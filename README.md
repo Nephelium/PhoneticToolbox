@@ -34,5 +34,11 @@ PhoneticToolbox 是一个集成了多种语音分析功能的工具箱，旨在�
 
 详细的使用教程和参数说明，请参阅我们的 **[在线文档](https://nephelium.github.io/PhoneticToolbox/)**。
 
----
-*中山大学语音学实验室 / Sun Yat-sen University Phonetics Lab*
+@software{Jing_PhoneticToolbox_2025,
+  author = {Jing, Liwen},
+  title = {{PhoneticToolbox}},
+  url = {https://github.com/Nephelium/PhoneticToolbox},
+  version = {1.0.0},
+  year = {2025},
+  month = {11}
+}
