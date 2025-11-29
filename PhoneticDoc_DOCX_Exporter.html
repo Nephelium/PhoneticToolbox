@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhoneticDoc to DOCX Converter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 html-docx-js -->
+    <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
+    <!-- 引入 FileSaver.js 用于保存文件 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        body { background-color: #f3f4f6; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: sans-serif; }
+        .card { background: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); width: 100%; max-width: 600px; }
+        .btn { transition: all 0.2s; }
+        .btn:active { transform: scale(0.98); }
+        
+        /* 预览区域样式，模拟文档 */
+        #preview {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            border-radius: 8px;
+            background: #fff;
+            font-size: 0.9em;
+            color: #374151;
+        }
+        #preview h1 { font-size: 1.5em; font-weight: bold; margin-top: 1em; color: #111827; }
+        #preview h2 { font-size: 1.25em; font-weight: bold; margin-top: 0.8em; color: #374151; }
+        #preview p { margin-bottom: 0.5em; line-height: 1.6; }
+        #preview img { max-width: 100%; height: auto; margin: 10px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 text-indigo-600 mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-900">PhoneticDoc 转 DOCX</h1>
+            <p class="text-gray-500 mt-2">读取 JSON 备份文件并导出为 Word 文档</p>
+        </div>
+
+        <div class="space-y-4">
+            <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-indigo-500 transition cursor-pointer relative" id="dropZone">
+                <input type="file" id="fileInput" accept=".json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                <div class="space-y-2">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <div class="text-sm text-gray-600">
+                        <span class="font-medium text-indigo-600 hover:text-indigo-500">点击上传</span>
+                        或拖拽文件到此处
+                    </div>
+                    <p class="text-xs text-gray-500">支持 PhoneticDoc_Backup.json</p>
+                </div>
+            </div>
+
+            <div id="fileInfo" class="hidden bg-green-50 text-green-700 p-3 rounded-md flex items-center justify-between text-sm">
+                <span id="fileName">filename.json</span>
+                <button onclick="resetFile()" class="text-green-600 hover:text-green-800 font-bold">×</button>
+            </div>
+
+            <!-- 导出格式选择 -->
+            <div class="bg-white p-4 rounded-md shadow-sm border border-gray-200">
+                <label class="block text-sm font-medium text-gray-700 mb-2">导出格式</label>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center">
+                        <input id="format-docx" name="export-format" type="radio" value="docx" checked class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                        <label for="format-docx" class="ml-2 block text-sm text-gray-900">Word 文档 (.docx)</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input id="format-md" name="export-format" type="radio" value="md" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                        <label for="format-md" class="ml-2 block text-sm text-gray-900">Markdown (.md)</label>
+                    </div>
+                </div>
+            </div>
+
+            <button id="convertBtn" disabled onclick="convertAndDownload()" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed btn">
+                生成文档
+            </button>
+            
+            <div id="status" class="text-center text-sm text-gray-500 min-h-[20px]"></div>
+        </div>
+
+        <div id="preview" class="hidden">
+            <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">内容预览 (前 500 字符)</h3>
+            <div id="previewBody"></div>
+        </div>
+    </div>
+
+    <script>
+        let loadedData = null;
+
+        // --- 核心 Markdown 解析器 (复制自原项目) ---
+        const SimpleMD = {
+            parse: function(text) {
+                if (!text) return '';
+                const lines = text.split('\n');
+                let html = '';
+                let inCodeBlock = false;
+                let codeBuffer = [];
+                let listBuffer = [];
+                let listType = null;
+                let tableBuffer = [];
+                
+                const flushList = () => {
+                    if (listBuffer.length === 0) return;
+                    const tag = listType === 'ol' ? 'ol' : 'ul';
+                    const items = listBuffer.map(item => {
+                        let content = item.text.replace(/^(\s*)(-|\d+\.)\s+/, '');
+                        return `<li data-line="${item.line}">${this.inlineParse(content)}</li>`;
+                    }).join('');
+                    html += `<${tag} style="margin-bottom: 0.6em;">${items}</${tag}>`;
+                    listBuffer = [];
+                    listType = null;
+                };
+
+                const flushTable = () => {
+                    if (tableBuffer.length === 0) return;
+                    if (tableBuffer.length >= 2 && tableBuffer[1].text.includes('|') && tableBuffer[1].text.includes('-')) {
+                        html += '<table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 0.6em;"><thead><tr>';
+                        const processRow = (rowStr) => {
+                             let cells = rowStr.trim();
+                             if (cells.startsWith('|')) cells = cells.substring(1);
+                             if (cells.endsWith('|')) cells = cells.substring(0, cells.length - 1);
+                             return cells.split('|');
+                        };
+                        processRow(tableBuffer[0].text).forEach(h => html += `<th style="padding:8px; background-color:#f3f4f6;">${this.inlineParse(h.trim())}</th>`);
+                        html += '</tr></thead><tbody>';
+                        for (let i = 2; i < tableBuffer.length; i++) {
+                            html += `<tr>`;
+                            processRow(tableBuffer[i].text).forEach(c => html += `<td style="padding:8px;">${this.inlineParse(c.trim())}</td>`);
+                            html += '</tr>';
+                        }
+                        html += '</tbody></table>';
+                    } else {
+                        tableBuffer.forEach(line => {
+                            html += `<p>${this.inlineParse(line.text)}</p>`;
+                        });
+                    }
+                    tableBuffer = [];
+                };
+
+                lines.forEach((line, i) => {
+                    const lineNum = i + 1;
+                    const trimmed = line.trim();
+                    
+                    if (trimmed.startsWith('```')) {
+                        if (inCodeBlock) {
+                            html += `<pre style="background:#f3f4f6; padding:10px; border-radius:4px;"><code>${this.escapeHtml(codeBuffer.join('\n'))}</code></pre>`;
+                            codeBuffer = [];
+                            inCodeBlock = false;
+                        } else {
+                            if (listBuffer.length) flushList();
+                            if (tableBuffer.length) flushTable();
+                            inCodeBlock = true;
+                        }
+                        return; 
+                    }
+                    if (inCodeBlock) {
+                        codeBuffer.push(line);
+                        return;
+                    }
+
+                    const ulMatch = line.match(/^(\s*)-\s+(.*)/);
+                    const olMatch = line.match(/^(\s*)\d+\.\s+(.*)/);
+                    
+                    if (ulMatch || olMatch) {
+                        if (tableBuffer.length) flushTable();
+                        const currentType = ulMatch ? 'ul' : 'ol';
+                        if (listBuffer.length > 0 && listType !== currentType) flushList();
+                        listType = currentType;
+                        listBuffer.push({text: line, line: lineNum});
+                        return;
+                    } else {
+                        if (listBuffer.length) flushList();
+                    }
+
+                    if (trimmed.startsWith('|') || (trimmed.includes('|') && tableBuffer.length > 0)) {
+                         tableBuffer.push({text: line, line: lineNum});
+                         return;
+                    } else {
+                         if (tableBuffer.length) flushTable();
+                    }
+
+                    if (trimmed === '') return;
+
+                    let match = line.match(/^(#{1,4}) (.*)/);
+                    if (match) {
+                        // Word export needs specific heading styles usually, but h1-h4 tags work well
+                        const level = match[1].length;
+                        const size = level === 1 ? '24pt' : level === 2 ? '18pt' : level === 3 ? '14pt' : '12pt';
+                        const color = level === 1 ? '#000000' : '#4b5563';
+                        html += `<h${level} style="font-size:${size}; color:${color}; margin-top:1em; margin-bottom:0.5em; font-weight:bold;">${this.inlineParse(match[2])}</h${level}>`;
+                        return;
+                    }
+                    
+                    if (trimmed === '---') {
+                        html += `<hr style="border:0; border-top:1px dashed #ccc; margin: 1em 0;">`;
+                        return;
+                    }
+
+                    if (line.startsWith('>')) {
+                        let content = line.substring(1).trim();
+                        html += `<blockquote style="border-left:4px solid #6366f1; padding-left:1em; color:#666; margin: 1em 0;">${this.inlineParse(content)}</blockquote>`;
+                        return;
+                    }
+                    
+                    if (line.match(/^!\[.*\]\(.*\)$/)) {
+                        html += `<div>${this.inlineParse(line)}</div>`;
+                        return;
+                    }
+
+                    html += `<p style="margin-bottom: 0.6em; line-height: 1.6;">${this.inlineParse(line)}</p>`;
+                });
+                
+                if (listBuffer.length) flushList();
+                if (tableBuffer.length) flushTable();
+                if (inCodeBlock) { 
+                     html += `<pre style="background:#f3f4f6; padding:10px;"><code>${this.escapeHtml(codeBuffer.join('\n'))}</code></pre>`;
+                }
+
+                return html;
+            },
+            
+            inlineParse: function(text) {
+                return text
+                    .replace(/`([^`]+)`/g, '<code style="background:#f3f4f6; padding:2px 4px; border-radius:4px;">$1</code>')
+                    .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" style="max-width:100%; margin:10px 0;">') // Image handling
+                    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" style="color:#6366f1; text-decoration:underline;">$1</a>')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    .replace(/^( {4})/g, '&emsp;&emsp;')
+                    .replace(/<u>(.*?)<\/u>/g, '<u>$1</u>')
+                    .replace(/<s>(.*?)<\/s>/g, '<s>$1</s>')
+                    .replace(/<div class="text-(center|left|right|justify)">(.*?)<\/div>/g, '<div style="text-align:$1">$2</div>')
+                    .replace(/<span style="color:(.*?)">(.*?)<\/span>/g, '<span style="color:$1">$2</span>');
+            },
+            
+            escapeHtml: function(unsafe) {
+                return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            }
+        };
+
+        // --- 事件处理 ---
+        const fileInput = document.getElementById('fileInput');
+        const dropZone = document.getElementById('dropZone');
+
+        fileInput.addEventListener('change', handleFileSelect);
+
+        // 拖拽效果
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-indigo-500', 'bg-indigo-50');
+        });
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-indigo-500', 'bg-indigo-50');
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-indigo-500', 'bg-indigo-50');
+            if(e.dataTransfer.files.length) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        function handleFileSelect(e) {
+            if(e.target.files.length) {
+                handleFile(e.target.files[0]);
+            }
+        }
+
+        function handleFile(file) {
+            if(file.type !== 'application/json' && !file.name.endsWith('.json')) {
+                alert('请上传 JSON 格式的备份文件');
+                return;
+            }
+
+            document.getElementById('fileName').innerText = file.name;
+            document.getElementById('fileInfo').classList.remove('hidden');
+            document.getElementById('dropZone').classList.add('hidden');
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    if(!json.data) throw new Error('Invalid format');
+                    loadedData = json;
+                    document.getElementById('convertBtn').disabled = false;
+                    document.getElementById('status').innerText = '文件解析成功，准备生成';
+                    showPreview();
+                } catch(err) {
+                    alert('文件解析失败：格式不正确');
+                    resetFile();
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function resetFile() {
+            loadedData = null;
+            document.getElementById('fileInfo').classList.add('hidden');
+            document.getElementById('dropZone').classList.remove('hidden');
+            document.getElementById('convertBtn').disabled = true;
+            document.getElementById('preview').classList.add('hidden');
+            document.getElementById('status').innerText = '';
+            fileInput.value = '';
+        }
+
+        function showPreview() {
+            if(!loadedData || !loadedData.data.length) return;
+            const firstChap = loadedData.data[0];
+            const firstSec = firstChap.sections[0];
+            
+            // 简单渲染预览
+            let html = `<h1 style="font-size:1.5em; font-weight:bold">${firstChap.title}</h1>`;
+            html += `<h2 style="font-size:1.2em; font-weight:bold; color:#555">${firstSec.title}</h2>`;
+            
+            let content = firstSec.content;
+            // 替换图片预览
+            content = content.replace(/!\[(.*?)\]\((img_[a-z0-9]+)\)/g, (m, alt, id) => {
+                return loadedData.images && loadedData.images[id] ? `![${alt}](${loadedData.images[id]})` : m;
+            });
+            
+            html += SimpleMD.parse(content);
+            
+            document.getElementById('previewBody').innerHTML = html;
+            document.getElementById('preview').classList.remove('hidden');
+        }
+
+        function convertAndDownload() {
+            if(!loadedData) return;
+            
+            const format = document.querySelector('input[name="export-format"]:checked').value;
+            
+            document.getElementById('status').innerText = `正在生成 ${format === 'docx' ? 'DOCX' : 'Markdown'}...`;
+            
+            setTimeout(() => {
+                try {
+                    if (format === 'docx') {
+                        generateDocx();
+                    } else {
+                        generateMarkdown();
+                    }
+                } catch(e) {
+                    console.error(e);
+                    document.getElementById('status').innerText = '生成失败: ' + e.message;
+                }
+            }, 100);
+        }
+
+        function generateMarkdown() {
+            let mdContent = '';
+
+            loadedData.data.forEach(chap => {
+                mdContent += `# ${chap.title}\n\n`;
+                chap.sections.forEach(sec => {
+                    mdContent += `## ${sec.title}\n\n`;
+                    
+                    let content = sec.content;
+                    
+                    // 替换图片 ID 为 Base64
+                    content = content.replace(/!\[(.*?)\]\((img_[a-z0-9]+)\)/g, (m, alt, id) => {
+                        return loadedData.images && loadedData.images[id] ? `![${alt}](${loadedData.images[id]})` : m;
+                    });
+
+                    // 移除音频
+                    content = content.replace(/!\[audio\]\((aud_[a-z0-9]+)\)/g, (m, id) => {
+                        return `**[音频附件: ${id}]**`; 
+                    });
+
+                    mdContent += content + '\n\n';
+                });
+            });
+
+            const blob = new Blob([mdContent], {type: "text/markdown;charset=utf-8"});
+            saveAs(blob, `PhoneticDoc_Export_${new Date().toISOString().slice(0,10)}.md`);
+            document.getElementById('status').innerText = 'Markdown 下载已开始！';
+        }
+
+        function generateDocx() {
+            let fullHtml = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        body { font-family: 'Calibri', 'Segoe UI', sans-serif; line-height: 1.5; }
+                        h1 { font-size: 24pt; color: #000000; page-break-before: always; }
+                        h1:first-child { page-break-before: auto; }
+                        h2 { font-size: 18pt; color: #333333; margin-top: 15pt; }
+                        h3 { font-size: 14pt; color: #666666; margin-top: 12pt; }
+                        p { font-size: 11pt; margin-bottom: 10pt; text-align: justify; }
+                        table { width: 100%; border-collapse: collapse; margin-bottom: 12pt; }
+                        td, th { border: 1px solid #000; padding: 5pt; }
+                        img { max-width: 100%; height: auto; }
+                        blockquote { border-left: 3px solid #ccc; padding-left: 10pt; color: #666; font-style: italic; }
+                    </style>
+                </head>
+                <body>
+            `;
+
+            loadedData.data.forEach(chap => {
+                fullHtml += `<h1>${chap.title}</h1>`;
+                chap.sections.forEach(sec => {
+                    fullHtml += `<h2>${sec.title}</h2>`;
+                    
+                    let content = sec.content;
+                    
+                    // 替换图片 ID 为 Base64
+                    content = content.replace(/!\[(.*?)\]\((img_[a-z0-9]+)\)/g, (m, alt, id) => {
+                        return loadedData.images && loadedData.images[id] ? `![${alt}](${loadedData.images[id]})` : '';
+                    });
+
+                    // 移除音频 (DOCX 不支持嵌入音频播放器，或者替换为文字提示)
+                    content = content.replace(/!\[audio\]\((aud_[a-z0-9]+)\)/g, (m, id) => {
+                        return `**[音频附件: ${id}]**`; 
+                    });
+
+                    fullHtml += SimpleMD.parse(content);
+                    fullHtml += '<br/>'; // Section spacing
+                });
+            });
+
+            fullHtml += '</body></html>';
+
+            // 使用 html-docx-js 转换
+            const converted = htmlDocx.asBlob(fullHtml, {
+                orientation: 'portrait',
+                margins: { top: 720, right: 720, bottom: 720, left: 720 } // Twips (1/1440 inch) - roughly 0.5 inch
+            });
+            
+            saveAs(converted, `PhoneticDoc_Export_${new Date().toISOString().slice(0,10)}.docx`);
+            
+            document.getElementById('status').innerText = 'DOCX 下载已开始！';
+        }
+    </script>
+</body>
+</html>

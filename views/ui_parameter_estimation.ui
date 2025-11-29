@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ParameterEstimation</class>
+ <widget class="QWidget" name="ParameterEstimation">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>参数估计</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="3">
+    <widget class="QLabel" name="labelHeader">
+     <property name="text">
+      <string>请选择输入/输出目录并开始处理</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="labelInputDir">
+     <property name="text">
+      <string>输入目录</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="editInputDir"/>
+   </item>
+   <item row="1" column="2">
+    <widget class="QPushButton" name="buttonBrowseInput">
+     <property name="text">
+      <string>浏览...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="labelOutputDir">
+     <property name="text">
+      <string>输出目录</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="editOutputDir"/>
+   </item>
+   <item row="2" column="2">
+    <widget class="QPushButton" name="buttonBrowseOutput">
+     <property name="text">
+      <string>浏览...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="3">
+    <widget class="QCheckBox" name="checkboxSaveMatWithWav">
+     <property name="text">
+      <string>csv 与 wav 同目录</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout_1">
+     <item>
+      <widget class="QPushButton" name="buttonPlaySelected">
+       <property name="text">
+        <string>播放选中音频</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonStopPlayback">
+       <property name="text">
+        <string>停止播放</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonRefreshFiles">
+       <property name="text">
+        <string>刷新文件列表</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="8" column="0" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="buttonReadTextGrid">
+       <property name="text">
+        <string>读取TextGrid</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonTextGridSegmentation">
+       <property name="text">
+        <string>TextGrid切分</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonSaveSegmentedAudio">
+       <property name="text">
+        <string>保存切分音频</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="9" column="0" colspan="3">
+    <widget class="QSplitter" name="splitMain">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QListWidget" name="listFiles">
+      <property name="minimumSize">
+       <size>
+        <width>200</width>
+        <height>300</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QWidget" name="wavePlotContainer">
+      <property name="minimumSize">
+       <size>
+        <width>600</width>
+        <height>300</height>
+       </size>
+      </property>
+     </widget>
+    </widget>
+   </item>
+   <item row="10" column="0" colspan="3">
+    <widget class="QPushButton" name="buttonStart">
+     <property name="text">
+      <string>开始处理</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+ </ui>

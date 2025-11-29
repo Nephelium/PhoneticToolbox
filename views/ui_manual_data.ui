@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ManualData</class>
+ <widget class="QWidget" name="ManualData">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1000</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>手动数据</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="labelMatDir">
+     <property name="text">
+      <string>CSV目录</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLineEdit" name="edit_matdir"/>
+   </item>
+   <item row="0" column="2">
+    <widget class="QPushButton" name="buttonBrowseMatDir">
+     <property name="text">
+      <string>浏览...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QLabel" name="labelOutputDir">
+     <property name="text">
+      <string>输出目录</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QLineEdit" name="edit_outputdir"/>
+   </item>
+   <item row="0" column="5">
+    <widget class="QPushButton" name="buttonBrowseOutputDir">
+     <property name="text">
+      <string>浏览...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="labelMatFiles">
+     <property name="text">
+      <string>CSV文件列表</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" colspan="5">
+    <widget class="QLabel" name="labelManualTable">
+     <property name="text">
+      <string>手动数据表</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QListWidget" name="listMatFiles"/>
+   </item>
+   <item row="2" column="1" colspan="5">
+    <widget class="QTableWidget" name="tableManualData"/>
+   </item>
+   <item row="3" column="0">
+    <widget class="QPushButton" name="buttonAddRow">
+     <property name="text">
+      <string>添加行</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QPushButton" name="buttonRemoveRow">
+     <property name="text">
+      <string>删除行</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2">
+    <widget class="QPushButton" name="buttonSave">
+     <property name="text">
+      <string>保存</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="5">
+    <widget class="QPushButton" name="buttonClose">
+     <property name="text">
+      <string>关闭</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+ </ui>

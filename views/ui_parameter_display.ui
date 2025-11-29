@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ParameterDisplay</class>
+ <widget class="QWidget" name="ParameterDisplay">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1000</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>参数显示</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="labelWavDir">
+     <property name="text">
+      <string>WAV目录</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLineEdit" name="editWavDir"/>
+   </item>
+   <item row="0" column="2">
+    <widget class="QPushButton" name="buttonBrowseWavDir">
+     <property name="text">
+      <string>浏览...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="labelMatDir">
+     <property name="text">
+      <string>CSV目录</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="editMatDir"/>
+   </item>
+   <item row="1" column="2">
+    <widget class="QPushButton" name="buttonBrowseMatDir">
+     <property name="text">
+      <string>浏览...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLineEdit" name="editFilterFiles">
+     <property name="placeholderText">
+      <string>筛选音频（输入字符串）</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="editFilterParams">
+     <property name="placeholderText">
+      <string>筛选参数（输入字符串）</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QPushButton" name="buttonRefresh">
+     <property name="text">
+      <string>刷新</string>
+     </property>
+    </widget>
+   </item>
+   <!-- 移除顶部的 播放/保存图片 按钮，改为底部统一布局 -->
+   <!-- 使用 QSplitter 以便用户手动调整三栏宽度 -->
+   <item row="3" column="0" colspan="3">
+    <widget class="QSplitter" name="splitMain">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QListWidget" name="listWavFiles"/>
+     <widget class="QListWidget" name="listParams"/>
+     <widget class="QWidget" name="plotContainer">
+      <property name="minimumSize">
+       <size>
+        <width>400</width>
+        <height>400</height>
+       </size>
+      </property>
+     </widget>
+    </widget>
+   </item>
+   <!-- 底部统一放置 播放 / 保存图片 / 关闭 三个按钮 -->
+   <item row="4" column="0">
+    <widget class="QPushButton" name="buttonPlay">
+     <property name="text">
+      <string>播放</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QPushButton" name="buttonSaveFigure">
+     <property name="text">
+      <string>保存图片</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QPushButton" name="buttonClose">
+     <property name="text">
+      <string>关闭</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+ </ui>

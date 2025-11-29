@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Settings</class>
+ <widget class="QWidget" name="Settings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>300</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>设置</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QGroupBox" name="groupCommon">
+     <property name="title"><string>常用设置</string></property>
+     <layout class="QGridLayout" name="gridCommon">
+      <item row="0" column="0"><widget class="QLabel" name="labelEnergyRatio"><property name="text"><string>能量阈值（比例）</string></property></widget></item>
+      <item row="0" column="1"><widget class="QDoubleSpinBox" name="spinEnergyRatio"><property name="minimum"><double>0.0</double></property><property name="maximum"><double>1.0</double></property><property name="singleStep"><double>0.01</double></property><property name="value"><double>0.01</double></property></widget></item>
+      <item row="1" column="0"><widget class="QLabel" name="labelEnergyWin"><property name="text"><string>能量窗口（毫秒）</string></property></widget></item>
+      <item row="1" column="1"><widget class="QSpinBox" name="spinEnergyWin"><property name="minimum"><number>5</number></property><property name="maximum"><number>200</number></property><property name="value"><number>25</number></property></widget></item>
+      <item row="2" column="0"><widget class="QLabel" name="labelFrameShift"><property name="text"><string>帧移（毫秒）</string></property></widget></item>
+      <item row="2" column="1"><widget class="QSpinBox" name="spinFrameShift"><property name="minimum"><number>1</number></property><property name="maximum"><number>50</number></property><property name="value"><number>2</number></property></widget></item>
+      <item row="3" column="0"><widget class="QLabel" name="labelWindowSize"><property name="text"><string>窗宽（毫秒）</string></property></widget></item>
+      <item row="3" column="1"><widget class="QSpinBox" name="spinWindowSize"><property name="minimum"><number>5</number></property><property name="maximum"><number>200</number></property><property name="value"><number>25</number></property></widget></item>
+      <item row="4" column="0"><widget class="QLabel" name="labelSmoothWin"><property name="text"><string>平滑点数</string></property></widget></item>
+      <item row="4" column="1"><widget class="QSpinBox" name="spinSmoothWin"><property name="minimum"><number>0</number></property><property name="maximum"><number>200</number></property><property name="value"><number>0</number></property></widget></item>
+      
+      <item row="6" column="0"><widget class="QLabel" name="labelNPeriodsH"><property name="text"><string>谐波估计周期数</string></property></widget></item>
+      <item row="6" column="1"><widget class="QSpinBox" name="spinNPeriodsH"><property name="minimum"><number>1</number></property><property name="maximum"><number>20</number></property><property name="value"><number>3</number></property></widget></item>
+      <item row="7" column="0"><widget class="QLabel" name="labelNPeriodsEC"><property name="text"><string>能量/CPP/HNR 周期数</string></property></widget></item>
+     <item row="7" column="1"><widget class="QSpinBox" name="spinNPeriodsEC"><property name="minimum"><number>1</number></property><property name="maximum"><number>20</number></property><property name="value"><number>5</number></property></widget></item>
+      <item row="9" column="0"><widget class="QCheckBox" name="checkRecurse"><property name="text"><string>递归子目录</string></property></widget></item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupReaper">
+     <property name="title"><string>REAPER 参数</string></property>
+     <layout class="QGridLayout" name="gridReaper">
+      <item row="2" column="0"><widget class="QLabel" name="labelReaperMinF0"><property name="text"><string>最低基频</string></property></widget></item>
+      <item row="2" column="1"><widget class="QSpinBox" name="spinReaperMinF0"><property name="minimum"><number>10</number></property><property name="maximum"><number>1000</number></property><property name="value"><number>40</number></property></widget></item>
+      <item row="3" column="0"><widget class="QLabel" name="labelReaperMaxF0"><property name="text"><string>最高基频</string></property></widget></item>
+      <item row="3" column="1"><widget class="QSpinBox" name="spinReaperMaxF0"><property name="minimum"><number>50</number></property><property name="maximum"><number>2000</number></property><property name="value"><number>500</number></property></widget></item>
+      <item row="4" column="0"><widget class="QCheckBox" name="checkReaperHilbert"><property name="text"><string>hilbert</string></property><property name="checked"><bool>true</bool></property></widget></item>
+      <item row="4" column="1"><widget class="QCheckBox" name="checkReaperNoHighpass"><property name="text"><string>no-highpass</string></property><property name="checked"><bool>false</bool></property></widget></item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="bottomButtons">
+     <item><spacer name="spacer"><property name="orientation"><enum>Qt::Horizontal</enum></property><property name="sizeHint"><size><width>40</width><height>20</height></size></property></spacer></item>
+     <item><widget class="QPushButton" name="buttonSave"><property name="text"><string>保存</string></property></widget></item>
+     <item><widget class="QPushButton" name="buttonClose"><property name="text"><string>关闭</string></property></widget></item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+ </ui>

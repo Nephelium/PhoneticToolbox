@@ -1,0 +1,9 @@
+PyQt6>=6.6
+numpy>=1.23
+scipy>=1.10
+pytest>=7.0
+praat-parselmouth>=0.4.3
+numpy>=1.25
+scipy>=1.11
+pytest>=7.4
+matplotlib>=3.8

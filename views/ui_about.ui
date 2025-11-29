@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>About</class>
+ <widget class="QWidget" name="About">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>800</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+    <string>关于 PhoneticToolbox</string>
+   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="labelTitle">
+     <property name="text">
+      <string>PhoneticToolbox (PyQt6) v1.0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTextBrowser" name="labelBody">
+     <property name="html">
+      <string notr="true"><![CDATA[
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <style>
+      body { font-family: 'KaiTi'; font-size: 14pt; line-height: 1.5; }
+      a, a:link, a:visited { text-decoration: underline; color: #ffd54f; }
+      .intro { }
+      .item { margin: 0.6em 0; }
+      .divider { text-align: center; letter-spacing: 1px; }
+      .org { }
+      .author { }
+      .email { font-family: 'KaiTi', 'Courier New', monospace; font-size: 13pt; }
+      .profile { }
+    </style>
+  </head>
+  <body>
+    <p class="intro">本项目基于原始 MATLAB 版 VoiceSauce 进行深度修改与扩展（<a href="https://www.phonetics.ucla.edu/voicesauce/">https://www.phonetics.ucla.edu/voicesauce/</a>），部分核心算法参考 opensauce-python 项目（<a href="https://github.com/voicesauce/opensauce-python">https://github.com/voicesauce/opensauce-python</a>）。本项目致力于为语音学研究提供更加高效、易用的工具链，主要改动与扩展如下：</p>
+    <p class="item" style="font-size:13pt;">1. 在 VoiceSauce 的基础上新增了基于 REAPER 算法（<a href="https://github.com/google/REAPER/">https://github.com/google/REAPER</a>）的基频检测模块，支持检测极低的基频，特别适用于嘎裂声等特殊发声类型的分析。改写了 SHR（次谐波谐波比）算法的基频监测逻辑，优化了对嘎裂声等发声类型的参数估计精度。</p>
+    <p class="item" style="font-size:13pt;">2. 全新增加了 EGG（电声门图）信号分析模块，支持双声道信号归一化，支持闭合商、速度商的计算等功能。支持逆滤波、EGG 信号批量处理。</p>
+    <p class="item" style="font-size:13pt;">3. 增加了基于经典 Klatt 模型的语音合成模块，支持 5 种典型发声类型预设与参数的动态调整，支持输入元音并自动合成元音。</p>
+    <p class="item" style="font-size:13pt;">4. 增加了基于 Parselmouth 的基频修改模块，支持单个音频的可视化编辑、批量编辑，以及与多文件的批量处理。</p>
+    <p class="item" style="font-size:13pt;">5. 增加了基于 Web 技术的听觉感知实验平台，支持手动编辑实验界面及音频排序功能。支持音频刺激呈现、反应时记录、问卷调查与数据导出等功能。支持实验界面导出共享。</p>
+    <p class="org" style="font-size:13pt;">单位：中山大学中国语言文学系（珠海）</p>
+    <p class="author" style="font-size:13pt;">作者：井立文（知乎 @井韶子）</p>
+    <p class="email" style="font-size:13pt;">邮箱：jinglw3@mail2.sysu.edu.cn</p>
+    <p class="profile" style="font-size:13pt;">个人主页：<a href="https://www.zhihu.com/people/jingshaozi">https://www.zhihu.com/people/jingshaozi</a></p>
+  </body>
+</html>
+      ]]></string>
+     </property>
+     <property name="openExternalLinks">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="buttonOK">
+     <property name="text">
+      <string>确定</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+ </ui>
