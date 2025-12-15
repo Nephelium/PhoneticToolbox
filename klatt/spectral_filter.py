@@ -1,8 +1,118 @@
 import numpy as np
-from scipy.signal import stft, istft
-from scipy.interpolate import interp1d
+import sys
 
-from scipy.ndimage import uniform_filter1d
+# Use pure NumPy implementations to avoid PyInstaller issues with scipy.signal
+# scipy.signal.stft/istft can cause crashes in packaged executables
+
+def _numpy_stft(x, fs, nperseg, noverlap, nfft, window='hann'):
+    """Pure NumPy implementation of STFT."""
+    hop = nperseg - noverlap
+    
+    # Create window
+    if window == 'hann':
+        win = np.hanning(nperseg)
+    else:
+        win = np.ones(nperseg)
+    
+    # Pad signal
+    pad_len = nfft // 2
+    x_padded = np.pad(x, (pad_len, pad_len), mode='reflect')
+    
+    # Calculate number of frames
+    num_frames = 1 + (len(x_padded) - nperseg) // hop
+    
+    # Initialize output
+    Zxx = np.zeros((nfft // 2 + 1, num_frames), dtype=np.complex128)
+    
+    # Compute STFT
+    for i in range(num_frames):
+        start = i * hop
+        segment = x_padded[start:start + nperseg] * win
+        # Zero-pad to nfft
+        padded_segment = np.zeros(nfft)
+        padded_segment[:nperseg] = segment
+        spectrum = np.fft.rfft(padded_segment)
+        Zxx[:, i] = spectrum
+    
+    # Time and frequency vectors
+    t = np.arange(num_frames) * hop / fs
+    f = np.fft.rfftfreq(nfft, 1/fs)
+    
+    return f, t, Zxx
+
+def _numpy_istft(Zxx, fs, nperseg, noverlap, nfft, window='hann'):
+    """Pure NumPy implementation of ISTFT with proper amplitude preservation."""
+    hop = nperseg - noverlap
+    num_frames = Zxx.shape[1]
+    
+    # Create window
+    if window == 'hann':
+        win = np.hanning(nperseg)
+    else:
+        win = np.ones(nperseg)
+    
+    # Output length
+    output_len = (num_frames - 1) * hop + nperseg
+    x = np.zeros(output_len)
+    window_sum = np.zeros(output_len)
+    
+    # Overlap-add
+    for i in range(num_frames):
+        # Inverse FFT
+        frame_full = np.fft.irfft(Zxx[:, i], n=nfft)
+        frame = frame_full[:nperseg] * win
+        
+        start = i * hop
+        x[start:start + nperseg] += frame
+        window_sum[start:start + nperseg] += win ** 2
+    
+    # Normalize by window sum (COLA condition)
+    # For Hann window with 75% overlap, the sum of squared windows should be ~0.375 * nperseg / hop
+    # We need to normalize to preserve original amplitude
+    
+    # Calculate the expected COLA normalization factor
+    # For proper COLA, sum(win^2) over overlapping windows should be constant
+    # The theoretical value for Hann window is: sum(win^2) / hop ≈ 1.5 for 75% overlap
+    
+    # Find the stable region (middle part where overlap-add is complete)
+    stable_start = nperseg
+    stable_end = max(stable_start + 1, output_len - nperseg)
+    
+    if stable_end > stable_start:
+        # Use the median of window_sum in stable region as normalization factor
+        stable_window_sum = window_sum[stable_start:stable_end]
+        norm_factor = np.median(stable_window_sum)
+        if norm_factor > 1e-10:
+            x = x / norm_factor
+    else:
+        # Fallback: normalize by window_sum directly
+        window_sum = np.maximum(window_sum, 1e-10)
+        x = x / window_sum
+    
+    return None, x
+
+def _numpy_uniform_filter1d(arr, size):
+    """Pure NumPy implementation of uniform_filter1d (moving average)."""
+    if size <= 1:
+        return arr.copy()
+    
+    # Use cumsum for efficient moving average
+    cumsum = np.cumsum(np.insert(arr, 0, 0))
+    
+    # Handle edges with padding
+    result = np.zeros_like(arr)
+    half = size // 2
+    
+    for i in range(len(arr)):
+        left = max(0, i - half)
+        right = min(len(arr), i + half + 1)
+        result[i] = (cumsum[right] - cumsum[left]) / (right - left)
+    
+    return result
+
+def _numpy_interp1d(x_old, y_old, x_new):
+    """Pure NumPy linear interpolation."""
+    return np.interp(x_new, x_old, y_old)
 
 class SpectralFilter:
     def __init__(self, fs):
@@ -19,7 +129,7 @@ class SpectralFilter:
         win_len = max(1, win_len)
         
         s_sq = audio**2
-        env = np.sqrt(uniform_filter1d(s_sq, size=win_len) + 1e-10)
+        env = np.sqrt(_numpy_uniform_filter1d(s_sq, win_len) + 1e-10)
         
         # Calculate gain
         # Avoid dividing by zero or amplifying noise too much
@@ -34,7 +144,7 @@ class SpectralFilter:
         # Smooth gain to avoid artifacts
         # Use a larger window for smoothing gain changes
         smooth_win = int(0.1 * self.fs) # 100ms
-        gain_smooth = uniform_filter1d(gain, size=smooth_win)
+        gain_smooth = _numpy_uniform_filter1d(gain, smooth_win)
         
         # Hard limit on gain to prevent explosions
         gain_smooth = np.clip(gain_smooth, 0.0, 100.0)
@@ -46,12 +156,19 @@ class SpectralFilter:
         Apply Shimmer as Amplitude Modulation (Post-processing).
         shimmer_arr: Array of shimmer values in %.
         """
+        if len(audio) == 0:
+            return audio
+        if len(shimmer_arr) == 0:
+            return audio
+            
         if len(audio) != len(shimmer_arr):
             # Resize shimmer_arr
-            x_old = np.linspace(0, 1, len(shimmer_arr))
-            x_new = np.linspace(0, 1, len(audio))
-            f = interp1d(x_old, shimmer_arr, kind='linear', fill_value="extrapolate")
-            shimmer_arr = f(x_new)
+            if len(shimmer_arr) < 2:
+                shimmer_arr = np.full(len(audio), shimmer_arr[0] if len(shimmer_arr) > 0 else 0.0)
+            else:
+                x_old = np.linspace(0, 1, len(shimmer_arr))
+                x_new = np.linspace(0, 1, len(audio))
+                shimmer_arr = _numpy_interp1d(x_old, shimmer_arr, x_new)
             
         # Noise generator: Uniform [-1, 1]
         noise = np.random.uniform(-1.0, 1.0, size=len(audio))
@@ -69,17 +186,26 @@ class SpectralFilter:
         f0_arr: Array of F0 values (Hz).
         """
         n = len(audio)
+        if n == 0:
+            return audio
+        if len(jitter_arr) == 0 or len(f0_arr) == 0:
+            return audio
+            
         if len(jitter_arr) != n:
-            x_old = np.linspace(0, 1, len(jitter_arr))
-            x_new = np.linspace(0, 1, n)
-            f = interp1d(x_old, jitter_arr, kind='linear', fill_value="extrapolate")
-            jitter_arr = f(x_new)
+            if len(jitter_arr) < 2:
+                jitter_arr = np.full(n, jitter_arr[0] if len(jitter_arr) > 0 else 0.0)
+            else:
+                x_old = np.linspace(0, 1, len(jitter_arr))
+                x_new = np.linspace(0, 1, n)
+                jitter_arr = _numpy_interp1d(x_old, jitter_arr, x_new)
             
         if len(f0_arr) != n:
-            x_old = np.linspace(0, 1, len(f0_arr))
-            x_new = np.linspace(0, 1, n)
-            f = interp1d(x_old, f0_arr, kind='linear', fill_value="extrapolate")
-            f0_arr = f(x_new)
+            if len(f0_arr) < 2:
+                f0_arr = np.full(n, f0_arr[0] if len(f0_arr) > 0 else 100.0)
+            else:
+                x_old = np.linspace(0, 1, len(f0_arr))
+                x_new = np.linspace(0, 1, n)
+                f0_arr = _numpy_interp1d(x_old, f0_arr, x_new)
 
         # Time vector
         t = np.arange(n) / self.fs
@@ -111,11 +237,11 @@ class SpectralFilter:
     def normalize(self, audio, target_db=-1.0):
         """
         Normalize peak amplitude to target_db (or linear range -1 to 1 if target_db is None).
-        User asked for -1~1, so we map max peak to 1.0.
+        User asked for -1~1, so we map max peak to 0.95 (with some headroom).
         """
         mx = np.max(np.abs(audio))
         if mx > 1e-8:
-            return audio / mx
+            return audio / mx * 0.95  # Leave some headroom
         return audio
 
     def process(self, audio, f0_contour, h1h2_contour, slope_contour, hnr_contour):
@@ -132,6 +258,10 @@ class SpectralFilter:
         Returns:
             Filtered audio waveform.
         """
+        # Validate input
+        if audio is None or len(audio) == 0:
+            return audio if audio is not None else np.array([])
+        
         # STFT parameters
         # 25ms window, 5ms hop (match VoiceSauce analysis usually, or just good default)
         nperseg = int(0.025 * self.fs)
@@ -139,7 +269,11 @@ class SpectralFilter:
         # nfft should be power of 2 for speed, or at least >= nperseg
         nfft = 2**int(np.ceil(np.log2(nperseg)))
         
-        f, t, Zxx = stft(audio, fs=self.fs, window='hann', nperseg=nperseg, noverlap=noverlap, nfft=nfft)
+        # Check if audio is too short for STFT
+        if len(audio) < nperseg:
+            return audio
+        
+        f, t, Zxx = _numpy_stft(audio, self.fs, nperseg, noverlap, nfft, window='hann')
         
         # Zxx is complex: freq bins x time frames
         # Modifying magnitude, keeping phase
@@ -161,12 +295,18 @@ class SpectralFilter:
         # Input contours are likely sample-wise (len = len(audio))
         # We pick values at frame centers
         frame_indices = (t_frames * self.fs).astype(int)
-        frame_indices = np.clip(frame_indices, 0, len(f0_contour)-1)
         
-        f0_frames = f0_contour[frame_indices]
-        h1h2_frames = h1h2_contour[frame_indices]
-        slope_frames = slope_contour[frame_indices]
-        hnr_frames = hnr_contour[frame_indices]
+        # Ensure contours are long enough - resize if needed
+        def safe_index(contour, indices):
+            if len(contour) == 0:
+                return np.zeros(len(indices))
+            clipped_indices = np.clip(indices, 0, len(contour) - 1)
+            return contour[clipped_indices]
+        
+        f0_frames = safe_index(f0_contour, frame_indices)
+        h1h2_frames = safe_index(h1h2_contour, frame_indices)
+        slope_frames = safe_index(slope_contour, frame_indices)
+        hnr_frames = safe_index(hnr_contour, frame_indices)
         
         # Frequency axis
         freqs = f
@@ -358,7 +498,7 @@ class SpectralFilter:
         # magnitude * exp(j*phase)
         Zxx_new = magnitude * np.exp(1j * phase)
         
-        _, audio_rec = istft(Zxx_new, fs=self.fs, window='hann', nperseg=nperseg, noverlap=noverlap, nfft=nfft)
+        _, audio_rec = _numpy_istft(Zxx_new, self.fs, nperseg, noverlap, nfft, window='hann')
         
         # Match length
         if len(audio_rec) > len(audio):

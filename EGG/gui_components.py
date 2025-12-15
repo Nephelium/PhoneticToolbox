@@ -9,8 +9,9 @@ class MplCanvas(FigureCanvas):
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         self.fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = self.fig.add_subplot(111)
-        self.fig.patch.set_alpha(0.0)
-        self.axes.patch.set_alpha(0.0)
+        # Set dark background explicitly
+        self.fig.set_facecolor('#2E2E2E')
+        self.axes.set_facecolor('#2E2E2E')
         super(MplCanvas, self).__init__(self.fig)
         self.setParent(parent)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)

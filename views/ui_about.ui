@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>800</height>
+    <height>900</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,6 +16,12 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="labelTitle">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="text">
       <string>PhoneticToolbox (PyQt6) v1.0</string>
      </property>
@@ -26,6 +32,18 @@
    </item>
    <item>
     <widget class="QTextBrowser" name="labelBody">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>100</height>
+      </size>
+     </property>
      <property name="html">
       <string notr="true"><![CDATA[
 <!DOCTYPE html>
@@ -51,6 +69,7 @@
     <p class="item" style="font-size:13pt;">3. 增加了基于经典 Klatt 模型的语音合成模块，支持 5 种典型发声类型预设与参数的动态调整，支持输入元音并自动合成元音。</p>
     <p class="item" style="font-size:13pt;">4. 增加了基于 Parselmouth 的基频修改模块，支持单个音频的可视化编辑、批量编辑，以及与多文件的批量处理。</p>
     <p class="item" style="font-size:13pt;">5. 增加了基于 Web 技术的听觉感知实验平台，支持手动编辑实验界面及音频排序功能。支持音频刺激呈现、反应时记录、问卷调查与数据导出等功能。支持实验界面导出共享。</p>
+    <p class="item" style="font-size:13pt;">请在此处获取最新版应用<a href="https://github.com/Nephelium/PhoneticToolbox/releases">https://github.com/Nephelium/PhoneticToolbox/releases</a></p>
     <p class="org" style="font-size:13pt;">单位：中山大学中国语言文学系（珠海）</p>
     <p class="author" style="font-size:13pt;">作者：井立文（知乎 @井韶子）</p>
     <p class="email" style="font-size:13pt;">邮箱：jinglw3@mail2.sysu.edu.cn</p>

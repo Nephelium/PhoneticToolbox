@@ -3,7 +3,7 @@
 [![GitHub release](https://img.shields.io/github/v/release/Nephelium/PhoneticToolbox)](https://github.com/Nephelium/PhoneticToolbox/releases)
 [![Documentation](https://img.shields.io/badge/docs-查看完整说明书-blue)](https://nephelium.github.io/PhoneticToolbox/)
 
-**[点击这里查看完整图文说明书 / Click here for full documentation](https://nephelium.github.io/PhoneticToolbox/)**
+## [点击这里查看完整图文说明书 / Click here for full documentation](https://nephelium.github.io/PhoneticToolbox/)
 
 ---
 
@@ -13,15 +13,21 @@ PhoneticToolbox 是一个集成了多种语音分析功能的工具箱，旨在�
 
 ### 主要功能 (Key Features)
 
+-   **声学参数提取**：
+    -   提供与VoiceSauce相近的声学参数提取功能。
+    -   支持嘎裂（Creak）相关的发声类型的基频提取及参数提取。
+
 -   **EGG 分析 (EGG Analysis)**：
     -   提供详细的 EGG 信号分析功能。
-    -   支持逆滤波 (Inverse Filtering) 和参数测量。
+    -   支持逆滤波和批量处理。
     
 -   **Klatt 合成 (Klatt Synthesis)**：
     -   内置 Klatt 合成器界面，支持调整共振峰、带宽等参数进行语音合成。
+    -   支持直接使用元音进行语音合成
     
 -   **基频修改 (F0 Modification)**：
     -   支持对音频文件的基频 (F0) 进行修改和重合成。
+    -   支持多个音频文件的变速变调处理。
 
 -   **感知实验 (Perception Experiment)**：
     -   内置感知实验模块，方便进行听辨实验设计和数据收集。
@@ -33,12 +39,3 @@ PhoneticToolbox 是一个集成了多种语音分析功能的工具箱，旨在�
 ## 使用说明 (Usage)
 
 详细的使用教程和参数说明，请参阅我们的 **[在线文档](https://nephelium.github.io/PhoneticToolbox/)**。
-
-@software{Jing_PhoneticToolbox_2025,
-  author = {Jing, Liwen},
-  title = {{PhoneticToolbox}},
-  url = {https://github.com/Nephelium/PhoneticToolbox},
-  version = {1.0.0},
-  year = {2025},
-  month = {11}
-}

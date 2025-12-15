@@ -110,6 +110,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="buttonReadLipData">
+       <property name="text">
+        <string>读取唇形数据</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item row="9" column="0" colspan="3">

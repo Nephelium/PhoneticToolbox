@@ -1246,7 +1246,12 @@ class Normalizer(KlattComponent):
         """
         Implements normalization.
         """
-        self.output[:] = self.input[:]/np.max(np.abs(self.input[:]))
+        max_val = np.max(np.abs(self.input[:]))
+        if max_val > 1e-10:
+            self.output[:] = self.input[:] / max_val
+        else:
+            # Avoid division by zero - output silence
+            self.output[:] = self.input[:]
         self.send()
 
 

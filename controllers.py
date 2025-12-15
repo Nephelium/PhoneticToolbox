@@ -11,10 +11,380 @@ from PyQt6.QtCore import QThread, pyqtSignal
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 import numpy as np
 
-from .models.state import AppState
-from .services.praat_service import compute_praat_f0_formants
-from .utils.csv_io import save_csv, load_csv_any
-from .utils.textgrid_parser import parse_textgrid
+# Try absolute imports first (for frozen app/script usage), then relative (for package usage)
+try:
+    from models.state import AppState
+    from services.praat_service import compute_praat_f0_formants
+    from utils.csv_io import save_csv, load_csv_any
+    from utils.textgrid_parser import parse_textgrid
+    from utils.lip_reader import read_lip_data
+    from services import update_service
+except ImportError:
+    from .models.state import AppState
+    from .services.praat_service import compute_praat_f0_formants
+    from .utils.csv_io import save_csv, load_csv_any
+    from .utils.textgrid_parser import parse_textgrid
+    from .utils.lip_reader import read_lip_data
+    from .services import update_service
+
+# --- Theme Definitions ---
+
+# Dark Theme for Main Window (黑底白字) - 主页专用，按钮更大更美观
+DARK_MAIN_STYLESHEET = """
+QMainWindow {
+    background-color: #121212;
+    color: #ffffff;
+}
+QLabel {
+    color: #ffffff;
+    background-color: transparent;
+}
+QPushButton {
+    background-color: #2d2d2d;
+    border: 2px solid #404040;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    min-height: 50px;
+    padding: 10px 18px;
+}
+QPushButton:hover {
+    background-color: #3d3d3d;
+    border-color: #606060;
+}
+QPushButton:pressed {
+    background-color: #1a1a1a;
+    border-color: #505050;
+}
+"""
+
+# Global Dark Theme for Dialogs (黑底白字) - 对话框和子窗口，灰白配色
+GLOBAL_DARK_STYLESHEET = """
+QWidget {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+QMainWindow, QDialog {
+    background-color: #1e1e1e;
+}
+QLabel {
+    color: #ffffff;
+    background-color: transparent;
+}
+QLineEdit, QSpinBox, QDoubleSpinBox, QComboBox {
+    background-color: #2d2d2d;
+    color: #ffffff;
+    border: 1px solid #404040;
+    border-radius: 4px;
+    padding: 3px 6px;
+    min-height: 22px;
+    max-height: 22px;
+}
+QTextEdit, QPlainTextEdit, QTextBrowser {
+    background-color: #2d2d2d;
+    color: #ffffff;
+    border: 1px solid #404040;
+    border-radius: 4px;
+    padding: 3px 6px;
+}
+QListWidget, QTreeWidget, QTableWidget {
+    background-color: #2d2d2d;
+    color: #ffffff;
+    border: 1px solid #404040;
+    border-radius: 4px;
+}
+QPushButton {
+    background-color: #2d2d2d;
+    color: #ffffff;
+    border: 1px solid #404040;
+    border-radius: 4px;
+    padding: 3px 12px;
+    min-height: 22px;
+    max-height: 22px;
+}
+QPushButton:hover {
+    background-color: #3d3d3d;
+    border-color: #606060;
+}
+QPushButton:pressed {
+    background-color: #1a1a1a;
+}
+QPushButton:disabled {
+    background-color: #1a1a1a;
+    color: #666666;
+    border-color: #333333;
+}
+QMenuBar {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+QMenu {
+    background-color: #2d2d2d;
+    color: #ffffff;
+    border: 1px solid #404040;
+}
+QMenu::item:selected {
+    background-color: #3d3d3d;
+}
+QHeaderView::section {
+    background-color: #2d2d2d;
+    color: #ffffff;
+    border: 1px solid #404040;
+    padding: 4px;
+}
+QScrollBar:vertical, QScrollBar:horizontal {
+    background: #1e1e1e;
+}
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+    background: #404040;
+    border-radius: 4px;
+}
+QGroupBox {
+    border: 1px solid #505050;
+    border-radius: 4px;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 13px;
+    margin-top: 16px;
+    padding-top: 8px;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 2px 8px;
+    color: #cccccc;
+    font-size: 13px;
+}
+QTabWidget::pane {
+    border: 1px solid #404040;
+    border-radius: 4px;
+}
+QTabBar::tab {
+    background: #2d2d2d;
+    color: #ffffff;
+    border: 1px solid #404040;
+    padding: 6px 12px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+QTabBar::tab:selected {
+    background: #3d3d3d;
+}
+QCheckBox, QRadioButton {
+    color: #ffffff;
+    spacing: 6px;
+}
+QCheckBox::indicator, QRadioButton::indicator {
+    width: 16px;
+    height: 16px;
+}
+QSlider::groove:horizontal {
+    background: #404040;
+    height: 6px;
+    border-radius: 3px;
+}
+QSlider::handle:horizontal {
+    background: #808080;
+    width: 14px;
+    margin: -4px 0;
+    border-radius: 7px;
+}
+QProgressBar {
+    background-color: #2d2d2d;
+    color: #ffffff;
+    border: 1px solid #404040;
+    border-radius: 4px;
+    text-align: center;
+}
+QProgressBar::chunk {
+    background-color: #606060;
+    border-radius: 3px;
+}
+"""
+
+# Light Theme for Main Window (白底黑字) - 主页专用
+LIGHT_MAIN_STYLESHEET = """
+QMainWindow {
+    background-color: #f5f5f5;
+    color: #212121;
+}
+QLabel {
+    color: #212121;
+    background-color: transparent;
+}
+QPushButton {
+    background-color: #ffffff;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    color: #212121;
+    font-size: 16px;
+    font-weight: bold;
+    min-height: 50px;
+    padding: 10px 18px;
+}
+QPushButton:hover {
+    background-color: #f0f0f0;
+    border-color: #bdbdbd;
+}
+QPushButton:pressed {
+    background-color: #e0e0e0;
+    border-color: #9e9e9e;
+}
+"""
+
+# Global Light Theme for Dialogs (白底黑字)
+GLOBAL_LIGHT_STYLESHEET = """
+QWidget {
+    background-color: #fafafa;
+    color: #212121;
+}
+QMainWindow, QDialog {
+    background-color: #fafafa;
+}
+QLabel {
+    color: #212121;
+    background-color: transparent;
+}
+QLineEdit, QSpinBox, QDoubleSpinBox, QComboBox {
+    background-color: #ffffff;
+    color: #212121;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 3px 6px;
+    min-height: 22px;
+    max-height: 22px;
+}
+QTextEdit, QPlainTextEdit, QTextBrowser {
+    background-color: #ffffff;
+    color: #212121;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 3px 6px;
+}
+QListWidget, QTreeWidget, QTableWidget {
+    background-color: #ffffff;
+    color: #212121;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+QPushButton {
+    background-color: #ffffff;
+    color: #212121;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 3px 12px;
+    min-height: 22px;
+    max-height: 22px;
+}
+QPushButton:hover {
+    background-color: #f5f5f5;
+    border-color: #bdbdbd;
+}
+QPushButton:pressed {
+    background-color: #e0e0e0;
+}
+QPushButton:disabled {
+    background-color: #f5f5f5;
+    color: #9e9e9e;
+    border-color: #e0e0e0;
+}
+QMenuBar {
+    background-color: #fafafa;
+    color: #212121;
+}
+QMenu {
+    background-color: #ffffff;
+    color: #212121;
+    border: 1px solid #e0e0e0;
+}
+QMenu::item:selected {
+    background-color: #f0f0f0;
+}
+QHeaderView::section {
+    background-color: #f5f5f5;
+    color: #212121;
+    border: 1px solid #e0e0e0;
+    padding: 4px;
+}
+QScrollBar:vertical, QScrollBar:horizontal {
+    background: #fafafa;
+}
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+    background: #bdbdbd;
+    border-radius: 4px;
+}
+QGroupBox {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    color: #212121;
+    font-weight: bold;
+    font-size: 13px;
+    margin-top: 16px;
+    padding-top: 8px;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 2px 8px;
+    color: #424242;
+    font-size: 13px;
+}
+QTabWidget::pane {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+QTabBar::tab {
+    background: #f5f5f5;
+    color: #212121;
+    border: 1px solid #e0e0e0;
+    padding: 6px 12px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+QTabBar::tab:selected {
+    background: #ffffff;
+}
+QCheckBox, QRadioButton {
+    color: #212121;
+    spacing: 6px;
+}
+QCheckBox::indicator, QRadioButton::indicator {
+    width: 16px;
+    height: 16px;
+}
+QSlider::groove:horizontal {
+    background: #e0e0e0;
+    height: 6px;
+    border-radius: 3px;
+}
+QSlider::handle:horizontal {
+    background: #757575;
+    width: 14px;
+    margin: -4px 0;
+    border-radius: 7px;
+}
+QProgressBar {
+    background-color: #f5f5f5;
+    color: #212121;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    text-align: center;
+}
+QProgressBar::chunk {
+    background-color: #757575;
+    border-radius: 3px;
+}
+"""
+
+
+class CheckUpdateWorker(QThread):
+    finished_sig = pyqtSignal(bool, str, str, str) # has_update, version, url, changelog
+
+    def run(self):
+        current = update_service.get_current_version()
+        has_up, ver, url, log = update_service.check_for_updates(current)
+        self.finished_sig.emit(has_up, str(ver), str(url), str(log))
 
 
 log = logging.getLogger(__name__)
@@ -53,7 +423,22 @@ class MainController:
     def init(self) -> None:
         self.widget.setWindowTitle("PhoneticToolbox (PyQt6)")
         self._children: list[tuple[QtWidgets.QWidget, object]] = []
+
+        # --- Theme Setup ---
+        self.is_dark = True
+        app = QtWidgets.QApplication.instance()
+        if app:
+            app.setStyleSheet(GLOBAL_DARK_STYLESHEET)
         
+        # Apply specific Dark Theme to Main Window to preserve original look
+        self.widget.setStyleSheet(DARK_MAIN_STYLESHEET)
+
+        # Bind Theme Button
+        try:
+            self.widget.buttonTheme.clicked.connect(self.toggle_theme)
+        except AttributeError:
+            pass
+
         # ASCII Art Title
         ascii_title = ASCII_TITLE
         try:
@@ -67,6 +452,14 @@ class MainController:
 
         # 绑定按钮
         self.widget.buttonParameterEstimation.clicked.connect(self.open_parameter_estimation)
+        try:
+            self.widget.buttonLipFeatureAnalysis.clicked.connect(self.open_lip_feature_analysis)
+        except AttributeError:
+            pass
+        try:
+            self.widget.buttonAutoAnnotation.clicked.connect(self.open_auto_annotation)
+        except AttributeError:
+            pass # In case UI is not updated yet or cached
         self.widget.buttonOutputToText.clicked.connect(self.open_output_text)
         self.widget.buttonOutputToEMU.clicked.connect(self.open_egg_analysis)
         self.widget.buttonParameterDisplay.clicked.connect(self.open_parameter_display)
@@ -76,9 +469,123 @@ class MainController:
         try:
             self.widget.buttonSynthesisAudio.clicked.connect(self.open_synthesis_app)
             self.widget.buttonChangeF0.clicked.connect(self.open_change_f0_app)
+            self.widget.buttonSpec2Wav.clicked.connect(self.open_spec2wav_app)
         except Exception:
             pass
+        try:
+            self.widget.buttonIPAConverter.clicked.connect(self.open_ipa_converter)
+        except AttributeError:
+            pass
         self.widget.buttonExit.clicked.connect(self.open_help)
+
+
+
+    def toggle_theme(self) -> None:
+        app = QtWidgets.QApplication.instance()
+        if not app:
+            return
+        
+        if self.is_dark:
+            # Switch to Light (白底黑字)
+            app.setStyleSheet(GLOBAL_LIGHT_STYLESHEET)
+            self.widget.setStyleSheet(LIGHT_MAIN_STYLESHEET)
+            self.is_dark = False
+        else:
+            # Switch to Dark (黑底白字)
+            app.setStyleSheet(GLOBAL_DARK_STYLESHEET)
+            self.widget.setStyleSheet(DARK_MAIN_STYLESHEET)
+            self.is_dark = True
+
+    def open_auto_annotation(self) -> None:
+        """启动外部 MFA 对齐脚本 (auto_alignment/auto_alignment.bat)
+        
+        auto_alignment 文件夹应放在 PhoneticToolbox.exe 同级目录下，
+        不打包进 exe 内部。
+        """
+        import subprocess
+        try:
+            # 获取 exe 所在目录（打包后）或脚本所在目录（开发时）
+            if getattr(sys, 'frozen', False):
+                # 打包后的 exe 所在目录
+                exe_dir = Path(sys.executable).parent
+            else:
+                # 开发模式：脚本所在目录
+                exe_dir = Path(__file__).parent
+            
+            # 在 exe 同级目录下查找 auto_alignment 文件夹
+            bat_path = exe_dir / "auto_alignment" / "auto_alignment.bat"
+            
+            if not bat_path.exists():
+                QtWidgets.QMessageBox.critical(
+                    self.widget, 
+                    "自动标注", 
+                    f"找不到自动标注脚本:\n{bat_path}\n\n"
+                    "请确保 auto_alignment 文件夹已解压到 PhoneticToolbox.exe 同级目录下。"
+                )
+                return
+            
+            # Launch the batch script
+            subprocess.Popen([str(bat_path)], shell=True, cwd=str(bat_path.parent))
+            QtWidgets.QMessageBox.information(
+                self.widget, 
+                "自动标注", 
+                f"已启动自动标注程序。\n脚本路径: {bat_path}"
+            )
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self.widget, "自动标注", f"启动失败: {e}")
+
+    def open_lip_feature_analysis(self) -> None:
+        """启动唇形提取程序
+        
+        lip_feature_analysis 文件夹应放在 PhoneticToolbox.exe 同级目录下
+        """
+        try:
+            import subprocess
+            
+            # 获取 exe 所在目录（打包后）或脚本所在目录（开发时）
+            if getattr(sys, 'frozen', False):
+                # 打包后的 exe 所在目录
+                exe_dir = Path(sys.executable).parent
+            else:
+                # 开发模式：脚本所在目录
+                exe_dir = Path(__file__).parent
+            
+            # 在 exe 同级目录下查找
+            candidates = [
+                exe_dir / "lip_feature_analysis" / "lip_feature_analysis.exe",
+                resource_path("lip_feature_analysis/lip_feature_analysis.exe"),
+                Path("lip_feature_analysis/lip_feature_analysis.exe"),
+            ]
+            
+            exe_path = None
+            for p in candidates:
+                if Path(p).exists():
+                    exe_path = Path(p)
+                    log.info(f"Found lip_feature_analysis at: {exe_path}")
+                    break
+            
+            if not exe_path:
+                QtWidgets.QMessageBox.critical(
+                    self.widget, 
+                    "唇形提取", 
+                    f"找不到可执行文件:\n{exe_dir / 'lip_feature_analysis' / 'lip_feature_analysis.exe'}\n\n"
+                    "请确保 lip_feature_analysis 文件夹存在。"
+                )
+                return
+
+            # Use Popen to launch independently
+            # Set CWD to the exe's directory so it can find _internal if needed
+            subprocess.Popen([str(exe_path)], cwd=str(exe_path.parent))
+            QtWidgets.QMessageBox.information(
+                self.widget, 
+                "唇形提取", 
+                f"程序已启动。\n程序路径: {exe_path}"
+            )
+            
+        except Exception as e:
+            import traceback
+            log.error(f"Failed to open lip_feature_analysis: {traceback.format_exc()}")
+            QtWidgets.QMessageBox.critical(self.widget, "唇形提取", f"启动失败: {e}")
 
     def open_parameter_estimation(self) -> None:
         self._show_child("ui_parameter_estimation", ParameterEstimationController)
@@ -93,9 +600,23 @@ class MainController:
         try:
             from PyQt6.QtCore import QUrl
             from PyQt6.QtGui import QDesktopServices
-            html_path = resource_path("perception_experiment/perception_experiment.html")
-            if not html_path.exists():
-                QtWidgets.QMessageBox.warning(self.widget, "感知实验", f"未找到页面: {html_path}")
+            
+            candidates = [
+                resource_path("perception_experiment/perception_experiment.html"),
+                Path(r"c:\Users\13680\Desktop\project\【中山大学】\PhoneticToolbox\perception_experiment\perception_experiment.html"),
+            ]
+            
+            html_path = None
+            for p in candidates:
+                try:
+                    if Path(p).exists():
+                        html_path = Path(p)
+                        break
+                except Exception:
+                    continue
+            
+            if not html_path:
+                QtWidgets.QMessageBox.warning(self.widget, "感知实验", f"未找到页面: perception_experiment.html")
                 return
             QDesktopServices.openUrl(QUrl.fromLocalFile(str(html_path)))
         except Exception as e:
@@ -106,8 +627,8 @@ class MainController:
             from PyQt6.QtCore import QUrl
             from PyQt6.QtGui import QDesktopServices
             candidates = [
-                Path(r"c:\Users\13680\Desktop\project\【中山大学】\PhoneticToolbox\PhoneticToolboxDoc.html"),
-                resource_path("PhoneticToolboxDoc.html"),
+                Path(r"c:\Users\13680\Desktop\project\【中山大学】\PhoneticToolbox\index.html"),
+                resource_path("index.html"),
             ]
             target = None
             for p in candidates:
@@ -118,7 +639,7 @@ class MainController:
                 except Exception:
                     pass
             if not target:
-                QtWidgets.QMessageBox.warning(self.widget, "使用说明", "未找到使用说明页面")
+                QtWidgets.QMessageBox.warning(self.widget, "使用说明", "未找到使用说明页面 (index.html)")
                 return
             QDesktopServices.openUrl(QUrl.fromLocalFile(str(target)))
         except Exception as e:
@@ -126,17 +647,14 @@ class MainController:
 
     def open_egg_analysis(self) -> None:
         try:
-            import subprocess
-            exe_rel = "EGG/EGG信号分析.exe"
-            exe_path = resource_path(exe_rel)
-            if not exe_path.exists():
-                cand = Path(__file__).resolve().parent / "EGG" / "dist" / "EGG信号分析.exe"
-                if cand.exists():
-                    exe_path = cand
-            if not exe_path.exists():
-                QtWidgets.QMessageBox.warning(self.widget, "EGG信号分析", f"未找到可执行文件: {exe_rel}")
-                return
-            subprocess.Popen([str(exe_path)])
+            # Directly import and instantiate the Python class
+            try:
+                from EGG.main_app import EGGAnalysisApp
+            except ImportError:
+                from .EGG.main_app import EGGAnalysisApp
+            # Keep a reference to prevent garbage collection
+            self._egg_window = EGGAnalysisApp()
+            self._egg_window.show()
             self._integrate_egg_results()
         except Exception as e:
             QtWidgets.QMessageBox.critical(self.widget, "EGG信号分析", f"启动失败: {e}")
@@ -146,42 +664,143 @@ class MainController:
 
     def open_synthesis_app(self) -> None:
         try:
-            import subprocess
-            exe_rel = "klatt/klatt合成器.exe"
-            exe_path = resource_path(exe_rel)
-            if not exe_path.exists():
-                alt_rel = "klatt/Klatt合成器.exe"
-                exe_path = resource_path(alt_rel) if resource_path(alt_rel).exists() else exe_path
-            if not exe_path.exists():
-                cand = Path(__file__).resolve().parent / "klatt" / "dist" / "Klatt合成器.exe"
-                if cand.exists():
-                    exe_path = cand
-                else:
-                    cand2 = Path(__file__).resolve().parent / "klatt" / "dist" / "klatt合成器.exe"
-                    if cand2.exists():
-                        exe_path = cand2
-            if not exe_path.exists():
-                QtWidgets.QMessageBox.warning(self.widget, "合成音频", f"未找到可执行文件: {exe_rel}")
-                return
-            subprocess.Popen([str(exe_path)])
+            # Directly import and instantiate the Python class
+            try:
+                from klatt.klatt_gui import MainWindow as KlattMainWindow
+            except ImportError:
+                from .klatt.klatt_gui import MainWindow as KlattMainWindow
+            # Keep a reference to prevent garbage collection
+            self._klatt_window = KlattMainWindow()
+            self._klatt_window.show()
         except Exception as e:
             QtWidgets.QMessageBox.critical(self.widget, "合成音频", f"启动失败: {e}")
 
     def open_change_f0_app(self) -> None:
         try:
-            import subprocess
-            exe_rel = "changeF0/changeF0.exe"
-            exe_path = resource_path(exe_rel)
-            if not exe_path.exists():
-                cand = Path(__file__).resolve().parent / "changeF0" / "dist" / "changeF0.exe"
-                if cand.exists():
-                    exe_path = cand
-            if not exe_path.exists():
-                QtWidgets.QMessageBox.warning(self.widget, "修改基频", f"未找到可执行文件: {exe_rel}")
-                return
-            subprocess.Popen([str(exe_path)])
+            # Directly import and instantiate the Python class
+            try:
+                from changeF0.changeF0 import DraggablePitchEditor
+            except ImportError:
+                from .changeF0.changeF0 import DraggablePitchEditor
+            # Keep a reference to prevent garbage collection
+            self._changef0_window = DraggablePitchEditor()
+            self._changef0_window.show()
         except Exception as e:
             QtWidgets.QMessageBox.critical(self.widget, "修改基频", f"启动失败: {e}")
+
+    def open_spec2wav_app(self) -> None:
+        try:
+            log.info("Opening Spec2Wav app...")
+            
+            # For frozen app, ensure spec2wav path is available
+            if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+                meipass = sys._MEIPASS
+                log.info(f"Running in frozen mode, _MEIPASS: {meipass}")
+                
+                # Ensure _MEIPASS is in sys.path
+                if meipass not in sys.path:
+                    sys.path.insert(0, meipass)
+                    log.info(f"Added {meipass} to sys.path")
+                
+                # Check if spec2wav directory exists
+                spec2wav_path = Path(meipass) / 'spec2wav'
+                log.info(f"spec2wav path exists: {spec2wav_path.exists()}")
+                if spec2wav_path.exists():
+                    # List contents for debugging
+                    try:
+                        contents = list(spec2wav_path.iterdir())
+                        log.info(f"spec2wav contents: {[c.name for c in contents]}")
+                    except Exception as e:
+                        log.warning(f"Could not list spec2wav contents: {e}")
+            
+            # Try multiple import strategies
+            Spec2WavMainWindow = None
+            import_errors = []
+            
+            # Strategy 1: Direct import (works for both frozen and dev mode)
+            try:
+                from spec2wav.spec2wav_gui import MainWindow as Spec2WavMainWindow
+                log.info("Imported via direct import")
+            except ImportError as e1:
+                import_errors.append(f"Direct import: {e1}")
+                log.warning(f"Direct import failed: {e1}")
+                
+                # Strategy 2: Import from spec2wav module
+                try:
+                    from spec2wav import MainWindow as Spec2WavMainWindow
+                    log.info("Imported via spec2wav module")
+                except ImportError as e2:
+                    import_errors.append(f"Module import: {e2}")
+                    log.warning(f"Module import failed: {e2}")
+                    
+                    # Strategy 3: Relative import (for package mode)
+                    try:
+                        from .spec2wav.spec2wav_gui import MainWindow as Spec2WavMainWindow
+                        log.info("Imported via relative import")
+                    except ImportError as e3:
+                        import_errors.append(f"Relative import: {e3}")
+                        log.warning(f"Relative import failed: {e3}")
+                        
+                        # Strategy 4: Package import
+                        try:
+                            from PhoneticToolbox.spec2wav.spec2wav_gui import MainWindow as Spec2WavMainWindow
+                            log.info("Imported via package import")
+                        except ImportError as e4:
+                            import_errors.append(f"Package import: {e4}")
+                            log.warning(f"Package import failed: {e4}")
+            
+            if Spec2WavMainWindow is None:
+                raise ImportError(f"Failed to import Spec2WavMainWindow. Errors:\n" + "\n".join(import_errors))
+            
+            log.info("Spec2Wav module imported successfully")
+            # Keep a reference to prevent garbage collection
+            self._spec2wav_window = Spec2WavMainWindow()
+            self._spec2wav_window.show()
+            log.info("Spec2Wav window shown")
+        except Exception as e:
+            import traceback
+            error_msg = traceback.format_exc()
+            log.error(f"Failed to open Spec2Wav: {e}\n{error_msg}")
+            QtWidgets.QMessageBox.critical(self.widget, "语谱图转音频", f"启动失败: {e}\n\n详细信息:\n{error_msg}")
+
+    def open_ipa_converter(self) -> None:
+        """打开普通话转IPA网页"""
+        try:
+            from PyQt6.QtCore import QUrl
+            from PyQt6.QtGui import QDesktopServices
+            
+            # 获取 exe 所在目录（打包后）或脚本所在目录（开发时）
+            if getattr(sys, 'frozen', False):
+                exe_dir = Path(sys.executable).parent
+            else:
+                exe_dir = Path(__file__).parent
+            
+            candidates = [
+                exe_dir / "IPATrans" / "ipa_converter.html",
+                resource_path("IPATrans/ipa_converter.html"),
+                Path("IPATrans/ipa_converter.html"),
+            ]
+            
+            html_path = None
+            for p in candidates:
+                try:
+                    if Path(p).exists():
+                        html_path = Path(p)
+                        break
+                except Exception:
+                    continue
+            
+            if not html_path:
+                QtWidgets.QMessageBox.warning(
+                    self.widget, 
+                    "普通话转IPA", 
+                    f"未找到页面: ipa_converter.html\n\n"
+                    "请确保 IPATrans 文件夹存在于程序目录下。"
+                )
+                return
+            QDesktopServices.openUrl(QUrl.fromLocalFile(str(html_path)))
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self.widget, "普通话转IPA", f"打开失败: {e}")
 
     def open_manual_data(self) -> None:
         self._show_child("ui_manual_data", ManualDataController)
@@ -301,7 +920,7 @@ class SettingsController:
             # 已默认使用两种 F0 方法并行，不再提供选择
             self.state.Nperiods = int(self.widget.spinNPeriodsH.value())
             self.state.Nperiods_EC = int(self.widget.spinNPeriodsEC.value())
-            # 保存 REAPER 参数
+            # 保存 REAPER 参数，并同步到 Praat 和其他 F0 相关参数
             try:
                 self.state.F0ReaperBin = self.widget.editReaperBin.text().strip()
                 try:
@@ -309,8 +928,10 @@ class SettingsController:
                     self.state.F0ReaperFrameIntervalSec = float(self.widget.spinFrameShift.value()) / 1000.0
                 except Exception:
                     self.state.F0ReaperFrameIntervalSec = float(self.state.frameshift) / 1000.0
-                self.state.F0ReaperMinF0 = int(self.widget.spinReaperMinF0.value())
-                self.state.F0ReaperMaxF0 = int(self.widget.spinReaperMaxF0.value())
+                # 使用 set_f0_range 同步所有 F0 范围参数（REAPER、Praat、SHR 等）
+                min_f0 = int(self.widget.spinReaperMinF0.value())
+                max_f0 = int(self.widget.spinReaperMaxF0.value())
+                self.state.set_f0_range(min_f0, max_f0)
                 self.state.F0ReaperHilbert = 1 if self.widget.checkReaperHilbert.isChecked() else 0
                 self.state.F0ReaperNoHighpass = 1 if self.widget.checkReaperNoHighpass.isChecked() else 0
             except Exception:
@@ -359,9 +980,11 @@ class ParameterEstimationController:
             self.widget.buttonReadTextGrid.clicked.connect(self._read_textgrid)
             self.widget.buttonTextGridSegmentation.clicked.connect(self._toggle_segmentation)
             self.widget.buttonSaveSegmentedAudio.clicked.connect(self._save_segmented_audio)
+            self.widget.buttonReadLipData.clicked.connect(self._read_lip_data)
         except Exception:
             pass
         self._textgrid_cache = {}
+        self._lip_data_map = {}
         self._selected_tier_name = None
         try:
             self.widget.listFiles.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.ExtendedSelection)
@@ -372,6 +995,32 @@ class ParameterEstimationController:
     def _read_textgrid(self) -> None:
         self._refresh_files()
         QtWidgets.QMessageBox.information(self.widget, "TextGrid", "已重新读取目录下的TextGrid文件")
+
+    def _read_lip_data(self) -> None:
+        p = Path(self.widget.editInputDir.text())
+        if not p.exists():
+            QtWidgets.QMessageBox.warning(self.widget, "唇形数据", "输入目录不存在")
+            return
+            
+        count = 0
+        self._lip_data_map = {}
+        
+        # Look for .pkl files in the directory
+        # Strategy: Iterate over all wav files in the list, check if corresponding pkl exists
+        items = [self.widget.listFiles.item(i).text() for i in range(self.widget.listFiles.count())]
+        
+        for name in items:
+            wav_path = p / name
+            # Assume pkl has same stem as wav
+            pkl_path = wav_path.with_suffix(".pkl")
+            if pkl_path.exists():
+                self._lip_data_map[name] = pkl_path
+                count += 1
+                
+        if count > 0:
+            QtWidgets.QMessageBox.information(self.widget, "唇形数据", f"已关联 {count} 个音频文件的唇形数据 (.pkl)\n(将自动尝试加载同名 _timestamps.pkl 用于时间对齐)")
+        else:
+            QtWidgets.QMessageBox.warning(self.widget, "唇形数据", "未找到与音频同名的 .pkl 唇形数据文件")
 
     def _toggle_segmentation(self) -> None:
         items = self.widget.listFiles.selectedItems()
@@ -515,7 +1164,14 @@ class ParameterEstimationController:
         if not p.exists():
             return
         
-        from .utils.textgrid_parser import parse_textgrid
+        try:
+            from utils.textgrid_parser import parse_textgrid
+        except ImportError:
+            try:
+                from .utils.textgrid_parser import parse_textgrid
+            except ImportError:
+                # Fallback for frozen app where utils might be at root
+                from textgrid_parser import parse_textgrid
         
         for wav in p.rglob("*.wav") if self.state.recursedir else p.glob("*.wav"):
             self.widget.listFiles.addItem(str(wav.name))
@@ -541,7 +1197,7 @@ class ParameterEstimationController:
         # User requested to ignore segmentation options for main processing
         tier_name = None
 
-        self._worker = PEWorker(items, input_dir, output_dir, self.state, tier_name)
+        self._worker = PEWorker(items, input_dir, output_dir, self.state, tier_name, self._lip_data_map)
         def _on_progress(val: int, name: str) -> None:
             try:
                 progress.setValue(val)
@@ -573,7 +1229,14 @@ class ParameterEstimationController:
         name = sel_items[0].text()
         wav_path = Path(self.widget.editInputDir.text()) / name
         try:
-            from .services.praat_service import read_wav_mono_float
+            try:
+                from services.praat_service import read_wav_mono_float
+            except ImportError:
+                try:
+                    from .services.praat_service import read_wav_mono_float
+                except ImportError:
+                    import services.praat_service as praat_service_mod
+                    read_wav_mono_float = praat_service_mod.read_wav_mono_float
             fs, y = read_wav_mono_float(wav_path)
         except Exception as e:
             QtWidgets.QMessageBox.critical(self.widget, "波形显示", f"读取失败: {e}")
@@ -763,8 +1426,11 @@ class ParameterDisplayController:
         wav_path = Path(self.widget.editWavDir.text()) / name
         self._current_wav_path = wav_path
         mat_path = Path(self.widget.editMatDir.text()) / f"{Path(name).stem}.csv"
-        from .services.praat_service import read_wav_mono_float
         try:
+            try:
+                from services.praat_service import read_wav_mono_float
+            except ImportError:
+                from .services.praat_service import read_wav_mono_float
             fs, y = read_wav_mono_float(wav_path)
         except Exception:
             fs, y = 16000, np.zeros(1000)
@@ -899,6 +1565,10 @@ class ParameterDisplayController:
             "SpectralSlope_rF0": "频谱倾斜 (rF0)",
             "Jitter": "基频抖动",
             "Shimmer": "振幅抖动",
+            "LipArea": "唇面积比 (Lip Area Ratio)",
+            "LipWidth": "外唇宽度 (Outer Lip Width)",
+            "LipOpen": "唇开度 (Lip Openness)",
+            "LipCirc": "唇圆度 (Lip Circularity)",
         }
         out = []
         rev = {}
@@ -970,7 +1640,13 @@ class ParameterDisplayController:
         if tg_tiers_to_plot:
             tg_path = self._current_wav_path.with_suffix(".TextGrid")
             if tg_path.exists():
-                from .utils.textgrid_parser import parse_textgrid
+                try:
+                    from utils.textgrid_parser import parse_textgrid
+                except ImportError:
+                    try:
+                        from .utils.textgrid_parser import parse_textgrid
+                    except ImportError:
+                         from textgrid_parser import parse_textgrid
                 tg = parse_textgrid(tg_path)
                 if tg:
                     for idx, tier_name in enumerate(tg_tiers_to_plot):
@@ -1256,6 +1932,10 @@ class OutputTextController:
             "SpectralSlope_rF0": "频谱倾斜 (rF0)",
             "Jitter": "基频抖动",
             "Shimmer": "振幅抖动",
+            "LipArea": "唇面积比 (Lip Area Ratio)",
+            "LipWidth": "外唇宽度 (Outer Lip Width)",
+            "LipOpen": "唇开度 (Lip Openness)",
+            "LipCirc": "唇圆度 (Lip Circularity)",
         }
 
     def _populate_paramlist(self) -> None:
@@ -1703,6 +2383,12 @@ class AboutController:
                 background-color: #1e1e1e;
                 color: #ffffff;
             }
+            QTextBrowser {
+                background-color: #1e1e1e;
+                color: #ffffff;
+                border: 1px solid #333333;
+                padding: 10px;
+            }
             QPushButton {
                 background-color: #333333;
                 border: 1px solid #555555;
@@ -1713,6 +2399,34 @@ class AboutController:
             }
         """)
         
+        # Add Update Button (Dynamically)
+        self.btn_update = QtWidgets.QPushButton("检查更新")
+        self.btn_update.setCursor(QtCore.Qt.CursorShape.PointingHandCursor)
+        # Use a distinct style for the update button if desired, or inherit
+        self.btn_update.setStyleSheet("""
+            QPushButton {
+                background-color: #2980b9; 
+                color: white; 
+                border: 1px solid #34495e;
+                padding: 6px;
+                border-radius: 4px;
+                font-weight: bold;
+            }
+            QPushButton:hover { background-color: #3498db; }
+        """)
+        self.btn_update.clicked.connect(self._check_update)
+        
+        # Try to add it to layout before OK button
+        try:
+            layout = self.widget.layout()
+            idx = layout.indexOf(self.widget.buttonOK)
+            if idx >= 0:
+                layout.insertWidget(idx, self.btn_update)
+            else:
+                layout.addWidget(self.btn_update)
+        except Exception:
+            pass
+
         # ASCII Art Title
         ascii_title = ASCII_TITLE
         try:
@@ -1722,20 +2436,80 @@ class AboutController:
             self.widget.labelTitle.setFont(font)
         except Exception:
             pass
+
+    def _check_update(self) -> None:
+        self.btn_update.setEnabled(False)
+        self.btn_update.setText("正在检查...")
+        self._worker = CheckUpdateWorker()
+        self._worker.finished_sig.connect(self._on_check_finished)
+        self._worker.start()
+
+    def _on_check_finished(self, has_update: bool, ver: str, url: str, log: str) -> None:
+        self.btn_update.setEnabled(True)
+        self.btn_update.setText("检查更新")
+        
+        if not has_update:
+            if ver == "0.0.0" or not ver:
+                 QtWidgets.QMessageBox.information(self.widget, "检查更新", "无法连接到 GitHub 检查更新。\n\n可能的原因：\n• 网络连接不稳定\n• GitHub 服务暂时不可用\n• 防火墙或代理设置阻止了访问\n\n请稍后再试，或访问项目主页手动检查更新：\nhttps://github.com/Nephelium/PhoneticToolbox/releases")
+            else:
+                 QtWidgets.QMessageBox.information(self.widget, "检查更新", f"当前已是最新版本 ({ver})。")
+            return
+        
+        # Has update
+        msg = f"发现新版本: {ver}\n\n更新日志:\n{log}\n\n是否立即更新？"
+        ret = QtWidgets.QMessageBox.question(self.widget, "发现更新", msg, 
+                                             QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No)
+        
+        if ret == QtWidgets.QMessageBox.StandardButton.Yes:
+            if not url or not url.startswith("http"):
+                QtWidgets.QMessageBox.warning(self.widget, "错误", "无效的下载链接。")
+                return
+            
+            QtWidgets.QMessageBox.information(self.widget, "提示", "即将开始下载更新。\n下载完成后，程序将自动重启。")
+            
+            try:
+                self.pd = QtWidgets.QProgressDialog("正在下载更新...", "取消", 0, 100, self.widget)
+                self.pd.setWindowModality(QtCore.Qt.WindowModality.WindowModal)
+                self.pd.show()
+                
+                def _progress(p):
+                    self.pd.setValue(p)
+                    QtWidgets.QApplication.processEvents()
+                    if self.pd.wasCanceled():
+                        raise Exception("用户取消")
+
+                update_service.perform_update(url, _progress)
+            except Exception as e:
+                self.pd.close()
+                QtWidgets.QMessageBox.critical(self.widget, "更新失败", f"更新出错: {e}")
 class PEWorker(QThread):
     progress_sig = pyqtSignal(int, str)
     error_sig = pyqtSignal(str)
     finished_sig = pyqtSignal()
 
-    def __init__(self, items: list[str], input_dir: Path, output_dir: Path, state: AppState, tier_name: Optional[str] = None):
+    def __init__(self, items: list[str], input_dir: Path, output_dir: Path, state: AppState, tier_name: Optional[str] = None, lip_data_map: Dict[str, Path] = None):
         super().__init__()
         self.items = items
         self.input_dir = input_dir
         self.output_dir = output_dir
         self.state = state
         self.tier_name = tier_name
+        self.lip_data_map = lip_data_map or {}
 
     def run(self) -> None:
+        try:
+            from utils.lip_reader import read_lip_data
+        except ImportError:
+            try:
+                from .utils.lip_reader import read_lip_data
+            except ImportError:
+                try:
+                    import utils.lip_reader as lip_reader_mod
+                    read_lip_data = lip_reader_mod.read_lip_data
+                except ImportError:
+                    # Fallback if utils is at root
+                    from lip_reader import read_lip_data
+
         for i, name in enumerate(self.items, start=1):
             if self.isInterruptionRequested():
                 break
@@ -1751,7 +2525,19 @@ class PEWorker(QThread):
                 method=self.state.F0Praatmethod,
                 )
                 try:
-                    from .services.praat_service import compute_reaper_f0
+                    try:
+                        from services.praat_service import compute_reaper_f0
+                    except ImportError:
+                        try:
+                            from .services.praat_service import compute_reaper_f0
+                        except ImportError:
+                            import services.praat_service as praat_service_mod
+                            compute_reaper_f0 = praat_service_mod.compute_reaper_f0
+                except ImportError:
+                     # Final fallback if absolutely nothing works (should not happen if packaged correctly)
+                     pass
+
+                try:
                     r_res = compute_reaper_f0(
                         wav_path=wav_path,
                         frame_interval_sec=float(self.state.F0ReaperFrameIntervalSec),
@@ -1776,10 +2562,24 @@ class PEWorker(QThread):
                     print("REAPER F0 计算失败:", e)
                 
                 self.progress_sig.emit(base + 2, name)
-                from .services.praat_service import read_wav_mono_float
+                try:
+                    from services.praat_service import read_wav_mono_float
+                except ImportError:
+                    try:
+                        from .services.praat_service import read_wav_mono_float
+                    except ImportError:
+                        import services.praat_service as praat_service_mod
+                        read_wav_mono_float = praat_service_mod.read_wav_mono_float
                 fs, y = read_wav_mono_float(wav_path)
                 try:
-                    from .services.praat_service import compute_shrp_f0
+                    try:
+                        from services.praat_service import compute_shrp_f0
+                    except ImportError:
+                        try:
+                            from .services.praat_service import compute_shrp_f0
+                        except ImportError:
+                            import services.praat_service as praat_service_mod
+                            compute_shrp_f0 = praat_service_mod.compute_shrp_f0
                     shrp_res = compute_shrp_f0(
                         wav_path=wav_path,
                         frameshift_ms=self.state.frameshift,
@@ -1803,7 +2603,14 @@ class PEWorker(QThread):
                             if rTimes.size == rF0.size and rTimes.size > 1:
                                 target_t = np.arange(1, tgt_len + 1, dtype=float) * (float(self.state.frameshift) / 1000.0)
                                 src = np.nan_to_num(rF0, nan=-1.0)
-                                from .services.praat_service import round_half_away_from_zero
+                                try:
+                                    from services.praat_service import round_half_away_from_zero
+                                except ImportError:
+                                    try:
+                                        from .services.praat_service import round_half_away_from_zero
+                                    except ImportError:
+                                        import services.praat_service as praat_service_mod
+                                        round_half_away_from_zero = praat_service_mod.round_half_away_from_zero
                                 times_sec = round_half_away_from_zero(rTimes * 1000.0).astype(float) / 1000.0
                                 rF0i = np.interp(target_t, times_sec, src, left=-1.0, right=-1.0)
                             else:
@@ -1834,28 +2641,68 @@ class PEWorker(QThread):
                 voiced_mask = Ewin > th
                 
                 if np.any(np.isnan(pF0) & voiced_mask):
-                    from .services.praat_service import compute_creaky_f0
+                    try:
+                        from services.praat_service import compute_creaky_f0
+                    except ImportError:
+                        try:
+                            from .services.praat_service import compute_creaky_f0
+                        except ImportError:
+                            import services.praat_service as praat_service_mod
+                            compute_creaky_f0 = praat_service_mod.compute_creaky_f0
                     creaky = compute_creaky_f0(y, fs, self.state.frameshift)
                     n = min(pF0.shape[0], creaky.shape[0])
                     for kk in range(n):
                         if voiced_mask[kk] and (np.isnan(pF0[kk]) or pF0[kk] <= 0):
                             pF0[kk] = creaky[kk]
                     result["pF0"] = pF0
-                from .services.praat_service import (
-                    compute_harmonics_H1H2H4,
-                    compute_A1A2A3,
-                    compute_H1A1A2A3_corrected,
-                    compute_H1H2_H2H4_corrected,
-                    compute_CPP,
-                    compute_HNR,
-                    compute_SHR,
-                    compute_spectral_slope,
-                    compute_jitter_shimmer,
-                    compute_harmonic_at_fixed_freq,
-                    compute_harmonic_at_fixed_freq_with_freq,
-                    compute_H42K_corrected,
-                    compute_2K5K_corrected,
-                )
+                try:
+                    from services.praat_service import (
+                        compute_harmonics_H1H2H4,
+                        compute_A1A2A3,
+                        compute_H1A1A2A3_corrected,
+                        compute_H1H2_H2H4_corrected,
+                        compute_CPP,
+                        compute_HNR,
+                        compute_SHR,
+                        compute_spectral_slope,
+                        compute_jitter_shimmer,
+                        compute_harmonic_at_fixed_freq,
+                        compute_harmonic_at_fixed_freq_with_freq,
+                        compute_H42K_corrected,
+                        compute_2K5K_corrected,
+                    )
+                except ImportError:
+                    try:
+                        from .services.praat_service import (
+                            compute_harmonics_H1H2H4,
+                            compute_A1A2A3,
+                            compute_H1A1A2A3_corrected,
+                            compute_H1H2_H2H4_corrected,
+                            compute_CPP,
+                            compute_HNR,
+                            compute_SHR,
+                            compute_spectral_slope,
+                            compute_jitter_shimmer,
+                            compute_harmonic_at_fixed_freq,
+                            compute_harmonic_at_fixed_freq_with_freq,
+                            compute_H42K_corrected,
+                            compute_2K5K_corrected,
+                        )
+                    except ImportError:
+                        import services.praat_service as praat_service_mod
+                        compute_harmonics_H1H2H4 = praat_service_mod.compute_harmonics_H1H2H4
+                        compute_A1A2A3 = praat_service_mod.compute_A1A2A3
+                        compute_H1A1A2A3_corrected = praat_service_mod.compute_H1A1A2A3_corrected
+                        compute_H1H2_H2H4_corrected = praat_service_mod.compute_H1H2_H2H4_corrected
+                        compute_CPP = praat_service_mod.compute_CPP
+                        compute_HNR = praat_service_mod.compute_HNR
+                        compute_SHR = praat_service_mod.compute_SHR
+                        compute_spectral_slope = praat_service_mod.compute_spectral_slope
+                        compute_jitter_shimmer = praat_service_mod.compute_jitter_shimmer
+                        compute_harmonic_at_fixed_freq = praat_service_mod.compute_harmonic_at_fixed_freq
+                        compute_harmonic_at_fixed_freq_with_freq = praat_service_mod.compute_harmonic_at_fixed_freq_with_freq
+                        compute_H42K_corrected = praat_service_mod.compute_H42K_corrected
+                        compute_2K5K_corrected = praat_service_mod.compute_2K5K_corrected
                 rF0u = np.array(result.get("rF0Uniform", []), dtype=float)
                 if rF0u.size == 0:
                     rF0u = np.array(result.get("rF0", []), dtype=float)
@@ -1941,50 +2788,64 @@ class PEWorker(QThread):
                     result[f"SpectralSlope_{label}"] = slope
                 _compute_with("pF0", pF0)
                 _compute_with("rF0", rF0u)
+
+                # Lip Data Processing
+                if name in self.lip_data_map:
+                    try:
+                        lip_pkl = self.lip_data_map[name]
+                        nf = pF0.shape[0]
+                        target_times = np.arange(nf) * float(self.state.frameshift) / 1000.0
+                        # Load raw interpolated data (smoothing handled below with other params)
+                        lip_res = read_lip_data(str(lip_pkl), target_times, smooth_win=0)
+                        result.update(lip_res)
+                    except Exception as e:
+                        print(f"Lip data error for {name}: {e}")
+
                 self.progress_sig.emit(base + 19, name)
                 jit, shim = compute_jitter_shimmer(y, fs, self.state.frameshift, self.state.windowsize, voiced_mask=voiced_mask)
                 result["Jitter"] = jit
                 result["Shimmer"] = shim
-                
+            
+            # 平滑与离群剔除
                 def _smooth_points(arr: np.ndarray, points: int) -> np.ndarray:
-                    try:
-                        x = np.array(arr, dtype=float)
-                        p = int(points)
-                        if p <= 0:
-                            return x
-                        m = ~np.isnan(x)
-                        if np.count_nonzero(m) == 0:
-                            return x
-                        out = x.copy()
-                        idx = np.where(m)[0]
-                        if idx.size == 0:
-                            return x
-                        cuts = np.where(np.diff(idx) > 1)[0]
-                        starts = np.concatenate(([0], cuts + 1))
-                        ends = np.concatenate((cuts, [idx.size - 1]))
-                        hl = p // 2
-                        hr = p - hl
-                        for si, ei in zip(starts, ends):
-                            s = int(idx[si]); e = int(idx[ei]); L = e - s + 1
-                            left_ok = (s > 0 and np.isnan(x[s - 1]))
-                            right_ok = (e < x.size - 1 and np.isnan(x[e + 1]))
-                            if L < p and left_ok and right_ok:
-                                out[s:e+1] = np.nan
-                                continue
-                            seg = x[s:e+1]
-                            if p <= 1 or L <= 1:
-                                out[s:e+1] = seg
-                                continue
-                            vals = np.empty_like(seg)
-                            for t in range(L):
-                                l = max(0, t - hl)
-                                r = min(L, t + hr)
-                                w = seg[l:r]
-                                vals[t] = float(np.mean(w)) if w.size > 0 else np.nan
-                            out[s:e+1] = vals
-                        return out
-                    except Exception:
-                        return arr
+                        try:
+                            x = np.array(arr, dtype=float)
+                            p = int(points)
+                            if p <= 0:
+                                return x
+                            m = ~np.isnan(x)
+                            if np.count_nonzero(m) == 0:
+                                return x
+                            out = x.copy()
+                            idx = np.where(m)[0]
+                            if idx.size == 0:
+                                return x
+                            cuts = np.where(np.diff(idx) > 1)[0]
+                            starts = np.concatenate(([0], cuts + 1))
+                            ends = np.concatenate((cuts, [idx.size - 1]))
+                            hl = p // 2
+                            hr = p - hl
+                            for si, ei in zip(starts, ends):
+                                s = int(idx[si]); e = int(idx[ei]); L = e - s + 1
+                                left_ok = (s > 0 and np.isnan(x[s - 1]))
+                                right_ok = (e < x.size - 1 and np.isnan(x[e + 1]))
+                                if L < p and left_ok and right_ok:
+                                    out[s:e+1] = np.nan
+                                    continue
+                                seg = x[s:e+1]
+                                if p <= 1 or L <= 1:
+                                    out[s:e+1] = seg
+                                    continue
+                                vals = np.empty_like(seg)
+                                for t in range(L):
+                                    l = max(0, t - hl)
+                                    r = min(L, t + hr)
+                                    w = seg[l:r]
+                                    vals[t] = float(np.mean(w)) if w.size > 0 else np.nan
+                                out[s:e+1] = vals
+                            return out
+                        except Exception:
+                            return arr
                 win = int(self.state.O_smoothwinsize)
                 keys_for_smooth = [
                     "pF0","pF1","pF2","pF3","pF4","pB1","pB2","pB3","pB4",
@@ -1992,11 +2853,12 @@ class PEWorker(QThread):
                     "H1A1c_pF0","H1A2c_pF0","H1A3c_pF0","H2K_pF0","H5K_pF0","H42Ku_pF0","H2KH5Ku_pF0","H42Kc_pF0","H2KH5Kc_pF0","CPP_pF0","HNR05_pF0","HNR15_pF0","HNR25_pF0","HNR35_pF0","SHR_pF0","SpectralSlope_pF0",
                     "H1_rF0","H2_rF0","H4_rF0","A1_rF0","A2_rF0","A3_rF0",
                     "H1A1c_rF0","H1A2c_rF0","H1A3c_rF0","H2K_rF0","H5K_rF0","H42Ku_rF0","H2KH5Ku_rF0","H42Kc_rF0","H2KH5Kc_rF0","CPP_rF0","HNR05_rF0","HNR15_rF0","HNR25_rF0","HNR35_rF0","SHR_rF0","SpectralSlope_rF0",
-                    "Energy","Jitter","Shimmer"
+                "Energy","Jitter","Shimmer",
+                "LipArea", "LipWidth", "LipOpen", "LipCirc"
                 ]
                 for key in keys_for_smooth:
-                    if key in result:
-                        result[key] = _smooth_points(result[key], win)
+                        if key in result:
+                            result[key] = _smooth_points(result[key], win)
                 # 平滑/离群之后再计算未校正的差值，确保与最终H/A值一致
                 for label in ["pF0", "rF0"]:
                     try:
@@ -2054,7 +2916,13 @@ class PEWorker(QThread):
             try:
                 tg_path = wav_path.with_suffix(".TextGrid")
                 if tg_path.exists():
-                    from .utils.textgrid_parser import parse_textgrid
+                    try:
+                        from utils.textgrid_parser import parse_textgrid
+                    except ImportError:
+                        try:
+                            from .utils.textgrid_parser import parse_textgrid
+                        except ImportError:
+                            from textgrid_parser import parse_textgrid
                     tg = parse_textgrid(tg_path)
                     if tg:
                         # Determine frame count
@@ -2129,10 +2997,20 @@ def run_parameter_estimation_once(wav_dir: Optional[str] = None, mat_dir: Option
                 method=state.F0Praatmethod,
             )
             
-            from .services.praat_service import read_wav_mono_float
+            try:
+                from services.praat_service import read_wav_mono_float
+            except ImportError:
+                from .services.praat_service import read_wav_mono_float
             fs, y = read_wav_mono_float(wav_path)
             try:
-                from .services.praat_service import compute_shrp_f0
+                try:
+                    from services.praat_service import compute_shrp_f0
+                except ImportError:
+                    try:
+                        from .services.praat_service import compute_shrp_f0
+                    except ImportError:
+                        import services.praat_service as praat_service_mod
+                        compute_shrp_f0 = praat_service_mod.compute_shrp_f0
                 shrp_res = compute_shrp_f0(
                     wav_path=wav_path,
                     frameshift_ms=state.frameshift,
@@ -2169,20 +3047,51 @@ def run_parameter_estimation_once(wav_dir: Optional[str] = None, mat_dir: Option
                 Ewin[k] = float(np.sum(seg.astype(float) ** 2))
             th = float(np.max(Ewin)) * float(state.voicing_energy_threshold_ratio)
             voiced_mask = Ewin > th
-            from .services.praat_service import (
-                compute_harmonics_H1H2H4,
-                compute_A1A2A3,
-                compute_H1A1A2A3_corrected,
-                compute_CPP,
-                compute_HNR,
-                compute_SHR,
-                compute_spectral_slope,
-                compute_jitter_shimmer,
-                compute_harmonic_at_fixed_freq,
-                compute_harmonic_at_fixed_freq_with_freq,
-                compute_H42K_corrected,
-                compute_2K5K_corrected,
-            )
+            try:
+                from services.praat_service import (
+                    compute_harmonics_H1H2H4,
+                    compute_A1A2A3,
+                    compute_H1A1A2A3_corrected,
+                    compute_CPP,
+                    compute_HNR,
+                    compute_SHR,
+                    compute_spectral_slope,
+                    compute_jitter_shimmer,
+                    compute_harmonic_at_fixed_freq,
+                    compute_harmonic_at_fixed_freq_with_freq,
+                    compute_H42K_corrected,
+                    compute_2K5K_corrected,
+                )
+            except ImportError:
+                try:
+                    from .services.praat_service import (
+                        compute_harmonics_H1H2H4,
+                        compute_A1A2A3,
+                        compute_H1A1A2A3_corrected,
+                        compute_CPP,
+                        compute_HNR,
+                        compute_SHR,
+                        compute_spectral_slope,
+                        compute_jitter_shimmer,
+                        compute_harmonic_at_fixed_freq,
+                        compute_harmonic_at_fixed_freq_with_freq,
+                        compute_H42K_corrected,
+                        compute_2K5K_corrected,
+                    )
+                except ImportError:
+                    import services.praat_service as praat_service_mod
+                    compute_harmonics_H1H2H4 = praat_service_mod.compute_harmonics_H1H2H4
+                    compute_A1A2A3 = praat_service_mod.compute_A1A2A3
+                    compute_H1A1A2A3_corrected = praat_service_mod.compute_H1A1A2A3_corrected
+                    compute_CPP = praat_service_mod.compute_CPP
+                    compute_HNR = praat_service_mod.compute_HNR
+                    compute_SHR = praat_service_mod.compute_SHR
+                    compute_spectral_slope = praat_service_mod.compute_spectral_slope
+                    compute_jitter_shimmer = praat_service_mod.compute_jitter_shimmer
+                    compute_harmonic_at_fixed_freq = praat_service_mod.compute_harmonic_at_fixed_freq
+                    compute_harmonic_at_fixed_freq_with_freq = praat_service_mod.compute_harmonic_at_fixed_freq_with_freq
+                    compute_H42K_corrected = praat_service_mod.compute_H42K_corrected
+                    compute_2K5K_corrected = praat_service_mod.compute_2K5K_corrected
             # Dual-run: 使用 pF0 和 rF0 计算两套 F0 相关参数
             rF0u = np.array(result.get("rF0Uniform", []), dtype=float)
             if rF0u.size == 0:
@@ -2334,7 +3243,7 @@ def run_parameter_estimation_once(wav_dir: Optional[str] = None, mat_dir: Option
             except Exception:
                 pass
             # 掩蔽无声段
-            for key in ["pF0", "strF0", "pF1", "pF2", "pF3", "pF4", "pB1", "pB2", "pB3", "pB4", "H1", "H2", "H4", "A1", "A2", "A3", "H1H2u", "H2H4u", "H1A1u", "H1A2u", "H1A3u", "H1A1c", "H1A2c", "H1A3c", "H2K", "H5K", "H42Ku", "H2KH5Ku", "CPP", "Energy", "HNR05", "HNR15", "HNR25", "HNR35", "SpectralSlope", "Jitter", "Shimmer"]:
+            for key in ["pF0", "strF0", "pF1", "pF2", "pF3", "pF4", "pB1", "pB2", "pB3", "pB4", "H1", "H2", "H4", "A1", "A2", "A3", "H1H2u", "H2H4u", "H1A1u", "H1A2u", "H1A3u", "H1A1c", "H1A2c", "H1A3c", "H2K", "H5K", "H42Ku", "H2KH5Ku", "CPP", "Energy", "HNR05", "HNR15", "HNR25", "HNR35", "SpectralSlope", "Jitter", "Shimmer", "LipArea", "LipWidth", "LipOpen", "LipCirc"]:
                 if key in result:
                     x = np.array(result[key], dtype=float)
                     n = min(x.shape[0], voiced_mask.shape[0])

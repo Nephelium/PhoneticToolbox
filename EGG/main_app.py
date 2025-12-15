@@ -39,23 +39,47 @@ except ImportError:
 
 
 # 从本地模块导入
-from gui_components import MplCanvas
-from analysis_algorithms import (
-    calculate_cq_sq,
-    apply_highpass_filter,
-    apply_lowpass_filter, find_gci_goi_peak_min_criterion,
-)
-# 从 config 导入常量
-from config import (
-    DEFAULT_PEAK_PROMINENCE, DEFAULT_VALLEY_PROMINENCE,
-    DEFAULT_ZOOM_WINDOW_MS,
-    DEFAULT_ROI_START, DEFAULT_ROI_DURATION,
-    DEFAULT_HIGHPASS_CUTOFF, DEFAULT_LOWPASS_CUTOFF,
-    DARK_STYLESHEET, MATPLOTLIB_STYLE_SETTINGS, DEFAULT_SPEC_WINDOW_MS,
-    DEFAULT_SPEC_VMIN, DEFAULT_SPEC_VMAX
-)
-# 从 inverse_filtering 导入 (保持不变)
-from inverse_filtering import apply_simplified_cp_inverse_filtering, plot_inverse_filtering_results
+try:
+    from .gui_components import MplCanvas
+    from .analysis_algorithms import (
+        calculate_cq_sq,
+        apply_highpass_filter,
+        apply_lowpass_filter, find_gci_goi_peak_min_criterion,
+    )
+    # 从 config 导入常量
+    from .config import (
+        DEFAULT_PEAK_PROMINENCE, DEFAULT_VALLEY_PROMINENCE,
+        DEFAULT_ZOOM_WINDOW_MS,
+        DEFAULT_ROI_START, DEFAULT_ROI_DURATION,
+        DEFAULT_HIGHPASS_CUTOFF, DEFAULT_LOWPASS_CUTOFF,
+        DARK_STYLESHEET, MATPLOTLIB_STYLE_SETTINGS, DEFAULT_SPEC_WINDOW_MS,
+        DEFAULT_SPEC_VMIN, DEFAULT_SPEC_VMAX
+    )
+    # 从 inverse_filtering 导入 (保持不变)
+    from .inverse_filtering import apply_simplified_cp_inverse_filtering, plot_inverse_filtering_results
+except ImportError:
+    # Fallback for standalone execution
+    from gui_components import MplCanvas
+    from analysis_algorithms import (
+        calculate_cq_sq,
+        apply_highpass_filter,
+        apply_lowpass_filter, find_gci_goi_peak_min_criterion,
+    )
+    from config import (
+        DEFAULT_PEAK_PROMINENCE, DEFAULT_VALLEY_PROMINENCE,
+        DEFAULT_ZOOM_WINDOW_MS,
+        DEFAULT_ROI_START, DEFAULT_ROI_DURATION,
+        DEFAULT_HIGHPASS_CUTOFF, DEFAULT_LOWPASS_CUTOFF,
+        DARK_STYLESHEET, MATPLOTLIB_STYLE_SETTINGS, DEFAULT_SPEC_WINDOW_MS,
+        DEFAULT_SPEC_VMIN, DEFAULT_SPEC_VMAX
+    )
+    from inverse_filtering import apply_simplified_cp_inverse_filtering, plot_inverse_filtering_results
+
+def get_resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), relative_path)
 
 # --- Main Application Window ---
 class EGGAnalysisApp(QMainWindow):
@@ -65,7 +89,11 @@ class EGGAnalysisApp(QMainWindow):
         super().__init__()
         self.setWindowTitle("EGG & Audio Analysis Tool")
         self.setGeometry(100, 100, 1350, 920)
-        icon_path = r"EGG.ico"
+        
+        # Apply Dark Theme
+        self.setStyleSheet(DARK_STYLESHEET)
+        
+        icon_path = get_resource_path("EGG.ico")
         icon = QIcon(icon_path)
         self.setWindowIcon(icon)
         app_inst = QApplication.instance()
@@ -133,11 +161,12 @@ class EGGAnalysisApp(QMainWindow):
         file_menu.addAction(exit_action)
 
         # --- Tools Menu ---
-        tools_menu = menubar.addMenu('工具(&T)')
+        # tools_menu = menubar.addMenu('工具(&T)')
         self.swap_action = QAction('交换左右声道', self, checkable=True)
         self.swap_action.setStatusTip("交换左右声道并重新加载文件（EGG 与音频对调）")
         self.swap_action.triggered.connect(self.toggle_channel_flip)
-        tools_menu.addAction(self.swap_action)
+        # tools_menu.addAction(self.swap_action)
+        menubar.addAction(self.swap_action)
 
         # --- Main Layout ---
         main_widget = QWidget(self)
@@ -1219,8 +1248,17 @@ class EGGAnalysisApp(QMainWindow):
         if self.egg_signal_processed is None or self.time_vector is None: return
         self.timeline_ax.cla()
         self.timeline_roi_patch = None
-        time_vec = np.array(self.time_vector)
-        egg_sig = np.array(self.egg_signal_processed)
+        
+        # Determine downsampling step based on file duration
+        step = 1
+        if self.file_duration > 100:
+            step = 50
+        elif self.file_duration > 10:
+            step = 10
+            
+        time_vec = np.array(self.time_vector)[::step]
+        egg_sig = np.array(self.egg_signal_processed)[::step]
+        
         self.timeline_ax.plot(time_vec, egg_sig, lw=0.7, color='darkgrey')
         self.timeline_ax.set_title("Timeline Overview (Click to set Start Time)", color='lightgray')
         self.timeline_ax.set_xlabel("Time (s)", color='lightgray')

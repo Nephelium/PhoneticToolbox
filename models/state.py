@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict, fields
 from pathlib import Path
+from typing import Dict, Any
 import platform
+import json
 
 
 @dataclass
@@ -51,8 +53,8 @@ class AppState:
     FormantsPraatNumFormants: int = 4
 
     F0ReaperFrameIntervalSec: float = 0.002
-    F0ReaperMinF0: int = 20
-    F0ReaperMaxF0: int = 500
+    F0ReaperMinF0: int = 40  # 与 Praat 保持一致
+    F0ReaperMaxF0: int = 500  # 与 Praat 保持一致
     F0ReaperHilbert: int = 1
     F0ReaperNoHighpass: int = 0
     F0ReaperBin: str = field(default_factory=lambda: str(Path.cwd() / "reaper.exe"))
@@ -158,3 +160,73 @@ class AppState:
     @staticmethod
     def _delim() -> str:
         return "\\" if platform.system() == "Windows" else "/"
+
+    def set_f0_range(self, min_f0: int, max_f0: int) -> None:
+        """设置所有 F0 相关参数的范围，保持 REAPER 和 Praat 同步。
+        
+        Args:
+            min_f0: 最低基频 (Hz)
+            max_f0: 最高基频 (Hz)
+        """
+        # REAPER 参数
+        self.F0ReaperMinF0 = min_f0
+        self.F0ReaperMaxF0 = max_f0
+        # Praat 参数
+        self.F0Praatmin = min_f0
+        self.F0Praatmax = max_f0
+        # 通用参数
+        self.minF0 = min_f0
+        self.maxF0 = max_f0
+        self.minstrF0 = min_f0
+        self.maxstrF0 = max_f0
+        # SHR 参数也使用相同范围
+        self.SHRmin = min_f0
+        self.SHRmax = max_f0
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize AppState to a dictionary for persistence.
+        
+        Converts all fields to JSON-serializable types.
+        """
+        result = {}
+        for f in fields(self):
+            value = getattr(self, f.name)
+            # Convert tuples to lists for JSON compatibility
+            if isinstance(value, tuple):
+                value = list(value)
+            result[f.name] = value
+        return result
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "AppState":
+        """Deserialize AppState from a dictionary.
+        
+        Handles type conversions for fields that need special handling.
+        """
+        # Filter to only include fields that exist in the dataclass AND are init=True
+        init_fields = {f.name for f in fields(cls) if f.init}
+        filtered_data = {}
+        
+        for key, value in data.items():
+            if key not in init_fields:
+                continue
+            # Convert lists back to tuples for tuple fields
+            field_obj = next((f for f in fields(cls) if f.name == key), None)
+            if field_obj and hasattr(field_obj.type, '__origin__'):
+                if field_obj.type.__origin__ is tuple:
+                    value = tuple(value) if isinstance(value, list) else value
+            filtered_data[key] = value
+        
+        return cls(**filtered_data)
+
+    def save_to_file(self, path: Path) -> None:
+        """Save settings to a JSON file."""
+        with open(path, 'w', encoding='utf-8') as f:
+            json.dump(self.to_dict(), f, indent=2, ensure_ascii=False)
+
+    @classmethod
+    def load_from_file(cls, path: Path) -> "AppState":
+        """Load settings from a JSON file."""
+        with open(path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        return cls.from_dict(data)

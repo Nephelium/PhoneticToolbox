@@ -1,37 +1,98 @@
 import sys
 from pathlib import Path
+import os
+import csv
+import traceback
+
 # Add project root to sys.path to allow importing PhoneticToolbox
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 # Also add PhoneticToolbox root just in case
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+# Core imports
 import numpy as np
+
+# SciPy imports - only what's needed (spectral_filter now uses pure NumPy)
+try:
+    from scipy.signal import resample_poly
+    from scipy.ndimage import gaussian_filter1d
+except ImportError as e:
+    print(f"SciPy import error: {e}", file=sys.stderr)
+    traceback.print_exc()
+    raise
+
+# Audio and GUI imports
 import parselmouth
 import pyqtgraph as pg
-import csv
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
-import sounddevice as sd
-from scipy.interpolate import interp1d
-from scipy.ndimage import gaussian_filter1d
-import soundfile as sf
 from PyQt6.QtGui import QAction, QIcon
+import sounddevice as sd
+import soundfile as sf
+
+def get_resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), relative_path)
+
 # Import backend
-from tdklatt import KlattParam1980, KlattSynth, klatt_make
-from spectral_filter import SpectralFilter
-from praat_service import (compute_praat_f0_formants,
-    compute_HNR,
-    compute_SHR,
-    compute_spectral_slope,
-    compute_jitter_shimmer,
-    compute_harmonics_H1H2H4,
-    compute_H1H2_H2H4_corrected,
-)
+try:
+    from .tdklatt import KlattParam1980, KlattSynth, klatt_make
+    from .spectral_filter import SpectralFilter
+    from .praat_service import (compute_praat_f0_formants,
+        compute_HNR,
+        compute_SHR,
+        compute_spectral_slope,
+        compute_jitter_shimmer,
+        compute_harmonics_H1H2H4,
+        compute_H1H2_H2H4_corrected,
+    )
+except ImportError:
+    from tdklatt import KlattParam1980, KlattSynth, klatt_make
+    from spectral_filter import SpectralFilter
+    from praat_service import (compute_praat_f0_formants,
+        compute_HNR,
+        compute_SHR,
+        compute_spectral_slope,
+        compute_jitter_shimmer,
+        compute_harmonics_H1H2H4,
+        compute_H1H2_H2H4_corrected,
+    )
 
 try:
     from .klatt_config import PARAM_DEFAULTS, DEFAULT_DURATION, DEFAULT_FS, FADE_MS
 except ImportError:
     from klatt_config import PARAM_DEFAULTS, DEFAULT_DURATION, DEFAULT_FS, FADE_MS
+
+try:
+    from .consonant_data import (
+        CONSONANT_DATA, NASALS, PLOSIVES, SIBILANTS, FRICATIVES,
+        APPROXIMANTS, TAPS, TRILLS, LATERAL_FRICATIVES,
+        LATERAL_APPROXIMANTS, LATERAL_FLAPS
+    )
+except ImportError:
+    from consonant_data import (
+        CONSONANT_DATA, NASALS, PLOSIVES, SIBILANTS, FRICATIVES,
+        APPROXIMANTS, TAPS, TRILLS, LATERAL_FRICATIVES,
+        LATERAL_APPROXIMANTS, LATERAL_FLAPS
+    )
+
+try:
+    from .consonant_synth import ConsonantSynthesizer
+except ImportError:
+    from consonant_synth import ConsonantSynthesizer
+
+try:
+    from .input_parser import InputParser
+except ImportError:
+    from input_parser import InputParser
+
+try:
+    from .transition_gen import TransitionGenerator
+except ImportError:
+    from transition_gen import TransitionGenerator
 
 # Vowel Formants (Approximate Male)
 VOWEL_FORMANTS = {
@@ -74,7 +135,8 @@ class CurveEditViewBox(XOnlyZoomViewBox):
         is_ctrl = modifiers & Qt.KeyboardModifier.ControlModifier
 
         if ev.button() == Qt.MouseButton.LeftButton:
-            pos = ev.pos()
+            # Use scenePos() instead of pos() to get correct coordinates
+            pos = ev.scenePos()
             mouse_point = self.editor.plot_widget.plotItem.vb.mapSceneToView(pos)
             x, y = mouse_point.x(), mouse_point.y()
 
@@ -170,18 +232,28 @@ def apply_plot_style(plot):
     except Exception:
         pass
 
+
+# Import smoothing utility from separate module (to avoid PyQt6 dependency in tests)
+try:
+    from .smoothing_utils import smooth_excluding_regions
+except ImportError:
+    from smoothing_utils import smooth_excluding_regions
+
+
 class ParameterCurve:
     """
     Data structure to hold curve points and generate array.
     """
-    def __init__(self, name, default_value=0.0, min_val=0.0, max_val=100.0, unit=""):
+    def __init__(self, name, default_value=0.0, min_val=0.0, max_val=100.0, unit="", duration=None):
         self.name = name
         self.default_value = default_value
         self.min_val = min_val
         self.max_val = max_val
         self.unit = unit
         # Points: List of (time, value) tuples
-        self.points = [(0.0, default_value), (1.0, default_value)]
+        # Use provided duration or DEFAULT_DURATION
+        end_time = duration if duration is not None else DEFAULT_DURATION
+        self.points = [(0.0, default_value), (end_time, default_value)]
         self.global_override = None # If set, overrides points
         
     def set_points(self, points):
@@ -211,9 +283,8 @@ class ParameterCurve:
             values.append(values[-1])
             
         # Interpolate
-        interp_func = interp1d(times, values, kind='linear', fill_value="extrapolate")
         t_grid = np.linspace(0, duration, n_samples)
-        arr = interp_func(t_grid)
+        arr = np.interp(t_grid, times, values)
         
         # Clip
         arr = np.clip(arr, self.min_val, self.max_val)
@@ -231,6 +302,8 @@ class CurveEditor(QWidget):
         self.duration_limit = duration
         self.layout = QVBoxLayout(self)
         self.locked_regions = []
+        self.hidden_regions = []  # Regions where curve is hidden (silence and consonants)
+        self.consonant_regions = []  # Regions where consonants are located (for smoothing exclusion)
         
         # Header with Global Input
         header_layout = QHBoxLayout()
@@ -281,6 +354,47 @@ class CurveEditor(QWidget):
             line = pg.InfiniteLine(pos=t, angle=90, pen=pg.mkPen('r', width=1, style=Qt.PenStyle.DashLine))
             self.plot_widget.addItem(line)
             self.vowel_lines.append(line)
+    
+    def set_hidden_regions(self, regions):
+        """Set regions where curve should be displayed with reduced visibility (silence and consonant regions)."""
+        self.hidden_regions = regions if regions else []
+        self.update_plot()
+    
+    def set_consonant_regions(self, regions):
+        """
+        Set regions where consonants are located.
+        These regions will be:
+        1. Displayed with semi-transparent overlay (same as silence)
+        2. Blocked from editing
+        3. Excluded from smoothing calculations
+        
+        Args:
+            regions: List of (start_time, end_time) tuples for consonant segments
+        """
+        self.consonant_regions = regions if regions else []
+        # Add consonant regions to locked regions (block editing)
+        # Merge with existing locked regions
+        self._update_locked_from_consonants()
+        self.update_plot()
+    
+    def _update_locked_from_consonants(self):
+        """Update locked_regions to include consonant regions."""
+        # Keep any non-consonant locked regions and add consonant regions
+        # For simplicity, we'll just set locked_regions to consonant_regions
+        # In a more complex scenario, we'd merge them
+        base_locked = getattr(self, '_base_locked_regions', [])
+        self.locked_regions = list(base_locked) + list(self.consonant_regions)
+    
+    def set_locked_regions(self, regions):
+        """
+        Set base locked regions (from audio analysis, etc.).
+        Consonant regions will be added on top of these.
+        
+        Args:
+            regions: List of (start_time, end_time) tuples
+        """
+        self._base_locked_regions = regions if regions else []
+        self._update_locked_from_consonants()
 
 
         
@@ -379,22 +493,58 @@ class CurveEditor(QWidget):
             self.data_changed.emit()
 
     def update_plot(self):
+        # Remove old hidden region items
+        if hasattr(self, '_hidden_region_items'):
+            for item in self._hidden_region_items:
+                self.plot_widget.removeItem(item)
+        self._hidden_region_items = []
+        
         if self.parameter.global_override is not None:
             # Show flat line
             val = self.parameter.global_override
-            # Use current view range for time or 0 to 1 if default
-            # But parameter doesn't know duration. We use existing points x range?
-            # Or just use 0 and max time of points
             times = [p[0] for p in self.parameter.points]
             if not times: times = [0, 1]
-            max_t = max(times[-1], 1.0) # Assume at least 1s or max point
-            
-            # Show a flat line covering the whole range
+            max_t = max(times[-1], 1.0)
             self.curve_item.setData([0, max_t], [val, val])
         else:
             times = [p[0] for p in self.parameter.points]
             values = [p[1] for p in self.parameter.points]
-            self.curve_item.setData(times, values)
+            
+            # Filter out points in hidden regions for display
+            hidden_regions = getattr(self, 'hidden_regions', [])
+            if hidden_regions:
+                # Create segments: visible parts shown normally, hidden parts shown dimmed
+                visible_times = []
+                visible_values = []
+                
+                for i, (t, v) in enumerate(zip(times, values)):
+                    is_hidden = False
+                    for (h_start, h_end) in hidden_regions:
+                        if h_start <= t <= h_end:
+                            is_hidden = True
+                            break
+                    if not is_hidden:
+                        visible_times.append(t)
+                        visible_values.append(v)
+                
+                # Draw visible curve
+                if visible_times:
+                    self.curve_item.setData(visible_times, visible_values)
+                else:
+                    self.curve_item.setData([], [])
+                
+                # Draw hidden regions with gray shading
+                for (h_start, h_end) in hidden_regions:
+                    region = pg.LinearRegionItem(
+                        values=[h_start, h_end],
+                        brush=pg.mkBrush(128, 128, 128, 50),
+                        pen=pg.mkPen(None),
+                        movable=False
+                    )
+                    self.plot_widget.addItem(region)
+                    self._hidden_region_items.append(region)
+            else:
+                self.curve_item.setData(times, values)
         
     def move_point(self, idx, x, y):
         # Constrain x if not first/last? 
@@ -603,7 +753,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("发声态合成系统 (Voice Quality Synthesizer)")
         self.resize(1400, 900)
-        icon_path = r"klatt.ico"
+        icon_path = get_resource_path("klatt.ico")
         icon = QIcon(icon_path)
         self.setWindowIcon(icon)
         app_inst = QApplication.instance()
@@ -619,7 +769,7 @@ class MainWindow(QMainWindow):
         # Parameters
         self.params = {}
         for name, (default_val, min_val, max_val, unit) in PARAM_DEFAULTS.items():
-            self.params[name] = ParameterCurve(name, default_val, min_val, max_val, unit)
+            self.params[name] = ParameterCurve(name, default_val, min_val, max_val, unit, duration=self.duration)
         
         # Override F0 max for manual drawing as requested
         if "F0" in self.params:
@@ -686,7 +836,11 @@ class MainWindow(QMainWindow):
         act_vowel_rules.triggered.connect(self.show_vowel_rules_dialog)
         menubar.addAction(act_vowel_rules)
 
-        # 11. 发声类型预设
+        # 11. 辅音规则菜单
+        consonant_menu = menubar.addMenu("辅音规则")
+        self._create_consonant_menu(consonant_menu)
+
+        # 12. 发声类型预设
         preset_menu = menubar.addMenu("发声类型预设")
         for p_name in ["常态浊声", "耳语", "气声", "嘎裂", "假声"]:
             act = QAction(p_name, self)
@@ -935,7 +1089,12 @@ class MainWindow(QMainWindow):
                 new_points.sort(key=lambda x: x[0])
                 p.points = new_points
                 
-            # Update current editor
+            # Update all param editors duration and plot range
+            for ed in getattr(self, 'param_editors', []):
+                ed.set_duration(self.duration)
+                ed.update_plot()
+                
+            # Update current editor (if separate from param_editors)
             if hasattr(self, 'current_editor') and self.current_editor:
                 self.current_editor.set_duration(self.duration)
                 self.current_editor.update_plot()
@@ -1026,6 +1185,53 @@ class MainWindow(QMainWindow):
         layout.addWidget(explanation)
         
         dlg.exec()
+
+    def _create_consonant_menu(self, parent_menu):
+        """
+        Create the consonant rules menu with submenus organized by manner of articulation.
+        
+        Args:
+            parent_menu: The parent QMenu to add submenus to
+        """
+        # Define menu categories with their Chinese names and consonant sets
+        categories = [
+            ("鼻音", NASALS),
+            ("塞音", PLOSIVES),
+            ("有咝擦音", SIBILANTS),
+            ("无咝擦音", FRICATIVES),
+            ("近音", APPROXIMANTS),
+            ("闪音", TAPS),
+            ("颤音", TRILLS),
+            ("边擦音", LATERAL_FRICATIVES),
+            ("边近音", LATERAL_APPROXIMANTS),
+            ("边闪音", LATERAL_FLAPS),
+        ]
+        
+        for category_name, consonant_set in categories:
+            if not consonant_set:
+                continue
+            submenu = parent_menu.addMenu(category_name)
+            # Sort consonants for consistent ordering
+            for consonant in sorted(consonant_set):
+                if consonant in CONSONANT_DATA:
+                    params = CONSONANT_DATA[consonant]
+                    # Create action with consonant symbol and place of articulation
+                    action_text = f"{consonant} ({params.place})"
+                    action = QAction(action_text, self)
+                    action.triggered.connect(
+                        lambda checked, c=consonant: self._copy_consonant_to_clipboard(c)
+                    )
+                    submenu.addAction(action)
+
+    def _copy_consonant_to_clipboard(self, consonant: str):
+        """
+        Copy a consonant symbol to the system clipboard and show a confirmation message.
+        
+        Args:
+            consonant: The IPA consonant symbol to copy
+        """
+        QApplication.clipboard().setText(consonant)
+        QMessageBox.information(self, "提示", f"已复制: {consonant}")
 
     def show_waveform_dialog(self):
         audio = None
@@ -1149,9 +1355,15 @@ class MainWindow(QMainWindow):
         path, _ = QFileDialog.getSaveFileName(self, "Export Parameters", "", "CSV Files (*.csv)")
         if path:
             try:
-                with open(path, 'w', newline='') as f:
+                with open(path, 'w', newline='', encoding='utf-8') as f:
                     writer = csv.writer(f)
+                    # Write header with metadata
                     writer.writerow(["Parameter", "Time", "Value", "Global"])
+                    # Write metadata: duration and vowel input
+                    writer.writerow(["__DURATION__", self.duration, 0, False])
+                    vowel_text = self.vowel_input.text() if hasattr(self, 'vowel_input') else ""
+                    writer.writerow(["__VOWEL_INPUT__", 0, vowel_text, False])
+                    # Write parameter data
                     for name, param in self.params.items():
                         if param.global_override is not None:
                             writer.writerow([name, 0, param.global_override, True])
@@ -1166,16 +1378,15 @@ class MainWindow(QMainWindow):
         path, _ = QFileDialog.getOpenFileName(self, "Import Parameters", "", "CSV Files (*.csv)")
         if path:
             try:
-                # Reset all points first?
+                # Reset all points first
                 for p in self.params.values():
                     p.points = []
                     p.global_override = None
                 
-                with open(path, 'r') as f:
-                    reader = csv.DictReader(f) # Assuming header we just wrote?
-                    # Check header
-                    # Actually we used csv.writer with header row.
-                    # Let's re-read simply.
+                imported_duration = None
+                imported_vowel_input = ""
+                
+                with open(path, 'r', encoding='utf-8') as f:
                     f.seek(0)
                     header = next(csv.reader(f))
                     if header != ["Parameter", "Time", "Value", "Global"]:
@@ -1185,25 +1396,60 @@ class MainWindow(QMainWindow):
                     for row in csv.reader(f):
                         if not row: continue
                         name, t, v, glob = row
+                        
+                        # Handle metadata
+                        if name == "__DURATION__":
+                            imported_duration = float(t)
+                            continue
+                        elif name == "__VOWEL_INPUT__":
+                            imported_vowel_input = v
+                            continue
+                        
                         if name in self.params:
                             if glob == "True":
                                 self.params[name].global_override = float(v)
                             else:
                                 self.params[name].points.append((float(t), float(v)))
+                
+                # Update duration if imported
+                if imported_duration is not None and imported_duration > 0:
+                    self.duration = imported_duration
+                    self.duration_input.setText(f"{self.duration:.2f}")
+                    # Update all parameter curves to use new duration
+                    for p in self.params.values():
+                        # Update end point if exists
+                        if p.points:
+                            # Find max time in points
+                            max_t = max(pt[0] for pt in p.points)
+                            if max_t < self.duration:
+                                # Extend last point to duration
+                                last_val = p.points[-1][1] if p.points else p.default_value
+                                p.points.append((self.duration, last_val))
+                
+                # Update vowel input if imported
+                if imported_vowel_input and hasattr(self, 'vowel_input'):
+                    self.vowel_input.setText(imported_vowel_input)
                                 
-                # Sort points
+                # Sort points and ensure valid state
                 for p in self.params.values():
                     if not p.points and p.global_override is None:
                         p.points = [(0.0, p.default_value), (self.duration, p.default_value)]
                     p.points.sort(key=lambda x: x[0])
                     
-                # Update UI
+                # Update UI editors
                 for ed in getattr(self, 'param_editors', []):
+                    ed.set_duration(self.duration)
                     ed.update_plot()
 
-                         
                 self.status_label.setText(f"Imported from {path}")
+                
+                # Auto-synthesize after import
+                QApplication.processEvents()
+                self.synthesize()
+                
             except Exception as e:
+                import traceback
+                traceback.print_exc()
                 QMessageBox.critical(self, "Error", str(e))
 
     def generate_vowels(self):
@@ -1211,46 +1457,70 @@ class MainWindow(QMainWindow):
         if not text:
             return
             
-        # Parse tokens
+        # Use InputParser to parse tokens (supports both vowels and consonants)
+        parser = InputParser(vowel_formants=VOWEL_FORMANTS)
+        parsed_segments = parser.parse(text)
+        
+        if not parsed_segments:
+            return
+        
+        # Convert parsed segments to tokens format for backward compatibility
+        # tokens: list of (symbol, duration_modifier, segment_type, base_duration_ms)
         tokens = []
-        i = 0
-        while i < len(text):
-            ch = text[i].lower()
-            # Handle space as silence or Vowel
-            is_space = (ch == ' ')
-            if is_space or ch in VOWEL_FORMANTS:
-                j = i + 1
-                mods = []
-                while j < len(text) and text[j] in "+-*/":
-                    mods.append(text[j])
-                    j += 1
-                m = 1.0
-                for c in mods:
-                    if c == '+':
-                        m *= 1.1
-                    elif c == '-':
-                        m *= 0.9
-                    elif c == '*':
-                        m *= 2.0
-                    elif c == '/':
-                        m *= 0.5
-                if m > 0:
-                    tokens.append((ch, m))
-                i = j
-            else:
-                i += 1
-                
+        for seg in parsed_segments:
+            symbol = seg['symbol']
+            modifier = seg['duration_modifier']
+            seg_type = seg['type']
+            base_dur_ms = seg.get('base_duration_ms', 0.0)
+            tokens.append((symbol, modifier, seg_type, base_dur_ms))
+        
         if not tokens:
             return
             
-        # transition_type = "Smooth" (Default)
-        n_vowels = len(tokens)
-        weights = [w for _, w in tokens]
-        total_w = sum(weights)
-        if total_w <= 0:
-            return
-            
-        seg_durs = [self.duration * (w / total_w) for w in weights]
+        # Calculate segment durations
+        # For consonants: use base_duration_ms * modifier
+        # For vowels/silence: use proportional duration based on modifier weights
+        n_segments = len(tokens)
+        
+        # Separate consonant fixed durations from vowel/silence proportional durations
+        consonant_total_ms = 0.0
+        vowel_weights = []
+        
+        for i, (symbol, modifier, seg_type, base_dur_ms) in enumerate(tokens):
+            if seg_type == 'consonant':
+                # Consonants have fixed duration (base_duration_ms * modifier)
+                consonant_total_ms += base_dur_ms * modifier
+                vowel_weights.append(0.0)  # Placeholder
+            else:
+                # Vowels and silence use proportional duration
+                vowel_weights.append(modifier)
+        
+        # Calculate remaining duration for vowels after consonants
+        consonant_total_sec = consonant_total_ms / 1000.0
+        vowel_total_sec = max(0.0, self.duration - consonant_total_sec)
+        
+        # Calculate segment durations
+        total_vowel_weight = sum(vowel_weights)
+        seg_durs = []
+        
+        for i, (symbol, modifier, seg_type, base_dur_ms) in enumerate(tokens):
+            if seg_type == 'consonant':
+                # Fixed duration for consonants
+                seg_durs.append(base_dur_ms * modifier / 1000.0)
+            else:
+                # Proportional duration for vowels/silence
+                if total_vowel_weight > 0:
+                    seg_durs.append(vowel_total_sec * (modifier / total_vowel_weight))
+                else:
+                    seg_durs.append(0.0)
+        
+        # Ensure total duration matches
+        actual_total = sum(seg_durs)
+        if actual_total > 0 and abs(actual_total - self.duration) > 0.001:
+            # Scale to match target duration
+            scale = self.duration / actual_total
+            seg_durs = [d * scale for d in seg_durs]
+        
         boundaries_arr = np.cumsum(seg_durs)[:-1]
         
         # Smooth points from slider
@@ -1269,37 +1539,57 @@ class MainWindow(QMainWindow):
         
         av_default = self.params["AV"].default_value
         
-        # Helper to get formant of a token index (searching backward/forward for non-space)
+        # Helper to get formant of a token index (searching backward/forward for non-space/non-consonant)
         def get_target_formants(idx, direction):
             curr = idx
-            while 0 <= curr < n_vowels:
-                t_char = tokens[curr][0]
-                if t_char != ' ':
-                    return VOWEL_FORMANTS.get(t_char, [500, 1500, 2500])
+            while 0 <= curr < n_segments:
+                t_symbol, _, t_type, _ = tokens[curr]
+                if t_type == 'vowel':
+                    return VOWEL_FORMANTS.get(t_symbol, [500, 1500, 2500])
                 curr += direction
             return [500, 1500, 2500] 
 
         self.silence_intervals = []
+        self.hidden_regions = []  # Regions where parameters should be hidden in display (silence + consonants)
+        self.consonant_regions = []  # Regions where consonants are located (for smoothing exclusion)
+        
+        # Store parsed segment info for synthesis (used by synthesize method)
+        self.parsed_segments = []
 
         # Fill segments
-        for i in range(n_vowels):
+        for i in range(n_segments):
             t_start = 0 if i == 0 else boundaries_arr[i-1]
-            t_end = self.duration if i == n_vowels-1 else boundaries_arr[i]
+            t_end = self.duration if i == n_segments-1 else boundaries_arr[i]
             
             mask = (t_grid >= t_start) & (t_grid <= t_end)
             if not np.any(mask):
                 continue
                 
-            token_char = tokens[i][0]
+            token_symbol, token_modifier, token_type, token_base_dur = tokens[i]
             
-            if token_char == ' ':
-                # User request: Do not adjust AV (keep it as default/voiced), 
-                # enforce silence in time domain later.
-                grids["AV"][mask] = av_default 
-                
-                # Record silence interval for post-processing
+            # Store segment info for synthesis
+            seg_info = {
+                'type': token_type,
+                'symbol': token_symbol,
+                'start_time': t_start,
+                'end_time': t_end,
+                'duration_ms': (t_end - t_start) * 1000.0,
+                'duration_modifier': token_modifier
+            }
+            self.parsed_segments.append(seg_info)
+            
+            if token_type == 'silence':
+                # Space = silence segment
+                # Record silence interval for post-processing (will be zeroed out)
                 self.silence_intervals.append((t_start, t_end))
+                # Record hidden region for display (parameters not visible but editable)
+                self.hidden_regions.append((t_start, t_end))
                 
+                # Set AV to 0 for silence (no voicing)
+                grids["AV"][mask] = 0.0
+                
+                # For formants, use neutral values (won't be heard anyway)
+                # But keep them reasonable for smooth transitions
                 prev_f = get_target_formants(i - 1, -1)
                 next_f = get_target_formants(i + 1, 1)
                 segment_indices = np.where(mask)[0]
@@ -1310,24 +1600,51 @@ class MainWindow(QMainWindow):
                         val_end = next_f[k]
                         interp_vals = val_start * (1 - local_steps) + val_end * local_steps
                         grids[key][mask] = interp_vals
+            elif token_type == 'consonant':
+                # Consonant segment
+                # Record consonant region for display masking and smoothing exclusion
+                self.consonant_regions.append((t_start, t_end))
+                # Also add to hidden regions for visual masking (same style as silence)
+                self.hidden_regions.append((t_start, t_end))
+                
+                # For consonants, use neutral formant values (actual synthesis handled separately)
+                # But keep them reasonable for smooth transitions
+                prev_f = get_target_formants(i - 1, -1)
+                next_f = get_target_formants(i + 1, 1)
+                segment_indices = np.where(mask)[0]
+                if len(segment_indices) > 0:
+                    local_steps = np.linspace(0, 1, len(segment_indices))
+                    for k, key in enumerate(["F1", "F2", "F3"]):
+                        val_start = prev_f[k]
+                        val_end = next_f[k]
+                        interp_vals = val_start * (1 - local_steps) + val_end * local_steps
+                        grids[key][mask] = interp_vals
+                
+                # Set AV based on consonant voicing (handled by consonant synth, but set default)
+                params = CONSONANT_DATA[token_symbol]
+                if params.voiced:
+                    grids["AV"][mask] = av_default * 0.5  # Reduced voicing for consonants
+                else:
+                    grids["AV"][mask] = 0.0  # No voicing for voiceless consonants
             else:
+                # Vowel segment
                 grids["AV"][mask] = av_default
-                fvals = VOWEL_FORMANTS.get(token_char, [500, 1500, 2500])
+                fvals = VOWEL_FORMANTS.get(token_symbol, [500, 1500, 2500])
                 grids["F1"][mask] = fvals[0]
                 grids["F2"][mask] = fvals[1]
                 grids["F3"][mask] = fvals[2]
 
         # Pass 2: Smoothing (Twice moving average on F1-F3)
-        from scipy.ndimage import uniform_filter1d
+        # Exclude consonant regions from smoothing to preserve their boundaries
         for key in ["F1", "F2", "F3"]:
-            grids[key] = uniform_filter1d(grids[key], size=smooth_pts, mode='nearest')
-            grids[key] = uniform_filter1d(grids[key], size=smooth_pts, mode='nearest')
+            grids[key] = smooth_excluding_regions(grids[key], t_grid, self.consonant_regions, smooth_pts)
+            grids[key] = smooth_excluding_regions(grids[key], t_grid, self.consonant_regions, smooth_pts)
 
         # Pass 3: AV Fade Out (Moved to Time Domain in synthesize)
 
         # Convert grids to Points for ParameterCurve
         boundaries = []
-        for i in range(n_vowels - 1):
+        for i in range(n_segments - 1):
             boundaries.append(float(boundaries_arr[i]))
             
         for key in ["F1", "F2", "F3", "AV"]:
@@ -1339,10 +1656,12 @@ class MainWindow(QMainWindow):
                 dv = self.params[key].default_value
                 self.params[key].set_points([(0.0, dv), (self.duration, dv)])
                 
-        self.status_label.setText(f"Generated vowels: {text}")
+        self.status_label.setText(f"Generated segments: {text}")
         self.vowel_boundaries = boundaries
         for ed in getattr(self, 'param_editors', []):
             ed.set_vowel_boundaries(boundaries)
+            ed.set_hidden_regions(getattr(self, 'hidden_regions', []))
+            ed.set_consonant_regions(getattr(self, 'consonant_regions', []))
             ed.update_plot()
 
 
@@ -1489,7 +1808,8 @@ class MainWindow(QMainWindow):
             pass
         try:
             for ed in getattr(self, 'param_editors', []):
-                ed.locked_regions = list(getattr(self, 'locked_regions', []))
+                # Use set_locked_regions to properly merge with consonant regions
+                ed.set_locked_regions(list(getattr(self, 'locked_regions', [])))
                 ed.update_plot()
         except Exception:
             pass
@@ -1631,24 +1951,41 @@ class MainWindow(QMainWindow):
             ah_arr = np.zeros_like(av_arr)
         
         # Initialize KlattParam
+        # Use Klatt's native 10000 Hz sampling rate for synthesis stability
+        # Then resample output to self.fs (16000 Hz)
+        klatt_fs = 10000
         kp = KlattParam1980(
-            FS=self.fs,
+            FS=klatt_fs,
             DUR=self.duration,
             F0=effective_f0[0], # Use effective F0 initial value
             Jitter=0, Shimmer=0, SHR=0, HNR=None, Slope=0 # Placeholders
         )
         
+        # Ensure all arrays match N_SAMP length
+        n_samp = kp.N_SAMP
+        
+        def resize_to_nsamp(arr):
+            """Resize array to match N_SAMP using interpolation"""
+            if len(arr) == n_samp:
+                return arr
+            x_old = np.linspace(0, 1, len(arr))
+            x_new = np.linspace(0, 1, n_samp)
+            return np.interp(x_new, x_old, arr)
+        
+        # Resize effective_f0 to match N_SAMP
+        effective_f0 = resize_to_nsamp(effective_f0)
+        
         # Inject arrays
         kp.F0 = effective_f0 # Use effective F0
-        kp.Jitter = arrays["Jitter"]
+        kp.Jitter = resize_to_nsamp(arrays["Jitter"])
         # Use Shimmer as fraction (0-1) so KlattVoice can add as dB perturbation internally
-        kp.Shimmer = 0 # Disable internal Shimmer (handled in post-processing)
+        kp.Shimmer = np.zeros(n_samp) # Disable internal Shimmer (handled in post-processing)
         
-        kp.SHR = arrays["SHR"]
-        kp.Slope = arrays["Slope"]
-        kp.AVS = avs_arr
-        kp.AH = ah_arr
-        kp.AV = av_arr
+        kp.SHR = resize_to_nsamp(arrays["SHR"])
+        kp.Slope = resize_to_nsamp(arrays["Slope"])
+        kp.AVS = resize_to_nsamp(avs_arr)
+        kp.AH = resize_to_nsamp(ah_arr)
+        kp.AV = resize_to_nsamp(av_arr)
         
         # Inject Formants and Bandwidths
         # kp.FF is a list of arrays [F1_arr, F2_arr, ...]
@@ -1660,23 +1997,36 @@ class MainWindow(QMainWindow):
             b_key = f"B{i+1}"
             if f_key in arrays:
                 if i < len(kp.FF):
-                    kp.FF[i] = arrays[f_key]
+                    kp.FF[i] = resize_to_nsamp(arrays[f_key])
             if b_key in arrays:
                 if i < len(kp.BW):
-                    kp.BW[i] = arrays[b_key]
+                    kp.BW[i] = resize_to_nsamp(arrays[b_key])
         
         # Inject Amplitudes A1-A5
-        if "A1" in arrays: kp.A1 = arrays["A1"]
-        if "A2" in arrays: kp.A2 = arrays["A2"]
-        if "A3" in arrays: kp.A3 = arrays["A3"]
-        if "A4" in arrays: kp.A4 = arrays["A4"]
-        if "A5" in arrays: kp.A5 = arrays["A5"]
+        if "A1" in arrays: kp.A1 = resize_to_nsamp(arrays["A1"])
+        if "A2" in arrays: kp.A2 = resize_to_nsamp(arrays["A2"])
+        if "A3" in arrays: kp.A3 = resize_to_nsamp(arrays["A3"])
+        if "A4" in arrays: kp.A4 = resize_to_nsamp(arrays["A4"])
+        if "A5" in arrays: kp.A5 = resize_to_nsamp(arrays["A5"])
         
         # Run Synthesis
         try:
             self.synth_engine = klatt_make(kp)
             self.synth_engine.run()
-            self.synthesized_audio = self.synth_engine.output
+            synth_output = self.synth_engine.output
+            
+            if synth_output is None or len(synth_output) == 0:
+                raise ValueError("Synthesis produced empty output")
+            
+            # Resample from Klatt's 10000 Hz to self.fs (16000 Hz)
+            # resample_poly(x, up, down) -> up/down ratio
+            # 16000/10000 = 8/5
+            self.synthesized_audio = resample_poly(synth_output, 8, 5)
+            
+            # --- Consonant Synthesis Integration ---
+            # If we have parsed segments with consonants, synthesize and splice them in
+            if hasattr(self, 'parsed_segments') and self.parsed_segments:
+                self.synthesized_audio = self._integrate_consonants(self.synthesized_audio)
             
             # --- Post-processing: Spectral Filtering ---
             # H1-H2, Slope, HNR adjustment in frequency domain
@@ -1688,17 +2038,28 @@ class MainWindow(QMainWindow):
                 # Note: Parameters might not exist in arrays if not in layout, 
                 # but they should be in self.params
                 
+                audio_len = len(self.synthesized_audio)
+                
+                # Helper to resize array to match audio length
+                def resize_to_audio(arr):
+                    if len(arr) == audio_len:
+                        return arr
+                    x_old = np.linspace(0, 1, len(arr))
+                    x_new = np.linspace(0, 1, audio_len)
+                    return np.interp(x_new, x_old, arr)
+                
                 # Helper to get array even if not in 'arrays' dict (e.g. if default)
                 def get_arr(name):
                     if name in arrays:
-                        return arrays[name]
+                        return resize_to_audio(arrays[name])
                     elif name in self.params:
-                        return self.params[name].get_array(self.duration, self.fs)
+                        arr = self.params[name].get_array(self.duration, self.fs)
+                        return resize_to_audio(arr)
                     else:
                         # Should not happen for core params, but fallback
-                        return np.zeros(len(self.synthesized_audio))
+                        return np.zeros(audio_len)
 
-                f0_c = effective_f0 # Use effective F0
+                f0_c = resize_to_audio(effective_f0) # Use effective F0
                 h1h2_c = get_arr("H1H2")
                 slope_c = get_arr("Slope")
                 hnr_c = get_arr("HNR")
@@ -1773,7 +2134,18 @@ class MainWindow(QMainWindow):
                     arr[start_idx:end_idx] *= curve
 
                 # 1. Global Start Fade In
-                if n_samples > 0:
+                # Skip fade-in if the first segment is a plosive (they need abrupt onset)
+                skip_fade_in = False
+                if hasattr(self, 'parsed_segments') and self.parsed_segments:
+                    first_seg = self.parsed_segments[0]
+                    if first_seg['type'] == 'consonant':
+                        symbol = first_seg['symbol']
+                        if symbol in CONSONANT_DATA:
+                            manner = CONSONANT_DATA[symbol].manner
+                            if manner == 'plosive':
+                                skip_fade_in = True
+                
+                if n_samples > 0 and not skip_fade_in:
                     apply_fade_in(audio, 0, fade_in_len)
                 
                 # 2. Global End Fade Out
@@ -1804,10 +2176,16 @@ class MainWindow(QMainWindow):
                 self.synthesized_audio = audio
                 
             except Exception as e:
+                import traceback
                 print(f"Spectral Filtering Error: {e}")
-                # Don't fail synthesis if filtering fails, just warn?
-                # Or maybe user wants to know.
+                traceback.print_exc()
+                # Don't fail synthesis if filtering fails, just warn
                 pass
+
+            # Final normalization to ensure proper amplitude for playback and display
+            mx = np.max(np.abs(self.synthesized_audio))
+            if mx > 1e-8:
+                self.synthesized_audio = self.synthesized_audio / mx * 0.95  # Leave some headroom
 
             # Update Visualizer waveform on homepage
             try:
@@ -1820,8 +2198,183 @@ class MainWindow(QMainWindow):
             
             self.status_label.setText("Synthesis complete.")
         except Exception as e:
+            import traceback
+            print(f"Synthesis Error: {e}")
+            traceback.print_exc()
             QMessageBox.critical(self, "Synthesis Error", str(e))
             self.status_label.setText("Synthesis failed.")
+
+    def _integrate_consonants(self, vowel_audio: np.ndarray) -> np.ndarray:
+        """
+        Integrate consonant synthesis into the vowel audio.
+        
+        This method:
+        1. Synthesizes consonant audio for each consonant segment
+        2. Generates transitions between consonants and vowels
+        3. Splices consonant audio into the appropriate positions
+        4. Applies crossfade for smooth transitions
+        
+        Requirements: 2.1, 3.1, 4.1, 5.1, 6.1, 7.1, 12.5
+        
+        Args:
+            vowel_audio: The synthesized vowel audio from Klatt
+            
+        Returns:
+            Audio with consonants integrated
+        """
+        if not hasattr(self, 'parsed_segments') or not self.parsed_segments:
+            return vowel_audio
+        
+        # Check if there are any consonants
+        has_consonants = any(seg['type'] == 'consonant' for seg in self.parsed_segments)
+        if not has_consonants:
+            return vowel_audio
+        
+        try:
+            # Initialize consonant synthesizer
+            consonant_synth = ConsonantSynthesizer(fs=self.fs, f0=120.0)
+            transition_gen = TransitionGenerator(fs=self.fs, f0=120.0, vowel_formants=VOWEL_FORMANTS)
+            
+            # Work with a copy of the audio
+            result_audio = vowel_audio.copy()
+            n_samples = len(result_audio)
+            
+            # Process each segment
+            for i, segment in enumerate(self.parsed_segments):
+                if segment['type'] != 'consonant':
+                    continue
+                
+                symbol = segment['symbol']
+                start_time = segment['start_time']
+                end_time = segment['end_time']
+                duration_ms = segment['duration_ms']
+                
+                # Calculate sample indices
+                start_idx = int(start_time * self.fs)
+                end_idx = int(end_time * self.fs)
+                
+                # Clamp indices
+                start_idx = max(0, min(n_samples, start_idx))
+                end_idx = max(0, min(n_samples, end_idx))
+                
+                if end_idx <= start_idx:
+                    continue
+                
+                # Get context for transitions
+                prev_segment = self.parsed_segments[i - 1] if i > 0 else None
+                next_segment = self.parsed_segments[i + 1] if i < len(self.parsed_segments) - 1 else None
+                
+                # Build context dict for consonant synthesis
+                context = {}
+                if prev_segment:
+                    context['prev_type'] = prev_segment['type']
+                    context['prev_symbol'] = prev_segment['symbol']
+                if next_segment:
+                    context['next_type'] = next_segment['type']
+                    context['next_symbol'] = next_segment['symbol']
+                
+                # Synthesize consonant
+                consonant_audio = consonant_synth.synthesize(symbol, duration_ms, context)
+                
+                if len(consonant_audio) == 0:
+                    continue
+                
+                # Calculate transition durations (20-50ms range)
+                transition_ms = 30.0
+                transition_samples = int(transition_ms * self.fs / 1000)
+                
+                # Generate transitions if needed
+                trans_in_audio = np.array([])
+                trans_out_audio = np.array([])
+                
+                # Transition from previous segment to consonant
+                if prev_segment and prev_segment['type'] == 'vowel':
+                    prev_seg_info = {
+                        'type': 'vowel',
+                        'symbol': prev_segment['symbol']
+                    }
+                    cons_seg_info = {
+                        'type': 'consonant',
+                        'symbol': symbol
+                    }
+                    if transition_gen.is_transition_needed(prev_seg_info, cons_seg_info):
+                        trans_in_audio = transition_gen.generate(prev_seg_info, cons_seg_info, transition_ms)
+                
+                # Transition from consonant to next segment
+                if next_segment and next_segment['type'] == 'vowel':
+                    cons_seg_info = {
+                        'type': 'consonant',
+                        'symbol': symbol
+                    }
+                    next_seg_info = {
+                        'type': 'vowel',
+                        'symbol': next_segment['symbol']
+                    }
+                    if transition_gen.is_transition_needed(cons_seg_info, next_seg_info):
+                        trans_out_audio = transition_gen.generate(cons_seg_info, next_seg_info, transition_ms)
+                
+                # Combine consonant with transitions
+                combined_parts = []
+                if len(trans_in_audio) > 0:
+                    combined_parts.append(trans_in_audio)
+                combined_parts.append(consonant_audio)
+                if len(trans_out_audio) > 0:
+                    combined_parts.append(trans_out_audio)
+                
+                # Concatenate with crossfade
+                if len(combined_parts) > 1:
+                    combined_audio = consonant_synth.concatenate_audio(combined_parts, crossfade_ms=5.0)
+                else:
+                    combined_audio = consonant_audio
+                
+                # Splice into result audio
+                # The consonant region should replace the vowel audio in that region
+                target_len = end_idx - start_idx
+                
+                if len(combined_audio) != target_len:
+                    # Resample to match target length
+                    if len(combined_audio) > 0 and target_len > 0:
+                        combined_audio = np.interp(
+                            np.linspace(0, 1, target_len),
+                            np.linspace(0, 1, len(combined_audio)),
+                            combined_audio
+                        )
+                
+                # Apply crossfade at boundaries for smooth splicing
+                crossfade_len = min(transition_samples, target_len // 4, 100)
+                
+                if crossfade_len > 0 and len(combined_audio) >= crossfade_len * 2:
+                    # Fade in at start
+                    fade_in = np.linspace(0, 1, crossfade_len)
+                    combined_audio[:crossfade_len] *= fade_in
+                    
+                    # Fade out at end
+                    fade_out = np.linspace(1, 0, crossfade_len)
+                    combined_audio[-crossfade_len:] *= fade_out
+                    
+                    # Crossfade with existing audio at boundaries
+                    if start_idx >= crossfade_len:
+                        # Blend with preceding audio
+                        blend_start = start_idx - crossfade_len
+                        blend_region = result_audio[blend_start:start_idx]
+                        blend_region *= np.linspace(1, 0, crossfade_len)
+                    
+                    if end_idx + crossfade_len <= n_samples:
+                        # Blend with following audio
+                        blend_region = result_audio[end_idx:end_idx + crossfade_len]
+                        blend_region *= np.linspace(0, 1, crossfade_len)
+                
+                # Replace the consonant region
+                result_audio[start_idx:end_idx] = combined_audio[:target_len]
+            
+            return result_audio
+            
+        except Exception as e:
+            import traceback
+            print(f"Consonant integration error: {e}")
+            traceback.print_exc()
+            # Return original audio if consonant integration fails
+            return vowel_audio
 
     def export_audio(self):
         if self.synthesized_audio is None:
@@ -1910,7 +2463,8 @@ class MainWindow(QMainWindow):
         self.apply_locks_to_params()
         try:
             for ed in getattr(self, 'param_editors', []):
-                ed.locked_regions = list(self.locked_regions)
+                # Use set_locked_regions to properly merge with consonant regions
+                ed.set_locked_regions(list(self.locked_regions))
                 ed.update_plot()
 
         except Exception:

@@ -199,6 +199,81 @@ class BatchProcessorDialog(QDialog):
             self.worker.wait()
         super().closeEvent(event)
 
+class ImportF0Dialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("导入基频序列")
+        self.resize(600, 400)
+        self.layout = QVBoxLayout(self)
+        
+        self.label = QLabel("请在下方粘贴基频序列（支持空格、Tab、逗号、换行分隔）：\n如果粘贴两列，第一列为时间（将忽略），第二列为基频值。")
+        self.layout.addWidget(self.label)
+        
+        self.text_edit = QTextEdit()
+        self.layout.addWidget(self.text_edit)
+        
+        btns = QHBoxLayout()
+        self.btn_ok = QPushButton("导入")
+        self.btn_ok.clicked.connect(self.accept)
+        self.btn_cancel = QPushButton("取消")
+        self.btn_cancel.clicked.connect(self.reject)
+        btns.addWidget(self.btn_ok)
+        btns.addWidget(self.btn_cancel)
+        self.layout.addLayout(btns)
+        
+    def get_data(self):
+        text = self.text_edit.toPlainText().strip()
+        if not text:
+            return None
+            
+        # 预处理：替换常见分隔符为统一空格
+        # 将逗号、分号等替换为空格
+        text = re.sub(r'[,，;；]', ' ', text)
+        
+        lines = text.strip().split('\n')
+        f0_values = []
+        
+        try:
+            for line in lines:
+                line = line.strip()
+                if not line: continue
+                
+                parts = re.split(r'\s+', line)
+                # 过滤空字符串
+                parts = [p for p in parts if p]
+                
+                if not parts: continue
+                
+                val = 0.0
+                if len(parts) == 1:
+                    # 一列：基频
+                    val = float(parts[0])
+                else:
+                    # 多列：取最后一列作为基频？或者按题目要求“第一列时间，第二列基频”
+                    # 题目说：如果有两列...第二列是基频值。
+                    # 考虑到可能有多列，我们假设第二列是基频（索引1）。
+                    # 如果只有两列，取parts[1]。
+                    # 如果有多于两列，为了稳妥，也可以取parts[1]或者最后一列。
+                    # 按照常用格式（Time, F0），通常是第二列。
+                    if len(parts) >= 2:
+                        val = float(parts[1])
+                    else:
+                        # Fallback
+                        val = float(parts[0])
+                
+                if np.isnan(val):
+                    raise ValueError("包含NaN值")
+                f0_values.append(val)
+                
+            if not f0_values:
+                return None
+                
+            return np.array(f0_values)
+            
+        except Exception as e:
+            QMessageBox.warning(self, "解析错误", f"无法解析数据: {e}")
+            return None
+
 class DraggablePitchEditor(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -241,7 +316,10 @@ class DraggablePitchEditor(QMainWindow):
         
         btn_batch_tool = QPushButton("批量变速变调工具")
         btn_batch_tool.clicked.connect(self.open_batch_tool)
-        btn_batch_tool.setStyleSheet("background-color: #e1f5fe; color: #0277bd;")
+        
+        self.btn_import_f0 = QPushButton("导入基频序列")
+        self.btn_import_f0.clicked.connect(self.import_f0_sequence)
+        self.btn_import_f0.setEnabled(False)
         
         # 第一行：文件与播放操作
         row1_layout = QHBoxLayout()
@@ -283,51 +361,49 @@ class DraggablePitchEditor(QMainWindow):
         row1_layout.addWidget(self.btn_delete_batch)
         row1_layout.addWidget(self.btn_rename_batch)
         
-        # 第二行：参数设置 (Y轴范围 & 参考线)
+        # 第二行：参数设置 (Y轴范围 & 参考线) - 使用标签+控件的水平布局
         row2_layout = QHBoxLayout()
         
-        # Y轴范围设置组
-        grp_axis = QGroupBox("Y轴范围设置 (Hz)")
-        layout_axis = QHBoxLayout()
+        # Y轴范围设置 - 标签在左侧
+        row2_layout.addWidget(QLabel("Y轴范围(Hz):"))
         self.input_ymin = QLineEdit("50")
         self.input_ymin.setFixedWidth(60)
+        row2_layout.addWidget(QLabel("Min:"))
+        row2_layout.addWidget(self.input_ymin)
         self.input_ymax = QLineEdit("350")
         self.input_ymax.setFixedWidth(60)
+        row2_layout.addWidget(QLabel("Max:"))
+        row2_layout.addWidget(self.input_ymax)
         btn_set_axis = QPushButton("应用范围")
         btn_set_axis.clicked.connect(self.update_axis_range)
+        row2_layout.addWidget(btn_set_axis)
         
-        layout_axis.addWidget(QLabel("Min:"))
-        layout_axis.addWidget(self.input_ymin)
-        layout_axis.addWidget(QLabel("Max:"))
-        layout_axis.addWidget(self.input_ymax)
-        layout_axis.addWidget(btn_set_axis)
-        grp_axis.setLayout(layout_axis)
+        # 分隔符
+        row2_layout.addSpacing(20)
         
-        # 参考线设置组
-        grp_ref = QGroupBox("参考线工具")
-        layout_ref = QHBoxLayout()
+        # 参考线设置 - 标签在左侧
+        row2_layout.addWidget(QLabel("参考线:"))
         self.input_ref = QLineEdit("200")
         self.input_ref.setFixedWidth(60)
         self.input_ref.setPlaceholderText("频率")
+        row2_layout.addWidget(self.input_ref)
         btn_add_ref = QPushButton("添加参考线")
         btn_add_ref.clicked.connect(self.add_ref_line)
+        row2_layout.addWidget(btn_add_ref)
         btn_clear_ref = QPushButton("清除所有")
         btn_clear_ref.clicked.connect(self.clear_ref_lines)
+        row2_layout.addWidget(btn_clear_ref)
         
-        layout_ref.addWidget(self.input_ref)
-        layout_ref.addWidget(btn_add_ref)
-        layout_ref.addWidget(btn_clear_ref)
-        grp_ref.setLayout(layout_ref)
+        # 分隔符
+        row2_layout.addSpacing(20)
         
         # 对比图保存按钮
         self.btn_save_compare = QPushButton("保存对比图")
         self.btn_save_compare.clicked.connect(self.save_comparison_plot)
         self.btn_save_compare.setEnabled(False)
-        self.btn_save_compare.setStyleSheet("background-color: #e1f5fe; color: #0277bd;")
 
-        row2_layout.addWidget(grp_axis)
-        row2_layout.addWidget(grp_ref)
         row2_layout.addWidget(self.btn_save_compare)
+        row2_layout.addWidget(self.btn_import_f0)
         row2_layout.addWidget(btn_batch_tool)
         row2_layout.addStretch() # 弹簧，把按钮顶到左边
 
@@ -486,6 +562,7 @@ class DraggablePitchEditor(QMainWindow):
             self.btn_play_synth.setEnabled(False)
             self.btn_save_audio.setEnabled(False)
             self.btn_save_compare.setEnabled(True)
+            self.btn_import_f0.setEnabled(True)
             self.btn_batch_linear_save.setEnabled(True)
 
             # 绘制
@@ -1241,6 +1318,70 @@ class DraggablePitchEditor(QMainWindow):
                 
             except Exception as e:
                 QMessageBox.critical(self, "保存图片失败", str(e))
+
+    def import_f0_sequence(self):
+        if self.snd is None or not self.current_xlim:
+            return
+            
+        dlg = ImportF0Dialog(self)
+        if dlg.exec() == QDialog.DialogCode.Accepted:
+            new_f0 = dlg.get_data()
+            if new_f0 is None:
+                return
+                
+            # 获取当前视野范围
+            xmin, xmax = self.current_xlim
+            
+            # 1. 获取当前视野内的索引
+            mask = (self.times >= xmin) & (self.times <= xmax)
+            indices = np.where(mask)[0]
+            
+            if len(indices) == 0:
+                QMessageBox.warning(self, "错误", "当前视野内没有数据点")
+                return
+                
+            # 2. 检查基频连续性（只替换完整的基频曲线）
+            # 获取视野内所有有效基频点（非0）
+            view_f0 = self.modified_f0[indices]
+            # 找出非0值的索引（相对于indices的偏移）
+            nonzero_offsets = np.where(view_f0 > 0)[0]
+            
+            if len(nonzero_offsets) == 0:
+                QMessageBox.warning(self, "错误", "当前视野内没有有效基频（全为静音/无声）")
+                return
+                
+            # 检查是否连续：索引差分应该全为1
+            if len(nonzero_offsets) > 1:
+                diffs = np.diff(nonzero_offsets)
+                if np.any(diffs > 1):
+                    QMessageBox.warning(self, "错误", "当前视野包含多段中断的基频曲线。\n请缩放图窗，使视野内只包含一段完整的连续基频曲线。")
+                    return
+            
+            # 3. 确定替换范围
+            # 从第一个非0点到最后一个非0点
+            start_offset = nonzero_offsets[0]
+            end_offset = nonzero_offsets[-1]
+            
+            target_len = end_offset - start_offset + 1
+            target_indices = indices[start_offset : end_offset + 1]
+            
+            # 4. 插值
+            source_len = len(new_f0)
+            if source_len < 2:
+                 # 如果只有一个点，直接赋值？或者扩展
+                 resampled_f0 = np.full(target_len, new_f0[0])
+            else:
+                x_old = np.linspace(0, 1, source_len)
+                x_new = np.linspace(0, 1, target_len)
+                resampled_f0 = np.interp(x_new, x_old, new_f0)
+            
+            # 5. 替换
+            self.modified_f0[target_indices] = resampled_f0
+            
+            # 6. 刷新
+            self.draw_pitch_curve_content()
+            self.canvas.draw()
+            QMessageBox.information(self, "成功", "基频序列已导入并替换")
 
     def open_batch_tool(self):
         dlg = BatchProcessorDialog(self)

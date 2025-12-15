@@ -152,9 +152,11 @@ def round_half_away_from_zero(x: np.ndarray) -> np.ndarray:
         try:
             from opensauce.helpers import round_half_away_from_zero as rha
         except Exception:
-            base = Path(__file__).resolve().parent
-            candidate = base / ".." / ".." / "opensauce-python-master"
-            sys.path.append(str(candidate))
+            # services/praat_service.py -> parent is services/ -> parent.parent is project root
+            base = Path(__file__).resolve().parent.parent
+            candidate = base / "opensauce-python-master"
+            if str(candidate) not in sys.path:
+                sys.path.insert(0, str(candidate))
             from opensauce.helpers import round_half_away_from_zero as rha
         return rha(x)
     except Exception:
@@ -173,9 +175,11 @@ def compute_shrp_f0(
         try:
             from opensauce.shrp import shr_pitch
         except Exception:
-            base = Path(__file__).resolve().parent
-            candidate = base / ".." / ".." / "opensauce-python-master"
-            sys.path.append(str(candidate))
+            # services/praat_service.py -> parent is services/ -> parent.parent is project root
+            base = Path(__file__).resolve().parent.parent
+            candidate = base / "opensauce-python-master"
+            if str(candidate) not in sys.path:
+                sys.path.insert(0, str(candidate))
             from opensauce.shrp import shr_pitch
         fs, y = read_wav_mono_float(wav_path)
         nframes = int(round(y.size / float(fs) * 1000.0 / float(frameshift_ms)))

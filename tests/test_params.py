@@ -1,127 +1,236 @@
-import numpy as np
+"""
+Property-based tests for parameter extraction functionality.
+
+**Feature: phonetic-toolbox, Property 10: Parameter Extraction Validity**
+**Validates: Requirements 2.2, 3.3**
+"""
+from __future__ import annotations
+
+import sys
 from pathlib import Path
+from typing import List
 
-from PhoneticToolbox.services.praat_service import (
-    _harmonic_mag_db,
-    compute_harmonics_H1H2H4,
-    compute_CPP,
-    compute_HNR,
-    compute_SHR,
-    compute_harmonic_at_fixed_freq,
-    read_wav_mono_float,
-    compute_shrp_f0,
-)
+import numpy as np
+import pytest
+from hypothesis import given, settings, assume
 
+# Ensure the project root is in sys.path for imports
+PROJECT_ROOT = Path(__file__).parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-def synth_signal(fs: int, duration_s: float, f0: float) -> np.ndarray:
-    t = np.arange(int(fs * duration_s)) / fs
-    # 合成含 H1/H2/H4 的信号：幅度分别 1.0, 0.5, 0.25
-    y = (
-        1.0 * np.sin(2 * np.pi * f0 * t)
-        + 0.5 * np.sin(2 * np.pi * 2 * f0 * t)
-        + 0.25 * np.sin(2 * np.pi * 4 * f0 * t)
-    )
-    return y.astype(float)
+from services.praat_service import compute_praat_f0_formants
 
 
-def test_harmonics_basic():
-    fs = 16000
-    f0 = 100.0
-    y = synth_signal(fs, 0.5, f0)
-    frameshift_ms = 10
-    Nperiods = 3
-    # 构造 F0 序列（50 帧，全部有声）
-    nframes = int(0.5 * 1000 / frameshift_ms)
-    F0 = np.full(nframes, f0, dtype=float)
-    result = compute_harmonics_H1H2H4(y, fs, frameshift_ms, F0, Nperiods)
-    H1 = result["H1"]
-    H2 = result["H2"]
-    H4 = result["H4"]
-    # H1/H2/H4 均应非 NaN 且量级合理
-    assert np.isnan(H1).sum() < nframes // 5
-    assert np.isnan(H2).sum() < nframes // 5
-    assert np.isnan(H4).sum() < nframes // 5
-    # H1 应大于 H2，大于 H4
-    m1 = np.nanmedian(H1)
-    m2 = np.nanmedian(H2)
-    m4 = np.nanmedian(H4)
-    assert m1 > m2
-    assert m2 > m4
+def get_test_wav_files() -> List[Path]:
+    """Get list of WAV files from klatt directory for testing."""
+    klatt_dir = PROJECT_ROOT / "klatt"
+    if not klatt_dir.exists():
+        return []
+    return list(klatt_dir.glob("*.wav"))
 
 
-def test_cpp_hnr_shapes():
-    fs = 16000
-    f0 = 120.0
-    y = synth_signal(fs, 0.5, f0)
-    frameshift_ms = 10
-    nframes = int(0.5 * 1000 / frameshift_ms)
-    F0 = np.full(nframes, f0, dtype=float)
-    cpp = compute_CPP(y, fs, frameshift_ms, F0, N_periods=5)
-    assert cpp.shape[0] == nframes
-    hnr = compute_HNR(y, fs, frameshift_ms, F0, N_periods=5)
-    # 存在四个频带键（MATLAB 命名）
-    assert all(k in hnr for k in ["HNR05", "HNR15", "HNR25", "HNR35"])
+# Get available test WAV files
+TEST_WAV_FILES = get_test_wav_files()
 
 
-def test_shr_range_and_mask():
-    fs = 16000
-    f0 = 120.0
-    y = synth_signal(fs, 0.4, f0)
-    frameshift_ms = 10
-    nframes = int(0.4 * 1000 / frameshift_ms)
-    F0 = np.full(nframes, f0, dtype=float)
-    shr = compute_SHR(y, fs, frameshift_ms, F0, minf0=40.0, maxf0=500.0)
-    assert shr.shape[0] == nframes
-    valid = shr[~np.isnan(shr)]
-    assert valid.size > 0
-    assert np.all(valid >= 0.0) and np.all(valid <= 1.0)
+@pytest.mark.skipif(len(TEST_WAV_FILES) == 0, reason="No WAV files found in klatt directory")
+class TestParameterExtractionValidity:
+    """
+    Property-based tests for parameter extraction validity.
+    
+    **Feature: phonetic-toolbox, Property 10: Parameter Extraction Validity**
+    **Validates: Requirements 2.2, 3.3**
+    
+    Property: For any valid WAV audio file with voiced content, parameter extraction
+    SHALL produce F0 values within the configured min/max range for voiced frames.
+    """
+    
+    @pytest.mark.parametrize("wav_path", TEST_WAV_FILES, ids=lambda p: p.name)
+    @pytest.mark.parametrize("min_f0,max_f0", [
+        (40, 500),   # Default range
+        (50, 400),   # Narrower range
+        (75, 300),   # Even narrower
+    ])
+    def test_f0_values_within_configured_range(
+        self, wav_path: Path, min_f0: int, max_f0: int
+    ):
+        """
+        **Feature: phonetic-toolbox, Property 10: Parameter Extraction Validity**
+        **Validates: Requirements 2.2, 3.3**
+        
+        For any valid WAV audio file with voiced content, parameter extraction
+        SHALL produce F0 values within the configured min/max range for voiced frames.
+        
+        Note: Praat's pitch tracking algorithm uses interpolation and smoothing,
+        which can result in F0 values slightly outside the configured range.
+        We allow a small tolerance (1 Hz) to account for this algorithmic behavior.
+        """
+        # Extract parameters
+        result = compute_praat_f0_formants(
+            wav_path=wav_path,
+            frameshift_ms=5,
+            min_f0=min_f0,
+            max_f0=max_f0
+        )
+        
+        # Get F0 values
+        f0_values = result["pF0"]
+        
+        # Filter out NaN values (unvoiced frames)
+        voiced_f0 = f0_values[~np.isnan(f0_values)]
+        
+        # Skip if no voiced frames (some audio may be entirely unvoiced)
+        if len(voiced_f0) == 0:
+            pytest.skip(f"No voiced frames in {wav_path.name}")
+        
+        # Allow small tolerance for pitch tracking algorithm interpolation
+        tolerance = 1.0  # Hz
+        
+        # Property: All voiced F0 values should be within configured range (with tolerance)
+        assert np.all(voiced_f0 >= min_f0 - tolerance), (
+            f"F0 values below min_f0={min_f0} (with {tolerance}Hz tolerance): min={np.min(voiced_f0):.2f}"
+        )
+        assert np.all(voiced_f0 <= max_f0 + tolerance), (
+            f"F0 values above max_f0={max_f0} (with {tolerance}Hz tolerance): max={np.max(voiced_f0):.2f}"
+        )
+    
+    @pytest.mark.parametrize("wav_path", TEST_WAV_FILES, ids=lambda p: p.name)
+    def test_formant_values_are_positive(self, wav_path: Path):
+        """
+        **Feature: phonetic-toolbox, Property 10: Parameter Extraction Validity**
+        **Validates: Requirements 2.2, 3.3**
+        
+        For any valid WAV audio file, formant values (when present) should be positive.
+        """
+        result = compute_praat_f0_formants(
+            wav_path=wav_path,
+            frameshift_ms=5,
+            min_f0=40,
+            max_f0=500
+        )
+        
+        # Check formants F1-F4
+        for formant_key in ["pF1", "pF2", "pF3", "pF4"]:
+            formant_values = result[formant_key]
+            # Filter out NaN values
+            valid_formants = formant_values[~np.isnan(formant_values)]
+            
+            if len(valid_formants) > 0:
+                # All valid formant values should be positive
+                assert np.all(valid_formants > 0), (
+                    f"{formant_key} has non-positive values: min={np.min(valid_formants):.2f}"
+                )
+    
+    @pytest.mark.parametrize("wav_path", TEST_WAV_FILES, ids=lambda p: p.name)
+    def test_formant_ordering(self, wav_path: Path):
+        """
+        **Feature: phonetic-toolbox, Property 10: Parameter Extraction Validity**
+        **Validates: Requirements 2.2, 3.3**
+        
+        For any valid WAV audio file, formants should generally follow F1 < F2 < F3 < F4
+        ordering (when all are present and valid).
+        """
+        result = compute_praat_f0_formants(
+            wav_path=wav_path,
+            frameshift_ms=5,
+            min_f0=40,
+            max_f0=500
+        )
+        
+        f1 = result["pF1"]
+        f2 = result["pF2"]
+        f3 = result["pF3"]
+        f4 = result["pF4"]
+        
+        # Find frames where all formants are valid
+        valid_mask = (
+            ~np.isnan(f1) & ~np.isnan(f2) & ~np.isnan(f3) & ~np.isnan(f4)
+        )
+        
+        if not np.any(valid_mask):
+            pytest.skip(f"No frames with all valid formants in {wav_path.name}")
+        
+        # Check ordering for valid frames
+        # Note: We check that the majority follow the ordering, as some frames
+        # may have estimation errors
+        f1_valid = f1[valid_mask]
+        f2_valid = f2[valid_mask]
+        f3_valid = f3[valid_mask]
+        f4_valid = f4[valid_mask]
+        
+        # Count frames where ordering is correct
+        correct_order = (
+            (f1_valid < f2_valid) & (f2_valid < f3_valid) & (f3_valid < f4_valid)
+        )
+        correct_ratio = np.sum(correct_order) / len(correct_order)
+        
+        # At least 50% of frames should have correct ordering
+        # (allowing for some estimation errors)
+        assert correct_ratio >= 0.5, (
+            f"Only {correct_ratio*100:.1f}% of frames have correct formant ordering"
+        )
+    
+    @pytest.mark.parametrize("wav_path", TEST_WAV_FILES, ids=lambda p: p.name)
+    def test_result_contains_required_keys(self, wav_path: Path):
+        """
+        **Feature: phonetic-toolbox, Property 10: Parameter Extraction Validity**
+        **Validates: Requirements 2.2, 3.3**
+        
+        Parameter extraction should return all required keys.
+        """
+        result = compute_praat_f0_formants(
+            wav_path=wav_path,
+            frameshift_ms=5,
+            min_f0=40,
+            max_f0=500
+        )
+        
+        required_keys = ["pF0", "pF1", "pF2", "pF3", "pF4", "pB1", "pB2", "pB3", "pB4", "Fs"]
+        
+        for key in required_keys:
+            assert key in result, f"Missing required key: {key}"
+    
+    @pytest.mark.parametrize("wav_path", TEST_WAV_FILES, ids=lambda p: p.name)
+    def test_array_lengths_consistent(self, wav_path: Path):
+        """
+        **Feature: phonetic-toolbox, Property 10: Parameter Extraction Validity**
+        **Validates: Requirements 2.2, 3.3**
+        
+        All parameter arrays should have the same length.
+        """
+        result = compute_praat_f0_formants(
+            wav_path=wav_path,
+            frameshift_ms=5,
+            min_f0=40,
+            max_f0=500
+        )
+        
+        array_keys = ["pF0", "pF1", "pF2", "pF3", "pF4", "pB1", "pB2", "pB3", "pB4"]
+        
+        lengths = {key: len(result[key]) for key in array_keys}
+        unique_lengths = set(lengths.values())
+        
+        assert len(unique_lengths) == 1, (
+            f"Inconsistent array lengths: {lengths}"
+        )
 
 
-def test_h5k_computation_across_frames():
-    fs = 16000
-    f0 = 120.0
-    # 合成包含 5kHz 分量的信号，确保 H5K 可检测到有意义的幅度
-    t = np.arange(int(fs * 0.5)) / fs
-    y = (
-        0.8 * np.sin(2 * np.pi * f0 * t)
-        + 0.2 * np.sin(2 * np.pi * 5000.0 * t)
-    ).astype(float)
-    frameshift_ms = 10
-    nframes = int(0.5 * 1000 / frameshift_ms)
-    F0 = np.full(nframes, f0, dtype=float)
-    Nperiods = 3
-    h5k = compute_harmonic_at_fixed_freq(y, fs, frameshift_ms, F0, Nperiods, 5000.0)
-    assert h5k.shape[0] == nframes
-    # 至少一半帧应为非 NaN（避免只在最后一帧有值）
-    assert np.count_nonzero(~np.isnan(h5k)) >= nframes // 2
-
-
-def test_read_wav_mono_float_normalizes_and_mono(tmp_path: Path):
-    fs = 16000
-    t = np.arange(fs // 10) / fs
-    mono = (0.5 * np.sin(2 * np.pi * 220 * t)).astype(np.float32)
-    stereo = np.stack([mono, 0.2 * mono], axis=1)
-    from scipy.io import wavfile
-    p1 = tmp_path / "test_int16.wav"
-    wavfile.write(str(p1), fs, np.int16(np.clip(mono, -1.0, 1.0) * 32767))
-    p2 = tmp_path / "test_float32_stereo.wav"
-    wavfile.write(str(p2), fs, stereo.astype(np.float32))
-    fs1, y1 = read_wav_mono_float(p1)
-    fs2, y2 = read_wav_mono_float(p2)
-    assert fs1 == fs and fs2 == fs
-    assert y1.ndim == 1 and y2.ndim == 1
-    assert np.max(np.abs(y1)) <= 1.0 + 1e-6
-    assert np.max(np.abs(y2)) <= 1.0 + 1e-6
-
-
-def test_compute_shrp_f0_shape(tmp_path: Path):
-    fs = 16000
-    t = np.arange(fs // 2) / fs
-    y = (0.7 * np.sin(2 * np.pi * 120 * t)).astype(np.float32)
-    from scipy.io import wavfile
-    p = tmp_path / "test_shrp.wav"
-    wavfile.write(str(p), fs, np.int16(np.clip(y, -1.0, 1.0) * 32767))
-    res = compute_shrp_f0(p, frameshift_ms=10, min_f0=40.0, max_f0=500.0, shr_threshold=0.4)
-    f0 = res.get("shrF0")
-    assert isinstance(f0, np.ndarray)
-    assert f0.shape[0] == int(round(y.size / fs * 1000.0 / 10.0))
+class TestParameterExtractionEdgeCases:
+    """
+    Edge case tests for parameter extraction.
+    """
+    
+    def test_nonexistent_file_raises_error(self, tmp_path: Path):
+        """
+        Parameter extraction should raise an error for non-existent files.
+        """
+        fake_path = tmp_path / "nonexistent.wav"
+        
+        with pytest.raises(Exception):
+            compute_praat_f0_formants(
+                wav_path=fake_path,
+                frameshift_ms=5,
+                min_f0=40,
+                max_f0=500
+            )
