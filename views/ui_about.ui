@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>900</height>
+    <height>550</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -62,19 +62,45 @@
       .profile { }
     </style>
   </head>
-  <body>
-    <p class="intro">本项目基于原始 MATLAB 版 VoiceSauce 进行深度修改与扩展（<a href="https://www.phonetics.ucla.edu/voicesauce/">https://www.phonetics.ucla.edu/voicesauce/</a>），部分核心算法参考 opensauce-python 项目（<a href="https://github.com/voicesauce/opensauce-python">https://github.com/voicesauce/opensauce-python</a>）。本项目致力于为语音学研究提供更加高效、易用的工具链，主要改动与扩展如下：</p>
-    <p class="item" style="font-size:13pt;">1. 在 VoiceSauce 的基础上新增了基于 REAPER 算法（<a href="https://github.com/google/REAPER/">https://github.com/google/REAPER</a>）的基频检测模块，支持检测极低的基频，特别适用于嘎裂声等特殊发声类型的分析。改写了 SHR（次谐波谐波比）算法的基频监测逻辑，优化了对嘎裂声等发声类型的参数估计精度。</p>
-    <p class="item" style="font-size:13pt;">2. 全新增加了 EGG（电声门图）信号分析模块，支持双声道信号归一化，支持闭合商、速度商的计算等功能。支持逆滤波、EGG 信号批量处理。</p>
-    <p class="item" style="font-size:13pt;">3. 增加了基于经典 Klatt 模型的语音合成模块，支持 5 种典型发声类型预设与参数的动态调整，支持输入元音并自动合成元音。</p>
-    <p class="item" style="font-size:13pt;">4. 增加了基于 Parselmouth 的基频修改模块，支持单个音频的可视化编辑、批量编辑，以及与多文件的批量处理。</p>
-    <p class="item" style="font-size:13pt;">5. 增加了基于 Web 技术的听觉感知实验平台，支持手动编辑实验界面及音频排序功能。支持音频刺激呈现、反应时记录、问卷调查与数据导出等功能。支持实验界面导出共享。</p>
-    <p class="item" style="font-size:13pt;">请在此处获取最新版应用<a href="https://github.com/Nephelium/PhoneticToolbox/releases">https://github.com/Nephelium/PhoneticToolbox/releases</a></p>
-    <p class="org" style="font-size:13pt;">单位：中山大学中国语言文学系（珠海）</p>
-    <p class="author" style="font-size:13pt;">作者：井立文（知乎 @井韶子）</p>
-    <p class="email" style="font-size:13pt;">邮箱：jinglw3@mail2.sysu.edu.cn</p>
-    <p class="profile" style="font-size:13pt;">个人主页：<a href="https://www.zhihu.com/people/jingshaozi">https://www.zhihu.com/people/jingshaozi</a></p>
-  </body>
+<body>
+    <div class="intro">
+        <p>
+            本项目基于 MATLAB 版 <b>VoiceSauce</b> 及 python 版 <b>opensauce-python</b> 深度开发，致力于为语音学研究提供高效、易用的工具箱。
+        </p>
+        <p>
+            工具箱在保留原版功能的基础上，核心集成了 <span class="highlight">REAPER 基频检测算法</span>与优化的 <span class="highlight">SHR 逻辑</span>，显著提升了对极低基频（如嘎裂声之类特殊发声类型）的分析精度。此外，工具箱新增了多项实用的自动化处理模块，如唇形提取、自动标注、EGG信号分析、语音合成、变速变调、感知实验、语谱图转音频、普通话转IPA等，有助于开展多项学术研究。
+        </p>
+    </div>
+
+    <div class="download-box">
+        <div color: #888; margin-bottom: 5px;">当前版本：v1.2.0。获取最新版本：</div>
+        <a class="download-link" href="https://github.com/Nephelium/PhoneticToolbox/releases">
+            Github Releases / PhoneticToolbox
+        </a>
+    </div>
+
+    <div class="info-section">
+        <div class="info-item">
+            <span class="label">单位</span>
+            <span class="content">中山大学中国语言文学系（珠海）</span>
+        </div>
+        <div class="info-item">
+            <span class="label">作者</span>
+            <span class="content">井立文（知乎 @井韶子）</span>
+        </div>
+        <div class="info-item">
+            <span class="label">邮箱</span>
+            <span class="content">jinglw3@mail2.sysu.edu.cn</span>
+        </div>
+        <div class="info-item">
+            <span class="label">个人主页</span>
+            <span class="content">
+                <a href="https://www.zhihu.com/people/jingshaozi">https://www.zhihu.com/people/jingshaozi</a>
+            </span>
+        </div>
+    </div>
+</body>
+</html>
 </html>
       ]]></string>
      </property>

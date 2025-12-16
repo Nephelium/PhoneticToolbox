@@ -284,3 +284,55 @@ MediaPipe imported successfully
 Initializing FaceMesh...
 Intercepted set_resource_dir. Redirecting to: C:\Users\13680\AppData\Local\Temp\mp_res_fix
 FaceMesh initialized successfully
+Starting application...
+Python version: 3.9.24 (main, Oct 14 2025, 16:10:39) [MSC v.1929 64 bit (AMD64)]
+Executable: C:\Users\13680\Desktop\project\【中山大学】\PhoneticToolbox\lip_feature_analysis\lip_feature_analysis.exe
+CWD: C:\Users\13680\Desktop\project\【中山大学】\PhoneticToolbox\lip_feature_analysis
+Running in frozen mode
+MEIPASS: C:\Users\13680\AppData\Local\Temp\_MEI25122
+Attempting to fix MediaPipe resources for frozen environment...
+Target temp resource dir: C:\Users\13680\AppData\Local\Temp\mp_res_fix
+Modules already exist in temp, skipping copy
+Successfully patched resource_util.set_resource_dir
+Patched FaceMesh binary path to: C:\Users\13680\AppData\Local\Temp\mp_res_fix\mediapipe\modules\face_landmark\face_landmark_front_cpu.binarypb
+Patched FaceDetection short range path to: C:\Users\13680\AppData\Local\Temp\mp_res_fix\mediapipe\modules\face_detection\face_detection_short_range_cpu.binarypb
+Patched FaceDetection full range path to: C:\Users\13680\AppData\Local\Temp\mp_res_fix\mediapipe\modules\face_detection\face_detection_full_range_cpu.binarypb
+Added DLL directory: C:\Users\13680\AppData\Local\Temp\_MEI25122\mediapipe\python
+Files in C:\Users\13680\AppData\Local\Temp\_MEI25122\mediapipe\python: ['opencv_world3410.dll', '_framework_bindings.cp39-win_amd64.pyd']
+Added DLL directory: C:\Users\13680\AppData\Local\Temp\_MEI25122\mediapipe
+Files in C:\Users\13680\AppData\Local\Temp\_MEI25122\mediapipe: []
+Added DLL directory: C:\Users\13680\AppData\Local\Temp\_MEI25122\cv2
+Files in C:\Users\13680\AppData\Local\Temp\_MEI25122\cv2: ['cv2.pyd', 'opencv_videoio_ffmpeg4110_64.dll']
+Added DLL directory: C:\Users\13680\AppData\Local\Temp\_MEI25122
+Files in C:\Users\13680\AppData\Local\Temp\_MEI25122: ['api-ms-win-core-console-l1-1-0.dll', 'api-ms-win-core-datetime-l1-1-0.dll', 'api-ms-win-core-debug-l1-1-0.dll', 'api-ms-win-core-errorhandling-l1-1-0.dll', 'api-ms-win-core-fibers-l1-1-0.dll', 'api-ms-win-core-file-l1-1-0.dll', 'api-ms-win-core-file-l1-2-0.dll', 'api-ms-win-core-file-l2-1-0.dll', 'api-ms-win-core-handle-l1-1-0.dll', 'api-ms-win-core-heap-l1-1-0.dll', 'api-ms-win-core-interlocked-l1-1-0.dll', 'api-ms-win-core-libraryloader-l1-1-0.dll', 'api-ms-win-core-localization-l1-2-0.dll', 'api-ms-win-core-memory-l1-1-0.dll', 'api-ms-win-core-namedpipe-l1-1-0.dll', 'api-ms-win-core-processenvironment-l1-1-0.dll', 'api-ms-win-core-processthreads-l1-1-0.dll', 'api-ms-win-core-processthreads-l1-1-1.dll', 'api-ms-win-core-profile-l1-1-0.dll', 'api-ms-win-core-rtlsupport-l1-1-0.dll', 'api-ms-win-core-string-l1-1-0.dll', 'api-ms-win-core-synch-l1-1-0.dll', 'api-ms-win-core-synch-l1-2-0.dll', 'api-ms-win-core-sysinfo-l1-1-0.dll', 'api-ms-win-core-timezone-l1-1-0.dll', 'api-ms-win-core-util-l1-1-0.dll', 'api-ms-win-crt-conio-l1-1-0.dll', 'api-ms-win-crt-convert-l1-1-0.dll', 'api-ms-win-crt-environment-l1-1-0.dll', 'api-ms-win-crt-filesystem-l1-1-0.dll', 'api-ms-win-crt-heap-l1-1-0.dll', 'api-ms-win-crt-locale-l1-1-0.dll', 'api-ms-win-crt-math-l1-1-0.dll', 'api-ms-win-crt-private-l1-1-0.dll', 'api-ms-win-crt-process-l1-1-0.dll', 'api-ms-win-crt-runtime-l1-1-0.dll', 'api-ms-win-crt-stdio-l1-1-0.dll', 'api-ms-win-crt-string-l1-1-0.dll', 'api-ms-win-crt-time-l1-1-0.dll', 'api-ms-win-crt-utility-l1-1-0.dll', 'CONCRT140.dll', 'ffi.dll', 'LIBBZ2.dll', 'libcrypto-3-x64.dll', 'libexpat.dll', 'liblzma.dll', 'libssl-3-x64.dll', 'MSVCP140.dll', 'MSVCP140_2.dll', 'pyexpat.pyd', 'python3.dll', 'python39.dll', 'select.pyd', 'tcl86t.dll', 'tk86t.dll', 'ucrtbase.dll', 'unicodedata.pyd', 'VCRUNTIME140.dll', 'VCRUNTIME140_1.dll', 'zlib.dll', '_asyncio.pyd', '_bz2.pyd', '_cffi_backend.cp39-win_amd64.pyd', '_ctypes.pyd', '_decimal.pyd', '_elementtree.pyd', '_hashlib.pyd', '_lzma.pyd', '_multiprocessing.pyd', '_overlapped.pyd', '_queue.pyd', '_socket.pyd', '_ssl.pyd', '_tkinter.pyd', '_uuid.pyd']
+Attempting to import mediapipe...
+MediaPipe imported successfully
+Initializing FaceMesh...
+Intercepted set_resource_dir. Redirecting to: C:\Users\13680\AppData\Local\Temp\mp_res_fix
+FaceMesh initialized successfully
+Starting application...
+Python version: 3.9.24 (main, Oct 14 2025, 16:10:39) [MSC v.1929 64 bit (AMD64)]
+Executable: C:\Users\13680\Desktop\project\【中山大学】\PhoneticToolbox\lip_feature_analysis\lip_feature_analysis.exe
+CWD: C:\Users\13680\Desktop\project\【中山大学】\PhoneticToolbox\lip_feature_analysis
+Running in frozen mode
+MEIPASS: C:\Users\13680\AppData\Local\Temp\_MEI175762
+Attempting to fix MediaPipe resources for frozen environment...
+Target temp resource dir: C:\Users\13680\AppData\Local\Temp\mp_res_fix
+Modules already exist in temp, skipping copy
+Successfully patched resource_util.set_resource_dir
+Patched FaceMesh binary path to: C:\Users\13680\AppData\Local\Temp\mp_res_fix\mediapipe\modules\face_landmark\face_landmark_front_cpu.binarypb
+Patched FaceDetection short range path to: C:\Users\13680\AppData\Local\Temp\mp_res_fix\mediapipe\modules\face_detection\face_detection_short_range_cpu.binarypb
+Patched FaceDetection full range path to: C:\Users\13680\AppData\Local\Temp\mp_res_fix\mediapipe\modules\face_detection\face_detection_full_range_cpu.binarypb
+Added DLL directory: C:\Users\13680\AppData\Local\Temp\_MEI175762\mediapipe\python
+Files in C:\Users\13680\AppData\Local\Temp\_MEI175762\mediapipe\python: ['opencv_world3410.dll', '_framework_bindings.cp39-win_amd64.pyd']
+Added DLL directory: C:\Users\13680\AppData\Local\Temp\_MEI175762\mediapipe
+Files in C:\Users\13680\AppData\Local\Temp\_MEI175762\mediapipe: []
+Added DLL directory: C:\Users\13680\AppData\Local\Temp\_MEI175762\cv2
+Files in C:\Users\13680\AppData\Local\Temp\_MEI175762\cv2: ['cv2.pyd', 'opencv_videoio_ffmpeg4110_64.dll']
+Added DLL directory: C:\Users\13680\AppData\Local\Temp\_MEI175762
+Files in C:\Users\13680\AppData\Local\Temp\_MEI175762: ['api-ms-win-core-console-l1-1-0.dll', 'api-ms-win-core-datetime-l1-1-0.dll', 'api-ms-win-core-debug-l1-1-0.dll', 'api-ms-win-core-errorhandling-l1-1-0.dll', 'api-ms-win-core-fibers-l1-1-0.dll', 'api-ms-win-core-file-l1-1-0.dll', 'api-ms-win-core-file-l1-2-0.dll', 'api-ms-win-core-file-l2-1-0.dll', 'api-ms-win-core-handle-l1-1-0.dll', 'api-ms-win-core-heap-l1-1-0.dll', 'api-ms-win-core-interlocked-l1-1-0.dll', 'api-ms-win-core-libraryloader-l1-1-0.dll', 'api-ms-win-core-localization-l1-2-0.dll', 'api-ms-win-core-memory-l1-1-0.dll', 'api-ms-win-core-namedpipe-l1-1-0.dll', 'api-ms-win-core-processenvironment-l1-1-0.dll', 'api-ms-win-core-processthreads-l1-1-0.dll', 'api-ms-win-core-processthreads-l1-1-1.dll', 'api-ms-win-core-profile-l1-1-0.dll', 'api-ms-win-core-rtlsupport-l1-1-0.dll', 'api-ms-win-core-string-l1-1-0.dll', 'api-ms-win-core-synch-l1-1-0.dll', 'api-ms-win-core-synch-l1-2-0.dll', 'api-ms-win-core-sysinfo-l1-1-0.dll', 'api-ms-win-core-timezone-l1-1-0.dll', 'api-ms-win-core-util-l1-1-0.dll', 'api-ms-win-crt-conio-l1-1-0.dll', 'api-ms-win-crt-convert-l1-1-0.dll', 'api-ms-win-crt-environment-l1-1-0.dll', 'api-ms-win-crt-filesystem-l1-1-0.dll', 'api-ms-win-crt-heap-l1-1-0.dll', 'api-ms-win-crt-locale-l1-1-0.dll', 'api-ms-win-crt-math-l1-1-0.dll', 'api-ms-win-crt-private-l1-1-0.dll', 'api-ms-win-crt-process-l1-1-0.dll', 'api-ms-win-crt-runtime-l1-1-0.dll', 'api-ms-win-crt-stdio-l1-1-0.dll', 'api-ms-win-crt-string-l1-1-0.dll', 'api-ms-win-crt-time-l1-1-0.dll', 'api-ms-win-crt-utility-l1-1-0.dll', 'CONCRT140.dll', 'ffi.dll', 'LIBBZ2.dll', 'libcrypto-3-x64.dll', 'libexpat.dll', 'liblzma.dll', 'libssl-3-x64.dll', 'MSVCP140.dll', 'MSVCP140_2.dll', 'pyexpat.pyd', 'python3.dll', 'python39.dll', 'select.pyd', 'tcl86t.dll', 'tk86t.dll', 'ucrtbase.dll', 'unicodedata.pyd', 'VCRUNTIME140.dll', 'VCRUNTIME140_1.dll', 'zlib.dll', '_asyncio.pyd', '_bz2.pyd', '_cffi_backend.cp39-win_amd64.pyd', '_ctypes.pyd', '_decimal.pyd', '_elementtree.pyd', '_hashlib.pyd', '_lzma.pyd', '_multiprocessing.pyd', '_overlapped.pyd', '_queue.pyd', '_socket.pyd', '_ssl.pyd', '_tkinter.pyd', '_uuid.pyd']
+Attempting to import mediapipe...
+MediaPipe imported successfully
+Initializing FaceMesh...
+Intercepted set_resource_dir. Redirecting to: C:\Users\13680\AppData\Local\Temp\mp_res_fix
+FaceMesh initialized successfully

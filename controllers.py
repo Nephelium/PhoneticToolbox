@@ -4,7 +4,7 @@ import logging
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Dict, Any
 
 from PyQt6 import QtWidgets, QtCore, uic, QtGui
 from PyQt6.QtCore import QThread, pyqtSignal
@@ -1205,11 +1205,16 @@ class ParameterEstimationController:
             except Exception:
                 pass
         self._worker.progress_sig.connect(_on_progress)
-        self._worker.error_sig.connect(lambda msg: QtWidgets.QMessageBox.critical(self.widget, "参数估计错误", msg))
+        self._had_error = False
+        def _on_error(msg: str) -> None:
+            self._had_error = True
+            QtWidgets.QMessageBox.critical(self.widget, "参数估计错误", msg)
+        self._worker.error_sig.connect(_on_error)
         def _on_finished():
             progress.close()
             self.widget.buttonStart.setEnabled(True)
-            QtWidgets.QMessageBox.information(self.widget, "参数估计", "处理完成")
+            if not self._had_error:
+                QtWidgets.QMessageBox.information(self.widget, "参数估计", "处理完成")
         self._worker.finished_sig.connect(_on_finished)
         def _on_cancel():
             if self._worker.isRunning():
@@ -1493,83 +1498,80 @@ class ParameterDisplayController:
         mapping = {
                 "pF0": "F0 - Praat",
                 "rF0": "F0 - REAPER",
-                "sF0": "F0 - Snack",
-                "shrF0": "F0 - SHR",
-            "pF1": "F1 - Praat",
-            "pF2": "F2 - Praat",
-            "pF3": "F3 - Praat",
-            "pF4": "F4 - Praat",
-            "pB1": "B1 - Praat",
-            "pB2": "B2 - Praat",
-            "pB3": "B3 - Praat",
-            "pB4": "B4 - Praat",
-            "H1_pF0": "H1 (pF0)",
-            "H1_rF0": "H1 (rF0)",
-            "H2_pF0": "H2 (pF0)",
-            "H2_rF0": "H2 (rF0)",
-            "H4_pF0": "H4 (pF0)",
-            "H4_rF0": "H4 (rF0)",
-            "A1_pF0": "A1 (pF0)",
-            "A1_rF0": "A1 (rF0)",
-            "A2_pF0": "A2 (pF0)",
-            "A2_rF0": "A2 (rF0)",
-            "A3_pF0": "A3 (pF0)",
-            "A3_rF0": "A3 (rF0)",
-            "H1H2u_pF0": "H1-H2 (pF0)",
-            "H1H2u_rF0": "H1-H2 (rF0)",
-            "H2H4u_pF0": "H2-H4 (pF0)",
-            "H2H4u_rF0": "H2-H4 (rF0)",
-            "H1A1u_pF0": "H1-A1 (pF0)",
-            "H1A1u_rF0": "H1-A1 (rF0)",
-            "H1A2u_pF0": "H1-A2 (pF0)",
-            "H1A2u_rF0": "H1-A2 (rF0)",
-            "H1A3u_pF0": "H1-A3 (pF0)",
-            "H1A3u_rF0": "H1-A3 (rF0)",
-            "H1A1c_pF0": "H1*-A1* (pF0)",
-            "H1A1c_rF0": "H1*-A1* (rF0)",
-            "H1A2c_pF0": "H1*-A2* (pF0)",
-            "H1A2c_rF0": "H1*-A2* (rF0)",
-            "H1A3c_pF0": "H1*-A3* (pF0)",
-            "H1A3c_rF0": "H1*-A3* (rF0)",
-            "H1H2c_pF0": "H1*-H2* (pF0)",
-            "H1H2c_rF0": "H1*-H2* (rF0)",
-            "H2H4c_pF0": "H2*-H4* (pF0)",
-            "H2H4c_rF0": "H2*-H4* (rF0)",
-            "H2K_pF0": "2K (pF0)",
-            "H2K_rF0": "2K (rF0)",
-            "H5K_pF0": "5K (pF0)",
-            "H5K_rF0": "5K (rF0)",
-            "H42Ku_pF0": "H4-2K (pF0)",
-            "H42Ku_rF0": "H4-2K (rF0)",
-            "H2KH5Ku_pF0": "2K-5K (pF0)",
-            "H2KH5Ku_rF0": "2K-5K (rF0)",
-            "H42Kc_pF0": "H4*-2K* (pF0)",
-            "H42Kc_rF0": "H4*-2K* (rF0)",
-            "H2KH5Kc_pF0": "2K*-5K* (pF0)",
-            "H2KH5Kc_rF0": "2K*-5K* (rF0)",
-            "CPP_pF0": "CPP (pF0)",
-            "CPP_rF0": "CPP (rF0)",
-            "Energy": "Energy",
-            "HNR05_pF0": "HNR05 (pF0)",
-            "HNR15_pF0": "HNR15 (pF0)",
-            "HNR25_pF0": "HNR25 (pF0)",
-            "HNR35_pF0": "HNR35 (pF0)",
-            "HNR05_rF0": "HNR05 (rF0)",
-            "HNR15_rF0": "HNR15 (rF0)",
-            "HNR25_rF0": "HNR25 (rF0)",
-            "HNR35_rF0": "HNR35 (rF0)",
+                "pF1": "F1 - Praat",
+                "pF2": "F2 - Praat",
+                "pF3": "F3 - Praat",
+                "pF4": "F4 - Praat",
+                "pB1": "B1 - Praat",
+                "pB2": "B2 - Praat",
+                "pB3": "B3 - Praat",
+                "pB4": "B4 - Praat",
+                "H1_pF0": "H1 (pF0)",
+                "H1_rF0": "H1 (rF0)",
+                "H2_pF0": "H2 (pF0)",
+                "H2_rF0": "H2 (rF0)",
+                "H4_pF0": "H4 (pF0)",
+                "H4_rF0": "H4 (rF0)",
+                "A1_pF0": "A1 (pF0)",
+                "A1_rF0": "A1 (rF0)",
+                "A2_pF0": "A2 (pF0)",
+                "A2_rF0": "A2 (rF0)",
+                "A3_pF0": "A3 (pF0)",
+                "A3_rF0": "A3 (rF0)",
+                "H1H2u_pF0": "H1-H2 (pF0)",
+                "H1H2u_rF0": "H1-H2 (rF0)",
+                "H2H4u_pF0": "H2-H4 (pF0)",
+                "H2H4u_rF0": "H2-H4 (rF0)",
+                "H1A1u_pF0": "H1-A1 (pF0)",
+                "H1A1u_rF0": "H1-A1 (rF0)",
+                "H1A2u_pF0": "H1-A2 (pF0)",
+                "H1A2u_rF0": "H1-A2 (rF0)",
+                "H1A3u_pF0": "H1-A3 (pF0)",
+                "H1A3u_rF0": "H1-A3 (rF0)",
+                "H1A1c_pF0": "H1*-A1* (pF0)",
+                "H1A1c_rF0": "H1*-A1* (rF0)",
+                "H1A2c_pF0": "H1*-A2* (pF0)",
+                "H1A2c_rF0": "H1*-A2* (rF0)",
+                "H1A3c_pF0": "H1*-A3* (pF0)",
+                "H1A3c_rF0": "H1*-A3* (rF0)",
+                "H1H2c_pF0": "H1*-H2* (pF0)",
+                "H1H2c_rF0": "H1*-H2* (rF0)",
+                "H2H4c_pF0": "H2*-H4* (pF0)",
+                "H2H4c_rF0": "H2*-H4* (rF0)",
+                "H2K_pF0": "2K (pF0)",
+                "H2K_rF0": "2K (rF0)",
+                "H5K_pF0": "5K (pF0)",
+                "H5K_rF0": "5K (rF0)",
+                "H42Ku_pF0": "H4-2K (pF0)",
+                "H42Ku_rF0": "H4-2K (rF0)",
+                "H2KH5Ku_pF0": "2K-5K (pF0)",
+                "H2KH5Ku_rF0": "2K-5K (rF0)",
+                "H42Kc_pF0": "H4*-2K* (pF0)",
+                "H42Kc_rF0": "H4*-2K* (rF0)",
+                "H2KH5Kc_pF0": "2K*-5K* (pF0)",
+                "H2KH5Kc_rF0": "2K*-5K* (rF0)",
+                "CPP_pF0": "CPP (pF0)",
+                "CPP_rF0": "CPP (rF0)",
+                "Energy": "Energy",
+                "HNR05_pF0": "HNR05 (pF0)",
+                "HNR15_pF0": "HNR15 (pF0)",
+                "HNR25_pF0": "HNR25 (pF0)",
+                "HNR35_pF0": "HNR35 (pF0)",
+                "HNR05_rF0": "HNR05 (rF0)",
+                "HNR15_rF0": "HNR15 (rF0)",
+                "HNR25_rF0": "HNR25 (rF0)",
+                "HNR35_rF0": "HNR35 (rF0)",
                 "SHR_pF0": "SHR (pF0)",
                 "SHR_rF0": "SHR (rF0)",
-                "SHR_shrF0": "SHR (shrF0)",
-            "SpectralSlope_pF0": "频谱倾斜 (pF0)",
-            "SpectralSlope_rF0": "频谱倾斜 (rF0)",
-            "Jitter": "基频抖动",
-            "Shimmer": "振幅抖动",
-            "LipArea": "唇面积比 (Lip Area Ratio)",
-            "LipWidth": "外唇宽度 (Outer Lip Width)",
-            "LipOpen": "唇开度 (Lip Openness)",
-            "LipCirc": "唇圆度 (Lip Circularity)",
-        }
+                "SpectralSlope_pF0": "频谱倾斜 (pF0)",
+                "SpectralSlope_rF0": "频谱倾斜 (rF0)",
+                "Jitter": "基频抖动",
+                "Shimmer": "振幅抖动",
+                "LipArea": "唇面积比 (Lip Area Ratio)",
+                "LipWidth": "外唇宽度 (Outer Lip Width)",
+                "LipOpen": "唇开度 (Lip Openness)",
+                "LipCirc": "唇圆度 (Lip Circularity)",
+            }
         out = []
         rev = {}
         for k, title in mapping.items():
@@ -1860,8 +1862,6 @@ class OutputTextController:
         return {
             "pF0": "F0 - Praat",
             "rF0": "F0 - REAPER",
-            "sF0": "F0 - Snack",
-            "shrF0": "F0 - SHR",
             "pF1": "F1 - Praat",
             "pF2": "F2 - Praat",
             "pF3": "F3 - Praat",
@@ -2498,6 +2498,19 @@ class PEWorker(QThread):
 
     def run(self) -> None:
         try:
+            self._run_impl()
+        except Exception as e:
+            import traceback
+            error_msg = f"参数估计过程中发生错误: {e}\n{traceback.format_exc()}"
+            print(error_msg)
+            self.error_sig.emit(error_msg)
+        finally:
+            self.finished_sig.emit()
+
+    def _run_impl(self) -> None:
+        # Import lip_reader with multiple fallback strategies
+        read_lip_data = None
+        try:
             from utils.lip_reader import read_lip_data
         except ImportError:
             try:
@@ -2507,8 +2520,13 @@ class PEWorker(QThread):
                     import utils.lip_reader as lip_reader_mod
                     read_lip_data = lip_reader_mod.read_lip_data
                 except ImportError:
-                    # Fallback if utils is at root
-                    from lip_reader import read_lip_data
+                    try:
+                        from lip_reader import read_lip_data
+                    except ImportError:
+                        # If all imports fail, define a dummy function
+                        def read_lip_data(pkl_path, target_times, smooth_win=0):
+                            print(f"Warning: lip_reader not available, skipping lip data for {pkl_path}")
+                            return {}
 
         for i, name in enumerate(self.items, start=1):
             if self.isInterruptionRequested():
@@ -2524,6 +2542,7 @@ class PEWorker(QThread):
                 max_f0=self.state.F0Praatmax,
                 method=self.state.F0Praatmethod,
                 )
+                compute_reaper_f0 = None
                 try:
                     try:
                         from services.praat_service import compute_reaper_f0
@@ -2533,11 +2552,13 @@ class PEWorker(QThread):
                         except ImportError:
                             import services.praat_service as praat_service_mod
                             compute_reaper_f0 = praat_service_mod.compute_reaper_f0
-                except ImportError:
+                except ImportError as e:
                      # Final fallback if absolutely nothing works (should not happen if packaged correctly)
-                     pass
+                     print(f"Warning: Could not import compute_reaper_f0: {e}")
 
                 try:
+                    if compute_reaper_f0 is None:
+                        raise ImportError("compute_reaper_f0 not available")
                     r_res = compute_reaper_f0(
                         wav_path=wav_path,
                         frame_interval_sec=float(self.state.F0ReaperFrameIntervalSec),
@@ -2571,28 +2592,7 @@ class PEWorker(QThread):
                         import services.praat_service as praat_service_mod
                         read_wav_mono_float = praat_service_mod.read_wav_mono_float
                 fs, y = read_wav_mono_float(wav_path)
-                try:
-                    try:
-                        from services.praat_service import compute_shrp_f0
-                    except ImportError:
-                        try:
-                            from .services.praat_service import compute_shrp_f0
-                        except ImportError:
-                            import services.praat_service as praat_service_mod
-                            compute_shrp_f0 = praat_service_mod.compute_shrp_f0
-                    shrp_res = compute_shrp_f0(
-                        wav_path=wav_path,
-                        frameshift_ms=self.state.frameshift,
-                        min_f0=self.state.F0Praatmin,
-                        max_f0=self.state.F0Praatmax,
-                        shr_threshold=float(self.state.SHRThreshold),
-                    )
-                    shrF0 = np.array(shrp_res.get("shrF0", []), dtype=float)
-                    if shrF0.size > 0:
-                        result["shrF0"] = shrF0
-                        result["SHR_shrF0"] = np.array(shrp_res.get("SHR", []), dtype=float)
-                except Exception:
-                    pass
+                # shrp_f0 计算已移除（不再依赖 opensauce）
                 try:
                     if ("rF0" in result):
                         duration_sec = float(y.size) / float(fs)
@@ -2706,34 +2706,54 @@ class PEWorker(QThread):
                 rF0u = np.array(result.get("rF0Uniform", []), dtype=float)
                 if rF0u.size == 0:
                     rF0u = np.array(result.get("rF0", []), dtype=float)
-                def _compute_with(label: str, F0x: np.ndarray) -> None:
+                # Track progress across both pF0 and rF0 computations
+                self._current_progress = base + 2
+                def _update_progress(step: int) -> None:
+                    # Only update if progress increases (never go backwards)
+                    new_val = base + step
+                    if new_val > self._current_progress:
+                        self._current_progress = new_val
+                        self.progress_sig.emit(new_val, name)
+                
+                def _compute_with(label: str, F0x: np.ndarray, progress_offset: int) -> None:
                     if F0x.size == 0:
                         return
                     hh = compute_harmonics_H1H2H4(y, fs, self.state.frameshift, F0x, self.state.Nperiods, voiced_mask=voiced_mask)
                     result[f"H1_{label}"] = hh.get("H1")
                     result[f"H2_{label}"] = hh.get("H2")
                     result[f"H4_{label}"] = hh.get("H4")
+                    _update_progress(progress_offset + 1)
+                    
                     aa = compute_A1A2A3(y, fs, self.state.frameshift, F0x, F1, F2, F3, self.state.Nperiods, voiced_mask=voiced_mask)
                     result[f"A1_{label}"] = aa.get("A1")
                     result[f"A2_{label}"] = aa.get("A2")
                     result[f"A3_{label}"] = aa.get("A3")
+                    _update_progress(progress_offset + 2)
+                    
                     # 差值改为在平滑/掩蔽之后统一计算
                     H2K, F2K = compute_harmonic_at_fixed_freq_with_freq(y, fs, self.state.frameshift, F0x, self.state.Nperiods, 2000.0, voiced_mask=voiced_mask)
                     result[f"H2K_{label}"] = H2K
                     result[f"F2K_{label}"] = F2K
+                    _update_progress(progress_offset + 3)
+                    
                     H5K = compute_harmonic_at_fixed_freq(y, fs, self.state.frameshift, F0x, self.state.Nperiods, 5000.0, voiced_mask=voiced_mask)
                     result[f"H5K_{label}"] = H5K
+                    _update_progress(progress_offset + 4)
+                    
                     if f"H4_{label}" in result and f"H2K_{label}" in result:
                         result[f"H42Ku_{label}"] = result[f"H4_{label}"] - result[f"H2K_{label}"]
                     if f"H2K_{label}" in result and f"H5K_{label}" in result:
                         result[f"H2KH5Ku_{label}"] = result[f"H2K_{label}"] - result[f"H5K_{label}"]
                     result[f"CPP_{label}"] = compute_CPP(y, fs, self.state.frameshift, F0x, self.state.Nperiods_EC, voiced_mask=voiced_mask)
+                    _update_progress(progress_offset + 5)
+                    
                     hnr = compute_HNR(y, fs, self.state.frameshift, F0x, self.state.Nperiods_EC, voiced_mask=voiced_mask)
                     for k, v in hnr.items():
                         result[f"{k}_{label}"] = v
-                    def _shr_cb(frac: float):
-                        self.progress_sig.emit(base + 16 + int(max(0, min(1.0, frac)) * 3), name)
-                    result[f"SHR_{label}"] = compute_SHR(y, fs, self.state.frameshift, F0x, float(self.state.SHRmin), float(self.state.SHRmax), progress_cb=_shr_cb, voiced_mask=voiced_mask, shr_threshold=float(self.state.SHRThreshold))
+                    _update_progress(progress_offset + 6)
+                    
+                    result[f"SHR_{label}"] = compute_SHR(y, fs, self.state.frameshift, F0x, float(self.state.SHRmin), float(self.state.SHRmax), progress_cb=None, voiced_mask=voiced_mask, shr_threshold=float(self.state.SHRThreshold))
+                    _update_progress(progress_offset + 7)
                     B1 = np.array(result.get("pB1", []), dtype=float)
                     B2 = np.array(result.get("pB2", []), dtype=float)
                     B3 = np.array(result.get("pB3", []), dtype=float)
@@ -2786,8 +2806,8 @@ class PEWorker(QThread):
                         result[f"H2KH5Kc_{label}"] = h2kh5kc
                     slope = compute_spectral_slope(y, fs, self.state.frameshift, F0x, voiced_mask=voiced_mask)
                     result[f"SpectralSlope_{label}"] = slope
-                _compute_with("pF0", pF0)
-                _compute_with("rF0", rF0u)
+                _compute_with("pF0", pF0, progress_offset=3)   # Steps 3-10
+                _compute_with("rF0", rF0u, progress_offset=10)  # Steps 10-17
 
                 # Lip Data Processing
                 if name in self.lip_data_map:
@@ -2801,8 +2821,13 @@ class PEWorker(QThread):
                     except Exception as e:
                         print(f"Lip data error for {name}: {e}")
 
-                self.progress_sig.emit(base + 19, name)
-                jit, shim = compute_jitter_shimmer(y, fs, self.state.frameshift, self.state.windowsize, voiced_mask=voiced_mask)
+                _update_progress(18)
+                jit, shim = compute_jitter_shimmer(
+                    y, fs, self.state.frameshift, self.state.windowsize, 
+                    voiced_mask=voiced_mask,
+                    min_f0=float(self.state.F0Praatmin),
+                    max_f0=float(self.state.F0Praatmax)
+                )
                 result["Jitter"] = jit
                 result["Shimmer"] = shim
             
@@ -2974,7 +2999,8 @@ class PEWorker(QThread):
             mat_path = self.output_dir / f"{wav_path.stem}.csv"
             save_csv(mat_path, result)
             self.progress_sig.emit(base + 20, name)
-        self.finished_sig.emit()
+        # Note: finished_sig is emitted in the outer run() method's finally block
+
 def run_parameter_estimation_once(wav_dir: Optional[str] = None, mat_dir: Optional[str] = None) -> None:
     state = AppState()
     input_dir = Path(wav_dir or state.wavdir)
@@ -3002,28 +3028,7 @@ def run_parameter_estimation_once(wav_dir: Optional[str] = None, mat_dir: Option
             except ImportError:
                 from .services.praat_service import read_wav_mono_float
             fs, y = read_wav_mono_float(wav_path)
-            try:
-                try:
-                    from services.praat_service import compute_shrp_f0
-                except ImportError:
-                    try:
-                        from .services.praat_service import compute_shrp_f0
-                    except ImportError:
-                        import services.praat_service as praat_service_mod
-                        compute_shrp_f0 = praat_service_mod.compute_shrp_f0
-                shrp_res = compute_shrp_f0(
-                    wav_path=wav_path,
-                    frameshift_ms=state.frameshift,
-                    min_f0=state.F0Praatmin,
-                    max_f0=state.F0Praatmax,
-                    shr_threshold=float(state.SHRThreshold),
-                )
-                shrF0 = np.array(shrp_res.get("shrF0", []), dtype=float)
-                if shrF0.size > 0:
-                    result["shrF0"] = shrF0
-                    result["SHR_shrF0"] = np.array(shrp_res.get("SHR", []), dtype=float)
-            except Exception:
-                pass
+            # shrp_f0 计算已移除（不再依赖 opensauce）
             pF0 = np.array(result.get("pF0", []), dtype=float)
             F1 = np.array(result.get("pF1", []), dtype=float)
             F2 = np.array(result.get("pF2", []), dtype=float)
@@ -3176,7 +3181,12 @@ def run_parameter_estimation_once(wav_dir: Optional[str] = None, mat_dir: Option
                 result[f"SpectralSlope_{label}"] = slope
             _compute_with("pF0", pF0)
             _compute_with("rF0", rF0u)
-            jit, shim = compute_jitter_shimmer(y, fs, state.frameshift, state.windowsize, voiced_mask=voiced_mask)
+            jit, shim = compute_jitter_shimmer(
+                y, fs, state.frameshift, state.windowsize, 
+                voiced_mask=voiced_mask,
+                min_f0=float(state.F0Praatmin),
+                max_f0=float(state.F0Praatmax)
+            )
             result["Jitter"] = jit
             result["Shimmer"] = shim
             # 平滑与离群剔除

@@ -64,6 +64,12 @@ def read_lip_data(pkl_path: str, target_times: np.ndarray, smooth_win: int = 0) 
         print("No valid timestamps found in lip data")
         return {}
     
+    # Align first data point to time 0 (shift all times so first point starts at 0)
+    first_time = src_times[0]
+    if first_time != 0:
+        src_times = src_times - first_time
+        print(f"Shifted lip data times by {first_time:.4f}s to align first point to t=0")
+    
     # Mapping from internal key to output key
     # Using the normalized values as requested
     key_map = {

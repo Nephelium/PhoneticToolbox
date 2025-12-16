@@ -133,7 +133,7 @@
     <item row="5" column="0">
      <widget class="QPushButton" name="buttonAbout">
       <property name="text">
-       <string>关于</string>
+       <string>关于/更新</string>
       </property>
      </widget>
     </item>

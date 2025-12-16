@@ -147,62 +147,8 @@ def read_wav_mono_float(wav_path: Path) -> Tuple[int, np.ndarray]:
 
 
 def round_half_away_from_zero(x: np.ndarray) -> np.ndarray:
-    try:
-        import sys
-        try:
-            from opensauce.helpers import round_half_away_from_zero as rha
-        except Exception:
-            base = Path(__file__).resolve().parent
-            candidate = base / ".." / ".." / "opensauce-python-master"
-            sys.path.append(str(candidate))
-            from opensauce.helpers import round_half_away_from_zero as rha
-        return rha(x)
-    except Exception:
-        return (np.sign(x) * np.floor(np.abs(x) + 0.5)).astype(int)
-
-
-def compute_shrp_f0(
-    wav_path: Path,
-    frameshift_ms: int,
-    min_f0: float,
-    max_f0: float,
-    shr_threshold: float = 0.4,
-) -> Dict[str, Any]:
-    try:
-        import sys
-        try:
-            from opensauce.shrp import shr_pitch
-        except Exception:
-            base = Path(__file__).resolve().parent
-            candidate = base / ".." / ".." / "opensauce-python-master"
-            sys.path.append(str(candidate))
-            from opensauce.shrp import shr_pitch
-        fs, y = read_wav_mono_float(wav_path)
-        nframes = int(round(y.size / float(fs) * 1000.0 / float(frameshift_ms)))
-        if nframes <= 0:
-            return {"shrF0": np.array([], dtype=float), "SHR": np.array([], dtype=float), "Fs": fs}
-        shr, f0 = shr_pitch(
-            y.astype(float),
-            fs,
-            window_length=40,
-            frame_shift=frameshift_ms,
-            min_pitch=float(min_f0),
-            max_pitch=float(max_f0),
-            shr_threshold=float(shr_threshold),
-            frame_precision=2,
-            datalen=nframes,
-        )
-        f0 = np.array(f0, dtype=float)
-        shr = np.array(shr, dtype=float)
-        if f0.shape[0] > nframes:
-            f0 = f0[:nframes]
-        if shr.shape[0] > nframes:
-            shr = shr[:nframes]
-        return {"shrF0": f0, "SHR": shr, "Fs": fs}
-    except Exception:
-        fs, _ = read_wav_mono_float(wav_path)
-        nframes = int(round(Path(wav_path).stat().st_size / max(fs, 1)))
-        return {"shrF0": np.array([], dtype=float), "SHR": np.array([], dtype=float), "Fs": fs}
+    """四舍五入，远离零（自实现，不依赖外部库）"""
+    return (np.sign(x) * np.floor(np.abs(x) + 0.5)).astype(int)
 
 
 def _parse_reaper_est_f0(path: Path) -> Tuple[List[float], List[int], List[float]]:
@@ -1054,31 +1000,110 @@ def compute_jitter_shimmer(
     frameshift_ms: int,
     window_ms: int,
     voiced_mask: np.ndarray | None = None,
+    min_f0: float = 50.0,
+    max_f0: float = 600.0,
 ) -> Tuple[np.ndarray, np.ndarray]:
-    """基于 Praat PointProcess 的局部 Jitter/Shimmer（按帧窗口）。"""
-    try:
-        snd = parselmouth.Sound(y.astype(float), sampling_frequency=fs)
-        pp = parselmouth.praat.call(snd, "To PointProcess (periodic, cc)...", 40, 500)
-    except Exception:
-        return (np.full(int(round(y.size / fs * 1000.0 / frameshift_ms)), np.nan, dtype=float),
-                np.full(int(round(y.size / fs * 1000.0 / frameshift_ms)), np.nan, dtype=float))
+    """基于 Praat PointProcess 的局部 Jitter/Shimmer（按帧窗口）。
+    
+    改进版本：
+    - 使用更宽的 F0 范围 (50-600 Hz) 以适应更多语音
+    - 使用更宽松的周期检测参数
+    - 对整个音频计算全局 jitter/shimmer，然后分配到各帧
+    """
     nf = int(round(y.size / float(fs) * 1000.0 / float(frameshift_ms)))
     jit = np.full(nf, np.nan, dtype=float)
     shim = np.full(nf, np.nan, dtype=float)
-    for i in range(nf):
-        if voiced_mask is not None and i < voiced_mask.shape[0] and not bool(voiced_mask[i]):
-            continue
-        t = (i + 1) * frameshift_ms / 1000.0
-        w = window_ms / 1000.0
-        t_s = max(0.0, t - w / 2.0)
-        t_e = min(float(y.size) / fs, t + w / 2.0)
+    
+    if parselmouth is None:
+        return jit, shim
+    
+    try:
+        snd = parselmouth.Sound(y.astype(np.float64), sampling_frequency=float(fs))
+        
         try:
-            j = parselmouth.praat.call(pp, "Get jitter (local)", t_s, t_e, 0.0001, 0.02, 1.3)
-            s = parselmouth.praat.call([snd, pp], "Get shimmer (local)", t_s, t_e, 0.0001, 0.02, 1.3, 1.6)
-            jit[i] = float(j) if j is not None else np.nan
-            shim[i] = float(s) if s is not None else np.nan
+            pp = parselmouth.praat.call(snd, "To PointProcess (periodic, cc)...", 
+                                        0.0, float(min_f0), float(max_f0))
         except Exception:
-            pass
+            try:
+                pitch = snd.to_pitch(time_step=0.0, pitch_floor=float(min_f0), pitch_ceiling=float(max_f0))
+                pp = parselmouth.praat.call([snd, pitch], "To PointProcess (cc)")
+            except Exception:
+                return jit, shim
+        
+        duration = float(y.size) / float(fs)
+        period_floor = 1.0 / max_f0
+        period_ceiling = 1.0 / min_f0
+        max_period_factor = 1.3
+        max_amplitude_factor = 1.6
+        
+        # 计算全局值
+        try:
+            global_jit = parselmouth.praat.call(pp, "Get jitter (local)", 
+                                                 0.0, duration,
+                                                 period_floor, period_ceiling, 
+                                                 max_period_factor)
+            global_shim = parselmouth.praat.call([snd, pp], "Get shimmer (local)", 
+                                                  0.0, duration,
+                                                  period_floor, period_ceiling, 
+                                                  max_period_factor, max_amplitude_factor)
+        except Exception:
+            global_jit = np.nan
+            global_shim = np.nan
+        
+        w = window_ms / 1000.0
+        for i in range(nf):
+            if voiced_mask is not None and i < voiced_mask.shape[0] and not bool(voiced_mask[i]):
+                continue
+            
+            t_center = (i + 1) * frameshift_ms / 1000.0
+            t_s = max(0.0, t_center - w / 2.0)
+            t_e = min(duration, t_center + w / 2.0)
+            
+            if t_e - t_s < 3 * period_ceiling:
+                if not np.isnan(global_jit):
+                    jit[i] = global_jit
+                if not np.isnan(global_shim):
+                    shim[i] = global_shim
+                continue
+            
+            try:
+                j = parselmouth.praat.call(pp, "Get jitter (local)", 
+                                           t_s, t_e,
+                                           period_floor, period_ceiling, 
+                                           max_period_factor)
+                s = parselmouth.praat.call([snd, pp], "Get shimmer (local)", 
+                                           t_s, t_e,
+                                           period_floor, period_ceiling, 
+                                           max_period_factor, max_amplitude_factor)
+                
+                if j is not None and not np.isnan(j) and j >= 0:
+                    jit[i] = float(j)
+                elif not np.isnan(global_jit):
+                    jit[i] = global_jit
+                    
+                if s is not None and not np.isnan(s) and s >= 0:
+                    shim[i] = float(s)
+                elif not np.isnan(global_shim):
+                    shim[i] = global_shim
+                    
+            except Exception:
+                if not np.isnan(global_jit):
+                    jit[i] = global_jit
+                if not np.isnan(global_shim):
+                    shim[i] = global_shim
+        
+        nan_ratio = np.sum(np.isnan(jit)) / max(1, nf)
+        if nan_ratio > 0.8 and not np.isnan(global_jit):
+            for i in range(nf):
+                if voiced_mask is not None and i < voiced_mask.shape[0] and bool(voiced_mask[i]):
+                    if np.isnan(jit[i]):
+                        jit[i] = global_jit
+                    if np.isnan(shim[i]):
+                        shim[i] = global_shim
+                        
+    except Exception as e:
+        print(f"Jitter/Shimmer calculation error: {e}")
+    
     return jit, shim
 
 

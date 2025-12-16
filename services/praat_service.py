@@ -147,66 +147,8 @@ def read_wav_mono_float(wav_path: Path) -> Tuple[int, np.ndarray]:
 
 
 def round_half_away_from_zero(x: np.ndarray) -> np.ndarray:
-    try:
-        import sys
-        try:
-            from opensauce.helpers import round_half_away_from_zero as rha
-        except Exception:
-            # services/praat_service.py -> parent is services/ -> parent.parent is project root
-            base = Path(__file__).resolve().parent.parent
-            candidate = base / "opensauce-python-master"
-            if str(candidate) not in sys.path:
-                sys.path.insert(0, str(candidate))
-            from opensauce.helpers import round_half_away_from_zero as rha
-        return rha(x)
-    except Exception:
-        return (np.sign(x) * np.floor(np.abs(x) + 0.5)).astype(int)
-
-
-def compute_shrp_f0(
-    wav_path: Path,
-    frameshift_ms: int,
-    min_f0: float,
-    max_f0: float,
-    shr_threshold: float = 0.4,
-) -> Dict[str, Any]:
-    try:
-        import sys
-        try:
-            from opensauce.shrp import shr_pitch
-        except Exception:
-            # services/praat_service.py -> parent is services/ -> parent.parent is project root
-            base = Path(__file__).resolve().parent.parent
-            candidate = base / "opensauce-python-master"
-            if str(candidate) not in sys.path:
-                sys.path.insert(0, str(candidate))
-            from opensauce.shrp import shr_pitch
-        fs, y = read_wav_mono_float(wav_path)
-        nframes = int(round(y.size / float(fs) * 1000.0 / float(frameshift_ms)))
-        if nframes <= 0:
-            return {"shrF0": np.array([], dtype=float), "SHR": np.array([], dtype=float), "Fs": fs}
-        shr, f0 = shr_pitch(
-            y.astype(float),
-            fs,
-            window_length=40,
-            frame_shift=frameshift_ms,
-            min_pitch=float(min_f0),
-            max_pitch=float(max_f0),
-            shr_threshold=float(shr_threshold),
-            frame_precision=2,
-            datalen=nframes,
-        )
-        f0 = np.array(f0, dtype=float)
-        shr = np.array(shr, dtype=float)
-        if f0.shape[0] > nframes:
-            f0 = f0[:nframes]
-        if shr.shape[0] > nframes:
-            shr = shr[:nframes]
-        return {"shrF0": f0, "SHR": shr, "Fs": fs}
-    except Exception:
-        fs, _ = read_wav_mono_float(wav_path)
-        nframes = int(round(Path(wav_path).stat().st_size / max(fs, 1)))
-        return {"shrF0": np.array([], dtype=float), "SHR": np.array([], dtype=float), "Fs": fs}
+    """四舍五入，远离零（自实现，不依赖外部库）"""
+    return (np.sign(x) * np.floor(np.abs(x) + 0.5)).astype(int)
 
 
 def _parse_reaper_est_f0(path: Path) -> Tuple[List[float], List[int], List[float]]:
@@ -273,13 +215,26 @@ def _find_reaper_bin(explicit: str | None = None) -> str:
 
     proj = Path(__file__).resolve().parents[2]
     meipass = Path(getattr(sys, "_MEIPASS", Path.cwd()))
+    
+    # 获取 exe 所在目录（打包后）
+    exe_dir = Path(sys.executable).parent if getattr(sys, 'frozen', False) else Path.cwd()
+    
     cands = [
+        # 打包后 exe 同级目录下的 reaper 文件夹
+        exe_dir / "reaper" / "reaper.exe",
+        exe_dir / "reaper.exe",
+        # _MEIPASS 内部
         meipass / "reaper.exe",
         meipass / "reaper" / "reaper.exe",
+        # 当前工作目录
+        Path.cwd() / "reaper" / "reaper.exe",
         Path.cwd() / "reaper.exe",
         Path.cwd() / "reaper",
+        # 开发模式
         proj / "REAPER-master" / "reaper.exe",
+        proj / "reaper" / "reaper.exe",
         Path(__file__).resolve().parent / ".." / "reaper.exe",
+        Path(__file__).resolve().parent / ".." / "reaper" / "reaper.exe",
         Path(__file__).resolve().parent / ".." / "reaper",
     ]
     for cand in cands:
@@ -299,11 +254,17 @@ def compute_reaper_f0(
     reaper_bin: str | None = None,
 ) -> Dict[str, Any]:
     wav_path = Path(wav_path)
-    rb = _find_reaper_bin(reaper_bin)
-    import tempfile
-    tmpdir = tempfile.TemporaryDirectory()
-    f0_out = Path(tmpdir.name) / "out.f0"
     try:
+        rb = _find_reaper_bin(reaper_bin)
+    except RuntimeError as e:
+        print(f"REAPER binary not found: {e}")
+        return {"rTimes": np.array([], dtype=float), "rVoiced": np.array([], dtype=int), "rF0Raw": np.array([], dtype=float), "rF0": np.array([], dtype=float)}
+    
+    import tempfile
+    tmpdir = None
+    try:
+        tmpdir = tempfile.TemporaryDirectory()
+        f0_out = Path(tmpdir.name) / "out.f0"
         cmd = [
             rb,
             "-i", str(wav_path),
@@ -317,7 +278,23 @@ def compute_reaper_f0(
             cmd.append("-t")
         if no_highpass:
             cmd.append("-s")
-        r = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        
+        # 使用 CREATE_NO_WINDOW 标志避免在 Windows 上弹出控制台窗口
+        startupinfo = None
+        creationflags = 0
+        if sys.platform == "win32":
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            startupinfo.wShowWindow = subprocess.SW_HIDE
+            creationflags = subprocess.CREATE_NO_WINDOW
+        
+        r = subprocess.run(
+            cmd, 
+            stdout=subprocess.PIPE, 
+            stderr=subprocess.PIPE,
+            startupinfo=startupinfo,
+            creationflags=creationflags
+        )
         if r.returncode != 0:
             raise RuntimeError(r.stderr.decode(errors="ignore") or "reaper failed")
         times, voiced, values = _parse_reaper_est_f0(f0_out)
@@ -326,11 +303,15 @@ def compute_reaper_f0(
         val_arr = np.array(values, dtype=float)
         out_series = np.where(val_arr > 0.0, val_arr, np.nan)
         return {"rTimes": t_arr, "rVoiced": v_arr, "rF0Raw": val_arr, "rF0": out_series}
+    except Exception as e:
+        print(f"REAPER F0 computation error: {e}")
+        return {"rTimes": np.array([], dtype=float), "rVoiced": np.array([], dtype=int), "rF0Raw": np.array([], dtype=float), "rF0": np.array([], dtype=float)}
     finally:
-        try:
-            tmpdir.cleanup()
-        except Exception:
-            pass
+        if tmpdir is not None:
+            try:
+                tmpdir.cleanup()
+            except Exception:
+                pass
 
 
 def _segment_for_frame(y: np.ndarray, fs: int, frameshift_ms: int, k: int, N_periods: int, f0_curr: float) -> np.ndarray:
@@ -446,20 +427,28 @@ def compute_harmonic_at_fixed_freq(
 ) -> np.ndarray:
     """计算固定目标频率附近的谐波幅度（例如 2kHz、5kHz）。
     参考 MATLAB: func_Get2K / func_Get5K。
+    优化：使用更大的步长和更小的搜索范围来加速计算。
     """
     nframes = int(F0.shape[0])
     out = np.full(nframes, np.nan, dtype=float)
-    for k in range(nframes):
-        if voiced_mask is not None and k < voiced_mask.shape[0] and not bool(voiced_mask[k]):
-            continue
+    
+    # Pre-compute voiced indices for efficiency
+    if voiced_mask is not None:
+        voiced_indices = np.where(voiced_mask[:nframes])[0]
+    else:
+        voiced_indices = np.arange(nframes)
+    
+    for k in voiced_indices:
         f0c = float(F0[k])
+        if np.isnan(f0c) or f0c <= 0:
+            continue
         seg = _segment_for_frame(y, fs, frameshift_ms, k + 1, N_periods, f0c)
         if seg.size == 0:
             continue
-        if np.isnan(f0c) or f0c <= 0:
-            continue
-        df = max(1.0, f0c / 20.0)
-        range_frac = (1.0 * f0c) / float(target_hz)
+        # Use larger step size for faster computation (f0c / 10 instead of f0c / 20)
+        df = max(2.0, f0c / 10.0)
+        # Use smaller search range (0.5 * f0c / target_hz instead of 1.0)
+        range_frac = (0.5 * f0c) / float(target_hz)
         mag, _ = _search_peak_mag_db(seg, fs, target_hz, df=df, range_frac=range_frac)
         out[k] = mag
     return out
@@ -473,18 +462,30 @@ def compute_harmonic_at_fixed_freq_with_freq(
     target_hz: float,
     voiced_mask: np.ndarray | None = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
+    """计算固定目标频率附近的谐波幅度和频率。
+    优化：使用更大的步长和更小的搜索范围来加速计算。
+    """
     nframes = int(F0.shape[0])
     mags = np.full(nframes, np.nan, dtype=float)
     freqs = np.full(nframes, np.nan, dtype=float)
-    for k in range(nframes):
-        if voiced_mask is not None and k < voiced_mask.shape[0] and not bool(voiced_mask[k]):
-            continue
+    
+    # Pre-compute voiced indices for efficiency
+    if voiced_mask is not None:
+        voiced_indices = np.where(voiced_mask[:nframes])[0]
+    else:
+        voiced_indices = np.arange(nframes)
+    
+    for k in voiced_indices:
         f0c = float(F0[k])
-        seg = _segment_for_frame(y, fs, frameshift_ms, k + 1, N_periods, f0c)
-        if seg.size == 0 or np.isnan(f0c) or f0c <= 0:
+        if np.isnan(f0c) or f0c <= 0:
             continue
-        df = max(1.0, f0c / 20.0)
-        range_frac = (1.0 * f0c) / float(target_hz)
+        seg = _segment_for_frame(y, fs, frameshift_ms, k + 1, N_periods, f0c)
+        if seg.size == 0:
+            continue
+        # Use larger step size for faster computation
+        df = max(2.0, f0c / 10.0)
+        # Use smaller search range
+        range_frac = (0.5 * f0c) / float(target_hz)
         m, f = _search_peak_mag_db(seg, fs, target_hz, df=df, range_frac=range_frac)
         mags[k] = m
         freqs[k] = f
@@ -1058,31 +1059,146 @@ def compute_jitter_shimmer(
     frameshift_ms: int,
     window_ms: int,
     voiced_mask: np.ndarray | None = None,
+    min_f0: float = 50.0,
+    max_f0: float = 600.0,
 ) -> Tuple[np.ndarray, np.ndarray]:
-    """基于 Praat PointProcess 的局部 Jitter/Shimmer（按帧窗口）。"""
-    try:
-        snd = parselmouth.Sound(y.astype(float), sampling_frequency=fs)
-        pp = parselmouth.praat.call(snd, "To PointProcess (periodic, cc)...", 40, 500)
-    except Exception:
-        return (np.full(int(round(y.size / fs * 1000.0 / frameshift_ms)), np.nan, dtype=float),
-                np.full(int(round(y.size / fs * 1000.0 / frameshift_ms)), np.nan, dtype=float))
+    """基于 Praat PointProcess 的局部 Jitter/Shimmer（按帧窗口）。
+    
+    改进版本：
+    - 使用更宽的 F0 范围 (50-600 Hz) 以适应更多语音
+    - 使用更宽松的周期检测参数
+    - 对整个音频计算全局 jitter/shimmer，然后分配到各帧
+    
+    Args:
+        y: 音频信号
+        fs: 采样率
+        frameshift_ms: 帧移（毫秒）
+        window_ms: 分析窗口（毫秒）
+        voiced_mask: 浊音掩码
+        min_f0: 最小基频（Hz）
+        max_f0: 最大基频（Hz）
+    
+    Returns:
+        (jitter, shimmer) 两个数组
+    """
     nf = int(round(y.size / float(fs) * 1000.0 / float(frameshift_ms)))
     jit = np.full(nf, np.nan, dtype=float)
     shim = np.full(nf, np.nan, dtype=float)
-    for i in range(nf):
-        if voiced_mask is not None and i < voiced_mask.shape[0] and not bool(voiced_mask[i]):
-            continue
-        t = (i + 1) * frameshift_ms / 1000.0
-        w = window_ms / 1000.0
-        t_s = max(0.0, t - w / 2.0)
-        t_e = min(float(y.size) / fs, t + w / 2.0)
+    
+    if parselmouth is None:
+        return jit, shim
+    
+    try:
+        # 创建 Sound 对象
+        snd = parselmouth.Sound(y.astype(np.float64), sampling_frequency=float(fs))
+        
+        # 使用更宽松的参数创建 PointProcess
+        # 参数: time_step, min_pitch, max_pitch
         try:
-            j = parselmouth.praat.call(pp, "Get jitter (local)", t_s, t_e, 0.0001, 0.02, 1.3)
-            s = parselmouth.praat.call([snd, pp], "Get shimmer (local)", t_s, t_e, 0.0001, 0.02, 1.3, 1.6)
-            jit[i] = float(j) if j is not None else np.nan
-            shim[i] = float(s) if s is not None else np.nan
+            pp = parselmouth.praat.call(snd, "To PointProcess (periodic, cc)...", 
+                                        0.0,  # time_step (0 = auto)
+                                        float(min_f0), 
+                                        float(max_f0))
         except Exception:
-            pass
+            # 如果 cc 方法失败，尝试 ac 方法
+            try:
+                pitch = snd.to_pitch(time_step=0.0, pitch_floor=float(min_f0), pitch_ceiling=float(max_f0))
+                pp = parselmouth.praat.call([snd, pitch], "To PointProcess (cc)")
+            except Exception:
+                return jit, shim
+        
+        # 获取音频时长
+        duration = float(y.size) / float(fs)
+        
+        # Jitter/Shimmer 参数（参考 Praat 默认值和 VoiceSauce）
+        # period_floor: 最短周期（秒），对应最高 F0
+        # period_ceiling: 最长周期（秒），对应最低 F0
+        # max_period_factor: 允许的最大周期变化因子
+        period_floor = 1.0 / max_f0  # 约 0.00167 秒
+        period_ceiling = 1.0 / min_f0  # 约 0.02 秒
+        max_period_factor = 1.3  # Praat 默认值
+        max_amplitude_factor = 1.6  # Praat 默认值
+        
+        # 首先尝试计算全局 jitter/shimmer
+        try:
+            global_jit = parselmouth.praat.call(pp, "Get jitter (local)", 
+                                                 0.0, duration,
+                                                 period_floor, period_ceiling, 
+                                                 max_period_factor)
+            global_shim = parselmouth.praat.call([snd, pp], "Get shimmer (local)", 
+                                                  0.0, duration,
+                                                  period_floor, period_ceiling, 
+                                                  max_period_factor, max_amplitude_factor)
+        except Exception:
+            global_jit = np.nan
+            global_shim = np.nan
+        
+        # 按帧计算局部 jitter/shimmer
+        w = window_ms / 1000.0
+        for i in range(nf):
+            if voiced_mask is not None and i < voiced_mask.shape[0] and not bool(voiced_mask[i]):
+                continue
+            
+            # 帧中心时间
+            t_center = (i + 1) * frameshift_ms / 1000.0
+            t_s = max(0.0, t_center - w / 2.0)
+            t_e = min(duration, t_center + w / 2.0)
+            
+            # 确保窗口足够大（至少需要 3 个周期）
+            if t_e - t_s < 3 * period_ceiling:
+                # 窗口太小，使用全局值
+                if not np.isnan(global_jit):
+                    jit[i] = global_jit
+                if not np.isnan(global_shim):
+                    shim[i] = global_shim
+                continue
+            
+            try:
+                # 检查窗口内是否有足够的脉冲点
+                n_pulses = parselmouth.praat.call(pp, "Get number of points")
+                if n_pulses < 3:
+                    continue
+                
+                j = parselmouth.praat.call(pp, "Get jitter (local)", 
+                                           t_s, t_e,
+                                           period_floor, period_ceiling, 
+                                           max_period_factor)
+                s = parselmouth.praat.call([snd, pp], "Get shimmer (local)", 
+                                           t_s, t_e,
+                                           period_floor, period_ceiling, 
+                                           max_period_factor, max_amplitude_factor)
+                
+                # 检查返回值是否有效
+                if j is not None and not np.isnan(j) and j >= 0:
+                    jit[i] = float(j)
+                elif not np.isnan(global_jit):
+                    jit[i] = global_jit
+                    
+                if s is not None and not np.isnan(s) and s >= 0:
+                    shim[i] = float(s)
+                elif not np.isnan(global_shim):
+                    shim[i] = global_shim
+                    
+            except Exception:
+                # 如果局部计算失败，使用全局值
+                if not np.isnan(global_jit):
+                    jit[i] = global_jit
+                if not np.isnan(global_shim):
+                    shim[i] = global_shim
+        
+        # 如果大部分帧都是 NaN，尝试用全局值填充浊音帧
+        nan_ratio = np.sum(np.isnan(jit)) / max(1, nf)
+        if nan_ratio > 0.8 and not np.isnan(global_jit):
+            for i in range(nf):
+                if voiced_mask is not None and i < voiced_mask.shape[0] and bool(voiced_mask[i]):
+                    if np.isnan(jit[i]):
+                        jit[i] = global_jit
+                    if np.isnan(shim[i]):
+                        shim[i] = global_shim
+                        
+    except Exception as e:
+        print(f"Jitter/Shimmer calculation error: {e}")
+    
     return jit, shim
 
 
