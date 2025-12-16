@@ -15,7 +15,7 @@ PhoneticToolbox 是一个集成了多种语音分析功能的工具箱，旨在�
 
 #### 1. 声学参数提取 (Acoustic Parameter Extraction)
 -   提供与 **VoiceSauce** 高度相似的声学参数提取功能。
--   支持提取基频 (F0)、共振峰 (F1-F4)、能量 (Energy)、H1*-H2*、H1*-A1*、H1*-A2*、H1*-A3*、CPP、HNR、SHR 等多种声学参数。
+-   支持提取基频 (F0)、共振峰 (F1-F4)、能量 (Energy)、H1-H2、H1-A1、H1-A2、H1-A3、CPP、HNR、SHR 等多种声学参数。
 -   特别优化了**嘎裂声 (Creaky Voice)** 等非模态发声类型的基频提取及参数估算准确度。
 
 #### 2. EGG 信号分析 (EGG Signal Analysis)
