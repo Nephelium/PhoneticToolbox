@@ -33,6 +33,16 @@
         .animate-fade-in {
             animation: fadeIn 0.5s ease-in-out;
         }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(6px); }
+            15% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-4px); }
+        }
+        .animate-fade-in-out {
+            animation: fadeInOut 1.2s ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -51,19 +61,13 @@
         /**
          * 辅助函数：生成标准xlsx内容
          */
-        const generateCSV = (results, participantData, questionnaireConfig) => {
+        const generateXLSX = (results, participantData, questionnaireConfig) => {
             const pad2 = (n) => String(n).padStart(2, '0');
             const now = new Date();
             const dateStr = `${now.getFullYear()}-${pad2(now.getMonth()+1)}-${pad2(now.getDate())}`;
             const timeStr = `${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())}`;
 
             const sanitizeHeader = (s) => `Q_${String(s).replace(/[\s,，;:]+/g, '_')}`;
-            const escapeCSVCell = (v) => {
-                let s = v == null ? '' : String(v);
-                s = s.replace(/\r|\n/g, ' ');
-                s = s.replace(/"/g, '""');
-                return /[",]/.test(s) ? `"${s}"` : s;
-            };
             const joinArray = (arr) => (Array.isArray(arr) ? arr.join(';') : arr);
 
             const fixedHeaders = ['Participant_ID', 'Timestamp_Date', 'Timestamp_Time'];
@@ -77,31 +81,35 @@
             if (!pID) pID = 'Anonymous';
             const safePIDForFile = String(pID).replace(/[^\w\-]+/g, '_');
 
-            const csvRows = [headers.join(',')];
+            const aoa = [headers];
             results.forEach((res, index) => {
                 const row = [];
-                row.push(escapeCSVCell(pID));
-                row.push(escapeCSVCell(dateStr));
-                row.push(escapeCSVCell(timeStr));
+                row.push(pID);
+                row.push(dateStr);
+                row.push(timeStr);
 
                 questionnaireConfig.forEach(q => {
                     let val = participantData[q.id];
                     if (Array.isArray(val)) val = joinArray(val);
                     val = val == null ? '' : String(val).replace(/[，,]+/g, ';');
-                    row.push(escapeCSVCell(val));
+                    row.push(val);
                 });
 
                 const filenameSafe = (res.filename || '').replace(/[，,]+/g, '_');
-                row.push(escapeCSVCell(index + 1));
-                row.push(escapeCSVCell(filenameSafe));
-                row.push(escapeCSVCell(res.key || ''));
-                row.push(escapeCSVCell(res.rt ?? ''));
-                row.push(escapeCSVCell(res.isValid ? 'TRUE' : 'FALSE'));
+                row.push(index + 1);
+                row.push(filenameSafe);
+                row.push(res.key || '');
+                row.push(res.rt ?? '');
+                row.push(res.isValid ? 'TRUE' : 'FALSE');
 
-                csvRows.push(row.join(','));
+                aoa.push(row);
             });
 
-            return { csvContent: csvRows.join('\n'), pID: safePIDForFile };
+            const ws = XLSX.utils.aoa_to_sheet(aoa);
+            ws['!cols'] = headers.map(() => ({ wch: 22 }));
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Results");
+            return { wb, pID: safePIDForFile };
         };
 
         /**
@@ -131,14 +139,16 @@
 
 
         // === 渲染组件：被试端 ===
-        const TrialRunner = ({ onFinish, files, playlist, currentTrialIndex, setCurrentTrialIndex, config, setResults }) => {
+        const TrialRunner = ({ onFinish, files, playlist, currentTrialIndex, setCurrentTrialIndex, config, results, setResults }) => {
             const [status, setStatus] = useState('waiting'); // waiting, preparing, interstitial, playing, responding
             const [startTime, setStartTime] = useState(0);
             const [textContent, setTextContent] = useState('');
             const [hasStarted, setHasStarted] = useState(false); // 新增：是否已点击开始 (用于激活AudioContext)
             const [lastKeyPressed, setLastKeyPressed] = useState(null); // 用于按键视觉反馈
             const [playingStimulus, setPlayingStimulus] = useState(null); // 当前正在播放的刺激 'A', 'B', 'X'
+            const [playbackHint, setPlaybackHint] = useState({ visible: false, nonce: 0 });
             const audioRef = useRef(null);
+            const playbackHintTimerRef = useRef(null);
             
             const currentItem = playlist[currentTrialIndex];
             // 兼容旧版：如果 item 没有 stimuli 属性，则视为单刺激 X
@@ -274,9 +284,6 @@
             const handleKeyDown = useCallback((e) => {
                 if (!hasStarted) return;
                 const pressedKey = e.key.toLowerCase();
-                
-                setLastKeyPressed(pressedKey);
-                setTimeout(() => setLastKeyPressed(null), 200);
 
                 if (status === 'interstitial') {
                     if (config.advanceMode === 'manual') {
@@ -285,13 +292,24 @@
                     return;
                 }
 
+                if (status === 'playing' || status === 'preparing') {
+                    if (playbackHintTimerRef.current) clearTimeout(playbackHintTimerRef.current);
+                    setPlaybackHint(prev => ({ visible: true, nonce: prev.nonce + 1 }));
+                    playbackHintTimerRef.current = setTimeout(() => {
+                        setPlaybackHint(prev => ({ ...prev, visible: false }));
+                    }, 1200);
+                    return;
+                }
+
                 if (status !== 'responding') return;
                 
                 const validConfig = config.validKeys.find(k => k.key === pressedKey);
 
                 if (validConfig) {
+                    setLastKeyPressed(pressedKey);
+                    setTimeout(() => setLastKeyPressed(null), 200);
                     const rt = Date.now() - startTime;
-                    setResults(prev => [...prev, {
+                    const result = {
                         trialIndex: currentTrialIndex,
                         fileId: isComplex ? currentItem.stimuli?.X?.fileId : currentItem.fileId, // 记录主要刺激(X)
                         filename: isComplex ? currentItem.stimuli?.X?.name : currentFile?.name,
@@ -300,7 +318,7 @@
                         rt: rt,
                         isValid: true,
                         timestamp: new Date().toISOString()
-                    }]);
+                    };
                     
                     if (audioRef.current) {
                         audioRef.current.pause();
@@ -308,12 +326,15 @@
                     }
 
                     if (currentTrialIndex < playlist.length - 1) {
+                        setResults(prev => [...prev, result]);
                         setCurrentTrialIndex(p => p + 1);
                     } else {
-                        onFinish();
+                        const finalResults = [...results, result];
+                        setResults(finalResults);
+                        onFinish(finalResults);
                     }
                 }
-            }, [status, currentTrialIndex, startTime, config, currentItem, currentFile, onFinish, playlist.length, hasStarted, setCurrentTrialIndex, setResults, startActualTrial, isComplex]);
+            }, [status, currentTrialIndex, startTime, config, currentItem, currentFile, onFinish, playlist.length, hasStarted, setCurrentTrialIndex, results, setResults, startActualTrial, isComplex]);
 
             useEffect(() => {
                 if (hasStarted) {
@@ -323,6 +344,12 @@
                     };
                 }
             }, [handleKeyDown, hasStarted]);
+
+            useEffect(() => {
+                return () => {
+                    if (playbackHintTimerRef.current) clearTimeout(playbackHintTimerRef.current);
+                };
+            }, []);
 
             // === 渲染：开始界面 ===
             if (!hasStarted) {
@@ -422,6 +449,14 @@
                     
                     {/* 渲染音频元素 (Hidden) - 仅作为播放引擎 */}
                     <audio ref={audioRef} className="hidden" />
+
+                    {playbackHint.visible && (
+                        <div key={playbackHint.nonce} className="pointer-events-none fixed left-0 right-0 bottom-44 flex justify-center">
+                            <div className="animate-fade-in-out bg-gray-900/80 text-white text-sm px-4 py-2 rounded-full shadow">
+                                请等待音频播放结束后再作答（播放中按键无效）
+                            </div>
+                        </div>
+                    )}
                     
                     <div className="text-center space-y-4 fixed bottom-12 left-0 right-0">
                         <p className="text-gray-400 text-sm tracking-widest uppercase">{status === 'waiting' ? 'PREPARING' : (status === 'playing' ? 'PLAYING...' : 'RESPONSE REQUIRED')}</p>
@@ -1062,9 +1097,21 @@
                     return;
                 }
                 
-                const missingFiles = playlist.filter(item => !files.find(f => f.id === item.fileId));
-                if (missingFiles.length > 0) {
-                    if(!window.confirm(`警告：当前播放列表中有 ${missingFiles.length} 个试次缺失音频文件。\n这些试次在实验中将无法播放音频。\n\n是否继续？`)) {
+                const fileExistsById = (id) => !!files.find(f => f.id === id);
+                const isMissingAudioForTrial = (item) => {
+                    if (!item) return false;
+                    if (item.stimuli) {
+                        const stimuli = item.stimuli || {};
+                        const values = Object.values(stimuli).filter(v => v != null);
+                        if (values.length === 0) return false;
+                        return values.some(v => !v.fileId || !fileExistsById(v.fileId));
+                    }
+                    if (item.type !== 'audio') return false;
+                    return !item.fileId || !fileExistsById(item.fileId);
+                };
+                const missingTrials = playlist.filter(isMissingAudioForTrial);
+                if (missingTrials.length > 0) {
+                    if(!window.confirm(`警告：当前播放列表中有 ${missingTrials.length} 个试次缺失音频文件。\n这些试次在实验中将无法播放音频。\n\n是否继续？`)) {
                         return;
                     }
                 }
@@ -1093,17 +1140,13 @@
                 setPhase('instruction');
             };
 
-            const finishExperiment = useCallback(() => {
+            const finishExperiment = useCallback((finalResults) => {
                 setPhase('finished');
                 setIsPlaying(false); // 关闭窗口
-                const { csvContent, pID } = generateCSV(results, participantData, questionnaire);
-                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
+                const resultsToExport = Array.isArray(finalResults) ? finalResults : results;
+                const { wb, pID } = generateXLSX(resultsToExport, participantData, questionnaire);
                 const timestamp = new Date().toISOString().replace(/[-:T.]/g, '').slice(0, 14);
-                link.download = `${pID}_${timestamp}.csv`;
-                link.click();
+                XLSX.writeFile(wb, `${pID}_${timestamp}.xlsx`);
             }, [results, participantData, questionnaire]);
 
             // === 渲染组件：范式选择 ===
@@ -1591,6 +1634,7 @@
                                 currentTrialIndex={currentTrialIndex}
                                 setCurrentTrialIndex={setCurrentTrialIndex}
                                 config={config}
+                                results={results}
                                 setResults={setResults}
                             />
                         </div>
