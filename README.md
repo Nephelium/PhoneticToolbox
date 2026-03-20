@@ -7,6 +7,9 @@
 
 PhoneticToolbox v2 是一个面向语音学研究、教学与实验流程的一体化分析工具箱，覆盖声学参数估计、EGG 分析、语音合成、语谱图逆重建、唇形提取与多类实验入口。项目基于 Python + PyQt6，采用严格分层架构，支持开发态与打包分发。
 
+> 📘 使用说明书（推荐先读）：[Phonetic_Export/index.html](Phonetic_Export/index.html)  
+> 本地绝对路径：`d:\PhoneticToolbox\PhoneticToolbox_v2\Phonetic_Export\index.html`
+
 ## 功能概览
 
 - 声学参数估计：F0（Praat / REAPER）、共振峰、H1-H4 / A1-A3 / H2K / H5K、Jitter / Shimmer、CPP、HNR、SHR、SoE、参数校正
