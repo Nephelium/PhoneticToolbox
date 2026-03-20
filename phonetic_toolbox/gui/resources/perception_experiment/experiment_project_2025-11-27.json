@@ -1,0 +1,43 @@
+{
+  "playlistNames": [],
+  "config": {
+    "title": "听觉感知实验",
+    "introText": "接下来您将听到一组音频，请仔细聆听并根据直觉做出判断。",
+    "autoPlay": true,
+    "showFilename": false,
+    "interTrialInterval": 1000,
+    "useBeep": true,
+    "validKeys": [
+      {
+        "key": "j",
+        "label": "正确 (J)"
+      },
+      {
+        "key": "f",
+        "label": "错误 (F)"
+      }
+    ],
+    "allowReplay": false
+  },
+  "questionnaire": [
+    {
+      "id": "q1",
+      "type": "text",
+      "label": "姓名/编号",
+      "required": true
+    },
+    {
+      "id": "q2",
+      "type": "radio",
+      "label": "性别",
+      "options": [
+        "男",
+        "女",
+        "其他"
+      ],
+      "required": true
+    }
+  ],
+  "timestamp": "2025-11-27T08:12:19.390Z",
+  "version": "1.0"
+}

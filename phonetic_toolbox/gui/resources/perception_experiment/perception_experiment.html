@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>听觉感知实验平台</title>
+    <!-- 引入 Tailwind CSS 样式库 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 引入 Babel 用于在浏览器中编译 JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- 引入 SheetJS 用于处理 XLSX -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+
+    <!-- 配置 Import Map 以支持直接在浏览器中 import 模块 -->
+    <script type="importmap">
+    {
+        "imports": {
+            "react": "https://esm.sh/react@18.2.0",
+            "react-dom": "https://esm.sh/react-dom@18.2.0",
+            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+            "lucide-react": "https://esm.sh/lucide-react@0.263.1"
+        }
+    }
+    </script>
+    
+    <style>
+        /* 简单的淡入动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(6px); }
+            15% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-4px); }
+        }
+        .animate-fade-in-out {
+            animation: fadeInOut 1.2s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <div id="root"></div>
+
+    <!-- 核心逻辑代码: 注意 type="text/babel" 和 data-type="module" -->
+    <script type="text/babel" data-type="module">
+        import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+        import { createRoot } from 'react-dom/client';
+        import { 
+            Play, Pause, SkipForward, Save, Upload, FileAudio, 
+            Settings, List, Activity, Download, Trash2, Plus, 
+            ArrowUp, ArrowDown, GripVertical, Check, X, Folder, FileJson, Monitor, FileImage, FileText, File
+        } from 'lucide-react';
+        const HELP_DOC_URL = 'file:///d:/PhoneticToolbox/PhoneticToolbox_v2/Phonetic_Export/index.html#s1764313131518';
+
+        /**
+         * 辅助函数：生成标准xlsx内容
+         */
+        const generateXLSX = (results, participantData, questionnaireConfig) => {
+            const pad2 = (n) => String(n).padStart(2, '0');
+            const now = new Date();
+            const dateStr = `${now.getFullYear()}-${pad2(now.getMonth()+1)}-${pad2(now.getDate())}`;
+            const timeStr = `${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())}`;
+
+            const sanitizeHeader = (s) => `Q_${String(s).replace(/[\s,，;:]+/g, '_')}`;
+            const joinArray = (arr) => (Array.isArray(arr) ? arr.join(';') : arr);
+
+            const fixedHeaders = ['Participant_ID', 'Timestamp_Date', 'Timestamp_Time'];
+            const questionHeaders = questionnaireConfig.map(q => sanitizeHeader(q.label));
+            const trialHeaders = ['Trial_Index', 'Audio_Filename', 'Response_Key', 'Reaction_Time_ms', 'Is_Valid_Key'];
+            const headers = [...fixedHeaders, ...questionHeaders, ...trialHeaders];
+
+            const pidCandidate = questionnaireConfig.find(q => q.type === 'text' && /姓名|编号/.test(q.label))
+                || questionnaireConfig.find(q => q.type === 'text');
+            let pID = pidCandidate ? (participantData[pidCandidate.id] || '') : '';
+            if (!pID) pID = 'Anonymous';
+            const safePIDForFile = String(pID).replace(/[^\w\-]+/g, '_');
+
+            const aoa = [headers];
+            results.forEach((res, index) => {
+                const row = [];
+                row.push(pID);
+                row.push(dateStr);
+                row.push(timeStr);
+
+                questionnaireConfig.forEach(q => {
+                    let val = participantData[q.id];
+                    if (Array.isArray(val)) val = joinArray(val);
+                    val = val == null ? '' : String(val).replace(/[，,]+/g, ';');
+                    row.push(val);
+                });
+
+                const filenameSafe = (res.filename || '').replace(/[，,]+/g, '_');
+                row.push(index + 1);
+                row.push(filenameSafe);
+                row.push(res.key || '');
+                row.push(res.rt ?? '');
+                row.push(res.isValid ? 'TRUE' : 'FALSE');
+
+                aoa.push(row);
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet(aoa);
+            ws['!cols'] = headers.map(() => ({ wch: 22 }));
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Results");
+            return { wb, pID: safePIDForFile };
+        };
+
+        /**
+         * 辅助函数：播放提示音 (Beep)
+         */
+        const playBeep = (freq = 440, duration = 0.2) => {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                osc.frequency.value = freq;
+                osc.type = 'sine';
+                
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                osc.start();
+                gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + duration);
+                osc.stop(ctx.currentTime + duration);
+            } catch (e) {
+                console.error("Audio Context Error", e);
+            }
+        };
+
+
+        // === 渲染组件：被试端 ===
+        const TrialRunner = ({ onFinish, files, playlist, currentTrialIndex, setCurrentTrialIndex, config, results, setResults }) => {
+            const [status, setStatus] = useState('waiting'); // waiting, preparing, interstitial, playing, responding
+            const [startTime, setStartTime] = useState(0);
+            const [textContent, setTextContent] = useState('');
+            const [hasStarted, setHasStarted] = useState(false); // 新增：是否已点击开始 (用于激活AudioContext)
+            const [lastKeyPressed, setLastKeyPressed] = useState(null); // 用于按键视觉反馈
+            const [playingStimulus, setPlayingStimulus] = useState(null); // 当前正在播放的刺激 'A', 'B', 'X'
+            const [playbackHint, setPlaybackHint] = useState({ visible: false, nonce: 0 });
+            const audioRef = useRef(null);
+            const playbackHintTimerRef = useRef(null);
+            
+            const currentItem = playlist[currentTrialIndex];
+            // 兼容旧版：如果 item 没有 stimuli 属性，则视为单刺激 X
+            const isComplex = currentItem && !!currentItem.stimuli;
+            const currentFile = !isComplex ? files.find(f => f.id === currentItem?.fileId) : null;
+
+            useEffect(() => {
+                if (currentItem?.type === 'text' && currentFile?.url) {
+                    fetch(currentFile.url).then(r => r.text()).then(setTextContent).catch(e => setTextContent("无法加载文本"));
+                } else {
+                    setTextContent('');
+                }
+            }, [currentItem, currentFile]);
+
+            // 核心逻辑：开始播放刺激 (Beep -> Stimulus Sequence)
+            const startActualTrial = useCallback(async () => {
+                if (status === 'preparing' || status === 'playing') return;
+                setStatus('preparing'); 
+
+                // 提示音
+                if (config.useBeep) {
+                    playBeep(600, 0.15);
+                    await new Promise(r => setTimeout(r, 500)); 
+                }
+                
+                // 播放器辅助函数
+                const playFile = (fileId) => {
+                    return new Promise((resolve) => {
+                        const file = files.find(f => f.id === fileId);
+                        if (!file || !audioRef.current) { 
+                            console.warn("File not found or audio not ready", fileId);
+                            resolve(); 
+                            return; 
+                        }
+                        
+                        audioRef.current.src = file.url;
+                        audioRef.current.currentTime = 0;
+                        
+                        const handleEnded = () => {
+                            audioRef.current.removeEventListener('ended', handleEnded);
+                            resolve();
+                        };
+                        const handleError = (e) => {
+                            console.error("Audio playback error", e);
+                            audioRef.current.removeEventListener('error', handleError);
+                            resolve();
+                        };
+
+                        audioRef.current.addEventListener('ended', handleEnded);
+                        audioRef.current.addEventListener('error', handleError);
+                        
+                        audioRef.current.play().catch(e => {
+                            console.error("Autoplay failed", e);
+                            resolve();
+                        });
+                    });
+                };
+
+                const wait = (ms) => new Promise(r => setTimeout(r, ms));
+                const isi = config.isi || 500;
+
+                setStatus('playing');
+
+                if (isComplex) {
+                     const { type, stimuli } = currentItem;
+                     const sequence = [];
+                     
+                     // 根据范式构建播放序列
+                     if (type === 'ax') {
+                         sequence.push({ label: 'A', id: stimuli.A?.fileId });
+                         sequence.push({ label: 'X', id: stimuli.X?.fileId });
+                     } else if (type === 'abx') {
+                         sequence.push({ label: 'A', id: stimuli.A?.fileId });
+                         sequence.push({ label: 'B', id: stimuli.B?.fileId });
+                         sequence.push({ label: 'X', id: stimuli.X?.fileId });
+                     } else if (type === 'axb') {
+                         sequence.push({ label: 'A', id: stimuli.A?.fileId });
+                         sequence.push({ label: 'X', id: stimuli.X?.fileId });
+                         sequence.push({ label: 'B', id: stimuli.B?.fileId });
+                     }
+
+                     for (let i = 0; i < sequence.length; i++) {
+                         const step = sequence[i];
+                         // ISI
+                         if (i > 0) {
+                             setPlayingStimulus(null);
+                             await wait(isi);
+                         }
+                         // Play
+                         if (step.id) {
+                            setPlayingStimulus(step.label);
+                            await playFile(step.id);
+                         } else {
+                             // 缺失文件，跳过或等待？
+                             // 这里选择等待一小段时间模拟
+                             await wait(100); 
+                         }
+                     }
+                } else if (currentItem.type === 'audio') {
+                    // Single file
+                    setPlayingStimulus('X');
+                    if (currentItem.fileId) await playFile(currentItem.fileId);
+                } else {
+                    // Text/Image: no audio playback needed, just start
+                }
+                
+                setPlayingStimulus(null);
+                setStatus('responding');
+                setStartTime(Date.now());
+
+            }, [config, currentItem, status, isComplex, files]);
+
+            // 1. 监听试次变化：进入 Interstitial (指导语/间隔) 阶段
+            useEffect(() => {
+                if (!hasStarted) return;
+                setStatus('interstitial');
+            }, [currentTrialIndex, hasStarted]);
+
+            // 2. Interstitial 自动前进逻辑
+            useEffect(() => {
+                if (!hasStarted) return;
+                let t = null;
+                if (status === 'interstitial') {
+                    if (config.advanceMode === 'auto') {
+                        t = setTimeout(() => {
+                            startActualTrial();
+                        }, config.interTrialInterval);
+                    }
+                }
+                return () => { if(t) clearTimeout(t); };
+            }, [status, config.advanceMode, config.interTrialInterval, hasStarted, startActualTrial]);
+
+            const handleKeyDown = useCallback((e) => {
+                if (!hasStarted) return;
+                const pressedKey = e.key.toLowerCase();
+
+                if (status === 'interstitial') {
+                    if (config.advanceMode === 'manual') {
+                        startActualTrial();
+                    }
+                    return;
+                }
+
+                if (status === 'playing' || status === 'preparing') {
+                    if (playbackHintTimerRef.current) clearTimeout(playbackHintTimerRef.current);
+                    setPlaybackHint(prev => ({ visible: true, nonce: prev.nonce + 1 }));
+                    playbackHintTimerRef.current = setTimeout(() => {
+                        setPlaybackHint(prev => ({ ...prev, visible: false }));
+                    }, 1200);
+                    return;
+                }
+
+                if (status !== 'responding') return;
+                
+                const validConfig = config.validKeys.find(k => k.key === pressedKey);
+
+                if (validConfig) {
+                    setLastKeyPressed(pressedKey);
+                    setTimeout(() => setLastKeyPressed(null), 200);
+                    const rt = Date.now() - startTime;
+                    const result = {
+                        trialIndex: currentTrialIndex,
+                        fileId: isComplex ? currentItem.stimuli?.X?.fileId : currentItem.fileId, // 记录主要刺激(X)
+                        filename: isComplex ? currentItem.stimuli?.X?.name : currentFile?.name,
+                        key: pressedKey,
+                        keyLabel: validConfig.label,
+                        rt: rt,
+                        isValid: true,
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    if (audioRef.current) {
+                        audioRef.current.pause();
+                        audioRef.current.currentTime = 0;
+                    }
+
+                    if (currentTrialIndex < playlist.length - 1) {
+                        setResults(prev => [...prev, result]);
+                        setCurrentTrialIndex(p => p + 1);
+                    } else {
+                        const finalResults = [...results, result];
+                        setResults(finalResults);
+                        onFinish(finalResults);
+                    }
+                }
+            }, [status, currentTrialIndex, startTime, config, currentItem, currentFile, onFinish, playlist.length, hasStarted, setCurrentTrialIndex, results, setResults, startActualTrial, isComplex]);
+
+            useEffect(() => {
+                if (hasStarted) {
+                    window.addEventListener('keydown', handleKeyDown);
+                    return () => {
+                        window.removeEventListener('keydown', handleKeyDown);
+                    };
+                }
+            }, [handleKeyDown, hasStarted]);
+
+            useEffect(() => {
+                return () => {
+                    if (playbackHintTimerRef.current) clearTimeout(playbackHintTimerRef.current);
+                };
+            }, []);
+
+            // === 渲染：开始界面 ===
+            if (!hasStarted) {
+                return (
+                    <div className="flex flex-col items-center justify-center h-full space-y-8 animate-fade-in">
+                        <h2 className="text-3xl font-bold text-gray-800">实验准备就绪</h2>
+                        <p className="text-gray-600 text-lg">请点击下方按钮开始实验</p>
+                        <button 
+                            onClick={() => {
+                                setHasStarted(true);
+                                setStatus('interstitial');
+                            }}
+                            className="px-8 py-4 bg-blue-600 text-white text-xl rounded-lg shadow-lg hover:bg-blue-700 transition-transform transform hover:scale-105 active:scale-95 font-bold flex items-center gap-3"
+                        >
+                            <Play className="w-6 h-6 fill-current" /> 开始实验
+                        </button>
+                    </div>
+                );
+            }
+
+            if (!currentItem) return <div className="flex items-center justify-center h-full text-red-500">错误：试次丢失</div>;
+
+            // 渲染逻辑：如果是 Interstitial 且需要显示文本
+            if (status === 'interstitial') {
+                const hasInstruction = currentItem.instruction && currentItem.instruction.trim() !== '';
+                const shouldRenderText = hasInstruction || config.showInterTrialText;
+                
+                if (shouldRenderText) {
+                     let text = hasInstruction ? currentItem.instruction : config.interTrialText;
+                     if (!text || text.trim() === '') return <div className="h-full flex items-center justify-center bg-gray-50 w-full"></div>;
+
+                     if (config.advanceMode === 'manual') {
+                        text += "<br><br><span style='font-size:0.6em; font-weight:normal; opacity:0.7;'>按任意键进入下一题。</span>";
+                    }
+                    const styleClass = config.largeText ? "text-5xl font-bold leading-tight" : "text-2xl leading-relaxed";
+                    return (
+                        <div className="flex flex-col items-center justify-center h-full space-y-12 animate-fade-in p-12 select-none w-full">
+                            <div className={`text-gray-800 text-center max-w-5xl whitespace-pre-wrap ${styleClass}`} 
+                                 dangerouslySetInnerHTML={{__html: text}}></div>
+                        </div>
+                    );
+                } else {
+                    return <div className="h-full flex items-center justify-center bg-gray-50 w-full"></div>;
+                }
+            }
+
+            return (
+                <div className="flex flex-col items-center justify-center h-full space-y-12 p-8 select-none w-full relative outline-none" tabIndex="-1" ref={r => r && r.focus()}>
+                    {config.showFilename && <div className="text-6xl font-bold text-gray-800 animate-fade-in absolute top-12">
+                        {isComplex ? (currentItem.stimuli?.X?.name) : (currentFile?.name.replace(/\.[^/.]+$/, ""))}
+                    </div>}
+                    
+                    {/* 图片显示逻辑 */}
+                    {currentItem.type === 'image' && currentFile && (
+                        <img src={currentFile.url} alt="stimulus" className="max-h-[60vh] max-w-[90vw] object-contain shadow-lg rounded-lg" />
+                    )}
+                    
+                    {/* 文本显示逻辑 */}
+                    {currentItem.type === 'text' && (
+                        <div className="bg-white p-8 rounded-lg shadow-lg max-w-4xl w-full max-h-[60vh] overflow-y-auto text-xl leading-relaxed whitespace-pre-wrap border border-gray-200">
+                            {textContent}
+                        </div>
+                    )}
+
+                    {/* 音频显示逻辑 (复杂范式或单刺激) */}
+                    {(currentItem.type === 'audio' || isComplex) && (
+                        <div className="flex gap-8 items-center justify-center">
+                            {isComplex ? (
+                                <>
+                                    {/* 动态生成 A, B, X 的卡片 */}
+                                    {['A', 'B', 'X'].filter(label => currentItem.stimuli[label] !== undefined).map(label => {
+                                        // 仅当范式包含该标签时才显示 (简单判断：看item.stimuli是否有值)
+                                        // 但ABX模式下 stimuli.A, B, X 都有。
+                                        // AX模式下 stimuli.B 为空。
+                                        const fileInfo = currentItem.stimuli[label];
+                                        if (!fileInfo) return null;
+                                        const isActive = playingStimulus === label;
+                                        
+                                        return (
+                                            <div key={label} className={`w-32 h-32 flex flex-col items-center justify-center rounded-xl shadow-lg border-2 transition-all duration-300 ${isActive ? 'bg-blue-50 border-blue-500 scale-110' : 'bg-white border-gray-100 scale-100'}`}>
+                                                <span className={`text-4xl font-bold ${isActive ? 'text-blue-600' : 'text-gray-300'}`}>{label}</span>
+                                                {isActive && <Activity className="w-6 h-6 text-blue-500 animate-pulse mt-2" />}
+                                            </div>
+                                        );
+                                    })}
+                                </>
+                            ) : (
+                                <div className="w-48 h-48 flex items-center justify-center bg-white rounded-full shadow-lg border border-gray-100 transition-all duration-300 transform scale-100">
+                                    {status === 'playing' ? 
+                                        <Activity className="w-24 h-24 text-blue-500 animate-pulse" /> : 
+                                        <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
+                                    }
+                                </div>
+                            )}
+                        </div>
+                    )}
+                    
+                    {/* 渲染音频元素 (Hidden) - 仅作为播放引擎 */}
+                    <audio ref={audioRef} className="hidden" />
+
+                    {playbackHint.visible && (
+                        <div key={playbackHint.nonce} className="pointer-events-none fixed left-0 right-0 bottom-44 flex justify-center">
+                            <div className="animate-fade-in-out bg-gray-900/80 text-white text-sm px-4 py-2 rounded-full shadow">
+                                请等待音频播放结束后再作答（播放中按键无效）
+                            </div>
+                        </div>
+                    )}
+                    
+                    <div className="text-center space-y-4 fixed bottom-12 left-0 right-0">
+                        <p className="text-gray-400 text-sm tracking-widest uppercase">{status === 'waiting' ? 'PREPARING' : (status === 'playing' ? 'PLAYING...' : 'RESPONSE REQUIRED')}</p>
+                        <div className="flex gap-12 justify-center">
+                            {config.validKeys.map(k => (
+                                <div key={k.key} className={`flex flex-col items-center gap-2 group transition-transform duration-100 ${lastKeyPressed === k.key ? 'scale-110' : ''}`}>
+                                    <div className={`w-20 h-20 border-2 ${lastKeyPressed === k.key ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white'} rounded-xl flex items-center justify-center font-mono text-3xl font-bold text-gray-700 shadow-sm`}>{k.key.toUpperCase()}</div>
+                                    <span className="text-sm text-gray-500 font-medium">{k.label}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+                // === 状态管理 ===
+                const [phase, setPhase] = useState('paradigm_selection'); // 初始化进入范式选择
+                const [paradigm, setParadigm] = useState('X'); // 'X', 'AX', 'ABX', 'AXB'
+                const [isPlaying, setIsPlaying] = useState(false); 
+                const [activeTab, setActiveTab] = useState('files');
+            const [csvPrefix, setCsvPrefix] = useState(''); // xlsx导出路径前缀
+            const [files, setFiles] = useState([]); 
+            const [playlist, setPlaylist] = useState([]); 
+            const [config, setConfig] = useState({
+                title: "听觉感知实验",
+                introText: "接下来您将听到一组音频，请仔细聆听并根据直觉做出判断。",
+                introLargeText: true,
+                interTrialText: "请您判断xxx",
+                showInterTrialText: false,
+                largeText: true,
+                advanceMode: 'auto', // 'auto' | 'manual'
+                autoPlay: true,
+                showFilename: false,
+                interTrialInterval: 1000,
+                isi: 500, // Inter-Stimulus Interval
+                useBeep: true,
+                validKeys: [
+                    { key: 'f', label: '错误 (F)' },
+                    { key: 'j', label: '正确 (J)' }
+                   
+                ],
+                allowReplay: false,
+            });
+            const [questionnaire, setQuestionnaire] = useState([
+                { id: 'q1', type: 'text', label: '姓名/编号', required: true },
+                { id: 'q2', type: 'radio', label: '性别', options: ['男', '女'], required: true }
+            ]);
+            const [participantData, setParticipantData] = useState({});
+            const [currentTrialIndex, setCurrentTrialIndex] = useState(0);
+            const [results, setResults] = useState([]);
+            const [previewUrl, setPreviewUrl] = useState(null); // 用于文件列表预览
+            
+            // === 逻辑处理：文件管理 ===
+            const handleFileUpload = (e, group = 'X') => {
+                try {
+                    const fileList = Array.from(e.target.files);
+                    
+                    // 过滤文件类型：仅允许音频和图片
+                    // 严格白名单模式，排除 .txt, .ico 等
+                    const allowedExtensions = [
+                        '.mp3', '.wav', '.ogg', '.m4a', '.flac', '.aac', '.wma', '.mp4', // Audio
+                        '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'         // Image
+                    ];
+
+                    const uploaded = fileList.filter(f => {
+                        const name = f.name.toLowerCase();
+                        // 排除常见无关文件，显式排除 .ico 和 .txt 以及 icon 类型
+                        if (name.startsWith('.') || name.includes('__macosx') || name.includes('desktop.ini') || name.endsWith('.ds_store') || name.endsWith('.ico') || name.endsWith('.txt') || f.type.includes('icon')) return false;
+                        
+                        const ext = name.substring(name.lastIndexOf('.'));
+                        // 严格匹配后缀或MIME类型 (仅音频和图片)
+                        return allowedExtensions.includes(ext) || 
+                               f.type.startsWith('audio/') || 
+                               f.type.startsWith('image/');
+                    });
+
+                    if (uploaded.length === 0) {
+                        // 如果原列表有文件但全被过滤了，提示用户
+                        if (fileList.length > 0) {
+                            alert("未检测到有效素材文件 (仅支持音频和图片)");
+                        }
+                        return;
+                    }
+
+                    const newFiles = uploaded.map(f => ({
+                        id: Math.random().toString(36).substr(2, 9),
+                        name: f.name,
+                        // 优先使用自定义属性 fullPath (来自文件夹拖拽)，否则尝试 webkitRelativePath，最后回退到 name
+                        path: f.fullPath || f.webkitRelativePath || f.name, 
+                        url: URL.createObjectURL(f),
+                        fileObj: f,
+                        group: group // 标记文件分组 (A, B, X)
+                    }));
+                    
+                    setFiles(prev => [...prev, ...newFiles]);
+                    
+                    // 触发播放列表自动更新 (如果是 X 组文件更新，或者单刺激模式)
+                    // 注意：这里我们只追加新文件到 Playlist，如果是复杂范式，可能需要点击“生成”按钮更安全
+                    // 但为了保持原有体验，如果 paradigm === 'X'，我们自动追加
+                    if (paradigm === 'X') {
+                        setPlaylist(prev => {
+                            // ... 原有的自动追加逻辑 ...
+                            const nextPlaylist = prev.map(item => ({...item})); 
+                            const usedFileIds = new Set();
+                            
+                             // 构建待匹配项的索引
+                             const pendingMap = new Map();
+                             nextPlaylist.forEach((item, idx) => {
+                                 if (!item.fileId && item.fileName) {
+                                     if (!pendingMap.has(item.fileName)) {
+                                         pendingMap.set(item.fileName, []);
+                                     }
+                                     pendingMap.get(item.fileName).push(idx);
+                                 }
+                             });
+ 
+                             // 快速匹配
+                             newFiles.forEach(nf => {
+                                 if (nf.name && pendingMap.has(nf.name)) {
+                                     const indices = pendingMap.get(nf.name);
+                                     if (Array.isArray(indices)) {
+                                         indices.forEach(idx => {
+                                             if (nextPlaylist[idx]) {
+                                                 nextPlaylist[idx].fileId = nf.id;
+                                             }
+                                         });
+                                         usedFileIds.add(nf.id);
+                                     }
+                                 }
+                             });
+
+                            const appendItems = newFiles
+                                .filter(nf => !usedFileIds.has(nf.id))
+                                .map(f => {
+                                    let type = 'audio';
+                                    if (f.fileObj && f.fileObj.type) {
+                                        if (f.fileObj.type.startsWith('image/')) type = 'image';
+                                        else if (f.fileObj.type === 'text/plain' || f.name.endsWith('.txt')) type = 'text';
+                                    }
+                                    return {
+                                        uuid: Math.random().toString(36).substr(2, 9),
+                                        fileId: f.id,
+                                        fileName: f.name, 
+                                        instruction: '', 
+                                        type: type,
+                                        paradigm: 'X'
+                                    };
+                                });
+                            return [...nextPlaylist, ...appendItems];
+                        });
+                    } else {
+                        // 复杂范式下，仅提示用户更新了文件库，需手动重新生成或自动尝试重新生成
+                        // 这里我们调用一个 debounced 的生成函数或者简单的提示
+                        // 为了简化，我们暂时不自动更新 Playlist，而是依赖用户点击“刷新/生成”或者在 useEffect 中监听 files 变化
+                        // 但用户要求 "当用户点击“生成播放列表”或上传文件后更新列表时，程序应根据 X 组 的文件数量来生成试次"
+                        // 所以这里应该触发生成逻辑
+                        // 既然不能在这里直接调用 setState(func) 里的 func，我们可能需要一个 useEffect 或者独立的函数
+                        // 暂时先留空，后面用 useEffect(() => { generatePlaylist() }, [files]) 来处理?
+                        // 不，useEffect 会导致每次修改 files 都重置 playlist，这会丢失 instruction。
+                        // 所以最好是手动触发，或者智能合并。
+                        // 用户说： "当用户...上传文件后更新列表时...应根据 X 组...生成"
+                        // 所以我会在 setFiles 后调用 generatePlaylist(newFiles)
+                    }
+
+                } catch (err) {
+                    console.error("File upload error:", err);
+                    alert("文件上传出错，请重试");
+                }
+            };
+            
+            // 监听 files 变化自动更新 Playlist (仅针对复杂范式)
+            useEffect(() => {
+                if (paradigm === 'X') return; // X模式由 handleFileUpload 内部处理保持兼容
+                
+                // 自动生成/同步逻辑
+                // 规则：根据 X 组文件生成 Trial
+                // 尽量保留现有的 instruction 和 uuid (如果文件名匹配)
+                
+                const filesX = files.filter(f => f.group === 'X');
+                const filesA = files.filter(f => f.group === 'A');
+                const filesB = files.filter(f => f.group === 'B');
+                
+                setPlaylist(prev => {
+                    // 建立旧列表的映射以保留 instruction
+                    // Key: X_Filename (假设 X 是主键)
+                    const oldMap = new Map();
+                    prev.forEach(item => {
+                        if (item.stimuli && item.stimuli.X) {
+                            oldMap.set(item.stimuli.X.name, item);
+                        }
+                    });
+                    
+                    const newPlaylist = filesX.map(fX => {
+                        const existing = oldMap.get(fX.name);
+                        
+                        // 查找对应的 A 和 B (假设按顺序对应? 用户说 "自动配对逻辑: 第1个...配第1个")
+                        // 所以我们需要 index
+                        // 但是 map 是无序的吗？ filesX 是数组，有序。
+                        // 我们需要知道 fX 在 filesX 中的 index。
+                        // 为了性能，我们先不在这里 map，而是下面用 index 遍历
+                        return null; 
+                    });
+                    
+                    const generated = [];
+                    for(let i=0; i<filesX.length; i++) {
+                        const fX = filesX[i];
+                        const fA = filesA[i]; // 可能 undefined
+                        const fB = filesB[i]; // 可能 undefined
+                        
+                        const existing = oldMap.get(fX.name);
+                        
+                        const trial = {
+                            uuid: existing ? existing.uuid : Math.random().toString(36).substr(2, 9),
+                            type: paradigm.toLowerCase(), // 'ax', 'abx', 'axb'
+                            stimuli: {
+                                X: { fileId: fX.id, name: fX.name },
+                                A: fA ? { fileId: fA.id, name: fA.name } : null,
+                                B: fB ? { fileId: fB.id, name: fB.name } : null
+                            },
+                            instruction: existing ? existing.instruction : ''
+                        };
+                        generated.push(trial);
+                    }
+                    return generated;
+                });
+                
+            }, [files, paradigm]); // 当 files 或 paradigm 变化时重新生成
+
+            const handleSort = (type) => {
+                let newOrder = [...playlist];
+                
+                // 获取排序用的名称：对于复杂范式使用 X 刺激的名称，否则使用 fileId 对应的文件名
+                const getSortName = (item) => {
+                    if (item.stimuli && item.stimuli.X) {
+                        return item.stimuli.X.name || '';
+                    }
+                    const file = files.find(f => f.id === item.fileId);
+                    return file?.name || item.fileName || '';
+                };
+                
+                if (type === 'asc') {
+                    newOrder.sort((a, b) => {
+                        return getSortName(a).localeCompare(getSortName(b));
+                    });
+                } else if (type === 'desc') {
+                    newOrder.sort((a, b) => {
+                        return getSortName(b).localeCompare(getSortName(a));
+                    });
+                } else if (type === 'random') {
+                    for (let i = newOrder.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [newOrder[i], newOrder[j]] = [newOrder[j], newOrder[i]];
+                    }
+                }
+                setPlaylist(newOrder);
+            };
+
+            const dragItem = useRef(null);
+            const dragOverItem = useRef(null);
+
+            const handleDragSort = () => {
+                let _playlist = [...playlist];
+                const draggedItemContent = _playlist.splice(dragItem.current, 1)[0];
+                _playlist.splice(dragOverItem.current, 0, draggedItemContent);
+                dragItem.current = null;
+                dragOverItem.current = null;
+                setPlaylist(_playlist);
+            };
+
+            // === 逻辑处理：资源助手与xlsx导入 ===
+            const processFilesForXLSX = (fileList) => {
+                if (fileList.length === 0) return;
+                
+                // 根据范式决定列头
+                let headers = ['File_Path', 'Inter_Trial_Instruction'];
+                if (paradigm === 'AX') headers = ['File_A', 'File_X', 'Inter_Trial_Instruction'];
+                else if (paradigm === 'ABX') headers = ['File_A', 'File_B', 'File_X', 'Inter_Trial_Instruction'];
+                else if (paradigm === 'AXB') headers = ['File_A', 'File_X', 'File_B', 'Inter_Trial_Instruction'];
+
+                const rows = fileList.map(f => {
+                    let path = f.webkitRelativePath || f.name;
+                    // 如果有前缀，拼接前缀
+                    if (csvPrefix) {
+                        const prefix = csvPrefix.trim().replace(/[\\/]+$/, '');
+                        // 简单判断分隔符风格
+                        const isWin = prefix.includes('\\') || (!prefix.includes('/') && navigator.platform.indexOf('Win') > -1);
+                        const sep = isWin ? '\\' : '/';
+                        const relPath = path.replace(/^[\\/]+/, ''); // 去掉开头的斜杠
+                        // 如果是Windows风格前缀，将相对路径中的/替换为\
+                        const finalRelPath = isWin ? relPath.replace(/\//g, '\\') : relPath;
+                        path = `${prefix}${sep}${finalRelPath}`;
+                    }
+                    
+                    // 将路径填入第一个文件列，其他留空
+                    const rowData = new Array(headers.length).fill('');
+                    rowData[0] = path; 
+                    return rowData;
+                });
+                
+                // 添加表头
+                rows.unshift(headers);
+                
+                // 创建工作簿和工作表
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.aoa_to_sheet(rows);
+                
+                // 设置列宽 (可选)
+                ws['!cols'] = headers.map(() => ({ wch: 40 }));
+                
+                XLSX.utils.book_append_sheet(wb, ws, "Resource_List");
+                
+                // 导出文件
+                XLSX.writeFile(wb, `resource_list_${paradigm}_${new Date().getTime()}.xlsx`);
+            };
+
+            const handleResourceFolder = (e) => {
+                processFilesForXLSX(Array.from(e.target.files));
+            };
+
+            const handleHelperDrop = async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const items = e.dataTransfer.items;
+                if (!items) return;
+
+                const scanEntry = (entry) => {
+                    if (entry.isFile) {
+                        return new Promise(resolve => entry.file(f => {
+                            // 不要直接修改 f.webkitRelativePath (只读属性)
+                            // 而是附加一个自定义属性，供后续处理使用
+                            f.fullPath = entry.fullPath.replace(/^\//, '');
+                            resolve([f]);
+                        }));
+                    } else if (entry.isDirectory) {
+                        const reader = entry.createReader();
+                        return new Promise(resolve => {
+                            // 递归读取所有 entries (解决 Chrome 每次只读 100 个的限制)
+                            const readAllEntries = async () => {
+                                let allEntries = [];
+                                let keepReading = true;
+                                while (keepReading) {
+                                    const batch = await new Promise((res, rej) => reader.readEntries(res, rej));
+                                    if (batch.length > 0) {
+                                        allEntries = allEntries.concat(batch);
+                                    } else {
+                                        keepReading = false;
+                                    }
+                                }
+                                return allEntries;
+                            };
+
+                            readAllEntries().then(async entries => {
+                                if (entries.length === 0) { resolve([]); return; }
+                                const promises = entries.map(scanEntry);
+                                const results = await Promise.all(promises);
+                                resolve(results.flat());
+                            }).catch(e => {
+                                console.error("Read directory error:", e);
+                                resolve([]);
+                            });
+                        });
+                    }
+                    return Promise.resolve([]);
+                };
+
+                const promises = [];
+                for (let i = 0; i < items.length; i++) {
+                    const entry = items[i].webkitGetAsEntry ? items[i].webkitGetAsEntry() : null;
+                    if (entry) promises.push(scanEntry(entry));
+                }
+                
+                try {
+                    const results = await Promise.all(promises);
+                    // 同样应用过滤逻辑：严格白名单 (仅音频和图片)
+                    const allowedExtensions = [
+                        '.mp3', '.wav', '.ogg', '.m4a', '.flac', '.aac', '.wma', '.mp4', 
+                        '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'
+                    ];
+                    
+                    const flatFiles = results.flat().filter(f => {
+                        const name = f.name.toLowerCase();
+                        // 显式排除 .ico 和 .txt 以及 icon 类型
+                        if (name.startsWith('.') || name.includes('__macosx') || name.includes('desktop.ini') || name.endsWith('.ds_store') || name.endsWith('.ico') || name.endsWith('.txt') || f.type.includes('icon')) return false;
+                        const ext = name.substring(name.lastIndexOf('.'));
+                        return allowedExtensions.includes(ext) || f.type.startsWith('audio/') || f.type.startsWith('image/');
+                    });
+
+                    if (flatFiles.length > 0) {
+                        processFilesForXLSX(flatFiles);
+                    } else {
+                        alert("未检测到有效文件");
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert("读取文件夹失败，请尝试使用按钮上传");
+                }
+            };
+
+            const handlePlaylistXLSX = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const data = new Uint8Array(event.target.result);
+                    const wb = XLSX.read(data, { type: 'array' });
+                    // 获取第一个工作表
+                    const wsname = wb.SheetNames[0];
+                    const ws = wb.Sheets[wsname];
+                    // 将工作表转换为数组 (Header: 1 表示生成二维数组)
+                    const rows = XLSX.utils.sheet_to_json(ws, { header: 1 });
+
+                    if (!rows || rows.length === 0) {
+                        alert("未在XLSX中找到有效数据。");
+                        e.target.value = '';
+                        return;
+                    }
+
+                    // 1. 识别列
+                    const header = rows[0].map(h => String(h).trim().toLowerCase());
+                    let colMap = { A: -1, B: -1, X: -1, Inst: -1, Path: -1 };
+                    
+                    header.forEach((h, i) => {
+                        if (h.includes('file_a') || h === 'a') colMap.A = i;
+                        else if (h.includes('file_b') || h === 'b') colMap.B = i;
+                        else if (h.includes('file_x') || h === 'x') colMap.X = i;
+                        else if (h.includes('instruction') || h.includes('展示语')) colMap.Inst = i;
+                        else if (h.includes('path') || h.includes('file')) colMap.Path = i;
+                    });
+                    
+                    // 默认列映射 (如果未找到明确表头)
+                    if (colMap.A === -1 && colMap.B === -1 && colMap.X === -1 && colMap.Path === -1) {
+                         if (paradigm === 'X') { colMap.X = 0; colMap.Inst = 1; }
+                         else if (paradigm === 'AX') { colMap.A = 0; colMap.X = 1; colMap.Inst = 2; }
+                         else if (paradigm === 'ABX') { colMap.A = 0; colMap.B = 1; colMap.X = 2; colMap.Inst = 3; }
+                         else if (paradigm === 'AXB') { colMap.A = 0; colMap.X = 1; colMap.B = 2; colMap.Inst = 3; }
+                    } else {
+                        // 如果找到了具体的A/B/X列，但当前模式是X，兼容处理
+                        if (paradigm === 'X' && colMap.Path === -1) {
+                            if (colMap.X !== -1) colMap.Path = colMap.X;
+                            else if (colMap.A !== -1) colMap.Path = colMap.A;
+                        }
+                    }
+
+                    const parsedItems = [];
+                    const startRow = (header.some(h => h.includes('file') || h.includes('path'))) ? 1 : 0; // 如果第一行看起来像表头则跳过
+
+                    for (let i = startRow; i < rows.length; i++) {
+                        const row = rows[i];
+                        if (!row || row.length === 0) continue;
+                        
+                        const getVal = (idx) => (idx !== -1 && row[idx]) ? String(row[idx]).trim() : '';
+                        const getFileId = (name) => {
+                            if (!name) return null;
+                            // 尝试全名匹配或忽略路径匹配
+                            const f = files.find(f => f.name === name || f.path === name || f.name === name.split(/[\\/]/).pop());
+                            return f ? f.id : null;
+                        };
+
+                        const inst = getVal(colMap.Inst);
+                        
+                        if (paradigm === 'X') {
+                            const pathVal = getVal(colMap.Path) || getVal(colMap.X);
+                            if (!pathVal) continue;
+                            const basename = pathVal.split(/[\\/]/).pop();
+                            
+                            parsedItems.push({
+                                uuid: Math.random().toString(36).substr(2, 9),
+                                fileId: getFileId(basename),
+                                fileName: basename,
+                                instruction: inst,
+                                type: 'audio',
+                                paradigm: 'X'
+                            });
+                        } else {
+                            // 复杂范式
+                            const valA = getVal(colMap.A);
+                            const valB = getVal(colMap.B);
+                            const valX = getVal(colMap.X);
+                            
+                            // 至少需要 X 或 A
+                            if (!valA && !valX) continue;
+                            
+                            const stimuli = {};
+                            if (valA) stimuli.A = { name: valA.split(/[\\/]/).pop(), fileId: getFileId(valA) };
+                            if (valB) stimuli.B = { name: valB.split(/[\\/]/).pop(), fileId: getFileId(valB) };
+                            if (valX) stimuli.X = { name: valX.split(/[\\/]/).pop(), fileId: getFileId(valX) };
+                            
+                            parsedItems.push({
+                                uuid: Math.random().toString(36).substr(2, 9),
+                                type: paradigm.toLowerCase(),
+                                stimuli: stimuli,
+                                instruction: inst
+                            });
+                        }
+                    }
+
+                    if (parsedItems.length > 0) {
+                         if (confirm(`解析到 ${parsedItems.length} 个试次。\n是否替换当前列表？(取消则追加)`)) {
+                             setPlaylist(parsedItems);
+                         } else {
+                             setPlaylist(prev => [...prev, ...parsedItems]);
+                         }
+                         
+                         const missingCount = parsedItems.filter(item => {
+                             if (item.stimuli) {
+                                 return Object.values(item.stimuli).some(s => !s.fileId);
+                             }
+                             return !item.fileId;
+                         }).length;
+                         
+                         if (missingCount > 0) {
+                             alert(`导入成功，但有 ${missingCount} 个试次未匹配到已上传的音频文件 (将显示为缺失)。`);
+                         } else {
+                             alert("导入成功！");
+                         }
+                    } else {
+                        alert("未解析到有效数据，请检查列头是否符合范式要求。");
+                    }
+                    e.target.value = '';
+                };
+                reader.readAsArrayBuffer(file);
+            };
+
+            // === 逻辑处理：全局保存与读取 ===
+            const saveProjectConfig = async () => {
+                const data = {
+                    // 保存完整的 playlist 结构
+                    playlistConfig: playlist.map(item => ({
+                        fileName: files.find(f => f.id === item.fileId)?.name,
+                        instruction: item.instruction,
+                        type: item.type
+                    })).filter(i => i.fileName),
+                    config,
+                    questionnaire,
+                    timestamp: new Date().toISOString(),
+                    version: "2.0" // 升级版本号
+                };
+                const content = JSON.stringify(data, null, 2);
+                const defaultName = `experiment_project_${new Date().toISOString().slice(0,10)}.json`;
+
+                try {
+                    if (window.showSaveFilePicker) {
+                        const fileHandle = await window.showSaveFilePicker({
+                            suggestedName: defaultName,
+                            types: [{
+                                description: 'JSON Project Config',
+                                accept: { 'application/json': ['.json'] }
+                            }]
+                        });
+                        const writable = await fileHandle.createWritable();
+                        await writable.write(content);
+                        await writable.close();
+                        alert("配置已保存！");
+                        return;
+                    }
+                } catch (e) {
+                    if (e.name === 'AbortError') return;
+                    console.warn("File System API failed, falling back to download:", e);
+                }
+
+                const blob = new Blob([content], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = defaultName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            };
+
+            const loadProjectConfig = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        if (data.config) setConfig(data.config);
+                        if (data.questionnaire) setQuestionnaire(data.questionnaire);
+                        
+                        // 兼容旧版本 logic
+                        let newPlaylist = [];
+                        
+                        if (data.playlistConfig) {
+                            // 新版本 v2.0
+                            data.playlistConfig.forEach(item => {
+                                const foundFile = files.find(f => f.name === item.fileName);
+                                // 无论是否找到文件，都恢复播放列表结构
+                                newPlaylist.push({
+                                    uuid: Math.random().toString(36).substr(2, 9),
+                                    fileId: foundFile ? foundFile.id : null,
+                                    fileName: item.fileName,
+                                    instruction: item.instruction || '',
+                                    type: item.type || 'audio'
+                                });
+                            });
+                        } else if (data.playlistNames && Array.isArray(data.playlistNames)) {
+                            // 旧版本 v1.0
+                            data.playlistNames.forEach(name => {
+                                const foundFile = files.find(f => f.name === name);
+                                if (foundFile) {
+                                    newPlaylist.push({
+                                        uuid: Math.random().toString(36).substr(2, 9),
+                                        fileId: foundFile.id,
+                                        instruction: '',
+                                        type: 'audio'
+                                    });
+                                }
+                            });
+                        }
+
+                        if (newPlaylist.length > 0) {
+                            setPlaylist(newPlaylist);
+                            alert(`配置已加载，匹配到 ${newPlaylist.length} 个试次。`);
+                        } else if (data.playlistNames || data.playlistConfig) {
+                             alert("配置已加载，但在当前文件库中未找到匹配文件。请先上传文件。");
+                        } else {
+                            alert("配置已加载。");
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        alert("配置文件错误");
+                    }
+                    e.target.value = '';
+                };
+                reader.readAsText(file);
+            };
+
+            // === 逻辑处理：实验流程 ===
+            const startExperiment = () => {
+                if (playlist.length === 0) {
+                    alert("请至少添加一个音频文件");
+                    return;
+                }
+                
+                const fileExistsById = (id) => !!files.find(f => f.id === id);
+                const isMissingAudioForTrial = (item) => {
+                    if (!item) return false;
+                    if (item.stimuli) {
+                        const stimuli = item.stimuli || {};
+                        const values = Object.values(stimuli).filter(v => v != null);
+                        if (values.length === 0) return false;
+                        return values.some(v => !v.fileId || !fileExistsById(v.fileId));
+                    }
+                    if (item.type !== 'audio') return false;
+                    return !item.fileId || !fileExistsById(item.fileId);
+                };
+                const missingTrials = playlist.filter(isMissingAudioForTrial);
+                if (missingTrials.length > 0) {
+                    if(!window.confirm(`警告：当前播放列表中有 ${missingTrials.length} 个试次缺失音频文件。\n这些试次在实验中将无法播放音频。\n\n是否继续？`)) {
+                        return;
+                    }
+                }
+
+                setPhase('participant_form');
+                setParticipantData({});
+                setResults([]);
+                setCurrentTrialIndex(0);
+                setIsPlaying(false); // 此时还没开始真正跑 TrialRunner
+            };
+
+            const submitQuestionnaire = (e) => {
+                e.preventDefault();
+                for (let q of questionnaire) {
+                    if (q.required !== false) {
+                        const val = participantData[q.id];
+                        if (q.type === 'text') {
+                            if (!val || String(val).trim() === '') { alert(`请填写: ${q.label}`); return; }
+                        } else if (q.type === 'radio') {
+                            if (!val) { alert(`请填写: ${q.label}`); return; }
+                        } else if (q.type === 'checkbox') {
+                            if (!Array.isArray(val) || val.length === 0) { alert(`请填写: ${q.label}`); return; }
+                        }
+                    }
+                }
+                setPhase('instruction');
+            };
+
+            const finishExperiment = useCallback((finalResults) => {
+                setPhase('finished');
+                setIsPlaying(false); // 关闭窗口
+                const resultsToExport = Array.isArray(finalResults) ? finalResults : results;
+                const { wb, pID } = generateXLSX(resultsToExport, participantData, questionnaire);
+                const timestamp = new Date().toISOString().replace(/[-:T.]/g, '').slice(0, 14);
+                XLSX.writeFile(wb, `${pID}_${timestamp}.xlsx`);
+            }, [results, participantData, questionnaire]);
+
+            // === 渲染组件：范式选择 ===
+            const renderParadigmSelection = () => (
+                <div className="flex flex-col items-center justify-center h-screen bg-gray-50 text-gray-800 font-sans space-y-12">
+                     <h1 className="text-4xl font-bold text-gray-900">听觉感知实验平台</h1>
+                     <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 max-w-2xl w-full">
+                        <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-4">请选择实验范式</h2>
+                        <div className="grid grid-cols-2 gap-4">
+                            {[
+                                { id: 'X', label: '单刺激 (X)', desc: '播放一个音频，要求被试做出判断。' },
+                                { id: 'AX', label: '区分任务 (AX)', desc: '播放 A -> X，判断 X 是否与 A 相同，或判断 X 的属性。' },
+                                { id: 'ABX', label: '区分任务 (ABX)', desc: '播放 A -> B -> X，判断 X 更像 A 还是 B。' },
+                                { id: 'AXB', label: '区分任务 (AXB)', desc: '播放 A -> X -> B，判断 X 更像 A 还是 B。' }
+                            ].map(p => (
+                                <button key={p.id} 
+                                    onClick={() => setParadigm(p.id)}
+                                    className={`p-6 rounded-lg border-2 text-left transition-all hover:shadow-md ${paradigm === p.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'}`}
+                                >
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-xl font-bold text-gray-800">{p.label}</span>
+                                        {paradigm === p.id && <Check className="w-6 h-6 text-blue-600" />}
+                                    </div>
+                                    <p className="text-sm text-gray-500 leading-relaxed">{p.desc}</p>
+                                </button>
+                            ))}
+                        </div>
+                        
+                        <div className="mt-8 flex justify-end gap-3">
+                            <button
+                                onClick={() => window.open(HELP_DOC_URL, '_blank')}
+                                className="px-8 py-3 bg-green-600 text-white text-lg rounded-lg shadow hover:bg-green-700 transition font-bold"
+                            >
+                                帮助
+                            </button>
+                            <button 
+                                onClick={() => {
+                                    if (!paradigm) return;
+                                    setPhase('design');
+                                }}
+                                className="px-8 py-3 bg-blue-600 text-white text-lg rounded-lg shadow hover:bg-blue-700 transition font-bold flex items-center gap-2"
+                            >
+                                进入实验设计 <SkipForward className="w-5 h-5" />
+                            </button>
+                        </div>
+                     </div>
+                     <p className="text-gray-400 text-sm">注意：选择范式后将决定文件管理与播放逻辑，中途更改可能需要重新上传文件。</p>
+                </div>
+            );
+
+            // === 渲染组件：设计器 ===
+            const renderDesigner = () => (
+                <div className="flex h-screen bg-gray-50 text-gray-800 font-sans">
+                    <div className="w-64 bg-white border-r border-gray-200 flex flex-col shadow-sm z-10">
+                        <div className="p-4 border-b border-gray-200 bg-gray-50">
+                            <h1 className="font-bold text-lg flex items-center gap-2 text-gray-800">
+                                <Activity className="w-5 h-5 text-blue-600" />
+                                实验设计器
+                            </h1>
+                        </div>
+                        <nav className="flex-1 overflow-y-auto p-2 space-y-1">
+                            {[
+                                { id: 'files', icon: FileAudio, label: '音频数据库' },
+                                { id: 'sort', icon: List, label: '播放序列' },
+                                { id: 'config', icon: Settings, label: '实验参数' },
+                                { id: 'quest', icon: List, label: '问卷设置' },
+                                { id: 'helper', icon: Folder, label: '资源助手' },
+                            ].map(item => (
+                                <button key={item.id} onClick={() => setActiveTab(item.id)}
+                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors ${
+                                        activeTab === item.id ? 'bg-blue-50 text-blue-700 border border-blue-100' : 'text-gray-600 hover:bg-gray-100 border border-transparent'
+                                    }`}
+                                >
+                                    <item.icon className="w-4 h-4" />
+                                    {item.label}
+                                </button>
+                            ))}
+                        </nav>
+                        <div className="p-4 bg-gray-50 border-t border-gray-200 space-y-3">
+                            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">项目管理</div>
+                            <button onClick={saveProjectConfig} className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition">
+                                <Save className="w-4 h-4"/> 保存项目配置
+                            </button>
+                            <label className="w-full cursor-pointer flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition">
+                                <Upload className="w-4 h-4"/> 加载项目配置
+                                <input type="file" accept=".json" className="hidden" onChange={loadProjectConfig}/>
+                            </label>
+                        </div>
+                        <div className="p-4 border-t border-gray-200">
+                            <button onClick={startExperiment} className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md shadow-md font-bold transition-all flex items-center justify-center gap-2">
+                                <Play className="w-4 h-4 fill-current"/> 开始运行实验
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="flex-1 overflow-y-auto p-8 bg-gray-50">
+                        {activeTab === 'files' && (
+                            <div className="space-y-6 animate-fade-in">
+                                <h2 className="text-2xl font-bold text-gray-800 border-b pb-2">音频管理 - {paradigm} 范式</h2>
+                                <div className={`grid gap-6 h-[600px] ${paradigm === 'X' ? 'grid-cols-1 max-w-2xl mx-auto' : paradigm === 'AX' ? 'grid-cols-2' : 'grid-cols-3'}`}>
+                                    {(() => {
+                                        const zones = [];
+                                        const renderZone = (group, title, colorClass) => {
+                                            const groupFiles = files.filter(f => f.group === group);
+                                            return (
+                                                <div key={group} className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex flex-col h-full overflow-hidden">
+                                                     <h3 className={`font-bold text-lg mb-4 ${colorClass} flex items-center gap-2`}>
+                                                        <FileAudio className="w-5 h-5"/> {title}
+                                                     </h3>
+                                                     {/* Upload Area */}
+                                                     <div className="flex-none mb-4">
+                                                         <div className="flex flex-col items-center justify-center h-24 px-4 transition bg-gray-50 border-2 border-gray-300 border-dashed rounded-md hover:border-blue-400 hover:bg-blue-50 group cursor-pointer relative">
+                                                            <Upload className="w-6 h-6 text-gray-400 mb-1 group-hover:text-blue-500 transition-colors" />
+                                                            <span className="text-xs text-gray-600 font-medium group-hover:text-blue-600">点击上传 {group} 组文件</span>
+                                                            <input type="file" multiple onChange={(e) => handleFileUpload(e, group)} className="absolute inset-0 opacity-0 cursor-pointer" />
+                                                         </div>
+                                                     </div>
+                                                     
+                                                     <div className="flex justify-between items-center mb-2 text-xs text-gray-500 border-b pb-1 flex-none">
+                                                         <span>已加载: <span className="font-bold">{groupFiles.length}</span></span>
+                                                         {groupFiles.length > 0 && (
+                                                             <button onClick={() => {
+                                                                 if(confirm(`确定清空 ${group} 组文件吗？`)) {
+                                                                     setFiles(prev => prev.filter(f => f.group !== group));
+                                                                 }
+                                                             }} className="text-red-500 hover:text-red-700 flex items-center gap-1"><Trash2 className="w-3 h-3"/> 清空</button>
+                                                         )}
+                                                     </div>
+                                                     
+                                                     <ul className="flex-1 overflow-y-auto divide-y divide-gray-100 text-sm bg-gray-50 rounded border border-gray-100 p-2">
+                                                         {groupFiles.length === 0 && <li className="text-center text-gray-400 py-4 text-xs">暂无文件</li>}
+                                                         {groupFiles.map(f => (
+                                                             <li key={f.id} className="py-2 flex justify-between items-center group hover:bg-white px-1 rounded transition">
+                                                                 <div className="truncate flex-1 pr-2 cursor-pointer" title={f.name} onClick={() => setPreviewUrl(f.url)}>
+                                                                    <div className={`truncate ${previewUrl === f.url ? 'text-blue-600 font-bold' : 'text-gray-700'}`}>{f.name}</div>
+                                                                 </div>
+                                                                 <button onClick={() => setPreviewUrl(f.url)} className="text-gray-400 hover:text-blue-500">
+                                                                     {previewUrl === f.url ? <Activity className="w-3 h-3 text-blue-500 animate-pulse"/> : <Play className="w-3 h-3"/>}
+                                                                 </button>
+                                                             </li>
+                                                         ))}
+                                                     </ul>
+                                                </div>
+                                            );
+                                        };
+
+                                        if (paradigm === 'X') {
+                                            zones.push(renderZone('X', '刺激列表 (X)', 'text-gray-800'));
+                                        } else if (paradigm === 'AX') {
+                                            zones.push(renderZone('A', 'Stimulus A (参照)', 'text-blue-600'));
+                                            zones.push(renderZone('X', 'Stimulus X (目标)', 'text-purple-600'));
+                                        } else if (paradigm === 'ABX' || paradigm === 'AXB') {
+                                            zones.push(renderZone('A', 'Stimulus A', 'text-blue-600'));
+                                            zones.push(renderZone('B', 'Stimulus B', 'text-green-600'));
+                                            zones.push(renderZone('X', 'Stimulus X', 'text-purple-600'));
+                                        }
+                                        return zones;
+                                    })()}
+                                </div>
+                                
+                                {previewUrl && (
+                                    <div className="p-3 bg-white border border-gray-200 shadow-sm flex items-center gap-3 animate-fade-in rounded-lg mt-4 max-w-2xl mx-auto">
+                                        <span className="text-xs font-bold text-blue-600 whitespace-nowrap">预览播放器:</span>
+                                        <audio src={previewUrl} controls autoPlay className="h-8 flex-1" />
+                                        <button onClick={() => setPreviewUrl(null)} className="text-gray-400 hover:text-red-500"><X className="w-4 h-4"/></button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                        {activeTab === 'sort' && (
+                            <div className="space-y-6 animate-fade-in">
+                                <h2 className="text-2xl font-bold text-gray-800 border-b pb-2">播放序列排序</h2>
+                                <div className="flex gap-2 mb-4">
+                                    <button onClick={() => handleSort('asc')} className="px-4 py-2 bg-white border border-gray-200 rounded shadow-sm hover:bg-gray-50 text-sm font-medium text-gray-700 flex items-center gap-2">
+                                        <ArrowDown className="w-4 h-4"/> 正序 (A-Z)
+                                    </button>
+                                    <button onClick={() => handleSort('desc')} className="px-4 py-2 bg-white border border-gray-200 rounded shadow-sm hover:bg-gray-50 text-sm font-medium text-gray-700 flex items-center gap-2">
+                                        <ArrowUp className="w-4 h-4"/> 倒序 (Z-A)
+                                    </button>
+                                    <button onClick={() => handleSort('random')} className="px-4 py-2 bg-white border border-gray-200 rounded shadow-sm hover:bg-gray-50 text-sm font-medium text-gray-700 flex items-center gap-2">
+                                        <Activity className="w-4 h-4"/> 随机洗牌
+                                    </button>
+                                </div>
+                                <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                                    {playlist.length === 0 ? (
+                                        <div className="p-12 text-center text-gray-400 flex flex-col items-center gap-2">
+                                            <List className="w-8 h-8 opacity-20"/> 暂无文件
+                                        </div>
+                                    ) : (
+                                        <ul className="divide-y divide-gray-100 max-h-[600px] overflow-y-auto">
+                                            {playlist.map((item, index) => {
+                                                const file = files.find(f => f.id === item.fileId);
+                                                const isMissing = !file;
+                                                const hasInstruction = item.instruction && item.instruction.trim() !== '';
+                                                
+                                                return (
+                                                    <li key={item.uuid} draggable 
+                                                        onDragStart={() => (dragItem.current = index)}
+                                                        onDragEnter={() => (dragOverItem.current = index)}
+                                                        onDragEnd={handleDragSort} onDragOver={e => e.preventDefault()}
+                                                        className={`p-3 flex items-center gap-4 group transition-colors bg-white hover:bg-gray-50`}
+                                                    >
+                                                        <div className="cursor-move text-gray-400 hover:text-gray-600"><GripVertical className="w-5 h-5" /></div>
+                                                        
+                                                        {/* 左侧：序号与音频名称 */}
+                                                        <div className="flex-1 min-w-0 flex items-center gap-3 border-r pr-4">
+                                                            <span className={`font-mono text-sm font-bold w-8 text-center py-1 rounded ${hasInstruction ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                                                                {index + 1}
+                                                            </span>
+                                                            
+                                                            {item.stimuli ? (
+                                                                <div className="flex flex-col gap-1 overflow-hidden">
+                                                                    <div className="flex items-center gap-3 text-xs">
+                                                                        {item.stimuli.A && (
+                                                                            <span className={`px-2 py-0.5 rounded border ${files.find(f=>f.id===item.stimuli.A.fileId) ? 'bg-blue-50 border-blue-100 text-blue-700' : 'bg-red-50 border-red-100 text-red-600'}`}>
+                                                                                A: {item.stimuli.A.name}
+                                                                            </span>
+                                                                        )}
+                                                                        {item.stimuli.B && (
+                                                                            <span className={`px-2 py-0.5 rounded border ${files.find(f=>f.id===item.stimuli.B.fileId) ? 'bg-green-50 border-green-100 text-green-700' : 'bg-red-50 border-red-100 text-red-600'}`}>
+                                                                                B: {item.stimuli.B.name}
+                                                                            </span>
+                                                                        )}
+                                                                        {item.stimuli.X && (
+                                                                            <span className={`px-2 py-0.5 rounded border ${files.find(f=>f.id===item.stimuli.X.fileId) ? 'bg-purple-50 border-purple-100 text-purple-700' : 'bg-red-50 border-red-100 text-red-600'}`}>
+                                                                                X: {item.stimuli.X.name}
+                                                                            </span>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            ) : (
+                                                                <div className={`font-medium truncate ${!files.find(f => f.id === item.fileId) ? 'text-red-600 italic' : 'text-gray-700'}`}>
+                                                                    {!files.find(f => f.id === item.fileId) ? `[缺失] ${item.fileName || '未知文件'}` : item.fileName}
+                                                                </div>
+                                                            )}
+                                                        </div>
+
+                                                        {/* 右侧：展示语编辑 */}
+                                                        <div className="flex-[1.5] flex items-center gap-3 pl-4">
+                                                            <div className="flex-1 relative">
+                                                                <input 
+                                                                    type="text" 
+                                                                    value={item.instruction || ''} 
+                                                                    placeholder={config.showInterTrialText ? `(使用默认: ${config.interTrialText.slice(0,10)}...)` : "无展示语"}
+                                                                    onChange={(e) => {
+                                                                        const newVal = e.target.value;
+                                                                        setPlaylist(prev => prev.map((p, i) => i === index ? { ...p, instruction: newVal } : p));
+                                                                    }}
+                                                                    className={`w-full text-sm border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none bg-transparent py-1 transition-all ${hasInstruction ? 'text-gray-800 font-medium' : 'text-gray-400 italic'}`}
+                                                                />
+                                                                {!hasInstruction && config.showInterTrialText && <span className="absolute right-0 top-1/2 -translate-y-1/2 text-[10px] text-blue-400 bg-blue-50 px-1 rounded pointer-events-none">默认开启</span>}
+                                                            </div>
+                                                            <span className={`text-xs px-2 py-1 rounded font-medium ${hasInstruction ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'}`}>
+                                                                {item.type}
+                                                            </span>
+                                                        </div>
+                                                    </li>
+                                                );
+                                            })}
+                                        </ul>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                        {activeTab === 'config' && (
+                            <div className="space-y-6 animate-fade-in">
+                                <h2 className="text-2xl font-bold text-gray-800 border-b pb-2">实验参数配置</h2>
+                                <div className="grid grid-cols-1 gap-6 max-w-3xl">
+                                    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                                        <h3 className="font-semibold mb-4 text-gray-800 flex items-center gap-2">基础显示</h3>
+                                        <div className="space-y-4">
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-1">实验标题</label>
+                                                <input type="text" value={config.title} onChange={e => setConfig({...config, title: e.target.value})} className="w-full rounded-md border-gray-300 shadow-sm border p-2" />
+                                            </div>
+                                            <div>
+                                                <div className="flex justify-between items-center mb-1">
+                                                    <label className="block text-sm font-medium text-gray-700">指导语</label>
+                                                    <label className="flex items-center gap-1 cursor-pointer"><input type="checkbox" checked={config.introLargeText} onChange={e => setConfig({...config, introLargeText: e.target.checked})} className="rounded text-blue-600"/> <span className="text-xs text-gray-600">使用大字</span></label>
+                                                </div>
+                                                <textarea rows={4} value={config.introText} onChange={e => setConfig({...config, introText: e.target.value})} className="w-full rounded-md border-gray-300 shadow-sm border p-2" />
+                                                <p className="text-xs text-gray-400 mt-1">支持HTML标签，如 &lt;br&gt; 换行，&lt;b&gt;加粗&lt;/b&gt;</p>
+                                            </div>
+                                            <div className="border-t pt-4">
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <label className="block text-sm font-medium text-gray-700">试次间展示语</label>
+                                                    <div className="flex gap-4">
+                                                        <label className="flex items-center gap-1 cursor-pointer"><input type="checkbox" checked={config.showInterTrialText} onChange={e => setConfig({...config, showInterTrialText: e.target.checked})} className="rounded text-blue-600"/> <span className="text-xs text-gray-600">启用展示</span></label>
+                                                        <label className="flex items-center gap-1 cursor-pointer"><input type="checkbox" checked={config.largeText} onChange={e => setConfig({...config, largeText: e.target.checked})} className="rounded text-blue-600"/> <span className="text-xs text-gray-600">使用大字</span></label>
+                                                    </div>
+                                                </div>
+                                                <textarea rows={2} value={config.interTrialText} onChange={e => setConfig({...config, interTrialText: e.target.value})} className="w-full rounded-md border-gray-300 shadow-sm border p-2" placeholder="默认为全局展示语，可被xlsx导入覆盖" />
+                                                <p className="text-xs text-gray-400 mt-1">支持HTML标签，如 &lt;br&gt; 换行，&lt;b&gt;加粗&lt;/b&gt;</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                                        <h3 className="font-semibold mb-4 text-gray-800 flex items-center gap-2">播放控制</h3>
+                                        <div className="space-y-4">
+                                            <div className="flex flex-col gap-3">
+                                                <label className="block text-sm font-medium text-gray-700">试次切换模式</label>
+                                                <div className="flex gap-6">
+                                                    <label className="flex items-center gap-2 cursor-pointer">
+                                                        <input type="radio" name="advanceMode" value="auto" checked={config.advanceMode === 'auto'} onChange={e => setConfig({...config, advanceMode: 'auto'})} className="text-blue-600" />
+                                                        <span className="text-sm text-gray-700">自动进入下一题</span>
+                                                    </label>
+                                                    <label className="flex items-center gap-2 cursor-pointer">
+                                                        <input type="radio" name="advanceMode" value="manual" checked={config.advanceMode === 'manual'} onChange={e => setConfig({...config, advanceMode: 'manual'})} className="text-blue-600" />
+                                                        <span className="text-sm text-gray-700">按任意键进入下一题</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-wrap gap-6 border-t pt-4">
+                                                <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked={config.autoPlay} onChange={e => setConfig({...config, autoPlay: e.target.checked})} className="w-4 h-4 text-blue-600 rounded" /><span className="text-sm text-gray-700">自动播放</span></label>
+                                                <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked={config.useBeep} onChange={e => setConfig({...config, useBeep: e.target.checked})} className="w-4 h-4 text-blue-600 rounded" /><span className="text-sm text-gray-700">提示音</span></label>
+                                                <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked={config.showFilename} onChange={e => setConfig({...config, showFilename: e.target.checked})} className="w-4 h-4 text-blue-600 rounded" /><span className="text-sm text-gray-700">显示文件名</span></label>
+                                            </div>
+                                            <div className="border-t pt-4">
+                                                <label className="block text-sm font-medium text-gray-700 mb-1">试次间隔 (ms)</label>
+                                                <input type="number" value={config.interTrialInterval} onChange={e => setConfig({...config, interTrialInterval: parseInt(e.target.value) || 0})} className="w-32 rounded-md border-gray-300 shadow-sm border p-2" />
+                                                <p className="text-xs text-gray-400 mt-1">如果是自动切换，此为停留时间；如果是手动切换，此为最小等待时间</p>
+                                            </div>
+                                            <div className="border-t pt-4">
+                                                <label className="block text-sm font-medium text-gray-700 mb-1">刺激间间隔 (ISI) (ms)</label>
+                                                <input type="number" value={config.isi} onChange={e => setConfig({...config, isi: parseInt(e.target.value) || 0})} className="w-32 rounded-md border-gray-300 shadow-sm border p-2" />
+                                                <p className="text-xs text-gray-400 mt-1">AX/ABX/AXB 范式中，各刺激之间的静默时间 (默认 500ms)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                                        <h3 className="font-semibold mb-4 text-gray-800 flex items-center gap-2">按键设置</h3>
+                                        <div className="space-y-3">
+                                            {config.validKeys.map((k, idx) => (
+                                                <div key={idx} className="grid grid-cols-12 gap-2 items-center">
+                                                    <div className="col-span-2"><input type="text" maxLength={1} value={k.key} onChange={e => {const n=[...config.validKeys];n[idx].key=e.target.value.toLowerCase();setConfig({...config,validKeys:n})}} className="w-full text-center border-gray-300 border p-2 rounded font-mono uppercase" placeholder="键" /></div>
+                                                    <div className="col-span-8"><input type="text" value={k.label} onChange={e => {const n=[...config.validKeys];n[idx].label=e.target.value;setConfig({...config,validKeys:n})}} className="w-full border-gray-300 border p-2 rounded" placeholder="说明" /></div>
+                                                    <div className="col-span-2 flex justify-center"><button onClick={() => setConfig({...config,validKeys:config.validKeys.filter((_,i)=>i!==idx)})} className="text-gray-400 hover:text-red-500 p-1"><Trash2 className="w-4 h-4"/></button></div>
+                                                </div>
+                                            ))}
+                                            <button onClick={() => setConfig({...config, validKeys: [...config.validKeys, {key: '', label: ''}]})} className="flex items-center gap-1 text-sm text-blue-600 font-medium mt-2 hover:bg-blue-50 px-3 py-1 rounded w-fit transition"><Plus className="w-4 h-4"/> 添加新按键</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {activeTab === 'quest' && (
+                            <div className="space-y-6 animate-fade-in">
+                                <h2 className="text-2xl font-bold text-gray-800 border-b pb-2">问卷设置</h2>
+                                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 max-w-3xl">
+                                    <ul className="space-y-4">
+                                        {questionnaire.map((q, idx) => (
+                                            <li key={q.id} className="border border-gray-200 p-4 rounded-lg relative bg-gray-50 hover:shadow-sm transition-shadow">
+                                                <div className="absolute right-2 top-2">
+                                                    {questionnaire.length > 1 && <button onClick={() => setQuestionnaire(questionnaire.filter((_, i) => i !== idx))} className="text-gray-400 hover:text-red-500 p-1"><X className="w-4 h-4" /></button>}
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-6">
+                                                    <div>
+                                                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 block">问题文本</label>
+                                                        <input type="text" value={q.label} onChange={e => {const n=[...questionnaire];n[idx].label=e.target.value;setQuestionnaire(n)}} className="w-full border-gray-300 border p-2 rounded" />
+                                                    </div>
+                                                    <div>
+                                                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 block">类型</label>
+                                                        <select value={q.type} onChange={e => {const n=[...questionnaire];n[idx].type=e.target.value;if(e.target.value==='text'){delete n[idx].options;delete n[idx].optionsText;}else if((e.target.value==='radio' || e.target.value==='checkbox')){if(!n[idx].options)n[idx].options=['A','B'];n[idx].optionsText=(n[idx].options||[]).join(',');}setQuestionnaire(n)}} className="w-full border-gray-300 border p-2 rounded bg-white">
+                                                            <option value="text">文本</option><option value="radio">单选</option><option value="checkbox">多选</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                {(q.type === 'radio' || q.type === 'checkbox') && (
+                                                    <div className="mt-4">
+                                                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 block">选项 (逗号分隔)</label>
+                                                        <input type="text" value={(q.optionsText ?? (q.options?.join(',') || ''))} onChange={e => {const n=[...questionnaire];n[idx].optionsText=e.target.value;setQuestionnaire(n)}} onBlur={e => {const n=[...questionnaire];n[idx].options=e.target.value.split(/[，,]+/).map(s=>s.trim()).filter(Boolean);n[idx].optionsText=n[idx].options.join(',');setQuestionnaire(n)}} className="w-full border-gray-300 border p-2 rounded" />
+                                                    </div>
+                                                )}
+                                                <div className="mt-3 flex items-center gap-2">
+                                                    <input type="checkbox" checked={q.required !== false} onChange={e => {const n=[...questionnaire];n[idx].required=e.target.checked;setQuestionnaire(n)}} className="rounded text-blue-600" />
+                                                    <label className="text-sm text-gray-600">必答</label>
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <button onClick={() => setQuestionnaire([...questionnaire, { id: `q${Date.now()}`, type: 'text', label: '新问题', required: true }])} className="mt-6 w-full border-2 border-dashed border-gray-300 p-3 text-gray-500 hover:border-blue-500 hover:text-blue-500 rounded-lg font-medium flex justify-center items-center gap-2 transition-all"><Plus className="w-5 h-5"/> 添加新问题</button>
+                                </div>
+                            </div>
+                        )}
+                        {activeTab === 'helper' && (
+                            <div className="space-y-6 animate-fade-in">
+                                <h2 className="text-2xl font-bold text-gray-800 border-b pb-2">资源助手</h2>
+                                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                                    <h3 className="font-semibold mb-4 text-gray-800 flex items-center gap-2">生成指导语文档</h3>
+                                    
+                                    <div className="mb-4">
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">路径前缀 (可选)</label>
+                                        <input type="text" value={csvPrefix} onChange={e => setCsvPrefix(e.target.value)} 
+                                               className="w-full border-gray-300 border p-2 rounded text-sm" 
+                                               placeholder="例如: D:\Experiments\Audio (用于生成的xlsx中拼接绝对路径)" />
+                                    </div>
+
+                                    <div 
+                                        className="flex flex-col items-center justify-center w-full h-48 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md hover:border-blue-400 hover:bg-blue-50"
+                                        onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); e.dataTransfer.dropEffect = 'copy'; }}
+                                        onDrop={handleHelperDrop}
+                                    >
+                                        <span className="flex items-center space-x-2 mb-6">
+                                            <Folder className="w-8 h-8 text-gray-400" />
+                                            <span className="font-medium text-lg text-gray-600">拖入文件夹 或 点击下方按钮</span>
+                                        </span>
+                                        <label className="cursor-pointer flex items-center gap-2 px-6 py-3 bg-white text-blue-700 rounded-lg hover:bg-blue-50 transition border border-blue-200 shadow-sm font-medium">
+                                            <Download className="w-4 h-4"/> 选择文件夹导出XLSX
+                                            <input type="file" multiple webkitdirectory="" directory="" onChange={handleResourceFolder} className="hidden" />
+                                        </label>
+                                        <p className="mt-4 text-xs text-gray-400">支持直接拖入文件夹</p>
+                                    </div>
+                                    <div className="mt-6 border-t pt-4">
+                                        <h3 className="font-semibold mb-4 text-gray-800 flex items-center gap-2">导入试次间指导语</h3>
+                                        <label className="cursor-pointer flex items-center gap-2 px-6 py-3 bg-white text-indigo-700 rounded-lg hover:bg-indigo-50 transition border border-indigo-200 shadow-sm font-medium">
+                                            <Upload className="w-4 h-4"/> 选择XLSX文件
+                                            <input type="file" accept=".xlsx" onChange={handlePlaylistXLSX} className="hidden" />
+                                        </label>
+                                        <p className="mt-2 text-xs text-gray-400">XLSX格式要求：第一列=文件路径，第二列=试次间指导语</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+
+
+
+            // === 主渲染入口 ===
+            if (phase === 'paradigm_selection') return renderParadigmSelection();
+            if (phase === 'design') return renderDesigner();
+            if (phase === 'participant_form') return (
+                <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans">
+                    <div className="bg-white max-w-lg w-full p-8 rounded-lg shadow-lg">
+                        <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">被试信息登记</h2>
+                        <form onSubmit={submitQuestionnaire} className="space-y-6">
+                            {questionnaire.map(q => (
+                                <div key={q.id}>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">{q.label} {q.required !== false && <span className="text-red-500">*</span>}</label>
+                                    {q.type === 'text' ? (
+                                        <input type="text" required={q.required !== false} value={participantData[q.id] || ''} onChange={e => setParticipantData({...participantData, [q.id]: e.target.value})} className="w-full border-gray-300 rounded-md shadow-sm border p-2" />
+                                    ) : q.type === 'radio' ? (
+                                        <div className="flex gap-4 mt-2">
+                                            {q.options?.map(opt => (
+                                                <label key={opt} className="flex items-center"><input type="radio" name={q.id} value={opt} required={q.required !== false} checked={participantData[q.id] === opt} onChange={e => setParticipantData({...participantData, [q.id]: e.target.value})} className="mr-2" />{opt}</label>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="flex gap-4 mt-2">
+                                            {q.options?.map(opt => (
+                                                <label key={opt} className="flex items-center"><input type="checkbox" name={`${q.id}_${opt}`} value={opt} checked={(Array.isArray(participantData[q.id]) ? participantData[q.id] : []).includes(opt)} onChange={e => {
+                                                    const prev = Array.isArray(participantData[q.id]) ? participantData[q.id] : [];
+                                                    const next = e.target.checked ? [...prev, opt] : prev.filter(x => x !== opt);
+                                                    setParticipantData({...participantData, [q.id]: next});
+                                                }} className="mr-2" />{opt}</label>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                            <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded font-medium hover:bg-blue-700">进入实验</button>
+                        </form>
+                    </div>
+                </div>
+            );
+            if (phase === 'instruction') return (
+                <div className="min-h-screen bg-white flex flex-col items-center justify-center p-12 font-sans cursor-pointer" onClick={() => { setPhase('experiment'); setIsPlaying(true); }}>
+                    <div className="max-w-2xl text-center space-y-8">
+                        <h1 className="text-4xl font-bold text-gray-900">{config.title}</h1>
+                        <div className={`text-gray-600 leading-relaxed whitespace-pre-wrap ${config.introLargeText ? 'text-4xl font-bold' : 'text-xl'}`} dangerouslySetInnerHTML={{__html: config.introText}}></div>
+                        <div className="pt-8 text-gray-400 animate-bounce">点击任意处开始实验</div>
+                    </div>
+                </div>
+            );
+            if (phase === 'experiment') {
+                return (
+                    <div className="h-screen bg-gray-50 font-sans select-none flex flex-col overflow-hidden">
+                        <div className="h-1 bg-gray-200 w-full flex-shrink-0"><div className="h-full bg-blue-500 transition-all duration-300" style={{ width: `${((currentTrialIndex) / playlist.length) * 100}%` }}></div></div>
+                        
+                        <div className="flex-1 relative">
+                             <button onClick={() => { if(confirm('确定要强制结束实验吗？')) finishExperiment(); }} 
+                                className="absolute top-4 right-4 z-50 px-3 py-1 bg-white/80 text-red-500 text-xs rounded border border-red-100 hover:bg-red-50 transition-colors">
+                                强制结束
+                            </button>
+
+                            <TrialRunner 
+                                onFinish={finishExperiment} 
+                                files={files}
+                                playlist={playlist}
+                                currentTrialIndex={currentTrialIndex}
+                                setCurrentTrialIndex={setCurrentTrialIndex}
+                                config={config}
+                                results={results}
+                                setResults={setResults}
+                            />
+                        </div>
+                    </div>
+                );
+            }
+            if (phase === 'finished') return (
+                <div className="h-screen flex flex-col items-center justify-center bg-green-50 space-y-6">
+                    <Check className="w-20 h-20 text-green-600" />
+                    <h1 className="text-3xl font-bold text-gray-800">实验结束</h1>
+                    <p className="text-gray-600">数据已自动下载。</p>
+                    <div className="flex gap-4 mt-8">
+                        <button onClick={saveProjectConfig} className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 shadow-md flex items-center gap-2">
+                            <Save className="w-4 h-4"/> 保存项目配置
+                        </button>
+                        <button onClick={() => setPhase('design')} className="px-6 py-2 border border-green-600 text-green-700 rounded hover:bg-green-100">
+                            返回设计器
+                        </button>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-2">注意：返回设计器将保留当前所有设置和资源。</p>
+                </div>
+            );
+            return null;
+        };
+
+        const container = document.getElementById('root');
+        const root = createRoot(container);
+        root.render(<App />);
+    </script>
+</body>
+</html>
