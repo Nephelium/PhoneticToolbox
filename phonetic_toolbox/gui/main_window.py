@@ -357,6 +357,7 @@ class MainWindow(QMainWindow):
                 data = json.loads(response.read().decode())
                 latest_version = data.get("tag_name", "未知")
                 release_url = data.get("html_url", "https://github.com/Nephelium/PhoneticToolbox/releases")
+                release_notes = data.get("body", "")
                 
                 # Update GUI safely
                 from PyQt6.QtCore import QMetaObject, Qt, Q_ARG
@@ -364,15 +365,16 @@ class MainWindow(QMainWindow):
                                          Qt.ConnectionType.QueuedConnection, 
                                          Q_ARG(str, current_version), 
                                          Q_ARG(str, latest_version), 
-                                         Q_ARG(str, release_url))
+                                         Q_ARG(str, release_url),
+                                         Q_ARG(str, release_notes))
         except Exception as e:
             from PyQt6.QtCore import QMetaObject, Qt, Q_ARG
             QMetaObject.invokeMethod(self, "_show_update_error", 
                                      Qt.ConnectionType.QueuedConnection, 
                                      Q_ARG(str, str(e)))
 
-    @QtCore.pyqtSlot(str, str, str)
-    def _show_update_result(self, current_version, latest_version, release_url):
+    @QtCore.pyqtSlot(str, str, str, str)
+    def _show_update_result(self, current_version, latest_version, release_url, release_notes):
         msg = getattr(self, "update_msg_box", QMessageBox(self))
         msg.setWindowTitle("检查更新")
         msg.setWindowIcon(self.windowIcon())
@@ -386,9 +388,11 @@ class MainWindow(QMainWindow):
             )
             msg.setStandardButtons(QMessageBox.StandardButton.Ok)
         elif relation == -1:
+            notes = self._summarize_release_notes(release_notes)
             msg.setText("版本结论：当前版本低于 GitHub 最新版本")
             msg.setInformativeText(
                 f"当前版本：{current_version}\nGitHub 最新：{latest_version}\n\n建议更新到最新版本。"
+                f"\n\n更新说明：\n{notes}"
             )
             msg.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
             msg.button(QMessageBox.StandardButton.Yes).setText("立即下载")
@@ -527,6 +531,18 @@ class MainWindow(QMainWindow):
         if current > latest:
             return 1
         return 0
+
+    def _summarize_release_notes(self, text):
+        if not text:
+            return "GitHub 未提供本次发布说明。"
+        normalized = text.replace("\r\n", "\n").strip()
+        normalized = re.sub(r"\n{3,}", "\n\n", normalized)
+        lines = normalized.split("\n")
+        if len(lines) > 18:
+            normalized = "\n".join(lines[:18]).rstrip() + "\n..."
+        if len(normalized) > 1600:
+            normalized = normalized[:1600].rstrip() + "..."
+        return normalized
 
     def _load_current_version(self):
         candidates = [
