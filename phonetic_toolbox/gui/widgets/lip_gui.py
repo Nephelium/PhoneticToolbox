@@ -1453,6 +1453,8 @@ class LipOffsetAdjustDialog(QDialog):
         root = QVBoxLayout(self)
         self.lbl_est = QLabel(f"估算 offset: {self._estimated_offset:+.3f} s（搜索范围 ±2.0 s）")
         root.addWidget(self.lbl_est)
+        self.lbl_limit = QLabel("提示：当前页面只显示前60秒的音频，用于唇形和音频信号的同步矫正。")
+        root.addWidget(self.lbl_limit)
 
         self.figure = Figure()
         self.canvas = Canvas(self.figure)

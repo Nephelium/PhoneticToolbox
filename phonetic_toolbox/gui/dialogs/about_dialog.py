@@ -74,10 +74,10 @@ class AboutDialog(QDialog):
 <body>
 <div>
     <p>
-      本项目脱胎于经典的 MATLAB 版 <b>VoiceSauce</b>。在深度整合两者的基础上，我们希望为语音学的日常研究打造一个既严谨高效又贴心易用的专属工具箱。
+      本项目的灵感来源于经典的 MATLAB 版 <b>VoiceSauce</b>。在深度整合两者的基础上，我们希望为语音学的日常研究打造一个既严谨高效又贴心易用的专属工具箱。
     </p>
     <p>
-      除了悉数保留原版的经典功能，工具箱还特别引入了 <span class="highlight">REAPER 基频检测算法</span>以及经过优化的 <span class="highlight">SHR 逻辑</span>。面对嘎裂等特殊发声类型时，它能更加敏锐地捕捉极低基频的细节，让声学分析的精度得到切实的提升。
+      除了悉数保留原版的经典功能，工具箱还特别引入了 <span class="highlight">REAPER 基频检测算法</span>以及经过优化的 <span class="highlight">SHR 逻辑</span>。面对嘎裂等特殊发声类型时，它能更加敏锐地捕捉极低基频的细节，让声学分析的精度得到切实的提升。另外，Jitter 与 Shimmer 参数的计算实现，参考了开源项目 <span class="highlight">Troparion</span> 以及论文  <span class="highlight">Bulbar ALS Detection Based on Analysis of Voice Perturbation and Vibrato</span> 的相关思路与定义。
     </p>
     <p>
       为了进一步解放研究者的精力，工具箱还拓展了多项实用的自动化处理模块，涵盖唇形提取、自动标注、EGG 信号分析、语音合成、变速变调、感知实验、语谱图转音频以及普通话转 IPA 等功能。希望这些丰富的拓展件，能陪伴大家顺利开展更加多元的学术探索。
@@ -96,6 +96,12 @@ class AboutDialog(QDialog):
     </div>
     <div class="info-row">
       <span class="label">个人主页</span> <a href="https://www.zhihu.com/people/jingshaozi">https://www.zhihu.com/people/jingshaozi</a>
+    </div>
+    <div class="info-row">
+      <span class="label">参考仓库</span> <a href="https://github.com/Mak-Sim/Troparion/tree/master">https://github.com/Mak-Sim/Troparion/tree/master</a>
+    </div>
+    <div class="info-row">
+      <span class="label">参考论文</span> Bulbar ALS Detection Based on Analysis of Voice Perturbation and Vibrato
     </div>
   </div>
 </body>
