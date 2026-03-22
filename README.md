@@ -46,18 +46,33 @@ flowchart LR
     E --> F
 ```
 
-## 界面截图占位
+## 界面截图
 
 - 主页  
-  ![主页截图占位](docs/images/main_window.png)
-- 参数估计  
-  ![参数估计截图占位](docs/images/parameter_estimation.png)
-- EGG 分析  
-  ![EGG截图占位](docs/images/egg_widget.png)
-- 语音合成实验室  
-  ![语音合成截图占位](docs/images/speech_synthesis.png)
+![alt text](images/7375639c4af361c4598bd91b23bf6598.png)
 - 唇形提取  
-  ![唇形截图占位](docs/images/lip_gui.png)
+![alt text](images/004a9f663096067c026ba29703ab8aea.png)
+- 参数估计  
+![alt text](images/7f05cf41e8209cf460601ff40100a446.png)
+- 参数显示
+![alt text](images/f355b394553c27e1bf659bdd9b662ae2.png)
+- EGG 分析  
+![alt text](images/b82fb918b156b1603743edb2c4eb45c4.png)
+- 语音合成
+![alt text](images/20b4775c4d7303b6ba954fd91251804f.png)
+- 变速变调
+![alt text](images/8446c532f821b2ce08349318f37c9c7c.png)
+- 感知实验
+![alt text](images/649585f38dd2f0abc71ec5be8d5ee752.png)
+- MFA自动标注
+![alt text](images/ded69057b08847b72ff7c43aec156980.png)
+- 语谱图转音频
+![alt text](images/00d329ea310876c54402f6d638cd6b7b.png)
+- 普通话转IPA
+![alt text](images/67ea524fc70f2388a981774e6e6a5ac8.png)
+- LPC谱图
+![alt text](images/475f58e6eda39c1cca61483add832277.png)
+
 
 ## 架构设计
 
