@@ -13,7 +13,7 @@ PhoneticToolbox v2 是一个面向语音学研究、教学与实验流程的一�
 [![打开使用说明书](https://img.shields.io/badge/%E7%82%B9%E5%87%BB%E6%89%93%E5%BC%80-%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E%E4%B9%A6-ff4d4f?style=for-the-badge&logo=readthedocs&logoColor=white)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Nephelium/PhoneticToolbox/main/Phonetic_Export/index.html)
 
 > 不知道从哪里开始？直接点上面的红色按钮。  
-> 包含安装、各模块操作步骤、常见问题与示例流程。
+> 包含各模块操作步骤、常见问题与示例流程。
 
 ## 功能概览
 

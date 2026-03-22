@@ -198,8 +198,21 @@ class Spec2WavWidget(QWidget):
 
     def set_theme(self, is_dark: bool):
         self.is_dark = is_dark
-        # The global stylesheet handles most things, but we might want to adjust specific colors if needed
-        pass
+        if self.is_dark:
+            panel_bg = "#000000"
+            panel_fg = "#ffffff"
+            border = "#666666"
+        else:
+            panel_bg = "#ffffff"
+            panel_fg = "#111111"
+            border = "#bfbfbf"
+        panel_style = (
+            f"border: 1px solid {border}; "
+            f"background-color: {panel_bg}; "
+            f"color: {panel_fg};"
+        )
+        self.left_label.setStyleSheet(panel_style)
+        self.right_label.setStyleSheet(panel_style)
 
     def start_selection(self):
         # Minimize/Hide main window

@@ -88,7 +88,7 @@ PARAMETER_MAPPING = {
     "H2KH5Kc_rF0": "2K*-5K* (rF0)",
     "CPP_pF0": "CPP (pF0)",
     "CPP_rF0": "CPP (rF0)",
-    "Energy": "Energy",
+    "Intensity": "Intensity",
     "HNR05_pF0": "HNR05 (pF0)",
     "HNR15_pF0": "HNR15 (pF0)",
     "HNR25_pF0": "HNR25 (pF0)",
@@ -644,11 +644,16 @@ class AcousticAnalysisService:
                 if np.issubdtype(v.dtype, np.number):
                      result.parameters[k] = smooth_arr(v)
 
-            # Smooth lip data
-            if result.lip_data:
-                for k, v in result.lip_data.items():
-                    if isinstance(v, np.ndarray) and np.issubdtype(v.dtype, np.number):
-                        result.lip_data[k] = smooth_arr(v)
+        # --- 10. Lip Smoothing (Optional, separate) ---
+        if config.lip_smooth_win_size > 1 and result.lip_data:
+            lip_win = config.lip_smooth_win_size
+            def smooth_lip(arr):
+                if arr is None or len(arr) == 0:
+                    return arr
+                return pd.Series(arr).rolling(window=lip_win, center=True, min_periods=1).mean().values
+            for k, v in result.lip_data.items():
+                if isinstance(v, np.ndarray) and np.issubdtype(v.dtype, np.number):
+                    result.lip_data[k] = smooth_lip(v)
         
         return self._apply_selected_parameters(result, config.selected_parameter_keys)
 
@@ -656,6 +661,8 @@ class AcousticAnalysisService:
         if not selected_keys:
             return result
         selected = set(selected_keys)
+        if "Energy" in selected and "Intensity" not in selected:
+            selected.add("Intensity")
         for key, attr in CORE_RESULT_FIELD_MAP.items():
             if key not in selected and hasattr(result, attr):
                 setattr(result, attr, None)

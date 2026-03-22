@@ -28,6 +28,7 @@ def read_lip_data(pkl_path: str, target_times: np.ndarray, smooth_win: int = 0) 
 
     metadata = data.get('metadata') if isinstance(data.get('metadata'), dict) else {}
     manual_offset = float(metadata.get('lip_manual_offset', 0.0) or 0.0)
+    alignment_mode = str(metadata.get('time_alignment_mode', '') or '')
 
     # Attempt to load corresponding timestamps file for alignment
     p = Path(pkl_path)
@@ -77,7 +78,7 @@ def read_lip_data(pkl_path: str, target_times: np.ndarray, smooth_win: int = 0) 
         return {}
 
     first_time = float(src_times[0])
-    if abs(first_time) > 1e-9:
+    if alignment_mode != "anchored_audio_start" and abs(first_time) > 1e-9:
         src_times = src_times - first_time
         print(f"Shifted lip data times by {first_time:.4f}s to force t=0 alignment")
     if abs(manual_offset) > 1e-9:

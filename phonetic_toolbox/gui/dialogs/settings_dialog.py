@@ -37,6 +37,9 @@ class SettingsDialog(QtWidgets.QDialog):
         
         self.spin_smooth_win = QtWidgets.QSpinBox()
         self.spin_smooth_win.setRange(1, 100)
+
+        self.spin_lip_smooth_win = QtWidgets.QSpinBox()
+        self.spin_lip_smooth_win.setRange(0, 100)
         
         self.chk_only_voiced = QtWidgets.QCheckBox("仅保留浊音 (ZCR判定)")
         
@@ -55,6 +58,7 @@ class SettingsDialog(QtWidgets.QDialog):
         form_general.addRow("帧移 (毫秒):", self.spin_frameshift)
         form_general.addRow("窗宽 (毫秒):", self.spin_windowsize)
         form_general.addRow("平滑点数:", self.spin_smooth_win)
+        form_general.addRow("唇形平滑点数:", self.spin_lip_smooth_win)
         form_general.addRow("输出过滤:", self.chk_only_voiced)
         form_general.addRow("谐波估计周期数:", self.spin_n_periods)
         form_general.addRow("共振峰数量:", self.spin_num_formants)
@@ -115,6 +119,7 @@ class SettingsDialog(QtWidgets.QDialog):
         self.spin_windowsize.setValue(int(cfg_obj.windowsize_ms))
         
         self.spin_smooth_win.setValue(cfg_obj.smooth_win_size)
+        self.spin_lip_smooth_win.setValue(cfg_obj.lip_smooth_win_size)
         self.chk_only_voiced.setChecked(cfg_obj.only_voiced)
         self.spin_n_periods.setValue(cfg_obj.n_periods)
         
@@ -133,6 +138,7 @@ class SettingsDialog(QtWidgets.QDialog):
         self.settings.set("frameshift_ms", self.spin_frameshift.value())
         self.settings.set("windowsize_ms", self.spin_windowsize.value())
         self.settings.set("smooth_win_size", self.spin_smooth_win.value())
+        self.settings.set("lip_smooth_win_size", self.spin_lip_smooth_win.value())
         self.settings.set("only_voiced", self.chk_only_voiced.isChecked())
         self.settings.set("n_periods", self.spin_n_periods.value())
         

@@ -54,6 +54,151 @@ def resolve_ffmpeg_executable() -> str | None:
         return external
     return None
 
+def resolve_ffprobe_executable(ffmpeg_exe: str | None = None) -> str | None:
+    candidates: list[str] = []
+    if ffmpeg_exe:
+        ffmpeg_path = Path(ffmpeg_exe)
+        if ffmpeg_path.name.lower() == "ffmpeg.exe":
+            candidates.append(str(ffmpeg_path.with_name("ffprobe.exe")))
+        elif ffmpeg_path.name.lower() == "ffmpeg":
+            candidates.append(str(ffmpeg_path.with_name("ffprobe")))
+    external = shutil.which("ffprobe")
+    if external:
+        candidates.append(external)
+    for candidate in candidates:
+        p = Path(candidate)
+        if p.exists():
+            return str(p)
+    return None
+
+def _probe_stream_start_offset_seconds(video_path: str, ffprobe: str) -> float:
+    cmd = [
+        ffprobe,
+        "-v",
+        "error",
+        "-select_streams",
+        "a:0",
+        "-show_entries",
+        "stream=start_time",
+        "-of",
+        "default=noprint_wrappers=1:nokey=1",
+        video_path,
+    ]
+    try:
+        out = subprocess.run(cmd, capture_output=True, text=True, check=False)
+    except Exception:
+        return 0.0
+    if out.returncode != 0:
+        return 0.0
+    text = (out.stdout or "").strip().splitlines()
+    if not text:
+        return 0.0
+    try:
+        val = float(text[0].strip())
+    except Exception:
+        return 0.0
+    if not np.isfinite(val) or val <= 0:
+        return 0.0
+    return float(val)
+
+def _probe_first_audio_packet_pts_seconds(video_path: str, ffprobe: str) -> float:
+    cmd = [
+        ffprobe,
+        "-v",
+        "error",
+        "-select_streams",
+        "a:0",
+        "-show_packets",
+        "-show_entries",
+        "packet=pts_time,best_effort_timestamp_time,dts_time",
+        "-of",
+        "default=noprint_wrappers=1:nokey=1",
+        "-read_intervals",
+        "%+#1",
+        video_path,
+    ]
+    try:
+        out = subprocess.run(cmd, capture_output=True, text=True, check=False)
+    except Exception:
+        return 0.0
+    if out.returncode != 0:
+        return 0.0
+    vals: list[float] = []
+    for line in (out.stdout or "").splitlines():
+        s = line.strip()
+        if not s:
+            continue
+        try:
+            v = float(s)
+            if np.isfinite(v):
+                vals.append(v)
+        except Exception:
+            continue
+    if not vals:
+        return 0.0
+    v = min(vals)
+    if v <= 0:
+        return 0.0
+    return float(v)
+
+def probe_audio_stream_start_offset(video_path: str, ffmpeg_exe: str | None) -> float:
+    ffprobe = resolve_ffprobe_executable(ffmpeg_exe)
+    if not ffprobe:
+        return 0.0
+    stream_offset = _probe_stream_start_offset_seconds(video_path, ffprobe)
+    packet_offset = _probe_first_audio_packet_pts_seconds(video_path, ffprobe)
+    return float(max(stream_offset, packet_offset))
+
+def estimate_lip_audio_offset_seconds(
+    audio_samples: np.ndarray,
+    sample_rate: int,
+    lip_times: np.ndarray,
+    lip_open: np.ndarray,
+    search_seconds: float = 2.0,
+) -> float:
+    if audio_samples.size < 8 or lip_times.size < 8 or lip_open.size < 8 or sample_rate <= 0:
+        return 0.0
+    audio = np.abs(audio_samples.astype(np.float64))
+    win = max(1, int(round(0.01 * sample_rate)))
+    env = np.convolve(audio, np.ones(win, dtype=np.float64) / float(win), mode="same")
+    audio_t = np.arange(len(env), dtype=np.float64) / float(sample_rate)
+
+    lip_t = np.array(lip_times, dtype=np.float64)
+    lip_y = np.array(lip_open, dtype=np.float64)
+    n = min(lip_t.size, lip_y.size)
+    lip_t = lip_t[:n]
+    lip_y = lip_y[:n]
+    if n < 8:
+        return 0.0
+
+    t0 = max(float(audio_t[0]), float(lip_t[0]) - search_seconds)
+    t1 = min(float(audio_t[-1]), float(lip_t[-1]) + search_seconds)
+    if t1 - t0 <= 1.0:
+        return 0.0
+    grid_fs = 200.0
+    grid = np.arange(t0, t1, 1.0 / grid_fs, dtype=np.float64)
+    if grid.size < 100:
+        return 0.0
+
+    audio_grid = np.interp(grid, audio_t, env)
+    audio_grid = (audio_grid - np.mean(audio_grid)) / (np.std(audio_grid) + 1e-12)
+
+    best_offset = 0.0
+    best_score = -1e12
+    for off in np.arange(-search_seconds, search_seconds + 0.0001, 0.005):
+        shifted = np.interp(grid, lip_t + off, lip_y, left=np.nan, right=np.nan)
+        valid = np.isfinite(shifted)
+        if np.count_nonzero(valid) < 100:
+            continue
+        lv = shifted[valid]
+        lv = (lv - np.mean(lv)) / (np.std(lv) + 1e-12)
+        av = audio_grid[valid]
+        score = float(np.mean(av * lv))
+        if score > best_score:
+            best_score = score
+            best_offset = float(off)
+    return best_offset
+
 class LipGUI(QWidget):
     def __init__(self):
         super().__init__()
@@ -67,6 +212,8 @@ class LipGUI(QWidget):
         self._recording_start_ts: float | None = None
         self._recording_start_epoch: float | None = None
         self._audio_stream: sd.InputStream | None = None
+        self._live_audio_stream: sd.InputStream | None = None
+        self._live_audio_stream_active = False
         self._video_capture: cv2.VideoCapture | None = None
         self._face_mesh = None
         self._mesh_connections: tuple[tuple[int, int], ...] = ()
@@ -80,7 +227,17 @@ class LipGUI(QWidget):
         self._audio_chunk_times: list[float] = []
         self._audio_chunk_times_abs: list[float] = []
         self._audio_first_chunk_epoch: float | None = None
+        self._audio_adc_to_wall_offset: float | None = None
         self._lip_first_frame_epoch: float | None = None
+        self.is_raw_recording = False
+        self._raw_video_writer: cv2.VideoWriter | None = None
+        self._raw_audio_stream: sd.InputStream | None = None
+        self._raw_audio_chunks: list[np.ndarray] = []
+        self._raw_recording_session_dir: Path | None = None
+        self._raw_recording_video_temp_path: Path | None = None
+        self._raw_recording_audio_path: Path | None = None
+        self._raw_recording_output_path: Path | None = None
+        self._raw_recording_sample_rate: int = 44100
         self._metrics: dict[str, list[float]] = {
             "area": [],
             "face_width": [],
@@ -116,17 +273,23 @@ class LipGUI(QWidget):
         self.path_edit = QLineEdit(self.save_directory)
         self.path_edit.setReadOnly(True)
 
-        self.start_btn = QPushButton("开始录制")
+        self.start_btn = QPushButton("实时参数计算")
         self.start_btn.clicked.connect(self.start_recording)
-        self.stop_btn = QPushButton("停止录制")
+        self.stop_btn = QPushButton("停止计算并保存")
         self.stop_btn.clicked.connect(self.stop_recording)
         self.stop_btn.setEnabled(False)
+        self.raw_start_btn = QPushButton("开始视频录制")
+        self.raw_start_btn.clicked.connect(self.start_raw_recording)
+        self.raw_stop_btn = QPushButton("停止录制并保存")
+        self.raw_stop_btn.clicked.connect(self.stop_raw_recording)
+        self.raw_stop_btn.setEnabled(False)
         self.upload_video_btn = QPushButton("上传视频并识别")
         self.upload_video_btn.clicked.connect(self.upload_video)
         self.replay_btn = QPushButton("唇形动画回放")
         self.replay_btn.clicked.connect(self._open_animation_player)
         self.help_btn = QPushButton("帮助")
         self.help_btn.clicked.connect(self._open_help)
+        self.help_btn.setStyleSheet("background-color: #28a745; color: white; font-weight: bold;")
 
         self.status_label = QLabel("就绪")
         self.fps_label = QLabel("FPS: --")
@@ -140,12 +303,17 @@ class LipGUI(QWidget):
         row1 = QHBoxLayout()
         row1.addWidget(self.start_btn)
         row1.addWidget(self.stop_btn)
+        row1.addWidget(self.raw_start_btn)
+        row1.addWidget(self.raw_stop_btn)
         row1.addWidget(self.upload_video_btn)
         row1.addWidget(self.replay_btn)
         row1.addWidget(self.help_btn)
-        row1.addWidget(self.status_label, 1)
-        row1.addWidget(self.fps_label)
         control_grid.addLayout(row1, 1, 0)
+
+        row2 = QHBoxLayout()
+        row2.addWidget(self.status_label, 1)
+        row2.addWidget(self.fps_label)
+        control_grid.addLayout(row2, 2, 0)
 
         root.addLayout(control_grid)
 
@@ -157,6 +325,7 @@ class LipGUI(QWidget):
 
     def _setup_video_pipeline(self) -> None:
         self._video_capture = cv2.VideoCapture(0)
+        self._setup_live_audio_stream()
         try:
             import mediapipe as mp
 
@@ -179,6 +348,64 @@ class LipGUI(QWidget):
         self._video_timer.setInterval(30)
         self._video_timer.timeout.connect(self._on_video_tick)
         self._video_timer.start()
+
+    def _setup_live_audio_stream(self) -> None:
+        if self._live_audio_stream is not None:
+            return
+
+        def _live_audio_callback(indata, _frames, time_info, _status):
+            if not self.is_recording:
+                return
+            with self._state_lock:
+                start_ts = self._recording_start_ts
+                start_epoch = self._recording_start_epoch
+            if start_ts is None:
+                return
+            chunk_wall_now = time.time()
+            adc_time = None
+            if hasattr(time_info, "inputBufferAdcTime"):
+                try:
+                    adc_time = float(getattr(time_info, "inputBufferAdcTime"))
+                except Exception:
+                    adc_time = None
+            elif isinstance(time_info, dict):
+                try:
+                    adc_time = float(time_info.get("inputBufferAdcTime"))
+                except Exception:
+                    adc_time = None
+
+            if adc_time is not None and np.isfinite(adc_time):
+                if self._audio_adc_to_wall_offset is None:
+                    self._audio_adc_to_wall_offset = chunk_wall_now - adc_time
+                chunk_abs = self._audio_adc_to_wall_offset + adc_time
+            else:
+                chunk_abs = chunk_wall_now
+
+            self._audio_chunks.append(indata.copy())
+            if start_epoch is not None:
+                self._audio_chunk_times.append(chunk_abs - start_epoch)
+            else:
+                self._audio_chunk_times.append(time.perf_counter() - start_ts)
+            self._audio_chunk_times_abs.append(chunk_abs)
+            if self._audio_first_chunk_epoch is None:
+                self._audio_first_chunk_epoch = chunk_abs
+            if start_epoch is None:
+                self._recording_start_epoch = chunk_abs
+
+        try:
+            stream = sd.InputStream(
+                samplerate=44100,
+                channels=1,
+                dtype="int16",
+                blocksize=1024,
+                callback=_live_audio_callback,
+            )
+            stream.start()
+            self._live_audio_stream = stream
+            self._live_audio_stream_active = True
+        except Exception:
+            self._live_audio_stream = None
+            self._live_audio_stream_active = False
 
     def set_theme(self, is_dark: bool) -> None:
         self.is_dark = is_dark
@@ -211,6 +438,7 @@ class LipGUI(QWidget):
         if not ok:
             self.status_label.setText("读取摄像头失败")
             return
+        raw_frame = frame.copy()
 
         h, w, _ = frame.shape
         full_landmarks: np.ndarray | None = None
@@ -265,6 +493,9 @@ class LipGUI(QWidget):
             metrics=metrics_frame,
             relative_time=(now - start_ts) if start_ts is not None else None,
         )
+
+        if self.is_raw_recording and self._raw_video_writer is not None:
+            self._raw_video_writer.write(raw_frame)
 
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         qimg = QImage(
@@ -387,6 +618,9 @@ class LipGUI(QWidget):
             if self.is_recording:
                 QMessageBox.warning(self, "上传视频", "录制进行中，请先停止录制。")
                 return
+        live_timer_was_active = self._video_timer.isActive()
+        if live_timer_was_active:
+            self._video_timer.stop()
         video_path, _ = QFileDialog.getOpenFileName(
             self,
             "选择视频文件",
@@ -394,11 +628,16 @@ class LipGUI(QWidget):
             "Video Files (*.mp4 *.mov *.avi *.mkv *.wmv *.m4v)",
         )
         if not video_path:
+            if live_timer_was_active:
+                self._video_timer.start()
             return
         ffmpeg = resolve_ffmpeg_executable()
         if not ffmpeg:
             QMessageBox.warning(self, "上传视频", "未检测到 ffmpeg，无法保留视频音频。")
+            if live_timer_was_active:
+                self._video_timer.start()
             return
+        audio_stream_start_offset = probe_audio_stream_start_offset(video_path, ffmpeg)
 
         output_root = Path(self.save_directory)
         output_root.mkdir(parents=True, exist_ok=True)
@@ -429,12 +668,38 @@ class LipGUI(QWidget):
         if extract_result.returncode != 0:
             shutil.rmtree(session_dir, ignore_errors=True)
             QMessageBox.warning(self, "上传视频", f"提取音频失败：\n{extract_result.stderr[:400]}")
+            if live_timer_was_active:
+                self._video_timer.start()
             return
+
+        if audio_stream_start_offset > 1e-9:
+            try:
+                with wave.open(str(wav_path), "rb") as wav_in:
+                    channels = wav_in.getnchannels()
+                    sampwidth = wav_in.getsampwidth()
+                    sample_rate = wav_in.getframerate()
+                    raw = wav_in.readframes(wav_in.getnframes())
+                if channels == 1 and sampwidth == 2:
+                    audio_samples = np.frombuffer(raw, dtype=np.int16)
+                    silence_count = int(round(audio_stream_start_offset * sample_rate))
+                    if silence_count > 0:
+                        padded = np.concatenate(
+                            [np.zeros(silence_count, dtype=np.int16), audio_samples]
+                        )
+                        with wave.open(str(wav_path), "wb") as wav_out:
+                            wav_out.setnchannels(1)
+                            wav_out.setsampwidth(2)
+                            wav_out.setframerate(sample_rate)
+                            wav_out.writeframes(padded.tobytes())
+            except Exception:
+                pass
 
         cap = cv2.VideoCapture(video_path)
         if not cap.isOpened():
             shutil.rmtree(session_dir, ignore_errors=True)
             QMessageBox.warning(self, "上传视频", "无法读取视频文件。")
+            if live_timer_was_active:
+                self._video_timer.start()
             return
 
         fps = cap.get(cv2.CAP_PROP_FPS)
@@ -471,9 +736,14 @@ class LipGUI(QWidget):
         frame_times: list[float] = []
         frame_times_abs: list[float] = []
         landmarks_full: list[np.ndarray] = []
-        start_epoch = time.time()
+        start_epoch = 0.0
         frame_index = 0
         canceled = False
+        last_valid_landmarks: np.ndarray | None = None
+        last_valid_metrics: dict[str, float] | None = None
+        detected_frame_count = 0
+        filled_frame_count = 0
+        nan_frame_count = 0
 
         try:
             while True:
@@ -502,15 +772,27 @@ class LipGUI(QWidget):
                             dtype=np.float32,
                         )
                         metrics_frame = lip_extract(full_landmarks)
+                        last_valid_landmarks = full_landmarks.astype(np.float32)
+                        last_valid_metrics = {k: float(metrics_frame[k]) for k in metrics}
+                        detected_frame_count += 1
 
                 if full_landmarks is None:
-                    landmarks_full.append(np.full((478, 2), np.nan, dtype=np.float32))
+                    if last_valid_landmarks is not None:
+                        landmarks_full.append(last_valid_landmarks.copy())
+                        filled_frame_count += 1
+                    else:
+                        landmarks_full.append(np.full((478, 2), np.nan, dtype=np.float32))
+                        nan_frame_count += 1
                 else:
                     landmarks_full.append(full_landmarks.astype(np.float32))
 
                 if metrics_frame is None:
-                    for key in metrics:
-                        metrics[key].append(float("nan"))
+                    if last_valid_metrics is not None:
+                        for key in metrics:
+                            metrics[key].append(last_valid_metrics[key])
+                    else:
+                        for key in metrics:
+                            metrics[key].append(float("nan"))
                 else:
                     for key in metrics:
                         metrics[key].append(float(metrics_frame[key]))
@@ -525,6 +807,8 @@ class LipGUI(QWidget):
         finally:
             cap.release()
             progress.close()
+            if live_timer_was_active:
+                self._video_timer.start()
 
         if canceled or frame_index == 0:
             shutil.rmtree(session_dir, ignore_errors=True)
@@ -534,11 +818,43 @@ class LipGUI(QWidget):
                 QMessageBox.warning(self, "上传视频", "视频中未读取到有效帧。")
             return
 
+        if np.isnan(np.array(metrics["open"], dtype=np.float64)).all():
+            shutil.rmtree(session_dir, ignore_errors=True)
+            QMessageBox.warning(self, "上传视频", "整段视频未检测到有效人脸，无法生成唇形参数。")
+            return
+
+        def _fill_leading_nans(values: list[float]) -> list[float]:
+            arr = np.array(values, dtype=np.float64)
+            valid = np.where(np.isfinite(arr))[0]
+            if valid.size == 0:
+                return values
+            first = int(valid[0])
+            if first > 0:
+                arr[:first] = arr[first]
+            return arr.tolist()
+
+        for key in metrics:
+            metrics[key] = _fill_leading_nans(metrics[key])
+
+        if landmarks_full:
+            first_valid_idx = None
+            for idx, lm in enumerate(landmarks_full):
+                if np.isfinite(lm).all():
+                    first_valid_idx = idx
+                    break
+            if first_valid_idx is not None and first_valid_idx > 0:
+                for idx in range(first_valid_idx):
+                    landmarks_full[idx] = landmarks_full[first_valid_idx].copy()
+
         sample_rate = 44100
         chunk_size = 1024
+        audio_samples_for_offset = np.array([], dtype=np.float64)
         with wave.open(str(wav_path), "rb") as wav_in:
             sample_rate = wav_in.getframerate()
             total_samples = wav_in.getnframes()
+            raw_audio_bytes = wav_in.readframes(total_samples)
+            if wav_in.getnchannels() == 1 and wav_in.getsampwidth() == 2 and total_samples > 0:
+                audio_samples_for_offset = np.frombuffer(raw_audio_bytes, dtype=np.int16).astype(np.float64) / 32768.0
         chunk_count = int(np.ceil(total_samples / chunk_size)) if total_samples > 0 else 0
         audio_frame_timestamps = [
             start_epoch + (chunk_idx * chunk_size / sample_rate)
@@ -552,6 +868,19 @@ class LipGUI(QWidget):
         }
         with open(session_dir / "audio_recording_timestamps.pkl", "wb") as handle:
             pickle.dump(timestamps_payload, handle)
+
+        auto_lip_offset = 0.0
+        try:
+            auto_lip_offset = estimate_lip_audio_offset_seconds(
+                audio_samples=audio_samples_for_offset,
+                sample_rate=sample_rate,
+                lip_times=np.array(frame_times, dtype=np.float64),
+                lip_open=np.array(metrics["open"], dtype=np.float64),
+                search_seconds=2.0,
+            )
+        except Exception:
+            auto_lip_offset = 0.0
+        auto_lip_offset = float(np.clip(auto_lip_offset, -2.0, 2.0))
 
         duration = frame_times[-1] if frame_times else None
         data_payload = {
@@ -577,18 +906,207 @@ class LipGUI(QWidget):
                 "recording_start_time": frame_times_abs[0] if frame_times_abs else None,
                 "lip_first_frame_time": frame_times_abs[0] if frame_times_abs else None,
                 "audio_first_frame_time": start_epoch,
-                "lip_manual_offset": 0.0,
+                "lip_manual_offset": auto_lip_offset,
                 "recording_duration": duration,
                 "fps": fps,
                 "source": "uploaded_video",
+                "video_time_base_mode": "frame_index_over_fps",
+                "audio_stream_start_offset": audio_stream_start_offset,
+                "auto_lip_offset_estimate": auto_lip_offset,
+                "time_alignment_mode": "anchored_audio_start",
+                "video_total_frames": frame_index,
+                "video_detected_frames": detected_frame_count,
+                "video_filled_frames": filled_frame_count,
+                "video_nan_frames": nan_frame_count,
                 "created_at": datetime.now().isoformat(),
             },
         }
         with open(session_dir / "audio_recording.pkl", "wb") as handle:
             pickle.dump(data_payload, handle)
 
-        self.status_label.setText(f"视频识别完成: {session_dir}")
-        QMessageBox.information(self, "上传视频", f"唇形与音频数据已保存到:\n{session_dir}")
+        valid_ratio = (detected_frame_count / frame_index * 100.0) if frame_index > 0 else 0.0
+        self.status_label.setText(
+            f"视频识别完成: 总帧{frame_index} 检测{detected_frame_count} 补全{filled_frame_count}"
+        )
+        QMessageBox.information(
+            self,
+            "上传视频",
+            (
+                f"唇形与音频数据已保存到:\n{session_dir}\n\n"
+                f"总帧数: {frame_index}\n"
+                f"检测成功帧: {detected_frame_count} ({valid_ratio:.1f}%)\n"
+                f"补全帧: {filled_frame_count}\n"
+                f"无可补全帧: {nan_frame_count}\n"
+                f"自动唇形offset: {auto_lip_offset:+.3f}s"
+            ),
+        )
+
+    def start_raw_recording(self) -> None:
+        if self.is_raw_recording:
+            return
+        if self._video_capture is None or not self._video_capture.isOpened():
+            QMessageBox.warning(self, "开始录制", "摄像头未就绪。")
+            return
+
+        output_root = Path(self.save_directory)
+        output_root.mkdir(parents=True, exist_ok=True)
+        session_name = f"raw_recording_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        session_dir = output_root / session_name
+        suffix = 1
+        while session_dir.exists():
+            session_dir = output_root / f"{session_name}_{suffix}"
+            suffix += 1
+        session_dir.mkdir(parents=True, exist_ok=True)
+
+        width = int(self._video_capture.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(self._video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        fps = float(self._video_capture.get(cv2.CAP_PROP_FPS))
+        if width <= 0:
+            width = 640
+        if height <= 0:
+            height = 480
+        if not np.isfinite(fps) or fps <= 0:
+            fps = 30.0
+
+        video_temp_path = session_dir / "raw_video_only.mp4"
+        writer = cv2.VideoWriter(
+            str(video_temp_path),
+            cv2.VideoWriter_fourcc(*"mp4v"),
+            fps,
+            (width, height),
+        )
+        if not writer.isOpened():
+            QMessageBox.warning(self, "开始录制", "视频写入器初始化失败。")
+            shutil.rmtree(session_dir, ignore_errors=True)
+            return
+
+        self._raw_audio_chunks = []
+        sample_rate = self._raw_recording_sample_rate
+
+        def _raw_audio_callback(indata, _frames, _time_info, _status):
+            if not self.is_raw_recording:
+                return
+            self._raw_audio_chunks.append(indata.copy())
+
+        if self._live_audio_stream is not None and self._live_audio_stream_active:
+            try:
+                self._live_audio_stream.stop()
+            except Exception:
+                pass
+            self._live_audio_stream_active = False
+
+        try:
+            audio_stream = sd.InputStream(
+                samplerate=sample_rate,
+                channels=1,
+                dtype="int16",
+                blocksize=1024,
+                callback=_raw_audio_callback,
+            )
+            audio_stream.start()
+        except Exception as exc:
+            writer.release()
+            shutil.rmtree(session_dir, ignore_errors=True)
+            QMessageBox.warning(self, "开始录制", f"音频流初始化失败:\n{exc}")
+            return
+
+        self.is_raw_recording = True
+        self._raw_video_writer = writer
+        self._raw_audio_stream = audio_stream
+        self._raw_recording_session_dir = session_dir
+        self._raw_recording_video_temp_path = video_temp_path
+        self._raw_recording_audio_path = session_dir / "raw_audio.wav"
+        self._raw_recording_output_path = session_dir / "raw_recording.mp4"
+        self.raw_start_btn.setEnabled(False)
+        self.raw_stop_btn.setEnabled(True)
+        self.status_label.setText("正在录制原始视频...")
+
+    def stop_raw_recording(self) -> None:
+        if not self.is_raw_recording:
+            return
+        self.is_raw_recording = False
+
+        if self._raw_audio_stream is not None:
+            try:
+                self._raw_audio_stream.stop()
+                self._raw_audio_stream.close()
+            finally:
+                self._raw_audio_stream = None
+
+        if self._raw_video_writer is not None:
+            self._raw_video_writer.release()
+            self._raw_video_writer = None
+
+        session_dir = self._raw_recording_session_dir
+        video_temp_path = self._raw_recording_video_temp_path
+        audio_path = self._raw_recording_audio_path
+        output_path = self._raw_recording_output_path
+        self.raw_start_btn.setEnabled(True)
+        self.raw_stop_btn.setEnabled(False)
+
+        if session_dir is None or video_temp_path is None or audio_path is None or output_path is None:
+            self.status_label.setText("录制结束")
+            return
+
+        audio_array = (
+            np.concatenate(self._raw_audio_chunks, axis=0).reshape(-1).astype(np.int16)
+            if self._raw_audio_chunks
+            else np.array([], dtype=np.int16)
+        )
+        with wave.open(str(audio_path), "wb") as wav_out:
+            wav_out.setnchannels(1)
+            wav_out.setsampwidth(2)
+            wav_out.setframerate(self._raw_recording_sample_rate)
+            wav_out.writeframes(audio_array.tobytes())
+
+        ffmpeg = resolve_ffmpeg_executable()
+        merged_ok = False
+        if ffmpeg and video_temp_path.exists() and audio_path.exists():
+            cmd = [
+                ffmpeg,
+                "-y",
+                "-i",
+                str(video_temp_path),
+                "-i",
+                str(audio_path),
+                "-c:v",
+                "copy",
+                "-c:a",
+                "aac",
+                "-b:a",
+                "128k",
+                "-shortest",
+                str(output_path),
+            ]
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            merged_ok = result.returncode == 0 and output_path.exists()
+
+        if merged_ok:
+            self.status_label.setText(f"录制完成: {output_path}")
+            QMessageBox.information(self, "停止录制", f"原始录制已保存:\n{output_path}")
+        else:
+            self.status_label.setText(f"录制完成(未封装): {session_dir}")
+            QMessageBox.warning(
+                self,
+                "停止录制",
+                (
+                    "已保存原始视频和音频，但未能合成 MP4。\n"
+                    f"目录: {session_dir}"
+                ),
+            )
+
+        self._raw_audio_chunks = []
+        self._raw_recording_session_dir = None
+        self._raw_recording_video_temp_path = None
+        self._raw_recording_audio_path = None
+        self._raw_recording_output_path = None
+
+        if self._live_audio_stream is not None and not self._live_audio_stream_active:
+            try:
+                self._live_audio_stream.start()
+                self._live_audio_stream_active = True
+            except Exception:
+                self._live_audio_stream_active = False
 
     @staticmethod
     def _load_recording_bundle(folder: Path) -> dict | None:
@@ -646,54 +1164,25 @@ class LipGUI(QWidget):
         self._audio_chunk_times.clear()
         self._audio_chunk_times_abs.clear()
         self._audio_first_chunk_epoch = None
+        self._audio_adc_to_wall_offset = None
         self._lip_first_frame_epoch = None
         for key in self._metrics:
             self._metrics[key].clear()
-
-        def _audio_callback(indata, _frames, _time_info, _status):
-            with self._state_lock:
-                recording = self.is_recording
-                start_ts = self._recording_start_ts
-                start_epoch = self._recording_start_epoch
-            if not recording or start_ts is None:
-                return
-            chunk_abs = time.time()
-            self._audio_chunks.append(indata.copy())
-            self._audio_chunk_times.append(time.perf_counter() - start_ts)
-            self._audio_chunk_times_abs.append(chunk_abs)
-            if self._audio_first_chunk_epoch is None:
-                self._audio_first_chunk_epoch = chunk_abs
-            if start_epoch is None:
-                self._recording_start_epoch = chunk_abs
-
-        self._audio_stream = sd.InputStream(
-            samplerate=44100,
-            channels=1,
-            dtype="int16",
-            blocksize=1024,
-            callback=_audio_callback,
-        )
-        self._audio_stream.start()
+        if self._live_audio_stream is None or not self._live_audio_stream_active:
+            self._setup_live_audio_stream()
 
         self.path_btn.setEnabled(False)
-        self.start_btn.setText("录制中…")
+        self.start_btn.setText("参数计算中…")
         self.start_btn.setStyleSheet("background-color: #d35454; color: white; font-weight: bold;")
         self.start_btn.setEnabled(False)
         self.stop_btn.setEnabled(True)
-        self.status_label.setText("录制中")
+        self.status_label.setText("实时计算中")
 
     def stop_recording(self) -> None:
         with self._state_lock:
             if not self.is_recording:
                 return
             self.is_recording = False
-
-        if self._audio_stream is not None:
-            try:
-                self._audio_stream.stop()
-                self._audio_stream.close()
-            finally:
-                self._audio_stream = None
 
         if self._audio_chunks:
             audio_array = np.concatenate(self._audio_chunks, axis=0).reshape(-1).astype(np.int16)
@@ -707,13 +1196,14 @@ class LipGUI(QWidget):
                 sample_rate=44100,
                 lip_times=np.array(self._frame_times, dtype=np.float64),
                 lip_metrics={k: np.array(v, dtype=np.float64) for k, v in self._metrics.items()},
+                is_dark=self.is_dark,
                 parent=self,
             )
             offset_dialog.setWindowIcon(self.windowIcon())
             result = offset_dialog.exec()
             if result == QDialog.DialogCode.Rejected:
                 self.path_btn.setEnabled(True)
-                self.start_btn.setText("开始录制")
+                self.start_btn.setText("实时参数计算")
                 self.start_btn.setStyleSheet("")
                 self.start_btn.setEnabled(True)
                 self.stop_btn.setEnabled(False)
@@ -727,7 +1217,7 @@ class LipGUI(QWidget):
         )
 
         self.path_btn.setEnabled(True)
-        self.start_btn.setText("开始录制")
+        self.start_btn.setText("实时参数计算")
         self.start_btn.setStyleSheet("")
         self.start_btn.setEnabled(True)
         self.stop_btn.setEnabled(False)
@@ -750,6 +1240,7 @@ class LipGUI(QWidget):
                 audio_array = np.array([], dtype=np.int16)
 
         sample_rate = 44100
+        chunk_size = 1024
         audio_start_epoch = self._recording_start_epoch
         if audio_start_epoch is None:
             audio_start_epoch = self._audio_first_chunk_epoch
@@ -766,52 +1257,69 @@ class LipGUI(QWidget):
         start_epoch = audio_start_epoch
         if self._audio_chunk_times_abs:
             audio_frame_timestamps = list(self._audio_chunk_times_abs)
+            start_epoch = audio_frame_timestamps[0]
         else:
             audio_frame_timestamps = [start_epoch + rel_t for rel_t in self._audio_chunk_times]
         timestamps_payload = {
             "start_time": start_epoch,
             "frame_timestamps": audio_frame_timestamps,
             "sample_rate": sample_rate,
-            "chunk_size": 1024,
+            "chunk_size": chunk_size,
         }
         timestamps_path = session_dir / "audio_recording_timestamps.pkl"
         with open(timestamps_path, "wb") as handle:
             pickle.dump(timestamps_payload, handle)
 
         if self._landmarks_full:
-            landmarks_data: list[np.ndarray] = [
-                frame_landmarks.copy() for frame_landmarks in self._landmarks_full
-            ]
+            landmarks_arr = np.stack(self._landmarks_full).astype(np.float32)
+            landmarks_arr = self._interpolate_short_landmark_gaps(landmarks_arr, max_gap=2)
+            landmarks_data: list[np.ndarray] = [frame_landmarks.copy() for frame_landmarks in landmarks_arr]
         else:
             landmarks_data = []
 
-        duration = self._frame_times[-1] if self._frame_times else None
+        metrics_local: dict[str, list[float]] = {}
+        for key in self._metrics:
+            vals = np.array(self._metrics[key], dtype=np.float64)
+            vals = self._interpolate_short_numeric_gaps(vals, max_gap=2)
+            metrics_local[key] = vals.tolist()
+
+        frame_times_abs = np.array(self._frame_times_abs, dtype=np.float64)
+        if frame_times_abs.size > 0:
+            frame_time_anchor = float(audio_start_epoch)
+            frame_times = (frame_times_abs - frame_time_anchor).astype(np.float64)
+            if frame_times.size > 0 and frame_times[0] < 0:
+                frame_times = frame_times - frame_times[0]
+        else:
+            frame_times = np.array(self._frame_times, dtype=np.float64)
+
+        duration = float(frame_times[-1]) if frame_times.size > 0 else None
         data_payload = {
-            "absolute_timestamps": list(self._frame_times_abs),
-            "relative_times": list(self._frame_times),
-            "area": list(self._metrics["area"]),
-            "face_width": list(self._metrics["face_width"]),
-            "face_height": list(self._metrics["face_height"]),
-            "height_px": list(self._metrics["height_px"]),
-            "outer_width_px": list(self._metrics["outer_width_px"]),
-            "inner_width_px": list(self._metrics["inner_width_px"]),
-            "total_width_px": list(self._metrics["total_width_px"]),
-            "open_px": list(self._metrics["open_px"]),
-            "length": list(self._metrics["length"]),
-            "height": list(self._metrics["height"]),
-            "outer_width": list(self._metrics["outer_width"]),
-            "inner_width": list(self._metrics["inner_width"]),
-            "total_width": list(self._metrics["total_width"]),
-            "open": list(self._metrics["open"]),
-            "circularity": list(self._metrics["circularity"]),
+            "absolute_timestamps": list(frame_times + float(audio_start_epoch)),
+            "relative_times": list(frame_times),
+            "area": metrics_local["area"],
+            "face_width": metrics_local["face_width"],
+            "face_height": metrics_local["face_height"],
+            "height_px": metrics_local["height_px"],
+            "outer_width_px": metrics_local["outer_width_px"],
+            "inner_width_px": metrics_local["inner_width_px"],
+            "total_width_px": metrics_local["total_width_px"],
+            "open_px": metrics_local["open_px"],
+            "length": metrics_local["length"],
+            "height": metrics_local["height"],
+            "outer_width": metrics_local["outer_width"],
+            "inner_width": metrics_local["inner_width"],
+            "total_width": metrics_local["total_width"],
+            "open": metrics_local["open"],
+            "circularity": metrics_local["circularity"],
             "landmarks": landmarks_data,
             "metadata": {
-                "recording_start_time": self._frame_times_abs[0] if self._frame_times_abs else None,
-                "lip_first_frame_time": self._lip_first_frame_epoch,
+                "recording_start_time": float(audio_start_epoch),
+                "lip_first_frame_time": float(audio_start_epoch) if frame_times.size > 0 else None,
                 "audio_first_frame_time": self._audio_first_chunk_epoch,
                 "lip_manual_offset": float(lip_offset_seconds),
+                "time_alignment_mode": "anchored_audio_start",
                 "recording_duration": duration,
-                "fps": (len(self._frame_times) / duration) if duration and duration > 0 else None,
+                "fps": (len(frame_times) / duration) if duration and duration > 0 else None,
                 "created_at": datetime.now().isoformat(),
             },
         }
@@ -821,11 +1329,58 @@ class LipGUI(QWidget):
 
         return str(session_dir)
 
+    @staticmethod
+    def _interpolate_short_numeric_gaps(arr: np.ndarray, max_gap: int = 2) -> np.ndarray:
+        x = np.array(arr, dtype=np.float64)
+        n = len(x)
+        i = 0
+        while i < n:
+            if np.isfinite(x[i]):
+                i += 1
+                continue
+            s = i
+            while i < n and not np.isfinite(x[i]):
+                i += 1
+            e = i - 1
+            gap_len = e - s + 1
+            left = s - 1
+            right = i
+            if gap_len <= max_gap and left >= 0 and right < n and np.isfinite(x[left]) and np.isfinite(x[right]):
+                for k in range(gap_len):
+                    alpha = (k + 1) / (gap_len + 1)
+                    x[s + k] = (1.0 - alpha) * x[left] + alpha * x[right]
+        return x
+
+    @staticmethod
+    def _interpolate_short_landmark_gaps(arr: np.ndarray, max_gap: int = 2) -> np.ndarray:
+        x = np.array(arr, dtype=np.float32)
+        valid = np.isfinite(x).all(axis=(1, 2))
+        n = x.shape[0]
+        i = 0
+        while i < n:
+            if valid[i]:
+                i += 1
+                continue
+            s = i
+            while i < n and not valid[i]:
+                i += 1
+            e = i - 1
+            gap_len = e - s + 1
+            left = s - 1
+            right = i
+            if gap_len <= max_gap and left >= 0 and right < n and valid[left] and valid[right]:
+                for k in range(gap_len):
+                    alpha = (k + 1) / (gap_len + 1)
+                    x[s + k] = (1.0 - alpha) * x[left] + alpha * x[right]
+        return x
+
     def closeEvent(self, event: QCloseEvent) -> None:
         with self._state_lock:
             recording = self.is_recording
         if recording:
             self.stop_recording()
+        if self.is_raw_recording:
+            self.stop_raw_recording()
 
         if self._video_timer.isActive():
             self._video_timer.stop()
@@ -835,6 +1390,13 @@ class LipGUI(QWidget):
         if self._face_mesh is not None:
             self._face_mesh.close()
             self._face_mesh = None
+        if self._live_audio_stream is not None:
+            try:
+                self._live_audio_stream.stop()
+                self._live_audio_stream.close()
+            finally:
+                self._live_audio_stream = None
+                self._live_audio_stream_active = False
         super().closeEvent(event)
 
 
@@ -845,11 +1407,13 @@ class LipOffsetAdjustDialog(QDialog):
         sample_rate: int,
         lip_times: np.ndarray,
         lip_metrics: dict[str, np.ndarray],
+        is_dark: bool,
         parent=None,
     ):
         super().__init__(parent)
         self.setWindowTitle("唇形/音频偏移校正")
         self.resize(1180, 820)
+        self._is_dark = bool(is_dark)
 
         self._audio = np.array(audio_array, dtype=np.float64)
         if self._audio.size > 0:
@@ -947,6 +1511,15 @@ class LipOffsetAdjustDialog(QDialog):
         self.canvas.mpl_connect("button_press_event", self._on_press)
         self.canvas.mpl_connect("button_release_event", self._on_release)
         self.canvas.mpl_connect("motion_notify_event", self._on_motion)
+        self._apply_theme()
+
+    def _apply_theme(self):
+        if self._is_dark:
+            self.setStyleSheet("QDialog { background-color: #17191c; color: #f0f0f0; }")
+            self.figure.set_facecolor("#17191c")
+        else:
+            self.setStyleSheet("")
+            self.figure.set_facecolor("#ffffff")
 
     @staticmethod
     def _clean_time_axis(times: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
@@ -1039,17 +1612,19 @@ class LipOffsetAdjustDialog(QDialog):
         self._redraw()
 
     @staticmethod
-    def _limit_visible_points(x: np.ndarray, y: np.ndarray, x0: float, x1: float) -> tuple[np.ndarray, np.ndarray]:
+    def _limit_visible_audio_points(x: np.ndarray, y: np.ndarray, x0: float, x1: float) -> tuple[np.ndarray, np.ndarray]:
         mask = (x >= x0) & (x <= x1)
         if not np.any(mask):
             return np.array([]), np.array([])
         xv = x[mask]
         yv = y[mask]
-        n = len(xv)
-        if n <= 9999:
-            return xv, yv
-        step = int(np.ceil(n / 9999.0))
-        return xv[::step], yv[::step]
+        if len(xv) > 1:
+            xv = xv[::2]
+            yv = yv[::2]
+        while len(xv) > 9999:
+            xv = xv[::2]
+            yv = yv[::2]
+        return xv, yv
 
     def _audio_envelope(self) -> tuple[np.ndarray, np.ndarray]:
         if self._audio.size == 0:
@@ -1075,6 +1650,17 @@ class LipOffsetAdjustDialog(QDialog):
         if lip_t.size < 8:
             return 0.0
 
+        audio_mask = audio_t <= 60.0
+        if np.any(audio_mask):
+            audio_t = audio_t[audio_mask]
+            audio_env = audio_env[audio_mask]
+        lip_mask = lip_t <= 60.0
+        if np.any(lip_mask):
+            lip_t = lip_t[lip_mask]
+            lip_y = lip_y[lip_mask]
+        if audio_t.size < 8 or lip_t.size < 8:
+            return 0.0
+
         t0 = max(float(audio_t[0]), float(lip_t[0]) - 2.0)
         t1 = min(float(audio_t[-1]), float(lip_t[-1]) + 2.0)
         if t1 - t0 <= 1.0:
@@ -1088,7 +1674,7 @@ class LipOffsetAdjustDialog(QDialog):
 
         best_offset = 0.0
         best_score = -1e12
-        for off in np.arange(-2.0, 2.0001, 0.005):
+        for off in np.arange(-2.0, 2.0001, 0.002):
             shifted = np.interp(grid, lip_t + off, lip_y, left=np.nan, right=np.nan)
             valid = np.isfinite(shifted)
             if np.count_nonzero(valid) < 100:
@@ -1106,11 +1692,27 @@ class LipOffsetAdjustDialog(QDialog):
         x0, x1 = self.ax_audio.get_xlim()
         self.ax_audio.cla()
         self.ax_lip.cla()
+        if self._is_dark:
+            bg = "#17191c"
+            fg = "#e5e5e5"
+            grid = 0.18
+        else:
+            bg = "#ffffff"
+            fg = "#222222"
+            grid = 0.2
+        self.ax_audio.set_facecolor(bg)
+        self.ax_lip.set_facecolor(bg)
+        self.ax_audio.tick_params(colors=fg)
+        self.ax_lip.tick_params(colors=fg)
+        for spine in self.ax_audio.spines.values():
+            spine.set_color(fg)
+        for spine in self.ax_lip.spines.values():
+            spine.set_color(fg)
         audio_t = np.arange(self._audio.size, dtype=np.float64) / float(self._sample_rate) if self._sample_rate > 0 else np.array([])
         if audio_t.size > 0:
-            xa, ya = self._limit_visible_points(audio_t, self._audio, x0, x1)
+            xa, ya = self._limit_visible_audio_points(audio_t, self._audio, x0, x1)
             self.ax_audio.plot(xa, ya, color="#00b3ff", linewidth=1.0)
-        self.ax_audio.set_ylabel("Amplitude")
+        self.ax_audio.set_ylabel("Amplitude", color=fg)
 
         key = self._metric_key
         lip_y = np.array(self._lip_metrics.get(key, []), dtype=np.float64)
@@ -1120,18 +1722,24 @@ class LipOffsetAdjustDialog(QDialog):
             lip_y = lip_y[:n]
             lip_t = lip_t[:n]
         if lip_t.size > 0:
-            xo, yo = self._limit_visible_points(lip_t, lip_y, x0, x1)
+            mask0 = (lip_t >= x0) & (lip_t <= x1)
+            xo = lip_t[mask0]
+            yo = lip_y[mask0]
             self.ax_lip.plot(xo, yo, color="#bababa", linewidth=1.0, alpha=0.55, label="原始")
 
             off = self._current_offset()
-            xs, ys = self._limit_visible_points(lip_t + off, lip_y, x0, x1)
+            shifted_t = lip_t + off
+            mask1 = (shifted_t >= x0) & (shifted_t <= x1)
+            xs = shifted_t[mask1]
+            ys = lip_y[mask1]
             self.ax_lip.plot(xs, ys, color="#1f77b4", linewidth=1.4, label=f"对齐后 ({off:+.3f}s)")
             self.ax_lip.legend(loc="upper left")
-        self.ax_lip.set_xlabel("Time (s)")
-        self.ax_lip.set_ylabel(self.param_combo.currentText())
-        self.ax_lip.grid(True, alpha=0.2)
-        self.ax_audio.grid(True, alpha=0.2)
+        self.ax_lip.set_xlabel("Time (s)", color=fg)
+        self.ax_lip.set_ylabel(self.param_combo.currentText(), color=fg)
+        self.ax_lip.grid(True, alpha=grid)
+        self.ax_audio.grid(True, alpha=grid)
         self.ax_audio.set_xlim(x0, x1)
+        self.figure.set_facecolor(bg)
         self.canvas.draw_idle()
 
 

@@ -11,6 +11,7 @@ import urllib.request
 import json
 import threading
 import re
+from pathlib import Path
 
 from .styles import DARK_MAIN_STYLESHEET, GLOBAL_DARK_STYLESHEET, LIGHT_MAIN_STYLESHEET, GLOBAL_LIGHT_STYLESHEET
 from .widgets.parameter_estimation_widget import ParameterEstimationWidget
@@ -334,7 +335,7 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, "帮助", f"找不到帮助文件:\n{help_path}")
 
     def on_check_update(self):
-        current_version = "v1.2.0"
+        current_version = self._load_current_version()
 
         self.update_msg_box = QMessageBox(self)
         self.update_msg_box.setWindowTitle("检查更新")
@@ -526,6 +527,26 @@ class MainWindow(QMainWindow):
         if current > latest:
             return 1
         return 0
+
+    def _load_current_version(self):
+        candidates = [
+            Path(get_resource_path("pyproject.toml")),
+            Path(__file__).resolve().parents[2] / "pyproject.toml",
+            Path.cwd() / "pyproject.toml",
+        ]
+        for path in candidates:
+            if not path.exists():
+                continue
+            try:
+                text = path.read_text(encoding="utf-8")
+            except Exception:
+                continue
+            match = re.search(r'^\s*version\s*=\s*"([^"]+)"\s*$', text, flags=re.MULTILINE)
+            if match:
+                value = match.group(1).strip()
+                if value:
+                    return f"v{value}"
+        return "v2.0.0"
 
     def on_about(self):
         dlg = AboutDialog(self)

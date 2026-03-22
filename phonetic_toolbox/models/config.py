@@ -31,6 +31,7 @@ class AcousticConfig:
     # Analysis specific
     n_periods: int = 3
     smooth_win_size: int = 10
+    lip_smooth_win_size: int = 0
     only_voiced: bool = True  # If True, unvoiced frames will be set to NaN based on ZCR/Energy
     selected_parameter_keys: Optional[List[str]] = None
 
