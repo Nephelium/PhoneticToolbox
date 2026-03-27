@@ -9,6 +9,7 @@ from phonetic_toolbox.services.mfa_alignment_service import (
     MFAAutoAlignmentService,
 )
 from phonetic_toolbox.services.lpc_service import LPCSpectrumService
+from phonetic_toolbox.services.phonology_service import PhonologyInductionService
 from phonetic_toolbox.models.config import AcousticConfig, AnalysisResult
 from phonetic_toolbox.models.lip_models import LipLaunchResult
 from phonetic_toolbox.models.ipa_models import IPATransLaunchResult
@@ -55,6 +56,7 @@ __all__ = [
     "PerceptionExperimentService",
     "MFAAutoAlignmentService",
     "LPCSpectrumService",
+    "PhonologyInductionService",
     "LipLaunchResult",
     "IPATransLaunchResult",
     "PerceptionLaunchResult",

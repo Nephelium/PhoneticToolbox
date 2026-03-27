@@ -21,6 +21,7 @@ from .widgets.egg_widget import EGGWidget
 from .widgets.spec2wav_widget import Spec2WavWidget
 from .widgets.speech_synthesis_widget import SpeechSynthesisWidget
 from .widgets.lpc_spectrum_widget import LPCSpectrumWidget
+from .widgets.phonology_induction_widget import PhonologyInductionWidget
 from .widgets.lip_gui import launch_lip_gui
 from .dialogs.about_dialog import AboutDialog
 from phonetic_toolbox.utils import get_resource_path
@@ -42,7 +43,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Phonetic Toolbox v2")
-        self.resize(700, 520)
+        self.resize(700, 460)
         self.setWindowIcon(QIcon(get_resource_path("PhoneticToolbox.ico")))
         
         # Central Widget is a StackedWidget
@@ -64,8 +65,8 @@ class MainWindow(QMainWindow):
 
     def init_home_ui(self):
         layout = QVBoxLayout(self.home_page)
-        layout.setContentsMargins(26, 24, 26, 24)
-        layout.setSpacing(14)
+        layout.setContentsMargins(22, 16, 22, 16)
+        layout.setSpacing(10)
         
         # Title (ASCII Art)
         title = QLabel(ASCII_TITLE)
@@ -75,11 +76,11 @@ class MainWindow(QMainWindow):
         title.setStyleSheet("font-family: 'Consolas', 'Courier New', monospace; font-size: 9px; font-weight: bold; color: white;")
         layout.addWidget(title)
         
-        layout.addSpacing(8)
+        layout.addSpacing(2)
         
         # Grid
         grid = QGridLayout()
-        grid.setSpacing(14)
+        grid.setSpacing(10)
         
         buttons = [
             ("唇形提取", self.on_lip_extraction),
@@ -93,6 +94,7 @@ class MainWindow(QMainWindow):
             ("语谱图转音频", self.on_spec2wav),
             ("普通话转IPA", self.on_ipa_trans),
             ("LPC谱图", self.on_lpc_spectrum),
+            ("音系归纳", self.on_phonology_induction),
             ("检查更新", self.on_check_update),
             ("关于", self.on_about),
             ("使用说明", self.on_open_help),
@@ -103,16 +105,15 @@ class MainWindow(QMainWindow):
         col = 0
         for text, slot in buttons:
             btn = QPushButton(text)
-            btn.setMinimumHeight(68)
+            btn.setMinimumHeight(62)
             btn.clicked.connect(slot)
             grid.addWidget(btn, row, col)
             col += 1
-            if col > 2:
+            if col > 3:
                 col = 0
                 row += 1
                 
         layout.addLayout(grid)
-        layout.addStretch()
 
         # Helper method removed as it is no longer needed
     
@@ -161,6 +162,9 @@ class MainWindow(QMainWindow):
         if "lpc" in self.sub_windows and self.sub_windows["lpc"].isVisible():
             if hasattr(self.sub_windows["lpc"], "set_theme"):
                 self.sub_windows["lpc"].set_theme(self.is_dark)
+        if "pi" in self.sub_windows and self.sub_windows["pi"].isVisible():
+            if hasattr(self.sub_windows["pi"], "set_theme"):
+                self.sub_windows["pi"].set_theme(self.is_dark)
         if "lip" in self.sub_windows and self.sub_windows["lip"].isVisible():
             if hasattr(self.sub_windows["lip"], "set_theme"):
                 self.sub_windows["lip"].set_theme(self.is_dark)
@@ -278,6 +282,18 @@ class MainWindow(QMainWindow):
         w.setWindowIcon(QIcon(get_resource_path("PhoneticToolbox.ico")))
         w.resize(1200, 700)
         self.sub_windows["lpc"] = w
+        if hasattr(w, "set_theme"):
+            w.set_theme(self.is_dark)
+        w.show()
+
+    def on_phonology_induction(self):
+        if "pi" in self.sub_windows and self.sub_windows["pi"].isVisible():
+            self.sub_windows["pi"].activateWindow()
+            return
+        w = PhonologyInductionWidget()
+        w.setWindowIcon(QIcon(get_resource_path("PhoneticToolbox.ico")))
+        w.resize(360, 240)
+        self.sub_windows["pi"] = w
         if hasattr(w, "set_theme"):
             w.set_theme(self.is_dark)
         w.show()
