@@ -1,8 +1,6 @@
 import numpy as np
 import soundfile as sf
 import os
-from typing import Optional, Tuple
-from scipy import signal
 
 from ..core.spec2wav.image_processing import load_spectrogram_image
 from ..core.spec2wav.griffin_lim import spectrogram_to_audio, _stft
@@ -27,6 +25,7 @@ class Spec2WavService:
         Raises:
             ValueError: If image loading or processing fails.
         """
+        self._validate_config(config)
         if config.image_path and not os.path.exists(config.image_path) and config.image_data is None:
             raise ValueError(f"Image file not found: {config.image_path}")
             
@@ -47,8 +46,14 @@ class Spec2WavService:
         # Usually sr = 2 * max_freq
         native_sr = int(2 * config.freq_end)
         
-        # Window length usually equals n_fft
-        window_length = n_fft
+        # Calculate window length in samples
+        if hasattr(config, 'win_length_ms') and config.win_length_ms > 0:
+            window_length = int((config.win_length_ms / 1000.0) * native_sr)
+            # Ensure window length is not greater than n_fft
+            window_length = min(window_length, n_fft)
+        else:
+            window_length = n_fft
+        window_length = max(1, window_length)
         
         native_audio = spectrogram_to_audio(
             spectrogram=linear_spectrogram,
@@ -70,38 +75,7 @@ class Spec2WavService:
         # Calculate actual duration
         duration = len(audio) / sr
         
-        # 4. Compute reconstructed spectrogram for verification (optional but good for UI)
-        # We compute this at the native SR or Target SR? 
-        # The GUI showed the reconstructed one. Let's compute it.
-        # We'll use a standard window and n_fft appropriate for the audio.
-        # But wait, to compare with original, we might want similar params.
-        # However, the original params were derived from image dimensions.
-        # Let's just compute a standard spectrogram of the output audio.
-        
-        # Recalculate STFT of the result
-        # Use consistent n_fft if possible, or standard one
-        calc_n_fft = n_fft # Use same resolution
-        calc_win_length = min(1024, calc_n_fft)
-        calc_window = signal.windows.hann(calc_win_length, sym=False)
-        
-        # If we resampled, the hop_length and n_fft relationship to time changed.
-        # But we can just compute a standard STFT for display.
-        if sr != native_sr:
-             # Recalculate hop_length for the new SR to maintain similar time resolution?
-             # Or just standard values.
-             # Let's stick to the parameters used in generation if not resampled, 
-             # otherwise standard.
-             pass
-
-        # To be safe and simple, let's just compute a standard spectrogram for the output audio
-        # using the values that fit the current audio.
-        # But the GUI implementation used the SAME n_fft and hop_length (which might be wrong if resampled?)
-        # The GUI implementation:
-        # reconstructed_spec = np.abs(_stft(native_audio, n_fft, hop_length, window_length, window))
-        # It used 'native_audio' BEFORE resampling for the reconstruction check.
-        
-        # Let's follow that logic: Compute reconstruction check on NATIVE audio
-        reconstructed_spec = np.abs(_stft(native_audio, n_fft, hop_length, min(window_length, n_fft), signal.windows.hann(min(window_length, n_fft), sym=False)))
+        reconstructed_spec = np.abs(_stft(native_audio, n_fft, hop_length, min(window_length, n_fft), np.hanning(min(window_length, n_fft))))
         reconstructed_db = amplitude_to_db(reconstructed_spec, ref=np.max)
 
         return Spec2WavResult(
@@ -123,3 +97,20 @@ class Spec2WavService:
             file_path (str): Output file path.
         """
         sf.write(file_path, audio, sr)
+
+    @staticmethod
+    def _validate_config(config: Spec2WavConfig) -> None:
+        if config.image_data is None and not config.image_path:
+            raise ValueError("Either image_path or image_data must be provided.")
+        if config.time_end <= config.time_start:
+            raise ValueError("time_end must be greater than time_start.")
+        if config.freq_start < 0:
+            raise ValueError("freq_start must be non-negative.")
+        if config.freq_end <= config.freq_start:
+            raise ValueError("freq_end must be greater than freq_start.")
+        if config.min_db >= config.max_db:
+            raise ValueError("min_db must be less than max_db.")
+        if config.n_iter < 1:
+            raise ValueError("n_iter must be at least 1.")
+        if config.target_sr < 0:
+            raise ValueError("target_sr must be non-negative.")

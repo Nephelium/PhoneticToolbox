@@ -12,9 +12,11 @@ from PyQt6.QtWidgets import (
     QPlainTextEdit,
     QProgressDialog,
     QPushButton,
+    QSpinBox,
     QVBoxLayout,
 )
 
+from phonetic_toolbox.models.mfa_models import MFAAlignmentConfig
 from phonetic_toolbox.services.mfa_alignment_service import (
     MFAAutoAlignmentService,
 )
@@ -30,12 +32,16 @@ class MFAAlignmentWorker(QThread):
         dict_path: str,
         acoustic_path: str,
         output_path: str,
+        beam: int,
+        retry_beam: int,
     ):
         super().__init__()
         self.audio_path = audio_path
         self.dict_path = dict_path
         self.acoustic_path = acoustic_path
         self.output_path = output_path
+        self.beam = beam
+        self.retry_beam = retry_beam
 
     def run(self):
         service = MFAAutoAlignmentService()
@@ -44,6 +50,8 @@ class MFAAlignmentWorker(QThread):
             dict_path=self.dict_path,
             acoustic_path=self.acoustic_path,
             output_path=self.output_path,
+            beam=self.beam,
+            retry_beam=self.retry_beam,
         )
         self.finished_sig.emit(result.success, result.message, result.detail)
 
@@ -56,6 +64,7 @@ class MFAAutoAlignmentDialog(QDialog):
         self.worker = None
         self.progress = None
         self.is_dark = True
+        self.alignment_config = MFAAlignmentConfig()
         self._init_ui()
 
     def _init_ui(self):
@@ -114,6 +123,17 @@ class MFAAutoAlignmentDialog(QDialog):
         h4.addWidget(self.output_input)
         h4.addWidget(self.btn_output)
         form_layout.addRow("输出路径:", h4)
+
+        self.beam_input = QSpinBox()
+        self.beam_input.setRange(1, 10000)
+        self.beam_input.setValue(self.alignment_config.beam)
+        self.beam_input.valueChanged.connect(self._sync_retry_beam)
+        form_layout.addRow("Beam:", self.beam_input)
+
+        self.retry_beam_input = QSpinBox()
+        self.retry_beam_input.setRange(1, 40000)
+        self.retry_beam_input.setValue(self.alignment_config.retry_beam)
+        form_layout.addRow("Retry beam:", self.retry_beam_input)
 
         for line_edit in [
             self.acoustic_input,
@@ -253,6 +273,8 @@ class MFAAutoAlignmentDialog(QDialog):
         dict_path = self.dict_input.text().strip()
         acoustic_path = self.acoustic_input.text().strip()
         output_path = self.output_input.text().strip()
+        beam = self.beam_input.value()
+        retry_beam = self.retry_beam_input.value()
 
         if not all([audio_path, dict_path, acoustic_path, output_path]):
             QMessageBox.warning(self, "错误", "请填写所有路径。")
@@ -262,6 +284,8 @@ class MFAAutoAlignmentDialog(QDialog):
         self.log_output.appendPlainText(">>> 开始 MFA 对齐任务...")
         self.log_output.appendPlainText(f"音频路径: {audio_path}")
         self.log_output.appendPlainText(f"输出路径: {output_path}")
+        self.log_output.appendPlainText(f"Beam: {beam}")
+        self.log_output.appendPlainText(f"Retry beam: {retry_beam}")
 
         self.progress = QProgressDialog("正在运行 MFA 对齐...", "取消", 0, 0, self)
         self.progress.setWindowModality(Qt.WindowModality.WindowModal)
@@ -274,9 +298,15 @@ class MFAAutoAlignmentDialog(QDialog):
             dict_path=dict_path,
             acoustic_path=acoustic_path,
             output_path=output_path,
+            beam=beam,
+            retry_beam=retry_beam,
         )
         self.worker.finished_sig.connect(self._on_alignment_finished)
         self.worker.start()
+
+    def _sync_retry_beam(self, beam: int):
+        if self.retry_beam_input.value() < beam * 4:
+            self.retry_beam_input.setValue(beam * 4)
 
     def _on_alignment_finished(self, success: bool, message: str, detail: str):
         if self.progress is not None:

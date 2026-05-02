@@ -58,10 +58,9 @@ def test_launch_returns_success_and_process_id(tmp_path: Path, monkeypatch):
         def __init__(self, pid: int):
             self.pid = pid
 
-    def _fake_popen(command, cwd, shell):
-        assert command == [str(batch_file)]
+    def _fake_popen(command, cwd):
+        assert command == MFAAutoAlignmentService._build_batch_command(batch_file)
         assert cwd == str(project_dir)
-        assert shell is True
         return _FakeProcess(pid=1357)
 
     monkeypatch.setattr(
@@ -100,13 +99,27 @@ def test_run_alignment_calls_pipeline(tmp_path: Path, monkeypatch):
     output_dir = tmp_path / "output"
 
     class _FakePipeline:
-        def run(self, audio_path, dict_path, acoustic_path, output_path):
+        def run(
+            self,
+            audio_path,
+            dict_path,
+            acoustic_path,
+            output_path,
+            beam,
+            retry_beam,
+        ):
             assert audio_path == str(audio_dir)
             assert dict_path == str(dict_file)
             assert acoustic_path == str(acoustic_file)
             assert output_path == str(output_dir)
+            assert beam == 10
+            assert retry_beam == 40
             return True, "ok"
 
+    monkeypatch.setattr(
+        "phonetic_toolbox.services.mfa_alignment_service.MFAAutoAlignmentService._should_use_external_runtime",
+        lambda self: False,
+    )
     monkeypatch.setattr(
         "phonetic_toolbox.services.mfa_alignment_service.MFAAlignmentPipeline",
         lambda: _FakePipeline(),

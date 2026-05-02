@@ -30,7 +30,7 @@ log = logging.getLogger(__name__)
 class PEWorker(QThread):
     progress_sig = pyqtSignal(int, str)
     error_sig = pyqtSignal(str)
-    finished_sig = pyqtSignal()
+    finished_sig = pyqtSignal(object)
 
     def __init__(self, items: List[str], input_dir: Path, output_dir: Path, 
                  lip_data_map: Dict[str, Path], config: AcousticConfig):
@@ -44,7 +44,7 @@ class PEWorker(QThread):
         self._is_interrupted = False
 
     def run(self):
-        self.service.analyze_batch(
+        result = self.service.analyze_batch(
             files=self.items,
             input_dir=self.input_dir,
             output_dir=self.output_dir,
@@ -53,7 +53,7 @@ class PEWorker(QThread):
             progress_callback=self._emit_progress,
             stop_check=self.isInterruptionRequested
         )
-        self.finished_sig.emit()
+        self.finished_sig.emit(result)
 
     def _emit_progress(self, progress: int, name: str):
         self.progress_sig.emit(progress, name)
@@ -663,7 +663,28 @@ class ParameterEstimationWidget(QtWidgets.QWidget):
         self.progress.setValue(val)
         self.progress.setLabelText(f"处理中: {name}")
         
-    def _on_finished(self):
+    def _on_finished(self, result):
         self.progress.close()
         self.btn_start.setEnabled(True)
-        QtWidgets.QMessageBox.information(self, "完成", "批处理完成")
+        if result.failed:
+            details = "\n".join(
+                f"{item.file_name}: {item.message}" for item in result.failed[:10]
+            )
+            if len(result.failed) > 10:
+                details += f"\n... 另有 {len(result.failed) - 10} 个文件失败"
+            QtWidgets.QMessageBox.warning(
+                self,
+                "批处理完成",
+                (
+                    f"已处理 {len(result.processed)} 个文件，"
+                    f"{len(result.failed)} 个文件失败。\n\n{details}"
+                ),
+            )
+        elif result.stopped:
+            QtWidgets.QMessageBox.information(
+                self,
+                "已取消",
+                f"已处理 {len(result.processed)} 个文件，任务已取消。",
+            )
+        else:
+            QtWidgets.QMessageBox.information(self, "完成", "批处理完成")

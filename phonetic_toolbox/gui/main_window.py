@@ -578,7 +578,7 @@ class MainWindow(QMainWindow):
                 value = match.group(1).strip()
                 if value:
                     return f"v{value}"
-        return "v2.0.0"
+        return "v2.1.0"
 
     def on_about(self):
         dlg = AboutDialog(self)

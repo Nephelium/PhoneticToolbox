@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, Any, Optional, Union, List, Callable
 import traceback
@@ -130,6 +131,24 @@ CORE_RESULT_FIELD_MAP = {
 
 log = logging.getLogger(__name__)
 
+@dataclass
+class BatchItemError:
+    file_name: str
+    message: str
+    detail: str = ""
+
+
+@dataclass
+class BatchAnalysisResult:
+    processed: List[str] = field(default_factory=list)
+    failed: List[BatchItemError] = field(default_factory=list)
+    stopped: bool = False
+
+    @property
+    def success(self) -> bool:
+        return not self.failed and not self.stopped
+
+
 class AcousticAnalysisService:
     def __init__(self):
         pass
@@ -143,7 +162,7 @@ class AcousticAnalysisService:
         config: AcousticConfig,
         progress_callback: Optional[Callable[[int, str], None]] = None,
         stop_check: Optional[Callable[[], bool]] = None,
-    ) -> None:
+    ) -> BatchAnalysisResult:
         """
         批量分析文件。
         
@@ -157,12 +176,14 @@ class AcousticAnalysisService:
             stop_check: 检查是否需要停止的回调函数，返回 True 则停止
         """
         total = len(files)
+        batch_result = BatchAnalysisResult()
         for i, name in enumerate(files):
             if stop_check and stop_check():
+                batch_result.stopped = True
                 break
                 
             if progress_callback:
-                progress_callback(int((i / total) * 100), name)
+                progress_callback(int((i / total) * 100) if total else 0, name)
             
             try:
                 wav_path = input_dir / name
@@ -183,10 +204,18 @@ class AcousticAnalysisService:
                 out_path.parent.mkdir(parents=True, exist_ok=True)
                 
                 self.save_results(result, str(out_path))
+                batch_result.processed.append(name)
                 
             except Exception as e:
-                log.error(f"Error processing {name}: {e}")
-                # Optional: emit error via callback if needed, or just log
+                log.exception("Error processing %s", name)
+                batch_result.failed.append(
+                    BatchItemError(
+                        file_name=name,
+                        message=str(e),
+                        detail=traceback.format_exc(),
+                    )
+                )
+        return batch_result
 
     def analyze_file(self, wav_path: str, config: AcousticConfig, lip_pkl_path: Optional[str] = None, textgrid_path: Optional[str] = None) -> AnalysisResult:
         """
@@ -254,7 +283,7 @@ class AcousticAnalysisService:
             silence_mask = compute_silence_mask(intensity, config.silence_threshold)
             
         except Exception as e:
-            print(f"Intensity calculation failed: {e}")
+            log.warning("Intensity calculation failed for %s: %s", wav_path, e)
             est_len = int(len(y) / (fs * frameshift_ms / 1000.0))
             intensity = np.full(est_len, np.nan)
             silence_mask = np.ones(est_len, dtype=bool)
@@ -268,7 +297,7 @@ class AcousticAnalysisService:
                 num_formants=config.num_formants
             )
         except Exception as e:
-            print(f"Formant calculation failed: {e}")
+            log.warning("Formant calculation failed for %s: %s", wav_path, e)
             # Placeholder
             est_len = int(len(y) / (fs * frameshift_ms / 1000))
             formant_res = {f"pF{i}": np.full(est_len, np.nan) for i in range(1, 5)}
@@ -292,7 +321,7 @@ class AcousticAnalysisService:
             pf0 = compute_praat_f0(path, frameshift_ms, min_f0, max_f0, "cc")
             f0_data["pF0"] = pf0
         except Exception as e:
-            print(f"Praat F0 failed: {e}")
+            log.warning("Praat F0 failed for %s: %s", wav_path, e)
             f0_data["pF0"] = np.full(len(pF1), np.nan)
             
         # 3.2 REAPER F0 (Optional)
@@ -312,7 +341,7 @@ class AcousticAnalysisService:
             else:
                 f0_data["rF0"] = np.full(len(pF1), np.nan)
         except Exception as e:
-            # print(f"REAPER F0 failed: {e}")
+            log.warning("REAPER F0 failed for %s: %s", wav_path, e)
             f0_data["rF0"] = np.full(len(pF1), np.nan)
 
         # Ensure lengths match Formants (truncate or pad)
@@ -375,7 +404,7 @@ class AcousticAnalysisService:
                 derived_data[f"H5K{suffix}"] = h5k
                 
             except Exception as e:
-                # print(f"Spectral Batch failed: {e}")
+                log.warning("Spectral batch failed for %s (%s): %s", wav_path, f0_type, e)
                 for k in ["H1", "H2", "H4", "A1", "A2", "A3", "H2K", "H5K"]: 
                     derived_data[f"{k}{suffix}"] = np.full(target_len, np.nan)
                 h1=h2=h4=a1=a2=a3=h2k=h5k = np.full(target_len, np.nan)
@@ -390,8 +419,8 @@ class AcousticAnalysisService:
                 derived_data[f"H1A3u{suffix}"] = h1 - a3
                 derived_data[f"H42Ku{suffix}"] = h4 - h2k
                 derived_data[f"H2KH5Ku{suffix}"] = h2k - h5k
-            except:
-                pass
+            except Exception as e:
+                log.warning("Uncorrected tilt calculation failed for %s (%s): %s", wav_path, f0_type, e)
 
             # 4.4 Corrected Tilts
             try:
@@ -417,14 +446,15 @@ class AcousticAnalysisService:
                 
                 derived_data[f"H42Kc{suffix}"] = corr_res["H42Kc"]
                 derived_data[f"H2KH5Kc{suffix}"] = corr_res["H2KH5Kc"]
-            except:
-                pass
+            except Exception as e:
+                log.warning("Corrected tilt calculation failed for %s (%s): %s", wav_path, f0_type, e)
 
             # 4.6 CPP
             try:
                 cpp_val = compute_cpp(y, fs, frameshift_ms, f0, n_periods, voiced_mask)
                 derived_data[f"CPP{suffix}"] = cpp_val
-            except:
+            except Exception as e:
+                log.warning("CPP calculation failed for %s (%s): %s", wav_path, f0_type, e)
                 derived_data[f"CPP{suffix}"] = np.full(target_len, np.nan)
                 
             # 4.7 HNR
@@ -434,21 +464,23 @@ class AcousticAnalysisService:
                 for hk, hv in hnr_res.items():
                     # hk is like HNR05, HNR15
                     derived_data[f"{hk}{suffix}"] = hv[:target_len]
-            except:
-                pass
+            except Exception as e:
+                log.warning("HNR calculation failed for %s (%s): %s", wav_path, f0_type, e)
 
             # 4.8 SHR
             try:
                 shr_val = compute_shr(y, fs, frameshift_ms, f0, min_f0, max_f0, voiced_mask=voiced_mask)
                 derived_data[f"SHR{suffix}"] = shr_val[:target_len]
-            except:
+            except Exception as e:
+                log.warning("SHR calculation failed for %s (%s): %s", wav_path, f0_type, e)
                 derived_data[f"SHR{suffix}"] = np.full(target_len, np.nan)
 
             # 4.9 Spectral Slope
             try:
                 slope = compute_spectral_slope(y, fs, frameshift_ms, f0, min_pitch=min_f0, voiced_mask=voiced_mask)
                 derived_data[f"SpectralSlope{suffix}"] = slope[:target_len]
-            except:
+            except Exception as e:
+                log.warning("Spectral slope calculation failed for %s (%s): %s", wav_path, f0_type, e)
                 derived_data[f"SpectralSlope{suffix}"] = np.full(target_len, np.nan)
 
             # 4.10 SOE (Strength of Excitation)
@@ -458,7 +490,7 @@ class AcousticAnalysisService:
                 soe_val, _ = compute_soe(y, fs, frameshift_ms, f0, target_len)
                 derived_data[f"SOE{suffix}"] = soe_val
             except Exception as e:
-                # print(f"SOE failed: {e}")
+                log.warning("SOE calculation failed for %s (%s): %s", wav_path, f0_type, e)
                 derived_data[f"SOE{suffix}"] = np.full(target_len, np.nan)
 
         # --- 5. Global Parameters (Intensity, Jitter, Shimmer) ---
@@ -477,7 +509,7 @@ class AcousticAnalysisService:
             for k, v in js_res.items():
                 derived_data[k] = v[:target_len]
         except Exception as e:
-            # print(f"Jitter/Shimmer failed: {e}")
+            log.warning("Jitter/Shimmer failed for %s: %s", wav_path, e)
             for k in ["Jitter_Local", "Jitter_RAP", "Jitter_PPQ5", "Shimmer_Local", "Shimmer_APQ3", "Shimmer_APQ5", "Shimmer_APQ11"]:
                 derived_data[k] = np.full(target_len, np.nan)
             
@@ -496,7 +528,7 @@ class AcousticAnalysisService:
                 lip_res = read_lip_data(lip_pkl_path, times, smooth_win=1)
                 lip_data.update(lip_res)
             except Exception as e:
-                print(f"Lip data processing failed: {e}")
+                log.warning("Lip data processing failed for %s: %s", lip_pkl_path, e)
 
         # --- 7. TextGrid Data ---
         textgrid_data = {}
@@ -530,7 +562,7 @@ class AcousticAnalysisService:
                                 
                         textgrid_data[col_name] = labels
             except Exception as e:
-                print(f"TextGrid processing failed: {e}")
+                log.warning("TextGrid processing failed for %s: %s", textgrid_path, e)
 
         # --- 8. Construct AnalysisResult ---
         parameters = {}
@@ -693,4 +725,5 @@ class AcousticAnalysisService:
             save_excel(p, data_dict)
             save_fast_parameter_db(p, df_to_save)
         except Exception as e:
-            log.error(f"Failed to save results: {e}")
+            log.exception("Failed to save results to %s", p)
+            raise

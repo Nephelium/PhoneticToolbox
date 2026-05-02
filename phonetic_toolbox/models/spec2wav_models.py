@@ -15,6 +15,7 @@ class Spec2WavConfig:
     freq_end: float = 11025.0 # Nyquist frequency for 22050 Hz
     min_db: float = -30.0
     max_db: float = 0.0
+    win_length_ms: float = 10.0 # Configurable window length in ms
     n_iter: int = 32
     target_sr: int = 44100 # Default target sample rate
     

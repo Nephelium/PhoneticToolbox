@@ -104,11 +104,13 @@ class ParameterDialog(QDialog):
         self.time_end = QLineEdit("5.0")
         self.freq_start = QLineEdit("0")
         self.freq_end = QLineEdit("5000")
+        self.win_length = QLineEdit("10.0")
         
         layout.addRow("起始时间 (s):", self.time_start)
         layout.addRow("结束时间 (s):", self.time_end)
         layout.addRow("起始频率 (Hz):", self.freq_start)
         layout.addRow("结束频率 (Hz):", self.freq_end)
+        layout.addRow("窗宽 (ms):", self.win_length)
         
         buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         buttons.accepted.connect(self.accept)
@@ -121,7 +123,8 @@ class ParameterDialog(QDialog):
     def get_values(self):
         try:
             return (float(self.time_start.text()), float(self.time_end.text()), 
-                    float(self.freq_start.text()), float(self.freq_end.text()))
+                    float(self.freq_start.text()), float(self.freq_end.text()),
+                    float(self.win_length.text()))
         except ValueError:
             return None
 
@@ -328,7 +331,7 @@ class Spec2WavWidget(QWidget):
             if not self.params:
                 return
 
-            time_start, time_end, freq_start, freq_end = self.params
+            time_start, time_end, freq_start, freq_end, win_length_ms = self.params
             
             # Disable buttons
             self.btn_process.setEnabled(False)
@@ -342,6 +345,7 @@ class Spec2WavWidget(QWidget):
                 time_end=time_end,
                 freq_start=freq_start,
                 freq_end=freq_end,
+                win_length_ms=win_length_ms,
                 target_sr=44100 # Default target
             )
             

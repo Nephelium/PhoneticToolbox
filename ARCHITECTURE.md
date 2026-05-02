@@ -149,10 +149,9 @@ PhoneticToolbox_v2/
 │   └── app.py                  # PyQt Application 初始化配置
 ├── ARCHITECTURE.md             # 架构规范文档
 ├── README.md                   # 项目说明文档
-├── main.py                     # 程序打包入口
+├── run.py                      # 程序启动与 PyInstaller 打包入口
 ├── pyproject.toml              # 项目依赖与构建配置
 ├── requirements.txt            # Python 依赖列表
-├── run.py                      # 开发环境启动脚本
 └── settings.json               # 历史文件（已废弃，不再作为配置来源）
 ```
 

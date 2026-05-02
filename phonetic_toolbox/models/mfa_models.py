@@ -3,6 +3,12 @@ from typing import Optional
 
 
 @dataclass
+class MFAAlignmentConfig:
+    beam: int = 10
+    retry_beam: int = 40
+
+
+@dataclass
 class MFAAutoAlignmentLaunchResult:
     success: bool
     message: str

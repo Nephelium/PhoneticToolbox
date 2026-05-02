@@ -15,6 +15,8 @@ class MFAAlignmentPipeline:
         dict_path: str,
         acoustic_path: str,
         output_path: str,
+        beam: int = 10,
+        retry_beam: int = 40,
     ) -> tuple[bool, str]:
         workspace_dir = tempfile.mkdtemp(prefix="mfa_ptbx_")
         encoded_corpus_dir = os.path.join(workspace_dir, "corpus")
@@ -60,6 +62,8 @@ class MFAAlignmentPipeline:
                 verbose=True,
                 num_jobs=1,
                 use_mp=False,
+                beam=beam,
+                retry_beam=retry_beam,
             )
             aligner.align()
             aligner.export_files(encoded_output_dir)
