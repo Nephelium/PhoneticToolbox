@@ -65,6 +65,9 @@ class MainWindow(QMainWindow):
         self.is_dark = True
         self.apply_theme()
 
+        # 启动时仅自动检查一次更新（网络允许时）：已是最新则完全静默，仅有新版本时弹窗提醒
+        QtCore.QTimer.singleShot(1500, self._auto_check_update_once)
+
     def init_home_ui(self):
         layout = QVBoxLayout(self.home_page)
         layout.setContentsMargins(22, 16, 22, 16)
@@ -373,6 +376,57 @@ class MainWindow(QMainWindow):
         self.update_msg_box.show()
 
         threading.Thread(target=self._fetch_latest_version, args=(current_version,), daemon=True).start()
+
+    def _auto_check_update_once(self):
+        """启动时自动检查一次更新：无加载弹窗、无结果弹窗、网络失败静默，仅发现新版本时提醒。"""
+        if getattr(self, "_auto_update_checked", False):
+            return
+        self._auto_update_checked = True
+        current_version = self._load_current_version()
+        threading.Thread(target=self._fetch_latest_version_silent, args=(current_version,), daemon=True).start()
+
+    def _fetch_latest_version_silent(self, current_version):
+        url = "https://api.github.com/repos/Nephelium/PhoneticToolbox/releases/latest"
+        try:
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req, timeout=5) as response:
+                data = json.loads(response.read().decode())
+                latest_version = data.get("tag_name", "")
+                release_url = data.get("html_url", "https://github.com/Nephelium/PhoneticToolbox/releases")
+                release_notes = data.get("body", "")
+
+                from PyQt6.QtCore import QMetaObject, Qt, Q_ARG
+                QMetaObject.invokeMethod(self, "_show_auto_update_result",
+                                         Qt.ConnectionType.QueuedConnection,
+                                         Q_ARG(str, current_version),
+                                         Q_ARG(str, latest_version),
+                                         Q_ARG(str, release_url),
+                                         Q_ARG(str, release_notes))
+        except Exception:
+            # 网络不可用或请求受限时静默跳过，不打扰用户
+            pass
+
+    @QtCore.pyqtSlot(str, str, str, str)
+    def _show_auto_update_result(self, current_version, latest_version, release_url, release_notes):
+        # 仅在当前版本低于 GitHub 最新版本时弹窗；一致/更高/无法比较均保持静默
+        if self._compare_versions(current_version, latest_version) != -1:
+            return
+        notes = self._summarize_release_notes(release_notes)
+        msg = QMessageBox(self)
+        msg.setWindowTitle("发现新版本")
+        msg.setWindowIcon(self.windowIcon())
+        msg.setIcon(QMessageBox.Icon.NoIcon)
+        msg.setText("发现新版本，建议更新")
+        msg.setInformativeText(
+            f"当前版本：{current_version}\nGitHub 最新：{latest_version}\n\n更新说明：\n{notes}"
+        )
+        msg.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        msg.button(QMessageBox.StandardButton.Yes).setText("立即下载")
+        msg.button(QMessageBox.StandardButton.No).setText("稍后")
+        self._style_update_message_box(msg)
+        ret = msg.exec()
+        if ret == QMessageBox.StandardButton.Yes:
+            webbrowser.open(release_url)
 
     def _fetch_latest_version(self, current_version):
         url = "https://api.github.com/repos/Nephelium/PhoneticToolbox/releases/latest"

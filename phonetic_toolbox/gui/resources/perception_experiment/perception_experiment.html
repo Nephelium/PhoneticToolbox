@@ -137,6 +137,41 @@
                 console.error("Audio Context Error", e);
             }
         };
+        /**
+         * 辅助函数：在数组的 [startIdx, endIdx] 闭区间内原地洗牌 (Fisher-Yates)
+         */
+        const shuffleInPlace = (arr, startIdx, endIdx) => {
+            const s = Math.max(0, startIdx);
+            const e = Math.min(arr.length - 1, endIdx);
+            for (let i = e; i > s; i--) {
+                const j = s + Math.floor(Math.random() * (i - s + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+        };
+
+        /**
+         * 辅助函数：根据试次序号 (0-based) 查找其所属的按键分段
+         */
+        const getKeyRangeForTrial = (config, trialIndex) => {
+            const ranges = Array.isArray(config.keyRanges) ? config.keyRanges : [];
+            return ranges.find(r => {
+                const s = Math.max(1, parseInt(r.start, 10) || 1) - 1;
+                const e = parseInt(r.end, 10);
+                if (isNaN(e) || e < 1) return false;
+                return trialIndex >= s && trialIndex <= e - 1;
+            }) || null;
+        };
+
+        /**
+         * 辅助函数：获取某试次的生效按键 (分段优先，未覆盖时回退到全局按键)
+         */
+        const getEffectiveKeys = (config, trialIndex) => {
+            const range = getKeyRangeForTrial(config, trialIndex);
+            if (range && Array.isArray(range.keys) && range.keys.some(k => k && k.key)) {
+                return range.keys;
+            }
+            return config.validKeys;
+        };
 
 
         // === 渲染组件：被试端 ===
@@ -155,6 +190,12 @@
             // 兼容旧版：如果 item 没有 stimuli 属性，则视为单刺激 X
             const isComplex = currentItem && !!currentItem.stimuli;
             const currentFile = !isComplex ? files.find(f => f.id === currentItem?.fileId) : null;
+
+            // 分段按键：当前试次的生效按键、所属分段与阶段提示
+            const activeKeyRange = getKeyRangeForTrial(config, currentTrialIndex);
+            const effectiveKeys = getEffectiveKeys(config, currentTrialIndex);
+            const isRangeStart = !!activeKeyRange && (Math.max(1, parseInt(activeKeyRange.start, 10) || 1) - 1) === currentTrialIndex;
+            const stageNoticeText = (isRangeStart && activeKeyRange.notice) ? activeKeyRange.notice.trim() : '';
 
             useEffect(() => {
                 if (currentItem?.type === 'text' && currentFile?.url) {
@@ -262,11 +303,11 @@
 
             }, [config, currentItem, status, isComplex, files]);
 
-            // 1. 监听试次变化：进入 Interstitial (指导语/间隔) 阶段
+            // 1. 监听试次变化：进入 Interstitial (指导语/间隔) 阶段；若为新按键分段起点且配置了阶段提示，则先展示阶段提示页
             useEffect(() => {
                 if (!hasStarted) return;
-                setStatus('interstitial');
-            }, [currentTrialIndex, hasStarted]);
+                setStatus(stageNoticeText ? 'stageNotice' : 'interstitial');
+            }, [currentTrialIndex, hasStarted, stageNoticeText]);
 
             // 2. Interstitial 自动前进逻辑
             useEffect(() => {
@@ -286,6 +327,12 @@
                 if (!hasStarted) return;
                 const pressedKey = e.key.toLowerCase();
 
+                if (status === 'stageNotice') {
+                    // 阶段提示页：任意键继续，进入试次间阶段
+                    setStatus('interstitial');
+                    return;
+                }
+
                 if (status === 'interstitial') {
                     if (config.advanceMode === 'manual') {
                         startActualTrial();
@@ -304,7 +351,7 @@
 
                 if (status !== 'responding') return;
                 
-                const validConfig = config.validKeys.find(k => k.key === pressedKey);
+                const validConfig = effectiveKeys.find(k => k.key === pressedKey);
 
                 if (validConfig) {
                     setLastKeyPressed(pressedKey);
@@ -335,7 +382,7 @@
                         onFinish(finalResults);
                     }
                 }
-            }, [status, currentTrialIndex, startTime, config, currentItem, currentFile, onFinish, playlist.length, hasStarted, setCurrentTrialIndex, results, setResults, startActualTrial, isComplex]);
+            }, [status, currentTrialIndex, startTime, config, effectiveKeys, currentItem, currentFile, onFinish, playlist.length, hasStarted, setCurrentTrialIndex, results, setResults, startActualTrial, isComplex]);
 
             useEffect(() => {
                 if (hasStarted) {
@@ -361,7 +408,7 @@
                         <button 
                             onClick={() => {
                                 setHasStarted(true);
-                                setStatus('interstitial');
+                                setStatus(stageNoticeText ? 'stageNotice' : 'interstitial');
                             }}
                             className="px-8 py-4 bg-blue-600 text-white text-xl rounded-lg shadow-lg hover:bg-blue-700 transition-transform transform hover:scale-105 active:scale-95 font-bold flex items-center gap-3"
                         >
@@ -372,6 +419,27 @@
             }
 
             if (!currentItem) return <div className="flex items-center justify-center h-full text-red-500">错误：试次丢失</div>;
+
+            // 渲染逻辑：阶段提示页 (进入新按键分段的第一题前展示)
+            if (status === 'stageNotice') {
+                const styleClass = config.largeText ? "text-4xl font-bold leading-tight" : "text-xl leading-relaxed";
+                return (
+                    <div className="flex flex-col items-center justify-center h-full space-y-10 animate-fade-in p-12 select-none w-full cursor-pointer" onClick={() => setStatus('interstitial')}>
+                        <div className="text-sm font-bold tracking-widest text-blue-600 uppercase">阶段提示</div>
+                        <div className={`text-gray-800 text-center max-w-5xl whitespace-pre-wrap ${styleClass}`}
+                             dangerouslySetInnerHTML={{__html: stageNoticeText}}></div>
+                        <div className="flex gap-6 justify-center flex-wrap">
+                            {effectiveKeys.filter(k => k.key).map(k => (
+                                <div key={k.key} className="flex flex-col items-center gap-2">
+                                    <div className="w-16 h-16 border-2 border-gray-300 bg-white rounded-xl flex items-center justify-center font-mono text-2xl font-bold text-gray-700 shadow-sm">{k.key.toUpperCase()}</div>
+                                    <span className="text-sm text-gray-500 font-medium">{k.label}</span>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="text-gray-400 animate-bounce pt-4">按任意键继续</div>
+                    </div>
+                );
+            }
 
             // 渲染逻辑：如果是 Interstitial 且需要显示文本
             if (status === 'interstitial') {
@@ -461,8 +529,8 @@
                     
                     <div className="text-center space-y-4 fixed bottom-12 left-0 right-0">
                         <p className="text-gray-400 text-sm tracking-widest uppercase">{status === 'waiting' ? 'PREPARING' : (status === 'playing' ? 'PLAYING...' : 'RESPONSE REQUIRED')}</p>
-                        <div className="flex gap-12 justify-center">
-                            {config.validKeys.map(k => (
+                        <div className="flex gap-12 justify-center flex-wrap">
+                            {effectiveKeys.filter(k => k.key).map(k => (
                                 <div key={k.key} className={`flex flex-col items-center gap-2 group transition-transform duration-100 ${lastKeyPressed === k.key ? 'scale-110' : ''}`}>
                                     <div className={`w-20 h-20 border-2 ${lastKeyPressed === k.key ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white'} rounded-xl flex items-center justify-center font-mono text-3xl font-bold text-gray-700 shadow-sm`}>{k.key.toUpperCase()}</div>
                                     <span className="text-sm text-gray-500 font-medium">{k.label}</span>
@@ -502,6 +570,8 @@
                    
                 ],
                 allowReplay: false,
+                keyRanges: [], // 分段按键设置: [{ id, start, end, keys: [{key,label}], notice }]
+                shuffleRanges: [], // 随机洗牌范围: [{ id, start, end }]
             });
             const [questionnaire, setQuestionnaire] = useState([
                 { id: 'q1', type: 'text', label: '姓名/编号', required: true },
@@ -709,9 +779,18 @@
                         return getSortName(b).localeCompare(getSortName(a));
                     });
                 } else if (type === 'random') {
-                    for (let i = newOrder.length - 1; i > 0; i--) {
-                        const j = Math.floor(Math.random() * (i + 1));
-                        [newOrder[i], newOrder[j]] = [newOrder[j], newOrder[i]];
+                    const ranges = (config.shuffleRanges || [])
+                        .map(r => ({ s: parseInt(r.start, 10), e: parseInt(r.end, 10) }))
+                        .filter(r => !isNaN(r.s) && !isNaN(r.e) && r.s >= 1 && r.e >= r.s);
+                    if (ranges.length === 0) {
+                        // 未设置范围：全局洗牌
+                        for (let i = newOrder.length - 1; i > 0; i--) {
+                            const j = Math.floor(Math.random() * (i + 1));
+                            [newOrder[i], newOrder[j]] = [newOrder[j], newOrder[i]];
+                        }
+                    } else {
+                        // 设置了范围：仅在每个范围内洗牌，范围外顺序保持不变
+                        ranges.forEach(r => shuffleInPlace(newOrder, r.s - 1, r.e - 1));
                     }
                 }
                 setPlaylist(newOrder);
@@ -1040,7 +1119,8 @@
                 reader.onload = (event) => {
                     try {
                         const data = JSON.parse(event.target.result);
-                        if (data.config) setConfig(data.config);
+                        // 合并默认值，兼容缺少新字段 (keyRanges/shuffleRanges 等) 的旧配置
+                        if (data.config) setConfig(prev => ({ ...prev, ...data.config }));
                         if (data.questionnaire) setQuestionnaire(data.questionnaire);
                         
                         // 兼容旧版本 logic
@@ -1331,6 +1411,35 @@
                                         <Activity className="w-4 h-4"/> 随机洗牌
                                     </button>
                                 </div>
+                                <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 space-y-3 mb-4 max-w-3xl">
+                                    <div className="flex items-center justify-between">
+                                        <label className="text-sm font-medium text-gray-700">随机洗牌范围（可选）</label>
+                                        <button onClick={() => setConfig({ ...config, shuffleRanges: [...(config.shuffleRanges || []), { id: `sr${Date.now()}`, start: 1, end: playlist.length || 1 }] })} className="flex items-center gap-1 text-xs text-blue-600 font-medium hover:bg-blue-50 px-2 py-1 rounded transition"><Plus className="w-3 h-3"/> 添加范围</button>
+                                    </div>
+                                    <p className="text-xs text-gray-400">未设置范围时，“随机洗牌”为全局洗牌；设置后，仅在每个范围内随机洗牌，范围外的试次顺序保持不变（题号按当前列表顺序，含首尾）。</p>
+                                    {(config.shuffleRanges || []).length > 0 && (
+                                        <div className="space-y-2">
+                                            {(config.shuffleRanges || []).map((range, rIdx) => (
+                                                <div key={range.id || rIdx} className="flex items-center gap-2 text-sm text-gray-700">
+                                                    <span>第</span>
+                                                    <input type="number" min={1} value={range.start} onChange={e => { const n = [...(config.shuffleRanges || [])]; n[rIdx] = { ...n[rIdx], start: e.target.value }; setConfig({ ...config, shuffleRanges: n }); }} className="w-20 border-gray-300 border p-1.5 rounded text-center" />
+                                                    <span>题 至 第</span>
+                                                    <input type="number" min={1} value={range.end} onChange={e => { const n = [...(config.shuffleRanges || [])]; n[rIdx] = { ...n[rIdx], end: e.target.value }; setConfig({ ...config, shuffleRanges: n }); }} className="w-20 border-gray-300 border p-1.5 rounded text-center" />
+                                                    <span>题</span>
+                                                    <button onClick={() => {
+                                                        const s = parseInt(range.start, 10);
+                                                        const eIdx = parseInt(range.end, 10);
+                                                        if (isNaN(s) || isNaN(eIdx) || s < 1 || eIdx < s) { alert('范围无效，请检查起止题号'); return; }
+                                                        const newOrder = [...playlist];
+                                                        shuffleInPlace(newOrder, s - 1, eIdx - 1);
+                                                        setPlaylist(newOrder);
+                                                    }} className="ml-2 px-3 py-1 text-xs bg-blue-50 text-blue-600 rounded hover:bg-blue-100 font-medium transition">洗牌该范围</button>
+                                                    <button onClick={() => setConfig({ ...config, shuffleRanges: (config.shuffleRanges || []).filter((_, i) => i !== rIdx) })} className="ml-auto text-gray-400 hover:text-red-500 p-1"><Trash2 className="w-4 h-4"/></button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                                     {playlist.length === 0 ? (
                                         <div className="p-12 text-center text-gray-400 flex flex-col items-center gap-2">
@@ -1480,6 +1589,7 @@
                                     <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                                         <h3 className="font-semibold mb-4 text-gray-800 flex items-center gap-2">按键设置</h3>
                                         <div className="space-y-3">
+                                            <label className="block text-sm font-medium text-gray-700">全局按键（默认，未设置分段或未覆盖的试次生效）</label>
                                             {config.validKeys.map((k, idx) => (
                                                 <div key={idx} className="grid grid-cols-12 gap-2 items-center">
                                                     <div className="col-span-2"><input type="text" maxLength={1} value={k.key} onChange={e => {const n=[...config.validKeys];n[idx].key=e.target.value.toLowerCase();setConfig({...config,validKeys:n})}} className="w-full text-center border-gray-300 border p-2 rounded font-mono uppercase" placeholder="键" /></div>
@@ -1488,6 +1598,37 @@
                                                 </div>
                                             ))}
                                             <button onClick={() => setConfig({...config, validKeys: [...config.validKeys, {key: '', label: ''}]})} className="flex items-center gap-1 text-sm text-blue-600 font-medium mt-2 hover:bg-blue-50 px-3 py-1 rounded w-fit transition"><Plus className="w-4 h-4"/> 添加新按键</button>
+                                        </div>
+                                        <div className="border-t pt-4 mt-4 space-y-3">
+                                            <div className="flex items-center justify-between">
+                                                <label className="block text-sm font-medium text-gray-700">分段按键（可选，按试次范围覆盖全局按键）</label>
+                                                <button onClick={() => setConfig({ ...config, keyRanges: [...(config.keyRanges || []), { id: `kr${Date.now()}`, start: 1, end: playlist.length || 1, keys: [{ key: '', label: '' }], notice: '' }] })} className="flex items-center gap-1 text-xs text-blue-600 font-medium hover:bg-blue-50 px-2 py-1 rounded transition whitespace-nowrap"><Plus className="w-3 h-3"/> 添加按键范围</button>
+                                            </div>
+                                            <p className="text-xs text-gray-400">示例：第 1-20 题按键 1/2/3/4 代表一/二/三/四声；第 21-40 题按键 1/2 代表是/否。题号按当前播放序列顺序（含首尾），未覆盖的试次仍使用全局按键。</p>
+                                            {(config.keyRanges || []).map((range, rIdx) => (
+                                                <div key={range.id || rIdx} className="border border-gray-200 rounded-lg p-4 space-y-3 bg-gray-50">
+                                                    <div className="flex items-center gap-2 text-sm text-gray-700">
+                                                        <span>第</span>
+                                                        <input type="number" min={1} value={range.start} onChange={e => { const n = [...(config.keyRanges || [])]; n[rIdx] = { ...n[rIdx], start: e.target.value }; setConfig({ ...config, keyRanges: n }); }} className="w-20 border-gray-300 border p-1.5 rounded text-center bg-white" />
+                                                        <span>题 至 第</span>
+                                                        <input type="number" min={1} value={range.end} onChange={e => { const n = [...(config.keyRanges || [])]; n[rIdx] = { ...n[rIdx], end: e.target.value }; setConfig({ ...config, keyRanges: n }); }} className="w-20 border-gray-300 border p-1.5 rounded text-center bg-white" />
+                                                        <span>题</span>
+                                                        <button onClick={() => setConfig({ ...config, keyRanges: (config.keyRanges || []).filter((_, i) => i !== rIdx) })} className="ml-auto text-gray-400 hover:text-red-500 p-1"><Trash2 className="w-4 h-4"/></button>
+                                                    </div>
+                                                    {(range.keys || []).map((k, kIdx) => (
+                                                        <div key={kIdx} className="grid grid-cols-12 gap-2 items-center">
+                                                            <div className="col-span-2"><input type="text" maxLength={1} value={k.key} onChange={e => { const n = [...(config.keyRanges || [])]; const keys = [...(n[rIdx].keys || [])]; keys[kIdx] = { ...keys[kIdx], key: e.target.value.toLowerCase() }; n[rIdx] = { ...n[rIdx], keys }; setConfig({ ...config, keyRanges: n }); }} className="w-full text-center border-gray-300 border p-2 rounded font-mono uppercase bg-white" placeholder="键" /></div>
+                                                            <div className="col-span-8"><input type="text" value={k.label} onChange={e => { const n = [...(config.keyRanges || [])]; const keys = [...(n[rIdx].keys || [])]; keys[kIdx] = { ...keys[kIdx], label: e.target.value }; n[rIdx] = { ...n[rIdx], keys }; setConfig({ ...config, keyRanges: n }); }} className="w-full border-gray-300 border p-2 rounded bg-white" placeholder="说明" /></div>
+                                                            <div className="col-span-2 flex justify-center"><button onClick={() => { const n = [...(config.keyRanges || [])]; n[rIdx] = { ...n[rIdx], keys: (n[rIdx].keys || []).filter((_, i) => i !== kIdx) }; setConfig({ ...config, keyRanges: n }); }} className="text-gray-400 hover:text-red-500 p-1"><Trash2 className="w-4 h-4"/></button></div>
+                                                        </div>
+                                                    ))}
+                                                    <button onClick={() => { const n = [...(config.keyRanges || [])]; n[rIdx] = { ...n[rIdx], keys: [...(n[rIdx].keys || []), { key: '', label: '' }] }; setConfig({ ...config, keyRanges: n }); }} className="flex items-center gap-1 text-xs text-blue-600 font-medium hover:bg-blue-50 px-2 py-1 rounded w-fit transition"><Plus className="w-3 h-3"/> 添加按键</button>
+                                                    <div>
+                                                        <label className="block text-xs font-medium text-gray-500 mb-1">阶段提示（可选）：进入该范围第 1 题前全屏展示，并预览该阶段的按键，按任意键继续。支持 HTML 标签。</label>
+                                                        <textarea rows={2} value={range.notice || ''} onChange={e => { const n = [...(config.keyRanges || [])]; n[rIdx] = { ...n[rIdx], notice: e.target.value }; setConfig({ ...config, keyRanges: n }); }} className="w-full border-gray-300 border p-2 rounded text-sm bg-white" placeholder="例如：接下来的实验中，按键含义将发生变化，请注意屏幕下方的按键说明。" />
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
