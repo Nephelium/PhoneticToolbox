@@ -78,6 +78,7 @@ flowchart LR
 - LPC 谱图（LPC 频谱）
   ![LPC 谱图（频谱）](image/screenshots/13_lpc_spectrum.jpg)
 - 音系归纳
+
   ![音系归纳](image/screenshots/14_phonology.png)
 
 > 各模块更详细的操作步骤与示例见[使用说明书](Phonetic_Export/index.html)。
