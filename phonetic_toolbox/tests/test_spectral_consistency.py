@@ -16,7 +16,7 @@ from phonetic_toolbox.core.acoustic import (
     compute_spectral_features_batch
 )
 
-def compare_methods():
+def benchmark_compare_methods():
     # 1. Setup Audio
     search_dir = Path("C:/Users/13680/Desktop/测试音频/textgrid测试")
     if not search_dir.exists():
@@ -80,5 +80,43 @@ def compare_methods():
         else:
             print(f"{name:<6} | {len(valid):<12} | {np.min(valid):<10.3f} | {np.max(valid):<10.3f}")
 
+def test_spectral_batch_tracks_have_expected_harmonic_order():
+    fs = 16000
+    duration = 0.5
+    frameshift_ms = 5.0
+    time = np.arange(int(fs * duration), dtype=float) / fs
+    signal = (
+        0.8 * np.sin(2.0 * np.pi * 200.0 * time)
+        + 0.3 * np.sin(2.0 * np.pi * 400.0 * time)
+        + 0.1 * np.sin(2.0 * np.pi * 800.0 * time)
+    )
+    n_frames = int(round(duration * 1000.0 / frameshift_ms))
+    f0 = np.full(n_frames, 200.0, dtype=float)
+    f1 = np.full(n_frames, 800.0, dtype=float)
+    f2 = np.full(n_frames, 1600.0, dtype=float)
+    f3 = np.full(n_frames, 2400.0, dtype=float)
+
+    result = compute_spectral_features_batch(
+        signal,
+        fs,
+        frameshift_ms,
+        f0,
+        f1,
+        f2,
+        f3,
+        3,
+        np.ones(n_frames, dtype=bool),
+    )
+
+    valid = (
+        np.isfinite(result["H1"])
+        & np.isfinite(result["H2"])
+        & np.isfinite(result["H4"])
+    )
+    assert np.count_nonzero(valid) > 0
+    assert np.all(result["H1"][valid] > result["H2"][valid])
+    assert np.all(result["H2"][valid] > result["H4"][valid])
+
+
 if __name__ == "__main__":
-    compare_methods()
+    benchmark_compare_methods()

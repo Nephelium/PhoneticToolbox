@@ -88,13 +88,8 @@ def save_excel(path: Path, data: Dict[str, Any]) -> None:
 
     df = pd.DataFrame(df_data)
     
-    # Save to Excel
-    try:
-        df.to_excel(path, index=False)
-    except Exception as e:
-        print(f"Error saving Excel {path}: {e}")
-        # Fallback to CSV if Excel fails?
-        # df.to_csv(path.with_suffix(".csv"), index=False)
+    # Let write failures propagate so callers cannot report a false success.
+    df.to_excel(path, index=False)
 
 def load_excel(path: Path) -> Dict[str, Any]:
     """Load Excel file to dictionary."""

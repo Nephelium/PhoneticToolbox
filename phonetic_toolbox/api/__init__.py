@@ -5,6 +5,9 @@ from phonetic_toolbox.services.ipa_trans_service import IPATransService
 from phonetic_toolbox.services.perception_service import (
     PerceptionExperimentService,
 )
+from phonetic_toolbox.services.articulatory_synth_service import (
+    ArticulatorySynthService,
+)
 from phonetic_toolbox.services.mfa_alignment_service import (
     MFAAutoAlignmentService,
 )
@@ -14,6 +17,9 @@ from phonetic_toolbox.models.config import AcousticConfig, AnalysisResult
 from phonetic_toolbox.models.lip_models import LipLaunchResult
 from phonetic_toolbox.models.ipa_models import IPATransLaunchResult
 from phonetic_toolbox.models.perception_models import PerceptionLaunchResult
+from phonetic_toolbox.models.articulatory_models import (
+    ArticulatorySynthLaunchResult,
+)
 from phonetic_toolbox.models.mfa_models import (
     MFAAlignmentRunResult,
     MFAAutoAlignmentLaunchResult,
@@ -39,6 +45,13 @@ def launch_perception_experiment(
     return service.launch()
 
 
+def launch_articulatory_synth(
+    project_dir: str | None = None,
+) -> ArticulatorySynthLaunchResult:
+    service = ArticulatorySynthService(project_dir=project_dir)
+    return service.launch()
+
+
 def launch_mfa_auto_alignment(
     project_dir: str | None = None,
 ) -> MFAAutoAlignmentLaunchResult:
@@ -54,16 +67,19 @@ __all__ = [
     "AnalysisResult",
     "IPATransService",
     "PerceptionExperimentService",
+    "ArticulatorySynthService",
     "MFAAutoAlignmentService",
     "LPCSpectrumService",
     "PhonologyInductionService",
     "LipLaunchResult",
     "IPATransLaunchResult",
     "PerceptionLaunchResult",
+    "ArticulatorySynthLaunchResult",
     "MFAAutoAlignmentLaunchResult",
     "MFAAlignmentRunResult",
     "launch_lip_extraction",
     "launch_ipa_trans",
     "launch_perception_experiment",
+    "launch_articulatory_synth",
     "launch_mfa_auto_alignment",
 ]

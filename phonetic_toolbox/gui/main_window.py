@@ -24,8 +24,10 @@ from .widgets.lpc_spectrum_widget import LPCSpectrumWidget
 from .widgets.phonology_induction_widget import PhonologyInductionWidget
 from .widgets.lip_gui import launch_lip_gui
 from .dialogs.about_dialog import AboutDialog
+from phonetic_toolbox import __version__
 from phonetic_toolbox.utils import get_resource_path
 from phonetic_toolbox.api import (
+    launch_articulatory_synth,
     launch_ipa_trans,
     launch_perception_experiment,
 )
@@ -88,6 +90,7 @@ class MainWindow(QMainWindow):
             ("参数显示", self.on_parameter_display),
             ("EGG信号分析", self.on_egg_analysis),
             ("语音合成", self.on_speech_synthesis),
+            ("发音物理模拟", self.on_articulatory_synth),
             ("变速变调", self.on_pitch_manipulation),
             ("感知实验", self.on_perception_experiment),
             ("MFA自动标注", self.on_mfa_auto_alignment),
@@ -321,6 +324,12 @@ class MainWindow(QMainWindow):
             return
         else:
             QMessageBox.critical(self, "感知实验", result.message)
+
+    def on_articulatory_synth(self):
+        result = launch_articulatory_synth()
+        if result.success:
+            return
+        QMessageBox.critical(self, "发音物理模拟", result.message)
 
     def on_mfa_auto_alignment(self):
         from .dialogs.mfa_auto_alignment_dialog import MFAAutoAlignmentDialog
@@ -578,7 +587,7 @@ class MainWindow(QMainWindow):
                 value = match.group(1).strip()
                 if value:
                     return f"v{value}"
-        return "v2.1.0"
+        return f"v{__version__}"
 
     def on_about(self):
         dlg = AboutDialog(self)

@@ -26,6 +26,7 @@ from phonetic_toolbox.services.acoustic_service import PARAMETER_MAPPING
 from phonetic_toolbox.services.io.wav import read_wav_float_mono
 from phonetic_toolbox.services.io.excel import resolve_parameter_source, load_fastdb_columns, load_fastdb_window, ensure_fast_parameter_db
 from phonetic_toolbox.gui.dialogs.parameter_tools_dialog import ParameterHelpDialog as SharedParameterHelpDialog
+from phonetic_toolbox.utils import get_resource_path
 
 log = logging.getLogger(__name__)
 
@@ -1010,7 +1011,7 @@ class ParameterDisplayWidget(QtWidgets.QWidget):
         dialog.exec()
 
     def _open_help_doc(self):
-        help_file = Path(r"d:\PhoneticToolbox\PhoneticToolbox_v2\Phonetic_Export\index.html")
+        help_file = Path(get_resource_path(r"Phonetic_Export\index.html"))
         if not help_file.exists():
             QtWidgets.QMessageBox.warning(self, "帮助", f"未找到帮助文件：{help_file}")
             return

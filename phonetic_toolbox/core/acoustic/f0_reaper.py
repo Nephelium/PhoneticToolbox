@@ -40,15 +40,28 @@ def _find_reaper_bin(explicit: Optional[str] = None) -> str:
         if w:
             return w
 
-    # 启发式搜索
-    # 假设当前结构: phonetic_toolbox/core/acoustic/f0_reaper.py
-    # 向上寻找项目根目录
+    module_dir = Path(__file__).resolve().parent
     cands = [
+        module_dir / "reaper.exe",
+        module_dir / "reaper",
         Path.cwd() / "reaper.exe",
         Path.cwd() / "reaper" / "reaper.exe",
         Path.cwd() / "bin" / "reaper.exe",
         Path(__file__).parent.parent.parent.parent / "bin" / "reaper.exe",
     ]
+
+    meipass = getattr(sys, "_MEIPASS", None)
+    if meipass:
+        bundle_root = Path(meipass)
+        if explicit and not Path(explicit).is_absolute():
+            cands.insert(0, bundle_root / explicit)
+        cands.extend(
+            [
+                bundle_root / "phonetic_toolbox" / "core" / "acoustic" / "reaper.exe",
+                bundle_root / "reaper.exe",
+                bundle_root / "bin" / "reaper.exe",
+            ]
+        )
     
     for cand in cands:
         r = _resolve_candidate(cand)

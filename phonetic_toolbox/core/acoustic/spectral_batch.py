@@ -27,7 +27,7 @@ def parabolic_interpolation(y: np.ndarray, x: np.ndarray, i: int) -> Tuple[float
     if denom == 0:
         return beta, x[i]
         
-    p = 0.5 * (alpha - gamma) / denom
+    p = (alpha - gamma) / denom
     
     # Peak value
     peak_val = beta - 0.25 * (alpha - gamma) * p

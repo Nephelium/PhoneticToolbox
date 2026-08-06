@@ -17,14 +17,14 @@
     *   `core/` 下的各个子模块（如 `egg`, `acoustic`）应尽可能独立。
     *   跨模块调用应通过明确的接口进行。
 
-## 2. 目录结构详解 (Updated 2026-03-18)
+## 2. 目录结构详解 (Updated 2026-07-15)
 
 ```text
 PhoneticToolbox_v2/
-├── docs/                       # 项目文档
+├── docs/                       # 项目文档与已确认实施计划
 ├── phonetic_toolbox/           # 源代码根目录
 │   ├── api/                    # [Middle Layer] 对外暴露的简洁 API (Facade)
-│   │   └── __init__.py         # 导出 launch_lip_extraction / launch_ipa_trans / launch_perception_experiment 等入口
+│   │   └── __init__.py         # 导出 lip / IPA / perception / articulatory 等 Facade 入口
 │   ├── core/                   # [Inner Layer] 纯粹的领域逻辑与算法
 │   │   ├── acoustic/           # 声学参数提取
 │   │   │   ├── README.md           # 声学模块说明文档
@@ -33,8 +33,8 @@ PhoneticToolbox_v2/
 │   │   │   ├── corrections.py      # 能量校正算法 (Iseli & Alwan)
 │   │   │   ├── cpp.py              # 倒谱峰值突出度 (CPP) 计算
 │   │   │   ├── energy.py           # 能量/强度计算 (Intensity dB)
-│   │   │   ├── f0_praat.py         # Praat 算法基频提取
-│   │   │   ├── f0_reaper.py        # REAPER 算法基频提取 (Wrapper)
+│   │   │   ├── f0_praat.py         # Praat AC/CC 基频及显式时间轨迹
+│   │   │   ├── f0_reaper.py        # REAPER 基频与打包二进制定位
 │   │   │   ├── formants_praat.py   # Praat 算法共振峰提取 (含自动限额移位)
 │   │   │   ├── hnr.py              # 谐波噪声比 (HNR) 计算 (多频带)
 │   │   │   ├── jitter_shimmer.py   # 抖动与闪烁计算 (Local, RAP, PPQ5, APQ3/5/11)
@@ -85,6 +85,7 @@ PhoneticToolbox_v2/
         │   ├── egg_batch_dialog.py # EGG 批量处理对话框
         │   └── settings_dialog.py  # 全局设置弹窗
         ├── resources/          # 静态资源 (图标, 图片, 前端页面资源)
+        │   ├── articulatory_synth/  # 发音物理模拟器离线资源
         │   ├── ipa_trans/          # 普通话转 IPA 前端页面生成与产物
         │   │   ├── generate_ipa_website.py
         │   │   └── ipa_converter.html
@@ -111,6 +112,8 @@ PhoneticToolbox_v2/
         └── utils.py            # GUI 专用工具 (主题应用, 音频播放)
 │   ├── models/                 # [Inner Layer] 数据结构定义 (Pydantic/Dataclasses)
     │   ├── __init__.py         # 存放跨层共享的数据模型 (如 Config, AnalysisResult, LaunchResult)
+    │   ├── acoustic_models.py  # PitchTrack：带真实时间坐标的基频轨迹
+    │   ├── articulatory_models.py # 发音物理模拟器启动结果
     │   ├── config.py           # 配置模型定义
     │   ├── egg_models.py       # EGG 分析结果模型定义
     │   ├── ipa_models.py       # 普通话转 IPA 启动结果模型
@@ -129,6 +132,7 @@ PhoneticToolbox_v2/
 │   │   │   └── __init__.py
 │   │   ├── __init__.py
         ├── acoustic_service.py # 声学参数分析服务 (串联 Core 算法与 IO)
+        ├── articulatory_synth_service.py # 发音物理模拟器资源定位与启动
         ├── egg_service.py      # EGG 分析服务 (GCI/GOI 检测, CQ/SQ 计算, 逆滤波)
         ├── ipa_trans_service.py # 普通话转 IPA 服务（按需生成并打开前端页面）
         ├── lip_service.py      # 唇形提取服务（定位并打开外部项目入口）
@@ -138,8 +142,10 @@ PhoneticToolbox_v2/
         ├── settings_service.py # 配置管理服务 (单例模式, 持有运行时配置对象)
         └── spec2wav_service.py # 语谱图转音频服务
     ├── tests/                  # 单元测试与集成测试
-│   │   └── core/
-│   │       └── test_acoustic.py    # 声学算法测试用例
+│   │   ├── test_acoustic_time_alignment.py # F0 算法与时间网格回归测试
+│   │   ├── test_acoustic_numerics.py # 插值、RMS、掩码回归测试
+│   │   ├── test_resource_resolution.py # 开发态/_MEIPASS 资源测试
+│   │   ├── test_version_consistency.py # 项目/运行时/EXE 版本一致性
 │   │   ├── test_lip_service.py      # 唇形提取服务测试
 │   │   ├── test_lpc_service.py      # LPC 服务测试
 │   │   └── test_perception_service.py # 感知实验服务测试
@@ -150,6 +156,7 @@ PhoneticToolbox_v2/
 ├── ARCHITECTURE.md             # 架构规范文档
 ├── README.md                   # 项目说明文档
 ├── run.py                      # 程序启动与 PyInstaller 打包入口
+├── run.spec                    # 可移植、版本化的 PyInstaller onefile 规格
 ├── pyproject.toml              # 项目依赖与构建配置
 ├── requirements.txt            # Python 依赖列表
 └── settings.json               # 历史文件（已废弃，不再作为配置来源）
@@ -219,6 +226,34 @@ PhoneticToolbox_v2/
     *   `core/synthesis/klatt/` 仅保留核心算法与参数定义，不再存放 `*service.py` 命名文件。
     *   历史迁移产生的未被调用服务脚本已清理，避免无效模块滞留。
 
+### 2.5 声学时间契约、资源定位与版本化打包 (Updated 2026-07-15)
+
+1.  **显式声学时间轨迹**:
+    *   Core 层使用 `models/acoustic_models.py::PitchTrack` 表达“采样时间 + 数值”，不得再假定第三方算法的第一个返回值位于 0 秒。
+    *   Praat CC 必须调用 `Sound.to_pitch_cc()`；Praat AC 调用 `Sound.to_pitch()`，算法失败应显式上报，不得静默切换成另一算法。
+    *   `AcousticAnalysisService` 负责把 Praat/REAPER 映射到 `np.arange(n_frames) * frameshift_ms / 1000` 的统一零基网格。Core 不承担跨算法轨迹对齐。
+    *   网格外不外推；`NaN` 表示无声、无效或缺测。平滑不得跨越 `NaN` 间隙，也不得恢复被最终掩码排除的帧。
+
+2.  **数值与导出边界**:
+    *   `compute_rms` 返回线性时域 RMS；dB 音强由 `compute_energy` 表达，调用方不得混用量纲。
+    *   频谱峰值细化使用经过解析测试的三点抛物线插值。
+    *   Excel/CSV 写入错误必须传播到 Service 层；批处理由 Service 统一记录 `processed` 与 `failed`，IO 层不得吞异常。
+
+3.  **资源可移植性**:
+    *   禁止在 Python、HTML、CSS 或 JavaScript 中写入开发机盘符或仓库绝对路径。
+    *   Python 根级资源使用 `get_resource_path()`、模块位置或 Service 的运行时目录解析器；PyInstaller onefile 优先支持 `sys._MEIPASS`。
+    *   静态网页资源使用相对 URL。外部前端的目录发现、环境变量覆盖与打开动作属于 Services/API 职责。
+    *   REAPER 二进制解析须覆盖显式路径、系统 PATH、模块目录和 `_MEIPASS`，同时保留纯 Python 回退。
+
+4.  **版本与构建**:
+    *   发布版本同时记录于 `pyproject.toml` 与 `phonetic_toolbox.__version__`，由自动测试保证一致。
+    *   `run.spec` 必须以 `SPECPATH` 为项目根，禁止写死 checkout 路径；它从 `pyproject.toml` 读取版本并输出 `PhoneticToolbox_v<version>.exe`。
+    *   打包前至少执行完整 pytest、`compileall`、GUI 主窗口构造冒烟和资源解析测试；打包后检查关键资源解包与 EXE 启动存活。
+
+5.  **发音物理模拟器链路**:
+    *   入口遵循 `MainWindow -> API -> ArticulatorySynthService -> ArticulatorySynthLaunchResult`。
+    *   离线前端资源位于 `gui/resources/articulatory_synth/`；网页只处理交互与近似物理模型，不绕过 Service 实现平台路径发现。
+
 ## 3. models 文件夹的作用
 
 `phonetic_toolbox/models/` 文件夹用于存放**数据模型 (Data Models)**。
@@ -236,6 +271,7 @@ PhoneticToolbox_v2/
 
 1.  **配置对象**: 定义参数估计的配置结构。
 2.  **结果对象**: 定义分析结果的数据结构。
+3.  **显式轨迹对象**: 时间坐标不能可靠推导时，使用类似 `PitchTrack(times, values)` 的模型同时传递时间和值。
 
 **示例 (`models/config.py`)**:
 ```python
@@ -276,6 +312,8 @@ class AnalysisResult:
 *   ❌ 禁止在 `core/` 函数中直接读取文件（应传入数据）。
 *   ❌ 禁止在 `gui/` 中编写复杂的 `for` 循环进行数据处理。
 *   ❌ 禁止在 `utils/` 中放入业务逻辑（Utils 应该是项目无关的通用工具）。
+*   ❌ 禁止在源码或静态资源中写入开发机盘符、个人目录或仓库绝对路径。
+*   ❌ 禁止通过截断/补齐数组替代具有真实时间坐标的跨算法对齐。
 
 ---
 **违反上述规则的代码将被视为不合格代码，必须重构。**

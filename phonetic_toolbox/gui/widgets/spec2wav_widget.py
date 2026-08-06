@@ -19,6 +19,7 @@ from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 from ...services.spec2wav_service import Spec2WavService
 from ...models.spec2wav_models import Spec2WavConfig, Spec2WavResult
 from ...core.spec2wav.common import amplitude_to_db
+from phonetic_toolbox.utils import get_resource_path
 
 class SelectionOverlay(QWidget):
     selection_confirmed = pyqtSignal(list, object) # points, pixmap
@@ -425,7 +426,7 @@ class Spec2WavWidget(QWidget):
                 QMessageBox.critical(self, "错误", f"保存失败: {e}")
 
     def _open_help_doc(self):
-        help_file = r"d:\PhoneticToolbox\PhoneticToolbox_v2\Phonetic_Export\index.html"
+        help_file = get_resource_path(r"Phonetic_Export\index.html")
         if not os.path.exists(help_file):
             QMessageBox.warning(self, "帮助", f"未找到帮助文件：{help_file}")
             return

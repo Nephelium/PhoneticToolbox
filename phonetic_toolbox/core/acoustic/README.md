@@ -6,8 +6,8 @@
 
 | 文件名 | 主要功能 | 核心函数 | 说明 |
 | :--- | :--- | :--- | :--- |
-| **`f0_praat.py`** | 基频 (F0) | `compute_praat_f0` | 调用 `parselmouth` (Praat) 计算 F0，支持自相关 (AC) 和互相关 (CC) 方法。 |
-| **`f0_reaper.py`** | 基频 (F0) | `compute_reaper_f0` | 调用 REAPER 算法计算 F0。优先尝试调用外部 `reaper` 可执行文件 (C++版)，若失败则自动降级使用内置 Python 实现 (`reaper_python.py`)。 |
+| **`f0_praat.py`** | 基频 (F0) | `compute_praat_f0`<br>`compute_praat_f0_track` | 调用 `parselmouth` (Praat) 计算 F0。数组接口用于兼容旧调用；轨迹接口额外保留 Praat 的真实帧时间。AC 与 CC 分别调用对应算法，不静默互相降级。 |
+| **`f0_reaper.py`** | 基频 (F0) | `compute_reaper_f0` | 调用 REAPER 算法计算 F0。外部二进制可从显式配置、系统 PATH、模块目录或 PyInstaller `_MEIPASS` 中定位；若执行失败则回退到内置 Python 实现。 |
 | **`reaper_python.py`** | 基频 (F0) | `run_python_impl` | REAPER 算法的纯 Python 实现，作为 `f0_reaper.py` 的后备方案，无需外部二进制依赖。 |
 | **`formants_praat.py`** | 共振峰 | `compute_praat_formants` | 使用 Praat 的 Burg 算法计算 F1-F4 及其带宽。**包含自动限额移位逻辑**：若 F1/F2/F3/F4 超出预设频率范围 (如 F1>1200Hz)，自动将其归入下一共振峰槽位。 |
 | **`spectral_batch.py`** | 频谱参数 (批量) | `compute_spectral_features_batch` | **(推荐)** 高效批量计算 H1-H4, A1-A3, H2K, H5K 等参数。采用 FFT + 抛物线插值，比逐个计算快数百倍。 |
@@ -18,13 +18,21 @@
 | **`soe.py`** | 激励强度 | `compute_soe` | 计算 Strength of Excitation (SoE)，基于零频率滤波 (ZFF) 方法评估声门闭合瞬间的激励强度。 |
 | **`spectral_slope.py`** | 频谱斜率 | `compute_spectral_slope` | 通过对对数幅度谱进行线性回归计算频谱斜率。 |
 | **`lpc.py`** | LPC 谱包络 | `compute_lpc_spectrum` | 基于线性预测编码 (LPC) 计算频率-幅度谱包络，供 LPC 谱图界面与服务层调用。 |
-| **`energy.py`** | 能量/音强 | `compute_energy` | 计算短时能量 (Intensity)，结果以 dB 为单位，与 Praat 一致。 |
+| **`energy.py`** | 能量/音强 | `compute_energy`<br>`compute_rms` | `compute_energy` 输出 dB 音强；`compute_rms` 直接从时域窗口计算线性 RMS 振幅。 |
 | **`voicing.py`** | 清浊/静音检测 | `compute_silence_mask`<br>`compute_zcr_voicing_mask` | 基于音强阈值 (Intensity Threshold) 判断静音；基于过零率 (ZCR) 和能量判断清浊音 (Voiced/Unvoiced)。 |
 | **`corrections.py`** | 参数校正 | `compute_H1A1A2A3_corrected`<br>`compute_H1H2_H2H4_corrected`<br>`compute_corrections_H2KH5K` | 根据 Iseli & Alwan (1999) 算法，利用 F1-F4 和 B1-B4 对 H1, H2, H4, A1-A3, H2K, H5K 进行校正。 |
-| **`common.py`** | 通用工具 | `segment_for_frame` | 提供音频分帧、切片等底层工具函数。 |
+| **`common.py`** | 通用工具 | `segment_for_frame` | 提供音频分帧、切片等底层工具函数；第 `k` 帧中心对应零基网格 `k * frameshift`。 |
 | **`__init__.py`** | 包入口 | - | 统一导出上述所有核心函数，方便外部调用。 |
 
 ## 算法详细说明
+
+### 时间轴与缺失值约定
+
+- Core 层能够返回“时间 + 数值”的显式轨迹；`PitchTrack.times` 使用秒，`PitchTrack.values` 使用 Hz。
+- Praat 和 REAPER 的原始帧起点可能与共振峰网格不同。统一对齐由 `AcousticAnalysisService` 完成，目标网格为 `np.arange(n_frames) * frameshift_ms / 1000`。
+- 网格范围外不外推，返回 `NaN`；无声区间不会被相邻有声值跨越插值。
+- 平滑只在连续有限值区间内部进行，静音/清音掩码在平滑后仍然有效。
+- 依赖 F0 的频谱分帧使用同一个零基时间约定，避免固定一帧的系统性偏移。
 
 ### 1. Jitter & Shimmer (微扰参数)
 基于 Praat 的 `To PointProcess (periodic, cc)` 获取脉冲点，计算相邻周期的变化。
@@ -74,7 +82,7 @@
 *   `scipy`: 信号处理 (FFT, 滤波, 优化)。
 *   `praat-parselmouth`: 调用 Praat 核心算法。
 
-对于 `f0_reaper.py`，推荐系统路径中存在 `reaper` 可执行文件以获得最佳性能。如果未找到或执行失败，将自动使用 `reaper_python.py` (纯 Python 实现，速度较慢但兼容性好)。
+对于 `f0_reaper.py`，推荐使用随项目打包的 `phonetic_toolbox/core/acoustic/reaper.exe` 或在配置中给出明确路径。如果未找到或执行失败，将自动使用 `reaper_python.py`（纯 Python 实现，速度较慢但兼容性好）。
 
 ## 使用示例
 
@@ -85,6 +93,7 @@ import numpy as np
 import scipy.io.wavfile as wavfile
 from phonetic_toolbox.core.acoustic import (
     compute_praat_f0,
+    compute_praat_f0_track,
     compute_praat_formants,
     compute_spectral_features_batch
 )
@@ -100,6 +109,12 @@ n_periods = 4
 # 1. 计算 F0
 f0 = compute_praat_f0("example.wav", frameshift_ms, min_f0=75, max_f0=600)
 voiced_mask = (f0 > 0)
+
+# 如需保留 Praat 的真实帧时间，使用轨迹接口
+pitch_track = compute_praat_f0_track(
+    "example.wav", frameshift_ms, min_f0=75, max_f0=600, method="cc"
+)
+print(pitch_track.times[:3], pitch_track.values[:3])
 
 # 2. 计算共振峰 (带自动移位)
 formants = compute_praat_formants("example.wav", frameshift_ms)
@@ -157,6 +172,7 @@ print(freq_hz.shape, mag_db.shape)
 
 ## 注意事项
 
-1.  **帧中心对齐**: `common.py` 中的 `segment_for_frame` 默认使用 `(k + 1) * frameshift` 作为第 k 帧 (0-based) 的中心时间点。
-2.  **单位**: 频率单位为 Hz，时间单位通常为 ms (参数设置) 或 s (内部计算)。幅度通常为 dB。
-3.  **空值处理**: 当 F0 无法计算或音频片段无效时，函数通常返回 `np.nan`。
+1.  **帧中心对齐**: `common.py` 中的 `segment_for_frame` 使用 `k * frameshift` 作为第 `k` 帧（0-based）的中心时间点。
+2.  **单位**: 频率单位为 Hz，时间单位通常为 ms（参数设置）或 s（轨迹与内部计算）。频谱幅度/音强通常为 dB，`compute_rms` 返回线性振幅。
+3.  **空值处理**: 当 F0 无法计算或音频片段无效时，函数通常返回 `np.nan`；调用方不得把这些缺失区间当作可跨越插值的数据。
+4.  **峰值插值**: `spectral_batch.py` 使用三点抛物线插值细化 FFT 峰位置；解析测试覆盖非整数 bin 的峰值恢复。

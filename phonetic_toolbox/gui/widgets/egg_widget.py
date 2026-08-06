@@ -31,6 +31,7 @@ from phonetic_toolbox.models.config import EGGConfig, DEFAULT_ROI_START, DEFAULT
 from phonetic_toolbox.models.egg_models import EGGAnalysisResult
 from phonetic_toolbox.gui.workers.egg_workers import LoadWorker, EventsWorker, F0Worker
 from phonetic_toolbox.gui.dialogs.egg_batch_dialog import BatchProcessingDialog
+from phonetic_toolbox.utils import get_resource_path
 
 # --- Constants ---
 DEFAULT_PEAK_PROMINENCE = 0.01
@@ -1759,7 +1760,7 @@ class EGGWidget(QWidget):
         dlg.exec()
 
     def show_help_dialog(self):
-        help_file = Path(r"d:\PhoneticToolbox\PhoneticToolbox_v2\Phonetic_Export\index.html")
+        help_file = Path(get_resource_path(r"Phonetic_Export\index.html"))
         if not help_file.exists():
             QMessageBox.warning(self, "帮助", f"未找到帮助文件：{help_file}")
             return

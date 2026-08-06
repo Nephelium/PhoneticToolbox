@@ -48,16 +48,23 @@
         *   **元数据**: 采样率、文件时长。
         *   **其他**: 声门运动事件标记（Rise/Fall）。
 
-### 3. `spec2wav_models.py`: 语谱图转音频模型
+### 3. `acoustic_models.py`: 显式时间轨迹
+
+*   **`PitchTrack`**
+    *   **用途**: 同时保存基频采样时间 (`times`) 与对应数值 (`values`)，避免只传数组时丢失 Praat/REAPER 的真实帧起点。
+    *   **约定**: 时间单位为秒，基频单位为 Hz，无效或无声帧使用 `np.nan`。
+    *   **不可变性**: 数据类使用 `frozen=True`，轨迹对象创建后不重新绑定字段。
+
+### 4. `spec2wav_models.py`: 语谱图转音频模型
 
 *   **`Spec2WavConfig`**
     *   **用途**: 定义语谱图重建参数（频率范围、时间范围、动态范围、采样率等）。
 *   **`Spec2WavResult`**
     *   **用途**: 封装重建结果（波形、采样率、提示信息等），供 GUI 直接消费。
 
-### 4. 启动结果模型 (`lip_models.py` / `ipa_models.py` / `perception_models.py`)
+### 5. 启动结果模型
 
-这三类模型遵循同一设计思路：用结构化结果替代松散字典，承载“是否成功 + 消息 + 关键路径”。
+`lip_models.py`、`ipa_models.py`、`perception_models.py` 与 `articulatory_models.py` 遵循同一设计思路：用结构化结果替代松散字典，承载“是否成功 + 消息 + 关键路径”。
 
 *   **`LipLaunchResult` (`lip_models.py`)**
     *   **用途**: 返回唇形提取入口启动状态、入口路径与工作目录。
@@ -65,8 +72,10 @@
     *   **用途**: 返回 IPA 页面生成/打开状态、HTML 路径及生成日志。
 *   **`PerceptionLaunchResult` (`perception_models.py`)**
     *   **用途**: 返回感知实验页面打开状态、HTML 路径与工作目录。
+*   **`ArticulatorySynthLaunchResult` (`articulatory_models.py`)**
+    *   **用途**: 返回发音物理模拟器页面打开状态、HTML 路径与工作目录。
 
-### 5. 语音合成模块的数据边界 (Speech Synthesis Boundary)
+### 6. 语音合成模块的数据边界 (Speech Synthesis Boundary)
 
 当前“语音合成实验室”采用以下数据边界约定：
 *   **Core 合成参数**: `core/synthesis/klatt/tdklatt.py` 中 `KlattParam1980` 作为核心参数对象。
@@ -84,3 +93,8 @@
 
 1.  已补充与当前代码一致的启动结果模型说明（lip / ipa / perception）。
 2.  本文档仅做增量更新，不涉及删除任何未审阅目录或脚本。
+
+## 备注 (Updated 2026-07-15)
+
+1.  新增 `PitchTrack`，将声学轨迹的真实时间坐标纳入跨层数据契约。
+2.  新增 `ArticulatorySynthLaunchResult`，保持发音物理模拟器的 `GUI -> API -> Services -> Models` 调用边界。

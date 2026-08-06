@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import sys
 import webbrowser
+from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
@@ -12,13 +13,17 @@ from phonetic_toolbox.models.perception_models import PerceptionLaunchResult
 class PerceptionExperimentService:
     def __init__(self, project_dir: Optional[str] = None):
         self.project_dir = project_dir
+        self._debug_log_path: Optional[str] = None
 
     def launch(self) -> PerceptionLaunchResult:
         project_dir = self._resolve_project_dir()
         if project_dir is None:
+            msg = "未找到 perception_experiment 项目目录，请检查目录配置。"
+            if self._debug_log_path:
+                msg += f"\n\n诊断日志已保存至：\n{self._debug_log_path}\n请将该文件发送给开发者以便排查。"
             return PerceptionLaunchResult(
                 success=False,
-                message="未找到 perception_experiment 项目目录，请检查目录配置。",
+                message=msg,
             )
 
         html_path = self._resolve_html_path(project_dir)
@@ -101,7 +106,64 @@ class PerceptionExperimentService:
         discovered = self._discover_project_dir()
         if discovered is not None:
             return discovered
+
+        self._write_debug_log(candidate_dirs, runtime_base_dirs)
         return None
+
+    def _write_debug_log(
+        self,
+        candidate_dirs: list[Path],
+        runtime_base_dirs: list[Path],
+    ) -> None:
+        desktop = Path.home() / "Desktop"
+        log_path = desktop / "perception_debug.log"
+        try:
+            lines: list[str] = []
+            lines.append(f"=== 感知实验路径解析诊断日志 ===")
+            lines.append(f"时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            lines.append(f"sys.frozen: {getattr(sys, 'frozen', None)}")
+            lines.append(f"sys._MEIPASS: {getattr(sys, '_MEIPASS', None)}")
+            lines.append(f"sys.executable: {sys.executable}")
+            lines.append(f"sys.argv[0]: {sys.argv[0] if sys.argv else 'N/A'}")
+            lines.append(f"cwd: {Path.cwd()}")
+            lines.append(f"project_dir (显式传入): {self.project_dir}")
+            lines.append(f"env PHONETIC_TOOLBOX_PERCEPTION_PROJECT_DIR: {os.getenv('PHONETIC_TOOLBOX_PERCEPTION_PROJECT_DIR')}")
+            lines.append(f"")
+            lines.append(f"--- _runtime_base_dirs() 返回值 ---")
+            for i, d in enumerate(runtime_base_dirs):
+                lines.append(f"  [{i}] {d}  (exists={d.exists()})")
+            lines.append(f"")
+            lines.append(f"--- 候选路径检查结果 ---")
+            checked: set[str] = set()
+            for candidate in candidate_dirs:
+                key = (
+                    str(candidate.resolve())
+                    if candidate.exists()
+                    else str(candidate)
+                )
+                if key in checked:
+                    continue
+                checked.add(key)
+                status = "EXISTS(dir)" if (candidate.exists() and candidate.is_dir()) else ("EXISTS(file)" if candidate.exists() else "MISSING")
+                lines.append(f"  {status} | {candidate}")
+            lines.append(f"")
+            lines.append(f"--- _discover_project_dir() 递归搜索 ---")
+            for root in self._common_search_roots():
+                if not root.exists():
+                    lines.append(f"  SKIP (root不存在): {root}")
+                    continue
+                lines.append(f"  搜索 root: {root}")
+                found = self._find_named_dir(root, "perception_experiment", 4)
+                if found is not None:
+                    lines.append(f"    找到: {found}")
+                else:
+                    lines.append(f"    未找到")
+
+            content = "\n".join(lines)
+            log_path.write_text(content, encoding="utf-8")
+            self._debug_log_path = str(log_path)
+        except Exception:
+            self._debug_log_path = None
 
     @staticmethod
     def _resolve_html_path(project_dir: Path) -> Optional[Path]:

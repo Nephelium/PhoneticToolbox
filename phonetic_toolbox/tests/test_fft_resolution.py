@@ -20,7 +20,7 @@ from phonetic_toolbox.core.acoustic import (
     compute_H1A1A2A3_corrected
 )
 
-def test_fft_resolutions():
+def benchmark_fft_resolutions():
     # 1. Setup Audio
     search_dir = Path("C:/Users/13680/Desktop/测试音频/textgrid测试")
     if not search_dir.exists():
@@ -127,5 +127,59 @@ def test_fft_resolutions():
         
         print(f"{res:<10.1f} | {diff_h1:<12.4f} | {diff_h1h2:<15.4f} | {diff_h1a1:<15.4f}")
 
+def test_fft_resolutions_are_numerically_consistent():
+    fs = 16000
+    duration = 0.5
+    frameshift_ms = 5.0
+    time = np.arange(int(fs * duration), dtype=float) / fs
+    signal = (
+        0.8 * np.sin(2.0 * np.pi * 200.0 * time)
+        + 0.3 * np.sin(2.0 * np.pi * 400.0 * time)
+        + 0.1 * np.sin(2.0 * np.pi * 800.0 * time)
+    )
+    n_frames = int(round(duration * 1000.0 / frameshift_ms))
+    f0 = np.full(n_frames, 200.0, dtype=float)
+    f1 = np.full(n_frames, 800.0, dtype=float)
+    f2 = np.full(n_frames, 1600.0, dtype=float)
+    f3 = np.full(n_frames, 2400.0, dtype=float)
+    voiced = np.ones(n_frames, dtype=bool)
+
+    baseline = compute_spectral_features_batch(
+        signal,
+        fs,
+        frameshift_ms,
+        f0,
+        f1,
+        f2,
+        f3,
+        3,
+        voiced,
+        target_resolution=0.5,
+    )
+
+    for resolution in (1.0, 2.0, 5.0):
+        current = compute_spectral_features_batch(
+            signal,
+            fs,
+            frameshift_ms,
+            f0,
+            f1,
+            f2,
+            f3,
+            3,
+            voiced,
+            target_resolution=resolution,
+        )
+        for key in baseline:
+            valid = np.isfinite(baseline[key]) & np.isfinite(current[key])
+            assert np.count_nonzero(valid) > 0
+            np.testing.assert_allclose(
+                current[key][valid],
+                baseline[key][valid],
+                atol=0.15,
+                rtol=0.0,
+            )
+
+
 if __name__ == "__main__":
-    test_fft_resolutions()
+    benchmark_fft_resolutions()

@@ -2,6 +2,8 @@ from pathlib import Path
 from typing import List, Tuple, Set
 from PyQt6 import QtWidgets, QtCore, QtGui
 
+from phonetic_toolbox.utils import get_resource_path
+
 
 class ParameterSelectionDialog(QtWidgets.QDialog):
     def __init__(self, items: List[Tuple[str, str]], selected_keys: List[str], parent=None):
@@ -67,7 +69,7 @@ class ParameterHelpDialog(QtWidgets.QDialog):
         super().__init__(parent)
         self.setWindowTitle("声学参数说明")
         self.resize(800, 900)
-        icon_path = r"D:\PhoneticToolbox\PhoneticToolbox_v2\PhoneticToolbox.ico"
+        icon_path = get_resource_path("PhoneticToolbox.ico")
         if Path(icon_path).exists():
             self.setWindowIcon(QtGui.QIcon(icon_path))
         self.is_dark = False

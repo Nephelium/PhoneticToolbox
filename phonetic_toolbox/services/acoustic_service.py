@@ -8,7 +8,7 @@ import logging
 
 from phonetic_toolbox.models.config import AcousticConfig, AnalysisResult
 from phonetic_toolbox.core.acoustic import (
-    compute_praat_f0,
+    compute_praat_f0_track,
     compute_reaper_f0,
     compute_praat_formants,
     compute_spectral_features_batch,
@@ -130,6 +130,82 @@ CORE_RESULT_FIELD_MAP = {
 }
 
 log = logging.getLogger(__name__)
+
+
+def align_track_to_grid(
+    source_times: np.ndarray,
+    source_values: np.ndarray,
+    target_times: np.ndarray,
+) -> np.ndarray:
+    """Interpolate a track onto a target grid without extrapolation.
+
+    NaN values are intentionally retained in the interpolation input so
+    unvoiced gaps are not bridged by neighbouring voiced samples.
+    """
+    times = np.asarray(source_times, dtype=float).reshape(-1)
+    values = np.asarray(source_values, dtype=float).reshape(-1)
+    targets = np.asarray(target_times, dtype=float)
+    if times.size != values.size:
+        raise ValueError("轨迹时间轴与数值长度不一致")
+
+    output = np.full(targets.shape, np.nan, dtype=float)
+    valid_times = np.isfinite(times)
+    times = times[valid_times]
+    values = values[valid_times]
+    if times.size == 0:
+        return output
+
+    order = np.argsort(times, kind="stable")
+    times = times[order]
+    values = values[order]
+    times, unique_indices = np.unique(times, return_index=True)
+    values = values[unique_indices]
+
+    if times.size == 1:
+        exact = np.isclose(targets, times[0], rtol=0.0, atol=1e-12)
+        output[exact] = values[0]
+        return output
+
+    return np.interp(
+        targets,
+        times,
+        values,
+        left=np.nan,
+        right=np.nan,
+    )
+
+
+def smooth_preserving_gaps(
+    values: np.ndarray,
+    window_size: int,
+) -> np.ndarray:
+    """Apply a centred rolling mean within each finite segment."""
+    data = np.asarray(values, dtype=float)
+    if data.size == 0 or window_size <= 1:
+        return data.copy()
+
+    output = np.full(data.shape, np.nan, dtype=float)
+    valid_indices = np.flatnonzero(np.isfinite(data))
+    if valid_indices.size == 0:
+        return output
+
+    cuts = np.flatnonzero(np.diff(valid_indices) > 1)
+    starts = np.concatenate(([0], cuts + 1))
+    ends = np.concatenate((cuts, [valid_indices.size - 1]))
+    for start_pos, end_pos in zip(starts, ends):
+        start = int(valid_indices[start_pos])
+        end = int(valid_indices[end_pos]) + 1
+        output[start:end] = (
+            pd.Series(data[start:end])
+            .rolling(
+                window=int(window_size),
+                center=True,
+                min_periods=1,
+            )
+            .mean()
+            .to_numpy()
+        )
+    return output
 
 @dataclass
 class BatchItemError:
@@ -313,16 +389,29 @@ class AcousticAnalysisService:
         pB3 = formant_res.get("pB3")
         pB4 = formant_res.get("pB4")
 
+        target_len = len(pF1)
+        target_times = np.arange(target_len, dtype=float) * frameshift_ms / 1000.0
+
         # --- 3. 计算 F0 (Praat & REAPER) ---
         f0_data = {}
         
         # 3.1 Praat F0
         try:
-            pf0 = compute_praat_f0(path, frameshift_ms, min_f0, max_f0, "cc")
-            f0_data["pF0"] = pf0
+            pf0_track = compute_praat_f0_track(
+                path,
+                frameshift_ms,
+                min_f0,
+                max_f0,
+                "cc",
+            )
+            f0_data["pF0"] = align_track_to_grid(
+                pf0_track.times,
+                pf0_track.values,
+                target_times,
+            )
         except Exception as e:
             log.warning("Praat F0 failed for %s: %s", wav_path, e)
-            f0_data["pF0"] = np.full(len(pF1), np.nan)
+            f0_data["pF0"] = np.full(target_len, np.nan)
             
         # 3.2 REAPER F0 (Optional)
         try:
@@ -337,21 +426,16 @@ class AcousticAnalysisService:
                     no_highpass=config.reaper_no_highpass,
                     reaper_bin=config.reaper_bin_path
                 )
-                f0_data["rF0"] = rf0_res.get("rF0", np.array([]))
+                f0_data["rF0"] = align_track_to_grid(
+                    rf0_res.get("rTimes", np.array([])),
+                    rf0_res.get("rF0", np.array([])),
+                    target_times,
+                )
             else:
-                f0_data["rF0"] = np.full(len(pF1), np.nan)
+                f0_data["rF0"] = np.full(target_len, np.nan)
         except Exception as e:
             log.warning("REAPER F0 failed for %s: %s", wav_path, e)
-            f0_data["rF0"] = np.full(len(pF1), np.nan)
-
-        # Ensure lengths match Formants (truncate or pad)
-        target_len = len(pF1)
-        for k in ["pF0", "rF0"]:
-            arr = f0_data[k]
-            if len(arr) > target_len:
-                f0_data[k] = arr[:target_len]
-            elif len(arr) < target_len:
-                f0_data[k] = np.pad(arr, (0, target_len - len(arr)), constant_values=np.nan)
+            f0_data["rF0"] = np.full(target_len, np.nan)
 
         # --- 4. 基于 F0 计算衍生参数 (Harmonics, Amplitudes, Corrections, etc.) ---
         # 我们需要为 pF0 和 rF0 分别计算一套参数
@@ -608,7 +692,7 @@ class AcousticAnalysisService:
             textgrid_data[k] = fix_len(textgrid_data[k], fill_val="")
 
         result = AnalysisResult(
-            time_axis=np.arange(target_len) * frameshift_ms / 1000.0,
+            time_axis=target_times,
             
             f0_praat=f0_praat,
             f0_reaper=f0_reaper,
@@ -660,21 +744,34 @@ class AcousticAnalysisService:
         # --- 9. Smoothing (Optional) ---
         if config.smooth_win_size > 1:
             win_size = config.smooth_win_size
-            def smooth_arr(arr):
-                if arr is None or len(arr) == 0: return arr
-                return pd.Series(arr).rolling(window=win_size, center=True, min_periods=1).mean().values
 
-            if result.f0_praat is not None: result.f0_praat = smooth_arr(result.f0_praat)
-            if result.f0_reaper is not None: result.f0_reaper = smooth_arr(result.f0_reaper)
+            if result.f0_praat is not None:
+                result.f0_praat = smooth_preserving_gaps(result.f0_praat, win_size)
+            if result.f0_reaper is not None:
+                result.f0_reaper = smooth_preserving_gaps(result.f0_reaper, win_size)
             
             for attr in ['f1', 'f2', 'f3', 'f4', 'b1', 'b2', 'b3', 'b4']:
                 val = getattr(result, attr)
                 if val is not None:
-                    setattr(result, attr, smooth_arr(val))
+                    setattr(result, attr, smooth_preserving_gaps(val, win_size))
                     
             for k, v in result.parameters.items():
                 if np.issubdtype(v.dtype, np.number):
-                     result.parameters[k] = smooth_arr(v)
+                     result.parameters[k] = smooth_preserving_gaps(v, win_size)
+
+            # Smoothing must never restore frames rejected by the active mask.
+            if final_mask is not None:
+                if result.f0_praat is not None:
+                    result.f0_praat[final_mask] = np.nan
+                if result.f0_reaper is not None:
+                    result.f0_reaper[final_mask] = np.nan
+                for attr in ['f1', 'f2', 'f3', 'f4', 'b1', 'b2', 'b3', 'b4']:
+                    val = getattr(result, attr)
+                    if val is not None:
+                        val[final_mask] = np.nan
+                for value in result.parameters.values():
+                    if np.issubdtype(value.dtype, np.number):
+                        value[final_mask] = np.nan
 
         # --- 10. Lip Smoothing (Optional, separate) ---
         if config.lip_smooth_win_size > 1 and result.lip_data:

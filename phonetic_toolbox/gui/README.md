@@ -6,7 +6,7 @@
 
 | 模块/包 | 主要类/功能 | 说明 |
 | :--- | :--- | :--- |
-| **`main_window.py`** | `MainWindow` | **主窗口**。负责程序入口、主菜单导航、子窗口管理以及全局主题切换 (深色/浅色模式)。 |
+| **`main_window.py`** | `MainWindow` | **主窗口**。负责程序入口、主菜单导航、子窗口管理、版本检查以及全局主题切换；发音物理模拟等纯前端工具通过 API 启动。 |
 | **`styles.py`** | - | **样式表定义**。包含 QSS (Qt Style Sheets) 代码，定义了深色 (`DARK`) 和浅色 (`LIGHT`) 主题的视觉风格。 |
 | **`dialogs/`** | - | **对话框子模块**。 |
 | ├── `settings_dialog.py` | `SettingsDialog` | **全局设置对话框**。提供图形化界面修改当前运行时的声学参数 (如 F0 范围、静音阈值等)。永久默认值需在 `models/config.py` 中修改。 |
@@ -18,7 +18,9 @@
 | ├── `speech_synthesis_widget.py` | `SpeechSynthesisWidget` | **语音合成实验室**。提供 Klatt 参数曲线编辑、实时试听、频谱/波形联动与参数导出。 |
 | ├── `pitch_manipulation_widget.py` | `PitchManipulationWidget` | **基频实验室**。提供可视化的基频编辑、音频合成、播放及批量生成功能。 |
 | ├── `egg_widget.py` | `EGGWidget` | **EGG 分析**。提供 EGG 波形/语谱图显示、事件检测可视化 (GCI/GOI)、逆滤波及批量处理。 |
+| ├── `spec2wav_widget.py` | `Spec2WavWidget` | **语谱图转音频**。提供图像校正、Griffin-Lim 重建、试听与导出。 |
 | └── `lpc_spectrum_widget.py` | `LPCSpectrumWidget` | **LPC 谱图**。提供波形缩放/平移、Shift 选区、TextGrid 层级切换、LPC 曲线显示与图片导出。 |
+| **`resources/`** | - | **离线前端资源**。包含 IPA、感知实验和发音物理模拟器页面；打包后从 `_MEIPASS` 或运行目录解析。 |
 | **`workers/`** | - | **后台工作线程**。 |
 | └── `manipulation_workers.py` | `BatchProcessorWorker` | **批量变调线程**。在后台执行耗时的批量音频生成任务。 |
 
@@ -31,6 +33,8 @@
 *   **窗口管理**: 维护 `self.sub_windows` 字典，防止子窗口被垃圾回收，并支持窗口激活/置顶。
 *   **主题管理**: 监听主题切换按钮，调用 `apply_theme` 方法动态更新全局 `QApplication` 和当前窗口的样式表。
 *   **LPC 入口**: 提供“LPC谱图”入口并管理 `LPCSpectrumWidget` 子窗口生命周期。
+*   **版本显示**: 优先读取项目版本，打包环境缺少 `pyproject.toml` 时回退到 `phonetic_toolbox.__version__`。
+*   **前端工具入口**: IPA、感知实验和发音物理模拟器经 API/Service 返回结构化启动结果，GUI 只负责显示失败信息。
 
 ### 2. ParameterEstimationWidget (参数估计)
 
@@ -97,9 +101,18 @@
 *   **`LIGHT_MAIN_STYLESHEET`**: 主页专用的浅色样式。
 *   **`GLOBAL_LIGHT_STYLESHEET`**: 全局通用的浅色样式。
 
+## 资源路径与打包约定
+
+1.  Python 界面打开项目根级资源（图标、`Phonetic_Export` 等）时，使用 `phonetic_toolbox.utils.get_resource_path()` 或明确的模块/运行时目录解析器。
+2.  禁止把开发机盘符、仓库绝对路径或当前工作目录假定写入 GUI 代码。
+3.  `resources/` 内的静态 HTML/CSS/JS 只使用相对 URL；需要寻找运行态目录的逻辑放入 Service，不在网页或 Widget 中复制平台判断。
+4.  PyInstaller onefile 运行时优先解析 `sys._MEIPASS`，同时保留 EXE 同目录外置资源的兼容能力。
+5.  帮助入口统一指向 `Phonetic_Export/index.html`，各模块只设置自己的章节锚点。
+
 ## 开发规范 (GUI Layer)
 
 1.  **保持逻辑轻量**: GUI 层**严禁**包含复杂的声学计算逻辑。所有计算必须封装在 `core` 或 `services` 层，GUI 仅负责调用和显示。
 2.  **防卡死**: 任何耗时超过 100ms 的操作 (如文件读写、分析计算) **必须** 放入 `QThread` 或使用 `QTimer` 异步执行。
 3.  **异常处理**: 必须捕获 Service 层抛出的异常，并使用 `QMessageBox` 友好地提示用户，而不是让程序崩溃。
 4.  **样式分离**: 尽量不要在 Python 代码中硬编码颜色 (`widget.setStyleSheet("color: red")`)，应统一在 `styles.py` 中定义或使用 ObjectName 选择器。
+5.  **路径可移植**: 新增或修改资源入口时必须同时覆盖开发态、非项目工作目录和 PyInstaller `_MEIPASS` 场景，并补充对应测试。

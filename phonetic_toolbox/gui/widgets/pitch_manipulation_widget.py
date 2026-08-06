@@ -20,7 +20,7 @@ from matplotlib.figure import Figure
 from phonetic_toolbox.services.manipulation_service import ManipulationService
 from phonetic_toolbox.gui.dialogs.manipulation_dialogs import BatchProcessorDialog, ImportF0Dialog, KnotEditorDialog
 from phonetic_toolbox.gui.utils import apply_plot_theme, play_audio_sd
-from phonetic_toolbox.utils import parse_float_list
+from phonetic_toolbox.utils import get_resource_path, parse_float_list
 from phonetic_toolbox.gui.styles import GLOBAL_DARK_STYLESHEET, GLOBAL_LIGHT_STYLESHEET
 
 # Set matplotlib font for Chinese support
@@ -322,7 +322,7 @@ class PitchManipulationWidget(QWidget):
         self.reset_plots()
 
     def _open_help_doc(self):
-        help_file = Path(r"d:\PhoneticToolbox\PhoneticToolbox_v2\Phonetic_Export\index.html")
+        help_file = Path(get_resource_path(r"Phonetic_Export\index.html"))
         if not help_file.exists():
             QMessageBox.warning(self, "帮助", f"未找到帮助文件：{help_file}")
             return

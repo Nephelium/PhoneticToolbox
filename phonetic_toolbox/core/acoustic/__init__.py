@@ -1,4 +1,4 @@
-from .f0_praat import compute_praat_f0
+from .f0_praat import compute_praat_f0, compute_praat_f0_track
 from .f0_reaper import compute_reaper_f0
 from .f0_irapt import irapt
 from .formants_praat import compute_praat_formants
@@ -22,6 +22,7 @@ from .lpc import compute_lpc_spectrum
 
 __all__ = [
     "compute_praat_f0",
+    "compute_praat_f0_track",
     "compute_reaper_f0",
     "irapt",
     "compute_praat_formants",

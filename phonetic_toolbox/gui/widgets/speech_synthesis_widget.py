@@ -1559,7 +1559,7 @@ class SpeechSynthesisWidget(QMainWindow):
             dlg.accept()
 
     def _on_help_placeholder(self):
-        help_file = Path(r"d:\PhoneticToolbox\PhoneticToolbox_v2\Phonetic_Export\index.html")
+        help_file = Path(get_resource_path(r"Phonetic_Export\index.html"))
         if not help_file.exists():
             QMessageBox.warning(self, "帮助", f"未找到帮助文件：{help_file}")
             return

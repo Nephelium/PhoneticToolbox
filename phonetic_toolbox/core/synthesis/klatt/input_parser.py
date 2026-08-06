@@ -67,8 +67,9 @@ def parse_vowel_sequence(text: str) -> list[ParsedSegment]:
     while idx < len(text):
         ch = text[idx]
         if ch == " ":
-            segments.append(ParsedSegment(type="silence", symbol=" ", duration_modifier=1.0))
-            idx += 1
+            modifier, next_idx = _parse_modifier(text, idx + 1)
+            segments.append(ParsedSegment(type="silence", symbol=" ", duration_modifier=modifier))
+            idx = next_idx
             continue
         symbol = ch.lower()
         if symbol in VOWEL_FORMANTS:

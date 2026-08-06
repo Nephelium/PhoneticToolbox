@@ -4,6 +4,7 @@ from .egg_models import EGGAnalysisResult
 from .lip_models import LipLaunchResult
 from .ipa_models import IPATransLaunchResult
 from .perception_models import PerceptionLaunchResult
+from .articulatory_models import ArticulatorySynthLaunchResult
 from .mfa_models import MFAAutoAlignmentLaunchResult, MFAAlignmentRunResult
 from .lpc_models import LPCSpectrumConfig, LPCSpectrumResult
 from .phonology_models import (
@@ -18,6 +19,7 @@ __all__ = [
     'EGGConfig', 
     'EGGAnalysisResult',
     'IPATransLaunchResult',
+    'ArticulatorySynthLaunchResult',
     'LipLaunchResult',
     'MFAAutoAlignmentLaunchResult',
     'MFAAlignmentRunResult',

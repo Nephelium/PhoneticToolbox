@@ -24,6 +24,7 @@ import scipy.io.wavfile as wavfile
 import warnings
 from phonetic_toolbox.gui.dialogs.settings_dialog import SettingsDialog
 from phonetic_toolbox.gui.dialogs.parameter_tools_dialog import ParameterSelectionDialog, ParameterHelpDialog
+from phonetic_toolbox.utils import get_resource_path
 
 log = logging.getLogger(__name__)
 
@@ -584,7 +585,7 @@ class ParameterEstimationWidget(QtWidgets.QWidget):
             pass
 
     def _open_help(self):
-        help_file = Path(r"d:\PhoneticToolbox\PhoneticToolbox_v2\Phonetic_Export\index.html")
+        help_file = Path(get_resource_path(r"Phonetic_Export\index.html"))
         if not help_file.exists():
             QtWidgets.QMessageBox.warning(self, "帮助", f"未找到帮助文件：{help_file}")
             return

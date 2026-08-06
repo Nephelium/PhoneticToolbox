@@ -73,10 +73,17 @@ def compute_rms(
     window_ms: float = 20.0,
 ) -> np.ndarray:
     """Compute Root Mean Square (RMS) amplitude."""
-    energy = compute_energy(y, fs, frameshift_ms, F0, window_ms)
-    # Energy is sum(sample^2). RMS is sqrt(mean(sample^2))
-    # We need to know window size in samples to divide
+    frame_shift = int(round(fs / 1000.0 * frameshift_ms))
     win_samples = int(round(fs / 1000.0 * window_ms))
-    if win_samples <= 0:
-        return np.zeros_like(energy)
-    return np.sqrt(energy / win_samples)
+    if frame_shift <= 0 or win_samples <= 0:
+        raise ValueError("frameshift_ms 和 window_ms 必须产生至少一个采样点")
+
+    rms = np.full(len(F0), np.nan, dtype=float)
+    for index in range(len(F0)):
+        center = index * frame_shift
+        start = max(0, center - win_samples // 2)
+        end = min(len(y), center + win_samples // 2)
+        segment = np.asarray(y[start:end], dtype=float)
+        if segment.size:
+            rms[index] = float(np.sqrt(np.mean(segment * segment)))
+    return rms
