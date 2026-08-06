@@ -7,7 +7,6 @@
 | 模块/包 | 主要类/功能 | 说明 |
 | :--- | :--- | :--- |
 | **`acoustic_service.py`** | `AcousticAnalysisService` | **核心业务服务**。负责协调音频读取、参数配置、算法调用（F0, 共振峰, 频谱参数等）、结果整合与对齐。 |
-| **`articulatory_synth_service.py`** | `ArticulatorySynthService` | **发音物理模拟器启动服务**。负责在开发态、EXE 目录和 `_MEIPASS` 中定位离线前端资源并打开页面。 |
 | **`egg_service.py`** | `EGGService` | **EGG 分析服务**。负责 EGG 信号处理、事件检测 (GCI/GOI)、参数计算 (CQ/SQ) 及逆滤波。 |
 | **`lpc_service.py`** | `LPCSpectrumService` | **LPC 谱图服务**。负责音频加载、TextGrid 标签提取、LPC 核心调用与图片导出。 |
 | **`spec2wav_service.py`** | `Spec2WavService` | **语谱图转音频服务**。负责图像读取、参数组装与 Griffin-Lim 重建流程编排。 |
@@ -56,7 +55,7 @@
 *   **合成**: 调用 `core.manipulation.synthesis.synthesize_from_pitch` 进行单文件合成。
 *   **批量处理**: 调用 `core.manipulation.batch_utils.generate_batch_linear` 生成一系列变调文件。
 
-### 3. Launcher 服务 (唇形 / IPA / 感知实验 / 发音物理模拟)
+### 3. Launcher 服务 (唇形 / IPA / 感知实验)
 
 这类服务的职责是“定位入口 + 打开界面”，不在 GUI 层写路径解析与打开逻辑。
 
@@ -69,10 +68,6 @@
     *   默认优先打开 `perception_experiment.html`。
     *   支持环境变量 `PHONETIC_TOOLBOX_PERCEPTION_PROJECT_DIR` 覆盖目录。
     *   若默认页面缺失，自动回退到目录中首个 `*.html` 页面。
-*   **`ArticulatorySynthService`**:
-    *   优先定位内置 `gui/resources/articulatory_synth/articulatory_synth.html`。
-    *   支持 `PHONETIC_TOOLBOX_ARTICULATORY_SYNTH_DIR` 或显式目录覆盖。
-    *   返回 `ArticulatorySynthLaunchResult`，不在 GUI 层直接拼接资源路径。
 
 ### 4. EGGService (EGG 分析服务)
 

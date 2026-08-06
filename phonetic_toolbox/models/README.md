@@ -64,7 +64,7 @@
 
 ### 5. 启动结果模型
 
-`lip_models.py`、`ipa_models.py`、`perception_models.py` 与 `articulatory_models.py` 遵循同一设计思路：用结构化结果替代松散字典，承载“是否成功 + 消息 + 关键路径”。
+`lip_models.py`、`ipa_models.py` 与 `perception_models.py` 遵循同一设计思路：用结构化结果替代松散字典，承载“是否成功 + 消息 + 关键路径”。
 
 *   **`LipLaunchResult` (`lip_models.py`)**
     *   **用途**: 返回唇形提取入口启动状态、入口路径与工作目录。
@@ -72,8 +72,6 @@
     *   **用途**: 返回 IPA 页面生成/打开状态、HTML 路径及生成日志。
 *   **`PerceptionLaunchResult` (`perception_models.py`)**
     *   **用途**: 返回感知实验页面打开状态、HTML 路径与工作目录。
-*   **`ArticulatorySynthLaunchResult` (`articulatory_models.py`)**
-    *   **用途**: 返回发音物理模拟器页面打开状态、HTML 路径与工作目录。
 
 ### 6. 语音合成模块的数据边界 (Speech Synthesis Boundary)
 

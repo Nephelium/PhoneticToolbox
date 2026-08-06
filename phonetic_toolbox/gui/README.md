@@ -6,7 +6,7 @@
 
 | 模块/包 | 主要类/功能 | 说明 |
 | :--- | :--- | :--- |
-| **`main_window.py`** | `MainWindow` | **主窗口**。负责程序入口、主菜单导航、子窗口管理、版本检查以及全局主题切换；发音物理模拟等纯前端工具通过 API 启动。 |
+| **`main_window.py`** | `MainWindow` | **主窗口**。负责程序入口、主菜单导航、子窗口管理、版本检查以及全局主题切换。 |
 | **`styles.py`** | - | **样式表定义**。包含 QSS (Qt Style Sheets) 代码，定义了深色 (`DARK`) 和浅色 (`LIGHT`) 主题的视觉风格。 |
 | **`dialogs/`** | - | **对话框子模块**。 |
 | ├── `settings_dialog.py` | `SettingsDialog` | **全局设置对话框**。提供图形化界面修改当前运行时的声学参数 (如 F0 范围、静音阈值等)。永久默认值需在 `models/config.py` 中修改。 |
@@ -20,7 +20,7 @@
 | ├── `egg_widget.py` | `EGGWidget` | **EGG 分析**。提供 EGG 波形/语谱图显示、事件检测可视化 (GCI/GOI)、逆滤波及批量处理。 |
 | ├── `spec2wav_widget.py` | `Spec2WavWidget` | **语谱图转音频**。提供图像校正、Griffin-Lim 重建、试听与导出。 |
 | └── `lpc_spectrum_widget.py` | `LPCSpectrumWidget` | **LPC 谱图**。提供波形缩放/平移、Shift 选区、TextGrid 层级切换、LPC 曲线显示与图片导出。 |
-| **`resources/`** | - | **离线前端资源**。包含 IPA、感知实验和发音物理模拟器页面；打包后从 `_MEIPASS` 或运行目录解析。 |
+| **`resources/`** | - | **离线前端资源**。包含 IPA 和感知实验页面；打包后从 `_MEIPASS` 或运行目录解析。 |
 | **`workers/`** | - | **后台工作线程**。 |
 | └── `manipulation_workers.py` | `BatchProcessorWorker` | **批量变调线程**。在后台执行耗时的批量音频生成任务。 |
 
@@ -34,7 +34,7 @@
 *   **主题管理**: 监听主题切换按钮，调用 `apply_theme` 方法动态更新全局 `QApplication` 和当前窗口的样式表。
 *   **LPC 入口**: 提供“LPC谱图”入口并管理 `LPCSpectrumWidget` 子窗口生命周期。
 *   **版本显示**: 优先读取项目版本，打包环境缺少 `pyproject.toml` 时回退到 `phonetic_toolbox.__version__`。
-*   **前端工具入口**: IPA、感知实验和发音物理模拟器经 API/Service 返回结构化启动结果，GUI 只负责显示失败信息。
+*   **前端工具入口**: IPA 和感知实验经 API/Service 返回结构化启动结果，GUI 只负责显示失败信息。
 
 ### 2. ParameterEstimationWidget (参数估计)
 

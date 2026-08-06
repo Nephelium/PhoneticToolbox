@@ -24,7 +24,7 @@ PhoneticToolbox_v2/
 ├── docs/                       # 项目文档与已确认实施计划
 ├── phonetic_toolbox/           # 源代码根目录
 │   ├── api/                    # [Middle Layer] 对外暴露的简洁 API (Facade)
-│   │   └── __init__.py         # 导出 lip / IPA / perception / articulatory 等 Facade 入口
+│   │   └── __init__.py         # 导出 lip / IPA / perception / MFA 等 Facade 入口
 │   ├── core/                   # [Inner Layer] 纯粹的领域逻辑与算法
 │   │   ├── acoustic/           # 声学参数提取
 │   │   │   ├── README.md           # 声学模块说明文档
@@ -85,7 +85,6 @@ PhoneticToolbox_v2/
         │   ├── egg_batch_dialog.py # EGG 批量处理对话框
         │   └── settings_dialog.py  # 全局设置弹窗
         ├── resources/          # 静态资源 (图标, 图片, 前端页面资源)
-        │   ├── articulatory_synth/  # 发音物理模拟器离线资源
         │   ├── ipa_trans/          # 普通话转 IPA 前端页面生成与产物
         │   │   ├── generate_ipa_website.py
         │   │   └── ipa_converter.html
@@ -113,7 +112,6 @@ PhoneticToolbox_v2/
 │   ├── models/                 # [Inner Layer] 数据结构定义 (Pydantic/Dataclasses)
     │   ├── __init__.py         # 存放跨层共享的数据模型 (如 Config, AnalysisResult, LaunchResult)
     │   ├── acoustic_models.py  # PitchTrack：带真实时间坐标的基频轨迹
-    │   ├── articulatory_models.py # 发音物理模拟器启动结果
     │   ├── config.py           # 配置模型定义
     │   ├── egg_models.py       # EGG 分析结果模型定义
     │   ├── ipa_models.py       # 普通话转 IPA 启动结果模型
@@ -132,7 +130,6 @@ PhoneticToolbox_v2/
 │   │   │   └── __init__.py
 │   │   ├── __init__.py
         ├── acoustic_service.py # 声学参数分析服务 (串联 Core 算法与 IO)
-        ├── articulatory_synth_service.py # 发音物理模拟器资源定位与启动
         ├── egg_service.py      # EGG 分析服务 (GCI/GOI 检测, CQ/SQ 计算, 逆滤波)
         ├── ipa_trans_service.py # 普通话转 IPA 服务（按需生成并打开前端页面）
         ├── lip_service.py      # 唇形提取服务（定位并打开外部项目入口）
@@ -249,10 +246,6 @@ PhoneticToolbox_v2/
     *   发布版本同时记录于 `pyproject.toml` 与 `phonetic_toolbox.__version__`，由自动测试保证一致。
     *   `run.spec` 必须以 `SPECPATH` 为项目根，禁止写死 checkout 路径；它从 `pyproject.toml` 读取版本并输出 `PhoneticToolbox_v<version>.exe`。
     *   打包前至少执行完整 pytest、`compileall`、GUI 主窗口构造冒烟和资源解析测试；打包后检查关键资源解包与 EXE 启动存活。
-
-5.  **发音物理模拟器链路**:
-    *   入口遵循 `MainWindow -> API -> ArticulatorySynthService -> ArticulatorySynthLaunchResult`。
-    *   离线前端资源位于 `gui/resources/articulatory_synth/`；网页只处理交互与近似物理模型，不绕过 Service 实现平台路径发现。
 
 ## 3. models 文件夹的作用
 

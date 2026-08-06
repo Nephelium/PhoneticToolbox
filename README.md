@@ -25,7 +25,6 @@ PhoneticToolbox v2 是一个面向语音学研究、教学与实验流程的一�
 - 唇形提取：摄像头采集、视频上传逐帧识别、与音频对齐导出
 - 变调实验室：交互式 F0 编辑、批量变调刺激生成
 - LPC 谱图：选区联动、TextGrid 标签联动、高 DPI 导出
-- 发音物理模拟：离线交互式声道模型、实时发声与可视化导出
 - 音系归纳：上传调查字表、自动生成同音字表
 - 工具入口：普通话转 IPA、感知实验、MFA 自动标注入口
 
@@ -99,7 +98,7 @@ PhoneticToolbox_v2/
 ├── docs/                       # 项目文档
 ├── phonetic_toolbox/           # 源代码根目录
 │   ├── api/                    # [Middle Layer] 对外暴露的简洁 API (Facade)
-│   │   └── __init__.py         # 导出 lip / IPA / perception / articulatory 等启动入口
+│   │   └── __init__.py         # 导出 lip / IPA / perception / MFA 等启动入口
 │   ├── core/                   # [Inner Layer] 纯粹的领域逻辑与算法
 │   │   ├── acoustic/           # 声学参数提取
 │   │   │   ├── README.md           # 声学模块说明文档
@@ -160,7 +159,6 @@ PhoneticToolbox_v2/
 │   │   │   ├── egg_batch_dialog.py # EGG 批量处理对话框
 │   │   │   └── settings_dialog.py  # 全局设置弹窗
 │   │   ├── resources/          # 静态资源 (图标, 图片, 前端页面资源)
-│   │   │   ├── articulatory_synth/  # 发音物理模拟器离线前端资源
 │   │   │   ├── ipa_trans/          # 普通话转 IPA 前端页面生成与产物
 │   │   │   │   ├── generate_ipa_website.py
 │   │   │   │   └── ipa_converter.html
@@ -190,7 +188,6 @@ PhoneticToolbox_v2/
 │   │   ├── __init__.py         # 存放跨层共享的数据模型 (如 Config, AnalysisResult, LaunchResult)
 │   │   ├── config.py           # 配置模型定义
 │   │   ├── acoustic_models.py  # 带显式时间轴的声学轨迹模型
-│   │   ├── articulatory_models.py # 发音物理模拟器启动结果
 │   │   ├── egg_models.py       # EGG 分析结果模型定义
 │   │   ├── ipa_models.py       # 普通话转 IPA 启动结果模型
 │   │   ├── lip_models.py       # 唇形提取启动结果模型
@@ -209,7 +206,6 @@ PhoneticToolbox_v2/
 │   │   │   └── __init__.py
 │   │   ├── __init__.py
 │   │   ├── acoustic_service.py # 声学参数分析服务 (串联 Core 算法与 IO)
-│   │   ├── articulatory_synth_service.py # 发音物理模拟器资源定位与启动
 │   │   ├── egg_service.py      # EGG 分析服务 (GCI/GOI 检测, CQ/SQ 计算, 逆滤波)
 │   │   ├── ipa_trans_service.py # 普通话转 IPA 服务（按需生成并打开前端页面）
 │   │   ├── lip_service.py      # 唇形提取服务（定位并打开外部项目入口）
