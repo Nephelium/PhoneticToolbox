@@ -238,6 +238,14 @@ class LipGUI(QWidget):
         self._raw_recording_audio_path: Path | None = None
         self._raw_recording_output_path: Path | None = None
         self._raw_recording_sample_rate: int = 44100
+        self.is_hfps_recording = False
+        self._hfps_video_writer: cv2.VideoWriter | None = None
+        self._hfps_audio_stream: sd.InputStream | None = None
+        self._hfps_audio_chunks: list[np.ndarray] = []
+        self._hfps_audio_chunk_times_abs: list[float] = []
+        self._hfps_frame_times_abs: list[float] = []
+        self._hfps_session_dir: Path | None = None
+        self._hfps_video_temp_path: Path | None = None
         self._metrics: dict[str, list[float]] = {
             "area": [],
             "face_width": [],
@@ -283,6 +291,12 @@ class LipGUI(QWidget):
         self.raw_stop_btn = QPushButton("停止录制并保存")
         self.raw_stop_btn.clicked.connect(self.stop_raw_recording)
         self.raw_stop_btn.setEnabled(False)
+        self.hfps_btn = QPushButton("高帧率录制")
+        self.hfps_btn.setToolTip(
+            "先满帧率录制视频与音频，停止后自动逐帧离线识别并删除视频。"
+            "点位帧率不受推理速度限制，适用于被试不同意留存视频的场合。"
+        )
+        self.hfps_btn.clicked.connect(self.toggle_hfps_recording)
         self.upload_video_btn = QPushButton("上传视频并识别")
         self.upload_video_btn.clicked.connect(self.upload_video)
         self.replay_btn = QPushButton("唇形动画回放")
@@ -305,6 +319,7 @@ class LipGUI(QWidget):
         row1.addWidget(self.stop_btn)
         row1.addWidget(self.raw_start_btn)
         row1.addWidget(self.raw_stop_btn)
+        row1.addWidget(self.hfps_btn)
         row1.addWidget(self.upload_video_btn)
         row1.addWidget(self.replay_btn)
         row1.addWidget(self.help_btn)
@@ -440,6 +455,12 @@ class LipGUI(QWidget):
             return
         raw_frame = frame.copy()
 
+        if self.is_hfps_recording:
+            # 高帧率录制：跳过 FaceMesh 推理，只做取帧+写盘+显示，
+            # 保证采集循环不被推理拖慢。
+            self._on_hfps_frame(frame, raw_frame, frame_abs)
+            return
+
         h, w, _ = frame.shape
         full_landmarks: np.ndarray | None = None
         metrics_frame: dict[str, float] | None = None
@@ -497,6 +518,9 @@ class LipGUI(QWidget):
         if self.is_raw_recording and self._raw_video_writer is not None:
             self._raw_video_writer.write(raw_frame)
 
+        self._show_frame(frame)
+
+    def _show_frame(self, frame: np.ndarray) -> None:
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         qimg = QImage(
             rgb_frame.data,
@@ -512,6 +536,32 @@ class LipGUI(QWidget):
                 Qt.TransformationMode.SmoothTransformation,
             )
         )
+
+    def _on_hfps_frame(
+        self, frame: np.ndarray, raw_frame: np.ndarray, frame_abs: float
+    ) -> None:
+        if self._hfps_video_writer is not None:
+            self._hfps_frame_times_abs.append(frame_abs)
+            self._hfps_video_writer.write(raw_frame)
+        cv2.putText(
+            frame,
+            f"REC high-fps ({len(self._hfps_frame_times_abs)} frames)",
+            (10, 30),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.7,
+            (0, 0, 255),
+            2,
+        )
+
+        now = time.perf_counter()
+        self._fps_frame_counter += 1
+        if now - self._fps_last_ts >= 1.0:
+            fps = self._fps_frame_counter / (now - self._fps_last_ts)
+            self.fps_label.setText(f"FPS: {fps:.1f}")
+            self._fps_frame_counter = 0
+            self._fps_last_ts = now
+
+        self._show_frame(frame)
 
     def _draw_overlay(self, frame: np.ndarray, all_points: np.ndarray) -> None:
         color = (0, 255, 0)
@@ -618,6 +668,9 @@ class LipGUI(QWidget):
             if self.is_recording:
                 QMessageBox.warning(self, "上传视频", "录制进行中，请先停止录制。")
                 return
+        if self.is_hfps_recording:
+            QMessageBox.warning(self, "上传视频", "高帧率录制进行中，请先停止。")
+            return
         live_timer_was_active = self._video_timer.isActive()
         if live_timer_was_active:
             self._video_timer.stop()
@@ -706,44 +759,379 @@ class LipGUI(QWidget):
         if not np.isfinite(fps) or fps <= 0:
             fps = 30.0
         total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        has_total = total_frames > 0
 
-        progress = QProgressDialog("正在识别视频帧...", "取消", 0, max(total_frames, 1), self)
-        progress.setWindowTitle("上传视频并识别")
+        result = self._recognize_video_frames(cap, total_frames)
+        cap.release()
+        if live_timer_was_active:
+            self._video_timer.start()
+
+        if result is None:
+            shutil.rmtree(session_dir, ignore_errors=True)
+            self.status_label.setText("已取消视频识别或未读取到有效帧")
+            return
+
+        metrics = result["metrics"]
+        landmarks_full = result["landmarks_full"]
+        frame_index = result["frame_count"]
+        detected_frame_count = result["detected"]
+        filled_frame_count = result["filled"]
+        nan_frame_count = result["nan"]
+
+        if np.isnan(np.array(metrics["open"], dtype=np.float64)).all():
+            shutil.rmtree(session_dir, ignore_errors=True)
+            QMessageBox.warning(self, "上传视频", "整段视频未检测到有效人脸，无法生成唇形参数。")
+            return
+
+        sample_rate = 44100
+        chunk_size = 1024
+        audio_samples_for_offset = np.array([], dtype=np.float64)
+        with wave.open(str(wav_path), "rb") as wav_in:
+            sample_rate = wav_in.getframerate()
+            total_samples = wav_in.getnframes()
+            raw_audio_bytes = wav_in.readframes(total_samples)
+            if wav_in.getnchannels() == 1 and wav_in.getsampwidth() == 2 and total_samples > 0:
+                audio_samples_for_offset = np.frombuffer(raw_audio_bytes, dtype=np.int16).astype(np.float64) / 32768.0
+        chunk_count = int(np.ceil(total_samples / chunk_size)) if total_samples > 0 else 0
+        start_epoch = 0.0
+        audio_frame_timestamps = [
+            start_epoch + (chunk_idx * chunk_size / sample_rate)
+            for chunk_idx in range(chunk_count)
+        ]
+        frame_times = [idx / fps for idx in range(frame_index)]
+        frame_times_abs = [start_epoch + t for t in frame_times]
+
+        auto_lip_offset = self._save_offline_recognition(
+            session_dir=session_dir,
+            metrics=metrics,
+            landmarks_full=landmarks_full,
+            frame_times=frame_times,
+            frame_times_abs=frame_times_abs,
+            audio_samples=audio_samples_for_offset,
+            sample_rate=sample_rate,
+            chunk_size=chunk_size,
+            audio_frame_timestamps=audio_frame_timestamps,
+            start_epoch=start_epoch,
+            extra_metadata={
+                "fps": fps,
+                "source": "uploaded_video",
+                "video_time_base_mode": "frame_index_over_fps",
+                "audio_stream_start_offset": audio_stream_start_offset,
+                "video_total_frames": frame_index,
+                "video_detected_frames": detected_frame_count,
+                "video_filled_frames": filled_frame_count,
+                "video_nan_frames": nan_frame_count,
+            },
+        )
+
+        valid_ratio = (detected_frame_count / frame_index * 100.0) if frame_index > 0 else 0.0
+        self.status_label.setText(
+            f"视频识别完成: 总帧{frame_index} 检测{detected_frame_count} 补全{filled_frame_count}"
+        )
+        QMessageBox.information(
+            self,
+            "上传视频",
+            (
+                f"唇形与音频数据已保存到:\n{session_dir}\n\n"
+                f"总帧数: {frame_index}\n"
+                f"检测成功帧: {detected_frame_count} ({valid_ratio:.1f}%)\n"
+                f"补全帧: {filled_frame_count}\n"
+                f"无可补全帧: {nan_frame_count}\n"
+                f"自动唇形offset: {auto_lip_offset:+.3f}s"
+            ),
+        )
+
+    def toggle_hfps_recording(self) -> None:
+        if self.is_hfps_recording:
+            self._finish_hfps_recording()
+        else:
+            self._start_hfps_recording()
+
+    def _start_hfps_recording(self) -> None:
+        with self._state_lock:
+            busy = self.is_recording
+        if busy or self.is_raw_recording:
+            QMessageBox.warning(self, "高帧率录制", "请先停止当前录制/计算。")
+            return
+        if self._video_capture is None or not self._video_capture.isOpened():
+            QMessageBox.warning(self, "高帧率录制", "摄像头未就绪。")
+            return
+
+        output_root = Path(self.save_directory)
+        output_root.mkdir(parents=True, exist_ok=True)
+        session_name = f"lip_tracking_data_{datetime.now().strftime('%Y%m%d_%H%M%S')}_hfps"
+        session_dir = output_root / session_name
+        suffix = 1
+        while session_dir.exists():
+            session_dir = output_root / f"{session_name}_{suffix}"
+            suffix += 1
+        session_dir.mkdir(parents=True, exist_ok=True)
+
+        width = int(self._video_capture.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(self._video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        fps = float(self._video_capture.get(cv2.CAP_PROP_FPS))
+        if width <= 0:
+            width = 640
+        if height <= 0:
+            height = 480
+        if not np.isfinite(fps) or fps <= 0:
+            fps = 30.0
+
+        video_temp_path = session_dir / "recorded_video_temp.mp4"
+        writer = cv2.VideoWriter(
+            str(video_temp_path),
+            cv2.VideoWriter_fourcc(*"mp4v"),
+            fps,
+            (width, height),
+        )
+        if not writer.isOpened():
+            QMessageBox.warning(self, "高帧率录制", "视频写入器初始化失败。")
+            shutil.rmtree(session_dir, ignore_errors=True)
+            return
+
+        self._hfps_audio_chunks = []
+        self._hfps_audio_chunk_times_abs = []
+
+        def _hfps_audio_callback(indata, _frames, _time_info, _status):
+            if not self.is_hfps_recording:
+                return
+            self._hfps_audio_chunks.append(indata.copy())
+            self._hfps_audio_chunk_times_abs.append(time.time())
+
+        if self._live_audio_stream is not None and self._live_audio_stream_active:
+            try:
+                self._live_audio_stream.stop()
+            except Exception:
+                pass
+            self._live_audio_stream_active = False
+
+        try:
+            audio_stream = sd.InputStream(
+                samplerate=44100,
+                channels=1,
+                dtype="int16",
+                blocksize=1024,
+                callback=_hfps_audio_callback,
+            )
+            audio_stream.start()
+        except Exception as exc:
+            writer.release()
+            shutil.rmtree(session_dir, ignore_errors=True)
+            QMessageBox.warning(self, "高帧率录制", f"音频流初始化失败:\n{exc}")
+            return
+
+        self._hfps_frame_times_abs = []
+        self._hfps_video_writer = writer
+        self._hfps_audio_stream = audio_stream
+        self._hfps_session_dir = session_dir
+        self._hfps_video_temp_path = video_temp_path
+        self.is_hfps_recording = True
+
+        self.hfps_btn.setText("停止并识别")
+        self.hfps_btn.setStyleSheet(
+            "background-color: #d35454; color: white; font-weight: bold;"
+        )
+        for btn in (
+            self.start_btn,
+            self.stop_btn,
+            self.raw_start_btn,
+            self.raw_stop_btn,
+            self.upload_video_btn,
+            self.path_btn,
+        ):
+            btn.setEnabled(False)
+        self.status_label.setText(
+            "高帧率录制中（暂停实时识别，停止后逐帧离线识别）..."
+        )
+
+    def _finish_hfps_recording(self) -> None:
+        if not self.is_hfps_recording:
+            return
+        self.is_hfps_recording = False
+
+        if self._hfps_audio_stream is not None:
+            try:
+                self._hfps_audio_stream.stop()
+                self._hfps_audio_stream.close()
+            finally:
+                self._hfps_audio_stream = None
+        if self._hfps_video_writer is not None:
+            self._hfps_video_writer.release()
+            self._hfps_video_writer = None
+
+        session_dir = self._hfps_session_dir
+        video_temp_path = self._hfps_video_temp_path
+        self._hfps_session_dir = None
+        self._hfps_video_temp_path = None
+
+        self.hfps_btn.setText("高帧率录制")
+        self.hfps_btn.setStyleSheet("")
+        for btn in (
+            self.start_btn,
+            self.raw_start_btn,
+            self.upload_video_btn,
+            self.path_btn,
+        ):
+            btn.setEnabled(True)
+
+        if self._live_audio_stream is not None and not self._live_audio_stream_active:
+            try:
+                self._live_audio_stream.start()
+                self._live_audio_stream_active = True
+            except Exception:
+                self._live_audio_stream_active = False
+
+        if session_dir is None or video_temp_path is None:
+            self.status_label.setText("录制结束")
+            return
+
+        live_timer_was_active = self._video_timer.isActive()
+        if live_timer_was_active:
+            self._video_timer.stop()
+
+        process_t0 = time.perf_counter()
+        try:
+            if not self._hfps_frame_times_abs or not video_temp_path.exists():
+                shutil.rmtree(session_dir, ignore_errors=True)
+                self.status_label.setText("未录制到有效帧，已取消")
+                return
+
+            if self._hfps_audio_chunks:
+                audio_array = (
+                    np.concatenate(self._hfps_audio_chunks, axis=0)
+                    .reshape(-1)
+                    .astype(np.int16)
+                )
+            else:
+                audio_array = np.array([], dtype=np.int16)
+            wav_path = session_dir / "audio_recording.wav"
+            with wave.open(str(wav_path), "wb") as wav_out:
+                wav_out.setnchannels(1)
+                wav_out.setsampwidth(2)
+                wav_out.setframerate(44100)
+                wav_out.writeframes(audio_array.tobytes())
+
+            cap = cv2.VideoCapture(str(video_temp_path))
+            if not cap.isOpened():
+                shutil.rmtree(session_dir, ignore_errors=True)
+                QMessageBox.warning(self, "高帧率录制", "无法读取录制的临时视频。")
+                return
+            total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+            result = self._recognize_video_frames(cap, total_frames)
+            cap.release()
+
+            if result is None:
+                shutil.rmtree(session_dir, ignore_errors=True)
+                self.status_label.setText("已取消离线识别")
+                return
+
+            metrics = result["metrics"]
+            landmarks_full = result["landmarks_full"]
+
+            if np.isnan(np.array(metrics["open"], dtype=np.float64)).all():
+                shutil.rmtree(session_dir, ignore_errors=True)
+                QMessageBox.warning(
+                    self, "高帧率录制", "整段录制未检测到有效人脸，无法生成唇形参数。"
+                )
+                return
+
+            n = min(len(self._hfps_frame_times_abs), result["frame_count"])
+            frame_times_abs = list(self._hfps_frame_times_abs[:n])
+            landmarks_full = landmarks_full[:n]
+            for key in metrics:
+                metrics[key] = metrics[key][:n]
+
+            if self._hfps_audio_chunk_times_abs:
+                start_epoch = float(self._hfps_audio_chunk_times_abs[0])
+            else:
+                start_epoch = float(frame_times_abs[0])
+            frame_times = [t - start_epoch for t in frame_times_abs]
+            if frame_times and frame_times[0] < 0:
+                shift = -frame_times[0]
+                frame_times = [t + shift for t in frame_times]
+
+            duration = frame_times[-1] if frame_times else 0.0
+            achieved_fps = (len(frame_times) / duration) if duration > 0 else 0.0
+
+            auto_lip_offset = self._save_offline_recognition(
+                session_dir=session_dir,
+                metrics=metrics,
+                landmarks_full=landmarks_full,
+                frame_times=frame_times,
+                frame_times_abs=frame_times_abs,
+                audio_samples=audio_array.astype(np.float64) / 32768.0,
+                sample_rate=44100,
+                chunk_size=1024,
+                audio_frame_timestamps=list(self._hfps_audio_chunk_times_abs),
+                start_epoch=start_epoch,
+                extra_metadata={
+                    "fps": achieved_fps,
+                    "source": "camera_offline_hfps",
+                    "video_time_base_mode": "wall_clock_frame_timestamps",
+                    "video_deleted": True,
+                    "video_total_frames": result["frame_count"],
+                    "video_detected_frames": result["detected"],
+                    "video_filled_frames": result["filled"],
+                    "video_nan_frames": result["nan"],
+                },
+            )
+
+            processing_seconds = time.perf_counter() - process_t0
+            self.status_label.setText(f"已保存: {session_dir}")
+            QMessageBox.information(
+                self,
+                "高帧率录制",
+                (
+                    f"唇形与音频数据已保存到:\n{session_dir}\n\n"
+                    f"总帧数: {len(frame_times)}\n"
+                    f"实际采集帧率: {achieved_fps:.1f} 帧/秒\n"
+                    f"检测成功帧: {result['detected']}\n"
+                    f"补全帧: {result['filled']}\n"
+                    f"离线处理耗时: {processing_seconds:.1f} 秒\n"
+                    f"自动唇形offset: {auto_lip_offset:+.3f}s\n"
+                    f"临时视频已删除。"
+                ),
+            )
+        finally:
+            if live_timer_was_active:
+                self._video_timer.start()
+            self._hfps_audio_chunks = []
+            self._hfps_audio_chunk_times_abs = []
+            self._hfps_frame_times_abs = []
+            try:
+                if video_temp_path is not None and video_temp_path.exists():
+                    video_temp_path.unlink()
+            except Exception:
+                pass
+
+    def _recognize_video_frames(
+        self, cap: cv2.VideoCapture, total_frames: int
+    ) -> dict | None:
+        """对视频逐帧运行 FaceMesh（带进度对话框）。
+
+        返回 dict(keys: metrics, landmarks_full, frame_count, detected,
+        filled, nan)；用户取消或未读取到帧时返回 None。
+        未检测到人脸的帧用最近一次有效结果回填，前导无效帧用首个有效帧回填。
+        """
+        has_total = total_frames > 0
+        progress = QProgressDialog(
+            "正在识别视频帧...", "取消", 0, max(total_frames, 1), self
+        )
+        progress.setWindowTitle("逐帧离线识别")
         progress.setWindowModality(Qt.WindowModality.WindowModal)
         progress.setMinimumDuration(0)
         if not has_total:
             progress.setRange(0, 0)
         progress.show()
 
-        metrics: dict[str, list[float]] = {
-            "area": [],
-            "face_width": [],
-            "face_height": [],
-            "height_px": [],
-            "outer_width_px": [],
-            "inner_width_px": [],
-            "total_width_px": [],
-            "open_px": [],
-            "length": [],
-            "height": [],
-            "outer_width": [],
-            "inner_width": [],
-            "total_width": [],
-            "open": [],
-            "circularity": [],
-        }
-        frame_times: list[float] = []
-        frame_times_abs: list[float] = []
+        metrics: dict[str, list[float]] = {key: [] for key in self._metrics}
         landmarks_full: list[np.ndarray] = []
-        start_epoch = 0.0
-        frame_index = 0
-        canceled = False
         last_valid_landmarks: np.ndarray | None = None
         last_valid_metrics: dict[str, float] | None = None
         detected_frame_count = 0
         filled_frame_count = 0
         nan_frame_count = 0
+        frame_index = 0
+        canceled = False
 
         try:
             while True:
@@ -753,11 +1141,6 @@ class LipGUI(QWidget):
                 ok, frame = cap.read()
                 if not ok:
                     break
-
-                rel_time = frame_index / fps
-                abs_time = start_epoch + rel_time
-                frame_times.append(rel_time)
-                frame_times_abs.append(abs_time)
 
                 h, w, _ = frame.shape
                 full_landmarks: np.ndarray | None = None
@@ -773,7 +1156,9 @@ class LipGUI(QWidget):
                         )
                         metrics_frame = lip_extract(full_landmarks)
                         last_valid_landmarks = full_landmarks.astype(np.float32)
-                        last_valid_metrics = {k: float(metrics_frame[k]) for k in metrics}
+                        last_valid_metrics = {
+                            k: float(metrics_frame[k]) for k in metrics
+                        }
                         detected_frame_count += 1
 
                 if full_landmarks is None:
@@ -781,7 +1166,9 @@ class LipGUI(QWidget):
                         landmarks_full.append(last_valid_landmarks.copy())
                         filled_frame_count += 1
                     else:
-                        landmarks_full.append(np.full((478, 2), np.nan, dtype=np.float32))
+                        landmarks_full.append(
+                            np.full((478, 2), np.nan, dtype=np.float32)
+                        )
                         nan_frame_count += 1
                 else:
                     landmarks_full.append(full_landmarks.astype(np.float32))
@@ -800,42 +1187,20 @@ class LipGUI(QWidget):
                 frame_index += 1
                 if has_total:
                     progress.setValue(frame_index)
-                    progress.setLabelText(f"正在识别视频帧... {frame_index}/{total_frames}")
+                    progress.setLabelText(
+                        f"正在识别视频帧... {frame_index}/{total_frames}"
+                    )
                 else:
                     progress.setLabelText(f"正在识别视频帧... {frame_index}")
                 QApplication.processEvents()
         finally:
-            cap.release()
             progress.close()
-            if live_timer_was_active:
-                self._video_timer.start()
 
         if canceled or frame_index == 0:
-            shutil.rmtree(session_dir, ignore_errors=True)
-            if canceled:
-                self.status_label.setText("已取消视频识别")
-            else:
-                QMessageBox.warning(self, "上传视频", "视频中未读取到有效帧。")
-            return
-
-        if np.isnan(np.array(metrics["open"], dtype=np.float64)).all():
-            shutil.rmtree(session_dir, ignore_errors=True)
-            QMessageBox.warning(self, "上传视频", "整段视频未检测到有效人脸，无法生成唇形参数。")
-            return
-
-        def _fill_leading_nans(values: list[float]) -> list[float]:
-            arr = np.array(values, dtype=np.float64)
-            valid = np.where(np.isfinite(arr))[0]
-            if valid.size == 0:
-                return values
-            first = int(valid[0])
-            if first > 0:
-                arr[:first] = arr[first]
-            return arr.tolist()
+            return None
 
         for key in metrics:
-            metrics[key] = _fill_leading_nans(metrics[key])
-
+            metrics[key] = self._fill_leading_nans(metrics[key])
         if landmarks_full:
             first_valid_idx = None
             for idx, lm in enumerate(landmarks_full):
@@ -846,20 +1211,44 @@ class LipGUI(QWidget):
                 for idx in range(first_valid_idx):
                     landmarks_full[idx] = landmarks_full[first_valid_idx].copy()
 
-        sample_rate = 44100
-        chunk_size = 1024
-        audio_samples_for_offset = np.array([], dtype=np.float64)
-        with wave.open(str(wav_path), "rb") as wav_in:
-            sample_rate = wav_in.getframerate()
-            total_samples = wav_in.getnframes()
-            raw_audio_bytes = wav_in.readframes(total_samples)
-            if wav_in.getnchannels() == 1 and wav_in.getsampwidth() == 2 and total_samples > 0:
-                audio_samples_for_offset = np.frombuffer(raw_audio_bytes, dtype=np.int16).astype(np.float64) / 32768.0
-        chunk_count = int(np.ceil(total_samples / chunk_size)) if total_samples > 0 else 0
-        audio_frame_timestamps = [
-            start_epoch + (chunk_idx * chunk_size / sample_rate)
-            for chunk_idx in range(chunk_count)
-        ]
+        return {
+            "metrics": metrics,
+            "landmarks_full": landmarks_full,
+            "frame_count": frame_index,
+            "detected": detected_frame_count,
+            "filled": filled_frame_count,
+            "nan": nan_frame_count,
+        }
+
+    @staticmethod
+    def _fill_leading_nans(values: list[float]) -> list[float]:
+        arr = np.array(values, dtype=np.float64)
+        valid = np.where(np.isfinite(arr))[0]
+        if valid.size == 0:
+            return values
+        first = int(valid[0])
+        if first > 0:
+            arr[:first] = arr[first]
+        return arr.tolist()
+
+    def _save_offline_recognition(
+        self,
+        session_dir: Path,
+        metrics: dict[str, list[float]],
+        landmarks_full: list[np.ndarray],
+        frame_times: list[float],
+        frame_times_abs: list[float],
+        audio_samples: np.ndarray,
+        sample_rate: int,
+        chunk_size: int,
+        audio_frame_timestamps: list[float],
+        start_epoch: float,
+        extra_metadata: dict,
+    ) -> float:
+        """写 audio_recording_timestamps.pkl 与 audio_recording.pkl。
+
+        返回自动估计的唇形/音频 offset（秒）。
+        """
         timestamps_payload = {
             "start_time": start_epoch,
             "frame_timestamps": audio_frame_timestamps,
@@ -872,7 +1261,7 @@ class LipGUI(QWidget):
         auto_lip_offset = 0.0
         try:
             auto_lip_offset = estimate_lip_audio_offset_seconds(
-                audio_samples=audio_samples_for_offset,
+                audio_samples=audio_samples,
                 sample_rate=sample_rate,
                 lip_times=np.array(frame_times, dtype=np.float64),
                 lip_open=np.array(metrics["open"], dtype=np.float64),
@@ -883,6 +1272,17 @@ class LipGUI(QWidget):
         auto_lip_offset = float(np.clip(auto_lip_offset, -2.0, 2.0))
 
         duration = frame_times[-1] if frame_times else None
+        metadata = {
+            "recording_start_time": frame_times_abs[0] if frame_times_abs else None,
+            "lip_first_frame_time": frame_times_abs[0] if frame_times_abs else None,
+            "audio_first_frame_time": start_epoch,
+            "lip_manual_offset": auto_lip_offset,
+            "recording_duration": duration,
+            "auto_lip_offset_estimate": auto_lip_offset,
+            "time_alignment_mode": "anchored_audio_start",
+            "created_at": datetime.now().isoformat(),
+        }
+        metadata.update(extra_metadata)
         data_payload = {
             "absolute_timestamps": frame_times_abs,
             "relative_times": frame_times,
@@ -902,46 +1302,16 @@ class LipGUI(QWidget):
             "open": metrics["open"],
             "circularity": metrics["circularity"],
             "landmarks": landmarks_full,
-            "metadata": {
-                "recording_start_time": frame_times_abs[0] if frame_times_abs else None,
-                "lip_first_frame_time": frame_times_abs[0] if frame_times_abs else None,
-                "audio_first_frame_time": start_epoch,
-                "lip_manual_offset": auto_lip_offset,
-                "recording_duration": duration,
-                "fps": fps,
-                "source": "uploaded_video",
-                "video_time_base_mode": "frame_index_over_fps",
-                "audio_stream_start_offset": audio_stream_start_offset,
-                "auto_lip_offset_estimate": auto_lip_offset,
-                "time_alignment_mode": "anchored_audio_start",
-                "video_total_frames": frame_index,
-                "video_detected_frames": detected_frame_count,
-                "video_filled_frames": filled_frame_count,
-                "video_nan_frames": nan_frame_count,
-                "created_at": datetime.now().isoformat(),
-            },
+            "metadata": metadata,
         }
         with open(session_dir / "audio_recording.pkl", "wb") as handle:
             pickle.dump(data_payload, handle)
-
-        valid_ratio = (detected_frame_count / frame_index * 100.0) if frame_index > 0 else 0.0
-        self.status_label.setText(
-            f"视频识别完成: 总帧{frame_index} 检测{detected_frame_count} 补全{filled_frame_count}"
-        )
-        QMessageBox.information(
-            self,
-            "上传视频",
-            (
-                f"唇形与音频数据已保存到:\n{session_dir}\n\n"
-                f"总帧数: {frame_index}\n"
-                f"检测成功帧: {detected_frame_count} ({valid_ratio:.1f}%)\n"
-                f"补全帧: {filled_frame_count}\n"
-                f"无可补全帧: {nan_frame_count}\n"
-                f"自动唇形offset: {auto_lip_offset:+.3f}s"
-            ),
-        )
+        return auto_lip_offset
 
     def start_raw_recording(self) -> None:
+        if self.is_hfps_recording:
+            QMessageBox.warning(self, "开始录制", "高帧率录制进行中，请先停止。")
+            return
         if self.is_raw_recording:
             return
         if self._video_capture is None or not self._video_capture.isOpened():
@@ -1150,6 +1520,9 @@ class LipGUI(QWidget):
         return 0 <= point[0] < width and 0 <= point[1] < height
 
     def start_recording(self) -> None:
+        if self.is_hfps_recording:
+            QMessageBox.warning(self, "实时参数计算", "高帧率录制进行中，请先停止。")
+            return
         with self._state_lock:
             if self.is_recording:
                 return
@@ -1381,6 +1754,23 @@ class LipGUI(QWidget):
             self.stop_recording()
         if self.is_raw_recording:
             self.stop_raw_recording()
+        if self.is_hfps_recording:
+            # 高帧率录制中途关闭：丢弃本次录制并删除临时视频（隐私）
+            self.is_hfps_recording = False
+            if self._hfps_audio_stream is not None:
+                try:
+                    self._hfps_audio_stream.stop()
+                    self._hfps_audio_stream.close()
+                except Exception:
+                    pass
+                self._hfps_audio_stream = None
+            if self._hfps_video_writer is not None:
+                self._hfps_video_writer.release()
+                self._hfps_video_writer = None
+            if self._hfps_session_dir is not None:
+                shutil.rmtree(self._hfps_session_dir, ignore_errors=True)
+                self._hfps_session_dir = None
+            self._hfps_video_temp_path = None
 
         if self._video_timer.isActive():
             self._video_timer.stop()
