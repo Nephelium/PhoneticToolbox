@@ -8,7 +8,7 @@ P04 审阅补充（2026-09-09）：当前 15 个公共预览页不是最终模�
 
 | 模块 | 原功能分组数 | 单独计划 | 核心目标 | 状态 |
 | --- | --- | --- | --- | --- |
-| M01 参数估计 | 6 | [迁移计划](../plans/modules/M01-parameter-estimation.md) | `acoustic` | in_progress（M01-A基准已验收，算法/UI待迁移） |
+| M01 参数估计 | 6 | [迁移计划](../plans/modules/M01-parameter-estimation.md) | `acoustic` | in_progress（M01-A/B已限定验收，原生适配/完整UI/批任务待迁移） |
 
 ## M01 参数估计
 顶部目录与关联工具栏；左侧文件列表；中央波形与 TextGrid；右侧参数摘要；底部播放与批处理状态。

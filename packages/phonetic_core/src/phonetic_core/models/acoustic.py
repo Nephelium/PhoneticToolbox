@@ -33,7 +33,7 @@ class AcousticConfig:
     selected_parameter_keys: Optional[tuple[str, ...]] = None
 
     def __post_init__(self):
-        # Public safety validation is explicit M01-D01; no changes to valid computations.
+        # New array API validation; public contract is M01-D. Valid computations are unchanged.
         for name in ('min_f0','max_f0','frameshift_ms','windowsize_ms','max_formant','energy_window_ms'):
             value=getattr(self,name)
             if isinstance(value,bool) or not isinstance(value,(int,float)) or not np.isfinite(value) or value<=0:

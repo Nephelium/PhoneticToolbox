@@ -1,6 +1,6 @@
 {
   "task": "M01",
-  "status": "planned",
+  "status": "in_progress",
   "audit_date": "2026-09-09",
   "evidence_kind": "static_source_audit_and_existing_P03_fixture; not v3 numerical acceptance",
   "source_comparison": "byte-for-byte against adjacent v2; no imports or execution of legacy modules",
@@ -1068,7 +1068,7 @@
     "Shimmer_APQ5",
     "Shimmer_APQ11"
   ],
-  "gui_column_count_status": "M01-A independently captured GUI explicit all=77 columns, service None=79; v3 algorithm not implemented",
+  "gui_column_count_status": "M01-A independently captured GUI explicit all=77 columns, service None=79; M01-B core parity verified, complete UI/adapters pending",
   "sources": [
     {
       "path": "phonetic_toolbox/gui/widgets/parameter_estimation_widget.py",
@@ -2223,5 +2223,7 @@
       "symbols": []
     }
   ],
-  "m01_a_baseline_report": "docs/testing/m01-baseline-report.md"
+  "m01_a_baseline_report": "docs/testing/m01-baseline-report.md",
+  "m01_b_core_report": "docs/testing/m01-core-report.md",
+  "m01_b_scope": "Windows array science and wheel verified; 80 catalog keys, 14 settings, separate SOE extension; no completed UI claim"
 }

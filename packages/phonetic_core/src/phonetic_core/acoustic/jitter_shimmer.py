@@ -37,8 +37,10 @@ def _extract_f0_for_wm(
             return f0_irapt[valid_irapt], marks_irapt[valid_irapt]
     except Exception:
         pass
-    if backend_events is not None: backend_events.append({"stage":"wm_f0","actual":"praat_fallback","reason":"irapt_unavailable_or_insufficient"})
     if parselmouth is None or y.size == 0:
+        if backend_events is not None:
+            backend_events.append({"stage":"wm_f0","actual":"unavailable",
+                                   "reason":"empty_audio" if y.size == 0 else "praat_missing"})
         return np.array([]), np.array([])
     snd = parselmouth.Sound(
         y.astype(np.float64),
@@ -60,12 +62,18 @@ def _extract_f0_for_wm(
                 pitch_ceiling=float(max_f0),
             )
         except Exception:
+            if backend_events is not None:
+                backend_events.append({"stage":"wm_f0","actual":"unavailable","reason":"praat_failed"})
             return np.array([]), np.array([])
     f0 = np.asarray(pitch_obj.selected_array["frequency"], dtype=np.float64)
     time_marks = np.asarray(pitch_obj.xs(), dtype=np.float64)
     valid = np.isfinite(f0) & (f0 > 0.0) & np.isfinite(time_marks)
     if np.count_nonzero(valid) < 2:
+        if backend_events is not None:
+            backend_events.append({"stage":"wm_f0","actual":"unavailable","reason":"praat_insufficient"})
         return np.array([]), np.array([])
+    if backend_events is not None:
+        backend_events.append({"stage":"wm_f0","actual":"praat_fallback","reason":"irapt_unavailable_or_insufficient"})
     return f0[valid], time_marks[valid]
 
 

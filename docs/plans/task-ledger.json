@@ -246,7 +246,7 @@
       "dependencies": "P03,P04,P06,P07",
       "files": "docs/plans/modules/M01-parameter-estimation.md 等模块计划；packages/phonetic_core/src/phonetic_core/；frontend/src/modules/",
       "status": "in_progress",
-      "note": "M01-A verified（限定Windows旧实现/合成样例/离屏控件逻辑基准）：28例各两次独立捕获，23项回归与冻结保护测试通过，科学依赖版本审计完成；未安装新依赖、未迁移v3算法/UI，下一项M01-B。",
+      "note": "M01-A基准和M01-B科学核心verified（限定Windows）：149项独立wheel测试、30组转换字节完全一致；实际采样率和后端不可用元数据已单列修正。完整UI、原生预算和持久批次仍待C-G；下一项M01-C。",
       "steps": [
         "按 M01/M02/M03/M04/M06/M07/M08/M09/M13/M14 顺序逐个执行对应文件级计划",
         "先原样搬可用算法，再拆外层 I/O；不把算法重写和 UI 换肤混成一个提交",
@@ -260,7 +260,8 @@
         "docs/plans/2026-09-09-m01-implementation.md",
         "docs/modules/evidence/M01-source-map.md",
         "docs/testing/m01-planning-report.md",
-        "docs/testing/m01-baseline-report.md"
+        "docs/testing/m01-baseline-report.md",
+        "docs/testing/m01-core-report.md"
       ]
     },
     {
@@ -436,9 +437,10 @@
         "docs/plans/2026-09-09-m01-implementation.md",
         "docs/modules/evidence/M01-source-map.md",
         "docs/testing/m01-planning-report.md",
-        "docs/testing/m01-baseline-report.md"
+        "docs/testing/m01-baseline-report.md",
+        "docs/testing/m01-core-report.md"
       ],
-      "note": "M01-A verified（限定Windows旧实现/合成样例/离屏控件逻辑基准）：28例各两次独立捕获，23项回归与冻结保护测试通过，科学依赖版本审计完成；未安装新依赖、未迁移v3算法/UI，下一项M01-B。"
+      "note": "M01-A基准和M01-B科学核心verified（限定Windows）：149项独立wheel测试、30组转换字节完全一致；实际采样率和后端不可用元数据已单列修正。完整UI、原生预算和持久批次仍待C-G；下一项M01-C。"
     },
     {
       "id": "M02",

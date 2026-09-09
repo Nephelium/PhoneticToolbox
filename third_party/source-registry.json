@@ -42,7 +42,8 @@
         "packages/phonetic_core/src/phonetic_core/acoustic/formants_praat.py",
         "packages/phonetic_core/src/phonetic_core/acoustic/jitter_shimmer.py",
         "packages/phonetic_core/src/phonetic_core/services/acoustic.py",
-        "packages/phonetic_core/src/phonetic_core/acoustic/__init__.py"
+        "packages/phonetic_core/src/phonetic_core/acoustic/__init__.py",
+        "packages/phonetic_core/src/phonetic_core/models/audio.py"
       ],
       "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
     },
@@ -81,7 +82,9 @@
       "acknowledgement_group": "software",
       "used_at": [
         "packages/phonetic_core/src/phonetic_core/acoustic/reaper_python.py",
-        "packages/phonetic_core/src/phonetic_core/services/acoustic.py"
+        "packages/phonetic_core/src/phonetic_core/services/acoustic.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/reaper_codec.py",
+        "packages/phonetic_core/src/phonetic_core/models/audio.py"
       ],
       "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
     },
@@ -210,7 +213,8 @@
         "packages/phonetic_core/src/phonetic_core/models/acoustic.py",
         "packages/phonetic_core/src/phonetic_core/services/acoustic.py",
         "packages/phonetic_core/src/phonetic_core/acoustic/__init__.py",
-        "packages/phonetic_core/src/phonetic_core/acoustic/lip.py"
+        "packages/phonetic_core/src/phonetic_core/acoustic/lip.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/annotations.py"
       ],
       "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
     },

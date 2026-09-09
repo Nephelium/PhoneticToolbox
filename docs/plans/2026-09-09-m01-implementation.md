@@ -12,11 +12,11 @@
 
 ## 0. 本轮范围与状态
 
-2026-09-09，井井在“下一步先形成 M01 实施计划与功能对照表”的说明后回复“好，继续”。计划最初交付完成**迁移前源码审阅、文件级计划和验收设计**，当时M01/P08为planned。后续M01-A已实施（见下段），但算法/UI仍未迁移。
+2026-09-09，井井在“下一步先形成 M01 实施计划与功能对照表”的说明后回复“好，继续”。计划最初交付完成**迁移前源码审阅、文件级计划和验收设计**，当时M01/P08为planned。后续M01-A/B已实施（见下段），完整UI/原生预算与批次尚未迁移。
 
 本轮交付：[源码对照](../modules/evidence/M01-source-map.md)、[80参数/14设置及30文件哈希](../modules/evidence/M01-parameter-settings.json)、[细项验收表](../modules/evidence/M01-acceptance.csv)。既有 [M01模块计划](modules/M01-parameter-estimation.md) 保留为功能规格，本计划补足文件和执行顺序。
 
-M01-A 已按井井后续“好，请继续”实施并通过限定基准验收，见 [M01-A报告](../testing/m01-baseline-report.md)。M01/P08 当前 in_progress，下一项为 M01-B 科学核心与数值对照。原规划的首个子任务为 **M01-A：补齐旧行为基准与科学环境审计**。它不改算法/产品页面，不写现存研究数据，不建新数据库表。M01-C/F 涉及原生输出与持久批次的具体设计门；只在可审阅方案具备后进入对应实现。任何实际数据库DDL、用户数据迁移、全局环境变更、push或发布仍按根规则单独授权，不能由此计划推定。
+M01-A 已按井井后续“好，请继续”实施并通过限定基准验收，见 [M01-A报告](../testing/m01-baseline-report.md)。M01/P08 当前 in_progress，M01-B已完成限定Windows核心验收，下一项为M01-C原生与格式预算适配。原规划的首个子任务为 **M01-A：补齐旧行为基准与科学环境审计**。它不改算法/产品页面，不写现存研究数据，不建新数据库表。M01-C/F 涉及原生输出与持久批次的具体设计门；只在可审阅方案具备后进入对应实现。任何实际数据库DDL、用户数据迁移、全局环境变更、push或发布仍按根规则单独授权，不能由此计划推定。
 
 初次规划交付未引入依赖或算法源码。井井在 M01-A 后回复“继续”，授权 M01-B；本轮迁入纯计算与数组/配置接口，并更新实际来源登记，不以数值等价替代发行许可审查。
 
@@ -83,7 +83,7 @@ P04 的 `FileProvider.load(File)` 仅能加载WAV；`HostCapabilities.jobs=false
 
 **退出条件：** 三条参数选择路径的真实列、四项唇形合成时间行为、14设置请求/实际传递及独立后端证据可定位；专门确认的真实持续元音/唇形缺口仍明确标出，不能伪造自然语料标签。
 
-### M01-B · 科学核心与数值对照
+### M01-B · 科学核心与数值对照（verified：限定Windows数组核心与独立wheel）
 
 **文件：** `packages/phonetic_core/src/phonetic_core/models/acoustic.py`、`acoustic/catalog.py`、`acoustic/alignment.py`、源码对照表所列同名算法、`services/acoustic.py`、`ports/acoustic.py`；`packages/phonetic_core/pyproject.toml`；拟建项目科学依赖 `.in/.lock`；`third_party/source-registry.json`；测试 `tests/parity/test_parameter_estimation.py`、`packages/phonetic_core/tests/test_acoustic_alignment.py`、`test_acoustic_config.py`。
 
@@ -181,4 +181,4 @@ git diff --check
 
 另用只读AST核对80键/14控件、30文件hash和验收ID覆盖；`desktop.experiments.capture_context.capture()`比较v2保存性，只向 `output/validation/m01/`写本轮证据，不调用会覆盖P01输出的旧CLI入口。
 
-实际结果记在 [本轮审阅报告](../testing/m01-planning-report.md)。上述未来脚本不纳入本轮已运行清单。M01-A完成后从M01-B开始；M02及M03等其他模块保持planned。
+实际结果记在 [本轮审阅报告](../testing/m01-planning-report.md)。上述未来脚本不纳入本轮已运行清单。M01-B完成后从M01-C开始；M02及M03等其他模块保持planned。

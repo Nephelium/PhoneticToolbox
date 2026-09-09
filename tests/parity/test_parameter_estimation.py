@@ -40,6 +40,7 @@ def test_m01_independent_reference(case, tmp_path):
     frame = result.to_dataframe()
     assert list(frame.columns) == old['columns']
     assert result.time_axis.tolist() == old['time_axis']
+    assert result.sampling_rate == fs
     actual = {str(c): pack(frame[c].to_numpy()) for c in frame}
     assert not support.compare(old['tracks'], actual), support.compare(old['tracks'], actual)
     np.testing.assert_array_equal(data, before)
@@ -74,7 +75,9 @@ def test_p03_independent_reference(recipe, tmp_path):
     expected = unpack_reference(old['result'])
     for key, value in expected.items():
         if key == 'sampling_rate':
-            continue  # separately asserted metadata correction, no numerical masking
+            assert result.sampling_rate == old['audio']['sample_rate_hz']
+            assert value == 16000  # M01-D01 known old metadata bug, not a numeric tolerance exception
+            continue
         actual = getattr(result, key)
         if isinstance(value, dict):
             assert value.keys() == actual.keys()

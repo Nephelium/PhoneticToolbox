@@ -45,3 +45,11 @@ def test_known_pcm_quantization_bytes():
         (np.array([-.5,0.,.25],dtype=np.float32), [-32000,0,16000]),
     ]:
         assert reaper_pcm16(AudioInput(data,16000)).tobytes() == np.array(expected,dtype=np.int16).tobytes()
+
+
+@pytest.mark.parametrize('rate', [16000, 22050, 44100])
+def test_result_metadata_uses_actual_input_rate(rate):
+    from phonetic_core.models.acoustic import AcousticConfig
+    from phonetic_core.services.acoustic import analyze_audio
+    result = analyze_audio(AudioInput(np.zeros(0, dtype=np.int16), rate), AcousticConfig(use_reaper=False))
+    assert result.sampling_rate == rate

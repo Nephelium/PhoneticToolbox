@@ -25,7 +25,7 @@
 
 ## 计算与适配拆分
 
-下表路径前缀：旧代码均在 `phonetic_toolbox/`；新核心位于 `packages/phonetic_core/src/phonetic_core/`。精确源码行号/哈希见机器清单，以下新路径均为 **planned**。
+下表路径前缀：旧代码均在 `phonetic_toolbox/`；新核心位于 `packages/phonetic_core/src/phonetic_core/`。精确源码行号/哈希见机器清单，下表保留原迁移目标；M01-B已迁入的文件与哈希见 [核心迁移证据](M01-core-migration.json)，其余C-F适配仍planned。
 
 | 旧文件/函数 | 拟迁入位置 | 迁移约束 |
 | --- | --- | --- |
@@ -95,3 +95,7 @@ P03-K02 的440Hz正弦 REAPER 中位输出约62.745Hz仍只是旧行为；本轮
 复用现有12项来源索引：SRC-PRAAT、SRC-REAPER、SRC-IRAPT、SRC-WMPC、SRC-VOICESAUCE、SRC-OPENSAUCE、REF-CPP、REF-HNR、REF-SHR、REF-ISELI、REF-HAWKS、REF-SOE。本轮只核对本地用途，不新增下载、依赖或第三方移植，现有许可未决状态保持。新包迁入时逐文件补实际使用位置、关系类别和版权；完整发行许可仍另验。
 
 本轮不启动 Codex 内置浏览器，不关闭其任何测试页；后续 UI 验证沿用独立 Chrome/Qt 自有进程。测试只写忽略的 `output/validation/m01/`，不更改相邻 v2、旧语料或原科学环境。
+
+## M01-B 实际迁移
+
+独立wheel的149项Windows检查通过；源码矩阵、真实采样率修正、后端成功/不可用记录与范围见 [核心报告](../../testing/m01-core-report.md)。M01-D01已在数组结果中修正，不代表UI时间轴的M01-D02或完整双端任务已完成。

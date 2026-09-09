@@ -50,6 +50,14 @@ def main():
         'runtime_package_count':len(RUNTIME),'packages':inventory,'cross_platform_verified':False})
     migration_path=ROOT/'docs/modules/evidence/M01-core-migration.json'
     migration=json.loads(migration_path.read_text('utf-8'))
+    extra_mappings=[
+        ('phonetic_toolbox/core/acoustic/f0_reaper.py','acoustic/reaper_codec.py',['SRC-REAPER']),
+        ('phonetic_toolbox/services/acoustic_service.py','acoustic/annotations.py',['SRC-VOICESAUCE']),
+        ('phonetic_toolbox/services/acoustic_service.py','models/audio.py',['SRC-PRAAT','SRC-REAPER'])]
+    for source,target,ids in extra_mappings:
+        target='packages/phonetic_core/src/phonetic_core/'+target
+        if not any(r['target']==target for r in migration['files']):
+            migration['files'].append({'source':source,'source_sha256':sha(ROOT/source),'target':target,'source_ids':ids})
     for row in migration['files']:
         source=(ROOT/row['source']);target=(ROOT/row['target'])
         assert sha(source)==row['source_sha256']
@@ -65,6 +73,8 @@ def main():
             record['m01_migration_evidence']='docs/modules/evidence/M01-core-migration.json'
     migration['resources']=[{'path':'packages/phonetic_core/src/phonetic_core/acoustic/data/Sinc_hash_1000.mat',
         'sha256':'e3e2fb01d67f722b7f13c1c9a0f4d62559a1ece77167343dfa42de7203f4d860','source_id':'SRC-IRAPT'}]
+    migration['additional_model_source']={'path':'phonetic_toolbox/models/acoustic_models.py',
+        'sha256':sha(ROOT/'phonetic_toolbox/models/acoustic_models.py'),'symbol':'PitchTrack'}
     dump(migration_path,migration)
     registry['sources']=list(sources.values());registry['total_records']=len(sources)
     dump(registry_path,registry)

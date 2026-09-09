@@ -1,6 +1,6 @@
 {
   "task": "M01-B",
-  "status": "in_progress",
+  "status": "verified",
   "files": [
     {
       "source": "phonetic_toolbox/core/acoustic/common.py",
@@ -172,7 +172,7 @@
         "SRC-PRAAT",
         "SRC-VOICESAUCE"
       ],
-      "target_sha256": "55a712e75de050fe4697166776195734c08e1887169d50a50bca23a78e1f204c",
+      "target_sha256": "32843f79de09fcbb129456d464339a8ec74a2969e62d75c2cb7a921190e8643c",
       "unchanged_function_or_class_ast": [],
       "adaptation": "Project-owned migration; unchanged AST list identifies exact function bodies; remaining changes separate I/O, imports, per-call ports and snapshots. Source IDs retain their registered relationship; not a per-line upstream copying claim."
     },
@@ -239,7 +239,7 @@
         "SRC-IRAPT",
         "SRC-PRAAT"
       ],
-      "target_sha256": "5bd2d414f0ab32aca7bfb04886509d17edb220744b86ce9cb725ca54fc4a073b",
+      "target_sha256": "4a75c07a8498bef75fdeace732a83e75ed3be4e92ac1288c7adf70a514d2eae2",
       "unchanged_function_or_class_ast": [
         "_wm_phase_const",
         "_amp_extract",
@@ -274,7 +274,7 @@
         "SRC-VOICESAUCE",
         "SRC-OPENSAUCE"
       ],
-      "target_sha256": "f5dcc1ab559c14b6b8b98037c54f4b3eb53b5a2f9ce750c24e1c3a838e2b754d",
+      "target_sha256": "d4640691f6a18f21a9b4a93aea689319e6752b370c31dbcd8f2ff0f2cb162f97",
       "unchanged_function_or_class_ast": [],
       "adaptation": "Project-owned migration; unchanged AST list identifies exact function bodies; remaining changes separate I/O, imports, per-call ports and snapshots. Source IDs retain their registered relationship; not a per-line upstream copying claim."
     },
@@ -303,6 +303,40 @@
         "_smooth_array"
       ],
       "adaptation": "Project-owned migration; unchanged AST list identifies exact function bodies; remaining changes separate I/O, imports, per-call ports and snapshots. Source IDs retain their registered relationship; not a per-line upstream copying claim."
+    },
+    {
+      "source": "phonetic_toolbox/core/acoustic/f0_reaper.py",
+      "source_sha256": "4d2dac658bab746dc9f52f0087725de58cf1c3af74940046c2456a7d8f1bf339",
+      "target": "packages/phonetic_core/src/phonetic_core/acoustic/reaper_codec.py",
+      "source_ids": [
+        "SRC-REAPER"
+      ],
+      "target_sha256": "19b23ce77fcb15802b8fb19e7e5767581ea8f895595e43dd888ef74c934b50f8",
+      "unchanged_function_or_class_ast": [],
+      "adaptation": "Project-owned migration; unchanged AST list identifies exact function bodies; remaining changes separate I/O, imports, per-call ports and snapshots. Source IDs retain their registered relationship; not a per-line upstream copying claim."
+    },
+    {
+      "source": "phonetic_toolbox/services/acoustic_service.py",
+      "source_sha256": "23aa356ffe82f8c5b0f97f4dfed82ce29ab4490930febcecb45f9d9feccd7779",
+      "target": "packages/phonetic_core/src/phonetic_core/acoustic/annotations.py",
+      "source_ids": [
+        "SRC-VOICESAUCE"
+      ],
+      "target_sha256": "c2bacf344db79ca3aa6974af5f6d722e565e2df7bb8b776a34d69cfc44e983ee",
+      "unchanged_function_or_class_ast": [],
+      "adaptation": "Project-owned migration; unchanged AST list identifies exact function bodies; remaining changes separate I/O, imports, per-call ports and snapshots. Source IDs retain their registered relationship; not a per-line upstream copying claim."
+    },
+    {
+      "source": "phonetic_toolbox/services/acoustic_service.py",
+      "source_sha256": "23aa356ffe82f8c5b0f97f4dfed82ce29ab4490930febcecb45f9d9feccd7779",
+      "target": "packages/phonetic_core/src/phonetic_core/models/audio.py",
+      "source_ids": [
+        "SRC-PRAAT",
+        "SRC-REAPER"
+      ],
+      "target_sha256": "0c360798bd4fe845f0a3ec1ffb9477cafcde5d2ad3bfe45e502091c7381db55f",
+      "unchanged_function_or_class_ast": [],
+      "adaptation": "Project-owned migration; unchanged AST list identifies exact function bodies; remaining changes separate I/O, imports, per-call ports and snapshots. Source IDs retain their registered relationship; not a per-line upstream copying claim."
     }
   ],
   "resources": [
@@ -311,5 +345,12 @@
       "sha256": "e3e2fb01d67f722b7f13c1c9a0f4d62559a1ece77167343dfa42de7203f4d860",
       "source_id": "SRC-IRAPT"
     }
-  ]
+  ],
+  "additional_model_source": {
+    "path": "phonetic_toolbox/models/acoustic_models.py",
+    "sha256": "05c61352d411bc6dea83e03fc16941c92df91b93b0de012708ed9f4332a43c78",
+    "symbol": "PitchTrack"
+  },
+  "scope": "Windows arrays, independent numerical parity and wheel only; native budget/UI/batches pending",
+  "tests_passed": 149
 }

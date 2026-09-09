@@ -369,6 +369,7 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
 
     result = AnalysisResult(
         time_axis=target_times,
+        sampling_rate=fs,  # M01-D01: describe the input, not the REAPER intermediate.
 
         f0_praat=f0_praat,
         f0_reaper=f0_reaper,

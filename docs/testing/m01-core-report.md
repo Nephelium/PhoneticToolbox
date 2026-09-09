@@ -1,6 +1,6 @@
 # M01-B 科学核心迁移验收
 
-状态：in_progress；计算迁移对照已通过，独立 wheel 已通过，采样率修正收尾中。M01/P08 整体仍为 in_progress，完整 UI、原生输出预算和批次任务未接入。
+状态：verified（限定Windows数组核心与独立wheel）；149项定向检查通过。M01/P08 整体仍为 in_progress，完整 UI、原生输出预算和批次任务未接入。
 
 ## 已完成的计算迁移
 
@@ -35,6 +35,19 @@
 
 来源注册表与软件致谢共用生成数据。历史 VoiceSauce/OpenSauce 移植来源和许可未决项保留，未把方法参考写成所有代码的作者。所有测试音频均为自有解析合成信号；真实自然持续元音与配套唇形仍未新增验证。
 
-下一项：完成本阶段收尾后进入 M01-C，验证原生输出的强制资源限制、格式安全与双产物原子发布。数据库实际迁移与 M01 页面联合验收尚未发生。
+下一项：进入 M01-C，验证原生输出的强制资源限制、格式安全与双产物原子发布。数据库实际迁移与 M01 页面联合验收尚未发生。
 
 独立 wheel 基线验收：新建 `.venv/m01-wheelcheck`，按测试锁安装 18 包并安装本地 wheel，在 `output/validation/m01` 以 `-I -m pytest` 执行核心与 P03/M01 定向测试，**143 passed**。JUnit 证据为忽略的 `output/validation/m01/b-wheel-before-metadata.xml`。wheel 的独立 site-packages 路径与无 Qt/FastAPI/旧包导入均已核验。
+
+
+## 最终结果与独立修正
+
+- 数值迁移提交 `55bc27e` 保留旧元数据默认值，并通过143项独立wheel测试；随后单独修正 M01-D01：`AnalysisResult.sampling_rate` 取实际输入采样率，不再固定16000。22050/44100失败用例先红后绿，P03/M01-A完整数值对照同时明确断言这个元数据差异。
+- 后端状态修正：空输入、Praat调用失败、Praat有效点不足分别记unavailable及原因；只有取得足够有效点才记Praat回退成功。3个专门失败用例先红后绿，声学数组未改。
+- 最终独立wheel：**149 passed**（核心62、M01/P03数值34、转换30、原P03/M01-A冻结保护23）。运行于m01-wheelcheck的site-packages，命令与前述一致；最终JUnit为 `output/validation/m01/b-wheel-final-metadata.xml`。前端仅更新生成的致谢数据，`npm --prefix frontend run typecheck` 和 `ui-data:check` 均通过。
+- `scripts/check_architecture.py`、`scripts/validate_docs.py`、Git差异检查与环境依赖兼容检查通过。318项来源登记已与生成致谢保持一致；历史许可缺口不改变。
+- 保存性：v2的427个基线文件、HEAD/index/status、原包元数据hash和环境路径与本阶段前一致；P03的8份及M01-A的28份golden逐项hash不变。Git根已确认在本项目D盘目录，本轮没有push、现存数据库操作或Codex内置浏览器关闭操作。
+
+核心取消只在计算阶段间检查；不能宣称原生子进程即时取消、网页配额控制或任意文件解码已验收。损坏WAV检查验证外层SciPy解码拒绝，核心仅接已解码数组；正式文件入口仍在C。完整M01/P08保持in_progress。
+
+最终交付wheel位于忽略的 `output/validation/m01/wheels-handoff/`；收尾只纠正差异编号注释，AST与149项测试的wheel完全一致，重建后48项输入/后端/资源检查通过，安装内容逐文件与最终源码一致。最终wheel SHA-256：`917ee84b43645cbe5ecff6817ca28ed0d1809edcbb168b32b848d6d55a66d467`。
