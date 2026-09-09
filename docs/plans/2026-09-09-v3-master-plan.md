@@ -168,7 +168,7 @@
 
 **依赖：** P03,P04,P06,P07。**状态：** in_progress（M01-A/B限定验收完成，其余模块与M01完整UI/批任务仍待迁移）。
 
-2026-09-09：M01迁移前审阅和[文件级实施计划](2026-09-09-m01-implementation.md)已完成；30源文件/80参数/14设置已核对，见[本轮报告](../testing/m01-planning-report.md)。[M01-A独立基准](../testing/m01-baseline-report.md)已完成：28例双轮捕获与23项测试通过；[M01-B核心](../testing/m01-core-report.md)已完成149项Windows独立wheel测试，M01-C适配已通过222项Windows wheel测试与真实双产物回读，下一项为M01-D契约；不把核心验收计作整个模块verified。
+2026-09-09：M01迁移前审阅和[文件级实施计划](2026-09-09-m01-implementation.md)已完成；30源文件/80参数/14设置已核对，见[本轮报告](../testing/m01-planning-report.md)。[M01-A独立基准](../testing/m01-baseline-report.md)已完成：28例双轮捕获与23项测试通过；[M01-B核心](../testing/m01-core-report.md)已完成149项Windows独立wheel测试，M01-C适配已通过222项Windows wheel测试与真实双产物回读，[M01-D契约](../testing/m01-contract-report.md)已通过318项wheel测试与三组真实结果往返，下一项为M01-E共同研究页与桌面目录；不把核心验收计作整个模块verified。
 
 **目标文件：** docs/plans/modules/M01-parameter-estimation.md 等模块计划；packages/phonetic_core/src/phonetic_core/；frontend/src/modules/。
 

@@ -1,11 +1,9 @@
 """Bounded P06 metadata contracts, shared by local and server APIs."""
 from typing import Annotated, Literal
 from pydantic import Field, model_validator
-from .models import WireModel
+from .models import WireModel, Identifier, IdempotencyKey
 
 State = Literal['queued','running','cancel_requested','cancelled','failed','interrupted','succeeded']
-Identifier = Annotated[str, Field(pattern=r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$')]
-IdempotencyKey = Annotated[str, Field(pattern=r'^[A-Za-z0-9_-]{8,80}$')]
 
 
 class ProbeConfig(WireModel):
@@ -101,3 +99,11 @@ class JobEvent(WireModel):
 
 class JobEvents(WireModel):
     events: list[JobEvent]
+
+
+# Shared future result envelope; existing JobView/routes remain P06/P07 only.
+from .acoustic_models import AcousticFileManifest
+
+
+class ResultManifestEnvelope(WireModel):
+    manifest: Annotated[JobManifest | FileManifest | AcousticFileManifest, Field(discriminator='kind')]

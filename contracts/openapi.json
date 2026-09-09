@@ -1,6 +1,1155 @@
 {
   "components": {
     "schemas": {
+      "AcousticAssetRef": {
+        "additionalProperties": false,
+        "properties": {
+          "asset_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Asset Id",
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Sha256",
+            "type": "string"
+          }
+        },
+        "required": [
+          "asset_id",
+          "sha256"
+        ],
+        "title": "AcousticAssetRef",
+        "type": "object"
+      },
+      "AcousticBackendObservation": {
+        "additionalProperties": false,
+        "properties": {
+          "actual": {
+            "enum": [
+              "native_reaper",
+              "reaper_python",
+              "irapt1",
+              "praat_fallback",
+              "unavailable",
+              "disabled"
+            ],
+            "title": "Actual",
+            "type": "string"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "pattern": "^[a-z][a-z0-9_]{0,79}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Reason"
+          },
+          "resource_sha256": {
+            "anyOf": [
+              {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Resource Sha256"
+          },
+          "stage": {
+            "enum": [
+              "reaper",
+              "wm_f0"
+            ],
+            "title": "Stage",
+            "type": "string"
+          }
+        },
+        "required": [
+          "stage",
+          "actual"
+        ],
+        "title": "AcousticBackendObservation",
+        "type": "object"
+      },
+      "AcousticBackendPolicy": {
+        "additionalProperties": false,
+        "properties": {
+          "reaper": {
+            "default": "native_then_python",
+            "enum": [
+              "native_required",
+              "native_then_python",
+              "python_only",
+              "disabled"
+            ],
+            "title": "Reaper",
+            "type": "string"
+          },
+          "wm_f0": {
+            "const": "irapt_then_praat",
+            "default": "irapt_then_praat",
+            "title": "Wm F0",
+            "type": "string"
+          }
+        },
+        "title": "AcousticBackendPolicy",
+        "type": "object"
+      },
+      "AcousticBatchCounts": {
+        "additionalProperties": false,
+        "properties": {
+          "cancel_requested": {
+            "maximum": 10000,
+            "minimum": 0,
+            "title": "Cancel Requested",
+            "type": "integer"
+          },
+          "cancelled": {
+            "maximum": 10000,
+            "minimum": 0,
+            "title": "Cancelled",
+            "type": "integer"
+          },
+          "failed": {
+            "maximum": 10000,
+            "minimum": 0,
+            "title": "Failed",
+            "type": "integer"
+          },
+          "interrupted": {
+            "maximum": 10000,
+            "minimum": 0,
+            "title": "Interrupted",
+            "type": "integer"
+          },
+          "not_started": {
+            "maximum": 10000,
+            "minimum": 0,
+            "title": "Not Started",
+            "type": "integer"
+          },
+          "queued": {
+            "maximum": 10000,
+            "minimum": 0,
+            "title": "Queued",
+            "type": "integer"
+          },
+          "running": {
+            "maximum": 10000,
+            "minimum": 0,
+            "title": "Running",
+            "type": "integer"
+          },
+          "succeeded": {
+            "maximum": 10000,
+            "minimum": 0,
+            "title": "Succeeded",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "not_started",
+          "queued",
+          "running",
+          "cancel_requested",
+          "succeeded",
+          "failed",
+          "cancelled",
+          "interrupted"
+        ],
+        "title": "AcousticBatchCounts",
+        "type": "object"
+      },
+      "AcousticBatchItem": {
+        "additionalProperties": false,
+        "properties": {
+          "audio_asset_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Audio Asset Id",
+            "type": "string"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "pattern": "^[a-z][a-z0-9_]{0,79}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Error Code"
+          },
+          "index": {
+            "maximum": 9999,
+            "minimum": 0,
+            "title": "Index",
+            "type": "integer"
+          },
+          "job_id": {
+            "anyOf": [
+              {
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Id"
+          },
+          "state": {
+            "enum": [
+              "not_started",
+              "queued",
+              "running",
+              "cancel_requested",
+              "succeeded",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ],
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "index",
+          "audio_asset_id",
+          "job_id",
+          "state"
+        ],
+        "title": "AcousticBatchItem",
+        "type": "object"
+      },
+      "AcousticBatchSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "batch_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Batch Id",
+            "type": "string"
+          },
+          "closed": {
+            "title": "Closed",
+            "type": "boolean"
+          },
+          "complete": {
+            "description": "True only when the closed batch succeeded for every requested file",
+            "title": "Complete",
+            "type": "boolean"
+          },
+          "counts": {
+            "$ref": "#/components/schemas/AcousticBatchCounts"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AcousticBatchItem"
+            },
+            "maxItems": 10000,
+            "minItems": 1,
+            "title": "Items",
+            "type": "array"
+          },
+          "kind": {
+            "const": "acoustic_batch",
+            "default": "acoustic_batch",
+            "title": "Kind",
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "m01/1",
+            "default": "m01/1",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "total": {
+            "maximum": 10000,
+            "minimum": 1,
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "batch_id",
+          "total",
+          "closed",
+          "complete",
+          "counts",
+          "items"
+        ],
+        "title": "AcousticBatchSummary",
+        "type": "object"
+      },
+      "AcousticConfigSnapshot": {
+        "additionalProperties": false,
+        "properties": {
+          "backend_policy": {
+            "$ref": "#/components/schemas/AcousticBackendPolicy"
+          },
+          "selection": {
+            "$ref": "#/components/schemas/AcousticSelection"
+          },
+          "settings": {
+            "$ref": "#/components/schemas/AcousticSettings"
+          }
+        },
+        "title": "AcousticConfigSnapshot",
+        "type": "object"
+      },
+      "AcousticDecodedAudio": {
+        "additionalProperties": false,
+        "properties": {
+          "channels": {
+            "maximum": 8,
+            "minimum": 1,
+            "title": "Channels",
+            "type": "integer"
+          },
+          "sample_count": {
+            "description": "Frames per channel, never the flattened channel sample count",
+            "maximum": 2000000,
+            "minimum": 0,
+            "title": "Sample Count",
+            "type": "integer"
+          },
+          "sample_dtype": {
+            "enum": [
+              "uint8",
+              "int16",
+              "int32",
+              "float32",
+              "float64"
+            ],
+            "title": "Sample Dtype",
+            "type": "string"
+          },
+          "sample_rate_hz": {
+            "exclusiveMinimum": 0,
+            "maximum": 384000,
+            "title": "Sample Rate Hz",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "sample_rate_hz",
+          "channels",
+          "sample_count",
+          "sample_dtype"
+        ],
+        "title": "AcousticDecodedAudio",
+        "type": "object"
+      },
+      "AcousticFileManifest": {
+        "additionalProperties": false,
+        "properties": {
+          "complete": {
+            "const": true,
+            "default": true,
+            "title": "Complete",
+            "type": "boolean"
+          },
+          "completed_at": {
+            "minimum": 0,
+            "title": "Completed At",
+            "type": "number"
+          },
+          "expires_at": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/AcousticResultFile"
+            },
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Files",
+            "type": "array"
+          },
+          "job_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Job Id",
+            "type": "string"
+          },
+          "kind": {
+            "const": "acoustic_file",
+            "default": "acoustic_file",
+            "title": "Kind",
+            "type": "string"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/AcousticMetadata"
+          },
+          "retention": {
+            "enum": [
+              "server",
+              "local"
+            ],
+            "title": "Retention",
+            "type": "string"
+          },
+          "row_count": {
+            "exclusiveMinimum": 0,
+            "maximum": 100000,
+            "title": "Row Count",
+            "type": "integer"
+          },
+          "schema_version": {
+            "const": "m01/1",
+            "default": "m01/1",
+            "title": "Schema Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "job_id",
+          "metadata",
+          "completed_at",
+          "retention",
+          "expires_at",
+          "row_count",
+          "files"
+        ],
+        "title": "AcousticFileManifest",
+        "type": "object"
+      },
+      "AcousticInputSnapshot": {
+        "additionalProperties": false,
+        "properties": {
+          "asset_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Asset Id",
+            "type": "string"
+          },
+          "expires_at": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          },
+          "role": {
+            "enum": [
+              "audio",
+              "textgrid",
+              "lip"
+            ],
+            "title": "Role",
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Sha256",
+            "type": "string"
+          }
+        },
+        "required": [
+          "asset_id",
+          "sha256",
+          "role",
+          "expires_at"
+        ],
+        "title": "AcousticInputSnapshot",
+        "type": "object"
+      },
+      "AcousticInputs": {
+        "additionalProperties": false,
+        "properties": {
+          "audio": {
+            "$ref": "#/components/schemas/AcousticAssetRef"
+          },
+          "lip": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AcousticAssetRef"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "textgrid": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AcousticAssetRef"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "audio"
+        ],
+        "title": "AcousticInputs",
+        "type": "object"
+      },
+      "AcousticMetadata": {
+        "additionalProperties": false,
+        "properties": {
+          "adapter_version": {
+            "const": "m01-adapter/1",
+            "default": "m01-adapter/1",
+            "title": "Adapter Version",
+            "type": "string"
+          },
+          "algorithm_id": {
+            "const": "m01.parameter_estimation",
+            "default": "m01.parameter_estimation",
+            "title": "Algorithm Id",
+            "type": "string"
+          },
+          "algorithm_version": {
+            "const": "legacy-numeric/1",
+            "default": "legacy-numeric/1",
+            "title": "Algorithm Version",
+            "type": "string"
+          },
+          "backends": {
+            "items": {
+              "$ref": "#/components/schemas/AcousticBackendObservation"
+            },
+            "maxItems": 2,
+            "title": "Backends",
+            "type": "array"
+          },
+          "config": {
+            "$ref": "#/components/schemas/AcousticConfigSnapshot"
+          },
+          "config_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Config Sha256",
+            "type": "string"
+          },
+          "core_version": {
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Core Version",
+            "type": "string"
+          },
+          "decoded": {
+            "$ref": "#/components/schemas/AcousticDecodedAudio"
+          },
+          "inputs": {
+            "items": {
+              "$ref": "#/components/schemas/AcousticInputSnapshot"
+            },
+            "maxItems": 3,
+            "minItems": 1,
+            "title": "Inputs",
+            "type": "array"
+          },
+          "project_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "m01/1",
+            "default": "m01/1",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "source_ids": {
+            "items": {
+              "pattern": "^[A-Z][A-Z0-9_-]{0,79}$",
+              "type": "string"
+            },
+            "maxItems": 32,
+            "minItems": 1,
+            "title": "Source Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "core_version",
+          "project_id",
+          "inputs",
+          "decoded",
+          "config",
+          "config_sha256",
+          "source_ids",
+          "backends"
+        ],
+        "title": "AcousticMetadata",
+        "type": "object"
+      },
+      "AcousticNumericColumn": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "enum": [
+              "pF0",
+              "rF0",
+              "pF1",
+              "pF2",
+              "pF3",
+              "pF4",
+              "pB1",
+              "pB2",
+              "pB3",
+              "pB4",
+              "H1_pF0",
+              "H1_rF0",
+              "H2_pF0",
+              "H2_rF0",
+              "H4_pF0",
+              "H4_rF0",
+              "A1_pF0",
+              "A1_rF0",
+              "A2_pF0",
+              "A2_rF0",
+              "A3_pF0",
+              "A3_rF0",
+              "H1H2u_pF0",
+              "H1H2u_rF0",
+              "H2H4u_pF0",
+              "H2H4u_rF0",
+              "H1A1u_pF0",
+              "H1A1u_rF0",
+              "H1A2u_pF0",
+              "H1A2u_rF0",
+              "H1A3u_pF0",
+              "H1A3u_rF0",
+              "H1A1c_pF0",
+              "H1A1c_rF0",
+              "H1A2c_pF0",
+              "H1A2c_rF0",
+              "H1A3c_pF0",
+              "H1A3c_rF0",
+              "H1H2c_pF0",
+              "H1H2c_rF0",
+              "H2H4c_pF0",
+              "H2H4c_rF0",
+              "H2K_pF0",
+              "H2K_rF0",
+              "H5K_pF0",
+              "H5K_rF0",
+              "H42Ku_pF0",
+              "H42Ku_rF0",
+              "H2KH5Ku_pF0",
+              "H2KH5Ku_rF0",
+              "H42Kc_pF0",
+              "H42Kc_rF0",
+              "H2KH5Kc_pF0",
+              "H2KH5Kc_rF0",
+              "CPP_pF0",
+              "CPP_rF0",
+              "Intensity",
+              "HNR05_pF0",
+              "HNR15_pF0",
+              "HNR25_pF0",
+              "HNR35_pF0",
+              "HNR05_rF0",
+              "HNR15_rF0",
+              "HNR25_rF0",
+              "HNR35_rF0",
+              "SHR_pF0",
+              "SHR_rF0",
+              "SpectralSlope_pF0",
+              "SpectralSlope_rF0",
+              "Jitter_Local",
+              "Jitter_RAP",
+              "Jitter_PPQ5",
+              "Shimmer_Local",
+              "Shimmer_APQ3",
+              "Shimmer_APQ5",
+              "Shimmer_APQ11",
+              "LipArea",
+              "LipWidth",
+              "LipOpen",
+              "LipCirc",
+              "SOE_pF0",
+              "SOE_rF0"
+            ],
+            "title": "Key",
+            "type": "string"
+          },
+          "label": {
+            "maxLength": 180,
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          },
+          "nonfinite": {
+            "description": "0 finite; 1 NaN; 2 +Infinity; 3 -Infinity",
+            "items": {
+              "enum": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "type": "integer"
+            },
+            "maxItems": 100000,
+            "title": "Nonfinite",
+            "type": "array"
+          },
+          "reason": {
+            "description": "Unknown cause is explicit. No inferred unvoiced/failed label from a legacy NaN.",
+            "items": {
+              "anyOf": [
+                {
+                  "const": "legacy_nonfinite_unknown",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "maxItems": 100000,
+            "title": "Reason",
+            "type": "array"
+          },
+          "scope": {
+            "enum": [
+              "catalog",
+              "legacy_service_extension"
+            ],
+            "title": "Scope",
+            "type": "string"
+          },
+          "unit": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Unit",
+            "type": "string"
+          },
+          "values": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "maxItems": 100000,
+            "title": "Values",
+            "type": "array"
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "unit",
+          "scope",
+          "values",
+          "nonfinite",
+          "reason"
+        ],
+        "title": "AcousticNumericColumn",
+        "type": "object"
+      },
+      "AcousticRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "config": {
+            "$ref": "#/components/schemas/AcousticConfigSnapshot"
+          },
+          "idempotency_key": {
+            "pattern": "^[A-Za-z0-9_-]{8,80}$",
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "inputs": {
+            "$ref": "#/components/schemas/AcousticInputs"
+          },
+          "operation": {
+            "const": "acoustic_analysis",
+            "default": "acoustic_analysis",
+            "title": "Operation",
+            "type": "string"
+          },
+          "project_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "m01/1",
+            "default": "m01/1",
+            "title": "Schema Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id",
+          "idempotency_key",
+          "inputs"
+        ],
+        "title": "AcousticRequest",
+        "type": "object"
+      },
+      "AcousticResult": {
+        "additionalProperties": false,
+        "properties": {
+          "column_order": {
+            "items": {
+              "maxLength": 180,
+              "type": "string"
+            },
+            "maxItems": 147,
+            "minItems": 1,
+            "title": "Column Order",
+            "type": "array"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/AcousticMetadata"
+          },
+          "numeric": {
+            "items": {
+              "$ref": "#/components/schemas/AcousticNumericColumn"
+            },
+            "maxItems": 82,
+            "title": "Numeric",
+            "type": "array"
+          },
+          "schema_version": {
+            "const": "m01/1",
+            "default": "m01/1",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "text": {
+            "items": {
+              "$ref": "#/components/schemas/AcousticTextColumn"
+            },
+            "maxItems": 64,
+            "title": "Text",
+            "type": "array"
+          },
+          "times_s": {
+            "items": {
+              "minimum": 0,
+              "type": "number"
+            },
+            "maxItems": 100000,
+            "title": "Times S",
+            "type": "array"
+          }
+        },
+        "required": [
+          "metadata",
+          "times_s",
+          "numeric",
+          "text",
+          "column_order"
+        ],
+        "title": "AcousticResult",
+        "type": "object"
+      },
+      "AcousticResultFile": {
+        "additionalProperties": false,
+        "properties": {
+          "asset_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Asset Id",
+            "type": "string"
+          },
+          "expires_at": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          },
+          "format": {
+            "enum": [
+              "xlsx",
+              "sqlite"
+            ],
+            "title": "Format",
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Sha256",
+            "type": "string"
+          },
+          "size_bytes": {
+            "exclusiveMinimum": 0,
+            "maximum": 5000000000,
+            "title": "Size Bytes",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "asset_id",
+          "format",
+          "size_bytes",
+          "sha256",
+          "expires_at"
+        ],
+        "title": "AcousticResultFile",
+        "type": "object"
+      },
+      "AcousticSelection": {
+        "additionalProperties": false,
+        "properties": {
+          "keys": {
+            "items": {
+              "enum": [
+                "pF0",
+                "rF0",
+                "pF1",
+                "pF2",
+                "pF3",
+                "pF4",
+                "pB1",
+                "pB2",
+                "pB3",
+                "pB4",
+                "H1_pF0",
+                "H1_rF0",
+                "H2_pF0",
+                "H2_rF0",
+                "H4_pF0",
+                "H4_rF0",
+                "A1_pF0",
+                "A1_rF0",
+                "A2_pF0",
+                "A2_rF0",
+                "A3_pF0",
+                "A3_rF0",
+                "H1H2u_pF0",
+                "H1H2u_rF0",
+                "H2H4u_pF0",
+                "H2H4u_rF0",
+                "H1A1u_pF0",
+                "H1A1u_rF0",
+                "H1A2u_pF0",
+                "H1A2u_rF0",
+                "H1A3u_pF0",
+                "H1A3u_rF0",
+                "H1A1c_pF0",
+                "H1A1c_rF0",
+                "H1A2c_pF0",
+                "H1A2c_rF0",
+                "H1A3c_pF0",
+                "H1A3c_rF0",
+                "H1H2c_pF0",
+                "H1H2c_rF0",
+                "H2H4c_pF0",
+                "H2H4c_rF0",
+                "H2K_pF0",
+                "H2K_rF0",
+                "H5K_pF0",
+                "H5K_rF0",
+                "H42Ku_pF0",
+                "H42Ku_rF0",
+                "H2KH5Ku_pF0",
+                "H2KH5Ku_rF0",
+                "H42Kc_pF0",
+                "H42Kc_rF0",
+                "H2KH5Kc_pF0",
+                "H2KH5Kc_rF0",
+                "CPP_pF0",
+                "CPP_rF0",
+                "Intensity",
+                "HNR05_pF0",
+                "HNR15_pF0",
+                "HNR25_pF0",
+                "HNR35_pF0",
+                "HNR05_rF0",
+                "HNR15_rF0",
+                "HNR25_rF0",
+                "HNR35_rF0",
+                "SHR_pF0",
+                "SHR_rF0",
+                "SpectralSlope_pF0",
+                "SpectralSlope_rF0",
+                "Jitter_Local",
+                "Jitter_RAP",
+                "Jitter_PPQ5",
+                "Shimmer_Local",
+                "Shimmer_APQ3",
+                "Shimmer_APQ5",
+                "Shimmer_APQ11",
+                "LipArea",
+                "LipWidth",
+                "LipOpen",
+                "LipCirc"
+              ],
+              "type": "string"
+            },
+            "maxItems": 80,
+            "title": "Keys",
+            "type": "array"
+          },
+          "mode": {
+            "default": "catalog",
+            "enum": [
+              "catalog",
+              "legacy_service"
+            ],
+            "title": "Mode",
+            "type": "string"
+          }
+        },
+        "title": "AcousticSelection",
+        "type": "object"
+      },
+      "AcousticSettings": {
+        "additionalProperties": false,
+        "properties": {
+          "energy_window_ms": {
+            "default": 40.0,
+            "maximum": 1000,
+            "minimum": 1,
+            "title": "Energy Window Ms",
+            "type": "number"
+          },
+          "frameshift_ms": {
+            "default": 5.0,
+            "maximum": 1000,
+            "minimum": 0.1,
+            "title": "Frameshift Ms",
+            "type": "number"
+          },
+          "lip_smooth_win_size": {
+            "default": 0,
+            "maximum": 100,
+            "minimum": 0,
+            "title": "Lip Smooth Win Size",
+            "type": "integer"
+          },
+          "max_f0": {
+            "default": 880.0,
+            "maximum": 2000,
+            "minimum": 50,
+            "title": "Max F0",
+            "type": "number"
+          },
+          "max_formant": {
+            "default": 6000.0,
+            "exclusiveMinimum": 0,
+            "maximum": 10000,
+            "title": "Max Formant",
+            "type": "number"
+          },
+          "min_f0": {
+            "default": 60.0,
+            "maximum": 1000,
+            "minimum": 10,
+            "title": "Min F0",
+            "type": "number"
+          },
+          "n_periods": {
+            "default": 3,
+            "maximum": 100,
+            "minimum": 1,
+            "title": "N Periods",
+            "type": "integer"
+          },
+          "num_formants": {
+            "default": 5,
+            "maximum": 10,
+            "minimum": 3,
+            "title": "Num Formants",
+            "type": "integer"
+          },
+          "only_voiced": {
+            "default": true,
+            "title": "Only Voiced",
+            "type": "boolean"
+          },
+          "reaper_hilbert": {
+            "default": true,
+            "title": "Reaper Hilbert",
+            "type": "boolean"
+          },
+          "reaper_no_highpass": {
+            "default": false,
+            "title": "Reaper No Highpass",
+            "type": "boolean"
+          },
+          "silence_threshold": {
+            "default": 0.03,
+            "maximum": 1,
+            "minimum": 0,
+            "title": "Silence Threshold",
+            "type": "number"
+          },
+          "smooth_win_size": {
+            "default": 10,
+            "maximum": 100,
+            "minimum": 1,
+            "title": "Smooth Win Size",
+            "type": "integer"
+          },
+          "windowsize_ms": {
+            "default": 40.0,
+            "maximum": 1000,
+            "minimum": 1,
+            "title": "Windowsize Ms",
+            "type": "number"
+          }
+        },
+        "title": "AcousticSettings",
+        "type": "object"
+      },
+      "AcousticTextColumn": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "maxLength": 180,
+            "pattern": "^text_.+",
+            "title": "Key",
+            "type": "string"
+          },
+          "values": {
+            "items": {
+              "maxLength": 32767,
+              "type": "string"
+            },
+            "maxItems": 100000,
+            "title": "Values",
+            "type": "array"
+          }
+        },
+        "required": [
+          "key",
+          "values"
+        ],
+        "title": "AcousticTextColumn",
+        "type": "object"
+      },
       "AssetList": {
         "properties": {
           "assets": {
@@ -178,7 +1327,7 @@
             "type": "array"
           },
           "api_version": {
-            "default": "1.0.0",
+            "default": "1.1.0",
             "title": "Api Version",
             "type": "string"
           },
@@ -397,7 +1546,7 @@
         "additionalProperties": false,
         "properties": {
           "api_version": {
-            "default": "1.0.0",
+            "default": "1.1.0",
             "title": "Api Version",
             "type": "string"
           },
@@ -559,8 +1708,8 @@
             "type": "string"
           },
           "sample_count": {
-            "maximum": 4096.0,
-            "minimum": 1.0,
+            "maximum": 4096,
+            "minimum": 1,
             "title": "Sample Count",
             "type": "integer"
           },
@@ -815,8 +1964,8 @@
             "type": "string"
           },
           "size_bytes": {
-            "maximum": 5000000000.0,
-            "minimum": 0.0,
+            "maximum": 5000000000,
+            "minimum": 0,
             "title": "Size Bytes",
             "type": "integer"
           }
@@ -830,6 +1979,38 @@
           "expires_at"
         ],
         "title": "ResultFile",
+        "type": "object"
+      },
+      "ResultManifestEnvelope": {
+        "additionalProperties": false,
+        "properties": {
+          "manifest": {
+            "discriminator": {
+              "mapping": {
+                "acoustic_file": "#/components/schemas/AcousticFileManifest",
+                "managed_files": "#/components/schemas/FileManifest",
+                "pipeline_check_metadata": "#/components/schemas/JobManifest"
+              },
+              "propertyName": "kind"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/JobManifest"
+              },
+              {
+                "$ref": "#/components/schemas/FileManifest"
+              },
+              {
+                "$ref": "#/components/schemas/AcousticFileManifest"
+              }
+            ],
+            "title": "Manifest"
+          }
+        },
+        "required": [
+          "manifest"
+        ],
+        "title": "ResultManifestEnvelope",
         "type": "object"
       },
       "RetryInput": {
@@ -1170,7 +2351,7 @@
   "info": {
     "description": "Shared API; P05 accounts require configured PostgreSQL. Scientific tasks not yet connected.",
     "title": "PhoneticToolbox API",
-    "version": "1.0.0"
+    "version": "1.1.0"
   },
   "openapi": "3.1.0",
   "paths": {

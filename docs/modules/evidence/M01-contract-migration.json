@@ -1,0 +1,201 @@
+{
+  "task": "M01-D",
+  "status": "verified",
+  "verified_on": "2026-09-10",
+  "previous_commit": "b03985c",
+  "platform": "Windows",
+  "api_version": "1.1.0",
+  "scientific_schema": "m01/1",
+  "scope": "Shared contracts and actual core result serialization; no enabled scientific job endpoint",
+  "catalog_move_content_equal_after_lf_normalization": true,
+  "unchanged_old_paths": true,
+  "old_schema_changes_only_api_version_default": [
+    "Capabilities",
+    "Health"
+  ],
+  "code": [
+    {
+      "path": "backend/src/ptb_api/acoustic_models.py",
+      "sha256": "52909d3342ea1ca0511cb3fdfb613f3e9a26d082699047f7a2debf5fc1163e5f"
+    },
+    {
+      "path": "backend/src/ptb_api/acoustic_boundary.py",
+      "sha256": "50ccdfafc35740b807cf6ffd1a139d78ef0454dc00509b9cb7f5a495d518073d"
+    },
+    {
+      "path": "backend/src/ptb_worker/acoustic_result.py",
+      "sha256": "d66535f7ca6b4004223bf89598ae4aef481a0d20bcaf313b393d5ec3ab2cb96b"
+    },
+    {
+      "path": "packages/phonetic_core/src/phonetic_core/catalog.py",
+      "sha256": "a9cad38b187e1ed91656eac62065bdf4767223a3c3015f6e1fdbbe35e55309db"
+    },
+    {
+      "path": "packages/phonetic_core/src/phonetic_core/acoustic/catalog.py",
+      "sha256": "fbce62b2a68bfbc62de4334e0f59324d8b4dc49daab3cec307547642351ca4d2"
+    },
+    {
+      "path": "contracts/openapi.json",
+      "sha256": "c4b41ecd316031dd62dcada148d4425a45ec566ea3cb8d53ce9bdda82083200b"
+    },
+    {
+      "path": "contracts/generated/api.ts",
+      "sha256": "0e410fecd59e6a8aba87ae97a156d4d2f61f3147afde159e636ade3976eca22e"
+    },
+    {
+      "path": "tests/contracts/test_m01_contract.py",
+      "sha256": "743e2222a4595f5aca58de17547d2efb481bd325c5b73dd1e85eda025499ddaa"
+    },
+    {
+      "path": "backend/tests/test_m01_result.py",
+      "sha256": "9ad6d18234670521490edd2e5f1449cfab43237a07ac91c9da16ecd0cfa41520"
+    },
+    {
+      "path": "scripts/verify_m01_contract.py",
+      "sha256": "ccd5ce63139c4abf7db7fde3ea1bfcdb6ed8eab51122ae8f42c91825edaea8fd"
+    }
+  ],
+  "wheels": [
+    {
+      "path": "output/validation/m01/d-wheels/phonetic_core-3.0.0a1-py3-none-any.whl",
+      "sha256": "bdf4c97b8ddea895530e4c1866fe95398c66659223caee9dac1b76c377dd70bc"
+    },
+    {
+      "path": "output/validation/m01/d-wheels/ptb_api-3.0.0a1-py3-none-any.whl",
+      "sha256": "e2a2ef786390d7ae59244ba4d71401abd5b853bb9c8deb5338fdb2c44cc00670"
+    }
+  ],
+  "tests": {
+    "wheel": 318,
+    "engineering_api": 101,
+    "overlapping_contracts": 87,
+    "new_d_tests": 77
+  },
+  "native_cases": [
+    {
+      "case": "ASSOCIATED",
+      "rows": 160,
+      "columns": 83,
+      "strict_golden_differences": [],
+      "wire_sha256": "a1b805cd7e70e471a5516bdfca5f3db206b2e62485b673fbfa0dad7f481912ed",
+      "json_bytes": 335179,
+      "files": [
+        {
+          "asset_id": "00000000-0000-4000-8000-000000000030",
+          "format": "xlsx",
+          "size_bytes": 147159,
+          "sha256": "926316ef0a057e004296e74c88955d559973164e6c9d512bd90c58635024600b",
+          "expires_at": 604950.0
+        },
+        {
+          "asset_id": "00000000-0000-4000-8000-000000000031",
+          "format": "sqlite",
+          "size_bytes": 139264,
+          "sha256": "f3228faf5d7cb9e4f02197e3ee7542fe78185e938ac7930bc5696b597f79c905",
+          "expires_at": 604950.0
+        }
+      ],
+      "backend_events": [
+        {
+          "stage": "reaper",
+          "actual": "native_reaper",
+          "reason": null,
+          "resource_sha256": "279fecc82ed0a49b0277b114270771d7670299068e849058b392672825981824"
+        },
+        {
+          "stage": "wm_f0",
+          "actual": "irapt1",
+          "reason": null,
+          "resource_sha256": null
+        }
+      ]
+    },
+    {
+      "case": "FORMULA-EXPORT",
+      "rows": 160,
+      "columns": 83,
+      "strict_golden_differences": [],
+      "wire_sha256": "4a925e7efa757cf8eab58eb82d48893930e18029a88973040b2f4cce4bc8fd21",
+      "json_bytes": 335339,
+      "files": [
+        {
+          "asset_id": "00000000-0000-4000-8000-000000000030",
+          "format": "xlsx",
+          "size_bytes": 147207,
+          "sha256": "655d7b5d3494cf456a3d5f5bf701c07f10994504839dd5c19bf0a7c72c74669f",
+          "expires_at": 604950.0
+        },
+        {
+          "asset_id": "00000000-0000-4000-8000-000000000031",
+          "format": "sqlite",
+          "size_bytes": 139264,
+          "sha256": "22634f850cf7b910abb743ea15f0cc47562b93438a2b9697432483ba62038f33",
+          "expires_at": 604950.0
+        }
+      ],
+      "backend_events": [
+        {
+          "stage": "reaper",
+          "actual": "native_reaper",
+          "reason": null,
+          "resource_sha256": "279fecc82ed0a49b0277b114270771d7670299068e849058b392672825981824"
+        },
+        {
+          "stage": "wm_f0",
+          "actual": "irapt1",
+          "reason": null,
+          "resource_sha256": null
+        }
+      ]
+    },
+    {
+      "case": "SERVICE-NONE",
+      "rows": 160,
+      "columns": 79,
+      "strict_golden_differences": [],
+      "wire_sha256": "e5ce10f81988492c7b91c76b13af70f5f4bfae649ef4f719d14d2a8925a3fcf4",
+      "json_bytes": 329787,
+      "files": [
+        {
+          "asset_id": "00000000-0000-4000-8000-000000000030",
+          "format": "xlsx",
+          "size_bytes": 143975,
+          "sha256": "9bc55db4182e855cdbfe447db4c111adbaa9b1ef297c6e5cb1f1a49fdc49611b",
+          "expires_at": 604950.0
+        },
+        {
+          "asset_id": "00000000-0000-4000-8000-000000000031",
+          "format": "sqlite",
+          "size_bytes": 118784,
+          "sha256": "bf284b6a8dacde6ccdd31a1ea6fb64f33c7046dd0e27d6b78c16d07fcff7deb3",
+          "expires_at": 604950.0
+        }
+      ],
+      "backend_events": [
+        {
+          "stage": "reaper",
+          "actual": "native_reaper",
+          "reason": null,
+          "resource_sha256": "279fecc82ed0a49b0277b114270771d7670299068e849058b392672825981824"
+        },
+        {
+          "stage": "wm_f0",
+          "actual": "irapt1",
+          "reason": null,
+          "resource_sha256": null
+        }
+      ]
+    }
+  ],
+  "preservation": {
+    "seven_checks": true,
+    "frozen_hashes": 36,
+    "baseline_files_checked": 427
+  },
+  "limitations": [
+    "Actual cancellation/lease/owner transaction races remain M01-F",
+    "Paired files prepared, not durably published",
+    "Full UI and directory capabilities remain M01-E",
+    "No cross-platform or full M01 acceptance"
+  ]
+}

@@ -365,6 +365,415 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AcousticAssetRef */
+        AcousticAssetRef: {
+            /** Asset Id */
+            asset_id: string;
+            /** Sha256 */
+            sha256: string;
+        };
+        /** AcousticBackendObservation */
+        AcousticBackendObservation: {
+            /**
+             * Actual
+             * @enum {string}
+             */
+            actual: "native_reaper" | "reaper_python" | "irapt1" | "praat_fallback" | "unavailable" | "disabled";
+            /**
+             * Reason
+             * @default null
+             */
+            reason: string | null;
+            /**
+             * Resource Sha256
+             * @default null
+             */
+            resource_sha256: string | null;
+            /**
+             * Stage
+             * @enum {string}
+             */
+            stage: "reaper" | "wm_f0";
+        };
+        /** AcousticBackendPolicy */
+        AcousticBackendPolicy: {
+            /**
+             * Reaper
+             * @default native_then_python
+             * @enum {string}
+             */
+            reaper: "native_required" | "native_then_python" | "python_only" | "disabled";
+            /**
+             * Wm F0
+             * @default irapt_then_praat
+             * @constant
+             */
+            wm_f0: "irapt_then_praat";
+        };
+        /** AcousticBatchCounts */
+        AcousticBatchCounts: {
+            /** Cancel Requested */
+            cancel_requested: number;
+            /** Cancelled */
+            cancelled: number;
+            /** Failed */
+            failed: number;
+            /** Interrupted */
+            interrupted: number;
+            /** Not Started */
+            not_started: number;
+            /** Queued */
+            queued: number;
+            /** Running */
+            running: number;
+            /** Succeeded */
+            succeeded: number;
+        };
+        /** AcousticBatchItem */
+        AcousticBatchItem: {
+            /** Audio Asset Id */
+            audio_asset_id: string;
+            /**
+             * Error Code
+             * @default null
+             */
+            error_code: string | null;
+            /** Index */
+            index: number;
+            /** Job Id */
+            job_id: string | null;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "not_started" | "queued" | "running" | "cancel_requested" | "succeeded" | "failed" | "cancelled" | "interrupted";
+        };
+        /** AcousticBatchSummary */
+        AcousticBatchSummary: {
+            /** Batch Id */
+            batch_id: string;
+            /** Closed */
+            closed: boolean;
+            /**
+             * Complete
+             * @description True only when the closed batch succeeded for every requested file
+             */
+            complete: boolean;
+            counts: components["schemas"]["AcousticBatchCounts"];
+            /** Items */
+            items: components["schemas"]["AcousticBatchItem"][];
+            /**
+             * Kind
+             * @default acoustic_batch
+             * @constant
+             */
+            kind: "acoustic_batch";
+            /**
+             * Schema Version
+             * @default m01/1
+             * @constant
+             */
+            schema_version: "m01/1";
+            /** Total */
+            total: number;
+        };
+        /** AcousticConfigSnapshot */
+        AcousticConfigSnapshot: {
+            backend_policy?: components["schemas"]["AcousticBackendPolicy"];
+            selection?: components["schemas"]["AcousticSelection"];
+            settings?: components["schemas"]["AcousticSettings"];
+        };
+        /** AcousticDecodedAudio */
+        AcousticDecodedAudio: {
+            /** Channels */
+            channels: number;
+            /**
+             * Sample Count
+             * @description Frames per channel, never the flattened channel sample count
+             */
+            sample_count: number;
+            /**
+             * Sample Dtype
+             * @enum {string}
+             */
+            sample_dtype: "uint8" | "int16" | "int32" | "float32" | "float64";
+            /** Sample Rate Hz */
+            sample_rate_hz: number;
+        };
+        /** AcousticFileManifest */
+        AcousticFileManifest: {
+            /**
+             * Complete
+             * @default true
+             * @constant
+             */
+            complete: true;
+            /** Completed At */
+            completed_at: number;
+            /** Expires At */
+            expires_at: number | null;
+            /** Files */
+            files: components["schemas"]["AcousticResultFile"][];
+            /** Job Id */
+            job_id: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "acoustic_file";
+            metadata: components["schemas"]["AcousticMetadata"];
+            /**
+             * Retention
+             * @enum {string}
+             */
+            retention: "server" | "local";
+            /** Row Count */
+            row_count: number;
+            /**
+             * Schema Version
+             * @default m01/1
+             * @constant
+             */
+            schema_version: "m01/1";
+        };
+        /** AcousticInputSnapshot */
+        AcousticInputSnapshot: {
+            /** Asset Id */
+            asset_id: string;
+            /** Expires At */
+            expires_at: number | null;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "audio" | "textgrid" | "lip";
+            /** Sha256 */
+            sha256: string;
+        };
+        /** AcousticInputs */
+        AcousticInputs: {
+            audio: components["schemas"]["AcousticAssetRef"];
+            /** @default null */
+            lip: components["schemas"]["AcousticAssetRef"] | null;
+            /** @default null */
+            textgrid: components["schemas"]["AcousticAssetRef"] | null;
+        };
+        /** AcousticMetadata */
+        AcousticMetadata: {
+            /**
+             * Adapter Version
+             * @default m01-adapter/1
+             * @constant
+             */
+            adapter_version: "m01-adapter/1";
+            /**
+             * Algorithm Id
+             * @default m01.parameter_estimation
+             * @constant
+             */
+            algorithm_id: "m01.parameter_estimation";
+            /**
+             * Algorithm Version
+             * @default legacy-numeric/1
+             * @constant
+             */
+            algorithm_version: "legacy-numeric/1";
+            /** Backends */
+            backends: components["schemas"]["AcousticBackendObservation"][];
+            config: components["schemas"]["AcousticConfigSnapshot"];
+            /** Config Sha256 */
+            config_sha256: string;
+            /** Core Version */
+            core_version: string;
+            decoded: components["schemas"]["AcousticDecodedAudio"];
+            /** Inputs */
+            inputs: components["schemas"]["AcousticInputSnapshot"][];
+            /** Project Id */
+            project_id: string;
+            /**
+             * Schema Version
+             * @default m01/1
+             * @constant
+             */
+            schema_version: "m01/1";
+            /** Source Ids */
+            source_ids: string[];
+        };
+        /** AcousticNumericColumn */
+        AcousticNumericColumn: {
+            /**
+             * Key
+             * @enum {string}
+             */
+            key: "pF0" | "rF0" | "pF1" | "pF2" | "pF3" | "pF4" | "pB1" | "pB2" | "pB3" | "pB4" | "H1_pF0" | "H1_rF0" | "H2_pF0" | "H2_rF0" | "H4_pF0" | "H4_rF0" | "A1_pF0" | "A1_rF0" | "A2_pF0" | "A2_rF0" | "A3_pF0" | "A3_rF0" | "H1H2u_pF0" | "H1H2u_rF0" | "H2H4u_pF0" | "H2H4u_rF0" | "H1A1u_pF0" | "H1A1u_rF0" | "H1A2u_pF0" | "H1A2u_rF0" | "H1A3u_pF0" | "H1A3u_rF0" | "H1A1c_pF0" | "H1A1c_rF0" | "H1A2c_pF0" | "H1A2c_rF0" | "H1A3c_pF0" | "H1A3c_rF0" | "H1H2c_pF0" | "H1H2c_rF0" | "H2H4c_pF0" | "H2H4c_rF0" | "H2K_pF0" | "H2K_rF0" | "H5K_pF0" | "H5K_rF0" | "H42Ku_pF0" | "H42Ku_rF0" | "H2KH5Ku_pF0" | "H2KH5Ku_rF0" | "H42Kc_pF0" | "H42Kc_rF0" | "H2KH5Kc_pF0" | "H2KH5Kc_rF0" | "CPP_pF0" | "CPP_rF0" | "Intensity" | "HNR05_pF0" | "HNR15_pF0" | "HNR25_pF0" | "HNR35_pF0" | "HNR05_rF0" | "HNR15_rF0" | "HNR25_rF0" | "HNR35_rF0" | "SHR_pF0" | "SHR_rF0" | "SpectralSlope_pF0" | "SpectralSlope_rF0" | "Jitter_Local" | "Jitter_RAP" | "Jitter_PPQ5" | "Shimmer_Local" | "Shimmer_APQ3" | "Shimmer_APQ5" | "Shimmer_APQ11" | "LipArea" | "LipWidth" | "LipOpen" | "LipCirc" | "SOE_pF0" | "SOE_rF0";
+            /** Label */
+            label: string;
+            /**
+             * Nonfinite
+             * @description 0 finite; 1 NaN; 2 +Infinity; 3 -Infinity
+             */
+            nonfinite: (0 | 1 | 2 | 3)[];
+            /**
+             * Reason
+             * @description Unknown cause is explicit. No inferred unvoiced/failed label from a legacy NaN.
+             */
+            reason: ("legacy_nonfinite_unknown" | null)[];
+            /**
+             * Scope
+             * @enum {string}
+             */
+            scope: "catalog" | "legacy_service_extension";
+            /** Unit */
+            unit: string;
+            /** Values */
+            values: (number | null)[];
+        };
+        /** AcousticRequest */
+        AcousticRequest: {
+            config?: components["schemas"]["AcousticConfigSnapshot"];
+            /** Idempotency Key */
+            idempotency_key: string;
+            inputs: components["schemas"]["AcousticInputs"];
+            /**
+             * Operation
+             * @default acoustic_analysis
+             * @constant
+             */
+            operation: "acoustic_analysis";
+            /** Project Id */
+            project_id: string;
+            /**
+             * Schema Version
+             * @default m01/1
+             * @constant
+             */
+            schema_version: "m01/1";
+        };
+        /** AcousticResult */
+        AcousticResult: {
+            /** Column Order */
+            column_order: string[];
+            metadata: components["schemas"]["AcousticMetadata"];
+            /** Numeric */
+            numeric: components["schemas"]["AcousticNumericColumn"][];
+            /**
+             * Schema Version
+             * @default m01/1
+             * @constant
+             */
+            schema_version: "m01/1";
+            /** Text */
+            text: components["schemas"]["AcousticTextColumn"][];
+            /** Times S */
+            times_s: number[];
+        };
+        /** AcousticResultFile */
+        AcousticResultFile: {
+            /** Asset Id */
+            asset_id: string;
+            /** Expires At */
+            expires_at: number | null;
+            /**
+             * Format
+             * @enum {string}
+             */
+            format: "xlsx" | "sqlite";
+            /** Sha256 */
+            sha256: string;
+            /** Size Bytes */
+            size_bytes: number;
+        };
+        /** AcousticSelection */
+        AcousticSelection: {
+            /** Keys */
+            keys?: ("pF0" | "rF0" | "pF1" | "pF2" | "pF3" | "pF4" | "pB1" | "pB2" | "pB3" | "pB4" | "H1_pF0" | "H1_rF0" | "H2_pF0" | "H2_rF0" | "H4_pF0" | "H4_rF0" | "A1_pF0" | "A1_rF0" | "A2_pF0" | "A2_rF0" | "A3_pF0" | "A3_rF0" | "H1H2u_pF0" | "H1H2u_rF0" | "H2H4u_pF0" | "H2H4u_rF0" | "H1A1u_pF0" | "H1A1u_rF0" | "H1A2u_pF0" | "H1A2u_rF0" | "H1A3u_pF0" | "H1A3u_rF0" | "H1A1c_pF0" | "H1A1c_rF0" | "H1A2c_pF0" | "H1A2c_rF0" | "H1A3c_pF0" | "H1A3c_rF0" | "H1H2c_pF0" | "H1H2c_rF0" | "H2H4c_pF0" | "H2H4c_rF0" | "H2K_pF0" | "H2K_rF0" | "H5K_pF0" | "H5K_rF0" | "H42Ku_pF0" | "H42Ku_rF0" | "H2KH5Ku_pF0" | "H2KH5Ku_rF0" | "H42Kc_pF0" | "H42Kc_rF0" | "H2KH5Kc_pF0" | "H2KH5Kc_rF0" | "CPP_pF0" | "CPP_rF0" | "Intensity" | "HNR05_pF0" | "HNR15_pF0" | "HNR25_pF0" | "HNR35_pF0" | "HNR05_rF0" | "HNR15_rF0" | "HNR25_rF0" | "HNR35_rF0" | "SHR_pF0" | "SHR_rF0" | "SpectralSlope_pF0" | "SpectralSlope_rF0" | "Jitter_Local" | "Jitter_RAP" | "Jitter_PPQ5" | "Shimmer_Local" | "Shimmer_APQ3" | "Shimmer_APQ5" | "Shimmer_APQ11" | "LipArea" | "LipWidth" | "LipOpen" | "LipCirc")[];
+            /**
+             * Mode
+             * @default catalog
+             * @enum {string}
+             */
+            mode: "catalog" | "legacy_service";
+        };
+        /** AcousticSettings */
+        AcousticSettings: {
+            /**
+             * Energy Window Ms
+             * @default 40
+             */
+            energy_window_ms: number;
+            /**
+             * Frameshift Ms
+             * @default 5
+             */
+            frameshift_ms: number;
+            /**
+             * Lip Smooth Win Size
+             * @default 0
+             */
+            lip_smooth_win_size: number;
+            /**
+             * Max F0
+             * @default 880
+             */
+            max_f0: number;
+            /**
+             * Max Formant
+             * @default 6000
+             */
+            max_formant: number;
+            /**
+             * Min F0
+             * @default 60
+             */
+            min_f0: number;
+            /**
+             * N Periods
+             * @default 3
+             */
+            n_periods: number;
+            /**
+             * Num Formants
+             * @default 5
+             */
+            num_formants: number;
+            /**
+             * Only Voiced
+             * @default true
+             */
+            only_voiced: boolean;
+            /**
+             * Reaper Hilbert
+             * @default true
+             */
+            reaper_hilbert: boolean;
+            /**
+             * Reaper No Highpass
+             * @default false
+             */
+            reaper_no_highpass: boolean;
+            /**
+             * Silence Threshold
+             * @default 0.03
+             */
+            silence_threshold: number;
+            /**
+             * Smooth Win Size
+             * @default 10
+             */
+            smooth_win_size: number;
+            /**
+             * Windowsize Ms
+             * @default 40
+             */
+            windowsize_ms: number;
+        };
+        /** AcousticTextColumn */
+        AcousticTextColumn: {
+            /** Key */
+            key: string;
+            /** Values */
+            values: string[];
+        };
         /** AssetList */
         AssetList: {
             /** Assets */
@@ -425,7 +834,7 @@ export interface components {
             algorithms: string[];
             /**
              * Api Version
-             * @default 1.0.0
+             * @default 1.1.0
              */
             api_version: string;
             /** Limitations */
@@ -503,9 +912,8 @@ export interface components {
             /** Files */
             files: components["schemas"]["ResultFile"][];
             /**
-             * Kind
-             * @default managed_files
-             * @constant
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
              */
             kind: "managed_files";
         };
@@ -523,7 +931,7 @@ export interface components {
         Health: {
             /**
              * Api Version
-             * @default 1.0.0
+             * @default 1.1.0
              */
             api_version: string;
             /** App Version */
@@ -593,9 +1001,8 @@ export interface components {
             /** Core Version */
             core_version: string;
             /**
-             * Kind
-             * @default pipeline_check_metadata
-             * @constant
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
              */
             kind: "pipeline_check_metadata";
             /** Sample Count */
@@ -694,6 +1101,11 @@ export interface components {
             sha256: string;
             /** Size Bytes */
             size_bytes: number;
+        };
+        /** ResultManifestEnvelope */
+        ResultManifestEnvelope: {
+            /** Manifest */
+            manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticFileManifest"];
         };
         /** RetryInput */
         RetryInput: {

@@ -18,6 +18,8 @@ from phonetic_core import __version__ as core_version
 from . import __version__
 from .models import Capabilities, Health, Viewport
 from .protocol_version import API_VERSION
+from .acoustic_models import ACOUSTIC_SCHEMAS
+from .job_models import ResultManifestEnvelope
 
 
 def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: AccountStore | None = None,
@@ -88,10 +90,11 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
     def openapi():
         schema = base_openapi()
         # Shared process models are published without adding a fake analysis endpoint.
-        shared = Viewport.model_json_schema(ref_template='#/components/schemas/{model}')
-        definitions = shared.pop('$defs', {})
-        schema.setdefault('components', {}).setdefault('schemas', {}).update(definitions)
-        schema['components']['schemas']['Viewport'] = shared
+        for model in (Viewport,*ACOUSTIC_SCHEMAS,ResultManifestEnvelope):
+            shared = model.model_json_schema(ref_template='#/components/schemas/{model}')
+            definitions = shared.pop('$defs', {})
+            schema.setdefault('components', {}).setdefault('schemas', {}).update(definitions)
+            schema['components']['schemas'][model.__name__] = shared
         return schema
 
     app.add_middleware(AccountBoundary, origin=auth_settings.origin if auth_settings else None)

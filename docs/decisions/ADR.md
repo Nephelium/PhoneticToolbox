@@ -166,3 +166,11 @@
 - BackendAborted使取消/资源失败穿过旧REAPER广义异常处理，不能默认为缺失轨迹。正常科学公式和默认值保持；后端实际身份独立记录。此处不保证Codex程序本身不会闪退；本轮未操作内置浏览器或push。
 - 科学锁不受工程新tzdata约束覆盖；独立m01-io环境复用科学8包、工程20包、测试构建10包及新导出2包。来源登记和生成致谢统一，发行许可与跨平台能力继续保留未决状态。
 - 依据：[Windows进程/Job](https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects)、[Job成员验证](https://learn.microsoft.com/en-us/windows/win32/api/jobapi/nf-jobapi-isprocessinjob)、[SQLite序列化](https://docs.python.org/3.11/library/sqlite3.html)、[pickle安全边界](https://docs.python.org/3.11/library/pickle.html)。openpyxl写入接口按本地3.1.5源码核对并锁定，不把当前文档的版本当实际安装版本。
+
+## ADR-023 M01 共享科学契约与轻量API
+
+- 井井在C后回复“好，请继续”，2026-09-09至10实施D；[具体方案](../plans/2026-09-09-m01-contract.md)和[验证范围](../testing/m01-contract-report.md)定义本轮边界。API 1.1增加m01/1共享模型，不增加尚未完成的科学任务路由，不修改现有数据库。
+- 纯80键/显示名/字段映射目录原样移动到phonetic_core/catalog.py，旧acoustic/catalog保留重导出。API不能因导入常量而连带载入NumPy等科学依赖；实际核心只在worker导入。公式、默认值、运算顺序不变。
+- 请求只引用资源ID和hash；可信owner/project/ready/期限由宿主查询，不能由公开payload自报。设置、选择、后端策略共同计算配置hash；结果转换核对核心实际配置与采样率，并记录真实后端和原生hash。
+- 非有限值用null和整数mask无损表示，缺乏逐点原因只能标unknown。80键与服务额外SOE明确分开；校验收紧与旧兼容样例并存，见[差异D01–D08](../../contracts/versions.md)。
+- 单文件完整双产物与批次汇总分开；分析TTL按完成时间、切分按输入截止。本轮只提供生命周期策略及边界拒绝，F仍须在真实认领/续租/提交事务中重查到期并取消。类型通过不代表持久发布成功。

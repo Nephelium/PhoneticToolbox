@@ -1,0 +1,190 @@
+{
+  "$defs": {
+    "AcousticBatchCounts": {
+      "additionalProperties": false,
+      "properties": {
+        "cancel_requested": {
+          "maximum": 10000,
+          "minimum": 0,
+          "title": "Cancel Requested",
+          "type": "integer"
+        },
+        "cancelled": {
+          "maximum": 10000,
+          "minimum": 0,
+          "title": "Cancelled",
+          "type": "integer"
+        },
+        "failed": {
+          "maximum": 10000,
+          "minimum": 0,
+          "title": "Failed",
+          "type": "integer"
+        },
+        "interrupted": {
+          "maximum": 10000,
+          "minimum": 0,
+          "title": "Interrupted",
+          "type": "integer"
+        },
+        "not_started": {
+          "maximum": 10000,
+          "minimum": 0,
+          "title": "Not Started",
+          "type": "integer"
+        },
+        "queued": {
+          "maximum": 10000,
+          "minimum": 0,
+          "title": "Queued",
+          "type": "integer"
+        },
+        "running": {
+          "maximum": 10000,
+          "minimum": 0,
+          "title": "Running",
+          "type": "integer"
+        },
+        "succeeded": {
+          "maximum": 10000,
+          "minimum": 0,
+          "title": "Succeeded",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "not_started",
+        "queued",
+        "running",
+        "cancel_requested",
+        "succeeded",
+        "failed",
+        "cancelled",
+        "interrupted"
+      ],
+      "title": "AcousticBatchCounts",
+      "type": "object"
+    },
+    "AcousticBatchItem": {
+      "additionalProperties": false,
+      "properties": {
+        "audio_asset_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+          "title": "Audio Asset Id",
+          "type": "string"
+        },
+        "error_code": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z][a-z0-9_]{0,79}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Code"
+        },
+        "index": {
+          "maximum": 9999,
+          "minimum": 0,
+          "title": "Index",
+          "type": "integer"
+        },
+        "job_id": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Job Id"
+        },
+        "state": {
+          "enum": [
+            "not_started",
+            "queued",
+            "running",
+            "cancel_requested",
+            "succeeded",
+            "failed",
+            "cancelled",
+            "interrupted"
+          ],
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "index",
+        "audio_asset_id",
+        "job_id",
+        "state"
+      ],
+      "title": "AcousticBatchItem",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "batch_id": {
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "title": "Batch Id",
+      "type": "string"
+    },
+    "closed": {
+      "title": "Closed",
+      "type": "boolean"
+    },
+    "complete": {
+      "description": "True only when the closed batch succeeded for every requested file",
+      "title": "Complete",
+      "type": "boolean"
+    },
+    "counts": {
+      "$ref": "#/$defs/AcousticBatchCounts"
+    },
+    "items": {
+      "items": {
+        "$ref": "#/$defs/AcousticBatchItem"
+      },
+      "maxItems": 10000,
+      "minItems": 1,
+      "title": "Items",
+      "type": "array"
+    },
+    "kind": {
+      "const": "acoustic_batch",
+      "default": "acoustic_batch",
+      "title": "Kind",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "m01/1",
+      "default": "m01/1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "total": {
+      "maximum": 10000,
+      "minimum": 1,
+      "title": "Total",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "batch_id",
+    "total",
+    "closed",
+    "complete",
+    "counts",
+    "items"
+  ],
+  "title": "AcousticBatchSummary",
+  "type": "object"
+}

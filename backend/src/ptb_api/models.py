@@ -9,6 +9,8 @@ SafeCount = Annotated[int, Field(ge=0, le=9007199254740991)]
 Rate = Annotated[int, Field(gt=0, le=9007199254740991)]
 Text = Annotated[str, Field(min_length=1)]
 Hash = Annotated[str, Field(pattern=r'^[0-9a-f]{64}$')]
+Identifier = Annotated[str, Field(pattern=r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$')]
+IdempotencyKey = Annotated[str, Field(pattern=r'^[A-Za-z0-9_-]{8,80}$')]
 
 
 class WireModel(BaseModel):

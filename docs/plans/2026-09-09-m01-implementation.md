@@ -16,7 +16,7 @@
 
 本轮交付：[源码对照](../modules/evidence/M01-source-map.md)、[80参数/14设置及30文件哈希](../modules/evidence/M01-parameter-settings.json)、[细项验收表](../modules/evidence/M01-acceptance.csv)。既有 [M01模块计划](modules/M01-parameter-estimation.md) 保留为功能规格，本计划补足文件和执行顺序。
 
-M01-A 已按井井后续“好，请继续”实施并通过限定基准验收，见 [M01-A报告](../testing/m01-baseline-report.md)。M01/P08 当前 in_progress，M01-B已完成限定Windows核心验收，下一项为M01-C原生与格式预算适配。原规划的首个子任务为 **M01-A：补齐旧行为基准与科学环境审计**。它不改算法/产品页面，不写现存研究数据，不建新数据库表。M01-C/F 涉及原生输出与持久批次的具体设计门；只在可审阅方案具备后进入对应实现。任何实际数据库DDL、用户数据迁移、全局环境变更、push或发布仍按根规则单独授权，不能由此计划推定。
+M01-A 已按井井后续“好，请继续”实施并通过限定基准验收，见 [M01-A报告](../testing/m01-baseline-report.md)。M01/P08 当前 in_progress，M01-B/C/D已完成限定Windows核心、格式与协议验收，下一项为M01-E共同研究页与桌面目录。原规划的首个子任务为 **M01-A：补齐旧行为基准与科学环境审计**。它不改算法/产品页面，不写现存研究数据，不建新数据库表。M01-C/F 涉及原生输出与持久批次的具体设计门；只在可审阅方案具备后进入对应实现。任何实际数据库DDL、用户数据迁移、全局环境变更、push或发布仍按根规则单独授权，不能由此计划推定。
 
 初次规划交付未引入依赖或算法源码。井井在 M01-A 后回复“继续”，授权 M01-B；本轮迁入纯计算与数组/配置接口，并更新实际来源登记，不以数值等价替代发行许可审查。
 
@@ -123,7 +123,7 @@ assert len(parameter_catalog) == 80
 
 **退出条件：** 无任意目录输出旁路；既有REAPER二进制实际可用且受控；双产物回读等价；不能只凭模拟writer通过。
 
-### M01-D · 契约与科学结果语义
+### M01-D · 契约与科学结果语义（verified：限定共享协议与真实结果往返）
 
 **文件：** `backend/src/ptb_api/acoustic_models.py`、`job_models.py`、`models.py`；`contracts/openapi.json`、`generated/api.ts`、`versions.md`；`tests/contracts/test_m01_contract.py`。
 
@@ -183,4 +183,4 @@ git diff --check
 
 另用只读AST核对80键/14控件、30文件hash和验收ID覆盖；`desktop.experiments.capture_context.capture()`比较v2保存性，只向 `output/validation/m01/`写本轮证据，不调用会覆盖P01输出的旧CLI入口。
 
-实际结果记在 [本轮审阅报告](../testing/m01-planning-report.md)。上述未来脚本不纳入本轮已运行清单。M01-C完成后从M01-D开始；M02及M03等其他模块保持planned。
+实际结果记在 [本轮审阅报告](../testing/m01-planning-report.md)。上述未来脚本不纳入本轮已运行清单。M01-D完成后从M01-E开始；M02及M03等其他模块保持planned。

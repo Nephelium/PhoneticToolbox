@@ -1,11 +1,11 @@
-# 数据协议与版本 · P02
+# 数据协议与版本 · API 1.1 / M01-D
 
-应用发行版本的唯一维护入口为 [release/version.json](../release/version.json)，当前 Python 包 3.0.0a1，前端 3.0.0-alpha.1，API 1.0.0。运行时分别使用已安装包元数据和生成的前端版本文件。根目录旧 pyproject.toml 的 2.2.0 是历史迁移来源，不参与新包构建。
+应用发行版本的唯一维护入口为 [release/version.json](../release/version.json)，当前 Python 包 3.0.0a1，前端 3.0.0-alpha.1，API 1.1.0。运行时分别使用已安装包元数据和生成的前端版本文件。根目录旧 pyproject.toml 的 2.2.0 是历史迁移来源，不参与新包构建。
 
 ## 唯一生成链
 
-1. 手写源：[后端模型](../backend/src/ptb_api/models.py) 及 API 路由。
-2. `python scripts/generate_contracts.py` 生成 [OpenAPI](openapi.json) 和 schemas 中的 Audio、Selection、Track、Viewport JSON Schema。
+1. 手写源：[后端模型](../backend/src/ptb_api/models.py)、[M01模型](../backend/src/ptb_api/acoustic_models.py)、[任务模型](../backend/src/ptb_api/job_models.py) 及 API 路由。
+2. `python scripts/generate_contracts.py` 生成 [OpenAPI](openapi.json) 和 schemas 中的 Audio、Selection、Track、Viewport、AcousticRequest、AcousticResult、AcousticFileManifest、AcousticBatchSummary、ResultManifestEnvelope JSON Schema。
 3. `npm --prefix frontend run contracts` 从固定 OpenAPI 快照生成 [TypeScript](generated/api.ts)。生成文件禁止手改；同名模型不另写一份前端 interface。
 4. 两条命令分别加 `--check` 或改用 `contracts:check` 检查漂移；版本使用 `python scripts/sync_versions.py --check`。
 
@@ -23,3 +23,20 @@ P05 新增 auth challenge/login/me/logout 与 projects list/create/get/rename，
 ## 兼容规则
 
 新增可选字段可以兼容扩展；单位、键名或状态语义改变必须升级 API major。应用版本与算法版本分开，科学依赖迁移要有 P03 证据。生成快照、包锁和来源登记与变更同批提交。
+
+## M01-D 新协议及旧行为差异
+
+2026-09-09至10实施，API 1.1新增共享模型，科学schema单独标记`m01/1`，算法版本`legacy-numeric/1`、适配版本`m01-adapter/1`。当前HTTP路径及旧任务模型保持不变，尚未开放acoustic_analysis操作。新结构不改P02 Track的validity语义；旧值中的NaN无法判定生理或失败原因，因此M01使用独立mask结构。详见[验收报告](../docs/testing/m01-contract-report.md)。
+
+| 差异 | 新边界 | 原行为保留范围 |
+| --- | --- | --- |
+| D01 请求 | 只收项目/资源ID和hash；拒绝owner、路径、native_tool、未知字段 | 本地目录权限待E，不把旧裸路径透传服务端 |
+| D02 设置 | 14项默认值/控件范围相同；max_formant严格正值、min_f0小于max_f0，拒绝非有限和不合类型 | 原有失败配置仍保存在历史基线；核心兼容测试不改期望 |
+| D03 参数 | catalog仅80键，拒绝空选/重复/Energy别名/显示名；legacy_service显式空keys表示服务无筛选 | SOE_pF0/SOE_rF0作为legacy_service_extension保留，不增加80键 |
+| D04 缺失 | 有限数包括0原值保留；NaN/+Inf/-Inf分别null加1/2/3，正常mask为0 | 原因只有legacy_nonfinite_unknown，不从NaN猜unvoiced/failed |
+| D05 记录 | 真实解码帧数/声道/dtype/采样率、14设置及选择/策略hash、版本/来源/实际后端 | 固定16000元数据已在B单列修正；native必须有实际二进制hash，异常文本转安全code |
+| D06 关联 | 同账号同项目ready资源，hash/类型/期限重查；同名多候选明确歧义 | 返回input_expired只是边界错误，运行任务自动取消需F接入租约/提交检查 |
+| D07 完成 | 单文件恰有完整XLSX+SQLite；批次保存全列表子任务和计数，complete只表示全成功 | 批次关闭可含失败/取消/未开始，不能当完整单文件manifest |
+| D08 保留 | 分析结果从成功起至多7天；切分不晚于输入截止；本地无服务器TTL | 当前为策略和可信快照校验，PG原子发布/到期物理回收仍需F集成 |
+
+times_s沿用实际核心帧网格，验证为i×frameshift_ms/1000且处于真实音频范围内，不能由显示窗重算。每列携带目录显示名和A审计单位；Intensity不是测量SPL，唇形无输入单位信息时明确unknown。JSON Schema/TypeScript只保证结构；跨字段和科学一致性由后端验证和独立黄金结果对照负责。

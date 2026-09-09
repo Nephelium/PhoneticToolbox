@@ -219,9 +219,11 @@
         "packages/phonetic_core/src/phonetic_core/services/acoustic.py",
         "packages/phonetic_core/src/phonetic_core/acoustic/__init__.py",
         "packages/phonetic_core/src/phonetic_core/acoustic/lip.py",
-        "packages/phonetic_core/src/phonetic_core/acoustic/annotations.py"
+        "packages/phonetic_core/src/phonetic_core/acoustic/annotations.py",
+        "packages/phonetic_core/src/phonetic_core/catalog.py"
       ],
-      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
+      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json",
+      "m01_contract_evidence": "docs/modules/evidence/M01-contract-migration.json"
     },
     {
       "id": "SRC-OPENSAUCE",
@@ -3649,8 +3651,11 @@
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-io.lock"
-      ]
+        "requirements-m01-io.lock",
+        "backend/src/ptb_api/acoustic_models.py",
+        "backend/src/ptb_api/acoustic_boundary.py"
+      ],
+      "m01_contract_evidence": "docs/modules/evidence/M01-contract-migration.json"
     },
     {
       "id": "P02-PY-PYDANTIC-CORE",
