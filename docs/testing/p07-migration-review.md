@@ -1,8 +1,8 @@
 # P07 存储表与合成文件清理审阅
 
-2026-09-09，prepared / 未执行。P07 第一批代码、完整 SQL、验证脚本与无数据库的边界测试已准备。本文是具体操作范围，不把 P07 实施授权自动扩大为实际建表/文件删除授权。
+2026-09-09，井井在本审阅后的具体确认问题下回复“好，继续”，第 1–5 项范围已授权。003_storage.sql 已执行，首轮真实 PostgreSQL/磁盘验证通过；后续在同一范围内修复、复验不重复请求许可。本文保留原始操作范围，不将授权扩大到其他 schema 变更或目录清理。
 
-## 请求确认的范围
+## 已确认的范围
 
 1. 复用已验证且已停止的本机 PostgreSQL，数据库仍为 ptb_p05_test_20260909，PGDATA 仍为 output/validation/p05/postgres-data；只在运行验证时启动，只监听 127.0.0.1，结束停止。
 2. 执行 [003_storage.sql](../../backend/migrations/003_storage.sql)，新增独立 ptb_storage schema 的 state、quota_accounts、assets 三张表及索引。P05/P06 表结构不修改、旧数据不迁移，没有 DROP/ALTER。

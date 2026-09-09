@@ -164,10 +164,9 @@ def main():
         # Only exact IDs created by this harness; no recursive delete and no SQL DELETE.
         for asset_id in created:
             store.delete(owner, asset_id)
-    report = {'checks': checks, 'scope': 'prepared initial single-file cases; SQL/disk results only valid when executed',
-              'remaining': ['full-account concurrent last-byte reservation', 'mid-stream expiry over real socket',
-                            'hard power-loss durability', 'ZIP and multi-file outputs', 'P06 file fencing and active input references',
-                            'ten-account storage stress', 'browser visual acceptance']}
+    report = {'checks': checks, 'scope': 'Executed initial PG and disk cases; extended-validation.json covers contention, TCP and browser',
+              'remaining_joint_gates': ['hard power-loss durability', 'ZIP and multi-file outputs',
+                                       'P06 file fencing and active input references', 'sustained production load']}
     (ROOT/'output/validation/p07'/f'storage-{suffix}.json').write_text(json.dumps(report, indent=2)+'\n', encoding='utf-8')
     print(json.dumps(report))
 

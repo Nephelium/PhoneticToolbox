@@ -56,25 +56,28 @@ def main():
             raise RuntimeError('Owned PostgreSQL failed to start')
         with psycopg.connect(config['dsn']) as conn:
             assert conn.execute('SELECT current_database()').fetchone()[0] == 'ptb_p05_test_20260909'
-            for table in ('users', 'sessions', 'projects', 'login_attempts', 'schema_version'):
-                for row in conn.execute(f'SELECT to_jsonb(t) FROM ptb_accounts.{table} t').fetchall():
+            for table in ('ptb_accounts.users', 'ptb_accounts.sessions', 'ptb_accounts.projects', 'ptb_accounts.login_attempts',
+                          'ptb_accounts.schema_version', 'ptb_jobs.jobs', 'ptb_jobs.events', 'ptb_jobs.schema_version'):
+                for row in conn.execute(f'SELECT to_jsonb(t) FROM {table} t').fetchall():
                     before.add((table, json.dumps(row[0], sort_keys=True, default=str)))
         if args.apply_reviewed_schema:
             run([sys.executable, '-X', 'utf8', 'scripts/p07_database.py', 'apply', '--approved-p07-schema-and-test-files'], config)
         run([sys.executable, '-X', 'utf8', 'scripts/verify_p07_storage.py', '--approved-p07-schema-and-test-files'], config)
+        run([sys.executable, '-X', 'utf8', 'scripts/verify_p07_extended.py', '--approved-p07-schema-and-test-files'], config)
         with psycopg.connect(config['dsn']) as conn:
             after = set()
-            for table in ('users', 'sessions', 'projects', 'login_attempts', 'schema_version'):
-                for row in conn.execute(f'SELECT to_jsonb(t) FROM ptb_accounts.{table} t').fetchall():
+            for table in ('ptb_accounts.users', 'ptb_accounts.sessions', 'ptb_accounts.projects', 'ptb_accounts.login_attempts',
+                          'ptb_accounts.schema_version', 'ptb_jobs.jobs', 'ptb_jobs.events', 'ptb_jobs.schema_version'):
+                for row in conn.execute(f'SELECT to_jsonb(t) FROM {table} t').fetchall():
                     after.add((table, json.dumps(row[0], sort_keys=True, default=str)))
-        assert before.issubset(after), 'Pre-existing P05 records changed'
+        assert before.issubset(after), 'Pre-existing P05/P06 records changed'
     finally:
         if started:
             identity = (DATA/'postmaster.pid').read_text('utf-8').splitlines()
             assert Path(identity[1]).resolve() == DATA.resolve()
             run([pg_ctl, '-D', DATA, '-w', '-t', '30', '-m', 'fast', 'stop'])
     report = {'scope': 'P07 initial single-file acceptance only; ZIP/jobs joint gates remain',
-              'existing_account_rows_preserved': len(before), 'postgres_stopped': True,
+              'existing_account_and_job_rows_preserved': len(before), 'postgres_stopped': True,
               'schema_sha256': hashlib.sha256((ROOT/'backend/migrations/003_storage.sql').read_bytes()).hexdigest()}
     (OUT/'database-validation.json').write_text(json.dumps(report, indent=2)+'\n', encoding='utf-8')
     print(json.dumps(report))

@@ -72,8 +72,8 @@ npm --prefix frontend run build
 
 复验入口：`python scripts/run_p06_validation.py --approved-p06-test-data`（复用已有表，不带 --apply-reviewed-schema），随后 `python scripts/verify_p06_local_service.py --approved-test-data`。使用现有 .venv/v3-dev 解释器。Codex 内置测试页关闭两次关联退出，暂行测试方式见 [恢复记录](testing/p06-recovery-and-codex-exit.md)。
 
-## P07 存储准备（未执行数据库与删除验收）
+## P07 单文件存储（Windows 定向验收通过）
 
-见 [P07 报告](testing/p07-storage-report.md)与 [具体迁移审阅](testing/p07-migration-review.md)。后端私密配置可显式指定 storage_root；必须是已初始化且 instance_id 与 PG 匹配的私有目录，构造函数不建表。显式启用后的启动恢复会处理到期文件，因此在测试范围获确认前不得配置/运行该入口。未配置时文件 API 明确 503，桌面为 404。
+见 [P07 报告](testing/p07-storage-report.md)与 [已授权的具体迁移审阅](testing/p07-migration-review.md)。003 已执行，专属测试文件范围内的 PG/磁盘与独立浏览器验证通过；复验使用 run_p07_validation.py --approved-p07-schema-and-test-files，不重复应用 003。后端私密配置可显式指定 storage_root；必须是已初始化且 instance_id 与 PG 匹配的私有目录，构造函数不建表。启动恢复会处理到期文件，因此不得把研究者的普通文件目录配置为该私有根。未配置时文件 API 明确 503，桌面为 404。当前 [004 任务文件关联扩展](testing/p07-job-assets-review.md)尚未获具体执行确认，不在上述复验命令中运行。
 
 原始文件分块接口每块最多 256 KiB。/uploads 创建保留幂等键，PUT /uploads/{id}/blocks 使用 offset，POST finalize 完成服务器 SHA-256 和尺寸核对。文件以二进制原样保存，不自动解析 ZIP、Pickle 或执行代码。下载按单个 Range 和逐块截止/会话校验；DELETE 仅从会话确定 owner。生成结果与归档仍待 P07/P06 联合门，不要将上传资源称为科学分析产物。

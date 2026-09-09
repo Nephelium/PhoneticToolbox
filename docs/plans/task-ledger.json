@@ -206,9 +206,9 @@
       "id": "P07",
       "title": "5 GB 配额、7 天清理和结果管理",
       "dependencies": "P05,P06",
-      "files": "backend/src/ptb_api/quota.py；backend/src/ptb_api/storage.py；backend/src/ptb_worker/cleanup.py；frontend/src/modules/storage/StoragePage.vue",
+      "files": "backend/src/ptb_api/quota.py；backend/src/ptb_api/storage.py；backend/src/ptb_worker/cleanup.py；frontend/src/account/ProjectStorage.vue",
       "status": "in_progress",
-      "note": "用户已授权继续 P07。第一批配额、受控文件、资源接口、清理线程和文件面板已准备；纯政策/HTTP 边界和存储未启用的独立浏览器检查通过。实际建表与合成文件清理需具体授权；Q01-Q20 完整联合门尚未通过。",
+      "note": "003 存储表与专属生成文件清理范围已获具体授权并执行；Windows 单文件真实 PG/磁盘、最后额度并发、满额登录下载删除、TCP 到期和独立浏览器验收通过。004 任务文件关联扩展已准备待具体确认；ZIP/结果/输入/旧 worker 文件提交的联合门尚未完成，整体保持 in_progress。",
       "steps": [
         "实现账户字节计量、原子预留、受控 writer 和恢复核对",
         "实现上传/解压/生成/ZIP 全链路计量，不能靠前端判断",
@@ -222,13 +222,19 @@
         "docs/plans/2026-09-09-p07-storage.md",
         "docs/testing/p07-migration-review.md",
         "docs/testing/p07-storage-report.md",
-        "output/validation/p07/final-checks.json"
+        "output/validation/p07/final-checks.json",
+        "output/validation/p07/database-validation.json",
+        "output/validation/p07/extended-validation.json",
+        "output/playwright/p07/real-ui-validation.json",
+        "docs/testing/p07-job-assets-review.md"
       ],
       "acceptance_status": {
         "policy_and_http_boundary": "verified",
         "unconfigured_storage_browser": "verified",
-        "postgres_and_disk": "planned",
-        "zip_outputs_inputs_and_fencing": "planned"
+        "postgres_and_disk": "verified",
+        "zip_outputs_inputs_and_fencing": "planned",
+        "real_storage_browser": "verified",
+        "single_file_scope": "verified"
       }
     },
     {

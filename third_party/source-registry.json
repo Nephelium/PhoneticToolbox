@@ -6210,7 +6210,9 @@
       "verification_date": "2026-09-09",
       "relationship": "Existing test-only runtime drives an isolated Chrome profile; no code copied or bundled into application",
       "used_at": [
-        "output/playwright/p07/check-ui.cjs"
+        "output/playwright/p07/check-ui.cjs",
+        "tests/e2e/p07-storage.cjs",
+        "scripts/verify_p07_extended.py"
       ],
       "distribution_status": "test-only external runtime; not a new project or global installation",
       "acknowledgement_group": "software"
