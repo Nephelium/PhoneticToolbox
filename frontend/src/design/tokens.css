@@ -343,3 +343,16 @@ to{opacity:1;transform:none}
 .reference-groups{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
 .reference-groups [role=tab]{white-space:normal;text-align:left;justify-content:flex-start}
 .reference-groups [aria-selected=true]{background:var(--selected);color:var(--accent);border-color:var(--accent);font-weight:600}
+
+.account-page{min-height:100dvh;display:flex;flex-direction:column;background:var(--app)}
+.account-header,.account-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 32px;background:var(--panel);border-bottom:1px solid var(--border)}
+.account-brand{display:flex;align-items:center;gap:12px}.account-brand img{width:40px;height:40px}.account-brand small{display:block;margin-top:4px}
+.account-main{flex:1;overflow:visible;background:transparent;padding:40px 24px}.account-card{max-width:460px;margin:24px auto;padding:32px;border:1px solid var(--border);border-radius:var(--radius);background:var(--panel)}
+.account-card h1{font-size:25px;margin-bottom:12px}.account-card form{display:grid;gap:18px;margin:28px 0}.account-page label{display:grid;gap:8px;font-size:14px}.account-card form button{width:100%}
+.account-message{padding:12px 16px;background:var(--selected);border-radius:6px;max-width:900px;margin:0 auto 18px;line-height:1.7}
+.account-footer{border-top:1px solid var(--border);border-bottom:0;font-size:12px;color:var(--muted)}.account-footer button{font-size:12px}
+.account-workspace{max-width:1000px;margin:auto}.account-title{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}.project-create{display:flex;align-items:end;gap:12px;margin:28px 0}.project-create label{flex:1}
+.project-columns{display:grid;grid-template-columns:minmax(220px,1fr) minmax(0,2fr);gap:20px}.project-list,.project-detail{padding:20px;border:1px solid var(--border);border-radius:var(--radius);background:var(--panel)}
+.project-list button{width:100%;margin-top:12px;display:flex;align-items:start;flex-direction:column;white-space:normal;text-align:left;overflow-wrap:anywhere}.project-list [aria-pressed=true]{background:var(--selected);border-color:var(--accent)}
+.project-detail h2{overflow-wrap:anywhere}.project-detail form{display:grid;gap:14px;margin-top:20px}.project-detail form button{justify-self:start}
+@media(max-width:650px){.account-header,.account-footer{padding:16px;flex-wrap:wrap}.account-main{padding:20px 12px}.account-card{padding:24px 20px}.project-columns{grid-template-columns:1fr}.project-create{flex-wrap:wrap}.project-create label{flex-basis:100%}}

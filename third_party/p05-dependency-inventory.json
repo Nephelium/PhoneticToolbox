@@ -1,0 +1,166 @@
+{
+  "scope": "8 newly installed packages only; earlier locked dependencies retained",
+  "lock_sha256": "fa9690cde8794aa3b17c40a1878cea3f202f75f2fb67f01ba44c4c1b46a31a4c",
+  "packages": [
+    {
+      "id": "P05-PY-ARGON2-CFFI",
+      "title": "argon2-cffi",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P05"
+      ],
+      "authors": "Hynek Schlawack",
+      "actual_included_version": "25.1.0",
+      "license": "MIT",
+      "urls": {
+        "package": "https://pypi.org/project/argon2-cffi/25.1.0/",
+        "documentation": "https://argon2-cffi.readthedocs.io/",
+        "github": "https://github.com/hynek/argon2-cffi"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "installed-development-only; binary transitive licenses require release audit",
+      "relationship": "Installed into isolated v3 development environment; no code copied or modified",
+      "acknowledgement_group": "software"
+    },
+    {
+      "id": "P05-PY-ARGON2-CFFI-BINDINGS",
+      "title": "argon2-cffi-bindings",
+      "kind": "transitive-runtime-dependency",
+      "modules": [
+        "P05"
+      ],
+      "authors": "Hynek Schlawack",
+      "actual_included_version": "26.1.0",
+      "license": "MIT",
+      "urls": {
+        "package": "https://pypi.org/project/argon2-cffi-bindings/26.1.0/",
+        "github": "https://github.com/hynek/argon2-cffi-bindings"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "installed-development-only; binary transitive licenses require release audit",
+      "relationship": "Installed into isolated v3 development environment; no code copied or modified",
+      "acknowledgement_group": "software"
+    },
+    {
+      "id": "P05-PY-CFFI",
+      "title": "cffi",
+      "kind": "transitive-runtime-dependency",
+      "modules": [
+        "P05"
+      ],
+      "authors": "Armin Rigo, Maciej Fijalkowski",
+      "actual_included_version": "2.1.1",
+      "license": "MIT-0",
+      "urls": {
+        "package": "https://pypi.org/project/cffi/2.1.1/",
+        "documentation": "https://cffi.readthedocs.io/",
+        "source_code": "https://github.com/python-cffi/cffi"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "installed-development-only; binary transitive licenses require release audit",
+      "relationship": "Installed into isolated v3 development environment; no code copied or modified",
+      "acknowledgement_group": "software"
+    },
+    {
+      "id": "P05-PY-ITSDANGEROUS",
+      "title": "itsdangerous",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P05"
+      ],
+      "authors": "Pallets",
+      "actual_included_version": "2.2.0",
+      "license": "BSD-3-Clause",
+      "urls": {
+        "package": "https://pypi.org/project/itsdangerous/2.2.0/",
+        "documentation": "https://itsdangerous.palletsprojects.com/",
+        "source": "https://github.com/pallets/itsdangerous/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "installed-development-only; binary transitive licenses require release audit",
+      "relationship": "Installed into isolated v3 development environment; no code copied or modified",
+      "acknowledgement_group": "software"
+    },
+    {
+      "id": "P05-PY-PSYCOPG",
+      "title": "psycopg",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P05"
+      ],
+      "authors": "Daniele Varrazzo",
+      "actual_included_version": "3.3.3",
+      "license": "LGPL-3.0-only",
+      "urls": {
+        "package": "https://pypi.org/project/psycopg/3.3.3/",
+        "homepage": "https://psycopg.org/",
+        "documentation": "https://psycopg.org/psycopg3/docs/",
+        "code": "https://github.com/psycopg/psycopg"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "installed-development-only; binary transitive licenses require release audit",
+      "relationship": "Installed into isolated v3 development environment; no code copied or modified",
+      "acknowledgement_group": "software"
+    },
+    {
+      "id": "P05-PY-PSYCOPG-BINARY",
+      "title": "psycopg-binary",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P05"
+      ],
+      "authors": "Daniele Varrazzo",
+      "actual_included_version": "3.3.3",
+      "license": "LGPL-3.0-only",
+      "urls": {
+        "package": "https://pypi.org/project/psycopg-binary/3.3.3/",
+        "homepage": "https://psycopg.org/",
+        "documentation": "https://psycopg.org/psycopg3/docs/",
+        "code": "https://github.com/psycopg/psycopg"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "installed-development-only; binary transitive licenses require release audit",
+      "relationship": "Installed into isolated v3 development environment; no code copied or modified",
+      "acknowledgement_group": "software"
+    },
+    {
+      "id": "P05-PY-PYCPARSER",
+      "title": "pycparser",
+      "kind": "transitive-runtime-dependency",
+      "modules": [
+        "P05"
+      ],
+      "authors": "Eli Bendersky",
+      "actual_included_version": "3.0",
+      "license": "BSD-3-Clause",
+      "urls": {
+        "package": "https://pypi.org/project/pycparser/3.0/",
+        "homepage": "https://github.com/eliben/pycparser"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "installed-development-only; binary transitive licenses require release audit",
+      "relationship": "Installed into isolated v3 development environment; no code copied or modified",
+      "acknowledgement_group": "software"
+    },
+    {
+      "id": "P05-PY-TZDATA",
+      "title": "tzdata",
+      "kind": "transitive-runtime-dependency",
+      "modules": [
+        "P05"
+      ],
+      "authors": "Python Software Foundation",
+      "actual_included_version": "2026.3",
+      "license": "Apache-2.0",
+      "urls": {
+        "package": "https://pypi.org/project/tzdata/2026.3/",
+        "source": "https://github.com/python/tzdata",
+        "documentation": "https://tzdata.python.org"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "installed-development-only; binary transitive licenses require release audit",
+      "relationship": "Installed into isolated v3 development environment; no code copied or modified",
+      "acknowledgement_group": "software"
+    }
+  ]
+}

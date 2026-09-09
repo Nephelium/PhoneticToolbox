@@ -18,7 +18,7 @@
 - unit 与 backend、analysis_config_hash、source_ids 必填。P02 不冻结 80 参数的单位映射或实际算法版本；P03/M01 按原源码和黄金样例核定，不能凭参数名猜单位。
 - JSON Schema 与 TypeScript 提供结构约束；等长、单调、帧边界等跨字段约束由 Pydantic 执行，不能宣称浏览器类型检查已验证科研正确性。
 
-当前 HTTP 仅提供 GET health 和 capabilities；Viewport 是跨进程数据结构快照，没有虚构的分析 API。两个运行模式的 OpenAPI 一致。请求型业务模型与账号/任务/额度在对应阶段逐项添加。
+P05 新增 auth challenge/login/me/logout 与 projects list/create/get/rename，模型源为 backend/src/ptb_api/account_models.py，科学模型不变。两个模式发布同一 OpenAPI；local 账号接口返回不可用，未配置服务器返回 503，不提供假账号。Viewport 仍是跨进程结构，任务与额度待 P06/P07。新增接口是 API 1 的扩展，未改变既有科学字段语义。
 
 ## 兼容规则
 

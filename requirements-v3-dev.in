@@ -13,3 +13,8 @@ build==1.6.0
 setuptools==84.0.0
 wheel==0.48.0
 packaging==26.3
+
+# P05 isolated account development.
+argon2-cffi==25.1.0
+psycopg[binary]==3.3.3
+itsdangerous==2.2.0

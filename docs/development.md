@@ -57,3 +57,11 @@ npm --prefix frontend run build
 浏览器地址为 http://127.0.0.1:5174/ 。Qt 入口不启动额外 HTTP 服务。两端目前仅提供共同 UI、本机 WAV 预览/选区/试听；15 模块的算法、实际分析任务、摄像头、目录批处理和正式发行仍待后续任务。仅支持单个不超过 64 MB 的 WAV。文件不会自动上传或跨启动保存。
 
 试用 EGG：点击 EGG 信号分析，载入公开测试音频或选择自己的双声道 WAV。音频声道选择控制试听：1–4.wav 为右音频/左 EGG；牧歌.wav 为左音频/右 EGG。程序不按文件名猜测角色，需要显式选择，原文件不改写。可试切换主题、调整选区、缩放平移、参数草稿、标签切换与关闭提示。视觉验收和限制见 [P04 报告](testing/p04-workbench-report.md)。
+
+## P05 迁移前状态
+
+[P05 报告](testing/p05-accounts-report.md) 区分了测试替身检查与真实 PostgreSQL 结果。实际数据库尚未创建；先审阅 [迁移操作](testing/p05-migration-review.md)，不直接运行建表命令。
+
+后端仍可用 P02 命令启动只读骨架，未配置账号存储时 auth/projects 返回 503；本机模式返回 404。迁移完成后，P05 原型服务使用 `python -m ptb_api.server --port 5175 --frontend frontend/dist`，从标准输入读取一行私密 JSON（dsn、signing_key），仅回环监听；不用 .env，不在命令行/URL中传凭据。该入口不作生产部署。
+
+`tests/support/account_ui_host.py` 仅供自动验证浏览器流程，使用测试替身，重启不保存数据，不用于研究者试用或真实账号。项目中无默认生产管理员密码。正式账号创建使用 `scripts/p05_database.py create-user` 的隐藏提示；首次建表和测试数据创建都遵守迁移审阅授权。

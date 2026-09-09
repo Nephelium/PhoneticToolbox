@@ -117,3 +117,11 @@
 - 来源登记使用 acknowledgement_group（academic/software）作为展示分类，保留 kind 的原关系类别与全部许可/版本/未决项，不以分组改变来源事实。
 - 论文、语音方法链、声道学术手册、研究几何数据、待核实的 EGG 方法/发音词典/IPA 映射/音系材料归学术组；运行依赖、代码移植、参考实现、软件工具和工程素材归软件组。科学软件的实现记录仍归软件组，其独立论文记录归学术组，不复制记录或把代码许可套给论文。
 - 两组共用模块筛选与搜索；全局致谢和模块引用使用同一生成清单。生成时拒绝缺失或未知分组，避免新增来源静默混入。
+
+## ADR-017 P05 账号隔离与实际迁移门
+- 2026-09-09 采用：按 P05 计划准备实现与迁移草案，实际建表/迁移单独审阅确认。仅 P05 专属空库，不复用旧站用户表。
+- 使用 argon2-cffi 的 Argon2id、itsdangerous 签名的短时登录 CSRF 挑战、Starlette Cookie API；会话为随机不透明凭据，数据库只存其摘要，以支持即时撤销。密码校验、序列化签名使用成熟库，不自制密码学。
+- psycopg 3 参数化 SQL；账号/IP 登录计数在 PG 原子更新，不使用进程内限流充当多 worker 限流。数据库连接按事务关闭，不把会话/owner 放进跨用户全局变量。
+- 默认 HTTPS 且 Cookie 带 __Host- 前缀；显式 HTTP 仅允许 127.0.0.1 测试入口。固定 Origin、CSRF 与 SameSite 共同校验；请求不信任 X-Forwarded-For。实际反向代理部署须另行配置与验收。
+- /server/ 为服务器账号与项目入口；本机/Qt 预览继续离线无账号。网页账号切换卸载项目数据，不复用 P04 的全局本机文件状态；P06/P07 再接入科研任务和资源。
+- 依据：[Argon2 API](https://argon2-cffi.readthedocs.io/en/stable/api.html)、[Psycopg 事务](https://www.psycopg.org/psycopg3/docs/basic/usage.html)、[OWASP 会话](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html)、[OWASP CSRF](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)。

@@ -140,8 +140,8 @@
       "title": "服务器账号、项目和会话隔离",
       "dependencies": "P02",
       "files": "backend/src/ptb_api/auth.py；backend/src/ptb_api/projects.py；backend/tests/test_auth.py；tests/security/test_resource_ownership.py",
-      "status": "planned",
-      "note": "planned",
+      "status": "in_progress",
+      "note": "账号/项目接口、UI、迁移草案与测试替身定向检查已完成；实际 PostgreSQL 建表/迁移待单独确认，P05 不标 verified。",
       "steps": [
         "设计并审阅 users/sessions/projects/owner 模型和数据库迁移",
         "选择成熟密码哈希/会话实现，落实 Cookie、CSRF、退出撤销和登录限流",
@@ -151,7 +151,18 @@
         "以两个账号验证资源、任务、日志、取消与下载的全面隔离"
       ],
       "acceptance": "跨用户访问全部拒绝；登录可恢复，不依赖旧站；实际迁移执行前满足授权",
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/plans/2026-09-09-p05-accounts.md",
+        "docs/testing/p05-accounts-report.md",
+        "docs/testing/p05-migration-review.md"
+      ],
+      "acceptance_status": {
+        "http_logic_with_test_double": "verified",
+        "browser_ui_with_test_double": "verified",
+        "postgres_migration": "planned",
+        "postgres_isolation_and_concurrency": "planned",
+        "jobs_resources_joint_acceptance": "planned"
+      }
     },
     {
       "id": "P06",

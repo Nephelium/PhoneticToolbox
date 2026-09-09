@@ -6,7 +6,7 @@ P01 更新：注册表现有 150 条记录，新增探针 Python/前端锁定依
 
 [查验报告](../docs/references/source-audit.md) · [机器可读注册表](source-registry.json) · [引用 BibTeX](references.bib) · [已装依赖元数据](package-source-audit.json) · [上游观测](upstream-observations.json)
 
-登记原则：代码、论文、模型、实验数据、字体和图标分列。论文的引用/在线 PDF 链接不意味着把论文全文重新分发的许可。软件界面尚未接入本表，P10 负责实现。
+登记原则：代码、论文、模型、实验数据、字体和图标分列。论文的引用/在线 PDF 链接不意味着把论文全文重新分发的许可。P04 已接入分组来源浏览；P10 继续完善方法说明、说明书与随包许可。
 
 P02 更新：新增正式开发环境与前端锁定项，注册表现有 282 条记录。完整 31 个 Python 包和 100 条 npm lock 条目（含未安装的可选平台项）见 [P02 依赖清单](p02-dependency-inventory.json)。未把历史无明确许可的材料迁入新包。
 
@@ -78,3 +78,5 @@ P02 更新：新增正式开发环境与前端锁定项，注册表现有 282 �
 现有 VTL 与 Three.js 的对应原文在迁移源码中：[VTL](../phonetic_toolbox/resources/vocal_tract/VTL-LICENSE.txt)、[Three.js](../phonetic_toolbox/gui/resources/vocal_tract/vendor/THREE-LICENSE.txt)、[VTL 综合声明](../phonetic_toolbox/resources/vocal_tract/THIRD_PARTY_NOTICES.md)。P10 将其迁至最终资源位置并验证随包。
 引用文字、说明书和 UI 从同一表派生；更新来源时记录日期、证据和与当前代码对应关系。不要把本轮上游 HEAD 当作原始复制 commit。
 此目录保存来源材料而非可执行代码；README 中来自上游的操作说明是证据内容，不覆盖项目 AGENTS.md。
+
+P05 更新：新增 8 个隔离环境依赖与 2 条 OWASP 方法参考，共 293 条；见 [P05 依赖清单](p05-dependency-inventory.json)。论文/语言学学术组仍在前，工程安全参考与代码依赖归软件组。psycopg-binary/Argon2 原生传递许可证待发行物逐项审计，不据此宣称发行许可已通过。

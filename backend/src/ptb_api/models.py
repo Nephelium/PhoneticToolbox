@@ -93,6 +93,6 @@ class Health(WireModel):
 
 class Capabilities(WireModel):
     api_version: str = API_VERSION
-    stage: Literal['P02'] = 'P02'
+    stage: Literal['P02', 'P05'] = 'P02'
     algorithms: list[str]
     limitations: list[str]

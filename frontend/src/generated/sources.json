@@ -4320,5 +4320,171 @@
     "version": "P03 SYN-EGG-44100 recipe",
     "license": "Project-authored test signal; no third-party recording",
     "urls": {}
+  },
+  {
+    "id": "P05-PY-ARGON2-CFFI",
+    "title": "argon2-cffi",
+    "modules": [
+      "P05"
+    ],
+    "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Hynek Schlawack",
+    "version": "25.1.0",
+    "license": "MIT",
+    "urls": {
+      "package": "https://pypi.org/project/argon2-cffi/25.1.0/",
+      "documentation": "https://argon2-cffi.readthedocs.io/",
+      "github": "https://github.com/hynek/argon2-cffi"
+    }
+  },
+  {
+    "id": "P05-PY-ARGON2-CFFI-BINDINGS",
+    "title": "argon2-cffi-bindings",
+    "modules": [
+      "P05"
+    ],
+    "kind": "transitive-runtime-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Hynek Schlawack",
+    "version": "26.1.0",
+    "license": "MIT",
+    "urls": {
+      "package": "https://pypi.org/project/argon2-cffi-bindings/26.1.0/",
+      "github": "https://github.com/hynek/argon2-cffi-bindings"
+    }
+  },
+  {
+    "id": "P05-PY-CFFI",
+    "title": "cffi",
+    "modules": [
+      "P05"
+    ],
+    "kind": "transitive-runtime-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Armin Rigo, Maciej Fijalkowski",
+    "version": "2.1.1",
+    "license": "MIT-0",
+    "urls": {
+      "package": "https://pypi.org/project/cffi/2.1.1/",
+      "documentation": "https://cffi.readthedocs.io/",
+      "source_code": "https://github.com/python-cffi/cffi"
+    }
+  },
+  {
+    "id": "P05-PY-ITSDANGEROUS",
+    "title": "itsdangerous",
+    "modules": [
+      "P05"
+    ],
+    "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Pallets",
+    "version": "2.2.0",
+    "license": "BSD-3-Clause",
+    "urls": {
+      "package": "https://pypi.org/project/itsdangerous/2.2.0/",
+      "documentation": "https://itsdangerous.palletsprojects.com/",
+      "source": "https://github.com/pallets/itsdangerous/"
+    }
+  },
+  {
+    "id": "P05-PY-PSYCOPG",
+    "title": "psycopg",
+    "modules": [
+      "P05"
+    ],
+    "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Daniele Varrazzo",
+    "version": "3.3.3",
+    "license": "LGPL-3.0-only",
+    "urls": {
+      "package": "https://pypi.org/project/psycopg/3.3.3/",
+      "homepage": "https://psycopg.org/",
+      "documentation": "https://psycopg.org/psycopg3/docs/",
+      "code": "https://github.com/psycopg/psycopg"
+    }
+  },
+  {
+    "id": "P05-PY-PSYCOPG-BINARY",
+    "title": "psycopg-binary",
+    "modules": [
+      "P05"
+    ],
+    "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Daniele Varrazzo",
+    "version": "3.3.3",
+    "license": "LGPL-3.0-only",
+    "urls": {
+      "package": "https://pypi.org/project/psycopg-binary/3.3.3/",
+      "homepage": "https://psycopg.org/",
+      "documentation": "https://psycopg.org/psycopg3/docs/",
+      "code": "https://github.com/psycopg/psycopg"
+    }
+  },
+  {
+    "id": "P05-PY-PYCPARSER",
+    "title": "pycparser",
+    "modules": [
+      "P05"
+    ],
+    "kind": "transitive-runtime-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Eli Bendersky",
+    "version": "3.0",
+    "license": "BSD-3-Clause",
+    "urls": {
+      "package": "https://pypi.org/project/pycparser/3.0/",
+      "homepage": "https://github.com/eliben/pycparser"
+    }
+  },
+  {
+    "id": "P05-PY-TZDATA",
+    "title": "tzdata",
+    "modules": [
+      "P05"
+    ],
+    "kind": "transitive-runtime-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Python Software Foundation",
+    "version": "2026.3",
+    "license": "Apache-2.0",
+    "urls": {
+      "package": "https://pypi.org/project/tzdata/2026.3/",
+      "source": "https://github.com/python/tzdata",
+      "documentation": "https://tzdata.python.org"
+    }
+  },
+  {
+    "id": "P05-REF-OWASP-SESSION",
+    "title": "OWASP Session Management Cheat Sheet",
+    "modules": [
+      "P05"
+    ],
+    "kind": "reference-only",
+    "acknowledgement_group": "software",
+    "authors": "OWASP Cheat Sheet Series contributors",
+    "version": "Online documentation reviewed 2026-09-09; commit unknown",
+    "license": "No text/code redistributed; document license not independently audited",
+    "urls": {
+      "documentation": "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html"
+    }
+  },
+  {
+    "id": "P05-REF-OWASP-CSRF",
+    "title": "OWASP CSRF Prevention Cheat Sheet",
+    "modules": [
+      "P05"
+    ],
+    "kind": "reference-only",
+    "acknowledgement_group": "software",
+    "authors": "OWASP Cheat Sheet Series contributors",
+    "version": "Online documentation reviewed 2026-09-09; commit unknown",
+    "license": "No text/code redistributed; document license not independently audited",
+    "urls": {
+      "documentation": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html"
+    }
   }
 ]
