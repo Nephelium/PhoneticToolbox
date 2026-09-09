@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-09-09",
-  "total_records": 150,
+  "total_records": 282,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -3074,6 +3074,2515 @@
       "distribution_status": "not-in-pyqt6-prototype",
       "evidence": "Separate environment; startup/font/device enumeration observed. See P01 report for interaction test result.",
       "notes": "Candidate only; not selected or represented as a validated packaged alternative."
+    },
+    {
+      "id": "P02-PY-ANNOTATED-DOC",
+      "title": "annotated-doc",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "=?utf-8?q?Sebasti=C3=A1n_Ram=C3=ADrez?= <tiangolo@gmail.com>",
+      "actual_included_version": "0.0.5",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/annotated-doc/0.0.5/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-ANNOTATED-TYPES",
+      "title": "annotated-types",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Adrian Garcia Badaracco <1755071+adriangb@users.noreply.github.com>, Samuel Colvin <s@muelcolvin.com>, Zac Hatfield-Dodds <zac@zhd.dev>",
+      "actual_included_version": "0.8.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/annotated-types/0.8.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-ANYIO",
+      "title": "anyio",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Alex Grönholm <alex.gronholm@nextday.fi>",
+      "actual_included_version": "4.15.1",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/anyio/4.15.1/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-BUILD",
+      "title": "build",
+      "kind": "development-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Filipe Laíns <lains@riseup.net>, Bernát Gábor <gaborjbernat@gmail.com>, layday <layday@protonmail.com>, Henry Schreiner <henryschreineriii@gmail.com>",
+      "actual_included_version": "1.6.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/build/1.6.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-CERTIFI",
+      "title": "certifi",
+      "kind": "development-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Kenneth Reitz",
+      "actual_included_version": "2026.7.22",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "release": "https://pypi.org/project/certifi/2026.7.22/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-CLICK",
+      "title": "click",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "8.5.0",
+      "observed_upstream_commit": null,
+      "license": "BSD-3-Clause",
+      "urls": {
+        "release": "https://pypi.org/project/click/8.5.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-COLORAMA",
+      "title": "colorama",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Jonathan Hartley <tartley@tartley.com>",
+      "actual_included_version": "0.4.6",
+      "observed_upstream_commit": null,
+      "license": "unknown",
+      "urls": {
+        "release": "https://pypi.org/project/colorama/0.4.6/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-FASTAPI",
+      "title": "fastapi",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "=?utf-8?q?Sebasti=C3=A1n_Ram=C3=ADrez?= <tiangolo@gmail.com>",
+      "actual_included_version": "0.141.1",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/fastapi/0.141.1/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-H11",
+      "title": "h11",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Nathaniel J. Smith",
+      "actual_included_version": "0.16.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/h11/0.16.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-HTTPCORE",
+      "title": "httpcore",
+      "kind": "development-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Tom Christie <tom@tomchristie.com>",
+      "actual_included_version": "1.0.9",
+      "observed_upstream_commit": null,
+      "license": "BSD-3-Clause",
+      "urls": {
+        "release": "https://pypi.org/project/httpcore/1.0.9/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-HTTPX",
+      "title": "httpx",
+      "kind": "development-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Tom Christie <tom@tomchristie.com>",
+      "actual_included_version": "0.28.1",
+      "observed_upstream_commit": null,
+      "license": "BSD-3-Clause",
+      "urls": {
+        "release": "https://pypi.org/project/httpx/0.28.1/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-IDNA",
+      "title": "idna",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Kim Davies <kim+pypi@gumleaf.org>",
+      "actual_included_version": "3.19",
+      "observed_upstream_commit": null,
+      "license": "BSD-3-Clause",
+      "urls": {
+        "release": "https://pypi.org/project/idna/3.19/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-INICONFIG",
+      "title": "iniconfig",
+      "kind": "development-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Ronny Pfannschmidt <opensource@ronnypfannschmidt.de>, Holger Krekel <holger.krekel@gmail.com>",
+      "actual_included_version": "2.3.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/iniconfig/2.3.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-PACKAGING",
+      "title": "packaging",
+      "kind": "development-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Donald Stufft <donald@stufft.io>",
+      "actual_included_version": "26.3",
+      "observed_upstream_commit": null,
+      "license": "Apache-2.0 OR BSD-2-Clause",
+      "urls": {
+        "release": "https://pypi.org/project/packaging/26.3/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-PLUGGY",
+      "title": "pluggy",
+      "kind": "development-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Holger Krekel <holger@merlinux.eu>",
+      "actual_included_version": "1.6.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/pluggy/1.6.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-PYDANTIC",
+      "title": "pydantic",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Samuel Colvin <s@muelcolvin.com>, Eric Jolibois <em.jolibois@gmail.com>, Hasan Ramezani <hasan.r67@gmail.com>, Adrian Garcia Badaracco <1755071+adriangb@users.noreply.github.com>, Terrence Dorsey <terry@pydantic.dev>, David Montague <david@pydantic.dev>, Serge Matveenko <lig@countzero.co>, Marcelo Trylesinski <marcelotryle@gmail.com>, Sydney Runkle <sydneymarierunkle@gmail.com>, David Hewitt <mail@davidhewitt.dev>, Alex Hall <alex.mojaki@gmail.com>, Victorien Plot <contact@vctrn.dev>",
+      "actual_included_version": "2.13.5",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/pydantic/2.13.5/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-PYDANTIC-CORE",
+      "title": "pydantic_core",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Samuel Colvin <s@muelcolvin.com>, Adrian Garcia Badaracco <1755071+adriangb@users.noreply.github.com>, David Montague <david@pydantic.dev>, David Hewitt <mail@davidhewitt.dev>, Sydney Runkle <sydneymarierunkle@gmail.com>, Victorien Plot <contact@vctrn.dev>",
+      "actual_included_version": "2.46.5",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/pydantic_core/2.46.5/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-PYGMENTS",
+      "title": "Pygments",
+      "kind": "development-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Georg Brandl <georg@python.org>",
+      "actual_included_version": "2.21.0",
+      "observed_upstream_commit": null,
+      "license": "BSD-2-Clause",
+      "urls": {
+        "release": "https://pypi.org/project/Pygments/2.21.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-PYPROJECT-HOOKS",
+      "title": "pyproject_hooks",
+      "kind": "development-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Thomas Kluyver <thomas@kluyver.me.uk>",
+      "actual_included_version": "1.2.0",
+      "observed_upstream_commit": null,
+      "license": "unknown",
+      "urls": {
+        "release": "https://pypi.org/project/pyproject_hooks/1.2.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-PYQT6",
+      "title": "PyQt6",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Riverbank Computing Limited <info@riverbankcomputing.com>",
+      "actual_included_version": "6.11.0",
+      "observed_upstream_commit": null,
+      "license": "GPL-3.0-only",
+      "urls": {
+        "release": "https://pypi.org/project/PyQt6/6.11.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-PYQT6-QT6",
+      "title": "PyQt6-Qt6",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Riverbank Computing Limited",
+      "actual_included_version": "6.11.2",
+      "observed_upstream_commit": null,
+      "license": "LGPL v3",
+      "urls": {
+        "release": "https://pypi.org/project/PyQt6-Qt6/6.11.2/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-PYQT6-WEBENGINE",
+      "title": "PyQt6-WebEngine",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Riverbank Computing Limited <info@riverbankcomputing.com>",
+      "actual_included_version": "6.11.0",
+      "observed_upstream_commit": null,
+      "license": "GPL-3.0-only",
+      "urls": {
+        "release": "https://pypi.org/project/PyQt6-WebEngine/6.11.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-PYQT6-WEBENGINE-QT6",
+      "title": "PyQt6-WebEngine-Qt6",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Riverbank Computing Limited",
+      "actual_included_version": "6.11.2",
+      "observed_upstream_commit": null,
+      "license": "LGPL v3",
+      "urls": {
+        "release": "https://pypi.org/project/PyQt6-WebEngine-Qt6/6.11.2/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-PYQT6-SIP",
+      "title": "PyQt6_sip",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Phil Thompson",
+      "actual_included_version": "13.12.0",
+      "observed_upstream_commit": null,
+      "license": "BSD-2-Clause",
+      "urls": {
+        "release": "https://pypi.org/project/PyQt6_sip/13.12.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-PYTEST",
+      "title": "pytest",
+      "kind": "development-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Brianna Laugher, Bruno Oliveira, Floris Bruynooghe, Freya Bruhin, Holger Krekel, Others (See AUTHORS), Ronny Pfannschmidt",
+      "actual_included_version": "9.1.1",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/pytest/9.1.1/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-SETUPTOOLS",
+      "title": "setuptools",
+      "kind": "development-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Python Packaging Authority <distutils-sig@python.org>",
+      "actual_included_version": "84.0.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/setuptools/84.0.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-STARLETTE",
+      "title": "starlette",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Tom Christie <tom@tomchristie.com>",
+      "actual_included_version": "1.6.0",
+      "observed_upstream_commit": null,
+      "license": "BSD-3-Clause",
+      "urls": {
+        "release": "https://pypi.org/project/starlette/1.6.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-TYPING-INSPECTION",
+      "title": "typing-inspection",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Victorien Plot <contact@vctrn.dev>",
+      "actual_included_version": "0.4.4",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/typing-inspection/0.4.4/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-TYPING-EXTENSIONS",
+      "title": "typing_extensions",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "\"Guido van Rossum, Jukka Lehtosalo, Łukasz Langa, Michael Lee\" <levkivskyi@gmail.com>",
+      "actual_included_version": "4.16.0",
+      "observed_upstream_commit": null,
+      "license": "PSF-2.0",
+      "urls": {
+        "release": "https://pypi.org/project/typing_extensions/4.16.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-UVICORN",
+      "title": "uvicorn",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Tom Christie <tom@tomchristie.com>",
+      "actual_included_version": "0.52.4",
+      "observed_upstream_commit": null,
+      "license": "BSD-3-Clause",
+      "urls": {
+        "release": "https://pypi.org/project/uvicorn/0.52.4/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-PY-WHEEL",
+      "title": "wheel",
+      "kind": "development-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Daniel Holth <dholth@fastmail.fm>",
+      "actual_included_version": "0.48.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/wheel/0.48.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-only-native-release-audit-pending",
+      "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents."
+    },
+    {
+      "id": "P02-NPM-BABEL-CODE-FRAME-7-29-7",
+      "title": "@babel/code-frame",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "The Babel Team (https://babel.dev/team)",
+      "actual_included_version": "7.29.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@babel/code-frame/v/7.29.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-BABEL-HELPER-STRING-PARSER-7-29-7",
+      "title": "@babel/helper-string-parser",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "The Babel Team (https://babel.dev/team)",
+      "actual_included_version": "7.29.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@babel/helper-string-parser/v/7.29.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-BABEL-HELPER-VALIDATOR-IDENTIFIER-7-29-7",
+      "title": "@babel/helper-validator-identifier",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "The Babel Team (https://babel.dev/team)",
+      "actual_included_version": "7.29.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@babel/helper-validator-identifier/v/7.29.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-BABEL-PARSER-7-29-8",
+      "title": "@babel/parser",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "The Babel Team (https://babel.dev/team)",
+      "actual_included_version": "7.29.8",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@babel/parser/v/7.29.8"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-BABEL-TYPES-7-29-8",
+      "title": "@babel/types",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "The Babel Team (https://babel.dev/team)",
+      "actual_included_version": "7.29.8",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@babel/types/v/7.29.8"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-JRIDGEWELL-SOURCEMAP-CODEC-1-6-0",
+      "title": "@jridgewell/sourcemap-codec",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Justin Ridgewell <justin@ridgewell.name>",
+      "actual_included_version": "1.6.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@jridgewell/sourcemap-codec/v/1.6.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-OXC-PROJECT-TYPES-0-148-0",
+      "title": "@oxc-project/types",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Boshen and oxc contributors",
+      "actual_included_version": "0.148.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@oxc-project/types/v/0.148.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-REDOCLY-AJV-8-11-2",
+      "title": "@redocly/ajv",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Evgeny Poberezkin",
+      "actual_included_version": "8.11.2",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@redocly/ajv/v/8.11.2"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-REDOCLY-CONFIG-0-22-0",
+      "title": "@redocly/config",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "0.22.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@redocly/config/v/0.22.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-REDOCLY-OPENAPI-CORE-1-34-19",
+      "title": "@redocly/openapi-core",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.34.19",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@redocly/openapi-core/v/1.34.19"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-ANDROID-ARM-EABI-1-2-7",
+      "title": "@rolldown/binding-android-arm-eabi",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@rolldown/binding-android-arm-eabi/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-ANDROID-ARM64-1-2-7",
+      "title": "@rolldown/binding-android-arm64",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@rolldown/binding-android-arm64/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-DARWIN-ARM64-1-2-7",
+      "title": "@rolldown/binding-darwin-arm64",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@rolldown/binding-darwin-arm64/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-DARWIN-X64-1-2-7",
+      "title": "@rolldown/binding-darwin-x64",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@rolldown/binding-darwin-x64/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-FREEBSD-X64-1-2-7",
+      "title": "@rolldown/binding-freebsd-x64",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@rolldown/binding-freebsd-x64/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-ARM-GNUEABIHF-1-2-7",
+      "title": "@rolldown/binding-linux-arm-gnueabihf",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@rolldown/binding-linux-arm-gnueabihf/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-ARM64-GNU-1-2-7",
+      "title": "@rolldown/binding-linux-arm64-gnu",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@rolldown/binding-linux-arm64-gnu/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-ARM64-MUSL-1-2-7",
+      "title": "@rolldown/binding-linux-arm64-musl",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@rolldown/binding-linux-arm64-musl/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-PPC64-GNU-1-2-7",
+      "title": "@rolldown/binding-linux-ppc64-gnu",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@rolldown/binding-linux-ppc64-gnu/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-S390X-GNU-1-2-7",
+      "title": "@rolldown/binding-linux-s390x-gnu",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@rolldown/binding-linux-s390x-gnu/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-X64-GNU-1-2-7",
+      "title": "@rolldown/binding-linux-x64-gnu",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@rolldown/binding-linux-x64-gnu/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-X64-MUSL-1-2-7",
+      "title": "@rolldown/binding-linux-x64-musl",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@rolldown/binding-linux-x64-musl/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-OPENHARMONY-ARM64-1-2-7",
+      "title": "@rolldown/binding-openharmony-arm64",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@rolldown/binding-openharmony-arm64/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-WIN32-ARM64-MSVC-1-2-7",
+      "title": "@rolldown/binding-win32-arm64-msvc",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@rolldown/binding-win32-arm64-msvc/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-WIN32-X64-MSVC-1-2-7",
+      "title": "@rolldown/binding-win32-x64-msvc",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@rolldown/binding-win32-x64-msvc/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-PLUGINUTILS-1-0-1",
+      "title": "@rolldown/pluginutils",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.0.1",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@rolldown/pluginutils/v/1.0.1"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VITEJS-PLUGIN-VUE-6-0-8",
+      "title": "@vitejs/plugin-vue",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "6.0.8",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@vitejs/plugin-vue/v/6.0.8"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VOLAR-LANGUAGE-CORE-2-4-28",
+      "title": "@volar/language-core",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "2.4.28",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@volar/language-core/v/2.4.28"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VOLAR-SOURCE-MAP-2-4-28",
+      "title": "@volar/source-map",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "2.4.28",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@volar/source-map/v/2.4.28"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VOLAR-TYPESCRIPT-2-4-28",
+      "title": "@volar/typescript",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "2.4.28",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@volar/typescript/v/2.4.28"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VUE-COMPILER-CORE-3-5-42",
+      "title": "@vue/compiler-core",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@vue/compiler-core/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VUE-COMPILER-DOM-3-5-42",
+      "title": "@vue/compiler-dom",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@vue/compiler-dom/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VUE-COMPILER-SFC-3-5-42",
+      "title": "@vue/compiler-sfc",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@vue/compiler-sfc/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VUE-COMPILER-SSR-3-5-42",
+      "title": "@vue/compiler-ssr",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@vue/compiler-ssr/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VUE-LANGUAGE-CORE-3-3-11",
+      "title": "@vue/language-core",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "3.3.11",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@vue/language-core/v/3.3.11"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VUE-REACTIVITY-3-5-42",
+      "title": "@vue/reactivity",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@vue/reactivity/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VUE-RUNTIME-CORE-3-5-42",
+      "title": "@vue/runtime-core",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@vue/runtime-core/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VUE-RUNTIME-DOM-3-5-42",
+      "title": "@vue/runtime-dom",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@vue/runtime-dom/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VUE-SERVER-RENDERER-3-5-42",
+      "title": "@vue/server-renderer",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@vue/server-renderer/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VUE-SHARED-3-5-42",
+      "title": "@vue/shared",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/@vue/shared/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-AGENT-BASE-7-1-4",
+      "title": "agent-base",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Nathan Rajlich <nathan@tootallnate.net> (http://n8.io/)",
+      "actual_included_version": "7.1.4",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/agent-base/v/7.1.4"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ALIEN-SIGNALS-3-2-1",
+      "title": "alien-signals",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "3.2.1",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/alien-signals/v/3.2.1"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ANSI-COLORS-4-1-3",
+      "title": "ansi-colors",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Brian Woodward (https://github.com/doowb)",
+      "actual_included_version": "4.1.3",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/ansi-colors/v/4.1.3"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ARGPARSE-2-0-1",
+      "title": "argparse",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "2.0.1",
+      "observed_upstream_commit": null,
+      "license": "Python-2.0",
+      "urls": {
+        "release": "https://www.npmjs.com/package/argparse/v/2.0.1"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-BALANCED-MATCH-1-0-2",
+      "title": "balanced-match",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Julian Gruber",
+      "actual_included_version": "1.0.2",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/balanced-match/v/1.0.2"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-BRACE-EXPANSION-2-1-4",
+      "title": "brace-expansion",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Julian Gruber",
+      "actual_included_version": "2.1.4",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/brace-expansion/v/2.1.4"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-CHANGE-CASE-5-4-4",
+      "title": "change-case",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Blake Embrey",
+      "actual_included_version": "5.4.4",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/change-case/v/5.4.4"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-COLORETTE-1-4-0",
+      "title": "colorette",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Jorge Bucaran",
+      "actual_included_version": "1.4.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/colorette/v/1.4.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-CSSTYPE-3-2-3",
+      "title": "csstype",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Fredrik Nicol <fredrik.nicol@gmail.com>",
+      "actual_included_version": "3.2.3",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/csstype/v/3.2.3"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-DEBUG-4-4-3",
+      "title": "debug",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Josh Junon (https://github.com/qix-)",
+      "actual_included_version": "4.4.3",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/debug/v/4.4.3"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-DETECT-LIBC-2-1-2",
+      "title": "detect-libc",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Lovell Fuller <npm@lovell.info>",
+      "actual_included_version": "2.1.2",
+      "observed_upstream_commit": null,
+      "license": "Apache-2.0",
+      "urls": {
+        "release": "https://www.npmjs.com/package/detect-libc/v/2.1.2"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ENTITIES-7-0-1",
+      "title": "entities",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Felix Boehm <me@feedic.com>",
+      "actual_included_version": "7.0.1",
+      "observed_upstream_commit": null,
+      "license": "BSD-2-Clause",
+      "urls": {
+        "release": "https://www.npmjs.com/package/entities/v/7.0.1"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ESTREE-WALKER-2-0-2",
+      "title": "estree-walker",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Rich Harris",
+      "actual_included_version": "2.0.2",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/estree-walker/v/2.0.2"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-FAST-DEEP-EQUAL-3-1-3",
+      "title": "fast-deep-equal",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Evgeny Poberezkin",
+      "actual_included_version": "3.1.3",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/fast-deep-equal/v/3.1.3"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-FDIR-6-5-0",
+      "title": "fdir",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "thecodrr <thecodrr@protonmail.com>",
+      "actual_included_version": "6.5.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/fdir/v/6.5.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-FSEVENTS-2-3-3",
+      "title": "fsevents",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "2.3.3",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/fsevents/v/2.3.3"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-HTTPS-PROXY-AGENT-7-0-6",
+      "title": "https-proxy-agent",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Nathan Rajlich <nathan@tootallnate.net> (http://n8.io/)",
+      "actual_included_version": "7.0.6",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/https-proxy-agent/v/7.0.6"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-INDEX-TO-POSITION-1-2-0",
+      "title": "index-to-position",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Sindre Sorhus",
+      "actual_included_version": "1.2.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/index-to-position/v/1.2.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-JS-LEVENSHTEIN-1-1-6",
+      "title": "js-levenshtein",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Gustaf Andersson",
+      "actual_included_version": "1.1.6",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/js-levenshtein/v/1.1.6"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-JS-TOKENS-4-0-0",
+      "title": "js-tokens",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Simon Lydell",
+      "actual_included_version": "4.0.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/js-tokens/v/4.0.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-JS-YAML-4-3-2",
+      "title": "js-yaml",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Vladimir Zapparov <dervus.grim@gmail.com>",
+      "actual_included_version": "4.3.2",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/js-yaml/v/4.3.2"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "No upstream source edits. js-yaml 4.3.2 override fixes GHSA-2883-xcg3-v3hh."
+    },
+    {
+      "id": "P02-NPM-JSON-SCHEMA-TRAVERSE-1-0-0",
+      "title": "json-schema-traverse",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Evgeny Poberezkin",
+      "actual_included_version": "1.0.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/json-schema-traverse/v/1.0.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-1-33-0",
+      "title": "lightningcss",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "release": "https://www.npmjs.com/package/lightningcss/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-ANDROID-ARM64-1-33-0",
+      "title": "lightningcss-android-arm64",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "release": "https://www.npmjs.com/package/lightningcss-android-arm64/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-DARWIN-ARM64-1-33-0",
+      "title": "lightningcss-darwin-arm64",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "release": "https://www.npmjs.com/package/lightningcss-darwin-arm64/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-DARWIN-X64-1-33-0",
+      "title": "lightningcss-darwin-x64",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "release": "https://www.npmjs.com/package/lightningcss-darwin-x64/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-FREEBSD-X64-1-33-0",
+      "title": "lightningcss-freebsd-x64",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "release": "https://www.npmjs.com/package/lightningcss-freebsd-x64/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-LINUX-ARM-GNUEABIHF-1-33-0",
+      "title": "lightningcss-linux-arm-gnueabihf",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "release": "https://www.npmjs.com/package/lightningcss-linux-arm-gnueabihf/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-LINUX-ARM64-GNU-1-33-0",
+      "title": "lightningcss-linux-arm64-gnu",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "release": "https://www.npmjs.com/package/lightningcss-linux-arm64-gnu/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-LINUX-ARM64-MUSL-1-33-0",
+      "title": "lightningcss-linux-arm64-musl",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "release": "https://www.npmjs.com/package/lightningcss-linux-arm64-musl/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-LINUX-X64-GNU-1-33-0",
+      "title": "lightningcss-linux-x64-gnu",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "release": "https://www.npmjs.com/package/lightningcss-linux-x64-gnu/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-LINUX-X64-MUSL-1-33-0",
+      "title": "lightningcss-linux-x64-musl",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "release": "https://www.npmjs.com/package/lightningcss-linux-x64-musl/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-WIN32-ARM64-MSVC-1-33-0",
+      "title": "lightningcss-win32-arm64-msvc",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "release": "https://www.npmjs.com/package/lightningcss-win32-arm64-msvc/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-WIN32-X64-MSVC-1-33-0",
+      "title": "lightningcss-win32-x64-msvc",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "release": "https://www.npmjs.com/package/lightningcss-win32-x64-msvc/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-MAGIC-STRING-0-30-21",
+      "title": "magic-string",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Rich Harris",
+      "actual_included_version": "0.30.21",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/magic-string/v/0.30.21"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-MINIMATCH-5-1-9",
+      "title": "minimatch",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me)",
+      "actual_included_version": "5.1.9",
+      "observed_upstream_commit": null,
+      "license": "ISC",
+      "urls": {
+        "release": "https://www.npmjs.com/package/minimatch/v/5.1.9"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-MS-2-1-3",
+      "title": "ms",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "2.1.3",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/ms/v/2.1.3"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-MUGGLE-STRING-0-4-1",
+      "title": "muggle-string",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "0.4.1",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/muggle-string/v/0.4.1"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-NANOID-3-3-18",
+      "title": "nanoid",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Andrey Sitnik <andrey@sitnik.ru>",
+      "actual_included_version": "3.3.18",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/nanoid/v/3.3.18"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-OPENAPI-TYPESCRIPT-7-13-0",
+      "title": "openapi-typescript",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Drew Powers",
+      "actual_included_version": "7.13.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/openapi-typescript/v/7.13.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-PARSE-JSON-8-3-0",
+      "title": "parse-json",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Sindre Sorhus",
+      "actual_included_version": "8.3.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/parse-json/v/8.3.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-PATH-BROWSERIFY-1-0-1",
+      "title": "path-browserify",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "James Halliday",
+      "actual_included_version": "1.0.1",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/path-browserify/v/1.0.1"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-PICOCOLORS-1-1-1",
+      "title": "picocolors",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Alexey Raspopov",
+      "actual_included_version": "1.1.1",
+      "observed_upstream_commit": null,
+      "license": "ISC",
+      "urls": {
+        "release": "https://www.npmjs.com/package/picocolors/v/1.1.1"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-PICOMATCH-4-0-7",
+      "title": "picomatch",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Jon Schlinkert (https://github.com/jonschlinkert)",
+      "actual_included_version": "4.0.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/picomatch/v/4.0.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-PLURALIZE-8-0-0",
+      "title": "pluralize",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Blake Embrey",
+      "actual_included_version": "8.0.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/pluralize/v/8.0.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-POSTCSS-8-5-28",
+      "title": "postcss",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Andrey Sitnik <andrey@sitnik.es>",
+      "actual_included_version": "8.5.28",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/postcss/v/8.5.28"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-REQUIRE-FROM-STRING-2-0-2",
+      "title": "require-from-string",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Vsevolod Strukchinsky",
+      "actual_included_version": "2.0.2",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/require-from-string/v/2.0.2"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-1-2-7",
+      "title": "rolldown",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/rolldown/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-SOURCE-MAP-JS-1-2-1",
+      "title": "source-map-js",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Valentin 7rulnik Semirulnik <v7rulnik@gmail.com>",
+      "actual_included_version": "1.2.1",
+      "observed_upstream_commit": null,
+      "license": "BSD-3-Clause",
+      "urls": {
+        "release": "https://www.npmjs.com/package/source-map-js/v/1.2.1"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-SUPPORTS-COLOR-10-2-2",
+      "title": "supports-color",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Sindre Sorhus",
+      "actual_included_version": "10.2.2",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/supports-color/v/10.2.2"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-TINYGLOBBY-0-2-17",
+      "title": "tinyglobby",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Superchupu",
+      "actual_included_version": "0.2.17",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/tinyglobby/v/0.2.17"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-TYPE-FEST-4-41-0",
+      "title": "type-fest",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Sindre Sorhus",
+      "actual_included_version": "4.41.0",
+      "observed_upstream_commit": null,
+      "license": "(MIT OR CC0-1.0)",
+      "urls": {
+        "release": "https://www.npmjs.com/package/type-fest/v/4.41.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-TYPESCRIPT-5-9-3",
+      "title": "typescript",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Microsoft Corp.",
+      "actual_included_version": "5.9.3",
+      "observed_upstream_commit": null,
+      "license": "Apache-2.0",
+      "urls": {
+        "release": "https://www.npmjs.com/package/typescript/v/5.9.3"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-URI-JS-REPLACE-1-0-1",
+      "title": "uri-js-replace",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "https://github.com/andreinwald",
+      "actual_included_version": "1.0.1",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/uri-js-replace/v/1.0.1"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VITE-8-2-2",
+      "title": "vite",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "8.2.2",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/vite/v/8.2.2"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VSCODE-URI-3-2-0",
+      "title": "vscode-uri",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Microsoft",
+      "actual_included_version": "3.2.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/vscode-uri/v/3.2.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VUE-3-5-42",
+      "title": "vue",
+      "kind": "frontend-runtime-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/vue/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-VUE-TSC-3-3-11",
+      "title": "vue-tsc",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "3.3.11",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release": "https://www.npmjs.com/package/vue-tsc/v/3.3.11"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-YAML-AST-PARSER-0-0-43",
+      "title": "yaml-ast-parser",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "0.0.43",
+      "observed_upstream_commit": null,
+      "license": "Apache-2.0",
+      "urls": {
+        "release": "https://www.npmjs.com/package/yaml-ast-parser/v/0.0.43"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-NPM-YARGS-PARSER-21-1-1",
+      "title": "yargs-parser",
+      "kind": "frontend-build-dependency",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Ben Coe <ben@npmjs.com>",
+      "actual_included_version": "21.1.1",
+      "observed_upstream_commit": null,
+      "license": "ISC",
+      "urls": {
+        "release": "https://www.npmjs.com/package/yargs-parser/v/21.1.1"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "development-locked",
+      "evidence": "frontend/package-lock.json with integrity; inventory distinguishes installed optional packages.",
+      "notes": "Unmodified dependency."
+    },
+    {
+      "id": "P02-CPYTHON",
+      "title": "CPython via python-build-standalone",
+      "kind": "development-runtime",
+      "modules": [
+        "P02"
+      ],
+      "authors": "Python Software Foundation and python-build-standalone contributors",
+      "actual_included_version": "CPython 3.11.14, uv-managed Windows x86_64 standalone distribution",
+      "observed_upstream_commit": null,
+      "license": "PSF-2.0 and bundled component terms; runtime distribution audit pending",
+      "urls": {
+        "runtime_builds": "https://github.com/astral-sh/python-build-standalone",
+        "python": "https://www.python.org/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "Installed under project .venv/runtimes with --no-bin --no-registry.",
+      "notes": "Same project-local standalone interpreter build; new .venv/v3-dev environment."
     }
   ]
 }

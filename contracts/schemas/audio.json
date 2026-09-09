@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "channel_roles": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Channel Roles",
+      "type": "array"
+    },
+    "channels": {
+      "exclusiveMinimum": 0,
+      "title": "Channels",
+      "type": "integer"
+    },
+    "origin": {
+      "enum": [
+        "file",
+        "recording",
+        "generated"
+      ],
+      "title": "Origin",
+      "type": "string"
+    },
+    "sample_count": {
+      "maximum": 9007199254740991,
+      "minimum": 0,
+      "title": "Sample Count",
+      "type": "integer"
+    },
+    "sample_rate_hz": {
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991,
+      "title": "Sample Rate Hz",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "sample_rate_hz",
+    "channels",
+    "channel_roles",
+    "sample_count",
+    "origin"
+  ],
+  "title": "Audio",
+  "type": "object"
+}

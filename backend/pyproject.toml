@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools==84.0.0", "wheel==0.48.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ptb-api"
+version = "3.0.0a1"
+description = "Shared local and server API scaffold for PhoneticToolbox"
+requires-python = ">=3.11,<3.12"
+dependencies = ["phonetic-core==3.0.0a1", "fastapi==0.141.1", "pydantic==2.13.5", "uvicorn==0.52.4"]
+
+[project.scripts]
+ptb-api = "ptb_api.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

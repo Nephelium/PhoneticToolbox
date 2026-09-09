@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Integer sample-frame interval [start_sample, end_sample).",
+  "properties": {
+    "end_sample": {
+      "maximum": 9007199254740991,
+      "minimum": 0,
+      "title": "End Sample",
+      "type": "integer"
+    },
+    "sample_rate_hz": {
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991,
+      "title": "Sample Rate Hz",
+      "type": "integer"
+    },
+    "start_sample": {
+      "maximum": 9007199254740991,
+      "minimum": 0,
+      "title": "Start Sample",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "start_sample",
+    "end_sample",
+    "sample_rate_hz"
+  ],
+  "title": "Selection",
+  "type": "object"
+}

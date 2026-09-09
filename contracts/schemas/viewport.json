@@ -1,0 +1,205 @@
+{
+  "$defs": {
+    "Audio": {
+      "additionalProperties": false,
+      "properties": {
+        "channel_roles": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Channel Roles",
+          "type": "array"
+        },
+        "channels": {
+          "exclusiveMinimum": 0,
+          "title": "Channels",
+          "type": "integer"
+        },
+        "origin": {
+          "enum": [
+            "file",
+            "recording",
+            "generated"
+          ],
+          "title": "Origin",
+          "type": "string"
+        },
+        "sample_count": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "title": "Sample Count",
+          "type": "integer"
+        },
+        "sample_rate_hz": {
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "title": "Sample Rate Hz",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "sample_rate_hz",
+        "channels",
+        "channel_roles",
+        "sample_count",
+        "origin"
+      ],
+      "title": "Audio",
+      "type": "object"
+    },
+    "Selection": {
+      "additionalProperties": false,
+      "description": "Integer sample-frame interval [start_sample, end_sample).",
+      "properties": {
+        "end_sample": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "title": "End Sample",
+          "type": "integer"
+        },
+        "sample_rate_hz": {
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "title": "Sample Rate Hz",
+          "type": "integer"
+        },
+        "start_sample": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "title": "Start Sample",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "start_sample",
+        "end_sample",
+        "sample_rate_hz"
+      ],
+      "title": "Selection",
+      "type": "object"
+    },
+    "Track": {
+      "additionalProperties": false,
+      "properties": {
+        "analysis_config_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Analysis Config Hash",
+          "type": "string"
+        },
+        "backend": {
+          "minLength": 1,
+          "title": "Backend",
+          "type": "string"
+        },
+        "parameter_key": {
+          "minLength": 1,
+          "title": "Parameter Key",
+          "type": "string"
+        },
+        "reason": {
+          "items": {
+            "anyOf": [
+              {
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Reason",
+          "type": "array"
+        },
+        "source_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Source Ids",
+          "type": "array"
+        },
+        "times_s": {
+          "items": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "title": "Times S",
+          "type": "array"
+        },
+        "unit": {
+          "description": "Explicit scientific unit, e.g. Hz, dB, s, %, or 1; parameter mapping is audited in P03.",
+          "minLength": 1,
+          "title": "Unit",
+          "type": "string"
+        },
+        "validity": {
+          "items": {
+            "enum": [
+              "valid",
+              "unvoiced",
+              "missing",
+              "failed"
+            ],
+            "type": "string"
+          },
+          "title": "Validity",
+          "type": "array"
+        },
+        "values": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Values",
+          "type": "array"
+        }
+      },
+      "required": [
+        "parameter_key",
+        "backend",
+        "unit",
+        "times_s",
+        "values",
+        "validity",
+        "reason",
+        "analysis_config_hash",
+        "source_ids"
+      ],
+      "title": "Track",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "audio": {
+      "$ref": "#/$defs/Audio"
+    },
+    "selection": {
+      "$ref": "#/$defs/Selection"
+    },
+    "tracks": {
+      "items": {
+        "$ref": "#/$defs/Track"
+      },
+      "title": "Tracks",
+      "type": "array"
+    }
+  },
+  "required": [
+    "audio",
+    "selection",
+    "tracks"
+  ],
+  "title": "Viewport",
+  "type": "object"
+}

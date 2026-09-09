@@ -86,3 +86,13 @@
 - 输入输出：WAV 原始采样率/声道/整数半开区间保持独立于声卡采样率；选区渲染逐样本对照，播放端数字回环单独验证。
 - 选择：保留经过单文件和数字输出验证的 PyQt6 路径。PySide6 实际试验仅完成启动/字体/设备枚举，共用鼠标交互探针未通过；Electron/Tauri 只做官方资料比较，不冒充本机实测。
 - 门槛：PyQt 绑定许可、VTL/IRAPT/WM-PC 与历史未授权材料需要形成一致的发行策略；Mac/Linux 原生构建、设备、干净 Windows 环境和 P03 科学等价性尚未通过。上述未决项不能通过把项目统称 MIT 或原型截图来闭合。
+
+## ADR-013 P02 开发主线、包版本与单一契约源
+- 状态：2026-09-09 采用；井井试用 P01 反馈无问题并同意继续 P02。对 ADR-012 的阶段授权和开发冻结描述作此补充。
+- 决策：冻结 Windows 开发主线为 CPython 3.11.14、Vue 3/TypeScript/Vite、PyQt6/WebEngine；正式环境命名 `.venv/v3-dev`。P01 的来源审查交付为风险识别和处理边界，未解决的再分发许可继续阻断对应发行物，Mac/Linux 原生与设备交给各平台任务，不把这些风险标为通过。
+- 包边界：core 不依赖 Pydantic/HTTP/Qt；后端 Pydantic 模型是 HTTP 与跨进程 JSON 数据唯一手写源，contracts 保存生成快照。desktop 以进程协议调用统一 API，不 import backend；P02 仅提供健康/能力入口及退出验证，P06 再实现任务管理。
+- 科研约束：严格整数采样帧与安全整数上限，区间半开且不越界；轨迹携带有限、严格递增的真实秒数组，缺失为 null 加 validity/reason；跨字段约束由 Pydantic 验证，JSON Schema/TS 本身不能证明这些关系。
+- 版本：release/version.json 是应用包版本生成源，运行时从已安装发行元数据读取；API 版本独立。生成后检查漂移。核心当前无算法，科学依赖待 P03/P08 按实际行为锁入，不能复制整个 v2 环境冒充兼容性。
+- 依赖与来源：新包配置、Python lock、npm lock 与 P02 清单同步；构建/测试依赖与运行依赖分别标记。只登记版本元数据不足以完成 Qt/Chromium 原生发行审查。
+- 官方依据：[Pydantic strict mode](https://docs.pydantic.dev/latest/concepts/strict_mode/)、[openapi-typescript](https://openapi-ts.dev/introduction)。
+- 构建依赖修正：openapi-typescript 7.13.0 的 Redocly 1.34.19 精确依赖 js-yaml 4.3.1，安装审计命中 GHSA-2883-xcg3-v3hh。仅对这条传递依赖覆写至官方补丁 4.3.2，保留上游库其余版本，并重跑契约生成/漂移/类型与构建测试；不使用自动大范围升级。[上游修复公告](https://github.com/advisories/GHSA-2883-xcg3-v3hh)。

@@ -1,0 +1,20 @@
+{
+  "scope": "Unmodified historical snapshots and third-party excerpts; missing relative links remain reported, not claimed repaired. Content checks normalize only Git CRLF/LF conversion; observed_sha256 records original local bytes.",
+  "documents": [
+    {
+      "path": "docs/baseline/v2-README.md",
+      "observed_sha256": "ea1be162d43cc88190f72e524acb3016480444f962aad0b58d714503f5e99a51",
+      "content_sha256_lf": "3735d8676ef1e21c4d39c6616df1a754b329304a58e2d6bf369e60bdfd546fed"
+    },
+    {
+      "path": "docs/plans/2026-09-07-head-vocal-tract-modeling.md",
+      "observed_sha256": "326c34461a0a3d50bfe76475f76597a5fc8e7d5d01255655699391f1fd15da34",
+      "content_sha256_lf": "326c34461a0a3d50bfe76475f76597a5fc8e7d5d01255655699391f1fd15da34"
+    },
+    {
+      "path": "third_party/evidence/SRC-OPENSAUCE/README.md",
+      "observed_sha256": "1dc7398d33c00f5ce60e3eeb0d5700942244b6ffea2476992274e32dc442fd7f",
+      "content_sha256_lf": "1dc7398d33c00f5ce60e3eeb0d5700942244b6ffea2476992274e32dc442fd7f"
+    }
+  ]
+}

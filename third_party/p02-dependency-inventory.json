@@ -1,0 +1,1755 @@
+{
+  "schema_version": 1,
+  "checked_on": "2026-09-09",
+  "platform": "Windows x86_64 CPython 3.11.14",
+  "python": [
+    {
+      "name": "annotated-doc",
+      "version": "0.0.5",
+      "kind": "runtime-dependency",
+      "authors": "=?utf-8?q?Sebasti=C3=A1n_Ram=C3=ADrez?= <tiangolo@gmail.com>",
+      "license_metadata": "MIT",
+      "requires_dist": [],
+      "license_files": [
+        "annotated_doc-0.0.5.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "annotated-types",
+      "version": "0.8.0",
+      "kind": "runtime-dependency",
+      "authors": "Adrian Garcia Badaracco <1755071+adriangb@users.noreply.github.com>, Samuel Colvin <s@muelcolvin.com>, Zac Hatfield-Dodds <zac@zhd.dev>",
+      "license_metadata": "MIT",
+      "requires_dist": [],
+      "license_files": [
+        "annotated_types-0.8.0.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "anyio",
+      "version": "4.15.1",
+      "kind": "runtime-dependency",
+      "authors": "Alex Grönholm <alex.gronholm@nextday.fi>",
+      "license_metadata": "MIT",
+      "requires_dist": [
+        "exceptiongroup>=1.0.2; python_version < \"3.11\"",
+        "idna>=2.8",
+        "typing_extensions>=4.16.0; python_version < \"3.15\"",
+        "trio>=0.32.0; extra == \"trio\""
+      ],
+      "license_files": [
+        "anyio-4.15.1.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "build",
+      "version": "1.6.0",
+      "kind": "development-dependency",
+      "authors": "Filipe Laíns <lains@riseup.net>, Bernát Gábor <gaborjbernat@gmail.com>, layday <layday@protonmail.com>, Henry Schreiner <henryschreineriii@gmail.com>",
+      "license_metadata": "MIT",
+      "requires_dist": [
+        "packaging >= 24.0",
+        "pyproject_hooks",
+        "colorama; os_name == \"nt\"",
+        "importlib-metadata >= 4.6; python_full_version < \"3.10.2\"",
+        "tomli >= 1.1.0; python_version < \"3.11\"",
+        "keyring ; extra == \"keyring\"",
+        "uv >= 0.1.18 ; extra == \"uv\"",
+        "virtualenv >= 20.36.1 ; extra == \"virtualenv\""
+      ],
+      "license_files": [
+        "build-1.6.0.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "certifi",
+      "version": "2026.7.22",
+      "kind": "development-dependency",
+      "authors": "Kenneth Reitz",
+      "license_metadata": "MPL-2.0",
+      "requires_dist": [],
+      "license_files": [
+        "certifi-2026.7.22.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "click",
+      "version": "8.5.0",
+      "kind": "runtime-dependency",
+      "authors": "unknown",
+      "license_metadata": "BSD-3-Clause",
+      "requires_dist": [],
+      "license_files": [
+        "click-8.5.0.dist-info/licenses/LICENSE.txt"
+      ]
+    },
+    {
+      "name": "colorama",
+      "version": "0.4.6",
+      "kind": "runtime-dependency",
+      "authors": "Jonathan Hartley <tartley@tartley.com>",
+      "license_metadata": "unknown",
+      "requires_dist": [],
+      "license_files": [
+        "colorama-0.4.6.dist-info/licenses/LICENSE.txt"
+      ]
+    },
+    {
+      "name": "fastapi",
+      "version": "0.141.1",
+      "kind": "runtime-dependency",
+      "authors": "=?utf-8?q?Sebasti=C3=A1n_Ram=C3=ADrez?= <tiangolo@gmail.com>",
+      "license_metadata": "MIT",
+      "requires_dist": [
+        "starlette>=0.46.0",
+        "pydantic>=2.9.0",
+        "typing-extensions>=4.8.0",
+        "typing-inspection>=0.4.2",
+        "annotated-doc>=0.0.2",
+        "fastapi-cli[standard]>=0.0.32; extra == \"standard\"",
+        "fastar>=0.9.0; extra == \"standard\"",
+        "httpx<1.0.0,>=0.23.0; extra == \"standard\"",
+        "jinja2>=3.1.5; extra == \"standard\"",
+        "python-multipart>=0.0.18; extra == \"standard\"",
+        "email-validator>=2.0.0; extra == \"standard\"",
+        "uvicorn[standard]>=0.12.0; extra == \"standard\"",
+        "pydantic-settings>=2.0.0; extra == \"standard\"",
+        "pydantic-extra-types>=2.0.0; extra == \"standard\"",
+        "fastapi-cli[standard-no-fastapi-cloud-cli]>=0.0.32; extra == \"standard-no-fastapi-cloud-cli\"",
+        "httpx<1.0.0,>=0.23.0; extra == \"standard-no-fastapi-cloud-cli\"",
+        "jinja2>=3.1.5; extra == \"standard-no-fastapi-cloud-cli\"",
+        "python-multipart>=0.0.18; extra == \"standard-no-fastapi-cloud-cli\"",
+        "email-validator>=2.0.0; extra == \"standard-no-fastapi-cloud-cli\"",
+        "uvicorn[standard]>=0.12.0; extra == \"standard-no-fastapi-cloud-cli\"",
+        "pydantic-settings>=2.0.0; extra == \"standard-no-fastapi-cloud-cli\"",
+        "pydantic-extra-types>=2.0.0; extra == \"standard-no-fastapi-cloud-cli\"",
+        "fastapi-cli[standard]>=0.0.32; extra == \"all\"",
+        "httpx<1.0.0,>=0.23.0; extra == \"all\"",
+        "jinja2>=3.1.5; extra == \"all\"",
+        "python-multipart>=0.0.18; extra == \"all\"",
+        "itsdangerous>=1.1.0; extra == \"all\"",
+        "pyyaml>=5.3.1; extra == \"all\"",
+        "email-validator>=2.0.0; extra == \"all\"",
+        "uvicorn[standard]>=0.12.0; extra == \"all\"",
+        "pydantic-settings>=2.0.0; extra == \"all\"",
+        "pydantic-extra-types>=2.0.0; extra == \"all\""
+      ],
+      "license_files": [
+        "fastapi-0.141.1.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "h11",
+      "version": "0.16.0",
+      "kind": "runtime-dependency",
+      "authors": "Nathaniel J. Smith",
+      "license_metadata": "MIT",
+      "requires_dist": [],
+      "license_files": [
+        "h11-0.16.0.dist-info/licenses/LICENSE.txt"
+      ]
+    },
+    {
+      "name": "httpcore",
+      "version": "1.0.9",
+      "kind": "development-dependency",
+      "authors": "Tom Christie <tom@tomchristie.com>",
+      "license_metadata": "BSD-3-Clause",
+      "requires_dist": [
+        "certifi",
+        "h11>=0.16",
+        "anyio<5.0,>=4.0; extra == 'asyncio'",
+        "h2<5,>=3; extra == 'http2'",
+        "socksio==1.*; extra == 'socks'",
+        "trio<1.0,>=0.22.0; extra == 'trio'"
+      ],
+      "license_files": [
+        "httpcore-1.0.9.dist-info/licenses/LICENSE.md"
+      ]
+    },
+    {
+      "name": "httpx",
+      "version": "0.28.1",
+      "kind": "development-dependency",
+      "authors": "Tom Christie <tom@tomchristie.com>",
+      "license_metadata": "BSD-3-Clause",
+      "requires_dist": [
+        "anyio",
+        "certifi",
+        "httpcore==1.*",
+        "idna",
+        "brotli; (platform_python_implementation == 'CPython') and extra == 'brotli'",
+        "brotlicffi; (platform_python_implementation != 'CPython') and extra == 'brotli'",
+        "click==8.*; extra == 'cli'",
+        "pygments==2.*; extra == 'cli'",
+        "rich<14,>=10; extra == 'cli'",
+        "h2<5,>=3; extra == 'http2'",
+        "socksio==1.*; extra == 'socks'",
+        "zstandard>=0.18.0; extra == 'zstd'"
+      ],
+      "license_files": [
+        "httpx-0.28.1.dist-info/licenses/LICENSE.md"
+      ]
+    },
+    {
+      "name": "idna",
+      "version": "3.19",
+      "kind": "runtime-dependency",
+      "authors": "Kim Davies <kim+pypi@gumleaf.org>",
+      "license_metadata": "BSD-3-Clause",
+      "requires_dist": [
+        "ruff >= 0.16.0 ; extra == \"all\"",
+        "mypy >= 1.11.2 ; extra == \"all\"",
+        "ty >= 0.0.37 ; extra == \"all\"",
+        "pytest >= 8.3.2 ; extra == \"all\"",
+        "hypothesis >= 6.141.1 ; extra == \"all\"",
+        "coverage >= 7.10.0 ; extra == \"all\""
+      ],
+      "license_files": [
+        "idna-3.19.dist-info/licenses/LICENSE.md"
+      ]
+    },
+    {
+      "name": "iniconfig",
+      "version": "2.3.0",
+      "kind": "development-dependency",
+      "authors": "Ronny Pfannschmidt <opensource@ronnypfannschmidt.de>, Holger Krekel <holger.krekel@gmail.com>",
+      "license_metadata": "MIT",
+      "requires_dist": [],
+      "license_files": [
+        "iniconfig-2.3.0.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "packaging",
+      "version": "26.3",
+      "kind": "development-dependency",
+      "authors": "Donald Stufft <donald@stufft.io>",
+      "license_metadata": "Apache-2.0 OR BSD-2-Clause",
+      "requires_dist": [],
+      "license_files": [
+        "packaging-26.3.dist-info/licenses/LICENSE",
+        "packaging-26.3.dist-info/licenses/LICENSE.APACHE",
+        "packaging-26.3.dist-info/licenses/LICENSE.BSD",
+        "packaging/licenses/__init__.py",
+        "packaging/licenses/_spdx.py"
+      ]
+    },
+    {
+      "name": "pluggy",
+      "version": "1.6.0",
+      "kind": "development-dependency",
+      "authors": "Holger Krekel <holger@merlinux.eu>",
+      "license_metadata": "MIT",
+      "requires_dist": [
+        "pre-commit; extra == \"dev\"",
+        "tox; extra == \"dev\"",
+        "pytest; extra == \"testing\"",
+        "pytest-benchmark; extra == \"testing\"",
+        "coverage; extra == \"testing\""
+      ],
+      "license_files": [
+        "pluggy-1.6.0.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "pydantic",
+      "version": "2.13.5",
+      "kind": "runtime-dependency",
+      "authors": "Samuel Colvin <s@muelcolvin.com>, Eric Jolibois <em.jolibois@gmail.com>, Hasan Ramezani <hasan.r67@gmail.com>, Adrian Garcia Badaracco <1755071+adriangb@users.noreply.github.com>, Terrence Dorsey <terry@pydantic.dev>, David Montague <david@pydantic.dev>, Serge Matveenko <lig@countzero.co>, Marcelo Trylesinski <marcelotryle@gmail.com>, Sydney Runkle <sydneymarierunkle@gmail.com>, David Hewitt <mail@davidhewitt.dev>, Alex Hall <alex.mojaki@gmail.com>, Victorien Plot <contact@vctrn.dev>",
+      "license_metadata": "MIT",
+      "requires_dist": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.46.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2",
+        "email-validator>=2.0.0; extra == 'email'",
+        "tzdata; (python_version >= '3.9' and platform_system == 'Windows') and extra == 'timezone'"
+      ],
+      "license_files": [
+        "pydantic-2.13.5.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "pydantic_core",
+      "version": "2.46.5",
+      "kind": "runtime-dependency",
+      "authors": "Samuel Colvin <s@muelcolvin.com>, Adrian Garcia Badaracco <1755071+adriangb@users.noreply.github.com>, David Montague <david@pydantic.dev>, David Hewitt <mail@davidhewitt.dev>, Sydney Runkle <sydneymarierunkle@gmail.com>, Victorien Plot <contact@vctrn.dev>",
+      "license_metadata": "MIT",
+      "requires_dist": [
+        "typing-extensions>=4.14.1"
+      ],
+      "license_files": [
+        "pydantic_core-2.46.5.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "Pygments",
+      "version": "2.21.0",
+      "kind": "development-dependency",
+      "authors": "Georg Brandl <georg@python.org>",
+      "license_metadata": "BSD-2-Clause",
+      "requires_dist": [
+        "colorama>=0.4.6; extra == 'windows-terminal'"
+      ],
+      "license_files": [
+        "pygments-2.21.0.dist-info/licenses/AUTHORS",
+        "pygments-2.21.0.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "pyproject_hooks",
+      "version": "1.2.0",
+      "kind": "development-dependency",
+      "authors": "Thomas Kluyver <thomas@kluyver.me.uk>",
+      "license_metadata": "unknown",
+      "requires_dist": [],
+      "license_files": [
+        "pyproject_hooks-1.2.0.dist-info/LICENSE"
+      ]
+    },
+    {
+      "name": "PyQt6",
+      "version": "6.11.0",
+      "kind": "runtime-dependency",
+      "authors": "Riverbank Computing Limited <info@riverbankcomputing.com>",
+      "license_metadata": "GPL-3.0-only",
+      "requires_dist": [
+        "PyQt6-sip (>=13.8, <14)",
+        "PyQt6-Qt6 (>=6.11.0, <6.12.0)"
+      ],
+      "license_files": [
+        "pyqt6-6.11.0.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "PyQt6-Qt6",
+      "version": "6.11.2",
+      "kind": "runtime-dependency",
+      "authors": "Riverbank Computing Limited",
+      "license_metadata": "LGPL v3",
+      "requires_dist": [],
+      "license_files": [
+        "pyqt6_qt6-6.11.2.dist-info/LICENSE"
+      ]
+    },
+    {
+      "name": "PyQt6-WebEngine",
+      "version": "6.11.0",
+      "kind": "runtime-dependency",
+      "authors": "Riverbank Computing Limited <info@riverbankcomputing.com>",
+      "license_metadata": "GPL-3.0-only",
+      "requires_dist": [
+        "PyQt6-sip (>=13.8, <14)",
+        "PyQt6-WebEngine-Qt6 (>=6.11.0, <6.12.0)",
+        "PyQt6 (>=6.2.0)"
+      ],
+      "license_files": [
+        "pyqt6_webengine-6.11.0.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "PyQt6-WebEngine-Qt6",
+      "version": "6.11.2",
+      "kind": "runtime-dependency",
+      "authors": "Riverbank Computing Limited",
+      "license_metadata": "LGPL v3",
+      "requires_dist": [],
+      "license_files": [
+        "pyqt6_webengine_qt6-6.11.2.dist-info/LICENSE"
+      ]
+    },
+    {
+      "name": "PyQt6_sip",
+      "version": "13.12.0",
+      "kind": "runtime-dependency",
+      "authors": "Phil Thompson",
+      "license_metadata": "BSD-2-Clause",
+      "requires_dist": [],
+      "license_files": [
+        "pyqt6_sip-13.12.0.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "pytest",
+      "version": "9.1.1",
+      "kind": "development-dependency",
+      "authors": "Brianna Laugher, Bruno Oliveira, Floris Bruynooghe, Freya Bruhin, Holger Krekel, Others (See AUTHORS), Ronny Pfannschmidt",
+      "license_metadata": "MIT",
+      "requires_dist": [
+        "colorama>=0.4; sys_platform == \"win32\"",
+        "exceptiongroup>=1; python_version < \"3.11\"",
+        "iniconfig>=1.0.1",
+        "packaging>=22",
+        "pluggy<2,>=1.5",
+        "pygments>=2.7.2",
+        "tomli>=1; python_version < \"3.11\"",
+        "argcomplete; extra == \"dev\"",
+        "attrs>=19.2; extra == \"dev\"",
+        "hypothesis>=3.56; extra == \"dev\"",
+        "mock; extra == \"dev\"",
+        "requests; extra == \"dev\"",
+        "setuptools; extra == \"dev\"",
+        "xmlschema; extra == \"dev\""
+      ],
+      "license_files": [
+        "pytest-9.1.1.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "setuptools",
+      "version": "84.0.0",
+      "kind": "development-dependency",
+      "authors": "Python Packaging Authority <distutils-sig@python.org>",
+      "license_metadata": "MIT",
+      "requires_dist": [
+        "pytest!=8.1.*,>=6; extra == \"test\"",
+        "virtualenv>=13.0.0; extra == \"test\"",
+        "wheel>=0.44.0; extra == \"test\"",
+        "pip>=19.1; extra == \"test\"",
+        "packaging>=24.2; extra == \"test\"",
+        "jaraco.envs>=2.2; extra == \"test\"",
+        "pytest-xdist>=3; extra == \"test\"",
+        "jaraco.path>=3.7.2; extra == \"test\"",
+        "build[virtualenv]>=1.0.3; extra == \"test\"",
+        "filelock>=3.4.0; extra == \"test\"",
+        "ini2toml[lite]>=0.14; extra == \"test\"",
+        "tomli-w>=1.0.0; extra == \"test\"",
+        "pytest-timeout; extra == \"test\"",
+        "pytest-perf; sys_platform != \"cygwin\" and extra == \"test\"",
+        "jaraco.develop>=7.21; (python_version >= \"3.9\" and sys_platform != \"cygwin\") and extra == \"test\"",
+        "pytest-home>=0.5; extra == \"test\"",
+        "pytest-subprocess; extra == \"test\"",
+        "pyproject-hooks!=1.1; extra == \"test\"",
+        "jaraco.test>=5.5; extra == \"test\"",
+        "sphinx>=3.5; extra == \"doc\"",
+        "jaraco.packaging>=9.3; extra == \"doc\"",
+        "rst.linker>=1.9; extra == \"doc\"",
+        "furo; extra == \"doc\"",
+        "sphinx-lint; extra == \"doc\"",
+        "jaraco.tidelift>=1.4; extra == \"doc\"",
+        "pygments-github-lexers==0.0.5; extra == \"doc\"",
+        "sphinx-favicon; extra == \"doc\"",
+        "sphinx-inline-tabs; extra == \"doc\"",
+        "sphinx-reredirects; extra == \"doc\"",
+        "sphinxcontrib-towncrier; extra == \"doc\"",
+        "sphinx-notfound-page<2,>=1; extra == \"doc\"",
+        "pyproject-hooks!=1.1; extra == \"doc\"",
+        "towncrier<24.7; extra == \"doc\"",
+        "packaging>=24.2; extra == \"core\"",
+        "more_itertools>=8.8; extra == \"core\"",
+        "jaraco.text>=3.7; extra == \"core\"",
+        "importlib_metadata>=6; python_version < \"3.10\" and extra == \"core\"",
+        "tomli>=2.0.1; python_version < \"3.11\" and extra == \"core\"",
+        "wheel>=0.43.0; extra == \"core\"",
+        "jaraco.functools>=4; extra == \"core\"",
+        "more_itertools; extra == \"core\"",
+        "pytest-checkdocs>=2.14; extra == \"check\"",
+        "pytest-ruff>=0.2.1; sys_platform != \"cygwin\" and extra == \"check\"",
+        "ruff>=0.13.0; sys_platform != \"cygwin\" and extra == \"check\"",
+        "pytest-cov; extra == \"cover\"",
+        "pytest-enabler>=3.4; extra == \"enabler\"",
+        "pytest-mypy>=1.0.1; platform_python_implementation != \"PyPy\" and extra == \"type\"",
+        "mypy==1.18.*; extra == \"type\"",
+        "importlib_metadata>=7.0.2; python_version < \"3.10\" and extra == \"type\"",
+        "jaraco.develop>=7.21; sys_platform != \"cygwin\" and extra == \"type\""
+      ],
+      "license_files": [
+        "setuptools-84.0.0.dist-info/licenses/LICENSE",
+        "setuptools/_vendor/autocommand-2.2.2.dist-info/LICENSE",
+        "setuptools/_vendor/backports.tarfile-1.2.0.dist-info/LICENSE",
+        "setuptools/_vendor/importlib_metadata-8.7.1.dist-info/licenses/LICENSE",
+        "setuptools/_vendor/jaraco.text-4.0.0.dist-info/LICENSE",
+        "setuptools/_vendor/jaraco_context-6.1.0.dist-info/licenses/LICENSE",
+        "setuptools/_vendor/jaraco_functools-4.4.0.dist-info/licenses/LICENSE",
+        "setuptools/_vendor/more_itertools-10.8.0.dist-info/licenses/LICENSE",
+        "setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE",
+        "setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE.APACHE",
+        "setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE.BSD",
+        "setuptools/_vendor/packaging/licenses/__init__.py",
+        "setuptools/_vendor/packaging/licenses/_spdx.py",
+        "setuptools/_vendor/platformdirs-4.4.0.dist-info/licenses/LICENSE",
+        "setuptools/_vendor/tomli-2.4.0.dist-info/licenses/LICENSE",
+        "setuptools/_vendor/wheel-0.46.3.dist-info/licenses/LICENSE.txt",
+        "setuptools/_vendor/zipp-3.23.0.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "starlette",
+      "version": "1.6.0",
+      "kind": "runtime-dependency",
+      "authors": "Tom Christie <tom@tomchristie.com>",
+      "license_metadata": "BSD-3-Clause",
+      "requires_dist": [
+        "anyio<5,>=3.6.2",
+        "typing-extensions>=4.10.0; python_version < '3.13'",
+        "httpx2>=2.0.0; extra == 'full'",
+        "httpx<0.29.0,>=0.27.0; extra == 'full'",
+        "itsdangerous; extra == 'full'",
+        "jinja2; extra == 'full'",
+        "python-multipart>=0.0.18; extra == 'full'",
+        "pyyaml; extra == 'full'"
+      ],
+      "license_files": [
+        "starlette-1.6.0.dist-info/licenses/LICENSE.md"
+      ]
+    },
+    {
+      "name": "typing-inspection",
+      "version": "0.4.4",
+      "kind": "runtime-dependency",
+      "authors": "Victorien Plot <contact@vctrn.dev>",
+      "license_metadata": "MIT",
+      "requires_dist": [
+        "typing-extensions>=4.15.0"
+      ],
+      "license_files": [
+        "typing_inspection-0.4.4.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.16.0",
+      "kind": "runtime-dependency",
+      "authors": "\"Guido van Rossum, Jukka Lehtosalo, Łukasz Langa, Michael Lee\" <levkivskyi@gmail.com>",
+      "license_metadata": "PSF-2.0",
+      "requires_dist": [],
+      "license_files": [
+        "typing_extensions-4.16.0.dist-info/licenses/LICENSE"
+      ]
+    },
+    {
+      "name": "uvicorn",
+      "version": "0.52.4",
+      "kind": "runtime-dependency",
+      "authors": "Tom Christie <tom@tomchristie.com>",
+      "license_metadata": "BSD-3-Clause",
+      "requires_dist": [
+        "click>=7.0",
+        "h11>=0.8",
+        "typing-extensions>=4.0; python_version < '3.11'",
+        "httptools>=0.8.0; extra == 'standard'",
+        "python-dotenv>=0.13; extra == 'standard'",
+        "pyyaml>=5.1; extra == 'standard'",
+        "uvloop>=0.15.1; (sys_platform != 'win32' and (sys_platform != 'cygwin' and platform_python_implementation != 'PyPy')) and extra == 'standard'",
+        "watchfiles>=0.20; extra == 'standard'",
+        "websockets>=13.0; extra == 'standard'"
+      ],
+      "license_files": [
+        "uvicorn-0.52.4.dist-info/licenses/LICENSE.md"
+      ]
+    },
+    {
+      "name": "wheel",
+      "version": "0.48.0",
+      "kind": "development-dependency",
+      "authors": "Daniel Holth <dholth@fastmail.fm>",
+      "license_metadata": "MIT",
+      "requires_dist": [
+        "packaging >= 24.0"
+      ],
+      "license_files": [
+        "wheel-0.48.0.dist-info/licenses/LICENSE.txt"
+      ]
+    }
+  ],
+  "npm": [
+    {
+      "name": "@babel/code-frame",
+      "version": "7.29.7",
+      "location": "node_modules/@babel/code-frame",
+      "license": "MIT",
+      "integrity": "sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==",
+      "resolved": "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.29.7.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "The Babel Team (https://babel.dev/team)"
+    },
+    {
+      "name": "@babel/helper-string-parser",
+      "version": "7.29.7",
+      "location": "node_modules/@babel/helper-string-parser",
+      "license": "MIT",
+      "integrity": "sha512-Pb5ijPrZ89GDH8223L4UP8i6QApWxs04RbPQJTeWDV0/keR2E36MeKnyr6LYmUUvqRRI+Iv87SuF1W6ErINzYw==",
+      "resolved": "https://registry.npmjs.org/@babel/helper-string-parser/-/helper-string-parser-7.29.7.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "The Babel Team (https://babel.dev/team)"
+    },
+    {
+      "name": "@babel/helper-validator-identifier",
+      "version": "7.29.7",
+      "location": "node_modules/@babel/helper-validator-identifier",
+      "license": "MIT",
+      "integrity": "sha512-qehxGkRj55h/ff8EMaJ+cYhyaKlHIxqYDn682wQD7RNp9UujOQsHog2uS0r2vzr4pW+sXf90NeeayjcNaX3fFg==",
+      "resolved": "https://registry.npmjs.org/@babel/helper-validator-identifier/-/helper-validator-identifier-7.29.7.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "The Babel Team (https://babel.dev/team)"
+    },
+    {
+      "name": "@babel/parser",
+      "version": "7.29.8",
+      "location": "node_modules/@babel/parser",
+      "license": "MIT",
+      "integrity": "sha512-E8lTAYNB1KW+FH+VGJuZM1ioAx2E6oVlvQFRrf5P8ZZmsiJXYAD9vTFV7yyEURNzgh1dFqMZuO6tUwcARbqFCA==",
+      "resolved": "https://registry.npmjs.org/@babel/parser/-/parser-7.29.8.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "The Babel Team (https://babel.dev/team)"
+    },
+    {
+      "name": "@babel/types",
+      "version": "7.29.8",
+      "location": "node_modules/@babel/types",
+      "license": "MIT",
+      "integrity": "sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==",
+      "resolved": "https://registry.npmjs.org/@babel/types/-/types-7.29.8.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "The Babel Team (https://babel.dev/team)"
+    },
+    {
+      "name": "@jridgewell/sourcemap-codec",
+      "version": "1.6.0",
+      "location": "node_modules/@jridgewell/sourcemap-codec",
+      "license": "MIT",
+      "integrity": "sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw==",
+      "resolved": "https://registry.npmjs.org/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.6.0.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Justin Ridgewell <justin@ridgewell.name>"
+    },
+    {
+      "name": "@oxc-project/types",
+      "version": "0.148.0",
+      "location": "node_modules/@oxc-project/types",
+      "license": "MIT",
+      "integrity": "sha512-Nm4s/jB+4FpFsPhWGEC4h7rzksesmtnMXomo6rCMcg/b8zLQuOziRgkCS1fxDCXOlJB/6Q8oABOZ/OP6RIPj9A==",
+      "resolved": "https://registry.npmjs.org/@oxc-project/types/-/types-0.148.0.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Boshen and oxc contributors"
+    },
+    {
+      "name": "@redocly/ajv",
+      "version": "8.11.2",
+      "location": "node_modules/@redocly/ajv",
+      "license": "MIT",
+      "integrity": "sha512-io1JpnwtIcvojV7QKDUSIuMN/ikdOUd1ReEnUnMKGfDVridQZ31J0MmIuqwuRjWDZfmvr+Q0MqCcfHM2gTivOg==",
+      "resolved": "https://registry.npmjs.org/@redocly/ajv/-/ajv-8.11.2.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Evgeny Poberezkin"
+    },
+    {
+      "name": "@redocly/config",
+      "version": "0.22.0",
+      "location": "node_modules/@redocly/config",
+      "license": "MIT",
+      "integrity": "sha512-gAy93Ddo01Z3bHuVdPWfCwzgfaYgMdaZPcfL7JZ7hWJoK9V0lXDbigTWkhiPFAaLWzbOJ+kbUQG1+XwIm0KRGQ==",
+      "resolved": "https://registry.npmjs.org/@redocly/config/-/config-0.22.0.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@redocly/openapi-core",
+      "version": "1.34.19",
+      "location": "node_modules/@redocly/openapi-core",
+      "license": "MIT",
+      "integrity": "sha512-o/0VgsBXgwcY1lyeqcVtSGdTQAPnVggo0fbFVPlxl5XVDKUcVH0OLRqt3CbkwByT5FU305E0iE0O7MzThjDblw==",
+      "resolved": "https://registry.npmjs.org/@redocly/openapi-core/-/openapi-core-1.34.19.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@rolldown/binding-android-arm-eabi",
+      "version": "1.2.7",
+      "location": "node_modules/@rolldown/binding-android-arm-eabi",
+      "license": "MIT",
+      "integrity": "sha512-EypzgnYCwyVY4NDHKzGmNJT5b+XaQEBniHxsMdeIQLB/tcCzZnhqrzHpZFbX9iaxx+5RiB8caATBtfvZP7zVxQ==",
+      "resolved": "https://registry.npmjs.org/@rolldown/binding-android-arm-eabi/-/binding-android-arm-eabi-1.2.7.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@rolldown/binding-android-arm64",
+      "version": "1.2.7",
+      "location": "node_modules/@rolldown/binding-android-arm64",
+      "license": "MIT",
+      "integrity": "sha512-l17HE9EweWaqJZhuUuNBN/FzM62xw+DECVnJyvMsxn8vJFAGLy5QfLDoYAcronkAN8VxKZHezDpulHDPx95vFw==",
+      "resolved": "https://registry.npmjs.org/@rolldown/binding-android-arm64/-/binding-android-arm64-1.2.7.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@rolldown/binding-darwin-arm64",
+      "version": "1.2.7",
+      "location": "node_modules/@rolldown/binding-darwin-arm64",
+      "license": "MIT",
+      "integrity": "sha512-8ED8ELFvHXc6OCETIn4gXObPiaR6bckM/ipXtbzlPVDRMBfEGjCKgO90F9YtfdpDatVx/ZQw7aZ1vUMf/+T3Mw==",
+      "resolved": "https://registry.npmjs.org/@rolldown/binding-darwin-arm64/-/binding-darwin-arm64-1.2.7.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@rolldown/binding-darwin-x64",
+      "version": "1.2.7",
+      "location": "node_modules/@rolldown/binding-darwin-x64",
+      "license": "MIT",
+      "integrity": "sha512-/WPripjtiAIZ2tWY7ddijORT0Ujg87wxWW/qcoFVCKAWVDPhtY0xr7Dj0M3GyNGz60jGwTElhro/mkF9dT7dDQ==",
+      "resolved": "https://registry.npmjs.org/@rolldown/binding-darwin-x64/-/binding-darwin-x64-1.2.7.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@rolldown/binding-freebsd-x64",
+      "version": "1.2.7",
+      "location": "node_modules/@rolldown/binding-freebsd-x64",
+      "license": "MIT",
+      "integrity": "sha512-14DI4NcqpvbICxSnGLx3PmtDaWqRP/KGSGb6C+JLLVPeZRl6dKdHba3pGsqT3vpdTqhEYIPG0MMQ8c0xYqoJxA==",
+      "resolved": "https://registry.npmjs.org/@rolldown/binding-freebsd-x64/-/binding-freebsd-x64-1.2.7.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@rolldown/binding-linux-arm-gnueabihf",
+      "version": "1.2.7",
+      "location": "node_modules/@rolldown/binding-linux-arm-gnueabihf",
+      "license": "MIT",
+      "integrity": "sha512-bxrWIRvHWQvbJwi+VIie/kDJmQxcNE6xxWwZdqF/ExVAigtHkv54WTLQPb+QsZdnFy18fg7JPfWGL0RH6vwIlQ==",
+      "resolved": "https://registry.npmjs.org/@rolldown/binding-linux-arm-gnueabihf/-/binding-linux-arm-gnueabihf-1.2.7.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@rolldown/binding-linux-arm64-gnu",
+      "version": "1.2.7",
+      "location": "node_modules/@rolldown/binding-linux-arm64-gnu",
+      "license": "MIT",
+      "integrity": "sha512-toOY2BChBZyuxU7OYX6Tn389di4IzAqPTycVcci0O7FSfBqzRB3RZn+K5Is6ANf4tmgRd/K1yZTsNTXbkXsnLg==",
+      "resolved": "https://registry.npmjs.org/@rolldown/binding-linux-arm64-gnu/-/binding-linux-arm64-gnu-1.2.7.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@rolldown/binding-linux-arm64-musl",
+      "version": "1.2.7",
+      "location": "node_modules/@rolldown/binding-linux-arm64-musl",
+      "license": "MIT",
+      "integrity": "sha512-lAIXTH/aiLRLxsTgQvfhjo4K1ydWIp00+V0voOr9beb/9ZmkUFrSIb03dXNFRgMNvkE6oGsF10ioQ6UsI+vS5Q==",
+      "resolved": "https://registry.npmjs.org/@rolldown/binding-linux-arm64-musl/-/binding-linux-arm64-musl-1.2.7.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@rolldown/binding-linux-ppc64-gnu",
+      "version": "1.2.7",
+      "location": "node_modules/@rolldown/binding-linux-ppc64-gnu",
+      "license": "MIT",
+      "integrity": "sha512-kdnwS28Pkenp/mZMRwjXXXwxQ7pIsm+bF919LUK93BOyhcLsrVKdP2p9fxpiPNPAbNuch8ypQt0pm2P2LYCAGg==",
+      "resolved": "https://registry.npmjs.org/@rolldown/binding-linux-ppc64-gnu/-/binding-linux-ppc64-gnu-1.2.7.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@rolldown/binding-linux-s390x-gnu",
+      "version": "1.2.7",
+      "location": "node_modules/@rolldown/binding-linux-s390x-gnu",
+      "license": "MIT",
+      "integrity": "sha512-516OdsyLdr5E65paF3yBF55t8mfm9+gmtCsK3xI7XKXIT7EfRlHhxL8K/NR6Hu8BWSgF5+1w74lTL0+nxcc8Qw==",
+      "resolved": "https://registry.npmjs.org/@rolldown/binding-linux-s390x-gnu/-/binding-linux-s390x-gnu-1.2.7.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@rolldown/binding-linux-x64-gnu",
+      "version": "1.2.7",
+      "location": "node_modules/@rolldown/binding-linux-x64-gnu",
+      "license": "MIT",
+      "integrity": "sha512-r8/z8n7GFaYRln3xmP1Cxy0HH/HLM0uBUPkEuSVEfKGDA89M0FsZRZJRSwe/tJjRx+fpH/gjorfhB8tmEbSFLA==",
+      "resolved": "https://registry.npmjs.org/@rolldown/binding-linux-x64-gnu/-/binding-linux-x64-gnu-1.2.7.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@rolldown/binding-linux-x64-musl",
+      "version": "1.2.7",
+      "location": "node_modules/@rolldown/binding-linux-x64-musl",
+      "license": "MIT",
+      "integrity": "sha512-pAsE8iiDxUg1xBqdhrTfg45AVDVpirjz00sblEYClGNNcMnDb+e8beQgqIAw6LvauX/APvgxUnwrgun/YYGBhw==",
+      "resolved": "https://registry.npmjs.org/@rolldown/binding-linux-x64-musl/-/binding-linux-x64-musl-1.2.7.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@rolldown/binding-openharmony-arm64",
+      "version": "1.2.7",
+      "location": "node_modules/@rolldown/binding-openharmony-arm64",
+      "license": "MIT",
+      "integrity": "sha512-lTcIYmmnQQA8Or/2DatS6oSqcdLHvendjS+zLu+FwgToynWMRSmQdpM65fTANJgIS4mjbMOo5KT2lnT9SAb96w==",
+      "resolved": "https://registry.npmjs.org/@rolldown/binding-openharmony-arm64/-/binding-openharmony-arm64-1.2.7.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@rolldown/binding-win32-arm64-msvc",
+      "version": "1.2.7",
+      "location": "node_modules/@rolldown/binding-win32-arm64-msvc",
+      "license": "MIT",
+      "integrity": "sha512-e3Gu3WxbNk/UqQhxqU7YIYO+9ZBvWNz3U+h/qRFosscMFzdRPbXYSaSWgSnklv2fz1TgzBTcti2z35c/7irsHw==",
+      "resolved": "https://registry.npmjs.org/@rolldown/binding-win32-arm64-msvc/-/binding-win32-arm64-msvc-1.2.7.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@rolldown/binding-win32-x64-msvc",
+      "version": "1.2.7",
+      "location": "node_modules/@rolldown/binding-win32-x64-msvc",
+      "license": "MIT",
+      "integrity": "sha512-W/jg5qoRSqjsEv0+dZi4e687mcHqmVuU0P4fK6qS/xjetW2Gmc1W8j//z5nAeNcC8Ttm0hV46IjcYeuVwYhuiw==",
+      "resolved": "https://registry.npmjs.org/@rolldown/binding-win32-x64-msvc/-/binding-win32-x64-msvc-1.2.7.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@rolldown/pluginutils",
+      "version": "1.0.1",
+      "location": "node_modules/@rolldown/pluginutils",
+      "license": "MIT",
+      "integrity": "sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==",
+      "resolved": "https://registry.npmjs.org/@rolldown/pluginutils/-/pluginutils-1.0.1.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@vitejs/plugin-vue",
+      "version": "6.0.8",
+      "location": "node_modules/@vitejs/plugin-vue",
+      "license": "MIT",
+      "integrity": "sha512-0ZjgOg7oO6farnNGup7yvoM/YXZV84OZxHAwtflItNa/6zzQyVb5LNxyea3FEKEX2XlagIKzrlH7wwxkKgtiew==",
+      "resolved": "https://registry.npmjs.org/@vitejs/plugin-vue/-/plugin-vue-6.0.8.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Evan You"
+    },
+    {
+      "name": "@volar/language-core",
+      "version": "2.4.28",
+      "location": "node_modules/@volar/language-core",
+      "license": "MIT",
+      "integrity": "sha512-w4qhIJ8ZSitgLAkVay6AbcnC7gP3glYM3fYwKV3srj8m494E3xtrCv6E+bWviiK/8hs6e6t1ij1s2Endql7vzQ==",
+      "resolved": "https://registry.npmjs.org/@volar/language-core/-/language-core-2.4.28.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@volar/source-map",
+      "version": "2.4.28",
+      "location": "node_modules/@volar/source-map",
+      "license": "MIT",
+      "integrity": "sha512-yX2BDBqJkRXfKw8my8VarTyjv48QwxdJtvRgUpNE5erCsgEUdI2DsLbpa+rOQVAJYshY99szEcRDmyHbF10ggQ==",
+      "resolved": "https://registry.npmjs.org/@volar/source-map/-/source-map-2.4.28.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@volar/typescript",
+      "version": "2.4.28",
+      "location": "node_modules/@volar/typescript",
+      "license": "MIT",
+      "integrity": "sha512-Ja6yvWrbis2QtN4ClAKreeUZPVYMARDYZl9LMEv1iQ1QdepB6wn0jTRxA9MftYmYa4DQ4k/DaSZpFPUfxl8giw==",
+      "resolved": "https://registry.npmjs.org/@volar/typescript/-/typescript-2.4.28.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@vue/compiler-core",
+      "version": "3.5.42",
+      "location": "node_modules/@vue/compiler-core",
+      "license": "MIT",
+      "integrity": "sha512-2Ye1ilMtKXxl8qZUrQ5j0CdgenFp/HFQmta6rfRyfEsTG69L6Wk+tWuNoHYHMx9E8tF2Slvdg1FuwDvAXdy1LQ==",
+      "resolved": "https://registry.npmjs.org/@vue/compiler-core/-/compiler-core-3.5.42.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Evan You"
+    },
+    {
+      "name": "@vue/compiler-dom",
+      "version": "3.5.42",
+      "location": "node_modules/@vue/compiler-dom",
+      "license": "MIT",
+      "integrity": "sha512-qbhQZEFmycr+ni/qyuccS4sucNN7VAbDfbkvNxWOX2VfgFm90MNs3/UhRNKoPMEIVn0F8gdlYjLPvqxHwHeQOA==",
+      "resolved": "https://registry.npmjs.org/@vue/compiler-dom/-/compiler-dom-3.5.42.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Evan You"
+    },
+    {
+      "name": "@vue/compiler-sfc",
+      "version": "3.5.42",
+      "location": "node_modules/@vue/compiler-sfc",
+      "license": "MIT",
+      "integrity": "sha512-fkCAFB4okcAANGMThboWnScp/gzWjU0ZSkVnjTIiplmMDq2uq0tIB3j+xVu4rhv5rvOgBySCysudmbMd6xRRqw==",
+      "resolved": "https://registry.npmjs.org/@vue/compiler-sfc/-/compiler-sfc-3.5.42.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Evan You"
+    },
+    {
+      "name": "@vue/compiler-ssr",
+      "version": "3.5.42",
+      "location": "node_modules/@vue/compiler-ssr",
+      "license": "MIT",
+      "integrity": "sha512-xmLk3wLkbizPAiLyomjgFFosf2ys9b5Ghb+oh/k2tnvipNz8OFrQOiTcWCzyK7MpBp9KkyGtfvgfLUivbmuGYA==",
+      "resolved": "https://registry.npmjs.org/@vue/compiler-ssr/-/compiler-ssr-3.5.42.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Evan You"
+    },
+    {
+      "name": "@vue/language-core",
+      "version": "3.3.11",
+      "location": "node_modules/@vue/language-core",
+      "license": "MIT",
+      "integrity": "sha512-QJmpliwAVpC/OxubIByPAhNzsQPRc8/gxlN2qnVzVfIMjMDz/9RnXRFoetjz5yEgXVXyp4LqhXq3V53PjmNzFw==",
+      "resolved": "https://registry.npmjs.org/@vue/language-core/-/language-core-3.3.11.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "@vue/reactivity",
+      "version": "3.5.42",
+      "location": "node_modules/@vue/reactivity",
+      "license": "MIT",
+      "integrity": "sha512-TzNNfKpb7hDxbQltwAut8VDQA5YP+BuRlxntHUuRjyKwlMvmAPbs3unhCvieijifY6vFfVBwsS7wG/C7uq+bEQ==",
+      "resolved": "https://registry.npmjs.org/@vue/reactivity/-/reactivity-3.5.42.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Evan You"
+    },
+    {
+      "name": "@vue/runtime-core",
+      "version": "3.5.42",
+      "location": "node_modules/@vue/runtime-core",
+      "license": "MIT",
+      "integrity": "sha512-9uACtuHs7vJGkm5Bp3xu4xRDLFTIYy5DgxpToVjqGIAhAEKwQfsaLvKINhM6nFVp6bZPRFGdDqd1g52MqKsotA==",
+      "resolved": "https://registry.npmjs.org/@vue/runtime-core/-/runtime-core-3.5.42.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Evan You"
+    },
+    {
+      "name": "@vue/runtime-dom",
+      "version": "3.5.42",
+      "location": "node_modules/@vue/runtime-dom",
+      "license": "MIT",
+      "integrity": "sha512-rsCmhiWLaRxGltLwhlCWyYkFn7WAbKRh0q17eZ1A6Dq6eqc2ACQ61IIryxz0LrsvCzHSilLA9JHovVwM8CNE2g==",
+      "resolved": "https://registry.npmjs.org/@vue/runtime-dom/-/runtime-dom-3.5.42.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Evan You"
+    },
+    {
+      "name": "@vue/server-renderer",
+      "version": "3.5.42",
+      "location": "node_modules/@vue/server-renderer",
+      "license": "MIT",
+      "integrity": "sha512-2++5dUyYS4gvo7xQXSECUDhB7TS0aOl5SeVfC5qSq1Jgfhjvegw1zqhwTIR3imZ+QYPJQw9gfcFvXGAjGZ7ajQ==",
+      "resolved": "https://registry.npmjs.org/@vue/server-renderer/-/server-renderer-3.5.42.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Evan You"
+    },
+    {
+      "name": "@vue/shared",
+      "version": "3.5.42",
+      "location": "node_modules/@vue/shared",
+      "license": "MIT",
+      "integrity": "sha512-2rPxex1jQf4jvl9MOHl6YaXCPcrNqz/FstMOEh3QWY+/OME9nQTvl9WYeCwhW7AFjaR0SnngZGlp/wkR6rkI6g==",
+      "resolved": "https://registry.npmjs.org/@vue/shared/-/shared-3.5.42.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Evan You"
+    },
+    {
+      "name": "agent-base",
+      "version": "7.1.4",
+      "location": "node_modules/agent-base",
+      "license": "MIT",
+      "integrity": "sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ==",
+      "resolved": "https://registry.npmjs.org/agent-base/-/agent-base-7.1.4.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Nathan Rajlich <nathan@tootallnate.net> (http://n8.io/)"
+    },
+    {
+      "name": "alien-signals",
+      "version": "3.2.1",
+      "location": "node_modules/alien-signals",
+      "license": "MIT",
+      "integrity": "sha512-I8FjmltrfnDFoZedi5CG8DghVYNhzb/Ijluz7tCSJH0xpd0484Kowhbb1XDYOxfJpU1p5wnM2X54dA+IfGyD1g==",
+      "resolved": "https://registry.npmjs.org/alien-signals/-/alien-signals-3.2.1.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "ansi-colors",
+      "version": "4.1.3",
+      "location": "node_modules/ansi-colors",
+      "license": "MIT",
+      "integrity": "sha512-/6w/C21Pm1A7aZitlI5Ni/2J6FFQN8i1Cvz3kHABAAbw93v/NlvKdVOqz7CCWz/3iv/JplRSEEZ83XION15ovw==",
+      "resolved": "https://registry.npmjs.org/ansi-colors/-/ansi-colors-4.1.3.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Brian Woodward (https://github.com/doowb)"
+    },
+    {
+      "name": "argparse",
+      "version": "2.0.1",
+      "location": "node_modules/argparse",
+      "license": "Python-2.0",
+      "integrity": "sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==",
+      "resolved": "https://registry.npmjs.org/argparse/-/argparse-2.0.1.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "balanced-match",
+      "version": "1.0.2",
+      "location": "node_modules/balanced-match",
+      "license": "MIT",
+      "integrity": "sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==",
+      "resolved": "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Julian Gruber"
+    },
+    {
+      "name": "brace-expansion",
+      "version": "2.1.4",
+      "location": "node_modules/brace-expansion",
+      "license": "MIT",
+      "integrity": "sha512-hGfVzPxthbf3+2yjg/RBs60cB0FhqBS/zvdV/4wn4/BmN0bNMMHPc4V/BbFieqf1TKAGGAHnY4eSjajCl0f2Xg==",
+      "resolved": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-2.1.4.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Julian Gruber"
+    },
+    {
+      "name": "change-case",
+      "version": "5.4.4",
+      "location": "node_modules/change-case",
+      "license": "MIT",
+      "integrity": "sha512-HRQyTk2/YPEkt9TnUPbOpr64Uw3KOicFWPVBb+xiHvd6eBx/qPr9xqfBFDT8P2vWsvvz4jbEkfDe71W3VyNu2w==",
+      "resolved": "https://registry.npmjs.org/change-case/-/change-case-5.4.4.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Blake Embrey"
+    },
+    {
+      "name": "colorette",
+      "version": "1.4.0",
+      "location": "node_modules/colorette",
+      "license": "MIT",
+      "integrity": "sha512-Y2oEozpomLn7Q3HFP7dpww7AtMJplbM9lGZP6RDfHqmbeRjiwRg4n6VM6j4KLmRke85uWEI7JqF17f3pqdRA0g==",
+      "resolved": "https://registry.npmjs.org/colorette/-/colorette-1.4.0.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Jorge Bucaran"
+    },
+    {
+      "name": "csstype",
+      "version": "3.2.3",
+      "location": "node_modules/csstype",
+      "license": "MIT",
+      "integrity": "sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==",
+      "resolved": "https://registry.npmjs.org/csstype/-/csstype-3.2.3.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Fredrik Nicol <fredrik.nicol@gmail.com>"
+    },
+    {
+      "name": "debug",
+      "version": "4.4.3",
+      "location": "node_modules/debug",
+      "license": "MIT",
+      "integrity": "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==",
+      "resolved": "https://registry.npmjs.org/debug/-/debug-4.4.3.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Josh Junon (https://github.com/qix-)"
+    },
+    {
+      "name": "detect-libc",
+      "version": "2.1.2",
+      "location": "node_modules/detect-libc",
+      "license": "Apache-2.0",
+      "integrity": "sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==",
+      "resolved": "https://registry.npmjs.org/detect-libc/-/detect-libc-2.1.2.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Lovell Fuller <npm@lovell.info>"
+    },
+    {
+      "name": "entities",
+      "version": "7.0.1",
+      "location": "node_modules/entities",
+      "license": "BSD-2-Clause",
+      "integrity": "sha512-TWrgLOFUQTH994YUyl1yT4uyavY5nNB5muff+RtWaqNVCAK408b5ZnnbNAUEWLTCpum9w6arT70i1XdQ4UeOPA==",
+      "resolved": "https://registry.npmjs.org/entities/-/entities-7.0.1.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Felix Boehm <me@feedic.com>"
+    },
+    {
+      "name": "estree-walker",
+      "version": "2.0.2",
+      "location": "node_modules/estree-walker",
+      "license": "MIT",
+      "integrity": "sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==",
+      "resolved": "https://registry.npmjs.org/estree-walker/-/estree-walker-2.0.2.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Rich Harris"
+    },
+    {
+      "name": "fast-deep-equal",
+      "version": "3.1.3",
+      "location": "node_modules/fast-deep-equal",
+      "license": "MIT",
+      "integrity": "sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==",
+      "resolved": "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Evgeny Poberezkin"
+    },
+    {
+      "name": "fdir",
+      "version": "6.5.0",
+      "location": "node_modules/fdir",
+      "license": "MIT",
+      "integrity": "sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg==",
+      "resolved": "https://registry.npmjs.org/fdir/-/fdir-6.5.0.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "thecodrr <thecodrr@protonmail.com>"
+    },
+    {
+      "name": "fsevents",
+      "version": "2.3.3",
+      "location": "node_modules/fsevents",
+      "license": "MIT",
+      "integrity": "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==",
+      "resolved": "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "https-proxy-agent",
+      "version": "7.0.6",
+      "location": "node_modules/https-proxy-agent",
+      "license": "MIT",
+      "integrity": "sha512-vK9P5/iUfdl95AI+JVyUuIcVtd4ofvtrOr3HNtM2yxC9bnMbEdp3x01OhQNnjb8IJYi38VlTE3mBXwcfvywuSw==",
+      "resolved": "https://registry.npmjs.org/https-proxy-agent/-/https-proxy-agent-7.0.6.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Nathan Rajlich <nathan@tootallnate.net> (http://n8.io/)"
+    },
+    {
+      "name": "index-to-position",
+      "version": "1.2.0",
+      "location": "node_modules/index-to-position",
+      "license": "MIT",
+      "integrity": "sha512-Yg7+ztRkqslMAS2iFaU+Oa4KTSidr63OsFGlOrJoW981kIYO3CGCS3wA95P1mUi/IVSJkn0D479KTJpVpvFNuw==",
+      "resolved": "https://registry.npmjs.org/index-to-position/-/index-to-position-1.2.0.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Sindre Sorhus"
+    },
+    {
+      "name": "js-levenshtein",
+      "version": "1.1.6",
+      "location": "node_modules/js-levenshtein",
+      "license": "MIT",
+      "integrity": "sha512-X2BB11YZtrRqY4EnQcLX5Rh373zbK4alC1FW7D7MBhL2gtcC17cTnr6DmfHZeS0s2rTHjUTMMHfG7gO8SSdw+g==",
+      "resolved": "https://registry.npmjs.org/js-levenshtein/-/js-levenshtein-1.1.6.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Gustaf Andersson"
+    },
+    {
+      "name": "js-tokens",
+      "version": "4.0.0",
+      "location": "node_modules/js-tokens",
+      "license": "MIT",
+      "integrity": "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==",
+      "resolved": "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Simon Lydell"
+    },
+    {
+      "name": "js-yaml",
+      "version": "4.3.2",
+      "location": "node_modules/js-yaml",
+      "license": "MIT",
+      "integrity": "sha512-SFNOvSJ+Dgf/9An904Yx+CgSlIPCkIpao4qo51lpee25TIRejdH3rhR4EZMGoNx3/TP3O+wzWuiTFl4sqbltzA==",
+      "resolved": "https://registry.npmjs.org/js-yaml/-/js-yaml-4.3.2.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Vladimir Zapparov <dervus.grim@gmail.com>"
+    },
+    {
+      "name": "json-schema-traverse",
+      "version": "1.0.0",
+      "location": "node_modules/json-schema-traverse",
+      "license": "MIT",
+      "integrity": "sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==",
+      "resolved": "https://registry.npmjs.org/json-schema-traverse/-/json-schema-traverse-1.0.0.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Evgeny Poberezkin"
+    },
+    {
+      "name": "lightningcss",
+      "version": "1.33.0",
+      "location": "node_modules/lightningcss",
+      "license": "MPL-2.0",
+      "integrity": "sha512-WkUDrojuJs0xkgGf2udWxa3yGBRxPtxUkB79i6aCZLRgc7PM8fZe9TosfPDcvEpQZbuFASnHYmRLBLUbmLOIIA==",
+      "resolved": "https://registry.npmjs.org/lightningcss/-/lightningcss-1.33.0.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "lightningcss-android-arm64",
+      "version": "1.33.0",
+      "location": "node_modules/lightningcss-android-arm64",
+      "license": "MPL-2.0",
+      "integrity": "sha512-gEpRTalKdosp4Bb8qWtc2iOgE5SeIHlpS1up9bFq2wAyYhl1UdTObYiHe98zEM9SQvSoqQZ1IQD0JNpg3Ml5pg==",
+      "resolved": "https://registry.npmjs.org/lightningcss-android-arm64/-/lightningcss-android-arm64-1.33.0.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "lightningcss-darwin-arm64",
+      "version": "1.33.0",
+      "location": "node_modules/lightningcss-darwin-arm64",
+      "license": "MPL-2.0",
+      "integrity": "sha512-Sciaz8eenNTKn9b3t7+xr0ipTp9YxKQY4npwQ3mrRuL0BAVHBLyZxofhaKBAVtzmtRZ/zTyo0/to4B1uWG/Djg==",
+      "resolved": "https://registry.npmjs.org/lightningcss-darwin-arm64/-/lightningcss-darwin-arm64-1.33.0.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "lightningcss-darwin-x64",
+      "version": "1.33.0",
+      "location": "node_modules/lightningcss-darwin-x64",
+      "license": "MPL-2.0",
+      "integrity": "sha512-Z5UPAxzrjlWNNyGy6i65cJzzvgJ5D3T6wMvs+gWpY9d7qRhANrxqAp6LhxIgZhWEw18RfJTGcRxjuLIBr+m8XQ==",
+      "resolved": "https://registry.npmjs.org/lightningcss-darwin-x64/-/lightningcss-darwin-x64-1.33.0.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "lightningcss-freebsd-x64",
+      "version": "1.33.0",
+      "location": "node_modules/lightningcss-freebsd-x64",
+      "license": "MPL-2.0",
+      "integrity": "sha512-QQM/Ti/hQajJwCY+RiWuCZ9sdtI/XQk7nDK5vC8kkdwixezOlDgvDx7+RT+QjK6FcFT4MpsuoBnHIo/O3StRRg==",
+      "resolved": "https://registry.npmjs.org/lightningcss-freebsd-x64/-/lightningcss-freebsd-x64-1.33.0.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "lightningcss-linux-arm-gnueabihf",
+      "version": "1.33.0",
+      "location": "node_modules/lightningcss-linux-arm-gnueabihf",
+      "license": "MPL-2.0",
+      "integrity": "sha512-N7FVBe6iS24MlM6R/4RBTxGhQheZGs7tiQ9U32UtF75NzP5Q7xWPRqLBCKxlRQRk3rY1jCIPLzx7WzOhuUIRLQ==",
+      "resolved": "https://registry.npmjs.org/lightningcss-linux-arm-gnueabihf/-/lightningcss-linux-arm-gnueabihf-1.33.0.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "lightningcss-linux-arm64-gnu",
+      "version": "1.33.0",
+      "location": "node_modules/lightningcss-linux-arm64-gnu",
+      "license": "MPL-2.0",
+      "integrity": "sha512-j2v/itmy4HlNxlc6voKXYgBqNi0Ng2LShg4z7GufpEgs05P+2suBVyi9I6YHq5uoVFx9ETin3eCEhLVyXGQnKg==",
+      "resolved": "https://registry.npmjs.org/lightningcss-linux-arm64-gnu/-/lightningcss-linux-arm64-gnu-1.33.0.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "lightningcss-linux-arm64-musl",
+      "version": "1.33.0",
+      "location": "node_modules/lightningcss-linux-arm64-musl",
+      "license": "MPL-2.0",
+      "integrity": "sha512-yiO5ROMuYQgXbC60yjZU5CYSFZGKXL0HFATXt9mHJn1+zW55oCtMI9NfcVhYLMFDL7gV7oBPon/EmMMGg2OvtQ==",
+      "resolved": "https://registry.npmjs.org/lightningcss-linux-arm64-musl/-/lightningcss-linux-arm64-musl-1.33.0.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "lightningcss-linux-x64-gnu",
+      "version": "1.33.0",
+      "location": "node_modules/lightningcss-linux-x64-gnu",
+      "license": "MPL-2.0",
+      "integrity": "sha512-ar+Ju7LmcN0Jo4FpL4hpFybwNG9/3A/Br5KW2n2jyODg3MEZXaDYADdemoNS+BDNfMgKvylJLj4S5tyRActuAg==",
+      "resolved": "https://registry.npmjs.org/lightningcss-linux-x64-gnu/-/lightningcss-linux-x64-gnu-1.33.0.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "lightningcss-linux-x64-musl",
+      "version": "1.33.0",
+      "location": "node_modules/lightningcss-linux-x64-musl",
+      "license": "MPL-2.0",
+      "integrity": "sha512-RYiYbkokw0trfKqqzfF55lginwEPrD3OJDfTuJzFs1MK6iFnDenaz1fqLLtX4ITG3OktJQXOeTaw1awrBAlZPw==",
+      "resolved": "https://registry.npmjs.org/lightningcss-linux-x64-musl/-/lightningcss-linux-x64-musl-1.33.0.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "lightningcss-win32-arm64-msvc",
+      "version": "1.33.0",
+      "location": "node_modules/lightningcss-win32-arm64-msvc",
+      "license": "MPL-2.0",
+      "integrity": "sha512-1K+MPfLSFVpphzpdbfkhlWk6wBrTObBzS2T6db10PNOZgR9GoVsAWzwNyuhUYYbTp23j+4RrncfujZ4uAzXvwA==",
+      "resolved": "https://registry.npmjs.org/lightningcss-win32-arm64-msvc/-/lightningcss-win32-arm64-msvc-1.33.0.tgz",
+      "installed": false,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "lightningcss-win32-x64-msvc",
+      "version": "1.33.0",
+      "location": "node_modules/lightningcss-win32-x64-msvc",
+      "license": "MPL-2.0",
+      "integrity": "sha512-OlEICDx/Xl0FqSp4bry8zFnCvGpig3Gl4gCquvYwHuqJKEC1+n9NgDniFvqHGmMv1ZkqDJrDqKKSykTDX+ehuA==",
+      "resolved": "https://registry.npmjs.org/lightningcss-win32-x64-msvc/-/lightningcss-win32-x64-msvc-1.33.0.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "magic-string",
+      "version": "0.30.21",
+      "location": "node_modules/magic-string",
+      "license": "MIT",
+      "integrity": "sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==",
+      "resolved": "https://registry.npmjs.org/magic-string/-/magic-string-0.30.21.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Rich Harris"
+    },
+    {
+      "name": "minimatch",
+      "version": "5.1.9",
+      "location": "node_modules/minimatch",
+      "license": "ISC",
+      "integrity": "sha512-7o1wEA2RyMP7Iu7GNba9vc0RWWGACJOCZBJX2GJWip0ikV+wcOsgVuY9uE8CPiyQhkGFSlhuSkZPavN7u1c2Fw==",
+      "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-5.1.9.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me)"
+    },
+    {
+      "name": "ms",
+      "version": "2.1.3",
+      "location": "node_modules/ms",
+      "license": "MIT",
+      "integrity": "sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==",
+      "resolved": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "muggle-string",
+      "version": "0.4.1",
+      "location": "node_modules/muggle-string",
+      "license": "MIT",
+      "integrity": "sha512-VNTrAak/KhO2i8dqqnqnAHOa3cYBwXEZe9h+D5h/1ZqFSTEFHdM65lR7RoIqq3tBBYavsOXV84NoHXZ0AkPyqQ==",
+      "resolved": "https://registry.npmjs.org/muggle-string/-/muggle-string-0.4.1.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "nanoid",
+      "version": "3.3.18",
+      "location": "node_modules/nanoid",
+      "license": "MIT",
+      "integrity": "sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==",
+      "resolved": "https://registry.npmjs.org/nanoid/-/nanoid-3.3.18.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Andrey Sitnik <andrey@sitnik.ru>"
+    },
+    {
+      "name": "openapi-typescript",
+      "version": "7.13.0",
+      "location": "node_modules/openapi-typescript",
+      "license": "MIT",
+      "integrity": "sha512-EFP392gcqXS7ntPvbhBzbF8TyBA+baIYEm791Hy5YkjDYKTnk/Tn5OQeKm5BIZvJihpp8Zzr4hzx0Irde1LNGQ==",
+      "resolved": "https://registry.npmjs.org/openapi-typescript/-/openapi-typescript-7.13.0.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Drew Powers"
+    },
+    {
+      "name": "parse-json",
+      "version": "8.3.0",
+      "location": "node_modules/parse-json",
+      "license": "MIT",
+      "integrity": "sha512-ybiGyvspI+fAoRQbIPRddCcSTV9/LsJbf0e/S85VLowVGzRmokfneg2kwVW/KU5rOXrPSbF1qAKPMgNTqqROQQ==",
+      "resolved": "https://registry.npmjs.org/parse-json/-/parse-json-8.3.0.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Sindre Sorhus"
+    },
+    {
+      "name": "path-browserify",
+      "version": "1.0.1",
+      "location": "node_modules/path-browserify",
+      "license": "MIT",
+      "integrity": "sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==",
+      "resolved": "https://registry.npmjs.org/path-browserify/-/path-browserify-1.0.1.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "James Halliday"
+    },
+    {
+      "name": "picocolors",
+      "version": "1.1.1",
+      "location": "node_modules/picocolors",
+      "license": "ISC",
+      "integrity": "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==",
+      "resolved": "https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Alexey Raspopov"
+    },
+    {
+      "name": "picomatch",
+      "version": "4.0.7",
+      "location": "node_modules/picomatch",
+      "license": "MIT",
+      "integrity": "sha512-qcJu88Q2IWqJsDD529JKMdwGm/dvInW4HvQnRwiH9JtihJvzGOscDtHE3x1pBKeUOTysQ8kVmLnJ2kJu7yhcGA==",
+      "resolved": "https://registry.npmjs.org/picomatch/-/picomatch-4.0.7.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Jon Schlinkert (https://github.com/jonschlinkert)"
+    },
+    {
+      "name": "pluralize",
+      "version": "8.0.0",
+      "location": "node_modules/pluralize",
+      "license": "MIT",
+      "integrity": "sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==",
+      "resolved": "https://registry.npmjs.org/pluralize/-/pluralize-8.0.0.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Blake Embrey"
+    },
+    {
+      "name": "postcss",
+      "version": "8.5.28",
+      "location": "node_modules/postcss",
+      "license": "MIT",
+      "integrity": "sha512-RRuzqDtt5Y9h3quz5hWhK+TPnsmVs6WwSU6LkJMeY4HstUEDuYTG8UJSdawMRzmzAtV+KEoG8N3Qg2qLy5vM/A==",
+      "resolved": "https://registry.npmjs.org/postcss/-/postcss-8.5.28.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Andrey Sitnik <andrey@sitnik.es>"
+    },
+    {
+      "name": "require-from-string",
+      "version": "2.0.2",
+      "location": "node_modules/require-from-string",
+      "license": "MIT",
+      "integrity": "sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==",
+      "resolved": "https://registry.npmjs.org/require-from-string/-/require-from-string-2.0.2.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Vsevolod Strukchinsky"
+    },
+    {
+      "name": "rolldown",
+      "version": "1.2.7",
+      "location": "node_modules/rolldown",
+      "license": "MIT",
+      "integrity": "sha512-g0EtLvBjTUB7jhyV0S/TCup3v/XSVl45vUIGbOGU4QPiyjTenCe4mKuFvW9fEgYmS2Fo42AUssRmNuMziXdrig==",
+      "resolved": "https://registry.npmjs.org/rolldown/-/rolldown-1.2.7.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "source-map-js",
+      "version": "1.2.1",
+      "location": "node_modules/source-map-js",
+      "license": "BSD-3-Clause",
+      "integrity": "sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==",
+      "resolved": "https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.1.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Valentin 7rulnik Semirulnik <v7rulnik@gmail.com>"
+    },
+    {
+      "name": "supports-color",
+      "version": "10.2.2",
+      "location": "node_modules/supports-color",
+      "license": "MIT",
+      "integrity": "sha512-SS+jx45GF1QjgEXQx4NJZV9ImqmO2NPz5FNsIHrsDjh2YsHnawpan7SNQ1o8NuhrbHZy9AZhIoCUiCeaW/C80g==",
+      "resolved": "https://registry.npmjs.org/supports-color/-/supports-color-10.2.2.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Sindre Sorhus"
+    },
+    {
+      "name": "tinyglobby",
+      "version": "0.2.17",
+      "location": "node_modules/tinyglobby",
+      "license": "MIT",
+      "integrity": "sha512-wXR/dYpcqKmfWpEdZjiKJOwCNFndD0DMnrW/cYjVGttEkBfVgcLFHoNrlj47mjOVic9yyNu65alsgF4NQyTa2g==",
+      "resolved": "https://registry.npmjs.org/tinyglobby/-/tinyglobby-0.2.17.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Superchupu"
+    },
+    {
+      "name": "type-fest",
+      "version": "4.41.0",
+      "location": "node_modules/type-fest",
+      "license": "(MIT OR CC0-1.0)",
+      "integrity": "sha512-TeTSQ6H5YHvpqVwBRcnLDCBnDOHWYu7IvGbHT6N8AOymcr9PJGjc1GTtiWZTYg0NCgYwvnYWEkVChQAr9bjfwA==",
+      "resolved": "https://registry.npmjs.org/type-fest/-/type-fest-4.41.0.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Sindre Sorhus"
+    },
+    {
+      "name": "typescript",
+      "version": "5.9.3",
+      "location": "node_modules/typescript",
+      "license": "Apache-2.0",
+      "integrity": "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==",
+      "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.9.3.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Microsoft Corp."
+    },
+    {
+      "name": "uri-js-replace",
+      "version": "1.0.1",
+      "location": "node_modules/uri-js-replace",
+      "license": "MIT",
+      "integrity": "sha512-W+C9NWNLFOoBI2QWDp4UT9pv65r2w5Cx+3sTYFvtMdDBxkKt1syCqsUdSFAChbEe1uK5TfS04wt/nGwmaeIQ0g==",
+      "resolved": "https://registry.npmjs.org/uri-js-replace/-/uri-js-replace-1.0.1.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "https://github.com/andreinwald"
+    },
+    {
+      "name": "vite",
+      "version": "8.2.2",
+      "location": "node_modules/vite",
+      "license": "MIT",
+      "integrity": "sha512-cFKLV/PRgAUlIRm5WjMjJ86jrftzpqcgH+Us+DS8mI3CDNiH30Whrz8uHL3+MOLPAgqbMBAqWdAHAphOAM+z/Q==",
+      "resolved": "https://registry.npmjs.org/vite/-/vite-8.2.2.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Evan You"
+    },
+    {
+      "name": "vscode-uri",
+      "version": "3.2.0",
+      "location": "node_modules/vscode-uri",
+      "license": "MIT",
+      "integrity": "sha512-m2gXo3bn0G1kT9InzMf07fTbqMbGtyckj3bH5ktLO+1Ssv+yiATZ4dhwaQv9UZWxJh6E9IFGnQyjgWVDWVBDrg==",
+      "resolved": "https://registry.npmjs.org/vscode-uri/-/vscode-uri-3.2.0.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Microsoft"
+    },
+    {
+      "name": "vue",
+      "version": "3.5.42",
+      "location": "node_modules/vue",
+      "license": "MIT",
+      "integrity": "sha512-4RyHQTbQvOPs3MfvUO1Sg0YRrKNnA0mAVtvpd12Tg1fKDN7OHBUl1IqSn8zGJjK9nI3NkNp8cgTpVrSZC5TTcA==",
+      "resolved": "https://registry.npmjs.org/vue/-/vue-3.5.42.tgz",
+      "installed": true,
+      "development": false,
+      "authors": "Evan You"
+    },
+    {
+      "name": "vue-tsc",
+      "version": "3.3.11",
+      "location": "node_modules/vue-tsc",
+      "license": "MIT",
+      "integrity": "sha512-gOb0B9rtU2+f1dszwPqSH5kAieIF9ReeLhD3kSRNHv5WZZUQz/JdVXW0RTdqhNTMlQkqKzrTTviqKr/4FYZraQ==",
+      "resolved": "https://registry.npmjs.org/vue-tsc/-/vue-tsc-3.3.11.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "yaml-ast-parser",
+      "version": "0.0.43",
+      "location": "node_modules/yaml-ast-parser",
+      "license": "Apache-2.0",
+      "integrity": "sha512-2PTINUwsRqSd+s8XxKaJWQlUuEMHJQyEuh2edBbW8KNJz0SJPwUSD2zRWqezFEdN7IzAgeuYHFUCF7o8zRdZ0A==",
+      "resolved": "https://registry.npmjs.org/yaml-ast-parser/-/yaml-ast-parser-0.0.43.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "unknown"
+    },
+    {
+      "name": "yargs-parser",
+      "version": "21.1.1",
+      "location": "node_modules/yargs-parser",
+      "license": "ISC",
+      "integrity": "sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==",
+      "resolved": "https://registry.npmjs.org/yargs-parser/-/yargs-parser-21.1.1.tgz",
+      "installed": true,
+      "development": true,
+      "authors": "Ben Coe <ben@npmjs.com>"
+    }
+  ],
+  "v2_declaration_comparison": [
+    {
+      "declared": "numpy>=1.20.0,<2",
+      "installed": "2.2.6",
+      "matches": false,
+      "p02_action": "Preserved in v2; scientific parity and migration remain P03/P08"
+    },
+    {
+      "declared": "scipy>=1.7.0",
+      "installed": "1.16.3",
+      "matches": true,
+      "p02_action": "Preserved in v2; scientific parity and migration remain P03/P08"
+    },
+    {
+      "declared": "pandas>=1.3.0",
+      "installed": "2.3.3",
+      "matches": true,
+      "p02_action": "Preserved in v2; scientific parity and migration remain P03/P08"
+    },
+    {
+      "declared": "matplotlib>=3.4.0",
+      "installed": "3.10.8",
+      "matches": true,
+      "p02_action": "Preserved in v2; scientific parity and migration remain P03/P08"
+    },
+    {
+      "declared": "PyQt6>=6.2.0",
+      "installed": "6.6.1",
+      "matches": true,
+      "p02_action": "Separate P02 host version; see ADR-013"
+    },
+    {
+      "declared": "pyqtgraph>=0.12.0",
+      "installed": "0.14.0",
+      "matches": true,
+      "p02_action": "Preserved in v2; scientific parity and migration remain P03/P08"
+    },
+    {
+      "declared": "praat-parselmouth>=0.4.0",
+      "installed": "0.4.7",
+      "matches": true,
+      "p02_action": "Preserved in v2; scientific parity and migration remain P03/P08"
+    },
+    {
+      "declared": "PyWavelets>=1.1.0",
+      "installed": "1.9.0",
+      "matches": true,
+      "p02_action": "Preserved in v2; scientific parity and migration remain P03/P08"
+    },
+    {
+      "declared": "sounddevice>=0.4.0",
+      "installed": "0.5.3",
+      "matches": true,
+      "p02_action": "Preserved in v2; scientific parity and migration remain P03/P08"
+    },
+    {
+      "declared": "soundfile>=0.10.0",
+      "installed": "0.13.1",
+      "matches": true,
+      "p02_action": "Preserved in v2; scientific parity and migration remain P03/P08"
+    },
+    {
+      "declared": "openpyxl>=3.0.0",
+      "installed": "3.1.5",
+      "matches": true,
+      "p02_action": "Preserved in v2; scientific parity and migration remain P03/P08"
+    },
+    {
+      "declared": "python-docx>=1.1.0",
+      "installed": "1.2.0",
+      "matches": true,
+      "p02_action": "Preserved in v2; scientific parity and migration remain P03/P08"
+    },
+    {
+      "declared": "opencv-contrib-python>=4.8.0,<4.12.0",
+      "installed": "4.13.0.92",
+      "matches": false,
+      "p02_action": "Preserved in v2; scientific parity and migration remain P03/P08"
+    },
+    {
+      "declared": "mediapipe>=0.10.0,<0.10.22",
+      "installed": "0.10.14",
+      "matches": true,
+      "p02_action": "Preserved in v2; scientific parity and migration remain P03/P08"
+    },
+    {
+      "declared": "Pillow>=9.0.0",
+      "installed": "12.0.0",
+      "matches": true,
+      "p02_action": "Preserved in v2; scientific parity and migration remain P03/P08"
+    }
+  ],
+  "limitations": [
+    "Metadata is not full native license audit",
+    "P02 core has no scientific third-party dependencies",
+    "macOS/Linux lock and native runtime acceptance pending corresponding platform tasks"
+  ]
+}

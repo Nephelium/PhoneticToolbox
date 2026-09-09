@@ -1,8 +1,8 @@
-# PhoneticToolbox 3.0 · P01 原型工作区
+# PhoneticToolbox 3.0 · P02 工程工作区
 
-**2026-09-09 · P01 已获授权并实施。当前尚不是可发布的 v3 应用。**
+**2026-09-09 · P01 原型与试用已通过，P02 工程骨架已通过 Windows 定向验收。当前尚不是可发布的 v3 应用。**
 
-当前入口：[P01 原型报告](docs/testing/p01-host-probe-report.md)、[复现与试用说明](desktop/experiments/README.md)。Windows 单文件探针位于忽略的 `output/p01-probe/PhoneticToolbox-P01.exe`。全面业务迁移与 P02 尚未开始。
+当前入口：[P01 原型报告](docs/testing/p01-host-probe-report.md)、[复现与试用说明](desktop/experiments/README.md)。Windows 单文件探针位于忽略的 `output/p01-probe/PhoneticToolbox-P01.exe`。P02 独立环境、包与契约入口见 [开发说明](docs/development.md)，实际验证见 [P02 报告](docs/testing/p02-scaffold-report.md)。全面业务迁移尚未开始。
 
 沿用 U2 紧凑工作台、浅深色主题和 K2 波形团子。一个自有仓库共用前端与科学核心，分别交付网页版、Windows 单文件直用版/安装版、macOS；Linux 桌面作为独立平台验收项保留。已有可用代码优先迁移，不重复实现同一算法。
 

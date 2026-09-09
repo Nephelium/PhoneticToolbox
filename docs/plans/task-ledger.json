@@ -27,8 +27,8 @@
       "title": "先验证宿主、原生依赖和许可风险",
       "dependencies": "P00",
       "files": "desktop/experiments/host_probe.py；frontend/experiments/audio-viewport/；docs/decisions/ADR.md",
-      "status": "in_progress",
-      "note": "Windows 原型已验证；整体冻结保留来源/发行策略与跨平台原生未决项。",
+      "status": "verified",
+      "note": "P01 Windows 宿主、单文件、数字音频与来源风险评审完成，用户试用无问题；依 ADR-013 冻结开发主线。对应发行许可与跨平台设备仍未通过，不能解释为发行验收。",
       "steps": [
         "在一次性隔离探针环境搭建最小 Qt WebEngine 与构建页面；不改 phonetic_311；P02 再建立正式 v3 环境",
         "测试播放、中文/IPA、多个轨道、精确采样选区和窗口缩放",
@@ -40,13 +40,16 @@
       "execution_evidence": [
         "docs/testing/p01-host-probe-report.md",
         "desktop/experiments/README.md",
-        "output/validation/p01/final-summary.json"
+        "output/validation/p01/final-summary.json",
+        "docs/decisions/ADR.md#adr-013-p02-开发主线包版本与单一契约源"
       ],
       "acceptance_status": {
         "windows_host_and_onefile": "verified",
         "digital_audio_output": "verified",
         "source_and_distribution_gate": "blocked",
-        "mac_linux_native_validation": "planned"
+        "mac_linux_native_validation": "planned",
+        "manual_feedback": "verified",
+        "source_risk_review": "verified"
       }
     },
     {
@@ -54,8 +57,8 @@
       "title": "包边界、环境和契约脚手架",
       "dependencies": "P01",
       "files": "packages/phonetic_core/pyproject.toml；frontend/package.json；backend/pyproject.toml；desktop/pyproject.toml；contracts/versions.md；scripts/validate_docs.py",
-      "status": "planned",
-      "note": "planned",
+      "status": "verified",
+      "note": "Windows 独立环境、三包 wheel 干净安装、统一契约、架构检查与本地/服务器只读入口已通过；科学基线、完整 UI/任务/账号和发行仍未完成。",
       "steps": [
         "清点实际已安装依赖与 v2 声明冲突；不改 v2 环境",
         "创建 v3 独立开发/构建环境，锁定依赖和可用原生平台",
@@ -65,7 +68,19 @@
         "确认版本元数据来源，旧 v2 入口与新入口区分"
       ],
       "acceptance": "空环境可安装新包；同一 schema 不被两套代码分别手写；禁用依赖检查能抓住故意的越界例子",
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/testing/p02-scaffold-report.md",
+        "docs/development.md",
+        "output/validation/p02/latest.json"
+      ],
+      "acceptance_status": {
+        "clean_wheel_install": "verified",
+        "lock_consistency": "verified",
+        "schema_generation": "verified",
+        "architecture_negative_cases": "verified",
+        "local_server_start_exit": "verified",
+        "scientific_algorithms": "planned"
+      }
     },
     {
       "id": "P03",

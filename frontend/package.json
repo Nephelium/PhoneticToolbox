@@ -1,0 +1,24 @@
+{
+  "name": "phonetic-toolbox-frontend",
+  "version": "3.0.0-alpha.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "contracts": "node scripts/generate-contracts.mjs",
+    "contracts:check": "node scripts/generate-contracts.mjs --check",
+    "typecheck": "vue-tsc --noEmit",
+    "test": "node --test tests/contracts.test.ts",
+    "build": "vite build",
+    "dev": "vite --host 127.0.0.1"
+  },
+  "dependencies": { "vue": "3.5.42" },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "6.0.8",
+    "typescript": "5.9.3",
+    "vite": "8.2.2",
+    "vue-tsc": "3.3.11",
+    "openapi-typescript": "7.13.0"
+  },
+  "engines": { "node": "24.13.x", "npm": "11.6.x" },
+  "overrides": { "@redocly/openapi-core": { "js-yaml": "4.3.2" } }
+}

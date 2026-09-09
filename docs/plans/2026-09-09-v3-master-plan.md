@@ -1,11 +1,11 @@
 # PhoneticToolbox v3 全平台重构实施计划
 
-> **执行约定：** 秋叶及后续开发者必须遵守根 AGENTS.md，按本计划逐项实施、验证和记录；当前仅完成规划与源码继承，全面业务编码等待本稿审阅。用户已确认的要求见 requirements.md，具体技术候选不得伪装成已验证选择。
+> **执行约定：** 秋叶及后续开发者必须遵守根 AGENTS.md，按本计划逐项实施、验证和记录；当前 P01 原型与试用通过、P02 工程骨架已通过 Windows 定向验收；全面业务迁移尚未开始。用户已确认的要求见 requirements.md，具体技术候选不得伪装成已验证选择。
 
 **Goal:** 在保留全部科研功能和正确性的基础上，交付统一 U2/K2 视觉的独立网页版、Windows 单文件与安装版、macOS，以及单独验收的 Linux 桌面版。
 **Architecture:** 一个自有仓库，共用 Web 前端与版本化科学核心；桌面本地宿主和服务器 API 通过相同契约接入。用户、任务、配额、文件由外层负责，科学计算不复制为两套。
 **Tech Stack:** Vue 3/TypeScript/Vite、Python/FastAPI、Qt WebEngine 候选、PostgreSQL/独立 worker；最终版本与宿主在原型阶段冻结。
-**Status:** D0.3 · 2026-09-09 · 详细审阅稿。下列测试命令和目标源码文件是计划，不表示已建立或运行。
+**Status:** D0.3 规划基础，2026-09-09 已推进至 P02 骨架 verified。仅已标 verified 并链接验收报告的项目代表实际验证；其他命令/目标文件仍是计划。
 
 ## 1. 阅读与执行顺序
 先读 [要求](../requirements.md) → [总架构](../../ARCHITECTURE.md) → [UI](../design/UI_SPEC.md) → [模块](../modules/module-migration.md) → [账号/配额](../specs/accounts-storage-jobs.md) → [来源](../references/source-audit.md)。
@@ -14,7 +14,7 @@
 ## 2. 阶段与交付
 | 阶段 | 任务 | 核心交付 | 当前状态 |
 | --- | --- | --- | --- |
-| 基线与风险 | P00–P03 | 来源基线、宿主验证、依赖/科研基准 | P00 文档与继承完成；P01 Windows 原型已测、整体门槛未闭合；P02/P03 未实施 |
+| 基线与风险 | P00–P03 | 来源基线、宿主验证、依赖/科研基准 | P00 文档与继承完成；P01 Windows 原型/试用及风险评审通过；P02 骨架 verified，P03 未实施 |
 | 公共基础 | P04–P07 | UI 壳、登录、任务、5 GB/7 天 | 未实施 |
 | 功能迁移 | P08–P09 / M01–M15 | 全部功能双端与设备适配 | 未实施 |
 | 研究可追溯 | P10 | 软件/说明书/随包来源一致 | 已做首轮调查，未接软件界面 |
@@ -48,7 +48,7 @@
 
 ### P01 · 先验证宿主、原生依赖和许可风险
 
-**依赖：** P00。**状态：** in_progress。2026-09-09 井井已授权实施；Windows 探针验证及剩余门槛见 [P01 报告](../testing/p01-host-probe-report.md) 和 [细化计划](2026-09-09-p01-host-probe.md)。
+**依赖：** P00。**状态：** verified（Windows 原型与风险评审范围，用户试用通过，开发主线冻结见 ADR-013）；对应发行与跨平台门槛继续保留。证据见 [P01 报告](../testing/p01-host-probe-report.md) 和 [细化计划](2026-09-09-p01-host-probe.md)。
 
 **目标文件：** desktop/experiments/host_probe.py；frontend/experiments/audio-viewport/；docs/decisions/ADR.md。
 
@@ -64,7 +64,7 @@
 
 ### P02 · 包边界、环境和契约脚手架
 
-**依赖：** P01。**状态：** planned。
+**依赖：** P01。**状态：** verified（Windows 包、环境与契约范围）。详见 [P02 计划](2026-09-09-p02-scaffold.md) 和 [验收报告](../testing/p02-scaffold-report.md)。
 
 **目标文件：** packages/phonetic_core/pyproject.toml；frontend/package.json；backend/pyproject.toml；desktop/pyproject.toml；contracts/versions.md；scripts/validate_docs.py。
 

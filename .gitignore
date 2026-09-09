@@ -68,6 +68,7 @@ _MEI*/
 
 # v3 planning and local research evidence
 node_modules/
+*.egg-info/
 .vite/
 .env
 .env.*

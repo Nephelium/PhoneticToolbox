@@ -8,7 +8,7 @@ D0.3 / 2026-09-09 / 实现提案。上级约束见 [总架构](../ARCHITECTURE.m
 ## 目标代码位置
 openapi.json；schemas/{audio,track,job,asset,quota,capability}.json；parameter-catalog.json；generated/；versions.md
 
-这些是待实现的文件/目录，不是本轮已完成的业务代码。必须按主计划逐任务建立，不能创建空实现让导入测试假通过。
+上述为完整目标结构。P02 已实现的最小包、入口与生成契约以 P02 验收报告为准，其余业务目录仍待对应任务实施；不以空实现冒充业务通过。
 
 ## 输入、输出和边界
 输入来自版本化 contracts 或本组件明确定义的配置；输出为同一协议可理解的结果、错误、状态和可归属的资源。跨边界错误需含机器可读 code 与用户可理解 message，不暴露完整服务器路径或个人语料。
@@ -52,3 +52,7 @@ Error：code、message、retryable、details（脱敏）；code 示例 quota_exc
 ## 版本与兼容
 请求/响应固定 api_version；新增可选字段兼容，小版本不得修改单位、参数键或状态语义。破坏性变更升 major 并提供迁移说明。前端不尝试猜测旧服务器字段。
 科研输出 manifest 同时记录 app_version/core_version/algorithm/backend/source_ids，不把 API 版本当算法版本。
+
+## P02 实施记录
+
+2026-09-09：已完成 Windows 独立环境、包/入口与契约的定向验收，具体文件、命令和边界见 [P02 报告](../docs/testing/p02-scaffold-report.md)。上文完整功能结构仍按后续任务实施，不代表算法、正式 UI、账号/任务或全平台发行已通过。

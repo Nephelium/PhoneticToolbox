@@ -1,0 +1,15 @@
+# P02 Windows x86_64 / independent CPython 3.11.14.
+# First-party packages installed separately; no legacy v2 scientific dependency migration.
+fastapi==0.141.1
+pydantic==2.13.5
+uvicorn==0.52.4
+PyQt6==6.11.0
+PyQt6-WebEngine==6.11.0
+PyQt6-Qt6==6.11.2
+PyQt6-WebEngine-Qt6==6.11.2
+pytest==9.1.1
+httpx==0.28.1
+build==1.6.0
+setuptools==84.0.0
+wheel==0.48.0
+packaging==26.3

@@ -1,6 +1,6 @@
 # packages/phonetic_core — 工作规则
 
-继承 [根 AGENTS.md](../../AGENTS.md)，先读本目录 [ARCHITECTURE.md](ARCHITECTURE.md)。当前仅规划阶段；本文件不构成开始业务编码、安装依赖或部署的授权。
+继承 [根 AGENTS.md](../../AGENTS.md)，先读本目录 [ARCHITECTURE.md](ARCHITECTURE.md)。2026-09-09 已获 P02 工程骨架实施授权，范围见根规则与 P02 计划；不扩大为全面业务迁移或部署授权。
 
 - 负责：纯科学计算、模型与可移植研究业务。
 - 允许依赖：Python 标准库、锁定的 NumPy/SciPy/Parselmouth 等科学依赖；定义清晰的 F0/native ports。

@@ -1,0 +1,43 @@
+# v3 开发入口 · P02
+
+新工程入口为 frontend、backend、desktop、packages/phonetic_core。根目录 run.py / run.spec / pyproject.toml 保留为 v2 迁移来源，不用于安装或启动正式 v3。
+
+## 本机独立环境
+
+Windows x86_64，项目内独立 CPython 3.11.14；Node 24.13.0 / npm 11.6.2 为已存在工具，未安装新全局依赖。`.venv/v3-dev` 与 P01 探针、原 conda phonetic_311 分开。Python 传递依赖用 [带 hash 的 lock](../requirements-v3-dev.lock)，前端用 [npm lock](../frontend/package-lock.json)。此锁仅在 Windows 验证，不能当作其他平台已通过。
+
+在项目根目录 PowerShell 执行：
+
+```powershell
+uv venv --python '.venv/runtimes/cpython-3.11.14-windows-x86_64-none/python.exe' '.venv/v3-dev'
+uv pip install --python '.venv/v3-dev/Scripts/python.exe' --require-hashes -r requirements-v3-dev.lock
+uv pip install --python '.venv/v3-dev/Scripts/python.exe' --no-build-isolation -e packages/phonetic_core -e backend -e desktop
+npm --prefix frontend ci --ignore-scripts
+```
+
+已有环境不必重复建。新机器先安装同版项目内解释器（`uv python install 3.11.14 --install-dir .venv/runtimes --no-bin --no-registry`）；uv/Node 可由开发者选择现有可信安装，以上脚本不自动改系统。更新依赖须改 `.in` 和包声明，经试验后重新编译 lock、更新来源清单；不能自动升级 v2。
+
+## 使用与验证
+
+```powershell
+# 只读服务器开发入口：绑定 127.0.0.1 随机端口，控制台输出实际 URL，Ctrl+C 退出。
+& '.venv/v3-dev/Scripts/python.exe' -m ptb_api.cli --mode server
+# 桌面本地服务诊断：启动、会话握手、退出，输出版本与退出结果。
+& '.venv/v3-dev/Scripts/python.exe' -m ptb_desktop.main
+# 正式前端开发入口，目前是明确标注的工程空态。
+npm --prefix frontend run dev
+```
+
+P02 server 模式仅为 loopback 开发入口，无账号/任务/语料接口，不能部署给研究者使用。local 模式由 desktop 通过标准输入提供一次性凭据，URL 不含 token，服务校验 Host/Origin/Authorization。桌面启动器不会 import backend；三个 wheel 由同一发行组合安装。后续 P06 负责接入完整窗口与工作进程生命周期。
+
+```powershell
+& '.venv/v3-dev/Scripts/python.exe' scripts/generate_contracts.py --check
+npm --prefix frontend run contracts:check
+& '.venv/v3-dev/Scripts/python.exe' scripts/check_architecture.py
+& '.venv/v3-dev/Scripts/python.exe' scripts/validate_docs.py
+& '.venv/v3-dev/Scripts/python.exe' scripts/verify_p02.py
+```
+
+完整验证会另建带时间戳的干净环境，真实构建/安装三个 wheel，并从非项目目录运行两种服务与定向测试；所有日志保存在忽略的 output/validation/p02 下。不会删除已有环境。
+
+架构检查覆盖正式源码的 Python 导入、前端导入、旧路径与规定资源目录，不是任意动态 Python 的安全沙箱。历史文档快照和第三方摘录保留原字节：校验 hash，并另报其未解决的相对链接；现行文档缺失链接会使检查失败。
