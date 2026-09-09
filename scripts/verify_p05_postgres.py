@@ -5,6 +5,7 @@ from datetime import datetime,timezone
 import getpass
 import json
 import secrets
+import sys
 from pathlib import Path
 from uuid import uuid4
 from fastapi.testclient import TestClient
@@ -17,9 +18,11 @@ ORIGIN='https://p05.test'
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--approved-test-data',action='store_true')
+    parser.add_argument('--dsn-stdin',action='store_true',help='Read DSN from a private parent pipe')
     args=parser.parse_args()
     if not args.approved_test_data:parser.error('Requires approved isolated PostgreSQL test data')
-    dsn=getpass.getpass('Dedicated migrated test database DSN (hidden): ')
+    dsn=sys.stdin.readline().strip() if args.dsn_stdin else getpass.getpass('Dedicated migrated test database DSN (hidden): ')
+    if not dsn:parser.error('A private database DSN is required')
     store=PostgresAccountStore(dsn)
     store.check_schema()
     with store.connection() as conn:

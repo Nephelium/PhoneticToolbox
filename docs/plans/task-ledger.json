@@ -140,8 +140,8 @@
       "title": "服务器账号、项目和会话隔离",
       "dependencies": "P02",
       "files": "backend/src/ptb_api/auth.py；backend/src/ptb_api/projects.py；backend/tests/test_auth.py；tests/security/test_resource_ownership.py",
-      "status": "in_progress",
-      "note": "账号/项目接口、UI、迁移草案与测试替身定向检查已完成；实际 PostgreSQL 建表/迁移待单独确认，P05 不标 verified。",
+      "status": "verified",
+      "note": "Windows 账号/会话/项目范围 verified；专属空库迁移经用户明确授权，真实 PG 隔离、事务、并发和 API/PG 受控重启恢复通过。任务、资源、日志、取消、下载的联合验收仍在 P06/P07 planned，未豁免。",
       "steps": [
         "设计并审阅 users/sessions/projects/owner 模型和数据库迁移",
         "选择成熟密码哈希/会话实现，落实 Cookie、CSRF、退出撤销和登录限流",
@@ -154,14 +154,16 @@
       "execution_evidence": [
         "docs/plans/2026-09-09-p05-accounts.md",
         "docs/testing/p05-accounts-report.md",
-        "docs/testing/p05-migration-review.md"
+        "docs/testing/p05-migration-review.md",
+        "output/validation/p05/postgres-integration.json"
       ],
       "acceptance_status": {
         "http_logic_with_test_double": "verified",
         "browser_ui_with_test_double": "verified",
-        "postgres_migration": "planned",
-        "postgres_isolation_and_concurrency": "planned",
-        "jobs_resources_joint_acceptance": "planned"
+        "postgres_migration": "verified",
+        "postgres_isolation_and_concurrency": "verified",
+        "jobs_resources_joint_acceptance": "planned",
+        "api_and_database_process_restart_restore": "verified"
       }
     },
     {

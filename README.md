@@ -2,9 +2,9 @@
 
 **2026-09-09 · P01 原型、P02 工程骨架与 P03 独立科研基线已通过各自 Windows 定向验收。当前尚不是可发布的 v3 应用。**
 
-P05 当前进展：[账号与项目报告](docs/testing/p05-accounts-report.md)、[迁移审阅](docs/testing/p05-migration-review.md)。实际数据库迁移未执行。
+P05 当前进展：[账号与项目报告](docs/testing/p05-accounts-report.md)、[迁移审阅](docs/testing/p05-migration-review.md)。P05 已获专属空库授权并通过真实 PostgreSQL 定向验收；任务和配额仍待 P06/P07。
 
-公共界面入口：[P04 工作台试用报告](docs/testing/p04-workbench-report.md)（公共界面已审阅，学术优先分组已修订；P04 限定范围 verified，P05 in_progress）。试用启动方法见 [开发说明](docs/development.md)。
+公共界面入口：[P04 工作台试用报告](docs/testing/p04-workbench-report.md)（公共界面已审阅，学术优先分组已修订；P04 限定范围 verified，P05 账号/项目范围 verified）。试用启动方法见 [开发说明](docs/development.md)。
 
 前阶段：[P03 基线报告](docs/testing/p03-baseline-report.md)、[捕获协议](docs/baseline/capture-protocol.md)。P01 单文件探针与试用见 [原型报告](docs/testing/p01-host-probe-report.md)；P02 环境、包与契约见 [开发说明](docs/development.md) 和 [P02 报告](docs/testing/p02-scaffold-report.md)。P03 冻结旧服务行为用于后续回归，不表示已验证 v3 算法或所有旧指标的科学准确度。全面业务迁移尚未开始。
 

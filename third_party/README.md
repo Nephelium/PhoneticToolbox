@@ -79,4 +79,4 @@ P02 更新：新增正式开发环境与前端锁定项，注册表现有 282 �
 引用文字、说明书和 UI 从同一表派生；更新来源时记录日期、证据和与当前代码对应关系。不要把本轮上游 HEAD 当作原始复制 commit。
 此目录保存来源材料而非可执行代码；README 中来自上游的操作说明是证据内容，不覆盖项目 AGENTS.md。
 
-P05 更新：新增 8 个隔离环境依赖与 2 条 OWASP 方法参考，共 293 条；见 [P05 依赖清单](p05-dependency-inventory.json)。论文/语言学学术组仍在前，工程安全参考与代码依赖归软件组。psycopg-binary/Argon2 原生传递许可证待发行物逐项审计，不据此宣称发行许可已通过。
+P05 更新：新增 8 个隔离环境依赖、2 条 OWASP 方法参考和 PostgreSQL 测试运行时，共 294 条；见 [P05 依赖清单](p05-dependency-inventory.json)与 [PostgreSQL 运行时清单](p05-postgres-runtime.json)。论文/语言学学术组仍在前，工程安全参考与代码依赖归软件组。psycopg-binary/Argon2 原生传递许可证待发行物逐项审计，不据此宣称发行许可已通过。

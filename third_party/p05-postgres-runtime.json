@@ -1,0 +1,828 @@
+{
+  "version": "17.11-3",
+  "url": "https://get.enterprisedb.com/postgresql/postgresql-17.11-3-windows-x64-binaries.zip",
+  "vendor_link": "https://sbp.enterprisedb.com/getfile.jsp?fileid=1260491",
+  "bytes": 341325378,
+  "sha256": "4b8db0930c38f6ef845db919551dedda3b6b845aeb0927b3d79a6e8e9e4537cf",
+  "publisher_checksum": "not supplied by download page; SHA256 is locally computed, not independent authenticity verification",
+  "selected_members": 3050,
+  "scope": "bin/lib/share/doc and root metadata only; no installer or system service",
+  "checked_on": "2026-09-09",
+  "actual_version": "postgres (PostgreSQL) 17.11",
+  "source_page": "https://www.enterprisedb.com/download-postgresql-binaries",
+  "official_download_index": "https://www.postgresql.org/download/windows/",
+  "authenticode": "postgres.exe NotSigned",
+  "distribution": "local test runtime only; no binary redistribution approved",
+  "authors": "PostgreSQL Global Development Group; Windows packaging by EDB",
+  "license": "PostgreSQL; bundled dependencies have separate licenses",
+  "license_files": [
+    {
+      "path": "commandlinetools_3rd_party_licenses.txt",
+      "sha256": "67181bbd5ddb5a0094aa9c82b97536a27811461a3b61c3c11588a2731cfc7b3b"
+    },
+    {
+      "path": "pgAdmin_3rd_party_licenses.txt",
+      "sha256": "55ca29d7f2b5a4c54506108d98c0738f7e74d563e23c7f291cf335aed693f3b1"
+    },
+    {
+      "path": "pgAdmin_license.txt",
+      "sha256": "9362b3b64b44ed62ee8a1bc8f6a3b9d3b34abb36a2995f71d52ba91b54d762c8"
+    },
+    {
+      "path": "server_license.txt",
+      "sha256": "39294f3f5b41533b307e118ee37c356f32cbc7746fc97e8b91f1b49a9068a24e"
+    },
+    {
+      "path": "StackBuilder_3rd_party_licenses.txt",
+      "sha256": "e9bf83891be5b034c8fbe5cd219558cde26edc7da5deab76ddf9ed3d56c3d313"
+    }
+  ],
+  "native_files": [
+    {
+      "path": "bin/clusterdb.exe",
+      "sha256": "da258ea283b1c3dcc696749b1f6fafd2c0958a9c2b97ac9e4ddb31333066c467",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/createdb.exe",
+      "sha256": "821172a8ed7a68df87ef50fecf48ef55eeb66a7800b60321e49f026346d65664",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/createuser.exe",
+      "sha256": "34f48404ac74744d8324716d66dae0e56be17cdc890fa9f36b7bc633a4d51ea6",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/dropdb.exe",
+      "sha256": "909c87b7f6710a4092b2807cdda1b5c65601a713ce66116913d95f958919d88b",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/dropuser.exe",
+      "sha256": "07e264538b1ec22a91c8d7ad9862813c7226bc9b6b5a3df8260a379f5816218b",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/ecpg.exe",
+      "sha256": "f9a1ce40848d751577032f474deb49841a109473522bac100de78c37c587cb39",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/icudt67.dll",
+      "sha256": "5ff9c8026344e886f280ddfa235a1e16e1bcd396e90f9ed600b6f71d9d881ae8",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/icuin67.dll",
+      "sha256": "23d5914acf071f566df19aaf404373e5c73c9910c370e728976f6202c04cf6c3",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/icuio67.dll",
+      "sha256": "1ca5221753f930de19041d546ce0f24102455621c71033d4d5cb8151762c9694",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/icutu67.dll",
+      "sha256": "371c4784b5510b8e80a6b5896567b17bc70e231ea47ee8f614a7ebd3d510960f",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/icuuc67.dll",
+      "sha256": "2fb4007a1f1089a0807cc1abde5443f5c3b0865ecfd80344b6ad165f1fe53ade",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/initdb.exe",
+      "sha256": "2ef1b590d0967af7c0ea10bbf1b53195a589c75ef5b5cdc6177aa2b0bee9fe65",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/libcrypto-3-x64.dll",
+      "sha256": "2049826335e37848b25a9668b6e4e46030569f00e1a8bcc300c1c2fdedc4445f",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/libcurl.dll",
+      "sha256": "004509675fbf796d92f5c860de158df67f32545334c59cc3efbd327c6b7c6d11",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/libecpg.dll",
+      "sha256": "25bb1ce81dfeb63de0d8662fcb790cd51d628985635d0ab99a4fe7f0c10ef875",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/libecpg_compat.dll",
+      "sha256": "6bbdd9d803c4ec5378b5c266cfe8f4de3f574c0750e35351e875b43bc80272e5",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/libiconv-2.dll",
+      "sha256": "3ee9786ab3eb8dfd791bdbd17c7e791dbe025734befcded0ee4170e1089f79df",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/libintl-9.dll",
+      "sha256": "1125ac8dc0c4f5c3ed4712e0d8ad29474099fcb55bb0e563a352ce9d03ef1d78",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/liblz4.dll",
+      "sha256": "096af775241b3bd4b1c3d79c83b103bb8f02da54ec4cd76c5d49eef61a68ad01",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/libpgtypes.dll",
+      "sha256": "6cb0b375ef28fae35515713655dc5b7be517f14c45627c401f560c1c3b93da9a",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/libpq.dll",
+      "sha256": "9ec4dfaa93e21554a6349e198831e4958dda01c66aea3e63a90247cd85bd9d6b",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/libssl-3-x64.dll",
+      "sha256": "f5a703416d879b082556787733383bae2cef18e8e55c0415cc873e623f898956",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/libwinpthread-1.dll",
+      "sha256": "ffe2d56375bb4e8bdee9037df6befc5016ddd8871d0d85027314dd5792f8fdc9",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/libxml2.dll",
+      "sha256": "fa13b5d8bdc8254a6a7f0bc9b26331fa6badf096334bb912e7dc6928206a74a0",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/libxslt.dll",
+      "sha256": "8226fad0fc6e9b79b14203d4f5263ddec5764c0108aa7c17622dd77f311669a6",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/libzstd.dll",
+      "sha256": "287e7e474961e8886a3d961e2c07da647a7ac8d60d97023545f3a3ecf604daba",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/oid2name.exe",
+      "sha256": "94f5575f1cdece6d976e88eb18cab4d3d561d2d4c513f71255fdff61752a54aa",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_amcheck.exe",
+      "sha256": "d8f76e42dc3c9317075232a6f1f76b8b69a13e290a2cb235ab1c7423c777a68f",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_archivecleanup.exe",
+      "sha256": "78e88976a66817b66f7a39665d8de4e2ef07ad1dcb1252bb84ba83714acd4ea2",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_basebackup.exe",
+      "sha256": "69a3de966570ecfb16a432e2e80dcd3fd44e188c97f38d9532831c1647d2df03",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_checksums.exe",
+      "sha256": "27a90e17fd94841bc578353d4d407ad9575b8d55391c310e13d0379eb0734d40",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_combinebackup.exe",
+      "sha256": "5bda885c3b73ca52dbd0d0e52606e1ed01c72159547b894b59bff0e34adf3d0a",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_config.exe",
+      "sha256": "ef62bd885430e268a98a25f8fd9e7ecb71a8992c22b64c8928254f1c53b5d119",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_controldata.exe",
+      "sha256": "86eccb0530aebfef2509b8f09384a12c4b96dabb075410cf60f2950d375969a0",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_createsubscriber.exe",
+      "sha256": "94f1a47a152f950e72d6a773c5b699463028707205f40e94782c6aa44d389e4d",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_ctl.exe",
+      "sha256": "595303cede56a05eff6e2ec6e6e8bd5531c13832ba09fab57b1a9e93bc945c34",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_dump.exe",
+      "sha256": "e856d19e6b73f351069d2d3d9f442e8c0371bebfc53c7e55b455adfc0b8ee14b",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_dumpall.exe",
+      "sha256": "83a41670a78220b1e9a3fd629376ad0ec0fc031f6d29e191777c8cbdecbf4cdc",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_isready.exe",
+      "sha256": "d50bdc861663bde1c2e07d58801e584c656c4c4128c02c034f537c5d1b097d5f",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_receivewal.exe",
+      "sha256": "f438e44805dfc0ecdc59e9fc09c5107530eb31fd4952885c32b56a781081c616",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_recvlogical.exe",
+      "sha256": "6c20fb5bda37a06f7dee73d5a77c533fe26e1e3a1bd06448b7b6aeab7bbda04a",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_resetwal.exe",
+      "sha256": "716e83763edec37c33a1bee86dc37fdc0038a891694e87e9848eb13da3623b3b",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_restore.exe",
+      "sha256": "c85a472c22c4eb657f76e70a87b55e2070474cd0042bcb87b50a787d085d950c",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_rewind.exe",
+      "sha256": "8b4d1989a27c03362ba1db243eed732013f9442adaac0769401e0776586d6ae5",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_test_fsync.exe",
+      "sha256": "b1bd3bc57eedc30a3b0f7eea7e91034becd281615c8acdba59ab31b15088ed80",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_test_timing.exe",
+      "sha256": "9b9e2822ed6642926d999634162931fef4564ef0211e907c5830192146b8a40d",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_upgrade.exe",
+      "sha256": "5b9ce001eb4b14c8802ff72fa4d609d07182161d87f152194bcf505de685e5e1",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_verifybackup.exe",
+      "sha256": "a9f622d93f80b40bf71f047b5a4c4ce3b98bd55cd501542e6fbd3aa95654e6f1",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_waldump.exe",
+      "sha256": "ff75dea04cc245af69fd84ceaab30e2a4471c072ed5c737d5fe0d9e2baf63329",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pg_walsummary.exe",
+      "sha256": "346d0bc97393e025b536afb5bc0234b28f19cdfc1125b9ebf445cc590bf1c0e3",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/pgbench.exe",
+      "sha256": "bb9c52dff35e688c381f7f3b3a072661b3b355872f50e0f0be06e3188418eabd",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/postgres.exe",
+      "sha256": "8ae8bb442e8a4c4fb2c8e9ad38c19aca610ee3cba33afd69249de769f905329b",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/psql.exe",
+      "sha256": "aa12e27530ac07f129e69daca953ea5f02202a7bde45d503e771abc39016536d",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/reindexdb.exe",
+      "sha256": "bafe74796a4aea3de6da71792bae9cba37e67fa0c695508f3b2b264643d8ab2a",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/stackbuilder.exe",
+      "sha256": "f1fc9c23e3c848d77a1048b96401877cdf0d02b759aadde88f43f52cb7b20784",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/test_cloexec.exe",
+      "sha256": "c5af79bd4d47465d186186ed1b5be3e106d518520e808145b27ee29db0659b4d",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/testplug.dll",
+      "sha256": "d1b10395868a004f6ae4700159ba89992a65147efaca63218cd5fb084b32303a",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/vacuumdb.exe",
+      "sha256": "e91326be158dca8c78fbfab46a5ff5b74206d6639cb3f9c55a9087821a81c7d6",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/vacuumlo.exe",
+      "sha256": "ecd1734a448cd7bae6f8a26ccf43094e1f9e2a7c179ab8cdbbe902dea3c1d6a4",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/wxbase3211u_net_vc_x64_custom.dll",
+      "sha256": "f707ee1d13ed5d3264a6b95dbb6cc4cd79e5d663180a91dca80704b1d97783eb",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/wxbase3211u_vc_x64_custom.dll",
+      "sha256": "cc6b32bb8cbc1ecd798a8e08144671bb0542e75217ee5b0f9a76fab9146b88be",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/wxbase3211u_xml_vc_x64_custom.dll",
+      "sha256": "4c716cb9407ed90331d677b55e82b3e31a16ff6f5adf9493321594d01fa200d3",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/wxmsw3211u_adv_vc_x64_custom.dll",
+      "sha256": "e9b0906ec69d7656228f564596ae882a8d68f37b5021f490ebcf2aae289eb742",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/wxmsw3211u_aui_vc_x64_custom.dll",
+      "sha256": "ded33cdf2455389eaef3e9c2bd6bca04d3edfbea9e7f53393ee6f8bab2ae124c",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/wxmsw3211u_core_vc_x64_custom.dll",
+      "sha256": "d658d50d6820d17ac4de22bd66b93799595d63c7469ca6a1d99f479a838b67b8",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/wxmsw3211u_html_vc_x64_custom.dll",
+      "sha256": "74b2e9f9f4b690b554733f1be1e4412c27ea5e0b0a6cd67d05e3895eafb2946e",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/wxmsw3211u_xrc_vc_x64_custom.dll",
+      "sha256": "24bb563eaed37c5b87d238fab8183eac8f66dbf4c67b06c2b9fa54a1234e020f",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "bin/zlib1.dll",
+      "sha256": "890afa7a17fb66308e0026631070409138b157ef2773c0a41d22a76943f7aedf",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/_int.dll",
+      "sha256": "752fe49749fc86e424613c3d468dc534f819f5ca19ba51d91079759c58c8c0c6",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/amcheck.dll",
+      "sha256": "7c9afe65c0837345094c0af6164bf3e80a3091a02d93eea12ea6460404b331d0",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/auth_delay.dll",
+      "sha256": "ccfc568f84dcce7ff07920be34462d38c7f48c4ff31bad617f89f60bb8c95fca",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/auto_explain.dll",
+      "sha256": "8bb40d4657ed0a14c84adc0c2d6f765b6f20f68aff13ceabee1695d3bb6aa41b",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/autoinc.dll",
+      "sha256": "803d100c50f997fcb88acee9dca5d98b2fc066890035c11ae90c1e194bc25749",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/basebackup_to_shell.dll",
+      "sha256": "aedae9929fe69573a5168d66e477e55ed4fb7f7bb07319ef68dbae6cfb17518e",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/basic_archive.dll",
+      "sha256": "fc77498f4239e7de0e0849c71ef9ab95706902f075187f6d6a2b7abd974427ba",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/bloom.dll",
+      "sha256": "cc24fa3b074079086d210cf11e11dadce4babab119c6799ebb4de29edd08f04b",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/bool_plperl.dll",
+      "sha256": "1bef9e63109104f2056e176a503a0c6c6b5130599c1b601908c6ee182b806fae",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/btree_gin.dll",
+      "sha256": "c1dfa1a23be0ccafb88795d462d98bf1ccebc92dedb5c5e0aeab1afb9c74a41c",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/btree_gist.dll",
+      "sha256": "2b12613da74d25892ba43648a1ba37c4b7058737a7f0e89b80df52e932bd79fd",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/citext.dll",
+      "sha256": "0bbfe0f1cfb28d2f72685637c6e847de070718e5d2b36606a57352a5e8f7eec9",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/cube.dll",
+      "sha256": "abd74a6e1420ccf10af6fbc0dcd0130ab50a241e3c05fd5fae1b03cb10368867",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/cyrillic_and_mic.dll",
+      "sha256": "d0b57379d213dcb90d0429cd05d2689d4baf13ed0d786ce69e3a704296476315",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/dblink.dll",
+      "sha256": "ba6d132158d3f5fc5309b29b0ccadc5e163e603f1f378171a24a97c5d755adaf",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/dict_int.dll",
+      "sha256": "bb9aab1e9b9a8bc7770909b2b98e6767e1d600049a22ce48cb1c9a4f3b6fd915",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/dict_snowball.dll",
+      "sha256": "7dd3a703722b2bf8c7f04a2568d8cfc6fe17fbf51e42278c1689bda505cac93d",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/dict_xsyn.dll",
+      "sha256": "16ccc3a13ddc83d9b40012eb523cdd84f10910f227c929f1cc303c6069441628",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/earthdistance.dll",
+      "sha256": "83d624e6040c465923087b56250cbc6e709fecb80df49397f7e1e90c589defd3",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/euc2004_sjis2004.dll",
+      "sha256": "25787bf8880da77f9a52b566db88e76cd1737713644191af6a1210df7c9f10e6",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/euc_cn_and_mic.dll",
+      "sha256": "cbc3a104921e7ff3b47090d495aa46e3b216d8af150dbf59a544fe028c846768",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/euc_jp_and_sjis.dll",
+      "sha256": "c389f5260637c19d7d019f219fb51b718cc7b03100ccd5e0ee12b4ddb8970485",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/euc_kr_and_mic.dll",
+      "sha256": "3b2c04d6078f9a8334790f678314d8b0b8ca6c29b40a8ca7788c6d3ab76bd0f6",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/euc_tw_and_big5.dll",
+      "sha256": "3e6cd73d8d663b0de86f3925f7fa1556b1b1a6f44ba449573dd4086c74c8283a",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/file_fdw.dll",
+      "sha256": "839bd446ebed5b615a740fbb32bf6374dbe287d03e3ea0dcba6c895461a1ea76",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/fuzzystrmatch.dll",
+      "sha256": "f242fdc8d495d6432dc7b5575e1818869eee4d212dd4a187915cd2d7b802f09f",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/hstore.dll",
+      "sha256": "f5d973246e3e5fc71d174fd7c1755e8138efbc68c3aaa841b4eb5555c1a943f7",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/hstore_plperl.dll",
+      "sha256": "641f0eed5face9d797d7bfdcbf81c5736d798dc031fdcb36e7d4a82e3b274c78",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/hstore_plpython3.dll",
+      "sha256": "eddb4c4c81490d3ee6020123afe3312c9e1bd6c89406933b2890b18f7a657325",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/insert_username.dll",
+      "sha256": "00509ad3f94ad2e0a428a9de10df382f81a703da5b650e64d05c47f799f16a4c",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/isn.dll",
+      "sha256": "efcdecbb93f11f2357101ae9ddf65e6a413e9d753315beb50f435e8589475f9f",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/jsonb_plperl.dll",
+      "sha256": "45901f3c5dadc16b45500918fa9ef57b78a47d213ade20ba7ad2b457ab1c0c01",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/jsonb_plpython3.dll",
+      "sha256": "7e250bd33bff3cccb009d01381af60a5593cccdde16fea013aadce58486de26b",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/latin2_and_win1250.dll",
+      "sha256": "e27ac7ee0c62438ac7d30f2bf6a4297ec471876fff7f8881518f1d4b6e77df5a",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/latin_and_mic.dll",
+      "sha256": "b27b3f0b6303be1214692194d078103f606bfff93de70a64d2483b034df457d1",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/libpqwalreceiver.dll",
+      "sha256": "e6e7d444005f2fc758ad2743f3acb1de33087f36fd33ee27b98684d7746d6537",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/lo.dll",
+      "sha256": "39201e4fdafbe7ff51c8bf2f89b88f1d2400d1e9c626145932556b5e31aed2e9",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/ltree.dll",
+      "sha256": "7dfd11245b94c03eb74e7ba880a663662ed5c54c8daccf08d22484ead4bb3638",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/ltree_plpython3.dll",
+      "sha256": "c0a46902d8ddadf1bbe04d0c1b48e80b76c49e1205eafa8a9f4010eeedb02828",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/moddatetime.dll",
+      "sha256": "f654a2c09e438e59c7bdb94b5927b11856a956115994dd8038feb71a49d4ad59",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/pageinspect.dll",
+      "sha256": "ad89a92590afc886f875e6eab518c5c641af0d326a6dd62797207973a20ff893",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/passwordcheck.dll",
+      "sha256": "4d6107b760611cad982307060bf8e25d8ce7837f13045d99885fc509941619a2",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/pg_buffercache.dll",
+      "sha256": "2432a4f9a9fff49f75641b51c6048e398113589474dd1f48e41bf681a4500d88",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/pg_freespacemap.dll",
+      "sha256": "3b4791c28dbc06ba64f75bf0ee0a46eb0c05b144af78e8fb34289df411f24385",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/pg_prewarm.dll",
+      "sha256": "58832d182f2ed3cfc15edff8201462d4538a9e85e08e5c39b87cdb9e4f20fe6e",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/pg_stat_statements.dll",
+      "sha256": "46483a9fed98ec25d38acd0f9d2d3149db7b86a4df78f764c65466bf75e0e2a9",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/pg_surgery.dll",
+      "sha256": "631ac3a46e4196d9cc7a42dcd8dd0b5e20cd677a245013bfc42a500485a225a8",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/pg_trgm.dll",
+      "sha256": "ce88e92560308cb92107b5eb24e1164d414a1950c8f2a52b78b6133cc53003d9",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/pg_visibility.dll",
+      "sha256": "7c8813e72712960a039814e963db95748d449d6da03ed6f8849a938325a90596",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/pg_walinspect.dll",
+      "sha256": "963c9b4b4585021a461a9096d0443dfb5e8938d395742bc21fe3116c1d12c66c",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/pgcrypto.dll",
+      "sha256": "65df5477319a7bba0a82f57ac867629a4a46a4f6aed7f6d844687b0b7504da9a",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/pgevent.dll",
+      "sha256": "74e5a522770037a1e66bfb1866d94a873f56553682ecc992397cfff272b90d00",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/pgoutput.dll",
+      "sha256": "38216cce7fe0cf005c752b89f42ccb6c735db60855123c31a381f229ba25f919",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/pgrowlocks.dll",
+      "sha256": "6dee49d8338bd5ef6036a8f4c1c971e2e3fd9d8913771b1a810b53a23bb44d0d",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/pgstattuple.dll",
+      "sha256": "2dbc541beb60826765a992ec78217108e9b3aaa26f74ad24a335bb9dc8155a74",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/pgxml.dll",
+      "sha256": "6be5b95f273e6e7eafb80792454a3bd267d158ff520ac672e4f67e094809a3d1",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/plperl.dll",
+      "sha256": "c21972ed0a190868389d0461ba847c6100d8723736bf6c66b0973de941ae88a1",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/plpgsql.dll",
+      "sha256": "618541ff60af85f2e5bb763eafdb1bf69db463cc16dcd4376ed4549485cb0699",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/plpython3.dll",
+      "sha256": "63847fbf893033d3aa8b4dba3b6fd4f08b547cb48c87cf8b2ff3884dd2a7fd57",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/pltcl.dll",
+      "sha256": "32fd217a0a9697d6803ed90f939aa8dfdfffdc3f4fa3afce04ceec1e656469c5",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/plugin_debugger.dll",
+      "sha256": "56a0adf2ecab30a11235aab43cbbe408fe0dd29c9b3faa787fc6121abe9410b6",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/postgres_fdw.dll",
+      "sha256": "63874175efbda255acbfafd033eb3b557f90141c53b45a5256953bfc8675ca4f",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/refint.dll",
+      "sha256": "1566eeddba81766bae9b8d99d4c3de6b6c619c5be14608d112befe8b2858cb07",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/seg.dll",
+      "sha256": "c3e0c23497c7e30d199e847513846123c669ee946432d4b01b2a8c28afdc928d",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/sslinfo.dll",
+      "sha256": "2c64c6593a4d600ab908a4eacf4fe4a5c9f6f3bd710f0023d31a0bc32030ca7d",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/system_stats.dll",
+      "sha256": "ac48cb0f80982a2ab81770eb083a60f6813abd02fb4ac0f4ef3e7cf5cf6e5e0c",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/tablefunc.dll",
+      "sha256": "e3be27a3d385f41a27c6b43079ccc6436a0bea72b5949e777adae74fe6f33e39",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/tcn.dll",
+      "sha256": "69b986e86f1d0416e1d60ed88e2a025d20fccf44542238d4f2c7029be7a68ea2",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/test_decoding.dll",
+      "sha256": "774b1df99bdca6871de8b04db49f69848afe7414fff2beb149ee0a7ca99c7850",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/tsm_system_rows.dll",
+      "sha256": "15f6c314fc69133396ca23b7ba6706fcba4aa3b01003de4184bd2624fd70ba99",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/tsm_system_time.dll",
+      "sha256": "5f9c43aca279ea9f0207957681d8e114fb6def498b034cabda6965ecd78e3ab3",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/unaccent.dll",
+      "sha256": "7a5604b83e4073974476e593d428892abcc5bc445614088b242715228689fe7d",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/utf8_and_big5.dll",
+      "sha256": "ced779a8a3d6b07324d9e664cbfb1d7f9785be577b28140077b1ebf8cf622824",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/utf8_and_cyrillic.dll",
+      "sha256": "7e6e461b5f4fefc4499b221422f263296f0cafb5e7c2f5261ab9034e2a24b75b",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/utf8_and_euc2004.dll",
+      "sha256": "f87635eb3f8bee6919996423c4a3b245f168490d95f7d9fcf56fca245afe6a1c",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/utf8_and_euc_cn.dll",
+      "sha256": "158f6d21c3b2ca63e71caa4174b10dcdc618df189d19353cbdc45a0ed4cf406b",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/utf8_and_euc_jp.dll",
+      "sha256": "f704506804c27966cb8275a6db8b99ad7759db0098f0eaf8766270df4976dfe5",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/utf8_and_euc_kr.dll",
+      "sha256": "b86dde1e1d2e937ac146f290933521cabfad549d2b095b56cf95748e9f296b39",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/utf8_and_euc_tw.dll",
+      "sha256": "b119964f5c897977b3f0fb528897fc16756d86d4b2c16a96877e8649906b338a",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/utf8_and_gb18030.dll",
+      "sha256": "575ef5d9d5f7b7d15b2bf65f3f4e28d54c07c57314fe673b79dd08a7f94c7873",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/utf8_and_gbk.dll",
+      "sha256": "e73004c7099727d80ffd13724245c602257250b1d7767764ff87f8f62529a3be",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/utf8_and_iso8859.dll",
+      "sha256": "77019fcf9a48839229889edf726ba12a4790dc8c6f4114f2e50c87c5ef1f9f28",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/utf8_and_iso8859_1.dll",
+      "sha256": "984bc11aeeb46eaf52229b1254c18a00b4c0797c99a9284d98525489e971df1c",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/utf8_and_johab.dll",
+      "sha256": "824d0473a1372a8d8152b96812f740674cb11ffedbab7532014f402ac1d47cf1",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/utf8_and_sjis.dll",
+      "sha256": "bf33332f14b168c7756b6e0ce97d131c33c8c9e0bab897006cfb83f444d961c9",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/utf8_and_sjis2004.dll",
+      "sha256": "c37285950b05c571b6a51994820fc36860b266dcc20d5442fac17f105594e293",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/utf8_and_uhc.dll",
+      "sha256": "c09800fcdfe9b04418484e10c08b4fdf9cce5df9ec7467611559e11d160233a0",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/utf8_and_win.dll",
+      "sha256": "72f6ce4ba8d6b52c7a32f8dba5c81a92e59be09a2c69b590af82899fdfadbc94",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    },
+    {
+      "path": "lib/uuid-ossp.dll",
+      "sha256": "1148441dab73423eb50535026802969fd5e05ccb140e5ac15157e5785d0a462e",
+      "upstream_component_version": "unknown unless PostgreSQL executable; not inferred from filename"
+    }
+  ],
+  "license_audit_boundary": "Root license texts retained unchanged. Native file hashes enumerate extracted candidates, not proof all are loaded. Per-component provenance and redistribution obligations remain release gates."
+}

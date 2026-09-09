@@ -4486,5 +4486,22 @@
     "urls": {
       "documentation": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html"
     }
+  },
+  {
+    "id": "P05-POSTGRESQL-TEST",
+    "title": "PostgreSQL (P05 isolated database validation)",
+    "modules": [
+      "P05"
+    ],
+    "kind": "test-dependency",
+    "acknowledgement_group": "software",
+    "authors": "PostgreSQL Global Development Group; EDB Windows distribution",
+    "version": "17.11; EDB archive 17.11-3 Windows x64",
+    "license": "PostgreSQL; bundled native dependencies have separate licenses",
+    "urls": {
+      "homepage": "https://www.postgresql.org/",
+      "download": "https://www.enterprisedb.com/download-postgresql-binaries",
+      "license": "https://www.postgresql.org/about/licence/"
+    }
   }
 ]

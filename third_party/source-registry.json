@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-09-09",
-  "total_records": 293,
+  "total_records": 294,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -6077,6 +6077,32 @@
       },
       "verification_date": "2026-09-09",
       "distribution_status": "reference-only",
+      "acknowledgement_group": "software"
+    },
+    {
+      "id": "P05-POSTGRESQL-TEST",
+      "title": "PostgreSQL (P05 isolated database validation)",
+      "kind": "test-dependency",
+      "modules": [
+        "P05"
+      ],
+      "authors": "PostgreSQL Global Development Group; EDB Windows distribution",
+      "actual_included_version": "17.11; EDB archive 17.11-3 Windows x64",
+      "license": "PostgreSQL; bundled native dependencies have separate licenses",
+      "urls": {
+        "homepage": "https://www.postgresql.org/",
+        "download": "https://www.enterprisedb.com/download-postgresql-binaries",
+        "license": "https://www.postgresql.org/about/licence/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "isolated local test runtime; not included in application distribution",
+      "relationship": "Official EDB binaries used unchanged for P05 integration tests; no database algorithm copied",
+      "used_at": [
+        "scripts/run_p05_isolated_postgres.py",
+        "scripts/verify_p05_postgres.py"
+      ],
+      "evidence": "third_party/p05-postgres-runtime.json",
+      "unresolved": "Publisher SHA256 not supplied; postgres.exe unsigned; bundled native redistribution audit pending",
       "acknowledgement_group": "software"
     }
   ]

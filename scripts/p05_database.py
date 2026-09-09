@@ -1,6 +1,7 @@
 """Review-first P05 SQL and controlled account provisioning. No default mutation."""
 import argparse
 import getpass
+import sys
 from pathlib import Path
 import psycopg
 from ptb_api.account_store import PostgresAccountStore
@@ -12,11 +13,13 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('action',choices=['show','check','apply','create-user'])
     p.add_argument('--approved-empty-test-database',action='store_true')
+    p.add_argument('--dsn-stdin',action='store_true',help='Read DSN from a private parent pipe, never a command argument')
     args=p.parse_args()
     if args.action=='show':
         print(SQL.read_text('utf-8'))
         return
-    dsn=getpass.getpass('Dedicated test database DSN (hidden): ')
+    dsn=sys.stdin.readline().strip() if args.dsn_stdin else getpass.getpass('Dedicated test database DSN (hidden): ')
+    if not dsn:p.error('A private database DSN is required')
     store=PostgresAccountStore(dsn)
     if args.action=='check':
         store.check_schema()

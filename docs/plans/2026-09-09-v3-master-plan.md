@@ -15,7 +15,7 @@
 | 阶段 | 任务 | 核心交付 | 当前状态 |
 | --- | --- | --- | --- |
 | 基线与风险 | P00–P03 | 来源基线、宿主验证、依赖/科研基准 | P00 文档与继承完成；P01 Windows 原型/试用及风险评审通过；P02 骨架与 P03 独立行为基线 verified（限定 Windows 定向范围） |
-| 公共基础 | P04–P07 | UI 壳、登录、任务、5 GB/7 天 | P04 公共界面 verified；P05 in_progress，实际迁移待确认；P06–P07 planned |
+| 公共基础 | P04–P07 | UI 壳、登录、任务、5 GB/7 天 | P04 公共界面 verified；P05 账号/项目及真实 PG 定向 verified；P06–P07 planned |
 | 功能迁移 | P08–P09 / M01–M15 | 全部功能双端与设备适配 | 未实施 |
 | 研究可追溯 | P10 | 软件/说明书/随包来源一致 | 已做首轮调查，未接软件界面 |
 | 验证与发行 | P11–P15 | WSL 10 用户、各平台包和部署方案 | 未实施，Mac 暂无实机 |
@@ -115,7 +115,7 @@
 
 ### P05 · 服务器账号、项目和会话隔离
 
-**依赖：** P02。**状态：** in_progress（实现及迁移前定向验证完成，实际 PG 迁移与集成未执行；见 [P05 报告](../testing/p05-accounts-report.md)）。
+**依赖：** P02。**状态：** verified（限定 Windows 账号/会话/项目，实际 PG 建表、并发及受控重启通过；第 6 项任务/资源联合验收仍在 P06/P07 待完成；见 [P05 报告](../testing/p05-accounts-report.md)）。
 
 **目标文件：** backend/src/ptb_api/auth.py；backend/src/ptb_api/projects.py；backend/tests/test_auth.py；tests/security/test_resource_ownership.py。
 

@@ -1,6 +1,6 @@
 # backend — 工作规则
 
-继承 [根 AGENTS.md](../AGENTS.md)，先读本目录 [ARCHITECTURE.md](ARCHITECTURE.md)。2026-09-09 已获 P05 账号/项目实施授权，实际建表与迁移仍需单独确认，范围见根规则与 P05 计划；不扩大为全面业务迁移或部署授权。
+继承 [根 AGENTS.md](../AGENTS.md)，先读本目录 [ARCHITECTURE.md](ARCHITECTURE.md)。2026-09-09 已获 P05 账号/项目实施及专属空库建表授权，Windows 账号/会话/项目与真实 PostgreSQL 定向验收已通过；其他数据库、后续 schema 变更仍须按根规则授权，范围见 P05 计划；不扩大为全面业务迁移或部署授权。
 
 - 负责：账号、HTTP、资源、配额、任务、服务端存储。
 - 允许依赖：contracts、phonetic_core、数据库/存储接口和服务端第三方依赖。
