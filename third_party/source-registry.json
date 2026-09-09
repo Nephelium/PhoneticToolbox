@@ -1,0 +1,1328 @@
+{
+  "schema_version": 1,
+  "audit_status": "initial-audit-with-open-items",
+  "checked_on": "2026-09-09",
+  "total_records": 58,
+  "sources": [
+    {
+      "id": "SRC-PRAAT",
+      "title": "Praat / Parselmouth",
+      "kind": "runtime-and-method",
+      "modules": [
+        "M01",
+        "M02",
+        "M03",
+        "M04",
+        "M06",
+        "M07",
+        "M08",
+        "M12"
+      ],
+      "urls": {
+        "homepage": "https://www.praat.org/",
+        "documentation": "https://parselmouth.readthedocs.io/en/stable/",
+        "paper": "https://doi.org/10.1016/j.wocn.2018.07.001",
+        "pdf": "https://cris.vub.be/ws/files/38628284/jadoul_introducing_parselmouth_a_python_interface_to_praat.pdf"
+      },
+      "evidence": "本地 acoustic/f0_praat.py、formants_praat.py、manipulation 使用 parselmouth；环境 praat-parselmouth 0.4.7。",
+      "license": "GPL family; verify exact bundled Praat/Parselmouth licenses",
+      "notes": "软件注明 Praat 作者 Paul Boersma / David Weenink 与 Parselmouth 作者；使用者导出方法记录实际版本。本文的 jitter/shimmer 主路径不据此称为 Praat 实现。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": "praat-parselmouth 0.4.7 in phonetic_311; embedded Praat version not probed",
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "authors": "Yannick Jadoul and Bill Thompson and Bart de Boer",
+      "year": 2018,
+      "citation_title": "Introducing Parselmouth: A Python Interface to Praat",
+      "doi": "10.1016/j.wocn.2018.07.001"
+    },
+    {
+      "id": "SRC-REAPER",
+      "title": "REAPER (Robust Epoch And Pitch EstimatoR)",
+      "kind": "bundled-code",
+      "modules": [
+        "M01",
+        "M02",
+        "M07"
+      ],
+      "urls": {
+        "repository": "https://github.com/google/REAPER"
+      },
+      "evidence": "core/acoustic/f0_reaper.py 调用随带 reaper.exe；upstream README/LICENSE 已读取。",
+      "license": "Apache-2.0",
+      "notes": "当前 exe 与哪次源码构建对应尚不明确，不能以本轮远端 HEAD 代替。非同名 DAW。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": "1d6e9b95e6b08b500fccbc9a043989dbda747276",
+      "distribution_status": "review-required",
+      "repo": "google/REAPER",
+      "authors": "David Talkin and REAPER contributors",
+      "upstream_observation_note": "2026-09-09 inspected upstream HEAD; not proof of the original included commit",
+      "license_files": [
+        {
+          "path": "third_party/licenses/SRC-REAPER/LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "basis": "upstream observed version; actual included provenance reviewed separately"
+        }
+      ],
+      "evidence_files": [
+        "third_party/evidence/SRC-REAPER/README.md"
+      ]
+    },
+    {
+      "id": "SRC-IRAPT",
+      "title": "IRAPT",
+      "kind": "ported-code-and-data",
+      "modules": [
+        "M01"
+      ],
+      "urls": {
+        "repository": "https://github.com/Mak-Sim/IRAPT"
+      },
+      "evidence": "core/acoustic/f0_irapt.py；Sinc_hash_1000.mat 与上游同名文件 SHA-256 完全一致：e3e2fb01d67f722b7f13c1c9a0f4d62559a1ece77167343dfa42de7203f4d860。",
+      "license": "GPL-3.0",
+      "notes": "需要保留原代码/数据版权和移植说明；精确初始复制 commit 未知。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": "a84929ffe026b8c37a992f67e29c2f3f16edbbe3",
+      "distribution_status": "review-required",
+      "repo": "Mak-Sim/IRAPT",
+      "authors": "Elias Azarov and Maxim Vashkevich and Alexander A. Petrovsky",
+      "year": 2012,
+      "citation_title": "Instantaneous pitch estimation based on RAPT framework",
+      "venue": "EUSIPCO",
+      "pages": "2787--2791",
+      "upstream_observation_note": "2026-09-09 inspected upstream HEAD; not proof of the original included commit",
+      "license_files": [
+        {
+          "path": "third_party/licenses/SRC-IRAPT/LICENSE",
+          "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+          "basis": "upstream observed version; actual included provenance reviewed separately"
+        }
+      ],
+      "evidence_files": [
+        "third_party/evidence/SRC-IRAPT/README.md"
+      ]
+    },
+    {
+      "id": "SRC-WMPC",
+      "title": "Troparion / WM-PC jitter and shimmer",
+      "kind": "ported-method",
+      "modules": [
+        "M01"
+      ],
+      "urls": {
+        "repository": "https://github.com/Mak-Sim/Troparion",
+        "paper": "https://arxiv.org/abs/2003.10806",
+        "pdf": "https://arxiv.org/pdf/2003.10806",
+        "published_doi": "https://doi.org/10.23919/SPA.2019.8936657"
+      },
+      "evidence": "jitter_shimmer.py 的 _wm_phase_const、bias 搜索、amp_extract、PPQ/RAP/APQ 对应上游 MATLAB；F0 路径先 IRAPT 后回退 Parselmouth。",
+      "license": "MPL-2.0 (Troparion repository)",
+      "notes": "arXiv 2020 与 SPA 2019 版本分别标识；上游 README 与 arXiv 作者顺序有出入，正式出版引用顺序仍待对照。不可宣称工具获得医疗诊断有效性。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": "8dbfa495a8d637cb3520716ff0b5cf113e0ecd42",
+      "distribution_status": "review-required",
+      "repo": "Mak-Sim/Troparion",
+      "authors": "Maxim Vashkevich and Alexander Petrovsky and Yuliya Rushkevich",
+      "year": 2020,
+      "citation_title": "Bulbar ALS Detection Based on Analysis of Voice Perturbation and Vibrato",
+      "eprint": "2003.10806",
+      "upstream_observation_note": "2026-09-09 inspected upstream HEAD; not proof of the original included commit",
+      "license_files": [
+        {
+          "path": "third_party/licenses/SRC-WMPC/LICENSE",
+          "sha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5",
+          "basis": "upstream observed version; actual included provenance reviewed separately"
+        }
+      ],
+      "evidence_files": [
+        "third_party/evidence/SRC-WMPC/README.md"
+      ]
+    },
+    {
+      "id": "SRC-VOICESAUCE",
+      "title": "VoiceSauce",
+      "kind": "reference-code-and-method",
+      "modules": [
+        "M01",
+        "M02"
+      ],
+      "urls": {
+        "homepage": "https://www.phonetics.ucla.edu/voicesauce/",
+        "documentation": "https://www.phonetics.ucla.edu/voicesauce/documentation/index.html",
+        "pdf": "https://www.phonetics.ucla.edu/voiceproject/Publications/Shue-etal_2011_ICPhS.pdf"
+      },
+      "evidence": "本地 CPP/HNR/SHR/SoE/谐波计算的注释、函数结构与 VoiceSauce MATLAB 参照；本地原工程 func_getCPP/HNR 标有 Shue/UCLA SPAPL 版权，SoE 标有 Soo Jin Park。",
+      "license": "original MATLAB license not resolved",
+      "notes": "不能把 OpenSauce Apache 许可证直接套给 VoiceSauce 原始 MATLAB；2011 官方指定引文优先。每个函数的来源链还需 P10 全量精查。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "authors": "Yen-Liang Shue and Patricia Keating and Chad Vicenik and Kristine Yu",
+      "year": 2011,
+      "citation_title": "VoiceSauce: A program for voice analysis",
+      "venue": "Proceedings of ICPhS XVII",
+      "pages": "1846--1849"
+    },
+    {
+      "id": "SRC-OPENSAUCE",
+      "title": "OpenSauce Python",
+      "kind": "reference-implementation",
+      "modules": [
+        "M01"
+      ],
+      "urls": {
+        "repository": "https://github.com/voicesauce/opensauce-python",
+        "paper": "https://doi.org/10.5281/zenodo.2638411"
+      },
+      "evidence": "本机 opensauce-python-master 及上游 harmonics.py/shrp.py 与本项目方法对应；LICENSE/CITATION.txt 已核验。",
+      "license": "Apache-2.0",
+      "notes": "该项目是 VoiceSauce/OpenSauce 的 Python 实现；数学公式对应不等于已证明每个本地函数直接复制于该 commit。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": "e633608137d4e733304321843b324db3c0b17983",
+      "distribution_status": "review-required",
+      "repo": "voicesauce/opensauce-python",
+      "authors": "Terri M. Yu and R. David Murray and Kate Silverstein and Kristine M. Yu",
+      "year": 2019,
+      "citation_title": "OpenSauce: Open source software for voice analysis",
+      "doi": "10.5281/zenodo.2638411",
+      "upstream_observation_note": "2026-09-09 inspected upstream HEAD; not proof of the original included commit",
+      "license_files": [
+        {
+          "path": "third_party/licenses/SRC-OPENSAUCE/LICENSE",
+          "sha256": "b612144650c175dbe6299ca24ed186c130505a45ed53c1068c6fa86eeb0c833c",
+          "basis": "upstream observed version; actual included provenance reviewed separately"
+        }
+      ],
+      "evidence_files": [
+        "third_party/evidence/SRC-OPENSAUCE/README.md",
+        "third_party/evidence/SRC-OPENSAUCE/CITATION.txt"
+      ]
+    },
+    {
+      "id": "REF-CPP",
+      "title": "CPP: Hillenbrand, Cleveland & Erickson",
+      "kind": "paper",
+      "modules": [
+        "M01"
+      ],
+      "urls": {
+        "paper": "https://pubs.asha.org/doi/abs/10.1044/jshr.3704.769"
+      },
+      "evidence": "core/acoustic/cpp.py 的倒谱峰显著性；论文出版元数据已核验。",
+      "license": "not-established",
+      "notes": "本地实现基于 VoiceSauce 风格处理，数值设置不因引用此论文就视为完全复现原实验。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "authors": "James Hillenbrand and Ronald A. Cleveland and Robert L. Erickson",
+      "year": 1994,
+      "citation_title": "Acoustic Correlates of Breathy Vocal Quality",
+      "doi": "10.1044/jshr.3704.769",
+      "venue": "Journal of Speech and Hearing Research",
+      "pages": "769--778"
+    },
+    {
+      "id": "REF-HNR",
+      "title": "HNR: de Krom",
+      "kind": "paper",
+      "modules": [
+        "M01"
+      ],
+      "urls": {
+        "paper": "https://pubs.asha.org/doi/10.1044/jshr.3602.254"
+      },
+      "evidence": "core/acoustic/hnr.py 与 VoiceSauce HNR 路径；出版元数据已核验。",
+      "license": "not-established",
+      "notes": "HNR05/15/25/35 与其他软件 HNR 定义不可混为一项。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "authors": "Guus de Krom",
+      "year": 1993,
+      "citation_title": "A Cepstrum-Based Technique for Determining a Harmonics-to-Noise Ratio in Speech Signals",
+      "doi": "10.1044/jshr.3602.254",
+      "venue": "Journal of Speech and Hearing Research",
+      "pages": "254--266"
+    },
+    {
+      "id": "REF-SHR",
+      "title": "SHR: Xuejing Sun",
+      "kind": "paper",
+      "modules": [
+        "M01"
+      ],
+      "urls": {
+        "paper": "https://ieeexplore.ieee.org/document/5743722/"
+      },
+      "evidence": "SHR 本地实现和 OpenSauce/VoiceSauce shrp.py 对应；IEEE 搜索元数据核对。",
+      "license": "not-established",
+      "notes": "不要引用同年 ISCA 另一篇无关文章；具体实现设置和引用来源分开记录。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "authors": "Xuejing Sun",
+      "year": 2002,
+      "citation_title": "Pitch determination and voice quality analysis using Subharmonic-to-Harmonic Ratio"
+    },
+    {
+      "id": "REF-ISELI",
+      "title": "谐波幅度校正: Iseli & Alwan",
+      "kind": "paper",
+      "modules": [
+        "M01"
+      ],
+      "urls": {
+        "pdf": "https://www.seas.ucla.edu/spapl/paper/iseli04.pdf"
+      },
+      "evidence": "corrections.py 的 r=exp(-πB/fs) 与数字共振器公式对应 2004 论文；官方作者机构 PDF 已阅读。",
+      "license": "not-established",
+      "notes": "旧文档写成 Iseli 1999 不准确，v3 方法页改为本条；本轮未更改算法。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "authors": "Markus Iseli and Abeer Alwan",
+      "year": 2004,
+      "citation_title": "An improved correction formula for the estimation of harmonic magnitudes and its application to open quotient estimation"
+    },
+    {
+      "id": "REF-HAWKS",
+      "title": "共振峰带宽估计: Hawks & Miller",
+      "kind": "paper",
+      "modules": [
+        "M01"
+      ],
+      "urls": {
+        "paper": "https://profiles.wustl.edu/en/publications/a-formant-bandwidth-estimation-procedure-for-vowel-synthesis-4372",
+        "doi": "https://doi.org/10.1121/1.412986"
+      },
+      "evidence": "本地校正/带宽模型与 OpenSauce harmonics.py 的系数和引用对应；作者机构出版记录核验。",
+      "license": "not-established",
+      "notes": "估计带宽和 Praat 直接测得带宽分别说明。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "authors": "John W. Hawks and James D. Miller",
+      "year": 1995,
+      "citation_title": "A formant bandwidth estimation procedure for vowel synthesis",
+      "doi": "10.1121/1.412986",
+      "venue": "Journal of the Acoustical Society of America",
+      "pages": "1343--1344"
+    },
+    {
+      "id": "REF-SOE",
+      "title": "Strength of Excitation / epoch extraction",
+      "kind": "method-chain",
+      "modules": [
+        "M01"
+      ],
+      "urls": {
+        "documentation": "https://www.phonetics.ucla.edu/voicesauce/documentation/index.html"
+      },
+      "evidence": "本机原 MATLAB func_getSoE.m 标 Soo Jin Park (2015)，并引用 K. Sri Rama Murty / B. Yegnanarayana (2008) Epoch Extraction From Speech Signals；本地 core/acoustic/soe.py。",
+      "license": "VoiceSauce source obligations unresolved",
+      "notes": "本轮确认方法链与源注释；原始论文完整出版字段和本地改动待核验，不能只留下论文而漏掉实现作者。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "authors": "K. Sri Rama Murty and B. Yegnanarayana",
+      "year": 2008,
+      "citation_title": "Epoch Extraction From Speech Signals",
+      "bibliography_status": "source-comment-confirmed; primary publication fields pending"
+    },
+    {
+      "id": "SRC-TDKLATT",
+      "title": "tdklatt / TrackDraw",
+      "kind": "adapted-code",
+      "modules": [
+        "M06"
+      ],
+      "urls": {
+        "repository": "https://github.com/guestdaniel/tdklatt"
+      },
+      "evidence": "本地 core/synthesis/klatt/tdklatt.py 与上游行结构/类/文档字符串高度对应；归一化逐行匹配约 91.87%，并有本地播放/处理改动。",
+      "license": "MIT",
+      "notes": "原版权：Copyright (c) 2017 Adrian Y. Cho and Daniel R Guest。保留原文和改动说明；不声称 Klatt 引擎原创。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": "081f98431c2995187ecadb15d3667c7b6b7f8c73",
+      "distribution_status": "review-required",
+      "repo": "guestdaniel/tdklatt",
+      "authors": "Adrian Y. Cho and Daniel R Guest",
+      "upstream_observation_note": "2026-09-09 inspected upstream HEAD; not proof of the original included commit",
+      "license_files": [
+        {
+          "path": "third_party/licenses/SRC-TDKLATT/LICENSE",
+          "sha256": "2e41bdfafe0a6a21f31091bee125174153f294f223ce98fc440b82b5e1675f41",
+          "basis": "upstream observed version; actual included provenance reviewed separately"
+        }
+      ],
+      "evidence_files": [
+        "third_party/evidence/SRC-TDKLATT/README.md"
+      ]
+    },
+    {
+      "id": "REF-KLATT",
+      "title": "Klatt formant synthesizer",
+      "kind": "paper",
+      "modules": [
+        "M06"
+      ],
+      "urls": {
+        "pdf": "https://sail.usc.edu/~lgoldste/Ling582/Week%2012/klatt1980.pdf",
+        "doi": "https://doi.org/10.1121/1.383940"
+      },
+      "evidence": "Klatt 方法论文，已通过原论文 PDF 和 tdklatt 研究背景核对；具体代码作者见 tdklatt。",
+      "license": "not-established",
+      "notes": "方法引用不取代 tdklatt 实现版权。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "authors": "Dennis H. Klatt",
+      "year": 1980,
+      "citation_title": "Software for a cascade/parallel formant synthesizer",
+      "doi": "10.1121/1.383940",
+      "venue": "Journal of the Acoustical Society of America",
+      "pages": "971--995"
+    },
+    {
+      "id": "SRC-ZAIWA",
+      "title": "载瓦语 F0 与发声类型研究代码/数据",
+      "kind": "adapted-method-and-source",
+      "modules": [
+        "M07"
+      ],
+      "urls": {
+        "repository": "https://github.com/Luyao2025/Contribution-of-F0-and-phonation-to-tone-perception-in-the-Zaiwa-language"
+      },
+      "evidence": "本机 python_replication 明确写为论文复现；原 Section 2/main.m 等包含合成流程和原始音节，v2 phonation_synthesis.py 从该 Python 工作衍生。",
+      "license": "no repository license detected",
+      "notes": "公开代码仓库没有发现明确 LICENSE，不能当作公共领域；代码、录音、统计数据和论文许可需分别判断。当前 v2 不必加载原论文统计/音节数据，勿为演示而新增分发。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": "4a74bcbfc6095926a35f9cad8b05e0ec174f9f9e",
+      "distribution_status": "review-required",
+      "repo": "Luyao2025/Contribution-of-F0-and-phonation-to-tone-perception-in-the-Zaiwa-language",
+      "authors": "Yao Lu and Changwei Liang and Jiangping Kong",
+      "upstream_observation_note": "2026-09-09 inspected upstream HEAD; not proof of the original included commit",
+      "evidence_files": [
+        "third_party/evidence/SRC-ZAIWA/README.md"
+      ]
+    },
+    {
+      "id": "REF-ZAIWA",
+      "title": "F0 与发声类型对载瓦语声调感知的贡献",
+      "kind": "paper",
+      "modules": [
+        "M07"
+      ],
+      "urls": {
+        "paper": "https://www.sciencedirect.com/science/article/pii/S0095447025000245",
+        "doi": "https://doi.org/10.1016/j.wocn.2025.101413"
+      },
+      "evidence": "作者/期刊/卷号 110/文章 101413 已由出版方索引与本机论文原文核对。",
+      "license": "article license is separate from code/data",
+      "notes": "v2 Python 采用 Parselmouth/REAPER 替换原 STRAIGHT MulticueF0 等步骤，为近似重建；不要声称精确复现原论文。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "authors": "Yao Lu and Changwei Liang and Jiangping Kong",
+      "year": 2025,
+      "citation_title": "Contribution of F0 and phonation to tone perception in the Zaiwa language",
+      "doi": "10.1016/j.wocn.2025.101413",
+      "venue": "Journal of Phonetics"
+    },
+    {
+      "id": "REF-GRIFFINLIM",
+      "title": "Griffin–Lim 重建",
+      "kind": "paper",
+      "modules": [
+        "M09"
+      ],
+      "urls": {
+        "paper": "https://ieeexplore.ieee.org/document/1164317",
+        "pdf": "https://dub.ucsd.edu/CATbox/Reader/GriffinLimMSTFT.pdf",
+        "doi": "https://doi.org/10.1109/TASSP.1984.1164317"
+      },
+      "evidence": "core/spec2wav/griffin_lim.py；原论文 PDF 已核对。",
+      "license": "not-established",
+      "notes": "相位估计是重建，不保证恢复原始录音；固定随机种子与迭代设置进入结果。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "authors": "Daniel W. Griffin and Jae S. Lim",
+      "year": 1984,
+      "citation_title": "Signal estimation from modified short-time Fourier transform",
+      "doi": "10.1109/TASSP.1984.1164317",
+      "venue": "IEEE Transactions on Acoustics, Speech, and Signal Processing",
+      "pages": "236--243"
+    },
+    {
+      "id": "SRC-VTL",
+      "title": "VocalTractLab API 2.4",
+      "kind": "bundled-native-code",
+      "modules": [
+        "M10"
+      ],
+      "urls": {
+        "homepage": "https://www.vocaltractlab.de/",
+        "download": "https://www.vocaltractlab.de/download-vocaltractlab/VTL2.4.zip",
+        "documentation": "https://www.vocaltractlab.de/index.php?page=vocaltractlab-download"
+      },
+      "evidence": "resources/vocal_tract/ 源码 ZIP、GPL 文本、sources.lock.json、native DLL 和 bridge 源码；已核验官方 2.4 下载页面。",
+      "license": "GPL-3.0-or-later",
+      "notes": "VTL 与本地 bridge/adapter 的版权/修改声明随包；VocalTractLabAnalysis.dll 同字节副本用于状态隔离，非独立自研引擎。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": "2.4 (Windows native bundle)",
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "authors": "Peter Birkholz and VocalTractLab contributors"
+    },
+    {
+      "id": "DOC-VTL24",
+      "title": "VocalTractLab 2.4 官方手册",
+      "kind": "manual",
+      "modules": [
+        "M10"
+      ],
+      "urls": {
+        "pdf": "https://www.vocaltractlab.de/download-vocaltractlab/VTL2.4-manual.pdf"
+      },
+      "evidence": "官方 PDF 已打开，30 页；对应当前 2.4 引擎版本。",
+      "license": "not-established",
+      "notes": "软件提供打开官方手册/下载原 PDF 链接；不默认把 PDF 镜像打包。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": "link only; manual 2.4",
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required"
+    },
+    {
+      "id": "DOC-VTL23",
+      "title": "VocalTractLab 2.3 官方手册（补充）",
+      "kind": "manual",
+      "modules": [
+        "M10"
+      ],
+      "urls": {
+        "pdf": "https://www.vocaltractlab.de/download-vocaltractlab/VTL2.3-manual.pdf"
+      },
+      "evidence": "井井指定链接，已打开官方 PDF，30 页。",
+      "license": "not-established",
+      "notes": "明确标为 2.3 版补充资料，不能冒充当前 2.4 API 文档。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": "link only; manual 2.3",
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required"
+    },
+    {
+      "id": "REF-VTL2006",
+      "title": "三维声道模型",
+      "kind": "paper",
+      "modules": [
+        "M10"
+      ],
+      "urls": {
+        "pdf": "https://www.vocaltractlab.de/publications/birkholz-2006-icassp.pdf",
+        "publications": "https://www.vocaltractlab.de/index.php?page=birkholz-publications"
+      },
+      "evidence": "官方作者网页与 4 页论文 PDF 核验。",
+      "license": "not-established",
+      "notes": "声道几何/控制模型的基础引用；2.4 实际引擎增量以当前手册/源码说明为准。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "authors": "Peter Birkholz and Dietmar Jackèl and Bernd J. Kröger",
+      "year": 2006,
+      "citation_title": "Construction and Control of a Three-Dimensional Vocal Tract Model",
+      "venue": "ICASSP",
+      "pages": "873--876"
+    },
+    {
+      "id": "SRC-THREE",
+      "title": "Three.js r180 / OrbitControls",
+      "kind": "bundled-code",
+      "modules": [
+        "M10"
+      ],
+      "urls": {
+        "repository": "https://github.com/mrdoob/three.js/tree/r180"
+      },
+      "evidence": "gui/resources/vocal_tract/vendor/ 有三个脚本、THREE-LICENSE；sources.lock.json 记录准确 hash。",
+      "license": "MIT",
+      "notes": "v3 可迁移既有三维显示，但保留版本、版权。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": "0.180.0 / r180",
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required"
+    },
+    {
+      "id": "ASSET-HEAD",
+      "title": "3D human parts pack / FACE2",
+      "kind": "derived-asset",
+      "modules": [
+        "M10"
+      ],
+      "urls": {
+        "homepage": "https://opengameart.org/content/3d-human-parts-pack"
+      },
+      "evidence": "本地 sources.lock.json 记录 face2_0.obj 原 hash 和 head.json 衍生 hash，官方页面作者 byzmod3d/CC0 已核验。",
+      "license": "CC0-1.0",
+      "notes": "只取 FACE2，去掉 CABELO，三角化；配准为外观参考，不是受试者 MRI，不参与声学边界。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "authors": "byzmod3d"
+    },
+    {
+      "id": "ASSET-NASAL",
+      "title": "Healthy nasal cavities — averaged geometry",
+      "kind": "derived-research-data",
+      "modules": [
+        "M10"
+      ],
+      "urls": {
+        "doi": "https://doi.org/10.6084/m9.figshare.9585410.v4",
+        "related_paper": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7048824/"
+      },
+      "evidence": "本地 lock/notice 含 v4 下载 hash、作者全表和修改说明；本轮 DOI 直接获取未成功，相关论文检索可定位。",
+      "license": "CC-BY-4.0 per existing provenance; live v4 metadata pending",
+      "notes": "继承证据，不冒充本轮已完成全部在线验证；须保留原作者、v4 DOI、坐标变换及平均模型≠JD2 个体说明。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": "v4 according to existing sources.lock.json",
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "authors": "Jan Brüning and Thomas Hildebrandt and Werner Heppt and Nora Schmidt and Hans Lamecker and Angelika Szengel and Natalja Amiridze and Heiko Ramm and Matthias Bindernagel and Stefan Zachow and Leonid Goubergrits",
+      "year": 2020,
+      "citation_title": "Healthy nasal cavities - averaged geometry",
+      "doi": "10.6084/m9.figshare.9585410.v4",
+      "verification_status": "local-provenance-verified; live-dataset-metadata-pending"
+    },
+    {
+      "id": "SRC-VTLWRAPPER",
+      "title": "VocalTractLab-Python",
+      "kind": "reference-only",
+      "modules": [
+        "M10"
+      ],
+      "urls": {
+        "repository": "https://github.com/paul-krug/VocalTractLab-Python"
+      },
+      "evidence": "本地 lock 明确：Read as reference; not installed, not imported；本轮确认官方仓库可读。",
+      "license": "not assessed for redistribution; no bundled code claimed",
+      "notes": "保留参考来源；不能在依赖表中声称当前引擎使用其 Python wrapper。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": "reference commit bb37e1894a790f31d4ef7c19803c177cc095e290 from existing lock",
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required"
+    },
+    {
+      "id": "SRC-MEDIAPIPE",
+      "title": "MediaPipe Face Mesh",
+      "kind": "runtime-and-model",
+      "modules": [
+        "M05"
+      ],
+      "urls": {
+        "documentation": "https://developers.google.com/edge/mediapipe/solutions/vision/face_landmarker",
+        "repository": "https://github.com/google-ai-edge/mediapipe"
+      },
+      "evidence": "lip_gui.py 使用 legacy Face Mesh；phonetic_311 安装 mediapipe 0.10.14，PyPI 对应发布元数据已核验。",
+      "license": "Apache-2.0 for code; bundled model terms require artifact audit",
+      "notes": "官方当前 Face Landmarker 文档不能冒充本地使用新 API；具体 tflite 模型 hash/许可单独补齐。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": "0.10.14",
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required"
+    },
+    {
+      "id": "SRC-FFMPEG",
+      "title": "FFmpeg",
+      "kind": "native-tool",
+      "modules": [
+        "M05"
+      ],
+      "urls": {
+        "homepage": "https://ffmpeg.org/",
+        "license": "https://ffmpeg.org/legal.html"
+      },
+      "evidence": "run.spec/视频处理涉及 FFmpeg；当前分发二进制 build flags 和确切来源未完成核验。",
+      "license": "build-dependent; not yet verified",
+      "notes": "GPL/LGPL 取决于实际构建；需要记录每平台具体二进制、许可证/源代码获取方式，不能笼统标同一种许可。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "verification_status": "local-use-confirmed; exact-binary-pending"
+    },
+    {
+      "id": "SRC-MFA",
+      "title": "Montreal Forced Aligner / Kaldi / models",
+      "kind": "external-tool-and-models",
+      "modules": [
+        "M11"
+      ],
+      "urls": {
+        "documentation": "https://montreal-forced-aligner.readthedocs.io/en/latest/"
+      },
+      "evidence": "mfa_alignment_service / pipeline 调用外部环境；官方文档已查阅。",
+      "license": "each executable/model/dictionary must be checked",
+      "notes": "MFA 程序、Kaldi 依赖、声学模型与词典分别列许可；本轮未安装/运行 MFA，版本待环境专项探测。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required"
+    },
+    {
+      "id": "REF-MFA",
+      "title": "Montreal Forced Aligner 论文",
+      "kind": "paper",
+      "modules": [
+        "M11"
+      ],
+      "urls": {
+        "paper": "https://www.isca-archive.org/interspeech_2017/mcauliffe17_interspeech.html",
+        "doi": "https://doi.org/10.21437/Interspeech.2017-1386"
+      },
+      "evidence": "ISCA 原始论文记录核验。",
+      "license": "not-established",
+      "notes": "当前采用的 MFA 版本/模型应另记，引用 2017 论文不代表使用 2017 二进制。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "authors": "Michael McAuliffe and Michaela Socolof and Sarah Mihuc and Michael Wagner and Morgan Sonderegger",
+      "year": 2017,
+      "citation_title": "Montreal Forced Aligner: Trainable Text-Speech Alignment Using Kaldi",
+      "doi": "10.21437/Interspeech.2017-1386",
+      "venue": "Interspeech",
+      "pages": "498--502"
+    },
+    {
+      "id": "ASSET-DOULOS",
+      "title": "Doulos SIL 字体",
+      "kind": "font",
+      "modules": [
+        "M13"
+      ],
+      "urls": {
+        "homepage": "https://software.sil.org/doulos/",
+        "download": "https://software.sil.org/doulos/download/"
+      },
+      "evidence": "IPA HTML 随附字体；官方说明 SIL OFL；当前网站 7.000 不可当成本地字体版本。",
+      "license": "SIL Open Font License; actual font version pending",
+      "notes": "正式包装提取字体 name 表版本和 hash，随字体放准确 OFL 文本；其他系统字体不擅自复制。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "authors": "SIL International"
+    },
+    {
+      "id": "PENDING-EGG",
+      "title": "EGG 事件分析/简化逆滤波方法",
+      "kind": "provenance-pending",
+      "modules": [
+        "M03"
+      ],
+      "urls": {},
+      "evidence": "core/egg 的算法出处没有完整引用链，需逐函数查 GCI/GOI、CQ/SQ、滤波和简化 CPIF 的实现来源。",
+      "license": "not-established",
+      "notes": "列入 P10 待核验清单；不能用无来源占位条目通过发行审查。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "verification_status": "local-evidence-only"
+    },
+    {
+      "id": "PENDING-DICTIONARY",
+      "title": "内置普通话发音词典",
+      "kind": "provenance-pending",
+      "modules": [
+        "M12"
+      ],
+      "urls": {},
+      "evidence": "web_praat_editor/default.dict 的初始来源、授权和修改史尚未定位。",
+      "license": "not-established",
+      "notes": "列入 P10 待核验清单；不能用无来源占位条目通过发行审查。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "verification_status": "local-evidence-only"
+    },
+    {
+      "id": "PENDING-IPA",
+      "title": "11 套普通话转换规则及映射数据",
+      "kind": "provenance-pending",
+      "modules": [
+        "M13"
+      ],
+      "urls": {},
+      "evidence": "原 HTML/生成脚本内标准名称已核对；字表/多音规则/各标准原始出版信息尚未完整核实。",
+      "license": "not-established",
+      "notes": "列入 P10 待核验清单；不能用无来源占位条目通过发行审查。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "verification_status": "local-evidence-only"
+    },
+    {
+      "id": "PENDING-PHONOLOGY",
+      "title": "音系归纳规则和帮助材料",
+      "kind": "provenance-pending",
+      "modules": [
+        "M14"
+      ],
+      "urls": {},
+      "evidence": "本地转换/排序/归并代码已定位；未找到足以断言全部原创的历史记录，需审查复用数据和参考规则。",
+      "license": "not-established",
+      "notes": "列入 P10 待核验清单；不能用无来源占位条目通过发行审查。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "verification_status": "local-evidence-only"
+    },
+    {
+      "id": "ORIGIN-WEBEDITOR",
+      "title": "本地 pitch_perception 的 web_praat_editor 来源链",
+      "kind": "provenance-pending",
+      "modules": [
+        "M12"
+      ],
+      "urls": {},
+      "evidence": "v2 AGENTS 明确由本地 pitch_perception 项目通用化而来；需追溯其内部第三方脚本，不据项目同属用户就认为没有外部来源。",
+      "license": "not-established",
+      "notes": "列入 P10 待核验清单；不能用无来源占位条目通过发行审查。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "verification_status": "local-evidence-only"
+    },
+    {
+      "id": "ASSET-MASCOT",
+      "title": "K2 蓝色波形团子与 U2 设计参考",
+      "kind": "provenance-pending",
+      "modules": [
+        "global"
+      ],
+      "urls": {},
+      "evidence": "本次任务此前生成并由用户暂定；保存原图用于设计，不是正式多尺寸图标发行物。",
+      "license": "not-established",
+      "notes": "列入 P10 待核验清单；不能用无来源占位条目通过发行审查。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "verification_status": "local-evidence-only"
+    },
+    {
+      "id": "SRC-HTML2CANVAS",
+      "title": "html2canvas",
+      "kind": "legacy-web-dependency",
+      "modules": [
+        "M13"
+      ],
+      "urls": {
+        "repository": "https://github.com/niklasvh/html2canvas"
+      },
+      "evidence": "原 HTML/CDN import 已确认存在；具体锁定版本/脚本正文 license 尚需在前端迁移阶段逐个核验。",
+      "license": "exact-version-license-pending",
+      "notes": "v3 构建本地静态资源并保存许可证，禁止发行时靠未锁定 CDN 加载运行。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "verification_status": "local-use-confirmed; upstream-artifact-review-pending"
+    },
+    {
+      "id": "SRC-REACT",
+      "title": "React",
+      "kind": "legacy-web-dependency",
+      "modules": [
+        "M15"
+      ],
+      "urls": {
+        "repository": "https://github.com/facebook/react"
+      },
+      "evidence": "原 HTML/CDN import 已确认存在；具体锁定版本/脚本正文 license 尚需在前端迁移阶段逐个核验。",
+      "license": "exact-version-license-pending",
+      "notes": "v3 构建本地静态资源并保存许可证，禁止发行时靠未锁定 CDN 加载运行。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "verification_status": "local-use-confirmed; upstream-artifact-review-pending"
+    },
+    {
+      "id": "SRC-BABEL",
+      "title": "Babel standalone",
+      "kind": "legacy-web-dependency",
+      "modules": [
+        "M15"
+      ],
+      "urls": {
+        "repository": "https://github.com/babel/babel"
+      },
+      "evidence": "原 HTML/CDN import 已确认存在；具体锁定版本/脚本正文 license 尚需在前端迁移阶段逐个核验。",
+      "license": "exact-version-license-pending",
+      "notes": "v3 构建本地静态资源并保存许可证，禁止发行时靠未锁定 CDN 加载运行。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "verification_status": "local-use-confirmed; upstream-artifact-review-pending"
+    },
+    {
+      "id": "SRC-TAILWIND",
+      "title": "Tailwind CSS",
+      "kind": "legacy-web-dependency",
+      "modules": [
+        "M15"
+      ],
+      "urls": {
+        "repository": "https://github.com/tailwindlabs/tailwindcss"
+      },
+      "evidence": "原 HTML/CDN import 已确认存在；具体锁定版本/脚本正文 license 尚需在前端迁移阶段逐个核验。",
+      "license": "exact-version-license-pending",
+      "notes": "v3 构建本地静态资源并保存许可证，禁止发行时靠未锁定 CDN 加载运行。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "verification_status": "local-use-confirmed; upstream-artifact-review-pending"
+    },
+    {
+      "id": "SRC-SHEETJS",
+      "title": "SheetJS",
+      "kind": "legacy-web-dependency",
+      "modules": [
+        "M15"
+      ],
+      "urls": {
+        "repository": "https://git.sheetjs.com/sheetjs/sheetjs"
+      },
+      "evidence": "原 HTML/CDN import 已确认存在；具体锁定版本/脚本正文 license 尚需在前端迁移阶段逐个核验。",
+      "license": "exact-version-license-pending",
+      "notes": "v3 构建本地静态资源并保存许可证，禁止发行时靠未锁定 CDN 加载运行。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "verification_status": "local-use-confirmed; upstream-artifact-review-pending"
+    },
+    {
+      "id": "SRC-LUCIDE",
+      "title": "Lucide",
+      "kind": "legacy-web-dependency",
+      "modules": [
+        "M15"
+      ],
+      "urls": {
+        "repository": "https://github.com/lucide-icons/lucide"
+      },
+      "evidence": "原 HTML/CDN import 已确认存在；具体锁定版本/脚本正文 license 尚需在前端迁移阶段逐个核验。",
+      "license": "exact-version-license-pending",
+      "notes": "v3 构建本地静态资源并保存许可证，禁止发行时靠未锁定 CDN 加载运行。",
+      "verification_date": "2026-09-09",
+      "actual_included_version": null,
+      "observed_upstream_commit": null,
+      "distribution_status": "review-required",
+      "verification_status": "local-use-confirmed; upstream-artifact-review-pending"
+    },
+    {
+      "id": "PKG-NUMPY",
+      "title": "numpy",
+      "kind": "installed-runtime-package",
+      "modules": [
+        "shared-runtime"
+      ],
+      "actual_included_version": "2.2.6 in phonetic_311; v3 pin pending",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-09",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/numpy/2.2.6/json",
+        "documentation": "https://numpy.org/doc/",
+        "download": "https://pypi.org/project/numpy/#files",
+        "homepage": "https://numpy.org",
+        "release notes": "https://numpy.org/doc/stable/release",
+        "source": "https://github.com/numpy/numpy",
+        "tracker": "https://github.com/numpy/numpy/issues"
+      },
+      "license": "see exact release metadata / wheel audit pending",
+      "authors": "Travis E. Oliphant et al.",
+      "evidence": "Installed package version read without changing environment; corresponding official PyPI release metadata retrieved.",
+      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
+      "license_metadata_file": "third_party/licenses/pypi/numpy-2.2.6-metadata.txt",
+      "distribution_status": "actual-wheel-and-native-audit-required"
+    },
+    {
+      "id": "PKG-SCIPY",
+      "title": "scipy",
+      "kind": "installed-runtime-package",
+      "modules": [
+        "shared-runtime"
+      ],
+      "actual_included_version": "1.16.3 in phonetic_311; v3 pin pending",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-09",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/scipy/1.16.3/json",
+        "documentation": "https://docs.scipy.org/doc/scipy/",
+        "download": "https://github.com/scipy/scipy/releases",
+        "homepage": "https://scipy.org/",
+        "source": "https://github.com/scipy/scipy",
+        "tracker": "https://github.com/scipy/scipy/issues"
+      },
+      "license": "see exact release metadata / wheel audit pending",
+      "authors": null,
+      "evidence": "Installed package version read without changing environment; corresponding official PyPI release metadata retrieved.",
+      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
+      "license_metadata_file": "third_party/licenses/pypi/scipy-1.16.3-metadata.txt",
+      "distribution_status": "actual-wheel-and-native-audit-required"
+    },
+    {
+      "id": "PKG-PANDAS",
+      "title": "pandas",
+      "kind": "installed-runtime-package",
+      "modules": [
+        "shared-runtime"
+      ],
+      "actual_included_version": "2.3.3 in phonetic_311; v3 pin pending",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-09",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/pandas/2.3.3/json",
+        "documentation": "https://pandas.pydata.org/docs/",
+        "homepage": "https://pandas.pydata.org",
+        "repository": "https://github.com/pandas-dev/pandas"
+      },
+      "license": "see exact release metadata / wheel audit pending",
+      "authors": null,
+      "evidence": "Installed package version read without changing environment; corresponding official PyPI release metadata retrieved.",
+      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
+      "license_metadata_file": "third_party/licenses/pypi/pandas-2.3.3-metadata.txt",
+      "distribution_status": "actual-wheel-and-native-audit-required"
+    },
+    {
+      "id": "PKG-MATPLOTLIB",
+      "title": "matplotlib",
+      "kind": "installed-runtime-package",
+      "modules": [
+        "shared-runtime"
+      ],
+      "actual_included_version": "3.10.8 in phonetic_311; v3 pin pending",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-09",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/matplotlib/3.10.8/json",
+        "Bug Tracker": "https://github.com/matplotlib/matplotlib/issues",
+        "Documentation": "https://matplotlib.org",
+        "Donate": "https://numfocus.org/donate-to-matplotlib",
+        "Download": "https://matplotlib.org/stable/install/index.html",
+        "Forum": "https://discourse.matplotlib.org/",
+        "Homepage": "https://matplotlib.org",
+        "Source Code": "https://github.com/matplotlib/matplotlib"
+      },
+      "license": "see exact release metadata / wheel audit pending",
+      "authors": "John D. Hunter, Michael Droettboom",
+      "evidence": "Installed package version read without changing environment; corresponding official PyPI release metadata retrieved.",
+      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
+      "license_metadata_file": "third_party/licenses/pypi/matplotlib-3.10.8-metadata.txt",
+      "distribution_status": "actual-wheel-and-native-audit-required"
+    },
+    {
+      "id": "PKG-PYQT6",
+      "title": "PyQt6",
+      "kind": "installed-runtime-package",
+      "modules": [
+        "shared-runtime"
+      ],
+      "actual_included_version": "6.6.1 in phonetic_311; v3 pin pending",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-09",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/PyQt6/6.6.1/json",
+        "Homepage": "https://www.riverbankcomputing.com/software/pyqt/"
+      },
+      "license": "see exact release metadata / wheel audit pending",
+      "authors": "Riverbank Computing Limited",
+      "evidence": "Installed package version read without changing environment; corresponding official PyPI release metadata retrieved.",
+      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
+      "license_metadata_file": "third_party/licenses/pypi/PyQt6-6.6.1-metadata.txt",
+      "distribution_status": "actual-wheel-and-native-audit-required"
+    },
+    {
+      "id": "PKG-PYQTGRAPH",
+      "title": "pyqtgraph",
+      "kind": "installed-runtime-package",
+      "modules": [
+        "shared-runtime"
+      ],
+      "actual_included_version": "0.14.0 in phonetic_311; v3 pin pending",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-09",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/pyqtgraph/0.14.0/json",
+        "Documentation": "https://pyqtgraph.readthedocs.io",
+        "Homepage": "http://www.pyqtgraph.org",
+        "Source": "https://github.com/pyqtgraph/pyqtgraph"
+      },
+      "license": "see exact release metadata / wheel audit pending",
+      "authors": "Luke Campagnola",
+      "evidence": "Installed package version read without changing environment; corresponding official PyPI release metadata retrieved.",
+      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
+      "license_metadata_file": "third_party/licenses/pypi/pyqtgraph-0.14.0-metadata.txt",
+      "distribution_status": "actual-wheel-and-native-audit-required"
+    },
+    {
+      "id": "PKG-PRAAT-PARSELMOUTH",
+      "title": "praat-parselmouth",
+      "kind": "installed-runtime-package",
+      "modules": [
+        "shared-runtime"
+      ],
+      "actual_included_version": "0.4.7 in phonetic_311; v3 pin pending",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-09",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/praat-parselmouth/0.4.7/json",
+        "Bug Tracker": "https://github.com/YannickJadoul/Parselmouth/issues",
+        "Documentation": "https://parselmouth.readthedocs.io/",
+        "Homepage": "https://github.com/YannickJadoul/Parselmouth",
+        "Source Code": "https://github.com/YannickJadoul/Parselmouth"
+      },
+      "license": "see exact release metadata / wheel audit pending",
+      "authors": "Yannick Jadoul",
+      "evidence": "Installed package version read without changing environment; corresponding official PyPI release metadata retrieved.",
+      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
+      "license_metadata_file": "third_party/licenses/pypi/praat-parselmouth-0.4.7-metadata.txt",
+      "distribution_status": "actual-wheel-and-native-audit-required"
+    },
+    {
+      "id": "PKG-PYWAVELETS",
+      "title": "PyWavelets",
+      "kind": "installed-runtime-package",
+      "modules": [
+        "shared-runtime"
+      ],
+      "actual_included_version": "1.9.0 in phonetic_311; v3 pin pending",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-09",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/PyWavelets/1.9.0/json",
+        "documentation": "https://pywavelets.readthedocs.io/",
+        "homepage": "https://github.com/PyWavelets/pywt",
+        "source": "https://github.com/PyWavelets/pywt"
+      },
+      "license": "MIT AND BSD-3-Clause",
+      "authors": null,
+      "evidence": "Installed package version read without changing environment; corresponding official PyPI release metadata retrieved.",
+      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
+      "license_metadata_file": null,
+      "distribution_status": "actual-wheel-and-native-audit-required"
+    },
+    {
+      "id": "PKG-SOUNDDEVICE",
+      "title": "sounddevice",
+      "kind": "installed-runtime-package",
+      "modules": [
+        "shared-runtime"
+      ],
+      "actual_included_version": "0.5.3 in phonetic_311; v3 pin pending",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-09",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/sounddevice/0.5.3/json",
+        "Homepage": "http://python-sounddevice.readthedocs.io/",
+        "Source": "https://github.com/spatialaudio/python-sounddevice"
+      },
+      "license": "see exact release metadata / wheel audit pending",
+      "authors": "Matthias Geier",
+      "evidence": "Installed package version read without changing environment; corresponding official PyPI release metadata retrieved.",
+      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
+      "license_metadata_file": "third_party/licenses/pypi/sounddevice-0.5.3-metadata.txt",
+      "distribution_status": "actual-wheel-and-native-audit-required"
+    },
+    {
+      "id": "PKG-SOUNDFILE",
+      "title": "soundfile",
+      "kind": "installed-runtime-package",
+      "modules": [
+        "shared-runtime"
+      ],
+      "actual_included_version": "0.13.1 in phonetic_311; v3 pin pending",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-09",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/soundfile/0.13.1/json",
+        "Homepage": "https://github.com/bastibe/python-soundfile"
+      },
+      "license": "see exact release metadata / wheel audit pending",
+      "authors": "Bastian Bechtold",
+      "evidence": "Installed package version read without changing environment; corresponding official PyPI release metadata retrieved.",
+      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
+      "license_metadata_file": "third_party/licenses/pypi/soundfile-0.13.1-metadata.txt",
+      "distribution_status": "actual-wheel-and-native-audit-required"
+    },
+    {
+      "id": "PKG-OPENPYXL",
+      "title": "openpyxl",
+      "kind": "installed-runtime-package",
+      "modules": [
+        "shared-runtime"
+      ],
+      "actual_included_version": "3.1.5 in phonetic_311; v3 pin pending",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-09",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/openpyxl/3.1.5/json",
+        "Documentation": "https://openpyxl.readthedocs.io/en/stable/",
+        "Homepage": "https://openpyxl.readthedocs.io",
+        "Source": "https://foss.heptapod.net/openpyxl/openpyxl",
+        "Tracker": "https://foss.heptapod.net/openpyxl/openpyxl/-/issues"
+      },
+      "license": "see exact release metadata / wheel audit pending",
+      "authors": "See AUTHORS",
+      "evidence": "Installed package version read without changing environment; corresponding official PyPI release metadata retrieved.",
+      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
+      "license_metadata_file": "third_party/licenses/pypi/openpyxl-3.1.5-metadata.txt",
+      "distribution_status": "actual-wheel-and-native-audit-required"
+    },
+    {
+      "id": "PKG-PYTHON-DOCX",
+      "title": "python-docx",
+      "kind": "installed-runtime-package",
+      "modules": [
+        "shared-runtime"
+      ],
+      "actual_included_version": "1.2.0 in phonetic_311; v3 pin pending",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-09",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/python-docx/1.2.0/json",
+        "Changelog": "https://github.com/python-openxml/python-docx/blob/master/HISTORY.rst",
+        "Documentation": "https://python-docx.readthedocs.org/en/latest/",
+        "Homepage": "https://github.com/python-openxml/python-docx",
+        "Repository": "https://github.com/python-openxml/python-docx"
+      },
+      "license": "see exact release metadata / wheel audit pending",
+      "authors": null,
+      "evidence": "Installed package version read without changing environment; corresponding official PyPI release metadata retrieved.",
+      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
+      "license_metadata_file": "third_party/licenses/pypi/python-docx-1.2.0-metadata.txt",
+      "distribution_status": "actual-wheel-and-native-audit-required"
+    },
+    {
+      "id": "PKG-OPENCV-CONTRIB-PYTHON",
+      "title": "opencv-contrib-python",
+      "kind": "installed-runtime-package",
+      "modules": [
+        "shared-runtime"
+      ],
+      "actual_included_version": "4.13.0.92 in phonetic_311; v3 pin pending",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-09",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/opencv-contrib-python/4.13.0.92/json",
+        "Homepage": "https://github.com/opencv/opencv-python"
+      },
+      "license": "see exact release metadata / wheel audit pending",
+      "authors": null,
+      "evidence": "Installed package version read without changing environment; corresponding official PyPI release metadata retrieved.",
+      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
+      "license_metadata_file": "third_party/licenses/pypi/opencv-contrib-python-4.13.0.92-metadata.txt",
+      "distribution_status": "actual-wheel-and-native-audit-required"
+    },
+    {
+      "id": "PKG-MEDIAPIPE",
+      "title": "mediapipe",
+      "kind": "installed-runtime-package",
+      "modules": [
+        "shared-runtime"
+      ],
+      "actual_included_version": "0.10.14 in phonetic_311; v3 pin pending",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-09",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/mediapipe/0.10.14/json",
+        "Homepage": "https://github.com/google/mediapipe"
+      },
+      "license": "see exact release metadata / wheel audit pending",
+      "authors": "The MediaPipe Authors",
+      "evidence": "Installed package version read without changing environment; corresponding official PyPI release metadata retrieved.",
+      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
+      "license_metadata_file": "third_party/licenses/pypi/mediapipe-0.10.14-metadata.txt",
+      "distribution_status": "actual-wheel-and-native-audit-required"
+    },
+    {
+      "id": "PKG-PILLOW",
+      "title": "Pillow",
+      "kind": "installed-runtime-package",
+      "modules": [
+        "shared-runtime"
+      ],
+      "actual_included_version": "12.0.0 in phonetic_311; v3 pin pending",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-09",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/Pillow/12.0.0/json",
+        "Changelog": "https://github.com/python-pillow/Pillow/releases",
+        "Documentation": "https://pillow.readthedocs.io",
+        "Funding": "https://tidelift.com/subscription/pkg/pypi-pillow?utm_source=pypi-pillow&utm_medium=pypi",
+        "Homepage": "https://python-pillow.github.io",
+        "Mastodon": "https://fosstodon.org/@pillow",
+        "Release notes": "https://pillow.readthedocs.io/en/stable/releasenotes/index.html",
+        "Source": "https://github.com/python-pillow/Pillow"
+      },
+      "license": "MIT-CMU",
+      "authors": null,
+      "evidence": "Installed package version read without changing environment; corresponding official PyPI release metadata retrieved.",
+      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
+      "license_metadata_file": null,
+      "distribution_status": "actual-wheel-and-native-audit-required"
+    },
+    {
+      "id": "PKG-PYINSTALLER",
+      "title": "PyInstaller",
+      "kind": "installed-runtime-package",
+      "modules": [
+        "shared-runtime"
+      ],
+      "actual_included_version": "6.17.0 in phonetic_311; v3 pin pending",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-09",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/PyInstaller/6.17.0/json",
+        "Documentation": "https://pyinstaller.org",
+        "Homepage": "https://pyinstaller.org",
+        "Release Notes": "https://pyinstaller.org/en/stable/CHANGES.html",
+        "Source Code": "https://github.com/pyinstaller/pyinstaller"
+      },
+      "license": "see exact release metadata / wheel audit pending",
+      "authors": "Hartmut Goebel, Giovanni Bajo, David Vierra, David Cortesi, Martin Zibricky",
+      "evidence": "Installed package version read without changing environment; corresponding official PyPI release metadata retrieved.",
+      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
+      "license_metadata_file": "third_party/licenses/pypi/PyInstaller-6.17.0-metadata.txt",
+      "distribution_status": "actual-wheel-and-native-audit-required"
+    }
+  ]
+}

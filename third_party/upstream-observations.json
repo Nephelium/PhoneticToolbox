@@ -1,0 +1,250 @@
+{
+  "checked_on": "2026-09-09",
+  "semantics": "observed commits are not original included commits",
+  "repositories": [
+    {
+      "repo": "google/REAPER",
+      "url": "https://github.com/google/REAPER",
+      "observed_head": "1d6e9b95e6b08b500fccbc9a043989dbda747276",
+      "default_branch": "master",
+      "license": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "license_paths": [
+        "LICENSE"
+      ],
+      "tree_truncated": false,
+      "files": [
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/google/REAPER/1d6e9b95e6b08b500fccbc9a043989dbda747276/LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "bytes": 11358
+        },
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/google/REAPER/1d6e9b95e6b08b500fccbc9a043989dbda747276/README.md",
+          "sha256": "d3db4175b565f19e193e4584156560cb612c1259338c7a6191ab6992cba274f9",
+          "bytes": 6930
+        }
+      ],
+      "checked_on": "2026-09-09",
+      "note": "Observed upstream head is evidence timestamp, not a claim that v2 was derived from this exact commit."
+    },
+    {
+      "repo": "Mak-Sim/IRAPT",
+      "url": "https://github.com/Mak-Sim/IRAPT",
+      "observed_head": "a84929ffe026b8c37a992f67e29c2f3f16edbbe3",
+      "default_branch": "master",
+      "license": {
+        "key": "gpl-3.0",
+        "name": "GNU General Public License v3.0",
+        "spdx_id": "GPL-3.0",
+        "url": "https://api.github.com/licenses/gpl-3.0",
+        "node_id": "MDc6TGljZW5zZTk="
+      },
+      "license_paths": [
+        "LICENSE"
+      ],
+      "tree_truncated": false,
+      "files": [
+        {
+          "path": "IRAPT_web/Sinc_hash_1000.mat",
+          "url": "https://raw.githubusercontent.com/Mak-Sim/IRAPT/a84929ffe026b8c37a992f67e29c2f3f16edbbe3/IRAPT_web/Sinc_hash_1000.mat",
+          "sha256": "e3e2fb01d67f722b7f13c1c9a0f4d62559a1ece77167343dfa42de7203f4d860",
+          "bytes": 1520132
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/Mak-Sim/IRAPT/a84929ffe026b8c37a992f67e29c2f3f16edbbe3/LICENSE",
+          "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+          "bytes": 35149
+        },
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/Mak-Sim/IRAPT/a84929ffe026b8c37a992f67e29c2f3f16edbbe3/README.md",
+          "sha256": "af080b5393dcfd2ef71105ad8739400d6152df7f894993a95add14333e20de85",
+          "bytes": 8507
+        }
+      ],
+      "checked_on": "2026-09-09",
+      "note": "Observed upstream head is evidence timestamp, not a claim that v2 was derived from this exact commit."
+    },
+    {
+      "repo": "Mak-Sim/Troparion",
+      "url": "https://github.com/Mak-Sim/Troparion",
+      "observed_head": "8dbfa495a8d637cb3520716ff0b5cf113e0ecd42",
+      "default_branch": "master",
+      "license": {
+        "key": "mpl-2.0",
+        "name": "Mozilla Public License 2.0",
+        "spdx_id": "MPL-2.0",
+        "url": "https://api.github.com/licenses/mpl-2.0",
+        "node_id": "MDc6TGljZW5zZTE0"
+      },
+      "license_paths": [
+        "LICENSE"
+      ],
+      "tree_truncated": false,
+      "files": [
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/Mak-Sim/Troparion/8dbfa495a8d637cb3520716ff0b5cf113e0ecd42/LICENSE",
+          "sha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5",
+          "bytes": 16725
+        },
+        {
+          "path": "Perturbation_analysis/WM_phase_const.m",
+          "url": "https://raw.githubusercontent.com/Mak-Sim/Troparion/8dbfa495a8d637cb3520716ff0b5cf113e0ecd42/Perturbation_analysis/WM_phase_const.m",
+          "sha256": "8866981892b4ab3318accdc913e6a3f46014fe58d8dbef8be827b7f2d1112a2b",
+          "bytes": 2548
+        },
+        {
+          "path": "Perturbation_analysis/amp_extract.m",
+          "url": "https://raw.githubusercontent.com/Mak-Sim/Troparion/8dbfa495a8d637cb3520716ff0b5cf113e0ecd42/Perturbation_analysis/amp_extract.m",
+          "sha256": "85c1befce2d506f203266d7e900972c6b503246aa8cf6e12f3f4468365b17669",
+          "bytes": 243
+        },
+        {
+          "path": "Perturbation_analysis/jitter_ppq5.m",
+          "url": "https://raw.githubusercontent.com/Mak-Sim/Troparion/8dbfa495a8d637cb3520716ff0b5cf113e0ecd42/Perturbation_analysis/jitter_ppq5.m",
+          "sha256": "37dfca0f1bfcc327478dd49a7e02f8a87216e350647c64799b91ff1b2962ee0b",
+          "bytes": 448
+        },
+        {
+          "path": "Perturbation_analysis/jitter_rap.m",
+          "url": "https://raw.githubusercontent.com/Mak-Sim/Troparion/8dbfa495a8d637cb3520716ff0b5cf113e0ecd42/Perturbation_analysis/jitter_rap.m",
+          "sha256": "fe62ab1395b2a12a2358c01b4b31c7ff267b0ea354a656eb94b336048f78673b",
+          "bytes": 254
+        },
+        {
+          "path": "Perturbation_analysis/shimmer_apq.m",
+          "url": "https://raw.githubusercontent.com/Mak-Sim/Troparion/8dbfa495a8d637cb3520716ff0b5cf113e0ecd42/Perturbation_analysis/shimmer_apq.m",
+          "sha256": "f8624e9cfc8cd2d6d771a12137dc8b223ad2a5de16faeae0d5b6a16b422a072e",
+          "bytes": 332
+        },
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/Mak-Sim/Troparion/8dbfa495a8d637cb3520716ff0b5cf113e0ecd42/README.md",
+          "sha256": "641349e999b60099c4c375260f3ccfaf91709e2e1dc74da8e2a750b68ad1b909",
+          "bytes": 1656
+        }
+      ],
+      "checked_on": "2026-09-09",
+      "note": "Observed upstream head is evidence timestamp, not a claim that v2 was derived from this exact commit."
+    },
+    {
+      "repo": "voicesauce/opensauce-python",
+      "url": "https://github.com/voicesauce/opensauce-python",
+      "observed_head": "e633608137d4e733304321843b324db3c0b17983",
+      "default_branch": "master",
+      "license": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0",
+        "node_id": "MDc6TGljZW5zZTI="
+      },
+      "license_paths": [
+        "LICENSE"
+      ],
+      "tree_truncated": false,
+      "files": [
+        {
+          "path": "CITATION.txt",
+          "url": "https://raw.githubusercontent.com/voicesauce/opensauce-python/e633608137d4e733304321843b324db3c0b17983/CITATION.txt",
+          "sha256": "1abf2ea42de17008e8e991875eecb99a5a35012b4565aff4218e0d4579a562e2",
+          "bytes": 356
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/voicesauce/opensauce-python/e633608137d4e733304321843b324db3c0b17983/LICENSE",
+          "sha256": "b612144650c175dbe6299ca24ed186c130505a45ed53c1068c6fa86eeb0c833c",
+          "bytes": 11389
+        },
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/voicesauce/opensauce-python/e633608137d4e733304321843b324db3c0b17983/README.md",
+          "sha256": "1dc7398d33c00f5ce60e3eeb0d5700942244b6ffea2476992274e32dc442fd7f",
+          "bytes": 14027
+        },
+        {
+          "path": "opensauce/harmonics.py",
+          "url": "https://raw.githubusercontent.com/voicesauce/opensauce-python/e633608137d4e733304321843b324db3c0b17983/opensauce/harmonics.py",
+          "sha256": "be91e82f0fa371da8dcfb02d6594e905dbee54734cbbc3be5e5e0f52ad9c0fe4",
+          "bytes": 4409
+        },
+        {
+          "path": "opensauce/shrp.py",
+          "url": "https://raw.githubusercontent.com/voicesauce/opensauce-python/e633608137d4e733304321843b324db3c0b17983/opensauce/shrp.py",
+          "sha256": "83933644622b24e44803025f75291fa39da6818d39485840db624e2c627df049",
+          "bytes": 21265
+        }
+      ],
+      "checked_on": "2026-09-09",
+      "note": "Observed upstream head is evidence timestamp, not a claim that v2 was derived from this exact commit."
+    },
+    {
+      "repo": "guestdaniel/tdklatt",
+      "url": "https://github.com/guestdaniel/tdklatt",
+      "observed_head": "081f98431c2995187ecadb15d3667c7b6b7f8c73",
+      "default_branch": "master",
+      "license": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "license_paths": [
+        "LICENSE"
+      ],
+      "tree_truncated": false,
+      "files": [
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/guestdaniel/tdklatt/081f98431c2995187ecadb15d3667c7b6b7f8c73/LICENSE",
+          "sha256": "2e41bdfafe0a6a21f31091bee125174153f294f223ce98fc440b82b5e1675f41",
+          "bytes": 1098
+        },
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/guestdaniel/tdklatt/081f98431c2995187ecadb15d3667c7b6b7f8c73/README.md",
+          "sha256": "2c6b1650e5c864659d70469b614df18a380fe9f48e4a0628f03cc13e31473ce0",
+          "bytes": 3127
+        },
+        {
+          "path": "tdklatt.py",
+          "url": "https://raw.githubusercontent.com/guestdaniel/tdklatt/081f98431c2995187ecadb15d3667c7b6b7f8c73/tdklatt.py",
+          "sha256": "6a317e2dd3a0b41c88866f75c4e09436f8b1b2b22125ec66c1d8ab6bcfb0b4fc",
+          "bytes": 46226
+        }
+      ],
+      "checked_on": "2026-09-09",
+      "note": "Observed upstream head is evidence timestamp, not a claim that v2 was derived from this exact commit."
+    },
+    {
+      "repo": "Luyao2025/Contribution-of-F0-and-phonation-to-tone-perception-in-the-Zaiwa-language",
+      "url": "https://github.com/Luyao2025/Contribution-of-F0-and-phonation-to-tone-perception-in-the-Zaiwa-language",
+      "observed_head": "4a74bcbfc6095926a35f9cad8b05e0ec174f9f9e",
+      "default_branch": "main",
+      "license": null,
+      "license_paths": [],
+      "tree_truncated": false,
+      "files": [
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/Luyao2025/Contribution-of-F0-and-phonation-to-tone-perception-in-the-Zaiwa-language/4a74bcbfc6095926a35f9cad8b05e0ec174f9f9e/README.md",
+          "sha256": "3ca7605b794c5772ed5a805fe164c9eb534e876fb977ef283af1cd1cb86ad4d8",
+          "bytes": 255
+        }
+      ],
+      "checked_on": "2026-09-09",
+      "note": "Observed upstream head is evidence timestamp, not a claim that v2 was derived from this exact commit."
+    }
+  ]
+}

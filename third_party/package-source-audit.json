@@ -1,0 +1,282 @@
+[
+  {
+    "name": "numpy",
+    "version": "2.2.6",
+    "checked_on": "2026-09-09",
+    "metadata_url": "https://pypi.org/pypi/numpy/2.2.6/json",
+    "project_urls": {
+      "documentation": "https://numpy.org/doc/",
+      "download": "https://pypi.org/project/numpy/#files",
+      "homepage": "https://numpy.org",
+      "release notes": "https://numpy.org/doc/stable/release",
+      "source": "https://github.com/numpy/numpy",
+      "tracker": "https://github.com/numpy/numpy/issues"
+    },
+    "license_expression": null,
+    "author": "Travis E. Oliphant et al.",
+    "requires_python": ">=3.10",
+    "status": "pypi_release_metadata_verified",
+    "license_metadata_file": "third_party/licenses/pypi/numpy-2.2.6-metadata.txt",
+    "license_metadata_note": "PyPI release metadata as reported by project, not a substitute for auditing the actual installed wheel and bundled native libraries"
+  },
+  {
+    "name": "scipy",
+    "version": "1.16.3",
+    "checked_on": "2026-09-09",
+    "metadata_url": "https://pypi.org/pypi/scipy/1.16.3/json",
+    "project_urls": {
+      "documentation": "https://docs.scipy.org/doc/scipy/",
+      "download": "https://github.com/scipy/scipy/releases",
+      "homepage": "https://scipy.org/",
+      "source": "https://github.com/scipy/scipy",
+      "tracker": "https://github.com/scipy/scipy/issues"
+    },
+    "license_expression": null,
+    "author": null,
+    "requires_python": ">=3.11",
+    "status": "pypi_release_metadata_verified",
+    "license_metadata_file": "third_party/licenses/pypi/scipy-1.16.3-metadata.txt",
+    "license_metadata_note": "PyPI release metadata as reported by project, not a substitute for auditing the actual installed wheel and bundled native libraries"
+  },
+  {
+    "name": "pandas",
+    "version": "2.3.3",
+    "checked_on": "2026-09-09",
+    "metadata_url": "https://pypi.org/pypi/pandas/2.3.3/json",
+    "project_urls": {
+      "documentation": "https://pandas.pydata.org/docs/",
+      "homepage": "https://pandas.pydata.org",
+      "repository": "https://github.com/pandas-dev/pandas"
+    },
+    "license_expression": null,
+    "author": null,
+    "requires_python": ">=3.9",
+    "status": "pypi_release_metadata_verified",
+    "license_metadata_file": "third_party/licenses/pypi/pandas-2.3.3-metadata.txt",
+    "license_metadata_note": "PyPI release metadata as reported by project, not a substitute for auditing the actual installed wheel and bundled native libraries"
+  },
+  {
+    "name": "matplotlib",
+    "version": "3.10.8",
+    "checked_on": "2026-09-09",
+    "metadata_url": "https://pypi.org/pypi/matplotlib/3.10.8/json",
+    "project_urls": {
+      "Bug Tracker": "https://github.com/matplotlib/matplotlib/issues",
+      "Documentation": "https://matplotlib.org",
+      "Donate": "https://numfocus.org/donate-to-matplotlib",
+      "Download": "https://matplotlib.org/stable/install/index.html",
+      "Forum": "https://discourse.matplotlib.org/",
+      "Homepage": "https://matplotlib.org",
+      "Source Code": "https://github.com/matplotlib/matplotlib"
+    },
+    "license_expression": null,
+    "author": "John D. Hunter, Michael Droettboom",
+    "requires_python": ">=3.10",
+    "status": "pypi_release_metadata_verified",
+    "license_metadata_file": "third_party/licenses/pypi/matplotlib-3.10.8-metadata.txt",
+    "license_metadata_note": "PyPI release metadata as reported by project, not a substitute for auditing the actual installed wheel and bundled native libraries"
+  },
+  {
+    "name": "PyQt6",
+    "version": "6.6.1",
+    "checked_on": "2026-09-09",
+    "metadata_url": "https://pypi.org/pypi/PyQt6/6.6.1/json",
+    "project_urls": {
+      "Homepage": "https://www.riverbankcomputing.com/software/pyqt/"
+    },
+    "license_expression": null,
+    "author": "Riverbank Computing Limited",
+    "requires_python": ">=3.6.1",
+    "status": "pypi_release_metadata_verified",
+    "license_metadata_file": "third_party/licenses/pypi/PyQt6-6.6.1-metadata.txt",
+    "license_metadata_note": "PyPI release metadata as reported by project, not a substitute for auditing the actual installed wheel and bundled native libraries"
+  },
+  {
+    "name": "pyqtgraph",
+    "version": "0.14.0",
+    "checked_on": "2026-09-09",
+    "metadata_url": "https://pypi.org/pypi/pyqtgraph/0.14.0/json",
+    "project_urls": {
+      "Documentation": "https://pyqtgraph.readthedocs.io",
+      "Homepage": "http://www.pyqtgraph.org",
+      "Source": "https://github.com/pyqtgraph/pyqtgraph"
+    },
+    "license_expression": null,
+    "author": "Luke Campagnola",
+    "requires_python": ">=3.10",
+    "status": "pypi_release_metadata_verified",
+    "license_metadata_file": "third_party/licenses/pypi/pyqtgraph-0.14.0-metadata.txt",
+    "license_metadata_note": "PyPI release metadata as reported by project, not a substitute for auditing the actual installed wheel and bundled native libraries"
+  },
+  {
+    "name": "praat-parselmouth",
+    "version": "0.4.7",
+    "checked_on": "2026-09-09",
+    "metadata_url": "https://pypi.org/pypi/praat-parselmouth/0.4.7/json",
+    "project_urls": {
+      "Bug Tracker": "https://github.com/YannickJadoul/Parselmouth/issues",
+      "Documentation": "https://parselmouth.readthedocs.io/",
+      "Homepage": "https://github.com/YannickJadoul/Parselmouth",
+      "Source Code": "https://github.com/YannickJadoul/Parselmouth"
+    },
+    "license_expression": null,
+    "author": "Yannick Jadoul",
+    "requires_python": "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7",
+    "status": "pypi_release_metadata_verified",
+    "license_metadata_file": "third_party/licenses/pypi/praat-parselmouth-0.4.7-metadata.txt",
+    "license_metadata_note": "PyPI release metadata as reported by project, not a substitute for auditing the actual installed wheel and bundled native libraries"
+  },
+  {
+    "name": "PyWavelets",
+    "version": "1.9.0",
+    "checked_on": "2026-09-09",
+    "metadata_url": "https://pypi.org/pypi/PyWavelets/1.9.0/json",
+    "project_urls": {
+      "documentation": "https://pywavelets.readthedocs.io/",
+      "homepage": "https://github.com/PyWavelets/pywt",
+      "source": "https://github.com/PyWavelets/pywt"
+    },
+    "license_expression": "MIT AND BSD-3-Clause",
+    "author": null,
+    "requires_python": ">=3.11",
+    "status": "pypi_release_metadata_verified",
+    "license_metadata_file": null,
+    "license_metadata_note": "PyPI release metadata as reported by project, not a substitute for auditing the actual installed wheel and bundled native libraries"
+  },
+  {
+    "name": "sounddevice",
+    "version": "0.5.3",
+    "checked_on": "2026-09-09",
+    "metadata_url": "https://pypi.org/pypi/sounddevice/0.5.3/json",
+    "project_urls": {
+      "Homepage": "http://python-sounddevice.readthedocs.io/",
+      "Source": "https://github.com/spatialaudio/python-sounddevice"
+    },
+    "license_expression": null,
+    "author": "Matthias Geier",
+    "requires_python": ">=3.7",
+    "status": "pypi_release_metadata_verified",
+    "license_metadata_file": "third_party/licenses/pypi/sounddevice-0.5.3-metadata.txt",
+    "license_metadata_note": "PyPI release metadata as reported by project, not a substitute for auditing the actual installed wheel and bundled native libraries"
+  },
+  {
+    "name": "soundfile",
+    "version": "0.13.1",
+    "checked_on": "2026-09-09",
+    "metadata_url": "https://pypi.org/pypi/soundfile/0.13.1/json",
+    "project_urls": {
+      "Homepage": "https://github.com/bastibe/python-soundfile"
+    },
+    "license_expression": null,
+    "author": "Bastian Bechtold",
+    "requires_python": null,
+    "status": "pypi_release_metadata_verified",
+    "license_metadata_file": "third_party/licenses/pypi/soundfile-0.13.1-metadata.txt",
+    "license_metadata_note": "PyPI release metadata as reported by project, not a substitute for auditing the actual installed wheel and bundled native libraries"
+  },
+  {
+    "name": "openpyxl",
+    "version": "3.1.5",
+    "checked_on": "2026-09-09",
+    "metadata_url": "https://pypi.org/pypi/openpyxl/3.1.5/json",
+    "project_urls": {
+      "Documentation": "https://openpyxl.readthedocs.io/en/stable/",
+      "Homepage": "https://openpyxl.readthedocs.io",
+      "Source": "https://foss.heptapod.net/openpyxl/openpyxl",
+      "Tracker": "https://foss.heptapod.net/openpyxl/openpyxl/-/issues"
+    },
+    "license_expression": null,
+    "author": "See AUTHORS",
+    "requires_python": ">=3.8",
+    "status": "pypi_release_metadata_verified",
+    "license_metadata_file": "third_party/licenses/pypi/openpyxl-3.1.5-metadata.txt",
+    "license_metadata_note": "PyPI release metadata as reported by project, not a substitute for auditing the actual installed wheel and bundled native libraries"
+  },
+  {
+    "name": "python-docx",
+    "version": "1.2.0",
+    "checked_on": "2026-09-09",
+    "metadata_url": "https://pypi.org/pypi/python-docx/1.2.0/json",
+    "project_urls": {
+      "Changelog": "https://github.com/python-openxml/python-docx/blob/master/HISTORY.rst",
+      "Documentation": "https://python-docx.readthedocs.org/en/latest/",
+      "Homepage": "https://github.com/python-openxml/python-docx",
+      "Repository": "https://github.com/python-openxml/python-docx"
+    },
+    "license_expression": null,
+    "author": null,
+    "requires_python": ">=3.9",
+    "status": "pypi_release_metadata_verified",
+    "license_metadata_file": "third_party/licenses/pypi/python-docx-1.2.0-metadata.txt",
+    "license_metadata_note": "PyPI release metadata as reported by project, not a substitute for auditing the actual installed wheel and bundled native libraries"
+  },
+  {
+    "name": "opencv-contrib-python",
+    "version": "4.13.0.92",
+    "checked_on": "2026-09-09",
+    "metadata_url": "https://pypi.org/pypi/opencv-contrib-python/4.13.0.92/json",
+    "project_urls": {
+      "Homepage": "https://github.com/opencv/opencv-python"
+    },
+    "license_expression": null,
+    "author": null,
+    "requires_python": ">=3.6",
+    "status": "pypi_release_metadata_verified",
+    "license_metadata_file": "third_party/licenses/pypi/opencv-contrib-python-4.13.0.92-metadata.txt",
+    "license_metadata_note": "PyPI release metadata as reported by project, not a substitute for auditing the actual installed wheel and bundled native libraries"
+  },
+  {
+    "name": "mediapipe",
+    "version": "0.10.14",
+    "checked_on": "2026-09-09",
+    "metadata_url": "https://pypi.org/pypi/mediapipe/0.10.14/json",
+    "project_urls": {
+      "Homepage": "https://github.com/google/mediapipe"
+    },
+    "license_expression": null,
+    "author": "The MediaPipe Authors",
+    "requires_python": null,
+    "status": "pypi_release_metadata_verified",
+    "license_metadata_file": "third_party/licenses/pypi/mediapipe-0.10.14-metadata.txt",
+    "license_metadata_note": "PyPI release metadata as reported by project, not a substitute for auditing the actual installed wheel and bundled native libraries"
+  },
+  {
+    "name": "Pillow",
+    "version": "12.0.0",
+    "checked_on": "2026-09-09",
+    "metadata_url": "https://pypi.org/pypi/Pillow/12.0.0/json",
+    "project_urls": {
+      "Changelog": "https://github.com/python-pillow/Pillow/releases",
+      "Documentation": "https://pillow.readthedocs.io",
+      "Funding": "https://tidelift.com/subscription/pkg/pypi-pillow?utm_source=pypi-pillow&utm_medium=pypi",
+      "Homepage": "https://python-pillow.github.io",
+      "Mastodon": "https://fosstodon.org/@pillow",
+      "Release notes": "https://pillow.readthedocs.io/en/stable/releasenotes/index.html",
+      "Source": "https://github.com/python-pillow/Pillow"
+    },
+    "license_expression": "MIT-CMU",
+    "author": null,
+    "requires_python": ">=3.10",
+    "status": "pypi_release_metadata_verified",
+    "license_metadata_file": null,
+    "license_metadata_note": "PyPI release metadata as reported by project, not a substitute for auditing the actual installed wheel and bundled native libraries"
+  },
+  {
+    "name": "PyInstaller",
+    "version": "6.17.0",
+    "checked_on": "2026-09-09",
+    "metadata_url": "https://pypi.org/pypi/PyInstaller/6.17.0/json",
+    "project_urls": {
+      "Documentation": "https://pyinstaller.org",
+      "Homepage": "https://pyinstaller.org",
+      "Release Notes": "https://pyinstaller.org/en/stable/CHANGES.html",
+      "Source Code": "https://github.com/pyinstaller/pyinstaller"
+    },
+    "license_expression": null,
+    "author": "Hartmut Goebel, Giovanni Bajo, David Vierra, David Cortesi, Martin Zibricky",
+    "requires_python": "<3.15,>=3.8",
+    "status": "pypi_release_metadata_verified",
+    "license_metadata_file": "third_party/licenses/pypi/PyInstaller-6.17.0-metadata.txt",
+    "license_metadata_note": "PyPI release metadata as reported by project, not a substitute for auditing the actual installed wheel and bundled native libraries"
+  }
+]

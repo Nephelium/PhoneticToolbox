@@ -1,40 +1,73 @@
-# PhoneticToolbox v2 — Agent 规则
+# PhoneticToolbox v3 — Agent 工作规则
 
-## 打包规则（重要）
+## 0. 当前阶段与授权
+- 用户：井井；助手自称秋叶；默认中文。技术判断说明证据、限制和待验证项。
+- 当前是 **D0.3 规划审阅阶段**。已授权建立本地 v3 工作目录、继承可复用 v2 源码、调查第三方来源、编写规划/架构/规则。未授权开始全面业务重写、公开发布、服务器部署或全局环境变更。
+- 用户明确不要额外备份；保留相邻 v2 和现有使用数据。不得擅自删除、移动或修改 v2。这里的 Git 源码基线不是额外整目录备份，也不是已验证的新版本。
+- 旧网页目录的删除授权有条件：仅在证实没有必要保留的依赖、独有工作或来源资料后才可删除。当前检查发现旧前端存在未提交修改；本阶段保留两个旧目录。
+- 本文件适用于 v3 全目录。进入 frontend、backend、desktop、packages/phonetic_core、contracts、resources、tests、docs、third_party 时，继续读取相应 AGENTS.md 与 ARCHITECTURE.md。
 
-**每次打包 exe 都必须使用 conda 环境 `phonetic_311`**，不要使用 base 环境
-（base 环境缺少 pyqtgraph 等依赖，打出的 exe 会启动失败）。
+## 1. 必读与事实来源
+1. README.md：阶段、入口、不能误用的历史目录。
+2. ARCHITECTURE.md：组件边界、依赖方向、任务/文件/平台协议。
+3. docs/requirements.md、docs/plans/2026-09-09-v3-master-plan.md。
+4. 对应模块计划、docs/modules/module-migration.md、docs/decisions/ADR.md。
+5. third_party/source-registry.json、third_party/README.md 和 docs/references/source-audit.md。
+冲突时以井井最新明确要求为先；其余文档冲突必须记录并修正，不能挑方便的版本执行。D0.1/D0.2 仅提供视觉/功能历史，已更新部分以 D0.3 为准。
 
-打包命令（必须用 `python -m PyInstaller` 形式，该环境的 pyinstaller.exe
-启动器已损坏，直接调用会失败）：
+## 2. 每次编码的固定流程
+- 先给出当前任务 ID（Pxx 或 Mxx）、本轮要改的文件、预期行为及验收命令。
+- 工作前查看当前分支、git status、已有差异；不得混入无关用户改动。
+- 先迁移已验证的纯算法与数据规则；原样迁移和行为修正分开提交。默认值、单位、帧网格、NaN、有声判定、输出范围不得借重构静默改变。
+- 对真实行为风险先建立回归用例，再作最小实现；不写只照抄实现的测试，不为了文档微调启动全套构建。
+- 修改后检查 diff、边界、中文/IPA、来源、实际结果；运行计划规定的定向测试。失败必须定位，不注释问题、不扩大容差、不跳过检查来“通过”。
+- 一次完成一个可审阅任务；记录命令、平台、环境、产物、未测项目。只有满足退出条件才标完成。
+- 需要改变架构/交互语义/算法/依赖/发布目标时，先补 ADR 和受影响计划，再按用户已授权范围实施；重大新范围需井井确认。日常明确任务不反复询问。
+- 实施授权后允许按计划做本地小提交；push、发布、生产部署、改 CI/CD/密钥/全局环境和数据库实际迁移仍遵守会话授权边界。
 
-```powershell
-conda run -n phonetic_311 python -m PyInstaller run.spec --noconfirm --log-level WARN
-```
+## 3. 依赖与文件边界
+- frontend 只调用 contracts 与平台能力接口，不读取服务器路径、不导入 Python 算法、不拼 shell。
+- backend 是接口、身份、配额、任务和存储编排；不能实现另一套声学算法。
+- desktop 是窗口/启动/本地文件/设备/发行适配；不能复制业务算法或请求公网来完成离线基础功能。
+- phonetic_core 不依赖 Qt、FastAPI、数据库、HTTP、用户账号或固定开发机目录。
+- 本地服务与服务器服务使用同版核心包与契约；不同平台差异集中在 adapter。
+- 不从 ../PhoneticToolbox_v2、旧 Vue 站点或旧 API 工程动态导入。继承的 phonetic_toolbox 是过渡来源；迁移完成后新入口不能依赖它。
+- 禁止为某页面添加新的独立 http.server；全部模块挂统一宿主、统一页面注册表、统一任务生命周期。
+- 资源有清单和版本；不要把虚拟环境、研究语料、临时输出或第三方整仓库不加筛选地塞进发行包。
 
-- 打包配置：`run.spec`（PyInstaller 单文件模式，输出到 `dist\`，
-  文件名自动带 pyproject.toml 中的版本号，如 `PhoneticToolbox_v2.1.5.exe`）
-- 大型构建，通常需要 10 分钟以上，建议后台运行并轮询日志
-- 日志位置：`build\pyinstaller_build.log` / `build\pyinstaller_build.err`
-- 改版本号需同步三处：`pyproject.toml`、`phonetic_toolbox/__init__.py`
-  （`tests/test_version_consistency.py` 会校验）；写文件注意不要用带 BOM 的 UTF-8
+## 4. UI 与科研正确性
+- 采用已选 U2 紧凑工作台、完整浅/深主题、侧栏导航与标签页；暂定 K2 波形团子图标。
+- 以 docs/design/UI_SPEC.md 为视觉标准；禁止各模块自己造一套颜色、弹窗、播放条、加载状态。
+- 不允许删功能来迁就设计。15 模块、83 功能组、80 参数、14 设置逐项核对；新功能追加验收项。
+- 真实音频时间、选区、单位、标签和曲线必须一致；无数据画空态，不生成假结果。
+- 主题与截图仅证明视觉，启动仅证明启动；不能据此宣称算法、全平台、摄像头或实验时序通过。
+- 桌面不要求登录；网页账号/项目/配额界面不侵入本地研究流程。
 
-## 语音标注对齐模块（v2.1.5 新增）
+## 5. 网页运行约束
+- 目标 10 名研究者同时使用，有登录和用户隔离；计算并行度单独配置并实测。
+- 每账号文件空间 5,000,000,000 字节（5 GB），上传、结果、缓存和临时占用均计入；共享安装模型不算用户额度。
+- 用户数据最多保留 7 天；下载不要求自动删除、不延长有效期；用户可以直接删除，无需先下载。
+- 原子预留额度、受控流式写入、失败回收、到期不可访问和实际物理删除都要实现。禁止仅前端判断额度或刷新页面重置配额。
+- 每个任务有独立参数快照、owner、source/version；没有跨用户全局 Settings 单例。
+- 长任务、设备和原生库进程由本应用明确持有；禁止按端口或泛化进程名杀掉其他服务。
 
-- 主页【语音标注对齐】按钮 → `main_window.on_web_praat_editor` →
-  `services/web_praat_server.ensure_server()` 在进程内守护线程启动微型 HTTP 服务
-  （仅 127.0.0.1，随机端口），再用默认浏览器打开；用户无需手动起服务器
-- 网页前端静态资源：`phonetic_toolbox/gui/resources/web_praat_editor/`
-  （源自 pitch_perception 项目 web_praat_editor，已普适化：词层/音素层名可在页面
-  左侧自定义并经 localStorage 记忆；发音词典格式为每行“词 音素1 音素2 …”，
-  内置普通话词典 default.dict，界面已中文化）
-- 网页内“选择文件夹”对话框经 `_FolderPickerBridge`（pyqtSignal）转发到 Qt 主线程执行
-- 唇形对齐保存写回语料目录 `audio_recording.pkl` 的 `metadata.lip_manual_offset`，
-  与 `services/io/lip.py` 读取位置一致
-- 测试：`tests/test_web_praat_server.py`（10 个用例）
-- 说明书：`Phonetic_Export/index.html` 第 13 章；唇形新功能见第 7.3/7.4 节
-- 说明书编辑器：`Phonetic_Export/PhoneticToolboxDoc.html`（PhoneticDoc）新增
-  “导入网页”按钮：可读入导出的网页包 zip（index.html + images/audios）或单个
-  index.html 并转为可编辑章节；导入的小节内容以原始 HTML 保存，SimpleMD.parse
-  对以 `<` 开头的行原样透传。`Phonetic_Export/PhoneticDoc_网页导入包_v2.1.5.zip`
-  是当前说明书的即载包
+## 6. 第三方与学术署名
+- 凡引用外部代码、移植算法、参考论文、使用模型/字典/字体/数据，必须更新来源登记。
+- 登记作者、题名/项目、URL/DOI、实际版本或 commit、使用位置、关系类别、修改说明、许可证、查验日期和未决项。
+- 关系必须区分依赖、代码移植、论文方法、仅参考、数据素材与项目集成；登记表的 kind 使用对应细分类别，不能把方法参考写成原创实现或实际运行依赖。
+- 上游今日 HEAD 不等于本项目最初使用版本；缺失证据标 unknown，不捏造 commit、作者或许可。
+- 软件“关于 → 开源与学术致谢”、模块“方法与引用”、说明书与随包许可从同一登记生成；不得只在源码角落署名。
+- PDF 优先链接作者/出版社/官方站点，标清论文/手册版本；不擅自镜像或打包原 PDF、研究数据。
+- 声道说明必须包含 VTL 2.4 引擎、VTL 2.3 参考手册、几何资源各自来源及本项目适配边界。
+- 未明确的再分发许可是对应发行物的验收阻断项；不把整套软件标为“完全原创”或不加区分地宣称全为 MIT。
+
+## 7. 环境、测试与发行
+- 继承 v2 基线的 Windows 打包仍仅使用 conda phonetic_311，并采用 python -m PyInstaller；本阶段不执行打包。
+- v3 开发/发行环境在 P02/P12 中单独创建并锁定，不能升级污染 v2 的 phonetic_311；具体环境名/Qt 宿主在原型验收后冻结。
+- Windows 单文件直用版与安装版都保留；不能擅自以文件夹版替代已约定单文件目标。若单文件验证不通过，报告并修订 ADR。
+- macOS、Linux 原生组件分别构建测试；WSL 的 Linux 服务测试不能冒充 Mac 或 Linux 桌面设备验收。
+- 不改 .env、凭据、系统 CUDA/运行时、WSL 全局配置、CI/CD、生产数据库或对外发消息，除非该动作已在会话中明确授权。
+- 操作 Windows 路径用绝对路径和 LiteralPath；递归删除/移动前验证最终路径位于明确目标内。文件编码 UTF-8 无 BOM。
+
+## 8. 交付记录
+每次交付写清：完成任务 ID、修改原因、真实验证命令和结果、来源更新、剩余限制、下一项依赖。实现状态用 planned / in_progress / verified / blocked；P00 可用 documented-baseline 表示仅规划/源码基线完成，不能冒充业务 verified。

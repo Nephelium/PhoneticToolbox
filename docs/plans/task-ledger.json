@@ -1,0 +1,527 @@
+{
+  "schema_version": 1,
+  "created_on": "2026-09-09",
+  "tasks": [
+    {
+      "id": "P00",
+      "title": "建立可追溯源码与规划基线",
+      "dependencies": "无",
+      "files": "docs/baseline/source-manifest.json；docs/requirements.md；AGENTS.md；ARCHITECTURE.md",
+      "status": "documented-baseline",
+      "note": "本轮已完成源码继承/文档准备；业务验证未完成",
+      "steps": [
+        "核对当前 v2 工作状态、未跟踪运行资源和用户 EXE 校验和",
+        "以独立索引建立本地源码基线，创建 codex/v3-rebuild worktree；不更改 v2 index/HEAD",
+        "继承可复用源码，记录 427 文件 hash；不拷贝环境和私有研究语料",
+        "归档已选设计和功能矩阵，标明旧架构已被替代",
+        "校验原目录、文档覆盖与新目录状态"
+      ],
+      "acceptance": "原 v2 文件/HEAD/index 不变；所有新文档能定位，状态不虚报",
+      "execution_evidence": [
+        "../baseline/source-manifest.json",
+        "../baseline/planning-validation.md"
+      ]
+    },
+    {
+      "id": "P01",
+      "title": "先验证宿主、原生依赖和许可风险",
+      "dependencies": "P00",
+      "files": "desktop/experiments/host_probe.py；frontend/experiments/audio-viewport/；docs/decisions/ADR.md",
+      "status": "planned",
+      "note": "planned",
+      "steps": [
+        "在一次性隔离探针环境搭建最小 Qt WebEngine 与构建页面；不改 phonetic_311；P02 再建立正式 v3 环境",
+        "测试播放、中文/IPA、多个轨道、精确采样选区和窗口缩放",
+        "验证 WebEngine 随单文件包启动/退出和非项目目录运行",
+        "确认 VTL/REAPER 跨平台构建来源、IRAPT/WM-PC/载瓦语材料许可缺口",
+        "比较 Qt 宿主与 Tauri/Electron/PySide6 的实际代价，冻结一个方案"
+      ],
+      "acceptance": "给出宿主原型报告；未通过单文件、设备和来源审查时不推进全面 UI 移植",
+      "execution_evidence": []
+    },
+    {
+      "id": "P02",
+      "title": "包边界、环境和契约脚手架",
+      "dependencies": "P01",
+      "files": "packages/phonetic_core/pyproject.toml；frontend/package.json；backend/pyproject.toml；desktop/pyproject.toml；contracts/versions.md；scripts/validate_docs.py",
+      "status": "planned",
+      "note": "planned",
+      "steps": [
+        "清点实际已安装依赖与 v2 声明冲突；不改 v2 环境",
+        "创建 v3 独立开发/构建环境，锁定依赖和可用原生平台",
+        "建立最小可安装核心包、独立前端入口、本地/服务器服务入口",
+        "生成 OpenAPI/客户端类型流程及单位/轨迹 schema",
+        "建立禁止跨层导入、旧路径、未登记资源的架构检查",
+        "确认版本元数据来源，旧 v2 入口与新入口区分"
+      ],
+      "acceptance": "空环境可安装新包；同一 schema 不被两套代码分别手写；禁用依赖检查能抓住故意的越界例子",
+      "execution_evidence": []
+    },
+    {
+      "id": "P03",
+      "title": "科研行为与数据基线",
+      "dependencies": "P02",
+      "files": "tests/fixtures/manifest.json；tests/parity/test_baseline.py；scripts/capture_v2_baseline.py；docs/baseline/capture-protocol.md",
+      "status": "planned",
+      "note": "planned",
+      "steps": [
+        "从本机只读语料中选取持续元音、嘎裂声、EGG 和带 TextGrid 样例",
+        "记录源文件 hash、音频头、完整参数、真实后端与环境",
+        "在独立输出目录捕获当前 v2 数值结果，并对用户使用的 EXE 做关键行为对照",
+        "为缺失类别生成可公开的合成 fixture，不提交个人语料",
+        "定义每参数容差、缺失 mask、时间轴、文件数及精确边界",
+        "将已知问题与迁移回归分开登记"
+      ],
+      "acceptance": "基准结果不能由 v3 自己生成；参数/时间/后端可复现，尚缺样例清楚标记",
+      "execution_evidence": []
+    },
+    {
+      "id": "P04",
+      "title": "统一前端壳、主题、首页与公共组件",
+      "dependencies": "P02",
+      "files": "frontend/src/app/AppShell.vue；frontend/src/design/tokens.css；frontend/src/components/AudioTransport.vue；frontend/src/components/MethodReferences.vue",
+      "status": "planned",
+      "note": "planned",
+      "steps": [
+        "实现 U2 主题令牌、字体和 K2 品牌资产，不夹带各页算法",
+        "建立全部 15 模块注册、侧栏搜索/折叠、标签与首次首页",
+        "实现播放器、选区状态、波形视图、参数抽屉、任务面板、统一错误空态",
+        "建立 browser/desktop 能力适配接口，让同组件在两个宿主演示",
+        "验证主题/标签切换保持未保存编辑，键盘焦点和多窗口播放协调",
+        "提交浅深色/缩放对照供审阅后，再用公共组件迁移页面"
+      ],
+      "acceptance": "首页和公共组件视觉通过；图表为真实 fixture；全部菜单存在但未实现模块不能伪装可用",
+      "execution_evidence": []
+    },
+    {
+      "id": "P05",
+      "title": "服务器账号、项目和会话隔离",
+      "dependencies": "P02",
+      "files": "backend/src/ptb_api/auth.py；backend/src/ptb_api/projects.py；backend/tests/test_auth.py；tests/security/test_resource_ownership.py",
+      "status": "planned",
+      "note": "planned",
+      "steps": [
+        "设计并审阅 users/sessions/projects/owner 模型和数据库迁移",
+        "选择成熟密码哈希/会话实现，落实 Cookie、CSRF、退出撤销和登录限流",
+        "实现后端从会话确定 owner，任何请求不能选择其他 owner",
+        "实现登录/退出/当前用户和临时项目接口",
+        "前端登录页沿用 U2/K2；桌面默认无登录要求",
+        "以两个账号验证资源、任务、日志、取消与下载的全面隔离"
+      ],
+      "acceptance": "跨用户访问全部拒绝；登录可恢复，不依赖旧站；实际迁移执行前满足授权",
+      "execution_evidence": []
+    },
+    {
+      "id": "P06",
+      "title": "持久任务、worker 和本地统一服务",
+      "dependencies": "P02,P03,P05",
+      "files": "backend/src/ptb_worker/claims.py；backend/src/ptb_worker/leases.py；backend/src/ptb_worker/executor.py；desktop/src/ptb_desktop/local_service.py",
+      "status": "planned",
+      "note": "planned",
+      "steps": [
+        "实现任务状态机、输入/配置快照与幂等请求键",
+        "实现 PG 原子认领、心跳、lease_generation 和崩溃后 interrupted",
+        "工作进程加载核心包，按任务隔离原生状态；API 不长时间占计算",
+        "实现可恢复进度、取消与结果 manifest 的事务提交",
+        "桌面使用相同 job contract，本地文件/设备由专属适配器管理",
+        "故意中断 worker、重复提交、旧租约提交和服务重启测试"
+      ],
+      "acceptance": "没有伪成功/重复最终产物/遗留本任务进程；10 用户可排队，不把进程内线程当持久队列",
+      "execution_evidence": []
+    },
+    {
+      "id": "P07",
+      "title": "5 GB 配额、7 天清理和结果管理",
+      "dependencies": "P05,P06",
+      "files": "backend/src/ptb_api/quota.py；backend/src/ptb_api/storage.py；backend/src/ptb_worker/cleanup.py；frontend/src/modules/storage/StoragePage.vue",
+      "status": "planned",
+      "note": "planned",
+      "steps": [
+        "实现账户字节计量、原子预留、受控 writer 和恢复核对",
+        "实现上传/解压/生成/ZIP 全链路计量，不能靠前端判断",
+        "实现输入与输出独立 expires_at、到期禁读、删除与重启清理",
+        "实现占用列表、按大小/到期排序、直接删除和下载后手动清理",
+        "覆盖 Q01–Q20：竞态、断电、满额、物理删除失败、下载到期等",
+        "压测全局磁盘水位，建立错误/清理延迟可观测记录"
+      ],
+      "acceptance": "used+reserved 不越界；满额仍可下载清理；过期数据不可读，正常运行按时物理删除",
+      "execution_evidence": []
+    },
+    {
+      "id": "P08",
+      "title": "普通研究模块逐页迁移",
+      "dependencies": "P03,P04,P06,P07",
+      "files": "docs/plans/modules/M01-parameter-estimation.md 等模块计划；packages/phonetic_core/src/phonetic_core/；frontend/src/modules/",
+      "status": "planned",
+      "note": "planned",
+      "steps": [
+        "按 M01/M02/M03/M04/M06/M07/M08/M09/M13/M14 顺序逐个执行对应文件级计划",
+        "先原样搬可用算法，再拆外层 I/O；不把算法重写和 UI 换肤混成一个提交",
+        "每模块先对照 v2/契约，再接统一页面与本地/服务器两个 adapter",
+        "保留原入口和全部输出/参数，新增来源说明从注册表读取",
+        "每模块完成浅深色、取消/错误和结果导出审查后才迁下一个",
+        "跑该模块科研回归，不在失败时跳向更多模块堆积债务"
+      ],
+      "acceptance": "10 个模块各自满足原功能行和新增双端验收；无第二套服务端算法",
+      "execution_evidence": []
+    },
+    {
+      "id": "P09",
+      "title": "设备、时序和原生高风险模块迁移",
+      "dependencies": "P01,P03,P04,P06,P07",
+      "files": "docs/plans/modules/M05-lip-extraction.md；M10-vocal-tract.md；M11-mfa.md；M12-annotation.md；M15-perception.md",
+      "status": "planned",
+      "note": "planned",
+      "steps": [
+        "唇形：验证摄像头/麦克风权限、帧率、时间轴与平台差异",
+        "声道：VTL 原生构建、实例隔离、真实音频输出、几何与生理说明",
+        "MFA：平台模型与可执行环境、持久任务、真实取消和日志",
+        "标注：前端编辑、TextGrid、独立唇偏保存和未保存保护",
+        "感知：刺激预加载、客户端时间戳、随机化/结果导出、断网策略",
+        "将未达到目标的设备/平台限制写入能力矩阵，不做静默降级"
+      ],
+      "acceptance": "5 模块分别有可复核数据/设备证据；Web 不假装等同原生硬件时序",
+      "execution_evidence": []
+    },
+    {
+      "id": "P10",
+      "title": "全项目来源、说明书与软件致谢",
+      "dependencies": "P04,P08,P09",
+      "files": "third_party/source-registry.json；third_party/references.bib；docs/manual/methods-and-credits.md；frontend/src/modules/about/ReferencesPage.vue",
+      "status": "planned",
+      "note": "planned",
+      "steps": [
+        "逐函数复查优先算法，区分移植、依赖、论文方法和项目集成",
+        "补齐实际使用版本、原版权/许可证、修改说明和数据使用范围",
+        "软件关于与各模块方法页接同一注册表；提供仓库、DOI、官方 PDF 和引用复制",
+        "重新编排说明书全部章节，操作步骤与实际页面逐项对应",
+        "生成随包许可/参考文献/依赖清单，检查所有 UI 来源入口离线可读",
+        "解决未明确授权的代码/数据；必要时联系作者前另获发信授权，或采用合规替代方案并审阅"
+      ],
+      "acceptance": "没有未登记外部组件；不存在“全部原创”错误归属；对应发行许可缺口未解决则该发行物不发布",
+      "execution_evidence": []
+    },
+    {
+      "id": "P11",
+      "title": "WSL 多人集成、科学对照和负载测试",
+      "dependencies": "P08,P09,P10",
+      "files": "tests/security/；tests/performance/；tests/e2e/；docs/testing/load-report.md",
+      "status": "planned",
+      "note": "planned",
+      "steps": [
+        "在明确归本项目的 WSL 环境部署 API/worker/PostgreSQL/存储",
+        "10 个测试账号执行不同模块、排队、下载、到期和清理",
+        "验证 2 重任务+8 轻交互与 10 人同时提交，记录资源和等待时间",
+        "注入数据库/worker/磁盘/网络故障，核对恢复与跨用户边界",
+        "运行所有模块数值对照与 UI 场景，按真实环境标记缺口",
+        "用数据形成未来服务器规格与容量建议，不在本轮购买"
+      ],
+      "acceptance": "10 人场景指标有实测；安全/配额/TTL 必测全通过，设备未测不被掩盖",
+      "execution_evidence": []
+    },
+    {
+      "id": "P12",
+      "title": "Windows 单文件与安装版发行链",
+      "dependencies": "P01,P08,P09,P10",
+      "files": "desktop/packaging/windows/phonetictoolbox.spec；desktop/packaging/windows/installer.iss；scripts/build_windows.ps1",
+      "status": "planned",
+      "note": "planned",
+      "steps": [
+        "构建前端与核心 wheel，生成带版本和 hash 的发行清单",
+        "收集 WebEngine、Python、REAPER/VTL/其他原生依赖和字体字典",
+        "生成单文件 EXE，验证离线/首次启动/退出/目录权限/Unicode",
+        "制作安装包、真实快捷方式/卸载入口和升级策略",
+        "干净 Windows 账号、无 Python/Node 环境安装/升级/卸载测试",
+        "验证版本一致、来源清单在包内、默认保留用户研究数据"
+      ],
+      "acceptance": "单文件和安装版分别有验收记录；文件夹诊断版不冒充单文件交付",
+      "execution_evidence": []
+    },
+    {
+      "id": "P13",
+      "title": "macOS 构建与实机验收",
+      "dependencies": "P01,P08,P09,P10",
+      "files": "desktop/packaging/macos/；scripts/build_macos.sh；docs/testing/macos-report.md",
+      "status": "planned",
+      "note": "planned",
+      "steps": [
+        "准备经授权的 macOS 构建环境，确定 arm64/x86_64 支持矩阵",
+        "构建 Qt helper、Python wheel、REAPER/VTL dylib 并检查架构和加载路径",
+        "制作 .app/分发包，验证音频/摄像头权限文案与原生窗口",
+        "依据实际发行方式处理签名/公证，保留可追溯构建信息",
+        "取得 Mac 实机或测试者证据，执行离线/设备/退出/主题验收",
+        "没有实机的项目明确 pending，不以 CI 构建成功代替实际可用"
+      ],
+      "acceptance": "发布目标架构均通过相应构建和设备验收；当前暂无 Mac 不阻断其他平台规划",
+      "execution_evidence": []
+    },
+    {
+      "id": "P14",
+      "title": "Linux 桌面发行与兼容性",
+      "dependencies": "P01,P08,P09,P10",
+      "files": "desktop/packaging/linux/；scripts/build_linux.sh；docs/testing/linux-desktop-report.md",
+      "status": "planned",
+      "note": "planned",
+      "steps": [
+        "选择最小支持发行版和架构，记录 glibc/图形/音频依赖",
+        "构建原生工具与 VTL、核心 wheel 和共用前端",
+        "制作选定 AppImage/安装包及 .desktop 图标信息",
+        "测试 X11/Wayland、字体、音频设备、相机与沙箱配置",
+        "执行非项目目录/离线/退出/升级验证",
+        "列出真实支持矩阵，不把 WSL 后端测试计入桌面通过"
+      ],
+      "acceptance": "目标 Linux 桌面环境可运行并有设备证据；不能承诺所有发行版",
+      "execution_evidence": []
+    },
+    {
+      "id": "P15",
+      "title": "正式部署与分平台发布准备",
+      "dependencies": "按交付拆分：Web=P11；Windows=P12；macOS=P13；Linux=P14",
+      "files": "docs/deployment/production-runbook.md；docs/deployment/rollback.md；docs/releases/3.0.0.md",
+      "status": "planned",
+      "note": "planned",
+      "steps": [
+        "审查各平台验收状态，区分完成/未测/阻断，不夸大覆盖",
+        "根据负载报告查询阿里云实时规格/价格，提出具体部署资源",
+        "形成同源 HTTPS、数据库、worker、存储/配额/清理与最少日志配置清单",
+        "演练部署迁移、服务恢复和版本回退；核对备份不会超期保存用户音频",
+        "准备发布说明、说明书、下载文件名/校验和、签名和第三方材料",
+        "把生产部署/push/对外发布作为明确可审阅的最后动作，获授权后执行"
+      ],
+      "acceptance": "有可复核发布包和运维步骤；未通过的平台可单列待发布，不能在发布说明中宣称可用",
+      "execution_evidence": [],
+      "dependency_groups": {
+        "web": [
+          "P11"
+        ],
+        "windows": [
+          "P12"
+        ],
+        "macos": [
+          "P13"
+        ],
+        "linux": [
+          "P14"
+        ]
+      }
+    },
+    {
+      "id": "P16",
+      "title": "退役过渡代码与条件性旧目录清理",
+      "dependencies": "P08,P09,P10,P11",
+      "files": "docs/baseline/retirement-report.md；新工程 import/build 扫描；旧目录处理记录",
+      "status": "planned",
+      "note": "planned",
+      "steps": [
+        "确认新入口只依赖新包，所有功能验收映射已闭合",
+        "检查 v3 继承旧目录的唯一资源/说明/来源是否已迁入正式位置",
+        "扫描构建产物与运行时，证明没有旧路径和无意双实现",
+        "旧前端/API 重新查依赖、未提交修改和独有数据，不能因 v3 不依赖就判整个项目无用",
+        "只对明确确认无必要保留的精确目标应用用户的条件性删除授权",
+        "先列出清理清单与证据，再执行边界校验；v2 一直保留"
+      ],
+      "acceptance": "v3 结构简洁且完整；没有删除仍有用途/独有改动的旧项目，更不会删除 v2",
+      "execution_evidence": []
+    },
+    {
+      "id": "M01",
+      "title": "参数估计",
+      "dependencies": [
+        "P03",
+        "P04",
+        "P06",
+        "P07"
+      ],
+      "status": "planned",
+      "plan": "modules/M01-parameter-estimation.md",
+      "execution_evidence": []
+    },
+    {
+      "id": "M02",
+      "title": "参数显示",
+      "dependencies": [
+        "P03",
+        "P04",
+        "P06",
+        "P07"
+      ],
+      "status": "planned",
+      "plan": "modules/M02-parameter-display.md",
+      "execution_evidence": []
+    },
+    {
+      "id": "M03",
+      "title": "EGG 信号分析",
+      "dependencies": [
+        "P03",
+        "P04",
+        "P06",
+        "P07"
+      ],
+      "status": "planned",
+      "plan": "modules/M03-egg-analysis.md",
+      "execution_evidence": []
+    },
+    {
+      "id": "M04",
+      "title": "LPC 谱图",
+      "dependencies": [
+        "P03",
+        "P04",
+        "P06",
+        "P07"
+      ],
+      "status": "planned",
+      "plan": "modules/M04-lpc-spectrum.md",
+      "execution_evidence": []
+    },
+    {
+      "id": "M05",
+      "title": "唇形提取",
+      "dependencies": [
+        "P03",
+        "P04",
+        "P06",
+        "P07",
+        "P01"
+      ],
+      "status": "planned",
+      "plan": "modules/M05-lip-extraction.md",
+      "execution_evidence": []
+    },
+    {
+      "id": "M06",
+      "title": "语音合成",
+      "dependencies": [
+        "P03",
+        "P04",
+        "P06",
+        "P07"
+      ],
+      "status": "planned",
+      "plan": "modules/M06-speech-synthesis.md",
+      "execution_evidence": []
+    },
+    {
+      "id": "M07",
+      "title": "发声类型合成",
+      "dependencies": [
+        "P03",
+        "P04",
+        "P06",
+        "P07"
+      ],
+      "status": "planned",
+      "plan": "modules/M07-phonation-synthesis.md",
+      "execution_evidence": []
+    },
+    {
+      "id": "M08",
+      "title": "变速变调",
+      "dependencies": [
+        "P03",
+        "P04",
+        "P06",
+        "P07"
+      ],
+      "status": "planned",
+      "plan": "modules/M08-pitch-manipulation.md",
+      "execution_evidence": []
+    },
+    {
+      "id": "M09",
+      "title": "语谱图转音频",
+      "dependencies": [
+        "P03",
+        "P04",
+        "P06",
+        "P07"
+      ],
+      "status": "planned",
+      "plan": "modules/M09-spectrogram-to-audio.md",
+      "execution_evidence": []
+    },
+    {
+      "id": "M10",
+      "title": "声道工作台",
+      "dependencies": [
+        "P03",
+        "P04",
+        "P06",
+        "P07",
+        "P01"
+      ],
+      "status": "planned",
+      "plan": "modules/M10-vocal-tract.md",
+      "execution_evidence": []
+    },
+    {
+      "id": "M11",
+      "title": "MFA 自动标注",
+      "dependencies": [
+        "P03",
+        "P04",
+        "P06",
+        "P07",
+        "P01"
+      ],
+      "status": "planned",
+      "plan": "modules/M11-mfa.md",
+      "execution_evidence": []
+    },
+    {
+      "id": "M12",
+      "title": "语音标注对齐",
+      "dependencies": [
+        "P03",
+        "P04",
+        "P06",
+        "P07",
+        "P01"
+      ],
+      "status": "planned",
+      "plan": "modules/M12-annotation.md",
+      "execution_evidence": []
+    },
+    {
+      "id": "M13",
+      "title": "普通话转 IPA",
+      "dependencies": [
+        "P03",
+        "P04",
+        "P06",
+        "P07"
+      ],
+      "status": "planned",
+      "plan": "modules/M13-mandarin-ipa.md",
+      "execution_evidence": []
+    },
+    {
+      "id": "M14",
+      "title": "音系归纳",
+      "dependencies": [
+        "P03",
+        "P04",
+        "P06",
+        "P07"
+      ],
+      "status": "planned",
+      "plan": "modules/M14-phonology-induction.md",
+      "execution_evidence": []
+    },
+    {
+      "id": "M15",
+      "title": "感知实验",
+      "dependencies": [
+        "P03",
+        "P04",
+        "P06",
+        "P07",
+        "P01"
+      ],
+      "status": "planned",
+      "plan": "modules/M15-perception.md",
+      "execution_evidence": []
+    }
+  ]
+}

@@ -1,0 +1,2572 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-09",
+  "kind": "inherited-source-not-verified-app-release",
+  "source_head": "4eeff893eb6cdcddb40456072571dd5d30c51a76",
+  "v3_baseline_commit": "ccf4ff73c355e8d955c2a6b9605b32ac2c7255a6",
+  "file_count": 427,
+  "files": [
+    {
+      "path": ".gitattributes",
+      "size": 209,
+      "sha256": "50ae3823b2b6d62ef3d6e9517c9810ce75741196c38366db0f637ba5b7870537",
+      "previously_tracked": false
+    },
+    {
+      "path": ".gitignore",
+      "size": 555,
+      "sha256": "583518efad90b0936a74d1fbc10dea340ddb0dd80e16e0a093da9a788765d748",
+      "previously_tracked": false
+    },
+    {
+      "path": "AGENTS.md",
+      "size": 2534,
+      "sha256": "3316655f211b6b6361107938095deda073f21b002a8ef2224e5d6b02034d19fb",
+      "previously_tracked": false
+    },
+    {
+      "path": "ARCHITECTURE.md",
+      "size": 28887,
+      "sha256": "d55ce8396b60d1516d5d8bedd1b1dd13c61484416ff28e37057b4c61b239c239",
+      "previously_tracked": true
+    },
+    {
+      "path": "PT.png",
+      "size": 4842667,
+      "sha256": "3579ffdf9c6a9902304a046a67e0b1e5e7d8355f9c55c9c006ac907228f109be",
+      "previously_tracked": true
+    },
+    {
+      "path": "PhoneticToolbox.ico",
+      "size": 266302,
+      "sha256": "e4bdffbaf32d8926b94c1ecb212448d63053b0ddf77a61e0daaf257b8a9e56d1",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/PhoneticToolboxDoc.html",
+      "size": 112166,
+      "sha256": "734cc180d7c190457d8244db13742d0f423a2768fbc1e01bfcf93ed100214651",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_00e770qkn.jpg",
+      "size": 31162,
+      "sha256": "b1a83647b3654e2f777d77acba54c4cd72440921e8846f31476b486139676861",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_00rqgcbkf.jpg",
+      "size": 96387,
+      "sha256": "a3ab9e49611ea6c6477c373601058635f6826dd08fbda9b7a387df098a37c490",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_026cvw3te.jpg",
+      "size": 41797,
+      "sha256": "58b0a73e2b0904e335b0067b7faeb1a3a97012844af031da6e4f8b7f71605f07",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_03el1lc3a.jpg",
+      "size": 164480,
+      "sha256": "af7d1de85592208c9d46b1c7883def3f21736514586db172bd6cb5621a4d8d7b",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_07p3j5s82.jpg",
+      "size": 124251,
+      "sha256": "c6649d2df286a8a8c87161118c688f919349a188700812362143a6dd4efb8ccc",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_0nbub8tke.jpg",
+      "size": 52496,
+      "sha256": "0777028f142e15ff65fa87911cf8e58b7e30fa8f845219886f4478bc1786fa38",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_15yzsxl93.jpg",
+      "size": 96898,
+      "sha256": "c3ebf3d02e51641fb54aeb3e88ad16af8198ff8d1c27d0f44d239724aca27cd7",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_1xsf9egoy.jpg",
+      "size": 43304,
+      "sha256": "59268c78c7fd0c2dd1e70e0c73415b2ee49b784f7bdbae9a0b24eb4fb6523d0b",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_201jwanx5.jpg",
+      "size": 22819,
+      "sha256": "c0d4b3bff29657e5c5ceb48b5b2ffa965b4f0dbf293d1a0cc3341dd15bfc64c6",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_2bda65dse.jpg",
+      "size": 54292,
+      "sha256": "5f2678ae023b4f62532b666aa1b2279f0dc027b2da437ce6cce9b4fa7438041c",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_2d98mkjsa.jpg",
+      "size": 93706,
+      "sha256": "e5a97679dd4cbc17f0da175d29aaa1adce2142cf76f127163cd4b3248f564d2f",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_2sfbh0hs0.jpg",
+      "size": 76180,
+      "sha256": "b1e2d088fd54ab1cbafd23cba82c66d67553970abd6e12700179662b7a5641fd",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_2v4pq9pqv.jpg",
+      "size": 9888,
+      "sha256": "37f32c6ec89b37df99c93925c1e86e2a4c1ab657db1250a7ab511693db30320f",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_2yajxar6n.jpg",
+      "size": 45831,
+      "sha256": "ed4dcd08c4b99c0f22c71b34035b454beaa44da54d1301c8caaaa7ea974baeaf",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_38oo934gm.jpg",
+      "size": 45362,
+      "sha256": "984cb8e04722f7879d4cd4045f6ce15c16a17353af7edf1f2b712f9073f1c002",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_3gmyg1k9d.jpg",
+      "size": 43509,
+      "sha256": "42ab20c98e516d2fd62ebec1adc678f5c411b4e7361d9e51494839b5b269071c",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_3jj797wzp.jpg",
+      "size": 28820,
+      "sha256": "6f12b19be2393b764eb3ace0ab8054fbe17bebed2e6b58d421dd19b0a4afe595",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_3z52u1bk4.jpg",
+      "size": 93196,
+      "sha256": "5b2118f32790befc0f5db3939a040e405fb2d7a52c1a442c41a8006b1239300b",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_459z3hjbd.jpg",
+      "size": 63318,
+      "sha256": "f5d225a0d5dc34245cc77f747ae6f533ae1a2462b4a81cb514b835f5e938b58d",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_49b3s47x2.jpg",
+      "size": 224984,
+      "sha256": "d6ed5dc57982be83dad08269e93b94a4ee8800f15631ef0317fb1a4e7b41a0a6",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_4ow0zzbls.jpg",
+      "size": 77037,
+      "sha256": "6920ed283d39971b403d19b4416d8bb97c56f9f16e5af91ca2c6e61260e7ae28",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_4zbelwjyk.jpg",
+      "size": 30628,
+      "sha256": "b1fbb41d56374cda5ea24f3f800678b05dbdaacd4db7a70d5b66e8da49ce3854",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_51sxlm88f.jpg",
+      "size": 72328,
+      "sha256": "2acdfc060db49fec2c336ed2b36139d6c9031d9cb614be596efe52a6abda8f13",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_5b05ozb07.jpg",
+      "size": 56825,
+      "sha256": "6c554ac32003b796238bd4c37a2239bdf91a777493c0999c945a4c7b55f68bf6",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_5meff1tv6.jpg",
+      "size": 65777,
+      "sha256": "b231fa2b6f7b5e96b337a49fa93fe5410e71cebd362cdb83b7c1251247cad6aa",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_5nuy75flm.jpg",
+      "size": 14985,
+      "sha256": "a867e57485fd757d770a808edb9aa59a74c45930775e0371fd931d682f16c5bc",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_640ps4twv.jpg",
+      "size": 17509,
+      "sha256": "c7d76625347fbc29d6cb87a0d86c504aefd5cfccefc2cdfa3c79091edbdf6ae8",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_6bdtjayl9.jpg",
+      "size": 60139,
+      "sha256": "640408de35f649a57ae51197975851312af655d2f87eafdcd3be5cfd4c91f26b",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_6hinuecy1.jpg",
+      "size": 52086,
+      "sha256": "8000da0303ec56c1e8174128cf6ed80de4d754a151e8690d931ff87a67fa8a68",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_77av6c45e.jpg",
+      "size": 52266,
+      "sha256": "6fc1bd23aef214c84ad0749811d861a89db81777737a7ccb052cd7225f31a78f",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_7kh0x80yo.jpg",
+      "size": 16969,
+      "sha256": "4b16f3218dc37490d7c7e137574c6b58a06096fc1ee649110f7fa1a50792c27c",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_7no1t7dv1.jpg",
+      "size": 50024,
+      "sha256": "92f195f26b319db4f9bc2d31acc5ac7a6012547987b56cca1a7ea4fd1c1ef25f",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_7y04n2ggi.jpg",
+      "size": 14709,
+      "sha256": "50ad7c29217d48851df8e3850af5febdbd18afd6ad362f07f93beece404e8354",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_7zxbhjwy4.jpg",
+      "size": 149143,
+      "sha256": "d3075669e5a6e6d38c0ea5b73516ac63582f9ae2bbc6365ceadea1a039d44c5b",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_8i7tkel56.jpg",
+      "size": 59531,
+      "sha256": "00bce62deae0a704948bbe5b1c49ca639ee22717c0b66f96e7292fe636724907",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_8m5st3r1d.jpg",
+      "size": 203733,
+      "sha256": "b17328da465b0d312d5c73626058e3acd407e2d49d46a4d0fb68ad354443c944",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_8me25kibi.jpg",
+      "size": 43092,
+      "sha256": "c1e19a128e28c919d635a56f2f768b7b0228a99a5c58d78e693c5bdb801197eb",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_8q3p8l658.jpg",
+      "size": 51764,
+      "sha256": "59aa5fc556cb124d8f7fbceb4ef7c8739a27eb0533230f9931d4c128f4f69a81",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_8utfbdt4e.jpg",
+      "size": 7984,
+      "sha256": "c6118443572f69675125a630dc3ccd4c6e33d429a7c1c6585b429f55d336324a",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_900yiz36r.jpg",
+      "size": 44824,
+      "sha256": "6b2684ac1ef7bb28a1e697f2cb29af2e67ede113de43dfbf7cb78c3870040999",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_91q4qfnvj.jpg",
+      "size": 56640,
+      "sha256": "a53b13e2afa257b89e10245a4fa946c4ecf2a25af918916894ce516568271cb6",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_9a1kd46ln.jpg",
+      "size": 62480,
+      "sha256": "8bc6d6ae6b77151f3b146d95a9f7600568e13bd6825bde57a40936a36f1d561c",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_9bm7s9ezg.jpg",
+      "size": 31544,
+      "sha256": "5757294908716d001281a6be289833edde941d9fd209b81f36cf7d85e36cd868",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_9fbz0abd0.jpg",
+      "size": 66081,
+      "sha256": "cfe7eae42650a7659caec4ee67d098123c7dab5838733b1b2cfd710ddfe83513",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_9hraityri.jpg",
+      "size": 96423,
+      "sha256": "542c781d23044fa6c822e0c65bf40c14ea59bcebd1e52b83515ad89ee16e5e56",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_9kc2migjj.jpg",
+      "size": 88680,
+      "sha256": "01c4094ecd3ad09b1ec38c51c6492174d2739e3e7eefeaec327f8ec162b959f5",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_9mgjh7j4y.jpg",
+      "size": 69236,
+      "sha256": "73ee32b650d4f458648e8c6fd7e5931f89bc2cb6af9694377b8f2d60cd5ab32d",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_9p0db0q6a.jpg",
+      "size": 85516,
+      "sha256": "849cb344e75c53bdace80890b67c4c85171204cc2e384774a6ae37bb299228e9",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_9s126lkt0.jpg",
+      "size": 23113,
+      "sha256": "80013635721cf6895f18cf109449038b1c79644089ba4a7232697309b4bb0f5b",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_9yu6r1hqw.jpg",
+      "size": 103399,
+      "sha256": "dfc394e7de2936d758602a765a5ab5b5bbe7b5abafbad9020d5c98feaf016687",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_a4avynqk2.jpg",
+      "size": 84534,
+      "sha256": "357e3d45d47333553fcac240840d0d890f53304cd3ed80ca87dbf1cc0012d3cc",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_a8n3orjug.jpg",
+      "size": 14328,
+      "sha256": "3ab5ab4e3971000dce4659c54d7a560442074644ce0834344975189fb4b9c9a9",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_abmvy583c.jpg",
+      "size": 93310,
+      "sha256": "51238db4bdfd9b46a5298c9968f58c8d48056ac9c6d60a80c6ec23a24c035e32",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_ah18ubu3q.jpg",
+      "size": 27974,
+      "sha256": "19a8e31b472bbe33970caa97ca5ca743cf136d08584bcc4e647ee0627e6c48f2",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_ah8hqv0vq.jpg",
+      "size": 39064,
+      "sha256": "635999dc9dc42aecedc5a7eddf572b700317aa24182164a87e991a32c03b7dc6",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_ay95zbhip.jpg",
+      "size": 93523,
+      "sha256": "a039b8d44fdf364bf306ce76f08369096541a2a26bfcf87695cf2fb8a4be91f1",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_b11wgdn5p.jpg",
+      "size": 39861,
+      "sha256": "a89979a24e0fbb26b65603cf43e377680bd60a653d3b49b9761cd39ee0c397fd",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_baqbs2u3f.jpg",
+      "size": 104166,
+      "sha256": "864407ada50a930ad00fec05106f75cf3ef40587520c2b62aa7bc9c13a6b3c09",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_bffpj7w1y.jpg",
+      "size": 60366,
+      "sha256": "bc71188886bcf241f48a52c2fae81643b631ba3434fac7b5d47235a11f88fcb2",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_bre9sijxa.jpg",
+      "size": 98658,
+      "sha256": "9faf1235efe72d0a5000557ff4dd05de2b950caa76eb4ac53ecfc0f217105824",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_busc5bnht.jpg",
+      "size": 74089,
+      "sha256": "9240ada689f6c03840450c9971575107d4f3dfde26143da05e099704afd426fd",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_byaa8mht4.jpg",
+      "size": 10723,
+      "sha256": "f8cc4080de438a939518965885fbc703749524feb0ddf3cf9ff636d44667fa64",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_bzngc7z33.jpg",
+      "size": 75205,
+      "sha256": "43b3b6d8033a8dc221f67faf1536c33ea0de7119f685629acd08f6b57a479520",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_c2e1nj2yp.jpg",
+      "size": 42523,
+      "sha256": "5d3d1129997e51fa98799b8f88dc174048b3699ab4165d882d2c0b396c88da8e",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_crhc0gpsd.jpg",
+      "size": 26483,
+      "sha256": "3b49d63cfa869f843a081b10307efd096b6436e946aa70242572e02a6bb878c9",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_cssqv518t.jpg",
+      "size": 14392,
+      "sha256": "b125d3d50591605923565a9ebd784c5f87b7cebf33a6e559a6d5515c466f953c",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_dcnbtrtbv.jpg",
+      "size": 33922,
+      "sha256": "4eaac222c5f7df439ce8b2c49467b553c33678a29a4032b17243317490a26591",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_dfg9h1kel.jpg",
+      "size": 67034,
+      "sha256": "aa3121fa8b53a33fd42aad25ef6608a1b854945336841b1d99958fba35e6218a",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_eeimbpfrf.jpg",
+      "size": 79846,
+      "sha256": "50350c127bb814907f08b149a138680b2568c64e3439b903ff39f22be8f0e171",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_ekk7bwno7.jpg",
+      "size": 43960,
+      "sha256": "31b6d9cea7b2f36cf920151dffc0707050e7caacaebfe097718149bdf50e1e46",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_eprek6sgk.jpg",
+      "size": 67674,
+      "sha256": "5d182364eb187bca0b0766baa2b775ce230e6393f22f6458cfeb0f1f0532f53c",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_fet52381s.jpg",
+      "size": 120680,
+      "sha256": "10df9103dd84dd7e5994348443f0896b55e956440be7a503a6044ed2665cab61",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_ffa8mzd0h.jpg",
+      "size": 60143,
+      "sha256": "93ac93747d0d58707655789eb732940af99a19d2c7d5d5eeb329df5e3961e027",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_fjc3rn3jl.jpg",
+      "size": 20466,
+      "sha256": "6544eb7a0f49d7dff7a36e61c4d8c6ce7d4bd7b2d8a3de35cc02393a3ab338eb",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_g730epoyb.jpg",
+      "size": 55895,
+      "sha256": "09c10561e2c796c0884c8a418b2745a3b224f7a7e9f6ef4a8d25ca329bb014ce",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_gd7em84kz.jpg",
+      "size": 53488,
+      "sha256": "7be72e33db381731d7dcb1838163b473ad421bab69fdf537b7e4dee8358a9468",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_gpba0083z.jpg",
+      "size": 99986,
+      "sha256": "4c212e1ba1c66159fc2c21e3b79de0f5bcc973b54d4bcbc995a9087e5b0918b9",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_h0sdr468z.jpg",
+      "size": 6868,
+      "sha256": "953b363279d8239002fa8b69e0289da4477444918f677fd592defaaa9b41278d",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_h4kedu8yo.jpg",
+      "size": 66600,
+      "sha256": "a1d1f4070621e09d34024473f0cb2660ec600529ad629de8f528a6ea6cd7be83",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_h7824fiec.jpg",
+      "size": 30876,
+      "sha256": "713e005ebe9cb4b0434e18ba9c826560305383524dac2961d28ed78e2ecdd542",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_h9i1wfj6s.jpg",
+      "size": 55583,
+      "sha256": "085a09ead681d9b5073f914c63d81f89e07516b42b1ac4ab54160de3a79b9bfd",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_hiv4efrl5.jpg",
+      "size": 100206,
+      "sha256": "5aa0adc36720cad125f313a4ec2d17163606c232cd421161b2e9d537240bdd6e",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_hl77n5d06.jpg",
+      "size": 34883,
+      "sha256": "6bd3e10cee311e624cef66172276117177498f9b848edc7a0fab66b2e0ae946f",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_hma2pvquj.jpg",
+      "size": 79156,
+      "sha256": "05275510a7e8ee002a6ae3bb5a07627fd648c633af3e6b1014bac6140a461c59",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_ikjt598wz.jpg",
+      "size": 109399,
+      "sha256": "fb96253030f5e7b7dcf92e641596689ed3d10d2bb187141015f329e105d94ff0",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_imjwbohrz.jpg",
+      "size": 298411,
+      "sha256": "560b845e51ef1a4b4dd74ee9fed940bbaaf70aa36b3ff80e9026f44147bf916b",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_ip10uupgw.jpg",
+      "size": 96814,
+      "sha256": "e0c50482c4d90a4a0335983b8db5586c23db8cf8c03adca0d68527efe8b3a251",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_iyuf97huj.jpg",
+      "size": 13287,
+      "sha256": "e99b4805ca35d8d89be9f23223dcce3c5900386a163f35fbb9d629c6afeb7070",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_j21vv3y8v.jpg",
+      "size": 35252,
+      "sha256": "563d9421930c40166893b88161e7c2f8ebe6280923ef00d01f26eb7eb833df81",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_jnscf3j3o.jpg",
+      "size": 53437,
+      "sha256": "050063bad839329a704615f509ca944a3bb1d78343f87ac23fb11e90c81f8050",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_jttpecbyq.jpg",
+      "size": 9572,
+      "sha256": "051204dd78c031f60fa635462d357495f8964338b90c893a023d5afb6f2054ce",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_jyopd18qp.jpg",
+      "size": 112021,
+      "sha256": "c5074e76df4164b9b931deee65a5df22acbd27418d68f95a2311fee3e6c2b471",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_k8kh2mnpa.jpg",
+      "size": 115598,
+      "sha256": "0911ae547595b5a176c2360e2b7bef7a6085efc9fb2cbe104ea147d0aa7d9210",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_kasryx3dy.jpg",
+      "size": 115148,
+      "sha256": "1b94b13ac8189e4d73eb400fbf1aa5257bcee8308bcf386cbc162cfa3ce8c2f1",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_kooie011t.jpg",
+      "size": 32206,
+      "sha256": "b2949132c079649c8e6e7b991f23456d818e5474091359bc1b42a2de2d7be798",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_kyrd8a4f3.jpg",
+      "size": 29218,
+      "sha256": "cd2095f302f958a8e17fcebc04286860e72fa712272a4052dafac0e16102b63c",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_kzzc61x82.jpg",
+      "size": 105188,
+      "sha256": "9b7b8a1ff3617b871fd2d247a2fd88ea66903533893c838f1084f61f3038736a",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_lip_main_v214.png",
+      "size": 751490,
+      "sha256": "ae5d42ae77b3783fb914b0d049dc11701b6e9f0d6f4fe717d5ac27ffd5a73284",
+      "previously_tracked": false
+    },
+    {
+      "path": "Phonetic_Export/images/img_lip_offset_dialog.png",
+      "size": 234000,
+      "sha256": "50bf0e3084c9de04e01f5bf665747e50d4e486978330ee1035e7507833b55b58",
+      "previously_tracked": false
+    },
+    {
+      "path": "Phonetic_Export/images/img_ltllzo9gv.jpg",
+      "size": 45831,
+      "sha256": "ed4dcd08c4b99c0f22c71b34035b454beaa44da54d1301c8caaaa7ea974baeaf",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_m64gk1ehj.jpg",
+      "size": 29459,
+      "sha256": "d7579889dc7e98a9838dc313cd46e42eeb346040fc0b7596231eda243a14e809",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_main_panel_v214.png",
+      "size": 34540,
+      "sha256": "c6426281fad69ab969d7d10fb4f03d0a0bb3d9b5715ddbb1637783962f75e49d",
+      "previously_tracked": false
+    },
+    {
+      "path": "Phonetic_Export/images/img_mdd36et2t.jpg",
+      "size": 24377,
+      "sha256": "a79f385fa2bc5a9602a4e38f4ac977f1610c66766d430a0af2c39b5c3422f618",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_n0n5xo7ai.jpg",
+      "size": 31561,
+      "sha256": "d81354630878cfd5503233e08e84b6bde7dfbad7dd626e56c8eb6528c689df24",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_n6m4pb030.jpg",
+      "size": 14810,
+      "sha256": "ddb040d7178943a4974b337395afb035a376414616e58eafefcadf211c7301b8",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_ncesoxc1a.jpg",
+      "size": 39884,
+      "sha256": "ed74b4f4ead065c904f8b2b037aeafc7c755a05f3dbdf7dadf2df57710ae22d1",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_ne8nshb45.jpg",
+      "size": 8862,
+      "sha256": "cd8665d4896ad9336617244cffbe95c8e641094b43001027234f7e1a69149cf3",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_nf5qoyk2p.jpg",
+      "size": 110226,
+      "sha256": "2364f49c2e99547fd8569dd9fa22a884a8801ecdb5dd749b143a0c0ae823afca",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_nh223zdzv.jpg",
+      "size": 89854,
+      "sha256": "8ec316611a87e5a8b8c535923bfa225efa5875c058fb9cbb87077c7007583f9e",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_o9nqkb6ul.jpg",
+      "size": 113997,
+      "sha256": "5d947ee16aee3af79f6b2b91bd6ea01f85c1bb61238f91183d136adc882d9698",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_ofbdh0fhr.jpg",
+      "size": 84625,
+      "sha256": "2b6fcd9367ed54e56b80e64debc5745e1a9a584f9c6d847ccab7768f0b57d673",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_oogjkcj5c.jpg",
+      "size": 96294,
+      "sha256": "44e51f0959e0cc3ff19948f35d11086d36f4671ddbc5e0b051e21293d1cf6475",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_op01pxcr9.jpg",
+      "size": 44680,
+      "sha256": "0dfdd6f0927ef4ea20db4f8eea833ee64d545cf3d5bf33e2f76ab5a9e763441d",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_osobh3q7w.jpg",
+      "size": 103364,
+      "sha256": "f23591c978530e76f8737dd1fcb1ea6d8fadca682ecf855370a6fa1d09de3f0b",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_ouy76wwfa.jpg",
+      "size": 95989,
+      "sha256": "11befdcd0687a36ff4337347d6bc2db919aafbd51fbb4102b3a486a025962c0f",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_oz1ilwjlu.jpg",
+      "size": 9305,
+      "sha256": "798f72b11208ce6f73828f3e3732cdaf7e7ff6da1b9f68ce54496331c8a0ca20",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_pbw2dslcw.jpg",
+      "size": 99464,
+      "sha256": "56349ebd8899e84cc29f0dae815d2bf1b77d11e03707e70c661f538658327427",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_pgghphyrl.jpg",
+      "size": 27655,
+      "sha256": "542f622bc17e9db3a6c645c6797ea56d8c93e5f5c4b59a56eb407bc1339c81f3",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_phonation_synthesis.png",
+      "size": 233694,
+      "sha256": "4caee8a36b5e8b994350a8e141a998686acf3a02c528b070efa30843a81f0255",
+      "previously_tracked": false
+    },
+    {
+      "path": "Phonetic_Export/images/img_pjnvqt4s5.jpg",
+      "size": 33831,
+      "sha256": "45c8aac3b9592c8914561cf24a824903a363e8dda464ed1f08246782dd231be3",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_pqps2ag4q.jpg",
+      "size": 32959,
+      "sha256": "3dece28b4e3a7362ab3fc225e0ff604dd298dbe91fd3b452c1010f074e450d22",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_ptztq32l0.jpg",
+      "size": 119836,
+      "sha256": "38ca7882efd326e5f29aed12c523d6d448639b80218dc7ae72f79d95f081187c",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_ptzz97pav.jpg",
+      "size": 85161,
+      "sha256": "d0f7f261b49eae2359bd5fdf0c95bc525e08fbd5e46616e46a8a4982d4920823",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_pxbo095g6.jpg",
+      "size": 15895,
+      "sha256": "c3ed194739ec4859d7c8843d7f5a299af867408f03e30250e8d5e9d839106a72",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_q1m88crip.jpg",
+      "size": 38689,
+      "sha256": "263959a5cb98970395aec4875edc6ae73063128ad3671b36ccbcc20504526546",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_q1n2ppaby.jpg",
+      "size": 19867,
+      "sha256": "f45c2d74c5ad3cb68f19ca55398a2b54cb672884e0d1e4929467890b47434dbd",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_qgy0vsc5e.jpg",
+      "size": 26105,
+      "sha256": "756c814a6a9ecdc75c37d384a3703b6bd9eecd3cc310a6cc48798f2aa596e859",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_r0a4qz7b4.jpg",
+      "size": 31756,
+      "sha256": "b1d4ba88e9e07cf60908021746f1987f0d9f8ba9df8cd4f7163fe60f3df400bf",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_r8c0f2bqc.jpg",
+      "size": 24410,
+      "sha256": "139da28648b3026fa9c6920b5dc8badfc2285f05234ca7572e2f07ffb568ffda",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_rgasjmqiu.jpg",
+      "size": 13035,
+      "sha256": "c02363a35fdc57dc6b12333484a329c13567cbca9e674ad8d92a973fc4df2af5",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_s2pggxrpm.jpg",
+      "size": 22674,
+      "sha256": "c1ad99da89b8f94a6702b34c2013e5110db8ba68415aa9e02dfd96cca1459321",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_shu3zdpnz.jpg",
+      "size": 62464,
+      "sha256": "fc9c47ca06085181a7453c78cac2c0576c56a1df631d3fdc45c120687f33313a",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_so8vonotn.jpg",
+      "size": 59143,
+      "sha256": "957a14220719050313b435d0ed6096052c060a6a35f8e251e52c91fd877eb2ae",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_ssberthf4.jpg",
+      "size": 100098,
+      "sha256": "bfb817962027299332c44e05f3cd59dd455dbdd62c6fef01df5fe0c1c153b920",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_tds5vd0bp.jpg",
+      "size": 50794,
+      "sha256": "cecb468d5053d0dff5a74964f7f90d489d09ffe320b71434623e1aeecd1c0d92",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_tjxgtw11t.jpg",
+      "size": 65370,
+      "sha256": "e77f6bf1cca25f9ccc5cb212a295ce244c67e9f38d79632a83d1e9d8822a3e0a",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_tn5hi6nlf.jpg",
+      "size": 71603,
+      "sha256": "edc638c56a99b754d674630ca46bc835394e7c4a876bf2d93c78ecf7edaa17c5",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_ubi9unrxm.jpg",
+      "size": 98256,
+      "sha256": "f3b1a24feac2692f4515ab63d58adac4014c803da191c2b4227f5520724954e5",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_udcf5ux5j.jpg",
+      "size": 357711,
+      "sha256": "6acce73cc8653756a900c266b242bfbf94adc8dfe2ea860fa66c04e3b7d30dd8",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_uqy9548ww.jpg",
+      "size": 22265,
+      "sha256": "d32be49d7de673bc6131257a536bbe769738aec24c5b06561c5d59b8a436a211",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_vd7qvgnzn.jpg",
+      "size": 49131,
+      "sha256": "7a6645709e2cbf8e405345c36f19de6fb74a7d3a1cce9987e465d38d655c3fcd",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_ve21cslte.jpg",
+      "size": 49517,
+      "sha256": "8320b363c920bc664c25074faa4780fbe42bf07d0c543843d02aa62f8884260e",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_vef2b69t3.jpg",
+      "size": 153391,
+      "sha256": "7b03f179534b215f0864e02121cbd991dc8ee3a8b456e2319578c19ed561f12d",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_vt3r3pi82.jpg",
+      "size": 114080,
+      "sha256": "62672500c03642aed680f246030b930ef7045397097f46e13a7218037b28515f",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_vwt5viopo.jpg",
+      "size": 9319,
+      "sha256": "3ee3646822aa81d6985da56b3b482d0556782051d36db2316ffcd6e0bae8cac1",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_wawko3g7d.jpg",
+      "size": 23551,
+      "sha256": "a490bb2ccf1a0049b43fca019136c4de176d9ef1a68d1c8c20c5ff845bb22770",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_wdhlgsym8.jpg",
+      "size": 78788,
+      "sha256": "25ee13f2f88ac90406f809671ac65ea63a11fb08482f4d4c0ef8b9115cb1984a",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_webpraat_main.png",
+      "size": 494860,
+      "sha256": "e7cf54509ceecb9799c8d06353d36d5bd60963dcf03aee29fd11add4884edf4d",
+      "previously_tracked": false
+    },
+    {
+      "path": "Phonetic_Export/images/img_wgc4jh94a.jpg",
+      "size": 32527,
+      "sha256": "d7029bcf2379c654f8647a65088b12a3b156b5af4fa632f3ba77be6adbfa52f4",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_wiph9xgno.jpg",
+      "size": 89150,
+      "sha256": "39447fc5286e7ede5aee954440e2e973c19c2fea47311942836c69b18a481b15",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_wq3qgm34c.jpg",
+      "size": 68973,
+      "sha256": "a89b513ea6689293256bd52b32285742434521745d75678844eb6cd47f927fa6",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_wwnr5vyna.jpg",
+      "size": 38198,
+      "sha256": "a1e73e9ff46b4567f1488f040e574b210faf958e09364951fbb27cf3ce760cda",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_xl5rdrkbm.jpg",
+      "size": 95591,
+      "sha256": "a2af700018c9a5df44d63012da0e7c3e82b7fbd9b04cd11edfa3a1ec574bb8d3",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_xo1p336if.jpg",
+      "size": 37328,
+      "sha256": "f1212d9407381ff2cb1005d8e5efa76f92926275141554d0e6fa4f75d8650197",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_y41wogdjm.jpg",
+      "size": 112603,
+      "sha256": "b03f464e6c5bb08b5b5db6853af17e40231da21e6a22cb101b6143b3046fcc2d",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_y6pld0us9.jpg",
+      "size": 31430,
+      "sha256": "be065c9d85dfb56dee8fa4b239cb53148d39482a8dfd2e28cdff1be8a2b27d5a",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_yrn66rnbu.jpg",
+      "size": 31401,
+      "sha256": "156d1b7f4749050ae3f7233bec6c52da8476bb1a529c6aa03eb62c036049cf99",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_yu4s3q00j.jpg",
+      "size": 31175,
+      "sha256": "928893b5a6eb55be0eeb96a5a3e7ac4cc27428abe386622fb289f26420fbb151",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_z09yct8vz.jpg",
+      "size": 56086,
+      "sha256": "2a0a46a893b66f918a770a2fd77bd08117a090f539efaa701606caeeb423e79d",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_z1dy8u7wp.jpg",
+      "size": 106761,
+      "sha256": "7915f7fdf604069a30c60d83e70266cc2efcf6ee62a94ec4ee6a66b0f69b4cbb",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_zevjzl0tm.jpg",
+      "size": 30282,
+      "sha256": "a9e2c0a242226091adb1f098666bf51bd89c9f8988ceec9115f0a2bbd74832d5",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_ztr18ml80.jpg",
+      "size": 71603,
+      "sha256": "edc638c56a99b754d674630ca46bc835394e7c4a876bf2d93c78ecf7edaa17c5",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/images/img_zupseh0o3.jpg",
+      "size": 46876,
+      "sha256": "3981cc3bf86fca5a6b1b2799b9733629cb72c2404ab8c0bf15bbae89a3956c4a",
+      "previously_tracked": true
+    },
+    {
+      "path": "Phonetic_Export/index.html",
+      "size": 251515,
+      "sha256": "a46c984929bcd8073ff1daf4e6b382a6685d4ca19e0fee0e29de3ecf0fb39ad5",
+      "previously_tracked": true
+    },
+    {
+      "path": "README.md",
+      "size": 19848,
+      "sha256": "ea1be162d43cc88190f72e524acb3016480444f962aad0b58d714503f5e99a51",
+      "previously_tracked": true
+    },
+    {
+      "path": "auto_alignment/auto_alignment.bat",
+      "size": 683,
+      "sha256": "78be8dda6c70dbfb834662985510bd34237ff7a195bca7a7e3f34976820c2543",
+      "previously_tracked": true
+    },
+    {
+      "path": "benchmark_lip_fps.py",
+      "size": 7108,
+      "sha256": "85f589a130434a5ce9e709ecacef7eb29d52c275c36e5139a9c935f2c1b3fe80",
+      "previously_tracked": true
+    },
+    {
+      "path": "docs/README.md",
+      "size": 571,
+      "sha256": "ab7e90b3993bd1820647e86b30fc1dc82210337844c9dc7134a340bbae78ca52",
+      "previously_tracked": true
+    },
+    {
+      "path": "docs/plans/2026-07-15-acoustic-correctness-and-packaging-fixes.md",
+      "size": 6277,
+      "sha256": "30c0d092488f4226e0f8941bcf2728f69257c492e0ab461a137a7b8af601d120",
+      "previously_tracked": true
+    },
+    {
+      "path": "docs/plans/2026-08-23-lip-webpraat-review-design.md",
+      "size": 1444,
+      "sha256": "0f742057f0f0d409c16b002f51258bd6f7876ce9a5c9ac2aa7fefa0b5e3b7b59",
+      "previously_tracked": false
+    },
+    {
+      "path": "docs/plans/2026-08-23-phonation-synthesis-design.md",
+      "size": 3520,
+      "sha256": "19bf734f23f87a81daf4b2133ae1211f13547988fe3110e2d52b7943a26e4abd",
+      "previously_tracked": false
+    },
+    {
+      "path": "docs/plans/2026-08-23-phonation-synthesis.md",
+      "size": 6977,
+      "sha256": "dac9caa74210998b56ddfe9a1ed5bb914a5d5983423fd7251c54910e99c16e14",
+      "previously_tracked": false
+    },
+    {
+      "path": "docs/plans/2026-09-06-review-fixes.md",
+      "size": 2562,
+      "sha256": "67c5318ce22027052a1493c2fcac1a7a177cd9939d953e3660871308a8d5b4f0",
+      "previously_tracked": false
+    },
+    {
+      "path": "docs/plans/2026-09-07-head-vocal-tract-modeling.md",
+      "size": 25613,
+      "sha256": "326c34461a0a3d50bfe76475f76597a5fc8e7d5d01255655699391f1fd15da34",
+      "previously_tracked": false
+    },
+    {
+      "path": "docs/plans/2026-09-08-larynx-source-model-roadmap.md",
+      "size": 5016,
+      "sha256": "b9daf9bcc9d15adf10f25d501d717812890bafbf04bf0a406b932b490a3b0cb3",
+      "previously_tracked": false
+    },
+    {
+      "path": "docs/plans/2026-09-08-velopharynx-repair-design.md",
+      "size": 2194,
+      "sha256": "64d7072911cd074c6b128f4c3b15c698bf1b4a209c909fc64144e767920740f6",
+      "previously_tracked": false
+    },
+    {
+      "path": "docs/plans/2026-09-08-vocal-tract-integration.md",
+      "size": 3403,
+      "sha256": "5260ef8ef4abbadfa0270a5efaf6ff82496f0d4fc120e7f843b7a48c732138f2",
+      "previously_tracked": false
+    },
+    {
+      "path": "image/ARCHITECTURE/1776325135506.png",
+      "size": 300103,
+      "sha256": "2522863347df52f3b00d39b1cca802a495d0e12320c5ba5156e89babc035763a",
+      "previously_tracked": true
+    },
+    {
+      "path": "image/screenshots/01_main_window.png",
+      "size": 51820,
+      "sha256": "a23855d42ad00e73a55fbc580a320174eefe8bd6807e1a95d88fd5d9124a6182",
+      "previously_tracked": true
+    },
+    {
+      "path": "image/screenshots/02_lip_extraction.jpg",
+      "size": 96294,
+      "sha256": "44e51f0959e0cc3ff19948f35d11086d36f4671ddbc5e0b051e21293d1cf6475",
+      "previously_tracked": true
+    },
+    {
+      "path": "image/screenshots/03_parameter_estimation.png",
+      "size": 107578,
+      "sha256": "64af409a515927330492f26c47d2c2ea78e7bf3f22428183e063981d192c465d",
+      "previously_tracked": true
+    },
+    {
+      "path": "image/screenshots/04_parameter_display.jpg",
+      "size": 106761,
+      "sha256": "7915f7fdf604069a30c60d83e70266cc2efcf6ee62a94ec4ee6a66b0f69b4cbb",
+      "previously_tracked": true
+    },
+    {
+      "path": "image/screenshots/05_egg_analysis.png",
+      "size": 233053,
+      "sha256": "06db3c6b2e796e44ccec47c2e284ad10bb635629940fbeb4d62179e67d9336ea",
+      "previously_tracked": true
+    },
+    {
+      "path": "image/screenshots/06_speech_synthesis.jpg",
+      "size": 115598,
+      "sha256": "0911ae547595b5a176c2360e2b7bef7a6085efc9fb2cbe104ea147d0aa7d9210",
+      "previously_tracked": true
+    },
+    {
+      "path": "image/screenshots/07_pitch_manipulation.jpg",
+      "size": 99464,
+      "sha256": "56349ebd8899e84cc29f0dae815d2bf1b77d11e03707e70c661f538658327427",
+      "previously_tracked": true
+    },
+    {
+      "path": "image/screenshots/08_perception_experiment.jpg",
+      "size": 28820,
+      "sha256": "6f12b19be2393b764eb3ace0ab8054fbe17bebed2e6b58d421dd19b0a4afe595",
+      "previously_tracked": true
+    },
+    {
+      "path": "image/screenshots/09_mfa_alignment.jpg",
+      "size": 35252,
+      "sha256": "563d9421930c40166893b88161e7c2f8ebe6280923ef00d01f26eb7eb833df81",
+      "previously_tracked": true
+    },
+    {
+      "path": "image/screenshots/10_spec2wav.jpg",
+      "size": 124251,
+      "sha256": "c6649d2df286a8a8c87161118c688f919349a188700812362143a6dd4efb8ccc",
+      "previously_tracked": true
+    },
+    {
+      "path": "image/screenshots/11_ipa_converter.jpg",
+      "size": 85161,
+      "sha256": "d0f7f261b49eae2359bd5fdf0c95bc525e08fbd5e46616e46a8a4982d4920823",
+      "previously_tracked": true
+    },
+    {
+      "path": "image/screenshots/12_lpc_waveform.jpg",
+      "size": 89854,
+      "sha256": "8ec316611a87e5a8b8c535923bfa225efa5875c058fb9cbb87077c7007583f9e",
+      "previously_tracked": true
+    },
+    {
+      "path": "image/screenshots/13_lpc_spectrum.jpg",
+      "size": 78788,
+      "sha256": "25ee13f2f88ac90406f809671ac65ea63a11fb08482f4d4c0ef8b9115cb1984a",
+      "previously_tracked": true
+    },
+    {
+      "path": "image/screenshots/14_phonology.png",
+      "size": 12091,
+      "sha256": "26e65eb3991bca9f80cac333536bcbe8c9e95c5c99f5c18bc17dd5e171956828",
+      "previously_tracked": true
+    },
+    {
+      "path": "image/screenshots/15_phonation_synthesis.png",
+      "size": 233694,
+      "sha256": "4caee8a36b5e8b994350a8e141a998686acf3a02c528b070efa30843a81f0255",
+      "previously_tracked": false
+    },
+    {
+      "path": "papers/2003.10806v1.pdf",
+      "size": 1203245,
+      "sha256": "6aff83adffd48a419aef228cb6952313292f976d0f4c9e5a7e80db6b67460ce8",
+      "previously_tracked": true
+    },
+    {
+      "path": "papers/Bulbar ALS Detection Based on Analysis of Voice Perturbation and Vibrato.pdf",
+      "size": 1100587,
+      "sha256": "629fbdc890a5c6f92c4db53f5cfce16ecc19bde58bb62984a01004dd4e95b6ab",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/__init__.py",
+      "size": 22,
+      "sha256": "0ca93ed5bfab66c245c458b526827b4e612f204434adff82f470195b0be3b8cd",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/api/__init__.py",
+      "size": 3148,
+      "sha256": "f9f5b81da3a5e657c3a48179b11870d1d1b2cec5aebfea05bba5ae1e58e346f2",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/app.py",
+      "size": 648,
+      "sha256": "3f355af28a90f698ade8c0a490ceefdd14926c593af4cc10d9d21cc6c67ce9fe",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/README.md",
+      "size": 10030,
+      "sha256": "96b9817b7d4db878292e3c2d045f6ff6782c8b7d75c3493d9db6c5224fde3163",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/Sinc_hash_1000.mat",
+      "size": 1520132,
+      "sha256": "e3e2fb01d67f722b7f13c1c9a0f4d62559a1ece77167343dfa42de7203f4d860",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/__init__.py",
+      "size": 1438,
+      "sha256": "d41ba6fbb9c28b8dfbdd702597a1be3278bc32fa3958fbdeca06235821bbceeb",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/common.py",
+      "size": 1281,
+      "sha256": "862b435a6c114f9dda02850ee9dd2d7d579a8d68b2416be110fd19ed04258d21",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/corrections.py",
+      "size": 7909,
+      "sha256": "df0b5dc8c36e68e66caa61a8c0eca9cc171b2d83ec5a21917c42510cef926dd8",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/cpp.py",
+      "size": 2324,
+      "sha256": "8b12cef52140b33f711949b47333453bfb30a0628acd9f455df36c34a12eae53",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/energy.py",
+      "size": 3276,
+      "sha256": "693300a3d52842112fb2731d25bd730e3a8c5b32ef7a5b86bc61386842902283",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/f0_irapt.py",
+      "size": 22563,
+      "sha256": "2ecc738e6fd665c2cd63862076d53fac82fbe7f74185b614f0372d21654af4e1",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/f0_praat.py",
+      "size": 2126,
+      "sha256": "f36fe1ea4c9eb204d813f211c43a0d3ba84088e891319f3c175a80f65bf86feb",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/f0_reaper.py",
+      "size": 8717,
+      "sha256": "4d2dac658bab746dc9f52f0087725de58cf1c3af74940046c2456a7d8f1bf339",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/formants_praat.py",
+      "size": 4883,
+      "sha256": "94432b0893354bfddec565596dd21c854e0dd069784d20410a9ae31dfe1a771a",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/hnr.py",
+      "size": 2611,
+      "sha256": "b91654b88a452e719160e9a883f62192e0cdaf62c1dc8b6e8ddb09e967b7be15",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/jitter_shimmer.py",
+      "size": 9435,
+      "sha256": "613885a46b6384d19ccda049f4eda2db171f23ccef6ea650f494dc47d95ff0a2",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/lpc.py",
+      "size": 1168,
+      "sha256": "375d4358dbfceff91bee14172d3018971889e7f0a9d6d01984bd81d02e33abcf",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/reaper.exe",
+      "size": 321536,
+      "sha256": "279fecc82ed0a49b0277b114270771d7670299068e849058b392672825981824",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/reaper_python.py",
+      "size": 50202,
+      "sha256": "eadb141505f07698627cfbd0ceef5983e6195ce32ff86b7a63c83212edd3107a",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/shr.py",
+      "size": 4049,
+      "sha256": "f38c5aadb8a5f4886f47510db20d62bf2885498ede55e77a27f23cbfa6177dc0",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/soe.py",
+      "size": 6750,
+      "sha256": "ba74bc2cab053c970de5d3e6c10aec8d48a93fd5ae0d7d63bb51918ac48380f1",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/spectral_batch.py",
+      "size": 7397,
+      "sha256": "57773e2c89f87a99acd00461f46f45422035bb32b936781c87edaa904d435abc",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/spectral_slope.py",
+      "size": 1228,
+      "sha256": "0211fa63874da8e4a9eeaec3898c09df6cac4accc3ff39762ace444a7c00fcd7",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/voicing.py",
+      "size": 6220,
+      "sha256": "1d96f24f78d7d1d5480685aeda086e4bee42dad2f4996fb27354f0ff9035eac1",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/alignment/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/egg/README.md",
+      "size": 3143,
+      "sha256": "2dae2dfc40409c0e99975773d50865d39884d81bc7bc01e4db0ba494bd1cc42b",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/egg/__init__.py",
+      "size": 177,
+      "sha256": "a98216e7971129aa95ad2f7ba17700126c87d1c696005300e9fa2cca09dc02cc",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/egg/analysis.py",
+      "size": 12297,
+      "sha256": "85d813ab64ae7e6c04b114346817569d5b3ade3bbdaa8325a4cd272af868af5d",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/egg/inverse_filtering.py",
+      "size": 7658,
+      "sha256": "e4722762961445c4e0db8f2aeafa457a99b45ab240b876c32fb12446aeb83822",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/lip/__init__.py",
+      "size": 264,
+      "sha256": "e6ba66d8de3beac346da9f75c3cdfb5ba2e21987c04cb130164afa2b18b38858",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/lip/metrics.py",
+      "size": 3777,
+      "sha256": "aabdbd1e6964b148ca1fbd5a1bca880ce34c7eb2286ae978647bca8f3dc9f462",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/manipulation/README.md",
+      "size": 3787,
+      "sha256": "062792c311f29131f25485d906b0ed0868b1f7639c1b1a28d553abcba34e9fff",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/manipulation/__init__.py",
+      "size": 794,
+      "sha256": "eb8edaca0bac58473104f8d707fedd7dbe118999866ba9a88a7f1221ce36aa65",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/manipulation/batch_utils.py",
+      "size": 7490,
+      "sha256": "52ae280c71605925128b63c09b000366f59b79579a2109dea826157abcd82b6f",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/manipulation/phonation_synthesis.py",
+      "size": 22430,
+      "sha256": "dfb5cfa78f804c9400d9af6e3b72f0dc82b474cb9d1a1c6d74718c1cb1fc51e4",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/core/manipulation/synthesis.py",
+      "size": 1570,
+      "sha256": "508a7ad2dc1317363ed66d7dfeffdfd5d719422adc906c65121730feb78e19fe",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/signals/__init__.py",
+      "size": 192,
+      "sha256": "47ddda241958c85bef2b66a615ac97e55a3d029f06588ff215e487b32f928aee",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/signals/filters.py",
+      "size": 4077,
+      "sha256": "a23beea96299938e97845cd3e6ac638acd8bedf80d175219f0d05811fc5fdb38",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/spec2wav/README.md",
+      "size": 3023,
+      "sha256": "2e51aa903a48da4d42ece94a4a4472175a083d96ebb815cff9fc024713813815",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/spec2wav/__init__.py",
+      "size": 330,
+      "sha256": "60f92d7bbb0ba577e1c1d1c92de4f6dbf1d7d283a54e4c5513c8b55819aadeb3",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/spec2wav/common.py",
+      "size": 1684,
+      "sha256": "ff4325e1cad4933155fe0c071e3a39313d386f426ebf7ad4b34b9abce5ed4100",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/spec2wav/griffin_lim.py",
+      "size": 7094,
+      "sha256": "877a6bbbc1432039cf391b831dd351df3324d55fdc7e12354e3750b86acf8f4e",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/spec2wav/image_processing.py",
+      "size": 3847,
+      "sha256": "b54665d25f305d8828061a828665546e60c0fff88abadb695ccfcb40b7515bac",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/synthesis/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/synthesis/klatt/README.md",
+      "size": 827,
+      "sha256": "c5aff315f1e4513df74bc92f2735c302b15a72552cd735e82283b49647b58e2e",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/synthesis/klatt/__init__.py",
+      "size": 477,
+      "sha256": "7501b7fea973463ea442a70f2f3ad149e2573eb176b169f8405e15c402e10bac",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/synthesis/klatt/input_parser.py",
+      "size": 2134,
+      "sha256": "67377ca4f4e57d380256d427fe629e7528437e25fd4a588c273aff9901ceef42",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/synthesis/klatt/klatt_config.py",
+      "size": 1136,
+      "sha256": "b500d78a07035dabd8b1512a57e21b8a7b2803060c6b958087d626f1b9d2792b",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/synthesis/klatt/smoothing_utils.py",
+      "size": 2136,
+      "sha256": "0399e046d6d8507b8895b7fa0c52a389cf154f06a89a9b8e438f2708320d5cb8",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/synthesis/klatt/spectral_filter.py",
+      "size": 20159,
+      "sha256": "f4193817bfec5dcf0677e5dd013dd865773f669012c395e2d6399983666562a0",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/synthesis/klatt/tdklatt.py",
+      "size": 53082,
+      "sha256": "1137e6628cc33ba7f39c128f7298d96d7bf47005302465f231ac43667c43306f",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/transcription/__init__.py",
+      "size": 259,
+      "sha256": "272b78129f67710df3c58aa001e010d253600d6a538a4019a62a856359a8f7fb",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/transcription/mfa_name_codec.py",
+      "size": 963,
+      "sha256": "cb551438a03f9bb8a3504f57722d03830b1c4ab7d413216d432a68c769890d93",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/transcription/phonology_induction.py",
+      "size": 8328,
+      "sha256": "7c722c4e1bc07081f97e29aed6b8c32dd31568a58ce12b71f71663a022cf91cf",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/core/vocal_tract/README.md",
+      "size": 2821,
+      "sha256": "cd2f32301dc29757e82adae0aeb8c0fe0e05dafa825fd29c2ca990e50d51b910",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/core/vocal_tract/__init__.py",
+      "size": 42,
+      "sha256": "50c0e9d2360a0a1f20381c752597d825d2dc4a33dc318f97a1715f56d86cd5bd",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/core/vocal_tract/engine.py",
+      "size": 14386,
+      "sha256": "e29aa003a6d715e3136ae6c3b93f744817757d8a6efb85a22418fdf577d70506",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/core/vocal_tract/monitor.py",
+      "size": 4037,
+      "sha256": "11a9e1f1a36b82006967fc1b53595746ef4bb3dd32a4b4c7fb4c9f1502253542",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/core/vocal_tract/source.py",
+      "size": 1191,
+      "sha256": "93c71f4ceed030e8a1923ba30396351a28208d6b2ec03639b46e09bcef37c151",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/core/vocal_tract/trajectory.py",
+      "size": 2917,
+      "sha256": "3dda971316110832411e866717bcc467cbd8a634bf758bc328aba5700bb18f1c",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/diagnostics/__init__.py",
+      "size": 75,
+      "sha256": "145642ee0f12c81646a7dbb2c9c51d5c22f1a6e10c3d26dda72f83e2e405bc9a",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/diagnostics/vocal_tract.py",
+      "size": 4259,
+      "sha256": "0c1401d00e8546758becfc4761ffd13c9506a110edbac2e6b747b38bed46a0c2",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/README.md",
+      "size": 12609,
+      "sha256": "e06bdffdcbec902344deaaec8a4c814fbbd233545e76aaf12406edbbf639542c",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/__init__.py",
+      "size": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/dialogs/about_dialog.py",
+      "size": 8222,
+      "sha256": "49187616fc02462b21983e06260231056963e42cc457386468b684c38ab76be7",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/dialogs/egg_batch_dialog.py",
+      "size": 19812,
+      "sha256": "d98b3c33e1b46ddaf3655404a4fdbf7660efefb3186cdcc9cb4ec9fa2d967b0a",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/dialogs/lip_feature_analysis_standalone.py",
+      "size": 24257,
+      "sha256": "dd2215dfe20728c241ec4cd70fba90b55de0ead73414f540519439756b805a97",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/dialogs/manipulation_dialogs.py",
+      "size": 14044,
+      "sha256": "b910f56460e5f46e2e8fd709ee4a89e315bc7afc40251fd711d348897b365a23",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/dialogs/mfa_auto_alignment_dialog.py",
+      "size": 11066,
+      "sha256": "1d5a4438a1c9c3ea7ecb7f10abaa0fbfea449e6bbaf80dd9b540e5755ded5a9d",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/dialogs/mfa_auto_alignment_standalone.py",
+      "size": 738,
+      "sha256": "7307a24044734ef2337b680d1a7a1d4a275a21aa67ff6905ddf1932d308a2c84",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/dialogs/parameter_tools_dialog.py",
+      "size": 10115,
+      "sha256": "1643a7dc787d4c3e83f15a9f4366ba71d1aa67c7ebc11e4000a173b14f7f7ed1",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/dialogs/settings_dialog.py",
+      "size": 6559,
+      "sha256": "230329fc384ba7e4ccd8ad5884d543ecabc5074791cf147b26c88b0bb90befb2",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/main_window.py",
+      "size": 33692,
+      "sha256": "054445578808eb703a1ed47c16617af943e48db4b835a1f0ce2325b145ad80a6",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/ipa_trans/DoulosSIL-Regular.ttf",
+      "size": 887828,
+      "sha256": "cc89b87c047bcc8dc00246398218bb6343e0f2372b153cf560c29a77f27068ef",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/ipa_trans/generate_ipa_website.py",
+      "size": 38427,
+      "sha256": "676a03094f003a27575961c383ff59998bff284d02e01ed7fc9f584fc8b4dfba",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/ipa_trans/ipa_converter.html",
+      "size": 9998293,
+      "sha256": "11a5c8cc7315d04bc2beece64519247ab86f80e7e9fb37510704b8d1e4ec6451",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/perception_experiment.zip",
+      "size": 26697,
+      "sha256": "61783171928032720c8458d3357927710c297c114fc5fb98cf1a40a7dc14a6f4",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/perception_experiment/experiment_project_2025-11-27.json",
+      "size": 840,
+      "sha256": "4d967f70b45e49b008d358a6fd45c869979c79f5d23ba3d2232015bbe8f6fc77",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/perception_experiment/perception_experiment.html",
+      "size": 126280,
+      "sha256": "acdf62260ac1bd70c9f636cc0e702280ba0baa44c6744e9dd3da3846967364e5",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/anatomy.mjs",
+      "size": 4100,
+      "sha256": "fd7687f898de264df6164a2822229c7f9fc9b4c9b4745a7dff8a8db6526a09ed",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/app.js",
+      "size": 29401,
+      "sha256": "4068a0de83984149304fc20cb34fb28526ccd973e4894baa79830c6838ee8300",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/assets/head.json",
+      "size": 55700,
+      "sha256": "7bc2cb61c9abdb043d62a4438aa11a18033b9426d704b5ac854f5498adfb11dd",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/assets/nasal.json",
+      "size": 4261995,
+      "sha256": "b256b400f7c2d6c77397f4d4f3b34e4b45e41dbd04c8df578cbb42a5ec8b57d9",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/controls.mjs",
+      "size": 2135,
+      "sha256": "0a9c53845ed459f0e8e7b61a75363dc57a8eaabea578dd82540dacbdd0216403",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/desktop.css",
+      "size": 15524,
+      "sha256": "ab8803993d67bc7be1181467f52dcf40878411772bfccca7b4666286fa67b1e2",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/geometry.mjs",
+      "size": 11155,
+      "sha256": "dd1b08ca9813e6a0b46a160594ad51419236de0b01dd67bf5ff52648c83f91ed",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/index.html",
+      "size": 16099,
+      "sha256": "bcd5d4cdb43df745c50f5b99e674ec5479f2da1373a71242a900651c973ca658",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/keyframes.js",
+      "size": 6228,
+      "sha256": "0a6521d8995d7c46ba735bf3887d537afb958e318f7cde9bafbc15d83bf49ff6",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/layout.js",
+      "size": 825,
+      "sha256": "790387ecc5043fd2d0e8ad6c45c8d7804882309dbf063c96ef1fc9b499455893",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/monitor.js",
+      "size": 4099,
+      "sha256": "f88dcf8438bda63d583d881b5c27e55b96de6d552ff78ed1e7784f32249768d4",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/pitch.js",
+      "size": 4533,
+      "sha256": "6446152cb323fa921bc4ed7ebf9e47f45f6152ed9516e20fa52d63344629a197",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/scene.js",
+      "size": 23758,
+      "sha256": "ceedff892e9071680753a0fe01d14e87401365648a8d3e726eac682a426fea53",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/styles.css",
+      "size": 19481,
+      "sha256": "7feba9d8248a083c6da42667c11752529f5fbca72b6d4cee354a7c50b041751a",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/vendor/OrbitControls.js",
+      "size": 38703,
+      "sha256": "b97879c748170baadeb3fb84cea1ffdf4674e283dc06042f34e2acb95a76042c",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/vendor/THREE-LICENSE.txt",
+      "size": 1081,
+      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/vendor/three.core.js",
+      "size": 1403455,
+      "sha256": "eb077d2417f61d3e6d9264c317cabc4ea35769ed6b0ab533067292a550784c20",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/vendor/three.module.js",
+      "size": 603113,
+      "sha256": "c8211c69345d2e9949dc7a8ac969380497aa0600a5a8ac6a459c8cd02dd9cb8a",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/vocal_tract/viewer.js",
+      "size": 100,
+      "sha256": "e50b83cc2d8dd3fbf1a7c848eb740cf04e1bccf34c55b64e5affa255bc410af6",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/web_praat_editor/app.js",
+      "size": 84241,
+      "sha256": "e739e9bcf5a445ce71eadeeba0d795d7519458c8680645b0b6043740f106a06c",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/web_praat_editor/default.dict",
+      "size": 26020,
+      "sha256": "bbada4e40307447303f04bef5c36dfc2b1f17fea5c228aa7d9d266a3e8639a27",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/web_praat_editor/index.html",
+      "size": 6044,
+      "sha256": "2bfadc6fd9814806fedc4e88de0ab439b0d512d9d04505675da02216aba49637",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/web_praat_editor/sample_o_ong_iong_weng.lab",
+      "size": 533,
+      "sha256": "1425af0372ae7cf9ce47f863011080f2fbace3a9d6fb425e9a35be9a593458e5",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/web_praat_editor/sample_zi_zhi.lab",
+      "size": 126,
+      "sha256": "1fc561e019f634b778517b50b308443d915f3951eaf6548c5ef30c73bf8e72f0",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/web_praat_editor/styles.css",
+      "size": 6253,
+      "sha256": "e580cad0400a8862e0eaef53caccd1bef7e0abcc15f66d67a59b70d0cdee0f02",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/styles.py",
+      "size": 5264,
+      "sha256": "f5b0e0e86a415bff782da071410e50c1fdd03908afa51b0f2dffa2c07bdad376",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/utils.py",
+      "size": 1250,
+      "sha256": "e7d105ed98a25a84b033f31a16939f3f3016cb42f8a8fd1259f07f88c7e637c1",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/widgets/__init__.py",
+      "size": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/widgets/acoustic_widget.py",
+      "size": 6165,
+      "sha256": "a61cb3329b85bdb1340e05433118b30ef2be24c09bdeedab6e49fe80deb06191",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/widgets/egg_widget.py",
+      "size": 79421,
+      "sha256": "20dd2874be54ae4202fc2aecaf05484227e3aff48bb99d5a08cfca5bb6629daf",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/widgets/lip_gui.py",
+      "size": 128522,
+      "sha256": "6656012fb4469466d3a41ec9eb36c139be63b6cf058906b8d3bcf6dd7e6fbc79",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/widgets/lpc_spectrum_widget.py",
+      "size": 25192,
+      "sha256": "6075118585718c790abd0b8416ddd6a536ea074a6a1adb662a2dfce1a5f242e5",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/widgets/parameter_display_widget.py",
+      "size": 42441,
+      "sha256": "5a47c2a92b96d59a10bbbaafca6cea1fe6a5deaba50b76321c691acceb0af89c",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/widgets/parameter_estimation_widget.py",
+      "size": 26587,
+      "sha256": "98d83c3dafbbca45c823b5e6aef2d113e3239e4f2eb5ad4dfe576da0afcdce5a",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/widgets/phonation_synthesis_widget.py",
+      "size": 37522,
+      "sha256": "e76b7cb84e6ccc09f834b2ad8ea492fa49f10ad6875d81ca7752aca12345ef38",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/widgets/phonology_induction_widget.py",
+      "size": 19395,
+      "sha256": "6338d3b19654576c42a1eed4aae9e2e6be80a30db499b9b8695bcb3b57e417cf",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/widgets/pitch_manipulation_widget.py",
+      "size": 45076,
+      "sha256": "109f62665e90e4fc52a886fb36c7062324b5b95cbb7392be859a1597eb8c5de3",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/widgets/spec2wav_widget.py",
+      "size": 17562,
+      "sha256": "aa2a9b02ea59b8559a788a2b4a9e3b286a970c3716e2e2b36e272ca7d05d54f4",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/widgets/speech_synthesis_widget.py",
+      "size": 70270,
+      "sha256": "989c9e94003af647f3fcea34b0792f5d54936b2303ba757efb7b9c92421b7a14",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/workers/egg_workers.py",
+      "size": 3380,
+      "sha256": "ad222c73d6751546a63b79129ce8ecbcb8d46ef2b0b4f0c817b006bc87a9fd2d",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/workers/manipulation_workers.py",
+      "size": 2010,
+      "sha256": "e5d774e75f5f3c52c7452098b9056290f6920f8e5701f40cee3aafb335deb5d6",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/gui/workers/phonation_synthesis_workers.py",
+      "size": 3673,
+      "sha256": "4665f4eaa2f87227936c0edf2116a156e556b00e156a99e3c12c40e051cd30a5",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/gui/workers/vocal_tract_worker.py",
+      "size": 301,
+      "sha256": "92edd92b16a22ba2119205154b661422642c46da9c45bd52b33827f1be487d08",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/models/README.md",
+      "size": 6961,
+      "sha256": "954f9948b5f34fc29d913eb33cee953e3e628d8aba8b5d537dcb7a39885e5cdf",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/models/__init__.py",
+      "size": 1482,
+      "sha256": "bc302fa17adfb29506006389f945fd80186cb7755c94d60f60f656d4d7132ca3",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/models/acoustic_models.py",
+      "size": 244,
+      "sha256": "05c61352d411bc6dea83e03fc16941c92df91b93b0de012708ed9f4332a43c78",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/models/config.py",
+      "size": 4871,
+      "sha256": "dc9462c25789f0a1f72956de8cd48f60b8ad2015f980b919cb672c95ec6210c8",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/models/egg_models.py",
+      "size": 1171,
+      "sha256": "4a445769f81c5331dd6a24bdd6d63b092647bdfdc78df5546a9df29777448770",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/models/ipa_models.py",
+      "size": 283,
+      "sha256": "5ad5e46c64eea296cca1b0f0165d6fe1e76fcbb8a2d22f2b99497f3d99fc3081",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/models/lip_models.py",
+      "size": 288,
+      "sha256": "4392c8c53cc19ee1fb409fc2d43432361eddeef62ff469695b589a8fe7c7bfbe",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/models/lpc_models.py",
+      "size": 368,
+      "sha256": "617ef53a437a3842094e0c59e7dd147e6610925b87d19d53a717aff4bd6b7f42",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/models/mfa_models.py",
+      "size": 533,
+      "sha256": "dc6873556adf1f4068110a39174b438c9ffb895938da787695ec5aadad8945c2",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/models/perception_models.py",
+      "size": 168,
+      "sha256": "c857a73ebf3b90e31aacbf8b102c8b9543b0766241aedd189e2aaaa9ecaadb0b",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/models/phonation_synthesis_models.py",
+      "size": 4542,
+      "sha256": "f8855fa17cdd37216bc54745f91da35ab98fb0c89599bec8c4fb62e31479e74f",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/models/phonology_models.py",
+      "size": 663,
+      "sha256": "650796608d77e7d54bf9be13f11763950f81716d96039f238e80f54678e1ca92",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/models/spec2wav_models.py",
+      "size": 1151,
+      "sha256": "bc2027227031a2fb2617442eed2f9c764bcbf7055f1af27bdf210f8fc00d7ece",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/models/vocal_source.py",
+      "size": 685,
+      "sha256": "9a6c442900727271a780397cd57350ba1b8b3966bf10670ed5f53703c4834fc4",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/models/vocal_tract_models.py",
+      "size": 177,
+      "sha256": "1226da5a41ca18c6a027650022093bc512013dd90fd9a2f4db3c236600f4e59a",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/resources/vocal_tract/THIRD_PARTY_NOTICES.md",
+      "size": 1976,
+      "sha256": "d3f50c64bb635452cc81a4e298e44b6cf6c6313d43bd63f719bc01f6a5293729",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/resources/vocal_tract/VTL-LICENSE.txt",
+      "size": 35823,
+      "sha256": "230184f60bae2feaf244f10a8bac053c8ff33a183bcc365b4d8b876d2b7f4809",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/resources/vocal_tract/bundle-manifest.json",
+      "size": 1914,
+      "sha256": "8b6296438c031b60a9e85746614d5965361d49ac96bf39ffed9405e187cee7b9",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/resources/vocal_tract/native/JD2.speaker",
+      "size": 87909,
+      "sha256": "fc118b8150e65eca4aa636800128c343df13d3724044ca54ed3682ca3be222ec",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/resources/vocal_tract/native/M01.speaker",
+      "size": 119299,
+      "sha256": "438ef8970384444464ddc0ccb82e349323583ab8f87eea70ba227144c8d665c8",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/resources/vocal_tract/native/VocalTractLabAnalysis.dll",
+      "size": 536064,
+      "sha256": "caaab296b4c2362ada1a5d94aaffe6c1804b3ed8279c04427bcca1ac348e2407",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/resources/vocal_tract/native/VocalTractLabApi.dll",
+      "size": 536064,
+      "sha256": "caaab296b4c2362ada1a5d94aaffe6c1804b3ed8279c04427bcca1ac348e2407",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/resources/vocal_tract/native/W02.speaker",
+      "size": 121443,
+      "sha256": "c4b6c1e7d147c9187ef3d246a9ca5f6a232d477ad2c7aec16466f6fdb9243f04",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/resources/vocal_tract/native/geometry_p2.dll",
+      "size": 257536,
+      "sha256": "7bb1fff1a91e058df632666a3e5635060e44ac694713fa1612990a93a039bb78",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/resources/vocal_tract/sources.lock.json",
+      "size": 15242,
+      "sha256": "ff8069ddb910f4803d9cece4566b6f02098dadec9cbaf8dab5199642800b3743",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/resources/vocal_tract/sources/README.md",
+      "size": 1116,
+      "sha256": "3291a36437d45e88765911ef6ed0ee1221527c088fabb7beb03bbeb4b0dad937",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/resources/vocal_tract/sources/VTL2.4-API-source.zip",
+      "size": 300067,
+      "sha256": "aa696bf4cf5c44cbd433304943aebb241e5ea3064b949daf5ea09f96567cff9b",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/resources/vocal_tract/sources/build_geometry_prototype.py",
+      "size": 1745,
+      "sha256": "5410b30a2c03dbab6a6ac0132f77c38cc909a29e6160b2e226c2a2ba82b1b2a8",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/resources/vocal_tract/sources/geometry_bridge.cpp",
+      "size": 5795,
+      "sha256": "c8ebf514a499da24dbefa349d4315e0fd2557494db196d33bb268b131b2e8532",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/services/README.md",
+      "size": 12369,
+      "sha256": "d36db471b8b08789c4be6818598d47e039d1f4b2bd6f6066fd13a68d1afe21e1",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/__init__.py",
+      "size": 978,
+      "sha256": "37f35ffe039af059d9ece6183817bb025e01b0808775fbc3979b110256fd6d73",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/acoustic_service.py",
+      "size": 32687,
+      "sha256": "23aa356ffe82f8c5b0f97f4dfed82ce29ab4490930febcecb45f9d9feccd7779",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/egg_service.py",
+      "size": 21189,
+      "sha256": "7e860f3d36d001f9b4496bbecff0a2eda8bc84d6f72b420a8d6bdbfd15944aba",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/io/__init__.py",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/io/excel.py",
+      "size": 8051,
+      "sha256": "8e571e0cbfe970b7050833d9dca34f2e107cc8066f7fa25b463da92e5dd0494f",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/io/lip.py",
+      "size": 6180,
+      "sha256": "6b87ff3ea67f53adb6e2cec44925d260c70dc277a85f66a2ebd3a28a1b695259",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/io/textgrid.py",
+      "size": 9068,
+      "sha256": "2c0ce76475c6fe5a649b9d3a68916447c2cf3bbef3acd8b7d8be4a84316e3425",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/io/wav.py",
+      "size": 1920,
+      "sha256": "f970a73d886e029991bb64615f1f117830629d8ed45a83a6ec3ce2a19f01f008",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/ipa_trans_service.py",
+      "size": 8190,
+      "sha256": "68ae0a23c6d22d09505a9ba52ef488a0f776f367c4fbf33ebd59e69b6228b6a5",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/lip_service.py",
+      "size": 4515,
+      "sha256": "7b65b3ada65e267aa98ec95c3477adbf7405dc75e3c038ac54ce33919349c082",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/lpc_service.py",
+      "size": 3774,
+      "sha256": "6c4f98036f229439c7d47704dccf1a918a8c5ba905b556079dd0598e14b4240b",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/manipulation_service.py",
+      "size": 4047,
+      "sha256": "37e89e96dae5136123bae5c2b2b84e5bb2490433210149bfc9163a981bfb6a37",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/mfa_alignment_service.py",
+      "size": 14840,
+      "sha256": "d6df802a2d79f5d67a2a3cbaad6c09a301e6f555ef6f9134c42a55ec7cf0d13e",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/perception_service.py",
+      "size": 10354,
+      "sha256": "67a772402f05fb20dd7973a7126d077ec62d3d9db7a613bbe72a618e1e6dcbe5",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/phonation_synthesis_service.py",
+      "size": 19319,
+      "sha256": "aa0aed09b0f387c820d12ab49557f20020d12a5e0372b3153613e28c52bb565c",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/services/phonology_service.py",
+      "size": 37202,
+      "sha256": "83a715be2c3d39487c1294129203bf1a2a6d13e847efc0284b0d9b25ab590126",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/pipelines/__init__.py",
+      "size": 93,
+      "sha256": "c18b2061288185505a91981d93eab0d47b0631dc0f501a83f8ba97dd922f4441",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/pipelines/mfa_alignment_cli.py",
+      "size": 1496,
+      "sha256": "fb28f2045b9882cc1b508e4929e2f44e100a863b92a6c0b3b6e3eafb17edfd03",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/pipelines/mfa_alignment_pipeline.py",
+      "size": 4449,
+      "sha256": "cb7ba3228569c0da00f3873befaa4404a403dfa8dd63b4cdd278e34738c9b12f",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/settings_service.py",
+      "size": 2562,
+      "sha256": "4a7d65ba88515a6eb32501eac279a6c81da49490c101a7a84acd8e2727cedf08",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/spec2wav_service.py",
+      "size": 4574,
+      "sha256": "525357053ed5a9a443f743c4dce714f34577e9a0f91cff9e66790d427e0b8a8c",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/services/vocal_tract/README.md",
+      "size": 3208,
+      "sha256": "bf4f2b1dcfd430eb80ca0d91aaca20d2303d3f5cc60365087d73a8ea3645c107",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/services/vocal_tract/__init__.py",
+      "size": 42,
+      "sha256": "50c0e9d2360a0a1f20381c752597d825d2dc4a33dc318f97a1715f56d86cd5bd",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/services/vocal_tract/animation.py",
+      "size": 2284,
+      "sha256": "ae254cb77cd4af51eb89ad529f6b8f09b401424244ab3e29ecd8746e2b3c0d37",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/services/vocal_tract/audio_output.py",
+      "size": 8036,
+      "sha256": "b3dba8228465b5b9111d6300b7516a2da021fa65c90e8fadaa887841b5525bee",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/services/vocal_tract/process_guard.py",
+      "size": 2547,
+      "sha256": "6c9ab3986af9e5745b46e871e89046e5c83d38fd56c815946c3cba5f03a44faf",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/services/vocal_tract/profile.py",
+      "size": 1580,
+      "sha256": "159057e886714d80eb233ab8b8516c93269e40290848f1c4aa337f6843a96f84",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/services/vocal_tract/server.py",
+      "size": 13012,
+      "sha256": "43566385cdfb398dee074b3631eb6fe247dcf6c70cdbb651e7d729759d6705c5",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/services/vocal_tract/worker.py",
+      "size": 1462,
+      "sha256": "36800f1cbb69201f76a186d5309b4b2430c5e84b2daca9a2bbaf7ecc971dd6b7",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/services/vocal_tract_service.py",
+      "size": 5048,
+      "sha256": "bc3a5a7fdf453609f627fd8a01207a68249063db7300f40ed9cf6971c8f905dc",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/services/web_praat_server.py",
+      "size": 18040,
+      "sha256": "f5cda6e75c9d8d22dcd29aadc4768daabb5c2270557388e58893f056fde3dce7",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/benchmark_acoustic.py",
+      "size": 7961,
+      "sha256": "3d4490fa56497e5d859426e4f424d21852b15b3dfc9aa2414e3cedc52ec9bf04",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_acoustic_batch_result.py",
+      "size": 2049,
+      "sha256": "f8cfb8af0c55d6f8d1c148b89d8b4bfbc28eab063d6682464cb71746dc41ff7e",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_acoustic_numerics.py",
+      "size": 1422,
+      "sha256": "10e44056a048d3d43481eddd2ade41e049decff5359c1b139ba2ec7bef65c433",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_acoustic_time_alignment.py",
+      "size": 3141,
+      "sha256": "eb1da404ba221f9590c27a6fd9e0af11dd5972dbe335af356f64e9efcf9e80ad",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_fft_resolution.py",
+      "size": 5437,
+      "sha256": "57ff617a35915409fea816c5220a383035f52b942797782ab78bf0d2b536be8f",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_ipa_trans_service.py",
+      "size": 3364,
+      "sha256": "e7fe5b82468f66bc52fb6c86c5f62dc02ac6bab2d74a8119d838865314773002",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_lip_offset_dialog.py",
+      "size": 1579,
+      "sha256": "b146b303deac39c85d3923dd2b41c0a10718ac95ce2c79739eafa6c7c7adaf03",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_lip_service.py",
+      "size": 5157,
+      "sha256": "95246170f4a57597dd653d254517bf68a7f1f05602266f23797ad28c0ca70f2e",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_lpc_service.py",
+      "size": 1356,
+      "sha256": "d37c3d8d89a46b0b2e405aafd53a32943ccc5b8379856f19794a8430bbcab8f0",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_mfa_alignment_service.py",
+      "size": 4248,
+      "sha256": "47a847452011c163d88b61fd593dc1f3a1908d5b53d530083c4e664516978d0b",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_perception_service.py",
+      "size": 5191,
+      "sha256": "2a7ae1f0d175d5dac64f3c0b7d1054d0e274f901d971c8a0eae1968e7c6a9373",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_phonation_synthesis_core.py",
+      "size": 6349,
+      "sha256": "20f4d5212b64edd9205f2272f425f437907be196c1f484a9bedf085c2a2f45c7",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_phonation_synthesis_service.py",
+      "size": 7238,
+      "sha256": "7414a7c4b700380be93e153cdc33cdc968bb3f499e5736d2c5e8b5b5d6d96918",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_phonation_synthesis_widget.py",
+      "size": 3201,
+      "sha256": "8ae6b09b840bc297ebae177fa808e2001275f9b39c58b161a6aea1a629fc6f32",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_phonology_service.py",
+      "size": 3005,
+      "sha256": "f256e016326e5c5d09d96984782bdd2d83624305affc6d1d6e98d77c0caeba53",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_resource_resolution.py",
+      "size": 2822,
+      "sha256": "8bc3ccb3049ad0cfa8c5ed10d5ed7dec5b341f831173cfc1e1f435ac5cdfbb12",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_spec2wav_service.py",
+      "size": 995,
+      "sha256": "dc9a9bc6632f512b5356b7691fe6b8b58d10999de247979a96d3cd390f5b0398",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_spectral_consistency.py",
+      "size": 3807,
+      "sha256": "01d0ef09a893c60d9ce549ca4fad4437a34d8b2cdd3d77f3d2832f290c6fda4d",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_version_consistency.py",
+      "size": 1197,
+      "sha256": "c276695211f8428eee578bc3c49ee86a43edcaa290464572b2cfd3177031856b",
+      "previously_tracked": true
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_web_praat_frontend.py",
+      "size": 501,
+      "sha256": "664c83ff9696940f0562102a30c4e468337f964c3514511883b26196d81a4873",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/test_web_praat_server.py",
+      "size": 8560,
+      "sha256": "df0eb1e0077faad46cd963c6d0f2b65b2171613b2561eadbd0b1f1598f948a95",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/vocal_tract/__init__.py",
+      "size": 68,
+      "sha256": "7e7c4cc92b875ab6e42d7b9d9dba8299f31d11bdca734792980e962f0892dc6b",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/vocal_tract/conftest.py",
+      "size": 412,
+      "sha256": "8b98ae16fd9db2e6d795d7cd6ab4d6b7cb6ef997f505de48c88559143fa5e986",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/vocal_tract/fixtures/airway-a.json",
+      "size": 195943,
+      "sha256": "63f454c14a7b6bed118bfd83d870496199cddbaa730b09a206c635e7a919af93",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/vocal_tract/fixtures/lips-teeth.json",
+      "size": 33259,
+      "sha256": "a44dd2a47f9a2008acb0f64e7ae53545ea91e1b845efb8e02dde9aca42464478",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/vocal_tract/fixtures/velum-presets.json",
+      "size": 58360,
+      "sha256": "48ae5cd57d851a22bcb20c022366cd440df8d1e598cf3b294c35b1a2da7036ca",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/vocal_tract/frontend.test.mjs",
+      "size": 7988,
+      "sha256": "ec9adcdf6f736412cbc02d5ec16036f5255121753bcc4f0f84613a8501565805",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/vocal_tract/test_audio_output.py",
+      "size": 3566,
+      "sha256": "8ceada2263e9e361a81095863873ade36f701610c4262600d84f923f5fcca464",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/vocal_tract/test_http.py",
+      "size": 6332,
+      "sha256": "dd401ad79e23193b73120254b1d1d5d52da8af2aa48d9af69a24b4bd1eac13a0",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/vocal_tract/test_integration.py",
+      "size": 2222,
+      "sha256": "986edf2bd5012db9dccba63574fc354e3d00d50bb257aaf7e1b38fc89f11349a",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/vocal_tract/test_lifecycle.py",
+      "size": 3282,
+      "sha256": "0f2624801b7cbba728ddd6ebb63a970eee039d5162aabe78fc66a0cc7a481abb",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/vocal_tract/test_monitor_pitch.py",
+      "size": 4930,
+      "sha256": "6df8d07c36063bf41cb07f97ed444241d6c7c4c7baf482ea8585c67d636b16d8",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/vocal_tract/test_motion.py",
+      "size": 4365,
+      "sha256": "baa1737063ea9619128047c0e14c0de01f573aa661d73b94874a7327f5408ce8",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/vocal_tract/test_source.py",
+      "size": 3395,
+      "sha256": "4c0d5e6ded8e0ee49bea4c8c11dec525c2f004e8617b5b6fb205d04ee6aa7d41",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/tests/web_praat_async.test.cjs",
+      "size": 4996,
+      "sha256": "331fc876053ed198803342d18703f8dfb587f6781e282f02ca7cfdbaa8b7899c",
+      "previously_tracked": false
+    },
+    {
+      "path": "phonetic_toolbox/utils/__init__.py",
+      "size": 1624,
+      "sha256": "407b3516a63c43d94e6c36f0df6fc6c19a2c71f49df89d64281cd69e8e3dbb73",
+      "previously_tracked": true
+    },
+    {
+      "path": "pyproject.toml",
+      "size": 1240,
+      "sha256": "204464282708d9d40995936949fac0578f34bd1e686c8f6eee08979928bf1460",
+      "previously_tracked": true
+    },
+    {
+      "path": "requirements.txt",
+      "size": 286,
+      "sha256": "4d89c049ada8ac87a1016d921dab10115f762d30423be746c293c3a95449f545",
+      "previously_tracked": true
+    },
+    {
+      "path": "run.py",
+      "size": 2951,
+      "sha256": "de7126802c2c1e5173845d1719651429bcb063e36db01de1e6d4f66758fb221c",
+      "previously_tracked": true
+    },
+    {
+      "path": "run.spec",
+      "size": 7142,
+      "sha256": "2659e0337a107d08aa4f7e384fc4c45741cddbf4d9b0df130523b9358b8efff9",
+      "previously_tracked": true
+    }
+  ]
+}

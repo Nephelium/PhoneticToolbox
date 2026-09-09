@@ -65,3 +65,19 @@ auto_alignment/**/*.csv
 auto_alignment/**/*.xlsx
 
 _MEI*/
+
+# v3 planning and local research evidence
+node_modules/
+.vite/
+.env
+.env.*
+!.env.example
+docs/baseline/local-evidence.json
+output/
+var/
+local-data/
+tests/fixtures/private/
+test-results/
+playwright-report/
+!docs/modules/legacy-acceptance.csv
+!docs/modules/dual-platform-acceptance.csv

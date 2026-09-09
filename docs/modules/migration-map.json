@@ -1,0 +1,293 @@
+{
+  "schema_version": 1,
+  "status": "planned",
+  "modules": [
+    {
+      "id": "M01",
+      "slug": "parameter-estimation",
+      "page": "ParameterEstimationPage",
+      "core": "acoustic",
+      "legacy": [
+        "phonetic_toolbox/gui/widgets/parameter_estimation_widget.py",
+        "phonetic_toolbox/core/acoustic",
+        "phonetic_toolbox/services/settings_service.py"
+      ],
+      "sources": [
+        "SRC-PRAAT",
+        "SRC-REAPER",
+        "SRC-IRAPT",
+        "SRC-WMPC",
+        "SRC-VOICESAUCE",
+        "SRC-OPENSAUCE",
+        "REF-CPP",
+        "REF-HNR",
+        "REF-SHR",
+        "REF-ISELI",
+        "REF-HAWKS",
+        "REF-SOE"
+      ],
+      "reuse": "80 参数键、列名/顺序、14 设置默认值和单位逐项冻结；保持 p/r 结果独立；同目录导出不得覆盖输入 WAV。",
+      "checks": "持续元音/气声/嘎裂/静音、空目录、无 TextGrid、仅部分文件失败、Praat/REAPER 后端失效、取消时部分结果。",
+      "platform": "两端算法共用；桌面选择目录，Web 上传成明确文件集合；服务端路径不回显给用户。"
+    },
+    {
+      "id": "M02",
+      "slug": "parameter-display",
+      "page": "ParameterDisplayPage",
+      "core": "results",
+      "legacy": [
+        "phonetic_toolbox/gui/widgets/parameter_display_widget.py",
+        "phonetic_toolbox/gui/widgets/acoustic_widget.py"
+      ],
+      "sources": [
+        "SRC-PRAAT",
+        "SRC-REAPER",
+        "SRC-VOICESAUCE"
+      ],
+      "reuse": "保留既有 XLSX 的真实列解析；显示视窗/选区/全长三个量；缺失值用断线而非补零。",
+      "checks": "WAV/XLSX 无匹配、不同帧率参数、长音频抽稀、F0 双算法、0.8–1.2 秒选区准确播放、独立 reaper/correction 开关。",
+      "platform": "显示只需结果读取服务；大图用分辨率适配，不把完整巨型 XLSX 在每次拖动重传。"
+    },
+    {
+      "id": "M03",
+      "slug": "egg-analysis",
+      "page": "EggAnalysisPage",
+      "core": "egg",
+      "legacy": [
+        "phonetic_toolbox/gui/widgets/egg_widget.py",
+        "phonetic_toolbox/core/egg"
+      ],
+      "sources": [
+        "SRC-PRAAT",
+        "PENDING-EGG"
+      ],
+      "reuse": "冻结音频/EGG 声道角色、GCI/GOI 算法与阈值；逆滤波明确为当前简化实现；不能为了好看改成别的科学方法。",
+      "checks": "交换声道、事件缺失、极短输入、滤波阈值/阶数越界、两类 F0、批处理与单文件对照、保存图和 CSV。",
+      "platform": "核心只收数组/配置；录放音由宿主控制；服务器禁用继承的全局设置单例。"
+    },
+    {
+      "id": "M04",
+      "slug": "lpc-spectrum",
+      "page": "LpcSpectrumPage",
+      "core": "acoustic",
+      "legacy": [
+        "phonetic_toolbox/gui/widgets/lpc_spectrum_widget.py",
+        "phonetic_toolbox/core/acoustic/lpc.py"
+      ],
+      "sources": [
+        "SRC-PRAAT"
+      ],
+      "reuse": "冻结窗函数、LPC 阶数含义与归一化；谱图轴/单位、选区按样本映射；动态 y 轴只影响显示。",
+      "checks": "TextGrid 区间联动、无选区、过高阶数、静音、图像高 DPI 导出、返回波形保留结果。",
+      "platform": "科研图导出由服务生成可复现图或共享绘图数据，不依赖桌面窗口截图。"
+    },
+    {
+      "id": "M05",
+      "slug": "lip-extraction",
+      "page": "LipExtractionPage",
+      "core": "lip",
+      "legacy": [
+        "phonetic_toolbox/gui/widgets/lip_gui.py",
+        "phonetic_toolbox/core/lip",
+        "phonetic_toolbox/services/io/lip.py"
+      ],
+      "sources": [
+        "SRC-MEDIAPIPE",
+        "SRC-FFMPEG"
+      ],
+      "reuse": "冻结关键点/面积/宽度定义、音视频时间基准、滤波与偏移；先做离线识别对照，再做实时采集。",
+      "checks": "三种采集模式、无设备/权限拒绝/拔出、掉帧、停止后写盘、偏移应用/仅保存/取消、GIF/视频导出和回放。",
+      "platform": "Web 相机/麦克风通过浏览器权限，保存到配额管理的上传资源；原生使用系统设备适配；高帧率不作无依据保证。Web 禁止反序列化不可信 pickle；以安全结构化格式交互，旧 pkl 仅受控本地转换。"
+    },
+    {
+      "id": "M06",
+      "slug": "speech-synthesis",
+      "page": "SpeechSynthesisPage",
+      "core": "synthesis/klatt",
+      "legacy": [
+        "phonetic_toolbox/gui/widgets/speech_synthesis_widget.py",
+        "phonetic_toolbox/core/synthesis/klatt"
+      ],
+      "sources": [
+        "SRC-TDKLATT",
+        "REF-KLATT",
+        "SRC-PRAAT"
+      ],
+      "reuse": "tdklatt 先保留数值代码和 MIT 版权；把模块加载时 sounddevice/sys.exit 拆出计算；元音/辅音规则、Override 和参数导出往返均保留。",
+      "checks": "IPA 序列非法定位、手绘曲线覆盖、参数导入导出、源音频提取、预设替换未保存提示、改参后旧结果标记。",
+      "platform": "不在 Web worker 里播放音频；返回 PCM/WAV 工件，由前端播放器试听。"
+    },
+    {
+      "id": "M07",
+      "slug": "phonation-synthesis",
+      "page": "PhonationSynthesisPage",
+      "core": "manipulation",
+      "legacy": [
+        "phonetic_toolbox/gui/widgets/phonation_synthesis_widget.py",
+        "phonetic_toolbox/core/manipulation/phonation_synthesis.py",
+        "phonetic_toolbox/services/phonation_synthesis_service.py"
+      ],
+      "sources": [
+        "SRC-ZAIWA",
+        "REF-ZAIWA",
+        "SRC-PRAAT",
+        "SRC-REAPER"
+      ],
+      "reuse": "区分原论文与 Python 近似移植；保留 3 连续统×2 方向的全部输出、两种时间对齐和幅度开关；窗长/帧移按采样点。",
+      "checks": "有声区缺失、源/目标长度不等、F0 CSV 往返、编辑非法、当前/全部六类输出数目、能量匹配、取消和配额耗尽时部分完成。",
+      "platform": "生成前计算组合规模并预留空间；写入过程受限，不能用估算通过就无限生成；原论文数据未获明确许可不随包带入。"
+    },
+    {
+      "id": "M08",
+      "slug": "pitch-manipulation",
+      "page": "PitchManipulationPage",
+      "core": "manipulation",
+      "legacy": [
+        "phonetic_toolbox/gui/widgets/pitch_manipulation_widget.py",
+        "phonetic_toolbox/core/manipulation/synthesis.py",
+        "phonetic_toolbox/core/manipulation/batch_utils.py"
+      ],
+      "sources": [
+        "SRC-PRAAT"
+      ],
+      "reuse": "四种连接方式、当前视野的作用范围、编号/本批次列表、起点终点约束全部迁移；删除只能指向当前拥有的明确工件。",
+      "checks": "全部批量基频组合、拐点增删/往返、超范围 F0、历史对比、批量重命名/重复名、满额但仍可下载删除。",
+      "platform": "Web 不能执行本地路径批量删除；所有文件操作走 owner 检查与资源 ID。"
+    },
+    {
+      "id": "M09",
+      "slug": "spectrogram-to-audio",
+      "page": "SpectrogramToAudioPage",
+      "core": "spec2wav",
+      "legacy": [
+        "phonetic_toolbox/gui/widgets/spec2wav_widget.py",
+        "phonetic_toolbox/core/spec2wav"
+      ],
+      "sources": [
+        "REF-GRIFFINLIM"
+      ],
+      "reuse": "冻结图像到幅度映射、频率轴方向、窗/步长、迭代次数及随机初始化；结果称为重建音频。",
+      "checks": "裁图边界、时间频率标定、灰度/反色图、非法范围、固定随机种子和误差、不同采样率试听导出。",
+      "platform": "服务端计算；输入图片和重建文件均计量；前端只做标定和对照显示。"
+    },
+    {
+      "id": "M10",
+      "slug": "vocal-tract",
+      "page": "VocalTractPage",
+      "core": "vocal_tract",
+      "legacy": [
+        "phonetic_toolbox/core/vocal_tract",
+        "phonetic_toolbox/services/vocal_tract",
+        "phonetic_toolbox/gui/resources/vocal_tract",
+        "phonetic_toolbox/resources/vocal_tract"
+      ],
+      "sources": [
+        "SRC-VTL",
+        "REF-VTL2006",
+        "DOC-VTL24",
+        "DOC-VTL23",
+        "SRC-THREE",
+        "ASSET-HEAD",
+        "ASSET-NASAL",
+        "SRC-VTLWRAPPER"
+      ],
+      "reuse": "先验证 API 2.4 的 Windows/Linux/macOS 原生依赖与实例隔离；保留真实面积/传递函数、构形控制点、声源和轨迹映射，不用预录样例代替实时计算。",
+      "checks": "/a→i→u/、鼻化通路、全部视图与器官、撤销/重做、持续发声停止、F0 笔画与关键帧、两账号不同构形互不污染、引擎崩溃恢复。",
+      "platform": "三维交互复用既有 Three.js 逻辑并接共享主题；Web 原生计算在专属 worker，需验证远程控制延迟/音频缓冲。未达实时指标时明确实验性能力，不宣称实时适配完成。"
+    },
+    {
+      "id": "M11",
+      "slug": "mfa",
+      "page": "MfaAlignmentPage",
+      "core": "transcription",
+      "legacy": [
+        "phonetic_toolbox/gui/dialogs/mfa_auto_alignment_dialog.py",
+        "phonetic_toolbox/services/mfa_alignment_service.py",
+        "phonetic_toolbox/services/pipelines/mfa_alignment_pipeline.py",
+        "phonetic_toolbox/core/transcription/mfa_name_codec.py"
+      ],
+      "sources": [
+        "SRC-MFA",
+        "REF-MFA"
+      ],
+      "reuse": "继承路径/名称编码、Beam 与 Retry beam 的约束；模型/字典须按各自许可证登记；当前隐藏取消不是已有通过项。",
+      "checks": "中文/空格文件名、模型缺失、词典错误、超时、真实取消、仅停止自己的子进程、部分 TextGrid 输出和完整日志。",
+      "platform": "本地外部环境由 launcher 管；服务端隔离执行及账号文件集合；模型共享只读，不能让上传模型以任意脚本执行。"
+    },
+    {
+      "id": "M12",
+      "slug": "annotation",
+      "page": "AnnotationPage",
+      "core": "annotation",
+      "legacy": [
+        "phonetic_toolbox/services/web_praat_server.py",
+        "phonetic_toolbox/gui/resources/web_praat_editor",
+        "phonetic_toolbox/services/io/lip.py"
+      ],
+      "sources": [
+        "SRC-PRAAT",
+        "PENDING-DICTIONARY",
+        "ORIGIN-WEBEDITOR"
+      ],
+      "reuse": "提取既有编辑器状态/算法保留，不继承任意绝对路径接口；词/音素层独立，lip_manual_offset 只有一个，TextGrid 与唇偏分别保存。",
+      "checks": "四种参考复用、强度内收/外扩负数、词典/词表、全部替换恢复、空后缀覆盖提示、切页保持编辑、并发保存冲突、偏移往返。",
+      "platform": "桌面原目录通过受控资源映射；Web 下载修改后的安全格式与 TextGrid；服务端旧 pickle 输入默认拒绝，转换须另审安全实现。"
+    },
+    {
+      "id": "M13",
+      "slug": "mandarin-ipa",
+      "page": "MandarinIpaPage",
+      "core": "transcription",
+      "legacy": [
+        "phonetic_toolbox/services/ipa_trans_service.py",
+        "phonetic_toolbox/gui/resources/ipa_trans"
+      ],
+      "sources": [
+        "ASSET-DOULOS",
+        "PENDING-IPA",
+        "SRC-HTML2CANVAS"
+      ],
+      "reuse": "冻结 11 种标准和映射数据；标准名称≠规范来源已经核验；明确多音字和上下文限制，排版逻辑可重用。",
+      "checks": "11 标准逐一、组合音标/上下标、字音间距、横/竖排、格式切换、断网图片导出、空文本/歧义。",
+      "platform": "规则转换可在共享前端完成，无需每次上传文本；导出所需字体与图片库本地构建后离线验证。"
+    },
+    {
+      "id": "M14",
+      "slug": "phonology-induction",
+      "page": "PhonologyInductionPage",
+      "core": "transcription",
+      "legacy": [
+        "phonetic_toolbox/gui/widgets/phonology_induction_widget.py",
+        "phonetic_toolbox/services/phonology_service.py",
+        "phonetic_toolbox/core/transcription/phonology_induction.py"
+      ],
+      "sources": [
+        "PENDING-PHONOLOGY"
+      ],
+      "reuse": "导入语义、调类/调值映射、两种单辅音策略、声韵排序归并都保留；使用纯配置对象代替依赖 Qt 的对话框状态。",
+      "checks": "五种输入类型、跳首行、多选拖动、取消/返回、冲突归并、正序/逆序 DOCX 与矩阵 XLSX 恰好三份及内容对照。",
+      "platform": "表格解析与文档生成由核心/导出服务；Web 使用原子结果集合提交，不能只保存其中一个却报全部成功。"
+    },
+    {
+      "id": "M15",
+      "slug": "perception",
+      "page": "PerceptionPage",
+      "core": "perception",
+      "legacy": [
+        "phonetic_toolbox/services/perception_service.py",
+        "phonetic_toolbox/models/perception_models.py",
+        "phonetic_toolbox/gui/resources/perception_experiment"
+      ],
+      "sources": [
+        "SRC-REACT",
+        "SRC-BABEL",
+        "SRC-TAILWIND",
+        "SRC-SHEETJS",
+        "SRC-LUCIDE"
+      ],
+      "reuse": "优先复用范式/序列/问卷/按键逻辑，搬离 CDN；实验播放调度与反应计时在客户端，时钟定义和音频起点单独记录。",
+      "checks": "X/AX/ABX/AXB、范围洗牌边界、随机种子、全局与分段按键、指导语问卷、失焦/后台标签、断网恢复、未导出保护、XLSX/配置往返。",
+      "platform": "两端共用实验运行器；先预加载刺激并验证完整性，网络来回不能纳入反应时；正式试次禁重型任务与主题动画。"
+    }
+  ]
+}
