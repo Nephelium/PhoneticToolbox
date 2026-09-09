@@ -11,6 +11,8 @@
 | **`lpc_service.py`** | `LPCSpectrumService` | **LPC 谱图服务**。负责音频加载、TextGrid 标签提取、LPC 核心调用与图片导出。 |
 | **`spec2wav_service.py`** | `Spec2WavService` | **语谱图转音频服务**。负责图像读取、参数组装与 Griffin-Lim 重建流程编排。 |
 | **`manipulation_service.py`** | `ManipulationService` | **变调与合成服务**。负责音频加载、基频修改、合成及批量生成任务。 |
+| **`phonation_synthesis_service.py`** | `PhonationSynthesisService` | **发声类型合成服务**。负责 WAV 加载、Praat/REAPER F0 复用、LPC 残差分析、连续统编排及 WAV/CSV 导出。 |
+| **`web_praat_server.py`** | `ensure_server`, `save_lip_offset` | **语音标注对齐服务**。仅监听 127.0.0.1，提供 TextGrid/音频/唇形 REST API，并以临时文件 + 原子替换安全写回唇形偏移。 |
 | **`lip_service.py`** | `LipExtractionService` | **唇形提取启动服务**。负责定位外部项目目录并打开入口脚本。 |
 | **`ipa_trans_service.py`** | `IPATransService` | **普通话转 IPA 启动服务**。负责按需生成并打开前端 HTML 页面。 |
 | **`perception_service.py`** | `PerceptionExperimentService` | **感知实验启动服务**。负责定位并打开外部纯前端 HTML 页面。 |
@@ -68,6 +70,20 @@
     *   默认优先打开 `perception_experiment.html`。
     *   支持环境变量 `PHONETIC_TOOLBOX_PERCEPTION_PROJECT_DIR` 覆盖目录。
     *   若默认页面缺失，自动回退到目录中首个 `*.html` 页面。
+
+### 3.1 PhonationSynthesisService (发声类型合成服务)
+
+`PhonationSynthesisService` 将文件 I/O 和任务编排放在 Services 层，Core 层只接收数组与强类型配置。
+
+*   **分析**: 读取并重采样源/目标 WAV，复用项目已有的 Praat AC 与 REAPER F0 实现，统一映射到毫秒网格，再计算 LPC、残差和脉冲位置。
+*   **生成**: 调用 Core 生成三类连续统；“生成全部”按源→目标、目标→源各三类输出六组刺激。
+*   **导出**: 每组写出逐级 WAV 和拼接试听 WAV；【保存 F0 CSV】另行写出当前源/目标 F0 轨迹；支持后台线程进度回调与协作取消。
+
+### 3.2 WebPraatServer (语音标注对齐服务)
+
+*   **本机边界**: 在主进程守护线程中监听 `127.0.0.1` 随机端口，不依赖外网；主程序退出后服务结束。
+*   **语料接口**: 递归扫描同名 WAV/TextGrid，读取 `.lab` 词表和会话目录中的真实唇形 pkl，并提供静态前端资源。
+*   **保存语义**: TextGrid 默认另存为 `_webedit`；`metadata.lip_manual_offset` 独立写回 pkl。pkl 先完整写入同目录临时文件，再使用 `os.replace` 原子替换，失败时保留原文件。
 
 ### 4. EGGService (EGG 分析服务)
 
@@ -167,3 +183,18 @@ settings.set("min_f0", 60.0) # 更新当前运行时配置对象
 1.  声学服务改为按显式时间坐标对齐 Praat/REAPER，并保留 `NaN` 间隙和最终掩码。
 2.  Excel 写入异常由批处理统一记录，不再在 IO 层吞掉。
 3.  新增发音物理模拟器启动服务及对应结构化结果。
+
+## 备注 (Updated 2026-08-23)
+
+1.  新增 `PhonationSynthesisService`，集中承接发声类型合成的音频读取、分析编排和结果导出。
+
+## 数据一致性约定 (Updated 2026-09-06)
+
+- 网页语料 ID 绑定本次扫描和绝对路径；重新扫描后旧 ID 失效，旧标签页的保存被拒绝，页面修改仍保留。
+- `io.lip.resolve_lip_time_axis` 是网页与参数导出的共同时间轴入口：优先使用 `metadata.audio_first_frame_time`，其次使用配套时间戳文件的 `start_time`。有绝对时间和音频起点时保留实际延迟，包括旧录音；仅有相对时间的旧格式才以首帧归零。手动偏移在此基础上单独加一次。
+- `export_continuum`、`generate_selected`、`generate_all` 每次均创建新批次；调用者应使用返回的实际输出路径。六组生成共享同一批次，组内目录命名不变。`manifest.json` 仅在全部输出完成后标记 `complete`，失败或取消保持 `incomplete`；原有批次不受影响。
+- 分析结果保留 `source_path`，编辑 F0 时继续保留该路径。正常生成批次保存源/目标路径、分析/合成配置、实际 F0 CSV 和输出清单。
+
+## 声道工作台（2.2.0）
+
+`vocal_tract_service.py` 通过 API 启动主应用所有的原生工作进程。`vocal_tract/` 承接 HTTP、统一音频输出、关键帧缓存与用户配置；主应用退出主动关闭，异常退出由 Windows Job Object 与父句柄回收。配置写 LocalAppData，静态资源只读，生产代码不依赖原型。详见 [模块说明](vocal_tract/README.md)。

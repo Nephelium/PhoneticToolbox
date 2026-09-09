@@ -12,6 +12,16 @@ from .phonology_models import (
     PhonologyAnalysisResult,
     PhonologyOutputResult,
 )
+from .phonation_synthesis_models import (
+    ContinuumType,
+    F0AlignmentMode,
+    F0Backend,
+    PhonationAnalysisConfig,
+    PhonationAnalysisResult,
+    PhonationContinuumResult,
+    PhonationExportResult,
+    PhonationGenerationConfig,
+)
 
 __all__ = [
     'AcousticConfig',
@@ -29,5 +39,13 @@ __all__ = [
     'PhonologyAnalysisResult',
     'PhonologyOutputResult',
     'Spec2WavConfig',
-    'Spec2WavResult'
+    'Spec2WavResult',
+    'ContinuumType',
+    'F0AlignmentMode',
+    'F0Backend',
+    'PhonationAnalysisConfig',
+    'PhonationAnalysisResult',
+    'PhonationContinuumResult',
+    'PhonationExportResult',
+    'PhonationGenerationConfig',
 ]

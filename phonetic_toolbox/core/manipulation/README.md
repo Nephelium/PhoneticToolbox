@@ -1,11 +1,12 @@
 # 音频修改与合成核心模块 (Core Manipulation Module)
 
-本模块 (`phonetic_toolbox/core/manipulation`) 包含音频基频（F0）和时长的修改与合成算法。
+本模块 (`phonetic_toolbox/core/manipulation`) 包含音频基频（F0）、时长及发声类型连续统的修改与合成算法。
 
 ## 核心功能
 
 *   **基频合成 (Pitch Synthesis)**: 使用 Praat/Parselmouth 的 PSOLA (Pitch Synchronous Overlap and Add) 算法进行高质量的基频修改和语音重合成。
 *   **批量处理 (Batch Processing)**: 支持批量生成线性变化的基频序列（Linear Interpolation），用于生成一系列具有特定音高轮廓的刺激材料。
+*   **发声类型连续统 (Phonation Continuum)**: 对源音频做 LPC 逆滤波，以基频同步残差脉冲为单位迁移目标音频的周期形态，并通过源声道滤波器重合成。
 
 ## 文件说明
 
@@ -49,3 +50,14 @@
     *   **输出**:
         *   自动在原音频目录下生成修改后的 WAV 文件。
         *   文件名包含参数信息，如 `..._lin_Fpath_100.0-200.0_combo1.wav`。
+
+### 3. `phonation_synthesis.py`
+
+纯 NumPy/SciPy 的发声类型合成核心，不依赖 GUI 或文件路径。
+
+*   首尾静音裁剪、分帧加窗、LPC 分析和残差计算。
+*   基于 F0 周期的负峰脉冲检测、周期能量匹配与残差连续统生成。
+*   支持“仅 F0”“仅发声类型”“F0 + 发声类型”三类连续统。
+*   支持归一化有声时长和从有声起点计时两种 F0 控制点对齐方式。
+*   重合成阶段复用源音频的 LPC 声道滤波器，并执行响度匹配和峰值限制。
+*   分帧覆盖整个分析区间，最后一帧不足窗长时补零；残差及重合成的重叠相加裁到分析区间末端，避免丢弃尾部样本或影响区间外音频。

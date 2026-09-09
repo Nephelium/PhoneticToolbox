@@ -80,6 +80,13 @@
 *   **GUI 编辑状态**: `speech_synthesis_widget.py` 内部使用 `ParameterCurve` 维护交互态曲线，不跨层传递到 Core 之外。
 *   **服务层职责**: 与外部程序/文件 I/O 相关的逻辑应放在 `services/`，避免在 Core 层出现 Service 语义实现。
 
+### 7. `phonation_synthesis_models.py`: 发声类型合成契约
+
+*   **枚举**: `F0Backend`、`F0AlignmentMode`、`ContinuumType` 统一 GUI、Service 与 Core 的选项值。
+*   **配置**: `PhonationAnalysisConfig` 与 `PhonationGenerationConfig` 分别约束分析参数和连续统输出参数。
+*   **结果**: `PhonationAnalysisResult`、`PhonationContinuumResult` 保存音频、F0、LPC、残差、脉冲及导出路径，不使用松散字典跨层传递。
+*   `PhonationAnalysisResult.source_path` 保留分析输入路径，`copy_with_f0` 编辑轨迹时继续保留；`PhonationExportResult.output_directory` 返回实际批次内目录，调用者不应假定输出直接位于用户选择的根目录。
+
 ## 设计原则
 
 1.  **单一数据源**: 所有的默认配置值都应在此处修改，不依赖外部 JSON 文件。
@@ -96,3 +103,13 @@
 
 1.  新增 `PitchTrack`，将声学轨迹的真实时间坐标纳入跨层数据契约。
 2.  新增 `ArticulatorySynthLaunchResult`，保持发音物理模拟器的 `GUI -> API -> Services -> Models` 调用边界。
+
+## 备注 (Updated 2026-08-23)
+
+1.  新增发声类型合成的强类型配置与结果模型，保持 `GUI -> Services -> Core/Models` 分层边界。
+
+## 声道工作台（2.2.0）
+
+`vocal_tract_models.VocalTractLaunchResult` 是不可变启动结果：`success`、`message`、`url`、`process_id`。模型层不启动进程、播放声音或引用 GUI。关键帧参数校验属于 `core/vocal_tract/trajectory.py`。
+
+`vocal_source.py` 定义声道工作台的浊声、清声、耳语近似预设与压力/声门半宽/后部缝隙/振动幅度范围，单位分别为 Pa/mm/mm²/无量纲。它们是交互模型初值，不是个体生理标定值。

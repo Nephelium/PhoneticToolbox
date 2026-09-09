@@ -16,13 +16,15 @@
 | ├── `acoustic_widget.py` | `AcousticWidget` | **单文件分析组件**。提供简单的单文件选择、参数调整、分析运行及结果表格显示。 |
 | ├── `parameter_display_widget.py` | `ParameterDisplayWidget` | **参数显示组件**。用于可视化分析结果 (如绘制 F0 曲线、共振峰轨迹等)。 |
 | ├── `speech_synthesis_widget.py` | `SpeechSynthesisWidget` | **语音合成实验室**。提供 Klatt 参数曲线编辑、实时试听、频谱/波形联动与参数导出。 |
+| ├── `phonation_synthesis_widget.py` | `PhonationSynthesisWidget` | **发声类型合成**。提供双音频 F0/LPC 分析、控制点编辑、三类连续统与六组批量输出。 |
 | ├── `pitch_manipulation_widget.py` | `PitchManipulationWidget` | **基频实验室**。提供可视化的基频编辑、音频合成、播放及批量生成功能。 |
 | ├── `egg_widget.py` | `EGGWidget` | **EGG 分析**。提供 EGG 波形/语谱图显示、事件检测可视化 (GCI/GOI)、逆滤波及批量处理。 |
 | ├── `spec2wav_widget.py` | `Spec2WavWidget` | **语谱图转音频**。提供图像校正、Griffin-Lim 重建、试听与导出。 |
 | └── `lpc_spectrum_widget.py` | `LPCSpectrumWidget` | **LPC 谱图**。提供波形缩放/平移、Shift 选区、TextGrid 层级切换、LPC 曲线显示与图片导出。 |
-| **`resources/`** | - | **离线前端资源**。包含 IPA 和感知实验页面；打包后从 `_MEIPASS` 或运行目录解析。 |
+| **`resources/`** | - | **离线前端资源**。包含 IPA、感知实验与 `web_praat_editor/` 语音标注对齐页面；打包后从 `_MEIPASS` 或运行目录解析。 |
 | **`workers/`** | - | **后台工作线程**。 |
 | └── `manipulation_workers.py` | `BatchProcessorWorker` | **批量变调线程**。在后台执行耗时的批量音频生成任务。 |
+| └── `phonation_synthesis_workers.py` | `PhonationAnalysisWorker` / `PhonationGenerationWorker` | **发声类型合成线程**。执行双文件分析、连续统生成和协作取消。 |
 
 ## 详细功能说明
 
@@ -34,7 +36,7 @@
 *   **主题管理**: 监听主题切换按钮，调用 `apply_theme` 方法动态更新全局 `QApplication` 和当前窗口的样式表。
 *   **LPC 入口**: 提供“LPC谱图”入口并管理 `LPCSpectrumWidget` 子窗口生命周期。
 *   **版本显示**: 优先读取项目版本，打包环境缺少 `pyproject.toml` 时回退到 `phonetic_toolbox.__version__`。
-*   **前端工具入口**: IPA 和感知实验经 API/Service 返回结构化启动结果，GUI 只负责显示失败信息。
+*   **前端工具入口**: IPA 和感知实验经 API/Service 返回结构化启动结果；语音标注对齐由进程内本机服务提供，文件夹选择经 Qt 主线程桥接。
 
 ### 2. ParameterEstimationWidget (参数估计)
 
@@ -59,6 +61,15 @@
 *   **实时合成**: 修改后可立即合成音频并播放。
 *   **历史对比**: 自动记录并绘制多次修改的历史曲线，方便对比。
 *   **批量工具**: 集成了批量生成线性变调序列的工具。
+
+### 4.1 PhonationSynthesisWidget (发声类型合成)
+
+该组件面向发声类型与 F0 的正交操纵实验。
+
+*   **双后端 F0**: 可在 Praat/Parselmouth 与 REAPER 间切换，并编辑归一化有声时长或实际毫秒控制点。
+*   **三类连续统**: 分别生成仅改变 F0、仅改变发声类型、同时改变二者的刺激序列。
+*   **双向批量输出**: 一次生成源→目标和目标→源的全部六组结果及拼接试听文件；F0 CSV 由独立按钮保存。
+*   **线程与主题**: 分析/生成均在 QThread 中运行，支持取消并跟随主窗口深浅主题。
 
 ### 5. EGGWidget (EGG 分析)
 
@@ -108,6 +119,8 @@
 3.  `resources/` 内的静态 HTML/CSS/JS 只使用相对 URL；需要寻找运行态目录的逻辑放入 Service，不在网页或 Widget 中复制平台判断。
 4.  PyInstaller onefile 运行时优先解析 `sys._MEIPASS`，同时保留 EXE 同目录外置资源的兼容能力。
 5.  帮助入口统一指向 `Phonetic_Export/index.html`，各模块只设置自己的章节锚点。
+6.  `web_praat_editor` 分别维护 TextGrid 与唇形偏移的未保存状态；切换语料前必须确认两类修改均已成功落盘。
+7.  网页加载使用请求序号和 `AbortController`；切换文件或扫描目录时使旧任务失效，音频解码与唇形响应返回后必须再次核对任务和文件标识。保存响应只更新对应文件，保留请求期间发生的新编辑。
 
 ## 开发规范 (GUI Layer)
 
@@ -116,3 +129,9 @@
 3.  **异常处理**: 必须捕获 Service 层抛出的异常，并使用 `QMessageBox` 友好地提示用户，而不是让程序崩溃。
 4.  **样式分离**: 尽量不要在 Python 代码中硬编码颜色 (`widget.setStyleSheet("color: red")`)，应统一在 `styles.py` 中定义或使用 ObjectName 选择器。
 5.  **路径可移植**: 新增或修改资源入口时必须同时覆盖开发态、非项目工作目录和 PyInstaller `_MEIPASS` 场景，并补充对应测试。
+
+## 声道工作台（2.2.0）
+
+主页【声道工作台】经 `workers/vocal_tract_worker.py` 调用 API，服务就绪后在浏览器打开返回 URL。主窗口关闭与 QApplication.aboutToQuit 均关闭所属服务。`resources/vocal_tract/` 为离线网页：`desktop.css` 定义桌面固定视窗，`layout.js` 管理器官/声音/关键帧标签；模型和三张分析图常驻，关键帧每页三项。器官子面板只显示当前器官，唇宽有正面拖动点。`scene.js` / `geometry.mjs` / `anatomy.mjs` 只重建显示几何，音频与声学分析通过 HTTP API 调用核心。
+
+声道工作台网页按 CSS 内容区宽度自适应：≥1600 px 为模型/分析/控制三栏，较窄时模型与分析上下排列、右侧保持操作面板。实时分析可切换收起及模态展开。`scene.js` 负责镜头和共享显示几何，`pitch.js` 负责归一化时间的 F0 鼠标笔画、局部重画与撤销，`monitor.js` 只绘制后端返回的波形/短时谱，不在浏览器另起声源。面积图支持鼠标点选/拖动及方向键、Home/End；F0 图支持鼠标及方向键精调。模型控制点和视图平移的拖动互不修改对方状态。

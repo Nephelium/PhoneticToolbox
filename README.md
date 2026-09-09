@@ -1,6 +1,6 @@
 # PhoneticToolbox v2
 
-[![Version](https://img.shields.io/badge/Version-2.1.3-6f42c1.svg)](#版本与打包)
+[![Version](https://img.shields.io/badge/Version-2.2.0-6f42c1.svg)](#版本与打包)
 [![Python](https://img.shields.io/badge/Python-3.9--3.12-blue.svg)](#环境要求)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](#环境要求)
 [![UI](https://img.shields.io/badge/UI-PyQt6-41CD52.svg)](#项目亮点)
@@ -21,12 +21,25 @@ PhoneticToolbox v2 是一个面向语音学研究、教学与实验流程的一�
 - 声学参数估计：F0（Praat / REAPER）、共振峰、H1-H4 / A1-A3 / H2K / H5K、Jitter / Shimmer、CPP、HNR、SHR、SoE、参数校正
 - EGG 分析：GCI/GOI 事件检测、CQ/SQ 计算、逆滤波（CP-IF）
 - 语音合成实验室：Klatt 参数化合成、参数曲线编辑、回读分析
+- 声道工作台：VTL 器官建模、鼻腔与软腭、唇部宽高调节、关键帧动态声音与同步视图、清声与耳语近似、气流驱动控制；主页按钮启动，退出应用同步关闭
+- 发声类型合成：LPC 残差脉冲迁移、Praat/REAPER 双 F0 后端、六组连续统批量输出
 - 语谱图转音频：基于 Griffin-Lim 的逆重建（支持截图/图像导入）
 - 唇形提取：摄像头采集、高帧率离线识别（先录后算、自动删除视频）、视频上传逐帧识别、与音频对齐导出
+- 语音标注对齐：内置本机网页 TextGrid 编辑器，支持真实唇形曲线叠加、独立偏移保存与参考标注复用
 - 变调实验室：交互式 F0 编辑、批量变调刺激生成
 - LPC 谱图：选区联动、TextGrid 标签联动、高 DPI 导出
 - 音系归纳：上传调查字表、自动生成同音字表
 - 工具入口：普通话转 IPA、感知实验、MFA 自动标注入口
+
+发声类型合成每次生成都会在所选输出目录下建立独立的 `batch_日期_时间_随机标识` 文件夹，保留此前的刺激。批次包含输出清单 `manifest.json`、实际使用的 F0 CSV，以及源/目标文件和分析、合成参数；清单状态为 `complete` 才表示整批生成完成。取消或失败的批次保留 `incomplete` 标记。
+
+## 声道工作台使用入口
+
+启动应用后点击【声道工作台】，由应用自动启动本机服务并打开浏览器，无需另起原型。退出应用后旧网址会失效，下次从按钮重新打开。正常运行允许手动发声，不自动播放；在【声音】选择内置扬声器或其他输出设备，也可切换浊声/清声/耳语近似，微调气压和声门开度。当前以几何开度近似内收，尚不模拟组织肌肉张力；后续路线见 [喉部与声源建模规划](docs/plans/2026-09-08-larynx-source-model-roadmap.md)。
+
+宽屏（≥1600 CSS px）为模型、分析、控制三栏，普通窗口为两栏。矢状面可拖动平移；面积图直接点选截面；右侧【器官 / 声音 / 关键帧】切换。实时波形和灰度语谱图可收起或展开，调节分析窗长、步长及显示时长。关键帧支持手绘 60–350 Hz 基频曲线，修改动程总长时等比例伸缩。姿势及曲线保存到 `%LOCALAPPDATA%/PhoneticToolbox/vocal_tract/keyframes.json`，跨启动保留；不要把随机端口网址当作永久书签。桌面页面按至少 1200×650 的 CSS 视窗验证，放大缩小浏览器会改变实际可用空间。
+
+声道引擎当前随 Windows x64 原生 DLL 提供；其他平台尚未提供此模块的原生构建。模型来源不同，不能当成某一个体的完整 MRI 重建。
 
 ## 项目亮点
 
@@ -80,6 +93,9 @@ flowchart LR
 - 音系归纳
 
   ![音系归纳](image/screenshots/14_phonology.png)
+- 发声类型合成
+
+  ![发声类型合成](image/screenshots/15_phonation_synthesis.png)
 
 > 各模块更详细的操作步骤与示例见[使用说明书](Phonetic_Export/index.html)。
 
@@ -131,6 +147,7 @@ PhoneticToolbox_v2/
 │   │   ├── manipulation/       # 音频修改与合成
 │   │   │   ├── README.md
 │   │   │   ├── __init__.py
+│   │   │   ├── phonation_synthesis.py # 发声类型连续统的 LPC 残差与脉冲合成核心
 │   │   │   ├── synthesis.py        # PSOLA 合成算法 (Praat/Parselmouth)
 │   │   │   └── batch_utils.py      # 批量变调与合成逻辑
 │   │   ├── perception/         # 感知实验数据处理（预留核心算法目录）
@@ -173,6 +190,7 @@ PhoneticToolbox_v2/
 │   │   │   ├── acoustic_widget.py          # 声学参数可视化组件
 │   │   │   ├── parameter_estimation_widget.py # 参数估计与批处理主组件
 │   │   │   ├── pitch_manipulation_widget.py # 变速变调 (基频实验室) 主组件
+│   │   │   ├── phonation_synthesis_widget.py # 发声类型合成主组件
 │   │   │   ├── speech_synthesis_widget.py   # 语音合成实验室主组件（Klatt 参数编辑与联动视图）
 │   │   │   ├── egg_widget.py       # EGG 分析主组件
 │   │   │   ├── spec2wav_widget.py  # 语谱图转音频主组件
@@ -270,13 +288,15 @@ python -m pytest -q
 项目版本同时记录在 `pyproject.toml` 与 `phonetic_toolbox.__version__`，测试会检查二者一致。`run.spec` 从 `pyproject.toml` 读取版本，并生成带版本号的文件名。
 
 ```powershell
-py -3.11 -m PyInstaller --noconfirm run.spec
+conda run -n phonetic_311 python -m PyInstaller run.spec --noconfirm --log-level WARN
 ```
 
 默认产物为 `dist/PhoneticToolbox_v<version>.exe`。打包资源通过 `SPECPATH`、`get_resource_path()`、模块位置或静态页面相对 URL 解析，不依赖开发机盘符和当前工作目录。
 
 ## 子模块文档
 
+- 声道核心：[phonetic_toolbox/core/vocal_tract/README.md](phonetic_toolbox/core/vocal_tract/README.md)
+- 声道服务：[phonetic_toolbox/services/vocal_tract/README.md](phonetic_toolbox/services/vocal_tract/README.md)
 - 声学核心：[phonetic_toolbox/core/acoustic/README.md](phonetic_toolbox/core/acoustic/README.md)
 - EGG 核心：[phonetic_toolbox/core/egg/README.md](phonetic_toolbox/core/egg/README.md)
 - 语谱图转音频：[phonetic_toolbox/core/spec2wav/README.md](phonetic_toolbox/core/spec2wav/README.md)
@@ -288,4 +308,4 @@ py -3.11 -m PyInstaller --noconfirm run.spec
 
 ## 许可证
 
-MIT License
+主仓库代码使用 MIT；声道模块包含 GPL-3.0-or-later 的 VocalTractLab 原生组件及派生桥接代码、CC BY 4.0 鼻腔数据、CC0 头壳和 MIT Three.js。许可、署名、修改和配套源代码见 [第三方说明](phonetic_toolbox/resources/vocal_tract/THIRD_PARTY_NOTICES.md)。

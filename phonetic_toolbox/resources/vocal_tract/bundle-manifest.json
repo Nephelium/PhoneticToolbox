@@ -1,0 +1,55 @@
+{
+  "version": "2.2.0",
+  "files": [
+    {
+      "path": "resources/vocal_tract/native/geometry_p2.dll",
+      "bytes": 257536,
+      "sha256": "7bb1fff1a91e058df632666a3e5635060e44ac694713fa1612990a93a039bb78"
+    },
+    {
+      "path": "resources/vocal_tract/native/JD2.speaker",
+      "bytes": 87909,
+      "sha256": "fc118b8150e65eca4aa636800128c343df13d3724044ca54ed3682ca3be222ec"
+    },
+    {
+      "path": "resources/vocal_tract/native/M01.speaker",
+      "bytes": 119299,
+      "sha256": "438ef8970384444464ddc0ccb82e349323583ab8f87eea70ba227144c8d665c8"
+    },
+    {
+      "path": "resources/vocal_tract/native/VocalTractLabAnalysis.dll",
+      "bytes": 536064,
+      "sha256": "caaab296b4c2362ada1a5d94aaffe6c1804b3ed8279c04427bcca1ac348e2407"
+    },
+    {
+      "path": "resources/vocal_tract/native/VocalTractLabApi.dll",
+      "bytes": 536064,
+      "sha256": "caaab296b4c2362ada1a5d94aaffe6c1804b3ed8279c04427bcca1ac348e2407"
+    },
+    {
+      "path": "resources/vocal_tract/native/W02.speaker",
+      "bytes": 121443,
+      "sha256": "c4b6c1e7d147c9187ef3d246a9ca5f6a232d477ad2c7aec16466f6fdb9243f04"
+    },
+    {
+      "path": "resources/vocal_tract/sources/VTL2.4-API-source.zip",
+      "bytes": 300067,
+      "sha256": "aa696bf4cf5c44cbd433304943aebb241e5ea3064b949daf5ea09f96567cff9b"
+    },
+    {
+      "path": "resources/vocal_tract/sources/geometry_bridge.cpp",
+      "bytes": 5795,
+      "sha256": "c8ebf514a499da24dbefa349d4315e0fd2557494db196d33bb268b131b2e8532"
+    },
+    {
+      "path": "gui/resources/vocal_tract/assets/head.json",
+      "bytes": 55700,
+      "sha256": "7bc2cb61c9abdb043d62a4438aa11a18033b9426d704b5ac854f5498adfb11dd"
+    },
+    {
+      "path": "gui/resources/vocal_tract/assets/nasal.json",
+      "bytes": 4261995,
+      "sha256": "b256b400f7c2d6c77397f4d4f3b34e4b45e41dbd04c8df578cbb42a5ec8b57d9"
+    }
+  ]
+}

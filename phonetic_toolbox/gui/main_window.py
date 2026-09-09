@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QGridLayout, QPushButton, 
-    QLabel, QStackedWidget, QMessageBox, QApplication
+    QLabel, QStackedWidget, QMessageBox, QApplication, QFileDialog
 )
 from PyQt6.QtCore import Qt, QUrl
 from PyQt6 import QtCore
@@ -22,6 +22,7 @@ from .widgets.spec2wav_widget import Spec2WavWidget
 from .widgets.speech_synthesis_widget import SpeechSynthesisWidget
 from .widgets.lpc_spectrum_widget import LPCSpectrumWidget
 from .widgets.phonology_induction_widget import PhonologyInductionWidget
+from .widgets.phonation_synthesis_widget import PhonationSynthesisWidget
 from .widgets.lip_gui import launch_lip_gui
 from .dialogs.about_dialog import AboutDialog
 from phonetic_toolbox import __version__
@@ -29,6 +30,7 @@ from phonetic_toolbox.utils import get_resource_path
 from phonetic_toolbox.api import (
     launch_ipa_trans,
     launch_perception_experiment,
+    shutdown_vocal_tract,
 )
 
 ASCII_TITLE = (
@@ -40,11 +42,41 @@ ASCII_TITLE = (
     " ╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝ ╚═════╝   ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝"
 )
 
+class _FolderPickerBridge(QtCore.QObject):
+    """将网页服务线程的文件夹选择请求转到 Qt 主线程执行。"""
+
+    pickRequested = QtCore.pyqtSignal(str)
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._result = ""
+        self._done = threading.Event()
+        self.pickRequested.connect(self._on_pick)
+
+    def pick(self, initial: str) -> str:
+        """供 HTTP 服务线程调用：阻塞直到主线程中的对话框关闭。"""
+        self._result = ""
+        self._done.clear()
+        self.pickRequested.emit(initial or "")
+        self._done.wait()
+        return self._result
+
+    def _on_pick(self, initial: str):
+        try:
+            self._result = QFileDialog.getExistingDirectory(
+                self.parent(),
+                "选择语料文件夹（包含 wav 及同名 TextGrid）",
+                initial or str(Path.home()),
+            )
+        finally:
+            self._done.set()
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Phonetic Toolbox v2")
-        self.resize(700, 460)
+        self.resize(700, 520)
         self.setWindowIcon(QIcon(get_resource_path("PhoneticToolbox.ico")))
         
         # Central Widget is a StackedWidget
@@ -59,6 +91,9 @@ class MainWindow(QMainWindow):
         
         # Sub-windows storage to prevent garbage collection
         self.sub_windows = {}
+        self._vocal_closing = False
+        self._vocal_launch_worker = None
+        QApplication.instance().aboutToQuit.connect(self._shutdown_vocal_tract)
         
         # Apply Theme
         self.is_dark = True
@@ -92,9 +127,12 @@ class MainWindow(QMainWindow):
             ("参数显示", self.on_parameter_display),
             ("EGG信号分析", self.on_egg_analysis),
             ("语音合成", self.on_speech_synthesis),
+            ("发声类型合成", self.on_phonation_synthesis),
+            ("声道工作台", self.on_vocal_tract),
             ("变速变调", self.on_pitch_manipulation),
             ("感知实验", self.on_perception_experiment),
             ("MFA自动标注", self.on_mfa_auto_alignment),
+            ("语音标注对齐", self.on_web_praat_editor),
             ("语谱图转音频", self.on_spec2wav),
             ("普通话转IPA", self.on_ipa_trans),
             ("LPC谱图", self.on_lpc_spectrum),
@@ -163,6 +201,9 @@ class MainWindow(QMainWindow):
         if "ss" in self.sub_windows and self.sub_windows["ss"].isVisible():
             if hasattr(self.sub_windows["ss"], "set_theme"):
                 self.sub_windows["ss"].set_theme(self.is_dark)
+        if "phonation" in self.sub_windows and self.sub_windows["phonation"].isVisible():
+            if hasattr(self.sub_windows["phonation"], "set_theme"):
+                self.sub_windows["phonation"].set_theme(self.is_dark)
         if "lpc" in self.sub_windows and self.sub_windows["lpc"].isVisible():
             if hasattr(self.sub_windows["lpc"], "set_theme"):
                 self.sub_windows["lpc"].set_theme(self.is_dark)
@@ -278,6 +319,18 @@ class MainWindow(QMainWindow):
             w.set_theme(self.is_dark)
         w.show()
 
+    def on_phonation_synthesis(self):
+        if "phonation" in self.sub_windows and self.sub_windows["phonation"].isVisible():
+            self.sub_windows["phonation"].raise_()
+            self.sub_windows["phonation"].activateWindow()
+            return
+        w = PhonationSynthesisWidget()
+        w.setWindowIcon(QIcon(get_resource_path("PhoneticToolbox.ico")))
+        self.sub_windows["phonation"] = w
+        if hasattr(w, "set_theme"):
+            w.set_theme(self.is_dark)
+        w.show()
+
     def on_lpc_spectrum(self):
         if "lpc" in self.sub_windows and self.sub_windows["lpc"].isVisible():
             self.sub_windows["lpc"].activateWindow()
@@ -334,6 +387,53 @@ class MainWindow(QMainWindow):
         if hasattr(dialog, "set_theme"):
             dialog.set_theme(self.is_dark)
         dialog.exec()
+
+    def on_web_praat_editor(self):
+        """启动内置「语音标注对齐」网页服务并在浏览器中打开。"""
+        from phonetic_toolbox.services import web_praat_server
+
+        if not hasattr(self, "_folder_picker_bridge"):
+            self._folder_picker_bridge = _FolderPickerBridge(self)
+        try:
+            url = web_praat_server.ensure_server(folder_picker=self._folder_picker_bridge.pick)
+        except Exception as exc:
+            QMessageBox.critical(self, "语音标注对齐", f"内置服务启动失败：\n{exc}")
+            return
+        webbrowser.open(url)
+
+    def on_vocal_tract(self):
+        if self._vocal_closing or (self._vocal_launch_worker and self._vocal_launch_worker.isRunning()):
+            return
+        from .workers.vocal_tract_worker import VocalTractLaunchWorker
+        self.statusBar().showMessage("正在启动声道工作台…")
+        self._vocal_launch_worker = VocalTractLaunchWorker(self)
+        self._vocal_launch_worker.resultReady.connect(self._vocal_tract_ready)
+        self._vocal_launch_worker.start()
+
+    def _vocal_tract_ready(self, result):
+        if self._vocal_closing:
+            return
+        self.statusBar().clearMessage()
+        if result.success:
+            QDesktopServices.openUrl(QUrl(result.url))
+        else:
+            QMessageBox.critical(self, "声道工作台", "启动失败：\n" + result.message)
+
+    def _shutdown_vocal_tract(self):
+        self._vocal_closing = True
+        shutdown_vocal_tract()
+        if self._vocal_launch_worker and self._vocal_launch_worker.isRunning():
+            self._vocal_launch_worker.wait(5000)
+
+    def closeEvent(self, event):
+        self._shutdown_vocal_tract()
+        try:
+            from phonetic_toolbox.services import web_praat_server
+
+            web_praat_server.shutdown_server()
+        except Exception:
+            pass
+        super().closeEvent(event)
 
     def on_open_help(self):
         # 使用 get_resource_path 获取兼容打包环境的路径

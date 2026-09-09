@@ -17,7 +17,7 @@
     *   `core/` 下的各个子模块（如 `egg`, `acoustic`）应尽可能独立。
     *   跨模块调用应通过明确的接口进行。
 
-## 2. 目录结构详解 (Updated 2026-07-15)
+## 2. 目录结构详解 (Updated 2026-09-08)
 
 ```text
 PhoneticToolbox_v2/
@@ -26,6 +26,7 @@ PhoneticToolbox_v2/
 │   ├── api/                    # [Middle Layer] 对外暴露的简洁 API (Facade)
 │   │   └── __init__.py         # 导出 lip / IPA / perception / MFA 等 Facade 入口
 │   ├── core/                   # [Inner Layer] 纯粹的领域逻辑与算法
+│   │   ├── vocal_tract/        # VTL 原生 ABI、面积/传递函数、唇宽与关键帧插值
 │   │   ├── acoustic/           # 声学参数提取
 │   │   │   ├── README.md           # 声学模块说明文档
 │   │   │   ├── __init__.py
@@ -56,6 +57,7 @@ PhoneticToolbox_v2/
         ├── manipulation/       # 音频修改与合成
         │   ├── README.md
         │   ├── __init__.py
+        │   ├── phonation_synthesis.py # 发声类型连续统：LPC 残差、脉冲与重合成
         │   ├── synthesis.py        # PSOLA 合成算法 (Praat/Parselmouth)
         │   └── batch_utils.py      # 批量变调与合成逻辑
         ├── perception/         # 感知实验数据处理（预留核心算法目录）
@@ -85,9 +87,11 @@ PhoneticToolbox_v2/
         │   ├── egg_batch_dialog.py # EGG 批量处理对话框
         │   └── settings_dialog.py  # 全局设置弹窗
         ├── resources/          # 静态资源 (图标, 图片, 前端页面资源)
+        │   ├── vocal_tract/       # 声道工作台：二维/三维显示、单屏操作、图表
         │   ├── ipa_trans/          # 普通话转 IPA 前端页面生成与产物
         │   │   ├── generate_ipa_website.py
         │   │   └── ipa_converter.html
+        │   ├── web_praat_editor/   # 语音标注对齐静态前端（TextGrid + 唇形曲线）
         │   └── __init__.py
         ├── viewmodels/         # MVVM 模式的 ViewModel (可选)
         │   └── __init__.py
@@ -98,12 +102,14 @@ PhoneticToolbox_v2/
         │   ├── acoustic_widget.py          # 声学参数可视化组件
         │   ├── parameter_estimation_widget.py # 参数估计与批处理主组件
         │   ├── pitch_manipulation_widget.py # 变速变调 (基频实验室) 主组件
+        │   ├── phonation_synthesis_widget.py # 发声类型合成主组件
         │   ├── speech_synthesis_widget.py   # 语音合成实验室主组件（Klatt 参数编辑与联动视图）
 │   │   │   ├── egg_widget.py       # EGG 分析主组件
 │   │   │   ├── spec2wav_widget.py  # 语谱图转音频主组件
 │   │   │   └── lpc_spectrum_widget.py # LPC 谱图主组件（波形选区 + TextGrid 联动）
         ├── workers/            # 后台工作线程
         │   ├── manipulation_workers.py # 批量变调处理线程
+        │   ├── phonation_synthesis_workers.py # 发声类型分析与生成线程
         │   └── egg_workers.py      # EGG 分析与加载线程
         ├── __init__.py
         ├── main_window.py      # 应用程序主窗口
@@ -118,6 +124,7 @@ PhoneticToolbox_v2/
     │   ├── lip_models.py       # 唇形提取启动结果模型
     │   ├── lpc_models.py       # LPC 配置与结果模型定义
     │   ├── perception_models.py # 感知实验启动结果模型
+    │   ├── phonation_synthesis_models.py # 发声类型合成配置、枚举与结果
     │   └── spec2wav_models.py  # 语谱图转音频模型定义
     ├── services/               # [Middle Layer] 应用业务逻辑与 IO
 │   │   ├── io/                 # 文件输入输出
@@ -135,8 +142,10 @@ PhoneticToolbox_v2/
         ├── lip_service.py      # 唇形提取服务（定位并打开外部项目入口）
         ├── lpc_service.py      # LPC 谱图服务（音频读取、TextGrid 解析、导出保存）
         ├── manipulation_service.py # 变速变调服务 (音频加载, 合成, 批处理)
+        ├── phonation_synthesis_service.py # 发声类型合成编排与导出服务
         ├── perception_service.py # 感知实验服务（定位并打开外部 HTML）
         ├── settings_service.py # 配置管理服务 (单例模式, 持有运行时配置对象)
+        ├── web_praat_server.py # 本机 TextGrid 编辑服务与唇形偏移原子写回
         └── spec2wav_service.py # 语谱图转音频服务
     ├── tests/                  # 单元测试与集成测试
 │   │   ├── test_acoustic_time_alignment.py # F0 算法与时间网格回归测试
@@ -144,7 +153,9 @@ PhoneticToolbox_v2/
 │   │   ├── test_resource_resolution.py # 开发态/_MEIPASS 资源测试
 │   │   ├── test_version_consistency.py # 项目/运行时/EXE 版本一致性
 │   │   ├── test_lip_service.py      # 唇形提取服务测试
+│   │   ├── test_lip_offset_dialog.py # 保存前偏移校正交互测试
 │   │   ├── test_lpc_service.py      # LPC 服务测试
+│   │   ├── test_web_praat_server.py # 本机网页服务与安全保存测试
 │   │   └── test_perception_service.py # 感知实验服务测试
 │   ├── utils/                  # 通用工具库
 │   │   └── __init__.py         # 日志, 装饰器, 辅助函数
@@ -247,6 +258,14 @@ PhoneticToolbox_v2/
     *   `run.spec` 必须以 `SPECPATH` 为项目根，禁止写死 checkout 路径；它从 `pyproject.toml` 读取版本并输出 `PhoneticToolbox_v<version>.exe`。
     *   打包前至少执行完整 pytest、`compileall`、GUI 主窗口构造冒烟和资源解析测试；打包后检查关键资源解包与 EXE 启动存活。
 
+### 2.6 发声类型合成链路 (Updated 2026-08-23)
+
+1.  主页“发声类型合成”入口由 `gui/main_window.py` 打开 `gui/widgets/phonation_synthesis_widget.py`。
+2.  GUI 仅负责参数采集、F0 表格编辑、绘图与状态反馈；耗时分析和生成由 `gui/workers/phonation_synthesis_workers.py` 在 QThread 中执行。
+3.  `services/phonation_synthesis_service.py` 负责 WAV 读取/重采样、复用 Praat/REAPER F0 后端、任务编排以及 WAV/CSV 导出。
+4.  `core/manipulation/phonation_synthesis.py` 只实现数组级 LPC、残差脉冲、连续统和重合成算法，不依赖 PyQt、文件路径或源项目。
+5.  `models/phonation_synthesis_models.py` 统一跨层配置和结果契约；不复制、调用或打包原独立 EXE。
+
 ## 3. models 文件夹的作用
 
 `phonetic_toolbox/models/` 文件夹用于存放**数据模型 (Data Models)**。
@@ -328,3 +347,44 @@ class AnalysisResult:
 
 4.  **单一数据源**:
     *   获取配置的唯一合法途径是调用 `SettingsService().get_config_object()` 或直接实例化 `AcousticConfig()`。
+
+## 2026-09-06 数据一致性补充
+
+- 唇形时间轴解析集中在 `services/io/lip.py`，网页展示与参数导出使用相同音频起点、排序去重及手动偏移规则。
+- 网页文件标识随扫描失效，禁止将旧请求映射到新语料；前端只允许当前加载任务提交异步结果。
+- 发声类型合成导出由服务层分配独立批次，返回实际路径并写入完成状态和参数清单；GUI 不自行拼接批次路径。
+- LPC 核心分帧覆盖尾帧，补零数据不得影响分析区间外样本。对应回归验证记录见 `docs/plans/2026-09-06-review-fixes.md`。
+
+
+## 声道工作台集成（2.2.0，2026-09-08）
+
+生产链路为 MainWindow → GUI 启动线程 → API `launch_vocal_tract` → Services 进程管理 → 工作进程 HTTP / 音频 → Core VTL 与轨迹算法。生产代码不导入 `prototypes/`。网页仅负责操作、绘图与显示几何重建；声学计算和动态声音来自 Core 的同一参数轨迹。
+
+- `core/vocal_tract/`：注入只读原生资源目录的 Engine、关键帧及归一化 F0 曲线校验与插值、输出 PCM 的有限缓冲和纯 FFT 分析。
+- `models/vocal_tract_models.py`：启动成功、消息、URL、PID 的结构化结果。
+- `services/vocal_tract_service.py`：主应用所有的工作进程、随机端口握手、复用、取消与退出。
+- `services/vocal_tract/`：HTTP 会话、音频设备、缓存动程、原子用户配置和 Windows 父进程守护。
+- `gui/workers/vocal_tract_worker.py` 与 `gui/resources/vocal_tract/`：按钮后台启动及单屏网页。≥1600 CSS px 三栏、普通窗口两栏；分析区在窄屏切换声学图/输出监测，宽屏可同时显示。关键帧每页三项，展开 F0 绘图时两项。矢状面平移与截面点选为纯观察状态，不能改变声学参数。
+- `resources/vocal_tract/`：只读 DLL、speaker、许可、源代码与 SHA-256 清单，随 onefile EXE 分发。
+- `diagnostics/vocal_tract.py`：显式命令启动的静音集成检查，覆盖真实按钮、冻结资源与退出，不在普通启动中执行。
+
+主进程退出时正常请求服务关闭，并以 Windows Job Object 及父进程句柄保障异常退出回收。不能用全局进程名、固定端口或共享 server.json 判定所有权。用户配置必须位于 LocalAppData，不能写入 `_MEIPASS`。集成服务没有十分钟空闲退出。
+
+运行和验证细节见 `phonetic_toolbox/services/vocal_tract/README.md`；第三方许可与解剖/声学边界见 `phonetic_toolbox/resources/vocal_tract/THIRD_PARTY_NOTICES.md`。本轮仅生成本地 EXE，不涉及公开发布。
+
+### 声道模块的数据与边界
+
+- 现有 `AcousticConfig` 的代码配置规则继续适用于既有语音分析模块。VTL 的构形范围与中性值以随包 speaker 为权威；用户创作的关键帧/F0 曲线和声音设备偏好属于本模块工作状态，由 Services 保存，不写回 `AcousticConfig` 或全局 `SettingsService`。
+- 原生模型加载是 Core 静态资源读取的明确边界：Services 注入只读目录，Engine 可加载其中 DLL/speaker 并核对 SHA-256；不得访问实验语料、用户配置或临时握手文件。用户数据 I/O 全在 Services。
+- `trajectory.sample_trajectory` 将归一化 F0 曲线映射至关键帧总时长，同时供 20 ms 音频块与 60 ms 画面缓存取样；无手绘曲线时使用逐帧 F0 平滑插值。F0 数据版本 2 与旧的仅 frames 配置兼容。
+- `audio_output` 将经过音量、试听增益与淡入淡出的实际输出块交给 `OutputHistory`；缓冲上限 12 秒，锁独立于原生引擎。`/api/audio/monitor` 经同源会话鉴权返回 min/max 波形包络及 Hann 窗短时谱，不访问麦克风。
+- 语谱图使用 48→16 kHz 带抗混叠滤波的降采样，显示 0–6 kHz、90 dB 范围。时间列上限 320、频率行上限 256；必要时增大显示步长并明确报告有效步长，频率方向最大值合并保留谱峰。FFT 补零仅增密频点，不能宣称提高物理频率分辨率。
+- 网页 `geometry.mjs` 以当前中线气腔上下边界定位显示参考线，不跨越中线完全闭塞段；原生声学距离保持不变。`displayLips` 为显示层局部避让，二维使用同一三维网格的中线顶点。软腭按实际后壁斜率裁切并留出描边间隙，声学腭咽口面积不受描边修正影响。
+
+### 声源控制与后续喉部接口
+
+`models/vocal_source.py` 集中声明模式预设、量纲与范围，`core/vocal_tract/source.py` 校验并连续插值。Pa/mm/mm² 到 VTL dPa/cm/cm² 的换算只在 Engine 完成。清声和耳语采用原生 `rel_amp=0`，保留原生声门噪声模型；耳语是参数近似，不能宣称模拟了个体喉部组织。无振动时固定无音高意义的模型 F0，避免手绘音高间接改变无声带振动的几何状态。
+
+源设置是姿势的一部分，经撤销、关键帧、预览、持续音、动程缓存和保存/读取传递；跨模式采用连续振动幅度/气压/几何过渡。弱音增益在音频输出层，范围 0–24 dB，只影响监听和输出监测，不改变驱动压力或声道面积。
+
+实际 VTL 2.4 JD2 选择 Geometric glottis 2025。未来喉部视图需读取实际合成实例的声门运动/压力/气流；不能从另一份独立几何 DLL 推定音频相位。自振与完整喉部方案见 `docs/plans/2026-09-08-larynx-source-model-roadmap.md`。

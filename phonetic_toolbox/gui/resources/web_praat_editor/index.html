@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>语音标注对齐 - Phonetic Toolbox</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">语音标注对齐</div>
+      <div class="folder-row">
+        <input id="folderPath" class="folder-input" placeholder="语料文件夹路径（点击选择）…" />
+        <button id="scanBtn" title="扫描文件夹中的 wav/TextGrid 配对">扫描</button>
+      </div>
+      <input id="filter" class="filter" placeholder="筛选文件…" />
+      <div class="tier-panel" title="TextGrid 层级名称设置：词层用于整词/音节标注，音素层用于更细的音段标注。名称需与 TextGrid 中的 tier 名一致。">
+        <div class="tier-row">
+          <label>词层名<input id="wordTierInput" value="words" /></label>
+          <label>音素层名<input id="phoneTierInput" value="phones" /></label>
+        </div>
+      </div>
+      <div class="splice-panel">
+        <div class="splice-row">
+          <select id="spliceMode" title="复用参考 TextGrid 的方式">
+            <option value="outside">区间之外</option>
+            <option value="inside">区间之内</option>
+            <option value="before">起点之前</option>
+            <option value="after">起点之后</option>
+          </select>
+          <input id="spliceStart" type="number" step="0.5" placeholder="起点" />
+          <input id="spliceEnd" type="number" step="0.5" placeholder="终点" />
+          <button id="applySpliceBtn" title="在指定时间区间复用参考 TextGrid 的标注">复用</button>
+        </div>
+        <div class="ref-row">
+          <input type="file" id="referenceFile" accept=".TextGrid,.textgrid" title="选择参考 TextGrid 文件" />
+          <button id="clearReferenceBtn" title="清除参考文件" style="display:none">&times;</button>
+        </div>
+      </div>
+      <div id="fileList" class="file-list"></div>
+    </aside>
+    <main class="workspace">
+      <header class="toolbar">
+        <button id="toggleSidebarBtn" title="显示/隐藏文件列表">&#9776;</button>
+        <button id="playBtn" title="播放 / 暂停（空格或 P）">播放</button>
+        <button id="saveBtn" title="保存编辑后的 TextGrid（写为 原名+后缀.TextGrid）">保存</button>
+        <button id="autoPhonesBtn" title="为选中的词自动填充音素（双击词同效）">音素</button>
+        <input type="file" id="dictFile" accept=".dict,.txt" style="display:none" />
+        <button id="dictUploadBtn" title="上传发音词典（每行：词 音素1 音素2 …）">词典</button>
+        <input type="file" id="labFile" accept=".lab,.txt" style="display:none" />
+        <button id="labUploadBtn" title="上传 .lab 词表用于高亮与连续粘贴">词表</button>
+        <button id="labClearBtn" title="清除词表高亮" style="display:none">词表&#10005;</button>
+        <button id="toggleLipOpenBtn" title="显示/隐藏唇开度曲线" style="display:none">唇开&#x2713;</button>
+        <button id="toggleLipWidthBtn" title="显示/隐藏唇宽曲线" style="display:none">唇宽&#x2713;</button>
+        <button id="saveLipBtn" title="保存唇形时间偏移（写回 audio_recording.pkl）" style="display:none">存唇偏&#x2714;</button>
+        <button id="lipLeftBtn" title="唇形曲线左移（Alt+←，加 Shift 为 10ms）" style="display:none">&#x25C0;</button>
+        <input id="lipOffsetInput" class="lip-offset-input" type="number" step="1" value="0" title="唇形时间偏移（毫秒）" style="display:none" />
+        <span class="lip-unit" id="lipUnit" style="display:none">ms</span>
+        <button id="lipRightBtn" title="唇形曲线右移（Alt+→，加 Shift 为 10ms）" style="display:none">&#x25B6;</button>
+        <label class="field">
+          <span>后缀</span>
+          <input id="suffixInput" value="_webedit" title="保存文件名后缀；留空则覆盖原 TextGrid（慎用）" />
+        </label>
+        <label class="field">
+          <span>视窗</span>
+          <input id="visibleInput" type="number" value="3.2" min="0.2" step="0.1" title="可视窗口时长（秒）" />
+        </label>
+        <div id="status" class="status">请在左侧选择语料文件夹</div>
+      </header>
+      <header class="toolbar search-bar">
+        <input id="searchInput" class="search-input" placeholder="搜索词层文本…" />
+        <span id="searchInfo" class="search-info"></span>
+        <button id="searchPrevBtn" title="上一个匹配">&larr;</button>
+        <button id="searchNextBtn" title="下一个匹配">&rarr;</button>
+        <input id="replaceInput" class="search-input" placeholder="替换为…" />
+        <button id="replaceBtn" title="替换当前匹配">替换</button>
+        <button id="replaceAllBtn" title="替换全部匹配">全部</button>
+        <input id="fitStart" class="fit-input" type="number" step="0.1" placeholder="起点" title="强度对齐范围起点（秒）；在词层拖选可自动填入" />
+        <input id="fitEnd" class="fit-input" type="number" step="0.1" placeholder="终点" title="强度对齐范围终点（秒）" />
+        <input id="fitTrimMs" class="fit-trim-input" type="number" step="1" value="10" title="边界内收（正数）/外扩（负数）毫秒数" />
+        <button id="fitIntensityBtn" title="在范围内按音量强度自动微调词边界">强度贴合</button>
+      </header>
+      <section class="viewer">
+        <canvas id="waveCanvas"></canvas>
+        <canvas id="spectrogramCanvas"></canvas>
+        <canvas id="gridCanvas"></canvas>
+        <canvas id="progressCanvas"></canvas>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>

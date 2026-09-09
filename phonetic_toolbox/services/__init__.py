@@ -9,6 +9,7 @@ from .perception_service import PerceptionExperimentService
 from .mfa_alignment_service import MFAAutoAlignmentService
 from .lpc_service import LPCSpectrumService
 from .phonology_service import PhonologyInductionService
+from .phonation_synthesis_service import PhonationSynthesisService
 
 __all__ = [
     'AcousticAnalysisService',
@@ -21,5 +22,6 @@ __all__ = [
     'PerceptionExperimentService',
     'MFAAutoAlignmentService',
     'LPCSpectrumService',
-    'PhonologyInductionService'
+    'PhonologyInductionService',
+    'PhonationSynthesisService',
 ]

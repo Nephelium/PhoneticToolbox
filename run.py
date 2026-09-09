@@ -5,6 +5,15 @@ import tempfile
 import time
 from pathlib import Path
 
+# An owned worker must not construct Qt windows or run GUI startup maintenance.
+if __name__ == "__main__" and "--vocal-tract-worker" in sys.argv:
+    from phonetic_toolbox.services.vocal_tract.worker import main as vocal_worker_main
+    raise SystemExit(vocal_worker_main(sys.argv[sys.argv.index("--vocal-tract-worker") + 1:]))
+
+if __name__ == "__main__" and "--vocal-tract-smoke-test" in sys.argv:
+    from phonetic_toolbox.diagnostics.vocal_tract import main as vocal_smoke_main
+    raise SystemExit(vocal_smoke_main(sys.argv[sys.argv.index("--vocal-tract-smoke-test") + 1]))
+
 # Workaround for DLL load failed error with PyQt6 and OpenCV
 try:
     import cv2

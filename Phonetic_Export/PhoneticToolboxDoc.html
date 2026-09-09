@@ -270,6 +270,11 @@
                 旧版转换
                 <input type="file" hidden accept=".json" multiple onchange="app.convertLegacyJSONBatch(this)">
             </label>
+            <label class="sidebar-footer-btn" style="cursor: pointer;" title="读取导出的网页包（含 index.html 与 images/audios 的 zip，或单个 index.html）并转为可编辑文档">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                导入网页
+                <input type="file" hidden accept=".zip,.html,.htm" onchange="app.importExportPackage(this)">
+            </label>
             
             <!-- 暂存按钮已移除，Ctrl+S 改为直接备份 -->
             
@@ -516,6 +521,16 @@
                     // Images/Block Elements
                     if (line.match(/^!\[.*\]\(.*\)$/)) {
                         html += `<div data-line="${lineNum}">${this.inlineParse(line)}</div>`;
+                        return;
+                    }
+
+                    // Raw HTML block passthrough（图注等原始 HTML 行原样输出，并补上 data-line 以支持点击同步）
+                    if (trimmed.startsWith('<')) {
+                        if (/^<[a-zA-Z][^>]*\sdata-line=/.test(line) || /^<\//.test(trimmed)) {
+                            html += line;
+                        } else {
+                            html += line.replace(/^<([a-zA-Z][a-zA-Z0-9]*)/, `<$1 data-line="${lineNum}"`);
+                        }
                         return;
                     }
 
@@ -1262,6 +1277,203 @@
                     audios: p.audios || {},
                     settings: p.settings || { lineHeight: 1.6 }
                 };
+            },
+
+            // ---------- 导入导出的网页包（index.html + images/audios） ----------
+            findHtmlFileInZip(zip) {
+                const allFiles = Object.keys(zip.files || {}).filter(p => p && !zip.files[p].dir);
+                const normalized = allFiles.map(p => this.normalizeZipPath(p));
+                if (normalized.includes('index.html')) {
+                    return { path: 'index.html', file: zip.file('index.html') };
+                }
+                const candidates = normalized.filter(p => /(^|\/)index\.html?$/i.test(p));
+                if (!candidates.length) return null;
+                candidates.sort((a, b) => a.length - b.length);
+                return { path: candidates[0], file: zip.file(candidates[0]) };
+            },
+
+            async readZipMediaAsDataUrls(zip, kind) {
+                const out = {};
+                const isImg = kind === 'image';
+                const re = isImg ? /^(img_[a-zA-Z0-9_-]+)\.([a-z0-9]+)$/i : /^(aud_[a-zA-Z0-9_-]+)\.([a-z0-9]+)$/i;
+                for (const path of Object.keys(zip.files || {})) {
+                    const entry = zip.files[path];
+                    if (!entry || entry.dir) continue;
+                    const basename = path.split('/').pop() || '';
+                    const m = re.exec(basename);
+                    if (!m) continue;
+                    const id = m[1];
+                    if (out[id]) continue;
+                    const ext = (m[2] || '').toLowerCase();
+                    const base64 = await entry.async('base64');
+                    const mime = isImg ? this.extToMime(ext || 'png') : this.audioExtToMime(ext || 'mp3');
+                    out[id] = `data:${mime};base64,${base64}`;
+                }
+                return out;
+            },
+
+            // ---------- 导出 HTML → Markdown 还原 ----------
+            imgTagToMd(img) {
+                const src = img.getAttribute('src') || '';
+                const alt = img.getAttribute('alt') || 'img';
+                // zip 导入（图片已内嵌）时用编辑器惯用的裸 id 形式；
+                // 单 html 导入时保留原始相对路径，保证预览与再导出不断链
+                if (this._preferBareImgId) {
+                    const m = /(?:^|\/)(img_[a-zA-Z0-9_-]+)(?:\.[a-z0-9]+)?$/i.exec(src);
+                    if (m) return `![${alt}](${m[1]})`;
+                }
+                return `![${alt}](${src})`;
+            },
+
+            inlineHtmlToMd(container) {
+                // 将 SimpleMD 生成的行内标签还原为 Markdown；<u>/<s>/<span>/<div class> 等原样保留
+                let out = '';
+                container.childNodes.forEach(node => {
+                    if (node.nodeType === 3) { out += node.textContent; return; }
+                    if (node.nodeType !== 1) { out += node.textContent || ''; return; }
+                    const tag = node.tagName.toLowerCase();
+                    const inner = () => this.inlineHtmlToMd(node);
+                    if (tag === 'strong' || tag === 'b') out += '**' + inner() + '**';
+                    else if (tag === 'em' || tag === 'i') out += '*' + inner() + '*';
+                    else if (tag === 'code') out += '`' + node.textContent + '`';
+                    else if (tag === 'a') out += '[' + inner() + '](' + (node.getAttribute('href') || '') + ')';
+                    else if (tag === 'img') out += this.imgTagToMd(node);
+                    else if (tag === 'br') out += '  \n';
+                    else out += node.outerHTML;
+                });
+                return out;
+            },
+
+            tableHtmlToMd(table) {
+                const headCells = Array.from(table.querySelectorAll('thead th')).map(th => this.inlineHtmlToMd(th).trim());
+                if (!headCells.length) return table.outerHTML;
+                const rows = [
+                    '| ' + headCells.join(' | ') + ' |',
+                    '| ' + headCells.map(() => '---').join(' | ') + ' |',
+                ];
+                table.querySelectorAll('tbody tr').forEach(tr => {
+                    const cells = Array.from(tr.querySelectorAll('td')).map(td => this.inlineHtmlToMd(td).trim());
+                    rows.push('| ' + cells.join(' | ') + ' |');
+                });
+                return rows.join('\n');
+            },
+
+            exportSectionHtmlToMarkdown(sectionEl) {
+                const lines = [];
+                const stripDataLine = (html) => html.replace(/\s*data-line="\d*"/g, '');
+                Array.from(sectionEl.childNodes).forEach(node => {
+                    if (node.nodeType === 8) return;
+                    if (node.nodeType === 3) {
+                        const t = node.textContent.trim();
+                        if (t) lines.push(t);
+                        return;
+                    }
+                    const tag = node.tagName ? node.tagName.toLowerCase() : '';
+                    if (tag === 'p') {
+                        // 带样式/类名的 p（如图注居中）保留原始 HTML
+                        if (node.getAttribute('style') || node.getAttribute('class')) {
+                            lines.push(stripDataLine(node.outerHTML));
+                            return;
+                        }
+                        const t = this.inlineHtmlToMd(node).trim();
+                        if (t) lines.push(t);
+                        return;
+                    }
+                    if (/^h[1-4]$/.test(tag)) {
+                        lines.push('#'.repeat(Number(tag[1])) + ' ' + this.inlineHtmlToMd(node).trim());
+                        return;
+                    }
+                    if (tag === 'hr') { lines.push('---'); return; }
+                    if (tag === 'blockquote') { lines.push('> ' + this.inlineHtmlToMd(node).trim()); return; }
+                    if (tag === 'pre') { lines.push('```\n' + node.textContent.replace(/\n$/, '') + '\n```'); return; }
+                    if (tag === 'ul' || tag === 'ol') {
+                        let i = 0;
+                        node.querySelectorAll(':scope > li').forEach(li => {
+                            i += 1;
+                            lines.push((tag === 'ul' ? '- ' : `${i}. `) + this.inlineHtmlToMd(li).trim());
+                        });
+                        return;
+                    }
+                    if (tag === 'table') { lines.push(this.tableHtmlToMd(node)); return; }
+                    if (tag === 'audio') {
+                        const m = /(aud_[a-zA-Z0-9_-]+)/.exec(node.getAttribute('src') || '');
+                        lines.push(m ? `![audio](${m[1]})` : stripDataLine(node.outerHTML));
+                        return;
+                    }
+                    if (tag === 'div') {
+                        const directImg = node.querySelector(':scope > img');
+                        const txt = node.textContent.trim();
+                        if (directImg && !txt) { lines.push(this.imgTagToMd(directImg)); return; }
+                        if (/^\$\$[\s\S]*\$\$$/.test(txt)) { lines.push(txt); return; }
+                        lines.push(stripDataLine(node.outerHTML));
+                        return;
+                    }
+                    lines.push(stripDataLine(node.outerHTML));
+                });
+                return lines.join('\n');
+            },
+
+            parseExportedHtml(htmlText) {
+                const doc = new DOMParser().parseFromString(htmlText, 'text/html');
+                const chapters = [];
+                const stamp = Date.now();
+                doc.querySelectorAll('.export-chapter-block').forEach((chapEl, ci) => {
+                    const titleEl = chapEl.querySelector('.chapter-main-title');
+                    const chapter = {
+                        id: 'c' + stamp + '_' + ci,
+                        title: titleEl ? titleEl.textContent.trim() : `章节 ${ci + 1}`,
+                        sections: [],
+                    };
+                    chapEl.querySelectorAll('.section-block').forEach((secEl, si) => {
+                        const h2 = secEl.querySelector('.section-title-anchor');
+                        const clone = secEl.cloneNode(true);
+                        const h2c = clone.querySelector('.section-title-anchor');
+                        if (h2c) h2c.remove();
+                        const body = this.exportSectionHtmlToMarkdown(clone);
+                        chapter.sections.push({
+                            id: secEl.id || ('s' + stamp + '_' + ci + '_' + si),
+                            title: h2 ? h2.textContent.trim() : `小节 ${si + 1}`,
+                            content: body.trim(),
+                        });
+                    });
+                    if (chapter.sections.length) chapters.push(chapter);
+                });
+                return { data: chapters, settings: { lineHeight: 1.6 } };
+            },
+
+            async importExportPackage(input) {
+                const file = input.files[0];
+                input.value = '';
+                if (!file) return;
+                try {
+                    let htmlText = '';
+                    let images = {};
+                    let audios = {};
+                    const name = file.name.toLowerCase();
+                    if (name.endsWith('.zip')) {
+                        if (typeof JSZip === 'undefined') throw new Error('JSZip 未加载');
+                        const zip = await JSZip.loadAsync(file);
+                        const htmlInfo = this.findHtmlFileInZip(zip);
+                        if (!htmlInfo || !htmlInfo.file) throw new Error('压缩包中未找到 index.html');
+                        htmlText = await htmlInfo.file.async('text');
+                        images = await this.readZipMediaAsDataUrls(zip, 'image');
+                        audios = await this.readZipMediaAsDataUrls(zip, 'audio');
+                    } else {
+                        htmlText = await file.text();
+                    }
+                    this._preferBareImgId = Object.keys(images).length > 0;
+                    const payload = this.parseExportedHtml(htmlText);
+                    if (!payload.data.length) throw new Error('未识别到任何章节（需要 PhoneticDoc 导出的网页）');
+                    payload.images = images;
+                    payload.audios = audios;
+                    this.applyLoadedPayload(payload);
+                    localStorage.setItem('phonetic_doc_pro', JSON.stringify({ data: this.data, images: this.images, audios: this.audios, settings: this.settings }));
+                    const mediaNote = name.endsWith('.zip') ? '' : '；单 html 导入未内嵌图片，重新导出前请改用 zip 导入以保留图片文件';
+                    this.showMsg(`已导入 ${payload.data.length} 章${mediaNote}`);
+                    if (mediaNote) alert('已导入为可编辑文档。\n\n注意：单个 html 不包含图片文件，预览依赖同目录 images/ 文件夹；\n如需重新导出完整网页包，请改用 zip（index.html + images/）导入。');
+                } catch (err) {
+                    alert('导入失败：' + (err && err.message ? err.message : err));
+                }
             },
 
             applyLoadedPayload(p) {

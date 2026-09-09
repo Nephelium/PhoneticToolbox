@@ -2,6 +2,71 @@ import pickle
 import numpy as np
 from pathlib import Path
 from typing import Dict, Any, Optional
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class LipTimeAxis:
+    times: np.ndarray
+    indices: np.ndarray
+    sample_count: int
+    manual_offset: float
+
+
+def resolve_lip_time_axis(data: dict, pkl_path: Path) -> LipTimeAxis:
+    """Resolve audio-relative times, excluding the separately stored offset.
+
+    Prefer the first audio frame in metadata, then the timestamps companion.
+    Preserve measured audio/lip delay even in legacy recordings. Only legacy
+    relative-only recordings are rebased to zero when no audio anchor exists.
+    Both the web editor and parameter export must use this same contract.
+    """
+    if not isinstance(data, dict):
+        raise ValueError("Lip recording must be a dictionary")
+    metadata = data.get("metadata")
+    metadata = metadata if isinstance(metadata, dict) else {}
+    manual_offset = float(metadata.get("lip_manual_offset", 0.0) or 0.0)
+    if not np.isfinite(manual_offset):
+        raise ValueError("Lip offset must be finite")
+
+    def finite_number(value):
+        try:
+            number = float(value)
+            return number if np.isfinite(number) else None
+        except (TypeError, ValueError):
+            return None
+
+    anchor = finite_number(metadata.get("audio_first_frame_time"))
+    if anchor is None:
+        path = Path(pkl_path)
+        companion = path.with_name(f"{path.stem}_timestamps.pkl")
+        try:
+            with companion.open("rb") as handle:
+                timestamps = pickle.load(handle)
+            if isinstance(timestamps, dict):
+                anchor = finite_number(timestamps.get("start_time"))
+        except (OSError, EOFError, pickle.UnpicklingError):
+            pass
+
+    raw_absolute = data.get("absolute_timestamps")
+    absolute = np.asarray(raw_absolute if raw_absolute is not None else [], dtype=float).reshape(-1)
+    anchored = anchor is not None and absolute.size > 0
+    if anchored:
+        times = absolute - anchor
+    else:
+        raw_relative = data.get("relative_times")
+        times = np.asarray(raw_relative if raw_relative is not None else [], dtype=float).reshape(-1)
+    sample_count = len(times)
+    indices = np.flatnonzero(np.isfinite(times))
+    indices = indices[np.argsort(times[indices], kind="stable")]
+    times = times[indices]
+    unique = np.r_[True, np.diff(times) > 1e-9] if len(times) else np.array([], dtype=bool)
+    times, indices = times[unique], indices[unique]
+    if len(times) < 2:
+        raise ValueError("Lip timestamps are not sufficient")
+    if not anchored and metadata.get("time_alignment_mode") != "anchored_audio_start":
+        times = times - times[0]
+    return LipTimeAxis(times, indices, sample_count, manual_offset)
 
 def read_lip_data(pkl_path: str, target_times: np.ndarray, smooth_win: int = 0) -> Dict[str, np.ndarray]:
     """
@@ -26,65 +91,13 @@ def read_lip_data(pkl_path: str, target_times: np.ndarray, smooth_win: int = 0) 
         print(f"Error loading lip data {pkl_path}: {e}")
         return {}
 
-    metadata = data.get('metadata') if isinstance(data.get('metadata'), dict) else {}
-    manual_offset = float(metadata.get('lip_manual_offset', 0.0) or 0.0)
-    alignment_mode = str(metadata.get('time_alignment_mode', '') or '')
-
-    # Attempt to load corresponding timestamps file for alignment
-    p = Path(pkl_path)
-    # The timestamps file is expected to be [stem]_timestamps.pkl
-    ts_path = p.parent / f"{p.stem}_timestamps.pkl"
-    
-    audio_start_time = None
-    if ts_path.exists():
-        try:
-            with open(ts_path, 'rb') as f:
-                ts_data = pickle.load(f)
-                audio_start_time = ts_data.get('start_time')
-                print(f"Loaded audio timestamps from {ts_path}, start_time: {audio_start_time}")
-        except Exception as e:
-            print(f"Error loading timestamps {ts_path}: {e}")
-    
-    # Determine source times
-    src_times = None
-    
-    # Priority 1: Use absolute timestamps aligned with audio start time
-    abs_times = data.get('absolute_timestamps')
-    if audio_start_time is not None and abs_times and len(abs_times) > 0:
-        abs_times = np.array(abs_times, dtype=float)
-        src_times = abs_times - audio_start_time
-        print("Using aligned absolute timestamps for lip data")
-
-    # Priority 2: Use relative times from lip data (assume aligned start)
-    if src_times is None:
-        rel_times = data.get('relative_times')
-        if rel_times and len(rel_times) > 0:
-            src_times = np.array(rel_times, dtype=float)
-            print("Using relative timestamps from lip data (no audio alignment)")
-            
-    if src_times is None or len(src_times) < 2:
-        print("No valid timestamps found in lip data")
+    try:
+        axis = resolve_lip_time_axis(data, Path(pkl_path))
+    except (TypeError, ValueError) as exc:
+        print(f"Invalid lip time axis {pkl_path}: {exc}")
         return {}
+    src_times = axis.times + axis.manual_offset
 
-    src_times = np.array(src_times, dtype=float)
-    order = np.argsort(src_times)
-    src_times = src_times[order]
-    unique_mask = np.ones(len(src_times), dtype=bool)
-    if len(src_times) > 1:
-        unique_mask[1:] = np.diff(src_times) > 1e-9
-    src_times = src_times[unique_mask]
-    if len(src_times) < 2:
-        print("Lip timestamps are not sufficient after sorting/dedup")
-        return {}
-
-    first_time = float(src_times[0])
-    if alignment_mode != "anchored_audio_start" and abs(first_time) > 1e-9:
-        src_times = src_times - first_time
-        print(f"Shifted lip data times by {first_time:.4f}s to force t=0 alignment")
-    if abs(manual_offset) > 1e-9:
-        src_times = src_times + manual_offset
-        print(f"Applied manual lip offset: {manual_offset:+.4f}s")
-    
     # Mapping from internal key to output key
     key_map = {
         'area': 'LipArea',           # Lip Area Ratio
@@ -100,9 +113,9 @@ def read_lip_data(pkl_path: str, target_times: np.ndarray, smooth_win: int = 0) 
         if vals is None:
             continue
         vals = np.array(vals, dtype=float)
-        if len(vals) != len(order):
+        if len(vals) != axis.sample_count:
             continue
-        vals = vals[order][unique_mask]
+        vals = vals[axis.indices]
         
         # Handle source NaNs: interpolate only using valid points
         valid_mask = ~np.isnan(vals)

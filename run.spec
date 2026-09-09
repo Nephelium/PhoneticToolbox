@@ -134,6 +134,10 @@ for name in [
         binaries += [(str(candidate), ".")]
 binaries += collect_dynamic_libs("scipy")
 binaries += collect_dynamic_libs("numpy")
+# Explicit native entries make PyInstaller inspect their MSVC dependencies.
+vocal_native = PROJECT_ROOT / "phonetic_toolbox/resources/vocal_tract/native"
+binaries += [(str(vocal_native / name), "phonetic_toolbox/resources/vocal_tract/native")
+             for name in ("VocalTractLabApi.dll", "VocalTractLabAnalysis.dll", "geometry_p2.dll")]
 def keep_mediapipe_data(src):
     normalized = src.lower().replace("\\", "/")
     if normalized.endswith((".dll", ".pyd")):

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+import os
 import threading
 import time
 from datetime import datetime
@@ -16,7 +18,8 @@ import numpy as np
 import sounddevice as sd
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as Canvas
 from matplotlib.figure import Figure
-from PyQt6.QtCore import QTimer, Qt
+from matplotlib.font_manager import FontProperties
+from PyQt6.QtCore import QSettings, QTimer, Qt, pyqtSignal
 from PyQt6.QtGui import QCloseEvent, QIcon, QImage, QPixmap
 from PyQt6.QtGui import QDesktopServices
 from PyQt6.QtWidgets import (
@@ -199,7 +202,209 @@ def estimate_lip_audio_offset_seconds(
             best_offset = float(off)
     return best_offset
 
+class LandmarkStabilizer:
+    """面部特征点低通滤波器（速度下限 One Euro + 强运动直通门控）。
+
+    特征点为 2D 像素坐标 (N, 2)。设计目标：滑条对滤波强度有绝对控制权
+    （1Hz=强防抖 … 摄像头帧率=几乎原始），同时嘴唇等自然快速运动不拖慢。
+
+    1. 逐点自适应截止频率（One Euro）：截止频率 = 滑条基准频率 +
+       beta × 该点速度。速度用相邻『原始』帧差分估计（不含滤波滞后），
+       并减去随面部尺寸自适应的噪声速度下限——静止时纯抖动不会把截止
+       频率抬回去，滑条设多少就是多少。
+    2. 速度场邻居平均：逐点速度先与网格邻居做一轮平均再计算截止频率，
+       相邻点平滑强度接近，不破坏嘴唇等局部几何形状。
+    3. 强运动直通门控：新测量与当前估计的位移明显超过噪声门限（约为面
+       部对角线的 1%~2.4%）时判定为真实运动，增益直接提升到门控值、立
+       即跟随，嘴唇快速运动在任何档位下都几乎零延迟；静止时位移小于门
+       限，增益完全由滑条截止频率决定。
+    """
+
+    def __init__(
+        self,
+        min_cutoff_hz: float = 15.0,
+        beta: float = 0.08,
+        d_cutoff_hz: float = 1.0,
+        neighbor_indices: list[np.ndarray] | None = None,
+    ) -> None:
+        self.min_cutoff = float(min_cutoff_hz)
+        self.beta = float(beta)
+        self.d_cutoff = float(d_cutoff_hz)
+        self._neighbors = neighbor_indices
+        self.reset()
+
+    def set_neighbors(self, neighbor_indices: list[np.ndarray] | None) -> None:
+        self._neighbors = neighbor_indices
+
+    def reset(self) -> None:
+        self._x_hat: np.ndarray | None = None
+        self._dx_hat: np.ndarray | None = None
+        self._x_prev: np.ndarray | None = None
+        self._t_prev: float | None = None
+
+    @staticmethod
+    def _alpha(cutoff_hz: float, dt: float) -> float:
+        tau = 1.0 / (2.0 * math.pi * max(cutoff_hz, 1e-6))
+        return dt / (tau + dt)
+
+    def _neighbor_average(self, speeds: np.ndarray, valid: np.ndarray) -> np.ndarray:
+        """速度场与网格邻居做一轮平均，保持相邻点平滑强度一致。"""
+        if self._neighbors is None or len(self._neighbors) != speeds.shape[0]:
+            return speeds
+        accum = speeds.astype(np.float64).copy()
+        counts = np.ones(speeds.shape[0], dtype=np.float64)
+        valid_f = valid.astype(np.float64)
+        for i, nbrs in enumerate(self._neighbors):
+            if nbrs.size == 0:
+                continue
+            accum[i] += float(np.dot(speeds[nbrs], valid_f[nbrs]))
+            counts[i] += float(valid_f[nbrs].sum())
+        return (accum / counts).astype(np.float32)
+
+    def filter(self, points: np.ndarray, timestamp: float) -> np.ndarray:
+        """对一帧特征点做滤波。points 形状 (N, 2)，允许含 NaN 行。"""
+        x = np.asarray(points, dtype=np.float32)
+        valid = np.isfinite(x).all(axis=1)
+        if not np.any(valid):
+            return x
+
+        if (
+            self._x_hat is None
+            or self._t_prev is None
+            or self._dx_hat is None
+            or self._x_prev is None
+        ):
+            self._x_hat = x.copy()
+            self._x_prev = x.copy()
+            self._dx_hat = np.zeros_like(x)
+            self._t_prev = float(timestamp)
+            return x.copy()
+
+        dt = float(timestamp) - self._t_prev
+        if dt <= 0.0:
+            return self._x_hat.copy()
+        dt = min(dt, 0.25)
+
+        # 个别点之前缺失（NaN）而本帧恢复时，直接用当前观测重新初始化
+        finite_hat = np.isfinite(self._x_hat).all(axis=1)
+        reinit = valid & ~finite_hat
+        if np.any(reinit):
+            self._x_hat[reinit] = x[reinit]
+            self._x_prev[reinit] = x[reinit]
+            self._dx_hat[reinit] = 0.0
+
+        # 1) 速度估计：相邻原始帧差分 + 一阶平滑，减去噪声速度下限
+        a_d = self._alpha(self.d_cutoff, dt)
+        prev_valid = np.isfinite(self._x_prev).all(axis=1)
+        both = valid & prev_valid
+        dx = np.zeros_like(x)
+        dx[both] = (x[both] - self._x_prev[both]) / dt
+        dx_hat = a_d * dx + (1.0 - a_d) * self._dx_hat
+        dx_hat[~valid] = 0.0
+
+        speeds = np.linalg.norm(dx_hat, axis=1)
+        speeds = self._neighbor_average(speeds, valid)
+
+        anchor_rows = valid & np.isfinite(self._x_hat).all(axis=1)
+        valid_pts = self._x_hat[anchor_rows]
+        span = valid_pts.max(axis=0) - valid_pts.min(axis=0)
+        face_scale = float(np.linalg.norm(span))
+        speeds = np.maximum(speeds - 0.11 * face_scale, 0.0)
+
+        cutoffs = self.min_cutoff + self.beta * speeds
+        taus = 1.0 / (2.0 * math.pi * np.maximum(cutoffs, 1e-6))
+        alphas = (dt / (taus + dt)).astype(np.float32)
+
+        # 2) 强运动直通门控：位移明显超过噪声门限时直接跟随
+        res = x - self._x_hat
+        mags = np.linalg.norm(res, axis=1)
+        mags[~np.isfinite(mags)] = 0.0
+        n0 = 0.010 * face_scale
+        n1 = 0.024 * face_scale
+        gate = np.clip((mags - n0) / max(n1 - n0, 1e-6), 0.0, 1.0)
+        alpha_eff = np.maximum(alphas, gate).astype(np.float32)
+
+        x_new = self._x_hat.copy()
+        a_col = alpha_eff[valid, None]
+        x_new[valid] = self._x_hat[valid] + a_col * res[valid]
+
+        self._x_hat = x_new
+        self._dx_hat = dx_hat
+        self._x_prev = x.copy()
+        self._t_prev = float(timestamp)
+        return x_new
+
+
+def _query_camera_names_powershell() -> list[str]:
+    """尽力获取摄像头友好名称（Windows PnP Image/Camera 类设备），失败返回空列表。"""
+    ps_cmd = (
+        "Get-CimInstance Win32_PnPEntity -ErrorAction SilentlyContinue | "
+        "Where-Object { $_.PNPClass -eq 'Image' -or $_.PNPClass -eq 'Camera' } | "
+        "Select-Object -ExpandProperty Name"
+    )
+    creation_flags = getattr(subprocess, "CREATE_NO_WINDOW", 0)
+    try:
+        out = subprocess.run(
+            ["powershell", "-NoProfile", "-NonInteractive", "-Command", ps_cmd],
+            capture_output=True,
+            text=True,
+            timeout=10,
+            creationflags=creation_flags,
+        )
+    except Exception:
+        return []
+    if out.returncode != 0:
+        return []
+    return [line.strip() for line in (out.stdout or "").splitlines() if line.strip()]
+
+
+def _enumerate_camera_devices(max_index: int = 8) -> list[tuple[int, str]]:
+    """枚举可用摄像头。返回 [(设备索引, 显示名称), ...]。
+
+    注意：调用前必须先释放当前占用的摄像头，否则其索引探测不到。
+    """
+    indices: list[int] = []
+    for idx in range(max_index):
+        try:
+            cap = cv2.VideoCapture(idx, cv2.CAP_DSHOW)
+            if cap.isOpened():
+                indices.append(idx)
+            cap.release()
+        except Exception:
+            continue
+    names = _query_camera_names_powershell()
+    cameras: list[tuple[int, str]] = []
+    for pos, idx in enumerate(indices):
+        if pos < len(names):
+            cameras.append((idx, f"{names[pos]} (设备 {idx})"))
+        else:
+            cameras.append((idx, f"摄像头 {idx}"))
+    return cameras
+
+
+def _enumerate_audio_input_devices() -> list[tuple[int, str]]:
+    """枚举可用音频输入设备。返回 [(sounddevice 索引, 显示名称), ...]。
+
+    同一物理设备在不同 host API 下会重复出现，按名称去重，保留首个。
+    """
+    devices: list[tuple[int, str]] = []
+    seen_names: set[str] = set()
+    try:
+        for idx, info in enumerate(sd.query_devices()):
+            if int(info.get("max_input_channels", 0)) > 0:
+                name = str(info.get("name", f"输入设备 {idx}"))
+                if name in seen_names:
+                    continue
+                seen_names.add(name)
+                devices.append((idx, name))
+    except Exception:
+        pass
+    return devices
+
+
 class LipGUI(QWidget):
+    devices_detected = pyqtSignal(list, list)
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("唇形提取")
@@ -209,6 +414,11 @@ class LipGUI(QWidget):
         self._state_lock = threading.Lock()
         self.is_recording = False
         self.save_directory = str(self._default_save_directory())
+        self._camera_index: int | None = None
+        self._audio_device_index: int | None = None
+        self._enum_running = False
+        self._stabilizer = LandmarkStabilizer()
+        self._mesh_neighbors: list[np.ndarray] | None = None
         self._recording_start_ts: float | None = None
         self._recording_start_epoch: float | None = None
         self._audio_stream: sd.InputStream | None = None
@@ -219,6 +429,7 @@ class LipGUI(QWidget):
         self._mesh_connections: tuple[tuple[int, int], ...] = ()
         self._fps_frame_counter = 0
         self._fps_last_ts = time.perf_counter()
+        self._measured_fps: float = 0.0
 
         self._frame_times: list[float] = []
         self._frame_times_abs: list[float] = []
@@ -265,6 +476,7 @@ class LipGUI(QWidget):
         }
 
         self._build_ui()
+        self.devices_detected.connect(self._on_devices_detected)
         self._setup_video_pipeline()
 
     def _build_ui(self) -> None:
@@ -305,6 +517,39 @@ class LipGUI(QWidget):
         self.help_btn.clicked.connect(self._open_help)
         self.help_btn.setStyleSheet("background-color: #28a745; color: white; font-weight: bold;")
 
+        self.camera_combo = QComboBox()
+        self.camera_combo.setMinimumWidth(220)
+        self.camera_combo.setToolTip("选择视频采集设备（如外接高帧率摄像头）")
+        self.camera_combo.currentIndexChanged.connect(self._on_camera_combo_changed)
+        self.audio_combo = QComboBox()
+        self.audio_combo.setMinimumWidth(220)
+        self.audio_combo.setToolTip("选择音频输入设备（如外接声卡/麦克风）")
+        self.audio_combo.currentIndexChanged.connect(self._on_audio_combo_changed)
+        self.refresh_devices_btn = QPushButton("刷新设备")
+        self.refresh_devices_btn.setToolTip("重新检测摄像头与音频输入设备")
+        self.refresh_devices_btn.clicked.connect(self._refresh_devices)
+
+        self.filter_check = QCheckBox("特征点低通滤波（防抖）")
+        self.filter_check.setChecked(True)
+        self.filter_check.setToolTip(
+            "对面部特征点施加自适应低通滤波：静止时强平滑抑制抖动，"
+            "快速运动时自动降低平滑强度以减小延迟。"
+        )
+        self.filter_check.toggled.connect(self._on_filter_toggled)
+        self.filter_strength_slider = QSlider(Qt.Orientation.Horizontal)
+        self.filter_strength_slider.setRange(1, 30)  # 摄像头就绪后按其实际帧率调整上限
+        self.filter_strength_slider.setFixedWidth(140)
+        self.filter_strength_slider.setToolTip(
+            "滤波截止频率：越小防抖越强，越大跟随越快。"
+            "上限为当前摄像头帧率。"
+        )
+        self.filter_freq_label = QLabel()
+        self.filter_freq_label.setMinimumWidth(44)
+        saved_cutoff = self._load_filter_cutoff_setting()
+        self.filter_strength_slider.setValue(saved_cutoff)
+        self.filter_strength_slider.valueChanged.connect(self._on_filter_strength_changed)
+        self._on_filter_strength_changed(self.filter_strength_slider.value())
+
         self.status_label = QLabel("就绪")
         self.fps_label = QLabel("FPS: --")
         self.fps_label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
@@ -325,10 +570,23 @@ class LipGUI(QWidget):
         row1.addWidget(self.help_btn)
         control_grid.addLayout(row1, 1, 0)
 
+        row_devices = QHBoxLayout()
+        row_devices.addWidget(QLabel("摄像头"))
+        row_devices.addWidget(self.camera_combo, 1)
+        row_devices.addWidget(QLabel("音频输入"))
+        row_devices.addWidget(self.audio_combo, 1)
+        row_devices.addWidget(self.refresh_devices_btn)
+        row_devices.addSpacing(16)
+        row_devices.addWidget(self.filter_check)
+        row_devices.addWidget(QLabel("滤波"))
+        row_devices.addWidget(self.filter_strength_slider)
+        row_devices.addWidget(self.filter_freq_label)
+        control_grid.addLayout(row_devices, 2, 0)
+
         row2 = QHBoxLayout()
         row2.addWidget(self.status_label, 1)
         row2.addWidget(self.fps_label)
-        control_grid.addLayout(row2, 2, 0)
+        control_grid.addLayout(row2, 3, 0)
 
         root.addLayout(control_grid)
 
@@ -339,8 +597,6 @@ class LipGUI(QWidget):
         root.addWidget(self.video_label, 1)
 
     def _setup_video_pipeline(self) -> None:
-        self._video_capture = cv2.VideoCapture(0)
-        self._setup_live_audio_stream()
         try:
             import mediapipe as mp
 
@@ -354,6 +610,8 @@ class LipGUI(QWidget):
                 set(mp.solutions.face_mesh.FACEMESH_TESSELATION)
                 | set(mp.solutions.face_mesh.FACEMESH_CONTOURS)
             )
+            self._mesh_neighbors = self._build_mesh_neighbors(self._mesh_connections, 478)
+            self._stabilizer.set_neighbors(self._mesh_neighbors)
         except Exception:
             self._face_mesh = None
             self._mesh_connections = ()
@@ -363,6 +621,232 @@ class LipGUI(QWidget):
         self._video_timer.setInterval(30)
         self._video_timer.timeout.connect(self._on_video_tick)
         self._video_timer.start()
+
+        # 启动时异步检测摄像头/音频输入设备，检测完成后自动打开设备
+        self._refresh_devices()
+
+    def _refresh_devices(self) -> None:
+        """异步枚举摄像头与音频输入设备。
+
+        枚举前需释放当前摄像头，否则它自身无法被探测到。
+        """
+        if self._enum_running:
+            return
+        with self._state_lock:
+            busy = self.is_recording
+        if busy or self.is_raw_recording or self.is_hfps_recording:
+            return
+        self._enum_running = True
+        self.refresh_devices_btn.setEnabled(False)
+        self.camera_combo.setEnabled(False)
+        self.audio_combo.setEnabled(False)
+        for btn in (
+            self.start_btn,
+            self.raw_start_btn,
+            self.hfps_btn,
+            self.upload_video_btn,
+        ):
+            btn.setEnabled(False)
+        self._video_timer.stop()
+        if self._video_capture is not None:
+            try:
+                self._video_capture.release()
+            except Exception:
+                pass
+            self._video_capture = None
+        self.status_label.setText("正在检测摄像头与音频输入设备...")
+        threading.Thread(target=self._enumerate_devices_worker, daemon=True).start()
+
+    def _enumerate_devices_worker(self) -> None:
+        cameras = _enumerate_camera_devices()
+        audio_inputs = _enumerate_audio_input_devices()
+        self.devices_detected.emit(cameras, audio_inputs)
+
+    def _on_devices_detected(
+        self, cameras: list[tuple[int, str]], audio_inputs: list[tuple[int, str]]
+    ) -> None:
+        prev_camera = self._camera_index
+        prev_audio = self._audio_device_index
+
+        self.camera_combo.blockSignals(True)
+        self.camera_combo.clear()
+        for idx, name in cameras:
+            self.camera_combo.addItem(name, idx)
+        camera_pos = -1
+        if prev_camera is not None:
+            camera_pos = self.camera_combo.findData(prev_camera)
+        if camera_pos < 0:
+            camera_pos = 0 if self.camera_combo.count() > 0 else -1
+        if camera_pos >= 0:
+            self.camera_combo.setCurrentIndex(camera_pos)
+        self.camera_combo.blockSignals(False)
+        self._camera_index = (
+            self.camera_combo.currentData() if camera_pos >= 0 else None
+        )
+
+        self.audio_combo.blockSignals(True)
+        self.audio_combo.clear()
+        self.audio_combo.addItem("系统默认设备", None)
+        for idx, name in audio_inputs:
+            self.audio_combo.addItem(name, idx)
+        audio_pos = self.audio_combo.findData(prev_audio)
+        self.audio_combo.setCurrentIndex(audio_pos if audio_pos >= 0 else 0)
+        self.audio_combo.blockSignals(False)
+        new_audio_device = self.audio_combo.currentData()
+        audio_changed = new_audio_device != self._audio_device_index
+        self._audio_device_index = new_audio_device
+
+        if self._camera_index is not None:
+            self._video_capture = self._open_camera(self._camera_index)
+            self._stabilizer.reset()
+        self._update_filter_range_from_camera()
+        if self._video_capture is None:
+            self.status_label.setText("未检测到可用摄像头")
+        else:
+            self.status_label.setText("设备检测完成")
+
+        if audio_changed or self._live_audio_stream is None:
+            self._restart_live_audio_stream()
+
+        self._video_timer.start()
+        self._enum_running = False
+        with self._state_lock:
+            busy = self.is_recording
+        if not (busy or self.is_raw_recording or self.is_hfps_recording):
+            self.refresh_devices_btn.setEnabled(True)
+            self.camera_combo.setEnabled(True)
+            self.audio_combo.setEnabled(True)
+            for btn in (
+                self.start_btn,
+                self.raw_start_btn,
+                self.hfps_btn,
+                self.upload_video_btn,
+            ):
+                btn.setEnabled(True)
+
+    @staticmethod
+    def _open_camera(index: int) -> cv2.VideoCapture | None:
+        cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+        if not cap.isOpened():
+            cap.release()
+            cap = cv2.VideoCapture(index)
+        if not cap.isOpened():
+            cap.release()
+            return None
+        return cap
+
+    def _on_camera_combo_changed(self, _index: int) -> None:
+        if self._enum_running:
+            return
+        new_index = self.camera_combo.currentData()
+        if new_index is None or new_index == self._camera_index:
+            return
+        old_index = self._camera_index
+        self._video_timer.stop()
+        if self._video_capture is not None:
+            try:
+                self._video_capture.release()
+            except Exception:
+                pass
+            self._video_capture = None
+        capture = self._open_camera(int(new_index))
+        if capture is None:
+            QMessageBox.warning(self, "切换摄像头", "无法打开所选摄像头，已恢复原有设备。")
+            self.camera_combo.blockSignals(True)
+            revert_pos = self.camera_combo.findData(old_index)
+            if revert_pos >= 0:
+                self.camera_combo.setCurrentIndex(revert_pos)
+            self.camera_combo.blockSignals(False)
+            if old_index is not None:
+                capture = self._open_camera(int(old_index))
+        else:
+            self._camera_index = int(new_index)
+            self.status_label.setText(f"已切换摄像头: {self.camera_combo.currentText()}")
+        self._video_capture = capture
+        self._stabilizer.reset()
+        self._update_filter_range_from_camera()
+        self._video_timer.start()
+
+    def _on_audio_combo_changed(self, _index: int) -> None:
+        if self._enum_running:
+            return
+        self._audio_device_index = self.audio_combo.currentData()
+        self._restart_live_audio_stream()
+        self.status_label.setText(f"已切换音频输入: {self.audio_combo.currentText()}")
+
+    def _restart_live_audio_stream(self) -> None:
+        if self._live_audio_stream is not None:
+            try:
+                self._live_audio_stream.stop()
+                self._live_audio_stream.close()
+            except Exception:
+                pass
+            self._live_audio_stream = None
+            self._live_audio_stream_active = False
+        self._setup_live_audio_stream()
+
+    def _set_device_controls_enabled(self, enabled: bool) -> None:
+        self.camera_combo.setEnabled(enabled)
+        self.audio_combo.setEnabled(enabled)
+        self.refresh_devices_btn.setEnabled(enabled)
+
+    def _on_filter_toggled(self, checked: bool) -> None:
+        self.filter_strength_slider.setEnabled(checked)
+        self._stabilizer.reset()
+        self.status_label.setText(
+            "低通滤波已开启（特征点防抖）" if checked else "低通滤波已关闭"
+        )
+
+    @staticmethod
+    def _filter_settings() -> QSettings:
+        return QSettings("PhoneticToolbox", "LipGUI")
+
+    def _load_filter_cutoff_setting(self) -> int:
+        try:
+            value = int(float(self._filter_settings().value("filter_cutoff_hz", 15)))
+        except (TypeError, ValueError):
+            value = 15
+        return max(1, value)
+
+    def _on_filter_strength_changed(self, value: int) -> None:
+        # 滑条直读截止频率（Hz），上限为当前摄像头帧率
+        cutoff = float(max(1, value))
+        self._stabilizer.min_cutoff = cutoff
+        self.filter_freq_label.setText(f"{int(cutoff)} Hz")
+        self._filter_settings().setValue("filter_cutoff_hz", int(cutoff))
+
+    def _update_filter_range_from_camera(self) -> None:
+        """按当前摄像头帧率调整滤波滑条上限（保留用户设定值，超限才收缩）。
+
+        优先用驱动上报的 CAP_PROP_FPS，拿不到时用实测帧率，最后兑底 30。
+        """
+        fps = 0.0
+        if self._video_capture is not None and self._video_capture.isOpened():
+            v = float(self._video_capture.get(cv2.CAP_PROP_FPS))
+            if np.isfinite(v) and v > 0:
+                fps = v
+        if fps <= 0 and self._measured_fps > 0:
+            fps = self._measured_fps
+        if fps <= 0:
+            fps = 30.0
+        max_hz = max(1, int(round(fps)))
+        if self.filter_strength_slider.maximum() != max_hz:
+            self.filter_strength_slider.setMaximum(max_hz)
+
+    def _current_min_cutoff(self) -> float:
+        return float(self._stabilizer.min_cutoff)
+
+    @staticmethod
+    def _build_mesh_neighbors(
+        connections: tuple[tuple[int, int], ...], num_points: int
+    ) -> list[np.ndarray]:
+        """由网格连接关系构建每个特征点的邻居索引列表。"""
+        neighbors: list[set[int]] = [set() for _ in range(num_points)]
+        for start_idx, end_idx in connections:
+            if start_idx < num_points and end_idx < num_points:
+                neighbors[start_idx].add(end_idx)
+                neighbors[end_idx].add(start_idx)
+        return [np.array(sorted(n), dtype=np.int64) for n in neighbors]
 
     def _setup_live_audio_stream(self) -> None:
         if self._live_audio_stream is not None:
@@ -413,14 +897,17 @@ class LipGUI(QWidget):
                 channels=1,
                 dtype="int16",
                 blocksize=1024,
+                device=self._audio_device_index,
                 callback=_live_audio_callback,
             )
             stream.start()
             self._live_audio_stream = stream
             self._live_audio_stream_active = True
-        except Exception:
+        except Exception as exc:
             self._live_audio_stream = None
             self._live_audio_stream_active = False
+            if self._audio_device_index is not None:
+                self.status_label.setText(f"音频输入设备打开失败: {exc}")
 
     def set_theme(self, is_dark: bool) -> None:
         self.is_dark = is_dark
@@ -445,7 +932,8 @@ class LipGUI(QWidget):
 
     def _on_video_tick(self) -> None:
         if self._video_capture is None or not self._video_capture.isOpened():
-            self.status_label.setText("摄像头未就绪")
+            if not self._enum_running:
+                self.status_label.setText("摄像头未就绪")
             return
 
         ok, frame = self._video_capture.read()
@@ -474,6 +962,8 @@ class LipGUI(QWidget):
                     [(lm.x * w, lm.y * h) for lm in face_landmarks.landmark],
                     dtype=np.float32,
                 )
+                if self.filter_check.isChecked():
+                    full_landmarks = self._stabilizer.filter(full_landmarks, frame_abs)
                 metrics_frame = lip_extract(full_landmarks)
                 self._draw_overlay(frame, full_landmarks)
 
@@ -508,6 +998,8 @@ class LipGUI(QWidget):
             self.fps_label.setText(f"FPS: {fps:.1f}")
             self._fps_frame_counter = 0
             self._fps_last_ts = now
+            self._measured_fps = fps
+            self._update_filter_range_from_camera()
 
         self._draw_metrics_overlay(
             frame=frame,
@@ -560,6 +1052,8 @@ class LipGUI(QWidget):
             self.fps_label.setText(f"FPS: {fps:.1f}")
             self._fps_frame_counter = 0
             self._fps_last_ts = now
+            self._measured_fps = fps
+            self._update_filter_range_from_camera()
 
         self._show_frame(frame)
 
@@ -760,7 +1254,7 @@ class LipGUI(QWidget):
             fps = 30.0
         total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
-        result = self._recognize_video_frames(cap, total_frames)
+        result = self._recognize_video_frames(cap, total_frames, fps_hint=fps)
         cap.release()
         if live_timer_was_active:
             self._video_timer.start()
@@ -910,6 +1404,7 @@ class LipGUI(QWidget):
                 channels=1,
                 dtype="int16",
                 blocksize=1024,
+                device=self._audio_device_index,
                 callback=_hfps_audio_callback,
             )
             audio_stream.start()
@@ -939,6 +1434,7 @@ class LipGUI(QWidget):
             self.path_btn,
         ):
             btn.setEnabled(False)
+        self._set_device_controls_enabled(False)
         self.status_label.setText(
             "高帧率录制中（暂停实时识别，停止后逐帧离线识别）..."
         )
@@ -972,6 +1468,7 @@ class LipGUI(QWidget):
             self.path_btn,
         ):
             btn.setEnabled(True)
+        self._set_device_controls_enabled(True)
 
         if self._live_audio_stream is not None and not self._live_audio_stream_active:
             try:
@@ -1016,7 +1513,14 @@ class LipGUI(QWidget):
                 QMessageBox.warning(self, "高帧率录制", "无法读取录制的临时视频。")
                 return
             total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-            result = self._recognize_video_frames(cap, total_frames)
+            if len(self._hfps_frame_times_abs) >= 2:
+                span = self._hfps_frame_times_abs[-1] - self._hfps_frame_times_abs[0]
+                fps_hint = (
+                    (len(self._hfps_frame_times_abs) - 1) / span if span > 0 else 30.0
+                )
+            else:
+                fps_hint = 30.0
+            result = self._recognize_video_frames(cap, total_frames, fps_hint=fps_hint)
             cap.release()
 
             if result is None:
@@ -1052,6 +1556,26 @@ class LipGUI(QWidget):
             duration = frame_times[-1] if frame_times else 0.0
             achieved_fps = (len(frame_times) / duration) if duration > 0 else 0.0
 
+            lip_offset_seconds = 0.0
+            if audio_array.size > 0 and len(frame_times) > 2:
+                offset_dialog = LipOffsetAdjustDialog(
+                    audio_array=audio_array,
+                    sample_rate=44100,
+                    lip_times=np.array(frame_times, dtype=np.float64),
+                    lip_metrics={
+                        k: np.array(v, dtype=np.float64) for k, v in metrics.items()
+                    },
+                    is_dark=self.is_dark,
+                    parent=self,
+                )
+                offset_dialog.setWindowIcon(self.windowIcon())
+                dialog_result = offset_dialog.exec()
+                if dialog_result == QDialog.DialogCode.Rejected:
+                    shutil.rmtree(session_dir, ignore_errors=True)
+                    self.status_label.setText("已取消保存")
+                    return
+                lip_offset_seconds = offset_dialog.selected_offset_seconds
+
             auto_lip_offset = self._save_offline_recognition(
                 session_dir=session_dir,
                 metrics=metrics,
@@ -1063,6 +1587,7 @@ class LipGUI(QWidget):
                 chunk_size=1024,
                 audio_frame_timestamps=list(self._hfps_audio_chunk_times_abs),
                 start_epoch=start_epoch,
+                lip_offset_seconds=lip_offset_seconds,
                 extra_metadata={
                     "fps": achieved_fps,
                     "source": "camera_offline_hfps",
@@ -1087,7 +1612,7 @@ class LipGUI(QWidget):
                     f"检测成功帧: {result['detected']}\n"
                     f"补全帧: {result['filled']}\n"
                     f"离线处理耗时: {processing_seconds:.1f} 秒\n"
-                    f"自动唇形offset: {auto_lip_offset:+.3f}s\n"
+                    f"唇形/音频offset: {auto_lip_offset:+.3f}s\n"
                     f"临时视频已删除。"
                 ),
             )
@@ -1104,7 +1629,7 @@ class LipGUI(QWidget):
                 pass
 
     def _recognize_video_frames(
-        self, cap: cv2.VideoCapture, total_frames: int
+        self, cap: cv2.VideoCapture, total_frames: int, fps_hint: float = 30.0
     ) -> dict | None:
         """对视频逐帧运行 FaceMesh（带进度对话框）。
 
@@ -1132,6 +1657,14 @@ class LipGUI(QWidget):
         nan_frame_count = 0
         frame_index = 0
         canceled = False
+        stabilizer: LandmarkStabilizer | None = None
+        if self.filter_check.isChecked():
+            stabilizer = LandmarkStabilizer(
+                min_cutoff_hz=self._current_min_cutoff(),
+                neighbor_indices=self._mesh_neighbors,
+            )
+        if not np.isfinite(fps_hint) or fps_hint <= 0:
+            fps_hint = 30.0
 
         try:
             while True:
@@ -1154,6 +1687,10 @@ class LipGUI(QWidget):
                             [(lm.x * w, lm.y * h) for lm in face_landmarks.landmark],
                             dtype=np.float32,
                         )
+                        if stabilizer is not None:
+                            full_landmarks = stabilizer.filter(
+                                full_landmarks, frame_index / fps_hint
+                            )
                         metrics_frame = lip_extract(full_landmarks)
                         last_valid_landmarks = full_landmarks.astype(np.float32)
                         last_valid_metrics = {
@@ -1244,10 +1781,12 @@ class LipGUI(QWidget):
         audio_frame_timestamps: list[float],
         start_epoch: float,
         extra_metadata: dict,
+        lip_offset_seconds: float | None = None,
     ) -> float:
         """写 audio_recording_timestamps.pkl 与 audio_recording.pkl。
 
-        返回自动估计的唇形/音频 offset（秒）。
+        lip_offset_seconds 为用户在对齐对话框中确认的偏移；为 None 时
+        使用自动估计值。返回实际应用的唇形/音频 offset（秒）。
         """
         timestamps_payload = {
             "start_time": start_epoch,
@@ -1270,13 +1809,16 @@ class LipGUI(QWidget):
         except Exception:
             auto_lip_offset = 0.0
         auto_lip_offset = float(np.clip(auto_lip_offset, -2.0, 2.0))
+        applied_lip_offset = (
+            auto_lip_offset if lip_offset_seconds is None else float(lip_offset_seconds)
+        )
 
         duration = frame_times[-1] if frame_times else None
         metadata = {
             "recording_start_time": frame_times_abs[0] if frame_times_abs else None,
             "lip_first_frame_time": frame_times_abs[0] if frame_times_abs else None,
             "audio_first_frame_time": start_epoch,
-            "lip_manual_offset": auto_lip_offset,
+            "lip_manual_offset": applied_lip_offset,
             "recording_duration": duration,
             "auto_lip_offset_estimate": auto_lip_offset,
             "time_alignment_mode": "anchored_audio_start",
@@ -1306,7 +1848,7 @@ class LipGUI(QWidget):
         }
         with open(session_dir / "audio_recording.pkl", "wb") as handle:
             pickle.dump(data_payload, handle)
-        return auto_lip_offset
+        return applied_lip_offset
 
     def start_raw_recording(self) -> None:
         if self.is_hfps_recording:
@@ -1371,6 +1913,7 @@ class LipGUI(QWidget):
                 channels=1,
                 dtype="int16",
                 blocksize=1024,
+                device=self._audio_device_index,
                 callback=_raw_audio_callback,
             )
             audio_stream.start()
@@ -1389,6 +1932,7 @@ class LipGUI(QWidget):
         self._raw_recording_output_path = session_dir / "raw_recording.mp4"
         self.raw_start_btn.setEnabled(False)
         self.raw_stop_btn.setEnabled(True)
+        self._set_device_controls_enabled(False)
         self.status_label.setText("正在录制原始视频...")
 
     def stop_raw_recording(self) -> None:
@@ -1413,6 +1957,7 @@ class LipGUI(QWidget):
         output_path = self._raw_recording_output_path
         self.raw_start_btn.setEnabled(True)
         self.raw_stop_btn.setEnabled(False)
+        self._set_device_controls_enabled(True)
 
         if session_dir is None or video_temp_path is None or audio_path is None or output_path is None:
             self.status_label.setText("录制结束")
@@ -1545,6 +2090,7 @@ class LipGUI(QWidget):
             self._setup_live_audio_stream()
 
         self.path_btn.setEnabled(False)
+        self._set_device_controls_enabled(False)
         self.start_btn.setText("参数计算中…")
         self.start_btn.setStyleSheet("background-color: #d35454; color: white; font-weight: bold;")
         self.start_btn.setEnabled(False)
@@ -1576,6 +2122,7 @@ class LipGUI(QWidget):
             result = offset_dialog.exec()
             if result == QDialog.DialogCode.Rejected:
                 self.path_btn.setEnabled(True)
+                self._set_device_controls_enabled(True)
                 self.start_btn.setText("实时参数计算")
                 self.start_btn.setStyleSheet("")
                 self.start_btn.setEnabled(True)
@@ -1590,6 +2137,7 @@ class LipGUI(QWidget):
         )
 
         self.path_btn.setEnabled(True)
+        self._set_device_controls_enabled(True)
         self.start_btn.setText("实时参数计算")
         self.start_btn.setStyleSheet("")
         self.start_btn.setEnabled(True)
@@ -1834,6 +2382,21 @@ class LipOffsetAdjustDialog(QDialog):
         self.selected_offset_seconds = 0.0
         self._pan_active = False
         self._press_x = None
+        windows_directory = Path(os.environ.get("WINDIR", r"C:\Windows"))
+        font_path = next(
+            (
+                path
+                for path in (
+                    windows_directory / "Fonts" / "msyh.ttc",
+                    windows_directory / "Fonts" / "simsun.ttc",
+                )
+                if path.exists()
+            ),
+            None,
+        )
+        self._chinese_font = (
+            FontProperties(fname=str(font_path)) if font_path is not None else None
+        )
 
         self._build_ui()
         self._apply_initial_view()
@@ -1841,9 +2404,36 @@ class LipOffsetAdjustDialog(QDialog):
 
     def _build_ui(self):
         root = QVBoxLayout(self)
+
+        warning_label = QLabel(
+            "⚠ 重要提示：自动对齐 ≠ 真实对齐，请务必人工核对后再保存！\n"
+            "本页的自动对齐基于唇开度曲线与音频包络之间的相关系数估计，只是一种近似对齐，"
+            "可能与真实的对齐存在一定误差（录音首尾静音过长、环境噪声较大、或闭口音等唇部动作不明显的"
+            "片段都会降低估计精度）。请务必对照上方音频波形与唇形曲线，仔细检查二者的时间轴：\n"
+            "· 若确认原始时间轴已经对齐，请点击【保存但不应用偏移】；程序会保存数据，并将偏移记为 0 ms；\n"
+            "· 若自动估算值合理，可直接点击【应用偏移并保存】；若仍需微调，请先勾选“手动设置 offset”；\n"
+            "· 若一时无法确认，也可以先点击【保存但不应用偏移】保留原始时间轴，之后随时在主页【语音标注对齐】\n"
+            "  模块中对照波形与唇形曲线重新校正（偏移量会写回 pkl，再次导出参数时生效）；\n"
+            "· 若想放弃本次保存，请点击【取消】。"
+        )
+        warning_label.setWordWrap(True)
+        if self._is_dark:
+            warning_label.setStyleSheet(
+                "QLabel { background-color: #5a1f1f; color: #ffd966; "
+                "border: 2px solid #ff5555; border-radius: 6px; "
+                "padding: 10px; font-weight: bold; font-size: 13px; }"
+            )
+        else:
+            warning_label.setStyleSheet(
+                "QLabel { background-color: #fff3cd; color: #8a4b00; "
+                "border: 2px solid #d33; border-radius: 6px; "
+                "padding: 10px; font-weight: bold; font-size: 13px; }"
+            )
+        root.addWidget(warning_label)
+
         self.lbl_est = QLabel(f"估算 offset: {self._estimated_offset:+.3f} s（搜索范围 ±2.0 s）")
         root.addWidget(self.lbl_est)
-        self.lbl_limit = QLabel("提示：当前页面只显示前60秒的音频，用于唇形和音频信号的同步矫正。")
+        self.lbl_limit = QLabel("提示：当前页面只显示前 60 秒的音频，用于唇形和音频信号的同步校正。")
         root.addWidget(self.lbl_limit)
 
         self.figure = Figure()
@@ -1878,8 +2468,8 @@ class LipOffsetAdjustDialog(QDialog):
         self.offset_spin.setValue(self._estimated_offset)
         self.offset_spin.setEnabled(False)
 
-        self.btn_apply = QPushButton("应用并保存")
-        self.btn_no = QPushButton("不应用直接保存")
+        self.btn_apply = QPushButton("应用偏移并保存")
+        self.btn_no = QPushButton("保存但不应用偏移")
         self.btn_cancel = QPushButton("取消")
 
         ctl.addWidget(QLabel("唇形参数"))
@@ -2125,9 +2715,13 @@ class LipOffsetAdjustDialog(QDialog):
             xs = shifted_t[mask1]
             ys = lip_y[mask1]
             self.ax_lip.plot(xs, ys, color="#1f77b4", linewidth=1.4, label=f"对齐后 ({off:+.3f}s)")
-            self.ax_lip.legend(loc="upper left")
+            self.ax_lip.legend(loc="upper left", prop=self._chinese_font)
         self.ax_lip.set_xlabel("Time (s)", color=fg)
-        self.ax_lip.set_ylabel(self.param_combo.currentText(), color=fg)
+        self.ax_lip.set_ylabel(
+            self.param_combo.currentText(),
+            color=fg,
+            fontproperties=self._chinese_font,
+        )
         self.ax_lip.grid(True, alpha=grid)
         self.ax_audio.grid(True, alpha=grid)
         self.ax_audio.set_xlim(x0, x1)
