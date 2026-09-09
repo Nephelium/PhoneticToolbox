@@ -27,8 +27,8 @@
       "title": "先验证宿主、原生依赖和许可风险",
       "dependencies": "P00",
       "files": "desktop/experiments/host_probe.py；frontend/experiments/audio-viewport/；docs/decisions/ADR.md",
-      "status": "planned",
-      "note": "planned",
+      "status": "in_progress",
+      "note": "Windows 原型已验证；整体冻结保留来源/发行策略与跨平台原生未决项。",
       "steps": [
         "在一次性隔离探针环境搭建最小 Qt WebEngine 与构建页面；不改 phonetic_311；P02 再建立正式 v3 环境",
         "测试播放、中文/IPA、多个轨道、精确采样选区和窗口缩放",
@@ -37,7 +37,17 @@
         "比较 Qt 宿主与 Tauri/Electron/PySide6 的实际代价，冻结一个方案"
       ],
       "acceptance": "给出宿主原型报告；未通过单文件、设备和来源审查时不推进全面 UI 移植",
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/testing/p01-host-probe-report.md",
+        "desktop/experiments/README.md",
+        "output/validation/p01/final-summary.json"
+      ],
+      "acceptance_status": {
+        "windows_host_and_onefile": "verified",
+        "digital_audio_output": "verified",
+        "source_and_distribution_gate": "blocked",
+        "mac_linux_native_validation": "planned"
+      }
     },
     {
       "id": "P02",

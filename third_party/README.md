@@ -2,6 +2,8 @@
 
 D0.3 · 58 条记录（42 条重点方法/代码/素材来源，16 条已装 Python 包发布元数据，部分相互关联）。尚未完成全传递依赖与实际发行包审查，不得将全部记录状态改为已通过。
 
+P01 更新：注册表现有 150 条记录，新增探针 Python/前端锁定依赖与运行时、候选绑定记录。详细安装元数据与 npm integrity 见 [P01 依赖清单](p01-dependency-inventory.json)。70 条 npm 锁定项含可选平台包，并非全部安装或进入 EXE。Doulos SIL 已从本地字体确认版本 7.000，并提取内嵌版权与 OFL；这不代表 Chromium/Qt 原生传递许可或历史来源缺口已经闭合。
+
 [查验报告](../docs/references/source-audit.md) · [机器可读注册表](source-registry.json) · [引用 BibTeX](references.bib) · [已装依赖元数据](package-source-audit.json) · [上游观测](upstream-observations.json)
 
 登记原则：代码、论文、模型、实验数据、字体和图标分列。论文的引用/在线 PDF 链接不意味着把论文全文重新分发的许可。软件界面尚未接入本表，P10 负责实现。

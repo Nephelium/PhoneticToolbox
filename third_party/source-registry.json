@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-09-09",
-  "total_records": 58,
+  "total_records": 150,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -717,17 +717,18 @@
       "title": "Doulos SIL 字体",
       "kind": "font",
       "modules": [
-        "M13"
+        "M13",
+        "P01-probe"
       ],
       "urls": {
         "homepage": "https://software.sil.org/doulos/",
         "download": "https://software.sil.org/doulos/download/"
       },
-      "evidence": "IPA HTML 随附字体；官方说明 SIL OFL；当前网站 7.000 不可当成本地字体版本。",
-      "license": "SIL Open Font License; actual font version pending",
-      "notes": "正式包装提取字体 name 表版本和 hash，随字体放准确 OFL 文本；其他系统字体不擅自复制。",
+      "evidence": "Font name table + SHA-256 in frontend/experiments/audio-viewport/public/asset-manifest.json",
+      "license": "SIL Open Font License 1.1; embedded license extracted without modification",
+      "notes": "P01 uses the unchanged inherited font; exact copyright and OFL are in public/Doulos-OFL.txt.",
       "verification_date": "2026-09-09",
-      "actual_included_version": null,
+      "actual_included_version": "Version 7.000; read from the included font name table",
       "observed_upstream_commit": null,
       "distribution_status": "review-required",
       "authors": "SIL International"
@@ -1323,6 +1324,1756 @@
       "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
       "license_metadata_file": "third_party/licenses/pypi/PyInstaller-6.17.0-metadata.txt",
       "distribution_status": "actual-wheel-and-native-audit-required"
+    },
+    {
+      "id": "P01-PY-ALTGRAPH",
+      "title": "altgraph",
+      "kind": "build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Ronald Oussoren",
+      "actual_included_version": "0.17.5",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/altgraph/0.17.5/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-COLORAMA",
+      "title": "colorama",
+      "kind": "test-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Jonathan Hartley <tartley@tartley.com>",
+      "actual_included_version": "0.4.6",
+      "observed_upstream_commit": null,
+      "license": "unknown",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/colorama/0.4.6/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-INICONFIG",
+      "title": "iniconfig",
+      "kind": "test-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Ronny Pfannschmidt <opensource@ronnypfannschmidt.de>, Holger Krekel <holger.krekel@gmail.com>",
+      "actual_included_version": "2.3.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/iniconfig/2.3.0/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-NUMPY",
+      "title": "numpy",
+      "kind": "test-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Travis E. Oliphant et al.",
+      "actual_included_version": "2.2.6",
+      "observed_upstream_commit": null,
+      "license": "See exact installed license metadata in third_party/p01-dependency-inventory.json",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/numpy/2.2.6/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-PACKAGING",
+      "title": "packaging",
+      "kind": "build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Donald Stufft <donald@stufft.io>",
+      "actual_included_version": "26.3",
+      "observed_upstream_commit": null,
+      "license": "Apache-2.0 OR BSD-2-Clause",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/packaging/26.3/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-PEFILE",
+      "title": "pefile",
+      "kind": "build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Ero Carrera",
+      "actual_included_version": "2024.8.26",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/pefile/2024.8.26/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-PLUGGY",
+      "title": "pluggy",
+      "kind": "test-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Holger Krekel <holger@merlinux.eu>",
+      "actual_included_version": "1.6.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/pluggy/1.6.0/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-PSUTIL",
+      "title": "psutil",
+      "kind": "test-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Giampaolo Rodola",
+      "actual_included_version": "7.2.2",
+      "observed_upstream_commit": null,
+      "license": "BSD-3-Clause",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/psutil/7.2.2/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-PYAUDIOWPATCH",
+      "title": "PyAudioWPatch",
+      "kind": "test-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Hubert Pham(S0D3S edition)",
+      "actual_included_version": "0.2.12.8",
+      "observed_upstream_commit": null,
+      "license": "Apache-2.0 license",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/PyAudioWPatch/0.2.12.8/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-PYGMENTS",
+      "title": "Pygments",
+      "kind": "test-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Georg Brandl <georg@python.org>",
+      "actual_included_version": "2.21.0",
+      "observed_upstream_commit": null,
+      "license": "BSD-2-Clause",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/Pygments/2.21.0/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-PYINSTALLER",
+      "title": "pyinstaller",
+      "kind": "build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Hartmut Goebel, Giovanni Bajo, David Vierra, David Cortesi, Martin Zibricky",
+      "actual_included_version": "6.22.2",
+      "observed_upstream_commit": null,
+      "license": "GPLv2-or-later with a special exception which allows to use PyInstaller to build and distribute non-free programs (including commercial ones)",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/pyinstaller/6.22.2/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-PYINSTALLER-HOOKS-CONTRIB",
+      "title": "pyinstaller-hooks-contrib",
+      "kind": "build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "2026.7",
+      "observed_upstream_commit": null,
+      "license": "unknown",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/pyinstaller-hooks-contrib/2026.7/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-PYQT6",
+      "title": "PyQt6",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Riverbank Computing Limited <info@riverbankcomputing.com>",
+      "actual_included_version": "6.11.0",
+      "observed_upstream_commit": null,
+      "license": "GPL-3.0-only",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/PyQt6/6.11.0/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-PYQT6-QT6",
+      "title": "PyQt6-Qt6",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Riverbank Computing Limited",
+      "actual_included_version": "6.11.2",
+      "observed_upstream_commit": null,
+      "license": "LGPL v3",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/PyQt6-Qt6/6.11.2/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-PYQT6-WEBENGINE",
+      "title": "PyQt6-WebEngine",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Riverbank Computing Limited <info@riverbankcomputing.com>",
+      "actual_included_version": "6.11.0",
+      "observed_upstream_commit": null,
+      "license": "GPL-3.0-only",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/PyQt6-WebEngine/6.11.0/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-PYQT6-WEBENGINE-QT6",
+      "title": "PyQt6-WebEngine-Qt6",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Riverbank Computing Limited",
+      "actual_included_version": "6.11.2",
+      "observed_upstream_commit": null,
+      "license": "LGPL v3",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/PyQt6-WebEngine-Qt6/6.11.2/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-PYQT6-SIP",
+      "title": "PyQt6_sip",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Phil Thompson",
+      "actual_included_version": "13.12.0",
+      "observed_upstream_commit": null,
+      "license": "BSD-2-Clause",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/PyQt6_sip/13.12.0/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-PYTEST",
+      "title": "pytest",
+      "kind": "test-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Brianna Laugher, Bruno Oliveira, Floris Bruynooghe, Freya Bruhin, Holger Krekel, Others (See AUTHORS), Ronny Pfannschmidt",
+      "actual_included_version": "9.1.1",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/pytest/9.1.1/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-PYWIN32-CTYPES",
+      "title": "pywin32-ctypes",
+      "kind": "build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Enthought Inc.",
+      "actual_included_version": "0.2.3",
+      "observed_upstream_commit": null,
+      "license": "BSD-3-Clause",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/pywin32-ctypes/0.2.3/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-PY-SETUPTOOLS",
+      "title": "setuptools",
+      "kind": "build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Python Packaging Authority <distutils-sig@python.org>",
+      "actual_included_version": "84.0.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "release_metadata": "https://pypi.org/pypi/setuptools/84.0.0/json"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only-full-native-audit-pending",
+      "evidence": "Exact installed metadata; inventory records package-level license and requirements.",
+      "notes": "Installed in P01 standalone environment; build/test packages are not all bundled in the EXE."
+    },
+    {
+      "id": "P01-NPM-BABEL-HELPER-STRING-PARSER",
+      "title": "@babel/helper-string-parser",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "The Babel Team (https://babel.dev/team)",
+      "actual_included_version": "7.29.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@babel/helper-string-parser/v/7.29.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-BABEL-HELPER-VALIDATOR-IDENTIFIER",
+      "title": "@babel/helper-validator-identifier",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "The Babel Team (https://babel.dev/team)",
+      "actual_included_version": "7.29.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@babel/helper-validator-identifier/v/7.29.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-BABEL-PARSER",
+      "title": "@babel/parser",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "The Babel Team (https://babel.dev/team)",
+      "actual_included_version": "7.29.8",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@babel/parser/v/7.29.8"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-BABEL-TYPES",
+      "title": "@babel/types",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "The Babel Team (https://babel.dev/team)",
+      "actual_included_version": "7.29.8",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@babel/types/v/7.29.8"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-JRIDGEWELL-SOURCEMAP-CODEC",
+      "title": "@jridgewell/sourcemap-codec",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Justin Ridgewell <justin@ridgewell.name>",
+      "actual_included_version": "1.6.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@jridgewell/sourcemap-codec/v/1.6.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-OXC-PROJECT-TYPES",
+      "title": "@oxc-project/types",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Boshen and oxc contributors",
+      "actual_included_version": "0.148.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@oxc-project/types/v/0.148.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-ANDROID-ARM-EABI",
+      "title": "@rolldown/binding-android-arm-eabi",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@rolldown/binding-android-arm-eabi/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-ANDROID-ARM64",
+      "title": "@rolldown/binding-android-arm64",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@rolldown/binding-android-arm64/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-DARWIN-ARM64",
+      "title": "@rolldown/binding-darwin-arm64",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@rolldown/binding-darwin-arm64/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-DARWIN-X64",
+      "title": "@rolldown/binding-darwin-x64",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@rolldown/binding-darwin-x64/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-FREEBSD-X64",
+      "title": "@rolldown/binding-freebsd-x64",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@rolldown/binding-freebsd-x64/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-ARM-GNUEABIHF",
+      "title": "@rolldown/binding-linux-arm-gnueabihf",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@rolldown/binding-linux-arm-gnueabihf/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-ARM64-GNU",
+      "title": "@rolldown/binding-linux-arm64-gnu",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@rolldown/binding-linux-arm64-gnu/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-ARM64-MUSL",
+      "title": "@rolldown/binding-linux-arm64-musl",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@rolldown/binding-linux-arm64-musl/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-PPC64-GNU",
+      "title": "@rolldown/binding-linux-ppc64-gnu",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@rolldown/binding-linux-ppc64-gnu/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-S390X-GNU",
+      "title": "@rolldown/binding-linux-s390x-gnu",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@rolldown/binding-linux-s390x-gnu/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-X64-GNU",
+      "title": "@rolldown/binding-linux-x64-gnu",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@rolldown/binding-linux-x64-gnu/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-X64-MUSL",
+      "title": "@rolldown/binding-linux-x64-musl",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@rolldown/binding-linux-x64-musl/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-OPENHARMONY-ARM64",
+      "title": "@rolldown/binding-openharmony-arm64",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@rolldown/binding-openharmony-arm64/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-WIN32-ARM64-MSVC",
+      "title": "@rolldown/binding-win32-arm64-msvc",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@rolldown/binding-win32-arm64-msvc/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-WIN32-X64-MSVC",
+      "title": "@rolldown/binding-win32-x64-msvc",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@rolldown/binding-win32-x64-msvc/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-PLUGINUTILS",
+      "title": "@rolldown/pluginutils",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.0.1",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@rolldown/pluginutils/v/1.0.1"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VITEJS-PLUGIN-VUE",
+      "title": "@vitejs/plugin-vue",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "6.0.8",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@vitejs/plugin-vue/v/6.0.8"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VOLAR-LANGUAGE-CORE",
+      "title": "@volar/language-core",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "2.4.28",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@volar/language-core/v/2.4.28"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VOLAR-SOURCE-MAP",
+      "title": "@volar/source-map",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "2.4.28",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@volar/source-map/v/2.4.28"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VOLAR-TYPESCRIPT",
+      "title": "@volar/typescript",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "2.4.28",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@volar/typescript/v/2.4.28"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VUE-COMPILER-CORE",
+      "title": "@vue/compiler-core",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@vue/compiler-core/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VUE-COMPILER-DOM",
+      "title": "@vue/compiler-dom",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@vue/compiler-dom/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VUE-COMPILER-SFC",
+      "title": "@vue/compiler-sfc",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@vue/compiler-sfc/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VUE-COMPILER-SSR",
+      "title": "@vue/compiler-ssr",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@vue/compiler-ssr/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VUE-LANGUAGE-CORE",
+      "title": "@vue/language-core",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "3.3.11",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@vue/language-core/v/3.3.11"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VUE-REACTIVITY",
+      "title": "@vue/reactivity",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@vue/reactivity/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VUE-RUNTIME-CORE",
+      "title": "@vue/runtime-core",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@vue/runtime-core/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VUE-RUNTIME-DOM",
+      "title": "@vue/runtime-dom",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@vue/runtime-dom/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VUE-SERVER-RENDERER",
+      "title": "@vue/server-renderer",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@vue/server-renderer/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VUE-SHARED",
+      "title": "@vue/shared",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/@vue/shared/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ALIEN-SIGNALS",
+      "title": "alien-signals",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "3.2.1",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/alien-signals/v/3.2.1"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-CSSTYPE",
+      "title": "csstype",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Fredrik Nicol <fredrik.nicol@gmail.com>",
+      "actual_included_version": "3.2.3",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/csstype/v/3.2.3"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-DETECT-LIBC",
+      "title": "detect-libc",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Lovell Fuller <npm@lovell.info>",
+      "actual_included_version": "2.1.2",
+      "observed_upstream_commit": null,
+      "license": "Apache-2.0",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/detect-libc/v/2.1.2"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ENTITIES",
+      "title": "entities",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Felix Boehm <me@feedic.com>",
+      "actual_included_version": "7.0.1",
+      "observed_upstream_commit": null,
+      "license": "BSD-2-Clause",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/entities/v/7.0.1"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ESTREE-WALKER",
+      "title": "estree-walker",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Rich Harris",
+      "actual_included_version": "2.0.2",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/estree-walker/v/2.0.2"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-FDIR",
+      "title": "fdir",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "thecodrr <thecodrr@protonmail.com>",
+      "actual_included_version": "6.5.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/fdir/v/6.5.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-FSEVENTS",
+      "title": "fsevents",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "2.3.3",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/fsevents/v/2.3.3"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS",
+      "title": "lightningcss",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/lightningcss/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-ANDROID-ARM64",
+      "title": "lightningcss-android-arm64",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/lightningcss-android-arm64/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-DARWIN-ARM64",
+      "title": "lightningcss-darwin-arm64",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/lightningcss-darwin-arm64/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-DARWIN-X64",
+      "title": "lightningcss-darwin-x64",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/lightningcss-darwin-x64/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-FREEBSD-X64",
+      "title": "lightningcss-freebsd-x64",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/lightningcss-freebsd-x64/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-LINUX-ARM-GNUEABIHF",
+      "title": "lightningcss-linux-arm-gnueabihf",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/lightningcss-linux-arm-gnueabihf/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-LINUX-ARM64-GNU",
+      "title": "lightningcss-linux-arm64-gnu",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/lightningcss-linux-arm64-gnu/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-LINUX-ARM64-MUSL",
+      "title": "lightningcss-linux-arm64-musl",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/lightningcss-linux-arm64-musl/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-LINUX-X64-GNU",
+      "title": "lightningcss-linux-x64-gnu",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/lightningcss-linux-x64-gnu/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-LINUX-X64-MUSL",
+      "title": "lightningcss-linux-x64-musl",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/lightningcss-linux-x64-musl/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-WIN32-ARM64-MSVC",
+      "title": "lightningcss-win32-arm64-msvc",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/lightningcss-win32-arm64-msvc/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-WIN32-X64-MSVC",
+      "title": "lightningcss-win32-x64-msvc",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.33.0",
+      "observed_upstream_commit": null,
+      "license": "MPL-2.0",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/lightningcss-win32-x64-msvc/v/1.33.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-MAGIC-STRING",
+      "title": "magic-string",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Rich Harris",
+      "actual_included_version": "0.30.21",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/magic-string/v/0.30.21"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-MUGGLE-STRING",
+      "title": "muggle-string",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "0.4.1",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/muggle-string/v/0.4.1"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-NANOID",
+      "title": "nanoid",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Andrey Sitnik <andrey@sitnik.ru>",
+      "actual_included_version": "3.3.18",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/nanoid/v/3.3.18"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-PATH-BROWSERIFY",
+      "title": "path-browserify",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "James Halliday",
+      "actual_included_version": "1.0.1",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/path-browserify/v/1.0.1"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-PICOCOLORS",
+      "title": "picocolors",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Alexey Raspopov",
+      "actual_included_version": "1.1.1",
+      "observed_upstream_commit": null,
+      "license": "ISC",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/picocolors/v/1.1.1"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-PICOMATCH",
+      "title": "picomatch",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Jon Schlinkert (https://github.com/jonschlinkert)",
+      "actual_included_version": "4.0.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/picomatch/v/4.0.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-POSTCSS",
+      "title": "postcss",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Andrey Sitnik <andrey@sitnik.es>",
+      "actual_included_version": "8.5.28",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/postcss/v/8.5.28"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN",
+      "title": "rolldown",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "1.2.7",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/rolldown/v/1.2.7"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-SOURCE-MAP-JS",
+      "title": "source-map-js",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Valentin 7rulnik Semirulnik <v7rulnik@gmail.com>",
+      "actual_included_version": "1.2.1",
+      "observed_upstream_commit": null,
+      "license": "BSD-3-Clause",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/source-map-js/v/1.2.1"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-TINYGLOBBY",
+      "title": "tinyglobby",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Superchupu",
+      "actual_included_version": "0.2.17",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/tinyglobby/v/0.2.17"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-TYPESCRIPT",
+      "title": "typescript",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Microsoft Corp.",
+      "actual_included_version": "5.9.3",
+      "observed_upstream_commit": null,
+      "license": "Apache-2.0",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/typescript/v/5.9.3"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VITE",
+      "title": "vite",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "8.2.2",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/vite/v/8.2.2"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VSCODE-URI",
+      "title": "vscode-uri",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Microsoft",
+      "actual_included_version": "3.2.0",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/vscode-uri/v/3.2.0"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VUE",
+      "title": "vue",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Evan You",
+      "actual_included_version": "3.5.42",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/vue/v/3.5.42"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-NPM-VUE-TSC",
+      "title": "vue-tsc",
+      "kind": "probe-ui-build-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "unknown",
+      "actual_included_version": "3.3.11",
+      "observed_upstream_commit": null,
+      "license": "MIT",
+      "urls": {
+        "registry": "https://www.npmjs.com/package/vue-tsc/v/3.3.11"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "package-lock.json version/integrity; optional platform packages may not be installed.",
+      "notes": "P01 front-end build or runtime dependency; no upstream code modifications."
+    },
+    {
+      "id": "P01-CPYTHON",
+      "title": "CPython via python-build-standalone",
+      "kind": "probe-runtime-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "Python Software Foundation and python-build-standalone contributors",
+      "actual_included_version": "CPython 3.11.14, uv-managed Windows x86_64 standalone distribution",
+      "observed_upstream_commit": null,
+      "license": "PSF-2.0 and bundled component terms; runtime distribution audit pending",
+      "urls": {
+        "runtime_builds": "https://github.com/astral-sh/python-build-standalone",
+        "python": "https://www.python.org/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "prototype-only",
+      "evidence": "Installed under project .venv/runtimes with --no-bin --no-registry.",
+      "notes": "Does not reuse or change the conda phonetic_311 interpreter for the accepted probe."
+    },
+    {
+      "id": "P01-PYSIDE6",
+      "title": "PySide6 candidate host",
+      "kind": "evaluated-alternative-dependency",
+      "modules": [
+        "P01-probe"
+      ],
+      "authors": "The Qt Company Ltd. and Qt contributors",
+      "actual_included_version": "PySide6 / Essentials / Addons / Shiboken6 6.11.2 in separate trial environment",
+      "observed_upstream_commit": null,
+      "license": "LGPL/GPL/commercial and component-specific terms; see Qt license inventory",
+      "urls": {
+        "licenses": "https://doc.qt.io/qtforpython-6/licenses.html",
+        "package": "https://pypi.org/project/PySide6/6.11.2/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "not-in-pyqt6-prototype",
+      "evidence": "Separate environment; startup/font/device enumeration observed. See P01 report for interaction test result.",
+      "notes": "Candidate only; not selected or represented as a validated packaged alternative."
     }
   ]
 }

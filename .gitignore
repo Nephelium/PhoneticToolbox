@@ -79,5 +79,7 @@ local-data/
 tests/fixtures/private/
 test-results/
 playwright-report/
+# P01 public assets are reproduced by desktop/experiments/prepare_assets.py.
+/frontend/experiments/audio-viewport/public/
 !docs/modules/legacy-acceptance.csv
 !docs/modules/dual-platform-acceptance.csv
