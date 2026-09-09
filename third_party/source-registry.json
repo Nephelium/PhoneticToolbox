@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-09-09",
-  "total_records": 294,
+  "total_records": 296,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -6084,7 +6084,8 @@
       "title": "PostgreSQL (P05 isolated database validation)",
       "kind": "test-dependency",
       "modules": [
-        "P05"
+        "P05",
+        "P06"
       ],
       "authors": "PostgreSQL Global Development Group; EDB Windows distribution",
       "actual_included_version": "17.11; EDB archive 17.11-3 Windows x64",
@@ -6103,6 +6104,44 @@
       ],
       "evidence": "third_party/p05-postgres-runtime.json",
       "unresolved": "Publisher SHA256 not supplied; postgres.exe unsigned; bundled native redistribution audit pending",
+      "acknowledgement_group": "software"
+    },
+    {
+      "id": "P06-SQLITE",
+      "title": "SQLite (CPython bundled local task store)",
+      "authors": "SQLite authors",
+      "kind": "runtime-dependency",
+      "modules": [
+        "P06"
+      ],
+      "actual_included_version": "3.50.4",
+      "license": "Public domain; bundled with existing CPython runtime",
+      "urls": {
+        "homepage": "https://www.sqlite.org/",
+        "documentation": "https://www.sqlite.org/lang_transaction.html",
+        "license": "https://www.sqlite.org/copyright.html"
+      },
+      "verification_date": "2026-09-09",
+      "relationship": "Existing CPython standard library sqlite3 adapter; no upstream code copied or modified",
+      "distribution_status": "existing isolated runtime; no new global dependency",
+      "acknowledgement_group": "software"
+    },
+    {
+      "id": "P06-PG-LOCKS",
+      "title": "PostgreSQL 17 SELECT and advisory locking documentation",
+      "authors": "PostgreSQL Global Development Group",
+      "kind": "reference-only",
+      "modules": [
+        "P06"
+      ],
+      "actual_included_version": "PostgreSQL 17 documentation reviewed 2026-09-09; commit unknown",
+      "license": "Reference only; no documentation redistributed",
+      "urls": {
+        "select": "https://www.postgresql.org/docs/17/sql-select.html",
+        "locking": "https://www.postgresql.org/docs/17/explicit-locking.html"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "reference-only",
       "acknowledgement_group": "software"
     }
   ]

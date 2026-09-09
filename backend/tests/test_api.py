@@ -12,6 +12,9 @@ def test_modes_share_contract_and_do_not_claim_algorithms():
             capabilities = client.get('/api/v1/capabilities').json()
             assert capabilities['algorithms'] == []
             assert capabilities['stage'] == 'P02'
-            assert client.post('/api/v1/jobs', json={}).status_code == 404
+            response = client.post('/api/v1/jobs', json={})
+            assert response.status_code == 503
+            assert response.json() == {'detail':'task_service_unavailable'}
+            assert capabilities['task_operations'] == []
             schemas.append(client.get('/openapi.json').json())
     assert schemas[0] == schemas[1]

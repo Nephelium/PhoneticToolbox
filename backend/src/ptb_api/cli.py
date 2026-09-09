@@ -6,11 +6,14 @@ import json
 import socket
 import sys
 import threading
+import subprocess
+import queue
 
 import uvicorn
 from starlette.responses import JSONResponse
 
 from .main import create_app
+from ptb_worker.store import SQLiteJobStore
 
 
 class LoopbackGuard:
@@ -40,6 +43,7 @@ def main():
     parser.add_argument('--managed', action='store_true', help='Receive shutdown over stdin')
     args = parser.parse_args()
     token = None
+    config = {}
     if args.mode == 'local':
         config = json.loads(sys.stdin.readline())
         token = config.get('token')
@@ -49,7 +53,9 @@ def main():
     # Bind before reporting the port; never find-then-rebind an ephemeral port.
     sock.bind(('127.0.0.1', args.port))
     authority = '127.0.0.1:' + str(sock.getsockname()[1])
-    app = LoopbackGuard(create_app(args.mode), authority, token)
+    jobs=SQLiteJobStore(config['jobs_path']) if config.get('jobs_path') else None
+    if jobs:jobs.check_schema()
+    app = LoopbackGuard(create_app(args.mode,job_store=jobs,local_token=token,local_origin='http://'+authority), authority, token)
     server = uvicorn.Server(uvicorn.Config(app, log_level='warning', access_log=False))
 
     if args.managed or args.mode == 'local':
@@ -67,9 +73,23 @@ def main():
             print(json.dumps({'url': 'http://' + authority, 'mode': args.mode}), flush=True)
         await task
 
+    worker=None
     try:
+        if jobs:
+            worker=subprocess.Popen([sys.executable,'-m','ptb_worker.cli'],stdin=subprocess.PIPE,
+                                    stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True,encoding='utf-8',
+                                    creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+            worker.stdin.write(json.dumps({'kind':'sqlite','path':str(jobs.path)})+'\n');worker.stdin.flush()
+            ready=queue.Queue()
+            threading.Thread(target=lambda:ready.put(worker.stdout.readline()),daemon=True).start()
+            if json.loads(ready.get(timeout=10))!={'ready':True}:raise RuntimeError('Worker did not become ready')
         asyncio.run(serve())
     finally:
+        if worker:
+            worker.stdin.close()
+            try:worker.wait(timeout=10)
+            except subprocess.TimeoutExpired:worker.terminate();worker.wait(timeout=5)
+            worker.stdout.close()
         sock.close()
 
 

@@ -141,7 +141,7 @@
       "dependencies": "P02",
       "files": "backend/src/ptb_api/auth.py；backend/src/ptb_api/projects.py；backend/tests/test_auth.py；tests/security/test_resource_ownership.py",
       "status": "verified",
-      "note": "Windows 账号/会话/项目范围 verified；专属空库迁移经用户明确授权，真实 PG 隔离、事务、并发和 API/PG 受控重启恢复通过。任务、资源、日志、取消、下载的联合验收仍在 P06/P07 planned，未豁免。",
+      "note": "Windows 账号/会话/项目范围 verified；专属空库迁移及实际 PG 隔离、并发和受控重启恢复通过。任务/事件/取消/重试联合隔离已在 P06 通过；文件资源与下载仍待 P07。",
       "steps": [
         "设计并审阅 users/sessions/projects/owner 模型和数据库迁移",
         "选择成熟密码哈希/会话实现，落实 Cookie、CSRF、退出撤销和登录限流",
@@ -163,7 +163,8 @@
         "postgres_migration": "verified",
         "postgres_isolation_and_concurrency": "verified",
         "jobs_resources_joint_acceptance": "planned",
-        "api_and_database_process_restart_restore": "verified"
+        "api_and_database_process_restart_restore": "verified",
+        "jobs_events_cancel_retry_isolation": "verified"
       }
     },
     {
@@ -171,8 +172,8 @@
       "title": "持久任务、worker 和本地统一服务",
       "dependencies": "P02,P03,P05",
       "files": "backend/src/ptb_worker/claims.py；backend/src/ptb_worker/leases.py；backend/src/ptb_worker/executor.py；desktop/src/ptb_desktop/local_service.py",
-      "status": "planned",
-      "note": "planned",
+      "status": "verified",
+      "note": "Windows 持久任务流程定向 verified。具体建表审阅后继续指令及实际建表已核实；PG/SQLite 并发、租约、取消/中断/重试、本机服务重启与网页隔离通过。本轮退出恢复复验通过；语音算法、文件配额、完整 Qt 与跨平台仍未验收。",
       "steps": [
         "实现任务状态机、输入/配置快照与幂等请求键",
         "实现 PG 原子认领、心跳、lease_generation 和崩溃后 interrupted",
@@ -182,7 +183,24 @@
         "故意中断 worker、重复提交、旧租约提交和服务重启测试"
       ],
       "acceptance": "没有伪成功/重复最终产物/遗留本任务进程；10 用户可排队，不把进程内线程当持久队列",
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/plans/2026-09-09-p06-jobs.md",
+        "docs/testing/p06-migration-review.md",
+        "docs/testing/p06-jobs-report.md",
+        "docs/testing/p06-recovery-and-codex-exit.md",
+        "output/validation/p06/database-validation.json",
+        "output/validation/p06/local-service.json",
+        "output/validation/p06/ui-validation.json",
+        "output/validation/p06/recovery/final-checks.json"
+      ],
+      "acceptance_status": {
+        "postgres_sqlite_transactions": "verified",
+        "ten_server_accounts_queue": "verified",
+        "worker_cancel_interrupt_retry": "verified",
+        "local_http_restart_restore": "verified",
+        "browser_jobs_and_account_isolation": "verified",
+        "scientific_algorithms_files_and_native_devices": "planned"
+      }
     },
     {
       "id": "P07",

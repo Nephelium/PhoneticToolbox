@@ -7,7 +7,7 @@ class AccountBoundary:
         self.app,self.origin,self.max_bytes=app,origin,max_bytes
 
     async def __call__(self,scope,receive,send):
-        if scope['type']!='http' or not scope['path'].startswith(('/api/v1/auth/','/api/v1/projects')):
+        if scope['type']!='http' or not scope['path'].startswith(('/api/v1/auth/','/api/v1/projects','/api/v1/jobs')):
             return await self.app(scope,receive,send)
         async def reject(code,status):
             await JSONResponse({'detail':code},status_code=status,headers={'Cache-Control':'no-store'})(scope,receive,send)

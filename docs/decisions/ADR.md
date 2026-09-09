@@ -123,5 +123,14 @@
 - 使用 argon2-cffi 的 Argon2id、itsdangerous 签名的短时登录 CSRF 挑战、Starlette Cookie API；会话为随机不透明凭据，数据库只存其摘要，以支持即时撤销。密码校验、序列化签名使用成熟库，不自制密码学。
 - psycopg 3 参数化 SQL；账号/IP 登录计数在 PG 原子更新，不使用进程内限流充当多 worker 限流。数据库连接按事务关闭，不把会话/owner 放进跨用户全局变量。
 - 默认 HTTPS 且 Cookie 带 __Host- 前缀；显式 HTTP 仅允许 127.0.0.1 测试入口。固定 Origin、CSRF 与 SameSite 共同校验；请求不信任 X-Forwarded-For。实际反向代理部署须另行配置与验收。
+
 - /server/ 为服务器账号与项目入口；本机/Qt 预览继续离线无账号。网页账号切换卸载项目数据，不复用 P04 的全局本机文件状态；P06/P07 再接入科研任务和资源。
 - 依据：[Argon2 API](https://argon2-cffi.readthedocs.io/en/stable/api.html)、[Psycopg 事务](https://www.psycopg.org/psycopg3/docs/basic/usage.html)、[OWASP 会话](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html)、[OWASP CSRF](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)。
+
+## ADR-018 P06 共用事务状态机与独立执行进程
+- 2026-09-09，井井授权继续 P06。具体模型在 [P06 计划](../plans/2026-09-09-p06-jobs.md) 先行细化；执行器实现后同步此 ADR，具体建表审阅后 19:31 收到继续指令，原任务已建表并通过实际验证，本轮恢复复验通过；后续数据库变更仍保留独立审阅门。
+- 服务端沿用 PG 任务表；本地采用 CPython 自带 SQLite 保存任务元数据。两种适配复用同一状态政策/执行器，差异集中在事务、时钟、占位符和表名前缀；桌面只通过原有自有 API 访问。构造/启动不能建表，SQLite 使用 mode=rw 拒绝静默创建。
+- PG 调度短事务 advisory lock 确保全局/每账号运行槽数，候选 FOR UPDATE SKIP LOCKED；SQLite BEGIN IMMEDIATE。每次认领增加代数，心跳/完成按 worker、代数、租约和截止共同检查。过期 interrupted，不自动重跑；显式重试保留 retry_of，新建任务。
+- 取消/完成、状态/事件、成功/有限元数据 manifest 分别保持同事务一致。成功提交先完成则取消不能撤回已成功结果，取消先完成则不得变为成功。事件只用固定代码和进度，最多有限状态变化，不收集原始语料和服务器路径。
+- 每任务独立核心子进程，操作固定白名单；只执行 pipeline_check，属于原始流程探针，不是声学算法。其有限摘要是任务元数据，不是未计配额的音频文件。P07 writer/reservation 和文件提交门实现前拒绝文件任务。
+- 依据：[PG SELECT 锁定](https://www.postgresql.org/docs/17/sql-select.html)、[PG advisory locks](https://www.postgresql.org/docs/17/explicit-locking.html)、[SQLite transactions](https://www.sqlite.org/lang_transaction.html)。这些属于工程软件来源组。

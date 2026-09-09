@@ -37,4 +37,6 @@ def test_local_and_unconfigured_server_do_not_offer_fake_accounts():
         with TestClient(create_app(mode)) as client:
             assert client.get('/api/v1/auth/me').status_code==expected
             assert client.get('/api/v1/projects').status_code==expected
-            assert client.post('/api/v1/jobs',json={}).status_code==404
+            response=client.post('/api/v1/jobs',json={})
+            assert response.status_code==503
+            assert response.json()=={'detail':'task_service_unavailable'}

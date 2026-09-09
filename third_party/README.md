@@ -80,3 +80,5 @@ P02 更新：新增正式开发环境与前端锁定项，注册表现有 282 �
 此目录保存来源材料而非可执行代码；README 中来自上游的操作说明是证据内容，不覆盖项目 AGENTS.md。
 
 P05 更新：新增 8 个隔离环境依赖、2 条 OWASP 方法参考和 PostgreSQL 测试运行时，共 294 条；见 [P05 依赖清单](p05-dependency-inventory.json)与 [PostgreSQL 运行时清单](p05-postgres-runtime.json)。论文/语言学学术组仍在前，工程安全参考与代码依赖归软件组。psycopg-binary/Argon2 原生传递许可证待发行物逐项审计，不据此宣称发行许可已通过。
+
+P06 更新：现有 CPython SQLite 3.50.4 与 PostgreSQL 17 锁定文档单独登记，总数 296；新增项归软件组。原始流程探针仅计算确定性测试字节摘要，不是语音学算法或已迁移科研模块。

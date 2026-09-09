@@ -4,6 +4,7 @@ import type { components } from '../../../contracts/generated/api';
 import logo from '../assets/k2.png';
 import MethodReferences from '../components/MethodReferences.vue';
 import ModalDialog from '../components/ModalDialog.vue';
+import ProjectJobs from './ProjectJobs.vue';
 
 type Session = components['schemas']['SessionView'];
 type Project = components['schemas']['ProjectView'];
@@ -110,7 +111,7 @@ onUnmounted(() => { systemTheme.removeEventListener('change', applyTheme); gener
         <form class="project-create" @submit.prevent="saveProject(false)"><label>项目名称<input v-model="name" maxlength="120" required :disabled="busy" placeholder="例如：元音与发声类型"/></label><button class="primary" :disabled="busy || !name.trim()">新建项目</button></form>
         <div class="project-columns"><section class="project-list" aria-label="项目列表"><h2>项目 · {{ projects.length }}</h2><p v-if="!projects.length" class="empty-small">还没有项目。从一个研究主题开始。</p>
           <button v-for="project in projects" :key="project.id" :aria-pressed="selected?.id === project.id" @click="choose(project)"><strong>{{ project.name }}</strong><small>{{ new Date(project.created_at).toLocaleDateString('zh-CN') }}</small></button></section>
-          <section class="project-detail"><template v-if="selected"><h2>{{ selected.name }}</h2><form @submit.prevent="saveProject(true)"><label>项目名称<input v-model="rename" maxlength="120" required :disabled="busy"/></label><button :disabled="busy || !rename.trim()">保存名称</button></form><p class="empty-small">项目已建立。文件、分析任务与结果将在后续阶段接入。</p></template><p v-else class="empty-small">选择项目查看详情。</p></section></div>
+          <section class="project-detail"><template v-if="selected"><h2>{{ selected.name }}</h2><form @submit.prevent="saveProject(true)"><label>项目名称<input v-model="rename" maxlength="120" required :disabled="busy"/></label><button :disabled="busy || !rename.trim()">保存名称</button></form><ProjectJobs :key="session.user.id+selected.id" :project-id="selected.id" :owner-id="session.user.id" :csrf-token="session.csrf_token" @session-invalid="clearAccount"/></template><p v-else class="empty-small">选择项目查看详情。</p></section></div>
       </section>
     </main><footer class="account-footer"><span>PhoneticToolbox 3.0 · 账号与项目试用</span><button @click="references=true">开源与学术致谢</button></footer>
     <ModalDialog v-if="references" title="开源与学术致谢" wide @close="references=false"><MethodReferences/></ModalDialog>

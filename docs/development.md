@@ -65,3 +65,9 @@ npm --prefix frontend run build
 后端仍可用 P02 命令启动只读骨架，未配置账号存储时 auth/projects 返回 503；本机模式返回 404。P05 原型服务使用 `python -m ptb_api.server --port 5175 --frontend frontend/dist`，从标准输入读取一行私密 JSON（dsn、signing_key），仅回环监听；不用 .env，不在命令行/URL中传凭据。该入口不作生产部署。
 
 `tests/support/account_ui_host.py` 仅供自动验证浏览器流程，使用测试替身，重启不保存数据，不用于研究者试用或真实账号。项目中无默认生产管理员密码。正式账号创建使用 `scripts/p05_database.py create-user` 的隐藏提示；首次建表和测试数据创建都遵守迁移审阅授权。
+
+## P06 已验证任务流程
+
+见 [P06 报告](testing/p06-jobs-report.md)。任务 API 仅在显式配置已初始化存储后开放；后端入口不迁移数据库。服务器私密配置 enable_jobs=true 启用现有 PG 任务表，worker 通过 ptb_worker.cli 从 stdin 读取配置；桌面 LocalService(jobs_path=...) 使用相同接口和独立 worker。新表已按 [专项审阅](testing/p06-migration-review.md)建立，真实 PG/SQLite 与本机服务验收通过，勿重复执行初始化。默认未配置存储时仍返回 503。
+
+复验入口：`python scripts/run_p06_validation.py --approved-p06-test-data`（复用已有表，不带 --apply-reviewed-schema），随后 `python scripts/verify_p06_local_service.py --approved-test-data`。使用现有 .venv/v3-dev 解释器。Codex 内置测试页关闭两次关联退出，暂行测试方式见 [恢复记录](testing/p06-recovery-and-codex-exit.md)。

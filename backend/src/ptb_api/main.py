@@ -4,6 +4,9 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from starlette.responses import JSONResponse
 import psycopg
+import sqlite3
+from .jobs import create_job_router
+from ptb_worker.store import JobError, JobStore
 from .account_store import AccountStore
 from .auth import AccountContext, AuthSettings, create_account_router
 from .projects import create_project_router
@@ -16,7 +19,8 @@ from .protocol_version import API_VERSION
 
 
 def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: AccountStore | None = None,
-               auth_settings: AuthSettings | None = None) -> FastAPI:
+               auth_settings: AuthSettings | None = None, job_store: JobStore | None = None,
+               local_token: str | None = None, local_origin: str | None = None) -> FastAPI:
     if mode not in ('local', 'server'):
         raise ValueError('Unsupported service mode')
     app = FastAPI(title='PhoneticToolbox API', version=API_VERSION,
@@ -24,6 +28,15 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
     ctx = AccountContext(account_store, auth_settings, mode)
     app.include_router(create_account_router(ctx))
     app.include_router(create_project_router(ctx))
+    app.include_router(create_job_router(ctx,job_store,local_token=local_token,local_origin=local_origin))
+
+    @app.exception_handler(JobError)
+    async def job_error(request: Request, exc):
+        return JSONResponse({'detail':exc.code},status_code=exc.status)
+
+    @app.exception_handler(sqlite3.Error)
+    async def local_storage_unavailable(request: Request, exc):
+        return JSONResponse({'detail':'task_service_unavailable'},status_code=503)
 
     @app.exception_handler(RequestValidationError)
     async def invalid_request(request: Request, exc):
@@ -32,12 +45,12 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
 
     @app.exception_handler(psycopg.Error)
     async def database_unavailable(request: Request, exc):
-        return JSONResponse({'detail':'account_service_unavailable'},status_code=503)
+        return JSONResponse({'detail':'task_service_unavailable' if request.url.path.startswith('/api/v1/jobs') else 'account_service_unavailable'},status_code=503)
 
     @app.middleware('http')
     async def private_responses(request: Request, call_next):
         response = await call_next(request)
-        if request.url.path.startswith(('/api/v1/auth/', '/api/v1/projects')):
+        if request.url.path.startswith(('/api/v1/auth/', '/api/v1/projects', '/api/v1/jobs')):
             response.headers['Cache-Control'] = 'no-store'
             response.headers['Pragma'] = 'no-cache'
             response.headers['X-Content-Type-Options'] = 'nosniff'
@@ -49,9 +62,9 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
 
     @app.get('/api/v1/capabilities', response_model=Capabilities, operation_id='get_capabilities')
     def capabilities() -> Capabilities:
-        return Capabilities(stage='P05' if account_store is not None and mode == 'server' else 'P02',
-                            algorithms=[], limitations=[
-            'Scientific modules pending P08', 'Accounts require configured PostgreSQL; tasks pending P06'])
+        return Capabilities(stage='P06' if job_store is not None else ('P05' if account_store is not None and mode == 'server' else 'P02'),
+                            algorithms=[], task_operations=['pipeline_check'] if job_store is not None else [], limitations=[
+            'Scientific modules pending P08', 'P06 pipeline check produces bounded metadata only; file tasks require P07'])
 
     base_openapi = app.openapi
 

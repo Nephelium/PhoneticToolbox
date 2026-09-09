@@ -102,6 +102,92 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/jobs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Listing */
+        get: operations["list_jobs"];
+        put?: never;
+        /** Create */
+        post: operations["create_job"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/{job_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get */
+        get: operations["get_job"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/{job_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cancel */
+        post: operations["cancel_job"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/{job_id}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Events */
+        get: operations["get_job_events"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/{job_id}/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Retry */
+        post: operations["retry_job"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects": {
         parameters: {
             query?: never;
@@ -174,7 +260,12 @@ export interface components {
              * @default P02
              * @enum {string}
              */
-            stage: "P02" | "P05";
+            stage: "P02" | "P05" | "P06";
+            /**
+             * Task Operations
+             * @default []
+             */
+            task_operations: string[];
         };
         /** Challenge */
         Challenge: {
@@ -209,12 +300,117 @@ export interface components {
              */
             status: "ok";
         };
+        /** JobEvent */
+        JobEvent: {
+            /** Code */
+            code: string;
+            /** Created At */
+            created_at: number;
+            /** Progress */
+            progress: number;
+            /** Sequence */
+            sequence: number;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "queued" | "running" | "cancel_requested" | "cancelled" | "failed" | "interrupted" | "succeeded";
+        };
+        /** JobEvents */
+        JobEvents: {
+            /** Events */
+            events: components["schemas"]["JobEvent"][];
+        };
+        /** JobInput */
+        JobInput: {
+            config?: components["schemas"]["ProbeConfig"];
+            /** Idempotency Key */
+            idempotency_key: string;
+            /**
+             * Operation
+             * @default pipeline_check
+             * @constant
+             */
+            operation: "pipeline_check";
+            /** Project Id */
+            project_id: string;
+        };
+        /** JobList */
+        JobList: {
+            /** Jobs */
+            jobs: components["schemas"]["JobView"][];
+        };
+        /** JobManifest */
+        JobManifest: {
+            /**
+             * Complete
+             * @default true
+             * @constant
+             */
+            complete: true;
+            /** Core Version */
+            core_version: string;
+            /**
+             * Kind
+             * @default pipeline_check_metadata
+             * @constant
+             */
+            kind: "pipeline_check_metadata";
+            /** Sample Count */
+            sample_count: number;
+            /** Sha256 */
+            sha256: string;
+        };
+        /** JobView */
+        JobView: {
+            /** Created At */
+            created_at: number;
+            /** Error Code */
+            error_code: string | null;
+            /** Generation */
+            generation: number;
+            /** Id */
+            id: string;
+            /**
+             * Operation
+             * @default pipeline_check
+             * @constant
+             */
+            operation: "pipeline_check";
+            /** Progress */
+            progress: number;
+            /** Project Id */
+            project_id: string;
+            result_manifest: components["schemas"]["JobManifest"] | null;
+            /** Retry Of */
+            retry_of?: string | null;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "queued" | "running" | "cancel_requested" | "cancelled" | "failed" | "interrupted" | "succeeded";
+            /** Updated At */
+            updated_at: number;
+        };
         /** LoginInput */
         LoginInput: {
             /** Password */
             password: string;
             /** Username */
             username: string;
+        };
+        /** ProbeConfig */
+        ProbeConfig: {
+            /**
+             * Sample Count
+             * @default 4096
+             */
+            sample_count: number;
+            /**
+             * Seed
+             * @default 0
+             */
+            seed: number;
         };
         /** ProjectInput */
         ProjectInput: {
@@ -237,6 +433,11 @@ export interface components {
             id: string;
             /** Name */
             name: string;
+        };
+        /** RetryInput */
+        RetryInput: {
+            /** Idempotency Key */
+            idempotency_key: string;
         };
         /**
          * Selection
@@ -448,6 +649,200 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Health"];
+                };
+            };
+        };
+    };
+    list_jobs: {
+        parameters: {
+            query: {
+                project_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobList"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_job: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JobInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_job: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cancel_job: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_job_events: {
+        parameters: {
+            query?: {
+                after?: number;
+            };
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobEvents"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    retry_job: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RetryInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

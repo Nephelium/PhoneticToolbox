@@ -4491,7 +4491,8 @@
     "id": "P05-POSTGRESQL-TEST",
     "title": "PostgreSQL (P05 isolated database validation)",
     "modules": [
-      "P05"
+      "P05",
+      "P06"
     ],
     "kind": "test-dependency",
     "acknowledgement_group": "software",
@@ -4502,6 +4503,39 @@
       "homepage": "https://www.postgresql.org/",
       "download": "https://www.enterprisedb.com/download-postgresql-binaries",
       "license": "https://www.postgresql.org/about/licence/"
+    }
+  },
+  {
+    "id": "P06-SQLITE",
+    "title": "SQLite (CPython bundled local task store)",
+    "modules": [
+      "P06"
+    ],
+    "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
+    "authors": "SQLite authors",
+    "version": "3.50.4",
+    "license": "Public domain; bundled with existing CPython runtime",
+    "urls": {
+      "homepage": "https://www.sqlite.org/",
+      "documentation": "https://www.sqlite.org/lang_transaction.html",
+      "license": "https://www.sqlite.org/copyright.html"
+    }
+  },
+  {
+    "id": "P06-PG-LOCKS",
+    "title": "PostgreSQL 17 SELECT and advisory locking documentation",
+    "modules": [
+      "P06"
+    ],
+    "kind": "reference-only",
+    "acknowledgement_group": "software",
+    "authors": "PostgreSQL Global Development Group",
+    "version": "PostgreSQL 17 documentation reviewed 2026-09-09; commit unknown",
+    "license": "Reference only; no documentation redistributed",
+    "urls": {
+      "select": "https://www.postgresql.org/docs/17/sql-select.html",
+      "locking": "https://www.postgresql.org/docs/17/explicit-locking.html"
     }
   }
 ]
