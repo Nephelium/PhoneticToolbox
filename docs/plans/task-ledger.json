@@ -110,8 +110,8 @@
       "title": "统一前端壳、主题、首页与公共组件",
       "dependencies": "P02",
       "files": "frontend/src/app/AppShell.vue；frontend/src/design/tokens.css；frontend/src/components/AudioTransport.vue；frontend/src/components/MethodReferences.vue",
-      "status": "in_progress",
-      "note": "共同工作台、真实 WAV 预览与 Windows Qt 演示工程验证完成；视觉待用户审阅。实际分析/后台任务留待对应后续任务。",
+      "status": "verified",
+      "note": "井井反馈公共界面无明显问题，学术优先的分组致谢修订已落实；仅公共界面/Windows 定向范围，15 模块功能与科研结果待后续迁移验收。",
       "steps": [
         "实现 U2 主题令牌、字体和 K2 品牌资产，不夹带各页算法",
         "建立全部 15 模块注册、侧栏搜索/折叠、标签与首次首页",
@@ -131,7 +131,7 @@
         "frontend_checks": "verified",
         "browser_interactions": "verified",
         "qt_static_host_and_zoom": "verified",
-        "manual_visual_feedback": "planned",
+        "manual_visual_feedback": "verified",
         "backend_jobs_and_scientific_algorithms": "planned"
       }
     },

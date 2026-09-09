@@ -1,6 +1,6 @@
 # desktop — 工作规则
 
-继承 [根 AGENTS.md](../AGENTS.md)，先读本目录 [ARCHITECTURE.md](ARCHITECTURE.md)。2026-09-09 已获 P04 统一工作台实施授权；工程验证完成、视觉待井井审阅，具体边界见根规则与 P04 计划；不扩大为全面业务迁移或部署授权。
+继承 [根 AGENTS.md](../AGENTS.md)，先读本目录 [ARCHITECTURE.md](ARCHITECTURE.md)。2026-09-09 已获 P04 统一工作台实施授权；公共界面经井井审阅，致谢分组修订已落实；P04 限定范围 verified，具体边界见根规则与 P04 计划；不扩大为全面业务迁移或部署授权。
 
 - 负责：桌面窗口、本地服务生命周期、文件/设备和发行适配。
 - 允许依赖：contracts、phonetic_core、Qt 与各平台原生适配器。

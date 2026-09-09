@@ -339,3 +339,7 @@ to{opacity:1;transform:none}
 
 .task-row{display:flex;align-items:center;gap:12px;width:100%;flex-wrap:wrap}
 .task-row progress{accent-color:var(--accent);width:180px}
+
+.reference-groups{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.reference-groups [role=tab]{white-space:normal;text-align:left;justify-content:flex-start}
+.reference-groups [aria-selected=true]{background:var(--selected);color:var(--accent);border-color:var(--accent);font-weight:600}

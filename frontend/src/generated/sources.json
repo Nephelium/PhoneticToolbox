@@ -13,6 +13,7 @@
       "M12"
     ],
     "kind": "runtime-and-method",
+    "acknowledgement_group": "software",
     "authors": "Yannick Jadoul and Bill Thompson and Bart de Boer",
     "version": "praat-parselmouth 0.4.7 in phonetic_311; embedded Praat version not probed",
     "license": "GPL family; verify exact bundled Praat/Parselmouth licenses",
@@ -32,6 +33,7 @@
       "M07"
     ],
     "kind": "bundled-code",
+    "acknowledgement_group": "software",
     "authors": "David Talkin and REAPER contributors",
     "version": "实际版本待核实",
     "license": "Apache-2.0",
@@ -46,6 +48,7 @@
       "M01"
     ],
     "kind": "ported-code-and-data",
+    "acknowledgement_group": "software",
     "authors": "Elias Azarov and Maxim Vashkevich and Alexander A. Petrovsky",
     "version": "实际版本待核实",
     "license": "GPL-3.0",
@@ -60,6 +63,7 @@
       "M01"
     ],
     "kind": "ported-method",
+    "acknowledgement_group": "software",
     "authors": "Maxim Vashkevich and Alexander Petrovsky and Yuliya Rushkevich",
     "version": "实际版本待核实",
     "license": "MPL-2.0 (Troparion repository)",
@@ -78,6 +82,7 @@
       "M02"
     ],
     "kind": "reference-code-and-method",
+    "acknowledgement_group": "software",
     "authors": "Yen-Liang Shue and Patricia Keating and Chad Vicenik and Kristine Yu",
     "version": "实际版本待核实",
     "license": "original MATLAB license not resolved",
@@ -94,6 +99,7 @@
       "M01"
     ],
     "kind": "reference-implementation",
+    "acknowledgement_group": "software",
     "authors": "Terri M. Yu and R. David Murray and Kate Silverstein and Kristine M. Yu",
     "version": "实际版本待核实",
     "license": "Apache-2.0",
@@ -109,6 +115,7 @@
       "M01"
     ],
     "kind": "paper",
+    "acknowledgement_group": "academic",
     "authors": "James Hillenbrand and Ronald A. Cleveland and Robert L. Erickson",
     "version": "实际版本待核实",
     "license": "not-established",
@@ -123,6 +130,7 @@
       "M01"
     ],
     "kind": "paper",
+    "acknowledgement_group": "academic",
     "authors": "Guus de Krom",
     "version": "实际版本待核实",
     "license": "not-established",
@@ -137,6 +145,7 @@
       "M01"
     ],
     "kind": "paper",
+    "acknowledgement_group": "academic",
     "authors": "Xuejing Sun",
     "version": "实际版本待核实",
     "license": "not-established",
@@ -151,6 +160,7 @@
       "M01"
     ],
     "kind": "paper",
+    "acknowledgement_group": "academic",
     "authors": "Markus Iseli and Abeer Alwan",
     "version": "实际版本待核实",
     "license": "not-established",
@@ -165,6 +175,7 @@
       "M01"
     ],
     "kind": "paper",
+    "acknowledgement_group": "academic",
     "authors": "John W. Hawks and James D. Miller",
     "version": "实际版本待核实",
     "license": "not-established",
@@ -180,6 +191,7 @@
       "M01"
     ],
     "kind": "method-chain",
+    "acknowledgement_group": "academic",
     "authors": "K. Sri Rama Murty and B. Yegnanarayana",
     "version": "实际版本待核实",
     "license": "VoiceSauce source obligations unresolved",
@@ -194,6 +206,7 @@
       "M06"
     ],
     "kind": "adapted-code",
+    "acknowledgement_group": "software",
     "authors": "Adrian Y. Cho and Daniel R Guest",
     "version": "实际版本待核实",
     "license": "MIT",
@@ -208,6 +221,7 @@
       "M06"
     ],
     "kind": "paper",
+    "acknowledgement_group": "academic",
     "authors": "Dennis H. Klatt",
     "version": "实际版本待核实",
     "license": "not-established",
@@ -223,6 +237,7 @@
       "M07"
     ],
     "kind": "adapted-method-and-source",
+    "acknowledgement_group": "software",
     "authors": "Yao Lu and Changwei Liang and Jiangping Kong",
     "version": "实际版本待核实",
     "license": "no repository license detected",
@@ -237,6 +252,7 @@
       "M07"
     ],
     "kind": "paper",
+    "acknowledgement_group": "academic",
     "authors": "Yao Lu and Changwei Liang and Jiangping Kong",
     "version": "实际版本待核实",
     "license": "article license is separate from code/data",
@@ -252,6 +268,7 @@
       "M09"
     ],
     "kind": "paper",
+    "acknowledgement_group": "academic",
     "authors": "Daniel W. Griffin and Jae S. Lim",
     "version": "实际版本待核实",
     "license": "not-established",
@@ -268,6 +285,7 @@
       "M10"
     ],
     "kind": "bundled-native-code",
+    "acknowledgement_group": "software",
     "authors": "Peter Birkholz and VocalTractLab contributors",
     "version": "2.4 (Windows native bundle)",
     "license": "GPL-3.0-or-later",
@@ -284,6 +302,7 @@
       "M10"
     ],
     "kind": "manual",
+    "acknowledgement_group": "academic",
     "authors": "作者待核实",
     "version": "link only; manual 2.4",
     "license": "not-established",
@@ -298,6 +317,7 @@
       "M10"
     ],
     "kind": "manual",
+    "acknowledgement_group": "academic",
     "authors": "作者待核实",
     "version": "link only; manual 2.3",
     "license": "not-established",
@@ -312,6 +332,7 @@
       "M10"
     ],
     "kind": "paper",
+    "acknowledgement_group": "academic",
     "authors": "Peter Birkholz and Dietmar Jackèl and Bernd J. Kröger",
     "version": "实际版本待核实",
     "license": "not-established",
@@ -327,6 +348,7 @@
       "M10"
     ],
     "kind": "bundled-code",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "0.180.0 / r180",
     "license": "MIT",
@@ -341,6 +363,7 @@
       "M10"
     ],
     "kind": "derived-asset",
+    "acknowledgement_group": "software",
     "authors": "byzmod3d",
     "version": "实际版本待核实",
     "license": "CC0-1.0",
@@ -355,6 +378,7 @@
       "M10"
     ],
     "kind": "derived-research-data",
+    "acknowledgement_group": "academic",
     "authors": "Jan Brüning and Thomas Hildebrandt and Werner Heppt and Nora Schmidt and Hans Lamecker and Angelika Szengel and Natalja Amiridze and Heiko Ramm and Matthias Bindernagel and Stefan Zachow and Leonid Goubergrits",
     "version": "v4 according to existing sources.lock.json",
     "license": "CC-BY-4.0 per existing provenance; live v4 metadata pending",
@@ -370,6 +394,7 @@
       "M10"
     ],
     "kind": "reference-only",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "reference commit bb37e1894a790f31d4ef7c19803c177cc095e290 from existing lock",
     "license": "not assessed for redistribution; no bundled code claimed",
@@ -384,6 +409,7 @@
       "M05"
     ],
     "kind": "runtime-and-model",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "0.10.14",
     "license": "Apache-2.0 for code; bundled model terms require artifact audit",
@@ -399,6 +425,7 @@
       "M05"
     ],
     "kind": "native-tool",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "实际版本待核实",
     "license": "build-dependent; not yet verified",
@@ -414,6 +441,7 @@
       "M11"
     ],
     "kind": "external-tool-and-models",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "实际版本待核实",
     "license": "each executable/model/dictionary must be checked",
@@ -428,6 +456,7 @@
       "M11"
     ],
     "kind": "paper",
+    "acknowledgement_group": "academic",
     "authors": "Michael McAuliffe and Michaela Socolof and Sarah Mihuc and Michael Wagner and Morgan Sonderegger",
     "version": "实际版本待核实",
     "license": "not-established",
@@ -444,6 +473,7 @@
       "P01-probe"
     ],
     "kind": "font",
+    "acknowledgement_group": "software",
     "authors": "SIL International",
     "version": "Version 7.000; read from the included font name table",
     "license": "SIL Open Font License 1.1; embedded license extracted without modification",
@@ -459,6 +489,7 @@
       "M03"
     ],
     "kind": "provenance-pending",
+    "acknowledgement_group": "academic",
     "authors": "作者待核实",
     "version": "实际版本待核实",
     "license": "not-established",
@@ -471,6 +502,7 @@
       "M12"
     ],
     "kind": "provenance-pending",
+    "acknowledgement_group": "academic",
     "authors": "作者待核实",
     "version": "实际版本待核实",
     "license": "not-established",
@@ -483,6 +515,7 @@
       "M13"
     ],
     "kind": "provenance-pending",
+    "acknowledgement_group": "academic",
     "authors": "作者待核实",
     "version": "实际版本待核实",
     "license": "not-established",
@@ -495,6 +528,7 @@
       "M14"
     ],
     "kind": "provenance-pending",
+    "acknowledgement_group": "academic",
     "authors": "作者待核实",
     "version": "实际版本待核实",
     "license": "not-established",
@@ -507,6 +541,7 @@
       "M12"
     ],
     "kind": "provenance-pending",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "实际版本待核实",
     "license": "not-established",
@@ -519,6 +554,7 @@
       "global"
     ],
     "kind": "provenance-pending",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "实际版本待核实",
     "license": "not-established",
@@ -531,6 +567,7 @@
       "M13"
     ],
     "kind": "legacy-web-dependency",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "实际版本待核实",
     "license": "exact-version-license-pending",
@@ -545,6 +582,7 @@
       "M15"
     ],
     "kind": "legacy-web-dependency",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "实际版本待核实",
     "license": "exact-version-license-pending",
@@ -559,6 +597,7 @@
       "M15"
     ],
     "kind": "legacy-web-dependency",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "实际版本待核实",
     "license": "exact-version-license-pending",
@@ -573,6 +612,7 @@
       "M15"
     ],
     "kind": "legacy-web-dependency",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "实际版本待核实",
     "license": "exact-version-license-pending",
@@ -587,6 +627,7 @@
       "M15"
     ],
     "kind": "legacy-web-dependency",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "实际版本待核实",
     "license": "exact-version-license-pending",
@@ -601,6 +642,7 @@
       "M15"
     ],
     "kind": "legacy-web-dependency",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "实际版本待核实",
     "license": "exact-version-license-pending",
@@ -615,6 +657,7 @@
       "shared-runtime"
     ],
     "kind": "installed-runtime-package",
+    "acknowledgement_group": "software",
     "authors": "Travis E. Oliphant et al.",
     "version": "2.2.6 in phonetic_311; v3 pin pending",
     "license": "see exact release metadata / wheel audit pending",
@@ -635,6 +678,7 @@
       "shared-runtime"
     ],
     "kind": "installed-runtime-package",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "1.16.3 in phonetic_311; v3 pin pending",
     "license": "see exact release metadata / wheel audit pending",
@@ -654,6 +698,7 @@
       "shared-runtime"
     ],
     "kind": "installed-runtime-package",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "2.3.3 in phonetic_311; v3 pin pending",
     "license": "see exact release metadata / wheel audit pending",
@@ -671,6 +716,7 @@
       "shared-runtime"
     ],
     "kind": "installed-runtime-package",
+    "acknowledgement_group": "software",
     "authors": "John D. Hunter, Michael Droettboom",
     "version": "3.10.8 in phonetic_311; v3 pin pending",
     "license": "see exact release metadata / wheel audit pending",
@@ -692,6 +738,7 @@
       "shared-runtime"
     ],
     "kind": "installed-runtime-package",
+    "acknowledgement_group": "software",
     "authors": "Riverbank Computing Limited",
     "version": "6.6.1 in phonetic_311; v3 pin pending",
     "license": "see exact release metadata / wheel audit pending",
@@ -707,6 +754,7 @@
       "shared-runtime"
     ],
     "kind": "installed-runtime-package",
+    "acknowledgement_group": "software",
     "authors": "Luke Campagnola",
     "version": "0.14.0 in phonetic_311; v3 pin pending",
     "license": "see exact release metadata / wheel audit pending",
@@ -723,6 +771,7 @@
       "shared-runtime"
     ],
     "kind": "installed-runtime-package",
+    "acknowledgement_group": "software",
     "authors": "Yannick Jadoul",
     "version": "0.4.7 in phonetic_311; v3 pin pending",
     "license": "see exact release metadata / wheel audit pending",
@@ -741,6 +790,7 @@
       "shared-runtime"
     ],
     "kind": "installed-runtime-package",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "1.9.0 in phonetic_311; v3 pin pending",
     "license": "MIT AND BSD-3-Clause",
@@ -758,6 +808,7 @@
       "shared-runtime"
     ],
     "kind": "installed-runtime-package",
+    "acknowledgement_group": "software",
     "authors": "Matthias Geier",
     "version": "0.5.3 in phonetic_311; v3 pin pending",
     "license": "see exact release metadata / wheel audit pending",
@@ -773,6 +824,7 @@
       "shared-runtime"
     ],
     "kind": "installed-runtime-package",
+    "acknowledgement_group": "software",
     "authors": "Bastian Bechtold",
     "version": "0.13.1 in phonetic_311; v3 pin pending",
     "license": "see exact release metadata / wheel audit pending",
@@ -788,6 +840,7 @@
       "shared-runtime"
     ],
     "kind": "installed-runtime-package",
+    "acknowledgement_group": "software",
     "authors": "See AUTHORS",
     "version": "3.1.5 in phonetic_311; v3 pin pending",
     "license": "see exact release metadata / wheel audit pending",
@@ -806,6 +859,7 @@
       "shared-runtime"
     ],
     "kind": "installed-runtime-package",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "1.2.0 in phonetic_311; v3 pin pending",
     "license": "see exact release metadata / wheel audit pending",
@@ -824,6 +878,7 @@
       "shared-runtime"
     ],
     "kind": "installed-runtime-package",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "4.13.0.92 in phonetic_311; v3 pin pending",
     "license": "see exact release metadata / wheel audit pending",
@@ -839,6 +894,7 @@
       "shared-runtime"
     ],
     "kind": "installed-runtime-package",
+    "acknowledgement_group": "software",
     "authors": "The MediaPipe Authors",
     "version": "0.10.14 in phonetic_311; v3 pin pending",
     "license": "see exact release metadata / wheel audit pending",
@@ -854,6 +910,7 @@
       "shared-runtime"
     ],
     "kind": "installed-runtime-package",
+    "acknowledgement_group": "software",
     "authors": "作者待核实",
     "version": "12.0.0 in phonetic_311; v3 pin pending",
     "license": "MIT-CMU",
@@ -875,6 +932,7 @@
       "shared-runtime"
     ],
     "kind": "installed-runtime-package",
+    "acknowledgement_group": "software",
     "authors": "Hartmut Goebel, Giovanni Bajo, David Vierra, David Cortesi, Martin Zibricky",
     "version": "6.17.0 in phonetic_311; v3 pin pending",
     "license": "see exact release metadata / wheel audit pending",
@@ -893,6 +951,7 @@
       "P01-probe"
     ],
     "kind": "build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Ronald Oussoren",
     "version": "0.17.5",
     "license": "MIT",
@@ -907,6 +966,7 @@
       "P01-probe"
     ],
     "kind": "test-dependency",
+    "acknowledgement_group": "software",
     "authors": "Jonathan Hartley <tartley@tartley.com>",
     "version": "0.4.6",
     "license": "unknown",
@@ -921,6 +981,7 @@
       "P01-probe"
     ],
     "kind": "test-dependency",
+    "acknowledgement_group": "software",
     "authors": "Ronny Pfannschmidt <opensource@ronnypfannschmidt.de>, Holger Krekel <holger.krekel@gmail.com>",
     "version": "2.3.0",
     "license": "MIT",
@@ -935,6 +996,7 @@
       "P01-probe"
     ],
     "kind": "test-dependency",
+    "acknowledgement_group": "software",
     "authors": "Travis E. Oliphant et al.",
     "version": "2.2.6",
     "license": "See exact installed license metadata in third_party/p01-dependency-inventory.json",
@@ -949,6 +1011,7 @@
       "P01-probe"
     ],
     "kind": "build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Donald Stufft <donald@stufft.io>",
     "version": "26.3",
     "license": "Apache-2.0 OR BSD-2-Clause",
@@ -963,6 +1026,7 @@
       "P01-probe"
     ],
     "kind": "build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Ero Carrera",
     "version": "2024.8.26",
     "license": "MIT",
@@ -977,6 +1041,7 @@
       "P01-probe"
     ],
     "kind": "test-dependency",
+    "acknowledgement_group": "software",
     "authors": "Holger Krekel <holger@merlinux.eu>",
     "version": "1.6.0",
     "license": "MIT",
@@ -991,6 +1056,7 @@
       "P01-probe"
     ],
     "kind": "test-dependency",
+    "acknowledgement_group": "software",
     "authors": "Giampaolo Rodola",
     "version": "7.2.2",
     "license": "BSD-3-Clause",
@@ -1005,6 +1071,7 @@
       "P01-probe"
     ],
     "kind": "test-dependency",
+    "acknowledgement_group": "software",
     "authors": "Hubert Pham(S0D3S edition)",
     "version": "0.2.12.8",
     "license": "Apache-2.0 license",
@@ -1019,6 +1086,7 @@
       "P01-probe"
     ],
     "kind": "test-dependency",
+    "acknowledgement_group": "software",
     "authors": "Georg Brandl <georg@python.org>",
     "version": "2.21.0",
     "license": "BSD-2-Clause",
@@ -1033,6 +1101,7 @@
       "P01-probe"
     ],
     "kind": "build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Hartmut Goebel, Giovanni Bajo, David Vierra, David Cortesi, Martin Zibricky",
     "version": "6.22.2",
     "license": "GPLv2-or-later with a special exception which allows to use PyInstaller to build and distribute non-free programs (including commercial ones)",
@@ -1047,6 +1116,7 @@
       "P01-probe"
     ],
     "kind": "build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "2026.7",
     "license": "unknown",
@@ -1061,6 +1131,7 @@
       "P01-probe"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Riverbank Computing Limited <info@riverbankcomputing.com>",
     "version": "6.11.0",
     "license": "GPL-3.0-only",
@@ -1075,6 +1146,7 @@
       "P01-probe"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Riverbank Computing Limited",
     "version": "6.11.2",
     "license": "LGPL v3",
@@ -1089,6 +1161,7 @@
       "P01-probe"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Riverbank Computing Limited <info@riverbankcomputing.com>",
     "version": "6.11.0",
     "license": "GPL-3.0-only",
@@ -1103,6 +1176,7 @@
       "P01-probe"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Riverbank Computing Limited",
     "version": "6.11.2",
     "license": "LGPL v3",
@@ -1117,6 +1191,7 @@
       "P01-probe"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Phil Thompson",
     "version": "13.12.0",
     "license": "BSD-2-Clause",
@@ -1131,6 +1206,7 @@
       "P01-probe"
     ],
     "kind": "test-dependency",
+    "acknowledgement_group": "software",
     "authors": "Brianna Laugher, Bruno Oliveira, Floris Bruynooghe, Freya Bruhin, Holger Krekel, Others (See AUTHORS), Ronny Pfannschmidt",
     "version": "9.1.1",
     "license": "MIT",
@@ -1145,6 +1221,7 @@
       "P01-probe"
     ],
     "kind": "build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Enthought Inc.",
     "version": "0.2.3",
     "license": "BSD-3-Clause",
@@ -1159,6 +1236,7 @@
       "P01-probe"
     ],
     "kind": "build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Python Packaging Authority <distutils-sig@python.org>",
     "version": "84.0.0",
     "license": "MIT",
@@ -1173,6 +1251,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "The Babel Team (https://babel.dev/team)",
     "version": "7.29.7",
     "license": "MIT",
@@ -1187,6 +1266,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "The Babel Team (https://babel.dev/team)",
     "version": "7.29.7",
     "license": "MIT",
@@ -1201,6 +1281,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "The Babel Team (https://babel.dev/team)",
     "version": "7.29.8",
     "license": "MIT",
@@ -1215,6 +1296,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "The Babel Team (https://babel.dev/team)",
     "version": "7.29.8",
     "license": "MIT",
@@ -1229,6 +1311,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Justin Ridgewell <justin@ridgewell.name>",
     "version": "1.6.0",
     "license": "MIT",
@@ -1243,6 +1326,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Boshen and oxc contributors",
     "version": "0.148.0",
     "license": "MIT",
@@ -1257,6 +1341,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -1271,6 +1356,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -1285,6 +1371,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -1299,6 +1386,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -1313,6 +1401,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -1327,6 +1416,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -1341,6 +1431,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -1355,6 +1446,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -1369,6 +1461,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -1383,6 +1476,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -1397,6 +1491,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -1411,6 +1506,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -1425,6 +1521,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -1439,6 +1536,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -1453,6 +1551,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -1467,6 +1566,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.0.1",
     "license": "MIT",
@@ -1481,6 +1581,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "6.0.8",
     "license": "MIT",
@@ -1495,6 +1596,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "2.4.28",
     "license": "MIT",
@@ -1509,6 +1611,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "2.4.28",
     "license": "MIT",
@@ -1523,6 +1626,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "2.4.28",
     "license": "MIT",
@@ -1537,6 +1641,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -1551,6 +1656,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -1565,6 +1671,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -1579,6 +1686,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -1593,6 +1701,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "3.3.11",
     "license": "MIT",
@@ -1607,6 +1716,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -1621,6 +1731,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -1635,6 +1746,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -1649,6 +1761,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -1663,6 +1776,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -1677,6 +1791,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "3.2.1",
     "license": "MIT",
@@ -1691,6 +1806,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Fredrik Nicol <fredrik.nicol@gmail.com>",
     "version": "3.2.3",
     "license": "MIT",
@@ -1705,6 +1821,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Lovell Fuller <npm@lovell.info>",
     "version": "2.1.2",
     "license": "Apache-2.0",
@@ -1719,6 +1836,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Felix Boehm <me@feedic.com>",
     "version": "7.0.1",
     "license": "BSD-2-Clause",
@@ -1733,6 +1851,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Rich Harris",
     "version": "2.0.2",
     "license": "MIT",
@@ -1747,6 +1866,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "thecodrr <thecodrr@protonmail.com>",
     "version": "6.5.0",
     "license": "MIT",
@@ -1761,6 +1881,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "2.3.3",
     "license": "MIT",
@@ -1775,6 +1896,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -1789,6 +1911,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -1803,6 +1926,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -1817,6 +1941,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -1831,6 +1956,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -1845,6 +1971,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -1859,6 +1986,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -1873,6 +2001,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -1887,6 +2016,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -1901,6 +2031,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -1915,6 +2046,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -1929,6 +2061,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -1943,6 +2076,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Rich Harris",
     "version": "0.30.21",
     "license": "MIT",
@@ -1957,6 +2091,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "0.4.1",
     "license": "MIT",
@@ -1971,6 +2106,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Andrey Sitnik <andrey@sitnik.ru>",
     "version": "3.3.18",
     "license": "MIT",
@@ -1985,6 +2121,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "James Halliday",
     "version": "1.0.1",
     "license": "MIT",
@@ -1999,6 +2136,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Alexey Raspopov",
     "version": "1.1.1",
     "license": "ISC",
@@ -2013,6 +2151,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Jon Schlinkert (https://github.com/jonschlinkert)",
     "version": "4.0.7",
     "license": "MIT",
@@ -2027,6 +2166,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Andrey Sitnik <andrey@sitnik.es>",
     "version": "8.5.28",
     "license": "MIT",
@@ -2041,6 +2181,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -2055,6 +2196,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Valentin 7rulnik Semirulnik <v7rulnik@gmail.com>",
     "version": "1.2.1",
     "license": "BSD-3-Clause",
@@ -2069,6 +2211,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Superchupu",
     "version": "0.2.17",
     "license": "MIT",
@@ -2083,6 +2226,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Microsoft Corp.",
     "version": "5.9.3",
     "license": "Apache-2.0",
@@ -2097,6 +2241,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "8.2.2",
     "license": "MIT",
@@ -2111,6 +2256,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Microsoft",
     "version": "3.2.0",
     "license": "MIT",
@@ -2125,6 +2271,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -2139,6 +2286,7 @@
       "P01-probe"
     ],
     "kind": "probe-ui-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "3.3.11",
     "license": "MIT",
@@ -2153,6 +2301,7 @@
       "P01-probe"
     ],
     "kind": "probe-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Python Software Foundation and python-build-standalone contributors",
     "version": "CPython 3.11.14, uv-managed Windows x86_64 standalone distribution",
     "license": "PSF-2.0 and bundled component terms; runtime distribution audit pending",
@@ -2168,6 +2317,7 @@
       "P01-probe"
     ],
     "kind": "evaluated-alternative-dependency",
+    "acknowledgement_group": "software",
     "authors": "The Qt Company Ltd. and Qt contributors",
     "version": "PySide6 / Essentials / Addons / Shiboken6 6.11.2 in separate trial environment",
     "license": "LGPL/GPL/commercial and component-specific terms; see Qt license inventory",
@@ -2183,6 +2333,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "=?utf-8?q?Sebasti=C3=A1n_Ram=C3=ADrez?= <tiangolo@gmail.com>",
     "version": "0.0.5",
     "license": "MIT",
@@ -2197,6 +2348,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Adrian Garcia Badaracco <1755071+adriangb@users.noreply.github.com>, Samuel Colvin <s@muelcolvin.com>, Zac Hatfield-Dodds <zac@zhd.dev>",
     "version": "0.8.0",
     "license": "MIT",
@@ -2211,6 +2363,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Alex Grönholm <alex.gronholm@nextday.fi>",
     "version": "4.15.1",
     "license": "MIT",
@@ -2225,6 +2378,7 @@
       "P02"
     ],
     "kind": "development-dependency",
+    "acknowledgement_group": "software",
     "authors": "Filipe Laíns <lains@riseup.net>, Bernát Gábor <gaborjbernat@gmail.com>, layday <layday@protonmail.com>, Henry Schreiner <henryschreineriii@gmail.com>",
     "version": "1.6.0",
     "license": "MIT",
@@ -2239,6 +2393,7 @@
       "P02"
     ],
     "kind": "development-dependency",
+    "acknowledgement_group": "software",
     "authors": "Kenneth Reitz",
     "version": "2026.7.22",
     "license": "MPL-2.0",
@@ -2253,6 +2408,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "8.5.0",
     "license": "BSD-3-Clause",
@@ -2267,6 +2423,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Jonathan Hartley <tartley@tartley.com>",
     "version": "0.4.6",
     "license": "unknown",
@@ -2281,6 +2438,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "=?utf-8?q?Sebasti=C3=A1n_Ram=C3=ADrez?= <tiangolo@gmail.com>",
     "version": "0.141.1",
     "license": "MIT",
@@ -2295,6 +2453,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Nathaniel J. Smith",
     "version": "0.16.0",
     "license": "MIT",
@@ -2309,6 +2468,7 @@
       "P02"
     ],
     "kind": "development-dependency",
+    "acknowledgement_group": "software",
     "authors": "Tom Christie <tom@tomchristie.com>",
     "version": "1.0.9",
     "license": "BSD-3-Clause",
@@ -2323,6 +2483,7 @@
       "P02"
     ],
     "kind": "development-dependency",
+    "acknowledgement_group": "software",
     "authors": "Tom Christie <tom@tomchristie.com>",
     "version": "0.28.1",
     "license": "BSD-3-Clause",
@@ -2337,6 +2498,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Kim Davies <kim+pypi@gumleaf.org>",
     "version": "3.19",
     "license": "BSD-3-Clause",
@@ -2351,6 +2513,7 @@
       "P02"
     ],
     "kind": "development-dependency",
+    "acknowledgement_group": "software",
     "authors": "Ronny Pfannschmidt <opensource@ronnypfannschmidt.de>, Holger Krekel <holger.krekel@gmail.com>",
     "version": "2.3.0",
     "license": "MIT",
@@ -2365,6 +2528,7 @@
       "P02"
     ],
     "kind": "development-dependency",
+    "acknowledgement_group": "software",
     "authors": "Donald Stufft <donald@stufft.io>",
     "version": "26.3",
     "license": "Apache-2.0 OR BSD-2-Clause",
@@ -2379,6 +2543,7 @@
       "P02"
     ],
     "kind": "development-dependency",
+    "acknowledgement_group": "software",
     "authors": "Holger Krekel <holger@merlinux.eu>",
     "version": "1.6.0",
     "license": "MIT",
@@ -2393,6 +2558,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Samuel Colvin <s@muelcolvin.com>, Eric Jolibois <em.jolibois@gmail.com>, Hasan Ramezani <hasan.r67@gmail.com>, Adrian Garcia Badaracco <1755071+adriangb@users.noreply.github.com>, Terrence Dorsey <terry@pydantic.dev>, David Montague <david@pydantic.dev>, Serge Matveenko <lig@countzero.co>, Marcelo Trylesinski <marcelotryle@gmail.com>, Sydney Runkle <sydneymarierunkle@gmail.com>, David Hewitt <mail@davidhewitt.dev>, Alex Hall <alex.mojaki@gmail.com>, Victorien Plot <contact@vctrn.dev>",
     "version": "2.13.5",
     "license": "MIT",
@@ -2407,6 +2573,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Samuel Colvin <s@muelcolvin.com>, Adrian Garcia Badaracco <1755071+adriangb@users.noreply.github.com>, David Montague <david@pydantic.dev>, David Hewitt <mail@davidhewitt.dev>, Sydney Runkle <sydneymarierunkle@gmail.com>, Victorien Plot <contact@vctrn.dev>",
     "version": "2.46.5",
     "license": "MIT",
@@ -2421,6 +2588,7 @@
       "P02"
     ],
     "kind": "development-dependency",
+    "acknowledgement_group": "software",
     "authors": "Georg Brandl <georg@python.org>",
     "version": "2.21.0",
     "license": "BSD-2-Clause",
@@ -2435,6 +2603,7 @@
       "P02"
     ],
     "kind": "development-dependency",
+    "acknowledgement_group": "software",
     "authors": "Thomas Kluyver <thomas@kluyver.me.uk>",
     "version": "1.2.0",
     "license": "unknown",
@@ -2449,6 +2618,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Riverbank Computing Limited <info@riverbankcomputing.com>",
     "version": "6.11.0",
     "license": "GPL-3.0-only",
@@ -2463,6 +2633,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Riverbank Computing Limited",
     "version": "6.11.2",
     "license": "LGPL v3",
@@ -2477,6 +2648,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Riverbank Computing Limited <info@riverbankcomputing.com>",
     "version": "6.11.0",
     "license": "GPL-3.0-only",
@@ -2491,6 +2663,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Riverbank Computing Limited",
     "version": "6.11.2",
     "license": "LGPL v3",
@@ -2505,6 +2678,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Phil Thompson",
     "version": "13.12.0",
     "license": "BSD-2-Clause",
@@ -2519,6 +2693,7 @@
       "P02"
     ],
     "kind": "development-dependency",
+    "acknowledgement_group": "software",
     "authors": "Brianna Laugher, Bruno Oliveira, Floris Bruynooghe, Freya Bruhin, Holger Krekel, Others (See AUTHORS), Ronny Pfannschmidt",
     "version": "9.1.1",
     "license": "MIT",
@@ -2533,6 +2708,7 @@
       "P02"
     ],
     "kind": "development-dependency",
+    "acknowledgement_group": "software",
     "authors": "Python Packaging Authority <distutils-sig@python.org>",
     "version": "84.0.0",
     "license": "MIT",
@@ -2547,6 +2723,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Tom Christie <tom@tomchristie.com>",
     "version": "1.6.0",
     "license": "BSD-3-Clause",
@@ -2561,6 +2738,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Victorien Plot <contact@vctrn.dev>",
     "version": "0.4.4",
     "license": "MIT",
@@ -2575,6 +2753,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "\"Guido van Rossum, Jukka Lehtosalo, Łukasz Langa, Michael Lee\" <levkivskyi@gmail.com>",
     "version": "4.16.0",
     "license": "PSF-2.0",
@@ -2589,6 +2768,7 @@
       "P02"
     ],
     "kind": "runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Tom Christie <tom@tomchristie.com>",
     "version": "0.52.4",
     "license": "BSD-3-Clause",
@@ -2603,6 +2783,7 @@
       "P02"
     ],
     "kind": "development-dependency",
+    "acknowledgement_group": "software",
     "authors": "Daniel Holth <dholth@fastmail.fm>",
     "version": "0.48.0",
     "license": "MIT",
@@ -2617,6 +2798,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "The Babel Team (https://babel.dev/team)",
     "version": "7.29.7",
     "license": "MIT",
@@ -2631,6 +2813,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "The Babel Team (https://babel.dev/team)",
     "version": "7.29.7",
     "license": "MIT",
@@ -2645,6 +2828,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "The Babel Team (https://babel.dev/team)",
     "version": "7.29.7",
     "license": "MIT",
@@ -2659,6 +2843,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "The Babel Team (https://babel.dev/team)",
     "version": "7.29.8",
     "license": "MIT",
@@ -2673,6 +2858,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "The Babel Team (https://babel.dev/team)",
     "version": "7.29.8",
     "license": "MIT",
@@ -2687,6 +2873,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Justin Ridgewell <justin@ridgewell.name>",
     "version": "1.6.0",
     "license": "MIT",
@@ -2701,6 +2888,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Boshen and oxc contributors",
     "version": "0.148.0",
     "license": "MIT",
@@ -2715,6 +2903,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evgeny Poberezkin",
     "version": "8.11.2",
     "license": "MIT",
@@ -2729,6 +2918,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "0.22.0",
     "license": "MIT",
@@ -2743,6 +2933,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.34.19",
     "license": "MIT",
@@ -2757,6 +2948,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -2771,6 +2963,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -2785,6 +2978,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -2799,6 +2993,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -2813,6 +3008,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -2827,6 +3023,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -2841,6 +3038,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -2855,6 +3053,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -2869,6 +3068,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -2883,6 +3083,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -2897,6 +3098,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -2911,6 +3113,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -2925,6 +3128,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -2939,6 +3143,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -2953,6 +3158,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -2967,6 +3173,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.0.1",
     "license": "MIT",
@@ -2981,6 +3188,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "6.0.8",
     "license": "MIT",
@@ -2995,6 +3203,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "2.4.28",
     "license": "MIT",
@@ -3009,6 +3218,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "2.4.28",
     "license": "MIT",
@@ -3023,6 +3233,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "2.4.28",
     "license": "MIT",
@@ -3037,6 +3248,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -3051,6 +3263,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -3065,6 +3278,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -3079,6 +3293,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -3093,6 +3308,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "3.3.11",
     "license": "MIT",
@@ -3107,6 +3323,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -3121,6 +3338,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -3135,6 +3353,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -3149,6 +3368,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -3163,6 +3383,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -3177,6 +3398,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Nathan Rajlich <nathan@tootallnate.net> (http://n8.io/)",
     "version": "7.1.4",
     "license": "MIT",
@@ -3191,6 +3413,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "3.2.1",
     "license": "MIT",
@@ -3205,6 +3428,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Brian Woodward (https://github.com/doowb)",
     "version": "4.1.3",
     "license": "MIT",
@@ -3219,6 +3443,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "2.0.1",
     "license": "Python-2.0",
@@ -3233,6 +3458,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Julian Gruber",
     "version": "1.0.2",
     "license": "MIT",
@@ -3247,6 +3473,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Julian Gruber",
     "version": "2.1.4",
     "license": "MIT",
@@ -3261,6 +3488,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Blake Embrey",
     "version": "5.4.4",
     "license": "MIT",
@@ -3275,6 +3503,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Jorge Bucaran",
     "version": "1.4.0",
     "license": "MIT",
@@ -3289,6 +3518,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Fredrik Nicol <fredrik.nicol@gmail.com>",
     "version": "3.2.3",
     "license": "MIT",
@@ -3303,6 +3533,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Josh Junon (https://github.com/qix-)",
     "version": "4.4.3",
     "license": "MIT",
@@ -3317,6 +3548,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Lovell Fuller <npm@lovell.info>",
     "version": "2.1.2",
     "license": "Apache-2.0",
@@ -3331,6 +3563,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Felix Boehm <me@feedic.com>",
     "version": "7.0.1",
     "license": "BSD-2-Clause",
@@ -3345,6 +3578,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Rich Harris",
     "version": "2.0.2",
     "license": "MIT",
@@ -3359,6 +3593,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evgeny Poberezkin",
     "version": "3.1.3",
     "license": "MIT",
@@ -3373,6 +3608,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "thecodrr <thecodrr@protonmail.com>",
     "version": "6.5.0",
     "license": "MIT",
@@ -3387,6 +3623,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "2.3.3",
     "license": "MIT",
@@ -3401,6 +3638,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Nathan Rajlich <nathan@tootallnate.net> (http://n8.io/)",
     "version": "7.0.6",
     "license": "MIT",
@@ -3415,6 +3653,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Sindre Sorhus",
     "version": "1.2.0",
     "license": "MIT",
@@ -3429,6 +3668,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Gustaf Andersson",
     "version": "1.1.6",
     "license": "MIT",
@@ -3443,6 +3683,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Simon Lydell",
     "version": "4.0.0",
     "license": "MIT",
@@ -3457,6 +3698,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Vladimir Zapparov <dervus.grim@gmail.com>",
     "version": "4.3.2",
     "license": "MIT",
@@ -3471,6 +3713,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evgeny Poberezkin",
     "version": "1.0.0",
     "license": "MIT",
@@ -3485,6 +3728,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -3499,6 +3743,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -3513,6 +3758,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -3527,6 +3773,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -3541,6 +3788,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -3555,6 +3803,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -3569,6 +3818,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -3583,6 +3833,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -3597,6 +3848,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -3611,6 +3863,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -3625,6 +3878,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -3639,6 +3893,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.33.0",
     "license": "MPL-2.0",
@@ -3653,6 +3908,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Rich Harris",
     "version": "0.30.21",
     "license": "MIT",
@@ -3667,6 +3923,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me)",
     "version": "5.1.9",
     "license": "ISC",
@@ -3681,6 +3938,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "2.1.3",
     "license": "MIT",
@@ -3695,6 +3953,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "0.4.1",
     "license": "MIT",
@@ -3709,6 +3968,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Andrey Sitnik <andrey@sitnik.ru>",
     "version": "3.3.18",
     "license": "MIT",
@@ -3723,6 +3983,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Drew Powers",
     "version": "7.13.0",
     "license": "MIT",
@@ -3737,6 +3998,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Sindre Sorhus",
     "version": "8.3.0",
     "license": "MIT",
@@ -3751,6 +4013,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "James Halliday",
     "version": "1.0.1",
     "license": "MIT",
@@ -3765,6 +4028,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Alexey Raspopov",
     "version": "1.1.1",
     "license": "ISC",
@@ -3779,6 +4043,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Jon Schlinkert (https://github.com/jonschlinkert)",
     "version": "4.0.7",
     "license": "MIT",
@@ -3793,6 +4058,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Blake Embrey",
     "version": "8.0.0",
     "license": "MIT",
@@ -3807,6 +4073,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Andrey Sitnik <andrey@sitnik.es>",
     "version": "8.5.28",
     "license": "MIT",
@@ -3821,6 +4088,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Vsevolod Strukchinsky",
     "version": "2.0.2",
     "license": "MIT",
@@ -3835,6 +4103,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "1.2.7",
     "license": "MIT",
@@ -3849,6 +4118,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Valentin 7rulnik Semirulnik <v7rulnik@gmail.com>",
     "version": "1.2.1",
     "license": "BSD-3-Clause",
@@ -3863,6 +4133,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Sindre Sorhus",
     "version": "10.2.2",
     "license": "MIT",
@@ -3877,6 +4148,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Superchupu",
     "version": "0.2.17",
     "license": "MIT",
@@ -3891,6 +4163,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Sindre Sorhus",
     "version": "4.41.0",
     "license": "(MIT OR CC0-1.0)",
@@ -3905,6 +4178,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Microsoft Corp.",
     "version": "5.9.3",
     "license": "Apache-2.0",
@@ -3919,6 +4193,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "https://github.com/andreinwald",
     "version": "1.0.1",
     "license": "MIT",
@@ -3933,6 +4208,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "8.2.2",
     "license": "MIT",
@@ -3947,6 +4223,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Microsoft",
     "version": "3.2.0",
     "license": "MIT",
@@ -3961,6 +4238,7 @@
       "P02"
     ],
     "kind": "frontend-runtime-dependency",
+    "acknowledgement_group": "software",
     "authors": "Evan You",
     "version": "3.5.42",
     "license": "MIT",
@@ -3975,6 +4253,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "3.3.11",
     "license": "MIT",
@@ -3989,6 +4268,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "unknown",
     "version": "0.0.43",
     "license": "Apache-2.0",
@@ -4003,6 +4283,7 @@
       "P02"
     ],
     "kind": "frontend-build-dependency",
+    "acknowledgement_group": "software",
     "authors": "Ben Coe <ben@npmjs.com>",
     "version": "21.1.1",
     "license": "ISC",
@@ -4017,6 +4298,7 @@
       "P02"
     ],
     "kind": "development-runtime",
+    "acknowledgement_group": "software",
     "authors": "Python Software Foundation and python-build-standalone contributors",
     "version": "CPython 3.11.14, uv-managed Windows x86_64 standalone distribution",
     "license": "PSF-2.0 and bundled component terms; runtime distribution audit pending",
@@ -4033,6 +4315,7 @@
       "P04"
     ],
     "kind": "project-generated-fixture",
+    "acknowledgement_group": "software",
     "authors": "PhoneticToolbox project",
     "version": "P03 SYN-EGG-44100 recipe",
     "license": "Project-authored test signal; no third-party recording",
