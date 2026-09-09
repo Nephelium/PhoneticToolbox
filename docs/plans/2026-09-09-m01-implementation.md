@@ -150,6 +150,8 @@ assert len(parameter_catalog) == 80
 
 ### M01-F · 持久批次与双端任务
 
+2026-09-10 井井要求以 v2 说明书补查遗漏：[M01 说明书差异](../modules/v2-manual-coverage.md)。本阶段必须接通所选 WAV/TextGrid/同名层的实际切分保存、刷新回读；新增 M01-MAN01（说明书承诺提取后同步保存参数，当前 v2 函数仅写 WAV）须在 F/G 明确语义并实现或取得具体调整决定，不能默默忽略。显示布局修订不替代这些交付。
+
 **文件：** `backend/src/ptb_worker/acoustic_executor.py`、`acoustic_batches.py`、`files.py`、`store.py`、`executor.py`、`cli.py`；`backend/src/ptb_api/jobs.py`、`main.py`、`server.py`；`desktop/src/ptb_desktop/local_service.py`；拟审阅 `backend/migrations/005_acoustic_batches.sql` 及本地schema方案；`scripts/run_m01_validation.py`、`backend/tests/test_m01_jobs.py`。
 
 1. 提供batch创建、文件子任务关联、恢复与取消的精确DDL、旧行保存查询和清理范围；实际迁移待该具体操作授权，不能复用003/004授权。

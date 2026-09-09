@@ -3,7 +3,7 @@ const fs=require('node:fs/promises'),path=require('node:path'),assert=require('n
 (async()=>{
  let raw='';for await(const block of process.stdin)raw+=block;const config=JSON.parse(raw);
  const {chromium}=require(config.playwright);const browser=await chromium.launch({executablePath:config.browser,headless:true});
- const context=await browser.newContext({viewport:{width:1440,height:1000}});const page=await context.newPage(),errors=[];
+ const context=await browser.newContext({viewport:{width:1440,height:900}});const page=await context.newPage(),errors=[];
  page.on('pageerror',e=>errors.push(e.message));const checks=[];
  try{
   await page.goto(config.origin+'/server/');
@@ -20,7 +20,31 @@ const fs=require('node:fs/promises'),path=require('node:path'),assert=require('n
   assert((await page.locator('.wave-track svg').boundingBox()).height>=160);
   assert((await page.locator('.m01-file-list .file-row').first().boundingBox()).height<=42);
   await page.getByLabel('全选音频').check();assert.equal(await page.locator('.m01-file-entry input:checked').count(),17);await page.getByLabel('全选音频').uncheck();
+  await page.locator('.file-panel').focus();await page.keyboard.press('Control+a');assert.equal(await page.locator('.m01-file-entry input:checked').count(),17);await page.getByLabel('全选音频').uncheck();
   await page.getByLabel('显示语谱图（Praat）').check();await page.locator('.spectrogram-canvas canvas').waitFor();
+  await page.locator('.signal-panel').evaluate(el=>el.scrollTop=0);
+  const fit=await page.evaluate(()=>{const r=s=>document.querySelector(s).getBoundingClientRect();return {axis:r('.wave-track .time-axis').bottom,canvas:r('.spectrogram-canvas').bottom,pane:r('.signal-panel').bottom};});
+  assert(fit.axis<fit.pane&&fit.canvas<=fit.pane,'wave axis and entire spectrogram must fit initial 1440x900 view: '+JSON.stringify(fit));
+  const columns=await page.locator('.workbench-grid').evaluate(grid=>{
+   const middle=grid.querySelector('.signal-panel'),left=grid.querySelector('.file-panel'),right=grid.querySelector('.parameter-summary');
+   const before=[left.getBoundingClientRect().top,right.getBoundingClientRect().top,left.scrollTop,right.scrollTop];middle.scrollTop=80;
+   return {moved:middle.scrollTop>0,before,after:[left.getBoundingClientRect().top,right.getBoundingClientRect().top,left.scrollTop,right.scrollTop]};
+  });assert(columns.moved);assert.deepEqual(columns.before,columns.after);
+  await page.locator('.signal-panel').evaluate(el=>el.scrollTop=0);
+  const plot=await page.locator('.wave-track svg').boundingBox();await page.mouse.move(plot.x+plot.width*.75,plot.y+plot.height*.5);
+  await page.keyboard.down('Control');await page.mouse.wheel(0,-100);await page.keyboard.up('Control');
+  await page.waitForFunction(()=>Number(document.querySelector('.pan-label input')?.value)>0);
+  const windowStart=Number(await page.getByLabel('平移波形时间窗').inputValue());assert(Math.abs(windowStart-.3)<.001,'0.6-second cursor anchor stays at 75% after 2x zoom');
+  await page.getByRole('button',{name:'适合窗口',exact:true}).click();
+  checks.push('1440x900 complete spectrogram and per-track time axis; independent middle scroll; Ctrl-wheel cursor anchor');
+  await page.setViewportSize({width:1440,height:660});await page.locator('.workbench-columns.shared-scroll').waitFor();
+  const shared=await page.locator('.workbench-columns').evaluate(grid=>{
+   const children=[...grid.children],before=children.map(el=>el.getBoundingClientRect().top);grid.scrollTop=70;
+   return {amount:grid.scrollTop,deltas:children.map((el,i)=>before[i]-el.getBoundingClientRect().top)};
+  });assert(shared.amount>0);assert(shared.deltas.every(x=>Math.abs(x-shared.amount)<1));
+  await page.setViewportSize({width:1440,height:900});await page.locator('.workbench-columns:not(.shared-scroll)').waitFor();
+  await page.locator('.signal-panel').evaluate(el=>el.scrollTop=0);
+  checks.push('all three overflowing columns share workbench scroll at 660px height; independent scrolling restored at 900px');
   assert(await page.locator('.spectrogram-canvas canvas').evaluate(canvas=>{const data=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;return data.some((v,i)=>i%4===0&&v<200)&&data.some((v,i)=>i%4===0&&v>240);}));
   await page.getByLabel('显示语谱图（Praat）').uncheck();assert.equal(await page.locator('.spectrogram-canvas').count(),0);
   checks.push('single/dual channel toggle, taller wave, compact rows, select all, actual Praat grayscale on/off');
@@ -73,6 +97,20 @@ const fs=require('node:fs/promises'),path=require('node:path'),assert=require('n
   await page.getByLabel('显示语谱图（Praat）').check();await page.locator('.spectrogram-canvas canvas').waitFor();
   await page.getByLabel('放大波形').click();
   await page.locator('.spectrogram-canvas canvas[aria-label*="至300.000秒"]').waitFor();
+  await page.getByLabel('播放进度（当前选区）').fill('420');
+  assert((await page.locator('.audio-transport .mono').innerText()).startsWith('420.000 /'));
+  await page.getByRole('button',{name:'播放选区',exact:true}).click();await page.getByRole('button',{name:'暂停',exact:true}).waitFor();
+  const seekBox=await page.getByLabel('播放进度（当前选区）').boundingBox();
+  await page.mouse.move(seekBox.x+seekBox.width*.7,seekBox.y+seekBox.height/2);await page.mouse.down();
+  await page.mouse.move(seekBox.x+seekBox.width*.8,seekBox.y+seekBox.height/2,{steps:8});
+  await page.waitForTimeout(150);assert(Number(await page.getByLabel('播放进度（当前选区）').inputValue())>470,'playback ticks must not reset thumb while dragging');await page.mouse.up();
+  await page.getByLabel('播放进度（当前选区）').fill('510');
+  await page.waitForFunction(()=>Number(document.querySelector('.playback-seek input').value)>=510&&document.querySelector('.audio-transport button').textContent.includes('暂停'));
+  await page.getByRole('button',{name:'暂停',exact:true}).click();
+  await page.getByLabel('播放进度（当前选区）').fill('600');
+  assert((await page.locator('.audio-transport .mono').innerText()).startsWith('600.000 /'));
+  await page.getByRole('button',{name:'停止',exact:true}).click();
+  checks.push('600-second audio seek while paused/playing and exact endpoint, without changing selection');
   await page.screenshot({path:path.join(config.output,'m01-long-praat.png'),fullPage:true,animations:'disabled'});
   checks.push('600-second 19.2 MB WAV: worker load '+longLoadMs+' ms, <=1600 peak vertices, bounded Praat preview follows zoom');
   await page.getByLabel('显示语谱图（Praat）').uncheck();await back();await enter('测试项目乙');
@@ -90,5 +128,5 @@ const fs=require('node:fs/promises'),path=require('node:path'),assert=require('n
   for(const person of config.people){assert(!storage.some(s=>s.includes(person.password)));}
   assert.deepEqual(errors,[]);
   await fs.writeFile(path.join(config.output,'report.json'),JSON.stringify({success:true,checks,errors,scope:'Actual Chrome and HTTP; account/storage use explicit memory test doubles, not PG evidence'},null,2));
- }finally{await context.close();await browser.close();}
+ }catch(error){await page.screenshot({path:path.join(config.output,'failed.png'),animations:'disabled'});throw error;}finally{await context.close();await browser.close();}
 })().catch(e=>{console.error(e.stack);process.exitCode=1;});

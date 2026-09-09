@@ -7,7 +7,7 @@ from uuid import uuid4
 import json
 import time
 from PyQt6.QtCore import QTimer
-from PyQt6.QtWidgets import QApplication,QFileDialog
+from PyQt6.QtWidgets import QApplication,QFileDialog,QLineEdit
 from ptb_desktop.host import register_scheme,Workbench
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -24,7 +24,19 @@ def main():
     click=lambda label:"[...document.querySelectorAll('button')].find(b=>b.textContent.trim()==="+json.dumps(label,ensure_ascii=False)+")?.click()"
     def dialog_accept():
         dialog=app.activeModalWidget()
-        if isinstance(dialog,QFileDialog):dialog.setDirectory(str(inputs));dialog.selectFile(str(inputs));dialog.accept()
+        if isinstance(dialog,QFileDialog):
+            # QFileSystemModel loads asynchronously. Select the child in its parent,
+            # then verify the real dialog selection before accepting the grant.
+            dialog.setDirectory(str(inputs.parent))
+            def accept_selected():
+                if time.monotonic()-started>40:return
+                edit=dialog.findChild(QLineEdit,'fileNameEdit')
+                if edit is not None:edit.setText(str(inputs))
+                selected=dialog.selectedFiles()
+                result['dialog_selection']={'selected':selected,'expected':str(inputs)}
+                if len(selected)==1 and Path(selected[0]).resolve()==inputs.resolve():dialog.accept()
+                else:QTimer.singleShot(150,accept_selected)
+            QTimer.singleShot(150,accept_selected)
         else:QTimer.singleShot(100,dialog_accept)
     checks=[
         ("document.querySelector('.host-badge')?.textContent==='本地桌面'",click('参数估计')),
@@ -39,7 +51,8 @@ def main():
         ("document.querySelectorAll('.parameter-grid input').length===80",click('全不选')),
         ("document.querySelector('dialog .primary')?.disabled===true",click('取消')),
         ("!document.querySelector('dialog')","document.querySelector('.m01-intervals button')?.click()"),
-        ("document.querySelector('.m01-batch-bar strong')?.textContent==='处理列表中的 17 个文件'",None),
+        ("document.querySelector('.m01-batch-bar strong')?.textContent==='处理列表中的 17 个文件'", "document.querySelector('.signal-panel').scrollTop=0"),
+        ("(()=>{const r=s=>document.querySelector(s).getBoundingClientRect();return r('.wave-track .time-axis').bottom<r('.signal-panel').bottom && r('.spectrogram-canvas').bottom<=r('.signal-panel').bottom && Math.abs(r('.m01-output-row').top-r('.m01-directory-bar>.primary').top)<5 && !!document.querySelector('.playback-seek input')})()",None),
     ]
     def finish(code,error=None):
         timer.stop();result.update(success=code==0,observations=observations,error=error)

@@ -42,3 +42,5 @@ frontend / backend / desktop / packages / contracts / resources / tests 是 v3 �
 所有对外部署、代码推送、发行物发布，待明确授权再执行。
 
 M01-E 已完成[目录、共享研究页与Praat显示定向验收](docs/testing/m01-workspace-report.md)：默认单声道/可双声道、较高波形、紧凑文件行与全选、可开关语谱图、长音频峰值显示。按[开发入口](docs/development.md)启动；参数批计算、取消与结果持久发布仍待M01-F。
+
+2026-09-10 截图反馈后的 [M01 布局与时间交互修订](docs/testing/m01-layout-report.md)：独立列滚动、自适应目录条、可见时间轴、Ctrl+滚轮缩放和播放进度定位。[说明书覆盖门](docs/modules/v2-manual-coverage.md)已加入迁移流程；真实 TextGrid 切分保存仍为 M01-F/G 必须完成项，不把预览当作已实现写入。

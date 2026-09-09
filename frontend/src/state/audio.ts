@@ -9,6 +9,11 @@ function tick(){ if(!context || !playback.playing)return;playback.position=Math.
 export function pause(){generation++;playback.playing=false;cancelAnimationFrame(raf);if(source){source.onended=null;source.stop();source.disconnect();source=undefined;}gain?.disconnect();gain=undefined;}
 export function stop(){pause();playback.position=0;}
 export function volume(value:number){playback.volume=value;if(gain)gain.gain.value=value;}
+export function seek(asset:AudioAsset,position:number,start:number,end:number,selectedChannel:number){
+ const continuing=playback.playing;pause();
+ playback.position=Math.max(start,Math.min(position,end,asset.duration));
+ if(continuing&&playback.position<end)void play(asset,playback.position,end,selectedChannel);
+}
 export async function play(asset:AudioAsset,start:number,end:number,selectedChannel:number){
   pause();const request=generation;playback.error='';
   try {

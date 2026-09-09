@@ -6,12 +6,14 @@ import {m01State,saveM01} from './store.ts';
 import {association,matchAssociation,reconcile,applyParameters,applySettings,dirty,effectiveOutput,type Settings} from './state.ts';
 import {stop} from '../../state/audio.ts';
 import WaveformViewport from '../../components/WaveformViewport.vue';
+import WorkbenchColumns from '../../components/WorkbenchColumns.vue';
 import ParameterDrawer from '../../components/ParameterDrawer.vue';
 import SettingsDrawer from '../../components/SettingsDrawer.vue';
 import AppIcon from '../../components/AppIcon.vue';
 const props=defineProps<{context:ResearchContext}>();const emit=defineEmits<{references:[]}>();
 const state=m01State(props.context.key),picker=ref<HTMLInputElement>(),busy=ref(false),notice=ref('');
 const audioFiles=computed(()=>state.files.filter(f=>f.kind==='audio'));
+function listKey(event:KeyboardEvent){if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='a'){event.preventDefault();state.marked=audioFiles.value.map(f=>f.id);}}
 const selected=computed(()=>audioFiles.value.find(f=>f.id===state.selected));
 const spectrogramLoader=computed(()=>{const file=selected.value;return props.context.files.spectrogram&&file?(view:SpectrogramView)=>props.context.files.spectrogram!(file,view):undefined;});
 const linked=computed(()=>association(state));
@@ -74,29 +76,28 @@ onUnmounted(()=>{disposed=true;previewAbort.abort();state.loadVersion++;state.li
 </script>
 <template>
 <section class="workspace-page m01-page" aria-label="参数估计 工作区">
-<header class="page-heading"><div><p class="eyebrow">M01 · {{context.label}}</p><h1>参数估计</h1><p class="muted">组织音频与关联，设置下一次分析。</p></div><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button></header>
+<header class="page-heading"><div><p class="eyebrow">M01 · {{context.label}}</p><h1>参数估计</h1></div><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button></header>
 <div class="m01-directory-bar">
-<template v-if="context.files.kind==='desktop'"><button class="primary" :disabled="busy" @click="choose('input')">选择音频目录</button><span class="directory-label">{{state.input?.label??'尚未选择目录'}}</span><button :disabled="busy" @click="choose('association')">选择关联目录</button><span v-if="state.associationDirectory" class="directory-label">{{state.associationDirectory.label}}</span></template>
+<template v-if="context.files.kind==='desktop'"><button class="primary" :disabled="busy" @click="choose('input')">选择音频目录</button><span class="directory-label" :title="state.input?.label">{{state.input?.label??'尚未选择目录'}}</span><button :disabled="busy" @click="choose('association')">选择关联目录</button><span v-if="state.associationDirectory" class="directory-label" :title="state.associationDirectory.label">{{state.associationDirectory.label}}</span></template>
 <template v-else-if="context.files.kind==='preview'"><input ref="picker" class="visually-hidden" type="file" accept=".wav" multiple aria-label="选择音频列表" @change="add"/><button class="primary" @click="picker?.click()">添加WAV到列表</button><span class="hint">本机预览 · 不上传</span></template>
 <template v-else><span>项目资源 · {{context.label}}</span><small class="muted">在项目文件管理中上传WAV、TextGrid与.lip.json，再刷新。</small></template>
 <button :disabled="busy||(context.files.kind==='desktop'&&!state.input)" @click="refresh">{{busy?'正在读取…':'刷新列表'}}</button>
-</div>
-<div v-if="context.files.kind==='desktop'" class="m01-output-row"><label><input v-model="state.sameDirectory" type="checkbox"/>结果与WAV同目录</label><button :disabled="state.sameDirectory||busy" @click="choose('output')">选择结果目录</button><span class="directory-label">{{effectiveOutput(state)?.label??'尚未选择结果目录'}}</span></div>
+<div v-if="context.files.kind==='desktop'" class="m01-output-row"><label><input v-model="state.sameDirectory" type="checkbox"/>结果与WAV同目录</label><button :disabled="state.sameDirectory||busy" @click="choose('output')">选择结果目录</button><span class="directory-label" :title="effectiveOutput(state)?.label">{{effectiveOutput(state)?.label??'尚未选择结果目录'}}</span></div></div>
 <p v-if="notice" role="status" class="notice">{{notice}}</p><p v-if="state.wave.error" role="alert" class="error-banner">{{state.wave.error}}</p>
-<div class="workbench-grid">
-<aside class="file-panel"><div class="panel-heading"><h2>音频列表</h2><small>{{audioFiles.length}} 个文件</small></div><p class="hint">点选用于试听；批处理覆盖整个列表。</p>
+<WorkbenchColumns @files-keydown="listKey">
+<template #files><div class="panel-heading"><h2>音频列表</h2><small>{{audioFiles.length}} 个文件</small></div><p class="hint">点选用于试听；批处理覆盖整个列表。</p>
 <div class="m01-select-all"><label><input aria-label="全选音频" type="checkbox" :checked="audioFiles.length>0&&state.marked.length===audioFiles.length" :indeterminate="state.marked.length>0&&state.marked.length<audioFiles.length" :disabled="!audioFiles.length" @change="state.marked=($event.target as HTMLInputElement).checked?audioFiles.map(f=>f.id):[]"/>全选</label><small>切分选择 {{state.marked.length}} / {{audioFiles.length}}</small></div><div class="m01-file-list"><div v-for="file in audioFiles" :key="file.id" class="m01-file-entry"><input v-model="state.marked" type="checkbox" :value="file.id" :aria-label="'选择切分 '+file.name"/><button class="file-row" :class="{selected:state.selected===file.id}" :aria-pressed="state.selected===file.id" @click="selectFile(file)"><AppIcon name="file"/><span>{{file.name}}<small>{{association(state,file.id).textgrid?'TextGrid · ':''}}{{association(state,file.id).lip?'唇形关联 · ':''}}{{Math.ceil(file.size/1024)}} KB</small><small v-if="association(state,file.id).error" class="danger-text">关联待确认</small></span></button></div></div>
-<p v-if="!audioFiles.length" class="empty-small">选择音频目录或刷新项目资源。</p></aside>
-<div class="signal-panel"><template v-if="selected"><div class="signal-heading"><h2>{{selected.name}}</h2><p v-if="state.wave.asset" class="mono muted">{{state.wave.asset.sampleRate}} Hz · {{state.wave.asset.channels.length}} 声道 · {{state.wave.asset.duration.toFixed(3)}} s</p></div>
+<p v-if="!audioFiles.length" class="empty-small">选择音频目录或刷新项目资源。</p></template>
+<template #default><template v-if="selected"><div class="signal-heading"><h2>{{selected.name}}</h2><p v-if="state.wave.asset" class="mono muted">{{state.wave.asset.sampleRate}} Hz · {{state.wave.asset.channels.length}} 声道 · {{state.wave.asset.duration.toFixed(3)}} s</p></div>
 <div class="m01-association-controls"><label>TextGrid<select aria-label="TextGrid关联" :value="linked.textgrid?.id??''" :disabled="state.wave.loading" @change="changeAssociation('textgrid',$event)"><option value="">不关联</option><option v-for="f in state.files.filter(f=>f.kind==='textgrid')" :key="f.id" :value="f.id">{{f.name}}</option></select></label><label>唇形数据<select aria-label="唇形关联" :value="linked.lip?.id??''" @change="changeAssociation('lip',$event)"><option value="">不关联</option><option v-for="f in state.files.filter(f=>f.kind==='lip')" :key="f.id" :value="f.id">{{f.name}}</option></select></label></div>
-<p class="hint">同名自动关联；可明确改选。唇形使用安全.lip.json格式，旧PKL需先经受限转换。</p><p v-if="linked.error" role="alert" class="error-banner">{{linked.error}}</p>
-<p v-if="state.wave.loading" role="status">正在读取音频与关联…</p>
-<template v-if="state.wave.asset"><label class="channel-picker">试听声道<select v-model.number="state.wave.channel" @change="stop"><option v-for="(_,i) in state.wave.asset.channels" :key="i" :value="i">声道 {{i+1}}</option></select></label><WaveformViewport :state="state.wave" :spectrogram-loader="spectrogramLoader"/>
+<details class="association-help"><summary>关联说明</summary><p class="hint">同名自动关联；可明确改选。唇形使用安全.lip.json格式，旧PKL需先经受限转换。</p></details><p v-if="linked.error" role="alert" class="error-banner">{{linked.error}}</p>
+<p v-if="state.wave.loading" role="status" class="audio-loading"><progress aria-label="音频读取与解码进度"/>正在读取音频与关联…</p>
+<template v-if="state.wave.asset"><WaveformViewport :state="state.wave" :spectrogram-loader="spectrogramLoader"><template #controls><label class="channel-picker">试听声道<select v-model.number="state.wave.channel" @change="stop"><option v-for="(_,i) in state.wave.asset.channels" :key="i" :value="i">声道 {{i+1}}</option></select></label></template></WaveformViewport>
 <section v-if="linked.tiers.length" class="m01-tiers"><label>TextGrid切分层<select v-model.number="linked.layer"><option v-for="(tier,i) in linked.tiers" :key="i" :value="i">{{tier.name}}</option></select></label><div class="m01-intervals"><button v-for="(interval,i) in intervals" :key="i" @click="intervalSelect(interval.xmin,interval.xmax)"><span class="ipa-sample">{{interval.text||'（空标签）'}}</span><small>{{interval.xmin.toFixed(3)}}–{{interval.xmax.toFixed(3)}} s</small></button></div><p class="hint">点选区间同步试听选区。当前层有 {{segments}} 个候选片段（跳过空白、sil、eps标签）。</p><button disabled>保存当前层切分音频</button><small class="muted">切分写入将在任务接入后启用。</small></section>
-</template></template><div v-else class="wave-empty"><AppIcon name="wave"/><h2>选择一段声音</h2><p>从左侧列表选择文件，查看真实波形、标签和试听选区。</p></div></div>
-<aside class="parameter-summary"><h2>输出参数</h2><div class="parameter-count"><strong>{{state.wave.parameters.length}}</strong><span>/ 80 项</span></div><button @click="openParameters">选择输出参数</button><hr/><h2>分析设置</h2><p class="mono muted">帧移 {{state.settings.frameshift_ms}} ms<br/>分析窗 {{state.settings.windowsize_ms}} ms</p><button @click="openSettings">编辑14项设置</button><button :disabled="!dirty(state)" @click="save">保存草稿</button><span v-if="dirty(state)" class="draft-indicator">● 尚未保存</span><hr/><h2>分析结果</h2><p class="empty-small">暂无计算结果</p></aside>
-</div>
-<div class="m01-batch-bar"><div><strong>处理列表中的 {{audioFiles.length}} 个文件</strong><p class="hint">与当前试听文件、TextGrid切分层分别操作。</p></div><button disabled>开始全列表分析</button><span class="muted">计算、取消与双格式结果发布将在下一阶段接入。</span></div>
+</template></template><div v-else class="wave-empty"><AppIcon name="wave"/><h2>选择一段声音</h2><p>从左侧列表选择文件，查看真实波形、标签和试听选区。</p></div></template>
+<template #settings><h2>输出参数</h2><div class="parameter-count"><strong>{{state.wave.parameters.length}}</strong><span>/ 80 项</span></div><button @click="openParameters">选择输出参数</button><hr/><h2>分析设置</h2><p class="mono muted">帧移 {{state.settings.frameshift_ms}} ms<br/>分析窗 {{state.settings.windowsize_ms}} ms</p><button @click="openSettings">编辑14项设置</button><button :disabled="!dirty(state)" @click="save">保存草稿</button><span v-if="dirty(state)" class="draft-indicator">● 尚未保存</span><hr/><h2>分析结果</h2><p class="empty-small">暂无计算结果</p><div class="m01-batch-bar"><div><strong>处理列表中的 {{audioFiles.length}} 个文件</strong><p class="hint">与当前试听文件、TextGrid切分层分别操作。</p></div><button disabled>开始全列表分析</button><span class="muted">计算、取消与双格式结果发布将在下一阶段接入。</span></div></template>
+</WorkbenchColumns>
+
 <ParameterDrawer v-if="state.drawer==='parameters'" :selected="state.wave.parameters" :draft="state.parameterDraft" require-selection @draft="state.parameterDraft=$event" @close="state.drawer=''" @apply="parameters"/>
 <SettingsDrawer v-if="state.drawer==='settings'" :draft="state.settingsDraft" @draft="state.settingsDraft=$event" @close="state.drawer=''" @apply="settings"/>
 </section></template>

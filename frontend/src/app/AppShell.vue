@@ -92,7 +92,7 @@ const modalTitle=computed(()=>({settings:'工作台设置',help:'使用说明',u
 <span class="host-badge">{{research?'网页项目':host.kind==='desktop'?'本地桌面':'浏览器预览'}}</span>
 </header>
 <button v-if="research" class="project-return" @click="emit('leaveProject')">← 返回项目与文件管理 · {{research.label}}</button>
-<main id="main-content" tabindex="-1" role="tabpanel" :aria-labelledby="'tab-'+active">
+<main id="main-content" :class="{'pane-workspace':active==='M01'}" tabindex="-1" role="tabpanel" :aria-labelledby="'tab-'+active">
 <div v-if="active==='home'" class="home-page">
 <header class="welcome">
 <div class="welcome-copy">
