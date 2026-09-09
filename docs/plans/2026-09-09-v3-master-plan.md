@@ -14,7 +14,7 @@
 ## 2. 阶段与交付
 | 阶段 | 任务 | 核心交付 | 当前状态 |
 | --- | --- | --- | --- |
-| 基线与风险 | P00–P03 | 来源基线、宿主验证、依赖/科研基准 | P00 文档与继承完成；P01 Windows 原型/试用及风险评审通过；P02 骨架 verified，P03 未实施 |
+| 基线与风险 | P00–P03 | 来源基线、宿主验证、依赖/科研基准 | P00 文档与继承完成；P01 Windows 原型/试用及风险评审通过；P02 骨架与 P03 独立行为基线 verified（限定 Windows 定向范围） |
 | 公共基础 | P04–P07 | UI 壳、登录、任务、5 GB/7 天 | 未实施 |
 | 功能迁移 | P08–P09 / M01–M15 | 全部功能双端与设备适配 | 未实施 |
 | 研究可追溯 | P10 | 软件/说明书/随包来源一致 | 已做首轮调查，未接软件界面 |
@@ -81,7 +81,7 @@
 
 ### P03 · 科研行为与数据基线
 
-**依赖：** P02。**状态：** planned。
+**依赖：** P02。**状态：** verified（独立原 v2 捕获、同平台重复性与 EXE 提取代码对照；完整 GUI 与科学真值未测，见 [P03 报告](../testing/p03-baseline-report.md)）。
 
 **目标文件：** tests/fixtures/manifest.json；tests/parity/test_baseline.py；scripts/capture_v2_baseline.py；docs/baseline/capture-protocol.md。
 

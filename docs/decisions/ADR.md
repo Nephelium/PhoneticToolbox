@@ -96,3 +96,11 @@
 - 依赖与来源：新包配置、Python lock、npm lock 与 P02 清单同步；构建/测试依赖与运行依赖分别标记。只登记版本元数据不足以完成 Qt/Chromium 原生发行审查。
 - 官方依据：[Pydantic strict mode](https://docs.pydantic.dev/latest/concepts/strict_mode/)、[openapi-typescript](https://openapi-ts.dev/introduction)。
 - 构建依赖修正：openapi-typescript 7.13.0 的 Redocly 1.34.19 精确依赖 js-yaml 4.3.1，安装审计命中 GHSA-2883-xcg3-v3hh。仅对这条传递依赖覆写至官方补丁 4.3.2，保留上游库其余版本，并重跑契约生成/漂移/类型与构建测试；不使用自动大范围升级。[上游修复公告](https://github.com/advisories/GHSA-2883-xcg3-v3hh)。
+
+## ADR-014 P03 独立基准与旧行为缺陷分离
+- 状态：2026-09-09 采用，用户授权继续 P03。
+- P03 捕获工具作为测试专用边界，在独立进程中用原 conda 环境只读导入原 v2；正式 core/backend/desktop/frontend 仍禁止依赖 v2。禁写 pycache，临时和结果目录全部指向 v3 忽略目录。
+- 基准来自原环境实际执行，不来自新核心包。公开合成输入的冻结结果可随测试保留，私人录音、标注和其完整数值结果只存在本机忽略目录。公开清单使用匿名样例 ID 和内容 hash。
+- 用观测调用链和 REAPER 实际进程记录确认后端，不能依赖误导性的注释或请求名。原结果中未标原因的 NaN 不自行推断成无声；保存 null 加 nonfinite mask，原因标 legacy_unspecified，并关联过程日志。
+- 先冻结参数/输出/时间行为，再记录科学缺陷。单位不明确时标未核定而不猜测；跨平台精度与所有 15 模块的黄金覆盖随对应迁移任务扩展。
+- EXE hash 相同不代表与当前源码相同。归档字节码/配置对照、提取实现的行为、完整 EXE/GUI 行为属于三层不同证据，报告必须分开。

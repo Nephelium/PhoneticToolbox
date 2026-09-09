@@ -87,8 +87,8 @@
       "title": "科研行为与数据基线",
       "dependencies": "P02",
       "files": "tests/fixtures/manifest.json；tests/parity/test_baseline.py；scripts/capture_v2_baseline.py；docs/baseline/capture-protocol.md",
-      "status": "planned",
-      "note": "planned",
+      "status": "verified",
+      "note": "Windows original-v2 reference capture and same-platform repeatability verified; v3 parity and full EXE GUI not tested",
       "steps": [
         "从本机只读语料中选取持续元音、嘎裂声、EGG 和带 TextGrid 样例",
         "记录源文件 hash、音频头、完整参数、真实后端与环境",
@@ -98,7 +98,12 @@
         "将已知问题与迁移回归分开登记"
       ],
       "acceptance": "基准结果不能由 v3 自己生成；参数/时间/后端可复现，尚缺样例清楚标记",
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/plans/2026-09-09-p03-baseline.md",
+        "docs/testing/p03-baseline-report.md",
+        "tests/fixtures/manifest.json",
+        "output/validation/p03/20260909-165413/capture-summary.json"
+      ]
     },
     {
       "id": "P04",

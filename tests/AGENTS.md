@@ -1,6 +1,6 @@
 # tests — 工作规则
 
-继承 [根 AGENTS.md](../AGENTS.md)，先读本目录 [ARCHITECTURE.md](ARCHITECTURE.md)。2026-09-09 已获 P02 工程骨架实施授权，具体边界见根规则与 P02 计划；不扩大为全面业务迁移或部署授权。
+继承 [根 AGENTS.md](../AGENTS.md)，先读本目录 [ARCHITECTURE.md](ARCHITECTURE.md)。2026-09-09 已按授权完成 P03 独立科研基线，具体边界见根规则与 P03 报告；不扩大为全面业务迁移或部署授权。
 
 - 负责：功能、数值、跨用户和发行验证。
 - 允许依赖：公开合成 fixture、经许可的最小样例、忽略的本机语料引用和测试工具。

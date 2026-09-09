@@ -1,0 +1,285 @@
+{
+  "schema_version": 1,
+  "producer": {
+    "kind": "original-v2-conda-process",
+    "environment": "phonetic_311"
+  },
+  "v3_algorithm_parity": "not_implemented",
+  "public_cases": [
+    {
+      "id": "SYN-VOWEL-44100",
+      "input_sha256": "6f2d8fde3753ace08f3bf1cad3944129449e86c54c36726d11a724219d6a17db",
+      "status": "returned",
+      "baseline_path": "tests/fixtures/golden/SYN-VOWEL-44100.json.gz",
+      "baseline_sha256": "1f39e8912051a8293ee55c4d9e821902dbf677b8dff841bea9bdfebe15d3beed",
+      "audio": {
+        "channels": 1,
+        "dtype": "int16",
+        "sample_count": 35280,
+        "sample_rate_hz": 44100
+      },
+      "channel_selection": null,
+      "requirements": [
+        "P03",
+        "M01"
+      ]
+    },
+    {
+      "id": "SYN-MIXED-16000",
+      "input_sha256": "53b79fbf817dac6d80453af9a2939086dc6c45777919ceb3dd130918b61a146a",
+      "status": "returned",
+      "baseline_path": "tests/fixtures/golden/SYN-MIXED-16000.json.gz",
+      "baseline_sha256": "e0aa93907341ef315695a83bc7baaa37bf5909528ea4f006ae1b83586a0f60db",
+      "audio": {
+        "channels": 1,
+        "dtype": "int16",
+        "sample_count": 19200,
+        "sample_rate_hz": 16000
+      },
+      "channel_selection": null,
+      "requirements": [
+        "P03",
+        "M01"
+      ]
+    },
+    {
+      "id": "SYN-SILENCE-16000",
+      "input_sha256": "358c6dcef4442790decb0a5c03fb320154f9d1dd5b4618e301f9e6661a413cb5",
+      "status": "returned",
+      "baseline_path": "tests/fixtures/golden/SYN-SILENCE-16000.json.gz",
+      "baseline_sha256": "f6accadad8468b0f436250b1f6cc9fed2b0bd39dfc08eceff1a31650da8886e1",
+      "audio": {
+        "channels": 1,
+        "dtype": "int16",
+        "sample_count": 8000,
+        "sample_rate_hz": 16000
+      },
+      "channel_selection": null,
+      "requirements": [
+        "P03",
+        "M01"
+      ]
+    },
+    {
+      "id": "SYN-SINE440-16000",
+      "input_sha256": "6deadff2e9327d5af87da8caa6652424268b4c5b125a6bca40edd37ee7b87cf8",
+      "status": "returned",
+      "baseline_path": "tests/fixtures/golden/SYN-SINE440-16000.json.gz",
+      "baseline_sha256": "822fade3cfd7991d076dc9f28a2108a3eed9d28c45ca6b4b20d5de8d58cfc6e1",
+      "audio": {
+        "channels": 1,
+        "dtype": "int16",
+        "sample_count": 8000,
+        "sample_rate_hz": 16000
+      },
+      "channel_selection": null,
+      "requirements": [
+        "P03",
+        "M01"
+      ]
+    },
+    {
+      "id": "SYN-ONE-FRAME",
+      "input_sha256": "156075e2635b9b2c186258f4db987ed9fbdfb727f49e5eac4b9a126aefbdf727",
+      "status": "returned",
+      "baseline_path": "tests/fixtures/golden/SYN-ONE-FRAME.json.gz",
+      "baseline_sha256": "a596633fb65ec46ff9524c395e4ec55668b8c65713636a4f409ea51b46867d9f",
+      "audio": {
+        "channels": 1,
+        "dtype": "int16",
+        "sample_count": 1,
+        "sample_rate_hz": 16000
+      },
+      "channel_selection": null,
+      "requirements": [
+        "P03",
+        "M01"
+      ]
+    },
+    {
+      "id": "SYN-EMPTY",
+      "input_sha256": "ba584a378b11d9e9c98736fd8c256fe1453a84ee4139416d24b07acff424f0fb",
+      "status": "returned",
+      "baseline_path": "tests/fixtures/golden/SYN-EMPTY.json.gz",
+      "baseline_sha256": "c6ea4ed269bb2da01340f8e6b5135238032df256f406bf65f34d477072ea7563",
+      "audio": {
+        "channels": 1,
+        "dtype": "int16",
+        "sample_count": 0,
+        "sample_rate_hz": 16000
+      },
+      "channel_selection": null,
+      "requirements": [
+        "P03",
+        "M01"
+      ]
+    },
+    {
+      "id": "SYN-BROKEN",
+      "input_sha256": "cbf8ceb556bde142c1589aae0305f389972e80984edac0d37f06b01baa379367",
+      "status": "error",
+      "baseline_path": "tests/fixtures/golden/SYN-BROKEN.json.gz",
+      "baseline_sha256": "5f4f12c0f6e080e6357dbb03e4d2a53465e64d42cfbdfff4bfae14a77ed82785",
+      "audio": null,
+      "channel_selection": null,
+      "requirements": [
+        "P03",
+        "M01"
+      ]
+    },
+    {
+      "id": "SYN-EGG-44100",
+      "input_sha256": "87aefa73ff48b1b04b2197a4952e60468495c6a4817e3c75e0ef47ed40e165ff",
+      "status": "returned",
+      "baseline_path": "tests/fixtures/golden/SYN-EGG-44100.json.gz",
+      "baseline_sha256": "11e14a4500b1d16064e427e7bc944251ec893f568b9a55b7219b005fb03cfa44",
+      "audio": {
+        "channels": 2,
+        "dtype": "int16",
+        "sample_count": 35280,
+        "sample_rate_hz": 44100
+      },
+      "channel_selection": {
+        "evidence": "generator declares left shape/right audio",
+        "flip_channels": false
+      },
+      "requirements": [
+        "P03",
+        "M03"
+      ]
+    }
+  ],
+  "private_cases": [
+    {
+      "id": "LOCAL-01",
+      "input_sha256": "df9c3cb6c9cfd38ab29dfd9875abf13a87435bb230e67d43acbc9fcdd6f0456e",
+      "sidecar_sha256": [
+        "0f1dcf3713415b8fe99a5a64cbc2ef30ef8ea1fe52a4f9064e9384f80749dded"
+      ],
+      "status": "returned",
+      "privacy": "private_local_only",
+      "audio": {
+        "channels": 1,
+        "dtype": "int16",
+        "sample_count": 172863,
+        "sample_rate_hz": 44100
+      },
+      "channel_selection": null,
+      "requirements": [
+        "P03",
+        "M01"
+      ]
+    },
+    {
+      "id": "LOCAL-06",
+      "input_sha256": "0d50b1834d6073e0d17b7ca04c86387a25d12196258a51c8c3ccbe1e3d80493f",
+      "sidecar_sha256": [],
+      "status": "returned",
+      "privacy": "private_local_only",
+      "audio": {
+        "channels": 1,
+        "dtype": "int16",
+        "sample_count": 10754,
+        "sample_rate_hz": 16000
+      },
+      "channel_selection": null,
+      "requirements": [
+        "P03",
+        "M01"
+      ]
+    },
+    {
+      "id": "LOCAL-09",
+      "input_sha256": "b5183a5d5bddf4661314574e636913420420fed73babb2a113e5d730c67547fa",
+      "sidecar_sha256": [],
+      "status": "returned",
+      "privacy": "private_local_only",
+      "audio": {
+        "channels": 1,
+        "dtype": "int16",
+        "sample_count": 19577,
+        "sample_rate_hz": 22050
+      },
+      "channel_selection": null,
+      "requirements": [
+        "P03",
+        "M01"
+      ]
+    },
+    {
+      "id": "LOCAL-12",
+      "input_sha256": "c2210ac1f996702a9b087028a737a25055104df256775cd7753c3eb43545df62",
+      "sidecar_sha256": [
+        "9a2460a290f7837bfa32f0cabc42441beed217befe46857a7deefc7c1d041637"
+      ],
+      "status": "returned",
+      "privacy": "private_local_only",
+      "audio": {
+        "channels": 1,
+        "dtype": "int16",
+        "sample_count": 358427,
+        "sample_rate_hz": 44100
+      },
+      "channel_selection": null,
+      "requirements": [
+        "P03",
+        "M01"
+      ]
+    },
+    {
+      "id": "EGG-01",
+      "input_sha256": "cacce9835054f5a799774ee05c57f47a0e90dd96ee14df820529a74cffa83ab7",
+      "sidecar_sha256": [],
+      "status": "returned",
+      "privacy": "private_local_only",
+      "audio": {
+        "channels": 2,
+        "dtype": "float32",
+        "sample_count": 646699,
+        "sample_rate_hz": 44100
+      },
+      "channel_selection": {
+        "evidence": "explicit_user_confirmation_left_EGG",
+        "flip_channels": false
+      },
+      "requirements": [
+        "P03",
+        "M03"
+      ]
+    },
+    {
+      "id": "EGG-05",
+      "input_sha256": "ed71f6d209aa5cbe685b6371280f7d6ba98285497e7874bd85893a99c586ff63",
+      "sidecar_sha256": [],
+      "status": "returned",
+      "privacy": "private_local_only",
+      "audio": {
+        "channels": 2,
+        "dtype": "int16",
+        "sample_count": 1006848,
+        "sample_rate_hz": 44100
+      },
+      "channel_selection": {
+        "evidence": "explicit_user_confirmation_right_EGG",
+        "flip_channels": true
+      },
+      "requirements": [
+        "P03",
+        "M03"
+      ]
+    }
+  ],
+  "tolerance": {
+    "default_rtol": 1e-07,
+    "default_atol": 1e-10,
+    "exact": [
+      "keys",
+      "shape",
+      "time_axis",
+      "missing_masks",
+      "units",
+      "backend_identity"
+    ],
+    "large_egg_preprocessing_arrays": "same-platform exact byte digest; no cross-platform tolerance claim"
+  }
+}
