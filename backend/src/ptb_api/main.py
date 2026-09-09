@@ -10,6 +10,8 @@ from ptb_worker.store import JobError, JobStore
 from .account_store import AccountStore
 from .auth import AccountContext, AuthSettings, create_account_router
 from .projects import create_project_router
+from .assets import create_storage_router
+from .quota import StorageError
 from .account_boundary import AccountBoundary
 from phonetic_core import __version__ as core_version
 
@@ -20,7 +22,7 @@ from .protocol_version import API_VERSION
 
 def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: AccountStore | None = None,
                auth_settings: AuthSettings | None = None, job_store: JobStore | None = None,
-               local_token: str | None = None, local_origin: str | None = None) -> FastAPI:
+               local_token: str | None = None, local_origin: str | None = None, storage=None) -> FastAPI:
     if mode not in ('local', 'server'):
         raise ValueError('Unsupported service mode')
     app = FastAPI(title='PhoneticToolbox API', version=API_VERSION,
@@ -29,6 +31,15 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
     app.include_router(create_account_router(ctx))
     app.include_router(create_project_router(ctx))
     app.include_router(create_job_router(ctx,job_store,local_token=local_token,local_origin=local_origin))
+    app.include_router(create_storage_router(ctx, storage))
+
+    @app.exception_handler(StorageError)
+    async def storage_error(request: Request, exc):
+        return JSONResponse({'detail': exc.code}, status_code=exc.status)
+
+    @app.exception_handler(OSError)
+    async def file_unavailable(request: Request, exc):
+        return JSONResponse({'detail': 'storage_service_unavailable'}, status_code=503)
 
     @app.exception_handler(JobError)
     async def job_error(request: Request, exc):
@@ -45,12 +56,15 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
 
     @app.exception_handler(psycopg.Error)
     async def database_unavailable(request: Request, exc):
-        return JSONResponse({'detail':'task_service_unavailable' if request.url.path.startswith('/api/v1/jobs') else 'account_service_unavailable'},status_code=503)
+        path = request.url.path
+        code = ('storage_service_unavailable' if path.startswith(('/api/v1/storage', '/api/v1/assets', '/api/v1/uploads'))
+                else 'task_service_unavailable' if path.startswith('/api/v1/jobs') else 'account_service_unavailable')
+        return JSONResponse({'detail': code}, status_code=503)
 
     @app.middleware('http')
     async def private_responses(request: Request, call_next):
         response = await call_next(request)
-        if request.url.path.startswith(('/api/v1/auth/', '/api/v1/projects', '/api/v1/jobs')):
+        if request.url.path.startswith(('/api/v1/auth/', '/api/v1/projects', '/api/v1/jobs', '/api/v1/storage', '/api/v1/assets', '/api/v1/uploads')):
             response.headers['Cache-Control'] = 'no-store'
             response.headers['Pragma'] = 'no-cache'
             response.headers['X-Content-Type-Options'] = 'nosniff'
@@ -62,8 +76,10 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
 
     @app.get('/api/v1/capabilities', response_model=Capabilities, operation_id='get_capabilities')
     def capabilities() -> Capabilities:
-        return Capabilities(stage='P06' if job_store is not None else ('P05' if account_store is not None and mode == 'server' else 'P02'),
-                            algorithms=[], task_operations=['pipeline_check'] if job_store is not None else [], limitations=[
+        storage_ready = mode == 'server' and storage is not None and getattr(storage, 'ready', False)
+        return Capabilities(stage='P07' if storage_ready else ('P06' if job_store is not None else ('P05' if account_store is not None and mode == 'server' else 'P02')),
+                            algorithms=[], task_operations=['pipeline_check'] if job_store is not None else [],
+                            storage_operations=['upload', 'download', 'delete'] if storage_ready else [], limitations=[
             'Scientific modules pending P08', 'P06 pipeline check produces bounded metadata only; file tasks require P07'])
 
     base_openapi = app.openapi

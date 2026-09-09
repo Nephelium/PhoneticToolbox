@@ -1,13 +1,15 @@
 """Bound account JSON request size before framework parsing, without logging bodies."""
 from urllib.parse import urlsplit
+import re
 from starlette.responses import JSONResponse
+from .quota import CHUNK_BYTES
 
 class AccountBoundary:
     def __init__(self, app, origin=None, max_bytes=16384):
         self.app,self.origin,self.max_bytes=app,origin,max_bytes
 
     async def __call__(self,scope,receive,send):
-        if scope['type']!='http' or not scope['path'].startswith(('/api/v1/auth/','/api/v1/projects','/api/v1/jobs')):
+        if scope['type']!='http' or not scope['path'].startswith(('/api/v1/auth/','/api/v1/projects','/api/v1/jobs','/api/v1/storage','/api/v1/assets','/api/v1/uploads')):
             return await self.app(scope,receive,send)
         async def reject(code,status):
             await JSONResponse({'detail':code},status_code=status,headers={'Cache-Control':'no-store'})(scope,receive,send)
@@ -16,6 +18,7 @@ class AccountBoundary:
             if [v for k,v in scope['headers'] if k==b'host'] != [expected]:
                 return await reject('host_rejected',403)
         if scope['method'] in ('POST','PATCH','PUT'):
+            limit = CHUNK_BYTES if scope['method']=='PUT' and re.fullmatch(r'/api/v1/uploads/[0-9a-fA-F-]{36}/blocks',scope['path']) else self.max_bytes
             size=0
             chunks=[]
             while True:
@@ -23,7 +26,7 @@ class AccountBoundary:
                 if message['type']=='http.disconnect':return
                 block=message.get('body',b'')
                 size+=len(block)
-                if size>self.max_bytes:
+                if size>limit:
                     return await reject('request_too_large',413)
                 chunks.append(block)
                 if not message.get('more_body',False):break

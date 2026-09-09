@@ -13,6 +13,8 @@ from .auth import AuthSettings
 from .account_store import PostgresAccountStore
 from .cli import LoopbackGuard
 from ptb_worker.store import PostgresJobStore
+from .storage import Storage
+from ptb_worker.cleanup import run_cleanup
 
 
 def main():
@@ -31,14 +33,26 @@ def main():
     store.check_schema()
     jobs=PostgresJobStore(config['dsn']) if config.get('enable_jobs',False) else None
     if jobs:jobs.check_schema()
-    app=create_app(account_store=store,auth_settings=settings,job_store=jobs)
+    storage=Storage(config['dsn'],config['storage_root']) if config.get('storage_root') else None
+    if storage:
+        storage.recover()
+    app=create_app(account_store=store,auth_settings=settings,job_store=jobs,storage=storage)
     app.mount('/server',StaticFiles(directory=static,html=True),name='account-ui')
     guarded=LoopbackGuard(app,f'127.0.0.1:{args.port}',None)
     server=uvicorn.Server(uvicorn.Config(guarded,host='127.0.0.1',port=args.port,access_log=False,log_level='warning',proxy_headers=False))
     if args.managed:
         def owner_closed():sys.stdin.readline();server.should_exit=True
         threading.Thread(target=owner_closed,daemon=True).start()
-    server.run()
+    cleanup_stop=threading.Event()
+    cleaner=threading.Thread(target=run_cleanup,args=(storage,cleanup_stop),daemon=True) if storage else None
+    if cleaner:
+        cleaner.start()
+    try:
+        server.run()
+    finally:
+        cleanup_stop.set()
+        if cleaner:
+            cleaner.join(timeout=15)
 
 if __name__=='__main__':
     try:

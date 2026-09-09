@@ -4526,7 +4526,8 @@
     "id": "P06-PG-LOCKS",
     "title": "PostgreSQL 17 SELECT and advisory locking documentation",
     "modules": [
-      "P06"
+      "P06",
+      "P07"
     ],
     "kind": "reference-only",
     "acknowledgement_group": "software",
@@ -4536,6 +4537,54 @@
     "urls": {
       "select": "https://www.postgresql.org/docs/17/sql-select.html",
       "locking": "https://www.postgresql.org/docs/17/explicit-locking.html"
+    }
+  },
+  {
+    "id": "P07-PYTHON-FILES",
+    "title": "Python 3.11 file durability and process file locking documentation",
+    "modules": [
+      "P07"
+    ],
+    "kind": "reference-only",
+    "acknowledgement_group": "software",
+    "authors": "Python Software Foundation and Python contributors",
+    "version": "CPython 3.11.14; documentation branch 3.11 reviewed 2026-09-09",
+    "license": "Reference only; no documentation redistributed",
+    "urls": {
+      "fsync": "https://docs.python.org/3.11/library/os.html",
+      "windows_locking": "https://docs.python.org/3.11/library/msvcrt.html",
+      "posix_locking": "https://docs.python.org/3.11/library/fcntl.html"
+    }
+  },
+  {
+    "id": "P07-STARLETTE-RESPONSES",
+    "title": "Starlette response ASGI interface documentation",
+    "modules": [
+      "P07"
+    ],
+    "kind": "reference-only",
+    "acknowledgement_group": "software",
+    "authors": "Starlette contributors",
+    "version": "Documentation reviewed 2026-09-09; installed dependency remains in existing lock",
+    "license": "Reference only; no documentation redistributed",
+    "urls": {
+      "documentation": "https://starlette.dev/responses/"
+    }
+  },
+  {
+    "id": "P07-PLAYWRIGHT-TEST",
+    "title": "Playwright independent browser verification",
+    "modules": [
+      "P07"
+    ],
+    "kind": "test-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Microsoft and Playwright contributors",
+    "version": "1.62.1 (Codex bundled workspace runtime)",
+    "license": "Apache-2.0",
+    "urls": {
+      "homepage": "https://playwright.dev/",
+      "repository": "https://github.com/microsoft/playwright"
     }
   }
 ]

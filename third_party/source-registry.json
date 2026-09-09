@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-09-09",
-  "total_records": 296,
+  "total_records": 299,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -6132,7 +6132,8 @@
       "authors": "PostgreSQL Global Development Group",
       "kind": "reference-only",
       "modules": [
-        "P06"
+        "P06",
+        "P07"
       ],
       "actual_included_version": "PostgreSQL 17 documentation reviewed 2026-09-09; commit unknown",
       "license": "Reference only; no documentation redistributed",
@@ -6142,6 +6143,76 @@
       },
       "verification_date": "2026-09-09",
       "distribution_status": "reference-only",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "backend/src/ptb_worker/store.py",
+        "backend/src/ptb_api/storage.py"
+      ]
+    },
+    {
+      "id": "P07-PYTHON-FILES",
+      "title": "Python 3.11 file durability and process file locking documentation",
+      "authors": "Python Software Foundation and Python contributors",
+      "kind": "reference-only",
+      "modules": [
+        "P07"
+      ],
+      "actual_included_version": "CPython 3.11.14; documentation branch 3.11 reviewed 2026-09-09",
+      "license": "Reference only; no documentation redistributed",
+      "urls": {
+        "fsync": "https://docs.python.org/3.11/library/os.html",
+        "windows_locking": "https://docs.python.org/3.11/library/msvcrt.html",
+        "posix_locking": "https://docs.python.org/3.11/library/fcntl.html"
+      },
+      "verification_date": "2026-09-09",
+      "relationship": "Standard-library API use; no external algorithm port",
+      "used_at": [
+        "backend/src/ptb_api/storage.py"
+      ],
+      "distribution_status": "existing CPython runtime; native durability requires platform-specific acceptance",
+      "acknowledgement_group": "software"
+    },
+    {
+      "id": "P07-STARLETTE-RESPONSES",
+      "title": "Starlette response ASGI interface documentation",
+      "authors": "Starlette contributors",
+      "kind": "reference-only",
+      "modules": [
+        "P07"
+      ],
+      "actual_included_version": "Documentation reviewed 2026-09-09; installed dependency remains in existing lock",
+      "license": "Reference only; no documentation redistributed",
+      "urls": {
+        "documentation": "https://starlette.dev/responses/"
+      },
+      "verification_date": "2026-09-09",
+      "relationship": "Custom bounded response follows ASGI response interface; validates authorization and expiry per block",
+      "used_at": [
+        "backend/src/ptb_api/assets.py"
+      ],
+      "distribution_status": "reference-only; existing dependency unchanged",
+      "acknowledgement_group": "software"
+    },
+    {
+      "id": "P07-PLAYWRIGHT-TEST",
+      "title": "Playwright independent browser verification",
+      "authors": "Microsoft and Playwright contributors",
+      "kind": "test-dependency",
+      "modules": [
+        "P07"
+      ],
+      "actual_included_version": "1.62.1 (Codex bundled workspace runtime)",
+      "license": "Apache-2.0",
+      "urls": {
+        "homepage": "https://playwright.dev/",
+        "repository": "https://github.com/microsoft/playwright"
+      },
+      "verification_date": "2026-09-09",
+      "relationship": "Existing test-only runtime drives an isolated Chrome profile; no code copied or bundled into application",
+      "used_at": [
+        "output/playwright/p07/check-ui.cjs"
+      ],
+      "distribution_status": "test-only external runtime; not a new project or global installation",
       "acknowledgement_group": "software"
     }
   ]

@@ -71,3 +71,9 @@ npm --prefix frontend run build
 见 [P06 报告](testing/p06-jobs-report.md)。任务 API 仅在显式配置已初始化存储后开放；后端入口不迁移数据库。服务器私密配置 enable_jobs=true 启用现有 PG 任务表，worker 通过 ptb_worker.cli 从 stdin 读取配置；桌面 LocalService(jobs_path=...) 使用相同接口和独立 worker。新表已按 [专项审阅](testing/p06-migration-review.md)建立，真实 PG/SQLite 与本机服务验收通过，勿重复执行初始化。默认未配置存储时仍返回 503。
 
 复验入口：`python scripts/run_p06_validation.py --approved-p06-test-data`（复用已有表，不带 --apply-reviewed-schema），随后 `python scripts/verify_p06_local_service.py --approved-test-data`。使用现有 .venv/v3-dev 解释器。Codex 内置测试页关闭两次关联退出，暂行测试方式见 [恢复记录](testing/p06-recovery-and-codex-exit.md)。
+
+## P07 存储准备（未执行数据库与删除验收）
+
+见 [P07 报告](testing/p07-storage-report.md)与 [具体迁移审阅](testing/p07-migration-review.md)。后端私密配置可显式指定 storage_root；必须是已初始化且 instance_id 与 PG 匹配的私有目录，构造函数不建表。显式启用后的启动恢复会处理到期文件，因此在测试范围获确认前不得配置/运行该入口。未配置时文件 API 明确 503，桌面为 404。
+
+原始文件分块接口每块最多 256 KiB。/uploads 创建保留幂等键，PUT /uploads/{id}/blocks 使用 offset，POST finalize 完成服务器 SHA-256 和尺寸核对。文件以二进制原样保存，不自动解析 ZIP、Pickle 或执行代码。下载按单个 Range 和逐块截止/会话校验；DELETE 仅从会话确定 owner。生成结果与归档仍待 P07/P06 联合门，不要将上传资源称为科学分析产物。

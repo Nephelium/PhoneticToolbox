@@ -134,3 +134,10 @@
 - 取消/完成、状态/事件、成功/有限元数据 manifest 分别保持同事务一致。成功提交先完成则取消不能撤回已成功结果，取消先完成则不得变为成功。事件只用固定代码和进度，最多有限状态变化，不收集原始语料和服务器路径。
 - 每任务独立核心子进程，操作固定白名单；只执行 pipeline_check，属于原始流程探针，不是声学算法。其有限摘要是任务元数据，不是未计配额的音频文件。P07 writer/reservation 和文件提交门实现前拒绝文件任务。
 - 依据：[PG SELECT 锁定](https://www.postgresql.org/docs/17/sql-select.html)、[PG advisory locks](https://www.postgresql.org/docs/17/explicit-locking.html)、[SQLite transactions](https://www.sqlite.org/lang_transaction.html)。这些属于工程软件来源组。
+
+## ADR-019 P07 受控文件与逐块账本
+- 2026-09-09，按 P07 继续授权采用 PG 配额账本 + 私有平面文件目录。稳定的随机物理键与资源状态分离，未完成文件不对外开放；不通过复制/rename 再记一份用量。
+- 每次文件变更同时持有根目录进程间文件锁与 PG 调度锁；短事务先提交预留，再进行有上限的写入/fsync，再提交 used/reserved 转账。文件锁防止数据库连接中断后旧写入与恢复重叠。恢复按实际尺寸核对；不凭租约超时直接释放仍在磁盘的字节。
+- 每账号额度固定 5,000,000,000 字节，未知长度分块逐步预留；全局磁盘安全余量还扣除所有未落盘预留。删除先标记不可用，成功 unlink 后才释放账目；失败继续计费并重试。文件名仅作显示，磁盘键仅接受服务端 UUID；私有根需已初始化标记，拒绝符号链接/reparse 路径。
+- 桌面原始文件不应用服务器 7 天策略。未接入受控 writer 的科学/外部工具任务继续拒绝，ZIP/结果/输入引用须经单独联合验证，不能把单文件闭环标为全部 P07 已通过。
+- 依据：[PostgreSQL advisory locks](https://www.postgresql.org/docs/17/explicit-locking.html)、[Python fsync](https://docs.python.org/3.11/library/os.html)、[Starlette streaming](https://starlette.dev/responses/)。实际建表与生成测试文件清理范围单独审阅。
