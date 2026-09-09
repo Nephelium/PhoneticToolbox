@@ -24,7 +24,7 @@ npm --prefix frontend ci --ignore-scripts
 & '.venv/v3-dev/Scripts/python.exe' -m ptb_api.cli --mode server
 # 桌面本地服务诊断：启动、会话握手、退出，输出版本与退出结果。
 & '.venv/v3-dev/Scripts/python.exe' -m ptb_desktop.main
-# 正式前端开发入口，目前是明确标注的工程空态。
+# 前端开发入口，当前为 P04 工作台试用版。
 npm --prefix frontend run dev
 ```
 
@@ -41,3 +41,19 @@ npm --prefix frontend run contracts:check
 完整验证会另建带时间戳的干净环境，真实构建/安装三个 wheel，并从非项目目录运行两种服务与定向测试；所有日志保存在忽略的 output/validation/p02 下。不会删除已有环境。
 
 架构检查覆盖正式源码的 Python 导入、前端导入、旧路径与规定资源目录，不是任意动态 Python 的安全沙箱。历史文档快照和第三方摘录保留原字节：校验 hash，并另报其未解决的相对链接；现行文档缺失链接会使检查失败。
+
+## P04 工作台试用
+
+在项目根目录执行，使用现有隔离环境，无需再安装依赖：
+
+```powershell
+# 浏览器试用；终端保持运行，Ctrl+C 退出。
+npm --prefix frontend run dev -- --port 5174 --strictPort
+# Qt 原生窗口试用；先构建，同一静态前端直接由自定义 scheme 加载。
+npm --prefix frontend run build
+& '.venv/v3-dev/Scripts/python.exe' desktop/experiments/p04_host.py
+```
+
+浏览器地址为 http://127.0.0.1:5174/ 。Qt 入口不启动额外 HTTP 服务。两端目前仅提供共同 UI、本机 WAV 预览/选区/试听；15 模块的算法、实际分析任务、摄像头、目录批处理和正式发行仍待后续任务。仅支持单个不超过 64 MB 的 WAV。文件不会自动上传或跨启动保存。
+
+试用 EGG：点击 EGG 信号分析，载入公开测试音频或选择自己的双声道 WAV。音频声道选择控制试听：1–4.wav 为右音频/左 EGG；牧歌.wav 为左音频/右 EGG。程序不按文件名猜测角色，需要显式选择，原文件不改写。可试切换主题、调整选区、缩放平移、参数草稿、标签切换与关闭提示。视觉验收和限制见 [P04 报告](testing/p04-workbench-report.md)。

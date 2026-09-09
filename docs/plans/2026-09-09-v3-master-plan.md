@@ -15,7 +15,7 @@
 | 阶段 | 任务 | 核心交付 | 当前状态 |
 | --- | --- | --- | --- |
 | 基线与风险 | P00–P03 | 来源基线、宿主验证、依赖/科研基准 | P00 文档与继承完成；P01 Windows 原型/试用及风险评审通过；P02 骨架与 P03 独立行为基线 verified（限定 Windows 定向范围） |
-| 公共基础 | P04–P07 | UI 壳、登录、任务、5 GB/7 天 | 未实施 |
+| 公共基础 | P04–P07 | UI 壳、登录、任务、5 GB/7 天 | P04 in_progress：工程验证完成，视觉待审阅；P05–P07 planned |
 | 功能迁移 | P08–P09 / M01–M15 | 全部功能双端与设备适配 | 未实施 |
 | 研究可追溯 | P10 | 软件/说明书/随包来源一致 | 已做首轮调查，未接软件界面 |
 | 验证与发行 | P11–P15 | WSL 10 用户、各平台包和部署方案 | 未实施，Mac 暂无实机 |
@@ -98,7 +98,7 @@
 
 ### P04 · 统一前端壳、主题、首页与公共组件
 
-**依赖：** P02。**状态：** planned。
+**依赖：** P02。**状态：** in_progress（工程验证完成，视觉待井井审阅；见 [P04 报告](../testing/p04-workbench-report.md)）。
 
 **目标文件：** frontend/src/app/AppShell.vue；frontend/src/design/tokens.css；frontend/src/components/AudioTransport.vue；frontend/src/components/MethodReferences.vue。
 

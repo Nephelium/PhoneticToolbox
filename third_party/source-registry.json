@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-09-09",
-  "total_records": 282,
+  "total_records": 283,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -731,7 +731,8 @@
       "actual_included_version": "Version 7.000; read from the included font name table",
       "observed_upstream_commit": null,
       "distribution_status": "review-required",
-      "authors": "SIL International"
+      "authors": "SIL International",
+      "p04_usage": "Unchanged font and embedded OFL copied to frontend/src/assets; used for IPA in shared frontend"
     },
     {
       "id": "PENDING-EGG",
@@ -833,7 +834,8 @@
       "actual_included_version": null,
       "observed_upstream_commit": null,
       "distribution_status": "review-required",
-      "verification_status": "local-evidence-only"
+      "verification_status": "local-evidence-only",
+      "p04_usage": "Unchanged K2 PNG in frontend/src/assets/k2.png; release provenance review remains open"
     },
     {
       "id": "SRC-HTML2CANVAS",
@@ -5583,6 +5585,22 @@
       "distribution_status": "prototype-only",
       "evidence": "Installed under project .venv/runtimes with --no-bin --no-registry.",
       "notes": "Same project-local standalone interpreter build; new .venv/v3-dev environment."
+    },
+    {
+      "id": "PROJECT-SYNTHETIC-WAV",
+      "title": "PhoneticToolbox 公开解析测试波形",
+      "kind": "project-generated-fixture",
+      "modules": [
+        "P03",
+        "P04"
+      ],
+      "authors": "PhoneticToolbox project",
+      "urls": {},
+      "license": "Project-authored test signal; no third-party recording",
+      "verification_date": "2026-09-09",
+      "actual_included_version": "P03 SYN-EGG-44100 recipe",
+      "distribution_status": "project-test-fixture",
+      "evidence": "scripts/baseline_support.py RECIPES; deterministic analytic PCM16 stereo waveform, not physiological ground truth"
     }
   ]
 }

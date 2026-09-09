@@ -69,7 +69,7 @@ def check_assets(root, manifest, source_ids):
             errors.append('resource hash mismatch: ' + relative)
         if item['source_id'] not in source_ids:
             errors.append('unknown resource source: ' + relative)
-    for folder in ['frontend/public', 'desktop/src/ptb_desktop/assets', 'packages/phonetic_core/src/phonetic_core/assets']:
+    for folder in ['frontend/public', 'frontend/src/assets', 'desktop/src/ptb_desktop/assets', 'packages/phonetic_core/src/phonetic_core/assets']:
         for file in (root / folder).rglob('*'):
             if file.is_file() and file.relative_to(root).as_posix() not in registered:
                 errors.append('unregistered resource: ' + file.relative_to(root).as_posix())

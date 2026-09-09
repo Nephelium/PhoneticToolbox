@@ -1,0 +1,322 @@
+[
+  {
+    "key": "pF0",
+    "label": "F0 - Praat"
+  },
+  {
+    "key": "rF0",
+    "label": "F0 - REAPER"
+  },
+  {
+    "key": "pF1",
+    "label": "F1 - Praat"
+  },
+  {
+    "key": "pF2",
+    "label": "F2 - Praat"
+  },
+  {
+    "key": "pF3",
+    "label": "F3 - Praat"
+  },
+  {
+    "key": "pF4",
+    "label": "F4 - Praat"
+  },
+  {
+    "key": "pB1",
+    "label": "B1 - Praat"
+  },
+  {
+    "key": "pB2",
+    "label": "B2 - Praat"
+  },
+  {
+    "key": "pB3",
+    "label": "B3 - Praat"
+  },
+  {
+    "key": "pB4",
+    "label": "B4 - Praat"
+  },
+  {
+    "key": "H1_pF0",
+    "label": "H1 (pF0)"
+  },
+  {
+    "key": "H1_rF0",
+    "label": "H1 (rF0)"
+  },
+  {
+    "key": "H2_pF0",
+    "label": "H2 (pF0)"
+  },
+  {
+    "key": "H2_rF0",
+    "label": "H2 (rF0)"
+  },
+  {
+    "key": "H4_pF0",
+    "label": "H4 (pF0)"
+  },
+  {
+    "key": "H4_rF0",
+    "label": "H4 (rF0)"
+  },
+  {
+    "key": "A1_pF0",
+    "label": "A1 (pF0)"
+  },
+  {
+    "key": "A1_rF0",
+    "label": "A1 (rF0)"
+  },
+  {
+    "key": "A2_pF0",
+    "label": "A2 (pF0)"
+  },
+  {
+    "key": "A2_rF0",
+    "label": "A2 (rF0)"
+  },
+  {
+    "key": "A3_pF0",
+    "label": "A3 (pF0)"
+  },
+  {
+    "key": "A3_rF0",
+    "label": "A3 (rF0)"
+  },
+  {
+    "key": "H1H2u_pF0",
+    "label": "H1-H2 (pF0)"
+  },
+  {
+    "key": "H1H2u_rF0",
+    "label": "H1-H2 (rF0)"
+  },
+  {
+    "key": "H2H4u_pF0",
+    "label": "H2-H4 (pF0)"
+  },
+  {
+    "key": "H2H4u_rF0",
+    "label": "H2-H4 (rF0)"
+  },
+  {
+    "key": "H1A1u_pF0",
+    "label": "H1-A1 (pF0)"
+  },
+  {
+    "key": "H1A1u_rF0",
+    "label": "H1-A1 (rF0)"
+  },
+  {
+    "key": "H1A2u_pF0",
+    "label": "H1-A2 (pF0)"
+  },
+  {
+    "key": "H1A2u_rF0",
+    "label": "H1-A2 (rF0)"
+  },
+  {
+    "key": "H1A3u_pF0",
+    "label": "H1-A3 (pF0)"
+  },
+  {
+    "key": "H1A3u_rF0",
+    "label": "H1-A3 (rF0)"
+  },
+  {
+    "key": "H1A1c_pF0",
+    "label": "H1*-A1* (pF0)"
+  },
+  {
+    "key": "H1A1c_rF0",
+    "label": "H1*-A1* (rF0)"
+  },
+  {
+    "key": "H1A2c_pF0",
+    "label": "H1*-A2* (pF0)"
+  },
+  {
+    "key": "H1A2c_rF0",
+    "label": "H1*-A2* (rF0)"
+  },
+  {
+    "key": "H1A3c_pF0",
+    "label": "H1*-A3* (pF0)"
+  },
+  {
+    "key": "H1A3c_rF0",
+    "label": "H1*-A3* (rF0)"
+  },
+  {
+    "key": "H1H2c_pF0",
+    "label": "H1*-H2* (pF0)"
+  },
+  {
+    "key": "H1H2c_rF0",
+    "label": "H1*-H2* (rF0)"
+  },
+  {
+    "key": "H2H4c_pF0",
+    "label": "H2*-H4* (pF0)"
+  },
+  {
+    "key": "H2H4c_rF0",
+    "label": "H2*-H4* (rF0)"
+  },
+  {
+    "key": "H2K_pF0",
+    "label": "2K (pF0)"
+  },
+  {
+    "key": "H2K_rF0",
+    "label": "2K (rF0)"
+  },
+  {
+    "key": "H5K_pF0",
+    "label": "5K (pF0)"
+  },
+  {
+    "key": "H5K_rF0",
+    "label": "5K (rF0)"
+  },
+  {
+    "key": "H42Ku_pF0",
+    "label": "H4-2K (pF0)"
+  },
+  {
+    "key": "H42Ku_rF0",
+    "label": "H4-2K (rF0)"
+  },
+  {
+    "key": "H2KH5Ku_pF0",
+    "label": "2K-5K (pF0)"
+  },
+  {
+    "key": "H2KH5Ku_rF0",
+    "label": "2K-5K (rF0)"
+  },
+  {
+    "key": "H42Kc_pF0",
+    "label": "H4*-2K* (pF0)"
+  },
+  {
+    "key": "H42Kc_rF0",
+    "label": "H4*-2K* (rF0)"
+  },
+  {
+    "key": "H2KH5Kc_pF0",
+    "label": "2K*-5K* (pF0)"
+  },
+  {
+    "key": "H2KH5Kc_rF0",
+    "label": "2K*-5K* (rF0)"
+  },
+  {
+    "key": "CPP_pF0",
+    "label": "CPP (pF0)"
+  },
+  {
+    "key": "CPP_rF0",
+    "label": "CPP (rF0)"
+  },
+  {
+    "key": "Intensity",
+    "label": "Intensity"
+  },
+  {
+    "key": "HNR05_pF0",
+    "label": "HNR05 (pF0)"
+  },
+  {
+    "key": "HNR15_pF0",
+    "label": "HNR15 (pF0)"
+  },
+  {
+    "key": "HNR25_pF0",
+    "label": "HNR25 (pF0)"
+  },
+  {
+    "key": "HNR35_pF0",
+    "label": "HNR35 (pF0)"
+  },
+  {
+    "key": "HNR05_rF0",
+    "label": "HNR05 (rF0)"
+  },
+  {
+    "key": "HNR15_rF0",
+    "label": "HNR15 (rF0)"
+  },
+  {
+    "key": "HNR25_rF0",
+    "label": "HNR25 (rF0)"
+  },
+  {
+    "key": "HNR35_rF0",
+    "label": "HNR35 (rF0)"
+  },
+  {
+    "key": "SHR_pF0",
+    "label": "SHR (pF0)"
+  },
+  {
+    "key": "SHR_rF0",
+    "label": "SHR (rF0)"
+  },
+  {
+    "key": "SpectralSlope_pF0",
+    "label": "Slope (pF0)"
+  },
+  {
+    "key": "SpectralSlope_rF0",
+    "label": "Slope (rF0)"
+  },
+  {
+    "key": "Jitter_Local",
+    "label": "Jitter (Local)"
+  },
+  {
+    "key": "Jitter_RAP",
+    "label": "Jitter (RAP)"
+  },
+  {
+    "key": "Jitter_PPQ5",
+    "label": "Jitter (PPQ5)"
+  },
+  {
+    "key": "Shimmer_Local",
+    "label": "Shimmer (Local)"
+  },
+  {
+    "key": "Shimmer_APQ3",
+    "label": "Shimmer (APQ3)"
+  },
+  {
+    "key": "Shimmer_APQ5",
+    "label": "Shimmer (APQ5)"
+  },
+  {
+    "key": "Shimmer_APQ11",
+    "label": "Shimmer (APQ11)"
+  },
+  {
+    "key": "LipArea",
+    "label": "唇面积"
+  },
+  {
+    "key": "LipWidth",
+    "label": "唇宽度"
+  },
+  {
+    "key": "LipOpen",
+    "label": "唇开度"
+  },
+  {
+    "key": "LipCirc",
+    "label": "唇圆度"
+  }
+]

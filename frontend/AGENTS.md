@@ -1,6 +1,6 @@
 # frontend — 工作规则
 
-继承 [根 AGENTS.md](../AGENTS.md)，先读本目录 [ARCHITECTURE.md](ARCHITECTURE.md)。2026-09-09 已获 P02 工程骨架实施授权，具体边界见根规则与 P02 计划；不扩大为全面业务迁移或部署授权。
+继承 [根 AGENTS.md](../AGENTS.md)，先读本目录 [ARCHITECTURE.md](ARCHITECTURE.md)。2026-09-09 已获 P04 统一工作台实施授权；工程验证完成、视觉待井井审阅，具体边界见根规则与 P04 计划；不扩大为全面业务迁移或部署授权。
 
 - 负责：公共 Web 界面。
 - 允许依赖：contracts 生成的类型和 frontend 内部公共组件；平台能力通过 FileProvider、JobClient、AudioController、CaptureProvider、ProjectStore 接入。

@@ -1,0 +1,4041 @@
+[
+  {
+    "id": "SRC-PRAAT",
+    "title": "Praat / Parselmouth",
+    "modules": [
+      "M01",
+      "M02",
+      "M03",
+      "M04",
+      "M06",
+      "M07",
+      "M08",
+      "M12"
+    ],
+    "kind": "runtime-and-method",
+    "authors": "Yannick Jadoul and Bill Thompson and Bart de Boer",
+    "version": "praat-parselmouth 0.4.7 in phonetic_311; embedded Praat version not probed",
+    "license": "GPL family; verify exact bundled Praat/Parselmouth licenses",
+    "urls": {
+      "homepage": "https://www.praat.org/",
+      "documentation": "https://parselmouth.readthedocs.io/en/stable/",
+      "paper": "https://doi.org/10.1016/j.wocn.2018.07.001",
+      "pdf": "https://cris.vub.be/ws/files/38628284/jadoul_introducing_parselmouth_a_python_interface_to_praat.pdf"
+    }
+  },
+  {
+    "id": "SRC-REAPER",
+    "title": "REAPER (Robust Epoch And Pitch EstimatoR)",
+    "modules": [
+      "M01",
+      "M02",
+      "M07"
+    ],
+    "kind": "bundled-code",
+    "authors": "David Talkin and REAPER contributors",
+    "version": "实际版本待核实",
+    "license": "Apache-2.0",
+    "urls": {
+      "repository": "https://github.com/google/REAPER"
+    }
+  },
+  {
+    "id": "SRC-IRAPT",
+    "title": "IRAPT",
+    "modules": [
+      "M01"
+    ],
+    "kind": "ported-code-and-data",
+    "authors": "Elias Azarov and Maxim Vashkevich and Alexander A. Petrovsky",
+    "version": "实际版本待核实",
+    "license": "GPL-3.0",
+    "urls": {
+      "repository": "https://github.com/Mak-Sim/IRAPT"
+    }
+  },
+  {
+    "id": "SRC-WMPC",
+    "title": "Troparion / WM-PC jitter and shimmer",
+    "modules": [
+      "M01"
+    ],
+    "kind": "ported-method",
+    "authors": "Maxim Vashkevich and Alexander Petrovsky and Yuliya Rushkevich",
+    "version": "实际版本待核实",
+    "license": "MPL-2.0 (Troparion repository)",
+    "urls": {
+      "repository": "https://github.com/Mak-Sim/Troparion",
+      "paper": "https://arxiv.org/abs/2003.10806",
+      "pdf": "https://arxiv.org/pdf/2003.10806",
+      "published_doi": "https://doi.org/10.23919/SPA.2019.8936657"
+    }
+  },
+  {
+    "id": "SRC-VOICESAUCE",
+    "title": "VoiceSauce",
+    "modules": [
+      "M01",
+      "M02"
+    ],
+    "kind": "reference-code-and-method",
+    "authors": "Yen-Liang Shue and Patricia Keating and Chad Vicenik and Kristine Yu",
+    "version": "实际版本待核实",
+    "license": "original MATLAB license not resolved",
+    "urls": {
+      "homepage": "https://www.phonetics.ucla.edu/voicesauce/",
+      "documentation": "https://www.phonetics.ucla.edu/voicesauce/documentation/index.html",
+      "pdf": "https://www.phonetics.ucla.edu/voiceproject/Publications/Shue-etal_2011_ICPhS.pdf"
+    }
+  },
+  {
+    "id": "SRC-OPENSAUCE",
+    "title": "OpenSauce Python",
+    "modules": [
+      "M01"
+    ],
+    "kind": "reference-implementation",
+    "authors": "Terri M. Yu and R. David Murray and Kate Silverstein and Kristine M. Yu",
+    "version": "实际版本待核实",
+    "license": "Apache-2.0",
+    "urls": {
+      "repository": "https://github.com/voicesauce/opensauce-python",
+      "paper": "https://doi.org/10.5281/zenodo.2638411"
+    }
+  },
+  {
+    "id": "REF-CPP",
+    "title": "CPP: Hillenbrand, Cleveland & Erickson",
+    "modules": [
+      "M01"
+    ],
+    "kind": "paper",
+    "authors": "James Hillenbrand and Ronald A. Cleveland and Robert L. Erickson",
+    "version": "实际版本待核实",
+    "license": "not-established",
+    "urls": {
+      "paper": "https://pubs.asha.org/doi/abs/10.1044/jshr.3704.769"
+    }
+  },
+  {
+    "id": "REF-HNR",
+    "title": "HNR: de Krom",
+    "modules": [
+      "M01"
+    ],
+    "kind": "paper",
+    "authors": "Guus de Krom",
+    "version": "实际版本待核实",
+    "license": "not-established",
+    "urls": {
+      "paper": "https://pubs.asha.org/doi/10.1044/jshr.3602.254"
+    }
+  },
+  {
+    "id": "REF-SHR",
+    "title": "SHR: Xuejing Sun",
+    "modules": [
+      "M01"
+    ],
+    "kind": "paper",
+    "authors": "Xuejing Sun",
+    "version": "实际版本待核实",
+    "license": "not-established",
+    "urls": {
+      "paper": "https://ieeexplore.ieee.org/document/5743722/"
+    }
+  },
+  {
+    "id": "REF-ISELI",
+    "title": "谐波幅度校正: Iseli & Alwan",
+    "modules": [
+      "M01"
+    ],
+    "kind": "paper",
+    "authors": "Markus Iseli and Abeer Alwan",
+    "version": "实际版本待核实",
+    "license": "not-established",
+    "urls": {
+      "pdf": "https://www.seas.ucla.edu/spapl/paper/iseli04.pdf"
+    }
+  },
+  {
+    "id": "REF-HAWKS",
+    "title": "共振峰带宽估计: Hawks & Miller",
+    "modules": [
+      "M01"
+    ],
+    "kind": "paper",
+    "authors": "John W. Hawks and James D. Miller",
+    "version": "实际版本待核实",
+    "license": "not-established",
+    "urls": {
+      "paper": "https://profiles.wustl.edu/en/publications/a-formant-bandwidth-estimation-procedure-for-vowel-synthesis-4372",
+      "doi": "https://doi.org/10.1121/1.412986"
+    }
+  },
+  {
+    "id": "REF-SOE",
+    "title": "Strength of Excitation / epoch extraction",
+    "modules": [
+      "M01"
+    ],
+    "kind": "method-chain",
+    "authors": "K. Sri Rama Murty and B. Yegnanarayana",
+    "version": "实际版本待核实",
+    "license": "VoiceSauce source obligations unresolved",
+    "urls": {
+      "documentation": "https://www.phonetics.ucla.edu/voicesauce/documentation/index.html"
+    }
+  },
+  {
+    "id": "SRC-TDKLATT",
+    "title": "tdklatt / TrackDraw",
+    "modules": [
+      "M06"
+    ],
+    "kind": "adapted-code",
+    "authors": "Adrian Y. Cho and Daniel R Guest",
+    "version": "实际版本待核实",
+    "license": "MIT",
+    "urls": {
+      "repository": "https://github.com/guestdaniel/tdklatt"
+    }
+  },
+  {
+    "id": "REF-KLATT",
+    "title": "Klatt formant synthesizer",
+    "modules": [
+      "M06"
+    ],
+    "kind": "paper",
+    "authors": "Dennis H. Klatt",
+    "version": "实际版本待核实",
+    "license": "not-established",
+    "urls": {
+      "pdf": "https://sail.usc.edu/~lgoldste/Ling582/Week%2012/klatt1980.pdf",
+      "doi": "https://doi.org/10.1121/1.383940"
+    }
+  },
+  {
+    "id": "SRC-ZAIWA",
+    "title": "载瓦语 F0 与发声类型研究代码/数据",
+    "modules": [
+      "M07"
+    ],
+    "kind": "adapted-method-and-source",
+    "authors": "Yao Lu and Changwei Liang and Jiangping Kong",
+    "version": "实际版本待核实",
+    "license": "no repository license detected",
+    "urls": {
+      "repository": "https://github.com/Luyao2025/Contribution-of-F0-and-phonation-to-tone-perception-in-the-Zaiwa-language"
+    }
+  },
+  {
+    "id": "REF-ZAIWA",
+    "title": "F0 与发声类型对载瓦语声调感知的贡献",
+    "modules": [
+      "M07"
+    ],
+    "kind": "paper",
+    "authors": "Yao Lu and Changwei Liang and Jiangping Kong",
+    "version": "实际版本待核实",
+    "license": "article license is separate from code/data",
+    "urls": {
+      "paper": "https://www.sciencedirect.com/science/article/pii/S0095447025000245",
+      "doi": "https://doi.org/10.1016/j.wocn.2025.101413"
+    }
+  },
+  {
+    "id": "REF-GRIFFINLIM",
+    "title": "Griffin–Lim 重建",
+    "modules": [
+      "M09"
+    ],
+    "kind": "paper",
+    "authors": "Daniel W. Griffin and Jae S. Lim",
+    "version": "实际版本待核实",
+    "license": "not-established",
+    "urls": {
+      "paper": "https://ieeexplore.ieee.org/document/1164317",
+      "pdf": "https://dub.ucsd.edu/CATbox/Reader/GriffinLimMSTFT.pdf",
+      "doi": "https://doi.org/10.1109/TASSP.1984.1164317"
+    }
+  },
+  {
+    "id": "SRC-VTL",
+    "title": "VocalTractLab API 2.4",
+    "modules": [
+      "M10"
+    ],
+    "kind": "bundled-native-code",
+    "authors": "Peter Birkholz and VocalTractLab contributors",
+    "version": "2.4 (Windows native bundle)",
+    "license": "GPL-3.0-or-later",
+    "urls": {
+      "homepage": "https://www.vocaltractlab.de/",
+      "download": "https://www.vocaltractlab.de/download-vocaltractlab/VTL2.4.zip",
+      "documentation": "https://www.vocaltractlab.de/index.php?page=vocaltractlab-download"
+    }
+  },
+  {
+    "id": "DOC-VTL24",
+    "title": "VocalTractLab 2.4 官方手册",
+    "modules": [
+      "M10"
+    ],
+    "kind": "manual",
+    "authors": "作者待核实",
+    "version": "link only; manual 2.4",
+    "license": "not-established",
+    "urls": {
+      "pdf": "https://www.vocaltractlab.de/download-vocaltractlab/VTL2.4-manual.pdf"
+    }
+  },
+  {
+    "id": "DOC-VTL23",
+    "title": "VocalTractLab 2.3 官方手册（补充）",
+    "modules": [
+      "M10"
+    ],
+    "kind": "manual",
+    "authors": "作者待核实",
+    "version": "link only; manual 2.3",
+    "license": "not-established",
+    "urls": {
+      "pdf": "https://www.vocaltractlab.de/download-vocaltractlab/VTL2.3-manual.pdf"
+    }
+  },
+  {
+    "id": "REF-VTL2006",
+    "title": "三维声道模型",
+    "modules": [
+      "M10"
+    ],
+    "kind": "paper",
+    "authors": "Peter Birkholz and Dietmar Jackèl and Bernd J. Kröger",
+    "version": "实际版本待核实",
+    "license": "not-established",
+    "urls": {
+      "pdf": "https://www.vocaltractlab.de/publications/birkholz-2006-icassp.pdf",
+      "publications": "https://www.vocaltractlab.de/index.php?page=birkholz-publications"
+    }
+  },
+  {
+    "id": "SRC-THREE",
+    "title": "Three.js r180 / OrbitControls",
+    "modules": [
+      "M10"
+    ],
+    "kind": "bundled-code",
+    "authors": "作者待核实",
+    "version": "0.180.0 / r180",
+    "license": "MIT",
+    "urls": {
+      "repository": "https://github.com/mrdoob/three.js/tree/r180"
+    }
+  },
+  {
+    "id": "ASSET-HEAD",
+    "title": "3D human parts pack / FACE2",
+    "modules": [
+      "M10"
+    ],
+    "kind": "derived-asset",
+    "authors": "byzmod3d",
+    "version": "实际版本待核实",
+    "license": "CC0-1.0",
+    "urls": {
+      "homepage": "https://opengameart.org/content/3d-human-parts-pack"
+    }
+  },
+  {
+    "id": "ASSET-NASAL",
+    "title": "Healthy nasal cavities — averaged geometry",
+    "modules": [
+      "M10"
+    ],
+    "kind": "derived-research-data",
+    "authors": "Jan Brüning and Thomas Hildebrandt and Werner Heppt and Nora Schmidt and Hans Lamecker and Angelika Szengel and Natalja Amiridze and Heiko Ramm and Matthias Bindernagel and Stefan Zachow and Leonid Goubergrits",
+    "version": "v4 according to existing sources.lock.json",
+    "license": "CC-BY-4.0 per existing provenance; live v4 metadata pending",
+    "urls": {
+      "doi": "https://doi.org/10.6084/m9.figshare.9585410.v4",
+      "related_paper": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7048824/"
+    }
+  },
+  {
+    "id": "SRC-VTLWRAPPER",
+    "title": "VocalTractLab-Python",
+    "modules": [
+      "M10"
+    ],
+    "kind": "reference-only",
+    "authors": "作者待核实",
+    "version": "reference commit bb37e1894a790f31d4ef7c19803c177cc095e290 from existing lock",
+    "license": "not assessed for redistribution; no bundled code claimed",
+    "urls": {
+      "repository": "https://github.com/paul-krug/VocalTractLab-Python"
+    }
+  },
+  {
+    "id": "SRC-MEDIAPIPE",
+    "title": "MediaPipe Face Mesh",
+    "modules": [
+      "M05"
+    ],
+    "kind": "runtime-and-model",
+    "authors": "作者待核实",
+    "version": "0.10.14",
+    "license": "Apache-2.0 for code; bundled model terms require artifact audit",
+    "urls": {
+      "documentation": "https://developers.google.com/edge/mediapipe/solutions/vision/face_landmarker",
+      "repository": "https://github.com/google-ai-edge/mediapipe"
+    }
+  },
+  {
+    "id": "SRC-FFMPEG",
+    "title": "FFmpeg",
+    "modules": [
+      "M05"
+    ],
+    "kind": "native-tool",
+    "authors": "作者待核实",
+    "version": "实际版本待核实",
+    "license": "build-dependent; not yet verified",
+    "urls": {
+      "homepage": "https://ffmpeg.org/",
+      "license": "https://ffmpeg.org/legal.html"
+    }
+  },
+  {
+    "id": "SRC-MFA",
+    "title": "Montreal Forced Aligner / Kaldi / models",
+    "modules": [
+      "M11"
+    ],
+    "kind": "external-tool-and-models",
+    "authors": "作者待核实",
+    "version": "实际版本待核实",
+    "license": "each executable/model/dictionary must be checked",
+    "urls": {
+      "documentation": "https://montreal-forced-aligner.readthedocs.io/en/latest/"
+    }
+  },
+  {
+    "id": "REF-MFA",
+    "title": "Montreal Forced Aligner 论文",
+    "modules": [
+      "M11"
+    ],
+    "kind": "paper",
+    "authors": "Michael McAuliffe and Michaela Socolof and Sarah Mihuc and Michael Wagner and Morgan Sonderegger",
+    "version": "实际版本待核实",
+    "license": "not-established",
+    "urls": {
+      "paper": "https://www.isca-archive.org/interspeech_2017/mcauliffe17_interspeech.html",
+      "doi": "https://doi.org/10.21437/Interspeech.2017-1386"
+    }
+  },
+  {
+    "id": "ASSET-DOULOS",
+    "title": "Doulos SIL 字体",
+    "modules": [
+      "M13",
+      "P01-probe"
+    ],
+    "kind": "font",
+    "authors": "SIL International",
+    "version": "Version 7.000; read from the included font name table",
+    "license": "SIL Open Font License 1.1; embedded license extracted without modification",
+    "urls": {
+      "homepage": "https://software.sil.org/doulos/",
+      "download": "https://software.sil.org/doulos/download/"
+    }
+  },
+  {
+    "id": "PENDING-EGG",
+    "title": "EGG 事件分析/简化逆滤波方法",
+    "modules": [
+      "M03"
+    ],
+    "kind": "provenance-pending",
+    "authors": "作者待核实",
+    "version": "实际版本待核实",
+    "license": "not-established",
+    "urls": {}
+  },
+  {
+    "id": "PENDING-DICTIONARY",
+    "title": "内置普通话发音词典",
+    "modules": [
+      "M12"
+    ],
+    "kind": "provenance-pending",
+    "authors": "作者待核实",
+    "version": "实际版本待核实",
+    "license": "not-established",
+    "urls": {}
+  },
+  {
+    "id": "PENDING-IPA",
+    "title": "11 套普通话转换规则及映射数据",
+    "modules": [
+      "M13"
+    ],
+    "kind": "provenance-pending",
+    "authors": "作者待核实",
+    "version": "实际版本待核实",
+    "license": "not-established",
+    "urls": {}
+  },
+  {
+    "id": "PENDING-PHONOLOGY",
+    "title": "音系归纳规则和帮助材料",
+    "modules": [
+      "M14"
+    ],
+    "kind": "provenance-pending",
+    "authors": "作者待核实",
+    "version": "实际版本待核实",
+    "license": "not-established",
+    "urls": {}
+  },
+  {
+    "id": "ORIGIN-WEBEDITOR",
+    "title": "本地 pitch_perception 的 web_praat_editor 来源链",
+    "modules": [
+      "M12"
+    ],
+    "kind": "provenance-pending",
+    "authors": "作者待核实",
+    "version": "实际版本待核实",
+    "license": "not-established",
+    "urls": {}
+  },
+  {
+    "id": "ASSET-MASCOT",
+    "title": "K2 蓝色波形团子与 U2 设计参考",
+    "modules": [
+      "global"
+    ],
+    "kind": "provenance-pending",
+    "authors": "作者待核实",
+    "version": "实际版本待核实",
+    "license": "not-established",
+    "urls": {}
+  },
+  {
+    "id": "SRC-HTML2CANVAS",
+    "title": "html2canvas",
+    "modules": [
+      "M13"
+    ],
+    "kind": "legacy-web-dependency",
+    "authors": "作者待核实",
+    "version": "实际版本待核实",
+    "license": "exact-version-license-pending",
+    "urls": {
+      "repository": "https://github.com/niklasvh/html2canvas"
+    }
+  },
+  {
+    "id": "SRC-REACT",
+    "title": "React",
+    "modules": [
+      "M15"
+    ],
+    "kind": "legacy-web-dependency",
+    "authors": "作者待核实",
+    "version": "实际版本待核实",
+    "license": "exact-version-license-pending",
+    "urls": {
+      "repository": "https://github.com/facebook/react"
+    }
+  },
+  {
+    "id": "SRC-BABEL",
+    "title": "Babel standalone",
+    "modules": [
+      "M15"
+    ],
+    "kind": "legacy-web-dependency",
+    "authors": "作者待核实",
+    "version": "实际版本待核实",
+    "license": "exact-version-license-pending",
+    "urls": {
+      "repository": "https://github.com/babel/babel"
+    }
+  },
+  {
+    "id": "SRC-TAILWIND",
+    "title": "Tailwind CSS",
+    "modules": [
+      "M15"
+    ],
+    "kind": "legacy-web-dependency",
+    "authors": "作者待核实",
+    "version": "实际版本待核实",
+    "license": "exact-version-license-pending",
+    "urls": {
+      "repository": "https://github.com/tailwindlabs/tailwindcss"
+    }
+  },
+  {
+    "id": "SRC-SHEETJS",
+    "title": "SheetJS",
+    "modules": [
+      "M15"
+    ],
+    "kind": "legacy-web-dependency",
+    "authors": "作者待核实",
+    "version": "实际版本待核实",
+    "license": "exact-version-license-pending",
+    "urls": {
+      "repository": "https://git.sheetjs.com/sheetjs/sheetjs"
+    }
+  },
+  {
+    "id": "SRC-LUCIDE",
+    "title": "Lucide",
+    "modules": [
+      "M15"
+    ],
+    "kind": "legacy-web-dependency",
+    "authors": "作者待核实",
+    "version": "实际版本待核实",
+    "license": "exact-version-license-pending",
+    "urls": {
+      "repository": "https://github.com/lucide-icons/lucide"
+    }
+  },
+  {
+    "id": "PKG-NUMPY",
+    "title": "numpy",
+    "modules": [
+      "shared-runtime"
+    ],
+    "kind": "installed-runtime-package",
+    "authors": "Travis E. Oliphant et al.",
+    "version": "2.2.6 in phonetic_311; v3 pin pending",
+    "license": "see exact release metadata / wheel audit pending",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/numpy/2.2.6/json",
+      "documentation": "https://numpy.org/doc/",
+      "download": "https://pypi.org/project/numpy/#files",
+      "homepage": "https://numpy.org",
+      "release notes": "https://numpy.org/doc/stable/release",
+      "source": "https://github.com/numpy/numpy",
+      "tracker": "https://github.com/numpy/numpy/issues"
+    }
+  },
+  {
+    "id": "PKG-SCIPY",
+    "title": "scipy",
+    "modules": [
+      "shared-runtime"
+    ],
+    "kind": "installed-runtime-package",
+    "authors": "作者待核实",
+    "version": "1.16.3 in phonetic_311; v3 pin pending",
+    "license": "see exact release metadata / wheel audit pending",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/scipy/1.16.3/json",
+      "documentation": "https://docs.scipy.org/doc/scipy/",
+      "download": "https://github.com/scipy/scipy/releases",
+      "homepage": "https://scipy.org/",
+      "source": "https://github.com/scipy/scipy",
+      "tracker": "https://github.com/scipy/scipy/issues"
+    }
+  },
+  {
+    "id": "PKG-PANDAS",
+    "title": "pandas",
+    "modules": [
+      "shared-runtime"
+    ],
+    "kind": "installed-runtime-package",
+    "authors": "作者待核实",
+    "version": "2.3.3 in phonetic_311; v3 pin pending",
+    "license": "see exact release metadata / wheel audit pending",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/pandas/2.3.3/json",
+      "documentation": "https://pandas.pydata.org/docs/",
+      "homepage": "https://pandas.pydata.org",
+      "repository": "https://github.com/pandas-dev/pandas"
+    }
+  },
+  {
+    "id": "PKG-MATPLOTLIB",
+    "title": "matplotlib",
+    "modules": [
+      "shared-runtime"
+    ],
+    "kind": "installed-runtime-package",
+    "authors": "John D. Hunter, Michael Droettboom",
+    "version": "3.10.8 in phonetic_311; v3 pin pending",
+    "license": "see exact release metadata / wheel audit pending",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/matplotlib/3.10.8/json",
+      "Bug Tracker": "https://github.com/matplotlib/matplotlib/issues",
+      "Documentation": "https://matplotlib.org",
+      "Donate": "https://numfocus.org/donate-to-matplotlib",
+      "Download": "https://matplotlib.org/stable/install/index.html",
+      "Forum": "https://discourse.matplotlib.org/",
+      "Homepage": "https://matplotlib.org",
+      "Source Code": "https://github.com/matplotlib/matplotlib"
+    }
+  },
+  {
+    "id": "PKG-PYQT6",
+    "title": "PyQt6",
+    "modules": [
+      "shared-runtime"
+    ],
+    "kind": "installed-runtime-package",
+    "authors": "Riverbank Computing Limited",
+    "version": "6.6.1 in phonetic_311; v3 pin pending",
+    "license": "see exact release metadata / wheel audit pending",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/PyQt6/6.6.1/json",
+      "Homepage": "https://www.riverbankcomputing.com/software/pyqt/"
+    }
+  },
+  {
+    "id": "PKG-PYQTGRAPH",
+    "title": "pyqtgraph",
+    "modules": [
+      "shared-runtime"
+    ],
+    "kind": "installed-runtime-package",
+    "authors": "Luke Campagnola",
+    "version": "0.14.0 in phonetic_311; v3 pin pending",
+    "license": "see exact release metadata / wheel audit pending",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/pyqtgraph/0.14.0/json",
+      "Documentation": "https://pyqtgraph.readthedocs.io",
+      "Source": "https://github.com/pyqtgraph/pyqtgraph"
+    }
+  },
+  {
+    "id": "PKG-PRAAT-PARSELMOUTH",
+    "title": "praat-parselmouth",
+    "modules": [
+      "shared-runtime"
+    ],
+    "kind": "installed-runtime-package",
+    "authors": "Yannick Jadoul",
+    "version": "0.4.7 in phonetic_311; v3 pin pending",
+    "license": "see exact release metadata / wheel audit pending",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/praat-parselmouth/0.4.7/json",
+      "Bug Tracker": "https://github.com/YannickJadoul/Parselmouth/issues",
+      "Documentation": "https://parselmouth.readthedocs.io/",
+      "Homepage": "https://github.com/YannickJadoul/Parselmouth",
+      "Source Code": "https://github.com/YannickJadoul/Parselmouth"
+    }
+  },
+  {
+    "id": "PKG-PYWAVELETS",
+    "title": "PyWavelets",
+    "modules": [
+      "shared-runtime"
+    ],
+    "kind": "installed-runtime-package",
+    "authors": "作者待核实",
+    "version": "1.9.0 in phonetic_311; v3 pin pending",
+    "license": "MIT AND BSD-3-Clause",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/PyWavelets/1.9.0/json",
+      "documentation": "https://pywavelets.readthedocs.io/",
+      "homepage": "https://github.com/PyWavelets/pywt",
+      "source": "https://github.com/PyWavelets/pywt"
+    }
+  },
+  {
+    "id": "PKG-SOUNDDEVICE",
+    "title": "sounddevice",
+    "modules": [
+      "shared-runtime"
+    ],
+    "kind": "installed-runtime-package",
+    "authors": "Matthias Geier",
+    "version": "0.5.3 in phonetic_311; v3 pin pending",
+    "license": "see exact release metadata / wheel audit pending",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/sounddevice/0.5.3/json",
+      "Source": "https://github.com/spatialaudio/python-sounddevice"
+    }
+  },
+  {
+    "id": "PKG-SOUNDFILE",
+    "title": "soundfile",
+    "modules": [
+      "shared-runtime"
+    ],
+    "kind": "installed-runtime-package",
+    "authors": "Bastian Bechtold",
+    "version": "0.13.1 in phonetic_311; v3 pin pending",
+    "license": "see exact release metadata / wheel audit pending",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/soundfile/0.13.1/json",
+      "Homepage": "https://github.com/bastibe/python-soundfile"
+    }
+  },
+  {
+    "id": "PKG-OPENPYXL",
+    "title": "openpyxl",
+    "modules": [
+      "shared-runtime"
+    ],
+    "kind": "installed-runtime-package",
+    "authors": "See AUTHORS",
+    "version": "3.1.5 in phonetic_311; v3 pin pending",
+    "license": "see exact release metadata / wheel audit pending",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/openpyxl/3.1.5/json",
+      "Documentation": "https://openpyxl.readthedocs.io/en/stable/",
+      "Homepage": "https://openpyxl.readthedocs.io",
+      "Source": "https://foss.heptapod.net/openpyxl/openpyxl",
+      "Tracker": "https://foss.heptapod.net/openpyxl/openpyxl/-/issues"
+    }
+  },
+  {
+    "id": "PKG-PYTHON-DOCX",
+    "title": "python-docx",
+    "modules": [
+      "shared-runtime"
+    ],
+    "kind": "installed-runtime-package",
+    "authors": "作者待核实",
+    "version": "1.2.0 in phonetic_311; v3 pin pending",
+    "license": "see exact release metadata / wheel audit pending",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/python-docx/1.2.0/json",
+      "Changelog": "https://github.com/python-openxml/python-docx/blob/master/HISTORY.rst",
+      "Documentation": "https://python-docx.readthedocs.org/en/latest/",
+      "Homepage": "https://github.com/python-openxml/python-docx",
+      "Repository": "https://github.com/python-openxml/python-docx"
+    }
+  },
+  {
+    "id": "PKG-OPENCV-CONTRIB-PYTHON",
+    "title": "opencv-contrib-python",
+    "modules": [
+      "shared-runtime"
+    ],
+    "kind": "installed-runtime-package",
+    "authors": "作者待核实",
+    "version": "4.13.0.92 in phonetic_311; v3 pin pending",
+    "license": "see exact release metadata / wheel audit pending",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/opencv-contrib-python/4.13.0.92/json",
+      "Homepage": "https://github.com/opencv/opencv-python"
+    }
+  },
+  {
+    "id": "PKG-MEDIAPIPE",
+    "title": "mediapipe",
+    "modules": [
+      "shared-runtime"
+    ],
+    "kind": "installed-runtime-package",
+    "authors": "The MediaPipe Authors",
+    "version": "0.10.14 in phonetic_311; v3 pin pending",
+    "license": "see exact release metadata / wheel audit pending",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/mediapipe/0.10.14/json",
+      "Homepage": "https://github.com/google/mediapipe"
+    }
+  },
+  {
+    "id": "PKG-PILLOW",
+    "title": "Pillow",
+    "modules": [
+      "shared-runtime"
+    ],
+    "kind": "installed-runtime-package",
+    "authors": "作者待核实",
+    "version": "12.0.0 in phonetic_311; v3 pin pending",
+    "license": "MIT-CMU",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/Pillow/12.0.0/json",
+      "Changelog": "https://github.com/python-pillow/Pillow/releases",
+      "Documentation": "https://pillow.readthedocs.io",
+      "Funding": "https://tidelift.com/subscription/pkg/pypi-pillow?utm_source=pypi-pillow&utm_medium=pypi",
+      "Homepage": "https://python-pillow.github.io",
+      "Mastodon": "https://fosstodon.org/@pillow",
+      "Release notes": "https://pillow.readthedocs.io/en/stable/releasenotes/index.html",
+      "Source": "https://github.com/python-pillow/Pillow"
+    }
+  },
+  {
+    "id": "PKG-PYINSTALLER",
+    "title": "PyInstaller",
+    "modules": [
+      "shared-runtime"
+    ],
+    "kind": "installed-runtime-package",
+    "authors": "Hartmut Goebel, Giovanni Bajo, David Vierra, David Cortesi, Martin Zibricky",
+    "version": "6.17.0 in phonetic_311; v3 pin pending",
+    "license": "see exact release metadata / wheel audit pending",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/PyInstaller/6.17.0/json",
+      "Documentation": "https://pyinstaller.org",
+      "Homepage": "https://pyinstaller.org",
+      "Release Notes": "https://pyinstaller.org/en/stable/CHANGES.html",
+      "Source Code": "https://github.com/pyinstaller/pyinstaller"
+    }
+  },
+  {
+    "id": "P01-PY-ALTGRAPH",
+    "title": "altgraph",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "build-dependency",
+    "authors": "Ronald Oussoren",
+    "version": "0.17.5",
+    "license": "MIT",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/altgraph/0.17.5/json"
+    }
+  },
+  {
+    "id": "P01-PY-COLORAMA",
+    "title": "colorama",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "test-dependency",
+    "authors": "Jonathan Hartley <tartley@tartley.com>",
+    "version": "0.4.6",
+    "license": "unknown",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/colorama/0.4.6/json"
+    }
+  },
+  {
+    "id": "P01-PY-INICONFIG",
+    "title": "iniconfig",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "test-dependency",
+    "authors": "Ronny Pfannschmidt <opensource@ronnypfannschmidt.de>, Holger Krekel <holger.krekel@gmail.com>",
+    "version": "2.3.0",
+    "license": "MIT",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/iniconfig/2.3.0/json"
+    }
+  },
+  {
+    "id": "P01-PY-NUMPY",
+    "title": "numpy",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "test-dependency",
+    "authors": "Travis E. Oliphant et al.",
+    "version": "2.2.6",
+    "license": "See exact installed license metadata in third_party/p01-dependency-inventory.json",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/numpy/2.2.6/json"
+    }
+  },
+  {
+    "id": "P01-PY-PACKAGING",
+    "title": "packaging",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "build-dependency",
+    "authors": "Donald Stufft <donald@stufft.io>",
+    "version": "26.3",
+    "license": "Apache-2.0 OR BSD-2-Clause",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/packaging/26.3/json"
+    }
+  },
+  {
+    "id": "P01-PY-PEFILE",
+    "title": "pefile",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "build-dependency",
+    "authors": "Ero Carrera",
+    "version": "2024.8.26",
+    "license": "MIT",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/pefile/2024.8.26/json"
+    }
+  },
+  {
+    "id": "P01-PY-PLUGGY",
+    "title": "pluggy",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "test-dependency",
+    "authors": "Holger Krekel <holger@merlinux.eu>",
+    "version": "1.6.0",
+    "license": "MIT",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/pluggy/1.6.0/json"
+    }
+  },
+  {
+    "id": "P01-PY-PSUTIL",
+    "title": "psutil",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "test-dependency",
+    "authors": "Giampaolo Rodola",
+    "version": "7.2.2",
+    "license": "BSD-3-Clause",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/psutil/7.2.2/json"
+    }
+  },
+  {
+    "id": "P01-PY-PYAUDIOWPATCH",
+    "title": "PyAudioWPatch",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "test-dependency",
+    "authors": "Hubert Pham(S0D3S edition)",
+    "version": "0.2.12.8",
+    "license": "Apache-2.0 license",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/PyAudioWPatch/0.2.12.8/json"
+    }
+  },
+  {
+    "id": "P01-PY-PYGMENTS",
+    "title": "Pygments",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "test-dependency",
+    "authors": "Georg Brandl <georg@python.org>",
+    "version": "2.21.0",
+    "license": "BSD-2-Clause",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/Pygments/2.21.0/json"
+    }
+  },
+  {
+    "id": "P01-PY-PYINSTALLER",
+    "title": "pyinstaller",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "build-dependency",
+    "authors": "Hartmut Goebel, Giovanni Bajo, David Vierra, David Cortesi, Martin Zibricky",
+    "version": "6.22.2",
+    "license": "GPLv2-or-later with a special exception which allows to use PyInstaller to build and distribute non-free programs (including commercial ones)",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/pyinstaller/6.22.2/json"
+    }
+  },
+  {
+    "id": "P01-PY-PYINSTALLER-HOOKS-CONTRIB",
+    "title": "pyinstaller-hooks-contrib",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "build-dependency",
+    "authors": "unknown",
+    "version": "2026.7",
+    "license": "unknown",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/pyinstaller-hooks-contrib/2026.7/json"
+    }
+  },
+  {
+    "id": "P01-PY-PYQT6",
+    "title": "PyQt6",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Riverbank Computing Limited <info@riverbankcomputing.com>",
+    "version": "6.11.0",
+    "license": "GPL-3.0-only",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/PyQt6/6.11.0/json"
+    }
+  },
+  {
+    "id": "P01-PY-PYQT6-QT6",
+    "title": "PyQt6-Qt6",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Riverbank Computing Limited",
+    "version": "6.11.2",
+    "license": "LGPL v3",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/PyQt6-Qt6/6.11.2/json"
+    }
+  },
+  {
+    "id": "P01-PY-PYQT6-WEBENGINE",
+    "title": "PyQt6-WebEngine",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Riverbank Computing Limited <info@riverbankcomputing.com>",
+    "version": "6.11.0",
+    "license": "GPL-3.0-only",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/PyQt6-WebEngine/6.11.0/json"
+    }
+  },
+  {
+    "id": "P01-PY-PYQT6-WEBENGINE-QT6",
+    "title": "PyQt6-WebEngine-Qt6",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Riverbank Computing Limited",
+    "version": "6.11.2",
+    "license": "LGPL v3",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/PyQt6-WebEngine-Qt6/6.11.2/json"
+    }
+  },
+  {
+    "id": "P01-PY-PYQT6-SIP",
+    "title": "PyQt6_sip",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Phil Thompson",
+    "version": "13.12.0",
+    "license": "BSD-2-Clause",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/PyQt6_sip/13.12.0/json"
+    }
+  },
+  {
+    "id": "P01-PY-PYTEST",
+    "title": "pytest",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "test-dependency",
+    "authors": "Brianna Laugher, Bruno Oliveira, Floris Bruynooghe, Freya Bruhin, Holger Krekel, Others (See AUTHORS), Ronny Pfannschmidt",
+    "version": "9.1.1",
+    "license": "MIT",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/pytest/9.1.1/json"
+    }
+  },
+  {
+    "id": "P01-PY-PYWIN32-CTYPES",
+    "title": "pywin32-ctypes",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "build-dependency",
+    "authors": "Enthought Inc.",
+    "version": "0.2.3",
+    "license": "BSD-3-Clause",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/pywin32-ctypes/0.2.3/json"
+    }
+  },
+  {
+    "id": "P01-PY-SETUPTOOLS",
+    "title": "setuptools",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "build-dependency",
+    "authors": "Python Packaging Authority <distutils-sig@python.org>",
+    "version": "84.0.0",
+    "license": "MIT",
+    "urls": {
+      "release_metadata": "https://pypi.org/pypi/setuptools/84.0.0/json"
+    }
+  },
+  {
+    "id": "P01-NPM-BABEL-HELPER-STRING-PARSER",
+    "title": "@babel/helper-string-parser",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "The Babel Team (https://babel.dev/team)",
+    "version": "7.29.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@babel/helper-string-parser/v/7.29.7"
+    }
+  },
+  {
+    "id": "P01-NPM-BABEL-HELPER-VALIDATOR-IDENTIFIER",
+    "title": "@babel/helper-validator-identifier",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "The Babel Team (https://babel.dev/team)",
+    "version": "7.29.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@babel/helper-validator-identifier/v/7.29.7"
+    }
+  },
+  {
+    "id": "P01-NPM-BABEL-PARSER",
+    "title": "@babel/parser",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "The Babel Team (https://babel.dev/team)",
+    "version": "7.29.8",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@babel/parser/v/7.29.8"
+    }
+  },
+  {
+    "id": "P01-NPM-BABEL-TYPES",
+    "title": "@babel/types",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "The Babel Team (https://babel.dev/team)",
+    "version": "7.29.8",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@babel/types/v/7.29.8"
+    }
+  },
+  {
+    "id": "P01-NPM-JRIDGEWELL-SOURCEMAP-CODEC",
+    "title": "@jridgewell/sourcemap-codec",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Justin Ridgewell <justin@ridgewell.name>",
+    "version": "1.6.0",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@jridgewell/sourcemap-codec/v/1.6.0"
+    }
+  },
+  {
+    "id": "P01-NPM-OXC-PROJECT-TYPES",
+    "title": "@oxc-project/types",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Boshen and oxc contributors",
+    "version": "0.148.0",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@oxc-project/types/v/0.148.0"
+    }
+  },
+  {
+    "id": "P01-NPM-ROLLDOWN-BINDING-ANDROID-ARM-EABI",
+    "title": "@rolldown/binding-android-arm-eabi",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@rolldown/binding-android-arm-eabi/v/1.2.7"
+    }
+  },
+  {
+    "id": "P01-NPM-ROLLDOWN-BINDING-ANDROID-ARM64",
+    "title": "@rolldown/binding-android-arm64",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@rolldown/binding-android-arm64/v/1.2.7"
+    }
+  },
+  {
+    "id": "P01-NPM-ROLLDOWN-BINDING-DARWIN-ARM64",
+    "title": "@rolldown/binding-darwin-arm64",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@rolldown/binding-darwin-arm64/v/1.2.7"
+    }
+  },
+  {
+    "id": "P01-NPM-ROLLDOWN-BINDING-DARWIN-X64",
+    "title": "@rolldown/binding-darwin-x64",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@rolldown/binding-darwin-x64/v/1.2.7"
+    }
+  },
+  {
+    "id": "P01-NPM-ROLLDOWN-BINDING-FREEBSD-X64",
+    "title": "@rolldown/binding-freebsd-x64",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@rolldown/binding-freebsd-x64/v/1.2.7"
+    }
+  },
+  {
+    "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-ARM-GNUEABIHF",
+    "title": "@rolldown/binding-linux-arm-gnueabihf",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@rolldown/binding-linux-arm-gnueabihf/v/1.2.7"
+    }
+  },
+  {
+    "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-ARM64-GNU",
+    "title": "@rolldown/binding-linux-arm64-gnu",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@rolldown/binding-linux-arm64-gnu/v/1.2.7"
+    }
+  },
+  {
+    "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-ARM64-MUSL",
+    "title": "@rolldown/binding-linux-arm64-musl",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@rolldown/binding-linux-arm64-musl/v/1.2.7"
+    }
+  },
+  {
+    "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-PPC64-GNU",
+    "title": "@rolldown/binding-linux-ppc64-gnu",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@rolldown/binding-linux-ppc64-gnu/v/1.2.7"
+    }
+  },
+  {
+    "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-S390X-GNU",
+    "title": "@rolldown/binding-linux-s390x-gnu",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@rolldown/binding-linux-s390x-gnu/v/1.2.7"
+    }
+  },
+  {
+    "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-X64-GNU",
+    "title": "@rolldown/binding-linux-x64-gnu",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@rolldown/binding-linux-x64-gnu/v/1.2.7"
+    }
+  },
+  {
+    "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-X64-MUSL",
+    "title": "@rolldown/binding-linux-x64-musl",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@rolldown/binding-linux-x64-musl/v/1.2.7"
+    }
+  },
+  {
+    "id": "P01-NPM-ROLLDOWN-BINDING-OPENHARMONY-ARM64",
+    "title": "@rolldown/binding-openharmony-arm64",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@rolldown/binding-openharmony-arm64/v/1.2.7"
+    }
+  },
+  {
+    "id": "P01-NPM-ROLLDOWN-BINDING-WIN32-ARM64-MSVC",
+    "title": "@rolldown/binding-win32-arm64-msvc",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@rolldown/binding-win32-arm64-msvc/v/1.2.7"
+    }
+  },
+  {
+    "id": "P01-NPM-ROLLDOWN-BINDING-WIN32-X64-MSVC",
+    "title": "@rolldown/binding-win32-x64-msvc",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@rolldown/binding-win32-x64-msvc/v/1.2.7"
+    }
+  },
+  {
+    "id": "P01-NPM-ROLLDOWN-PLUGINUTILS",
+    "title": "@rolldown/pluginutils",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.0.1",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@rolldown/pluginutils/v/1.0.1"
+    }
+  },
+  {
+    "id": "P01-NPM-VITEJS-PLUGIN-VUE",
+    "title": "@vitejs/plugin-vue",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Evan You",
+    "version": "6.0.8",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@vitejs/plugin-vue/v/6.0.8"
+    }
+  },
+  {
+    "id": "P01-NPM-VOLAR-LANGUAGE-CORE",
+    "title": "@volar/language-core",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "2.4.28",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@volar/language-core/v/2.4.28"
+    }
+  },
+  {
+    "id": "P01-NPM-VOLAR-SOURCE-MAP",
+    "title": "@volar/source-map",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "2.4.28",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@volar/source-map/v/2.4.28"
+    }
+  },
+  {
+    "id": "P01-NPM-VOLAR-TYPESCRIPT",
+    "title": "@volar/typescript",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "2.4.28",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@volar/typescript/v/2.4.28"
+    }
+  },
+  {
+    "id": "P01-NPM-VUE-COMPILER-CORE",
+    "title": "@vue/compiler-core",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@vue/compiler-core/v/3.5.42"
+    }
+  },
+  {
+    "id": "P01-NPM-VUE-COMPILER-DOM",
+    "title": "@vue/compiler-dom",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@vue/compiler-dom/v/3.5.42"
+    }
+  },
+  {
+    "id": "P01-NPM-VUE-COMPILER-SFC",
+    "title": "@vue/compiler-sfc",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@vue/compiler-sfc/v/3.5.42"
+    }
+  },
+  {
+    "id": "P01-NPM-VUE-COMPILER-SSR",
+    "title": "@vue/compiler-ssr",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@vue/compiler-ssr/v/3.5.42"
+    }
+  },
+  {
+    "id": "P01-NPM-VUE-LANGUAGE-CORE",
+    "title": "@vue/language-core",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "3.3.11",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@vue/language-core/v/3.3.11"
+    }
+  },
+  {
+    "id": "P01-NPM-VUE-REACTIVITY",
+    "title": "@vue/reactivity",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@vue/reactivity/v/3.5.42"
+    }
+  },
+  {
+    "id": "P01-NPM-VUE-RUNTIME-CORE",
+    "title": "@vue/runtime-core",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@vue/runtime-core/v/3.5.42"
+    }
+  },
+  {
+    "id": "P01-NPM-VUE-RUNTIME-DOM",
+    "title": "@vue/runtime-dom",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@vue/runtime-dom/v/3.5.42"
+    }
+  },
+  {
+    "id": "P01-NPM-VUE-SERVER-RENDERER",
+    "title": "@vue/server-renderer",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@vue/server-renderer/v/3.5.42"
+    }
+  },
+  {
+    "id": "P01-NPM-VUE-SHARED",
+    "title": "@vue/shared",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/@vue/shared/v/3.5.42"
+    }
+  },
+  {
+    "id": "P01-NPM-ALIEN-SIGNALS",
+    "title": "alien-signals",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "3.2.1",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/alien-signals/v/3.2.1"
+    }
+  },
+  {
+    "id": "P01-NPM-CSSTYPE",
+    "title": "csstype",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Fredrik Nicol <fredrik.nicol@gmail.com>",
+    "version": "3.2.3",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/csstype/v/3.2.3"
+    }
+  },
+  {
+    "id": "P01-NPM-DETECT-LIBC",
+    "title": "detect-libc",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Lovell Fuller <npm@lovell.info>",
+    "version": "2.1.2",
+    "license": "Apache-2.0",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/detect-libc/v/2.1.2"
+    }
+  },
+  {
+    "id": "P01-NPM-ENTITIES",
+    "title": "entities",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Felix Boehm <me@feedic.com>",
+    "version": "7.0.1",
+    "license": "BSD-2-Clause",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/entities/v/7.0.1"
+    }
+  },
+  {
+    "id": "P01-NPM-ESTREE-WALKER",
+    "title": "estree-walker",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Rich Harris",
+    "version": "2.0.2",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/estree-walker/v/2.0.2"
+    }
+  },
+  {
+    "id": "P01-NPM-FDIR",
+    "title": "fdir",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "thecodrr <thecodrr@protonmail.com>",
+    "version": "6.5.0",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/fdir/v/6.5.0"
+    }
+  },
+  {
+    "id": "P01-NPM-FSEVENTS",
+    "title": "fsevents",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "2.3.3",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/fsevents/v/2.3.3"
+    }
+  },
+  {
+    "id": "P01-NPM-LIGHTNINGCSS",
+    "title": "lightningcss",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/lightningcss/v/1.33.0"
+    }
+  },
+  {
+    "id": "P01-NPM-LIGHTNINGCSS-ANDROID-ARM64",
+    "title": "lightningcss-android-arm64",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/lightningcss-android-arm64/v/1.33.0"
+    }
+  },
+  {
+    "id": "P01-NPM-LIGHTNINGCSS-DARWIN-ARM64",
+    "title": "lightningcss-darwin-arm64",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/lightningcss-darwin-arm64/v/1.33.0"
+    }
+  },
+  {
+    "id": "P01-NPM-LIGHTNINGCSS-DARWIN-X64",
+    "title": "lightningcss-darwin-x64",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/lightningcss-darwin-x64/v/1.33.0"
+    }
+  },
+  {
+    "id": "P01-NPM-LIGHTNINGCSS-FREEBSD-X64",
+    "title": "lightningcss-freebsd-x64",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/lightningcss-freebsd-x64/v/1.33.0"
+    }
+  },
+  {
+    "id": "P01-NPM-LIGHTNINGCSS-LINUX-ARM-GNUEABIHF",
+    "title": "lightningcss-linux-arm-gnueabihf",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/lightningcss-linux-arm-gnueabihf/v/1.33.0"
+    }
+  },
+  {
+    "id": "P01-NPM-LIGHTNINGCSS-LINUX-ARM64-GNU",
+    "title": "lightningcss-linux-arm64-gnu",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/lightningcss-linux-arm64-gnu/v/1.33.0"
+    }
+  },
+  {
+    "id": "P01-NPM-LIGHTNINGCSS-LINUX-ARM64-MUSL",
+    "title": "lightningcss-linux-arm64-musl",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/lightningcss-linux-arm64-musl/v/1.33.0"
+    }
+  },
+  {
+    "id": "P01-NPM-LIGHTNINGCSS-LINUX-X64-GNU",
+    "title": "lightningcss-linux-x64-gnu",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/lightningcss-linux-x64-gnu/v/1.33.0"
+    }
+  },
+  {
+    "id": "P01-NPM-LIGHTNINGCSS-LINUX-X64-MUSL",
+    "title": "lightningcss-linux-x64-musl",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/lightningcss-linux-x64-musl/v/1.33.0"
+    }
+  },
+  {
+    "id": "P01-NPM-LIGHTNINGCSS-WIN32-ARM64-MSVC",
+    "title": "lightningcss-win32-arm64-msvc",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/lightningcss-win32-arm64-msvc/v/1.33.0"
+    }
+  },
+  {
+    "id": "P01-NPM-LIGHTNINGCSS-WIN32-X64-MSVC",
+    "title": "lightningcss-win32-x64-msvc",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/lightningcss-win32-x64-msvc/v/1.33.0"
+    }
+  },
+  {
+    "id": "P01-NPM-MAGIC-STRING",
+    "title": "magic-string",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Rich Harris",
+    "version": "0.30.21",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/magic-string/v/0.30.21"
+    }
+  },
+  {
+    "id": "P01-NPM-MUGGLE-STRING",
+    "title": "muggle-string",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "0.4.1",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/muggle-string/v/0.4.1"
+    }
+  },
+  {
+    "id": "P01-NPM-NANOID",
+    "title": "nanoid",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Andrey Sitnik <andrey@sitnik.ru>",
+    "version": "3.3.18",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/nanoid/v/3.3.18"
+    }
+  },
+  {
+    "id": "P01-NPM-PATH-BROWSERIFY",
+    "title": "path-browserify",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "James Halliday",
+    "version": "1.0.1",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/path-browserify/v/1.0.1"
+    }
+  },
+  {
+    "id": "P01-NPM-PICOCOLORS",
+    "title": "picocolors",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Alexey Raspopov",
+    "version": "1.1.1",
+    "license": "ISC",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/picocolors/v/1.1.1"
+    }
+  },
+  {
+    "id": "P01-NPM-PICOMATCH",
+    "title": "picomatch",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Jon Schlinkert (https://github.com/jonschlinkert)",
+    "version": "4.0.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/picomatch/v/4.0.7"
+    }
+  },
+  {
+    "id": "P01-NPM-POSTCSS",
+    "title": "postcss",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Andrey Sitnik <andrey@sitnik.es>",
+    "version": "8.5.28",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/postcss/v/8.5.28"
+    }
+  },
+  {
+    "id": "P01-NPM-ROLLDOWN",
+    "title": "rolldown",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/rolldown/v/1.2.7"
+    }
+  },
+  {
+    "id": "P01-NPM-SOURCE-MAP-JS",
+    "title": "source-map-js",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Valentin 7rulnik Semirulnik <v7rulnik@gmail.com>",
+    "version": "1.2.1",
+    "license": "BSD-3-Clause",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/source-map-js/v/1.2.1"
+    }
+  },
+  {
+    "id": "P01-NPM-TINYGLOBBY",
+    "title": "tinyglobby",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Superchupu",
+    "version": "0.2.17",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/tinyglobby/v/0.2.17"
+    }
+  },
+  {
+    "id": "P01-NPM-TYPESCRIPT",
+    "title": "typescript",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Microsoft Corp.",
+    "version": "5.9.3",
+    "license": "Apache-2.0",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/typescript/v/5.9.3"
+    }
+  },
+  {
+    "id": "P01-NPM-VITE",
+    "title": "vite",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Evan You",
+    "version": "8.2.2",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/vite/v/8.2.2"
+    }
+  },
+  {
+    "id": "P01-NPM-VSCODE-URI",
+    "title": "vscode-uri",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Microsoft",
+    "version": "3.2.0",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/vscode-uri/v/3.2.0"
+    }
+  },
+  {
+    "id": "P01-NPM-VUE",
+    "title": "vue",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/vue/v/3.5.42"
+    }
+  },
+  {
+    "id": "P01-NPM-VUE-TSC",
+    "title": "vue-tsc",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-ui-build-dependency",
+    "authors": "unknown",
+    "version": "3.3.11",
+    "license": "MIT",
+    "urls": {
+      "registry": "https://www.npmjs.com/package/vue-tsc/v/3.3.11"
+    }
+  },
+  {
+    "id": "P01-CPYTHON",
+    "title": "CPython via python-build-standalone",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "probe-runtime-dependency",
+    "authors": "Python Software Foundation and python-build-standalone contributors",
+    "version": "CPython 3.11.14, uv-managed Windows x86_64 standalone distribution",
+    "license": "PSF-2.0 and bundled component terms; runtime distribution audit pending",
+    "urls": {
+      "runtime_builds": "https://github.com/astral-sh/python-build-standalone",
+      "python": "https://www.python.org/"
+    }
+  },
+  {
+    "id": "P01-PYSIDE6",
+    "title": "PySide6 candidate host",
+    "modules": [
+      "P01-probe"
+    ],
+    "kind": "evaluated-alternative-dependency",
+    "authors": "The Qt Company Ltd. and Qt contributors",
+    "version": "PySide6 / Essentials / Addons / Shiboken6 6.11.2 in separate trial environment",
+    "license": "LGPL/GPL/commercial and component-specific terms; see Qt license inventory",
+    "urls": {
+      "licenses": "https://doc.qt.io/qtforpython-6/licenses.html",
+      "package": "https://pypi.org/project/PySide6/6.11.2/"
+    }
+  },
+  {
+    "id": "P02-PY-ANNOTATED-DOC",
+    "title": "annotated-doc",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "=?utf-8?q?Sebasti=C3=A1n_Ram=C3=ADrez?= <tiangolo@gmail.com>",
+    "version": "0.0.5",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/annotated-doc/0.0.5/"
+    }
+  },
+  {
+    "id": "P02-PY-ANNOTATED-TYPES",
+    "title": "annotated-types",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Adrian Garcia Badaracco <1755071+adriangb@users.noreply.github.com>, Samuel Colvin <s@muelcolvin.com>, Zac Hatfield-Dodds <zac@zhd.dev>",
+    "version": "0.8.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/annotated-types/0.8.0/"
+    }
+  },
+  {
+    "id": "P02-PY-ANYIO",
+    "title": "anyio",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Alex Grönholm <alex.gronholm@nextday.fi>",
+    "version": "4.15.1",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/anyio/4.15.1/"
+    }
+  },
+  {
+    "id": "P02-PY-BUILD",
+    "title": "build",
+    "modules": [
+      "P02"
+    ],
+    "kind": "development-dependency",
+    "authors": "Filipe Laíns <lains@riseup.net>, Bernát Gábor <gaborjbernat@gmail.com>, layday <layday@protonmail.com>, Henry Schreiner <henryschreineriii@gmail.com>",
+    "version": "1.6.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/build/1.6.0/"
+    }
+  },
+  {
+    "id": "P02-PY-CERTIFI",
+    "title": "certifi",
+    "modules": [
+      "P02"
+    ],
+    "kind": "development-dependency",
+    "authors": "Kenneth Reitz",
+    "version": "2026.7.22",
+    "license": "MPL-2.0",
+    "urls": {
+      "release": "https://pypi.org/project/certifi/2026.7.22/"
+    }
+  },
+  {
+    "id": "P02-PY-CLICK",
+    "title": "click",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "unknown",
+    "version": "8.5.0",
+    "license": "BSD-3-Clause",
+    "urls": {
+      "release": "https://pypi.org/project/click/8.5.0/"
+    }
+  },
+  {
+    "id": "P02-PY-COLORAMA",
+    "title": "colorama",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Jonathan Hartley <tartley@tartley.com>",
+    "version": "0.4.6",
+    "license": "unknown",
+    "urls": {
+      "release": "https://pypi.org/project/colorama/0.4.6/"
+    }
+  },
+  {
+    "id": "P02-PY-FASTAPI",
+    "title": "fastapi",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "=?utf-8?q?Sebasti=C3=A1n_Ram=C3=ADrez?= <tiangolo@gmail.com>",
+    "version": "0.141.1",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/fastapi/0.141.1/"
+    }
+  },
+  {
+    "id": "P02-PY-H11",
+    "title": "h11",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Nathaniel J. Smith",
+    "version": "0.16.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/h11/0.16.0/"
+    }
+  },
+  {
+    "id": "P02-PY-HTTPCORE",
+    "title": "httpcore",
+    "modules": [
+      "P02"
+    ],
+    "kind": "development-dependency",
+    "authors": "Tom Christie <tom@tomchristie.com>",
+    "version": "1.0.9",
+    "license": "BSD-3-Clause",
+    "urls": {
+      "release": "https://pypi.org/project/httpcore/1.0.9/"
+    }
+  },
+  {
+    "id": "P02-PY-HTTPX",
+    "title": "httpx",
+    "modules": [
+      "P02"
+    ],
+    "kind": "development-dependency",
+    "authors": "Tom Christie <tom@tomchristie.com>",
+    "version": "0.28.1",
+    "license": "BSD-3-Clause",
+    "urls": {
+      "release": "https://pypi.org/project/httpx/0.28.1/"
+    }
+  },
+  {
+    "id": "P02-PY-IDNA",
+    "title": "idna",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Kim Davies <kim+pypi@gumleaf.org>",
+    "version": "3.19",
+    "license": "BSD-3-Clause",
+    "urls": {
+      "release": "https://pypi.org/project/idna/3.19/"
+    }
+  },
+  {
+    "id": "P02-PY-INICONFIG",
+    "title": "iniconfig",
+    "modules": [
+      "P02"
+    ],
+    "kind": "development-dependency",
+    "authors": "Ronny Pfannschmidt <opensource@ronnypfannschmidt.de>, Holger Krekel <holger.krekel@gmail.com>",
+    "version": "2.3.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/iniconfig/2.3.0/"
+    }
+  },
+  {
+    "id": "P02-PY-PACKAGING",
+    "title": "packaging",
+    "modules": [
+      "P02"
+    ],
+    "kind": "development-dependency",
+    "authors": "Donald Stufft <donald@stufft.io>",
+    "version": "26.3",
+    "license": "Apache-2.0 OR BSD-2-Clause",
+    "urls": {
+      "release": "https://pypi.org/project/packaging/26.3/"
+    }
+  },
+  {
+    "id": "P02-PY-PLUGGY",
+    "title": "pluggy",
+    "modules": [
+      "P02"
+    ],
+    "kind": "development-dependency",
+    "authors": "Holger Krekel <holger@merlinux.eu>",
+    "version": "1.6.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/pluggy/1.6.0/"
+    }
+  },
+  {
+    "id": "P02-PY-PYDANTIC",
+    "title": "pydantic",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Samuel Colvin <s@muelcolvin.com>, Eric Jolibois <em.jolibois@gmail.com>, Hasan Ramezani <hasan.r67@gmail.com>, Adrian Garcia Badaracco <1755071+adriangb@users.noreply.github.com>, Terrence Dorsey <terry@pydantic.dev>, David Montague <david@pydantic.dev>, Serge Matveenko <lig@countzero.co>, Marcelo Trylesinski <marcelotryle@gmail.com>, Sydney Runkle <sydneymarierunkle@gmail.com>, David Hewitt <mail@davidhewitt.dev>, Alex Hall <alex.mojaki@gmail.com>, Victorien Plot <contact@vctrn.dev>",
+    "version": "2.13.5",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/pydantic/2.13.5/"
+    }
+  },
+  {
+    "id": "P02-PY-PYDANTIC-CORE",
+    "title": "pydantic_core",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Samuel Colvin <s@muelcolvin.com>, Adrian Garcia Badaracco <1755071+adriangb@users.noreply.github.com>, David Montague <david@pydantic.dev>, David Hewitt <mail@davidhewitt.dev>, Sydney Runkle <sydneymarierunkle@gmail.com>, Victorien Plot <contact@vctrn.dev>",
+    "version": "2.46.5",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/pydantic_core/2.46.5/"
+    }
+  },
+  {
+    "id": "P02-PY-PYGMENTS",
+    "title": "Pygments",
+    "modules": [
+      "P02"
+    ],
+    "kind": "development-dependency",
+    "authors": "Georg Brandl <georg@python.org>",
+    "version": "2.21.0",
+    "license": "BSD-2-Clause",
+    "urls": {
+      "release": "https://pypi.org/project/Pygments/2.21.0/"
+    }
+  },
+  {
+    "id": "P02-PY-PYPROJECT-HOOKS",
+    "title": "pyproject_hooks",
+    "modules": [
+      "P02"
+    ],
+    "kind": "development-dependency",
+    "authors": "Thomas Kluyver <thomas@kluyver.me.uk>",
+    "version": "1.2.0",
+    "license": "unknown",
+    "urls": {
+      "release": "https://pypi.org/project/pyproject_hooks/1.2.0/"
+    }
+  },
+  {
+    "id": "P02-PY-PYQT6",
+    "title": "PyQt6",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Riverbank Computing Limited <info@riverbankcomputing.com>",
+    "version": "6.11.0",
+    "license": "GPL-3.0-only",
+    "urls": {
+      "release": "https://pypi.org/project/PyQt6/6.11.0/"
+    }
+  },
+  {
+    "id": "P02-PY-PYQT6-QT6",
+    "title": "PyQt6-Qt6",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Riverbank Computing Limited",
+    "version": "6.11.2",
+    "license": "LGPL v3",
+    "urls": {
+      "release": "https://pypi.org/project/PyQt6-Qt6/6.11.2/"
+    }
+  },
+  {
+    "id": "P02-PY-PYQT6-WEBENGINE",
+    "title": "PyQt6-WebEngine",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Riverbank Computing Limited <info@riverbankcomputing.com>",
+    "version": "6.11.0",
+    "license": "GPL-3.0-only",
+    "urls": {
+      "release": "https://pypi.org/project/PyQt6-WebEngine/6.11.0/"
+    }
+  },
+  {
+    "id": "P02-PY-PYQT6-WEBENGINE-QT6",
+    "title": "PyQt6-WebEngine-Qt6",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Riverbank Computing Limited",
+    "version": "6.11.2",
+    "license": "LGPL v3",
+    "urls": {
+      "release": "https://pypi.org/project/PyQt6-WebEngine-Qt6/6.11.2/"
+    }
+  },
+  {
+    "id": "P02-PY-PYQT6-SIP",
+    "title": "PyQt6_sip",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Phil Thompson",
+    "version": "13.12.0",
+    "license": "BSD-2-Clause",
+    "urls": {
+      "release": "https://pypi.org/project/PyQt6_sip/13.12.0/"
+    }
+  },
+  {
+    "id": "P02-PY-PYTEST",
+    "title": "pytest",
+    "modules": [
+      "P02"
+    ],
+    "kind": "development-dependency",
+    "authors": "Brianna Laugher, Bruno Oliveira, Floris Bruynooghe, Freya Bruhin, Holger Krekel, Others (See AUTHORS), Ronny Pfannschmidt",
+    "version": "9.1.1",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/pytest/9.1.1/"
+    }
+  },
+  {
+    "id": "P02-PY-SETUPTOOLS",
+    "title": "setuptools",
+    "modules": [
+      "P02"
+    ],
+    "kind": "development-dependency",
+    "authors": "Python Packaging Authority <distutils-sig@python.org>",
+    "version": "84.0.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/setuptools/84.0.0/"
+    }
+  },
+  {
+    "id": "P02-PY-STARLETTE",
+    "title": "starlette",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Tom Christie <tom@tomchristie.com>",
+    "version": "1.6.0",
+    "license": "BSD-3-Clause",
+    "urls": {
+      "release": "https://pypi.org/project/starlette/1.6.0/"
+    }
+  },
+  {
+    "id": "P02-PY-TYPING-INSPECTION",
+    "title": "typing-inspection",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Victorien Plot <contact@vctrn.dev>",
+    "version": "0.4.4",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/typing-inspection/0.4.4/"
+    }
+  },
+  {
+    "id": "P02-PY-TYPING-EXTENSIONS",
+    "title": "typing_extensions",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "\"Guido van Rossum, Jukka Lehtosalo, Łukasz Langa, Michael Lee\" <levkivskyi@gmail.com>",
+    "version": "4.16.0",
+    "license": "PSF-2.0",
+    "urls": {
+      "release": "https://pypi.org/project/typing_extensions/4.16.0/"
+    }
+  },
+  {
+    "id": "P02-PY-UVICORN",
+    "title": "uvicorn",
+    "modules": [
+      "P02"
+    ],
+    "kind": "runtime-dependency",
+    "authors": "Tom Christie <tom@tomchristie.com>",
+    "version": "0.52.4",
+    "license": "BSD-3-Clause",
+    "urls": {
+      "release": "https://pypi.org/project/uvicorn/0.52.4/"
+    }
+  },
+  {
+    "id": "P02-PY-WHEEL",
+    "title": "wheel",
+    "modules": [
+      "P02"
+    ],
+    "kind": "development-dependency",
+    "authors": "Daniel Holth <dholth@fastmail.fm>",
+    "version": "0.48.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/wheel/0.48.0/"
+    }
+  },
+  {
+    "id": "P02-NPM-BABEL-CODE-FRAME-7-29-7",
+    "title": "@babel/code-frame",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "The Babel Team (https://babel.dev/team)",
+    "version": "7.29.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@babel/code-frame/v/7.29.7"
+    }
+  },
+  {
+    "id": "P02-NPM-BABEL-HELPER-STRING-PARSER-7-29-7",
+    "title": "@babel/helper-string-parser",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "The Babel Team (https://babel.dev/team)",
+    "version": "7.29.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@babel/helper-string-parser/v/7.29.7"
+    }
+  },
+  {
+    "id": "P02-NPM-BABEL-HELPER-VALIDATOR-IDENTIFIER-7-29-7",
+    "title": "@babel/helper-validator-identifier",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "The Babel Team (https://babel.dev/team)",
+    "version": "7.29.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@babel/helper-validator-identifier/v/7.29.7"
+    }
+  },
+  {
+    "id": "P02-NPM-BABEL-PARSER-7-29-8",
+    "title": "@babel/parser",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "The Babel Team (https://babel.dev/team)",
+    "version": "7.29.8",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@babel/parser/v/7.29.8"
+    }
+  },
+  {
+    "id": "P02-NPM-BABEL-TYPES-7-29-8",
+    "title": "@babel/types",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "The Babel Team (https://babel.dev/team)",
+    "version": "7.29.8",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@babel/types/v/7.29.8"
+    }
+  },
+  {
+    "id": "P02-NPM-JRIDGEWELL-SOURCEMAP-CODEC-1-6-0",
+    "title": "@jridgewell/sourcemap-codec",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Justin Ridgewell <justin@ridgewell.name>",
+    "version": "1.6.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@jridgewell/sourcemap-codec/v/1.6.0"
+    }
+  },
+  {
+    "id": "P02-NPM-OXC-PROJECT-TYPES-0-148-0",
+    "title": "@oxc-project/types",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Boshen and oxc contributors",
+    "version": "0.148.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@oxc-project/types/v/0.148.0"
+    }
+  },
+  {
+    "id": "P02-NPM-REDOCLY-AJV-8-11-2",
+    "title": "@redocly/ajv",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Evgeny Poberezkin",
+    "version": "8.11.2",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@redocly/ajv/v/8.11.2"
+    }
+  },
+  {
+    "id": "P02-NPM-REDOCLY-CONFIG-0-22-0",
+    "title": "@redocly/config",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "0.22.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@redocly/config/v/0.22.0"
+    }
+  },
+  {
+    "id": "P02-NPM-REDOCLY-OPENAPI-CORE-1-34-19",
+    "title": "@redocly/openapi-core",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.34.19",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@redocly/openapi-core/v/1.34.19"
+    }
+  },
+  {
+    "id": "P02-NPM-ROLLDOWN-BINDING-ANDROID-ARM-EABI-1-2-7",
+    "title": "@rolldown/binding-android-arm-eabi",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@rolldown/binding-android-arm-eabi/v/1.2.7"
+    }
+  },
+  {
+    "id": "P02-NPM-ROLLDOWN-BINDING-ANDROID-ARM64-1-2-7",
+    "title": "@rolldown/binding-android-arm64",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@rolldown/binding-android-arm64/v/1.2.7"
+    }
+  },
+  {
+    "id": "P02-NPM-ROLLDOWN-BINDING-DARWIN-ARM64-1-2-7",
+    "title": "@rolldown/binding-darwin-arm64",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@rolldown/binding-darwin-arm64/v/1.2.7"
+    }
+  },
+  {
+    "id": "P02-NPM-ROLLDOWN-BINDING-DARWIN-X64-1-2-7",
+    "title": "@rolldown/binding-darwin-x64",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@rolldown/binding-darwin-x64/v/1.2.7"
+    }
+  },
+  {
+    "id": "P02-NPM-ROLLDOWN-BINDING-FREEBSD-X64-1-2-7",
+    "title": "@rolldown/binding-freebsd-x64",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@rolldown/binding-freebsd-x64/v/1.2.7"
+    }
+  },
+  {
+    "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-ARM-GNUEABIHF-1-2-7",
+    "title": "@rolldown/binding-linux-arm-gnueabihf",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@rolldown/binding-linux-arm-gnueabihf/v/1.2.7"
+    }
+  },
+  {
+    "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-ARM64-GNU-1-2-7",
+    "title": "@rolldown/binding-linux-arm64-gnu",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@rolldown/binding-linux-arm64-gnu/v/1.2.7"
+    }
+  },
+  {
+    "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-ARM64-MUSL-1-2-7",
+    "title": "@rolldown/binding-linux-arm64-musl",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@rolldown/binding-linux-arm64-musl/v/1.2.7"
+    }
+  },
+  {
+    "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-PPC64-GNU-1-2-7",
+    "title": "@rolldown/binding-linux-ppc64-gnu",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@rolldown/binding-linux-ppc64-gnu/v/1.2.7"
+    }
+  },
+  {
+    "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-S390X-GNU-1-2-7",
+    "title": "@rolldown/binding-linux-s390x-gnu",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@rolldown/binding-linux-s390x-gnu/v/1.2.7"
+    }
+  },
+  {
+    "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-X64-GNU-1-2-7",
+    "title": "@rolldown/binding-linux-x64-gnu",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@rolldown/binding-linux-x64-gnu/v/1.2.7"
+    }
+  },
+  {
+    "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-X64-MUSL-1-2-7",
+    "title": "@rolldown/binding-linux-x64-musl",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@rolldown/binding-linux-x64-musl/v/1.2.7"
+    }
+  },
+  {
+    "id": "P02-NPM-ROLLDOWN-BINDING-OPENHARMONY-ARM64-1-2-7",
+    "title": "@rolldown/binding-openharmony-arm64",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@rolldown/binding-openharmony-arm64/v/1.2.7"
+    }
+  },
+  {
+    "id": "P02-NPM-ROLLDOWN-BINDING-WIN32-ARM64-MSVC-1-2-7",
+    "title": "@rolldown/binding-win32-arm64-msvc",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@rolldown/binding-win32-arm64-msvc/v/1.2.7"
+    }
+  },
+  {
+    "id": "P02-NPM-ROLLDOWN-BINDING-WIN32-X64-MSVC-1-2-7",
+    "title": "@rolldown/binding-win32-x64-msvc",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@rolldown/binding-win32-x64-msvc/v/1.2.7"
+    }
+  },
+  {
+    "id": "P02-NPM-ROLLDOWN-PLUGINUTILS-1-0-1",
+    "title": "@rolldown/pluginutils",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.0.1",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@rolldown/pluginutils/v/1.0.1"
+    }
+  },
+  {
+    "id": "P02-NPM-VITEJS-PLUGIN-VUE-6-0-8",
+    "title": "@vitejs/plugin-vue",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Evan You",
+    "version": "6.0.8",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@vitejs/plugin-vue/v/6.0.8"
+    }
+  },
+  {
+    "id": "P02-NPM-VOLAR-LANGUAGE-CORE-2-4-28",
+    "title": "@volar/language-core",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "2.4.28",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@volar/language-core/v/2.4.28"
+    }
+  },
+  {
+    "id": "P02-NPM-VOLAR-SOURCE-MAP-2-4-28",
+    "title": "@volar/source-map",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "2.4.28",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@volar/source-map/v/2.4.28"
+    }
+  },
+  {
+    "id": "P02-NPM-VOLAR-TYPESCRIPT-2-4-28",
+    "title": "@volar/typescript",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "2.4.28",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@volar/typescript/v/2.4.28"
+    }
+  },
+  {
+    "id": "P02-NPM-VUE-COMPILER-CORE-3-5-42",
+    "title": "@vue/compiler-core",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@vue/compiler-core/v/3.5.42"
+    }
+  },
+  {
+    "id": "P02-NPM-VUE-COMPILER-DOM-3-5-42",
+    "title": "@vue/compiler-dom",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@vue/compiler-dom/v/3.5.42"
+    }
+  },
+  {
+    "id": "P02-NPM-VUE-COMPILER-SFC-3-5-42",
+    "title": "@vue/compiler-sfc",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@vue/compiler-sfc/v/3.5.42"
+    }
+  },
+  {
+    "id": "P02-NPM-VUE-COMPILER-SSR-3-5-42",
+    "title": "@vue/compiler-ssr",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@vue/compiler-ssr/v/3.5.42"
+    }
+  },
+  {
+    "id": "P02-NPM-VUE-LANGUAGE-CORE-3-3-11",
+    "title": "@vue/language-core",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "3.3.11",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@vue/language-core/v/3.3.11"
+    }
+  },
+  {
+    "id": "P02-NPM-VUE-REACTIVITY-3-5-42",
+    "title": "@vue/reactivity",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@vue/reactivity/v/3.5.42"
+    }
+  },
+  {
+    "id": "P02-NPM-VUE-RUNTIME-CORE-3-5-42",
+    "title": "@vue/runtime-core",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@vue/runtime-core/v/3.5.42"
+    }
+  },
+  {
+    "id": "P02-NPM-VUE-RUNTIME-DOM-3-5-42",
+    "title": "@vue/runtime-dom",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@vue/runtime-dom/v/3.5.42"
+    }
+  },
+  {
+    "id": "P02-NPM-VUE-SERVER-RENDERER-3-5-42",
+    "title": "@vue/server-renderer",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@vue/server-renderer/v/3.5.42"
+    }
+  },
+  {
+    "id": "P02-NPM-VUE-SHARED-3-5-42",
+    "title": "@vue/shared",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/@vue/shared/v/3.5.42"
+    }
+  },
+  {
+    "id": "P02-NPM-AGENT-BASE-7-1-4",
+    "title": "agent-base",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Nathan Rajlich <nathan@tootallnate.net> (http://n8.io/)",
+    "version": "7.1.4",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/agent-base/v/7.1.4"
+    }
+  },
+  {
+    "id": "P02-NPM-ALIEN-SIGNALS-3-2-1",
+    "title": "alien-signals",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "3.2.1",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/alien-signals/v/3.2.1"
+    }
+  },
+  {
+    "id": "P02-NPM-ANSI-COLORS-4-1-3",
+    "title": "ansi-colors",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Brian Woodward (https://github.com/doowb)",
+    "version": "4.1.3",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/ansi-colors/v/4.1.3"
+    }
+  },
+  {
+    "id": "P02-NPM-ARGPARSE-2-0-1",
+    "title": "argparse",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "2.0.1",
+    "license": "Python-2.0",
+    "urls": {
+      "release": "https://www.npmjs.com/package/argparse/v/2.0.1"
+    }
+  },
+  {
+    "id": "P02-NPM-BALANCED-MATCH-1-0-2",
+    "title": "balanced-match",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Julian Gruber",
+    "version": "1.0.2",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/balanced-match/v/1.0.2"
+    }
+  },
+  {
+    "id": "P02-NPM-BRACE-EXPANSION-2-1-4",
+    "title": "brace-expansion",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Julian Gruber",
+    "version": "2.1.4",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/brace-expansion/v/2.1.4"
+    }
+  },
+  {
+    "id": "P02-NPM-CHANGE-CASE-5-4-4",
+    "title": "change-case",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Blake Embrey",
+    "version": "5.4.4",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/change-case/v/5.4.4"
+    }
+  },
+  {
+    "id": "P02-NPM-COLORETTE-1-4-0",
+    "title": "colorette",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Jorge Bucaran",
+    "version": "1.4.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/colorette/v/1.4.0"
+    }
+  },
+  {
+    "id": "P02-NPM-CSSTYPE-3-2-3",
+    "title": "csstype",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Fredrik Nicol <fredrik.nicol@gmail.com>",
+    "version": "3.2.3",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/csstype/v/3.2.3"
+    }
+  },
+  {
+    "id": "P02-NPM-DEBUG-4-4-3",
+    "title": "debug",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Josh Junon (https://github.com/qix-)",
+    "version": "4.4.3",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/debug/v/4.4.3"
+    }
+  },
+  {
+    "id": "P02-NPM-DETECT-LIBC-2-1-2",
+    "title": "detect-libc",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Lovell Fuller <npm@lovell.info>",
+    "version": "2.1.2",
+    "license": "Apache-2.0",
+    "urls": {
+      "release": "https://www.npmjs.com/package/detect-libc/v/2.1.2"
+    }
+  },
+  {
+    "id": "P02-NPM-ENTITIES-7-0-1",
+    "title": "entities",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Felix Boehm <me@feedic.com>",
+    "version": "7.0.1",
+    "license": "BSD-2-Clause",
+    "urls": {
+      "release": "https://www.npmjs.com/package/entities/v/7.0.1"
+    }
+  },
+  {
+    "id": "P02-NPM-ESTREE-WALKER-2-0-2",
+    "title": "estree-walker",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Rich Harris",
+    "version": "2.0.2",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/estree-walker/v/2.0.2"
+    }
+  },
+  {
+    "id": "P02-NPM-FAST-DEEP-EQUAL-3-1-3",
+    "title": "fast-deep-equal",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Evgeny Poberezkin",
+    "version": "3.1.3",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/fast-deep-equal/v/3.1.3"
+    }
+  },
+  {
+    "id": "P02-NPM-FDIR-6-5-0",
+    "title": "fdir",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "thecodrr <thecodrr@protonmail.com>",
+    "version": "6.5.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/fdir/v/6.5.0"
+    }
+  },
+  {
+    "id": "P02-NPM-FSEVENTS-2-3-3",
+    "title": "fsevents",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "2.3.3",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/fsevents/v/2.3.3"
+    }
+  },
+  {
+    "id": "P02-NPM-HTTPS-PROXY-AGENT-7-0-6",
+    "title": "https-proxy-agent",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Nathan Rajlich <nathan@tootallnate.net> (http://n8.io/)",
+    "version": "7.0.6",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/https-proxy-agent/v/7.0.6"
+    }
+  },
+  {
+    "id": "P02-NPM-INDEX-TO-POSITION-1-2-0",
+    "title": "index-to-position",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Sindre Sorhus",
+    "version": "1.2.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/index-to-position/v/1.2.0"
+    }
+  },
+  {
+    "id": "P02-NPM-JS-LEVENSHTEIN-1-1-6",
+    "title": "js-levenshtein",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Gustaf Andersson",
+    "version": "1.1.6",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/js-levenshtein/v/1.1.6"
+    }
+  },
+  {
+    "id": "P02-NPM-JS-TOKENS-4-0-0",
+    "title": "js-tokens",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Simon Lydell",
+    "version": "4.0.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/js-tokens/v/4.0.0"
+    }
+  },
+  {
+    "id": "P02-NPM-JS-YAML-4-3-2",
+    "title": "js-yaml",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Vladimir Zapparov <dervus.grim@gmail.com>",
+    "version": "4.3.2",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/js-yaml/v/4.3.2"
+    }
+  },
+  {
+    "id": "P02-NPM-JSON-SCHEMA-TRAVERSE-1-0-0",
+    "title": "json-schema-traverse",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Evgeny Poberezkin",
+    "version": "1.0.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/json-schema-traverse/v/1.0.0"
+    }
+  },
+  {
+    "id": "P02-NPM-LIGHTNINGCSS-1-33-0",
+    "title": "lightningcss",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "release": "https://www.npmjs.com/package/lightningcss/v/1.33.0"
+    }
+  },
+  {
+    "id": "P02-NPM-LIGHTNINGCSS-ANDROID-ARM64-1-33-0",
+    "title": "lightningcss-android-arm64",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "release": "https://www.npmjs.com/package/lightningcss-android-arm64/v/1.33.0"
+    }
+  },
+  {
+    "id": "P02-NPM-LIGHTNINGCSS-DARWIN-ARM64-1-33-0",
+    "title": "lightningcss-darwin-arm64",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "release": "https://www.npmjs.com/package/lightningcss-darwin-arm64/v/1.33.0"
+    }
+  },
+  {
+    "id": "P02-NPM-LIGHTNINGCSS-DARWIN-X64-1-33-0",
+    "title": "lightningcss-darwin-x64",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "release": "https://www.npmjs.com/package/lightningcss-darwin-x64/v/1.33.0"
+    }
+  },
+  {
+    "id": "P02-NPM-LIGHTNINGCSS-FREEBSD-X64-1-33-0",
+    "title": "lightningcss-freebsd-x64",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "release": "https://www.npmjs.com/package/lightningcss-freebsd-x64/v/1.33.0"
+    }
+  },
+  {
+    "id": "P02-NPM-LIGHTNINGCSS-LINUX-ARM-GNUEABIHF-1-33-0",
+    "title": "lightningcss-linux-arm-gnueabihf",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "release": "https://www.npmjs.com/package/lightningcss-linux-arm-gnueabihf/v/1.33.0"
+    }
+  },
+  {
+    "id": "P02-NPM-LIGHTNINGCSS-LINUX-ARM64-GNU-1-33-0",
+    "title": "lightningcss-linux-arm64-gnu",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "release": "https://www.npmjs.com/package/lightningcss-linux-arm64-gnu/v/1.33.0"
+    }
+  },
+  {
+    "id": "P02-NPM-LIGHTNINGCSS-LINUX-ARM64-MUSL-1-33-0",
+    "title": "lightningcss-linux-arm64-musl",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "release": "https://www.npmjs.com/package/lightningcss-linux-arm64-musl/v/1.33.0"
+    }
+  },
+  {
+    "id": "P02-NPM-LIGHTNINGCSS-LINUX-X64-GNU-1-33-0",
+    "title": "lightningcss-linux-x64-gnu",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "release": "https://www.npmjs.com/package/lightningcss-linux-x64-gnu/v/1.33.0"
+    }
+  },
+  {
+    "id": "P02-NPM-LIGHTNINGCSS-LINUX-X64-MUSL-1-33-0",
+    "title": "lightningcss-linux-x64-musl",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "release": "https://www.npmjs.com/package/lightningcss-linux-x64-musl/v/1.33.0"
+    }
+  },
+  {
+    "id": "P02-NPM-LIGHTNINGCSS-WIN32-ARM64-MSVC-1-33-0",
+    "title": "lightningcss-win32-arm64-msvc",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "release": "https://www.npmjs.com/package/lightningcss-win32-arm64-msvc/v/1.33.0"
+    }
+  },
+  {
+    "id": "P02-NPM-LIGHTNINGCSS-WIN32-X64-MSVC-1-33-0",
+    "title": "lightningcss-win32-x64-msvc",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "urls": {
+      "release": "https://www.npmjs.com/package/lightningcss-win32-x64-msvc/v/1.33.0"
+    }
+  },
+  {
+    "id": "P02-NPM-MAGIC-STRING-0-30-21",
+    "title": "magic-string",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Rich Harris",
+    "version": "0.30.21",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/magic-string/v/0.30.21"
+    }
+  },
+  {
+    "id": "P02-NPM-MINIMATCH-5-1-9",
+    "title": "minimatch",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me)",
+    "version": "5.1.9",
+    "license": "ISC",
+    "urls": {
+      "release": "https://www.npmjs.com/package/minimatch/v/5.1.9"
+    }
+  },
+  {
+    "id": "P02-NPM-MS-2-1-3",
+    "title": "ms",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "2.1.3",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/ms/v/2.1.3"
+    }
+  },
+  {
+    "id": "P02-NPM-MUGGLE-STRING-0-4-1",
+    "title": "muggle-string",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "0.4.1",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/muggle-string/v/0.4.1"
+    }
+  },
+  {
+    "id": "P02-NPM-NANOID-3-3-18",
+    "title": "nanoid",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Andrey Sitnik <andrey@sitnik.ru>",
+    "version": "3.3.18",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/nanoid/v/3.3.18"
+    }
+  },
+  {
+    "id": "P02-NPM-OPENAPI-TYPESCRIPT-7-13-0",
+    "title": "openapi-typescript",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Drew Powers",
+    "version": "7.13.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/openapi-typescript/v/7.13.0"
+    }
+  },
+  {
+    "id": "P02-NPM-PARSE-JSON-8-3-0",
+    "title": "parse-json",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Sindre Sorhus",
+    "version": "8.3.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/parse-json/v/8.3.0"
+    }
+  },
+  {
+    "id": "P02-NPM-PATH-BROWSERIFY-1-0-1",
+    "title": "path-browserify",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "James Halliday",
+    "version": "1.0.1",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/path-browserify/v/1.0.1"
+    }
+  },
+  {
+    "id": "P02-NPM-PICOCOLORS-1-1-1",
+    "title": "picocolors",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Alexey Raspopov",
+    "version": "1.1.1",
+    "license": "ISC",
+    "urls": {
+      "release": "https://www.npmjs.com/package/picocolors/v/1.1.1"
+    }
+  },
+  {
+    "id": "P02-NPM-PICOMATCH-4-0-7",
+    "title": "picomatch",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Jon Schlinkert (https://github.com/jonschlinkert)",
+    "version": "4.0.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/picomatch/v/4.0.7"
+    }
+  },
+  {
+    "id": "P02-NPM-PLURALIZE-8-0-0",
+    "title": "pluralize",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Blake Embrey",
+    "version": "8.0.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/pluralize/v/8.0.0"
+    }
+  },
+  {
+    "id": "P02-NPM-POSTCSS-8-5-28",
+    "title": "postcss",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Andrey Sitnik <andrey@sitnik.es>",
+    "version": "8.5.28",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/postcss/v/8.5.28"
+    }
+  },
+  {
+    "id": "P02-NPM-REQUIRE-FROM-STRING-2-0-2",
+    "title": "require-from-string",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Vsevolod Strukchinsky",
+    "version": "2.0.2",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/require-from-string/v/2.0.2"
+    }
+  },
+  {
+    "id": "P02-NPM-ROLLDOWN-1-2-7",
+    "title": "rolldown",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "1.2.7",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/rolldown/v/1.2.7"
+    }
+  },
+  {
+    "id": "P02-NPM-SOURCE-MAP-JS-1-2-1",
+    "title": "source-map-js",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Valentin 7rulnik Semirulnik <v7rulnik@gmail.com>",
+    "version": "1.2.1",
+    "license": "BSD-3-Clause",
+    "urls": {
+      "release": "https://www.npmjs.com/package/source-map-js/v/1.2.1"
+    }
+  },
+  {
+    "id": "P02-NPM-SUPPORTS-COLOR-10-2-2",
+    "title": "supports-color",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Sindre Sorhus",
+    "version": "10.2.2",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/supports-color/v/10.2.2"
+    }
+  },
+  {
+    "id": "P02-NPM-TINYGLOBBY-0-2-17",
+    "title": "tinyglobby",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Superchupu",
+    "version": "0.2.17",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/tinyglobby/v/0.2.17"
+    }
+  },
+  {
+    "id": "P02-NPM-TYPE-FEST-4-41-0",
+    "title": "type-fest",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Sindre Sorhus",
+    "version": "4.41.0",
+    "license": "(MIT OR CC0-1.0)",
+    "urls": {
+      "release": "https://www.npmjs.com/package/type-fest/v/4.41.0"
+    }
+  },
+  {
+    "id": "P02-NPM-TYPESCRIPT-5-9-3",
+    "title": "typescript",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Microsoft Corp.",
+    "version": "5.9.3",
+    "license": "Apache-2.0",
+    "urls": {
+      "release": "https://www.npmjs.com/package/typescript/v/5.9.3"
+    }
+  },
+  {
+    "id": "P02-NPM-URI-JS-REPLACE-1-0-1",
+    "title": "uri-js-replace",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "https://github.com/andreinwald",
+    "version": "1.0.1",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/uri-js-replace/v/1.0.1"
+    }
+  },
+  {
+    "id": "P02-NPM-VITE-8-2-2",
+    "title": "vite",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Evan You",
+    "version": "8.2.2",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/vite/v/8.2.2"
+    }
+  },
+  {
+    "id": "P02-NPM-VSCODE-URI-3-2-0",
+    "title": "vscode-uri",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Microsoft",
+    "version": "3.2.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/vscode-uri/v/3.2.0"
+    }
+  },
+  {
+    "id": "P02-NPM-VUE-3-5-42",
+    "title": "vue",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-runtime-dependency",
+    "authors": "Evan You",
+    "version": "3.5.42",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/vue/v/3.5.42"
+    }
+  },
+  {
+    "id": "P02-NPM-VUE-TSC-3-3-11",
+    "title": "vue-tsc",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "3.3.11",
+    "license": "MIT",
+    "urls": {
+      "release": "https://www.npmjs.com/package/vue-tsc/v/3.3.11"
+    }
+  },
+  {
+    "id": "P02-NPM-YAML-AST-PARSER-0-0-43",
+    "title": "yaml-ast-parser",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "unknown",
+    "version": "0.0.43",
+    "license": "Apache-2.0",
+    "urls": {
+      "release": "https://www.npmjs.com/package/yaml-ast-parser/v/0.0.43"
+    }
+  },
+  {
+    "id": "P02-NPM-YARGS-PARSER-21-1-1",
+    "title": "yargs-parser",
+    "modules": [
+      "P02"
+    ],
+    "kind": "frontend-build-dependency",
+    "authors": "Ben Coe <ben@npmjs.com>",
+    "version": "21.1.1",
+    "license": "ISC",
+    "urls": {
+      "release": "https://www.npmjs.com/package/yargs-parser/v/21.1.1"
+    }
+  },
+  {
+    "id": "P02-CPYTHON",
+    "title": "CPython via python-build-standalone",
+    "modules": [
+      "P02"
+    ],
+    "kind": "development-runtime",
+    "authors": "Python Software Foundation and python-build-standalone contributors",
+    "version": "CPython 3.11.14, uv-managed Windows x86_64 standalone distribution",
+    "license": "PSF-2.0 and bundled component terms; runtime distribution audit pending",
+    "urls": {
+      "runtime_builds": "https://github.com/astral-sh/python-build-standalone",
+      "python": "https://www.python.org/"
+    }
+  },
+  {
+    "id": "PROJECT-SYNTHETIC-WAV",
+    "title": "PhoneticToolbox 公开解析测试波形",
+    "modules": [
+      "P03",
+      "P04"
+    ],
+    "kind": "project-generated-fixture",
+    "authors": "PhoneticToolbox project",
+    "version": "P03 SYN-EGG-44100 recipe",
+    "license": "Project-authored test signal; no third-party recording",
+    "urls": {}
+  }
+]

@@ -2,7 +2,8 @@
 
 ## 0. 当前阶段与授权
 - 用户：井井；助手自称秋叶；默认中文。技术判断说明证据、限制和待验证项。
-- 当前已完成 **P03 科研行为基线的 Windows 定向验收**。2026-09-09 井井在 P02 后回复“好，请继续”，授权执行 P03，并确认 EGG 样例的双声道方向；边界见 docs/plans/2026-09-09-p03-baseline.md 和 docs/testing/p03-baseline-report.md。该结果不代表 v3 算法、完整 EXE GUI 或跨平台验收。公开发布、服务器部署、全局环境变更和全面业务迁移仍不属于本轮范围。
+- 当前 **P04 统一工作台 in_progress，工程验证完成、视觉待井井审阅**；2026-09-09 井井在 P03 后确认继续，授权范围见 docs/plans/2026-09-09-p04-workbench.md 与 docs/testing/p04-workbench-report.md。P04 提供共同界面、真实 WAV 预览和 Qt 演示，不代表 15 模块算法已迁移。
+- 前阶段已完成 **P03 科研行为基线的 Windows 定向验收**。2026-09-09 井井在 P02 后回复“好，请继续”，授权执行 P03，并确认 EGG 样例的双声道方向；边界见 docs/plans/2026-09-09-p03-baseline.md 和 docs/testing/p03-baseline-report.md。该结果不代表 v3 算法、完整 EXE GUI 或跨平台验收。公开发布、服务器部署、全局环境变更和全面业务迁移仍不属于本轮范围。
 - 用户明确不要额外备份；保留相邻 v2 和现有使用数据。不得擅自删除、移动或修改 v2。这里的 Git 源码基线不是额外整目录备份，也不是已验证的新版本。
 - 旧网页目录的删除授权有条件：仅在证实没有必要保留的依赖、独有工作或来源资料后才可删除。当前检查发现旧前端存在未提交修改；本阶段保留两个旧目录。
 - 本文件适用于 v3 全目录。进入 frontend、backend、desktop、packages/phonetic_core、contracts、resources、tests、docs、third_party 时，继续读取相应 AGENTS.md 与 ARCHITECTURE.md。

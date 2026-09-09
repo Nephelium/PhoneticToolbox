@@ -1,5 +1,26 @@
 {
   "schema_version": 1,
-  "scope": "P02 production source asset directories only; P01 experiments remain separately registered",
-  "resources": []
+  "scope": "P04 shared frontend assets; P01 experiments remain separately registered",
+  "resources": [
+    {
+      "path": "frontend/src/assets/k2.png",
+      "sha256": "0ccfb1c0cc094720afcee9e06e85b1d5b89a7bdc594322c3fb8a1cb814626c9e",
+      "source_id": "ASSET-MASCOT"
+    },
+    {
+      "path": "frontend/src/assets/DoulosSIL-Regular.ttf",
+      "sha256": "cc89b87c047bcc8dc00246398218bb6343e0f2372b153cf560c29a77f27068ef",
+      "source_id": "ASSET-DOULOS"
+    },
+    {
+      "path": "frontend/src/assets/Doulos-OFL.txt",
+      "sha256": "940b145e55e07109fba236378a55eab74247189f4932cfd13b4de32c83ffddc3",
+      "source_id": "ASSET-DOULOS"
+    },
+    {
+      "path": "frontend/src/assets/SYN-EGG-44100.wav",
+      "sha256": "87aefa73ff48b1b04b2197a4952e60468495c6a4817e3c75e0ef47ed40e165ff",
+      "source_id": "PROJECT-SYNTHETIC-WAV"
+    }
+  ]
 }

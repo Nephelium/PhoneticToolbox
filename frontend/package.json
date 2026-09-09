@@ -7,7 +7,9 @@
     "contracts": "node scripts/generate-contracts.mjs",
     "contracts:check": "node scripts/generate-contracts.mjs --check",
     "typecheck": "vue-tsc --noEmit",
-    "test": "node --test tests/contracts.test.ts",
+    "test": "node --test tests/*.test.ts",
+    "ui-data": "node scripts/generate-ui-data.mjs",
+    "ui-data:check": "node scripts/generate-ui-data.mjs --check",
     "build": "vite build",
     "dev": "vite --host 127.0.0.1"
   },

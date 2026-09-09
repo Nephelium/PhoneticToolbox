@@ -110,8 +110,8 @@
       "title": "统一前端壳、主题、首页与公共组件",
       "dependencies": "P02",
       "files": "frontend/src/app/AppShell.vue；frontend/src/design/tokens.css；frontend/src/components/AudioTransport.vue；frontend/src/components/MethodReferences.vue",
-      "status": "planned",
-      "note": "planned",
+      "status": "in_progress",
+      "note": "共同工作台、真实 WAV 预览与 Windows Qt 演示工程验证完成；视觉待用户审阅。实际分析/后台任务留待对应后续任务。",
       "steps": [
         "实现 U2 主题令牌、字体和 K2 品牌资产，不夹带各页算法",
         "建立全部 15 模块注册、侧栏搜索/折叠、标签与首次首页",
@@ -121,7 +121,19 @@
         "提交浅深色/缩放对照供审阅后，再用公共组件迁移页面"
       ],
       "acceptance": "首页和公共组件视觉通过；图表为真实 fixture；全部菜单存在但未实现模块不能伪装可用",
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/plans/2026-09-09-p04-workbench.md",
+        "docs/testing/p04-workbench-report.md",
+        "output/validation/p04/browser-final-layouts.json",
+        "output/validation/p04/qt-final/qt-summary.json"
+      ],
+      "acceptance_status": {
+        "frontend_checks": "verified",
+        "browser_interactions": "verified",
+        "qt_static_host_and_zoom": "verified",
+        "manual_visual_feedback": "planned",
+        "backend_jobs_and_scientific_algorithms": "planned"
+      }
     },
     {
       "id": "P05",
