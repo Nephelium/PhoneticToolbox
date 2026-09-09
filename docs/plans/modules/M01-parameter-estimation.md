@@ -2,6 +2,8 @@
 
 状态：planned，未开始实现。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
+2026-09-09 已完成迁移前源码核对，实际实现仍 planned。执行细节以 [文件级实施计划](../2026-09-09-m01-implementation.md) 为准；[源码对照](../../modules/evidence/M01-source-map.md)、[参数/设置清单](../../modules/evidence/M01-parameter-settings.json)、[30项验收表](../../modules/evidence/M01-acceptance.csv) 和 [本轮报告](../../testing/m01-planning-report.md) 已补齐。下列原功能规格继续有效；文件级计划修订了尚未存在的 E2E 命令和持久批次接入安排。
+
 ## 现有代码与目标文件
 现有路径均已确认存在；目录内逐函数对应由实施第一步记录，避免把旧类名机械套给新实现。
 
@@ -14,9 +16,9 @@
 - `frontend/src/modules/parameter-estimation/ParameterEstimationPage.vue`
 - `frontend/src/modules/parameter-estimation/state.ts`
 - `packages/phonetic_core/src/phonetic_core/acoustic/`
-- `backend/src/ptb_api/modules/parameter_estimation.py`
+- `backend/src/ptb_api/acoustic_models.py`、`backend/src/ptb_api/jobs.py`（统一任务入口）
 - `tests/parity/test_parameter_estimation.py`
-- `frontend/tests/e2e/parameter-estimation.spec.ts`
+- `tests/e2e/m01-parameter-estimation.cjs`
 
 纯显示/客户端模块如果没有科学计算，不为凑层数创建空 core/API；仅创建真实需要的读取/转换边界。共用核心目录中的改动按文件独立提交，不能覆盖其他已迁移模块。
 
@@ -56,15 +58,7 @@
 
 每个分组至少一个正常路径和一个相关错误/边界路径；录制、原生时序和数值算法必须在真实目标环境验证。
 
-拟建测试后的执行命令（当前不能当作已运行）：
-
-```powershell
-# 先激活 P02 建立并核验的 v3 环境，不改 phonetic_311。
-python -m pytest tests/parity/test_parameter_estimation.py -q
-npm --prefix frontend run test:e2e -- parameter-estimation.spec.ts
-```
-
-CLI 参数和 npm scripts 在 P02 明确定义后才能使用；如实现路径不同，先更新本计划与架构记录。共享测试另见 P03/P11。两条命令不能代替本模块原生/设备手工验收。
+命令入口已在 [文件级计划第3节](../2026-09-09-m01-implementation.md) 按 A–G 子任务具体列出。原草案的 `npm run test:e2e` 不适用当前工程：现有前端测试脚本使用 Node test，真实浏览器脚本位于 `tests/e2e/`。未来 M01 E2E 由拟建 `scripts/run_m01_validation.py` 调度独立浏览器，不能将不存在的 npm script 写成已运行证据。
 
 ## 完成条件
 - 本页全部 6 组功能以及原矩阵相关参数/设置有映射，没有把折叠项当作删除项。

@@ -1,0 +1,2226 @@
+{
+  "task": "M01",
+  "status": "planned",
+  "audit_date": "2026-09-09",
+  "evidence_kind": "static_source_audit_and_existing_P03_fixture; not v3 numerical acceptance",
+  "source_comparison": "byte-for-byte against adjacent v2; no imports or execution of legacy modules",
+  "catalog_count": 80,
+  "settings_count": 14,
+  "parameters": [
+    {
+      "catalog_order": 1,
+      "key": "pF0",
+      "export_label": "F0 - Praat",
+      "legacy_unit": "Hz",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 2,
+      "key": "rF0",
+      "export_label": "F0 - REAPER",
+      "legacy_unit": "Hz",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 3,
+      "key": "pF1",
+      "export_label": "F1 - Praat",
+      "legacy_unit": "Hz",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 4,
+      "key": "pF2",
+      "export_label": "F2 - Praat",
+      "legacy_unit": "Hz",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 5,
+      "key": "pF3",
+      "export_label": "F3 - Praat",
+      "legacy_unit": "Hz",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 6,
+      "key": "pF4",
+      "export_label": "F4 - Praat",
+      "legacy_unit": "Hz",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 7,
+      "key": "pB1",
+      "export_label": "B1 - Praat",
+      "legacy_unit": "Hz",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 8,
+      "key": "pB2",
+      "export_label": "B2 - Praat",
+      "legacy_unit": "Hz",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 9,
+      "key": "pB3",
+      "export_label": "B3 - Praat",
+      "legacy_unit": "Hz",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 10,
+      "key": "pB4",
+      "export_label": "B4 - Praat",
+      "legacy_unit": "Hz",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 11,
+      "key": "H1_pF0",
+      "export_label": "H1 (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 12,
+      "key": "H1_rF0",
+      "export_label": "H1 (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 13,
+      "key": "H2_pF0",
+      "export_label": "H2 (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 14,
+      "key": "H2_rF0",
+      "export_label": "H2 (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 15,
+      "key": "H4_pF0",
+      "export_label": "H4 (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 16,
+      "key": "H4_rF0",
+      "export_label": "H4 (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 17,
+      "key": "A1_pF0",
+      "export_label": "A1 (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 18,
+      "key": "A1_rF0",
+      "export_label": "A1 (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 19,
+      "key": "A2_pF0",
+      "export_label": "A2 (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 20,
+      "key": "A2_rF0",
+      "export_label": "A2 (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 21,
+      "key": "A3_pF0",
+      "export_label": "A3 (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 22,
+      "key": "A3_rF0",
+      "export_label": "A3 (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 23,
+      "key": "H1H2u_pF0",
+      "export_label": "H1-H2 (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 24,
+      "key": "H1H2u_rF0",
+      "export_label": "H1-H2 (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 25,
+      "key": "H2H4u_pF0",
+      "export_label": "H2-H4 (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 26,
+      "key": "H2H4u_rF0",
+      "export_label": "H2-H4 (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 27,
+      "key": "H1A1u_pF0",
+      "export_label": "H1-A1 (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 28,
+      "key": "H1A1u_rF0",
+      "export_label": "H1-A1 (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 29,
+      "key": "H1A2u_pF0",
+      "export_label": "H1-A2 (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 30,
+      "key": "H1A2u_rF0",
+      "export_label": "H1-A2 (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 31,
+      "key": "H1A3u_pF0",
+      "export_label": "H1-A3 (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 32,
+      "key": "H1A3u_rF0",
+      "export_label": "H1-A3 (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 33,
+      "key": "H1A1c_pF0",
+      "export_label": "H1*-A1* (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 34,
+      "key": "H1A1c_rF0",
+      "export_label": "H1*-A1* (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 35,
+      "key": "H1A2c_pF0",
+      "export_label": "H1*-A2* (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 36,
+      "key": "H1A2c_rF0",
+      "export_label": "H1*-A2* (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 37,
+      "key": "H1A3c_pF0",
+      "export_label": "H1*-A3* (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 38,
+      "key": "H1A3c_rF0",
+      "export_label": "H1*-A3* (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 39,
+      "key": "H1H2c_pF0",
+      "export_label": "H1*-H2* (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 40,
+      "key": "H1H2c_rF0",
+      "export_label": "H1*-H2* (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 41,
+      "key": "H2H4c_pF0",
+      "export_label": "H2*-H4* (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 42,
+      "key": "H2H4c_rF0",
+      "export_label": "H2*-H4* (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 43,
+      "key": "H2K_pF0",
+      "export_label": "2K (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 44,
+      "key": "H2K_rF0",
+      "export_label": "2K (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 45,
+      "key": "H5K_pF0",
+      "export_label": "5K (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 46,
+      "key": "H5K_rF0",
+      "export_label": "5K (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 47,
+      "key": "H42Ku_pF0",
+      "export_label": "H4-2K (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 48,
+      "key": "H42Ku_rF0",
+      "export_label": "H4-2K (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 49,
+      "key": "H2KH5Ku_pF0",
+      "export_label": "2K-5K (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 50,
+      "key": "H2KH5Ku_rF0",
+      "export_label": "2K-5K (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 51,
+      "key": "H42Kc_pF0",
+      "export_label": "H4*-2K* (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 52,
+      "key": "H42Kc_rF0",
+      "export_label": "H4*-2K* (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 53,
+      "key": "H2KH5Kc_pF0",
+      "export_label": "2K*-5K* (pF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 54,
+      "key": "H2KH5Kc_rF0",
+      "export_label": "2K*-5K* (rF0)",
+      "legacy_unit": "dB_uncalibrated_magnitude_or_difference",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 55,
+      "key": "CPP_pF0",
+      "export_label": "CPP (pF0)",
+      "legacy_unit": "dB",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 56,
+      "key": "CPP_rF0",
+      "export_label": "CPP (rF0)",
+      "legacy_unit": "dB",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 57,
+      "key": "Intensity",
+      "export_label": "Intensity",
+      "legacy_unit": "dB_legacy_amplitude_reference_not_measured_SPL",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 58,
+      "key": "HNR05_pF0",
+      "export_label": "HNR05 (pF0)",
+      "legacy_unit": "dB",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 59,
+      "key": "HNR15_pF0",
+      "export_label": "HNR15 (pF0)",
+      "legacy_unit": "dB",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 60,
+      "key": "HNR25_pF0",
+      "export_label": "HNR25 (pF0)",
+      "legacy_unit": "dB",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 61,
+      "key": "HNR35_pF0",
+      "export_label": "HNR35 (pF0)",
+      "legacy_unit": "dB",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 62,
+      "key": "HNR05_rF0",
+      "export_label": "HNR05 (rF0)",
+      "legacy_unit": "dB",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 63,
+      "key": "HNR15_rF0",
+      "export_label": "HNR15 (rF0)",
+      "legacy_unit": "dB",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 64,
+      "key": "HNR25_rF0",
+      "export_label": "HNR25 (rF0)",
+      "legacy_unit": "dB",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 65,
+      "key": "HNR35_rF0",
+      "export_label": "HNR35 (rF0)",
+      "legacy_unit": "dB",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 66,
+      "key": "SHR_pF0",
+      "export_label": "SHR (pF0)",
+      "legacy_unit": "amplitude_ratio",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 67,
+      "key": "SHR_rF0",
+      "export_label": "SHR (rF0)",
+      "legacy_unit": "amplitude_ratio",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 68,
+      "key": "SpectralSlope_pF0",
+      "export_label": "Slope (pF0)",
+      "legacy_unit": "dB_per_decade",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 69,
+      "key": "SpectralSlope_rF0",
+      "export_label": "Slope (rF0)",
+      "legacy_unit": "dB_per_decade",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 70,
+      "key": "Jitter_Local",
+      "export_label": "Jitter (Local)",
+      "legacy_unit": "percent",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 71,
+      "key": "Jitter_RAP",
+      "export_label": "Jitter (RAP)",
+      "legacy_unit": "percent",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 72,
+      "key": "Jitter_PPQ5",
+      "export_label": "Jitter (PPQ5)",
+      "legacy_unit": "percent",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 73,
+      "key": "Shimmer_Local",
+      "export_label": "Shimmer (Local)",
+      "legacy_unit": "percent",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 74,
+      "key": "Shimmer_APQ3",
+      "export_label": "Shimmer (APQ3)",
+      "legacy_unit": "percent",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 75,
+      "key": "Shimmer_APQ5",
+      "export_label": "Shimmer (APQ5)",
+      "legacy_unit": "percent",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 76,
+      "key": "Shimmer_APQ11",
+      "export_label": "Shimmer (APQ11)",
+      "legacy_unit": "percent",
+      "p03_coverage": "captured",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 77,
+      "key": "LipArea",
+      "export_label": "唇面积",
+      "legacy_unit": "unknown_without_input_metadata",
+      "p03_coverage": "missing_lip_input",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 78,
+      "key": "LipWidth",
+      "export_label": "唇宽度",
+      "legacy_unit": "unknown_without_input_metadata",
+      "p03_coverage": "missing_lip_input",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 79,
+      "key": "LipOpen",
+      "export_label": "唇开度",
+      "legacy_unit": "unknown_without_input_metadata",
+      "p03_coverage": "missing_lip_input",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    },
+    {
+      "catalog_order": 80,
+      "key": "LipCirc",
+      "export_label": "唇圆度",
+      "legacy_unit": "unknown_without_input_metadata",
+      "p03_coverage": "missing_lip_input",
+      "gui_default_selected": true,
+      "v3_implemented": false
+    }
+  ],
+  "service_only_parameters": [
+    {
+      "key": "SOE_pF0",
+      "legacy_unit": "normalized_ZFF_difference",
+      "p03_coverage": "captured",
+      "gui_catalog_member": false
+    },
+    {
+      "key": "SOE_rF0",
+      "legacy_unit": "normalized_ZFF_difference",
+      "p03_coverage": "captured",
+      "gui_catalog_member": false
+    }
+  ],
+  "settings": [
+    {
+      "key": "silence_threshold",
+      "default": 0.03,
+      "control": "spin_silence_threshold",
+      "range": [
+        0.0,
+        1.0
+      ],
+      "unit": "relative ratio",
+      "group": "general",
+      "v3_implemented": false
+    },
+    {
+      "key": "energy_window_ms",
+      "default": 40.0,
+      "control": "spin_energy_win",
+      "range": [
+        1,
+        1000
+      ],
+      "unit": "ms",
+      "group": "general",
+      "v3_implemented": false
+    },
+    {
+      "key": "frameshift_ms",
+      "default": 5.0,
+      "control": "spin_frameshift",
+      "range": [
+        0.1,
+        1000.0
+      ],
+      "unit": "ms",
+      "group": "general",
+      "v3_implemented": false
+    },
+    {
+      "key": "windowsize_ms",
+      "default": 40.0,
+      "control": "spin_windowsize",
+      "range": [
+        1,
+        1000
+      ],
+      "unit": "ms",
+      "group": "general",
+      "v3_implemented": false
+    },
+    {
+      "key": "smooth_win_size",
+      "default": 10,
+      "control": "spin_smooth_win",
+      "range": [
+        1,
+        100
+      ],
+      "unit": "points",
+      "group": "general",
+      "v3_implemented": false
+    },
+    {
+      "key": "lip_smooth_win_size",
+      "default": 0,
+      "control": "spin_lip_smooth_win",
+      "range": [
+        0,
+        100
+      ],
+      "unit": "points",
+      "group": "general",
+      "v3_implemented": false
+    },
+    {
+      "key": "only_voiced",
+      "default": true,
+      "control": "chk_only_voiced",
+      "range": null,
+      "unit": "boolean",
+      "group": "general",
+      "v3_implemented": false
+    },
+    {
+      "key": "n_periods",
+      "default": 3,
+      "control": "spin_n_periods",
+      "range": [
+        1,
+        100
+      ],
+      "unit": "periods",
+      "group": "general",
+      "v3_implemented": false
+    },
+    {
+      "key": "num_formants",
+      "default": 5,
+      "control": "spin_num_formants",
+      "range": [
+        3,
+        10
+      ],
+      "unit": "count",
+      "group": "general",
+      "v3_implemented": false
+    },
+    {
+      "key": "max_formant",
+      "default": 6000.0,
+      "control": "spin_max_formant",
+      "range": [
+        0.0,
+        10000.0
+      ],
+      "unit": "Hz",
+      "group": "general",
+      "v3_implemented": false
+    },
+    {
+      "key": "min_f0",
+      "default": 60.0,
+      "control": "spin_min_f0",
+      "range": [
+        10.0,
+        1000.0
+      ],
+      "unit": "Hz",
+      "group": "REAPER dialog group",
+      "v3_implemented": false
+    },
+    {
+      "key": "max_f0",
+      "default": 880.0,
+      "control": "spin_max_f0",
+      "range": [
+        50.0,
+        2000.0
+      ],
+      "unit": "Hz",
+      "group": "REAPER dialog group",
+      "v3_implemented": false
+    },
+    {
+      "key": "reaper_hilbert",
+      "default": true,
+      "control": "chk_hilbert",
+      "range": null,
+      "unit": "boolean",
+      "group": "REAPER dialog group",
+      "v3_implemented": false
+    },
+    {
+      "key": "reaper_no_highpass",
+      "default": false,
+      "control": "chk_no_highpass",
+      "range": null,
+      "unit": "boolean",
+      "group": "REAPER dialog group",
+      "v3_implemented": false
+    }
+  ],
+  "non_dialog_config": {
+    "use_reaper": true,
+    "reaper_bin_path": "phonetic_toolbox/core/acoustic/reaper.exe",
+    "selected_parameter_keys": null
+  },
+  "p03_unfiltered_example_columns": [
+    "Time_s",
+    "pF0",
+    "rF0",
+    "pF1",
+    "pF2",
+    "pF3",
+    "pF4",
+    "pB1",
+    "pB2",
+    "pB3",
+    "pB4",
+    "Intensity",
+    "H1_pF0",
+    "H2_pF0",
+    "H4_pF0",
+    "A1_pF0",
+    "A2_pF0",
+    "A3_pF0",
+    "H2K_pF0",
+    "H5K_pF0",
+    "H1H2u_pF0",
+    "H2H4u_pF0",
+    "H1A1u_pF0",
+    "H1A2u_pF0",
+    "H1A3u_pF0",
+    "H42Ku_pF0",
+    "H2KH5Ku_pF0",
+    "H1H2c_pF0",
+    "H2H4c_pF0",
+    "H1A1c_pF0",
+    "H1A2c_pF0",
+    "H1A3c_pF0",
+    "H42Kc_pF0",
+    "H2KH5Kc_pF0",
+    "CPP_pF0",
+    "HNR05_pF0",
+    "HNR15_pF0",
+    "HNR25_pF0",
+    "HNR35_pF0",
+    "SHR_pF0",
+    "SpectralSlope_pF0",
+    "SOE_pF0",
+    "H1_rF0",
+    "H2_rF0",
+    "H4_rF0",
+    "A1_rF0",
+    "A2_rF0",
+    "A3_rF0",
+    "H2K_rF0",
+    "H5K_rF0",
+    "H1H2u_rF0",
+    "H2H4u_rF0",
+    "H1A1u_rF0",
+    "H1A2u_rF0",
+    "H1A3u_rF0",
+    "H42Ku_rF0",
+    "H2KH5Ku_rF0",
+    "H1H2c_rF0",
+    "H2H4c_rF0",
+    "H1A1c_rF0",
+    "H1A2c_rF0",
+    "H1A3c_rF0",
+    "H42Kc_rF0",
+    "H2KH5Kc_rF0",
+    "CPP_rF0",
+    "HNR05_rF0",
+    "HNR15_rF0",
+    "HNR25_rF0",
+    "HNR35_rF0",
+    "SHR_rF0",
+    "SpectralSlope_rF0",
+    "SOE_rF0",
+    "Jitter_Local",
+    "Jitter_RAP",
+    "Jitter_PPQ5",
+    "Shimmer_Local",
+    "Shimmer_APQ3",
+    "Shimmer_APQ5",
+    "Shimmer_APQ11"
+  ],
+  "gui_all_selected_expected_columns_from_static_filter": [
+    "Time_s",
+    "pF0",
+    "rF0",
+    "pF1",
+    "pF2",
+    "pF3",
+    "pF4",
+    "pB1",
+    "pB2",
+    "pB3",
+    "pB4",
+    "Intensity",
+    "H1_pF0",
+    "H2_pF0",
+    "H4_pF0",
+    "A1_pF0",
+    "A2_pF0",
+    "A3_pF0",
+    "H2K_pF0",
+    "H5K_pF0",
+    "H1H2u_pF0",
+    "H2H4u_pF0",
+    "H1A1u_pF0",
+    "H1A2u_pF0",
+    "H1A3u_pF0",
+    "H42Ku_pF0",
+    "H2KH5Ku_pF0",
+    "H1H2c_pF0",
+    "H2H4c_pF0",
+    "H1A1c_pF0",
+    "H1A2c_pF0",
+    "H1A3c_pF0",
+    "H42Kc_pF0",
+    "H2KH5Kc_pF0",
+    "CPP_pF0",
+    "HNR05_pF0",
+    "HNR15_pF0",
+    "HNR25_pF0",
+    "HNR35_pF0",
+    "SHR_pF0",
+    "SpectralSlope_pF0",
+    "H1_rF0",
+    "H2_rF0",
+    "H4_rF0",
+    "A1_rF0",
+    "A2_rF0",
+    "A3_rF0",
+    "H2K_rF0",
+    "H5K_rF0",
+    "H1H2u_rF0",
+    "H2H4u_rF0",
+    "H1A1u_rF0",
+    "H1A2u_rF0",
+    "H1A3u_rF0",
+    "H42Ku_rF0",
+    "H2KH5Ku_rF0",
+    "H1H2c_rF0",
+    "H2H4c_rF0",
+    "H1A1c_rF0",
+    "H1A2c_rF0",
+    "H1A3c_rF0",
+    "H42Kc_rF0",
+    "H2KH5Kc_rF0",
+    "CPP_rF0",
+    "HNR05_rF0",
+    "HNR15_rF0",
+    "HNR25_rF0",
+    "HNR35_rF0",
+    "SHR_rF0",
+    "SpectralSlope_rF0",
+    "Jitter_Local",
+    "Jitter_RAP",
+    "Jitter_PPQ5",
+    "Shimmer_Local",
+    "Shimmer_APQ3",
+    "Shimmer_APQ5",
+    "Shimmer_APQ11"
+  ],
+  "gui_column_count_status": "77 inferred from existing 79-column fixture and source filter; independent GUI-config capture still required",
+  "sources": [
+    {
+      "path": "phonetic_toolbox/gui/widgets/parameter_estimation_widget.py",
+      "sha256": "98d83c3dafbbca45c823b5e6aef2d113e3239e4f2eb5ad4dfe576da0afcdce5a",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "PEWorker",
+          "line": 31,
+          "end_line": 60
+        },
+        {
+          "name": "PEWorker.__init__",
+          "line": 36,
+          "end_line": 45
+        },
+        {
+          "name": "PEWorker.run",
+          "line": 47,
+          "end_line": 57
+        },
+        {
+          "name": "PEWorker._emit_progress",
+          "line": 59,
+          "end_line": 60
+        },
+        {
+          "name": "ParameterEstimationWidget",
+          "line": 62,
+          "end_line": 691
+        },
+        {
+          "name": "ParameterEstimationWidget.__init__",
+          "line": 63,
+          "end_line": 86
+        },
+        {
+          "name": "ParameterEstimationWidget.init_ui",
+          "line": 88,
+          "end_line": 245
+        },
+        {
+          "name": "ParameterEstimationWidget._browse_input",
+          "line": 247,
+          "end_line": 257
+        },
+        {
+          "name": "ParameterEstimationWidget._browse_output",
+          "line": 259,
+          "end_line": 263
+        },
+        {
+          "name": "ParameterEstimationWidget._toggle_output_dir",
+          "line": 265,
+          "end_line": 269
+        },
+        {
+          "name": "ParameterEstimationWidget._refresh_files",
+          "line": 271,
+          "end_line": 282
+        },
+        {
+          "name": "ParameterEstimationWidget._on_selection_changed",
+          "line": 284,
+          "end_line": 292
+        },
+        {
+          "name": "ParameterEstimationWidget._plot_waveform",
+          "line": 294,
+          "end_line": 324
+        },
+        {
+          "name": "ParameterEstimationWidget._update_plot",
+          "line": 326,
+          "end_line": 369
+        },
+        {
+          "name": "ParameterEstimationWidget._on_scroll",
+          "line": 371,
+          "end_line": 404
+        },
+        {
+          "name": "ParameterEstimationWidget._on_press",
+          "line": 406,
+          "end_line": 410
+        },
+        {
+          "name": "ParameterEstimationWidget._on_release",
+          "line": 412,
+          "end_line": 414
+        },
+        {
+          "name": "ParameterEstimationWidget._on_motion",
+          "line": 416,
+          "end_line": 438
+        },
+        {
+          "name": "ParameterEstimationWidget._play_audio",
+          "line": 440,
+          "end_line": 450
+        },
+        {
+          "name": "ParameterEstimationWidget._stop_audio",
+          "line": 452,
+          "end_line": 453
+        },
+        {
+          "name": "ParameterEstimationWidget._read_textgrid",
+          "line": 455,
+          "end_line": 472
+        },
+        {
+          "name": "ParameterEstimationWidget._toggle_segmentation",
+          "line": 474,
+          "end_line": 509
+        },
+        {
+          "name": "ParameterEstimationWidget._save_segmented_audio",
+          "line": 511,
+          "end_line": 558
+        },
+        {
+          "name": "ParameterEstimationWidget._read_lip_data",
+          "line": 560,
+          "end_line": 579
+        },
+        {
+          "name": "ParameterEstimationWidget._open_settings",
+          "line": 581,
+          "end_line": 585
+        },
+        {
+          "name": "ParameterEstimationWidget._open_help",
+          "line": 587,
+          "end_line": 596
+        },
+        {
+          "name": "ParameterEstimationWidget._open_parameter_selection",
+          "line": 598,
+          "end_line": 606
+        },
+        {
+          "name": "ParameterEstimationWidget._open_parameter_help",
+          "line": 608,
+          "end_line": 610
+        },
+        {
+          "name": "ParameterEstimationWidget._start_processing",
+          "line": 612,
+          "end_line": 635
+        },
+        {
+          "name": "ParameterEstimationWidget.set_theme",
+          "line": 637,
+          "end_line": 661
+        },
+        {
+          "name": "ParameterEstimationWidget._on_progress",
+          "line": 663,
+          "end_line": 665
+        },
+        {
+          "name": "ParameterEstimationWidget._on_finished",
+          "line": 667,
+          "end_line": 691
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/gui/dialogs/settings_dialog.py",
+      "sha256": "230329fc384ba7e4ccd8ad5884d543ecabc5074791cf147b26c88b0bb90befb2",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "SettingsDialog",
+          "line": 5,
+          "end_line": 155
+        },
+        {
+          "name": "SettingsDialog.__init__",
+          "line": 6,
+          "end_line": 12
+        },
+        {
+          "name": "SettingsDialog.init_ui",
+          "line": 14,
+          "end_line": 110
+        },
+        {
+          "name": "SettingsDialog.load_settings",
+          "line": 112,
+          "end_line": 133
+        },
+        {
+          "name": "SettingsDialog.save_settings",
+          "line": 135,
+          "end_line": 155
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/gui/dialogs/parameter_tools_dialog.py",
+      "sha256": "1643a7dc787d4c3e83f15a9f4366ba71d1aa67c7ebc11e4000a173b14f7f7ed1",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "ParameterSelectionDialog",
+          "line": 8,
+          "end_line": 64
+        },
+        {
+          "name": "ParameterSelectionDialog.__init__",
+          "line": 9,
+          "end_line": 15
+        },
+        {
+          "name": "ParameterSelectionDialog._init_ui",
+          "line": 17,
+          "end_line": 48
+        },
+        {
+          "name": "ParameterSelectionDialog._select_all",
+          "line": 50,
+          "end_line": 52
+        },
+        {
+          "name": "ParameterSelectionDialog._select_none",
+          "line": 54,
+          "end_line": 56
+        },
+        {
+          "name": "ParameterSelectionDialog.selected_keys",
+          "line": 58,
+          "end_line": 64
+        },
+        {
+          "name": "ParameterHelpDialog",
+          "line": 67,
+          "end_line": 198
+        },
+        {
+          "name": "ParameterHelpDialog.__init__",
+          "line": 68,
+          "end_line": 78
+        },
+        {
+          "name": "ParameterHelpDialog._init_ui",
+          "line": 80,
+          "end_line": 198
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/models/config.py",
+      "sha256": "dc9462c25789f0a1f72956de8cd48f60b8ad2015f980b919cb672c95ec6210c8",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "AcousticConfig",
+          "line": 10,
+          "end_line": 36
+        },
+        {
+          "name": "PitchManipulationConfig",
+          "line": 39,
+          "end_line": 48
+        },
+        {
+          "name": "EGGConfig",
+          "line": 51,
+          "end_line": 73
+        },
+        {
+          "name": "AnalysisResult",
+          "line": 78,
+          "end_line": 153
+        },
+        {
+          "name": "AnalysisResult.to_dataframe",
+          "line": 111,
+          "end_line": 153
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/models/acoustic_models.py",
+      "sha256": "05c61352d411bc6dea83e03fc16941c92df91b93b0de012708ed9f4332a43c78",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "PitchTrack",
+          "line": 9,
+          "end_line": 13
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/services/acoustic_service.py",
+      "sha256": "23aa356ffe82f8c5b0f97f4dfed82ce29ab4490930febcecb45f9d9feccd7779",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "align_track_to_grid",
+          "line": 135,
+          "end_line": 175
+        },
+        {
+          "name": "smooth_preserving_gaps",
+          "line": 178,
+          "end_line": 208
+        },
+        {
+          "name": "BatchItemError",
+          "line": 211,
+          "end_line": 214
+        },
+        {
+          "name": "BatchAnalysisResult",
+          "line": 218,
+          "end_line": 225
+        },
+        {
+          "name": "BatchAnalysisResult.success",
+          "line": 224,
+          "end_line": 225
+        },
+        {
+          "name": "AcousticAnalysisService",
+          "line": 228,
+          "end_line": 826
+        },
+        {
+          "name": "AcousticAnalysisService.__init__",
+          "line": 229,
+          "end_line": 230
+        },
+        {
+          "name": "AcousticAnalysisService.analyze_batch",
+          "line": 232,
+          "end_line": 294
+        },
+        {
+          "name": "AcousticAnalysisService.analyze_file",
+          "line": 296,
+          "end_line": 787
+        },
+        {
+          "name": "AcousticAnalysisService._apply_selected_parameters",
+          "line": 789,
+          "end_line": 800
+        },
+        {
+          "name": "AcousticAnalysisService.save_results",
+          "line": 802,
+          "end_line": 826
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/services/settings_service.py",
+      "sha256": "4a7d65ba88515a6eb32501eac279a6c81da49490c101a7a84acd8e2727cedf08",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "SettingsService",
+          "line": 9,
+          "end_line": 68
+        },
+        {
+          "name": "SettingsService.__new__",
+          "line": 12,
+          "end_line": 22
+        },
+        {
+          "name": "SettingsService.load",
+          "line": 24,
+          "end_line": 26
+        },
+        {
+          "name": "SettingsService.save",
+          "line": 28,
+          "end_line": 32
+        },
+        {
+          "name": "SettingsService.get",
+          "line": 34,
+          "end_line": 35
+        },
+        {
+          "name": "SettingsService.set",
+          "line": 37,
+          "end_line": 38
+        },
+        {
+          "name": "SettingsService.get_all",
+          "line": 42,
+          "end_line": 43
+        },
+        {
+          "name": "SettingsService.get_config_object",
+          "line": 45,
+          "end_line": 68
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/services/io/textgrid.py",
+      "sha256": "2c0ce76475c6fe5a649b9d3a68916447c2cf3bbef3acd8b7d8be4a84316e3425",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "Interval",
+          "line": 7,
+          "end_line": 10
+        },
+        {
+          "name": "Tier",
+          "line": 13,
+          "end_line": 17
+        },
+        {
+          "name": "TextGrid",
+          "line": 20,
+          "end_line": 23
+        },
+        {
+          "name": "write_textgrid",
+          "line": 26,
+          "end_line": 61
+        },
+        {
+          "name": "_parse_short_format",
+          "line": 64,
+          "end_line": 126
+        },
+        {
+          "name": "_is_short_format",
+          "line": 129,
+          "end_line": 145
+        },
+        {
+          "name": "parse_textgrid",
+          "line": 148,
+          "end_line": 180
+        },
+        {
+          "name": "_parse_long_format",
+          "line": 183,
+          "end_line": 278
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/services/io/lip.py",
+      "sha256": "6b87ff3ea67f53adb6e2cec44925d260c70dc277a85f66a2ebd3a28a1b695259",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "LipTimeAxis",
+          "line": 9,
+          "end_line": 13
+        },
+        {
+          "name": "resolve_lip_time_axis",
+          "line": 16,
+          "end_line": 69
+        },
+        {
+          "name": "read_lip_data",
+          "line": 71,
+          "end_line": 133
+        },
+        {
+          "name": "_smooth_array",
+          "line": 135,
+          "end_line": 176
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/services/io/excel.py",
+      "sha256": "8e571e0cbfe970b7050833d9dca34f2e107cc8066f7fa25b463da92e5dd0494f",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "_is_fastdb_valid",
+          "line": 9,
+          "end_line": 29
+        },
+        {
+          "name": "save_excel",
+          "line": 31,
+          "end_line": 92
+        },
+        {
+          "name": "load_excel",
+          "line": 94,
+          "end_line": 104
+        },
+        {
+          "name": "load_csv",
+          "line": 106,
+          "end_line": 116
+        },
+        {
+          "name": "load_parameter_file",
+          "line": 118,
+          "end_line": 135
+        },
+        {
+          "name": "get_fast_param_path",
+          "line": 137,
+          "end_line": 139
+        },
+        {
+          "name": "resolve_parameter_source",
+          "line": 141,
+          "end_line": 154
+        },
+        {
+          "name": "ensure_fast_parameter_db",
+          "line": 156,
+          "end_line": 197
+        },
+        {
+          "name": "save_fast_parameter_db",
+          "line": 199,
+          "end_line": 217
+        },
+        {
+          "name": "load_fastdb_columns",
+          "line": 219,
+          "end_line": 225
+        },
+        {
+          "name": "load_fastdb_window",
+          "line": 227,
+          "end_line": 248
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/common.py",
+      "sha256": "862b435a6c114f9dda02850ee9dd2d7d579a8d68b2416be110fd19ed04258d21",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "segment_for_frame",
+          "line": 3,
+          "end_line": 35
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/corrections.py",
+      "sha256": "df0b5dc8c36e68e66caa61a8c0eca9cc171b2d83ec5a21917c42510cef926dd8",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "hawks_miller_bw",
+          "line": 5,
+          "end_line": 13
+        },
+        {
+          "name": "iseli_correction",
+          "line": 15,
+          "end_line": 25
+        },
+        {
+          "name": "compute_corrections_H2KH5K",
+          "line": 27,
+          "end_line": 80
+        },
+        {
+          "name": "compute_H1A1A2A3_corrected",
+          "line": 82,
+          "end_line": 133
+        },
+        {
+          "name": "compute_H1H2_H2H4_corrected",
+          "line": 135,
+          "end_line": 175
+        },
+        {
+          "name": "correct_formants",
+          "line": 177,
+          "end_line": 207
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/cpp.py",
+      "sha256": "8b12cef52140b33f711949b47333453bfb30a0628acd9f455df36c34a12eae53",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "compute_cpp",
+          "line": 5,
+          "end_line": 74
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/energy.py",
+      "sha256": "693300a3d52842112fb2731d25bd730e3a8c5b32ef7a5b86bc61386842902283",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "compute_energy",
+          "line": 3,
+          "end_line": 66
+        },
+        {
+          "name": "compute_rms",
+          "line": 68,
+          "end_line": 89
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/f0_irapt.py",
+      "sha256": "2ecc738e6fd665c2cd63862076d53fac82fbe7f74185b614f0372d21654af4e1",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "_CorrParam",
+          "line": 13,
+          "end_line": 26
+        },
+        {
+          "name": "_Cfg",
+          "line": 30,
+          "end_line": 51
+        },
+        {
+          "name": "_my_fit",
+          "line": 54,
+          "end_line": 63
+        },
+        {
+          "name": "_my_unwrap_pair",
+          "line": 66,
+          "end_line": 71
+        },
+        {
+          "name": "_filter_no_offset",
+          "line": 74,
+          "end_line": 84
+        },
+        {
+          "name": "_f0_bank_get_samples",
+          "line": 87,
+          "end_line": 99
+        },
+        {
+          "name": "_get_harmonic_params",
+          "line": 102,
+          "end_line": 132
+        },
+        {
+          "name": "_take_hparams_whole_sig",
+          "line": 135,
+          "end_line": 193
+        },
+        {
+          "name": "_value_func_corr_line_fft_interp",
+          "line": 196,
+          "end_line": 250
+        },
+        {
+          "name": "_dp_pitch_step",
+          "line": 253,
+          "end_line": 275
+        },
+        {
+          "name": "_dp_pitch_full",
+          "line": 278,
+          "end_line": 303
+        },
+        {
+          "name": "_get_final_f0",
+          "line": 306,
+          "end_line": 326
+        },
+        {
+          "name": "_build_cfg",
+          "line": 329,
+          "end_line": 426
+        },
+        {
+          "name": "_get_vu_dp",
+          "line": 429,
+          "end_line": 456
+        },
+        {
+          "name": "_irapt1_or_sus",
+          "line": 459,
+          "end_line": 510
+        },
+        {
+          "name": "_sinc_hash_table",
+          "line": 513,
+          "end_line": 529
+        },
+        {
+          "name": "_sample_with_sinc_hash",
+          "line": 532,
+          "end_line": 555
+        },
+        {
+          "name": "_phase_warp_signal",
+          "line": 558,
+          "end_line": 589
+        },
+        {
+          "name": "_harmonic_params_from_warped",
+          "line": 592,
+          "end_line": 638
+        },
+        {
+          "name": "_irapt2_refine",
+          "line": 641,
+          "end_line": 694
+        },
+        {
+          "name": "irapt",
+          "line": 697,
+          "end_line": 716
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/f0_praat.py",
+      "sha256": "f36fe1ea4c9eb204d813f211c43a0d3ba84088e891319f3c175a80f65bf86feb",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "compute_praat_f0",
+          "line": 11,
+          "end_line": 37
+        },
+        {
+          "name": "compute_praat_f0_track",
+          "line": 40,
+          "end_line": 75
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/f0_reaper.py",
+      "sha256": "4d2dac658bab746dc9f52f0087725de58cf1c3af74940046c2456a7d8f1bf339",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "_find_reaper_bin",
+          "line": 12,
+          "end_line": 71
+        },
+        {
+          "name": "_parse_reaper_est_f0",
+          "line": 73,
+          "end_line": 103
+        },
+        {
+          "name": "compute_reaper_f0",
+          "line": 105,
+          "end_line": 254
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/formants_praat.py",
+      "sha256": "94432b0893354bfddec565596dd21c854e0dd069784d20410a9ae31dfe1a771a",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "compute_praat_formants",
+          "line": 10,
+          "end_line": 153
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/hnr.py",
+      "sha256": "b91654b88a452e719160e9a883f62192e0cdaf62c1dc8b6e8ddb09e967b7be15",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "compute_hnr",
+          "line": 5,
+          "end_line": 77
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/jitter_shimmer.py",
+      "sha256": "613885a46b6384d19ccda049f4eda2db171f23ccef6ea650f494dc47d95ff0a2",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "_extract_f0_for_wm",
+          "line": 15,
+          "end_line": 65
+        },
+        {
+          "name": "_wm_phase_const",
+          "line": 68,
+          "end_line": 157
+        },
+        {
+          "name": "_amp_extract",
+          "line": 160,
+          "end_line": 179
+        },
+        {
+          "name": "get_period_and_amplitude_vectors",
+          "line": 182,
+          "end_line": 204
+        },
+        {
+          "name": "compute_local_perturbation",
+          "line": 207,
+          "end_line": 213
+        },
+        {
+          "name": "compute_pq",
+          "line": 216,
+          "end_line": 229
+        },
+        {
+          "name": "compute_jitter_shimmer",
+          "line": 232,
+          "end_line": 292
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/lpc.py",
+      "sha256": "375d4358dbfceff91bee14172d3018971889e7f0a9d6d01984bd81d02e33abcf",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "compute_lpc_spectrum",
+          "line": 6,
+          "end_line": 34
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/reaper_python.py",
+      "sha256": "eadb141505f07698627cfbd0ceef5983e6195ce32ff86b7a63c83212edd3107a",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "_next_pow2",
+          "line": 18,
+          "end_line": 22
+        },
+        {
+          "name": "EpochTrackerPy",
+          "line": 24,
+          "end_line": 871
+        },
+        {
+          "name": "EpochTrackerPy.__init__",
+          "line": 25,
+          "end_line": 81
+        },
+        {
+          "name": "EpochTrackerPy._round_up",
+          "line": 83,
+          "end_line": 84
+        },
+        {
+          "name": "EpochTrackerPy._hann_window",
+          "line": 86,
+          "end_line": 91
+        },
+        {
+          "name": "EpochTrackerPy._make_linear_fir_half",
+          "line": 93,
+          "end_line": 107
+        },
+        {
+          "name": "EpochTrackerPy._mirror_filter",
+          "line": 109,
+          "end_line": 128
+        },
+        {
+          "name": "EpochTrackerPy._highpass_filter",
+          "line": 130,
+          "end_line": 149
+        },
+        {
+          "name": "EpochTrackerPy._hilbert_transform",
+          "line": 151,
+          "end_line": 174
+        },
+        {
+          "name": "EpochTrackerPy._lpc_dc_gain",
+          "line": 249,
+          "end_line": 253
+        },
+        {
+          "name": "EpochTrackerPy._make_deltas",
+          "line": 255,
+          "end_line": 256
+        },
+        {
+          "name": "EpochTrackerPy.init",
+          "line": 258,
+          "end_line": 275
+        },
+        {
+          "name": "EpochTrackerPy.window_fn",
+          "line": 277,
+          "end_line": 283
+        },
+        {
+          "name": "EpochTrackerPy.get_bandpassed_rms",
+          "line": 285,
+          "end_line": 314
+        },
+        {
+          "name": "EpochTrackerPy.get_symmetry_stats",
+          "line": 316,
+          "end_line": 334
+        },
+        {
+          "name": "EpochTrackerPy.normalize_amplitude",
+          "line": 336,
+          "end_line": 368
+        },
+        {
+          "name": "EpochTrackerPy.compute_features",
+          "line": 370,
+          "end_line": 390
+        },
+        {
+          "name": "EpochTrackerPy.get_lpc_residual",
+          "line": 392,
+          "end_line": 438
+        },
+        {
+          "name": "EpochTrackerPy.get_residual_pulses",
+          "line": 440,
+          "end_line": 474
+        },
+        {
+          "name": "EpochTrackerPy._find_nccf_peaks",
+          "line": 476,
+          "end_line": 497
+        },
+        {
+          "name": "EpochTrackerPy._cross_correlation",
+          "line": 499,
+          "end_line": 518
+        },
+        {
+          "name": "EpochTrackerPy.get_pulse_correlations",
+          "line": 520,
+          "end_line": 543
+        },
+        {
+          "name": "EpochTrackerPy.get_voice_transition_features",
+          "line": 545,
+          "end_line": 575
+        },
+        {
+          "name": "EpochTrackerPy.get_rms_voicing_modulator",
+          "line": 577,
+          "end_line": 598
+        },
+        {
+          "name": "EpochTrackerPy.create_period_lattice",
+          "line": 600,
+          "end_line": 696
+        },
+        {
+          "name": "EpochTrackerPy.do_dynamic_programming",
+          "line": 698,
+          "end_line": 725
+        },
+        {
+          "name": "EpochTrackerPy.backtrack_and_save_output",
+          "line": 727,
+          "end_line": 767
+        },
+        {
+          "name": "EpochTrackerPy.track_epochs",
+          "line": 769,
+          "end_line": 772
+        },
+        {
+          "name": "EpochTrackerPy.get_filled_epochs",
+          "line": 774,
+          "end_line": 806
+        },
+        {
+          "name": "EpochTrackerPy.resample_and_return_results",
+          "line": 808,
+          "end_line": 871
+        },
+        {
+          "name": "parse_est_track",
+          "line": 873,
+          "end_line": 899
+        },
+        {
+          "name": "find_reaper",
+          "line": 901,
+          "end_line": 925
+        },
+        {
+          "name": "run_reaper",
+          "line": 927,
+          "end_line": 935
+        },
+        {
+          "name": "run_python_impl",
+          "line": 937,
+          "end_line": 962
+        },
+        {
+          "name": "plot_f0",
+          "line": 964,
+          "end_line": 1073
+        },
+        {
+          "name": "write_csv",
+          "line": 1075,
+          "end_line": 1082
+        },
+        {
+          "name": "process_file",
+          "line": 1084,
+          "end_line": 1097
+        },
+        {
+          "name": "main",
+          "line": 1099,
+          "end_line": 1161
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/shr.py",
+      "sha256": "f38c5aadb8a5f4886f47510db20d62bf2885498ede55e77a27f23cbfa6177dc0",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "compute_shr",
+          "line": 4,
+          "end_line": 121
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/soe.py",
+      "sha256": "ba74bc2cab053c970de5d3e6c10aec8d48a93fd5ae0d7d63bb51918ac48380f1",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "compute_soe",
+          "line": 5,
+          "end_line": 87
+        },
+        {
+          "name": "zff",
+          "line": 89,
+          "end_line": 113
+        },
+        {
+          "name": "remove_trend",
+          "line": 115,
+          "end_line": 165
+        },
+        {
+          "name": "get_delta",
+          "line": 167,
+          "end_line": 195
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/spectral_batch.py",
+      "sha256": "57773e2c89f87a99acd00461f46f45422035bb32b936781c87edaa904d435abc",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "parabolic_interpolation",
+          "line": 6,
+          "end_line": 41
+        },
+        {
+          "name": "compute_spectral_features_batch",
+          "line": 43,
+          "end_line": 198
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/spectral_slope.py",
+      "sha256": "0211fa63874da8e4a9eeaec3898c09df6cac4accc3ff39762ace444a7c00fcd7",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "compute_spectral_slope",
+          "line": 5,
+          "end_line": 35
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/voicing.py",
+      "sha256": "1d96f24f78d7d1d5480685aeda086e4bee42dad2f4996fb27354f0ff9035eac1",
+      "matches_current_v2": true,
+      "symbols": [
+        {
+          "name": "compute_silence_mask",
+          "line": 4,
+          "end_line": 42
+        },
+        {
+          "name": "compute_voiced_mask",
+          "line": 44,
+          "end_line": 76
+        },
+        {
+          "name": "compute_zcr_voicing_mask",
+          "line": 78,
+          "end_line": 174
+        }
+      ]
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/__init__.py",
+      "sha256": "d41ba6fbb9c28b8dfbdd702597a1be3278bc32fa3958fbdeca06235821bbceeb",
+      "matches_current_v2": true,
+      "symbols": []
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/Sinc_hash_1000.mat",
+      "sha256": "e3e2fb01d67f722b7f13c1c9a0f4d62559a1ece77167343dfa42de7203f4d860",
+      "matches_current_v2": true,
+      "symbols": []
+    },
+    {
+      "path": "phonetic_toolbox/core/acoustic/reaper.exe",
+      "sha256": "279fecc82ed0a49b0277b114270771d7670299068e849058b392672825981824",
+      "matches_current_v2": true,
+      "symbols": []
+    }
+  ]
+}

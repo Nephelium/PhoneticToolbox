@@ -84,3 +84,4 @@ playwright-report/
 /frontend/experiments/audio-viewport/public/
 !docs/modules/legacy-acceptance.csv
 !docs/modules/dual-platform-acceptance.csv
+!docs/modules/evidence/M01-acceptance.csv

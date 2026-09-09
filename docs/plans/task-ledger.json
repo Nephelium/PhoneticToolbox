@@ -246,7 +246,7 @@
       "dependencies": "P03,P04,P06,P07",
       "files": "docs/plans/modules/M01-parameter-estimation.md 等模块计划；packages/phonetic_core/src/phonetic_core/；frontend/src/modules/",
       "status": "planned",
-      "note": "planned",
+      "note": "M01迁移前审阅完成：30源文件与v2一致，80参数/14设置与细项验收已核对；文件级实施计划已形成，算法、页面和双端任务仍planned。下一小步M01-A补独立基准与科学环境审计。",
       "steps": [
         "按 M01/M02/M03/M04/M06/M07/M08/M09/M13/M14 顺序逐个执行对应文件级计划",
         "先原样搬可用算法，再拆外层 I/O；不把算法重写和 UI 换肤混成一个提交",
@@ -256,7 +256,11 @@
         "跑该模块科研回归，不在失败时跳向更多模块堆积债务"
       ],
       "acceptance": "10 个模块各自满足原功能行和新增双端验收；无第二套服务端算法",
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/plans/2026-09-09-m01-implementation.md",
+        "docs/modules/evidence/M01-source-map.md",
+        "docs/testing/m01-planning-report.md"
+      ]
     },
     {
       "id": "P09",
@@ -427,7 +431,12 @@
       ],
       "status": "planned",
       "plan": "modules/M01-parameter-estimation.md",
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/plans/2026-09-09-m01-implementation.md",
+        "docs/modules/evidence/M01-source-map.md",
+        "docs/testing/m01-planning-report.md"
+      ],
+      "note": "M01迁移前审阅完成：30源文件与v2一致，80参数/14设置与细项验收已核对；文件级实施计划已形成，算法、页面和双端任务仍planned。下一小步M01-A补独立基准与科学环境审计。"
     },
     {
       "id": "M02",

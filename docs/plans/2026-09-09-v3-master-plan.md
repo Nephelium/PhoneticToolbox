@@ -168,6 +168,8 @@
 
 **依赖：** P03,P04,P06,P07。**状态：** planned。
 
+2026-09-09：M01迁移前审阅和[文件级实施计划](2026-09-09-m01-implementation.md)已完成；30源文件/80参数/14设置已核对，见[本轮报告](../testing/m01-planning-report.md)。实现尚未开始，下一项为M01-A独立基准补齐与科学环境审计；不把计划完成计作模块verified。
+
 **目标文件：** docs/plans/modules/M01-parameter-estimation.md 等模块计划；packages/phonetic_core/src/phonetic_core/；frontend/src/modules/。
 
 1. 按 M01/M02/M03/M04/M06/M07/M08/M09/M13/M14 顺序逐个执行对应文件级计划。
