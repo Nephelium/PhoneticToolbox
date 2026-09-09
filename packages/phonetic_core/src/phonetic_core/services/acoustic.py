@@ -7,7 +7,7 @@ import pandas as pd
 from ..models.acoustic import AcousticConfig, AnalysisResult
 from ..models.audio import AudioInput
 from ..models.associations import AcousticAssociations
-from ..ports.acoustic import AcousticBackends
+from ..ports.acoustic import AcousticBackends, BackendAborted
 from ..acoustic.catalog import CORE_RESULT_FIELD_MAP
 from ..acoustic.alignment import align_track_to_grid, smooth_preserving_gaps
 from ..acoustic.lip import interpolate_lip
@@ -147,6 +147,8 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
         else:
             f0_data["rF0"] = np.full(target_len, np.nan)
     except Exception as e:
+        if isinstance(e, BackendAborted):
+            raise
         log.warning("REAPER F0 failed for %s: %s", wav_path, e)
         f0_data["rF0"] = np.full(target_len, np.nan)
         backend_events.append({"stage":"reaper","actual":"unavailable","reason":type(e).__name__})

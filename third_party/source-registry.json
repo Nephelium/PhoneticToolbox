@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-09-09",
-  "total_records": 318,
+  "total_records": 323,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -43,9 +43,11 @@
         "packages/phonetic_core/src/phonetic_core/acoustic/jitter_shimmer.py",
         "packages/phonetic_core/src/phonetic_core/services/acoustic.py",
         "packages/phonetic_core/src/phonetic_core/acoustic/__init__.py",
-        "packages/phonetic_core/src/phonetic_core/models/audio.py"
+        "packages/phonetic_core/src/phonetic_core/models/audio.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/textgrid.py"
       ],
-      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
+      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json",
+      "m01_io_evidence": "docs/testing/m01-io-report.md"
     },
     {
       "id": "SRC-REAPER",
@@ -84,9 +86,12 @@
         "packages/phonetic_core/src/phonetic_core/acoustic/reaper_python.py",
         "packages/phonetic_core/src/phonetic_core/services/acoustic.py",
         "packages/phonetic_core/src/phonetic_core/acoustic/reaper_codec.py",
-        "packages/phonetic_core/src/phonetic_core/models/audio.py"
+        "packages/phonetic_core/src/phonetic_core/models/audio.py",
+        "backend/src/ptb_worker/native/reaper.py",
+        "resources/manifests/acoustic.json"
       ],
-      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
+      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json",
+      "m01_io_evidence": "docs/testing/m01-io-report.md"
     },
     {
       "id": "SRC-IRAPT",
@@ -3321,7 +3326,10 @@
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P02-PY-ANNOTATED-TYPES",
@@ -3341,7 +3349,10 @@
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P02-PY-ANYIO",
@@ -3361,7 +3372,10 @@
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P02-PY-BUILD",
@@ -3421,7 +3435,10 @@
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P02-PY-COLORAMA",
@@ -3461,7 +3478,10 @@
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P02-PY-H11",
@@ -3481,7 +3501,10 @@
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P02-PY-HTTPCORE",
@@ -3541,7 +3564,10 @@
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P02-PY-INICONFIG",
@@ -3621,7 +3647,10 @@
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P02-PY-PYDANTIC-CORE",
@@ -3641,7 +3670,10 @@
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P02-PY-PYGMENTS",
@@ -3841,7 +3873,10 @@
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P02-PY-TYPING-INSPECTION",
@@ -3861,7 +3896,10 @@
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P02-PY-TYPING-EXTENSIONS",
@@ -3881,7 +3919,10 @@
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P02-PY-UVICORN",
@@ -3901,7 +3942,10 @@
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P02-PY-WHEEL",
@@ -5979,7 +6023,10 @@
       "verification_date": "2026-09-09",
       "distribution_status": "installed-development-only; binary transitive licenses require release audit",
       "relationship": "Installed into isolated v3 development environment; no code copied or modified",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P05-PY-ARGON2-CFFI-BINDINGS",
@@ -5998,7 +6045,10 @@
       "verification_date": "2026-09-09",
       "distribution_status": "installed-development-only; binary transitive licenses require release audit",
       "relationship": "Installed into isolated v3 development environment; no code copied or modified",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P05-PY-CFFI",
@@ -6018,7 +6068,10 @@
       "verification_date": "2026-09-09",
       "distribution_status": "installed-development-only; binary transitive licenses require release audit",
       "relationship": "Installed into isolated v3 development environment; no code copied or modified",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P05-PY-ITSDANGEROUS",
@@ -6038,7 +6091,10 @@
       "verification_date": "2026-09-09",
       "distribution_status": "installed-development-only; binary transitive licenses require release audit",
       "relationship": "Installed into isolated v3 development environment; no code copied or modified",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P05-PY-PSYCOPG",
@@ -6059,7 +6115,10 @@
       "verification_date": "2026-09-09",
       "distribution_status": "installed-development-only; binary transitive licenses require release audit",
       "relationship": "Installed into isolated v3 development environment; no code copied or modified",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P05-PY-PSYCOPG-BINARY",
@@ -6080,7 +6139,10 @@
       "verification_date": "2026-09-09",
       "distribution_status": "installed-development-only; binary transitive licenses require release audit",
       "relationship": "Installed into isolated v3 development environment; no code copied or modified",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P05-PY-PYCPARSER",
@@ -6099,7 +6161,10 @@
       "verification_date": "2026-09-09",
       "distribution_status": "installed-development-only; binary transitive licenses require release audit",
       "relationship": "Installed into isolated v3 development environment; no code copied or modified",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-io.lock"
+      ]
     },
     {
       "id": "P05-PY-TZDATA",
@@ -6188,7 +6253,8 @@
       "authors": "SQLite authors",
       "kind": "runtime-dependency",
       "modules": [
-        "P06"
+        "P06",
+        "M01"
       ],
       "actual_included_version": "3.50.4",
       "license": "Public domain; bundled with existing CPython runtime",
@@ -6200,7 +6266,11 @@
       "verification_date": "2026-09-09",
       "relationship": "Existing CPython standard library sqlite3 adapter; no upstream code copied or modified",
       "distribution_status": "existing isolated runtime; no new global dependency",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "backend/src/ptb_worker/io/parameter_exports.py"
+      ],
+      "m01_io_evidence": "docs/testing/m01-io-report.md"
     },
     {
       "id": "P06-PG-LOCKS",
@@ -6333,7 +6403,8 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-test.lock"
+        "requirements-m01-test.lock",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json"
@@ -6355,7 +6426,8 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-test.lock"
+        "requirements-m01-test.lock",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json"
@@ -6377,7 +6449,8 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-test.lock"
+        "requirements-m01-test.lock",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json"
@@ -6399,7 +6472,8 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-science.lock"
+        "requirements-m01-science.lock",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json"
@@ -6421,7 +6495,8 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-test.lock"
+        "requirements-m01-test.lock",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json"
@@ -6443,7 +6518,8 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-science.lock"
+        "requirements-m01-science.lock",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json"
@@ -6465,7 +6541,8 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-test.lock"
+        "requirements-m01-test.lock",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json"
@@ -6487,7 +6564,8 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-science.lock"
+        "requirements-m01-science.lock",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json"
@@ -6509,7 +6587,8 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-test.lock"
+        "requirements-m01-test.lock",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json"
@@ -6531,7 +6610,8 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-test.lock"
+        "requirements-m01-test.lock",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json"
@@ -6553,7 +6633,8 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-test.lock"
+        "requirements-m01-test.lock",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json"
@@ -6575,7 +6656,8 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-science.lock"
+        "requirements-m01-science.lock",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json"
@@ -6597,7 +6679,8 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-science.lock"
+        "requirements-m01-science.lock",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json"
@@ -6619,10 +6702,13 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-science.lock"
+        "requirements-m01-science.lock",
+        "backend/src/ptb_worker/io/audio.py",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
-      "evidence": "third_party/m01-dependency-inventory.json"
+      "evidence": "third_party/m01-dependency-inventory.json",
+      "m01_io_evidence": "docs/testing/m01-io-report.md"
     },
     {
       "id": "M01-PY-SETUPTOOLS",
@@ -6641,7 +6727,8 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-test.lock"
+        "requirements-m01-test.lock",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json"
@@ -6663,7 +6750,8 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-science.lock"
+        "requirements-m01-science.lock",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json"
@@ -6685,7 +6773,8 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-science.lock"
+        "requirements-m01-science.lock",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json"
@@ -6707,10 +6796,123 @@
       "distribution_status": "local-development-locked; redistribution review pending",
       "acknowledgement_group": "software",
       "used_at": [
-        "requirements-m01-test.lock"
+        "requirements-m01-test.lock",
+        "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-OPENPYXL",
+      "title": "openpyxl",
+      "kind": "dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "See AUTHORS",
+      "actual_included_version": "3.1.5",
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/openpyxl/3.1.5/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "backend/src/ptb_worker/io/parameter_exports.py",
+        "requirements-m01-io.lock"
+      ],
+      "relationship": "Unmodified dependency; project-owned bounded writer adapter uses pinned internal writer API",
+      "evidence": "third_party/m01-io-inventory.json"
+    },
+    {
+      "id": "M01-PY-ET-XMLFILE",
+      "title": "et-xmlfile",
+      "kind": "dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "See AUTHORS.txt",
+      "actual_included_version": "2.0.0",
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/et-xmlfile/2.0.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "backend/src/ptb_worker/io/parameter_exports.py",
+        "requirements-m01-io.lock"
+      ],
+      "relationship": "Unmodified dependency; project-owned bounded writer adapter uses pinned internal writer API",
+      "evidence": "third_party/m01-io-inventory.json"
+    },
+    {
+      "id": "M01-WIN32",
+      "title": "Windows Job Objects and named pipes",
+      "kind": "documentation-reference",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Microsoft",
+      "actual_included_version": "Official documentation consulted 2026-09-09; Windows / CPython 3.11.14 APIs tested locally",
+      "license": "Documentation referenced, no third-party document/code redistributed",
+      "urls": {
+        "process": "https://learn.microsoft.com/en-us/windows/win32/procthread/process-creation-flags",
+        "job": "https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects",
+        "membership": "https://learn.microsoft.com/en-us/windows/win32/api/jobapi/nf-jobapi-isprocessinjob",
+        "pipe": "https://learn.microsoft.com/en-us/windows/win32/ipc/named-pipe-type-read-and-wait-modes"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "reference only",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "backend/src/ptb_worker/native/windows.py"
+      ],
+      "relationship": "API/format reference; project-owned adapter implementation"
+    },
+    {
+      "id": "M01-WAVE",
+      "title": "RIFF WAVE / WAVEFORMATEXTENSIBLE",
+      "kind": "documentation-reference",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Microsoft",
+      "actual_included_version": "Official documentation consulted 2026-09-09; Windows / CPython 3.11.14 APIs tested locally",
+      "license": "Documentation referenced, no third-party document/code redistributed",
+      "urls": {
+        "documentation": "https://learn.microsoft.com/en-us/windows/win32/api/mmreg/ns-mmreg-waveformatextensible"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "reference only",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "backend/src/ptb_worker/io/audio.py"
+      ],
+      "relationship": "API/format reference; project-owned adapter implementation"
+    },
+    {
+      "id": "M01-PICKLE",
+      "title": "Python 3.11 restricted pickle loading",
+      "kind": "documentation-reference",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Python Software Foundation",
+      "actual_included_version": "Official documentation consulted 2026-09-09; Windows / CPython 3.11.14 APIs tested locally",
+      "license": "Documentation referenced, no third-party document/code redistributed",
+      "urls": {
+        "documentation": "https://docs.python.org/3.11/library/pickle.html"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "reference only",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "backend/src/ptb_worker/io/lip.py"
+      ],
+      "relationship": "API/format reference; project-owned adapter implementation"
     }
   ]
 }

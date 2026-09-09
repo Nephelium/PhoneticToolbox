@@ -1,0 +1,108 @@
+{
+  "task": "M01-C",
+  "status": "verified",
+  "scope": "Windows bounded adapters and paired preparation only",
+  "files": [
+    {
+      "path": "backend/src/ptb_worker/io/__init__.py",
+      "sha256": "0444a24bb77b4808a5fa8c2fbd51e3474faee2acaf0225adf1e74752a4af6ef3",
+      "relationship": "Project-owned bounded adapter; source IDs in module docstrings and registry"
+    },
+    {
+      "path": "backend/src/ptb_worker/io/annotations.py",
+      "sha256": "41f080cfe5dc1d401bfbb533b1f72fab29b3e04814979120b757813e729d1caf",
+      "relationship": "Project-owned bounded adapter; source IDs in module docstrings and registry"
+    },
+    {
+      "path": "backend/src/ptb_worker/io/audio.py",
+      "sha256": "7fd3205fce9883ea319e9ea0670ed43deb059821df9408ca054e6e7e8c980f2a",
+      "relationship": "Project-owned bounded adapter; source IDs in module docstrings and registry"
+    },
+    {
+      "path": "backend/src/ptb_worker/io/export_worker.py",
+      "sha256": "3dce12425e52809b52f64aeb07ca574fb2fff2124587478777a10edc4662005a",
+      "relationship": "Project-owned bounded adapter; source IDs in module docstrings and registry"
+    },
+    {
+      "path": "backend/src/ptb_worker/io/limits.py",
+      "sha256": "5f5adff8759ad1c6c75192da098da29f6c8a3a4ee87dec619497d1bcabb67c5b",
+      "relationship": "Project-owned bounded adapter; source IDs in module docstrings and registry"
+    },
+    {
+      "path": "backend/src/ptb_worker/io/lip.py",
+      "sha256": "c054998d82b5f0d7c21d2cd913a83d0e919c3f3b47728fd596bee2631171e4c3",
+      "relationship": "Project-owned bounded adapter; source IDs in module docstrings and registry"
+    },
+    {
+      "path": "backend/src/ptb_worker/io/parameter_exports.py",
+      "sha256": "479b21addf4670a6f60c86bd2f10a006e10836c3f77617d3a523ea956080a7c2",
+      "relationship": "Project-owned bounded adapter; source IDs in module docstrings and registry"
+    },
+    {
+      "path": "backend/src/ptb_worker/io/scratch.py",
+      "sha256": "2ec950d25c82c574a0e4f035d4552bff50c6bdfc35b4505500d793bdb68da81c",
+      "relationship": "Project-owned bounded adapter; source IDs in module docstrings and registry"
+    },
+    {
+      "path": "backend/src/ptb_worker/native/__init__.py",
+      "sha256": "5438551ff93753f9a9c98364ba1e706013bba9c3d00694210a3862ee780a08e7",
+      "relationship": "Project-owned bounded adapter; source IDs in module docstrings and registry"
+    },
+    {
+      "path": "backend/src/ptb_worker/native/reaper.py",
+      "sha256": "b128359b6421af088ed740e22f20588228ec4ffbd386342851b24fba7436e6cb",
+      "relationship": "Project-owned bounded adapter; source IDs in module docstrings and registry"
+    },
+    {
+      "path": "backend/src/ptb_worker/native/windows.py",
+      "sha256": "1d7a49e03de60a9c913e1f353a97946e8f83777b220c2cdc01ded2015bc933c3",
+      "relationship": "Project-owned bounded adapter; source IDs in module docstrings and registry"
+    },
+    {
+      "path": "packages/phonetic_core/src/phonetic_core/acoustic/textgrid.py",
+      "sha256": "92decee4792c5144d1d57c7948092d0bf3d5d6a4e1befc3ba242ed5968dde411",
+      "change": "New project-owned format parser or shared typed error"
+    },
+    {
+      "path": "packages/phonetic_core/src/phonetic_core/ports/errors.py",
+      "sha256": "631f2ae75a234b2a5c6d060622e627d3e2b506071867709aecdfab1426144fc2",
+      "change": "New project-owned format parser or shared typed error"
+    },
+    {
+      "path": "packages/phonetic_core/src/phonetic_core/ports/acoustic.py",
+      "sha256": "17a4b5b00fd14b8677adcdb740e404587e427258fb4fe02cf023ce73e7335910",
+      "previous_commit_sha256": "edf8454208ab1916be9223f00e0bac0d3635a3cbb6552001d43cb263530e0329",
+      "change": "Propagate typed host abort; unchanged normal numeric path"
+    },
+    {
+      "path": "packages/phonetic_core/src/phonetic_core/services/acoustic.py",
+      "sha256": "fe93a474d7bab7cf242096c86f84d4d2c73b68d7e2d6aff75d6a271326f2407b",
+      "previous_commit_sha256": "beeb435f4f5833353a493a2086ba42683f3cbf67a170b4c3da8771f3ef27ae67",
+      "change": "Propagate typed host abort; unchanged normal numeric path"
+    }
+  ],
+  "legacy_references": [
+    {
+      "path": "phonetic_toolbox/core/acoustic/f0_reaper.py",
+      "sha256": "4d2dac658bab746dc9f52f0087725de58cf1c3af74940046c2456a7d8f1bf339",
+      "relationship": "Read-only historical behavior reference; not imported by new runtime"
+    },
+    {
+      "path": "phonetic_toolbox/services/io/textgrid.py",
+      "sha256": "2c0ce76475c6fe5a649b9d3a68916447c2cf3bbef3acd8b7d8be4a84316e3425",
+      "relationship": "Read-only historical behavior reference; not imported by new runtime"
+    },
+    {
+      "path": "phonetic_toolbox/services/io/excel.py",
+      "sha256": "8e571e0cbfe970b7050833d9dca34f2e107cc8066f7fa25b463da92e5dd0494f",
+      "relationship": "Read-only historical behavior reference; not imported by new runtime"
+    },
+    {
+      "path": "phonetic_toolbox/gui/widgets/lip_gui.py",
+      "sha256": "6656012fb4469466d3a41ec9eb36c139be63b6cf058906b8d3bcf6dd7e6fbc79",
+      "relationship": "Read-only historical behavior reference; not imported by new runtime"
+    }
+  ],
+  "b_snapshot": "M01-core-migration.json (historical B hashes remain unchanged)",
+  "report": "docs/testing/m01-io-report.md"
+}

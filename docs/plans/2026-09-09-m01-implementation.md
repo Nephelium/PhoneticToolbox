@@ -108,7 +108,9 @@ assert len(parameter_catalog) == 80
 
 **退出条件：** 核心可独立安装、不含Qt/HTTP/DB/旧包导入；数值差异全部解释；实际native路径待C后才能联合验收。
 
-### M01-C · 原生、格式与文件预算适配
+### M01-C · 原生、格式与文件预算适配（verified：限定Windows适配与双产物准备）
+
+实测与命令更新见 [C报告](../testing/m01-io-report.md)：解释器使用独立m01-io；纯TextGrid模块在core/acoustic/textgrid.py，按已有acoustic模块结构落地。持久manifest发布/PG账本仍在F完成。
 
 **文件：** `backend/src/ptb_worker/native/reaper.py`、`io/audio.py`、`io/parameter_exports.py`、`io/lip.py`；核心 `acoustic/reaper_codec.py`、`acoustic/reaper_python.py`、`acoustic/lip.py`、`acoustic/annotations.py`、`io/textgrid.py`；`scripts/verify_m01_native_io.py`、`backend/tests/test_m01_io.py`、`tests/security/test_m01_formats.py`；新建 `resources/manifests/acoustic.json`（当前resources仅有规则和架构文件）。
 
@@ -181,4 +183,4 @@ git diff --check
 
 另用只读AST核对80键/14控件、30文件hash和验收ID覆盖；`desktop.experiments.capture_context.capture()`比较v2保存性，只向 `output/validation/m01/`写本轮证据，不调用会覆盖P01输出的旧CLI入口。
 
-实际结果记在 [本轮审阅报告](../testing/m01-planning-report.md)。上述未来脚本不纳入本轮已运行清单。M01-B完成后从M01-C开始；M02及M03等其他模块保持planned。
+实际结果记在 [本轮审阅报告](../testing/m01-planning-report.md)。上述未来脚本不纳入本轮已运行清单。M01-C完成后从M01-D开始；M02及M03等其他模块保持planned。

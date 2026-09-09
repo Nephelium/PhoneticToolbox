@@ -156,3 +156,13 @@
 - 配置使用每次调用的不可变快照；REAPER 通过显式 port 注入，默认缺少适配器时记录 unavailable，不能暗中搜索可执行文件或把 Python 跟踪器冒充 native。WM 的 IRAPT/Praat 实际分支写入每次结果；IRAPT 失败与有效点不足目前共用明确的回退原因，不据 NaN 猜测具体生理原因。
 - 纯算法原始运算次序、80 键、额外 SOE、时间轴和 NaN 保留。原服务固定 16000 的采样率元数据修正单列提交。核心阶段取消检查在计算阶段之间；强制终止原生子进程与任务租约取消在 C/F 验收。
 - 纯唇形时间/标签插值与 REAPER PCM/EST 编码提前到 B；不把文件、pickle、进程、数据库或网页配额实现带入核心。测试二进制适配只处理小型合成信号，不能成为正式服务的临时后门。
+
+
+## ADR-022 M01 受控原生与双格式准备
+- 2026-09-09，按井井M01-B后的继续授权采用，实测见 [M01-C报告](../testing/m01-io-report.md)。原生与导出进程先挂起、加入有内存限制和KILL_ON_JOB_CLOSE的自有Job再运行；固定Job成员身份校验包含venv后代。命名管道本机随机名称、逐块字节强制上限、客户端身份核验，清理仅处理所属句柄。
+- Scratch是宿主创建的暂存能力，本操作先预算后写入；不能把任意路径传给REAPER作为输出目录。C没有启用P07科学操作，PG配额、租约/fencing、持久manifest一次发布留给F；字节限额与进程成功不能替代这些后续条件。
+- WAV先验证布局和样本数再解码；TextGrid只接IntervalTier；旧PKL只有本地显式基础值转换器，禁止执行构造，安全JSON采用null+nonfinite mask。真实旧NumPy对象PKL属于明确兼容缺口。纯TextGrid解析位于core/acoustic，依赖方向不变。
+- XLSX在受限内存XML/ZIP生成，不启用库默认临时文件；新SQLite只在内存建表并限制页数，然后序列化。每个文件的两种输出全部回读成功才作为一对返回；当前是双产物准备，最终持久发布是F。所有字符串写为文本，空表拒绝，导出显示列名保留原PARAMETER_MAPPING。
+- BackendAborted使取消/资源失败穿过旧REAPER广义异常处理，不能默认为缺失轨迹。正常科学公式和默认值保持；后端实际身份独立记录。此处不保证Codex程序本身不会闪退；本轮未操作内置浏览器或push。
+- 科学锁不受工程新tzdata约束覆盖；独立m01-io环境复用科学8包、工程20包、测试构建10包及新导出2包。来源登记和生成致谢统一，发行许可与跨平台能力继续保留未决状态。
+- 依据：[Windows进程/Job](https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects)、[Job成员验证](https://learn.microsoft.com/en-us/windows/win32/api/jobapi/nf-jobapi-isprocessinjob)、[SQLite序列化](https://docs.python.org/3.11/library/sqlite3.html)、[pickle安全边界](https://docs.python.org/3.11/library/pickle.html)。openpyxl写入接口按本地3.1.5源码核对并锁定，不把当前文档的版本当实际安装版本。

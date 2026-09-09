@@ -76,3 +76,7 @@ Parselmouth/Praat、REAPER、MediaPipe、MFA、FFmpeg、Doulos SIL、React/Babel
 - 说明书同表生成；不重复手写一套容易过期的引文。
 - 用户离线也能阅读随包的引用文本和许可证；外部 PDF 链接需网络，明确标识。直接下载链接保留官方地址，发布前测试可达性；未获许可不把全文重新镜像打包。
 - P10 在每个平台的实际构建产物上生成完整 SBOM/许可清单，当前 42 条重点来源和 16 包元数据只是起点。
+
+## M01-C适配补充
+
+2026-09-09：新增2个导出依赖和3个API/格式文档参考，登记共323条；[C清单](../../third_party/m01-io-inventory.json)保留40个实际包的来源映射与新增包安装文件hash。原生REAPER无新复制或下载，确切hash/PE架构见 [资源清单](../../resources/manifests/acoustic.json)。原commit、编译选项、完整原生依赖及再分发审计仍待核实；MIT元数据不等于整包发行许可审查完成。

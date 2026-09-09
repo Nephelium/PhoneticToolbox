@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import Callable, Protocol
 import numpy as np
 from ..models.audio import AudioInput
+from .errors import BackendAborted
 
 
 @dataclass(frozen=True)

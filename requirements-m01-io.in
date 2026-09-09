@@ -1,0 +1,28 @@
+# M01-C isolated Windows I/O environment; original audited export versions.
+-r requirements-m01-test.in
+openpyxl==3.1.5
+et-xmlfile==2.0.0
+
+# Worker currently ships in ptb-api; satisfy its existing metadata as well.
+# Reuse the verified engineering versions, without importing/installing Qt.
+fastapi==0.141.1
+pydantic==2.13.5
+uvicorn==0.52.4
+argon2-cffi==25.1.0
+psycopg[binary]==3.3.3
+itsdangerous==2.2.0
+# Existing engineering transitive pins (science keeps its audited tzdata 2025.2).
+annotated-doc==0.0.5
+annotated-types==0.8.0
+anyio==4.15.1
+argon2-cffi-bindings==26.1.0
+cffi==2.1.1
+click==8.5.0
+h11==0.16.0
+idna==3.19
+psycopg-binary==3.3.3
+pycparser==3.0
+pydantic-core==2.46.5
+starlette==1.6.0
+typing-extensions==4.16.0
+typing-inspection==0.4.4

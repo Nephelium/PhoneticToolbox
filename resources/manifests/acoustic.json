@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "module": "M01",
+  "scope": "Windows native adapter validation; release bundling remains P12",
+  "resources": [
+    {
+      "id": "reaper-windows-x64",
+      "host_capability": "registered_reaper_binary",
+      "validation_source": "phonetic_toolbox/core/acoustic/reaper.exe",
+      "sha256": "279fecc82ed0a49b0277b114270771d7670299068e849058b392672825981824",
+      "size_bytes": 321536,
+      "platform": "win32",
+      "architecture": "PE machine 0x8664 (AMD64)",
+      "source_id": "SRC-REAPER",
+      "interface": "WAV PCM16 input; EST ASCII output through owned named pipe",
+      "upstream_commit": "unknown",
+      "build_flags": "unknown",
+      "runtime_dependencies": "Windows inherited executable runs in isolated validation; complete import-table and redistribution audit pending P12",
+      "redistribution_status": "review-required; no new binary copied"
+    }
+  ]
+}

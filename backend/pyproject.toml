@@ -9,6 +9,9 @@ description = "Shared local and server API scaffold for PhoneticToolbox"
 requires-python = ">=3.11,<3.12"
 dependencies = ["phonetic-core==3.0.0a1", "fastapi==0.141.1", "pydantic==2.13.5", "uvicorn==0.52.4", "argon2-cffi==25.1.0", "psycopg[binary]==3.3.3", "itsdangerous==2.2.0"]
 
+[project.optional-dependencies]
+acoustic-io = ["phonetic-core[acoustic]==3.0.0a1", "openpyxl==3.1.5", "et-xmlfile==2.0.0"]
+
 [project.scripts]
 ptb-api = "ptb_api.cli:main"
 

@@ -86,3 +86,5 @@ P06 更新：现有 CPython SQLite 3.50.4 与 PostgreSQL 17 锁定文档单独�
 P07 迁移前更新：来源共 299 条；新增标准库文件持久化/锁、Starlette 响应接口参考及现有独立浏览器测试工具记录。均属软件组，未新增项目运行依赖；这是当时的迁移前记录；随后 003/004 已获具体授权并通过受控路径验收。
 
 P07 联合更新：来源共 300 条，新增 P07-PYTHON-ZIP 标准库依赖/API 来源，复用既有 CPython 3.11.14；没有新安装或声学算法移植。受控 writer、ZIP 限制与原生工具未开放边界见 ../docs/testing/p07-job-files-report.md。
+
+M01-C更新：323条来源登记；新增openpyxl3.1.5/et-xmlfile2.0.0及Win32/WAVE/pickle文档参考。40包完整C环境映射见 [C依赖清单](m01-io-inventory.json)，方法/代码署名不变，真实REAPER来源及发行缺口见 [原生资源](../resources/manifests/acoustic.json)。

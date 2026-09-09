@@ -4509,7 +4509,8 @@
     "id": "P06-SQLITE",
     "title": "SQLite (CPython bundled local task store)",
     "modules": [
-      "P06"
+      "P06",
+      "M01"
     ],
     "kind": "runtime-dependency",
     "acknowledgement_group": "software",
@@ -4871,6 +4872,84 @@
     "license": "MIT",
     "urls": {
       "release": "https://pypi.org/project/wheel/0.48.0/"
+    }
+  },
+  {
+    "id": "M01-PY-OPENPYXL",
+    "title": "openpyxl",
+    "modules": [
+      "M01"
+    ],
+    "kind": "dependency",
+    "acknowledgement_group": "software",
+    "authors": "See AUTHORS",
+    "version": "3.1.5",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/openpyxl/3.1.5/"
+    }
+  },
+  {
+    "id": "M01-PY-ET-XMLFILE",
+    "title": "et-xmlfile",
+    "modules": [
+      "M01"
+    ],
+    "kind": "dependency",
+    "acknowledgement_group": "software",
+    "authors": "See AUTHORS.txt",
+    "version": "2.0.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/et-xmlfile/2.0.0/"
+    }
+  },
+  {
+    "id": "M01-WIN32",
+    "title": "Windows Job Objects and named pipes",
+    "modules": [
+      "M01"
+    ],
+    "kind": "documentation-reference",
+    "acknowledgement_group": "software",
+    "authors": "Microsoft",
+    "version": "Official documentation consulted 2026-09-09; Windows / CPython 3.11.14 APIs tested locally",
+    "license": "Documentation referenced, no third-party document/code redistributed",
+    "urls": {
+      "process": "https://learn.microsoft.com/en-us/windows/win32/procthread/process-creation-flags",
+      "job": "https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects",
+      "membership": "https://learn.microsoft.com/en-us/windows/win32/api/jobapi/nf-jobapi-isprocessinjob",
+      "pipe": "https://learn.microsoft.com/en-us/windows/win32/ipc/named-pipe-type-read-and-wait-modes"
+    }
+  },
+  {
+    "id": "M01-WAVE",
+    "title": "RIFF WAVE / WAVEFORMATEXTENSIBLE",
+    "modules": [
+      "M01"
+    ],
+    "kind": "documentation-reference",
+    "acknowledgement_group": "software",
+    "authors": "Microsoft",
+    "version": "Official documentation consulted 2026-09-09; Windows / CPython 3.11.14 APIs tested locally",
+    "license": "Documentation referenced, no third-party document/code redistributed",
+    "urls": {
+      "documentation": "https://learn.microsoft.com/en-us/windows/win32/api/mmreg/ns-mmreg-waveformatextensible"
+    }
+  },
+  {
+    "id": "M01-PICKLE",
+    "title": "Python 3.11 restricted pickle loading",
+    "modules": [
+      "M01"
+    ],
+    "kind": "documentation-reference",
+    "acknowledgement_group": "software",
+    "authors": "Python Software Foundation",
+    "version": "Official documentation consulted 2026-09-09; Windows / CPython 3.11.14 APIs tested locally",
+    "license": "Documentation referenced, no third-party document/code redistributed",
+    "urls": {
+      "documentation": "https://docs.python.org/3.11/library/pickle.html"
     }
   }
 ]
