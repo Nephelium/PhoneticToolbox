@@ -15,7 +15,7 @@
 | 阶段 | 任务 | 核心交付 | 当前状态 |
 | --- | --- | --- | --- |
 | 基线与风险 | P00–P03 | 来源基线、宿主验证、依赖/科研基准 | P00 文档与继承完成；P01 Windows 原型/试用及风险评审通过；P02 骨架与 P03 独立行为基线 verified（限定 Windows 定向范围） |
-| 公共基础 | P04–P07 | UI 壳、登录、任务、5 GB/7 天 | P04 公共界面 verified；P05 账号/项目及真实 PG 定向 verified；P06 Windows 持久任务定向 verified（含真实 PG/SQLite 与恢复复验）；P07 in_progress（Windows 单文件真实存储定向 verified，ZIP/任务文件联合验收待完成） |
+| 公共基础 | P04–P07 | UI 壳、登录、任务、5 GB/7 天 | P04 公共界面 verified；P05 账号/项目及真实 PG 定向 verified；P06 Windows 持久任务定向 verified（含真实 PG/SQLite 与恢复复验）；P07 Windows 受控存储/工程生成/有界 ZIP 联合 verified（不含科学迁移、原生目录输出和生产跨平台验收） |
 | 功能迁移 | P08–P09 / M01–M15 | 全部功能双端与设备适配 | 未实施 |
 | 研究可追溯 | P10 | 软件/说明书/随包来源一致 | 已做首轮调查，未接软件界面 |
 | 验证与发行 | P11–P15 | WSL 10 用户、各平台包和部署方案 | 未实施，Mac 暂无实机 |
@@ -149,7 +149,7 @@
 
 ### P07 · 5 GB 配额、7 天清理和结果管理
 
-**依赖：** P05,P06。**状态：** in_progress（003 已获授权执行，Windows 单文件 PG/磁盘/并发/TCP/浏览器验收通过；004 任务文件扩展待审阅，整体联合验收未完成；见 [P07 计划](2026-09-09-p07-storage.md)及 [当前报告](../testing/p07-storage-report.md)）。
+**依赖：** P05,P06。**状态：** verified（限定 Windows 受控存储、工程生成和有界 ZIP；003/004 均获具体授权执行，真实 PG/磁盘/任务引用/旧 worker/独立浏览器联合验收通过；见 [P07 计划](2026-09-09-p07-storage.md)及 [单文件报告](../testing/p07-storage-report.md)、[联合报告](../testing/p07-job-files-report.md)）。
 
 **目标文件：** backend/src/ptb_api/quota.py；backend/src/ptb_api/storage.py；backend/src/ptb_worker/cleanup.py；frontend/src/modules/storage/StoragePage.vue。
 

@@ -1,6 +1,6 @@
 """Bounded P06 metadata contracts, shared by local and server APIs."""
 from typing import Annotated, Literal
-from pydantic import Field
+from pydantic import Field, model_validator
 from .models import WireModel
 
 State = Literal['queued','running','cancel_requested','cancelled','failed','interrupted','succeeded']
@@ -24,6 +24,47 @@ class RetryInput(WireModel):
     idempotency_key: IdempotencyKey
 
 
+class FileConfig(WireModel):
+    inputs: list[Identifier] = Field(default_factory=list, max_length=16)
+    max_output_bytes: int = Field(default=16_777_216, ge=1, le=5_000_000_000)
+    probe_bytes: int = Field(default=16384, ge=1, le=33_554_432)
+    probe_files: int = Field(default=2, ge=1, le=4)
+
+
+class FileJobInput(WireModel):
+    project_id: Identifier
+    idempotency_key: IdempotencyKey
+    operation: Literal['storage_check','archive_zip','extract_zip']
+    config: FileConfig = Field(default_factory=FileConfig)
+
+    @model_validator(mode='after')
+    def valid_inputs(self):
+        count = len(self.config.inputs)
+        if len(set(self.config.inputs)) != count:
+            raise ValueError('Duplicate input')
+        if self.operation == 'archive_zip' and not count:
+            raise ValueError('Archive requires inputs')
+        if self.operation == 'extract_zip' and count != 1:
+            raise ValueError('Extraction requires one ZIP')
+        return self
+
+
+class ResultFile(WireModel):
+    id: Identifier
+    name: str
+    kind: Literal['result','archive']
+    size_bytes: int = Field(ge=0,le=5_000_000_000)
+    sha256: Annotated[str, Field(pattern=r'^[0-9a-f]{64}$')]
+    expires_at: float
+
+
+class FileManifest(WireModel):
+    complete: Literal[True] = True
+    kind: Literal['managed_files'] = 'managed_files'
+    files: list[ResultFile] = Field(min_length=1,max_length=16)
+    core_version: str
+
+
 class JobManifest(WireModel):
     complete: Literal[True] = True
     kind: Literal['pipeline_check_metadata'] = 'pipeline_check_metadata'
@@ -35,13 +76,13 @@ class JobManifest(WireModel):
 class JobView(WireModel):
     id: str
     project_id: str
-    operation: Literal['pipeline_check'] = 'pipeline_check'
+    operation: Literal['pipeline_check','storage_check','archive_zip','extract_zip'] = 'pipeline_check'
     state: State
     progress: Annotated[float, Field(ge=0,le=1)]
     generation: int
     created_at: float
     updated_at: float
-    result_manifest: JobManifest | None
+    result_manifest: JobManifest | FileManifest | None
     error_code: str | None
     retry_of: str | None = None
 

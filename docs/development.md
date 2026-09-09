@@ -74,6 +74,6 @@ npm --prefix frontend run build
 
 ## P07 单文件存储（Windows 定向验收通过）
 
-见 [P07 报告](testing/p07-storage-report.md)与 [已授权的具体迁移审阅](testing/p07-migration-review.md)。003 已执行，专属测试文件范围内的 PG/磁盘与独立浏览器验证通过；复验使用 run_p07_validation.py --approved-p07-schema-and-test-files，不重复应用 003。后端私密配置可显式指定 storage_root；必须是已初始化且 instance_id 与 PG 匹配的私有目录，构造函数不建表。启动恢复会处理到期文件，因此不得把研究者的普通文件目录配置为该私有根。未配置时文件 API 明确 503，桌面为 404。当前 [004 任务文件关联扩展](testing/p07-job-assets-review.md)尚未获具体执行确认，不在上述复验命令中运行。
+见 [P07 报告](testing/p07-storage-report.md)与 [已授权的具体迁移审阅](testing/p07-migration-review.md)。003 已执行，专属测试文件范围内的 PG/磁盘与独立浏览器验证通过；复验使用 run_p07_validation.py --approved-p07-schema-and-test-files，不重复应用 003。后端私密配置可显式指定 storage_root；必须是已初始化且 instance_id 与 PG 匹配的私有目录，构造函数不建表。启动恢复会处理到期文件，因此不得把研究者的普通文件目录配置为该私有根。未配置时文件 API 明确 503，桌面为 404。[004 任务文件关联扩展](testing/p07-job-assets-review.md)已获授权并执行；默认命令会验证单文件和任务/ZIP 联合行为，不再执行 DDL。
 
-原始文件分块接口每块最多 256 KiB。/uploads 创建保留幂等键，PUT /uploads/{id}/blocks 使用 offset，POST finalize 完成服务器 SHA-256 和尺寸核对。文件以二进制原样保存，不自动解析 ZIP、Pickle 或执行代码。下载按单个 Range 和逐块截止/会话校验；DELETE 仅从会话确定 owner。生成结果与归档仍待 P07/P06 联合门，不要将上传资源称为科学分析产物。
+原始文件分块接口每块最多 256 KiB。/uploads 创建保留幂等键，PUT /uploads/{id}/blocks 使用 offset，POST finalize 完成服务器 SHA-256 和尺寸核对。文件以二进制原样保存，不自动解析 ZIP、Pickle 或执行代码。下载按单个 Range 和逐块截止/会话校验；DELETE 仅从会话确定 owner。受控任务/ZIP 联合门已通过，见 [联合报告](testing/p07-job-files-report.md)。文件任务要求服务器私有配置 enable_jobs=true、enable_file_jobs=true、storage_root 为已初始化根；独立 worker 的同库配置也须提供相同 storage_root。只有 capability 返回的操作可以启用；生成的工程测试文件不能称为科学分析产物，未受控的原生目录写入仍未开放。

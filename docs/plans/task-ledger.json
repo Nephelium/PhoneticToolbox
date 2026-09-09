@@ -207,8 +207,8 @@
       "title": "5 GB 配额、7 天清理和结果管理",
       "dependencies": "P05,P06",
       "files": "backend/src/ptb_api/quota.py；backend/src/ptb_api/storage.py；backend/src/ptb_worker/cleanup.py；frontend/src/account/ProjectStorage.vue",
-      "status": "in_progress",
-      "note": "003 存储表与专属生成文件清理范围已获具体授权并执行；Windows 单文件真实 PG/磁盘、最后额度并发、满额登录下载删除、TCP 到期和独立浏览器验收通过。004 任务文件关联扩展已准备待具体确认；ZIP/结果/输入/旧 worker 文件提交的联合门尚未完成，整体保持 in_progress。",
+      "status": "verified",
+      "note": "003/004 均获具体授权并执行，Windows 受控存储、工程生成和有界 ZIP 联合范围 verified。真实 PG/磁盘/配额/TCP、输入引用、整批结果提交、旧 worker 拒绝、进程中断重试与两标签页竞态通过；不代表科学模块、任意原生输出目录、硬断电、持续生产负载或跨平台发行通过。",
       "steps": [
         "实现账户字节计量、原子预留、受控 writer 和恢复核对",
         "实现上传/解压/生成/ZIP 全链路计量，不能靠前端判断",
@@ -226,15 +226,18 @@
         "output/validation/p07/database-validation.json",
         "output/validation/p07/extended-validation.json",
         "output/playwright/p07/real-ui-validation.json",
-        "docs/testing/p07-job-assets-review.md"
+        "docs/testing/p07-job-assets-review.md",
+        "docs/testing/p07-job-files-report.md",
+        "output/validation/p07/jobs-validation.json"
       ],
       "acceptance_status": {
         "policy_and_http_boundary": "verified",
         "unconfigured_storage_browser": "verified",
         "postgres_and_disk": "verified",
-        "zip_outputs_inputs_and_fencing": "planned",
+        "zip_outputs_inputs_and_fencing": "verified",
         "real_storage_browser": "verified",
-        "single_file_scope": "verified"
+        "single_file_scope": "verified",
+        "owned_worker_crash_recovery": "verified"
       }
     },
     {

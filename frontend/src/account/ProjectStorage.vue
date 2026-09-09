@@ -11,6 +11,9 @@ const usage = ref<Usage | null>(null), assets = ref<Asset[]>([]), notice = ref('
 const available = ref(false), busy = ref(false), progress = ref(0), order = ref('expires');
 const removal = ref<Asset | null>(null), fileInput = ref<HTMLInputElement>();
 const pending = ref<{ file: File; key: string; assetId?: string } | null>(null);
+const fileJobs = ref(false), selectedIds = ref<string[]>([]), outputMegabytes = ref(128);
+const activeReferences = ref<string[]>([]);
+const taskKeys = new Map<string,string>();
 const abort = new AbortController();
 let disposed = false, timer: ReturnType<typeof setInterval> | undefined, loading = false;
 const errors: Record<string, string> = {
@@ -22,6 +25,9 @@ const errors: Record<string, string> = {
   upload_closed: '这次上传已关闭或到期，请重新选择文件。',
   asset_expired: '文件已到期，不能继续下载。',
   asset_limit_reached: '文件记录数量已达上限，请联系管理员。',
+  input_lifetime_too_short: '输入文件剩余有效期不足 5 分钟，请重新上传后创建任务。',
+  file_tasks_unavailable: '文件任务尚未启用。',
+  output_budget_exceeded: '本批输出超过设定上限，未完成文件将清理。',
 };
 function message(error: unknown) {
   const code = error instanceof Error ? error.message : '';
@@ -99,6 +105,31 @@ async function remove() {
   } catch (error) { if (!disposed) notice.value = message(error); }
   finally { busy.value = false; }
 }
+async function confirmRemoval(item: Asset) {
+  if (busy.value) return;
+  busy.value = true;
+  try {
+    const impact = await request<components['schemas']['DeleteImpact']>(`assets/${item.id}/delete-impact`);
+    if (!disposed) { activeReferences.value = impact.active_jobs; removal.value = item; }
+  } catch(error) { if (!disposed) notice.value = message(error); }
+  finally { busy.value = false; }
+}
+async function fileTask(operation: 'storage_check'|'archive_zip'|'extract_zip', inputs: string[] = []) {
+  if (busy.value) return;
+  busy.value = true; notice.value = '';
+  const limit = Math.floor(outputMegabytes.value * 1_000_000);
+  const slot = JSON.stringify([operation, inputs, limit]);
+  if (!taskKeys.has(slot)) taskKeys.set(slot, crypto.randomUUID());
+  try {
+    if (!Number.isSafeInteger(limit) || limit < 1 || limit > 5_000_000_000 || inputs.length > 16) throw new Error('invalid_request');
+    const job = await request<components['schemas']['JobView']>('jobs','POST', {
+      project_id: props.projectId, operation, idempotency_key: taskKeys.get(slot),
+      config: { inputs, max_output_bytes: limit },
+    });
+    if (!disposed) { taskKeys.delete(slot); notice.value = `任务 ${job.id.slice(0,8)} 已提交，可在任务记录中查看进度。整批成功后才可下载。`; selectedIds.value = []; }
+  } catch(error) { if (!disposed) notice.value = message(error); }
+  finally { busy.value = false; }
+}
 function bytes(value: number) {
   return value < 1_000 ? `${value} B` : value < 1_000_000 ? `${(value / 1_000).toFixed(1)} KB`
     : value < 1_000_000_000 ? `${(value / 1_000_000).toFixed(1)} MB` : `${(value / 1_000_000_000).toFixed(2)} GB`;
@@ -109,7 +140,10 @@ function label(item: Asset) {
   if (item.expires_at * 1_000 <= Date.now() && item.state !== 'delete_failed') return '已到期 · 等待清理';
   return ({ uploading: '上传未完成', ready: '可下载', deleting: '正在删除', delete_failed: '删除未完成', deleted: '已删除' })[item.state];
 }
-onMounted(() => { void refresh(); timer = setInterval(() => { void refresh(); }, 5000); });
+onMounted(() => {
+  void refresh(); timer = setInterval(() => { void refresh(); }, 5000);
+  void request<components['schemas']['Capabilities']>('capabilities').then(c => { if (!disposed) fileJobs.value = c.task_operations.includes('archive_zip'); }).catch(() => {});
+});
 onUnmounted(() => { disposed = true; abort.abort(); clearInterval(timer); pending.value = null; });
 </script>
 
@@ -129,17 +163,24 @@ onUnmounted(() => { disposed = true; abort.abort(); clearInterval(timer); pendin
       <button class="primary" :disabled="busy || !pending || !available || usage?.frozen || !usage?.ready" @click="upload">{{ busy ? '正在处理…' : pending?.assetId ? '继续上传' : '上传文件' }}</button>
       <progress v-if="busy && pending" :value="progress" :max="1" aria-label="上传进度" />
     </div>
-    <p class="hint">未完成上传最多保留 24 小时；关闭页面不会删除电脑上的原文件。当前上传用于文件管理，尚未接入语音分析。</p>
+    <p class="hint">未完成上传最多保留 24 小时；关闭页面不会删除电脑上的原文件。当前文件管理尚未接入语音分析。</p>
+    <div v-if="fileJobs" class="file-job-controls">
+      <label>本批输出上限（MB）<input v-model.number="outputMegabytes" type="number" min="1" max="5000" :disabled="busy" /></label>
+      <div class="file-actions"><button :disabled="busy || !selectedIds.length || selectedIds.length > 16" @click="fileTask('archive_zip', [...selectedIds])">打包所选文件（{{ selectedIds.length }}）</button><button :disabled="busy" @click="fileTask('storage_check')">运行存储流程检查</button></div>
+      <p class="hint">ZIP 最多 16 个条目，暂不支持 ZIP64、加密或链接。打包与展开不延长原文件期限；流程检查仅生成两份小型测试文件，不分析语音。</p>
+    </div>
     <label class="storage-sort">排序<select v-model="order" @change="refresh"><option value="expires">最早到期</option><option value="size">占用最大</option><option value="created">最新上传</option></select></label>
     <p v-if="available && !assets.length" class="muted">此项目还没有文件。</p>
     <ul v-else class="storage-files">
       <li v-for="item in assets" :key="item.id">
-        <div class="file-details"><strong>{{ item.name }}</strong><small>{{ bytes(item.size_bytes) }} · {{ label(item) }}</small><small>{{ date(item.expires_at) }} 到期</small></div>
-        <div class="file-actions"><a v-if="readable(item)" :href="`/api/v1/assets/${item.id}/content?expected_account=${ownerId}`" download>下载</a><button :disabled="busy" @click="removal = item">{{ item.state === 'delete_failed' ? '重试删除' : '删除' }}</button></div>
+        <input v-if="fileJobs && readable(item)" v-model="selectedIds" type="checkbox" :value="item.id" :aria-label="`选择 ${item.name}`" :disabled="busy" />
+        <div class="file-details"><strong>{{ item.name }}</strong><small>{{ ({input:'上传',result:'生成结果',archive:'归档资源',temporary:'临时文件'})[item.kind] }} · {{ bytes(item.size_bytes) }} · {{ label(item) }}</small><small>{{ date(item.expires_at) }} 到期</small></div>
+        <div class="file-actions"><a v-if="readable(item)" :href="`/api/v1/assets/${item.id}/content?expected_account=${ownerId}`" download>下载</a><button v-if="fileJobs && readable(item) && item.name.toLowerCase().endsWith('.zip')" :disabled="busy" @click="fileTask('extract_zip', [item.id])">展开 ZIP</button><button :disabled="busy" @click="confirmRemoval(item)">{{ item.state === 'delete_failed' ? '重试删除' : '删除' }}</button></div>
       </li>
     </ul>
     <ModalDialog v-if="removal" title="删除这个文件？" @close="removal = null">
-      <p class="remove-name">{{ removal.name }}</p><p>将删除 1 个上传资源，已写入 {{ bytes(removal.size_bytes) }}。本阶段尚未关联分析任务或结果。</p>
+      <p class="remove-name">{{ removal.name }}</p><p>将删除 1 个资源，已写入 {{ bytes(removal.size_bytes) }}。当前关联 {{ activeReferences.length }} 个活动任务；删除会请求停止这些任务。</p>
+      <p class="hint">已经成功的其他结果保留各自期限。确认期间新引用此资源的任务，也会在删除时停止。</p>
       <p>删除后不能再下载。无需先下载；如果需要留存，请先保存到自己的电脑。</p>
       <template #footer><button :disabled="busy" @click="removal = null">保留文件</button><button :disabled="busy" @click="remove">确认删除</button></template>
     </ModalDialog>
@@ -160,4 +201,7 @@ progress { display: block; width: 100%; accent-color: var(--accent); height: .7r
 .file-details small,.storage-meter small { color: var(--muted); }
 .storage-upload input { width: 100%; max-width: 22rem; }
 .storage-notice { line-height: 1.6; }
+.file-job-controls { margin: 1rem 0; display: grid; gap: .7rem; }
+.file-job-controls input { max-width: 8rem; margin-left: .5rem; }
+.storage-files input[type="checkbox"] { width: 1rem; flex: 0 0 1rem; }
 </style>

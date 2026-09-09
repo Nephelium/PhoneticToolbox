@@ -54,7 +54,12 @@
             "type": "string"
           },
           "kind": {
-            "const": "input",
+            "enum": [
+              "input",
+              "result",
+              "archive",
+              "temporary"
+            ],
             "title": "Kind",
             "type": "string"
           },
@@ -231,6 +236,129 @@
           "csrf_token"
         ],
         "title": "Challenge",
+        "type": "object"
+      },
+      "DeleteImpact": {
+        "properties": {
+          "active_jobs": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Active Jobs",
+            "type": "array"
+          }
+        },
+        "required": [
+          "active_jobs"
+        ],
+        "title": "DeleteImpact",
+        "type": "object"
+      },
+      "FileConfig": {
+        "additionalProperties": false,
+        "properties": {
+          "inputs": {
+            "items": {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+              "type": "string"
+            },
+            "maxItems": 16,
+            "title": "Inputs",
+            "type": "array"
+          },
+          "max_output_bytes": {
+            "default": 16777216,
+            "maximum": 5000000000.0,
+            "minimum": 1.0,
+            "title": "Max Output Bytes",
+            "type": "integer"
+          },
+          "probe_bytes": {
+            "default": 16384,
+            "maximum": 33554432.0,
+            "minimum": 1.0,
+            "title": "Probe Bytes",
+            "type": "integer"
+          },
+          "probe_files": {
+            "default": 2,
+            "maximum": 4.0,
+            "minimum": 1.0,
+            "title": "Probe Files",
+            "type": "integer"
+          }
+        },
+        "title": "FileConfig",
+        "type": "object"
+      },
+      "FileJobInput": {
+        "additionalProperties": false,
+        "properties": {
+          "config": {
+            "$ref": "#/components/schemas/FileConfig"
+          },
+          "idempotency_key": {
+            "pattern": "^[A-Za-z0-9_-]{8,80}$",
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "operation": {
+            "enum": [
+              "storage_check",
+              "archive_zip",
+              "extract_zip"
+            ],
+            "title": "Operation",
+            "type": "string"
+          },
+          "project_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Project Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id",
+          "idempotency_key",
+          "operation"
+        ],
+        "title": "FileJobInput",
+        "type": "object"
+      },
+      "FileManifest": {
+        "additionalProperties": false,
+        "properties": {
+          "complete": {
+            "const": true,
+            "default": true,
+            "title": "Complete",
+            "type": "boolean"
+          },
+          "core_version": {
+            "title": "Core Version",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/ResultFile"
+            },
+            "maxItems": 16,
+            "minItems": 1,
+            "title": "Files",
+            "type": "array"
+          },
+          "kind": {
+            "const": "managed_files",
+            "default": "managed_files",
+            "title": "Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "files",
+          "core_version"
+        ],
+        "title": "FileManifest",
         "type": "object"
       },
       "FinalizeInput": {
@@ -477,8 +605,13 @@
             "type": "string"
           },
           "operation": {
-            "const": "pipeline_check",
             "default": "pipeline_check",
+            "enum": [
+              "pipeline_check",
+              "storage_check",
+              "archive_zip",
+              "extract_zip"
+            ],
             "title": "Operation",
             "type": "string"
           },
@@ -498,9 +631,13 @@
                 "$ref": "#/components/schemas/JobManifest"
               },
               {
+                "$ref": "#/components/schemas/FileManifest"
+              },
+              {
                 "type": "null"
               }
-            ]
+            ],
+            "title": "Result Manifest"
           },
           "retry_of": {
             "anyOf": [
@@ -646,6 +783,53 @@
           "created_at"
         ],
         "title": "ProjectView",
+        "type": "object"
+      },
+      "ResultFile": {
+        "additionalProperties": false,
+        "properties": {
+          "expires_at": {
+            "title": "Expires At",
+            "type": "number"
+          },
+          "id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "result",
+              "archive"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Sha256",
+            "type": "string"
+          },
+          "size_bytes": {
+            "maximum": 5000000000.0,
+            "minimum": 0.0,
+            "title": "Size Bytes",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "kind",
+          "size_bytes",
+          "sha256",
+          "expires_at"
+        ],
+        "title": "ResultFile",
         "type": "object"
       },
       "RetryInput": {
@@ -1194,6 +1378,49 @@
         ]
       }
     },
+    "/api/v1/assets/{asset_id}/delete-impact": {
+      "get": {
+        "operationId": "get_delete_impact",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "asset_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Asset Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteImpact"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Impact",
+        "tags": [
+          "storage"
+        ]
+      }
+    },
     "/api/v1/auth/challenge": {
       "get": {
         "operationId": "get_login_challenge",
@@ -1375,7 +1602,15 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/JobInput"
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/JobInput"
+                  },
+                  {
+                    "$ref": "#/components/schemas/FileJobInput"
+                  }
+                ],
+                "title": "Body"
               }
             }
           },

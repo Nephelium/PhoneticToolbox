@@ -11,7 +11,7 @@ import psycopg
 from psycopg.rows import dict_row
 from phonetic_core import __version__ as core_version
 from ptb_api import __version__ as adapter_version
-from ptb_api.job_models import JobInput, JobManifest
+from ptb_api.job_models import JobInput, JobManifest, FileJobInput
 from .policy import ACTIVE, cancel_state, fenced
 
 LOCAL_PROJECT = '00000000-0000-4000-8000-000000000001'
@@ -59,6 +59,7 @@ class JobStore:
         if not 1 <= max_running <= 16 or not 2 <= lease_seconds <= 60:
             raise ValueError('Invalid scheduler settings')
         self.max_running,self.lease_seconds=max_running,lease_seconds
+        self.files = None
 
     def check_schema(self):
         with self.transaction(write=False) as tx:
@@ -93,6 +94,10 @@ class JobStore:
         with self.transaction() as tx:self._recover(tx,tx.now())
 
     def submit(self, owner, body: JobInput, *, retry_of=None):
+        if isinstance(body, FileJobInput):
+            if not self.files:
+                raise JobError('file_tasks_unavailable',503)
+            return self.files.submit(owner,body,retry_of=retry_of)
         request=body.model_dump(exclude={'idempotency_key'}) | {'retry_of':retry_of}
         request_hash=hashlib.sha256(canonical(request).encode('utf-8')).hexdigest()
         with self.transaction() as tx:
@@ -147,23 +152,33 @@ class JobStore:
             if not row:raise JobError('job_not_found',404)
             if row['state'] not in ('failed','interrupted','cancelled'):raise JobError('job_not_retryable')
             snapshot=json.loads(row['snapshot'])
-        body=JobInput(project_id=str(row['project_id']),idempotency_key=key,operation=snapshot['operation'],config=snapshot['config'])
+        model = JobInput if snapshot['operation']=='pipeline_check' else FileJobInput
+        body=model(project_id=str(row['project_id']),idempotency_key=key,operation=snapshot['operation'],config=snapshot['config'])
         return self.submit(owner,body,retry_of=job_id)
 
     def claim(self, worker_id):
+        if self.files is not None:
+            return self.files.claim(worker_id)
         with self.transaction() as tx:
-            now=tx.now();self._recover(tx,now)
-            if tx.execute("SELECT count(*) AS n FROM {jobs} WHERE state IN ('running','cancel_requested')").fetchone()['n'] >= self.max_running:return None
-            query="""SELECT j.* FROM {jobs} j WHERE j.state='queued' AND NOT EXISTS
-                (SELECT 1 FROM {jobs} a WHERE a.owner_id=j.owner_id AND a.state IN ('running','cancel_requested'))
-                ORDER BY j.created_at,j.id LIMIT 1"""
-            if self.postgres:query+=' FOR UPDATE OF j SKIP LOCKED'
-            found=tx.execute(query).fetchone()
-            if not found:return None
-            row=dict(found);generation=row['generation']+1
-            tx.execute("UPDATE {jobs} SET state='running',worker_id=?,generation=?,lease_until=? WHERE id=?",(worker_id,generation,now+self.lease_seconds,row['id']))
-            row=self._row(tx,row['id']);self._event(tx,row,'running',now)
-            return row
+            return self._claim(tx,worker_id)
+
+    def _claim(self, tx, worker_id):
+        now=tx.now();self._recover(tx,now)
+        if tx.execute("SELECT count(*) AS n FROM {jobs} WHERE state IN ('running','cancel_requested')").fetchone()['n'] >= self.max_running:return None
+        query="""SELECT j.* FROM {jobs} j WHERE j.state='queued' AND NOT EXISTS
+            (SELECT 1 FROM {jobs} a WHERE a.owner_id=j.owner_id AND a.state IN ('running','cancel_requested'))
+            ORDER BY j.created_at,j.id LIMIT 1"""
+        params=()
+        if self.files is None:
+            query=query.replace('ORDER BY j.created_at','AND j.snapshot LIKE ? ORDER BY j.created_at')
+            params=('%"operation":"pipeline_check"%',)
+        if self.postgres:query+=' FOR UPDATE OF j SKIP LOCKED'
+        found=tx.execute(query,params).fetchone()
+        if not found:return None
+        row=dict(found);generation=row['generation']+1
+        tx.execute("UPDATE {jobs} SET state='running',worker_id=?,generation=?,lease_until=? WHERE id=?",(worker_id,generation,now+self.lease_seconds,row['id']))
+        row=self._row(tx,row['id']);self._event(tx,row,'running',now)
+        return row
 
     def heartbeat(self, job_id, worker_id, generation, progress):
         if not 0 <= progress < 1:raise ValueError('Only committed results reach progress 1')

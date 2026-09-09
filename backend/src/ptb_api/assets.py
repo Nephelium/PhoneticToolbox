@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from starlette.concurrency import run_in_threadpool
 from starlette.responses import Response
 from .quota import CHUNK_BYTES, StorageError, content_range
-from .storage_models import UploadInput, FinalizeInput, AssetView, AssetList, StorageUsage
+from .storage_models import UploadInput, FinalizeInput, AssetView, AssetList, StorageUsage, DeleteImpact
 
 
 class PrivateDownload(Response):
@@ -98,5 +98,9 @@ def create_storage_router(ctx, store):
     @router.delete('/assets/{asset_id}', response_model=AssetView, operation_id='delete_asset')
     def delete(asset_id: UUID, owner=Depends(mutation)):
         return store.delete(owner['id'], asset_id)
+
+    @router.get('/assets/{asset_id}/delete-impact', response_model=DeleteImpact, operation_id='get_delete_impact')
+    def impact(asset_id: UUID, owner=Depends(identity)):
+        return store.impact(owner['id'],asset_id)
 
     return router

@@ -52,6 +52,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/assets/{asset_id}/delete-impact": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Impact */
+        get: operations["get_delete_impact"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/challenge": {
         parameters: {
             query?: never;
@@ -367,9 +384,9 @@ export interface components {
             id: string;
             /**
              * Kind
-             * @constant
+             * @enum {string}
              */
-            kind: "input";
+            kind: "input" | "result" | "archive" | "temporary";
             /** Name */
             name: string;
             /** Project Id */
@@ -434,6 +451,63 @@ export interface components {
         Challenge: {
             /** Csrf Token */
             csrf_token: string;
+        };
+        /** DeleteImpact */
+        DeleteImpact: {
+            /** Active Jobs */
+            active_jobs: string[];
+        };
+        /** FileConfig */
+        FileConfig: {
+            /** Inputs */
+            inputs?: string[];
+            /**
+             * Max Output Bytes
+             * @default 16777216
+             */
+            max_output_bytes: number;
+            /**
+             * Probe Bytes
+             * @default 16384
+             */
+            probe_bytes: number;
+            /**
+             * Probe Files
+             * @default 2
+             */
+            probe_files: number;
+        };
+        /** FileJobInput */
+        FileJobInput: {
+            config?: components["schemas"]["FileConfig"];
+            /** Idempotency Key */
+            idempotency_key: string;
+            /**
+             * Operation
+             * @enum {string}
+             */
+            operation: "storage_check" | "archive_zip" | "extract_zip";
+            /** Project Id */
+            project_id: string;
+        };
+        /** FileManifest */
+        FileManifest: {
+            /**
+             * Complete
+             * @default true
+             * @constant
+             */
+            complete: true;
+            /** Core Version */
+            core_version: string;
+            /** Files */
+            files: components["schemas"]["ResultFile"][];
+            /**
+             * Kind
+             * @default managed_files
+             * @constant
+             */
+            kind: "managed_files";
         };
         /** FinalizeInput */
         FinalizeInput: {
@@ -542,14 +616,15 @@ export interface components {
             /**
              * Operation
              * @default pipeline_check
-             * @constant
+             * @enum {string}
              */
-            operation: "pipeline_check";
+            operation: "pipeline_check" | "storage_check" | "archive_zip" | "extract_zip";
             /** Progress */
             progress: number;
             /** Project Id */
             project_id: string;
-            result_manifest: components["schemas"]["JobManifest"] | null;
+            /** Result Manifest */
+            result_manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | null;
             /** Retry Of */
             retry_of?: string | null;
             /**
@@ -601,6 +676,24 @@ export interface components {
             id: string;
             /** Name */
             name: string;
+        };
+        /** ResultFile */
+        ResultFile: {
+            /** Expires At */
+            expires_at: number;
+            /** Id */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "result" | "archive";
+            /** Name */
+            name: string;
+            /** Sha256 */
+            sha256: string;
+            /** Size Bytes */
+            size_bytes: number;
         };
         /** RetryInput */
         RetryInput: {
@@ -860,6 +953,37 @@ export interface operations {
             };
         };
     };
+    get_delete_impact: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                asset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeleteImpact"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_login_challenge: {
         parameters: {
             query?: never;
@@ -1031,7 +1155,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["JobInput"];
+                "application/json": components["schemas"]["JobInput"] | components["schemas"]["FileJobInput"];
             };
         };
         responses: {

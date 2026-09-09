@@ -47,6 +47,7 @@ class Storage:
         self.root = Path(os.path.abspath(root))
         self.min_free_bytes = min_free_bytes
         self.ready = False
+        self.files = None
 
     def _path(self, asset_id):
         # No user filename, extension, directory, storage URL or shell input.
@@ -158,78 +159,94 @@ class Storage:
                 (owner, project_id)).fetchall()]
 
     def create(self, owner, body):
-        payload = body.model_dump(mode='json', exclude={'idempotency_key'})
-        digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
         with self._locked() as conn:
-            old = conn.execute('SELECT * FROM ptb_storage.assets WHERE owner_id=%s AND idempotency_key=%s',
-                               (owner, body.idempotency_key)).fetchone()
-            if old:
-                if old['request_hash'] != digest:
-                    raise StorageError('idempotency_conflict')
-                return public_asset(old)
-            self._writable(conn)
-            if not conn.execute('SELECT 1 FROM ptb_accounts.projects p JOIN ptb_accounts.users u ON p.owner_id=u.id WHERE p.id=%s AND p.owner_id=%s AND u.active',
-                                (body.project_id, owner)).fetchone():
-                raise StorageError('project_not_found', 404)
-            if conn.execute('SELECT count(*) AS n FROM ptb_storage.assets WHERE owner_id=%s', (owner,)).fetchone()['n'] >= 10000:
-                raise StorageError('asset_limit_reached')
-            budget = body.expected_bytes or 0
-            self._disk_budget(conn, budget)
-            now, asset_id = self._now(conn), uuid4()
-            with conn.transaction():
-                conn.execute('INSERT INTO ptb_storage.quota_accounts(owner_id) VALUES(%s) ON CONFLICT DO NOTHING', (owner,))
-                q = conn.execute('SELECT * FROM ptb_storage.quota_accounts WHERE owner_id=%s FOR UPDATE', (owner,)).fetchone()
-                reserve(q['used_bytes'], q['reserved_bytes'], budget)
-                conn.execute('UPDATE ptb_storage.quota_accounts SET reserved_bytes=reserved_bytes+%s WHERE owner_id=%s', (budget, owner))
-                conn.execute("INSERT INTO ptb_storage.assets(id,owner_id,project_id,name,state,idempotency_key,request_hash,expected_bytes,reserved_bytes,created_at,expires_at) VALUES(%s,%s,%s,%s,'uploading',%s,%s,%s,%s,%s,%s)",
-                             (asset_id, owner, body.project_id, body.name, body.idempotency_key, digest, body.expected_bytes, budget, now, now+TEMP_SECONDS))
-            # The durable row/reservation exists before even an empty file is created.
-            with self._path(asset_id).open('xb') as target:
-                target.flush()
-                os.fsync(target.fileno())
-            return public_asset(self._row(conn, owner, asset_id))
+            return self._create(conn, owner, body)
+
+    def _create(self, conn, owner, body, *, kind="input", deadline=None, on_created=None):
+        payload = body.model_dump(mode='json', exclude={'idempotency_key'})
+        if kind != 'input':
+            payload['kind'] = kind
+        digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
+        old = conn.execute('SELECT * FROM ptb_storage.assets WHERE owner_id=%s AND idempotency_key=%s',
+                           (owner, body.idempotency_key)).fetchone()
+        if old:
+            if old['request_hash'] != digest:
+                raise StorageError('idempotency_conflict')
+            return public_asset(old)
+        self._writable(conn)
+        if not conn.execute('SELECT 1 FROM ptb_accounts.projects p JOIN ptb_accounts.users u ON p.owner_id=u.id WHERE p.id=%s AND p.owner_id=%s AND u.active',
+                            (body.project_id, owner)).fetchone():
+            raise StorageError('project_not_found', 404)
+        if conn.execute('SELECT count(*) AS n FROM ptb_storage.assets WHERE owner_id=%s', (owner,)).fetchone()['n'] >= 10000:
+            raise StorageError('asset_limit_reached')
+        budget = body.expected_bytes or 0
+        self._disk_budget(conn, budget)
+        now, asset_id = self._now(conn), uuid4()
+        with conn.transaction():
+            conn.execute('INSERT INTO ptb_storage.quota_accounts(owner_id) VALUES(%s) ON CONFLICT DO NOTHING', (owner,))
+            q = conn.execute('SELECT * FROM ptb_storage.quota_accounts WHERE owner_id=%s FOR UPDATE', (owner,)).fetchone()
+            reserve(q['used_bytes'], q['reserved_bytes'], budget)
+            conn.execute('UPDATE ptb_storage.quota_accounts SET reserved_bytes=reserved_bytes+%s WHERE owner_id=%s', (budget, owner))
+            conn.execute("INSERT INTO ptb_storage.assets(id,owner_id,project_id,name,state,idempotency_key,request_hash,expected_bytes,reserved_bytes,created_at,expires_at) VALUES(%s,%s,%s,%s,'uploading',%s,%s,%s,%s,%s,%s)",
+                         (asset_id, owner, body.project_id, body.name, body.idempotency_key, digest, body.expected_bytes, budget, now, min(now+TEMP_SECONDS, deadline) if deadline else now+TEMP_SECONDS))
+            if kind != "input":
+                conn.execute("UPDATE ptb_storage.assets SET kind=%s WHERE id=%s", (kind, asset_id))
+            if on_created:
+                on_created(conn, asset_id)
+        # The durable row/reservation exists before even an empty file is created.
+        with self._path(asset_id).open('xb') as target:
+            target.flush()
+            os.fsync(target.fileno())
+        return public_asset(self._row(conn, owner, asset_id))
 
     def append(self, owner, asset_id, offset, data):
+        with self._locked() as conn:
+            if self._row(conn, owner, asset_id)["kind"] != "input":
+                raise StorageError("worker_owned_asset", 403)
+            return self._append(conn, owner, asset_id, offset, data)
+
+    def _append(self, conn, owner, asset_id, offset, data):
         if not 0 < len(data) <= CHUNK_BYTES or type(offset) is not int or offset < 0:
             raise StorageError('invalid_chunk', 422)
-        with self._locked() as conn:
-            self._writable(conn)
-            row = self._sync(conn, self._row(conn, owner, asset_id))
-            if row['state'] != 'uploading' or row['expires_at'] <= self._now(conn):
-                raise StorageError('upload_closed', 410)
-            path = self._path(asset_id)
-            if offset < row['size_bytes'] and offset+len(data) <= row['size_bytes']:
-                with path.open('rb') as source:
-                    source.seek(offset)
-                    if source.read(len(data)) == data:
-                        return public_asset(row)
-                raise StorageError('chunk_conflict')
-            if offset != row['size_bytes']:
-                raise StorageError('offset_conflict')
-            if row['expected_bytes'] is not None and offset+len(data) > row['expected_bytes']:
-                raise StorageError('declared_size_exceeded', 413)
-            extra = max(0, len(data)-row['reserved_bytes'])
-            self._disk_budget(conn, extra)
-            with conn.transaction():
-                q = conn.execute('SELECT * FROM ptb_storage.quota_accounts WHERE owner_id=%s FOR UPDATE', (owner,)).fetchone()
-                reserve(q['used_bytes'], q['reserved_bytes'], extra)
-                conn.execute('UPDATE ptb_storage.assets SET reserved_bytes=reserved_bytes+%s WHERE id=%s', (extra, asset_id))
-                conn.execute('UPDATE ptb_storage.quota_accounts SET reserved_bytes=reserved_bytes+%s WHERE owner_id=%s', (extra, owner))
-            try:
-                # No truncate or overwrite; missing empty files can be recovered from
-                # a crash between committed reservation and exclusive creation.
-                with path.open('ab', buffering=0) as target:
-                    written = target.write(data)
-                    if written != len(data):
-                        raise OSError('Incomplete storage write')
-                    os.fsync(target.fileno())
-            except OSError:
-                # Reservation remains held. Recovery accounts even partially written bytes.
-                raise StorageError('storage_write_failed', 507) from None
-            return public_asset(self._sync(conn, self._row(conn, owner, asset_id)))
+        self._writable(conn)
+        row = self._sync(conn, self._row(conn, owner, asset_id))
+        if row['state'] != 'uploading' or row['expires_at'] <= self._now(conn):
+            raise StorageError('upload_closed', 410)
+        path = self._path(asset_id)
+        if offset < row['size_bytes'] and offset+len(data) <= row['size_bytes']:
+            with path.open('rb') as source:
+                source.seek(offset)
+                if source.read(len(data)) == data:
+                    return public_asset(row)
+            raise StorageError('chunk_conflict')
+        if offset != row['size_bytes']:
+            raise StorageError('offset_conflict')
+        if row['expected_bytes'] is not None and offset+len(data) > row['expected_bytes']:
+            raise StorageError('declared_size_exceeded', 413)
+        extra = max(0, len(data)-row['reserved_bytes'])
+        self._disk_budget(conn, extra)
+        with conn.transaction():
+            q = conn.execute('SELECT * FROM ptb_storage.quota_accounts WHERE owner_id=%s FOR UPDATE', (owner,)).fetchone()
+            reserve(q['used_bytes'], q['reserved_bytes'], extra)
+            conn.execute('UPDATE ptb_storage.assets SET reserved_bytes=reserved_bytes+%s WHERE id=%s', (extra, asset_id))
+            conn.execute('UPDATE ptb_storage.quota_accounts SET reserved_bytes=reserved_bytes+%s WHERE owner_id=%s', (extra, owner))
+        try:
+            # No truncate or overwrite; missing empty files can be recovered from
+            # a crash between committed reservation and exclusive creation.
+            with path.open('ab', buffering=0) as target:
+                written = target.write(data)
+                if written != len(data):
+                    raise OSError('Incomplete storage write')
+                os.fsync(target.fileno())
+        except OSError:
+            # Reservation remains held. Recovery accounts even partially written bytes.
+            raise StorageError('storage_write_failed', 507) from None
+        return public_asset(self._sync(conn, self._row(conn, owner, asset_id)))
 
     def finalize(self, owner, asset_id, expected_hash=None):
         with self._locked() as conn:
+            if self._row(conn, owner, asset_id)["kind"] != "input":
+                raise StorageError("worker_owned_asset", 403)
             self._writable(conn)
             row = self._sync(conn, self._row(conn, owner, asset_id))
             if row['state'] == 'ready':
@@ -288,6 +305,8 @@ class Storage:
     def _delete(self, conn, row):
         if row['state'] == 'deleted':
             return row
+        if self.files is not None:
+            self.files.before_delete(conn, row)
         # Incomplete disk writes must stay budget-covered until actual deletion.
         conn.execute("UPDATE ptb_storage.assets SET state='deleting',delete_attempts=delete_attempts+1,last_delete_at=%s WHERE id=%s",
                      (self._now(conn), row['id']))
@@ -308,11 +327,20 @@ class Storage:
         with self._locked() as conn:
             return public_asset(self._delete(conn, self._row(conn, owner, asset_id)))
 
+    def impact(self, owner, asset_id):
+        if self.files is not None:
+            return self.files.impact(owner,asset_id)
+        with self._locked() as conn:
+            self._row(conn,owner,asset_id)
+            return {'active_jobs':[]}
+
     def recover(self):
         """Called before downloads; unknown files freeze writes instead of disappearing."""
         self.ready = False
         with self._locked() as conn:
             conn.execute("UPDATE ptb_storage.state SET frozen=true,reason='recovering'")
+            if self.files is not None:
+                self.files.reconcile(conn)
             rows = conn.execute('SELECT * FROM ptb_storage.assets').fetchall()
             expected = {str(r['id'])+'.bin' for r in rows if r['state'] != 'deleted'}
             actual = {p.name for p in self.root.iterdir()} - {'.ptb-storage.json', '.ptb-storage.lock'}
@@ -336,6 +364,8 @@ class Storage:
 
     def cleanup(self):
         with self._locked() as conn:
+            if self.files is not None:
+                self.files.reconcile(conn)
             now = self._now(conn)
             rows = conn.execute("SELECT * FROM ptb_storage.assets WHERE state!='deleted' AND (expires_at<=%s OR state IN ('deleting','delete_failed')) ORDER BY expires_at LIMIT 100", (now,)).fetchall()
             for row in rows:

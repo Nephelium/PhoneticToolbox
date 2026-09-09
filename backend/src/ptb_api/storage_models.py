@@ -29,7 +29,7 @@ class AssetView(BaseModel):
     id: str
     project_id: str
     name: str
-    kind: Literal['input']
+    kind: Literal['input','result','archive','temporary']
     state: Literal['uploading', 'ready', 'deleting', 'delete_failed', 'deleted']
     size_bytes: int
     reserved_bytes: int
@@ -51,3 +51,7 @@ class StorageUsage(BaseModel):
     available_bytes: int
     frozen: bool
     ready: bool
+
+
+class DeleteImpact(BaseModel):
+    active_jobs: list[str]

@@ -18,6 +18,10 @@ def stop_child(child):
 
 def execute_claim(store, claim, worker_id, stop, *, step_delay=0):
     snapshot=json.loads(claim['snapshot'])
+    if snapshot['operation'] != 'pipeline_check':
+        from .file_executor import execute_file_claim
+        execute_file_claim(store,claim,worker_id,stop,step_delay=step_delay)
+        return
     identity=(claim['id'],worker_id,claim['generation'])
     if snapshot['core_version']!=core_version:
         store.finish(*identity,error='core_version_mismatch');return

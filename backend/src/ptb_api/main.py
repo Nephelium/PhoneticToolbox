@@ -77,10 +77,11 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
     @app.get('/api/v1/capabilities', response_model=Capabilities, operation_id='get_capabilities')
     def capabilities() -> Capabilities:
         storage_ready = mode == 'server' and storage is not None and getattr(storage, 'ready', False)
+        file_jobs = storage_ready and job_store is not None and getattr(job_store,'files',None) is not None
         return Capabilities(stage='P07' if storage_ready else ('P06' if job_store is not None else ('P05' if account_store is not None and mode == 'server' else 'P02')),
-                            algorithms=[], task_operations=['pipeline_check'] if job_store is not None else [],
+                            algorithms=[], task_operations=(['pipeline_check'] + (['storage_check','archive_zip','extract_zip'] if file_jobs else [])) if job_store is not None else [],
                             storage_operations=['upload', 'download', 'delete'] if storage_ready else [], limitations=[
-            'Scientific modules pending P08', 'P06 pipeline check produces bounded metadata only; file tasks require P07'])
+            'Scientific modules pending P08', 'Storage checks generate engineering fixtures, not scientific analysis results'])
 
     base_openapi = app.openapi
 

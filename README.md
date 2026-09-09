@@ -2,7 +2,7 @@
 
 **2026-09-09 · P01 原型、P02 工程骨架与 P03 独立科研基线已通过各自 Windows 定向验收。当前尚不是可发布的 v3 应用。**
 
-P05 当前进展：[账号与项目报告](docs/testing/p05-accounts-report.md)、[迁移审阅](docs/testing/p05-migration-review.md)。P05 已获专属空库授权并通过真实 PostgreSQL 定向验收；P06 已完成 Windows 持久任务流程验收及闪退后复验，见 [任务验收与限制](docs/testing/p06-jobs-report.md)及 [建表审阅](docs/testing/p06-migration-review.md)。P07 已获 003 存储表与专属测试文件清理授权，Windows 单文件的真实数据库/磁盘、并发额度、TCP 到期和独立浏览器定向验收已通过；整体仍 in_progress，004 任务文件关联扩展尚待具体确认，见 [P07 当前报告](docs/testing/p07-storage-report.md)和[具体操作审阅](docs/testing/p07-migration-review.md)。两次 Codex 退出与内置测试页关闭存在直接时间关联，排查及绕行约定见 [恢复记录](docs/testing/p06-recovery-and-codex-exit.md)。
+P05 当前进展：[账号与项目报告](docs/testing/p05-accounts-report.md)、[迁移审阅](docs/testing/p05-migration-review.md)。P05 已获专属空库授权并通过真实 PostgreSQL 定向验收；P06 已完成 Windows 持久任务流程验收及闪退后复验，见 [任务验收与限制](docs/testing/p06-jobs-report.md)及 [建表审阅](docs/testing/p06-migration-review.md)。P07 已获 003 存储表与专属测试文件清理授权，Windows 单文件的真实数据库/磁盘、并发额度、TCP 到期和独立浏览器定向验收已通过；004 已获“好，允许”的具体授权并执行，P07 受控任务文件与有界 ZIP 的 Windows 联合验收也通过；科学算法、原生目录输出和生产/跨平台能力仍未验收，见 [P07 单文件报告](docs/testing/p07-storage-report.md)、[联合验收与限制](docs/testing/p07-job-files-report.md)和[具体操作审阅](docs/testing/p07-migration-review.md)。两次 Codex 退出与内置测试页关闭存在直接时间关联，排查及绕行约定见 [恢复记录](docs/testing/p06-recovery-and-codex-exit.md)。
 
 公共界面入口：[P04 工作台试用报告](docs/testing/p04-workbench-report.md)（公共界面已审阅，学术优先分组已修订；P04 限定范围 verified，P05 账号/项目范围 verified）。试用启动方法见 [开发说明](docs/development.md)。
 

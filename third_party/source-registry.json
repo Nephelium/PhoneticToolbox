@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-09-09",
-  "total_records": 299,
+  "total_records": 300,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -6215,6 +6215,29 @@
         "scripts/verify_p07_extended.py"
       ],
       "distribution_status": "test-only external runtime; not a new project or global installation",
+      "acknowledgement_group": "software"
+    },
+    {
+      "id": "P07-PYTHON-ZIP",
+      "title": "Python zipfile standard library and ZIP API documentation",
+      "authors": "Python Software Foundation and Python contributors",
+      "kind": "dependency",
+      "modules": [
+        "P07"
+      ],
+      "actual_included_version": "CPython 3.11.14 standard library; 3.11 documentation branch reviewed 2026-09-09",
+      "license": "PSF-2.0 (existing CPython runtime)",
+      "urls": {
+        "documentation": "https://docs.python.org/3.11/library/zipfile.html",
+        "source": "https://github.com/python/cpython/blob/v3.11.14/Lib/zipfile.py"
+      },
+      "verification_date": "2026-09-09",
+      "relationship": "Uses existing standard-library ZIP parser and stream writer; project-owned size/path/ratio checks and quota/fencing adapters; no upstream code copied",
+      "used_at": [
+        "backend/src/ptb_worker/archives.py",
+        "backend/tests/test_archive_policy.py"
+      ],
+      "distribution_status": "Existing standard library, no new installation; only stored/deflate archives within documented limits supported",
       "acknowledgement_group": "software"
     }
   ]

@@ -141,3 +141,11 @@
 - 每账号额度固定 5,000,000,000 字节，未知长度分块逐步预留；全局磁盘安全余量还扣除所有未落盘预留。删除先标记不可用，成功 unlink 后才释放账目；失败继续计费并重试。文件名仅作显示，磁盘键仅接受服务端 UUID；私有根需已初始化标记，拒绝符号链接/reparse 路径。
 - 桌面原始文件不应用服务器 7 天策略。未接入受控 writer 的科学/外部工具任务继续拒绝，ZIP/结果/输入引用须经单独联合验证，不能把单文件闭环标为全部 P07 已通过。
 - 依据：[PostgreSQL advisory locks](https://www.postgresql.org/docs/17/explicit-locking.html)、[Python fsync](https://docs.python.org/3.11/library/os.html)、[Starlette streaming](https://starlette.dev/responses/)。实际建表与生成测试文件清理范围单独审阅。
+
+## ADR-020 P07 任务文件关联与受控归档
+- 2026-09-09，井井对 004 具体扩展回复“好，允许”。004 已在原专属测试库执行且保留已有行，未新增数据库或扩大文件清理范围。设计和验收步骤见 [联合计划](../plans/2026-09-09-p07-job-files.md)。
+- 新的 FilePipeline 组合原 Storage 与 PostgresJobStore，锁顺序固定为 OS 文件锁、577707 存储会话锁、577606 短事务锁；原 SQLite 桌面任务仍使用 P06 路径。ZIP 处理在独立 worker 中进行，不占用 API 请求计算，也不增加单页宿主。
+- 输入关系随任务提交一起入库；两个联合外键保证任务和资源同账号同项目。认领前与每次有界读写、结果提交都核对输入、代数、租约和取消；任务成功、结果可见、manifest 与事件同事务完成。残留字节在物理删除前保持计量，恢复不以超时直接清零。
+- storage_check 是确定性工程测试文件，不是科学分析。archive_zip 和 extract_zip 是纯内容归档，截止不超过最早输入期限；新生成的工程测试结果从成功提交起算 7 天。temporary 不提交为可下载结果。
+- 当前 ZIP 接受最多 16 条目、128 KiB 中央目录、8 层名称、180 字符名，支持 stored/deflate，拒绝 ZIP64、多卷、加密、链接、路径逃逸和超过 200 倍的展开比。先核对 EOCD 再打开解析器；每个展开块仍独立计量。ZIP 输出采用 stored 流式归档，所有头部、描述符和尾部都经过受控 writer。目录条目仅用于校验，文件名中的逻辑目录以“ · ”显示，不建立目录树；同显示名拒绝。
+- 这些限制是当前显式支持边界，不代表支持所有 ZIP 或原生工具目录写入；未经强制总字节限制的原生文件输出仍拒绝。来源登记 P07-PYTHON-ZIP，参考 [Python 3.11 ZIP 文档](https://docs.python.org/3.11/library/zipfile.html)。

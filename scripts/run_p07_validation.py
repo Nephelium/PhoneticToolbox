@@ -30,6 +30,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--approved-p07-schema-and-test-files', action='store_true')
     parser.add_argument('--apply-reviewed-schema', action='store_true')
+    parser.add_argument('--apply-approved-job-files-schema', action='store_true')
     args = parser.parse_args()
     if not args.approved_p07_schema_and_test_files:
         parser.error('Requires review of schema plus deletion of generated files in the marked P07 root')
@@ -62,8 +63,11 @@ def main():
                     before.add((table, json.dumps(row[0], sort_keys=True, default=str)))
         if args.apply_reviewed_schema:
             run([sys.executable, '-X', 'utf8', 'scripts/p07_database.py', 'apply', '--approved-p07-schema-and-test-files'], config)
+        if args.apply_approved_job_files_schema:
+            run([sys.executable, '-X', 'utf8', 'scripts/p07_job_files_database.py', 'apply', '--approved-p07-job-assets-schema'], config)
         run([sys.executable, '-X', 'utf8', 'scripts/verify_p07_storage.py', '--approved-p07-schema-and-test-files'], config)
         run([sys.executable, '-X', 'utf8', 'scripts/verify_p07_extended.py', '--approved-p07-schema-and-test-files'], config)
+        run([sys.executable, '-X', 'utf8', 'scripts/verify_p07_jobs.py', '--approved-p07-schema-and-test-files'], config)
         with psycopg.connect(config['dsn']) as conn:
             after = set()
             for table in ('ptb_accounts.users', 'ptb_accounts.sessions', 'ptb_accounts.projects', 'ptb_accounts.login_attempts',
@@ -76,9 +80,10 @@ def main():
             identity = (DATA/'postmaster.pid').read_text('utf-8').splitlines()
             assert Path(identity[1]).resolve() == DATA.resolve()
             run([pg_ctl, '-D', DATA, '-w', '-t', '30', '-m', 'fast', 'stop'])
-    report = {'scope': 'P07 initial single-file acceptance only; ZIP/jobs joint gates remain',
+    report = {'scope': 'P07 Windows controlled storage, file jobs and bounded ZIP joint acceptance',
               'existing_account_and_job_rows_preserved': len(before), 'postgres_stopped': True,
-              'schema_sha256': hashlib.sha256((ROOT/'backend/migrations/003_storage.sql').read_bytes()).hexdigest()}
+              'schema_sha256': hashlib.sha256((ROOT/'backend/migrations/003_storage.sql').read_bytes()).hexdigest(),
+              'job_file_schema_sha256': hashlib.sha256((ROOT/'backend/migrations/004_job_assets.sql').read_bytes()).hexdigest()}
     (OUT/'database-validation.json').write_text(json.dumps(report, indent=2)+'\n', encoding='utf-8')
     print(json.dumps(report))
 

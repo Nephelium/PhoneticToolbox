@@ -26,6 +26,8 @@ from ptb_api.quota import CHUNK_BYTES, QUOTA_BYTES, StorageError
 from ptb_api.storage import Storage
 from ptb_api.storage_models import UploadInput
 from ptb_worker.cleanup import run_cleanup
+from ptb_worker.store import PostgresJobStore
+from ptb_worker.files import FilePipeline
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT/'output/validation/p07'
@@ -71,6 +73,8 @@ def main():
             raise AssertionError('Expected '+code)
 
     server = None
+    worker = None
+    jobs = None
     server_thread = None
     cleanup_stop = threading.Event()
     cleanup_thread = None
@@ -103,7 +107,9 @@ def main():
         sock.bind(('127.0.0.1', 0))
         port = sock.getsockname()[1]
         origin = f'http://127.0.0.1:{port}'
-        app = create_app(account_store=accounts, storage=storage, auth_settings=AuthSettings(
+        jobs = PostgresJobStore(config['dsn'])
+        FilePipeline(jobs,storage)
+        app = create_app(account_store=accounts, storage=storage, job_store=jobs, auth_settings=AuthSettings(
             origin=origin, signing_key=secrets.token_urlsafe(48), allow_insecure_loopback=True))
         app.mount('/server', StaticFiles(directory=ROOT/'frontend/dist', html=True))
         async def test_peer(scope, receive, send):
@@ -227,9 +233,13 @@ def main():
         print('Real PG quota contention, TCP expiry, ten-account storage and cleanup checks passed.', flush=True)
 
         runtime = Path.home()/'.cache/codex-runtimes/codex-primary-runtime/dependencies/node'
+        worker = subprocess.Popen([sys.executable,'-X','utf8','-m','ptb_worker.cli'],stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,encoding='utf-8',creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+        worker.stdin.write(json.dumps({'kind':'postgres','dsn':config['dsn'],'storage_root':str(FILES)})+'\n');worker.stdin.flush()
+        assert json.loads(worker.stdout.readline())['ready']
         browser_input = dict(origin=origin, people=[people[8],people[9]],
             playwright=str(runtime/'node_modules/playwright'), browser='C:/Program Files/Google/Chrome/Application/chrome.exe',
-            output=str(ROOT/'output/playwright/p07'))
+            output=str(ROOT/'output/playwright/p07'), joint=True)
         result = subprocess.run([str(runtime/'bin/node.exe'), 'tests/e2e/p07-storage.cjs'], input=json.dumps(browser_input)+'\n',
             text=True, encoding='utf-8', capture_output=True, cwd=ROOT, timeout=90,
             creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
@@ -239,6 +249,12 @@ def main():
     finally:
         resume.set()
         cleanup_stop.set()
+        if worker is not None:
+            worker.stdin.close()
+            try: worker.wait(10)
+            except subprocess.TimeoutExpired:
+                worker.terminate();worker.wait(5)
+            worker.stdout.close();worker.stderr.close()
         if cleanup_thread is not None:
             cleanup_thread.join(10)
         if server is not None:
@@ -248,14 +264,17 @@ def main():
             assert not server_thread.is_alive(), 'Owned TCP host did not stop'
         # Only the ten new test accounts and their registered UUID resources.
         for person in people:
+            if jobs is not None:
+                for job in jobs.list(person['owner'],person['project']):
+                    jobs.cancel(person['owner'],job['id'])
             for asset in storage.list(person['owner'], person['project']):
                 assert storage._path(asset['id']).resolve().parent == FILES.resolve()
                 assert storage.delete(person['owner'], asset['id'])['state'] == 'deleted'
             usage = storage.usage(person['owner'])
             assert usage['used_bytes'] == usage['reserved_bytes'] == 0
-    report = dict(scope='Windows PG and controlled single-file storage acceptance', checks=checks,
+    report = dict(scope='Windows PG storage and real browser file-job integration', checks=checks,
         owned_host_stopped=True, generated_files_removed=True,
-        remaining=['ZIP and result generation with P06 fencing/input references','hard power-cut and cross-platform validation','sustained production load'])
+        remaining=['hard power-cut and cross-platform validation','sustained production load','uncontrolled native-tool output directories unsupported'])
     (OUT/'extended-validation.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(report), flush=True)
 

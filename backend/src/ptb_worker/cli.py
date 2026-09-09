@@ -18,6 +18,12 @@ def main():
     options={'max_running':config.get('max_running',2),'lease_seconds':config.get('lease_seconds',10)}
     store=PostgresJobStore(config['dsn'],**options) if config['kind']=='postgres' else SQLiteJobStore(config['path'],**options)
     store.check_schema()
+    if config.get('storage_root'):
+        from ptb_api.storage import Storage
+        from .files import FilePipeline
+        storage=Storage(config['dsn'],config['storage_root'])
+        FilePipeline(store,storage)
+        storage.recover()
     stop=threading.Event()
     def owner_closed():sys.stdin.readline();stop.set()
     threading.Thread(target=owner_closed,daemon=True).start()

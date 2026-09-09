@@ -165,8 +165,8 @@ def main():
         for asset_id in created:
             store.delete(owner, asset_id)
     report = {'checks': checks, 'scope': 'Executed initial PG and disk cases; extended-validation.json covers contention, TCP and browser',
-              'remaining_joint_gates': ['hard power-loss durability', 'ZIP and multi-file outputs',
-                                       'P06 file fencing and active input references', 'sustained production load']}
+              'separate_reports': ['jobs-validation.json','extended-validation.json'],
+              'remaining_limits': ['hard power-loss durability','sustained production load']}
     (ROOT/'output/validation/p07'/f'storage-{suffix}.json').write_text(json.dumps(report, indent=2)+'\n', encoding='utf-8')
     print(json.dumps(report))
 

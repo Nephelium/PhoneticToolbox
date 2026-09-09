@@ -2,7 +2,7 @@
 import hmac
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from .job_models import JobInput, JobView, JobList, JobEvents, RetryInput
+from .job_models import JobInput, FileJobInput, JobView, JobList, JobEvents, RetryInput
 from ptb_worker.store import JobError
 
 
@@ -25,7 +25,7 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
         return owner
 
     @router.post('',response_model=JobView,status_code=201,operation_id='create_job')
-    def create(body: JobInput, owner=Depends(mutation)):
+    def create(body: JobInput | FileJobInput, owner=Depends(mutation)):
         return store.submit(owner['id'],body)
 
     @router.get('',response_model=JobList,operation_id='list_jobs')
