@@ -1,0 +1,213 @@
+{
+  "no_cross_platform_claim": true,
+  "not_installed_or_locked_this_turn": true,
+  "platform": "win32",
+  "python_version": "3.11.14",
+  "reference_packages": {
+    "et-xmlfile": {
+      "active_requires": [],
+      "home_page": "https://foss.heptapod.net/openpyxl/et_xmlfile",
+      "license_expression": null,
+      "matches_p03": true,
+      "p03_version": "2.0.0",
+      "project_urls": [
+        "Documentation, https://openpyxl.pages.heptapod.net/et_xmlfile/",
+        "Source, https://foss.heptapod.net/openpyxl/et_xmlfile",
+        "Tracker, https://foss.heptapod.net/openpyxl/et_xmfile/-/issues"
+      ],
+      "version": "2.0.0",
+      "license_metadata_scope": "installed distribution metadata only; bundled native license audit remains separate",
+      "license_text_present": true,
+      "license_text_sha256": "e5dcffe836b6ec8a58e492419b550e65fb8cbdc308503979e5dacb33ac7ea3b7"
+    },
+    "numpy": {
+      "active_requires": [],
+      "home_page": null,
+      "license_expression": null,
+      "matches_p03": true,
+      "p03_version": "2.2.6",
+      "project_urls": [
+        "homepage, https://numpy.org",
+        "documentation, https://numpy.org/doc/",
+        "source, https://github.com/numpy/numpy",
+        "download, https://pypi.org/project/numpy/#files",
+        "tracker, https://github.com/numpy/numpy/issues",
+        "release notes, https://numpy.org/doc/stable/release"
+      ],
+      "version": "2.2.6",
+      "license_metadata_scope": "installed distribution metadata only; bundled native license audit remains separate",
+      "license_text_present": true,
+      "license_text_sha256": "c2c756c00eb6289344b0d93f9c2802d9c0dc70957ae7af4294b9626499b630d9"
+    },
+    "openpyxl": {
+      "active_requires": [
+        "et-xmlfile"
+      ],
+      "home_page": "https://openpyxl.readthedocs.io",
+      "license_expression": null,
+      "matches_p03": true,
+      "p03_version": "3.1.5",
+      "project_urls": [
+        "Documentation, https://openpyxl.readthedocs.io/en/stable/",
+        "Source, https://foss.heptapod.net/openpyxl/openpyxl",
+        "Tracker, https://foss.heptapod.net/openpyxl/openpyxl/-/issues"
+      ],
+      "version": "3.1.5",
+      "license_metadata_scope": "installed distribution metadata only; bundled native license audit remains separate",
+      "license_text_present": true,
+      "license_text_sha256": "e5dcffe836b6ec8a58e492419b550e65fb8cbdc308503979e5dacb33ac7ea3b7"
+    },
+    "pandas": {
+      "active_requires": [
+        "numpy",
+        "python-dateutil",
+        "pytz",
+        "tzdata"
+      ],
+      "home_page": null,
+      "license_expression": null,
+      "matches_p03": true,
+      "p03_version": "2.3.3",
+      "project_urls": [
+        "homepage, https://pandas.pydata.org",
+        "documentation, https://pandas.pydata.org/docs/",
+        "repository, https://github.com/pandas-dev/pandas"
+      ],
+      "version": "2.3.3",
+      "license_metadata_scope": "installed distribution metadata only; bundled native license audit remains separate",
+      "license_text_present": true,
+      "license_text_sha256": "6409fc04490d2a6779748b1ca3b2589f4c1c3e8fe0dc216d70a5612c4ec56ef4"
+    },
+    "praat-parselmouth": {
+      "active_requires": [
+        "numpy"
+      ],
+      "home_page": "https://github.com/YannickJadoul/Parselmouth",
+      "license_expression": null,
+      "matches_p03": true,
+      "p03_version": "0.4.7",
+      "project_urls": [
+        "Bug Tracker, https://github.com/YannickJadoul/Parselmouth/issues",
+        "Documentation, https://parselmouth.readthedocs.io/",
+        "Source Code, https://github.com/YannickJadoul/Parselmouth"
+      ],
+      "version": "0.4.7",
+      "license_metadata_scope": "installed distribution metadata only; bundled native license audit remains separate",
+      "license_text_present": true,
+      "license_text_sha256": "1cf89a6524b8056375ede856dfc7f047b2d23aa1e5acab11dc918b2c592fe666"
+    },
+    "python-dateutil": {
+      "active_requires": [
+        "six"
+      ],
+      "home_page": "https://github.com/dateutil/dateutil",
+      "license_expression": null,
+      "matches_p03": true,
+      "p03_version": "2.9.0.post0",
+      "project_urls": [
+        "Documentation, https://dateutil.readthedocs.io/en/stable/",
+        "Source, https://github.com/dateutil/dateutil"
+      ],
+      "version": "2.9.0.post0",
+      "license_metadata_scope": "installed distribution metadata only; bundled native license audit remains separate",
+      "license_text_present": true,
+      "license_text_sha256": "199628ddb098f90709bb2dc43f816a5a40fe31690de0e25d0f4d6455fe6bc609"
+    },
+    "pytz": {
+      "active_requires": [],
+      "home_page": "http://pythonhosted.org/pytz",
+      "license_expression": null,
+      "matches_p03": true,
+      "p03_version": "2025.2",
+      "project_urls": [],
+      "version": "2025.2",
+      "license_metadata_scope": "installed distribution metadata only; bundled native license audit remains separate",
+      "license_text_present": true,
+      "license_text_sha256": "e5dcffe836b6ec8a58e492419b550e65fb8cbdc308503979e5dacb33ac7ea3b7"
+    },
+    "scipy": {
+      "active_requires": [
+        "numpy"
+      ],
+      "home_page": null,
+      "license_expression": null,
+      "matches_p03": true,
+      "p03_version": "1.16.3",
+      "project_urls": [
+        "homepage, https://scipy.org/",
+        "documentation, https://docs.scipy.org/doc/scipy/",
+        "source, https://github.com/scipy/scipy",
+        "download, https://github.com/scipy/scipy/releases",
+        "tracker, https://github.com/scipy/scipy/issues"
+      ],
+      "version": "1.16.3",
+      "license_metadata_scope": "installed distribution metadata only; bundled native license audit remains separate",
+      "license_text_present": true,
+      "license_text_sha256": "d4e4b4bae85b238878af9bcb243801597cd32cc8bae2cfab17ae360d881bac45"
+    },
+    "six": {
+      "active_requires": [],
+      "home_page": "https://github.com/benjaminp/six",
+      "license_expression": null,
+      "matches_p03": true,
+      "p03_version": "1.17.0",
+      "project_urls": [],
+      "version": "1.17.0",
+      "license_metadata_scope": "installed distribution metadata only; bundled native license audit remains separate",
+      "license_text_present": true,
+      "license_text_sha256": "e5dcffe836b6ec8a58e492419b550e65fb8cbdc308503979e5dacb33ac7ea3b7"
+    },
+    "tzdata": {
+      "active_requires": [],
+      "home_page": "https://github.com/python/tzdata",
+      "license_expression": null,
+      "matches_p03": true,
+      "p03_version": "2025.2",
+      "project_urls": [
+        "Bug Reports, https://github.com/python/tzdata/issues",
+        "Source, https://github.com/python/tzdata",
+        "Documentation, https://tzdata.readthedocs.io"
+      ],
+      "version": "2025.2",
+      "license_metadata_scope": "installed distribution metadata only; bundled native license audit remains separate",
+      "license_text_present": true,
+      "license_text_sha256": "2af71558e438db0b73a20beab92dc278a94e1bbe974c00c1a33e3ab62d53a608"
+    },
+    "xlsxwriter": null
+  },
+  "v3_versions": {
+    "et-xmlfile": null,
+    "numpy": null,
+    "openpyxl": null,
+    "pandas": null,
+    "praat-parselmouth": null,
+    "python-dateutil": null,
+    "pytz": null,
+    "scipy": null,
+    "six": null,
+    "tzdata": "2026.3",
+    "xlsxwriter": null
+  },
+  "wheel_candidates": [
+    {
+      "cache_scope": 0,
+      "filename": "numpy-2.2.6-cp311-cp311-win_amd64.whl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "valid_wheel_zip": false
+    },
+    {
+      "cache_scope": 0,
+      "filename": "numpy-2.2.6-cp311-cp311-win_amd64.whl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "valid_wheel_zip": false
+    }
+  ],
+  "wheel_search_scope": [
+    "project .venv",
+    "pip wheels cache",
+    "uv wheels-v5 cache"
+  ],
+  "capture_scope": "M01-A Windows read-only installed metadata audit; optional extras not selected"
+}

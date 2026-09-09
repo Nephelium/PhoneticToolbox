@@ -245,8 +245,8 @@
       "title": "普通研究模块逐页迁移",
       "dependencies": "P03,P04,P06,P07",
       "files": "docs/plans/modules/M01-parameter-estimation.md 等模块计划；packages/phonetic_core/src/phonetic_core/；frontend/src/modules/",
-      "status": "planned",
-      "note": "M01迁移前审阅完成：30源文件与v2一致，80参数/14设置与细项验收已核对；文件级实施计划已形成，算法、页面和双端任务仍planned。下一小步M01-A补独立基准与科学环境审计。",
+      "status": "in_progress",
+      "note": "M01-A verified（限定Windows旧实现/合成样例/离屏控件逻辑基准）：28例各两次独立捕获，23项回归与冻结保护测试通过，科学依赖版本审计完成；未安装新依赖、未迁移v3算法/UI，下一项M01-B。",
       "steps": [
         "按 M01/M02/M03/M04/M06/M07/M08/M09/M13/M14 顺序逐个执行对应文件级计划",
         "先原样搬可用算法，再拆外层 I/O；不把算法重写和 UI 换肤混成一个提交",
@@ -259,7 +259,8 @@
       "execution_evidence": [
         "docs/plans/2026-09-09-m01-implementation.md",
         "docs/modules/evidence/M01-source-map.md",
-        "docs/testing/m01-planning-report.md"
+        "docs/testing/m01-planning-report.md",
+        "docs/testing/m01-baseline-report.md"
       ]
     },
     {
@@ -429,14 +430,15 @@
         "P06",
         "P07"
       ],
-      "status": "planned",
+      "status": "in_progress",
       "plan": "modules/M01-parameter-estimation.md",
       "execution_evidence": [
         "docs/plans/2026-09-09-m01-implementation.md",
         "docs/modules/evidence/M01-source-map.md",
-        "docs/testing/m01-planning-report.md"
+        "docs/testing/m01-planning-report.md",
+        "docs/testing/m01-baseline-report.md"
       ],
-      "note": "M01迁移前审阅完成：30源文件与v2一致，80参数/14设置与细项验收已核对；文件级实施计划已形成，算法、页面和双端任务仍planned。下一小步M01-A补独立基准与科学环境审计。"
+      "note": "M01-A verified（限定Windows旧实现/合成样例/离屏控件逻辑基准）：28例各两次独立捕获，23项回归与冻结保护测试通过，科学依赖版本审计完成；未安装新依赖、未迁移v3算法/UI，下一项M01-B。"
     },
     {
       "id": "M02",

@@ -166,9 +166,9 @@
 
 ### P08 · 普通研究模块逐页迁移
 
-**依赖：** P03,P04,P06,P07。**状态：** planned。
+**依赖：** P03,P04,P06,P07。**状态：** in_progress（M01-A基准完成，普通模块算法/UI尚未迁移）。
 
-2026-09-09：M01迁移前审阅和[文件级实施计划](2026-09-09-m01-implementation.md)已完成；30源文件/80参数/14设置已核对，见[本轮报告](../testing/m01-planning-report.md)。实现尚未开始，下一项为M01-A独立基准补齐与科学环境审计；不把计划完成计作模块verified。
+2026-09-09：M01迁移前审阅和[文件级实施计划](2026-09-09-m01-implementation.md)已完成；30源文件/80参数/14设置已核对，见[本轮报告](../testing/m01-planning-report.md)。[M01-A独立基准](../testing/m01-baseline-report.md)已完成：28例双轮捕获与23项测试通过；下一项为M01-B核心迁移，不把基准验收计作模块verified。
 
 **目标文件：** docs/plans/modules/M01-parameter-estimation.md 等模块计划；packages/phonetic_core/src/phonetic_core/；frontend/src/modules/。
 

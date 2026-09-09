@@ -1068,7 +1068,7 @@
     "Shimmer_APQ5",
     "Shimmer_APQ11"
   ],
-  "gui_column_count_status": "77 inferred from existing 79-column fixture and source filter; independent GUI-config capture still required",
+  "gui_column_count_status": "M01-A independently captured GUI explicit all=77 columns, service None=79; v3 algorithm not implemented",
   "sources": [
     {
       "path": "phonetic_toolbox/gui/widgets/parameter_estimation_widget.py",
@@ -2222,5 +2222,6 @@
       "matches_current_v2": true,
       "symbols": []
     }
-  ]
+  ],
+  "m01_a_baseline_report": "docs/testing/m01-baseline-report.md"
 }

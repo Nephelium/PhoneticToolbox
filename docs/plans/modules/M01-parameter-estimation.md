@@ -1,8 +1,8 @@
 # M01 · 参数估计迁移计划
 
-状态：planned，未开始实现。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
+状态：in_progress；M01-A独立基准已完成限定验收，科学核心/完整页面尚未迁移。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
-2026-09-09 已完成迁移前源码核对，实际实现仍 planned。执行细节以 [文件级实施计划](../2026-09-09-m01-implementation.md) 为准；[源码对照](../../modules/evidence/M01-source-map.md)、[参数/设置清单](../../modules/evidence/M01-parameter-settings.json)、[30项验收表](../../modules/evidence/M01-acceptance.csv) 和 [本轮报告](../../testing/m01-planning-report.md) 已补齐。下列原功能规格继续有效；文件级计划修订了尚未存在的 E2E 命令和持久批次接入安排。
+2026-09-09 已完成迁移前源码核对和 [M01-A独立基准](../../testing/m01-baseline-report.md)，下一项为M01-B科学核心。执行细节以 [文件级实施计划](../2026-09-09-m01-implementation.md) 为准；[源码对照](../../modules/evidence/M01-source-map.md)、[参数/设置清单](../../modules/evidence/M01-parameter-settings.json)、[30项验收表](../../modules/evidence/M01-acceptance.csv) 和 [本轮报告](../../testing/m01-planning-report.md) 已补齐。下列原功能规格继续有效；文件级计划修订了尚未存在的 E2E 命令和持久批次接入安排。
 
 ## 现有代码与目标文件
 现有路径均已确认存在；目录内逐函数对应由实施第一步记录，避免把旧类名机械套给新实现。

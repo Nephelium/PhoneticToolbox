@@ -12,11 +12,11 @@
 
 ## 0. 本轮范围与状态
 
-2026-09-09，井井在“下一步先形成 M01 实施计划与功能对照表”的说明后回复“好，继续”。本次完成**迁移前源码审阅、文件级计划和验收设计**。M01/P08 实现状态仍 **planned**，不以文档收口冒充算法/UI已迁移。
+2026-09-09，井井在“下一步先形成 M01 实施计划与功能对照表”的说明后回复“好，继续”。计划最初交付完成**迁移前源码审阅、文件级计划和验收设计**，当时M01/P08为planned。后续M01-A已实施（见下段），但算法/UI仍未迁移。
 
 本轮交付：[源码对照](../modules/evidence/M01-source-map.md)、[80参数/14设置及30文件哈希](../modules/evidence/M01-parameter-settings.json)、[细项验收表](../modules/evidence/M01-acceptance.csv)。既有 [M01模块计划](modules/M01-parameter-estimation.md) 保留为功能规格，本计划补足文件和执行顺序。
 
-下一项可独立实施的是 **M01-A：补齐旧行为基准与科学环境审计**。它不改算法/产品页面，不写现存研究数据，不建新数据库表。M01-C/F 涉及原生输出与持久批次的具体设计门；只在可审阅方案具备后进入对应实现。任何实际数据库DDL、用户数据迁移、全局环境变更、push或发布仍按根规则单独授权，不能由此计划推定。
+M01-A 已按井井后续“好，请继续”实施并通过限定基准验收，见 [M01-A报告](../testing/m01-baseline-report.md)。M01/P08 当前 in_progress，下一项为 M01-B 科学核心与数值对照。原规划的首个子任务为 **M01-A：补齐旧行为基准与科学环境审计**。它不改算法/产品页面，不写现存研究数据，不建新数据库表。M01-C/F 涉及原生输出与持久批次的具体设计门；只在可审阅方案具备后进入对应实现。任何实际数据库DDL、用户数据迁移、全局环境变更、push或发布仍按根规则单独授权，不能由此计划推定。
 
 本轮未引入新依赖或算法源码。来源先沿用既有登记，未来实际迁入时更新；不以读过论文或存在许可证文件替代逐文件来源审查。
 
@@ -60,7 +60,7 @@ P04 的 `FileProvider.load(File)` 仅能加载WAV；`HostCapabilities.jobs=false
 
 每个任务按“独立失败用例 → 最小实现 → 定向验证 → diff/来源核对 → 明确文件清单本地提交”执行。一次只推进一个可审阅子任务；下面的新文件/命令均为**拟建**，本轮不声称已存在或通过。遇到真实数值差异先定位，不扩大容差、不重写golden。
 
-### M01-A · 基准补齐与环境审计（下一小步）
+### M01-A · 基准补齐与环境审计（已完成限定验收）
 
 **文件：** 新建 `scripts/capture_m01_baseline.py`、`scripts/m01_baseline_worker.py`、`tests/fixtures/m01/manifest.json`、`tests/parity/test_m01_capture_contract.py`；复用不覆盖 `scripts/baseline_support.py`、P03 fixtures；报告 `docs/testing/m01-baseline-report.md`。
 
@@ -70,7 +70,7 @@ P04 的 `FileProvider.load(File)` 仅能加载WAV；`HostCapabilities.jobs=false
 4. 捕获同一小样本的服务None/GUI80键/子集配置；合成TextGrid层、解析唇形时轴和各设置单变量对照；真实回退路径通过可控后端失效触发，分别记native/python/IRAPT/Praat。不同配置各两次进程重复，检查实际调用而非只看标签。
 5. 补导出回读：列重命名、顺序、NaN、text_标签、SQLite索引、空表失败；独立保存合成黄金结果，禁止覆盖P03现有golden。
 6. 生成项目内科学依赖**审计候选**：原producer版本、已存在wheel/来源/许可、v3缺失项和平台限制；此步先报告，不安装或改lock。只有用于数字迁移的具体环境方案确定后进入B。
-7. 执行 `& '.venv/v3-dev/Scripts/python.exe' -X utf8 scripts/capture_m01_baseline.py`（拟建入口默认不覆盖已冻结文件、不操作数据库）；`& '.venv/v3-dev/Scripts/python.exe' -X utf8 -m pytest -c tests/pytest.ini tests/parity/test_m01_capture_contract.py -q`。
+7. 执行 `& '.venv/v3-dev/Scripts/python.exe' -X utf8 scripts/capture_m01_baseline.py`（已实现入口默认不覆盖已冻结文件；不操作现存/服务数据库，仅在新测试目录导出合成SQLite结果）；`& '.venv/v3-dev/Scripts/python.exe' -X utf8 -m pytest -c tests/pytest.ini tests/parity/test_m01_capture_contract.py -q`。
 
 **退出条件：** 三条参数选择路径的真实列、四项唇形合成时间行为、14设置请求/实际传递及独立后端证据可定位；专门确认的真实持续元音/唇形缺口仍明确标出，不能伪造自然语料标签。
 
@@ -172,4 +172,4 @@ git diff --check
 
 另用只读AST核对80键/14控件、30文件hash和验收ID覆盖；`desktop.experiments.capture_context.capture()`比较v2保存性，只向 `output/validation/m01/`写本轮证据，不调用会覆盖P01输出的旧CLI入口。
 
-实际结果记在 [本轮审阅报告](../testing/m01-planning-report.md)。上述未来脚本不纳入本轮已运行清单。下一次从M01-A开始；M02及M03等其他模块保持planned。
+实际结果记在 [本轮审阅报告](../testing/m01-planning-report.md)。上述未来脚本不纳入本轮已运行清单。M01-A完成后从M01-B开始；M02及M03等其他模块保持planned。
