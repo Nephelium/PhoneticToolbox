@@ -1,0 +1,499 @@
+{
+  "platform": "Windows x86_64",
+  "python": "3.11.14",
+  "runtime_package_count": 8,
+  "packages": [
+    {
+      "name": "build",
+      "version": "1.6.0",
+      "scope": "test-build-only",
+      "active_requires": [
+        "packaging >= 24.0",
+        "pyproject_hooks",
+        "colorama; os_name == \"nt\""
+      ],
+      "license": "MIT",
+      "license_files": [
+        {
+          "path": "build-1.6.0.dist-info/licenses/LICENSE",
+          "sha256": "aaf9a29ca5907971ccf07de025375db34539a8d5eeebce20b46099805722106f"
+        }
+      ],
+      "project_urls": [
+        "changelog, https://build.pypa.io/en/stable/changelog.html",
+        "homepage, https://build.pypa.io",
+        "issues, https://github.com/pypa/build/issues",
+        "source, https://github.com/pypa/build"
+      ],
+      "source_id": "M01-PY-BUILD"
+    },
+    {
+      "name": "colorama",
+      "version": "0.4.6",
+      "scope": "test-build-only",
+      "active_requires": [],
+      "license": "unknown",
+      "license_files": [
+        {
+          "path": "colorama-0.4.6.dist-info/licenses/LICENSE.txt",
+          "sha256": "cac35c02686e5d04a5a7140bfb3b36e73aed496656e891102e428886d7930318"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://github.com/tartley/colorama"
+      ],
+      "source_id": "M01-PY-COLORAMA"
+    },
+    {
+      "name": "iniconfig",
+      "version": "2.3.0",
+      "scope": "test-build-only",
+      "active_requires": [],
+      "license": "MIT",
+      "license_files": [
+        {
+          "path": "iniconfig-2.3.0.dist-info/licenses/LICENSE",
+          "sha256": "3409fa91f7ace557894632676656e32264fe5ef7581535725dc9a23774551bd4"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://github.com/pytest-dev/iniconfig"
+      ],
+      "source_id": "M01-PY-INICONFIG"
+    },
+    {
+      "name": "numpy",
+      "version": "2.2.6",
+      "scope": "science-runtime",
+      "active_requires": [],
+      "license": "See installed distribution license texts; full review pending",
+      "license_files": [
+        {
+          "path": "numpy-2.2.6.dist-info/LICENSE.txt",
+          "sha256": "14256cc3a2c9d32ac284da96b937feb44f72dd90bee2317ac3020166846ad99d"
+        },
+        {
+          "path": "numpy/_core/include/numpy/random/LICENSE.txt",
+          "sha256": "d544761558b510866c21f7e8a2d5716fca76e0b98117e3b6b86314db7244d150"
+        },
+        {
+          "path": "numpy/ma/LICENSE",
+          "sha256": "d78dbb208b80d92b4d333e41a4baae50d12444f46e53199fa7726a91de6e2da7"
+        },
+        {
+          "path": "numpy/random/LICENSE.md",
+          "sha256": "b4bc2f4fa1c95778f1ed3dd8f14706bece399475b978f9f34b5d3cd72521b48a"
+        }
+      ],
+      "project_urls": [
+        "homepage, https://numpy.org",
+        "documentation, https://numpy.org/doc/",
+        "source, https://github.com/numpy/numpy",
+        "download, https://pypi.org/project/numpy/#files",
+        "tracker, https://github.com/numpy/numpy/issues",
+        "release notes, https://numpy.org/doc/stable/release"
+      ],
+      "source_id": "M01-PY-NUMPY",
+      "reference_version": "2.2.6"
+    },
+    {
+      "name": "packaging",
+      "version": "26.3",
+      "scope": "test-build-only",
+      "active_requires": [],
+      "license": "Apache-2.0 OR BSD-2-Clause",
+      "license_files": [
+        {
+          "path": "packaging-26.3.dist-info/licenses/LICENSE",
+          "sha256": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48"
+        },
+        {
+          "path": "packaging-26.3.dist-info/licenses/LICENSE.APACHE",
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+        },
+        {
+          "path": "packaging-26.3.dist-info/licenses/LICENSE.BSD",
+          "sha256": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5"
+        },
+        {
+          "path": "packaging/licenses/__init__.py",
+          "sha256": "590d12eee73ddbec53b4e9ee5bfc64d9cb3aacb4940e8ebcba260757ce56740b"
+        },
+        {
+          "path": "packaging/licenses/_spdx.py",
+          "sha256": "596ec35e2ca0ebcba9fd8343ff0a51625af548786257815f24b41f7e08613314"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://packaging.pypa.io/",
+        "Source, https://github.com/pypa/packaging"
+      ],
+      "source_id": "M01-PY-PACKAGING"
+    },
+    {
+      "name": "pandas",
+      "version": "2.3.3",
+      "scope": "science-runtime",
+      "active_requires": [
+        "numpy>=1.23.2; python_version == \"3.11\"",
+        "python-dateutil>=2.8.2",
+        "pytz>=2020.1",
+        "tzdata>=2022.7"
+      ],
+      "license": "See installed distribution license texts; full review pending",
+      "license_files": [
+        {
+          "path": "pandas-2.3.3.dist-info/LICENSE",
+          "sha256": "533eb6d0b98e5be3ddd12dce97be35dd11282f5c47cdf8d08c81756fd5d70a26"
+        }
+      ],
+      "project_urls": [
+        "homepage, https://pandas.pydata.org",
+        "documentation, https://pandas.pydata.org/docs/",
+        "repository, https://github.com/pandas-dev/pandas"
+      ],
+      "source_id": "M01-PY-PANDAS",
+      "reference_version": "2.3.3"
+    },
+    {
+      "name": "pluggy",
+      "version": "1.6.0",
+      "scope": "test-build-only",
+      "active_requires": [],
+      "license": "MIT",
+      "license_files": [
+        {
+          "path": "pluggy-1.6.0.dist-info/licenses/LICENSE",
+          "sha256": "d6b65e6c213a5d0b577911d34d6e5949b9f59d76c238c5071a2f3fc16cfb2606"
+        }
+      ],
+      "project_urls": [],
+      "source_id": "M01-PY-PLUGGY"
+    },
+    {
+      "name": "praat-parselmouth",
+      "version": "0.4.7",
+      "scope": "science-runtime",
+      "active_requires": [
+        "numpy>=1.7.0"
+      ],
+      "license": "GPLv3",
+      "license_files": [
+        {
+          "path": "praat_parselmouth-0.4.7.dist-info/licenses/LICENSE",
+          "sha256": "0b383d5a63da644f628d99c33976ea6487ed89aaa59f0b3257992deac1171e6b"
+        }
+      ],
+      "project_urls": [
+        "Bug Tracker, https://github.com/YannickJadoul/Parselmouth/issues",
+        "Documentation, https://parselmouth.readthedocs.io/",
+        "Source Code, https://github.com/YannickJadoul/Parselmouth"
+      ],
+      "source_id": "M01-PY-PRAAT-PARSELMOUTH",
+      "reference_version": "0.4.7"
+    },
+    {
+      "name": "Pygments",
+      "version": "2.21.0",
+      "scope": "test-build-only",
+      "active_requires": [],
+      "license": "BSD-2-Clause",
+      "license_files": [
+        {
+          "path": "pygments-2.21.0.dist-info/licenses/AUTHORS",
+          "sha256": "71a83872ad82f57be692cf827e048e2cd51d45169cfa1ea3f28706d97a872c0f"
+        },
+        {
+          "path": "pygments-2.21.0.dist-info/licenses/LICENSE",
+          "sha256": "a9d66f1d526df02e29dce73436d34e56e8632f46c275bbdffc70569e882f9f17"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://pygments.org",
+        "Documentation, https://pygments.org/docs",
+        "Source, https://github.com/pygments/pygments",
+        "Bug Tracker, https://github.com/pygments/pygments/issues",
+        "Changelog, https://github.com/pygments/pygments/blob/master/CHANGES"
+      ],
+      "source_id": "M01-PY-PYGMENTS"
+    },
+    {
+      "name": "pyproject_hooks",
+      "version": "1.2.0",
+      "scope": "test-build-only",
+      "active_requires": [],
+      "license": "unknown",
+      "license_files": [
+        {
+          "path": "pyproject_hooks-1.2.0.dist-info/LICENSE",
+          "sha256": "1b22b049b5267d6dfc23a67bf4a84d8ec04b9fdfb1a51d360e42b4342c8b4154"
+        }
+      ],
+      "project_urls": [
+        "Changelog, https://pyproject-hooks.readthedocs.io/en/latest/changelog.html",
+        "Documentation, https://pyproject-hooks.readthedocs.io/",
+        "Source, https://github.com/pypa/pyproject-hooks"
+      ],
+      "source_id": "M01-PY-PYPROJECT-HOOKS"
+    },
+    {
+      "name": "pytest",
+      "version": "9.1.1",
+      "scope": "test-build-only",
+      "active_requires": [
+        "colorama>=0.4; sys_platform == \"win32\"",
+        "iniconfig>=1.0.1",
+        "packaging>=22",
+        "pluggy<2,>=1.5",
+        "pygments>=2.7.2"
+      ],
+      "license": "MIT",
+      "license_files": [
+        {
+          "path": "pytest-9.1.1.dist-info/licenses/LICENSE",
+          "sha256": "ca836a5f9ecca3b2f350230faa20a48fb8b145653b5568d784862df864706b9b"
+        }
+      ],
+      "project_urls": [
+        "Changelog, https://docs.pytest.org/en/stable/changelog.html",
+        "Contact, https://docs.pytest.org/en/stable/contact.html",
+        "Funding, https://docs.pytest.org/en/stable/sponsor.html",
+        "Homepage, https://docs.pytest.org/en/latest/",
+        "Source, https://github.com/pytest-dev/pytest",
+        "Tracker, https://github.com/pytest-dev/pytest/issues"
+      ],
+      "source_id": "M01-PY-PYTEST"
+    },
+    {
+      "name": "python-dateutil",
+      "version": "2.9.0.post0",
+      "scope": "science-runtime",
+      "active_requires": [
+        "six >=1.5"
+      ],
+      "license": "Dual License",
+      "license_files": [
+        {
+          "path": "python_dateutil-2.9.0.post0.dist-info/LICENSE",
+          "sha256": "ba00f51a0d92823b5a1cde27d8b5b9d2321e67ed8da9bc163eff96d5e17e577e"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://dateutil.readthedocs.io/en/stable/",
+        "Source, https://github.com/dateutil/dateutil"
+      ],
+      "source_id": "M01-PY-PYTHON-DATEUTIL",
+      "reference_version": "2.9.0.post0"
+    },
+    {
+      "name": "pytz",
+      "version": "2025.2",
+      "scope": "science-runtime",
+      "active_requires": [],
+      "license": "MIT",
+      "license_files": [
+        {
+          "path": "pytz-2025.2.dist-info/LICENSE.txt",
+          "sha256": "be8b1a37ebe26c592a90f6c0eb33103a7f383ce2f4d7498c0af9a526990a07b8"
+        }
+      ],
+      "project_urls": [],
+      "source_id": "M01-PY-PYTZ",
+      "reference_version": "2025.2"
+    },
+    {
+      "name": "scipy",
+      "version": "1.16.3",
+      "scope": "science-runtime",
+      "active_requires": [
+        "numpy<2.6,>=1.25.2"
+      ],
+      "license": "See installed distribution license texts; full review pending",
+      "license_files": [
+        {
+          "path": "scipy-1.16.3.dist-info/LICENSE.txt",
+          "sha256": "564d63dbef2ef3eb1dec94908966d3edf5f11c487ee2cf2baf8bf3faef01bdd9"
+        },
+        {
+          "path": "scipy/_lib/_uarray/LICENSE",
+          "sha256": "e4c4acc31e8287066d7c995d26e3ef902ca1977ee187b260b11c278366503811"
+        },
+        {
+          "path": "scipy/fft/_pocketfft/LICENSE.md",
+          "sha256": "c04661685cff9d8035fe1c4c3ab357e7f7633cafc06a73e9d90c3c5fede8a86a"
+        },
+        {
+          "path": "scipy/sparse/linalg/_eigen/arpack/COPYING",
+          "sha256": "fcb3c6c7de1460cf7d0863c3c5996e518eb8015a2eced36911f3da178440b3df"
+        },
+        {
+          "path": "scipy/spatial/qhull_src/COPYING_QHULL.txt",
+          "sha256": "2a6ebb495e26dd5f88cbc40c593733da6edb27b64936f70409cd5a1acafb1c32"
+        }
+      ],
+      "project_urls": [
+        "homepage, https://scipy.org/",
+        "documentation, https://docs.scipy.org/doc/scipy/",
+        "source, https://github.com/scipy/scipy",
+        "download, https://github.com/scipy/scipy/releases",
+        "tracker, https://github.com/scipy/scipy/issues"
+      ],
+      "source_id": "M01-PY-SCIPY",
+      "reference_version": "1.16.3"
+    },
+    {
+      "name": "setuptools",
+      "version": "84.0.0",
+      "scope": "test-build-only",
+      "active_requires": [],
+      "license": "MIT",
+      "license_files": [
+        {
+          "path": "setuptools-84.0.0.dist-info/licenses/LICENSE",
+          "sha256": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741"
+        },
+        {
+          "path": "setuptools/_vendor/autocommand-2.2.2.dist-info/LICENSE",
+          "sha256": "ade78d04982d69972d444a8e14a94f87a2334dd3855cc80348ea8e240aa0df2d"
+        },
+        {
+          "path": "setuptools/_vendor/backports.tarfile-1.2.0.dist-info/LICENSE",
+          "sha256": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741"
+        },
+        {
+          "path": "setuptools/_vendor/importlib_metadata-8.7.1.dist-info/licenses/LICENSE",
+          "sha256": "458502e12d97bbf64438606a20044aa85eb05fb0a8a807bb35dbec253fd1fc04"
+        },
+        {
+          "path": "setuptools/_vendor/jaraco.text-4.0.0.dist-info/LICENSE",
+          "sha256": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741"
+        },
+        {
+          "path": "setuptools/_vendor/jaraco_context-6.1.0.dist-info/licenses/LICENSE",
+          "sha256": "9755a18519666e5f0f4cae3daad3d7012bcae48a600b31237d75e9fe134e6683"
+        },
+        {
+          "path": "setuptools/_vendor/jaraco_functools-4.4.0.dist-info/licenses/LICENSE",
+          "sha256": "5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d"
+        },
+        {
+          "path": "setuptools/_vendor/more_itertools-10.8.0.dist-info/licenses/LICENSE",
+          "sha256": "09f1c8c9e941af3e584d59641ea9b87d83c0cb0fd007eb5ef391a7e2643c1a46"
+        },
+        {
+          "path": "setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE",
+          "sha256": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48"
+        },
+        {
+          "path": "setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE.APACHE",
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+        },
+        {
+          "path": "setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE.BSD",
+          "sha256": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5"
+        },
+        {
+          "path": "setuptools/_vendor/packaging/licenses/__init__.py",
+          "sha256": "4f05cb1d9097c1281d17044b3f15bad364fa99289eba74851cce9fa7ca605bbf"
+        },
+        {
+          "path": "setuptools/_vendor/packaging/licenses/_spdx.py",
+          "sha256": "596ec35e2ca0ebcba9fd8343ff0a51625af548786257815f24b41f7e08613314"
+        },
+        {
+          "path": "setuptools/_vendor/platformdirs-4.4.0.dist-info/licenses/LICENSE",
+          "sha256": "29e0fd62e929850e86eb28c3fdccf0cefdf4fa94879011cffb3d0d4bed6d4db6"
+        },
+        {
+          "path": "setuptools/_vendor/tomli-2.4.0.dist-info/licenses/LICENSE",
+          "sha256": "b80816b0d530b8accb4c2211783790984a6e3b61922c2b5ee92f3372ab2742fe"
+        },
+        {
+          "path": "setuptools/_vendor/wheel-0.46.3.dist-info/licenses/LICENSE.txt",
+          "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+        },
+        {
+          "path": "setuptools/_vendor/zipp-3.23.0.dist-info/licenses/LICENSE",
+          "sha256": "5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d"
+        },
+        {
+          "path": "setuptools/config/NOTICE",
+          "sha256": "2dddf08818297a3b89d43d95ff659d8da85741108c9136dfa3a4d856c0623bd8"
+        },
+        {
+          "path": "setuptools/config/_validate_pyproject/NOTICE",
+          "sha256": "09c9bcea95ca086f8bc5bed174e40bc835b297d40fb5f86bbbb570fe0a5581a7"
+        }
+      ],
+      "project_urls": [
+        "Source, https://github.com/pypa/setuptools",
+        "Documentation, https://setuptools.pypa.io/",
+        "Changelog, https://setuptools.pypa.io/en/stable/history.html"
+      ],
+      "source_id": "M01-PY-SETUPTOOLS"
+    },
+    {
+      "name": "six",
+      "version": "1.17.0",
+      "scope": "science-runtime",
+      "active_requires": [],
+      "license": "MIT",
+      "license_files": [
+        {
+          "path": "six-1.17.0.dist-info/LICENSE",
+          "sha256": "4375ba20e2b9c6c4e7cad2940a628fd90e95cc3d50ee92aae755715d8ba1fbd0"
+        }
+      ],
+      "project_urls": [],
+      "source_id": "M01-PY-SIX",
+      "reference_version": "1.17.0"
+    },
+    {
+      "name": "tzdata",
+      "version": "2025.2",
+      "scope": "science-runtime",
+      "active_requires": [],
+      "license": "Apache-2.0",
+      "license_files": [
+        {
+          "path": "tzdata-2025.2.dist-info/licenses/LICENSE",
+          "sha256": "33e8e5002d3512d3fcc2282b995e6bad9d334781b9c5ac31843f404900e1f3b4"
+        },
+        {
+          "path": "tzdata-2025.2.dist-info/licenses/licenses/LICENSE_APACHE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        }
+      ],
+      "project_urls": [
+        "Bug Reports, https://github.com/python/tzdata/issues",
+        "Source, https://github.com/python/tzdata",
+        "Documentation, https://tzdata.readthedocs.io"
+      ],
+      "source_id": "M01-PY-TZDATA",
+      "reference_version": "2025.2"
+    },
+    {
+      "name": "wheel",
+      "version": "0.48.0",
+      "scope": "test-build-only",
+      "active_requires": [
+        "packaging >= 24.0"
+      ],
+      "license": "MIT",
+      "license_files": [
+        {
+          "path": "wheel-0.48.0.dist-info/licenses/LICENSE.txt",
+          "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+        }
+      ],
+      "project_urls": [
+        "Changelog, https://wheel.readthedocs.io/en/stable/news.html",
+        "Documentation, https://wheel.readthedocs.io/",
+        "Issue Tracker, https://github.com/pypa/wheel/issues",
+        "Source, https://github.com/pypa/wheel"
+      ],
+      "source_id": "M01-PY-WHEEL"
+    }
+  ],
+  "cross_platform_verified": false
+}

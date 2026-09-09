@@ -1,0 +1,10 @@
+# M01-B Windows CPython 3.11: exact independently observed P03/M01-A versions.
+# Project-local .venv/m01-science only; export adapters are M01-C.
+numpy==2.2.6
+scipy==1.16.3
+praat-parselmouth==0.4.7
+pandas==2.3.3
+python-dateutil==2.9.0.post0
+six==1.17.0
+pytz==2025.2
+tzdata==2025.2

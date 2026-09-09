@@ -5,9 +5,15 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "phonetic-core"
 version = "3.0.0a1"
-description = "PhoneticToolbox scientific core boundary; algorithms pending P03/P08"
+description = "PhoneticToolbox scientific core; M01 array algorithms and explicit backend ports"
 requires-python = ">=3.11,<3.12"
 dependencies = []
 
+[project.optional-dependencies]
+acoustic = ["numpy==2.2.6", "scipy==1.16.3", "praat-parselmouth==0.4.7", "pandas==2.3.3"]
+
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+"phonetic_core.acoustic" = ["data/*.mat", "NOTICE.txt", "licenses/*"]

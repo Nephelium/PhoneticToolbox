@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-09-09",
-  "total_records": 300,
+  "total_records": 318,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -35,7 +35,16 @@
       "year": 2018,
       "citation_title": "Introducing Parselmouth: A Python Interface to Praat",
       "doi": "10.1016/j.wocn.2018.07.001",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/models/acoustic.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/f0_praat.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/formants_praat.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/jitter_shimmer.py",
+        "packages/phonetic_core/src/phonetic_core/services/acoustic.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/__init__.py"
+      ],
+      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
     },
     {
       "id": "SRC-REAPER",
@@ -69,7 +78,12 @@
       "evidence_files": [
         "third_party/evidence/SRC-REAPER/README.md"
       ],
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/acoustic/reaper_python.py",
+        "packages/phonetic_core/src/phonetic_core/services/acoustic.py"
+      ],
+      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
     },
     {
       "id": "SRC-IRAPT",
@@ -105,7 +119,13 @@
       "evidence_files": [
         "third_party/evidence/SRC-IRAPT/README.md"
       ],
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/acoustic/f0_irapt.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/jitter_shimmer.py",
+        "packages/phonetic_core/src/phonetic_core/services/acoustic.py"
+      ],
+      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
     },
     {
       "id": "SRC-WMPC",
@@ -143,7 +163,12 @@
       "evidence_files": [
         "third_party/evidence/SRC-WMPC/README.md"
       ],
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/acoustic/jitter_shimmer.py",
+        "packages/phonetic_core/src/phonetic_core/services/acoustic.py"
+      ],
+      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
     },
     {
       "id": "SRC-VOICESAUCE",
@@ -170,7 +195,24 @@
       "citation_title": "VoiceSauce: A program for voice analysis",
       "venue": "Proceedings of ICPhS XVII",
       "pages": "1846--1849",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/acoustic/common.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/energy.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/voicing.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/spectral_batch.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/cpp.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/hnr.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/spectral_slope.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/soe.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/catalog.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/alignment.py",
+        "packages/phonetic_core/src/phonetic_core/models/acoustic.py",
+        "packages/phonetic_core/src/phonetic_core/services/acoustic.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/__init__.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/lip.py"
+      ],
+      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
     },
     {
       "id": "SRC-OPENSAUCE",
@@ -207,7 +249,13 @@
         "third_party/evidence/SRC-OPENSAUCE/README.md",
         "third_party/evidence/SRC-OPENSAUCE/CITATION.txt"
       ],
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/acoustic/common.py",
+        "packages/phonetic_core/src/phonetic_core/acoustic/spectral_batch.py",
+        "packages/phonetic_core/src/phonetic_core/services/acoustic.py"
+      ],
+      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
     },
     {
       "id": "REF-CPP",
@@ -232,7 +280,11 @@
       "doi": "10.1044/jshr.3704.769",
       "venue": "Journal of Speech and Hearing Research",
       "pages": "769--778",
-      "acknowledgement_group": "academic"
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/acoustic/cpp.py"
+      ],
+      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
     },
     {
       "id": "REF-HNR",
@@ -257,7 +309,11 @@
       "doi": "10.1044/jshr.3602.254",
       "venue": "Journal of Speech and Hearing Research",
       "pages": "254--266",
-      "acknowledgement_group": "academic"
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/acoustic/hnr.py"
+      ],
+      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
     },
     {
       "id": "REF-SHR",
@@ -279,7 +335,11 @@
       "authors": "Xuejing Sun",
       "year": 2002,
       "citation_title": "Pitch determination and voice quality analysis using Subharmonic-to-Harmonic Ratio",
-      "acknowledgement_group": "academic"
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/acoustic/shr.py"
+      ],
+      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
     },
     {
       "id": "REF-ISELI",
@@ -301,7 +361,11 @@
       "authors": "Markus Iseli and Abeer Alwan",
       "year": 2004,
       "citation_title": "An improved correction formula for the estimation of harmonic magnitudes and its application to open quotient estimation",
-      "acknowledgement_group": "academic"
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/acoustic/corrections.py"
+      ],
+      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
     },
     {
       "id": "REF-HAWKS",
@@ -327,7 +391,11 @@
       "doi": "10.1121/1.412986",
       "venue": "Journal of the Acoustical Society of America",
       "pages": "1343--1344",
-      "acknowledgement_group": "academic"
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/acoustic/corrections.py"
+      ],
+      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
     },
     {
       "id": "REF-SOE",
@@ -350,7 +418,11 @@
       "year": 2008,
       "citation_title": "Epoch Extraction From Speech Signals",
       "bibliography_status": "source-comment-confirmed; primary publication fields pending",
-      "acknowledgement_group": "academic"
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/acoustic/soe.py"
+      ],
+      "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json"
     },
     {
       "id": "SRC-TDKLATT",
@@ -6239,6 +6311,402 @@
       ],
       "distribution_status": "Existing standard library, no new installation; only stored/deflate archives within documented limits supported",
       "acknowledgement_group": "software"
+    },
+    {
+      "id": "M01-PY-BUILD",
+      "title": "build",
+      "kind": "test-build-dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Filipe Laíns <lains@riseup.net>, Bernát Gábor <gaborjbernat@gmail.com>, layday <layday@protonmail.com>, Henry Schreiner <henryschreineriii@gmail.com>",
+      "actual_included_version": "1.6.0",
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/build/1.6.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-test.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-COLORAMA",
+      "title": "colorama",
+      "kind": "test-build-dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Jonathan Hartley <tartley@tartley.com>",
+      "actual_included_version": "0.4.6",
+      "license": "unknown",
+      "urls": {
+        "release": "https://pypi.org/project/colorama/0.4.6/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-test.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-INICONFIG",
+      "title": "iniconfig",
+      "kind": "test-build-dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Ronny Pfannschmidt <opensource@ronnypfannschmidt.de>, Holger Krekel <holger.krekel@gmail.com>",
+      "actual_included_version": "2.3.0",
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/iniconfig/2.3.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-test.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-NUMPY",
+      "title": "numpy",
+      "kind": "dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Travis E. Oliphant et al.",
+      "actual_included_version": "2.2.6",
+      "license": "See installed distribution license texts; full review pending",
+      "urls": {
+        "release": "https://pypi.org/project/numpy/2.2.6/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-science.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-PACKAGING",
+      "title": "packaging",
+      "kind": "test-build-dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Donald Stufft <donald@stufft.io>",
+      "actual_included_version": "26.3",
+      "license": "Apache-2.0 OR BSD-2-Clause",
+      "urls": {
+        "release": "https://pypi.org/project/packaging/26.3/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-test.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-PANDAS",
+      "title": "pandas",
+      "kind": "dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "The Pandas Development Team <pandas-dev@python.org>",
+      "actual_included_version": "2.3.3",
+      "license": "See installed distribution license texts; full review pending",
+      "urls": {
+        "release": "https://pypi.org/project/pandas/2.3.3/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-science.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-PLUGGY",
+      "title": "pluggy",
+      "kind": "test-build-dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Holger Krekel <holger@merlinux.eu>",
+      "actual_included_version": "1.6.0",
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/pluggy/1.6.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-test.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-PRAAT-PARSELMOUTH",
+      "title": "praat-parselmouth",
+      "kind": "dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Yannick Jadoul",
+      "actual_included_version": "0.4.7",
+      "license": "GPLv3",
+      "urls": {
+        "release": "https://pypi.org/project/praat-parselmouth/0.4.7/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-science.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-PYGMENTS",
+      "title": "Pygments",
+      "kind": "test-build-dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Georg Brandl <georg@python.org>",
+      "actual_included_version": "2.21.0",
+      "license": "BSD-2-Clause",
+      "urls": {
+        "release": "https://pypi.org/project/Pygments/2.21.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-test.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-PYPROJECT-HOOKS",
+      "title": "pyproject_hooks",
+      "kind": "test-build-dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Thomas Kluyver <thomas@kluyver.me.uk>",
+      "actual_included_version": "1.2.0",
+      "license": "unknown",
+      "urls": {
+        "release": "https://pypi.org/project/pyproject_hooks/1.2.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-test.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-PYTEST",
+      "title": "pytest",
+      "kind": "test-build-dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Brianna Laugher, Bruno Oliveira, Floris Bruynooghe, Freya Bruhin, Holger Krekel, Others (See AUTHORS), Ronny Pfannschmidt",
+      "actual_included_version": "9.1.1",
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/pytest/9.1.1/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-test.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-PYTHON-DATEUTIL",
+      "title": "python-dateutil",
+      "kind": "dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Gustavo Niemeyer",
+      "actual_included_version": "2.9.0.post0",
+      "license": "Dual License",
+      "urls": {
+        "release": "https://pypi.org/project/python-dateutil/2.9.0.post0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-science.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-PYTZ",
+      "title": "pytz",
+      "kind": "dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Stuart Bishop",
+      "actual_included_version": "2025.2",
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/pytz/2025.2/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-science.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-SCIPY",
+      "title": "scipy",
+      "kind": "dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Not recorded in installed metadata",
+      "actual_included_version": "1.16.3",
+      "license": "See installed distribution license texts; full review pending",
+      "urls": {
+        "release": "https://pypi.org/project/scipy/1.16.3/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-science.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-SETUPTOOLS",
+      "title": "setuptools",
+      "kind": "test-build-dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Python Packaging Authority <distutils-sig@python.org>",
+      "actual_included_version": "84.0.0",
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/setuptools/84.0.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-test.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-SIX",
+      "title": "six",
+      "kind": "dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Benjamin Peterson",
+      "actual_included_version": "1.17.0",
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/six/1.17.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-science.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-TZDATA",
+      "title": "tzdata",
+      "kind": "dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Python Software Foundation",
+      "actual_included_version": "2025.2",
+      "license": "Apache-2.0",
+      "urls": {
+        "release": "https://pypi.org/project/tzdata/2025.2/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-science.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
+    },
+    {
+      "id": "M01-PY-WHEEL",
+      "title": "wheel",
+      "kind": "test-build-dependency",
+      "modules": [
+        "M01"
+      ],
+      "authors": "Daniel Holth <dholth@fastmail.fm>",
+      "actual_included_version": "0.48.0",
+      "license": "MIT",
+      "urls": {
+        "release": "https://pypi.org/project/wheel/0.48.0/"
+      },
+      "verification_date": "2026-09-09",
+      "distribution_status": "local-development-locked; redistribution review pending",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "requirements-m01-test.lock"
+      ],
+      "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
+      "evidence": "third_party/m01-dependency-inventory.json"
     }
   ]
 }

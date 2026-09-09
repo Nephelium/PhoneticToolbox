@@ -1,0 +1,22 @@
+PhoneticToolbox M01 scientific core migration, 2026-09-09.
+
+This package preserves the inherited project's calculations. Original-source
+hashes, functions and adaptations are in docs/modules/evidence/M01-core-migration.json.
+Source IDs associate methods, reference implementations, or actual dependencies;
+they do not assert that every line was copied from the named upstream project.
+
+IRAPT: Elias Azarov, Maxim Vashkevich, Alexander A. Petrovsky.
+https://github.com/Mak-Sim/IRAPT (GPL-3.0)
+Sinc_hash_1000.mat matches the previously audited upstream resource, SHA-256
+e3e2fb01d67f722b7f13c1c9a0f4d62559a1ece77167343dfa42de7203f4d860.
+WM-PC/Troparion: Maxim Vashkevich, Alexander Petrovsky, Yuliya Rushkevich.
+https://github.com/Mak-Sim/Troparion (upstream MPL-2.0)
+REAPER: David Talkin and REAPER contributors.
+https://github.com/google/REAPER (upstream Apache-2.0)
+
+Praat/Parselmouth, VoiceSauce/OpenSauce and CPP/HNR/SHR/Iseli/Hawks/SoE
+method references retain their separate records in third_party/source-registry.json.
+The exact initial copied commits and parts of the VoiceSauce adaptation provenance
+remain unresolved. Included upstream license texts are evidence, not a claim of
+completed redistribution review. This local validation wheel is not a public release
+and must not be presented as wholly original or wholly MIT-licensed software.

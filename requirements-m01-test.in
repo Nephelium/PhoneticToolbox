@@ -1,0 +1,12 @@
+# Reproducible M01-B standalone wheel acceptance environment (project-local).
+-r requirements-m01-science.in
+pytest==9.1.1
+build==1.6.0
+setuptools==84.0.0
+wheel==0.48.0
+colorama==0.4.6
+iniconfig==2.3.0
+packaging==26.3
+pluggy==1.6.0
+pygments==2.21.0
+pyproject-hooks==1.2.0

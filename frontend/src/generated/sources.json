@@ -4602,5 +4602,275 @@
       "documentation": "https://docs.python.org/3.11/library/zipfile.html",
       "source": "https://github.com/python/cpython/blob/v3.11.14/Lib/zipfile.py"
     }
+  },
+  {
+    "id": "M01-PY-BUILD",
+    "title": "build",
+    "modules": [
+      "M01"
+    ],
+    "kind": "test-build-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Filipe Laíns <lains@riseup.net>, Bernát Gábor <gaborjbernat@gmail.com>, layday <layday@protonmail.com>, Henry Schreiner <henryschreineriii@gmail.com>",
+    "version": "1.6.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/build/1.6.0/"
+    }
+  },
+  {
+    "id": "M01-PY-COLORAMA",
+    "title": "colorama",
+    "modules": [
+      "M01"
+    ],
+    "kind": "test-build-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Jonathan Hartley <tartley@tartley.com>",
+    "version": "0.4.6",
+    "license": "unknown",
+    "urls": {
+      "release": "https://pypi.org/project/colorama/0.4.6/"
+    }
+  },
+  {
+    "id": "M01-PY-INICONFIG",
+    "title": "iniconfig",
+    "modules": [
+      "M01"
+    ],
+    "kind": "test-build-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Ronny Pfannschmidt <opensource@ronnypfannschmidt.de>, Holger Krekel <holger.krekel@gmail.com>",
+    "version": "2.3.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/iniconfig/2.3.0/"
+    }
+  },
+  {
+    "id": "M01-PY-NUMPY",
+    "title": "numpy",
+    "modules": [
+      "M01"
+    ],
+    "kind": "dependency",
+    "acknowledgement_group": "software",
+    "authors": "Travis E. Oliphant et al.",
+    "version": "2.2.6",
+    "license": "See installed distribution license texts; full review pending",
+    "urls": {
+      "release": "https://pypi.org/project/numpy/2.2.6/"
+    }
+  },
+  {
+    "id": "M01-PY-PACKAGING",
+    "title": "packaging",
+    "modules": [
+      "M01"
+    ],
+    "kind": "test-build-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Donald Stufft <donald@stufft.io>",
+    "version": "26.3",
+    "license": "Apache-2.0 OR BSD-2-Clause",
+    "urls": {
+      "release": "https://pypi.org/project/packaging/26.3/"
+    }
+  },
+  {
+    "id": "M01-PY-PANDAS",
+    "title": "pandas",
+    "modules": [
+      "M01"
+    ],
+    "kind": "dependency",
+    "acknowledgement_group": "software",
+    "authors": "The Pandas Development Team <pandas-dev@python.org>",
+    "version": "2.3.3",
+    "license": "See installed distribution license texts; full review pending",
+    "urls": {
+      "release": "https://pypi.org/project/pandas/2.3.3/"
+    }
+  },
+  {
+    "id": "M01-PY-PLUGGY",
+    "title": "pluggy",
+    "modules": [
+      "M01"
+    ],
+    "kind": "test-build-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Holger Krekel <holger@merlinux.eu>",
+    "version": "1.6.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/pluggy/1.6.0/"
+    }
+  },
+  {
+    "id": "M01-PY-PRAAT-PARSELMOUTH",
+    "title": "praat-parselmouth",
+    "modules": [
+      "M01"
+    ],
+    "kind": "dependency",
+    "acknowledgement_group": "software",
+    "authors": "Yannick Jadoul",
+    "version": "0.4.7",
+    "license": "GPLv3",
+    "urls": {
+      "release": "https://pypi.org/project/praat-parselmouth/0.4.7/"
+    }
+  },
+  {
+    "id": "M01-PY-PYGMENTS",
+    "title": "Pygments",
+    "modules": [
+      "M01"
+    ],
+    "kind": "test-build-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Georg Brandl <georg@python.org>",
+    "version": "2.21.0",
+    "license": "BSD-2-Clause",
+    "urls": {
+      "release": "https://pypi.org/project/Pygments/2.21.0/"
+    }
+  },
+  {
+    "id": "M01-PY-PYPROJECT-HOOKS",
+    "title": "pyproject_hooks",
+    "modules": [
+      "M01"
+    ],
+    "kind": "test-build-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Thomas Kluyver <thomas@kluyver.me.uk>",
+    "version": "1.2.0",
+    "license": "unknown",
+    "urls": {
+      "release": "https://pypi.org/project/pyproject_hooks/1.2.0/"
+    }
+  },
+  {
+    "id": "M01-PY-PYTEST",
+    "title": "pytest",
+    "modules": [
+      "M01"
+    ],
+    "kind": "test-build-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Brianna Laugher, Bruno Oliveira, Floris Bruynooghe, Freya Bruhin, Holger Krekel, Others (See AUTHORS), Ronny Pfannschmidt",
+    "version": "9.1.1",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/pytest/9.1.1/"
+    }
+  },
+  {
+    "id": "M01-PY-PYTHON-DATEUTIL",
+    "title": "python-dateutil",
+    "modules": [
+      "M01"
+    ],
+    "kind": "dependency",
+    "acknowledgement_group": "software",
+    "authors": "Gustavo Niemeyer",
+    "version": "2.9.0.post0",
+    "license": "Dual License",
+    "urls": {
+      "release": "https://pypi.org/project/python-dateutil/2.9.0.post0/"
+    }
+  },
+  {
+    "id": "M01-PY-PYTZ",
+    "title": "pytz",
+    "modules": [
+      "M01"
+    ],
+    "kind": "dependency",
+    "acknowledgement_group": "software",
+    "authors": "Stuart Bishop",
+    "version": "2025.2",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/pytz/2025.2/"
+    }
+  },
+  {
+    "id": "M01-PY-SCIPY",
+    "title": "scipy",
+    "modules": [
+      "M01"
+    ],
+    "kind": "dependency",
+    "acknowledgement_group": "software",
+    "authors": "Not recorded in installed metadata",
+    "version": "1.16.3",
+    "license": "See installed distribution license texts; full review pending",
+    "urls": {
+      "release": "https://pypi.org/project/scipy/1.16.3/"
+    }
+  },
+  {
+    "id": "M01-PY-SETUPTOOLS",
+    "title": "setuptools",
+    "modules": [
+      "M01"
+    ],
+    "kind": "test-build-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Python Packaging Authority <distutils-sig@python.org>",
+    "version": "84.0.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/setuptools/84.0.0/"
+    }
+  },
+  {
+    "id": "M01-PY-SIX",
+    "title": "six",
+    "modules": [
+      "M01"
+    ],
+    "kind": "dependency",
+    "acknowledgement_group": "software",
+    "authors": "Benjamin Peterson",
+    "version": "1.17.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/six/1.17.0/"
+    }
+  },
+  {
+    "id": "M01-PY-TZDATA",
+    "title": "tzdata",
+    "modules": [
+      "M01"
+    ],
+    "kind": "dependency",
+    "acknowledgement_group": "software",
+    "authors": "Python Software Foundation",
+    "version": "2025.2",
+    "license": "Apache-2.0",
+    "urls": {
+      "release": "https://pypi.org/project/tzdata/2025.2/"
+    }
+  },
+  {
+    "id": "M01-PY-WHEEL",
+    "title": "wheel",
+    "modules": [
+      "M01"
+    ],
+    "kind": "test-build-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Daniel Holth <dholth@fastmail.fm>",
+    "version": "0.48.0",
+    "license": "MIT",
+    "urls": {
+      "release": "https://pypi.org/project/wheel/0.48.0/"
+    }
   }
 ]
