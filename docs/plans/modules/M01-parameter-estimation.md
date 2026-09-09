@@ -1,8 +1,8 @@
 # M01 · 参数估计迁移计划
 
-状态：in_progress；M01-A/B/C已完成限定Windows验收，完整页面与持久批任务尚未迁移。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
+状态：in_progress；M01-A/B/C/D/E已完成限定Windows验收，E目录、草稿与显示已限定验收，持久批任务尚未接入。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
-2026-09-09 已完成迁移前源码核对和 [M01-A独立基准](../../testing/m01-baseline-report.md)，[M01-B科学核心](../../testing/m01-core-report.md)已通过149项测试，[M01-C适配](../../testing/m01-io-report.md)已通过222项wheel测试及两组实际双产物回读，[M01-D契约](../../testing/m01-contract-report.md)已通过318项wheel测试和三组真实结果往返，下一项为M01-E共同研究页与桌面目录。执行细节以 [文件级实施计划](../2026-09-09-m01-implementation.md) 为准；[源码对照](../../modules/evidence/M01-source-map.md)、[参数/设置清单](../../modules/evidence/M01-parameter-settings.json)、[30项验收表](../../modules/evidence/M01-acceptance.csv) 和 [本轮报告](../../testing/m01-planning-report.md) 已补齐。下列原功能规格继续有效；文件级计划修订了尚未存在的 E2E 命令和持久批次接入安排。
+2026-09-09 已完成迁移前源码核对和 [M01-A独立基准](../../testing/m01-baseline-report.md)，[M01-B科学核心](../../testing/m01-core-report.md)已通过149项测试，[M01-C适配](../../testing/m01-io-report.md)已通过222项wheel测试及两组实际双产物回读，[M01-D契约](../../testing/m01-contract-report.md)已通过318项wheel测试和三组真实结果往返，下一项为M01-F持久批次与双端任务。执行细节以 [文件级实施计划](../2026-09-09-m01-implementation.md) 为准；[源码对照](../../modules/evidence/M01-source-map.md)、[参数/设置清单](../../modules/evidence/M01-parameter-settings.json)、[30项验收表](../../modules/evidence/M01-acceptance.csv) 和 [本轮报告](../../testing/m01-planning-report.md) 已补齐。下列原功能规格继续有效；文件级计划修订了尚未存在的 E2E 命令和持久批次接入安排。
 
 ## 现有代码与目标文件
 现有路径均已确认存在；目录内逐函数对应由实施第一步记录，避免把旧类名机械套给新实现。
@@ -65,3 +65,5 @@
 - 数值/文件/时间轴差异均解释并审阅；已有功能不得静默改语义。
 - 浅深色、未保存保护、错误恢复与真实操作可用；Web owner/配额检查适用的路径已覆盖。
 - 软件/说明书的来源一致；尚缺权限/设备证据时状态仍为待处理，不能以隐藏控件绕过。
+
+M01-E的[目录/显示报告](../../testing/m01-workspace-report.md)已覆盖共同页与追加显示要求，完整模块仍in_progress。

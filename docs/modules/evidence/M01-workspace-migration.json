@@ -1,0 +1,588 @@
+{
+  "task": "M01-E",
+  "status": "verified",
+  "scope": "Windows directory capabilities, drafts, audition and read-only actual Praat display; full parameter tasks remain F/G",
+  "previous_commit": "639bc6e",
+  "verified_on": "2026-09-10",
+  "code": [
+    {
+      "path": "backend/src/ptb_api/assets.py",
+      "sha256": "98510924d5b864df9439cb63d93e64c6752db89901dec0dc60b35232d58e5683"
+    },
+    {
+      "path": "backend/src/ptb_api/main.py",
+      "sha256": "d04177c1dfbf324fc7c9b832e139d8f8efa26d2e90e788137a63f2cbc900adff"
+    },
+    {
+      "path": "backend/src/ptb_api/preview.py",
+      "sha256": "9d1b8ab836708111ad2f2362b744e22aacb91c3df661be7056ce75add664f4c4"
+    },
+    {
+      "path": "backend/src/ptb_api/preview_models.py",
+      "sha256": "9964141e2bf122c654f6a70ce03631e41eb023ef02edbe721592372ce1ee2a55"
+    },
+    {
+      "path": "backend/src/ptb_worker/spectrogram_preview.py",
+      "sha256": "7ebef76e2297857b0915dac5cd06b2399bbaa2dc67de878aa806e22d6b2b15ed"
+    },
+    {
+      "path": "backend/tests/test_m01_preview.py",
+      "sha256": "fb3cf1e3a17aaceb03693cadff361f8b7e31942bd52ab48ff53fd443122d3f52"
+    },
+    {
+      "path": "backend/tests/test_m01_spectrogram.py",
+      "sha256": "8fcfae5248af579e1210bc48219f559ca9ce74a00021a4dd2f902435ba3f261e"
+    },
+    {
+      "path": "contracts/generated/api.ts",
+      "sha256": "6f88a53ebd1383e538fdad85d504ec69f635ee9f1d636fbfd10a76c26d32ff41"
+    },
+    {
+      "path": "contracts/openapi.json",
+      "sha256": "6102427d12484afbe37421b6a4aad5443658bfd7712479b75fc9a0abb8a986a0"
+    },
+    {
+      "path": "desktop/src/ptb_desktop/file_provider.py",
+      "sha256": "e10861c25a0bc58063af4e44851a9c20203dc4c336c35c8c31593b035d070926"
+    },
+    {
+      "path": "desktop/src/ptb_desktop/host.py",
+      "sha256": "9fc99736cdbc8071251da394ca8aaf0b57ef16b2249f976614dcabd7abc7d16c"
+    },
+    {
+      "path": "desktop/src/ptb_desktop/local_service.py",
+      "sha256": "dd947a963eb98acfc0587f8e12b60d6442a0c853f2a962b8a3a94de318cbba69"
+    },
+    {
+      "path": "desktop/src/ptb_desktop/main.py",
+      "sha256": "2dfb493d49195929e62893159aabc2fbf3b9c61aa9632c8ed0de5c0b73954569"
+    },
+    {
+      "path": "desktop/tests/test_m01_files.py",
+      "sha256": "ca3322a019cacbf04509b20711e76a5fdb01b7b59b44ae43da68ff9ef34af086"
+    },
+    {
+      "path": "frontend/src/account/ServerPage.vue",
+      "sha256": "fd256562ada08bd50d5f334c8649d31c9e86a58aa08aa1c9d192bf09430143d6"
+    },
+    {
+      "path": "frontend/src/app/AppShell.vue",
+      "sha256": "977e6e754454cad847876c550223d870df78e80c342b658c7eb680dac79274ea"
+    },
+    {
+      "path": "frontend/src/app/WorkspaceView.vue",
+      "sha256": "0110c96c8dcd49eb1df556fa3828ef5df2e78fc4b8403ec20858bd683427ebfa"
+    },
+    {
+      "path": "frontend/src/components/ParameterDrawer.vue",
+      "sha256": "3b53033a836613722ed8d317773d92b3bce0b3df0c777d7432b2fc28fff217d6"
+    },
+    {
+      "path": "frontend/src/components/SettingsDrawer.vue",
+      "sha256": "82456ab79ab7525bf907b5976fcf1097d2665464cacf63fd3b2ff2c6c060d9b5"
+    },
+    {
+      "path": "frontend/src/components/SpectrogramViewport.vue",
+      "sha256": "68980c7deabea84a682b78f7507c562b043ca03eae61754aad938b4386172adf"
+    },
+    {
+      "path": "frontend/src/components/WaveformViewport.vue",
+      "sha256": "dd8c20848fcfc62e2eb9b3ed6ef4c79cc05162d054a1f4d486e507970462f769"
+    },
+    {
+      "path": "frontend/src/design/tokens.css",
+      "sha256": "7847c3936a4b3091e7c2475c6c9708c8d211e941ddee2314bcc5e5be8fb6944e"
+    },
+    {
+      "path": "frontend/src/generated/sources.json",
+      "sha256": "6c16e78f475da977258d49a30d923552eef7c5fb4ad907981f1cd9fe8160f0eb"
+    },
+    {
+      "path": "frontend/src/main.ts",
+      "sha256": "1e1eda650903f2b6299f63941afa3107846b7c4b6115b3003549b710331120b6"
+    },
+    {
+      "path": "frontend/src/modules/parameter-estimation/ParameterEstimationPage.vue",
+      "sha256": "30c8778274ea5b6d200b265e8deceb4d5836012ea675a244eb4266ec4cab975c"
+    },
+    {
+      "path": "frontend/src/modules/parameter-estimation/state.ts",
+      "sha256": "9b7fa55ee3f01f521995dbd3aab9c43c649e35c941dbc3fc0d30502a0e8461dd"
+    },
+    {
+      "path": "frontend/src/modules/parameter-estimation/store.ts",
+      "sha256": "0d6339b8fb3c1241cade2cf2966f3b14daad34324d0e024980ddc08de9f7f0bb"
+    },
+    {
+      "path": "frontend/src/platform/browser.ts",
+      "sha256": "6e7070b48ca02ccb9b6b0bea81e863084704e95f802be169bbeb2ca94443b2ff"
+    },
+    {
+      "path": "frontend/src/platform/decode.ts",
+      "sha256": "28681abe35b3af521ceb902d1e00a53266d65c2ef5f8d50626253938404cbc2b"
+    },
+    {
+      "path": "frontend/src/platform/desktop.ts",
+      "sha256": "fc07065848526fa8e95badfa7d860751f967b35ef7c3048f921904f90e1b0299"
+    },
+    {
+      "path": "frontend/src/platform/research.ts",
+      "sha256": "8098a65b1669f68abae0133db7dc73d2acfd5f75cecd64f10d7919ceab06b905"
+    },
+    {
+      "path": "frontend/src/platform/types.ts",
+      "sha256": "aac7878a35a108a4932bcc5dc222d11ca919c59311aa4b12b069efad14ed5cf9"
+    },
+    {
+      "path": "frontend/src/platform/wav.ts",
+      "sha256": "10360e75db305318d769815fea2c2c064b06f1d25590b4642cd1a55c1eae5fd0"
+    },
+    {
+      "path": "frontend/src/platform/wav.worker.ts",
+      "sha256": "bbb7b15c462095c3ea460aba451982e5949007f89c0789af961caa36753ed4c1"
+    },
+    {
+      "path": "frontend/src/state/workspace.ts",
+      "sha256": "ead55341cd337df22083c0e109deb8de5343031d58ff8e0db4716e206a179f54"
+    },
+    {
+      "path": "frontend/tests/m01-display.test.ts",
+      "sha256": "c287879fe30b227bf3d661a7cb34d6f377321faecde48918ebd1f6665b459e4d"
+    },
+    {
+      "path": "frontend/tests/m01-state.test.ts",
+      "sha256": "1978cf179b605f25025011d793e34e8ff2d90702c11998c2c7c1f28a0047416f"
+    },
+    {
+      "path": "packages/phonetic_core/src/phonetic_core/acoustic/textgrid.py",
+      "sha256": "1c665264816fb9bb27dc392d170a1a6c7e13f6689692ffc789c4962cf00ef31c"
+    },
+    {
+      "path": "packages/phonetic_core/src/phonetic_core/spectrogram.py",
+      "sha256": "c1ae851e3a9d5d1fa8f1cc4bfe95e0b7ccc88287aee2d62f2bd5a255a05810e1"
+    },
+    {
+      "path": "packages/phonetic_core/src/phonetic_core/textgrid.py",
+      "sha256": "927636c502a812b90128b2d8ac896282cb41fbdedf5b21eb36a56efa833e9f3a"
+    },
+    {
+      "path": "packages/phonetic_core/tests/test_spectrogram.py",
+      "sha256": "8ca61c247aa52bd34228123ea5c2a1c726706b6c887234422dd500605a105a53"
+    },
+    {
+      "path": "scripts/verify_m01_browser.py",
+      "sha256": "b47853306aadad6228f8b7e9ab7e00f7c90356df21c660a7d397b073b0eac240"
+    },
+    {
+      "path": "scripts/verify_m01_workspace.py",
+      "sha256": "afa3c60ae9986e0935740ca371bfb1c7b002941742d016b2bf8351cbced97f7e"
+    },
+    {
+      "path": "tests/e2e/m01-workspace.cjs",
+      "sha256": "61680a15549b3913c10b2ea6d5d3271bea985bbcbb29290fb7b75215f50d4af7"
+    },
+    {
+      "path": "tests/support/m01_preview_double.py",
+      "sha256": "d30f03f80ca84315a08824aee4105b6aff55d3df16edccfaccc1b4b5f0862b1b"
+    }
+  ],
+  "wheels": [
+    {
+      "path": "output/validation/m01/e-wheels/phonetic_core-3.0.0a1-py3-none-any.whl",
+      "sha256": "baa8c68df6a205ed7e44ea63c3aaf7e9efc08d2da470be1717258e175a26dd15"
+    },
+    {
+      "path": "output/validation/m01/e-wheels/ptb_api-3.0.0a1-py3-none-any.whl",
+      "sha256": "f188a3742b4c5899437f07cf9fe89625f9d73db569aee12bd0d3bb177b037d16"
+    },
+    {
+      "path": "output/validation/m01/e-wheels/ptb_desktop-3.0.0a1-py3-none-any.whl",
+      "sha256": "8381c3f63410c013cef0638c874da2e7e10ea068a48cec1faf6c20be4a8cf63a"
+    }
+  ],
+  "locks": [
+    {
+      "path": "requirements-m01-ui.in",
+      "sha256": "f3105926181841edc5aa9c76ec06898ea8ab28cad994c20bcfae5c66b76a5707"
+    },
+    {
+      "path": "requirements-m01-ui.lock",
+      "sha256": "4f0439244e439c3a90efe4fe15817c5e93b66782ffd01a58e4219e3bc1454b89"
+    }
+  ],
+  "checks": {
+    "wheel_tests": 113,
+    "textgrid_regression": 10,
+    "frontend_tests": 16,
+    "spectrogram_recheck_after_overflow_guard": 5,
+    "schema_typecheck_build_architecture_docs": "passed",
+    "old_parser_same_callable_and_source_except_relative_import": true
+  },
+  "installed": {
+    "installed_paths": [
+      "D:\\PhoneticToolbox\\PhoneticToolbox_v3\\.venv\\m01-ui\\Lib\\site-packages\\phonetic_core\\textgrid.py",
+      "D:\\PhoneticToolbox\\PhoneticToolbox_v3\\.venv\\m01-ui\\Lib\\site-packages\\phonetic_core\\spectrogram.py",
+      "D:\\PhoneticToolbox\\PhoneticToolbox_v3\\.venv\\m01-ui\\Lib\\site-packages\\ptb_api\\preview.py",
+      "D:\\PhoneticToolbox\\PhoneticToolbox_v3\\.venv\\m01-ui\\Lib\\site-packages\\ptb_desktop\\host.py"
+    ],
+    "same_textgrid_parser": true,
+    "old_source_equal_except_import": true,
+    "packages": [
+      [
+        "PyQt6",
+        "6.11.0"
+      ],
+      [
+        "PyQt6-Qt6",
+        "6.11.2"
+      ],
+      [
+        "PyQt6-WebEngine",
+        "6.11.0"
+      ],
+      [
+        "PyQt6-WebEngine-Qt6",
+        "6.11.2"
+      ],
+      [
+        "PyQt6_sip",
+        "13.12.0"
+      ],
+      [
+        "Pygments",
+        "2.21.0"
+      ],
+      [
+        "annotated-doc",
+        "0.0.5"
+      ],
+      [
+        "annotated-types",
+        "0.8.0"
+      ],
+      [
+        "anyio",
+        "4.15.1"
+      ],
+      [
+        "argon2-cffi",
+        "25.1.0"
+      ],
+      [
+        "argon2-cffi-bindings",
+        "26.1.0"
+      ],
+      [
+        "build",
+        "1.6.0"
+      ],
+      [
+        "certifi",
+        "2026.7.22"
+      ],
+      [
+        "cffi",
+        "2.1.1"
+      ],
+      [
+        "click",
+        "8.5.0"
+      ],
+      [
+        "colorama",
+        "0.4.6"
+      ],
+      [
+        "et_xmlfile",
+        "2.0.0"
+      ],
+      [
+        "fastapi",
+        "0.141.1"
+      ],
+      [
+        "h11",
+        "0.16.0"
+      ],
+      [
+        "httpcore",
+        "1.0.9"
+      ],
+      [
+        "httpx",
+        "0.28.1"
+      ],
+      [
+        "idna",
+        "3.19"
+      ],
+      [
+        "iniconfig",
+        "2.3.0"
+      ],
+      [
+        "itsdangerous",
+        "2.2.0"
+      ],
+      [
+        "numpy",
+        "2.2.6"
+      ],
+      [
+        "openpyxl",
+        "3.1.5"
+      ],
+      [
+        "packaging",
+        "26.3"
+      ],
+      [
+        "pandas",
+        "2.3.3"
+      ],
+      [
+        "phonetic-core",
+        "3.0.0a1"
+      ],
+      [
+        "pluggy",
+        "1.6.0"
+      ],
+      [
+        "praat-parselmouth",
+        "0.4.7"
+      ],
+      [
+        "psycopg",
+        "3.3.3"
+      ],
+      [
+        "psycopg-binary",
+        "3.3.3"
+      ],
+      [
+        "ptb-api",
+        "3.0.0a1"
+      ],
+      [
+        "ptb-desktop",
+        "3.0.0a1"
+      ],
+      [
+        "pycparser",
+        "3.0"
+      ],
+      [
+        "pydantic",
+        "2.13.5"
+      ],
+      [
+        "pydantic_core",
+        "2.46.5"
+      ],
+      [
+        "pyproject_hooks",
+        "1.2.0"
+      ],
+      [
+        "pytest",
+        "9.1.1"
+      ],
+      [
+        "python-dateutil",
+        "2.9.0.post0"
+      ],
+      [
+        "pytz",
+        "2025.2"
+      ],
+      [
+        "scipy",
+        "1.16.3"
+      ],
+      [
+        "setuptools",
+        "84.0.0"
+      ],
+      [
+        "six",
+        "1.17.0"
+      ],
+      [
+        "starlette",
+        "1.6.0"
+      ],
+      [
+        "typing-inspection",
+        "0.4.4"
+      ],
+      [
+        "typing_extensions",
+        "4.16.0"
+      ],
+      [
+        "tzdata",
+        "2025.2"
+      ],
+      [
+        "uvicorn",
+        "0.52.4"
+      ],
+      [
+        "wheel",
+        "0.48.0"
+      ]
+    ]
+  },
+  "qt": {
+    "success": true,
+    "layout": {
+      "body": "跳到工作区\nPhoneticToolbox\n语音研究工具箱\n首页\n分析与采集\n参数估计\n参数显示\nEGG 信号分析\nLPC 谱图\n唇形提取\n合成与操控\n语音合成\n发声类型合成\n变速变调\n语谱图转音频\n声道工作台\n标注与实验\nMFA 自动标注\n语音标注对齐\næ\n普通话转 IPA\n音系归纳\n感知实验\n设置\n使用说明\n检查更新\n关于\n浅色\n深色\n跟随系统\n首页\n参数估计\n本地桌面\n\nM01 · 本机目录\n\n参数估计\n\n组织音频与关联，设置下一次分析。\n\n方法与引用\n选择音频目录\n输入\n选择关联目录\n刷新列表\n结果与WAV同目录\n选择结果目录\n输入\n音频列表\n17 个文件\n\n点选用于试听；批处理覆盖整个列表。\n\n全选\n切分选择 0 / 17\n声调00.wav\nTextGrid · 138 KB\n声调01.wav\n138 KB\n声调02.wav\n138 KB\n声调03.wav\n138 KB\n声调04.wav\n138 KB\n声调05.wav\n138 KB\n声调06.wav\n138 KB\n声调07.wav\n138 KB\n声调08.wav\n138 KB\n声调09.wav\n138 KB\n声调10.wav\n138 KB\n声调11.wav\n138 KB\n声调12.wav\n138 KB\n声调13.wav\n138 KB\n声调14.wav\n138 KB\n声调15.wav\n138 KB\n声调16.wav\n138 KB\n声调00.wav\n\n44100 Hz · 2 声道 · 0.800 s\n\nTextGrid\n不关联\n声调00.TextGrid\n唇形数据\n不关联\n\n同名自动关联；可明确改选。唇形使用安全.lip.json格式，旧PKL需先经受限转换。\n\n试听声道\n声道 1\n声道 2\n原始波形 · 振幅 / 秒\n−\n1×\n+\n适合窗口\n显示两个声道\n显示语谱图（Praat）\n绘图按像素聚合峰值，原音频不变\n声道 1\n试听声道\n语谱图 · 声道 1\nPraat · Gaussian 5 ms · 50 dB\n5000 Hz\n2500\n0\n\nPraat 6.1.38 · 当前时间窗相对灰度 · 6 dB/oct显示预加重。仅为预览，不是已校准声压级。\n\n0.000\n0.200\n0.400\n0.600\n0.800\n\n拖动波形选择时间段，也可在下方输入精确起止时间。\n\nTextGrid切分层\n音节\nIPA\n阴平\n0.000–0.400 s\n上声\n0.400–0.800 s\n\n点选区间同步试听选区。当前层有 2 个候选片段（跳过空白、sil、eps标签）。\n\n保存当前层切分音频切分写入将在任务接入后启用。\n输出参数\n80\n/ 80 项\n选择输出参数\n分析设置\n\n帧移 5 ms\n分析窗 40 ms\n\n编辑14项设置保存草稿\n分析结果\n\n暂无计算结果\n\n处理列表中的 17 个文件\n\n与当前试听文件、TextGrid切分层分别操作。\n\n开始全列表分析\n计算、取消与双格式结果发布将在下一阶段接入。\n时间选区\n起点  s\n—\n终点  s\n全部\n播放选区\n停止\n0.000 / 0.800 s\n70%\n文件与配置就绪 · 计算流程待接入\n本机文件 · 无自动上传",
+      "channels": 1,
+      "files": 17,
+      "labels": [
+        "阴平0.000–0.400 s",
+        "上声0.400–0.800 s"
+      ],
+      "mainWidth": 1206,
+      "rowHeight": 40.66666793823242,
+      "scroll": 1206,
+      "spectrogram": true,
+      "waveHeight": 172,
+      "width": 1440
+    },
+    "observations": [
+      {
+        "stage": 0,
+        "passed": true
+      },
+      {
+        "stage": 1,
+        "passed": true
+      },
+      {
+        "stage": 2,
+        "passed": true
+      },
+      {
+        "stage": 3,
+        "passed": true
+      },
+      {
+        "stage": 4,
+        "passed": true
+      },
+      {
+        "stage": 5,
+        "passed": true
+      },
+      {
+        "stage": 6,
+        "passed": true
+      },
+      {
+        "stage": 7,
+        "passed": true
+      },
+      {
+        "stage": 8,
+        "passed": true
+      },
+      {
+        "stage": 9,
+        "passed": true
+      },
+      {
+        "stage": 10,
+        "passed": true
+      },
+      {
+        "stage": 11,
+        "passed": true
+      },
+      {
+        "stage": 12,
+        "passed": true
+      }
+    ],
+    "error": null,
+    "service_exit_code": 0,
+    "normal_close": true
+  },
+  "browser": {
+    "success": true,
+    "checks": [
+      "17 inputs, actual stereo WAV with default single-channel view, shared TextGrid preview and selection",
+      "single/dual channel toggle, taller wave, compact rows, select all, actual Praat grayscale on/off",
+      "WebAudio selection end/stop, explicit no-association survives refresh, marked subset independent, stale response discarded",
+      "settings cancel/apply, tab retention and close/reopen transport rebind, 80-key drawer and saved draft",
+      "600-second 19.2 MB WAV: worker load 182 ms, <=1600 peak vertices, bounded Praat preview follows zoom",
+      "project drafts are isolated and restored",
+      "account change clears prior resources and does not inherit other-owner draft or other-module audio preview"
+    ],
+    "errors": [],
+    "scope": "Actual Chrome and HTTP; account/storage use explicit memory test doubles, not PG evidence"
+  },
+  "raw_evidence": [
+    {
+      "path": "output/validation/m01/workspace-ffdd983001d043fdaae19e593206215f/report.json",
+      "sha256": "a3410370d94d35eb43cee82d26c5d88b92dd9701b59faeaa3b00205af95a0726"
+    },
+    {
+      "path": "output/playwright/m01-e-167cf4121fc14cd5b21b6ac3ed948178/report.json",
+      "sha256": "53e09074ade4c42b16ea8da68c487adaa10b491dfbbfa4626fa2ec15682771fd"
+    },
+    {
+      "path": "output/validation/m01/e-wheel-final.xml",
+      "sha256": "80745b870588822f8e18536f1185e76814854fde683733fa3456478aec0c13fe"
+    },
+    {
+      "path": "output/validation/m01/e-textgrid-wheel.xml",
+      "sha256": "0e43db510f9f50d67bbd25a99d5c54256e6095ec05f1254bf211080fe8e2ed44"
+    },
+    {
+      "path": "output/validation/m01/e-spectrogram-final.xml",
+      "sha256": "641a223b13cdf3a9215378e0fb2234af623d4db6d68354cbd31a1913ec01a339"
+    }
+  ],
+  "preservation": {
+    "v2_checks": {
+      "v2_head": true,
+      "v2_index_sha256": true,
+      "v2_status": true,
+      "baseline_files_checked": true,
+      "baseline_files_changed_since_D03": true,
+      "v2_package_metadata_sha256": true,
+      "v2_environment": true
+    },
+    "baseline_files_checked": 427,
+    "baseline_files_changed_since_D03": [],
+    "goldens_checked": 36,
+    "goldens_unchanged": true,
+    "v3_root": "D:/PhoneticToolbox/PhoneticToolbox_v3"
+  },
+  "source_records": 323,
+  "added_user_display_cases": [
+    "M01-A31",
+    "M01-A32",
+    "M01-A33",
+    "M01-A34"
+  ],
+  "limits": {
+    "wav_bytes": 64000000,
+    "decoded_samples": 32000000,
+    "textgrid_bytes": 2000000,
+    "native_process_bytes": 1000000000,
+    "native_timeout_seconds": 20,
+    "spectrogram_slots_per_api_process": 1,
+    "pixel_columns_max": 1002,
+    "pixel_rows_max": 252
+  },
+  "limitations": [
+    "No persistent parameter analysis/cancel/export or segment writes",
+    "HTTP account/storage UI used explicit memory doubles; no new PG migration or quota claim",
+    "Public static preview lacks Praat backend",
+    "No cross-platform/EXE release or full multi-window persistent-profile lifecycle claim",
+    "No claim to repair Codex app crash root cause"
+  ]
+}

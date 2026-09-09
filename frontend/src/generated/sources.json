@@ -21,7 +21,9 @@
       "homepage": "https://www.praat.org/",
       "documentation": "https://parselmouth.readthedocs.io/en/stable/",
       "paper": "https://doi.org/10.1016/j.wocn.2018.07.001",
-      "pdf": "https://cris.vub.be/ws/files/38628284/jadoul_introducing_parselmouth_a_python_interface_to_praat.pdf"
+      "pdf": "https://cris.vub.be/ws/files/38628284/jadoul_introducing_parselmouth_a_python_interface_to_praat.pdf",
+      "spectrogram_analysis": "https://fon.hum.uva.nl/praat/manual/Sound__To_Spectrogram___.html",
+      "spectrogram_display": "https://www.fon.hum.uva.nl/praat/manual/Spectrogram__Paint___.html"
     }
   },
   {
@@ -2615,7 +2617,8 @@
     "id": "P02-PY-PYQT6",
     "title": "PyQt6",
     "modules": [
-      "P02"
+      "P02",
+      "M01"
     ],
     "kind": "runtime-dependency",
     "acknowledgement_group": "software",
@@ -2630,7 +2633,8 @@
     "id": "P02-PY-PYQT6-QT6",
     "title": "PyQt6-Qt6",
     "modules": [
-      "P02"
+      "P02",
+      "M01"
     ],
     "kind": "runtime-dependency",
     "acknowledgement_group": "software",
@@ -2645,7 +2649,8 @@
     "id": "P02-PY-PYQT6-WEBENGINE",
     "title": "PyQt6-WebEngine",
     "modules": [
-      "P02"
+      "P02",
+      "M01"
     ],
     "kind": "runtime-dependency",
     "acknowledgement_group": "software",
@@ -2660,7 +2665,8 @@
     "id": "P02-PY-PYQT6-WEBENGINE-QT6",
     "title": "PyQt6-WebEngine-Qt6",
     "modules": [
-      "P02"
+      "P02",
+      "M01"
     ],
     "kind": "runtime-dependency",
     "acknowledgement_group": "software",
@@ -2675,7 +2681,8 @@
     "id": "P02-PY-PYQT6-SIP",
     "title": "PyQt6_sip",
     "modules": [
-      "P02"
+      "P02",
+      "M01"
     ],
     "kind": "runtime-dependency",
     "acknowledgement_group": "software",

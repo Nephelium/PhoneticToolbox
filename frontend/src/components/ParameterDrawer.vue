@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref,computed } from 'vue';import parameters from '../generated/parameters.json';import ModalDialog from './ModalDialog.vue';
-const props=defineProps<{selected:string[]}>();const emit=defineEmits<{close:[];apply:[keys:string[]]}>();
-const query=ref(''),draft=ref([...props.selected]);const filtered=computed(()=>parameters.filter(p=>(p.label+' '+p.key).toLowerCase().includes(query.value.toLowerCase())));
+import { ref,computed,watch } from 'vue';import parameters from '../generated/parameters.json';import ModalDialog from './ModalDialog.vue';
+const props=defineProps<{selected:string[];draft?:string[];requireSelection?:boolean}>();const emit=defineEmits<{close:[];apply:[keys:string[]];draft:[keys:string[]]}>();
+const query=ref(''),draft=ref([...(props.draft??props.selected)]);const filtered=computed(()=>parameters.filter(p=>(p.label+' '+p.key).toLowerCase().includes(query.value.toLowerCase())));
+watch(draft,v=>emit('draft',[...v]),{deep:true});
 </script>
 <template>
 <ModalDialog title="输出参数" wide @close="emit('close')">
@@ -22,7 +23,7 @@ const query=ref(''),draft=ref([...props.selected]);const filtered=computed(()=>p
 <p v-if="!filtered.length" class="empty-small">没有匹配的参数</p>
 <template #footer>
 <button @click="emit('close')">取消</button>
-<button class="primary" @click="emit('apply',draft)">应用到草稿</button>
+<button class="primary" :disabled="requireSelection&&!draft.length" @click="emit('apply',draft)">应用到草稿</button>
 </template>
 </ModalDialog>
 </template>

@@ -1,0 +1,10 @@
+# M01-E read-only scientific display, isolated from v3-dev and v2.
+-r requirements-m01-io.in
+PyQt6==6.11.0
+PyQt6-Qt6==6.11.2
+PyQt6-WebEngine==6.11.0
+PyQt6-WebEngine-Qt6==6.11.2
+PyQt6-sip==13.12.0
+httpx==0.28.1
+httpcore==1.0.9
+certifi==2026.7.22

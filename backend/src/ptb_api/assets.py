@@ -7,6 +7,7 @@ from starlette.concurrency import run_in_threadpool
 from starlette.responses import Response
 from .quota import CHUNK_BYTES, StorageError, content_range
 from .storage_models import UploadInput, FinalizeInput, AssetView, AssetList, StorageUsage, DeleteImpact
+from .preview_models import TextGridPreview
 
 
 class PrivateDownload(Response):
@@ -81,6 +82,53 @@ def create_storage_router(ctx, store):
     @router.get('/assets/{asset_id}', response_model=AssetView, operation_id='get_asset')
     def metadata(asset_id: UUID, owner=Depends(identity)):
         return store.metadata(owner['id'], asset_id)
+
+    @router.get('/assets/{asset_id}/textgrid',response_model=TextGridPreview,operation_id='preview_textgrid')
+    def textgrid(asset_id: UUID, request: Request, owner=Depends(identity)):
+        from dataclasses import asdict
+        import hashlib
+        from phonetic_core.textgrid import parse_textgrid
+        asset=store.metadata(owner['id'],asset_id)
+        if not asset['name'].lower().endswith('.textgrid') or asset['size_bytes']>2_000_000:
+            raise HTTPException(422,'unsupported_textgrid')
+        payload=bytearray()
+        while len(payload)<asset['size_bytes']:
+            current=ctx.session(request)
+            if current['id']!=owner['id']:raise HTTPException(409,'account_changed')
+            chunk=store.read_block(owner['id'],asset_id,len(payload),min(CHUNK_BYTES,asset['size_bytes']-len(payload)))
+            if not chunk:raise HTTPException(503,'storage_read_failed')
+            payload.extend(chunk)
+        sha=hashlib.sha256(payload).hexdigest()
+        if sha!=asset['sha256']:raise HTTPException(409,'asset_changed')
+        try:
+            text=bytes(payload).decode('utf-16' if payload[:2] in (b'\xff\xfe',b'\xfe\xff') else 'utf-8-sig')
+            tiers=[{'name':tier.name,'intervals':[asdict(interval) for interval in tier.intervals]} for tier in parse_textgrid(text)]
+        except (ValueError,UnicodeError):raise HTTPException(422,'invalid_textgrid') from None
+        store.metadata(owner['id'],asset_id)  # Expiry is rechecked after parsing as well.
+        return {'asset_id':str(asset_id),'sha256':sha,'tiers':tiers}
+
+    from .preview_models import SpectrogramPreview
+
+    @router.get('/assets/{asset_id}/spectrogram',response_model=SpectrogramPreview,operation_id='asset_spectrogram_preview')
+    def spectrogram(asset_id:UUID,request:Request,channel:int=Query(ge=0,le=31),start:float=Query(ge=0),
+                    end:float=Query(gt=0),width:int=Query(default=800,ge=100,le=1000),owner=Depends(identity)):
+        import hashlib
+        from ptb_worker.spectrogram_preview import render,preview_slot,MAX_BYTES
+        with preview_slot():
+            asset=store.metadata(owner['id'],asset_id)
+            if not asset['name'].lower().endswith('.wav') or asset['size_bytes']>MAX_BYTES:raise HTTPException(422,'unsupported_preview_audio')
+            data=bytearray()
+            while len(data)<asset['size_bytes']:
+                if ctx.session(request)['id']!=owner['id']:raise HTTPException(409,'account_changed')
+                chunk=store.read_block(owner['id'],asset_id,len(data),min(CHUNK_BYTES,asset['size_bytes']-len(data)))
+                if not chunk:raise HTTPException(503,'storage_read_failed')
+                data.extend(chunk)
+            raw=bytes(data);del data;sha=hashlib.sha256(raw).hexdigest()
+            if sha!=asset['sha256']:raise HTTPException(409,'asset_changed')
+            value=render(raw,channel=channel,start=start,end=end,width=width)
+            store.metadata(owner['id'],asset_id)
+            if ctx.session(request)['id']!=owner['id']:raise HTTPException(409,'account_changed')
+        return dict(sha256=sha,**value)
 
     @router.get('/assets/{asset_id}/content', response_class=Response, operation_id='download_asset',
                 responses={200: {'content': {'application/octet-stream': {}}}, 206: {'description': 'Partial content'},

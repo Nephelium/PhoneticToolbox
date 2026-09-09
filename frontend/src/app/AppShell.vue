@@ -1,6 +1,17 @@
 <script setup lang="ts">
 import { ref,computed,watch,onMounted,onUnmounted,nextTick } from 'vue';import { groups,modules } from './registry.ts';import { host,workspace,states,saveDraft } from '../state/workspace.ts';import { stop } from '../state/audio.ts';
 import AudioTransport from '../components/AudioTransport.vue';import AppIcon from '../components/AppIcon.vue';import ModalDialog from '../components/ModalDialog.vue';import MethodReferences from '../components/MethodReferences.vue';import WorkspaceView from './WorkspaceView.vue';import version from '../version.json';import fontLicense from '../assets/Doulos-OFL.txt?raw';import logo from '../assets/k2.png';
+import ParameterEstimationPage from '../modules/parameter-estimation/ParameterEstimationPage.vue';
+import {m01State,saveM01,forgetM01} from '../modules/parameter-estimation/store.ts';
+import {dirty} from '../modules/parameter-estimation/state.ts';
+import {previewFiles,type ResearchContext} from '../platform/research.ts';
+import {desktopFiles} from '../platform/desktop.ts';
+const props=defineProps<{research?:ResearchContext}>();const emit=defineEmits<{leaveProject:[]}>();
+const defaultContext:ResearchContext={key:'local:M01',label:desktopFiles?'本机目录':'本机预览',files:desktopFiles??previewFiles()};
+const researchContext=computed(()=>props.research??defaultContext);
+const previewKey=(id:string)=>props.research?researchContext.value.key.replace(/:M01$/,':'+id):id;
+const m01=computed(()=>m01State(researchContext.value.key));
+const moduleDirty=(id:string)=>id==='M01'?dirty(m01.value):!!states[previewKey(id)]?.dirty;
 const active=ref('home'),tabs=ref<string[]>(['home']),query=ref('');const collapsed=ref(host.projects.read('collapsed',false));
 type Theme='system'|'light'|'dark';const savedTheme=host.projects.read<string>('theme','system');const theme=ref<Theme>(['system','light','dark'].includes(savedTheme)?savedTheme as Theme:'system');
 const system=matchMedia('(prefers-color-scheme: dark)');const applyTheme=()=>document.documentElement.dataset.theme=theme.value==='system'?(system.matches?'dark':'light'):theme.value;
@@ -9,13 +20,13 @@ system.addEventListener('change',applyTheme);onUnmounted(()=>system.removeEventL
 const storedRecent=host.projects.read<unknown>('recent',[]);const recent=ref((Array.isArray(storedRecent)?storedRecent:[]).filter(id=>modules.some(m=>m.id===id)).slice(0,5));
 const current=computed(()=>modules.find(m=>m.id===active.value));const visible=computed(()=>modules.filter(m=>(m.title+' '+m.description+' '+m.id).toLowerCase().includes(query.value.trim().toLowerCase())));
 const modal=ref(''),closing=ref(''),notice=ref('');const referencesId=ref<string|undefined>();
-function open(id:string){stop();if(!tabs.value.includes(id))tabs.value.push(id);active.value=id;if(id!=='home'){workspace(id);recent.value=[id,...recent.value.filter(x=>x!==id)].slice(0,5);host.projects.write('recent',recent.value);}}
-function remove(id:string){stop();const index=tabs.value.indexOf(id);tabs.value=tabs.value.filter(x=>x!==id);delete states[id];if(active.value===id)active.value=tabs.value[Math.max(0,index-1)];closing.value='';void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
-function close(id:string){if(workspace(id).dirty)closing.value=id;else remove(id);}
-function saveClose(){if(saveDraft(closing.value))remove(closing.value);else notice.value='本机草稿保存失败，标签仍保留。请检查浏览器存储权限。';}
+function open(id:string){stop();if(!tabs.value.includes(id))tabs.value.push(id);active.value=id;if(id!=='home'){if(id!=='M01')workspace(previewKey(id));recent.value=[id,...recent.value.filter(x=>x!==id)].slice(0,5);host.projects.write('recent',recent.value);}}
+function remove(id:string){stop();const index=tabs.value.indexOf(id);tabs.value=tabs.value.filter(x=>x!==id);if(id==='M01')forgetM01(researchContext.value.key);else delete states[previewKey(id)];if(active.value===id)active.value=tabs.value[Math.max(0,index-1)];closing.value='';void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
+function close(id:string){if(moduleDirty(id))closing.value=id;else remove(id);}
+function saveClose(){if(closing.value==='M01'&&m01.value.drawer){notice.value='请先应用或取消参数/设置对话框中的编辑，再保存关闭。';return;}if(closing.value==='M01'?saveM01(researchContext.value.key):saveDraft(previewKey(closing.value)))remove(closing.value);else notice.value='本机草稿保存失败，标签仍保留。请检查浏览器存储权限。';}
 function refs(id?:string){referencesId.value=id;modal.value='references';}
 function tabKey(event:KeyboardEvent){let n=tabs.value.indexOf(active.value);if(event.key==='ArrowRight')n=(n+1)%tabs.value.length;else if(event.key==='ArrowLeft')n=(n-1+tabs.value.length)%tabs.value.length;else if(event.key==='Home')n=0;else if(event.key==='End')n=tabs.value.length-1;else return;event.preventDefault();open(tabs.value[n]);void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
-function beforeUnload(event:BeforeUnloadEvent){if(Object.values(states).some(s=>s.dirty)){event.preventDefault();event.returnValue='';}}
+function beforeUnload(event:BeforeUnloadEvent){if(dirty(m01.value)||tabs.value.some(id=>moduleDirty(id))){event.preventDefault();event.returnValue='';}}
 onMounted(()=>window.addEventListener('beforeunload',beforeUnload));onUnmounted(()=>window.removeEventListener('beforeunload',beforeUnload));
 const modalTitle=computed(()=>({settings:'工作台设置',help:'使用说明',update:'检查更新',about:'关于 PhoneticToolbox',references:'开源与学术致谢','font-license':'Doulos SIL 字体许可'}[modal.value]||''));
 </script>
@@ -71,15 +82,16 @@ const modalTitle=computed(()=>({settings:'工作台设置',help:'使用说明',u
 <div class="workspace-tabs" role="tablist" aria-label="工作区标签">
 <div v-for="id in tabs" :key="id" class="tab-wrap" :class="{active:active===id}">
 <button :id="'tab-'+id" role="tab" :aria-selected="active===id" :tabindex="active===id?0:-1" aria-controls="main-content" @click="open(id)" @keydown="tabKey">
-<AppIcon v-if="id==='home'" name="home"/>{{id==='home'?'首页':modules.find(m=>m.id===id)?.title}}<span v-if="states[id]?.dirty" aria-label="未保存">•</span>
+<AppIcon v-if="id==='home'" name="home"/>{{id==='home'?'首页':modules.find(m=>m.id===id)?.title}}<span v-if="moduleDirty(id)" aria-label="未保存">•</span>
 </button>
 <button v-if="id!=='home'" class="tab-close" :aria-label="'关闭 '+modules.find(m=>m.id===id)?.title" @click="close(id)">
 <AppIcon name="close"/>
 </button>
 </div>
 </div>
-<span class="host-badge">{{host.kind==='desktop'?'本地桌面':'浏览器预览'}}</span>
+<span class="host-badge">{{research?'网页项目':host.kind==='desktop'?'本地桌面':'浏览器预览'}}</span>
 </header>
+<button v-if="research" class="project-return" @click="emit('leaveProject')">← 返回项目与文件管理 · {{research.label}}</button>
 <main id="main-content" tabindex="-1" role="tabpanel" :aria-labelledby="'tab-'+active">
 <div v-if="active==='home'" class="home-page">
 <header class="welcome">
@@ -144,20 +156,21 @@ const modalTitle=computed(()=>({settings:'工作台设置',help:'使用说明',u
 <button @click="refs()">开源与学术致谢</button>
 </footer>
 </div>
-<WorkspaceView v-else-if="current" :key="current.id" :module="current" @references="refs(current?.id)"/>
+<ParameterEstimationPage v-else-if="current?.id==='M01'" :key="researchContext.key" :context="researchContext" @references="refs('M01')"/>
+<WorkspaceView v-else-if="current" :key="current.id" :module="current" :state-key="previewKey(current.id)" @references="refs(current?.id)"/>
 </main>
 <div v-if="current" class="global-transport">
-<AudioTransport :state="workspace(current.id)" :active="true"/>
+<AudioTransport :state="current.id==='M01'?m01.wave:workspace(previewKey(current.id))" :active="true"/>
 </div>
 <div class="statusbar">
 <span>
-<span class="status-dot"/>{{current?'公共预览就绪 · 分析功能待接入':'就绪 · 选择工具开始'}}</span>
-<span>本机文件 · 无自动上传</span>
+<span class="status-dot"/>{{current?.id==='M01'?'文件与配置就绪 · 计算流程待接入':current?'公共预览就绪 · 分析功能待接入':'就绪 · 选择工具开始'}}</span>
+<span>{{research?'当前账号的项目资源':'本机文件 · 无自动上传'}}</span>
 </div>
 </div>
 </div>
 <ModalDialog v-if="closing" title="保存参数草稿？" @close="closing=''">
-<p>“{{modules.find(m=>m.id===closing)?.title}}”有尚未保存的参数选择。保存会将参数草稿留在本机；音频不会保存到浏览器存储。</p>
+<p>“{{modules.find(m=>m.id===closing)?.title}}”有尚未保存的参数或设置。保存会将参数草稿留在本机；音频不会保存到浏览器存储。</p>
 <p v-if="notice" role="alert">{{notice}}</p>
 <template #footer>
 <button @click="closing=''">取消关闭</button>

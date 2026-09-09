@@ -69,6 +69,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/assets/{asset_id}/spectrogram": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Spectrogram */
+        get: operations["asset_spectrogram_preview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assets/{asset_id}/textgrid": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Textgrid */
+        get: operations["preview_textgrid"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/challenge": {
         parameters: {
             query?: never;
@@ -251,6 +285,23 @@ export interface paths {
         put?: never;
         /** Retry */
         post: operations["retry_job"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/preview/spectrogram": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Spectrogram */
+        post: operations["local_spectrogram_preview"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1049,6 +1100,22 @@ export interface components {
             /** Username */
             username: string;
         };
+        /** PreviewInterval */
+        PreviewInterval: {
+            /** Text */
+            text: string;
+            /** Xmax */
+            xmax: number;
+            /** Xmin */
+            xmin: number;
+        };
+        /** PreviewTier */
+        PreviewTier: {
+            /** Intervals */
+            intervals: components["schemas"]["PreviewInterval"][];
+            /** Name */
+            name: string;
+        };
         /** ProbeConfig */
         ProbeConfig: {
             /**
@@ -1135,6 +1202,45 @@ export interface components {
             expires_at: string;
             user: components["schemas"]["UserView"];
         };
+        /** SpectrogramPreview */
+        SpectrogramPreview: {
+            /** Backend */
+            backend: string;
+            /** Dx */
+            dx: number;
+            /** Dy */
+            dy: number;
+            /** Dynamic Range */
+            dynamic_range: number;
+            /** End */
+            end: number;
+            /** Frequency Max */
+            frequency_max: number;
+            /** Height */
+            height: number;
+            /** Parselmouth Version */
+            parselmouth_version: string;
+            /** Pixels Base64 */
+            pixels_base64: string;
+            /** Praat Version */
+            praat_version: string;
+            /** Preemphasis */
+            preemphasis: number;
+            /** Sha256 */
+            sha256: string;
+            /** Start */
+            start: number;
+            /** Time Step */
+            time_step: number;
+            /** Width */
+            width: number;
+            /** Window Length */
+            window_length: number;
+            /** X1 */
+            x1: number;
+            /** Y1 */
+            y1: number;
+        };
         /** StorageUsage */
         StorageUsage: {
             /** Available Bytes */
@@ -1149,6 +1255,15 @@ export interface components {
             reserved_bytes: number;
             /** Used Bytes */
             used_bytes: number;
+        };
+        /** TextGridPreview */
+        TextGridPreview: {
+            /** Asset Id */
+            asset_id: string;
+            /** Sha256 */
+            sha256: string;
+            /** Tiers */
+            tiers: components["schemas"]["PreviewTier"][];
         };
         /** Track */
         Track: {
@@ -1383,6 +1498,73 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DeleteImpact"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    asset_spectrogram_preview: {
+        parameters: {
+            query: {
+                channel: number;
+                start: number;
+                end: number;
+                width?: number;
+            };
+            header?: never;
+            path: {
+                asset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SpectrogramPreview"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    preview_textgrid: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                asset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TextGridPreview"];
                 };
             };
             /** @description Validation Error */
@@ -1708,6 +1890,40 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    local_spectrogram_preview: {
+        parameters: {
+            query: {
+                channel: number;
+                start: number;
+                end: number;
+                width?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SpectrogramPreview"];
                 };
             };
             /** @description Validation Error */

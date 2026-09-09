@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "ptb-desktop"
 version = "3.0.0a1"
-description = "PhoneticToolbox local service launcher; full window pending P04"
+description = "PhoneticToolbox shared Qt workbench and owned local service launcher"
 requires-python = ">=3.11,<3.12"
 dependencies = ["phonetic-core==3.0.0a1"]
 

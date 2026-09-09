@@ -22,7 +22,9 @@
         "homepage": "https://www.praat.org/",
         "documentation": "https://parselmouth.readthedocs.io/en/stable/",
         "paper": "https://doi.org/10.1016/j.wocn.2018.07.001",
-        "pdf": "https://cris.vub.be/ws/files/38628284/jadoul_introducing_parselmouth_a_python_interface_to_praat.pdf"
+        "pdf": "https://cris.vub.be/ws/files/38628284/jadoul_introducing_parselmouth_a_python_interface_to_praat.pdf",
+        "spectrogram_analysis": "https://fon.hum.uva.nl/praat/manual/Sound__To_Spectrogram___.html",
+        "spectrogram_display": "https://www.fon.hum.uva.nl/praat/manual/Spectrogram__Paint___.html"
       },
       "evidence": "本地 acoustic/f0_praat.py、formants_praat.py、manipulation 使用 parselmouth；环境 praat-parselmouth 0.4.7。",
       "license": "GPL family; verify exact bundled Praat/Parselmouth licenses",
@@ -44,10 +46,21 @@
         "packages/phonetic_core/src/phonetic_core/services/acoustic.py",
         "packages/phonetic_core/src/phonetic_core/acoustic/__init__.py",
         "packages/phonetic_core/src/phonetic_core/models/audio.py",
-        "packages/phonetic_core/src/phonetic_core/acoustic/textgrid.py"
+        "packages/phonetic_core/src/phonetic_core/acoustic/textgrid.py",
+        "packages/phonetic_core/src/phonetic_core/textgrid.py",
+        "packages/phonetic_core/src/phonetic_core/spectrogram.py",
+        "frontend/src/components/SpectrogramViewport.vue"
       ],
       "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json",
-      "m01_io_evidence": "docs/testing/m01-io-report.md"
+      "m01_io_evidence": "docs/testing/m01-io-report.md",
+      "m01_workspace_evidence": "docs/testing/m01-workspace-report.md",
+      "m01_preview_runtime": {
+        "parselmouth": "0.4.7",
+        "embedded_praat": "6.1.38",
+        "environment": ".venv/m01-ui",
+        "verified_on": "2026-09-10"
+      },
+      "m01_preview_method": "Real Sound.to_spectrogram; own bounded grayscale renderer using Gaussian 5 ms, 50 dB relative range and 6 dB/oct display preemphasis. No calibrated SPL or pixel-for-pixel Praat editor claim."
     },
     {
       "id": "SRC-REAPER",
@@ -3417,7 +3430,9 @@
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "m01_ui_lock": "requirements-m01-ui.lock",
+      "m01_workspace_evidence": "docs/testing/m01-workspace-report.md"
     },
     {
       "id": "P02-PY-CLICK",
@@ -3526,7 +3541,9 @@
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "m01_ui_lock": "requirements-m01-ui.lock",
+      "m01_workspace_evidence": "docs/testing/m01-workspace-report.md"
     },
     {
       "id": "P02-PY-HTTPX",
@@ -3546,7 +3563,9 @@
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "m01_ui_lock": "requirements-m01-ui.lock",
+      "m01_workspace_evidence": "docs/testing/m01-workspace-report.md"
     },
     {
       "id": "P02-PY-IDNA",
@@ -3725,7 +3744,8 @@
       "title": "PyQt6",
       "kind": "runtime-dependency",
       "modules": [
-        "P02"
+        "P02",
+        "M01"
       ],
       "authors": "Riverbank Computing Limited <info@riverbankcomputing.com>",
       "actual_included_version": "6.11.0",
@@ -3737,15 +3757,21 @@
       "verification_date": "2026-09-09",
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
-      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents. M01-E reuses the pinned Qt WebChannel/WebEngine and QFileDialog in the common workbench; no new upstream code or dependency version.",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "desktop/src/ptb_desktop/host.py"
+      ],
+      "m01_workspace_evidence": "docs/testing/m01-workspace-report.md",
+      "m01_ui_lock": "requirements-m01-ui.lock"
     },
     {
       "id": "P02-PY-PYQT6-QT6",
       "title": "PyQt6-Qt6",
       "kind": "runtime-dependency",
       "modules": [
-        "P02"
+        "P02",
+        "M01"
       ],
       "authors": "Riverbank Computing Limited",
       "actual_included_version": "6.11.2",
@@ -3757,15 +3783,21 @@
       "verification_date": "2026-09-09",
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
-      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents. M01-E reuses the pinned Qt WebChannel/WebEngine and QFileDialog in the common workbench; no new upstream code or dependency version.",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "desktop/src/ptb_desktop/host.py"
+      ],
+      "m01_workspace_evidence": "docs/testing/m01-workspace-report.md",
+      "m01_ui_lock": "requirements-m01-ui.lock"
     },
     {
       "id": "P02-PY-PYQT6-WEBENGINE",
       "title": "PyQt6-WebEngine",
       "kind": "runtime-dependency",
       "modules": [
-        "P02"
+        "P02",
+        "M01"
       ],
       "authors": "Riverbank Computing Limited <info@riverbankcomputing.com>",
       "actual_included_version": "6.11.0",
@@ -3777,15 +3809,21 @@
       "verification_date": "2026-09-09",
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
-      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents. M01-E reuses the pinned Qt WebChannel/WebEngine and QFileDialog in the common workbench; no new upstream code or dependency version.",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "desktop/src/ptb_desktop/host.py"
+      ],
+      "m01_workspace_evidence": "docs/testing/m01-workspace-report.md",
+      "m01_ui_lock": "requirements-m01-ui.lock"
     },
     {
       "id": "P02-PY-PYQT6-WEBENGINE-QT6",
       "title": "PyQt6-WebEngine-Qt6",
       "kind": "runtime-dependency",
       "modules": [
-        "P02"
+        "P02",
+        "M01"
       ],
       "authors": "Riverbank Computing Limited",
       "actual_included_version": "6.11.2",
@@ -3797,15 +3835,21 @@
       "verification_date": "2026-09-09",
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
-      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents. M01-E reuses the pinned Qt WebChannel/WebEngine and QFileDialog in the common workbench; no new upstream code or dependency version.",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "desktop/src/ptb_desktop/host.py"
+      ],
+      "m01_workspace_evidence": "docs/testing/m01-workspace-report.md",
+      "m01_ui_lock": "requirements-m01-ui.lock"
     },
     {
       "id": "P02-PY-PYQT6-SIP",
       "title": "PyQt6_sip",
       "kind": "runtime-dependency",
       "modules": [
-        "P02"
+        "P02",
+        "M01"
       ],
       "authors": "Phil Thompson",
       "actual_included_version": "13.12.0",
@@ -3818,7 +3862,9 @@
       "distribution_status": "development-only-native-release-audit-pending",
       "evidence": "Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.",
       "notes": "Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "m01_ui_lock": "requirements-m01-ui.lock",
+      "m01_workspace_evidence": "docs/testing/m01-workspace-report.md"
     },
     {
       "id": "P02-PY-PYTEST",
@@ -6873,7 +6919,9 @@
       "distribution_status": "reference only",
       "acknowledgement_group": "software",
       "used_at": [
-        "backend/src/ptb_worker/native/windows.py"
+        "backend/src/ptb_worker/native/windows.py",
+        "backend/src/ptb_worker/spectrogram_preview.py",
+        "desktop/src/ptb_desktop/file_provider.py"
       ],
       "relationship": "API/format reference; project-owned adapter implementation"
     },

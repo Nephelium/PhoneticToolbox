@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed,ref } from 'vue';import type { Module } from './registry.ts';import { workspace,host,assignAsset,states } from '../state/workspace.ts';import { stop } from '../state/audio.ts';
 import AppIcon from '../components/AppIcon.vue';import WaveformViewport from '../components/WaveformViewport.vue';import ParameterDrawer from '../components/ParameterDrawer.vue';import TaskPanel from '../components/TaskPanel.vue';
-const props=defineProps<{module:Module}>();const emit=defineEmits<{references:[]}>();const state=computed(()=>workspace(props.module.id));const drawer=ref(false),picker=ref<HTMLInputElement>();
-async function load(file:File){const id=props.module.id,s=states[id];if(!s)return;s.loading=true;s.error='';stop();try{const asset=await host.files.load(file);if(states[id]!==s)return;if(id==='M03'&&asset.channels.length!==2)throw Error('EGG 需要双声道 WAV：一个声道为 EGG，另一个为音频。');assignAsset(id,asset);}catch(e){s.error=e instanceof Error?e.message:'文件读取失败，请重新选择。';}finally{s.loading=false;}}
+const props=defineProps<{module:Module;stateKey?:string}>();const emit=defineEmits<{references:[]}>();const state=computed(()=>workspace(props.stateKey??props.module.id));const drawer=ref(false),picker=ref<HTMLInputElement>();
+async function load(file:File){const id=props.stateKey??props.module.id,s=states[id];if(!s)return;s.loading=true;s.error='';stop();try{const asset=await host.files.load(file);if(states[id]!==s)return;if(props.module.id==='M03'&&asset.channels.length!==2)throw Error('EGG 需要双声道 WAV：一个声道为 EGG，另一个为音频。');assignAsset(id,asset);}catch(e){s.error=e instanceof Error?e.message:'文件读取失败，请重新选择。';}finally{s.loading=false;}}
 function pick(e:Event){const input=e.target as HTMLInputElement;if(input.files?.[0])void load(input.files[0]);input.value='';}
 async function demo(){const currentState=state.value;currentState.loading=true;try{const response=await fetch(new URL('../assets/SYN-EGG-44100.wav',import.meta.url).href);if(!response.ok)throw Error('测试音频读取失败');await load(new File([await response.arrayBuffer()],'公开测试音频 · 双声道.wav'));}catch(e){currentState.error=String(e);}finally{currentState.loading=false;}}
 </script>

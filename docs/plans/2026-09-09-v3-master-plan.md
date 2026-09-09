@@ -16,7 +16,7 @@
 | --- | --- | --- | --- |
 | 基线与风险 | P00–P03 | 来源基线、宿主验证、依赖/科研基准 | P00 文档与继承完成；P01 Windows 原型/试用及风险评审通过；P02 骨架与 P03 独立行为基线 verified（限定 Windows 定向范围） |
 | 公共基础 | P04–P07 | UI 壳、登录、任务、5 GB/7 天 | P04 公共界面 verified；P05 账号/项目及真实 PG 定向 verified；P06 Windows 持久任务定向 verified（含真实 PG/SQLite 与恢复复验）；P07 Windows 受控存储/工程生成/有界 ZIP 联合 verified（不含科学迁移、原生目录输出和生产跨平台验收） |
-| 功能迁移 | P08–P09 / M01–M15 | 全部功能双端与设备适配 | 未实施 |
+| 功能迁移 | P08–P09 / M01–M15 | 全部功能双端与设备适配 | P08/M01 in_progress，A–E已限定验收；持久批次与其他模块待实施 |
 | 研究可追溯 | P10 | 软件/说明书/随包来源一致 | 已做首轮调查，未接软件界面 |
 | 验证与发行 | P11–P15 | WSL 10 用户、各平台包和部署方案 | 未实施，Mac 暂无实机 |
 | 退役与清理 | P16 | 去除重复/旧依赖，条件性旧目录清理 | 不执行，条件尚未满足 |
@@ -166,9 +166,9 @@
 
 ### P08 · 普通研究模块逐页迁移
 
-**依赖：** P03,P04,P06,P07。**状态：** in_progress（M01-A/B限定验收完成，其余模块与M01完整UI/批任务仍待迁移）。
+**依赖：** P03,P04,P06,P07。**状态：** in_progress（M01-A至E限定验收完成，其余模块与M01持久批任务仍待迁移）。
 
-2026-09-09：M01迁移前审阅和[文件级实施计划](2026-09-09-m01-implementation.md)已完成；30源文件/80参数/14设置已核对，见[本轮报告](../testing/m01-planning-report.md)。[M01-A独立基准](../testing/m01-baseline-report.md)已完成：28例双轮捕获与23项测试通过；[M01-B核心](../testing/m01-core-report.md)已完成149项Windows独立wheel测试，M01-C适配已通过222项Windows wheel测试与真实双产物回读，[M01-D契约](../testing/m01-contract-report.md)已通过318项wheel测试与三组真实结果往返，下一项为M01-E共同研究页与桌面目录；不把核心验收计作整个模块verified。
+2026-09-09：M01迁移前审阅和[文件级实施计划](2026-09-09-m01-implementation.md)已完成；30源文件/80参数/14设置已核对，见[本轮报告](../testing/m01-planning-report.md)。[M01-A独立基准](../testing/m01-baseline-report.md)已完成：28例双轮捕获与23项测试通过；[M01-B核心](../testing/m01-core-report.md)已完成149项Windows独立wheel测试，M01-C适配已通过222项Windows wheel测试与真实双产物回读，[M01-D契约](../testing/m01-contract-report.md)已通过318项wheel测试与三组真实结果往返，下一项为M01-F持久批次与双端任务；不把核心验收计作整个模块verified。
 
 **目标文件：** docs/plans/modules/M01-parameter-estimation.md 等模块计划；packages/phonetic_core/src/phonetic_core/；frontend/src/modules/。
 
@@ -353,3 +353,5 @@ G6：分平台发行准入和生产部署清单已验证后才公开发布。
 ## 8. 启动实施前应完成的审阅
 井井主要审阅外观、功能范围、账号/5 GB/7 天规则和分平台目标；依赖、路径、代码来源、测试组织由秋叶按本计划处理。
 确认后从 P01 开始，完成可审阅原型与风险记录再推进；不要直接重写全部页面。
+
+2026-09-10补充：[M01-E](../testing/m01-workspace-report.md)目录/草稿/试听/显示已限定验收，包括井井追加的Praat语谱图与长音频显示要求；M01/P08整体仍in_progress。

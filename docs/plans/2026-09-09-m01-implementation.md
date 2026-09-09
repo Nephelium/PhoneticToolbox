@@ -16,7 +16,7 @@
 
 本轮交付：[源码对照](../modules/evidence/M01-source-map.md)、[80参数/14设置及30文件哈希](../modules/evidence/M01-parameter-settings.json)、[细项验收表](../modules/evidence/M01-acceptance.csv)。既有 [M01模块计划](modules/M01-parameter-estimation.md) 保留为功能规格，本计划补足文件和执行顺序。
 
-M01-A 已按井井后续“好，请继续”实施并通过限定基准验收，见 [M01-A报告](../testing/m01-baseline-report.md)。M01/P08 当前 in_progress，M01-B/C/D已完成限定Windows核心、格式与协议验收，下一项为M01-E共同研究页与桌面目录。原规划的首个子任务为 **M01-A：补齐旧行为基准与科学环境审计**。它不改算法/产品页面，不写现存研究数据，不建新数据库表。M01-C/F 涉及原生输出与持久批次的具体设计门；只在可审阅方案具备后进入对应实现。任何实际数据库DDL、用户数据迁移、全局环境变更、push或发布仍按根规则单独授权，不能由此计划推定。
+M01-A 已按井井后续“好，请继续”实施并通过限定基准验收，见 [M01-A报告](../testing/m01-baseline-report.md)。M01/P08 当前 in_progress，M01-B/C/D已完成限定Windows核心、格式与协议验收，下一项为M01-F持久批次与双端任务。原规划的首个子任务为 **M01-A：补齐旧行为基准与科学环境审计**。它不改算法/产品页面，不写现存研究数据，不建新数据库表。M01-C/F 涉及原生输出与持久批次的具体设计门；只在可审阅方案具备后进入对应实现。任何实际数据库DDL、用户数据迁移、全局环境变更、push或发布仍按根规则单独授权，不能由此计划推定。
 
 初次规划交付未引入依赖或算法源码。井井在 M01-A 后回复“继续”，授权 M01-B；本轮迁入纯计算与数组/配置接口，并更新实际来源登记，不以数值等价替代发行许可审查。
 
@@ -135,7 +135,7 @@ assert len(parameter_catalog) == 80
 
 **退出条件：** 旧P06/P07协议可读，三类manifest不混淆；实际行为修正有版本及测试依据。
 
-### M01-E · 桌面目录与共同研究页
+### M01-E · 桌面目录与共同研究页（verified：限定目录、草稿和预览显示）
 
 **文件：** 新建 `desktop/src/ptb_desktop/file_provider.py`、`host.py`，修改 `desktop/src/ptb_desktop/main.py`（保留既有诊断入口），参考但不覆盖 `desktop/experiments/p04_host.py`；`frontend/src/platform/types.ts/browser.ts/desktop.ts`；`frontend/src/modules/parameter-estimation/ParameterEstimationPage.vue`、`state.ts`；`frontend/src/app/WorkspaceView.vue`、`AppShell.vue`；`frontend/src/account/ServerPage.vue`；复用 `ParameterDrawer.vue/WaveformViewport.vue/AudioTransport.vue/MethodReferences.vue`，按需新增 `SettingsDrawer.vue/DirectoryOrAssetPicker.vue`；`desktop/tests/test_m01_files.py`、`frontend/tests/m01-state.test.ts`。
 
@@ -183,4 +183,6 @@ git diff --check
 
 另用只读AST核对80键/14控件、30文件hash和验收ID覆盖；`desktop.experiments.capture_context.capture()`比较v2保存性，只向 `output/validation/m01/`写本轮证据，不调用会覆盖P01输出的旧CLI入口。
 
-实际结果记在 [本轮审阅报告](../testing/m01-planning-report.md)。上述未来脚本不纳入本轮已运行清单。M01-D完成后从M01-E开始；M02及M03等其他模块保持planned。
+实际结果记在 [本轮审阅报告](../testing/m01-planning-report.md)。上述未来脚本不纳入本轮已运行清单。M01-E目录与显示定向验收后从M01-F开始；M02及M03等其他模块保持planned。
+
+M01-E实际执行与追加显示设计见[目录计划](2026-09-10-m01-workspace.md)、[显示计划](2026-09-10-m01-display.md)、[验收报告](../testing/m01-workspace-report.md)。真实Praat只读显示是本轮明确追加授权，不等同F科学任务入口；原退出条件中完整页面verified仍须F/G。

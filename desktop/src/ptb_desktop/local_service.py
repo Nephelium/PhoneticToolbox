@@ -75,6 +75,17 @@ class LocalService:
             process.stdin.close()
             process.stdout.close()
 
+    def preview(self,payload,query):
+        from urllib.parse import urlencode
+        from urllib.error import HTTPError
+        request=urllib.request.Request(self.url+'/api/v1/preview/spectrogram?'+urlencode(query),data=payload,
+            headers={'Authorization':'Bearer '+self.token,'Origin':self.url,'Content-Type':'application/octet-stream'})
+        opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
+        try:
+            with opener.open(request,timeout=30) as response:return json.load(response)
+        except HTTPError as error:
+            raise ValueError(json.load(error).get('detail','preview_failed')) from None
+
     def __enter__(self):
         self.start()
         return self

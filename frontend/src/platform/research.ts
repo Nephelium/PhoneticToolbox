@@ -1,0 +1,47 @@
+import type { components } from '../../../contracts/generated/api';
+import { decodeWav } from './decode.ts';
+export type Tier=components['schemas']['TextGridPreview']['tiers'][number];
+export type Spectrogram=components['schemas']['SpectrogramPreview'];
+export interface SpectrogramView {channel:number;start:number;end:number;width:number}
+export interface ResearchFile { id:string; name:string; kind:'audio'|'textgrid'|'lip'; size:number; sha256?:string; expiresAt?:number }
+export interface DirectoryGrant { id:string; label:string; purpose:'input'|'output'|'association' }
+export interface ResearchFiles {
+  kind:'desktop'|'server'|'preview';
+  choose?(purpose:DirectoryGrant['purpose']):Promise<DirectoryGrant|null>;
+  add?(files:File[]):void;
+  list(directory?:string):Promise<ResearchFile[]>;
+  read(file:ResearchFile,signal?:AbortSignal):Promise<{buffer:ArrayBuffer;sha256:string}>;
+  textgrid(file:ResearchFile):Promise<{sha256:string;tiers:Tier[]}>;
+  spectrogram?(file:ResearchFile,view:SpectrogramView):Promise<Spectrogram>;
+  dispose():void;
+}
+export interface ResearchContext { key:string; label:string; files:ResearchFiles; ownerId?:string }
+export const fileKind=(name:string):ResearchFile['kind']|null=>/\.wav$/i.test(name)?'audio':/\.textgrid$/i.test(name)?'textgrid':/\.lip\.json$/i.test(name)?'lip':null;
+export async function audioPreview(files:ResearchFiles,file:ResearchFile,signal?:AbortSignal) {
+  const data=await files.read(file,signal);return {asset:await decodeWav(data.buffer,file.name,signal),sha256:data.sha256};
+}
+export async function sha256(buffer:ArrayBuffer) {return [...new Uint8Array(await crypto.subtle.digest('SHA-256',buffer))].map(n=>n.toString(16).padStart(2,'0')).join('');}
+
+export function previewFiles():ResearchFiles {
+  const files=new Map<string,File>();
+  return {kind:'preview',add(values){for(const f of values){if(!fileKind(f.name))continue;files.set(crypto.randomUUID(),f);}},
+    async list(){return [...files].map(([id,f])=>({id,name:f.name,size:f.size,kind:fileKind(f.name)!}));},
+    async read(file){const f=files.get(file.id);if(!f||f.size>64_000_000)throw Error('预览限64 MB，请先截取较短音频。');const buffer=await f.arrayBuffer();return {buffer,sha256:await sha256(buffer)};},
+    async textgrid(){throw Error('TextGrid关联预览请使用桌面版或登录项目。当前页面仅提供本地WAV预览。');},dispose(){files.clear();}};
+}
+
+export function serverFiles(owner:string,project:string,onInvalid:()=>void):ResearchFiles {
+  const abort=new AbortController();let disposed=false;
+  async function request(path:string,signal?:AbortSignal) {
+    if(disposed)throw Error('项目会话已关闭。');
+    const r=await fetch('/api/v1/'+path,{credentials:'same-origin',cache:'no-store',signal:signal?AbortSignal.any([abort.signal,signal]):abort.signal,headers:{'X-PTB-Account':owner}});
+    if(!r.ok){const error=await r.json().catch(()=>({}));if(r.status===401||error.detail==='account_changed')onInvalid();if(error.detail?.startsWith('preview_')||error.detail==='invalid_spectrogram_input')throw Error(error.detail);throw Error(({asset_expired:'文件已到期，请重新上传。',invalid_textgrid:'TextGrid格式不受支持或不完整。',unsupported_textgrid:'TextGrid超过2 MB或类型不正确。'} as Record<string,string>)[error.detail]||'项目文件不可访问，请刷新或检查登录状态。');}
+    return r;
+  }
+  async function verify(file:ResearchFile){const r=await request('assets/'+encodeURIComponent(file.id));const asset:components['schemas']['AssetView']=await r.json();if(asset.project_id!==project||asset.state!=='ready'||asset.sha256!==file.sha256)throw Error('文件已变化，请刷新项目列表。');return asset;}
+  return {kind:'server',async list(){const data:components['schemas']['AssetList']=await(await request('assets?project_id='+encodeURIComponent(project))).json();return data.assets.filter(a=>a.project_id===project&&a.state==='ready'&&fileKind(a.name)).map(a=>({id:a.id,name:a.name,kind:fileKind(a.name)!,size:a.size_bytes,sha256:a.sha256??undefined,expiresAt:a.expires_at}));},
+    async read(file,signal){await verify(file);const limit=file.kind==='audio'?64_000_000:2_000_000;if(file.size>limit)throw Error('文件超过当前预览上限。');const response=await request('assets/'+encodeURIComponent(file.id)+'/content',signal);const reader=response.body?.getReader();if(!reader)throw Error('文件读取失败。');const chunks:Uint8Array[]=[];let size=0;try{while(true){const {done,value}=await reader.read();if(done)break;size+=value.length;if(size>limit||size>file.size)throw Error('文件长度已变化。');chunks.push(value);}}finally{await reader.cancel();}if(size!==file.size)throw Error('文件下载不完整。');const bytes=new Uint8Array(size);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}const hash=await sha256(bytes.buffer);if(hash!==file.sha256)throw Error('文件校验失败，请重新加载。');return {buffer:bytes.buffer,sha256:hash};},
+    async textgrid(file){await verify(file);const data:components['schemas']['TextGridPreview']=await(await request('assets/'+encodeURIComponent(file.id)+'/textgrid')).json();if(data.sha256!==file.sha256)throw Error('关联文件已变化，请刷新。');return data;},
+    async spectrogram(file,view){await verify(file);const query=new URLSearchParams(Object.entries(view).map(([k,v])=>[k,String(v)]));const data:Spectrogram=await(await request('assets/'+encodeURIComponent(file.id)+'/spectrogram?'+query)).json();if(data.sha256!==file.sha256)throw Error('音频已变化，请刷新。');return data;},
+    dispose(){disposed=true;abort.abort();}};
+}

@@ -1855,6 +1855,53 @@
         "title": "LoginInput",
         "type": "object"
       },
+      "PreviewInterval": {
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "xmax": {
+            "title": "Xmax",
+            "type": "number"
+          },
+          "xmin": {
+            "title": "Xmin",
+            "type": "number"
+          }
+        },
+        "required": [
+          "xmin",
+          "xmax",
+          "text"
+        ],
+        "title": "PreviewInterval",
+        "type": "object"
+      },
+      "PreviewTier": {
+        "additionalProperties": false,
+        "properties": {
+          "intervals": {
+            "items": {
+              "$ref": "#/components/schemas/PreviewInterval"
+            },
+            "maxItems": 100000,
+            "title": "Intervals",
+            "type": "array"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "intervals"
+        ],
+        "title": "PreviewTier",
+        "type": "object"
+      },
       "ProbeConfig": {
         "additionalProperties": false,
         "properties": {
@@ -2083,6 +2130,111 @@
         "title": "SessionView",
         "type": "object"
       },
+      "SpectrogramPreview": {
+        "additionalProperties": false,
+        "properties": {
+          "backend": {
+            "title": "Backend",
+            "type": "string"
+          },
+          "dx": {
+            "title": "Dx",
+            "type": "number"
+          },
+          "dy": {
+            "title": "Dy",
+            "type": "number"
+          },
+          "dynamic_range": {
+            "title": "Dynamic Range",
+            "type": "number"
+          },
+          "end": {
+            "title": "End",
+            "type": "number"
+          },
+          "frequency_max": {
+            "title": "Frequency Max",
+            "type": "number"
+          },
+          "height": {
+            "maximum": 252.0,
+            "minimum": 1.0,
+            "title": "Height",
+            "type": "integer"
+          },
+          "parselmouth_version": {
+            "title": "Parselmouth Version",
+            "type": "string"
+          },
+          "pixels_base64": {
+            "maxLength": 400000,
+            "title": "Pixels Base64",
+            "type": "string"
+          },
+          "praat_version": {
+            "title": "Praat Version",
+            "type": "string"
+          },
+          "preemphasis": {
+            "title": "Preemphasis",
+            "type": "number"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Sha256",
+            "type": "string"
+          },
+          "start": {
+            "title": "Start",
+            "type": "number"
+          },
+          "time_step": {
+            "title": "Time Step",
+            "type": "number"
+          },
+          "width": {
+            "maximum": 1002.0,
+            "minimum": 1.0,
+            "title": "Width",
+            "type": "integer"
+          },
+          "window_length": {
+            "title": "Window Length",
+            "type": "number"
+          },
+          "x1": {
+            "title": "X1",
+            "type": "number"
+          },
+          "y1": {
+            "title": "Y1",
+            "type": "number"
+          }
+        },
+        "required": [
+          "sha256",
+          "start",
+          "end",
+          "frequency_max",
+          "x1",
+          "dx",
+          "y1",
+          "dy",
+          "width",
+          "height",
+          "pixels_base64",
+          "backend",
+          "parselmouth_version",
+          "praat_version",
+          "window_length",
+          "dynamic_range",
+          "preemphasis",
+          "time_step"
+        ],
+        "title": "SpectrogramPreview",
+        "type": "object"
+      },
       "StorageUsage": {
         "properties": {
           "available_bytes": {
@@ -2119,6 +2271,36 @@
           "ready"
         ],
         "title": "StorageUsage",
+        "type": "object"
+      },
+      "TextGridPreview": {
+        "additionalProperties": false,
+        "properties": {
+          "asset_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Asset Id",
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Sha256",
+            "type": "string"
+          },
+          "tiers": {
+            "items": {
+              "$ref": "#/components/schemas/PreviewTier"
+            },
+            "maxItems": 64,
+            "title": "Tiers",
+            "type": "array"
+          }
+        },
+        "required": [
+          "asset_id",
+          "sha256",
+          "tiers"
+        ],
+        "title": "TextGridPreview",
         "type": "object"
       },
       "Track": {
@@ -2602,6 +2784,135 @@
         ]
       }
     },
+    "/api/v1/assets/{asset_id}/spectrogram": {
+      "get": {
+        "operationId": "asset_spectrogram_preview",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "asset_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Asset Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "channel",
+            "required": true,
+            "schema": {
+              "maximum": 31,
+              "minimum": 0,
+              "title": "Channel",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "title": "Start",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "required": true,
+            "schema": {
+              "exclusiveMinimum": 0,
+              "title": "End",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "width",
+            "required": false,
+            "schema": {
+              "default": 800,
+              "maximum": 1000,
+              "minimum": 100,
+              "title": "Width",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpectrogramPreview"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Spectrogram",
+        "tags": [
+          "storage"
+        ]
+      }
+    },
+    "/api/v1/assets/{asset_id}/textgrid": {
+      "get": {
+        "operationId": "preview_textgrid",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "asset_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Asset Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TextGridPreview"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Textgrid",
+        "tags": [
+          "storage"
+        ]
+      }
+    },
     "/api/v1/auth/challenge": {
       "get": {
         "operationId": "get_login_challenge",
@@ -3016,6 +3327,82 @@
         "summary": "Retry",
         "tags": [
           "jobs"
+        ]
+      }
+    },
+    "/api/v1/preview/spectrogram": {
+      "post": {
+        "operationId": "local_spectrogram_preview",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "channel",
+            "required": true,
+            "schema": {
+              "maximum": 31,
+              "minimum": 0,
+              "title": "Channel",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "title": "Start",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "required": true,
+            "schema": {
+              "exclusiveMinimum": 0,
+              "title": "End",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "width",
+            "required": false,
+            "schema": {
+              "default": 800,
+              "maximum": 1000,
+              "minimum": 100,
+              "title": "Width",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpectrogramPreview"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Spectrogram",
+        "tags": [
+          "preview"
         ]
       }
     },

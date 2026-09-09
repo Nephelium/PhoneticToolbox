@@ -4,7 +4,7 @@
 
 P05 当前进展：[账号与项目报告](docs/testing/p05-accounts-report.md)、[迁移审阅](docs/testing/p05-migration-review.md)。P05 已获专属空库授权并通过真实 PostgreSQL 定向验收；P06 已完成 Windows 持久任务流程验收及闪退后复验，见 [任务验收与限制](docs/testing/p06-jobs-report.md)及 [建表审阅](docs/testing/p06-migration-review.md)。P07 已获 003 存储表与专属测试文件清理授权，Windows 单文件的真实数据库/磁盘、并发额度、TCP 到期和独立浏览器定向验收已通过；004 已获“好，允许”的具体授权并执行，P07 受控任务文件与有界 ZIP 的 Windows 联合验收也通过；科学算法、原生目录输出和生产/跨平台能力仍未验收，见 [P07 单文件报告](docs/testing/p07-storage-report.md)、[联合验收与限制](docs/testing/p07-job-files-report.md)和[具体操作审阅](docs/testing/p07-migration-review.md)。两次 Codex 退出与内置测试页关闭存在直接时间关联，排查及绕行约定见 [恢复记录](docs/testing/p06-recovery-and-codex-exit.md)。
 
-P08 下一步：[M01 参数估计实施计划](docs/plans/2026-09-09-m01-implementation.md)与[源码审阅报告](docs/testing/m01-planning-report.md)已形成，80参数/14设置和30项验收已映射；[M01-A基准](docs/testing/m01-baseline-report.md)现已完成28例双轮捕获和23项测试，[M01-B科学核心](docs/testing/m01-core-report.md)现已通过独立wheel的149项Windows定向测试，[M01-C适配](docs/testing/m01-io-report.md)已通过222项Windows wheel测试及实际双产物回读，[M01-D契约](docs/testing/m01-contract-report.md)已通过限定Windows协议与真实结果往返验收，M01仍为in_progress，下一项是M01-E共同研究页与桌面目录；完整页面与持久批任务尚未接入。
+P08 下一步：[M01 参数估计实施计划](docs/plans/2026-09-09-m01-implementation.md)与[源码审阅报告](docs/testing/m01-planning-report.md)已形成，80参数/14设置和30项验收已映射；[M01-A基准](docs/testing/m01-baseline-report.md)现已完成28例双轮捕获和23项测试，[M01-B科学核心](docs/testing/m01-core-report.md)现已通过独立wheel的149项Windows定向测试，[M01-C适配](docs/testing/m01-io-report.md)已通过222项Windows wheel测试及实际双产物回读，[M01-D契约](docs/testing/m01-contract-report.md)已通过限定Windows协议与真实结果往返验收，M01仍为in_progress，下一项是M01-F持久批次与双端任务；E目录、草稿与显示已限定验收，持久批任务尚未接入。
 
 公共界面入口：[P04 工作台试用报告](docs/testing/p04-workbench-report.md)（公共界面已审阅，学术优先分组已修订；P04 限定范围 verified，P05 账号/项目范围 verified）。试用启动方法见 [开发说明](docs/development.md)。
 
@@ -40,3 +40,5 @@ frontend / backend / desktop / packages / contracts / resources / tests 是 v3 �
 用户数据、原始测试语料和本机绝对路径记录在忽略的本地证据文件中；不随公开源码或安装包分发。官方论文与手册使用来源链接；本地继承的历史 papers 目录不自动进入 v3 包。
 
 所有对外部署、代码推送、发行物发布，待明确授权再执行。
+
+M01-E 已完成[目录、共享研究页与Praat显示定向验收](docs/testing/m01-workspace-report.md)：默认单声道/可双声道、较高波形、紧凑文件行与全选、可开关语谱图、长音频峰值显示。按[开发入口](docs/development.md)启动；参数批计算、取消与结果持久发布仍待M01-F。

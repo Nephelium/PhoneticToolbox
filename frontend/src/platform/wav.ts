@@ -1,4 +1,4 @@
-import type { AudioAsset } from './types.ts';
+import type { AudioAsset,PeakIndex } from './types.ts';
 export function parseWav(buffer:ArrayBuffer, name:string):AudioAsset {
   const v = new DataView(buffer);
   const str=(offset:number,n:number)=>Array.from({length:n},(_,i)=>String.fromCharCode(v.getUint8(offset+i))).join('');
@@ -17,7 +17,9 @@ export function parseWav(buffer:ArrayBuffer, name:string):AudioAsset {
   const count=v.getUint16(fmt+2,true), sampleRate=v.getUint32(fmt+4,true), block=v.getUint16(fmt+12,true), bits=v.getUint16(fmt+14,true);
   if(count<1 || count>32 || sampleRate<1 || block!==count*bits/8 || length%block) throw Error('WAV 音频头或帧长度不受支持。');
   if(!((format===1 && [8,16,24,32].includes(bits)) || (format===3 && [32,64].includes(bits)))) throw Error('目前支持 PCM 8/16/24/32 位和 FLOAT 32/64 位 WAV。');
-  const frames=length/block, channels=Array.from({length:count},()=>new Float32Array(frames));
+  const frames=length/block;
+  if(buffer.byteLength>64_000_000||frames*count>32_000_000)throw Error('音频超过预览内存预算（64 MB文件、3200万个采样值），请先截取较短音频。');
+  const channels=Array.from({length:count},()=>new Float32Array(frames));
   for(let i=0;i<frames;i++) for(let c=0;c<count;c++) {
     const p=data+i*block+c*bits/8;
     let value=0;
@@ -29,16 +31,23 @@ export function parseWav(buffer:ArrayBuffer, name:string):AudioAsset {
     if(!Number.isFinite(value)) throw Error('音频包含非有限采样值，无法安全预览。');
     channels[c][i]=value;
   }
-  return {name,sampleRate,frames,channels,duration:frames/sampleRate};
+  return {name,sampleRate,frames,channels,peaks:channels.map(peakIndex),duration:frames/sampleRate};
 }
 export function selection(start:number,end:number,duration:number):[number,number] {
   const a=Math.min(duration,Math.max(0,Number.isFinite(start)?start:0));
   const b=Math.min(duration,Math.max(0,Number.isFinite(end)?end:0));
   return [Math.min(a,b),Math.max(a,b)];
 }
-export function envelope(samples:Float32Array, start:number,end:number,bins=800):[number,number][] {
+export function peakIndex(samples:Float32Array):PeakIndex {
+  const stride=256,size=Math.ceil(samples.length/stride),min=new Float32Array(size),max=new Float32Array(size);
+  for(let b=0;b<size;b++){let lo=Infinity,hi=-Infinity;for(let i=b*stride;i<Math.min(samples.length,(b+1)*stride);i++){lo=Math.min(lo,samples[i]);hi=Math.max(hi,samples[i]);}min[b]=lo;max[b]=hi;}
+  return {stride,min,max};
+}
+export function envelope(samples:Float32Array, start:number,end:number,bins=800,index?:PeakIndex):[number,number][] {
   const lo=Math.max(0,Math.floor(start)), hi=Math.min(samples.length,Math.ceil(end));
   const step=Math.max(1,Math.ceil((hi-lo)/bins)); const points:[number,number][]=[];
-  for(let i=lo;i<hi;i+=step) { let min=Infinity,max=-Infinity;for(let j=i;j<Math.min(hi,i+step);j++){min=Math.min(min,samples[j]);max=Math.max(max,samples[j]);}points.push([min,max]); }
+  for(let i=lo;i<hi;i+=step) { let min=Infinity,max=-Infinity;const stop=Math.min(hi,i+step);let j=i;
+    while(j<stop){if(index&&j%index.stride===0&&j+index.stride<=stop){const b=j/index.stride;min=Math.min(min,index.min[b]);max=Math.max(max,index.max[b]);j+=index.stride;}else{min=Math.min(min,samples[j]);max=Math.max(max,samples[j]);j++;}}
+    points.push([min,max]); }
   return points;
 }

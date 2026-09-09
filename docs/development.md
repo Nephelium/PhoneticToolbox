@@ -1,5 +1,20 @@
 # v3 开发入口 · P02
 
+## 当前M01目录与显示入口（2026-09-10）
+
+使用本轮新建的项目内m01-ui环境（含固定Praat/Qt依赖），无需全局安装。默认命令仍是短诊断；打开实际共同工作台使用：
+
+```powershell
+npm --prefix frontend run build
+& 'D:/PhoneticToolbox/PhoneticToolbox_v3/.venv/m01-ui/Scripts/python.exe' -m ptb_desktop.main --workspace --dist 'D:/PhoneticToolbox/PhoneticToolbox_v3/frontend/dist'
+```
+
+点击“参数估计”选择输入目录。默认一条波形，可勾选“显示两个声道”与“显示语谱图（Praat）”；切换试听声道同步更新显示。文件行支持全选切分范围；批处理范围仍是整个输入列表。参数计算、进度/取消、结果与切分写入尚待M01-F。WAV预览限64,000,000字节/3200万采样值，按像素聚合只优化显示，不改音频。
+
+服务器仍从`/server/`账号项目进入同一工作台；后端需使用含固定科学包的环境才能执行语谱图。未连接账号/存储时不伪造项目；公共静态浏览器预览只在本机解码WAV，没有Praat服务。旧P04实验宿主没有新目录握手，请用上述入口。详情见[M01-E报告](testing/m01-workspace-report.md)。
+
+以下P02–P07章节保留各阶段历史与工程诊断方法，不代表历史入口具有全部新增功能。
+
 新工程入口为 frontend、backend、desktop、packages/phonetic_core。根目录 run.py / run.spec / pyproject.toml 保留为 v2 迁移来源，不用于安装或启动正式 v3。
 
 ## 本机独立环境

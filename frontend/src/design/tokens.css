@@ -356,3 +356,27 @@ to{opacity:1;transform:none}
 .project-list button{width:100%;margin-top:12px;display:flex;align-items:start;flex-direction:column;white-space:normal;text-align:left;overflow-wrap:anywhere}.project-list [aria-pressed=true]{background:var(--selected);border-color:var(--accent)}
 .project-detail h2{overflow-wrap:anywhere}.project-detail form{display:grid;gap:14px;margin-top:20px}.project-detail form button{justify-self:start}
 @media(max-width:650px){.account-header,.account-footer{padding:16px;flex-wrap:wrap}.account-main{padding:20px 12px}.account-card{padding:24px 20px}.project-columns{grid-template-columns:1fr}.project-create{flex-wrap:wrap}.project-create label{flex-basis:100%}}
+
+/* M01-E uses the same U2 tokens and responsive workbench. */
+.m01-directory-bar,.m01-output-row,.m01-batch-bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:12px 0}
+.directory-label{overflow-wrap:anywhere;font-size:13px;color:var(--muted)}
+.m01-output-row label{display:flex;align-items:center;gap:8px}.m01-page .file-panel{min-width:0}
+.m01-file-list{max-height:480px;overflow:auto}.m01-file-list .file-row{width:100%;text-align:left;border:0;border-bottom:1px solid var(--border);border-radius:0;white-space:normal;justify-content:flex-start}
+.m01-file-list .file-row span{min-width:0;overflow-wrap:anywhere}.m01-file-list .selected{background:var(--selected);color:var(--accent)}
+.m01-association-controls{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0}.m01-association-controls label{display:grid;gap:4px;flex:1;min-width:140px}.m01-association-controls select{width:100%;min-width:0;max-width:100%}
+.m01-tiers{padding-top:16px;border-top:1px solid var(--border)}.m01-tiers>label{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.m01-intervals{display:flex;gap:4px;max-height:140px;overflow:auto;flex-wrap:wrap;margin:12px 0}.m01-intervals button{display:flex;flex-direction:column;align-items:start;white-space:normal;max-width:180px;overflow-wrap:anywhere}.m01-intervals small{font-size:12px;color:var(--muted)}
+.m01-batch-bar{border:1px solid var(--border);background:var(--panel);padding:12px;border-radius:var(--radius)}.m01-batch-bar p{margin:4px 0}
+.m01-settings .setting-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:12px 0}.m01-settings small{display:block;color:var(--muted);font-size:12px}.m01-settings input[type=number]{width:115px}
+.m01-page .parameter-summary button{width:100%;margin-bottom:8px}.danger-text{color:var(--danger)}.project-return{border-radius:0;text-align:left;justify-content:flex-start}
+@media(max-width:650px){.m01-file-list{max-height:180px}.m01-directory-bar,.m01-output-row{align-items:stretch}.m01-directory-bar .directory-label{flex-basis:100%}.m01-tiers select{max-width:100%}.m01-settings input[type=number]{width:96px}}
+
+.m01-file-entry{display:flex;align-items:center;gap:4px}.m01-file-entry>input{flex:none;margin-left:4px}.m01-file-list .file-row{background:transparent}.m01-file-list .file-row.selected{background:var(--selected)}
+
+/* M01-E requested display density; renderer aggregation does not alter audio. */
+.wave-viewport .wave-track svg{height:172px}
+.display-options{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin:6px 0 12px}.display-options label{display:flex;align-items:center;gap:5px;font-size:12px}
+.m01-select-all{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:4px 3px 8px;font-size:12px}.m01-select-all label{display:flex;align-items:center;gap:4px}
+.m01-file-list .file-row{min-height:36px;padding:3px 6px;gap:6px}.m01-file-list .file-row>span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;line-height:16px;flex:1}.m01-file-list .file-row small{font-size:10px;line-height:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.m01-file-entry{gap:2px}.m01-file-entry>input{width:14px;height:14px}
+.spectrogram-view{margin:12px 0}.spectrogram-canvas{position:relative;border:1px solid var(--border);background:white}.spectrogram-canvas canvas{display:block;width:100%;height:220px}.frequency-axis{position:absolute;inset:2px auto 2px 3px;display:flex;flex-direction:column;justify-content:space-between;font-size:10px;color:#222;pointer-events:none}.frequency-axis span{background:#ffffffcc;padding:0 2px}.spectrogram-empty{min-height:150px;display:grid;place-items:center;border:1px solid var(--border);color:var(--muted)}
+@media(max-width:650px){.wave-viewport .wave-track svg{height:150px}.spectrogram-canvas canvas{height:190px}}

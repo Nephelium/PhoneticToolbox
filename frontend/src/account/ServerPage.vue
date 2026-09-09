@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, shallowRef, onMounted, onUnmounted } from 'vue';
 import type { components } from '../../../contracts/generated/api';
 import logo from '../assets/k2.png';
 import MethodReferences from '../components/MethodReferences.vue';
 import ModalDialog from '../components/ModalDialog.vue';
 import ProjectJobs from './ProjectJobs.vue';
 import ProjectStorage from './ProjectStorage.vue';
+import AppShell from '../app/AppShell.vue';
+import {serverFiles,type ResearchContext} from '../platform/research.ts';
+import {clearM01Owner} from '../modules/parameter-estimation/store.ts';
+import {stop} from '../state/audio.ts';
+import {clearWorkspaceOwner} from '../state/workspace.ts';
+const research=shallowRef<ResearchContext|null>(null);
+function leaveResearch(){stop();research.value?.files.dispose();research.value=null;}
+function enterResearch(){if(!session.value||!selected.value)return;leaveResearch();const owner=session.value.user.id,project=selected.value;research.value={key:'server:'+owner+':'+project.id+':M01',ownerId:owner,label:project.name,files:serverFiles(owner,project.id,clearAccount)};}
 
 type Session = components['schemas']['SessionView'];
 type Project = components['schemas']['ProjectView'];
@@ -19,7 +27,7 @@ const systemTheme = matchMedia('(prefers-color-scheme: dark)');
 let generation = 0;
 const channel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('ptb-v3-accounts') : null;
 function applyTheme() { document.documentElement.dataset.theme = theme.value === 'system' ? (systemTheme.matches ? 'dark' : 'light') : theme.value === 'dark' ? 'dark' : 'light'; try { localStorage.setItem('ptb.v3.account-theme', theme.value); } catch { /* Theme still works without persistence. */ } }
-function clearAccount() { generation++; session.value = null; projects.value = []; selected.value = null; name.value = ''; rename.value = ''; password.value = ''; }
+function clearAccount() { if(session.value){clearM01Owner(session.value.user.id);clearWorkspaceOwner(session.value.user.id);};leaveResearch();generation++; session.value = null; projects.value = []; selected.value = null; name.value = ''; rename.value = ''; password.value = ''; }
 class ApiError extends Error { constructor(public status: number, public code: string) { super(code); } }
 async function api<T>(path: string, method = 'GET', body?: unknown, csrf?: string, owner?: string): Promise<T> {
   const response = await fetch('/api/v1/' + path, { method, credentials: 'same-origin', cache: 'no-store',
@@ -39,16 +47,19 @@ async function loadProjects(current: Session, version: number) {
   if (version === generation) projects.value = result.projects;
 }
 async function refresh() {
-  const version = ++generation; checking.value = true;
+  const previousOwner=session.value?.user.id;
+  const version = ++generation; checking.value = true;leaveResearch();
   // Clear former identity before resolving a potentially changed shared cookie.
   session.value = null; projects.value = []; selected.value = null;
   try {
     const current = await api<Session>('auth/me');
     if (version !== generation) return;
+    if(previousOwner&&previousOwner!==current.user.id){clearM01Owner(previousOwner);clearWorkspaceOwner(previousOwner);}
     session.value = current; available.value = true;
     await loadProjects(current, version);
   } catch (error) {
     if (version !== generation) return;
+    if(previousOwner){clearM01Owner(previousOwner);clearWorkspaceOwner(previousOwner);}
     session.value = null; projects.value = [];
     available.value = error instanceof ApiError && error.status === 401;
     if (!available.value) message.value = errorText(error);
@@ -86,12 +97,13 @@ async function saveProject(renaming: boolean) {
   finally { busy.value = false; }
 }
 function choose(project: Project) { selected.value = project; rename.value = project.name; }
-function visibility() { if (!document.hidden && !busy.value && session.value) void refresh(); }
+function visibility() { if (!document.hidden && !busy.value && session.value && !research.value) void refresh(); }
 onMounted(() => { systemTheme.addEventListener('change', applyTheme); applyTheme(); void refresh(); document.addEventListener('visibilitychange', visibility); if (channel) channel.onmessage = () => { clearAccount(); void refresh(); }; });
-onUnmounted(() => { systemTheme.removeEventListener('change', applyTheme); generation++; channel?.close(); document.removeEventListener('visibilitychange', visibility); });
+onUnmounted(() => {leaveResearch();if(session.value){clearM01Owner(session.value.user.id);clearWorkspaceOwner(session.value.user.id);};systemTheme.removeEventListener('change', applyTheme); generation++; channel?.close(); document.removeEventListener('visibilitychange', visibility); });
 </script>
 <template>
-  <div class="account-page">
+  <AppShell v-if="research" :research="research" @leave-project="leaveResearch"/>
+  <div v-else class="account-page">
     <header class="account-header"><div class="account-brand"><img :src="logo" alt="PhoneticToolbox 波形团子"/><div><strong>PhoneticToolbox</strong><small>语音研究工作台 · 网页版</small></div></div>
       <select v-model="theme" aria-label="配色主题" @change="applyTheme"><option value="light">浅色</option><option value="dark">深色</option><option value="system">跟随系统</option></select></header>
     <main class="account-main">
@@ -112,7 +124,7 @@ onUnmounted(() => { systemTheme.removeEventListener('change', applyTheme); gener
         <form class="project-create" @submit.prevent="saveProject(false)"><label>项目名称<input v-model="name" maxlength="120" required :disabled="busy" placeholder="例如：元音与发声类型"/></label><button class="primary" :disabled="busy || !name.trim()">新建项目</button></form>
         <div class="project-columns"><section class="project-list" aria-label="项目列表"><h2>项目 · {{ projects.length }}</h2><p v-if="!projects.length" class="empty-small">还没有项目。从一个研究主题开始。</p>
           <button v-for="project in projects" :key="project.id" :aria-pressed="selected?.id === project.id" @click="choose(project)"><strong>{{ project.name }}</strong><small>{{ new Date(project.created_at).toLocaleDateString('zh-CN') }}</small></button></section>
-          <section class="project-detail"><template v-if="selected"><h2>{{ selected.name }}</h2><form @submit.prevent="saveProject(true)"><label>项目名称<input v-model="rename" maxlength="120" required :disabled="busy"/></label><button :disabled="busy || !rename.trim()">保存名称</button></form><ProjectJobs :key="session.user.id+selected.id" :project-id="selected.id" :owner-id="session.user.id" :csrf-token="session.csrf_token" @session-invalid="clearAccount"/><ProjectStorage :key="'storage-'+session.user.id+selected.id" :project-id="selected.id" :owner-id="session.user.id" :csrf-token="session.csrf_token" @session-invalid="clearAccount"/></template><p v-else class="empty-small">选择项目查看详情。</p></section></div>
+          <section class="project-detail"><template v-if="selected"><h2>{{ selected.name }}</h2><button class="primary" @click="enterResearch">进入研究工作台</button><form @submit.prevent="saveProject(true)"><label>项目名称<input v-model="rename" maxlength="120" required :disabled="busy"/></label><button :disabled="busy || !rename.trim()">保存名称</button></form><ProjectJobs :key="session.user.id+selected.id" :project-id="selected.id" :owner-id="session.user.id" :csrf-token="session.csrf_token" @session-invalid="clearAccount"/><ProjectStorage :key="'storage-'+session.user.id+selected.id" :project-id="selected.id" :owner-id="session.user.id" :csrf-token="session.csrf_token" @session-invalid="clearAccount"/></template><p v-else class="empty-small">选择项目查看详情。</p></section></div>
       </section>
     </main><footer class="account-footer"><span>PhoneticToolbox 3.0 · 账号与项目试用</span><button @click="references=true">开源与学术致谢</button></footer>
     <ModalDialog v-if="references" title="开源与学术致谢" wide @close="references=false"><MethodReferences/></ModalDialog>

@@ -2,10 +2,10 @@
 
 ## 0. 当前阶段与授权
 - 用户：井井；助手自称秋叶；默认中文。技术判断说明证据、限制和待验证项。
-- 当前 **P04 统一工作台 verified（限定公共界面与 Windows 定向验证）**；2026-09-09 井井在 P03 后确认继续，授权范围见 docs/plans/2026-09-09-p04-workbench.md 与 docs/testing/p04-workbench-report.md。井井已反馈当前界面无明显问题；学术优先的分组致谢修订已落实。P04 提供共同界面、真实 WAV 预览和 Qt 演示，不代表 15 模块算法已迁移。井井已授权继续 P05，并对专属空库方案回复“允许”。P05 现为 verified（Windows 账号/会话/项目范围）：实际 PostgreSQL 建表、隔离、事务、并发与受控重启恢复已通过；井井随后回复“好，继续”，已授权 P06 实施；P06 现为 verified（限定 Windows 持久任务流程）：具体建表审阅后的继续指令已核实，实际 PG/SQLite、并发、取消/中断/重试、本机服务重启与网页账号隔离均通过；退出后的收尾复验与记录已完成（docs/plans/2026-09-09-p06-jobs.md、docs/testing/p06-jobs-report.md）；井井在 P06 验收后回复“好，请继续～”，已授权推进 P07；P07 现为 verified（限定 Windows 受控存储、工程生成与有界 ZIP 联合范围）；003 审阅后“好，继续”、004 审阅后“好，允许”的具体授权均已执行，旧行保留；真实 PG/磁盘、配额/TCP/到期、任务输入/结果/旧 worker fencing、进程中断重试与独立浏览器两标签页联合验收通过。证据见 docs/testing/p07-storage-report.md、docs/testing/p07-job-files-report.md，设计与边界见 docs/plans/2026-09-09-p07-job-files.md；未涵盖科学算法迁移、硬断电、生产负载、原生工具任意目录输出或跨平台发行。P08 已完成M01-A基准与M01-B限定Windows科学核心验收，M01-C已完成限定Windows受控原生/格式适配，M01-D已完成限定共享协议与结果语义验收，完整UI/批任务尚未迁移；P09仍planned，按具体模块计划推进；见 docs/plans/2026-09-09-p05-accounts.md 与 docs/testing/p05-accounts-report.md。
+- 当前 **P04 统一工作台 verified（限定公共界面与 Windows 定向验证）**；2026-09-09 井井在 P03 后确认继续，授权范围见 docs/plans/2026-09-09-p04-workbench.md 与 docs/testing/p04-workbench-report.md。井井已反馈当前界面无明显问题；学术优先的分组致谢修订已落实。P04 提供共同界面、真实 WAV 预览和 Qt 演示，不代表 15 模块算法已迁移。井井已授权继续 P05，并对专属空库方案回复“允许”。P05 现为 verified（Windows 账号/会话/项目范围）：实际 PostgreSQL 建表、隔离、事务、并发与受控重启恢复已通过；井井随后回复“好，继续”，已授权 P06 实施；P06 现为 verified（限定 Windows 持久任务流程）：具体建表审阅后的继续指令已核实，实际 PG/SQLite、并发、取消/中断/重试、本机服务重启与网页账号隔离均通过；退出后的收尾复验与记录已完成（docs/plans/2026-09-09-p06-jobs.md、docs/testing/p06-jobs-report.md）；井井在 P06 验收后回复“好，请继续～”，已授权推进 P07；P07 现为 verified（限定 Windows 受控存储、工程生成与有界 ZIP 联合范围）；003 审阅后“好，继续”、004 审阅后“好，允许”的具体授权均已执行，旧行保留；真实 PG/磁盘、配额/TCP/到期、任务输入/结果/旧 worker fencing、进程中断重试与独立浏览器两标签页联合验收通过。证据见 docs/testing/p07-storage-report.md、docs/testing/p07-job-files-report.md，设计与边界见 docs/plans/2026-09-09-p07-job-files.md；未涵盖科学算法迁移、硬断电、生产负载、原生工具任意目录输出或跨平台发行。P08 已完成M01-A基准与M01-B限定Windows科学核心验收，M01-C已完成限定Windows受控原生/格式适配，M01-D已完成限定共享协议与结果语义验收，E目录、草稿、试听与Praat显示已限定验收；持久批任务尚未接入；P09仍planned，按具体模块计划推进；见 docs/plans/2026-09-09-p05-accounts.md 与 docs/testing/p05-accounts-report.md。
 - 2026-09-09 井井在下一步说明后回复“好，继续”，本轮已完成 P08/M01 迁移前源码审阅、文件级计划与细项验收设计，见 docs/plans/2026-09-09-m01-implementation.md 和 docs/testing/m01-planning-report.md。该审阅交付时M01/P08仍planned，随后M01-A的实施与当前进度见下一条。原生输出、持久批次和实际DDL的具体设计门见计划，不把本轮文档完成扩大为整模块verified或新的数据库迁移授权。
 - 井井随后回复“好，请继续”，已授权并完成M01-A独立基准补齐及科学环境审计：28例双轮捕获、23项测试，范围与新发现见 docs/testing/m01-baseline-report.md。M01-A结束时M01/P08为in_progress，随后进入M01-B。该轮只对合成数据新建导出SQLite文件，不操作现存/服务数据库；M01-A时科学包仅审计，B轮独立安装/锁定见下一条。
-- 井井在 M01-A 后回复“继续”，授权并完成 M01-B：独立科学锁与可安装核心 wheel、149 项 Windows 定向测试，数值/时间/mask 对照及转换字节通过；真实采样率与后端结果元数据单列修正。见 docs/testing/m01-core-report.md。后续C/D已完成，下一项M01-E；B 的小型合成 native 测试适配不得接网页/用户任务，完整 M01/P08 仍 in_progress。
+- 井井在 M01-A 后回复“继续”，授权并完成 M01-B：独立科学锁与可安装核心 wheel、149 项 Windows 定向测试，数值/时间/mask 对照及转换字节通过；真实采样率与后端结果元数据单列修正。见 docs/testing/m01-core-report.md。后续C/D已完成，下一项M01-F；B 的小型合成 native 测试适配不得接网页/用户任务，完整 M01/P08 仍 in_progress。
 - 前阶段已完成 **P03 科研行为基线的 Windows 定向验收**。2026-09-09 井井在 P02 后回复“好，请继续”，授权执行 P03，并确认 EGG 样例的双声道方向；边界见 docs/plans/2026-09-09-p03-baseline.md 和 docs/testing/p03-baseline-report.md。该结果不代表 v3 算法、完整 EXE GUI 或跨平台验收。公开发布、服务器部署、全局环境变更和全面业务迁移仍不属于本轮范围。
 - 用户明确不要额外备份；保留相邻 v2 和现有使用数据。不得擅自删除、移动或修改 v2。这里的 Git 源码基线不是额外整目录备份，也不是已验证的新版本。
 - 旧网页目录的删除授权有条件：仅在证实没有必要保留的依赖、独有工作或来源资料后才可删除。当前检查发现旧前端存在未提交修改；本阶段保留两个旧目录。
@@ -13,7 +13,7 @@
 
 - 井井在M01-B后回复“继续”，已完成M01-C：有界原生Job/命名管道、WAV/TextGrid/安全唇形格式与XLSX/SQLite双产物准备，222项Windows wheel测试及两组160×83实际导出回读通过，见 docs/testing/m01-io-report.md。未接入PG配额/持久发布或正式UI；M01-D已继续完成，完整M01/P08仍in_progress。
 
-- 井井在M01-C后回复“好，请继续”，已完成M01-D：API 1.1/m01/1共享协议、可信输入/TTL边界、实际结果无损JSON与单文件/批次清单，318项Windows wheel测试及三组冻结对照通过，见 docs/testing/m01-contract-report.md。未开放科学任务HTTP操作，实际持久取消/发布仍为F；下一项M01-E。
+- 井井在M01-C后回复“好，请继续”，已完成M01-D：API 1.1/m01/1共享协议、可信输入/TTL边界、实际结果无损JSON与单文件/批次清单，318项Windows wheel测试及三组冻结对照通过，见 docs/testing/m01-contract-report.md。未开放科学任务HTTP操作，实际持久取消/发布仍为F；下一项M01-F。
 
 ## 1. 必读与事实来源
 1. README.md：阶段、入口、不能误用的历史目录。
@@ -84,3 +84,5 @@
 
 ## 9. 交付记录
 每次交付写清：完成任务 ID、修改原因、真实验证命令和结果、来源更新、剩余限制、下一项依赖。实现状态用 planned / in_progress / verified / blocked；P00 可用 documented-baseline 表示仅规划/源码基线完成，不能冒充业务 verified。
+
+- 井井在M01-D后回复“继续”，并追加单/双声道、波形高度、紧凑列表/全选、Praat语谱图和长音频显示要求。M01-E现为verified（限定Windows目录、草稿、预览与显示），见docs/testing/m01-workspace-report.md。新增m01-ui项目内环境、真实Praat受限预览；完整参数分析页面和持久批次仍in_progress，下一项M01-F，实际DDL须另行具体审阅授权。

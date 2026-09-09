@@ -11,6 +11,8 @@ from .account_store import AccountStore
 from .auth import AccountContext, AuthSettings, create_account_router
 from .projects import create_project_router
 from .assets import create_storage_router
+from .preview import create_preview_router
+from ptb_worker.spectrogram_preview import PreviewError
 from .quota import StorageError
 from .account_boundary import AccountBoundary
 from phonetic_core import __version__ as core_version
@@ -34,6 +36,11 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
     app.include_router(create_project_router(ctx))
     app.include_router(create_job_router(ctx,job_store,local_token=local_token,local_origin=local_origin))
     app.include_router(create_storage_router(ctx, storage))
+    app.include_router(create_preview_router(mode,local_token,local_origin))
+
+    @app.exception_handler(PreviewError)
+    async def preview_error(request: Request,exc):
+        return JSONResponse({'detail':exc.code},status_code=exc.status)
 
     @app.exception_handler(StorageError)
     async def storage_error(request: Request, exc):
@@ -66,7 +73,7 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
     @app.middleware('http')
     async def private_responses(request: Request, call_next):
         response = await call_next(request)
-        if request.url.path.startswith(('/api/v1/auth/', '/api/v1/projects', '/api/v1/jobs', '/api/v1/storage', '/api/v1/assets', '/api/v1/uploads')):
+        if request.url.path.startswith(('/api/v1/auth/', '/api/v1/projects', '/api/v1/jobs', '/api/v1/storage', '/api/v1/assets', '/api/v1/uploads','/api/v1/preview')):
             response.headers['Cache-Control'] = 'no-store'
             response.headers['Pragma'] = 'no-cache'
             response.headers['X-Content-Type-Options'] = 'nosniff'
