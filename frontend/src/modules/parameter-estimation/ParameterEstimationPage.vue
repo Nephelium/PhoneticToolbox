@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed,ref,onMounted,onUnmounted,watch,markRaw} from 'vue';
-import type {ResearchContext,ResearchFile,DirectoryGrant,SpectrogramView} from '../../platform/research.ts';
+import type {ResearchContext,ResearchFile,DirectoryGrant,SpectrogramView,BatchView,JobView,BatchSelection,BatchConfig} from '../../platform/research.ts';
 import {audioPreview} from '../../platform/research.ts';
 import {m01State,saveM01} from './store.ts';
 import {association,matchAssociation,reconcile,applyParameters,applySettings,dirty,effectiveOutput,type Settings} from './state.ts';
@@ -10,6 +10,7 @@ import WorkbenchColumns from '../../components/WorkbenchColumns.vue';
 import ParameterDrawer from '../../components/ParameterDrawer.vue';
 import SettingsDrawer from '../../components/SettingsDrawer.vue';
 import AppIcon from '../../components/AppIcon.vue';
+import BatchResults from './BatchResults.vue';
 const props=defineProps<{context:ResearchContext}>();const emit=defineEmits<{references:[]}>();
 const state=m01State(props.context.key),picker=ref<HTMLInputElement>(),busy=ref(false),notice=ref('');
 const audioFiles=computed(()=>state.files.filter(f=>f.kind==='audio'));
@@ -19,6 +20,43 @@ const spectrogramLoader=computed(()=>{const file=selected.value;return props.con
 const linked=computed(()=>association(state));
 const intervals=computed(()=>linked.value.tiers[linked.value.layer]?.intervals??[]);
 const segments=computed(()=>intervals.value.filter(i=>i.xmax>i.xmin&&!['','sil','eps','<sil>','<eps>'].includes(i.text.trim().toLowerCase())).length);
+const tasks=computed(()=>props.context.files.tasks),taskBusy=ref(false),taskReady=ref(false),batchList=ref<BatchView[]>([]),activeBatch=ref<BatchView|null>(null),jobResults=ref<JobView[]>([]),sliceParameters=ref(false);
+const resultCache=new Map<string,JobView>();let taskTimer:ReturnType<typeof setTimeout>|undefined;
+let autoSaveBatch:{id:string;directory:string}|null=null;
+function scheduleBatch(){clearTimeout(taskTimer);if(!disposed&&tasks.value)taskTimer=setTimeout(()=>void loadBatch(),activeBatch.value&&!activeBatch.value.summary.closed?1500:6000);}
+async function loadBatch(id?:string){
+ if(!tasks.value||disposed)return;if(taskBusy.value){scheduleBatch();return;}
+ taskBusy.value=true;
+ try{const list=await tasks.value.list();if(disposed)return;batchList.value=list;taskReady.value=true;const chosen=id??activeBatch.value?.id??batchList.value[0]?.id;
+  if(chosen){const batch=await tasks.value.get(chosen);if(disposed)return;activeBatch.value=batch;for(const item of batch.summary.items){if(item.job_id&&['succeeded','failed','cancelled','interrupted'].includes(item.state)&&!resultCache.has(item.job_id)){const job=await tasks.value.job(item.job_id);if(disposed)return;resultCache.set(item.job_id,job);}}jobResults.value=batch.summary.items.flatMap(item=>item.job_id&&resultCache.has(item.job_id)?[resultCache.get(item.job_id)!]:[]);}
+ }catch(e){if(!disposed)notice.value=e instanceof Error?e.message:'任务读取失败。';}
+ finally{taskBusy.value=false;}
+ if(disposed)return;
+ if(autoSaveBatch?.id===activeBatch.value?.id&&activeBatch.value?.summary.closed){const directory=autoSaveBatch!.directory;autoSaveBatch=null;if(activeBatch.value.summary.counts.succeeded&&tasks.value.save)await saveResults(directory);}
+ scheduleBatch();
+}
+async function startBatch(operation:'acoustic_analysis'|'textgrid_segment'){
+ if(!tasks.value||taskBusy.value)return;
+ taskBusy.value=true;notice.value='';clearTimeout(taskTimer);
+ try{const chosen=operation==='acoustic_analysis'?audioFiles.value:audioFiles.value.filter(f=>state.marked.length?state.marked.includes(f.id):f.id===state.selected);
+  if(!chosen.length)throw Error('请先选择音频。');if(operation==='acoustic_analysis'&&!state.wave.parameters.length)throw Error('请选择输出参数。');
+  const layer=operation==='textgrid_segment'?linked.value.tiers[linked.value.layer]?.name??null:null;
+  if(operation==='textgrid_segment'&&!layer)throw Error('请选择TextGrid切分层。');
+  if(props.context.files.kind==='desktop'&&!effectiveOutput(state))throw Error('请先选择结果目录。');
+  const inputs:BatchSelection[]=[];let noParent=0;
+  for(const file of chosen){const a=association(state,file.id);if(a.error)throw Error(file.name+'：'+a.error);if(operation==='textgrid_segment'&&!a.textgrid)throw Error(file.name+' 尚未关联TextGrid。');
+   const item:BatchSelection={audio:file,textgrid:a.textgrid,lip:operation==='acoustic_analysis'?a.lip:null};
+   if(operation==='textgrid_segment'&&sliceParameters.value){const parent=await tasks.value.parent(file);if(parent)item.parent_result=parent;else noParent++;}inputs.push(item);}
+  const config:BatchConfig|null=operation==='acoustic_analysis'?{settings:{...state.settings},selection:{mode:'catalog',keys:[...state.wave.parameters] as NonNullable<NonNullable<BatchConfig['selection']>['keys']>},backend_policy:{reaper:'native_required',wm_f0:'irapt_then_praat'}}:null;
+  const directory=effectiveOutput(state)?.id;
+  const batch=await tasks.value.submit(operation,inputs,config,layer,crypto.randomUUID());if(disposed)return;activeBatch.value=batch;autoSaveBatch=props.context.files.kind==='desktop'&&directory?{id:batch.id,directory}:null;
+  notice.value=noParent?`${noParent}个音频没有可用参数结果，将仅切分音频。`:'批次已提交。参数与文件关联已固定，后续编辑只影响新任务。';
+ }catch(e){notice.value=e instanceof Error?e.message:'提交失败。';}finally{taskBusy.value=false;void loadBatch();}
+}
+async function cancelBatch(){if(!tasks.value||!activeBatch.value||taskBusy.value)return;taskBusy.value=true;try{activeBatch.value=await tasks.value.cancel(activeBatch.value.id);}catch(e){notice.value=String(e);}finally{taskBusy.value=false;void loadBatch();}}
+async function retryJob(id:string){if(!tasks.value||taskBusy.value)return;taskBusy.value=true;try{await tasks.value.retry(id,crypto.randomUUID());}catch(e){notice.value=String(e);}finally{taskBusy.value=false;void loadBatch();}}
+async function saveResults(target?:string){const directory=target??effectiveOutput(state)?.id;if(!tasks.value?.save||!activeBatch.value||taskBusy.value)return;if(!directory){notice.value='重新打开后，请先选择结果目录，再保存已完成结果。';return;}taskBusy.value=true;try{const result=await tasks.value.save(activeBatch.value.id,directory);if(disposed)return;await refresh();notice.value=`已保存${result.count}个结果文件；已有同名不同内容文件保持原样。`;}catch(e){if(!disposed)notice.value=String(e);}finally{taskBusy.value=false;scheduleBatch();}}
+async function downloadResult(id:string,name:string){if(!tasks.value?.download||taskBusy.value)return;taskBusy.value=true;try{await tasks.value.download(id,name);}catch(e){notice.value=String(e);}finally{taskBusy.value=false;scheduleBatch();}}
 let disposed=false,previewAbort=new AbortController();
 watch(()=>dirty(state),value=>state.wave.dirty=value,{immediate:true});
 async function refresh(){
@@ -71,8 +109,8 @@ function parameters(keys:string[]){try{applyParameters(state,keys);}catch(e){not
 function settings(value:Settings){applySettings(state,value);}
 function save(){notice.value=saveM01(props.context.key)?'参数与设置已保存。文件、目录权限和账号凭据不会写入草稿。':'草稿保存失败，请检查本机存储权限。';}
 function intervalSelect(xmin:number,xmax:number){stop();if(!state.wave.asset)return;state.wave.start=Math.max(0,Math.min(xmin,state.wave.asset.duration));state.wave.end=Math.max(state.wave.start,Math.min(xmax,state.wave.asset.duration));}
-onMounted(()=>{if(props.context.files.kind!=='desktop'||state.input)void refresh();});
-onUnmounted(()=>{disposed=true;previewAbort.abort();state.loadVersion++;state.listVersion++;state.wave.loading=false;stop();});
+onMounted(()=>{if(props.context.files.kind!=='desktop'||state.input)void refresh();if(tasks.value)void loadBatch();});
+onUnmounted(()=>{disposed=true;clearTimeout(taskTimer);previewAbort.abort();state.loadVersion++;state.listVersion++;state.wave.loading=false;stop();});
 </script>
 <template>
 <section class="workspace-page m01-page" aria-label="参数估计 工作区">
@@ -93,9 +131,9 @@ onUnmounted(()=>{disposed=true;previewAbort.abort();state.loadVersion++;state.li
 <details class="association-help"><summary>关联说明</summary><p class="hint">同名自动关联；可明确改选。唇形使用安全.lip.json格式，旧PKL需先经受限转换。</p></details><p v-if="linked.error" role="alert" class="error-banner">{{linked.error}}</p>
 <p v-if="state.wave.loading" role="status" class="audio-loading"><progress aria-label="音频读取与解码进度"/>正在读取音频与关联…</p>
 <template v-if="state.wave.asset"><WaveformViewport :state="state.wave" :spectrogram-loader="spectrogramLoader"><template #controls><label class="channel-picker">试听声道<select v-model.number="state.wave.channel" @change="stop"><option v-for="(_,i) in state.wave.asset.channels" :key="i" :value="i">声道 {{i+1}}</option></select></label></template></WaveformViewport>
-<section v-if="linked.tiers.length" class="m01-tiers"><label>TextGrid切分层<select v-model.number="linked.layer"><option v-for="(tier,i) in linked.tiers" :key="i" :value="i">{{tier.name}}</option></select></label><div class="m01-intervals"><button v-for="(interval,i) in intervals" :key="i" @click="intervalSelect(interval.xmin,interval.xmax)"><span class="ipa-sample">{{interval.text||'（空标签）'}}</span><small>{{interval.xmin.toFixed(3)}}–{{interval.xmax.toFixed(3)}} s</small></button></div><p class="hint">点选区间同步试听选区。当前层有 {{segments}} 个候选片段（跳过空白、sil、eps标签）。</p><button disabled>保存当前层切分音频</button><small class="muted">切分写入将在任务接入后启用。</small></section>
+<section v-if="linked.tiers.length" class="m01-tiers"><label>TextGrid切分层<select v-model.number="linked.layer"><option v-for="(tier,i) in linked.tiers" :key="i" :value="i">{{tier.name}}</option></select></label><div class="m01-intervals"><button v-for="(interval,i) in intervals" :key="i" @click="intervalSelect(interval.xmin,interval.xmax)"><span class="ipa-sample">{{interval.text||'（空标签）'}}</span><small>{{interval.xmin.toFixed(3)}}–{{interval.xmax.toFixed(3)}} s</small></button></div><p class="hint">当前层有 {{segments}} 个候选片段。勾选多项可批量切分；未勾选时处理当前音频。</p><label><input v-model="sliceParameters" type="checkbox"/>同时切分最近一次完整参数结果</label><p v-if="sliceParameters" class="hint">匹配相同原音频，保留原分析帧与时间，不重新估计。无参数结果时仅保存音频。</p><button :disabled="!taskReady||taskBusy||busy" @click="startBatch('textgrid_segment')">保存当前层切分音频</button><small v-if="!tasks" class="muted">当前入口仅供预览；持久任务入口需本机任务服务或项目服务。</small></section>
 </template></template><div v-else class="wave-empty"><AppIcon name="wave"/><h2>选择一段声音</h2><p>从左侧列表选择文件，查看真实波形、标签和试听选区。</p></div></template>
-<template #settings><h2>输出参数</h2><div class="parameter-count"><strong>{{state.wave.parameters.length}}</strong><span>/ 80 项</span></div><button @click="openParameters">选择输出参数</button><hr/><h2>分析设置</h2><p class="mono muted">帧移 {{state.settings.frameshift_ms}} ms<br/>分析窗 {{state.settings.windowsize_ms}} ms</p><button @click="openSettings">编辑14项设置</button><button :disabled="!dirty(state)" @click="save">保存草稿</button><span v-if="dirty(state)" class="draft-indicator">● 尚未保存</span><hr/><h2>分析结果</h2><p class="empty-small">暂无计算结果</p><div class="m01-batch-bar"><div><strong>处理列表中的 {{audioFiles.length}} 个文件</strong><p class="hint">与当前试听文件、TextGrid切分层分别操作。</p></div><button disabled>开始全列表分析</button><span class="muted">计算、取消与双格式结果发布将在下一阶段接入。</span></div></template>
+<template #settings><h2>输出参数</h2><div class="parameter-count"><strong>{{state.wave.parameters.length}}</strong><span>/ 80 项</span></div><button @click="openParameters">选择输出参数</button><hr/><h2>分析设置</h2><p class="mono muted">帧移 {{state.settings.frameshift_ms}} ms<br/>分析窗 {{state.settings.windowsize_ms}} ms</p><button @click="openSettings">编辑14项设置</button><button :disabled="!dirty(state)" @click="save">保存草稿</button><span v-if="dirty(state)" class="draft-indicator">● 尚未保存</span><hr/><div class="m01-batch-bar"><div><strong>处理列表中的 {{audioFiles.length}} 个文件</strong><p class="hint">使用全列表及当前参数设置；计算期间可以继续试听。</p></div><button class="primary" :disabled="!taskReady||taskBusy||busy||!audioFiles.length" @click="startBatch('acoustic_analysis')">开始全列表分析</button><span v-if="taskBusy" class="muted" role="status">正在处理任务操作…</span></div><hr/><h2>分析结果</h2><BatchResults :batches="batchList" :active="activeBatch" :jobs="jobResults" :busy="taskBusy" :desktop="context.files.kind==='desktop'" @select="loadBatch" @cancel="cancelBatch" @save="saveResults" @retry="retryJob" @download="downloadResult"/></template>
 </WorkbenchColumns>
 
 <ParameterDrawer v-if="state.drawer==='parameters'" :selected="state.wave.parameters" :draft="state.parameterDraft" require-selection @draft="state.parameterDraft=$event" @close="state.drawer=''" @apply="parameters"/>

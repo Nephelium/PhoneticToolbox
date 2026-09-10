@@ -13,7 +13,7 @@ import {stop} from '../state/audio.ts';
 import {clearWorkspaceOwner} from '../state/workspace.ts';
 const research=shallowRef<ResearchContext|null>(null);
 function leaveResearch(){stop();research.value?.files.dispose();research.value=null;}
-function enterResearch(){if(!session.value||!selected.value)return;leaveResearch();const owner=session.value.user.id,project=selected.value;research.value={key:'server:'+owner+':'+project.id+':M01',ownerId:owner,label:project.name,files:serverFiles(owner,project.id,clearAccount)};}
+function enterResearch(){if(!session.value||!selected.value)return;leaveResearch();const owner=session.value.user.id,project=selected.value;research.value={key:'server:'+owner+':'+project.id+':M01',ownerId:owner,label:project.name,files:serverFiles(owner,project.id,clearAccount,()=>session.value?.csrf_token??'')};}
 
 type Session = components['schemas']['SessionView'];
 type Project = components['schemas']['ProjectView'];

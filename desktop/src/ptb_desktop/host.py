@@ -58,10 +58,28 @@ class LocalOnly(QWebEngineUrlRequestInterceptor):
 
 class Bridge(QObject):
     previewReady=pyqtSignal(str,str)
+    taskReady=pyqtSignal(str,str)
     def __init__(self,provider,service,window,*,test_dialog=False):
         super().__init__(window);self.provider,self.service,self.window=provider,service,window
         self.test_dialog=test_dialog
         self.preview_lock=threading.Lock()
+        self.task_lock=threading.Lock()
+        from .task_bridge import TaskBridge
+        self.tasks=TaskBridge(provider,service)
+
+    @pyqtSlot(str,str)
+    def task(self,request_id,raw):
+        if len(request_id)>64 or len(raw)>1_000_000:return
+        if not self.task_lock.acquire(False):
+            self.taskReady.emit(request_id,json.dumps({'ok':False,'error':'任务操作正在进行，请稍候。'}));return
+        def work():
+            try:result={'ok':True,'value':self.tasks.invoke(json.loads(raw))}
+            except FileAccessError as exc:result={'ok':False,'error':str(exc)}
+            except Exception:result={'ok':False,'error':'任务操作失败，请检查文件关联、目录权限或任务服务。'}
+            finally:self.task_lock.release()
+            try:self.taskReady.emit(request_id,json.dumps(result,ensure_ascii=False,allow_nan=False))
+            except RuntimeError:pass
+        threading.Thread(target=work,daemon=True).start()
 
     @pyqtSlot(str,str)
     def preview(self,request_id,raw):
@@ -92,7 +110,7 @@ class Bridge(QObject):
             op=body.get('op')
             if op=='hello':
                 health=self.service.get('/api/v1/health')
-                value={'kind':'desktop','session':self.provider.session,'api_version':health['api_version']}
+                value={'kind':'desktop','session':self.provider.session,'api_version':health['api_version'],'tasks':bool(self.service.local_files_root)}
             elif op=='choose':
                 purpose=body.get('purpose')
                 def picker():
@@ -123,9 +141,9 @@ class Page(QWebEnginePage):
 
 
 class Workbench(QMainWindow):
-    def __init__(self,dist,*,test=False):
+    def __init__(self,dist,*,test=False,jobs_path=None,local_files_root=None,reaper_binary=None):
         super().__init__();self.setWindowTitle('PhoneticToolbox 3.0');self.resize(1440,900)
-        self.provider=FileProvider();self.service=LocalService();self.service.start();self.closing=False
+        self.provider=FileProvider();self.service=LocalService(jobs_path,local_files_root=local_files_root,reaper_binary=reaper_binary);self.service.start();self.closing=False
         self.profile=QWebEngineProfile(self) if test else QWebEngineProfile('ptb-v3-workbench',self)
         if not test:
             data=QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
@@ -149,9 +167,9 @@ class Workbench(QMainWindow):
         self.provider.close();self.service.close();event.accept()
 
 
-def run(dist):
+def run(dist,**options):
     if not (dist/'index.html').is_file():raise RuntimeError('请先构建共同前端。')
     register_scheme();app=QApplication(['PhoneticToolbox']);app.setApplicationName('PhoneticToolbox-v3')
-    window=Workbench(dist)
+    window=Workbench(dist,**options)
     app.aboutToQuit.connect(window.service.close);app.aboutToQuit.connect(window.provider.close)
     window.show();code=app.exec();window.page.deleteLater();app.processEvents();return code

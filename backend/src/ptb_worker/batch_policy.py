@@ -5,32 +5,11 @@ No submission, database initialization, file reads, or scientific computation.
 from dataclasses import dataclass
 import hashlib
 import json
-from typing import Literal
-from pydantic import Field,model_validator
-from ptb_api.models import WireModel,Identifier,IdempotencyKey
-from ptb_api.acoustic_models import AcousticInputs,AcousticConfigSnapshot,AcousticBatchSummary,AcousticBatchItem
+from ptb_api.acoustic_models import AcousticBatchSummary,AcousticBatchItem
+from ptb_api.acoustic_batch_models import BatchRequest
 
 MAX_BATCH_INPUTS=1000
 ACTIVE={'queued','running','cancel_requested'}
-
-
-class BatchRequest(WireModel):
-    schema_version: Literal['m01-batch/1']='m01-batch/1'
-    operation: Literal['acoustic_analysis','textgrid_segment']
-    project_id: Identifier
-    idempotency_key: IdempotencyKey
-    inputs: list[AcousticInputs]=Field(min_length=1,max_length=MAX_BATCH_INPUTS)
-    config: AcousticConfigSnapshot | None=None
-    layer: str | None=Field(default=None,min_length=1,max_length=180)
-
-    @model_validator(mode='after')
-    def scope(self):
-        if len({i.audio.asset_id for i in self.inputs})!=len(self.inputs):raise ValueError('Duplicate batch audio')
-        if self.operation=='acoustic_analysis':
-            if self.config is None or self.layer is not None:raise ValueError('Analysis requires explicit config, not cutting tier')
-        elif self.config is not None or self.layer is None or not self.layer.strip() or any(i.textgrid is None for i in self.inputs):
-            raise ValueError('Segmentation requires an explicit tier and TextGrid for every selected audio')
-        return self
 
 
 @dataclass(frozen=True)

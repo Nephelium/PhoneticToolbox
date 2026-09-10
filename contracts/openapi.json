@@ -510,6 +510,58 @@
         "title": "AcousticInputs",
         "type": "object"
       },
+      "AcousticManagedFile": {
+        "additionalProperties": false,
+        "properties": {
+          "expires_at": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          },
+          "id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "const": "result",
+            "default": "result",
+            "title": "Kind",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 255,
+            "title": "Name",
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Sha256",
+            "type": "string"
+          },
+          "size_bytes": {
+            "maximum": 64000000,
+            "minimum": 1,
+            "title": "Size Bytes",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "size_bytes",
+          "sha256",
+          "expires_at"
+        ],
+        "title": "AcousticManagedFile",
+        "type": "object"
+      },
       "AcousticMetadata": {
         "additionalProperties": false,
         "properties": {
@@ -1124,6 +1176,51 @@
         "title": "AcousticSettings",
         "type": "object"
       },
+      "AcousticTaskManifest": {
+        "additionalProperties": false,
+        "properties": {
+          "complete": {
+            "const": true,
+            "default": true,
+            "title": "Complete",
+            "type": "boolean"
+          },
+          "core_version": {
+            "title": "Core Version",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/AcousticManagedFile"
+            },
+            "maxItems": 3001,
+            "minItems": 1,
+            "title": "Files",
+            "type": "array"
+          },
+          "kind": {
+            "const": "managed_acoustic_files",
+            "default": "managed_acoustic_files",
+            "title": "Kind",
+            "type": "string"
+          },
+          "operation": {
+            "enum": [
+              "acoustic_analysis",
+              "textgrid_segment"
+            ],
+            "title": "Operation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "operation",
+          "core_version",
+          "files"
+        ],
+        "title": "AcousticTaskManifest",
+        "type": "object"
+      },
       "AcousticTextColumn": {
         "additionalProperties": false,
         "properties": {
@@ -1314,6 +1411,200 @@
           "origin"
         ],
         "title": "Audio",
+        "type": "object"
+      },
+      "BatchInputs": {
+        "additionalProperties": false,
+        "properties": {
+          "audio": {
+            "$ref": "#/components/schemas/AcousticAssetRef"
+          },
+          "lip": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AcousticAssetRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "parent_result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AcousticAssetRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "textgrid": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AcousticAssetRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "audio"
+        ],
+        "title": "BatchInputs",
+        "type": "object"
+      },
+      "BatchList": {
+        "additionalProperties": false,
+        "properties": {
+          "batches": {
+            "items": {
+              "$ref": "#/components/schemas/BatchView"
+            },
+            "maxItems": 100,
+            "title": "Batches",
+            "type": "array"
+          }
+        },
+        "required": [
+          "batches"
+        ],
+        "title": "BatchList",
+        "type": "object"
+      },
+      "BatchRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "config": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AcousticConfigSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "idempotency_key": {
+            "pattern": "^[A-Za-z0-9_-]{8,80}$",
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "inputs": {
+            "items": {
+              "$ref": "#/components/schemas/BatchInputs"
+            },
+            "maxItems": 1000,
+            "minItems": 1,
+            "title": "Inputs",
+            "type": "array"
+          },
+          "layer": {
+            "anyOf": [
+              {
+                "maxLength": 180,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Layer"
+          },
+          "operation": {
+            "enum": [
+              "acoustic_analysis",
+              "textgrid_segment"
+            ],
+            "title": "Operation",
+            "type": "string"
+          },
+          "project_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "m01-batch/1",
+            "default": "m01-batch/1",
+            "title": "Schema Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "operation",
+          "project_id",
+          "idempotency_key",
+          "inputs"
+        ],
+        "title": "BatchRequest",
+        "type": "object"
+      },
+      "BatchView": {
+        "additionalProperties": false,
+        "properties": {
+          "audio_names": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 1000,
+            "minItems": 1,
+            "title": "Audio Names",
+            "type": "array"
+          },
+          "cancel_requested": {
+            "title": "Cancel Requested",
+            "type": "boolean"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "number"
+          },
+          "id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "operation": {
+            "enum": [
+              "acoustic_analysis",
+              "textgrid_segment"
+            ],
+            "title": "Operation",
+            "type": "string"
+          },
+          "project_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "request_sha256": {
+            "title": "Request Sha256",
+            "type": "string"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/AcousticBatchSummary"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "project_id",
+          "operation",
+          "created_at",
+          "updated_at",
+          "cancel_requested",
+          "request_sha256",
+          "audio_names",
+          "summary"
+        ],
+        "title": "BatchView",
         "type": "object"
       },
       "Capabilities": {
@@ -1759,7 +2050,9 @@
               "pipeline_check",
               "storage_check",
               "archive_zip",
-              "extract_zip"
+              "extract_zip",
+              "acoustic_analysis",
+              "textgrid_segment"
             ],
             "title": "Operation",
             "type": "string"
@@ -1781,6 +2074,9 @@
               },
               {
                 "$ref": "#/components/schemas/FileManifest"
+              },
+              {
+                "$ref": "#/components/schemas/AcousticTaskManifest"
               },
               {
                 "type": "null"
@@ -2035,6 +2331,7 @@
             "discriminator": {
               "mapping": {
                 "acoustic_file": "#/components/schemas/AcousticFileManifest",
+                "managed_acoustic_files": "#/components/schemas/AcousticTaskManifest",
                 "managed_files": "#/components/schemas/FileManifest",
                 "pipeline_check_metadata": "#/components/schemas/JobManifest"
               },
@@ -2049,6 +2346,9 @@
               },
               {
                 "$ref": "#/components/schemas/AcousticFileManifest"
+              },
+              {
+                "$ref": "#/components/schemas/AcousticTaskManifest"
               }
             ],
             "title": "Manifest"
@@ -2531,7 +2831,7 @@
     }
   },
   "info": {
-    "description": "Shared API; P05 accounts require configured PostgreSQL. Scientific tasks not yet connected.",
+    "description": "Shared API; accounts require configured PostgreSQL. M01 batches require an explicitly configured durable worker and resource store.",
     "title": "PhoneticToolbox API",
     "version": "1.1.0"
   },
@@ -3131,6 +3431,340 @@
           }
         },
         "summary": "Create",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/batches/create": {
+      "post": {
+        "operationId": "create_acoustic_batch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Batch",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/batches/list": {
+      "get": {
+        "operationId": "list_acoustic_batches",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchList"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Batches",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/batches/{batch_id}": {
+      "get": {
+        "operationId": "get_acoustic_batch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "batch_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Batch Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Batch",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/batches/{batch_id}/cancel": {
+      "post": {
+        "operationId": "cancel_acoustic_batch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "batch_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Batch Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Cancel Batch",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/local-inputs": {
+      "post": {
+        "operationId": "register_local_acoustic_input",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "role",
+            "required": true,
+            "schema": {
+              "title": "Role",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Local Input",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/local-results/{asset_id}": {
+      "get": {
+        "operationId": "read_local_acoustic_result",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "asset_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Asset Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "default": 65536,
+              "maximum": 1048576,
+              "minimum": 1,
+              "title": "Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Local Result",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/parents/latest": {
+      "get": {
+        "operationId": "find_acoustic_parent",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sha256",
+            "required": true,
+            "schema": {
+              "pattern": "^[0-9a-f]{64}$",
+              "title": "Sha256",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Parent",
         "tags": [
           "jobs"
         ]

@@ -60,6 +60,17 @@ class JobStore:
             raise ValueError('Invalid scheduler settings')
         self.max_running,self.lease_seconds=max_running,lease_seconds
         self.files = None
+        self.batches = None
+
+    def capacity_used(self,tx,owner):
+        used=tx.execute('SELECT count(*) AS n FROM {jobs} WHERE owner_id=?',(owner,)).fetchone()['n']
+        exists=(tx.execute("SELECT to_regclass('ptb_jobs.acoustic_batches') AS n").fetchone()['n'] if self.postgres else
+                tx.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='acoustic_batches'").fetchone())
+        if exists:
+            prefix='ptb_jobs.' if self.postgres else ''
+            used+=tx.execute(f'''SELECT count(*) AS n FROM {prefix}acoustic_batch_items i JOIN {prefix}acoustic_batches b
+                ON b.id=i.batch_id WHERE b.owner_id=? AND b.closed_at IS NULL AND NOT b.cancel_requested AND i.child_job_id IS NULL''',(owner,)).fetchone()['n']
+        return used
 
     def check_schema(self):
         with self.transaction(write=False) as tx:
@@ -105,7 +116,7 @@ class JobStore:
             if old:
                 if old['request_hash'] != request_hash:raise JobError('idempotency_conflict')
                 return public(dict(old))
-            if tx.execute('SELECT count(*) AS n FROM {jobs} WHERE owner_id=?',(owner,)).fetchone()['n'] >= 1000:
+            if self.capacity_used(tx,owner) >= 1000:
                 raise JobError('job_limit_reached')
             if self.postgres and not tx.conn.execute('SELECT 1 FROM ptb_accounts.projects p JOIN ptb_accounts.users u ON p.owner_id=u.id WHERE p.id=%s AND p.owner_id=%s AND u.active',(body.project_id,owner)).fetchone():
                 raise JobError('project_not_found',404)
@@ -153,6 +164,9 @@ class JobStore:
             if row['state'] not in ('failed','interrupted','cancelled'):raise JobError('job_not_retryable')
             snapshot=json.loads(row['snapshot'])
         model = JobInput if snapshot['operation']=='pipeline_check' else FileJobInput
+        if snapshot['operation'] in ('acoustic_analysis','textgrid_segment'):
+            if self.batches is None:raise JobError('acoustic_tasks_unavailable',503)
+            return self.batches.retry(owner,job_id,key)
         body=model(project_id=str(row['project_id']),idempotency_key=key,operation=snapshot['operation'],config=snapshot['config'])
         return self.submit(owner,body,retry_of=job_id)
 
@@ -164,6 +178,7 @@ class JobStore:
 
     def _claim(self, tx, worker_id):
         now=tx.now();self._recover(tx,now)
+        if self.batches is not None:self.batches.advance(tx,now)
         if tx.execute("SELECT count(*) AS n FROM {jobs} WHERE state IN ('running','cancel_requested')").fetchone()['n'] >= self.max_running:return None
         query="""SELECT j.* FROM {jobs} j WHERE j.state='queued' AND NOT EXISTS
             (SELECT 1 FROM {jobs} a WHERE a.owner_id=j.owner_id AND a.state IN ('running','cancel_requested'))

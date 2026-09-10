@@ -302,10 +302,10 @@ class Storage:
                 raise StorageError('asset_expired', 410)
             return block
 
-    def _delete(self, conn, row):
+    def _delete(self, conn, row, *, notify_jobs=True):
         if row['state'] == 'deleted':
             return row
-        if self.files is not None:
+        if notify_jobs and self.files is not None:
             self.files.before_delete(conn, row)
         # Incomplete disk writes must stay budget-covered until actual deletion.
         conn.execute("UPDATE ptb_storage.assets SET state='deleting',delete_attempts=delete_attempts+1,last_delete_at=%s WHERE id=%s",

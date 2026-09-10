@@ -266,6 +266,58 @@
       "title": "AcousticInputSnapshot",
       "type": "object"
     },
+    "AcousticManagedFile": {
+      "additionalProperties": false,
+      "properties": {
+        "expires_at": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Expires At"
+        },
+        "id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "result",
+          "default": "result",
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 255,
+          "title": "Name",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "size_bytes": {
+          "maximum": 64000000,
+          "minimum": 1,
+          "title": "Size Bytes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "size_bytes",
+        "sha256",
+        "expires_at"
+      ],
+      "title": "AcousticManagedFile",
+      "type": "object"
+    },
     "AcousticMetadata": {
       "additionalProperties": false,
       "properties": {
@@ -611,6 +663,51 @@
       "title": "AcousticSettings",
       "type": "object"
     },
+    "AcousticTaskManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "complete": {
+          "const": true,
+          "default": true,
+          "title": "Complete",
+          "type": "boolean"
+        },
+        "core_version": {
+          "title": "Core Version",
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/AcousticManagedFile"
+          },
+          "maxItems": 3001,
+          "minItems": 1,
+          "title": "Files",
+          "type": "array"
+        },
+        "kind": {
+          "const": "managed_acoustic_files",
+          "default": "managed_acoustic_files",
+          "title": "Kind",
+          "type": "string"
+        },
+        "operation": {
+          "enum": [
+            "acoustic_analysis",
+            "textgrid_segment"
+          ],
+          "title": "Operation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "core_version",
+        "files"
+      ],
+      "title": "AcousticTaskManifest",
+      "type": "object"
+    },
     "FileManifest": {
       "additionalProperties": false,
       "properties": {
@@ -741,6 +838,7 @@
       "discriminator": {
         "mapping": {
           "acoustic_file": "#/$defs/AcousticFileManifest",
+          "managed_acoustic_files": "#/$defs/AcousticTaskManifest",
           "managed_files": "#/$defs/FileManifest",
           "pipeline_check_metadata": "#/$defs/JobManifest"
         },
@@ -755,6 +853,9 @@
         },
         {
           "$ref": "#/$defs/AcousticFileManifest"
+        },
+        {
+          "$ref": "#/$defs/AcousticTaskManifest"
         }
       ],
       "title": "Manifest"

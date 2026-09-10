@@ -55,6 +55,11 @@ def main():
     authority = '127.0.0.1:' + str(sock.getsockname()[1])
     jobs=SQLiteJobStore(config['jobs_path']) if config.get('jobs_path') else None
     if jobs:jobs.check_schema()
+    if jobs and config.get('local_files_root'):
+        from ptb_worker.local_acoustic_files import LocalAcousticFiles
+        from ptb_worker.acoustic_batches import AcousticBatches
+        files=LocalAcousticFiles(jobs,config['local_files_root'],reaper_binary=config.get('reaper_binary'))
+        AcousticBatches(jobs,files);files.recover()
     app = LoopbackGuard(create_app(args.mode,job_store=jobs,local_token=token,local_origin='http://'+authority), authority, token)
     server = uvicorn.Server(uvicorn.Config(app, log_level='warning', access_log=False))
 
@@ -79,7 +84,8 @@ def main():
             worker=subprocess.Popen([sys.executable,'-m','ptb_worker.cli'],stdin=subprocess.PIPE,
                                     stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True,encoding='utf-8',
                                     creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
-            worker.stdin.write(json.dumps({'kind':'sqlite','path':str(jobs.path)})+'\n');worker.stdin.flush()
+            worker.stdin.write(json.dumps({'kind':'sqlite','path':str(jobs.path),'local_files_root':config.get('local_files_root'),
+                'reaper_binary':config.get('reaper_binary')})+'\n');worker.stdin.flush()
             ready=queue.Queue()
             threading.Thread(target=lambda:ready.put(worker.stdout.readline()),daemon=True).start()
             if json.loads(ready.get(timeout=10))!={'ready':True}:raise RuntimeError('Worker did not become ready')

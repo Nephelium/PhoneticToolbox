@@ -445,9 +445,10 @@
         "docs/testing/m01-io-report.md",
         "docs/testing/m01-contract-report.md",
         "docs/testing/m01-workspace-report.md",
-        "docs/testing/m01-execution-preparation-report.md"
+        "docs/testing/m01-execution-preparation-report.md",
+        "docs/testing/m01-persistent-report.md"
       ],
-      "note": "M01 A/B/C/D/E and F1 preparation verified within documented Windows scopes. F2 durable scheduling/publication and full M01 remain in_progress. Actual 005 schema application requires specific approval of docs/testing/m01-migration-review.md."
+      "note": "A/B/C/D/E/F1/F2 verified in their documented Windows scopes. 005 applied after specific approval; real PG/SQLite, Qt/Chrome processing and publication verified. Full M01 remains in_progress; G manual/compatibility/natural-data review remains."
     },
     {
       "id": "M02",

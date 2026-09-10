@@ -22,8 +22,18 @@ def main():
         from ptb_api.storage import Storage
         from .files import FilePipeline
         storage=Storage(config['dsn'],config['storage_root'])
-        FilePipeline(store,storage)
+        if config.get('enable_acoustic_batches'):
+            from .acoustic_files import AcousticFiles
+            from .acoustic_batches import AcousticBatches
+            files=AcousticFiles(store,storage);files.reaper_binary=config.get('reaper_binary')
+            AcousticBatches(store,files)
+        else:FilePipeline(store,storage)
         storage.recover()
+    if config.get('local_files_root'):
+        from .local_acoustic_files import LocalAcousticFiles
+        from .acoustic_batches import AcousticBatches
+        files=LocalAcousticFiles(store,config['local_files_root'],reaper_binary=config.get('reaper_binary'))
+        AcousticBatches(store,files);files.recover()
     stop=threading.Event()
     def owner_closed():sys.stdin.readline();stop.set()
     threading.Thread(target=owner_closed,daemon=True).start()

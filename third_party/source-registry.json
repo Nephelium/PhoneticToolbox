@@ -49,7 +49,8 @@
         "packages/phonetic_core/src/phonetic_core/acoustic/textgrid.py",
         "packages/phonetic_core/src/phonetic_core/textgrid.py",
         "packages/phonetic_core/src/phonetic_core/spectrogram.py",
-        "frontend/src/components/SpectrogramViewport.vue"
+        "frontend/src/components/SpectrogramViewport.vue",
+        "backend/src/ptb_worker/science_child.py"
       ],
       "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json",
       "m01_io_evidence": "docs/testing/m01-io-report.md",
@@ -101,7 +102,9 @@
         "packages/phonetic_core/src/phonetic_core/acoustic/reaper_codec.py",
         "packages/phonetic_core/src/phonetic_core/models/audio.py",
         "backend/src/ptb_worker/native/reaper.py",
-        "resources/manifests/acoustic.json"
+        "resources/manifests/acoustic.json",
+        "backend/src/ptb_worker/science_child.py",
+        "backend/src/ptb_worker/managed_scratch.py"
       ],
       "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json",
       "m01_io_evidence": "docs/testing/m01-io-report.md"
@@ -6321,7 +6324,9 @@
       "used_at": [
         "backend/src/ptb_worker/io/parameter_exports.py",
         "scripts/m01_database.py",
-        "backend/src/ptb_worker/segment_child.py"
+        "backend/src/ptb_worker/segment_child.py",
+        "backend/src/ptb_worker/local_acoustic_files.py",
+        "backend/src/ptb_worker/acoustic_batches.py"
       ],
       "m01_io_evidence": "docs/testing/m01-io-report.md",
       "m01_execution_evidence": "docs/testing/m01-execution-preparation-report.md"
@@ -6370,7 +6375,9 @@
       "verification_date": "2026-09-09",
       "relationship": "Standard-library API use; no external algorithm port",
       "used_at": [
-        "backend/src/ptb_api/storage.py"
+        "backend/src/ptb_api/storage.py",
+        "backend/src/ptb_worker/acoustic_files.py",
+        "desktop/src/ptb_desktop/task_bridge.py"
       ],
       "distribution_status": "existing CPython runtime; native durability requires platform-specific acceptance",
       "acknowledgement_group": "software"
@@ -6762,7 +6769,8 @@
         "requirements-m01-science.lock",
         "backend/src/ptb_worker/io/audio.py",
         "requirements-m01-io.lock",
-        "backend/src/ptb_worker/segment_child.py"
+        "backend/src/ptb_worker/segment_child.py",
+        "backend/src/ptb_worker/science_child.py"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json",
@@ -6880,7 +6888,8 @@
       "used_at": [
         "backend/src/ptb_worker/io/parameter_exports.py",
         "requirements-m01-io.lock",
-        "backend/src/ptb_worker/segment_child.py"
+        "backend/src/ptb_worker/segment_child.py",
+        "backend/src/ptb_worker/science_child.py"
       ],
       "relationship": "Unmodified dependency; project-owned bounded writer adapter uses pinned internal writer API",
       "evidence": "third_party/m01-io-inventory.json",
@@ -6932,7 +6941,9 @@
         "backend/src/ptb_worker/native/windows.py",
         "backend/src/ptb_worker/spectrogram_preview.py",
         "desktop/src/ptb_desktop/file_provider.py",
-        "backend/src/ptb_worker/segmentation.py"
+        "backend/src/ptb_worker/segmentation.py",
+        "desktop/src/ptb_desktop/task_bridge.py",
+        "backend/src/ptb_worker/managed_scratch.py"
       ],
       "relationship": "API/format reference; project-owned adapter implementation",
       "m01_execution_evidence": "docs/testing/m01-execution-preparation-report.md"

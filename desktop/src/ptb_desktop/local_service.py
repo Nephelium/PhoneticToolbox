@@ -9,12 +9,14 @@ import urllib.request
 
 
 class LocalService:
-    def __init__(self, jobs_path=None):
+    def __init__(self, jobs_path=None, *, local_files_root=None,reaper_binary=None):
         self.token = secrets.token_urlsafe(32)
         self.process = None
         self.url = None
         self.exit_code = None
         self.jobs_path = str(jobs_path) if jobs_path is not None else None
+        self.local_files_root=str(local_files_root) if local_files_root is not None else None
+        self.reaper_binary=str(reaper_binary) if reaper_binary is not None else None
 
     def start(self):
         if self.process is not None:
@@ -24,7 +26,8 @@ class LocalService:
             stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
             text=True, encoding='utf-8', creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
         try:
-            self.process.stdin.write(json.dumps({'token': self.token, 'jobs_path':self.jobs_path}) + '\n')
+            self.process.stdin.write(json.dumps({'token': self.token, 'jobs_path':self.jobs_path,
+                'local_files_root':self.local_files_root,'reaper_binary':self.reaper_binary}) + '\n')
             self.process.stdin.flush()
             lines = queue.Queue()
             threading.Thread(target=lambda: lines.put(self.process.stdout.readline()), daemon=True).start()
@@ -74,6 +77,21 @@ class LocalService:
         finally:
             process.stdin.close()
             process.stdout.close()
+
+    def import_input(self,payload,name,role):
+        from urllib.parse import urlencode
+        path='/api/v1/jobs/local-inputs?'+urlencode(dict(name=name,role=role))
+        return json.loads(self.binary(path,'POST',payload))
+
+    def binary(self,path,method='GET',payload=None):
+        if not path.startswith('/api/v1/jobs/') or '://' in path:raise ValueError('Invalid local task path')
+        request=urllib.request.Request(self.url+path,data=payload,method=method,
+            headers={'Authorization':'Bearer '+self.token,'Origin':self.url,'Content-Type':'application/octet-stream'})
+        opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
+        with opener.open(request,timeout=30) as response:
+            raw=response.read(1_048_577)
+            if len(raw)>1_048_576:raise ValueError('Oversized task response')
+            return raw
 
     def preview(self,payload,query):
         from urllib.parse import urlencode

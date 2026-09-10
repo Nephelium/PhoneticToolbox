@@ -37,14 +37,14 @@ def unpack_bundle(payload,limit):
     error=manifest.get('error')
     if isinstance(error,str) and error in {'invalid_segment_input','segment_budget_exceeded','parent_result_source_mismatch','no_labelled_segments','missing_or_invalid_tier'}:
         raise FormatError(error)
-    if manifest.get('kind')!='prepared_segments' or not isinstance(manifest.get('files'),list) or not 1<=len(manifest['files'])<=3000:
+    if manifest.get('kind') not in ('prepared_segments','prepared_analysis') or not isinstance(manifest.get('files'),list) or not 1<=len(manifest['files'])<=3000:
         raise FormatError('invalid_segment_manifest')
     names=set()
     for entry in manifest['files']:
         if not isinstance(entry,dict):raise FormatError('invalid_segment_file')
         name,size=entry.get('name'),entry.get('size_bytes')
         kind=entry.get('format')
-        extension={'wav':'.wav','xlsx':'.xlsx','sqlite':'.ptb.sqlite'}.get(kind) if isinstance(kind,str) else None
+        extension={'wav':'.wav','xlsx':'.xlsx','sqlite':'.ptb.sqlite','json':'.ptb.json'}.get(kind) if isinstance(kind,str) else None
         if (type(size)!=int or size<=0 or offset+size>len(payload) or not isinstance(name,str) or
             not extension or not name.endswith(extension) or len(name)>220 or
             any(ord(c)<32 or c in '/\\:<>"|?*' for c in name) or name.casefold() in names):

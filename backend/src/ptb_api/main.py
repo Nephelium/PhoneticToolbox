@@ -30,7 +30,7 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
     if mode not in ('local', 'server'):
         raise ValueError('Unsupported service mode')
     app = FastAPI(title='PhoneticToolbox API', version=API_VERSION,
-                  description='Shared API; P05 accounts require configured PostgreSQL. Scientific tasks not yet connected.')
+                  description='Shared API; accounts require configured PostgreSQL. M01 batches require an explicitly configured durable worker and resource store.')
     ctx = AccountContext(account_store, auth_settings, mode)
     app.include_router(create_account_router(ctx))
     app.include_router(create_project_router(ctx))
@@ -88,9 +88,9 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
         storage_ready = mode == 'server' and storage is not None and getattr(storage, 'ready', False)
         file_jobs = storage_ready and job_store is not None and getattr(job_store,'files',None) is not None
         return Capabilities(stage='P07' if storage_ready else ('P06' if job_store is not None else ('P05' if account_store is not None and mode == 'server' else 'P02')),
-                            algorithms=[], task_operations=(['pipeline_check'] + (['storage_check','archive_zip','extract_zip'] if file_jobs else [])) if job_store is not None else [],
+                            algorithms=['M01'] if getattr(job_store,'batches',None) else [], task_operations=(['pipeline_check'] + (['storage_check','archive_zip','extract_zip'] if file_jobs else []) + (['acoustic_analysis','textgrid_segment'] if getattr(job_store,'batches',None) else [])) if job_store is not None else [],
                             storage_operations=['upload', 'download', 'delete'] if storage_ready else [], limitations=[
-            'Scientific modules pending P08', 'Storage checks generate engineering fixtures, not scientific analysis results'])
+            'M01 is available only when durable acoustic batches are configured; other scientific modules remain pending', 'Storage checks generate engineering fixtures, not scientific analysis results'])
 
     base_openapi = app.openapi
 

@@ -45,7 +45,7 @@ class FilePipeline:
                 return public(dict(old))
             if not conn.execute('SELECT 1 FROM ptb_accounts.projects p JOIN ptb_accounts.users u ON p.owner_id=u.id WHERE p.id=%s AND p.owner_id=%s AND u.active',(body.project_id,owner)).fetchone():
                 raise JobError('project_not_found',404)
-            if tx.execute('SELECT count(*) AS n FROM {jobs} WHERE owner_id=?',(owner,)).fetchone()['n'] >= 1000:
+            if self.jobs.capacity_used(tx,owner) >= 1000:
                 raise JobError('job_limit_reached')
             quota=conn.execute('SELECT used_bytes,reserved_bytes FROM ptb_storage.quota_accounts WHERE owner_id=%s',(owner,)).fetchone()
             if quota and quota['used_bytes']+quota['reserved_bytes']>=QUOTA_BYTES:
@@ -117,17 +117,26 @@ class FilePipeline:
         with self.storage._locked() as conn:
             job, inputs = self._fence(conn,identity)
             rows = self._outputs(conn,identity)
-            if len(rows)>=16: raise StorageError('output_count_exceeded',413)
+            if len(rows)>=self.output_limit(job): raise StorageError('output_count_exceeded',413)
             self._budget(job,rows,expected or 0)
             deadline = min([job['deadline'],*[a['expires_at'] for a in inputs]])
             body = UploadInput(project_id=job['project_id'],name=name,expected_bytes=expected,
-                idempotency_key=f"job-{identity[0]}-{identity[2]}-{len(rows)}")
+                idempotency_key=f"job-{identity[0]}-{identity[2]}-{self.output_sequence(conn,identity)}")
             def register(connection, asset_id):
                 # Recheck with the same transaction as registration/reservation.
                 self._fence(connection,identity)
                 connection.execute("INSERT INTO ptb_storage.job_assets(job_id,asset_id,owner_id,project_id,role,generation,created_at) VALUES(%s,%s,%s,%s,'output',%s,%s)",
                     (job['id'],asset_id,job['owner_id'],job['project_id'],identity[2],self.storage._now(connection)))
             return self.storage._create(conn,str(job['owner_id']),body,kind=kind,deadline=deadline,on_created=register)
+
+    def output_limit(self,job):return 16
+
+    def output_sequence(self,conn,identity):
+        return len(FilePipeline._outputs(self,conn,identity))
+
+    def independent_expiry(self,operation):return operation=='storage_check'
+
+    def manifest(self,operation,files):return FileManifest(files=files,core_version=core_version).model_dump()
 
     @staticmethod
     def _budget(job, outputs, extra):
@@ -183,7 +192,7 @@ class FilePipeline:
                 raise StorageError('incomplete_output_batch',409)
             now = tx.now()
             operation = json.loads(job['snapshot'])['operation']
-            deadline = expiry(now, [min(a['expires_at'],a['input_expires_at']) for a in inputs] if operation!='storage_check' else [])
+            deadline = expiry(now, [min(a['expires_at'],a['input_expires_at']) for a in inputs] if not self.independent_expiry(operation) else [])
             files = []
             for item in outputs:
                 if self.storage._path(item['id']).stat().st_size != item['size_bytes']:
@@ -196,10 +205,10 @@ class FilePipeline:
             # batch, including all ready flags and released reservations.
             self._fence(conn,identity)
             now=tx.now()
-            deadline=expiry(now,[min(a['expires_at'],a['input_expires_at']) for a in inputs] if operation!='storage_check' else [])
+            deadline=expiry(now,[min(a['expires_at'],a['input_expires_at']) for a in inputs] if not self.independent_expiry(operation) else [])
             conn.execute('UPDATE ptb_storage.assets SET expires_at=%s WHERE id=ANY(%s)',(deadline,[a['id'] for a in outputs]))
             for item in files: item['expires_at']=deadline
-            manifest = FileManifest(files=files,core_version=core_version).model_dump()
+            manifest = self.manifest(operation,files)
             tx.execute("UPDATE {jobs} SET state='succeeded',progress=1,result_manifest=?,error_code=NULL,worker_id=NULL,lease_until=NULL WHERE id=?",(canonical(manifest),job['id']))
             job.update(state='succeeded',progress=1)
             self.jobs._event(tx,job,'succeeded',now)

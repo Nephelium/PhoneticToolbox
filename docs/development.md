@@ -1,19 +1,19 @@
 # v3 开发入口 · P02
 
-## 当前M01目录与显示入口（2026-09-10）
+## 当前M01持久参数估计入口（2026-09-10）
 
 使用本轮新建的项目内m01-ui环境（含固定Praat/Qt依赖），无需全局安装。默认命令仍是短诊断；打开实际共同工作台使用：
 
 ```powershell
 npm --prefix frontend run build
-& 'D:/PhoneticToolbox/PhoneticToolbox_v3/.venv/m01-ui/Scripts/python.exe' -m ptb_desktop.main --workspace --dist 'D:/PhoneticToolbox/PhoneticToolbox_v3/frontend/dist'
+& 'D:/PhoneticToolbox/PhoneticToolbox_v3/scripts/Start-M01-Workbench.ps1'
 ```
 
-点击“参数估计”选择输入目录。默认一条波形，可勾选“显示两个声道”与“显示语谱图（Praat）”；切换试听声道同步更新显示。文件行支持全选切分范围；批处理范围仍是整个输入列表。参数计算、进度/取消、结果与切分写入尚待M01-F。WAV预览限64,000,000字节/3200万采样值，按像素聚合只优化显示，不改音频。
+点击“参数估计”选择输入目录。默认一条波形，可勾选“显示两个声道”与“显示语谱图（Praat）”；切换试听声道同步更新显示。文件行支持全选切分范围；批处理范围仍是整个输入列表。F2已接通参数计算、持久批次/取消/重试、三种结果保存及按TextGrid切分。可勾选“同时切分最近一次完整参数结果”；没有父结果时仅切分音频。WAV预览限64,000,000字节/3200万采样值，按像素聚合只优化显示，不改音频。
 
 本轮 [布局修订](testing/m01-layout-report.md)：目录与输出控件按宽度同排，批量区在右侧；宽屏三列按内容独立滚动，全部溢出时共同滚动。波形下有秒刻度，Ctrl+滚轮缩放、双击全长；底部进度条可定位当前选区，点“全部”后可定位全文件。文件列表获得焦点后 Ctrl+A 全选。更新前端后重新打开工作台加载本轮构建。
 
-服务器仍从`/server/`账号项目进入同一工作台；后端需使用含固定科学包的环境才能执行语谱图。未连接账号/存储时不伪造项目；公共静态浏览器预览只在本机解码WAV，没有Praat服务。旧P04实验宿主没有新目录握手，请用上述入口。详情见[M01-E报告](testing/m01-workspace-report.md)。
+服务器仍从`/server/`账号项目进入同一工作台；后端需使用含固定科学包的环境才能执行语谱图。未连接账号/存储时不伪造项目；公共静态浏览器预览只在本机解码WAV，没有Praat服务。旧P04实验宿主没有新目录握手，请用上述入口。详情见[M01-E报告](testing/m01-workspace-report.md)及[F2报告](testing/m01-persistent-report.md)。新的开发启动器使用已审阅的固定SQLite；第一次创建自己的缓存，以后复用`output/validation/m01/workbench-local.json`引用。它不自动建表/升级环境。单次科学分析限200万采样值（声道合计），较长输入可先切分。服务器与独立worker均需明确配置`enable_acoustic_batches=true`和同一存储；worker另接收已登记`reaper_binary`。
 
 以下P02–P07章节保留各阶段历史与工程诊断方法，不代表历史入口具有全部新增功能。
 

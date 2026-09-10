@@ -1,9 +1,10 @@
 """Every job, event and cancellation is scoped to the authenticated owner."""
 import hmac
 from uuid import UUID
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request,Response
 from .job_models import JobInput, FileJobInput, JobView, JobList, JobEvents, RetryInput
 from ptb_worker.store import JobError
+from .acoustic_batch_models import BatchRequest,BatchView,BatchList
 
 
 def create_job_router(ctx, store, *, local_token=None, local_origin=None):
@@ -47,4 +48,45 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
     @router.post('/{job_id}/retry',response_model=JobView,status_code=201,operation_id='retry_job')
     def retry(job_id: UUID,body: RetryInput,owner=Depends(mutation)):
         return store.retry(owner['id'],str(job_id),body.idempotency_key)
+
+    def batches():
+        result=getattr(store,'batches',None)
+        if result is None:raise HTTPException(503,'acoustic_tasks_unavailable')
+        return result
+
+    @router.post('/batches/create',response_model=BatchView,status_code=201,operation_id='create_acoustic_batch')
+    def create_batch(body:BatchRequest,owner=Depends(mutation)):
+        return batches().submit(owner['id'],body)
+
+    @router.get('/batches/list',response_model=BatchList,operation_id='list_acoustic_batches')
+    def list_batches(project_id:UUID,owner=Depends(identity)):
+        return {'batches':batches().list(owner['id'],str(project_id))}
+
+    @router.get('/batches/{batch_id}',response_model=BatchView,operation_id='get_acoustic_batch')
+    def get_batch(batch_id:UUID,owner=Depends(identity)):
+        return batches().get(owner['id'],str(batch_id))
+
+    @router.post('/batches/{batch_id}/cancel',response_model=BatchView,operation_id='cancel_acoustic_batch')
+    def cancel_batch(batch_id:UUID,owner=Depends(mutation)):
+        return batches().cancel(owner['id'],str(batch_id))
+
+    @router.post('/local-inputs',operation_id='register_local_acoustic_input')
+    async def local_input(request:Request,role:str,name:str,owner=Depends(mutation)):
+        if ctx.mode!='local' or not getattr(store,'batches',None):raise HTTPException(404,'unavailable')
+        limit=64_000_000 if role=='audio' else 16_000_000 if role=='parent_result' else 2_000_000
+        raw=bytearray()
+        async for block in request.stream():
+            if len(raw)+len(block)>limit:raise HTTPException(413,'input_budget_exceeded')
+            raw.extend(block)
+        from starlette.concurrency import run_in_threadpool
+        return await run_in_threadpool(store.files.import_input,bytes(raw),name,role)
+
+    @router.get('/parents/latest',operation_id='find_acoustic_parent')
+    def parent(project_id:UUID,sha256:str=Query(pattern=r'^[0-9a-f]{64}$'),owner=Depends(identity)):
+        return batches().parent_result(owner['id'],str(project_id),sha256)
+
+    @router.get('/local-results/{asset_id}',operation_id='read_local_acoustic_result')
+    def local_result(asset_id:UUID,offset:int=Query(0,ge=0),size:int=Query(65536,ge=1,le=1048576),owner=Depends(identity)):
+        if ctx.mode!='local' or not getattr(store,'batches',None):raise HTTPException(404,'unavailable')
+        return Response(store.files.read_result(owner['id'],str(asset_id),offset,size),media_type='application/octet-stream')
     return router

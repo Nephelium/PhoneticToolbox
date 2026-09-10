@@ -223,6 +223,125 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/jobs/batches/create": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Batch */
+        post: operations["create_acoustic_batch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/batches/list": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Batches */
+        get: operations["list_acoustic_batches"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/batches/{batch_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Batch */
+        get: operations["get_acoustic_batch"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/batches/{batch_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cancel Batch */
+        post: operations["cancel_acoustic_batch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/local-inputs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Local Input */
+        post: operations["register_local_acoustic_input"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/local-results/{asset_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Local Result */
+        get: operations["read_local_acoustic_result"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/parents/latest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Parent */
+        get: operations["find_acoustic_parent"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/jobs/{job_id}": {
         parameters: {
             query?: never;
@@ -609,6 +728,25 @@ export interface components {
             /** @default null */
             textgrid: components["schemas"]["AcousticAssetRef"] | null;
         };
+        /** AcousticManagedFile */
+        AcousticManagedFile: {
+            /** Expires At */
+            expires_at: number | null;
+            /** Id */
+            id: string;
+            /**
+             * Kind
+             * @default result
+             * @constant
+             */
+            kind: "result";
+            /** Name */
+            name: string;
+            /** Sha256 */
+            sha256: string;
+            /** Size Bytes */
+            size_bytes: number;
+        };
         /** AcousticMetadata */
         AcousticMetadata: {
             /**
@@ -818,6 +956,29 @@ export interface components {
              */
             windowsize_ms: number;
         };
+        /** AcousticTaskManifest */
+        AcousticTaskManifest: {
+            /**
+             * Complete
+             * @default true
+             * @constant
+             */
+            complete: true;
+            /** Core Version */
+            core_version: string;
+            /** Files */
+            files: components["schemas"]["AcousticManagedFile"][];
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "managed_acoustic_files";
+            /**
+             * Operation
+             * @enum {string}
+             */
+            operation: "acoustic_analysis" | "textgrid_segment";
+        };
         /** AcousticTextColumn */
         AcousticTextColumn: {
             /** Key */
@@ -878,6 +1039,64 @@ export interface components {
             sample_count: number;
             /** Sample Rate Hz */
             sample_rate_hz: number;
+        };
+        /** BatchInputs */
+        BatchInputs: {
+            audio: components["schemas"]["AcousticAssetRef"];
+            lip?: components["schemas"]["AcousticAssetRef"] | null;
+            parent_result?: components["schemas"]["AcousticAssetRef"] | null;
+            textgrid?: components["schemas"]["AcousticAssetRef"] | null;
+        };
+        /** BatchList */
+        BatchList: {
+            /** Batches */
+            batches: components["schemas"]["BatchView"][];
+        };
+        /** BatchRequest */
+        BatchRequest: {
+            config?: components["schemas"]["AcousticConfigSnapshot"] | null;
+            /** Idempotency Key */
+            idempotency_key: string;
+            /** Inputs */
+            inputs: components["schemas"]["BatchInputs"][];
+            /** Layer */
+            layer?: string | null;
+            /**
+             * Operation
+             * @enum {string}
+             */
+            operation: "acoustic_analysis" | "textgrid_segment";
+            /** Project Id */
+            project_id: string;
+            /**
+             * Schema Version
+             * @default m01-batch/1
+             * @constant
+             */
+            schema_version: "m01-batch/1";
+        };
+        /** BatchView */
+        BatchView: {
+            /** Audio Names */
+            audio_names: string[];
+            /** Cancel Requested */
+            cancel_requested: boolean;
+            /** Created At */
+            created_at: number;
+            /** Id */
+            id: string;
+            /**
+             * Operation
+             * @enum {string}
+             */
+            operation: "acoustic_analysis" | "textgrid_segment";
+            /** Project Id */
+            project_id: string;
+            /** Request Sha256 */
+            request_sha256: string;
+            summary: components["schemas"]["AcousticBatchSummary"];
+            /** Updated At */
+            updated_at: number;
         };
         /** Capabilities */
         Capabilities: {
@@ -1076,13 +1295,13 @@ export interface components {
              * @default pipeline_check
              * @enum {string}
              */
-            operation: "pipeline_check" | "storage_check" | "archive_zip" | "extract_zip";
+            operation: "pipeline_check" | "storage_check" | "archive_zip" | "extract_zip" | "acoustic_analysis" | "textgrid_segment";
             /** Progress */
             progress: number;
             /** Project Id */
             project_id: string;
             /** Result Manifest */
-            result_manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | null;
+            result_manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticTaskManifest"] | null;
             /** Retry Of */
             retry_of?: string | null;
             /**
@@ -1172,7 +1391,7 @@ export interface components {
         /** ResultManifestEnvelope */
         ResultManifestEnvelope: {
             /** Manifest */
-            manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticFileManifest"];
+            manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticFileManifest"] | components["schemas"]["AcousticTaskManifest"];
         };
         /** RetryInput */
         RetryInput: {
@@ -1760,6 +1979,230 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_acoustic_batch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BatchRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BatchView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_acoustic_batches: {
+        parameters: {
+            query: {
+                project_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BatchList"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_acoustic_batch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                batch_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BatchView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cancel_acoustic_batch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                batch_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BatchView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    register_local_acoustic_input: {
+        parameters: {
+            query: {
+                role: string;
+                name: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_local_acoustic_result: {
+        parameters: {
+            query?: {
+                offset?: number;
+                size?: number;
+            };
+            header?: never;
+            path: {
+                asset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    find_acoustic_parent: {
+        parameters: {
+            query: {
+                project_id: string;
+                sha256: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */

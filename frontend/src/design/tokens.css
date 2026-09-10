@@ -371,7 +371,7 @@ to{opacity:1;transform:none}
 .m01-page .parameter-summary button{width:100%;margin-bottom:8px}.danger-text{color:var(--danger)}.project-return{border-radius:0;text-align:left;justify-content:flex-start}
 @media(max-width:650px){.m01-file-list{max-height:180px}.m01-directory-bar,.m01-output-row{align-items:stretch}.m01-directory-bar .directory-label{flex-basis:100%}.m01-tiers select{max-width:100%}.m01-settings input[type=number]{width:96px}}
 
-.m01-file-entry{display:flex;align-items:center;gap:4px}.m01-file-entry>input{flex:none;margin-left:4px}.m01-file-list .file-row{background:transparent}.m01-file-list .file-row.selected{background:var(--selected)}
+.m01-file-entry{display:flex;align-items:center;gap:4px;min-width:0}.m01-file-entry>input{flex:none;margin-left:4px}.m01-file-list .file-row{background:transparent;min-width:0;width:0;flex:1}.m01-file-list .file-row.selected{background:var(--selected)}
 
 /* M01-E requested display density; renderer aggregation does not alter audio. */
 .wave-viewport .wave-track svg{height:172px}

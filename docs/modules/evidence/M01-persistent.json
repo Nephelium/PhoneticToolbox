@@ -1,0 +1,324 @@
+{
+  "task": "M01-F2",
+  "status": "verified",
+  "scope": "Documented Windows synthetic durable batch, local/PG publication, actual Qt and Chrome paths; full M01/G remains in_progress",
+  "verified_on": "2026-09-10",
+  "previous_commit": "75b452c70e939b8d8f5fb6752320d9c48f0c9e87",
+  "code": [
+    {
+      "path": "backend/src/ptb_api/account_boundary.py",
+      "sha256": "06bf2090d73e825ae4b97b004de1ca3a485373aeb887f4bc1e3dcc72662f905d"
+    },
+    {
+      "path": "backend/src/ptb_api/acoustic_batch_models.py",
+      "sha256": "94838acc02adff1da2bd84328b82ef01ef827e3db0355b121b55ec6463b90a88"
+    },
+    {
+      "path": "backend/src/ptb_api/cli.py",
+      "sha256": "abc6e073dfb440251551ac8f2d8b93cc1a1907ccc33aac19a1b9c7e41f202a57"
+    },
+    {
+      "path": "backend/src/ptb_api/job_models.py",
+      "sha256": "26caa1aacf10d3bfbe026f621618f2984427c04c1ae5d4215afa41b1fed3e526"
+    },
+    {
+      "path": "backend/src/ptb_api/jobs.py",
+      "sha256": "0ce77db80c9de596d932deb06e3f380934e094e4c71fe2d37dd8849f50d91b78"
+    },
+    {
+      "path": "backend/src/ptb_api/main.py",
+      "sha256": "ebf41e272f7860f928b54bd1b316a4f34b7e57a168eb44faca1cfdf8781fd9c8"
+    },
+    {
+      "path": "backend/src/ptb_api/server.py",
+      "sha256": "95e6620369df7370c5b96bbe1a55553d05e05842dde1fcca7534e5b1300f6186"
+    },
+    {
+      "path": "backend/src/ptb_api/storage.py",
+      "sha256": "b226257a852f0924de102546ec046a5031392252201ae9397a0ab5624f2d827f"
+    },
+    {
+      "path": "backend/src/ptb_worker/acoustic_batches.py",
+      "sha256": "6134a8921c2f4d31152b47329f1876f300fe748f906807e55a7013f6063ed3d6"
+    },
+    {
+      "path": "backend/src/ptb_worker/acoustic_executor.py",
+      "sha256": "caa2d5f058cc8004a75d9d2ff18837eecb635470125a2f4b51925b854a945c95"
+    },
+    {
+      "path": "backend/src/ptb_worker/acoustic_files.py",
+      "sha256": "f0eb541146a3a02c7825144332e0cd059c54ac1c2b8919423cb2b7931a920d6e"
+    },
+    {
+      "path": "backend/src/ptb_worker/batch_policy.py",
+      "sha256": "dfddd3a8191918cf00809703a2c103efce26920a77545a161d44fa9cd4ecbc7f"
+    },
+    {
+      "path": "backend/src/ptb_worker/cli.py",
+      "sha256": "727e2e44ba955e0b8bfe90235059ee941f3e6177c66db1bc57442b529ff2ef58"
+    },
+    {
+      "path": "backend/src/ptb_worker/executor.py",
+      "sha256": "3daecc4efc6aa845bab53a24d881fe38d0f71c83cccddb6a9c0f30c67b57af1f"
+    },
+    {
+      "path": "backend/src/ptb_worker/files.py",
+      "sha256": "a52f51dc8fe534d77bc6e4edb3727b247500a46586e029d2582418380460a699"
+    },
+    {
+      "path": "backend/src/ptb_worker/local_acoustic_files.py",
+      "sha256": "8c41dd265daf9553d85ee1a9e6298cec8ad3d40c4533c79571859fca7e7cb9ed"
+    },
+    {
+      "path": "backend/src/ptb_worker/managed_scratch.py",
+      "sha256": "34f4bb5935a32146e3e118bcb2240176d513461cde5fe37057d134cb71ee5678"
+    },
+    {
+      "path": "backend/src/ptb_worker/native/reaper.py",
+      "sha256": "82ae4a41f0641351959b392c1fd24a91c7c491d5f91d46fa2c68ecc1ea89a5ac"
+    },
+    {
+      "path": "backend/src/ptb_worker/science_child.py",
+      "sha256": "06eab83970ede5716708603466def36d3ad8d2aa02e7cc465311be806fe20644"
+    },
+    {
+      "path": "backend/src/ptb_worker/segmentation.py",
+      "sha256": "c0bb79c67329ab168feab45b45ae6e88c14c0ecd8493f880d98f0f3b932c2199"
+    },
+    {
+      "path": "backend/src/ptb_worker/store.py",
+      "sha256": "549644b8dcd8a4afc840a573f60c7098cddfd8532ecc9df4288e27ea9f9a5072"
+    },
+    {
+      "path": "backend/tests/test_m01_batch_boundary.py",
+      "sha256": "134a8ce63486d129ff0b379497ee22495b892870451d5602ba1606a4059ee508"
+    },
+    {
+      "path": "contracts/generated/api.ts",
+      "sha256": "079598c1d88c45959ec149354459ebd583db5836855fcb9b31707fcdcdc5fc41"
+    },
+    {
+      "path": "contracts/openapi.json",
+      "sha256": "d2063f77c25eb72dd4988bd6563541154a571e7e65f42a42f39a76f7de29bece"
+    },
+    {
+      "path": "contracts/schemas/resultmanifestenvelope.json",
+      "sha256": "fa1ecfbd776dc90f82f19dff5d14712179f61ed66d80f1331c2c10376e6e3c39"
+    },
+    {
+      "path": "contracts/versions.md",
+      "sha256": "724d71a9ebc6c1e72037c485a87d272008bb90f0060bb02de3ea6aa83764bd90"
+    },
+    {
+      "path": "desktop/src/ptb_desktop/host.py",
+      "sha256": "d42150fde62adb6813dda08f27d1def22a0bfdd253ee50618f4cfb83ba04bc72"
+    },
+    {
+      "path": "desktop/src/ptb_desktop/local_service.py",
+      "sha256": "10a0782462a045826709776e2394de5b73fa841b7045b8953b4c07858305bd48"
+    },
+    {
+      "path": "desktop/src/ptb_desktop/main.py",
+      "sha256": "e26d0a54240d2ffce896a166e36ccfb6870302f99f6e84c2bd0749bd5c94e47a"
+    },
+    {
+      "path": "desktop/src/ptb_desktop/task_bridge.py",
+      "sha256": "1c6fb7722745b225c1e25ed3391df6bc75a6cf8302bba66af3ec126360584ead"
+    },
+    {
+      "path": "frontend/src/account/ServerPage.vue",
+      "sha256": "456443d70db4f343f04da17e2b536636ad8565368d64505b3887b5959c557315"
+    },
+    {
+      "path": "frontend/src/app/AppShell.vue",
+      "sha256": "09316f1679ffc121bf5268f1dd9330a9d2d99c836303be77da2cab9c69909402"
+    },
+    {
+      "path": "frontend/src/design/tokens.css",
+      "sha256": "b53942818ec5045ccb505fffe426b78747fb71ce82b46dbba631e42d39635455"
+    },
+    {
+      "path": "frontend/src/modules/parameter-estimation/BatchResults.vue",
+      "sha256": "91d8597b15b03e2ba8fd01b9f2f46e037e42d1cec14b7930fd5d5c4b9ab031ea"
+    },
+    {
+      "path": "frontend/src/modules/parameter-estimation/ParameterEstimationPage.vue",
+      "sha256": "c7ed92601997d2aed2aebec4b66e3cef7c197b9b0bcd3c43575a6013c215b3e8"
+    },
+    {
+      "path": "frontend/src/platform/desktop.ts",
+      "sha256": "db46cf13ec2468fdbcf4eb6bdd035bb18414bdd8a965f0ba472a20e72947f324"
+    },
+    {
+      "path": "frontend/src/platform/research.ts",
+      "sha256": "6e6b89cc68abd8a3c150334fa5febab0b3429e35a10e7d88e41bee079f689acf"
+    },
+    {
+      "path": "scripts/Start-M01-Workbench.ps1",
+      "sha256": "ed7a4a9a67135d621f555f2eeb4e2b21644a30773d8bd238552498444135104d"
+    },
+    {
+      "path": "scripts/run_m01_validation.py",
+      "sha256": "354523a382424b4c2786dfc8e62873483d6157e7d883ec36b2465ab30a65197c"
+    },
+    {
+      "path": "scripts/start_m01_workbench.py",
+      "sha256": "4b22470c52dc514e61408cc9c6fbd16360d6eab86969d391cc1b123ab3a5f362"
+    },
+    {
+      "path": "scripts/verify_m01_local_tasks.py",
+      "sha256": "48dad8b6d957e03a787928cd6029ae81b1527ddaca16dd5c6f98a994311defdf"
+    },
+    {
+      "path": "scripts/verify_m01_persistent.py",
+      "sha256": "388373441b44ed5fc4d5bb709f922bc9ddff685aaa6319bceb44f280c5fcaeb7"
+    },
+    {
+      "path": "scripts/verify_m01_task_window.py",
+      "sha256": "617f519d5bd35fbf88c5243d1df02ddb72028d96fedc1d2052e2cc67e5ede41a"
+    },
+    {
+      "path": "scripts/verify_m01_web.py",
+      "sha256": "8cb7117f90b3838f3a651cb43a301c958a71717c3904a0f47449f8413a7fe2f8"
+    }
+  ],
+  "schema": {
+    "task": "M01-F2",
+    "schema_applied": [
+      {
+        "existing_tables_preserved": 3,
+        "new_batch_tables": 3,
+        "kind": "sqlite"
+      },
+      {
+        "existing_tables_preserved": 13,
+        "new_batch_tables": 3,
+        "kind": "postgres"
+      }
+    ],
+    "postgres_stopped": true,
+    "schema_hashes": {
+      "postgres": "3d1006b267d3db69d6e0b9bc3419dd7062e261aba24f21712c5bf7ec169dedf6",
+      "sqlite": "d66c08a7885f78676651afe1f08c0c9e459aafae901fc4bfe5fde8d8e6c47847"
+    }
+  },
+  "postgres": {
+    "ordered_17_and_idempotency": true,
+    "17_actual_results": true,
+    "reconstructed_batch": true,
+    "cancel_queued_keeps_unstarted": true,
+    "middle_failure_keeps_results": true,
+    "concurrent_idempotent_admission": true,
+    "running_cancel_reaps_actual_child": true,
+    "expired_lease_stale_output_and_explicit_retry": true,
+    "injected_second_reservation_failure_cleans_whole_output": true,
+    "actual_input_delete_during_child_blocks_publication": true,
+    "expired_input_before_claim_is_failed": true,
+    "old_rows_preserved_and_no_reservation_leak": true
+  },
+  "web": {
+    "checks": [
+      "actual browser full-list scientific batch",
+      "authenticated real result download",
+      "browser reload retains persistent completed batch",
+      "actual parent-linked TextGrid audio and parameter cuts",
+      "account switch clears UI and refuses foreign batch"
+    ],
+    "errors": []
+  },
+  "web_ttl": [
+    {
+      "operation": "textgrid_segment",
+      "input_expiry": 1789619125.516698,
+      "output_expiry": 1789619125.516698
+    },
+    {
+      "operation": "acoustic_analysis",
+      "input_expiry": 1789619125.516698,
+      "output_expiry": 1789619139.910217
+    }
+  ],
+  "sqlite": {
+    "real_science_and_nonoverwriting_idempotent_save": true,
+    "actual_parent_parameter_cut_and_stereo_samples": true,
+    "partial_export_rollback_preserves_existing": true,
+    "all_80_against_original_v2_golden": true,
+    "owned_service_restart_and_results": true,
+    "old_rows_and_no_scratch_reservations": true
+  },
+  "qt": {
+    "success": true,
+    "stages": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "error": null,
+    "normal_close": true,
+    "outputs": [
+      "segments.ptb.json",
+      "SYN-VOWEL-44100.ptb.json",
+      "SYN-VOWEL-44100.ptb.sqlite",
+      "SYN-VOWEL-44100.TextGrid",
+      "SYN-VOWEL-44100.wav",
+      "SYN-VOWEL-44100.xlsx",
+      "SYN-VOWEL-44100_音节_上声_0.400_0.800_0002.ptb.sqlite",
+      "SYN-VOWEL-44100_音节_上声_0.400_0.800_0002.wav",
+      "SYN-VOWEL-44100_音节_上声_0.400_0.800_0002.xlsx",
+      "SYN-VOWEL-44100_音节_阴平_0.000_0.400_0001.ptb.sqlite",
+      "SYN-VOWEL-44100_音节_阴平_0.000_0.400_0001.wav",
+      "SYN-VOWEL-44100_音节_阴平_0.000_0.400_0001.xlsx"
+    ]
+  },
+  "p07_regression": {
+    "scope": "Windows real PG + marked disk + owned worker joint file acceptance",
+    "checks": {
+      "Q04_Q20_two_results_exact_independent_ttl_and_public_write_rejection": true,
+      "Q14_Q20_zip_roundtrip_and_no_renewal": true,
+      "maximum_filename_zip_roundtrip": true,
+      "Q03_zip_path_ratio_and_directory_bombs": true,
+      "Q04_Q14_multi_output_and_zip_tail_budget_atomic_failure": true,
+      "Q12_database_owner_fk_Q04_native_path_rejected": true,
+      "Q07_active_input_expiry_Q17_fenced_manifest_and_hidden_staging": true,
+      "explicit_cancel_before_manifest_cannot_succeed": true,
+      "expiry_during_final_commit_rolls_back_all_visibility": true,
+      "Q18_generation_delete_race_atomic_visibility": "succeeded",
+      "Q08_Q10_owned_worker_terminated_recovered_Q17_old_worker_retry": true
+    },
+    "generated_files_removed": true,
+    "hard_power_loss_tested": false
+  },
+  "test_count": 237,
+  "frontend_tests": 16,
+  "preservation": {
+    "v2_head": true,
+    "v2_index_sha256": true,
+    "v2_status": true,
+    "baseline_files_checked": true,
+    "baseline_files_changed_since_D03": true,
+    "v2_package_metadata_sha256": true,
+    "v2_environment": true
+  },
+  "source_records": 323,
+  "wheels": [
+    {
+      "path": "output/validation/m01/f2-wheels/ptb_api-3.0.0a1-py3-none-any.whl",
+      "sha256": "003b3b65cd79022885ce3585bdaf70c70cd85b3a4c888bc38fa18730b50b046a"
+    },
+    {
+      "path": "output/validation/m01/f2-wheels/ptb_desktop-3.0.0a1-py3-none-any.whl",
+      "sha256": "12dbe8461e722629e800c1c51a5afc5499648930b67da65214d501aa2696d3f9"
+    }
+  ],
+  "limitations": [
+    "Synthetic Windows scope; no complete M01/natural-corpus/cross-platform/release claim",
+    "Legacy XLSX/SQLite import compatibility remains G",
+    "Scientific decoded samples limit 2000000 across channels; output group 64 MB; child 240 seconds",
+    "Ordinary directory export does not guarantee hard-power-loss atomicity",
+    "No Codex crash root-cause repair guarantee; IAB avoided"
+  ]
+}

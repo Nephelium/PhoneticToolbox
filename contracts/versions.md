@@ -40,3 +40,11 @@ P05 新增 auth challenge/login/me/logout 与 projects list/create/get/rename，
 | D08 保留 | 分析结果从成功起至多7天；切分不晚于输入截止；本地无服务器TTL | 当前为策略和可信快照校验，PG原子发布/到期物理回收仍需F集成 |
 
 times_s沿用实际核心帧网格，验证为i×frameshift_ms/1000且处于真实音频范围内，不能由显示窗重算。每列携带目录显示名和A审计单位；Intensity不是测量SPL，唇形无输入单位信息时明确unknown。JSON Schema/TypeScript只保证结构；跨字段和科学一致性由后端验证和独立黄金结果对照负责。
+
+## M01-F2 兼容增量
+
+API仍为1.1.0；既有请求和结果均保留。增加`/jobs/batches/create`、`/jobs/batches/list`、`/jobs/batches/{id}`及cancel，复用原子任务get/retry；未配置持久批次返回503。新请求`BatchRequest.schema_version=m01-batch/1`只收资源ID/hash与配置，owner仍由会话/本机会话推导。1000项批次JSON边界为1 MB，其他账号/任务小请求上限不变。
+
+`AcousticTaskManifest.kind=managed_acoustic_files`表示真实已公开资产；完整参数结果恰有XLSX、SQLite及用于同源参数派生的无损JSON。原`AcousticFileManifest`是D阶段科学清单，保持可读；新worker清单不冒充它。`BatchView`返回有序音频名及真实子任务计数；科学schema/单位/NaN规则未变。
+
+`/jobs/local-inputs`和`/jobs/local-results/{id}`仅为桌面宿主提供有界二进制能力：本次bearer和Origin先于读取验证，普通网页登录不可调用。`/jobs/parents/latest`仅返回同账号项目、相同原音频hash、已完整发布且仍可访问的父结果引用。来源与授权边界见[ADR-027](../docs/decisions/ADR.md)。

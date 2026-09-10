@@ -1,10 +1,10 @@
-# PhoneticToolbox 3.0 · P04 工作台试用
+# PhoneticToolbox 3.0 · M01 参数估计开发工作台
 
 **2026-09-09 · P01 原型、P02 工程骨架与 P03 独立科研基线已通过各自 Windows 定向验收。当前尚不是可发布的 v3 应用。**
 
 P05 当前进展：[账号与项目报告](docs/testing/p05-accounts-report.md)、[迁移审阅](docs/testing/p05-migration-review.md)。P05 已获专属空库授权并通过真实 PostgreSQL 定向验收；P06 已完成 Windows 持久任务流程验收及闪退后复验，见 [任务验收与限制](docs/testing/p06-jobs-report.md)及 [建表审阅](docs/testing/p06-migration-review.md)。P07 已获 003 存储表与专属测试文件清理授权，Windows 单文件的真实数据库/磁盘、并发额度、TCP 到期和独立浏览器定向验收已通过；004 已获“好，允许”的具体授权并执行，P07 受控任务文件与有界 ZIP 的 Windows 联合验收也通过；科学算法、原生目录输出和生产/跨平台能力仍未验收，见 [P07 单文件报告](docs/testing/p07-storage-report.md)、[联合验收与限制](docs/testing/p07-job-files-report.md)和[具体操作审阅](docs/testing/p07-migration-review.md)。两次 Codex 退出与内置测试页关闭存在直接时间关联，排查及绕行约定见 [恢复记录](docs/testing/p06-recovery-and-codex-exit.md)。
 
-P08 下一步：[M01 参数估计实施计划](docs/plans/2026-09-09-m01-implementation.md)与[源码审阅报告](docs/testing/m01-planning-report.md)已形成，80参数/14设置和30项验收已映射；[M01-A基准](docs/testing/m01-baseline-report.md)现已完成28例双轮捕获和23项测试，[M01-B科学核心](docs/testing/m01-core-report.md)现已通过独立wheel的149项Windows定向测试，[M01-C适配](docs/testing/m01-io-report.md)已通过222项Windows wheel测试及实际双产物回读，[M01-D契约](docs/testing/m01-contract-report.md)已通过限定Windows协议与真实结果往返验收，M01仍为in_progress，下一项是M01-F持久批次与双端任务；E目录、草稿与显示已限定验收，持久批任务尚未接入。
+P08 下一步：[M01 参数估计实施计划](docs/plans/2026-09-09-m01-implementation.md)与[源码审阅报告](docs/testing/m01-planning-report.md)已形成，80参数/14设置和30项验收已映射；[M01-A基准](docs/testing/m01-baseline-report.md)现已完成28例双轮捕获和23项测试，[M01-B科学核心](docs/testing/m01-core-report.md)现已通过独立wheel的149项Windows定向测试，[M01-C适配](docs/testing/m01-io-report.md)已通过222项Windows wheel测试及实际双产物回读，[M01-D契约](docs/testing/m01-contract-report.md)已通过限定Windows协议与真实结果往返验收，[M01-F2](docs/testing/m01-persistent-report.md)现已接入持久计算、取消/重试、结果保存与TextGrid同步切分，并通过列明的Windows真实双端验证；M01仍为in_progress，下一项G联合收口。
 
 公共界面入口：[P04 工作台试用报告](docs/testing/p04-workbench-report.md)（公共界面已审阅，学术优先分组已修订；P04 限定范围 verified，P05 账号/项目范围 verified）。试用启动方法见 [开发说明](docs/development.md)。
 
@@ -41,8 +41,8 @@ frontend / backend / desktop / packages / contracts / resources / tests 是 v3 �
 
 所有对外部署、代码推送、发行物发布，待明确授权再执行。
 
-M01-E 已完成[目录、共享研究页与Praat显示定向验收](docs/testing/m01-workspace-report.md)：默认单声道/可双声道、较高波形、紧凑文件行与全选、可开关语谱图、长音频峰值显示。按[开发入口](docs/development.md)启动；参数批计算、取消与结果持久发布仍待M01-F。
+M01-E 已完成[目录、共享研究页与Praat显示定向验收](docs/testing/m01-workspace-report.md)：默认单声道/可双声道、较高波形、紧凑文件行与全选、可开关语谱图、长音频峰值显示。按[开发入口](docs/development.md)启动；参数批计算、取消与持久发布已由[M01-F2](docs/testing/m01-persistent-report.md)接通。
 
-2026-09-10 截图反馈后的 [M01 布局与时间交互修订](docs/testing/m01-layout-report.md)：独立列滚动、自适应目录条、可见时间轴、Ctrl+滚轮缩放和播放进度定位。[说明书覆盖门](docs/modules/v2-manual-coverage.md)已加入迁移流程；真实 TextGrid 切分保存仍为 M01-F/G 必须完成项，不把预览当作已实现写入。
+2026-09-10 截图反馈后的 [M01 布局与时间交互修订](docs/testing/m01-layout-report.md)：独立列滚动、自适应目录条、可见时间轴、Ctrl+滚轮缩放和播放进度定位。[说明书覆盖门](docs/modules/v2-manual-coverage.md)已加入迁移流程；F2已接通真实TextGrid切分及可选参数同步保存；全模块G审阅仍须逐项完成。
 
-2026-09-10 [M01-F1切分与批次准备](docs/testing/m01-execution-preparation-report.md)已通过244项Windows定向测试及WAV/参数双格式真实合成产物回读。尚未启用页面保存/批处理；下一步按[005具体审阅](docs/testing/m01-migration-review.md)取得实际建表授权，继续F2持久提交、取消、恢复和结果发布。
+2026-09-10 [M01-F1切分与批次准备](docs/testing/m01-execution-preparation-report.md)已通过244项Windows定向测试及WAV/参数双格式真实合成产物回读。随后井井对[005具体审阅](docs/testing/m01-migration-review.md)授权继续，两库已应用。[F2报告](docs/testing/m01-persistent-report.md)记录实际页面保存/批处理、异常恢复及边界；开发启动使用[scripts/Start-M01-Workbench.ps1](scripts/Start-M01-Workbench.ps1)。

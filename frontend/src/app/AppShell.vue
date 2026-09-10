@@ -164,7 +164,7 @@ const modalTitle=computed(()=>({settings:'工作台设置',help:'使用说明',u
 </div>
 <div class="statusbar">
 <span>
-<span class="status-dot"/>{{current?.id==='M01'?'文件与配置就绪 · 计算流程待接入':current?'公共预览就绪 · 分析功能待接入':'就绪 · 选择工具开始'}}</span>
+<span class="status-dot"/>{{current?.id==='M01'?'参数估计 · 文件、试听与任务':current?'公共预览就绪 · 分析功能待接入':'就绪 · 选择工具开始'}}</span>
 <span>{{research?'当前账号的项目资源':'本机文件 · 无自动上传'}}</span>
 </div>
 </div>

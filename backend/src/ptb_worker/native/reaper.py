@@ -4,10 +4,6 @@ import math
 import re
 import time
 from pathlib import Path
-from scipy.io import wavfile
-import numpy as np
-from phonetic_core.acoustic.reaper_codec import reaper_pcm16,parse_est_f0
-from phonetic_core.ports.acoustic import ReaperTrack
 from ..io.limits import LimitedBuffer,Limits,LimitError,Cancelled,FormatError
 from ..io.scratch import Scratch,no_links
 from .windows import OwnedProcess,InputPipe
@@ -44,6 +40,12 @@ class Reaper:
         self.scratch=scratch;self.limits=limits;self.stop=stop;self.on_started=on_started
 
     def __call__(self,audio,frame_interval_sec,min_f0,max_f0,*,hilbert,no_highpass):
+        # The orchestration worker also uses collect_pipe. Scientific DLLs must
+        # load only when executing REAPER inside the owned scientific child.
+        from scipy.io import wavfile
+        import numpy as np
+        from phonetic_core.acoustic.reaper_codec import reaper_pcm16,parse_est_f0
+        from phonetic_core.ports.acoustic import ReaperTrack
         if self.stop():raise Cancelled('cancelled')
         if audio.samples.size>self.limits.samples:raise LimitError('sample_limit_exceeded')
         converted_frames=math.ceil(len(audio.samples)*16000/audio.sample_rate_hz)

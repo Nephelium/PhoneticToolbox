@@ -1,6 +1,6 @@
 # M01-F：005 持久批次表的具体审阅
 
-2026-09-10。**状态：prepared，未执行实际建表。** 这份审阅限定本机已有测试库；井井的一般“继续”和此前003/004授权不替代本次具体DDL授权。执行准备证据见 [M01-F1报告](m01-execution-preparation-report.md)。
+2026-09-10。**状态：applied，2026-09-10两库已按原SQL应用。** 井井对本份具体审阅及限定合成验证/清理回复“好，继续”，该授权已核实并执行；不是复用003/004授权。证据见[F2报告](m01-persistent-report.md)及`output/validation/m01/persistent-7d7a6a1a5818455da1de88cbadcfb33b/report.json`。后续不得重复DDL。下文保留实际应用时审阅的精确范围。执行准备证据见 [M01-F1报告](m01-execution-preparation-report.md)。
 
 ## 拟操作对象
 
@@ -30,7 +30,7 @@ PG外键要求批次、项目、子任务和音频资源属于相同owner/projec
 & '.venv/v3-dev/Scripts/python.exe' -X utf8 scripts/m01_database.py show --kind sqlite
 ```
 
-获明确授权后才可调用的入口：
+已获具体授权并执行的入口（以下为历史应用命令，不应重复执行）：
 
 ```powershell
 & '.venv/v3-dev/Scripts/python.exe' -X utf8 scripts/m01_database.py apply --kind sqlite --approved-m01-batch-schema --reviewed-sha256 d66c08a7885f78676651afe1f08c0c9e459aafae901fc4bfe5fde8d8e6c47847
@@ -39,9 +39,9 @@ PG外键要求批次、项目、子任务和音频资源属于相同owner/projec
 
 PG入口另从标准输入接收既有私有连接配置，禁止把DSN放命令行/日志。受控启动流程复用P07已有原则：只在固定PGDATA没有运行实例时，用项目内既有PostgreSQL临时绑定loopback端口；记录自己启动的实例，只对该PGDATA与实例身份匹配的进程正常停止。不能直接执行整套 `run_p07_validation.py`，其旧测试动作不是本次建表的一部分。当前F1没有启动该集群，也没有执行上述apply命令。
 
-## 拟授权后的联合验证范围
+## 已授权的联合验证范围
 
 1. 先应用两份005，核实旧行摘要完全保留、新表外键和版本正确。
 2. F2继续实现提交/认领/取消/租约与原子发布；使用本轮自造的合成音频和TextGrid，验证17项批次、第二项失败、取消、进程退出、输入删除/到期、旧代结果拒绝及重启恢复。
 3. 新测试文件只在 `output/validation/m01/` 的新UUID子目录，以及已有P07标记根中新登记的M01测试资源内生成/清理。测试记录只操作本次随机owner/project/batch/job ID并保留此前记录；不依据泛化路径或进程名删除/停止对象。清理失败保留证据，不扩大范围。
-4. 本轮新增的实际WAV/XLSX/SQLite样例已在新证据目录生成并回读，那是合成导出文件，不是任务schema迁移。005实际SQL执行、PG并发、持久恢复和UI保存仍待获授权后验证。
+4. F1的WAV/XLSX/SQLite样例是合成导出文件，不是任务schema迁移；随后F2已按本次具体授权执行005，并验证PG并发、持久恢复和UI保存，结果以[F2报告](m01-persistent-report.md)为准。

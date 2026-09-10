@@ -37,7 +37,11 @@ def main():
     if storage:
         if jobs and config.get('enable_file_jobs',False):
             from ptb_worker.files import FilePipeline
-            FilePipeline(jobs,storage)
+            if config.get('enable_acoustic_batches'):
+                from ptb_worker.acoustic_files import AcousticFiles
+                from ptb_worker.acoustic_batches import AcousticBatches
+                files=AcousticFiles(jobs,storage);AcousticBatches(jobs,files)
+            else:FilePipeline(jobs,storage)
         storage.recover()
     app=create_app(account_store=store,auth_settings=settings,job_store=jobs,storage=storage)
     app.mount('/server',StaticFiles(directory=static,html=True),name='account-ui')
