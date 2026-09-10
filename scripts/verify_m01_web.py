@@ -11,7 +11,6 @@ from uuid import uuid4
 import urllib.request
 from ptb_api.account_store import PostgresAccountStore
 from ptb_api.storage import Storage
-from ptb_api.storage_models import UploadInput
 from ptb_worker.store import PostgresJobStore
 from ptb_worker.acoustic_files import AcousticFiles
 from ptb_worker.acoustic_batches import AcousticBatches
@@ -30,10 +29,18 @@ def verify(config,out):
         user=account.create_user(name,password);project=account.create_project(str(user['id']),'批次验证项目')
         people.append(dict(username=name,password=password,id=str(user['id']),project=str(project['id'])))
     source=create_fixture(out,RECIPES[0]);raw=source.read_bytes()
-    for name,data in [(source.name,raw),(source.stem+'.TextGrid','File type = "ooTextFile short"\n"TextGrid"\n0\n.8\n<exists>\n1\n"IntervalTier"\n"音节"\n0\n.8\n2\n0\n.4\n"阴平"\n.4\n.8\n"上声"\n'.encode())]:
-        a=storage.create(people[0]['id'],UploadInput(project_id=people[0]['project'],name=name,expected_bytes=len(data),idempotency_key=uuid4().hex))
-        for offset in range(0,len(data),65536):storage.append(people[0]['id'],a['id'],offset,data[offset:offset+65536])
-        storage.finalize(people[0]['id'],a['id'])
+    upload=out/'upload';upload.mkdir()
+    source=upload/'声调_ɑ̃˥.wav';source.write_bytes(raw)
+    grid=source.with_suffix('.TextGrid')
+    grid.write_text('File type = "ooTextFile short"\n"TextGrid"\n0\n.8\n<exists>\n1\n"IntervalTier"\n"音节"\n0\n.8\n2\n0\n.4\n"ɑ̃˥"\n.4\n.8\n"=1+1"\n',encoding='utf-8')
+    failure_project=str(account.create_project(people[0]['id'],'失败验证项目')['id'])
+    bad=upload/'01-损坏.wav';bad.write_bytes(b'not RIFF WAVE')
+    import wave
+    long=upload/'02-长音频.wav'
+    with wave.open(str(long),'wb') as handle:
+        handle.setnchannels(1);handle.setsampwidth(2);handle.setframerate(8000)
+        handle.writeframes(b'\x00\x00'*2_000_001)
+    good=upload/'03-可分析.wav';good.write_bytes(raw)
     with socket.socket() as sock:sock.bind(('127.0.0.1',0));port=sock.getsockname()[1]
     origin=f'http://127.0.0.1:{port}';options=dict(dsn=config['dsn'],storage_root=str(storage.root),enable_acoustic_batches=True)
     hidden=getattr(subprocess,'CREATE_NO_WINDOW',0)
@@ -53,12 +60,23 @@ def verify(config,out):
         worker.stdin.write(json.dumps(options|dict(kind='postgres',reaper_binary=str(ROOT/'phonetic_toolbox/core/acoustic/reaper.exe')))+'\n');worker.stdin.flush()
         assert json.loads(worker.stdout.readline())=={'ready':True}
         runtime=Path.home()/'.cache/codex-runtimes/codex-primary-runtime/dependencies/node'
-        browser_input=dict(origin=origin,people=people,playwright=str(runtime/'node_modules/playwright'),browser='C:/Program Files/Google/Chrome/Application/chrome.exe',output=str(out))
-        done=subprocess.run([str(runtime/'bin/node.exe'),str(ROOT/'tests/e2e/m01-tasks.cjs')],input=json.dumps(browser_input)+'\n',capture_output=True,text=True,encoding='utf-8',creationflags=hidden,timeout=160)
+        browser_input=dict(origin=origin,people=people,playwright=str(runtime/'node_modules/playwright'),browser='C:/Program Files/Google/Chrome/Application/chrome.exe',output=str(out),
+            uploads=[str(source),str(grid)],failure_uploads=[str(bad),str(long),str(good)],audio_name=source.name)
+        done=subprocess.run([str(runtime/'bin/node.exe'),str(ROOT/'tests/e2e/m01-tasks.cjs')],input=json.dumps(browser_input)+'\n',capture_output=True,text=True,encoding='utf-8',creationflags=hidden,timeout=330)
         # Test assertions never log auth/session inputs; redact even unexpected failures.
         log=done.stdout+'\n'+done.stderr
         for person in people:log=log.replace(person['password'],'[redacted]')
         (out/'browser.log').write_text(log,encoding='utf-8');assert done.returncode==0,'See browser.log'
+        from verify_m01_downloads import verify_downloads
+        verify_downloads(out)
+        failed=jobs.list(people[0]['id'],failure_project)
+        assert len(failed)==3
+        assert sorted(j['error_code'] for j in failed if j['state']=='failed')==['analysis_sample_limit','invalid_audio']
+        assert sum(j['state']=='succeeded' for j in failed)==1
+        with storage._locked() as conn:
+            leftovers=conn.execute("SELECT COUNT(*) AS n FROM ptb_storage.assets WHERE project_id=%s AND kind='temporary' AND state!='deleted'",(failure_project,)).fetchone()['n']
+            assert leftovers==0
+        (out/'web-errors.json').write_text(json.dumps(dict(codes=['analysis_sample_limit','invalid_audio'],successful_later_file=True,temporary_assets_remaining=leftovers),indent=2),encoding='utf-8')
         ttl=[]
         for job in jobs.list(people[0]['id'],people[0]['project']):
             assert job['state']=='succeeded'
@@ -73,6 +91,7 @@ def verify(config,out):
     finally:
         for person in people:
             for batch in batches.list(person['id'],person['project']):batches.cancel(person['id'],batch['id'])
+        for batch in batches.list(people[0]['id'],failure_project):batches.cancel(people[0]['id'],batch['id'])
         for process in (worker,server):
             if process:
                 process.stdin.close()

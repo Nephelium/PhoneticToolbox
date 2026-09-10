@@ -11,6 +11,7 @@ import sys
 import time
 from .io.limits import Limits,LimitError,FormatError,Cancelled
 from .io.scratch import Scratch
+from .acoustic_errors import ACOUSTIC_ERRORS,AcousticFailure
 
 SEGMENT_LIMITS=Limits(input_bytes=64_000_000,samples=32_000_000,channels=32,
                      output_bytes=64_000_000,process_bytes=1_000_000_000,timeout_seconds=60.)
@@ -35,8 +36,8 @@ def unpack_bundle(payload,limit):
     if not isinstance(manifest,dict):raise FormatError('invalid_segment_manifest')
     offset=8+n;blobs=[]
     error=manifest.get('error')
-    if isinstance(error,str) and error in {'invalid_segment_input','segment_budget_exceeded','parent_result_source_mismatch','no_labelled_segments','missing_or_invalid_tier'}:
-        raise FormatError(error)
+    if isinstance(error,str) and error in ACOUSTIC_ERRORS:
+        raise AcousticFailure(error)
     if manifest.get('kind') not in ('prepared_segments','prepared_analysis') or not isinstance(manifest.get('files'),list) or not 1<=len(manifest['files'])<=3000:
         raise FormatError('invalid_segment_manifest')
     names=set()

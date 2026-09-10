@@ -1,0 +1,70 @@
+{
+  "task": "M01-G joint batch",
+  "status": "verified",
+  "module_status": "in_progress",
+  "platform": "Windows",
+  "python_regression": {
+    "passed": 410,
+    "warnings": 2,
+    "log": "output/validation/m01/g-regression.log"
+  },
+  "frontend_tests": 16,
+  "source_records": 323,
+  "source_hashes": {
+    "backend/src/ptb_worker/acoustic_errors.py": "5e96204ae6ea74cb07cd6d1c31d49d5face126eb6ce04540005aca2c505368d7",
+    "backend/src/ptb_worker/acoustic_executor.py": "60fddfc9529067994a902bf1d1d7e267776b7248d4abbbacd1492a423e57940a",
+    "backend/src/ptb_worker/acoustic_files.py": "e53f63b2b0d15fb5ca682549e06d6c4aabf6d9a5d95d7a43cc26739d8676f36d",
+    "backend/src/ptb_worker/files.py": "e96228fb4f69b5d2a6f9cc37bd2d3c185aa76dce6bccab47f1e2cd740dd9d13b",
+    "backend/src/ptb_worker/local_acoustic_files.py": "65e882fb63edc495a78c3b9f5ca439b404263560503e61aff9b637af1fe51a45",
+    "backend/src/ptb_worker/science_child.py": "8105b7bd9408ddf158028baacdd18e985df69f53f8be04b28705eeb722bb159b",
+    "backend/src/ptb_worker/segmentation.py": "0ea9ddf7a7934ea6fa0db57f296d5a7f45de615784ba55d3ffc5628d17893af6",
+    "backend/tests/test_m01_failure_codes.py": "9389e2a8159978b1519b51806632266e30449584aee3f51d91bc014c99146c2f",
+    "frontend/src/account/ProjectStorage.vue": "ac763afa604112326c5e8f57210b4e75944d55693628eeb499eb990b7c74640c",
+    "frontend/src/app/AppShell.vue": "d0a318c79c225b09fead1a629db3ce834cec3f4b95fc667298d8189cde336a74",
+    "frontend/src/modules/parameter-estimation/BatchResults.vue": "2ae2a99b2691aaccfa776b1ca90e1b22f2f8c1754527c159f92dc4a589d08efd",
+    "scripts/run_m01_validation.py": "f8db5c36a971f3ee89844bdd5afdd1028f46d64c927d2e666f3bd743b6b8b961",
+    "scripts/verify_m01_downloads.py": "0ed7dc7e2972e15f37c17eeac8cb54fbdb364bd3019b1192b1f45de01258389f",
+    "scripts/verify_m01_failures.py": "9e7d3808c33ac0654258daaaba61a6846519554176c8231a81395bb8473525ea",
+    "scripts/verify_m01_natural.py": "7ce762969f6dbd99fa6350f7862ec11637d5d92a5024c128b6db3eb70bb417d4",
+    "scripts/verify_m01_task_window.py": "0dd4992f1f9f79c48b092f5334f56abdeff8913d6239bf0df9b13169e8949364",
+    "scripts/verify_m01_web.py": "1aef62aa25f030d41fa109c770c0a22e24b3b025dc3c8a75dd5439822856f503",
+    "tests/e2e/m01-tasks.cjs": "6602ac662c4f536b290ef856cbf6acc49d5cb426caefd355d90d4bd06b086198"
+  },
+  "installed_wheel_sources_match": {
+    "backend/src/ptb_worker/acoustic_executor.py": true,
+    "backend/src/ptb_worker/acoustic_files.py": true,
+    "backend/src/ptb_worker/files.py": true,
+    "backend/src/ptb_worker/local_acoustic_files.py": true,
+    "backend/src/ptb_worker/science_child.py": true,
+    "backend/src/ptb_worker/segmentation.py": true,
+    "backend/src/ptb_worker/acoustic_errors.py": true
+  },
+  "api_wheel_sha256": "0d99d2e7b43230e023150f74b4343e356018b1cfa548693d378179e42982afdc",
+  "reports": {
+    "web": "output/validation/m01/persistent-96ec90edc3fb475ab9966106f86817d2/web-report.json",
+    "web_readback": "output/validation/m01/persistent-96ec90edc3fb475ab9966106f86817d2/web-readback.json",
+    "web_errors": "output/validation/m01/persistent-96ec90edc3fb475ab9966106f86817d2/web-errors.json",
+    "web_layout": "output/validation/m01/persistent-96ec90edc3fb475ab9966106f86817d2/web-layout.json",
+    "natural": "output/validation/m01/natural-45133546ecca4d5eafcd66139b3aaf04/report.json",
+    "failures": "output/validation/m01/failures-a872bbe816dd41e8987b5f33a549ad27/report.json",
+    "desktop": "output/validation/m01/local-tasks-cbb1478869ae491788c6fadcf78c06a1/report.json",
+    "qt": "output/validation/m01/task-window-fb4235e06556487ea74b4deb384656db/report.json"
+  },
+  "preservation": {
+    "v2_head": true,
+    "v2_index_sha256": true,
+    "v2_status": true,
+    "baseline_files_checked": true,
+    "baseline_files_changed_since_D03": true,
+    "v2_package_metadata_sha256": true,
+    "v2_environment": true
+  },
+  "owned_pg_stopped": true,
+  "local_active_jobs": 0,
+  "limitations": [
+    "Legacy PKL graphical conversion is not connected",
+    "Arbitrary historical result import is not implemented",
+    "Four natural recordings do not cover all phonation types",
+    "Cross-platform release and production load remain unverified"
+  ]
+}

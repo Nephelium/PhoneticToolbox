@@ -228,7 +228,8 @@ class LocalAcousticFiles:
             self.jobs._recover(tx,tx.now());job=self.jobs._row(tx,identity[0])
             if job and job['generation']==identity[2] and job['worker_id']==identity[1] and job['state'] in ('running','cancel_requested'):
                 state='cancelled' if job['state']=='cancel_requested' or code=='cancelled' else 'failed'
-                code=code if code in ('cancelled','input_unavailable','output_budget_exceeded','disk_space_low') else 'execution_failed'
+                from .acoustic_errors import ACOUSTIC_ERRORS
+                code=code if code in ACOUSTIC_ERRORS | {'cancelled','input_unavailable','output_budget_exceeded','disk_space_low'} else 'execution_failed'
                 tx.execute('UPDATE {jobs} SET state=?,error_code=?,worker_id=NULL,lease_until=NULL WHERE id=?',(state,code,job['id']))
                 job['state']=state;self.jobs._event(tx,job,code,tx.now())
             for a in self._outputs(identity):

@@ -38,7 +38,7 @@ def main():
         ("!!document.querySelector('.m01-page')",click('选择音频目录')),
         ("document.querySelectorAll('.m01-file-list .file-row').length===1","document.querySelector('.m01-file-list .file-row')?.click()"),
         ("document.querySelectorAll('.m01-intervals button').length===2 && [...document.querySelectorAll('button')].some(b=>b.textContent.trim()==='开始全列表分析'&&!b.disabled)",click('开始全列表分析')),
-        ("document.querySelector('.m01-results strong')?.textContent==='1 / 1 已完成'","document.querySelector('.m01-tiers input[type=checkbox]')?.click()"),
+        ("document.querySelector('.m01-results strong')?.textContent==='1 / 1 已完成' && document.querySelector('.m01-page')?.textContent.includes('已保存3个结果文件') && !!document.querySelector('.m01-tiers input[type=checkbox]')","document.querySelector('.m01-tiers input[type=checkbox]')?.click()"),
         ("document.querySelector('.m01-tiers input[type=checkbox]')?.checked && [...document.querySelectorAll('button')].some(b=>b.textContent.trim()==='保存当前层切分音频'&&!b.disabled)",click('保存当前层切分音频')),
         ("document.querySelector('.m01-results strong')?.textContent==='1 / 1 已完成'",None)]
     def finish(ok,error=None):

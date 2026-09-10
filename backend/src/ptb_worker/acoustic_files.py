@@ -4,11 +4,14 @@ import json
 from .files import FilePipeline
 from .store import JobError,core_version
 from .acoustic_batches import OPERATIONS
+from .acoustic_errors import ACOUSTIC_ERRORS
 from ptb_api.quota import StorageError
 from ptb_api.acoustic_batch_models import AcousticTaskManifest
 
 
 class AcousticFiles(FilePipeline):
+    additional_error_codes=ACOUSTIC_ERRORS
+
     @property
     def scratch_root(self):return self.storage.root
 

@@ -11,6 +11,7 @@ def main():
     from .io.annotations import decode_textgrid
     from .io.lip import decode_lip
     from .io.limits import Limits,LimitError
+    from .acoustic_errors import AcousticFailure
     from .io.parameter_exports import table_from_frame,_build_pair
     from .managed_scratch import ReservedNativeScratch
     from .native.reaper import Reaper,REAPER_SHA256
@@ -33,17 +34,25 @@ def main():
             if len(raw)!=n or digest(raw)!=item['sha256']:raise ValueError('Input changed')
             blobs[item['role']]=raw
         if handle.read(1):raise ValueError('Trailing input')
-    audio=decode_wav(blobs['audio'],limits)
-    associations=AcousticAssociations(tiers=decode_textgrid(blobs['textgrid'],limits) if 'textgrid' in blobs else (),
-                                     lip=decode_lip(blobs['lip']) if 'lip' in blobs else None)
+    try:audio=decode_wav(blobs['audio'],limits)
+    except LimitError:raise
+    except ValueError:raise AcousticFailure('invalid_audio') from None
+    if not len(audio.samples):raise AcousticFailure('no_parameter_frames')
+    try:tiers=decode_textgrid(blobs['textgrid'],limits) if 'textgrid' in blobs else ()
+    except ValueError:raise AcousticFailure('invalid_textgrid') from None
+    try:lip=decode_lip(blobs['lip']) if 'lip' in blobs else None
+    except ValueError:raise AcousticFailure('invalid_lip') from None
+    associations=AcousticAssociations(tiers=tiers,lip=lip)
     inputs=[AcousticInputSnapshot(asset_id=i['id'],role=i['role'],sha256=i['sha256'],expires_at=i['expires_at']) for i in header['inputs']]
     with ReservedNativeScratch(header['native_scratch'],16_000_000) as scratch:
         native=Reaper(header['reaper_binary'],scratch,limits) if request.config.backend_policy.reaper!='disabled' else None
         result=analyze_audio(audio,to_core_config(request.config),associations,AcousticBackends(reaper=native))
+        frame=result.to_dataframe().rename(columns=PARAMETER_MAPPING)
+        if frame.empty:raise AcousticFailure('no_parameter_frames')
         wire=build_acoustic_result(result,audio,request,inputs,native_sha256=REAPER_SHA256 if native else None)
         raw=wire.model_dump_json().encode()
         if len(raw)>16_000_000:raise LimitError('scientific_result_budget')
-        table=table_from_frame(result.to_dataframe().rename(columns=PARAMETER_MAPPING),limits)
+        table=table_from_frame(frame,limits)
         pair=_build_pair(table,limits)
     payloads=[pair.xlsx,pair.sqlite,raw]
     names=[('result.xlsx','xlsx'),('result.ptb.sqlite','sqlite'),('result.ptb.json','json')]
@@ -59,9 +68,10 @@ def main():
 
 if __name__=='__main__':
     try:main()
-    except Exception:
+    except Exception as exc:
+        from .acoustic_errors import public_error
         # Fixed code only; annotation text and private paths never go to logs.
-        encoded=b'{"error":"invalid_segment_input"}'
+        encoded=json.dumps({'error':public_error(exc)}).encode()
         try:
             with open(sys.argv[2],'wb',buffering=0) as out:out.write(struct.pack('<Q',len(encoded))+encoded)
         except Exception:raise SystemExit(2) from None

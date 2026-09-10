@@ -163,7 +163,7 @@ onUnmounted(() => { disposed = true; abort.abort(); clearInterval(timer); pendin
       <button class="primary" :disabled="busy || !pending || !available || usage?.frozen || !usage?.ready" @click="upload">{{ busy ? '正在处理…' : pending?.assetId ? '继续上传' : '上传文件' }}</button>
       <progress v-if="busy && pending" :value="progress" :max="1" aria-label="上传进度" />
     </div>
-    <p class="hint">未完成上传最多保留 24 小时；关闭页面不会删除电脑上的原文件。当前文件管理尚未接入语音分析。</p>
+    <p class="hint">未完成上传最多保留 24 小时。上传 WAV 和关联的 TextGrid 后，点击“进入研究工作台”使用参数估计；关闭页面不会删除电脑上的原文件。</p>
     <div v-if="fileJobs" class="file-job-controls">
       <label>本批输出上限（MB）<input v-model.number="outputMegabytes" type="number" min="1" max="5000" :disabled="busy" /></label>
       <div class="file-actions"><button :disabled="busy || !selectedIds.length || selectedIds.length > 16" @click="fileTask('archive_zip', [...selectedIds])">打包所选文件（{{ selectedIds.length }}）</button><button :disabled="busy" @click="fileTask('storage_check')">运行存储流程检查</button></div>

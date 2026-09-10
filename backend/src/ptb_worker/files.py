@@ -19,6 +19,7 @@ FILE_OPERATIONS = ('storage_check','archive_zip','extract_zip')
 
 
 class FilePipeline:
+    additional_error_codes=frozenset()
     def __init__(self, jobs, storage):
         if not jobs.postgres or jobs._dsn != storage._dsn:
             raise ValueError('File jobs require the same PostgreSQL and private storage')
@@ -217,7 +218,7 @@ class FilePipeline:
     def fail(self, identity, code):
         safe = {'cancelled','input_unavailable','quota_exceeded','output_budget_exceeded','archive_rejected',
                 'disk_space_low','storage_write_failed','output_count_exceeded','stale_worker'}
-        if code not in safe: code='execution_failed'
+        if code not in safe | self.additional_error_codes: code='execution_failed'
         with self.storage._locked() as conn:
             with self.tx(conn) as tx:
                 self.jobs._recover(tx,tx.now())

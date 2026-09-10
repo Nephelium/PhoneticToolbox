@@ -5,6 +5,7 @@ import threading
 from dataclasses import replace
 from .managed_scratch import ManagedScratch
 from .io.limits import Cancelled,LimitError,FormatError
+from .acoustic_errors import public_error
 from .segmentation import prepare_segments,unpack_bundle,SEGMENT_LIMITS,digest
 from ptb_api.quota import StorageError,CHUNK_BYTES
 
@@ -72,7 +73,7 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None):
         if timer.is_alive() or abort.is_set() or stop.is_set():raise Cancelled('cancelled')
         files.complete(identity)
     except (Cancelled,LimitError,FormatError,StorageError,OSError,ValueError) as exc:
-        code=errors[0] if errors else getattr(exc,'code','cancelled' if isinstance(exc,Cancelled) else 'execution_failed')
+        code=errors[0] if errors else public_error(exc)
         files.fail(identity,code)
     finally:
         done.set()

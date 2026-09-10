@@ -246,7 +246,7 @@
       "dependencies": "P03,P04,P06,P07",
       "files": "docs/plans/modules/M01-parameter-estimation.md 等模块计划；packages/phonetic_core/src/phonetic_core/；frontend/src/modules/",
       "status": "in_progress",
-      "note": "M01-A/B/C/D/E已限定Windows验收：E为目录、草稿、试听与只读Praat显示；完整参数分析页面及持久批次仍待F/G。下一项M01-F，实际DDL需具体审阅授权。",
+      "note": "M01 A-F2 verified in documented Windows scopes; G joint batch verifies real uploads/download readback, four local natural recordings, errors, responsive layouts and manual. Full M01/G remains in_progress: legacy PKL graphical conversion and historical parameter import remain. 005 already applied; no repeat DDL.",
       "steps": [
         "按 M01/M02/M03/M04/M06/M07/M08/M09/M13/M14 顺序逐个执行对应文件级计划",
         "先原样搬可用算法，再拆外层 I/O；不把算法重写和 UI 换肤混成一个提交",
@@ -264,7 +264,10 @@
         "docs/testing/m01-core-report.md",
         "docs/testing/m01-io-report.md",
         "docs/testing/m01-contract-report.md",
-        "docs/testing/m01-workspace-report.md"
+        "docs/testing/m01-workspace-report.md",
+        "docs/testing/m01-persistent-report.md",
+        "docs/testing/m01-report.md",
+        "docs/manual/parameter-estimation.md"
       ]
     },
     {
@@ -446,9 +449,11 @@
         "docs/testing/m01-contract-report.md",
         "docs/testing/m01-workspace-report.md",
         "docs/testing/m01-execution-preparation-report.md",
-        "docs/testing/m01-persistent-report.md"
+        "docs/testing/m01-persistent-report.md",
+        "docs/testing/m01-report.md",
+        "docs/manual/parameter-estimation.md"
       ],
-      "note": "A/B/C/D/E/F1/F2 verified in their documented Windows scopes. 005 applied after specific approval; real PG/SQLite, Qt/Chrome processing and publication verified. Full M01 remains in_progress; G manual/compatibility/natural-data review remains."
+      "note": "M01 A-F2 verified in documented Windows scopes; G joint batch verifies real uploads/download readback, four local natural recordings, errors, responsive layouts and manual. Full M01/G remains in_progress: legacy PKL graphical conversion and historical parameter import remain. 005 already applied; no repeat DDL."
     },
     {
       "id": "M02",

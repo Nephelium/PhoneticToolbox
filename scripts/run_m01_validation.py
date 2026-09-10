@@ -84,7 +84,7 @@ def main():
                     (args.verify_legacy_files,'verify_p07_jobs.py',['--approved-p07-schema-and-test-files'],'legacy-files')):
                 if enabled:
                     result=subprocess.run([str(ROOT/'.venv/m01-ui/Scripts/python.exe'),'-X','utf8',str(ROOT/'scripts'/script),*arguments],
-                        input=json.dumps(config)+'\n',text=True,encoding='utf-8',cwd=ROOT,capture_output=True,creationflags=NO_WINDOW,timeout=240)
+                        input=json.dumps(config)+'\n',text=True,encoding='utf-8',cwd=ROOT,capture_output=True,creationflags=NO_WINDOW,timeout=420 if name=='web' else 240)
                     (out/(name+'-output.txt')).write_text(result.stdout+'\n'+result.stderr,encoding='utf-8')
                     if result.returncode:raise RuntimeError(name+'_verification_failed')
                     report[name+'_verified']=True
