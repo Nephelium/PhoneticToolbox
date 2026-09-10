@@ -150,6 +150,8 @@ assert len(parameter_catalog) == 80
 
 ### M01-F · 持久批次与双端任务
 
+2026-09-10 [F1执行准备](2026-09-10-m01-execution-preparation.md)已限定验收，见[F1报告](../testing/m01-execution-preparation-report.md)：切分/参数派生、内部批次策略、005审阅和保护入口已具备。下列真实持久流程为F2，仍未完成；实际建表依赖[005具体授权](../testing/m01-migration-review.md)。
+
 2026-09-10 井井要求以 v2 说明书补查遗漏：[M01 说明书差异](../modules/v2-manual-coverage.md)。本阶段必须接通所选 WAV/TextGrid/同名层的实际切分保存、刷新回读；新增 M01-MAN01（说明书承诺提取后同步保存参数，当前 v2 函数仅写 WAV）须在 F/G 明确语义并实现或取得具体调整决定，不能默默忽略。显示布局修订不替代这些交付。
 
 **文件：** `backend/src/ptb_worker/acoustic_executor.py`、`acoustic_batches.py`、`files.py`、`store.py`、`executor.py`、`cli.py`；`backend/src/ptb_api/jobs.py`、`main.py`、`server.py`；`desktop/src/ptb_desktop/local_service.py`；拟审阅 `backend/migrations/005_acoustic_batches.sql` 及本地schema方案；`scripts/run_m01_validation.py`、`backend/tests/test_m01_jobs.py`。

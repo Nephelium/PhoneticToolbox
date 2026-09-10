@@ -444,9 +444,10 @@
         "docs/testing/m01-core-report.md",
         "docs/testing/m01-io-report.md",
         "docs/testing/m01-contract-report.md",
-        "docs/testing/m01-workspace-report.md"
+        "docs/testing/m01-workspace-report.md",
+        "docs/testing/m01-execution-preparation-report.md"
       ],
-      "note": "M01-A/B/C/D/E已限定Windows验收：E为目录、草稿、试听与只读Praat显示；完整参数分析页面及持久批次仍待F/G。下一项M01-F，实际DDL需具体审阅授权。"
+      "note": "M01 A/B/C/D/E and F1 preparation verified within documented Windows scopes. F2 durable scheduling/publication and full M01 remain in_progress. Actual 005 schema application requires specific approval of docs/testing/m01-migration-review.md."
     },
     {
       "id": "M02",

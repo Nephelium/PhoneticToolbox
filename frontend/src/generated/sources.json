@@ -4535,7 +4535,8 @@
     "title": "PostgreSQL 17 SELECT and advisory locking documentation",
     "modules": [
       "P06",
-      "P07"
+      "P07",
+      "M01"
     ],
     "kind": "reference-only",
     "acknowledgement_group": "software",

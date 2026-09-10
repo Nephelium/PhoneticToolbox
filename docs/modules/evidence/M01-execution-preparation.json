@@ -1,0 +1,221 @@
+{
+  "task": "M01-F1",
+  "status": "verified",
+  "scope": "Windows owned segmentation and optional parameter slices, internal batch policy and migration preparation only",
+  "verified_on": "2026-09-10",
+  "previous_commit": "9b1ace32c685e949a523b9be76a20cb710894a3f",
+  "code": [
+    {
+      "path": "packages/phonetic_core/src/phonetic_core/segmentation.py",
+      "sha256": "f6a5cf2a38a3b19aeaa674c1ac3fc6b685b3d2a3b0044b6866edd54b92cea9f4"
+    },
+    {
+      "path": "packages/phonetic_core/tests/test_segmentation.py",
+      "sha256": "86fe7fe591219cb88045ae14f44ef384b8fee1716e1e211c18cfa83283d96946"
+    },
+    {
+      "path": "backend/src/ptb_worker/segmentation.py",
+      "sha256": "7bcd2de1290148c55fd039f491e9e795fd5cedaf2c925f89fa2180a154ceef2e"
+    },
+    {
+      "path": "backend/src/ptb_worker/segment_child.py",
+      "sha256": "63ed0d68fc40ede7368a1cf6b9b3ae83c5df34123f69e9b01d091dad5fc98f9b"
+    },
+    {
+      "path": "backend/src/ptb_worker/batch_policy.py",
+      "sha256": "c455b648db14f39956476449d10b37e80367c1a37b8aa1bf1a391e595bd4a9e8"
+    },
+    {
+      "path": "backend/tests/test_m01_segments.py",
+      "sha256": "198ed20a53c124917aa8291900ed08a7a407ca04457e091116f2f9b51acb16c7"
+    },
+    {
+      "path": "backend/tests/test_m01_batch_policy.py",
+      "sha256": "28efe67feabb06a06a6c67ea49de76e0489b854a59c7028d0fdf25f2853fea27"
+    },
+    {
+      "path": "backend/tests/test_m01_migration_guard.py",
+      "sha256": "b07a0ec55d102795648b968edec5395129c8912f6bf3132b62a653af5b1896f6"
+    },
+    {
+      "path": "backend/migrations/005_acoustic_batches.sql",
+      "sha256": "3d1006b267d3db69d6e0b9bc3419dd7062e261aba24f21712c5bf7ec169dedf6"
+    },
+    {
+      "path": "backend/migrations/005_acoustic_batches_sqlite.sql",
+      "sha256": "d66c08a7885f78676651afe1f08c0c9e459aafae901fc4bfe5fde8d8e6c47847"
+    },
+    {
+      "path": "scripts/m01_database.py",
+      "sha256": "6f2ed5a3a8166934744e63972119b46e0ac97d5dc825aafe727113ebfae76636"
+    },
+    {
+      "path": "scripts/verify_m01_segments.py",
+      "sha256": "5c9e6d4f4dfae042854285f4e810fd763df455c4e01c98ad15ffb840d799584c"
+    }
+  ],
+  "wheels": [
+    {
+      "path": "output/validation/m01/f1-wheels/phonetic_core-3.0.0a1-py3-none-any.whl",
+      "sha256": "df74241be59ed9c4a2dbd16a7f33721087477a4290550cfc8d14761e85268a66"
+    },
+    {
+      "path": "output/validation/m01/f1-wheels/ptb_api-3.0.0a1-py3-none-any.whl",
+      "sha256": "b5f553ba79aaee352c52f81478d0edc90920d16a4680311e370935346d56554a"
+    }
+  ],
+  "tests": {
+    "passed": 244,
+    "warnings": 2,
+    "junit": "output/validation/m01/f1-final.xml"
+  },
+  "actual_artifacts": {
+    "report": "output/validation/m01/segments-b22f897b5dfc441b851a8a14bff8e515/report.json",
+    "report_sha256": "ab807f957eafa32708617111ef06b4bb280f33b23b6ed0aeabb868716567333f",
+    "cases": [
+      {
+        "case": "actual-praat-parent",
+        "source_frames": 160,
+        "segments": [
+          {
+            "first_sample": 0,
+            "last_sample": 8952,
+            "rows": 41,
+            "first_local_time": 0.0,
+            "first_source_time": 0.0,
+            "files": [
+              {
+                "name": "SYN-VOWEL-44100_音节_ɑ_0.000_0.203_0001.wav",
+                "format": "wav",
+                "segment_index": 0,
+                "size_bytes": 17948,
+                "sha256": "43e1d05bb85578211ae542e7fbec30bc19bf92f12eb5fb347e0a0fff1c81a918"
+              },
+              {
+                "name": "SYN-VOWEL-44100_音节_ɑ_0.000_0.203_0001.xlsx",
+                "format": "xlsx",
+                "segment_index": 0,
+                "size_bytes": 5693,
+                "sha256": "e94c66596f9d175e91f717893b63bca0e559aee60b54cd1bb9153d1a9168af20"
+              },
+              {
+                "name": "SYN-VOWEL-44100_音节_ɑ_0.000_0.203_0001.ptb.sqlite",
+                "format": "sqlite",
+                "segment_index": 0,
+                "size_bytes": 12288,
+                "sha256": "7aa368fa59bfa00ed2e189bbabce0e00ecb220a9b807fac5a4713f00253e63ee"
+              }
+            ]
+          },
+          {
+            "first_sample": 17684,
+            "last_sample": 35280,
+            "rows": 79,
+            "first_local_time": 0.00400226757369615,
+            "first_source_time": 0.405,
+            "files": [
+              {
+                "name": "SYN-VOWEL-44100_音节_literal_0.401_0.800_0003.wav",
+                "format": "wav",
+                "segment_index": 2,
+                "size_bytes": 35236,
+                "sha256": "45532937c51b7fbf9b34d65ffc32ff85edc71b80aa9a3da5eb311b47e606baa4"
+              },
+              {
+                "name": "SYN-VOWEL-44100_音节_literal_0.401_0.800_0003.xlsx",
+                "format": "xlsx",
+                "segment_index": 2,
+                "size_bytes": 6518,
+                "sha256": "06be9b2d13f02db23da5c0e5b23d683d4642ae4bf9e34071624ef734311310eb"
+              },
+              {
+                "name": "SYN-VOWEL-44100_音节_literal_0.401_0.800_0003.ptb.sqlite",
+                "format": "sqlite",
+                "segment_index": 2,
+                "size_bytes": 12288,
+                "sha256": "0d4ba4613f781e7c618f92a5241d0c2eb752b9b0fa211dd25e702f2e5f73a4e9"
+              }
+            ]
+          }
+        ],
+        "elapsed_seconds": 3.6559999999881256,
+        "heartbeat_calls": 8,
+        "wave_samples_equal": true,
+        "both_parameter_formats_equal": true,
+        "parent_sha256": "54b0da5d51739691c30d9db0599bcfe10391a6fa6828dfc6212e4a038e1f34b5",
+        "backends": [
+          {
+            "stage": "wm_f0",
+            "actual": "irapt1",
+            "reason": null,
+            "resource_sha256": null
+          },
+          {
+            "stage": "reaper",
+            "actual": "disabled",
+            "reason": null,
+            "resource_sha256": null
+          }
+        ]
+      },
+      {
+        "case": "float32-stereo",
+        "duration_s": 1.0,
+        "input_bytes": 64058,
+        "sample_dtype": "float32",
+        "elapsed_seconds": 2.610000000015134,
+        "samples_equal": true,
+        "files": [
+          {
+            "name": "float32-stereo_音节_float_0.125_0.875_0001.wav",
+            "format": "wav",
+            "segment_index": 0,
+            "size_bytes": 48058,
+            "sha256": "4cda9ea74a449223db99c39188b4c787fc4ba273b0c8818654b8f8041646f4e3"
+          }
+        ]
+      },
+      {
+        "case": "600-seconds",
+        "duration_s": 600.0,
+        "input_bytes": 9600044,
+        "sample_dtype": "int16",
+        "elapsed_seconds": 2.562999999994645,
+        "samples_equal": true,
+        "files": [
+          {
+            "name": "600-seconds_音节_start_0.000_0.125_0001.wav",
+            "format": "wav",
+            "segment_index": 0,
+            "size_bytes": 2044,
+            "sha256": "e52e4817cb6a5311f64301aa6027c71bb7457ee2c270cbee48bdf8a1335991f8"
+          },
+          {
+            "name": "600-seconds_音节_end_599.875_600.000_0002.wav",
+            "format": "wav",
+            "segment_index": 1,
+            "size_bytes": 2044,
+            "sha256": "de9509a732c131e4c677642f7e3304ea59c41ed0d682c431c7bc26ec59209d6e"
+          }
+        ]
+      }
+    ]
+  },
+  "preservation": {
+    "v2_head": true,
+    "v2_index_sha256": true,
+    "v2_status": true,
+    "baseline_files_checked": true,
+    "baseline_files_changed_since_D03": true,
+    "v2_package_metadata_sha256": true,
+    "v2_environment": true
+  },
+  "source_records": 323,
+  "schema_applied": false,
+  "limitations": [
+    "005 not applied; actual PostgreSQL/SQLite integration still requires explicit authorization",
+    "No enabled UI save or public persistent batch endpoint",
+    "Quota/fencing/expiry, cross-input name conflicts, recovery and durable parent-result selection pending F2/G",
+    "Synthetic Windows artifacts only; no full M01 or Codex crash repair claim"
+  ]
+}

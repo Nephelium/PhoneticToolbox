@@ -87,3 +87,4 @@
 每次交付写清：完成任务 ID、修改原因、真实验证命令和结果、来源更新、剩余限制、下一项依赖。实现状态用 planned / in_progress / verified / blocked；P00 可用 documented-baseline 表示仅规划/源码基线完成，不能冒充业务 verified。
 
 - 井井在M01-D后回复“继续”，并追加单/双声道、波形高度、紧凑列表/全选、Praat语谱图和长音频显示要求。M01-E现为verified（限定Windows目录、草稿、预览与显示），见docs/testing/m01-workspace-report.md。新增m01-ui项目内环境、真实Praat受限预览；完整参数分析页面和持久批次仍in_progress，下一项M01-F，实际DDL须另行具体审阅授权。
+- 井井在M01-E布局修订后回复“继续”，已完成M01-F1执行准备：244项Windows定向测试、WAV与可选参数切片实际回读、批次策略和005增量SQL，见docs/testing/m01-execution-preparation-report.md。005尚未实际执行；具体授权对象见docs/testing/m01-migration-review.md，不能沿用003/004授权。M01-F仍in_progress，下一项F2持久提交/取消/恢复/发布；页面保存与批处理仍未启用。
