@@ -6,6 +6,7 @@ ACOUSTIC_ERRORS=frozenset({
     'analysis_output_limit','analysis_resource_limit','no_parameter_frames',
     'deadline_exceeded','invalid_segment_input','segment_budget_exceeded',
     'parent_result_source_mismatch','no_labelled_segments','missing_or_invalid_tier',
+    'legacy_parameter_invalid','legacy_parameter_budget','legacy_parameter_time_mismatch',
 })
 
 

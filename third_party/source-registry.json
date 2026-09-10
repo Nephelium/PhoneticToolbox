@@ -6326,7 +6326,8 @@
         "scripts/m01_database.py",
         "backend/src/ptb_worker/segment_child.py",
         "backend/src/ptb_worker/local_acoustic_files.py",
-        "backend/src/ptb_worker/acoustic_batches.py"
+        "backend/src/ptb_worker/acoustic_batches.py",
+        "backend/src/ptb_worker/io/legacy_parameters.py"
       ],
       "m01_io_evidence": "docs/testing/m01-io-report.md",
       "m01_execution_evidence": "docs/testing/m01-execution-preparation-report.md"
@@ -6889,7 +6890,8 @@
         "backend/src/ptb_worker/io/parameter_exports.py",
         "requirements-m01-io.lock",
         "backend/src/ptb_worker/segment_child.py",
-        "backend/src/ptb_worker/science_child.py"
+        "backend/src/ptb_worker/science_child.py",
+        "backend/src/ptb_worker/io/legacy_parameters.py"
       ],
       "relationship": "Unmodified dependency; project-owned bounded writer adapter uses pinned internal writer API",
       "evidence": "third_party/m01-io-inventory.json",
@@ -6973,7 +6975,7 @@
     },
     {
       "id": "M01-PICKLE",
-      "title": "Python 3.11 restricted pickle loading",
+      "title": "Python 3.11 pickle format and restricted numeric conversion",
       "kind": "documentation-reference",
       "modules": [
         "M01"
@@ -6988,9 +6990,12 @@
       "distribution_status": "reference only",
       "acknowledgement_group": "software",
       "used_at": [
-        "backend/src/ptb_worker/io/lip.py"
+        "backend/src/ptb_worker/io/lip.py",
+        "backend/src/ptb_worker/io/legacy_pickle.py",
+        "backend/src/ptb_worker/legacy_conversion.py"
       ],
-      "relationship": "API/format reference; project-owned adapter implementation"
+      "relationship": "API/format reference; project-owned symbolic opcode reader; no serialized global is imported or called",
+      "m01_legacy_evidence": "docs/testing/m01-legacy-report.md"
     }
   ]
 }

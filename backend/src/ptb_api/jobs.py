@@ -73,7 +73,7 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
     @router.post('/local-inputs',operation_id='register_local_acoustic_input')
     async def local_input(request:Request,role:str,name:str,owner=Depends(mutation)):
         if ctx.mode!='local' or not getattr(store,'batches',None):raise HTTPException(404,'unavailable')
-        limit=64_000_000 if role=='audio' else 16_000_000 if role=='parent_result' else 2_000_000
+        limit=64_000_000 if role=='audio' else 16_000_000 if role in ('parent_result','legacy_result') else 2_000_000
         raw=bytearray()
         async for block in request.stream():
             if len(raw)+len(block)>limit:raise HTTPException(413,'input_budget_exceeded')
@@ -84,6 +84,20 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
     @router.get('/parents/latest',operation_id='find_acoustic_parent')
     def parent(project_id:UUID,sha256:str=Query(pattern=r'^[0-9a-f]{64}$'),owner=Depends(identity)):
         return batches().parent_result(owner['id'],str(project_id),sha256)
+
+    @router.post('/local-lip-conversion',operation_id='convert_local_legacy_lip')
+    async def convert_lip(request:Request,owner=Depends(mutation)):
+        if ctx.mode!='local' or not getattr(store,'batches',None):raise HTTPException(404,'unavailable')
+        from ptb_worker.legacy_conversion import convert,MAX_INPUT
+        from ptb_worker.spectrogram_preview import preview_slot
+        from starlette.concurrency import run_in_threadpool
+        with preview_slot():
+            raw=bytearray()
+            async for block in request.stream():
+                if len(raw)+len(block)>MAX_INPUT:raise HTTPException(413,'legacy_conversion_budget')
+                raw.extend(block)
+            result=await run_in_threadpool(convert,bytes(raw))
+        return Response(result,media_type='application/json')
 
     @router.get('/local-results/{asset_id}',operation_id='read_local_acoustic_result')
     def local_result(asset_id:UUID,offset:int=Query(0,ge=0),size:int=Query(65536,ge=1,le=1048576),owner=Depends(identity)):

@@ -46,3 +46,19 @@ def test_binary_local_input_checks_identity_before_reading_and_its_own_limit():
 def test_orchestration_import_never_loads_scientific_dlls():
     result=subprocess.run([sys.executable,'-c',"import sys; import ptb_worker.acoustic_executor; from ptb_worker.native.reaper import collect_pipe; assert not ({'numpy','scipy','parselmouth','PyQt6'} & set(sys.modules))"],capture_output=True,timeout=10)
     assert result.returncode==0,result.stderr.decode(errors='replace')
+
+
+def test_local_conversion_auth_budget_and_actual_numpy_input():
+    import pickle,struct
+    import numpy as np
+    from ptb_worker.io.lip import decode_lip
+    store=Rejected();origin='http://127.0.0.1:5177';headers={'Authorization':'Bearer '+'x'*40,'Origin':origin}
+    raw=pickle.dumps({'relative_times':np.arange(2000)/100.,'open':np.ones(2000)})
+    body=struct.pack('<II',len(raw),0)+raw;assert len(body)>16384
+    with TestClient(create_app('local',job_store=store,local_token='x'*40,local_origin=origin),base_url=origin) as c:
+        path='/api/v1/jobs/local-lip-conversion'
+        assert c.post(path,content=body).status_code==403
+        assert c.post(path,content=body,headers={'Authorization':'Bearer '+'x'*40}).status_code==403
+        response=c.post(path,content=body,headers=headers)
+        assert response.status_code==200 and len(decode_lip(response.content)['open'])==2000
+        assert c.post(path,content=b'x'*18_000_009,headers=headers).status_code==413

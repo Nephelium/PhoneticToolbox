@@ -22,6 +22,7 @@ const intervals=computed(()=>linked.value.tiers[linked.value.layer]?.intervals??
 const segments=computed(()=>intervals.value.filter(i=>i.xmax>i.xmin&&!['','sil','eps','<sil>','<eps>'].includes(i.text.trim().toLowerCase())).length);
 const tasks=computed(()=>props.context.files.tasks),taskBusy=ref(false),taskReady=ref(false),batchList=ref<BatchView[]>([]),activeBatch=ref<BatchView|null>(null),jobResults=ref<JobView[]>([]),sliceParameters=ref(false);
 const resultCache=new Map<string,JobView>();let taskTimer:ReturnType<typeof setTimeout>|undefined;
+const parameterSource=ref<'recent'|'legacy'>('recent'),legacyOpen=ref(false),pickleId=ref(''),converting=ref(false);
 let autoSaveBatch:{id:string;directory:string}|null=null;
 function scheduleBatch(){clearTimeout(taskTimer);if(!disposed&&tasks.value)taskTimer=setTimeout(()=>void loadBatch(),activeBatch.value&&!activeBatch.value.summary.closed?1500:6000);}
 async function loadBatch(id?:string){
@@ -46,7 +47,10 @@ async function startBatch(operation:'acoustic_analysis'|'textgrid_segment'){
   const inputs:BatchSelection[]=[];let noParent=0;
   for(const file of chosen){const a=association(state,file.id);if(a.error)throw Error(file.name+'：'+a.error);if(operation==='textgrid_segment'&&!a.textgrid)throw Error(file.name+' 尚未关联TextGrid。');
    const item:BatchSelection={audio:file,textgrid:a.textgrid,lip:operation==='acoustic_analysis'?a.lip:null};
-   if(operation==='textgrid_segment'&&sliceParameters.value){const parent=await tasks.value.parent(file);if(parent)item.parent_result=parent;else noParent++;}inputs.push(item);}
+   if(operation==='textgrid_segment'&&sliceParameters.value){
+    if(parameterSource.value==='legacy'){if(!a.legacy)throw Error(file.name+' 尚未明确关联历史参数表，请逐项选择。');item.legacy_result=a.legacy;}
+    else{const parent=await tasks.value.parent(file);if(parent)item.parent_result=parent;else noParent++;}
+   }inputs.push(item);}
   const config:BatchConfig|null=operation==='acoustic_analysis'?{settings:{...state.settings},selection:{mode:'catalog',keys:[...state.wave.parameters] as NonNullable<NonNullable<BatchConfig['selection']>['keys']>},backend_policy:{reaper:'native_required',wm_f0:'irapt_then_praat'}}:null;
   const directory=effectiveOutput(state)?.id;
   const batch=await tasks.value.submit(operation,inputs,config,layer,crypto.randomUUID());if(disposed)return;activeBatch.value=batch;autoSaveBatch=props.context.files.kind==='desktop'&&directory?{id:batch.id,directory}:null;
@@ -103,6 +107,15 @@ async function changeAssociation(kind:'textgrid'|'lip',event:Event){
  a[kind]=state.files.find(f=>f.id===id&&f.kind===kind)??null;a.manual[kind]=true;a.error='';
  if(kind==='textgrid'){a.tiers=[];a.gridHash='';a.layer=0;const version=++state.loadVersion;try{await loadGrid(state.selected,version);}catch(e){if(version===state.loadVersion)a.error=e instanceof Error?e.message:'TextGrid读取失败。';}}
 }
+async function convertLip(){
+ const file=state.files.find(f=>f.id===pickleId.value&&f.kind==='lip_pickle'),audioId=state.selected;
+ if(!file||!props.context.files.convertLip||converting.value)return;converting.value=true;notice.value='';
+ try{const result=await props.context.files.convertLip(file);if(disposed)return;await refresh();
+  if(state.files.some(f=>f.id===audioId)){const a=association(state,audioId);a.lip=result.file;a.manual.lip=true;}
+  legacyOpen.value=false;
+  notice.value=`已保存 ${result.file.name} 并关联到所选音频。${result.companion_found?'已读取同名伴随时间戳，音频起点优先采用 PKL 内元数据。':''}原 PKL 保持原样。`;
+ }catch(e){if(!disposed)notice.value=e instanceof Error?e.message:'转换失败。';}finally{converting.value=false;}
+}
 function openParameters(){state.parameterDraft=[...state.wave.parameters];state.drawer='parameters';}
 function openSettings(){state.settingsDraft={...state.settings};state.drawer='settings';}
 function parameters(keys:string[]){try{applyParameters(state,keys);}catch(e){notice.value=String(e);}}
@@ -118,7 +131,7 @@ onUnmounted(()=>{disposed=true;clearTimeout(taskTimer);previewAbort.abort();stat
 <div class="m01-directory-bar">
 <template v-if="context.files.kind==='desktop'"><button class="primary" :disabled="busy" @click="choose('input')">选择音频目录</button><span class="directory-label" :title="state.input?.label">{{state.input?.label??'尚未选择目录'}}</span><button :disabled="busy" @click="choose('association')">选择关联目录</button><span v-if="state.associationDirectory" class="directory-label" :title="state.associationDirectory.label">{{state.associationDirectory.label}}</span></template>
 <template v-else-if="context.files.kind==='preview'"><input ref="picker" class="visually-hidden" type="file" accept=".wav" multiple aria-label="选择音频列表" @change="add"/><button class="primary" @click="picker?.click()">添加WAV到列表</button><span class="hint">本机预览 · 不上传</span></template>
-<template v-else><span>项目资源 · {{context.label}}</span><small class="muted">在项目文件管理中上传WAV、TextGrid与.lip.json，再刷新。</small></template>
+<template v-else><span>项目资源 · {{context.label}}</span><small class="muted">在项目文件管理中上传 WAV、TextGrid、.lip.json 或历史 XLSX/SQLite，再刷新。</small></template>
 <button :disabled="busy||(context.files.kind==='desktop'&&!state.input)" @click="refresh">{{busy?'正在读取…':'刷新列表'}}</button>
 <div v-if="context.files.kind==='desktop'" class="m01-output-row"><label><input v-model="state.sameDirectory" type="checkbox"/>结果与WAV同目录</label><button :disabled="state.sameDirectory||busy" @click="choose('output')">选择结果目录</button><span class="directory-label" :title="effectiveOutput(state)?.label">{{effectiveOutput(state)?.label??'尚未选择结果目录'}}</span></div></div>
 <p v-if="notice" role="status" class="notice">{{notice}}</p><p v-if="state.wave.error" role="alert" class="error-banner">{{state.wave.error}}</p>
@@ -128,10 +141,18 @@ onUnmounted(()=>{disposed=true;clearTimeout(taskTimer);previewAbort.abort();stat
 <p v-if="!audioFiles.length" class="empty-small">选择音频目录或刷新项目资源。</p></template>
 <template #default><template v-if="selected"><div class="signal-heading"><h2>{{selected.name}}</h2><p v-if="state.wave.asset" class="mono muted">{{state.wave.asset.sampleRate}} Hz · {{state.wave.asset.channels.length}} 声道 · {{state.wave.asset.duration.toFixed(3)}} s</p></div>
 <div class="m01-association-controls"><label>TextGrid<select aria-label="TextGrid关联" :value="linked.textgrid?.id??''" :disabled="state.wave.loading" @change="changeAssociation('textgrid',$event)"><option value="">不关联</option><option v-for="f in state.files.filter(f=>f.kind==='textgrid')" :key="f.id" :value="f.id">{{f.name}}</option></select></label><label>唇形数据<select aria-label="唇形关联" :value="linked.lip?.id??''" @change="changeAssociation('lip',$event)"><option value="">不关联</option><option v-for="f in state.files.filter(f=>f.kind==='lip')" :key="f.id" :value="f.id">{{f.name}}</option></select></label></div>
-<details class="association-help"><summary>关联说明</summary><p class="hint">同名自动关联；可明确改选。唇形使用安全.lip.json格式，旧PKL需先经受限转换。</p></details><p v-if="linked.error" role="alert" class="error-banner">{{linked.error}}</p>
+<details class="association-help" :open="legacyOpen" @toggle="legacyOpen=($event.target as HTMLDetailsElement).open"><summary>关联说明与旧文件兼容</summary>
+ <p class="hint">TextGrid 与 .lip.json 同名自动关联，也可改选。历史参数表在下方切分区选择。</p>
+ <template v-if="context.files.convertLip"><label class="legacy-field">旧唇形 PKL<select v-model="pickleId" aria-label="旧唇形PKL"><option value="">请选择旧文件</option><option v-for="f in state.files.filter(f=>f.kind==='lip_pickle'&&!/_timestamps\.pkl$/i.test(f.name))" :key="f.id" :value="f.id">{{f.name}}</option></select></label><button :disabled="converting||!pickleId||busy" @click="convertLip">{{converting?'正在转换…':'转换并保存 .lip.json'}}</button><p class="hint">在 PKL 同目录创建新文件并关联当前音频；已有文件不覆盖。自动读取同名 _timestamps.pkl 作为起点后备。仅转换时间与四项唇形参数，原文件中的 landmarks 等仍保留在 PKL。</p></template>
+ <p v-else class="hint">旧唇形 PKL 请在桌面版转换为 .lip.json 后上传。</p>
+</details><p v-if="linked.error" role="alert" class="error-banner">{{linked.error}}</p>
 <p v-if="state.wave.loading" role="status" class="audio-loading"><progress aria-label="音频读取与解码进度"/>正在读取音频与关联…</p>
 <template v-if="state.wave.asset"><WaveformViewport :state="state.wave" :spectrogram-loader="spectrogramLoader"><template #controls><label class="channel-picker">试听声道<select v-model.number="state.wave.channel" @change="stop"><option v-for="(_,i) in state.wave.asset.channels" :key="i" :value="i">声道 {{i+1}}</option></select></label></template></WaveformViewport>
-<section v-if="linked.tiers.length" class="m01-tiers"><label>TextGrid切分层<select v-model.number="linked.layer"><option v-for="(tier,i) in linked.tiers" :key="i" :value="i">{{tier.name}}</option></select></label><div class="m01-intervals"><button v-for="(interval,i) in intervals" :key="i" @click="intervalSelect(interval.xmin,interval.xmax)"><span class="ipa-sample">{{interval.text||'（空标签）'}}</span><small>{{interval.xmin.toFixed(3)}}–{{interval.xmax.toFixed(3)}} s</small></button></div><p class="hint">当前层有 {{segments}} 个候选片段。勾选多项可批量切分；未勾选时处理当前音频。</p><label><input v-model="sliceParameters" type="checkbox"/>同时切分最近一次完整参数结果</label><p v-if="sliceParameters" class="hint">匹配相同原音频，保留原分析帧与时间，不重新估计。无参数结果时仅保存音频。</p><button :disabled="!taskReady||taskBusy||busy" @click="startBatch('textgrid_segment')">保存当前层切分音频</button><small v-if="!tasks" class="muted">当前入口仅供预览；持久任务入口需本机任务服务或项目服务。</small></section>
+<section v-if="linked.tiers.length" class="m01-tiers"><label>TextGrid切分层<select v-model.number="linked.layer"><option v-for="(tier,i) in linked.tiers" :key="i" :value="i">{{tier.name}}</option></select></label><div class="m01-intervals"><button v-for="(interval,i) in intervals" :key="i" @click="intervalSelect(interval.xmin,interval.xmax)"><span class="ipa-sample">{{interval.text||'（空标签）'}}</span><small>{{interval.xmin.toFixed(3)}}–{{interval.xmax.toFixed(3)}} s</small></button></div><p class="hint">当前层有 {{segments}} 个候选片段。勾选多项可批量切分；未勾选时处理当前音频。</p><label><input v-model="sliceParameters" type="checkbox"/>同时切分参数结果</label>
+<template v-if="sliceParameters"><div class="legacy-source-row"><label>参数来源<select v-model="parameterSource" aria-label="切分参数来源"><option value="recent">本应用最近一次同源完整结果</option><option value="legacy">指定历史参数表（来源未核实）</option></select></label>
+<label v-if="parameterSource==='legacy'">历史参数表<select aria-label="历史参数表关联" :value="linked.legacy?.id??''" @change="linked.legacy=state.files.find(f=>f.id===($event.target as HTMLSelectElement).value&&f.kind==='parameter')??null"><option value="">未指定</option><option v-for="f in state.files.filter(f=>f.kind==='parameter')" :key="f.id" :value="f.id">{{f.name}}</option></select></label></div>
+<p class="hint">{{parameterSource==='recent'?'匹配相同原音频，保留原分析帧与时间，不重新估计。无参数结果时仅保存音频。':'请为每个待切分音频选择对应的完整历史表。旧表无法核实原 WAV 来源，输出会保留此标记；未关联时停止提交。'}}</p></template>
+<button :disabled="!taskReady||taskBusy||busy" @click="startBatch('textgrid_segment')">保存当前层切分音频</button><small v-if="!tasks" class="muted">当前入口仅供预览；持久任务入口需本机任务服务或项目服务。</small></section>
 </template></template><div v-else class="wave-empty"><AppIcon name="wave"/><h2>选择一段声音</h2><p>从左侧列表选择文件，查看真实波形、标签和试听选区。</p></div></template>
 <template #settings><h2>输出参数</h2><div class="parameter-count"><strong>{{state.wave.parameters.length}}</strong><span>/ 80 项</span></div><button @click="openParameters">选择输出参数</button><hr/><h2>分析设置</h2><p class="mono muted">帧移 {{state.settings.frameshift_ms}} ms<br/>分析窗 {{state.settings.windowsize_ms}} ms</p><button @click="openSettings">编辑14项设置</button><button :disabled="!dirty(state)" @click="save">保存草稿</button><span v-if="dirty(state)" class="draft-indicator">● 尚未保存</span><hr/><div class="m01-batch-bar"><div><strong>处理列表中的 {{audioFiles.length}} 个文件</strong><p class="hint">使用全列表及当前参数设置；计算期间可以继续试听。</p></div><button class="primary" :disabled="!taskReady||taskBusy||busy||!audioFiles.length" @click="startBatch('acoustic_analysis')">开始全列表分析</button><span v-if="taskBusy" class="muted" role="status">正在处理任务操作…</span></div><hr/><h2>分析结果</h2><BatchResults :batches="batchList" :active="activeBatch" :jobs="jobResults" :busy="taskBusy" :desktop="context.files.kind==='desktop'" @select="loadBatch" @cancel="cancelBatch" @save="saveResults" @retry="retryJob" @download="downloadResult"/></template>
 </WorkbenchColumns>
@@ -139,3 +160,7 @@ onUnmounted(()=>{disposed=true;clearTimeout(taskTimer);previewAbort.abort();stat
 <ParameterDrawer v-if="state.drawer==='parameters'" :selected="state.wave.parameters" :draft="state.parameterDraft" require-selection @draft="state.parameterDraft=$event" @close="state.drawer=''" @apply="parameters"/>
 <SettingsDrawer v-if="state.drawer==='settings'" :draft="state.settingsDraft" @draft="state.settingsDraft=$event" @close="state.drawer=''" @apply="settings"/>
 </section></template>
+<style scoped>
+.legacy-field{display:flex;flex-direction:column;gap:6px;margin:10px 0}.legacy-field select{min-width:0;max-width:100%}.association-help p{overflow-wrap:anywhere}
+.legacy-source-row{display:flex;flex-wrap:wrap;gap:12px}.legacy-source-row label{display:flex;flex:1 1 240px;min-width:0;flex-direction:column;gap:6px}.legacy-source-row select{min-width:0;max-width:100%}
+</style>

@@ -72,6 +72,28 @@ def test_directory_entry_budget_fails_explicitly(tmp_path):
     with pytest.raises(FileAccessError):p.list(d['id'])
 
 
+def test_conversion_publishes_only_new_file_and_preserves_sources(tmp_path):
+    import pickle
+    from ptb_desktop.task_bridge import TaskBridge
+    from ptb_worker.legacy_conversion import convert
+    from ptb_worker.io.lip import decode_lip
+    folder=fixtures(tmp_path);lip=folder/'旧.pkl';companion=folder/'旧_timestamps.pkl'
+    raw=pickle.dumps({'absolute_timestamps':[100.,100.1],'open':[1.,2.]})
+    lip.write_bytes(raw);companion.write_bytes(pickle.dumps({'start_time':99.}))
+    class Service:
+        def binary(self,path,method,payload,**kwargs):
+            assert path=='/api/v1/jobs/local-lip-conversion' and method=='POST'
+            return convert(payload)
+    provider=FileProvider();grant=provider.choose('association',lambda:folder)
+    selected=next(f for f in provider.list(grant['id']) if f['name']==lip.name)
+    bridge=TaskBridge(provider,Service());result=bridge.invoke({'op':'convert_lip','id':selected['id']})
+    assert result['file']['kind']=='lip' and result['companion_found']
+    converted=folder/result['file']['name'];saved=converted.read_bytes()
+    assert decode_lip(saved)['metadata']['audio_first_frame_time']==99.
+    with pytest.raises(FileAccessError,match='已有同名'):bridge.convert_lip(selected['id'])
+    assert converted.read_bytes()==saved and lip.read_bytes()==raw and not list(folder.glob('*.part'))
+
+
 def test_host_network_allowlist_is_bound_to_its_owned_service():
     from ptb_desktop.host import permitted_url
     service='http://127.0.0.1:12345'

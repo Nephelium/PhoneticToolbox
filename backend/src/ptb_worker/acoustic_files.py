@@ -29,8 +29,9 @@ class AcousticFiles(FilePipeline):
                 item=self.storage._readable(tx.conn,owner,ref['asset_id'])
                 if str(item['project_id'])!=project or item['sha256']!=ref['sha256'] or item['expires_at']<=now+300:
                     raise JobError('input_unavailable',409)
-                limit=64_000_000 if role=='audio' else 16_000_000 if role=='parent_result' else 2_000_000
-                suffix='.wav' if role=='audio' else '.textgrid' if role=='textgrid' else '.lip.json' if role=='lip' else '.ptb.json'
+                limit=64_000_000 if role=='audio' else 16_000_000 if role in ('parent_result','legacy_result') else 2_000_000
+                suffix={'audio':'.wav','textgrid':'.textgrid','lip':'.lip.json','parent_result':'.ptb.json','legacy_result':('.xlsx','.ptb.sqlite','.ptb.sqlite3')}.get(role)
+                if not suffix:raise JobError('invalid_input',422)
                 if item['size_bytes']>limit or not item['name'].lower().endswith(suffix):raise JobError('invalid_input',422)
                 if role=='parent_result':
                     producer=tx.execute("SELECT j.snapshot,j.result_manifest FROM ptb_storage.job_assets l JOIN {jobs} j ON j.id=l.job_id WHERE l.asset_id=? AND l.role='output' AND j.state='succeeded'",(item['id'],)).fetchone()

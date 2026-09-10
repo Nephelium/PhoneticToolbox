@@ -18,6 +18,9 @@ Object.assign(errors,{
  missing_or_invalid_tier:'未找到所选层，或层内区间越界、重叠。请检查本文件的 TextGrid。',
  no_labelled_segments:'所选层没有可保存的非静音标注区间。',
  parent_result_source_mismatch:'参数结果与当前 WAV 的来源不一致，请重新分析该音频。',
+ legacy_parameter_invalid:'历史参数表无效。请检查单工作表、Time_s、数值列；公式、重复表头与非普通 params 表不受支持。',
+ legacy_parameter_budget:'历史参数表超过读取预算（16 MB、20 万单元格或 XML 32 MB）。请缩小表格。',
+ legacy_parameter_time_mismatch:'历史参数时间超出当前音频，或表内已有 Source_Time_s。请选择与完整音频对应的原参数表。',
 });
 function audioName(batch:BatchView,job:JobView){const index=batch.summary.items.find(item=>item.job_id===job.id)?.index;return index===undefined?'音频':batch.audio_names[index]??'音频';}
 function downloadName(batch:BatchView,job:JobView,name:string){return job.operation==='acoustic_analysis'?audioName(batch,job).replace(/\.wav$/i,'').replace(/[\x00-\x1f/\\:<>"|?*]/g,'_').slice(0,160)+name.slice('result'.length):name;}

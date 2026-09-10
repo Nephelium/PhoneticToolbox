@@ -33,6 +33,9 @@ def verify(config,out):
     source=upload/'声调_ɑ̃˥.wav';source.write_bytes(raw)
     grid=source.with_suffix('.TextGrid')
     grid.write_text('File type = "ooTextFile short"\n"TextGrid"\n0\n.8\n<exists>\n1\n"IntervalTier"\n"音节"\n0\n.8\n2\n0\n.4\n"ɑ̃˥"\n.4\n.8\n"=1+1"\n',encoding='utf-8')
+    from m01_legacy_fixtures import create_legacy_fixtures
+    legacy=create_legacy_fixtures(upload)
+    (out/'legacy-fixtures.json').write_text(json.dumps(legacy,ensure_ascii=False,indent=2),encoding='utf-8')
     failure_project=str(account.create_project(people[0]['id'],'失败验证项目')['id'])
     bad=upload/'01-损坏.wav';bad.write_bytes(b'not RIFF WAVE')
     import wave
@@ -61,7 +64,7 @@ def verify(config,out):
         assert json.loads(worker.stdout.readline())=={'ready':True}
         runtime=Path.home()/'.cache/codex-runtimes/codex-primary-runtime/dependencies/node'
         browser_input=dict(origin=origin,people=people,playwright=str(runtime/'node_modules/playwright'),browser='C:/Program Files/Google/Chrome/Application/chrome.exe',output=str(out),
-            uploads=[str(source),str(grid)],failure_uploads=[str(bad),str(long),str(good)],audio_name=source.name)
+            uploads=[str(source),str(grid),str(upload/'历史参数.xlsx'),str(upload/'历史参数.ptb.sqlite')],failure_uploads=[str(bad),str(long),str(good)],audio_name=source.name)
         done=subprocess.run([str(runtime/'bin/node.exe'),str(ROOT/'tests/e2e/m01-tasks.cjs')],input=json.dumps(browser_input)+'\n',capture_output=True,text=True,encoding='utf-8',creationflags=hidden,timeout=330)
         # Test assertions never log auth/session inputs; redact even unexpected failures.
         log=done.stdout+'\n'+done.stderr
@@ -69,6 +72,8 @@ def verify(config,out):
         (out/'browser.log').write_text(log,encoding='utf-8');assert done.returncode==0,'See browser.log'
         from verify_m01_downloads import verify_downloads
         verify_downloads(out)
+        from verify_m01_legacy_downloads import verify_legacy_downloads
+        verify_legacy_downloads(out)
         failed=jobs.list(people[0]['id'],failure_project)
         assert len(failed)==3
         assert sorted(j['error_code'] for j in failed if j['state']=='failed')==['analysis_sample_limit','invalid_audio']

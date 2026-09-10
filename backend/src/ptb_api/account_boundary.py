@@ -19,7 +19,7 @@ class AccountBoundary:
                 return await reject('host_rejected',403)
         # This binary route authenticates before reading and bounds its stream
         # per input role. Do not buffer audio as small account JSON here.
-        if scope['method']=='POST' and scope['path']=='/api/v1/jobs/local-inputs':
+        if scope['method']=='POST' and scope['path'] in ('/api/v1/jobs/local-inputs','/api/v1/jobs/local-lip-conversion'):
             return await self.app(scope,receive,send)
         if scope['method'] in ('POST','PATCH','PUT'):
             limit = CHUNK_BYTES if scope['method']=='PUT' and re.fullmatch(r'/api/v1/uploads/[0-9a-fA-F-]{36}/blocks',scope['path']) else self.max_bytes

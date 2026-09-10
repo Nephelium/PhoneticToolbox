@@ -20,7 +20,7 @@ export function validateSettings(value:Settings):string {
   if(typeof v!=='number'||!Number.isFinite(v)||(rule.type==='integer'&&!Number.isInteger(v))||(rule.minimum!==undefined&&v<rule.minimum)||(rule.exclusiveMinimum!==undefined&&v<=rule.exclusiveMinimum)||(rule.maximum!==undefined&&v>rule.maximum))return settingLabels[key as SettingKey][0]+'超出支持范围。';}
  return value.min_f0!>=value.max_f0!?'最小基频必须小于最大基频。':'';
 }
-export interface Association {textgrid:ResearchFile|null;lip:ResearchFile|null;tiers:Tier[];gridHash:string;layer:number;error:string;manual:{textgrid:boolean;lip:boolean}}
+export interface Association {textgrid:ResearchFile|null;lip:ResearchFile|null;legacy:ResearchFile|null;tiers:Tier[];gridHash:string;layer:number;error:string;manual:{textgrid:boolean;lip:boolean}}
 export interface M01State {
  wave:Workspace;files:ResearchFile[];selected:string;marked:string[];associations:Record<string,Association>;
  input:DirectoryGrant|null;output:DirectoryGrant|null;associationDirectory:DirectoryGrant|null;sameDirectory:boolean;
@@ -37,7 +37,7 @@ export function draftJson(state:M01State){return JSON.stringify({parameters:stat
 export function dirty(state:M01State){return draftJson(state)!==state.saved|| (state.drawer==='settings'&&JSON.stringify(state.settingsDraft)!==JSON.stringify(state.settings))||(state.drawer==='parameters'&&JSON.stringify(state.parameterDraft)!==JSON.stringify(state.wave.parameters));}
 export function applyParameters(state:M01State,keys:string[]){if(!keys.length||new Set(keys).size!==keys.length||keys.some(k=>!parameterKeys.includes(k as never)))throw Error('请至少选择一个有效参数，且不能重复。');state.wave.parameters=[...keys];state.drawer='';state.wave.dirty=dirty(state);}
 export function applySettings(state:M01State,value:Settings){const error=validateSettings(value);if(error)throw Error(error);state.settings={...value};state.drawer='';state.wave.dirty=dirty(state);}
-export function association(state:M01State,id=state.selected):Association {return state.associations[id]??(state.associations[id]={textgrid:null,lip:null,tiers:[],gridHash:'',layer:0,error:'',manual:{textgrid:false,lip:false}});}
+export function association(state:M01State,id=state.selected):Association {return state.associations[id]??(state.associations[id]={textgrid:null,lip:null,legacy:null,tiers:[],gridHash:'',layer:0,error:'',manual:{textgrid:false,lip:false}});}
 export function matchAssociation(audio:ResearchFile,files:ResearchFile[],kind:'textgrid'|'lip'){
  const name=audio.name.replace(/\.wav$/i,'')+(kind==='textgrid'?'.textgrid':'.lip.json');const matches=files.filter(f=>f.kind===kind&&f.name.toLowerCase()===name.toLowerCase());
  if(matches.length>1)throw Error('同名关联有多个候选，请为该音频明确选择。');return matches[0]??null;
@@ -47,7 +47,7 @@ export function reconcile(state:M01State,files:ResearchFile[]){
  state.files=files;
  state.marked=state.marked.filter(id=>files.some(f=>f.id===id&&f.kind==='audio'));
  if(!files.some(f=>f.kind==='audio'&&f.id===state.selected)){state.selected='';state.wave.asset=null;state.wave.start=0;state.wave.end=0;state.loadVersion++;}
- for(const id of Object.keys(state.associations)){if(!files.some(f=>f.id===id)){delete state.associations[id];continue;}const a=state.associations[id];for(const kind of ['textgrid','lip'] as const){const old=a[kind];if(old&&!files.some(f=>f.id===old.id&&f.sha256===old.sha256)){a[kind]=null;if(kind==='textgrid'){a.tiers=[];a.gridHash='';}}}}
+ for(const id of Object.keys(state.associations)){if(!files.some(f=>f.id===id)){delete state.associations[id];continue;}const a=state.associations[id];for(const kind of ['textgrid','lip','legacy'] as const){const old=a[kind];if(old&&!files.some(f=>f.id===old.id&&(!f.sha256||!old.sha256||f.sha256===old.sha256))){a[kind]=null;if(kind==='textgrid'){a.tiers=[];a.gridHash='';}}}}
 }
 export function snapshot(state:M01State){if(!state.wave.parameters.length)throw Error('请选择输出参数。');const error=validateSettings(state.settings);if(error)throw Error(error);return {inputs:state.files.filter(f=>f.kind==='audio').map(f=>({...f})),parameters:[...state.wave.parameters],settings:{...state.settings}};}
 export function effectiveOutput(state:M01State){return state.sameDirectory?state.input:state.output;}

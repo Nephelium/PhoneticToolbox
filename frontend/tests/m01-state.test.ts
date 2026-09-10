@@ -9,3 +9,10 @@ test('whole list, audition selection, and layer remain separate',()=>{const s=cr
 test('association selection is case insensitive but rejects duplicate candidates',()=>{const grid:ResearchFile={id:'g',name:'声调.TextGrid',kind:'textgrid',size:12};assert.equal(matchAssociation(audio,[grid],'textgrid')?.id,'g');assert.throws(()=>matchAssociation(audio,[grid,{...grid,id:'g2'}],'textgrid'));assert.equal(matchAssociation(audio,[],'lip'),null);});
 test('refresh removes vanished audio/association and invalidates pending preview',()=>{const s=createState();s.selected='a';s.files=[audio];association(s).textgrid={id:'g',name:'a.TextGrid',kind:'textgrid',size:12};association(s).gridHash='old';reconcile(s,[audio]);assert.equal(association(s).textgrid,null);assert.equal(association(s).gridHash,'');reconcile(s,[]);assert.equal(s.selected,'');assert.equal(s.loadVersion,1);});
 test('independent projects retain draft and same-directory tracks input',()=>{const a=createState(),b=createState();applyParameters(a,['rF0']);assert.equal(b.wave.parameters.length,80);a.input={id:'input',purpose:'input',label:'语料'};a.output={id:'output',purpose:'output',label:'结果'};assert.equal(effectiveOutput(a)?.id,'input');a.sameDirectory=false;assert.equal(effectiveOutput(a)?.id,'output');});
+test('native refresh retains a read association; changed server hash or missing legacy input clears it',()=>{
+ const s=createState();s.selected=audio.id;const g:ResearchFile={id:'g',name:'声调.TextGrid',kind:'textgrid',size:12};
+ association(s).textgrid={...g,sha256:'a'.repeat(64)};association(s).manual.textgrid=true;
+ const legacy:ResearchFile={id:'old',name:'声调.xlsx',kind:'parameter',size:300};association(s).legacy=legacy;
+ reconcile(s,[audio,g,legacy]);assert.equal(association(s).textgrid?.sha256,'a'.repeat(64));assert.equal(association(s).legacy?.id,'old');
+ reconcile(s,[audio,{...g,sha256:'b'.repeat(64)}]);assert.equal(association(s).textgrid,null);assert.equal(association(s).legacy,null);
+});

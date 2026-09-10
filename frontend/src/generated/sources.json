@@ -4947,7 +4947,7 @@
   },
   {
     "id": "M01-PICKLE",
-    "title": "Python 3.11 restricted pickle loading",
+    "title": "Python 3.11 pickle format and restricted numeric conversion",
     "modules": [
       "M01"
     ],

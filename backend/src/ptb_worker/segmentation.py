@@ -58,11 +58,11 @@ def unpack_bundle(payload,limit):
 
 
 def prepare_segments(audio,textgrid,layer,scratch,*,audio_name='audio.wav',parent_result=None,
-                     limits=SEGMENT_LIMITS,stop=lambda:False,on_started=None,heartbeat=lambda:None):
+                     legacy_result=None,legacy_name=None,limits=SEGMENT_LIMITS,stop=lambda:False,on_started=None,heartbeat=lambda:None):
     """Return verified bytes, never publish paths. Heartbeat runs during child work.
 
-    parent_result is a trusted AcousticResult serialization from the matching WAV,
-    not arbitrary XLSX or executable pickle. Callers must authenticate provenance.
+    parent_result requires authenticated matching-WAV provenance. legacy_result
+    is a separately identified, explicitly associated historical table.
     """
     if not isinstance(scratch,Scratch):raise TypeError('Host-owned Scratch required')
     if stop():raise Cancelled('cancelled')
@@ -70,10 +70,14 @@ def prepare_segments(audio,textgrid,layer,scratch,*,audio_name='audio.wav',paren
     if len(audio)>limits.input_bytes or len(textgrid)>limits.text_bytes:raise LimitError('segment_input_budget')
     if not isinstance(layer,str) or not 0<len(layer)<=180:raise FormatError('invalid_segment_layer')
     if not isinstance(audio_name,str) or not 0<len(audio_name)<=255:raise FormatError('invalid_audio_name')
+    if legacy_result is not None:
+        from .io.legacy_parameters import SUFFIXES
+        if parent_result is not None or type(legacy_name)!=str or not 0<len(legacy_name)<=255 or not legacy_name.lower().endswith(SUFFIXES):raise FormatError('invalid_legacy_source')
+        parent_result=legacy_result
     if parent_result is not None and (type(parent_result)!=bytes or len(parent_result)>16_000_000):raise LimitError('parent_result_budget')
     header={'audio_size':len(audio),'grid_size':len(textgrid),'parent_size':len(parent_result or b''),
             'audio_sha256':digest(audio),'textgrid_sha256':digest(textgrid),'layer':layer,
-            'audio_name':audio_name,'limits':asdict(limits)}
+            'audio_name':audio_name,'legacy_name':legacy_name if legacy_result is not None else None,'limits':asdict(limits)}
     raw=json.dumps(header,ensure_ascii=False,separators=(',',':')).encode()+b'\n'+audio+textgrid+(parent_result or b'')
     path=scratch.create(raw,'.json')
     try:

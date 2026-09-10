@@ -6,11 +6,11 @@ P04 审阅补充（2026-09-09）：当前 15 个公共预览页不是最终模�
 
 [原功能验收矩阵](legacy-acceptance.csv) · [双端补充矩阵](dual-platform-acceptance.csv) · [80 参数键](all-80-acoustic-parameters.json) · [页面原规格](page-specifications.json)
 
-2026-09-10 追加：[说明书章节与功能覆盖门](v2-manual-coverage.md)。每模块必须同时对照 v2 说明书和实际源码；布局允许不同，功能不可遗漏。M01 新发现说明书的“切分后同步保存参数”承诺与当前源码仅写 WAV 不一致，列为 M01-MAN01 待 F/G 解决，不以预览验收销项。
+2026-09-10 追加：[说明书章节与功能覆盖门](v2-manual-coverage.md)。每模块必须同时对照 v2 说明书和实际源码；布局允许不同，功能不可遗漏。M01 新发现说明书的“切分后同步保存参数”承诺与当前源码仅写 WAV 不一致，列为 M01-MAN01；F2同源结果和G历史参数表切分已接通，见[旧格式验收](../testing/m01-legacy-report.md)，整模块仍需逐项审阅。
 
 | 模块 | 原功能分组数 | 单独计划 | 核心目标 | 状态 |
 | --- | --- | --- | --- | --- |
-| M01 参数估计 | 6 | [迁移计划](../plans/modules/M01-parameter-estimation.md) | `acoustic` | in_progress（M01-A/B/C/D/E已限定验收，E显示已限定验收，持久批任务待迁移） |
+| M01 参数估计 | 6 | [迁移计划](../plans/modules/M01-parameter-estimation.md) | `acoustic` | in_progress（M01 A–F2及G联合/旧格式入口已限定验收，剩39项最终逐条审阅） |
 
 ## M01 参数估计
 顶部目录与关联工具栏；左侧文件列表；中央波形与 TextGrid；右侧参数摘要与批处理；底部公共播放状态。三列滚动与紧凑布局见 [M01-E 修订](../plans/2026-09-10-m01-layout.md)。

@@ -1,0 +1,50 @@
+{
+  "task": "M01-G legacy inputs",
+  "status": "verified",
+  "scope": "Windows local conversion and explicit historical XLSX/SQLite segmentation; full M01 in_progress",
+  "code_sha256": {
+    "backend/src/ptb_api/account_boundary.py": "82e0dd613e1cd3d29abb0b618aab13beb6ca3b97f7ae0717c47f75cbc5db6c2a",
+    "backend/src/ptb_api/acoustic_batch_models.py": "bad21852cb5b6d7612ea89a1034b157dd1a01f05b26b87d9ee8054390ec87957",
+    "backend/src/ptb_api/jobs.py": "d8d1658febe9c6554c7c10416342fe1082aa1b6b7e9bb3915baa014b91162c37",
+    "backend/src/ptb_worker/acoustic_errors.py": "6cc1bab015117b58a47be9c8ece0e7853baf09d4fa1b013baa37a1e112ef218e",
+    "backend/src/ptb_worker/acoustic_executor.py": "2d6e9b6d642c1ee119c550c53180f4532af24c0068189e49093b51d42cfa32c4",
+    "backend/src/ptb_worker/acoustic_files.py": "5969814b96747c362b28532c0e66833d3be2f19ad8675c5797d4098d4aa748f7",
+    "backend/src/ptb_worker/io/lip.py": "3155787f2680412369381fca429dbe83a6bc633fd403718c0942e5f5bd1d93b2",
+    "backend/src/ptb_worker/local_acoustic_files.py": "56fea2dd4dbf1a4ba6655b59e0540ab8baac57654de30415f2497b37f68d49a7",
+    "backend/src/ptb_worker/segment_child.py": "8450a482d43d2e1c6c1e2cdb9da303034574dff248f6d22f642881b249d71637",
+    "backend/src/ptb_worker/segmentation.py": "dc089ea71829e866904802f02f3e062c2337ff848b6431fd9e909c94e9986c7e",
+    "desktop/src/ptb_desktop/file_provider.py": "8191fdbbcef562e0fbd66eaa4ecc60edaf393461d85a693c6d582c1d8ad7e5a0",
+    "desktop/src/ptb_desktop/local_service.py": "4493da6ce5231d3460daadbf1c75a9056f482092c72c2825b1ea57403f9661b6",
+    "desktop/src/ptb_desktop/task_bridge.py": "375da9138f530f12218b858edea0fefc9732b01a445ab724f46d7ea6ab9aa67b",
+    "frontend/src/app/AppShell.vue": "b128f1a8710dc4a08d2958c3256b8b87ce4496d48c46672a90ae90548ae3b265",
+    "frontend/src/modules/parameter-estimation/BatchResults.vue": "47325b611bef8e8c6ca7ad97627e16c2e59827477a6e6a67cf1ed5f0663a3bd9",
+    "frontend/src/modules/parameter-estimation/ParameterEstimationPage.vue": "de7c6bf7c7155c8021135ebc661b089e795757e0e3cccdea07d2367221cb7760",
+    "frontend/src/modules/parameter-estimation/state.ts": "96db14b624b3f3145960922ac0a8efc7a57598d7845cd82573ef209c1a97c09c",
+    "frontend/src/platform/desktop.ts": "56b7f3d9506b21157c1ad6c1f333d2bce292d5e5e15387aa5325870cdb931eb8",
+    "frontend/src/platform/research.ts": "f706aa3fd9ce752682850406c29b402814c71fe360e76ecf0f84efa46f9272ee",
+    "backend/src/ptb_worker/io/legacy_parameters.py": "b5a0a76b83bb230ae6865e43c5d4ead1274c84ceaf1073366355f19822253939",
+    "backend/src/ptb_worker/io/legacy_pickle.py": "532e8344c0fd8efe035a79032e73e3bd12c9aa5eb9b36067c347b5c3930ad763",
+    "backend/src/ptb_worker/legacy_conversion.py": "7c5b8c8e0dff085d70278af650cd5fb319c3ec5f477f152b202ff11146d41f7a"
+  },
+  "wheels": {
+    "ptb_api-3.0.0a1-py3-none-any.whl": "d0f98b114939d21e0b6292caf0d849260f2b8253fa2f1535734ac1c256aeb2f6",
+    "ptb_desktop-3.0.0a1-py3-none-any.whl": "c1bf60f986ebced4d05903ef6853132595b281d42dcbe9a10e97dbb4d0acbfdd"
+  },
+  "checks": {
+    "python_full": 430,
+    "frontend": 17,
+    "qt_steps": 15,
+    "chrome_groups": 10,
+    "historical_downloads": 14,
+    "old_parameter_pairs": 4,
+    "sqlite_active_jobs": 0,
+    "postgres_stopped": true
+  },
+  "evidence": {
+    "qt": "output/validation/m01/task-window-9998fa477dce4ae09db763af7667c05e/report.json",
+    "web": "output/validation/m01/persistent-7af298afbbbc4112b2117bcd1474829e/report.json",
+    "old_formats": "output/validation/m01/persistent-7af298afbbbc4112b2117bcd1474829e/legacy-readback.json",
+    "preservation": "output/validation/m01/legacy-preservation.json",
+    "regression": "output/validation/m01/legacy-regression.log"
+  }
+}

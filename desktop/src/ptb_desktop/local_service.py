@@ -83,14 +83,14 @@ class LocalService:
         path='/api/v1/jobs/local-inputs?'+urlencode(dict(name=name,role=role))
         return json.loads(self.binary(path,'POST',payload))
 
-    def binary(self,path,method='GET',payload=None):
+    def binary(self,path,method='GET',payload=None,*,max_bytes=1_048_576):
         if not path.startswith('/api/v1/jobs/') or '://' in path:raise ValueError('Invalid local task path')
         request=urllib.request.Request(self.url+path,data=payload,method=method,
             headers={'Authorization':'Bearer '+self.token,'Origin':self.url,'Content-Type':'application/octet-stream'})
         opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
         with opener.open(request,timeout=30) as response:
-            raw=response.read(1_048_577)
-            if len(raw)>1_048_576:raise ValueError('Oversized task response')
+            raw=response.read(max_bytes+1)
+            if len(raw)>max_bytes:raise ValueError('Oversized task response')
             return raw
 
     def preview(self,payload,query):

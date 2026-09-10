@@ -120,7 +120,7 @@ class FileProvider:
             for count,entry in enumerate(scan):
                 if count>=self.max_entries:raise FileAccessError('目录条目超过10000，请选择较小目录。')
                 lower=entry.name.lower()
-                kind='audio' if lower.endswith('.wav') else 'textgrid' if lower.endswith('.textgrid') else 'lip' if lower.endswith('.lip.json') else None
+                kind='audio' if lower.endswith('.wav') else 'textgrid' if lower.endswith('.textgrid') else 'lip' if lower.endswith('.lip.json') else 'lip_pickle' if lower.endswith('.pkl') else 'parameter' if lower.endswith(('.xlsx','.ptb.sqlite','.ptb.sqlite3')) else None
                 # Windows scandir caches zero inode/link counts; obtain real identity.
                 info=Path(entry.path).lstat()
                 if not kind or not stat.S_ISREG(info.st_mode) or info.st_nlink!=1 or getattr(info,'st_file_attributes',0)&0x400:continue
@@ -140,7 +140,7 @@ class FileProvider:
         try:
             path=checked_path(directory.path/entry.name)
             if path.parent!=directory.path:raise FileAccessError('文件超出目录授权。')
-            limit=self.max_bytes if entry.name.lower().endswith('.wav') else min(self.max_bytes,2_000_000)
+            limit=self.max_bytes if entry.name.lower().endswith('.wav') else min(self.max_bytes,16_000_000 if entry.name.lower().endswith(('.pkl','.xlsx','.ptb.sqlite','.ptb.sqlite3')) else 2_000_000)
             raw=read_locked(path,directory.path,limit,entry.fingerprint)
             self.directory(entry.directory)
         except OSError:raise FileAccessError('文件不可读取，请刷新列表。') from None

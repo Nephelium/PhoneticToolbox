@@ -90,3 +90,5 @@
 - 井井在M01-E布局修订后回复“继续”，已完成M01-F1执行准备：244项Windows定向测试、WAV与可选参数切片实际回读、批次策略和005增量SQL，见docs/testing/m01-execution-preparation-report.md。F1当时未执行005。井井随后对docs/testing/m01-migration-review.md回复“好，继续”，已授权并执行两库005和限定合成测试；F2持久提交/取消/恢复/发布及页面实际保存现已接通，见docs/testing/m01-persistent-report.md。下一项G，不重复索取005授权，不重复DDL。
 
 - 井井在F2交付后回复“好，继续”，已执行M01-G本轮Windows联合审阅：真实上传/三组双格式下载回读、四份已授权自然录音对照、明确错误与小窗口布局及说明书更新；见docs/testing/m01-report.md。完整G/M01继续in_progress，优先补旧PKL图形转换和历史参数导入，不能把新文件供v2读取通过说成旧文件导入已实现；005不重复执行，测试继续用独立Chrome/Qt。
+
+- 上条后的“继续”已执行M01-G旧格式批次：本机有界符号PKL转换/图形保存、历史XLSX/SQLite显式关联及原帧同步切分均已Windows定向验证，见docs/testing/m01-legacy-report.md。430项Python、17项前端、15步Qt及真实Chrome下载回读通过；原v2只读。完整M01仍in_progress，下一步39项最终逐条审阅，再迁M02；不重复DDL，不运行Codex内置浏览器关闭。

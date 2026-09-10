@@ -1,8 +1,8 @@
 """M01-C source_id M01-PICKLE: inert JSON and local-only legacy conversion.
 
-No pickle entry point is registered with the public API. Constructors, globals,
-persistent IDs, extensions and shared/cyclic containers are rejected. Historical
-NumPy object pickles require an explicit offline conversion outside this reader.
+The local conversion route uses a separate bounded child and symbolic numeric
+reader. No executable pickle loader is exposed. The older primitive-only helper
+remains restricted; wire JSON never contains Python objects or constructors.
 """
 import io
 import json
@@ -151,8 +151,20 @@ def load_inert_legacy_pickle(payload,limits=Limits()):
     return value
 
 
-def convert_local_legacy_lip(payload,limits=Limits()):
-    return encode_lip(load_inert_legacy_pickle(payload,limits),limits)
+def convert_local_legacy_lip(payload,limits=Limits(),*,companion=None):
+    from .legacy_pickle import read_numeric_pickle,Array
+    data=read_numeric_pickle(payload,limits)
+    if type(data)!=dict:raise FormatError('Legacy lip mapping required')
+    selected={k:(data[k].vector() if type(data[k])==Array else data[k]) for k in VECTORS if k in data}
+    metadata=data.get('metadata',{})
+    if type(metadata)!=dict:raise FormatError('Invalid legacy metadata')
+    selected['metadata']={k:metadata[k] for k in METADATA if k in metadata}
+    if selected['metadata'].get('audio_first_frame_time') is None and companion is not None:
+        info=read_numeric_pickle(companion,limits)
+        start=info.get('start_time') if type(info)==dict else None
+        if type(start) not in (int,float) or not math.isfinite(start):raise FormatError('Invalid companion audio start')
+        selected['metadata']['audio_first_frame_time']=start
+    return encode_lip(selected,limits)
 
 
 def legacy_companion_start(payload,limits=Limits()):

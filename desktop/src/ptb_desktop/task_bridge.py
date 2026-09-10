@@ -1,7 +1,9 @@
 """Native capability to local API translation and non-overwriting result export."""
 from contextlib import contextmanager
 import hashlib
+import json
 import os
+import struct
 from pathlib import Path
 from uuid import UUID,uuid4
 from .file_provider import checked_path,FileAccessError,identity
@@ -27,6 +29,7 @@ class TaskBridge:
 
     def invoke(self,body):
         op=body.get('op')
+        if op=='convert_lip':return self.convert_lip(body['id'])
         if op=='list':return self.service.get('/api/v1/jobs/batches/list?project_id='+PROJECT)['batches']
         if op=='parent':
             _,sha=self.provider.read(body['id'])
@@ -41,7 +44,7 @@ class TaskBridge:
                 raise FileAccessError('批次请求不正确。')
             inputs=[]
             for item in body['inputs']:
-                if set(item)-{'audio','textgrid','lip','parent_result'}:raise FileAccessError('不支持的关联。')
+                if set(item)-{'audio','textgrid','lip','parent_result','legacy_result'}:raise FileAccessError('不支持的关联。')
                 mapped={}
                 for role,key in item.items():
                     if key is None:continue
@@ -55,6 +58,38 @@ class TaskBridge:
                 config=body.get('config'),layer=body.get('layer'),idempotency_key=body['idempotency_key']))
         if op=='save':return self.save(str(UUID(body['id'])),body['directory'])
         raise FileAccessError('不支持的任务操作。')
+
+    def convert_lip(self,file_id):
+        raw,_=self.provider.read(file_id);entry=self.provider.entries[file_id]
+        if not entry.name.lower().endswith('.pkl') or entry.name.lower().endswith('_timestamps.pkl'):raise FileAccessError('请选择旧唇形 PKL。')
+        directory=self.provider.directory(entry.directory);root=directory.path
+        name=entry.name[:-4]+'.lip.json';target=root/name
+        if len(name)>220:raise FileAccessError('转换文件名过长。')
+        companions=[f for f in self.provider.list(entry.directory) if f['name'].casefold()==(entry.name[:-4]+'_timestamps.pkl').casefold()]
+        if len(companions)>1:raise FileAccessError('伴随时间戳文件不明确。')
+        companion=self.provider.read(companions[0]['id'])[0] if companions else b''
+        if len(companion)>2_000_000:raise FileAccessError('伴随时间戳超过 2 MB。')
+        from urllib.error import HTTPError
+        try:converted=self.service.binary('/api/v1/jobs/local-lip-conversion','POST',struct.pack('<II',len(raw),len(companion))+raw+companion,max_bytes=2_000_000)
+        except HTTPError as error:
+            code=json.load(error).get('detail','')
+            raise FileAccessError({'legacy_conversion_budget':'旧 PKL 超过转换预算（16 MB、数值或内存上限）。',
+                'legacy_conversion_timeout':'旧 PKL 转换超时，请缩短数据。','preview_busy':'预览或转换正在进行，请稍后重试。'}.get(code,'旧 PKL 含不支持或损坏的结构，未生成文件。')) from None
+        with pin_directory(root):
+            self.provider.directory(entry.directory)
+            # Recheck sources after conversion; no file output if the selected input changed.
+            if self.provider.read(file_id)[0]!=raw:raise FileAccessError('旧 PKL 已变化，请刷新。')
+            if companions and self.provider.read(companions[0]['id'])[0]!=companion:raise FileAccessError('伴随时间戳已变化。')
+            if target.exists() or target.is_symlink():raise FileAccessError('已有同名 .lip.json，保持原样；可直接关联它。')
+            temp=root/('.ptb-'+uuid4().hex+'.part');original=None
+            try:
+                with temp.open('xb') as f:
+                    original=identity(os.fstat(f.fileno()));f.write(converted);f.flush();os.fsync(f.fileno())
+                os.rename(temp,target)
+            finally:
+                if original and temp.exists() and identity(temp.stat())==original:checked_path(temp);temp.unlink()
+            file=next(f for f in self.provider.list(entry.directory) if f['name']==name)
+            return {'file':file,'companion_found':bool(companions)}
 
     def save(self,batch_id,directory_id):
         directory=self.provider.directory(directory_id)

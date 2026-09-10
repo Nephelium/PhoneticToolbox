@@ -31,7 +31,15 @@ def main():
     except ValueError:raise FormatError('missing_or_invalid_tier') from None
     if not plan:raise FormatError('no_labelled_segments')
     parent=None;table=None
-    if parent_raw:
+    if parent_raw and header.get('legacy_name'):
+        from .io.legacy_parameters import read_legacy_parameters
+        try:table=read_legacy_parameters(parent_raw,header['legacy_name'],replace(limits,input_bytes=16_000_000))
+        except LimitError:raise FormatError('legacy_parameter_budget') from None
+        except (ValueError,TypeError):raise FormatError('legacy_parameter_invalid') from None
+        ti=table['columns'].index('Time_s')
+        if 'Source_Time_s' in table['columns'] or table['rows'][0][ti]<0 or table['rows'][-1][ti]>len(audio.samples)/audio.sample_rate_hz:
+            raise FormatError('legacy_parameter_time_mismatch')
+    elif parent_raw:
         parent=AcousticResult.model_validate_json(parent_raw)
         source=next(x for x in parent.metadata.inputs if x.role=='audio')
         decoded=parent.metadata.decoded
@@ -80,7 +88,8 @@ def main():
     manifest={'kind':'prepared_segments','schema_version':'m01-segments/1','audio_sha256':digest(audio_raw),
               'textgrid_sha256':digest(grid_raw),'layer':header['layer'],'sample_rate_hz':audio.sample_rate_hz,
               'sample_dtype':str(audio.samples.dtype),'channels':audio.samples.shape[1] if audio.samples.ndim==2 else 1,
-              'parent_result_sha256':digest(parent_raw) if parent_raw else None,
+              'parent_result_sha256':digest(parent_raw) if parent_raw and not header.get('legacy_name') else None,
+              'legacy_result':{'name':header['legacy_name'],'sha256':digest(parent_raw),'provenance':'user_associated_unverified'} if header.get('legacy_name') else None,
               'parameter_time_policy':'original_frames_rebased_to_first_sample_with_Source_Time_s',
               'reestimated':False,'segments':segments,'files':files}
     encoded=json.dumps(manifest,ensure_ascii=False,allow_nan=False,separators=(',',':')).encode()
@@ -95,7 +104,7 @@ if __name__=='__main__':
     try:main()
     except Exception as exc:
         from .io.limits import LimitError
-        code=str(exc) if str(exc) in ('parent_result_source_mismatch','no_labelled_segments','missing_or_invalid_tier') else 'segment_budget_exceeded' if isinstance(exc,(LimitError,MemoryError)) else 'invalid_segment_input'
+        code=str(exc) if str(exc) in ('parent_result_source_mismatch','no_labelled_segments','missing_or_invalid_tier','legacy_parameter_invalid','legacy_parameter_budget','legacy_parameter_time_mismatch') else 'segment_budget_exceeded' if isinstance(exc,(LimitError,MemoryError)) else 'invalid_segment_input'
         # Fixed error codes only; private paths and annotation text never become logs.
         encoded=json.dumps({'error':code}).encode()
         try:

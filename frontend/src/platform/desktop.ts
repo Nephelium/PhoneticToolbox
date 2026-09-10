@@ -22,6 +22,7 @@ export async function initializePlatform(){
     list:()=>task({op:'list'}),get:id=>task({op:'get',id}),cancel:id=>task({op:'cancel',id}),job:id=>task({op:'job',id}),
     retry:(id,key)=>task({op:'retry',id,key}),save:(id,directory)=>task({op:'save',id,directory})};
   desktopFiles={kind:'desktop',tasks:hello.tasks?tasks:undefined,choose:(purpose:DirectoryGrant['purpose'])=>call('choose',{purpose}),
+    convertLip:hello.tasks?file=>task({op:'convert_lip',id:file.id}):undefined,
     list:(id='')=>call('list',{id}),async read(file){const v=await call<{base64:string;sha256:string}>('read',{id:file.id});const text=atob(v.base64),bytes=new Uint8Array(text.length);for(let i=0;i<text.length;i++)bytes[i]=text.charCodeAt(i);return {buffer:bytes.buffer,sha256:v.sha256};},
     textgrid:file=>call('textgrid',{id:file.id}),
     spectrogram:(file,view)=>new Promise((resolve,reject)=>{const id=crypto.randomUUID();const timer=setTimeout(()=>{pending.delete(id);reject(Error('preview_timeout'));},35000);pending.set(id,{resolve,reject,timer});bridge.preview(id,JSON.stringify({id:file.id,...view}));}),dispose(){}};

@@ -3,12 +3,12 @@ import { decodeWav } from './decode.ts';
 export type Tier=components['schemas']['TextGridPreview']['tiers'][number];
 export type Spectrogram=components['schemas']['SpectrogramPreview'];
 export interface SpectrogramView {channel:number;start:number;end:number;width:number}
-export interface ResearchFile { id:string; name:string; kind:'audio'|'textgrid'|'lip'; size:number; sha256?:string; expiresAt?:number }
+export interface ResearchFile { id:string; name:string; kind:'audio'|'textgrid'|'lip'|'lip_pickle'|'parameter'; size:number; sha256?:string; expiresAt?:number }
 export interface DirectoryGrant { id:string; label:string; purpose:'input'|'output'|'association' }
 export type BatchView=components['schemas']['BatchView'];
 export type JobView=components['schemas']['JobView'];
 export type BatchConfig=components['schemas']['AcousticConfigSnapshot'];
-export interface BatchSelection {audio:ResearchFile;textgrid?:ResearchFile|null;lip?:ResearchFile|null;parent_result?:{asset_id:string;sha256:string}}
+export interface BatchSelection {audio:ResearchFile;textgrid?:ResearchFile|null;lip?:ResearchFile|null;legacy_result?:ResearchFile|null;parent_result?:{asset_id:string;sha256:string}}
 export interface ResearchTasks {
   parent(file:ResearchFile):Promise<{asset_id:string;sha256:string}|null>;
   submit(operation:'acoustic_analysis'|'textgrid_segment',inputs:BatchSelection[],config:BatchConfig|null,layer:string|null,key:string):Promise<BatchView>;
@@ -26,10 +26,11 @@ export interface ResearchFiles {
   read(file:ResearchFile,signal?:AbortSignal):Promise<{buffer:ArrayBuffer;sha256:string}>;
   textgrid(file:ResearchFile):Promise<{sha256:string;tiers:Tier[]}>;
   spectrogram?(file:ResearchFile,view:SpectrogramView):Promise<Spectrogram>;
+  convertLip?(file:ResearchFile):Promise<{file:ResearchFile;companion_found:boolean}>;
   dispose():void;
 }
 export interface ResearchContext { key:string; label:string; files:ResearchFiles; ownerId?:string }
-export const fileKind=(name:string):ResearchFile['kind']|null=>/\.wav$/i.test(name)?'audio':/\.textgrid$/i.test(name)?'textgrid':/\.lip\.json$/i.test(name)?'lip':null;
+export const fileKind=(name:string):ResearchFile['kind']|null=>/\.wav$/i.test(name)?'audio':/\.textgrid$/i.test(name)?'textgrid':/\.lip\.json$/i.test(name)?'lip':/\.(xlsx|ptb\.sqlite3?)$/i.test(name)?'parameter':null;
 export async function audioPreview(files:ResearchFiles,file:ResearchFile,signal?:AbortSignal) {
   const data=await files.read(file,signal);return {asset:await decodeWav(data.buffer,file.name,signal),sha256:data.sha256};
 }

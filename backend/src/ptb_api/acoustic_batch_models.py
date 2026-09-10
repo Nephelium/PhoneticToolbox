@@ -7,6 +7,12 @@ from .acoustic_models import AcousticInputs,AcousticAssetRef,AcousticConfigSnaps
 
 class BatchInputs(AcousticInputs):
     parent_result: AcousticAssetRef | None=None
+    legacy_result: AcousticAssetRef | None=None
+
+    @model_validator(mode='after')
+    def one_parameter_source(self):
+        if self.parent_result and self.legacy_result:raise ValueError('Choose one parameter source')
+        return self
 
 
 class BatchRequest(WireModel):
@@ -22,10 +28,10 @@ class BatchRequest(WireModel):
     def scope(self):
         if len({i.audio.asset_id for i in self.inputs})!=len(self.inputs):raise ValueError('Duplicate batch audio')
         for item in self.inputs:
-            ids=[v.asset_id for v in (item.audio,item.textgrid,item.lip,item.parent_result) if v is not None]
+            ids=[v.asset_id for v in (item.audio,item.textgrid,item.lip,item.parent_result,item.legacy_result) if v is not None]
             if len(ids)!=len(set(ids)):raise ValueError('Duplicate input roles')
         if self.operation=='acoustic_analysis':
-            if self.config is None or self.layer is not None or any(i.parent_result for i in self.inputs):
+            if self.config is None or self.layer is not None or any(i.parent_result or i.legacy_result for i in self.inputs):
                 raise ValueError('Analysis requires explicit config, not cutting tier or parent result')
         elif self.config is not None or self.layer is None or not self.layer.strip() or any(i.textgrid is None for i in self.inputs):
             raise ValueError('Segmentation requires an explicit tier and TextGrid for every selected audio')

@@ -17,7 +17,7 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 def verify_downloads(out):
-    files=json.loads((out/'web-downloads.json').read_text('utf-8'))
+    files=[f for f in json.loads((out/'web-downloads.json').read_text('utf-8')) if not f['path'].startswith('legacy-')]
     assert len(files)==10
     for file in files:
         path=out/file['path'];assert path.resolve().is_relative_to(out.resolve())

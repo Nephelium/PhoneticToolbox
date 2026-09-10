@@ -1419,6 +1419,16 @@
           "audio": {
             "$ref": "#/components/schemas/AcousticAssetRef"
           },
+          "legacy_result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AcousticAssetRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "lip": {
             "anyOf": [
               {
@@ -3650,6 +3660,25 @@
           }
         },
         "summary": "Local Input",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/local-lip-conversion": {
+      "post": {
+        "operationId": "convert_local_legacy_lip",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Convert Lip",
         "tags": [
           "jobs"
         ]

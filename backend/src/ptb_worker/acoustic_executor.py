@@ -42,7 +42,9 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None):
             if snapshot['operation']=='textgrid_segment':
                 source=next(i for i in snapshot['input_assets'] if i['role']=='audio')
                 bundle=prepare_segments(blobs['audio'],blobs['textgrid'],snapshot['layer'],scratch,audio_name=source['name'],
-                    parent_result=blobs.get('parent_result'),stop=lambda:abort.is_set() or stop.is_set(),on_started=on_started)
+                    parent_result=blobs.get('parent_result'),legacy_result=blobs.get('legacy_result'),
+                    legacy_name=next((i['name'] for i in snapshot['input_assets'] if i['role']=='legacy_result'),None),
+                    stop=lambda:abort.is_set() or stop.is_set(),on_started=on_started)
                 payloads=list(zip([f['name'] for f in bundle.manifest['files']],bundle.payloads))
                 payloads.append(('segments.ptb.json',json.dumps(bundle.manifest,ensure_ascii=False,allow_nan=False).encode()))
             else:
@@ -51,7 +53,7 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None):
                 native=files.output(identity,'native-scratch.wav','temporary',16_000_000)
                 try:
                     header=dict(request=dict(project_id=str(claim['project_id']),idempotency_key=claim['id'],
-                        inputs={k:v for k,v in snapshot['input_refs'].items() if k!='parent_result'},config=snapshot['config']['analysis']),
+                        inputs={k:v for k,v in snapshot['input_refs'].items() if k not in ('parent_result','legacy_result')},config=snapshot['config']['analysis']),
                         inputs=snapshot['input_assets'],native_scratch=str(files.scratch_path(identity,native['id'])),
                         reaper_binary=str(files.reaper_binary))
                     request=scratch.create(json.dumps(header,ensure_ascii=False).encode()+b'\n'+b''.join(blobs[i['role']] for i in snapshot['input_assets']),'.json')

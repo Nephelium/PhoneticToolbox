@@ -308,6 +308,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/jobs/local-lip-conversion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Convert Lip */
+        post: operations["convert_local_legacy_lip"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/jobs/local-results/{asset_id}": {
         parameters: {
             query?: never;
@@ -1043,6 +1060,7 @@ export interface components {
         /** BatchInputs */
         BatchInputs: {
             audio: components["schemas"]["AcousticAssetRef"];
+            legacy_result?: components["schemas"]["AcousticAssetRef"] | null;
             lip?: components["schemas"]["AcousticAssetRef"] | null;
             parent_result?: components["schemas"]["AcousticAssetRef"] | null;
             textgrid?: components["schemas"]["AcousticAssetRef"] | null;
@@ -2146,6 +2164,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    convert_local_legacy_lip: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
         };

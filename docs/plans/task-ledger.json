@@ -246,7 +246,7 @@
       "dependencies": "P03,P04,P06,P07",
       "files": "docs/plans/modules/M01-parameter-estimation.md 等模块计划；packages/phonetic_core/src/phonetic_core/；frontend/src/modules/",
       "status": "in_progress",
-      "note": "M01 A-F2 verified in documented Windows scopes; G joint batch verifies real uploads/download readback, four local natural recordings, errors, responsive layouts and manual. Full M01/G remains in_progress: legacy PKL graphical conversion and historical parameter import remain. 005 already applied; no repeat DDL.",
+      "note": "M01 A-F2 and G joint/legacy-input batches verified in documented Windows scopes. Local symbolic PKL conversion and explicitly associated historical XLSX/SQLite parameter cuts now implemented and exercised through Qt/Chrome. Full M01/G remains in_progress pending final per-row acceptance review; M02 is not yet migrated. No repeat DDL.",
       "steps": [
         "按 M01/M02/M03/M04/M06/M07/M08/M09/M13/M14 顺序逐个执行对应文件级计划",
         "先原样搬可用算法，再拆外层 I/O；不把算法重写和 UI 换肤混成一个提交",
@@ -267,7 +267,9 @@
         "docs/testing/m01-workspace-report.md",
         "docs/testing/m01-persistent-report.md",
         "docs/testing/m01-report.md",
-        "docs/manual/parameter-estimation.md"
+        "docs/manual/parameter-estimation.md",
+        "docs/plans/2026-09-10-m01-legacy-inputs.md",
+        "docs/testing/m01-legacy-report.md"
       ]
     },
     {
@@ -451,9 +453,11 @@
         "docs/testing/m01-execution-preparation-report.md",
         "docs/testing/m01-persistent-report.md",
         "docs/testing/m01-report.md",
-        "docs/manual/parameter-estimation.md"
+        "docs/manual/parameter-estimation.md",
+        "docs/plans/2026-09-10-m01-legacy-inputs.md",
+        "docs/testing/m01-legacy-report.md"
       ],
-      "note": "M01 A-F2 verified in documented Windows scopes; G joint batch verifies real uploads/download readback, four local natural recordings, errors, responsive layouts and manual. Full M01/G remains in_progress: legacy PKL graphical conversion and historical parameter import remain. 005 already applied; no repeat DDL."
+      "note": "M01 A-F2 and G joint/legacy-input batches verified in documented Windows scopes. Local symbolic PKL conversion and explicitly associated historical XLSX/SQLite parameter cuts now implemented and exercised through Qt/Chrome. Full M01/G remains in_progress pending final per-row acceptance review; M02 is not yet migrated. No repeat DDL."
     },
     {
       "id": "M02",
