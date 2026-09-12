@@ -60,3 +60,5 @@ M01-E 已完成[目录、共享研究页与Praat显示定向验收](docs/testing
 2026-09-10 [M01-F1切分与批次准备](docs/testing/m01-execution-preparation-report.md)已通过244项Windows定向测试及WAV/参数双格式真实合成产物回读。随后井井对[005具体审阅](docs/testing/m01-migration-review.md)授权继续，两库已应用。[F2报告](docs/testing/m01-persistent-report.md)记录实际页面保存/批处理、异常恢复及边界；开发启动使用[scripts/Start-M01-Workbench.ps1](scripts/Start-M01-Workbench.ps1)。
 
 2026-09-11：井井追加起声渐入、静音后渐入、关键帧拖动排序及一键清空，要求修改后直接打包、不做检验。[R5 实现记录](docs/plans/2026-09-11-m10-onset.md)对应 [Windows 录制版 5](dist/m10-recording/PhoneticToolbox-v3-M10-R5.exe)。R4 的 verified 仅属于历史验收，不代表此次 R5 修改已验收。
+
+2026-09-12：[M03-E1 操作与导出对齐](docs/testing/m03-report.md)已限定验证，恢复独立批次设置和源文件/时间保存名，修正单文件 CSV 双 F0 不受显示开关影响，补四图手势与保存反馈。完整 E/M03 仍在联合收口，旧 EXE 未更新。

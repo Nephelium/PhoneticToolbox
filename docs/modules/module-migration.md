@@ -283,3 +283,5 @@ D页面与逐文件批次已限定Windows开发态验证，见[报告](../testin
 原矩阵 197 行 = 83 页面功能组 + 20 全局项 + 80 参数项 + 14 设置项；另有 20 行双端补充。功能组可包含多个控件，不可将 197 说成全部实际功能数量。MFA 取消已标为新增，图片中不存在的双唇偏移/重复按钮不纳入原功能。
 新增账号/安全/配额场景见 [Q01–Q20](../specs/accounts-storage-jobs.md)，各平台条件见 [发行矩阵](../deployment/platform-release.md)。
 参数显示和合成等模块的结果必须带 source/algorithm/version/config；完整来源清单见 [注册表](../../third_party/source-registry.json)。
+
+M03-E1限定Windows操作与导出对齐已验证，单文件CSV双F0独立于显示、批次默认独立、保存名与手势恢复，30项当前状态见[联合收口记录](../testing/m03-report.md)。完整E/M03仍in_progress。

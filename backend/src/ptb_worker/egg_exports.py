@@ -24,7 +24,7 @@ def csv_bytes(result, config, settings, start, end):
     frame = pd.DataFrame({'CQ': cq[take], 'SQ': sq[take]}, index=times[take])
     for keep, key, t, v in [(settings.keep_praat_f0, 'F0_Praat (Hz)', result.audio_f0_times, result.audio_f0_values),
                            (settings.keep_gci_f0, 'F0_GCI (Hz)', result.gci_f0_times, result.gci_f0_values)]:
-        if keep:
+        if keep or settings.mode == 'single':
             t = np.asarray(t if t is not None else []); v = np.asarray(v if v is not None else [])
             take = (t >= start) & (t < end)
             frame = frame.join(pd.DataFrame({key: v[take]}, index=t[take]), how='outer')

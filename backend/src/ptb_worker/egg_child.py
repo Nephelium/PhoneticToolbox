@@ -14,7 +14,7 @@ MAX_INVERSE_SAMPLES = 48_000
 def digest(raw): return hashlib.sha256(raw).hexdigest()
 
 
-def prepare(raw, config):
+def prepare(raw, config, input_name='egg.wav'):
     from .egg_runtime import fingerprint
     runtime = fingerprint()
     import numpy as np
@@ -56,7 +56,7 @@ def prepare(raw, config):
         for name, values in [('egg_ORIG.wav',audio),('egg_IF.wav',filtered)]:
             stream = io.BytesIO(); wavfile.write(stream,int(fs),values.astype(np.float64)); blobs[name] = stream.getvalue()
     else:
-        if settings.keep_praat_f0 or settings.glottal_movement:
+        if settings.mode == 'single' or settings.keep_praat_f0 or settings.glottal_movement:
             track = praat_pitch(result.audio_signal,int(fs))
             result.audio_f0_times, result.audio_f0_values = track.times,track.values
         if settings.glottal_movement:
@@ -82,8 +82,10 @@ def prepare(raw, config):
     if preview is not None:
         metadata.update(preview=preview,csv_grid=None,csv_mask=None)
     if inverse_view is not None: metadata['inverse_view']=inverse_view
-    blobs['egg.ptb.json'] = json.dumps(metadata,ensure_ascii=False,allow_nan=False).encode()
     names = expected_names(settings)
+    from .egg_export_names import export_names
+    metadata.update(input_name=input_name,export_names=export_names(input_name,settings.mode,first_time,last_time,names))
+    blobs['egg.ptb.json'] = json.dumps(metadata,ensure_ascii=False,allow_nan=False).encode()
     if set(blobs) != set(names): raise AcousticFailure('egg_incomplete_export')
     header = dict(kind='prepared_egg',audio_sha256=digest(raw),files=[dict(name=n,format=n.rsplit('.',1)[1],
         size_bytes=len(blobs[n]),sha256=digest(blobs[n])) for n in names])
@@ -96,7 +98,7 @@ def main():
     with open(sys.argv[1],'rb') as handle:
         header = json.loads(handle.readline(16384)); raw = handle.read(INPUT_BYTES+1)
     if len(raw)>INPUT_BYTES or digest(raw)!=header['sha256']: raise ValueError('Input changed')
-    payload = prepare(raw,header['config'])
+    payload = prepare(raw,header['config'],header.get('input_name','egg.wav'))
     with open(sys.argv[2],'wb',buffering=0) as out:
         for offset in range(0,len(payload),65536): out.write(payload[offset:offset+65536])
 

@@ -54,3 +54,5 @@ API仍为1.1.0；既有请求和结果均保留。增加`/jobs/batches/create`�
 ## M03-D 交互显示增量
 
 m03/1增加preview模式与micro_center/micro_width_ms，只作用于交互绘图，旧单文件/批次/逆滤波的完整文件集合不变。旧模式幂等哈希排除新增微观默认字段。egg-preview/1 JSON中缺失值为null，频谱栅格只做有界显示。egg-inverse-view/1记录原IF图的频率/dB与相对中心采样时间，WAV科学数值不改。两套显示结构由Pydantic生成OpenAPI/JSON Schema/TypeScript。
+
+M03-E1：`egg.ptb.json`增加`input_name`和`export_names`保存建议，固定内部名称/manifest结构不变，旧结果无映射时回退旧名。单文件`keep_*_f0`作为绘图开关，CSV两类F0独立保留，修正D阶段混用的行为；批次列选择不变。

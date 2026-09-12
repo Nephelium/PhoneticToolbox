@@ -47,6 +47,26 @@ def test_spectral_psd_matches_frozen_v2_image_array(frozen,window):
     np.testing.assert_array_equal(np.flipud(10*np.log10(power)),arrays[f'spectrum.{window}.0'])
 
 
+def test_single_csv_retains_both_f0_columns_when_plot_switches_are_off(frozen):
+    # V2 _save_csv_data always writes both tracks, regardless of plot visibility.
+    _,arrays,samples,raw=frozen
+    settings=dict(mode='single',roi_start=.1,roi_end=.5,keep_praat_f0=False,keep_gci_f0=False)
+    bundle=unpack_bundle(export(raw,settings,'元音 ɑ̃˥.wav'),64_000_000)
+    payloads=dict(zip([f['name'] for f in bundle.manifest['files']],bundle.payloads))
+    frame=pd.read_csv(io.BytesIO(payloads['egg_DATA.csv']))
+    assert {'F0_Praat (Hz)','F0_GCI (Hz)'} <= set(frame.columns)
+    assert frame['F0_Praat (Hz)'].notna().any() and frame['F0_GCI (Hz)'].notna().any()
+    config=EGGConfig.for_workbench(); result=analyze_events(prepare(samples,44100,config),config)
+    from phonetic_core.egg.f0 import praat_pitch
+    track=praat_pitch(result.audio_signal,44100)
+    np.testing.assert_array_equal(track.values,arrays['praat.legacy.values'])
+    result.audio_f0_times=track.times;result.audio_f0_values=track.values
+    visible,_=csv_bytes(result,config,EggTaskConfig(**(settings|dict(keep_praat_f0=True,keep_gci_f0=True))),.1,.5)
+    assert payloads['egg_DATA.csv']==visible
+    meta=json.loads(payloads['egg.ptb.json'])
+    assert meta['export_names']['egg_DATA.csv']=='元音 ɑ̃˥_0_10s_0_50s_DATA.csv'
+
+
 def test_corrected_waveform_time_and_retained_local_filter(frozen):
     _,arrays,samples,_=frozen;cfg=EGGConfig.for_workbench();result=prepare(samples,44100,cfg)
     times,audio,_=waveform_series(result,cfg,4410,22050)

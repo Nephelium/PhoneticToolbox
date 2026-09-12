@@ -145,8 +145,15 @@ class TaskBridge:
                 for item in batch['summary']['items']:
                     if item['state']!='succeeded':continue
                     job=self.service.get('/api/v1/jobs/'+item['job_id'])
+                    export_names={}
+                    if job['operation']=='egg_analysis':
+                        import base64
+                        meta=next(f for f in job['result_manifest']['files'] if f['name']=='egg.ptb.json')
+                        verified=self.invoke(dict(op='result',job=job['id'],id=meta['id']))
+                        export_names=json.loads(base64.b64decode(verified['base64'])).get('export_names',{})
                     for file in job['result_manifest']['files']:
                         name=file['name']
+                        if job['operation']=='egg_analysis':name=export_names.get(name,name)
                         if job['operation']=='acoustic_analysis':name=Path(batch['audio_names'][item['index']]).stem+name[len('result'):]
                         if not name or len(name)>220 or any(ord(c)<32 or c in '/\\:<>"|?*' for c in name):raise FileAccessError('输出文件名不受支持。')
                         path=root/name

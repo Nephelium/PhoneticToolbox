@@ -506,9 +506,10 @@
         "docs/testing/m03-baseline-report.md",
         "docs/testing/m03-core-report.md",
         "docs/testing/m03-jobs-report.md",
-        "docs/testing/m03-ui-report.md"
+        "docs/testing/m03-ui-report.md",
+        "docs/testing/m03-report.md"
       ],
-      "note": "M03-A/B/C/D verified only within their Windows baseline, installed-core, task/export and development UI scopes. D: shared V3 theme/fonts/components, V2 four-plot layout, grouped controls, 122 scientific/export/font checks, 14 M03 contract checks, 47 frontend checks and real Qt/Chrome operations. Existing M01 Scratch cleanup showed one intermittent WinError32 in broad regression; isolated rerun passed, root cause open. Whole M03 in_progress; next E joint/source/manual closure, then F frozen EXE. No DDL, v2/environment/old EXE changes or push.",
+      "note": "M03-A/B/C/D verified only within their Windows baseline, installed-core, task/export and development UI scopes. D: shared V3 theme/fonts/components, V2 four-plot layout, grouped controls, 122 scientific/export/font checks, 14 M03 contract checks, 47 frontend checks and real Qt/Chrome operations. Existing M01 Scratch cleanup showed one intermittent WinError32 in broad regression; isolated rerun passed, root cause open. Whole M03 in_progress; next E joint/source/manual closure, then F frozen EXE. No DDL, v2/environment/old EXE changes or push. E1限定Windows默认/导出/手势对齐已验，完整E仍in_progress，下一批E2网页/自然录音/切换竞争。",
       "planning_evidence": [
         "docs/modules/evidence/M03-source-map.md",
         "docs/plans/2026-09-12-m03-implementation.md"

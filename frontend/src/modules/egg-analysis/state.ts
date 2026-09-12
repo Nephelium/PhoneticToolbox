@@ -1,11 +1,12 @@
 import type {EggTaskConfig,EggPreviewData} from '../../platform/research.ts';
-export const defaults=():EggTaskConfig=>({mode:'preview',signal_mode:'filtered',flip_channels:false,roi_start:0,roi_end:.5,micro_center:.25,micro_width_ms:50,gci_method:'slope',goi_method:'scale',peak_prominence:.01,valley_prominence:.01,auto_prominence:true,highpass_cutoff:25,lowpass_cutoff:1000,spec_window_ms:20,spec_vmin:-70,spec_vmax:-10,keep_praat_f0:true,keep_gci_f0:true,glottal_movement:false,silence_threshold:.01,generate_images:false,lp_order:null,export_policy:'sample-aligned/1'});
+export const defaults=():EggTaskConfig=>({mode:'preview',signal_mode:'filtered',flip_channels:false,roi_start:0,roi_end:.5,micro_center:.25,micro_width_ms:50,gci_method:'slope',goi_method:'scale',peak_prominence:.01,valley_prominence:.01,auto_prominence:true,highpass_cutoff:25,lowpass_cutoff:1000,spec_window_ms:20,spec_vmin:-70,spec_vmax:-10,keep_praat_f0:false,keep_gci_f0:false,glottal_movement:false,silence_threshold:.01,generate_images:false,lp_order:null,export_policy:'sample-aligned/1'});
 export function taskConfig(config:EggTaskConfig,mode:EggTaskConfig['mode'],order:number|null=null):EggTaskConfig {
   const result={...config,mode,font:undefined,lp_order:mode==='inverse'?order:null};
   if(mode!=='preview'){result.micro_center=null;result.micro_width_ms=50;}
   if(mode==='batch')Object.assign(result,{roi_start:0,roi_end:null,signal_mode:'filtered'});
   return result;
 }
+export const batchDefaults=():EggTaskConfig=>({...taskConfig(defaults(),'batch'),keep_praat_f0:true,keep_gci_f0:true});
 export function signature(config:EggTaskConfig){const c={...defaults(),...config};delete c.font;return JSON.stringify(Object.keys(c).sort().map(k=>[k,c[k as keyof EggTaskConfig]]));}
 export function validate(config:EggTaskConfig,duration:number,rate:number){
   const end=config.roi_end??duration,start=config.roi_start??0;

@@ -45,7 +45,8 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None):
                 from .native.reaper import collect_pipe
                 from .egg_runtime import command as egg_command
                 from ptb_api.egg_models import EggTaskConfig, expected_names
-                header=dict(config=snapshot['config']['analysis'],sha256=digest(blobs['audio']))
+                header=dict(config=snapshot['config']['analysis'],sha256=digest(blobs['audio']),
+                    input_name=next(i['name'] for i in snapshot['input_assets'] if i['role']=='audio'))
                 request=scratch.create(json.dumps(header).encode()+b'\n'+blobs['audio'],'.json')
                 # Validate runtime before allocating the pipe, so missing runtime
                 # cannot leak a pipe handle. Only the fixed trusted bootstrap runs.

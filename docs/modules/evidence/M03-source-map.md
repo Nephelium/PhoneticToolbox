@@ -1,6 +1,6 @@
 # M03 说明书与源码审阅
 
-2026-09-12。初次规划时仅完成源码/说明书映射，随后井井授权M03-A。当前M03-A/B已完成限定Windows基准和纯核心，证据见[核心报告](../../testing/m03-core-report.md)，任务/导出/页面仍planned。对照相邻 v2 `Phonetic_Export/index.html` 的 3.1–3.4 全文与本工程继承源码；A阶段直接只读调用原v2核实。说明书纯文本仅留在忽略的 `output/validation/20260912-closeout/manual-text.txt`，未复制其图片或全文进发行物。
+2026-09-12。初次规划时仅完成源码/说明书映射，随后井井授权M03-A。当前 A/B/C/D 与 E1 已完成各自限定 Windows 验收，最新逐项证据见[联合收口记录](../../testing/m03-report.md)，完整 M03 仍 in_progress。对照相邻 v2 `Phonetic_Export/index.html` 的 3.1–3.4 全文与本工程继承源码；A阶段直接只读调用原v2核实。说明书纯文本仅留在忽略的 `output/validation/20260912-closeout/manual-text.txt`，未复制其图片或全文进发行物。
 
 ## 全部功能映射
 
@@ -22,7 +22,7 @@
 | F06 进度、取消、失败继续 | 源码 BatchWorker.cancel/run | 旧批次仅文件间查取消 | 新所属worker在文件内可取消，取消不得变为成功空结果，A25–A26 |
 | 全局 主题、帮助、来源、错误、双端 | 根规则与六功能组 | P04/P06/P07 | 共同界面/任务/配额，逐端真实操作，A27–A30 |
 
-目标文件、阶段与30项测试定义见 [M03实施计划](../../plans/2026-09-12-m03-implementation.md)。以上目标入口尚未实现。
+目标文件、阶段与30项测试定义见 [M03实施计划](../../plans/2026-09-12-m03-implementation.md)。上述入口现已按 A–D 实现，E1 补齐默认、导出名称和手势。联合覆盖及未测项目以最新收口记录为准。
 
 ## 已核实默认值
 
@@ -47,10 +47,17 @@
 | D09 | file_duration少一个采样周期，局部CQ计算可返回ROI外padding点，单文件CSV未再次裁切CQ行 | 元数据区分sample_duration与last_sample_time，输出区间遵循明确半开规则；与旧输出的变更单列审阅 |
 | D10 | A阶段解析边界捕获表明CQ在0.05/0.95处为NaN，但SQ仍可有有限值；两者缺失规则独立 | 核心迁移分别保留CQ和SQ mask，不用CQ无效连带抹去SQ。此为原行为记录，不代表其方法有效性已获验证 |
 
-上述为本地源码事实，不代表生理测量有效性验证。B已明确实现真实Praat帧时间、样本时长元数据及公共错误/取消边界；ROI数值、SQ与独立mask保持旧规则，CSV/双WAV修正仍待C。
+上述为本地源码事实，不代表生理测量有效性验证。B已明确实现真实Praat帧时间、样本时长元数据及公共错误/取消边界；ROI数值、SQ与独立mask保持旧规则，CSV/双WAV修正已在 C 验证，E1 修正了单文件显示开关不应删除 CSV F0 列的差异。
 
 ## 来源与现有基准
 
-现有 P03 的 `SYN-EGG-44100`、私有 EGG-01/EGG-05 已有独立Windows服务级基线，见 [捕获协议](../../baseline/capture-protocol.md)和 `tests/fixtures/manifest.json`。M03-A已核对自然文件哈希及六份关键模块来源，并完成双轮补捕获，见[基准报告](../../testing/m03-baseline-report.md)。自然语料及完整数值仍仅在忽略目录，公开fixture仅含合成输入结果。完整GUI操作和IF双WAV待v3实现验收。
+现有 P03 的 `SYN-EGG-44100`、私有 EGG-01/EGG-05 已有独立Windows服务级基线，见 [捕获协议](../../baseline/capture-protocol.md)和 `tests/fixtures/manifest.json`。M03-A已核对自然文件哈希及六份关键模块来源，并完成双轮补捕获，见[基准报告](../../testing/m03-baseline-report.md)。自然语料及完整数值仍仅在忽略目录，公开fixture仅含合成输入结果。开发态页面和 IF 双WAV已有 D/E1 证据，自然录音页面与冻结程序继续单列待验。
 
 `PENDING-EGG`仍为local-evidence-only，手册引用《汉语韵律的嗓音发声研究》不足以证明本代码的具体方法/许可来源，后续须核对原文页码、公式和代码来源，不能将手册推荐设置表述成已获独立科学验证。依赖链包含NumPy、SciPy、Parselmouth、Pandas、Matplotlib与WAV读取；原filters还导入pywt，但EGG实际只用高/低通；B的新核心已移除该无关导入。
+
+## E1 追加核对
+
+- `_save_csv_data` 不检查 `show_f0` / `f0_corrected`，单文件 CSV 始终收录可用的两类轨迹。D 曾复用显示开关筛掉对应列，E1 已修复。批次列开关保持原语义。
+- `save_analysis` 使用输入名和两位小数秒数（小数点改下划线）；E1 通过共享元数据建议名恢复，保留原子保存与同名保护。
+- `on_left_scroll/on_left_drag/on_zoom_scroll/on_zoom_drag` 的手势由公共图表输入接入任务。原微观滚轮范围为 5–5000 ms，与原先计划中的 10–200 ms 不完全一致；目前仅验证已审阅的10–200 ms范围，宽范围仍待预算/交互审阅。
+- `EggBatchDialog` 与单文件窗口使用独立配置；E1 恢复独立批次默认/草稿。八份已登记原源码 SHA-256 本轮重新核对一致。

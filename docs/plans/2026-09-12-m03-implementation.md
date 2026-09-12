@@ -6,7 +6,7 @@
 
 **技术：** 项目内Python 3.11、NumPy/SciPy/Parselmouth、Pandas/Matplotlib、Vue/TypeScript、现有Qt宿主与P06/P07服务。A仅审计，B已创建独立科学环境并锁定实际Conda/MKL构建；GUI依赖和整合仍待后续阶段。
 
-2026-09-12最新授权：井井在B阶段后回复“好，继续”。**M03-A/B/C已限定verified，完整M03仍in_progress。** B的独立核心、wheel及环境证据见[核心报告](../testing/m03-core-report.md)，C的任务/文件/数值导出证据见[任务报告](../testing/m03-jobs-report.md)。P04-FONT字体快照已接通，单文件/批次实际三PNG及数值CSV不变已限定验证，见[字体报告](../testing/p04-fonts-report.md)；D–F尚未实施。无需重复002/005，本轮不执行DDL。
+2026-09-12最新授权：井井在B阶段后回复“好，继续”。**M03-A/B/C已限定verified，完整M03仍in_progress。** B的独立核心、wheel及环境证据见[核心报告](../testing/m03-core-report.md)，C的任务/文件/数值导出证据见[任务报告](../testing/m03-jobs-report.md)。P04-FONT字体快照已接通，单文件/批次实际三PNG及数值CSV不变已限定验证，见[字体报告](../testing/p04-fonts-report.md)；D已限定完成，E1默认/导出/手势对齐见[联合收口记录](../testing/m03-report.md)，完整E仍in_progress，F尚未实施。无需重复002/005，本轮不执行DDL。
 
 ## 1. 输入证据和拟定行为
 
@@ -94,7 +94,7 @@
 
 完成M03后停止，M04及其他模块不自动接续。源码/开发态通过不能替代完整EXE、声卡或跨平台验证。
 
-## 3. 三十项验收清单（均planned）
+## 3. 三十项验收设计清单（当前逐项状态见M03-report）
 
 | ID | 正常路径 | 错误或边界 |
 | --- | --- | --- |
@@ -132,3 +132,5 @@
 ## 4. 当前执行结果
 
 M03-A/B/C/D 已分别在原版基准、Windows安装核心、开发态任务/导出、开发态统一页面范围内验证。D证据见页面报告，包括井井要求的按钮分组修订；公共字体已从第一版接入。完整M03/P08仍in_progress，下一项E：30项逐项对照、自然语料页面、网页账号联合路径、输出命名及来源收口；F冻结EXE仍planned。D广域回归的一次M01 Scratch清理占用单列保留，不宣称所有回归稳定全绿。
+
+2026-09-12 E1追加：井井在D后授权继续，已按ADR-039修正单文件F0显示与CSV列分离、独立批次默认/草稿、源名称/时间保存和四图手势。E1限定验证，完整E仍in_progress；下一批E2网页/自然录音/切换竞争，长文件与微观范围差异仍保留。
