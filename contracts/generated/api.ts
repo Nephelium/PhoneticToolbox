@@ -325,6 +325,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/jobs/egg/fonts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Egg Fonts */
+        post: operations["check_egg_export_fonts"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/jobs/local-inputs": {
         parameters: {
             query?: never;
@@ -1573,6 +1590,29 @@ export interface components {
             /** Sha256 */
             sha256?: string | null;
         };
+        /** FontCheckItem */
+        FontCheckItem: {
+            /** Available */
+            available: boolean;
+            /** Family */
+            family?: string | null;
+            /** Requested */
+            requested: string;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "zh" | "latin" | "ipa";
+            /** Sha256 */
+            sha256?: string | null;
+        };
+        /** FontPreflight */
+        FontPreflight: {
+            /** Available */
+            available: boolean;
+            /** Fonts */
+            fonts: components["schemas"]["FontCheckItem"][];
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -2669,6 +2709,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    check_egg_export_fonts: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FigureFontSnapshot"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FontPreflight"];
                 };
             };
             /** @description Validation Error */

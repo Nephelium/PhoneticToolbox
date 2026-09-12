@@ -2438,6 +2438,86 @@
         "title": "FinalizeInput",
         "type": "object"
       },
+      "FontCheckItem": {
+        "additionalProperties": false,
+        "properties": {
+          "available": {
+            "title": "Available",
+            "type": "boolean"
+          },
+          "family": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Family"
+          },
+          "requested": {
+            "maxLength": 100,
+            "minLength": 1,
+            "pattern": "^[^\\x00-\\x1f\"\\x27\\\\/;{}<>]+$",
+            "title": "Requested",
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "zh",
+              "latin",
+              "ipa"
+            ],
+            "title": "Role",
+            "type": "string"
+          },
+          "sha256": {
+            "anyOf": [
+              {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sha256"
+          }
+        },
+        "required": [
+          "role",
+          "requested",
+          "available"
+        ],
+        "title": "FontCheckItem",
+        "type": "object"
+      },
+      "FontPreflight": {
+        "additionalProperties": false,
+        "properties": {
+          "available": {
+            "title": "Available",
+            "type": "boolean"
+          },
+          "fonts": {
+            "items": {
+              "$ref": "#/components/schemas/FontCheckItem"
+            },
+            "maxItems": 3,
+            "minItems": 3,
+            "title": "Fonts",
+            "type": "array"
+          }
+        },
+        "required": [
+          "available",
+          "fonts"
+        ],
+        "title": "FontPreflight",
+        "type": "object"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -4588,6 +4668,47 @@
           }
         },
         "summary": "Egg",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/egg/fonts": {
+      "post": {
+        "operationId": "check_egg_export_fonts",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FigureFontSnapshot"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FontPreflight"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Egg Fonts",
         "tags": [
           "jobs"
         ]

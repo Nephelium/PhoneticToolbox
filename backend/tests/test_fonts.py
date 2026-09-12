@@ -19,3 +19,15 @@ def test_resolved_font_evidence_and_fixed_doulos():
     assert value['ipa']['family']=='Doulos SIL'
     assert len(value['ipa']['sha256'])==64
     assert all('path' not in item for item in [value['zh'],value['latin'],value['ipa']])
+
+def test_missing_font_fails_before_scientific_analysis(monkeypatch):
+    import io
+    import numpy as np
+    from scipy.io import wavfile
+    from ptb_worker.egg_child import prepare
+    from ptb_worker.acoustic_errors import AcousticFailure
+    def unexpected(*args,**kwargs):raise AssertionError('Analysis must not run before font validation')
+    monkeypatch.setattr('phonetic_core.egg.analyze_events',unexpected)
+    stream=io.BytesIO();wavfile.write(stream,44100,np.zeros((22050,2)))
+    with pytest.raises(AcousticFailure,match='font_unavailable'):
+        prepare(stream.getvalue(),dict(mode='single',font=FigureFontSnapshot(latin='PTB missing 987654').model_dump()))

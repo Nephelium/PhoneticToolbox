@@ -11,3 +11,14 @@ class FigureFontSnapshot(WireModel):
     latin: Family = 'Segoe UI'
     ipa: Literal['Doulos SIL'] = 'Doulos SIL'
     size_px: float = Field(default=12,ge=10,le=24)
+
+class FontCheckItem(WireModel):
+    role: Literal['zh','latin','ipa']
+    requested: Family
+    available: bool
+    family: str | None = Field(default=None,max_length=200)
+    sha256: str | None = Field(default=None,pattern=r'^[0-9a-f]{64}$')
+
+class FontPreflight(WireModel):
+    available: bool
+    fonts: list[FontCheckItem] = Field(min_length=3,max_length=3)

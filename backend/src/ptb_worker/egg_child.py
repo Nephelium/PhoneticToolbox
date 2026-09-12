@@ -36,13 +36,14 @@ def prepare(raw, config, input_name='egg.wav'):
     last = len(samples) if settings.roi_end is None else int(settings.roi_end*fs)
     if not 0 <= first < last <= len(samples): raise AcousticFailure('egg_invalid_roi')
     if settings.mode == 'inverse' and last-first > MAX_INVERSE_SAMPLES: raise AcousticFailure('egg_inverse_budget')
+    font_evidence=None
+    if settings.font is not None and (settings.mode=='single' or settings.mode=='batch' and settings.generate_images):
+        from .fonts import resolve_fonts
+        font_evidence=resolve_fonts(settings.font)
     numerical = EGGConfig.for_workbench(**{k:v for k,v in settings.model_dump().items() if k in EGGConfig.__dataclass_fields__})
     result = analyze_events(load(samples, int(fs), numerical, flip_channels=settings.flip_channels), numerical)
     first_time, last_time = first/fs, last/fs
-    blobs = {}; masked = 0; font_evidence=None; preview=None; inverse_view=None
-    if settings.font is not None and (settings.mode=='single' or settings.generate_images):
-        from .fonts import resolve_fonts
-        font_evidence=resolve_fonts(settings.font)
+    blobs = {}; masked = 0; preview=None; inverse_view=None
     if settings.mode == 'inverse':
         audio = result.audio_signal[first:last]
         gcis = np.asarray(result.gci_times); gcis = gcis[(gcis >= first_time) & (gcis < last_time)]-first_time

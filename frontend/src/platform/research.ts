@@ -6,6 +6,8 @@ export type ParameterTable=components['schemas']['ParameterTable'];
 export type ReconstructionConfig=components['schemas']['Spec2WavConfig'];
 export type EggTaskConfig=components['schemas']['EggTaskConfig'];
 export type EggPreviewData=components['schemas']['EggPreviewData'];
+export type FigureFontSnapshot=components['schemas']['FigureFontSnapshot'];
+export type FontPreflight=components['schemas']['FontPreflight'];
 export interface SpectrogramView {channel:number;start:number;end:number;width:number}
 export interface ResearchFile { id:string; name:string; kind:'audio'|'textgrid'|'lip'|'lip_pickle'|'parameter'|'image'; size:number; sha256?:string; expiresAt?:number }
 export interface DirectoryGrant { id:string; label:string; purpose:'input'|'output'|'association' }
@@ -23,6 +25,7 @@ export interface ResearchTasks {
   reconstruct?(file:ResearchFile,config:ReconstructionConfig,key:string):Promise<JobView>;
   egg?(file:ResearchFile,config:EggTaskConfig,key:string):Promise<JobView>;
   eggJobs?():Promise<JobView[]>;
+  eggFonts?(font:FigureFontSnapshot):Promise<FontPreflight>;
   reconstructions?():Promise<JobView[]>;
   cancelJob?(id:string):Promise<JobView>;
   saveJob?(id:string,directory:string):Promise<{count:number;saved:string[]}>;
@@ -70,6 +73,7 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
     async reconstruct(file,config,key){if(!file.sha256)throw Error('图片缺少校验值。');return (await request('jobs/spec2wav/create',undefined,'POST',{project_id:project,idempotency_key:key,image:{asset_id:file.id,sha256:file.sha256},config})).json();},
     async egg(file,config,key){if(!file.sha256)throw Error('音频缺少校验值。');const {exportFontSnapshot}=await import('../state/fonts.ts');return (await request('jobs/egg/create',undefined,'POST',{project_id:project,idempotency_key:key,audio:{asset_id:file.id,sha256:file.sha256},config:{...config,font:config.font??exportFontSnapshot()}})).json();},
     async eggJobs(){const data:components['schemas']['JobList']=await(await request('jobs?project_id='+encodeURIComponent(project))).json();return data.jobs.filter(j=>j.operation==='egg_analysis');},
+    async eggFonts(font){return (await request('jobs/egg/fonts',undefined,'POST',font)).json();},
     async reconstructions(){const data:components['schemas']['JobList']=await(await request('jobs?project_id='+encodeURIComponent(project))).json();return data.jobs.filter(j=>j.operation==='spectrogram_to_audio');},
     async cancelJob(id){return (await request('jobs/'+encodeURIComponent(id)+'/cancel',undefined,'POST')).json();},
     async result(_job,id,sha){const response=await request('assets/'+encodeURIComponent(id)+'/content');const raw=await response.arrayBuffer();if(raw.byteLength>64_000_000||await sha256(raw)!==sha)throw Error('结果校验失败。');return raw;},

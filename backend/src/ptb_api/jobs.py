@@ -7,6 +7,7 @@ from ptb_worker.store import JobError
 from .acoustic_batch_models import BatchRequest,BatchView,BatchList
 from .spec2wav_models import Spec2WavRequest
 from .egg_models import EggRequest
+from .font_models import FigureFontSnapshot,FontPreflight
 
 
 def create_job_router(ctx, store, *, local_token=None, local_origin=None):
@@ -81,6 +82,11 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
     def egg(body:EggRequest,owner=Depends(mutation)):
         from ptb_worker.egg_jobs import submit
         return submit(store,owner['id'],body)
+
+    @router.post('/egg/fonts',response_model=FontPreflight,operation_id='check_egg_export_fonts')
+    def egg_fonts(body:FigureFontSnapshot,owner=Depends(mutation)):
+        from ptb_worker.font_preflight import inspect_fonts
+        return inspect_fonts(body)
 
     @router.post('/local-inputs',operation_id='register_local_acoustic_input')
     async def local_input(request:Request,role:str,name:str,owner=Depends(mutation)):

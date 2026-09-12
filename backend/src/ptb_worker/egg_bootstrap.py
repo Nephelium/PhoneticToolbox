@@ -9,5 +9,9 @@ os.environ['PATH'] = os.pathsep.join([str(prefix),str(prefix/'Library/bin'),str(
 os.environ['MPLCONFIGDIR'] = str(prefix/'var/cache/ptb-m03-matplotlib')
 dll_handle = os.add_dll_directory(str(prefix/'Library/bin'))
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
-from ptb_worker.egg_child import run
-run()
+if sys.argv[1:] == ['--font-preflight']:
+    from ptb_worker.font_preflight import child
+    child()
+else:
+    from ptb_worker.egg_child import run
+    run()

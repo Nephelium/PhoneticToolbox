@@ -29,6 +29,7 @@ class TaskBridge:
 
     def invoke(self,body):
         op=body.get('op')
+        if op=='egg_fonts':return self.service.request('/api/v1/jobs/egg/fonts','POST',body['font'])
         if op=='egg':
             raw,_=self.provider.read(body['id']);entry=self.provider.entries[body['id']]
             ref=self.service.import_input(raw,entry.name,'audio')
