@@ -190,6 +190,7 @@ class Page(QWebEnginePage):
 class Workbench(QMainWindow):
     def __init__(self,dist,*,test=False,jobs_path=None,local_files_root=None,reaper_binary=None,vocal_resources=None,vocal_profile=None,start_module=None):
         super().__init__();self.setWindowTitle('PhoneticToolbox 3.0');self.resize(1440,900)
+        self.fit_screen(initial=True)
         self.provider=FileProvider();self.service=LocalService(jobs_path,local_files_root=local_files_root,reaper_binary=reaper_binary);self.service.start();self.closing=False
         from .vocal_tract.client import VocalTractClient
         data=Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation))
@@ -214,6 +215,21 @@ class Workbench(QMainWindow):
         self.page.windowCloseRequested.connect(self.accept_close)
         self.setCentralWidget(self.view)
         self.view.load(QUrl('ptbapp://app/index.html'+('#M10' if start_module=='M10' else '')))
+
+    def fit_screen(self,screen=None,*,initial=False):
+        screen=screen or self.screen()
+        if screen is None:return
+        area=screen.availableGeometry()
+        width=max(1,area.width()-32);height=max(1,area.height()-64)
+        self.setMinimumSize(min(800,width),min(500,height))
+        if not self.isMaximized() and not self.isFullScreen():
+            self.resize(min(1440 if initial else self.width(),width),min(900 if initial else self.height(),height))
+
+    def showEvent(self,event):
+        super().showEvent(event)
+        if not getattr(self,'_screen_connected',False) and self.windowHandle():
+            self.windowHandle().screenChanged.connect(self.fit_screen)
+            self._screen_connected=True
 
     def save_download(self,download):
         # Only a renderer-generated image from this owned page; never navigate to arbitrary downloads.

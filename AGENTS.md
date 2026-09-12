@@ -1,6 +1,7 @@
 # PhoneticToolbox v3 — Agent 工作规则
 
 ## 0. 当前阶段与授权
+- 2026-09-12 井井审阅滚动方案后授权继续。P04-SCROLL 现为 verified（限定 Windows 开发态公共内容/二维滚轮/Qt 尺寸），见 docs/testing/p04-scroll-report.md。普通滚轮滚动，EGG/M02 Ctrl＋滚轮缩放，弹窗正文独立滚动；M10 仅外层最小高度/滚动，模型手势与录制未改。旧 EXE 未重打包，完整 M03/E3 仍 in_progress，后续回到 E3-B。未 DDL、push 或改 v2。
 - 2026-09-12 井井在E2后授权继续E3。本轮恢复微观5–5000ms、原版显示抽点与边界不重复提交，限定Windows开发态验证见docs/testing/m03-e3-report.md。新增官方书目/原手册截图/Henrich原文方法差异，代码许可未闭合。完整E3/E/M03仍in_progress，下一项E3-B长文件全段语义和预算、字体预检/剩余交互；66.4秒仅导航及拒绝已验，不代表全段分析完成。仅重装项目m03-compatible核心wheel，第三方库/v2/语料/旧EXE不变，未DDL或push。
 - 2026-09-12 井井在E1后回复“继续”。M03-E2现为verified（限定Windows开发态Qt/本机托管PG与Chrome），见docs/testing/m03-e2-report.md。双账号读隔离/切换、服务器三路径10文件回读、受控配额与到期清理、两自然录音开头及较响ROI通过；修复历史预览回读迟到覆盖新文件选择。完整E/M03仍in_progress，下一项E3长文件/微观范围差异与来源/剩余边界；F冻结EXE未做。到期为测试调整时间并显式清理，不冒充七天自然经过。未DDL、未改v2/语料/环境/旧EXE、未push。
 - 2026-09-12 井井在D后回复“继续”。M03-E1现为verified（限定Windows开发态默认/导出/手势对齐），见docs/testing/m03-report.md：独立单文件/批次默认，单文件CSV双F0不受显示开关影响，源文件名/时间保存及同名保护，四图滚轮/拖动/键盘/中心线与弹窗保存反馈。完整E/M03仍in_progress；E2下一项网页/自然录音页面及切换竞争。原V2微观滚轮5–5000ms与当前10–200ms差异已明确，长文件预算/来源/EXE仍待。未DDL、未改v2/旧EXE/环境、未push。

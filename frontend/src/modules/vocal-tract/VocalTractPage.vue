@@ -30,5 +30,5 @@ onUnmounted(()=>{observer?.disconnect();window.removeEventListener('message',mes
 </section>
 </template>
 <style scoped>
-.vocal-page{height:100%;min-height:0;width:100%;display:flex;flex:1}.vocal-page iframe{border:0;width:100%;height:100%;min-height:0;background:var(--app)}.vocal-unavailable{padding:30px;line-height:2}
+.vocal-page{height:100%;min-height:640px;width:100%;display:flex;flex:1}.vocal-page iframe{border:0;width:100%;height:100%;min-height:0;background:var(--app)}.vocal-unavailable{padding:30px;line-height:2}
 </style>
