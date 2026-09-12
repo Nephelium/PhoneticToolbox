@@ -897,10 +897,10 @@
         "M03"
       ],
       "urls": {},
-      "evidence": "core/egg 的算法出处没有完整引用链，需逐函数查 GCI/GOI、CQ/SQ、滤波和简化 CPIF 的实现来源。",
+      "evidence": "原core/egg及EGGAnalysisService已在M03-B迁入packages/phonetic_core/src/phonetic_core/egg，来源哈希见third_party/egg-migration.json；GCI/GOI、CQ/SQ与简化CPIF完整学术引用/授权链仍待核实。",
       "license": "not-established",
-      "notes": "列入 P10 待核验清单；不能用无来源占位条目通过发行审查。",
-      "verification_date": "2026-09-09",
+      "notes": "本地数值迁移，正常步骤与显式边界修正分开；不将独立基准或数值一致性当作生理有效性/许可证明。Windows兼容环境实际构建见third_party/m03-runtime-lock.json。",
+      "verification_date": "2026-09-12",
       "actual_included_version": null,
       "observed_upstream_commit": null,
       "distribution_status": "review-required",

@@ -1,0 +1,3 @@
+# M03-B project-local science/wheel tests; no Qt, Matplotlib or device runtime.
+# Reuse already-audited exact scientific and test versions, no global install.
+-r requirements-m01-test.in

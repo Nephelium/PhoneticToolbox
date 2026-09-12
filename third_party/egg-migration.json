@@ -1,0 +1,33 @@
+{
+  "source_id": "PENDING-EGG",
+  "relationship": "local-code-migration",
+  "date": "2026-09-12",
+  "license": "not-established",
+  "sources": [
+    {
+      "path": "phonetic_toolbox/core/egg/analysis.py",
+      "sha256": "85d813ab64ae7e6c04b114346817569d5b3ade3bbdaa8325a4cd272af868af5d"
+    },
+    {
+      "path": "phonetic_toolbox/core/signals/filters.py",
+      "sha256": "a23beea96299938e97845cd3e6ac638acd8bedf80d175219f0d05811fc5fdb38"
+    },
+    {
+      "path": "phonetic_toolbox/services/egg_service.py",
+      "sha256": "7e860f3d36d001f9b4496bbecff0a2eda8bc84d6f72b420a8d6bdbfd15944aba"
+    },
+    {
+      "path": "phonetic_toolbox/core/egg/inverse_filtering.py",
+      "sha256": "e4722762961445c4e0db8f2aeafa457a99b45ab240b876c32fb12446aeb83822"
+    },
+    {
+      "path": "phonetic_toolbox/models/egg_models.py",
+      "sha256": "4a445769f81c5331dd6a24bdd6d63b092647bdfdc78df5546a9df29777448770"
+    },
+    {
+      "path": "phonetic_toolbox/models/config.py",
+      "sha256": "dc9462c25789f0a1f72956de8cd48f60b8ad2015f980b919cb672c95ec6210c8"
+    }
+  ],
+  "changes": "Extracted numerical functions and five array-only service methods. Removed file/GUI dependencies and unrelated wavelet filtering. Public adapters validate inputs and own result objects."
+}

@@ -1,0 +1,11 @@
+EGG numerical implementation migrated locally from PhoneticToolbox v2, 2026-09-12.
+Source IDs: PENDING-EGG (event, CQ/SQ, filters, simplified CP inverse filter),
+SRC-PRAAT (Parselmouth/Praat pitch backend).
+Original file hashes and adaptations: third_party/egg-migration.json.
+Original authorship/method attribution and redistribution license for PENDING-EGG
+are not established. This local migration does not grant redistribution rights.
+Praat/Parselmouth licensing and authorship remain in the shared source registry.
+The legacy SQ formula is normalized asymmetry, not a duration ratio:
+(decontacting_duration - contacting_duration) / contact_duration.
+CQ and SQ missing masks are independent. ROI CQ and ROI events deliberately
+retain distinct filtering/padding rules pending a separately reviewed correction.

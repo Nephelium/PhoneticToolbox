@@ -1,0 +1,18 @@
+# M03 compatible environment: SciPy is locked separately as the original Conda/MKL build.
+numpy==2.2.6
+praat-parselmouth==0.4.7
+pandas==2.3.3
+python-dateutil==2.9.0.post0
+six==1.17.0
+pytz==2025.2
+tzdata==2025.2
+pytest==9.1.1
+build==1.6.0
+setuptools==84.0.0
+wheel==0.48.0
+colorama==0.4.6
+iniconfig==2.3.0
+packaging==26.3
+pluggy==1.6.0
+pygments==2.21.0
+pyproject-hooks==1.2.0
