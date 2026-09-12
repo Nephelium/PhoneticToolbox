@@ -1,6 +1,6 @@
 # M03 说明书与源码审阅
 
-2026-09-12。状态：源码/说明书映射已完成，算法迁移 planned。本轮未运行旧 EGG 算法、读取自然语料或创建数据库。对照相邻 v2 `Phonetic_Export/index.html` 的 3.1–3.4 全文与本工程继承源码。说明书纯文本仅留在忽略的 `output/validation/20260912-closeout/manual-text.txt`，未复制其图片或全文进发行物。
+2026-09-12。初次规划时仅完成源码/说明书映射，随后井井授权M03-A。当前基准执行及证据见实施计划和M03-A报告，算法迁移仍planned。对照相邻 v2 `Phonetic_Export/index.html` 的 3.1–3.4 全文与本工程继承源码；A阶段直接只读调用原v2核实。说明书纯文本仅留在忽略的 `output/validation/20260912-closeout/manual-text.txt`，未复制其图片或全文进发行物。
 
 ## 全部功能映射
 
@@ -27,8 +27,8 @@
 ## 已核实默认值
 
 - `models/config.py:EGGConfig`：峰/谷显著度0.01，自动开启，自动下限0.01；高通25Hz、低通1000Hz；GCI/GOI均slope；criterion_level=0.25；谱窗20ms，显示-70至-10dB。
-- `EGGWidget.__init__`：不交换、显示滤波EGG，Praat F0/GCI F0/声门移动初始均关闭；总览60秒，微观50ms。
-- `EggBatchDialog`：静音阈值0.01，高通25Hz，不交换，GCI slope、GOI scale，两类F0默认保留，图片默认不生成。不要将单文件配置的GOI默认值套到批次。
+- `EGGWidget.__init__/init_ui`：不交换、显示滤波EGG，Praat F0/GCI F0/声门移动初始均关闭；总览60秒，微观50ms。init_ui显式把GOI改为scale，因此实际单文件界面默认GCI slope、GOI scale。
+- `EggBatchDialog`：静音阈值0.01，高通25Hz，不交换，GCI slope、GOI scale，两类F0默认保留，图片默认不生成。底层裸EGGConfig与实际GUI默认分开记录。
 - `load_file`：time_vector=np.arange(N)/fs，现有file_duration取最后采样时刻(N-1)/fs。归一化影响实际分析和逆滤波输入，不能仅称显示缩放。
 - 自动峰显著度为局部max(abs(signal))*0.6，下限0.01，窗200ms/步100ms。峰/谷先在EGG信号找，随后再在相关区间用差分寻找斜率事件。手册的直接在微分信号找峰谷说法不精确。
 
@@ -36,7 +36,7 @@
 
 | ID | 源码事实 | 计划处理与边界 |
 | --- | --- | --- |
-| D01 | 手册说单文件默认GCI斜率、GOI尺度，实际EGGConfig两者均slope；批处理默认才是slope/scale | 原行为基准分别捕获，v3先保留两套实际默认并注明。改默认必须另行决定 |
+| D01 | EGGConfig两者均slope，但EGGWidget.init_ui把GOI设为scale；实际单文件、批次、说明书均为slope/scale。A阶段纠正初审遗漏的GUI覆盖 | 基准分别捕获裸服务与GUI默认，v3界面保留slope/scale；不把配置类默认当实际用户行为 |
 | D02 | `calculate_cq_sq`的SQ=(去接触时长-接触建立时长)/接触时长，取值趋于[-1,1]；核心README将SQ写成比值 | 保留计算公式，v3文档明确“旧实现的SQ不对称指标”，不冒充通常比值定义；CQ仅保留严格0.05<CQ<0.95，缺失为NaN |
 | D03 | 手册承诺逆滤波自动输出_ORIG.wav/_IF.wav。当前run_inverse_filtering仅打开对比对话框，该GUI文件无WAV写出调用 | v3增加显式保存两WAV，保留归一化音频来源说明，使用受控结果集合，作为补齐承诺单列验收 |
 | D04 | calculate_cq_sq_segment滤波路径从已处理信号截取±100ms后再次滤波；get_events_segment从raw截±50ms后滤波 | 不能把两个调用合并后宣称数值不变。A阶段同时捕获，B阶段先显式legacy策略；统一处理需要独立数值差异报告与审阅 |
@@ -45,11 +45,12 @@
 | D07 | 单文件CSV是多个时间网格outer join，批次在CQ/GCI时刻插值F0，再按音频绝对值包络mask；其图片重算CQ/SQ并不应用该mask | 不将批次CSV和图中非静音点说成完全相同。raw/native轨与导出策略分列，保持NaN/插值来源，比较时统一明确策略 |
 | D08 | EGG filters.filtfilt失败会警告后返回原输入，事件异常或取消可返回空列表，批次保存图片异常可吞掉 | 新状态/错误要显式区分空事件、失败、取消、仅部分产物。正常数值保持，异常不得沿用伪成功 |
 | D09 | file_duration少一个采样周期，局部CQ计算可返回ROI外padding点，单文件CSV未再次裁切CQ行 | 元数据区分sample_duration与last_sample_time，输出区间遵循明确半开规则；与旧输出的变更单列审阅 |
+| D10 | A阶段解析边界捕获表明CQ在0.05/0.95处为NaN，但SQ仍可有有限值；两者缺失规则独立 | 核心迁移分别保留CQ和SQ mask，不用CQ无效连带抹去SQ。此为原行为记录，不代表其方法有效性已获验证 |
 
 上述为本地源码事实，不是对生理测量有效性的验证。本轮不执行上述科学行为修正。
 
 ## 来源与现有基准
 
-现有 P03 的 `SYN-EGG-44100`、私有 EGG-01/EGG-05 已有独立Windows服务级基线，见 [捕获协议](../../baseline/capture-protocol.md)和 `tests/fixtures/manifest.json`。自然语料路径仅在忽略的本机证据中，后续需再核对哈希；当前未读音频、未重捕获。P03不能覆盖本表的ROI、图片、CSV、IF双WAV与完整GUI行为。
+现有 P03 的 `SYN-EGG-44100`、私有 EGG-01/EGG-05 已有独立Windows服务级基线，见 [捕获协议](../../baseline/capture-protocol.md)和 `tests/fixtures/manifest.json`。M03-A已核对自然文件哈希及六份关键模块来源，并完成双轮补捕获，见[基准报告](../../testing/m03-baseline-report.md)。自然语料及完整数值仍仅在忽略目录，公开fixture仅含合成输入结果。完整GUI操作和IF双WAV待v3实现验收。
 
 `PENDING-EGG`仍为local-evidence-only，手册引用《汉语韵律的嗓音发声研究》不足以证明本代码的具体方法/许可来源，后续须核对原文页码、公式和代码来源，不能将手册推荐设置表述成已获独立科学验证。依赖链包含NumPy、SciPy、Parselmouth、Pandas、Matplotlib与WAV读取；当前filters还导入pywt，但EGG实际只用高/低通，不应机械携带无关去噪算法。

@@ -1,6 +1,8 @@
 # PhoneticToolbox v3 — Agent 工作规则
 
 ## 0. 当前阶段与授权
+- 2026-09-12 井井补充：EGG贴合v2仅指布局与功能，v3统一设计规范和公共组件必须从页面第一版落实。页面内控件/图表/状态也须统一，不能只换外壳或留到收尾调整。真实组件与适配边界见docs/design/m03-v2-layout.md；旧Qt截图仅是基准，展示时先标明，不能让用户误认为v3页面设计。
+- 2026-09-12 井井在M03计划后回复“好，请继续”，明确EGG布局尽量贴合v2、功能囊括v2，其余可优化。M03-A已完成限定Windows原v2独立基准：11样例双轮一致，公开合成数值与私有语料分开，详见docs/testing/m03-baseline-report.md。完整M03仍in_progress，下一项M03-B纯数组核心；页面/EXE尚未实现。布局以docs/design/m03-v2-layout.md为准：左CQ/SQ与语谱、右音频与EGG微观、下方两行参数及总览，覆盖早期右侧集中设置方案。实际单文件与批处理均GCI slope/GOI scale，底层EGGConfig被GUI覆盖的事实已纠正。不得将基准verified扩大为模块verified，不重复DDL、不推进M04。
 
 **2026-09-12 最新停止点（优先于以下历史检查点）：** 井井在进度审阅后授权继续整理成果、补齐M02整幅PNG并细化M03计划。现有成果已形成本地检查点c800ce8。M02-F05整幅PNG已通过限定开发态Windows Qt/Chrome验收，见docs/testing/m02-png-closeout-report.md；旧Research-Fix1/M10-R5 EXE未重新打包。M03源码/说明书审阅及30项验收设计已完成，仍planned，下一步审阅docs/plans/2026-09-12-m03-implementation.md后进入M03-A。P08仍in_progress，P09整体planned，M10/R4仅历史限定范围verified，R5仍未检验。旧R4 EXE当前不在发行目录，保留原报告元数据。本轮未push、发布、执行DDL或修改v2。
 

@@ -4,3 +4,6 @@ phonetic_toolbox/gui/resources/perception_experiment/*.html linguist-detectable=
 
 # Generated TypeScript must compare identically after a fresh Windows checkout.
 /contracts/generated/*.ts text eol=lf
+
+# Frozen M03 metadata includes byte hashes and must survive Windows checkout.
+/tests/fixtures/m03/*.json text eol=lf

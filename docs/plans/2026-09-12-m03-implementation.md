@@ -6,13 +6,15 @@
 
 **技术：** 项目内Python 3.11、NumPy/SciPy/Parselmouth、Pandas/Matplotlib、Vue/TypeScript、现有Qt宿主与P06/P07服务。环境版本在A阶段实际审计，未安装新环境或依赖。
 
-2026-09-12。**本轮完成的是规划和源码映射。完整M03仍planned，A–F均未实施。** 井井已授权收尾后细化下一模块计划；本计划成为新模块实施和科学行为修正的具体审阅依据。无需重复002/005，不在M03规划中执行DDL。
+2026-09-12最新授权：井井回复“好，请继续”，要求EGG布局尽量贴合v2、囊括v2全部功能，其余可优化。**M03进入in_progress，当前执行M03-A独立基准。** 原规划检查点被本条覆盖，B–F尚未实施。无需重复002/005，本轮不执行DDL。
 
 ## 1. 输入证据和拟定行为
 
 已读说明书3.1–3.4，逐组函数及9项差异见 [源码映射](../modules/evidence/M03-source-map.md)。该表是实施的必读入口，原六功能组见 [模块计划](modules/M03-egg-analysis.md)。
 
-建议第一轮保留旧默认与公式：单文件GOI默认slope、批次默认scale；SQ保留旧不对称指标并写出公式。原始/滤波和单文件/批次分别保留配置，不在迁移时强行统一。Praat真实帧时间、输出区间及逆滤波双WAV作为明确修正，须有前后差异证据；ROI重复滤波的科学统一放在兼容迁移之后，未经单独审阅不实施。
+第一轮保留旧界面默认与公式：单文件和批次均GCI slope、GOI scale。A阶段发现旧EGGWidget.init_ui会覆盖EGGConfig的GOI slope默认，纠正上一轮仅据配置类作出的判断。SQ保留旧不对称指标并写出公式。原始/滤波和单文件/批次分别保留配置，不在迁移时强行统一。Praat真实帧时间、输出区间及逆滤波双WAV作为明确修正，须有前后差异证据；ROI重复滤波的科学统一放在兼容迁移之后，未经单独审阅不实施。
+
+布局以本轮用户要求及[位置与组件复用约束](../design/m03-v2-layout.md)为准，覆盖此前右侧设置面板的概括方案。EGG内部保留v2四图、两行参数和下方总览关系；外壳与页面内所有控件、图表、状态均从第一版遵守v3 U2和共同tokens/组件，不能只统一外壳或留到收尾换样式。全部六功能组、30项最终验收继续保留。
 
 三个实现方向已经比较：直接复用Qt页面不满足双端与核心解耦；全面重写事件算法会失去对照基准；选择拆出既有数组函数并分层适配，先保留差异，再有证据地修正。
 
@@ -28,7 +30,7 @@
 4. 同一输入双轮捕获，先检测重复性。来源哈希、依赖版本、实际后端、数组dtype/shape/NaN及取消/错误结果进入manifest。
 5. 审计m09-ui已有依赖，拟建独立 `.venv/m03-ui` 并锁版本，避免修改m09/m10和v2运行环境。确认新环境前只审计，不安装。
 
-拟执行：`.venv/m09-ui/Scripts/python.exe -X utf8 scripts/capture_m03_baseline.py`，随后 `-m pytest -c tests/pytest.ini tests/parity/test_m03_capture_contract.py -q`。脚本当前未创建，不能把这些命令当已通过。
+已执行：`.venv/m09-ui/Scripts/python.exe -X utf8 scripts/capture_m03_baseline.py --freeze-public`，随后 `-m pytest -c tests/pytest.ini tests/parity/test_m03_capture_contract.py -q`。11样例双轮一致，脚本及公开fixture已创建。常规重捕获省略`--freeze-public`，冻结保护拒绝覆盖已有基准；详细结果见[M03-A报告](../testing/m03-baseline-report.md)。
 
 退出：所有路径能定位源函数与独立expected，D01–D09前后边界明确。单/双轮返回差异必须先解释，不能增大容差后进入B。
 
@@ -60,7 +62,9 @@
 
 拟新增 `frontend/src/modules/egg-analysis/{EggAnalysisPage,EggSignalPlots,EggParameters,EggBatchPanel,EggInverseResult}.vue`、`state.ts`，修改 `AppShell.vue` 和共用平台声明。新建 `frontend/tests/m03.test.ts`、`scripts/verify_m03_qt.py`、`tests/e2e/m03.cjs`。
 
-1. 顶部文件/声道，中央60秒总览、主ROI、微观窗口，右侧参数/方法，底部共用播放。保留单文件、批次、IF独立结果范围。
+页面实施前按[实际复用清单](../design/m03-v2-layout.md)接AppShell、tokens、AppIcon、AudioTransport、TaskPanel、ModalDialog及MethodReferences；WaveformViewport/公共状态、SpectrogramViewport按EGG科学语义作有界适配，WorkbenchColumns现有三栏不能机械套成四图。新增共享扩展需补现有M01/M02定向回归。第一版即提供真实数据的浅深主题并与现有v3页面比对，不推迟统一风格。
+
+1. 顶部文件/声道/批处理/帮助工具。左上CQ/SQ、左下带顶部色条的语谱图；右上音频微观、右下EGG微观，原始/滤波和高通留在EGG图上方。图下两行参数，最后为60秒总览和长文件导航。播放复用共同能力，入口仍在第一行参数。保留单文件、批次、IF独立结果范围。
 2. 新页面只消费结果，不计算另一套事件/F0。原始/滤波开关的旧科学影响明确可见，重算期间旧结果标为过期，阻止错配保存。
 3. 微观事件与CQ图如沿用不同legacy策略必须显示来源，不能制造完全同步的假象。全局时间与毫秒相对时间分别标记。
 4. 先测默认操作、每个设置/导出/关闭，再测浅深主题、390/1000/1440宽、IPA/长文件名、取消/错误和输入切换。独立Chrome/Qt，不调用Codex内置浏览器关闭。
@@ -118,4 +122,4 @@
 
 ## 4. 当前执行结果
 
-本轮已完成：只读审阅、逐功能映射、9项差异、文件级分阶段计划和30项验收设计。未完成：M03-A基准补齐、环境创建、任何EGG核心/接口/页面实现、数值对照及EXE。M03仍planned，P08仍in_progress。
+M03-A verified，仅限Windows原v2独立行为基准。11样例双轮一致，完成环境审计、旧Qt布局/实际导出回读、公开fixture与捕获回归。D01默认值已纠正，追加D10独立CQ/SQ缺失规则。环境创建、EGG核心/接口/页面实现、v3算法对照及EXE均未完成。完整M03和P08仍in_progress，下一项M03-B，不提前启动其他模块。
