@@ -48,6 +48,8 @@
 
 ### M03-C：有界任务、文件和导出
 
+新增依赖（2026-09-12）：[P04-FONT](2026-09-12-global-fonts-design.md)规定三PNG及批次图片使用统一导出字体快照。C已有数值/文件工作可独立推进，字体契约接入前不得把图片字体专项标为verified。Matplotlib等后台渲染在适配层解析当前渲染端可用字体，按任务隔离配置；科学核心不读取用户字体或系统字体目录。该补充不授权DDL或更改已冻结的科学数值。
+
 拟新增 `backend/src/ptb_api/egg_models.py`、`backend/src/ptb_worker/{egg_jobs,egg_child,egg_exports}.py`，修改 `job_models.py`、`jobs.py`、`ptb_worker/{store,acoustic_executor,process_entry}.py`、桌面 `task_bridge.py` 与 `frontend/src/platform/{research,desktop}.ts`。是否复用executor内部助手在C开始前检查，禁止复制另一套科学算法。
 
 1. 新 `m03/1` 任务/结果模型由Pydantic生成contracts。仅以受控引用传入文件，读取和导出复用P06/P07 owner/hash/expiry/fencing/原子发布。
@@ -60,6 +62,8 @@
 拟测试文件：`backend/tests/test_m03_jobs.py`、`backend/tests/test_m03_exports.py`、`desktop/tests/test_m03_bridge.py`、`tests/contracts/test_m03_contract.py`。退出：真实读写回读、取消/恢复/越权、失败全回收及IF双WAV一致，不止mock成功。
 
 ### M03-D：共同界面与真实操作
+
+字体退出门：先接入P04-FONT公共角色与偏好，再构建页面及四图，覆盖CQ/SQ双轴、谱图色条、微观事件标签、总览、参数行、批次与IF结果。不得先硬编码字体再等待收尾替换。除A28外追加[P04-FONT的F01–F12](2026-09-12-global-fonts-design.md)适用项，三PNG实际回读与字体缺失回退列入E联合验收。公共字体能力未就绪时，页面字体专项保持planned/in_progress。
 
 拟新增 `frontend/src/modules/egg-analysis/{EggAnalysisPage,EggSignalPlots,EggParameters,EggBatchPanel,EggInverseResult}.vue`、`state.ts`，修改 `AppShell.vue` 和共用平台声明。新建 `frontend/tests/m03.test.ts`、`scripts/verify_m03_qt.py`、`tests/e2e/m03.cjs`。
 

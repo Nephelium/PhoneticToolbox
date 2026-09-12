@@ -100,6 +100,8 @@
 
 ### P04 · 统一前端壳、主题、首页与公共组件
 
+2026-09-12新增公共子任务 **P04-FONT / planned**：[全局字体与导出设计](2026-09-12-global-fonts-design.md)。已确认需求与规范，设置及渲染适配尚未实现。先完成公共字体模型、配置入口和导出适配，再由M03及后续页面接入；M01/M02/M09与冻结M10单独列补齐证据，不改变原模块验收范围或M10冻结状态。此项作为P04子任务追踪，不替换原32项阶段/模块账本。
+
 **依赖：** P02。**状态：** verified（公共界面经井井审阅，致谢分组已修订；限定工程范围见 [P04 报告](../testing/p04-workbench-report.md)）。
 
 **目标文件：** frontend/src/app/AppShell.vue；frontend/src/design/tokens.css；frontend/src/components/AudioTransport.vue；frontend/src/components/MethodReferences.vue。
