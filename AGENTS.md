@@ -1,6 +1,10 @@
 # PhoneticToolbox v3 — Agent 工作规则
 
 ## 0. 当前阶段与授权
+
+**2026-09-12 最新停止点（优先于以下历史检查点）：** 井井在进度审阅后授权继续整理成果、补齐M02整幅PNG并细化M03计划。现有成果已形成本地检查点c800ce8。M02-F05整幅PNG已通过限定开发态Windows Qt/Chrome验收，见docs/testing/m02-png-closeout-report.md；旧Research-Fix1/M10-R5 EXE未重新打包。M03源码/说明书审阅及30项验收设计已完成，仍planned，下一步审阅docs/plans/2026-09-12-m03-implementation.md后进入M03-A。P08仍in_progress，P09整体planned，M10/R4仅历史限定范围verified，R5仍未检验。旧R4 EXE当前不在发行目录，保留原报告元数据。本轮未push、发布、执行DDL或修改v2。
+
+### 历史授权与阶段证据（当时的下一步不作为当前执行指令）
 - 2026-09-12，井井授权修复已迁移 M01/M02/M09 的实际桌面入口，并明确允许新建 v3 专用本地任务库。Research-Fix1 通过限定 Windows 合成数据与真实单文件双轮验收，见 docs/testing/desktop-repair-report.md。首次新库位于 LocalAppData/PhoneticToolbox/v3/research-v1，只初始化不存在的新目录并复用既有002/005；已有目录只校验，不运行DDL。修复产物为 dist/research-repair/PhoneticToolbox-v3-Research-Fix1.exe，原M10-R5及v2保留。已修冻结worker调度、截图隐藏、TextGrid时间轨并纳入主题修复，其他模块继续停止，网页部署/安装版/跨平台不在此轮。
 - 2026-09-11 最新明确授权与停止点：井井要求继续完成M01收口，再迁移M02参数显示（默认同绘图区叠加曲线、可多图窗批量分配，按说明书2.2纠正并复验）和M09语谱图转音频，做完停止。本轮已完成M01最终39项审阅，以及M02/M09限定Windows本地/托管Chrome验收，见docs/testing/m01-final-review.md、docs/testing/m02-m09-report.md与docs/plans/2026-09-11-m01-m02-m09.md。当前三项标为verified的范围以报告为准，M09多屏/DPI截图设备未纳入。新项目内m09-ui与开发入口scripts/Start-Research-Workbench.ps1不修改M10运行环境/录制EXE；M10/R4保持冻结。下列“下一项M01-G/39项暂停/M02不启动”是历史检查点，当前停止点覆盖其执行顺序。不得自行推进其他模块、重复DDL或发布。
 - 用户：井井；助手自称秋叶；默认中文。技术判断说明证据、限制和待验证项。

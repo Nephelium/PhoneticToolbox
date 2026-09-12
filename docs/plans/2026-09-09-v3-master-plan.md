@@ -1,5 +1,7 @@
 # PhoneticToolbox v3 全平台重构实施计划
 
+2026-09-12当前进度：M01/M02/M09保持限定Windows验证，M02整幅PNG补齐见[收尾报告](../testing/m02-png-closeout-report.md)，历史EXE未更新。M03仅完成[审阅计划](2026-09-12-m03-implementation.md)，仍planned。以下早期阶段的下一步指令为历史记录，当前优先执行根AGENTS最新停止点。
+
 > **执行约定：** 秋叶及后续开发者必须遵守根 AGENTS.md，按本计划逐项实施、验证和记录；当前 P01 原型与试用通过、P02 工程骨架已通过 Windows 定向验收；全面业务迁移尚未开始。用户已确认的要求见 requirements.md，具体技术候选不得伪装成已验证选择。
 
 **Goal:** 在保留全部科研功能和正确性的基础上，交付统一 U2/K2 视觉的独立网页版、Windows 单文件与安装版、macOS，以及单独验收的 Linux 桌面版。
