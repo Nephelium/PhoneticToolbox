@@ -1,5 +1,6 @@
 """M03-D owned Qt, real local API/child, isolated copy of existing test schema."""
 import json
+import argparse
 import os
 import sqlite3
 import time
@@ -16,6 +17,7 @@ from ptb_worker.local_acoustic_files import initialize_local_files
 ROOT=Path(__file__).resolve().parents[1]
 
 def main():
+    parser=argparse.ArgumentParser();parser.add_argument('--include-private',action='store_true');options=parser.parse_args()
     out=ROOT/'output/validation/m03-ui'/('qt-'+uuid4().hex);out.mkdir(parents=True)
     db=out/'jobs.sqlite3'
     with sqlite3.connect((ROOT/'output/validation/p06/local-state.sqlite3').as_uri()+'?mode=ro',uri=True) as source,sqlite3.connect(db) as target:
@@ -60,6 +62,50 @@ def main():
         js('document.documentElement.dataset.theme="dark"');w.resize(1280,800);pause();w.view.grab().save(str(out/'dark-1280.png'))
         assert js('document.documentElement.scrollWidth<=window.innerWidth');checks.append('dark 1280 width stays inside common shell')
         click('保存参数草稿');js('[...document.querySelectorAll(".tab-close")].find(b=>b.ariaLabel==="关闭 EGG 信号分析").click()');until('!document.querySelector(".egg-page")');click('EGG 信号分析');until('document.querySelectorAll(".egg-history .task-row").length>=6');checks.append('close and reopen restores persisted jobs and parameter draft')
+        if options.include_private:
+            QFileDialog.getExistingDirectory=lambda *a,**k:str(inputs)
+            click('打开 WAV 目录');until('document.querySelectorAll(".egg-source option").length===4')
+            confirmed=json.loads((ROOT/'output/validation/p03/confirmed-egg.json').read_text('utf-8'))
+            baseline=json.loads((ROOT/'tests/fixtures/m03/manifest.json').read_text('utf-8'))
+            report['private_cases']=[]
+            for case in confirmed['cases']:
+                original=Path(case['input']);raw=original.read_bytes();digest=hashlib.sha256(raw).hexdigest()
+                assert digest==next(c for c in baseline['private_cases'] if c['id']==case['case_id'])['input_sha256']
+                # Only this already-authorized input is staged into the ignored test fixture area.
+                name=case['case_id']+'.wav';(inputs/name).write_bytes(raw);originals[name]=digest
+                click('刷新文件');until('document.querySelectorAll(".egg-source option").length==='+str(len(originals)+1))
+                select(name);until('!document.querySelector(".egg-source select").disabled')
+                flipped=bool(js('document.querySelector(".egg-source").innerText.includes("左：音频")'))
+                if flipped!=case['flip_channels']:click('交换声道')
+                click('更新分析');ready();wait_exports()
+                with sqlite3.connect(db) as conn:
+                    rows=conn.execute("SELECT snapshot,result_manifest FROM jobs WHERE state='succeeded' ORDER BY created_at DESC").fetchall()
+                snapshot,manifest=next((json.loads(a),json.loads(b)) for a,b in rows if name in a and json.loads(a)['config']['analysis']['mode']=='preview')
+                meta_file=next(f for f in manifest['files'] if f['name']=='egg.ptb.json')
+                meta=json.loads((cache/(meta_file['id']+'.bin')).read_text('utf-8'))
+                assert meta['input_sha256']==digest and meta['config']['flip_channels']==case['flip_channels']
+                assert meta['preview']['schema_version']=='egg-preview/1'
+                assert all(abs(v)<=.750001 for v in meta['preview']['audio']['values'] if v is not None)
+                assert hashlib.sha256(original.read_bytes()).hexdigest()==digest
+                report['private_cases'].append(dict(id=case['case_id'],sha256=digest,samples=meta['sample_count'],roi=meta['selection'],four_plots=True))
+                w.view.grab().save(str(out/(case['case_id']+'-onset-private.png')))
+                # Select a loud half-second for a second, non-onset UI check.
+                rate,values=wavfile.read(original);audio=values[:,0 if case['flip_channels'] else 1].astype(float)
+                block=int(rate*.5);count=len(audio)//block;energies=np.abs(audio[:count*block]).reshape(count,block).mean(axis=1)
+                first=int(np.argmax(energies))*block
+                fill('EGG 选区起点',first/rate);fill('EGG 选区时长',.5)
+                js('[...document.querySelectorAll(".egg-parameter-row input[type=checkbox]")].filter(e=>["Praat F0","GCI F0"].includes(e.parentElement.textContent.trim())).forEach(e=>{if(!e.checked)e.click()})')
+                click('更新分析');ready();wait_exports()
+                with sqlite3.connect(db) as conn:rows=conn.execute("SELECT snapshot,result_manifest FROM jobs WHERE state='succeeded' ORDER BY created_at DESC").fetchall()
+                _,manifest=next((json.loads(a),json.loads(b)) for a,b in rows if name in a and json.loads(a)['config']['analysis']['mode']=='preview')
+                meta_file=next(f for f in manifest['files'] if f['name']=='egg.ptb.json');meta=json.loads((cache/(meta_file['id']+'.bin')).read_text('utf-8'))
+                assert abs(meta['selection']['start_sample']-first)<=1 and meta['input_sha256']==digest
+                assert any(v is not None and v>0 for v in meta['preview']['praat']['values'])
+                assert any(v is not None and abs(v)>.001 for v in meta['preview']['audio']['values'])
+                report['private_cases'][-1]['voiced_roi']=meta['selection'];report['private_cases'][-1]['praat_points']=sum(v is not None for v in meta['preview']['praat']['values'])
+                assert hashlib.sha256(original.read_bytes()).hexdigest()==digest
+                w.view.grab().save(str(out/(case['case_id']+'-voiced-private.png')))
+            checks.append('two authorized natural recordings open in actual Qt with matched hash, role and four plots')
         assert originals=={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in inputs.iterdir()}
         for p in saved.rglob('*.wav'):
             rate,data=wavfile.read(p);assert rate==44100 and len(data)==5292

@@ -1,6 +1,8 @@
 # PhoneticToolbox v3 全平台重构实施计划
 
-2026-09-12追加当前进度：M03-E1已完成Windows开发态默认/导出/手势对齐，30项证据及剩余缺口见[联合收口记录](../testing/m03-report.md)。完整E/M03仍in_progress，下一批E2网页/自然录音页面及切换竞争。下段及后文早期下一步为历史。
+2026-09-12追加当前进度：M03-E2限定网页/自然录音与竞争验收通过，见[报告](../testing/m03-e2-report.md)。完整E/M03仍in_progress，下一项E3范围差异与来源。
+
+2026-09-12较早进度：M03-E1已完成Windows开发态默认/导出/手势对齐，30项证据及剩余缺口见[联合收口记录](../testing/m03-report.md)。完整E/M03仍in_progress，下一批E2网页/自然录音页面及切换竞争。下段及后文早期下一步为历史。
 
 2026-09-12历史进度：M01/M02/M09保持限定Windows验证，M02整幅PNG补齐见[收尾报告](../testing/m02-png-closeout-report.md)，历史EXE未更新。井井授权继续M03并要求布局贴合v2，M03-A/B已完成[独立基准](../testing/m03-baseline-report.md)和[指定Windows构建的纯核心验证](../testing/m03-core-report.md)，完整M03为in_progress，下一项C任务/文件/导出。以下早期阶段的下一步指令为历史记录，当前优先执行根AGENTS最新停止点。
 
