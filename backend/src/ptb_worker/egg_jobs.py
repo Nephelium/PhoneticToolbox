@@ -37,7 +37,7 @@ def submit(store, owner, body, *, retry_of=None):
                 analysis=body.config.model_dump(),max_output_bytes=160_000_000))
         job_id = str(uuid4())
         tx.execute("INSERT INTO {jobs}(id,owner_id,project_id,idempotency_key,request_hash,snapshot,state,deadline,created_at,updated_at) VALUES(?,?,?,?,?,?,'queued',?,?,?)",
-            (job_id,owner,body.project_id,body.idempotency_key,sha,canonical(snapshot),now+300,now,now))
+            (job_id,owner,body.project_id,body.idempotency_key,sha,canonical(snapshot),now+600,now,now))
         store.files.link_batch_inputs(tx,job_id,dict(owner_id=owner,project_id=body.project_id),sources,now)
         job=store._row(tx,job_id); store._event(tx,job,'queued',now)
         return public(job)

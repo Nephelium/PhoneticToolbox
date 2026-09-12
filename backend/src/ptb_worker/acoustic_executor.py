@@ -53,7 +53,7 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None):
                 argv=egg_command(request,'')
                 pipe=InputPipe();argv[-1]=pipe.name
                 raw,_=collect_pipe(argv,pipe,scratch.root,
-                    replace(SEGMENT_LIMITS,timeout_seconds=120,process_bytes=1_500_000_000),
+                    replace(SEGMENT_LIMITS,timeout_seconds=240,process_bytes=3_000_000_000),
                     lambda:abort.is_set() or stop.is_set(),on_started)
                 bundle=unpack_bundle(raw,64_000_000)
                 names=[f['name'] for f in bundle.manifest['files']]

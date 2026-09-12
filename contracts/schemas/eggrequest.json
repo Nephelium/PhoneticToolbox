@@ -120,7 +120,7 @@
         "micro_center": {
           "anyOf": [
             {
-              "maximum": 60,
+              "maximum": 120,
               "minimum": 0,
               "type": "number"
             },

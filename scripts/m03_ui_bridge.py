@@ -21,6 +21,12 @@ def main():
     if '--ranges' in sys.argv:
         wavfile.write(inputs/'wide.wav',44100,np.tile(samples,(8,1)))
         wavfile.write(inputs/'long.wav',44100,np.tile(samples,(83,1)))
+    if '--long' in sys.argv:
+        i=np.arange(120*48000,dtype=np.int64);gain=np.where(i<len(i)//2,1,2)
+        samples=np.column_stack([((i%320)*2-320)*70*gain,((i%240)*2-240)*60*gain]).astype(np.int16)
+        wavfile.write(inputs/'long.wav',48000,samples)
+    if '--ranges' in sys.argv:
+        wavfile.write(inputs/'oversized.wav',44100,np.tile(samples,(151,1)))
     os.environ['PTB_EGG_PYTHON']=str(ROOT/'.venv/m03-compatible/python.exe')
     provider=FileProvider()
     with LocalService(db,local_files_root=cache) as service:

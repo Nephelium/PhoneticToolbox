@@ -24,8 +24,8 @@ async function main(){
   await width.fill('50');await width.blur();await select('long.wav');
   const pan=page.getByLabel('平移波形时间窗');await pan.focus();await page.keyboard.press('End');assert(Math.abs(Number(await pan.inputValue())-6.4)<.001);
   assert((await page.getByLabel('波形时间轴（秒）').textContent()).includes('66.400'));await page.getByLabel('EGG 选区起点').fill('65');await page.getByLabel('EGG 选区起点').blur();
-  const count=await page.locator('.task-row').count();await click('更新分析');await page.getByRole('alert').filter({hasText:'当前 EGG 计算限 60 秒'}).waitFor();assert.equal(await page.locator('.task-row').count(),count);assert.equal(await page.locator('.egg-four-plots svg').count(),0);assert(await page.getByRole('button',{name:'播放选区',exact:true}).isDisabled());
-  await page.screenshot({path:path.join(out,'long-eof.png')});checks.push('66.4-second source navigates to EOF; oversized analysis explicitly refused with no stale plots or new task');
+  await click('更新分析');await plotted();assert.equal(await page.getByLabel('EGG 选区起点').inputValue(),'65');await page.screenshot({path:path.join(out,'long-eof.png')});checks.push('66.4-second source navigates to EOF and analyzes tail with global preprocessing');
+  await select('oversized.wav');const count=await page.locator('.task-row').count();await click('更新分析');await page.getByRole('alert').filter({hasText:'当前 EGG 计算限 120 秒'}).waitFor();assert.equal(await page.locator('.task-row').count(),count);checks.push('120.8-second input explicitly refused without a new task');
   assert.deepEqual(errors,[]);await fs.writeFile(path.join(out,'report.json'),JSON.stringify({success:true,checks,errors,schema_applied:[]},null,2));console.log(out);
  }catch(e){await page.screenshot({path:path.join(out,'failed.png')});await fs.writeFile(path.join(out,'report.json'),JSON.stringify({success:false,error:String(e),checks,errors},null,2));console.log(out);throw e;}
  finally{await browser.close();await server.close();worker.stdin.end(JSON.stringify({op:'shutdown'})+'\n');await new Promise(resolve=>worker.once('exit',resolve));}

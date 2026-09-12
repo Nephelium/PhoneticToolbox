@@ -123,7 +123,7 @@ def test_inverse_pair_float64_exact_samples(frozen,order,key):
     (8001,2,8000,{'roi_end':2.0},'egg_invalid_roi'),
     (96000,2,96000,{'mode':'inverse','roi_end':1.0},'egg_inverse_budget'),
     (1000,2,4000,{},'egg_sample_rate'),
-    (480001,2,8000,{},'egg_input_budget'),
+    (960001,2,8000,{},'egg_input_budget'),
 ])
 def test_child_rejects_unsupported_shape_and_budget_before_analysis(frames,channels,rate,config,code):
     from ptb_worker.acoustic_errors import AcousticFailure

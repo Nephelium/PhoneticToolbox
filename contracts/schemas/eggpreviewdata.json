@@ -7,7 +7,7 @@
           "items": {
             "type": "number"
           },
-          "maxItems": 30000,
+          "maxItems": 120000,
           "title": "Times",
           "type": "array"
         },
@@ -22,7 +22,7 @@
               }
             ]
           },
-          "maxItems": 30000,
+          "maxItems": 120000,
           "title": "Values",
           "type": "array"
         }

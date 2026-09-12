@@ -10,7 +10,7 @@ from .font_models import FigureFontSnapshot
 class EggTaskConfig(WireModel):
     font: FigureFontSnapshot | None = None  # None preserves historical task rendering.
     mode: Literal['single', 'batch', 'inverse', 'preview'] = 'single'
-    micro_center: float | None = Field(default=None, ge=0, le=60)
+    micro_center: float | None = Field(default=None, ge=0, le=120)
     micro_width_ms: float = Field(default=50., ge=5, le=5000)
     flip_channels: bool = False
     signal_mode: Literal['raw', 'filtered'] = 'filtered'
@@ -88,8 +88,8 @@ class EggManifest(WireModel):
 
 
 class EggSeries(WireModel):
-    times: list[float] = Field(max_length=30000)
-    values: list[float | None] = Field(max_length=30000)
+    times: list[float] = Field(max_length=120000)
+    values: list[float | None] = Field(max_length=120000)
 
     @model_validator(mode='after')
     def aligned(self):

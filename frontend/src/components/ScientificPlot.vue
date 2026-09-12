@@ -13,6 +13,8 @@ const ticks=(range:[number,number],count=5)=>Array.from({length:count},(_,i)=>ra
 const xTicks=computed(()=>ticks(props.x,Math.max(2,Math.min(5,Math.floor(plotWidth.value/(fontSize.value*5))))));
 const label=(v:number)=>Math.abs(v)>=100?String(Math.round(v)):Number(v.toFixed(3)).toString();
 function path(trace:PlotTrace){let gap=true;return trace.times.map((t,i)=>{const v=trace.values[i];if(v==null||!Number.isFinite(v)){gap=true;return '';}const command=gap?'M':'L';gap=false;return `${command}${X(t).toFixed(2)},${Y(v,trace.right).toFixed(2)}`;}).join('');}
+// Keep every scientific point; batch equal-radius circles to bound DOM nodes.
+function dots(trace:PlotTrace){return trace.times.map((t,i)=>{const v=trace.values[i];if(v==null||!Number.isFinite(v))return '';return `M${X(t)-1.6},${Y(v,trace.right)}a1.6,1.6 0 1,0 3.2,0a1.6,1.6 0 1,0 -3.2,0Z`;}).join('');}
 let drag:{x:number;span:number;pixels:number;id:number}|undefined;let dragged=false;
 function seek(event:MouseEvent){if(dragged){dragged=false;return;}const box=(event.currentTarget as Element).getBoundingClientRect();const x=(event.clientX-box.left)-left.value;if(x>=0&&x<=plotWidth.value)emit('seek',props.x[0]+x/plotWidth.value*(props.x[1]-props.x[0]));}
 function wheel(event:WheelEvent){if(!event.ctrlKey||!props.interactive||!event.deltaY)return;event.preventDefault();emit('zoom',event.deltaY>0?1.1:.9);}
@@ -28,7 +30,7 @@ function keys(event:KeyboardEvent){if(!props.interactive)return;const delta=(pro
 <g :clip-path="`url(#${clip})`">
 <image v-if="raster" :href="raster.url" :x="X(raster.extent[0])" :y="Y(raster.extent[3])" :width="X(raster.extent[1])-X(raster.extent[0])" :height="Y(raster.extent[2])-Y(raster.extent[3])" preserveAspectRatio="none"/>
 <line v-for="v in ticks(y)" :key="v" :x1="left" :x2="left+plotWidth" :y1="Y(v)" :y2="Y(v)" stroke="var(--border)" stroke-dasharray="2 4"/>
-<g v-for="trace in traces" :key="trace.label" :stroke="trace.color" :fill="trace.color"><template v-if="trace.points"><circle v-for="(t,i) in trace.times" :key="i" v-show="trace.values[i]!=null" :cx="X(t)" :cy="Y(trace.values[i]??0,trace.right)" r="1.6" stroke="none"/></template><path v-else :d="path(trace)" fill="none" stroke-width="1.1"/></g>
+<g v-for="trace in traces" :key="trace.label" :stroke="trace.color" :fill="trace.color"><path v-if="trace.points&&trace.times.length>3000" :d="dots(trace)" stroke="none" class="scientific-dots"/><template v-else-if="trace.points"><circle v-for="(t,i) in trace.times" :key="i" v-show="trace.values[i]!=null" :cx="X(t)" :cy="Y(trace.values[i]??0,trace.right)" r="1.6" stroke="none"/></template><path v-else :d="path(trace)" fill="none" stroke-width="1.1"/></g>
 <line v-for="(m,i) in markers" :key="i" :x1="X(m.time)" :x2="X(m.time)" :y1="top" :y2="top+plotHeight"  :stroke="m.color??'var(--success)'" :stroke-dasharray="m.dashed?'4 3':undefined" opacity=".75"><title>{{m.label}} {{m.time}}</title></line>
 </g>
 <rect :x="left" :y="top" :width="plotWidth" :height="plotHeight" fill="none" stroke="var(--border)"/>
