@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request,Response
 from .job_models import JobInput, FileJobInput, JobView, JobList, JobEvents, RetryInput
 from ptb_worker.store import JobError
 from .acoustic_batch_models import BatchRequest,BatchView,BatchList
+from .spec2wav_models import Spec2WavRequest
 
 
 def create_job_router(ctx, store, *, local_token=None, local_origin=None):
@@ -70,10 +71,15 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
     def cancel_batch(batch_id:UUID,owner=Depends(mutation)):
         return batches().cancel(owner['id'],str(batch_id))
 
+    @router.post('/spec2wav/create',response_model=JobView,status_code=201,operation_id='create_spec2wav_job')
+    def reconstruct(body:Spec2WavRequest,owner=Depends(mutation)):
+        from ptb_worker.spec2wav_jobs import submit
+        return submit(store,owner['id'],body)
+
     @router.post('/local-inputs',operation_id='register_local_acoustic_input')
     async def local_input(request:Request,role:str,name:str,owner=Depends(mutation)):
         if ctx.mode!='local' or not getattr(store,'batches',None):raise HTTPException(404,'unavailable')
-        limit=64_000_000 if role=='audio' else 16_000_000 if role in ('parent_result','legacy_result') else 2_000_000
+        limit=64_000_000 if role=='audio' else 16_000_000 if role in ('parent_result','legacy_result','image') else 2_000_000
         raw=bytearray()
         async for block in request.stream():
             if len(raw)+len(block)>limit:raise HTTPException(413,'input_budget_exceeded')

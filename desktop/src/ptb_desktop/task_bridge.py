@@ -29,6 +29,33 @@ class TaskBridge:
 
     def invoke(self,body):
         op=body.get('op')
+        if op=='reconstruct':
+            raw,_=self.provider.read(body['id']);entry=self.provider.entries[body['id']]
+            ref=self.service.import_input(raw,entry.name,'image')
+            return self.service.request('/api/v1/jobs/spec2wav/create','POST',dict(project_id=PROJECT,idempotency_key=body['key'],image=ref,config=body['config']))
+        if op=='reconstructions':return [j for j in self.service.get('/api/v1/jobs?project_id='+PROJECT)['jobs'] if j['operation']=='spectrogram_to_audio']
+        if op=='cancel_job':return self.service.request('/api/v1/jobs/'+str(UUID(body['id']))+'/cancel','POST')
+        if op=='save_job':return self.save(str(UUID(body['id'])),body['directory'],single=True)
+        if op=='result':
+            import base64
+            job=self.service.get('/api/v1/jobs/'+str(UUID(body['job'])))
+            if job['state']!='succeeded' or job['operation']!='spectrogram_to_audio':raise FileAccessError('重建结果尚不可用。')
+            file=next((f for f in job['result_manifest']['files'] if f['id']==body['id']),None)
+            if not file or file['size_bytes']>64_000_000:raise FileAccessError('结果文件不正确。')
+            chunks=[self.service.binary(f'/api/v1/jobs/local-results/{file["id"]}?offset={offset}&size={min(1048576,file["size_bytes"]-offset)}') for offset in range(0,file['size_bytes'],1048576)]
+            raw=b''.join(chunks)
+            if len(raw)!=file['size_bytes'] or hashlib.sha256(raw).hexdigest()!=file['sha256']:raise FileAccessError('结果校验失败。')
+            return {'base64':base64.b64encode(raw).decode(),'sha256':file['sha256']}
+        if op=='parameters':
+            raw,sha=self.provider.read(body['id']);entry=self.provider.entries[body['id']]
+            from urllib.error import HTTPError
+            try:result=self.service.parameters(raw,entry.name)
+            except HTTPError as exc:
+                code=json.load(exc).get('detail','')
+                messages={'parameter_input_budget':'参数文件超过 16 MB。','parameter_read_timeout':'参数表读取超时，请使用较小的表。','preview_busy':'已有预览正在读取，请稍后重试。','invalid_parameter_table':'参数表格式不受支持、包含公式或超过显示预算。原文件未修改。','parameter_read_failed':'参数读取子进程未能完成。请使用完整研究工作台修复版，原文件未修改。','preview_platform_unverified':'此平台的参数读取尚未验证。'}
+                raise FileAccessError(messages.get(code,'参数读取服务失败。请检查本机后台，不能据此判断原参数文件损坏。')) from None
+            if result['sha256']!=sha:raise FileAccessError('参数文件校验失败。')
+            return result
         if op=='convert_lip':return self.convert_lip(body['id'])
         if op=='list':return self.service.get('/api/v1/jobs/batches/list?project_id='+PROJECT)['batches']
         if op=='parent':
@@ -91,10 +118,15 @@ class TaskBridge:
             file=next(f for f in self.provider.list(entry.directory) if f['name']==name)
             return {'file':file,'companion_found':bool(companions)}
 
-    def save(self,batch_id,directory_id):
+    def save(self,batch_id,directory_id,*,single=False):
         directory=self.provider.directory(directory_id)
         if directory.purpose not in ('input','output'):raise FileAccessError('请选择结果目录。')
-        root=directory.path;batch=self.service.get('/api/v1/jobs/batches/'+batch_id)
+        root=directory.path
+        if single:
+            job=self.service.get('/api/v1/jobs/'+batch_id)
+            if job['operation']!='spectrogram_to_audio' or job['state']!='succeeded':raise FileAccessError('重建结果尚不可用。')
+            batch={'summary':{'items':[dict(state='succeeded',job_id=batch_id,index=0)]}}
+        else:batch=self.service.get('/api/v1/jobs/batches/'+batch_id)
         created=[];pending={};saved=[]
         def sha(path):
             value=hashlib.sha256()

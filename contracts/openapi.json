@@ -1882,6 +1882,29 @@
         "title": "Health",
         "type": "object"
       },
+      "ImagePoint": {
+        "additionalProperties": false,
+        "properties": {
+          "x": {
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "X",
+            "type": "number"
+          },
+          "y": {
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Y",
+            "type": "number"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ],
+        "title": "ImagePoint",
+        "type": "object"
+      },
       "JobEvent": {
         "additionalProperties": false,
         "properties": {
@@ -2062,7 +2085,8 @@
               "archive_zip",
               "extract_zip",
               "acoustic_analysis",
-              "textgrid_segment"
+              "textgrid_segment",
+              "spectrogram_to_audio"
             ],
             "title": "Operation",
             "type": "string"
@@ -2087,6 +2111,9 @@
               },
               {
                 "$ref": "#/components/schemas/AcousticTaskManifest"
+              },
+              {
+                "$ref": "#/components/schemas/Spec2WavManifest"
               },
               {
                 "type": "null"
@@ -2159,6 +2186,73 @@
           "password"
         ],
         "title": "LoginInput",
+        "type": "object"
+      },
+      "ParameterTable": {
+        "additionalProperties": false,
+        "properties": {
+          "columns": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 256,
+            "minItems": 1,
+            "title": "Columns",
+            "type": "array"
+          },
+          "kinds": {
+            "items": {
+              "enum": [
+                "number",
+                "text"
+              ],
+              "type": "string"
+            },
+            "maxItems": 256,
+            "minItems": 1,
+            "title": "Kinds",
+            "type": "array"
+          },
+          "rows": {
+            "items": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "type": "array"
+            },
+            "maxItems": 200000,
+            "title": "Rows",
+            "type": "array"
+          },
+          "schema_version": {
+            "const": "m02/1",
+            "default": "m02/1",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Sha256",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sha256",
+          "columns",
+          "kinds",
+          "rows"
+        ],
+        "title": "ParameterTable",
         "type": "object"
       },
       "PreviewInterval": {
@@ -2343,6 +2437,7 @@
                 "acoustic_file": "#/components/schemas/AcousticFileManifest",
                 "managed_acoustic_files": "#/components/schemas/AcousticTaskManifest",
                 "managed_files": "#/components/schemas/FileManifest",
+                "managed_spec2wav_files": "#/components/schemas/Spec2WavManifest",
                 "pipeline_check_metadata": "#/components/schemas/JobManifest"
               },
               "propertyName": "kind"
@@ -2359,6 +2454,9 @@
               },
               {
                 "$ref": "#/components/schemas/AcousticTaskManifest"
+              },
+              {
+                "$ref": "#/components/schemas/Spec2WavManifest"
               }
             ],
             "title": "Manifest"
@@ -2438,6 +2536,185 @@
           "expires_at"
         ],
         "title": "SessionView",
+        "type": "object"
+      },
+      "Spec2WavConfig": {
+        "additionalProperties": false,
+        "properties": {
+          "corners": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ImagePoint"
+                },
+                "maxItems": 4,
+                "minItems": 4,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Corners"
+          },
+          "freq_end": {
+            "default": 11025,
+            "maximum": 48000.0,
+            "minimum": 1.0,
+            "title": "Freq End",
+            "type": "number"
+          },
+          "freq_start": {
+            "default": 0,
+            "exclusiveMaximum": 48000.0,
+            "minimum": 0.0,
+            "title": "Freq Start",
+            "type": "number"
+          },
+          "max_db": {
+            "default": 0,
+            "maximum": 20.0,
+            "minimum": -160.0,
+            "title": "Max Db",
+            "type": "number"
+          },
+          "min_db": {
+            "default": -30,
+            "maximum": 20.0,
+            "minimum": -160.0,
+            "title": "Min Db",
+            "type": "number"
+          },
+          "n_iter": {
+            "default": 32,
+            "maximum": 128.0,
+            "minimum": 1.0,
+            "title": "N Iter",
+            "type": "integer"
+          },
+          "seed": {
+            "default": 0,
+            "maximum": 4294967295.0,
+            "minimum": 0.0,
+            "title": "Seed",
+            "type": "integer"
+          },
+          "target_sr": {
+            "default": 44100,
+            "enum": [
+              0,
+              8000,
+              16000,
+              22050,
+              24000,
+              32000,
+              44100,
+              48000,
+              96000
+            ],
+            "title": "Target Sr",
+            "type": "integer"
+          },
+          "time_end": {
+            "default": 1,
+            "exclusiveMinimum": 0.0,
+            "maximum": 86430.0,
+            "title": "Time End",
+            "type": "number"
+          },
+          "time_start": {
+            "default": 0,
+            "maximum": 86400.0,
+            "minimum": 0.0,
+            "title": "Time Start",
+            "type": "number"
+          },
+          "win_length_ms": {
+            "default": 10,
+            "exclusiveMinimum": 0.0,
+            "maximum": 1000.0,
+            "title": "Win Length Ms",
+            "type": "number"
+          }
+        },
+        "title": "Spec2WavConfig",
+        "type": "object"
+      },
+      "Spec2WavManifest": {
+        "additionalProperties": false,
+        "properties": {
+          "complete": {
+            "const": true,
+            "default": true,
+            "title": "Complete",
+            "type": "boolean"
+          },
+          "core_version": {
+            "title": "Core Version",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/AcousticManagedFile"
+            },
+            "maxItems": 4,
+            "minItems": 4,
+            "title": "Files",
+            "type": "array"
+          },
+          "kind": {
+            "const": "managed_spec2wav_files",
+            "default": "managed_spec2wav_files",
+            "title": "Kind",
+            "type": "string"
+          },
+          "operation": {
+            "const": "spectrogram_to_audio",
+            "default": "spectrogram_to_audio",
+            "title": "Operation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "core_version",
+          "files"
+        ],
+        "title": "Spec2WavManifest",
+        "type": "object"
+      },
+      "Spec2WavRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "config": {
+            "$ref": "#/components/schemas/Spec2WavConfig"
+          },
+          "idempotency_key": {
+            "pattern": "^[A-Za-z0-9_-]{8,80}$",
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "image": {
+            "$ref": "#/components/schemas/AcousticAssetRef"
+          },
+          "project_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "m09/1",
+            "default": "m09/1",
+            "title": "Schema Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id",
+          "idempotency_key",
+          "image",
+          "config"
+        ],
+        "title": "Spec2WavRequest",
         "type": "object"
       },
       "SpectrogramPreview": {
@@ -3089,6 +3366,49 @@
           }
         },
         "summary": "Impact",
+        "tags": [
+          "storage"
+        ]
+      }
+    },
+    "/api/v1/assets/{asset_id}/parameters": {
+      "get": {
+        "operationId": "asset_parameter_table",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "asset_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Asset Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParameterTable"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Parameters",
         "tags": [
           "storage"
         ]
@@ -3799,6 +4119,47 @@
         ]
       }
     },
+    "/api/v1/jobs/spec2wav/create": {
+      "post": {
+        "operationId": "create_spec2wav_job",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Spec2WavRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reconstruct",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
     "/api/v1/jobs/{job_id}": {
       "get": {
         "operationId": "get_job",
@@ -3990,6 +4351,49 @@
         "summary": "Retry",
         "tags": [
           "jobs"
+        ]
+      }
+    },
+    "/api/v1/preview/parameters": {
+      "post": {
+        "operationId": "local_parameter_table",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "maxLength": 220,
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParameterTable"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Parameters",
+        "tags": [
+          "preview"
         ]
       }
     },

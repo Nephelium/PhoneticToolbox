@@ -246,7 +246,7 @@
       "dependencies": "P03,P04,P06,P07",
       "files": "docs/plans/modules/M01-parameter-estimation.md 等模块计划；packages/phonetic_core/src/phonetic_core/；frontend/src/modules/",
       "status": "in_progress",
-      "note": "M01 A-F2 and G joint/legacy-input batches verified in documented Windows scopes. Local symbolic PKL conversion and explicitly associated historical XLSX/SQLite parameter cuts now implemented and exercised through Qt/Chrome. Full M01/G remains in_progress pending final per-row acceptance review; M02 is not yet migrated. No repeat DDL.",
+      "note": "M01 final 39-row review closed. M02 shared-area overlay and multiple graph assignment, and M09 file-input reconstruction verified in bounded Windows local/hosted Chrome scopes. P08 remains in_progress for other modules; stop here as requested. See docs/testing/m01-final-review.md and m02-m09-report.md. No repeat DDL.",
       "steps": [
         "按 M01/M02/M03/M04/M06/M07/M08/M09/M13/M14 顺序逐个执行对应文件级计划",
         "先原样搬可用算法，再拆外层 I/O；不把算法重写和 UI 换肤混成一个提交",
@@ -439,7 +439,7 @@
         "P06",
         "P07"
       ],
-      "status": "in_progress",
+      "status": "verified",
       "plan": "modules/M01-parameter-estimation.md",
       "execution_evidence": [
         "docs/plans/2026-09-09-m01-implementation.md",
@@ -455,9 +455,17 @@
         "docs/testing/m01-report.md",
         "docs/manual/parameter-estimation.md",
         "docs/plans/2026-09-10-m01-legacy-inputs.md",
-        "docs/testing/m01-legacy-report.md"
+        "docs/testing/m01-legacy-report.md",
+        "docs/testing/m01-final-review.md"
       ],
-      "note": "M01 A-F2 and G joint/legacy-input batches verified in documented Windows scopes. Local symbolic PKL conversion and explicitly associated historical XLSX/SQLite parameter cuts now implemented and exercised through Qt/Chrome. Full M01/G remains in_progress pending final per-row acceptance review; M02 is not yet migrated. No repeat DDL."
+      "note": "Final 39-row review completed under renewed user authorization. Joint wheel regression 472 passed. No repeat DDL. Stop after M01/M02/M09 as instructed.",
+      "verification_scope": "Windows local and Windows hosted Chrome; bounded existing workflows",
+      "platform_status": {
+        "windows_local": "verified",
+        "windows_hosted_web": "verified",
+        "macos": "planned",
+        "linux": "planned"
+      }
     },
     {
       "id": "M02",
@@ -468,9 +476,19 @@
         "P06",
         "P07"
       ],
-      "status": "planned",
+      "status": "verified",
       "plan": "modules/M02-parameter-display.md",
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/testing/m02-m09-report.md"
+      ],
+      "verification_scope": "Windows local and Windows hosted Chrome; bounded existing workflows",
+      "note": "User-authorized M02/M09 scoped Windows workflows verified. M02 manual 2.2 overlay semantics corrected and reverified; adapted SVG export excludes waveform. M09 screen-capture devices not verified. See joint report/source map. This task stops here, preserving parallel M10 work.",
+      "platform_status": {
+        "windows_local": "verified",
+        "windows_hosted_web": "verified",
+        "macos": "planned",
+        "linux": "planned"
+      }
     },
     {
       "id": "M03",
@@ -560,9 +578,19 @@
         "P06",
         "P07"
       ],
-      "status": "planned",
+      "status": "verified",
       "plan": "modules/M09-spectrogram-to-audio.md",
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/testing/m02-m09-report.md"
+      ],
+      "verification_scope": "Windows local file input / bounded reconstruction and Windows hosted Chrome; multi-screen capture and other platforms not verified",
+      "note": "User-authorized M02/M09 scoped Windows workflows verified. M02 manual 2.2 overlay semantics corrected and reverified; adapted SVG export excludes waveform. M09 screen-capture devices not verified. See joint report/source map. This task stops here, preserving parallel M10 work.",
+      "platform_status": {
+        "windows_local": "verified",
+        "windows_hosted_web": "verified",
+        "macos": "planned",
+        "linux": "planned"
+      }
     },
     {
       "id": "M10",
@@ -574,9 +602,28 @@
         "P07",
         "P01"
       ],
-      "status": "planned",
+      "status": "verified",
       "plan": "modules/M10-vocal-tract.md",
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/plans/2026-09-11-m10-recording.md",
+        "docs/testing/m10-report.md",
+        "docs/modules/evidence/M10-source-map.md",
+        "docs/plans/2026-09-11-m10-video.md",
+        "docs/testing/m10-recording-features-report.md",
+        "docs/plans/2026-09-11-m10-onset.md"
+      ],
+      "verification_scope": "Windows local vocal-tract recording only",
+      "frozen": true,
+      "platform_status": {
+        "windows_local": "verified",
+        "server": "planned",
+        "macos": "planned",
+        "linux": "planned"
+      },
+      "recording_revision": "R4",
+      "note": "Windows M10/R4 verified and frozen after the user-authorized recording additions. Portable frames and presets, 50 ms minimum / 200 ms new frames, silent frames without F0, 150 Hz defaults, replay cache and synchronized current/six-view video. 169 Python and 22 frontend tests, 12 geometry cases, both frozen Qt suites and independent video decoding passed. Native m10/2 unchanged. Other modules follow their own plans. Not full v3 or cross-platform release. R5 onset envelope, drag reorder and clear/undo implemented; user requested build only, no verification. The verified scope above remains R4.",
+      "latest_revision": "R5",
+      "latest_revision_verification": "not_run_by_user_request"
     },
     {
       "id": "M11",

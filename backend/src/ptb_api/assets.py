@@ -130,6 +130,29 @@ def create_storage_router(ctx, store):
             if ctx.session(request)['id']!=owner['id']:raise HTTPException(409,'account_changed')
         return dict(sha256=sha,**value)
 
+    from .display_models import ParameterTable
+
+    @router.get('/assets/{asset_id}/parameters',response_model=ParameterTable,operation_id='asset_parameter_table')
+    def parameters(asset_id:UUID,request:Request,owner=Depends(identity)):
+        import hashlib
+        from ptb_worker.parameter_preview import render,MAX_BYTES
+        from ptb_worker.spectrogram_preview import preview_slot
+        with preview_slot():
+            asset=store.metadata(owner['id'],asset_id)
+            if asset['size_bytes']>MAX_BYTES or not asset['name'].lower().endswith(('.xlsx','.ptb.sqlite','.ptb.sqlite3')):
+                raise HTTPException(422,'unsupported_parameter_table')
+            data=bytearray()
+            while len(data)<asset['size_bytes']:
+                if ctx.session(request)['id']!=owner['id']:raise HTTPException(409,'account_changed')
+                block=store.read_block(owner['id'],asset_id,len(data),min(CHUNK_BYTES,asset['size_bytes']-len(data)))
+                if not block:raise HTTPException(503,'storage_read_failed')
+                data.extend(block)
+            if hashlib.sha256(data).hexdigest()!=asset['sha256']:raise HTTPException(409,'asset_changed')
+            result=render(bytes(data),asset['name'])
+            store.metadata(owner['id'],asset_id)
+            if ctx.session(request)['id']!=owner['id']:raise HTTPException(409,'account_changed')
+            return result
+
     @router.get('/assets/{asset_id}/content', response_class=Response, operation_id='download_asset',
                 responses={200: {'content': {'application/octet-stream': {}}}, 206: {'description': 'Partial content'},
                            416: {'description': 'Invalid or unsatisfiable single range'}})

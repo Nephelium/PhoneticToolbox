@@ -85,8 +85,8 @@ class LocalAcousticFiles:
         if shutil.disk_usage(self.root).free-reserved-extra<1_000_000_000:raise StorageError('disk_space_low',507)
 
     def import_input(self,raw,name,role):
-        suffix={'audio':'.wav','textgrid':'.textgrid','lip':'.lip.json','parent_result':'.ptb.json','legacy_result':('.xlsx','.ptb.sqlite','.ptb.sqlite3')}.get(role)
-        limit=64_000_000 if role=='audio' else 16_000_000 if role in ('parent_result','legacy_result') else 2_000_000
+        suffix={'audio':'.wav','textgrid':'.textgrid','lip':'.lip.json','parent_result':'.ptb.json','legacy_result':('.xlsx','.ptb.sqlite','.ptb.sqlite3'),'image':('.png','.jpg','.jpeg','.bmp')}.get(role)
+        limit=64_000_000 if role=='audio' else 16_000_000 if role in ('parent_result','legacy_result','image') else 2_000_000
         if not suffix or not 0<len(raw)<=limit or not isinstance(name,str) or not 0<len(name)<=220 or any(c in name for c in '/\\:\x00') or not name.lower().endswith(suffix):
             raise JobError('invalid_local_input',422)
         sha=hashlib.sha256(raw).hexdigest()
@@ -214,7 +214,10 @@ class LocalAcousticFiles:
                 raise StorageError('incomplete_output_batch',409)
             for a in outputs:
                 if self._path(a['id']).stat().st_size!=a['size_bytes']:raise StorageError('output_changed',409)
-            manifest=AcousticTaskManifest(operation=json.loads(job['snapshot'])['operation'],core_version=core_version,
+            from ptb_api.spec2wav_models import Spec2WavManifest
+            operation=json.loads(job['snapshot'])['operation']
+            model=Spec2WavManifest if operation=='spectrogram_to_audio' else AcousticTaskManifest
+            manifest=model(operation=operation,core_version=core_version,
                 files=[dict(id=a['id'],name=a['name'],kind='result',size_bytes=a['size_bytes'],sha256=a['sha256'],expires_at=None) for a in outputs]).model_dump()
             self._fence(tx,identity)
             for a in outputs:a.update(state='ready',reserved_bytes=0)

@@ -4,6 +4,7 @@ Not yet a public job or writer: callers must add durable owner/fencing/quota and
 atomic publication. Host Scratch owns only the new temporary request bytes.
 """
 from dataclasses import asdict,dataclass
+from ptb_worker.process_entry import command
 import hashlib
 import json
 import struct
@@ -38,14 +39,14 @@ def unpack_bundle(payload,limit):
     error=manifest.get('error')
     if isinstance(error,str) and error in ACOUSTIC_ERRORS:
         raise AcousticFailure(error)
-    if manifest.get('kind') not in ('prepared_segments','prepared_analysis') or not isinstance(manifest.get('files'),list) or not 1<=len(manifest['files'])<=3000:
+    if manifest.get('kind') not in ('prepared_segments','prepared_analysis','prepared_spec2wav') or not isinstance(manifest.get('files'),list) or not 1<=len(manifest['files'])<=3000:
         raise FormatError('invalid_segment_manifest')
     names=set()
     for entry in manifest['files']:
         if not isinstance(entry,dict):raise FormatError('invalid_segment_file')
         name,size=entry.get('name'),entry.get('size_bytes')
         kind=entry.get('format')
-        extension={'wav':'.wav','xlsx':'.xlsx','sqlite':'.ptb.sqlite','json':'.ptb.json'}.get(kind) if isinstance(kind,str) else None
+        extension={'wav':'.wav','xlsx':'.xlsx','sqlite':'.ptb.sqlite','json':'.ptb.json','png':'.png'}.get(kind) if isinstance(kind,str) else None
         if (type(size)!=int or size<=0 or offset+size>len(payload) or not isinstance(name,str) or
             not extension or not name.endswith(extension) or len(name)>220 or
             any(ord(c)<32 or c in '/\\:<>"|?*' for c in name) or name.casefold() in names):
@@ -91,7 +92,7 @@ def prepare_segments(audio,textgrid,layer,scratch,*,audio_name='audio.wav',paren
                 last_beat=time.monotonic()
             return stop()
         pipe=InputPipe()
-        payload,_=collect_pipe([sys.executable,'-B','-m','ptb_worker.segment_child',str(path),pipe.name],
+        payload,_=collect_pipe(command('ptb_worker.segment_child',str(path),pipe.name),
                                pipe,scratch.root,limits,check,on_started)
         if stop():raise Cancelled('cancelled')
         heartbeat()

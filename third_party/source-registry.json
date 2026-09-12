@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-09-09",
-  "total_records": 323,
+  "total_records": 326,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -571,9 +571,9 @@
         "pdf": "https://dub.ucsd.edu/CATbox/Reader/GriffinLimMSTFT.pdf",
         "doi": "https://doi.org/10.1109/TASSP.1984.1164317"
       },
-      "evidence": "core/spec2wav/griffin_lim.py；原论文 PDF 已核对。",
+      "evidence": "core/spec2wav/griffin_lim.py；原论文 PDF 已核对。 v3: packages/phonetic_core/src/phonetic_core/spec2wav/reconstruction.py; backend/src/ptb_worker/spec2wav_child.py.",
       "license": "not-established",
-      "notes": "相位估计是重建，不保证恢复原始录音；固定随机种子与迭代设置进入结果。",
+      "notes": "相位估计是重建，不保证恢复原始录音；固定随机种子与迭代设置进入结果。 v2 zero-start parity verified with fixed RandomState; nonzero-band interpolation and local seed are explicit changes. Method reference; no paper PDF or external code bundled.",
       "verification_date": "2026-09-09",
       "actual_included_version": null,
       "observed_upstream_commit": null,
@@ -584,7 +584,9 @@
       "doi": "10.1109/TASSP.1984.1164317",
       "venue": "IEEE Transactions on Acoustics, Speech, and Signal Processing",
       "pages": "236--243",
-      "acknowledgement_group": "academic"
+      "acknowledgement_group": "academic",
+      "m02_m09_verification_date": "2026-09-11",
+      "m02_m09_evidence": "docs/testing/m02-m09-report.md; requirements-m09-ui.lock; tests/parity/test_spec2wav.py; backend/tests/test_m02_display.py"
     },
     {
       "id": "SRC-VTL",
@@ -606,7 +608,15 @@
       "observed_upstream_commit": null,
       "distribution_status": "review-required",
       "authors": "Peter Birkholz and VocalTractLab contributors",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "resources/vocal_tract",
+        "packages/phonetic_core/src/phonetic_core/vocal_tract",
+        "scripts/build_m10_geometry.py"
+      ],
+      "m10_migration_evidence": "docs/modules/evidence/M10-migration.json",
+      "m10_verification_date": "2026-09-11",
+      "m10_modifications": "API 2.4 binary unchanged. Bridge m10/2: manual tongue root, physical anterior lateral relief, narrow-gap readout and shared tube recomputation. R4 constrains posterior targets against speaker pharynx/body dimensions. Whisper audition +24 dB, native raw synthesis unchanged. TS3 l=-0.6; internal s=0.32 baseline retained but its UI example removed. GPL-3.0-or-later."
     },
     {
       "id": "DOC-VTL24",
@@ -688,7 +698,12 @@
       "actual_included_version": "0.180.0 / r180",
       "observed_upstream_commit": null,
       "distribution_status": "review-required",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "frontend/public/vocal-tract/vendor"
+      ],
+      "m10_migration_evidence": "docs/modules/evidence/M10-migration.json",
+      "m10_verification_date": "2026-09-11"
     },
     {
       "id": "ASSET-HEAD",
@@ -708,7 +723,12 @@
       "observed_upstream_commit": null,
       "distribution_status": "review-required",
       "authors": "byzmod3d",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "frontend/public/vocal-tract/assets/head.json"
+      ],
+      "m10_migration_evidence": "docs/modules/evidence/M10-migration.json",
+      "m10_verification_date": "2026-09-11"
     },
     {
       "id": "ASSET-NASAL",
@@ -733,7 +753,13 @@
       "citation_title": "Healthy nasal cavities - averaged geometry",
       "doi": "10.6084/m9.figshare.9585410.v4",
       "verification_status": "local-provenance-verified; live-dataset-metadata-pending",
-      "acknowledgement_group": "academic"
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "frontend/public/vocal-tract/assets/nasal.json"
+      ],
+      "m10_migration_evidence": "docs/modules/evidence/M10-migration.json",
+      "m10_verification_date": "2026-09-11",
+      "m10_modifications": "nasal/3 display registration: y += 1.14 - 0.28*x cm, for all vertices and landmarks. Original triangles retained. Both +/-5 mm slice contours checked within head; true outlet closures replace spurious SVG chords. No change to acoustic nasal tube."
     },
     {
       "id": "SRC-VTLWRAPPER",
@@ -1313,16 +1339,23 @@
       "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
       "license_metadata_file": "third_party/licenses/pypi/sounddevice-0.5.3-metadata.txt",
       "distribution_status": "actual-wheel-and-native-audit-required",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "used_at": [
+        "desktop/src/ptb_desktop/vocal_tract/audio_output.py"
+      ],
+      "m10_migration_evidence": "docs/modules/evidence/M10-migration.json",
+      "m10_verification_date": "2026-09-11",
+      "m10_runtime_version": "0.5.3 in requirements-m10-ui.lock"
     },
     {
       "id": "PKG-SOUNDFILE",
       "title": "soundfile",
       "kind": "installed-runtime-package",
       "modules": [
-        "shared-runtime"
+        "shared-runtime",
+        "M09"
       ],
-      "actual_included_version": "0.13.1 in phonetic_311; v3 pin pending",
+      "actual_included_version": "0.13.1 in phonetic_311; M09 isolated runtime 0.13.1 in requirements-m09-ui.lock",
       "observed_upstream_commit": null,
       "verification_date": "2026-09-09",
       "urls": {
@@ -1335,7 +1368,9 @@
       "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
       "license_metadata_file": "third_party/licenses/pypi/soundfile-0.13.1-metadata.txt",
       "distribution_status": "actual-wheel-and-native-audit-required",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "m02_m09_verification_date": "2026-09-11",
+      "m02_m09_evidence": "docs/testing/m02-m09-report.md; requirements-m09-ui.lock; tests/parity/test_spec2wav.py; backend/tests/test_m02_display.py"
     },
     {
       "id": "PKG-OPENPYXL",
@@ -1392,9 +1427,10 @@
       "title": "opencv-contrib-python",
       "kind": "installed-runtime-package",
       "modules": [
-        "shared-runtime"
+        "shared-runtime",
+        "M09"
       ],
-      "actual_included_version": "4.13.0.92 in phonetic_311; v3 pin pending",
+      "actual_included_version": "4.13.0.92 in phonetic_311; M09 isolated runtime 4.13.0.92 in requirements-m09-ui.lock",
       "observed_upstream_commit": null,
       "verification_date": "2026-09-09",
       "urls": {
@@ -1407,7 +1443,9 @@
       "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
       "license_metadata_file": "third_party/licenses/pypi/opencv-contrib-python-4.13.0.92-metadata.txt",
       "distribution_status": "actual-wheel-and-native-audit-required",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "m02_m09_verification_date": "2026-09-11",
+      "m02_m09_evidence": "docs/testing/m02-m09-report.md; requirements-m09-ui.lock; tests/parity/test_spec2wav.py; backend/tests/test_m02_display.py"
     },
     {
       "id": "PKG-MEDIAPIPE",
@@ -6308,7 +6346,8 @@
       "kind": "runtime-dependency",
       "modules": [
         "P06",
-        "M01"
+        "M01",
+        "M02"
       ],
       "actual_included_version": "3.50.4",
       "license": "Public domain; bundled with existing CPython runtime",
@@ -6330,7 +6369,9 @@
         "backend/src/ptb_worker/io/legacy_parameters.py"
       ],
       "m01_io_evidence": "docs/testing/m01-io-report.md",
-      "m01_execution_evidence": "docs/testing/m01-execution-preparation-report.md"
+      "m01_execution_evidence": "docs/testing/m01-execution-preparation-report.md",
+      "m02_m09_verification_date": "2026-09-11",
+      "m02_m09_evidence": "docs/testing/m02-m09-report.md; requirements-m09-ui.lock; tests/parity/test_spec2wav.py; backend/tests/test_m02_display.py"
     },
     {
       "id": "P06-PG-LOCKS",
@@ -6525,7 +6566,8 @@
       "title": "numpy",
       "kind": "dependency",
       "modules": [
-        "M01"
+        "M01",
+        "M09"
       ],
       "authors": "Travis E. Oliphant et al.",
       "actual_included_version": "2.2.6",
@@ -6541,7 +6583,9 @@
         "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
-      "evidence": "third_party/m01-dependency-inventory.json"
+      "evidence": "third_party/m01-dependency-inventory.json",
+      "m02_m09_verification_date": "2026-09-11",
+      "m02_m09_evidence": "docs/testing/m02-m09-report.md; requirements-m09-ui.lock; tests/parity/test_spec2wav.py; backend/tests/test_m02_display.py"
     },
     {
       "id": "M01-PY-PACKAGING",
@@ -6755,7 +6799,8 @@
       "title": "scipy",
       "kind": "dependency",
       "modules": [
-        "M01"
+        "M01",
+        "M09"
       ],
       "authors": "Not recorded in installed metadata",
       "actual_included_version": "1.16.3",
@@ -6776,7 +6821,9 @@
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json",
       "m01_io_evidence": "docs/testing/m01-io-report.md",
-      "m01_execution_evidence": "docs/testing/m01-execution-preparation-report.md"
+      "m01_execution_evidence": "docs/testing/m01-execution-preparation-report.md",
+      "m02_m09_verification_date": "2026-09-11",
+      "m02_m09_evidence": "docs/testing/m02-m09-report.md; requirements-m09-ui.lock; tests/parity/test_spec2wav.py; backend/tests/test_m02_display.py"
     },
     {
       "id": "M01-PY-SETUPTOOLS",
@@ -6875,7 +6922,8 @@
       "title": "openpyxl",
       "kind": "dependency",
       "modules": [
-        "M01"
+        "M01",
+        "M02"
       ],
       "authors": "See AUTHORS",
       "actual_included_version": "3.1.5",
@@ -6895,7 +6943,9 @@
       ],
       "relationship": "Unmodified dependency; project-owned bounded writer adapter uses pinned internal writer API",
       "evidence": "third_party/m01-io-inventory.json",
-      "m01_execution_evidence": "docs/testing/m01-execution-preparation-report.md"
+      "m01_execution_evidence": "docs/testing/m01-execution-preparation-report.md",
+      "m02_m09_verification_date": "2026-09-11",
+      "m02_m09_evidence": "docs/testing/m02-m09-report.md; requirements-m09-ui.lock; tests/parity/test_spec2wav.py; backend/tests/test_m02_display.py"
     },
     {
       "id": "M01-PY-ET-XMLFILE",
@@ -6996,6 +7046,68 @@
       ],
       "relationship": "API/format reference; project-owned symbolic opcode reader; no serialized global is imported or called",
       "m01_legacy_evidence": "docs/testing/m01-legacy-report.md"
+    },
+    {
+      "id": "PROJECT-M10",
+      "title": "PhoneticToolbox 声道界面与平台适配",
+      "kind": "project-integration",
+      "modules": [
+        "M10"
+      ],
+      "authors": "井韶子 / PhoneticToolbox contributors",
+      "urls": {},
+      "license": "Project integration; native-derived adapter GPL-3.0-or-later; third-party components separately listed",
+      "actual_included_version": "v3 M10 Windows recording R5 / m10/2",
+      "verification_date": "2026-09-11",
+      "distribution_status": "local-validation-only",
+      "acknowledgement_group": "software",
+      "evidence": "M10-source-map.md; migrated source hashes and separately recorded behavior corrections",
+      "m10_modifications": "R5: 50 ms post-limiter onset envelope, silent-resume envelope, draggable frames and clear/undo. Built without tests by explicit user request; docs/plans/2026-09-11-m10-onset.md",
+      "m10_r5_verification": "not_run_by_user_request"
+    },
+    {
+      "id": "REF-WEBCODECS",
+      "title": "WebCodecs specification",
+      "authors": "W3C Web Media Working Group",
+      "kind": "specification-reference",
+      "modules": [
+        "M10"
+      ],
+      "urls": {
+        "specification": "https://www.w3.org/TR/webcodecs/"
+      },
+      "license": "Specification reference only; no specification text or external muxer source code redistributed",
+      "actual_included_version": "Specification consulted 2026-09-11; runtime encoder from existing Qt WebEngine 6.11.2",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-11",
+      "distribution_status": "reference-only",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "frontend/public/vocal-tract/video.js"
+      ],
+      "evidence": "docs/testing/m10-recording-features-report.md"
+    },
+    {
+      "id": "REF-WEBM",
+      "title": "WebM Container Guidelines",
+      "authors": "The WebM Project",
+      "kind": "specification-reference",
+      "modules": [
+        "M10"
+      ],
+      "urls": {
+        "specification": "https://www.webmproject.org/docs/container/"
+      },
+      "license": "Specification reference only; no specification text or external muxer source code redistributed",
+      "actual_included_version": "Specification consulted 2026-09-11; runtime encoder from existing Qt WebEngine 6.11.2",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-11",
+      "distribution_status": "reference-only",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "desktop/src/ptb_desktop/vocal_tract/video.py"
+      ],
+      "evidence": "docs/testing/m10-recording-features-report.md"
     }
   ]
 }

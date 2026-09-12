@@ -5,10 +5,24 @@ from fastapi import APIRouter,HTTPException,Request,Query
 from starlette.concurrency import run_in_threadpool
 from ptb_worker.spectrogram_preview import render,preview_slot,MAX_BYTES
 from .preview_models import SpectrogramPreview
+from .display_models import ParameterTable
 
 
 def create_preview_router(mode,token,origin):
     router=APIRouter(prefix='/api/v1/preview',tags=['preview'])
+
+    @router.post('/parameters',response_model=ParameterTable,operation_id='local_parameter_table')
+    async def parameters(request:Request,name:str=Query(max_length=220)):
+        if mode!='local' or not token or not origin:raise HTTPException(404,'local_preview_unavailable')
+        if request.headers.get('origin')!=origin or not hmac.compare_digest(request.headers.get('authorization','').encode(),('Bearer '+token).encode()):
+            raise HTTPException(403,'permission_denied')
+        from ptb_worker.parameter_preview import render as table_render,MAX_BYTES as table_limit
+        with preview_slot():
+            data=bytearray()
+            async for chunk in request.stream():
+                if len(data)+len(chunk)>table_limit:raise HTTPException(413,'parameter_input_budget')
+                data.extend(chunk)
+            return await run_in_threadpool(table_render,bytes(data),name)
 
     @router.post('/spectrogram',response_model=SpectrogramPreview,operation_id='local_spectrogram_preview')
     async def spectrogram(request:Request,channel:int=Query(ge=0,le=31),start:float=Query(ge=0),

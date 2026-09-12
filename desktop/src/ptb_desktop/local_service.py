@@ -22,7 +22,7 @@ class LocalService:
         if self.process is not None:
             raise RuntimeError('Service already started')
         self.process = subprocess.Popen(
-            [sys.executable, '-m', 'ptb_api.cli', '--mode', 'local'],
+            ([sys.executable, '--local-service', '--mode', 'local'] if getattr(sys,'frozen',False) else [sys.executable, '-m', 'ptb_api.cli', '--mode', 'local']),
             stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
             text=True, encoding='utf-8', creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
         try:
@@ -92,6 +92,16 @@ class LocalService:
             raw=response.read(max_bytes+1)
             if len(raw)>max_bytes:raise ValueError('Oversized task response')
             return raw
+
+    def parameters(self,payload,name):
+        from urllib.parse import urlencode
+        request=urllib.request.Request(self.url+'/api/v1/preview/parameters?'+urlencode({'name':name}),data=payload,
+            headers={'Authorization':'Bearer '+self.token,'Origin':self.url,'Content-Type':'application/octet-stream'})
+        opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
+        with opener.open(request,timeout=30) as response:
+            raw=response.read(16_000_001)
+            if len(raw)>16_000_000:raise ValueError('Parameter response budget')
+            return json.loads(raw)
 
     def preview(self,payload,query):
         from urllib.parse import urlencode

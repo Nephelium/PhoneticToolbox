@@ -29,8 +29,8 @@ class AcousticFiles(FilePipeline):
                 item=self.storage._readable(tx.conn,owner,ref['asset_id'])
                 if str(item['project_id'])!=project or item['sha256']!=ref['sha256'] or item['expires_at']<=now+300:
                     raise JobError('input_unavailable',409)
-                limit=64_000_000 if role=='audio' else 16_000_000 if role in ('parent_result','legacy_result') else 2_000_000
-                suffix={'audio':'.wav','textgrid':'.textgrid','lip':'.lip.json','parent_result':'.ptb.json','legacy_result':('.xlsx','.ptb.sqlite','.ptb.sqlite3')}.get(role)
+                limit=64_000_000 if role=='audio' else 16_000_000 if role in ('parent_result','legacy_result','image') else 2_000_000
+                suffix={'audio':'.wav','textgrid':'.textgrid','lip':'.lip.json','parent_result':'.ptb.json','legacy_result':('.xlsx','.ptb.sqlite','.ptb.sqlite3'),'image':('.png','.jpg','.jpeg','.bmp')}.get(role)
                 if not suffix:raise JobError('invalid_input',422)
                 if item['size_bytes']>limit or not item['name'].lower().endswith(suffix):raise JobError('invalid_input',422)
                 if role=='parent_result':
@@ -58,6 +58,9 @@ class AcousticFiles(FilePipeline):
     def independent_expiry(self,operation):return operation=='acoustic_analysis' or super().independent_expiry(operation)
 
     def manifest(self,operation,files):
+        if operation=='spectrogram_to_audio':
+            from ptb_api.spec2wav_models import Spec2WavManifest
+            return Spec2WavManifest(files=files,core_version=core_version).model_dump()
         if operation in OPERATIONS:return AcousticTaskManifest(operation=operation,files=files,core_version=core_version).model_dump()
         return super().manifest(operation,files)
 

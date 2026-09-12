@@ -41,6 +41,7 @@ function wheel(event:WheelEvent){if(!event.ctrlKey||!duration.value)return;event
 <path d="M0 45H1000" class="wave-baseline"/>
 <rect :x="x(state.start)" y="0" :width="Math.max(0,x(state.end)-x(state.start))" height="90" class="wave-selection"/>
 <path :d="path(track.points)" class="wave-line"/>
+<slot name="annotations" :x="x" :start="left" :end="left+windowLength"/>
 <path v-if="playback.position>=left&&playback.position<=left+windowLength" :d="`M${x(playback.position)} 0V90`" class="playback-cursor"/>
 </svg>
 <div class="time-axis" aria-label="波形时间轴（秒）"><span v-for="i in 5" :key="i">{{(left+(i-1)*windowLength/4).toFixed(windowLength<.1?4:3)}}{{i===5?' s':''}}</span></div>
@@ -49,6 +50,7 @@ function wheel(event:WheelEvent){if(!event.ctrlKey||!duration.value)return;event
 <div v-if="state.showSpectrogram&&spectrogramLoader" class="time-axis" aria-label="语谱图时间轴（秒）">
 <span v-for="i in 5" :key="i">{{(left+(i-1)*windowLength/4).toFixed(3)}}</span>
 </div>
+<slot name="timeline" :start="left" :end="left+windowLength"/>
 <label v-if="state.zoom>1" class="pan-label">时间窗起点 <input v-model.number="state.offset" type="range" min="0" :max="duration-windowLength" :step="1/(state.asset?.sampleRate||1)" aria-label="平移波形时间窗"/>
 </label>
 <p class="hint">拖动选区 · Ctrl＋滚轮缩放 · 双击显示全长；下方可输入精确时间。</p>

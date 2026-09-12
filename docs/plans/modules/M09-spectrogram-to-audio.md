@@ -1,6 +1,6 @@
 # M09 · 语谱图转音频迁移计划
 
-状态：planned，未开始实现。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
+状态：verified，限定Windows桌面与Windows托管Chrome的已列明范围。实际路径与命令由[本次实施计划](../2026-09-11-m01-m02-m09.md)、[源码映射](../../modules/evidence/M09-source-map.md)和[联合报告](../../testing/m02-m09-report.md)更新，下方保留迁移前规格；M09截图设备、多平台与发行未纳入完成声明。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
 ## 现有代码与目标文件
 现有路径均已确认存在；目录内逐函数对应由实施第一步记录，避免把旧类名机械套给新实现。

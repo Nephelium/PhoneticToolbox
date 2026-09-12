@@ -1,6 +1,6 @@
 # M10 · 声道工作台迁移计划
 
-状态：planned，未开始实现。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
+状态：verified（仅 Windows 本机声道已迁移并暂时冻结；服务器与 macOS/Linux 仍 planned）。2026-09-11 井井调整顺序优先 M10，[迁移实施计划](../2026-09-11-m10-recording.md)覆盖下列历史全平台提案的本机部分，历史验收见 [R3 报告](../../testing/m10-report.md)。随后明确追加的本地关键帧/构形、短帧/静音、声音与同步视频已按 [R4 计划](../2026-09-11-m10-video.md)完成，最新验收以 [R4 报告](../../testing/m10-recording-features-report.md)为准。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
 ## 现有代码与目标文件
 现有路径均已确认存在；目录内逐函数对应由实施第一步记录，避免把旧类名机械套给新实现。
@@ -10,7 +10,7 @@
 - [phonetic_toolbox/gui/resources/vocal_tract](../../../phonetic_toolbox/gui/resources/vocal_tract)
 - [phonetic_toolbox/resources/vocal_tract](../../../phonetic_toolbox/resources/vocal_tract)
 
-拟创建/修改路径（未来实现，不代表已经存在）：
+最初拟创建/修改路径（以下保留历史提案；实际 Windows 路径及执行命令见本轮计划/报告，未建设服务器模块或 e2e 文件）：
 
 - `frontend/src/modules/vocal-tract/VocalTractPage.vue`
 - `frontend/src/modules/vocal-tract/state.ts`

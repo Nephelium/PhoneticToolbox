@@ -1,5 +1,6 @@
 """One durable file task; heartbeat runs independently of scientific computation."""
 import json
+from ptb_worker.process_entry import command
 import sys
 import threading
 from dataclasses import replace
@@ -39,7 +40,18 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None):
             blobs[item['role']]=bytes(raw)
         progress[0]=.1
         with ManagedScratch(files,identity) as scratch:
-            if snapshot['operation']=='textgrid_segment':
+            if snapshot['operation']=='spectrogram_to_audio':
+                from .native.windows import InputPipe
+                from .native.reaper import collect_pipe
+                header=dict(config=snapshot['config']['analysis'],sha256=digest(blobs['image']))
+                request=scratch.create(json.dumps(header).encode()+b'\n'+blobs['image'],'.json')
+                pipe=InputPipe()
+                raw,_=collect_pipe(command('ptb_worker.spec2wav_child',str(request),pipe.name),pipe,
+                    scratch.root,replace(SEGMENT_LIMITS,timeout_seconds=240),lambda:abort.is_set() or stop.is_set(),on_started)
+                bundle=unpack_bundle(raw,64_000_000)
+                if bundle.manifest['image_sha256']!=header['sha256']:raise FormatError('source_mismatch')
+                payloads=list(zip([f['name'] for f in bundle.manifest['files']],bundle.payloads))
+            elif snapshot['operation']=='textgrid_segment':
                 source=next(i for i in snapshot['input_assets'] if i['role']=='audio')
                 bundle=prepare_segments(blobs['audio'],blobs['textgrid'],snapshot['layer'],scratch,audio_name=source['name'],
                     parent_result=blobs.get('parent_result'),legacy_result=blobs.get('legacy_result'),
@@ -58,7 +70,7 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None):
                         reaper_binary=str(files.reaper_binary))
                     request=scratch.create(json.dumps(header,ensure_ascii=False).encode()+b'\n'+b''.join(blobs[i['role']] for i in snapshot['input_assets']),'.json')
                     pipe=InputPipe()
-                    raw,_=collect_pipe([sys.executable,'-B','-m','ptb_worker.science_child',str(request),pipe.name],pipe,
+                    raw,_=collect_pipe(command('ptb_worker.science_child',str(request),pipe.name),pipe,
                         scratch.root,replace(SEGMENT_LIMITS,timeout_seconds=240),lambda:abort.is_set() or stop.is_set(),on_started)
                     bundle=unpack_bundle(raw,64_000_000)
                     if bundle.manifest['audio_sha256']!=digest(blobs['audio']):raise FormatError('source_mismatch')

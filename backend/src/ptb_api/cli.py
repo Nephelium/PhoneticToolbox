@@ -1,5 +1,6 @@
 """Loopback development entry; no data endpoints or production deployment."""
 import argparse
+from ptb_worker.process_entry import command
 import asyncio
 import hmac
 import json
@@ -81,7 +82,7 @@ def main():
     worker=None
     try:
         if jobs:
-            worker=subprocess.Popen([sys.executable,'-m','ptb_worker.cli'],stdin=subprocess.PIPE,
+            worker=subprocess.Popen(command('ptb_worker.cli'),stdin=subprocess.PIPE,
                                     stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True,encoding='utf-8',
                                     creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
             worker.stdin.write(json.dumps({'kind':'sqlite','path':str(jobs.path),'local_files_root':config.get('local_files_root'),

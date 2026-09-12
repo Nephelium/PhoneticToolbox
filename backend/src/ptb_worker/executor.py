@@ -1,5 +1,6 @@
 """Execute trusted core operations outside API/worker memory, with bounded shutdown."""
 import json
+from ptb_worker.process_entry import command
 import queue
 import subprocess
 import sys
@@ -18,7 +19,7 @@ def stop_child(child):
 
 def execute_claim(store, claim, worker_id, stop, *, step_delay=0):
     snapshot=json.loads(claim['snapshot'])
-    if snapshot['operation'] in ('acoustic_analysis','textgrid_segment'):
+    if snapshot['operation'] in ('acoustic_analysis','textgrid_segment','spectrogram_to_audio'):
         from .acoustic_executor import execute_acoustic_claim
         execute_acoustic_claim(store,claim,worker_id,stop)
         return
@@ -29,7 +30,7 @@ def execute_claim(store, claim, worker_id, stop, *, step_delay=0):
     identity=(claim['id'],worker_id,claim['generation'])
     if snapshot['core_version']!=core_version:
         store.finish(*identity,error='core_version_mismatch');return
-    child=subprocess.Popen([sys.executable,'-m','ptb_worker.core_child'],stdin=subprocess.PIPE,
+    child=subprocess.Popen(command('ptb_worker.core_child'),stdin=subprocess.PIPE,
                            stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True,encoding='utf-8',
                            creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
     messages=queue.Queue(maxsize=64)

@@ -4,6 +4,7 @@ Windows parent owns a KILL_ON_JOB_CLOSE Job. No output files, shell commands,
 user-supplied paths, global process termination, or persistent science tasks.
 """
 import base64
+from ptb_worker.process_entry import command
 from contextlib import contextmanager
 import json
 import os
@@ -37,7 +38,7 @@ def render(payload,*,channel,start,end,width=800,timeout=20):
         limits.basic.flags=0x2000|0x100|0x200
         limits.process_memory=1_000_000_000;limits.job_memory=1_000_000_000
         win.checked(win.set_job(job,9,win.c.byref(limits),win.c.sizeof(limits)))
-        process=subprocess.Popen([sys.executable,'-m','ptb_worker.spectrogram_preview'],stdin=subprocess.PIPE,
+        process=subprocess.Popen(command('ptb_worker.spectrogram_preview'),stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,creationflags=subprocess.CREATE_NO_WINDOW,
             env={**os.environ,'OPENBLAS_NUM_THREADS':'1','OMP_NUM_THREADS':'1','MKL_NUM_THREADS':'1'})
         ready=queue.Queue()

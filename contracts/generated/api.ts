@@ -69,6 +69,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/assets/{asset_id}/parameters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Parameters */
+        get: operations["asset_parameter_table"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/assets/{asset_id}/spectrogram": {
         parameters: {
             query?: never;
@@ -359,6 +376,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/jobs/spec2wav/create": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reconstruct */
+        post: operations["create_spec2wav_job"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/jobs/{job_id}": {
         parameters: {
             query?: never;
@@ -421,6 +455,23 @@ export interface paths {
         put?: never;
         /** Retry */
         post: operations["retry_job"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/preview/parameters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Parameters */
+        post: operations["local_parameter_table"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1238,6 +1289,13 @@ export interface components {
              */
             status: "ok";
         };
+        /** ImagePoint */
+        ImagePoint: {
+            /** X */
+            x: number;
+            /** Y */
+            y: number;
+        };
         /** JobEvent */
         JobEvent: {
             /** Code */
@@ -1313,13 +1371,13 @@ export interface components {
              * @default pipeline_check
              * @enum {string}
              */
-            operation: "pipeline_check" | "storage_check" | "archive_zip" | "extract_zip" | "acoustic_analysis" | "textgrid_segment";
+            operation: "pipeline_check" | "storage_check" | "archive_zip" | "extract_zip" | "acoustic_analysis" | "textgrid_segment" | "spectrogram_to_audio";
             /** Progress */
             progress: number;
             /** Project Id */
             project_id: string;
             /** Result Manifest */
-            result_manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticTaskManifest"] | null;
+            result_manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticTaskManifest"] | components["schemas"]["Spec2WavManifest"] | null;
             /** Retry Of */
             retry_of?: string | null;
             /**
@@ -1336,6 +1394,23 @@ export interface components {
             password: string;
             /** Username */
             username: string;
+        };
+        /** ParameterTable */
+        ParameterTable: {
+            /** Columns */
+            columns: string[];
+            /** Kinds */
+            kinds: ("number" | "text")[];
+            /** Rows */
+            rows: (number | string | null)[][];
+            /**
+             * Schema Version
+             * @default m02/1
+             * @constant
+             */
+            schema_version: "m02/1";
+            /** Sha256 */
+            sha256: string;
         };
         /** PreviewInterval */
         PreviewInterval: {
@@ -1409,7 +1484,7 @@ export interface components {
         /** ResultManifestEnvelope */
         ResultManifestEnvelope: {
             /** Manifest */
-            manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticFileManifest"] | components["schemas"]["AcousticTaskManifest"];
+            manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticFileManifest"] | components["schemas"]["AcousticTaskManifest"] | components["schemas"]["Spec2WavManifest"];
         };
         /** RetryInput */
         RetryInput: {
@@ -1438,6 +1513,101 @@ export interface components {
              */
             expires_at: string;
             user: components["schemas"]["UserView"];
+        };
+        /** Spec2WavConfig */
+        Spec2WavConfig: {
+            /** Corners */
+            corners?: components["schemas"]["ImagePoint"][] | null;
+            /**
+             * Freq End
+             * @default 11025
+             */
+            freq_end: number;
+            /**
+             * Freq Start
+             * @default 0
+             */
+            freq_start: number;
+            /**
+             * Max Db
+             * @default 0
+             */
+            max_db: number;
+            /**
+             * Min Db
+             * @default -30
+             */
+            min_db: number;
+            /**
+             * N Iter
+             * @default 32
+             */
+            n_iter: number;
+            /**
+             * Seed
+             * @default 0
+             */
+            seed: number;
+            /**
+             * Target Sr
+             * @default 44100
+             * @enum {integer}
+             */
+            target_sr: 0 | 8000 | 16000 | 22050 | 24000 | 32000 | 44100 | 48000 | 96000;
+            /**
+             * Time End
+             * @default 1
+             */
+            time_end: number;
+            /**
+             * Time Start
+             * @default 0
+             */
+            time_start: number;
+            /**
+             * Win Length Ms
+             * @default 10
+             */
+            win_length_ms: number;
+        };
+        /** Spec2WavManifest */
+        Spec2WavManifest: {
+            /**
+             * Complete
+             * @default true
+             * @constant
+             */
+            complete: true;
+            /** Core Version */
+            core_version: string;
+            /** Files */
+            files: components["schemas"]["AcousticManagedFile"][];
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "managed_spec2wav_files";
+            /**
+             * Operation
+             * @default spectrogram_to_audio
+             * @constant
+             */
+            operation: "spectrogram_to_audio";
+        };
+        /** Spec2WavRequest */
+        Spec2WavRequest: {
+            config: components["schemas"]["Spec2WavConfig"];
+            /** Idempotency Key */
+            idempotency_key: string;
+            image: components["schemas"]["AcousticAssetRef"];
+            /** Project Id */
+            project_id: string;
+            /**
+             * Schema Version
+             * @default m09/1
+             * @constant
+             */
+            schema_version: "m09/1";
         };
         /** SpectrogramPreview */
         SpectrogramPreview: {
@@ -1735,6 +1905,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DeleteImpact"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    asset_parameter_table: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                asset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ParameterTable"];
                 };
             };
             /** @description Validation Error */
@@ -2254,6 +2455,39 @@ export interface operations {
             };
         };
     };
+    create_spec2wav_job: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Spec2WavRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_job: {
         parameters: {
             query?: never;
@@ -2371,6 +2605,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    local_parameter_table: {
+        parameters: {
+            query: {
+                name: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ParameterTable"];
                 };
             };
             /** @description Validation Error */

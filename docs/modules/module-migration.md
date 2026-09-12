@@ -6,11 +6,11 @@ P04 审阅补充（2026-09-09）：当前 15 个公共预览页不是最终模�
 
 [原功能验收矩阵](legacy-acceptance.csv) · [双端补充矩阵](dual-platform-acceptance.csv) · [80 参数键](all-80-acoustic-parameters.json) · [页面原规格](page-specifications.json)
 
-2026-09-10 追加：[说明书章节与功能覆盖门](v2-manual-coverage.md)。每模块必须同时对照 v2 说明书和实际源码；布局允许不同，功能不可遗漏。M01 新发现说明书的“切分后同步保存参数”承诺与当前源码仅写 WAV 不一致，列为 M01-MAN01；F2同源结果和G历史参数表切分已接通，见[旧格式验收](../testing/m01-legacy-report.md)，整模块仍需逐项审阅。
+2026-09-10 追加：[说明书章节与功能覆盖门](v2-manual-coverage.md)。每模块必须同时对照 v2 说明书和实际源码；布局允许不同，功能不可遗漏。M01 新发现说明书的“切分后同步保存参数”承诺与当前源码仅写 WAV 不一致，列为 M01-MAN01；F2同源结果和G历史参数表切分已接通，见[旧格式验收](../testing/m01-legacy-report.md)，整模块39项最终审阅已完成，见[收口报告](../testing/m01-final-review.md)。
 
 | 模块 | 原功能分组数 | 单独计划 | 核心目标 | 状态 |
 | --- | --- | --- | --- | --- |
-| M01 参数估计 | 6 | [迁移计划](../plans/modules/M01-parameter-estimation.md) | `acoustic` | in_progress（M01 A–F2及G联合/旧格式入口已限定验收，剩39项最终逐条审阅） |
+| M01 参数估计 | 6 | [迁移计划](../plans/modules/M01-parameter-estimation.md) | `acoustic` | verified（限定Windows；39项已收口） |
 
 ## M01 参数估计
 顶部目录与关联工具栏；左侧文件列表；中央波形与 TextGrid；右侧参数摘要与批处理；底部公共播放状态。三列滚动与紧凑布局见 [M01-E 修订](../plans/2026-09-10-m01-layout.md)。
@@ -28,16 +28,16 @@ P04 审阅补充（2026-09-09）：当前 15 个公共预览页不是最终模�
 平台差异：两端算法共用；桌面选择目录，Web 上传成明确文件集合；服务端路径不回显给用户。
 来源 ID：SRC-PRAAT, SRC-REAPER, SRC-IRAPT, SRC-WMPC, SRC-VOICESAUCE, SRC-OPENSAUCE, REF-CPP, REF-HNR, REF-SHR, REF-ISELI, REF-HAWKS, REF-SOE
 
-| M02 参数显示 | 5 | [迁移计划](../plans/modules/M02-parameter-display.md) | `results` | planned |
+| M02 参数显示 | 5 | [迁移计划](../plans/modules/M02-parameter-display.md) | `results` | verified（限定Windows桌面/托管Chrome，多图窗） |
 
 ## M02 参数显示
-左侧 WAV/XLSX 目录与文件列表；中央多轨图；右侧参数选择；上方视窗导航；底部选区播放。
+左侧 WAV/XLSX 目录与文件列表；中央波形与参数叠加图；右侧参数选择；上方视窗导航；底部选区播放。
 
 | 编号 | 原功能组 | 必须保留的功能 | 新位置 | 行为约束 |
 | --- | --- | --- | --- | --- |
 | M02-F01 | 载入既有结果 | WAV 目录、XLSX 目录、浏览、音频筛选、刷新、选择文件 | 左侧资源栏 | 可以直接读取既有参数表，不要求重新做参数估计。 |
 | M02-F02 | 参数与过滤 | 参数搜索、多选、reaper、correction 两个独立开关 | 右侧参数栏 | 筛选只改变候选项可见性，不静默修改已选参数或混合两个开关的含义。 |
-| M02-F03 | 多轨显示 | 波形、多个参数曲线、语谱图、共享时间轴 | 中央垂直轨道区 | 同一选区覆盖各轨，参数名与算法标签完整；多轨可滚动。 |
+| M02-F03 | 参数叠加显示 | 波形、多个参数曲线、语谱图、共享时间轴 | 上方波形、下方叠加图窗 | 同窗曲线共享绘图区和纵轴，旧量级规则可自动双轴，分窗显式分配；参数名/图例完整，时间同步。 |
 | M02-F04 | 时间操作 | 可视范围、位置滑条、缩放、平移、选区 | 图顶导航＋底部读数 | 视窗时长、全文件时长、选区时长分开显示，0.8–1.2 秒必须对应真实坐标。 |
 | M02-F05 | 输出与帮助 | 播放及选区播放、保存图片、参数说明、帮助、关闭 | 播放条＋页面标题栏 | 保存目标明确为当前图；关闭仅关闭模块页。 |
 
@@ -151,7 +151,7 @@ P04 审阅补充（2026-09-09）：当前 15 个公共预览页不是最终模�
 平台差异：Web 不能执行本地路径批量删除；所有文件操作走 owner 检查与资源 ID。
 来源 ID：SRC-PRAAT
 
-| M09 语谱图转音频 | 4 | [迁移计划](../plans/modules/M09-spectrogram-to-audio.md) | `spec2wav` | planned |
+| M09 语谱图转音频 | 4 | [迁移计划](../plans/modules/M09-spectrogram-to-audio.md) | `spec2wav` | verified（限定Windows文件输入/托管Chrome；截图设备另测） |
 
 ## M09 语谱图转音频
 中央左右对照原始图片与重建语谱图；右侧时间/频率标定；底部重建、试听、输出。
@@ -167,9 +167,11 @@ P04 审阅补充（2026-09-09）：当前 15 个公共预览页不是最终模�
 平台差异：服务端计算；输入图片和重建文件均计量；前端只做标定和对照显示。
 来源 ID：REF-GRIFFINLIM
 
-| M10 声道工作台 | 7 | [迁移计划](../plans/modules/M10-vocal-tract.md) | `vocal_tract` | planned |
+| M10 声道工作台 | 7 | [迁移计划](../plans/modules/M10-vocal-tract.md) | `vocal_tract` | verified（Windows 本机已迁移并冻结，其他平台 planned） |
 
 ## M10 声道工作台
+
+2026-09-11 **已迁移 / verified（限定 Windows 本机录制），暂时冻结**。映射见 [M10-source-map](evidence/M10-source-map.md)，历史迁移见 [R3 报告](../testing/m10-report.md)，最新单文件 EXE、本地文件、0.05 秒短帧/静音与同步视频见 [R4 报告](../testing/m10-recording-features-report.md)，操作见[说明书](../manual/vocal-tract.md)。服务器与 macOS/Linux 仍 planned。
 中央为矢状面或三维大视图；右侧器官/声音/关键帧三页签；下方声学图或实时监视；页顶模型来源与工作台操作。
 
 | 编号 | 原功能组 | 必须保留的功能 | 新位置 | 行为约束 |

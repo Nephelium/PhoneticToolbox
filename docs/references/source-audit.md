@@ -80,3 +80,11 @@ Parselmouth/Praat、REAPER、MediaPipe、MFA、FFmpeg、Doulos SIL、React/Babel
 ## M01-C适配补充
 
 2026-09-09：新增2个导出依赖和3个API/格式文档参考，登记共323条；[C清单](../../third_party/m01-io-inventory.json)保留40个实际包的来源映射与新增包安装文件hash。原生REAPER无新复制或下载，确切hash/PE架构见 [资源清单](../../resources/manifests/acoustic.json)。原commit、编译选项、完整原生依赖及再分发审计仍待核实；MIT元数据不等于整包发行许可审查完成。
+
+## 2026-09-11 M10 Windows 资源迁入
+
+同日 M02/M09：统一登记补充表读取、Griffin–Lim 核心迁入及受限图像/音频适配位置，前端致谢重新生成。独立运行时精确锁定原已审计版本 OpenCV 4.13.0.92、SoundFile 0.13.1。论文属于方法参考，v2零起点数值/字节对照与非零频带修复分开记录；详见 [联合报告](../testing/m02-m09-report.md)。没有打包论文PDF，也没有将原生依赖许可待审项改为通过。
+
+VTL API 2.4 原始二进制、2.3 参考手册、几何桥接 m10/2、Three.js、头壳和平均鼻腔分别保留来源。迁移/当前哈希见 [M10 迁移清单](../modules/evidence/M10-migration.json)，数值和显示适配边界见 [M10 报告](../testing/m10-report.md)。显示读数补丁与实际侧缘拟合源码随包；独立运行时新增 sounddevice 0.5.3/PyInstaller 锁，未把全项目许可未决项标成通过。
+
+R4 增加 WebCodecs 与 WebM 规范参考，已有 Qt WebEngine 提供 VP8/Opus 编码，本项目按规范写容器，没有移植第三方 muxer。耳语试听补偿、后移约束和共享显示适配见 [R4 报告](../testing/m10-recording-features-report.md)。原生 DLL、原鼻腔资源与来源锁保留，资源包标记 `3.0.0-m10.4`。

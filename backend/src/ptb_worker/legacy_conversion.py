@@ -1,5 +1,6 @@
 """Local-only, memory-only PKL conversion in an owned bounded Windows Job."""
 import json
+from ptb_worker.process_entry import command
 import os
 import queue
 import struct
@@ -22,7 +23,7 @@ def convert(payload,timeout=20):
         limits.basic.flags=0x2000|0x100|0x200
         limits.process_memory=512_000_000;limits.job_memory=512_000_000
         win.checked(win.set_job(job,9,win.c.byref(limits),win.c.sizeof(limits)))
-        process=subprocess.Popen([sys.executable,'-B','-m','ptb_worker.legacy_conversion'],stdin=subprocess.PIPE,
+        process=subprocess.Popen(command('ptb_worker.legacy_conversion'),stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,creationflags=subprocess.CREATE_NO_WINDOW)
         ready=queue.Queue()
         threading.Thread(target=lambda:ready.put(process.stdout.readline(64)),daemon=True).start()

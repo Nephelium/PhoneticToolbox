@@ -1,0 +1,200 @@
+{
+  "version": "3.0.0-m10.5",
+  "files": [
+    {
+      "path": "resources/vocal_tract/native/geometry_p2.dll",
+      "bytes": 258560,
+      "sha256": "3a3bb343af6671cd786b46de67d499f3d8c72264ff2320f1a4877af5760406b2"
+    },
+    {
+      "path": "resources/vocal_tract/native/JD2.speaker",
+      "bytes": 87909,
+      "sha256": "fc118b8150e65eca4aa636800128c343df13d3724044ca54ed3682ca3be222ec"
+    },
+    {
+      "path": "resources/vocal_tract/native/M01.speaker",
+      "bytes": 119299,
+      "sha256": "438ef8970384444464ddc0ccb82e349323583ab8f87eea70ba227144c8d665c8"
+    },
+    {
+      "path": "resources/vocal_tract/native/VocalTractLabAnalysis.dll",
+      "bytes": 536064,
+      "sha256": "caaab296b4c2362ada1a5d94aaffe6c1804b3ed8279c04427bcca1ac348e2407"
+    },
+    {
+      "path": "resources/vocal_tract/native/VocalTractLabApi.dll",
+      "bytes": 536064,
+      "sha256": "caaab296b4c2362ada1a5d94aaffe6c1804b3ed8279c04427bcca1ac348e2407"
+    },
+    {
+      "path": "resources/vocal_tract/native/W02.speaker",
+      "bytes": 121443,
+      "sha256": "c4b6c1e7d147c9187ef3d246a9ca5f6a232d477ad2c7aec16466f6fdb9243f04"
+    },
+    {
+      "path": "resources/vocal_tract/sources/VTL2.4-API-source.zip",
+      "bytes": 300067,
+      "sha256": "aa696bf4cf5c44cbd433304943aebb241e5ea3064b949daf5ea09f96567cff9b"
+    },
+    {
+      "path": "resources/vocal_tract/sources/geometry_bridge.cpp",
+      "bytes": 7573,
+      "sha256": "0f8f5b3dcb4bd8b7fc3f855e87159b4f9d50746e2f19d03ce8ad55865ae01f81"
+    },
+    {
+      "path": "frontend/public/vocal-tract/assets/head.json",
+      "bytes": 55700,
+      "sha256": "7bc2cb61c9abdb043d62a4438aa11a18033b9426d704b5ac854f5498adfb11dd"
+    },
+    {
+      "path": "frontend/public/vocal-tract/assets/nasal.json",
+      "bytes": 4261995,
+      "sha256": "b256b400f7c2d6c77397f4d4f3b34e4b45e41dbd04c8df578cbb42a5ec8b57d9"
+    },
+    {
+      "path": "frontend/public/vocal-tract/anatomy.mjs",
+      "bytes": 6360,
+      "sha256": "725b86d4616309bdf76ac02cdb6a23ac239bfaf1859d6c5e17f7a7ee7f739486"
+    },
+    {
+      "path": "frontend/public/vocal-tract/app.js",
+      "bytes": 31311,
+      "sha256": "8565fe698a6f5de8642fe0c9e15a470b1a44673d5e52d2f814e187761c9661dd"
+    },
+    {
+      "path": "frontend/public/vocal-tract/controls.mjs",
+      "bytes": 2686,
+      "sha256": "ea6debe95b511aee48d427c1661bb91972a6dc0c5781b08d7bbd86db4d73fe03"
+    },
+    {
+      "path": "frontend/public/vocal-tract/desktop.css",
+      "bytes": 15524,
+      "sha256": "ab8803993d67bc7be1181467f52dcf40878411772bfccca7b4666286fa67b1e2"
+    },
+    {
+      "path": "frontend/public/vocal-tract/geometry.mjs",
+      "bytes": 12719,
+      "sha256": "6063894e4cda75c8d9e924f10e084c20ff7fba664e79ac922e4f3ba08bcdb7ff"
+    },
+    {
+      "path": "frontend/public/vocal-tract/index.html",
+      "bytes": 18530,
+      "sha256": "88f2b7ce2ff0a83cf0f744fe90c84a2a05541a022253479d92c17ad20617dfee"
+    },
+    {
+      "path": "frontend/public/vocal-tract/keyframes.js",
+      "bytes": 14384,
+      "sha256": "8683a15e5727f6698ecc1446d29c14248a2f00489245f214a4b6d48e3b3205d5"
+    },
+    {
+      "path": "frontend/public/vocal-tract/layout.js",
+      "bytes": 1243,
+      "sha256": "04182fb97df89f9d86aa76570a92944b0eeb040f63da4d17f5ebbb3f8e871514"
+    },
+    {
+      "path": "frontend/public/vocal-tract/monitor.js",
+      "bytes": 4526,
+      "sha256": "8f160250445815876d02f6fe2f44d71652e69c296e5737a9d0a5a61d4ae52593"
+    },
+    {
+      "path": "frontend/public/vocal-tract/pitch.js",
+      "bytes": 6317,
+      "sha256": "dd17fa91fa6e0bead8d5613263819d27b0f49020577c077e5102b5cd8cdcdf13"
+    },
+    {
+      "path": "frontend/public/vocal-tract/platform.js",
+      "bytes": 1059,
+      "sha256": "0129b234aed7e5dfadc6efe59936955e666b6651c25abaf8b217085ee42eaa24"
+    },
+    {
+      "path": "frontend/public/vocal-tract/scene.js",
+      "bytes": 25442,
+      "sha256": "8678b1d11e4e8c84da0b090fe71b7c65a72f7652535d36f80b7d1ac44df98fd6"
+    },
+    {
+      "path": "frontend/public/vocal-tract/styles.css",
+      "bytes": 19481,
+      "sha256": "7feba9d8248a083c6da42667c11752529f5fbca72b6d4cee354a7c50b041751a"
+    },
+    {
+      "path": "frontend/public/vocal-tract/theme.js",
+      "bytes": 630,
+      "sha256": "25a9059f80a705ed4ac5d70211011ddccb2028a8d4f6d54f52fdf8ad492681b0"
+    },
+    {
+      "path": "frontend/public/vocal-tract/v3.css",
+      "bytes": 9860,
+      "sha256": "85a380bc6114aa27f95721b5b8f2781b07572e1931ca2a690f2c1f0bd24df2da"
+    },
+    {
+      "path": "frontend/public/vocal-tract/vendor/OrbitControls.js",
+      "bytes": 38703,
+      "sha256": "b97879c748170baadeb3fb84cea1ffdf4674e283dc06042f34e2acb95a76042c"
+    },
+    {
+      "path": "frontend/public/vocal-tract/vendor/THREE-LICENSE.txt",
+      "bytes": 1081,
+      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601"
+    },
+    {
+      "path": "frontend/public/vocal-tract/vendor/three.core.js",
+      "bytes": 1403455,
+      "sha256": "eb077d2417f61d3e6d9264c317cabc4ea35769ed6b0ab533067292a550784c20"
+    },
+    {
+      "path": "frontend/public/vocal-tract/vendor/three.module.js",
+      "bytes": 603113,
+      "sha256": "c8211c69345d2e9949dc7a8ac969380497aa0600a5a8ac6a459c8cd02dd9cb8a"
+    },
+    {
+      "path": "frontend/public/vocal-tract/viewer.js",
+      "bytes": 100,
+      "sha256": "e50b83cc2d8dd3fbf1a7c848eb740cf04e1bccf34c55b64e5affa255bc410af6"
+    },
+    {
+      "path": "resources/vocal_tract/sources/build_geometry_prototype.py",
+      "bytes": 1745,
+      "sha256": "5410b30a2c03dbab6a6ac0132f77c38cc909a29e6160b2e226c2a2ba82b1b2a8"
+    },
+    {
+      "path": "resources/vocal_tract/sources/M10-build.md",
+      "bytes": 1126,
+      "sha256": "b5a71242cd5c02c8d9fb3af11143efa7f064baf8d8afb990ccddf5123023ec14"
+    },
+    {
+      "path": "resources/vocal_tract/sources/M10-geometric-readout.patch",
+      "bytes": 2351,
+      "sha256": "59ba89e071709285d1741c63ea8a7ecc7abdeb9ad1b85028e7fabd7b4231a911"
+    },
+    {
+      "path": "resources/vocal_tract/sources/README.md",
+      "bytes": 1395,
+      "sha256": "98bd2d9dfb69ac9bbc0b2c8151a7bb3eca551de6f3b850e21d95d0333e618cac"
+    },
+    {
+      "path": "resources/vocal_tract/sources.lock.json",
+      "bytes": 15242,
+      "sha256": "ff8069ddb910f4803d9cece4566b6f02098dadec9cbaf8dab5199642800b3743"
+    },
+    {
+      "path": "resources/vocal_tract/THIRD_PARTY_NOTICES.md",
+      "bytes": 2587,
+      "sha256": "87c51bccb1f5b94cf612dbb41e573189b3ab84dc7a41b88c1ad9100e52495af2"
+    },
+    {
+      "path": "resources/vocal_tract/VTL-LICENSE.txt",
+      "bytes": 35823,
+      "sha256": "230184f60bae2feaf244f10a8bac053c8ff33a183bcc365b4d8b876d2b7f4809"
+    },
+    {
+      "path": "frontend/public/vocal-tract/presets.js",
+      "bytes": 2104,
+      "sha256": "0940c9beac8623eadbc845311bd07f4d77c7e2d0cad6ed2e5ea5a4ec36fdee77"
+    },
+    {
+      "path": "frontend/public/vocal-tract/video.js",
+      "bytes": 10671,
+      "sha256": "21e4e1e5e4d044c19bb2a8e53082d9db71bdbb3002ad89abdf3dc553a0df6816"
+    }
+  ]
+}

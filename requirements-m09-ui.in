@@ -1,0 +1,4 @@
+# M02/M09 joint development runtime, preserving the installed M10 recording runtime.
+-r requirements-m10-ui.in
+opencv-contrib-python==4.13.0.92
+soundfile==0.13.1

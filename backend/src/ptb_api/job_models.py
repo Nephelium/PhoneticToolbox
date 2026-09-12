@@ -72,18 +72,19 @@ class JobManifest(WireModel):
 
 
 from .acoustic_batch_models import AcousticTaskManifest
+from .spec2wav_models import Spec2WavManifest
 
 
 class JobView(WireModel):
     id: str
     project_id: str
-    operation: Literal['pipeline_check','storage_check','archive_zip','extract_zip','acoustic_analysis','textgrid_segment'] = 'pipeline_check'
+    operation: Literal['pipeline_check','storage_check','archive_zip','extract_zip','acoustic_analysis','textgrid_segment','spectrogram_to_audio'] = 'pipeline_check'
     state: State
     progress: Annotated[float, Field(ge=0,le=1)]
     generation: int
     created_at: float
     updated_at: float
-    result_manifest: JobManifest | FileManifest | AcousticTaskManifest | None
+    result_manifest: JobManifest | FileManifest | AcousticTaskManifest | Spec2WavManifest | None
     error_code: str | None
     retry_of: str | None = None
 
@@ -109,4 +110,4 @@ from .acoustic_models import AcousticFileManifest
 
 
 class ResultManifestEnvelope(WireModel):
-    manifest: Annotated[JobManifest | FileManifest | AcousticFileManifest | AcousticTaskManifest, Field(discriminator='kind')]
+    manifest: Annotated[JobManifest | FileManifest | AcousticFileManifest | AcousticTaskManifest | Spec2WavManifest, Field(discriminator='kind')]

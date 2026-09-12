@@ -2,8 +2,10 @@ import type { components } from '../../../contracts/generated/api';
 import { decodeWav } from './decode.ts';
 export type Tier=components['schemas']['TextGridPreview']['tiers'][number];
 export type Spectrogram=components['schemas']['SpectrogramPreview'];
+export type ParameterTable=components['schemas']['ParameterTable'];
+export type ReconstructionConfig=components['schemas']['Spec2WavConfig'];
 export interface SpectrogramView {channel:number;start:number;end:number;width:number}
-export interface ResearchFile { id:string; name:string; kind:'audio'|'textgrid'|'lip'|'lip_pickle'|'parameter'; size:number; sha256?:string; expiresAt?:number }
+export interface ResearchFile { id:string; name:string; kind:'audio'|'textgrid'|'lip'|'lip_pickle'|'parameter'|'image'; size:number; sha256?:string; expiresAt?:number }
 export interface DirectoryGrant { id:string; label:string; purpose:'input'|'output'|'association' }
 export type BatchView=components['schemas']['BatchView'];
 export type JobView=components['schemas']['JobView'];
@@ -16,6 +18,11 @@ export interface ResearchTasks {
   retry(id:string,key:string):Promise<JobView>;
   save?(id:string,directory:string):Promise<{count:number;saved:string[]}>;
   download?(id:string,name:string):Promise<void>;
+  reconstruct?(file:ResearchFile,config:ReconstructionConfig,key:string):Promise<JobView>;
+  reconstructions?():Promise<JobView[]>;
+  cancelJob?(id:string):Promise<JobView>;
+  saveJob?(id:string,directory:string):Promise<{count:number;saved:string[]}>;
+  result?(job:string,id:string,sha256:string):Promise<ArrayBuffer>;
 }
 export interface ResearchFiles {
   kind:'desktop'|'server'|'preview';
@@ -26,11 +33,13 @@ export interface ResearchFiles {
   read(file:ResearchFile,signal?:AbortSignal):Promise<{buffer:ArrayBuffer;sha256:string}>;
   textgrid(file:ResearchFile):Promise<{sha256:string;tiers:Tier[]}>;
   spectrogram?(file:ResearchFile,view:SpectrogramView):Promise<Spectrogram>;
+  parameters?(file:ResearchFile):Promise<ParameterTable>;
+  capture?():Promise<ResearchFile|null>;
   convertLip?(file:ResearchFile):Promise<{file:ResearchFile;companion_found:boolean}>;
   dispose():void;
 }
 export interface ResearchContext { key:string; label:string; files:ResearchFiles; ownerId?:string }
-export const fileKind=(name:string):ResearchFile['kind']|null=>/\.wav$/i.test(name)?'audio':/\.textgrid$/i.test(name)?'textgrid':/\.lip\.json$/i.test(name)?'lip':/\.(xlsx|ptb\.sqlite3?)$/i.test(name)?'parameter':null;
+export const fileKind=(name:string):ResearchFile['kind']|null=>/\.wav$/i.test(name)?'audio':/\.textgrid$/i.test(name)?'textgrid':/\.lip\.json$/i.test(name)?'lip':/\.(xlsx|ptb\.sqlite3?)$/i.test(name)?'parameter':/\.(png|jpg|jpeg|bmp)$/i.test(name)?'image':null;
 export async function audioPreview(files:ResearchFiles,file:ResearchFile,signal?:AbortSignal) {
   const data=await files.read(file,signal);return {asset:await decodeWav(data.buffer,file.name,signal),sha256:data.sha256};
 }
@@ -49,11 +58,15 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
   async function request(path:string,signal?:AbortSignal,method='GET',body?:unknown) {
     if(disposed)throw Error('项目会话已关闭。');
     const r=await fetch('/api/v1/'+path,{method,body:body?JSON.stringify(body):undefined,credentials:'same-origin',cache:'no-store',signal:signal?AbortSignal.any([abort.signal,signal]):abort.signal,headers:{'X-PTB-Account':owner,...(body?{'Content-Type':'application/json'}:{}),...(method!=='GET'?{'X-CSRF-Token':csrf?.()??''}:{})}});
-    if(!r.ok){const error=await r.json().catch(()=>({}));if(r.status===401||error.detail==='account_changed')onInvalid();if(error.detail?.startsWith('preview_')||error.detail==='invalid_spectrogram_input')throw Error(error.detail);throw Error(({asset_expired:'文件已到期，请重新上传。',invalid_textgrid:'TextGrid格式不受支持或不完整。',unsupported_textgrid:'TextGrid超过2 MB或类型不正确。'} as Record<string,string>)[error.detail]||'项目文件不可访问，请刷新或检查登录状态。');}
+    if(!r.ok){const error=await r.json().catch(()=>({}));if(r.status===401||error.detail==='account_changed')onInvalid();if(r.status===422&&path==='jobs/spec2wav/create')throw Error('标定参数无效：请核对时间、频率、dB范围及迭代次数。');if(typeof error.detail==='string'&&(error.detail.startsWith('preview_')||error.detail==='invalid_spectrogram_input'))throw Error(error.detail);throw Error(({invalid_parameter_table:'参数表包含不支持的内容、公式或损坏结构。原文件未修改。',parameter_read_failed:'参数表超过读取预算或读取失败。',parameter_read_timeout:'参数表读取超时，请缩小数据。',asset_expired:'文件已到期，请重新上传。',invalid_textgrid:'TextGrid格式不受支持或不完整。',unsupported_textgrid:'TextGrid超过2 MB或类型不正确。'} as Record<string,string>)[error.detail]||'项目文件不可访问，请刷新或检查登录状态。');}
     return r;
   }
   async function verify(file:ResearchFile){const r=await request('assets/'+encodeURIComponent(file.id));const asset:components['schemas']['AssetView']=await r.json();if(asset.project_id!==project||asset.state!=='ready'||asset.sha256!==file.sha256)throw Error('文件已变化，请刷新项目列表。');return asset;}
   const tasks:ResearchTasks={async parent(file){if(!file.sha256)return null;return (await request('jobs/parents/latest?'+new URLSearchParams({project_id:project,sha256:file.sha256}))).json();},async submit(operation,inputs,config,layer,key){const mapped=inputs.map(item=>Object.fromEntries(Object.entries(item).filter(([,v])=>v!=null).map(([role,value])=>{if(role==='parent_result')return [role,value];const file=value as ResearchFile;if(!file.sha256)throw Error('文件缺少校验值，请刷新。');return [role,{asset_id:file.id,sha256:file.sha256}];})));return (await request('jobs/batches/create',undefined,'POST',{project_id:project,operation,inputs:mapped,config,layer,idempotency_key:key})).json();},
+    async reconstruct(file,config,key){if(!file.sha256)throw Error('图片缺少校验值。');return (await request('jobs/spec2wav/create',undefined,'POST',{project_id:project,idempotency_key:key,image:{asset_id:file.id,sha256:file.sha256},config})).json();},
+    async reconstructions(){const data:components['schemas']['JobList']=await(await request('jobs?project_id='+encodeURIComponent(project))).json();return data.jobs.filter(j=>j.operation==='spectrogram_to_audio');},
+    async cancelJob(id){return (await request('jobs/'+encodeURIComponent(id)+'/cancel',undefined,'POST')).json();},
+    async result(_job,id,sha){const response=await request('assets/'+encodeURIComponent(id)+'/content');const raw=await response.arrayBuffer();if(raw.byteLength>64_000_000||await sha256(raw)!==sha)throw Error('结果校验失败。');return raw;},
     async list(){return (await(await request('jobs/batches/list?project_id='+encodeURIComponent(project))).json()).batches;},
     async get(id){return (await request('jobs/batches/'+encodeURIComponent(id))).json();},
     async cancel(id){return (await request('jobs/batches/'+encodeURIComponent(id)+'/cancel',undefined,'POST')).json();},
@@ -61,8 +74,9 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
     async retry(id,key){return (await request('jobs/'+encodeURIComponent(id)+'/retry',undefined,'POST',{idempotency_key:key})).json();},
     async download(id,name){const response=await request('assets/'+encodeURIComponent(id)+'/content');const blob=await response.blob();if(disposed)return;const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}};
   return {kind:'server',tasks:csrf?tasks:undefined,async list(){const data:components['schemas']['AssetList']=await(await request('assets?project_id='+encodeURIComponent(project))).json();return data.assets.filter(a=>a.project_id===project&&a.state==='ready'&&fileKind(a.name)).map(a=>({id:a.id,name:a.name,kind:fileKind(a.name)!,size:a.size_bytes,sha256:a.sha256??undefined,expiresAt:a.expires_at}));},
-    async read(file,signal){await verify(file);const limit=file.kind==='audio'?64_000_000:2_000_000;if(file.size>limit)throw Error('文件超过当前预览上限。');const response=await request('assets/'+encodeURIComponent(file.id)+'/content',signal);const reader=response.body?.getReader();if(!reader)throw Error('文件读取失败。');const chunks:Uint8Array[]=[];let size=0;try{while(true){const {done,value}=await reader.read();if(done)break;size+=value.length;if(size>limit||size>file.size)throw Error('文件长度已变化。');chunks.push(value);}}finally{await reader.cancel();}if(size!==file.size)throw Error('文件下载不完整。');const bytes=new Uint8Array(size);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}const hash=await sha256(bytes.buffer);if(hash!==file.sha256)throw Error('文件校验失败，请重新加载。');return {buffer:bytes.buffer,sha256:hash};},
+    async read(file,signal){await verify(file);const limit=file.kind==='audio'?64_000_000:['image','parameter'].includes(file.kind)?16_000_000:2_000_000;if(file.size>limit)throw Error('文件超过当前预览上限。');const response=await request('assets/'+encodeURIComponent(file.id)+'/content',signal);const reader=response.body?.getReader();if(!reader)throw Error('文件读取失败。');const chunks:Uint8Array[]=[];let size=0;try{while(true){const {done,value}=await reader.read();if(done)break;size+=value.length;if(size>limit||size>file.size)throw Error('文件长度已变化。');chunks.push(value);}}finally{await reader.cancel();}if(size!==file.size)throw Error('文件下载不完整。');const bytes=new Uint8Array(size);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}const hash=await sha256(bytes.buffer);if(hash!==file.sha256)throw Error('文件校验失败，请重新加载。');return {buffer:bytes.buffer,sha256:hash};},
     async textgrid(file){await verify(file);const data:components['schemas']['TextGridPreview']=await(await request('assets/'+encodeURIComponent(file.id)+'/textgrid')).json();if(data.sha256!==file.sha256)throw Error('关联文件已变化，请刷新。');return data;},
     async spectrogram(file,view){await verify(file);const query=new URLSearchParams(Object.entries(view).map(([k,v])=>[k,String(v)]));const data:Spectrogram=await(await request('assets/'+encodeURIComponent(file.id)+'/spectrogram?'+query)).json();if(data.sha256!==file.sha256)throw Error('音频已变化，请刷新。');return data;},
+    async parameters(file){await verify(file);const data:ParameterTable=await(await request('assets/'+encodeURIComponent(file.id)+'/parameters')).json();if(data.sha256!==file.sha256)throw Error('参数文件已变化，请刷新。');return data;},
     dispose(){disposed=true;abort.abort();}};
 }

@@ -164,6 +164,9 @@ class JobStore:
             if row['state'] not in ('failed','interrupted','cancelled'):raise JobError('job_not_retryable')
             snapshot=json.loads(row['snapshot'])
         model = JobInput if snapshot['operation']=='pipeline_check' else FileJobInput
+        if snapshot['operation']=='spectrogram_to_audio':
+            from .spec2wav_jobs import submit
+            return submit(self,owner,dict(project_id=str(row['project_id']),idempotency_key=key,image=snapshot['input_refs']['image'],config=snapshot['config']['analysis']),retry_of=job_id)
         if snapshot['operation'] in ('acoustic_analysis','textgrid_segment'):
             if self.batches is None:raise JobError('acoustic_tasks_unavailable',503)
             return self.batches.retry(owner,job_id,key)

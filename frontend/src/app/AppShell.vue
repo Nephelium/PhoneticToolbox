@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { ref,computed,watch,onMounted,onUnmounted,nextTick } from 'vue';import { groups,modules } from './registry.ts';import { host,workspace,states,saveDraft } from '../state/workspace.ts';import { stop } from '../state/audio.ts';
 import AudioTransport from '../components/AudioTransport.vue';import AppIcon from '../components/AppIcon.vue';import ModalDialog from '../components/ModalDialog.vue';import MethodReferences from '../components/MethodReferences.vue';import WorkspaceView from './WorkspaceView.vue';import version from '../version.json';import fontLicense from '../assets/Doulos-OFL.txt?raw';import logo from '../assets/k2.png';
+import VocalTractPage from '../modules/vocal-tract/VocalTractPage.vue';
 import ParameterEstimationPage from '../modules/parameter-estimation/ParameterEstimationPage.vue';
+import ParameterDisplayPage from '../modules/parameter-display/ParameterDisplayPage.vue';
+import Spec2WavPage from '../modules/spectrogram-to-audio/Spec2WavPage.vue';
 import {m01State,saveM01,forgetM01} from '../modules/parameter-estimation/store.ts';
 import {dirty} from '../modules/parameter-estimation/state.ts';
 import {previewFiles,type ResearchContext} from '../platform/research.ts';
@@ -11,8 +14,11 @@ const defaultContext:ResearchContext={key:'local:M01',label:desktopFiles?'本机
 const researchContext=computed(()=>props.research??defaultContext);
 const previewKey=(id:string)=>props.research?researchContext.value.key.replace(/:M01$/,':'+id):id;
 const m01=computed(()=>m01State(researchContext.value.key));
-const moduleDirty=(id:string)=>id==='M01'?dirty(m01.value):!!states[previewKey(id)]?.dirty;
-const active=ref('home'),tabs=ref<string[]>(['home']),query=ref('');const collapsed=ref(host.projects.read('collapsed',false));
+const m10Dirty=ref(false);
+const m02Page=ref<{save:()=>boolean}>();
+const moduleDirty=(id:string)=>id==='M10'?m10Dirty.value:id==='M01'?dirty(m01.value):!!states[previewKey(id)]?.dirty;
+const recordingEntry=location.hash==='#M10';
+const active=ref(recordingEntry?'M10':'home'),tabs=ref<string[]>(recordingEntry?['home','M10']:['home']),query=ref('');const collapsed=ref(host.projects.read('collapsed',false));
 type Theme='system'|'light'|'dark';const savedTheme=host.projects.read<string>('theme','system');const theme=ref<Theme>(['system','light','dark'].includes(savedTheme)?savedTheme as Theme:'system');
 const system=matchMedia('(prefers-color-scheme: dark)');const applyTheme=()=>document.documentElement.dataset.theme=theme.value==='system'?(system.matches?'dark':'light'):theme.value;
 watch(theme,()=>{applyTheme();host.projects.write('theme',theme.value);},{immediate:true});watch(collapsed,v=>host.projects.write('collapsed',v));
@@ -21,9 +27,9 @@ const storedRecent=host.projects.read<unknown>('recent',[]);const recent=ref((Ar
 const current=computed(()=>modules.find(m=>m.id===active.value));const visible=computed(()=>modules.filter(m=>(m.title+' '+m.description+' '+m.id).toLowerCase().includes(query.value.trim().toLowerCase())));
 const modal=ref(''),closing=ref(''),notice=ref('');const referencesId=ref<string|undefined>();
 function open(id:string){stop();if(!tabs.value.includes(id))tabs.value.push(id);active.value=id;if(id!=='home'){if(id!=='M01')workspace(previewKey(id));recent.value=[id,...recent.value.filter(x=>x!==id)].slice(0,5);host.projects.write('recent',recent.value);}}
-function remove(id:string){stop();const index=tabs.value.indexOf(id);tabs.value=tabs.value.filter(x=>x!==id);if(id==='M01')forgetM01(researchContext.value.key);else delete states[previewKey(id)];if(active.value===id)active.value=tabs.value[Math.max(0,index-1)];closing.value='';void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
+function remove(id:string){stop();if(id==='M10')m10Dirty.value=false;const index=tabs.value.indexOf(id);tabs.value=tabs.value.filter(x=>x!==id);if(id==='M01')forgetM01(researchContext.value.key);else delete states[previewKey(id)];if(active.value===id)active.value=tabs.value[Math.max(0,index-1)];closing.value='';void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
 function close(id:string){if(moduleDirty(id))closing.value=id;else remove(id);}
-function saveClose(){if(closing.value==='M01'&&m01.value.drawer){notice.value='请先应用或取消参数/设置对话框中的编辑，再保存关闭。';return;}if(closing.value==='M01'?saveM01(researchContext.value.key):saveDraft(previewKey(closing.value)))remove(closing.value);else notice.value='本机草稿保存失败，标签仍保留。请检查浏览器存储权限。';}
+function saveClose(){if(closing.value==='M02'){if(m02Page.value?.save())remove('M02');return;}if(closing.value==='M10'){notice.value='请返回关键帧，保存或取消正在编辑的姿势后再关闭。';return;}if(closing.value==='M01'&&m01.value.drawer){notice.value='请先应用或取消参数/设置对话框中的编辑，再保存关闭。';return;}if(closing.value==='M01'?saveM01(researchContext.value.key):saveDraft(previewKey(closing.value)))remove(closing.value);else notice.value='本机草稿保存失败，标签仍保留。请检查浏览器存储权限。';}
 function refs(id?:string){referencesId.value=id;modal.value='references';}
 function tabKey(event:KeyboardEvent){let n=tabs.value.indexOf(active.value);if(event.key==='ArrowRight')n=(n+1)%tabs.value.length;else if(event.key==='ArrowLeft')n=(n-1+tabs.value.length)%tabs.value.length;else if(event.key==='Home')n=0;else if(event.key==='End')n=tabs.value.length-1;else return;event.preventDefault();open(tabs.value[n]);void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
 function beforeUnload(event:BeforeUnloadEvent){if(dirty(m01.value)||tabs.value.some(id=>moduleDirty(id))){event.preventDefault();event.returnValue='';}}
@@ -92,7 +98,7 @@ const modalTitle=computed(()=>({settings:'工作台设置',help:'使用说明',u
 <span class="host-badge">{{research?'网页项目':host.kind==='desktop'?'本地桌面':'浏览器预览'}}</span>
 </header>
 <button v-if="research" class="project-return" @click="emit('leaveProject')">← 返回项目与文件管理 · {{research.label}}</button>
-<main id="main-content" :class="{'pane-workspace':active==='M01'}" tabindex="-1" role="tabpanel" :aria-labelledby="'tab-'+active">
+<main id="main-content" :class="{'pane-workspace':['M01','M02','M09','M10'].includes(active)}" tabindex="-1" role="tabpanel" :aria-labelledby="'tab-'+active">
 <div v-if="active==='home'" class="home-page">
 <header class="welcome">
 <div class="welcome-copy">
@@ -157,14 +163,17 @@ const modalTitle=computed(()=>({settings:'工作台设置',help:'使用说明',u
 </footer>
 </div>
 <ParameterEstimationPage v-else-if="current?.id==='M01'" :key="researchContext.key" :context="researchContext" @references="refs('M01')"/>
-<WorkspaceView v-else-if="current" :key="current.id" :module="current" :state-key="previewKey(current.id)" @references="refs(current?.id)"/>
+<WorkspaceView v-else-if="current&&!['M02','M09','M10'].includes(current.id)" :key="current.id" :module="current" :state-key="previewKey(current.id)" @references="refs(current?.id)"/>
+<ParameterDisplayPage v-if="tabs.includes('M02')" v-show="active==='M02'" ref="m02Page" :key="researchContext.key+':M02'" :active="active==='M02'" :context="researchContext" :state-key="previewKey('M02')" @references="refs('M02')" @close="close('M02')"/>
+<Spec2WavPage v-if="tabs.includes('M09')" v-show="active==='M09'" :key="researchContext.key+':M09'" :context="researchContext" :state-key="previewKey('M09')" @references="refs('M09')" @close="close('M09')"/>
+<VocalTractPage v-if="tabs.includes('M10')" v-show="active==='M10'" :active="active==='M10'" @references="refs('M10')" @close="close('M10')" @dirty="m10Dirty=$event"/>
 </main>
-<div v-if="current" class="global-transport">
+<div v-if="current&&current.id!=='M10'" class="global-transport">
 <AudioTransport :state="current.id==='M01'?m01.wave:workspace(previewKey(current.id))" :active="true"/>
 </div>
 <div class="statusbar">
 <span>
-<span class="status-dot"/>{{current?.id==='M01'?'参数估计 · 文件、试听与任务':current?'公共预览就绪 · 分析功能待接入':'就绪 · 选择工具开始'}}</span>
+<span class="status-dot"/>{{current?.id==='M01'?'参数估计 · 文件、试听与任务':current?.id==='M02'?'参数显示 · 原帧与多图窗':current?.id==='M09'?'语谱图重建 · 近似相位恢复':current?.id==='M10'?'声道工作台 · VTL 2.4':current?'公共预览就绪 · 分析功能待接入':'就绪 · 选择工具开始'}}</span>
 <span>{{research?'当前账号的项目资源':'本机文件 · 无自动上传'}}</span>
 </div>
 </div>
@@ -208,7 +217,13 @@ const modalTitle=computed(()=>({settings:'工作台设置',help:'使用说明',u
 <li>桌面默认保存到 WAV 目录，也可选择独立结果目录；已有不同内容的文件另名保留。网页在处理记录中下载 XLSX、SQLite 和来源 JSON，文件到期前请自行留存。</li>
 <li>处理记录显示每个文件的状态。取消保留已完成结果；失败或中断项可单独重试。重开工作台后可查看持久记录，再选择目录保存结果。</li>
 </ol>
-<p class="notice">长音频可先预览、缩放和切分。当前单次科学计算上限为 200 万采样值（所有声道合计）和 240 秒；显示优化不会改变计算数据。旧 XLSX/SQLite 的任意导入尚未接入；其他模块按各自实施状态提供功能。</p>
+<p class="notice">长音频可先预览、缩放和切分。当前单次参数估计上限为 200 万采样值（所有声道合计）和 240 秒；显示优化不会改变计算数据。</p>
+<h3>参数显示：已有结果与多图窗</h3>
+<p>选择 WAV 目录和参数目录，优先关联同名 SQLite，也可手动选择 XLSX。参数沿用原时间和缺失值，读取限 16 MB / 20 万单元格，不执行表内公式。默认所有未校正参数叠加在一个绘图区，用颜色、线型和图例区分；共用纵轴，量级差距较大时沿用 v2 自动双轴。参数图普通滚轮缩放、左键拖动平移、Shift＋拖动选区。</p>
+<p>右侧可搜索、勾选多个参数，新建图窗后批量分配。reaper / correction 只筛选候选项；合并图窗保留曲线。时间窗和选区同步，Ctrl+滚轮缩放，波形工具可平移。每张图可放大并保存为 SVG，底部播放条试听。</p>
+<h3>语谱图转音频：校正与重建</h3>
+<p>导入灰度 PNG/JPEG/BMP，桌面也可主动截图。按左上、右上、右下、左下选四点，填写图内时间、频率和灰度标定，设置窗长、迭代和种子后开始重建。网页截图先保存并上传到项目。</p>
+<p>结果提供 WAV、校正/重建 PNG 和来源 JSON。固定种子方便复核，非零频率起点采用频带插值并低频补零。输出时长可能因原帧步长取整稍短于标定时长。图像缺少相位，声音仅为近似重建；显示削波样本数，不能视为原录音恢复。</p>
 <h3>IPA 字符显示</h3>
 <p class="ipa-sample">a ɑ ə ɚ ɤ ɿ ʅ ŋ ɲ ʂ ʐ tʰ ʈʂʰ ˥˩</p>
 </template>

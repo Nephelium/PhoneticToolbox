@@ -2,6 +2,7 @@
 from .io.limits import Cancelled, FormatError, LimitError
 
 ACOUSTIC_ERRORS=frozenset({
+    'invalid_spectrogram_image','invalid_spectrogram_config','invalid_spectrogram_result','spectrogram_budget','invalid_image_corners',
     'invalid_audio','invalid_textgrid','invalid_lip','analysis_sample_limit',
     'analysis_output_limit','analysis_resource_limit','no_parameter_frames',
     'deadline_exceeded','invalid_segment_input','segment_budget_exceeded',

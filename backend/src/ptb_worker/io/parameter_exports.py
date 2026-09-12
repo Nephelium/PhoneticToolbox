@@ -6,6 +6,7 @@ caller-selected output path, or unbounded worksheet temporary file is opened.
 Durable publication/fencing is supplied by M01-F, not by this preparation layer.
 """
 from dataclasses import asdict, dataclass
+from ptb_worker.process_entry import command
 import io
 import json
 import math
@@ -201,7 +202,7 @@ def export_pair(frame,scratch,limits=Limits(),stop=lambda:False,on_started=None)
     pipe=None
     try:
         pipe=InputPipe()
-        payload,_=collect_pipe([sys.executable,'-B','-m','ptb_worker.io.export_worker',str(path),pipe.name],pipe,scratch.root,limits,stop,on_started)
+        payload,_=collect_pipe(command('ptb_worker.io.export_worker',str(path),pipe.name),pipe,scratch.root,limits,stop,on_started)
         if len(payload)<16:raise FormatError('Incomplete export pair')
         nx,ns=struct.unpack_from('<QQ',payload)
         if 16+nx+ns!=len(payload):raise FormatError('Incomplete export pair')

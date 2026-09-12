@@ -823,12 +823,13 @@
     "id": "PKG-SOUNDFILE",
     "title": "soundfile",
     "modules": [
-      "shared-runtime"
+      "shared-runtime",
+      "M09"
     ],
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "Bastian Bechtold",
-    "version": "0.13.1 in phonetic_311; v3 pin pending",
+    "version": "0.13.1 in phonetic_311; M09 isolated runtime 0.13.1 in requirements-m09-ui.lock",
     "license": "see exact release metadata / wheel audit pending",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/soundfile/0.13.1/json",
@@ -877,12 +878,13 @@
     "id": "PKG-OPENCV-CONTRIB-PYTHON",
     "title": "opencv-contrib-python",
     "modules": [
-      "shared-runtime"
+      "shared-runtime",
+      "M09"
     ],
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "作者待核实",
-    "version": "4.13.0.92 in phonetic_311; v3 pin pending",
+    "version": "4.13.0.92 in phonetic_311; M09 isolated runtime 4.13.0.92 in requirements-m09-ui.lock",
     "license": "see exact release metadata / wheel audit pending",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/opencv-contrib-python/4.13.0.92/json",
@@ -4517,7 +4519,8 @@
     "title": "SQLite (CPython bundled local task store)",
     "modules": [
       "P06",
-      "M01"
+      "M01",
+      "M02"
     ],
     "kind": "runtime-dependency",
     "acknowledgement_group": "software",
@@ -4661,7 +4664,8 @@
     "id": "M01-PY-NUMPY",
     "title": "numpy",
     "modules": [
-      "M01"
+      "M01",
+      "M09"
     ],
     "kind": "dependency",
     "acknowledgement_group": "software",
@@ -4811,7 +4815,8 @@
     "id": "M01-PY-SCIPY",
     "title": "scipy",
     "modules": [
-      "M01"
+      "M01",
+      "M09"
     ],
     "kind": "dependency",
     "acknowledgement_group": "software",
@@ -4886,7 +4891,8 @@
     "id": "M01-PY-OPENPYXL",
     "title": "openpyxl",
     "modules": [
-      "M01"
+      "M01",
+      "M02"
     ],
     "kind": "dependency",
     "acknowledgement_group": "software",
@@ -4958,6 +4964,49 @@
     "license": "Documentation referenced, no third-party document/code redistributed",
     "urls": {
       "documentation": "https://docs.python.org/3.11/library/pickle.html"
+    }
+  },
+  {
+    "id": "PROJECT-M10",
+    "title": "PhoneticToolbox 声道界面与平台适配",
+    "modules": [
+      "M10"
+    ],
+    "kind": "project-integration",
+    "acknowledgement_group": "software",
+    "authors": "井韶子 / PhoneticToolbox contributors",
+    "version": "v3 M10 Windows recording R5 / m10/2",
+    "license": "Project integration; native-derived adapter GPL-3.0-or-later; third-party components separately listed",
+    "urls": {}
+  },
+  {
+    "id": "REF-WEBCODECS",
+    "title": "WebCodecs specification",
+    "modules": [
+      "M10"
+    ],
+    "kind": "specification-reference",
+    "acknowledgement_group": "software",
+    "authors": "W3C Web Media Working Group",
+    "version": "Specification consulted 2026-09-11; runtime encoder from existing Qt WebEngine 6.11.2",
+    "license": "Specification reference only; no specification text or external muxer source code redistributed",
+    "urls": {
+      "specification": "https://www.w3.org/TR/webcodecs/"
+    }
+  },
+  {
+    "id": "REF-WEBM",
+    "title": "WebM Container Guidelines",
+    "modules": [
+      "M10"
+    ],
+    "kind": "specification-reference",
+    "acknowledgement_group": "software",
+    "authors": "The WebM Project",
+    "version": "Specification consulted 2026-09-11; runtime encoder from existing Qt WebEngine 6.11.2",
+    "license": "Specification reference only; no specification text or external muxer source code redistributed",
+    "urls": {
+      "specification": "https://www.webmproject.org/docs/container/"
     }
   }
 ]

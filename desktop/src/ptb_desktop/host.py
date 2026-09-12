@@ -2,6 +2,7 @@
 import base64
 import json
 import mimetypes
+import os
 import threading
 from pathlib import Path
 from dataclasses import asdict
@@ -45,7 +46,7 @@ class Assets(QWebEngineUrlSchemeHandler):
             if name=='index.html':
                 raw=raw.replace(b'<head>',b'<head><script src="qrc:///qtwebchannel/qwebchannel.js"></script>')
             buffer=QBuffer(job);buffer.setData(raw);buffer.open(QIODevice.OpenModeFlag.ReadOnly)
-            mime={'.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml'}.get(path.suffix,mimetypes.guess_type(path.name)[0] or 'application/octet-stream')
+            mime={'.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.svg':'image/svg+xml'}.get(path.suffix,mimetypes.guess_type(path.name)[0] or 'application/octet-stream')
             job.reply(mime.encode('ascii'),buffer)
         except (OSError,ValueError):job.fail(QWebEngineUrlRequestJob.Error.UrlNotFound)
 
@@ -57,6 +58,7 @@ class LocalOnly(QWebEngineUrlRequestInterceptor):
 
 
 class Bridge(QObject):
+    vocalReady=pyqtSignal(str,str)
     previewReady=pyqtSignal(str,str)
     taskReady=pyqtSignal(str,str)
     def __init__(self,provider,service,window,*,test_dialog=False):
@@ -66,6 +68,40 @@ class Bridge(QObject):
         self.task_lock=threading.Lock()
         from .task_bridge import TaskBridge
         self.tasks=TaskBridge(provider,service)
+        self.vocal_slots=threading.BoundedSemaphore(12)
+        from .vocal_tract.files import VocalFiles
+        self.vocal_files=VocalFiles()
+
+    @pyqtSlot(str,str)
+    def vocal(self,request_id,raw):
+        if len(request_id)>64 or len(raw)>8_000_000:return
+        if not self.vocal_slots.acquire(False):
+            self.vocalReady.emit(request_id,json.dumps({'ok':False,'error':'声道请求繁忙，请稍候。'}));return
+        try:
+            body=json.loads(raw);op=body['op'];selected=None
+            if op in ('document/open','document/save','video/begin'):
+                if self.test_dialog and hasattr(self,'test_vocal_picker'):
+                    selected=self.test_vocal_picker(op)
+                elif op=='document/open':
+                    selected=QFileDialog.getOpenFileName(self.window,'导入声道关键帧','','声道关键帧 (*.ptb-vocal.json *.json)')[0]
+                else:
+                    video=op=='video/begin'
+                    selected=QFileDialog.getSaveFileName(self.window,'保存动作视频' if video else '导出声道关键帧','声道动作.webm' if video else '声道关键帧.ptb-vocal.json','WebM 视频 (*.webm)' if video else '声道关键帧 (*.ptb-vocal.json)')[0]
+        except Exception as exc:
+            self.vocal_slots.release();self.vocalReady.emit(request_id,json.dumps({'ok':False,'error':str(exc)}));return
+        def work():
+            try:
+                if op in ('document/open','document/save') or op.startswith('video/'):
+                    value=self.vocal_files.invoke(op,body.get('body',{}),self.window.vocal,selected)
+                else:
+                    if op=='shutdown':self.vocal_files.close()
+                    value=self.window.vocal.invoke(op,body.get('body'))
+                result={'ok':True,'value':value}
+            except Exception as exc:result={'ok':False,'error':str(exc)}
+            finally:self.vocal_slots.release()
+            try:self.vocalReady.emit(request_id,json.dumps(result,ensure_ascii=False,allow_nan=False))
+            except RuntimeError:pass
+        threading.Thread(target=work,daemon=True).start()
 
     @pyqtSlot(str,str)
     def task(self,request_id,raw):
@@ -111,6 +147,14 @@ class Bridge(QObject):
             if op=='hello':
                 health=self.service.get('/api/v1/health')
                 value={'kind':'desktop','session':self.provider.session,'api_version':health['api_version'],'tasks':bool(self.service.local_files_root)}
+            elif op=='capture':
+                if QMessageBox.question(self.window,'截取语谱图','将暂时隐藏本窗口并截取当前屏幕。请确认屏幕不含敏感内容。截图仅保留在本机内存，开始重建后才加入本机任务。',QMessageBox.StandardButton.Ok|QMessageBox.StandardButton.Cancel)!=QMessageBox.StandardButton.Ok:
+                    value=None
+                else:
+                    from .capture import capture_hidden
+                    pixmap=capture_hidden(self.window);buffer=QBuffer();buffer.open(QIODevice.OpenModeFlag.WriteOnly)
+                    if not pixmap.save(buffer,'PNG'):raise FileAccessError('截图失败。')
+                    value=self.provider.capture(bytes(buffer.data()))
             elif op=='choose':
                 purpose=body.get('purpose')
                 def picker():
@@ -141,16 +185,24 @@ class Page(QWebEnginePage):
 
 
 class Workbench(QMainWindow):
-    def __init__(self,dist,*,test=False,jobs_path=None,local_files_root=None,reaper_binary=None):
+    def __init__(self,dist,*,test=False,jobs_path=None,local_files_root=None,reaper_binary=None,vocal_resources=None,vocal_profile=None,start_module=None):
         super().__init__();self.setWindowTitle('PhoneticToolbox 3.0');self.resize(1440,900)
         self.provider=FileProvider();self.service=LocalService(jobs_path,local_files_root=local_files_root,reaper_binary=reaper_binary);self.service.start();self.closing=False
+        from .vocal_tract.client import VocalTractClient
+        data=Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation))
+        legacy=Path(os.environ.get('LOCALAPPDATA',Path.home()))/'PhoneticToolbox/vocal_tract'
+        self.vocal=VocalTractClient(vocal_resources or dist.parent.parent/'resources/vocal_tract/native',
+            vocal_profile or data/'vocal-tract',legacy_profile=None if test else legacy)
         self.profile=QWebEngineProfile(self) if test else QWebEngineProfile('ptb-v3-workbench',self)
+        # Local resource filenames may be stable between EXE revisions.
+        self.profile.setHttpCacheType(QWebEngineProfile.HttpCacheType.NoCache)
         if not test:
             data=QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
             self.profile.setPersistentStoragePath(str(Path(data)/'workbench'))
         self.assets=Assets(dist,self.profile);self.interceptor=LocalOnly(self.service.url,self.profile)
         self.profile.installUrlSchemeHandler(b'ptbapp',self.assets);self.profile.setUrlRequestInterceptor(self.interceptor)
         self.view=QWebEngineView(self);self.page=Page(self.profile,self.view);self.view.setPage(self.page)
+        self.profile.downloadRequested.connect(self.save_download)
         self.page.permissionRequested.connect(lambda request:request.deny())
         self.page.settings().setAttribute(QWebEngineSettings.WebAttribute.PlaybackRequiresUserGesture,True)
         self.page.settings().setAttribute(QWebEngineSettings.WebAttribute.JavascriptCanOpenWindows,False)
@@ -158,13 +210,22 @@ class Workbench(QMainWindow):
         self.channel.registerObject('files',self.bridge);self.page.setWebChannel(self.channel)
         self.page.windowCloseRequested.connect(self.accept_close)
         self.setCentralWidget(self.view)
-        self.view.load(QUrl('ptbapp://app/index.html'))
+        self.view.load(QUrl('ptbapp://app/index.html'+('#M10' if start_module=='M10' else '')))
+
+    def save_download(self,download):
+        # Only a renderer-generated image from this owned page; never navigate to arbitrary downloads.
+        if download.page()!=self.page or download.url().scheme()!='blob' or not download.suggestedFileName().lower().endswith(('.svg','.png')):
+            download.cancel();return
+        options=QFileDialog.Option.DontUseNativeDialog if self.bridge.test_dialog else QFileDialog.Option(0)
+        selected=QFileDialog.getSaveFileName(self,'保存图像',Path(download.suggestedFileName()).name,'图像 (*.svg *.png)',options=options)[0]
+        if not selected:download.cancel();return
+        target=Path(selected);download.setDownloadDirectory(str(target.parent));download.setDownloadFileName(target.name);download.accept()
 
     def accept_close(self):self.closing=True;self.close()
     def closeEvent(self,event):
         if not self.closing:
             event.ignore();self.page.triggerAction(QWebEnginePage.WebAction.RequestClose);return
-        self.provider.close();self.service.close();event.accept()
+        self.bridge.vocal_files.close();self.vocal.close();self.provider.close();self.service.close();event.accept()
 
 
 def run(dist,**options):
@@ -172,4 +233,5 @@ def run(dist,**options):
     register_scheme();app=QApplication(['PhoneticToolbox']);app.setApplicationName('PhoneticToolbox-v3')
     window=Workbench(dist,**options)
     app.aboutToQuit.connect(window.service.close);app.aboutToQuit.connect(window.provider.close)
+    app.aboutToQuit.connect(window.vocal.close)
     window.show();code=app.exec();window.page.deleteLater();app.processEvents();return code

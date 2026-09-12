@@ -829,6 +829,48 @@
       ],
       "title": "ResultFile",
       "type": "object"
+    },
+    "Spec2WavManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "complete": {
+          "const": true,
+          "default": true,
+          "title": "Complete",
+          "type": "boolean"
+        },
+        "core_version": {
+          "title": "Core Version",
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/AcousticManagedFile"
+          },
+          "maxItems": 4,
+          "minItems": 4,
+          "title": "Files",
+          "type": "array"
+        },
+        "kind": {
+          "const": "managed_spec2wav_files",
+          "default": "managed_spec2wav_files",
+          "title": "Kind",
+          "type": "string"
+        },
+        "operation": {
+          "const": "spectrogram_to_audio",
+          "default": "spectrogram_to_audio",
+          "title": "Operation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "core_version",
+        "files"
+      ],
+      "title": "Spec2WavManifest",
+      "type": "object"
     }
   },
   "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -840,6 +882,7 @@
           "acoustic_file": "#/$defs/AcousticFileManifest",
           "managed_acoustic_files": "#/$defs/AcousticTaskManifest",
           "managed_files": "#/$defs/FileManifest",
+          "managed_spec2wav_files": "#/$defs/Spec2WavManifest",
           "pipeline_check_metadata": "#/$defs/JobManifest"
         },
         "propertyName": "kind"
@@ -856,6 +899,9 @@
         },
         {
           "$ref": "#/$defs/AcousticTaskManifest"
+        },
+        {
+          "$ref": "#/$defs/Spec2WavManifest"
         }
       ],
       "title": "Manifest"

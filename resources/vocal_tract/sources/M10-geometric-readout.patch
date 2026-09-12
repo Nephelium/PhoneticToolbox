@@ -1,0 +1,44 @@
+--- a/Developer/Sources/VocalTract.h
++++ b/Developer/Sources/VocalTract.h
+@@ -438,7 +438,7 @@
+ 
+   void calcCrossSections();
+   void getCrossProfiles(Point2D P, Point2D v, double *upperProfile, double *lowerProfile, 
+-    bool considerTongue, Tube::Articulator &articulator, bool debug = false);
++    bool considerTongue, Tube::Articulator &articulator, bool debug = false, bool geometric = false);
+   void insertUpperProfileLine(Point2D P0, Point2D P1, int surfaceIndex, 
+     double *upperProfile, int *upperProfileSurface);
+   void insertLowerProfileLine(Point2D P0, Point2D P1, int surfaceIndex, 
+--- a/Developer/Sources/VocalTract.cpp
++++ b/Developer/Sources/VocalTract.cpp
+@@ -5704,7 +5704,7 @@
+ // ****************************************************************************
+ 
+ void VocalTract::getCrossProfiles(Point2D P, Point2D v, double *upperProfile, 
+-       double *lowerProfile, bool considerTongue, Tube::Articulator &articulator, bool debug)
++       double *lowerProfile, bool considerTongue, Tube::Articulator &articulator, bool debug, bool geometric)
+ {
+   const double MIN_SQUARED_NORMAL_LENGTH = 0.0000001;
+   const double INVALID = INVALID_PROFILE_SAMPLE;
+@@ -6406,8 +6406,8 @@
+     }
+ 
+     // Potentially move the leftmost and rightmost ends towards the middle.
+-    while ((leftmost < N2)  && (lowerProfile[leftmost] > upperProfile[leftmost]-0.1)) { leftmost++; }
+-    while ((rightmost > N2) && (lowerProfile[rightmost] > upperProfile[rightmost]-0.1)) { rightmost--; }
++    while ((leftmost < N2)  && (lowerProfile[leftmost] > upperProfile[leftmost]-(geometric ? 0.000001 : 0.1))) { leftmost++; }
++    while ((rightmost > N2) && (lowerProfile[rightmost] > upperProfile[rightmost]-(geometric ? 0.000001 : 0.1))) { rightmost--; }
+     
+     // **************************************************************
+     // The lower profile samples must always lie below the upper 
+@@ -6438,8 +6438,8 @@
+   // profile are not allowed.
+   // ****************************************************************
+ 
+-  const double OPEN_THRESHOLD = 0.1;   // = 1 mm
+-  const double CUTOFF_THRESHOLD = 0.01;
++  const double OPEN_THRESHOLD = geometric ? 0.000001 : 0.1;   // = 1 mm
++  const double CUTOFF_THRESHOLD = geometric ? 0.000001 : 0.01;
+ 
+   i = N2-1;
+   while ((upperProfile[i] - lowerProfile[i] < OPEN_THRESHOLD) && (i > 0)) { i--; }

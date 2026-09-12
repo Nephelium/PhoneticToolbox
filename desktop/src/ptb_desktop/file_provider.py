@@ -85,7 +85,7 @@ class Entry:
 class FileProvider:
     def __init__(self,*,max_bytes=64_000_000,max_entries=10000):
         self.max_bytes,self.max_entries=max_bytes,max_entries
-        self.directories={};self.entries={};self.entry_ids={};self.closed=False
+        self.directories={};self.entries={};self.entry_ids={};self.closed=False;self.captured={}
         self.session=secrets.token_urlsafe(24)
 
     def choose(self,purpose,picker):
@@ -120,7 +120,7 @@ class FileProvider:
             for count,entry in enumerate(scan):
                 if count>=self.max_entries:raise FileAccessError('目录条目超过10000，请选择较小目录。')
                 lower=entry.name.lower()
-                kind='audio' if lower.endswith('.wav') else 'textgrid' if lower.endswith('.textgrid') else 'lip' if lower.endswith('.lip.json') else 'lip_pickle' if lower.endswith('.pkl') else 'parameter' if lower.endswith(('.xlsx','.ptb.sqlite','.ptb.sqlite3')) else None
+                kind='audio' if lower.endswith('.wav') else 'textgrid' if lower.endswith('.textgrid') else 'lip' if lower.endswith('.lip.json') else 'lip_pickle' if lower.endswith('.pkl') else 'parameter' if lower.endswith(('.xlsx','.ptb.sqlite','.ptb.sqlite3')) else 'image' if lower.endswith(('.png','.jpg','.jpeg','.bmp')) else None
                 # Windows scandir caches zero inode/link counts; obtain real identity.
                 info=Path(entry.path).lstat()
                 if not kind or not stat.S_ISREG(info.st_mode) or info.st_nlink!=1 or getattr(info,'st_file_attributes',0)&0x400:continue
@@ -136,11 +136,13 @@ class FileProvider:
     def read(self,key):
         entry=self.entries.get(key) if not self.closed else None
         if entry is None:raise FileAccessError('文件授权已失效，请刷新列表。')
+        if key in self.captured:
+            raw=self.captured[key];return raw,hashlib.sha256(raw).hexdigest()
         directory=self.directory(entry.directory)
         try:
             path=checked_path(directory.path/entry.name)
             if path.parent!=directory.path:raise FileAccessError('文件超出目录授权。')
-            limit=self.max_bytes if entry.name.lower().endswith('.wav') else min(self.max_bytes,16_000_000 if entry.name.lower().endswith(('.pkl','.xlsx','.ptb.sqlite','.ptb.sqlite3')) else 2_000_000)
+            limit=self.max_bytes if entry.name.lower().endswith('.wav') else min(self.max_bytes,16_000_000 if entry.name.lower().endswith(('.pkl','.xlsx','.ptb.sqlite','.ptb.sqlite3','.png','.jpg','.jpeg','.bmp')) else 2_000_000)
             raw=read_locked(path,directory.path,limit,entry.fingerprint)
             self.directory(entry.directory)
         except OSError:raise FileAccessError('文件不可读取，请刷新列表。') from None
@@ -156,5 +158,13 @@ class FileProvider:
         if path.exists() or path.is_symlink():raise FileAccessError('已有同名结果，请更换输出目录。')
         return path
 
+    def capture(self,raw):
+        if self.closed or not 0<len(raw)<=16_000_000:raise FileAccessError('截图过大或窗口已关闭。')
+        for key in self.captured:self.entries.pop(key,None)
+        self.captured.clear();key=secrets.token_urlsafe(24);self.captured[key]=raw
+        self.entries[key]=Entry('','屏幕截图.png',())
+        return dict(id=key,name='屏幕截图.png',kind='image',size=len(raw))
+
     def close(self):
+        self.captured.clear()
         self.closed=True;self.directories.clear();self.entries.clear();self.entry_ids.clear()

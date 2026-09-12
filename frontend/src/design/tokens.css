@@ -16,6 +16,10 @@ svg{width:20px;height:20px;flex:none}
 .ipa-icon{display:inline-grid;place-items:center;width:20px;flex:none;font-size:24px;line-height:20px}
 a{color:var(--accent);text-underline-offset:3px}
 input,select{border:1px solid var(--border);border-radius:6px;background:var(--panel);padding:7px 10px;min-height:34px;min-width:0}
+/* Qt/native select popups need an opaque surface as well as themed text. */
+select{color-scheme:inherit;color:var(--text)}
+select option,select optgroup{background-color:var(--panel);color:var(--text)}
+select option:checked{background-color:var(--selected);color:var(--text)}
 input[type=checkbox]{accent-color:var(--accent);min-height:16px;width:16px;height:16px;padding:0}
 input[type=range]{accent-color:var(--accent);padding:0;border:0;min-height:24px}
 input::placeholder{color:var(--muted)}
@@ -59,7 +63,7 @@ hr{border:0;border-top:1px solid var(--border);margin:22px 0}
 .utility-grid svg{width:15px;height:15px}
 .theme-picker{display:flex;align-items:center;background:var(--panel);border:1px solid var(--border);border-radius:6px;padding-left:10px;margin-top:8px}
 .theme-picker svg{width:16px}
-.theme-picker select{flex:1;border:0;background:none;font-size:12px;padding:6px 8px}
+.theme-picker select{flex:1;border:0;background:var(--panel);font-size:12px;padding:6px 8px}
 .main-shell{display:flex;flex-direction:column;min-width:0;min-height:0}
 .topbar{display:flex;align-items:center;min-height:49px;border-bottom:1px solid var(--border);background:var(--sidebar);padding:8px 16px 0;gap:14px}
 .workspace-tabs{display:flex;align-self:stretch;gap:4px;overflow-x:auto;min-width:0;scrollbar-width:thin;flex:1}
