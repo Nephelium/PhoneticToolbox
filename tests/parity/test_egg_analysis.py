@@ -24,6 +24,7 @@ def equal(actual, expected):
     if isinstance(expected, np.ndarray):
         assert actual.dtype == expected.dtype
         np.testing.assert_array_equal(actual, expected)
+        assert actual.tobytes() == expected.tobytes()
     else:
         assert actual == expected
 
@@ -96,3 +97,15 @@ def test_glottal_heuristic(reference):
     result = glottal_movement(np.array([0,.01,.02,.03,.14,.15,.16]),
                              np.array([100,130,100,140,400,100,np.nan]))
     assert [list(event) for event in result] == meta['analytic']['movement']
+
+
+@pytest.mark.parametrize('key,gci,goi,peaks', [
+    ('cq',[0,.01,.02],[.006,.016],[.002,.014]),
+    ('boundaries',[0,1,2,3],[.05,1.95],[.02,1.3]),
+    ('multiple_peaks',[0,1],[.6],[.2,.3]),
+])
+def test_cq_sq_analytic_and_independent_missing_masks(reference,key,gci,goi,peaks):
+    from phonetic_core.egg.metrics import calculate_cq_sq
+    meta,arrays=reference
+    for actual,expected in zip(calculate_cq_sq(gci,goi,peaks),meta['analytic'][key]):
+        equal(actual,unpack(expected,arrays))

@@ -4,9 +4,9 @@
 
 **架构：** 纯数组科学核心加显式配置，经既有任务/文件协议接桌面与网页。GUI中遗留的分析、CSV和绘图规则先分别捕获，正常算法迁移与科学行为修正分别提交。
 
-**技术：** 项目内Python 3.11、NumPy/SciPy/Parselmouth、Pandas/Matplotlib、Vue/TypeScript、现有Qt宿主与P06/P07服务。环境版本在A阶段实际审计，未安装新环境或依赖。
+**技术：** 项目内Python 3.11、NumPy/SciPy/Parselmouth、Pandas/Matplotlib、Vue/TypeScript、现有Qt宿主与P06/P07服务。A仅审计，B已创建独立科学环境并锁定实际Conda/MKL构建；GUI依赖和整合仍待后续阶段。
 
-2026-09-12最新授权：井井回复“好，请继续”，要求EGG布局尽量贴合v2、囊括v2全部功能，其余可优化。**M03进入in_progress，当前执行M03-A独立基准。** 原规划检查点被本条覆盖，B–F尚未实施。无需重复002/005，本轮不执行DDL。
+2026-09-12最新授权：井井在A阶段及v3统一风格说明后回复“噢噢 那你继续吧”。**M03-A/B已限定verified，完整M03仍in_progress。** B的独立核心、wheel及环境证据见[核心报告](../testing/m03-core-report.md)，C–F尚未实施。无需重复002/005，本轮不执行DDL。
 
 ## 1. 输入证据和拟定行为
 
@@ -36,7 +36,7 @@
 
 ### M03-B：纯数组核心与科学契约
 
-拟新增 `packages/phonetic_core/src/phonetic_core/egg/{__init__,config,model,preprocess,events,metrics,f0,inverse}.py`、`tests/parity/test_egg_analysis.py`、`packages/phonetic_core/tests/test_egg_config.py`。
+已新增 `packages/phonetic_core/src/phonetic_core/egg/`、`tests/parity/test_egg_analysis.py`、`packages/phonetic_core/tests/test_egg_config.py`，正常兼容迁移先提交，再增加显式边界，见ADR-035。以下条目保留为本阶段设计依据。
 
 1. 先为公开数组接口建立A01–A17回归，再移入现有函数，拆出文件/Qt/可变全局配置。逐字段保留峰谷阈值、滤波阶数/截止、局部窗口与事件位置。
 2. 参数快照至少分为 `signal_mode`、`flip_channels`、`analysis_scope`、`roi_start/roi_end`、`gci_method/goi_method`、`peak_prominence/valley_prominence/auto_prominence`、`highpass_cutoff/lowpass_cutoff`、`spec_window_ms/spec_vmin/spec_vmax`、`lp_order`、`export_policy`。作用不同的配置不能共享一个被GUI修改的实例。
@@ -44,7 +44,7 @@
 4. 保留当前SQ公式，并用独立解析事件测试：GCI=[0,.01,.02]、GOI=[.006,.016]、peak=[.002,.014]，应有CQ=[.6,.6]、SQ=[1/3,-1/3]。边界0.05/0.95、多个peak和无GOI需有独立缺失预期。
 5. 明确raw/filtered局部兼容策略。正常算法移植提交通过后，再单独处理Praat实际时间与N/fs元数据修正，附差异摘要。不得把新科学方法或ROI滤波统一混进移植提交。
 
-拟执行：`.venv/m03-ui/Scripts/python.exe -X utf8 -m pytest -c tests/pytest.ini tests/parity/test_egg_analysis.py packages/phonetic_core/tests/test_egg_config.py -q`，安装独立wheel后再从干净目录执行同组核心回归。退出需数值、mask、时间与原始输入保护同时通过。
+已执行：`scripts/Invoke-M03-Python.ps1 -X utf8 -m pytest -c tests/pytest.ini tests/parity/test_egg_analysis.py packages/phonetic_core/tests/test_egg_config.py tests/parity/test_m03_capture_contract.py -q`，最终80项通过。安装wheel后从独立目录执行同组回归和`scripts/verify_m03_core.py --include-private`，11样例31761项精确比较通过。真实使用`.venv/m03-compatible`，原拟`.venv/m03-ui`的PyPI SciPy构建无法逐位复现旧MKL去趋势，保留失败证据而不扩大容差。
 
 ### M03-C：有界任务、文件和导出
 
@@ -55,6 +55,7 @@
 3. 单文件三PNG+CSV、批次CSV和可选图、IF两WAV分别形成完整manifest。CSV网格策略及静音mask带标记，不把其中一图失败报告成全部成功。
 4. IF输出为当前分析音频归一化片段及简化CP逆滤波结果，保留样本数、采样率、原ROI偏移、阶数/后端/失败信息，避免误标为原始文件字节切片。
 5. 新operation如可复用既有jobs表则无DDL；若实际表约束要求DDL，先提交具体迁移审阅，此计划不构成执行授权。
+6. C须先审阅兼容科学环境如何接入所属worker；不能把M03的Conda SciPy/DLL直接覆盖m09/m10宿主。独立子进程运行环境须有明确指纹，后续冻结/Qt整合时单独验证DLL搜索与既有模块数值，当前B不代表该整合已通过。
 
 拟测试文件：`backend/tests/test_m03_jobs.py`、`backend/tests/test_m03_exports.py`、`desktop/tests/test_m03_bridge.py`、`tests/contracts/test_m03_contract.py`。退出：真实读写回读、取消/恢复/越权、失败全回收及IF双WAV一致，不止mock成功。
 
@@ -122,4 +123,4 @@
 
 ## 4. 当前执行结果
 
-M03-A verified，仅限Windows原v2独立行为基准。11样例双轮一致，完成环境审计、旧Qt布局/实际导出回读、公开fixture与捕获回归。D01默认值已纠正，追加D10独立CQ/SQ缺失规则。环境创建、EGG核心/接口/页面实现、v3算法对照及EXE均未完成。完整M03和P08仍in_progress，下一项M03-B，不提前启动其他模块。
+M03-A/B verified，分别限定原v2独立基准和Windows安装核心wheel。80项检查、11样例31761项精确比较通过，兼容环境与实际库构建已锁定。C接口/任务/导出、D页面、E联合与来源收口、F冻结EXE尚未完成。完整M03和P08仍in_progress，下一项M03-C，不提前启动其他模块。

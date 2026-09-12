@@ -73,7 +73,8 @@ class LegacyCalculations:
         start_s: float,
         end_s: float,
         config: EGGConfig,
-        use_raw_signal: bool = False
+        use_raw_signal: bool = False,
+        cancel_event = None
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """
         Calculate CQ/SQ for a specific segment (ROI).
@@ -143,7 +144,8 @@ class LegacyCalculations:
             use_local_prominence=config.auto_prominence,
             local_window_s=0.2, local_hop_s=0.1, min_auto_prom=config.min_auto_prominence,
             gci_method=config.gci_method,
-            goi_method=config.goi_method
+            goi_method=config.goi_method,
+            cancel_event=cancel_event
         )
 
         # Adjust times
@@ -159,7 +161,8 @@ class LegacyCalculations:
         start_s: float,
         end_s: float,
         config: EGGConfig,
-        use_raw_signal: bool = False
+        use_raw_signal: bool = False,
+        cancel_event = None
     ) -> Tuple[List[float], List[float], List[float]]:
         """
         Get GCI, GOI, and Peaks for a specific segment using current config.
@@ -197,7 +200,8 @@ class LegacyCalculations:
             use_local_prominence=config.auto_prominence,
             local_window_s=0.2, local_hop_s=0.1, min_auto_prom=config.min_auto_prominence,
             gci_method=config.gci_method,
-            goi_method=config.goi_method
+            goi_method=config.goi_method,
+            cancel_event=cancel_event
         )
 
         # Adjust times

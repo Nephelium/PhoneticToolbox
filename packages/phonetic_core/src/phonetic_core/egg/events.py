@@ -5,6 +5,7 @@ import numpy as np
 from scipy import signal
 import warnings
 from typing import Tuple, List, Optional
+from .errors import EggError, EggCancelled, check_cancel
 
 def find_gci_goi_peak_min_criterion(
     egg_segment: np.ndarray,
@@ -26,7 +27,7 @@ def find_gci_goi_peak_min_criterion(
     基于波峰、特定规则的前置波谷（用于GCI）、显著后置波谷（用于GOI）以及阈值水平查找GCI和GOI。
     同时返回检测到的所有波峰的时间点。
     GCI阈值固定为前置波谷到波峰幅度的0.25处。
-    GOI阈值使用传入的criterion_level。
+    旧实现的GCI和GOI尺度阈值均固定0.25，保留此行为。
     使用线性插值进行阈值交叉点定位。
     包含用于峰谷查找的显著度参数。
 
@@ -53,6 +54,7 @@ def find_gci_goi_peak_min_criterion(
             - peak_times_s (list): 检测到的所有波峰的时间点列表 (秒)。
               如果未找到波峰，则为空列表。
     """
+    check_cancel(cancel_event)
     if egg_segment is None or len(egg_segment) < 2:
         return [], [], [] # Return three empty lists
 
@@ -66,6 +68,7 @@ def find_gci_goi_peak_min_criterion(
                 hop = max(1, int(local_hop_s * fs))
                 peaks_all = []
                 for start in range(0, N, hop):
+                    check_cancel(cancel_event)
                     end = min(N, start + win)
                     if end - start < 2:
                         continue
@@ -91,9 +94,10 @@ def find_gci_goi_peak_min_criterion(
             else:
                 peaks, _ = signal.find_peaks(egg_segment, distance=peak_min_dist, prominence=peak_prominence)
                 valleys, _ = signal.find_peaks(-egg_segment, distance=peak_min_dist, prominence=valley_prominence)
+    except EggCancelled:
+        raise
     except Exception as e:
-        print(f"Error during peak/valley finding: {e}")
-        return [], [], []
+        raise EggError('event_detection_failed') from e
     if len(peaks) < 1:
         # print(f"警告: 未找到足够的波峰")
         return [], [], []
@@ -114,8 +118,7 @@ def find_gci_goi_peak_min_criterion(
     deriv_all = np.diff(egg_segment)
     N = len(egg_segment)
     for i in range(len(peaks)):
-        if cancel_event is not None and getattr(cancel_event, "is_set", None) is not None and cancel_event.is_set():
-            return [], [], []
+        check_cancel(cancel_event)
         current_peak_idx = int(peaks[i])
         left_valleys = valleys[valleys < current_peak_idx] if len(valleys) > 0 else np.array([])
         right_valleys = valleys[valleys > current_peak_idx] if len(valleys) > 0 else np.array([])

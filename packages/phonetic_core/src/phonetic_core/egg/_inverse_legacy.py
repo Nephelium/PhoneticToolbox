@@ -6,6 +6,7 @@ from scipy import signal
 from scipy.linalg import solve_toeplitz
 import warnings
 from typing import Optional
+from .errors import check_cancel, EggCancelled
 
 def autocorrelation(y: np.ndarray, order: int) -> np.ndarray:
     """计算自相关函数"""
@@ -66,7 +67,8 @@ def apply_simplified_cp_inverse_filtering(
     closed_phase_duration_ms: float = 3.0,
     min_segments_for_avg: int = 3,
     tilt_order: int = 1,
-    pre_emphasis_alpha: float = 0.97
+    pre_emphasis_alpha: float = 0.97,
+    cancel_event = None
 ) -> Optional[np.ndarray]:
     """
     应用简化的基于闭合相的逆滤波 - ARMA + Pre-emphasis 版本。
@@ -107,6 +109,7 @@ def apply_simplified_cp_inverse_filtering(
     gci_samples_in_roi = (gci_times_relative_to_roi_start * fs).astype(int)
 
     for gci_sample in gci_samples_in_roi:
+        check_cancel(cancel_event)
         start_idx = gci_sample + 1
         end_idx = start_idx + closed_phase_samples
         end_idx = min(end_idx, len(audio_preemphasized))

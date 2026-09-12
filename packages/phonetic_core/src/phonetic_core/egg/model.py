@@ -4,6 +4,7 @@ See NOTICE.txt. Pure numerical compatibility layer, no file/device/GUI access.
 from dataclasses import dataclass, field
 from typing import List, Optional, Tuple
 import numpy as np
+from .config import EGGConfig
 
 @dataclass
 class EGGAnalysisResult:
@@ -38,3 +39,16 @@ class EGGAnalysisResult:
 
     # Glottal Movement
     glottal_movement_events: List[Tuple[float, str]] = field(default_factory=list) # List of (time, type)
+    preprocessing_config: Optional[EGGConfig] = None
+    analysis_config: Optional[EGGConfig] = None
+    method_version: str = 'egg-legacy/1'
+    source_ids: Tuple[str, ...] = ('PENDING-EGG', 'SRC-PRAAT')
+
+    @property
+    def sample_duration_s(self) -> float:
+        """Actual sample extent N/fs, distinct from legacy file_duration."""
+        return len(self.time_vector) / self.fs
+
+    @property
+    def last_sample_time_s(self) -> float:
+        return float(self.time_vector[-1]) if len(self.time_vector) else 0.

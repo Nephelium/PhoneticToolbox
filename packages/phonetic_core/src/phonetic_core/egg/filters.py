@@ -4,6 +4,7 @@ See NOTICE.txt. Pure numerical compatibility layer, no file/device/GUI access.
 import numpy as np
 from scipy import signal
 import warnings
+from .errors import EggError
 
 def apply_highpass_filter(data: np.ndarray, cutoff_freq: float, fs: int, order: int = 4) -> np.ndarray:
     """
@@ -32,8 +33,7 @@ def apply_highpass_filter(data: np.ndarray, cutoff_freq: float, fs: int, order: 
         y = signal.filtfilt(b, a, data)
         return y
     except ValueError as e:
-        warnings.warn(f"Error during high-pass filtering: {e}. Cutoff: {cutoff}. Returning unfiltered data.")
-        return data
+        raise EggError('filter_failed') from e
 
 def apply_lowpass_filter(data: np.ndarray, cutoff_freq: float, fs: int, order: int = 4) -> np.ndarray:
     """
@@ -62,5 +62,4 @@ def apply_lowpass_filter(data: np.ndarray, cutoff_freq: float, fs: int, order: i
         y = signal.filtfilt(b, a, data)
         return y
     except ValueError as e:
-        warnings.warn(f"Error during low-pass filtering: {e}. Cutoff: {cutoff}. Returning unfiltered data.")
-        return data
+        raise EggError('filter_failed') from e

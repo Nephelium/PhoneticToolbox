@@ -29,5 +29,6 @@
       "sha256": "dc9462c25789f0a1f72956de8cd48f60b8ad2015f980b919cb672c95ec6210c8"
     }
   ],
-  "changes": "Extracted numerical functions and five array-only service methods. Removed file/GUI dependencies and unrelated wavelet filtering. Public adapters validate inputs and own result objects."
+  "changes": "Extracted numerical functions and five array-only service methods. Removed file/GUI dependencies and unrelated wavelet filtering. Public adapters validate inputs and own result objects.",
+  "boundary_changes": "After compatibility commit: immutable config, explicit input/filter/IF errors and cooperative cancellation; separate actual Praat times and N/fs metadata while retaining legacy grids. ROI filtering/padding, SQ formula and independent masks unchanged."
 }

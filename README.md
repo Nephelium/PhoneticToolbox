@@ -1,6 +1,6 @@
 # PhoneticToolbox 3.0 · 开发工作台
 
-**2026-09-12 收尾更新：** 既有成果已建立本地源码检查点，M02新增包含波形/标注/可选语谱图的白底300dpi整幅PNG，限定开发态Windows Qt/Chrome验收见[收尾报告](docs/testing/m02-png-closeout-report.md)。使用`scripts/Start-Research-Workbench.ps1`可读取本轮前端构建；下面历史Research-Fix1.exe未重新打包。M03-A已完成[11样例双轮独立基准](docs/testing/m03-baseline-report.md)，完整M03为in_progress，算法及界面仍planned；后续布局按[v2位置约束](docs/design/m03-v2-layout.md)执行。P08继续in_progress。
+**2026-09-12 收尾更新：** 既有成果已建立本地源码检查点，M02新增包含波形/标注/可选语谱图的白底300dpi整幅PNG，限定开发态Windows Qt/Chrome验收见[收尾报告](docs/testing/m02-png-closeout-report.md)。使用`scripts/Start-Research-Workbench.ps1`可读取本轮前端构建；下面历史Research-Fix1.exe未重新打包。M03-A/B已完成独立基准及[Windows纯核心验证](docs/testing/m03-core-report.md)：80项检查、11样例31761项精确比较。完整M03仍in_progress，任务/导出/页面未接入；后续布局按[v2位置与v3组件约束](docs/design/m03-v2-layout.md)执行。P08继续in_progress。
 
 **2026-09-12：M01/M02/M09 Windows 联合修复已通过限定单文件验收。** 本机修复入口：`dist/research-repair/PhoneticToolbox-v3-Research-Fix1.exe`。双击自动持有本地任务服务，首次新建专用任务库，不需要登录或手动启服务器。已修复冻结子进程误开窗口、参数/语谱图读取、TextGrid 时间比例与截图隐藏，并纳入深色下拉修正。具体证据和未测范围见[修复报告](docs/testing/desktop-repair-report.md)。原 M10-R5 EXE 保留，以下为历史交付记录。仍未正式发行。
 

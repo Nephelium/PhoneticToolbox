@@ -246,7 +246,7 @@
       "dependencies": "P03,P04,P06,P07",
       "files": "docs/plans/modules/M01-parameter-estimation.md 等模块计划；packages/phonetic_core/src/phonetic_core/；frontend/src/modules/",
       "status": "in_progress",
-      "note": "2026-09-12: M01/M02/M09 bounded Windows evidence retained; M02 development whole-figure PNG verified, EXE unchanged. M03-A original-v2 baseline verified, full M03 in_progress; next pure core. Other modules remain pending.",
+      "note": "2026-09-12: M01/M02/M09 bounded Windows evidence retained; M02 development PNG verified, EXE unchanged. M03-A/B baseline and pure-core wheel verified in a locked Windows Conda/MKL runtime, full M03 in_progress; next task/file/export adapters. Other modules remain pending.",
       "steps": [
         "按 M01/M02/M03/M04/M06/M07/M08/M09/M13/M14 顺序逐个执行对应文件级计划",
         "先原样搬可用算法，再拆外层 I/O；不把算法重写和 UI 换肤混成一个提交",
@@ -503,9 +503,10 @@
       "status": "in_progress",
       "plan": "modules/M03-egg-analysis.md",
       "execution_evidence": [
-        "docs/testing/m03-baseline-report.md"
+        "docs/testing/m03-baseline-report.md",
+        "docs/testing/m03-core-report.md"
       ],
-      "note": "2026-09-12 M03-A verified for Windows original-v2 baseline only: 11 cases, two exact repeats, original source and input hashes unchanged. User requires v2-like four-plot layout and complete v2 functions. Core, UI and EXE remain planned; next M03-B.",
+      "note": "2026-09-12 M03-A/B verified for Windows baseline and installed pure-core wheel in locked Conda/MKL runtime. 80 checks; 11 cases and 31761 exact scalar/array comparisons. PyPI SciPy build differs and is not verified for parity. Full M03 in_progress; task/exports/UI/EXE pending. UI must use v3 shared design from first version and preserve v2 layout. Next M03-C.",
       "planning_evidence": [
         "docs/modules/evidence/M03-source-map.md",
         "docs/plans/2026-09-12-m03-implementation.md"
