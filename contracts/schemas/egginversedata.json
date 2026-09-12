@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "audio_db": {
+      "items": {
+        "type": "number"
+      },
+      "maxItems": 30000,
+      "title": "Audio Db",
+      "type": "array"
+    },
+    "audio_values": {
+      "items": {
+        "type": "number"
+      },
+      "maxItems": 30000,
+      "title": "Audio Values",
+      "type": "array"
+    },
+    "egg_db": {
+      "items": {
+        "type": "number"
+      },
+      "maxItems": 30000,
+      "title": "Egg Db",
+      "type": "array"
+    },
+    "egg_values": {
+      "items": {
+        "type": "number"
+      },
+      "maxItems": 30000,
+      "title": "Egg Values",
+      "type": "array"
+    },
+    "frequencies_hz": {
+      "items": {
+        "type": "number"
+      },
+      "maxItems": 30000,
+      "title": "Frequencies Hz",
+      "type": "array"
+    },
+    "inverse_db": {
+      "items": {
+        "type": "number"
+      },
+      "maxItems": 30000,
+      "title": "Inverse Db",
+      "type": "array"
+    },
+    "inverse_values": {
+      "items": {
+        "type": "number"
+      },
+      "maxItems": 30000,
+      "title": "Inverse Values",
+      "type": "array"
+    },
+    "relative_times_s": {
+      "items": {
+        "type": "number"
+      },
+      "maxItems": 30000,
+      "title": "Relative Times S",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "egg-inverse-view/1",
+      "default": "egg-inverse-view/1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "spectral_policy": {
+      "const": "pad-44100-periodic-hamming-fft-80db-floor",
+      "default": "pad-44100-periodic-hamming-fft-80db-floor",
+      "title": "Spectral Policy",
+      "type": "string"
+    }
+  },
+  "required": [
+    "frequencies_hz",
+    "audio_db",
+    "inverse_db",
+    "egg_db",
+    "relative_times_s",
+    "audio_values",
+    "inverse_values",
+    "egg_values"
+  ],
+  "title": "EggInverseData",
+  "type": "object"
+}

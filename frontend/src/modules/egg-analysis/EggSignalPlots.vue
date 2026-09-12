@@ -1,0 +1,21 @@
+<script setup lang="ts">
+import {computed} from 'vue';
+import ScientificPlot from '../../components/ScientificPlot.vue';
+import type {EggPreviewData,EggTaskConfig} from '../../platform/research.ts';
+const props=defineProps<{data?:EggPreviewData;psd?:string;config:EggTaskConfig}>();const emit=defineEmits<{seek:[time:number]}>();
+const range=computed<[number,number]>(()=>[props.config.roi_start??0,props.config.roi_end??.5]);
+const microRange=computed<[number,number]>(()=>[-(props.data?.micro_width_ms??50)/2,(props.data?.micro_width_ms??50)/2]);
+const markers=computed(()=>[...(props.data?.gci??[]).map(time=>({time:(time-props.data!.micro_center)*1000,label:'GCI'})),...(props.data?.goi??[]).map(time=>({time:(time-props.data!.micro_center)*1000,label:'GOI',dashed:true}))]);
+const trace=(key:'cq'|'sq'|'praat'|'gci_f0',label:string,color:string,right=false)=>({...(props.data?.[key]??{times:[],values:[]}),label,color,right,points:true});
+const micro=(key:'audio'|'egg',label:string,color:string)=>({times:(props.data?.[key].times??[]).map(t=>(t-props.data!.micro_center)*1000),values:props.data?.[key].values??[],label,color});
+const amplitude=computed<[number,number]>(()=>{const peak=Math.max(.05,...(props.data?.egg.values??[]).map(v=>Math.abs(v??0)));return [-peak*1.08,peak*1.08];});
+</script>
+<template><div class="egg-four-plots" title="CQ：processed ±100 ms 重复滤波；微观显示：raw ±100 ms 滤波裁剪；微观事件：raw ±50 ms。GCI 实线，GOI 虚线。">
+<section class="egg-plot cq-pane"><header><h2>CQ / SQ</h2><small>点击定位微观中心</small></header><ScientificPlot title="CQ 与 SQ 双轴图" :x="range" :y="[0,1]" :right="[-1.1,1.1]" unit="CQ" right-unit="SQ" :empty="!data" :traces="[trace('cq','CQ','var(--wave)'),trace('sq','SQ','var(--teal)',true)]" @seek="emit('seek',$event)"/></section>
+<section class="egg-plot audio-pane"><header><h2>音频 · 微观</h2><small>{{data?data.micro_center.toFixed(4)+' s':'尚未定位'}} · 相对时间</small></header><ScientificPlot title="音频微观波形与事件" :x="microRange" :y="[-.75,.75]" unit="振幅" x-unit="ms" :empty="!data" :markers="markers" :traces="[micro('audio','归一化音频','var(--wave)')]"/></section>
+<section class="egg-plot spec-pane"><header><h2>语谱图 / F0</h2><small>PSD · 频率左轴 / F0 右轴</small></header><div class="egg-colorbar"><span>{{config.spec_vmin}} dB</span><i/><span>{{config.spec_vmax}} dB</span></div><ScientificPlot title="EGG 音频语谱图及 F0" :markers="(data?.movement??[]).map(([time,label])=>({time,label}))" :x="range" :y="[0,5000]" :right="[50,500]" unit="Hz" right-unit="Hz" :empty="!data" :raster="data&&psd?{url:psd,extent:data.spectral_extent}:undefined" :traces="[...(config.keep_praat_f0?[trace('praat','Praat','var(--violet)',true)]:[]),...(config.keep_gci_f0?[trace('gci_f0','GCI F0','var(--danger)',true)]:[])]" @seek="emit('seek',$event)"/></section>
+<section class="egg-plot egg-pane"><header><h2>EGG · 微观</h2><slot name="filter"/></header><ScientificPlot title="EGG 微观波形与事件" :x="microRange" :y="amplitude" unit="振幅" x-unit="ms" :empty="!data" :markers="markers" :traces="[micro('egg',config.signal_mode==='raw'?'原始 EGG':'滤波 EGG','var(--teal)')]"/></section>
+</div></template>
+<style scoped>
+.egg-four-plots{display:grid;grid-template-columns:1fr 1fr;gap:10px;min-width:0}.egg-plot{min-width:0;border:1px solid var(--border);border-radius:var(--radius);background:var(--panel);overflow:hidden}.egg-plot>header{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:8px 12px 0;min-height:35px}.egg-plot>.hint{padding:0 12px 7px}.egg-colorbar{display:flex;align-items:center;gap:8px;padding:0 12px;font-family:var(--font-figure);font-size:var(--figure-size)}.egg-colorbar i{height:6px;flex:1;background:linear-gradient(to right,#fff,#000);border:1px solid var(--border)}@media(max-width:980px){.egg-four-plots{grid-template-columns:1fr}.audio-pane{grid-row:3}}
+</style>

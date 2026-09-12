@@ -1222,6 +1222,37 @@ export interface components {
             /** Active Jobs */
             active_jobs: string[];
         };
+        /** EggInverseData */
+        EggInverseData: {
+            /** Audio Db */
+            audio_db: number[];
+            /** Audio Values */
+            audio_values: number[];
+            /** Egg Db */
+            egg_db: number[];
+            /** Egg Values */
+            egg_values: number[];
+            /** Frequencies Hz */
+            frequencies_hz: number[];
+            /** Inverse Db */
+            inverse_db: number[];
+            /** Inverse Values */
+            inverse_values: number[];
+            /** Relative Times S */
+            relative_times_s: number[];
+            /**
+             * Schema Version
+             * @default egg-inverse-view/1
+             * @constant
+             */
+            schema_version: "egg-inverse-view/1";
+            /**
+             * Spectral Policy
+             * @default pad-44100-periodic-hamming-fft-80db-floor
+             * @constant
+             */
+            spectral_policy: "pad-44100-periodic-hamming-fft-80db-floor";
+        };
         /** EggManifest */
         EggManifest: {
             /**
@@ -1246,6 +1277,69 @@ export interface components {
              */
             operation: "egg_analysis";
         };
+        /** EggPreviewData */
+        EggPreviewData: {
+            audio: components["schemas"]["EggSeries"];
+            cq: components["schemas"]["EggSeries"];
+            /**
+             * Display Policy
+             * @default legacy-roi-extent; grayscale-raster-only
+             * @constant
+             */
+            display_policy: "legacy-roi-extent; grayscale-raster-only";
+            egg: components["schemas"]["EggSeries"];
+            /** Gci */
+            gci: number[];
+            gci_f0: components["schemas"]["EggSeries"];
+            /** Goi */
+            goi: number[];
+            /** Micro Center */
+            micro_center: number;
+            /**
+             * Micro Event Policy
+             * @default raw-50ms-padding
+             * @constant
+             */
+            micro_event_policy: "raw-50ms-padding";
+            /**
+             * Micro Wave Policy
+             * @default raw-100ms-padding-filter-crop
+             * @constant
+             */
+            micro_wave_policy: "raw-100ms-padding-filter-crop";
+            /** Micro Width Ms */
+            micro_width_ms: number;
+            /** Movement */
+            movement: [
+                number,
+                string
+            ][];
+            praat: components["schemas"]["EggSeries"];
+            /** Raster Shape */
+            raster_shape: [
+                number,
+                number
+            ];
+            /**
+             * Schema Version
+             * @default egg-preview/1
+             * @constant
+             */
+            schema_version: "egg-preview/1";
+            /** Spectral Extent */
+            spectral_extent: [
+                number,
+                number,
+                number,
+                number
+            ];
+            /** Spectral Shape */
+            spectral_shape: [
+                number,
+                number
+            ];
+            sq: components["schemas"]["EggSeries"];
+        };
         /** EggRequest */
         EggRequest: {
             audio: components["schemas"]["AcousticAssetRef"];
@@ -1260,6 +1354,13 @@ export interface components {
              * @constant
              */
             schema_version: "m03/1";
+        };
+        /** EggSeries */
+        EggSeries: {
+            /** Times */
+            times: number[];
+            /** Values */
+            values: (number | null)[];
         };
         /** EggTaskConfig */
         EggTaskConfig: {
@@ -1324,12 +1425,19 @@ export interface components {
             lowpass_cutoff: number;
             /** Lp Order */
             lp_order?: number | null;
+            /** Micro Center */
+            micro_center?: number | null;
+            /**
+             * Micro Width Ms
+             * @default 50
+             */
+            micro_width_ms: number;
             /**
              * Mode
              * @default single
              * @enum {string}
              */
-            mode: "single" | "batch" | "inverse";
+            mode: "single" | "batch" | "inverse" | "preview";
             /**
              * Peak Prominence
              * @default 0.01

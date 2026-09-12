@@ -88,3 +88,7 @@ Parselmouth/Praat、REAPER、MediaPipe、MFA、FFmpeg、Doulos SIL、React/Babel
 VTL API 2.4 原始二进制、2.3 参考手册、几何桥接 m10/2、Three.js、头壳和平均鼻腔分别保留来源。迁移/当前哈希见 [M10 迁移清单](../modules/evidence/M10-migration.json)，数值和显示适配边界见 [M10 报告](../testing/m10-report.md)。显示读数补丁与实际侧缘拟合源码随包；独立运行时新增 sounddevice 0.5.3/PyInstaller 锁，未把全项目许可未决项标成通过。
 
 R4 增加 WebCodecs 与 WebM 规范参考，已有 Qt WebEngine 提供 VP8/Opus 编码，本项目按规范写容器，没有移植第三方 muxer。耳语试听补偿、后移约束和共享显示适配见 [R4 报告](../testing/m10-recording-features-report.md)。原生 DLL、原鼻腔资源与来源锁保留，资源包标记 `3.0.0-m10.4`。
+
+## 2026-09-12 M03-D 显示路径迁移
+
+PENDING-EGG增加原egg_widget.update_zoom_plots和InverseFilteringResultDialog的纯数组显示路径，记录于third_party/egg-migration.json。原v2 GUI独立双轮捕获的公开合成数组位于tests/fixtures/m03/ui-display.npz，源码SHA见ui-source.json，逐样本对照通过。没有增加第三方库或改变未确立的代码/学术许可状态；同一来源登记继续生成工作台致谢。

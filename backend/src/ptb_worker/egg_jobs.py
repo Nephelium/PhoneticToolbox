@@ -5,10 +5,19 @@ from .store import JobError, LOCAL_PROJECT, canonical, core_version, adapter_ver
 from ptb_api.egg_models import EggRequest
 
 
+def request_payload(body, retry_of=None):
+    value = body.model_dump(exclude={'idempotency_key'}) | {'retry_of':retry_of}
+    # Additive preview controls must not change old single/batch/inverse hashes.
+    if body.config.mode != 'preview':
+        value['config'].pop('micro_center',None)
+        value['config'].pop('micro_width_ms',None)
+    return value
+
+
 def submit(store, owner, body, *, retry_of=None):
     body = EggRequest.model_validate(body)
     if store.files is None: raise JobError('task_service_unavailable',503)
-    request = body.model_dump(exclude={'idempotency_key'}) | {'retry_of':retry_of}
+    request = request_payload(body,retry_of)
     sha = hashlib.sha256(canonical(request).encode()).hexdigest()
     with store.files.batch_transaction() as tx:
         old = tx.execute('SELECT * FROM {jobs} WHERE owner_id=? AND idempotency_key=?',(owner,body.idempotency_key)).fetchone()

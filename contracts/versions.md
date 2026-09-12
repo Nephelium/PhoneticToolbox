@@ -50,3 +50,7 @@ API仍为1.1.0；既有请求和结果均保留。增加`/jobs/batches/create`�
 `AcousticTaskManifest.kind=managed_acoustic_files`表示真实已公开资产；完整参数结果恰有XLSX、SQLite及用于同源参数派生的无损JSON。原`AcousticFileManifest`是D阶段科学清单，保持可读；新worker清单不冒充它。`BatchView`返回有序音频名及真实子任务计数；科学schema/单位/NaN规则未变。
 
 `/jobs/local-inputs`和`/jobs/local-results/{id}`仅为桌面宿主提供有界二进制能力：本次bearer和Origin先于读取验证，普通网页登录不可调用。`/jobs/parents/latest`仅返回同账号项目、相同原音频hash、已完整发布且仍可访问的父结果引用。来源与授权边界见[ADR-027](../docs/decisions/ADR.md)。
+
+## M03-D 交互显示增量
+
+m03/1增加preview模式与micro_center/micro_width_ms，只作用于交互绘图，旧单文件/批次/逆滤波的完整文件集合不变。旧模式幂等哈希排除新增微观默认字段。egg-preview/1 JSON中缺失值为null，频谱栅格只做有界显示。egg-inverse-view/1记录原IF图的频率/dB与相对中心采样时间，WAV科学数值不改。两套显示结构由Pydantic生成OpenAPI/JSON Schema/TypeScript。

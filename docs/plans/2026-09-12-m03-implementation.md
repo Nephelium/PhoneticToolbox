@@ -65,6 +65,8 @@
 
 ### M03-D：共同界面与真实操作
 
+本轮已完成限定Windows开发态实现，报告见[页面验收](../testing/m03-ui-report.md)。井井针对按钮区的反馈已落实为两行功能分组，高低通集中EGG图上方。preview数据与IF四图数值边界见ADR-038，宏观任务范围不扩展为完整E/F。
+
 字体退出门：先接入P04-FONT公共角色与偏好，再构建页面及四图，覆盖CQ/SQ双轴、谱图色条、微观事件标签、总览、参数行、批次与IF结果。不得先硬编码字体再等待收尾替换。除A28外追加[P04-FONT的F01–F12](2026-09-12-global-fonts-design.md)适用项，三PNG实际回读与字体缺失回退列入E联合验收。公共字体能力未就绪时，页面字体专项保持planned/in_progress。
 
 拟新增 `frontend/src/modules/egg-analysis/{EggAnalysisPage,EggSignalPlots,EggParameters,EggBatchPanel,EggInverseResult}.vue`、`state.ts`，修改 `AppShell.vue` 和共用平台声明。新建 `frontend/tests/m03.test.ts`、`scripts/verify_m03_qt.py`、`tests/e2e/m03.cjs`。
@@ -76,7 +78,7 @@
 3. 微观事件与CQ图如沿用不同legacy策略必须显示来源，不能制造完全同步的假象。全局时间与毫秒相对时间分别标记。
 4. 先测默认操作、每个设置/导出/关闭，再测浅深主题、390/1000/1440宽、IPA/长文件名、取消/错误和输入切换。独立Chrome/Qt，不调用Codex内置浏览器关闭。
 
-拟执行：`npm --prefix frontend test`、`npm --prefix frontend run typecheck`、`npm --prefix frontend run build`、`.venv/m03-ui/Scripts/python.exe -X utf8 scripts/verify_m03_qt.py` 及项目拥有的Chrome验证启动器。
+拟执行：`npm --prefix frontend test`、`npm --prefix frontend run typecheck`、`npm --prefix frontend run build`、`.venv/m09-ui/Scripts/python.exe -X utf8 scripts/verify_m03_qt.py` 及项目拥有的Chrome验证启动器。
 
 ### M03-E：来源、说明书与逐项联合验收
 
@@ -129,4 +131,4 @@
 
 ## 4. 当前执行结果
 
-M03-A/B/C verified，分别限定原v2独立基准、Windows安装核心wheel、开发态任务/文件/数值导出。C的258项后台/桌面/契约回归、23项导出及真实Windows流程见任务报告；完整字体专项、D页面/整批目录交互、E联合与来源收口、F冻结EXE尚未完成。完整M03和P08仍in_progress，下一项公共字体依赖及M03-D，不提前启动其他模块。
+M03-A/B/C/D 已分别在原版基准、Windows安装核心、开发态任务/导出、开发态统一页面范围内验证。D证据见页面报告，包括井井要求的按钮分组修订；公共字体已从第一版接入。完整M03/P08仍in_progress，下一项E：30项逐项对照、自然语料页面、网页账号联合路径、输出命名及来源收口；F冻结EXE仍planned。D广域回归的一次M01 Scratch清理占用单列保留，不宣称所有回归稳定全绿。

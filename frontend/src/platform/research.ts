@@ -5,6 +5,7 @@ export type Spectrogram=components['schemas']['SpectrogramPreview'];
 export type ParameterTable=components['schemas']['ParameterTable'];
 export type ReconstructionConfig=components['schemas']['Spec2WavConfig'];
 export type EggTaskConfig=components['schemas']['EggTaskConfig'];
+export type EggPreviewData=components['schemas']['EggPreviewData'];
 export interface SpectrogramView {channel:number;start:number;end:number;width:number}
 export interface ResearchFile { id:string; name:string; kind:'audio'|'textgrid'|'lip'|'lip_pickle'|'parameter'|'image'; size:number; sha256?:string; expiresAt?:number }
 export interface DirectoryGrant { id:string; label:string; purpose:'input'|'output'|'association' }

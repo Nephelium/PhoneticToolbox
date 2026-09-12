@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref,watch,onMounted,onUnmounted } from 'vue';import type { Workspace } from '../state/workspace.ts';import {playback,play,pause,stop,volume,seek} from '../state/audio.ts';import { selection } from '../platform/wav.ts';import AppIcon from './AppIcon.vue';
-const props=defineProps<{state:Workspace;active:boolean}>();
+const props=defineProps<{state:Workspace;active:boolean;compact?:boolean}>();
 const scrub=ref<number|null>(null);
 watch(()=>[props.state.asset,props.state.start,props.state.end],()=>scrub.value=null);
 function seekTo(event:Event){if(props.state.asset)seek(props.state.asset,Number((event.target as HTMLInputElement).value),props.state.start,props.state.end,props.state.channel);scrub.value=null;}
@@ -10,8 +10,8 @@ function key(e:KeyboardEvent){if(!props.active||e.code!=='Space'||e.repeat||docu
 onMounted(()=>window.addEventListener('keydown',key));onUnmounted(()=>window.removeEventListener('keydown',key));
 </script>
 <template>
-<div class="transport-controls">
-<div class="selection-controls">
+<div class="transport-controls" :class="{'transport-compact':compact}">
+<div v-if="!compact" class="selection-controls">
 <strong>时间选区</strong>
 <label>起点 <input v-model.number="state.start" type="number" min="0" :max="state.asset?.duration||0" step="0.001" :disabled="!state.asset" @change="range"/> s</label>
 <span>—</span>
@@ -19,7 +19,7 @@ onMounted(()=>window.addEventListener('keydown',key));onUnmounted(()=>window.rem
 <button :disabled="!state.asset" @click="state.start=0;state.end=state.asset!.duration;stop()">全部</button>
 </div>
 <div class="audio-transport">
-<button class="primary" :disabled="!state.asset||state.end<=state.start" @click="toggle">
+<button :class="{primary:!compact}" :disabled="!state.asset||state.end<=state.start" @click="toggle">
 <AppIcon :name="playback.playing?'pause':'play'"/>{{playback.playing?'暂停':'播放选区'}}</button>
 <button :disabled="!state.asset" @click="stop">
 <AppIcon name="stop"/>停止</button>
@@ -34,3 +34,6 @@ onMounted(()=>window.addEventListener('keydown',key));onUnmounted(()=>window.rem
 </div>
 <p v-if="playback.error" role="alert" class="error-text">{{playback.error}}</p>
 </template>
+<style scoped>
+.transport-compact{padding:0;gap:6px;flex:1;min-width:220px}.transport-compact .audio-transport{gap:6px;flex-wrap:wrap;margin:0}.transport-compact .playback-seek,.transport-compact .volume{display:none}
+</style>

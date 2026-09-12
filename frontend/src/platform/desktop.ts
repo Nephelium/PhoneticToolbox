@@ -1,4 +1,5 @@
 import { browser } from './browser.ts';
+import {serialRequests} from './serial-requests.ts';
 import type { HostCapabilities } from './types.ts';
 import type { DirectoryGrant,ResearchFiles,Spectrogram,ResearchTasks } from './research.ts';
 type Bridge={invoke:(body:string,callback:(value:string)=>void)=>void;preview:(id:string,body:string)=>void;previewReady:{connect:(fn:(id:string,body:string)=>void)=>void};task:(id:string,body:string)=>void;taskReady:{connect:(fn:(id:string,body:string)=>void)=>void}};
@@ -26,7 +27,7 @@ export async function initializePlatform(){
   bridge.previewReady.connect((id,text)=>{const request=pending.get(id);if(!request)return;pending.delete(id);clearTimeout(request.timer);try{const data=JSON.parse(text);if(!data.ok)throw Error(data.error);request.resolve(data.value);}catch(e){request.reject(e instanceof Error?e:Error('语谱图读取失败。'));}});
   const taskPending=new Map<string,{resolve:(value:any)=>void;reject:(error:Error)=>void;timer:ReturnType<typeof setTimeout>}>();
   bridge.taskReady?.connect((id,text)=>{const request=taskPending.get(id);if(!request)return;taskPending.delete(id);clearTimeout(request.timer);try{const data=JSON.parse(text);if(!data.ok)throw Error(data.error);request.resolve(data.value);}catch(e){request.reject(e instanceof Error?e:Error('任务读取失败。'));}});
-  const task=<T>(body:unknown):Promise<T>=>new Promise((resolve,reject)=>{const id=crypto.randomUUID(),timer=setTimeout(()=>{taskPending.delete(id);reject(Error('任务操作超时，刷新批次可核对实际状态。'));},300000);taskPending.set(id,{resolve,reject,timer});bridge.task(id,JSON.stringify(body));});
+  const task=serialRequests(<T>(body:unknown):Promise<T>=>new Promise((resolve,reject)=>{const id=crypto.randomUUID(),timer=setTimeout(()=>{taskPending.delete(id);reject(Error('任务操作超时，刷新批次可核对实际状态。'));},300000);taskPending.set(id,{resolve,reject,timer});bridge.task(id,JSON.stringify(body));}));
   const tasks:ResearchTasks={parent:file=>task({op:'parent',id:file.id}),submit:(operation,inputs,config,layer,key)=>task({op:'submit',operation,inputs:inputs.map(item=>Object.fromEntries(Object.entries(item).filter(([,v])=>v!=null).map(([role,file])=>[role,role==='parent_result'?file:(file as {id:string}).id]))),config,layer,idempotency_key:key}),
     reconstruct:(file,config,key)=>task({op:'reconstruct',id:file.id,config,key}),reconstructions:()=>task({op:'reconstructions'}),cancelJob:id=>task({op:'cancel_job',id}),saveJob:(id,directory)=>task({op:'save_job',id,directory}),
     egg:async(file,config,key)=>{const {exportFontSnapshot}=await import('../state/fonts.ts');return task({op:'egg',id:file.id,config:{...config,font:config.font??exportFontSnapshot()},key});},eggJobs:()=>task({op:'egg_jobs'}),

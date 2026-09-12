@@ -39,7 +39,7 @@ def prepare(raw, config):
     numerical = EGGConfig.for_workbench(**{k:v for k,v in settings.model_dump().items() if k in EGGConfig.__dataclass_fields__})
     result = analyze_events(load(samples, int(fs), numerical, flip_channels=settings.flip_channels), numerical)
     first_time, last_time = first/fs, last/fs
-    blobs = {}; masked = 0; font_evidence=None
+    blobs = {}; masked = 0; font_evidence=None; preview=None; inverse_view=None
     if settings.font is not None and (settings.mode=='single' or settings.generate_images):
         from .fonts import resolve_fonts
         font_evidence=resolve_fonts(settings.font)
@@ -47,6 +47,12 @@ def prepare(raw, config):
         audio = result.audio_signal[first:last]
         gcis = np.asarray(result.gci_times); gcis = gcis[(gcis >= first_time) & (gcis < last_time)]-first_time
         filtered = inverse_filter(audio, int(fs), gcis, lp_order=settings.lp_order)
+        from phonetic_core.egg.preview import inverse_comparison
+        from ptb_api.egg_models import EggInverseData
+        frequencies, spectra, times, waves = inverse_comparison(audio,filtered,result.egg_signal_processed[first:last],int(fs))
+        inverse_view = EggInverseData(frequencies_hz=frequencies.tolist(),audio_db=spectra[0].tolist(),
+            inverse_db=spectra[1].tolist(),egg_db=spectra[2].tolist(),relative_times_s=times.tolist(),
+            audio_values=waves[0].tolist(),inverse_values=waves[1].tolist(),egg_values=waves[2].tolist()).model_dump()
         for name, values in [('egg_ORIG.wav',audio),('egg_IF.wav',filtered)]:
             stream = io.BytesIO(); wavfile.write(stream,int(fs),values.astype(np.float64)); blobs[name] = stream.getvalue()
     else:
@@ -55,9 +61,13 @@ def prepare(raw, config):
             result.audio_f0_times, result.audio_f0_values = track.times,track.values
         if settings.glottal_movement:
             result.glottal_movement_events = glottal_movement(result.audio_f0_times,result.audio_f0_values)
-        blobs['egg_DATA.csv'], masked = csv_bytes(result,numerical,settings,first_time,last_time)
-        if settings.mode == 'single' or settings.generate_images:
-            blobs.update(plot_bytes(result,numerical,settings,first,last,font_evidence))
+        if settings.mode == 'preview':
+            from .egg_preview import preview_files
+            preview, blobs = preview_files(result,numerical,settings,first,last)
+        else:
+            blobs['egg_DATA.csv'], masked = csv_bytes(result,numerical,settings,first_time,last_time)
+            if settings.mode == 'single' or settings.generate_images:
+                blobs.update(plot_bytes(result,numerical,settings,first,last,font_evidence))
     metadata = dict(schema_version='m03/1',method_version=result.method_version,export_policy=settings.export_policy,
         config=settings.model_dump(),render_fonts=font_evidence,input_sha256=digest(raw),sample_rate_hz=int(fs),sample_count=len(samples),
         selection=dict(start_sample=first,end_sample=last,start_s=first_time,end_s=last_time,interval='half-open'),
@@ -69,6 +79,9 @@ def prepare(raw, config):
         local_cq_policy='legacy-100ms-padding-repeat-filter',waveform_time='sample-index/fs',
         inverse=(dict(sample_count=last-first,lp_order=settings.lp_order or int(fs/1000)+6,
             original='normalized-analysis-audio',estimate='simplified-closed-phase-inverse-filter',wav_subtype='FLOAT64') if settings.mode=='inverse' else None))
+    if preview is not None:
+        metadata.update(preview=preview,csv_grid=None,csv_mask=None)
+    if inverse_view is not None: metadata['inverse_view']=inverse_view
     blobs['egg.ptb.json'] = json.dumps(metadata,ensure_ascii=False,allow_nan=False).encode()
     names = expected_names(settings)
     if set(blobs) != set(names): raise AcousticFailure('egg_incomplete_export')

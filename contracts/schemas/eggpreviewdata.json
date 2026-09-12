@@ -1,0 +1,192 @@
+{
+  "$defs": {
+    "EggSeries": {
+      "additionalProperties": false,
+      "properties": {
+        "times": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 30000,
+          "title": "Times",
+          "type": "array"
+        },
+        "values": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "maxItems": 30000,
+          "title": "Values",
+          "type": "array"
+        }
+      },
+      "required": [
+        "times",
+        "values"
+      ],
+      "title": "EggSeries",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "audio": {
+      "$ref": "#/$defs/EggSeries"
+    },
+    "cq": {
+      "$ref": "#/$defs/EggSeries"
+    },
+    "display_policy": {
+      "const": "legacy-roi-extent; grayscale-raster-only",
+      "default": "legacy-roi-extent; grayscale-raster-only",
+      "title": "Display Policy",
+      "type": "string"
+    },
+    "egg": {
+      "$ref": "#/$defs/EggSeries"
+    },
+    "gci": {
+      "items": {
+        "type": "number"
+      },
+      "maxItems": 1000,
+      "title": "Gci",
+      "type": "array"
+    },
+    "gci_f0": {
+      "$ref": "#/$defs/EggSeries"
+    },
+    "goi": {
+      "items": {
+        "type": "number"
+      },
+      "maxItems": 1000,
+      "title": "Goi",
+      "type": "array"
+    },
+    "micro_center": {
+      "title": "Micro Center",
+      "type": "number"
+    },
+    "micro_event_policy": {
+      "const": "raw-50ms-padding",
+      "default": "raw-50ms-padding",
+      "title": "Micro Event Policy",
+      "type": "string"
+    },
+    "micro_wave_policy": {
+      "const": "raw-100ms-padding-filter-crop",
+      "default": "raw-100ms-padding-filter-crop",
+      "title": "Micro Wave Policy",
+      "type": "string"
+    },
+    "micro_width_ms": {
+      "title": "Micro Width Ms",
+      "type": "number"
+    },
+    "movement": {
+      "items": {
+        "maxItems": 2,
+        "minItems": 2,
+        "prefixItems": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          }
+        ],
+        "type": "array"
+      },
+      "maxItems": 1000,
+      "title": "Movement",
+      "type": "array"
+    },
+    "praat": {
+      "$ref": "#/$defs/EggSeries"
+    },
+    "raster_shape": {
+      "maxItems": 2,
+      "minItems": 2,
+      "prefixItems": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "integer"
+        }
+      ],
+      "title": "Raster Shape",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "egg-preview/1",
+      "default": "egg-preview/1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "spectral_extent": {
+      "maxItems": 4,
+      "minItems": 4,
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Spectral Extent",
+      "type": "array"
+    },
+    "spectral_shape": {
+      "maxItems": 2,
+      "minItems": 2,
+      "prefixItems": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "integer"
+        }
+      ],
+      "title": "Spectral Shape",
+      "type": "array"
+    },
+    "sq": {
+      "$ref": "#/$defs/EggSeries"
+    }
+  },
+  "required": [
+    "cq",
+    "sq",
+    "praat",
+    "gci_f0",
+    "audio",
+    "egg",
+    "gci",
+    "goi",
+    "movement",
+    "micro_center",
+    "micro_width_ms",
+    "spectral_extent",
+    "spectral_shape",
+    "raster_shape"
+  ],
+  "title": "EggPreviewData",
+  "type": "object"
+}

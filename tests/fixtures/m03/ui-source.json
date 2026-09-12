@@ -1,0 +1,32 @@
+{
+  "source": "PENDING-EGG",
+  "file": "phonetic_toolbox/gui/widgets/egg_widget.py",
+  "source_sha256": "20dd2874be54ae4202fc2aecaf05484227e3aff48bb99d5a08cfca5bb6629daf",
+  "input": "public EGG-SYN-PCM16 normalized samples",
+  "keys": [
+    "end.False.egg",
+    "end.False.ms",
+    "end.True.egg",
+    "end.True.ms",
+    "if.0.0.x",
+    "if.0.0.y",
+    "if.0.1.x",
+    "if.0.1.y",
+    "if.1.0.x",
+    "if.1.0.y",
+    "if.2.0.x",
+    "if.2.0.y",
+    "if.3.0.x",
+    "if.3.0.y",
+    "if.4.0.x",
+    "if.4.0.y",
+    "middle.False.egg",
+    "middle.False.ms",
+    "middle.True.egg",
+    "middle.True.ms",
+    "start.False.egg",
+    "start.False.ms",
+    "start.True.egg",
+    "start.True.ms"
+  ]
+}

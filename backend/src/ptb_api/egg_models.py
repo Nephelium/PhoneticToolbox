@@ -1,5 +1,5 @@
 """M03/1: immutable per-file task, shared P06/P07 persistence (no DDL)."""
-from typing import Literal
+from typing import Literal, Annotated
 from pydantic import Field, model_validator
 from .models import WireModel, Identifier, IdempotencyKey
 from .acoustic_models import AcousticAssetRef
@@ -9,7 +9,9 @@ from .font_models import FigureFontSnapshot
 
 class EggTaskConfig(WireModel):
     font: FigureFontSnapshot | None = None  # None preserves historical task rendering.
-    mode: Literal['single', 'batch', 'inverse'] = 'single'
+    mode: Literal['single', 'batch', 'inverse', 'preview'] = 'single'
+    micro_center: float | None = Field(default=None, ge=0, le=60)
+    micro_width_ms: float = Field(default=50., ge=10, le=200)
     flip_channels: bool = False
     signal_mode: Literal['raw', 'filtered'] = 'filtered'
     roi_start: float = Field(default=0.0, ge=0, le=86400)
@@ -34,6 +36,8 @@ class EggTaskConfig(WireModel):
 
     @model_validator(mode='after')
     def ranges(self):
+        if self.mode != 'preview' and (self.micro_center is not None or self.micro_width_ms != 50.):
+            raise ValueError('Micro viewport only applies to preview')
         if self.highpass_cutoff >= self.lowpass_cutoff or self.spec_vmin >= self.spec_vmax:
             raise ValueError('Invalid filter or spectral range')
         if (self.roi_end is None and self.roi_start != 0) or (self.roi_end is not None and self.roi_end <= self.roi_start):
@@ -57,6 +61,7 @@ class EggRequest(WireModel):
 
 def expected_names(config):
     names = ['egg.ptb.json']
+    if config.mode == 'preview': return names + ['egg_AUDIO.wav', 'egg_PSD.png']
     if config.mode == 'inverse': return names + ['egg_ORIG.wav', 'egg_IF.wav']
     names += ['egg_DATA.csv']
     if config.mode == 'single' or config.generate_images:
@@ -75,8 +80,55 @@ class EggManifest(WireModel):
     def complete_set(self):
         names = sorted(f.name for f in self.files)
         sets = [expected_names(EggTaskConfig()), expected_names(EggTaskConfig(mode='batch')),
-                expected_names(EggTaskConfig(mode='inverse', roi_end=1.0))]
+                expected_names(EggTaskConfig(mode='inverse', roi_end=1.0)), expected_names(EggTaskConfig(mode='preview'))]
         if (names not in [sorted(s) for s in sets] or len({f.id for f in self.files}) != len(names)
                 or sum(f.size_bytes for f in self.files) > 64_000_000):
             raise ValueError('Incomplete EGG export')
         return self
+
+
+class EggSeries(WireModel):
+    times: list[float] = Field(max_length=30000)
+    values: list[float | None] = Field(max_length=30000)
+
+    @model_validator(mode='after')
+    def aligned(self):
+        if len(self.times) != len(self.values): raise ValueError('Unaligned series')
+        return self
+
+
+class EggPreviewData(WireModel):
+    schema_version: Literal['egg-preview/1'] = 'egg-preview/1'
+    cq: EggSeries
+    sq: EggSeries
+    praat: EggSeries
+    gci_f0: EggSeries
+    audio: EggSeries
+    egg: EggSeries
+    gci: list[float] = Field(max_length=1000)
+    goi: list[float] = Field(max_length=1000)
+    movement: list[tuple[float, str]] = Field(max_length=1000)
+    micro_center: float
+    micro_width_ms: float
+    spectral_extent: tuple[float, float, float, float]
+    spectral_shape: tuple[int, int]
+    raster_shape: tuple[int, int]
+    display_policy: Literal['legacy-roi-extent; grayscale-raster-only'] = 'legacy-roi-extent; grayscale-raster-only'
+    micro_wave_policy: Literal['raw-100ms-padding-filter-crop'] = 'raw-100ms-padding-filter-crop'
+    micro_event_policy: Literal['raw-50ms-padding'] = 'raw-50ms-padding'
+
+
+DisplayValues = Annotated[list[float], Field(max_length=30000)]
+
+
+class EggInverseData(WireModel):
+    schema_version: Literal['egg-inverse-view/1'] = 'egg-inverse-view/1'
+    frequencies_hz: DisplayValues
+    audio_db: DisplayValues
+    inverse_db: DisplayValues
+    egg_db: DisplayValues
+    relative_times_s: DisplayValues
+    audio_values: DisplayValues
+    inverse_values: DisplayValues
+    egg_values: DisplayValues
+    spectral_policy: Literal['pad-44100-periodic-hamming-fft-80db-floor'] = 'pad-44100-periodic-hamming-fft-80db-floor'

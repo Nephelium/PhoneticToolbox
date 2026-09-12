@@ -139,12 +139,34 @@
       "default": null,
       "title": "Lp Order"
     },
+    "micro_center": {
+      "anyOf": [
+        {
+          "maximum": 60,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Micro Center"
+    },
+    "micro_width_ms": {
+      "default": 50.0,
+      "maximum": 200,
+      "minimum": 10,
+      "title": "Micro Width Ms",
+      "type": "number"
+    },
     "mode": {
       "default": "single",
       "enum": [
         "single",
         "batch",
-        "inverse"
+        "inverse",
+        "preview"
       ],
       "title": "Mode",
       "type": "string"

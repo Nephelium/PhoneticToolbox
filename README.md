@@ -2,7 +2,7 @@
 
 **全局字体（2026-09-12）：** 设置中可统一调整中文、英文与数字、等宽字体，IPA始终固定Doulos SIL。M01/M02/M09/M10开发页面与新导出图像已接入，M03后台任务使用提交时的字体快照。整幅PNG刻度、音标和图例统一基础字号。操作见[字体设置](docs/manual/settings.md)，证据与限制见[字体报告](docs/testing/p04-fonts-report.md)。历史EXE未重新打包。
 
-**M03最新进度（2026-09-12）：** C已完成限定Windows开发态任务/文件/数值导出，真实三条任务路径、取消/重试/故障回收、60秒三图和两份授权自然录音通过，见[验收记录](docs/testing/m03-jobs-report.md)。完整M03仍in_progress；公共字体快照已接通，EGG页面、整批目录交互及EXE仍待后续阶段，现有启动器/EXE尚不提供EGG页面。以下为前序历史记录，M03当前进度以本条为准。
+**M03最新进度（2026-09-12）：** D已接入统一EGG页面与分组参数区，限定Windows开发态Qt/独立Chrome的四图、单文件/IF/批次保存与重开操作已验证，见[页面报告](docs/testing/m03-ui-report.md)及[使用说明](docs/manual/egg-analysis.md)。开发入口`scripts/Start-Research-Workbench.ps1`可打开新页。完整M03仍in_progress，下一项E联合收口；旧EXE未重新打包，不能视为包含新页面。以下为前序历史记录。
 
 **2026-09-12 收尾更新：** 既有成果已建立本地源码检查点，M02新增包含波形/标注/可选语谱图的白底300dpi整幅PNG，限定开发态Windows Qt/Chrome验收见[收尾报告](docs/testing/m02-png-closeout-report.md)。使用`scripts/Start-Research-Workbench.ps1`可读取本轮前端构建；下面历史Research-Fix1.exe未重新打包。M03-A/B已完成独立基准及[Windows纯核心验证](docs/testing/m03-core-report.md)：80项检查、11样例31761项精确比较。完整M03仍in_progress，任务/导出/页面未接入；后续布局按[v2位置与v3组件约束](docs/design/m03-v2-layout.md)执行。P08继续in_progress。
 

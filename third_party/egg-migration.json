@@ -47,6 +47,18 @@
     "policy": "sample-aligned/1: actual Praat frame times, half-open CSV ROI, waveform sample-index time; retain local filtering and CSV-only batch masking",
     "spectrum": "Matplotlib 3.10.8 PSD called in 256-window blocks; PSD/frequency/time byte parity checked; invisible raster rows clipped at identical pixel boundaries",
     "evidence": "docs/testing/m03-jobs-report.md",
-    "font_snapshot": "P04-FONT pending; current PNGs are fixed legacy print reference only"
+    "font_snapshot": "P04-FONT verified for Windows development exports; docs/testing/p04-fonts-report.md"
+  },
+  "display_migration": {
+    "used_in": [
+      "packages/phonetic_core/src/phonetic_core/egg/preview.py",
+      "backend/src/ptb_worker/egg_preview.py",
+      "frontend/src/modules/egg-analysis"
+    ],
+    "policy": "Preserve raw 100ms padded micro display, independent 50ms events and processed 100ms CQ; inverse pad then periodic Hamming/FFT, actual central 50ms window.",
+    "baseline": "tests/fixtures/m03/ui-display.npz",
+    "baseline_sha256": "254fe5445b73fd9be494eefbf3234bbdb6b42f6385bc499863d617ac024c1128",
+    "capture": "scripts/capture_m03_display.py",
+    "evidence": "docs/testing/m03-ui-report.md"
   }
 }

@@ -20,6 +20,17 @@ def test_workbench_defaults():
     assert config.export_policy == 'sample-aligned/1'
 
 
+def test_preview_fields_do_not_change_historical_mode_idempotency_payload():
+    from ptb_api.egg_models import EggRequest
+    from ptb_worker.egg_jobs import request_payload
+    from ptb_worker.store import LOCAL_PROJECT
+    base=dict(project_id=LOCAL_PROJECT,idempotency_key='m03-compatible-hash',audio=dict(asset_id=LOCAL_PROJECT,sha256='a'*64))
+    for config in [{},{'mode':'batch'},{'mode':'inverse','roi_end':.1}]:
+        payload=request_payload(EggRequest(**base,config=config))
+        assert 'micro_center' not in payload['config'] and 'micro_width_ms' not in payload['config']
+    assert request_payload(EggRequest(**base,config={'mode':'preview','micro_center':.1}))['config']['micro_center']==.1
+
+
 def test_partial_manifest_rejected():
     with pytest.raises(ValidationError): EggManifest(core_version='3.0.0a1', files=[])
 

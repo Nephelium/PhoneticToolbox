@@ -2,11 +2,12 @@
 import { computed,ref,onMounted,onUnmounted } from 'vue';import type { Workspace } from '../state/workspace.ts';import { envelope,selection } from '../platform/wav.ts';
 import SpectrogramViewport from './SpectrogramViewport.vue';import type {Spectrogram,SpectrogramView} from '../platform/research.ts';
 import {playback} from '../state/audio.ts';
-const props=defineProps<{state:Workspace;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>}>();let anchor:number|null=null;
+const props=defineProps<{state:Workspace;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;maxWindowSeconds?:number}>();let anchor:number|null=null;
 const viewport=ref<HTMLElement>(),width=ref(800);let observer:ResizeObserver;
 onMounted(()=>{observer=new ResizeObserver(entries=>{width.value=Math.max(100,Math.min(1600,Math.round(entries[0].contentRect.width)));});if(viewport.value)observer.observe(viewport.value);});
 onUnmounted(()=>observer?.disconnect());
 const duration=computed(()=>props.state.asset?.duration||0);const windowLength=computed(()=>duration.value/props.state.zoom);
+const minZoom=computed(()=>Math.max(1,duration.value/(props.maxWindowSeconds??Infinity)));
 const left=computed(()=>Math.min(props.state.offset,Math.max(0,duration.value-windowLength.value)));
 const indices=computed(()=>{const a=props.state.asset;if(!a)return [];const selected=Math.min(props.state.channel,a.channels.length-1);return props.state.showBoth&&a.channels.length>1?[0,selected===0?1:selected]:[selected];});
 const tracks=computed(()=>indices.value.map(index=>({index,points:envelope(props.state.asset!.channels[index],left.value*props.state.asset!.sampleRate,(left.value+windowLength.value)*props.state.asset!.sampleRate,width.value,props.state.asset!.peaks?.[index])})));
@@ -16,7 +17,7 @@ function time(event:PointerEvent){const box=(event.currentTarget as Element).get
 function down(event:PointerEvent){anchor=time(event);(event.currentTarget as Element).setPointerCapture(event.pointerId);props.state.start=anchor;props.state.end=anchor;}
 function move(event:PointerEvent){if(anchor!==null){[props.state.start,props.state.end]=selection(anchor,time(event),duration.value);}}
 const maxZoom=computed(()=>Math.max(1,Math.min(65536,duration.value/.01)));
-function zoom(value:number,fraction=0){const anchor=left.value+fraction*windowLength.value;props.state.zoom=Math.max(1,Math.min(maxZoom.value,value));props.state.offset=Math.max(0,Math.min(anchor-fraction*windowLength.value,duration.value-windowLength.value));}
+function zoom(value:number,fraction=0){const anchor=left.value+fraction*windowLength.value;props.state.zoom=Math.max(minZoom.value,Math.min(maxZoom.value,value));props.state.offset=Math.max(0,Math.min(anchor-fraction*windowLength.value,duration.value-windowLength.value));}
 function wheel(event:WheelEvent){if(!event.ctrlKey||!duration.value)return;event.preventDefault();const box=(event.currentTarget as Element).getBoundingClientRect();zoom(props.state.zoom*(event.deltaY<0?2:.5),Math.max(0,Math.min(1,(event.clientX-box.left)/box.width)));}
 </script>
 <template>
@@ -25,7 +26,7 @@ function wheel(event:WheelEvent){if(!event.ctrlKey||!duration.value)return;event
 <span>原始波形 <small>· 振幅 / 秒</small>
 </span>
 <div>
-<button :disabled="state.zoom===1" aria-label="缩小波形" @click="zoom(state.zoom/2)">−</button>
+<button :disabled="state.zoom<=minZoom" aria-label="缩小波形" @click="zoom(state.zoom/2)">−</button>
 <span class="mono">{{Number(state.zoom.toFixed(1))}}×</span>
 <button :disabled="state.zoom>=maxZoom" aria-label="放大波形" @click="zoom(state.zoom*2)">+</button>
 <button @click="zoom(1);state.offset=0">适合窗口</button>
@@ -53,6 +54,6 @@ function wheel(event:WheelEvent){if(!event.ctrlKey||!duration.value)return;event
 <slot name="timeline" :start="left" :end="left+windowLength"/>
 <label v-if="state.zoom>1" class="pan-label">时间窗起点 <input v-model.number="state.offset" type="range" min="0" :max="duration-windowLength" :step="1/(state.asset?.sampleRate||1)" aria-label="平移波形时间窗"/>
 </label>
-<p class="hint">拖动选区 · Ctrl＋滚轮缩放 · 双击显示全长；下方可输入精确时间。</p>
+<p class="hint">拖动选区 · Ctrl＋滚轮缩放 · 双击{{maxWindowSeconds?'恢复总览':'显示全长'}}；时间控件可输入精确选区。</p>
 </div>
 </template>
