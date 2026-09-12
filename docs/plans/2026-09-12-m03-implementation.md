@@ -6,7 +6,7 @@
 
 **技术：** 项目内Python 3.11、NumPy/SciPy/Parselmouth、Pandas/Matplotlib、Vue/TypeScript、现有Qt宿主与P06/P07服务。A仅审计，B已创建独立科学环境并锁定实际Conda/MKL构建；GUI依赖和整合仍待后续阶段。
 
-2026-09-12最新授权：井井在A阶段及v3统一风格说明后回复“噢噢 那你继续吧”。**M03-A/B已限定verified，完整M03仍in_progress。** B的独立核心、wheel及环境证据见[核心报告](../testing/m03-core-report.md)，C–F尚未实施。无需重复002/005，本轮不执行DDL。
+2026-09-12最新授权：井井在B阶段后回复“好，继续”。**M03-A/B/C已限定verified，完整M03仍in_progress。** B的独立核心、wheel及环境证据见[核心报告](../testing/m03-core-report.md)，C的任务/文件/数值导出证据见[任务报告](../testing/m03-jobs-report.md)。新增P04-FONT字体快照尚未接通，字体专项仍planned；D–F尚未实施。无需重复002/005，本轮不执行DDL。
 
 ## 1. 输入证据和拟定行为
 
@@ -47,6 +47,8 @@
 已执行：`scripts/Invoke-M03-Python.ps1 -X utf8 -m pytest -c tests/pytest.ini tests/parity/test_egg_analysis.py packages/phonetic_core/tests/test_egg_config.py tests/parity/test_m03_capture_contract.py -q`，最终80项通过。安装wheel后从独立目录执行同组回归和`scripts/verify_m03_core.py --include-private`，11样例31761项精确比较通过。真实使用`.venv/m03-compatible`，原拟`.venv/m03-ui`的PyPI SciPy构建无法逐位复现旧MKL去趋势，保留失败证据而不扩大容差。
 
 ### M03-C：有界任务、文件和导出
+
+本轮完成状态及实测预算见[任务报告](../testing/m03-jobs-report.md)。采用固定的隔离科学bootstrap，不把EGG加入现有冻结EXE的通用worker入口；现有EXE尚未包含兼容运行库。通用任务表承载逐文件批次项，整批目录交互留给D，不改变005的M01批次限制。单文件/批次CSV科学规则保留并明确sample-aligned/1差异，FFT分块与原调用逐字节一致。字体专项仍依赖下一段公共方案。
 
 新增依赖（2026-09-12）：[P04-FONT](2026-09-12-global-fonts-design.md)规定三PNG及批次图片使用统一导出字体快照。C已有数值/文件工作可独立推进，字体契约接入前不得把图片字体专项标为verified。Matplotlib等后台渲染在适配层解析当前渲染端可用字体，按任务隔离配置；科学核心不读取用户字体或系统字体目录。该补充不授权DDL或更改已冻结的科学数值。
 
@@ -127,4 +129,4 @@
 
 ## 4. 当前执行结果
 
-M03-A/B verified，分别限定原v2独立基准和Windows安装核心wheel。80项检查、11样例31761项精确比较通过，兼容环境与实际库构建已锁定。C接口/任务/导出、D页面、E联合与来源收口、F冻结EXE尚未完成。完整M03和P08仍in_progress，下一项M03-C，不提前启动其他模块。
+M03-A/B/C verified，分别限定原v2独立基准、Windows安装核心wheel、开发态任务/文件/数值导出。C的258项后台/桌面/契约回归、23项导出及真实Windows流程见任务报告；完整字体专项、D页面/整批目录交互、E联合与来源收口、F冻结EXE尚未完成。完整M03和P08仍in_progress，下一项公共字体依赖及M03-D，不提前启动其他模块。

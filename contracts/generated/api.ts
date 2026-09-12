@@ -308,6 +308,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/jobs/egg/create": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Egg */
+        post: operations["create_egg_job"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/jobs/local-inputs": {
         parameters: {
             query?: never;
@@ -1205,6 +1222,157 @@ export interface components {
             /** Active Jobs */
             active_jobs: string[];
         };
+        /** EggManifest */
+        EggManifest: {
+            /**
+             * Complete
+             * @default true
+             * @constant
+             */
+            complete: true;
+            /** Core Version */
+            core_version: string;
+            /** Files */
+            files: components["schemas"]["AcousticManagedFile"][];
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "managed_egg_files";
+            /**
+             * Operation
+             * @default egg_analysis
+             * @constant
+             */
+            operation: "egg_analysis";
+        };
+        /** EggRequest */
+        EggRequest: {
+            audio: components["schemas"]["AcousticAssetRef"];
+            config: components["schemas"]["EggTaskConfig"];
+            /** Idempotency Key */
+            idempotency_key: string;
+            /** Project Id */
+            project_id: string;
+            /**
+             * Schema Version
+             * @default m03/1
+             * @constant
+             */
+            schema_version: "m03/1";
+        };
+        /** EggTaskConfig */
+        EggTaskConfig: {
+            /**
+             * Auto Prominence
+             * @default true
+             */
+            auto_prominence: boolean;
+            /**
+             * Export Policy
+             * @default sample-aligned/1
+             * @constant
+             */
+            export_policy: "sample-aligned/1";
+            /**
+             * Flip Channels
+             * @default false
+             */
+            flip_channels: boolean;
+            /**
+             * Gci Method
+             * @default slope
+             * @enum {string}
+             */
+            gci_method: "slope" | "scale";
+            /**
+             * Generate Images
+             * @default false
+             */
+            generate_images: boolean;
+            /**
+             * Glottal Movement
+             * @default false
+             */
+            glottal_movement: boolean;
+            /**
+             * Goi Method
+             * @default scale
+             * @enum {string}
+             */
+            goi_method: "slope" | "scale";
+            /**
+             * Highpass Cutoff
+             * @default 25
+             */
+            highpass_cutoff: number;
+            /**
+             * Keep Gci F0
+             * @default true
+             */
+            keep_gci_f0: boolean;
+            /**
+             * Keep Praat F0
+             * @default true
+             */
+            keep_praat_f0: boolean;
+            /**
+             * Lowpass Cutoff
+             * @default 1000
+             */
+            lowpass_cutoff: number;
+            /** Lp Order */
+            lp_order?: number | null;
+            /**
+             * Mode
+             * @default single
+             * @enum {string}
+             */
+            mode: "single" | "batch" | "inverse";
+            /**
+             * Peak Prominence
+             * @default 0.01
+             */
+            peak_prominence: number;
+            /** Roi End */
+            roi_end?: number | null;
+            /**
+             * Roi Start
+             * @default 0
+             */
+            roi_start: number;
+            /**
+             * Signal Mode
+             * @default filtered
+             * @enum {string}
+             */
+            signal_mode: "raw" | "filtered";
+            /**
+             * Silence Threshold
+             * @default 0.01
+             */
+            silence_threshold: number;
+            /**
+             * Spec Vmax
+             * @default -10
+             */
+            spec_vmax: number;
+            /**
+             * Spec Vmin
+             * @default -70
+             */
+            spec_vmin: number;
+            /**
+             * Spec Window Ms
+             * @default 20
+             */
+            spec_window_ms: number;
+            /**
+             * Valley Prominence
+             * @default 0.01
+             */
+            valley_prominence: number;
+        };
         /** FileConfig */
         FileConfig: {
             /** Inputs */
@@ -1371,13 +1539,13 @@ export interface components {
              * @default pipeline_check
              * @enum {string}
              */
-            operation: "pipeline_check" | "storage_check" | "archive_zip" | "extract_zip" | "acoustic_analysis" | "textgrid_segment" | "spectrogram_to_audio";
+            operation: "pipeline_check" | "storage_check" | "archive_zip" | "extract_zip" | "acoustic_analysis" | "textgrid_segment" | "spectrogram_to_audio" | "egg_analysis";
             /** Progress */
             progress: number;
             /** Project Id */
             project_id: string;
             /** Result Manifest */
-            result_manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticTaskManifest"] | components["schemas"]["Spec2WavManifest"] | null;
+            result_manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticTaskManifest"] | components["schemas"]["Spec2WavManifest"] | components["schemas"]["EggManifest"] | null;
             /** Retry Of */
             retry_of?: string | null;
             /**
@@ -1484,7 +1652,7 @@ export interface components {
         /** ResultManifestEnvelope */
         ResultManifestEnvelope: {
             /** Manifest */
-            manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticFileManifest"] | components["schemas"]["AcousticTaskManifest"] | components["schemas"]["Spec2WavManifest"];
+            manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticFileManifest"] | components["schemas"]["AcousticTaskManifest"] | components["schemas"]["Spec2WavManifest"] | components["schemas"]["EggManifest"];
         };
         /** RetryInput */
         RetryInput: {
@@ -2324,6 +2492,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BatchView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_egg_job: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EggRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobView"];
                 };
             };
             /** @description Validation Error */

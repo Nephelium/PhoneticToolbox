@@ -2,6 +2,9 @@
 from .io.limits import Cancelled, FormatError, LimitError
 
 ACOUSTIC_ERRORS=frozenset({
+    'egg_runtime_unavailable','egg_runtime_mismatch','egg_input_budget','egg_stereo_required',
+    'egg_sample_rate','egg_invalid_roi','egg_inverse_budget','egg_incomplete_export',
+    'egg_filter_failed','egg_inverse_unavailable','egg_pitch_failed',
     'invalid_spectrogram_image','invalid_spectrogram_config','invalid_spectrogram_result','spectrogram_budget','invalid_image_corners',
     'invalid_audio','invalid_textgrid','invalid_lip','analysis_sample_limit',
     'analysis_output_limit','analysis_resource_limit','no_parameter_frames',

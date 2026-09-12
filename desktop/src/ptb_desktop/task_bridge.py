@@ -29,6 +29,12 @@ class TaskBridge:
 
     def invoke(self,body):
         op=body.get('op')
+        if op=='egg':
+            raw,_=self.provider.read(body['id']);entry=self.provider.entries[body['id']]
+            ref=self.service.import_input(raw,entry.name,'audio')
+            return self.service.request('/api/v1/jobs/egg/create','POST',dict(project_id=PROJECT,
+                idempotency_key=body['key'],audio=ref,config=body['config']))
+        if op=='egg_jobs':return [j for j in self.service.get('/api/v1/jobs?project_id='+PROJECT)['jobs'] if j['operation']=='egg_analysis']
         if op=='reconstruct':
             raw,_=self.provider.read(body['id']);entry=self.provider.entries[body['id']]
             ref=self.service.import_input(raw,entry.name,'image')
@@ -39,7 +45,7 @@ class TaskBridge:
         if op=='result':
             import base64
             job=self.service.get('/api/v1/jobs/'+str(UUID(body['job'])))
-            if job['state']!='succeeded' or job['operation']!='spectrogram_to_audio':raise FileAccessError('重建结果尚不可用。')
+            if job['state']!='succeeded' or job['operation'] not in ('spectrogram_to_audio','egg_analysis'):raise FileAccessError('分析结果尚不可用。')
             file=next((f for f in job['result_manifest']['files'] if f['id']==body['id']),None)
             if not file or file['size_bytes']>64_000_000:raise FileAccessError('结果文件不正确。')
             chunks=[self.service.binary(f'/api/v1/jobs/local-results/{file["id"]}?offset={offset}&size={min(1048576,file["size_bytes"]-offset)}') for offset in range(0,file['size_bytes'],1048576)]
@@ -124,7 +130,7 @@ class TaskBridge:
         root=directory.path
         if single:
             job=self.service.get('/api/v1/jobs/'+batch_id)
-            if job['operation']!='spectrogram_to_audio' or job['state']!='succeeded':raise FileAccessError('重建结果尚不可用。')
+            if job['operation'] not in ('spectrogram_to_audio','egg_analysis') or job['state']!='succeeded':raise FileAccessError('分析结果尚不可用。')
             batch={'summary':{'items':[dict(state='succeeded',job_id=batch_id,index=0)]}}
         else:batch=self.service.get('/api/v1/jobs/batches/'+batch_id)
         created=[];pending={};saved=[]

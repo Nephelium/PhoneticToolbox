@@ -1,6 +1,7 @@
 # PhoneticToolbox v3 — Agent 工作规则
 
 ## 0. 当前阶段与授权
+- 2026-09-12 井井在M03-B后回复“好，继续”。M03-C现为verified（限定Windows开发态任务/文件/数值导出），见docs/testing/m03-jobs-report.md。m03/1接既有任务/资产协议，独立MKL子进程，单文件CSV+三PNG、逐文件批次导出及IF双WAV实际回读；取消/失效worker/故障回收/重开/两份授权自然录音通过。未执行DDL或修改m09/m10/v2环境。新P04-FONT字体快照尚未接通，其图片字体专项仍planned；完整M03仍in_progress，下一项公共字体依赖及M03-D。EGG页面/整批目录交互/冻结EXE尚未实施，不能把本轮PNG导出图当V3交互界面。
 - 2026-09-12 井井在M03-A和UI统一约束后回复“噢噢 那你继续吧”。M03-B现为verified（限定Windows纯核心及安装wheel），见docs/testing/m03-core-report.md：80项检查、11样例31761项精确比较、输入与原v2源码未变。新核心位于packages/phonetic_core/src/phonetic_core/egg，实际用户默认slope/scale，保留两种ROI旧规则与独立mask，真实Praat帧时间与N/fs元数据明确区分。SciPy同版不同构建产生差异，兼容环境为项目内.venv/m03-compatible（Conda/MKL锁）；.venv/m03-ui为未通过逐位基准的PyPI候选，不能误用。完整M03仍in_progress，下一项C任务/文件/导出。页面/Qt整合/EXE尚未实施，不重复DDL、不改m09/m10/v2环境，UI从第一版遵守既定v3风格。
 - 2026-09-12 井井补充：EGG贴合v2仅指布局与功能，v3统一设计规范和公共组件必须从页面第一版落实。页面内控件/图表/状态也须统一，不能只换外壳或留到收尾调整。真实组件与适配边界见docs/design/m03-v2-layout.md；旧Qt截图仅是基准，展示时先标明，不能让用户误认为v3页面设计。
 - 2026-09-12 井井在M03计划后回复“好，请继续”，明确EGG布局尽量贴合v2、功能囊括v2，其余可优化。M03-A已完成限定Windows原v2独立基准：11样例双轮一致，公开合成数值与私有语料分开，详见docs/testing/m03-baseline-report.md。完整M03仍in_progress，下一项M03-B纯数组核心；页面/EXE尚未实现。布局以docs/design/m03-v2-layout.md为准：左CQ/SQ与语谱、右音频与EGG微观、下方两行参数及总览，覆盖早期右侧集中设置方案。实际单文件与批处理均GCI slope/GOI scale，底层EGGConfig被GUI覆盖的事实已纠正。不得将基准verified扩大为模块verified，不重复DDL、不推进M04。

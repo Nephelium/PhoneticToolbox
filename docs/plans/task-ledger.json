@@ -504,9 +504,10 @@
       "plan": "modules/M03-egg-analysis.md",
       "execution_evidence": [
         "docs/testing/m03-baseline-report.md",
-        "docs/testing/m03-core-report.md"
+        "docs/testing/m03-core-report.md",
+        "docs/testing/m03-jobs-report.md"
       ],
-      "note": "2026-09-12 M03-A/B verified for Windows baseline and installed pure-core wheel in locked Conda/MKL runtime. 80 checks; 11 cases and 31761 exact scalar/array comparisons. PyPI SciPy build differs and is not verified for parity. Full M03 in_progress; task/exports/UI/EXE pending. UI must use v3 shared design from first version and preserve v2 layout. Next M03-C.",
+      "note": "M03-A/B/C verified within Windows baseline, installed compatible core and development task/file/numerical-export scope. C: 258 backend/desktop/contract checks, 23 export checks, real API/SQLite/owned-child cancel/retry/recovery/fault cleanup, 60s three-PNG and two authorized natural recordings. P04-FONT snapshot integration still planned. Whole M03 in_progress; next shared fonts and M03-D, then E/F. No DDL or old environment/EXE changes.",
       "planning_evidence": [
         "docs/modules/evidence/M03-source-map.md",
         "docs/plans/2026-09-12-m03-implementation.md"

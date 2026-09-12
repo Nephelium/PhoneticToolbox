@@ -40,7 +40,27 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None):
             blobs[item['role']]=bytes(raw)
         progress[0]=.1
         with ManagedScratch(files,identity) as scratch:
-            if snapshot['operation']=='spectrogram_to_audio':
+            if snapshot['operation']=='egg_analysis':
+                from .native.windows import InputPipe
+                from .native.reaper import collect_pipe
+                from .egg_runtime import command as egg_command
+                from ptb_api.egg_models import EggTaskConfig, expected_names
+                header=dict(config=snapshot['config']['analysis'],sha256=digest(blobs['audio']))
+                request=scratch.create(json.dumps(header).encode()+b'\n'+blobs['audio'],'.json')
+                # Validate runtime before allocating the pipe, so missing runtime
+                # cannot leak a pipe handle. Only the fixed trusted bootstrap runs.
+                argv=egg_command(request,'')
+                pipe=InputPipe();argv[-1]=pipe.name
+                raw,_=collect_pipe(argv,pipe,scratch.root,
+                    replace(SEGMENT_LIMITS,timeout_seconds=120,process_bytes=1_500_000_000),
+                    lambda:abort.is_set() or stop.is_set(),on_started)
+                bundle=unpack_bundle(raw,64_000_000)
+                names=[f['name'] for f in bundle.manifest['files']]
+                if (bundle.manifest.get('audio_sha256')!=header['sha256'] or
+                    sorted(names)!=sorted(expected_names(EggTaskConfig.model_validate(header['config'])))):
+                    raise FormatError('source_mismatch')
+                payloads=list(zip(names,bundle.payloads))
+            elif snapshot['operation']=='spectrogram_to_audio':
                 from .native.windows import InputPipe
                 from .native.reaper import collect_pipe
                 header=dict(config=snapshot['config']['analysis'],sha256=digest(blobs['image']))

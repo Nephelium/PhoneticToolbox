@@ -58,6 +58,9 @@ class AcousticFiles(FilePipeline):
     def independent_expiry(self,operation):return operation=='acoustic_analysis' or super().independent_expiry(operation)
 
     def manifest(self,operation,files):
+        if operation=='egg_analysis':
+            from ptb_api.egg_models import EggManifest
+            return EggManifest(files=files,core_version=core_version).model_dump()
         if operation=='spectrogram_to_audio':
             from ptb_api.spec2wav_models import Spec2WavManifest
             return Spec2WavManifest(files=files,core_version=core_version).model_dump()

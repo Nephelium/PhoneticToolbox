@@ -19,7 +19,7 @@ def stop_child(child):
 
 def execute_claim(store, claim, worker_id, stop, *, step_delay=0):
     snapshot=json.loads(claim['snapshot'])
-    if snapshot['operation'] in ('acoustic_analysis','textgrid_segment','spectrogram_to_audio'):
+    if snapshot['operation'] in ('acoustic_analysis','textgrid_segment','spectrogram_to_audio','egg_analysis'):
         from .acoustic_executor import execute_acoustic_claim
         execute_acoustic_claim(store,claim,worker_id,stop)
         return

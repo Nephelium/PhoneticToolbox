@@ -1,5 +1,7 @@
 # 数据协议与版本 · API 1.1 / M01-D
 
+M03-C增加`m03/1`：`EggRequest`仅接项目/资源ID、SHA-256与`EggTaskConfig`，通过`jobs/egg/create`创建通用`egg_analysis`任务。`EggManifest`仅允许完整CSV/三PNG/双WAV组合和来源JSON。`sample-aligned/1`明确原生时间outer join、实际Praat帧时间、批次GCI插值/CSV静音遮罩、采样对齐半开ROI和双FLOAT64 WAV语义。重试保持原配置，字体快照依赖P04-FONT尚未接入，完整接口/预算/差异见[M03-C记录](../docs/testing/m03-jobs-report.md)。未改既有002/005表结构。
+
 应用发行版本的唯一维护入口为 [release/version.json](../release/version.json)，当前 Python 包 3.0.0a1，前端 3.0.0-alpha.1，API 1.1.0。运行时分别使用已安装包元数据和生成的前端版本文件。根目录旧 pyproject.toml 的 2.2.0 是历史迁移来源，不参与新包构建。
 
 ## 唯一生成链

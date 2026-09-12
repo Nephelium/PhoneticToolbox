@@ -6,6 +6,7 @@ from .job_models import JobInput, FileJobInput, JobView, JobList, JobEvents, Ret
 from ptb_worker.store import JobError
 from .acoustic_batch_models import BatchRequest,BatchView,BatchList
 from .spec2wav_models import Spec2WavRequest
+from .egg_models import EggRequest
 
 
 def create_job_router(ctx, store, *, local_token=None, local_origin=None):
@@ -74,6 +75,11 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
     @router.post('/spec2wav/create',response_model=JobView,status_code=201,operation_id='create_spec2wav_job')
     def reconstruct(body:Spec2WavRequest,owner=Depends(mutation)):
         from ptb_worker.spec2wav_jobs import submit
+        return submit(store,owner['id'],body)
+
+    @router.post('/egg/create',response_model=JobView,status_code=201,operation_id='create_egg_job')
+    def egg(body:EggRequest,owner=Depends(mutation)):
+        from ptb_worker.egg_jobs import submit
         return submit(store,owner['id'],body)
 
     @router.post('/local-inputs',operation_id='register_local_acoustic_input')

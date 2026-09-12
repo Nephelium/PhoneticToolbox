@@ -708,6 +708,48 @@
       "title": "AcousticTaskManifest",
       "type": "object"
     },
+    "EggManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "complete": {
+          "const": true,
+          "default": true,
+          "title": "Complete",
+          "type": "boolean"
+        },
+        "core_version": {
+          "title": "Core Version",
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/AcousticManagedFile"
+          },
+          "maxItems": 5,
+          "minItems": 2,
+          "title": "Files",
+          "type": "array"
+        },
+        "kind": {
+          "const": "managed_egg_files",
+          "default": "managed_egg_files",
+          "title": "Kind",
+          "type": "string"
+        },
+        "operation": {
+          "const": "egg_analysis",
+          "default": "egg_analysis",
+          "title": "Operation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "core_version",
+        "files"
+      ],
+      "title": "EggManifest",
+      "type": "object"
+    },
     "FileManifest": {
       "additionalProperties": false,
       "properties": {
@@ -881,6 +923,7 @@
         "mapping": {
           "acoustic_file": "#/$defs/AcousticFileManifest",
           "managed_acoustic_files": "#/$defs/AcousticTaskManifest",
+          "managed_egg_files": "#/$defs/EggManifest",
           "managed_files": "#/$defs/FileManifest",
           "managed_spec2wav_files": "#/$defs/Spec2WavManifest",
           "pipeline_check_metadata": "#/$defs/JobManifest"
@@ -902,6 +945,9 @@
         },
         {
           "$ref": "#/$defs/Spec2WavManifest"
+        },
+        {
+          "$ref": "#/$defs/EggManifest"
         }
       ],
       "title": "Manifest"

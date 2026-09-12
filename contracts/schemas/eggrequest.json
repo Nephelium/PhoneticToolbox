@@ -1,0 +1,230 @@
+{
+  "$defs": {
+    "AcousticAssetRef": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+          "title": "Asset Id",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "asset_id",
+        "sha256"
+      ],
+      "title": "AcousticAssetRef",
+      "type": "object"
+    },
+    "EggTaskConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "auto_prominence": {
+          "default": true,
+          "title": "Auto Prominence",
+          "type": "boolean"
+        },
+        "export_policy": {
+          "const": "sample-aligned/1",
+          "default": "sample-aligned/1",
+          "title": "Export Policy",
+          "type": "string"
+        },
+        "flip_channels": {
+          "default": false,
+          "title": "Flip Channels",
+          "type": "boolean"
+        },
+        "gci_method": {
+          "default": "slope",
+          "enum": [
+            "slope",
+            "scale"
+          ],
+          "title": "Gci Method",
+          "type": "string"
+        },
+        "generate_images": {
+          "default": false,
+          "title": "Generate Images",
+          "type": "boolean"
+        },
+        "glottal_movement": {
+          "default": false,
+          "title": "Glottal Movement",
+          "type": "boolean"
+        },
+        "goi_method": {
+          "default": "scale",
+          "enum": [
+            "slope",
+            "scale"
+          ],
+          "title": "Goi Method",
+          "type": "string"
+        },
+        "highpass_cutoff": {
+          "default": 25.0,
+          "exclusiveMaximum": 48000,
+          "exclusiveMinimum": 0,
+          "title": "Highpass Cutoff",
+          "type": "number"
+        },
+        "keep_gci_f0": {
+          "default": true,
+          "title": "Keep Gci F0",
+          "type": "boolean"
+        },
+        "keep_praat_f0": {
+          "default": true,
+          "title": "Keep Praat F0",
+          "type": "boolean"
+        },
+        "lowpass_cutoff": {
+          "default": 1000.0,
+          "exclusiveMaximum": 48000,
+          "exclusiveMinimum": 0,
+          "title": "Lowpass Cutoff",
+          "type": "number"
+        },
+        "lp_order": {
+          "anyOf": [
+            {
+              "maximum": 256,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lp Order"
+        },
+        "mode": {
+          "default": "single",
+          "enum": [
+            "single",
+            "batch",
+            "inverse"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "peak_prominence": {
+          "default": 0.01,
+          "maximum": 10,
+          "minimum": 0,
+          "title": "Peak Prominence",
+          "type": "number"
+        },
+        "roi_end": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "maximum": 86400,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Roi End"
+        },
+        "roi_start": {
+          "default": 0.0,
+          "maximum": 86400,
+          "minimum": 0,
+          "title": "Roi Start",
+          "type": "number"
+        },
+        "signal_mode": {
+          "default": "filtered",
+          "enum": [
+            "raw",
+            "filtered"
+          ],
+          "title": "Signal Mode",
+          "type": "string"
+        },
+        "silence_threshold": {
+          "default": 0.01,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Silence Threshold",
+          "type": "number"
+        },
+        "spec_vmax": {
+          "default": -10.0,
+          "maximum": 20,
+          "minimum": -160,
+          "title": "Spec Vmax",
+          "type": "number"
+        },
+        "spec_vmin": {
+          "default": -70.0,
+          "maximum": 20,
+          "minimum": -160,
+          "title": "Spec Vmin",
+          "type": "number"
+        },
+        "spec_window_ms": {
+          "default": 20.0,
+          "maximum": 50,
+          "minimum": 5,
+          "title": "Spec Window Ms",
+          "type": "number"
+        },
+        "valley_prominence": {
+          "default": 0.01,
+          "maximum": 10,
+          "minimum": 0,
+          "title": "Valley Prominence",
+          "type": "number"
+        }
+      },
+      "title": "EggTaskConfig",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "audio": {
+      "$ref": "#/$defs/AcousticAssetRef"
+    },
+    "config": {
+      "$ref": "#/$defs/EggTaskConfig"
+    },
+    "idempotency_key": {
+      "pattern": "^[A-Za-z0-9_-]{8,80}$",
+      "title": "Idempotency Key",
+      "type": "string"
+    },
+    "project_id": {
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "m03/1",
+      "default": "m03/1",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "project_id",
+    "idempotency_key",
+    "audio",
+    "config"
+  ],
+  "title": "EggRequest",
+  "type": "object"
+}

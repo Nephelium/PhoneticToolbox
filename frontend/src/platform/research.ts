@@ -4,6 +4,7 @@ export type Tier=components['schemas']['TextGridPreview']['tiers'][number];
 export type Spectrogram=components['schemas']['SpectrogramPreview'];
 export type ParameterTable=components['schemas']['ParameterTable'];
 export type ReconstructionConfig=components['schemas']['Spec2WavConfig'];
+export type EggTaskConfig=components['schemas']['EggTaskConfig'];
 export interface SpectrogramView {channel:number;start:number;end:number;width:number}
 export interface ResearchFile { id:string; name:string; kind:'audio'|'textgrid'|'lip'|'lip_pickle'|'parameter'|'image'; size:number; sha256?:string; expiresAt?:number }
 export interface DirectoryGrant { id:string; label:string; purpose:'input'|'output'|'association' }
@@ -19,6 +20,8 @@ export interface ResearchTasks {
   save?(id:string,directory:string):Promise<{count:number;saved:string[]}>;
   download?(id:string,name:string):Promise<void>;
   reconstruct?(file:ResearchFile,config:ReconstructionConfig,key:string):Promise<JobView>;
+  egg?(file:ResearchFile,config:EggTaskConfig,key:string):Promise<JobView>;
+  eggJobs?():Promise<JobView[]>;
   reconstructions?():Promise<JobView[]>;
   cancelJob?(id:string):Promise<JobView>;
   saveJob?(id:string,directory:string):Promise<{count:number;saved:string[]}>;
@@ -64,6 +67,8 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
   async function verify(file:ResearchFile){const r=await request('assets/'+encodeURIComponent(file.id));const asset:components['schemas']['AssetView']=await r.json();if(asset.project_id!==project||asset.state!=='ready'||asset.sha256!==file.sha256)throw Error('文件已变化，请刷新项目列表。');return asset;}
   const tasks:ResearchTasks={async parent(file){if(!file.sha256)return null;return (await request('jobs/parents/latest?'+new URLSearchParams({project_id:project,sha256:file.sha256}))).json();},async submit(operation,inputs,config,layer,key){const mapped=inputs.map(item=>Object.fromEntries(Object.entries(item).filter(([,v])=>v!=null).map(([role,value])=>{if(role==='parent_result')return [role,value];const file=value as ResearchFile;if(!file.sha256)throw Error('文件缺少校验值，请刷新。');return [role,{asset_id:file.id,sha256:file.sha256}];})));return (await request('jobs/batches/create',undefined,'POST',{project_id:project,operation,inputs:mapped,config,layer,idempotency_key:key})).json();},
     async reconstruct(file,config,key){if(!file.sha256)throw Error('图片缺少校验值。');return (await request('jobs/spec2wav/create',undefined,'POST',{project_id:project,idempotency_key:key,image:{asset_id:file.id,sha256:file.sha256},config})).json();},
+    async egg(file,config,key){if(!file.sha256)throw Error('音频缺少校验值。');return (await request('jobs/egg/create',undefined,'POST',{project_id:project,idempotency_key:key,audio:{asset_id:file.id,sha256:file.sha256},config})).json();},
+    async eggJobs(){const data:components['schemas']['JobList']=await(await request('jobs?project_id='+encodeURIComponent(project))).json();return data.jobs.filter(j=>j.operation==='egg_analysis');},
     async reconstructions(){const data:components['schemas']['JobList']=await(await request('jobs?project_id='+encodeURIComponent(project))).json();return data.jobs.filter(j=>j.operation==='spectrogram_to_audio');},
     async cancelJob(id){return (await request('jobs/'+encodeURIComponent(id)+'/cancel',undefined,'POST')).json();},
     async result(_job,id,sha){const response=await request('assets/'+encodeURIComponent(id)+'/content');const raw=await response.arrayBuffer();if(raw.byteLength>64_000_000||await sha256(raw)!==sha)throw Error('结果校验失败。');return raw;},

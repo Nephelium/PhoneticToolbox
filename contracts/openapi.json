@@ -1704,6 +1704,252 @@
         "title": "DeleteImpact",
         "type": "object"
       },
+      "EggManifest": {
+        "additionalProperties": false,
+        "properties": {
+          "complete": {
+            "const": true,
+            "default": true,
+            "title": "Complete",
+            "type": "boolean"
+          },
+          "core_version": {
+            "title": "Core Version",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/AcousticManagedFile"
+            },
+            "maxItems": 5,
+            "minItems": 2,
+            "title": "Files",
+            "type": "array"
+          },
+          "kind": {
+            "const": "managed_egg_files",
+            "default": "managed_egg_files",
+            "title": "Kind",
+            "type": "string"
+          },
+          "operation": {
+            "const": "egg_analysis",
+            "default": "egg_analysis",
+            "title": "Operation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "core_version",
+          "files"
+        ],
+        "title": "EggManifest",
+        "type": "object"
+      },
+      "EggRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "audio": {
+            "$ref": "#/components/schemas/AcousticAssetRef"
+          },
+          "config": {
+            "$ref": "#/components/schemas/EggTaskConfig"
+          },
+          "idempotency_key": {
+            "pattern": "^[A-Za-z0-9_-]{8,80}$",
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "project_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "m03/1",
+            "default": "m03/1",
+            "title": "Schema Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id",
+          "idempotency_key",
+          "audio",
+          "config"
+        ],
+        "title": "EggRequest",
+        "type": "object"
+      },
+      "EggTaskConfig": {
+        "additionalProperties": false,
+        "properties": {
+          "auto_prominence": {
+            "default": true,
+            "title": "Auto Prominence",
+            "type": "boolean"
+          },
+          "export_policy": {
+            "const": "sample-aligned/1",
+            "default": "sample-aligned/1",
+            "title": "Export Policy",
+            "type": "string"
+          },
+          "flip_channels": {
+            "default": false,
+            "title": "Flip Channels",
+            "type": "boolean"
+          },
+          "gci_method": {
+            "default": "slope",
+            "enum": [
+              "slope",
+              "scale"
+            ],
+            "title": "Gci Method",
+            "type": "string"
+          },
+          "generate_images": {
+            "default": false,
+            "title": "Generate Images",
+            "type": "boolean"
+          },
+          "glottal_movement": {
+            "default": false,
+            "title": "Glottal Movement",
+            "type": "boolean"
+          },
+          "goi_method": {
+            "default": "scale",
+            "enum": [
+              "slope",
+              "scale"
+            ],
+            "title": "Goi Method",
+            "type": "string"
+          },
+          "highpass_cutoff": {
+            "default": 25.0,
+            "exclusiveMaximum": 48000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Highpass Cutoff",
+            "type": "number"
+          },
+          "keep_gci_f0": {
+            "default": true,
+            "title": "Keep Gci F0",
+            "type": "boolean"
+          },
+          "keep_praat_f0": {
+            "default": true,
+            "title": "Keep Praat F0",
+            "type": "boolean"
+          },
+          "lowpass_cutoff": {
+            "default": 1000.0,
+            "exclusiveMaximum": 48000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Lowpass Cutoff",
+            "type": "number"
+          },
+          "lp_order": {
+            "anyOf": [
+              {
+                "maximum": 256.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lp Order"
+          },
+          "mode": {
+            "default": "single",
+            "enum": [
+              "single",
+              "batch",
+              "inverse"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "peak_prominence": {
+            "default": 0.01,
+            "maximum": 10.0,
+            "minimum": 0.0,
+            "title": "Peak Prominence",
+            "type": "number"
+          },
+          "roi_end": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "maximum": 86400.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Roi End"
+          },
+          "roi_start": {
+            "default": 0.0,
+            "maximum": 86400.0,
+            "minimum": 0.0,
+            "title": "Roi Start",
+            "type": "number"
+          },
+          "signal_mode": {
+            "default": "filtered",
+            "enum": [
+              "raw",
+              "filtered"
+            ],
+            "title": "Signal Mode",
+            "type": "string"
+          },
+          "silence_threshold": {
+            "default": 0.01,
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Silence Threshold",
+            "type": "number"
+          },
+          "spec_vmax": {
+            "default": -10.0,
+            "maximum": 20.0,
+            "minimum": -160.0,
+            "title": "Spec Vmax",
+            "type": "number"
+          },
+          "spec_vmin": {
+            "default": -70.0,
+            "maximum": 20.0,
+            "minimum": -160.0,
+            "title": "Spec Vmin",
+            "type": "number"
+          },
+          "spec_window_ms": {
+            "default": 20.0,
+            "maximum": 50.0,
+            "minimum": 5.0,
+            "title": "Spec Window Ms",
+            "type": "number"
+          },
+          "valley_prominence": {
+            "default": 0.01,
+            "maximum": 10.0,
+            "minimum": 0.0,
+            "title": "Valley Prominence",
+            "type": "number"
+          }
+        },
+        "title": "EggTaskConfig",
+        "type": "object"
+      },
       "FileConfig": {
         "additionalProperties": false,
         "properties": {
@@ -2086,7 +2332,8 @@
               "extract_zip",
               "acoustic_analysis",
               "textgrid_segment",
-              "spectrogram_to_audio"
+              "spectrogram_to_audio",
+              "egg_analysis"
             ],
             "title": "Operation",
             "type": "string"
@@ -2114,6 +2361,9 @@
               },
               {
                 "$ref": "#/components/schemas/Spec2WavManifest"
+              },
+              {
+                "$ref": "#/components/schemas/EggManifest"
               },
               {
                 "type": "null"
@@ -2436,6 +2686,7 @@
               "mapping": {
                 "acoustic_file": "#/components/schemas/AcousticFileManifest",
                 "managed_acoustic_files": "#/components/schemas/AcousticTaskManifest",
+                "managed_egg_files": "#/components/schemas/EggManifest",
                 "managed_files": "#/components/schemas/FileManifest",
                 "managed_spec2wav_files": "#/components/schemas/Spec2WavManifest",
                 "pipeline_check_metadata": "#/components/schemas/JobManifest"
@@ -2457,6 +2708,9 @@
               },
               {
                 "$ref": "#/components/schemas/Spec2WavManifest"
+              },
+              {
+                "$ref": "#/components/schemas/EggManifest"
               }
             ],
             "title": "Manifest"
@@ -3931,6 +4185,47 @@
           }
         },
         "summary": "Cancel Batch",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/egg/create": {
+      "post": {
+        "operationId": "create_egg_job",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EggRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Egg",
         "tags": [
           "jobs"
         ]

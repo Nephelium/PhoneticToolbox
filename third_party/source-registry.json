@@ -897,7 +897,7 @@
         "M03"
       ],
       "urls": {},
-      "evidence": "原core/egg及EGGAnalysisService已在M03-B迁入packages/phonetic_core/src/phonetic_core/egg，来源哈希见third_party/egg-migration.json；GCI/GOI、CQ/SQ与简化CPIF完整学术引用/授权链仍待核实。",
+      "evidence": "原core/egg及EGGAnalysisService已在M03-B迁入packages/phonetic_core/src/phonetic_core/egg，来源哈希见third_party/egg-migration.json；GCI/GOI、CQ/SQ与简化CPIF完整学术引用/授权链仍待核实。 M03-C数值导出规则由旧GUI/批处理迁入egg/export_series.py及backend/egg_exports.py，hash及差异见third_party/egg-migration.json；有界任务证据见docs/testing/m03-jobs-report.md。",
       "license": "not-established",
       "notes": "本地数值迁移，正常步骤与显式边界修正分开；不将独立基准或数值一致性当作生理有效性/许可证明。Windows兼容环境实际构建见third_party/m03-runtime-lock.json。",
       "verification_date": "2026-09-12",
@@ -1193,7 +1193,8 @@
       "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
       "license_metadata_file": "third_party/licenses/pypi/pandas-2.3.3-metadata.txt",
       "distribution_status": "actual-wheel-and-native-audit-required",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "m03_export_evidence": "requirements-m03-exports.lock; third_party/m03-export-runtime.json; docs/testing/m03-jobs-report.md"
     },
     {
       "id": "PKG-MATPLOTLIB",
@@ -1221,7 +1222,8 @@
       "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
       "license_metadata_file": "third_party/licenses/pypi/matplotlib-3.10.8-metadata.txt",
       "distribution_status": "actual-wheel-and-native-audit-required",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "m03_export_evidence": "requirements-m03-exports.lock; third_party/m03-export-runtime.json; docs/testing/m03-jobs-report.md"
     },
     {
       "id": "PKG-PYQT6",
@@ -6631,7 +6633,8 @@
         "requirements-m01-io.lock"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
-      "evidence": "third_party/m01-dependency-inventory.json"
+      "evidence": "third_party/m01-dependency-inventory.json",
+      "m03_export_evidence": "requirements-m03-exports.lock; third_party/m03-export-runtime.json; docs/testing/m03-jobs-report.md"
     },
     {
       "id": "M01-PY-PLUGGY",

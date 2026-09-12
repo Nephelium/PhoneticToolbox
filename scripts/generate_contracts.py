@@ -7,13 +7,14 @@ from ptb_api.main import create_app
 from ptb_api.models import Audio, Selection, Track, Viewport
 from ptb_api.acoustic_models import ACOUSTIC_SCHEMAS
 from ptb_api.job_models import ResultManifestEnvelope
+from ptb_api.egg_models import EggRequest, EggTaskConfig, EggManifest
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def snapshots():
     result = {'contracts/openapi.json': create_app().openapi()}
-    for model in (Audio, Selection, Track, Viewport,*ACOUSTIC_SCHEMAS,ResultManifestEnvelope):
+    for model in (Audio, Selection, Track, Viewport,*ACOUSTIC_SCHEMAS,ResultManifestEnvelope,EggRequest,EggTaskConfig,EggManifest):
         schema = model.model_json_schema()
         schema['$schema'] = 'https://json-schema.org/draft/2020-12/schema'
         result[f'contracts/schemas/{model.__name__.lower()}.json'] = schema

@@ -217,6 +217,9 @@ class LocalAcousticFiles:
             from ptb_api.spec2wav_models import Spec2WavManifest
             operation=json.loads(job['snapshot'])['operation']
             model=Spec2WavManifest if operation=='spectrogram_to_audio' else AcousticTaskManifest
+            if operation=='egg_analysis':
+                from ptb_api.egg_models import EggManifest
+                model=EggManifest
             manifest=model(operation=operation,core_version=core_version,
                 files=[dict(id=a['id'],name=a['name'],kind='result',size_bytes=a['size_bytes'],sha256=a['sha256'],expires_at=None) for a in outputs]).model_dump()
             self._fence(tx,identity)

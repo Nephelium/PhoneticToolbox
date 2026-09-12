@@ -27,8 +27,26 @@
     {
       "path": "phonetic_toolbox/models/config.py",
       "sha256": "dc9462c25789f0a1f72956de8cd48f60b8ad2015f980b919cb672c95ec6210c8"
+    },
+    {
+      "path": "phonetic_toolbox/gui/widgets/egg_widget.py",
+      "sha256": "20dd2874be54ae4202fc2aecaf05484227e3aff48bb99d5a08cfca5bb6629daf"
+    },
+    {
+      "path": "phonetic_toolbox/gui/dialogs/egg_batch_dialog.py",
+      "sha256": "d98b3c33e1b46ddaf3655404a4fdbf7660efefb3186cdcc9cb4ec9fa2d967b0a"
     }
   ],
   "changes": "Extracted numerical functions and five array-only service methods. Removed file/GUI dependencies and unrelated wavelet filtering. Public adapters validate inputs and own result objects.",
-  "boundary_changes": "After compatibility commit: immutable config, explicit input/filter/IF errors and cooperative cancellation; separate actual Praat times and N/fs metadata while retaining legacy grids. ROI filtering/padding, SQ formula and independent masks unchanged."
+  "boundary_changes": "After compatibility commit: immutable config, explicit input/filter/IF errors and cooperative cancellation; separate actual Praat times and N/fs metadata while retaining legacy grids. ROI filtering/padding, SQ formula and independent masks unchanged.",
+  "export_migration": {
+    "used_in": [
+      "packages/phonetic_core/src/phonetic_core/egg/export_series.py",
+      "backend/src/ptb_worker/egg_exports.py"
+    ],
+    "policy": "sample-aligned/1: actual Praat frame times, half-open CSV ROI, waveform sample-index time; retain local filtering and CSV-only batch masking",
+    "spectrum": "Matplotlib 3.10.8 PSD called in 256-window blocks; PSD/frequency/time byte parity checked; invisible raster rows clipped at identical pixel boundaries",
+    "evidence": "docs/testing/m03-jobs-report.md",
+    "font_snapshot": "P04-FONT pending; current PNGs are fixed legacy print reference only"
+  }
 }
