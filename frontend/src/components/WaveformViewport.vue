@@ -2,7 +2,7 @@
 import { computed,ref,onMounted,onUnmounted } from 'vue';import type { Workspace } from '../state/workspace.ts';import { envelope,selection } from '../platform/wav.ts';
 import SpectrogramViewport from './SpectrogramViewport.vue';import type {Spectrogram,SpectrogramView} from '../platform/research.ts';
 import {playback} from '../state/audio.ts';
-const props=defineProps<{state:Workspace;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;maxWindowSeconds?:number}>();let anchor:number|null=null;
+const props=defineProps<{state:Workspace;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;maxWindowSeconds?:number;compactOverview?:boolean}>();let anchor:number|null=null;
 const viewport=ref<HTMLElement>(),width=ref(800);let observer:ResizeObserver;
 onMounted(()=>{observer=new ResizeObserver(entries=>{width.value=Math.max(100,Math.min(1600,Math.round(entries[0].contentRect.width)));});if(viewport.value)observer.observe(viewport.value);});
 onUnmounted(()=>observer?.disconnect());
@@ -21,8 +21,8 @@ function zoom(value:number,fraction=0){const anchor=left.value+fraction*windowLe
 function wheel(event:WheelEvent){if(!event.ctrlKey||!duration.value)return;event.preventDefault();const box=(event.currentTarget as Element).getBoundingClientRect();zoom(props.state.zoom*(event.deltaY<0?2:.5),Math.max(0,Math.min(1,(event.clientX-box.left)/box.width)));}
 </script>
 <template>
-<div ref="viewport" class="wave-viewport">
-<div class="wave-toolbar">
+<div ref="viewport" class="wave-viewport" :class="{'compact-overview':compactOverview}">
+<div v-if="!compactOverview" class="wave-toolbar">
 <span>原始波形 <small>· 振幅 / 秒</small>
 </span>
 <div>
@@ -32,9 +32,9 @@ function wheel(event:WheelEvent){if(!event.ctrlKey||!duration.value)return;event
 <button @click="zoom(1);state.offset=0">适合窗口</button>
 </div>
 </div>
-<div class="display-options"><slot name="controls"/><label v-if="state.asset&&state.asset.channels.length>1"><input v-model="state.showBoth" type="checkbox"/>显示两个声道</label><label v-if="spectrogramLoader"><input v-model="state.showSpectrogram" type="checkbox"/>显示语谱图（Praat）</label><small class="muted">绘图按像素聚合峰值，原音频不变</small></div>
+<div v-if="!compactOverview" class="display-options"><slot name="controls"/><label v-if="state.asset&&state.asset.channels.length>1"><input v-model="state.showBoth" type="checkbox"/>显示两个声道</label><label v-if="spectrogramLoader"><input v-model="state.showSpectrogram" type="checkbox"/>显示语谱图（Praat）</label><small class="muted">绘图按像素聚合峰值，原音频不变</small></div>
 <div v-for="track in tracks" :key="track.index" class="wave-track">
-<div class="track-label">
+<div v-if="!compactOverview||state.showBoth" class="track-label">
 <span>声道 {{track.index+1}}</span>
 <small>{{track.index===state.channel?'试听声道':'原始数据'}}</small>
 </div>
@@ -52,8 +52,24 @@ function wheel(event:WheelEvent){if(!event.ctrlKey||!duration.value)return;event
 <span v-for="i in 5" :key="i">{{(left+(i-1)*windowLength/4).toFixed(3)}}</span>
 </div>
 <slot name="timeline" :start="left" :end="left+windowLength"/>
+<div v-if="compactOverview" class="wave-toolbar overview-controls">
+<strong>音频总览</strong>
+<label v-if="state.asset&&state.asset.channels.length>1"><input v-model="state.showBoth" type="checkbox"/>显示两个声道</label>
+<div>
+<button :disabled="state.zoom<=minZoom" aria-label="缩小波形" @click="zoom(state.zoom/2)">−</button>
+<span class="mono">{{Number(state.zoom.toFixed(1))}}×</span>
+<button :disabled="state.zoom>=maxZoom" aria-label="放大波形" @click="zoom(state.zoom*2)">+</button>
+<button @click="zoom(1);state.offset=0">适合窗口</button>
+</div>
+<small>拖动选区 · Ctrl＋滚轮缩放<span v-if="maxWindowSeconds"> · 最多 {{maxWindowSeconds}} 秒视窗</span></small>
+</div>
 <label v-if="state.zoom>1" class="pan-label">时间窗起点 <input v-model.number="state.offset" type="range" min="0" :max="duration-windowLength" :step="1/(state.asset?.sampleRate||1)" aria-label="平移波形时间窗"/>
 </label>
-<p class="hint">拖动选区 · Ctrl＋滚轮缩放 · 双击{{maxWindowSeconds?'恢复总览':'显示全长'}}；时间控件可输入精确选区。</p>
+<p v-if="!compactOverview" class="hint">拖动选区 · Ctrl＋滚轮缩放 · 双击{{maxWindowSeconds?'恢复总览':'显示全长'}}；时间控件可输入精确选区。</p>
 </div>
 </template>
+<style scoped>
+.compact-overview .overview-controls{justify-content:flex-start;flex-wrap:wrap;gap:8px 16px;margin:4px 0 0}
+.overview-controls label{display:flex;align-items:center;gap:5px}
+.compact-overview .wave-track svg{height:110px}
+</style>

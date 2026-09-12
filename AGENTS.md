@@ -1,6 +1,7 @@
 # PhoneticToolbox v3 — Agent 工作规则
 
 ## 0. 当前阶段与授权
+- 2026-09-12 井井追加EGG总览紧凑布局：波形置顶，双声道/缩放/适合窗口在图下同排。限定Chrome/Qt布局已通过，见docs/testing/m03-overview-report.md。仅EGG启用公共组件compactOverview，其他模块默认布局不变。120秒长文件成果已在9cbbf3c，完整M03仍in_progress，下一项字体预检/剩余收口；旧EXE未打包。
 - 2026-09-12 井井在长文件下一步说明后授权继续。M03-E3-B 已限定 Windows 开发态验证120秒/576万帧完整处理、首尾查看与三路径导出，原V2双轮20数组23242942值精确一致，见 docs/testing/m03-long-report.md。按实测设3GB/240秒进程预算，60秒仅总览视窗；核心/V2/环境/旧EXE不变，未DDL/push。完整E3/M03仍in_progress，下一项字体预检/剩余交互及来源收口，再审阅冻结EXE范围。
 - 2026-09-12 井井审阅滚动方案后授权继续。P04-SCROLL 现为 verified（限定 Windows 开发态公共内容/二维滚轮/Qt 尺寸），见 docs/testing/p04-scroll-report.md。普通滚轮滚动，EGG/M02 Ctrl＋滚轮缩放，弹窗正文独立滚动；M10 仅外层最小高度/滚动，模型手势与录制未改。旧 EXE 未重打包，完整 M03/E3 仍 in_progress，后续回到 E3-B。未 DDL、push 或改 v2。
 - 2026-09-12 井井在E2后授权继续E3。本轮恢复微观5–5000ms、原版显示抽点与边界不重复提交，限定Windows开发态验证见docs/testing/m03-e3-report.md。新增官方书目/原手册截图/Henrich原文方法差异，代码许可未闭合。完整E3/E/M03仍in_progress，下一项E3-B长文件全段语义和预算、字体预检/剩余交互；66.4秒仅导航及拒绝已验，不代表全段分析完成。仅重装项目m03-compatible核心wheel，第三方库/v2/语料/旧EXE不变，未DDL或push。
