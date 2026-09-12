@@ -51,3 +51,5 @@
 方法与来源入口保留 VTL 2.4 引擎、VTL 2.3 参考手册、Three.js、外部头壳和平均鼻腔的分别署名。鼻腔是参考配准，头壳不是 JD2 个体扫描。鼻腔多余长条来自开放截线错误封口，本轮修正截线连接，原鼻腔参考网格保留。绿色鼻咽连接在两种视图中共用几何，软腭独立控制开口，显示咽壁不再被其带入。唇部采用分离的光滑体积，移除旧牙龈连接面导致的交叠。舌侧通路拟合和舌背后移限位另会影响实际构形，详见[R3 迁移证据](../testing/m10-report.md)与[R4 验证和适配边界](../testing/m10-recording-features-report.md)。
 
 适用许可及源码见应用资源中的 `THIRD_PARTY_NOTICES.md`，项目统一登记见 [source-registry.json](../../third_party/source-registry.json)。模块包含 GPL、MIT、CC0、CC BY 等分别适用的组件，不将整个组合声明为纯 MIT 或完全原创。
+
+2026-09-12开发态字体接入：公共[字体设置](settings.md)统一调整已打开页面；所有IPA固定Doulos SIL。图表与新视频文字跟随图表字体设置，正在导出的视频保留原字体，导出结束后应用新选择。历史EXE未重新打包，限定验证见[字体报告](../testing/p04-fonts-report.md)。

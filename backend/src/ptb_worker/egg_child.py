@@ -39,7 +39,10 @@ def prepare(raw, config):
     numerical = EGGConfig.for_workbench(**{k:v for k,v in settings.model_dump().items() if k in EGGConfig.__dataclass_fields__})
     result = analyze_events(load(samples, int(fs), numerical, flip_channels=settings.flip_channels), numerical)
     first_time, last_time = first/fs, last/fs
-    blobs = {}; masked = 0
+    blobs = {}; masked = 0; font_evidence=None
+    if settings.font is not None and (settings.mode=='single' or settings.generate_images):
+        from .fonts import resolve_fonts
+        font_evidence=resolve_fonts(settings.font)
     if settings.mode == 'inverse':
         audio = result.audio_signal[first:last]
         gcis = np.asarray(result.gci_times); gcis = gcis[(gcis >= first_time) & (gcis < last_time)]-first_time
@@ -54,9 +57,9 @@ def prepare(raw, config):
             result.glottal_movement_events = glottal_movement(result.audio_f0_times,result.audio_f0_values)
         blobs['egg_DATA.csv'], masked = csv_bytes(result,numerical,settings,first_time,last_time)
         if settings.mode == 'single' or settings.generate_images:
-            blobs.update(plot_bytes(result,numerical,settings,first,last))
+            blobs.update(plot_bytes(result,numerical,settings,first,last,font_evidence))
     metadata = dict(schema_version='m03/1',method_version=result.method_version,export_policy=settings.export_policy,
-        config=settings.model_dump(),input_sha256=digest(raw),sample_rate_hz=int(fs),sample_count=len(samples),
+        config=settings.model_dump(),render_fonts=font_evidence,input_sha256=digest(raw),sample_rate_hz=int(fs),sample_count=len(samples),
         selection=dict(start_sample=first,end_sample=last,start_s=first_time,end_s=last_time,interval='half-open'),
         channel_roles=['audio','egg'] if settings.flip_channels else ['egg','audio'],
         normalized_peak=.7,source_ids=list(result.source_ids),runtime=runtime,

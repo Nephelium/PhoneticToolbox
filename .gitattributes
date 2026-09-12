@@ -7,3 +7,15 @@ phonetic_toolbox/gui/resources/perception_experiment/*.html linguist-detectable=
 
 # Frozen M03 metadata includes byte hashes and must survive Windows checkout.
 /tests/fixtures/m03/*.json text eol=lf
+
+# P04-FONT resource hashes must survive Windows checkout.
+/frontend/public/vocal-tract/app.js text eol=lf
+/frontend/public/vocal-tract/monitor.js text eol=lf
+/frontend/public/vocal-tract/pitch.js text eol=lf
+/frontend/public/vocal-tract/platform.js text eol=lf
+/frontend/public/vocal-tract/styles.css text eol=lf
+/frontend/public/vocal-tract/v3.css text eol=lf
+/frontend/public/vocal-tract/video.js text eol=lf
+/frontend/public/vocal-tract/fonts.js text eol=lf
+/resources/vocal_tract/bundle-manifest.json text eol=lf
+/backend/src/ptb_worker/assets/Doulos-OFL.txt text eol=lf

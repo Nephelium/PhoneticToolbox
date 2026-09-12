@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-09-09",
-  "total_records": 327,
+  "total_records": 328,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -872,7 +872,13 @@
       "kind": "font",
       "modules": [
         "M13",
-        "P01-probe"
+        "P01-probe",
+        "P04-FONT",
+        "M01",
+        "M02",
+        "M03",
+        "M09",
+        "M10"
       ],
       "urls": {
         "homepage": "https://software.sil.org/doulos/",
@@ -887,7 +893,17 @@
       "distribution_status": "review-required",
       "authors": "SIL International",
       "p04_usage": "Unchanged font and embedded OFL copied to frontend/src/assets; used for IPA in shared frontend",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "p04_font_usage": {
+        "policy": "All semantic IPA fields fixed to Doulos SIL; no IPA selector",
+        "copies": [
+          "frontend/src/assets/DoulosSIL-Regular.ttf",
+          "backend/src/ptb_worker/assets/DoulosSIL-Regular.ttf"
+        ],
+        "sha256": "cc89b87c047bcc8dc00246398218bb6343e0f2372b153cf560c29a77f27068ef",
+        "license": "Complete OFL text accompanies both assets and is embedded with the font in editable SVG; backend text copy normalizes line endings to LF",
+        "verified_on": "2026-09-12"
+      }
     },
     {
       "id": "PENDING-EGG",
@@ -7133,6 +7149,37 @@
         "frontend/src/modules/parameter-display/png.ts"
       ],
       "evidence": "docs/plans/2026-09-12-closeout-and-m02-png.md"
+    },
+    {
+      "id": "REF-FONT-RENDERING",
+      "title": "CSS font loading, Qt font catalogue and Matplotlib font resolution",
+      "authors": "W3C CSS Working Group; The Qt Company; Matplotlib developers",
+      "kind": "specification-reference",
+      "modules": [
+        "P04-FONT",
+        "M02",
+        "M03",
+        "M10"
+      ],
+      "urls": {
+        "font_loading": "https://www.w3.org/TR/2023/WD-css-font-loading-3-20230406/",
+        "qt_fonts": "https://doc.qt.io/qt-6/qfontdatabase.html",
+        "matplotlib_fonts": "https://matplotlib.org/stable/api/font_manager_api.html",
+        "local_fonts": "https://wicg.github.io/local-font-access/"
+      },
+      "license": "API and specification reference only; no upstream example code copied",
+      "actual_included_version": "CSS Font Loading Level 3 WD 2023-04-06; Qt and Matplotlib online API references observed 2026-09-12; installed runtime versions remain independently locked",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-12",
+      "distribution_status": "reference-only",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "frontend/src/state/fonts.ts",
+        "frontend/src/design/svg-fonts.ts",
+        "desktop/src/ptb_desktop/host.py",
+        "backend/src/ptb_worker/fonts.py"
+      ],
+      "evidence": "docs/plans/2026-09-12-fonts-implementation.md"
     }
   ]
 }

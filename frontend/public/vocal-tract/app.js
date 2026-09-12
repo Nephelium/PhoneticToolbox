@@ -1,3 +1,4 @@
+import {canvasFont} from './fonts.js';
 import {tint} from './theme.js';
 import {request,response} from './platform.js';
 import {VocalTractViewer} from './viewer.js';
@@ -161,7 +162,7 @@ function drawSideHandles(s,w,h,x,y,scale){
 }
 function chart(id,xmax,ymin,ymax,xlabel){
   const canvas=$(id),w=canvas.clientWidth,h=canvas.clientHeight,dpr=Math.min(devicePixelRatio,2);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);const pad={l:27,r:7,t:7,b:17};const x=v=>pad.l+v/xmax*(w-pad.l-pad.r),y=v=>h-pad.b-(v-ymin)/(ymax-ymin)*(h-pad.t-pad.b);
-  ctx.font='9px "Microsoft YaHei"';ctx.fillStyle=tint('#8a9489');ctx.strokeStyle=tint('#e5e7dd');ctx.lineWidth=.7;
+  ctx.font=canvasFont(9);ctx.fillStyle=tint('#8a9489');ctx.strokeStyle=tint('#e5e7dd');ctx.lineWidth=.7;
   for(let i=0;i<3;i++){const v=ymin+(ymax-ymin)*i/2;ctx.beginPath();ctx.moveTo(pad.l,y(v));ctx.lineTo(w-pad.r,y(v));ctx.stroke();ctx.fillText(Math.round(v),2,y(v)+3);}
   for(let i=0;i<3;i++){const v=xmax*i/2;ctx.fillText(xlabel?xlabel(v):v.toFixed(0),x(v)-5,h-2);}
   return {ctx,w,h,x,y,pad};
@@ -182,7 +183,7 @@ function drawCharts(){if(!snapshot)return;const s=snapshot;
   $('sectionStatus').textContent=(open?'当前为几何气腔截面':'当前几何截面闭合或无可见气腔')+' · 声学最窄 '+s.oral_min_area.toFixed(4)+' cm² · 腭咽口 '+s.nasal.port_area.toFixed(2)+' cm²';
   if(s.oral_min_area>0.001&&!open)$('sectionStatus').textContent+=' · VTL 狭窄处含声学面积修正';
   if(s.oral_min_area<=0.00011&&s.nasal.port_area<=0.0001)$('sectionStatus').textContent+=' · 口鼻闭塞，稳态应近静音';
-  const unit=scale<25?.5:1;ctx.strokeStyle=tint('#92a08e');ctx.fillStyle=tint('#7b897b');ctx.font='8px "Microsoft YaHei"';ctx.beginPath();ctx.moveTo(5,h-6);ctx.lineTo(5+scale*unit,h-6);ctx.stroke();ctx.fillText(unit+' cm',8+scale*unit,h-3);
+  const unit=scale<25?.5:1;ctx.strokeStyle=tint('#92a08e');ctx.fillStyle=tint('#7b897b');ctx.font=canvasFont(8);ctx.beginPath();ctx.moveTo(5,h-6);ctx.lineTo(5+scale*unit,h-6);ctx.stroke();ctx.fillText(unit+' cm',8+scale*unit,h-3);
 }
 function selectSection(index){
   if(!snapshot)return;

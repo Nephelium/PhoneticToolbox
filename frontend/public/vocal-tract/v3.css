@@ -58,3 +58,8 @@ dialog::backdrop{background:var(--bg);backdrop-filter:none}dialog{isolation:isol
 .preset-bar select{max-width:140px;padding:3px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:4px}.preset-bar>button{font-size:10px;padding:3px 6px}
 #presetDialog,#videoDialog{width:560px;max-width:85vw}#presetDialog label,#videoDialog label{display:flex;gap:12px;align-items:center;margin-top:16px}#presetName{flex:1;background:var(--panel);color:var(--ink);border:1px solid var(--line);padding:8px;border-radius:5px}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}#videoProgress{width:100%;accent-color:var(--green)}#videoDialog p,#presetDialog p{color:var(--muted)}
 .export-viewport>canvas,.export-viewport>.sagittal-canvas{position:absolute;inset:0;width:100%;height:100%}
+
+/* P04-FONT: controls inherit the parent font roles; IPA remains fixed. */
+select,textarea{font-family:var(--sans)}.ipa,.preset-ipa,#presets button,.pose-name,.pose-title,#frameStatus,#customPreset,#presetName{font-family:var(--font-ipa,"PTB-Doulos"),serif}.mono,code,pre{font-family:var(--font-mono,Consolas),monospace}
+
+.sagittal-canvas,.orientation svg{font-family:var(--font-figure,var(--sans))}

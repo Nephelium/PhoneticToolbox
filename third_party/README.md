@@ -96,3 +96,5 @@ M02/M09 更新（2026-09-11）：来源条目仍为326条，既有 Griffin–Lim
 本轮迁入路径见统一登记的 `m10_migration_evidence` 与 [M10 报告](../docs/testing/m10-report.md)。VTL 2.4 API 保留，几何桥接 m10/2 和读数补丁分别提供源码。声音与几何适配继续遵循 VTL GPL 条款，Three.js/头壳/平均鼻腔分别为 MIT/CC0/CC BY 4.0。当前产物供 Windows 本机验证与录制，未公开发布。
 
 2026-09-12：新增REF-PNG，W3C PNG第三版规范参考，用于M02整幅PNG的300dpi元数据；编码器沿用现有浏览器，不增加运行依赖。来源登记和软件致谢同步，当前共327条记录。
+
+P04-FONT更新（2026-09-12）：登记表共328条，ASSET-DOULOS补充既有Doulos SIL 7.000在公共设置、TextGrid、M02 SVG、M03后台及M10中的实际使用与后端副本哈希。SVG附完整OFL文本。REF-FONT-RENDERING为官方规范/文档参考，不是新增运行依赖。系统字体仅按名称使用，未提取或随包分发。

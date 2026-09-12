@@ -9,9 +9,12 @@ import {m01State,saveM01,forgetM01} from '../modules/parameter-estimation/store.
 import {dirty} from '../modules/parameter-estimation/state.ts';
 import {previewFiles,type ResearchContext} from '../platform/research.ts';
 import {desktopFiles} from '../platform/desktop.ts';
+import FontSettings from '../components/FontSettings.vue';
+import {selectFontOwner} from '../state/fonts.ts';
 const props=defineProps<{research?:ResearchContext}>();const emit=defineEmits<{leaveProject:[]}>();
 const defaultContext:ResearchContext={key:'local:M01',label:desktopFiles?'本机目录':'本机预览',files:desktopFiles??previewFiles()};
 const researchContext=computed(()=>props.research??defaultContext);
+watch(()=>props.research?.ownerId,owner=>{void selectFontOwner(owner);},{immediate:true});
 const previewKey=(id:string)=>props.research?researchContext.value.key.replace(/:M01$/,':'+id):id;
 const m01=computed(()=>m01State(researchContext.value.key));
 const m10Dirty=ref(false);
@@ -197,6 +200,7 @@ const modalTitle=computed(()=>({settings:'工作台设置',help:'使用说明',u
 </select>
 </label>
 <p class="muted">主题、侧栏宽度与最近工具保存在本机。各工具的参数在工具内单独设置。</p>
+<FontSettings/>
 </template>
 <template v-else-if="modal==='help'">
 <h3>工作台的基本操作</h3>

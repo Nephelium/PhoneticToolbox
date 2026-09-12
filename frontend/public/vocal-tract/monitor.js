@@ -1,3 +1,4 @@
+import {canvasFont} from './fonts.js';
 import {dark,tint} from './theme.js';
 export function setupMonitor(post,isClosed){
   const $=id=>document.getElementById(id);let latest=null,pending=false,visible=false,lastKey='';
@@ -12,7 +13,7 @@ export function setupMonitor(post,isClosed){
   $('monitorClose').onclick=()=>dialog.close();dialog.addEventListener('close',()=>{home.append(panel);draw();});
   $('monitorStop').onclick=async()=>{if(!$('stopFrames').disabled)$('stopFrames').click();try{await post('deactivate');}catch(e){$('monitorStatus').textContent='停止失败：'+e.message;}};
   for(const id of ['monitorSeconds','monitorWindow','monitorHop'])$(id).onchange=()=>{lastKey='';poll();};
-  function context(id){const canvas=$(id),w=canvas.clientWidth,h=canvas.clientHeight,d=Math.min(devicePixelRatio,2);canvas.width=w*d;canvas.height=h*d;const c=canvas.getContext('2d');c.scale(d,d);c.font='9px "Microsoft YaHei"';return {c,w,h};}
+  function context(id){const canvas=$(id),w=canvas.clientWidth,h=canvas.clientHeight,d=Math.min(devicePixelRatio,2);canvas.width=w*d;canvas.height=h*d;const c=canvas.getContext('2d');c.scale(d,d);c.font=canvasFont(9);return {c,w,h};}
   function draw(){
     if(!visible)return;
     const wave=context('waveCanvas'),spec=context('spectrogramCanvas');if(!wave.w)return;

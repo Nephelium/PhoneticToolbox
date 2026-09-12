@@ -1,0 +1,8 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><div id="app"></div><script type="module">
+import {createApp} from 'vue';
+import TextGridTimeline from '../src/components/TextGridTimeline.vue';
+import {selectFontOwner} from '../src/state/fonts.ts';
+import '../src/design/tokens.css';
+await selectFontOwner();
+createApp(TextGridTimeline,{tiers:[{name:'IPA',intervals:[{xmin:0,xmax:1,text:'aː tʰ ɕ ŋ ə ã n̩'}]}],start:0,end:1,selected:0,selectionStart:0,selectionEnd:0}).mount('#app');
+</script></body></html>

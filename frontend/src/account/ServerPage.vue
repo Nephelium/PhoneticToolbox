@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, shallowRef, onMounted, onUnmounted } from 'vue';
+import { ref, shallowRef, watch, onMounted, onUnmounted } from 'vue';
 import type { components } from '../../../contracts/generated/api';
 import logo from '../assets/k2.png';
 import MethodReferences from '../components/MethodReferences.vue';
@@ -10,6 +10,7 @@ import AppShell from '../app/AppShell.vue';
 import {serverFiles,type ResearchContext} from '../platform/research.ts';
 import {clearM01Owner} from '../modules/parameter-estimation/store.ts';
 import {stop} from '../state/audio.ts';
+import {selectFontOwner} from '../state/fonts.ts';
 import {clearWorkspaceOwner} from '../state/workspace.ts';
 const research=shallowRef<ResearchContext|null>(null);
 function leaveResearch(){stop();research.value?.files.dispose();research.value=null;}
@@ -18,6 +19,7 @@ function enterResearch(){if(!session.value||!selected.value)return;leaveResearch
 type Session = components['schemas']['SessionView'];
 type Project = components['schemas']['ProjectView'];
 const session = ref<Session | null>(null), projects = ref<Project[]>([]);
+watch(()=>session.value?.user.id,id=>{void selectFontOwner(id);},{immediate:true});
 const username = ref(''), password = ref(''), name = ref(''), message = ref('');
 const busy = ref(false), checking = ref(true), available = ref(true), references = ref(false);
 const selected = ref<Project | null>(null), rename = ref('');

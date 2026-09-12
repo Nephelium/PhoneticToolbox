@@ -4,9 +4,11 @@ from pydantic import Field, model_validator
 from .models import WireModel, Identifier, IdempotencyKey
 from .acoustic_models import AcousticAssetRef
 from .acoustic_batch_models import AcousticManagedFile
+from .font_models import FigureFontSnapshot
 
 
 class EggTaskConfig(WireModel):
+    font: FigureFontSnapshot | None = None  # None preserves historical task rendering.
     mode: Literal['single', 'batch', 'inverse'] = 'single'
     flip_channels: bool = False
     signal_mode: Literal['raw', 'filtered'] = 'filtered'

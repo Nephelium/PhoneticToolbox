@@ -11,8 +11,10 @@
 
 整幅PNG于2026-09-12在开发入口完成限定Windows Qt/Chrome验证，见[验收报告](../testing/m02-png-closeout-report.md)。历史Research-Fix1.exe未重新打包，不包含此新增按钮。
 
-图窗是统一宿主内的独立图面板，使用共同主题和播放系统，不另外打开浏览器弹窗。SVG 的 IPA 字符依赖阅读软件可用字体。
+图窗是统一宿主内的独立图面板，使用共同主题和播放系统，不另外打开浏览器弹窗。SVG保留可编辑文字并嵌入Doulos SIL及OFL，其他所选字体仍需阅读设备安装且阅读软件支持。固定外观分享优先使用PNG。
 
 输入限制：16 MB、20 万单元格、256 列。支持原参数 XLSX 与普通 `params` SQLite 表，包含有效 `Time_s`。不执行 Excel 公式、链接、SQLite 函数或任意 SQL。不对损坏、乱序或非参数工作簿静默修复。
 
 方法署名沿用原参数列对应的 Praat、REAPER、VoiceSauce 等来源。表读取使用 openpyxl 和 CPython SQLite，详见统一“方法与来源”。显示已计算参数不代表重新验证外部表的算法来源。
+
+字体在公共[设置](settings.md)统一调整。IPA固定Doulos SIL。整幅PNG的刻度、音标、图例和分区标签使用同一基础字号，总标题稍大；字体加载完成后固定此次图形和文字，再生成300dpi图像。已有图片不追溯改变。

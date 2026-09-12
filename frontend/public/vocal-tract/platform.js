@@ -1,4 +1,5 @@
 // M10 platform port. This module cannot open sockets or choose native paths.
+import {applyFonts} from './fonts.js';
 const pending=new Map();let sequence=0;
 export function request(op,body={}){
   return new Promise((resolve,reject)=>{
@@ -9,6 +10,7 @@ export function request(op,body={}){
 window.addEventListener('message',event=>{
   if(event.source!==parent)return;
   const data=event.data;
+  if(data?.type==='m10-fonts')void applyFonts(data.fonts);
   if(data?.type==='m10-response'){
     const item=pending.get(data.id);if(!item)return;pending.delete(data.id);clearTimeout(item.timer);
     data.ok?item.resolve(data.value):item.reject(Error(data.error));

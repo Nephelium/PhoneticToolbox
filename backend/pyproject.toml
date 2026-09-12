@@ -17,3 +17,6 @@ ptb-api = "ptb_api.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+ptb_worker = ["assets/*.ttf", "assets/*.txt"]

@@ -6,7 +6,7 @@
 
 **技术：** 项目内Python 3.11、NumPy/SciPy/Parselmouth、Pandas/Matplotlib、Vue/TypeScript、现有Qt宿主与P06/P07服务。A仅审计，B已创建独立科学环境并锁定实际Conda/MKL构建；GUI依赖和整合仍待后续阶段。
 
-2026-09-12最新授权：井井在B阶段后回复“好，继续”。**M03-A/B/C已限定verified，完整M03仍in_progress。** B的独立核心、wheel及环境证据见[核心报告](../testing/m03-core-report.md)，C的任务/文件/数值导出证据见[任务报告](../testing/m03-jobs-report.md)。新增P04-FONT字体快照尚未接通，字体专项仍planned；D–F尚未实施。无需重复002/005，本轮不执行DDL。
+2026-09-12最新授权：井井在B阶段后回复“好，继续”。**M03-A/B/C已限定verified，完整M03仍in_progress。** B的独立核心、wheel及环境证据见[核心报告](../testing/m03-core-report.md)，C的任务/文件/数值导出证据见[任务报告](../testing/m03-jobs-report.md)。P04-FONT字体快照已接通，单文件/批次实际三PNG及数值CSV不变已限定验证，见[字体报告](../testing/p04-fonts-report.md)；D–F尚未实施。无需重复002/005，本轮不执行DDL。
 
 ## 1. 输入证据和拟定行为
 
@@ -48,7 +48,7 @@
 
 ### M03-C：有界任务、文件和导出
 
-本轮完成状态及实测预算见[任务报告](../testing/m03-jobs-report.md)。采用固定的隔离科学bootstrap，不把EGG加入现有冻结EXE的通用worker入口；现有EXE尚未包含兼容运行库。通用任务表承载逐文件批次项，整批目录交互留给D，不改变005的M01批次限制。单文件/批次CSV科学规则保留并明确sample-aligned/1差异，FFT分块与原调用逐字节一致。字体专项仍依赖下一段公共方案。
+本轮完成状态及实测预算见[任务报告](../testing/m03-jobs-report.md)。采用固定的隔离科学bootstrap，不把EGG加入现有冻结EXE的通用worker入口；现有EXE尚未包含兼容运行库。通用任务表承载逐文件批次项，整批目录交互留给D，不改变005的M01批次限制。单文件/批次CSV科学规则保留并明确sample-aligned/1差异，FFT分块与原调用逐字节一致。字体专项后续已按下一段公共方案接入，报告范围以P04-FONT为准。
 
 新增依赖（2026-09-12）：[P04-FONT](2026-09-12-global-fonts-design.md)规定三PNG及批次图片使用统一导出字体快照。C已有数值/文件工作可独立推进，字体契约接入前不得把图片字体专项标为verified。Matplotlib等后台渲染在适配层解析当前渲染端可用字体，按任务隔离配置；科学核心不读取用户字体或系统字体目录。该补充不授权DDL或更改已冻结的科学数值。
 

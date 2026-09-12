@@ -58,8 +58,8 @@
     },
     {
       "path": "frontend/public/vocal-tract/app.js",
-      "bytes": 31311,
-      "sha256": "8565fe698a6f5de8642fe0c9e15a470b1a44673d5e52d2f814e187761c9661dd"
+      "bytes": 31128,
+      "sha256": "effa43d65ca3b0298e344d46abea33d496b6ed9de2093cfb5934c8aaf9525402"
     },
     {
       "path": "frontend/public/vocal-tract/controls.mjs",
@@ -93,18 +93,18 @@
     },
     {
       "path": "frontend/public/vocal-tract/monitor.js",
-      "bytes": 4526,
-      "sha256": "8f160250445815876d02f6fe2f44d71652e69c296e5737a9d0a5a61d4ae52593"
+      "bytes": 4555,
+      "sha256": "81ea57d67de4ee399f0367ec968000eb423c9948d4fc39230903c9dc1d4b1f79"
     },
     {
       "path": "frontend/public/vocal-tract/pitch.js",
-      "bytes": 6317,
-      "sha256": "dd17fa91fa6e0bead8d5613263819d27b0f49020577c077e5102b5cd8cdcdf13"
+      "bytes": 6320,
+      "sha256": "70195668e2b94c9efe7256910aa098d2e4608d5e9810b2cc9c1f993509e7a5b6"
     },
     {
       "path": "frontend/public/vocal-tract/platform.js",
-      "bytes": 1059,
-      "sha256": "0129b234aed7e5dfadc6efe59936955e666b6651c25abaf8b217085ee42eaa24"
+      "bytes": 1157,
+      "sha256": "7a84683e992ea0b74be120f9d590ac17a014a31035c84e650950ebd23f15d50d"
     },
     {
       "path": "frontend/public/vocal-tract/scene.js",
@@ -113,8 +113,8 @@
     },
     {
       "path": "frontend/public/vocal-tract/styles.css",
-      "bytes": 19481,
-      "sha256": "7feba9d8248a083c6da42667c11752529f5fbca72b6d4cee354a7c50b041751a"
+      "bytes": 19471,
+      "sha256": "8242a942be946da16f3ef1de79c1d6f0a08af8c0bd9a60c9dbf6ca5f12de03df"
     },
     {
       "path": "frontend/public/vocal-tract/theme.js",
@@ -123,8 +123,8 @@
     },
     {
       "path": "frontend/public/vocal-tract/v3.css",
-      "bytes": 9860,
-      "sha256": "85a380bc6114aa27f95721b5b8f2781b07572e1931ca2a690f2c1f0bd24df2da"
+      "bytes": 10203,
+      "sha256": "ee7fd736e53c63b9ec412a4a233fb78662c9105a7d78913d957b3860e9cc7546"
     },
     {
       "path": "frontend/public/vocal-tract/vendor/OrbitControls.js",
@@ -193,8 +193,14 @@
     },
     {
       "path": "frontend/public/vocal-tract/video.js",
-      "bytes": 10671,
-      "sha256": "21e4e1e5e4d044c19bb2a8e53082d9db71bdbb3002ad89abdf3dc553a0df6816"
+      "bytes": 10920,
+      "sha256": "3bc5161a1fcf2ef58bacf589bd2bea0d775f10d75b54ab84817f049c4ed94b8c"
+    },
+    {
+      "path": "frontend/public/vocal-tract/fonts.js",
+      "bytes": 1484,
+      "sha256": "72618d854a73ddbcd3236430a26df05a8eb2d5c1bce747fc3cad754954951ea7"
     }
-  ]
+  ],
+  "presentation_revision": "P04-FONT 2026-09-12; development typography only, no EXE rebuilt"
 }

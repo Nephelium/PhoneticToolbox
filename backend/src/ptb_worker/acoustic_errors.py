@@ -2,6 +2,7 @@
 from .io.limits import Cancelled, FormatError, LimitError
 
 ACOUSTIC_ERRORS=frozenset({
+    'font_unavailable',
     'egg_runtime_unavailable','egg_runtime_mismatch','egg_input_budget','egg_stereo_required',
     'egg_sample_rate','egg_invalid_roi','egg_inverse_budget','egg_incomplete_export',
     'egg_filter_failed','egg_inverse_unavailable','egg_pitch_failed',

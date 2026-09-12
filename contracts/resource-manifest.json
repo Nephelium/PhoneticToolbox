@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "scope": "P04 shared assets and M10 Windows local native/geometry/UI resources",
+  "scope": "P04 shared fonts/assets and M10 Windows local native/geometry/UI resources",
   "resources": [
     {
       "path": "frontend/src/assets/k2.png",
@@ -29,7 +29,7 @@
     },
     {
       "path": "frontend/public/vocal-tract/app.js",
-      "sha256": "8565fe698a6f5de8642fe0c9e15a470b1a44673d5e52d2f814e187761c9661dd",
+      "sha256": "effa43d65ca3b0298e344d46abea33d496b6ed9de2093cfb5934c8aaf9525402",
       "source_id": "PROJECT-M10"
     },
     {
@@ -74,17 +74,17 @@
     },
     {
       "path": "frontend/public/vocal-tract/monitor.js",
-      "sha256": "8f160250445815876d02f6fe2f44d71652e69c296e5737a9d0a5a61d4ae52593",
+      "sha256": "81ea57d67de4ee399f0367ec968000eb423c9948d4fc39230903c9dc1d4b1f79",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/pitch.js",
-      "sha256": "dd17fa91fa6e0bead8d5613263819d27b0f49020577c077e5102b5cd8cdcdf13",
+      "sha256": "70195668e2b94c9efe7256910aa098d2e4608d5e9810b2cc9c1f993509e7a5b6",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/platform.js",
-      "sha256": "0129b234aed7e5dfadc6efe59936955e666b6651c25abaf8b217085ee42eaa24",
+      "sha256": "7a84683e992ea0b74be120f9d590ac17a014a31035c84e650950ebd23f15d50d",
       "source_id": "PROJECT-M10"
     },
     {
@@ -99,7 +99,7 @@
     },
     {
       "path": "frontend/public/vocal-tract/styles.css",
-      "sha256": "7feba9d8248a083c6da42667c11752529f5fbca72b6d4cee354a7c50b041751a",
+      "sha256": "8242a942be946da16f3ef1de79c1d6f0a08af8c0bd9a60c9dbf6ca5f12de03df",
       "source_id": "PROJECT-M10"
     },
     {
@@ -109,7 +109,7 @@
     },
     {
       "path": "frontend/public/vocal-tract/v3.css",
-      "sha256": "85a380bc6114aa27f95721b5b8f2781b07572e1931ca2a690f2c1f0bd24df2da",
+      "sha256": "ee7fd736e53c63b9ec412a4a233fb78662c9105a7d78913d957b3860e9cc7546",
       "source_id": "PROJECT-M10"
     },
     {
@@ -134,7 +134,7 @@
     },
     {
       "path": "frontend/public/vocal-tract/video.js",
-      "sha256": "21e4e1e5e4d044c19bb2a8e53082d9db71bdbb3002ad89abdf3dc553a0df6816",
+      "sha256": "3bc5161a1fcf2ef58bacf589bd2bea0d775f10d75b54ab84817f049c4ed94b8c",
       "source_id": "PROJECT-M10"
     },
     {
@@ -144,7 +144,7 @@
     },
     {
       "path": "resources/vocal_tract/bundle-manifest.json",
-      "sha256": "874e365d2ee5ae1a7418e61bf6265823d17412d47a74bbaad028971dce9fcb22",
+      "sha256": "56f8c4d7fc1c1acc782e9b2dcedaebf821eb1977be1c575ee0641bef363386b5",
       "source_id": "SRC-VTL"
     },
     {
@@ -221,6 +221,21 @@
       "path": "resources/vocal_tract/VTL-LICENSE.txt",
       "sha256": "230184f60bae2feaf244f10a8bac053c8ff33a183bcc365b4d8b876d2b7f4809",
       "source_id": "SRC-VTL"
+    },
+    {
+      "path": "frontend/public/vocal-tract/fonts.js",
+      "source_id": "PROJECT-M10",
+      "sha256": "72618d854a73ddbcd3236430a26df05a8eb2d5c1bce747fc3cad754954951ea7"
+    },
+    {
+      "path": "backend/src/ptb_worker/assets/DoulosSIL-Regular.ttf",
+      "source_id": "ASSET-DOULOS",
+      "sha256": "cc89b87c047bcc8dc00246398218bb6343e0f2372b153cf560c29a77f27068ef"
+    },
+    {
+      "path": "backend/src/ptb_worker/assets/Doulos-OFL.txt",
+      "source_id": "ASSET-DOULOS",
+      "sha256": "dadf7f382cfd1fccf4b485b12fc16a08a2a20e8095b960d840b243f979f6082f"
     }
   ]
 }

@@ -83,7 +83,7 @@
       "target": "frontend/public/vocal-tract/app.js",
       "source_sha256": "4068a0de83984149304fc20cb34fb28526ccd973e4894baa79830c6838ee8300",
       "migration_sha256": "4068a0de83984149304fc20cb34fb28526ccd973e4894baa79830c6838ee8300",
-      "current_sha256": "8565fe698a6f5de8642fe0c9e15a470b1a44673d5e52d2f814e187761c9661dd"
+      "current_sha256": "effa43d65ca3b0298e344d46abea33d496b6ed9de2093cfb5934c8aaf9525402"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/controls.mjs",
@@ -132,14 +132,14 @@
       "target": "frontend/public/vocal-tract/monitor.js",
       "source_sha256": "f88dcf8438bda63d583d881b5c27e55b96de6d552ff78ed1e7784f32249768d4",
       "migration_sha256": "f88dcf8438bda63d583d881b5c27e55b96de6d552ff78ed1e7784f32249768d4",
-      "current_sha256": "8f160250445815876d02f6fe2f44d71652e69c296e5737a9d0a5a61d4ae52593"
+      "current_sha256": "81ea57d67de4ee399f0367ec968000eb423c9948d4fc39230903c9dc1d4b1f79"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/pitch.js",
       "target": "frontend/public/vocal-tract/pitch.js",
       "source_sha256": "6446152cb323fa921bc4ed7ebf9e47f45f6152ed9516e20fa52d63344629a197",
       "migration_sha256": "6446152cb323fa921bc4ed7ebf9e47f45f6152ed9516e20fa52d63344629a197",
-      "current_sha256": "dd17fa91fa6e0bead8d5613263819d27b0f49020577c077e5102b5cd8cdcdf13"
+      "current_sha256": "70195668e2b94c9efe7256910aa098d2e4608d5e9810b2cc9c1f993509e7a5b6"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/scene.js",
@@ -153,7 +153,7 @@
       "target": "frontend/public/vocal-tract/styles.css",
       "source_sha256": "7feba9d8248a083c6da42667c11752529f5fbca72b6d4cee354a7c50b041751a",
       "migration_sha256": "7feba9d8248a083c6da42667c11752529f5fbca72b6d4cee354a7c50b041751a",
-      "current_sha256": "7feba9d8248a083c6da42667c11752529f5fbca72b6d4cee354a7c50b041751a"
+      "current_sha256": "8242a942be946da16f3ef1de79c1d6f0a08af8c0bd9a60c9dbf6ca5f12de03df"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/viewer.js",
@@ -303,5 +303,6 @@
       "current_sha256": "aa696bf4cf5c44cbd433304943aebb241e5ea3064b949daf5ea09f96567cff9b"
     }
   ],
-  "behavior_revision": "R5 / native m10/2; built without verification by user request; docs/plans/2026-09-11-m10-onset.md"
+  "behavior_revision": "R5 / native m10/2; built without verification by user request; docs/plans/2026-09-11-m10-onset.md",
+  "presentation_revision": "P04-FONT: docs/testing/p04-fonts-report.md; font-only development checks do not validate other R5 behavior"
 }

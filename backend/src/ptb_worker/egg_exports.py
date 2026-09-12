@@ -34,7 +34,7 @@ def csv_bytes(result, config, settings, start, end):
     return frame.sort_index().to_csv(na_rep='NaN', index_label='Time (s)').encode(), 0
 
 
-def plot_bytes(result, config, settings, first, last):
+def plot_bytes(result, config, settings, first, last, font_evidence=None):
     # Explicit fixed, print-friendly V2 exports. These are scientific artifacts,
     # not the interactive V3 page or its light/dark UI theme.
     from matplotlib import rc_context
@@ -47,9 +47,22 @@ def plot_bytes(result, config, settings, first, last):
              'figure.facecolor': 'white', 'axes.facecolor': 'white', 'savefig.facecolor': 'white',
              'axes.edgecolor': 'black', 'text.color': 'black', 'grid.color': '#DDDDDD', 'grid.linestyle': ':'}
     blobs = {}
+    if settings.font is not None:
+        from .fonts import resolve_fonts
+        fonts=font_evidence or resolve_fonts(settings.font)
+        style.update({'font.family':[fonts['latin']['family'],fonts['ipa']['family'],fonts['zh']['family']],
+                      'font.size':settings.font.size_px*72/96,'axes.unicode_minus':True})
     def figure():
         fig = Figure(figsize=size); FigureCanvasAgg(fig); return fig
     def save(fig, name):
+        # Explicit phonetic labels retain Doulos even if a Latin face contains
+        # IPA glyphs. Current EGG axes are ordinary English/scientific labels.
+        if settings.font is not None:
+            import re
+            from matplotlib.text import Text
+            for text in fig.findobj(Text):
+                if re.search(r'[\u0250-\u036f\u1d00-\u1dbf]|\[[a-zɑ-ʯ]+\]',text.get_text()):
+                    text.set_fontfamily(['Doulos SIL',fonts['zh']['family']])
         stream = io.BytesIO(); fig.savefig(stream, format='png', dpi=dpi)
         blobs[name] = stream.getvalue(); fig.clear()
     with rc_context(style):

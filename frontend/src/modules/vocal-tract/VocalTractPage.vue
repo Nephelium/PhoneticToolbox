@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import {ref,onMounted,onUnmounted,watch} from 'vue';
 import {vocalRequest} from '../../platform/desktop.ts';
+import {fontPayload,fontRevision} from '../../state/fonts.ts';
 const props=defineProps<{active:boolean}>();
 const emit=defineEmits<{references:[];close:[];dirty:[value:boolean]}>();
 const frame=ref<HTMLIFrameElement>();const ready=!!vocalRequest;
-const theme=()=>frame.value?.contentWindow?.postMessage({type:'m10-theme',theme:document.documentElement.dataset.theme},'*');
+const theme=()=>{frame.value?.contentWindow?.postMessage({type:'m10-theme',theme:document.documentElement.dataset.theme},'*');if(fontPayload.value)frame.value?.contentWindow?.postMessage({type:'m10-fonts',fonts:JSON.parse(JSON.stringify(fontPayload.value))},'*');};
+watch(fontRevision,theme);
 async function message(event:MessageEvent){
   if(event.source!==frame.value?.contentWindow||!event.data||typeof event.data!=='object')return;
   const {type,id,op,body}=event.data;

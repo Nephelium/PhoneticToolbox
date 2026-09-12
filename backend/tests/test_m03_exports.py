@@ -109,3 +109,50 @@ def test_child_rejects_unsupported_shape_and_budget_before_analysis(frames,chann
     from ptb_worker.acoustic_errors import AcousticFailure
     stream=io.BytesIO();wavfile.write(stream,rate,np.zeros((frames,channels),dtype=np.int16))
     with pytest.raises(AcousticFailure,match=code):export(stream.getvalue(),config)
+
+
+@pytest.mark.parametrize('mode',['single','batch'])
+def test_font_change_updates_images_and_evidence_without_changing_csv(frozen,mode):
+    _,_,_,raw=frozen
+    outputs=[]
+    for latin in ['Times New Roman','Arial']:
+        config=dict(mode=mode,generate_images=True,font=dict(zh='SimSun',latin=latin,ipa='Doulos SIL',size_px=24))
+        if mode=='single':config.update(roi_start=.1,roi_end=.5)
+        bundle=unpack_bundle(export(raw,config),64_000_000)
+        blobs={f['name']:b for f,b in zip(bundle.manifest['files'],bundle.payloads)}
+        meta=json.loads(blobs['egg.ptb.json'])
+        assert meta['render_fonts']['latin']['family']==latin
+        assert meta['render_fonts']['ipa']['family']=='Doulos SIL'
+        for name in ['egg_CQ_SQ.png','egg_SPEC_F0.png','egg_WAVEFORMS.png']:
+            with Image.open(io.BytesIO(blobs[name])) as image: image.verify()
+        outputs.append(blobs)
+    assert outputs[0]['egg_DATA.csv']==outputs[1]['egg_DATA.csv']
+    assert all(outputs[0][name]!=outputs[1][name] for name in ['egg_CQ_SQ.png','egg_SPEC_F0.png','egg_WAVEFORMS.png'])
+
+
+def test_parallel_children_keep_independent_font_snapshots(frozen,tmp_path):
+    import subprocess
+    import sys
+    import hashlib
+    from pathlib import Path
+    _,_,_,raw=frozen
+    bootstrap=Path(__file__).resolve().parents[1]/'src/ptb_worker/egg_bootstrap.py'
+    children=[]
+    try:
+        for index,latin in enumerate(['Times New Roman','Arial']):
+            source=tmp_path/f'{index}.request';target=tmp_path/f'{index}.bundle'
+            header=dict(sha256=hashlib.sha256(raw).hexdigest(),config=dict(mode='single',roi_end=.5,font=dict(zh='SimSun',latin=latin)))
+            source.write_bytes(json.dumps(header).encode()+b'\n'+raw)
+            process=subprocess.Popen([sys.executable,'-I','-B',str(bootstrap),str(source),str(target)],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            children.append((process,target,latin))
+        for process,target,latin in children:
+            _,error=process.communicate(timeout=60)
+            assert process.returncode==0,error.decode(errors='replace')
+            bundle=unpack_bundle(target.read_bytes(),64_000_000)
+            blobs={f['name']:b for f,b in zip(bundle.manifest['files'],bundle.payloads)}
+            meta=json.loads(blobs['egg.ptb.json'])
+            assert meta['render_fonts']['latin']['family']==latin
+            assert meta['render_fonts']['ipa']['family']=='Doulos SIL'
+    finally:
+        for process,_,_ in children:
+            if process.poll() is None:process.kill();process.wait()

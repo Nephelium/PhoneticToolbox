@@ -19,3 +19,5 @@
 预算：输入 16 MB，原图最多 2500 万像素，实际重建区域最多 100 万像素；像素数 × 迭代数最多 3200 万。时长最多 30 秒，FFT 最多 16384 点，迭代最多 128 次。Windows 子进程内存约 1 GB、运行最多 240 秒；超限报错，不能留下部分可下载结果。
 
 方法来源：Daniel W. Griffin 与 Jae S. Lim，1984，*Signal estimation from modified short-time Fourier transform*，DOI `10.1109/TASSP.1984.1164317`。实现由本项目 v2 迁入并作明确适配；NumPy/SciPy 提供数值工具，OpenCV 解码与透视校正，SoundFile 写出 WAV。统一来源表保留各自关系和许可待审项。
+
+2026-09-12开发态字体接入：公共[字体设置](settings.md)统一调整已打开页面；所有IPA固定Doulos SIL。字体只影响呈现，不改变科研数值或音频。历史EXE未重新打包，限定验证见[字体报告](../testing/p04-fonts-report.md)。

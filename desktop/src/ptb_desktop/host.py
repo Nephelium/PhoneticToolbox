@@ -147,6 +147,9 @@ class Bridge(QObject):
             if op=='hello':
                 health=self.service.get('/api/v1/health')
                 value={'kind':'desktop','session':self.provider.session,'api_version':health['api_version'],'tasks':bool(self.service.local_files_root)}
+            elif op=='fonts':
+                from PyQt6.QtGui import QFontDatabase
+                value=sorted(QFontDatabase.families())
             elif op=='capture':
                 if QMessageBox.question(self.window,'截取语谱图','将暂时隐藏本窗口并截取当前屏幕。请确认屏幕不含敏感内容。截图仅保留在本机内存，开始重建后才加入本机任务。',QMessageBox.StandardButton.Ok|QMessageBox.StandardButton.Cancel)!=QMessageBox.StandardButton.Ok:
                     value=None

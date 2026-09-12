@@ -1279,6 +1279,7 @@ export interface components {
              * @default false
              */
             flip_channels: boolean;
+            font?: components["schemas"]["FigureFontSnapshot"] | null;
             /**
              * Gci Method
              * @default slope
@@ -1372,6 +1373,36 @@ export interface components {
              * @default 0.01
              */
             valley_prominence: number;
+        };
+        /** FigureFontSnapshot */
+        FigureFontSnapshot: {
+            /**
+             * Ipa
+             * @default Doulos SIL
+             * @constant
+             */
+            ipa: "Doulos SIL";
+            /**
+             * Latin
+             * @default Segoe UI
+             */
+            latin: string;
+            /**
+             * Schema Version
+             * @default font/1
+             * @constant
+             */
+            schema_version: "font/1";
+            /**
+             * Size Px
+             * @default 12
+             */
+            size_px: number;
+            /**
+             * Zh
+             * @default Microsoft YaHei
+             */
+            zh: string;
         };
         /** FileConfig */
         FileConfig: {

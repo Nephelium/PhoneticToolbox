@@ -1,4 +1,48 @@
 {
+  "$defs": {
+    "FigureFontSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "ipa": {
+          "const": "Doulos SIL",
+          "default": "Doulos SIL",
+          "title": "Ipa",
+          "type": "string"
+        },
+        "latin": {
+          "default": "Segoe UI",
+          "maxLength": 100,
+          "minLength": 1,
+          "pattern": "^[^\\x00-\\x1f\"\\x27\\\\/;{}<>]+$",
+          "title": "Latin",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "font/1",
+          "default": "font/1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "size_px": {
+          "default": 12,
+          "maximum": 24,
+          "minimum": 10,
+          "title": "Size Px",
+          "type": "number"
+        },
+        "zh": {
+          "default": "Microsoft YaHei",
+          "maxLength": 100,
+          "minLength": 1,
+          "pattern": "^[^\\x00-\\x1f\"\\x27\\\\/;{}<>]+$",
+          "title": "Zh",
+          "type": "string"
+        }
+      },
+      "title": "FigureFontSnapshot",
+      "type": "object"
+    }
+  },
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "properties": {
@@ -17,6 +61,17 @@
       "default": false,
       "title": "Flip Channels",
       "type": "boolean"
+    },
+    "font": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/FigureFontSnapshot"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "gci_method": {
       "default": "slope",

@@ -33,7 +33,7 @@ p{line-height:1.75}
 hr{border:0;border-top:1px solid var(--border);margin:22px 0}
 .muted,.hint{color:var(--muted)}
 .hint{font-size:12px;line-height:1.8}
-.mono{font-variant-numeric:tabular-nums;font-family:Consolas,"SFMono-Regular",monospace;font-size:12px}
+.mono{font-variant-numeric:tabular-nums;font-family:var(--font-mono,Consolas),monospace;font-size:12px;font-variant-ligatures:none}
 .eyebrow{font-size:12px;font-weight:600;letter-spacing:1.3px;color:var(--muted);margin-bottom:6px}
 .icon-button{padding:5px;min-width:30px;min-height:30px;border:0;background:transparent}
 .status-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--success);flex:none}
@@ -222,7 +222,7 @@ dialog::backdrop{background:var(--overlay)}
 .reference-links button{font-size:12px;min-height:28px}
 .help-list{padding-left:23px;line-height:1.9}
 .help-list li{margin-bottom:12px;font-size:13px}
-.ipa-sample{font-family:"Doulos SIL","Charis SIL","Segoe UI",serif;font-size:23px;line-height:1.8;word-spacing:8px}
+.ipa-sample{font-family:var(--font-ipa,"PTB-Doulos"),serif;font-size:23px;line-height:1.8;word-spacing:8px}
 .about-brand{display:flex;gap:16px;align-items:center;margin-bottom:20px}
 .about-brand img{width:54px}
 .selectable{user-select:text}
@@ -321,7 +321,13 @@ to{opacity:1;transform:none}
 
 
 @font-face{font-family:PTB-Doulos;src:url(../assets/DoulosSIL-Regular.ttf);font-display:swap}
-.ipa-sample,.ipa-icon{font-family:PTB-Doulos,serif}
+.ipa-sample,.ipa-icon,.ipa-text{font-family:var(--font-ipa,"PTB-Doulos"),serif}
+:root{--font-figure:var(--font);--font-ipa:"PTB-Doulos","Microsoft YaHei",serif;--figure-size:12px}
+.parameter-chart,.time-axis,.frequency-axis{font-family:var(--font-figure)}
+.time-axis,.frequency-axis{font-size:var(--figure-size)}
+.parameter-chart text{font-size:var(--figure-size)}
+.parameter-chart .ipa-text,.wave-track .ipa-text,.textgrid-interval .ipa-text{font-family:var(--font-figure-ipa,var(--font-ipa))}
+code,pre{font-family:var(--font-mono,Consolas),monospace;font-variant-ligatures:none}
 .nav-item,.tool-group button strong{font-size:14px}
 
 
@@ -451,3 +457,7 @@ to{opacity:1;transform:none}
  .m01-page .m01-batch-bar{margin-top:8px}
  .m01-page .m01-batch-bar>span{white-space:normal}
 }
+
+/* Typography overrides after module spacing rules. */
+.wave-viewport .time-axis,.spectrogram-canvas .frequency-axis{font-size:var(--figure-size)}
+.wave-track .ipa-text{font-size:var(--figure-size)}
