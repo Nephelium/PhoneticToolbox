@@ -5008,5 +5008,20 @@
     "urls": {
       "specification": "https://www.webmproject.org/docs/container/"
     }
+  },
+  {
+    "id": "REF-PNG",
+    "title": "Portable Network Graphics (PNG) Specification (Third Edition)",
+    "modules": [
+      "M02"
+    ],
+    "kind": "specification-reference",
+    "acknowledgement_group": "software",
+    "authors": "W3C Portable Network Graphics Working Group",
+    "version": "W3C Recommendation 24 June 2025, sections 5.5 and 11.3.4.3; canvas encoder from existing browser/Qt",
+    "license": "Specification reference only; no specification text or sample implementation redistributed",
+    "urls": {
+      "specification": "https://www.w3.org/TR/2025/REC-png-3-20250624/"
+    }
   }
 ]

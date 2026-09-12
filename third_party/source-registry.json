@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-09-09",
-  "total_records": 326,
+  "total_records": 327,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -7108,6 +7108,28 @@
         "desktop/src/ptb_desktop/vocal_tract/video.py"
       ],
       "evidence": "docs/testing/m10-recording-features-report.md"
+    },
+    {
+      "id": "REF-PNG",
+      "title": "Portable Network Graphics (PNG) Specification (Third Edition)",
+      "authors": "W3C Portable Network Graphics Working Group",
+      "kind": "specification-reference",
+      "modules": [
+        "M02"
+      ],
+      "urls": {
+        "specification": "https://www.w3.org/TR/2025/REC-png-3-20250624/"
+      },
+      "license": "Specification reference only; no specification text or sample implementation redistributed",
+      "actual_included_version": "W3C Recommendation 24 June 2025, sections 5.5 and 11.3.4.3; canvas encoder from existing browser/Qt",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-12",
+      "distribution_status": "reference-only",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "frontend/src/modules/parameter-display/png.ts"
+      ],
+      "evidence": "docs/plans/2026-09-12-closeout-and-m02-png.md"
     }
   ]
 }

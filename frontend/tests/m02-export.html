@@ -1,0 +1,14 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>M02 synthetic export fixture</title></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';
+import Page from '../src/modules/parameter-display/ParameterDisplayPage.vue';
+import '../src/design/tokens.css';
+// Explicit synthetic component fixture. Native file/Praat integration is checked
+// independently by scripts/verify_m02_png_qt.py, not represented by this fixture.
+const buffer=new ArrayBuffer(44+8000*4),view=new DataView(buffer);
+const text=(i,s)=>[...s].forEach((c,n)=>view.setUint8(i+n,c.charCodeAt(0)));
+text(0,'RIFF');view.setUint32(4,buffer.byteLength-8,true);text(8,'WAVE');text(12,'fmt ');view.setUint32(16,16,true);view.setUint16(20,1,true);view.setUint16(22,2,true);view.setUint32(24,8000,true);view.setUint32(28,32000,true);view.setUint16(32,4,true);view.setUint16(34,16,true);text(36,'data');view.setUint32(40,32000,true);
+for(let i=0;i<8000;i++){view.setInt16(44+i*4,12000*Math.sin(2*Math.PI*i/40),true);view.setInt16(46+i*4,4000*Math.sin(2*Math.PI*i/80),true);}
+const files=[{id:'wave',name:'元音ɑ̃.wav',kind:'audio',size:buffer.byteLength},{id:'table',name:'元音ɑ̃.xlsx',kind:'parameter',size:10}];
+const table={schema_version:'m02/1',sha256:'a'.repeat(64),columns:['Time_s','F0','small','TextGrid'],kinds:['number','number','number','text'],rows:Array.from({length:100},(_,i)=>[i/100,200+i,1+i/200,i<50?'ɑ̃˥':'i˩'])};
+createApp({render:()=>h(Page,{stateKey:'m02-export-test',active:true,context:{key:'synthetic',label:'Synthetic export fixture',files:{kind:'preview',list:async()=>files,read:async()=>({buffer:buffer.slice(0),sha256:"a".repeat(64)}),parameters:async()=>structuredClone(table)}}})}).mount('#app');
+</script></body></html>

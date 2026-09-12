@@ -3,7 +3,9 @@ import {computed,ref,onMounted,onUnmounted} from 'vue';
 import type {ParameterTable} from '../../platform/research.ts';
 import type {Workspace} from '../../state/workspace.ts';
 import {overlayPlot,annotationRuns,type PlotGroup,type OverlayCurve} from './state.ts';
-const props=defineProps<{table:ParameterTable;group:PlotGroup;wave:Workspace}>();
+import {wholeFigurePng,downloadImage} from './export.ts';
+const props=defineProps<{table:ParameterTable;group:PlotGroup;wave:Workspace;waveform:()=>HTMLElement|undefined}>();
+const exporting=ref(false);
 const svg=ref<SVGSVGElement>(),surface=ref<HTMLElement>(),error=ref(''),chartWidth=ref(600);
 let resize:ResizeObserver|undefined;
 onMounted(()=>{resize=new ResizeObserver(entries=>{const width=entries[0]?.contentRect.width;if(width)chartWidth.value=Math.max(340,Math.floor(width));});if(surface.value)resize.observe(surface.value);});
@@ -30,9 +32,17 @@ function down(event:PointerEvent){if(event.button!==0)return;drag={x:event.clien
 function move(event:PointerEvent){if(!drag)return;if(drag.select){props.wave.start=Math.min(drag.time,time(event));props.wave.end=Math.max(drag.time,time(event));}else{const rect=svg.value!.getBoundingClientRect();const dx=(event.clientX-drag.x)/rect.width*chartWidth.value/plotWidth.value*span.value;props.wave.offset=Math.max(0,Math.min(duration.value-span.value,drag.offset-dx));}}
 function wheel(event:WheelEvent){event.preventDefault();const rect=svg.value!.getBoundingClientRect();const fraction=Math.max(0,Math.min(1,((event.clientX-rect.left)/rect.width*chartWidth.value-plotLeft)/plotWidth.value));const anchor=start.value+fraction*span.value;props.wave.zoom=Math.max(1,Math.min(Math.max(1,duration.value/.01),props.wave.zoom*(event.deltaY<0?1.25:.8)));props.wave.offset=Math.max(0,Math.min(duration.value-duration.value/props.wave.zoom,anchor-fraction*duration.value/props.wave.zoom));}
 async function save(){error.value='';try{const clone=svg.value!.cloneNode(true) as SVGSVGElement;const style=getComputedStyle(svg.value!);for(const name of ['--text','--muted','--border','--panel','--selection',...colorTokens])clone.style.setProperty(name,style.getPropertyValue(name));clone.setAttribute('xmlns','http://www.w3.org/2000/svg');clone.style.width=chartWidth.value+'px';clone.style.height=chartHeight.value+'px';clone.setAttribute('width',String(chartWidth.value));clone.setAttribute('height',String(chartHeight.value));const blob=new Blob([new XMLSerializer().serializeToString(clone)],{type:'image/svg+xml;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=props.group.title+'.svg';a.click();setTimeout(()=>URL.revokeObjectURL(url),5000);}catch{error.value='图片导出失败，请重试。';}}
+async function saveWhole(){
+ if(exporting.value)return;error.value='';exporting.value=true;
+ try{const waveform=props.waveform();if(!svg.value||!waveform)throw Error('波形尚未就绪。');
+  const name=(props.wave.asset?.name??'参数').replace(/\.wav$/i,'')+'-'+props.group.title;
+  const blob=await wholeFigurePng({chart:svg.value,waveform,title:name,start:start.value,end:start.value+span.value,plotLeft,plotRight:plotRight.value});
+  downloadImage(blob,name+'.png');
+ }catch(e){error.value=e instanceof Error?e.message:'整幅图片导出失败，请重试。';}finally{exporting.value=false;}
+}
 </script>
 <template><section class="parameter-figure">
-<header class="section-title"><div><h3>{{group.title}}</h3><small>{{chart.curves.length}} 条曲线叠加 · {{chart.dual?'自动双纵轴':'共用纵轴'}}</small></div><div><slot/><button @click="save" :disabled="!group.parameters.length">保存当前图</button></div></header>
+<header class="section-title"><div><h3>{{group.title}}</h3><small>{{chart.curves.length}} 条曲线叠加 · {{chart.dual?'自动双纵轴':'共用纵轴'}}</small></div><div><slot/><button @click="save" :disabled="!group.parameters.length" title="仅保存参数图 SVG">保存当前图</button><button @click="saveWhole" :disabled="!group.parameters.length||exporting" title="白底 300 dpi，包含波形、已开启语谱图及此参数图">{{exporting?'正在生成 PNG…':'保存整幅 PNG'}}</button></div></header>
 <p v-if="error" role="alert">{{error}}</p><div ref="surface" class="plot-surface">
 <div v-if="!group.parameters.length" class="empty-plot"><strong>{{group.title}} · 待分配参数</strong><p>勾选参数并分配到此图窗后，多条曲线将在同一绘图区叠加。</p></div>
 <svg v-else ref="svg" class="parameter-chart" :viewBox="'0 0 '+chartWidth+' '+chartHeight" :style="{height:chartHeight+'px'}" role="img" :aria-label="group.title+'叠加参数曲线'" @pointerdown="down" @pointermove="move" @pointerup="move($event);drag=null" @pointercancel="drag=null" @wheel="wheel" @dblclick="wave.zoom=1;wave.offset=0">
