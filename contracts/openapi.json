@@ -1861,7 +1861,7 @@
             "items": {
               "type": "number"
             },
-            "maxItems": 1000,
+            "maxItems": 10000,
             "title": "Gci",
             "type": "array"
           },
@@ -1872,7 +1872,7 @@
             "items": {
               "type": "number"
             },
-            "maxItems": 1000,
+            "maxItems": 10000,
             "title": "Goi",
             "type": "array"
           },
@@ -1885,6 +1885,13 @@
             "default": "raw-50ms-padding",
             "title": "Micro Event Policy",
             "type": "string"
+          },
+          "micro_sample_stride": {
+            "default": 1,
+            "maximum": 64,
+            "minimum": 1,
+            "title": "Micro Sample Stride",
+            "type": "integer"
           },
           "micro_wave_policy": {
             "const": "raw-100ms-padding-filter-crop",
@@ -2172,8 +2179,8 @@
           },
           "micro_width_ms": {
             "default": 50.0,
-            "maximum": 200.0,
-            "minimum": 10.0,
+            "maximum": 5000.0,
+            "minimum": 5.0,
             "title": "Micro Width Ms",
             "type": "number"
           },

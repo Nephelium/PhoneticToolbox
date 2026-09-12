@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-09-09",
-  "total_records": 328,
+  "total_records": 330,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -913,7 +913,7 @@
         "M03"
       ],
       "urls": {},
-      "evidence": "原core/egg及EGGAnalysisService已在M03-B迁入packages/phonetic_core/src/phonetic_core/egg，来源哈希见third_party/egg-migration.json；GCI/GOI、CQ/SQ与简化CPIF完整学术引用/授权链仍待核实。 M03-C数值导出规则由旧GUI/批处理迁入egg/export_series.py及backend/egg_exports.py，hash及差异见third_party/egg-migration.json；有界任务证据见docs/testing/m03-jobs-report.md。 M03-D新增微观显示及IF四图数值路径，原V2独立双轮冻结见tests/fixtures/m03/ui-source.json、ui-display.npz；使用位置与差异见third_party/egg-migration.json。 M03-E1对照原GUI修复独立默认、单文件CSV双F0与源名称保存，补有界手势；八份来源hash不变，具体范围见docs/testing/m03-report.md。",
+      "evidence": "原core/egg及EGGAnalysisService已在M03-B迁入packages/phonetic_core/src/phonetic_core/egg，来源哈希见third_party/egg-migration.json；GCI/GOI、CQ/SQ与简化CPIF完整学术引用/授权链仍待核实。 M03-C数值导出规则由旧GUI/批处理迁入egg/export_series.py及backend/egg_exports.py，hash及差异见third_party/egg-migration.json；有界任务证据见docs/testing/m03-jobs-report.md。 M03-D新增微观显示及IF四图数值路径，原V2独立双轮冻结见tests/fixtures/m03/ui-source.json、ui-display.npz；使用位置与差异见third_party/egg-migration.json。 M03-E1对照原GUI修复独立默认、单文件CSV双F0与源名称保存，补有界手势；八份来源hash不变，具体范围见docs/testing/m03-report.md。 M03-E3恢复原5–5000ms及显示抽点，独立基准见tests/fixtures/m03/ranges-source.json；书目、旧手册截图与Henrich原文差异见docs/references/m03-method-audit.md。未确立的代码许可保持不变。",
       "license": "not-established",
       "notes": "本地数值迁移，正常步骤与显式边界修正分开；不将独立基准或数值一致性当作生理有效性/许可证明。Windows兼容环境实际构建见third_party/m03-runtime-lock.json。",
       "verification_date": "2026-09-12",
@@ -7180,6 +7180,48 @@
         "backend/src/ptb_worker/fonts.py"
       ],
       "evidence": "docs/plans/2026-09-12-fonts-implementation.md"
+    },
+    {
+      "id": "REF-YIN-EGG-THESIS",
+      "title": "汉语韵律的嗓音发声研究（旧版手册引用）",
+      "authors": "尹基德",
+      "kind": "reference-only",
+      "modules": [
+        "M03"
+      ],
+      "urls": {
+        "catalog": "https://lib.chinese.pku.edu.cn/xueweilunwen?combine=&degree=All&degree_str=&field_xwlw_callno_value=&major=All&page=314&sort_by=field_xwlw_year_int_value&sort_order=DESC&year=&year_int_max=&year_int_min="
+      },
+      "actual_included_version": "馆藏 020/D2010(71)；完整论文页码未核准",
+      "license": "引用与原站链接；论文全文未收录",
+      "evidence": "北大官方馆藏题名/作者/导师及原v2手册图3-8。截图无页码，不将手册默认推荐视为论文直接结论。见docs/references/m03-method-audit.md。",
+      "verification_status": "bibliography-only",
+      "distribution_status": "citation-link-only",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-12",
+      "acknowledgement_group": "academic"
+    },
+    {
+      "id": "REF-HENRICH-2004-DEGG",
+      "title": "On the use of the derivative of electroglottographic signals for characterization of nonpathological phonation",
+      "authors": "Nathalie Henrich; Christophe d’Alessandro; Boris Doval; Michèle Castellengo",
+      "year": 2004,
+      "kind": "reference-only",
+      "modules": [
+        "M03"
+      ],
+      "urls": {
+        "paper": "https://doi.org/10.1121/1.1646401",
+        "author_pdf": "https://www.lam.jussieu.fr/Membres/Castellengo/publications/2004b-Voice%20DEGG.pdf"
+      },
+      "actual_included_version": "JASA 115(3), 1321–1332 (2004)；方法审阅参考",
+      "license": "© 2004 Acoustical Society of America；引用与原站链接，全文未收录",
+      "evidence": "原文p.1323、pp.1327–1329区分阈值、混合与DECOM。用于核查方法边界，未移植DECOM代码，不以本文证明旧实现许可。见docs/references/m03-method-audit.md。",
+      "verification_status": "primary-paper-reviewed",
+      "distribution_status": "citation-link-only",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-12",
+      "acknowledgement_group": "academic"
     }
   ]
 }

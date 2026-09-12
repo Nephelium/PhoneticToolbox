@@ -1,6 +1,7 @@
 # PhoneticToolbox v3 — Agent 工作规则
 
 ## 0. 当前阶段与授权
+- 2026-09-12 井井在E2后授权继续E3。本轮恢复微观5–5000ms、原版显示抽点与边界不重复提交，限定Windows开发态验证见docs/testing/m03-e3-report.md。新增官方书目/原手册截图/Henrich原文方法差异，代码许可未闭合。完整E3/E/M03仍in_progress，下一项E3-B长文件全段语义和预算、字体预检/剩余交互；66.4秒仅导航及拒绝已验，不代表全段分析完成。仅重装项目m03-compatible核心wheel，第三方库/v2/语料/旧EXE不变，未DDL或push。
 - 2026-09-12 井井在E1后回复“继续”。M03-E2现为verified（限定Windows开发态Qt/本机托管PG与Chrome），见docs/testing/m03-e2-report.md。双账号读隔离/切换、服务器三路径10文件回读、受控配额与到期清理、两自然录音开头及较响ROI通过；修复历史预览回读迟到覆盖新文件选择。完整E/M03仍in_progress，下一项E3长文件/微观范围差异与来源/剩余边界；F冻结EXE未做。到期为测试调整时间并显式清理，不冒充七天自然经过。未DDL、未改v2/语料/环境/旧EXE、未push。
 - 2026-09-12 井井在D后回复“继续”。M03-E1现为verified（限定Windows开发态默认/导出/手势对齐），见docs/testing/m03-report.md：独立单文件/批次默认，单文件CSV双F0不受显示开关影响，源文件名/时间保存及同名保护，四图滚轮/拖动/键盘/中心线与弹窗保存反馈。完整E/M03仍in_progress；E2下一项网页/自然录音页面及切换竞争。原V2微观滚轮5–5000ms与当前10–200ms差异已明确，长文件预算/来源/EXE仍待。未DDL、未改v2/旧EXE/环境、未push。
 - 2026-09-12 井井继续授权M03-D，并反馈下方按钮散乱。D现为verified（限定Windows开发态Qt/独立Chrome四图、参数/试听、任务与逐文件批次保存），见docs/testing/m03-ui-report.md。首版遵守v3主题、公共字体与组件，四图贴合v2；控件改为两行分组，高低通集中EGG图上方。122项科学/导出/字体、14项M03契约、47项前端及真实UI通过。广域回归另保留M01 Scratch取消清理的一次WinError32，单项复跑通过但根因未确认；不称全套稳定全绿。完整M03仍in_progress，下一项E的30项/来源/自然语料页面/网页联合收口，F冻结EXE尚未实施。未DDL、未改v2/m09科学环境/旧EXE、未push。
@@ -9,7 +10,7 @@
 - 2026-09-12 井井补充：EGG贴合v2仅指布局与功能，v3统一设计规范和公共组件必须从页面第一版落实。页面内控件/图表/状态也须统一，不能只换外壳或留到收尾调整。真实组件与适配边界见docs/design/m03-v2-layout.md；旧Qt截图仅是基准，展示时先标明，不能让用户误认为v3页面设计。
 - 2026-09-12 井井在M03计划后回复“好，请继续”，明确EGG布局尽量贴合v2、功能囊括v2，其余可优化。M03-A已完成限定Windows原v2独立基准：11样例双轮一致，公开合成数值与私有语料分开，详见docs/testing/m03-baseline-report.md。完整M03仍in_progress，下一项M03-B纯数组核心；页面/EXE尚未实现。布局以docs/design/m03-v2-layout.md为准：左CQ/SQ与语谱、右音频与EGG微观、下方两行参数及总览，覆盖早期右侧集中设置方案。实际单文件与批处理均GCI slope/GOI scale，底层EGGConfig被GUI覆盖的事实已纠正。不得将基准verified扩大为模块verified，不重复DDL、不推进M04。
 
-**2026-09-12 较早停止点（仅历史，当前状态以上方 M03-E2 为准）：** 井井在进度审阅后授权继续整理成果、补齐M02整幅PNG并细化M03计划。现有成果已形成本地检查点c800ce8。M02-F05整幅PNG已通过限定开发态Windows Qt/Chrome验收，见docs/testing/m02-png-closeout-report.md；旧Research-Fix1/M10-R5 EXE未重新打包。M03源码/说明书审阅及30项验收设计已完成，仍planned，下一步审阅docs/plans/2026-09-12-m03-implementation.md后进入M03-A。P08仍in_progress，P09整体planned，M10/R4仅历史限定范围verified，R5仍未检验。旧R4 EXE当前不在发行目录，保留原报告元数据。本轮未push、发布、执行DDL或修改v2。
+**2026-09-12 较早停止点（仅历史，当前状态以上方 M03-E3 为准）：** 井井在进度审阅后授权继续整理成果、补齐M02整幅PNG并细化M03计划。现有成果已形成本地检查点c800ce8。M02-F05整幅PNG已通过限定开发态Windows Qt/Chrome验收，见docs/testing/m02-png-closeout-report.md；旧Research-Fix1/M10-R5 EXE未重新打包。M03源码/说明书审阅及30项验收设计已完成，仍planned，下一步审阅docs/plans/2026-09-12-m03-implementation.md后进入M03-A。P08仍in_progress，P09整体planned，M10/R4仅历史限定范围verified，R5仍未检验。旧R4 EXE当前不在发行目录，保留原报告元数据。本轮未push、发布、执行DDL或修改v2。
 
 ### 历史授权与阶段证据（当时的下一步不作为当前执行指令）
 - 2026-09-12，井井授权修复已迁移 M01/M02/M09 的实际桌面入口，并明确允许新建 v3 专用本地任务库。Research-Fix1 通过限定 Windows 合成数据与真实单文件双轮验收，见 docs/testing/desktop-repair-report.md。首次新库位于 LocalAppData/PhoneticToolbox/v3/research-v1，只初始化不存在的新目录并复用既有002/005；已有目录只校验，不运行DDL。修复产物为 dist/research-repair/PhoneticToolbox-v3-Research-Fix1.exe，原M10-R5及v2保留。已修冻结worker调度、截图隐藏、TextGrid时间轨并纳入主题修复，其他模块继续停止，网页部署/安装版/跨平台不在此轮。

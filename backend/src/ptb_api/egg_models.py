@@ -11,7 +11,7 @@ class EggTaskConfig(WireModel):
     font: FigureFontSnapshot | None = None  # None preserves historical task rendering.
     mode: Literal['single', 'batch', 'inverse', 'preview'] = 'single'
     micro_center: float | None = Field(default=None, ge=0, le=60)
-    micro_width_ms: float = Field(default=50., ge=10, le=200)
+    micro_width_ms: float = Field(default=50., ge=5, le=5000)
     flip_channels: bool = False
     signal_mode: Literal['raw', 'filtered'] = 'filtered'
     roi_start: float = Field(default=0.0, ge=0, le=86400)
@@ -105,11 +105,12 @@ class EggPreviewData(WireModel):
     gci_f0: EggSeries
     audio: EggSeries
     egg: EggSeries
-    gci: list[float] = Field(max_length=1000)
-    goi: list[float] = Field(max_length=1000)
+    gci: list[float] = Field(max_length=10000)
+    goi: list[float] = Field(max_length=10000)
     movement: list[tuple[float, str]] = Field(max_length=1000)
     micro_center: float
     micro_width_ms: float
+    micro_sample_stride: int = Field(default=1, ge=1, le=64)
     spectral_extent: tuple[float, float, float, float]
     spectral_shape: tuple[int, int]
     raster_shape: tuple[int, int]

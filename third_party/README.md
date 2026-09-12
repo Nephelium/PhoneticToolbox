@@ -98,3 +98,5 @@ M02/M09 更新（2026-09-11）：来源条目仍为326条，既有 Griffin–Lim
 2026-09-12：新增REF-PNG，W3C PNG第三版规范参考，用于M02整幅PNG的300dpi元数据；编码器沿用现有浏览器，不增加运行依赖。来源登记和软件致谢同步，当前共327条记录。
 
 P04-FONT更新（2026-09-12）：登记表共328条，ASSET-DOULOS补充既有Doulos SIL 7.000在公共设置、TextGrid、M02 SVG、M03后台及M10中的实际使用与后端副本哈希。SVG附完整OFL文本。REF-FONT-RENDERING为官方规范/文档参考，不是新增运行依赖。系统字体仅按名称使用，未提取或随包分发。
+
+M03-E3：注册表现有330条记录，新增旧手册论文馆藏与Henrich（2004）方法审阅参考。两者均为reference-only，论文全文未收录。微观5–5000ms原始显示路径另有合成基准。见[方法核查](../docs/references/m03-method-audit.md)，PENDING-EGG代码许可保持未确立。

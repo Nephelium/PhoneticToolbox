@@ -61,3 +61,7 @@
 - `save_analysis` 使用输入名和两位小数秒数（小数点改下划线）；E1 通过共享元数据建议名恢复，保留原子保存与同名保护。
 - `on_left_scroll/on_left_drag/on_zoom_scroll/on_zoom_drag` 的手势由公共图表输入接入任务。原微观滚轮范围为 5–5000 ms，与原先计划中的 10–200 ms 不完全一致；目前仅验证已审阅的10–200 ms范围，宽范围仍待预算/交互审阅。
 - `EggBatchDialog` 与单文件窗口使用独立配置；E1 恢复独立批次默认/草稿。八份已登记原源码 SHA-256 本轮重新核对一致。
+
+## E3追加
+
+微观5–5000ms及原显示抽点已恢复，独立双轮基准见tests/fixtures/m03/ranges-source.json。手册图3-8无页码且讨论42%混合阈值，实际程序0.25；Henrich的DECOM有额外相关步骤，详见[方法审阅](../../references/m03-method-audit.md)。原代码许可仍待确认。

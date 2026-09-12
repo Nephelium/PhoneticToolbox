@@ -73,5 +73,13 @@
     ],
     "changes": "Restore independent single/batch defaults and single CSV F0 regardless of plot visibility; port bounded navigation and original source/time filename convention via metadata suggestions. Original 5-5000ms wheel range remains outside current reviewed 10-200ms display budget.",
     "evidence": "docs/testing/m03-report.md"
+  },
+  "range_closeout": {
+    "policy": "5–5000ms; original power-of-two waveform display stride, full event detection retained",
+    "baseline": "tests/fixtures/m03/ranges.npz",
+    "baseline_sha256": "7fb9f89d30addc2e33e62e98db9f0379e360252fc9698152fd42609422ba1402",
+    "capture": "scripts/capture_m03_ranges.py",
+    "source_audit": "docs/references/m03-method-audit.md",
+    "evidence": "docs/testing/m03-e3-report.md"
   }
 }

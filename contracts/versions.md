@@ -56,3 +56,5 @@ API仍为1.1.0；既有请求和结果均保留。增加`/jobs/batches/create`�
 m03/1增加preview模式与micro_center/micro_width_ms，只作用于交互绘图，旧单文件/批次/逆滤波的完整文件集合不变。旧模式幂等哈希排除新增微观默认字段。egg-preview/1 JSON中缺失值为null，频谱栅格只做有界显示。egg-inverse-view/1记录原IF图的频率/dB与相对中心采样时间，WAV科学数值不改。两套显示结构由Pydantic生成OpenAPI/JSON Schema/TypeScript。
 
 M03-E1：`egg.ptb.json`增加`input_name`和`export_names`保存建议，固定内部名称/manifest结构不变，旧结果无映射时回退旧名。单文件`keep_*_f0`作为绘图开关，CSV两类F0独立保留，修正D阶段混用的行为；批次列选择不变。
+
+M03-E3：微观输入范围恢复为 5–5000 ms。`egg-preview/1.micro_sample_stride` 为可选、默认 1 的显示抽点说明；原结果仍可读取。新宽窗口按原 V2 二次幂规则抽取波形点，完整事件保留。事件列表上限扩为 10000，覆盖 5 秒窗口及原 1 ms 最小峰距；不改默认算法、CSV/WAV 或旧模式的幂等输入。新范围请求需要本次更新后的服务端，旧服务端可能返回范围校验错误。

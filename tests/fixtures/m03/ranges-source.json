@@ -1,0 +1,52 @@
+{
+  "source": "PENDING-EGG",
+  "source_sha256": "20dd2874be54ae4202fc2aecaf05484227e3aff48bb99d5a08cfca5bb6629daf",
+  "input_sha256": "38f823cfda054d0bb82f6a1d20a7498f7dbaaa4455dab231ca88578a8e68f04a",
+  "recipe": "EGG-SYN-PCM16 normalized stereo repeated 8 times, FLOAT32 WAV 44100Hz",
+  "cases": [
+    [
+      "min",
+      3.2,
+      5
+    ],
+    [
+      "max",
+      3.2,
+      5000
+    ],
+    [
+      "start",
+      0.0,
+      5
+    ],
+    [
+      "end",
+      6.4,
+      5
+    ],
+    [
+      "wide_start",
+      0.0,
+      5000
+    ],
+    [
+      "wide_end",
+      6.4,
+      5000
+    ]
+  ],
+  "strides": {
+    "min.False": 1,
+    "max.False": 32,
+    "start.False": 1,
+    "end.False": 1,
+    "wide_start.False": 16,
+    "wide_end.False": 16,
+    "min.True": 1,
+    "max.True": 32,
+    "start.True": 1,
+    "end.True": 1,
+    "wide_start.True": 16,
+    "wide_end.True": 16
+  }
+}

@@ -5050,5 +5050,36 @@
       "matplotlib_fonts": "https://matplotlib.org/stable/api/font_manager_api.html",
       "local_fonts": "https://wicg.github.io/local-font-access/"
     }
+  },
+  {
+    "id": "REF-YIN-EGG-THESIS",
+    "title": "汉语韵律的嗓音发声研究（旧版手册引用）",
+    "modules": [
+      "M03"
+    ],
+    "kind": "reference-only",
+    "acknowledgement_group": "academic",
+    "authors": "尹基德",
+    "version": "馆藏 020/D2010(71)；完整论文页码未核准",
+    "license": "引用与原站链接；论文全文未收录",
+    "urls": {
+      "catalog": "https://lib.chinese.pku.edu.cn/xueweilunwen?combine=&degree=All&degree_str=&field_xwlw_callno_value=&major=All&page=314&sort_by=field_xwlw_year_int_value&sort_order=DESC&year=&year_int_max=&year_int_min="
+    }
+  },
+  {
+    "id": "REF-HENRICH-2004-DEGG",
+    "title": "On the use of the derivative of electroglottographic signals for characterization of nonpathological phonation",
+    "modules": [
+      "M03"
+    ],
+    "kind": "reference-only",
+    "acknowledgement_group": "academic",
+    "authors": "Nathalie Henrich; Christophe d’Alessandro; Boris Doval; Michèle Castellengo",
+    "version": "JASA 115(3), 1321–1332 (2004)；方法审阅参考",
+    "license": "© 2004 Acoustical Society of America；引用与原站链接，全文未收录",
+    "urls": {
+      "paper": "https://doi.org/10.1121/1.1646401",
+      "author_pdf": "https://www.lam.jussieu.fr/Membres/Castellengo/publications/2004b-Voice%20DEGG.pdf"
+    }
   }
 ]

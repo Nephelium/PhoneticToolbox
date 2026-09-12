@@ -18,6 +18,9 @@ def main():
     cache=out/'cache';cache.mkdir();initialize_local_files(cache);inputs=out/'inputs';inputs.mkdir();saved=out/'saved';saved.mkdir()
     with np.load(ROOT/'tests/fixtures/m03/EGG-SYN-PCM16.npz') as a:samples=np.column_stack([a['load.egg_signal_raw'],a['load.audio_signal']])
     wavfile.write(inputs/'EGG ɑ̃˥.wav',44100,samples);wavfile.write(inputs/'mono.wav',44100,samples[:,0]);wavfile.write(inputs/'silence.wav',44100,np.zeros_like(samples))
+    if '--ranges' in sys.argv:
+        wavfile.write(inputs/'wide.wav',44100,np.tile(samples,(8,1)))
+        wavfile.write(inputs/'long.wav',44100,np.tile(samples,(83,1)))
     os.environ['PTB_EGG_PYTHON']=str(ROOT/'.venv/m03-compatible/python.exe')
     provider=FileProvider()
     with LocalService(db,local_files_root=cache) as service:

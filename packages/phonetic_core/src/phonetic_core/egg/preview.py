@@ -10,7 +10,7 @@ from .errors import roi, cutoffs, EggError
 
 
 def micro_waveforms(result, config, center, width_ms=50., *, raw=False):
-    if not np.isfinite(width_ms) or not 10 <= width_ms <= 200:
+    if not np.isfinite(width_ms) or not 5 <= width_ms <= 5000:
         raise EggError('invalid_roi')
     start, end = center-width_ms/2000, center+width_ms/2000
     roi(max(0., start), end); cutoffs(config, result.fs)

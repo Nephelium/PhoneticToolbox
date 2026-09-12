@@ -155,8 +155,8 @@
     },
     "micro_width_ms": {
       "default": 50.0,
-      "maximum": 200,
-      "minimum": 10,
+      "maximum": 5000,
+      "minimum": 5,
       "title": "Micro Width Ms",
       "type": "number"
     },

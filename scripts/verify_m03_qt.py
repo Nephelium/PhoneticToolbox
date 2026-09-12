@@ -17,7 +17,7 @@ from ptb_worker.local_acoustic_files import initialize_local_files
 ROOT=Path(__file__).resolve().parents[1]
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--include-private',action='store_true');options=parser.parse_args()
+    parser=argparse.ArgumentParser();extra=parser.add_mutually_exclusive_group();extra.add_argument('--include-private',action='store_true');extra.add_argument('--ranges',action='store_true');options=parser.parse_args()
     out=ROOT/'output/validation/m03-ui'/('qt-'+uuid4().hex);out.mkdir(parents=True)
     db=out/'jobs.sqlite3'
     with sqlite3.connect((ROOT/'output/validation/p06/local-state.sqlite3').as_uri()+'?mode=ro',uri=True) as source,sqlite3.connect(db) as target:
@@ -35,7 +35,7 @@ def main():
     QFileDialog.getExistingDirectory=lambda *a,**k:str(saved if '输出' in str(a) else inputs)
     def js(code):
         loop=QEventLoop();box=[];w.page.runJavaScript(code,lambda v:(box.append(v),loop.quit()));QTimer.singleShot(5000,loop.quit);loop.exec();return box[0] if box else None
-    def pause():loop=QEventLoop();QTimer.singleShot(100,loop.quit);loop.exec()
+    def pause(milliseconds=100):loop=QEventLoop();QTimer.singleShot(milliseconds,loop.quit);loop.exec()
     def until(code,seconds=60):
         end=time.monotonic()+seconds
         while time.monotonic()<end:
@@ -62,6 +62,21 @@ def main():
         js('document.documentElement.dataset.theme="dark"');w.resize(1280,800);pause();w.view.grab().save(str(out/'dark-1280.png'))
         assert js('document.documentElement.scrollWidth<=window.innerWidth');checks.append('dark 1280 width stays inside common shell')
         click('保存参数草稿');js('[...document.querySelectorAll(".tab-close")].find(b=>b.ariaLabel==="关闭 EGG 信号分析").click()');until('!document.querySelector(".egg-page")');click('EGG 信号分析');until('document.querySelectorAll(".egg-history .task-row").length>=6');checks.append('close and reopen restores persisted jobs and parameter draft')
+        if options.ranges:
+            wavfile.write(inputs/'wide.wav',44100,np.tile(samples,(8,1)))
+            originals['wide.wav']=hashlib.sha256((inputs/'wide.wav').read_bytes()).hexdigest()
+            QFileDialog.getExistingDirectory=lambda *a,**k:str(inputs)
+            click('打开 WAV 目录');until('document.querySelectorAll(".egg-source option").length===5')
+            select('wide.wav');until('!document.querySelector(".egg-source select").disabled')
+            fill('EGG 选区起点',3);fill('EGG 选区时长',.5)
+            for width in (5,5000):
+                fill('EGG 微观窗口',width);click('更新分析');ready();wait_exports()
+                assert js('Number([...document.querySelectorAll("input")].find(e=>e.ariaLabel==="EGG 微观窗口").value)')==width
+                # DOM readiness precedes Qt's compositor; allow the visible frame to paint.
+                pause(500)
+                w.view.grab().save(str(out/('micro-'+str(width)+'.png')))
+            assert js('document.querySelector(".audio-pane small").textContent.includes("每 32 点")')
+            checks.append('5 and 5000ms windows compute and render in actual Qt with explicit display stride')
         if options.include_private:
             QFileDialog.getExistingDirectory=lambda *a,**k:str(inputs)
             click('打开 WAV 目录');until('document.querySelectorAll(".egg-source option").length===4')

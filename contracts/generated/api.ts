@@ -1302,6 +1302,11 @@ export interface components {
              */
             micro_event_policy: "raw-50ms-padding";
             /**
+             * Micro Sample Stride
+             * @default 1
+             */
+            micro_sample_stride: number;
+            /**
              * Micro Wave Policy
              * @default raw-100ms-padding-filter-crop
              * @constant

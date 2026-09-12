@@ -7,5 +7,5 @@ export function rangeAfterGesture(start:number,end:number,duration:number,kind:'
 }
 export function microAfterGesture(center:number,width:number,duration:number,kind:'zoom'|'pan',value:number){
   return {center:Math.max(0,Math.min(duration,kind==='pan'?center-value/1000:center)),
-    width:Math.max(10,Math.min(200,kind==='zoom'?width*value:width))};
+    width:Math.max(5,Math.min(5000,kind==='zoom'?width*value:width))};
 }

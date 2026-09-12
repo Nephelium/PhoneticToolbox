@@ -23,6 +23,11 @@ def preview_files(result, config, settings, first, last):
         return EggSeries(times=times[take].tolist(), values=[float(v) if np.isfinite(v) else None for v in values[take]])
     t, cq, sq = cq_segment(result, start, end, config, use_raw_signal=raw)
     micro_t, audio, egg = micro_waveforms(result, config, center, settings.micro_width_ms, raw=raw)
+    # V2 EGGWidget._get_downsampling_step, display only after full filtering.
+    stride, count = 1, len(micro_t)
+    while count > 10000:
+        stride *= 2
+        count //= 2
     lo = max(0., center-settings.micro_width_ms/2000)
     hi = min(len(result.time_vector)/result.fs, center+settings.micro_width_ms/2000)
     gci, goi, _ = events_segment(result, lo, hi, config, use_raw_signal=raw)
@@ -41,10 +46,10 @@ def preview_files(result, config, settings, first, last):
     data = EggPreviewData(cq=series(t,cq), sq=series(t,sq),
         praat=series(result.audio_f0_times,result.audio_f0_values),
         gci_f0=series(result.gci_f0_times,result.gci_f0_values) if settings.keep_gci_f0 else series([],[]),
-        audio=series(micro_t,audio,False), egg=series(micro_t,egg,False),
+        audio=series(micro_t[::stride],audio[::stride],False), egg=series(micro_t[::stride],egg[::stride],False),
         gci=[v for v in gci if lo <= v < hi], goi=[v for v in goi if lo <= v < hi],
         movement=[(t,v) for t,v in result.glottal_movement_events if start <= t < end],
-        micro_center=center, micro_width_ms=settings.micro_width_ms,
+        micro_center=center, micro_width_ms=settings.micro_width_ms, micro_sample_stride=stride,
         spectral_extent=(start,end,0.,rows*cell), spectral_shape=shape,
         raster_shape=(raster.height,raster.width))
     return data.model_dump(), {'egg_AUDIO.wav':wav.getvalue(),'egg_PSD.png':stream.getvalue()}

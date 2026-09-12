@@ -9,7 +9,7 @@ const emit=defineEmits<{range:[start:number,end:number];update:[];cancel:[];save
 <div class="control-group"><span class="control-group-label">选区与更新</span><div class="group-controls">
 <label>起点 s<input aria-label="EGG 选区起点" :value="start" type="number" min="0" :max="duration" step=".001" @change="emit('range',Number(($event.target as HTMLInputElement).value),Number(($event.target as HTMLInputElement).value)+end-start)"/></label>
 <label>时长 s<input aria-label="EGG 选区时长" :value="Number((end-start).toFixed(6))" type="number" min=".001" :max="duration" step=".001" @change="emit('range',start,start+Number(($event.target as HTMLInputElement).value))"/></label>
-<label>微观 ms<input v-model.number="config.micro_width_ms" type="number" min="10" max="200" step="10"/></label><button class="primary" :disabled="!canUpdate" @click="emit('update')">更新分析</button><button v-if="pending" @click="emit('cancel')">取消分析</button>
+<label>微观 ms<input v-model.number="config.micro_width_ms" aria-label="EGG 微观窗口" type="number" min="5" max="5000" step="5"/></label><button class="primary" :disabled="!canUpdate" @click="emit('update')">更新分析</button><button v-if="pending" @click="emit('cancel')">取消分析</button>
 </div></div>
 <div class="control-group playback-group"><span class="control-group-label">选区试听</span><slot name="playback"/></div>
 <div class="control-group"><span class="control-group-label">导出与逆滤波</span><div class="group-controls">

@@ -44,7 +44,7 @@ def test_silent_preview_contains_nulls_or_empty_series_not_fake_pitch():
     assert all(v is None for v in p['praat']['values'])
     assert all(v==0 for v in p['audio']['values'])
 
-@pytest.mark.parametrize('config',[dict(mode='single',micro_center=.1),dict(mode='preview',micro_width_ms=9),dict(mode='preview',micro_width_ms=201)])
+@pytest.mark.parametrize('config',[dict(mode='single',micro_center=.1),dict(mode='preview',micro_width_ms=4.99),dict(mode='preview',micro_width_ms=5000.01)])
 def test_micro_bounds_are_explicit(config):
     with pytest.raises(ValueError):EggTaskConfig(**config)
 

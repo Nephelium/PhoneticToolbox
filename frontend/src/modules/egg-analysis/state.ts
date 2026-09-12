@@ -9,6 +9,7 @@ export function taskConfig(config:EggTaskConfig,mode:EggTaskConfig['mode'],order
 export const batchDefaults=():EggTaskConfig=>({...taskConfig(defaults(),'batch'),keep_praat_f0:true,keep_gci_f0:true});
 export function signature(config:EggTaskConfig){const c={...defaults(),...config};delete c.font;return JSON.stringify(Object.keys(c).sort().map(k=>[k,c[k as keyof EggTaskConfig]]));}
 export function validate(config:EggTaskConfig,duration:number,rate:number){
+  if(config.mode==='preview'&&(!Number.isFinite(config.micro_width_ms)||config.micro_width_ms!<5||config.micro_width_ms!>5000))throw Error('微观窗口须在 5–5000 ms 范围内。');
   const end=config.roi_end??duration,start=config.roi_start??0;
   if(!Number.isFinite(start)||!Number.isFinite(end)||start<0||end<=start||end>duration)throw Error('分析选区须在音频范围内，且终点大于起点。');
   if(!Number.isFinite(config.highpass_cutoff)||!Number.isFinite(config.lowpass_cutoff)||config.highpass_cutoff!<=0||config.highpass_cutoff!>=config.lowpass_cutoff!||config.lowpass_cutoff!>=rate/2)throw Error('滤波频率须满足 0 < 高通 < 低通 < 采样率的一半。');
