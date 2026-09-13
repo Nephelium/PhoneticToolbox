@@ -499,7 +499,7 @@
     "kind": "provenance-pending",
     "acknowledgement_group": "academic",
     "authors": "作者待核实",
-    "version": "实际版本待核实",
+    "version": "V2 本地源码快照，8份文件 SHA-256 见 egg-migration.json（2026-09-13复核）",
     "license": "not-established",
     "urls": {}
   },

@@ -94,3 +94,5 @@ R4 增加 WebCodecs 与 WebM 规范参考，已有 Qt WebEngine 提供 VP8/Opus 
 PENDING-EGG增加原egg_widget.update_zoom_plots和InverseFilteringResultDialog的纯数组显示路径，记录于third_party/egg-migration.json。原v2 GUI独立双轮捕获的公开合成数组位于tests/fixtures/m03/ui-display.npz，源码SHA见ui-source.json，逐样本对照通过。没有增加第三方库或改变未确立的代码/学术许可状态；同一来源登记继续生成工作台致谢。
 
 M03-E3新增REF-YIN-EGG-THESIS馆藏书目及REF-HENRICH-2004-DEGG方法审阅参考，共330条登记；两者仅引用与原站链接。阈值/DECOM差异、原手册截图哈希和未决链见[M03方法核查](m03-method-audit.md)。PENDING-EGG许可不变。
+
+2026-09-13 M03-A29：直接迁移来源已确认是V2本地源码，八份原文件SHA-256复核一致。固定GCI后3ms、自相关LPC平均及未使用GOI的边界已同步说明。来源条目仍为330条，未新增参考论文或运行依赖；最初文献对应及完整授权链保持未决。见[复核记录](../testing/m03-provenance-report.md)。

@@ -100,3 +100,5 @@ M02/M09 更新（2026-09-11）：来源条目仍为326条，既有 Griffin–Lim
 P04-FONT更新（2026-09-12）：登记表共328条，ASSET-DOULOS补充既有Doulos SIL 7.000在公共设置、TextGrid、M02 SVG、M03后台及M10中的实际使用与后端副本哈希。SVG附完整OFL文本。REF-FONT-RENDERING为官方规范/文档参考，不是新增运行依赖。系统字体仅按名称使用，未提取或随包分发。
 
 M03-E3：注册表现有330条记录，新增旧手册论文馆藏与Henrich（2004）方法审阅参考。两者均为reference-only，论文全文未收录。微观5–5000ms原始显示路径另有合成基准。见[方法核查](../docs/references/m03-method-audit.md)，PENDING-EGG代码许可保持未确立。
+
+2026-09-13 M03-A29：直接迁移来源已确认是V2本地源码，八份原文件SHA-256复核一致。固定GCI后3ms、自相关LPC平均及未使用GOI的边界已同步说明。来源条目仍为330条，未新增参考论文或运行依赖；最初文献对应及完整授权链保持未决。见[复核记录](../docs/testing/m03-provenance-report.md)。
