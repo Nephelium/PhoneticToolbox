@@ -20,7 +20,7 @@
 | D 页面 | `frontend/src/modules/lpc-spectrum/`、公共波形可选适配、平台能力及页面注册 | 四功能组完整，原有模块手势不受影响，Chrome真实任务及小窗/浅深色/草稿检查 |
 | E 收口 | 使用说明、验收报告、功能矩阵 | A01–A20有明确证据和未测边界，开发态阶段收口 |
 
-A已完成限定基准，见 [报告](../testing/m04-baseline-report.md)。B纯核心现为限定Windows verified，见[核心报告](../testing/m04-core-report.md)；C–E尚未实现，不能将核心结果称为V3交互页面。
+A已完成限定基准，见 [报告](../testing/m04-baseline-report.md)。B纯核心现为限定Windows verified，见[核心报告](../testing/m04-core-report.md)；C任务/导出已限定Windows verified，见[任务报告](../testing/m04-jobs-report.md)；D–E尚未实现，不能将导出图称为V3交互页面。
 
 ## 20项验收
 
@@ -50,3 +50,13 @@ A已完成限定基准，见 [报告](../testing/m04-baseline-report.md)。B纯�
 所有阶段记录实际命令。A执行 `& .venv/m09-ui/Scripts/python.exe -X utf8 scripts/capture_m04_baseline.py --freeze-public`（只首次冻结，已有基准时省略该开关），静态检查使用 `scripts/validate_docs.py` 和 `scripts/check_architecture.py`。B–E的具体回归命令随实现登记，不将旧计划尚不存在的npm命令冒充可运行入口。
 
 B边界依据ADR-047：单次48,000样本上限、参数/ROI与有限值验证、前后协作取消。运行 `scripts/probe_m04_budget.py`、`tests/parity/test_lpc_spectrum.py` 与 `tests/parity/test_lpc_boundaries.py`，安装独立wheel目标目录后复验。C再实施进程硬预算。
+
+## C 任务与导出实施（2026-09-13）
+
+井井在B交付后确认继续。新增 `backend/src/ptb_api/lpc_models.py`、`ptb_worker/lpc_{jobs,child,runtime,exports}.py` 与固定bootstrap，公共executor/manifest/retry/路由增加lpc_analysis，desktop TaskBridge复用既有本地输入与非覆盖保存。契约由后端生成。无新表或DDL。
+
+m04/1单文件请求包含WAV引用、可选TextGrid引用、显式ROI、tier和完整字体快照。产物固定lpc.ptb.json（谱值/样本选区/参数/来源）、lpc_SPECTRUM.png（2400×1350、300DPI白底黑线）、lpc_AUDIO.wav（单声道原比例FLOAT64选区）。标签依原V2规则，图中IPA使用Doulos SIL。显示名字含源名/标签/时间，实际文件资产使用固定安全名。
+
+复用M03兼容运行环境，LPC独立固定入口；核心wheel更新仅限本项目m03-compatible，第三方依赖不变。整份输入64MB、最多800万帧和8声道、8–96kHz，读取后只复制/转换ROI（最多48000帧），不对整份文件做LPC。TextGrid限2MB并复用已有解析器。单子进程30秒/2GB、结果8MB，任务截止300秒， scratch与结果占用沿用现有计量。首次缺字体以明确错误结束，不发布半套结果。
+
+定向命令：`pytest backend/tests/test_m04_contract.py backend/tests/test_m04_exports.py`；`scripts/verify_m04_jobs.py`（实际本地HTTP/存储/子进程/保存/取消/重试/故障）；`scripts/verify_m04_server.py`（项目专用测试PG、双账号与结果隔离/配额/到期）。协议生成检查、前端typecheck与构建。接口和导出验收不代表D页面或EXE完成。

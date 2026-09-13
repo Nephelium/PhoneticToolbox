@@ -164,6 +164,11 @@ class JobStore:
             if row['state'] not in ('failed','interrupted','cancelled'):raise JobError('job_not_retryable')
             snapshot=json.loads(row['snapshot'])
         model = JobInput if snapshot['operation']=='pipeline_check' else FileJobInput
+        if snapshot['operation']=='lpc_analysis':
+            from .lpc_jobs import submit
+            return submit(self,owner,dict(project_id=str(row['project_id']),idempotency_key=key,
+                audio=snapshot['input_refs']['audio'],textgrid=snapshot['input_refs'].get('textgrid'),
+                config=snapshot['config']['analysis']),retry_of=job_id)
         if snapshot['operation']=='egg_analysis':
             from .egg_jobs import submit
             return submit(self,owner,dict(project_id=str(row['project_id']),idempotency_key=key,

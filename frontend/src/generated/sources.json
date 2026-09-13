@@ -721,7 +721,8 @@
     "id": "PKG-MATPLOTLIB",
     "title": "matplotlib",
     "modules": [
-      "shared-runtime"
+      "shared-runtime",
+      "M04"
     ],
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",

@@ -393,6 +393,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/jobs/lpc/create": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Lpc */
+        post: operations["create_lpc_job"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/lpc/fonts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Lpc Fonts */
+        post: operations["check_lpc_export_fonts"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/jobs/parents/latest": {
         parameters: {
             query?: never;
@@ -1723,13 +1757,13 @@ export interface components {
              * @default pipeline_check
              * @enum {string}
              */
-            operation: "pipeline_check" | "storage_check" | "archive_zip" | "extract_zip" | "acoustic_analysis" | "textgrid_segment" | "spectrogram_to_audio" | "egg_analysis";
+            operation: "pipeline_check" | "storage_check" | "archive_zip" | "extract_zip" | "acoustic_analysis" | "textgrid_segment" | "spectrogram_to_audio" | "egg_analysis" | "lpc_analysis";
             /** Progress */
             progress: number;
             /** Project Id */
             project_id: string;
             /** Result Manifest */
-            result_manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticTaskManifest"] | components["schemas"]["Spec2WavManifest"] | components["schemas"]["EggManifest"] | null;
+            result_manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticTaskManifest"] | components["schemas"]["Spec2WavManifest"] | components["schemas"]["EggManifest"] | components["schemas"]["LpcManifest"] | null;
             /** Retry Of */
             retry_of?: string | null;
             /**
@@ -1746,6 +1780,95 @@ export interface components {
             password: string;
             /** Username */
             username: string;
+        };
+        /** LpcManifest */
+        LpcManifest: {
+            /**
+             * Complete
+             * @default true
+             * @constant
+             */
+            complete: true;
+            /** Core Version */
+            core_version: string;
+            /** Files */
+            files: components["schemas"]["AcousticManagedFile"][];
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "managed_lpc_files";
+            /**
+             * Operation
+             * @default lpc_analysis
+             * @constant
+             */
+            operation: "lpc_analysis";
+        };
+        /** LpcRequest */
+        LpcRequest: {
+            audio: components["schemas"]["AcousticAssetRef"];
+            config: components["schemas"]["LpcTaskConfig"];
+            /** Idempotency Key */
+            idempotency_key: string;
+            /** Project Id */
+            project_id: string;
+            /**
+             * Schema Version
+             * @default m04/1
+             * @constant
+             */
+            schema_version: "m04/1";
+            textgrid?: components["schemas"]["AcousticAssetRef"] | null;
+        };
+        /** LpcSpectrumData */
+        LpcSpectrumData: {
+            /** Amp Max Db */
+            amp_max_db: number;
+            /** Amp Min Db */
+            amp_min_db: number;
+            /** Frequencies Hz */
+            frequencies_hz: number[];
+            /** Magnitude Db */
+            magnitude_db: number[];
+        };
+        /** LpcTaskConfig */
+        LpcTaskConfig: {
+            /**
+             * Amp Max Db
+             * @default 35
+             */
+            amp_max_db: number;
+            /**
+             * Amp Min Db
+             * @default -5
+             */
+            amp_min_db: number;
+            /**
+             * Dynamic Y
+             * @default false
+             */
+            dynamic_y: boolean;
+            font?: components["schemas"]["FigureFontSnapshot"];
+            /**
+             * Freq Max Hz
+             * @default 8000
+             */
+            freq_max_hz: number;
+            /**
+             * Order
+             * @default 50
+             */
+            order: number;
+            /** Roi End */
+            roi_end: number;
+            /**
+             * Roi Start
+             * @default 0
+             */
+            roi_start: number;
+            /** Tier Name */
+            tier_name?: string | null;
         };
         /** ParameterTable */
         ParameterTable: {
@@ -1836,7 +1959,7 @@ export interface components {
         /** ResultManifestEnvelope */
         ResultManifestEnvelope: {
             /** Manifest */
-            manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticFileManifest"] | components["schemas"]["AcousticTaskManifest"] | components["schemas"]["Spec2WavManifest"] | components["schemas"]["EggManifest"];
+            manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticFileManifest"] | components["schemas"]["AcousticTaskManifest"] | components["schemas"]["Spec2WavManifest"] | components["schemas"]["EggManifest"] | components["schemas"]["LpcManifest"];
         };
         /** RetryInput */
         RetryInput: {
@@ -2828,6 +2951,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_lpc_job: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LpcRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    check_lpc_export_fonts: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FigureFontSnapshot"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FontPreflight"];
                 };
             };
             /** @description Validation Error */

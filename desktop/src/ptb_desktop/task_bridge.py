@@ -29,6 +29,16 @@ class TaskBridge:
 
     def invoke(self,body):
         op=body.get('op')
+        if op=='lpc_fonts':return self.service.request('/api/v1/jobs/lpc/fonts','POST',body['font'])
+        if op=='lpc':
+            raw,_=self.provider.read(body['id']);entry=self.provider.entries[body['id']]
+            ref=self.service.import_input(raw,entry.name,'audio');grid=None
+            if body.get('textgrid'):
+                data,_=self.provider.read(body['textgrid']);grid_entry=self.provider.entries[body['textgrid']]
+                grid=self.service.import_input(data,grid_entry.name,'textgrid')
+            return self.service.request('/api/v1/jobs/lpc/create','POST',dict(project_id=PROJECT,
+                idempotency_key=body['key'],audio=ref,textgrid=grid,config=body['config']))
+        if op=='lpc_jobs':return [j for j in self.service.get('/api/v1/jobs?project_id='+PROJECT)['jobs'] if j['operation']=='lpc_analysis']
         if op=='egg_fonts':return self.service.request('/api/v1/jobs/egg/fonts','POST',body['font'])
         if op=='egg':
             raw,_=self.provider.read(body['id']);entry=self.provider.entries[body['id']]
@@ -46,7 +56,7 @@ class TaskBridge:
         if op=='result':
             import base64
             job=self.service.get('/api/v1/jobs/'+str(UUID(body['job'])))
-            if job['state']!='succeeded' or job['operation'] not in ('spectrogram_to_audio','egg_analysis'):raise FileAccessError('分析结果尚不可用。')
+            if job['state']!='succeeded' or job['operation'] not in ('spectrogram_to_audio','egg_analysis','lpc_analysis'):raise FileAccessError('分析结果尚不可用。')
             file=next((f for f in job['result_manifest']['files'] if f['id']==body['id']),None)
             if not file or file['size_bytes']>64_000_000:raise FileAccessError('结果文件不正确。')
             chunks=[self.service.binary(f'/api/v1/jobs/local-results/{file["id"]}?offset={offset}&size={min(1048576,file["size_bytes"]-offset)}') for offset in range(0,file['size_bytes'],1048576)]
@@ -131,7 +141,7 @@ class TaskBridge:
         root=directory.path
         if single:
             job=self.service.get('/api/v1/jobs/'+batch_id)
-            if job['operation'] not in ('spectrogram_to_audio','egg_analysis') or job['state']!='succeeded':raise FileAccessError('分析结果尚不可用。')
+            if job['operation'] not in ('spectrogram_to_audio','egg_analysis','lpc_analysis') or job['state']!='succeeded':raise FileAccessError('分析结果尚不可用。')
             batch={'summary':{'items':[dict(state='succeeded',job_id=batch_id,index=0)]}}
         else:batch=self.service.get('/api/v1/jobs/batches/'+batch_id)
         created=[];pending={};saved=[]
@@ -147,14 +157,14 @@ class TaskBridge:
                     if item['state']!='succeeded':continue
                     job=self.service.get('/api/v1/jobs/'+item['job_id'])
                     export_names={}
-                    if job['operation']=='egg_analysis':
+                    if job['operation'] in ('egg_analysis','lpc_analysis'):
                         import base64
-                        meta=next(f for f in job['result_manifest']['files'] if f['name']=='egg.ptb.json')
+                        meta=next(f for f in job['result_manifest']['files'] if f['name']==('lpc.ptb.json' if job['operation']=='lpc_analysis' else 'egg.ptb.json'))
                         verified=self.invoke(dict(op='result',job=job['id'],id=meta['id']))
                         export_names=json.loads(base64.b64decode(verified['base64'])).get('export_names',{})
                     for file in job['result_manifest']['files']:
                         name=file['name']
-                        if job['operation']=='egg_analysis':name=export_names.get(name,name)
+                        if job['operation'] in ('egg_analysis','lpc_analysis'):name=export_names.get(name,name)
                         if job['operation']=='acoustic_analysis':name=Path(batch['audio_names'][item['index']]).stem+name[len('result'):]
                         if not name or len(name)>220 or any(ord(c)<32 or c in '/\\:<>"|?*' for c in name):raise FileAccessError('输出文件名不受支持。')
                         path=root/name

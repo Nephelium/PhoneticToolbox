@@ -39,7 +39,7 @@ def unpack_bundle(payload,limit):
     error=manifest.get('error')
     if isinstance(error,str) and error in ACOUSTIC_ERRORS:
         raise AcousticFailure(error)
-    if manifest.get('kind') not in ('prepared_segments','prepared_analysis','prepared_spec2wav','prepared_egg') or not isinstance(manifest.get('files'),list) or not 1<=len(manifest['files'])<=3000:
+    if manifest.get('kind') not in ('prepared_segments','prepared_analysis','prepared_spec2wav','prepared_egg','prepared_lpc') or not isinstance(manifest.get('files'),list) or not 1<=len(manifest['files'])<=3000:
         raise FormatError('invalid_segment_manifest')
     names=set()
     for entry in manifest['files']:

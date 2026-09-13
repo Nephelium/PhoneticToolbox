@@ -825,6 +825,48 @@
       "title": "JobManifest",
       "type": "object"
     },
+    "LpcManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "complete": {
+          "const": true,
+          "default": true,
+          "title": "Complete",
+          "type": "boolean"
+        },
+        "core_version": {
+          "title": "Core Version",
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/AcousticManagedFile"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "title": "Files",
+          "type": "array"
+        },
+        "kind": {
+          "const": "managed_lpc_files",
+          "default": "managed_lpc_files",
+          "title": "Kind",
+          "type": "string"
+        },
+        "operation": {
+          "const": "lpc_analysis",
+          "default": "lpc_analysis",
+          "title": "Operation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "core_version",
+        "files"
+      ],
+      "title": "LpcManifest",
+      "type": "object"
+    },
     "ResultFile": {
       "additionalProperties": false,
       "properties": {
@@ -925,6 +967,7 @@
           "managed_acoustic_files": "#/$defs/AcousticTaskManifest",
           "managed_egg_files": "#/$defs/EggManifest",
           "managed_files": "#/$defs/FileManifest",
+          "managed_lpc_files": "#/$defs/LpcManifest",
           "managed_spec2wav_files": "#/$defs/Spec2WavManifest",
           "pipeline_check_metadata": "#/$defs/JobManifest"
         },
@@ -948,6 +991,9 @@
         },
         {
           "$ref": "#/$defs/EggManifest"
+        },
+        {
+          "$ref": "#/$defs/LpcManifest"
         }
       ],
       "title": "Manifest"

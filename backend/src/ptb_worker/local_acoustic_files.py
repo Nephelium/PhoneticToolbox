@@ -217,6 +217,9 @@ class LocalAcousticFiles:
             from ptb_api.spec2wav_models import Spec2WavManifest
             operation=json.loads(job['snapshot'])['operation']
             model=Spec2WavManifest if operation=='spectrogram_to_audio' else AcousticTaskManifest
+            if operation=='lpc_analysis':
+                from ptb_api.lpc_models import LpcManifest
+                model=LpcManifest
             if operation=='egg_analysis':
                 from ptb_api.egg_models import EggManifest
                 model=EggManifest

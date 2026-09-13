@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "amp_max_db": {
+      "title": "Amp Max Db",
+      "type": "number"
+    },
+    "amp_min_db": {
+      "title": "Amp Min Db",
+      "type": "number"
+    },
+    "frequencies_hz": {
+      "items": {
+        "type": "number"
+      },
+      "maxItems": 1024,
+      "minItems": 1024,
+      "title": "Frequencies Hz",
+      "type": "array"
+    },
+    "magnitude_db": {
+      "items": {
+        "type": "number"
+      },
+      "maxItems": 1024,
+      "minItems": 1024,
+      "title": "Magnitude Db",
+      "type": "array"
+    }
+  },
+  "required": [
+    "frequencies_hz",
+    "magnitude_db",
+    "amp_min_db",
+    "amp_max_db"
+  ],
+  "title": "LpcSpectrumData",
+  "type": "object"
+}

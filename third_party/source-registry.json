@@ -1217,7 +1217,8 @@
       "title": "matplotlib",
       "kind": "installed-runtime-package",
       "modules": [
-        "shared-runtime"
+        "shared-runtime",
+        "M04"
       ],
       "actual_included_version": "3.10.8 in phonetic_311; v3 pin pending",
       "observed_upstream_commit": null,
@@ -1239,7 +1240,8 @@
       "license_metadata_file": "third_party/licenses/pypi/matplotlib-3.10.8-metadata.txt",
       "distribution_status": "actual-wheel-and-native-audit-required",
       "acknowledgement_group": "software",
-      "m03_export_evidence": "requirements-m03-exports.lock; third_party/m03-export-runtime.json; docs/testing/m03-jobs-report.md"
+      "m03_export_evidence": "requirements-m03-exports.lock; third_party/m03-export-runtime.json; docs/testing/m03-jobs-report.md",
+      "m04_evidence": "Existing Matplotlib 3.10.8 unmodified Agg renderer; backend/src/ptb_worker/lpc_exports.py; docs/testing/m04-jobs-report.md"
     },
     {
       "id": "PKG-PYQT6",

@@ -58,3 +58,5 @@ m03/1增加preview模式与micro_center/micro_width_ms，只作用于交互绘�
 M03-E1：`egg.ptb.json`增加`input_name`和`export_names`保存建议，固定内部名称/manifest结构不变，旧结果无映射时回退旧名。单文件`keep_*_f0`作为绘图开关，CSV两类F0独立保留，修正D阶段混用的行为；批次列选择不变。
 
 M03-E3：微观输入范围恢复为 5–5000 ms。`egg-preview/1.micro_sample_stride` 为可选、默认 1 的显示抽点说明；原结果仍可读取。新宽窗口按原 V2 二次幂规则抽取波形点，完整事件保留。事件列表上限扩为 10000，覆盖 5 秒窗口及原 1 ms 最小峰距；不改默认算法、CSV/WAV 或旧模式的幂等输入。新范围请求需要本次更新后的服务端，旧服务端可能返回范围校验错误。
+
+2026-09-13 M04-C：新增m04/1 LPC请求、配置、1024点谱值、managed_lpc_files清单与lpc_analysis操作。沿用已有API/任务/存储协议，新增 `/api/v1/jobs/lpc/create` 和字体检查接口，未更改既有字段语义或执行DDL。

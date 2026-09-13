@@ -1,0 +1,97 @@
+{
+  "$defs": {
+    "AcousticManagedFile": {
+      "additionalProperties": false,
+      "properties": {
+        "expires_at": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Expires At"
+        },
+        "id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "result",
+          "default": "result",
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 255,
+          "title": "Name",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "size_bytes": {
+          "maximum": 64000000,
+          "minimum": 1,
+          "title": "Size Bytes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "size_bytes",
+        "sha256",
+        "expires_at"
+      ],
+      "title": "AcousticManagedFile",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "complete": {
+      "const": true,
+      "default": true,
+      "title": "Complete",
+      "type": "boolean"
+    },
+    "core_version": {
+      "title": "Core Version",
+      "type": "string"
+    },
+    "files": {
+      "items": {
+        "$ref": "#/$defs/AcousticManagedFile"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "title": "Files",
+      "type": "array"
+    },
+    "kind": {
+      "const": "managed_lpc_files",
+      "default": "managed_lpc_files",
+      "title": "Kind",
+      "type": "string"
+    },
+    "operation": {
+      "const": "lpc_analysis",
+      "default": "lpc_analysis",
+      "title": "Operation",
+      "type": "string"
+    }
+  },
+  "required": [
+    "core_version",
+    "files"
+  ],
+  "title": "LpcManifest",
+  "type": "object"
+}

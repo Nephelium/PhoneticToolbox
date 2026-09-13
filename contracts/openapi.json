@@ -2775,7 +2775,8 @@
               "acoustic_analysis",
               "textgrid_segment",
               "spectrogram_to_audio",
-              "egg_analysis"
+              "egg_analysis",
+              "lpc_analysis"
             ],
             "title": "Operation",
             "type": "string"
@@ -2806,6 +2807,9 @@
               },
               {
                 "$ref": "#/components/schemas/EggManifest"
+              },
+              {
+                "$ref": "#/components/schemas/LpcManifest"
               },
               {
                 "type": "null"
@@ -2878,6 +2882,204 @@
           "password"
         ],
         "title": "LoginInput",
+        "type": "object"
+      },
+      "LpcManifest": {
+        "additionalProperties": false,
+        "properties": {
+          "complete": {
+            "const": true,
+            "default": true,
+            "title": "Complete",
+            "type": "boolean"
+          },
+          "core_version": {
+            "title": "Core Version",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/AcousticManagedFile"
+            },
+            "maxItems": 3,
+            "minItems": 3,
+            "title": "Files",
+            "type": "array"
+          },
+          "kind": {
+            "const": "managed_lpc_files",
+            "default": "managed_lpc_files",
+            "title": "Kind",
+            "type": "string"
+          },
+          "operation": {
+            "const": "lpc_analysis",
+            "default": "lpc_analysis",
+            "title": "Operation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "core_version",
+          "files"
+        ],
+        "title": "LpcManifest",
+        "type": "object"
+      },
+      "LpcRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "audio": {
+            "$ref": "#/components/schemas/AcousticAssetRef"
+          },
+          "config": {
+            "$ref": "#/components/schemas/LpcTaskConfig"
+          },
+          "idempotency_key": {
+            "pattern": "^[A-Za-z0-9_-]{8,80}$",
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "project_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "m04/1",
+            "default": "m04/1",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "textgrid": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AcousticAssetRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "project_id",
+          "idempotency_key",
+          "audio",
+          "config"
+        ],
+        "title": "LpcRequest",
+        "type": "object"
+      },
+      "LpcSpectrumData": {
+        "additionalProperties": false,
+        "properties": {
+          "amp_max_db": {
+            "title": "Amp Max Db",
+            "type": "number"
+          },
+          "amp_min_db": {
+            "title": "Amp Min Db",
+            "type": "number"
+          },
+          "frequencies_hz": {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 1024,
+            "minItems": 1024,
+            "title": "Frequencies Hz",
+            "type": "array"
+          },
+          "magnitude_db": {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 1024,
+            "minItems": 1024,
+            "title": "Magnitude Db",
+            "type": "array"
+          }
+        },
+        "required": [
+          "frequencies_hz",
+          "magnitude_db",
+          "amp_min_db",
+          "amp_max_db"
+        ],
+        "title": "LpcSpectrumData",
+        "type": "object"
+      },
+      "LpcTaskConfig": {
+        "additionalProperties": false,
+        "properties": {
+          "amp_max_db": {
+            "default": 35.0,
+            "maximum": 100.0,
+            "minimum": -200.0,
+            "title": "Amp Max Db",
+            "type": "number"
+          },
+          "amp_min_db": {
+            "default": -5.0,
+            "maximum": 100.0,
+            "minimum": -200.0,
+            "title": "Amp Min Db",
+            "type": "number"
+          },
+          "dynamic_y": {
+            "default": false,
+            "title": "Dynamic Y",
+            "type": "boolean"
+          },
+          "font": {
+            "$ref": "#/components/schemas/FigureFontSnapshot"
+          },
+          "freq_max_hz": {
+            "default": 8000.0,
+            "maximum": 48000.0,
+            "minimum": 100.0,
+            "title": "Freq Max Hz",
+            "type": "number"
+          },
+          "order": {
+            "default": 50,
+            "maximum": 200.0,
+            "minimum": 1.0,
+            "title": "Order",
+            "type": "integer"
+          },
+          "roi_end": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 1000.0,
+            "title": "Roi End",
+            "type": "number"
+          },
+          "roi_start": {
+            "default": 0.0,
+            "maximum": 1000.0,
+            "minimum": 0.0,
+            "title": "Roi Start",
+            "type": "number"
+          },
+          "tier_name": {
+            "anyOf": [
+              {
+                "maxLength": 180,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tier Name"
+          }
+        },
+        "required": [
+          "roi_end"
+        ],
+        "title": "LpcTaskConfig",
         "type": "object"
       },
       "ParameterTable": {
@@ -3130,6 +3332,7 @@
                 "managed_acoustic_files": "#/components/schemas/AcousticTaskManifest",
                 "managed_egg_files": "#/components/schemas/EggManifest",
                 "managed_files": "#/components/schemas/FileManifest",
+                "managed_lpc_files": "#/components/schemas/LpcManifest",
                 "managed_spec2wav_files": "#/components/schemas/Spec2WavManifest",
                 "pipeline_check_metadata": "#/components/schemas/JobManifest"
               },
@@ -3153,6 +3356,9 @@
               },
               {
                 "$ref": "#/components/schemas/EggManifest"
+              },
+              {
+                "$ref": "#/components/schemas/LpcManifest"
               }
             ],
             "title": "Manifest"
@@ -4841,6 +5047,88 @@
           }
         },
         "summary": "Local Result",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/lpc/create": {
+      "post": {
+        "operationId": "create_lpc_job",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LpcRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Lpc",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/lpc/fonts": {
+      "post": {
+        "operationId": "check_lpc_export_fonts",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FigureFontSnapshot"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FontPreflight"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Lpc Fonts",
         "tags": [
           "jobs"
         ]

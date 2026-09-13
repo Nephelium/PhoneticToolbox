@@ -1,0 +1,118 @@
+{
+  "$defs": {
+    "FigureFontSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "ipa": {
+          "const": "Doulos SIL",
+          "default": "Doulos SIL",
+          "title": "Ipa",
+          "type": "string"
+        },
+        "latin": {
+          "default": "Segoe UI",
+          "maxLength": 100,
+          "minLength": 1,
+          "pattern": "^[^\\x00-\\x1f\"\\x27\\\\/;{}<>]+$",
+          "title": "Latin",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "font/1",
+          "default": "font/1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "size_px": {
+          "default": 12,
+          "maximum": 24,
+          "minimum": 10,
+          "title": "Size Px",
+          "type": "number"
+        },
+        "zh": {
+          "default": "Microsoft YaHei",
+          "maxLength": 100,
+          "minLength": 1,
+          "pattern": "^[^\\x00-\\x1f\"\\x27\\\\/;{}<>]+$",
+          "title": "Zh",
+          "type": "string"
+        }
+      },
+      "title": "FigureFontSnapshot",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "amp_max_db": {
+      "default": 35.0,
+      "maximum": 100,
+      "minimum": -200,
+      "title": "Amp Max Db",
+      "type": "number"
+    },
+    "amp_min_db": {
+      "default": -5.0,
+      "maximum": 100,
+      "minimum": -200,
+      "title": "Amp Min Db",
+      "type": "number"
+    },
+    "dynamic_y": {
+      "default": false,
+      "title": "Dynamic Y",
+      "type": "boolean"
+    },
+    "font": {
+      "$ref": "#/$defs/FigureFontSnapshot"
+    },
+    "freq_max_hz": {
+      "default": 8000.0,
+      "maximum": 48000,
+      "minimum": 100,
+      "title": "Freq Max Hz",
+      "type": "number"
+    },
+    "order": {
+      "default": 50,
+      "maximum": 200,
+      "minimum": 1,
+      "title": "Order",
+      "type": "integer"
+    },
+    "roi_end": {
+      "exclusiveMinimum": 0,
+      "maximum": 1000,
+      "title": "Roi End",
+      "type": "number"
+    },
+    "roi_start": {
+      "default": 0.0,
+      "maximum": 1000,
+      "minimum": 0,
+      "title": "Roi Start",
+      "type": "number"
+    },
+    "tier_name": {
+      "anyOf": [
+        {
+          "maxLength": 180,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tier Name"
+    }
+  },
+  "required": [
+    "roi_end"
+  ],
+  "title": "LpcTaskConfig",
+  "type": "object"
+}

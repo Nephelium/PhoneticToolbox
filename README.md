@@ -1,6 +1,6 @@
 # PhoneticToolbox 3.0 · 开发工作台
 
-**M04 LPC谱图（2026-09-13）：** A基准与B纯核心已限定Windows verified，源码/独立wheel两路73项通过，新增LPC学术引用及计算预算。完整M04 in_progress，下一项任务/PNG导出，页面尚未实现。见[核心报告](docs/testing/m04-core-report.md)、[方法引用](docs/references/m04-method-audit.md)与[实施步骤](docs/plans/2026-09-13-m04-implementation.md)。
+**M04 LPC谱图（2026-09-13）：** C任务与PNG导出已限定Windows verified，接入本地/服务器任务、结果保存和取消回收，800万帧文件尾部选区与双账号隔离通过。完整M04 in_progress，下一项V3页面。见[任务导出报告](docs/testing/m04-jobs-report.md)、[核心报告](docs/testing/m04-core-report.md)与[实施步骤](docs/plans/2026-09-13-m04-implementation.md)。
 
 **EGG开发态功能收口（2026-09-13）：** 六功能组与最后草稿/连续操作检查完成，开发态功能阶段verified。补齐LP阶数保存、重开及失败反馈，65项前端与23组Chrome通过。入口为`scripts/Start-Research-Workbench.ps1`，范围及限制见[收口报告](docs/testing/m03-dev-closeout-report.md)。完整模块的设备/生产/跨平台验收仍单列。
 

@@ -7,6 +7,7 @@ from ptb_worker.store import JobError
 from .acoustic_batch_models import BatchRequest,BatchView,BatchList
 from .spec2wav_models import Spec2WavRequest
 from .egg_models import EggRequest
+from .lpc_models import LpcRequest
 from .font_models import FigureFontSnapshot,FontPreflight
 
 
@@ -77,6 +78,16 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
     def reconstruct(body:Spec2WavRequest,owner=Depends(mutation)):
         from ptb_worker.spec2wav_jobs import submit
         return submit(store,owner['id'],body)
+
+    @router.post('/lpc/create',response_model=JobView,status_code=201,operation_id='create_lpc_job')
+    def lpc(body:LpcRequest,owner=Depends(mutation)):
+        from ptb_worker.lpc_jobs import submit
+        return submit(store,owner['id'],body)
+
+    @router.post('/lpc/fonts',response_model=FontPreflight,operation_id='check_lpc_export_fonts')
+    def lpc_fonts(body:FigureFontSnapshot,owner=Depends(mutation)):
+        from ptb_worker.font_preflight import inspect_fonts
+        return inspect_fonts(body)
 
     @router.post('/egg/create',response_model=JobView,status_code=201,operation_id='create_egg_job')
     def egg(body:EggRequest,owner=Depends(mutation)):

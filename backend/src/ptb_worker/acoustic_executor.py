@@ -40,7 +40,28 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None):
             blobs[item['role']]=bytes(raw)
         progress[0]=.1
         with ManagedScratch(files,identity) as scratch:
-            if snapshot['operation']=='egg_analysis':
+            if snapshot['operation']=='lpc_analysis':
+                from .native.windows import InputPipe
+                from .native.reaper import collect_pipe
+                from .lpc_runtime import command as lpc_command
+                from ptb_api.lpc_models import LPC_NAMES
+                header=dict(config=snapshot['config']['analysis'],sha256=digest(blobs['audio']),
+                    audio_size=len(blobs['audio']),textgrid_sha256=digest(blobs['textgrid']) if 'textgrid' in blobs else None,
+                    input_name=next(i['name'] for i in snapshot['input_assets'] if i['role']=='audio'))
+                request=scratch.create(json.dumps(header).encode()+b'\n'+blobs['audio']+blobs.get('textgrid',b''),'.json')
+                argv=lpc_command(request,'')
+                pipe=InputPipe();argv[-1]=pipe.name
+                raw,_=collect_pipe(argv,pipe,scratch.root,
+                    replace(SEGMENT_LIMITS,timeout_seconds=30,process_bytes=2_000_000_000,output_bytes=8_000_000),
+                    lambda:abort.is_set() or stop.is_set(),on_started)
+                bundle=unpack_bundle(raw,8_000_000)
+                names=[f['name'] for f in bundle.manifest['files']]
+                if (bundle.manifest.get('kind')!='prepared_lpc' or
+                    bundle.manifest.get('audio_sha256')!=header['sha256'] or
+                    bundle.manifest.get('textgrid_sha256')!=header['textgrid_sha256'] or sorted(names)!=sorted(LPC_NAMES)):
+                    raise FormatError('source_mismatch')
+                payloads=list(zip(names,bundle.payloads))
+            elif snapshot['operation']=='egg_analysis':
                 from .native.windows import InputPipe
                 from .native.reaper import collect_pipe
                 from .egg_runtime import command as egg_command

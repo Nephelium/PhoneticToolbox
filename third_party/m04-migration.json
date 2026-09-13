@@ -21,5 +21,9 @@
     "M04-PY-NUMPY",
     "M04-PY-SCIPY"
   ],
-  "implementation_blocked": false
+  "implementation_blocked": false,
+  "task_adapter": "backend/src/ptb_worker/lpc_child.py",
+  "render_adapter": "backend/src/ptb_worker/lpc_exports.py",
+  "render_dependency": "PKG-MATPLOTLIB",
+  "render_changes": "V2 8x4.5 inch, 300 DPI, black-line/white-background export; V3 font snapshot and Doulos SIL annotation title; numerical curve unchanged."
 }

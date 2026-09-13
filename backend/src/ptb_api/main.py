@@ -22,6 +22,7 @@ from .models import Capabilities, Health, Viewport
 from .protocol_version import API_VERSION
 from .acoustic_models import ACOUSTIC_SCHEMAS
 from .egg_models import EggPreviewData, EggInverseData
+from .lpc_models import LpcSpectrumData
 from .job_models import ResultManifestEnvelope
 
 
@@ -98,7 +99,7 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
     def openapi():
         schema = base_openapi()
         # Shared process models are published without adding a fake analysis endpoint.
-        for model in (Viewport,*ACOUSTIC_SCHEMAS,ResultManifestEnvelope,EggPreviewData,EggInverseData):
+        for model in (Viewport,*ACOUSTIC_SCHEMAS,ResultManifestEnvelope,EggPreviewData,EggInverseData,LpcSpectrumData):
             shared = model.model_json_schema(ref_template='#/components/schemas/{model}')
             definitions = shared.pop('$defs', {})
             schema.setdefault('components', {}).setdefault('schemas', {}).update(definitions)
