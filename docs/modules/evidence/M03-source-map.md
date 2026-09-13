@@ -2,6 +2,8 @@
 
 2026-09-12。初次规划时仅完成源码/说明书映射，随后井井授权M03-A。当前 A/B/C/D 与 E1 已完成各自限定 Windows 验收，最新逐项证据见[联合收口记录](../../testing/m03-report.md)，完整 M03 仍 in_progress。对照相邻 v2 `Phonetic_Export/index.html` 的 3.1–3.4 全文与本工程继承源码；A阶段直接只读调用原v2核实。说明书纯文本仅留在忽略的 `output/validation/20260912-closeout/manual-text.txt`，未复制其图片或全文进发行物。
 
+2026-09-13重新逐段核对3.1–3.4及原GUI/批次源码，八文件与手册哈希一致，六功能组最新入口和证据见[开发态功能复核](../../testing/m03-function-review.md)。补齐单击总览保留选区定位和提交期间取消，历史E1的范围/待验描述由后续专项覆盖，完整M03仍in_progress，EXE暂停。
+
 ## 全部功能映射
 
 | 功能 | 手册/实际入口 | 核心或服务 | v3 目标与验收 |
@@ -15,7 +17,7 @@
 | F04 Praat/GCI两类F0及显示开关 | §3.3，toggle_f0_visibility/toggle_f0_correction / _update_f0_contour | calculate_praat_f0、_calculate_gci_f0 | 分别保留真实帧/事件中点时间，不把两类F0合并，A14–A15 |
 | F04 逆滤波阶数、对比窗、WAV | §3.3，run_inverse_filtering / InverseFilteringResultDialog | apply_simplified_cp_inverse_filtering | 共同工作台内对比视图和双WAV结果集合，当前缺失承诺见D03，A16–A17 |
 | F05 60秒总览、起点/时长、定位、红线 | §3.1/3.2，plot_timeline / on_timeline_click / on_left_plot_click | time_vector与当前ROI | 总览/主ROI/微观窗口三层分开，同源时标，A18 |
-| F05 50ms细查、10–200ms缩放、拖动 | §3.2，on_zoom_scroll/on_zoom_drag、on_left_scroll/on_left_drag | GUI局部波形与事件 | 保留点击联动及键盘数值输入，A19 |
+| F05 50ms细查、5–5000ms缩放、拖动 | §3.2，on_zoom_scroll/on_zoom_drag、on_left_scroll/on_left_drag | GUI局部波形与事件 | 保留点击联动及键盘数值输入，A19 |
 | F05 ROI播放、停止 | §3.2，play_audio/stop_audio | 已归一化的音频角色声道 | 共用播放能力，仍播放当前ROI，交换后声音角色正确，A20 |
 | F05 单文件保存CSV及三PNG | §3.3，save_analysis / _save_csv_data / _save_plots | GUI数据表outer join、150dpi导出 | 保留时间列集合与来源、白底三图、时间文件名，原输出冲突另名保护，A21 |
 | F06 目录、静音阈值、高通、交换、方法、双F0、可选三图 | §3.4，EggBatchDialog / BatchWorker.run / save_batch_plots | 全局事件、GCI时间网格、插值、归一化音频绝对值20ms滑动均值mask | 共用持久任务和完整文件集合，单文件/批次规则显式分开，A22–A24 |

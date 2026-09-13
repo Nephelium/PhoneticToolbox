@@ -23,3 +23,10 @@ test('selection clamps to the actual signal and peak envelope keeps impulses',()
  assert.deepEqual(selection(9,-1,.8),[0,.8]);assert.deepEqual(selection(NaN,.5,.8),[0,.5]);
  assert.deepEqual(envelope(new Float32Array([0,0,1,0,-.5,0]),0,6,2),[[0,1],[-.5,0]]);
 });
+
+import {positionSelection} from '../src/platform/wav.ts';
+test('overview positioning preserves selection length and fits the end of the actual file',()=>{
+ assert.deepEqual(positionSelection(.2,.5,.8),[.2,.7]);
+ const [start,end]=positionSelection(.79,.5,.8);assert(Math.abs(start-.3)<1e-12);assert.equal(end,.8);
+ assert.deepEqual(positionSelection(-1,.5,.8),[0,.5]);assert.deepEqual(positionSelection(2,1,.8),[0,.8]);
+});

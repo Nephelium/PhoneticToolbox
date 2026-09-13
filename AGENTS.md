@@ -1,6 +1,7 @@
 # PhoneticToolbox v3 — Agent 工作规则
 
 ## 0. 当前阶段与授权
+- 2026-09-13 井井授权继续V2功能清单核对。本轮六功能组映射及两项补齐已verified（限定Windows独立Chrome），见docs/testing/m03-function-review.md：总览单击保留选区并更新、批次提交可取消且不误取消上一批。65项前端、5组新增/M01-M02默认选区、6组批次、3组总览通过；原V2八文件及手册哈希一致。完整M03仍in_progress，剩余方法/许可链与设备/生产证据单列，下一项来源未决项集中收口；EXE暂停，不推进M04，未DDL或push。
 - 2026-09-13 井井继续授权E3。结果窗口读取/重读/迟到反馈已verified（限定Windows独立Chrome），见docs/testing/m03-result-feedback-report.md：错误在窗口内提示，旧读取/保存/下载反馈不能影响新窗口；64项前端、10组结果与4组试听Chrome回归通过，下载CSV实测哈希一致。故障/到期响应为受控注入，不冒充自然到期或生产认证验收。完整M03仍in_progress，下一项V2开发态功能清单集中核对及来源收口；EXE暂停，未DDL/push，不推进M04。
 - 2026-09-13 井井继续授权开发态E3。批次参数和提交失败反馈已verified（限定Windows独立Chrome），见docs/testing/m03-batch-feedback-report.md：错误参数不发任务，全部拒绝保留选择/旧批次入口，部分成功逐文件说明；64项前端、6组批次与3组字体Chrome回归通过。完整M03仍in_progress，下一项结果窗口读取失败/到期及剩余交互；本轮未复跑Qt。EXE暂停，不推进M04，未DDL或push。
 - 2026-09-13 最新范围调整：井井明确后续暂不考虑EXE，近期不需要打包。停止M03-F及其他EXE封装/构建/发行准备，不继续相关探针；后续推进开发态功能、交互与科学迁移。F1本轮仅生成筛选后的本地运行文件，首次迁移探针因缺numpy.testing失败，未构建任何EXE。新增探针脚本和output证据保留为未完成草稿，不称verified。以下F候选/探针下一步均为历史，恢复须用户另行要求。

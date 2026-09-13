@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed,ref,onMounted,onUnmounted } from 'vue';import type { Workspace } from '../state/workspace.ts';import { envelope,selection } from '../platform/wav.ts';
+import { computed,ref,onMounted,onUnmounted } from 'vue';import type { Workspace } from '../state/workspace.ts';import { envelope,selection,positionSelection } from '../platform/wav.ts';
 import SpectrogramViewport from './SpectrogramViewport.vue';import type {Spectrogram,SpectrogramView} from '../platform/research.ts';
 import {playback} from '../state/audio.ts';
-const props=defineProps<{state:Workspace;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;maxWindowSeconds?:number;compactOverview?:boolean}>();let anchor:number|null=null;
+const props=defineProps<{state:Workspace;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;maxWindowSeconds?:number;compactOverview?:boolean;clickMovesSelection?:boolean}>();let anchor:number|null=null,anchorX=0,selectionLength=0,dragged=false;
+const emit=defineEmits<{'selection-end':[start:number,end:number]}>();
 const viewport=ref<HTMLElement>(),width=ref(800);let observer:ResizeObserver;
 onMounted(()=>{observer=new ResizeObserver(entries=>{width.value=Math.max(100,Math.min(1600,Math.round(entries[0].contentRect.width)));});if(viewport.value)observer.observe(viewport.value);});
 onUnmounted(()=>observer?.disconnect());
@@ -14,8 +15,21 @@ const tracks=computed(()=>indices.value.map(index=>({index,points:envelope(props
 function path(points:[number,number][]) {return points.map(([lo,hi],i)=>`M${i/Math.max(1,points.length-1)*1000},${45-hi*37}V${45-lo*37}`).join(' ');}
 function x(t:number){return Math.max(0,Math.min(1000,(t-left.value)/windowLength.value*1000));}
 function time(event:PointerEvent){const box=(event.currentTarget as Element).getBoundingClientRect();return left.value+Math.max(0,Math.min(1,(event.clientX-box.left)/box.width))*windowLength.value;}
-function down(event:PointerEvent){anchor=time(event);(event.currentTarget as Element).setPointerCapture(event.pointerId);props.state.start=anchor;props.state.end=anchor;}
-function move(event:PointerEvent){if(anchor!==null){[props.state.start,props.state.end]=selection(anchor,time(event),duration.value);}}
+function down(event:PointerEvent){
+  if(event.button!==0)return;
+  anchor=time(event);anchorX=event.clientX;dragged=false;selectionLength=props.state.end-props.state.start;
+  (event.currentTarget as Element).setPointerCapture(event.pointerId);
+  if(!props.clickMovesSelection){props.state.start=anchor;props.state.end=anchor;}
+}
+function move(event:PointerEvent){if(anchor!==null){
+  if(Math.abs(event.clientX-anchorX)>=3)dragged=true;
+  if(!props.clickMovesSelection||dragged)[props.state.start,props.state.end]=selection(anchor,time(event),duration.value);
+}}
+function up(event:PointerEvent){
+  if(anchor===null)return;move(event);
+  if(props.clickMovesSelection&&!dragged)[props.state.start,props.state.end]=positionSelection(anchor,selectionLength>0?selectionLength:Math.min(.5,duration.value),duration.value);
+  anchor=null;emit('selection-end',props.state.start,props.state.end);
+}
 const maxZoom=computed(()=>Math.max(1,Math.min(65536,duration.value/.01)));
 function zoom(value:number,fraction=0){const anchor=left.value+fraction*windowLength.value;props.state.zoom=Math.max(minZoom.value,Math.min(maxZoom.value,value));props.state.offset=Math.max(0,Math.min(anchor-fraction*windowLength.value,duration.value-windowLength.value));}
 function wheel(event:WheelEvent){if(!event.ctrlKey||!duration.value)return;event.preventDefault();const box=(event.currentTarget as Element).getBoundingClientRect();zoom(props.state.zoom*(event.deltaY<0?2:.5),Math.max(0,Math.min(1,(event.clientX-box.left)/box.width)));}
@@ -38,7 +52,7 @@ function wheel(event:WheelEvent){if(!event.ctrlKey||!duration.value)return;event
 <span>声道 {{track.index+1}}</span>
 <small>{{track.index===state.channel?'试听声道':'原始数据'}}</small>
 </div>
-<svg viewBox="0 0 1000 90" preserveAspectRatio="none" role="img" :aria-label="'声道 '+(track.index+1)+' 原始波形；用下方数值控件调整选区'" @wheel="wheel" @dblclick="zoom(1);state.offset=0" @pointerdown="down" @pointermove="move" @pointerup="move($event);anchor=null" @pointercancel="anchor=null">
+<svg viewBox="0 0 1000 90" preserveAspectRatio="none" role="img" :aria-label="'声道 '+(track.index+1)+' 原始波形；用下方数值控件调整选区'" @wheel="wheel" @dblclick="zoom(1);state.offset=0" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="anchor=null">
 <path d="M0 45H1000" class="wave-baseline"/>
 <rect :x="x(state.start)" y="0" :width="Math.max(0,x(state.end)-x(state.start))" height="90" class="wave-selection"/>
 <path :d="path(track.points)" class="wave-line"/>
@@ -61,7 +75,7 @@ function wheel(event:WheelEvent){if(!event.ctrlKey||!duration.value)return;event
 <button :disabled="state.zoom>=maxZoom" aria-label="放大波形" @click="zoom(state.zoom*2)">+</button>
 <button @click="zoom(1);state.offset=0">适合窗口</button>
 </div>
-<small>拖动选区 · Ctrl＋滚轮缩放<span v-if="maxWindowSeconds"> · 最多 {{maxWindowSeconds}} 秒视窗</span></small>
+<small><template v-if="clickMovesSelection">单击定位 · </template>拖动选区 · Ctrl＋滚轮缩放<span v-if="maxWindowSeconds"> · 最多 {{maxWindowSeconds}} 秒视窗</span></small>
 </div>
 <label v-if="state.zoom>1" class="pan-label">时间窗起点 <input v-model.number="state.offset" type="range" min="0" :max="duration-windowLength" :step="1/(state.asset?.sampleRate||1)" aria-label="平移波形时间窗"/>
 </label>

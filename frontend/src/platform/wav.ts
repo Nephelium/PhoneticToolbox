@@ -38,6 +38,11 @@ export function selection(start:number,end:number,duration:number):[number,numbe
   const b=Math.min(duration,Math.max(0,Number.isFinite(end)?end:0));
   return [Math.min(a,b),Math.max(a,b)];
 }
+export function positionSelection(at:number,length:number,duration:number):[number,number] {
+  const span=Math.min(Math.max(0,length),Math.max(0,duration));
+  const start=Math.max(0,Math.min(at,duration-span));
+  return [start,start+span];
+}
 export function peakIndex(samples:Float32Array):PeakIndex {
   const stride=256,size=Math.ceil(samples.length/stride),min=new Float32Array(size),max=new Float32Array(size);
   for(let b=0;b<size;b++){let lo=Infinity,hi=-Infinity;for(let i=b*stride;i<Math.min(samples.length,(b+1)*stride);i++){lo=Math.min(lo,samples[i]);hi=Math.max(hi,samples[i]);}min[b]=lo;max[b]=hi;}
