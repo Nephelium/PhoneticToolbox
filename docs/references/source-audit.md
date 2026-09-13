@@ -96,3 +96,5 @@ PENDING-EGG增加原egg_widget.update_zoom_plots和InverseFilteringResultDialog�
 M03-E3新增REF-YIN-EGG-THESIS馆藏书目及REF-HENRICH-2004-DEGG方法审阅参考，共330条登记；两者仅引用与原站链接。阈值/DECOM差异、原手册截图哈希和未决链见[M03方法核查](m03-method-audit.md)。PENDING-EGG许可不变。
 
 2026-09-13 M03-A29：直接迁移来源已确认是V2本地源码，八份原文件SHA-256复核一致。固定GCI后3ms、自相关LPC平均及未使用GOI的边界已同步说明。来源条目仍为330条，未新增参考论文或运行依赖；最初文献对应及完整授权链保持未决。见[复核记录](../testing/m03-provenance-report.md)。
+
+2026-09-13 M04：井井允许补LPC学术引用与有界代码来源查询。已核对Makhoul原文、SciPy v1.16.3函数来源及V2本地历史，见[审阅](m04-method-audit.md)。未查明的更早代码作者保留unknown，不继续以此阻挡开发。

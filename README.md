@@ -1,12 +1,12 @@
 # PhoneticToolbox 3.0 · 开发工作台
 
-**M04 LPC谱图（2026-09-13）：** 已开始迁移，四功能组与V2说明书/源码已核对，12场景原V2双轮基准通过。当前为A基准verified，完整M04 in_progress，V3页面尚未实现。见[基准报告](docs/testing/m04-baseline-report.md)与[实施步骤](docs/plans/2026-09-13-m04-implementation.md)。
+**M04 LPC谱图（2026-09-13）：** A基准与B纯核心已限定Windows verified，源码/独立wheel两路73项通过，新增LPC学术引用及计算预算。完整M04 in_progress，下一项任务/PNG导出，页面尚未实现。见[核心报告](docs/testing/m04-core-report.md)、[方法引用](docs/references/m04-method-audit.md)与[实施步骤](docs/plans/2026-09-13-m04-implementation.md)。
 
 **EGG开发态功能收口（2026-09-13）：** 六功能组与最后草稿/连续操作检查完成，开发态功能阶段verified。补齐LP阶数保存、重开及失败反馈，65项前端与23组Chrome通过。入口为`scripts/Start-Research-Workbench.ps1`，范围及限制见[收口报告](docs/testing/m03-dev-closeout-report.md)。完整模块的设备/生产/跨平台验收仍单列。
 
 **当前范围（2026-09-13）：** 按井井最新要求，近期只推进开发版，EXE封装、打包和相关探针暂停。以下候选范围为历史计划，未生成新的EXE。
 
-**当前优先级（2026-09-13）：** 代码引用后续核查按井井要求暂停，继续功能与交互完善。已修复切换文件后旧预览错误串入新文件的问题，[Chrome五项回归](docs/testing/m03-preview-switch-report.md)通过。
+**当前优先级（2026-09-13）：** EGG代码引用后续核查按井井要求暂停；LPC学术引用已补，代码出处有界查找不阻挡功能。已修复切换文件后旧预览错误串入新文件的问题，[Chrome五项回归](docs/testing/m03-preview-switch-report.md)通过。
 
 **EGG来源复核（2026-09-13）：** 已确认直接迁移来源为V2，8份原文件哈希一致。使用说明补充简化逆滤波固定取GCI后3ms、未按GOI确认闭相的实际行为；方法文献对应与许可缺口单列，见[复核记录](docs/testing/m03-provenance-report.md)。
 

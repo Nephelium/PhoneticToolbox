@@ -1,6 +1,6 @@
 # M04 · LPC 谱图迁移计划
 
-状态：in_progress，2026-09-13井井已授权M04。A原V2独立基准verified，V3核心/页面尚未实现。具体步骤以[文件级实施计划](../2026-09-13-m04-implementation.md)与[源码映射](../../modules/evidence/M04-source-map.md)为准。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
+状态：in_progress，2026-09-13井井已授权M04。A原V2独立基准与B纯核心限定Windows verified，任务/页面尚未实现。具体步骤以[文件级实施计划](../2026-09-13-m04-implementation.md)与[源码映射](../../modules/evidence/M04-source-map.md)为准。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
 ## 现有代码与目标文件
 现有路径均已确认存在；目录内逐函数对应由实施第一步记录，避免把旧类名机械套给新实现。
@@ -8,11 +8,11 @@
 - [phonetic_toolbox/gui/widgets/lpc_spectrum_widget.py](../../../phonetic_toolbox/gui/widgets/lpc_spectrum_widget.py)
 - [phonetic_toolbox/core/acoustic/lpc.py](../../../phonetic_toolbox/core/acoustic/lpc.py)
 
-拟创建/修改路径（未来实现，不代表已经存在）：
+实施路径（核心和对照测试已实现，任务/页面路径仍为计划）：
 
 - `frontend/src/modules/lpc-spectrum/LpcSpectrumPage.vue`
 - `frontend/src/modules/lpc-spectrum/state.ts`
-- `packages/phonetic_core/src/phonetic_core/acoustic/`
+- `packages/phonetic_core/src/phonetic_core/lpc/`
 - `backend/src/ptb_api/modules/lpc_spectrum.py`
 - `tests/parity/test_lpc_spectrum.py`
 - `frontend/tests/e2e/lpc-spectrum.spec.ts`

@@ -71,7 +71,7 @@ D页面与逐文件批次已限定Windows开发态验证，见[报告](../testin
 平台差异：核心只收数组/配置；录放音由宿主控制；服务器禁用继承的全局设置单例。
 来源 ID：SRC-PRAAT, PENDING-EGG
 
-| M04 LPC 谱图 | 4 | [实施计划](../plans/2026-09-13-m04-implementation.md) | `lpc` | in_progress / A基准verified，页面未实现 |
+| M04 LPC 谱图 | 4 | [实施计划](../plans/2026-09-13-m04-implementation.md) | `lpc` | in_progress / A基准与B纯核心verified，任务/页面未实现 |
 
 ## M04 LPC 谱图
 顶部输入输出目录；左侧文件；中央波形/频谱；右侧 LPC 设置；底部处理与试听。

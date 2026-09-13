@@ -102,3 +102,5 @@ P04-FONT更新（2026-09-12）：登记表共328条，ASSET-DOULOS补充既有Do
 M03-E3：注册表现有330条记录，新增旧手册论文馆藏与Henrich（2004）方法审阅参考。两者均为reference-only，论文全文未收录。微观5–5000ms原始显示路径另有合成基准。见[方法核查](../docs/references/m03-method-audit.md)，PENDING-EGG代码许可保持未确立。
 
 2026-09-13 M03-A29：直接迁移来源已确认是V2本地源码，八份原文件SHA-256复核一致。固定GCI后3ms、自相关LPC平均及未使用GOI的边界已同步说明。来源条目仍为330条，未新增参考论文或运行依赖；最初文献对应及完整授权链保持未决。见[复核记录](../docs/testing/m03-provenance-report.md)。
+
+M04：学术引用、NumPy/SciPy实际调用与V2本地迁移记录分开登记，见[方法审阅](../docs/references/m04-method-audit.md)和[migration记录](m04-migration.json)。更早代码来源有界查找无结果，不阻碍功能推进。

@@ -15,11 +15,11 @@
   "original_external_code_source": "unknown",
   "search": "Local source and Git history; exact public query compute_lpc_spectrum solve_toeplitz returned no match. No authorship inferred.",
   "destination": "packages/phonetic_core/src/phonetic_core/lpc",
-  "changes": "Numerical function preserved; service rules separated from WAV/TextGrid I/O and plotting.",
+  "changes": "Numerical function preserved; service rules separated from WAV/TextGrid I/O and plotting. Explicit public validation, ROI sample budget and cooperative cancellation added separately; legacy numerical function unchanged.",
   "academic_reference": "REF-MAKHOUL-1975-LPC",
   "runtime_dependencies": [
-    "M01-PY-NUMPY",
-    "M01-PY-SCIPY"
+    "M04-PY-NUMPY",
+    "M04-PY-SCIPY"
   ],
   "implementation_blocked": false
 }

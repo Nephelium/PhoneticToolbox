@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-09-09",
-  "total_records": 330,
+  "total_records": 333,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -7222,6 +7222,73 @@
       "observed_upstream_commit": null,
       "verification_date": "2026-09-12",
       "acknowledgement_group": "academic"
+    },
+    {
+      "id": "REF-MAKHOUL-1975-LPC",
+      "title": "Linear Prediction: A Tutorial Review",
+      "authors": "John Makhoul",
+      "year": 1975,
+      "kind": "reference-only",
+      "modules": [
+        "M04"
+      ],
+      "urls": {
+        "paper": "https://doi.org/10.1109/PROC.1975.9792",
+        "university_pdf": "https://www.commsp.ee.ic.ac.uk/~xl404/papers/Linear%20prediction%20A%20tutorial%20review.pdf"
+      },
+      "actual_included_version": "Proceedings of the IEEE 63(4), 561–580 (1975); method reference",
+      "license": "Citation and original link only; paper not bundled",
+      "evidence": "Original paper pp.563–566: autocorrelation normal equations, symmetric Toeplitz matrix, gain and parameter computation. Method reference, not proof of V2 code origin. docs/references/m04-method-audit.md",
+      "verification_status": "primary-paper-reviewed",
+      "distribution_status": "citation-link-only",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-09-13",
+      "acknowledgement_group": "academic"
+    },
+    {
+      "id": "M04-PY-NUMPY",
+      "title": "NumPy",
+      "authors": "NumPy contributors",
+      "kind": "dependency",
+      "modules": [
+        "M04"
+      ],
+      "actual_included_version": "2.2.6; existing project Conda/MKL compatible runtime",
+      "license": "See existing installed distribution licenses; no new library redistribution in this stage",
+      "urls": {
+        "release": "https://numpy.org/doc/2.2/reference/generated/numpy.correlate.html"
+      },
+      "verification_date": "2026-09-13",
+      "distribution_status": "local-development-locked",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/lpc/_legacy.py"
+      ],
+      "relationship": "Unmodified runtime dependency; no upstream source vendoring",
+      "evidence": "third_party/m03-runtime-lock.json; third_party/m04-migration.json"
+    },
+    {
+      "id": "M04-PY-SCIPY",
+      "title": "SciPy",
+      "authors": "SciPy contributors",
+      "kind": "dependency",
+      "modules": [
+        "M04"
+      ],
+      "actual_included_version": "1.16.3; existing project Conda/MKL compatible runtime",
+      "license": "See existing installed distribution licenses; no new library redistribution in this stage",
+      "urls": {
+        "solver": "https://github.com/scipy/scipy/blob/v1.16.3/scipy/linalg/_basic.py",
+        "response": "https://github.com/scipy/scipy/blob/v1.16.3/scipy/signal/_filter_design.py"
+      },
+      "verification_date": "2026-09-13",
+      "distribution_status": "local-development-locked",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/lpc/_legacy.py"
+      ],
+      "relationship": "Unmodified runtime dependency; no upstream source vendoring",
+      "evidence": "third_party/m03-runtime-lock.json; third_party/m04-migration.json"
     }
   ]
 }

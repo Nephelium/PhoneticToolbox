@@ -5081,5 +5081,52 @@
       "paper": "https://doi.org/10.1121/1.1646401",
       "author_pdf": "https://www.lam.jussieu.fr/Membres/Castellengo/publications/2004b-Voice%20DEGG.pdf"
     }
+  },
+  {
+    "id": "REF-MAKHOUL-1975-LPC",
+    "title": "Linear Prediction: A Tutorial Review",
+    "modules": [
+      "M04"
+    ],
+    "kind": "reference-only",
+    "acknowledgement_group": "academic",
+    "authors": "John Makhoul",
+    "version": "Proceedings of the IEEE 63(4), 561–580 (1975); method reference",
+    "license": "Citation and original link only; paper not bundled",
+    "urls": {
+      "paper": "https://doi.org/10.1109/PROC.1975.9792",
+      "university_pdf": "https://www.commsp.ee.ic.ac.uk/~xl404/papers/Linear%20prediction%20A%20tutorial%20review.pdf"
+    }
+  },
+  {
+    "id": "M04-PY-NUMPY",
+    "title": "NumPy",
+    "modules": [
+      "M04"
+    ],
+    "kind": "dependency",
+    "acknowledgement_group": "software",
+    "authors": "NumPy contributors",
+    "version": "2.2.6; existing project Conda/MKL compatible runtime",
+    "license": "See existing installed distribution licenses; no new library redistribution in this stage",
+    "urls": {
+      "release": "https://numpy.org/doc/2.2/reference/generated/numpy.correlate.html"
+    }
+  },
+  {
+    "id": "M04-PY-SCIPY",
+    "title": "SciPy",
+    "modules": [
+      "M04"
+    ],
+    "kind": "dependency",
+    "acknowledgement_group": "software",
+    "authors": "SciPy contributors",
+    "version": "1.16.3; existing project Conda/MKL compatible runtime",
+    "license": "See existing installed distribution licenses; no new library redistribution in this stage",
+    "urls": {
+      "solver": "https://github.com/scipy/scipy/blob/v1.16.3/scipy/linalg/_basic.py",
+      "response": "https://github.com/scipy/scipy/blob/v1.16.3/scipy/signal/_filter_design.py"
+    }
   }
 ]

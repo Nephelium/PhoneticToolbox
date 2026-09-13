@@ -1,6 +1,6 @@
 # M04 LPC 谱图实施计划
 
-2026-09-13，井井在EGG收口后明确继续M04。完整M04为in_progress，按下面独立检查点推进；引用核查/EXE/生产部署暂停，不推进M05，不执行DDL或修改V2。
+2026-09-13，井井在EGG收口后明确继续M04。完整M04为in_progress，按下面独立检查点推进；LPC学术引用补齐、代码来源做有界查找（井井最新追加授权），EXE/生产部署暂停，不推进M05，不执行DDL或修改V2。
 
 ## 架构与页面
 
@@ -20,7 +20,7 @@
 | D 页面 | `frontend/src/modules/lpc-spectrum/`、公共波形可选适配、平台能力及页面注册 | 四功能组完整，原有模块手势不受影响，Chrome真实任务及小窗/浅深色/草稿检查 |
 | E 收口 | 使用说明、验收报告、功能矩阵 | A01–A20有明确证据和未测边界，开发态阶段收口 |
 
-A当前已完成限定基准，见 [报告](../testing/m04-baseline-report.md)。B–E尚未实现，不能将A数组图称为V3交互页面。
+A已完成限定基准，见 [报告](../testing/m04-baseline-report.md)。B纯核心现为限定Windows verified，见[核心报告](../testing/m04-core-report.md)；C–E尚未实现，不能将核心结果称为V3交互页面。
 
 ## 20项验收
 
@@ -48,3 +48,5 @@ A当前已完成限定基准，见 [报告](../testing/m04-baseline-report.md)�
 | A20 | 本机与托管网页流程 | owner隔离/配额/到期适用检查，设备/生产单列 |
 
 所有阶段记录实际命令。A执行 `& .venv/m09-ui/Scripts/python.exe -X utf8 scripts/capture_m04_baseline.py --freeze-public`（只首次冻结，已有基准时省略该开关），静态检查使用 `scripts/validate_docs.py` 和 `scripts/check_architecture.py`。B–E的具体回归命令随实现登记，不将旧计划尚不存在的npm命令冒充可运行入口。
+
+B边界依据ADR-047：单次48,000样本上限、参数/ROI与有限值验证、前后协作取消。运行 `scripts/probe_m04_budget.py`、`tests/parity/test_lpc_spectrum.py` 与 `tests/parity/test_lpc_boundaries.py`，安装独立wheel目标目录后复验。C再实施进程硬预算。
