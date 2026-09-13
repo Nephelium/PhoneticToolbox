@@ -1,5 +1,9 @@
 # PhoneticToolbox 3.0 · 开发工作台
 
+**当前范围（2026-09-13）：** 按井井最新要求，近期只推进开发版，EXE封装、打包和相关探针暂停。以下候选范围为历史计划，未生成新的EXE。
+
+**EGG批次反馈（2026-09-13）：** 参数错误在弹窗内提示并保留选择；全部提交被拒绝时保留上一批保存入口，部分成功时列出未提交原因。[Chrome限定验收](docs/testing/m03-batch-feedback-report.md)通过。
+
 **EGG试听修复（2026-09-13）：** IF原音频/估计按文件角色绑定播放，修正清单排序导致的标签对调；两条试听可直接切换，旧设备请求失败不会打断新播放。[限定开发态验收](docs/testing/m03-playback-report.md)通过，[EXE候选范围](docs/plans/2026-09-13-m03-f-candidate-review.md)仍planned。
 
 **EGG导出字体（2026-09-12）：** 单文件三图与批次带图提交前检查实际计算环境字体，缺失时保留分析/批次选择并提示；纯CSV与逆滤波不受字体缺失阻断。[限定Windows开发态验收](docs/testing/m03-font-preflight-report.md)已通过。

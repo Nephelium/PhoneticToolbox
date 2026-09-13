@@ -20,7 +20,7 @@ import EggBatchPanel from './EggBatchPanel.vue';
 import {exportFontSnapshot} from '../../state/fonts.ts';
 import {preflightExportFonts} from './fonts.ts';
 import {rangeAfterGesture,microAfterGesture} from './navigation.ts';
-import {defaults,batchDefaults,signature,taskConfig,validate,errors,inverseAudioFiles,type PreviewRecord} from './state.ts';
+import {defaults,batchDefaults,signature,taskConfig,validate,validateParameters,errors,inverseAudioFiles,type PreviewRecord} from './state.ts';
 const props=defineProps<{context:ResearchContext;stateKey:string;active:boolean}>();const emit=defineEmits<{references:[];close:[]}>();
 const wave=workspace(props.stateKey),config=ref<EggTaskConfig>({...defaults(),...host.projects.read<Partial<EggTaskConfig>>('egg.config.'+props.stateKey,{})});
 const batchConfig=ref<EggTaskConfig>({...batchDefaults(),...host.projects.read<Partial<EggTaskConfig>>('egg.batch-config.'+props.stateKey,{})});
@@ -84,12 +84,32 @@ function gesture(area:'main'|'micro',kind:'zoom'|'pan',value:number){
 }
 async function cancel(id:string){try{await tasks.value?.cancelJob?.(id);await poll();}catch(e){error.value=String(e);}}
 async function retry(id:string){try{const job=await tasks.value!.retry(id,crypto.randomUUID());labelJob(job,(labels.value[id]??'EGG')+' · 重试');if(batchIds.value.includes(id)){batchIds.value.push(job.id);host.projects.write('egg.batch.'+props.stateKey,batchIds.value);}await poll();}catch(e){error.value=String(e);}}
-async function batchSubmit(selected:ResearchFile[],settings:EggTaskConfig){if(!tasks.value?.egg||batchBusy.value)return;const ticket=++batchEpoch;batchBusy.value=true;batchError.value='';let count=0;let admitted=false;const failures:string[]=[];
-  try{const frozen=await preflightExportFonts(taskConfig(settings,'batch'),exportFontSnapshot(),tasks.value.eggFonts);if(disposed||ticket!==batchEpoch)return;
-    admitted=true;batchIds.value=[];host.projects.write('egg.batch.'+props.stateKey,[]);batchConfig.value={...frozen};host.projects.write('egg.batch-config.'+props.stateKey,frozen);
-    for(const file of selected){if(disposed||ticket!==batchEpoch)break;try{const job=await tasks.value.egg(file,frozen,crypto.randomUUID());batchIds.value.push(job.id);host.projects.write('egg.batch.'+props.stateKey,batchIds.value);labelJob(job,file.name+' · 批次');count++;if(ticket!==batchEpoch)await tasks.value.cancelJob?.(job.id);}catch{failures.push(file.name);}}}
-  catch(e){batchError.value=e instanceof Error?e.message:String(e);}
-  finally{batchBusy.value=false;if(admitted){batchOpen.value=false;notice.value=`已提交 ${count} 个文件。${failures.length?'未提交：'+failures.join('、'):''}`;await poll();}}}
+async function batchSubmit(selected:ResearchFile[],settings:EggTaskConfig){
+  if(!tasks.value?.egg||batchBusy.value||!selected.length)return;
+  const ticket=++batchEpoch;batchBusy.value=true;batchError.value='';let count=0;
+  const failures:string[]=[];
+  try{
+    const config=taskConfig(settings,'batch');validateParameters(config);
+    const frozen=await preflightExportFonts(config,exportFontSnapshot(),tasks.value.eggFonts);
+    if(disposed||ticket!==batchEpoch)return;
+    for(const file of selected){
+      if(disposed||ticket!==batchEpoch)break;
+      try{
+        const job=await tasks.value.egg(file,frozen,crypto.randomUUID());
+        if(disposed||ticket!==batchEpoch){await tasks.value.cancelJob?.(job.id);break;}
+        // Replace the previous batch only after a new task has been accepted.
+        if(count===0){batchIds.value=[];batchConfig.value={...frozen};host.projects.write('egg.batch-config.'+props.stateKey,frozen);}
+        batchIds.value.push(job.id);host.projects.write('egg.batch.'+props.stateKey,batchIds.value);
+        labelJob(job,file.name+' · 批次');count++;
+      }catch(e){const message=e instanceof Error?e.message:String(e);failures.push(file.name+'：'+(errors[message]??message));}
+    }
+    if(failures.length)batchError.value='未提交：'+failures.join('；');
+  }catch(e){batchError.value=e instanceof Error?e.message:String(e);}
+  finally{
+    batchBusy.value=false;
+    if(!disposed&&ticket===batchEpoch&&count>0){batchOpen.value=false;notice.value=`已提交 ${count} 个文件。${batchError.value}`;await poll();}
+  }
+}
 async function cancelBatch(){batchEpoch++;for(const id of batchIds.value)await cancel(id);notice.value='已请求取消本次批量任务，已完成的结果保留。';}
 function closeResult(){viewEpoch++;resultJob.value=undefined;resultConfig.value=undefined;inverseView.value=undefined;for(const image of resultImages.value)release(image.url);resultImages.value=[];inverseWaves.value=[];stop();}
 async function view(job:JobView){closeResult();const ticket=viewEpoch;error.value='';try{const metadata=JSON.parse(new TextDecoder().decode(await readFile(job,'egg.ptb.json')));if(disposed||ticket!==viewEpoch)return;

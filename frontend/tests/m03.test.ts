@@ -1,6 +1,7 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import {defaults,taskConfig,validate,signature} from '../src/modules/egg-analysis/state.ts';
 import {batchDefaults} from '../src/modules/egg-analysis/state.ts';
+import {validateParameters} from '../src/modules/egg-analysis/state.ts';
 import {rangeAfterGesture,microAfterGesture} from '../src/modules/egg-analysis/navigation.ts';
 test('single display switches and batch defaults follow independent V2 dialogs',()=>{const page=defaults();assert.equal(page.keep_praat_f0,false);assert.equal(page.keep_gci_f0,false);const batch=batchDefaults();assert.equal(batch.keep_praat_f0,true);assert.equal(batch.keep_gci_f0,true);assert.equal(batch.generate_images,false);assert.equal(batch.roi_end,null);assert.equal(batch.highpass_cutoff,25);});
 test('plot gestures preserve duration at file boundaries and clamp micro view',()=>{assert.deepEqual(rangeAfterGesture(.2,.7,1,'pan',.4),[0,.49999999999999994]);const [a,b]=rangeAfterGesture(.2,.7,1,'pan',-1);assert.equal(b,1);assert.ok(Math.abs(a-.5)<1e-12);assert.deepEqual(rangeAfterGesture(.2,.7,1,'zoom',10),[0,1]);assert.deepEqual(microAfterGesture(.1,50,1,'pan',200),{center:0,width:50});assert.deepEqual(microAfterGesture(.1,5000,1,'zoom',1.1),{center:.1,width:5000});assert.deepEqual(microAfterGesture(.1,5,1,'zoom',.9),{center:.1,width:5});});
@@ -14,3 +15,15 @@ test('micro numeric input shares wheel limits and rejects non-finite widths',()=
 
 import {inverseAudioFiles} from '../src/modules/egg-analysis/state.ts';
 test('IF player roles follow explicit file names despite sorted manifest order',()=>{const files=[{name:'egg_IF.wav',id:'if'},{name:'egg.ptb.json',id:'meta'},{name:'egg_ORIG.wav',id:'original'}];assert.deepEqual(inverseAudioFiles(files).map(f=>f.id),['original','if']);assert.equal(files[0].id,'if');});
+
+test('M03/1 batch parameter errors reject blank and non-finite inputs before submission',()=>{
+  for(const value of ['',NaN,Infinity,-.01,1.01])assert.throws(()=>validateParameters({...batchDefaults(),silence_threshold:value as number}),/静音阈值/);
+  for(const value of ['',0,1000,48000])assert.throws(()=>validateParameters({...batchDefaults(),highpass_cutoff:value as number}),/高通/);
+  for(const value of [0,1])assert.doesNotThrow(()=>validateParameters({...batchDefaults(),silence_threshold:value}));
+  assert.doesNotThrow(()=>validateParameters({...batchDefaults(),highpass_cutoff:.5}));
+});
+test('shared parameter limits preserve contract endpoints without pretending to know file sample rate',()=>{
+  for(const changes of [{peak_prominence:0,valley_prominence:10},{spec_window_ms:5},{spec_window_ms:50},{spec_vmin:-160,spec_vmax:20},{highpass_cutoff:25,lowpass_cutoff:47000}])assert.doesNotThrow(()=>validateParameters({...batchDefaults(),...changes}));
+  for(const changes of [{peak_prominence:10.1},{valley_prominence:-1},{spec_window_ms:4},{spec_window_ms:51},{spec_vmin:-161},{spec_vmax:21},{spec_vmin:-10,spec_vmax:-10},{lowpass_cutoff:48000}])assert.throws(()=>validateParameters({...batchDefaults(),...changes}));
+  assert.throws(()=>validate({...defaults(),lowpass_cutoff:47000},.8,44100),/采样率/);
+});
