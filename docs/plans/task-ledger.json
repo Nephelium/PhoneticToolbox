@@ -526,9 +526,11 @@
         "P06",
         "P07"
       ],
-      "status": "planned",
-      "plan": "modules/M04-lpc-spectrum.md",
-      "execution_evidence": []
+      "status": "in_progress",
+      "plan": "2026-09-13-m04-implementation.md",
+      "execution_evidence": [
+        "docs/testing/m04-baseline-report.md"
+      ]
     },
     {
       "id": "M05",

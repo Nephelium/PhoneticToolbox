@@ -1,0 +1,236 @@
+{
+  "producer": "original-v2",
+  "numpy": "2.2.6",
+  "scipy": "1.16.3",
+  "defaults": {
+    "order": 50,
+    "freq_max_hz": 8000,
+    "amp_min_db": -5.0,
+    "amp_max_db": 35.0,
+    "dynamic_y": false
+  },
+  "cases": {
+    "default": {
+      "rate": 16000,
+      "config": {
+        "order": 50,
+        "freq_max_hz": 8000,
+        "amp_min_db": -5.0,
+        "amp_max_db": 35.0,
+        "dynamic_y": false
+      },
+      "status": "returned",
+      "y_range": [
+        -5.0,
+        35.0
+      ],
+      "finite": true,
+      "warnings": []
+    },
+    "dynamic_2k": {
+      "rate": 16000,
+      "config": {
+        "order": 50,
+        "freq_max_hz": 2000,
+        "amp_min_db": -5.0,
+        "amp_max_db": 35.0,
+        "dynamic_y": true
+      },
+      "status": "returned",
+      "y_range": [
+        -14.710286376022319,
+        51.88957083737841
+      ],
+      "finite": true,
+      "warnings": []
+    },
+    "dynamic_48k": {
+      "rate": 16000,
+      "config": {
+        "order": 50,
+        "freq_max_hz": 48000,
+        "amp_min_db": -5.0,
+        "amp_max_db": 35.0,
+        "dynamic_y": true
+      },
+      "status": "returned",
+      "y_range": [
+        -14.710286376022319,
+        51.88957083737841
+      ],
+      "finite": true,
+      "warnings": []
+    },
+    "noise_order1": {
+      "rate": 8000,
+      "config": {
+        "order": 1,
+        "freq_max_hz": 8000,
+        "amp_min_db": -5.0,
+        "amp_max_db": 35.0,
+        "dynamic_y": false
+      },
+      "status": "returned",
+      "y_range": [
+        -5.0,
+        35.0
+      ],
+      "finite": true,
+      "warnings": []
+    },
+    "noise_order200": {
+      "rate": 48000,
+      "config": {
+        "order": 200,
+        "freq_max_hz": 8000,
+        "amp_min_db": -5.0,
+        "amp_max_db": 35.0,
+        "dynamic_y": false
+      },
+      "status": "returned",
+      "y_range": [
+        -5.0,
+        35.0
+      ],
+      "finite": true,
+      "warnings": []
+    },
+    "noise_96k": {
+      "rate": 96000,
+      "config": {
+        "order": 50,
+        "freq_max_hz": 8000,
+        "amp_min_db": -5.0,
+        "amp_max_db": 35.0,
+        "dynamic_y": false
+      },
+      "status": "returned",
+      "y_range": [
+        -5.0,
+        35.0
+      ],
+      "finite": true,
+      "warnings": []
+    },
+    "constant": {
+      "rate": 16000,
+      "config": {
+        "order": 50,
+        "freq_max_hz": 8000,
+        "amp_min_db": -5.0,
+        "amp_max_db": 35.0,
+        "dynamic_y": false
+      },
+      "status": "returned",
+      "y_range": [
+        -5.0,
+        35.0
+      ],
+      "finite": true,
+      "warnings": []
+    },
+    "silence": {
+      "rate": 16000,
+      "config": {
+        "order": 50,
+        "freq_max_hz": 8000,
+        "amp_min_db": -5.0,
+        "amp_max_db": 35.0,
+        "dynamic_y": false
+      },
+      "status": "error",
+      "error_type": "ValueError",
+      "message": "LPC 求解失败: Singular principal minor",
+      "warnings": []
+    },
+    "short51": {
+      "rate": 16000,
+      "config": {
+        "order": 50,
+        "freq_max_hz": 8000,
+        "amp_min_db": -5.0,
+        "amp_max_db": 35.0,
+        "dynamic_y": false
+      },
+      "status": "error",
+      "error_type": "ValueError",
+      "message": "音频长度不足，无法计算当前阶数的 LPC。",
+      "warnings": []
+    },
+    "minimum52": {
+      "rate": 16000,
+      "config": {
+        "order": 50,
+        "freq_max_hz": 8000,
+        "amp_min_db": -5.0,
+        "amp_max_db": 35.0,
+        "dynamic_y": false
+      },
+      "status": "returned",
+      "y_range": [
+        -5.0,
+        35.0
+      ],
+      "finite": true,
+      "warnings": []
+    },
+    "nan": {
+      "rate": 16000,
+      "config": {
+        "order": 50,
+        "freq_max_hz": 8000,
+        "amp_min_db": -5.0,
+        "amp_max_db": 35.0,
+        "dynamic_y": false
+      },
+      "status": "error",
+      "error_type": "ValueError",
+      "message": "LPC 求解失败: array must not contain infs or NaNs",
+      "warnings": []
+    },
+    "infinity": {
+      "rate": 16000,
+      "config": {
+        "order": 50,
+        "freq_max_hz": 8000,
+        "amp_min_db": -5.0,
+        "amp_max_db": 35.0,
+        "dynamic_y": false
+      },
+      "status": "error",
+      "error_type": "ValueError",
+      "message": "LPC 求解失败: array must not contain infs or NaNs",
+      "warnings": [
+        "invalid value encountered in subtract"
+      ]
+    }
+  },
+  "labels": {
+    "0.0:1.0": "ɑ̃˥+b",
+    "0.15:0.85": "ɑ̃˥+b",
+    "0.8:1.0": "末",
+    "0.1:0.2": "ɑ̃˥",
+    "0.2:0.4": "b",
+    "0.4:0.6": ""
+  },
+  "tiers": [
+    "phones",
+    "words",
+    "phones",
+    "phones"
+  ],
+  "png": {
+    "size": [
+      2400,
+      1350
+    ],
+    "dpi": [
+      299.9994,
+      299.9994
+    ],
+    "name": "LPC_Spectrum_合成_声_ɑ̃˥+b.png",
+    "pixel_sha256": "380e575a9ee38dadede06847948e64c1e9aac3d1079d1aacda63121f328c8e58"
+  },
+  "array_count": 38,
+  "value_count": 44497
+}

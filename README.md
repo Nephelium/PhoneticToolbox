@@ -1,5 +1,7 @@
 # PhoneticToolbox 3.0 · 开发工作台
 
+**M04 LPC谱图（2026-09-13）：** 已开始迁移，四功能组与V2说明书/源码已核对，12场景原V2双轮基准通过。当前为A基准verified，完整M04 in_progress，V3页面尚未实现。见[基准报告](docs/testing/m04-baseline-report.md)与[实施步骤](docs/plans/2026-09-13-m04-implementation.md)。
+
 **EGG开发态功能收口（2026-09-13）：** 六功能组与最后草稿/连续操作检查完成，开发态功能阶段verified。补齐LP阶数保存、重开及失败反馈，65项前端与23组Chrome通过。入口为`scripts/Start-Research-Workbench.ps1`，范围及限制见[收口报告](docs/testing/m03-dev-closeout-report.md)。完整模块的设备/生产/跨平台验收仍单列。
 
 **当前范围（2026-09-13）：** 按井井最新要求，近期只推进开发版，EXE封装、打包和相关探针暂停。以下候选范围为历史计划，未生成新的EXE。

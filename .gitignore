@@ -87,3 +87,6 @@ playwright-report/
 !docs/modules/evidence/M01-acceptance.csv
 # M03 deterministic public synthetic arrays only; private captures stay ignored.
 !/tests/fixtures/m03/EGG-SYN-*.npz
+
+# M04 original V2 captures contain deterministic public synthetic arrays only.
+!/tests/fixtures/m04/arrays.npz
