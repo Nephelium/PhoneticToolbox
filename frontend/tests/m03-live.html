@@ -4,5 +4,16 @@ const rpc=async data=>{const r=await fetch('/__m03',{method:'POST',headers:{'Con
 const buffer=b=>Uint8Array.from(atob(b),c=>c.charCodeAt(0)).buffer;
 const files={kind:'desktop',choose:purpose=>rpc({op:'choose',purpose}),list:()=>rpc({op:'list'}),read:async f=>{const r=await rpc({op:'read',id:f.id});return {buffer:buffer(r.base64),sha256:r.sha256};},dispose(){},tasks:{
 egg:(f,config,key)=>rpc({op:'egg',id:f.id,config:{...config,font:config.font??exportFontSnapshot()},key}),eggJobs:()=>rpc({op:'egg_jobs'}),eggFonts:font=>rpc({op:'egg_fonts',font}),job:id=>rpc({op:'job',id}),cancelJob:id=>rpc({op:'cancel_job',id}),retry:(id,key)=>rpc({op:'retry',id,key}),saveJob:(id,directory)=>rpc({op:'save_job',id,directory}),result:async(job,id)=>buffer((await rpc({op:'result',job,id})).base64)}};
+// Optional download capability exercises the web action with real managed bytes.
+// This owned local adapter does not stand in for hosted account/auth testing.
+if(new URLSearchParams(location.search).has('downloads')){
+  delete files.tasks.saveJob;
+  files.tasks.download=async(id,name)=>{
+    const jobs=await rpc({op:'egg_jobs'}),job=jobs.find(j=>j.result_manifest?.files?.some(f=>f.id===id));
+    if(!job)throw Error('结果文件不完整。');
+    const data=buffer((await rpc({op:'result',job:job.id,id})).base64),url=URL.createObjectURL(new Blob([data]));
+    const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  };
+}
 createApp({render:()=>h(Shell,{research:{key:'m03-live:M01',label:'本轮合成样例',files}})}).mount('#app');
 </script></body></html>

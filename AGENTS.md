@@ -1,6 +1,7 @@
 # PhoneticToolbox v3 — Agent 工作规则
 
 ## 0. 当前阶段与授权
+- 2026-09-13 井井继续授权E3。结果窗口读取/重读/迟到反馈已verified（限定Windows独立Chrome），见docs/testing/m03-result-feedback-report.md：错误在窗口内提示，旧读取/保存/下载反馈不能影响新窗口；64项前端、10组结果与4组试听Chrome回归通过，下载CSV实测哈希一致。故障/到期响应为受控注入，不冒充自然到期或生产认证验收。完整M03仍in_progress，下一项V2开发态功能清单集中核对及来源收口；EXE暂停，未DDL/push，不推进M04。
 - 2026-09-13 井井继续授权开发态E3。批次参数和提交失败反馈已verified（限定Windows独立Chrome），见docs/testing/m03-batch-feedback-report.md：错误参数不发任务，全部拒绝保留选择/旧批次入口，部分成功逐文件说明；64项前端、6组批次与3组字体Chrome回归通过。完整M03仍in_progress，下一项结果窗口读取失败/到期及剩余交互；本轮未复跑Qt。EXE暂停，不推进M04，未DDL或push。
 - 2026-09-13 最新范围调整：井井明确后续暂不考虑EXE，近期不需要打包。停止M03-F及其他EXE封装/构建/发行准备，不继续相关探针；后续推进开发态功能、交互与科学迁移。F1本轮仅生成筛选后的本地运行文件，首次迁移探针因缺numpy.testing失败，未构建任何EXE。新增探针脚本和output证据保留为未完成草稿，不称verified。以下F候选/探针下一步均为历史，恢复须用户另行要求。
 - 2026-09-13 井井继续授权E3。连续试听与IF角色修复现为verified（限定Windows开发态），见docs/testing/m03-playback-report.md。修正结果清单排序导致ORIG/IF试听标签对调、公共播放器归属和过期resume失败竞争，62项前端、Chrome真实节点样本/连续操作、9组Qt回归通过。完整M03仍in_progress，实际声卡/多屏DPI/来源尚待；F候选范围审阅已形成planned方案，见docs/plans/2026-09-13-m03-f-candidate-review.md，独立MKL运行时与后台字体尚未封装。未打包、DDL或push，不推进M04。

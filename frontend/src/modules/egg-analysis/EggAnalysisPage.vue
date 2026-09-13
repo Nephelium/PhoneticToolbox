@@ -24,7 +24,7 @@ import {defaults,batchDefaults,signature,taskConfig,validate,validateParameters,
 const props=defineProps<{context:ResearchContext;stateKey:string;active:boolean}>();const emit=defineEmits<{references:[];close:[]}>();
 const wave=workspace(props.stateKey),config=ref<EggTaskConfig>({...defaults(),...host.projects.read<Partial<EggTaskConfig>>('egg.config.'+props.stateKey,{})});
 const batchConfig=ref<EggTaskConfig>({...batchDefaults(),...host.projects.read<Partial<EggTaskConfig>>('egg.batch-config.'+props.stateKey,{})});
-const resultNames=ref<Record<string,string>>({}),resultError=ref(''),resultNotice=ref(''),savingResult=ref(false);
+const resultNames=ref<Record<string,string>>({}),resultError=ref(''),resultReadError=ref(''),resultLoading=ref(false),resultNotice=ref(''),savingResult=ref(false);
 const analysisAudio=ref<AudioAsset>();const inverseView=ref<components['schemas']['EggInverseData']>();
 const files=ref<ResearchFile[]>([]),source=ref<ResearchFile>(),sourceHash=ref(''),directory=ref(''),picker=ref<HTMLInputElement>();
 const jobs=ref<JobView[]>([]),labels=ref<Record<string,string>>(host.projects.read('egg.jobs.'+props.stateKey,{}));
@@ -111,15 +111,53 @@ async function batchSubmit(selected:ResearchFile[],settings:EggTaskConfig){
   }
 }
 async function cancelBatch(){batchEpoch++;for(const id of batchIds.value)await cancel(id);notice.value='已请求取消本次批量任务，已完成的结果保留。';}
-function closeResult(){viewEpoch++;resultJob.value=undefined;resultConfig.value=undefined;inverseView.value=undefined;for(const image of resultImages.value)release(image.url);resultImages.value=[];inverseWaves.value=[];stop();}
-async function view(job:JobView){closeResult();const ticket=viewEpoch;error.value='';try{const metadata=JSON.parse(new TextDecoder().decode(await readFile(job,'egg.ptb.json')));if(disposed||ticket!==viewEpoch)return;
-    if(metadata.config.mode==='preview'){epoch++;pending.value='';await showPreview(job,true,ticket);return;}
-    resultNames.value=metadata.export_names??{};resultError.value='';resultNotice.value='';resultJob.value=job;resultConfig.value=metadata.config;inverseView.value=metadata.inverse_view;
-    if(job.result_manifest?.kind==='managed_egg_files')for(const f of [...job.result_manifest.files.filter(f=>f.name.endsWith('.png')),...inverseAudioFiles(job.result_manifest.files)]){const raw=await readFile(job,f.name);if(disposed||ticket!==viewEpoch)return;if(f.name.endsWith('.png'))resultImages.value.push({name:resultNames.value[f.name]??f.name,url:makeUrl(raw)});else{const asset=await decodeWav(raw,f.name);if(disposed||ticket!==viewEpoch)return;inverseWaves.value.push({label:f.name==='egg_ORIG.wav'?'归一化分析音频':'IF 估计',state:{asset:markRaw(asset),start:0,end:asset.duration,channel:0,parameters:[],dirty:false,error:'',loading:false,zoom:1,offset:0}});}}}
-  catch(e){if(!disposed&&ticket===viewEpoch)error.value=String(e);}}
+function resultMessage(e:unknown){const message=e instanceof Error?e.message:String(e);return errors[message]??message;}
+function currentResult(ticket:number,id:string){return !disposed&&ticket===viewEpoch&&resultJob.value?.id===id;}
+function closeResult(){
+  viewEpoch++;resultJob.value=undefined;resultConfig.value=undefined;inverseView.value=undefined;
+  resultNames.value={};resultError.value='';resultReadError.value='';resultNotice.value='';resultLoading.value=false;savingResult.value=false;
+  for(const image of resultImages.value)release(image.url);resultImages.value=[];inverseWaves.value=[];stop();
+}
+async function view(job:JobView){
+  closeResult();const ticket=viewEpoch;error.value='';resultJob.value=job;resultLoading.value=true;let reading='参数快照';
+  try{
+    const metadata=JSON.parse(new TextDecoder().decode(await readFile(job,'egg.ptb.json')));
+    if(!currentResult(ticket,job.id))return;
+    if(metadata.config.mode==='preview'){
+      reading='分析预览';epoch++;pending.value='';await showPreview(job,true,ticket);
+      if(currentResult(ticket,job.id))closeResult();return;
+    }
+    resultNames.value=metadata.export_names??{};resultConfig.value=metadata.config;inverseView.value=metadata.inverse_view;
+    if(job.result_manifest?.kind==='managed_egg_files')for(const f of [...job.result_manifest.files.filter(f=>f.name.endsWith('.png')),...inverseAudioFiles(job.result_manifest.files)]){
+      reading=resultNames.value[f.name]??f.name;
+      const raw=await readFile(job,f.name);if(!currentResult(ticket,job.id))return;
+      if(f.name.endsWith('.png'))resultImages.value.push({name:reading,url:makeUrl(raw)});
+      else{
+        const asset=await decodeWav(raw,f.name);if(!currentResult(ticket,job.id))return;
+        inverseWaves.value.push({label:f.name==='egg_ORIG.wav'?'归一化分析音频':'IF 估计',state:{asset:markRaw(asset),start:0,end:asset.duration,channel:0,parameters:[],dirty:false,error:'',loading:false,zoom:1,offset:0}});
+      }
+    }
+  }catch(e){if(currentResult(ticket,job.id))resultReadError.value=`读取 ${reading} 失败：${resultMessage(e)}`;}
+  finally{if(currentResult(ticket,job.id))resultLoading.value=false;}
+}
 async function saveBatch(){if(savingBatch.value)return;savingBatch.value=true;error.value='';try{const grant=await props.context.files.choose?.('output');if(!grant||!tasks.value?.saveJob)return;const selected=[...completedBatch.value];let count=0;const failed:string[]=[];for(const job of selected){try{await tasks.value.saveJob(job.id,grant.id);count++;}catch{failed.push(labels.value[job.id]??job.id.slice(0,8));}}notice.value=`已保存 ${count} 个批次任务的完整结果。${failed.length?'未保存：'+failed.join('、'):''}`;}catch(e){error.value=String(e);}finally{savingBatch.value=false;}}
-async function saveResult(job:JobView){if(savingResult.value)return;savingResult.value=true;resultError.value='';resultNotice.value='';try{const grant=await props.context.files.choose?.('output');if(grant&&tasks.value?.saveJob){const result=await tasks.value.saveJob(job.id,grant.id);resultNotice.value=`已保存 ${result.count} 个结果文件。`;}else resultNotice.value='已取消保存，计算结果仍保留。';}catch(e){resultError.value=String(e);}finally{savingResult.value=false;}}
-async function download(id:string,name:string){try{await tasks.value?.download?.(id,resultNames.value[name]??name);}catch(e){resultError.value=String(e);}}
+async function saveResult(job:JobView){
+  if(savingResult.value||resultLoading.value)return;const ticket=viewEpoch;
+  savingResult.value=true;resultError.value='';resultNotice.value='';
+  try{
+    const grant=await props.context.files.choose?.('output');if(!currentResult(ticket,job.id))return;
+    if(grant&&tasks.value?.saveJob){
+      const result=await tasks.value.saveJob(job.id,grant.id);
+      if(currentResult(ticket,job.id))resultNotice.value=`已保存 ${result.count} 个结果文件。`;
+    }else resultNotice.value='已取消保存，计算结果仍保留。';
+  }catch(e){if(currentResult(ticket,job.id))resultError.value=resultMessage(e);}
+  finally{if(currentResult(ticket,job.id))savingResult.value=false;}
+}
+async function download(id:string,name:string){
+  const ticket=viewEpoch,jobId=resultJob.value?.id;if(!jobId||resultLoading.value)return;
+  try{await tasks.value?.download?.(id,resultNames.value[name]??name);}
+  catch(e){if(currentResult(ticket,jobId))resultError.value=resultMessage(e);}
+}
 onMounted(()=>{if(props.context.files.kind!=='desktop')void refresh();void poll();});const timer=setInterval(()=>void poll(),1500);
 onUnmounted(()=>{disposed=true;clearTimeout(gestureTimer);epoch++;viewEpoch++;batchEpoch++;clearInterval(timer);stop();for(const url of urls)URL.revokeObjectURL(url);});
 </script>
@@ -133,7 +171,7 @@ onUnmounted(()=>{disposed=true;clearTimeout(gestureTimer);epoch++;viewEpoch++;ba
 <details class="egg-history" open><summary>处理记录 · {{jobs.length}} 个任务</summary><p class="hint">已提交任务保存在当前项目。关闭模块后仍可恢复查看、取消、重试或保存已完成结果。</p><div class="egg-actions"><button v-if="batchBusy||batchIds.length" @click="cancelBatch">取消本次批量任务</button><button v-if="tasks?.saveJob&&completedBatch.length" :disabled="savingBatch" @click="saveBatch">保存本次批量结果（{{completedBatch.length}}）</button><button @click="poll">刷新记录</button><button @click="save">保存参数草稿</button></div><TaskPanel :tasks="jobViews" empty-title="尚无 EGG 任务" empty-text="更新分析、单文件导出及批量操作的进度会显示在这里。" @cancel="cancel" @retry="retry"/><div class="egg-result-links"><template v-for="job in jobs.filter(j=>j.state==='succeeded')" :key="job.id"><button @click="view(job)">查看 {{labels[job.id]??job.id.slice(0,8)}}</button></template></div></details>
 <EggBatchPanel v-if="batchOpen" :files="files" :config="batchConfig" :busy="batchBusy" :error="batchError" @close="batchOpen=false" @submit="batchSubmit"/>
 <ModalDialog v-if="help" title="EGG 使用说明" wide @close="help=false"><p>双声道默认左 EGG、右音频，可交换。各声道独立归一化至峰值 0.7。点击更新分析后，左侧查看 CQ/SQ 与语谱图，点击曲线区定位右侧微观中心。普通滚轮滚动页面，四图支持 Ctrl＋滚轮缩放、拖动平移，聚焦后方向键平移、加减键缩放；手势结束后更新。微观窗口支持 5–5000 ms，宽窗口沿用旧版抽点显示，事件位置保留。底部总览拖动选择分析区间。</p><p>默认 GCI 斜率、GOI 尺度 0.25，高通 25 Hz、低通 1000 Hz。峰显著度自动模式使用旧版局部窗口。修改任何分析参数后需更新；缺失 CQ/SQ 分别留空。</p><p>保存 CSV / 三图会创建当前选区的完整导出任务。完成后从处理记录查看，桌面选择目录保存，网页逐个下载。单文件 CSV 始终保留两类 F0，页面开关只控制显示。批次参数独立保存，默认同时保留两类 F0；完整滤波文件的 20 ms 平均绝对振幅静音遮罩仅作用于 CSV。</p><p>逆滤波适合稳定元音短片段，限 1 秒 / 48000 帧。输出包含归一化分析音频和简化闭相估计。当前单个分析文件限 120 秒 / 576 万帧，长录音可先在参数估计中切分。微观波形、事件与 CQ 的局部滤波范围沿用旧版，悬停四图区域可查看来源：CQ 使用 processed ±100 ms 重复滤波，微观显示使用 raw ±100 ms 滤波裁剪，事件使用 raw ±50 ms。GCI 实线、GOI 虚线。</p></ModalDialog>
-<ModalDialog v-if="resultJob" title="EGG 任务结果" wide @close="closeResult"><p v-if="resultError" role="alert" class="error">{{resultError}}</p><p v-if="resultNotice" role="status">{{resultNotice}}</p><p class="hint">任务 {{resultJob.id.slice(0,8)}} · 参数与结果均来自该次计算快照。</p><details><summary>参数快照</summary><pre>{{JSON.stringify(resultConfig,null,2)}}</pre></details><p v-if="resultConfig?.mode==='inverse'">原音频为归一化分析片段；IF 为简化闭相逆滤波估计。</p><EggInverseResult v-if="inverseView" :data="inverseView"/><section v-for="(item,i) in inverseWaves" :key="i"><h3>{{item.label}}</h3><WaveformViewport :state="item.state"/><AudioTransport :state="item.state" :active="false" compact/></section><figure v-for="image in resultImages" :key="image.name"><figcaption>{{image.name}} · 导出图</figcaption><img :src="image.url" :alt="image.name" class="egg-export-image"/></figure><template #footer><button v-if="tasks?.saveJob" :disabled="savingResult" @click="saveResult(resultJob)">选择目录保存完整结果</button><template v-if="tasks?.download&&resultJob.result_manifest?.kind==='managed_egg_files'"><button v-for="f in resultJob.result_manifest.files" :key="f.id" @click="download(f.id,f.name)">下载 {{resultNames[f.name]??f.name}}</button></template><button @click="closeResult">返回分析</button></template></ModalDialog>
+<ModalDialog v-if="resultJob" title="EGG 任务结果" wide @close="closeResult"><p v-if="resultLoading" role="status">正在读取结果…</p><p v-if="resultReadError" role="alert" class="error-banner">{{resultReadError}}</p><p v-if="resultError" role="alert" class="error-banner">{{resultError}}</p><p v-if="resultNotice" role="status">{{resultNotice}}</p><p class="hint">任务 {{resultJob.id.slice(0,8)}} · 参数与结果均来自该次计算快照。</p><details v-if="resultConfig"><summary>参数快照</summary><pre>{{JSON.stringify(resultConfig,null,2)}}</pre></details><p v-if="resultConfig?.mode==='inverse'">原音频为归一化分析片段；IF 为简化闭相逆滤波估计。</p><EggInverseResult v-if="inverseView" :data="inverseView"/><section v-for="(item,i) in inverseWaves" :key="i"><h3>{{item.label}}</h3><WaveformViewport :state="item.state"/><AudioTransport :state="item.state" :active="false" compact/></section><figure v-for="image in resultImages" :key="image.name"><figcaption>{{image.name}} · 导出图</figcaption><img :src="image.url" :alt="image.name" class="egg-export-image"/></figure><template #footer><button v-if="resultReadError" :disabled="resultLoading||savingResult" @click="view(resultJob)">重新读取结果</button><button v-if="tasks?.saveJob" :disabled="savingResult||resultLoading||!resultConfig" @click="saveResult(resultJob)">选择目录保存完整结果</button><template v-if="tasks?.download&&resultJob.result_manifest?.kind==='managed_egg_files'"><button v-for="f in resultJob.result_manifest.files" :key="f.id" :disabled="resultLoading||!resultConfig" @click="download(f.id,f.name)">下载 {{resultNames[f.name]??f.name}}</button></template><button @click="closeResult">返回分析</button></template></ModalDialog>
 </section></template>
 <style scoped>
 .egg-page{padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0;overflow:auto;flex:1}.egg-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.egg-heading h1{font-size:20px}.egg-actions,.egg-source,.egg-filter,.egg-filter label{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.egg-source select{flex:1;max-width:520px;min-width:170px}.egg-source>span{font-size:12px;color:var(--muted)}.egg-filter{font-size:12px}.egg-filter input[type=range]{width:65px}.egg-filter input[type=number]{width:67px;min-height:28px;padding:4px 6px}.egg-controls{background:var(--app);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;display:grid;gap:10px}.egg-overview{border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px}.egg-history{border-top:1px solid var(--border);padding:10px 0}.egg-history summary{cursor:pointer;font-weight:600}.egg-history :deep(.task-panel){max-height:280px;overflow:auto}.egg-result-links{display:flex;gap:6px;flex-wrap:wrap;max-height:160px;overflow:auto;margin-top:8px}.egg-result-links button{max-width:100%;overflow:hidden;text-overflow:ellipsis;display:block}.egg-export-image{width:100%;height:auto}pre{white-space:pre-wrap;overflow-wrap:anywhere}figure{margin:12px 0}@media(max-width:700px){.egg-page{padding:10px}.egg-heading{align-items:flex-start}.egg-source select{max-width:100%;flex-basis:100%}}
