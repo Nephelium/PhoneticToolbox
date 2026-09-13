@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type {Tier} from '../platform/research.ts';
 import {intervalLayout} from './interval-layout.ts';
-defineProps<{tiers:Tier[];start:number;end:number;selected:number;selectionStart:number;selectionEnd:number}>();
+withDefaults(defineProps<{tiers:Tier[];start:number;end:number;selected:number;selectionStart:number;selectionEnd:number;selectedTierLabel?:string}>(),{selectedTierLabel:'当前切分层'});
 const emit=defineEmits<{select:[tier:number,start:number,end:number]}>();
 </script>
 <template><section class="textgrid-timeline" aria-label="TextGrid 时间对齐标注">
 <div v-for="(tier,tierIndex) in tiers" :key="tierIndex" class="textgrid-tier" :class="{active:tierIndex===selected}">
-<header><strong>{{tier.name}}</strong><small>{{tierIndex===selected?'当前切分层 · ':''}}点击片段选区试听，缩放后可查看短标签</small></header>
+<header><strong>{{tier.name}}</strong><small>{{tierIndex===selected?selectedTierLabel+' · ':''}}点击片段选区试听，缩放后可查看短标签</small></header>
 <div class="textgrid-lane" :aria-label="tier.name+' 标注轨'">
 <button v-for="interval in intervalLayout(tier.intervals,start,end)" :key="interval.index" class="textgrid-interval" :class="{selected:interval.xmin===selectionStart&&interval.xmax===selectionEnd}" :style="{left:interval.left+'%',width:interval.width+'%'}" :data-xmin="interval.xmin" :data-xmax="interval.xmax" :title="(interval.text||'（空标签）')+' · '+interval.xmin.toFixed(6)+'–'+interval.xmax.toFixed(6)+' s'" :aria-label="tier.name+'：'+(interval.text||'空标签')+'，'+interval.xmin+' 到 '+interval.xmax+' 秒'" @click="emit('select',tierIndex,interval.xmin,interval.xmax)"><span class="ipa-text">{{interval.text}}</span></button>
 </div></div>

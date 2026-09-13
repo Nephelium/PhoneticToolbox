@@ -2,7 +2,7 @@
 import { computed,ref,onMounted,onUnmounted } from 'vue';import type { Workspace } from '../state/workspace.ts';import { envelope,selection,positionSelection } from '../platform/wav.ts';
 import SpectrogramViewport from './SpectrogramViewport.vue';import type {Spectrogram,SpectrogramView} from '../platform/research.ts';
 import {playback} from '../state/audio.ts';
-const props=defineProps<{state:Workspace;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;maxWindowSeconds?:number;compactOverview?:boolean;clickMovesSelection?:boolean}>();let anchor:number|null=null,anchorX=0,selectionLength=0,dragged=false;
+const props=defineProps<{state:Workspace;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;maxWindowSeconds?:number;compactOverview?:boolean;clickMovesSelection?:boolean;selectionRequiresShift?:boolean}>();let anchor:number|null=null,anchorX=0,selectionLength=0,dragged=false;
 const emit=defineEmits<{'selection-end':[start:number,end:number]}>();
 const viewport=ref<HTMLElement>(),width=ref(800);let observer:ResizeObserver;
 onMounted(()=>{observer=new ResizeObserver(entries=>{width.value=Math.max(100,Math.min(1600,Math.round(entries[0].contentRect.width)));});if(viewport.value)observer.observe(viewport.value);});
@@ -16,7 +16,7 @@ function path(points:[number,number][]) {return points.map(([lo,hi],i)=>`M${i/Ma
 function x(t:number){return Math.max(0,Math.min(1000,(t-left.value)/windowLength.value*1000));}
 function time(event:PointerEvent){const box=(event.currentTarget as Element).getBoundingClientRect();return left.value+Math.max(0,Math.min(1,(event.clientX-box.left)/box.width))*windowLength.value;}
 function down(event:PointerEvent){
-  if(event.button!==0)return;
+  if(event.button!==0||(props.selectionRequiresShift&&!event.shiftKey))return;
   anchor=time(event);anchorX=event.clientX;dragged=false;selectionLength=props.state.end-props.state.start;
   (event.currentTarget as Element).setPointerCapture(event.pointerId);
   if(!props.clickMovesSelection){props.state.start=anchor;props.state.end=anchor;}
@@ -75,11 +75,11 @@ function wheel(event:WheelEvent){if(!event.ctrlKey||!duration.value)return;event
 <button :disabled="state.zoom>=maxZoom" aria-label="放大波形" @click="zoom(state.zoom*2)">+</button>
 <button @click="zoom(1);state.offset=0">适合窗口</button>
 </div>
-<small><template v-if="clickMovesSelection">单击定位 · </template>拖动选区 · Ctrl＋滚轮缩放<span v-if="maxWindowSeconds"> · 最多 {{maxWindowSeconds}} 秒视窗</span></small>
+<small><template v-if="clickMovesSelection">单击定位 · </template>{{selectionRequiresShift?'Shift＋拖动选区':'拖动选区'}} · Ctrl＋滚轮缩放<span v-if="maxWindowSeconds"> · 最多 {{maxWindowSeconds}} 秒视窗</span></small>
 </div>
 <label v-if="state.zoom>1" class="pan-label">时间窗起点 <input v-model.number="state.offset" type="range" min="0" :max="duration-windowLength" :step="1/(state.asset?.sampleRate||1)" aria-label="平移波形时间窗"/>
 </label>
-<p v-if="!compactOverview" class="hint">拖动选区 · Ctrl＋滚轮缩放 · 双击{{maxWindowSeconds?'恢复总览':'显示全长'}}；时间控件可输入精确选区。</p>
+<p v-if="!compactOverview" class="hint">{{selectionRequiresShift?'Shift＋拖动选区':'拖动选区'}} · Ctrl＋滚轮缩放 · 双击{{maxWindowSeconds?'恢复总览':'显示全长'}}；时间控件可输入精确选区。</p>
 </div>
 </template>
 <style scoped>

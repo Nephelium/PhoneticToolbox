@@ -5,6 +5,8 @@ export type Spectrogram=components['schemas']['SpectrogramPreview'];
 export type ParameterTable=components['schemas']['ParameterTable'];
 export type ReconstructionConfig=components['schemas']['Spec2WavConfig'];
 export type EggTaskConfig=components['schemas']['EggTaskConfig'];
+export type LpcTaskConfig=components['schemas']['LpcTaskConfig'];
+export type LpcSpectrumData=components['schemas']['LpcSpectrumData'];
 export type EggPreviewData=components['schemas']['EggPreviewData'];
 export type FigureFontSnapshot=components['schemas']['FigureFontSnapshot'];
 export type FontPreflight=components['schemas']['FontPreflight'];
@@ -26,6 +28,9 @@ export interface ResearchTasks {
   egg?(file:ResearchFile,config:EggTaskConfig,key:string):Promise<JobView>;
   eggJobs?():Promise<JobView[]>;
   eggFonts?(font:FigureFontSnapshot):Promise<FontPreflight>;
+  lpc?(file:ResearchFile,textgrid:ResearchFile|null,config:LpcTaskConfig,key:string):Promise<JobView>;
+  lpcJobs?():Promise<JobView[]>;
+  lpcFonts?(font:FigureFontSnapshot):Promise<FontPreflight>;
   reconstructions?():Promise<JobView[]>;
   cancelJob?(id:string):Promise<JobView>;
   saveJob?(id:string,directory:string):Promise<{count:number;saved:string[]}>;
@@ -74,6 +79,9 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
     async egg(file,config,key){if(!file.sha256)throw Error('音频缺少校验值。');const {exportFontSnapshot}=await import('../state/fonts.ts');return (await request('jobs/egg/create',undefined,'POST',{project_id:project,idempotency_key:key,audio:{asset_id:file.id,sha256:file.sha256},config:{...config,font:config.font??exportFontSnapshot()}})).json();},
     async eggJobs(){const data:components['schemas']['JobList']=await(await request('jobs?project_id='+encodeURIComponent(project))).json();return data.jobs.filter(j=>j.operation==='egg_analysis');},
     async eggFonts(font){return (await request('jobs/egg/fonts',undefined,'POST',font)).json();},
+    async lpc(file,textgrid,config,key){if(!file.sha256||(textgrid&&!textgrid.sha256))throw Error('文件缺少校验值，请刷新。');return (await request('jobs/lpc/create',undefined,'POST',{project_id:project,idempotency_key:key,audio:{asset_id:file.id,sha256:file.sha256},textgrid:textgrid?{asset_id:textgrid.id,sha256:textgrid.sha256}:null,config})).json();},
+    async lpcJobs(){const data:components['schemas']['JobList']=await(await request('jobs?project_id='+encodeURIComponent(project))).json();return data.jobs.filter(j=>j.operation==='lpc_analysis');},
+    async lpcFonts(font){return (await request('jobs/lpc/fonts',undefined,'POST',font)).json();},
     async reconstructions(){const data:components['schemas']['JobList']=await(await request('jobs?project_id='+encodeURIComponent(project))).json();return data.jobs.filter(j=>j.operation==='spectrogram_to_audio');},
     async cancelJob(id){return (await request('jobs/'+encodeURIComponent(id)+'/cancel',undefined,'POST')).json();},
     async result(_job,id,sha){const response=await request('assets/'+encodeURIComponent(id)+'/content');const raw=await response.arrayBuffer();if(raw.byteLength>64_000_000||await sha256(raw)!==sha)throw Error('结果校验失败。');return raw;},

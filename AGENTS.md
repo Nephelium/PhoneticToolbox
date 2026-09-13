@@ -1,6 +1,7 @@
 # PhoneticToolbox v3 — Agent 工作规则
 
 ## 0. 当前阶段与授权
+- 2026-09-13 井井在C后继续授权。M04-D现为verified（限定Windows独立Chrome/真实本机任务与MKL子进程），见docs/testing/m04-ui-report.md。页面接入V3公共波形/标注/频谱/播放/任务与字体，24组Chrome、69项前端及13项Python通过；时间频率分离、Shift选区、历史/草稿/取消/迟到归属/保存下载和小窗滚动已验。公共刻度大字号边距修正并复验共享手势。完整M04仍in_progress，下一项E的托管网页/自然录音及20项收口。未Qt/EXE/DDL/push，不推进M05。
 - 2026-09-13 井井在B后确认继续。M04-C现为verified（限定Windows任务/导出/本地HTTP与服务器真实PG认证ASGI），见docs/testing/m04-jobs-report.md。104项科学导出、139项共享契约/任务、2项保存与65项前端检查通过；PNG/JSON/选区WAV完整发布，取消/30秒超时/故障回收、800万帧尾部ROI、双账号/配额/受控到期通过。仅重装项目兼容环境核心wheel，第三方包/V2不变，未DDL/push/EXE。完整M04仍in_progress，下一项D的V3页面、字体预检与真实浏览器交互。
 - 2026-09-13 井井授权继续M04-B并追加允许LPC学术引用、代码出处有界查找。B现为verified（限定Windows纯核心/独立wheel目标目录），73项源码与安装包检查通过，7份V2来源哈希不变，见docs/testing/m04-core-report.md。原样迁移与公开验证分开提交，保留原计算；实测单次ROI上限48,000样本，计算前后协作取消已实现，进程硬预算在C实施。Makhoul(1975)及实际依赖已登记，更早代码来源unknown不阻挡功能。完整M04仍in_progress，下一项C任务/PNG导出，页面未接入；EXE/DDL/push/M05不推进。
 - 2026-09-13 井井在EGG开发态收口后明确继续，已授权推进M04 LPC谱图。M04-A现为verified（限定Windows原V2数值/服务文件/PNG基准），12场景、38数组44,497值双轮逐字节一致，见docs/testing/m04-baseline-report.md；7份原文件哈希不变。完整M04为in_progress，V3核心/任务/页面尚未实现，下一步按docs/plans/2026-09-13-m04-implementation.md进入B纯核心及预算。此前不推进M04为历史边界；M05不推进，引用/EXE继续暂停，未DDL/push。

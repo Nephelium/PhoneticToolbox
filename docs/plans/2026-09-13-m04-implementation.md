@@ -20,7 +20,7 @@
 | D 页面 | `frontend/src/modules/lpc-spectrum/`、公共波形可选适配、平台能力及页面注册 | 四功能组完整，原有模块手势不受影响，Chrome真实任务及小窗/浅深色/草稿检查 |
 | E 收口 | 使用说明、验收报告、功能矩阵 | A01–A20有明确证据和未测边界，开发态阶段收口 |
 
-A已完成限定基准，见 [报告](../testing/m04-baseline-report.md)。B纯核心现为限定Windows verified，见[核心报告](../testing/m04-core-report.md)；C任务/导出已限定Windows verified，见[任务报告](../testing/m04-jobs-report.md)；D–E尚未实现，不能将导出图称为V3交互页面。
+A已完成限定基准，见 [报告](../testing/m04-baseline-report.md)。B纯核心现为限定Windows verified，见[核心报告](../testing/m04-core-report.md)；C任务/导出已限定Windows verified，见[任务报告](../testing/m04-jobs-report.md)；D页面已限定Windows独立Chrome verified，见[页面报告](../testing/m04-ui-report.md)。下一项E托管网页/自然录音与20项收口，完整M04仍in_progress。
 
 ## 20项验收
 
@@ -60,3 +60,7 @@ m04/1单文件请求包含WAV引用、可选TextGrid引用、显式ROI、tier和
 复用M03兼容运行环境，LPC独立固定入口；核心wheel更新仅限本项目m03-compatible，第三方依赖不变。整份输入64MB、最多800万帧和8声道、8–96kHz，读取后只复制/转换ROI（最多48000帧），不对整份文件做LPC。TextGrid限2MB并复用已有解析器。单子进程30秒/2GB、结果8MB，任务截止300秒， scratch与结果占用沿用现有计量。首次缺字体以明确错误结束，不发布半套结果。
 
 定向命令：`pytest backend/tests/test_m04_contract.py backend/tests/test_m04_exports.py`；`scripts/verify_m04_jobs.py`（实际本地HTTP/存储/子进程/保存/取消/重试/故障）；`scripts/verify_m04_server.py`（项目专用测试PG、双账号与结果隔离/配额/到期）。协议生成检查、前端typecheck与构建。接口和导出验收不代表D页面或EXE完成。
+
+## D 页面实施（2026-09-13）
+
+井井在C交付后继续授权。文件为 `frontend/src/modules/lpc-spectrum/`、`platform/research.ts`、`platform/desktop.ts`、`AppShell.vue` 及公共波形可选Shift行为。详见ADR-049。复用真实任务/字体/保存接口，原始波形、频谱、参数、任务历史置于紧凑可滚动主区，TextGrid及文件放左栏。验证 `npm test`、`npm run typecheck`、`npm run build`，独立Chrome用实际TaskBridge/兼容子进程与合成输入检查计算、保存、切换、取消、草稿和小窗。托管认证联合与完整A01–A20收口留E，不把本机浏览器桥接称为托管部署验收。

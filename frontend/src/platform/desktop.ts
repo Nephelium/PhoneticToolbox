@@ -31,6 +31,7 @@ export async function initializePlatform(){
   const tasks:ResearchTasks={parent:file=>task({op:'parent',id:file.id}),submit:(operation,inputs,config,layer,key)=>task({op:'submit',operation,inputs:inputs.map(item=>Object.fromEntries(Object.entries(item).filter(([,v])=>v!=null).map(([role,file])=>[role,role==='parent_result'?file:(file as {id:string}).id]))),config,layer,idempotency_key:key}),
     reconstruct:(file,config,key)=>task({op:'reconstruct',id:file.id,config,key}),reconstructions:()=>task({op:'reconstructions'}),cancelJob:id=>task({op:'cancel_job',id}),saveJob:(id,directory)=>task({op:'save_job',id,directory}),
     egg:async(file,config,key)=>{const {exportFontSnapshot}=await import('../state/fonts.ts');return task({op:'egg',id:file.id,config:{...config,font:config.font??exportFontSnapshot()},key});},eggJobs:()=>task({op:'egg_jobs'}),eggFonts:font=>task({op:'egg_fonts',font}),
+    lpc:(file,textgrid,config,key)=>task({op:'lpc',id:file.id,textgrid:textgrid?.id,config,key}),lpcJobs:()=>task({op:'lpc_jobs'}),lpcFonts:font=>task({op:'lpc_fonts',font}),
     async result(job,id,sha){const value=await task<{base64:string;sha256:string}>({op:'result',job,id});if(value.sha256!==sha)throw Error('结果来源已变化。');const text=atob(value.base64);return Uint8Array.from(text,c=>c.charCodeAt(0)).buffer;},
     list:()=>task({op:'list'}),get:id=>task({op:'get',id}),cancel:id=>task({op:'cancel',id}),job:id=>task({op:'job',id}),
     retry:(id,key)=>task({op:'retry',id,key}),save:(id,directory)=>task({op:'save',id,directory})};

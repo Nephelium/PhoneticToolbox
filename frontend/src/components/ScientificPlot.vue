@@ -6,7 +6,7 @@ const props=withDefaults(defineProps<{title:string;x:[number,number];y:[number,n
 const emit=defineEmits<{seek:[time:number];zoom:[factor:number];pan:[delta:number]}>();const el=ref<HTMLElement>();const width=ref(500);let observer:ResizeObserver;const clip='plot-'+useId();
 onMounted(()=>{observer=new ResizeObserver(e=>width.value=Math.max(180,e[0].contentRect.width));if(el.value)observer.observe(el.value);});onUnmounted(()=>observer?.disconnect());
 const fontSize=computed(()=>fontPayload.value?.size??12);const chartHeight=computed(()=>Math.max(props.height,6*fontSize.value+40));
-const left=computed(()=>Math.max(54,(fontPayload.value?.size??12)*3.2)),top=computed(()=>(fontPayload.value?.size??12)+4),bottom=computed(()=>(fontPayload.value?.size??12)+22);const plotWidth=computed(()=>Math.max(1,width.value-left.value-(props.right?left.value:16)));const plotHeight=computed(()=>chartHeight.value-top.value-bottom.value);
+const left=computed(()=>Math.max(54,Math.max(...ticks(props.y).map(v=>label(v).length),...(props.right?ticks(props.right).map(v=>label(v).length):[]))*fontSize.value*.66+14)),top=computed(()=>fontSize.value+4),bottom=computed(()=>fontSize.value*2+22);const plotWidth=computed(()=>Math.max(1,width.value-left.value-(props.right?left.value:16)));const plotHeight=computed(()=>chartHeight.value-top.value-bottom.value);
 const X=(v:number)=>left.value+(v-props.x[0])/(props.x[1]-props.x[0])*plotWidth.value;
 const Y=(v:number,right=false)=>{const r=right&&props.right?props.right:props.y;return top.value+(r[1]-v)/(r[1]-r[0])*plotHeight.value;};
 const ticks=(range:[number,number],count=5)=>Array.from({length:count},(_,i)=>range[0]+i/(count-1)*(range[1]-range[0]));
@@ -36,7 +36,7 @@ function keys(event:KeyboardEvent){if(!props.interactive)return;const delta=(pro
 <rect :x="left" :y="top" :width="plotWidth" :height="plotHeight" fill="none" stroke="var(--border)"/>
 <text v-for="v in ticks(y)" :key="'l'+v" :x="left-7" :y="Y(v)+4" text-anchor="end">{{label(v)}}</text>
 <text v-for="v in right?ticks(right):[]" :key="'r'+v" :x="left+plotWidth+7" :y="Y(v,true)+4">{{label(v)}}</text>
-<text v-for="(v,i) in xTicks" :key="'x'+v" :x="X(v)" :y="chartHeight-14" :text-anchor="i===0?'start':i===xTicks.length-1?'end':'middle'">{{label(v)}}</text>
+<text v-for="(v,i) in xTicks" :key="'x'+v" :x="X(v)" :y="chartHeight-fontSize-10" :text-anchor="i===0?'start':i===xTicks.length-1?'end':'middle'">{{label(v)}}</text>
 <text :x="left" :y="fontSize">{{unit}}</text><text v-if="rightUnit" :x="left+plotWidth" :y="fontSize" text-anchor="end">{{rightUnit}}</text><text :x="width-4" :y="chartHeight-1" text-anchor="end">{{xUnit}}</text>
 </svg></div></template>
 <style scoped>

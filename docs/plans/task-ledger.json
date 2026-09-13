@@ -531,7 +531,8 @@
       "execution_evidence": [
         "docs/testing/m04-baseline-report.md",
         "docs/testing/m04-core-report.md",
-        "docs/testing/m04-jobs-report.md"
+        "docs/testing/m04-jobs-report.md",
+        "docs/testing/m04-ui-report.md"
       ]
     },
     {

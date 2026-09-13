@@ -5,6 +5,7 @@ import VocalTractPage from '../modules/vocal-tract/VocalTractPage.vue';
 import ParameterEstimationPage from '../modules/parameter-estimation/ParameterEstimationPage.vue';
 import ParameterDisplayPage from '../modules/parameter-display/ParameterDisplayPage.vue';
 import EggAnalysisPage from '../modules/egg-analysis/EggAnalysisPage.vue';
+import LpcSpectrumPage from '../modules/lpc-spectrum/LpcSpectrumPage.vue';
 import Spec2WavPage from '../modules/spectrogram-to-audio/Spec2WavPage.vue';
 import {m01State,saveM01,forgetM01} from '../modules/parameter-estimation/store.ts';
 import {dirty} from '../modules/parameter-estimation/state.ts';
@@ -20,6 +21,7 @@ const previewKey=(id:string)=>props.research?researchContext.value.key.replace(/
 const m01=computed(()=>m01State(researchContext.value.key));
 const m10Dirty=ref(false);
 const m03Page=ref<{save:()=>boolean}>();
+const m04Page=ref<{save:()=>boolean}>();
 const m02Page=ref<{save:()=>boolean}>();
 const moduleDirty=(id:string)=>id==='M10'?m10Dirty.value:id==='M01'?dirty(m01.value):!!states[previewKey(id)]?.dirty;
 const recordingEntry=location.hash==='#M10';
@@ -34,7 +36,7 @@ const modal=ref(''),closing=ref(''),notice=ref('');const referencesId=ref<string
 function open(id:string){stop();if(!tabs.value.includes(id))tabs.value.push(id);active.value=id;if(id!=='home'){if(id!=='M01')workspace(previewKey(id));recent.value=[id,...recent.value.filter(x=>x!==id)].slice(0,5);host.projects.write('recent',recent.value);}}
 function remove(id:string){stop();if(id==='M10')m10Dirty.value=false;const index=tabs.value.indexOf(id);tabs.value=tabs.value.filter(x=>x!==id);if(id==='M01')forgetM01(researchContext.value.key);else delete states[previewKey(id)];if(active.value===id)active.value=tabs.value[Math.max(0,index-1)];closing.value='';void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
 function close(id:string){notice.value='';if(moduleDirty(id))closing.value=id;else remove(id);}
-function saveClose(){if(closing.value==='M03'){if(m03Page.value?.save())remove('M03');else notice.value='参数草稿保存失败，标签和编辑仍保留。请检查本机存储后重试。';return;}if(closing.value==='M02'){if(m02Page.value?.save())remove('M02');return;}if(closing.value==='M10'){notice.value='请返回关键帧，保存或取消正在编辑的姿势后再关闭。';return;}if(closing.value==='M01'&&m01.value.drawer){notice.value='请先应用或取消参数/设置对话框中的编辑，再保存关闭。';return;}if(closing.value==='M01'?saveM01(researchContext.value.key):saveDraft(previewKey(closing.value)))remove(closing.value);else notice.value='本机草稿保存失败，标签仍保留。请检查浏览器存储权限。';}
+function saveClose(){if(closing.value==='M04'){if(m04Page.value?.save())remove('M04');else notice.value='LPC 参数草稿无效或保存失败，请返回模块检查。';return;}if(closing.value==='M03'){if(m03Page.value?.save())remove('M03');else notice.value='参数草稿保存失败，标签和编辑仍保留。请检查本机存储后重试。';return;}if(closing.value==='M02'){if(m02Page.value?.save())remove('M02');return;}if(closing.value==='M10'){notice.value='请返回关键帧，保存或取消正在编辑的姿势后再关闭。';return;}if(closing.value==='M01'&&m01.value.drawer){notice.value='请先应用或取消参数/设置对话框中的编辑，再保存关闭。';return;}if(closing.value==='M01'?saveM01(researchContext.value.key):saveDraft(previewKey(closing.value)))remove(closing.value);else notice.value='本机草稿保存失败，标签仍保留。请检查浏览器存储权限。';}
 function refs(id?:string){referencesId.value=id;modal.value='references';}
 function tabKey(event:KeyboardEvent){let n=tabs.value.indexOf(active.value);if(event.key==='ArrowRight')n=(n+1)%tabs.value.length;else if(event.key==='ArrowLeft')n=(n-1+tabs.value.length)%tabs.value.length;else if(event.key==='Home')n=0;else if(event.key==='End')n=tabs.value.length-1;else return;event.preventDefault();open(tabs.value[n]);void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
 function beforeUnload(event:BeforeUnloadEvent){if(dirty(m01.value)||tabs.value.some(id=>moduleDirty(id))){event.preventDefault();event.returnValue='';}}
@@ -103,7 +105,7 @@ const modalTitle=computed(()=>({settings:'工作台设置',help:'使用说明',u
 <span class="host-badge">{{research?'网页项目':host.kind==='desktop'?'本地桌面':'浏览器预览'}}</span>
 </header>
 <button v-if="research" class="project-return" @click="emit('leaveProject')">← 返回项目与文件管理 · {{research.label}}</button>
-<main id="main-content" :class="{'pane-workspace':['M01','M02','M03','M09','M10'].includes(active)}" tabindex="-1" role="tabpanel" :aria-labelledby="'tab-'+active">
+<main id="main-content" :class="{'pane-workspace':['M01','M02','M03','M04','M09','M10'].includes(active)}" tabindex="-1" role="tabpanel" :aria-labelledby="'tab-'+active">
 <div v-if="active==='home'" class="home-page">
 <header class="welcome">
 <div class="welcome-copy">
@@ -168,18 +170,19 @@ const modalTitle=computed(()=>({settings:'工作台设置',help:'使用说明',u
 </footer>
 </div>
 <ParameterEstimationPage v-else-if="current?.id==='M01'" :key="researchContext.key" :context="researchContext" @references="refs('M01')"/>
-<WorkspaceView v-else-if="current&&!['M02','M03','M09','M10'].includes(current.id)" :key="current.id" :module="current" :state-key="previewKey(current.id)" @references="refs(current?.id)"/>
+<WorkspaceView v-else-if="current&&!['M02','M03','M04','M09','M10'].includes(current.id)" :key="current.id" :module="current" :state-key="previewKey(current.id)" @references="refs(current?.id)"/>
 <ParameterDisplayPage v-if="tabs.includes('M02')" v-show="active==='M02'" ref="m02Page" :key="researchContext.key+':M02'" :active="active==='M02'" :context="researchContext" :state-key="previewKey('M02')" @references="refs('M02')" @close="close('M02')"/>
 <EggAnalysisPage v-if="tabs.includes('M03')" v-show="active==='M03'" ref="m03Page" :key="researchContext.key+':M03'" :active="active==='M03'" :context="researchContext" :state-key="previewKey('M03')" @references="refs('M03')" @close="close('M03')"/>
+<LpcSpectrumPage v-if="tabs.includes('M04')" v-show="active==='M04'" ref="m04Page" :key="researchContext.key+':M04'" :active="active==='M04'" :context="researchContext" :state-key="previewKey('M04')" @references="refs('M04')" @close="close('M04')"/>
 <Spec2WavPage v-if="tabs.includes('M09')" v-show="active==='M09'" :key="researchContext.key+':M09'" :context="researchContext" :state-key="previewKey('M09')" @references="refs('M09')" @close="close('M09')"/>
 <VocalTractPage v-if="tabs.includes('M10')" v-show="active==='M10'" :active="active==='M10'" @references="refs('M10')" @close="close('M10')" @dirty="m10Dirty=$event"/>
 </main>
-<div v-if="current&&!['M03','M10'].includes(current.id)" class="global-transport">
+<div v-if="current&&!['M03','M04','M10'].includes(current.id)" class="global-transport">
 <AudioTransport :state="current.id==='M01'?m01.wave:workspace(previewKey(current.id))" :active="true"/>
 </div>
 <div class="statusbar">
 <span>
-<span class="status-dot"/>{{current?.id==='M01'?'参数估计 · 文件、试听与任务':current?.id==='M02'?'参数显示 · 原帧与多图窗':current?.id==='M03'?'EGG · 接触商与声门事件':current?.id==='M09'?'语谱图重建 · 近似相位恢复':current?.id==='M10'?'声道工作台 · VTL 2.4':current?'公共预览就绪 · 分析功能待接入':'就绪 · 选择工具开始'}}</span>
+<span class="status-dot"/>{{current?.id==='M01'?'参数估计 · 文件、试听与任务':current?.id==='M02'?'参数显示 · 原帧与多图窗':current?.id==='M03'?'EGG · 接触商与声门事件':current?.id==='M04'?'LPC · 线性预测谱包络':current?.id==='M09'?'语谱图重建 · 近似相位恢复':current?.id==='M10'?'声道工作台 · VTL 2.4':current?'公共预览就绪 · 分析功能待接入':'就绪 · 选择工具开始'}}</span>
 <span>{{research?'当前账号的项目资源':'本机文件 · 无自动上传'}}</span>
 </div>
 </div>
@@ -228,6 +231,9 @@ const modalTitle=computed(()=>({settings:'工作台设置',help:'使用说明',u
 <h3>参数显示：已有结果与多图窗</h3>
 <p>选择 WAV 目录和参数目录，优先关联同名 SQLite，也可手动选择 XLSX。参数沿用原时间和缺失值，读取限 16 MB / 20 万单元格，不执行表内公式。默认所有未校正参数叠加在一个绘图区，用颜色、线型和图例区分；共用纵轴，量级差距较大时沿用 v2 自动双轴。参数图 Ctrl＋滚轮缩放，普通滚轮滚动内容、左键拖动平移、Shift＋拖动选区。</p>
 <p>右侧可搜索、勾选多个参数，新建图窗后批量分配。reaper / correction 只筛选候选项；合并图窗保留曲线。时间窗和选区同步，Ctrl+滚轮缩放，波形工具可平移。每张图可放大并保存参数 SVG，也可保存白底300dpi整幅 PNG，包含波形、标注、已开启且完成的语谱图和此参数图。底部播放条试听。</p>
+<h3>LPC 谱图：短时选区与谱包络</h3>
+<p>选择 WAV 及可选 TextGrid，按住 Shift 拖动框选或输入起止秒数。清除选区后分析当前可见时间窗，单次最多 48,000 样本。默认 50 阶、8000 Hz、−5 至 35 dB；动态纵轴按谱值自动留出余量。切换波形与频谱不重算，频谱缩放不改变音频时间范围。</p>
+<p>波形试听原始所选声道，频谱试听任务的单声道均值片段。参数改变后旧图保留并提示需更新。结果提供 300 DPI 白底黑线 PNG、选区 WAV 与含全部谱值、参数及来源的 JSON，可从历史任务恢复并保存。</p>
 <h3>语谱图转音频：校正与重建</h3>
 <p>导入灰度 PNG/JPEG/BMP，桌面也可主动截图。按左上、右上、右下、左下选四点，填写图内时间、频率和灰度标定，设置窗长、迭代和种子后开始重建。网页截图先保存并上传到项目。</p>
 <p>结果提供 WAV、校正/重建 PNG 和来源 JSON。固定种子方便复核，非零频率起点采用频带插值并低频补零。输出时长可能因原帧步长取整稍短于标定时长。图像缺少相位，声音仅为近似重建；显示削波样本数，不能视为原录音恢复。</p>
