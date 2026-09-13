@@ -1,0 +1,25 @@
+{
+  "module": "M04",
+  "date": "2026-09-13",
+  "direct_source": "PhoneticToolbox V2 local checkout",
+  "source_hashes": {
+    "phonetic_toolbox/core/acoustic/lpc.py": "375d4358dbfceff91bee14172d3018971889e7f0a9d6d01984bd81d02e33abcf",
+    "phonetic_toolbox/services/lpc_service.py": "6c4f98036f229439c7d47704dccf1a918a8c5ba905b556079dd0598e14b4240b",
+    "phonetic_toolbox/models/lpc_models.py": "617ef53a437a3842094e0c59e7dd147e6610925b87d19d53a717aff4bd6b7f42",
+    "phonetic_toolbox/gui/widgets/lpc_spectrum_widget.py": "6075118585718c790abd0b8416ddd6a536ea074a6a1adb662a2dfce1a5f242e5",
+    "phonetic_toolbox/services/io/wav.py": "f970a73d886e029991bb64615f1f117830629d8ed45a83a6ec3ce2a19f01f008",
+    "phonetic_toolbox/services/io/textgrid.py": "2c0ce76475c6fe5a649b9d3a68916447c2cf3bbef3acd8b7d8be4a84316e3425",
+    "Phonetic_Export/index.html": "a46c984929bcd8073ff1daf4e6b382a6685d4ca19e0fee0e29de3ecf0fb39ad5"
+  },
+  "local_history": "f6108ff: initial repository import; no earlier authorship history available",
+  "original_external_code_source": "unknown",
+  "search": "Local source and Git history; exact public query compute_lpc_spectrum solve_toeplitz returned no match. No authorship inferred.",
+  "destination": "packages/phonetic_core/src/phonetic_core/lpc",
+  "changes": "Numerical function preserved; service rules separated from WAV/TextGrid I/O and plotting.",
+  "academic_reference": "REF-MAKHOUL-1975-LPC",
+  "runtime_dependencies": [
+    "M01-PY-NUMPY",
+    "M01-PY-SCIPY"
+  ],
+  "implementation_blocked": false
+}

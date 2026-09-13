@@ -1,0 +1,10 @@
+M04 local migration of V2 LPC spectrum code, 2026-09-13.
+Direct source: core/acoustic/lpc.py, services/lpc_service.py and services/io/wav.py.
+Source hashes and bounded origin search: third_party/m04-migration.json.
+The NumPy/SciPy numerical steps are retained; this module does not call Praat.
+Method reference: John Makhoul (1975), Linear Prediction: A Tutorial Review,
+Proceedings of the IEEE 63(4), 561-580. DOI: 10.1109/PROC.1975.9792.
+The paper is a method reference, not evidence of the local code's authorship.
+Earlier external code origin is unknown after local history and public lookup.
+This does not block development under the user's instruction. No additional
+redistribution rights are inferred. Third-party library licenses remain applicable.

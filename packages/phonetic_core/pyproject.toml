@@ -11,6 +11,7 @@ dependencies = []
 
 [project.optional-dependencies]
 acoustic = ["numpy==2.2.6", "scipy==1.16.3", "praat-parselmouth==0.4.7", "pandas==2.3.3"]
+lpc = ["numpy==2.2.6", "scipy==1.16.3"]
 egg = ["numpy==2.2.6", "scipy==1.16.3", "praat-parselmouth==0.4.7"]
 
 [tool.setuptools.packages.find]
@@ -19,3 +20,5 @@ where = ["src"]
 [tool.setuptools.package-data]
 "phonetic_core.acoustic" = ["data/*.mat", "NOTICE.txt", "licenses/*"]
 "phonetic_core.egg" = ["NOTICE.txt"]
+
+"phonetic_core.lpc" = ["NOTICE.txt"]
