@@ -11,3 +11,6 @@ test('stale signature detects every scientific setting and ignores font snapshot
 test('sample-rate and selection budgets reject invalid views',()=>{assert.doesNotThrow(()=>validate(defaults(),.8,44100));assert.throws(()=>validate({...defaults(),roi_end:NaN},.8,44100));assert.throws(()=>validate(defaults(),121,44100));assert.throws(()=>validate({...defaults(),lowpass_cutoff:4000},.8,8000));assert.throws(()=>validate({...defaults(),roi_start:.5,roi_end:.4},.8,44100));});
 
 test('micro numeric input shares wheel limits and rejects non-finite widths',()=>{for(const width of [5,5000])assert.doesNotThrow(()=>validate({...defaults(),micro_width_ms:width},6.4,44100));for(const width of [4.99,5000.01,NaN,Infinity])assert.throws(()=>validate({...defaults(),micro_width_ms:width},6.4,44100));});
+
+import {inverseAudioFiles} from '../src/modules/egg-analysis/state.ts';
+test('IF player roles follow explicit file names despite sorted manifest order',()=>{const files=[{name:'egg_IF.wav',id:'if'},{name:'egg.ptb.json',id:'meta'},{name:'egg_ORIG.wav',id:'original'}];assert.deepEqual(inverseAudioFiles(files).map(f=>f.id),['original','if']);assert.equal(files[0].id,'if');});

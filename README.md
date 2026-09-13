@@ -1,5 +1,7 @@
 # PhoneticToolbox 3.0 · 开发工作台
 
+**EGG试听修复（2026-09-13）：** IF原音频/估计按文件角色绑定播放，修正清单排序导致的标签对调；两条试听可直接切换，旧设备请求失败不会打断新播放。[限定开发态验收](docs/testing/m03-playback-report.md)通过，[EXE候选范围](docs/plans/2026-09-13-m03-f-candidate-review.md)仍planned。
+
 **EGG导出字体（2026-09-12）：** 单文件三图与批次带图提交前检查实际计算环境字体，缺失时保留分析/批次选择并提示；纯CSV与逆滤波不受字体缺失阻断。[限定Windows开发态验收](docs/testing/m03-font-preflight-report.md)已通过。
 
 **EGG长录音（2026-09-12）：** 当前开发版支持最长120秒且576万帧，保留全文件处理与末尾定位、整段导出。[限定Windows验收](docs/testing/m03-long-report.md)通过，剩余交互/来源收口及冻结EXE仍待。
