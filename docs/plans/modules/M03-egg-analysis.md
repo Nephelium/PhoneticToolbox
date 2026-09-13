@@ -1,5 +1,7 @@
 # M03 · EGG 信号分析迁移计划
 
+2026-09-13最新：开发态功能阶段已[收口](../../testing/m03-dev-closeout-report.md)，下文早期planned页面/字体已由各专项覆盖。完整M03仍in_progress，独立设备/生产/跨平台未扩大；引用及EXE暂停。
+
 状态：in_progress，M03-A/B/C已完成限定Windows独立基准、纯核心及开发态任务/文件/数值导出，见[C报告](../../testing/m03-jobs-report.md)；公共字体、页面/整批目录交互和EXE仍planned。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
 2026-09-12已完成说明书3.1–3.4与源码逐组审阅，见[源码映射](../../modules/evidence/M03-source-map.md)与[文件级实施计划](../2026-09-12-m03-implementation.md)。初审列出9项差异及30项验收设计，M03-A补获证据见[基准报告](../../testing/m03-baseline-report.md)。布局遵循[最新v2位置约束](../../design/m03-v2-layout.md)。B的80项检查、11样例精确比较及实际MKL构建锁见[核心报告](../../testing/m03-core-report.md)。下列原概括计划的未来文件/命令以新的文件级计划为准。

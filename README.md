@@ -1,5 +1,7 @@
 # PhoneticToolbox 3.0 · 开发工作台
 
+**EGG开发态功能收口（2026-09-13）：** 六功能组与最后草稿/连续操作检查完成，开发态功能阶段verified。补齐LP阶数保存、重开及失败反馈，65项前端与23组Chrome通过。入口为`scripts/Start-Research-Workbench.ps1`，范围及限制见[收口报告](docs/testing/m03-dev-closeout-report.md)。完整模块的设备/生产/跨平台验收仍单列。
+
 **当前范围（2026-09-13）：** 按井井最新要求，近期只推进开发版，EXE封装、打包和相关探针暂停。以下候选范围为历史计划，未生成新的EXE。
 
 **当前优先级（2026-09-13）：** 代码引用后续核查按井井要求暂停，继续功能与交互完善。已修复切换文件后旧预览错误串入新文件的问题，[Chrome五项回归](docs/testing/m03-preview-switch-report.md)通过。

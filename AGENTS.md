@@ -1,6 +1,7 @@
 # PhoneticToolbox v3 — Agent 工作规则
 
 ## 0. 当前阶段与授权
+- 2026-09-13 井井审阅最后功能收口后授权继续。M03开发态功能阶段现为verified（限定现有Windows环境及各报告的Chrome/Qt/本机托管服务范围），见docs/testing/m03-dev-closeout-report.md。补LP阶数草稿/未保存提示、关闭框内保存失败反馈，65项前端与23组Chrome通过；当前构建已更新。完整M03设备/生产/跨平台仍in_progress，A29与EXE按要求暂停，开发功能阶段不再因这些未测项延长。本轮未启动Qt/DDL/push；下一模块建议M04，尚未实施。
 - 2026-09-13 最新要求：井井明确代码引用暂不处理，优先功能实现。暂停A29进一步文献/许可核查，不将此作为开发功能推进的前置条件；已核对的说明保留，未决项不扩大为已确认。E3文件切换旧预览错误反馈已限定Windows Chrome verified，65项前端与5项Chrome回归通过，见docs/testing/m03-preview-switch-report.md。EXE及相关探针继续暂停，不自动推进M04。
 - 2026-09-13 井井继续E3并明确EGG源码位于V2。A29本轮已确认V2直接迁移来源，8份源码hash复核一致；澄清固定GCI后3ms、自相关LPC平均，未按GOI确认闭相。见docs/testing/m03-provenance-report.md与docs/references/m03-method-audit.md。本轮仅说明/登记修订，原算法未改；最初文献对应/完整授权链仍待材料，完整M03保持in_progress。EXE及探针暂停，不推进M04，未DDL或push。
 - 2026-09-13 井井授权继续V2功能清单核对。本轮六功能组映射及两项补齐已verified（限定Windows独立Chrome），见docs/testing/m03-function-review.md：总览单击保留选区并更新、批次提交可取消且不误取消上一批。65项前端、5组新增/M01-M02默认选区、6组批次、3组总览通过；原V2八文件及手册哈希一致。完整M03仍in_progress，剩余方法/许可链与设备/生产证据单列，下一项来源未决项集中收口；EXE暂停，不推进M04，未DDL或push。

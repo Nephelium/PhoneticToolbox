@@ -1,5 +1,7 @@
 # M03 EGG 信号分析实施计划
 
+2026-09-13最新收口：开发态功能阶段verified，LP阶数草稿/关闭反馈及连续操作已验证，见[收口报告](../testing/m03-dev-closeout-report.md)。完整模块设备/生产/跨平台仍in_progress，引用及EXE暂停。下文历史下一项不覆盖本条。
+
 2026-09-13最新范围：井井要求暂停EXE及相关探针，下文F阶段为历史计划。E3六功能组复核、总览单击/提交取消已限定验证，见[功能复核报告](../testing/m03-function-review.md)。A29本轮已确认V2直接迁移来源及固定3ms实际步骤，见[方法核查](../references/m03-method-audit.md)与[来源复核记录](../testing/m03-provenance-report.md)；最初文献/许可仍待材料，不自动推进M04。
 
 2026-09-13追加：井井要求代码引用先不处理，A29后续核查暂停，开发功能继续推进。当前修复切文件后的旧预览错误反馈，见[功能报告](../testing/m03-preview-switch-report.md)。

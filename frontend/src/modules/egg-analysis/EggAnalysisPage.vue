@@ -22,7 +22,8 @@ import {preflightExportFonts} from './fonts.ts';
 import {rangeAfterGesture,microAfterGesture} from './navigation.ts';
 import {defaults,batchDefaults,signature,taskConfig,validate,validateParameters,errors,inverseAudioFiles,type PreviewRecord} from './state.ts';
 const props=defineProps<{context:ResearchContext;stateKey:string;active:boolean}>();const emit=defineEmits<{references:[];close:[]}>();
-const wave=workspace(props.stateKey),config=ref<EggTaskConfig>({...defaults(),...host.projects.read<Partial<EggTaskConfig>>('egg.config.'+props.stateKey,{})});
+const {inverse_lp_order:savedOrder,...savedConfig}=host.projects.read<Partial<EggTaskConfig>&{inverse_lp_order?:number|string|null}>('egg.config.'+props.stateKey,{});
+const wave=workspace(props.stateKey),config=ref<EggTaskConfig>({...defaults(),...savedConfig});
 const batchConfig=ref<EggTaskConfig>({...batchDefaults(),...host.projects.read<Partial<EggTaskConfig>>('egg.batch-config.'+props.stateKey,{})});
 const resultNames=ref<Record<string,string>>({}),resultError=ref(''),resultReadError=ref(''),resultLoading=ref(false),resultNotice=ref(''),savingResult=ref(false);
 const analysisAudio=ref<AudioAsset>();const inverseView=ref<components['schemas']['EggInverseData']>();
@@ -30,7 +31,7 @@ const files=ref<ResearchFile[]>([]),source=ref<ResearchFile>(),sourceHash=ref(''
 const jobs=ref<JobView[]>([]),labels=ref<Record<string,string>>(host.projects.read('egg.jobs.'+props.stateKey,{}));
 const preview=ref<PreviewRecord>(),psd=ref(''),error=ref(''),notice=ref(''),loading=ref(false),submitting=ref(false),pending=ref('');
 const batchError=ref(''),fontChecking=ref(false);let submittingBatchIds:string[]=[];
-const batchOpen=ref(false),batchBusy=ref(false),help=ref(false),order=ref<number|string|null>(null),resultJob=ref<JobView>(),resultImages=ref<{name:string;url:string}[]>([]),inverseWaves=ref<{label:string;state:Workspace}[]>([]),resultConfig=ref<EggTaskConfig>();
+const batchOpen=ref(false),batchBusy=ref(false),help=ref(false),order=ref<number|string|null>(savedOrder??null),resultJob=ref<JobView>(),resultImages=ref<{name:string;url:string}[]>([]),inverseWaves=ref<{label:string;state:Workspace}[]>([]),resultConfig=ref<EggTaskConfig>();
 const tasks=computed(()=>props.context.files.tasks),stale=computed(()=>!!preview.value&&(signature(preview.value.config)!==signature(config.value)||!!source.value&&preview.value.input_sha256!==sourceHash.value));
 const displayed=computed(()=>stale.value?undefined:preview.value?.preview);
 const playable=computed<Workspace>(()=>({...wave,asset:stale.value||!displayed.value?null:analysisAudio.value??null,channel:0}));
@@ -42,9 +43,10 @@ function makeUrl(buffer:ArrayBuffer){const url=URL.createObjectURL(new Blob([buf
 function release(url:string){if(url){URL.revokeObjectURL(url);urls.delete(url);}}
 function clearPreview(){clearTimeout(gestureTimer);stop();analysisAudio.value=undefined;preview.value=undefined;release(psd.value);psd.value='';}
 function labelJob(job:JobView,label:string){labels.value[job.id]=label;host.projects.write('egg.jobs.'+props.stateKey,labels.value);jobs.value=[job,...jobs.value.filter(j=>j.id!==job.id)];}
-function save(){const okay=host.projects.write('egg.config.'+props.stateKey,config.value);if(okay)wave.dirty=false;else error.value='参数草稿保存失败，请检查本机存储。';return okay;}
+function save(){const okay=host.projects.write('egg.config.'+props.stateKey,{...config.value,inverse_lp_order:order.value});if(okay)wave.dirty=false;else error.value='参数草稿保存失败，请检查本机存储。';return okay;}
 defineExpose({save});
 watch(config,()=>{wave.dirty=true;stop();},{deep:true});
+watch(order,()=>{wave.dirty=true;});
 watch(()=>[wave.start,wave.end],([start,end])=>{if(start!==config.value.roi_start||end!==config.value.roi_end){config.value.roi_start=start;config.value.roi_end=end;config.value.micro_center=(start+end)/2;stop();}});
 watch(()=>config.value.flip_channels,flip=>{if(wave.asset)wave.channel=wave.asset.channels.length===1?0:flip?0:1;});
 watch(()=>props.active,active=>{if(!active)stop();});
