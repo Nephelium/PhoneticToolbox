@@ -1,5 +1,7 @@
 # PhoneticToolbox 3.0 · 开发工作台
 
+**M12 语音标注对齐（2026-09-14）：** 已完成限定 Windows 开发态功能迁移，包含原 7 功能组、本机 TextGrid/独立唇偏保存、网页项目新版本保存和未保存保护。入口 `scripts/Start-Research-Workbench.ps1`，在侧栏选择语音标注对齐。[操作说明](docs/manual/annotation.md) · [真实验收](docs/testing/m12-report.md)。本次未打包 EXE，M04 和其他模块保持原检查点。
+
 **M04 LPC谱图（2026-09-13）：** D页面已限定Windows开发态verified，接入统一波形/标注/频谱/试听/任务、草稿与保存下载。24组真实Chrome、69项前端、13项Python通过，完整M04仍in_progress，下一项托管网页/自然录音及20项验收收口。见[页面报告](docs/testing/m04-ui-report.md)、[操作说明](docs/manual/lpc-spectrum.md)与[实施步骤](docs/plans/2026-09-13-m04-implementation.md)。
 
 **EGG开发态功能收口（2026-09-13）：** 六功能组与最后草稿/连续操作检查完成，开发态功能阶段verified。补齐LP阶数保存、重开及失败反馈，65项前端与23组Chrome通过。入口为`scripts/Start-Research-Workbench.ps1`，范围及限制见[收口报告](docs/testing/m03-dev-closeout-report.md)。完整模块的设备/生产/跨平台验收仍单列。

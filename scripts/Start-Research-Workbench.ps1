@@ -1,4 +1,4 @@
-# M01/M02/M03/M09 shared local development entry. No build, update or migration.
+# M01/M02/M03/M04/M09/M12 shared local development entry. No build, update or migration.
 $ErrorActionPreference = 'Stop'
 $researchRoot = Split-Path -Parent $PSScriptRoot
 $researchPython = Join-Path $researchRoot '.venv/m09-ui/Scripts/python.exe'

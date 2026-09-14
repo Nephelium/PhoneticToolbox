@@ -1,6 +1,6 @@
 # M12 · 语音标注对齐迁移计划
 
-状态：planned，未开始实现。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
+状态：verified，限定 Windows 开发态功能；[2026-09-14实施记录](../2026-09-14-m12-implementation.md)和[验收报告](../../testing/m12-report.md)覆盖下述7组。EXE未构建，跨平台/生产未测。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
 ## 现有代码与目标文件
 现有路径均已确认存在；目录内逐函数对应由实施第一步记录，避免把旧类名机械套给新实现。
@@ -9,14 +9,14 @@
 - [phonetic_toolbox/gui/resources/web_praat_editor](../../../phonetic_toolbox/gui/resources/web_praat_editor)
 - [phonetic_toolbox/services/io/lip.py](../../../phonetic_toolbox/services/io/lip.py)
 
-拟创建/修改路径（未来实现，不代表已经存在）：
+实际实现路径（替代原拟建 state.ts/API module/e2e 路径，使用现有统一宿主和文件能力）：
 
 - `frontend/src/modules/annotation/AnnotationPage.vue`
-- `frontend/src/modules/annotation/state.ts`
+- `frontend/src/modules/annotation/editor.mjs`、`format.ts`、`AnnotationTracks.vue`
 - `packages/phonetic_core/src/phonetic_core/annotation/`
-- `backend/src/ptb_api/modules/annotation.py`
-- `tests/parity/test_annotation.py`
-- `frontend/tests/e2e/annotation.spec.ts`
+- `backend/src/ptb_worker/io/annotation.py`、`desktop/src/ptb_desktop/annotation.py`、`frontend/src/platform/annotation.ts`
+- `frontend/tests/annotation-parity.test.ts`、`desktop/tests/test_m12_annotation.py`
+- `tests/e2e/m12.cjs`、`m12-web.cjs`、`scripts/verify_m12_qt.py`
 
 纯显示/客户端模块如果没有科学计算，不为凑层数创建空 core/API；仅创建真实需要的读取/转换边界。共用核心目录中的改动按文件独立提交，不能覆盖其他已迁移模块。
 
@@ -57,15 +57,15 @@
 
 每个分组至少一个正常路径和一个相关错误/边界路径；录制、原生时序和数值算法必须在真实目标环境验证。
 
-拟建测试后的执行命令（当前不能当作已运行）：
+当前实际专项命令（环境与完整176项回归见验收报告）：
 
 ```powershell
 # 先激活 P02 建立并核验的 v3 环境，不改 phonetic_311。
-python -m pytest tests/parity/test_annotation.py -q
-npm --prefix frontend run test:e2e -- annotation.spec.ts
+python -m pytest -c tests/pytest.ini desktop/tests/test_m12_annotation.py -q
+node tests/e2e/m12.cjs
 ```
 
-CLI 参数和 npm scripts 在 P02 明确定义后才能使用；如实现路径不同，先更新本计划与架构记录。共享测试另见 P03/P11。两条命令不能代替本模块原生/设备手工验收。
+本轮已按 ADR-050 更新实际路径；同名网页文件保存为项目内新版本，本机源/目标双版本检查。共享测试另见 P03/P11。两条命令不能代替本模块原生/设备手工验收。
 
 ## 完成条件
 - 本页全部 7 组功能以及原矩阵相关参数/设置有映射，没有把折叠项当作删除项。

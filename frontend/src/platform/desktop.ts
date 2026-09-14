@@ -36,6 +36,7 @@ export async function initializePlatform(){
     list:()=>task({op:'list'}),get:id=>task({op:'get',id}),cancel:id=>task({op:'cancel',id}),job:id=>task({op:'job',id}),
     retry:(id,key)=>task({op:'retry',id,key}),save:(id,directory)=>task({op:'save',id,directory})};
   desktopFiles={kind:'desktop',tasks:hello.tasks?tasks:undefined,choose:(purpose:DirectoryGrant['purpose'])=>call('choose',{purpose}),
+    annotation:hello.tasks?{scan:directory=>task({op:'annotation_scan',directory}),lip:file=>task({op:'annotation_lip',id:file.id}),target:(file,role,suffix)=>task({op:'annotation_target',id:file.id,role,suffix}),save:body=>task({op:'annotation_save',...body})}:undefined,
     parameters:file=>task({op:'parameters',id:file.id}),capture:()=>call('capture'),
     convertLip:hello.tasks?file=>task({op:'convert_lip',id:file.id}):undefined,
     list:(id='')=>call('list',{id}),async read(file){const v=await call<{base64:string;sha256:string}>('read',{id:file.id});const text=atob(v.base64),bytes=new Uint8Array(text.length);for(let i=0;i<text.length;i++)bytes[i]=text.charCodeAt(i);return {buffer:bytes.buffer,sha256:v.sha256};},

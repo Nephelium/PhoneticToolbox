@@ -120,7 +120,7 @@ class FileProvider:
             for count,entry in enumerate(scan):
                 if count>=self.max_entries:raise FileAccessError('目录条目超过10000，请选择较小目录。')
                 lower=entry.name.lower()
-                kind='audio' if lower.endswith('.wav') else 'textgrid' if lower.endswith('.textgrid') else 'lip' if lower.endswith('.lip.json') else 'lip_pickle' if lower.endswith('.pkl') else 'parameter' if lower.endswith(('.xlsx','.ptb.sqlite','.ptb.sqlite3')) else 'image' if lower.endswith(('.png','.jpg','.jpeg','.bmp')) else None
+                kind='audio' if lower.endswith('.wav') else 'textgrid' if lower.endswith('.textgrid') else 'lip' if lower.endswith('.lip.json') else 'lip_pickle' if lower.endswith('.pkl') else 'lab' if lower.endswith('.lab') else 'parameter' if lower.endswith(('.xlsx','.ptb.sqlite','.ptb.sqlite3')) else 'image' if lower.endswith(('.png','.jpg','.jpeg','.bmp')) else None
                 # Windows scandir caches zero inode/link counts; obtain real identity.
                 info=Path(entry.path).lstat()
                 if not kind or not stat.S_ISREG(info.st_mode) or info.st_nlink!=1 or getattr(info,'st_file_attributes',0)&0x400:continue

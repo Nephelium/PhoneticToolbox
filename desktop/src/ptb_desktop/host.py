@@ -105,11 +105,18 @@ class Bridge(QObject):
 
     @pyqtSlot(str,str)
     def task(self,request_id,raw):
-        if len(request_id)>64 or len(raw)>1_000_000:return
+        if len(request_id)>64:return
+        if len(raw)>8_100_000:
+            self.taskReady.emit(request_id,json.dumps({'ok':False,'error':'请求超过当前文件大小预算。'}));return
+        try:
+            decoded=json.loads(raw)
+            if not isinstance(decoded,dict) or (decoded.get('op')!='annotation_save' and len(raw)>1_000_000):raise ValueError()
+        except (ValueError,TypeError):
+            self.taskReady.emit(request_id,json.dumps({'ok':False,'error':'请求结构或大小不正确。'}));return
         if not self.task_lock.acquire(False):
             self.taskReady.emit(request_id,json.dumps({'ok':False,'error':'任务操作正在进行，请稍候。'}));return
         def work():
-            try:result={'ok':True,'value':self.tasks.invoke(json.loads(raw))}
+            try:result={'ok':True,'value':self.tasks.invoke(decoded)}
             except FileAccessError as exc:result={'ok':False,'error':str(exc)}
             except Exception:result={'ok':False,'error':'任务操作失败，请检查文件关联、目录权限或任务服务。'}
             finally:self.task_lock.release()
@@ -232,11 +239,13 @@ class Workbench(QMainWindow):
             self._screen_connected=True
 
     def save_download(self,download):
-        # Only a renderer-generated image from this owned page; never navigate to arbitrary downloads.
-        if download.page()!=self.page or download.url().scheme()!='blob' or not download.suggestedFileName().lower().endswith(('.svg','.png')):
+        # Only renderer-generated supported artifacts from this owned page.
+        name=Path(download.suggestedFileName()).name
+        if download.page()!=self.page or download.url().scheme()!='blob' or not name.lower().endswith(('.svg','.png','.textgrid','.lip.json')):
             download.cancel();return
         options=QFileDialog.Option.DontUseNativeDialog if self.bridge.test_dialog else QFileDialog.Option(0)
-        selected=QFileDialog.getSaveFileName(self,'保存图像',Path(download.suggestedFileName()).name,'图像 (*.svg *.png)',options=options)[0]
+        title,filter=('保存标注','Praat 标注 (*.TextGrid)') if name.lower().endswith('.textgrid') else ('保存安全唇形','安全唇形 (*.lip.json)') if name.lower().endswith('.lip.json') else ('保存图像','图像 (*.svg *.png)')
+        selected=QFileDialog.getSaveFileName(self,title,name,filter,options=options)[0]
         if not selected:download.cancel();return
         target=Path(selected);download.setDownloadDirectory(str(target.parent));download.setDownloadFileName(target.name);download.accept()
 

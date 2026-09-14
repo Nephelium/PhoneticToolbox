@@ -1,0 +1,6 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><title>M12 owned integration</title></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';import Shell from '/src/app/AppShell.vue';import '/src/design/tokens.css';
+const rpc=async data=>{const r=await fetch('/__m12',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const v=await r.json();if(v.error)throw Error(v.error);return v.value;};
+const files={kind:'desktop',choose:purpose=>rpc({op:'choose',purpose}),list:()=>rpc({op:'annotation_scan'}),read:async f=>{const r=await rpc({op:'read',id:f.id});return {buffer:Uint8Array.from(atob(r.base64),c=>c.charCodeAt(0)).buffer,sha256:r.sha256};},textgrid:()=>{throw Error('M12 uses full document');},dispose(){},annotation:{scan:directory=>rpc({op:'annotation_scan',directory}),lip:f=>rpc({op:'annotation_lip',id:f.id}),target:(f,role,suffix)=>rpc({op:'annotation_target',id:f.id,role,suffix}),save:body=>rpc({op:'annotation_save',...body})}};
+createApp({render:()=>h(Shell,{research:{key:'m12-live:M01',label:'M12 合成语料',files}})}).mount('#app');
+</script></body></html>

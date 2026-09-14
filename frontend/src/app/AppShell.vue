@@ -6,6 +6,7 @@ import ParameterEstimationPage from '../modules/parameter-estimation/ParameterEs
 import ParameterDisplayPage from '../modules/parameter-display/ParameterDisplayPage.vue';
 import EggAnalysisPage from '../modules/egg-analysis/EggAnalysisPage.vue';
 import LpcSpectrumPage from '../modules/lpc-spectrum/LpcSpectrumPage.vue';
+import AnnotationPage from '../modules/annotation/AnnotationPage.vue';
 import Spec2WavPage from '../modules/spectrogram-to-audio/Spec2WavPage.vue';
 import {m01State,saveM01,forgetM01} from '../modules/parameter-estimation/store.ts';
 import {dirty} from '../modules/parameter-estimation/state.ts';
@@ -22,6 +23,7 @@ const m01=computed(()=>m01State(researchContext.value.key));
 const m10Dirty=ref(false);
 const m03Page=ref<{save:()=>boolean}>();
 const m04Page=ref<{save:()=>boolean}>();
+const m12Page=ref<{save:()=>Promise<boolean>}>();
 const m02Page=ref<{save:()=>boolean}>();
 const moduleDirty=(id:string)=>id==='M10'?m10Dirty.value:id==='M01'?dirty(m01.value):!!states[previewKey(id)]?.dirty;
 const recordingEntry=location.hash==='#M10';
@@ -32,11 +34,12 @@ watch(theme,()=>{applyTheme();host.projects.write('theme',theme.value);},{immedi
 system.addEventListener('change',applyTheme);onUnmounted(()=>system.removeEventListener('change',applyTheme));
 const storedRecent=host.projects.read<unknown>('recent',[]);const recent=ref((Array.isArray(storedRecent)?storedRecent:[]).filter(id=>modules.some(m=>m.id===id)).slice(0,5));
 const current=computed(()=>modules.find(m=>m.id===active.value));const visible=computed(()=>modules.filter(m=>(m.title+' '+m.description+' '+m.id).toLowerCase().includes(query.value.trim().toLowerCase())));
-const modal=ref(''),closing=ref(''),notice=ref('');const referencesId=ref<string|undefined>();
+const modal=ref(''),closing=ref(''),notice=ref(''),closingBusy=ref(false);const referencesId=ref<string|undefined>();
 function open(id:string){stop();if(!tabs.value.includes(id))tabs.value.push(id);active.value=id;if(id!=='home'){if(id!=='M01')workspace(previewKey(id));recent.value=[id,...recent.value.filter(x=>x!==id)].slice(0,5);host.projects.write('recent',recent.value);}}
 function remove(id:string){stop();if(id==='M10')m10Dirty.value=false;const index=tabs.value.indexOf(id);tabs.value=tabs.value.filter(x=>x!==id);if(id==='M01')forgetM01(researchContext.value.key);else delete states[previewKey(id)];if(active.value===id)active.value=tabs.value[Math.max(0,index-1)];closing.value='';void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
 function close(id:string){notice.value='';if(moduleDirty(id))closing.value=id;else remove(id);}
-function saveClose(){if(closing.value==='M04'){if(m04Page.value?.save())remove('M04');else notice.value='LPC 参数草稿无效或保存失败，请返回模块检查。';return;}if(closing.value==='M03'){if(m03Page.value?.save())remove('M03');else notice.value='参数草稿保存失败，标签和编辑仍保留。请检查本机存储后重试。';return;}if(closing.value==='M02'){if(m02Page.value?.save())remove('M02');return;}if(closing.value==='M10'){notice.value='请返回关键帧，保存或取消正在编辑的姿势后再关闭。';return;}if(closing.value==='M01'&&m01.value.drawer){notice.value='请先应用或取消参数/设置对话框中的编辑，再保存关闭。';return;}if(closing.value==='M01'?saveM01(researchContext.value.key):saveDraft(previewKey(closing.value)))remove(closing.value);else notice.value='本机草稿保存失败，标签仍保留。请检查浏览器存储权限。';}
+async function saveClose(){if(closing.value==='M12'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m12Page.value?.save())remove('M12');else notice.value='标注或唇偏保存失败，编辑仍保留。请返回模块检查错误。';}finally{closingBusy.value=false;}return;}if(closing.value==='M04'){if(m04Page.value?.save())remove('M04');else notice.value='LPC 参数草稿无效或保存失败，请返回模块检查。';return;}if(closing.value==='M03'){if(m03Page.value?.save())remove('M03');else notice.value='参数草稿保存失败，标签和编辑仍保留。请检查本机存储后重试。';return;}if(closing.value==='M02'){if(m02Page.value?.save())remove('M02');return;}if(closing.value==='M10'){notice.value='请返回关键帧，保存或取消正在编辑的姿势后再关闭。';return;}if(closing.value==='M01'&&m01.value.drawer){notice.value='请先应用或取消参数/设置对话框中的编辑，再保存关闭。';return;}if(closing.value==='M01'?saveM01(researchContext.value.key):saveDraft(previewKey(closing.value)))remove(closing.value);else notice.value='本机草稿保存失败，标签仍保留。请检查浏览器存储权限。';}
+async function leaveProject(){if(closingBusy.value)return;closingBusy.value=true;try{if(m12Page.value&&!await m12Page.value.save())return;emit('leaveProject');}finally{closingBusy.value=false;}}
 function refs(id?:string){referencesId.value=id;modal.value='references';}
 function tabKey(event:KeyboardEvent){let n=tabs.value.indexOf(active.value);if(event.key==='ArrowRight')n=(n+1)%tabs.value.length;else if(event.key==='ArrowLeft')n=(n-1+tabs.value.length)%tabs.value.length;else if(event.key==='Home')n=0;else if(event.key==='End')n=tabs.value.length-1;else return;event.preventDefault();open(tabs.value[n]);void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
 function beforeUnload(event:BeforeUnloadEvent){if(dirty(m01.value)||tabs.value.some(id=>moduleDirty(id))){event.preventDefault();event.returnValue='';}}
@@ -104,8 +107,8 @@ const modalTitle=computed(()=>({settings:'工作台设置',help:'使用说明',u
 </div>
 <span class="host-badge">{{research?'网页项目':host.kind==='desktop'?'本地桌面':'浏览器预览'}}</span>
 </header>
-<button v-if="research" class="project-return" @click="emit('leaveProject')">← 返回项目与文件管理 · {{research.label}}</button>
-<main id="main-content" :class="{'pane-workspace':['M01','M02','M03','M04','M09','M10'].includes(active)}" tabindex="-1" role="tabpanel" :aria-labelledby="'tab-'+active">
+<button v-if="research" class="project-return"  :disabled="closingBusy" @click="leaveProject">← 返回项目与文件管理 · {{research.label}}</button>
+<main id="main-content" :class="{'pane-workspace':['M01','M02','M03','M04','M09','M10','M12'].includes(active)}" tabindex="-1" role="tabpanel" :aria-labelledby="'tab-'+active">
 <div v-if="active==='home'" class="home-page">
 <header class="welcome">
 <div class="welcome-copy">
@@ -170,30 +173,32 @@ const modalTitle=computed(()=>({settings:'工作台设置',help:'使用说明',u
 </footer>
 </div>
 <ParameterEstimationPage v-else-if="current?.id==='M01'" :key="researchContext.key" :context="researchContext" @references="refs('M01')"/>
-<WorkspaceView v-else-if="current&&!['M02','M03','M04','M09','M10'].includes(current.id)" :key="current.id" :module="current" :state-key="previewKey(current.id)" @references="refs(current?.id)"/>
+<WorkspaceView v-else-if="current&&!['M02','M03','M04','M09','M10','M12'].includes(current.id)" :key="current.id" :module="current" :state-key="previewKey(current.id)" @references="refs(current?.id)"/>
 <ParameterDisplayPage v-if="tabs.includes('M02')" v-show="active==='M02'" ref="m02Page" :key="researchContext.key+':M02'" :active="active==='M02'" :context="researchContext" :state-key="previewKey('M02')" @references="refs('M02')" @close="close('M02')"/>
+<AnnotationPage v-if="tabs.includes('M12')" v-show="active==='M12'" ref="m12Page" :key="researchContext.key+':M12'" :active="active==='M12'" :context="researchContext" :state-key="previewKey('M12')" @references="refs('M12')" @close="close('M12')"/>
 <EggAnalysisPage v-if="tabs.includes('M03')" v-show="active==='M03'" ref="m03Page" :key="researchContext.key+':M03'" :active="active==='M03'" :context="researchContext" :state-key="previewKey('M03')" @references="refs('M03')" @close="close('M03')"/>
 <LpcSpectrumPage v-if="tabs.includes('M04')" v-show="active==='M04'" ref="m04Page" :key="researchContext.key+':M04'" :active="active==='M04'" :context="researchContext" :state-key="previewKey('M04')" @references="refs('M04')" @close="close('M04')"/>
 <Spec2WavPage v-if="tabs.includes('M09')" v-show="active==='M09'" :key="researchContext.key+':M09'" :context="researchContext" :state-key="previewKey('M09')" @references="refs('M09')" @close="close('M09')"/>
 <VocalTractPage v-if="tabs.includes('M10')" v-show="active==='M10'" :active="active==='M10'" @references="refs('M10')" @close="close('M10')" @dirty="m10Dirty=$event"/>
 </main>
-<div v-if="current&&!['M03','M04','M10'].includes(current.id)" class="global-transport">
+<div v-if="current&&!['M03','M04','M10','M12'].includes(current.id)" class="global-transport">
 <AudioTransport :state="current.id==='M01'?m01.wave:workspace(previewKey(current.id))" :active="true"/>
 </div>
 <div class="statusbar">
 <span>
-<span class="status-dot"/>{{current?.id==='M01'?'参数估计 · 文件、试听与任务':current?.id==='M02'?'参数显示 · 原帧与多图窗':current?.id==='M03'?'EGG · 接触商与声门事件':current?.id==='M04'?'LPC · 线性预测谱包络':current?.id==='M09'?'语谱图重建 · 近似相位恢复':current?.id==='M10'?'声道工作台 · VTL 2.4':current?'公共预览就绪 · 分析功能待接入':'就绪 · 选择工具开始'}}</span>
+<span class="status-dot"/>{{current?.id==='M01'?'参数估计 · 文件、试听与任务':current?.id==='M02'?'参数显示 · 原帧与多图窗':current?.id==='M03'?'EGG · 接触商与声门事件':current?.id==='M04'?'LPC · 线性预测谱包络':current?.id==='M09'?'语谱图重建 · 近似相位恢复':current?.id==='M10'?'声道工作台 · VTL 2.4':current?.id==='M12'?'标注对齐 · TextGrid 与唇偏独立保存':current?'公共预览就绪 · 分析功能待接入':'就绪 · 选择工具开始'}}</span>
 <span>{{research?'当前账号的项目资源':'本机文件 · 无自动上传'}}</span>
 </div>
 </div>
 </div>
-<ModalDialog v-if="closing" title="保存参数草稿？" @close="closing=''">
-<p>“{{modules.find(m=>m.id===closing)?.title}}”有尚未保存的参数或设置。保存会将参数草稿留在本机；音频不会保存到浏览器存储。</p>
+<ModalDialog v-if="closing" :title="closing==='M12'?'保存标注修改？':'保存参数草稿？'" :close-disabled="closingBusy" @close="closing=''">
+<p v-if="closing==='M12'">标注或唇形偏移尚未保存。标注写入 _webedit，唇偏单独保存；任一失败将保留当前编辑。</p>
+<p v-else>“{{modules.find(m=>m.id===closing)?.title}}”有尚未保存的参数或设置。保存会将参数草稿留在本机；音频不会保存到浏览器存储。</p>
 <p v-if="notice" role="alert">{{notice}}</p>
 <template #footer>
-<button @click="closing=''">取消关闭</button>
-<button @click="remove(closing)">放弃草稿并关闭</button>
-<button class="primary" @click="saveClose">保存草稿并关闭</button>
+<button :disabled="closingBusy" @click="closing=''">取消关闭</button>
+<button :disabled="closingBusy" @click="remove(closing)">{{closing==='M12'?'放弃修改并关闭':'放弃草稿并关闭'}}</button>
+<button class="primary" :disabled="closingBusy" @click="saveClose">{{closingBusy?'正在保存…':closing==='M12'?'保存修改并关闭':'保存草稿并关闭'}}</button>
 </template>
 </ModalDialog>
 <ModalDialog v-if="modal" :title="modalTitle" :wide="modal==='references'" @close="modal=''">

@@ -28,7 +28,7 @@
       },
       "evidence": "本地 acoustic/f0_praat.py、formants_praat.py、manipulation 使用 parselmouth；环境 praat-parselmouth 0.4.7。",
       "license": "GPL family; verify exact bundled Praat/Parselmouth licenses",
-      "notes": "软件注明 Praat 作者 Paul Boersma / David Weenink 与 Parselmouth 作者；使用者导出方法记录实际版本。本文的 jitter/shimmer 主路径不据此称为 Praat 实现。",
+      "notes": "软件注明 Praat 作者 Paul Boersma / David Weenink 与 Parselmouth 作者；使用者导出方法记录实际版本。本文的 jitter/shimmer 主路径不据此称为 Praat 实现。 M12只兼容Praat TextGrid格式，频谱/强度与编辑在客户端执行，未为M12调用Praat算法。",
       "verification_date": "2026-09-09",
       "actual_included_version": "praat-parselmouth 0.4.7 in phonetic_311; embedded Praat version not probed",
       "observed_upstream_commit": null,
@@ -931,15 +931,18 @@
         "M12"
       ],
       "urls": {},
-      "evidence": "web_praat_editor/default.dict 的初始来源、授权和修改史尚未定位。",
+      "evidence": "V2 default.dict原样迁入frontend/src/modules/annotation/default.dict；文件SHA-256见m12-migration.json，最初来源/作者/许可仍未定位。",
       "license": "not-established",
       "notes": "列入 P10 待核验清单；不能用无来源占位条目通过发行审查。",
-      "verification_date": "2026-09-09",
-      "actual_included_version": null,
+      "verification_date": "2026-09-14",
+      "actual_included_version": "V2 local snapshot 2026-09-14; SHA-256 bbada4e40307447303f04bef5c36dfc2b1f17fea5c228aa7d9d266a3e8639a27",
       "observed_upstream_commit": null,
       "distribution_status": "review-required",
       "verification_status": "local-evidence-only",
-      "acknowledgement_group": "academic"
+      "acknowledgement_group": "academic",
+      "usage_paths": [
+        "frontend/src/modules/annotation/default.dict"
+      ]
     },
     {
       "id": "PENDING-IPA",
@@ -985,15 +988,23 @@
         "M12"
       ],
       "urls": {},
-      "evidence": "v2 AGENTS 明确由本地 pitch_perception 项目通用化而来；需追溯其内部第三方脚本，不据项目同属用户就认为没有外部来源。",
+      "evidence": "v2 AGENTS 明确由本地 pitch_perception 项目通用化而来；需追溯其内部第三方脚本，不据项目同属用户就认为没有外部来源。 2026-09-14直接从相邻V2迁入65个编辑函数、Hann/FFT及显示规则，6份源文件SHA-256见m12-migration.json。",
       "license": "not-established",
       "notes": "列入 P10 待核验清单；不能用无来源占位条目通过发行审查。",
-      "verification_date": "2026-09-09",
-      "actual_included_version": null,
+      "verification_date": "2026-09-14",
+      "actual_included_version": "V2 local snapshot 2026-09-14; editor app.js e739e9bcf5a445ce71eadeeba0d795d7519458c8680645b0b6043740f106a06c",
       "observed_upstream_commit": null,
       "distribution_status": "review-required",
       "verification_status": "local-evidence-only",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "usage_paths": [
+        "frontend/src/modules/annotation/editor.mjs",
+        "frontend/src/modules/annotation/fft.mjs",
+        "frontend/src/modules/annotation/display.ts",
+        "frontend/src/modules/annotation/spectrum.ts",
+        "desktop/src/ptb_desktop/annotation.py"
+      ],
+      "modifications": "实例化原编辑状态和公共文件/字体/播放适配；完整点层保留、显式拒绝错误/越界、原子版本保存、网页不可变资源另存。初始迁移与修正分开提交。"
     },
     {
       "id": "ASSET-MASCOT",

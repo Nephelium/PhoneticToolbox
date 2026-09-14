@@ -25,10 +25,14 @@ def pin_directory(path):
 
 
 class TaskBridge:
-    def __init__(self,provider,service):self.provider,self.service=provider,service
+    def __init__(self,provider,service):
+        self.provider,self.service=provider,service
+        from .annotation import AnnotationFiles
+        self.annotation=AnnotationFiles(provider)
 
     def invoke(self,body):
         op=body.get('op')
+        if isinstance(op,str) and op.startswith('annotation_'):return self.annotation.invoke(body)
         if op=='lpc_fonts':return self.service.request('/api/v1/jobs/lpc/fonts','POST',body['font'])
         if op=='lpc':
             raw,_=self.provider.read(body['id']);entry=self.provider.entries[body['id']]

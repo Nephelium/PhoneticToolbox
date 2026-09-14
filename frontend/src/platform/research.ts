@@ -1,5 +1,6 @@
 import type { components } from '../../../contracts/generated/api';
 import { decodeWav } from './decode.ts';
+import {portableAnnotation,type AnnotationPort} from './annotation.ts';
 export type Tier=components['schemas']['TextGridPreview']['tiers'][number];
 export type Spectrogram=components['schemas']['SpectrogramPreview'];
 export type ParameterTable=components['schemas']['ParameterTable'];
@@ -11,7 +12,7 @@ export type EggPreviewData=components['schemas']['EggPreviewData'];
 export type FigureFontSnapshot=components['schemas']['FigureFontSnapshot'];
 export type FontPreflight=components['schemas']['FontPreflight'];
 export interface SpectrogramView {channel:number;start:number;end:number;width:number}
-export interface ResearchFile { id:string; name:string; kind:'audio'|'textgrid'|'lip'|'lip_pickle'|'parameter'|'image'; size:number; sha256?:string; expiresAt?:number }
+export interface ResearchFile { id:string; name:string; kind:'audio'|'textgrid'|'lip'|'lip_pickle'|'parameter'|'image'|'lab'; size:number; sha256?:string; expiresAt?:number }
 export interface DirectoryGrant { id:string; label:string; purpose:'input'|'output'|'association' }
 export type BatchView=components['schemas']['BatchView'];
 export type JobView=components['schemas']['JobView'];
@@ -39,6 +40,7 @@ export interface ResearchTasks {
 export interface ResearchFiles {
   kind:'desktop'|'server'|'preview';
   tasks?:ResearchTasks;
+  annotation?:AnnotationPort;
   choose?(purpose:DirectoryGrant['purpose']):Promise<DirectoryGrant|null>;
   add?(files:File[]):void;
   list(directory?:string):Promise<ResearchFile[]>;
@@ -51,7 +53,7 @@ export interface ResearchFiles {
   dispose():void;
 }
 export interface ResearchContext { key:string; label:string; files:ResearchFiles; ownerId?:string }
-export const fileKind=(name:string):ResearchFile['kind']|null=>/\.wav$/i.test(name)?'audio':/\.textgrid$/i.test(name)?'textgrid':/\.lip\.json$/i.test(name)?'lip':/\.(xlsx|ptb\.sqlite3?)$/i.test(name)?'parameter':/\.(png|jpg|jpeg|bmp)$/i.test(name)?'image':null;
+export const fileKind=(name:string):ResearchFile['kind']|null=>/\.wav$/i.test(name)?'audio':/\.textgrid$/i.test(name)?'textgrid':/\.lip\.json$/i.test(name)?'lip':/\.lab$/i.test(name)?'lab':/\.(xlsx|ptb\.sqlite3?)$/i.test(name)?'parameter':/\.(png|jpg|jpeg|bmp)$/i.test(name)?'image':null;
 export async function audioPreview(files:ResearchFiles,file:ResearchFile,signal?:AbortSignal) {
   const data=await files.read(file,signal);return {asset:await decodeWav(data.buffer,file.name,signal),sha256:data.sha256};
 }
@@ -66,7 +68,7 @@ export function previewFiles():ResearchFiles {
 }
 
 export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?:()=>string):ResearchFiles {
-  const abort=new AbortController();let disposed=false;
+  const abort=new AbortController();let disposed=false,listedAtCapacity=false;
   async function request(path:string,signal?:AbortSignal,method='GET',body?:unknown) {
     if(disposed)throw Error('项目会话已关闭。');
     const r=await fetch('/api/v1/'+path,{method,body:body?JSON.stringify(body):undefined,credentials:'same-origin',cache:'no-store',signal:signal?AbortSignal.any([abort.signal,signal]):abort.signal,headers:{'X-PTB-Account':owner,...(body?{'Content-Type':'application/json'}:{}),...(method!=='GET'?{'X-CSRF-Token':csrf?.()??''}:{})}});
@@ -91,10 +93,32 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
     async job(id){return (await request('jobs/'+encodeURIComponent(id))).json();},
     async retry(id,key){return (await request('jobs/'+encodeURIComponent(id)+'/retry',undefined,'POST',{idempotency_key:key})).json();},
     async download(id,name){const response=await request('assets/'+encodeURIComponent(id)+'/content');const blob=await response.blob();if(disposed)return;const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}};
-  return {kind:'server',tasks:csrf?tasks:undefined,async list(){const data:components['schemas']['AssetList']=await(await request('assets?project_id='+encodeURIComponent(project))).json();return data.assets.filter(a=>a.project_id===project&&a.state==='ready'&&fileKind(a.name)).map(a=>({id:a.id,name:a.name,kind:fileKind(a.name)!,size:a.size_bytes,sha256:a.sha256??undefined,expiresAt:a.expires_at}));},
+  const adapter:ResearchFiles={kind:'server',tasks:csrf?tasks:undefined,async list(){const data:components['schemas']['AssetList']=await(await request('assets?project_id='+encodeURIComponent(project)+'&order=created')).json();listedAtCapacity=data.assets.length>=1000;return data.assets.filter(a=>a.project_id===project&&a.state==='ready'&&fileKind(a.name)).sort((a,b)=>b.created_at-a.created_at).map(a=>({id:a.id,name:a.name,kind:fileKind(a.name)!,size:a.size_bytes,sha256:a.sha256??undefined,expiresAt:a.expires_at}));},
     async read(file,signal){await verify(file);const limit=file.kind==='audio'?64_000_000:['image','parameter'].includes(file.kind)?16_000_000:2_000_000;if(file.size>limit)throw Error('文件超过当前预览上限。');const response=await request('assets/'+encodeURIComponent(file.id)+'/content',signal);const reader=response.body?.getReader();if(!reader)throw Error('文件读取失败。');const chunks:Uint8Array[]=[];let size=0;try{while(true){const {done,value}=await reader.read();if(done)break;size+=value.length;if(size>limit||size>file.size)throw Error('文件长度已变化。');chunks.push(value);}}finally{await reader.cancel();}if(size!==file.size)throw Error('文件下载不完整。');const bytes=new Uint8Array(size);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}const hash=await sha256(bytes.buffer);if(hash!==file.sha256)throw Error('文件校验失败，请重新加载。');return {buffer:bytes.buffer,sha256:hash};},
     async textgrid(file){await verify(file);const data:components['schemas']['TextGridPreview']=await(await request('assets/'+encodeURIComponent(file.id)+'/textgrid')).json();if(data.sha256!==file.sha256)throw Error('关联文件已变化，请刷新。');return data;},
     async spectrogram(file,view){await verify(file);const query=new URLSearchParams(Object.entries(view).map(([k,v])=>[k,String(v)]));const data:Spectrogram=await(await request('assets/'+encodeURIComponent(file.id)+'/spectrogram?'+query)).json();if(data.sha256!==file.sha256)throw Error('音频已变化，请刷新。');return data;},
     async parameters(file){await verify(file);const data:ParameterTable=await(await request('assets/'+encodeURIComponent(file.id)+'/parameters')).json();if(data.sha256!==file.sha256)throw Error('参数文件已变化，请刷新。');return data;},
     dispose(){disposed=true;abort.abort();}};
+  if(csrf){
+    const annotation=portableAnnotation(adapter,async(name,buffer,key)=>{
+      const hash=await sha256(buffer);
+      key=key+'_'+hash.slice(0,32);
+      // The idempotent upload endpoint returns both partial and ready uploads.
+      // Public asset metadata deliberately rejects files that are still uploading.
+      const current:components['schemas']['AssetView']=await(await request('uploads',undefined,'POST',{project_id:project,name,expected_bytes:buffer.byteLength,idempotency_key:key})).json();
+      const id=current.id;
+      if(current.state!=='ready'){
+        for(let offset=current.size_bytes;offset<buffer.byteLength;offset+=262144){
+          if(disposed)throw Error('项目会话已关闭。');
+          const response=await fetch('/api/v1/uploads/'+id+'/blocks?offset='+offset,{method:'PUT',credentials:'same-origin',signal:abort.signal,headers:{'X-PTB-Account':owner,'X-CSRF-Token':csrf(),'Content-Type':'application/octet-stream'},body:buffer.slice(offset,offset+262144)});
+          if(!response.ok){if(response.status===401)onInvalid();throw Error('标注上传失败，编辑仍保留。请检查登录和剩余空间后重试。');}
+        }
+      }
+      const asset:components['schemas']['AssetView']=await(await request('uploads/'+id+'/finalize',undefined,'POST',{sha256:hash})).json();
+      if(asset.sha256!==hash)throw Error('标注保存校验失败。');
+      return {id:asset.id,name:asset.name,kind:fileKind(asset.name)!,size:asset.size_bytes,sha256:hash,expiresAt:asset.expires_at};
+    });
+    adapter.annotation={...annotation,async scan(){const values=await adapter.list();if(listedAtCapacity)throw Error('项目资源达到当前 1000 条列表预算，请先在文件管理清理旧版本。');const seen=new Set<string>();return values.filter(f=>{const key=f.name.toLowerCase();if(seen.has(key))return false;seen.add(key);return true;});}};
+  }
+  return adapter;
 }

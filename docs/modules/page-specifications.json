@@ -507,7 +507,9 @@
       ]
     ],
     "states": "未保存有标记；缺参考文件、找不到层、词典格式错误分别提示；页切换保持编辑与参考资源。",
-    "special": "纠正上一轮生成图：不应出现唇开与唇宽两个独立偏移输入。图片中任何重复按钮均不进入实现规格。"
+    "special": "纠正上一轮生成图：不应出现唇开与唇宽两个独立偏移输入。图片中任何重复按钮均不进入实现规格。",
+    "implementation_evidence": "docs/testing/m12-report.md",
+    "verification_scope": "Windows development only; no EXE"
   },
   {
     "id": "M13",

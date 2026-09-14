@@ -512,7 +512,7 @@
     "kind": "provenance-pending",
     "acknowledgement_group": "academic",
     "authors": "作者待核实",
-    "version": "实际版本待核实",
+    "version": "V2 local snapshot 2026-09-14; SHA-256 bbada4e40307447303f04bef5c36dfc2b1f17fea5c228aa7d9d266a3e8639a27",
     "license": "not-established",
     "urls": {}
   },
@@ -551,7 +551,7 @@
     "kind": "provenance-pending",
     "acknowledgement_group": "software",
     "authors": "作者待核实",
-    "version": "实际版本待核实",
+    "version": "V2 local snapshot 2026-09-14; editor app.js e739e9bcf5a445ce71eadeeba0d795d7519458c8680645b0b6043740f106a06c",
     "license": "not-established",
     "urls": {}
   },

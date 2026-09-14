@@ -26,7 +26,7 @@ export function createEditor(options = {}) {
   function normalizeTextGrid(tg) {
     if(!tg)return;
     const xmax=duration()||tg.xmax||0;
-    for(const tier of tg.tiers)if(tier.intervals)tier.intervals=fillGaps(tier.intervals,xmax);
+    for(const tier of tg.tiers)if(tier.intervals && [wordTierName(),phoneTierName()].includes(tier.name) && (tier.xmin??tg.xmin)===0 && Math.abs((tier.xmax??tg.xmax)-xmax)<=1e-6)tier.intervals=fillGaps(tier.intervals,tier.xmax??tg.xmax);
   }
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
@@ -92,7 +92,7 @@ function intervalBelongsToWindow(item, start, end) {
 }
 
 function tierByName(name) {
-  return state.textgrid?.tiers.find((tier) => tier.name === name) || null;
+  return state.textgrid?.tiers.find((tier) => tier.name === name && tier.intervals && (tier.xmin??state.textgrid.xmin)===0 && Math.abs((tier.xmax??state.textgrid.xmax)-duration())<=1e-6) || null;
 }
 
 function wordTierName() {
@@ -300,10 +300,12 @@ function onGridMouseUp() {
 
 function moveBoundary(hit, time) {
   const tier = tierByName(hit.tier);
+  if (!tier || (hit.edge === 'start' && hit.index === 0) || (hit.edge === 'end' && hit.index === tier.intervals.length - 1)) return;
   const item = tier.intervals[hit.index];
   const minGap = 0.02;
   const lower = hit.edge === "start" ? (tier.intervals[hit.index - 1]?.xmin ?? 0) + minGap : item.xmin + minGap;
   const upper = hit.edge === "start" ? item.xmax - minGap : (tier.intervals[hit.index + 1]?.xmax ?? duration()) - minGap;
+  if (upper < lower) return;
   const newTime = clamp(time, lower, upper);
   const oldTime = hit.edge === "start" ? item.xmin : item.xmax;
   setBoundary(tier, hit.index, hit.edge, newTime);
@@ -312,6 +314,9 @@ function moveBoundary(hit, time) {
 
 function setBoundary(tier, index, edge, time) {
   const item = tier.intervals[index];
+  if (!item || !Number.isFinite(time)) return;
+  if (edge === 'start' && (index === 0 || time <= tier.intervals[index-1].xmin || time >= item.xmax)) return;
+  if (edge === 'end' && (index === tier.intervals.length-1 || time <= item.xmin || time >= tier.intervals[index+1].xmax)) return;
   if (edge === "start") {
     if (tier.intervals[index - 1]) tier.intervals[index - 1].xmax = time;
     item.xmin = time;
@@ -892,6 +897,7 @@ function pasteCopiedWord() {
   const wordDur = Math.max(0.18, phoneLabels.length * 0.14);
   const gap = blank.xmin > 0.01 ? 0.03 : 0;
   const available = blank.xmax - blank.xmin - gap;
+  if (available < 0.08) { setStatus('空白区间不足 80 ms，未粘贴。'); return; }
   const actualDur = Math.min(wordDur, Math.max(0.08, available));
   const oldXmax = blank.xmax;
   const oldXmin = blank.xmin;
@@ -1026,6 +1032,13 @@ function complementWindows(windows, xmax) {
 
 function spliceTier(currentTier, referenceTier, windows, xmax) {
   if (!referenceTier) return currentTier;
+  if (!!currentTier.intervals !== !!referenceTier.intervals) throw Error('参考文件同名层的类型不一致。');
+  const low=currentTier.xmin??0,high=currentTier.xmax??xmax;
+  if((referenceTier.xmin??0)!==low || (referenceTier.xmax??xmax)!==high)throw Error('参考文件同名层的时间范围不一致。');
+  if (currentTier.points) {
+    const inside = time => windows.some(([start,end]) => start <= time && time <= end);
+    return {...currentTier, points:[...currentTier.points.filter(p=>!inside(p.number)),...referenceTier.points.filter(p=>inside(p.number))].map(p=>({...p})).sort((a,b)=>a.number-b.number)};
+  }
   const intervals = [];
   complementWindows(windows, xmax).forEach(([start, end]) => {
     intervals.push(...clipIntervals(currentTier.intervals, start, end));
@@ -1033,7 +1046,8 @@ function spliceTier(currentTier, referenceTier, windows, xmax) {
   windows.forEach(([start, end]) => {
     intervals.push(...clipIntervals(referenceTier.intervals, start, end));
   });
-  return { name: currentTier.name, intervals: fillGaps(intervals, xmax) };
+  const filled=fillGaps(intervals,xmax).flatMap(i=>{const a=Math.max(low,i.xmin),b=Math.min(high,i.xmax);return b>a?[{...i,xmin:a,xmax:b}]:[];});
+  return { ...currentTier, intervals: filled };
 }
 
 async function applyReferenceSplice() {
@@ -1054,11 +1068,11 @@ async function applyReferenceSplice() {
   els.spliceStart.value = start.toFixed(3);
   els.spliceEnd.value = end.toFixed(3);
   const refByName = new Map(state.referenceTextGrid.tiers.map((tier) => [tier.name, tier]));
+  if (!state.textgrid.tiers.some(t=>refByName.has(t.name))) throw Error('参考文件中没有同名层。');
   const windows = replacementWindows(mode, start, end, xmax);
   state.textgrid.tiers = state.textgrid.tiers.map((tier) => {
     return spliceTier(tier, refByName.get(tier.name), windows, xmax);
   });
-  normalizeTextGrid(state.textgrid);
   markDirty();
   setStatus(`已复用参考标注（${mode}）`);
   drawAll();
@@ -1071,7 +1085,7 @@ async function applyReferenceSplice() {
   }
   function editText(text){
     const selected=state.selected, tier=selected&&tierByName(selected.tier);
-    if(!tier||!tier.intervals[selected.index])return;
+    if(!tier||!tier.intervals[selected.index]||tier.intervals[selected.index].text===text)return;
     saveUndoState();tier.intervals[selected.index].text=text;
     if(selected.tier===wordTierName()&&text)ensurePhonesForWord(tier.intervals[selected.index]);
     markDirty();drawAll();

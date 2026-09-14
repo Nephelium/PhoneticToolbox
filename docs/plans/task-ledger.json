@@ -278,7 +278,7 @@
       "dependencies": "P01,P03,P04,P06,P07",
       "files": "docs/plans/modules/M05-lip-extraction.md；M10-vocal-tract.md；M11-mfa.md；M12-annotation.md；M15-perception.md",
       "status": "planned",
-      "note": "Overall planned. M10/R4 has bounded Windows recording verification; R5 implemented and packaged without tests by explicit request. Other P09 modules not migrated; no full P09 verification.",
+      "note": "Overall planned. M10/R4 has bounded Windows recording verification; R5 implemented and packaged without tests by explicit request. Other P09 modules not migrated; no full P09 verification. M12 Windows development editing/native files/hosted web verified on 2026-09-14; no EXE or general P09 completion.",
       "steps": [
         "唇形：验证摄像头/麦克风权限、帧率、时间轴与平台差异",
         "声道：VTL 原生构建、实例隔离、真实音频输出、几何与生理说明",
@@ -288,7 +288,9 @@
         "将未达到目标的设备/平台限制写入能力矩阵，不做静默降级"
       ],
       "acceptance": "5 模块分别有可复核数据/设备证据；Web 不假装等同原生硬件时序",
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/testing/m12-report.md"
+      ]
     },
     {
       "id": "P10",
@@ -668,9 +670,16 @@
         "P07",
         "P01"
       ],
-      "status": "planned",
+      "status": "verified",
       "plan": "modules/M12-annotation.md",
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/plans/2026-09-14-m12-implementation.md",
+        "docs/modules/evidence/M12-source-map.md",
+        "docs/testing/m12-report.md",
+        "docs/manual/annotation.md"
+      ],
+      "verification_scope": "Windows development: installed Qt host, independent Chrome/native files and local hosted PostgreSQL web",
+      "note": "User requested M12 ahead of M04 on 2026-09-14. Seven functional groups complete in bounded Windows development scope. EXE not built; no DDL/push/V2 changes. Cross-platform, production and full early provenance remain unverified."
     },
     {
       "id": "M13",

@@ -35,6 +35,7 @@ class Array:
     shape: tuple | None = None
     dtype: Dtype | None = None
     raw: bytes = b''
+    order: str = 'C'
 
     def vector(self):
         if self.shape is None or len(self.shape)!=1:raise FormatError('Legacy vector must be one dimensional')
@@ -50,14 +51,14 @@ def read_numeric_pickle(payload,limits):
         if module in ('numpy.core.multiarray','numpy._core.multiarray') and name in ('scalar','_reconstruct'):return Symbol(name)
         if module in ('numpy.core.numeric','numpy._core.numeric') and name=='_frombuffer':return Symbol(name)
         raise FormatError('Unsupported legacy global')
-    def array(shape,dtype,raw):
+    def array(shape,dtype,raw,order='C'):
         nonlocal array_values
         if type(shape)!=tuple or not 1<=len(shape)<=4 or any(type(n)!=int or n<0 for n in shape):raise FormatError('Invalid array shape')
         count=math.prod(shape)
         if count>limits.samples or array_values+count>limits.samples:raise LimitError('legacy_array_budget')
         if type(dtype)!=Dtype or type(raw)!=bytes or len(raw)!=count*struct.calcsize(dtype.format):raise FormatError('Invalid numeric array')
         array_values+=count
-        return Array(shape,Dtype(dtype.code,dtype.endian,True),raw)
+        return Array(shape,Dtype(dtype.code,dtype.endian,True),raw,order)
     def reduce(value,args):
         if type(value)!=Symbol or type(args)!=tuple:raise FormatError('Unsupported legacy reduce')
         if value.name=='dtype':
@@ -72,7 +73,7 @@ def read_numeric_pickle(payload,limits):
             return Array()
         if value.name=='_frombuffer':
             if len(args)!=4 or args[3] not in ('C','F'):raise FormatError('Unsupported array layout')
-            return array(args[2],args[1],args[0])
+            return array(args[2],args[1],args[0],args[3])
         if value.name=='encode' and len(args)==2 and type(args[0])==str and args[1]=='latin1':return args[0].encode('latin1')
         raise FormatError('Unsupported legacy reduce')
     def items():
@@ -130,7 +131,7 @@ def read_numeric_pickle(payload,limits):
                     value.built=True
                 elif type(value)==Array:
                     if value.shape is not None or type(state)!=tuple or len(state)!=5 or state[0]!=1 or type(state[3])!=bool:raise FormatError('Unsupported array state')
-                    parsed=array(state[1],state[2],state[4]);value.shape,value.dtype,value.raw=parsed.shape,parsed.dtype,parsed.raw
+                    parsed=array(state[1],state[2],state[4],'F' if state[3] else 'C');value.shape,value.dtype,value.raw,value.order=parsed.shape,parsed.dtype,parsed.raw,parsed.order
                 else:raise FormatError('Unsupported legacy state')
             elif op=='STOP':
                 if marks or len(stack)!=1 or pos+1!=len(payload):raise FormatError('Incomplete or trailing pickle')

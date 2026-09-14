@@ -1,0 +1,38 @@
+// UI gestures and adversarial save timing, using the actual native file port.
+const fs=require('node:fs/promises'),path=require('node:path'),assert=require('node:assert/strict'),{pathToFileURL}=require('node:url');
+module.exports=async({page,click,loaded,out,checks})=>{
+ const {parseGrid}=await import(pathToFileURL(path.resolve(__dirname,'../../frontend/src/modules/annotation/format.ts')));
+ let snapshot=0;
+ const grid=page.locator('.annotation-grid');
+ const point=async(time,row=0)=>{await grid.scrollIntoViewIfNeeded();const box=await grid.boundingBox();return {x:box.x+box.width*time/2,y:box.y+box.height*(row===0?.22:.73)};};
+ const select=async(time,row=0)=>{const p=await point(time,row);await page.mouse.click(p.x,p.y);};
+ const drag=async(from,to,row=0)=>{const a=await point(from,row),b=await point(to,row);await page.mouse.move(a.x,a.y);await page.mouse.down();await page.mouse.move(b.x,b.y,{steps:8});await page.mouse.up();};
+ const doc=async()=>{const wait=page.waitForEvent('download');await click('下载当前 TextGrid');const d=await wait,p=path.join(out,'gesture-'+(++snapshot)+'.TextGrid');await d.saveAs(p);return parseGrid(await fs.readFile(p,'utf8'));};
+ const undo=async()=>{await grid.focus();await page.keyboard.press('Control+z');};
+ const word=g=>g.tiers.find(t=>t.name==='words').intervals.filter(i=>i.text),phones=g=>g.tiers.find(t=>t.name==='phones').intervals.filter(i=>i.text);
+ const baseline=await doc();
+ await drag(.65,.69);let d=await doc();assert(Math.abs(word(d)[0].xmax-.69)<.004);assert(Math.abs(phones(d)[1].xmax-.69)<.004);await undo();
+ await drag(.3,.35);d=await doc();assert(Math.abs(word(d)[0].xmin-.25)<.004);assert(Math.abs(phones(d)[0].xmin-.25)<.004);await undo();
+ await page.keyboard.down('Control');await select(.3);await select(1);await page.keyboard.up('Control');await drag(1,1.04);d=await doc();assert(Math.abs(word(d)[0].xmin-.24)<.004);assert(Math.abs(word(d)[1].xmin-.84)<.004);await undo();checks.push('boundary drag links phones, whole-word and Ctrl-multiple drag retain relative times; Ctrl-Z restores');
+ let p=await point(.45,1);await page.mouse.dblclick(p.x,p.y);d=await doc();assert.equal(d.tiers[1].intervals.length,baseline.tiers[1].intervals.length+1);
+ await select(.45,1);await page.keyboard.press('Alt+Backspace');d=await doc();assert.equal(d.tiers[1].intervals.length,baseline.tiers[1].intervals.length);await undo();await undo();checks.push('phone double-click inserts boundary, Alt-Backspace merges, undo restores');
+ await select(.3);await page.keyboard.press('Backspace');assert.equal(word(await doc()).length,1);await undo();
+ await select(.3);await page.keyboard.press('Control+c');await select(1.5);await page.keyboard.press('Control+v');assert.equal(word(await doc()).at(-1).text,'ba2');await undo();checks.push('keyboard clear and continuous lab-aware paste with undo');
+ await page.getByLabel('标注可视时长').fill('.5');await page.getByLabel('标注可视时长').press('Tab');await click('后一窗');assert.equal(await page.getByLabel('标注可视时长').inputValue(),'0.500');
+ await grid.scrollIntoViewIfNeeded();p=await point(.3);await page.mouse.move(p.x,p.y);await page.keyboard.down('Control');await page.mouse.wheel(0,-120);await page.keyboard.up('Control');await page.waitForFunction(()=>Number(document.querySelector('[aria-label="标注可视时长"]').value)<.5);
+ await page.keyboard.down('Shift');await page.mouse.wheel(0,120);await page.keyboard.up('Shift');
+ await page.getByLabel('标注可视时长').fill('2');await page.getByLabel('标注可视时长').press('Tab');await select(.3);
+ await page.keyboard.press('p');await page.waitForFunction(async()=> (await import('/src/state/audio.ts')).playback.playing);await page.keyboard.press('Space');await page.waitForFunction(async()=> !(await import('/src/state/audio.ts')).playback.playing);checks.push('view navigation, Ctrl zoom, Shift pan and real shared WebAudio start/pause');
+ await page.getByLabel('编辑选中标注文本').fill('定时保存');
+ assert.equal(await page.evaluate(()=>{const event=new Event('beforeunload',{cancelable:true});window.dispatchEvent(event);return event.defaultPrevented;}),true);
+ await page.clock.fastForward(61000);await page.getByRole('status').filter({hasText:'已保存：'}).waitFor();await loaded();assert.equal(await page.getByRole('button',{name:'保存 TextGrid *',exact:true}).count(),0);
+ let writes=0;const count=r=>{if(r.url().endsWith('/__m12')&&r.postDataJSON().op==='annotation_save')writes++;};page.on('request',count);
+ await page.getByLabel('编辑选中标注文本').evaluate(e=>{e.dispatchEvent(new CompositionEvent('compositionstart',{bubbles:true}));e.value='输入法组字';e.dispatchEvent(new InputEvent('input',{bubbles:true,isComposing:true}));});await page.clock.fastForward(61000);assert.equal(writes,0);
+ await page.getByLabel('编辑选中标注文本').evaluate(e=>{e.dispatchEvent(new CompositionEvent('compositionend',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));});await page.clock.fastForward(61000);await loaded();page.off('request',count);assert.equal(word(await doc())[0].text,'输入法组字');checks.push('60-second autosave includes uncommitted text, dirty unload guard; active IME composition is preserved');
+ let release,entered;const hold=new Promise(r=>release=r),started=new Promise(r=>entered=r);let intercept=true;
+ await page.route('**/__m12',async route=>{if(intercept&&route.request().postDataJSON().op==='annotation_save'){intercept=false;entered();await hold;}await route.continue();});
+ await select(.3);await page.getByLabel('编辑选中标注文本').fill('保存快照');await page.getByLabel('编辑选中标注文本').press('Enter');await page.locator('.annotation-file-list button').filter({hasText:'second.wav'}).click();await started;
+ await page.getByLabel('编辑选中标注文本').fill('保存期间的新编辑');await page.getByLabel('编辑选中标注文本').press('Enter');release();await page.getByRole('alert').filter({hasText:'保存期间有新的编辑'}).waitFor();assert.equal(await page.getByLabel('编辑选中标注文本').inputValue(),'保存期间的新编辑');
+ await page.unroute('**/__m12');await page.locator('.annotation-file-list button').filter({hasText:'second.wav'}).click();await loaded();await page.locator('.annotation-file-list button').filter({hasText:'audio_recording.wav'}).click();await loaded();await select(.3);assert.equal(await page.getByLabel('编辑选中标注文本').inputValue(),'保存期间的新编辑');
+ await page.getByLabel('编辑选中标注文本').fill('ba1');await page.getByLabel('编辑选中标注文本').press('Enter');await click('保存 TextGrid *');await loaded();checks.push('editing during delayed save prevents switch; retry saves latest text and reloads it');
+};

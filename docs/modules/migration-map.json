@@ -231,7 +231,9 @@
       ],
       "reuse": "提取既有编辑器状态/算法保留，不继承任意绝对路径接口；词/音素层独立，lip_manual_offset 只有一个，TextGrid 与唇偏分别保存。",
       "checks": "四种参考复用、强度内收/外扩负数、词典/词表、全部替换恢复、空后缀覆盖提示、切页保持编辑、并发保存冲突、偏移往返。",
-      "platform": "桌面原目录通过受控资源映射；Web 下载修改后的安全格式与 TextGrid；服务端旧 pickle 输入默认拒绝，转换须另审安全实现。"
+      "platform": "桌面原目录通过受控资源映射；Web 下载修改后的安全格式与 TextGrid；服务端旧 pickle 输入默认拒绝，转换须另审安全实现。",
+      "implementation_evidence": "docs/testing/m12-report.md",
+      "verification_scope": "Windows development only; no EXE"
     },
     {
       "id": "M13",

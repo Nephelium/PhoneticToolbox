@@ -1,6 +1,6 @@
 # M12 V2 源码与说明书映射
 
-2026-09-14，实施中。来源是相邻 V2 的 `phonetic_toolbox/gui/resources/web_praat_editor/app.js`、`index.html`、`default.dict`、`services/web_praat_server.py`、`services/io/lip.py` 与 `Phonetic_Export/index.html` 第 13.1–13.6 节。散列清单由迁移脚本生成于 `third_party/m12-migration.json`。
+2026-09-14，Windows 开发态功能 verified；逐组证据见 [验收报告](../../testing/m12-report.md)。来源是相邻 V2 的 `phonetic_toolbox/gui/resources/web_praat_editor/app.js`、`index.html`、`default.dict`、`services/web_praat_server.py`、`services/io/lip.py` 与 `Phonetic_Export/index.html` 第 13.1–13.6 节。散列清单由迁移脚本生成于 `third_party/m12-migration.json`。
 
 | 功能 | V2 函数/行为 | V3 落点与验收重点 |
 | --- | --- | --- |

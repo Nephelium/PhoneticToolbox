@@ -212,9 +212,11 @@ D页面与逐文件批次已限定Windows开发态验证，见[报告](../testin
 平台差异：本地外部环境由 launcher 管；服务端隔离执行及账号文件集合；模型共享只读，不能让上传模型以任意脚本执行。
 来源 ID：SRC-MFA, REF-MFA
 
-| M12 语音标注对齐 | 7 | [迁移计划](../plans/modules/M12-annotation.md) | `annotation` | planned |
+| M12 语音标注对齐 | 7 | [迁移计划](../plans/modules/M12-annotation.md) | `annotation` | verified（限定Windows开发态，见[报告](../testing/m12-report.md)） |
 
 ## M12 语音标注对齐
+
+2026-09-14已提前实施，以下7行正常及边界证据统一见[验收映射](../testing/m12-report.md)。本机原目录版本校验写入，网页使用不可变项目版本与下载；EXE尚未构建。
 左侧语料文件；中央波形/语谱图/唇形与词音素层；右侧层级/复用/保存设置；顶部编辑与搜索工具。
 
 | 编号 | 原功能组 | 必须保留的功能 | 新位置 | 行为约束 |

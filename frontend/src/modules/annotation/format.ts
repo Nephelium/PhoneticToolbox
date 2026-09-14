@@ -1,4 +1,5 @@
 import type {Grid,AnnotationTier,Interval} from './editor.mjs';
+import type {AudioAsset} from '../../platform/types.ts';
 
 // SRC-PRAAT: labelled and short text formats, doubled quotes and multiline labels.
 // Point tiers remain intact even though the two active editing rows are intervals.
@@ -65,9 +66,13 @@ export function decodeText(buffer:ArrayBuffer):string {
   try{return new TextDecoder('utf-8',{fatal:true}).decode(bytes);}catch{return new TextDecoder('gb18030',{fatal:true}).decode(bytes);}
 }
 export function validateEditingGrid(grid:Grid,duration:number){
-  if(grid.xmin!==0||Math.abs(grid.xmax-duration)>.05)throw Error('TextGrid 与音频时间范围不一致，请先在 Praat 核对。');
+  if(grid.xmin!==0||Math.abs(grid.xmax-duration)>1e-6)throw Error('TextGrid 与音频时间范围不一致，请先在 Praat 核对。');
   // Preserve the original domain and all unrelated tiers. Do not stretch labels.
   return grid;
+}
+export function validateEditingAudio(asset:AudioAsset){
+  if(asset.sampleRate<8000||asset.sampleRate>96000||asset.frames>8_000_000||asset.channels.length>8)throw Error('标注工作台支持 8–96 kHz、最多 8 声道及 800 万帧，请先转换或切分录音。');
+  return asset;
 }
 export function preferredGrid<T extends {name:string}>(audio:T,files:T[]):T|undefined {
   const stem=audio.name.replace(/\.wav$/i,'');
