@@ -1,0 +1,108 @@
+{
+  "module": "M12",
+  "date": "2026-09-14",
+  "source_ids": [
+    "ORIGIN-WEBEDITOR",
+    "PENDING-DICTIONARY",
+    "SRC-PRAAT"
+  ],
+  "files": [
+    {
+      "path": "phonetic_toolbox/gui/resources/web_praat_editor/app.js",
+      "sha256": "e739e9bcf5a445ce71eadeeba0d795d7519458c8680645b0b6043740f106a06c"
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/web_praat_editor/index.html",
+      "sha256": "2bfadc6fd9814806fedc4e88de0ab439b0d512d9d04505675da02216aba49637"
+    },
+    {
+      "path": "phonetic_toolbox/gui/resources/web_praat_editor/default.dict",
+      "sha256": "bbada4e40307447303f04bef5c36dfc2b1f17fea5c228aa7d9d266a3e8639a27"
+    },
+    {
+      "path": "phonetic_toolbox/services/web_praat_server.py",
+      "sha256": "f5cda6e75c9d8d22dcd29aadc4768daabb5c2270557388e58893f056fde3dce7"
+    },
+    {
+      "path": "phonetic_toolbox/services/io/lip.py",
+      "sha256": "6b87ff3ea67f53adb6e2cec44925d260c70dc277a85f66a2ebd3a28a1b695259"
+    },
+    {
+      "path": "Phonetic_Export/index.html",
+      "sha256": "a46c984929bcd8073ff1daf4e6b382a6685d4ca19e0fee0e29de3ecf0fb39ad5"
+    }
+  ],
+  "functions": [
+    "clamp",
+    "visibleEnd",
+    "duration",
+    "timeToX",
+    "xToTime",
+    "escapeTextGrid",
+    "fmt",
+    "fillGaps",
+    "nonEmpty",
+    "intervalCenter",
+    "intervalOverlap",
+    "intervalBelongsToWindow",
+    "tierByName",
+    "wordTierName",
+    "phoneTierName",
+    "wordTier",
+    "phoneTier",
+    "hitTest",
+    "onGridMouseDown",
+    "onGridMouseMove",
+    "onGridMouseUp",
+    "moveBoundary",
+    "setBoundary",
+    "deleteSelectedBoundary",
+    "moveMatchingPhoneBoundary",
+    "dragWord",
+    "canPlaceWord",
+    "finalizeRangeSelect",
+    "updateSelectedIndices",
+    "wordAtTime",
+    "phoneIntervalsInsideWord",
+    "labelsForIntervalCount",
+    "relabelPhonesForWord",
+    "splitPhoneAt",
+    "autoPhonesForSelection",
+    "ensurePhonesForWord",
+    "ensurePhoneBoundariesAtWord",
+    "percentile",
+    "smoothArray",
+    "localIntensityEnvelope",
+    "mergeActiveRuns",
+    "overlapLength",
+    "detectIntensityBoundsForWord",
+    "nearestNonEmptyBounds",
+    "setWordBounds",
+    "alignPhoneOuterEdgesToWord",
+    "fitIntensityRange",
+    "parseDictText",
+    "pinyinToPhonesFallback",
+    "pinyinToPhones",
+    "incrementTone",
+    "labIndexForWordSelection",
+    "nextCopiedWordText",
+    "pasteCopiedWord",
+    "doSearch",
+    "selectSearchResult",
+    "findNext",
+    "findPrev",
+    "replaceCurrent",
+    "replaceAll",
+    "clipIntervals",
+    "replacementWindows",
+    "complementWindows",
+    "spliceTier",
+    "applyReferenceSplice"
+  ],
+  "changes": [
+    "Per-editor state and injected UI ports",
+    "DOM-free model except injected canvas hit testing",
+    "Point tiers retained outside interval operations"
+  ],
+  "provenance": "V2 local migration confirmed; earlier origin and dictionary redistribution license remain unresolved"
+}
