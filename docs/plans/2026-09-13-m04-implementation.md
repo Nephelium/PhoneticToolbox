@@ -20,7 +20,7 @@
 | D 页面 | `frontend/src/modules/lpc-spectrum/`、公共波形可选适配、平台能力及页面注册 | 四功能组完整，原有模块手势不受影响，Chrome真实任务及小窗/浅深色/草稿检查 |
 | E 收口 | 使用说明、验收报告、功能矩阵 | A01–A20有明确证据和未测边界，开发态阶段收口 |
 
-A已完成限定基准，见 [报告](../testing/m04-baseline-report.md)。B纯核心现为限定Windows verified，见[核心报告](../testing/m04-core-report.md)；C任务/导出已限定Windows verified，见[任务报告](../testing/m04-jobs-report.md)；D页面已限定Windows独立Chrome verified，见[页面报告](../testing/m04-ui-report.md)。下一项E托管网页/自然录音与20项收口，完整M04仍in_progress。
+A已完成限定基准，见 [报告](../testing/m04-baseline-report.md)。B纯核心现为限定Windows verified，见[核心报告](../testing/m04-core-report.md)；C任务/导出已限定Windows verified，见[任务报告](../testing/m04-jobs-report.md)；D页面已限定Windows独立Chrome verified，见[页面报告](../testing/m04-ui-report.md)。E 已完成自然录音 Qt 宿主与新增语谱图交互，但托管账号 Chrome 被专用旧政策测试库的写入门禁挡住，状态仍为 in_progress；20 项逐项结论见[专项报告](../testing/m04-e-report.md)。完整 M04 不标 verified。
 
 ## 20项验收
 
@@ -64,3 +64,9 @@ m04/1单文件请求包含WAV引用、可选TextGrid引用、显式ROI、tier和
 ## D 页面实施（2026-09-13）
 
 井井在C交付后继续授权。文件为 `frontend/src/modules/lpc-spectrum/`、`platform/research.ts`、`platform/desktop.ts`、`AppShell.vue` 及公共波形可选Shift行为。详见ADR-049。复用真实任务/字体/保存接口，原始波形、频谱、参数、任务历史置于紧凑可滚动主区，TextGrid及文件放左栏。验证 `npm test`、`npm run typecheck`、`npm run build`，独立Chrome用实际TaskBridge/兼容子进程与合成输入检查计算、保存、切换、取消、草稿和小窗。托管认证联合与完整A01–A20收口留E，不把本机浏览器桥接称为托管部署验收。
+
+## E 追加交互与退出门（2026-09-26）
+
+井井追加手动选区与可切换语谱图，见 ADR-056。既有波形 Shift 拖动已在 D 和 P04 浏览器回归中通过，本轮仍用实际浏览器核对。M04 在波形下方使用现有 Praat 语谱预览，拖动语谱图与波形共用同一时间选区；异常预览不能阻止原有 LPC 任务。修改限 M04 页面与通用显示组件的可选接口，后端科学核心、任务协议和默认值不变。回归包含双图正反向选区、清除与可见窗、缩放后的时间映射、预览失败、频谱视图时间隔离，以及其他模块默认手势。
+
+E 的 20 项证据逐项收录在专项报告。Windows 本机 Chrome/Qt、授权自然录音、Linux 受限合成后端、真实托管账号网页、资源与发布分别标状态。专用 PostgreSQL 旧政策库遇到 `storage_policy_migration_required` 时停止写入验收；本任务不执行 DDL 或政策迁移。只有托管 Chrome 的上传、任务、历史和三文件下载实际通过后，才能将 A01/A20 的该范围标为 verified。

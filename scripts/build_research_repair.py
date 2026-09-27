@@ -20,6 +20,8 @@ for source, dest in [('frontend/dist', 'frontend/dist'), ('resources/vocal_tract
     args += ['--add-data', str(ROOT / source) + ';' + dest]
 for package in ['ptb_worker', 'ptb_api', 'phonetic_core', 'uvicorn']:
     args += ['--collect-submodules', package]
+from m11_bundle import arguments as m11_bundle_arguments
+args += m11_bundle_arguments(ROOT)
 args += ['--collect-all', '_sounddevice_data', '--hidden-import', '_cffi_backend',
          '--exclude-module', 'matplotlib', '--exclude-module', 'IPython',
          str(ROOT / 'scripts/research_entry.py')]

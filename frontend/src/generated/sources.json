@@ -406,14 +406,14 @@
   },
   {
     "id": "SRC-MEDIAPIPE",
-    "title": "MediaPipe Face Mesh",
+    "title": "MediaPipe legacy Face Mesh / Web Face Landmarker",
     "modules": [
       "M05"
     ],
     "kind": "runtime-and-model",
     "acknowledgement_group": "software",
     "authors": "作者待核实",
-    "version": "0.10.14",
+    "version": "legacy Python 0.10.14; tasks-vision 0.10.14; face_landmarker float16/1",
     "license": "Apache-2.0 for code; bundled model terms require artifact audit",
     "urls": {
       "documentation": "https://developers.google.com/edge/mediapipe/solutions/vision/face_landmarker",
@@ -445,10 +445,11 @@
     "kind": "external-tool-and-models",
     "acknowledgement_group": "software",
     "authors": "作者待核实",
-    "version": "实际版本待核实",
+    "version": "3.3.8 (optional local Windows candidate only; not bundled in main EXE)",
     "license": "each executable/model/dictionary must be checked",
     "urls": {
-      "documentation": "https://montreal-forced-aligner.readthedocs.io/en/latest/"
+      "documentation": "https://montreal-forced-aligner.readthedocs.io/en/v3.3.8/",
+      "license": "https://github.com/MontrealCorpusTools/Montreal-Forced-Aligner/blob/v3.3.8/LICENSE"
     }
   },
   {
@@ -586,9 +587,7 @@
   {
     "id": "SRC-REACT",
     "title": "React",
-    "modules": [
-      "M15"
-    ],
+    "modules": [],
     "kind": "legacy-web-dependency",
     "acknowledgement_group": "software",
     "authors": "作者待核实",
@@ -601,9 +600,7 @@
   {
     "id": "SRC-BABEL",
     "title": "Babel standalone",
-    "modules": [
-      "M15"
-    ],
+    "modules": [],
     "kind": "legacy-web-dependency",
     "acknowledgement_group": "software",
     "authors": "作者待核实",
@@ -616,9 +613,7 @@
   {
     "id": "SRC-TAILWIND",
     "title": "Tailwind CSS",
-    "modules": [
-      "M15"
-    ],
+    "modules": [],
     "kind": "legacy-web-dependency",
     "acknowledgement_group": "software",
     "authors": "作者待核实",
@@ -634,21 +629,21 @@
     "modules": [
       "M15"
     ],
-    "kind": "legacy-web-dependency",
+    "kind": "bundled-client-library",
     "acknowledgement_group": "software",
     "authors": "作者待核实",
-    "version": "实际版本待核实",
-    "license": "exact-version-license-pending",
+    "version": "0.20.3",
+    "license": "Apache-2.0",
     "urls": {
-      "repository": "https://git.sheetjs.com/sheetjs/sheetjs"
+      "repository": "https://git.sheetjs.com/sheetjs/sheetjs",
+      "distribution": "https://cdn.sheetjs.com/xlsx-0.20.3/package/xlsx.mjs",
+      "license": "https://docs.sheetjs.com/docs/miscellany/license/"
     }
   },
   {
     "id": "SRC-LUCIDE",
     "title": "Lucide",
-    "modules": [
-      "M15"
-    ],
+    "modules": [],
     "kind": "legacy-web-dependency",
     "acknowledgement_group": "software",
     "authors": "作者待核实",
@@ -831,7 +826,8 @@
     "title": "soundfile",
     "modules": [
       "shared-runtime",
-      "M09"
+      "M09",
+      "M12"
     ],
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
@@ -4251,7 +4247,8 @@
     "id": "P02-NPM-VUE-3-5-42",
     "title": "vue",
     "modules": [
-      "P02"
+      "P02",
+      "M15"
     ],
     "kind": "frontend-runtime-dependency",
     "acknowledgement_group": "software",
@@ -4823,7 +4820,8 @@
     "title": "scipy",
     "modules": [
       "M01",
-      "M09"
+      "M09",
+      "M12"
     ],
     "kind": "dependency",
     "acknowledgement_group": "software",
@@ -5128,6 +5126,35 @@
     "urls": {
       "solver": "https://github.com/scipy/scipy/blob/v1.16.3/scipy/linalg/_basic.py",
       "response": "https://github.com/scipy/scipy/blob/v1.16.3/scipy/signal/_filter_design.py"
+    }
+  },
+  {
+    "id": "PROJECT-M05",
+    "title": "PhoneticToolbox 唇形指标迁移与本地采集适配",
+    "modules": [
+      "M05"
+    ],
+    "kind": "project-integration",
+    "acknowledgement_group": "software",
+    "authors": "井韶子 / PhoneticToolbox contributors",
+    "version": "m05/1; lip-metrics-v2/1; decoded-pts/1",
+    "license": "Project integration; third-party components separately listed",
+    "urls": {}
+  },
+  {
+    "id": "ASSET-M05-NASA",
+    "title": "NASA Eileen Collins portrait via scikit-image",
+    "modules": [
+      "M05"
+    ],
+    "kind": "public-test-fixture",
+    "acknowledgement_group": "software",
+    "authors": "NASA",
+    "version": "scikit-image v0.19.3 astronaut.png",
+    "license": "NASA public-domain image; no endorsement or commercial likeness claim",
+    "urls": {
+      "source": "https://scikit-image.org/docs/0.21.x/api/skimage.data.html#skimage.data.astronaut",
+      "terms": "https://www.nasa.gov/nasa-brand-center/images-and-media/"
     }
   }
 ]

@@ -1,6 +1,6 @@
 # M11 · MFA 自动标注迁移计划
 
-状态：planned，未开始实现。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
+状态：in_progress。2026-09-27 Windows 本地正式任务与可选组件已实现，证据见 [M11 报告](../../testing/m11-report.md)；当前执行计划为 [分阶段实施](../2026-09-27-m11-implementation.md)。下列初版拟定路径／命令作为历史保留，实际入口和检查见新报告。Linux MFA 与正式远程执行仍阻断。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
 ## 现有代码与目标文件
 现有路径均已确认存在；目录内逐函数对应由实施第一步记录，避免把旧类名机械套给新实现。

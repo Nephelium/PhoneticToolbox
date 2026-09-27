@@ -15,6 +15,17 @@ def execute_file_claim(store,claim,worker_id,stop,*,step_delay=0):
     snapshot=json.loads(claim['snapshot'])
     config=snapshot['config']
     try:
+        # These legacy in-process archive paths do not yet have the bounded
+        # server execution protocol. Fail before reading inputs or reserving
+        # output; desktop research retains its existing streaming implementation.
+        from .resource_profiles import selected_profile
+        from .io.limits import FormatError
+        try:
+            profile=selected_profile()
+        except FormatError:
+            raise StorageError('server_export_unavailable',503) from None
+        if profile.shared_admission and snapshot['operation'] in ('archive_zip','extract_zip'):
+            raise StorageError('server_export_unavailable',503)
         with files.storage._locked() as conn:
             _,inputs=files._fence(conn,identity)
         operation=snapshot['operation']

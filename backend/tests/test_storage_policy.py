@@ -6,7 +6,7 @@ from ptb_api.storage_models import UploadInput
 
 
 def test_q01_last_bytes_and_settlement_are_not_double_counted():
-    assert QUOTA_BYTES == 5_000_000_000
+    assert QUOTA_BYTES == 1_000_000_000
     assert reserve(QUOTA_BYTES - 100, 60, 40) == 100
     with pytest.raises(StorageError, match='quota_exceeded'):
         reserve(QUOTA_BYTES - 100, 60, 41)
@@ -16,7 +16,7 @@ def test_q01_last_bytes_and_settlement_are_not_double_counted():
 
 
 def test_q02_invalid_budgets_do_not_expand_quota():
-    for amount in (-1, 5_000_000_001):
+    for amount in (-1, 1_000_000_001, True, 1.5):
         with pytest.raises(StorageError): reserve(0, 0, amount)
 
 
@@ -31,7 +31,7 @@ def test_q06_range_boundaries_and_empty_resources():
 
 
 def test_q19_q20_ttl_is_fixed_and_archive_cannot_extend_inputs():
-    assert expiry(100) == 604900
+    assert expiry(100) == 259300
     assert expiry(100, [300, 250]) == 250
     with pytest.raises(StorageError): expiry(100, [100])
 

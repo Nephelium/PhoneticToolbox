@@ -1,0 +1,10 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><title>M05 formal host verification</title></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';
+import {initializePlatform} from '/src/platform/desktop.ts';
+import '/src/design/tokens.css';
+// QWebChannel transport substitute only. M05Port is the production desktop.ts adapter.
+const callbacks={};async function send(channel,body){const response=await fetch('/__m05_host',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({channel,body:JSON.parse(body)})});return response.text();}
+window.qt={webChannelTransport:{}};
+window.QWebChannel=class{constructor(_,ready){ready({objects:{files:{invoke:(body,reply)=>void send('invoke',body).then(reply),previewReady:{connect:f=>callbacks.preview=f},taskReady:{connect:f=>callbacks.task=f},task:(id,body)=>void send('task',body).then(raw=>callbacks.task(id,raw))}}});}};
+await initializePlatform();const {default:Shell}=await import('/src/app/AppShell.vue');createApp({render:()=>h(Shell)}).mount('#app');
+</script></body></html>

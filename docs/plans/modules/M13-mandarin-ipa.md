@@ -1,6 +1,6 @@
 # M13 · 普通话转 IPA迁移计划
 
-状态：planned，未开始实现。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
+状态：**verified（限定 2026-09-26 Windows Chrome、Windows Qt 宿主和 WSL2 Ubuntu 静态托管）**。M13 是本地前端逐字转换，不依赖服务器科学计算链路；来源/许可 `PENDING-IPA`、生产部署及 Linux 真实浏览器交互仍单列未完成。证据见 [验收报告](../../testing/m13-report.md) 和 [源码映射](../../modules/evidence/M13-source-map.md)。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
 ## 现有代码与目标文件
 现有路径均已确认存在；目录内逐函数对应由实施第一步记录，避免把旧类名机械套给新实现。
@@ -8,16 +8,20 @@
 - [phonetic_toolbox/services/ipa_trans_service.py](../../../phonetic_toolbox/services/ipa_trans_service.py)
 - [phonetic_toolbox/gui/resources/ipa_trans](../../../phonetic_toolbox/gui/resources/ipa_trans)
 
-拟创建/修改路径（未来实现，不代表已经存在）：
+实际模块路径：
 
 - `frontend/src/modules/mandarin-ipa/MandarinIpaPage.vue`
 - `frontend/src/modules/mandarin-ipa/state.ts`
-- `packages/phonetic_core/src/phonetic_core/transcription/`
-- `backend/src/ptb_api/modules/mandarin_ipa.py`
-- `tests/parity/test_mandarin_ipa.py`
-- `frontend/tests/e2e/mandarin-ipa.spec.ts`
+- `frontend/src/modules/mandarin-ipa/export.ts`
+- `frontend/src/modules/mandarin-ipa/ipa-data.json`
+- `frontend/src/modules/mandarin-ipa/generate-data.mjs`
+- `frontend/tests/m13.test.ts`
+- `frontend/tests/m13-live.html`
+- `tests/e2e/m13.cjs`
+- `scripts/verify_m13_qt.py`
+- `scripts/verify_m13_linux_static.pl`
 
-纯显示/客户端模块如果没有科学计算，不为凑层数创建空 core/API；仅创建真实需要的读取/转换边界。共用核心目录中的改动按文件独立提交，不能覆盖其他已迁移模块。
+本轮核对后确认无需专属 core/API，也没有创建空后端层或任务契约。公共 AppShell 接线由公共 UI agent 维护；M13 页面通过 `dirty` 事件与 `save()` 接口接入。
 
 ## 布局与全部原功能分组
 左侧汉字编辑；中央转换结果；右侧转换标准和排版；顶部保存图片和帮助。
@@ -38,33 +42,39 @@
 
 平台边界：规则转换可在共享前端完成，无需每次上传文本；导出所需字体与图片库本地构建后离线验证。
 
-## 实施步骤与每步证据
-1. 只读列出上面每个功能组的旧控件、调用函数、默认值、输入输出格式、异常、现有测试。创建 `docs/modules/evidence/M13-source-map.md`，对新增/修复功能单独标识；不能把按钮文案当成功能已可用的证明。
-2. 在 P03 固定环境与样例下捕获本模块 v2 行为；核对 actual backend、单位、输出时间轴与缺失值。存入本地被忽略的输出目录，并把可公开 fixture 与配置/hash 写入测试清单。随机算法固定种子。新增功能没有旧基准时用明确规则验收。
-3. 把已有可用函数迁入核心；先保留数值步骤，只拆 UI/文件/设备/全局可变状态。目标函数显式收配置与输入，任务快照与结果记录方法版本。适配变动与算法优化分开提交。
-4. 新建本模块契约并接应用服务；输入通过资源 ID/已授权本地文件接口，输出进入 manifest。进度、取消、失败和部分结果统一；Web 所有临时/最终写入经过配额 writer。只显示已有结果的页面不强造长任务。
-5. 使用共享组件实现页面、主题、播放/选区、抽屉和页内子视图。把上述功能行一项项映射到组件与操作，保存/生成/试听等语义不能合并丢失。Web/desktop port 区分文件和设备能力，配置状态不跨账号/模块污染。
-6. 运行下面的专项场景与数值对照；先修真实差异，再对浅/深色、窗口缩放、键盘/IPA 字体、错误空态截图审阅。不能只运行单位测试就把 UI 和设备标已通过。
-7. 连接模块“方法与来源”入口，使用 ASSET-DOULOS, PENDING-IPA, SRC-HTML2CANVAS。更新说明书本模块操作、输入输出、参数单位、科学能力边界和来源；当前 unresolved 的条目不能伪装已核验。移植文件保留原版权/许可证。
-8. 更新 `docs/plans/task-ledger.json` 与原功能矩阵的证据列，记录实际命令/报告/截图；只有每行有可定位证据、双端必测通过才标完成。评审通过前保留旧功能来源，不删除旧入口或数据。
+## 实施记录
+
+1. 已完成说明书 10.1–10.2 与实际 `ipa_converter.html` 的四组映射、默认值、歧义与错误边界记录。
+2. 固定旧 HTML 源哈希后提取 21,572 行映射；10 个 IPA 列原值保留，汉语拼音沿用旧声调规则。只把旧非标准 JSON 的 3 个裸 `NaN` 规范化为 `null`。
+3. 转换、状态和排版保持纯前端。M13 资源按需分包，未创建 core/API、数据库结构或服务器任务。
+4. 页面使用公共 `ModuleFrame/Toolbar/Section/Status`、公共浅深主题和 Doulos SIL；AppShell 负责标签、关闭保护与帮助入口。模块内没有重复大标题、关闭按钮或音频条。
+5. 图片改为内置 Canvas 导出，不再调用旧 CDN html2canvas；实际离线下载、字体绘制调用及像素内容均已检查。
+6. 已运行单位/静态检查、真实 Chrome、Windows Qt 宿主与 WSL2 Linux 静态托管；范围和未测项见验收报告。
+7. 说明书与来源记录已更新；全局 task ledger、ADR 和 `module-migration.md` 留给统筹 agent，未越权覆盖其并行改动。
 
 ## 专项验收
 11 标准逐一、组合音标/上下标、字音间距、横/竖排、格式切换、断网图片导出、空文本/歧义。
 
 每个分组至少一个正常路径和一个相关错误/边界路径；录制、原生时序和数值算法必须在真实目标环境验证。
 
-拟建测试后的执行命令（当前不能当作已运行）：
+实际执行入口：
 
 ```powershell
-# 先激活 P02 建立并核验的 v3 环境，不改 phonetic_311。
-python -m pytest tests/parity/test_mandarin_ipa.py -q
-npm --prefix frontend run test:e2e -- mandarin-ipa.spec.ts
+npm --prefix frontend test
+npm --prefix frontend run typecheck
+npm --prefix frontend run build
+node tests/e2e/m13.cjs
+$env:PYTHONPATH='desktop/src;backend/src;packages/phonetic_core/src;scripts'
+& '.venv/m09-ui/Scripts/python.exe' 'scripts/verify_m13_qt.py'
+wsl.exe -d NInfer --exec perl /mnt/d/PhoneticToolbox/PhoneticToolbox_v3/scripts/verify_m13_linux_static.pl
 ```
 
-CLI 参数和 npm scripts 在 P02 明确定义后才能使用；如实现路径不同，先更新本计划与架构记录。共享测试另见 P03/P11。两条命令不能代替本模块原生/设备手工验收。
+仓库没有 `npm test:e2e`，因此没有报告该不存在的命令通过。Chrome 脚本直接使用项目现有 Vite 与 Playwright 运行时。
 
 ## 完成条件
 - 本页全部 4 组功能以及原矩阵相关参数/设置有映射，没有把折叠项当作删除项。
 - 数值/文件/时间轴差异均解释并审阅；已有功能不得静默改语义。
 - 浅深色、未保存保护、错误恢复与真实操作可用；Web owner/配额检查适用的路径已覆盖。
 - 软件/说明书的来源一致；尚缺权限/设备证据时状态仍为待处理，不能以隐藏控件绕过。
+
+上述功能条件已在限定平台满足。来源许可、生产服务部署、Linux 真实浏览器、macOS 与 EXE 未纳入本轮，不扩大 `verified`。

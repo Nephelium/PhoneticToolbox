@@ -82,8 +82,7 @@ def prepare_segments(audio,textgrid,layer,scratch,*,audio_name='audio.wav',paren
     raw=json.dumps(header,ensure_ascii=False,separators=(',',':')).encode()+b'\n'+audio+textgrid+(parent_result or b'')
     path=scratch.create(raw,'.json')
     try:
-        from .native.windows import InputPipe
-        from .native.reaper import collect_pipe
+        from .acoustic_executor import collect_scientific
         last_beat=-float('inf')
         def check():
             nonlocal last_beat
@@ -91,9 +90,7 @@ def prepare_segments(audio,textgrid,layer,scratch,*,audio_name='audio.wav',paren
                 heartbeat()  # A lease failure must abort, not be converted to success.
                 last_beat=time.monotonic()
             return stop()
-        pipe=InputPipe()
-        payload,_=collect_pipe(command('ptb_worker.segment_child',str(path),pipe.name),
-                               pipe,scratch.root,limits,check,on_started)
+        payload=collect_scientific('segment',path,scratch,limits,check,on_started)
         if stop():raise Cancelled('cancelled')
         heartbeat()
         bundle=unpack_bundle(payload,limits.output_bytes)

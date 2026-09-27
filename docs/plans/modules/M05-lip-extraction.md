@@ -1,6 +1,6 @@
 # M05 · 唇形提取迁移计划
 
-状态：planned，未开始实现。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
+状态：in_progress，2026-09-27 已授权实施。基线、浏览器候选、Windows 离线链路和 Chrome 实机录制已有证据，完整平台验收尚未收口。详见 [实施计划](../2026-09-27-m05-implementation.md)、[报告](../../testing/m05-report.md)、[操作说明](../../manual/lip-extraction.md)。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
 ## 现有代码与目标文件
 现有路径均已确认存在；目录内逐函数对应由实施第一步记录，避免把旧类名机械套给新实现。
@@ -39,7 +39,7 @@
 
 迁移重点：冻结关键点/面积/宽度定义、音视频时间基准、滤波与偏移；先做离线识别对照，再做实时采集。
 
-平台边界：Web 相机/麦克风通过浏览器权限，保存到配额管理的上传资源；原生使用系统设备适配；高帧率不作无依据保证。Web 禁止反序列化不可信 pickle；以安全结构化格式交互，旧 pkl 仅受控本地转换。
+平台边界：Web 相机/麦克风通过浏览器权限，默认本地导出；显式上传才进入配额管理，当前服务器 M05 能力关闭；原生使用系统设备适配；高帧率不作无依据保证。Web 禁止反序列化不可信 pickle；以安全结构化格式交互，旧 pkl 仅受控本地转换。
 
 ## 实施步骤与每步证据
 1. 只读列出上面每个功能组的旧控件、调用函数、默认值、输入输出格式、异常、现有测试。创建 `docs/modules/evidence/M05-source-map.md`，对新增/修复功能单独标识；不能把按钮文案当成功能已可用的证明。
@@ -56,12 +56,12 @@
 
 每个分组至少一个正常路径和一个相关错误/边界路径；录制、原生时序和数值算法必须在真实目标环境验证。
 
-拟建测试后的执行命令（当前不能当作已运行）：
+当前验收命令（实际结果见报告）：
 
 ```powershell
 # 先激活 P02 建立并核验的 v3 环境，不改 phonetic_311。
-python -m pytest tests/parity/test_lip_extraction.py -q
-npm --prefix frontend run test:e2e -- lip-extraction.spec.ts
+& '.venv/m05/Scripts/python.exe' -m pytest -c tests/pytest.ini tests/parity/test_lip_extraction.py backend/tests/test_m05_video.py backend/tests/test_m05_exports.py -q
+node tests/e2e/m05.cjs
 ```
 
 CLI 参数和 npm scripts 在 P02 明确定义后才能使用；如实现路径不同，先更新本计划与架构记录。共享测试另见 P03/P11。两条命令不能代替本模块原生/设备手工验收。

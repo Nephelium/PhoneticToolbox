@@ -1,0 +1,8 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><title>P04 real local preview</title></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';import Shell from '/src/app/AppShell.vue';import {previewFiles} from '/src/platform/research.ts';import '/src/design/tokens.css';
+// Real browser File reads. Only timing/failure is controlled; there is no job service.
+const files=previewFiles(),read=files.read;
+const control=window.__p04={delay:false,fail:false,waiting:false,release:null};
+files.read=async(...args)=>{if(control.delay){control.waiting=true;await new Promise(resolve=>control.release=resolve);control.waiting=false;}if(control.fail)throw Error('受控文件读取失败，请重新导入。');return read(...args);};
+createApp({render:()=>h(Shell,{research:{key:'p04-preview:M01',label:'公共布局合成文件验证',files}})}).mount('#app');
+</script></body></html>

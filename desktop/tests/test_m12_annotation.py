@@ -12,6 +12,35 @@ from phonetic_core.annotation import parse_document
 GRID = 'File type = "ooTextFile short"\n"TextGrid"\n0\n2\n<exists>\n2\n"IntervalTier"\n"words"\n0\n2\n1\n0\n2\n"井井 æ"\n"TextTier"\n"events"\n0\n2\n1\n1\n"ʔ"\n'
 
 
+def test_m12_r1_create_grid_from_bound_wav_then_save_new_grid_version(tmp_path):
+    (tmp_path/'中文.wav').write_bytes(b'owned WAV capability')
+    (tmp_path/'other.wav').write_bytes(b'other WAV capability')
+    provider=FileProvider();grant=provider.choose('input',lambda:tmp_path);annotation=AnnotationFiles(provider)
+    files=annotation.scan(grant['id']);audio=next(f for f in files if f['name']=='中文.wav');other=next(f for f in files if f['name']=='other.wav')
+    target=annotation.target(dict(role='textgrid',id=audio['id'],suffix='_webedit'))
+    with pytest.raises(FileAccessError,match='同一 WAV'):
+        annotation.save(dict(target=target['id'],source=dict(id=other['id'],sha256=provider.read(other['id'])[1]),text=GRID))
+    saved=annotation.save(dict(target=target['id'],source=dict(id=audio['id'],sha256=provider.read(audio['id'])[1]),text=GRID))
+    assert parse_document((tmp_path/saved['name']).read_text('utf-8'))['tiers'][0]['intervals'][0]['text']=='井井 æ'
+    annotation.save(dict(target=target['id'],source=dict(id=saved['file']['id'],sha256=saved['sha256']),text=GRID.replace('井井','顺序')))
+    assert '顺序' in (tmp_path/saved['name']).read_text('utf-8')
+    assert (tmp_path/'中文.wav').read_bytes()==b'owned WAV capability'
+
+
+def test_m12_r1_new_grid_rejects_changed_wav_and_concurrently_created_target(tmp_path):
+    wav=tmp_path/'new.wav';wav.write_bytes(b'first')
+    provider=FileProvider();grant=provider.choose('input',lambda:tmp_path);annotation=AnnotationFiles(provider)
+    audio=annotation.scan(grant['id'])[0];sha=provider.read(audio['id'])[1]
+    target=annotation.target(dict(role='textgrid',id=audio['id']))
+    (tmp_path/'new_自动保存.TextGrid').write_text('external',encoding='utf-8')
+    with pytest.raises(FileAccessError,match='其他窗口'):
+        annotation.save(dict(target=target['id'],source=dict(id=audio['id'],sha256=sha),text=GRID))
+    assert (tmp_path/'new_自动保存.TextGrid').read_text('utf-8')=='external'
+    target=annotation.target(dict(role='textgrid',id=audio['id'],suffix='_next'));wav.write_bytes(b'changed')
+    with pytest.raises(FileAccessError):annotation.save(dict(target=target['id'],source=dict(id=audio['id'],sha256=sha),text=GRID))
+    assert not (tmp_path/'new_next.TextGrid').exists()
+
+
 def setup(tmp_path):
     root = tmp_path/'corpus'; root.mkdir()
     sub = root/'中文 session'; sub.mkdir()

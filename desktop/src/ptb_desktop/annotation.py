@@ -4,17 +4,52 @@ Output names are derived from granted WAV/annotation files. Prepared target
 versions and source hashes protect edits from stale-window overwrites.
 """
 from pathlib import Path
+from contextlib import contextmanager
+import base64
 import hashlib
 import os
 import secrets
 import stat
-from .file_provider import Directory, Entry, FileAccessError, checked_path, identity, fingerprint, read_locked
+from .file_provider import Directory, Entry, FileAccessError, checked_path, identity, fingerprint, read_locked, open_locked
 
 
 class AnnotationFiles:
     def __init__(self, provider):
         self.provider = provider
         self.targets = {}
+
+    @contextmanager
+    def _audio_stream(self, file_id):
+        entry = self.provider.entries.get(file_id) if not self.provider.closed else None
+        if entry is None or not entry.name.lower().endswith('.wav'):
+            raise FileAccessError('音频授权已失效，请重新扫描。')
+        directory = self.provider.directory(entry.directory)
+        if directory.purpose == 'output':
+            raise FileAccessError('输出目录没有音频读取授权。')
+        try:
+            path = checked_path(directory.path / entry.name)
+            if path.parent != directory.path:
+                raise FileAccessError('音频超出目录授权。')
+            with open_locked(path, directory.path, entry.fingerprint) as stream:
+                yield stream
+                self.provider.directory(entry.directory)
+        except OSError:
+            raise FileAccessError('音频不可读取，请刷新列表。') from None
+
+    def audio(self, file_id):
+        from .annotation_audio import preview_audio
+        with self._audio_stream(file_id) as stream:
+            raw, sha, duration, note = preview_audio(stream, self.provider.max_bytes)
+        return dict(base64=base64.b64encode(raw).decode('ascii'), sha256=sha,
+                    sourceDuration=duration, previewNote=note)
+
+    def _source(self, file_id):
+        entry = self.provider.entries.get(file_id)
+        if entry and entry.name.lower().endswith('.wav'):
+            from .annotation_audio import source_hash
+            with self._audio_stream(file_id) as stream:
+                return b'', source_hash(stream)
+        return self.provider.read(file_id)
 
     def scan(self, key):
         root = self.provider.directory(key)
@@ -83,12 +118,12 @@ class AnnotationFiles:
         entry = self.provider.entries.get(body.get('id'))
         if entry is None:
             raise FileAccessError('来源授权已失效，请重新扫描。')
-        self.provider.read(body['id'])
+        self._source(body['id'])
         directory = self.provider.directory(entry.directory)
         if directory.purpose not in ('input', 'association'):
             raise FileAccessError('没有标注写入能力。')
         if role == 'textgrid' and entry.name.lower().endswith('.wav'):
-            suffix = body.get('suffix', '_webedit')
+            suffix = body.get('suffix', '_自动保存')
             if type(suffix) != str or len(suffix) > 60 or any(ord(c) < 32 or c in '/\\:*?"<>|' for c in suffix) or suffix.endswith(('.', ' ')):
                 raise FileAccessError('文件后缀无效。')
             name = Path(entry.name).stem + suffix + '.TextGrid'
@@ -103,7 +138,7 @@ class AnnotationFiles:
         if len(self.targets) >= 2000:
             raise FileAccessError('保存目标准备次数过多，请重开页面。')
         token = secrets.token_urlsafe(24)
-        self.targets[token] = (entry.directory, name, stamp, sha, role)
+        self.targets[token] = (entry.directory, name, stamp, sha, role, body['id'])
         return dict(id=token, name=name, sha256=sha)
 
     def save(self, body):
@@ -112,18 +147,18 @@ class AnnotationFiles:
         prepared = self.targets.get(body.get('target'))
         if prepared is None:
             raise FileAccessError('保存目标已失效，请重试。')
-        grant, name, stamp, expected, role = prepared
+        grant, name, stamp, expected, role, origin_id = prepared
         directory = self.provider.directory(grant)
         source = body.get('source', {})
-        source_bytes, source_sha = self.provider.read(source.get('id'))
+        source_bytes, source_sha = self._source(source.get('id'))
         if source_sha != source.get('sha256'):
             raise FileAccessError('来源文件已被修改，编辑仍保留，请重新读取或另存。')
         source_entry = self.provider.entries[source['id']]
         if source_entry.directory != grant:
             raise FileAccessError('保存来源与目录不符。')
         if role == 'textgrid':
-            if not source_entry.name.lower().endswith('.textgrid'):
-                raise FileAccessError('标注保存需要原 TextGrid 版本。')
+            if not source_entry.name.lower().endswith('.textgrid') and not (source_entry.name.lower().endswith('.wav') and source['id'] == origin_id):
+                raise FileAccessError('标注保存需要原 TextGrid 版本，或新建标注所绑定的同一 WAV 版本。')
             validate_textgrid(body.get('text'))
             payload = body['text'].encode('utf-8')
         else:
@@ -142,7 +177,7 @@ class AnnotationFiles:
             try:
                 if self._version(target, root) != (stamp, expected):
                     raise FileAccessError('目标已被其他窗口修改，未覆盖；编辑仍保留。')
-                if self.provider.read(source['id'])[1] != source_sha:
+                if self._source(source['id'])[1] != source_sha:
                     raise FileAccessError('来源已变化，未保存。')
                 with temp.open('xb') as stream:
                     stream.write(payload); stream.flush(); os.fsync(stream.fileno())
@@ -152,7 +187,7 @@ class AnnotationFiles:
                 current = next(f for f in self.provider.list(grant) if f['name'] == name)
                 current['sha256'] = hashlib.sha256(payload).hexdigest()
                 # Keep a retryable target version after successful write.
-                self.targets[body['target']] = (grant, name, fingerprint(target.stat()), current['sha256'], role)
+                self.targets[body['target']] = (grant, name, fingerprint(target.stat()), current['sha256'], role, origin_id)
                 return dict(file=current, name=name, sha256=current['sha256'])
             finally:
                 os.close(lock_fd)
@@ -161,6 +196,7 @@ class AnnotationFiles:
 
     def invoke(self, body):
         op = body.get('op')
+        if op == 'annotation_audio': return self.audio(body['id'])
         if op == 'annotation_scan': return self.scan(body['directory'])
         if op == 'annotation_lip': return self.lip(body['id'])
         if op == 'annotation_target': return self.target(body)

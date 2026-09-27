@@ -35,7 +35,7 @@ test('M12 TextGrid Chinese/IPA/quotes/multiline and point tiers survive save',()
 test('M12 malformed, overlapping, duplicate and excessive grids fail explicitly',()=>{
   assert.throws(()=>parseGrid(''));assert.throws(()=>parseGrid('File type = "ooTextFile"\n"TextGrid" 0 1 <exists> 1 "IntervalTier" "words" 0 1 2 0 .8 "a" .5 1 "b"'));
   const asset={name:'x',sampleRate:16000,frames:32000,duration:2,channels:[new Float32Array()],peaks:[]};assert.equal(validateEditingAudio(asset),asset);
-  for(const values of [{sampleRate:4294967295},{sampleRate:1},{frames:8000001},{channels:Array(9).fill(new Float32Array())}])assert.throws(()=>validateEditingAudio({...asset,...values}));
+  for(const values of [{sampleRate:4294967295},{sampleRate:1},{frames:32000001},{channels:Array(9).fill(new Float32Array())}])assert.throws(()=>validateEditingAudio({...asset,...values}));
 });
 test('M12 cannot drag the outer domain or paste beyond a short blank',()=>{
  const e=createEditor();e.state.textgrid={xmin:0,xmax:1,tiers:[{name:'words',intervals:[{xmin:0,xmax:.97,text:'a'},{xmin:.97,xmax:1,text:''}]}]};

@@ -1,0 +1,654 @@
+{
+  "sample_rate": 16000,
+  "synth": [
+    [
+      0,
+      0.6,
+      1
+    ],
+    [
+      0.1,
+      0.5,
+      0.8
+    ],
+    [
+      0.1,
+      0.5,
+      1.5
+    ],
+    [
+      0,
+      0.6,
+      1.005
+    ]
+  ],
+  "batch": [
+    {
+      "args": {
+        "t1": 0.1,
+        "t2": 0.5,
+        "f1_list": [
+          180,
+          120
+        ],
+        "f2_list": [
+          140,
+          200
+        ],
+        "knot_points": [
+          {
+            "time": 0.3,
+            "freqs": [
+              160,
+              190
+            ]
+          }
+        ],
+        "start_mode": "full",
+        "end_mode": "full",
+        "knot_modes": [
+          "order"
+        ],
+        "offset_mode": false
+      },
+      "names": [
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-160.0-140.0_k0.30_160.0Hz_combo3_3.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-160.0-200.0_k0.30_160.0Hz_combo4_4.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-190.0-140.0_k0.30_190.0Hz_combo7_7.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-190.0-200.0_k0.30_190.0Hz_combo8_8.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-160.0-140.0_k0.30_160.0Hz_combo1_1.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-160.0-200.0_k0.30_160.0Hz_combo2_2.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-190.0-140.0_k0.30_190.0Hz_combo5_5.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-190.0-200.0_k0.30_190.0Hz_combo6_6.wav"
+      ]
+    },
+    {
+      "args": {
+        "t1": 0.1,
+        "t2": 0.5,
+        "f1_list": [
+          180,
+          120
+        ],
+        "f2_list": [
+          140,
+          200
+        ],
+        "knot_points": [
+          {
+            "time": 0.3,
+            "freqs": [
+              160,
+              190
+            ]
+          }
+        ],
+        "start_mode": "full",
+        "end_mode": "order",
+        "knot_modes": [
+          "order"
+        ],
+        "offset_mode": false
+      },
+      "names": [
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-160.0-140.0_k0.30_160.0Hz_combo2_2.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-190.0-200.0_k0.30_190.0Hz_combo4_4.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-160.0-140.0_k0.30_160.0Hz_combo1_1.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-190.0-200.0_k0.30_190.0Hz_combo3_3.wav"
+      ]
+    },
+    {
+      "args": {
+        "t1": 0.1,
+        "t2": 0.5,
+        "f1_list": [
+          180,
+          120
+        ],
+        "f2_list": [
+          140,
+          200
+        ],
+        "knot_points": [
+          {
+            "time": 0.3,
+            "freqs": [
+              160,
+              190
+            ]
+          }
+        ],
+        "start_mode": "full",
+        "end_mode": "reverse",
+        "knot_modes": [
+          "order"
+        ],
+        "offset_mode": false
+      },
+      "names": [
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-160.0-200.0_k0.30_160.0Hz_combo2_2.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-190.0-140.0_k0.30_190.0Hz_combo4_4.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-160.0-200.0_k0.30_160.0Hz_combo1_1.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-190.0-140.0_k0.30_190.0Hz_combo3_3.wav"
+      ]
+    },
+    {
+      "args": {
+        "t1": 0.1,
+        "t2": 0.5,
+        "f1_list": [
+          180,
+          120
+        ],
+        "f2_list": [
+          140,
+          200
+        ],
+        "knot_points": [
+          {
+            "time": 0.3,
+            "freqs": [
+              160,
+              190
+            ]
+          }
+        ],
+        "start_mode": "full",
+        "end_mode": "constant",
+        "knot_modes": [
+          "order"
+        ],
+        "offset_mode": false
+      },
+      "names": [
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-160.0-140.0_k0.30_160.0Hz_combo2_2.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-190.0-140.0_k0.30_190.0Hz_combo4_4.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-160.0-140.0_k0.30_160.0Hz_combo1_1.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-190.0-140.0_k0.30_190.0Hz_combo3_3.wav"
+      ]
+    },
+    {
+      "args": {
+        "t1": 0.1,
+        "t2": 0.5,
+        "f1_list": [
+          180,
+          120
+        ],
+        "f2_list": [
+          140,
+          200
+        ],
+        "knot_points": [
+          {
+            "time": 0.3,
+            "freqs": [
+              160,
+              190
+            ]
+          }
+        ],
+        "start_mode": "order",
+        "end_mode": "full",
+        "knot_modes": [
+          "order"
+        ],
+        "offset_mode": false
+      },
+      "names": [
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-160.0-140.0_k0.30_160.0Hz_combo1_1.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-160.0-200.0_k0.30_160.0Hz_combo2_2.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-190.0-140.0_k0.30_190.0Hz_combo3_3.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-190.0-200.0_k0.30_190.0Hz_combo4_4.wav"
+      ]
+    },
+    {
+      "args": {
+        "t1": 0.1,
+        "t2": 0.5,
+        "f1_list": [
+          180,
+          120
+        ],
+        "f2_list": [
+          140,
+          200
+        ],
+        "knot_points": [
+          {
+            "time": 0.3,
+            "freqs": [
+              160,
+              190
+            ]
+          }
+        ],
+        "start_mode": "order",
+        "end_mode": "order",
+        "knot_modes": [
+          "order"
+        ],
+        "offset_mode": false
+      },
+      "names": [
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-160.0-140.0_k0.30_160.0Hz_combo1_1.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-190.0-200.0_k0.30_190.0Hz_combo2_2.wav"
+      ]
+    },
+    {
+      "args": {
+        "t1": 0.1,
+        "t2": 0.5,
+        "f1_list": [
+          180,
+          120
+        ],
+        "f2_list": [
+          140,
+          200
+        ],
+        "knot_points": [
+          {
+            "time": 0.3,
+            "freqs": [
+              160,
+              190
+            ]
+          }
+        ],
+        "start_mode": "order",
+        "end_mode": "reverse",
+        "knot_modes": [
+          "order"
+        ],
+        "offset_mode": false
+      },
+      "names": [
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-160.0-200.0_k0.30_160.0Hz_combo1_1.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-190.0-140.0_k0.30_190.0Hz_combo2_2.wav"
+      ]
+    },
+    {
+      "args": {
+        "t1": 0.1,
+        "t2": 0.5,
+        "f1_list": [
+          180,
+          120
+        ],
+        "f2_list": [
+          140,
+          200
+        ],
+        "knot_points": [
+          {
+            "time": 0.3,
+            "freqs": [
+              160,
+              190
+            ]
+          }
+        ],
+        "start_mode": "order",
+        "end_mode": "constant",
+        "knot_modes": [
+          "order"
+        ],
+        "offset_mode": false
+      },
+      "names": [
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-160.0-140.0_k0.30_160.0Hz_combo1_1.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-190.0-140.0_k0.30_190.0Hz_combo2_2.wav"
+      ]
+    },
+    {
+      "args": {
+        "t1": 0.1,
+        "t2": 0.5,
+        "f1_list": [
+          180,
+          120
+        ],
+        "f2_list": [
+          140,
+          200
+        ],
+        "knot_points": [
+          {
+            "time": 0.3,
+            "freqs": [
+              160,
+              190
+            ]
+          }
+        ],
+        "start_mode": "reverse",
+        "end_mode": "full",
+        "knot_modes": [
+          "order"
+        ],
+        "offset_mode": false
+      },
+      "names": [
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-190.0-140.0_k0.30_190.0Hz_combo3_3.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-190.0-200.0_k0.30_190.0Hz_combo4_4.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-160.0-140.0_k0.30_160.0Hz_combo1_1.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-160.0-200.0_k0.30_160.0Hz_combo2_2.wav"
+      ]
+    },
+    {
+      "args": {
+        "t1": 0.1,
+        "t2": 0.5,
+        "f1_list": [
+          180,
+          120
+        ],
+        "f2_list": [
+          140,
+          200
+        ],
+        "knot_points": [
+          {
+            "time": 0.3,
+            "freqs": [
+              160,
+              190
+            ]
+          }
+        ],
+        "start_mode": "reverse",
+        "end_mode": "order",
+        "knot_modes": [
+          "order"
+        ],
+        "offset_mode": false
+      },
+      "names": [
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-190.0-200.0_k0.30_190.0Hz_combo2_2.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-160.0-140.0_k0.30_160.0Hz_combo1_1.wav"
+      ]
+    },
+    {
+      "args": {
+        "t1": 0.1,
+        "t2": 0.5,
+        "f1_list": [
+          180,
+          120
+        ],
+        "f2_list": [
+          140,
+          200
+        ],
+        "knot_points": [
+          {
+            "time": 0.3,
+            "freqs": [
+              160,
+              190
+            ]
+          }
+        ],
+        "start_mode": "reverse",
+        "end_mode": "reverse",
+        "knot_modes": [
+          "order"
+        ],
+        "offset_mode": false
+      },
+      "names": [
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-190.0-140.0_k0.30_190.0Hz_combo2_2.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-160.0-200.0_k0.30_160.0Hz_combo1_1.wav"
+      ]
+    },
+    {
+      "args": {
+        "t1": 0.1,
+        "t2": 0.5,
+        "f1_list": [
+          180,
+          120
+        ],
+        "f2_list": [
+          140,
+          200
+        ],
+        "knot_points": [
+          {
+            "time": 0.3,
+            "freqs": [
+              160,
+              190
+            ]
+          }
+        ],
+        "start_mode": "reverse",
+        "end_mode": "constant",
+        "knot_modes": [
+          "order"
+        ],
+        "offset_mode": false
+      },
+      "names": [
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_120.0-190.0-140.0_k0.30_190.0Hz_combo2_2.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-160.0-140.0_k0.30_160.0Hz_combo1_1.wav"
+      ]
+    },
+    {
+      "args": {
+        "t1": 0.1,
+        "t2": 0.5,
+        "f1_list": [
+          180,
+          120
+        ],
+        "f2_list": [
+          140,
+          200
+        ],
+        "knot_points": [
+          {
+            "time": 0.3,
+            "freqs": [
+              160,
+              190
+            ]
+          }
+        ],
+        "start_mode": "constant",
+        "end_mode": "full",
+        "knot_modes": [
+          "order"
+        ],
+        "offset_mode": false
+      },
+      "names": [
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-160.0-140.0_k0.30_160.0Hz_combo1_1.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-160.0-200.0_k0.30_160.0Hz_combo2_2.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-190.0-140.0_k0.30_190.0Hz_combo3_3.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-190.0-200.0_k0.30_190.0Hz_combo4_4.wav"
+      ]
+    },
+    {
+      "args": {
+        "t1": 0.1,
+        "t2": 0.5,
+        "f1_list": [
+          180,
+          120
+        ],
+        "f2_list": [
+          140,
+          200
+        ],
+        "knot_points": [
+          {
+            "time": 0.3,
+            "freqs": [
+              160,
+              190
+            ]
+          }
+        ],
+        "start_mode": "constant",
+        "end_mode": "order",
+        "knot_modes": [
+          "order"
+        ],
+        "offset_mode": false
+      },
+      "names": [
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-160.0-140.0_k0.30_160.0Hz_combo1_1.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-190.0-200.0_k0.30_190.0Hz_combo2_2.wav"
+      ]
+    },
+    {
+      "args": {
+        "t1": 0.1,
+        "t2": 0.5,
+        "f1_list": [
+          180,
+          120
+        ],
+        "f2_list": [
+          140,
+          200
+        ],
+        "knot_points": [
+          {
+            "time": 0.3,
+            "freqs": [
+              160,
+              190
+            ]
+          }
+        ],
+        "start_mode": "constant",
+        "end_mode": "reverse",
+        "knot_modes": [
+          "order"
+        ],
+        "offset_mode": false
+      },
+      "names": [
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-160.0-200.0_k0.30_160.0Hz_combo1_1.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-190.0-140.0_k0.30_190.0Hz_combo2_2.wav"
+      ]
+    },
+    {
+      "args": {
+        "t1": 0.1,
+        "t2": 0.5,
+        "f1_list": [
+          180,
+          120
+        ],
+        "f2_list": [
+          140,
+          200
+        ],
+        "knot_points": [
+          {
+            "time": 0.3,
+            "freqs": [
+              160,
+              190
+            ]
+          }
+        ],
+        "start_mode": "constant",
+        "end_mode": "constant",
+        "knot_modes": [
+          "order"
+        ],
+        "offset_mode": false
+      },
+      "names": [
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-160.0-140.0_k0.30_160.0Hz_combo1_1.wav",
+        "public_0.00_0.60_modified_seg_0.10-0.50_kn1_lin_Fpath_180.0-190.0-140.0_k0.30_190.0Hz_combo2_2.wav"
+      ]
+    }
+  ],
+  "errors": {
+    "transform_2": "Option argument \"Unit\" cannot have the value \"Hz\".\r",
+    "transform_3": "Option argument \"Unit\" cannot have the value \"Hz\".\r"
+  },
+  "source_hashes": {
+    "core\\manipulation\\synthesis.py": "508a7ad2dc1317363ed66d7dfeffdfd5d719422adc906c65121730feb78e19fe",
+    "core\\manipulation\\batch_utils.py": "52ae280c71605925128b63c09b000366f59b79579a2109dea826157abcd82b6f",
+    "services\\manipulation_service.py": "37e89e96dae5136123bae5c2b2b84e5bb2490433210149bfc9163a981bfb6a37",
+    "gui\\widgets\\pitch_manipulation_widget.py": "109f62665e90e4fc52a886fb36c7062324b5b95cbb7392be859a1597eb8c5de3",
+    "gui\\dialogs\\manipulation_dialogs.py": "b910f56460e5f46e2e8fd709ee4a89e315bc7afc40251fd711d348897b365a23"
+  },
+  "parselmouth": "0.4.7",
+  "numpy": "2.2.6",
+  "array_hashes": {
+    "samples": "949dc46675694352dad7628d56c2a75328f402cc34e42f74a4b27d8f538d982b",
+    "times": "e7f24239abaa0d2cd0469ec431ab182890a3150b4e07dfcdcd97fa748b03ffac",
+    "f0": "5277b5b6060d785f01c8cdb1be56cbe7316972723ad54ab0680c3152a97bbd65",
+    "synth_0": "f87371986f83d96cf5b89b448263d70f4312d20148415f7265441327672818ea",
+    "axis_0": "88111d886d712c5de62bd4ce74249ecd9ff2150b91501023ba7ccbcbf62f3419",
+    "synth_1": "bfedab861b2c64a3ad0e9b9230b4ff9613b38ca3de3825f23764690b4e27d9c9",
+    "axis_1": "76582fce985a814474905e9a17288d297e594482f5bad7b7c459a819817656e4",
+    "synth_2": "9719c6612fcd8a489ed2220c37b1b746ed55ad99a23e2b041229a470cebae944",
+    "axis_2": "7ca5a0c43d832f94d4ca66845b1aadcd99ac1460cf714d56a24c558cc606e4fb",
+    "synth_3": "f87371986f83d96cf5b89b448263d70f4312d20148415f7265441327672818ea",
+    "axis_3": "88111d886d712c5de62bd4ce74249ecd9ff2150b91501023ba7ccbcbf62f3419",
+    "transform_0": "98fc58e70e57a6e1c42cebe7c357c6aa341bac9c09fefeaaf7ef6a6d03eab646",
+    "transform_1": "74027128095c43f8c973239113568f588798e77fe81746fa5b73a46358c11110",
+    "transform_4": "98fc58e70e57a6e1c42cebe7c357c6aa341bac9c09fefeaaf7ef6a6d03eab646",
+    "pcm_input": "98fc58e70e57a6e1c42cebe7c357c6aa341bac9c09fefeaaf7ef6a6d03eab646",
+    "batch_0_0": "2928bd6c2a8446e770da57226ee124544f9049fd2ed69867e732d4658c3130d8",
+    "batch_0_1": "1add11eb9d73d8bc47c3e4e33ce1ff96294d62f1b9bd74cdd40330f398a25427",
+    "batch_0_2": "29fadbbaadf55f5827a0542fc1614e7843f35505866d26fc379b4894e2a4b241",
+    "batch_0_3": "7e657b7fadea253d73c30ef41c7e89e0679198685e35fc01599e3fa0badb9cf1",
+    "batch_0_4": "d8e56abc8f4441ceeda8321abd0add5697de34762a902b220f83ca459078da3f",
+    "batch_0_5": "477f343603c2d8b61d772d415178f5696b3e57be71be0bd942e4ae14a268e86e",
+    "batch_0_6": "cb175da492cb754b29faf53b49974ed144852beec2e4b5f240beddc1cbc4abe8",
+    "batch_0_7": "b64248ac4c400115f77816ae7acee490b5867e64007e86cb510aa000f937a34a",
+    "batch_1_0": "2928bd6c2a8446e770da57226ee124544f9049fd2ed69867e732d4658c3130d8",
+    "batch_1_1": "7e657b7fadea253d73c30ef41c7e89e0679198685e35fc01599e3fa0badb9cf1",
+    "batch_1_2": "d8e56abc8f4441ceeda8321abd0add5697de34762a902b220f83ca459078da3f",
+    "batch_1_3": "b64248ac4c400115f77816ae7acee490b5867e64007e86cb510aa000f937a34a",
+    "batch_2_0": "1add11eb9d73d8bc47c3e4e33ce1ff96294d62f1b9bd74cdd40330f398a25427",
+    "batch_2_1": "29fadbbaadf55f5827a0542fc1614e7843f35505866d26fc379b4894e2a4b241",
+    "batch_2_2": "477f343603c2d8b61d772d415178f5696b3e57be71be0bd942e4ae14a268e86e",
+    "batch_2_3": "cb175da492cb754b29faf53b49974ed144852beec2e4b5f240beddc1cbc4abe8",
+    "batch_3_0": "2928bd6c2a8446e770da57226ee124544f9049fd2ed69867e732d4658c3130d8",
+    "batch_3_1": "29fadbbaadf55f5827a0542fc1614e7843f35505866d26fc379b4894e2a4b241",
+    "batch_3_2": "d8e56abc8f4441ceeda8321abd0add5697de34762a902b220f83ca459078da3f",
+    "batch_3_3": "cb175da492cb754b29faf53b49974ed144852beec2e4b5f240beddc1cbc4abe8",
+    "batch_4_0": "2928bd6c2a8446e770da57226ee124544f9049fd2ed69867e732d4658c3130d8",
+    "batch_4_1": "1add11eb9d73d8bc47c3e4e33ce1ff96294d62f1b9bd74cdd40330f398a25427",
+    "batch_4_2": "cb175da492cb754b29faf53b49974ed144852beec2e4b5f240beddc1cbc4abe8",
+    "batch_4_3": "b64248ac4c400115f77816ae7acee490b5867e64007e86cb510aa000f937a34a",
+    "batch_5_0": "2928bd6c2a8446e770da57226ee124544f9049fd2ed69867e732d4658c3130d8",
+    "batch_5_1": "b64248ac4c400115f77816ae7acee490b5867e64007e86cb510aa000f937a34a",
+    "batch_6_0": "1add11eb9d73d8bc47c3e4e33ce1ff96294d62f1b9bd74cdd40330f398a25427",
+    "batch_6_1": "cb175da492cb754b29faf53b49974ed144852beec2e4b5f240beddc1cbc4abe8",
+    "batch_7_0": "2928bd6c2a8446e770da57226ee124544f9049fd2ed69867e732d4658c3130d8",
+    "batch_7_1": "cb175da492cb754b29faf53b49974ed144852beec2e4b5f240beddc1cbc4abe8",
+    "batch_8_0": "29fadbbaadf55f5827a0542fc1614e7843f35505866d26fc379b4894e2a4b241",
+    "batch_8_1": "7e657b7fadea253d73c30ef41c7e89e0679198685e35fc01599e3fa0badb9cf1",
+    "batch_8_2": "d8e56abc8f4441ceeda8321abd0add5697de34762a902b220f83ca459078da3f",
+    "batch_8_3": "477f343603c2d8b61d772d415178f5696b3e57be71be0bd942e4ae14a268e86e",
+    "batch_9_0": "7e657b7fadea253d73c30ef41c7e89e0679198685e35fc01599e3fa0badb9cf1",
+    "batch_9_1": "d8e56abc8f4441ceeda8321abd0add5697de34762a902b220f83ca459078da3f",
+    "batch_10_0": "29fadbbaadf55f5827a0542fc1614e7843f35505866d26fc379b4894e2a4b241",
+    "batch_10_1": "477f343603c2d8b61d772d415178f5696b3e57be71be0bd942e4ae14a268e86e",
+    "batch_11_0": "29fadbbaadf55f5827a0542fc1614e7843f35505866d26fc379b4894e2a4b241",
+    "batch_11_1": "d8e56abc8f4441ceeda8321abd0add5697de34762a902b220f83ca459078da3f",
+    "batch_12_0": "d8e56abc8f4441ceeda8321abd0add5697de34762a902b220f83ca459078da3f",
+    "batch_12_1": "477f343603c2d8b61d772d415178f5696b3e57be71be0bd942e4ae14a268e86e",
+    "batch_12_2": "cb175da492cb754b29faf53b49974ed144852beec2e4b5f240beddc1cbc4abe8",
+    "batch_12_3": "b64248ac4c400115f77816ae7acee490b5867e64007e86cb510aa000f937a34a",
+    "batch_13_0": "d8e56abc8f4441ceeda8321abd0add5697de34762a902b220f83ca459078da3f",
+    "batch_13_1": "b64248ac4c400115f77816ae7acee490b5867e64007e86cb510aa000f937a34a",
+    "batch_14_0": "477f343603c2d8b61d772d415178f5696b3e57be71be0bd942e4ae14a268e86e",
+    "batch_14_1": "cb175da492cb754b29faf53b49974ed144852beec2e4b5f240beddc1cbc4abe8",
+    "batch_15_0": "d8e56abc8f4441ceeda8321abd0add5697de34762a902b220f83ca459078da3f",
+    "batch_15_1": "cb175da492cb754b29faf53b49974ed144852beec2e4b5f240beddc1cbc4abe8",
+    "offset": "4f54943b9635d63b0ec90e3ba06c69341f4370df0f8dd28db403d9b9a7392dbe"
+  }
+}

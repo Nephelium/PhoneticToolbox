@@ -427,6 +427,329 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/jobs/m05/catalog": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** M05 Catalog */
+        get: operations["lip_catalog"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m05/create": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** M05 Create */
+        post: operations["create_lip_job"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m05/uploads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** M05 Begin */
+        post: operations["begin_local_lip_video"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m05/uploads/{key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** M05 Block */
+        put: operations["write_local_lip_video"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m05/uploads/{key}/abort": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** M05 Abort */
+        post: operations["abort_local_lip_video"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m05/uploads/{key}/finalize": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** M05 Finish */
+        post: operations["finalize_local_lip_video"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m05/{key}/repeat": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** M05 Repeat */
+        post: operations["render_lip_animation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m06/create": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create M06 */
+        post: operations["create_speech_synthesis_job"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m07/create": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create M07 */
+        post: operations["create_phonation_synthesis_job"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m08/create": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** M08 */
+        post: operations["create_m08_job"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m08/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** M08 History */
+        post: operations["m08_history"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m08/list/{project_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** M08 List */
+        get: operations["list_m08_results"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m08/remove": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** M08 Remove */
+        post: operations["remove_m08_results"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m08/rename": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** M08 Rename */
+        post: operations["rename_m08_results"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m08/save": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** M08 Save */
+        post: operations["save_m08_result"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m11/catalog": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** M11 Catalog */
+        get: operations["mfa_component_catalog"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m11/component": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Component */
+        post: operations["manage_local_mfa_component"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m11/create": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** M11 Create */
+        post: operations["create_mfa_alignment_job"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/m14/create": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create M14 */
+        post: operations["create_phonology_job"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/jobs/parents/latest": {
         parameters: {
             query?: never;
@@ -829,6 +1152,12 @@ export interface components {
             kind: "acoustic_file";
             metadata: components["schemas"]["AcousticMetadata"];
             /**
+             * Policy Version
+             * @default 1
+             * @enum {integer}
+             */
+            policy_version: 1 | 2;
+            /**
              * Retention
              * @enum {string}
              */
@@ -1114,6 +1443,12 @@ export interface components {
              * @enum {string}
              */
             operation: "acoustic_analysis" | "textgrid_segment";
+            /**
+             * Policy Version
+             * @default 1
+             * @enum {integer}
+             */
+            policy_version: 1 | 2;
         };
         /** AcousticTextColumn */
         AcousticTextColumn: {
@@ -1146,6 +1481,12 @@ export interface components {
             kind: "input" | "result" | "archive" | "temporary";
             /** Name */
             name: string;
+            /**
+             * Policy Version
+             * @default 1
+             * @enum {integer}
+             */
+            policy_version: 1 | 2;
             /** Project Id */
             project_id: string;
             /** Reserved Bytes */
@@ -1327,6 +1668,12 @@ export interface components {
              * @constant
              */
             operation: "egg_analysis";
+            /**
+             * Policy Version
+             * @default 1
+             * @enum {integer}
+             */
+            policy_version: 1 | 2;
         };
         /** EggPreviewData */
         EggPreviewData: {
@@ -1618,6 +1965,12 @@ export interface components {
              * @enum {string}
              */
             kind: "managed_files";
+            /**
+             * Policy Version
+             * @default 1
+             * @enum {integer}
+             */
+            policy_version: 1 | 2;
         };
         /** FinalizeInput */
         FinalizeInput: {
@@ -1757,13 +2110,13 @@ export interface components {
              * @default pipeline_check
              * @enum {string}
              */
-            operation: "pipeline_check" | "storage_check" | "archive_zip" | "extract_zip" | "acoustic_analysis" | "textgrid_segment" | "spectrogram_to_audio" | "egg_analysis" | "lpc_analysis";
+            operation: "pipeline_check" | "storage_check" | "archive_zip" | "extract_zip" | "acoustic_analysis" | "textgrid_segment" | "spectrogram_to_audio" | "egg_analysis" | "lpc_analysis" | "pitch_manipulation" | "phonology_induction" | "speech_synthesis" | "phonation_synthesis" | "mfa_alignment" | "lip_analysis";
             /** Progress */
             progress: number;
             /** Project Id */
             project_id: string;
             /** Result Manifest */
-            result_manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticTaskManifest"] | components["schemas"]["Spec2WavManifest"] | components["schemas"]["EggManifest"] | components["schemas"]["LpcManifest"] | null;
+            result_manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticTaskManifest"] | components["schemas"]["Spec2WavManifest"] | components["schemas"]["EggManifest"] | components["schemas"]["LpcManifest"] | components["schemas"]["M08Manifest"] | components["schemas"]["M14Manifest"] | components["schemas"]["M06Manifest"] | components["schemas"]["M07Manifest"] | components["schemas"]["M11Manifest"] | components["schemas"]["M05Manifest"] | null;
             /** Retry Of */
             retry_of?: string | null;
             /**
@@ -1773,6 +2126,28 @@ export interface components {
             state: "queued" | "running" | "cancel_requested" | "cancelled" | "failed" | "interrupted" | "succeeded";
             /** Updated At */
             updated_at: number;
+            /** Waiting Reason */
+            waiting_reason?: string | null;
+        };
+        /** LocalM11ComponentRequest */
+        LocalM11ComponentRequest: {
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "check" | "import";
+            /** Archive */
+            archive?: string | null;
+            /** Dictionary */
+            dictionary: string;
+            /** Manifest */
+            manifest?: string | null;
+            /** Model */
+            model: string;
+            /** Runtime */
+            runtime?: string | null;
+            /** Trusted Manifest Sha256 */
+            trusted_manifest_sha256?: string | null;
         };
         /** LoginInput */
         LoginInput: {
@@ -1804,6 +2179,12 @@ export interface components {
              * @constant
              */
             operation: "lpc_analysis";
+            /**
+             * Policy Version
+             * @default 1
+             * @enum {integer}
+             */
+            policy_version: 1 | 2;
         };
         /** LpcRequest */
         LpcRequest: {
@@ -1869,6 +2250,642 @@ export interface components {
             roi_start: number;
             /** Tier Name */
             tier_name?: string | null;
+        };
+        /** M05Block */
+        M05Block: {
+            /** Base64 */
+            base64: string;
+            /** Offset */
+            offset: number;
+        };
+        /** M05Config */
+        M05Config: {
+            /**
+             * Animation
+             * @default none
+             * @enum {string}
+             */
+            animation: "none" | "mp4" | "gif";
+            /**
+             * Cutoff Hz
+             * @default 15
+             */
+            cutoff_hz: number;
+            /**
+             * Filter Enabled
+             * @default true
+             */
+            filter_enabled: boolean;
+            /**
+             * Offset
+             * @default 0
+             */
+            offset: number;
+            /**
+             * Quality
+             * @default standard
+             * @enum {string}
+             */
+            quality: "high" | "standard" | "small";
+        };
+        /** M05Manifest */
+        M05Manifest: {
+            /**
+             * Complete
+             * @default true
+             * @constant
+             */
+            complete: true;
+            /** Core Version */
+            core_version: string;
+            /** Files */
+            files: components["schemas"]["AcousticManagedFile"][];
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "managed_m05_files";
+            /**
+             * Operation
+             * @default lip_analysis
+             * @constant
+             */
+            operation: "lip_analysis";
+            /**
+             * Policy Version
+             * @default 1
+             * @enum {integer}
+             */
+            policy_version: 1 | 2;
+        };
+        /** M05Request */
+        M05Request: {
+            config?: components["schemas"]["M05Config"];
+            /** Idempotency Key */
+            idempotency_key: string;
+            /** Project Id */
+            project_id: string;
+            /**
+             * Schema Version
+             * @default m05/1
+             * @constant
+             */
+            schema_version: "m05/1";
+            video: components["schemas"]["AcousticAssetRef"];
+        };
+        /** M05Upload */
+        M05Upload: {
+            /** Name */
+            name: string;
+            /** Size */
+            size: number;
+        };
+        /** M06Manifest */
+        M06Manifest: {
+            /**
+             * Complete
+             * @default true
+             * @constant
+             */
+            complete: true;
+            /** Core Version */
+            core_version: string;
+            /** Files */
+            files: components["schemas"]["AcousticManagedFile"][];
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "managed_m06_files";
+            /**
+             * Operation
+             * @default speech_synthesis
+             * @constant
+             */
+            operation: "speech_synthesis";
+            /**
+             * Policy Version
+             * @default 1
+             * @enum {integer}
+             */
+            policy_version: 1 | 2;
+        };
+        /** M06Request */
+        M06Request: {
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "generate" | "synthesize" | "extract";
+            audio?: components["schemas"]["AcousticAssetRef"] | null;
+            /** Idempotency Key */
+            idempotency_key: string;
+            parameters: components["schemas"]["AcousticAssetRef"];
+            /** Project Id */
+            project_id: string;
+            /**
+             * Schema Version
+             * @default m06/1
+             * @constant
+             */
+            schema_version: "m06/1";
+        };
+        /** M07Analysis */
+        M07Analysis: {
+            /**
+             * F0 Backend
+             * @default parselmouth
+             * @enum {string}
+             */
+            f0_backend: "parselmouth" | "reaper";
+            /**
+             * F0 Frame Interval Ms
+             * @default 1
+             */
+            f0_frame_interval_ms: number;
+            /**
+             * Frame Length
+             * @default 128
+             */
+            frame_length: number;
+            /**
+             * Frame Shift
+             * @default 32
+             */
+            frame_shift: number;
+            /**
+             * Lpc Order
+             * @default 20
+             */
+            lpc_order: number;
+            /**
+             * Max F0 Hz
+             * @default 300
+             */
+            max_f0_hz: number;
+            /**
+             * Min F0 Hz
+             * @default 50
+             */
+            min_f0_hz: number;
+            /**
+             * Negative Peak Threshold
+             * @default -0.005
+             */
+            negative_peak_threshold: number;
+            /**
+             * Preemphasis
+             * @default 0.98
+             */
+            preemphasis: number;
+            /**
+             * Pulse Inner Periods
+             * @default 0.5
+             */
+            pulse_inner_periods: number;
+            /**
+             * Pulse Outer Periods
+             * @default 1.5
+             */
+            pulse_outer_periods: number;
+            /**
+             * Silence Padding Ms
+             * @default 8
+             */
+            silence_padding_ms: number;
+            /**
+             * Silence Threshold Db
+             * @default -45
+             */
+            silence_threshold_db: number;
+            /**
+             * Target Sample Rate
+             * @default 11025
+             * @constant
+             */
+            target_sample_rate: 11025;
+            /**
+             * Trim Silence
+             * @default true
+             */
+            trim_silence: boolean;
+            /**
+             * Voiced Margin Ms
+             * @default 30
+             */
+            voiced_margin_ms: number;
+            /**
+             * Window Name
+             * @default hamming
+             * @enum {string}
+             */
+            window_name: "hamming" | "hann" | "blackman" | "rectangular";
+        };
+        /** M07Controls */
+        M07Controls: {
+            /** Axis */
+            axis: number[];
+            /** Source */
+            source: number[];
+            /** Target */
+            target: number[];
+        };
+        /** M07Generation */
+        M07Generation: {
+            /**
+             * Energy Match
+             * @default true
+             */
+            energy_match: boolean;
+            /**
+             * Normalize To Source
+             * @default true
+             */
+            normalize_to_source: boolean;
+            /**
+             * Output Peak Limit
+             * @default 0.98
+             */
+            output_peak_limit: number;
+            /**
+             * Step Count
+             * @default 9
+             */
+            step_count: number;
+        };
+        /** M07Manifest */
+        M07Manifest: {
+            /**
+             * Complete
+             * @default true
+             * @constant
+             */
+            complete: true;
+            /** Core Version */
+            core_version: string;
+            /** Files */
+            files: components["schemas"]["AcousticManagedFile"][];
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "managed_m07_files";
+            /**
+             * Operation
+             * @default phonation_synthesis
+             * @constant
+             */
+            operation: "phonation_synthesis";
+            /**
+             * Policy Version
+             * @default 1
+             * @enum {integer}
+             */
+            policy_version: 1 | 2;
+        };
+        /** M07Request */
+        M07Request: {
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "analyze" | "apply" | "generate";
+            /**
+             * Alignment
+             * @default normalize
+             * @enum {string}
+             */
+            alignment: "normalize" | "onset";
+            analysis?: components["schemas"]["M07Analysis"];
+            /** Analysis Job Id */
+            analysis_job_id?: string | null;
+            /**
+             * Batch Group Count
+             * @default 1
+             * @enum {integer}
+             */
+            batch_group_count: 1 | 6;
+            /**
+             * Batch Group Index
+             * @default 0
+             */
+            batch_group_index: number;
+            /** Batch Id */
+            batch_id?: string | null;
+            /**
+             * Continuum Type
+             * @default 2
+             * @enum {integer}
+             */
+            continuum_type: 1 | 2 | 3;
+            controls?: components["schemas"]["M07Controls"] | null;
+            generation?: components["schemas"]["M07Generation"];
+            /** Idempotency Key */
+            idempotency_key: string;
+            /**
+             * Point Count
+             * @default 21
+             */
+            point_count: number;
+            /** Project Id */
+            project_id: string;
+            /**
+             * Reverse Direction
+             * @default false
+             */
+            reverse_direction: boolean;
+            /**
+             * Schema Version
+             * @default m07/1
+             * @constant
+             */
+            schema_version: "m07/1";
+            source: components["schemas"]["AcousticAssetRef"];
+            target: components["schemas"]["AcousticAssetRef"];
+        };
+        /** M08Config */
+        M08Config: {
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "preview" | "synthesize" | "transform" | "linear";
+            /** End */
+            end?: number | null;
+            /** Modified F0 */
+            modified_f0?: number[] | null;
+            /**
+             * Offset
+             * @default false
+             */
+            offset: boolean;
+            /**
+             * Pitch Hz
+             * @default 0
+             */
+            pitch_hz: number;
+            /**
+             * Pitch Ratio
+             * @default 1
+             */
+            pitch_ratio: number;
+            /** Points */
+            points?: components["schemas"]["M08Point"][];
+            /**
+             * Speed
+             * @default 1
+             */
+            speed: number;
+            /**
+             * Start
+             * @default 0
+             */
+            start: number;
+        };
+        /** M08Manage */
+        M08Manage: {
+            /** Ids */
+            ids: string[];
+            /** Names */
+            names?: string[];
+            /** Project Id */
+            project_id: string;
+            source: components["schemas"]["AcousticAssetRef"];
+        };
+        /** M08Manifest */
+        M08Manifest: {
+            /** Aliases */
+            aliases?: {
+                [key: string]: string;
+            };
+            /**
+             * Complete
+             * @default true
+             * @constant
+             */
+            complete: true;
+            /** Core Version */
+            core_version: string;
+            /** Deleted */
+            deleted?: string[];
+            /** Files */
+            files: components["schemas"]["AcousticManagedFile"][];
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "managed_m08_files";
+            /**
+             * Operation
+             * @default pitch_manipulation
+             * @constant
+             */
+            operation: "pitch_manipulation";
+            /**
+             * Policy Version
+             * @default 1
+             * @enum {integer}
+             */
+            policy_version: 1 | 2;
+            /** Saved */
+            saved?: string[];
+        };
+        /** M08Point */
+        M08Point: {
+            /** Freqs */
+            freqs: number[];
+            /**
+             * Mode
+             * @default order
+             * @enum {string}
+             */
+            mode: "full" | "order" | "reverse" | "constant";
+            /** Time */
+            time: number;
+        };
+        /** M08Request */
+        M08Request: {
+            audio: components["schemas"]["AcousticAssetRef"];
+            config: components["schemas"]["M08Config"];
+            /** Idempotency Key */
+            idempotency_key: string;
+            /** Project Id */
+            project_id: string;
+            /**
+             * Schema Version
+             * @default m08/1
+             * @constant
+             */
+            schema_version: "m08/1";
+        };
+        /** M08Source */
+        M08Source: {
+            /** Project Id */
+            project_id: string;
+            source: components["schemas"]["AcousticAssetRef"];
+        };
+        /** M11Config */
+        M11Config: {
+            /**
+             * Beam
+             * @default 10
+             */
+            beam: number;
+            /**
+             * Retry Beam
+             * @default 40
+             */
+            retry_beam: number;
+        };
+        /** M11CorpusItem */
+        M11CorpusItem: {
+            audio: components["schemas"]["AcousticAssetRef"];
+            /** Name */
+            name: string;
+            transcript: components["schemas"]["AcousticAssetRef"];
+            /**
+             * Transcript Format
+             * @default .lab
+             * @enum {string}
+             */
+            transcript_format: ".lab" | ".txt" | ".TextGrid";
+        };
+        /** M11Manifest */
+        M11Manifest: {
+            /**
+             * Complete
+             * @default true
+             * @constant
+             */
+            complete: true;
+            /** Core Version */
+            core_version: string;
+            /** Files */
+            files: components["schemas"]["AcousticManagedFile"][];
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "managed_m11_files";
+            /**
+             * Operation
+             * @default mfa_alignment
+             * @constant
+             */
+            operation: "mfa_alignment";
+            /**
+             * Policy Version
+             * @default 1
+             * @enum {integer}
+             */
+            policy_version: 1 | 2;
+        };
+        /** M11Request */
+        M11Request: {
+            config?: components["schemas"]["M11Config"];
+            /** Corpus */
+            corpus: components["schemas"]["M11CorpusItem"][];
+            dictionary?: components["schemas"]["AcousticAssetRef"] | null;
+            /** Idempotency Key */
+            idempotency_key: string;
+            /** Model Id */
+            model_id: string;
+            /** Project Id */
+            project_id: string;
+            /** Runtime Id */
+            runtime_id: string;
+            /**
+             * Schema Version
+             * @default m11/1
+             * @constant
+             */
+            schema_version: "m11/1";
+        };
+        /** M14Config */
+        M14Config: {
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "preview" | "export";
+            /**
+             * Consonant Only As Zero Initial
+             * @default true
+             */
+            consonant_only_as_zero_initial: boolean;
+            font?: components["schemas"]["FigureFontSnapshot"] | null;
+            settings?: components["schemas"]["M14Settings"] | null;
+            /**
+             * Skip First Row
+             * @default true
+             */
+            skip_first_row: boolean;
+        };
+        /** M14Manifest */
+        M14Manifest: {
+            /**
+             * Complete
+             * @default true
+             * @constant
+             */
+            complete: true;
+            /** Core Version */
+            core_version: string;
+            /** Files */
+            files: components["schemas"]["AcousticManagedFile"][];
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "managed_m14_files";
+            /**
+             * Operation
+             * @default phonology_induction
+             * @constant
+             */
+            operation: "phonology_induction";
+            /**
+             * Policy Version
+             * @default 1
+             * @enum {integer}
+             */
+            policy_version: 1 | 2;
+        };
+        /** M14Request */
+        M14Request: {
+            config: components["schemas"]["M14Config"];
+            /** Idempotency Key */
+            idempotency_key: string;
+            /** Project Id */
+            project_id: string;
+            /**
+             * Schema Version
+             * @default m14/1
+             * @constant
+             */
+            schema_version: "m14/1";
+            table: components["schemas"]["AcousticAssetRef"];
+        };
+        /** M14Settings */
+        M14Settings: {
+            /** Final Map */
+            final_map?: {
+                [key: string]: string;
+            };
+            /** Final Order */
+            final_order: string[];
+            /** Initial Map */
+            initial_map?: {
+                [key: string]: string;
+            };
+            /** Initial Order */
+            initial_order: string[];
+            /** Tone Map */
+            tone_map: {
+                [key: string]: string;
+            };
+            /** Tone Order */
+            tone_order: string[];
         };
         /** ParameterTable */
         ParameterTable: {
@@ -1959,7 +2976,7 @@ export interface components {
         /** ResultManifestEnvelope */
         ResultManifestEnvelope: {
             /** Manifest */
-            manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticFileManifest"] | components["schemas"]["AcousticTaskManifest"] | components["schemas"]["Spec2WavManifest"] | components["schemas"]["EggManifest"] | components["schemas"]["LpcManifest"];
+            manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticFileManifest"] | components["schemas"]["AcousticTaskManifest"] | components["schemas"]["Spec2WavManifest"] | components["schemas"]["EggManifest"] | components["schemas"]["LpcManifest"] | components["schemas"]["M08Manifest"] | components["schemas"]["M14Manifest"] | components["schemas"]["M06Manifest"] | components["schemas"]["M07Manifest"] | components["schemas"]["M11Manifest"] | components["schemas"]["M05Manifest"];
         };
         /** RetryInput */
         RetryInput: {
@@ -2068,6 +3085,12 @@ export interface components {
              * @constant
              */
             operation: "spectrogram_to_audio";
+            /**
+             * Policy Version
+             * @default 1
+             * @enum {integer}
+             */
+            policy_version: 1 | 2;
         };
         /** Spec2WavRequest */
         Spec2WavRequest: {
@@ -2129,12 +3152,28 @@ export interface components {
             available_bytes: number;
             /** Frozen */
             frozen: boolean;
+            /**
+             * Over Quota
+             * @default false
+             */
+            over_quota: boolean;
+            /**
+             * Policy Version
+             * @default 1
+             * @enum {integer}
+             */
+            policy_version: 1 | 2;
             /** Quota Bytes */
             quota_bytes: number;
             /** Ready */
             ready: boolean;
             /** Reserved Bytes */
             reserved_bytes: number;
+            /**
+             * Retention Seconds
+             * @default 604800
+             */
+            retention_seconds: number;
             /** Used Bytes */
             used_bytes: number;
         };
@@ -3017,6 +4056,605 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["FontPreflight"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    lip_catalog: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    create_lip_job: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["M05Request"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    begin_local_lip_video: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["M05Upload"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    write_local_lip_video: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["M05Block"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    abort_local_lip_video: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    finalize_local_lip_video: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    render_lip_animation: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["M05Config"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_speech_synthesis_job: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["M06Request"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_phonation_synthesis_job: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["M07Request"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_m08_job: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["M08Request"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    m08_history: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["M08Source"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_m08_results: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    remove_m08_results: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["M08Manage"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    rename_m08_results: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["M08Manage"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    save_m08_result: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["M08Manage"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    mfa_component_catalog: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    manage_local_mfa_component: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LocalM11ComponentRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_mfa_alignment_job: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["M11Request"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_phonology_job: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["M14Request"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobView"];
                 };
             };
             /** @description Validation Error */

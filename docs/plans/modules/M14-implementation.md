@@ -1,6 +1,6 @@
 # M14 实施记录 · 2026-09-27
 
-状态：in_progress。用户已授权完整迁移及限定平台验收。仅公开合成输入。根目录历史统筹停止点由本轮 M14 明确授权覆盖。
+状态：in_progress。已完成的限定 Windows/核心及未完成的平台接口详见 [验收报告](../../testing/m14-report.md)。用户已授权完整迁移及限定平台验收。仅公开合成输入。根目录历史统筹停止点由本轮 M14 明确授权覆盖。
 
 ## 阶段和文件
 
@@ -9,7 +9,7 @@
 3. C：`backend/src/ptb_api/m14_models.py`、`backend/src/ptb_worker/m14_{jobs,child,task}.py`、`desktop/src/ptb_desktop/m14_bridge.py`、`frontend/src/modules/phonology-induction/{PhonologyInductionPage.vue,state.ts,port.ts}` 及模块平台适配器。正式宿主接口需待共享文件占用释放后串行接线。
 4. D：Windows 正式工作台、现有 WSL 原生 Python、结构回读与视觉检查。`tests/parity/test_phonology_induction.py`、`frontend/tests/m14.test.ts`、`tests/e2e/m14.cjs`、`scripts/verify_m14_*.py`、`docs/manual/phonology-induction.md`、`docs/testing/m14-report.md`。
 
-## 接线需求（待确认占用与实测）
+## 接线需求（Windows 已串行完成，Linux 仍依 P11）
 
 - AppShell：M14 async import、真实 pane、dirty 与 save 方法；不显示音频播放器。
 - ResearchFiles：可选 m14 port，授权文件 ID／字节传递，前端不接触路径。
@@ -30,11 +30,11 @@
 
 ## 依赖与规模
 
-现有工作台 pandas 2.3.3、openpyxl 3.1.5；V2 python-docx 1.2.0，V3 缺失；两者均缺 xlrd。提议项目专用环境 python-docx 1.2.0、xlrd 2.0.2，测试 xlwt 1.3.0。安装等待用户答复，禁止全局安装和改变 V2。
+现有工作台 pandas 2.3.3、openpyxl 3.1.5；V2 python-docx 1.2.0，V3 缺失；两者均缺 xlrd。提议项目专用环境 python-docx 1.2.0、xlrd 2.0.2，测试 xlwt 1.3.0。井井已批准项目内隔离安装，Windows/WSL/授权服务器均落实；lxml 6.1.3、typing-extensions 4.16.0 锁定于 additions.lock。禁止全局安装和改变 V2。
 
 规模门由公开合成输入实测后冻结，读入和导出均不在 API 事件循环内执行。导出复杂度同时受记录数和声韵笛卡尔积约束。
 
-## 验收命令（计划，尚未执行）
+## 原定验收命令（实际执行和完整路径见验收报告）
 
 ```powershell
 & .venv/m14/Scripts/python.exe -m pytest -c tests/pytest.ini tests/parity/test_phonology_induction.py backend/tests/test_m14.py -q
@@ -42,7 +42,7 @@ node --test frontend/tests/m14.test.ts
 npm --prefix frontend run typecheck
 npm --prefix frontend run test
 npm --prefix frontend run build
-node tests/e2e/m14.cjs
+node tests/e2e/m14-host.cjs
 ```
 
 另记录实际 Qt 宿主、WSL 核心/导出、Windows 浏览器访问 Linux 服务与 Linux 原生浏览器的不同证据；DOCX/XLSX 回读不替代视觉检查。全局台账由统筹汇总本模块状态摘要。

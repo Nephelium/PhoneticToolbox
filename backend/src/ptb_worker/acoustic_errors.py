@@ -1,7 +1,18 @@
 """Fixed M01 public reasons. This module must remain free of scientific imports."""
 from .io.limits import Cancelled, FormatError, LimitError
 
-ACOUSTIC_ERRORS=frozenset({
+from .m14_errors import M14_ERRORS
+
+from .mfa.errors import M11_ERRORS
+
+ACOUSTIC_ERRORS=M11_ERRORS | M14_ERRORS | frozenset({
+    'resource_queue_full','resource_queue_timeout','resource_cleanup_required',
+    'resource_admission_corrupt','resource_admission_unsafe','resource_profile_invalid',
+    'trusted_worker_unavailable','server_resource_profile_required',
+    'm08_audio_decode_failed','m08_input_changed','m08_input_budget','m08_output_budget',
+    'm08_praat_error','m08_curve_length','m08_invalid_range','m08_execution_failed',
+    'm08_transform_requires_whole','m08_nonfinite_audio','m08_controls_required',
+    'reaper_runtime_failed',
     'font_unavailable',
     'lpc_runtime_unavailable','lpc_runtime_mismatch','lpc_input_budget','lpc_sample_rate',
     'lpc_invalid_roi','lpc_roi_budget','lpc_solver_failed','lpc_segment_too_short',
@@ -28,6 +39,7 @@ class AcousticFailure(FormatError):
 def public_error(error):
     if isinstance(error,AcousticFailure):return error.code
     if isinstance(error,Cancelled):return 'cancelled'
+    if str(error) in ACOUSTIC_ERRORS:return str(error)
     if isinstance(error,MemoryError):return 'analysis_resource_limit'
     if isinstance(error,LimitError):
         code=str(error)
@@ -40,3 +52,9 @@ def public_error(error):
     code=getattr(error,'code',None)
     return code if code in {'cancelled','input_unavailable','quota_exceeded','disk_space_low',
         'storage_write_failed','output_count_exceeded','stale_worker'} else 'execution_failed'
+
+# M06 fixed child/domain errors; paths and exception text are not exposed.
+ACOUSTIC_ERRORS |= {"m06_invalid_config","m06_invalid_sequence","m06_invalid_ipa","m06_empty_sequence", "m06_admission_budget","m06_input_budget","m06_input_changed","m06_audio_decode_failed","m06_execution_failed","m06_invalid_output","m06_invalid_bundle","m06_output_hash","m06_incomplete_output","m06_output_budget","m06_timeout"}
+
+from .m07_errors import ERRORS as M07_ERRORS
+ACOUSTIC_ERRORS |= M07_ERRORS

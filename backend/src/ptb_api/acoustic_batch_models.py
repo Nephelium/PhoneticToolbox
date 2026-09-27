@@ -63,7 +63,11 @@ class AcousticManagedFile(WireModel):
     expires_at: float | None
 
 
+from .storage_policy import PolicyVersion, LEGACY_POLICY_VERSION
+
+
 class AcousticTaskManifest(WireModel):
+    policy_version: PolicyVersion = LEGACY_POLICY_VERSION
     kind: Literal['managed_acoustic_files']='managed_acoustic_files'
     complete: Literal[True]=True
     operation: Literal['acoustic_analysis','textgrid_segment']

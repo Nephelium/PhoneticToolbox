@@ -11,6 +11,7 @@
 | F01 | 同名TextGrid、循环层级 | `read_sibling_textgrid/next_tier_name` 与 `_on_textgrid_button_clicked/_draw_textgrid` | 桌面同目录关联，网页按资源显式关联；共用时间标注，A04/A05 |
 | F02 | 阶数/频率上限/Min/Max/动态y轴 | `LPCSpectrumConfig`、控件初始化、`compute_spectrum` | 独立草稿及任务快照，动态与手动范围明确，A06/A07 |
 | F03 | 浏览、缩放、平移、Shift框选 | `_on_scroll/_on_press/_on_motion/_on_release` | 公共波形可选手势适配；普通滚轮页面滚动，Ctrl滚轮缩放，保留Shift框选及明确清除选区，A08/A09 |
+| F03 追加 | 用户要求在语谱图选择处理范围 | V2 LPC页无该附图入口 | V3可选Praat语谱预览紧贴波形；直接拖动与Shift波形框选写入同一时间选区，预览异常不阻断LPC，A09/A20 |
 | F03 | 无框选开始处理 | `_start_lpc_processing` 使用 `ax.get_xlim()` | 明确记录波形可见范围为本次ROI，频率轴不作为时间，A10 |
 | F03 | 有框选开始处理 | 同函数 `int(t*fs)`，`[start_idx:end_idx]` | 保留截断取整/半开样本区间并写入快照，A11 |
 | F03 | LPC计算与显示 | `compute_lpc_spectrum`、`_plot_lpc_curve` | 纯核心输出真实1024点谱线，公共科学图表渲染，A12–A14 |

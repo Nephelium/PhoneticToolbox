@@ -1,0 +1,4 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><title>M13 owned integration</title></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';import Page from '/src/modules/mandarin-ipa/MandarinIpaPage.vue';import '/src/design/tokens.css';import {selectFontOwner} from '/src/state/fonts.ts';
+await selectFontOwner();createApp({render:()=>h(Page,{stateKey:'m13-live',onReferences:()=>{window.__m13References=(window.__m13References||0)+1;}})}).mount('#app');
+</script></body></html>

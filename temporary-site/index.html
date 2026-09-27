@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="PhoneticToolbox 正在开发中，预计于 2026 年 10 月底开放。">
+  <title>PhoneticToolbox · 即将见面</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+      color: #14304a;
+      background: #f6f8f6;
+      font-synthesis: none;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      background:
+        radial-gradient(circle at 86% 17%, rgba(100, 203, 196, .19), transparent 32%),
+        radial-gradient(circle at 5% 94%, rgba(109, 156, 208, .14), transparent 32%),
+        #f6f8f6;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 88px));
+      min-height: 100vh;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header, footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    header { min-height: 112px; }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 13px;
+      color: #14304a;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -.025em;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #173b53;
+      color: #b9eee5;
+      box-shadow: 0 8px 20px rgba(23, 59, 83, .13);
+    }
+
+    .brand-mark svg { width: 25px; height: 25px; }
+
+    .header-note, .footer-note {
+      color: #718592;
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(310px, .9fr);
+      align-items: center;
+      gap: clamp(36px, 6vw, 100px);
+      flex: 1;
+      padding: 32px 0 74px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 24px;
+      color: #2b827c;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .15em;
+    }
+
+    .eyebrow::before {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #3ca89c;
+      box-shadow: 0 0 0 5px rgba(60, 168, 156, .12);
+      content: "";
+    }
+
+    h1 {
+      margin: 0;
+      color: #14304a;
+      font-family: "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "SimSun", serif;
+      font-size: clamp(48px, 5.5vw, 82px);
+      font-weight: 600;
+      letter-spacing: -.055em;
+      line-height: 1.22;
+    }
+
+    h1 span { color: #328c87; }
+
+    .intro {
+      max-width: 470px;
+      margin: 27px 0 0;
+      color: #627887;
+      font-size: clamp(16px, 1.5vw, 18px);
+      line-height: 2;
+    }
+
+    .release {
+      display: inline-flex;
+      align-items: center;
+      gap: 17px;
+      margin-top: 48px;
+      padding: 18px 23px;
+      border: 1px solid #d7e6e5;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .76);
+      box-shadow: 0 12px 32px rgba(26, 62, 82, .04);
+    }
+
+    .release-icon {
+      display: grid;
+      place-items: center;
+      width: 43px;
+      height: 43px;
+      flex: none;
+      border-radius: 12px;
+      background: #e5f4f0;
+      color: #2b827c;
+    }
+
+    .release-icon svg { width: 21px; height: 21px; }
+
+    .release small, .release strong { display: block; }
+    .release small { color: #748995; font-size: 12px; }
+    .release strong { margin-top: 5px; font-size: 17px; font-weight: 650; }
+
+    .date-note { margin: 14px 0 0; color: #83959e; font-size: 12px; }
+
+    .art {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: min(100%, 510px);
+      aspect-ratio: 1;
+      justify-self: end;
+    }
+
+    .art::before {
+      position: absolute;
+      inset: 2%;
+      border: 1px solid rgba(67, 139, 146, .12);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .art::after {
+      position: absolute;
+      inset: 11%;
+      border: 1px dashed rgba(67, 139, 146, .2);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .art-card {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 78%;
+      aspect-ratio: 1.08;
+      overflow: hidden;
+      padding: 29px;
+      border: 1px solid rgba(255, 255, 255, .35);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 85% 14%, rgba(91, 188, 176, .6), transparent 40%),
+        linear-gradient(145deg, #214b62, #112d45 72%);
+      box-shadow: 0 28px 55px rgba(23, 62, 78, .19);
+      color: #d9efec;
+      transform: rotate(-5deg);
+    }
+
+    .art-card::after {
+      position: absolute;
+      right: -28%;
+      bottom: -46%;
+      width: 90%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(185, 238, 229, .25);
+      border-radius: 50%;
+      box-shadow: 0 0 0 33px rgba(185, 238, 229, .045), 0 0 0 70px rgba(185, 238, 229, .035);
+      content: "";
+    }
+
+    .art-label, .art-bottom { z-index: 1; font-size: 11px; letter-spacing: .17em; }
+    .art-label { opacity: .7; }
+    .art-bottom { opacity: .68; }
+
+    .wave {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 46%;
+      overflow: visible;
+    }
+
+    .wave .guide { stroke: rgba(201, 242, 234, .18); stroke-width: 1; }
+    .wave .trace { fill: none; stroke: #c2f2e8; stroke-linecap: round; stroke-linejoin: round; stroke-width: 3.2; }
+    .wave .soft { fill: none; stroke: rgba(111, 210, 201, .48); stroke-width: 1.5; }
+
+    .orbit-dot {
+      position: absolute;
+      z-index: 2;
+      top: 13%;
+      right: 15%;
+      width: 14px;
+      height: 14px;
+      border: 4px solid #f6f8f6;
+      border-radius: 50%;
+      background: #49aa9e;
+      box-shadow: 0 4px 14px rgba(23, 62, 78, .15);
+    }
+
+    footer {
+      min-height: 80px;
+      border-top: 1px solid #e4ebeb;
+      color: #718592;
+      font-size: 12px;
+    }
+
+    @media (max-width: 760px) {
+      .page { width: min(100% - 40px, 540px); }
+      header { min-height: 80px; }
+      .header-note { display: none; }
+      main { grid-template-columns: 1fr; gap: 26px; padding: 48px 0 54px; }
+      .intro { margin-top: 22px; }
+      .release { margin-top: 34px; }
+      .art { width: min(85%, 380px); justify-self: center; }
+      footer { min-height: 74px; }
+      .footer-note { display: none; }
+    }
+
+    @media (max-width: 420px) {
+      .brand { font-size: 16px; }
+      h1 { font-size: 44px; }
+      .release { width: 100%; }
+      .art-card { padding: 20px; border-radius: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M3 16h4l3-8 5 16 4-13 3 8 3-4h4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        PhoneticToolbox
+      </div>
+      <span class="header-note">A SPACE FOR PHONETIC RESEARCH</span>
+    </header>
+
+    <main>
+      <section aria-labelledby="page-title">
+        <p class="eyebrow">正在开发中</p>
+        <h1 id="page-title">听见声音，<br><span>看见细节。</span></h1>
+        <p class="intro">PhoneticToolbox 正在认真准备中。感谢你提前来到这里，我们期待不久后与你见面。</p>
+        <div class="release" aria-label="预计开放时间：2026 年 10 月底">
+          <span class="release-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 3v4m10-4v4M3 10h18m-13 5h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </span>
+          <span><small>预计开放时间</small><strong>2026 年 10 月底</strong></span>
+        </div>
+        <p class="date-note">具体时间可能随开发进度调整。</p>
+      </section>
+
+      <div class="art" aria-hidden="true">
+        <span class="orbit-dot"></span>
+        <div class="art-card">
+          <span class="art-label">PHONETIC TOOLBOX / 2026</span>
+          <svg class="wave" viewBox="0 0 360 155" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="guide" d="M0 77.5H360M0 38.5H360M0 116.5H360"/>
+            <path class="soft" d="M0 79C30 79 34 68 46 68s17 25 26 25 14-58 24-58 12 88 23 88 12-58 22-58 13 34 21 34 12-74 24-74 12 104 23 104 13-65 22-65 14 35 22 35 11-44 21-44 13 47 23 47 14-24 24-24 22 0 39 0"/>
+            <path class="trace" d="M0 78h24c9 0 12-7 17-7s8 18 14 18 8-43 15-43 9 65 17 65 8-91 17-91 9 111 18 111 9-77 17-77 9 43 16 43 9-33 15-33 9 15 15 15 8-61 17-61 10 121 19 121 9-95 18-95 9 53 18 53 10-24 17-24 10 16 17 16 9-37 18-37 9 41 18 41 11-14 19-14h28"/>
+          </svg>
+          <span class="art-bottom">LISTEN · OBSERVE · UNDERSTAND</span>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <span>© 2026 PhoneticToolbox</span>
+      <span class="footer-note">MADE FOR CURIOUS EARS</span>
+    </footer>
+  </div>
+</body>
+</html>

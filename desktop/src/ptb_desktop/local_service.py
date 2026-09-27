@@ -54,7 +54,7 @@ class LocalService:
             headers={'Authorization': 'Bearer ' + self.token, 'Origin':self.url, 'Content-Type':'application/json'})
         # Local traffic does not inherit a user's HTTP proxy.
         opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
-        with opener.open(request, timeout=35 if path=='/api/v1/jobs/egg/fonts' else 5) as response:
+        with opener.open(request, timeout=900 if path=='/api/v1/jobs/m11/component' else 35 if path=='/api/v1/jobs/egg/fonts' else 5) as response:
             return json.load(response)
 
     def close(self):

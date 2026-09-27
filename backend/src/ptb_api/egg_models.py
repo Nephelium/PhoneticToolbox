@@ -69,7 +69,11 @@ def expected_names(config):
     return names
 
 
+from .storage_policy import PolicyVersion, LEGACY_POLICY_VERSION
+
+
 class EggManifest(WireModel):
+    policy_version: PolicyVersion = LEGACY_POLICY_VERSION
     kind: Literal['managed_egg_files'] = 'managed_egg_files'
     complete: Literal[True] = True
     operation: Literal['egg_analysis'] = 'egg_analysis'

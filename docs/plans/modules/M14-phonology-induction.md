@@ -1,6 +1,6 @@
 # M14 · 音系归纳迁移计划
 
-状态：planned，未开始实现。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
+状态：in_progress。2026-09-27 已完成五功能组迁移和限定 Windows 正式功能验收，Linux 核心/导出有实际服务器证据；Linux 正式任务、原生浏览器及托管存储联合门未完成。见 [实施记录](M14-implementation.md)、[验收报告](../../testing/m14-report.md)。以下保留原规划，实际文件与命令以这两份记录为准。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
 ## 现有代码与目标文件
 现有路径均已确认存在；目录内逐函数对应由实施第一步记录，避免把旧类名机械套给新实现。

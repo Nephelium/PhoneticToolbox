@@ -50,6 +50,12 @@ class Runtime:
         if path=='keyframes':
             frames=validate_frames(self.engine,obj['frames'],for_storage=True)
             self.profile.save_frames(frames,validate_pitch_curve(obj.get('pitch_curve',[])))
+            if not frames:
+                self.live.stop()
+                self.animation_playing=False
+                self.animation=None
+                self.animation_keys.clear()
+                self.animation_id+=1
             return {'saved':len(frames)}
         if path=='audio/monitor':
             seconds=float(obj.get('seconds',3));window=float(obj.get('window_ms',20));hop=float(obj.get('hop_ms',10))

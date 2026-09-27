@@ -6,6 +6,7 @@ import ctypes as c
 from ctypes import wintypes as w
 import os
 import subprocess
+import time
 
 if os.name != 'nt': raise ImportError('Windows native adapter is unavailable on this platform')
 k=c.WinDLL('kernel32',use_last_error=True)
@@ -34,7 +35,12 @@ class IoCounters(c.Structure):
 
 class ExtendedLimit(c.Structure):
     _fields_=[('basic',BasicLimit),('io',IoCounters),('process_memory',c.c_size_t),('job_memory',c.c_size_t),
-        ('peak_process',c.c_size_t),('peak_job',c.c_size_t)]
+         ('peak_process',c.c_size_t),('peak_job',c.c_size_t)]
+
+
+class JobAccounting(c.Structure):
+    _fields_=[('user',c.c_int64),('kernel',c.c_int64),('period_user',c.c_int64),('period_kernel',c.c_int64),
+              ('faults',w.DWORD),('total',w.DWORD),('active',w.DWORD),('terminated',w.DWORD)]
 
 
 def api(name,args,restype=w.BOOL):
@@ -83,6 +89,12 @@ class OwnedProcess:
     @property
     def pid(self): return self.info.pid
 
+    def memory_peak(self):
+        query=api('QueryInformationJobObject',[w.HANDLE,c.c_int,c.c_void_p,w.DWORD,c.c_void_p])
+        limits=ExtendedLimit()
+        checked(query(self.job,9,c.byref(limits),c.sizeof(limits),None))
+        return int(limits.peak_job)
+
     def poll(self):
         if wait(self.info.process,0)==258: return None
         value=w.DWORD();checked(exit_code(self.info.process,c.byref(value)))
@@ -108,7 +120,16 @@ class OwnedProcess:
             terminate_process(self.info.process,1)
             wait(self.info.process,3000);close(self.info.process)
         if self.info.thread:close(self.info.thread)
-        if self.job:close(self.job)
+        self.group_cleaned=False
+        if self.job:
+            query=api('QueryInformationJobObject',[w.HANDLE,c.c_int,c.c_void_p,w.DWORD,c.c_void_p])
+            until=time.monotonic()+3
+            while time.monotonic()<until:
+                info=JobAccounting()
+                if not query(self.job,1,c.byref(info),c.sizeof(info),None):break
+                if info.active==0:self.group_cleaned=True;break
+                time.sleep(.01)
+            close(self.job)
 
 
 create_pipe=api('CreateNamedPipeW',[w.LPCWSTR,w.DWORD,w.DWORD,w.DWORD,w.DWORD,w.DWORD,w.DWORD,c.c_void_p],w.HANDLE)

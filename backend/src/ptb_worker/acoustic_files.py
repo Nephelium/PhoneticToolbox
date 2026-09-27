@@ -6,6 +6,7 @@ from .store import JobError,core_version
 from .acoustic_batches import OPERATIONS
 from .acoustic_errors import ACOUSTIC_ERRORS
 from ptb_api.quota import StorageError
+from ptb_api.storage_policy import POLICY_VERSION
 from ptb_api.acoustic_batch_models import AcousticTaskManifest
 
 
@@ -29,8 +30,8 @@ class AcousticFiles(FilePipeline):
                 item=self.storage._readable(tx.conn,owner,ref['asset_id'])
                 if str(item['project_id'])!=project or item['sha256']!=ref['sha256'] or item['expires_at']<=now+300:
                     raise JobError('input_unavailable',409)
-                limit=64_000_000 if role=='audio' else 16_000_000 if role in ('parent_result','legacy_result','image') else 2_000_000
-                suffix={'audio':'.wav','textgrid':'.textgrid','lip':'.lip.json','parent_result':'.ptb.json','legacy_result':('.xlsx','.ptb.sqlite','.ptb.sqlite3'),'image':('.png','.jpg','.jpeg','.bmp')}.get(role)
+                limit=32_000_000 if role=='m07_analysis' else 64_000_000 if role=='audio' else 16_000_000 if role=='dictionary' else 16_000_000 if role in ('parent_result','legacy_result','image') else 2_000_000
+                suffix={'m07_analysis':'.m07.json','transcript':('.lab','.txt','.textgrid'),'dictionary':('.dict','.txt'),'table':('.xlsx','.xls','.csv','.txt','.tsv'),'audio':('.wav','.mp3','.flac'),'textgrid':'.textgrid','lip':'.lip.json','parent_result':'.ptb.json','legacy_result':('.xlsx','.ptb.sqlite','.ptb.sqlite3'),'image':('.png','.jpg','.jpeg','.bmp')}.get(role)
                 if not suffix:raise JobError('invalid_input',422)
                 if item['size_bytes']>limit or not item['name'].lower().endswith(suffix):raise JobError('invalid_input',422)
                 if role=='parent_result':
@@ -53,21 +54,34 @@ class AcousticFiles(FilePipeline):
         return [row for row in super()._outputs(conn,identity) if row['state']!='deleted']
 
     def output_limit(self,job):
-        return 3004 if json.loads(job['snapshot'])['operation'] in OPERATIONS else super().output_limit(job)
-
-    def independent_expiry(self,operation):return operation=='acoustic_analysis' or super().independent_expiry(operation)
+        return 3004 if json.loads(job['snapshot'])['operation'] in (*OPERATIONS,'pitch_manipulation','mfa_alignment','phonation_synthesis') else super().output_limit(job)
 
     def manifest(self,operation,files):
+        if operation=='mfa_alignment':
+            from ptb_api.m11_models import M11Manifest
+            return M11Manifest(policy_version=POLICY_VERSION,files=files,core_version=core_version).model_dump()
+        if operation=='phonation_synthesis':
+            from ptb_api.m07_models import M07Manifest
+            return M07Manifest(policy_version=POLICY_VERSION,files=files,core_version=core_version).model_dump()
+        if operation=='speech_synthesis':
+            from ptb_api.m06_models import M06Manifest
+            return M06Manifest(policy_version=POLICY_VERSION,files=files,core_version=core_version).model_dump()
+        if operation=='phonology_induction':
+            from ptb_api.m14_models import M14Manifest
+            return M14Manifest(policy_version=POLICY_VERSION,files=files,core_version=core_version).model_dump()
+        if operation=='pitch_manipulation':
+            from ptb_api.m08_models import M08Manifest
+            return M08Manifest(policy_version=POLICY_VERSION,files=files,core_version=core_version).model_dump()
         if operation=='lpc_analysis':
             from ptb_api.lpc_models import LpcManifest
-            return LpcManifest(files=files,core_version=core_version).model_dump()
+            return LpcManifest(policy_version=POLICY_VERSION,files=files,core_version=core_version).model_dump()
         if operation=='egg_analysis':
             from ptb_api.egg_models import EggManifest
-            return EggManifest(files=files,core_version=core_version).model_dump()
+            return EggManifest(policy_version=POLICY_VERSION,files=files,core_version=core_version).model_dump()
         if operation=='spectrogram_to_audio':
             from ptb_api.spec2wav_models import Spec2WavManifest
-            return Spec2WavManifest(files=files,core_version=core_version).model_dump()
-        if operation in OPERATIONS:return AcousticTaskManifest(operation=operation,files=files,core_version=core_version).model_dump()
+            return Spec2WavManifest(policy_version=POLICY_VERSION,files=files,core_version=core_version).model_dump()
+        if operation in OPERATIONS:return AcousticTaskManifest(policy_version=POLICY_VERSION,operation=operation,files=files,core_version=core_version).model_dump()
         return super().manifest(operation,files)
 
     def scratch_path(self,identity,asset_id):

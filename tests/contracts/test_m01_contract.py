@@ -52,7 +52,7 @@ def result():
 
 def manifest():
     expiry=100.+RETENTION_SECONDS
-    return AcousticFileManifest(job_id=uid(3),metadata=metadata(),completed_at=100.,
+    return AcousticFileManifest(policy_version=2,job_id=uid(3),metadata=metadata(),completed_at=100.,
         retention='server',expires_at=expiry,row_count=4,
         files=[{'asset_id':uid(n),'format':fmt,'size_bytes':200,'sha256':'b'*64,'expires_at':expiry}
                for n,fmt in ((4,'xlsx'),(5,'sqlite'))])

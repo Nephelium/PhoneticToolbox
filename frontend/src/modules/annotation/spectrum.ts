@@ -1,12 +1,17 @@
 import {hann,fft} from './fft.mjs';
-// Same V2 column grid, Hann/1024 FFT and 3.2 log-amplitude display range.
-export function spectrum(data:Float32Array,sr:number,start:number,length:number,cols:number,height:number,dark:boolean,points=cols){
- const size=1024,maxBin=Math.floor(Math.min(5000,sr/2)/sr*size),window=hann(size),spectra:Float64Array[]=[];
+// V2 column grid and 3.2 log-amplitude range; omitted ms preserves its 1024-point window.
+export function spectrumWindow(sr:number,ms?:number){
+ if(!Number.isFinite(sr)||sr<=0||ms!==undefined&&(!Number.isFinite(ms)||ms<1||ms>100))throw Error('语谱窗长需在 1–100 ms 之间。');
+ const samples=ms===undefined?1024:Math.max(2,Math.round(sr*ms/1000));
+ return {samples,size:2**Math.ceil(Math.log2(samples))};
+}
+export function spectrum(data:Float32Array,sr:number,start:number,length:number,cols:number,height:number,dark:boolean,points=cols,windowMs?:number){
+ const {samples,size}=spectrumWindow(sr,windowMs),maxBin=Math.floor(Math.min(5000,sr/2)/sr*size),window=hann(samples),spectra:Float64Array[]=[];
  let maximum=-Infinity;const rgba=new Uint8ClampedArray(cols*height*4),rms=new Float64Array(points);let maxRms=1e-9;
  const frame=Math.max(1,Math.floor(.03*sr));
  for(let col=0;col<cols;col++){
   const center=Math.floor((start+col/Math.max(1,cols-1)*length)*sr),re=new Float64Array(size),im=new Float64Array(size);
-  for(let i=0;i<size;i++)re[i]=(data[center-Math.floor(size/2)+i]||0)*window[i];fft(re,im);
+  for(let i=0;i<samples;i++)re[i]=(data[center-Math.floor(samples/2)+i]||0)*window[i];fft(re,im);
   const mags=new Float64Array(maxBin+1);for(let bin=1;bin<=maxBin;bin++){mags[bin]=Math.log10(Math.hypot(re[bin],im[bin])+1e-8);maximum=Math.max(maximum,mags[bin]);}spectra.push(mags);
  }
  for(let x=0;x<points;x++){const center=Math.floor((start+x/Math.max(1,points-1)*length)*sr);let sum=0;for(let i=0;i<frame;i++){const v=data[center-Math.floor(frame/2)+i]||0;sum+=v*v;}rms[x]=Math.sqrt(sum/frame);maxRms=Math.max(maxRms,rms[x]);}

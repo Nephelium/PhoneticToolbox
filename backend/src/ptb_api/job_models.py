@@ -2,6 +2,7 @@
 from typing import Annotated, Literal
 from pydantic import Field, model_validator
 from .models import WireModel, Identifier, IdempotencyKey
+from .storage_policy import QUOTA_BYTES, LEGACY_QUOTA_BYTES, PolicyVersion, LEGACY_POLICY_VERSION
 
 State = Literal['queued','running','cancel_requested','cancelled','failed','interrupted','succeeded']
 
@@ -24,7 +25,7 @@ class RetryInput(WireModel):
 
 class FileConfig(WireModel):
     inputs: list[Identifier] = Field(default_factory=list, max_length=16)
-    max_output_bytes: int = Field(default=16_777_216, ge=1, le=5_000_000_000)
+    max_output_bytes: int = Field(default=16_777_216, ge=1, le=QUOTA_BYTES)
     probe_bytes: int = Field(default=16384, ge=1, le=33_554_432)
     probe_files: int = Field(default=2, ge=1, le=4)
 
@@ -51,12 +52,13 @@ class ResultFile(WireModel):
     id: Identifier
     name: str
     kind: Literal['result','archive']
-    size_bytes: int = Field(ge=0,le=5_000_000_000)
+    size_bytes: int = Field(ge=0,le=LEGACY_QUOTA_BYTES)
     sha256: Annotated[str, Field(pattern=r'^[0-9a-f]{64}$')]
     expires_at: float
 
 
 class FileManifest(WireModel):
+    policy_version: PolicyVersion = LEGACY_POLICY_VERSION
     complete: Literal[True] = True
     kind: Literal['managed_files'] = 'managed_files'
     files: list[ResultFile] = Field(min_length=1,max_length=16)
@@ -75,20 +77,27 @@ from .acoustic_batch_models import AcousticTaskManifest
 from .spec2wav_models import Spec2WavManifest
 from .egg_models import EggManifest
 from .lpc_models import LpcManifest
+from .m08_models import M08Manifest
+from .m14_models import M14Manifest
+from .m06_models import M06Manifest
+from .m07_models import M07Manifest
+from .m11_models import M11Manifest
+from .m05_models import M05Manifest
 
 
 class JobView(WireModel):
     id: str
     project_id: str
-    operation: Literal['pipeline_check','storage_check','archive_zip','extract_zip','acoustic_analysis','textgrid_segment','spectrogram_to_audio','egg_analysis','lpc_analysis'] = 'pipeline_check'
+    operation: Literal['pipeline_check','storage_check','archive_zip','extract_zip','acoustic_analysis','textgrid_segment','spectrogram_to_audio','egg_analysis','lpc_analysis','pitch_manipulation','phonology_induction','speech_synthesis','phonation_synthesis','mfa_alignment','lip_analysis'] = 'pipeline_check'
     state: State
     progress: Annotated[float, Field(ge=0,le=1)]
     generation: int
     created_at: float
     updated_at: float
-    result_manifest: JobManifest | FileManifest | AcousticTaskManifest | Spec2WavManifest | EggManifest | LpcManifest | None
+    result_manifest: JobManifest | FileManifest | AcousticTaskManifest | Spec2WavManifest | EggManifest | LpcManifest | M08Manifest | M14Manifest | M06Manifest | M07Manifest | M11Manifest | M05Manifest | None
     error_code: str | None
     retry_of: str | None = None
+    waiting_reason: str | None = None
 
 
 class JobList(WireModel):
@@ -112,4 +121,4 @@ from .acoustic_models import AcousticFileManifest
 
 
 class ResultManifestEnvelope(WireModel):
-    manifest: Annotated[JobManifest | FileManifest | AcousticFileManifest | AcousticTaskManifest | Spec2WavManifest | EggManifest | LpcManifest, Field(discriminator='kind')]
+    manifest: Annotated[JobManifest | FileManifest | AcousticFileManifest | AcousticTaskManifest | Spec2WavManifest | EggManifest | LpcManifest | M08Manifest | M14Manifest | M06Manifest | M07Manifest | M11Manifest | M05Manifest, Field(discriminator='kind')]

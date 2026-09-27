@@ -29,9 +29,27 @@ class TaskBridge:
         self.provider,self.service=provider,service
         from .annotation import AnnotationFiles
         self.annotation=AnnotationFiles(provider)
+        from .m08_bridge import M08Bridge
+        self.m08=M08Bridge(self)
+        from .m14_bridge import M14Bridge
+        self.m14=M14Bridge(self)
+        from .m05_bridge import M05Bridge
+        self.m05=M05Bridge(self)
+        from .m11_bridge import M11Bridge
+        self.m11=M11Bridge(self)
+        from .m07_bridge import M07Bridge
+        self.m07=M07Bridge(self)
+        from .m06_bridge import M06Bridge
+        self.m06=M06Bridge(self)
 
     def invoke(self,body):
         op=body.get('op')
+        if isinstance(op,str) and op.startswith('m05_'):return self.m05.invoke(body)
+        if isinstance(op,str) and op.startswith('m11_'):return self.m11.invoke(body)
+        if isinstance(op,str) and op.startswith('m07_'):return self.m07.invoke(body)
+        if isinstance(op,str) and op.startswith('m06_'):return self.m06.invoke(body)
+        if isinstance(op,str) and op.startswith('m14_'):return self.m14.invoke(body)
+        if isinstance(op,str) and op.startswith('m08_'):return self.m08.invoke(body)
         if isinstance(op,str) and op.startswith('annotation_'):return self.annotation.invoke(body)
         if op=='lpc_fonts':return self.service.request('/api/v1/jobs/lpc/fonts','POST',body['font'])
         if op=='lpc':
@@ -60,7 +78,7 @@ class TaskBridge:
         if op=='result':
             import base64
             job=self.service.get('/api/v1/jobs/'+str(UUID(body['job'])))
-            if job['state']!='succeeded' or job['operation'] not in ('spectrogram_to_audio','egg_analysis','lpc_analysis'):raise FileAccessError('分析结果尚不可用。')
+            if job['state']!='succeeded' or job['operation'] not in ('spectrogram_to_audio','egg_analysis','lpc_analysis','pitch_manipulation','phonology_induction','speech_synthesis','phonation_synthesis','mfa_alignment','lip_analysis'):raise FileAccessError('分析结果尚不可用。')
             file=next((f for f in job['result_manifest']['files'] if f['id']==body['id']),None)
             if not file or file['size_bytes']>64_000_000:raise FileAccessError('结果文件不正确。')
             chunks=[self.service.binary(f'/api/v1/jobs/local-results/{file["id"]}?offset={offset}&size={min(1048576,file["size_bytes"]-offset)}') for offset in range(0,file['size_bytes'],1048576)]
@@ -145,7 +163,7 @@ class TaskBridge:
         root=directory.path
         if single:
             job=self.service.get('/api/v1/jobs/'+batch_id)
-            if job['operation'] not in ('spectrogram_to_audio','egg_analysis','lpc_analysis') or job['state']!='succeeded':raise FileAccessError('分析结果尚不可用。')
+            if job['operation'] not in ('spectrogram_to_audio','egg_analysis','lpc_analysis','speech_synthesis','phonation_synthesis') or job['state']!='succeeded':raise FileAccessError('分析结果尚不可用。')
             batch={'summary':{'items':[dict(state='succeeded',job_id=batch_id,index=0)]}}
         else:batch=self.service.get('/api/v1/jobs/batches/'+batch_id)
         created=[];pending={};saved=[]

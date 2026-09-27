@@ -1,5 +1,7 @@
 # 15 模块迁移规格与验收映射
 
+**2026-09-26 所有模块追加门：** 按[统筹计划 P08-CROSS](../plans/2026-09-26-server-coordination.md)分别记录 Windows、Linux 服务（WSL 或授权服务器）、小服务器资源、远程节点（适用时）和 UI 统一状态。全部新增门起始 planned，不能复用旧 Windows verified。网页新目标为每人 1 GB/默认最多 3 天，待政策迁移；按[当前 UI_SPEC](../design/UI_SPEC.md)移除模块内部大标题/说明行与重复关闭按钮，原“标题栏”的方法/保存/帮助动作迁往公共工具栏或参数/结果区。原功能映射和历史验收不删除，由井井指派各 Mxx agent 后逐项接入。
+
 2026-09-12公共新增要求：全部模块遵守[UI_SPEC字体规则](../design/UI_SPEC.md)与[P04-FONT设计](../plans/2026-09-12-global-fonts-design.md)。页面、图表和图片导出共用字体角色与快照规则，未来页面从第一版接入，已迁移页面追加F01–F12适用项。此要求追加到原功能矩阵，原83功能组、197验收基线不删除、不改写为已通过；随后井井授权既有模块接入及全部IPA固定Doulos SIL。M01/M02/M09/M10开发态与M03后台限定证据见[字体报告](../testing/p04-fonts-report.md)，M03已追加[导出字体预检](../testing/m03-font-preflight-report.md)，未来页面、其他平台及发行物仍待各自阶段。
 
 D0.3。以下原功能分组来自此前读取 v2 控件与服务形成的 page-specifications.json，本轮补充跨平台、来源及分层安排。清单是迁移追踪基线，不表示功能已实现或运行通过。迁移前仍需对照实际 v2；发现漏项追加记录，不删去难迁移的功能。
@@ -87,9 +89,11 @@ D页面与逐文件批次已限定Windows开发态验证，见[报告](../testin
 平台差异：科研图导出由服务生成可复现图或共享绘图数据，不依赖桌面窗口截图。
 直接实现：V2本地LPC源码，NumPy/SciPy计算，未调用Praat。引用核查暂停，原来源概括不作为算法实现证据。
 
-| M05 唇形提取 | 6 | [迁移计划](../plans/modules/M05-lip-extraction.md) | `lip` | planned |
+| M05 唇形提取 | 6 | [迁移计划](../plans/modules/M05-lip-extraction.md) | `lip` | in_progress |
 
 ## M05 唇形提取
+
+2026-09-27：[六功能组证据](evidence/M05-source-map.md)、[限定验收报告](../testing/m05-report.md)、[操作说明](../manual/lip-extraction.md)。浏览器 candidate，正式结果保留 legacy 离线；完整模块 in_progress。
 左侧设备与任务模式；中央视频画面；右侧实时参数与采集设置；底部录制/计算状态；回放进入页内子视图。
 
 | 编号 | 原功能组 | 必须保留的功能 | 新位置 | 行为约束 |
@@ -105,9 +109,11 @@ D页面与逐文件批次已限定Windows开发态验证，见[报告](../testin
 平台差异：Web 相机/麦克风通过浏览器权限，保存到配额管理的上传资源；原生使用系统设备适配；高帧率不作无依据保证。Web 禁止反序列化不可信 pickle；以安全结构化格式交互，旧 pkl 仅受控本地转换。
 来源 ID：SRC-MEDIAPIPE, SRC-FFMPEG
 
-| M06 语音合成 | 6 | [迁移计划](../plans/modules/M06-speech-synthesis.md) | `synthesis/klatt` | planned |
+| M06 语音合成 | 6 | [迁移计划](../plans/modules/M06-speech-synthesis.md) | `synthesis/klatt` | in_progress；[Windows 定向 verified / Linux 门关闭](../testing/m06-report.md) |
 
 ## M06 语音合成
+
+2026-09-27 六组 Windows 操作与边界证据见 [来源映射](evidence/M06-source-map.md) 和 [报告](../testing/m06-report.md)，Linux 与远程状态独立。
 左侧参数/规则；中央曲线编辑器与波形或语谱图；右侧选中参数属性；底部合成试听输出。
 
 | 编号 | 原功能组 | 必须保留的功能 | 新位置 | 行为约束 |
@@ -196,7 +202,7 @@ D页面与逐文件批次已限定Windows开发态验证，见[报告](../testin
 平台差异：三维交互复用既有 Three.js 逻辑并接共享主题；Web 原生计算在专属 worker，需验证远程控制延迟/音频缓冲。未达实时指标时明确实验性能力，不宣称实时适配完成。
 来源 ID：SRC-VTL, REF-VTL2006, DOC-VTL24, DOC-VTL23, SRC-THREE, ASSET-HEAD, ASSET-NASAL, SRC-VTLWRAPPER
 
-| M11 MFA 自动标注 | 4 | [迁移计划](../plans/modules/M11-mfa.md) | `transcription` | planned |
+| M11 MFA 自动标注 | 4 | [迁移计划](../plans/modules/M11-mfa.md) | `transcription` | in_progress；Windows 正式任务／组件已验，[证据](../testing/m11-report.md)，远程／Linux 待接 |
 
 ## M11 MFA 自动标注
 左侧模型/词典/输入输出表单；右侧任务日志；底部运行状态与开始对齐。
@@ -266,15 +272,17 @@ D页面与逐文件批次已限定Windows开发态验证，见[报告](../testin
 平台差异：表格解析与文档生成由核心/导出服务；Web 使用原子结果集合提交，不能只保存其中一个却报全部成功。
 来源 ID：PENDING-PHONOLOGY
 
-| M15 感知实验 | 7 | [迁移计划](../plans/modules/M15-perception.md) | `perception` | planned |
+| M15 感知实验 | 7 | [迁移计划](../plans/modules/M15-perception.md) | `perception` | in_progress（纯客户端；见专项报告） |
 
 ## M15 感知实验
+
+2026-09-27 按用户最新要求迁移为纯客户端。配置/刺激/运行/IndexedDB/结果不接 P06/P07 或账号存储，见 [来源映射](evidence/M15-source-map.md)、[独立 ADR](../decisions/ADR-M15-client.md)、[验收范围](../testing/m15-report.md)。A/C 为本轮目标，B 按用户确认保留精确方案，不新增站点级 Service Worker。
 统一外壳内提供素材、序列、参数、问卷、资源助手五个页内页签；正式实验进入专注呈现视图。
 
 | 编号 | 原功能组 | 必须保留的功能 | 新位置 | 行为约束 |
 | --- | --- | --- | --- | --- |
 | M15-F01 | 实验范式 | X、AX、ABX、AXB | 页首范式选择 | 完整保持刺激播放顺序与作答规则，切换时处理不兼容序列。 |
-| M15-F02 | 音频素材 | 音频数据库、上传、分组与试听预览 | 素材页签 | 资源失联给出具体文件；不静默把同名不同文件当作同一刺激。 |
+| M15-F02 | 刺激素材 | 音频、图片、TXT，本地导入、分组与试听预览 | 素材页签 | 资源失联给出具体文件；不静默把同名不同文件当作同一刺激。 |
 | M15-F03 | 播放序列 | 生成、编辑、排序、随机洗牌、全局或指定含首尾范围洗牌 | 序列页签 | 范围外试次顺序保持；编辑与洗牌后的当前序列可审阅。 |
 | M15-F04 | 参数与按键 | 试次间隔、ISI、指导语、全局按键、按试次范围覆盖的分段按键、阶段提示 | 参数页签 | 未被分段覆盖的试次使用全局按键；音频播放期间的作答限制沿用现有规则。 |
 | M15-F05 | 问卷 | 问卷设置及实验中的呈现 | 问卷页签＋正式流程 | 题目、答案与反应结果保持关联，不因主题切换重置。 |
@@ -283,7 +291,7 @@ D页面与逐文件批次已限定Windows开发态验证，见[报告](../testin
 
 复用边界：优先复用范式/序列/问卷/按键逻辑，搬离 CDN；实验播放调度与反应计时在客户端，时钟定义和音频起点单独记录。
 平台差异：两端共用实验运行器；先预加载刺激并验证完整性，网络来回不能纳入反应时；正式试次禁重型任务与主题动画。
-来源 ID：SRC-REACT, SRC-BABEL, SRC-TAILWIND, SRC-SHEETJS, SRC-LUCIDE
+当前来源 ID：P02-NPM-VUE-3-5-42、SRC-SHEETJS 和公共 Doulos SIL。React/Babel/Tailwind/lucide-react 只保留 V2 历史登记，不进入 M15 构建。
 
 ## 覆盖范围说明
 原矩阵 197 行 = 83 页面功能组 + 20 全局项 + 80 参数项 + 14 设置项；另有 20 行双端补充。功能组可包含多个控件，不可将 197 说成全部实际功能数量。MFA 取消已标为新增，图片中不存在的双唇偏移/重复按钮不纳入原功能。

@@ -30,6 +30,8 @@ def preview_slot():
 
 def render(payload,*,channel,start,end,width=800,timeout=20):
     if len(payload)>MAX_BYTES:raise PreviewError('preview_too_large',413)
+    if sys.platform=='linux':
+        return _render_linux(payload,channel=channel,start=start,end=end,width=width,timeout=timeout)
     if os.name!='nt':raise PreviewError('preview_platform_unverified',503)
     from .native import windows as win
     process=None;job=None
@@ -64,6 +66,29 @@ def render(payload,*,channel,start,end,width=800,timeout=20):
             if process.poll() is None:process.terminate()
             process.wait(timeout=5)
             process.stdin.close();process.stdout.close()
+
+
+def _render_linux(payload,*,channel,start,end,width,timeout):
+    from pathlib import Path
+    from .native.linux_runtime import command,load_profile
+    from .native.posix import run_bounded
+    from .io.limits import Limits,LimitError,FormatError
+    header=json.dumps(dict(size=len(payload),channel=channel,start=start,end=end,width=width)).encode()+b'\n'
+    if len(header)>8192:raise PreviewError('invalid_spectrogram_input')
+    try:
+        _,profile=load_profile()
+        output=run_bounded(command('spectrogram','--preview'),header+payload,Path(profile['cache']),
+                           Limits(input_bytes=MAX_BYTES+8192,output_bytes=512064,process_bytes=1073741824,timeout_seconds=timeout))
+        pid,separator,encoded=output.partition(b'\n')
+        if not separator or not pid.isdigit() or len(pid)>20:raise ValueError('Invalid child protocol')
+        result=json.loads(encoded)
+        if 'error' in result:raise PreviewError(result['error'])
+        return result
+    except PreviewError:raise
+    except LimitError as exc:
+        raise PreviewError('preview_timeout' if str(exc)=='native_timeout' else 'preview_resource_failed',503) from None
+    except (OSError,ValueError,FormatError):
+        raise PreviewError('preview_resource_failed',503) from None
 
 
 def child():

@@ -56,7 +56,11 @@ class LpcSpectrumData(WireModel):
         return self
 
 
+from .storage_policy import PolicyVersion, LEGACY_POLICY_VERSION
+
+
 class LpcManifest(WireModel):
+    policy_version: PolicyVersion = LEGACY_POLICY_VERSION
     kind: Literal['managed_lpc_files'] = 'managed_lpc_files'
     complete: Literal[True] = True
     operation: Literal['lpc_analysis'] = 'lpc_analysis'

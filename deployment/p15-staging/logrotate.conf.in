@@ -1,0 +1,17 @@
+# Target-specific supplementary config; install only if this log is not already
+# matched by the host's nginx rotation. Never configure two owners for one log.
+/var/log/nginx/ptb-staging-access.log {
+    daily
+    maxsize 10M
+    rotate 7
+    missingok
+    notifempty
+    compress
+    delaycompress
+    create 0640 www-data adm
+    sharedscripts
+    postrotate
+        # Reloading/reopening the shared proxy is separately authorized.
+        /usr/sbin/nginx -s reopen
+    endscript
+}

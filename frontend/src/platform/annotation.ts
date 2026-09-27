@@ -1,14 +1,25 @@
 import type {ResearchFiles,ResearchFile} from './research.ts';
-import {sha256} from './research.ts';
+import {sha256,audioPreview} from './research.ts';
+import {decodeWav} from './decode.ts';
 import {decodeText,parseGrid} from '../modules/annotation/format.ts';
 export interface AnnotationTarget {id:string;name:string;sha256:string|null}
 export interface AnnotationSaved {file:ResearchFile;name:string;sha256:string}
 export interface AnnotationSave {target:string;source:{id:string;sha256:string};text?:string;offset?:number}
 export interface AnnotationPort {
+ audio?(file:ResearchFile):Promise<{buffer:ArrayBuffer;sha256:string;sourceDuration:number;previewNote:string}>;
  scan(directory?:string):Promise<ResearchFile[]>;
  lip(file:ResearchFile):Promise<{wire:unknown;sha256:string}>;
  target(file:ResearchFile,role:'textgrid'|'lip',suffix?:string):Promise<AnnotationTarget>;
  save(body:AnnotationSave):Promise<AnnotationSaved>;
+}
+export async function annotationAudio(files:ResearchFiles,file:ResearchFile,signal?:AbortSignal){
+ if(!files.annotation?.audio)return {...await audioPreview(files,file,signal),previewNote:''};
+ if(signal?.aborted)throw new DOMException('Preview cancelled','AbortError');
+ const data=await files.annotation.audio(file),asset=await decodeWav(data.buffer,file.name,signal);
+ if(!Number.isFinite(data.sourceDuration)||data.sourceDuration<=0||Math.abs(asset.duration-data.sourceDuration)>1/asset.sampleRate+1e-9)throw Error('预览与原音频时间范围不一致。');
+ // A fractional final resampling frame must not stretch or truncate TextGrid time.
+ asset.duration=data.sourceDuration;
+ return {asset,sha256:data.sha256,previewNote:data.previewNote};
 }
 export interface LipTrack {wire:any;times:number[];open:(number|null)[];width:(number|null)[];offset:number}
 export function lipTrack(wire:unknown):LipTrack {
@@ -35,7 +46,7 @@ export function portableAnnotation(files:ResearchFiles,upload?:(name:string,buff
   return {
     scan:directory=>files.list(directory),
     async lip(file){if(file.kind==='lip_pickle')throw Error('网页不读取 PKL，请先在桌面转换为 .lip.json。');const read=await files.read(file);const wire=JSON.parse(decodeText(read.buffer));lipTrack(wire);return {wire,sha256:read.sha256};},
-    async target(file,role,suffix='_webedit'){
+    async target(file,role,suffix='_自动保存'){
       if(suffix.length>60||/[\x00-\x1f/\\:*?"<>|]/.test(suffix)||/[. ]$/.test(suffix))throw Error('文件后缀无效。');
       const name=role==='textgrid'?file.name.replace(/\.wav$/i,'')+suffix+'.TextGrid':file.name;
       const existing=(await files.list()).find(f=>f.name===name);

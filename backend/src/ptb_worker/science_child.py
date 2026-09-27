@@ -47,9 +47,15 @@ def main():
     with ReservedNativeScratch(header['native_scratch'],16_000_000) as scratch:
         native=Reaper(header['reaper_binary'],scratch,limits) if request.config.backend_policy.reaper!='disabled' else None
         result=analyze_audio(audio,to_core_config(request.config),associations,AcousticBackends(reaper=native))
+        # The legacy core records ordinary native failures as unavailable and
+        # continues with missing rF0. Linux's new complete-default task gate must
+        # fail before publication in that case. Unvoiced native tracks remain valid.
+        if sys.platform=='linux' and native is not None and not any(
+                event.get('stage')=='reaper' and event.get('actual')=='native_reaper' for event in result.backend_events):
+            raise AcousticFailure('reaper_runtime_failed')
         frame=result.to_dataframe().rename(columns=PARAMETER_MAPPING)
         if frame.empty:raise AcousticFailure('no_parameter_frames')
-        wire=build_acoustic_result(result,audio,request,inputs,native_sha256=REAPER_SHA256 if native else None)
+        wire=build_acoustic_result(result,audio,request,inputs,native_sha256=native.sha256 if native else None)
         raw=wire.model_dump_json().encode()
         if len(raw)>16_000_000:raise LimitError('scientific_result_budget')
         table=table_from_frame(frame,limits)

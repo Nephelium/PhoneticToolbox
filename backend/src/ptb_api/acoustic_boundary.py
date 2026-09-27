@@ -5,7 +5,8 @@ authenticated host/store. No filesystem paths, database access or fake job succe
 """
 from dataclasses import dataclass
 import math
-from .acoustic_models import AcousticInputSnapshot, AcousticRequest, RETENTION_SECONDS
+from .acoustic_models import AcousticInputSnapshot, AcousticRequest
+from .storage_policy import RETENTION_SECONDS
 
 
 class AcousticBoundaryError(ValueError):

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import ModuleFrame from '../../components/ModuleFrame.vue';
+import ModuleToolbar from '../../components/ModuleToolbar.vue';
+import ModuleStatus from '../../components/ModuleStatus.vue';
 import {computed,ref,onMounted,onUnmounted,watch,markRaw} from 'vue';
 import type {ResearchContext,ResearchFile,DirectoryGrant,SpectrogramView,BatchView,JobView,BatchSelection,BatchConfig} from '../../platform/research.ts';
 import {audioPreview} from '../../platform/research.ts';
@@ -127,15 +130,15 @@ onMounted(()=>{if(props.context.files.kind!=='desktop'||state.input)void refresh
 onUnmounted(()=>{disposed=true;clearTimeout(taskTimer);previewAbort.abort();state.loadVersion++;state.listVersion++;state.wave.loading=false;stop();});
 </script>
 <template>
-<section class="workspace-page m01-page" aria-label="参数估计 工作区">
-<header class="page-heading"><div><p class="eyebrow">M01 · {{context.label}}</p><h1>参数估计</h1></div><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button></header>
-<div class="m01-directory-bar">
+<ModuleFrame label="参数估计 工作区" class="workspace-page m01-page">
+
+<template #toolbar><ModuleToolbar label="参数估计操作"><div class="m01-directory-bar">
 <template v-if="context.files.kind==='desktop'"><button class="primary" :disabled="busy" @click="choose('input')">选择音频目录</button><span class="directory-label" :title="state.input?.label">{{state.input?.label??'尚未选择目录'}}</span><button :disabled="busy" @click="choose('association')">选择关联目录</button><span v-if="state.associationDirectory" class="directory-label" :title="state.associationDirectory.label">{{state.associationDirectory.label}}</span></template>
 <template v-else-if="context.files.kind==='preview'"><input ref="picker" class="visually-hidden" type="file" accept=".wav" multiple aria-label="选择音频列表" @change="add"/><button class="primary" @click="picker?.click()">添加WAV到列表</button><span class="hint">本机预览 · 不上传</span></template>
 <template v-else><span>项目资源 · {{context.label}}</span><small class="muted">在项目文件管理中上传 WAV、TextGrid、.lip.json 或历史 XLSX/SQLite，再刷新。</small></template>
 <button :disabled="busy||(context.files.kind==='desktop'&&!state.input)" @click="refresh">{{busy?'正在读取…':'刷新列表'}}</button>
-<div v-if="context.files.kind==='desktop'" class="m01-output-row"><label><input v-model="state.sameDirectory" type="checkbox"/>结果与WAV同目录</label><button :disabled="state.sameDirectory||busy" @click="choose('output')">选择结果目录</button><span class="directory-label" :title="effectiveOutput(state)?.label">{{effectiveOutput(state)?.label??'尚未选择结果目录'}}</span></div></div>
-<p v-if="notice" role="status" class="notice">{{notice}}</p><p v-if="state.wave.error" role="alert" class="error-banner">{{state.wave.error}}</p>
+<div v-if="context.files.kind==='desktop'" class="m01-output-row"><label><input v-model="state.sameDirectory" type="checkbox"/>结果与WAV同目录</label><button :disabled="state.sameDirectory||busy" @click="choose('output')">选择结果目录</button><span class="directory-label" :title="effectiveOutput(state)?.label">{{effectiveOutput(state)?.label??'尚未选择结果目录'}}</span></div></div><template #actions><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button></template></ModuleToolbar></template>
+<ModuleStatus v-if="notice" :message="notice"/><ModuleStatus v-if="state.wave.error" kind="error" :message="state.wave.error"/>
 <WorkbenchColumns @files-keydown="listKey">
 <template #files><div class="panel-heading"><h2>音频列表</h2><small>{{audioFiles.length}} 个文件</small></div><p class="hint">点选用于试听；批处理覆盖整个列表。</p>
 <div class="m01-select-all"><label><input aria-label="全选音频" type="checkbox" :checked="audioFiles.length>0&&state.marked.length===audioFiles.length" :indeterminate="state.marked.length>0&&state.marked.length<audioFiles.length" :disabled="!audioFiles.length" @change="state.marked=($event.target as HTMLInputElement).checked?audioFiles.map(f=>f.id):[]"/>全选</label><small>切分选择 {{state.marked.length}} / {{audioFiles.length}}</small></div><div class="m01-file-list"><div v-for="file in audioFiles" :key="file.id" class="m01-file-entry"><input v-model="state.marked" type="checkbox" :value="file.id" :aria-label="'选择切分 '+file.name"/><button class="file-row" :class="{selected:state.selected===file.id}" :aria-pressed="state.selected===file.id" @click="selectFile(file)"><AppIcon name="file"/><span>{{file.name}}<small>{{association(state,file.id).textgrid?'TextGrid · ':''}}{{association(state,file.id).lip?'唇形关联 · ':''}}{{Math.ceil(file.size/1024)}} KB</small><small v-if="association(state,file.id).error" class="danger-text">关联待确认</small></span></button></div></div>
@@ -160,7 +163,7 @@ onUnmounted(()=>{disposed=true;clearTimeout(taskTimer);previewAbort.abort();stat
 
 <ParameterDrawer v-if="state.drawer==='parameters'" :selected="state.wave.parameters" :draft="state.parameterDraft" require-selection @draft="state.parameterDraft=$event" @close="state.drawer=''" @apply="parameters"/>
 <SettingsDrawer v-if="state.drawer==='settings'" :draft="state.settingsDraft" @draft="state.settingsDraft=$event" @close="state.drawer=''" @apply="settings"/>
-</section></template>
+</ModuleFrame></template>
 <style scoped>
 .legacy-field{display:flex;flex-direction:column;gap:6px;margin:10px 0}.legacy-field select{min-width:0;max-width:100%}.association-help p{overflow-wrap:anywhere}
 .legacy-source-row{display:flex;flex-wrap:wrap;gap:12px}.legacy-source-row label{display:flex;flex:1 1 240px;min-width:0;flex-direction:column;gap:6px}.legacy-source-row select{min-width:0;max-width:100%}

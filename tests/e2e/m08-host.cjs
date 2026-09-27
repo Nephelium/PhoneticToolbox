@@ -1,0 +1,32 @@
+const fs=require('node:fs/promises'),path=require('node:path'),assert=require('node:assert/strict'),{spawn}=require('node:child_process'),{createInterface}=require('node:readline'),{pathToFileURL}=require('node:url');
+const root=path.resolve(__dirname,'../..');
+async function main(){
+ const worker=spawn(path.join(root,'.venv/m09-ui/Scripts/python.exe'),['-X','utf8','tests/support/m08_host_bridge.py'],{cwd:root,windowsHide:true,env:{...process.env,PYTHONPATH:['backend/src','packages/phonetic_core/src','desktop/src','scripts'].map(p=>path.join(root,p)).join(';')}});
+ let readyResolve,readyReject,counter=0;const pending=new Map(),ready=new Promise((r,j)=>{readyResolve=r;readyReject=j});
+ createInterface({input:worker.stdout}).on('line',line=>{const d=JSON.parse(line);if(d.ready)readyResolve(d);else{pending.get(d.id)?.(d);pending.delete(d.id)}});worker.stderr.on('data',d=>process.stderr.write(d));worker.once('exit',code=>readyReject(Error('Host exited '+code)));
+ const {out}=await ready;console.log(out);
+ const {createServer}=await import(pathToFileURL(path.join(root,'frontend/node_modules/vite/dist/node/index.js')));
+ const server=await createServer({root:path.join(root,'frontend'),server:{host:'127.0.0.1',port:5188},optimizeDeps:{entries:['tests/m08-host.html']},plugins:[{name:'m08-host-transport-test',configureServer(s){s.middlewares.use('/__m08_host',(req,res)=>{let raw='';req.on('data',d=>raw+=d);req.on('end',()=>{const id=++counter;pending.set(id,data=>{res.setHeader('Content-Type','application/json');res.end(JSON.stringify(data))});worker.stdin.write(JSON.stringify({...JSON.parse(raw),id})+'\n')})})}}]});await server.listen();
+ const {chromium}=require(path.join(process.env.USERPROFILE,'.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright'));
+ const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true}),page=await browser.newPage({viewport:{width:1440,height:1000}}),checks=[],errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(45000);
+ const click=name=>page.getByRole('button',{name,exact:true}).click(),open=()=>page.locator('nav').getByRole('button',{name:'变速变调',exact:true}).click(),idle=()=>page.waitForFunction(()=>document.querySelector('.m08-page')?.getAttribute('aria-busy')==='false');
+ let success=false;
+ try{
+  await page.goto(server.resolvedUrls.local[0]+'tests/m08-host.html');await open();await click('打开音频目录');
+  const select=page.getByLabel('M08 音频'),options=await select.locator('option').evaluateAll(items=>items.map(x=>({value:x.value,text:x.textContent})));
+  await select.selectOption(options.find(x=>x.text.endsWith('.wav')).value);await page.locator('.m08-curve').waitFor();await idle();checks.push('production desktop M08Port / TaskBridge / HTTP / durable preview in AppShell');
+  await page.getByLabel('语速倍率').fill('0.8');await click('合成当前视野');await page.getByText('输出 1.250 s',{exact:false}).waitFor();await idle();
+  await click('保存并编号');await idle();await page.locator('.history li').first().waitFor();const firstNames=await fs.readdir(path.join(out,'saved')),occupied=firstNames[0].replace(/_1\.wav$/,'_9.wav');await fs.writeFile(path.join(out,'saved',occupied),'unrelated synthetic existing file');await click('保存并编号');await idle();assert.equal(await page.locator('.history li').count(),2);const names=await fs.readdir(path.join(out,'saved'));assert(names.some(n=>n.endsWith('_1.wav'))&&names.some(n=>n.endsWith('_10.wav')));assert((await page.locator('.history').innerText()).includes('_10.wav'));checks.push('actual synthesis, PCM16 saved copies, atomic native numbering, persisted history');
+  const download=page.waitForEvent('download');await click('下载合成音');await(await download).saveAs(path.join(out,'download.wav'));assert((await fs.stat(path.join(out,'download.wav'))).size>1000);checks.push('actual output download');
+  await click('批量重命名');await page.getByLabel('新的共同前缀').fill('renamed_');await click('确认重命名');await idle();assert((await fs.readdir(path.join(out,'saved'))).filter(n=>n!==occupied).every(n=>n.startsWith('renamed_')));
+  await click('删除本批次音频');await click('确认删除所选音频');await idle();assert.deepEqual(await fs.readdir(path.join(out,'saved')),[occupied]);assert.equal(await fs.readFile(path.join(out,'saved',occupied),'utf8'),'unrelated synthetic existing file');assert((await fs.stat(path.join(out,'input','public ɑ̃˥.wav'))).size>0);checks.push('explicit selected IDs rename/delete both managed and this-session exported results; source preserved');
+  await page.getByLabel('语速倍率').fill('1.2');await page.getByLabel('关闭 变速变调',{exact:true}).click();await click('取消关闭');
+  await page.evaluate(()=>{window.__set=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(k.includes('m08.draft.'))throw Error('controlled storage failure');return window.__set.call(this,k,v)}});
+  await page.getByLabel('关闭 变速变调',{exact:true}).click();await click('保存草稿并关闭');await page.getByRole('dialog').getByRole('alert').waitFor();assert.equal(await page.locator('.m08-page').count(),1);await page.screenshot({path:path.join(out,'close-failed.png'),fullPage:true});
+  await page.evaluate(()=>Storage.prototype.setItem=window.__set);await click('保存草稿并关闭');await page.locator('.m08-page').waitFor({state:'detached'});await open();await click('打开音频目录');await select.selectOption(options.find(x=>x.text.endsWith('.wav')).value);await page.locator('.m08-curve').waitFor();await idle();assert.equal(await page.getByLabel('语速倍率').inputValue(),'1.2');checks.push('AppShell close cancellation, actual draft storage failure keeps tab, successful save/reopen');
+  await page.screenshot({path:path.join(out,'light.png'),fullPage:true});await page.evaluate(()=>document.documentElement.dataset.theme='dark');await page.waitForTimeout(250);await page.screenshot({path:path.join(out,'dark.png'),fullPage:true});
+  assert.deepEqual(errors,[]);success=true;
+ }catch(e){await page.screenshot({path:path.join(out,'failure.png'),fullPage:true});throw e;}
+ finally{await fs.writeFile(path.join(out,'browser-report.json'),JSON.stringify({success,checks,errors,scope:'Windows Chrome, production desktop adapter and real host; QWebChannel transport substituted'},null,2));console.log(JSON.stringify({success,checks}));await browser.close();await server.close();worker.stdin.end();}
+}
+main().catch(e=>{console.error(e);process.exitCode=1});

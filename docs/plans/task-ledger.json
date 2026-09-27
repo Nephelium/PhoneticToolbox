@@ -133,6 +133,11 @@
         "qt_static_host_and_zoom": "verified",
         "manual_visual_feedback": "verified",
         "backend_jobs_and_scientific_algorithms": "planned"
+      },
+      "coordination_update": {
+        "date": "2026-09-26",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "note": "保留历史限定验收；UI/远程/1GB三天/Linux 为独立追加任务，不扩展 verified。"
       }
     },
     {
@@ -200,6 +205,11 @@
         "local_http_restart_restore": "verified",
         "browser_jobs_and_account_isolation": "verified",
         "scientific_algorithms_files_and_native_devices": "planned"
+      },
+      "coordination_update": {
+        "date": "2026-09-26",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "note": "保留历史限定验收；UI/远程/1GB三天/Linux 为独立追加任务，不扩展 verified。"
       }
     },
     {
@@ -238,6 +248,11 @@
         "real_storage_browser": "verified",
         "single_file_scope": "verified",
         "owned_worker_crash_recovery": "verified"
+      },
+      "coordination_update": {
+        "date": "2026-09-26",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "note": "保留历史限定验收；UI/远程/1GB三天/Linux 为独立追加任务，不扩展 verified。"
       }
     },
     {
@@ -270,7 +285,12 @@
         "docs/manual/parameter-estimation.md",
         "docs/plans/2026-09-10-m01-legacy-inputs.md",
         "docs/testing/m01-legacy-report.md"
-      ]
+      ],
+      "coordination_update": {
+        "date": "2026-09-26",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "note": "保留历史限定验收；UI/远程/1GB三天/Linux 为独立追加任务，不扩展 verified。"
+      }
     },
     {
       "id": "P09",
@@ -290,7 +310,12 @@
       "acceptance": "5 模块分别有可复核数据/设备证据；Web 不假装等同原生硬件时序",
       "execution_evidence": [
         "docs/testing/m12-report.md"
-      ]
+      ],
+      "coordination_update": {
+        "date": "2026-09-26",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "note": "保留历史限定验收；UI/远程/1GB三天/Linux 为独立追加任务，不扩展 verified。"
+      }
     },
     {
       "id": "P10",
@@ -312,18 +337,18 @@
     },
     {
       "id": "P11",
-      "title": "WSL 多人集成、科学对照和负载测试",
-      "dependencies": "P08,P09,P10",
+      "title": "逐模块 Linux 验证、小服务器性能与联合负载测试",
+      "dependencies": "ENV 可先行；Linux/性能随模块开展；联合收口依赖各开放模块及相关来源门",
       "files": "tests/security/；tests/performance/；tests/e2e/；docs/testing/load-report.md",
       "status": "planned",
-      "note": "planned",
+      "note": "2026-09-26 新统筹计划前移 Linux 验证；Ubuntu 24.04.2/x86_64、2 vCPU、套餐 4 GiB/50 GiB，系统可见约 3.4 GiB，无 Swap。新增实现和云端验证仍 planned。",
       "steps": [
-        "在明确归本项目的 WSL 环境部署 API/worker/PostgreSQL/存储",
-        "10 个测试账号执行不同模块、排队、下载、到期和清理",
-        "验证 2 重任务+8 轻交互与 10 人同时提交，记录资源和等待时间",
-        "注入数据库/worker/磁盘/网络故障，核对恢复与跨用户边界",
-        "运行所有模块数值对照与 UI 场景，按真实环境标记缺口",
-        "用数据形成未来服务器规格与容量建议，不在本轮购买"
+        "只读核实授权服务器或专用 WSL 环境，未经批准不修改系统/现存库",
+        "抽取 Windows/Linux 受限进程适配与实际 capability",
+        "Windows 后逐模块执行 Linux 数值/文件/字体/接口验证",
+        "测量 10 人交互、1 个准入计算+9 人交互、批次与可信节点在线/离线",
+        "记录系统可用资源、进程树峰值、等待/计算/传输时间及故障恢复",
+        "依实測定义服务器与远程节点准入，不因预算改变科学结果"
       ],
       "acceptance": "10 人场景指标有实测；安全/配额/TTL 必测全通过，设备未测不被掩盖",
       "execution_evidence": []
@@ -388,10 +413,10 @@
       "dependencies": "按交付拆分：Web=P11；Windows=P12；macOS=P13；Linux=P14",
       "files": "docs/deployment/production-runbook.md；docs/deployment/rollback.md；docs/releases/3.0.0.md",
       "status": "planned",
-      "note": "planned",
+      "note": "2026-09-26 真实域名与服务器联调由 P15-STAGING 前置准备；生产部署与发布仍需明确授权。",
       "steps": [
         "审查各平台验收状态，区分完成/未测/阻断，不夸大覆盖",
-        "根据负载报告查询阿里云实时规格/价格，提出具体部署资源",
+        "核实已购阿里云轻量 Ubuntu 服务器与域名，按 P11 实测制定容量/部署/回滚方案，不新增购买",
         "形成同源 HTTPS、数据库、worker、存储/配额/清理与最少日志配置清单",
         "演练部署迁移、服务恢复和版本回退；核对备份不会超期保存用户音频",
         "准备发布说明、说明书、下载文件名/校验和、签名和第三方材料",
@@ -467,6 +492,14 @@
         "windows_hosted_web": "verified",
         "macos": "planned",
         "linux": "planned"
+      },
+      "additional_gates_2026_09_26": {
+        "linux_service_scope": "planned",
+        "server_small_profile": "planned",
+        "remote_worker_scope": "planned; applicability to be recorded per operation",
+        "ui_unification": "planned",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
       }
     },
     {
@@ -491,6 +524,14 @@
         "windows_hosted_web": "verified",
         "macos": "planned",
         "linux": "planned"
+      },
+      "additional_gates_2026_09_26": {
+        "linux_service_scope": "planned",
+        "server_small_profile": "planned",
+        "remote_worker_scope": "planned; applicability to be recorded per operation",
+        "ui_unification": "planned",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
       }
     },
     {
@@ -517,7 +558,15 @@
       "planning_evidence": [
         "docs/modules/evidence/M03-source-map.md",
         "docs/plans/2026-09-12-m03-implementation.md"
-      ]
+      ],
+      "additional_gates_2026_09_26": {
+        "linux_service_scope": "planned",
+        "server_small_profile": "planned",
+        "remote_worker_scope": "planned; applicability to be recorded per operation",
+        "ui_unification": "planned",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
+      }
     },
     {
       "id": "M04",
@@ -535,7 +584,15 @@
         "docs/testing/m04-core-report.md",
         "docs/testing/m04-jobs-report.md",
         "docs/testing/m04-ui-report.md"
-      ]
+      ],
+      "additional_gates_2026_09_26": {
+        "linux_service_scope": "planned",
+        "server_small_profile": "planned",
+        "remote_worker_scope": "planned; applicability to be recorded per operation",
+        "ui_unification": "planned",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
+      }
     },
     {
       "id": "M05",
@@ -547,9 +604,21 @@
         "P07",
         "P01"
       ],
-      "status": "planned",
+      "status": "in_progress",
       "plan": "modules/M05-lip-extraction.md",
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/testing/m05-baseline-report.md",
+        "docs/testing/m05-browser-report.md",
+        "docs/testing/m05-report.md"
+      ],
+      "additional_gates_2026_09_26": {
+        "linux_service_scope": "not admitted: inspected WSL runtime lacks numpy/mediapipe/av",
+        "server_small_profile": "planned",
+        "remote_worker_scope": "not admitted; local camera never fails over",
+        "ui_unification": "common frame/theme/fonts/toolbar/close guard wired",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "windows_scope": "Windows public and authorized natural baselines, Chrome/Qt physical capture, local tasks and exports verified within m05-report; physical sync and remaining hardware matrix pending"
+      }
     },
     {
       "id": "M06",
@@ -560,9 +629,21 @@
         "P06",
         "P07"
       ],
-      "status": "planned",
+      "status": "in_progress",
       "plan": "modules/M06-speech-synthesis.md",
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/modules/evidence/M06-source-map.md",
+        "docs/testing/m06-report.md",
+        "docs/manual/speech-synthesis.md"
+      ],
+      "additional_gates_2026_09_26": {
+        "linux_service_scope": "in_progress: 7 exact numeric failures; WSL linux_process_boundary_unavailable; disabled",
+        "server_small_profile": "Windows measured 10 s / 480000 samples, 1e9 process bytes; Linux not qualified",
+        "remote_worker_scope": "planned: fixed entry and budgets provided; no remote machine acceptance",
+        "ui_unification": "verified: common shell/frame/toolbar/section/status/player/tasks/close guard, scoped Windows",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "windows_scope": "verified: Windows exact V2 core, Chrome, Qt actual host and synthetic PostgreSQL only"
+      }
     },
     {
       "id": "M07",
@@ -575,7 +656,15 @@
       ],
       "status": "planned",
       "plan": "modules/M07-phonation-synthesis.md",
-      "execution_evidence": []
+      "execution_evidence": [],
+      "additional_gates_2026_09_26": {
+        "linux_service_scope": "planned",
+        "server_small_profile": "planned",
+        "remote_worker_scope": "planned; applicability to be recorded per operation",
+        "ui_unification": "planned",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
+      }
     },
     {
       "id": "M08",
@@ -588,7 +677,15 @@
       ],
       "status": "planned",
       "plan": "modules/M08-pitch-manipulation.md",
-      "execution_evidence": []
+      "execution_evidence": [],
+      "additional_gates_2026_09_26": {
+        "linux_service_scope": "planned",
+        "server_small_profile": "planned",
+        "remote_worker_scope": "planned; applicability to be recorded per operation",
+        "ui_unification": "planned",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
+      }
     },
     {
       "id": "M09",
@@ -611,6 +708,14 @@
         "windows_hosted_web": "verified",
         "macos": "planned",
         "linux": "planned"
+      },
+      "additional_gates_2026_09_26": {
+        "linux_service_scope": "planned",
+        "server_small_profile": "planned",
+        "remote_worker_scope": "planned; applicability to be recorded per operation",
+        "ui_unification": "planned",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
       }
     },
     {
@@ -644,7 +749,15 @@
       "recording_revision": "R4",
       "note": "Windows M10/R4 verified and frozen after the user-authorized recording additions. Portable frames and presets, 50 ms minimum / 200 ms new frames, silent frames without F0, 150 Hz defaults, replay cache and synchronized current/six-view video. 169 Python and 22 frontend tests, 12 geometry cases, both frozen Qt suites and independent video decoding passed. Native m10/2 unchanged. Other modules follow their own plans. Not full v3 or cross-platform release. R5 onset envelope, drag reorder and clear/undo implemented; user requested build only, no verification. The verified scope above remains R4.",
       "latest_revision": "R5",
-      "latest_revision_verification": "not_run_by_user_request"
+      "latest_revision_verification": "not_run_by_user_request",
+      "additional_gates_2026_09_26": {
+        "linux_service_scope": "planned",
+        "server_small_profile": "planned",
+        "remote_worker_scope": "planned; applicability to be recorded per operation",
+        "ui_unification": "planned",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
+      }
     },
     {
       "id": "M11",
@@ -656,9 +769,21 @@
         "P07",
         "P01"
       ],
-      "status": "planned",
+      "status": "in_progress",
       "plan": "modules/M11-mfa.md",
-      "execution_evidence": []
+      "execution_evidence": [
+        "docs/testing/m11-report.md",
+        "docs/modules/evidence/M11-source-map.md",
+        "docs/specs/m11-remote-handoff.md"
+      ],
+      "additional_gates_2026_09_26": {
+        "linux_service_scope": "blocked: native MFA environment and delegated resource group unverified",
+        "server_small_profile": "disabled: full dictionary Windows peak exceeds initial server budget",
+        "remote_worker_scope": "blocked: formal remote/1 execution/file bridge pending",
+        "ui_unification": "verified: actual Qt common workbench, limited Windows viewport checks",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "windows_scope": "verified: source Qt/local HTTP and optional component, public fixtures only"
+      }
     },
     {
       "id": "M12",
@@ -679,7 +804,16 @@
         "docs/manual/annotation.md"
       ],
       "verification_scope": "Windows development: installed Qt host, independent Chrome/native files and local hosted PostgreSQL web",
-      "note": "User requested M12 ahead of M04 on 2026-09-14. Seven functional groups complete in bounded Windows development scope. EXE not built; no DDL/push/V2 changes. Cross-platform, production and full early provenance remain unverified."
+      "note": "User requested M12 ahead of M04 on 2026-09-14. Seven functional groups complete in bounded Windows development scope. EXE not built; no DDL/push/V2 changes. Cross-platform, production and full early provenance remain unverified.",
+      "additional_gates_2026_09_26": {
+        "linux_service_scope": "planned",
+        "server_small_profile": "planned",
+        "remote_worker_scope": "planned; applicability to be recorded per operation",
+        "ui_unification": "planned",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
+      },
+      "current_scope_note": "2026-09-19 R6 Windows/Chrome/冻结基础链路限定 verified，见 docs/testing/m12-r6-report.md；旧 note 是 2026-09-14 历史，Linux/UI 新门均未完成。"
     },
     {
       "id": "M13",
@@ -692,7 +826,15 @@
       ],
       "status": "planned",
       "plan": "modules/M13-mandarin-ipa.md",
-      "execution_evidence": []
+      "execution_evidence": [],
+      "additional_gates_2026_09_26": {
+        "linux_service_scope": "planned",
+        "server_small_profile": "planned",
+        "remote_worker_scope": "planned; applicability to be recorded per operation",
+        "ui_unification": "planned",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
+      }
     },
     {
       "id": "M14",
@@ -705,7 +847,15 @@
       ],
       "status": "planned",
       "plan": "modules/M14-phonology-induction.md",
-      "execution_evidence": []
+      "execution_evidence": [],
+      "additional_gates_2026_09_26": {
+        "linux_service_scope": "planned",
+        "server_small_profile": "planned",
+        "remote_worker_scope": "planned; applicability to be recorded per operation",
+        "ui_unification": "planned",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
+      }
     },
     {
       "id": "M15",
@@ -713,13 +863,191 @@
       "dependencies": [
         "P03",
         "P04",
-        "P06",
-        "P07",
         "P01"
       ],
-      "status": "planned",
+      "status": "in_progress",
       "plan": "modules/M15-perception.md",
+      "verification_scope": "Windows Chrome official client module and offline A; actual Qt X/offline C; WSL static artifacts only",
+      "note": "2026-09-27: pure-client functionality delivered. No API/SQL/remote-worker or P06/P07 dependency. Offline B left as user-approved scoped proposal; Linux browser and physical end-to-end latency unverified.",
+      "execution_evidence": [
+        "docs/testing/m15-report.md",
+        "docs/testing/m15-coordination-summary.md",
+        "docs/modules/evidence/M15-source-map.md",
+        "docs/decisions/ADR-M15-client.md"
+      ],
+      "additional_gates_2026_09_26": {
+        "linux_service_scope": "WSL native static-artifact audit verified; Linux browser/audio unverified; no M15 backend",
+        "server_small_profile": "not applicable: public static delivery only, no uploaded experiment data or compute task",
+        "remote_worker_scope": "not applicable: all experiment operations run in the client",
+        "ui_unification": "verified within M15 Windows Chrome/Qt scope",
+        "plan": "docs/plans/2026-09-26-server-coordination.md",
+        "windows_scope": "docs/testing/m15-report.md; no hardware timing or packaged EXE claim"
+      }
+    },
+    {
+      "id": "P11-ENV",
+      "title": "环境盘点及 Linux 测试入口",
+      "dependencies": "无",
+      "files": "docs/testing/linux-environment.md（待新建）；scripts/verify_linux_environment.py（待新建）",
+      "status": "planned",
+      "note": "Implementation not started. User assigns implementation agents separately.",
+      "plan": "docs/plans/2026-09-26-server-coordination.md",
+      "steps": [
+        "阅读对应任务卡并核对文件归属",
+        "建立行为/失败证据",
+        "最小实施与定向验证",
+        "提交分平台报告与未测项"
+      ],
+      "acceptance": "明确 WSL/实际主机、Linux wheel/解释器/字体/cgroup 证据，不重配其他环境",
       "execution_evidence": []
+    },
+    {
+      "id": "P07-POLICY",
+      "title": "1 GB / 3 天政策与存量兼容迁移",
+      "dependencies": "实施前审阅具体增量迁移",
+      "files": "backend/src/ptb_api/quota.py；acoustic_models.py；storage.py；frontend/src/account/ProjectStorage.vue；contracts/；下一号增量迁移（待审阅）",
+      "status": "planned",
+      "note": "Implementation not started. User assigns implementation agents separately.",
+      "plan": "docs/plans/2026-09-26-server-coordination.md",
+      "steps": [
+        "阅读对应任务卡并核对文件归属",
+        "建立行为/失败证据",
+        "最小实施与定向验证",
+        "提交分平台报告与未测项"
+      ],
+      "acceptance": "额度/期限边界、旧超额账号和旧 manifest 兼容、并发/过期/生成协议及实际库证据",
+      "execution_evidence": []
+    },
+    {
+      "id": "P11-LINUX",
+      "title": "Linux 受限执行与真实 capability",
+      "dependencies": "P11-ENV",
+      "files": "backend/src/ptb_worker/native/；acoustic_executor.py；egg_runtime.py；lpc_runtime.py；backend/src/ptb_api/main.py",
+      "status": "planned",
+      "note": "Implementation not started. User assigns implementation agents separately.",
+      "plan": "docs/plans/2026-09-26-server-coordination.md",
+      "steps": [
+        "阅读对应任务卡并核对文件归属",
+        "建立行为/失败证据",
+        "最小实施与定向验证",
+        "提交分平台报告与未测项"
+      ],
+      "acceptance": "Windows 回归+Linux 数值/任务/预览/字体/取消与进程树预算",
+      "execution_evidence": []
+    },
+    {
+      "id": "P11-PERF",
+      "title": "小服务器基准与统一资源准入",
+      "dependencies": "P11-ENV；执行器改动依赖 P11-LINUX",
+      "files": "scripts/benchmark_modules.py（待新建）；tests/performance/（待补）；模块性能报告",
+      "status": "planned",
+      "note": "Implementation not started. User assigns implementation agents separately.",
+      "plan": "docs/plans/2026-09-26-server-coordination.md",
+      "steps": [
+        "阅读对应任务卡并核对文件归属",
+        "建立行为/失败证据",
+        "最小实施与定向验证",
+        "提交分平台报告与未测项"
+      ],
+      "acceptance": "1 槽初始约 1 GiB 的云端科学预算实测、10 人混合负载与科学差异对照",
+      "execution_evidence": []
+    },
+    {
+      "id": "P06-REMOTE",
+      "title": "可信计算节点主动领取与回传",
+      "dependencies": "P11-ENV,P07-POLICY；协同 P11-LINUX/P11-PERF",
+      "files": "backend/src/ptb_agent/（待新建）；worker 专用 API/认证（待新建）；contracts/；ptb_worker/store.py,policy.py,files.py",
+      "status": "planned",
+      "note": "Implementation not started. User assigns implementation agents separately.",
+      "plan": "docs/plans/2026-09-26-server-coordination.md",
+      "steps": [
+        "阅读对应任务卡并核对文件归属",
+        "建立行为/失败证据",
+        "最小实施与定向验证",
+        "提交分平台报告与未测项"
+      ],
+      "acceptance": "两节点竞争/旧租约/取消/断线/隔离/配额及实际科学产物对照",
+      "execution_evidence": []
+    },
+    {
+      "id": "P04-UNIFY",
+      "title": "模块页首精简与公共布局",
+      "dependencies": "无",
+      "files": "frontend/src/app/AppShell.vue；frontend/src/design/tokens.css；components/；各模块页面",
+      "status": "planned",
+      "note": "Implementation not started. User assigns implementation agents separately.",
+      "plan": "docs/plans/2026-09-26-server-coordination.md",
+      "steps": [
+        "阅读对应任务卡并核对文件归属",
+        "建立行为/失败证据",
+        "最小实施与定向验证",
+        "提交分平台报告与未测项"
+      ],
+      "acceptance": "无重复大标题/关闭按钮、全部操作可达，浅深/缩放/中文IPA/关闭保护/真实科研交互",
+      "execution_evidence": []
+    },
+    {
+      "id": "P08-CROSS",
+      "title": "逐模块平台资源界面追加验收",
+      "dependencies": "按模块依赖公共能力",
+      "files": "docs/plans/modules/；各 Mxx 科学核心与页面；对应测试报告",
+      "status": "planned",
+      "note": "Implementation not started. User assigns implementation agents separately.",
+      "plan": "docs/plans/2026-09-26-server-coordination.md",
+      "steps": [
+        "阅读对应任务卡并核对文件归属",
+        "建立行为/失败证据",
+        "最小实施与定向验证",
+        "提交分平台报告与未测项"
+      ],
+      "acceptance": "Windows/Linux/小服务器/远程适用范围/UI 分轴证据，旧 verified 不扩大",
+      "execution_evidence": []
+    },
+    {
+      "id": "P15-STAGING",
+      "title": "真实域名与服务器联合验收准备",
+      "dependencies": "P11-ENV,P07-POLICY；所开放模块的 Linux/资源门",
+      "files": "docs/deployment/production-runbook.md（待新建）；rollback.md（待新建）；正式服务入口与配置提案",
+      "status": "planned",
+      "note": "Implementation not started. User assigns implementation agents separately.",
+      "plan": "docs/plans/2026-09-26-server-coordination.md",
+      "steps": [
+        "阅读对应任务卡并核对文件归属",
+        "建立行为/失败证据",
+        "最小实施与定向验证",
+        "提交分平台报告与未测项"
+      ],
+      "acceptance": "目标主机+域名HTTPS+权限/上传下载+节点离线+恢复；生产写操作遵守授权",
+      "execution_evidence": []
+    },
+    {
+      "id": "P11-COORD",
+      "title": "服务器与模块统筹规划及只读审查",
+      "dependencies": "用户本轮规划指令",
+      "files": "docs/plans/2026-09-26-server-coordination.md；docs/specs/remote-compute.md；docs/testing/2026-09-26-planning-audit.md；现行规则入口",
+      "status": "verified",
+      "verification_scope": "planning-and-static-review-only",
+      "note": "仅规划/文档新增差异验证和只读源码核对；业务实现、Linux 功能、实际政策迁移与部署未执行。全库文档校验保留两个原有 M10-R5 失效链接。",
+      "steps": [
+        "核实当前工作树与用户截图",
+        "审查平台/资源/政策/UI 路径",
+        "形成任务卡与协议提案",
+        "同步现行规范和台账并验证差异"
+      ],
+      "acceptance": "可派发任务与来源/状态明确；源码保持不变；文档检查无新增错误",
+      "execution_evidence": [
+        "docs/plans/2026-09-26-server-coordination.md",
+        "docs/specs/remote-compute.md",
+        "docs/testing/2026-09-26-planning-audit.md"
+      ]
     }
-  ]
+  ],
+  "updated_on": "2026-09-26",
+  "current_coordination_plan": "docs/plans/2026-09-26-server-coordination.md",
+  "policy_target": {
+    "quota_bytes": 1000000000,
+    "retention_seconds": 259200,
+    "implementation_status": "planned",
+    "existing_data_strategy": "proposed: preserve original expiry; block growth for over-quota accounts; review before migration"
+  }
 }

@@ -1,0 +1,8 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>M05 owned feasibility probe</title></head><body><p>M05 独占测试：公开静态派生帧，不使用摄像头。</p><script type="module">
+import { LipInference } from '/src/modules/lip-extraction/inference.ts';
+window.m05Probe=async function(frames,delegate='CPU',mode='VIDEO'){
+ const engine=new LipInference(),beats=[];let last=performance.now();const timer=setInterval(()=>{const now=performance.now();beats.push(now-last);last=now;},10);
+ try{const support=await engine.initialize(delegate,mode),results=[];for(const item of frames){const blob=await (await fetch(item.url)).blob();const bitmap=await createImageBitmap(blob);results.push(await engine.detect(bitmap,item.time_s*1000,mode));}return {support,results,heartbeat_max_ms:Math.max(...beats),heartbeat_count:beats.length,userAgent:navigator.userAgent,heap:performance.memory?.usedJSHeapSize??null};}
+ finally{clearInterval(timer);engine.close();}
+};
+</script></body></html>

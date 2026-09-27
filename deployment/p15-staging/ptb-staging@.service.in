@@ -1,0 +1,33 @@
+# User unit in the ONE dedicated ptb-staging user manager, instance api/worker/cleaner.
+# Installing/enabling this file requires explicit target service authorization.
+[Unit]
+Description=PhoneticToolbox staging %i
+StartLimitIntervalSec=300
+StartLimitBurst=3
+
+[Service]
+Type=simple
+WorkingDirectory=/srv/ptb-staging/releases/REPLACE_RELEASE
+Environment=PYTHONPATH=/srv/ptb-staging/releases/REPLACE_RELEASE/backend/src:/srv/ptb-staging/releases/REPLACE_RELEASE/packages/phonetic_core/src
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PTB_RESOURCE_PROFILE=server-small
+Environment=OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+ExecStart=/srv/ptb-staging/releases/REPLACE_RELEASE/venv/bin/python -B scripts/p15_staging/host.py %i --config /etc/ptb-staging/config.json
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=360
+KillMode=control-group
+UMask=0077
+NoNewPrivileges=true
+StandardInput=null
+StandardOutput=journal
+StandardError=journal
+LogRateLimitIntervalSec=30s
+LogRateLimitBurst=50
+# No PrivateUsers/PrivateMounts/PrivateTmp: all scientific entrants share one
+# /run/user/<uid>/ptb-resource-admission-v1 and the same user bus/namespace.
+# Scientific transient units have their own P11 hard limits. This service's
+# cgroup is NOT an aggregate limit for those sibling units.
+
+[Install]
+WantedBy=default.target

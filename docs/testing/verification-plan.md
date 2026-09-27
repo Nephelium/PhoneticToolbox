@@ -1,5 +1,7 @@
 # 验证与科研回归策略
 
+**2026-09-26 追加门（planned）：** [统筹计划](../plans/2026-09-26-server-coordination.md)要求每模块在 Windows 后补 Linux 服务验证（专用 WSL 或授权实际服务器），同时提交资源 profile、UI 统一与适用的远程节点证据。新政策 1 GB/3 天单列新旧兼容验收；不能改写历史报告条件。Ubuntu/x86_64 科学构建和进程树隔离均需实测。
+
 D0.3。以下是计划，除本次文档/基线/来源检查外，不表示已经运行。
 
 ## 1. 三种基准分别保存
@@ -19,13 +21,13 @@ D0.3。以下是计划，除本次文档/基线/来源检查外，不表示已�
 | 契约 | schema、时间、缺失值、版本 | python -m pytest tests/contracts -q |
 | API | 权限、任务、配额和文件 | python -m pytest backend/tests -q |
 | 安全 | 跨账号、路径、上传、会话 | python -m pytest tests/security -q |
-| 前端 | 组件、状态、类型 | npm --prefix frontend run typecheck；npm --prefix frontend run test -- --run |
-| E2E | 15 模块真实用户流程 | npm --prefix frontend run test:e2e |
+| 前端 | 组件、状态、类型 | npm --prefix frontend run typecheck；npm --prefix frontend test |
+| E2E | 15 模块真实用户流程 | 按 tests/e2e/*.cjs 及各模块实际 launcher；当前 package.json 无 test:e2e，不能直接套用 |
 | 桌面 | 启停、离线、设备、更新 | python -m pytest desktop/tests tests/packaging -q |
 | 架构 | 禁止导入、旧路径、双实现 | python -m pytest tests/architecture -q |
 | 文档/来源 | 链接、登记、引用一致 | python scripts/validate_docs.py；python scripts/verify_sources.py |
 
-这里的 scripts/validate_docs.py / verify_sources.py 是 P02/P10 待建立的工程工具。本轮用了临时文档校验脚本，不能把未来工具列成已交付。
+2026-09-09 此表曾为预定命令。2026-09-26 实查 scripts/validate_docs.py 已存在且本轮运行；其余命令须检查所用环境、测试文件与副作用，不能因出现在表中就声称执行过。
 
 ## 3. 数值误差规则
 - 先固定版本和参数，再比较。数组 shape、时间数组、有声/缺失 mask、单位、参数键必须一致。
@@ -63,7 +65,7 @@ TextGrid/唇形：时间起点与共享 lip_manual_offset；保存标注与保�
 
 ## 7. 10 用户场景与性能
 在 WSL 独立环境准备 10 个测试账号；每人上传不同样例、排队处理、查看进度、下载、清理。
-分别记录 10 人轻交互、2 重任务+8 人交互、10 人同时提交批次、单人触顶、到期清理与 worker 崩溃。
+分别记录 10 人轻交互、1 个已准入计算任务+9 人交互、10 人同时提交批次、单人触顶、到期清理与 worker 崩溃；追加可信节点离线/两节点竞争/旧租约回传。原 2 重任务起点由当前小服务器预算替代。
 记录 CPU/内存/磁盘/带宽、API p50/p95/p99、任务等待/执行、磁盘峰值/预留、错误率与公平性。
 初始目标：轻量 API p95≤500ms、典型交互反馈≤100ms；计算任务不套用 API 时延目标。数据量与硬件写入报告。
 若未达目标先定位/调队列与视图降采样，再做有依据的服务器规格建议。没有实测前不保证某款阿里云实例够用。

@@ -24,6 +24,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--local-root', type=Path)
     parser.add_argument('--verify-repair', type=Path)
+    parser.add_argument('--verify-m12', type=Path)
+    parser.add_argument('--verify-m12-r1', type=Path)
+    parser.add_argument('--verify-m12-r2', type=Path)
+    parser.add_argument('--verify-m12-r3', type=Path)
     args = parser.parse_args()  # Unknown switches fail closed, never open a GUI.
     bundle = Path(getattr(sys, '_MEIPASS', Path(__file__).resolve().parents[1]))
     root = args.local_root or Path(os.environ['LOCALAPPDATA']) / 'PhoneticToolbox/v3/research-v1'
@@ -36,6 +40,12 @@ def main():
         restore_worker_pipes()
         from verify_research_repair import verify
         return verify(bundle, database, files, reaper, args.verify_repair)
+    if args.verify_m12 or args.verify_m12_r1 or args.verify_m12_r2 or args.verify_m12_r3:
+        restore_worker_pipes()
+        from verify_m12_qt import main as verify
+        verify(bundle=bundle, out=args.verify_m12 or args.verify_m12_r1 or args.verify_m12_r2 or args.verify_m12_r3, database=database, cache=files,
+               reaper=reaper, r1=bool(args.verify_m12_r1),r2=bool(args.verify_m12_r2),r3=bool(args.verify_m12_r3))
+        return 0
     from ptb_desktop.host import run
     return run(bundle / 'frontend/dist', jobs_path=database, local_files_root=files,
                reaper_binary=reaper, vocal_resources=bundle / 'resources/vocal_tract/native')

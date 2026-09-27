@@ -87,12 +87,40 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
 
     @app.get('/api/v1/capabilities', response_model=Capabilities, operation_id='get_capabilities')
     def capabilities() -> Capabilities:
+        from ptb_worker.native.capabilities import m01_capability, linux_capabilities, platform_name
         storage_ready = mode == 'server' and storage is not None and getattr(storage, 'ready', False)
         file_jobs = storage_ready and job_store is not None and getattr(job_store,'files',None) is not None
+        acoustic_ready, acoustic_reason = m01_capability(job_store)
+        science_operations = ['acoustic_analysis','textgrid_segment'] if acoustic_ready else []
+        algorithms = ['M01'] if acoustic_ready else []
+        from ptb_worker.m05_task import catalog as m05_catalog
+        if job_store is not None and m05_catalog(mode=='local')['available']:
+            science_operations.append('lip_analysis'); algorithms.append('M05')
+        from ptb_worker.m11_task import catalog as m11_catalog
+        if m11_catalog(local=mode=='local')['execution_available']:
+            science_operations.append('mfa_alignment'); algorithms.append('M11')
+        from ptb_worker.m07_task import capability as m07_capability
+        if m07_capability(job_store):
+            science_operations.append('phonation_synthesis'); algorithms.append('M07')
+        from ptb_worker.m06_task import capability as m06_capability
+        if m06_capability(job_store):
+            science_operations.append('speech_synthesis'); algorithms.append('M06')
+        from ptb_worker.m08_task import windows_capability
+        if windows_capability(job_store):
+            science_operations.append('pitch_manipulation'); algorithms.append('M08')
+        from ptb_worker.m14_task import capability as m14_capability
+        if m14_capability() and job_store is not None and getattr(job_store,'files',None) is not None:
+            science_operations.append('phonology_induction'); algorithms.append('M14')
+        if platform_name() == 'linux':
+            science_operations, reasons = linux_capabilities(job_store)
+            algorithms = [module for op,module in [('lpc_analysis','M04'),('egg_analysis','M03'),('acoustic_analysis','M01')] if op in science_operations]
+            acoustic_reason = reasons[0] if reasons else None
         return Capabilities(stage='P07' if storage_ready else ('P06' if job_store is not None else ('P05' if account_store is not None and mode == 'server' else 'P02')),
-                            algorithms=['M01'] if getattr(job_store,'batches',None) else [], task_operations=(['pipeline_check'] + (['storage_check','archive_zip','extract_zip'] if file_jobs else []) + (['acoustic_analysis','textgrid_segment'] if getattr(job_store,'batches',None) else [])) if job_store is not None else [],
+                            algorithms=algorithms, task_operations=(['pipeline_check'] + (['storage_check','archive_zip','extract_zip'] if file_jobs else []) + science_operations) if job_store is not None else [],
                             storage_operations=['upload', 'download', 'delete'] if storage_ready else [], limitations=[
-            'M01 is available only when durable acoustic batches are configured; other scientific modules remain pending', 'Storage checks generate engineering fixtures, not scientific analysis results'])
+            'Linux science requires host-selected runtime hashes and completed task validation receipts; Windows M01 requires its registered native resource and matching packages',
+            'Capabilities cover configured execution paths only; whole-host concurrency, remote execution and M09 Linux remain unverified',
+            'Storage checks generate engineering fixtures, not scientific analysis results'] + ([acoustic_reason] if acoustic_reason else []))
 
     base_openapi = app.openapi
 

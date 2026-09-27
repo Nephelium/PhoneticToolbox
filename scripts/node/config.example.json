@@ -1,0 +1,12 @@
+{
+  "schema": "ptb-node-config/1",
+  "server_origin": "https://compute.example.invalid",
+  "state_dir": "/absolute/project-private/node-state",
+  "credential_file": "/absolute/project-private/credential",
+  "cpu_percent": 50,
+  "memory_bytes": 536870912,
+  "parallelism": 1,
+  "temporary_bytes": 1073741824,
+  "reserve_disk_bytes": 1073741824,
+  "work_hours": [0, 24]
+}

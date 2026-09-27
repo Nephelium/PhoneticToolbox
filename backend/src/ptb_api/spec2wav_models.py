@@ -38,7 +38,11 @@ class Spec2WavRequest(WireModel):
     config:Spec2WavConfig
 
 
+from .storage_policy import PolicyVersion, LEGACY_POLICY_VERSION
+
+
 class Spec2WavManifest(WireModel):
+    policy_version: PolicyVersion = LEGACY_POLICY_VERSION
     kind:Literal['managed_spec2wav_files']='managed_spec2wav_files'
     complete:Literal[True]=True
     operation:Literal['spectrogram_to_audio']='spectrogram_to_audio'

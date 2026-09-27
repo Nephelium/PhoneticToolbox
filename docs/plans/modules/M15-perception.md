@@ -1,74 +1,54 @@
-# M15 · 感知实验迁移计划
+# M15 · 感知实验纯客户端迁移计划
 
-状态：planned，未开始实现。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
+2026-09-27。状态：Windows 开发功能及 A/C 定向验证已完成，完整跨平台条目保持 in_progress。软件验收与未测平台分别见 [报告](../../testing/m15-report.md) 和 [统筹摘要](../../testing/m15-coordination-summary.md)。本轮明确授权已覆盖纯客户端实现，并追加确认文本/图片两帧门与 AppShell/Qt 最小接线。旧 Python core/API、服务器 manifest、P06/P07 存储步骤为通用模板，现已 Superseded，不再作为 M15 依赖。
 
-## 现有代码与目标文件
-现有路径均已确认存在；目录内逐函数对应由实施第一步记录，避免把旧类名机械套给新实现。
+## 依据与退出门
 
-- [phonetic_toolbox/services/perception_service.py](../../../phonetic_toolbox/services/perception_service.py)
-- [phonetic_toolbox/models/perception_models.py](../../../phonetic_toolbox/models/perception_models.py)
-- [phonetic_toolbox/gui/resources/perception_experiment](../../../phonetic_toolbox/gui/resources/perception_experiment)
+[源功能映射](../../modules/evidence/M15-source-map.md)覆盖说明书 6.1–6.2 与原 HTML。Python 原服务只打开 HTML，不迁入后端。
+[独立架构决定](../../decisions/ADR-M15-client.md)冻结时钟、资源预算、恢复、共享接线与离线 A/B/C；[操作说明](../../manual/perception.md)解释实际使用。
 
-拟创建/修改路径（未来实现，不代表已经存在）：
+- F01 四范式与全部刺激角色、顺序和作答规则。
+- F02 音频/图片/TXT、本地导入/目录拖入、分组、预览、hash 关联与缺失检查。
+- F03 序列生成/编辑/排序/拖动/复制/移除、全局/闭区间洗牌；种子增强另存算法与最终顺序。
+- F04 默认值保持、0 修复、全局/分段按键、首匹配重叠、阶段提示、手动/自动推进与播放。
+- F05 文本/单选/多选问卷、必填、配置/答案会话快照。
+- F06 XLSX 模板/导入/导出、JSON 配置、原文件重新关联与本机恢复。
+- F07 运行/中断/安全边界/异常 attempt、部分及最终 CSV/XLSX/JSON、关闭保护。
 
-- `frontend/src/modules/perception/PerceptionPage.vue`
-- `frontend/src/modules/perception/state.ts`
-- `packages/phonetic_core/src/phonetic_core/perception/`
-- `backend/src/ptb_api/modules/perception.py`
-- `tests/parity/test_perception.py`
-- `frontend/tests/e2e/perception.spec.ts`
+## 阶段、文件归属与验收
 
-纯显示/客户端模块如果没有科学计算，不为凑层数创建空 core/API；仅创建真实需要的读取/转换边界。共用核心目录中的改动按文件独立提交，不能覆盖其他已迁移模块。
+| 阶段 | 文件 | 行为与验收 |
+| --- | --- | --- |
+| M15-A | tests/e2e/m15-baseline.cjs、源映射 | 独立执行 V2 函数体，四顺序、RT 起点、0/缺失/错误基准；不得用 V3 生成 expected |
+| M15-B | frontend/src/modules/perception/model.ts、media.ts、runner.ts、storage.ts | 纯客户端模型、单调时钟/音频调度、有界解码、IDB 事务与 CAS/Web Locks；纯逻辑及真实浏览器故障测试 |
+| M15-C | PerceptionPage.vue、formats.ts、drop.ts、vendor/* | 公共 ModuleFrame/Toolbar/Section/Status；五页签与正式专注视图、配置/资源/问卷与三格式结果；实际文件回读 |
+| M15-D | AppShell.vue 局部、desktop/host.py 下载白名单局部；tests/e2e/m15*.cjs、scripts/verify_m15_qt.py | 重读共享 diff 后串行按需注册、异步保存/关闭保护、主题与按键隔离；Chrome 正式入口 A、实际 Qt C |
+| 文档 | 本计划、ADR、source-map、manual、report、coordination-summary | 记录证据及边界，更新本模块状态，不扩大其他模块 verified |
 
-## 布局与全部原功能分组
-统一外壳内提供素材、序列、参数、问卷、资源助手五个页内页签；正式实验进入专注呈现视图。
+不创建 API/数据库/云端 worker。不依赖 P07 政策迁移。无用户文件上传、全局依赖/系统改变、V2 修改、push、公开部署或 EXE 打包。
 
-| 编号 | 原功能组 | 必须保留的功能 | 新位置 | 行为约束 |
-| --- | --- | --- | --- | --- |
-| M15-F01 | 实验范式 | X、AX、ABX、AXB | 页首范式选择 | 完整保持刺激播放顺序与作答规则，切换时处理不兼容序列。 |
-| M15-F02 | 音频素材 | 音频数据库、上传、分组与试听预览 | 素材页签 | 资源失联给出具体文件；不静默把同名不同文件当作同一刺激。 |
-| M15-F03 | 播放序列 | 生成、编辑、排序、随机洗牌、全局或指定含首尾范围洗牌 | 序列页签 | 范围外试次顺序保持；编辑与洗牌后的当前序列可审阅。 |
-| M15-F04 | 参数与按键 | 试次间隔、ISI、指导语、全局按键、按试次范围覆盖的分段按键、阶段提示 | 参数页签 | 未被分段覆盖的试次使用全局按键；音频播放期间的作答限制沿用现有规则。 |
-| M15-F05 | 问卷 | 问卷设置及实验中的呈现 | 问卷页签＋正式流程 | 题目、答案与反应结果保持关联，不因主题切换重置。 |
-| M15-F06 | 资源与配置 | 资源助手、XLSX 导入导出、保存/加载项目配置 | 资源助手＋页顶文件动作 | 加载配置与素材匹配分开反馈；缺素材时不误报可以正式运行。 |
-| M15-F07 | 实验运行与结果 | 开始实验、指导语/阶段提示、正式试次、反应记录、结果导出 | 专注呈现视图＋完成页 | 正式试次不被侧栏快捷键抢走按键；反应时定义与原实现保持一致。 |
+## 确切命令
 
-## 状态、重用与双端差异
-缺刺激、按键范围冲突、配置不兼容、运行中、结果未导出分开处理；中断退出需要明确保留结果路径。
-
-现页使用 CDN Tailwind、Babel、SheetJS 与 React/lucide 模块；v3 需要构建为本地静态资源。实验运行期间关闭主题动画、自动更新提示与后台重型计算；时序准确性须实际测量。
-
-迁移重点：优先复用范式/序列/问卷/按键逻辑，搬离 CDN；实验播放调度与反应计时在客户端，时钟定义和音频起点单独记录。
-
-平台边界：两端共用实验运行器；先预加载刺激并验证完整性，网络来回不能纳入反应时；正式试次禁重型任务与主题动画。
-
-## 实施步骤与每步证据
-1. 只读列出上面每个功能组的旧控件、调用函数、默认值、输入输出格式、异常、现有测试。创建 `docs/modules/evidence/M15-source-map.md`，对新增/修复功能单独标识；不能把按钮文案当成功能已可用的证明。
-2. 在 P03 固定环境与样例下捕获本模块 v2 行为；核对 actual backend、单位、输出时间轴与缺失值。存入本地被忽略的输出目录，并把可公开 fixture 与配置/hash 写入测试清单。随机算法固定种子。新增功能没有旧基准时用明确规则验收。
-3. 把已有可用函数迁入核心；先保留数值步骤，只拆 UI/文件/设备/全局可变状态。目标函数显式收配置与输入，任务快照与结果记录方法版本。适配变动与算法优化分开提交。
-4. 新建本模块契约并接应用服务；输入通过资源 ID/已授权本地文件接口，输出进入 manifest。进度、取消、失败和部分结果统一；Web 所有临时/最终写入经过配额 writer。只显示已有结果的页面不强造长任务。
-5. 使用共享组件实现页面、主题、播放/选区、抽屉和页内子视图。把上述功能行一项项映射到组件与操作，保存/生成/试听等语义不能合并丢失。Web/desktop port 区分文件和设备能力，配置状态不跨账号/模块污染。
-6. 运行下面的专项场景与数值对照；先修真实差异，再对浅/深色、窗口缩放、键盘/IPA 字体、错误空态截图审阅。不能只运行单位测试就把 UI 和设备标已通过。
-7. 连接模块“方法与来源”入口，使用 SRC-REACT, SRC-BABEL, SRC-TAILWIND, SRC-SHEETJS, SRC-LUCIDE。更新说明书本模块操作、输入输出、参数单位、科学能力边界和来源；当前 unresolved 的条目不能伪装已核验。移植文件保留原版权/许可证。
-8. 更新 `docs/plans/task-ledger.json` 与原功能矩阵的证据列，记录实际命令/报告/截图；只有每行有可定位证据、双端必测通过才标完成。评审通过前保留旧功能来源，不删除旧入口或数据。
-
-## 专项验收
-X/AX/ABX/AXB、范围洗牌边界、随机种子、全局与分段按键、指导语问卷、失焦/后台标签、断网恢复、未导出保护、XLSX/配置往返。
-
-每个分组至少一个正常路径和一个相关错误/边界路径；录制、原生时序和数值算法必须在真实目标环境验证。
-
-拟建测试后的执行命令（当前不能当作已运行）：
+从仓库根目录 Windows PowerShell 执行：
 
 ```powershell
-# 先激活 P02 建立并核验的 v3 环境，不改 phonetic_311。
-python -m pytest tests/parity/test_perception.py -q
-npm --prefix frontend run test:e2e -- perception.spec.ts
+node tests/e2e/m15-baseline.cjs
+node --test frontend/tests/m15*.test.ts
+npm --prefix frontend run typecheck
+npm --prefix frontend run build
+node tests/e2e/m15.cjs
+node tests/e2e/m15-recovery.cjs
+node tests/e2e/m15-runtime.cjs
+& '.venv/v3-dev/Scripts/python.exe' -X utf8 scripts/verify_m15_qt.py
+wsl -d NInfer --exec /home/ninfer/ptb-p11-20260926/venv/bin/python /mnt/d/PhoneticToolbox/PhoneticToolbox_v3/scripts/verify_m15_linux_static.py
 ```
 
-CLI 参数和 npm scripts 在 P02 明确定义后才能使用；如实现路径不同，先更新本计划与架构记录。共享测试另见 P03/P11。两条命令不能代替本模块原生/设备手工验收。
+浏览器端到端使用独立固定生产构建，避免共享目录并行改动触发 HMR 刷新正式试次。runtime 是只用于注入故障的测试页，正式入口仍为 AppShell。运行时测试会发出短合成声音，已事先向用户说明，不调系统音量/默认设备。
 
-## 完成条件
-- 本页全部 7 组功能以及原矩阵相关参数/设置有映射，没有把折叠项当作删除项。
-- 数值/文件/时间轴差异均解释并审阅；已有功能不得静默改语义。
-- 浅深色、未保存保护、错误恢复与真实操作可用；Web owner/配额检查适用的路径已覆盖。
-- 软件/说明书的来源一致；尚缺权限/设备证据时状态仍为待处理，不能以隐藏控件绕过。
+## 科研与未测边界
+
+音频仍从作答窗口开放起算；文本/图片经用户确认采用预载入/解码/两次 rAF 后开放。所有时间字段见报告。getOutputTimestamp 和 ended 只记录浏览器可观测估计。物理端到端时延需要回环/外部设备，本轮未测。
+
+A：准备完成后断网运行/导出，必达。C：Qt 内置静态资源定向验收。B：用户明确同意先交付 A/C 和精确缓存方案，本轮不引入 Service Worker；方案在 ADR，后续单独串行整合。浏览器关闭后的断网冷启动不标 verified。
+
+Linux 只分发静态资源，没有 M15 服务器计算进程、账号存储或远程节点。WSL 原生解释器已核验入口与 M15 静态资源，部署/其他浏览器仍未验。不能将 Windows Chrome/Qt 或 WSL 静态检查扩大为 Linux 浏览器验证。

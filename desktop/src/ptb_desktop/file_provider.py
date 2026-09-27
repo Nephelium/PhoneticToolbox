@@ -5,6 +5,7 @@ This is preview/target preflight; durable output creation is owned by M01-F.
 """
 from pathlib import Path
 from dataclasses import dataclass
+from contextlib import contextmanager
 import hashlib
 import os
 import secrets
@@ -27,7 +28,8 @@ def identity(info):return info.st_dev,info.st_ino
 def fingerprint(info):return (*identity(info),info.st_size,info.st_mtime_ns)
 
 
-def read_locked(path,root,limit,expected):
+@contextmanager
+def open_locked(path,root,expected):
     if os.name=='nt':
         import ctypes
         from ctypes import wintypes
@@ -61,6 +63,14 @@ def read_locked(path,root,limit,expected):
         info=os.fstat(stream.fileno())
         if not stat.S_ISREG(info.st_mode) or info.st_nlink!=1 or fingerprint(info)!=expected:
             raise FileAccessError('文件已变化，请刷新列表。')
+        yield stream
+        if fingerprint(os.fstat(stream.fileno()))!=expected:
+            raise FileAccessError('文件读取期间发生变化。')
+
+
+def read_locked(path,root,limit,expected):
+    with open_locked(path,root,expected) as stream:
+        info=os.fstat(stream.fileno())
         if info.st_size>limit:raise FileAccessError('文件超过当前预览大小上限。')
         content=stream.read(limit+1)
         if len(content)>limit or fingerprint(os.fstat(stream.fileno()))!=expected:
@@ -120,7 +130,7 @@ class FileProvider:
             for count,entry in enumerate(scan):
                 if count>=self.max_entries:raise FileAccessError('目录条目超过10000，请选择较小目录。')
                 lower=entry.name.lower()
-                kind='audio' if lower.endswith('.wav') else 'textgrid' if lower.endswith('.textgrid') else 'lip' if lower.endswith('.lip.json') else 'lip_pickle' if lower.endswith('.pkl') else 'lab' if lower.endswith('.lab') else 'parameter' if lower.endswith(('.xlsx','.ptb.sqlite','.ptb.sqlite3')) else 'image' if lower.endswith(('.png','.jpg','.jpeg','.bmp')) else None
+                kind='audio' if lower.endswith(('.wav','.mp3','.flac')) else 'textgrid' if lower.endswith('.textgrid') else 'lip' if lower.endswith('.lip.json') else 'lip_pickle' if lower.endswith('.pkl') else 'lab' if lower.endswith('.lab') else 'parameter' if lower.endswith(('.xlsx','.ptb.sqlite','.ptb.sqlite3')) else 'image' if lower.endswith(('.png','.jpg','.jpeg','.bmp')) else None
                 # Windows scandir caches zero inode/link counts; obtain real identity.
                 info=Path(entry.path).lstat()
                 if not kind or not stat.S_ISREG(info.st_mode) or info.st_nlink!=1 or getattr(info,'st_file_attributes',0)&0x400:continue
@@ -142,7 +152,7 @@ class FileProvider:
         try:
             path=checked_path(directory.path/entry.name)
             if path.parent!=directory.path:raise FileAccessError('文件超出目录授权。')
-            limit=self.max_bytes if entry.name.lower().endswith('.wav') else min(self.max_bytes,16_000_000 if entry.name.lower().endswith(('.pkl','.xlsx','.ptb.sqlite','.ptb.sqlite3','.png','.jpg','.jpeg','.bmp')) else 2_000_000)
+            limit=self.max_bytes if entry.name.lower().endswith(('.wav','.mp3','.flac')) else min(self.max_bytes,16_000_000 if entry.name.lower().endswith(('.pkl','.xlsx','.ptb.sqlite','.ptb.sqlite3','.png','.jpg','.jpeg','.bmp')) else 2_000_000)
             raw=read_locked(path,directory.path,limit,entry.fingerprint)
             self.directory(entry.directory)
         except OSError:raise FileAccessError('文件不可读取，请刷新列表。') from None

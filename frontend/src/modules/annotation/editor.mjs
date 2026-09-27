@@ -1,7 +1,10 @@
 // M12 source_ids: ORIGIN-WEBEDITOR, PENDING-DICTIONARY, SRC-PRAAT.
 // V2 editing functions migrated by scripts/migrate_m12_editor.py.
 // DOM, network and process-wide state replaced by per-editor injected ports.
+import {translateWords} from './movement.mjs';
+import {captureAnnotation,eraseWindows,pasteIntervals} from './clipboard.mjs';
 export function createEditor(options = {}) {
+  let annotationClipboard=null;
   const state = {
     audioBuffer: null, textgrid: null, visibleStart: 0, visibleDuration: 3.2,
     selected: null, selectedBoundary: null, selectedIndices: [], drag: null,
@@ -9,6 +12,7 @@ export function createEditor(options = {}) {
     phoneDict: null, searchResults: [], searchIndex: -1,
     labSequence: [], labWords: new Set(), copiedWord: '', copiedLabIndex: null,
     wordTierName: 'words', phoneTierName: 'phones',
+    sequenceIndex: 0, sequenceStart: null,
   };
   const controls = Object.fromEntries(['fitStart','fitEnd','fitTrimMs','spliceMode','spliceStart','spliceEnd','searchInput'].map(k=>[k,{value:''}]));
   controls.fitTrimMs.value='10'; controls.spliceMode.value='outside';
@@ -20,7 +24,7 @@ export function createEditor(options = {}) {
   const updateSearchInfo = () => {};
   function saveUndoState() {
     if(!state.textgrid)return;
-    state.undoStack.push(structuredClone(state.textgrid.tiers));
+    state.undoStack.push({tiers:structuredClone(state.textgrid.tiers),sequenceIndex:state.sequenceIndex,sequenceStart:state.sequenceStart,labSequence:state.labSequence});
     if(state.undoStack.length>50)state.undoStack.shift();
   }
   function normalizeTextGrid(tg) {
@@ -96,36 +100,36 @@ function tierByName(name) {
 }
 
 function wordTierName() {
-  return state.wordTierName || "words";
+  return state.wordTierName;
 }
 
 function phoneTierName() {
-  return state.phoneTierName || "phones";
+  return state.phoneTierName;
 }
 
 function wordTier() {
-  return tierByName(state.wordTierName || "words");
+  return tierByName(state.wordTierName);
 }
 
 function phoneTier() {
-  return tierByName(state.phoneTierName || "phones");
+  return tierByName(state.phoneTierName);
 }
 
 function hitTest(event) {
   const rect = els.grid.getBoundingClientRect();
-  const dpr = window.devicePixelRatio || 1;
-  const x = (event.clientX - rect.left) * dpr;
-  const y = (event.clientY - rect.top) * dpr;
+  const x = (event.clientX - rect.left) * els.grid.width / (rect.width || els.grid.width);
+  const y = (event.clientY - rect.top) * els.grid.height / (rect.height || els.grid.height);
   const time = xToTime(x, els.grid);
   const tierName = y < els.grid.height * 0.48 ? wordTierName() : phoneTierName();
   const tier = tierByName(tierName);
   if (!tier) return null;
   const near = state.visibleDuration * 0.006;
+  let nearest=null,nearestDistance=near;
   for (let i = 0; i < tier.intervals.length; i++) {
     const item = tier.intervals[i];
-    if (Math.abs(item.xmin - time) < near) return { tier: tierName, index: i, edge: "start", time };
-    if (Math.abs(item.xmax - time) < near) return { tier: tierName, index: i, edge: "end", time };
+    for(const [edge,at] of [['start',item.xmin],['end',item.xmax]]){const distance=Math.abs(at-time);if(distance<nearestDistance){nearestDistance=distance;nearest={tier:tierName,index:i,edge,time};}}
   }
+  if(nearest)return nearest;
   for (let i = 0; i < tier.intervals.length; i++) {
     const item = tier.intervals[i];
     if (item.xmin <= time && time <= item.xmax) return { tier: tierName, index: i, edge: null, time };
@@ -133,13 +137,17 @@ function hitTest(event) {
   return { tier: tierName, index: -1, edge: null, time };
 }
 
-function onGridMouseDown(event) {
+function onGridMouseDown(event,forceRange=false) {
   if (!state.textgrid) return;
   const hit = hitTest(event);
   if (!hit) return;
   state.lastMouseTime = hit.time;
 
-  if (event.ctrlKey && hit.tier === wordTierName() && hit.index >= 0) {
+  if(forceRange||event.shiftKey){
+    state.selectedBoundary=null;state.drag={mode:'pendingRangeSelect',hit,startTime:hit.time,startClientX:event.clientX,startClientY:event.clientY};drawGrid();return;
+  }
+
+  if (event.ctrlKey && !hit.edge && hit.tier === wordTierName() && hit.index >= 0) {
     const words = wordTier();
     const item = words.intervals[hit.index];
     if (item.text) {
@@ -163,18 +171,7 @@ function onGridMouseDown(event) {
   }
 
   if (hit.edge) {
-    const tier = tierByName(hit.tier);
-    const item = tier.intervals[hit.index];
-    const boundaryTime = hit.edge === "start" ? item.xmin : item.xmax;
-    state.selectedBoundary = { tier: hit.tier, time: boundaryTime };
-    state.drag = {
-      mode: "pendingBoundary",
-      hit,
-      startClientX: event.clientX,
-      startClientY: event.clientY,
-      originalTime: boundaryTime,
-    };
-    drawGrid();
+    beginBoundaryDrag(hit,event);
     return;
   }
 
@@ -188,7 +185,6 @@ function onGridMouseDown(event) {
         : [hit.index];
       state.selected = { tier: wordTierName(), index: hit.index };
       state.selectedIndices = selectedIndices.length > 1 ? [...selectedIndices] : [];
-      saveUndoState();
       state.drag = {
         mode: "pendingWord",
         hit,
@@ -228,23 +224,12 @@ function onGridMouseMove(event) {
   const hit = hitTest(event);
   if (!hit) return;
   state.lastMouseTime = hit.time;
-  if (state.drag.mode === "pendingBoundary") {
-    if (Math.abs(event.clientX - state.drag.startClientX) > 3) {
-      saveUndoState();
-      state.drag.mode = "boundary";
-      moveBoundary(state.drag.hit, hit.time);
-      markDirty();
-      drawGrid();
-    }
-  } else if (state.drag.mode === "boundary") {
-    moveBoundary(state.drag.hit, hit.time);
-    markDirty();
-    redrawDragOverlay();
+  if (["pendingBoundary","boundary"].includes(state.drag.mode)) {
+    dragBoundaryTo(hit.time,event.clientX);
   } else if (state.drag.mode === "pendingRangeSelect") {
     if (Math.abs(event.clientX - state.drag.startClientX) > 3) {
       state.drag.mode = "rangeSelect";
       state.drag.endTime = hit.time;
-      markDirty();
       drawGrid();
     }
   } else if (state.drag.mode === "rangeSelect") {
@@ -252,14 +237,13 @@ function onGridMouseMove(event) {
     drawGrid();
   } else if (state.drag.mode === "pendingWord") {
     if (Math.abs(event.clientX - state.drag.startClientX) > 3) {
+      saveUndoState();
       state.drag.mode = "word";
-      dragWord(state.drag, hit.time);
-      markDirty();
+      if(dragWord(state.drag, hit.time)!==false)markDirty();
       redrawDragOverlay();
     }
   } else if (state.drag.mode === "word") {
-    dragWord(state.drag, hit.time);
-    markDirty();
+    if(dragWord(state.drag, hit.time)!==false)markDirty();
     redrawDragOverlay();
   }
 }
@@ -298,17 +282,71 @@ function onGridMouseUp() {
   drawAll();
 }
 
+// Reusable by all time plots. Words win ties at shared word/phone boundaries.
+function boundaryAt(time,tolerance) {
+  let result=null,distance=tolerance;
+  for(const tier of [wordTier(),phoneTier()])for(const [index,item] of (tier?.intervals||[]).entries()){
+    const delta=Math.abs(item.xmax-time);
+    if(index<tier.intervals.length-1&&delta<distance){distance=delta;result={tier:tier.name,index,edge:'end',time};}
+  }
+  return result;
+}
+function beginBoundaryDrag(hit,event) {
+  const tier=tierByName(hit.tier),item=tier?.intervals[hit.index];
+  if(!item||!hit.edge)return;
+  const originalTime=hit.edge==='start'?item.xmin:item.xmax;
+  state.selected={tier:hit.tier,index:hit.index};state.selectedIndices=[];
+  state.selectedBoundary={tier:hit.tier,time:originalTime};
+  state.drag={mode:'pendingBoundary',hit,startClientX:event.clientX,originalTime,detach:!!event.ctrlKey,
+    originalIntervals:structuredClone(tier.intervals),originalPhones:structuredClone(phoneTier()?.intervals||[])};
+  drawGrid();
+}
+function dragBoundaryTo(time,clientX) {
+  const drag=state.drag;if(!drag||!['pendingBoundary','boundary'].includes(drag.mode))return;
+  if(drag.mode==='pendingBoundary'){
+    if(Math.abs(clientX-drag.startClientX)<=3)return;
+    saveUndoState();drag.mode='boundary';
+  }
+  if(drag.detach)detachBoundary(drag,time);else moveBoundary(drag.hit,time);
+  markDirty();drawGrid();
+}
+function detachBoundary(drag,time) {
+  const tier=tierByName(drag.hit.tier);if(!tier)return;
+  tier.intervals=structuredClone(drag.originalIntervals);
+  if(drag.hit.tier===wordTierName()&&phoneTier())phoneTier().intervals=structuredClone(drag.originalPhones);
+  const at=drag.originalTime,rightIndex=tier.intervals.findIndex((v,i)=>i>0&&v.xmin===at);
+  if(rightIndex<1)return;
+  const left=tier.intervals[rightIndex-1],right=tier.intervals[rightIndex];
+  const phones=drag.hit.tier===wordTierName()?phoneTier():null;
+  const phoneRight=phones?.intervals.findIndex((v,i)=>i>0&&v.xmin===at)??-1;
+  let lower=left.xmin+.000001,upper=right.xmax-.000001;
+  if(phones&&phoneRight>0){lower=Math.max(lower,phones.intervals[phoneRight-1].xmin+.000001);upper=Math.min(upper,phones.intervals[phoneRight].xmax-.000001);}
+  const moved=Number(clamp(time,lower,upper).toFixed(6));
+  const separate=(target,index)=>{
+    if(moved<at){target.intervals[index-1].xmax=moved;target.intervals.splice(index,0,{xmin:moved,xmax:at,text:''});}
+    else if(moved>at){target.intervals[index].xmin=moved;target.intervals.splice(index,0,{xmin:at,xmax:moved,text:''});}
+  };
+  separate(tier,rightIndex);if(phones&&phoneRight>0)separate(phones,phoneRight);
+  state.selected={tier:tier.name,index:moved>at?rightIndex+1:rightIndex-1};state.selectedIndices=[];
+  state.selectedBoundary={tier:tier.name,time:moved};
+}
 function moveBoundary(hit, time) {
   const tier = tierByName(hit.tier);
   if (!tier || (hit.edge === 'start' && hit.index === 0) || (hit.edge === 'end' && hit.index === tier.intervals.length - 1)) return;
   const item = tier.intervals[hit.index];
-  const minGap = 0.02;
-  const lower = hit.edge === "start" ? (tier.intervals[hit.index - 1]?.xmin ?? 0) + minGap : item.xmin + minGap;
-  const upper = hit.edge === "start" ? item.xmax - minGap : (tier.intervals[hit.index + 1]?.xmax ?? duration()) - minGap;
-  if (upper < lower) return;
-  const newTime = clamp(time, lower, upper);
+  const minGap = 0.000001; // File precision only, no millisecond editing restriction.
+  let lower = hit.edge === "start" ? (tier.intervals[hit.index - 1]?.xmin ?? 0) + minGap : item.xmin + minGap;
+  let upper = hit.edge === "start" ? item.xmax - minGap : (tier.intervals[hit.index + 1]?.xmax ?? duration()) - minGap;
   const oldTime = hit.edge === "start" ? item.xmin : item.xmax;
+  if(hit.tier===wordTierName()){
+    const phones=phoneTier()?.intervals,idx=phones?.findIndex((v,i)=>i>0&&Math.abs(v.xmin-oldTime)<1e-9)??-1;
+    if(phones&&idx>0){lower=Math.max(lower,phones[idx-1].xmin+minGap);upper=Math.min(upper,phones[idx].xmax-minGap);}
+  }
+  if (upper < lower) return;
+  const newTime = Number(clamp(time, lower, upper).toFixed(6));
   setBoundary(tier, hit.index, hit.edge, newTime);
+  if ((hit.edge === 'start' ? item.xmin : item.xmax) !== newTime) return;
+  if (state.selectedBoundary?.tier === hit.tier && state.selectedBoundary.time === oldTime) state.selectedBoundary.time = newTime;
   if (hit.tier === wordTierName()) moveMatchingPhoneBoundary(oldTime, newTime);
 }
 
@@ -331,14 +369,9 @@ function deleteSelectedBoundary() {
   if (!sb) return;
   const tier = tierByName(sb.tier);
   if (!tier) return;
-  const threshold = 0.005;
-  let leftIndex = -1;
-  let rightIndex = -1;
-  for (let i = 0; i < tier.intervals.length; i++) {
-    if (Math.abs(tier.intervals[i].xmax - sb.time) < threshold) leftIndex = i;
-    if (Math.abs(tier.intervals[i].xmin - sb.time) < threshold) rightIndex = i;
-  }
-  if (leftIndex < 0 || rightIndex < 0 || leftIndex === rightIndex) return;
+  const rightIndex=tier.intervals.findIndex((item,i)=>i>0&&item.xmin===sb.time&&tier.intervals[i-1].xmax===sb.time);
+  const leftIndex=rightIndex-1;
+  if(rightIndex<1)return;
   const left = tier.intervals[leftIndex];
   const right = tier.intervals[rightIndex];
   const merged = {
@@ -348,8 +381,9 @@ function deleteSelectedBoundary() {
   };
   tier.intervals.splice(Math.min(leftIndex, rightIndex), 2, merged);
   tier.intervals = fillGaps(tier.intervals, duration());
-  const mergedIndex = tier.intervals.findIndex((item) => Math.abs(item.xmin - merged.xmin) < threshold && Math.abs(item.xmax - merged.xmax) < threshold);
+  const mergedIndex = tier.intervals.findIndex((item) => item.xmin===merged.xmin&&item.xmax===merged.xmax);
   state.selected = mergedIndex >= 0 ? { tier: sb.tier, index: mergedIndex } : null;
+  state.selectedIndices = [];
   state.selectedBoundary = null;
   markDirty();
   drawAll();
@@ -359,7 +393,7 @@ function moveMatchingPhoneBoundary(oldTime, newTime) {
   const phones = phoneTier();
   if (!phones) return;
   let best = null;
-  let bestDistance = 0.04;
+  let bestDistance = 1e-9;
   phones.intervals.forEach((item, index) => {
     [["start", item.xmin], ["end", item.xmax]].forEach(([edge, value]) => {
       const distance = Math.abs(value - oldTime);
@@ -372,72 +406,25 @@ function moveMatchingPhoneBoundary(oldTime, newTime) {
   if (best) setBoundary(phones, best.index, best.edge, newTime);
 }
 
+function applyMoved(result) {
+  wordTier().intervals=result.words;
+  if(phoneTier())phoneTier().intervals=result.phones;
+  state.selected={tier:wordTierName(),index:result.indices[0]};
+  state.selectedIndices=result.indices.length>1?result.indices:[];
+  state.selectedBoundary=null;
+}
+function moveSelected(delta) {
+  if(!state.selected||state.selected.tier!==wordTierName())throw Error('请先在音节层选中需要移动的标注。');
+  const indices=state.selectedIndices.length?state.selectedIndices:[state.selected.index];
+  const result=translateWords(wordTier().intervals,phoneTier()?.intervals||[],indices,delta,state.textgrid.xmax,fillGaps);
+  saveUndoState();applyMoved(result);markDirty();drawAll();
+}
 function dragWord(drag, mouseTime) {
-  const words = wordTier();
-  const phones = phoneTier();
-  const originalWords = structuredClone(drag.originalIntervals);
-  const originalPhones = structuredClone(drag.originalPhones);
-  const indices = drag.selectedIndices && drag.selectedIndices.length > 1
-    ? drag.selectedIndices
-    : [drag.hit.index];
-
-  const delta = mouseTime - drag.startMouseTime;
-  const selectedItems = indices.map((i) => originalWords[i]).filter(Boolean);
-  const minStart = Math.min(...selectedItems.map((w) => w.xmin));
-  const maxEnd = Math.max(...selectedItems.map((w) => w.xmax));
-  const totalLen = maxEnd - minStart;
-  const clampedDelta = clamp(delta, -minStart, duration() - totalLen - minStart);
-
-  const movedWords = selectedItems.map((item) => ({
-    text: item.text,
-    xmin: item.xmin + clampedDelta,
-    xmax: item.xmax + clampedDelta,
-    oldStart: item.xmin,
-    oldEnd: item.xmax,
-  }));
-
-  const nonSelected = originalWords.filter((w, i) => w.text && w.xmax > w.xmin + 1e-7 && !indices.includes(i));
-  for (const mw of movedWords) {
-    if (!canPlaceWord(nonSelected, -1, mw.xmin, mw.xmax)) return;
-  }
-
-  const keptWords = originalWords.filter((w, i) => w.text && w.xmax > w.xmin + 1e-7 && !indices.includes(i));
-  words.intervals = fillGaps([...keptWords, ...movedWords.map((mw) => ({ xmin: mw.xmin, xmax: mw.xmax, text: mw.text }))], duration());
-
-  const newIndices = [];
-  for (const mw of movedWords) {
-    const idx = words.intervals.findIndex(
-      (w) => w.text === mw.text && Math.abs(w.xmin - mw.xmin) < 1e-5 && Math.abs(w.xmax - mw.xmax) < 1e-5,
-    );
-    if (idx >= 0) newIndices.push(idx);
-  }
-  if (newIndices.length) {
-    state.selected = { tier: wordTierName(), index: newIndices[0] };
-    if (newIndices.length > 1) state.selectedIndices = newIndices.sort((a, b) => a - b);
-    else state.selectedIndices = [];
-  }
-
-  if (phones) {
-    const allMovingPhones = [];
-    for (const { oldStart, oldEnd, xmin: newStart, xmax: newEnd } of movedWords) {
-      const moving = nonEmpty(originalPhones)
-        .filter((phone) => intervalBelongsToWindow(phone, oldStart, oldEnd))
-        .map((phone) => ({
-          xmin: newStart + (phone.xmin - oldStart),
-          xmax: newStart + (phone.xmax - oldStart),
-          text: phone.text,
-        }));
-      if (moving.length) {
-        moving[0].xmin = newStart;
-        moving[moving.length - 1].xmax = newEnd;
-      }
-      allMovingPhones.push(...moving);
-    }
-    const keptPhones = nonEmpty(originalPhones).filter(
-      (phone) => !movedWords.some((mw) => intervalBelongsToWindow(phone, mw.oldStart, mw.oldEnd)),
-    );
-    phones.intervals = fillGaps([...keptPhones, ...allMovingPhones], duration());
-  }
+  const indices=drag.selectedIndices?.length?drag.selectedIndices:[drag.hit.index];
+  const selected=indices.map(i=>drag.originalIntervals[i]);
+  const delta=clamp(mouseTime-drag.startMouseTime,-Math.min(...selected.map(i=>i.xmin)),state.textgrid.xmax-Math.max(...selected.map(i=>i.xmax)));
+  try{applyMoved(translateWords(drag.originalIntervals,drag.originalPhones,indices,delta,state.textgrid.xmax,fillGaps));return true;}
+  catch(error){setStatus(error.message);return false;}
 }
 
 function canPlaceWord(intervals, index, start, end) {
@@ -448,8 +435,8 @@ function canPlaceWord(intervals, index, start, end) {
 }
 
 function finalizeRangeSelect(drag) {
-  const t1 = Math.min(drag.startTime, drag.endTime || drag.startTime);
-  const t2 = Math.max(drag.startTime, drag.endTime || drag.startTime);
+  const t1 = Math.min(drag.startTime, drag.endTime ?? drag.startTime);
+  const t2 = Math.max(drag.startTime, drag.endTime ?? drag.startTime);
   els.fitStart.value = t1.toFixed(3);
   els.fitEnd.value = t2.toFixed(3);
   const words = wordTier();
@@ -514,6 +501,8 @@ function relabelPhonesForWord(word) {
 }
 
 function splitPhoneAt(time) {
+  if(!phoneTierName())return;
+  time=Number(time.toFixed(6));
   let phones = phoneTier();
   if (!phones) {
     phones = { name: phoneTierName(), intervals: [{ xmin: 0, xmax: duration(), text: "" }] };
@@ -522,7 +511,7 @@ function splitPhoneAt(time) {
   const index = phones.intervals.findIndex((phone) => phone.xmin < time && time < phone.xmax);
   if (index < 0) return;
   const phone = phones.intervals[index];
-  if (time - phone.xmin < 0.015 || phone.xmax - time < 0.015) return;
+  if(time<=phone.xmin||time>=phone.xmax)return;
   phones.intervals.splice(
     index,
     1,
@@ -548,6 +537,7 @@ function autoPhonesForSelection() {
 }
 
 function ensurePhonesForWord(word) {
+  if(!phoneTierName())return;
   let phonesTier = phoneTier();
   if (!phonesTier) {
     phonesTier = { name: phoneTierName(), intervals: [{ xmin: 0, xmax: duration(), text: "" }] };
@@ -574,7 +564,7 @@ function ensurePhonesForWord(word) {
 function ensurePhoneBoundariesAtWord(word) {
   const phones = phoneTier();
   if (!phones) return;
-  const threshold = 0.01;
+  const threshold = 1e-9;
   const hasStart = phones.intervals.some((phone) => Math.abs(phone.xmin - word.xmin) < threshold || Math.abs(phone.xmax - word.xmin) < threshold);
   const hasEnd = phones.intervals.some((phone) => Math.abs(phone.xmin - word.xmax) < threshold || Math.abs(phone.xmax - word.xmax) < threshold);
   if (!hasStart) splitPhoneAt(word.xmin);
@@ -1079,15 +1069,21 @@ async function applyReferenceSplice() {
 }
   function undo(){
     if(!state.textgrid||!state.undoStack.length)return;
-    state.textgrid.tiers=state.undoStack.pop();
+    const previous=state.undoStack.pop();state.textgrid.tiers=previous.tiers;
+    if(previous.labSequence===state.labSequence){state.sequenceIndex=previous.sequenceIndex;state.sequenceStart=previous.sequenceStart;}
+    else state.sequenceStart=null;
     state.selected=null;state.selectedBoundary=null;state.selectedIndices=[];state.drag=null;
     markDirty();drawAll();setStatus('已撤销');
   }
-  function editText(text){
+  function editText(text,manualLabels){
     const selected=state.selected, tier=selected&&tierByName(selected.tier);
     if(!tier||!tier.intervals[selected.index]||tier.intervals[selected.index].text===text)return;
     saveUndoState();tier.intervals[selected.index].text=text;
-    if(selected.tier===wordTierName()&&text)ensurePhonesForWord(tier.intervals[selected.index]);
+    if(selected.tier===wordTierName()&&text){
+      const word=tier.intervals[selected.index];
+      if(manualLabels){const inside=phoneIntervalsInsideWord(word),labels=inside.length===1?[text]:labelsForIntervalCount(manualLabels,inside.length);inside.forEach(({phone},i)=>{phone.text=labels[i]||'';});}
+      else ensurePhonesForWord(word);
+    }
     markDirty();drawAll();
   }
   function clearText(){
@@ -1100,6 +1096,34 @@ async function applyReferenceSplice() {
     state.copiedWord=item.text;state.copiedLabIndex=sel.tier===wordTierName()?labIndexForWordSelection(sel.index):null;
     setStatus(`已复制：${item.text}；下次粘贴：${nextCopiedWordText()}`);
   }
-  return {state,controls,setCanvas:canvas=>{els.grid=canvas;},normalizeTextGrid,saveUndoState,undo,editText,clearText,copy,
+  function captureSelected(){
+    const sel=state.selected,tier=sel&&tierByName(sel.tier);if(!tier)throw Error('请先选中一个标注。');
+    const role=sel.tier===wordTierName()?'word':'phone';
+    return captureAnnotation(tier.intervals,role==='word'?phoneTier()?.intervals:null,role==='word'&&state.selectedIndices.length?state.selectedIndices:[sel.index],role);
+  }
+  function deleteAnnotation(){
+    const clip=captureSelected(),tier=tierByName(state.selected.tier);
+    const next=eraseWindows(tier.intervals,clip.windows),phones=clip.phones?eraseWindows(phoneTier().intervals,clip.windows):null;
+    saveUndoState();tier.intervals=next;if(phones)phoneTier().intervals=phones;
+    state.selected=null;state.selectedIndices=[];state.selectedBoundary=null;state.searchResults=[];state.searchIndex=-1;
+    markDirty();drawAll();setStatus('已删除所选标注，原位置留空；Ctrl＋Z 可撤销。');
+  }
+  function copyAnnotation(cut=false){
+    const clip=captureSelected();if(cut)deleteAnnotation();annotationClipboard=clip;
+    setStatus(`已${cut?'剪切':'复制'}标注，保留原时长与内部边界。点击空白位置后 Ctrl＋V 粘贴。`);
+  }
+  function pasteAnnotation(time=state.lastMouseTime){
+    const clip=annotationClipboard;if(!clip)throw Error('请先使用 Ctrl＋C 或 Ctrl＋X 复制或剪切标注。');
+    const name=clip.role==='word'?wordTierName():phoneTierName(),tier=tierByName(name);
+    if(!tier||state.selected&&state.selected.tier!==name)throw Error('请在与剪贴内容相同的标注层选择粘贴位置。');
+    const next=pasteIntervals(tier.intervals,clip.intervals,time,clip.span,duration());
+    if(clip.phones&&!phoneTier())throw Error('剪贴内容含音素边界，请先选择音素层。');
+    const phones=clip.phones?pasteIntervals(phoneTier().intervals,clip.phones,time,clip.span,duration()):null;
+    saveUndoState();tier.intervals=next;if(phones)phoneTier().intervals=phones;
+    const start=Number(time.toFixed(6)),indices=clip.intervals.map(i=>next.findIndex(n=>n.xmin===Number((start+i.xmin).toFixed(6))&&n.xmax===Number((start+i.xmax).toFixed(6))));
+    state.selected={tier:name,index:indices[0]};state.selectedIndices=clip.role==='word'&&indices.length>1?indices:[];state.selectedBoundary=null;state.searchResults=[];state.searchIndex=-1;
+    markDirty();drawAll();setStatus('已粘贴标注，原文字、时长和内部边界保持。');
+  }
+  return {state,controls,setCanvas:canvas=>{els.grid=canvas;},normalizeTextGrid,saveUndoState,undo,editText,clearText,copy,copyAnnotation,deleteAnnotation,pasteAnnotation,moveSelected,boundaryAt,beginBoundaryDrag,dragBoundaryTo,
 clamp,visibleEnd,duration,timeToX,xToTime,escapeTextGrid,fmt,fillGaps,nonEmpty,intervalCenter,intervalOverlap,intervalBelongsToWindow,tierByName,wordTierName,phoneTierName,wordTier,phoneTier,hitTest,onGridMouseDown,onGridMouseMove,onGridMouseUp,moveBoundary,setBoundary,deleteSelectedBoundary,moveMatchingPhoneBoundary,dragWord,canPlaceWord,finalizeRangeSelect,updateSelectedIndices,wordAtTime,phoneIntervalsInsideWord,labelsForIntervalCount,relabelPhonesForWord,splitPhoneAt,autoPhonesForSelection,ensurePhonesForWord,ensurePhoneBoundariesAtWord,percentile,smoothArray,localIntensityEnvelope,mergeActiveRuns,overlapLength,detectIntensityBoundsForWord,nearestNonEmptyBounds,setWordBounds,alignPhoneOuterEdgesToWord,fitIntensityRange,parseDictText,pinyinToPhonesFallback,pinyinToPhones,incrementTone,labIndexForWordSelection,nextCopiedWordText,pasteCopiedWord,doSearch,selectSearchResult,findNext,findPrev,replaceCurrent,replaceAll,clipIntervals,replacementWindows,complementWindows,spliceTier,applyReferenceSplice};
 }

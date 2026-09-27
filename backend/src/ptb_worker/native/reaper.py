@@ -6,13 +6,14 @@ import time
 from pathlib import Path
 from ..io.limits import LimitedBuffer,Limits,LimitError,Cancelled,FormatError
 from ..io.scratch import Scratch,no_links
-from .windows import OwnedProcess,InputPipe
+import sys
 
 REAPER_SHA256='279fecc82ed0a49b0277b114270771d7670299068e849058b392672825981824'
 
 
-def collect_pipe(argv,pipe,cwd,limits,stop=lambda:False,on_started=None):
-    process=None;buffer=LimitedBuffer(limits.output_bytes);started=time.monotonic()
+def collect_pipe(argv,pipe,cwd,limits,stop=lambda:False,on_started=None,on_chunk=None,evidence=None):
+    from .windows import OwnedProcess
+    process=None;buffer=LimitedBuffer(limits.output_bytes);started=time.monotonic();received=0
     try:
         if stop():raise Cancelled('cancelled')
         process=OwnedProcess(argv,cwd,limits.process_bytes)
@@ -20,22 +21,40 @@ def collect_pipe(argv,pipe,cwd,limits,stop=lambda:False,on_started=None):
         while True:
             if stop():raise Cancelled('cancelled')
             if time.monotonic()-started>limits.timeout_seconds:raise LimitError('native_timeout')
-            chunk,eof=pipe.read(min(4096,limits.output_bytes-buffer.tell()+1),process)
-            if chunk:buffer.write(chunk)
+            chunk,eof=pipe.read(min(4096,limits.output_bytes-received+1),process)
+            if chunk:
+                received+=len(chunk)
+                if received>limits.output_bytes:raise LimitError("output_bytes_exceeded")
+                if on_chunk:on_chunk(chunk)
+                else:buffer.write(chunk)
             elif process.poll() is not None:
                 if process.poll()!=0:raise FormatError('native_exit_'+str(process.poll()))
                 return buffer.getvalue(),process.pid
             time.sleep(.005)
     finally:
-        if process:process.close()
-        pipe.close()
+        try:
+            if process and evidence is not None:
+                try:evidence.update(main_pid=process.pid,memory_peak_bytes=process.memory_peak(),configured_memory_bytes=limits.process_bytes,elapsed_seconds=time.monotonic()-started)
+                except OSError:evidence['memory_probe_failed']=True
+        finally:
+            try:
+                if process:process.close()
+                if process and evidence is not None:evidence['cleaned']=getattr(process,'group_cleaned',False)
+            finally:pipe.close()
 
 
 class Reaper:
-    def __init__(self,binary,scratch,limits=Limits(),stop=lambda:False,on_started=None):
+    def __init__(self,binary,scratch,limits=Limits(),stop=lambda:False,on_started=None,on_chunk=None):
         if not isinstance(scratch,Scratch):raise TypeError('Host-owned Scratch capability required')
         self.binary=Path(binary).absolute();no_links(self.binary)
-        if self.binary.stat().st_size>16_000_000 or hashlib.sha256(self.binary.read_bytes()).hexdigest()!=REAPER_SHA256:
+        self.sha256=REAPER_SHA256
+        if sys.platform=='linux':
+            from .linux_runtime import load_profile
+            _,profile=load_profile()
+            if str(self.binary)!=profile.get('reaper_binary'):
+                raise ValueError('Unregistered native binary')
+            self.sha256=profile['hashes'].get(str(self.binary))
+        if not self.sha256 or self.binary.stat().st_size>16_000_000 or hashlib.sha256(self.binary.read_bytes()).hexdigest()!=self.sha256:
             raise ValueError('Unregistered native binary')
         self.scratch=scratch;self.limits=limits;self.stop=stop;self.on_started=on_started
 
@@ -58,12 +77,18 @@ class Reaper:
         path=self.scratch.create(stream.getvalue(),'.wav')
         pipe=None
         try:
-            pipe=InputPipe()
-            argv=[str(self.binary),'-i',str(path),'-f',pipe.name,'-a','-e',str(float(frame_interval_sec)),
+            if sys.platform!='linux':
+                from .windows import InputPipe
+                pipe=InputPipe()
+            argv=[str(self.binary),'-i',str(path),'-f',pipe.name if pipe else '', '-a','-e',str(float(frame_interval_sec)),
                   '-m',str(float(min_f0)),'-x',str(float(max_f0))]
             if hilbert:argv.append('-t')
             if no_highpass:argv.append('-s')
-            payload,self.last_pid=collect_pipe(argv,pipe,self.scratch.root,self.limits,self.stop,self.on_started)
+            if sys.platform=='linux':
+                from .linux_reaper import collect
+                payload,self.last_pid=collect(argv,self.scratch.root,self.limits,self.stop,self.on_started)
+            else:
+                payload,self.last_pid=collect_pipe(argv,pipe,self.scratch.root,self.limits,self.stop,self.on_started)
             self.last_output_bytes=len(payload)
             try:times,voiced,values=parse_est_f0(payload.decode('ascii'))
             except UnicodeError as exc:raise FormatError('invalid_native_encoding') from exc

@@ -15,6 +15,8 @@ def inspect_fonts(snapshot, *, timeout=20):
     from .egg_runtime import command
     from .acoustic_errors import AcousticFailure
     snapshot=FigureFontSnapshot.model_validate(snapshot)
+    if sys.platform == 'linux':
+        return _inspect_linux(snapshot, timeout)
     if os.name!='nt':raise PreviewError('font_preflight_platform_unverified',503)
     if not _slot.acquire(False):raise PreviewError('font_preflight_busy',429)
     from .native import windows as win
@@ -51,6 +53,28 @@ def inspect_fonts(snapshot, *, timeout=20):
                 process.wait(timeout=5)
                 process.stdin.close();process.stdout.close()
         finally:_slot.release()
+
+
+def _inspect_linux(snapshot, timeout):
+    from pathlib import Path
+    from ptb_api.font_models import FontPreflight
+    from .native.linux_runtime import command, load_profile
+    from .native.posix import run_bounded
+    from .io.limits import Limits, LimitError, FormatError
+    if not _slot.acquire(False):
+        raise PreviewError('font_preflight_busy',429)
+    try:
+        _, profile = load_profile()
+        raw = run_bounded(command('fonts', '--font-preflight'), snapshot.model_dump_json().encode()+b'\n',
+                          Path(profile['cache']), Limits(input_bytes=8192, output_bytes=8192,
+                          process_bytes=1073741824, timeout_seconds=timeout))
+        return FontPreflight.model_validate_json(raw).model_dump()
+    except LimitError as exc:
+        raise PreviewError('font_preflight_timeout' if str(exc)=='native_timeout' else 'font_preflight_failed',503) from None
+    except (OSError, ValueError, FormatError):
+        raise PreviewError('font_preflight_failed',503) from None
+    finally:
+        _slot.release()
 
 
 def child():

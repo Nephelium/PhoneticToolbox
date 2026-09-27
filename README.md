@@ -1,12 +1,26 @@
 # PhoneticToolbox 3.0 · 开发工作台
 
-**M12 语音标注对齐（2026-09-14）：** 已完成限定 Windows 开发态功能迁移，包含原 7 功能组、本机 TextGrid/独立唇偏保存、网页项目新版本保存和未保存保护。入口 `scripts/Start-Research-Workbench.ps1`，在侧栏选择语音标注对齐。[操作说明](docs/manual/annotation.md) · [真实验收](docs/testing/m12-report.md)。本次未打包 EXE，M04 和其他模块保持原检查点。
+2026-09-27 M05：基线、浏览器候选、正式离线任务/文件和 Windows Chrome/实际 Qt 本机三模式录制已有分项证据。已按 V2 修复完整网格、同帧叠加、停止尺寸及 Qt 权限错误提示。浏览器新模型未通过等价门，正式结果保留 legacy；完整模块 in_progress，物理同步、Linux/远程准入及剩余设备矩阵待验。入口 `scripts/Start-M05-Workbench.ps1`，见 [M05 报告](docs/testing/m05-report.md) 与 [说明](docs/manual/lip-extraction.md)。未 push、DDL、部署或生成 EXE。
+
+M11 本轮开发入口：[MFA 使用与组件安装](docs/manual/mfa.md)。Windows 本地正式任务和离线候选已限定验证，完整迁移仍 in_progress；[报告与各平台边界](docs/testing/m11-report.md)、[远程接线要求](docs/specs/m11-remote-handoff.md)。主 EXE 未更新。
+
+**2026-09-27 M15 感知实验：** 已接入统一工作台 → 标注与实验 → 感知实验。纯客户端，无需登录，刺激/问卷/结果只保存在本机。四范式、配置/XLSX、恢复与三格式结果导出已完成限定 Windows Chrome/实际 Qt 验收。离线 A 与 Qt C 定向通过，B 保留已批准方案；Linux 浏览器与物理时延未验。[操作说明](docs/manual/perception.md) · [验收报告](docs/testing/m15-report.md) · [统筹摘要](docs/testing/m15-coordination-summary.md)。没有 M15 服务器 API/数据库前置依赖，未打包 EXE。
+
+**2026-09-26 当前统筹入口：** [Linux/小型服务器/统一 UI 任务计划](docs/plans/2026-09-26-server-coordination.md) · [可信外接计算节点设计](docs/specs/remote-compute.md) · [只读代码审查](docs/testing/2026-09-26-planning-audit.md)。新需求为阿里云 Ubuntu 24.04.2/x86_64、2 vCPU、套餐 4 GiB/50 GiB（系统可见内存约 3.4 GiB）、每人 **1 GB/3 天**、每模块追加 Linux 验证与资源测量、取消模块内重复页首/关闭按钮。当前只更新规划，代码/数据库仍用旧政策，Linux/远程节点/UI 改造均待井井指派 agent。已有模块的 Windows 验收范围不变。
+
+**2026-09-19 M12-R6：** 图窗置顶、资源与搜索下移、整段标注删除/剪切/粘贴完成。119 项前端、6 组新增及 8 组 R5 Chrome、类型/构建通过；实际冻结 EXE 11 步保存下载链路通过。临时入口 `dist/m12-preview-r6/PhoneticToolbox-v3-M12-R6.exe`，旧包保留。[R6 报告](docs/testing/m12-r6-report.md)。深色沿用全局主题，旧灰色截图为过渡中间态。
+
+**2026-09-19 M12-R5：** 图窗编辑、选区同步、毫秒语谱窗及原始 TextGrid 优先已完成限定开发态验证，见 [R5 报告](docs/testing/m12-r5-report.md)。前端已构建，旧 EXE 未更新。
+
+2026-09-15：按用户要求完成 M12-R4 长 WAV 轻量读取和标注层下方秒数刻度，已生成 `dist/m12-preview-r4/PhoneticToolbox-v3-M12-R4.exe`。本轮明确不做验证，故仅记录实现与构建完成，未验证运行行为。见[构建记录](docs/plans/2026-09-15-m12-r4-long-audio.md)。
+
+**M12 语音标注对齐（2026-09-14）：** 已完成限定 Windows 功能迁移及 R3 试用修复。手工边界取消毫秒级间距限制，清空/合并使用键盘；已加载 TextGrid 支持空白处双击新增，自动保存改为 `_自动保存.TextGrid`。波形/语谱图等高，波形细节按原采样点连线，三图支持 Shift 平移，语谱图支持左键拖选；首次音素切分可选点击位置或等分。保留 R1/R2 的实际层名、顺序标注、整体移动及共享选区试听。整个 v3 在设置中调整页面大小，禁止 Ctrl＋滚轮整页缩放。临时单文件入口 `dist/m12-preview-r3/PhoneticToolbox-v3-M12-R3.exe`，实际冻结 EXE 50 步通过，旧包保留。[操作说明](docs/manual/annotation.md) · [R3 验证](docs/testing/m12-r3-report.md) · [迁移验收](docs/testing/m12-report.md) · [R1 范围](docs/testing/m12-r1-report.md) · [R2 验证](docs/testing/m12-r2-report.md)。M04 和其他模块保持原迁移检查点，临时包不包含 M03/M04 独立兼容运行环境。
 
 **M04 LPC谱图（2026-09-13）：** D页面已限定Windows开发态verified，接入统一波形/标注/频谱/试听/任务、草稿与保存下载。24组真实Chrome、69项前端、13项Python通过，完整M04仍in_progress，下一项托管网页/自然录音及20项验收收口。见[页面报告](docs/testing/m04-ui-report.md)、[操作说明](docs/manual/lpc-spectrum.md)与[实施步骤](docs/plans/2026-09-13-m04-implementation.md)。
 
 **EGG开发态功能收口（2026-09-13）：** 六功能组与最后草稿/连续操作检查完成，开发态功能阶段verified。补齐LP阶数保存、重开及失败反馈，65项前端与23组Chrome通过。入口为`scripts/Start-Research-Workbench.ps1`，范围及限制见[收口报告](docs/testing/m03-dev-closeout-report.md)。完整模块的设备/生产/跨平台验收仍单列。
 
-**当前范围（2026-09-13）：** 按井井最新要求，近期只推进开发版，EXE封装、打包和相关探针暂停。以下候选范围为历史计划，未生成新的EXE。
+**历史范围（2026-09-13）：** 当时只推进开发版，EXE封装、打包和相关探针暂停。2026-09-14 井井已明确要求 M12 临时包并继续反馈修复，当前以页首 M12-R3 为准；其他 EXE 专项仍暂停。
 
 **当前优先级（2026-09-13）：** EGG代码引用后续核查按井井要求暂停；LPC学术引用已补，代码出处有界查找不阻挡功能。已修复切换文件后旧预览错误串入新文件的问题，[Chrome五项回归](docs/testing/m03-preview-switch-report.md)通过。
 
@@ -55,7 +69,7 @@ P08 已完成的 M01 阶段：[M01 参数估计实施计划](docs/plans/2026-09-
 | 3. 总体边界 | [架构文档](ARCHITECTURE.md) |
 | 4. 外观与操作 | [UI 规范](docs/design/UI_SPEC.md) |
 | 5. 全部功能如何迁移 | [15 模块迁移规格](docs/modules/module-migration.md) |
-| 6. 登录、5 GB、7 天 | [账号与存储规格](docs/specs/accounts-storage-jobs.md) |
+| 6. 登录、1 GB、3 天目标与迁移 | [账号与存储规格](docs/specs/accounts-storage-jobs.md) |
 | 7. 来源与论文 | [查验报告](docs/references/source-audit.md)、[引用与第三方清单](third_party/README.md) |
 | 8. 测试与发布 | [验证策略](docs/testing/verification-plan.md)、[平台与发行](docs/deployment/platform-release.md) |
 | 9. 开发约束 | [AGENTS.md](AGENTS.md)、[架构决策](docs/decisions/ADR.md) |

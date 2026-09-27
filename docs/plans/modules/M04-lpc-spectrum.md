@@ -1,6 +1,6 @@
 # M04 · LPC 谱图迁移计划
 
-状态：in_progress，2026-09-13井井已授权M04。A原V2基准、B纯核心及C任务/导出限定Windows verified，页面尚未实现。具体步骤以[文件级实施计划](../2026-09-13-m04-implementation.md)与[源码映射](../../modules/evidence/M04-source-map.md)为准。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
+状态：in_progress。A/B/C/D已有各自报告限定的 Windows verified；E 的 Windows 本机开发态、授权自然录音 Qt 宿主已验，托管账号 Chrome 因专用测试库旧存储政策版本而未通过，不能标整个 M04 verified。Linux 仅沿用 P11 受限合成后端证据。见[专项报告](../../testing/m04-e-report.md)、[文件级实施计划](../2026-09-13-m04-implementation.md)与[源码映射](../../modules/evidence/M04-source-map.md)。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
 ## 现有代码与目标文件
 现有路径均已确认存在；目录内逐函数对应由实施第一步记录，避免把旧类名机械套给新实现。
@@ -8,7 +8,7 @@
 - [phonetic_toolbox/gui/widgets/lpc_spectrum_widget.py](../../../phonetic_toolbox/gui/widgets/lpc_spectrum_widget.py)
 - [phonetic_toolbox/core/acoustic/lpc.py](../../../phonetic_toolbox/core/acoustic/lpc.py)
 
-实施路径（核心和对照测试已实现，任务/页面路径仍为计划）：
+实际实施路径以文件级计划和报告为准；以下为迁移时的候选路径，部分文件按现有架构落在其他位置：
 
 - `frontend/src/modules/lpc-spectrum/LpcSpectrumPage.vue`
 - `frontend/src/modules/lpc-spectrum/state.ts`
@@ -20,7 +20,7 @@
 纯显示/客户端模块如果没有科学计算，不为凑层数创建空 core/API；仅创建真实需要的读取/转换边界。共用核心目录中的改动按文件独立提交，不能覆盖其他已迁移模块。
 
 ## 布局与全部原功能分组
-顶部输入输出目录；左侧文件；中央波形/频谱；右侧 LPC 设置；底部处理与试听。
+统一工作台工具栏打开目录；左侧文件和TextGrid；主区波形/可选语谱图与LPC频谱切换，参数和试听在主区下方。语谱图在波形下方，支持直接拖选同一时间范围；波形保留Shift拖选。
 
 | 编号 | 原功能组 | 必须保留的功能 | 新位置 | 行为约束 |
 | --- | --- | --- | --- | --- |

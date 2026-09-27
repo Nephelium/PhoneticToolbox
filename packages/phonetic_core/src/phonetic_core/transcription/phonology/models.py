@@ -1,6 +1,8 @@
 # Direct V2 migration; source_id=PENDING-PHONOLOGY. See NOTICE.md and M14-source-map.md.
 from __future__ import annotations
 
+NAMES=('同音字表_韵母到声母.docx','同音字表_声母到韵母.docx','同音字表_二维表.xlsx')
+
 from dataclasses import dataclass
 
 

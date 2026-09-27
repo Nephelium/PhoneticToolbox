@@ -11,7 +11,29 @@ from .segmentation import prepare_segments,unpack_bundle,SEGMENT_LIMITS,digest
 from ptb_api.quota import StorageError,CHUNK_BYTES
 
 
-def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None):
+def collect_scientific(entry, request, scratch, limits, stop, on_started=None, evidence=None, on_chunk=None):
+    """Trusted fixed entry -> legacy bundle bytes, with platform-owned cleanup."""
+    if sys.platform == 'linux':
+        from .native.linux_runtime import run
+        return run(entry, request, scratch.root, limits, stop=stop,
+                   on_started=on_started, evidence=evidence, on_chunk=on_chunk)
+    from .native.windows import InputPipe
+    from .native.reaper import collect_pipe
+    if entry in ('lpc', 'egg'):
+        from .lpc_runtime import command as lpc_command
+        from .egg_runtime import command as egg_command
+        argv = (lpc_command if entry == 'lpc' else egg_command)(request, '')
+    else:
+        module = {'m07': 'ptb_worker.m07_child', 'm06': 'ptb_worker.m06_child', 'm08': 'ptb_worker.m08_child', 'acoustic': 'ptb_worker.science_child', 'segment': 'ptb_worker.segment_child',
+                  'spec2wav': 'ptb_worker.spec2wav_child'}[entry]
+        argv = command(module, str(request), '')
+    pipe = InputPipe()
+    argv[-1] = pipe.name
+    raw, _ = collect_pipe(argv, pipe, scratch.root, limits, stop, on_started, on_chunk, evidence)
+    return raw
+
+
+def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None,process_evidence=None):
     files=store.files;identity=(claim['id'],worker_id,claim['generation']);snapshot=json.loads(claim['snapshot'])
     done=threading.Event();abort=threading.Event();errors=[];progress=[.01]
     def heartbeat():
@@ -40,20 +62,34 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None):
             blobs[item['role']]=bytes(raw)
         progress[0]=.1
         with ManagedScratch(files,identity) as scratch:
-            if snapshot['operation']=='lpc_analysis':
-                from .native.windows import InputPipe
-                from .native.reaper import collect_pipe
-                from .lpc_runtime import command as lpc_command
+            if snapshot['operation']=='pitch_manipulation' and snapshot.get('saved_copy'):
+                result=dict(snapshot['copy_result'],name=snapshot['copy_name'])
+                meta=dict(schema_version='m08/1',audio_sha256=snapshot['source_ref']['sha256'],results=[result])
+                payloads=[(snapshot['copy_name'],blobs['audio']),('m08.ptb.json',json.dumps(meta,ensure_ascii=False,allow_nan=False).encode())]
+            elif snapshot['operation']=='pitch_manipulation':
+                from .m08_stream import Receiver
+                audio_path=scratch.create(blobs['audio'],'.wav')
+                native=files.output(identity,'m08-native.wav','temporary',64_000_000)
+                try:
+                    header=dict(config=snapshot['config']['analysis'],sha256=digest(blobs['audio']),
+                        audio_path=str(audio_path),native_path=str(files.scratch_path(identity,native['id'])),
+                        input_name=snapshot['input_assets'][0]['name'])
+                    request=scratch.create(json.dumps(header).encode(),'.json')
+                    receiver=Receiver(files,identity,header['sha256'])
+                    collect_scientific('m08',request,scratch,
+                        replace(SEGMENT_LIMITS,timeout_seconds=120,process_bytes=1_000_000_000),
+                        lambda:abort.is_set() or stop.is_set(),on_started,process_evidence,on_chunk=receiver.write)
+                    receiver.finish();payloads=[]
+                finally:files.release_scratch(identity,native['id'])
+            elif snapshot['operation']=='lpc_analysis':
                 from ptb_api.lpc_models import LPC_NAMES
                 header=dict(config=snapshot['config']['analysis'],sha256=digest(blobs['audio']),
                     audio_size=len(blobs['audio']),textgrid_sha256=digest(blobs['textgrid']) if 'textgrid' in blobs else None,
                     input_name=next(i['name'] for i in snapshot['input_assets'] if i['role']=='audio'))
                 request=scratch.create(json.dumps(header).encode()+b'\n'+blobs['audio']+blobs.get('textgrid',b''),'.json')
-                argv=lpc_command(request,'')
-                pipe=InputPipe();argv[-1]=pipe.name
-                raw,_=collect_pipe(argv,pipe,scratch.root,
+                raw=collect_scientific('lpc',request,scratch,
                     replace(SEGMENT_LIMITS,timeout_seconds=30,process_bytes=2_000_000_000,output_bytes=8_000_000),
-                    lambda:abort.is_set() or stop.is_set(),on_started)
+                    lambda:abort.is_set() or stop.is_set(),on_started,process_evidence)
                 bundle=unpack_bundle(raw,8_000_000)
                 names=[f['name'] for f in bundle.manifest['files']]
                 if (bundle.manifest.get('kind')!='prepared_lpc' or
@@ -62,20 +98,13 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None):
                     raise FormatError('source_mismatch')
                 payloads=list(zip(names,bundle.payloads))
             elif snapshot['operation']=='egg_analysis':
-                from .native.windows import InputPipe
-                from .native.reaper import collect_pipe
-                from .egg_runtime import command as egg_command
                 from ptb_api.egg_models import EggTaskConfig, expected_names
                 header=dict(config=snapshot['config']['analysis'],sha256=digest(blobs['audio']),
                     input_name=next(i['name'] for i in snapshot['input_assets'] if i['role']=='audio'))
                 request=scratch.create(json.dumps(header).encode()+b'\n'+blobs['audio'],'.json')
-                # Validate runtime before allocating the pipe, so missing runtime
-                # cannot leak a pipe handle. Only the fixed trusted bootstrap runs.
-                argv=egg_command(request,'')
-                pipe=InputPipe();argv[-1]=pipe.name
-                raw,_=collect_pipe(argv,pipe,scratch.root,
+                raw=collect_scientific('egg',request,scratch,
                     replace(SEGMENT_LIMITS,timeout_seconds=240,process_bytes=3_000_000_000),
-                    lambda:abort.is_set() or stop.is_set(),on_started)
+                    lambda:abort.is_set() or stop.is_set(),on_started,process_evidence)
                 bundle=unpack_bundle(raw,64_000_000)
                 names=[f['name'] for f in bundle.manifest['files']]
                 if (bundle.manifest.get('audio_sha256')!=header['sha256'] or
@@ -102,8 +131,6 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None):
                 payloads=list(zip([f['name'] for f in bundle.manifest['files']],bundle.payloads))
                 payloads.append(('segments.ptb.json',json.dumps(bundle.manifest,ensure_ascii=False,allow_nan=False).encode()))
             else:
-                from .native.windows import InputPipe
-                from .native.reaper import collect_pipe
                 native=files.output(identity,'native-scratch.wav','temporary',16_000_000)
                 try:
                     header=dict(request=dict(project_id=str(claim['project_id']),idempotency_key=claim['id'],
@@ -111,9 +138,8 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None):
                         inputs=snapshot['input_assets'],native_scratch=str(files.scratch_path(identity,native['id'])),
                         reaper_binary=str(files.reaper_binary))
                     request=scratch.create(json.dumps(header,ensure_ascii=False).encode()+b'\n'+b''.join(blobs[i['role']] for i in snapshot['input_assets']),'.json')
-                    pipe=InputPipe()
-                    raw,_=collect_pipe(command('ptb_worker.science_child',str(request),pipe.name),pipe,
-                        scratch.root,replace(SEGMENT_LIMITS,timeout_seconds=240),lambda:abort.is_set() or stop.is_set(),on_started)
+                    raw=collect_scientific('acoustic',request,scratch,
+                        replace(SEGMENT_LIMITS,timeout_seconds=240),lambda:abort.is_set() or stop.is_set(),on_started,process_evidence)
                     bundle=unpack_bundle(raw,64_000_000)
                     if bundle.manifest['audio_sha256']!=digest(blobs['audio']):raise FormatError('source_mismatch')
                     payloads=list(zip([f['name'] for f in bundle.manifest['files']],bundle.payloads))

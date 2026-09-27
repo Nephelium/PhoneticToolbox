@@ -25,7 +25,9 @@ def load(raw: bytes, name: str, skip_first_row: bool = True):
         if any(len(v)>MAX_CELL or any(ord(c)<32 and c not in '\t\r\n' for c in v) for v in cols): raise ValueError('m14_invalid_cell')
         if skip_first_row and index==0: skipped.append(dict(row=index+1,reason='首行'));return
         row=rules._parse_columns(cols)
-        if row:rows.append(row)
+        if row:
+            rows.append(row)
+            if len(rows)>MAX_ROWS:raise ValueError('m14_row_budget')
         else:skipped.append(dict(row=index+1,reason='表头、空行或缺少字/音标'))
     try:
         if suffix=='.xlsx':

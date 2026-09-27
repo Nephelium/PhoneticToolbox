@@ -1,0 +1,21 @@
+{
+  "schema": "p15-staging/1",
+  "origin": "https://REPLACE_DOMAIN",
+  "bind": "127.0.0.1",
+  "port": 18765,
+  "unix_user": "ptb-staging",
+  "release_root": "/srv/ptb-staging/releases/REPLACE_RELEASE",
+  "frontend": "/srv/ptb-staging/releases/REPLACE_RELEASE/frontend/dist",
+  "storage_root": "/var/lib/ptb-staging/assets",
+  "private_config": "/etc/ptb-staging/private.json",
+  "runtime_profile": "/srv/ptb-staging/releases/REPLACE_RELEASE/runtime.json",
+  "validation_receipt": "/srv/ptb-staging/releases/REPLACE_RELEASE/receipt.json",
+  "release_manifest": "/srv/ptb-staging/releases/REPLACE_RELEASE/release.json",
+  "control_file": "/var/lib/ptb-staging/control.json",
+  "min_free_bytes": 10737418240,
+  "max_running": 1,
+  "lease_seconds": 10,
+  "resource_profile": "server-small",
+  "allowed_operations": [],
+  "remote_enabled": false
+}

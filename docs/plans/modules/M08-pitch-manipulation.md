@@ -1,6 +1,17 @@
 # M08 · 变速变调迁移计划
 
-状态：planned，未开始实现。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
+状态：in_progress。2026-09-27 已完成正式任务/存储 adapter、三格式解码、AppShell 注册及限定 Windows HTTP/Chrome/Qt 验收，见 [正式接线报告](../../testing/m08-wiring-report.md)。真实 PostgreSQL 网页因政策门受阻，Linux 正式受限链路与跨平台精确门仍未完成。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
+
+
+## 2026-09-26 实施检查点（历史，接线状态以新报告为准）
+
+- 用户已明确实施授权，范围限定 M08 文件；并行 owner 的公共执行器、capability、入口、AppShell、tokens、公共组件和注册未改。总台账/全局 ADR 由统筹汇总。
+- [六组映射](../../modules/evidence/M08-source-map.md)、[使用说明](../../manual/pitch-manipulation.md)、[精确接线需求](M08-wiring.md)、[实际验收](../../testing/m08-report.md)。
+- 直接迁移三份科学文件与新增边界规则分离。V2 非零 Hz 偏移错误在 handler 显式修正为 Hertz，原错误仍有独立回归。
+- Windows 源码/安装 wheel 定向 43 项，前端全量 137 项，真实 Chrome 15 组测试通过（限定独立组件及真实计算测试 adapter）。
+- Linux WSL 原 Windows 冻结精确门 25 passed / 5 failed；64 诊断数组59完全相同。另 Linux 同环境原V2与V3 64/64精确相同。禁止把同平台对照替代跨平台精确门。
+- 正式网页 owner/配额/下载到期、持久队列/硬取消、MP3/FLAC FileProvider、AppShell 注册与标签关闭保护均需公共接线后联合验证。服务器资源/远程节点/EXE未实施。
+- 本轮不推进 M07，不改总台账、数据库、共享依赖清单、环境配置或旧发行包。
 
 ## 现有代码与目标文件
 现有路径均已确认存在；目录内逐函数对应由实施第一步记录，避免把旧类名机械套给新实现。
@@ -56,15 +67,15 @@
 
 每个分组至少一个正常路径和一个相关错误/边界路径；录制、原生时序和数值算法必须在真实目标环境验证。
 
-拟建测试后的执行命令（当前不能当作已运行）：
+现行测试入口（实际运行结果与环境见报告，不沿用已失效的 test:e2e）：
 
 ```powershell
 # 先激活 P02 建立并核验的 v3 环境，不改 phonetic_311。
 python -m pytest tests/parity/test_pitch_manipulation.py -q
-npm --prefix frontend run test:e2e -- pitch-manipulation.spec.ts
+node tests/e2e/m08.cjs
 ```
 
-CLI 参数和 npm scripts 在 P02 明确定义后才能使用；如实现路径不同，先更新本计划与架构记录。共享测试另见 P03/P11。两条命令不能代替本模块原生/设备手工验收。
+npm 现行 scripts 为 test/typecheck/build，没有 test:e2e。M08 按现有 Vite + Chrome + stdio 测试适配模式运行，不能代替公共 production adapter。共享测试另见 P03/P11。两条命令不能代替本模块原生/设备手工验收。
 
 ## 完成条件
 - 本页全部 6 组功能以及原矩阵相关参数/设置有映射，没有把折叠项当作删除项。

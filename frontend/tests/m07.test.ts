@@ -1,0 +1,8 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {defaults,generationDefaults,validate,validatePoints,designs,table,current} from '../src/modules/phonation-synthesis/state.ts';
+test('M07 independent six designs and actual defaults',()=>{const a=defaults(),g=generationDefaults();validate(a,g);assert.equal(a.frame_length,128);assert.equal(a.frame_shift,32);assert.equal(g.step_count,9);assert.equal(designs().length,6);assert.equal(new Set(designs().map(d=>`${d.kind}/${d.reverse}`)).size,6);});
+test('M07 parameter cross-fields and nonfinite rejection',()=>{for(const a of [{...defaults(),frame_shift:128},{...defaults(),preemphasis:NaN},{...defaults(),min_f0_hz:400}])assert.throws(()=>validate(a,generationDefaults()));assert.throws(()=>validate(defaults(),{...generationDefaults(),step_count:2.2}));});
+test('M07 control time and invalid voiced points',()=>{assert.throws(()=>validatePoints({axis:[0,0],source:[100,100],target:[120,120]}));assert.throws(()=>validatePoints({axis:[0,100],source:[NaN,100],target:[120,120]}));assert.throws(()=>validatePoints({axis:[0,100],source:[0,0],target:[120,120]}));});
+test('M07 unequal voiced spans show explicit onset blank tail',()=>{const source=[0,...Array(21).fill(100),0],target=[0,...Array(41).fill(150),0];const p=table(source,target,21,'onset');assert.equal(p.axis.at(-1),40);assert.equal(p.source.at(-1),0);assert.equal(p.target.at(-1),150);const n=table(source,target,21,'normalize');assert.equal(n.source.at(-1),100);});
+test('M07 late callbacks require identity and generation',()=>{assert(current(1,1,'a','a'));assert(!current(1,2,'a','a'));assert(!current(1,1,'a','b'));});

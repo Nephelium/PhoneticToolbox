@@ -12,6 +12,7 @@ from ptb_api.job_models import FileManifest
 from ptb_api.storage_models import UploadInput
 from ptb_api.storage import public_asset
 from ptb_api.quota import CHUNK_BYTES, QUOTA_BYTES, StorageError, expiry
+from ptb_api.storage_policy import POLICY_VERSION, independent_result_expiry
 from .store import Transaction, JobError, canonical, public, core_version, adapter_version
 from .policy import fenced, cancel_state
 
@@ -135,9 +136,9 @@ class FilePipeline:
     def output_sequence(self,conn,identity):
         return len(FilePipeline._outputs(self,conn,identity))
 
-    def independent_expiry(self,operation):return operation=='storage_check'
+    def independent_expiry(self,snapshot):return independent_result_expiry(snapshot)
 
-    def manifest(self,operation,files):return FileManifest(files=files,core_version=core_version).model_dump()
+    def manifest(self,operation,files):return FileManifest(policy_version=POLICY_VERSION,files=files,core_version=core_version).model_dump()
 
     @staticmethod
     def _budget(job, outputs, extra):
@@ -192,8 +193,10 @@ class FilePipeline:
             if not outputs or any(a['state']!='uploading' or not a['sha256'] or a['kind']=='temporary' for a in outputs):
                 raise StorageError('incomplete_output_batch',409)
             now = tx.now()
-            operation = json.loads(job['snapshot'])['operation']
-            deadline = expiry(now, [min(a['expires_at'],a['input_expires_at']) for a in inputs] if not self.independent_expiry(operation) else [])
+            snapshot = json.loads(job['snapshot'])
+            operation = snapshot['operation']
+            input_deadlines = [] if self.independent_expiry(snapshot) else [min(a['expires_at'],a['input_expires_at']) for a in inputs]
+            deadline = expiry(now, input_deadlines)
             files = []
             for item in outputs:
                 if self.storage._path(item['id']).stat().st_size != item['size_bytes']:
@@ -206,8 +209,8 @@ class FilePipeline:
             # batch, including all ready flags and released reservations.
             self._fence(conn,identity)
             now=tx.now()
-            deadline=expiry(now,[min(a['expires_at'],a['input_expires_at']) for a in inputs] if not self.independent_expiry(operation) else [])
-            conn.execute('UPDATE ptb_storage.assets SET expires_at=%s WHERE id=ANY(%s)',(deadline,[a['id'] for a in outputs]))
+            deadline=expiry(now,input_deadlines)
+            conn.execute('UPDATE ptb_storage.assets SET expires_at=%s,policy_version=%s WHERE id=ANY(%s)',(deadline,POLICY_VERSION,[a['id'] for a in outputs]))
             for item in files: item['expires_at']=deadline
             manifest = self.manifest(operation,files)
             tx.execute("UPDATE {jobs} SET state='succeeded',progress=1,result_manifest=?,error_code=NULL,worker_id=NULL,lease_until=NULL WHERE id=?",(canonical(manifest),job['id']))
@@ -217,7 +220,8 @@ class FilePipeline:
 
     def fail(self, identity, code):
         safe = {'cancelled','input_unavailable','quota_exceeded','output_budget_exceeded','archive_rejected',
-                'disk_space_low','storage_write_failed','output_count_exceeded','stale_worker'}
+                'disk_space_low','storage_write_failed','output_count_exceeded','stale_worker',
+                'server_export_unavailable'}
         if code not in safe | self.additional_error_codes: code='execution_failed'
         with self.storage._locked() as conn:
             with self.tx(conn) as tx:

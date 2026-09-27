@@ -13,5 +13,5 @@ test('P04 text/token pairs meet AA contrast in both themes',()=>{
 test('P04 native theme popup has explicit opaque surfaces and readable option text',()=>{
  assert.match(css,/select option,select optgroup\{background-color:var\(--panel\);color:var\(--text\)\}/);
  assert.match(css,/select option:checked\{background-color:var\(--selected\);color:var\(--text\)\}/);
- assert.match(css,/\.theme-picker select\{[^}]*background:var\(--panel\)/);
+ assert.match(css,/input,select\{[^}]*background:var\(--panel\)/);
 });

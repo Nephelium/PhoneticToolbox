@@ -3,7 +3,7 @@ import type {AudioAsset} from '../../platform/types.ts';
 
 // SRC-PRAAT: labelled and short text formats, doubled quotes and multiline labels.
 // Point tiers remain intact even though the two active editing rows are intervals.
-export function parseGrid(text:string):Grid {
+export function parseGrid(text:string,allowNoTiers=false):Grid {
   if(text.length>2_000_000)throw Error('TextGrid 超过 2 MB。');
   const tokens:(string|number)[]=[];let i=0;
   while(i<text.length){
@@ -45,7 +45,7 @@ export function parseGrid(text:string):Grid {
     }else throw Error('不支持的 TextGrid 层类型。');
     grid.tiers.push(tier);
   }
-  if(cursor!==tokens.length||!grid.tiers.length)throw Error('TextGrid 不完整或含多余内容。');
+  if(cursor!==tokens.length||(!grid.tiers.length&&!allowNoTiers))throw Error('TextGrid 不完整或含多余内容。');
   return grid;
 }
 export function serializeGrid(grid:Grid):string {
@@ -57,7 +57,7 @@ export function serializeGrid(grid:Grid):string {
     if(tier.intervals){lines.push(`        intervals: size = ${tier.intervals.length}`);tier.intervals.forEach((item,i)=>lines.push(`        intervals [${i+1}]:`,`            xmin = ${num(item.xmin)}`,`            xmax = ${num(item.xmax)}`,`            text = ${quote(item.text)}`));}
     else{lines.push(`        points: size = ${tier.points!.length}`);tier.points!.forEach((item,i)=>lines.push(`        points [${i+1}]:`,`            number = ${num(item.number)}`,`            mark = ${quote(item.mark)}`));}
   });
-  const text=lines.join('\n')+'\n';parseGrid(text);return text;
+  const text=lines.join('\n')+'\n';parseGrid(text,true);return text;
 }
 export function decodeText(buffer:ArrayBuffer):string {
   const bytes=new Uint8Array(buffer);
@@ -70,12 +70,21 @@ export function validateEditingGrid(grid:Grid,duration:number){
   // Preserve the original domain and all unrelated tiers. Do not stretch labels.
   return grid;
 }
+export function loadEditingGrid(text:string|undefined,duration:number):{grid:Grid;created:boolean}{
+  if(!Number.isFinite(duration)||duration<=0)throw Error('音频时长无效。');
+  const parsed=text?.trim()?validateEditingGrid(parseGrid(text,true),duration):undefined;
+  if(parsed?.tiers.length)return {grid:parsed,created:false};
+  return {grid:parsed??{xmin:0,xmax:duration,tiers:[]},created:true};
+}
 export function validateEditingAudio(asset:AudioAsset){
-  if(asset.sampleRate<8000||asset.sampleRate>96000||asset.frames>8_000_000||asset.channels.length>8)throw Error('标注工作台支持 8–96 kHz、最多 8 声道及 800 万帧，请先转换或切分录音。');
+  if(asset.sampleRate<8000||asset.sampleRate>96000||asset.frames*asset.channels.length>32_000_000||asset.channels.length>8)throw Error('标注工作台支持 8–96 kHz、最多 8 声道及 3200 万个采样值；文件仍限 64 MB，请先转换或切分录音。');
   return asset;
 }
 export function preferredGrid<T extends {name:string}>(audio:T,files:T[]):T|undefined {
   const stem=audio.name.replace(/\.wav$/i,'');
-  for(const suffix of ['_webedit','_post','_auto','']){const matches=files.filter(f=>f.name.toLowerCase()===(stem+suffix+'.textgrid').toLowerCase());if(matches.length>1)throw Error('存在同名标注资源，请明确选择。');if(matches[0])return matches[0];}
+  for(const suffix of ['','_自动保存','_webedit','_post','_auto']){const matches=files.filter(f=>f.name.toLowerCase()===(stem+suffix+'.textgrid').toLowerCase());if(matches.length>1)throw Error('存在同名标注资源，请明确选择。');if(matches[0])return matches[0];}
+  const candidates=files.filter(f=>f.name.toLowerCase().startsWith(stem.toLowerCase()+'_')&&f.name.toLowerCase().endsWith('.textgrid'));
+  if(candidates.length===1)return candidates[0];
+  if(candidates.length>1)throw Error('有多个同名前缀的 TextGrid，请明确选择关联文件。');
 }
 export function selectedInterval(grid:Grid|null,selection:{tier:string;index:number}|null):Interval|undefined{return selection?grid?.tiers.find(t=>t.name===selection.tier)?.intervals?.[selection.index]:undefined;}

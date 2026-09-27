@@ -3,8 +3,10 @@ import ctypes
 import argparse
 from ctypes import wintypes
 import json
+import os
 from pathlib import Path
 import subprocess
+import tempfile
 import time
 from uuid import uuid4
 
@@ -39,9 +41,11 @@ def process_parents():
 ROOT = Path(__file__).resolve().parents[1]
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--state',type=Path,help='Previously initialized, owned verification state only')
+parser.add_argument('--exe',type=Path)
+parser.add_argument('--verification',choices=['repair','m12','m12-r1','m12-r2','m12-r3'],default='repair')
 options=parser.parse_args()
-exe = ROOT / 'dist/research-repair/PhoneticToolbox-v3-Research-Fix1.exe'
-out = ROOT / 'output/validation/desktop-repair' / ('frozen-' + uuid4().hex)
+exe = (options.exe or ROOT / 'dist/research-repair/PhoneticToolbox-v3-Research-Fix1.exe').absolute()
+out = ROOT / ('output/validation/'+options.verification+'-exe' if options.verification.startswith('m12') else 'output/validation/desktop-repair') / ('frozen-' + uuid4().hex)
 out.mkdir(parents=True)
 print(out, flush=True)
 user = ctypes.WinDLL('user32', use_last_error=True)
@@ -52,9 +56,16 @@ user.IsWindowVisible.argtypes = [wintypes.HWND]
 user.GetWindowTextW.argtypes = [wintypes.HWND, wintypes.LPWSTR, ctypes.c_int]
 maximum = 0
 seen = {}
+env=os.environ.copy()
+for key in list(env):
+    if key.startswith(('PYTHON','PTB_EGG_','QT_')):env.pop(key)
+if options.verification.startswith('m12'):
+    windows=Path(env.get('SystemRoot','C:/Windows'))
+    env['PATH']=os.pathsep.join(map(str,[windows/'System32',windows]))
+launch_cwd=Path(tempfile.gettempdir()) if options.verification.startswith('m12') else out
 with (out/'stdout.log').open('wb') as stdout, (out/'stderr.log').open('wb') as stderr:
-    process = subprocess.Popen([str(exe), '--local-root', str(options.state or out/'state'), '--verify-repair', str(out/'results')],
-                               stdout=stdout, stderr=stderr, creationflags=subprocess.CREATE_NO_WINDOW)
+    process = subprocess.Popen([str(exe), '--local-root', str(options.state or out/'state'), '--verify-'+options.verification, str(out/'results')],
+                               cwd=launch_cwd,env=env,stdout=stdout, stderr=stderr, creationflags=subprocess.CREATE_NO_WINDOW)
     started = time.monotonic()
     while process.poll() is None:
         parents=process_parents();pids={process.pid}
@@ -93,11 +104,11 @@ with (out/'stdout.log').open('wb') as stdout, (out/'stderr.log').open('wb') as s
     (out/'process-report.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
 print(json.dumps(result), flush=True)
 assert process.returncode == 0, str(out/'stderr.log')
-assert maximum == 1, result
+assert maximum == (0 if options.verification.startswith('m12') else 1), result
 assert not remaining, result
 for arguments in (['--ptb-worker','os'], ['--ptb-worker'], ['--unknown-worker']):
     rejected = subprocess.run([str(exe),*arguments],stdout=subprocess.PIPE,stderr=subprocess.PIPE,
-                              timeout=30,creationflags=subprocess.CREATE_NO_WINDOW)
+                              cwd=launch_cwd,env=env,timeout=45,creationflags=subprocess.CREATE_NO_WINDOW)
     assert rejected.returncode == 2, (arguments,rejected.returncode)
 result['unknown_dispatch_rejected']=3
 (out/'process-report.json').write_text(json.dumps(result,indent=2),encoding='utf-8')

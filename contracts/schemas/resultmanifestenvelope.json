@@ -189,6 +189,15 @@
         "metadata": {
           "$ref": "#/$defs/AcousticMetadata"
         },
+        "policy_version": {
+          "default": 1,
+          "enum": [
+            1,
+            2
+          ],
+          "title": "Policy Version",
+          "type": "integer"
+        },
         "retention": {
           "enum": [
             "server",
@@ -698,6 +707,15 @@
           ],
           "title": "Operation",
           "type": "string"
+        },
+        "policy_version": {
+          "default": 1,
+          "enum": [
+            1,
+            2
+          ],
+          "title": "Policy Version",
+          "type": "integer"
         }
       },
       "required": [
@@ -741,6 +759,15 @@
           "default": "egg_analysis",
           "title": "Operation",
           "type": "string"
+        },
+        "policy_version": {
+          "default": 1,
+          "enum": [
+            1,
+            2
+          ],
+          "title": "Policy Version",
+          "type": "integer"
         }
       },
       "required": [
@@ -777,6 +804,15 @@
           "default": "managed_files",
           "title": "Kind",
           "type": "string"
+        },
+        "policy_version": {
+          "default": 1,
+          "enum": [
+            1,
+            2
+          ],
+          "title": "Policy Version",
+          "type": "integer"
         }
       },
       "required": [
@@ -858,6 +894,15 @@
           "default": "lpc_analysis",
           "title": "Operation",
           "type": "string"
+        },
+        "policy_version": {
+          "default": 1,
+          "enum": [
+            1,
+            2
+          ],
+          "title": "Policy Version",
+          "type": "integer"
         }
       },
       "required": [
@@ -865,6 +910,335 @@
         "files"
       ],
       "title": "LpcManifest",
+      "type": "object"
+    },
+    "M05Manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "complete": {
+          "const": true,
+          "default": true,
+          "title": "Complete",
+          "type": "boolean"
+        },
+        "core_version": {
+          "title": "Core Version",
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/AcousticManagedFile"
+          },
+          "maxItems": 12,
+          "minItems": 5,
+          "title": "Files",
+          "type": "array"
+        },
+        "kind": {
+          "const": "managed_m05_files",
+          "default": "managed_m05_files",
+          "title": "Kind",
+          "type": "string"
+        },
+        "operation": {
+          "const": "lip_analysis",
+          "default": "lip_analysis",
+          "title": "Operation",
+          "type": "string"
+        },
+        "policy_version": {
+          "default": 1,
+          "enum": [
+            1,
+            2
+          ],
+          "title": "Policy Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "core_version",
+        "files"
+      ],
+      "title": "M05Manifest",
+      "type": "object"
+    },
+    "M06Manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "complete": {
+          "const": true,
+          "default": true,
+          "title": "Complete",
+          "type": "boolean"
+        },
+        "core_version": {
+          "title": "Core Version",
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/AcousticManagedFile"
+          },
+          "maxItems": 3,
+          "minItems": 2,
+          "title": "Files",
+          "type": "array"
+        },
+        "kind": {
+          "const": "managed_m06_files",
+          "default": "managed_m06_files",
+          "title": "Kind",
+          "type": "string"
+        },
+        "operation": {
+          "const": "speech_synthesis",
+          "default": "speech_synthesis",
+          "title": "Operation",
+          "type": "string"
+        },
+        "policy_version": {
+          "default": 1,
+          "enum": [
+            1,
+            2
+          ],
+          "title": "Policy Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "core_version",
+        "files"
+      ],
+      "title": "M06Manifest",
+      "type": "object"
+    },
+    "M07Manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "complete": {
+          "const": true,
+          "default": true,
+          "title": "Complete",
+          "type": "boolean"
+        },
+        "core_version": {
+          "title": "Core Version",
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/AcousticManagedFile"
+          },
+          "maxItems": 55,
+          "minItems": 2,
+          "title": "Files",
+          "type": "array"
+        },
+        "kind": {
+          "const": "managed_m07_files",
+          "default": "managed_m07_files",
+          "title": "Kind",
+          "type": "string"
+        },
+        "operation": {
+          "const": "phonation_synthesis",
+          "default": "phonation_synthesis",
+          "title": "Operation",
+          "type": "string"
+        },
+        "policy_version": {
+          "default": 1,
+          "enum": [
+            1,
+            2
+          ],
+          "title": "Policy Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "core_version",
+        "files"
+      ],
+      "title": "M07Manifest",
+      "type": "object"
+    },
+    "M08Manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "aliases": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "object"
+        },
+        "complete": {
+          "const": true,
+          "default": true,
+          "title": "Complete",
+          "type": "boolean"
+        },
+        "core_version": {
+          "title": "Core Version",
+          "type": "string"
+        },
+        "deleted": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 256,
+          "title": "Deleted",
+          "type": "array"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/AcousticManagedFile"
+          },
+          "maxItems": 258,
+          "minItems": 1,
+          "title": "Files",
+          "type": "array"
+        },
+        "kind": {
+          "const": "managed_m08_files",
+          "default": "managed_m08_files",
+          "title": "Kind",
+          "type": "string"
+        },
+        "operation": {
+          "const": "pitch_manipulation",
+          "default": "pitch_manipulation",
+          "title": "Operation",
+          "type": "string"
+        },
+        "policy_version": {
+          "default": 1,
+          "enum": [
+            1,
+            2
+          ],
+          "title": "Policy Version",
+          "type": "integer"
+        },
+        "saved": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 256,
+          "title": "Saved",
+          "type": "array"
+        }
+      },
+      "required": [
+        "core_version",
+        "files"
+      ],
+      "title": "M08Manifest",
+      "type": "object"
+    },
+    "M11Manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "complete": {
+          "const": true,
+          "default": true,
+          "title": "Complete",
+          "type": "boolean"
+        },
+        "core_version": {
+          "title": "Core Version",
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/AcousticManagedFile"
+          },
+          "maxItems": 102,
+          "minItems": 2,
+          "title": "Files",
+          "type": "array"
+        },
+        "kind": {
+          "const": "managed_m11_files",
+          "default": "managed_m11_files",
+          "title": "Kind",
+          "type": "string"
+        },
+        "operation": {
+          "const": "mfa_alignment",
+          "default": "mfa_alignment",
+          "title": "Operation",
+          "type": "string"
+        },
+        "policy_version": {
+          "default": 1,
+          "enum": [
+            1,
+            2
+          ],
+          "title": "Policy Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "core_version",
+        "files"
+      ],
+      "title": "M11Manifest",
+      "type": "object"
+    },
+    "M14Manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "complete": {
+          "const": true,
+          "default": true,
+          "title": "Complete",
+          "type": "boolean"
+        },
+        "core_version": {
+          "title": "Core Version",
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/AcousticManagedFile"
+          },
+          "maxItems": 3,
+          "minItems": 1,
+          "title": "Files",
+          "type": "array"
+        },
+        "kind": {
+          "const": "managed_m14_files",
+          "default": "managed_m14_files",
+          "title": "Kind",
+          "type": "string"
+        },
+        "operation": {
+          "const": "phonology_induction",
+          "default": "phonology_induction",
+          "title": "Operation",
+          "type": "string"
+        },
+        "policy_version": {
+          "default": 1,
+          "enum": [
+            1,
+            2
+          ],
+          "title": "Policy Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "core_version",
+        "files"
+      ],
+      "title": "M14Manifest",
       "type": "object"
     },
     "ResultFile": {
@@ -947,6 +1321,15 @@
           "default": "spectrogram_to_audio",
           "title": "Operation",
           "type": "string"
+        },
+        "policy_version": {
+          "default": 1,
+          "enum": [
+            1,
+            2
+          ],
+          "title": "Policy Version",
+          "type": "integer"
         }
       },
       "required": [
@@ -968,6 +1351,12 @@
           "managed_egg_files": "#/$defs/EggManifest",
           "managed_files": "#/$defs/FileManifest",
           "managed_lpc_files": "#/$defs/LpcManifest",
+          "managed_m05_files": "#/$defs/M05Manifest",
+          "managed_m06_files": "#/$defs/M06Manifest",
+          "managed_m07_files": "#/$defs/M07Manifest",
+          "managed_m08_files": "#/$defs/M08Manifest",
+          "managed_m11_files": "#/$defs/M11Manifest",
+          "managed_m14_files": "#/$defs/M14Manifest",
           "managed_spec2wav_files": "#/$defs/Spec2WavManifest",
           "pipeline_check_metadata": "#/$defs/JobManifest"
         },
@@ -994,6 +1383,24 @@
         },
         {
           "$ref": "#/$defs/LpcManifest"
+        },
+        {
+          "$ref": "#/$defs/M08Manifest"
+        },
+        {
+          "$ref": "#/$defs/M14Manifest"
+        },
+        {
+          "$ref": "#/$defs/M06Manifest"
+        },
+        {
+          "$ref": "#/$defs/M07Manifest"
+        },
+        {
+          "$ref": "#/$defs/M11Manifest"
+        },
+        {
+          "$ref": "#/$defs/M05Manifest"
         }
       ],
       "title": "Manifest"

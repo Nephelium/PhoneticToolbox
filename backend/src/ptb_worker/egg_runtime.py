@@ -17,6 +17,10 @@ def command(request, pipe):
 
 
 def fingerprint():
+    import sys
+    if sys.platform == 'linux':
+        from .native.linux_runtime import fingerprint as linux_fingerprint
+        return linux_fingerprint()
     import importlib.metadata as metadata
     import json
     import sys

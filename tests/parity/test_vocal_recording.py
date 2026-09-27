@@ -9,6 +9,7 @@ from scipy.signal import butter,sosfiltfilt
 from phonetic_core.vocal_tract.document import make_document,sequence_document
 from phonetic_core.vocal_tract.trajectory import validate_frames,sample_trajectory
 from phonetic_core.vocal_tract.animation import prepare_animation
+from phonetic_core.vocal_tract.envelope import sequence_envelope, attack_envelope
 from ptb_desktop.vocal_tract.runtime import Runtime
 from ptb_desktop.vocal_tract.files import VocalFiles
 from ptb_desktop.vocal_tract.video import VideoSession
@@ -140,9 +141,41 @@ def test_export_audio_uses_same_prepared_samples_and_gain(runtime):
     prepared=runtime.invoke('animation/prepare',{'frames':frames(runtime)})
     encoded=runtime.invoke('animation/audio',{'id':prepared['id']})
     actual=np.frombuffer(base64.b64decode(encoded['base64']),dtype='<f4')
-    expected=audition_samples(runtime.animation['audition_audio'],.8,0).astype('<f4')
+    expected=audition_samples(runtime.animation['audition_audio'],.8,0,runtime.animation['envelope']).astype('<f4')
     np.testing.assert_array_equal(actual,expected)
     assert len(actual)==round(prepared['duration']*48000)
+
+
+def test_r5_attack_boundaries_and_short_segment_duration():
+    sr=48000
+    envelope=sequence_envelope(14400,sr,[(4800,7200)])
+    assert envelope[0]==0 and envelope[2399]==1
+    np.testing.assert_array_equal(envelope[2400:4000],np.ones(1600))
+    assert envelope[4800:7200].tolist()==[0.]*2400
+    assert envelope[7200]==0 and envelope[9599]==1
+    np.testing.assert_array_equal(envelope[9600:12000],np.ones(2400))
+    continuous=sequence_envelope(28800,sr,[])
+    np.testing.assert_array_equal(continuous[9000:10300],np.ones(1300))
+    np.testing.assert_array_equal(continuous[18600:19800],np.ones(1200))
+    leading_pause=sequence_envelope(7200,sr,[(0,2400)])
+    assert leading_pause[:2400].tolist()==[0.]*2400
+    assert leading_pause[2400]==0 and leading_pause[4799]==1
+    # A 50 ms voiced segment gets a 25 ms attack, as requested for R5.
+    short=sequence_envelope(2400,sr,[])
+    assert short[0]==0 and short[1199]==1 and short[1200]==1
+    assert 0<attack_envelope(0,960,sr)[-1]<attack_envelope(960,960,sr)[0]<1
+    assert attack_envelope(1920,960,sr)[-1]==1
+
+
+def test_r5_clear_invalidates_old_prepared_recording(runtime):
+    prepared=runtime.invoke('animation/prepare',{'frames':frames(runtime)})
+    assert runtime.invoke('animation/prepare',{'frames':frames(runtime)})['cached']
+    assert runtime.invoke('keyframes',{'frames':[],'pitch_curve':[]})=={'saved':0}
+    assert runtime.invoke('keyframes/load')['frames']==[]
+    with pytest.raises(ValueError,match='失效'):
+        runtime.invoke('animation/audio',{'id':prepared['id']})
+    restored=runtime.invoke('animation/prepare',{'frames':frames(runtime)})
+    assert not restored['cached'] and restored['id']!=prepared['id']
 
 
 def test_incomplete_video_and_cancel_preserve_target(tmp_path):

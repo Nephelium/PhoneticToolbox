@@ -3,6 +3,7 @@ from typing import Literal
 from uuid import UUID
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 from .quota import QUOTA_BYTES
+from .storage_policy import PolicyVersion, LEGACY_POLICY_VERSION, LEGACY_RETENTION_SECONDS
 
 
 class UploadInput(BaseModel):
@@ -26,6 +27,7 @@ class FinalizeInput(BaseModel):
 
 
 class AssetView(BaseModel):
+    policy_version: PolicyVersion = LEGACY_POLICY_VERSION
     id: str
     project_id: str
     name: str
@@ -45,6 +47,9 @@ class AssetList(BaseModel):
 
 
 class StorageUsage(BaseModel):
+    policy_version: PolicyVersion = LEGACY_POLICY_VERSION
+    retention_seconds: int = LEGACY_RETENTION_SECONDS
+    over_quota: bool = False
     quota_bytes: int
     used_bytes: int
     reserved_bytes: int

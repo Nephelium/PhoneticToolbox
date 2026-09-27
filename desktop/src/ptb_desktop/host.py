@@ -110,7 +110,9 @@ class Bridge(QObject):
             self.taskReady.emit(request_id,json.dumps({'ok':False,'error':'请求超过当前文件大小预算。'}));return
         try:
             decoded=json.loads(raw)
-            if not isinstance(decoded,dict) or (decoded.get('op')!='annotation_save' and len(raw)>1_000_000):raise ValueError()
+            if not isinstance(decoded,dict):raise ValueError()
+            limit=86_000_000 if decoded.get('op')=='m11_import' else 8_100_000 if decoded.get('op')=='annotation_save' else 2_800_000 if decoded.get('op')=='m14_import' else 1_000_000
+            if len(raw)>limit:raise ValueError()
         except (ValueError,TypeError):
             self.taskReady.emit(request_id,json.dumps({'ok':False,'error':'请求结构或大小不正确。'}));return
         if not self.task_lock.acquire(False):
@@ -154,6 +156,10 @@ class Bridge(QObject):
             if op=='hello':
                 health=self.service.get('/api/v1/health')
                 value={'kind':'desktop','session':self.provider.session,'api_version':health['api_version'],'tasks':bool(self.service.local_files_root)}
+            elif op=='m05_media':
+                value=self.window.m05_media.arm()
+            elif op=='m05_media_status':
+                value=self.window.m05_media.status()
             elif op=='fonts':
                 from PyQt6.QtGui import QFontDatabase
                 value=sorted(QFontDatabase.families())
@@ -165,6 +171,15 @@ class Bridge(QObject):
                     pixmap=capture_hidden(self.window);buffer=QBuffer();buffer.open(QIODevice.OpenModeFlag.WriteOnly)
                     if not pixmap.save(buffer,'PNG'):raise FileAccessError('截图失败。')
                     value=self.provider.capture(bytes(buffer.data()))
+            elif op=='m11_pick':
+                purpose=body.get('purpose')
+                if purpose in ('runtime','corpus'):
+                    path=QFileDialog.getExistingDirectory(self.window,'选择 MFA '+purpose+' 目录','')
+                elif purpose in ('model','dictionary','archive','manifest'):
+                    filters={'model':'MFA model (*.zip)','dictionary':'Dictionary (*.dict *.txt)','archive':'Component (*.zip)','manifest':'Manifest (*.json)'}
+                    path,_=QFileDialog.getOpenFileName(self.window,'选择 MFA '+purpose,'',filters[purpose])
+                else:raise FileAccessError('不支持的 MFA 资源。')
+                value=self.tasks.m11.grant(purpose,path) if path else None
             elif op=='choose':
                 purpose=body.get('purpose')
                 def picker():
@@ -214,7 +229,9 @@ class Workbench(QMainWindow):
         self.profile.installUrlSchemeHandler(b'ptbapp',self.assets);self.profile.setUrlRequestInterceptor(self.interceptor)
         self.view=QWebEngineView(self);self.page=Page(self.profile,self.view);self.view.setPage(self.page)
         self.profile.downloadRequested.connect(self.save_download)
-        self.page.permissionRequested.connect(lambda request:request.deny())
+        from .m05_permissions import MediaPermission
+        self.m05_media=MediaPermission(self)
+        self.page.permissionRequested.connect(self.m05_media.requested)
         self.page.settings().setAttribute(QWebEngineSettings.WebAttribute.PlaybackRequiresUserGesture,True)
         self.page.settings().setAttribute(QWebEngineSettings.WebAttribute.JavascriptCanOpenWindows,False)
         self.channel=QWebChannel(self.page);self.bridge=Bridge(self.provider,self.service,self,test_dialog=test)
@@ -241,10 +258,10 @@ class Workbench(QMainWindow):
     def save_download(self,download):
         # Only renderer-generated supported artifacts from this owned page.
         name=Path(download.suggestedFileName()).name
-        if download.page()!=self.page or download.url().scheme()!='blob' or not name.lower().endswith(('.svg','.png','.textgrid','.lip.json')):
+        if download.page()!=self.page or download.url().scheme()!='blob' or not name.lower().endswith(('.svg','.png','.textgrid','.lip.json','.json','.csv','.xlsx')):
             download.cancel();return
         options=QFileDialog.Option.DontUseNativeDialog if self.bridge.test_dialog else QFileDialog.Option(0)
-        title,filter=('保存标注','Praat 标注 (*.TextGrid)') if name.lower().endswith('.textgrid') else ('保存安全唇形','安全唇形 (*.lip.json)') if name.lower().endswith('.lip.json') else ('保存图像','图像 (*.svg *.png)')
+        title,filter=('保存标注','Praat 标注 (*.TextGrid)') if name.lower().endswith('.textgrid') else ('保存安全唇形','安全唇形 (*.lip.json)') if name.lower().endswith('.lip.json') else ('保存实验文件','实验文件 (*.json *.csv *.xlsx)') if name.lower().endswith(('.json','.csv','.xlsx')) else ('保存图像','图像 (*.svg *.png)')
         selected=QFileDialog.getSaveFileName(self,title,name,filter,options=options)[0]
         if not selected:download.cancel();return
         target=Path(selected);download.setDownloadDirectory(str(target.parent));download.setDownloadFileName(target.name);download.accept()

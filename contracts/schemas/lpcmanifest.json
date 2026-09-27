@@ -86,6 +86,15 @@
       "default": "lpc_analysis",
       "title": "Operation",
       "type": "string"
+    },
+    "policy_version": {
+      "default": 1,
+      "enum": [
+        1,
+        2
+      ],
+      "title": "Policy Version",
+      "type": "integer"
     }
   },
   "required": [

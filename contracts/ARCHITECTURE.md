@@ -2,6 +2,8 @@
 
 D0.3 / 2026-09-09 / 实现提案。上级约束见 [总架构](../ARCHITECTURE.md)。
 
+2026-09-26：新政策目标为每账号 1 GB/最多 3 天。现存代码、数据库和生成协议仍为旧 5 GB/7 天；按 [P07-POLICY](../docs/plans/2026-09-26-server-coordination.md)统一实施与兼容回读，不能直接手改生成 schema。下列额度字段表达新目标，尚未生效。
+
 ## 职责与依赖
 跨端数据协议与兼容策略。允许依赖：声明式 schema、数据字典、生成脚本及协议测试。禁止依赖或行为：GUI、计算实现、数据库连接与独立手改生成的客户端。
 
@@ -46,7 +48,7 @@ Selection：start_sample、end_sample、sample_rate_hz；区间 [start,end)，�
 Job：id、module_id、input_asset_ids、config_snapshot、status、attempt、lease_generation、progress、created_at、deadline_at、result_asset_ids、source_ids、core_version。
 Job.status：queued / running / cancel_requested / succeeded / failed / cancelled / interrupted。终态不回跳；重试创建新 attempt 并保留前次记录。输入过期使用明确错误码，资源状态另行管理。
 Asset.state：uploading / available / expired / deleting / delete_failed / deleted。删除失败不可读取、继续计量；重试删除保持幂等。
-Quota：quota_bytes=5000000000、used_bytes、reserved_bytes、available_bytes；由服务端事务计算。
+Quota：quota_bytes=1000000000、used_bytes、reserved_bytes、available_bytes；由服务端事务计算。数据默认 retention_seconds=259200；新旧 policy_version/manifest 的兼容规则由 P07-POLICY 固定。
 Error：code、message、retryable、details（脱敏）；code 示例 quota_exceeded / asset_expired / permission_denied / invalid_audio / backend_unavailable / job_interrupted。
 
 ## 版本与兼容

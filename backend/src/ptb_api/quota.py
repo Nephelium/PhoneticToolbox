@@ -1,9 +1,7 @@
 """P07 byte policy. All amounts are decimal bytes, never display-rounded GB."""
 import re
 
-QUOTA_BYTES = 5_000_000_000
-RETENTION_SECONDS = 7 * 24 * 3600
-TEMP_SECONDS = 24 * 3600
+from .storage_policy import QUOTA_BYTES, RETENTION_SECONDS, TEMP_SECONDS
 CHUNK_BYTES = 256 * 1024
 
 

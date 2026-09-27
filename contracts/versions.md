@@ -24,6 +24,8 @@ P05 新增 auth challenge/login/me/logout 与 projects list/create/get/rename，
 
 ## 兼容规则
 
+2026-09-27 P07-POLICY 增量：新 FileConfig.max_output_bytes 上限为 1,000,000,000；历史 ResultFile 保留 5,000,000,000 读取上限。全部受管文件 manifest 新发布显式 policy_version=2，旧缺字段读作 1；本地 expires_at=null 保持无服务器期限。现存数据库迁移是独立门，usage 继续返回实际库政策。M08/M14 路由、operation 和结果联合类型保留。旧客户端如严格拒绝新增响应字段，须配套升级；此处不宣称任意旧客户端都兼容。详见[政策收口](../docs/testing/p07-policy-closeout-report.md)。
+
 新增可选字段可以兼容扩展；单位、键名或状态语义改变必须升级 API major。应用版本与算法版本分开，科学依赖迁移要有 P03 证据。生成快照、包锁和来源登记与变更同批提交。
 
 ## M01-D 新协议及旧行为差异

@@ -19,7 +19,27 @@ def stop_child(child):
 
 def execute_claim(store, claim, worker_id, stop, *, step_delay=0):
     snapshot=json.loads(claim['snapshot'])
-    if snapshot['operation'] in ('acoustic_analysis','textgrid_segment','spectrogram_to_audio','egg_analysis','lpc_analysis'):
+    if snapshot['operation']=='lip_analysis':
+        from .m05_executor import execute_claim as execute_m05
+        execute_m05(store,claim,worker_id,stop)
+        return
+    if snapshot['operation']=='mfa_alignment':
+        from .m11_executor import execute_claim as execute_m11
+        execute_m11(store,claim,worker_id,stop)
+        return
+    if snapshot['operation']=='phonation_synthesis':
+        from .m07_executor import execute_claim as execute_m07
+        execute_m07(store,claim,worker_id,stop)
+        return
+    if snapshot['operation']=='speech_synthesis':
+        from .m06_executor import execute_claim as execute_m06
+        execute_m06(store,claim,worker_id,stop)
+        return
+    if snapshot['operation']=='phonology_induction':
+        from .m14_executor import execute_claim as execute_m14
+        execute_m14(store,claim,worker_id,stop)
+        return
+    if snapshot['operation'] in ('acoustic_analysis','textgrid_segment','spectrogram_to_audio','egg_analysis','lpc_analysis','pitch_manipulation'):
         from .acoustic_executor import execute_acoustic_claim
         execute_acoustic_claim(store,claim,worker_id,stop)
         return

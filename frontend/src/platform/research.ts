@@ -1,6 +1,16 @@
 import type { components } from '../../../contracts/generated/api';
 import { decodeWav } from './decode.ts';
 import {portableAnnotation,type AnnotationPort} from './annotation.ts';
+import {m07Port,type M07Port} from './m07.ts';
+import {m06Port} from './m06.ts';
+import type {M06Port} from '../modules/speech-synthesis/port.ts';
+import {m08Port} from './m08.ts';
+import {serverM14} from './m14.ts';
+import {serverM11} from './m11.ts';
+import type {LipPort} from '../modules/lip-extraction/port.ts';
+import type {M11Port} from '../modules/mfa/port.ts';
+import type {M14Port} from '../modules/phonology-induction/port.ts';
+import type {M08Port} from '../modules/pitch-manipulation/port.ts';
 export type Tier=components['schemas']['TextGridPreview']['tiers'][number];
 export type Spectrogram=components['schemas']['SpectrogramPreview'];
 export type ParameterTable=components['schemas']['ParameterTable'];
@@ -41,6 +51,12 @@ export interface ResearchFiles {
   kind:'desktop'|'server'|'preview';
   tasks?:ResearchTasks;
   annotation?:AnnotationPort;
+  m06?:M06Port;
+  m07?:M07Port;
+  m08?:M08Port;
+  m14?:M14Port;
+  m11?:M11Port;
+  m05?:LipPort;
   choose?(purpose:DirectoryGrant['purpose']):Promise<DirectoryGrant|null>;
   add?(files:File[]):void;
   list(directory?:string):Promise<ResearchFile[]>;
@@ -53,7 +69,7 @@ export interface ResearchFiles {
   dispose():void;
 }
 export interface ResearchContext { key:string; label:string; files:ResearchFiles; ownerId?:string }
-export const fileKind=(name:string):ResearchFile['kind']|null=>/\.wav$/i.test(name)?'audio':/\.textgrid$/i.test(name)?'textgrid':/\.lip\.json$/i.test(name)?'lip':/\.lab$/i.test(name)?'lab':/\.(xlsx|ptb\.sqlite3?)$/i.test(name)?'parameter':/\.(png|jpg|jpeg|bmp)$/i.test(name)?'image':null;
+export const fileKind=(name:string):ResearchFile['kind']|null=>/\.(wav|mp3|flac)$/i.test(name)?'audio':/\.textgrid$/i.test(name)?'textgrid':/\.lip\.json$/i.test(name)?'lip':/\.lab$/i.test(name)?'lab':/\.(xlsx|ptb\.sqlite3?)$/i.test(name)?'parameter':/\.(png|jpg|jpeg|bmp)$/i.test(name)?'image':null;
 export async function audioPreview(files:ResearchFiles,file:ResearchFile,signal?:AbortSignal) {
   const data=await files.read(file,signal);return {asset:await decodeWav(data.buffer,file.name,signal),sha256:data.sha256};
 }
@@ -72,7 +88,7 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
   async function request(path:string,signal?:AbortSignal,method='GET',body?:unknown) {
     if(disposed)throw Error('项目会话已关闭。');
     const r=await fetch('/api/v1/'+path,{method,body:body?JSON.stringify(body):undefined,credentials:'same-origin',cache:'no-store',signal:signal?AbortSignal.any([abort.signal,signal]):abort.signal,headers:{'X-PTB-Account':owner,...(body?{'Content-Type':'application/json'}:{}),...(method!=='GET'?{'X-CSRF-Token':csrf?.()??''}:{})}});
-    if(!r.ok){const error=await r.json().catch(()=>({}));if(r.status===401||error.detail==='account_changed')onInvalid();if(r.status===422&&path==='jobs/spec2wav/create')throw Error('标定参数无效：请核对时间、频率、dB范围及迭代次数。');if(typeof error.detail==='string'&&(error.detail.startsWith('preview_')||error.detail==='invalid_spectrogram_input'))throw Error(error.detail);throw Error(({input_unavailable:'源文件已失效或临近到期，请重新上传。',quota_exceeded:'文件空间不足，请清理不需要的文件后重试。',invalid_parameter_table:'参数表包含不支持的内容、公式或损坏结构。原文件未修改。',parameter_read_failed:'参数表超过读取预算或读取失败。',parameter_read_timeout:'参数表读取超时，请缩小数据。',asset_expired:'文件已到期，请重新上传。',invalid_textgrid:'TextGrid格式不受支持或不完整。',unsupported_textgrid:'TextGrid超过2 MB或类型不正确。'} as Record<string,string>)[error.detail]||'项目文件不可访问，请刷新或检查登录状态。');}
+    if(!r.ok){const error=await r.json().catch(()=>({}));if(r.status===401||error.detail==='account_changed')onInvalid();if(r.status===422&&path==='jobs/spec2wav/create')throw Error('标定参数无效：请核对时间、频率、dB范围及迭代次数。');if(typeof error.detail==='string'&&(error.detail.startsWith('preview_')||error.detail.startsWith('m07_')||error.detail==='invalid_spectrogram_input'))throw Error(error.detail);throw Error(({input_unavailable:'源文件已失效或临近到期，请重新上传。',quota_exceeded:'文件空间不足，请清理不需要的文件后重试。',invalid_parameter_table:'参数表包含不支持的内容、公式或损坏结构。原文件未修改。',parameter_read_failed:'参数表超过读取预算或读取失败。',parameter_read_timeout:'参数表读取超时，请缩小数据。',asset_expired:'文件已到期，请重新上传。',invalid_textgrid:'TextGrid格式不受支持或不完整。',unsupported_textgrid:'TextGrid超过2 MB或类型不正确。'} as Record<string,string>)[error.detail]||'项目文件不可访问，请刷新或检查登录状态。');}
     return r;
   }
   async function verify(file:ResearchFile){const r=await request('assets/'+encodeURIComponent(file.id));const asset:components['schemas']['AssetView']=await r.json();if(asset.project_id!==project||asset.state!=='ready'||asset.sha256!==file.sha256)throw Error('文件已变化，请刷新项目列表。');return asset;}
@@ -100,7 +116,15 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
     async parameters(file){await verify(file);const data:ParameterTable=await(await request('assets/'+encodeURIComponent(file.id)+'/parameters')).json();if(data.sha256!==file.sha256)throw Error('参数文件已变化，请刷新。');return data;},
     dispose(){disposed=true;abort.abort();}};
   if(csrf){
-    const annotation=portableAnnotation(adapter,async(name,buffer,key)=>{
+    adapter.m07=m07Port({project,async source(file){await verify(file);return {asset_id:file.id,sha256:file.sha256!};},async create(body){return (await request('jobs/m07/create',undefined,'POST',body)).json();},job:tasks.job,read:tasks.result!,cancel:tasks.cancelJob!,retry:tasks.retry,async list(){return ((await(await request('jobs?project_id='+encodeURIComponent(project))).json()).jobs as JobView[]).filter(j=>j.operation==='phonation_synthesis');}});
+    adapter.m06=m06Port({project,async parameters(text,signal){const a=await upload('m06-parameters.csv',new TextEncoder().encode(text).buffer,'m06-'+crypto.randomUUID(),'合成参数');if(signal.aborted)throw Error('操作已取消');return {asset_id:a.id,sha256:a.sha256!};},async source(file){await verify(file);return {asset_id:file.id,sha256:file.sha256!};},
+      async create(body){return (await request('jobs/m06/create',undefined,'POST',body)).json();},job:tasks.job,read:tasks.result!,cancel:tasks.cancelJob!});
+    adapter.m11=serverM11(owner,project,csrf,onInvalid,abort.signal);
+    adapter.m14=serverM14(owner,project,csrf,onInvalid,abort.signal);
+    adapter.m08=m08Port({project,async source(file){await verify(file);return {asset_id:file.id,sha256:file.sha256!};},
+      async request(action,body){return (await request('jobs/m08/'+(action==='list'?'list/'+encodeURIComponent(project):action),undefined,action==='list'?'GET':'POST',body)).json();},
+      job:tasks.job,read:tasks.result!,cancel:tasks.cancelJob!});
+    async function upload(name:string,buffer:ArrayBuffer,key:string,label='标注'){
       const hash=await sha256(buffer);
       key=key+'_'+hash.slice(0,32);
       // The idempotent upload endpoint returns both partial and ready uploads.
@@ -110,14 +134,15 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
       if(current.state!=='ready'){
         for(let offset=current.size_bytes;offset<buffer.byteLength;offset+=262144){
           if(disposed)throw Error('项目会话已关闭。');
-          const response=await fetch('/api/v1/uploads/'+id+'/blocks?offset='+offset,{method:'PUT',credentials:'same-origin',signal:abort.signal,headers:{'X-PTB-Account':owner,'X-CSRF-Token':csrf(),'Content-Type':'application/octet-stream'},body:buffer.slice(offset,offset+262144)});
-          if(!response.ok){if(response.status===401)onInvalid();throw Error('标注上传失败，编辑仍保留。请检查登录和剩余空间后重试。');}
+          const response=await fetch('/api/v1/uploads/'+id+'/blocks?offset='+offset,{method:'PUT',credentials:'same-origin',signal:abort.signal,headers:{'X-PTB-Account':owner,'X-CSRF-Token':csrf!(),'Content-Type':'application/octet-stream'},body:buffer.slice(offset,offset+262144)});
+          if(!response.ok){if(response.status===401)onInvalid();throw Error(label+'上传失败，编辑仍保留。请检查登录和剩余空间后重试。');}
         }
       }
       const asset:components['schemas']['AssetView']=await(await request('uploads/'+id+'/finalize',undefined,'POST',{sha256:hash})).json();
-      if(asset.sha256!==hash)throw Error('标注保存校验失败。');
+      if(asset.sha256!==hash)throw Error(label+'保存校验失败。');
       return {id:asset.id,name:asset.name,kind:fileKind(asset.name)!,size:asset.size_bytes,sha256:hash,expiresAt:asset.expires_at};
-    });
+    }
+    const annotation=portableAnnotation(adapter,upload);
     adapter.annotation={...annotation,async scan(){const values=await adapter.list();if(listedAtCapacity)throw Error('项目资源达到当前 1000 条列表预算，请先在文件管理清理旧版本。');const seen=new Set<string>();return values.filter(f=>{const key=f.name.toLowerCase();if(seen.has(key))return false;seen.add(key);return true;});}};
   }
   return adapter;

@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import type { components } from '../../../contracts/generated/api';
 import ModalDialog from '../components/ModalDialog.vue';
 
 type Asset = components['schemas']['AssetView'];
-type Usage = components['schemas']['StorageUsage'];
+// Additive response fields until the shared M08/P07 contract generation gate.
+type Usage = components['schemas']['StorageUsage'] & { policy_version?: 1 | 2; retention_seconds?: number; over_quota?: boolean };
 const props = defineProps<{ projectId: string; ownerId: string; csrfToken: string }>();
 const emit = defineEmits<{ sessionInvalid: [] }>();
 const usage = ref<Usage | null>(null), assets = ref<Asset[]>([]), notice = ref('');
+const policyReady = computed(() => usage.value?.policy_version === 2);
+const overQuota = computed(() => !!usage.value && usage.value.used_bytes + usage.value.reserved_bytes > usage.value.quota_bytes);
+const canWrite = computed(() => available.value && policyReady.value && usage.value?.ready && !usage.value?.frozen && !overQuota.value);
 const available = ref(false), busy = ref(false), progress = ref(0), order = ref('expires');
 const removal = ref<Asset | null>(null), fileInput = ref<HTMLInputElement>();
 const pending = ref<{ file: File; key: string; assetId?: string } | null>(null);
@@ -21,6 +25,7 @@ const errors: Record<string, string> = {
   disk_space_low: '服务器磁盘空间不足，现有文件仍可下载和清理。',
   storage_service_unavailable: '文件服务尚未启用或暂时无法连接。',
   storage_recovery_required: '文件服务正在核对存储，请稍后再试。',
+  storage_policy_migration_required: '新存储政策尚待管理员完成迁移，新增写入暂不可用。现有有效文件仍可下载或删除。',
   storage_busy: '文件服务正在处理其他请求，请稍后重试。',
   upload_closed: '这次上传已关闭或到期，请重新选择文件。',
   asset_expired: '文件已到期，不能继续下载。',
@@ -83,9 +88,9 @@ async function upload() {
       progress.value = selected.file.size ? asset.size_bytes / selected.file.size : 1;
     }
     if (disposed) return;
-    // The server computes SHA-256 incrementally. Never load a 5 GB file into JS memory.
+    // The server computes SHA-256 incrementally; keep browser memory bounded.
     await request<Asset>(`uploads/${asset.id}/finalize`, 'POST', {});
-    pending.value = null; progress.value = 1; notice.value = '上传完成。文件保留 7 天，下载不会延长到期时间。';
+    pending.value = null; progress.value = 1; notice.value = '上传完成。新文件最多保留 3 天，下载不会延长到期时间。';
     if (fileInput.value) fileInput.value.value = '';
     await refresh();
   } catch (error) { if (!disposed) notice.value = message(error); }
@@ -121,7 +126,7 @@ async function fileTask(operation: 'storage_check'|'archive_zip'|'extract_zip', 
   const slot = JSON.stringify([operation, inputs, limit]);
   if (!taskKeys.has(slot)) taskKeys.set(slot, crypto.randomUUID());
   try {
-    if (!Number.isSafeInteger(limit) || limit < 1 || limit > 5_000_000_000 || inputs.length > 16) throw new Error('invalid_request');
+    if (!canWrite.value || !usage.value || !Number.isSafeInteger(limit) || limit < 1 || limit > usage.value.quota_bytes || inputs.length > 16) throw new Error('invalid_request');
     const job = await request<components['schemas']['JobView']>('jobs','POST', {
       project_id: props.projectId, operation, idempotency_key: taskKeys.get(slot),
       config: { inputs, max_output_bytes: limit },
@@ -150,23 +155,25 @@ onUnmounted(() => { disposed = true; abort.abort(); clearInterval(timer); pendin
 <template>
   <section class="project-storage" aria-labelledby="storage-heading">
     <div class="storage-heading"><h3 id="storage-heading">项目文件</h3><button :disabled="busy" @click="refresh">刷新空间</button></div>
-    <p class="muted">每个账号共享 5 GB 空间。文件最多保留 7 天，可先下载，也可直接删除。</p>
+    <p class="muted">新政策：每账号 1 GB（1,000,000,000 字节），新数据最多保留 3 天（259,200 秒）。下载和访问不续期，可直接删除。</p>
     <div v-if="usage" class="storage-meter">
       <div><strong>{{ bytes(usage.used_bytes) }}</strong> 已占用 · {{ bytes(usage.reserved_bytes) }} 已预留</div>
       <progress :value="usage.used_bytes + usage.reserved_bytes" :max="usage.quota_bytes" aria-label="账号文件空间" />
-      <small>可用 {{ bytes(usage.available_bytes) }} / 5 GB · 包含所有项目和未完成上传</small>
+      <small>可用 {{ bytes(usage.available_bytes) }} / {{ bytes(usage.quota_bytes) }} · 包含所有项目的上传、结果、缓存、临时文件及预留</small>
+      <p v-if="!policyReady" class="hint">当前服务尚未确认启用新政策，额度以服务返回为准。新增写入暂停，已有有效文件可下载或删除。</p>
+      <p v-if="overQuota" class="hint">现有占用与预留超过额度，新增写入暂停。旧文件保留原到期时间，可下载或删除；实际删除成功后才释放空间。</p>
       <p v-if="usage.frozen || !usage.ready" class="hint">新增写入暂不可用，正在等待存储核对。</p>
     </div>
     <p v-if="notice" role="status" class="storage-notice">{{ notice }}</p>
     <div class="storage-upload">
-      <label>选择上传文件<input ref="fileInput" type="file" :disabled="busy || !available || usage?.frozen || !usage?.ready" @change="choose" /></label>
-      <button class="primary" :disabled="busy || !pending || !available || usage?.frozen || !usage?.ready" @click="upload">{{ busy ? '正在处理…' : pending?.assetId ? '继续上传' : '上传文件' }}</button>
+      <label>选择上传文件<input ref="fileInput" type="file" :disabled="busy || !canWrite" @change="choose" /></label>
+      <button class="primary" :disabled="busy || !pending || !canWrite" @click="upload">{{ busy ? '正在处理…' : pending?.assetId ? '继续上传' : '上传文件' }}</button>
       <progress v-if="busy && pending" :value="progress" :max="1" aria-label="上传进度" />
     </div>
-    <p class="hint">未完成上传最多保留 24 小时。上传 WAV 和关联的 TextGrid 后，点击“进入研究工作台”使用参数估计；关闭页面不会删除电脑上的原文件。</p>
+    <p class="hint">旧文件按列表原到期时间保留。新上传从最终确认起、新科学结果从完成起计时，ZIP 与副本不晚于输入到期。未完成上传最多保留 24 小时。上传 WAV 和关联的 TextGrid 后可进入研究工作台；关闭页面不会删除电脑上的原文件。</p>
     <div v-if="fileJobs" class="file-job-controls">
-      <label>本批输出上限（MB）<input v-model.number="outputMegabytes" type="number" min="1" max="5000" :disabled="busy" /></label>
-      <div class="file-actions"><button :disabled="busy || !selectedIds.length || selectedIds.length > 16" @click="fileTask('archive_zip', [...selectedIds])">打包所选文件（{{ selectedIds.length }}）</button><button :disabled="busy" @click="fileTask('storage_check')">运行存储流程检查</button></div>
+      <label>本批输出上限（MB）<input v-model.number="outputMegabytes" type="number" min="1" :max="usage ? usage.quota_bytes / 1_000_000 : undefined" :disabled="busy || !canWrite" /></label>
+      <div class="file-actions"><button :disabled="busy || !canWrite || !selectedIds.length || selectedIds.length > 16" @click="fileTask('archive_zip', [...selectedIds])">打包所选文件（{{ selectedIds.length }}）</button><button :disabled="busy || !canWrite" @click="fileTask('storage_check')">运行存储流程检查</button></div>
       <p class="hint">ZIP 最多 16 个条目，暂不支持 ZIP64、加密或链接。打包与展开不延长原文件期限；流程检查仅生成两份小型测试文件，不分析语音。</p>
     </div>
     <label class="storage-sort">排序<select v-model="order" @change="refresh"><option value="expires">最早到期</option><option value="size">占用最大</option><option value="created">最新上传</option></select></label>
@@ -175,7 +182,7 @@ onUnmounted(() => { disposed = true; abort.abort(); clearInterval(timer); pendin
       <li v-for="item in assets" :key="item.id">
         <input v-if="fileJobs && readable(item)" v-model="selectedIds" type="checkbox" :value="item.id" :aria-label="`选择 ${item.name}`" :disabled="busy" />
         <div class="file-details"><strong>{{ item.name }}</strong><small>{{ ({input:'上传',result:'生成结果',archive:'归档资源',temporary:'临时文件'})[item.kind] }} · {{ bytes(item.size_bytes) }} · {{ label(item) }}</small><small>{{ date(item.expires_at) }} 到期</small></div>
-        <div class="file-actions"><a v-if="readable(item)" :href="`/api/v1/assets/${item.id}/content?expected_account=${ownerId}`" download>下载</a><button v-if="fileJobs && readable(item) && item.name.toLowerCase().endsWith('.zip')" :disabled="busy" @click="fileTask('extract_zip', [item.id])">展开 ZIP</button><button :disabled="busy" @click="confirmRemoval(item)">{{ item.state === 'delete_failed' ? '重试删除' : '删除' }}</button></div>
+        <div class="file-actions"><a v-if="readable(item)" :href="`/api/v1/assets/${item.id}/content?expected_account=${ownerId}`" download>下载</a><button v-if="fileJobs && readable(item) && item.name.toLowerCase().endsWith('.zip')" :disabled="busy || !canWrite" @click="fileTask('extract_zip', [item.id])">展开 ZIP</button><button :disabled="busy" @click="confirmRemoval(item)">{{ item.state === 'delete_failed' ? '重试删除' : '删除' }}</button></div>
       </li>
     </ul>
     <ModalDialog v-if="removal" title="删除这个文件？" @close="removal = null">

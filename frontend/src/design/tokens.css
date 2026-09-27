@@ -4,6 +4,7 @@
 
 *{box-sizing:border-box}
 body{margin:0}
+.page-zoom-controls{display:flex;align-items:center;gap:8px}.page-zoom-controls output{min-width:4em;text-align:center}
 button,input,select{font:inherit;color:inherit}
 button,a,select,input{ -webkit-tap-highlight-color:transparent}
 button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:34px;border:1px solid var(--border);border-radius:6px;background:var(--panel);padding:6px 12px;cursor:pointer;white-space:nowrap}
@@ -41,7 +42,7 @@ hr{border:0;border-top:1px solid var(--border);margin:22px 0}
 .skip-link{position:fixed;top:-100px;left:8px;z-index:100;padding:12px;background:var(--panel)}
 .skip-link:focus{top:8px}
 
-.app-shell{display:grid;grid-template-columns:224px minmax(0,1fr);height:100dvh;min-height:360px;overflow:hidden}
+.app-shell{display:grid;grid-template-columns:224px minmax(0,1fr);height:calc(100dvh / var(--page-scale,1));min-height:360px;overflow:hidden}
 .sidebar{background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:18px 12px 10px;min-height:0}
 .brand{display:flex;align-items:center;gap:8px;padding:0 1px 20px}
 .brand img{width:32px;height:32px;object-fit:contain}
@@ -61,9 +62,6 @@ hr{border:0;border-top:1px solid var(--border);margin:22px 0}
 .utility-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px}
 .utility-grid button{border:0;background:transparent;justify-content:flex-start;padding:5px 9px;font-size:12px;min-height:30px}
 .utility-grid svg{width:15px;height:15px}
-.theme-picker{display:flex;align-items:center;background:var(--panel);border:1px solid var(--border);border-radius:6px;padding-left:10px;margin-top:8px}
-.theme-picker svg{width:16px}
-.theme-picker select{flex:1;border:0;background:var(--panel);font-size:12px;padding:6px 8px}
 .main-shell{display:flex;flex-direction:column;min-width:0;min-height:0}
 .topbar{display:flex;align-items:center;min-height:49px;border-bottom:1px solid var(--border);background:var(--sidebar);padding:8px 16px 0;gap:14px}
 .workspace-tabs{display:flex;align-self:stretch;gap:4px;overflow-x:auto;min-width:0;scrollbar-width:thin;flex:1}
@@ -81,16 +79,12 @@ main{overflow:auto;flex:1;min-height:0;background:var(--panel);scrollbar-width:t
 .collapsed{grid-template-columns:64px minmax(0,1fr)}
 .collapsed .sidebar{padding-left:8px;padding-right:8px}
 .collapsed .brand{justify-content:center;flex-wrap:wrap;gap:4px;padding-bottom:10px}
-.collapsed .brand>span,.collapsed .nav-item>span,.collapsed .nav-group h2,.collapsed .utility-grid span,.collapsed .theme-picker svg{display:none}
+.collapsed .brand>span,.collapsed .nav-item>span,.collapsed .nav-group h2,.collapsed .utility-grid span{display:none}
 .collapsed .nav-item{justify-content:center;padding:7px}
 .collapsed .nav-group{margin-top:12px}
-.collapsed .search-box{padding-left:5px}
-.collapsed .search-box svg{display:none}
-.collapsed .search-box input{font-size:12px;padding:5px}
+.collapsed .search-box{display:none}
 .collapsed .utility-grid{grid-template-columns:1fr}
 .collapsed .utility-grid button{justify-content:center}
-.collapsed .theme-picker{padding:0}
-.collapsed .theme-picker select{width:45px;font-size:12px;padding-left:2px}
 
 .home-page{max-width:1600px;margin:auto;padding:30px 32px 12px}
 .welcome{display:flex;justify-content:space-between;align-items:center;padding:12px 0 36px;gap:20px}
@@ -198,9 +192,9 @@ main{overflow:auto;flex:1;min-height:0;background:var(--panel);scrollbar-width:t
 .error-banner>span{flex:1}
 .error-text{color:var(--danger);font-size:12px}
 
-dialog{padding:0;border:1px solid var(--border);border-radius:10px;background:var(--panel);color:var(--text);box-shadow:var(--shadow);width:min(560px,calc(100vw - 24px));max-height:calc(100dvh - 32px);overflow:hidden}
+dialog{padding:0;border:1px solid var(--border);border-radius:10px;background:var(--panel);color:var(--text);box-shadow:var(--shadow);width:min(560px,calc(100vw / var(--page-scale,1) - 24px));max-height:calc(100dvh / var(--page-scale,1) - 32px);overflow:hidden}
 dialog[open]{display:flex;flex-direction:column}
-dialog.wide{width:min(800px,calc(100vw - 24px))}
+dialog.wide{width:min(800px,calc(100vw / var(--page-scale,1) - 24px))}
 dialog::backdrop{background:var(--overlay)}
 .dialog-header{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);background:var(--panel)}
 .dialog-header h2{font-size:18px}
@@ -262,16 +256,12 @@ dialog::backdrop{background:var(--overlay)}
 @media(max-width:900px){.app-shell{grid-template-columns:64px minmax(0,1fr)}
 .sidebar{padding:12px 8px}
 .brand{justify-content:center;flex-wrap:wrap;padding-bottom:12px}
-.brand>span,.nav-item>span,.nav-group h2,.utility-grid span,.theme-picker svg{display:none}
+.brand>span,.nav-item>span,.nav-group h2,.utility-grid span{display:none}
 .nav-item{justify-content:center;padding:7px}
 .brand .icon-button{display:none}
-.search-box{padding-left:2px}
-.search-box svg{display:none}
-.search-box input{font-size:12px;padding:5px}
+.search-box{display:none}
 .utility-grid{grid-template-columns:1fr}
 .utility-grid button{justify-content:center}
-.theme-picker{padding:0}
-.theme-picker select{width:45px;font-size:12px;padding-left:2px}
 .tool-groups{grid-template-columns:1fr}
 .tool-group>button{min-height:60px}
 .tool-group button small{font-size:12px}
@@ -356,7 +346,7 @@ code,pre{font-family:var(--font-mono,Consolas),monospace;font-variant-ligatures:
 .reference-groups [role=tab]{white-space:normal;text-align:left;justify-content:flex-start}
 .reference-groups [aria-selected=true]{background:var(--selected);color:var(--accent);border-color:var(--accent);font-weight:600}
 
-.account-page{min-height:100dvh;display:flex;flex-direction:column;background:var(--app)}
+.account-page{min-height:calc(100dvh / var(--page-scale,1));display:flex;flex-direction:column;background:var(--app)}
 .account-header,.account-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 32px;background:var(--panel);border-bottom:1px solid var(--border)}
 .account-brand{display:flex;align-items:center;gap:12px}.account-brand img{width:40px;height:40px}.account-brand small{display:block;margin-top:4px}
 .account-main{flex:1;overflow:visible;background:transparent;padding:40px 24px}.account-card{max-width:460px;margin:24px auto;padding:32px;border:1px solid var(--border);border-radius:var(--radius);background:var(--panel)}
@@ -463,3 +453,9 @@ code,pre{font-family:var(--font-mono,Consolas),monospace;font-variant-ligatures:
 /* Typography overrides after module spacing rules. */
 .wave-viewport .time-axis,.spectrogram-canvas .frequency-axis{font-size:var(--figure-size)}
 .wave-track .ipa-text{font-size:var(--figure-size)}
+
+/* P04-UNIFY: shared density only; existing U2 colors and figure roles remain. */
+:root{--module-padding:12px;--module-gap:12px;--control-gap:8px;--control-size:14px;--support-size:12px;--control-height:34px}
+.module-frame.workspace-page,.module-frame.annotation-page,.module-frame.egg-page{padding:var(--module-padding);gap:var(--module-gap)}
+.module-frame .module-toolbar .m01-directory-bar{padding:0;margin:0;border:0;gap:var(--control-gap)}
+.module-frame .module-toolbar .m01-directory-bar button{font-size:var(--control-size);min-height:var(--control-height)}

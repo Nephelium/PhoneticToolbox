@@ -1,0 +1,44 @@
+# Include in nginx http{} after rendering; never overwrite the global nginx.conf.
+# Replace domain/certificate paths only after target approval. No private alias.
+log_format ptb_staging '$time_iso8601 $status $request_time $upstream_response_time';
+# No IP, URI/query, cookie, body, authorization or usernames in the access log.
+limit_conn_zone $binary_remote_addr zone=ptb_stage_conn:1m;
+
+server {
+    listen 80;
+    server_name REPLACE_DOMAIN;
+    return 308 https://REPLACE_DOMAIN$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name REPLACE_DOMAIN;
+    ssl_certificate /etc/letsencrypt/live/REPLACE_DOMAIN/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/REPLACE_DOMAIN/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    if ($host != REPLACE_DOMAIN) { return 403; }
+    client_max_body_size 1m;
+    client_body_buffer_size 1m;
+    client_body_timeout 30s;
+    send_timeout 30s;
+    limit_conn ptb_stage_conn 8;
+    access_log /var/log/nginx/ptb-staging-access.log ptb_staging;
+    # Error logs can include request URLs; disable site error logs to avoid
+    # identifiers. Application emits fixed machine codes; inspect global nginx
+    # error logging during target review before accepting the privacy gate.
+    error_log /dev/null crit;
+    add_header X-Content-Type-Options nosniff always;
+    add_header Referrer-Policy no-referrer always;
+
+    location = / { return 302 /server/; }
+    location = /server { return 308 /server/; }
+    location /server/ {
+        proxy_pass http://127.0.0.1:18765;
+        include /etc/nginx/snippets/ptb-staging-proxy.conf;
+    }
+    location /api/ {
+        proxy_pass http://127.0.0.1:18765;
+        include /etc/nginx/snippets/ptb-staging-proxy.conf;
+    }
+    location / { return 404; }
+}

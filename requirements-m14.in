@@ -1,0 +1,10 @@
+# M14 additions to an existing platform/scientific environment (CPython 3.11).
+# pandas/openpyxl reuse project-locked versions; no global installation.
+pandas==2.3.3
+openpyxl==3.1.5
+python-docx==1.2.0
+xlrd==2.0.2
+lxml==6.1.3
+typing-extensions==4.16.0
+# Fixture generation only, not a product runtime requirement:
+# xlwt==1.3.0

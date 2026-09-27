@@ -1,0 +1,8 @@
+<script setup lang="ts">
+import {ref,watch,onMounted} from 'vue';import type {Raster} from './port.ts';
+const props=defineProps<{data:Raster;start:number;end:number;windowMs:number}>();const canvas=ref<HTMLCanvasElement>();
+function paint(){const target=canvas.value;if(!target)return;const r=props.data,bytes=atob(r.pixels),off=document.createElement('canvas');off.width=r.width;off.height=r.height;const ctx=off.getContext('2d')!,img=ctx.createImageData(r.width,r.height);for(let y=0;y<r.height;y++)for(let x=0;x<r.width;x++){const p=((r.height-1-y)*r.width+x)*4,v=bytes.charCodeAt(y*r.width+x);img.data[p]=img.data[p+1]=img.data[p+2]=v;img.data[p+3]=255;}ctx.putImageData(img,0,0);target.width=1000;target.height=220;const out=target.getContext('2d')!;out.fillStyle='white';out.fillRect(0,0,1000,220);out.drawImage(off,(r.t0-props.start)/(props.end-props.start)*1000,0,Math.max(.001,r.t1-r.t0)/(props.end-props.start)*1000,220);}
+onMounted(paint);watch(()=>[props.data,props.start,props.end],paint);
+</script>
+<template><div class="synthesis-spectrum"><div class="track-label">语谱图 · Tukey 0.25 · {{windowMs}} ms · {{data.fmax.toFixed(0)}} Hz</div><canvas ref="canvas" role="img" aria-label="合成结果语谱图"/><div class="axis"><span>{{start.toFixed(3)}} s</span><span>{{end.toFixed(3)}} s</span></div><p class="hint">V2 功率谱与 5–99 百分位显示范围。灰度仅供预览，未校准为声压级。</p></div></template>
+<style scoped>canvas{width:100%;height:220px}.axis{display:flex;justify-content:space-between;font-family:var(--font-figure);font-size:var(--figure-size)}.synthesis-spectrum{border:1px solid var(--border);border-radius:8px;overflow:hidden}</style>

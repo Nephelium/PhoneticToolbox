@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-09-09",
-  "total_records": 333,
+  "total_records": 335,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -61,7 +61,9 @@
         "environment": ".venv/m01-ui",
         "verified_on": "2026-09-10"
       },
-      "m01_preview_method": "Real Sound.to_spectrogram; own bounded grayscale renderer using Gaussian 5 ms, 50 dB relative range and 6 dB/oct display preemphasis. No calibrated SPL or pixel-for-pixel Praat editor claim."
+      "m01_preview_method": "Real Sound.to_spectrogram; own bounded grayscale renderer using Gaussian 5 ms, 50 dB relative range and 6 dB/oct display preemphasis. No calibrated SPL or pixel-for-pixel Praat editor claim.",
+      "m07_migration_evidence": "docs/modules/evidence/M07-source-map.md",
+      "m07_scope": "V2 LPC-residual Python migration; independent original comparison, no paper-data redistribution; existing license review status retained."
     },
     {
       "id": "SRC-REAPER",
@@ -107,7 +109,9 @@
         "backend/src/ptb_worker/managed_scratch.py"
       ],
       "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json",
-      "m01_io_evidence": "docs/testing/m01-io-report.md"
+      "m01_io_evidence": "docs/testing/m01-io-report.md",
+      "m07_migration_evidence": "docs/modules/evidence/M07-source-map.md",
+      "m07_scope": "V2 LPC-residual Python migration; independent original comparison, no paper-data redistribution; existing license review status retained."
     },
     {
       "id": "SRC-IRAPT",
@@ -479,9 +483,12 @@
         }
       ],
       "evidence_files": [
-        "third_party/evidence/SRC-TDKLATT/README.md"
+        "third_party/evidence/SRC-TDKLATT/README.md",
+        "docs/modules/evidence/M06-source-map.md",
+        "tests/fixtures/m06/v2.json"
       ],
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "v3_migration": "2026-09-27 M06: direct V2 snapshot, original numerical functions retained; device/import exit/example removed; MIT notice and LICENSE included in core wheel. Original upstream included commit remains unknown."
     },
     {
       "id": "REF-KLATT",
@@ -532,7 +539,9 @@
       "evidence_files": [
         "third_party/evidence/SRC-ZAIWA/README.md"
       ],
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "m07_migration_evidence": "docs/modules/evidence/M07-source-map.md",
+      "m07_scope": "V2 LPC-residual Python migration; independent original comparison, no paper-data redistribution; existing license review status retained."
     },
     {
       "id": "REF-ZAIWA",
@@ -557,7 +566,9 @@
       "citation_title": "Contribution of F0 and phonation to tone perception in the Zaiwa language",
       "doi": "10.1016/j.wocn.2025.101413",
       "venue": "Journal of Phonetics",
-      "acknowledgement_group": "academic"
+      "acknowledgement_group": "academic",
+      "m07_migration_evidence": "docs/modules/evidence/M07-source-map.md",
+      "m07_scope": "V2 LPC-residual Python migration; independent original comparison, no paper-data redistribution; existing license review status retained."
     },
     {
       "id": "REF-GRIFFINLIM",
@@ -782,7 +793,7 @@
     },
     {
       "id": "SRC-MEDIAPIPE",
-      "title": "MediaPipe Face Mesh",
+      "title": "MediaPipe legacy Face Mesh / Web Face Landmarker",
       "kind": "runtime-and-model",
       "modules": [
         "M05"
@@ -791,11 +802,11 @@
         "documentation": "https://developers.google.com/edge/mediapipe/solutions/vision/face_landmarker",
         "repository": "https://github.com/google-ai-edge/mediapipe"
       },
-      "evidence": "lip_gui.py 使用 legacy Face Mesh；phonetic_311 安装 mediapipe 0.10.14，PyPI 对应发布元数据已核验。",
+      "evidence": "M05 independent V2 oracle and source/model hashes: tests/fixtures/m05/v2.json.gz; fixed Web artifacts: resources/m05/resources.json; backend comparison: docs/testing/m05-browser-report.md",
       "license": "Apache-2.0 for code; bundled model terms require artifact audit",
-      "notes": "官方当前 Face Landmarker 文档不能冒充本地使用新 API；具体 tflite 模型 hash/许可单独补齐。",
-      "verification_date": "2026-09-09",
-      "actual_included_version": "0.10.14",
+      "notes": "Web candidate failed numerical equivalence gate; legacy remains formal offline backend. Code Apache-2.0; bundled model redistribution audit remains open; local validation only.",
+      "verification_date": "2026-09-27",
+      "actual_included_version": "legacy Python 0.10.14; tasks-vision 0.10.14; face_landmarker float16/1",
       "observed_upstream_commit": null,
       "distribution_status": "review-required",
       "acknowledgement_group": "software"
@@ -829,13 +840,14 @@
         "M11"
       ],
       "urls": {
-        "documentation": "https://montreal-forced-aligner.readthedocs.io/en/latest/"
+        "documentation": "https://montreal-forced-aligner.readthedocs.io/en/v3.3.8/",
+        "license": "https://github.com/MontrealCorpusTools/Montreal-Forced-Aligner/blob/v3.3.8/LICENSE"
       },
-      "evidence": "mfa_alignment_service / pipeline 调用外部环境；官方文档已查阅。",
+      "evidence": "2026-09-27 实测既有 Windows MFA 3.3.8，193 个 Conda 包的来源/版本/hash/许可清单与离线候选验证见 docs/references/m11-runtime-audit.md、docs/testing/m11-report.md。",
       "license": "each executable/model/dictionary must be checked",
-      "notes": "MFA 程序、Kaldi 依赖、声学模型与词典分别列许可；本轮未安装/运行 MFA，版本待环境专项探测。",
-      "verification_date": "2026-09-09",
-      "actual_included_version": null,
+      "notes": "MFA MIT、Kaldi 与原生依赖、声学模型与词典分别核对。FFmpeg 此构建为 GPL；本地模型与上游发行摘要的绑定未闭合，完整可选包再分发审核仍待完成。主 EXE 未更新。",
+      "verification_date": "2026-09-27",
+      "actual_included_version": "3.3.8 (optional local Windows candidate only; not bundled in main EXE)",
       "observed_upstream_commit": null,
       "distribution_status": "review-required",
       "acknowledgement_group": "software"
@@ -1004,7 +1016,7 @@
         "frontend/src/modules/annotation/spectrum.ts",
         "desktop/src/ptb_desktop/annotation.py"
       ],
-      "modifications": "实例化原编辑状态和公共文件/字体/播放适配；完整点层保留、显式拒绝错误/越界、原子版本保存、网页不可变资源另存。初始迁移与修正分开提交。"
+      "modifications": "实例化原编辑状态和公共文件/字体/播放适配；完整点层保留、显式拒绝错误/越界、原子版本保存、网页不可变资源另存。初始迁移与修正分开提交。2026-09-19 M12-R5 保留原 Hann/FFT 函数，新增真实毫秒窗长及 FFT 补零、跨图边界编辑与原始 TextGrid 优先；不改原强度算法，不新增第三方依赖。"
     },
     {
       "id": "ASSET-MASCOT",
@@ -1049,101 +1061,107 @@
       "id": "SRC-REACT",
       "title": "React",
       "kind": "legacy-web-dependency",
-      "modules": [
-        "M15"
-      ],
+      "modules": [],
       "urls": {
         "repository": "https://github.com/facebook/react"
       },
       "evidence": "原 HTML/CDN import 已确认存在；具体锁定版本/脚本正文 license 尚需在前端迁移阶段逐个核验。",
       "license": "exact-version-license-pending",
-      "notes": "v3 构建本地静态资源并保存许可证，禁止发行时靠未锁定 CDN 加载运行。",
+      "notes": "仅 V2 感知实验历史依赖；2026-09-27 M15 使用现有 Vue，不将该旧 CDN 依赖打入 V3。",
       "verification_date": "2026-09-09",
       "actual_included_version": null,
       "observed_upstream_commit": null,
-      "distribution_status": "review-required",
+      "distribution_status": "not-included-in-v3-m15",
       "verification_status": "local-use-confirmed; upstream-artifact-review-pending",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "legacy_modules": [
+        "M15"
+      ]
     },
     {
       "id": "SRC-BABEL",
       "title": "Babel standalone",
       "kind": "legacy-web-dependency",
-      "modules": [
-        "M15"
-      ],
+      "modules": [],
       "urls": {
         "repository": "https://github.com/babel/babel"
       },
       "evidence": "原 HTML/CDN import 已确认存在；具体锁定版本/脚本正文 license 尚需在前端迁移阶段逐个核验。",
       "license": "exact-version-license-pending",
-      "notes": "v3 构建本地静态资源并保存许可证，禁止发行时靠未锁定 CDN 加载运行。",
+      "notes": "仅 V2 感知实验历史依赖；2026-09-27 M15 使用现有 Vue，不将该旧 CDN 依赖打入 V3。",
       "verification_date": "2026-09-09",
       "actual_included_version": null,
       "observed_upstream_commit": null,
-      "distribution_status": "review-required",
+      "distribution_status": "not-included-in-v3-m15",
       "verification_status": "local-use-confirmed; upstream-artifact-review-pending",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "legacy_modules": [
+        "M15"
+      ]
     },
     {
       "id": "SRC-TAILWIND",
       "title": "Tailwind CSS",
       "kind": "legacy-web-dependency",
-      "modules": [
-        "M15"
-      ],
+      "modules": [],
       "urls": {
         "repository": "https://github.com/tailwindlabs/tailwindcss"
       },
       "evidence": "原 HTML/CDN import 已确认存在；具体锁定版本/脚本正文 license 尚需在前端迁移阶段逐个核验。",
       "license": "exact-version-license-pending",
-      "notes": "v3 构建本地静态资源并保存许可证，禁止发行时靠未锁定 CDN 加载运行。",
+      "notes": "仅 V2 感知实验历史依赖；2026-09-27 M15 使用现有 Vue，不将该旧 CDN 依赖打入 V3。",
       "verification_date": "2026-09-09",
       "actual_included_version": null,
       "observed_upstream_commit": null,
-      "distribution_status": "review-required",
+      "distribution_status": "not-included-in-v3-m15",
       "verification_status": "local-use-confirmed; upstream-artifact-review-pending",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "legacy_modules": [
+        "M15"
+      ]
     },
     {
       "id": "SRC-SHEETJS",
       "title": "SheetJS",
-      "kind": "legacy-web-dependency",
+      "kind": "bundled-client-library",
       "modules": [
         "M15"
       ],
       "urls": {
-        "repository": "https://git.sheetjs.com/sheetjs/sheetjs"
+        "repository": "https://git.sheetjs.com/sheetjs/sheetjs",
+        "distribution": "https://cdn.sheetjs.com/xlsx-0.20.3/package/xlsx.mjs",
+        "license": "https://docs.sheetjs.com/docs/miscellany/license/"
       },
-      "evidence": "原 HTML/CDN import 已确认存在；具体锁定版本/脚本正文 license 尚需在前端迁移阶段逐个核验。",
-      "license": "exact-version-license-pending",
-      "notes": "v3 构建本地静态资源并保存许可证，禁止发行时靠未锁定 CDN 加载运行。",
-      "verification_date": "2026-09-09",
-      "actual_included_version": null,
+      "evidence": "frontend/src/modules/perception/vendor/xlsx.mjs 与 LICENSE，官方原件；sha256 见同目录 README。",
+      "license": "Apache-2.0",
+      "notes": "旧 HTML 引用 0.19.3；迁移锁定官方 CE 0.20.3 ESM，无外部运行依赖，不自动联网。",
+      "verification_date": "2026-09-27",
+      "actual_included_version": "0.20.3",
       "observed_upstream_commit": null,
-      "distribution_status": "review-required",
-      "verification_status": "local-use-confirmed; upstream-artifact-review-pending",
+      "distribution_status": "license-included",
+      "verification_status": "official-artifact-and-license-verified",
       "acknowledgement_group": "software"
     },
     {
       "id": "SRC-LUCIDE",
       "title": "Lucide",
       "kind": "legacy-web-dependency",
-      "modules": [
-        "M15"
-      ],
+      "modules": [],
       "urls": {
         "repository": "https://github.com/lucide-icons/lucide"
       },
       "evidence": "原 HTML/CDN import 已确认存在；具体锁定版本/脚本正文 license 尚需在前端迁移阶段逐个核验。",
       "license": "exact-version-license-pending",
-      "notes": "v3 构建本地静态资源并保存许可证，禁止发行时靠未锁定 CDN 加载运行。",
+      "notes": "仅 V2 感知实验历史依赖；2026-09-27 M15 使用现有 Vue，不将该旧 CDN 依赖打入 V3。",
       "verification_date": "2026-09-09",
       "actual_included_version": null,
       "observed_upstream_commit": null,
-      "distribution_status": "review-required",
+      "distribution_status": "not-included-in-v3-m15",
       "verification_status": "local-use-confirmed; upstream-artifact-review-pending",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "legacy_modules": [
+        "M15"
+      ]
     },
     {
       "id": "PKG-NUMPY",
@@ -1384,7 +1402,8 @@
       "kind": "installed-runtime-package",
       "modules": [
         "shared-runtime",
-        "M09"
+        "M09",
+        "M12"
       ],
       "actual_included_version": "0.13.1 in phonetic_311; M09 isolated runtime 0.13.1 in requirements-m09-ui.lock",
       "observed_upstream_commit": null,
@@ -1396,7 +1415,7 @@
       "license": "see exact release metadata / wheel audit pending",
       "authors": "Bastian Bechtold",
       "evidence": "Installed package version read without changing environment; corresponding official PyPI release metadata retrieved.",
-      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
+      "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated. M12-R4 uses the existing 0.13.1 runtime for bounded first-channel WAV preview reading in desktop/src/ptb_desktop/annotation_audio.py; no dependency upgrade or new validation.",
       "license_metadata_file": "third_party/licenses/pypi/soundfile-0.13.1-metadata.txt",
       "distribution_status": "actual-wheel-and-native-audit-required",
       "acknowledgement_group": "software",
@@ -6015,7 +6034,8 @@
       "title": "vue",
       "kind": "frontend-runtime-dependency",
       "modules": [
-        "P02"
+        "P02",
+        "M15"
       ],
       "authors": "Evan You",
       "actual_included_version": "3.5.42",
@@ -6832,7 +6852,8 @@
       "kind": "dependency",
       "modules": [
         "M01",
-        "M09"
+        "M09",
+        "M12"
       ],
       "authors": "Not recorded in installed metadata",
       "actual_included_version": "1.16.3",
@@ -6848,7 +6869,8 @@
         "backend/src/ptb_worker/io/audio.py",
         "requirements-m01-io.lock",
         "backend/src/ptb_worker/segment_child.py",
-        "backend/src/ptb_worker/science_child.py"
+        "backend/src/ptb_worker/science_child.py",
+        "desktop/src/ptb_desktop/annotation_audio.py"
       ],
       "relationship": "Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes",
       "evidence": "third_party/m01-dependency-inventory.json",
@@ -7302,6 +7324,41 @@
       ],
       "relationship": "Unmodified runtime dependency; no upstream source vendoring",
       "evidence": "third_party/m03-runtime-lock.json; third_party/m04-migration.json"
+    },
+    {
+      "id": "PROJECT-M05",
+      "title": "PhoneticToolbox 唇形指标迁移与本地采集适配",
+      "kind": "project-integration",
+      "modules": [
+        "M05"
+      ],
+      "authors": "井韶子 / PhoneticToolbox contributors",
+      "urls": {},
+      "license": "Project integration; third-party components separately listed",
+      "actual_included_version": "m05/1; lip-metrics-v2/1; decoded-pts/1",
+      "verification_date": "2026-09-27",
+      "distribution_status": "local-validation-only",
+      "acknowledgement_group": "software",
+      "evidence": "docs/modules/evidence/M05-source-map.md; docs/testing/m05-report.md"
+    },
+    {
+      "id": "ASSET-M05-NASA",
+      "title": "NASA Eileen Collins portrait via scikit-image",
+      "kind": "public-test-fixture",
+      "modules": [
+        "M05"
+      ],
+      "authors": "NASA",
+      "urls": {
+        "source": "https://scikit-image.org/docs/0.21.x/api/skimage.data.html#skimage.data.astronaut",
+        "terms": "https://www.nasa.gov/nasa-brand-center/images-and-media/"
+      },
+      "license": "NASA public-domain image; no endorsement or commercial likeness claim",
+      "actual_included_version": "scikit-image v0.19.3 astronaut.png",
+      "verification_date": "2026-09-27",
+      "distribution_status": "test-only",
+      "acknowledgement_group": "software",
+      "evidence": "resources/m05/resources.json; public derived engineering fixtures only; not natural speech or physiological truth"
     }
   ]
 }

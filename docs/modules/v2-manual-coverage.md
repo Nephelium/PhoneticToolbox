@@ -10,17 +10,17 @@
 | M02 参数显示 | 2.2 参数显示 | 已读全文及图2-9/2-11并对照_plot；同区叠加修正见M02-source-map |
 | M03 EGG 信号分析 | 3.1–3.4 | 2026-09-13六功能组已重核，见[m03-function-review](../testing/m03-function-review.md)；补总览单击/提交取消，完整M03仍in_progress |
 | M04 LPC 谱图 | 11.1（含11.6/11.7小标题） | 2026-09-13已读全文并核对四功能组，差异见[M04-source-map](evidence/M04-source-map.md)，A–C通过，D页面限定Chrome已验；E完整映射收口待办 |
-| M05 唇形提取 | 7.1–7.4 | 已定位，待逐项对照 |
-| M06 语音合成 | 4.1–4.5 | 已定位，待逐项对照 |
+| M05 唇形提取 | 7.1–7.4，13.4 offset | [六组映射与七项差异](evidence/M05-source-map.md)；Windows 分项验证，完整模块 in_progress |
+| M06 语音合成 | 4.1–4.5 | [六组映射及说明书/源码差异](evidence/M06-source-map.md)，Windows 定向验证；Linux 未过门 |
 | M07 发声类型合成 | 14.1–14.4 | 已定位，待逐项对照 |
 | M08 变速变调 | 5.1–5.4 | 已定位，待逐项对照 |
 | M09 语谱图转音频 | 9.1–9.2 | 已对照，频率起点修正与截图设备限制见M09-source-map |
 | M10 声道工作台 | 15.1–15.11 | 已定位，待逐项对照 |
-| M11 MFA 自动标注 | 8.1–8.3 | 已定位，待逐项对照 |
+| M11 MFA 自动标注 | 8.1–8.3 | 已对照四组及名称编码／默认值差异，[映射](evidence/M11-source-map.md)；平台状态见 M11 报告 |
 | M12 语音标注对齐 | 13.1–13.6 | [7组源码映射](evidence/M12-source-map.md)及[Windows开发态实测](../testing/m12-report.md) |
-| M13 普通话转 IPA | 10.1–10.2 | 已定位，待逐项对照 |
+| M13 普通话转 IPA | 10.1–10.2 | [4组源码映射](evidence/M13-source-map.md)、[操作说明](../manual/mandarin-ipa.md)及[限定平台实测](../testing/m13-report.md) |
 | M14 音系归纳 | 12.1–12.2 | 已定位，待逐项对照 |
-| M15 感知实验 | 6.1–6.2 | 已定位，待逐项对照 |
+| M15 感知实验 | 6.1–6.2 | 已全文逐项对照，[功能/源码差异与证据](evidence/M15-source-map.md)，TXT、autoPlay、复杂配置和 CSV/XLSX 差异单列 |
 
 ## M01 第 2.1 节对照
 

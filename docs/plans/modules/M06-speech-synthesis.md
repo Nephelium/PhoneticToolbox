@@ -1,6 +1,6 @@
 # M06 · 语音合成迁移计划
 
-状态：planned，未开始实现。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
+状态：in_progress。2026-09-27 Windows 开发态核心、统一页面、正式宿主与隔离 PostgreSQL 已完成定向验收；Linux 精确数值和任务边界未过门，能力关闭。见 [实施记录](M06-implementation.md)、[来源映射](../../modules/evidence/M06-source-map.md)、[验收报告](../../testing/m06-report.md)。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
 ## 现有代码与目标文件
 现有路径均已确认存在；目录内逐函数对应由实施第一步记录，避免把旧类名机械套给新实现。
@@ -8,14 +8,14 @@
 - [phonetic_toolbox/gui/widgets/speech_synthesis_widget.py](../../../phonetic_toolbox/gui/widgets/speech_synthesis_widget.py)
 - [phonetic_toolbox/core/synthesis/klatt](../../../phonetic_toolbox/core/synthesis/klatt)
 
-拟创建/修改路径（未来实现，不代表已经存在）：
+实际实施路径（其余历史候选由本节替代）：
 
 - `frontend/src/modules/speech-synthesis/SpeechSynthesisPage.vue`
 - `frontend/src/modules/speech-synthesis/state.ts`
 - `packages/phonetic_core/src/phonetic_core/synthesis/klatt/`
-- `backend/src/ptb_api/modules/speech_synthesis.py`
+- `backend/src/ptb_api/m06_models.py`、`backend/src/ptb_worker/m06_{task,executor,child}.py`
 - `tests/parity/test_speech_synthesis.py`
-- `frontend/tests/e2e/speech-synthesis.spec.ts`
+- `tests/e2e/m06-host.cjs`
 
 纯显示/客户端模块如果没有科学计算，不为凑层数创建空 core/API；仅创建真实需要的读取/转换边界。共用核心目录中的改动按文件独立提交，不能覆盖其他已迁移模块。
 
@@ -55,12 +55,12 @@ IPA 序列非法定位、手绘曲线覆盖、参数导入导出、源音频提�
 
 每个分组至少一个正常路径和一个相关错误/边界路径；录制、原生时序和数值算法必须在真实目标环境验证。
 
-拟建测试后的执行命令（当前不能当作已运行）：
+实际验收入口（完整环境与结果见报告）：
 
 ```powershell
 # 先激活 P02 建立并核验的 v3 环境，不改 phonetic_311。
 python -m pytest tests/parity/test_speech_synthesis.py -q
-npm --prefix frontend run test:e2e -- speech-synthesis.spec.ts
+node tests/e2e/m06-host.cjs
 ```
 
 CLI 参数和 npm scripts 在 P02 明确定义后才能使用；如实现路径不同，先更新本计划与架构记录。共享测试另见 P03/P11。两条命令不能代替本模块原生/设备手工验收。

@@ -16,6 +16,7 @@ from .io.scratch import no_links
 from .store import JobError,LOCAL_PROJECT,canonical,core_version
 from .policy import fenced,cancel_state
 from ptb_api.quota import StorageError
+from ptb_api.storage_policy import POLICY_VERSION
 from ptb_api.acoustic_batch_models import AcousticTaskManifest
 
 
@@ -51,13 +52,20 @@ class LocalAcousticFiles:
 
     @contextmanager
     def locked(self):
-        import msvcrt
+        if os.name == 'nt':
+            import msvcrt
+            acquire = lambda handle: msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+            release = lambda handle: msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+        else:
+            import fcntl
+            acquire = lambda handle: fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+            release = lambda handle: fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
         with self.thread_lock:
             no_links(self.root);path=self.root/'.ptb-local.lock';no_links(path)
             with path.open('r+b',buffering=0) as lock:
                 deadline=time.monotonic()+5
                 while True:
-                    try:msvcrt.locking(lock.fileno(),msvcrt.LK_NBLCK,1);break
+                    try:acquire(lock);break
                     except OSError:
                         if time.monotonic()>=deadline:raise StorageError('local_storage_busy',503) from None
                         time.sleep(.01)
@@ -68,7 +76,7 @@ class LocalAcousticFiles:
                     if state['version']!=1:raise StorageError('local_schema_mismatch',503)
                     self.state=state
                     yield state
-                finally:lock.seek(0);msvcrt.locking(lock.fileno(),msvcrt.LK_UNLCK,1)
+                finally:lock.seek(0);release(lock)
 
     @contextmanager
     def batch_transaction(self):
@@ -85,8 +93,8 @@ class LocalAcousticFiles:
         if shutil.disk_usage(self.root).free-reserved-extra<1_000_000_000:raise StorageError('disk_space_low',507)
 
     def import_input(self,raw,name,role):
-        suffix={'audio':'.wav','textgrid':'.textgrid','lip':'.lip.json','parent_result':'.ptb.json','legacy_result':('.xlsx','.ptb.sqlite','.ptb.sqlite3'),'image':('.png','.jpg','.jpeg','.bmp')}.get(role)
-        limit=64_000_000 if role=='audio' else 16_000_000 if role in ('parent_result','legacy_result','image') else 2_000_000
+        suffix={'transcript':('.lab','.txt','.textgrid'),'dictionary':('.dict','.txt'),'table':('.xlsx','.xls','.csv','.txt','.tsv'),'audio':('.wav','.mp3','.flac'),'textgrid':'.textgrid','lip':'.lip.json','parent_result':'.ptb.json','legacy_result':('.xlsx','.ptb.sqlite','.ptb.sqlite3'),'image':('.png','.jpg','.jpeg','.bmp')}.get(role)
+        limit=64_000_000 if role=='audio' else 16_000_000 if role=='dictionary' else 16_000_000 if role in ('parent_result','legacy_result','image') else 2_000_000
         if not suffix or not 0<len(raw)<=limit or not isinstance(name,str) or not 0<len(name)<=220 or any(c in name for c in '/\\:\x00') or not name.lower().endswith(suffix):
             raise JobError('invalid_local_input',422)
         sha=hashlib.sha256(raw).hexdigest()
@@ -108,8 +116,9 @@ class LocalAcousticFiles:
         for role,ref in inputs.items():
             if ref is None:continue
             a=self._asset(ref['asset_id'])
-            if a['state']!='ready' or a['sha256']!=ref['sha256'] or (role!='parent_result' and a['role']!=role):
+            if a['state']!='ready' or a['sha256']!=ref['sha256'] or (role not in ('parent_result','m07_analysis') and a['role']!=role):
                 raise JobError('input_unavailable',409)
+            if role=='m07_analysis' and not a['name'].endswith('.m07.json'):raise JobError('m07_analysis_unavailable',422)
             if role=='parent_result' and not a['name'].endswith('.ptb.json'):raise JobError('invalid_parent_result',422)
             if role=='parent_result':
                 producer=self.jobs._row(tx,a['job_id']) if a['job_id'] else None
@@ -217,13 +226,31 @@ class LocalAcousticFiles:
             from ptb_api.spec2wav_models import Spec2WavManifest
             operation=json.loads(job['snapshot'])['operation']
             model=Spec2WavManifest if operation=='spectrogram_to_audio' else AcousticTaskManifest
+            if operation=='lip_analysis':
+                from ptb_api.m05_models import M05Manifest
+                model=M05Manifest
+            if operation=='mfa_alignment':
+                from ptb_api.m11_models import M11Manifest
+                model=M11Manifest
+            if operation=='phonation_synthesis':
+                from ptb_api.m07_models import M07Manifest
+                model=M07Manifest
+            elif operation=='speech_synthesis':
+                from ptb_api.m06_models import M06Manifest
+                model=M06Manifest
+            if operation=='phonology_induction':
+                from ptb_api.m14_models import M14Manifest
+                model=M14Manifest
+            if operation=='pitch_manipulation':
+                from ptb_api.m08_models import M08Manifest
+                model=M08Manifest
             if operation=='lpc_analysis':
                 from ptb_api.lpc_models import LpcManifest
                 model=LpcManifest
             if operation=='egg_analysis':
                 from ptb_api.egg_models import EggManifest
                 model=EggManifest
-            manifest=model(operation=operation,core_version=core_version,
+            manifest=model(policy_version=POLICY_VERSION,operation=operation,core_version=core_version,
                 files=[dict(id=a['id'],name=a['name'],kind='result',size_bytes=a['size_bytes'],sha256=a['sha256'],expires_at=None) for a in outputs]).model_dump()
             self._fence(tx,identity)
             for a in outputs:a.update(state='ready',reserved_bytes=0)
@@ -238,7 +265,8 @@ class LocalAcousticFiles:
             if job and job['generation']==identity[2] and job['worker_id']==identity[1] and job['state'] in ('running','cancel_requested'):
                 state='cancelled' if job['state']=='cancel_requested' or code=='cancelled' else 'failed'
                 from .acoustic_errors import ACOUSTIC_ERRORS
-                code=code if code in ACOUSTIC_ERRORS | {'cancelled','input_unavailable','output_budget_exceeded','disk_space_low'} else 'execution_failed'
+                from .m05_errors import M05_ERRORS
+                code=code if code in ACOUSTIC_ERRORS | M05_ERRORS | {'cancelled','input_unavailable','output_budget_exceeded','disk_space_low'} else 'execution_failed'
                 tx.execute('UPDATE {jobs} SET state=?,error_code=?,worker_id=NULL,lease_until=NULL WHERE id=?',(state,code,job['id']))
                 job['state']=state;self.jobs._event(tx,job,code,tx.now())
             for a in self._outputs(identity):

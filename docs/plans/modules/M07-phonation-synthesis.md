@@ -1,6 +1,6 @@
 # M07 · 发声类型合成迁移计划
 
-状态：planned，未开始实现。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
+状态：in_progress。2026-09-27 Windows开发态闭环已限定verified，Linux/远程仍待准入。现行文件、命令和验收以 [实施计划](../2026-09-27-m07-implementation.md) 与 [主报告](../../testing/m07-report.md) 为准。以下为原迁移设计，旧拟建命令不得当当前入口。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
 ## 现有代码与目标文件
 现有路径均已确认存在；目录内逐函数对应由实施第一步记录，避免把旧类名机械套给新实现。

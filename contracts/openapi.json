@@ -398,6 +398,15 @@
           "metadata": {
             "$ref": "#/components/schemas/AcousticMetadata"
           },
+          "policy_version": {
+            "default": 1,
+            "enum": [
+              1,
+              2
+            ],
+            "title": "Policy Version",
+            "type": "integer"
+          },
           "retention": {
             "enum": [
               "server",
@@ -1211,6 +1220,15 @@
             ],
             "title": "Operation",
             "type": "string"
+          },
+          "policy_version": {
+            "default": 1,
+            "enum": [
+              1,
+              2
+            ],
+            "title": "Policy Version",
+            "type": "integer"
           }
         },
         "required": [
@@ -1312,6 +1330,15 @@
           "name": {
             "title": "Name",
             "type": "string"
+          },
+          "policy_version": {
+            "default": 1,
+            "enum": [
+              1,
+              2
+            ],
+            "title": "Policy Version",
+            "type": "integer"
           },
           "project_id": {
             "title": "Project Id",
@@ -1830,6 +1857,15 @@
             "default": "egg_analysis",
             "title": "Operation",
             "type": "string"
+          },
+          "policy_version": {
+            "default": 1,
+            "enum": [
+              1,
+              2
+            ],
+            "title": "Policy Version",
+            "type": "integer"
           }
         },
         "required": [
@@ -2326,7 +2362,7 @@
           },
           "max_output_bytes": {
             "default": 16777216,
-            "maximum": 5000000000.0,
+            "maximum": 1000000000.0,
             "minimum": 1.0,
             "title": "Max Output Bytes",
             "type": "integer"
@@ -2410,6 +2446,15 @@
             "default": "managed_files",
             "title": "Kind",
             "type": "string"
+          },
+          "policy_version": {
+            "default": 1,
+            "enum": [
+              1,
+              2
+            ],
+            "title": "Policy Version",
+            "type": "integer"
           }
         },
         "required": [
@@ -2776,7 +2821,13 @@
               "textgrid_segment",
               "spectrogram_to_audio",
               "egg_analysis",
-              "lpc_analysis"
+              "lpc_analysis",
+              "pitch_manipulation",
+              "phonology_induction",
+              "speech_synthesis",
+              "phonation_synthesis",
+              "mfa_alignment",
+              "lip_analysis"
             ],
             "title": "Operation",
             "type": "string"
@@ -2812,6 +2863,24 @@
                 "$ref": "#/components/schemas/LpcManifest"
               },
               {
+                "$ref": "#/components/schemas/M08Manifest"
+              },
+              {
+                "$ref": "#/components/schemas/M14Manifest"
+              },
+              {
+                "$ref": "#/components/schemas/M06Manifest"
+              },
+              {
+                "$ref": "#/components/schemas/M07Manifest"
+              },
+              {
+                "$ref": "#/components/schemas/M11Manifest"
+              },
+              {
+                "$ref": "#/components/schemas/M05Manifest"
+              },
+              {
                 "type": "null"
               }
             ],
@@ -2844,6 +2913,17 @@
           "updated_at": {
             "title": "Updated At",
             "type": "number"
+          },
+          "waiting_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Waiting Reason"
           }
         },
         "required": [
@@ -2858,6 +2938,84 @@
           "error_code"
         ],
         "title": "JobView",
+        "type": "object"
+      },
+      "LocalM11ComponentRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "enum": [
+              "check",
+              "import"
+            ],
+            "title": "Action",
+            "type": "string"
+          },
+          "archive": {
+            "anyOf": [
+              {
+                "maxLength": 4096,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archive"
+          },
+          "dictionary": {
+            "maxLength": 4096,
+            "title": "Dictionary",
+            "type": "string"
+          },
+          "manifest": {
+            "anyOf": [
+              {
+                "maxLength": 4096,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Manifest"
+          },
+          "model": {
+            "maxLength": 4096,
+            "title": "Model",
+            "type": "string"
+          },
+          "runtime": {
+            "anyOf": [
+              {
+                "maxLength": 4096,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Runtime"
+          },
+          "trusted_manifest_sha256": {
+            "anyOf": [
+              {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trusted Manifest Sha256"
+          }
+        },
+        "required": [
+          "action",
+          "model",
+          "dictionary"
+        ],
+        "title": "LocalM11ComponentRequest",
         "type": "object"
       },
       "LoginInput": {
@@ -2917,6 +3075,15 @@
             "default": "lpc_analysis",
             "title": "Operation",
             "type": "string"
+          },
+          "policy_version": {
+            "default": 1,
+            "enum": [
+              1,
+              2
+            ],
+            "title": "Policy Version",
+            "type": "integer"
           }
         },
         "required": [
@@ -3080,6 +3247,1311 @@
           "roi_end"
         ],
         "title": "LpcTaskConfig",
+        "type": "object"
+      },
+      "M05Block": {
+        "additionalProperties": false,
+        "properties": {
+          "base64": {
+            "maxLength": 349528,
+            "title": "Base64",
+            "type": "string"
+          },
+          "offset": {
+            "maximum": 128000000.0,
+            "minimum": 0.0,
+            "title": "Offset",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "offset",
+          "base64"
+        ],
+        "title": "M05Block",
+        "type": "object"
+      },
+      "M05Config": {
+        "additionalProperties": false,
+        "properties": {
+          "animation": {
+            "default": "none",
+            "enum": [
+              "none",
+              "mp4",
+              "gif"
+            ],
+            "title": "Animation",
+            "type": "string"
+          },
+          "cutoff_hz": {
+            "default": 15.0,
+            "maximum": 240.0,
+            "minimum": 1.0,
+            "title": "Cutoff Hz",
+            "type": "number"
+          },
+          "filter_enabled": {
+            "default": true,
+            "title": "Filter Enabled",
+            "type": "boolean"
+          },
+          "offset": {
+            "default": 0.0,
+            "maximum": 2.0,
+            "minimum": -2.0,
+            "title": "Offset",
+            "type": "number"
+          },
+          "quality": {
+            "default": "standard",
+            "enum": [
+              "high",
+              "standard",
+              "small"
+            ],
+            "title": "Quality",
+            "type": "string"
+          }
+        },
+        "title": "M05Config",
+        "type": "object"
+      },
+      "M05Manifest": {
+        "additionalProperties": false,
+        "properties": {
+          "complete": {
+            "const": true,
+            "default": true,
+            "title": "Complete",
+            "type": "boolean"
+          },
+          "core_version": {
+            "title": "Core Version",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/AcousticManagedFile"
+            },
+            "maxItems": 12,
+            "minItems": 5,
+            "title": "Files",
+            "type": "array"
+          },
+          "kind": {
+            "const": "managed_m05_files",
+            "default": "managed_m05_files",
+            "title": "Kind",
+            "type": "string"
+          },
+          "operation": {
+            "const": "lip_analysis",
+            "default": "lip_analysis",
+            "title": "Operation",
+            "type": "string"
+          },
+          "policy_version": {
+            "default": 1,
+            "enum": [
+              1,
+              2
+            ],
+            "title": "Policy Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "core_version",
+          "files"
+        ],
+        "title": "M05Manifest",
+        "type": "object"
+      },
+      "M05Request": {
+        "additionalProperties": false,
+        "properties": {
+          "config": {
+            "$ref": "#/components/schemas/M05Config"
+          },
+          "idempotency_key": {
+            "pattern": "^[A-Za-z0-9_-]{8,80}$",
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "project_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "m05/1",
+            "default": "m05/1",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "video": {
+            "$ref": "#/components/schemas/AcousticAssetRef"
+          }
+        },
+        "required": [
+          "project_id",
+          "idempotency_key",
+          "video"
+        ],
+        "title": "M05Request",
+        "type": "object"
+      },
+      "M05Upload": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "maxLength": 220,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "size": {
+            "maximum": 128000000.0,
+            "minimum": 1.0,
+            "title": "Size",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "size"
+        ],
+        "title": "M05Upload",
+        "type": "object"
+      },
+      "M06Manifest": {
+        "additionalProperties": false,
+        "properties": {
+          "complete": {
+            "const": true,
+            "default": true,
+            "title": "Complete",
+            "type": "boolean"
+          },
+          "core_version": {
+            "title": "Core Version",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/AcousticManagedFile"
+            },
+            "maxItems": 3,
+            "minItems": 2,
+            "title": "Files",
+            "type": "array"
+          },
+          "kind": {
+            "const": "managed_m06_files",
+            "default": "managed_m06_files",
+            "title": "Kind",
+            "type": "string"
+          },
+          "operation": {
+            "const": "speech_synthesis",
+            "default": "speech_synthesis",
+            "title": "Operation",
+            "type": "string"
+          },
+          "policy_version": {
+            "default": 1,
+            "enum": [
+              1,
+              2
+            ],
+            "title": "Policy Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "core_version",
+          "files"
+        ],
+        "title": "M06Manifest",
+        "type": "object"
+      },
+      "M06Request": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "enum": [
+              "generate",
+              "synthesize",
+              "extract"
+            ],
+            "title": "Action",
+            "type": "string"
+          },
+          "audio": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AcousticAssetRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "idempotency_key": {
+            "pattern": "^[A-Za-z0-9_-]{8,80}$",
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/AcousticAssetRef"
+          },
+          "project_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "m06/1",
+            "default": "m06/1",
+            "title": "Schema Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id",
+          "idempotency_key",
+          "action",
+          "parameters"
+        ],
+        "title": "M06Request",
+        "type": "object"
+      },
+      "M07Analysis": {
+        "additionalProperties": false,
+        "properties": {
+          "f0_backend": {
+            "default": "parselmouth",
+            "enum": [
+              "parselmouth",
+              "reaper"
+            ],
+            "title": "F0 Backend",
+            "type": "string"
+          },
+          "f0_frame_interval_ms": {
+            "default": 1,
+            "maximum": 20.0,
+            "minimum": 0.5,
+            "title": "F0 Frame Interval Ms",
+            "type": "number"
+          },
+          "frame_length": {
+            "default": 128,
+            "maximum": 1024.0,
+            "minimum": 32.0,
+            "title": "Frame Length",
+            "type": "integer"
+          },
+          "frame_shift": {
+            "default": 32,
+            "maximum": 512.0,
+            "minimum": 8.0,
+            "title": "Frame Shift",
+            "type": "integer"
+          },
+          "lpc_order": {
+            "default": 20,
+            "maximum": 60.0,
+            "minimum": 4.0,
+            "title": "Lpc Order",
+            "type": "integer"
+          },
+          "max_f0_hz": {
+            "default": 300,
+            "maximum": 1000.0,
+            "minimum": 50.0,
+            "title": "Max F0 Hz",
+            "type": "number"
+          },
+          "min_f0_hz": {
+            "default": 50,
+            "maximum": 500.0,
+            "minimum": 20.0,
+            "title": "Min F0 Hz",
+            "type": "number"
+          },
+          "negative_peak_threshold": {
+            "default": -0.005,
+            "maximum": 0.0,
+            "minimum": -0.2,
+            "title": "Negative Peak Threshold",
+            "type": "number"
+          },
+          "preemphasis": {
+            "default": 0.98,
+            "exclusiveMaximum": 1.0,
+            "minimum": 0.0,
+            "title": "Preemphasis",
+            "type": "number"
+          },
+          "pulse_inner_periods": {
+            "default": 0.5,
+            "maximum": 1.2,
+            "minimum": 0.1,
+            "title": "Pulse Inner Periods",
+            "type": "number"
+          },
+          "pulse_outer_periods": {
+            "default": 1.5,
+            "maximum": 3.0,
+            "minimum": 0.6,
+            "title": "Pulse Outer Periods",
+            "type": "number"
+          },
+          "silence_padding_ms": {
+            "default": 8,
+            "maximum": 80.0,
+            "minimum": 0.0,
+            "title": "Silence Padding Ms",
+            "type": "number"
+          },
+          "silence_threshold_db": {
+            "default": -45,
+            "maximum": -10.0,
+            "minimum": -80.0,
+            "title": "Silence Threshold Db",
+            "type": "number"
+          },
+          "target_sample_rate": {
+            "const": 11025,
+            "default": 11025,
+            "title": "Target Sample Rate",
+            "type": "integer"
+          },
+          "trim_silence": {
+            "default": true,
+            "title": "Trim Silence",
+            "type": "boolean"
+          },
+          "voiced_margin_ms": {
+            "default": 30,
+            "maximum": 120.0,
+            "minimum": 0.0,
+            "title": "Voiced Margin Ms",
+            "type": "number"
+          },
+          "window_name": {
+            "default": "hamming",
+            "enum": [
+              "hamming",
+              "hann",
+              "blackman",
+              "rectangular"
+            ],
+            "title": "Window Name",
+            "type": "string"
+          }
+        },
+        "title": "M07Analysis",
+        "type": "object"
+      },
+      "M07Controls": {
+        "additionalProperties": false,
+        "properties": {
+          "axis": {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 200,
+            "minItems": 2,
+            "title": "Axis",
+            "type": "array"
+          },
+          "source": {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 200,
+            "minItems": 2,
+            "title": "Source",
+            "type": "array"
+          },
+          "target": {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 200,
+            "minItems": 2,
+            "title": "Target",
+            "type": "array"
+          }
+        },
+        "required": [
+          "axis",
+          "source",
+          "target"
+        ],
+        "title": "M07Controls",
+        "type": "object"
+      },
+      "M07Generation": {
+        "additionalProperties": false,
+        "properties": {
+          "energy_match": {
+            "default": true,
+            "title": "Energy Match",
+            "type": "boolean"
+          },
+          "normalize_to_source": {
+            "default": true,
+            "title": "Normalize To Source",
+            "type": "boolean"
+          },
+          "output_peak_limit": {
+            "default": 0.98,
+            "exclusiveMinimum": 0.0,
+            "maximum": 1.0,
+            "title": "Output Peak Limit",
+            "type": "number"
+          },
+          "step_count": {
+            "default": 9,
+            "maximum": 50.0,
+            "minimum": 2.0,
+            "title": "Step Count",
+            "type": "integer"
+          }
+        },
+        "title": "M07Generation",
+        "type": "object"
+      },
+      "M07Manifest": {
+        "additionalProperties": false,
+        "properties": {
+          "complete": {
+            "const": true,
+            "default": true,
+            "title": "Complete",
+            "type": "boolean"
+          },
+          "core_version": {
+            "title": "Core Version",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/AcousticManagedFile"
+            },
+            "maxItems": 55,
+            "minItems": 2,
+            "title": "Files",
+            "type": "array"
+          },
+          "kind": {
+            "const": "managed_m07_files",
+            "default": "managed_m07_files",
+            "title": "Kind",
+            "type": "string"
+          },
+          "operation": {
+            "const": "phonation_synthesis",
+            "default": "phonation_synthesis",
+            "title": "Operation",
+            "type": "string"
+          },
+          "policy_version": {
+            "default": 1,
+            "enum": [
+              1,
+              2
+            ],
+            "title": "Policy Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "core_version",
+          "files"
+        ],
+        "title": "M07Manifest",
+        "type": "object"
+      },
+      "M07Request": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "enum": [
+              "analyze",
+              "apply",
+              "generate"
+            ],
+            "title": "Action",
+            "type": "string"
+          },
+          "alignment": {
+            "default": "normalize",
+            "enum": [
+              "normalize",
+              "onset"
+            ],
+            "title": "Alignment",
+            "type": "string"
+          },
+          "analysis": {
+            "$ref": "#/components/schemas/M07Analysis"
+          },
+          "analysis_job_id": {
+            "anyOf": [
+              {
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analysis Job Id"
+          },
+          "batch_group_count": {
+            "default": 1,
+            "enum": [
+              1,
+              6
+            ],
+            "title": "Batch Group Count",
+            "type": "integer"
+          },
+          "batch_group_index": {
+            "default": 0,
+            "maximum": 5.0,
+            "minimum": 0.0,
+            "title": "Batch Group Index",
+            "type": "integer"
+          },
+          "batch_id": {
+            "anyOf": [
+              {
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Id"
+          },
+          "continuum_type": {
+            "default": 2,
+            "enum": [
+              1,
+              2,
+              3
+            ],
+            "title": "Continuum Type",
+            "type": "integer"
+          },
+          "controls": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/M07Controls"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "generation": {
+            "$ref": "#/components/schemas/M07Generation"
+          },
+          "idempotency_key": {
+            "pattern": "^[A-Za-z0-9_-]{8,80}$",
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "point_count": {
+            "default": 21,
+            "maximum": 200.0,
+            "minimum": 20.0,
+            "title": "Point Count",
+            "type": "integer"
+          },
+          "project_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "reverse_direction": {
+            "default": false,
+            "title": "Reverse Direction",
+            "type": "boolean"
+          },
+          "schema_version": {
+            "const": "m07/1",
+            "default": "m07/1",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "source": {
+            "$ref": "#/components/schemas/AcousticAssetRef"
+          },
+          "target": {
+            "$ref": "#/components/schemas/AcousticAssetRef"
+          }
+        },
+        "required": [
+          "project_id",
+          "idempotency_key",
+          "action",
+          "source",
+          "target"
+        ],
+        "title": "M07Request",
+        "type": "object"
+      },
+      "M08Config": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "enum": [
+              "preview",
+              "synthesize",
+              "transform",
+              "linear"
+            ],
+            "title": "Action",
+            "type": "string"
+          },
+          "end": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End"
+          },
+          "modified_f0": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "maxItems": 200000,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Modified F0"
+          },
+          "offset": {
+            "default": false,
+            "title": "Offset",
+            "type": "boolean"
+          },
+          "pitch_hz": {
+            "default": 0.0,
+            "title": "Pitch Hz",
+            "type": "number"
+          },
+          "pitch_ratio": {
+            "default": 1.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Pitch Ratio",
+            "type": "number"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/M08Point"
+            },
+            "maxItems": 64,
+            "title": "Points",
+            "type": "array"
+          },
+          "speed": {
+            "default": 1.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Speed",
+            "type": "number"
+          },
+          "start": {
+            "default": 0,
+            "title": "Start",
+            "type": "number"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "title": "M08Config",
+        "type": "object"
+      },
+      "M08Manage": {
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "items": {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+              "type": "string"
+            },
+            "maxItems": 256,
+            "minItems": 1,
+            "title": "Ids",
+            "type": "array"
+          },
+          "names": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 256,
+            "title": "Names",
+            "type": "array"
+          },
+          "project_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "source": {
+            "$ref": "#/components/schemas/AcousticAssetRef"
+          }
+        },
+        "required": [
+          "project_id",
+          "source",
+          "ids"
+        ],
+        "title": "M08Manage",
+        "type": "object"
+      },
+      "M08Manifest": {
+        "additionalProperties": false,
+        "properties": {
+          "aliases": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Aliases",
+            "type": "object"
+          },
+          "complete": {
+            "const": true,
+            "default": true,
+            "title": "Complete",
+            "type": "boolean"
+          },
+          "core_version": {
+            "title": "Core Version",
+            "type": "string"
+          },
+          "deleted": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 256,
+            "title": "Deleted",
+            "type": "array"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/AcousticManagedFile"
+            },
+            "maxItems": 258,
+            "minItems": 1,
+            "title": "Files",
+            "type": "array"
+          },
+          "kind": {
+            "const": "managed_m08_files",
+            "default": "managed_m08_files",
+            "title": "Kind",
+            "type": "string"
+          },
+          "operation": {
+            "const": "pitch_manipulation",
+            "default": "pitch_manipulation",
+            "title": "Operation",
+            "type": "string"
+          },
+          "policy_version": {
+            "default": 1,
+            "enum": [
+              1,
+              2
+            ],
+            "title": "Policy Version",
+            "type": "integer"
+          },
+          "saved": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 256,
+            "title": "Saved",
+            "type": "array"
+          }
+        },
+        "required": [
+          "core_version",
+          "files"
+        ],
+        "title": "M08Manifest",
+        "type": "object"
+      },
+      "M08Point": {
+        "additionalProperties": false,
+        "properties": {
+          "freqs": {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 256,
+            "minItems": 1,
+            "title": "Freqs",
+            "type": "array"
+          },
+          "mode": {
+            "default": "order",
+            "enum": [
+              "full",
+              "order",
+              "reverse",
+              "constant"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "time": {
+            "title": "Time",
+            "type": "number"
+          }
+        },
+        "required": [
+          "time",
+          "freqs"
+        ],
+        "title": "M08Point",
+        "type": "object"
+      },
+      "M08Request": {
+        "additionalProperties": false,
+        "properties": {
+          "audio": {
+            "$ref": "#/components/schemas/AcousticAssetRef"
+          },
+          "config": {
+            "$ref": "#/components/schemas/M08Config"
+          },
+          "idempotency_key": {
+            "pattern": "^[A-Za-z0-9_-]{8,80}$",
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "project_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "m08/1",
+            "default": "m08/1",
+            "title": "Schema Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id",
+          "idempotency_key",
+          "audio",
+          "config"
+        ],
+        "title": "M08Request",
+        "type": "object"
+      },
+      "M08Source": {
+        "additionalProperties": false,
+        "properties": {
+          "project_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "source": {
+            "$ref": "#/components/schemas/AcousticAssetRef"
+          }
+        },
+        "required": [
+          "project_id",
+          "source"
+        ],
+        "title": "M08Source",
+        "type": "object"
+      },
+      "M11Config": {
+        "additionalProperties": false,
+        "properties": {
+          "beam": {
+            "default": 10,
+            "maximum": 10000.0,
+            "minimum": 1.0,
+            "title": "Beam",
+            "type": "integer"
+          },
+          "retry_beam": {
+            "default": 40,
+            "maximum": 40000.0,
+            "minimum": 1.0,
+            "title": "Retry Beam",
+            "type": "integer"
+          }
+        },
+        "title": "M11Config",
+        "type": "object"
+      },
+      "M11CorpusItem": {
+        "additionalProperties": false,
+        "properties": {
+          "audio": {
+            "$ref": "#/components/schemas/AcousticAssetRef"
+          },
+          "name": {
+            "maxLength": 240,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "transcript": {
+            "$ref": "#/components/schemas/AcousticAssetRef"
+          },
+          "transcript_format": {
+            "default": ".lab",
+            "enum": [
+              ".lab",
+              ".txt",
+              ".TextGrid"
+            ],
+            "title": "Transcript Format",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "audio",
+          "transcript"
+        ],
+        "title": "M11CorpusItem",
+        "type": "object"
+      },
+      "M11Manifest": {
+        "additionalProperties": false,
+        "properties": {
+          "complete": {
+            "const": true,
+            "default": true,
+            "title": "Complete",
+            "type": "boolean"
+          },
+          "core_version": {
+            "title": "Core Version",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/AcousticManagedFile"
+            },
+            "maxItems": 102,
+            "minItems": 2,
+            "title": "Files",
+            "type": "array"
+          },
+          "kind": {
+            "const": "managed_m11_files",
+            "default": "managed_m11_files",
+            "title": "Kind",
+            "type": "string"
+          },
+          "operation": {
+            "const": "mfa_alignment",
+            "default": "mfa_alignment",
+            "title": "Operation",
+            "type": "string"
+          },
+          "policy_version": {
+            "default": 1,
+            "enum": [
+              1,
+              2
+            ],
+            "title": "Policy Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "core_version",
+          "files"
+        ],
+        "title": "M11Manifest",
+        "type": "object"
+      },
+      "M11Request": {
+        "additionalProperties": false,
+        "properties": {
+          "config": {
+            "$ref": "#/components/schemas/M11Config"
+          },
+          "corpus": {
+            "items": {
+              "$ref": "#/components/schemas/M11CorpusItem"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Corpus",
+            "type": "array"
+          },
+          "dictionary": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AcousticAssetRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "idempotency_key": {
+            "pattern": "^[A-Za-z0-9_-]{8,80}$",
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "model_id": {
+            "pattern": "^[a-zA-Z0-9_-]{1,80}$",
+            "title": "Model Id",
+            "type": "string"
+          },
+          "project_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "runtime_id": {
+            "pattern": "^[a-zA-Z0-9_-]{1,80}$",
+            "title": "Runtime Id",
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "m11/1",
+            "default": "m11/1",
+            "title": "Schema Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id",
+          "idempotency_key",
+          "runtime_id",
+          "model_id",
+          "corpus"
+        ],
+        "title": "M11Request",
+        "type": "object"
+      },
+      "M14Config": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "enum": [
+              "preview",
+              "export"
+            ],
+            "title": "Action",
+            "type": "string"
+          },
+          "consonant_only_as_zero_initial": {
+            "default": true,
+            "title": "Consonant Only As Zero Initial",
+            "type": "boolean"
+          },
+          "font": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FigureFontSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "settings": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/M14Settings"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "skip_first_row": {
+            "default": true,
+            "title": "Skip First Row",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "title": "M14Config",
+        "type": "object"
+      },
+      "M14Manifest": {
+        "additionalProperties": false,
+        "properties": {
+          "complete": {
+            "const": true,
+            "default": true,
+            "title": "Complete",
+            "type": "boolean"
+          },
+          "core_version": {
+            "title": "Core Version",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/AcousticManagedFile"
+            },
+            "maxItems": 3,
+            "minItems": 1,
+            "title": "Files",
+            "type": "array"
+          },
+          "kind": {
+            "const": "managed_m14_files",
+            "default": "managed_m14_files",
+            "title": "Kind",
+            "type": "string"
+          },
+          "operation": {
+            "const": "phonology_induction",
+            "default": "phonology_induction",
+            "title": "Operation",
+            "type": "string"
+          },
+          "policy_version": {
+            "default": 1,
+            "enum": [
+              1,
+              2
+            ],
+            "title": "Policy Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "core_version",
+          "files"
+        ],
+        "title": "M14Manifest",
+        "type": "object"
+      },
+      "M14Request": {
+        "additionalProperties": false,
+        "properties": {
+          "config": {
+            "$ref": "#/components/schemas/M14Config"
+          },
+          "idempotency_key": {
+            "pattern": "^[A-Za-z0-9_-]{8,80}$",
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "project_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "m14/1",
+            "default": "m14/1",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "table": {
+            "$ref": "#/components/schemas/AcousticAssetRef"
+          }
+        },
+        "required": [
+          "project_id",
+          "idempotency_key",
+          "table",
+          "config"
+        ],
+        "title": "M14Request",
+        "type": "object"
+      },
+      "M14Settings": {
+        "additionalProperties": false,
+        "properties": {
+          "final_map": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "maxProperties": 10000,
+            "title": "Final Map",
+            "type": "object"
+          },
+          "final_order": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10000,
+            "title": "Final Order",
+            "type": "array"
+          },
+          "initial_map": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "maxProperties": 10000,
+            "title": "Initial Map",
+            "type": "object"
+          },
+          "initial_order": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10000,
+            "title": "Initial Order",
+            "type": "array"
+          },
+          "tone_map": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "maxProperties": 10000,
+            "title": "Tone Map",
+            "type": "object"
+          },
+          "tone_order": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10000,
+            "title": "Tone Order",
+            "type": "array"
+          }
+        },
+        "required": [
+          "tone_map",
+          "tone_order",
+          "initial_order",
+          "final_order"
+        ],
+        "title": "M14Settings",
         "type": "object"
       },
       "ParameterTable": {
@@ -3333,6 +4805,12 @@
                 "managed_egg_files": "#/components/schemas/EggManifest",
                 "managed_files": "#/components/schemas/FileManifest",
                 "managed_lpc_files": "#/components/schemas/LpcManifest",
+                "managed_m05_files": "#/components/schemas/M05Manifest",
+                "managed_m06_files": "#/components/schemas/M06Manifest",
+                "managed_m07_files": "#/components/schemas/M07Manifest",
+                "managed_m08_files": "#/components/schemas/M08Manifest",
+                "managed_m11_files": "#/components/schemas/M11Manifest",
+                "managed_m14_files": "#/components/schemas/M14Manifest",
                 "managed_spec2wav_files": "#/components/schemas/Spec2WavManifest",
                 "pipeline_check_metadata": "#/components/schemas/JobManifest"
               },
@@ -3359,6 +4837,24 @@
               },
               {
                 "$ref": "#/components/schemas/LpcManifest"
+              },
+              {
+                "$ref": "#/components/schemas/M08Manifest"
+              },
+              {
+                "$ref": "#/components/schemas/M14Manifest"
+              },
+              {
+                "$ref": "#/components/schemas/M06Manifest"
+              },
+              {
+                "$ref": "#/components/schemas/M07Manifest"
+              },
+              {
+                "$ref": "#/components/schemas/M11Manifest"
+              },
+              {
+                "$ref": "#/components/schemas/M05Manifest"
               }
             ],
             "title": "Manifest"
@@ -3575,6 +5071,15 @@
             "default": "spectrogram_to_audio",
             "title": "Operation",
             "type": "string"
+          },
+          "policy_version": {
+            "default": 1,
+            "enum": [
+              1,
+              2
+            ],
+            "title": "Policy Version",
+            "type": "integer"
           }
         },
         "required": [
@@ -3734,6 +5239,20 @@
             "title": "Frozen",
             "type": "boolean"
           },
+          "over_quota": {
+            "default": false,
+            "title": "Over Quota",
+            "type": "boolean"
+          },
+          "policy_version": {
+            "default": 1,
+            "enum": [
+              1,
+              2
+            ],
+            "title": "Policy Version",
+            "type": "integer"
+          },
           "quota_bytes": {
             "title": "Quota Bytes",
             "type": "integer"
@@ -3744,6 +5263,11 @@
           },
           "reserved_bytes": {
             "title": "Reserved Bytes",
+            "type": "integer"
+          },
+          "retention_seconds": {
+            "default": 604800,
+            "title": "Retention Seconds",
             "type": "integer"
           },
           "used_bytes": {
@@ -3896,7 +5420,7 @@
           "expected_bytes": {
             "anyOf": [
               {
-                "maximum": 5000000000.0,
+                "maximum": 1000000000.0,
                 "minimum": 0.0,
                 "type": "integer"
               },
@@ -5129,6 +6653,753 @@
           }
         },
         "summary": "Lpc Fonts",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m05/catalog": {
+      "get": {
+        "operationId": "lip_catalog",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "M05 Catalog",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m05/create": {
+      "post": {
+        "operationId": "create_lip_job",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/M05Request"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "M05 Create",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m05/uploads": {
+      "post": {
+        "operationId": "begin_local_lip_video",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/M05Upload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "M05 Begin",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m05/uploads/{key}": {
+      "put": {
+        "operationId": "write_local_lip_video",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/M05Block"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "M05 Block",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m05/uploads/{key}/abort": {
+      "post": {
+        "operationId": "abort_local_lip_video",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Key",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "M05 Abort",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m05/uploads/{key}/finalize": {
+      "post": {
+        "operationId": "finalize_local_lip_video",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Key",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "M05 Finish",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m05/{key}/repeat": {
+      "post": {
+        "operationId": "render_lip_animation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/M05Config"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "M05 Repeat",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m06/create": {
+      "post": {
+        "operationId": "create_speech_synthesis_job",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/M06Request"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create M06",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m07/create": {
+      "post": {
+        "operationId": "create_phonation_synthesis_job",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/M07Request"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create M07",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m08/create": {
+      "post": {
+        "operationId": "create_m08_job",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/M08Request"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "M08",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m08/history": {
+      "post": {
+        "operationId": "m08_history",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/M08Source"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "M08 History",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m08/list/{project_id}": {
+      "get": {
+        "operationId": "list_m08_results",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "M08 List",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m08/remove": {
+      "post": {
+        "operationId": "remove_m08_results",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/M08Manage"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "M08 Remove",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m08/rename": {
+      "post": {
+        "operationId": "rename_m08_results",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/M08Manage"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "M08 Rename",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m08/save": {
+      "post": {
+        "operationId": "save_m08_result",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/M08Manage"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "M08 Save",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m11/catalog": {
+      "get": {
+        "operationId": "mfa_component_catalog",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "M11 Catalog",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m11/component": {
+      "post": {
+        "operationId": "manage_local_mfa_component",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocalM11ComponentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Component",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m11/create": {
+      "post": {
+        "operationId": "create_mfa_alignment_job",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/M11Request"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "M11 Create",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m14/create": {
+      "post": {
+        "operationId": "create_phonology_job",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/M14Request"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create M14",
         "tags": [
           "jobs"
         ]

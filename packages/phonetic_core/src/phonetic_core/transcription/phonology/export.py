@@ -1,8 +1,7 @@
 """Pure in-memory three-file export. Platform owns paths and atomic publication."""
 from io import BytesIO
 from .render import PhonologyRenderer
-
-NAMES=('同音字表_韵母到声母.docx','同音字表_声母到韵母.docx','同音字表_二维表.xlsx')
+from .models import NAMES
 
 
 def export(analysis,tone_class_map,tone_order,initial_order,final_order,*,renderer=None,cancelled=lambda:False):
@@ -12,6 +11,16 @@ def export(analysis,tone_class_map,tone_order,initial_order,final_order,*,render
     initials=r._resolve_order(analysis.unique_initials,initial_order)
     finals=r._resolve_order(analysis.unique_finals,final_order)
     tones=r._resolve_order(analysis.unique_tones,tone_order)
+    # Excel's cell limit is a file-format constraint; reject before any output
+    # is published rather than silently truncating homophone entries.
+    cells={}
+    labels={}
+    for row in analysis.rows:
+        key=(row.initial,row.final)
+        cells[key]=cells.get(key,0)+len(row.character)+len(row.note)
+        labels.setdefault(key,set()).add(tone_class_map.get(row.tone_value,row.tone_value))
+    if any(size+sum(len(t)+3 for t in labels[key])>32767 for key,size in cells.items()):
+        raise ValueError('m14_cell_output_budget')
     payloads={}
     for name,mode in zip(NAMES,('final_initial','initial_final',None)):
         if cancelled():raise InterruptedError('m14_cancelled')

@@ -31,7 +31,7 @@ def public(row):
     snapshot=json.loads(row['snapshot'])
     return {k:row[k] for k in ('id','state','progress','generation','created_at','updated_at','error_code')} | {
         'project_id':str(row['project_id']), 'operation':snapshot['operation'],
-        'retry_of':snapshot.get('retry_of'),
+        'retry_of':snapshot.get('retry_of'), 'waiting_reason':snapshot.get('waiting_reason'),
         'result_manifest':json.loads(row['result_manifest']) if row['result_manifest'] else None}
 
 
@@ -163,7 +163,27 @@ class JobStore:
             if not row:raise JobError('job_not_found',404)
             if row['state'] not in ('failed','interrupted','cancelled'):raise JobError('job_not_retryable')
             snapshot=json.loads(row['snapshot'])
+        if snapshot['operation']=='lip_analysis':
+            from .m05_task import submit
+            return submit(self,owner,dict({k:v for k,v in snapshot['request'].items() if k!='retry_of'},idempotency_key=key),retry_of=job_id)
+        if snapshot['operation']=='mfa_alignment':
+            from .m11_task import submit
+            return submit(self,owner,dict({k:v for k,v in snapshot['request'].items() if k!='retry_of'},idempotency_key=key),retry_of=job_id)
         model = JobInput if snapshot['operation']=='pipeline_check' else FileJobInput
+        if snapshot['operation']=='phonation_synthesis':
+            from .m07_task import submit
+            return submit(self,owner,dict({k:v for k,v in snapshot['request'].items() if k!='retry_of'},idempotency_key=key),retry_of=job_id)
+        if snapshot['operation']=='speech_synthesis':
+            from .m06_task import submit
+            return submit(self,owner,dict(project_id=str(row['project_id']),idempotency_key=key,
+                action=snapshot['config']['action'],audio=snapshot['input_refs'].get('audio'),
+                parameters=snapshot['input_refs']['table']),retry_of=job_id)
+        if snapshot['operation']=='pitch_manipulation':
+            if snapshot.get('saved_copy'):
+                raise JobError('m08_saved_copy_retry_requires_save',409)
+            from .m08_task import submit
+            return submit(self,owner,dict(project_id=str(row['project_id']),idempotency_key=key,
+                audio=snapshot['input_refs']['audio'],config=snapshot['config']['analysis']),retry_of=job_id)
         if snapshot['operation']=='lpc_analysis':
             from .lpc_jobs import submit
             return submit(self,owner,dict(project_id=str(row['project_id']),idempotency_key=key,
@@ -179,6 +199,12 @@ class JobStore:
         if snapshot['operation'] in ('acoustic_analysis','textgrid_segment'):
             if self.batches is None:raise JobError('acoustic_tasks_unavailable',503)
             return self.batches.retry(owner,job_id,key)
+        if model is FileJobInput:
+            from ptb_api.storage_policy import QUOTA_BYTES
+            # A retry is a new request. Keep the old snapshot intact and return
+            # a public error instead of leaking an internal validation failure.
+            if snapshot['config'].get('max_output_bytes', 0) > QUOTA_BYTES:
+                raise JobError('output_budget_exceeded',413)
         body=model(project_id=str(row['project_id']),idempotency_key=key,operation=snapshot['operation'],config=snapshot['config'])
         return self.submit(owner,body,retry_of=job_id)
 
@@ -192,13 +218,13 @@ class JobStore:
         now=tx.now();self._recover(tx,now)
         if self.batches is not None:self.batches.advance(tx,now)
         if tx.execute("SELECT count(*) AS n FROM {jobs} WHERE state IN ('running','cancel_requested')").fetchone()['n'] >= self.max_running:return None
-        query="""SELECT j.* FROM {jobs} j WHERE j.state='queued' AND NOT EXISTS
+        query="""SELECT j.* FROM {jobs} j WHERE j.state='queued' AND j.snapshot NOT LIKE ? AND NOT EXISTS
             (SELECT 1 FROM {jobs} a WHERE a.owner_id=j.owner_id AND a.state IN ('running','cancel_requested'))
             ORDER BY j.created_at,j.id LIMIT 1"""
-        params=()
+        params=('%"execution_route":"remote_pending"%',)
         if self.files is None:
             query=query.replace('ORDER BY j.created_at','AND j.snapshot LIKE ? ORDER BY j.created_at')
-            params=('%"operation":"pipeline_check"%',)
+            params=params+('%"operation":"pipeline_check"%',)
         if self.postgres:query+=' FOR UPDATE OF j SKIP LOCKED'
         found=tx.execute(query,params).fetchone()
         if not found:return None

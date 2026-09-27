@@ -236,6 +236,56 @@
       "path": "backend/src/ptb_worker/assets/Doulos-OFL.txt",
       "source_id": "ASSET-DOULOS",
       "sha256": "dadf7f382cfd1fccf4b485b12fc16a08a2a20e8095b960d840b243f979f6082f"
+    },
+    {
+      "path": "frontend/public/m05/mediapipe-0.10.14/face_landmarker.task",
+      "sha256": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+      "source_id": "SRC-MEDIAPIPE"
+    },
+    {
+      "path": "frontend/public/m05/mediapipe-0.10.14/package.json",
+      "sha256": "20120384b2b0c1300d27ba769fff3cacfdbc964d5eb4cc12dda37a68d6c3885b",
+      "source_id": "SRC-MEDIAPIPE"
+    },
+    {
+      "path": "frontend/public/m05/mediapipe-0.10.14/vision_bundle.cjs",
+      "sha256": "52b84244bb64fd460faf89e0fa24711bafd32cfd26e830e574d0fc67bdad7ab7",
+      "source_id": "SRC-MEDIAPIPE"
+    },
+    {
+      "path": "frontend/public/m05/mediapipe-0.10.14/vision_bundle.classic.js",
+      "sha256": "52b84244bb64fd460faf89e0fa24711bafd32cfd26e830e574d0fc67bdad7ab7",
+      "source_id": "SRC-MEDIAPIPE"
+    },
+    {
+      "path": "frontend/public/m05/mediapipe-0.10.14/vision_bundle.mjs",
+      "sha256": "e77f281f9619150d937023c355bae170e9120e3b9e43f1e23a2a7bee07197669",
+      "source_id": "SRC-MEDIAPIPE"
+    },
+    {
+      "path": "frontend/public/m05/mediapipe-0.10.14/wasm/vision_wasm_internal.js",
+      "sha256": "9440cf0cc0cea21800e31581ec32aeedcc5fbf9df4509796bbc7d3f99e52ab9c",
+      "source_id": "SRC-MEDIAPIPE"
+    },
+    {
+      "path": "frontend/public/m05/mediapipe-0.10.14/wasm/vision_wasm_internal.wasm",
+      "sha256": "f82a8e6c05e08a44cc9f9e7ec5f845935bcbb1b1500ebe8c2f4812fb4e2917dc",
+      "source_id": "SRC-MEDIAPIPE"
+    },
+    {
+      "path": "frontend/public/m05/mediapipe-0.10.14/wasm/vision_wasm_nosimd_internal.js",
+      "sha256": "abe9b6fbeaf86fcb53a5edce3926c82ccb0619e18fed4d9d9ce561ee7f55e054",
+      "source_id": "SRC-MEDIAPIPE"
+    },
+    {
+      "path": "frontend/public/m05/mediapipe-0.10.14/wasm/vision_wasm_nosimd_internal.wasm",
+      "sha256": "38b61feab2fd7934e05cbe9f68baa308978a5e3b7f85c1913bb8ae89b8ef8b97",
+      "source_id": "SRC-MEDIAPIPE"
+    },
+    {
+      "path": "frontend/public/m05/worker.js",
+      "sha256": "bb3181c23f97f7c6ff87bfef21e720dca049b82fbb6ba348bc9401f5c4d852fc",
+      "source_id": "PROJECT-M05"
     }
   ]
 }

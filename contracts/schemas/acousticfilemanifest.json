@@ -579,6 +579,15 @@
     "metadata": {
       "$ref": "#/$defs/AcousticMetadata"
     },
+    "policy_version": {
+      "default": 1,
+      "enum": [
+        1,
+        2
+      ],
+      "title": "Policy Version",
+      "type": "integer"
+    },
     "retention": {
       "enum": [
         "server",

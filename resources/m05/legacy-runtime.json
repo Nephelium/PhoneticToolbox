@@ -1,0 +1,22 @@
+{
+  "schema": "m05-legacy-runtime/1",
+  "versions": {
+    "mediapipe": "0.10.14",
+    "numpy": "2.2.6",
+    "opencv-contrib-python": "4.13.0.92",
+    "av": "16.1.0"
+  },
+  "models": {
+    "modules/face_detection/face_detection_full_range_sparse.tflite": "2c3728e6da56f21e21a320433396fb06d40d9088f2247c05e5635a688d45dfe1",
+    "modules/face_detection/face_detection_short_range.tflite": "bbff11cebd1eb27a1e004cae0b0e63ec8c551cbf34a4451148b4908b8db3eca8",
+    "modules/face_landmark/face_landmark.tflite": "1055cb9d4a9ca8b8c688902a3a5194311138ba256bcc94e336d8373a5f30c814",
+    "modules/face_landmark/face_landmark_with_attention.tflite": "e06a804e0144f9929eda782122916b35d60c697c3c9344013ca2bbe76a6ce2b4"
+  },
+  "source_hashes": {
+    "phonetic_toolbox\\core\\lip\\metrics.py": "aabdbd1e6964b148ca1fbd5a1bca880ce34c7eb2286ae978647bca8f3dc9f462",
+    "phonetic_toolbox\\gui\\widgets\\lip_gui.py": "6656012fb4469466d3a41ec9eb36c139be63b6cf058906b8d3bcf6dd7e6fbc79",
+    "phonetic_toolbox\\services\\lip_service.py": "7b65b3ada65e267aa98ec95c3477adbf7405dc75e3c038ac54ce33919349c082",
+    "phonetic_toolbox\\services\\io\\lip.py": "6b87ff3ea67f53adb6e2cec44925d260c70dc277a85f66a2ebd3a28a1b695259",
+    "Phonetic_Export\\index.html": "a46c984929bcd8073ff1daf4e6b382a6685d4ca19e0fee0e29de3ecf0fb39ad5"
+  }
+}

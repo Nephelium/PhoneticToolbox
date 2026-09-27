@@ -13,13 +13,14 @@ from ptb_desktop.vocal_tract.audio_output import audition_samples
 ROOT=Path(__file__).resolve().parents[1]
 out=Path(sys.argv[1]) if len(sys.argv)>1 else ROOT/'output/validation/m10/r4-qt'
 result=json.loads((out/'result.json').read_text('utf-8'));reports=[]
-for name,size in [('current',(1280,720)),('six',(1920,1080))]:
-    seqfile=out/(name+'-sequence.json')
+cases=[('current',(1280,720)),('six',(1920,1080))] if (out/'current.webm').exists() else [('ordered-current',(1280,720))]
+for name,size in cases:
+    seqfile=out/('ordered-sequence.json' if name=='ordered-current' else name+'-sequence.json')
     sequence=json.loads((seqfile if seqfile.exists() else Path(result['profile'])/'keyframes.json').read_text('utf-8'))
     e=Engine(resource_dir=ROOT/'resources/vocal_tract/native')
     try:prepared=prepare_animation(e,sequence['frames'],pitch_curve=sequence['pitch_curve'],pictures_enabled=False)
     finally:e.close()
-    reference=audition_samples(prepared['audition_audio'],.8,0)
+    reference=audition_samples(prepared['audition_audio'],.8,0,prepared['envelope'])
     path=out/(name+'.webm')
     probe=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_streams','-show_format','-of','json',str(path)]))
     v=next(s for s in probe['streams'] if s['codec_type']=='video');a=next(s for s in probe['streams'] if s['codec_type']=='audio')

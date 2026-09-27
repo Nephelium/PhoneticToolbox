@@ -10,6 +10,8 @@ from typing import Annotated, Literal
 from pydantic import Field, field_validator, model_validator
 from phonetic_core.catalog import PARAMETER_MAPPING
 from .models import WireModel, Hash, Identifier, IdempotencyKey
+from .storage_policy import (QUOTA_BYTES, RETENTION_SECONDS, LEGACY_QUOTA_BYTES,
+                             LEGACY_POLICY_VERSION, POLICY_VERSION, PolicyVersion, retention_seconds)
 
 ParameterKey = Literal[tuple(PARAMETER_MAPPING)]
 OutputKey = Literal[tuple(PARAMETER_MAPPING)+('SOE_pF0','SOE_rF0')]
@@ -18,7 +20,6 @@ Code = Annotated[str, Field(pattern=r'^[a-z][a-z0-9_]{0,79}$')]
 SourceId = Annotated[str, Field(pattern=r'^[A-Z][A-Z0-9_-]{0,79}$')]
 MAX_CELLS = 200_000
 MAX_ROWS = 100_000
-RETENTION_SECONDS = 604800
 SCHEMA_VERSION = 'm01/1'
 
 
@@ -240,12 +241,14 @@ class AcousticResult(WireModel):
 class AcousticResultFile(WireModel):
     asset_id: Identifier
     format: Literal['xlsx','sqlite']
-    size_bytes: int = Field(gt=0,le=5_000_000_000)
+    size_bytes: int = Field(gt=0,le=LEGACY_QUOTA_BYTES)
     sha256: Hash
     expires_at: FiniteTime | None
 
 
 class AcousticFileManifest(WireModel):
+    # Historical manifests omit the field. New publishers must set version 2.
+    policy_version: PolicyVersion = LEGACY_POLICY_VERSION
     kind: Literal['acoustic_file'] = 'acoustic_file'
     schema_version: Literal['m01/1'] = SCHEMA_VERSION
     complete: Literal[True] = True
@@ -265,7 +268,9 @@ class AcousticFileManifest(WireModel):
         if self.retention=='local':
             if self.expires_at is not None:raise ValueError('Local result has no server expiry')
         else:
-            if self.expires_at is None or not self.completed_at<self.expires_at<=self.completed_at+RETENTION_SECONDS:raise ValueError('Server analysis results last at most seven days from success')
+            if self.expires_at is None or not self.completed_at<self.expires_at<=self.completed_at+retention_seconds(self.policy_version):raise ValueError('Server result exceeds its storage policy retention limit')
+            if self.policy_version == POLICY_VERSION:
+                if sum(f.size_bytes for f in self.files)>QUOTA_BYTES:raise ValueError('Server result exceeds storage quota')
             if any(i.expires_at is None or i.expires_at<=self.completed_at for i in self.metadata.inputs):raise ValueError('Input was not live at completion')
         return self
 

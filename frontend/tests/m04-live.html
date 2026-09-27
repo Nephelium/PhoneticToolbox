@@ -2,7 +2,7 @@
 import {createApp,h} from 'vue';import Shell from '/src/app/AppShell.vue';import '/src/design/tokens.css';
 const rpc=async data=>{const r=await fetch('/__m04',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const v=await r.json();if(v.error)throw Error(v.error);return v.value;};
 const buffer=b=>Uint8Array.from(atob(b),c=>c.charCodeAt(0)).buffer;
-const files={kind:'desktop',choose:purpose=>rpc({op:'choose',purpose}),list:()=>rpc({op:'list'}),read:async f=>{const r=await rpc({op:'read',id:f.id});return {buffer:buffer(r.base64),sha256:r.sha256};},textgrid:f=>rpc({op:'textgrid',id:f.id}),dispose(){},tasks:{
+const files={kind:'desktop',choose:purpose=>rpc({op:'choose',purpose}),list:()=>rpc({op:'list'}),read:async f=>{const r=await rpc({op:'read',id:f.id});return {buffer:buffer(r.base64),sha256:r.sha256};},textgrid:f=>rpc({op:'textgrid',id:f.id}),spectrogram:(f,view)=>rpc({op:'spectrogram',id:f.id,view}),dispose(){},tasks:{
 lpc:(f,textgrid,config,key)=>rpc({op:'lpc',id:f.id,textgrid:textgrid?.id,config,key}),lpcJobs:()=>rpc({op:'lpc_jobs'}),lpcFonts:font=>rpc({op:'lpc_fonts',font}),job:id=>rpc({op:'job',id}),cancelJob:id=>rpc({op:'cancel_job',id}),retry:(id,key)=>rpc({op:'retry',id,key}),saveJob:(id,directory)=>rpc({op:'save_job',id,directory}),result:async(job,id)=>buffer((await rpc({op:'result',job,id})).base64)}};
 // Actual managed bytes through the browser download action; hosted auth is a separate E-stage check.
 if(new URLSearchParams(location.search).has('downloads')){

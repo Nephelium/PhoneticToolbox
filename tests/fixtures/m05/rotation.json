@@ -1,0 +1,15 @@
+{
+  "original_runtime": true,
+  "opencv": "4.13.0",
+  "shape": [
+    320,
+    240,
+    3
+  ],
+  "auto": 1.0,
+  "rotation": 270.0,
+  "rgb_sha256": "57ba171a32c5d102b7a1ab068f4e515c9d63bc10d90614c0dde8f1c6010f5446",
+  "input_sha256": "b46c67aecd7848a3fa9e52658a35a715f9a7b878709504925ca4b4159adec415",
+  "input": "output/validation/m05/rotation-69f09449fc3f4de6b1e673cc8015cf8d/rotate90.mp4",
+  "source": "NASA public derivative; original readonly phonetic_311 OpenCV decode"
+}

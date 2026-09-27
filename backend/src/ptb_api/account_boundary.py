@@ -24,6 +24,7 @@ class AccountBoundary:
         if scope['method'] in ('POST','PATCH','PUT'):
             limit = CHUNK_BYTES if scope['method']=='PUT' and re.fullmatch(r'/api/v1/uploads/[0-9a-fA-F-]{36}/blocks',scope['path']) else self.max_bytes
             if scope['method']=='POST' and scope['path']=='/api/v1/jobs/batches/create':limit=1_000_000
+            if scope['method']=='PUT' and re.fullmatch(r'/api/v1/jobs/m05/uploads/[0-9a-fA-F-]{36}',scope['path']):limit=350_000
             size=0
             chunks=[]
             while True:

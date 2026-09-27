@@ -45,9 +45,11 @@ def main():
                     if op=='shutdown':break
                     if op=='choose':value=grants[request['purpose']]
                     elif op=='list':value=provider.list(grants['input']['id'])
-                    elif op in ('read','textgrid'):
+                    elif op in ('read','textgrid','spectrogram'):
                         raw,digest=provider.read(request['id'])
-                        value={'base64':base64.b64encode(raw).decode(),'sha256':digest} if op=='read' else {'sha256':digest,'tiers':[asdict(t) for t in parse_textgrid(raw.decode('utf-8'))]}
+                        if op=='read':value={'base64':base64.b64encode(raw).decode(),'sha256':digest}
+                        elif op=='textgrid':value={'sha256':digest,'tiers':[asdict(t) for t in parse_textgrid(raw.decode('utf-8'))]}
+                        else:value=service.preview(raw,request['view'])
                     else:value=bridge.invoke(request)
                     print(json.dumps({'id':request['rpc_id'],'value':value},ensure_ascii=False),flush=True)
                 except Exception as e:print(json.dumps({'id':request.get('rpc_id'),'error':str(e)},ensure_ascii=False),flush=True)

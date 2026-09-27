@@ -17,6 +17,7 @@ from uuid import UUID, uuid4
 import psycopg
 from psycopg.rows import dict_row
 from .quota import CHUNK_BYTES, QUOTA_BYTES, TEMP_SECONDS, StorageError, reserve, expiry
+from .storage_policy import POLICY_VERSION, LEGACY_POLICY_VERSION, LEGACY_QUOTA_BYTES, retention_seconds
 
 LOCK_ID = 577707
 
@@ -36,7 +37,8 @@ def no_links(path):
 def public_asset(row):
     fields = ('name', 'kind', 'state', 'size_bytes', 'reserved_bytes', 'expected_bytes',
               'sha256', 'created_at', 'expires_at', 'error_code')
-    return {key: row[key] for key in fields} | {'id': str(row['id']), 'project_id': str(row['project_id'])}
+    return {key: row[key] for key in fields} | {'id': str(row['id']), 'project_id': str(row['project_id']),
+        'policy_version': row.get('policy_version', LEGACY_POLICY_VERSION)}
 
 
 class Storage:
@@ -115,8 +117,11 @@ class Storage:
         raise StorageError('storage_inconsistent', 503)
 
     def _writable(self, conn):
-        if not self.ready or conn.execute('SELECT frozen FROM ptb_storage.state').fetchone()['frozen']:
+        state = conn.execute('SELECT * FROM ptb_storage.state').fetchone()
+        if not self.ready or state['frozen']:
             raise StorageError('storage_recovery_required', 503)
+        if state.get('policy_version', LEGACY_POLICY_VERSION) != POLICY_VERSION:
+            raise StorageError('storage_policy_migration_required', 503)
 
     def _disk_budget(self, conn, extra):
         reserved = conn.execute('SELECT coalesce(sum(reserved_bytes),0) AS n FROM ptb_storage.quota_accounts').fetchone()['n']
@@ -147,9 +152,13 @@ class Storage:
         with self._locked() as conn:
             row = conn.execute('SELECT * FROM ptb_storage.quota_accounts WHERE owner_id=%s', (owner,)).fetchone()
             used, reserved = (row['used_bytes'], row['reserved_bytes']) if row else (0, 0)
-            frozen = conn.execute('SELECT frozen FROM ptb_storage.state').fetchone()['frozen']
-            return dict(quota_bytes=QUOTA_BYTES, used_bytes=used, reserved_bytes=reserved,
-                        available_bytes=max(0, QUOTA_BYTES-used-reserved), frozen=frozen, ready=self.ready)
+            state = conn.execute('SELECT * FROM ptb_storage.state').fetchone()
+            version = state.get('policy_version', LEGACY_POLICY_VERSION)
+            quota = row['quota_bytes'] if row else (QUOTA_BYTES if version == POLICY_VERSION else LEGACY_QUOTA_BYTES)
+            return dict(quota_bytes=quota, used_bytes=used, reserved_bytes=reserved,
+                        available_bytes=max(0, quota-used-reserved), frozen=state['frozen'], ready=self.ready,
+                        policy_version=version, retention_seconds=retention_seconds(version),
+                        over_quota=used+reserved>quota)
 
     def list(self, owner, project_id, order='expires'):
         column = {'expires': 'expires_at,id', 'size': 'size_bytes DESC,id', 'created': 'created_at DESC,id'}[order]
@@ -271,8 +280,8 @@ class Storage:
                 raise StorageError('upload_closed', 410)
             with conn.transaction():
                 conn.execute('UPDATE ptb_storage.quota_accounts SET reserved_bytes=reserved_bytes-%s WHERE owner_id=%s', (row['reserved_bytes'], owner))
-                conn.execute("UPDATE ptb_storage.assets SET state='ready',reserved_bytes=0,sha256=%s,expires_at=%s WHERE id=%s",
-                             (computed_hash, expiry(now), asset_id))
+                conn.execute("UPDATE ptb_storage.assets SET state='ready',reserved_bytes=0,sha256=%s,expires_at=%s,policy_version=%s WHERE id=%s",
+                             (computed_hash, expiry(now), POLICY_VERSION, asset_id))
             return public_asset(self._row(conn, owner, asset_id))
 
     def _readable(self, conn, owner, asset_id):
