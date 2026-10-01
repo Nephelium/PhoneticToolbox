@@ -1,5 +1,7 @@
 # P17 M04 LPC 谱图逐项验收规则
 
+2026-10-01 R2 追加规则：时间范围/清除/开始分析位于右栏谱图参数内；波形和 LPC 分别按视口 28%/58% 的高度规则增长；“保存 PNG 图片”须覆盖取消不落盘、实际保存及与完整结果字节一致。上述新增项与三档尺寸/语谱图均已验证，证据见 [M04-R2 报告](../p17-m04-r2-report.md)。下表保留首轮功能覆盖记录，不把旧图高作为本轮判据。
+
 状态：限定 Windows 已执行，逐行状态见下表，未验范围保留。基线 0779bee；执行记录见同目录 M04-report.md。
 
 已读原始手册 `../PhoneticToolbox_v2/Phonetic_Export/index.html` 第 11.1 / 11.6 / 11.7 节，及实际源码 `phonetic_toolbox/gui/widgets/lpc_spectrum_widget.py`。V2 源码 SHA-256：`6075118585718c790abd0b8416ddd6a536ea074a6a1adb662a2dfce1a5f242e5`。
