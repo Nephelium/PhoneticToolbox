@@ -2,7 +2,7 @@
 import {ref,watch,nextTick,onUnmounted,computed} from 'vue';
 import type {Spectrogram,SpectrogramView} from '../platform/research.ts';
 const props=defineProps<{loader:(view:SpectrogramView)=>Promise<Spectrogram>;start:number;end:number;channel:number;width:number;selectable?:boolean;selectionStart?:number;selectionEnd?:number}>();
-const emit=defineEmits<{'selection-end':[start:number,end:number]}>();
+const emit=defineEmits<{'selection-end':[start:number,end:number];'view-wheel':[event:WheelEvent];'view-double-click':[event:MouseEvent]}>();
 const canvas=ref<HTMLCanvasElement>(),data=ref<Spectrogram|null>(null),error=ref(''),loading=ref(false);
 const dragging=ref(false),dragStart=ref(0),dragEnd=ref(0);let anchorX=0;
 function pointerTime(event:PointerEvent){const box=(event.currentTarget as HTMLCanvasElement).getBoundingClientRect();return props.start+Math.max(0,Math.min(1,(event.clientX-box.left)/box.width))*(props.end-props.start);}
@@ -31,7 +31,7 @@ async function run(){
  }catch(e){if(!disposed&&current===version){const text=e instanceof Error?e.message:'preview_failed';if(text==='preview_busy'&&attempt<8){retrying=true;timer=setTimeout(run,500+attempt++*250);}else error.value=messages[text]??text;}}
  finally{running=false;if(!disposed){if(current===version)loading.value=retrying;if(again)void run();}}
 }
-function schedule(){version++;attempt=0;data.value=null;error.value='';clearTimeout(timer);loading.value=true;timer=setTimeout(run,250);}
+function schedule(){version++;attempt=0;data.value=null;error.value='';clearTimeout(timer);loading.value=true;timer=setTimeout(run,60);}
 watch(()=>[props.loader,props.start,props.end,props.channel,props.width],schedule,{immediate:true});
 onUnmounted(()=>{disposed=true;version++;clearTimeout(timer);});
 </script>
@@ -39,10 +39,11 @@ onUnmounted(()=>{disposed=true;version++;clearTimeout(timer);});
 <div class="track-label"><span>语谱图 · 声道 {{channel+1}}</span><small>Praat · Gaussian 5 ms · 50 dB</small></div>
 <p v-if="loading" role="status" class="spectrogram-empty">正在计算当前时间窗的语谱图…</p>
 <p v-else-if="error" role="alert" class="error-banner">{{error}} <button @click="schedule">重试</button></p>
-<div v-if="data" class="spectrogram-canvas"><canvas ref="canvas" role="img" :class="{'selectable-spectrogram':selectable}" :aria-label="'Praat语谱图，'+start.toFixed(3)+'至'+end.toFixed(3)+'秒，0至'+data.frequency_max+'Hz'+(selectable?'；拖动选择LPC分析时间范围':'')" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="cancel"/><div v-if="selectable&&selected" class="spectrogram-selection" :style="{left:selected.left+'%',width:selected.width+'%'}"/><div class="frequency-axis"><span>{{data.frequency_max}} Hz</span><span>{{data.frequency_max/2}}</span><span>0</span></div></div>
+<div v-if="data" class="spectrogram-canvas"><canvas ref="canvas" role="img" :class="{'selectable-spectrogram':selectable}" :aria-label="'Praat语谱图，'+start.toFixed(3)+'至'+end.toFixed(3)+'秒，0至'+data.frequency_max+'Hz'+(selectable?'；拖动选择LPC分析时间范围':'')" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="cancel" @wheel="emit('view-wheel',$event)" @dblclick="emit('view-double-click',$event)"/><div v-if="selectable&&selected" class="spectrogram-selection" :style="{left:selected.left+'%',width:selected.width+'%'}"/><div class="frequency-axis"><span>{{data.frequency_max}} Hz</span><span>{{data.frequency_max/2}}</span><span>0</span></div></div>
 <p v-if="data" class="hint">Praat {{data.praat_version}} · 当前时间窗相对灰度 · 6 dB/oct显示预加重。仅为预览，不是已校准声压级。</p>
 </section></template>
 <style scoped>
 .selectable-spectrogram{touch-action:none;cursor:crosshair}
+.spectrogram-empty{min-height:220px}
 .spectrogram-selection{position:absolute;top:0;bottom:0;background:var(--selection);border-left:1px solid var(--accent);border-right:1px solid var(--accent);pointer-events:none}
 </style>

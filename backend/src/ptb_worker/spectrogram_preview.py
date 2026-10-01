@@ -113,4 +113,41 @@ def child():
     sys.stdout.buffer.write(output);sys.stdout.buffer.flush()
 
 
-if __name__=='__main__':child()
+def interactive_child():
+    # Parent assigns this interpreter to its memory-limited Job before imports.
+    print(os.getpid(),flush=True)
+    audio=None
+    while True:
+        line=sys.stdin.buffer.readline(8192)
+        if not line:return
+        if len(line)>=8192:raise SystemExit(2)
+        try:
+            header=json.loads(line)
+            size=header.pop('size')
+            if type(size)!=int or not 0<=size<=MAX_BYTES:raise ValueError()
+            if size:
+                payload=sys.stdin.buffer.read(size)
+                if len(payload)!=size:raise ValueError()
+                from .io.audio import decode_wav
+                from .io.limits import Limits
+                audio=None
+                audio=decode_wav(payload,Limits(input_bytes=MAX_BYTES,samples=32_000_000,channels=32))
+                del payload
+            if audio is None:raise ValueError()
+            from phonetic_core.spectrogram import spectrogram_preview
+            result=spectrogram_preview(audio,**header)
+            result.pop('_power');result.pop('_frequencies')
+            result['pixels_base64']=base64.b64encode(result.pop('pixels')).decode('ascii')
+        except ImportError:result={'error':'preview_runtime_unavailable'}
+        except MemoryError:result={'error':'preview_memory_exceeded'}
+        except Exception:result={'error':'invalid_spectrogram_input'}
+        output=json.dumps(result,allow_nan=False).encode()
+        if len(output)>512_000:raise SystemExit(2)
+        sys.stdout.buffer.write(str(len(output)).encode()+b'\n'+output)
+        sys.stdout.buffer.flush()
+
+
+if __name__=='__main__':
+    if sys.argv[1:]==['--interactive']:interactive_child()
+    elif not sys.argv[1:]:child()
+    else:raise SystemExit(2)

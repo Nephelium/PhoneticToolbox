@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {vResizablePanels} from '../../layout/resizablePanels.ts';
 import {computed,onMounted,onUnmounted,ref,watch} from 'vue';
 import ModuleFrame from '../../components/ModuleFrame.vue';
+import ModuleWorkbench from '../../components/ModuleWorkbench.vue';
 import ModuleToolbar from '../../components/ModuleToolbar.vue';
 import ModuleSection from '../../components/ModuleSection.vue';
 import ModuleStatus from '../../components/ModuleStatus.vue';
@@ -66,18 +66,17 @@ async function saveResults(){await operation(async()=>{if(!output.value)output.v
 </script>
 
 <template>
-<ModuleFrame label="MFA 自动标注工作区" :aria-busy="busy">
+<ModuleFrame fit class="mfa-page" label="MFA 自动标注工作区" :aria-busy="busy">
  <template #toolbar><ModuleToolbar>
   <button v-if="port?.local" :disabled="busy" @click="chooseCorpus">选择语料目录</button>
   <button :disabled="busy||!port" @click="fileInput?.click()">导入音频与转写</button>
   <input ref="fileInput" hidden type="file" multiple accept=".wav,.lab,.txt,.TextGrid" @change="imported"/>
-  <button :disabled="busy" @click="save">保存参数草稿</button><button :disabled="busy||!port" @click="refresh">刷新任务</button>
+  <button :disabled="busy" @click="save">保存参数草稿</button>
   <template #actions><button @click="help=true">帮助</button><button @click="emit('references')">方法与来源</button></template>
  </ModuleToolbar></template>
- <template #status><ModuleStatus v-if="error" kind="error" :message="error"/><ModuleStatus v-else-if="busy" kind="loading" message="正在处理。组件检查会执行真实 MFA 小任务，请稍候…"/><ModuleStatus v-else-if="message" kind="info" :message="message"/><ModuleStatus v-if="!port" kind="empty" message="请从本地研究工作台或已登录网页项目打开 MFA。"/></template>
- <div v-resizable-panels="{key:stateKey,center:'.mfa-results',centerMin:300,panels:[{selector:'.mfa-controls',side:'left',label:'运行组件与对齐参数',initial:400,min:300,max:700}]}" class="mfa-columns">
-  <div class="mfa-controls">
-   <ModuleSection label="运行组件与模型" title="运行组件与模型">
+ <template #status><ModuleStatus v-if="error" kind="error" :message="error"/><ModuleStatus v-else-if="busy" kind="loading" message="正在处理。组件检查会执行真实 MFA 小任务，请稍候…"/><ModuleStatus v-if="!port" kind="empty" message="请从本地研究工作台或已登录网页项目打开 MFA。"/></template>
+ <ModuleWorkbench :state-key="stateKey" left-label="组件与模型" right-label="任务与记录" :left-width="290" :right-width="300">
+ <template #left>   <ModuleSection label="运行组件与模型" title="运行组件与模型">
     <div class="mfa-form"><label>运行环境<select v-model="runtime" :disabled="busy"><option value="">选择已检查组件</option><option v-for="r in catalog?.runtimes" :key="r.id" :value="r.id">MFA {{r.version}} · {{r.platform}} / {{r.arch}}</option></select></label>
      <label>声学模型<select v-model="model" :disabled="busy"><option value="">选择已登记模型</option><option v-for="m in models" :key="m.id" :value="m.id">{{m.name}}</option></select></label>
      <label>发音词典<span class="resource-line">{{dictionaryName||'使用模型登记时的词典'}}<button :disabled="busy||!port" @click="dictInput?.click()">选择词典</button><button v-if="dictionary" :disabled="busy" @click="dictionary=undefined;dictionaryName=''">使用登记词典</button></span></label>
@@ -95,6 +94,7 @@ async function saveResults(){await operation(async()=>{if(!output.value)output.v
      <p class="muted">检查包含版本、原生依赖与公开合成音频实际对齐。安装失败保留当前版本。组件、模型与主程序分别管理。</p>
     </div>
    </ModuleSection>
+</template>
    <ModuleSection label="音频与既有转写" title="音频与既有转写">
     <ModuleStatus v-if="!corpus.length" kind="empty" message="导入同名 WAV 与 LAB、TXT 或 TextGrid。每份音频需有唯一转写。"/>
     <ul v-else class="corpus-list"><li v-for="c in corpus" :key="c.name"><span>{{c.name}}</span><span class="muted">{{c.transcript_format}}</span></li></ul>
@@ -105,8 +105,10 @@ async function saveResults(){await operation(async()=>{if(!output.value)output.v
     <div class="parameter-row"><label>Beam<input type="number" min="1" max="10000" :value="config.beam" :disabled="busy" @change="beamInput"/></label><label>Retry beam<input v-model.number="config.retry_beam" type="number" min="1" max="40000" :disabled="busy"/></label></div>
     <div class="actions"><button class="primary" :disabled="busy||!port||!corpus.length||!runtime||!model||running" @click="start">开始对齐</button><button :disabled="busy||!running||selected?.state==='cancel_requested'" @click="cancel">取消任务</button></div>
    </ModuleSection>
-  </div>
-  <div class="mfa-results">
+ <template #right>
+ <ModuleStatus v-if="message" kind="info" :message="message"/>
+ <button :disabled="busy||!port" @click="refresh">刷新任务</button>
+
    <ModuleSection label="任务与日志" title="任务与日志">
     <label>任务记录<select :value="selected?.id??''" @change="show(jobs.find(j=>j.id===($event.target as HTMLSelectElement).value)!)"><option value="" disabled>选择任务</option><option v-for="j in jobs" :key="j.id" :value="j.id">{{new Date(j.created_at*1000).toLocaleString()}} · {{m11Message(j.state)}}</option></select></label>
     <ModuleStatus v-if="!selected" kind="empty" message="还未选择任务。运行后会显示实际阶段与结果。"/>
@@ -125,12 +127,16 @@ async function saveResults(){await operation(async()=>{if(!output.value)output.v
     <button v-if="resultFiles.length&&port?.save" :disabled="busy" @click="saveResults">保存完整结果到输出目录</button>
     <p class="muted">自动边界需人工校对。保存使用独立结果子目录，保留原音频与原始 TextGrid。</p>
    </ModuleSection>
-  </div>
- </div>
+ </template>
+ </ModuleWorkbench>
  <ModalDialog v-if="help" title="MFA 自动标注帮助" @close="help=false"><p>MFA 将音频与已有文本强制对齐。请先准备同名 WAV 和 LAB、TXT 或 TextGrid；此功能不包含语音识别。</p><p>TextGrid 需有独立的转写区间层，MFA 3.3.8 会忽略 notes 以及以 words / phones 结尾的参考层。声学模型与词典必须匹配。汉字词典配汉字文本，拼音词典配其规定的拼音与声调格式。未登录词会明确报错。</p><p>Beam 默认 10、Retry beam 默认 40。调整 Beam 时按旧界面将 Retry beam 至少提高到四倍；提交时 Retry beam 不大于 Beam 则恢复四倍。</p><p>主程序不附带完整 MFA。组件固定版本、分平台安装。当前在线包尚未发布，已有 Windows 3.3.8 auto_alignment 可通过实际检查后使用。已装好组件与模型后本地对齐无需公网。</p><p>日志仅显示脱敏阶段。取消、超时或失败后，本机独立任务目录保留部分输出和诊断，不作为完整结果。网页数据遵循账号政策，未验证节点与服务器能力保持等待。</p></ModalDialog>
 </ModuleFrame>
 </template>
 
 <style scoped>
 .component-details{margin-top:10px;font-size:var(--support-size);overflow-wrap:anywhere}.component-details dl{display:grid;grid-template-columns:1fr 1fr;gap:4px}.component-details dd{margin:0}.native-log{white-space:pre-wrap;overflow-wrap:anywhere;max-height:320px;overflow:auto;font-family:var(--font-mono);font-size:var(--support-size)}.mfa-columns{display:grid;grid-template-columns:var(--panel-left,400px) minmax(300px,1fr);gap:var(--module-gap);align-items:start}.mfa-controls,.mfa-results{display:grid;gap:var(--module-gap);min-width:0}.mfa-form,.component-manager{display:grid;gap:var(--control-gap)}label{display:grid;gap:6px;font-size:var(--control-size)}select,input{width:100%;min-width:0}.resource-line,.actions,.parameter-row,.result-row,.job-state{display:flex;align-items:center;gap:var(--control-gap);flex-wrap:wrap}.resource-line{justify-content:space-between}.resource-line span,.result-row>span:first-child{overflow-wrap:anywhere;flex:1;min-width:140px}.parameter-row label{flex:1;min-width:100px}.actions{margin-top:12px}.component-toggle{margin-top:12px}.component-manager{margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}.digest,.event-log{font-family:var(--font-mono)}.muted{color:var(--muted);font-size:var(--support-size);line-height:1.6}.corpus-list{list-style:none;padding:0;max-height:240px;overflow:auto}.corpus-list li{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--border);overflow-wrap:anywhere}.job-state{justify-content:space-between;margin-top:12px}progress{width:100%;height:8px;accent-color:var(--accent)}.event-log{padding:0;list-style:none;min-height:100px;max-height:300px;overflow:auto;background:var(--bg);border:1px solid var(--border);border-radius:6px}.event-log li{padding:7px 10px;display:flex;gap:12px;font-size:var(--support-size)}.event-log time{color:var(--muted);white-space:nowrap}.result-row{padding:8px 0;border-bottom:1px solid var(--border)}@container module (max-width:800px){.mfa-columns{grid-template-columns:1fr}}
+
+.mfa-columns{flex:1;min-height:0;align-items:stretch}
+.mfa-controls,.mfa-results{min-height:0;overflow:auto;align-content:start;overscroll-behavior:contain}
+@container module (max-width:800px){.mfa-columns{flex:none}.mfa-controls,.mfa-results{overflow:visible}}
 </style>

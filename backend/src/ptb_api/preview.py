@@ -11,7 +11,7 @@ from .egg_interactive_models import EggPreviewSession, EggInteractiveResult
 from uuid import UUID
 
 
-def create_preview_router(mode,token,origin,*,egg_preview=None):
+def create_preview_router(mode,token,origin,*,egg_preview=None,spectrogram_session=None):
     router=APIRouter(prefix='/api/v1/preview',tags=['preview'])
 
     def egg_auth(request):
@@ -67,6 +67,7 @@ def create_preview_router(mode,token,origin,*,egg_preview=None):
                 if len(data)+len(chunk)>MAX_BYTES:raise HTTPException(413,'preview_too_large')
                 data.extend(chunk)
             raw=bytes(data);del data
-            value=await run_in_threadpool(render,raw,channel=channel,start=start,end=end,width=width)
+            renderer=spectrogram_session.render if spectrogram_session is not None else render
+            value=await run_in_threadpool(renderer,raw,channel=channel,start=start,end=end,width=width)
         return dict(sha256=hashlib.sha256(raw).hexdigest(),**value)
     return router

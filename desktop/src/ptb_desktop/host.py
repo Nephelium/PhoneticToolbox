@@ -162,13 +162,13 @@ class Bridge(QObject):
                 from PyQt6.QtGui import QFontDatabase
                 value=sorted(QFontDatabase.families())
             elif op=='capture':
-                if QMessageBox.question(self.window,'截取语谱图','将暂时隐藏本窗口并截取当前屏幕。请确认屏幕不含敏感内容。截图仅保留在本机内存，开始重建后才加入本机任务。',QMessageBox.StandardButton.Ok|QMessageBox.StandardButton.Cancel)!=QMessageBox.StandardButton.Ok:
-                    value=None
+                from .m09_capture import capture_spectrogram
+                captured=capture_spectrogram(self.window)
+                if captured is None:value=None
                 else:
-                    from .capture import capture_hidden
-                    pixmap=capture_hidden(self.window);buffer=QBuffer();buffer.open(QIODevice.OpenModeFlag.WriteOnly)
+                    pixmap,corners=captured;buffer=QBuffer();buffer.open(QIODevice.OpenModeFlag.WriteOnly)
                     if not pixmap.save(buffer,'PNG'):raise FileAccessError('截图失败。')
-                    value=self.provider.capture(bytes(buffer.data()))
+                    value={**self.provider.capture(bytes(buffer.data())),'corners':corners}
             elif op=='m11_pick':
                 purpose=body.get('purpose')
                 if purpose in ('runtime','corpus'):

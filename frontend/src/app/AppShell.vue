@@ -128,9 +128,9 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 </button>
 </div>
 </div>
-<span class="host-badge">{{research?'网页项目':host.kind==='desktop'?'本地桌面':'浏览器预览'}}</span>
+<button v-if="research" class="project-return" :title="'返回项目与文件管理 · '+research.label" :disabled="closingBusy" @click="leaveProject">← 返回项目与文件管理 · {{research.label}}</button>
+<span v-else class="host-badge">{{host.kind==='desktop'?'本地桌面':'浏览器预览'}}</span>
 </header>
-<button v-if="research" class="project-return"  :disabled="closingBusy" @click="leaveProject">← 返回项目与文件管理 · {{research.label}}</button>
 <main id="main-content" :class="{'pane-workspace':['M01','M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15'].includes(active)}" tabindex="-1" role="tabpanel" :aria-labelledby="'tab-'+active">
 <div v-if="active==='home'" class="home-page">
 <header class="welcome">

@@ -14,6 +14,7 @@ import psutil
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--exe', required=True, type=Path)
+    parser.add_argument('--natural-manifest', type=Path)
     args = parser.parse_args()
     exe = args.exe.resolve(strict=True)
     root = Path(__file__).resolve().parents[1]
@@ -28,7 +29,10 @@ def main():
     print(out, flush=True)
     seen = {}
     with (out / 'stdout.log').open('wb') as stdout, (out / 'stderr.log').open('wb') as stderr:
-        process = subprocess.Popen([str(exe), '--verify-preview', str(out / 'results')],
+        arguments=[str(exe), '--verify-preview', str(out / 'results')]
+        if args.natural_manifest:
+            arguments=[str(exe),'--verify-natural-preview',str(out/'results'),str(args.natural_manifest.resolve(strict=True))]
+        process = subprocess.Popen(arguments,
             cwd=tempfile.gettempdir(), env=env, stdout=stdout, stderr=stderr,
             creationflags=subprocess.CREATE_NO_WINDOW)
         parent = psutil.Process(process.pid)

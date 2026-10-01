@@ -70,7 +70,7 @@ export interface ResearchFiles {
     update(file:ResearchFile,session:string,config:EggTaskConfig):Promise<components['schemas']['EggInteractiveResult']>;
     close(file:ResearchFile,session:string):Promise<unknown>;
   };
-  capture?():Promise<ResearchFile|null>;
+  capture?():Promise<(ResearchFile & {corners?:{x:number;y:number}[]})|null>;
   convertLip?(file:ResearchFile):Promise<{file:ResearchFile;companion_found:boolean}>;
   dispose():void;
 }

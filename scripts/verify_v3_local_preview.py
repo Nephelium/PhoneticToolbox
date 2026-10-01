@@ -1,4 +1,4 @@
-"""Owned frozen-package checks; synthetic inputs, no camera/microphone capture."""
+"""Owned package checks; explicit natural-input mode, no device recording."""
 import hashlib
 import io
 import json
@@ -10,13 +10,26 @@ import traceback
 from uuid import uuid4
 
 
-def verify(bundle, out):
+def verify(bundle, out, natural_manifest=None):
     os.environ.setdefault('QT_QPA_PLATFORM', 'offscreen')
     os.environ.setdefault('QTWEBENGINE_CHROMIUM_FLAGS', '--disable-gpu')
     out.mkdir(parents=True, exist_ok=False)
     mode = 'frozen' if getattr(sys, 'frozen', False) else 'source'
-    report = dict(success=False, pages=[], tasks=[], scope=f'{mode} Windows local trial, synthetic inputs')
+    report = dict(success=False, pages=[], tasks=[], scope=f'{mode} Windows local trial, '+('authorized natural audio' if natural_manifest else 'synthetic inputs'))
     window = app = None
+    originals = {}
+    natural = None
+    if natural_manifest:
+        manifest=json.loads(Path(natural_manifest).read_text(encoding='utf-8'))
+        source_root=Path(manifest['root']).resolve(strict=True)
+        natural=manifest['selected']
+        for item in natural.values():
+            path=Path(item['path']).resolve(strict=True)
+            if not path.is_relative_to(source_root):raise ValueError('Natural input outside authorized corpus')
+            digest=hashlib.sha256(path.read_bytes()).hexdigest()
+            if digest!=item['sha256']:raise ValueError('Natural input changed')
+            originals[path]=digest
+        report['inputs']=[dict(relative=item['relative'],sha256=item['sha256'],duration=item['duration']) for item in natural.values()]
     try:
         from ptb_worker.local_workspace import prepare_workspace
         from ptb_worker.store import LOCAL_PROJECT
@@ -65,10 +78,16 @@ def verify(bundle, out):
 
             import numpy as np
             from scipy.io import wavfile
-            t = np.arange(16000) / 16000
-            audio = (.3 * np.sin(2 * np.pi * 150 * t)).astype(np.float32)
-            stream = io.BytesIO(); wavfile.write(stream, 16000, audio)
-            ref = service.import_input(stream.getvalue(), 'public-tone.wav', 'audio')
+            if natural:
+                audio_path=Path(natural['short']['path'])
+                audio_bytes=audio_path.read_bytes()
+                audio_name=audio_path.name
+            else:
+                t = np.arange(16000) / 16000
+                audio = (.3 * np.sin(2 * np.pi * 150 * t)).astype(np.float32)
+                stream = io.BytesIO(); wavfile.write(stream, 16000, audio)
+                audio_bytes,audio_name=stream.getvalue(),'public-tone.wav'
+            ref = service.import_input(audio_bytes, audio_name, 'audio')
             _, data = run('batches', operation='acoustic_analysis', inputs=[dict(audio=ref)],
                 config=dict(selection=dict(keys=['pF0','rF0','pF1']), backend_policy=dict(reaper='native_required')))
             acoustic = json.loads(data['result.ptb.json'])
@@ -87,11 +106,24 @@ def verify(bundle, out):
             run('m06', action='synthesize', parameters=service.import_input(export_parameters(config).encode(), 'parameters.csv', 'table'))
 
             run('lpc', audio=ref, config=dict(roi_start=.1, roi_end=.15, order=20))
-            frozen = np.load(fixture_root / 'EGG-SYN-PCM16.npz' if fixture_root.exists() else bundle / 'tests/fixtures/m03/EGG-SYN-PCM16.npz')
-            stereo = np.column_stack((frozen['load.audio_signal'], frozen['load.egg_signal_raw']))
-            stream = io.BytesIO(); wavfile.write(stream, 44100, stereo)
-            egg = service.import_input(stream.getvalue(), 'public-egg.wav', 'audio')
-            run('egg', audio=egg, config=dict(mode='single', roi_start=0, roi_end=.5))
+            if natural:
+                egg_path=Path(natural['egg']['path'])
+                egg_bytes,egg_name=egg_path.read_bytes(),egg_path.name
+            else:
+                frozen = np.load(fixture_root / 'EGG-SYN-PCM16.npz' if fixture_root.exists() else bundle / 'tests/fixtures/m03/EGG-SYN-PCM16.npz')
+                stereo = np.column_stack((frozen['load.audio_signal'], frozen['load.egg_signal_raw']))
+                stream = io.BytesIO(); wavfile.write(stream, 44100, stereo)
+                egg_bytes,egg_name=stream.getvalue(),'public-egg.wav'
+            egg = service.import_input(egg_bytes, egg_name, 'audio')
+            run('egg', audio=egg, config=dict(mode='single', roi_start=4 if natural else 0, roi_end=4.5 if natural else .5))
+            if natural:
+                preview_timings=[]
+                for index in range(5):
+                    t=time.monotonic()
+                    value=service.preview(audio_bytes,dict(channel=0,start=.05,end=.2,width=800))
+                    preview_timings.append(time.monotonic()-t)
+                    assert value['backend']=='praat' and value['sha256']==hashlib.sha256(audio_bytes).hexdigest()
+                report['frozen_spectrogram_seconds']=preview_timings
 
             table_path = fixture_root / 'public.xlsx' if fixture_root.exists() else bundle / 'tests/fixtures/m14/public.xlsx'
             table = service.import_input(table_path.read_bytes(), 'public.xlsx', 'table')
@@ -110,7 +142,7 @@ def verify(bundle, out):
         register_scheme(); app = QApplication(['v3-local-preview-check'])
         window = Workbench(bundle / 'frontend/dist', test=True, jobs_path=database, local_files_root=cache,
                            reaper_binary=reaper, vocal_resources=bundle / 'resources/vocal_tract/native', vocal_profile=out / 'vocal-profile')
-        window.resize(1440, 1000); window.show()
+        window.resize(1920 if natural else 1440, 1000); window.show()
         def pause():
             loop = QEventLoop(); QTimer.singleShot(100, loop.quit); loop.exec()
         def js(code):
@@ -133,6 +165,7 @@ def verify(bundle, out):
                  ('普通话转 IPA', '.mandarin-ipa-page'), ('音系归纳', '[aria-label="音系归纳工作区"]'),
                  ('感知实验', '.perception-page')]
         for i, (title, selector) in enumerate(pages, 1):
+            if natural and i==10:continue
             js('[...document.querySelectorAll("nav button")].find(b=>b.textContent.includes(' + json.dumps(title) + '))?.click()')
             wait('!!document.querySelector(' + json.dumps(selector) + ')')
             if i == 12:
@@ -149,9 +182,19 @@ def verify(bundle, out):
                                 inside:q.top>=b.top-1&&q.left>=b.left-1&&q.right<=b.right+1};});})()''')
                     assert geometry and all(item['inside'] for item in geometry), geometry
                     report['annotation_boundaries'].append(geometry)
-            pause(); window.view.grab().save(str(out / f'M{i:02d}.png'))
-            report['pages'].append(title)
+            # DOM readiness precedes Qt's compositor. Wait for two renderer frames
+            # and color transitions before reading actual pixels.
+            js('window.__p17paint=false;requestAnimationFrame(()=>requestAnimationFrame(()=>window.__p17paint=true))')
+            wait('window.__p17paint===true')
+            for _ in range(4):pause()
+            window.view.grab().save(str(out / f'M{i:02d}.png'))
+            geometry=js('''(()=>{const m=document.querySelector('main'),s=document.querySelector('main>.module-frame:not([style*="display: none"])');return {innerWidth,innerHeight,dpr:devicePixelRatio,mainHeight:m.clientHeight,mainScroll:m.scrollHeight,moduleHeight:s?.clientHeight,moduleScroll:s?.scrollHeight};})()''')
+            report['pages'].append(dict(title=title,geometry=geometry) if natural else title)
+            if natural:assert geometry['mainScroll']<=geometry['mainHeight']+2, (title,geometry)
             print(f'Verified {mode} page:', i, flush=True)
+        if natural:
+            report['originals_unchanged']=all(hashlib.sha256(path.read_bytes()).hexdigest()==digest for path,digest in originals.items())
+            assert report['originals_unchanged']
         report['success'] = True
     except Exception:
         report['error'] = traceback.format_exc()

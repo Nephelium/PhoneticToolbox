@@ -2,10 +2,10 @@
 import { computed,ref,onMounted,onUnmounted } from 'vue';import type { Workspace } from '../state/workspace.ts';import { envelope,selection,positionSelection } from '../platform/wav.ts';
 import SpectrogramViewport from './SpectrogramViewport.vue';import type {Spectrogram,SpectrogramView} from '../platform/research.ts';
 import {playback,isCurrentAudio} from '../state/audio.ts';import {amplitudeLimit,amplitudeLabel,sampleWavePath} from '../platform/waveform.ts';
-const props=defineProps<{state:Workspace;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;spectrogramSelectable?:boolean;maxWindowSeconds?:number;compactOverview?:boolean;overviewTop?:boolean;hideOverviewControls?:boolean;autoAmplitude?:boolean;normalizeDisplay?:boolean;clickMovesSelection?:boolean;selectionRequiresShift?:boolean;doubleClickAction?:'zoom'|'annotation';shiftWheelPan?:boolean;continuousDetail?:boolean;trackHeight?:number;hideTimeAxis?:boolean}>();let anchor:number|null=null,anchorX=0,selectionLength=0,dragged=false,boundaryDrag=false;
+const props=withDefaults(defineProps<{state:Workspace;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;spectrogramSelectable?:boolean;maxWindowSeconds?:number;compactOverview?:boolean;overviewTop?:boolean;hideOverviewControls?:boolean;autoAmplitude?:boolean;normalizeDisplay?:boolean;clickMovesSelection?:boolean;selectionRequiresShift?:boolean;doubleClickAction?:'zoom'|'annotation';shiftWheelPan?:boolean;continuousDetail?:boolean;trackHeight?:number;hideTimeAxis?:boolean}>(),{autoAmplitude:true,continuousDetail:true});let anchor:number|null=null,anchorX=0,selectionLength=0,dragged=false,boundaryDrag=false;
 const emit=defineEmits<{'selection-end':[start:number,end:number];'time-double-click':[time:number,ctrl:boolean];'boundary-start':[event:PointerEvent,time:number,tolerance:number];'boundary-move':[event:PointerEvent,time:number];'boundary-end':[]}>();
 const viewport=ref<HTMLElement>(),width=ref(800);let observer:ResizeObserver;
-onMounted(()=>{observer=new ResizeObserver(entries=>{width.value=Math.max(100,Math.min(1600,Math.round(entries[0].contentRect.width)));});if(viewport.value)observer.observe(viewport.value);});
+onMounted(()=>{observer=new ResizeObserver(entries=>{width.value=Math.max(100,Math.min(4096,Math.round(entries[0].contentRect.width)));});if(viewport.value)observer.observe(viewport.value);});
 onUnmounted(()=>observer?.disconnect());
 const duration=computed(()=>props.state.asset?.duration||0);const windowLength=computed(()=>duration.value/props.state.zoom);
 const minZoom=computed(()=>Math.max(1,duration.value/(props.maxWindowSeconds??Infinity)));
@@ -57,7 +57,7 @@ function wheel(event:WheelEvent){
 <button @click="zoom(1);state.offset=0">适合窗口</button>
 </div>
 </div>
-<div v-if="!compactOverview" class="display-options"><slot name="controls"/><label v-if="state.asset&&state.asset.channels.length>1"><input v-model="state.showBoth" type="checkbox"/>显示两个声道</label><label v-if="spectrogramLoader"><input v-model="state.showSpectrogram" type="checkbox"/>显示语谱图（Praat）</label><small class="muted">绘图按像素聚合峰值，原音频不变</small></div>
+<div v-if="!compactOverview" class="display-options"><slot name="controls"/><label v-if="state.asset&&state.asset.channels.length>1"><input v-model="state.showBoth" type="checkbox"/>显示两个声道</label><label v-if="spectrogramLoader"><input v-model="state.showSpectrogram" type="checkbox"/>显示语谱图（Praat）</label><small class="muted">振幅随可见窗调整 · 细节显示原始采样点</small></div>
 <div v-for="track in tracks" :key="track.index" class="wave-track">
 <div v-if="!compactOverview||state.showBoth" class="track-label">
 <span>声道 {{track.index+1}}</span>
@@ -73,8 +73,8 @@ function wheel(event:WheelEvent){
 </svg>
 <div v-if="!hideTimeAxis" class="time-axis" aria-label="波形时间轴（秒）"><span v-for="i in 5" :key="i">{{(left+(i-1)*windowLength/4).toFixed(windowLength<.1?4:3)}}{{i===5?' s':''}}</span></div>
 </div>
-<SpectrogramViewport v-if="state.showSpectrogram&&spectrogramLoader" :loader="spectrogramLoader" :start="left" :end="left+windowLength" :channel="state.channel" :width="width" :selectable="spectrogramSelectable" :selection-start="state.start" :selection-end="state.end" @selection-end="selectSpectrogram"/>
-<div v-if="state.showSpectrogram&&spectrogramLoader" class="time-axis" aria-label="语谱图时间轴（秒）">
+<SpectrogramViewport v-if="state.showSpectrogram&&spectrogramLoader" :loader="spectrogramLoader" :start="left" :end="left+windowLength" :channel="state.channel" :width="width" :selectable="spectrogramSelectable" :selection-start="state.start" :selection-end="state.end" @selection-end="selectSpectrogram" @view-wheel="wheel" @view-double-click="double"/>
+<div v-if="state.showSpectrogram&&spectrogramLoader" class="time-axis spectrogram-time-axis" aria-label="语谱图时间轴（秒）">
 <span v-for="i in 5" :key="i">{{(left+(i-1)*windowLength/4).toFixed(3)}}</span>
 </div>
 <slot name="timeline" :start="left" :end="left+windowLength"/>
@@ -100,4 +100,7 @@ function wheel(event:WheelEvent){
 .compact-overview .overview-controls{justify-content:flex-start;flex-wrap:wrap;gap:8px 16px;margin:4px 0 0}
 .overview-controls label{display:flex;align-items:center;gap:5px}
 .compact-overview .wave-track svg{height:110px}
+.amplitude-scaled :deep(.spectrogram-view){margin-left:var(--wave-axis-width,64px)}
+.amplitude-scaled .spectrogram-time-axis{margin-left:var(--wave-axis-width,64px)}
+.wave-track svg{overflow:hidden}
 </style>

@@ -12,6 +12,15 @@ def configure():
         path = bundle / relative
         if path.is_dir():
             sys.path.insert(0, str(path))
+    if not getattr(sys, 'frozen', False):
+        # The source verifier's child service must use this checkout as well.
+        os.environ['PYTHONPATH']=os.pathsep.join(str(bundle/p) for p in
+            ('packages/phonetic_core/src','desktop/src','backend/src'))
+        for key,relative in (
+            ('PTB_EGG_PYTHON','.venv/m03-compatible/python.exe'),
+            ('PTB_M05_PYTHON','.venv/m05/Scripts/python.exe'),
+            ('PTB_M11_COMPONENT_ROOT','output/m11c-028b881d')):
+            if (bundle/relative).exists():os.environ.setdefault(key,str(bundle/relative))
     config = bundle / 'local-preview.json'
     portable = bundle / 'desktop-bundle.json'
     if portable.is_file():
@@ -36,6 +45,11 @@ def main():
         restore_worker_pipes()
         from verify_v3_local_preview import verify
         return verify(bundle, Path(sys.argv[2]).absolute())
+    if len(sys.argv) == 4 and sys.argv[1] == '--verify-natural-preview':
+        from m10_recording_entry import restore_worker_pipes
+        restore_worker_pipes()
+        from verify_v3_local_preview import verify
+        return verify(bundle, Path(sys.argv[2]).absolute(), Path(sys.argv[3]).absolute())
     # Keep all fixed worker dispatch and unknown-switch rejection in one entry.
     from research_entry import main as research_main
     if len(sys.argv) == 1:

@@ -34,10 +34,14 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
     from contextlib import asynccontextmanager
     from ptb_worker.egg_interactive import InteractivePreview
     egg_preview = InteractivePreview(memory_bytes=3_000_000_000 if mode == 'local' else 1_000_000_000)
+    from ptb_worker.spectrogram_session import SpectrogramSession
+    spectrogram_session = SpectrogramSession() if mode == 'local' else None
     @asynccontextmanager
     async def lifespan(app):
         try: yield
-        finally: egg_preview.close()
+        finally:
+            egg_preview.close()
+            if spectrogram_session is not None:spectrogram_session.close()
     app = FastAPI(title='PhoneticToolbox API', version=API_VERSION, lifespan=lifespan,
                   description='Shared API; accounts require configured PostgreSQL. M01 batches require an explicitly configured durable worker and resource store.')
     ctx = AccountContext(account_store, auth_settings, mode)
@@ -45,7 +49,7 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
     app.include_router(create_project_router(ctx))
     app.include_router(create_job_router(ctx,job_store,local_token=local_token,local_origin=local_origin))
     app.include_router(create_storage_router(ctx, storage, egg_preview=egg_preview))
-    app.include_router(create_preview_router(mode,local_token,local_origin,egg_preview=egg_preview))
+    app.include_router(create_preview_router(mode,local_token,local_origin,egg_preview=egg_preview,spectrogram_session=spectrogram_session))
 
     @app.exception_handler(PreviewError)
     async def preview_error(request: Request,exc):

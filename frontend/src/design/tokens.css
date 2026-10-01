@@ -73,6 +73,9 @@ hr{border:0;border-top:1px solid var(--border);margin:22px 0}
 .tab-close svg{width:13px;height:13px}
 .tab-wrap svg{width:15px;height:15px}
 .host-badge{font-size:12px;color:var(--muted);padding-bottom:8px;white-space:nowrap}
+.topbar>.project-return{flex:none;display:block;max-width:320px;min-height:30px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;align-self:center;margin-bottom:6px;padding:4px 8px;font-size:12px;border-radius:var(--radius)}
+@media(max-width:900px){.topbar>.project-return{max-width:180px}}
+@media(max-width:600px){.topbar>.project-return{max-width:120px}}
 main{overflow:auto;flex:1;min-height:0;background:var(--panel);scrollbar-width:thin}
 .statusbar{border-top:1px solid var(--border);background:var(--app);display:flex;justify-content:space-between;gap:12px;padding:7px 20px;font-size:12px;color:var(--muted)}
 .statusbar .status-dot{margin-right:7px}
@@ -453,8 +456,11 @@ code,pre{font-family:var(--font-mono,Consolas),monospace;font-variant-ligatures:
 .wave-track .ipa-text{font-size:var(--figure-size)}
 
 /* P04-UNIFY: shared density only; existing U2 colors and figure roles remain. */
-:root{--module-padding:12px;--module-gap:12px;--control-gap:8px;--control-size:14px;--support-size:12px;--control-height:34px}
-.module-frame.workspace-page,.module-frame.annotation-page,.module-frame.egg-page{padding:var(--module-padding);gap:var(--module-gap)}
+:root{--module-padding:10px;--module-gap:8px;--control-gap:6px;--control-size:14px;--support-size:12px;--control-height:30px}
+.module-frame button{min-height:var(--control-height);padding:4px 9px}
+.module-frame input:not([type=checkbox]):not([type=range]),.module-frame select{min-height:var(--control-height);padding:4px 7px}
+.module-frame .hint{line-height:1.5}
+.module-frame.workspace-page,.module-frame.annotation-page,.module-frame.egg-page{padding:4px var(--module-padding) 8px;gap:var(--module-gap)}
 .module-frame .module-toolbar .m01-directory-bar{padding:0;margin:0;border:0;gap:var(--control-gap)}
 .module-frame .module-toolbar .m01-directory-bar button{font-size:var(--control-size);min-height:var(--control-height)}
 

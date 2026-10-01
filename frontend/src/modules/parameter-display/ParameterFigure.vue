@@ -10,24 +10,25 @@ const props=defineProps<{table:ParameterTable;group:PlotGroup;wave:Workspace;wav
 const exporting=ref(false);
 const format=ref<'png'|'svg'>('png');
 const svg=ref<SVGSVGElement>(),surface=ref<HTMLElement>(),error=ref(''),measuredWidth=ref(600);
+const viewportHeight=ref(window.innerHeight);const updateHeight=()=>{viewportHeight.value=window.innerHeight;};
 const fontScale=computed(()=>preferences.value.figure.size/12);
 const chartWidth=computed(()=>Math.max(Math.ceil(340*fontScale.value),measuredWidth.value));
 let resize:ResizeObserver|undefined;
-onMounted(()=>{resize=new ResizeObserver(entries=>{const width=entries[0]?.contentRect.width;if(width)measuredWidth.value=Math.floor(width);});if(surface.value)resize.observe(surface.value);});
-onUnmounted(()=>resize?.disconnect());
+onMounted(()=>{window.addEventListener('resize',updateHeight);resize=new ResizeObserver(entries=>{const width=entries[0]?.contentRect.width;if(width)measuredWidth.value=Math.floor(width);});if(surface.value)resize.observe(surface.value);});
+onUnmounted(()=>{resize?.disconnect();window.removeEventListener('resize',updateHeight);});
 const duration=computed(()=>props.wave.asset?.duration??1),span=computed(()=>duration.value/props.wave.zoom);
 const start=computed(()=>Math.min(props.wave.offset,Math.max(0,duration.value-span.value)));
 const chart=computed(()=>overlayPlot(props.table,props.group.parameters,start.value,start.value+span.value,chartWidth.value));
 const annotations=computed(()=>props.group.parameters.filter(n=>props.table.kinds[props.table.columns.indexOf(n)]==='text').map(name=>({name,runs:annotationRuns(props.table,name,start.value,start.value+span.value)})));
 const plotLeft=computed(()=>76*fontScale.value),plotRight=computed(()=>chartWidth.value-(chart.value.dual?76:22)*fontScale.value),plotWidth=computed(()=>plotRight.value-plotLeft.value);
-const plotTop=computed(()=>(28+annotations.value.length*23)*fontScale.value),plotHeight=300,plotBottom=computed(()=>plotTop.value+plotHeight);
+const plotTop=computed(()=>(28+annotations.value.length*23)*fontScale.value),plotHeight=computed(()=>Math.max(220,viewportHeight.value-780)),plotBottom=computed(()=>plotTop.value+plotHeight.value);
 const legendColumns=computed(()=>Math.max(1,Math.floor(chartWidth.value/(210*fontScale.value)))),legendWidth=computed(()=>chartWidth.value/legendColumns.value);
 const chartHeight=computed(()=>plotBottom.value+(58+Math.ceil(chart.value.curves.length/legendColumns.value)*24)*fontScale.value);
 const colorTokens=['--accent','--warning','--teal','--danger','--violet','--success'];
 const styleFor=(name:string)=>{const index=Math.max(0,props.table.columns.indexOf(name)-1);return {color:'var('+colorTokens[index%colorTokens.length]+')',dash:index>=colorTokens.length||name.toLowerCase().includes('rf0')?'7 3':undefined};};
 const x=(t:number)=>plotLeft.value+(t-start.value)/span.value*plotWidth.value;
 const scale=(curve:OverlayCurve)=>chart.value[curve.axis];
-const y=(curve:OverlayCurve,value:number)=>plotBottom.value-(value-scale(curve).min)/(scale(curve).max-scale(curve).min)*plotHeight;
+const y=(curve:OverlayCurve,value:number)=>plotBottom.value-(value-scale(curve).min)/(scale(curve).max-scale(curve).min)*plotHeight.value;
 function path(curve:OverlayCurve){let pen=false;return curve.points.map(point=>{if(point.value===null){pen=false;return '';}const command=pen?'L':'M';pen=true;return command+x(point.time).toFixed(3)+' '+y(curve,point.value).toFixed(3);}).join(' ');}
 function label(name:string){const max=Math.max(12,Math.floor((legendWidth.value-55)/(7*fontScale.value)));return name.length>max?name.slice(0,max-1)+'…':name;}
 const printable=(text:string)=>text&&!['sil','<sil>','eps','nan'].includes(text.toLowerCase());
@@ -77,5 +78,5 @@ async function saveWhole(){
 </svg></div><p v-if="group.parameters.length" class="plot-help">Ctrl＋滚轮缩放时间轴 · 左键拖动平移 · Shift＋拖动选区 · 双击全长<span v-if="chart.dual">。双轴沿用 v2 的量级判定；图例标明所属纵轴，原数值不归一化。</span></p></section></template>
 <style scoped>
 .image-format{width:auto;max-width:90px}
-.parameter-figure{border:1px solid var(--border);border-radius:8px;background:var(--panel);padding:14px;margin:14px 0;min-width:0}.parameter-figure>.section-title{flex-wrap:wrap;margin-bottom:14px}.section-title>div{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.section-title h3{margin:0;font-size:15px}.section-title small{color:var(--muted);font-size:12px}.plot-surface{width:100%;min-width:0;overflow-x:auto}.parameter-chart{display:block;width:100%;min-width:340px;max-width:none;background:var(--panel);touch-action:none;font-family:var(--font-figure);cursor:grab}.parameter-chart:active{cursor:grabbing}.empty-plot{min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--muted);border:1px dashed var(--border);border-radius:5px;background:var(--app)}.empty-plot strong{font-size:16px;color:var(--text)}.empty-plot p{max-width:340px;line-height:1.7}.plot-help{font-size:12px;color:var(--muted);line-height:1.6;margin:10px 0 0}
+.parameter-figure{border:1px solid var(--border);border-radius:8px;background:var(--panel);padding:10px;margin:10px 0;min-width:0}.parameter-figure>.section-title{flex-wrap:wrap;margin-bottom:8px}.section-title>div{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.section-title h3{margin:0;font-size:15px}.section-title small{color:var(--muted);font-size:12px}.plot-surface{width:100%;min-width:0;overflow-x:auto}.parameter-chart{display:block;width:100%;min-width:340px;max-width:none;background:var(--panel);touch-action:none;font-family:var(--font-figure);cursor:grab}.parameter-chart:active{cursor:grabbing}.empty-plot{min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--muted);border:1px dashed var(--border);border-radius:5px;background:var(--app)}.empty-plot strong{font-size:16px;color:var(--text)}.empty-plot p{max-width:340px;line-height:1.7}.plot-help{font-size:12px;color:var(--muted);line-height:1.6;margin:10px 0 0}
 </style>

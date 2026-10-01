@@ -6,3 +6,5 @@ test('M08 import ignores time column and retains view/gaps',()=>{assert.deepEqua
 test('M08 stroke and restore retain unvoiced frames',()=>{const original=[100,0,120,130];const next=editCurve(original,[...original],3,200,{index:0,value:140});assert.deepEqual(next.curve,[140,0,180,200]);assert.deepEqual(editCurve(original,next.curve,0,0,{index:3,value:200},true).curve,original);assert.deepEqual(original,[100,0,120,130]);});
 test('M08 rename has explicit scope and no collision/path escape',()=>{const files=[{id:'a',name:'x_1.wav'},{id:'b',name:'x_2.wav'}];assert.deepEqual(renamePlan(files,'new_',[]),[{id:'a',name:'new_1.wav'},{id:'b',name:'new_2.wav'}]);assert.throws(()=>renamePlan(files,'../',[]));assert.throws(()=>renamePlan(files,'new_',['NEW_1.wav']));});
 test('M08 current view clamped independently of full duration',()=>{assert.deepEqual(visible(10,2,8),[5,10]);assert.deepEqual(visible(10,1,8),[0,10]);});
+
+test('M08 reverse-direction stroke keeps the pointer endpoint and original mask',()=>{const original=[100,0,120,130];assert.deepEqual(editCurve(original,[...original],0,140,{index:3,value:200}).curve,[140,0,180,200]);});

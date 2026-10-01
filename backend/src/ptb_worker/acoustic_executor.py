@@ -39,8 +39,8 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None,process_
     # Offline EGG already permits 1 MiB reads/writes. Use that existing bound
     # instead of hundreds of tiny durable scratch transactions per interaction.
     # Hosted storage and other modules retain their established chunk sizes.
-    local_egg=snapshot['operation']=='egg_analysis' and not store.postgres
-    chunk_bytes=1_048_576 if local_egg else CHUNK_BYTES
+    local_large_chunks=snapshot['operation'] in ('egg_analysis','pitch_manipulation') and not store.postgres
+    chunk_bytes=1_048_576 if local_large_chunks else CHUNK_BYTES
     done=threading.Event();abort=threading.Event();errors=[];progress=[.01]
     def heartbeat():
         try:
@@ -67,7 +67,7 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None,process_
             if len(raw)!=item['size_bytes'] or digest(raw)!=item['sha256']:raise StorageError('input_unavailable',410)
             blobs[item['role']]=bytes(raw)
         progress[0]=.1
-        with ManagedScratch(files,identity,write_chunk_bytes=chunk_bytes if local_egg else 65536) as scratch:
+        with ManagedScratch(files,identity,write_chunk_bytes=chunk_bytes if local_large_chunks else 65536) as scratch:
             if snapshot['operation']=='pitch_manipulation' and snapshot.get('saved_copy'):
                 result=dict(snapshot['copy_result'],name=snapshot['copy_name'])
                 meta=dict(schema_version='m08/1',audio_sha256=snapshot['source_ref']['sha256'],results=[result])
@@ -81,7 +81,7 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None,process_
                         audio_path=str(audio_path),native_path=str(files.scratch_path(identity,native['id'])),
                         input_name=snapshot['input_assets'][0]['name'])
                     request=scratch.create(json.dumps(header).encode(),'.json')
-                    receiver=Receiver(files,identity,header['sha256'])
+                    receiver=Receiver(files,identity,header['sha256'],write_chunk_bytes=chunk_bytes if not store.postgres else 65536)
                     collect_scientific('m08',request,scratch,
                         replace(SEGMENT_LIMITS,timeout_seconds=120,process_bytes=1_000_000_000),
                         lambda:abort.is_set() or stop.is_set(),on_started,process_evidence,on_chunk=receiver.write)

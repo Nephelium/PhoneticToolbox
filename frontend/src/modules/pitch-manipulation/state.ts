@@ -16,7 +16,7 @@ export function importF0(times:number[],modified:number[],start:number,end:numbe
 }
 export function editCurve(original:number[],modified:number[],index:number,value:number,last?:{index:number;value:number},restore=false){
  const result=[...modified];if(!restore&&original[index]<=0)return {curve:result,last};const lo=Math.min(index,last?.index??index),hi=Math.max(index,last?.index??index);
- for(let i=lo;i<=hi;i++){if(restore)result[i]=original[i];else if(original[i]>0)result[i]=last&&hi>lo?last.value+(value-last.value)*(i-lo)/(hi-lo):value;}
+ for(let i=lo;i<=hi;i++){if(restore)result[i]=original[i];else if(original[i]>0)result[i]=last&&hi>lo?last.value+(value-last.value)*(i-last.index)/(index-last.index):value;}
  return {curve:result,last:{index,value}};
 }
 export function renamePlan(files:{id:string;name:string}[],prefix:string,existing:string[]){
