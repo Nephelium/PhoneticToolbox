@@ -1,0 +1,15 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><title>P17 layout acceptance</title></head><body><div id="app"></div><script type="module">
+import {createApp,h,ref} from 'vue';
+import Frame from '/src/components/ModuleFrame.vue';
+import Workbench from '/src/components/ModuleWorkbench.vue';
+import Section from '/src/components/ModuleSection.vue';
+import Plot from '/src/components/ScientificPlot.vue';
+import '/src/design/tokens.css';
+const value=ref('未提交参数'),noLeft=ref(false),noRight=ref(false);
+window.__p17={noLeft,noRight};
+createApp({render:()=>h('div',{style:'height:100vh;padding-left:224px'},h(Frame,{label:'三栏测试',fit:true},{default:()=>h(Workbench,{stateKey:'p17-layout'},{
+ left:noLeft.value?undefined:()=>h(Section,{label:'输入'},()=>[h('h2','输入与参数'),...Array.from({length:8},(_,i)=>h('label',{style:'display:flex;flex-direction:column;margin-bottom:8px'},['参数 '+i,h('input',{'aria-label':'参数 '+i,value:value.value,onInput:e=>value.value=e.target.value})]))]),
+ default:()=>[h(Section,{label:'图窗',style:'display:flex;flex-direction:column;flex:1;min-height:0'},()=>[h('h2','科学图窗'),h(Plot,{title:'布局测试折线',fill:true,height:300,style:'flex:1;min-height:0',x:[0,1],y:[-1,1],unit:'比例',traces:[{label:'几何数据',times:[0,.25,.5,.75,1],values:[0,.5,-.5,1,0],color:'var(--wave)'}]})]),h('button',{'aria-label':'中央操作'},'中央操作')],
+ right:noRight.value?undefined:()=>h(Section,{label:'记录'},()=>[h('button',{'aria-label':'保存测试状态'},'保存测试状态'),...Array.from({length:40},(_,i)=>h('p',{style:'margin:12px 0'},'布局测试记录 '+i))])
+ })}))}).mount('#app');
+</script></body></html>

@@ -1,0 +1,16 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><title>P17 real waveform acceptance</title></head><body><div id="app"></div><script type="module">
+import {createApp,h,ref} from 'vue';
+import Waveform from '/src/components/WaveformViewport.vue';
+import {workspace,assignAsset} from '/src/state/workspace.ts';
+import {decodeWav} from '/src/platform/decode.ts';
+import '/src/design/tokens.css';
+const state=workspace('p17-waveform'),status=ref('empty');
+const kind=new URLSearchParams(location.search).get('spectrogram');
+const spectrogramLoader=kind?async view=>{const response=await fetch('/__p17spec',{method:'POST',body:JSON.stringify({kind,view})});const data=await response.json();if(data.error)throw Error(data.error);return data.value;}:undefined;
+if(kind)state.showSpectrogram=true;
+window.__p17={state};
+async function pick(event){const file=event.target.files[0];if(!file)return;status.value='loading';const start=performance.now();try{assignAsset('p17-waveform',await decodeWav(await file.arrayBuffer(),file.name));window.__p17.loadMs=performance.now()-start;status.value='ready';}catch(error){status.value=String(error);}}
+createApp({render:()=>h('section',{style:'padding:16px;width:100%;margin:auto'},[
+h('input',{type:'file',accept:'.wav','aria-label':'真实录音',onChange:pick}),h('output',{'aria-label':'读取状态'},status.value),
+state.asset?h(Waveform,{state,spectrogramLoader,spectrogramSelectable:true,shiftWheelPan:true}):null])}).mount('#app');
+</script></body></html>

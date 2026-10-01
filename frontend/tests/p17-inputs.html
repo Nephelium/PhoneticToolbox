@@ -1,0 +1,11 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><title>P17 browser file inputs</title></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';
+import {previewFiles} from '/src/platform/research.ts';
+import M07 from '/src/modules/phonation-synthesis/PhonationSynthesisPage.vue';
+import M08 from '/src/modules/pitch-manipulation/PitchManipulationPage.vue';
+import M09 from '/src/modules/spectrogram-to-audio/Spec2WavPage.vue';
+import '/src/design/tokens.css';
+const id=new URLSearchParams(location.search).get('module')||'M08';
+const context={key:'p17-browser-inputs',label:'Browser file import',files:previewFiles()};
+createApp({render:()=>h({M07,M08,M09}[id],{context,stateKey:'p17-browser-'+id,active:true})}).mount('#app');
+</script><style>html,body,#app{height:100%;margin:0}#app{background:var(--surface)}</style></body></html>
