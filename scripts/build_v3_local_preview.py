@@ -47,8 +47,20 @@ def main():
             '--specpath', str(work)]
     for relative in ('scripts', 'backend/src', 'desktop/src', 'packages/phonetic_core/src'):
         args += ['--paths', str(ROOT / relative)]
-    data = [(ROOT / r, r) for r in ('frontend/dist', 'resources/vocal_tract', 'resources/m05',
-            'contracts', 'backend/migrations', 'docs/manual', 'third_party/licenses')]
+    # Another module can rebuild frontend/dist while PyInstaller is analyzing.
+    # Freeze data before analysis, just as we freeze the scientific source above.
+    data = []
+    for relative in ('frontend/dist', 'resources/vocal_tract', 'resources/m05',
+                     'contracts', 'backend/migrations', 'docs/manual', 'third_party/licenses'):
+        source, target = ROOT / relative, snapshot / relative
+        shutil.copytree(source, target)
+        expected = {p.relative_to(source).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+                    for p in source.rglob('*') if p.is_file()}
+        copied = {p.relative_to(target).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+                  for p in target.rglob('*') if p.is_file()}
+        if expected != copied:
+            raise RuntimeError('Build input changed while snapshotting: ' + relative)
+        data.append((target, relative))
     data += [(snapshot / r, r) for r in ('backend/src', 'desktop/src', 'packages/phonetic_core/src')]
     data += [(snapshot / 'local-preview.json', '.'),
              (ROOT / 'third_party/source-registry.json', 'third_party'),

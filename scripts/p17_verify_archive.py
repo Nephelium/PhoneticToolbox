@@ -23,9 +23,11 @@ def main():
     artifact = ROOT / 'dist' / args.name / (args.name + '.exe')
     archive = CArchiveReader(str(artifact))
     names = {name.replace('\\', '/'): name for name in archive.toc}
-    files = []
+    files, checkout_differences = [], []
     for relative in ('backend/src', 'desktop/src', 'packages/phonetic_core/src', 'frontend/dist', 'docs/manual'):
-        source = ROOT / relative if relative in ('frontend/dist', 'docs/manual') else work / 'snapshot' / relative
+        source = work / 'snapshot' / relative
+        if not source.is_dir():
+            source = ROOT / relative  # Previous builders did not snapshot frontend/manuals.
         for path in sorted(source.rglob('*')):
             if not path.is_file() or '__pycache__' in path.parts or path.suffix == '.pyc':
                 continue
@@ -34,14 +36,16 @@ def main():
             sha = digest(path.read_bytes())
             assert digest(archive.extract(names[target])) == sha, 'Stale bundled file: ' + target
             current = ROOT / target
-            assert current.is_file() and digest(current.read_bytes()) == sha, 'Checkout changed since build: ' + target
+            if not current.is_file() or digest(current.read_bytes()) != sha:
+                checkout_differences.append(target)
             files.append(dict(path=target, sha256=sha))
     config = json.loads(archive.extract(names['local-preview.json']))
     assert config['portable'] is False
     assert not any(name.startswith('phonetic_toolbox/') for name in names)
     report = dict(success=True, files_checked=len(files), archive_entries=len(names),
                   executable=artifact.name, bytes=artifact.stat().st_size,
-                  sha256=digest(artifact.read_bytes()), configuration=config, files=files)
+                  sha256=digest(artifact.read_bytes()), configuration=config, files=files,
+                  checkout_differences=checkout_differences)
     (work / 'p17-archive-report.json').write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
     print(json.dumps({key: value for key, value in report.items() if key not in ('files', 'configuration')}, ensure_ascii=False))
 
