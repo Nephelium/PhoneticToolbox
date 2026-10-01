@@ -187,6 +187,8 @@ def verify(bundle, out, natural_manifest=None):
             js('window.__p17paint=false;requestAnimationFrame(()=>requestAnimationFrame(()=>window.__p17paint=true))')
             wait('window.__p17paint===true')
             for _ in range(4):pause()
+            if natural:
+                assert not js('document.querySelector("main").innerText.includes("目录授权已失效")'), (title, 'unselected_directory_reported_expired')
             window.view.grab().save(str(out / f'M{i:02d}.png'))
             geometry=js('''(()=>{const m=document.querySelector('main'),s=document.querySelector('main>.module-frame:not([style*="display: none"])');return {innerWidth,innerHeight,dpr:devicePixelRatio,mainHeight:m.clientHeight,mainScroll:m.scrollHeight,moduleHeight:s?.clientHeight,moduleScroll:s?.scrollHeight};})()''')
             report['pages'].append(dict(title=title,geometry=geometry) if natural else title)

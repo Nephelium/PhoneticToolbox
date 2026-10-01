@@ -24,8 +24,8 @@ def main():
     archive = CArchiveReader(str(artifact))
     names = {name.replace('\\', '/'): name for name in archive.toc}
     files = []
-    for relative in ('backend/src', 'desktop/src', 'packages/phonetic_core/src', 'frontend/dist'):
-        source = ROOT / relative if relative == 'frontend/dist' else work / 'snapshot' / relative
+    for relative in ('backend/src', 'desktop/src', 'packages/phonetic_core/src', 'frontend/dist', 'docs/manual'):
+        source = ROOT / relative if relative in ('frontend/dist', 'docs/manual') else work / 'snapshot' / relative
         for path in sorted(source.rglob('*')):
             if not path.is_file() or '__pycache__' in path.parts or path.suffix == '.pyc':
                 continue

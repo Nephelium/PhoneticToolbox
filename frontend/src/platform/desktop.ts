@@ -49,7 +49,7 @@ export async function initializePlatform(){
       update:(_file,session,config)=>task({op:'egg_preview_update',session,config}),
       close:(_file,session)=>task({op:'egg_preview_close',session})}:undefined,
     convertLip:hello.tasks?file=>task({op:'convert_lip',id:file.id}):undefined,
-    list:(id='',recursive=false)=>recursive?task({op:'research_scan',id}):call('list',{id}),
+    list:(id='',recursive=false)=>!id?Promise.resolve([]):recursive?task({op:'research_scan',id}):call('list',{id}),
     async previewAudio(file){const v=await task<{base64:string;sha256:string;sourceDuration:number;previewNote:string}>({op:'research_audio',id:file.id});const text=atob(v.base64),bytes=new Uint8Array(text.length);for(let i=0;i<text.length;i++)bytes[i]=text.charCodeAt(i);return {buffer:bytes.buffer,sha256:v.sha256,sourceDuration:v.sourceDuration,previewNote:v.previewNote};},
     async read(file){const v=await call<{base64:string;sha256:string}>('read',{id:file.id});const text=atob(v.base64),bytes=new Uint8Array(text.length);for(let i=0;i<text.length;i++)bytes[i]=text.charCodeAt(i);return {buffer:bytes.buffer,sha256:v.sha256};},
     textgrid:file=>call('textgrid',{id:file.id}),
