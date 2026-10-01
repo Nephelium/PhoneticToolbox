@@ -53,5 +53,5 @@ export async function selectFontOwner(next?:string){
  try{await setFonts(saved,false);}catch(e){if(scope!==scopeRevision)return;const error=e instanceof Error?e.message:'字体加载失败。';await setFonts(defaults(),false).catch(()=>{});if(scope===scopeRevision)fontError.value=error;}
 }
 export async function fontsReady(){await document.fonts.load('14px PTB-Doulos','a ɑ tʰ ã');await document.fonts.ready;}
-export function exportFontSnapshot(){const f=figureFonts(preferences.value);const p=fontPayload.value as Awaited<ReturnType<typeof prepareFonts>>|undefined;return {schema_version:'font/1' as const,zh:p?.resolved.figureZh||f.zh||'Microsoft YaHei',latin:p?.resolved.figureLatin||f.latin||'Segoe UI',ipa:'Doulos SIL' as const,size_px:f.size};}
+export function exportFontSnapshot(){const f=figureFonts(preferences.value);const p=fontPayload.value as Awaited<ReturnType<typeof prepareFonts>>|undefined;return {schema_version:'font/1' as const,zh:p?.resolved.figureZh||f.zh||'Microsoft YaHei',latin:p?.resolved.figureLatin||f.latin||'Segoe UI',ipa:'Doulos SIL' as const,size_px:f.size,fallback_policy:'portable' as const};}
 export {doulosUrl};

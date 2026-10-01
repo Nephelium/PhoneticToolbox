@@ -12,6 +12,21 @@ from ptb_api.egg_models import EggTaskConfig, EggPreviewData
 
 FIXTURES=Path(__file__).resolve().parents[2]/'tests/fixtures/m03'
 
+
+def test_preview_without_gci_f0_only_detects_events_in_display_windows(monkeypatch):
+    import phonetic_core.egg as egg
+    def unexpected(*args, **kwargs):
+        raise AssertionError('A local preview without GCI F0 must not redetect full-file events')
+    monkeypatch.setattr(egg, 'analyze_events', unexpected)
+    with np.load(FIXTURES/'EGG-SYN-PCM16.npz') as a:
+        samples=np.column_stack([a['load.egg_signal_raw'],a['load.audio_signal']])
+    stream=io.BytesIO();wavfile.write(stream,44100,samples)
+    bundle=unpack_bundle(prepare(stream.getvalue(),dict(mode='preview',roi_start=.1,roi_end=.5,
+        micro_center=.3,keep_praat_f0=False,keep_gci_f0=False)),64_000_000)
+    preview=json.loads(bundle.payloads[0])['preview']
+    assert preview['cq']['times'] and preview['gci'] and preview['goi']
+    assert preview['gci_f0']['times']==[]
+
 @pytest.mark.parametrize('raw_mode',[False,True])
 def test_preview_exact_audio_praat_and_spectrum_extent(raw_mode):
     with np.load(FIXTURES/'EGG-SYN-PCM16.npz') as a:

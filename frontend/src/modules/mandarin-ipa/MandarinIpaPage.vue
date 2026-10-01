@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import {computed,reactive,ref,watch} from 'vue';
+import {vResizablePanels} from '../../layout/resizablePanels.ts';
+import {computed,nextTick,onBeforeUnmount,reactive,ref,watch} from 'vue';
 import ModuleFrame from '../../components/ModuleFrame.vue';
 import ModuleSection from '../../components/ModuleSection.vue';
 import ModuleStatus from '../../components/ModuleStatus.vue';
@@ -21,11 +22,51 @@ const hanziStyle=computed(()=>({fontSize:draft.hanziSize+'px',fontWeight:draft.b
 
 watch(draft,()=>{dirty.value=true;error.value='';},{deep:true});
 watch(dirty,value=>emit('dirty',value),{immediate:true});
-function openVariants(token:MappedToken){if(token.variants.length>1)activeVariant.value={char:token.char,index:token.index};}
-function chooseVariant(token:MappedToken,index:number){draft.selectedVariants[variantKey(token.char,token.index)]=index;activeVariant.value=null;}
+const variantPanel=ref<HTMLElement>(),variantPosition=ref({left:'0px',top:'0px',visibility:'hidden' as 'hidden'|'visible'});
+let variantAnchor:HTMLElement|undefined,variantFrame=0,variantResize:ResizeObserver|undefined,variantZoom:MutationObserver|undefined;
+function positionVariants(){
+  const panel=variantPanel.value,anchor=variantAnchor;
+  if(!panel||!anchor?.isConnected)return;
+  const rect=anchor.getBoundingClientRect(),box=panel.getBoundingClientRect();
+  // Fixed offsets inherit root zoom; DOM rectangles are viewport coordinates.
+  const zoom=box.width/panel.offsetWidth||1,margin=8,gap=8;
+  const width=window.innerWidth,height=window.innerHeight;
+  const clip=outputArea.value?.getBoundingClientRect();
+  if(!rect.width||rect.bottom<0||rect.top>height||(clip&&(rect.bottom<clip.top||rect.top>clip.bottom))){closeVariants();return;}
+  let left=rect.right+gap,top=rect.top;
+  if(left+box.width>width-margin)left=rect.left-box.width-gap;
+  if(left<margin){left=rect.left;top=rect.bottom+gap;if(top+box.height>height-margin)top=rect.top-box.height-gap;}
+  variantPosition.value={left:Math.max(margin,Math.min(left,width-box.width-margin))/zoom+'px',top:Math.max(margin,Math.min(top,height-box.height-margin))/zoom+'px',visibility:'visible'};
+}
+function scheduleVariantPosition(){cancelAnimationFrame(variantFrame);variantFrame=requestAnimationFrame(positionVariants);}
+function outsideVariants(event:PointerEvent){const target=event.target as Node;if(!variantPanel.value?.contains(target)&&!variantAnchor?.contains(target))closeVariants();}
+function variantKeydown(event:KeyboardEvent){if(event.key==='Escape'){event.preventDefault();event.stopPropagation();closeVariants(true);}}
+function closeVariants(restoreFocus=false){
+  activeVariant.value=null;cancelAnimationFrame(variantFrame);
+  variantResize?.disconnect();variantZoom?.disconnect();
+  window.removeEventListener('scroll',scheduleVariantPosition,true);window.removeEventListener('resize',scheduleVariantPosition);
+  document.removeEventListener('pointerdown',outsideVariants,true);document.removeEventListener('keydown',variantKeydown,true);
+  if(restoreFocus)variantAnchor?.focus({preventScroll:true});
+  variantAnchor=undefined;
+}
+async function openVariants(token:MappedToken,event:MouseEvent){
+  closeVariants();if(token.variants.length<2)return;
+  variantAnchor=event.currentTarget as HTMLElement;activeVariant.value={char:token.char,index:token.index};
+  variantPosition.value={left:'0px',top:'0px',visibility:'hidden'};
+  await nextTick();positionVariants();
+  if(!activeVariant.value)return;
+  variantResize=new ResizeObserver(scheduleVariantPosition);variantResize.observe(variantAnchor!);variantResize.observe(outputArea.value!);
+  variantZoom=new MutationObserver(scheduleVariantPosition);variantZoom.observe(document.documentElement,{attributes:true,attributeFilter:['style']});
+  variantPanel.value?.querySelector<HTMLButtonElement>('button[aria-pressed=true]')?.focus({preventScroll:true});
+  window.addEventListener('scroll',scheduleVariantPosition,true);window.addEventListener('resize',scheduleVariantPosition);
+  document.addEventListener('pointerdown',outsideVariants,true);document.addEventListener('keydown',variantKeydown,true);
+}
+function chooseVariant(token:MappedToken,index:number){draft.selectedVariants[variantKey(token.char,token.index)]=index;closeVariants(true);}
+watch(()=>[draft.text,draft.layout,draft.display,draft.standard],()=>closeVariants());
+onBeforeUnmount(()=>closeVariants());
 function save(){const ok=host.projects.write(draftKey.value,snapshotDraft(draft));if(ok){dirty.value=false;error.value='';}else error.value='草稿保存失败，当前文本和排版仍保留在页面中。';return ok;}
 async function exportImage(){
-  if(exporting.value)return;exporting.value=true;error.value='';activeVariant.value=null;
+  if(exporting.value)return;exporting.value=true;error.value='';closeVariants();
   try{
     const element=outputArea.value,style=element?getComputedStyle(element):getComputedStyle(document.documentElement);
     const blob=await renderMandarinIpaPng({tokens:tokens.value,draft:snapshotDraft(draft),width:element?.clientWidth??900,uiFont:style.getPropertyValue('--font').trim()||style.fontFamily});
@@ -38,20 +79,13 @@ defineExpose({save});
 
 <template>
 <ModuleFrame class="mandarin-ipa-page" label="普通话转 IPA 工作区">
-  <template #toolbar>
-    <ModuleToolbar label="普通话转 IPA 操作">
-      <button class="primary" :disabled="exporting||!draft.text.trim()" @click="exportImage">{{exporting?'正在生成…':'保存为 PNG'}}</button>
-      <button :disabled="!dirty" @click="save">保存本机草稿<span v-if="dirty" aria-label="未保存"> *</span></button>
-      <template #actions><span class="m13-local-note">本地逐字转换 · 文本不上传</span><button @click="emit('references')">帮助与来源</button></template>
-    </ModuleToolbar>
-  </template>
   <template #status>
     <ModuleStatus v-if="error" kind="error" :message="error"><button @click="error=''">收起提示</button></ModuleStatus>
     <ModuleStatus v-else-if="exporting" kind="loading" message="正在用本地 Doulos SIL 字体生成 PNG…"/>
     <ModuleStatus v-else kind="info" message="结果按单字映射，不处理语流音变。多音字默认使用旧数据中第一条读音，需要人工选择；标准名称是旧数据列名，不代表规范来源已核验。"/>
   </template>
 
-  <div class="m13-workspace" :class="{'m13-workspace-stacked':draft.layout==='stacked'}">
+  <div v-resizable-panels="{key:stateKey,center:'.m13-result-section',centerMin:360,panels:[{selector:'.m13-input-section',side:'left',label:'汉字输入',initial:280,min:240,max:560},{selector:'.m13-settings-section',side:'right',label:'转换与排版',initial:260,min:240,max:560}]}" class="m13-workspace" :class="{'m13-workspace-stacked':draft.layout==='stacked'}">
     <ModuleSection class="m13-input-section" label="汉字输入" title="汉字输入">
       <textarea v-model="draft.text" aria-label="待转换汉字文本" placeholder="输入汉字、标点或分行文本…" spellcheck="false"/>
       <p class="m13-count">{{[...draft.text].length.toLocaleString()}} 个字符</p>
@@ -65,7 +99,7 @@ defineExpose({save});
           <span v-else-if="token.kind==='literal'" class="m13-token m13-literal" :class="{'m13-ipa-only-literal':draft.display==='ipa-only'}">
             <span v-if="draft.display==='paired'" class="m13-ipa-placeholder" aria-hidden="true">&nbsp;</span><span class="m13-hanzi" :style="hanziStyle">{{token.char}}</span>
           </span>
-          <button v-else-if="token.variants.length>1" type="button" class="m13-token m13-mapped m13-ambiguous" :data-index="token.index" :data-value="token.value" :aria-label="`${token.char}：${token.variants.length} 个读音，当前 ${token.value}`" @click="openVariants(token)">
+          <button v-else-if="token.variants.length>1" type="button" class="m13-token m13-mapped m13-ambiguous" :data-index="token.index" :data-value="token.value" :aria-label="`${token.char}：${token.variants.length} 个读音，当前 ${token.value}`" aria-haspopup="dialog" :aria-expanded="activeVariant?.index===token.index" @click="openVariants(token,$event)">
             <span class="m13-ipa ipa-text">{{token.value}}</span><span v-if="draft.display==='paired'" class="m13-hanzi" :style="hanziStyle">{{token.char}}</span>
           </button>
           <span v-else class="m13-token m13-mapped" :data-index="token.index" :data-value="token.value">
@@ -73,15 +107,23 @@ defineExpose({save});
           </span>
         </template>
       </div>
-      <div v-if="selectedToken" class="m13-variants" role="dialog" :aria-label="'选择 '+selectedToken.char+' 的读音'">
-        <div><strong>选择读音：{{selectedToken.char}}</strong><button aria-label="关闭读音选择" @click="activeVariant=null">关闭</button></div>
+      <Teleport to="body">
+      <div v-if="selectedToken" ref="variantPanel" class="m13-variants" :style="variantPosition" role="dialog" :aria-label="'选择 '+selectedToken.char+' 的读音'">
+        <div><strong>选择读音：{{selectedToken.char}}</strong><button aria-label="关闭读音选择" @click="closeVariants(true)">×</button></div>
         <button v-for="option in options" :key="option.index" :aria-pressed="selectedToken.selectedVariant===option.index" @click="chooseVariant(selectedToken,option.index)">
           <span>{{option.pinyin}}{{option.toneLabel==='轻声'?'（轻声）':option.toneLabel}}</span><span class="ipa-text">{{option.value}}</span>
         </button>
       </div>
+      </Teleport>
     </ModuleSection>
 
     <ModuleSection class="m13-settings-section" label="转换和排版设置" title="转换与排版">
+      <ModuleToolbar label="普通话转 IPA 操作">
+        <button class="primary" :disabled="exporting||!draft.text.trim()" @click="exportImage">{{exporting?'正在生成…':'保存为 PNG'}}</button>
+        <button :disabled="!dirty" @click="save">保存本机草稿<span v-if="dirty" aria-label="未保存"> *</span></button>
+        <button @click="emit('references')">帮助与来源</button>
+      </ModuleToolbar>
+      <p class="m13-local-note">本地逐字转换 · 文本不上传</p>
       <label>转换标准<select v-model="draft.standard" aria-label="转换标准"><option v-for="standard in standards" :key="standard" :value="standard">{{standard}}</option></select></label>
       <fieldset><legend>显示内容</legend><label><input v-model="draft.display" type="radio" value="paired"/>字音同显</label><label><input v-model="draft.display" type="radio" value="ipa-only"/>仅音标</label></fieldset>
       <fieldset><legend>输入与结果排布</legend><label><input v-model="draft.layout" type="radio" value="side-by-side"/>左右排布</label><label><input v-model="draft.layout" type="radio" value="stacked"/>上下排布</label></fieldset>
@@ -97,13 +139,11 @@ defineExpose({save});
 
 <style scoped>
 .mandarin-ipa-page{height:100%;overflow:auto}.m13-local-note{color:var(--muted);font-size:var(--support-size)}
-.m13-workspace{display:grid;grid-template-columns:minmax(250px,.85fr) minmax(360px,1.45fr) minmax(240px,.8fr);gap:var(--module-gap);align-items:stretch;min-height:0}.m13-workspace-stacked{grid-template-columns:minmax(0,1fr)}.m13-workspace-stacked .m13-settings-section{grid-row:2}.m13-workspace-stacked .m13-result-section{grid-row:3}
+.m13-workspace{display:grid;grid-template-columns:var(--panel-left,280px) minmax(360px,1fr) var(--panel-right,260px);grid-template-areas:'input result settings';gap:var(--module-gap);align-items:stretch;min-height:0}.m13-input-section{grid-area:input}.m13-result-section{grid-area:result}.m13-settings-section{grid-area:settings}.m13-workspace.m13-workspace-stacked{grid-template-columns:minmax(320px,1fr) var(--panel-right,260px);grid-template-areas:'input settings' 'result settings'}.m13-workspace-stacked .m13-input-section textarea{min-height:180px}.m13-workspace-stacked .m13-output{min-height:260px}.m13-local-note{margin:10px 0 14px}
 .m13-input-section,.m13-result-section,.m13-settings-section{display:flex;flex-direction:column}.m13-input-section textarea{flex:1;width:100%;min-height:360px;resize:vertical;padding:12px;border:1px solid var(--border);border-radius:6px;background:var(--panel);color:var(--text);font:28px/1.8 var(--font);overflow-wrap:anywhere}.m13-count{margin-top:8px;color:var(--muted);font-size:var(--support-size);text-align:right}
 .m13-output{flex:1;min-height:360px;padding:16px;border:1px solid var(--border);border-radius:6px;background:var(--app);color:var(--text);overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;line-height:var(--m13-line-height)}
 .m13-token{display:inline-block;position:relative;vertical-align:bottom;margin:0 2px;padding:2px 4px;border-radius:4px;gap:0}.m13-paired .m13-token{display:inline-flex;flex-direction:column;align-items:center}.m13-ipa{font-family:var(--font-ipa,"PTB-Doulos"),serif;font-size:var(--m13-ipa-size);line-height:1.35;padding:.12em 0;overflow:visible;color:var(--accent)}.m13-hanzi{font-family:var(--font);line-height:1.2;margin-top:var(--m13-gap)}.m13-ipa-placeholder{font-size:var(--m13-ipa-size);line-height:1.35;padding:.12em 0}.m13-ipa-only-literal .m13-hanzi{font-size:var(--m13-ipa-size)!important;font-weight:400!important;font-style:normal!important;text-decoration:none!important;margin:0}
 .m13-ambiguous{min-height:0;border:0;background:transparent;color:inherit;white-space:normal}.m13-ambiguous:hover{background:var(--selected)}.m13-ambiguous:after{content:'▼';position:absolute;right:0;bottom:-1px;color:var(--accent);font-size:8px}.m13-mapped:not(button):hover{background:var(--selected)}
-.m13-variants{margin-top:12px;padding:12px;border:1px solid var(--accent);border-radius:var(--radius);background:var(--panel);box-shadow:var(--shadow)}.m13-variants>div{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}.m13-variants>button{display:flex;width:100%;justify-content:space-between;margin-top:6px}.m13-variants>button[aria-pressed=true]{background:var(--selected);border-color:var(--accent)}.m13-variants .ipa-text{font-size:18px;color:var(--accent)}
+.m13-variants{position:fixed;z-index:100;width:240px;height:240px;max-width:calc(100vw / var(--page-scale,1) - 16px);max-height:calc(100dvh / var(--page-scale,1) - 16px);overflow:auto;padding:10px;border:1px solid var(--accent);border-radius:var(--radius);background:var(--panel);color:var(--text);font-family:var(--font);font-size:var(--control-size);box-shadow:var(--shadow)}.m13-variants>div{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;position:sticky;top:-10px;background:var(--panel)}.m13-variants>div button{padding:2px 8px;min-height:28px;font-size:20px}.m13-variants>button{display:flex;width:100%;justify-content:space-between;margin-top:6px;padding:6px 8px;white-space:normal;overflow-wrap:anywhere}.m13-variants>button[aria-pressed=true]{background:var(--selected);border-color:var(--accent)}.m13-variants .ipa-text{font-size:18px;color:var(--accent)}
 .m13-settings-section>label{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center;margin-bottom:12px;font-size:var(--control-size)}.m13-settings-section>label select,.m13-settings-section>label input{grid-column:1/-1;width:100%}.m13-settings-section>label span{font-variant-numeric:tabular-nums;color:var(--muted)}fieldset{display:flex;flex-wrap:wrap;gap:8px 12px;margin:0 0 14px;padding:10px;border:1px solid var(--border);border-radius:6px}legend{padding:0 4px;font-size:var(--support-size);color:var(--muted)}fieldset label{display:flex;align-items:center;gap:5px}fieldset button{font-size:var(--support-size)}fieldset button[aria-pressed=true]{background:var(--selected);border-color:var(--accent)}
-@container module (max-width:1000px){.m13-workspace{grid-template-columns:minmax(240px,.8fr) minmax(360px,1.2fr)}.m13-settings-section{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}.m13-settings-section>:deep(.module-section-heading){grid-column:1/-1}.m13-settings-section fieldset{align-self:start}}
-@container module (max-width:680px){.m13-workspace{grid-template-columns:1fr}.m13-settings-section{grid-column:auto;display:flex}.m13-input-section textarea,.m13-output{min-height:240px}}
 </style>

@@ -1,5 +1,5 @@
 export interface FontPreferences {version:1;zh:string;latin:string;mono:string;ipa:'Doulos SIL';figure:{follow:boolean;zh:string;latin:string;size:number}}
-export const candidates={zh:['Microsoft YaHei','SimSun','KaiTi','Source Han Serif SC','Noto Serif CJK SC','PingFang SC'],latin:['Segoe UI','Times New Roman','Arial','Georgia'],mono:['Consolas','Cascadia Code','JetBrains Mono','Courier New']};
+export const candidates={zh:['Microsoft YaHei','SimSun','KaiTi','Source Han Serif SC','Noto Serif CJK SC','PingFang SC','Noto Sans CJK SC','Noto Sans SC','Source Han Sans SC'],latin:['Segoe UI','Times New Roman','Arial','Georgia','DejaVu Sans','Liberation Sans','Noto Sans'],mono:['Consolas','Cascadia Code','JetBrains Mono','Courier New','DejaVu Sans Mono','Liberation Mono','Menlo']};
 export const defaults=():FontPreferences=>({version:1,zh:'',latin:'',mono:'',ipa:'Doulos SIL',figure:{follow:true,zh:'',latin:'',size:12}});
 export const validFamily=(value:unknown):value is string=>typeof value==='string'&&value.length<=100&&!/[\x00-\x1f"'\\/;{}<>]/.test(value);
 export const quoteFamily=(value:string)=>{if(!validFamily(value))throw Error('无效的字体名称。');return '"'+value+'"';};

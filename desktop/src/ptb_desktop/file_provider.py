@@ -95,7 +95,8 @@ class Entry:
 class FileProvider:
     def __init__(self,*,max_bytes=64_000_000,max_entries=10000):
         self.max_bytes,self.max_entries=max_bytes,max_entries
-        self.directories={};self.entries={};self.entry_ids={};self.closed=False;self.captured={}
+        self.directories={};self.entries={};self.entry_ids={};self.closed=False;self.captured={};self.preview_cache=None
+        self.preview_sources=set()
         self.session=secrets.token_urlsafe(24)
 
     def choose(self,purpose,picker):
@@ -143,6 +144,18 @@ class FileProvider:
                 result.append({'id':file_id,'name':entry.name,'kind':kind,'size':info.st_size})
         return sorted(result,key=lambda v:(v['name'].casefold(),v['name']))
 
+    def validate(self,key):
+        """Revalidate a memory preview's grant without decoding the source again."""
+        entry=self.entries.get(key) if not self.closed else None
+        if entry is None: raise FileAccessError('文件授权已失效，请刷新列表。')
+        if key in self.captured: return
+        directory=self.directory(entry.directory)
+        try:
+            path=checked_path(directory.path/entry.name)
+            if path.parent!=directory.path or fingerprint(path.stat())!=entry.fingerprint:
+                raise FileAccessError('音频已变化，请刷新列表。')
+        except OSError: raise FileAccessError('音频已不可访问，请刷新列表。') from None
+
     def read(self,key):
         entry=self.entries.get(key) if not self.closed else None
         if entry is None:raise FileAccessError('文件授权已失效，请刷新列表。')
@@ -157,6 +170,70 @@ class FileProvider:
             self.directory(entry.directory)
         except OSError:raise FileAccessError('文件不可读取，请刷新列表。') from None
         return raw,hashlib.sha256(raw).hexdigest()
+
+    def scan(self,key):
+        """Recursive picker grant, retaining direct-directory file capabilities."""
+        root=self.directory(key)
+        if root.purpose=='output':raise FileAccessError('输出目录没有读取授权。')
+        pending=[(root.path,key)];result=[];visited=0;entries_seen=0
+        while pending:
+            path,grant=pending.pop();visited+=1
+            if visited>512:raise FileAccessError('子目录超过512，请选择较小目录。')
+            self.directory(grant)
+            result.extend({**item,'name':(path/item['name']).relative_to(root.path).as_posix()}
+                          for item in self.list(grant))
+            if len(result)>self.max_entries:raise FileAccessError('语料文件超过扫描预算，请选择较小目录。')
+            with os.scandir(path) as children:
+                for item in children:
+                    entries_seen+=1
+                    if entries_seen>self.max_entries:raise FileAccessError('目录条目超过扫描预算，请选择较小目录。')
+                    info=Path(item.path).lstat()
+                    if not stat.S_ISDIR(info.st_mode) or stat.S_ISLNK(info.st_mode) or getattr(info,'st_file_attributes',0)&0x400:continue
+                    child=checked_path(item.path);child.relative_to(root.path)
+                    existing=next((k for k,d in self.directories.items() if d.path==child and d.purpose==root.purpose and d.identity==identity(info)),None)
+                    if existing is None:
+                        if len(self.directories)>=640:raise FileAccessError('目录授权数量超出预算，请重新打开窗口。')
+                        existing=secrets.token_urlsafe(24)
+                        self.directories[existing]=Directory(child,root.purpose,identity(info))
+                    pending.append((child,existing))
+        self.directory(key)
+        return sorted(result,key=lambda item:(item['name'].casefold(),item['name']))
+
+    @contextmanager
+    def audio_stream(self,key):
+        entry=self.entries.get(key) if not self.closed else None
+        if entry is None or not entry.name.lower().endswith('.wav'):raise FileAccessError('WAV授权已失效，请刷新列表。')
+        directory=self.directory(entry.directory)
+        if directory.purpose=='output':raise FileAccessError('输出目录没有读取授权。')
+        try:
+            path=checked_path(directory.path/entry.name)
+            if path.parent!=directory.path:raise FileAccessError('音频超出目录授权。')
+            with open_locked(path,directory.path,entry.fingerprint) as stream:
+                yield stream
+                self.directory(entry.directory)
+        except OSError:raise FileAccessError('音频不可读取，请刷新列表。') from None
+
+    def audio_preview(self,key):
+        import base64
+        raw,sha,duration,note=self.preview_payload(key)
+        return dict(base64=base64.b64encode(raw).decode('ascii'),sha256=sha,
+                    sourceDuration=duration,previewNote=note)
+
+    def preview_payload(self,key):
+        from .annotation_audio import preview_audio
+        with self.audio_stream(key) as stream:
+            cached=self.preview_cache
+            if cached and cached[0]==key:return cached[1]
+            raw,sha,duration,note=preview_audio(stream,self.max_bytes,preserve_channels=True)
+        self.preview_cache=(key,(raw,sha,duration,note))
+        self.preview_sources.add(key)
+        return raw,sha,duration,note
+
+    def spectrogram_payload(self,key):
+        if key in self.preview_sources:
+            raw,sha,_,_=self.preview_payload(key)
+            return raw,sha
+        return self.read(key)
 
     def output_target(self,directory_id,audio_id,format):
         directory=self.directory(directory_id);entry=self.entries.get(audio_id)
@@ -177,4 +254,6 @@ class FileProvider:
 
     def close(self):
         self.captured.clear()
+        self.preview_cache=None
+        self.preview_sources.clear()
         self.closed=True;self.directories.clear();self.entries.clear();self.entry_ids.clear()

@@ -22,7 +22,7 @@ def m01_capability(store):
         return False, 'acoustic_batches_not_configured'
     if platform_name() == 'linux':
         ready, reasons = linux_capabilities(store)
-        return ('acoustic_analysis' in ready, None if 'acoustic_analysis' in ready else reasons[0])
+        return ('acoustic_analysis' in ready, None if 'acoustic_analysis' in ready else (reasons[0] if reasons else 'linux_acoustic_runtime_unverified'))
     if platform_name() != 'win32':
         return False, 'linux_scientific_runtime_unverified' if platform_name() == 'linux' else 'scientific_platform_unverified'
     binary = getattr(getattr(store, 'files', None), 'reaper_binary', None)

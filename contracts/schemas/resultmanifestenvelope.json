@@ -356,6 +356,15 @@
           "title": "Backends",
           "type": "array"
         },
+        "computation_revision": {
+          "default": "acoustic/1",
+          "enum": [
+            "acoustic/1",
+            "acoustic/2"
+          ],
+          "title": "Computation Revision",
+          "type": "string"
+        },
         "config": {
           "$ref": "#/$defs/AcousticConfigSnapshot"
         },

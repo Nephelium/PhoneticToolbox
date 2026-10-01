@@ -12,7 +12,7 @@ async function main(){
  const context=await browser.newContext({viewport:{width:1440,height:1100},acceptDownloads:true});const page=await context.newPage(),checks=[];
  try{
   await page.goto(server.resolvedUrls.local[0]+'tests/m02-export.html');
-  await page.getByRole('button',{name:'元音ɑ̃.wav',exact:true}).click();await page.locator('.parameter-curve').first().waitFor();
+  await page.getByRole('button',{name:'元音ɑ̃.wav',exact:true}).click();await page.locator('.empty-plot').waitFor();await page.getByRole('button',{name:'全选可见参数',exact:true}).click();await page.getByRole('button',{name:/^将 .* 项分配到图窗$/}).click();await page.getByRole('button',{name:'清空勾选',exact:true}).click();await page.locator('.parameter-curve').first().waitFor();
   assert.equal(await page.locator('.right-tick').count(),5);
   async function save(name,figure=0){const waiting=page.waitForEvent('download');await page.locator('.parameter-figure').nth(figure).getByRole('button',{name:'保存整幅 PNG',exact:true}).click();const download=await waiting;assert(download.suggestedFilename().endsWith('.png'));await download.saveAs(path.join(out,name));}
   await save('light.png');await page.evaluate(()=>document.documentElement.dataset.theme='dark');await page.getByLabel('显示两个声道').check();await save('dark-stereo.png');

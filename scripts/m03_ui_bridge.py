@@ -16,8 +16,18 @@ def main():
     with sqlite3.connect((ROOT/'output/validation/p06/local-state.sqlite3').as_uri()+'?mode=ro',uri=True) as source,sqlite3.connect(db) as target:
         assert not source.execute("SELECT 1 FROM jobs WHERE state IN ('queued','running','cancel_requested')").fetchone();source.backup(target)
     cache=out/'cache';cache.mkdir();initialize_local_files(cache);inputs=out/'inputs';inputs.mkdir();saved=out/'saved';saved.mkdir()
-    with np.load(ROOT/'tests/fixtures/m03/EGG-SYN-PCM16.npz') as a:samples=np.column_stack([a['load.egg_signal_raw'],a['load.audio_signal']])
-    wavfile.write(inputs/'EGG ɑ̃˥.wav',44100,samples);wavfile.write(inputs/'mono.wav',44100,samples[:,0]);wavfile.write(inputs/'silence.wav',44100,np.zeros_like(samples))
+    if '--real-only' in sys.argv:
+        private=Path(r'C:\Users\13680\Desktop\project\音频数据\EGG测试\3.wav')
+        raw=private.read_bytes()
+        (inputs/'3.wav').write_bytes(raw)
+        (inputs/'3-复测.wav').write_bytes(raw)
+    else:
+        with np.load(ROOT/'tests/fixtures/m03/EGG-SYN-PCM16.npz') as a:samples=np.column_stack([a['load.egg_signal_raw'],a['load.audio_signal']])
+        wavfile.write(inputs/'EGG ɑ̃˥.wav',44100,samples);wavfile.write(inputs/'mono.wav',44100,samples[:,0]);wavfile.write(inputs/'silence.wav',44100,np.zeros_like(samples))
+    if '--realtime-input' in sys.argv:
+        # Explicit opt-in private regression input, only inside ignored evidence.
+        private=Path(sys.argv[sys.argv.index('--realtime-input')+1])
+        (inputs/'realtime.wav').write_bytes(private.read_bytes())
     if '--ranges' in sys.argv:
         wavfile.write(inputs/'wide.wav',44100,np.tile(samples,(8,1)))
         wavfile.write(inputs/'long.wav',44100,np.tile(samples,(83,1)))

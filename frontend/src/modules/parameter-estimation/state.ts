@@ -23,14 +23,14 @@ export function validateSettings(value:Settings):string {
 export interface Association {textgrid:ResearchFile|null;lip:ResearchFile|null;legacy:ResearchFile|null;tiers:Tier[];gridHash:string;layer:number;error:string;manual:{textgrid:boolean;lip:boolean}}
 export interface M01State {
  wave:Workspace;files:ResearchFile[];selected:string;marked:string[];associations:Record<string,Association>;
- input:DirectoryGrant|null;output:DirectoryGrant|null;associationDirectory:DirectoryGrant|null;sameDirectory:boolean;
+ input:DirectoryGrant|null;output:DirectoryGrant|null;associationDirectory:DirectoryGrant|null;sameDirectory:boolean;recursive:boolean;
  settings:Settings;settingsDraft:Settings;parameterDraft:string[];drawer:''|'parameters'|'settings';
  saved:string;loadVersion:number;listVersion:number;
 }
 export function createState(saved?:{parameters?:string[];settings?:Settings}):M01State {
  const settings=saved?.settings&&!validateSettings(saved.settings)?{...saved.settings}:defaults();
  const parameters=saved?.parameters?.length&&saved.parameters.every(k=>parameterKeys.includes(k as never))?[...new Set(saved.parameters)]:[...parameterKeys];
- const state:M01State={wave:{asset:null,start:0,end:0,channel:0,parameters,dirty:false,error:'',loading:false,zoom:1,offset:0},files:[],selected:'',marked:[],associations:{},input:null,output:null,associationDirectory:null,sameDirectory:true,
+ const state:M01State={wave:{asset:null,start:0,end:0,channel:0,parameters,dirty:false,error:'',loading:false,zoom:1,offset:0},files:[],selected:'',marked:[],associations:{},input:null,output:null,associationDirectory:null,sameDirectory:true,recursive:false,
    settings,settingsDraft:{...settings},parameterDraft:[...parameters],drawer:'',saved:'',loadVersion:0,listVersion:0};state.saved=draftJson(state);return state;
 }
 export function draftJson(state:M01State){return JSON.stringify({parameters:state.wave.parameters,settings:state.settings});}

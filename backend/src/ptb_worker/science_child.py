@@ -14,7 +14,8 @@ def main():
     from .acoustic_errors import AcousticFailure
     from .io.parameter_exports import table_from_frame,_build_pair
     from .managed_scratch import ReservedNativeScratch
-    from .native.reaper import Reaper,REAPER_SHA256
+    from .native.reaper import Reaper
+    from .reaper_policy import PolicyReaper
     from .acoustic_result import to_core_config,build_acoustic_result
     from .segmentation import digest
     from phonetic_core.catalog import PARAMETER_MAPPING
@@ -45,17 +46,12 @@ def main():
     associations=AcousticAssociations(tiers=tiers,lip=lip)
     inputs=[AcousticInputSnapshot(asset_id=i['id'],role=i['role'],sha256=i['sha256'],expires_at=i['expires_at']) for i in header['inputs']]
     with ReservedNativeScratch(header['native_scratch'],16_000_000) as scratch:
-        native=Reaper(header['reaper_binary'],scratch,limits) if request.config.backend_policy.reaper!='disabled' else None
-        result=analyze_audio(audio,to_core_config(request.config),associations,AcousticBackends(reaper=native))
-        # The legacy core records ordinary native failures as unavailable and
-        # continues with missing rF0. Linux's new complete-default task gate must
-        # fail before publication in that case. Unvoiced native tracks remain valid.
-        if sys.platform=='linux' and native is not None and not any(
-                event.get('stage')=='reaper' and event.get('actual')=='native_reaper' for event in result.backend_events):
-            raise AcousticFailure('reaper_runtime_failed')
+        policy=request.config.backend_policy.reaper
+        backend=PolicyReaper(policy,lambda:Reaper(header['reaper_binary'],scratch,limits)) if policy!='disabled' else None
+        result=analyze_audio(audio,to_core_config(request.config),associations,AcousticBackends(reaper=backend))
         frame=result.to_dataframe().rename(columns=PARAMETER_MAPPING)
         if frame.empty:raise AcousticFailure('no_parameter_frames')
-        wire=build_acoustic_result(result,audio,request,inputs,native_sha256=native.sha256 if native else None)
+        wire=build_acoustic_result(result,audio,request,inputs,native_sha256=backend.native_sha256 if backend else None)
         raw=wire.model_dump_json().encode()
         if len(raw)>16_000_000:raise LimitError('scientific_result_budget')
         table=table_from_frame(frame,limits)

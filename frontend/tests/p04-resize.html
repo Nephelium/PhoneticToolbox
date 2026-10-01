@@ -1,0 +1,16 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><base href="/"><title>P04 synthetic layout verification</title></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';import Shell from '/src/app/AppShell.vue';import '/src/design/tokens.css';
+// Synthetic PCM and table exercise the real page. No native calculation or DB.
+const buffer=new ArrayBuffer(44+16000),v=new DataView(buffer),str=(i,s)=>[...s].forEach((c,n)=>v.setUint8(i+n,c.charCodeAt(0)));
+str(0,'RIFF');v.setUint32(4,buffer.byteLength-8,true);str(8,'WAVEfmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,8000,true);v.setUint32(28,16000,true);v.setUint16(32,2,true);v.setUint16(34,16,true);str(36,'data');v.setUint32(40,16000,true);
+for(let i=0;i<8000;i++)v.setInt16(44+2*i,10000*Math.sin(2*Math.PI*i/40),true);
+const files=[{id:'audio',name:'合成元音ɑ̃.wav',kind:'audio',size:buffer.byteLength},{id:'table',name:'合成元音ɑ̃.xlsx',kind:'parameter',size:20}];
+const table={schema_version:'m02/1',sha256:'a'.repeat(64),columns:['Time_s','pF0','rF0','Intensity'],kinds:['number','number','number','number'],rows:Array.from({length:100},(_,i)=>[i/100,200+i,201+i,60+i/100])};
+// Enable the actual M10 wrapper/iframe, but reject engine operations explicitly.
+// This verifies embedded layout only, never devices, VTL, audio or recording.
+if(new URLSearchParams(location.search).has('vocal')){
+ const {initializePlatform}=await import('/src/platform/desktop.ts');let reply;
+ window.qt={webChannelTransport:{}};window.QWebChannel=class{constructor(_,ready){ready({objects:{files:{invoke(raw,callback){const {op}=JSON.parse(raw);callback(JSON.stringify({ok:true,value:op==='hello'?{kind:'desktop',session:'layout-test',api_version:'1.1.0',tasks:false}:[]}));},previewReady:{connect(){}},taskReady:{connect(){}},task(){},vocalReady:{connect(fn){reply=fn;}},vocal(id){queueMicrotask(()=>reply(id,JSON.stringify({ok:false,error:'布局测试未连接声道引擎'})));}}}});}};await initializePlatform();
+}
+createApp({render:()=>h(Shell,{research:{key:'resize-test:M01',label:'合成数据 · 布局测试',files:{kind:'preview',list:async()=>files,read:async()=>({buffer:buffer.slice(0),sha256:'a'.repeat(64)}),parameters:async()=>structuredClone(table)}}})}).mount('#app');
+</script></body></html>

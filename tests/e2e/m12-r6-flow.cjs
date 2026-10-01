@@ -1,4 +1,4 @@
-module.exports=async({page,click,loaded,out,rpc,checks})=>{
+module.exports=async({page,click,loaded,out,rpc,checks,modifier="Control"})=>{
  const fs=require('node:fs/promises'),path=require('node:path'),assert=require('node:assert/strict');
  await rpc({op:'r3_setup'});await click('语音标注对齐');await click('选择语料文件夹');await page.locator('.annotation-file-list button').filter({hasText:'split.wav'}).click();await loaded();
  const color=()=>page.getByRole('button',{name:'下载当前 TextGrid',exact:true}).evaluate(e=>({background:getComputedStyle(e).backgroundColor,panel:getComputedStyle(e).getPropertyValue('--panel').trim(),transition:getComputedStyle(e).transitionDuration}));
@@ -13,20 +13,20 @@ module.exports=async({page,click,loaded,out,rpc,checks})=>{
  await page.locator('.annotation-file-list button').filter({hasText:'audio_recording.wav'}).click();await loaded();
  await page.getByLabel('标注可视时长').fill('2');await page.getByLabel('标注可视时长').press('Tab');
  const point=async(time,kind='grid',row=0)=>{const el=page.locator(kind==='wave'?'.wave-track svg':'.annotation-grid').first();await el.scrollIntoViewIfNeeded();const box=await el.boundingBox();return {x:box.x+box.width*time/2,y:box.y+box.height*(kind==='wave'?.5:row===0?.22:.73)};};
- const tap=async(time,kind='grid',row=0)=>{const p=await point(time,kind,row);await page.mouse.click(p.x,p.y);};
- const save=async()=>{await page.locator('.annotation-grid').focus();await page.keyboard.press('Control+s');await loaded();await page.getByRole('status').filter({hasText:'已保存：'}).waitFor();return (await rpc({op:'inspect'})).value.grids['audio_recording_自动保存.TextGrid'];};
- const undo=async()=>{await page.locator('.annotation-grid').focus();await page.keyboard.press('Control+z');};
- await tap(.3);await page.keyboard.press('Control+x');let d=await save();assert(!d.tiers[0].intervals.some(i=>i.text==='ba1'));assert(!d.tiers[1].intervals.some(i=>i.text==='a1'));
- await tap(.03,'wave');await page.keyboard.press('Control+v');d=await save();let word=d.tiers[0].intervals.find(i=>i.text==='ba1');assert(word);assert(Math.abs(word.xmin-.03)<.004);assert(Math.abs(word.xmax-word.xmin-.45)<1e-6);const phones=d.tiers[1].intervals.filter(i=>i.xmin>=word.xmin&&i.xmax<=word.xmax);assert.deepEqual(phones.map(i=>i.text),['b','a1']);assert(Math.abs(phones[0].xmax-word.xmin-.2)<1e-6);
+ const tap=async(time,kind='grid',row=0)=>{const p=await point(time,kind,row);const hit=await page.evaluate(({x,y})=>document.elementsFromPoint(x,y).slice(0,3).map(e=>({tag:e.tagName,cls:e.className?.baseVal??e.className,label:e.getAttribute('aria-label')})),p);assert(!hit.some(e=>String(e.cls).includes('panel-resize-handle')),JSON.stringify({time,p,hit}));await page.mouse.click(p.x,p.y);};
+ const save=async()=>{await page.locator('.annotation-grid').focus();await page.keyboard.press(modifier+"+s");await loaded();await page.getByRole('status').filter({hasText:'已保存：'}).waitFor();return (await rpc({op:'inspect'})).value.grids['audio_recording_自动保存.TextGrid'];};
+ const undo=async()=>{await page.locator('.annotation-grid').focus();await page.keyboard.press(modifier+"+z");};
+ await tap(.3);await page.keyboard.press(modifier+"+x");let d=await save();assert(!d.tiers[0].intervals.some(i=>i.text==='ba1'));assert(!d.tiers[1].intervals.some(i=>i.text==='a1'));
+ await tap(.03,'wave');await page.keyboard.press(modifier+"+v");d=await save();let word=d.tiers[0].intervals.find(i=>i.text==='ba1');assert(word);assert(Math.abs(word.xmin-.03)<.004);assert(Math.abs(word.xmax-word.xmin-.45)<1e-6);const phones=d.tiers[1].intervals.filter(i=>i.xmin>=word.xmin&&i.xmax<=word.xmax);assert.deepEqual(phones.map(i=>i.text),['b','a1']);assert(Math.abs(phones[0].xmax-word.xmin-.2)<1e-6);
  await undo();d=await save();assert(!d.tiers[0].intervals.some(i=>i.text==='ba1'));await undo();d=await save();assert.deepEqual(d.tiers[0].intervals.find(i=>i.text==='ba1'),{xmin:.2,xmax:.65,text:'ba1'});
- checks.push('Ctrl-X cuts word and phones; wave-click Ctrl-V preserves duration, tone and phone split; each undo restores saved content');
+ checks.push(`${modifier}-X cuts word and phones; wave-click ${modifier}-V preserves duration, tone and phone split; each undo restores saved content`);
  await tap(.3);await page.keyboard.press('Backspace');d=await save();assert(!d.tiers[0].intervals.some(i=>i.text==='ba1'));assert(!d.tiers[1].intervals.some(i=>i.text==='a1'));assert(d.tiers[0].intervals.some(i=>i.xmin===0&&i.xmax===.8&&!i.text));await undo();
- await tap(.5,'grid',1);await page.keyboard.press('Control+x');await tap(1.5,'grid',1);await page.keyboard.press('Control+v');d=await save();assert(d.tiers[0].intervals.some(i=>i.text==='ba1'&&i.xmin===.2&&i.xmax===.65));assert(d.tiers[1].intervals.some(i=>i.text==='a1'&&Math.abs(i.xmin-1.5)<.004));await undo();await undo();
+ await tap(.5,'grid',1);await page.keyboard.press(modifier+"+x");await tap(1.5,'grid',1);await page.keyboard.press(modifier+"+v");d=await save();assert(d.tiers[0].intervals.some(i=>i.text==='ba1'&&i.xmin===.2&&i.xmax===.65));assert(d.tiers[1].intervals.some(i=>i.text==='a1'&&Math.abs(i.xmin-1.5)<.004));await undo();await undo();
  checks.push('Backspace deletes whole annotation and phones leaving blank; phone cut/paste leaves word layer unchanged');
- await tap(.3);await page.keyboard.press('Control+c');const baseline=await save();await tap(.9);await page.keyboard.press('Control+v');await page.getByRole('alert').filter({hasText:'重叠'}).waitFor();assert.deepEqual(await save(),baseline);
- await tap(1.8,'wave');await page.keyboard.press('Control+v');await page.getByRole('alert').filter({hasText:'超出录音'}).waitFor();assert.deepEqual(await save(),baseline);
- await tap(1.45,'wave');await page.keyboard.press('Control+v');d=await save();assert.equal(d.tiers[0].intervals.filter(i=>i.text==='ba1').length,2);assert.equal(d.tiers[0].intervals.filter(i=>i.text==='ba2').length,1);await undo();
- checks.push('Ctrl-C/V copies exact annotation without tone increment; overlap and out-of-bounds fail without modifying files');
+ await tap(.3);await page.keyboard.press(modifier+"+c");const baseline=await save();await tap(.9);await page.keyboard.press(modifier+"+v");await page.getByRole('alert').filter({hasText:'重叠'}).waitFor();assert.deepEqual(await save(),baseline);
+ await tap(1.8,'wave');await page.keyboard.press(modifier+"+v");await page.getByRole('alert').filter({hasText:'超出录音'}).waitFor();assert.deepEqual(await save(),baseline);
+ await tap(1.45,'wave');await page.keyboard.press(modifier+"+v");d=await save();assert.equal(d.tiers[0].intervals.filter(i=>i.text==='ba1').length,2);assert.equal(d.tiers[0].intervals.filter(i=>i.text==='ba2').length,1);await undo();
+ checks.push(`${modifier}-C/V copies exact annotation without tone increment; overlap and out-of-bounds fail without modifying files`);
  await tap(.3);const label=page.getByLabel('编辑选中标注文本');await label.fill('文字框');await label.press('End');await label.press('Backspace');assert.equal(await label.inputValue(),'文字');await label.press('Enter');d=await save();assert(d.tiers[0].intervals.some(i=>i.text==='文字'&&i.xmin===.2&&i.xmax===.65));await undo();
  await page.locator('.annotation-grid').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(out,'r6-dark.png'),fullPage:true});
  await page.evaluate(()=>document.documentElement.dataset.theme='light');await page.waitForFunction(()=>getComputedStyle(document.querySelector('.annotation-settings button')).backgroundColor==='rgb(255, 255, 255)');await page.screenshot({path:path.join(out,'r6-light.png'),fullPage:true});

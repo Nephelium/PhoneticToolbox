@@ -31,14 +31,21 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
                local_token: str | None = None, local_origin: str | None = None, storage=None) -> FastAPI:
     if mode not in ('local', 'server'):
         raise ValueError('Unsupported service mode')
-    app = FastAPI(title='PhoneticToolbox API', version=API_VERSION,
+    from contextlib import asynccontextmanager
+    from ptb_worker.egg_interactive import InteractivePreview
+    egg_preview = InteractivePreview(memory_bytes=3_000_000_000 if mode == 'local' else 1_000_000_000)
+    @asynccontextmanager
+    async def lifespan(app):
+        try: yield
+        finally: egg_preview.close()
+    app = FastAPI(title='PhoneticToolbox API', version=API_VERSION, lifespan=lifespan,
                   description='Shared API; accounts require configured PostgreSQL. M01 batches require an explicitly configured durable worker and resource store.')
     ctx = AccountContext(account_store, auth_settings, mode)
     app.include_router(create_account_router(ctx))
     app.include_router(create_project_router(ctx))
     app.include_router(create_job_router(ctx,job_store,local_token=local_token,local_origin=local_origin))
-    app.include_router(create_storage_router(ctx, storage))
-    app.include_router(create_preview_router(mode,local_token,local_origin))
+    app.include_router(create_storage_router(ctx, storage, egg_preview=egg_preview))
+    app.include_router(create_preview_router(mode,local_token,local_origin,egg_preview=egg_preview))
 
     @app.exception_handler(PreviewError)
     async def preview_error(request: Request,exc):
@@ -86,7 +93,7 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
         return Health(app_version=__version__, core_version=core_version, mode=mode)
 
     @app.get('/api/v1/capabilities', response_model=Capabilities, operation_id='get_capabilities')
-    def capabilities() -> Capabilities:
+    def capabilities(request: Request) -> Capabilities:
         from ptb_worker.native.capabilities import m01_capability, linux_capabilities, platform_name
         storage_ready = mode == 'server' and storage is not None and getattr(storage, 'ready', False)
         file_jobs = storage_ready and job_store is not None and getattr(job_store,'files',None) is not None
@@ -115,9 +122,26 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
             science_operations, reasons = linux_capabilities(job_store)
             algorithms = [module for op,module in [('lpc_analysis','M04'),('egg_analysis','M03'),('acoustic_analysis','M01')] if op in science_operations]
             acoustic_reason = reasons[0] if reasons else None
+        from ptb_worker.resource_profiles import selected_profile
+        from ptb_worker.io.limits import FormatError
+        try: archive_ready = not selected_profile().shared_admission
+        except FormatError: archive_ready = False
+        operations = (['pipeline_check'] + (['storage_check'] + (['archive_zip','extract_zip'] if archive_ready else []) if file_jobs else []) + science_operations) if job_store is not None else []
+        # Set only by the trusted ASGI deployment boundary, never by HTTP input.
+        allowed = request.scope.get('ptb.allowed_operations')
+        if allowed is not None:
+            operations = [operation for operation in operations if operation in allowed]
+            module_ops = {'M01':{'acoustic_analysis','textgrid_segment'},'M03':{'egg_analysis'},
+                'M04':{'lpc_analysis'},'M05':{'lip_analysis'},'M06':{'speech_synthesis'},
+                'M07':{'phonation_synthesis'},'M08':{'pitch_manipulation'},
+                'M11':{'mfa_alignment'},'M14':{'phonology_induction'}}
+            algorithms = [module for module in algorithms if module_ops.get(module,set()).intersection(operations)]
+        storage_operations = ['upload','download','delete'] if storage_ready else []
+        if request.scope.get('ptb.storage_readonly'):
+            storage_operations = [op for op in storage_operations if op=='download']
         return Capabilities(stage='P07' if storage_ready else ('P06' if job_store is not None else ('P05' if account_store is not None and mode == 'server' else 'P02')),
-                            algorithms=algorithms, task_operations=(['pipeline_check'] + (['storage_check','archive_zip','extract_zip'] if file_jobs else []) + science_operations) if job_store is not None else [],
-                            storage_operations=['upload', 'download', 'delete'] if storage_ready else [], limitations=[
+                            algorithms=algorithms, task_operations=operations,
+                            storage_operations=storage_operations, limitations=[
             'Linux science requires host-selected runtime hashes and completed task validation receipts; Windows M01 requires its registered native resource and matching packages',
             'Capabilities cover configured execution paths only; whole-host concurrency, remote execution and M09 Linux remain unverified',
             'Storage checks generate engineering fixtures, not scientific analysis results'] + ([acoustic_reason] if acoustic_reason else []))

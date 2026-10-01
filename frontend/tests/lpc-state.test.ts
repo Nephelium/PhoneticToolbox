@@ -1,6 +1,19 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {defaults,parameters,restoreDraft,configuration,visibleRange,sameAnalysis,type LpcResult} from '../src/modules/lpc-spectrum/state.ts';
+import {defaults,parameters,restoreDraft,configuration,visibleRange,sameAnalysis,audioSelection,gridRangeStatus,type LpcResult} from '../src/modules/lpc-spectrum/state.ts';
 const font={schema_version:'font/1' as const,zh:'Microsoft YaHei',latin:'Segoe UI',ipa:'Doulos SIL' as const,size_px:14};
+test('M04 R1 annotation selection intersects the WAV without inventing out-of-range samples',()=>{
+ assert.deepEqual(audioSelection(1.8,9,3.85),[1.8,3.85]);
+ assert.deepEqual(audioSelection(9,1.8,3.85),[1.8,3.85]);
+ assert.deepEqual(audioSelection(-1,.5,3.85),[0,.5]);
+ for(const bounds of [[4,9],[1,1],[NaN,2],[-2,-1]])assert.equal(audioSelection(bounds[0],bounds[1],3.85),null);
+});
+test('M04 R1 blank overhang is explicit; nonblank out-of-range annotations remain invalid',()=>{
+ const tiers=[{name:'phones',intervals:[{xmin:0,xmax:.2,text:'ɑ̃˥'},{xmin:.2,xmax:9,text:'  '}]}];
+ assert.equal(gridRangeStatus(tiers,3.85,44100),'blank-overhang');
+ tiers[0].intervals[1].text='word';assert.equal(gridRangeStatus(tiers,3.85,44100),'mismatch');
+ tiers[0].intervals[1].xmax=3.85+1/44100;assert.equal(gridRangeStatus(tiers,3.85,44100),'valid');
+ tiers[0].intervals[0].xmin=-.01;assert.equal(gridRangeStatus(tiers,3.85,44100),'mismatch');
+});
 test('M04 A06 rejects empty/nonfinite drafts and preserves scientific defaults',()=>{
  assert.deepEqual(parameters(defaults()),{order:50,freq_max_hz:8000,amp_min_db:-5,amp_max_db:35,dynamic_y:false});
  for(const value of ['', 'NaN','Infinity','1.5','201'])assert.throws(()=>parameters({...defaults(),order:value}));

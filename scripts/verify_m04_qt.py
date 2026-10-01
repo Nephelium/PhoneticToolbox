@@ -1,5 +1,6 @@
 """M04-E actual Qt host and two previously authorized P03 natural WAVs, local only."""
 import gzip
+import argparse
 import hashlib
 import json
 import os
@@ -20,6 +21,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--audio', type=Path, help='Explicit local WAV with same-name TextGrid, read-only')
+    args = parser.parse_args()
     out = ROOT / 'output/validation/m04-e' / ('qt-' + uuid4().hex)
     out.mkdir(parents=True)
     db = out / 'jobs.sqlite3'
@@ -35,14 +39,19 @@ def main():
     saved.mkdir()
     baseline = ROOT / 'output/validation/p03/20260909-165413'
     natural = []
-    for key in ('LOCAL-01', 'LOCAL-12'):
-        request = json.loads((baseline / key / '1/request.json').read_text('utf-8'))
-        original = Path(request['input'])
-        grid = Path(request['textgrid'])
-        with gzip.open(baseline / key / '1/result.json.gz', 'rt', encoding='utf-8') as stream:
-            frozen = json.load(stream)
+    for key in (('R1-NATURAL',) if args.audio else ('LOCAL-01', 'LOCAL-12')):
+        if args.audio:
+            original = args.audio.resolve(strict=True)
+            grid = original.with_suffix('.TextGrid')
+        else:
+            request = json.loads((baseline / key / '1/request.json').read_text('utf-8'))
+            original = Path(request['input'])
+            grid = Path(request['textgrid'])
+            with gzip.open(baseline / key / '1/result.json.gz', 'rt', encoding='utf-8') as stream:
+                frozen = json.load(stream)
         audio_hash = hashlib.sha256(original.read_bytes()).hexdigest()
-        assert audio_hash == frozen['input_sha256']
+        if not args.audio:
+            assert audio_hash == frozen['input_sha256']
         originals = [(p, hashlib.sha256(p.read_bytes()).hexdigest()) for p in (original, grid)]
         (inputs / (key + '.wav')).write_bytes(original.read_bytes())
         (inputs / (key + '.TextGrid')).write_bytes(grid.read_bytes())
@@ -52,8 +61,12 @@ def main():
         count = len(mono) // block
         energies = np.abs(mono[:count * block]).reshape(count, block).mean(axis=1)
         first = int(np.argmax(energies)) * block
+        start, end = first / rate, (first + block) / rate
+        # Match the documented half-open int(seconds * rate) contract, including
+        # binary floating point immediately below an integer sample boundary.
         natural.append(dict(key=key, originals=originals, audio_hash=audio_hash, rate=rate,
-                            start=first / rate, end=(first + block) / rate, samples=block))
+                            start=start, end=end, actual_start=int(start * rate) / rate,
+                            samples=int(end * rate) - int(start * rate)))
     os.environ['PTB_EGG_PYTHON'] = str(ROOT / '.venv/m03-compatible/python.exe')
     register_scheme()
     app = QApplication(['M04-owned-QA'])
@@ -100,19 +113,19 @@ def main():
         click('LPC 谱图')
         until('!!document.querySelector(".lpc-page")')
         click('打开 WAV 目录')
-        until('document.querySelectorAll(".lpc-files select:first-of-type option").length>=3')
+        until("document.querySelectorAll('[aria-label=\"LPC 音频文件\"] option').length>="+str(len(natural)+1))
         for case in natural:
             select(case['key'] + '.wav')
             until('!!document.querySelector(".lpc-page .wave-track svg")')
             until('!document.querySelector(".lpc-files").innerText.includes("正在读取音频")')
-            assert js('document.querySelector(".lpc-files").innerText.includes("44100 Hz")')
+            assert js('document.querySelector(".lpc-files").innerText.includes('+json.dumps(str(case['rate'])+' Hz')+')')
             until("!!document.querySelector('[aria-label=\"LPC 标注层\"]')?.value")
             until('!document.querySelector(".lpc-files").innerText.includes("正在读取 TextGrid")')
             fill('LPC 选区起点', case['start'])
             fill('LPC 选区终点', case['end'])
             until('Math.abs(Number(document.querySelector(\'[aria-label="LPC 选区起点"]\').value)-'+str(case['start'])+')<1e-6 && Math.abs(Number(document.querySelector(\'[aria-label="LPC 选区终点"]\').value)-'+str(case['end'])+')<1e-6')
             click('开始分析')
-            until('!!document.querySelector(".lpc-spectrum svg") && document.querySelector(".lpc-spectrum")?.offsetParent!==null && !document.querySelector(".view-tabs").innerText.includes("正在读取结果") && document.querySelector(".lpc-main").innerText.includes('+json.dumps(case['key']+'.wav · '+f"{case['start']:.6f}",ensure_ascii=False)+')', 90)
+            until('!!document.querySelector(".lpc-spectrum svg") && document.querySelector(".lpc-spectrum")?.offsetParent!==null && !document.querySelector(".view-tabs").innerText.includes("正在读取结果") && document.querySelector(".lpc-main").innerText.includes('+json.dumps(case['key']+'.wav · '+f"{case['actual_start']:.6f}",ensure_ascii=False)+')', 90)
             with sqlite3.connect(db) as conn:
                 rows = conn.execute("SELECT snapshot,result_manifest FROM jobs WHERE state='succeeded' ORDER BY created_at DESC").fetchall()
             snapshot, manifest = next((json.loads(a), json.loads(b)) for a, b in rows if case['key'] + '.wav' in a)
@@ -124,13 +137,15 @@ def main():
             assert not js('!![...document.querySelectorAll(".lpc-page .notice")].find(e=>e.textContent.includes("已改变"))')
             assert all(hashlib.sha256(p.read_bytes()).hexdigest() == digest for p, digest in case['originals'])
             window.view.grab().save(str(out / (case['key'] + '-spectrum.png')))
-            if case['key'] == 'LOCAL-01':
+            if case['key'] in ('LOCAL-01', 'R1-NATURAL'):
                 click('波形')
                 js('document.querySelector(".lpc-page .view-tabs input[type=checkbox]")?.click()')
                 until('document.querySelector(".lpc-page .spectrogram-canvas canvas")?.width>500 && !document.querySelector(".lpc-page .spectrogram-view").innerText.includes("正在计算")', 45)
                 pause(800)
                 until('document.querySelector(".lpc-page .spectrogram-canvas canvas")?.width>500 && !document.querySelector(".lpc-page .spectrogram-view").innerText.includes("正在计算")', 45)
-                window.view.grab().save(str(out / 'LOCAL-01-wave-spectrogram.png'))
+                js('document.querySelector(".lpc-files").scrollTop=0')
+                pause(100)
+                window.view.grab().save(str(out / (case['key']+'-wave-spectrogram.png')))
                 js('document.querySelector(".lpc-page .view-tabs input[type=checkbox]")?.click()')
             report['natural'].append(dict(case=case['key'], source_sha256=case['audio_hash'], sample_rate=case['rate'],
                                           roi=metadata['selection'], spectrum_points=1024,
@@ -147,7 +162,7 @@ def main():
         saved_meta = json.loads(next(p.read_text('utf-8') for p in saved_files if p.suffix == '.json'))
         assert saved_meta['input_sha256'] == natural[-1]['audio_hash']
         assert all(hashlib.sha256(p.read_bytes()).hexdigest() == digest for case in natural for p, digest in case['originals'])
-        report['checks'].append('actual Qt host loads two authorized natural WAV/TextGrid files, calculates short high-energy ROIs, saves PNG/JSON/WAV')
+        report['checks'].append('actual Qt host loads '+str(len(natural))+' authorized natural WAV/TextGrid files, calculates short high-energy ROIs, saves PNG/JSON/WAV')
         report['success'] = True
     except Exception as exc:
         report['error'] = str(exc)

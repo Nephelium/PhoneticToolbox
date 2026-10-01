@@ -143,7 +143,7 @@ class AnnotationFiles:
 
     def save(self, body):
         from ptb_worker.io.annotation import validate_textgrid, update_lip_offset
-        from .task_bridge import pin_directory
+        from .directory_io import pin_directory
         prepared = self.targets.get(body.get('target'))
         if prepared is None:
             raise FileAccessError('保存目标已失效，请重试。')
@@ -168,31 +168,33 @@ class AnnotationFiles:
         root = directory.path; target = root/name
         lock = root/('.ptb-annotation-'+hashlib.sha256(name.casefold().encode()).hexdigest()[:20]+'.lock')
         temp = root/('.ptb-annotation-'+secrets.token_hex(16)+'.part')
-        with pin_directory(root):
+        with pin_directory(root) as output:
             self.provider.directory(grant)
             try:
-                lock_fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+                lock_stream = output.open(lock,'xb')
             except FileExistsError:
                 raise FileAccessError('另一个窗口正在保存此文件，请稍后重试。') from None
+            lock_identity=identity(os.fstat(lock_stream.fileno()));temporary_identity=None
             try:
                 if self._version(target, root) != (stamp, expected):
                     raise FileAccessError('目标已被其他窗口修改，未覆盖；编辑仍保留。')
                 if self._source(source['id'])[1] != source_sha:
                     raise FileAccessError('来源已变化，未保存。')
-                with temp.open('xb') as stream:
+                with output.open(temp,'xb') as stream:
+                    temporary_identity=identity(os.fstat(stream.fileno()))
                     stream.write(payload); stream.flush(); os.fsync(stream.fileno())
                 if self._version(target, root) != (stamp, expected):
                     raise FileAccessError('目标保存期间发生变化，未覆盖。')
-                os.replace(temp, target)
+                output.publish(temp,target,replace=stamp is not None)
                 current = next(f for f in self.provider.list(grant) if f['name'] == name)
                 current['sha256'] = hashlib.sha256(payload).hexdigest()
                 # Keep a retryable target version after successful write.
                 self.targets[body['target']] = (grant, name, fingerprint(target.stat()), current['sha256'], role, origin_id)
                 return dict(file=current, name=name, sha256=current['sha256'])
             finally:
-                os.close(lock_fd)
-                if temp.exists(): temp.unlink()
-                lock.unlink()
+                lock_stream.close()
+                if temporary_identity:output.unlink(temp,temporary_identity)
+                output.unlink(lock,lock_identity)
 
     def invoke(self, body):
         op = body.get('op')

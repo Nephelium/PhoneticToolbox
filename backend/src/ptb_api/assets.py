@@ -8,6 +8,8 @@ from starlette.responses import Response
 from .quota import CHUNK_BYTES, StorageError, content_range
 from .storage_models import UploadInput, FinalizeInput, AssetView, AssetList, StorageUsage, DeleteImpact
 from .preview_models import TextGridPreview
+from .egg_models import EggTaskConfig
+from .egg_interactive_models import EggPreviewSession, EggInteractiveResult
 
 
 class PrivateDownload(Response):
@@ -39,7 +41,7 @@ class PrivateDownload(Response):
         await send({'type': 'http.response.body', 'body': b'', 'more_body': False})
 
 
-def create_storage_router(ctx, store):
+def create_storage_router(ctx, store, *, egg_preview=None):
     router = APIRouter(prefix='/api/v1', tags=['storage'])
 
     def available():
@@ -54,6 +56,43 @@ def create_storage_router(ctx, store):
     def mutation(request: Request):
         available()
         return ctx.mutation(request)
+
+    @router.post('/assets/{asset_id}/egg-preview',response_model=EggPreviewSession,operation_id='open_asset_egg_preview')
+    def egg_open(asset_id:UUID,request:Request,owner=Depends(mutation)):
+        import hashlib
+        if egg_preview is None: raise HTTPException(503,'egg_runtime_unavailable')
+        asset=store.metadata(owner['id'],asset_id)
+        if not asset['name'].lower().endswith('.wav') or asset['size_bytes']>64_000_000: raise HTTPException(422,'egg_input_budget')
+        raw=bytearray()
+        while len(raw)<asset['size_bytes']:
+            if ctx.session(request)['id']!=owner['id']: raise HTTPException(409,'account_changed')
+            block=store.read_block(owner['id'],asset_id,len(raw),min(CHUNK_BYTES,asset['size_bytes']-len(raw)))
+            if not block: raise HTTPException(503,'storage_read_failed')
+            raw.extend(block)
+        if hashlib.sha256(raw).hexdigest()!=asset['sha256']: raise HTTPException(409,'asset_changed')
+        value=egg_preview.open((str(owner['id']),str(asset_id)),bytes(raw))
+        try:
+            store.metadata(owner['id'],asset_id)
+            if ctx.session(request)['id']!=owner['id']: raise HTTPException(409,'account_changed')
+        except Exception:
+            egg_preview.release((str(owner['id']),str(asset_id)),value['session_id'])
+            raise
+        return value
+
+    @router.post('/assets/{asset_id}/egg-preview/{session_id}',response_model=EggInteractiveResult,operation_id='update_asset_egg_preview')
+    def egg_update(asset_id:UUID,session_id:UUID,body:EggTaskConfig,request:Request,owner=Depends(mutation)):
+        if egg_preview is None: raise HTTPException(503,'egg_runtime_unavailable')
+        store.metadata(owner['id'],asset_id)
+        value=egg_preview.update((str(owner['id']),str(asset_id)),session_id,body.model_dump())
+        store.metadata(owner['id'],asset_id)
+        if ctx.session(request)['id']!=owner['id']: raise HTTPException(409,'account_changed')
+        import json
+        return EggInteractiveResult.model_validate_json(json.dumps(value))
+
+    @router.delete('/assets/{asset_id}/egg-preview/{session_id}',operation_id='close_asset_egg_preview')
+    def egg_close(asset_id:UUID,session_id:UUID,owner=Depends(mutation)):
+        if egg_preview is not None: egg_preview.release((str(owner['id']),str(asset_id)),session_id)
+        return {'closed':True}
 
     @router.get('/storage/usage', response_model=StorageUsage, operation_id='get_storage_usage')
     def usage(owner=Depends(identity)):

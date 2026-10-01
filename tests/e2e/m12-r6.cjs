@@ -2,6 +2,7 @@
 const fs=require('node:fs/promises'),path=require('node:path'),assert=require('node:assert/strict'),{spawn}=require('node:child_process'),{createInterface}=require('node:readline'),{pathToFileURL}=require('node:url');
 const root=path.resolve(__dirname,'../..');
 async function main(){
+ const modifier=process.env.PTB_TEST_SHORTCUT_MODIFIER||'Control';assert(['Control','Meta'].includes(modifier));
  const worker=spawn(path.join(root,'.venv/m09-ui/Scripts/python.exe'),['-X','utf8','scripts/m12_ui_bridge.py'],{cwd:root,windowsHide:true,env:{...process.env,PYTHONPATH:['backend/src','desktop/src','packages/phonetic_core/src'].map(p=>path.join(root,p)).join(';')}});
  const pending=new Map();let counter=0,readyResolve,readyReject;
  const ready=new Promise((r,j)=>{readyResolve=r;readyReject=j;});
@@ -17,9 +18,9 @@ async function main(){
  const loaded=()=>page.waitForFunction(()=>document.querySelector('.annotation-page')?.getAttribute('aria-busy')==='false'&&document.querySelector('.annotation-grid'));
  const gridClick=async(time,row=0)=>{const box=await page.locator('.annotation-grid').boundingBox();await page.mouse.click(box.x+box.width*time/2,box.y+box.height*(row===0?.22:.73));};
  try{
-  await page.goto(server.resolvedUrls.local[0]+'tests/m12-live.html');await require('./m12-r6-flow.cjs')({page,click,loaded,out,rpc,checks});
-  assert.deepEqual(errors,[]);await fs.writeFile(path.join(out,'report.json'),JSON.stringify({checks,errors},null,2));console.log(JSON.stringify({out,checks},null,2));
- }catch(error){await page.screenshot({path:path.join(out,'failure.png'),fullPage:true});await fs.writeFile(path.join(out,'failure.txt'),String(error)+'\n'+await page.locator('body').innerText()+'\nErrors:'+JSON.stringify(errors));console.error('M12 evidence:',out);throw error;}
+  await page.goto(server.resolvedUrls.local[0]+'tests/m12-live.html');await require('./m12-r6-flow.cjs')({page,click,loaded,out,rpc,checks,modifier});
+  assert.deepEqual(errors,[]);await fs.writeFile(path.join(out,'report.json'),JSON.stringify({modifier,checks,errors},null,2));console.log(JSON.stringify({out,checks},null,2));
+ }catch(error){await fs.writeFile(path.join(out,'resize-diagnostics.json'),JSON.stringify(await page.locator('.panel-resize-handle').evaluateAll(es=>es.map(e=>({label:e.getAttribute('aria-label'),hidden:e.hidden,style:e.getAttribute('style'),box:e.getBoundingClientRect().toJSON(),parent:e.parentElement.className,parentBox:e.parentElement.getBoundingClientRect().toJSON(),position:getComputedStyle(e.parentElement).position}))),null,2));await page.screenshot({path:path.join(out,'failure.png'),fullPage:true});await fs.writeFile(path.join(out,'failure.txt'),String(error)+'\n'+await page.locator('body').innerText()+'\nErrors:'+JSON.stringify(errors));console.error('M12 evidence:',out);throw error;}
  finally{await browser.close();await server.close();worker.stdin.end();}
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

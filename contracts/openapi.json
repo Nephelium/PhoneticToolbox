@@ -600,6 +600,15 @@
             "title": "Backends",
             "type": "array"
           },
+          "computation_revision": {
+            "default": "acoustic/1",
+            "enum": [
+              "acoustic/1",
+              "acoustic/2"
+            ],
+            "title": "Computation Revision",
+            "type": "string"
+          },
           "config": {
             "$ref": "#/components/schemas/AcousticConfigSnapshot"
           },
@@ -1731,6 +1740,65 @@
         "title": "DeleteImpact",
         "type": "object"
       },
+      "EggInteractiveResult": {
+        "additionalProperties": false,
+        "properties": {
+          "audio_base64": {
+            "anyOf": [
+              {
+                "maxLength": 32000000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Base64"
+          },
+          "config": {
+            "$ref": "#/components/schemas/EggTaskConfig"
+          },
+          "input_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Input Sha256",
+            "type": "string"
+          },
+          "preview": {
+            "$ref": "#/components/schemas/EggPreviewData"
+          },
+          "psd_base64": {
+            "maxLength": 2000000,
+            "title": "Psd Base64",
+            "type": "string"
+          },
+          "sample_count": {
+            "title": "Sample Count",
+            "type": "integer"
+          },
+          "sample_rate_hz": {
+            "title": "Sample Rate Hz",
+            "type": "integer"
+          },
+          "selection": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "title": "Selection",
+            "type": "object"
+          }
+        },
+        "required": [
+          "input_sha256",
+          "sample_rate_hz",
+          "sample_count",
+          "config",
+          "selection",
+          "preview",
+          "psd_base64"
+        ],
+        "title": "EggInteractiveResult",
+        "type": "object"
+      },
       "EggInverseData": {
         "additionalProperties": false,
         "properties": {
@@ -2037,6 +2105,26 @@
         "title": "EggPreviewData",
         "type": "object"
       },
+      "EggPreviewSession": {
+        "properties": {
+          "session_id": {
+            "format": "uuid",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Sha256",
+            "type": "string"
+          }
+        },
+        "required": [
+          "session_id",
+          "sha256"
+        ],
+        "title": "EggPreviewSession",
+        "type": "object"
+      },
       "EggRequest": {
         "additionalProperties": false,
         "properties": {
@@ -2309,6 +2397,15 @@
       "FigureFontSnapshot": {
         "additionalProperties": false,
         "properties": {
+          "fallback_policy": {
+            "default": "strict",
+            "enum": [
+              "strict",
+              "portable"
+            ],
+            "title": "Fallback Policy",
+            "type": "string"
+          },
           "ipa": {
             "const": "Doulos SIL",
             "default": "Doulos SIL",
@@ -5797,6 +5894,161 @@
         ]
       }
     },
+    "/api/v1/assets/{asset_id}/egg-preview": {
+      "post": {
+        "operationId": "open_asset_egg_preview",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "asset_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Asset Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EggPreviewSession"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Egg Open",
+        "tags": [
+          "storage"
+        ]
+      }
+    },
+    "/api/v1/assets/{asset_id}/egg-preview/{session_id}": {
+      "delete": {
+        "operationId": "close_asset_egg_preview",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "asset_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Asset Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Egg Close",
+        "tags": [
+          "storage"
+        ]
+      },
+      "post": {
+        "operationId": "update_asset_egg_preview",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "asset_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Asset Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EggTaskConfig"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EggInteractiveResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Egg Update",
+        "tags": [
+          "storage"
+        ]
+      }
+    },
     "/api/v1/assets/{asset_id}/parameters": {
       "get": {
         "operationId": "asset_parameter_table",
@@ -7688,6 +7940,119 @@
         "summary": "Retry",
         "tags": [
           "jobs"
+        ]
+      }
+    },
+    "/api/v1/preview/egg": {
+      "post": {
+        "operationId": "open_local_egg_preview",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EggPreviewSession"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Egg Open",
+        "tags": [
+          "preview"
+        ]
+      }
+    },
+    "/api/v1/preview/egg/{session_id}": {
+      "delete": {
+        "operationId": "close_local_egg_preview",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Egg Close",
+        "tags": [
+          "preview"
+        ]
+      },
+      "post": {
+        "operationId": "update_local_egg_preview",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EggTaskConfig"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EggInteractiveResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Egg Update",
+        "tags": [
+          "preview"
         ]
       }
     },

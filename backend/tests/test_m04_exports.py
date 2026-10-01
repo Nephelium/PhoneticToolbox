@@ -79,3 +79,34 @@ def test_invalid_grid_and_missing_layer():
 def test_more_than_eight_channels_rejected():
     with pytest.raises(AcousticFailure,match='lpc_input_budget'):
         prepare(wav(np.ones((1600,9))),{'roi_end':.1})
+
+
+def extended_grid(tail=''):
+    # A trimmed WAV with its original, longer blank TextGrid domain.
+    return ('File type = "ooTextFile"\nObject class = "TextGrid"\n'
+            '0\n9\n<exists>\n1\n"IntervalTier"\n"phones"\n0\n9\n2\n'
+            '0\n0.2\n"ɑ̃˥"\n0.2\n9\n"'+tail+'"\n').encode('utf-8')
+
+
+@pytest.mark.parametrize('tail', ['', '   '])
+def test_blank_grid_tail_does_not_block_valid_roi_or_change_spectrum(tail):
+    raw=wav(np.random.default_rng(42).normal(size=8000))
+    config={'roi_start':.05,'roi_end':.15}
+    def result(grid):
+        bundle=unpack_bundle(prepare(raw,config,textgrid=grid),8_000_000)
+        return dict(zip([f['name'] for f in bundle.manifest['files']],bundle.payloads))
+    plain=result(None)
+    grid=extended_grid(tail)
+    labelled=result(grid)
+    meta=json.loads(labelled['lpc.ptb.json'])
+    assert meta['label']=='ɑ̃˥'
+    assert meta['textgrid_sha256']==hashlib.sha256(grid).hexdigest()
+    assert meta['spectrum']==json.loads(plain['lpc.ptb.json'])['spectrum']
+    assert meta['selection']==json.loads(plain['lpc.ptb.json'])['selection']
+    assert labelled['lpc_AUDIO.wav']==plain['lpc_AUDIO.wav']
+
+
+def test_nonblank_grid_outside_audio_still_rejected():
+    raw=wav(np.random.default_rng(42).normal(size=8000))
+    with pytest.raises(AcousticFailure,match='lpc_textgrid_range'):
+        prepare(raw,{'roi_start':.05,'roi_end':.15},textgrid=extended_grid('越界标签'))

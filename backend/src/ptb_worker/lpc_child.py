@@ -43,7 +43,11 @@ def prepare(raw, config, input_name='audio.wav', textgrid=None):
         if not tiers:raise AcousticFailure('missing_or_invalid_tier')
         tier_name=settings.tier_name or tiers[0].name
         if not any(t.name==tier_name for t in tiers):raise AcousticFailure('missing_or_invalid_tier')
-        if any(i.xmin<0 or i.xmax>len(samples)/fs+1/fs for t in tiers for i in t.intervals):
+        # A trimmed recording may retain a longer blank TextGrid domain.
+        # Only labelled intervals can misattribute content to this audio. Keep
+        # their existing sample tolerance and the original grid/hash unchanged.
+        if any(i.text.strip() and (i.xmin<0 or i.xmax>len(samples)/fs+1/fs)
+               for t in tiers for i in t.intervals):
             raise AcousticFailure('lpc_textgrid_range')
         label=extract_label(tiers,tier_name,settings.roi_start,settings.roi_end)
         if len(label)>200:raise AcousticFailure('lpc_label_budget')

@@ -1,5 +1,18 @@
 # PhoneticToolbox v3 — Agent 工作规则
 
+2026-10-01 M03-R2：井井要求实时交互、四图手势/布局、总览显示和IF图窗，并追加暂时移除声门活动、高低通数值输入及默认低通2000 Hz。已完成限定Windows真实EGG录音、Chrome/实际Qt验证，见 [报告](docs/testing/2026-10-01-m03-r2-report.md) 与 [ADR](docs/decisions/ADR-M03-R2.md)。交互改为有界内存会话，正式导出保留任务；12组数值/字节对照、7项会话/HTTP、28项架构、15项前端状态、14组Chrome及Qt PNG保存通过。连续更新约0.13–0.22秒，首次仍需加载，未承诺固定延迟。Linux实时准入未开放，旧EXE未更新，未DDL/push/改V2或原音频。
+
+
+2026-10-01 M01/M02-R1：井井授权修复音频列表撑高、批次轮询抖动、递归目录、TextGrid切分、图窗清空/删除、默认PNG及长WAV预览。源码/前端构建完成，真实48对WAV/TextGrid、274片段采样对照、实际Qt全48文件切分及PNG/图窗管理通过，范围见 `docs/testing/2026-10-01-m01-m02-repairs-report.md`。入口 `scripts/Start-M01-M02-Workbench.ps1`。井井追加要求后验证仅使用指定“男-范皓云-已标注”目录，禁止借此查找/改动博士论文目录；原文件只读、输出进验证目录。真实大文件未验，早期合成检查不能替代真实验收。无EXE更新/DDL/push/环境变更，保留同期其他差异。
+
+2026-10-01 P12 EXE 更新：井井授权更新本机 EXE，随后自行检查并反馈 bug。已交付 `dist/PhoneticToolbox-v3-LocalPreview-20261001/PhoneticToolbox-v3-LocalPreview-20261001.exe`，见 `docs/testing/2026-10-01-exe-update-report.md`。真实冻结成品 10 项任务/15 页、M01 acoustic/2、标注侧栏三种状态定位、39 子进程退出和非法参数拒绝通过，限定 Windows/offscreen/合成输入。338 个包内源码/前端文件哈希已核对。原 local-preview-20260927 数据目录沿用，旧 R4 哈希不变；仍为依赖现有独立科学环境的本机包。未改现存库/V2/环境/CI，无 push/部署/公开发布，下一步等待人工试用反馈。
+
+2026-10-01 P16-REVIEW：井井授权逐条修复审查问题。本轮九项代码修复及 Windows 定向验证完成，详见 `docs/testing/2026-10-01-review-repairs-report.md`。M01 新结果 computation_revision=acoustic/2，旧 JSON 缺失字段按 acoustic/1；勿将新科学行为重标成原样迁移。源码/冻结源码快照的 EGG/LPC bootstrap 绑定配套核心，第三方锁未改。新增 POSIX 目录保存、三平台用户目录/原生资源选择、运行时清单及 Ctrl/Meta 标注支持；Linux 新保存实测和 Mac 原生/完整发行待验，当前 WSL 未找到 Python。保留同期 P04/M03/M04/M13 未提交差异；额外修复 Vue class 更新丢失侧栏定位类。不改现存库、V2、系统环境、CI/CD，无 push/部署/EXE。原历史状态不得覆盖此轮限定结论。
+
+2026-09-29 M03-RT：井井要求修复慢加载、完成空白、恢复自动更新，并追加代码审查。限定 Windows Chrome/实际 Qt 修复通过，见 `docs/testing/2026-09-29-m03-realtime-report.md`。加载/参数自动刷新、连续操作合并、取消/迟到结果、浮点历史恢复与试听复用已验。公共管道移除有数据时的等待，本机 EGG 按既有 1 MiB 上限读写，未请求 GCI F0 的预览省略无用全段事件检测；实际结果逐字节不变。77秒输入实际 Qt 首显约7.66秒、更新约5.72秒，仍非即时响应。入口 `scripts/Start-M03-Workbench.ps1`。WSL缺python3未验科学链，旧EXE未更新，无现存库DDL/push/发布，保留同期其他任务差异。
+
+2026-09-29 P04-RESIZE / M02-DEFAULT：井井授权并已实施所有现有侧栏/导航栏统一边界拖动及本机记忆、M01 拓宽、M02 首次空图、删除剩余重复模块页首、设置/使用说明标签化。限定 Windows Chrome/实际 Qt 验证见 `docs/testing/p04-resize-report.md`，WSL 仅静态构建读取/哈希。保留 M13 同期独立右栏/横向滚动规则和其他任务未提交差异。旧 EXE 未打包，无 DDL、push、公开发行或全局依赖变更。
+
 2026-09-27 M05：基线、浏览器候选、正式离线任务/文件和 Windows Chrome/实际 Qt 本机三模式录制已有分项证据。已按 V2 修复完整网格、同帧叠加、停止尺寸及 Qt 权限错误提示。浏览器新模型未通过等价门，正式结果保留 legacy；完整模块 in_progress，物理同步、Linux/远程准入及剩余设备矩阵待验。入口 `scripts/Start-M05-Workbench.ps1`，见 [M05 报告](docs/testing/m05-report.md) 与 [说明](docs/manual/lip-extraction.md)。未 push、DDL、部署或生成 EXE。
 
 ## 0. 当前阶段与授权

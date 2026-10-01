@@ -24,7 +24,6 @@ def prepare(raw, config, input_name='egg.wav'):
     from phonetic_core.egg.inverse import inverse_filter
     from ptb_api.egg_models import EggTaskConfig, expected_names
     from .acoustic_errors import AcousticFailure
-    from .egg_exports import csv_bytes, plot_bytes
     settings = EggTaskConfig.model_validate(config)
     if not 0 < len(raw) <= INPUT_BYTES: raise AcousticFailure('egg_input_budget')
     try: fs, samples = wavfile.read(io.BytesIO(raw))
@@ -41,7 +40,12 @@ def prepare(raw, config, input_name='egg.wav'):
         from .fonts import resolve_fonts
         font_evidence=resolve_fonts(settings.font)
     numerical = EGGConfig.for_workbench(**{k:v for k,v in settings.model_dump().items() if k in EGGConfig.__dataclass_fields__})
-    result = analyze_events(load(samples, int(fs), numerical, flip_channels=settings.flip_channels), numerical)
+    result = load(samples, int(fs), numerical, flip_channels=settings.flip_channels)
+    # CQ/SQ and micro markers run their own V2 local-window detection below.
+    # Full-file events are only consumed by GCI F0 or export/inverse modes.
+    # Preserve full-file normalization/detrending/filtering for every preview.
+    if settings.mode != 'preview' or settings.keep_gci_f0:
+        result = analyze_events(result, numerical)
     first_time, last_time = first/fs, last/fs
     blobs = {}; masked = 0; preview=None; inverse_view=None
     if settings.mode == 'inverse':
@@ -66,6 +70,7 @@ def prepare(raw, config, input_name='egg.wav'):
             from .egg_preview import preview_files
             preview, blobs = preview_files(result,numerical,settings,first,last)
         else:
+            from .egg_exports import csv_bytes, plot_bytes
             blobs['egg_DATA.csv'], masked = csv_bytes(result,numerical,settings,first_time,last_time)
             if settings.mode == 'single' or settings.generate_images:
                 blobs.update(plot_bytes(result,numerical,settings,first,last,font_evidence))

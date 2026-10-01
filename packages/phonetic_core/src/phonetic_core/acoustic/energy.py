@@ -1,5 +1,6 @@
 # M01-B source_ids: SRC-VOICESAUCE; migration evidence: docs/modules/evidence/M01-core-migration.json
 import numpy as np
+from .common import frame_sample_index
 
 def compute_energy(
     y: np.ndarray,
@@ -24,7 +25,6 @@ def compute_energy(
     Returns:
         Intensity array in dB (positive values).
     """
-    sampleshift = int(round(fs / 1000.0 * frameshift_ms))
     # Praat uses a minimum pitch to determine window size if not specified,
     # but here we use energy_window_ms (default 20ms is standard for energy).
     # Praat uses 3.2 / min_pitch (e.g. 3.2/100 = 0.032s = 32ms).
@@ -40,15 +40,8 @@ def compute_energy(
     calibration_db = 96.0 + 10 * np.log10(2.0) # ~ 99.01
 
     for k in range(nf):
-        s = k * sampleshift
-        # Center the window? Praat usually centers.
-        # But our system might use left-aligned. Let's stick to existing loop structure but check centering.
-        # If F0 analysis is centered, energy should be too.
-        # Current loop: s is start.
-        # Let's try to center it: s = k * sampleshift - win // 2
-
         # Using centered window for better alignment with F0
-        mid_point = int(k * sampleshift)
+        mid_point = frame_sample_index(fs, frameshift_ms, k)
         start_idx = max(0, mid_point - win // 2)
         end_idx = min(len(y), mid_point + win // 2)
 
@@ -74,14 +67,14 @@ def compute_rms(
     window_ms: float = 20.0,
 ) -> np.ndarray:
     """Compute Root Mean Square (RMS) amplitude."""
-    frame_shift = int(round(fs / 1000.0 * frameshift_ms))
+    frame_shift = fs / 1000.0 * frameshift_ms
     win_samples = int(round(fs / 1000.0 * window_ms))
     if frame_shift <= 0 or win_samples <= 0:
         raise ValueError("frameshift_ms 和 window_ms 必须产生至少一个采样点")
 
     rms = np.full(len(F0), np.nan, dtype=float)
     for index in range(len(F0)):
-        center = index * frame_shift
+        center = frame_sample_index(fs, frameshift_ms, index)
         start = max(0, center - win_samples // 2)
         end = min(len(y), center + win_samples // 2)
         segment = np.asarray(y[start:end], dtype=float)

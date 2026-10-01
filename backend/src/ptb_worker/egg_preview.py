@@ -10,7 +10,7 @@ from ptb_api.egg_models import EggPreviewData, EggSeries
 from .acoustic_errors import AcousticFailure
 
 
-def preview_files(result, config, settings, first, last):
+def preview_files(result, config, settings, first, last, *, cache=None, include_audio=True):
     start, end = first/result.fs, last/result.fs
     center = settings.micro_center if settings.micro_center is not None else (start+end)/2
     if not 0 <= center <= len(result.time_vector)/result.fs:
@@ -21,7 +21,11 @@ def preview_files(result, config, settings, first, last):
         values = np.asarray([] if values is None else values)
         take = (times >= start) & (times < end) if crop else np.ones(len(times), dtype=bool)
         return EggSeries(times=times[take].tolist(), values=[float(v) if np.isfinite(v) else None for v in values[take]])
-    t, cq, sq = cq_segment(result, start, end, config, use_raw_signal=raw)
+    # A session retains just one main viewport. Moving the micro cursor does
+    # not recompute CQ/SQ or the PSD. The default export path stays identical.
+    key = (first, last, tuple((k, str(v)) for k, v in settings.model_dump().items()
+           if k not in ('micro_center', 'micro_width_ms')))
+    main = cache.get(key) if cache is not None else None
     micro_t, audio, egg = micro_waveforms(result, config, center, settings.micro_width_ms, raw=raw)
     # V2 EGGWidget._get_downsampling_step, display only after full filtering.
     stride, count = 1, len(micro_t)
@@ -31,25 +35,33 @@ def preview_files(result, config, settings, first, last):
     lo = max(0., center-settings.micro_width_ms/2000)
     hi = min(len(result.time_vector)/result.fs, center+settings.micro_width_ms/2000)
     gci, goi, _ = events_segment(result, lo, hi, config, use_raw_signal=raw)
-    power, freq, _ = spectral_series(result.audio_signal[first:last], result.fs, config.spec_window_ms)
-    cell = (freq[-1]-freq[0])/len(freq)
-    rows = min(len(freq), int(np.ceil(5000/cell))+2)
-    visible = power[:rows].copy(); del power
-    shape = visible.shape
-    with np.errstate(divide='ignore'): np.log10(visible, out=visible)
-    visible *= 10
-    gray = (255*(1-np.clip((visible-settings.spec_vmin)/(settings.spec_vmax-settings.spec_vmin),0,1))).astype(np.uint8)
-    raster = Image.fromarray(np.flipud(gray))
-    raster.thumbnail((1024,512), Image.Resampling.BILINEAR)
-    stream = io.BytesIO(); raster.save(stream, format='PNG')
-    wav = io.BytesIO(); wavfile.write(wav, result.fs, result.audio_signal.astype(np.float32))
-    data = EggPreviewData(cq=series(t,cq), sq=series(t,sq),
-        praat=series(result.audio_f0_times,result.audio_f0_values),
-        gci_f0=series(result.gci_f0_times,result.gci_f0_values) if settings.keep_gci_f0 else series([],[]),
+    if main is None:
+        t, cq, sq = cq_segment(result, start, end, config, use_raw_signal=raw)
+        power, freq, _ = spectral_series(result.audio_signal[first:last], result.fs, config.spec_window_ms)
+        cell = (freq[-1]-freq[0])/len(freq)
+        rows = min(len(freq), int(np.ceil(5000/cell))+2)
+        visible = power[:rows].copy(); del power
+        shape = visible.shape
+        with np.errstate(divide='ignore'): np.log10(visible, out=visible)
+        visible *= 10
+        gray = (255*(1-np.clip((visible-settings.spec_vmin)/(settings.spec_vmax-settings.spec_vmin),0,1))).astype(np.uint8)
+        raster = Image.fromarray(np.flipud(gray))
+        raster.thumbnail((1024,512), Image.Resampling.BILINEAR)
+        stream = io.BytesIO(); raster.save(stream, format='PNG')
+        main = dict(cq=series(t,cq), sq=series(t,sq),
+            praat=series(result.audio_f0_times,result.audio_f0_values),
+            gci_f0=series(result.gci_f0_times,result.gci_f0_values) if settings.keep_gci_f0 else series([],[]),
+            spectral_extent=(start,end,0.,rows*cell), spectral_shape=shape,
+            raster_shape=(raster.height,raster.width), png=stream.getvalue())
+        if cache is not None:
+            cache.clear(); cache[key] = main
+    blobs = {'egg_PSD.png':main['png']}
+    if include_audio:
+        wav = io.BytesIO(); wavfile.write(wav, result.fs, result.audio_signal.astype(np.float32))
+        blobs['egg_AUDIO.wav'] = wav.getvalue()
+    data = EggPreviewData(**{k:v for k,v in main.items() if k != 'png'},
         audio=series(micro_t[::stride],audio[::stride],False), egg=series(micro_t[::stride],egg[::stride],False),
         gci=[v for v in gci if lo <= v < hi], goi=[v for v in goi if lo <= v < hi],
         movement=[(t,v) for t,v in result.glottal_movement_events if start <= t < end],
-        micro_center=center, micro_width_ms=settings.micro_width_ms, micro_sample_stride=stride,
-        spectral_extent=(start,end,0.,rows*cell), spectral_shape=shape,
-        raster_shape=(raster.height,raster.width))
-    return data.model_dump(), {'egg_AUDIO.wav':wav.getvalue(),'egg_PSD.png':stream.getvalue()}
+        micro_center=center, micro_width_ms=settings.micro_width_ms, micro_sample_stride=stride)
+    return data.model_dump(), blobs

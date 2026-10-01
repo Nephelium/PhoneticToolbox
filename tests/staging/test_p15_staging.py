@@ -32,6 +32,25 @@ def test_closed_config_valid():
     assert validate_config(config())['allowed_operations'] == []
 
 
+@pytest.mark.parametrize('mode,allowed,expected',[
+    ('open',[],[]),('open',['lpc_analysis'],['lpc_analysis']),
+    ('maintenance',['lpc_analysis'],[]),('drain',['lpc_analysis'],[]),
+])
+def test_capabilities_follow_live_deployment_admission(tmp_path,monkeypatch,mode,allowed,expected):
+    from types import SimpleNamespace
+    from ptb_worker.native import capabilities
+    monkeypatch.setattr(capabilities,'platform_name',lambda:'linux')
+    monkeypatch.setattr(capabilities,'linux_capabilities',lambda store:(['lpc_analysis','egg_analysis'],[]))
+    store=SimpleNamespace(batches=object(),files=SimpleNamespace(reaper_binary=None))
+    app=create_app(job_store=store,storage=SimpleNamespace(ready=True))
+    control=tmp_path/'control.json';control.write_text(json.dumps({'mode':mode}))
+    with TestClient(SiteBoundary(app,'staging.example.org',control,allowed),base_url='https://staging.example.org') as client:
+        value=client.get('/api/v1/capabilities').json()
+    assert value['task_operations']==expected
+    assert value['algorithms']==(['M04'] if expected else [])
+    if mode!='open':assert value['storage_operations']==['download']
+
+
 @pytest.mark.parametrize('changes', [
     {'origin':'http://staging.example.org'}, {'origin':'https://x.test/path'},
     {'origin':'https://user:secret@x.test'}, {'bind':'0.0.0.0'},

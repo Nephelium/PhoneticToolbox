@@ -5,6 +5,19 @@ defineEmits<{select:[id:string];cancel:[];save:[];retry:[id:string];download:[id
 const labels:Record<string,string>={not_started:'未开始',queued:'排队',running:'计算中',cancel_requested:'正在取消',cancelled:'已取消',succeeded:'已完成',failed:'失败',interrupted:'已中断'};
 const errors:Record<string,string>={input_unavailable:'输入已变化、删除或到期',worker_interrupted:'计算进程已中断，可重试',execution_failed:'处理失败，请检查音频与关联文件',deadline_exceeded:'处理时间超过上限',output_budget_exceeded:'结果超过当前大小上限',disk_space_low:'可用磁盘空间不足',quota_exceeded:'项目空间不足',cancelled:'已取消'};
 Object.assign(errors,{
+ analysis_energy_failed:'强度计算失败，本文件未生成结果。',
+ analysis_formants_failed:'共振峰计算失败，本文件未生成结果。',
+ analysis_praat_pitch_failed:'Praat 基频计算失败，本文件未生成结果。',
+ analysis_reaper_failed:'所选 REAPER 后端执行失败，本文件未生成结果。',
+ analysis_spectrum_failed:'谐波频谱计算失败，本文件未生成结果。',
+ analysis_tilt_failed:'谱倾斜计算失败，本文件未生成结果。',
+ analysis_correction_failed:'谐波校正计算失败，本文件未生成结果。',
+ analysis_cpp_failed:'CPP 计算失败，本文件未生成结果。',
+ analysis_hnr_failed:'HNR 计算失败，本文件未生成结果。',
+ analysis_shr_failed:'SHR 计算失败，本文件未生成结果。',
+ analysis_slope_failed:'频谱斜率计算失败，本文件未生成结果。',
+ analysis_soe_failed:'激励强度计算失败，本文件未生成结果。',
+ analysis_jitter_shimmer_failed:'微扰参数计算失败，本文件未生成结果。',
  invalid_audio:'WAV 内容或编码不受支持，请检查文件。',
  invalid_textgrid:'TextGrid 无法解析，请检查格式与层内容。',
  invalid_lip:'唇形关联文件无效，请使用受限转换得到的 .lip.json。',

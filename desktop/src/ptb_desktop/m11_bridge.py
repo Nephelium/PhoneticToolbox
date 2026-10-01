@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 from uuid import uuid4,UUID
 from .file_provider import FileAccessError,checked_path
+from .task_requests import M11_INPUT_LIMITS
 
 
 class M11Bridge:
@@ -44,9 +45,10 @@ class M11Bridge:
             role=body.get('role');name=body.get('name')
             if role not in ('audio','transcript','dictionary'):raise FileAccessError('输入类型不正确。')
             encoded=body.get('base64','')
-            limit=64_000_000 if role=='audio' else 16_000_000 if role=='dictionary' else 2_000_000
+            limit=M11_INPUT_LIMITS[role]
             if not isinstance(encoded,str) or len(encoded)>((limit+2)//3)*4:raise FileAccessError('文件超出输入预算。')
             raw=base64.b64decode(encoded,validate=True)
+            if len(raw)>limit:raise FileAccessError('文件超出输入预算。')
             return service.import_input(raw,name,role)
         if op=='m11_corpus':
             root=self.path(body['id'],'corpus')

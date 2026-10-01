@@ -27,11 +27,15 @@ def plan_segments(tiers,layer,sample_rate,frames,*,max_segments=1000):
     segments=[];previous=0.
     for i,interval in enumerate(matches[0].intervals):
         start,end=interval.xmin,interval.xmax
-        if not all(type(x) in (int,float) and math.isfinite(x) for x in (start,end)) or not 0<=start<end<=frames/sample_rate or start<previous:
+        if not all(type(x) in (int,float) and math.isfinite(x) for x in (start,end)) or not 0<=start<end or start<previous:
             raise ValueError('Invalid or overlapping TextGrid interval')
         previous=end
         label=interval.text.strip()
         if label.lower() in ('','sil','eps','<sil>','<eps>'):continue
+        # A TextGrid may retain an empty tail beyond a trimmed WAV. Only an
+        # interval that will be exported must lie inside the audio. Never clip
+        # labelled intervals or relax the tier's ordering/overlap validation.
+        if end>frames/sample_rate:raise ValueError('Labelled interval exceeds audio')
         first,last=int(start*sample_rate),int(end*sample_rate)
         if not 0<=first<last<=frames:raise ValueError('Empty or invalid sample range')
         if len(segments)>=max_segments:raise ValueError('Segment count limit exceeded')

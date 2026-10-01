@@ -106,13 +106,9 @@ class Bridge(QObject):
     @pyqtSlot(str,str)
     def task(self,request_id,raw):
         if len(request_id)>64:return
-        if len(raw)>8_100_000:
-            self.taskReady.emit(request_id,json.dumps({'ok':False,'error':'请求超过当前文件大小预算。'}));return
         try:
-            decoded=json.loads(raw)
-            if not isinstance(decoded,dict):raise ValueError()
-            limit=86_000_000 if decoded.get('op')=='m11_import' else 8_100_000 if decoded.get('op')=='annotation_save' else 2_800_000 if decoded.get('op')=='m14_import' else 1_000_000
-            if len(raw)>limit:raise ValueError()
+            from .task_requests import decode_task_request
+            decoded=decode_task_request(raw)
         except (ValueError,TypeError):
             self.taskReady.emit(request_id,json.dumps({'ok':False,'error':'请求结构或大小不正确。'}));return
         if not self.task_lock.acquire(False):
@@ -135,8 +131,10 @@ class Bridge(QObject):
             try:
                 body=json.loads(raw)
                 if set(body)!={'id','channel','start','end','width'}:raise ValueError('invalid_preview')
-                payload,_=self.provider.read(body.pop('id'))
-                result={'ok':True,'value':self.service.preview(payload,body)}
+                payload,source_sha=self.provider.spectrogram_payload(body.pop('id'))
+                value=self.service.preview(payload,body)
+                value['sha256']=source_sha
+                result={'ok':True,'value':value}
             except Exception as exc:
                 code=str(exc)
                 if code not in ('preview_busy','preview_runtime_unavailable','preview_timeout','preview_memory_exceeded','invalid_spectrogram_input'):code='preview_failed'
@@ -212,6 +210,8 @@ class Page(QWebEnginePage):
 class Workbench(QMainWindow):
     def __init__(self,dist,*,test=False,jobs_path=None,local_files_root=None,reaper_binary=None,vocal_resources=None,vocal_profile=None,start_module=None):
         super().__init__();self.setWindowTitle('PhoneticToolbox 3.0');self.resize(1440,900)
+        from .app_icon import configure_app_icon
+        self.setWindowIcon(configure_app_icon(dist))
         self.fit_screen(initial=True)
         self.provider=FileProvider();self.service=LocalService(jobs_path,local_files_root=local_files_root,reaper_binary=reaper_binary);self.service.start();self.closing=False
         from .vocal_tract.client import VocalTractClient

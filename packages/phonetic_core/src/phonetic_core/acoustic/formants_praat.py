@@ -45,9 +45,8 @@ def compute_praat_formants(
     snd = audio.praat_sound()
     time_step = frameshift_ms / 1000.0
 
-    # Request at least 5 formants to allow for shifting
-    # If user requests more, respect it.
-    request_n_formants = max(num_formants, 5)
+    # acoustic/2: the Burg model order must reflect the effective user setting.
+    request_n_formants = num_formants
 
     formant = snd.to_formant_burg(
         time_step=time_step,
@@ -77,15 +76,11 @@ def compute_praat_formants(
 
         # 1. Get all raw candidates for this frame
         candidates = []
-        try:
-            # Check up to requested number
-            for k in range(1, request_n_formants + 1):
-                f = formant.get_value_at_time(k, t)
-                b = formant.get_bandwidth_at_time(k, t)
-                if f is not None and not np.isnan(f):
-                    candidates.append((f, b))
-        except Exception:
-            pass # Ignore errors, use what we have
+        for k in range(1, request_n_formants + 1):
+            f = formant.get_value_at_time(k, t)
+            b = formant.get_bandwidth_at_time(k, t)
+            if f is not None and not np.isnan(f):
+                candidates.append((f, b))
 
         # 2. Assign candidates to slots with limits
         slots = {1: None, 2: None, 3: None, 4: None}

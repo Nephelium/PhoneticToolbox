@@ -103,6 +103,26 @@ class LocalService:
             if len(raw)>16_000_000:raise ValueError('Parameter response budget')
             return json.loads(raw)
 
+    def egg_preview(self, action, payload=None, session=None):
+        from uuid import UUID
+        from urllib.error import HTTPError
+        path='/api/v1/preview/egg'+('/'+str(UUID(session)) if session else '')
+        binary=action=='open'
+        body=payload if binary else json.dumps(payload).encode() if payload is not None else None
+        request=urllib.request.Request(self.url+path,data=body,method='DELETE' if action=='close' else 'POST',
+            headers={'Authorization':'Bearer '+self.token,'Origin':self.url,
+                     'Content-Type':'application/octet-stream' if binary else 'application/json'})
+        opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
+        try:
+            with opener.open(request,timeout=35) as response:
+                raw=response.read(64_000_001)
+                if len(raw)>64_000_000: raise ValueError('egg_preview_failed')
+                return json.loads(raw)
+        except HTTPError as error:
+            try: code=json.load(error).get('detail','egg_preview_failed')
+            except (ValueError,TypeError): code='egg_preview_failed'
+            raise ValueError(code if isinstance(code,str) else 'egg_preview_failed') from None
+
     def preview(self,payload,query):
         from urllib.parse import urlencode
         from urllib.error import HTTPError

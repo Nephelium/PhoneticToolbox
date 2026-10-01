@@ -1,5 +1,13 @@
 # 数据协议与版本 · API 1.1 / M01-D
 
+## P16 审查修复（2026-10-01）
+
+API 仍为 1.1.0，M01 JSON `metadata.computation_revision` 新增 `acoustic/1 | acoustic/2`。缺失字段默认 `acoustic/1`，新核心输出 `acoustic/2`，区分采样窗定位及 Burg 数量修正；结构版本仍为 m01/1，旧结果可读。普通阶段异常现在产生固定 `analysis_<stage>_failed` 失败码，合法无声与 NaN 语义不变。REAPER 回退原因可记录 `native_failed`，实际原生结果仍须含二进制哈希。
+
+`FigureFontSnapshot.fallback_policy` 新增 `strict | portable`，缺失时默认 strict 保持历史任务行为，新前端显式提交 portable。实际字体名称与哈希继续记录在原字体结果元数据中。既有任务快照不重写。上述字段由 Pydantic 生成 OpenAPI、JSON Schema 和 TypeScript。
+
+能力响应结构保持不变，内容按主机资源档和可信部署允许表收窄；维护/排空模式不宣告可新建计算任务，存储仅报告下载。历史 D08 的 7 天规则由 P07-POLICY 的 1 GB/3 天规则替代，历史文件以实际截止时间为准。
+
 M03-C增加`m03/1`：`EggRequest`仅接项目/资源ID、SHA-256与`EggTaskConfig`，通过`jobs/egg/create`创建通用`egg_analysis`任务。`EggManifest`仅允许完整CSV/三PNG/双WAV组合和来源JSON。`sample-aligned/1`明确原生时间outer join、实际Praat帧时间、批次GCI插值/CSV静音遮罩、采样对齐半开ROI和双FLOAT64 WAV语义。重试保持原配置，字体快照依赖P04-FONT尚未接入，完整接口/预算/差异见[M03-C记录](../docs/testing/m03-jobs-report.md)。未改既有002/005表结构。
 
 应用发行版本的唯一维护入口为 [release/version.json](../release/version.json)，当前 Python 包 3.0.0a1，前端 3.0.0-alpha.1，API 1.1.0。运行时分别使用已安装包元数据和生成的前端版本文件。根目录旧 pyproject.toml 的 2.2.0 是历史迁移来源，不参与新包构建。
@@ -62,3 +70,7 @@ M03-E1：`egg.ptb.json`增加`input_name`和`export_names`保存建议，固定�
 M03-E3：微观输入范围恢复为 5–5000 ms。`egg-preview/1.micro_sample_stride` 为可选、默认 1 的显示抽点说明；原结果仍可读取。新宽窗口按原 V2 二次幂规则抽取波形点，完整事件保留。事件列表上限扩为 10000，覆盖 5 秒窗口及原 1 ms 最小峰距；不改默认算法、CSV/WAV 或旧模式的幂等输入。新范围请求需要本次更新后的服务端，旧服务端可能返回范围校验错误。
 
 2026-09-13 M04-C：新增m04/1 LPC请求、配置、1024点谱值、managed_lpc_files清单与lpc_analysis操作。沿用已有API/任务/存储协议，新增 `/api/v1/jobs/lpc/create` 和字体检查接口，未更改既有字段语义或执行DDL。
+
+## M03-R2 临时预览增量（2026-10-01）
+
+新增 EggPreviewSession、EggInteractiveResult 及本机/已认证资源的打开、更新、关闭接口。沿用 EggTaskConfig（仅 preview 模式）和 egg-preview/1，不创建 JobView 或改变 m03/1 正式产物。JSON通过严格模型的JSON入口校验，坐标数组恢复元组语义。新前端和配套平台适配器同时更新，未配置新通道的环境不承诺实时计算。边界见 [ADR-M03-R2](../docs/decisions/ADR-M03-R2.md)。

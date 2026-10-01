@@ -1,32 +1,22 @@
 """Native capability to local API translation and non-overwriting result export."""
-from contextlib import contextmanager
 import hashlib
 import json
 import os
 import struct
+from contextlib import ExitStack
 from pathlib import Path
 from uuid import UUID,uuid4
 from .file_provider import checked_path,FileAccessError,identity
+from .directory_io import pin_directory
 
 PROJECT='00000000-0000-4000-8000-000000000001'
-
-
-@contextmanager
-def pin_directory(path):
-    import ctypes
-    from ctypes import wintypes
-    kernel=ctypes.WinDLL('kernel32',use_last_error=True)
-    create=kernel.CreateFileW;create.argtypes=[wintypes.LPCWSTR,wintypes.DWORD,wintypes.DWORD,ctypes.c_void_p,wintypes.DWORD,wintypes.DWORD,wintypes.HANDLE];create.restype=wintypes.HANDLE
-    handle=create(str(path),0x80000000,3,None,3,0x02200000,None)
-    if handle==ctypes.c_void_p(-1).value:raise FileAccessError('无法锁定结果目录，请重新选择。')
-    close=kernel.CloseHandle;close.argtypes=[wintypes.HANDLE]
-    try:yield
-    finally:close(handle)
 
 
 class TaskBridge:
     def __init__(self,provider,service):
         self.provider,self.service=provider,service
+        self.batch_sources={}
+        self.egg_preview_sources={}
         from .annotation import AnnotationFiles
         self.annotation=AnnotationFiles(provider)
         from .m08_bridge import M08Bridge
@@ -44,6 +34,27 @@ class TaskBridge:
 
     def invoke(self,body):
         op=body.get('op')
+        if op=='egg_preview_open':
+            raw,sha=self.provider.read(body['id'])
+            try: value=self.service.egg_preview('open',raw)
+            except ValueError as exc: raise FileAccessError(str(exc)) from None
+            if value['sha256']!=sha: raise FileAccessError('音频校验失败。')
+            self.egg_preview_sources={value['session_id']:body['id']}
+            return value
+        if op=='egg_preview_update':
+            session=str(UUID(body['session']))
+            file_id=self.egg_preview_sources.get(session)
+            if file_id is None: raise FileAccessError('egg_preview_expired')
+            # Recheck the existing grant and fingerprint without rereading WAV.
+            self.provider.validate(file_id)
+            try: return self.service.egg_preview('update',body['config'],session)
+            except ValueError as exc: raise FileAccessError(str(exc)) from None
+        if op=='egg_preview_close':
+            session=str(UUID(body['session']))
+            self.egg_preview_sources.pop(session,None)
+            return self.service.egg_preview('close',session=session)
+        if op=='research_audio':return self.provider.audio_preview(body['id'])
+        if op=='research_scan':return self.provider.scan(body['id'])
         if isinstance(op,str) and op.startswith('m05_'):return self.m05.invoke(body)
         if isinstance(op,str) and op.startswith('m11_'):return self.m11.invoke(body)
         if isinstance(op,str) and op.startswith('m07_'):return self.m07.invoke(body)
@@ -108,7 +119,7 @@ class TaskBridge:
         if op=='submit':
             if set(body)-{'op','operation','inputs','config','layer','idempotency_key'} or not isinstance(body.get('inputs'),list) or not 1<=len(body['inputs'])<=1000:
                 raise FileAccessError('批次请求不正确。')
-            inputs=[]
+            inputs=[];sources=[]
             for item in body['inputs']:
                 if set(item)-{'audio','textgrid','lip','parent_result','legacy_result'}:raise FileAccessError('不支持的关联。')
                 mapped={}
@@ -120,9 +131,12 @@ class TaskBridge:
                     raw,_=self.provider.read(key);entry=self.provider.entries[key]
                     mapped[role]=self.service.import_input(raw,entry.name,role)
                 inputs.append(mapped)
-            return self.service.request('/api/v1/jobs/batches/create','POST',dict(project_id=PROJECT,operation=body['operation'],inputs=inputs,
+                sources.append(self.provider.entries[item['audio']].directory)
+            batch=self.service.request('/api/v1/jobs/batches/create','POST',dict(project_id=PROJECT,operation=body['operation'],inputs=inputs,
                 config=body.get('config'),layer=body.get('layer'),idempotency_key=body['idempotency_key']))
-        if op=='save':return self.save(str(UUID(body['id'])),body['directory'])
+            self.batch_sources[batch['id']]=sources
+            return batch
+        if op=='save':return self.save(str(UUID(body['id'])),body['directory'],beside_sources=body.get('beside_sources') is True)
         raise FileAccessError('不支持的任务操作。')
 
     def convert_lip(self,file_id):
@@ -141,42 +155,54 @@ class TaskBridge:
             code=json.load(error).get('detail','')
             raise FileAccessError({'legacy_conversion_budget':'旧 PKL 超过转换预算（16 MB、数值或内存上限）。',
                 'legacy_conversion_timeout':'旧 PKL 转换超时，请缩短数据。','preview_busy':'预览或转换正在进行，请稍后重试。'}.get(code,'旧 PKL 含不支持或损坏的结构，未生成文件。')) from None
-        with pin_directory(root):
+        with pin_directory(root) as output:
             self.provider.directory(entry.directory)
             # Recheck sources after conversion; no file output if the selected input changed.
             if self.provider.read(file_id)[0]!=raw:raise FileAccessError('旧 PKL 已变化，请刷新。')
             if companions and self.provider.read(companions[0]['id'])[0]!=companion:raise FileAccessError('伴随时间戳已变化。')
-            if target.exists() or target.is_symlink():raise FileAccessError('已有同名 .lip.json，保持原样；可直接关联它。')
+            if output.exists(target):raise FileAccessError('已有同名 .lip.json，保持原样；可直接关联它。')
             temp=root/('.ptb-'+uuid4().hex+'.part');original=None
             try:
-                with temp.open('xb') as f:
+                with output.open(temp,'xb') as f:
                     original=identity(os.fstat(f.fileno()));f.write(converted);f.flush();os.fsync(f.fileno())
-                os.rename(temp,target)
+                output.publish(temp,target)
             finally:
-                if original and temp.exists() and identity(temp.stat())==original:checked_path(temp);temp.unlink()
+                if original:output.unlink(temp,original)
             file=next(f for f in self.provider.list(entry.directory) if f['name']==name)
             return {'file':file,'companion_found':bool(companions)}
 
-    def save(self,batch_id,directory_id,*,single=False):
+    def save(self,batch_id,directory_id,*,single=False,beside_sources=False):
         directory=self.provider.directory(directory_id)
         if directory.purpose not in ('input','output'):raise FileAccessError('请选择结果目录。')
         root=directory.path
+        sources=self.batch_sources.get(batch_id) if beside_sources else None
+        if beside_sources and sources is None:raise FileAccessError('此历史批次的子目录授权已失效，请取消结果与WAV同目录并选择结果目录。')
         if single:
             job=self.service.get('/api/v1/jobs/'+batch_id)
             if job['operation'] not in ('spectrogram_to_audio','egg_analysis','lpc_analysis','speech_synthesis','phonation_synthesis') or job['state']!='succeeded':raise FileAccessError('分析结果尚不可用。')
             batch={'summary':{'items':[dict(state='succeeded',job_id=batch_id,index=0)]}}
         else:batch=self.service.get('/api/v1/jobs/batches/'+batch_id)
         created=[];pending={};saved=[]
-        def sha(path):
+        def sha(path,output):
             value=hashlib.sha256()
-            with path.open('rb') as f:
+            with output.open(path,'rb') as f:
                 for block in iter(lambda:f.read(65536),b''):value.update(block)
             return value.hexdigest()
-        with pin_directory(root):
+        with ExitStack() as stack:
+            pinned={directory_id:stack.enter_context(pin_directory(root))}
+            output=pinned[directory_id]
             self.provider.directory(directory_id)
             try:
                 for item in batch['summary']['items']:
                     if item['state']!='succeeded':continue
+                    target_id=sources[item['index']] if sources is not None else directory_id
+                    target_directory=self.provider.directory(target_id)
+                    if sources is not None:
+                        if target_directory.purpose!='input':raise FileAccessError('源音频目录没有结果保存授权。')
+                        target_directory.path.relative_to(directory.path)
+                    root=target_directory.path
+                    if target_id not in pinned:pinned[target_id]=stack.enter_context(pin_directory(root))
+                    output=pinned[target_id]
                     job=self.service.get('/api/v1/jobs/'+item['job_id'])
                     export_names={}
                     if job['operation'] in ('egg_analysis','lpc_analysis'):
@@ -190,22 +216,23 @@ class TaskBridge:
                         if job['operation']=='acoustic_analysis':name=Path(batch['audio_names'][item['index']]).stem+name[len('result'):]
                         if not name or len(name)>220 or any(ord(c)<32 or c in '/\\:<>"|?*' for c in name):raise FileAccessError('输出文件名不受支持。')
                         path=root/name
-                        if path.exists():
+                        if output.exists(path):
                             checked_path(path)
-                            if path.is_file() and path.stat().st_size==file['size_bytes'] and sha(path)==file['sha256']:
-                                saved.append(name);continue
+                            if output.stat(path).st_size==file['size_bytes'] and sha(path,output)==file['sha256']:
+                                saved.append(path.relative_to(directory.path).as_posix());continue
                             path=root/(item['job_id'][:8]+'-'+name)
-                        if path.exists():
+                        if output.exists(path):
                             checked_path(path)
-                            if path.is_file() and path.stat().st_size==file['size_bytes'] and sha(path)==file['sha256']:
-                                saved.append(path.name);continue
+                            if output.stat(path).st_size==file['size_bytes'] and sha(path,output)==file['sha256']:
+                                saved.append(path.relative_to(directory.path).as_posix());continue
                             path=root/(uuid4().hex[:8]+'-'+name)
                         temp=root/('.ptb-'+uuid4().hex+'.part')
                         digest=hashlib.sha256();offset=0
-                        with temp.open('xb') as f:
-                            pending[temp]=identity(os.fstat(f.fileno()))
+                        with output.open(temp,'xb') as f:
+                            pending[temp]=(identity(os.fstat(f.fileno())),output)
                             while offset<file['size_bytes']:
                                 self.provider.directory(directory_id)
+                                self.provider.directory(target_id)
                                 size=min(1_048_576,file['size_bytes']-offset)
                                 raw=self.service.binary(f'/api/v1/jobs/local-results/{file["id"]}?offset={offset}&size={size}')
                                 if len(raw)!=size:raise FileAccessError('结果下载不完整。')
@@ -213,14 +240,16 @@ class TaskBridge:
                             f.flush();os.fsync(f.fileno())
                         if digest.hexdigest()!=file['sha256']:raise FileAccessError('结果校验失败。')
                         self.provider.directory(directory_id)
-                        os.rename(temp,path)  # Windows refuses any pre-existing destination.
-                        created.append((path,pending.pop(temp),file['sha256']));saved.append(path.name)
+                        self.provider.directory(target_id)
+                        output.publish(temp,path)  # Atomic no-clobber on each supported platform.
+                        original,_=pending.pop(temp)
+                        created.append((path,original,file['sha256'],output));saved.append(path.relative_to(directory.path).as_posix())
                 return {'saved':saved,'count':len(saved),'batch_id':batch_id}
             except BaseException:
-                for path,original in pending.items():
-                    if path.exists() and identity(path.stat())==original:checked_path(path);path.unlink()
-                for path,original,digest in created:
-                    if path.exists() and identity(path.stat())==original:
+                for path,(original,output) in pending.items():
+                    output.unlink(path,original)
+                for path,original,digest,output in created:
+                    if output.exists(path) and identity(output.stat(path))==original:
                         checked_path(path)
-                        if sha(path)==digest:path.unlink()
+                        if sha(path,output)==digest:output.unlink(path,original)
                 raise

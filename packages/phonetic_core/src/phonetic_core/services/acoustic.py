@@ -1,18 +1,17 @@
 # M01-B source_ids: SRC-PRAAT, SRC-REAPER, SRC-IRAPT, SRC-WMPC, SRC-VOICESAUCE, SRC-OPENSAUCE; migration evidence: docs/modules/evidence/M01-core-migration.json
 from dataclasses import asdict
-import logging
 from typing import Optional, List
 import numpy as np
 import pandas as pd
 from ..models.acoustic import AcousticConfig, AnalysisResult
 from ..models.audio import AudioInput
 from ..models.associations import AcousticAssociations
-from ..ports.acoustic import AcousticBackends, BackendAborted
+from ..ports.acoustic import AcousticBackends
+from ..ports.errors import raise_stage_failure
 from ..acoustic.catalog import CORE_RESULT_FIELD_MAP
 from ..acoustic.alignment import align_track_to_grid, smooth_preserving_gaps
 from ..acoustic.lip import interpolate_lip
 from ..acoustic.annotations import align_annotations
-log=logging.getLogger(__name__)
 from ..acoustic import (
     compute_praat_f0_track,
     compute_praat_formants,
@@ -43,6 +42,11 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
     checkpoint()
     y=audio.scientific_mono()
     fs=audio.sample_rate_hz
+    if not len(y):
+        # The array API keeps an empty result for empty input. Task publication
+        # rejects empty audio before calling this API; no algorithm is invoked.
+        return AnalysisResult(time_axis=np.array([],dtype=float),f0_praat=np.array([],dtype=float),
+            sampling_rate=fs,config_snapshot=asdict(config))
     wav_path='<decoded audio>'
     # Use config object properties
     frameshift_ms = config.frameshift_ms
@@ -70,10 +74,7 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
         silence_mask = compute_silence_mask(intensity, config.silence_threshold)
 
     except Exception as e:
-        log.warning("Intensity calculation failed for %s: %s", wav_path, e)
-        est_len = int(len(y) / (fs * frameshift_ms / 1000.0))
-        intensity = np.full(est_len, np.nan)
-        silence_mask = np.ones(est_len, dtype=bool)
+        raise_stage_failure('energy', e)
 
     checkpoint()
     # --- 1. 计算 Formants (Praat Burg) ---
@@ -85,11 +86,7 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
             num_formants=config.num_formants
         )
     except Exception as e:
-        log.warning("Formant calculation failed for %s: %s", wav_path, e)
-        # Placeholder
-        est_len = int(len(y) / (fs * frameshift_ms / 1000))
-        formant_res = {f"pF{i}": np.full(est_len, np.nan) for i in range(1, 5)}
-        formant_res.update({f"pB{i}": np.full(est_len, np.nan) for i in range(1, 5)})
+        raise_stage_failure('formants', e)
 
     # 获取共振峰数据供后续使用
     pF1 = formant_res.get("pF1")
@@ -123,8 +120,7 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
             target_times,
         )
     except Exception as e:
-        log.warning("Praat F0 failed for %s: %s", wav_path, e)
-        f0_data["pF0"] = np.full(target_len, np.nan)
+        raise_stage_failure('praat_pitch', e)
 
     # 3.2 REAPER F0 (Optional)
     try:
@@ -147,11 +143,7 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
         else:
             f0_data["rF0"] = np.full(target_len, np.nan)
     except Exception as e:
-        if isinstance(e, BackendAborted):
-            raise
-        log.warning("REAPER F0 failed for %s: %s", wav_path, e)
-        f0_data["rF0"] = np.full(target_len, np.nan)
-        backend_events.append({"stage":"reaper","actual":"unavailable","reason":type(e).__name__})
+        raise_stage_failure('reaper', e)
 
     checkpoint()
     # --- 4. 基于 F0 计算衍生参数 (Harmonics, Amplitudes, Corrections, etc.) ---
@@ -206,10 +198,7 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
             derived_data[f"H5K{suffix}"] = h5k
 
         except Exception as e:
-            log.warning("Spectral batch failed for %s (%s): %s", wav_path, f0_type, e)
-            for k in ["H1", "H2", "H4", "A1", "A2", "A3", "H2K", "H5K"]:
-                derived_data[f"{k}{suffix}"] = np.full(target_len, np.nan)
-            h1=h2=h4=a1=a2=a3=h2k=h5k = np.full(target_len, np.nan)
+            raise_stage_failure('spectrum', e)
 
         # 4.3 Uncorrected Tilts (H1-H2, H1-A1, etc.)
         # "H1H2u" means uncorrected
@@ -222,7 +211,7 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
             derived_data[f"H42Ku{suffix}"] = h4 - h2k
             derived_data[f"H2KH5Ku{suffix}"] = h2k - h5k
         except Exception as e:
-            log.warning("Uncorrected tilt calculation failed for %s (%s): %s", wav_path, f0_type, e)
+            raise_stage_failure('tilt', e)
 
         # 4.4 Corrected Tilts
         try:
@@ -249,15 +238,14 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
             derived_data[f"H42Kc{suffix}"] = corr_res["H42Kc"]
             derived_data[f"H2KH5Kc{suffix}"] = corr_res["H2KH5Kc"]
         except Exception as e:
-            log.warning("Corrected tilt calculation failed for %s (%s): %s", wav_path, f0_type, e)
+            raise_stage_failure('correction', e)
 
         # 4.6 CPP
         try:
             cpp_val = compute_cpp(y, fs, frameshift_ms, f0, n_periods, voiced_mask)
             derived_data[f"CPP{suffix}"] = cpp_val
         except Exception as e:
-            log.warning("CPP calculation failed for %s (%s): %s", wav_path, f0_type, e)
-            derived_data[f"CPP{suffix}"] = np.full(target_len, np.nan)
+            raise_stage_failure('cpp', e)
 
         # 4.7 HNR
         try:
@@ -267,23 +255,21 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
                 # hk is like HNR05, HNR15
                 derived_data[f"{hk}{suffix}"] = hv[:target_len]
         except Exception as e:
-            log.warning("HNR calculation failed for %s (%s): %s", wav_path, f0_type, e)
+            raise_stage_failure('hnr', e)
 
         # 4.8 SHR
         try:
             shr_val = compute_shr(y, fs, frameshift_ms, f0, min_f0, max_f0, voiced_mask=voiced_mask)
             derived_data[f"SHR{suffix}"] = shr_val[:target_len]
         except Exception as e:
-            log.warning("SHR calculation failed for %s (%s): %s", wav_path, f0_type, e)
-            derived_data[f"SHR{suffix}"] = np.full(target_len, np.nan)
+            raise_stage_failure('shr', e)
 
         # 4.9 Spectral Slope
         try:
             slope = compute_spectral_slope(y, fs, frameshift_ms, f0, min_pitch=min_f0, voiced_mask=voiced_mask)
             derived_data[f"SpectralSlope{suffix}"] = slope[:target_len]
         except Exception as e:
-            log.warning("Spectral slope calculation failed for %s (%s): %s", wav_path, f0_type, e)
-            derived_data[f"SpectralSlope{suffix}"] = np.full(target_len, np.nan)
+            raise_stage_failure('slope', e)
 
         # 4.10 SOE (Strength of Excitation)
         try:
@@ -292,8 +278,7 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
             soe_val, _ = compute_soe(y, fs, frameshift_ms, f0, target_len)
             derived_data[f"SOE{suffix}"] = soe_val
         except Exception as e:
-            log.warning("SOE calculation failed for %s (%s): %s", wav_path, f0_type, e)
-            derived_data[f"SOE{suffix}"] = np.full(target_len, np.nan)
+            raise_stage_failure('soe', e)
 
     checkpoint()
     # --- 5. Global Parameters (Intensity, Jitter, Shimmer) ---
@@ -312,9 +297,7 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
         for k, v in js_res.items():
             derived_data[k] = v[:target_len]
     except Exception as e:
-        log.warning("Jitter/Shimmer failed for %s: %s", wav_path, e)
-        for k in ["Jitter_Local", "Jitter_RAP", "Jitter_PPQ5", "Shimmer_Local", "Shimmer_APQ3", "Shimmer_APQ5", "Shimmer_APQ11"]:
-            derived_data[k] = np.full(target_len, np.nan)
+        raise_stage_failure('jitter_shimmer', e)
 
     # CPP (Generic) - usually copy CPP_pF0
     if "CPP_pF0" in derived_data:

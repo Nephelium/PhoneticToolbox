@@ -1,0 +1,14 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><base href="/"><title>M01 M02 repair checks</title></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';import Shell from '/src/app/AppShell.vue';import '/src/design/tokens.css';
+const buffer=new ArrayBuffer(44+16000),v=new DataView(buffer),str=(i,s)=>[...s].forEach((c,n)=>v.setUint8(i+n,c.charCodeAt(0)));
+str(0,'RIFF');v.setUint32(4,buffer.byteLength-8,true);str(8,'WAVEfmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,8000,true);v.setUint32(28,16000,true);v.setUint16(32,2,true);v.setUint16(34,16,true);str(36,'data');v.setUint32(40,16000,true);
+for(let i=0;i<8000;i++)v.setInt16(44+2*i,10000*Math.sin(2*Math.PI*i/40),true);
+const files=Array.from({length:400},(_,i)=>[{id:'a'+i,name:'音频'+String(i).padStart(3,'0')+'.wav',kind:'audio',size:buffer.byteLength},{id:'t'+i,name:'音频'+String(i).padStart(3,'0')+'.xlsx',kind:'parameter',size:20}]).flat();
+const children=[{...files[0],id:'sub-a',name:'子目录/音频000.wav'},{...files[1],id:'sub-t',name:'子目录/音频000.xlsx'}];
+const table={schema_version:'m02/1',sha256:'a'.repeat(64),columns:['Time_s','pF0','rF0','Intensity'],kinds:['number','number','number','number'],rows:Array.from({length:100},(_,i)=>[i/100,200+i,201+i,60+i/100])};
+const batch={id:'b1',operation:'acoustic_analysis',created_at:1,audio_names:files.filter(f=>f.kind==='audio').map(f=>f.name),summary:{total:400,closed:false,complete:false,counts:{succeeded:0,failed:0,interrupted:0,not_started:399,running:1,cancelled:0},items:Array.from({length:400},(_,index)=>({index,state:index?'not_started':'running',job_id:null,error_code:null}))}};
+window.qa={polls:0,cancelled:0,submitted:0};
+const delay=()=>new Promise(r=>setTimeout(r,400));
+const tasks={list:async()=>{window.qa.polls++;await delay();return [structuredClone(batch)];},get:async()=>{await delay();return structuredClone(batch);},job:async()=>{throw Error('No final jobs in fixture');},parent:async()=>null,cancel:async()=>{window.qa.cancelled++;await delay();return structuredClone(batch);},submit:async()=>{window.qa.submitted++;await delay();return structuredClone(batch);}};
+createApp({render:()=>h(Shell,{research:{key:'m01-m02-r1-test',label:'合成界面验证',files:{kind:'desktop',choose:async purpose=>({id:'root',label:'测试目录',purpose}),list:async(_,recursive)=>recursive?[...files,...children]:files,read:async()=>({buffer:buffer.slice(0),sha256:'a'.repeat(64)}),parameters:async()=>structuredClone(table),tasks}}})}).mount('#app');
+</script></body></html>

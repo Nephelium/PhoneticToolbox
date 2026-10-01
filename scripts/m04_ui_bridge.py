@@ -31,6 +31,10 @@ def main():
     wavfile.write(inputs/'silent.wav',48000,np.zeros(96000))
     grid='File type = "ooTextFile"\nObject class = "TextGrid"\n\n0\n2\n<exists>\n2\n"IntervalTier"\n"phones"\n0\n2\n2\n0\n1\n"ɑ̃˥"\n1\n2\n"末"\n"IntervalTier"\n"words"\n0\n2\n1\n0\n2\n"音节"\n'
     (inputs/'LPC ɑ̃˥.TextGrid').write_text(grid,encoding='utf-8')
+    for name,label in [('blank-tail',''),('wrong-grid','越界标签')]:
+        wavfile.write(inputs/(name+'.wav'),48000,audio)
+        extended='File type = "ooTextFile"\nObject class = "TextGrid"\n0\n9\n<exists>\n1\n"IntervalTier"\n"phones"\n0\n9\n2\n0\n0.2\n"ɑ̃˥"\n0.2\n9\n"'+label+'"\n'
+        (inputs/(name+'.TextGrid')).write_text(extended,encoding='utf-8')
     os.environ['PTB_EGG_PYTHON']=str(ROOT/'.venv/m03-compatible/python.exe')
     provider=FileProvider()
     try:

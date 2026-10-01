@@ -1,7 +1,7 @@
 """Bounded M12 display conversion; original bytes and timestamps stay authoritative.
 
 Uses existing SoundFile 0.13.1 and SciPy 1.16.3 runtime dependencies.
-Only the first channel enters the compact preview, matching M12 spectrogram/RMS.
+M12 defaults to the first channel. M01/M02 explicitly preserve all channels.
 """
 import hashlib
 import io
@@ -26,7 +26,7 @@ def source_hash(stream):
     return digest.hexdigest()
 
 
-def preview_audio(stream, max_bytes=MAX_PREVIEW_BYTES):
+def preview_audio(stream, max_bytes=MAX_PREVIEW_BYTES, *, preserve_channels=False):
     import numpy as np
     import soundfile as sf
     from scipy.signal import resample_poly
@@ -34,22 +34,23 @@ def preview_audio(stream, max_bytes=MAX_PREVIEW_BYTES):
     size = stream.seek(0, 2)
     stream.seek(0)
     if size > MAX_SOURCE_BYTES:
-        raise FileAccessError('标注长音频读取支持最大 2 GB WAV。')
+        raise FileAccessError('长音频预览支持最大 2 GB WAV。')
     budget = min(max_bytes, MAX_PREVIEW_BYTES)
     try:
         with sf.SoundFile(stream, mode='r') as audio:
             frames, rate, channels = audio.frames, audio.samplerate, audio.channels
             if audio.format not in ('WAV', 'WAVEX', 'RF64') or frames <= 0 or not 8000 <= rate <= 96000 or not 1 <= channels <= 8:
-                raise FileAccessError('标注工作台支持 8–96 kHz、最多 8 声道的非空 WAV。')
+                raise FileAccessError('长音频预览支持 8–96 kHz、最多 8 声道的非空 WAV。')
             supported = audio.subtype in ('PCM_U8', 'PCM_16', 'PCM_24', 'PCM_32', 'FLOAT', 'DOUBLE')
             compact = size > budget or frames * channels > MAX_SAMPLE_VALUES or audio.format == 'RF64' or not supported
             duration = frames / rate
             if compact:
-                max_frames = min(MAX_SAMPLE_VALUES, (budget - 44) // 2)
+                output_channels = channels if preserve_channels else 1
+                max_frames = min(MAX_SAMPLE_VALUES // output_channels, (budget - 44) // (2 * output_channels))
                 rates = sorted({rate, 48000, 44100, 32000, 24000, 22050, 16000, 12000, 11025, 8000}, reverse=True)
                 target_rate = next((r for r in rates if r <= rate and (frames * r + rate - 1) // rate <= max_frames), None)
                 if target_rate is None:
-                    raise FileAccessError('录音过长，8 kHz 单声道预览仍超过 64 MB，请分段打开。')
+                    raise FileAccessError('录音过长，8 kHz 轻量预览仍超过当前内存预算，请分段打开。')
                 divisor = math.gcd(rate, target_rate)
                 up, down = target_rate // divisor, rate // divisor
                 # Integer-second chunks and down-aligned context share one output grid.
@@ -58,7 +59,7 @@ def preview_audio(stream, max_bytes=MAX_PREVIEW_BYTES):
                 context = down * math.ceil(max(rate * .05, 12 * down / up) / down)
                 output = io.BytesIO()
                 with wave.open(output, 'wb') as writer:
-                    writer.setnchannels(1)
+                    writer.setnchannels(output_channels)
                     writer.setsampwidth(2)
                     writer.setframerate(target_rate)
                     for start in range(0, frames, chunk_frames):
@@ -68,9 +69,9 @@ def preview_audio(stream, max_bytes=MAX_PREVIEW_BYTES):
                         block = audio.read(right - left, dtype='float32', always_2d=True)
                         if len(block) != right - left or not np.isfinite(block).all():
                             raise FileAccessError('WAV 数据不完整或含非有限采样值。')
-                        mono = block[:, 0]
+                        mono = block if preserve_channels else block[:, 0]
                         if up != down:
-                            mono = resample_poly(mono, up, down)
+                            mono = resample_poly(mono, up, down, axis=0)
                         offset = (start - left) * up // down
                         count = ((end - start) * up + down - 1) // down
                         samples = mono[offset:offset + count]
@@ -79,7 +80,8 @@ def preview_audio(stream, max_bytes=MAX_PREVIEW_BYTES):
                         pcm = np.clip(np.rint(samples * 32768), -32768, 32767).astype('<i2')
                         writer.writeframesraw(pcm.tobytes())
                 payload = output.getvalue()
-                note = f'轻量预览：{target_rate / 1000:g} kHz / 16 位 / 第一声道；原文件 {rate / 1000:g} kHz / {channels} 声道。'
+                channel_note = f'{channels} 声道' if preserve_channels else '第一声道'
+                note = f'轻量预览：{target_rate / 1000:g} kHz / 16 位 / {channel_note}；原文件 {rate / 1000:g} kHz / {channels} 声道，计算与切分仍使用原文件。'
             else:
                 target_rate = rate
                 payload = None

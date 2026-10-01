@@ -7,6 +7,16 @@ from pathlib import Path
 def restore_worker_pipes():
     # PyInstaller windowed executables set Python streams to None even when a
     # parent explicitly supplies pipes. Recover only this child's inherited IO.
+    if os.name!='nt':
+        for name,number,mode in [('stdin',0,'r'),('stdout',1,'w'),('stderr',2,'w')]:
+            existing=getattr(sys,name)
+            if existing is not None:
+                if hasattr(existing,'reconfigure'):existing.reconfigure(encoding='utf-8',errors='strict')
+                continue
+            try:stream=os.fdopen(os.dup(number),mode,encoding='utf-8',buffering=1)
+            except OSError:stream=open(os.devnull,mode,encoding='utf-8')
+            setattr(sys,name,stream)
+        return
     import ctypes
     import msvcrt
     kernel=ctypes.WinDLL('kernel32',use_last_error=True)

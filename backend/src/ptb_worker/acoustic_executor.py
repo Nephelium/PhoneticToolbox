@@ -17,6 +17,7 @@ def collect_scientific(entry, request, scratch, limits, stop, on_started=None, e
         from .native.linux_runtime import run
         return run(entry, request, scratch.root, limits, stop=stop,
                    on_started=on_started, evidence=evidence, on_chunk=on_chunk)
+    if sys.platform!='win32':raise FormatError('scientific_platform_unavailable')
     from .native.windows import InputPipe
     from .native.reaper import collect_pipe
     if entry in ('lpc', 'egg'):
@@ -35,6 +36,11 @@ def collect_scientific(entry, request, scratch, limits, stop, on_started=None, e
 
 def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None,process_evidence=None):
     files=store.files;identity=(claim['id'],worker_id,claim['generation']);snapshot=json.loads(claim['snapshot'])
+    # Offline EGG already permits 1 MiB reads/writes. Use that existing bound
+    # instead of hundreds of tiny durable scratch transactions per interaction.
+    # Hosted storage and other modules retain their established chunk sizes.
+    local_egg=snapshot['operation']=='egg_analysis' and not store.postgres
+    chunk_bytes=1_048_576 if local_egg else CHUNK_BYTES
     done=threading.Event();abort=threading.Event();errors=[];progress=[.01]
     def heartbeat():
         try:
@@ -55,13 +61,13 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None,process_
         blobs={}
         for item in snapshot['input_assets']:
             raw=bytearray()
-            for offset in range(0,item['size_bytes'],CHUNK_BYTES):
+            for offset in range(0,item['size_bytes'],chunk_bytes):
                 if abort.is_set() or stop.is_set():raise Cancelled('cancelled')
-                raw.extend(files.read_input(identity,item['id'],offset,min(CHUNK_BYTES,item['size_bytes']-offset)))
+                raw.extend(files.read_input(identity,item['id'],offset,min(chunk_bytes,item['size_bytes']-offset)))
             if len(raw)!=item['size_bytes'] or digest(raw)!=item['sha256']:raise StorageError('input_unavailable',410)
             blobs[item['role']]=bytes(raw)
         progress[0]=.1
-        with ManagedScratch(files,identity) as scratch:
+        with ManagedScratch(files,identity,write_chunk_bytes=chunk_bytes if local_egg else 65536) as scratch:
             if snapshot['operation']=='pitch_manipulation' and snapshot.get('saved_copy'):
                 result=dict(snapshot['copy_result'],name=snapshot['copy_name'])
                 meta=dict(schema_version='m08/1',audio_sha256=snapshot['source_ref']['sha256'],results=[result])
@@ -112,13 +118,10 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None,process_
                     raise FormatError('source_mismatch')
                 payloads=list(zip(names,bundle.payloads))
             elif snapshot['operation']=='spectrogram_to_audio':
-                from .native.windows import InputPipe
-                from .native.reaper import collect_pipe
                 header=dict(config=snapshot['config']['analysis'],sha256=digest(blobs['image']))
                 request=scratch.create(json.dumps(header).encode()+b'\n'+blobs['image'],'.json')
-                pipe=InputPipe()
-                raw,_=collect_pipe(command('ptb_worker.spec2wav_child',str(request),pipe.name),pipe,
-                    scratch.root,replace(SEGMENT_LIMITS,timeout_seconds=240),lambda:abort.is_set() or stop.is_set(),on_started)
+                raw=collect_scientific('spec2wav',request,scratch,replace(SEGMENT_LIMITS,timeout_seconds=240),
+                    lambda:abort.is_set() or stop.is_set(),on_started)
                 bundle=unpack_bundle(raw,64_000_000)
                 if bundle.manifest['image_sha256']!=header['sha256']:raise FormatError('source_mismatch')
                 payloads=list(zip([f['name'] for f in bundle.manifest['files']],bundle.payloads))
@@ -149,7 +152,7 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None,process_
         for name,raw in payloads:
             if abort.is_set() or stop.is_set():raise Cancelled('cancelled')
             asset=files.output(identity,name,'result',len(raw))
-            for offset in range(0,len(raw),CHUNK_BYTES):files.write(identity,asset['id'],offset,raw[offset:offset+CHUNK_BYTES])
+            for offset in range(0,len(raw),chunk_bytes):files.write(identity,asset['id'],offset,raw[offset:offset+chunk_bytes])
             files.seal(identity,asset['id'])
         done.set();timer.join(timeout=6)
         if timer.is_alive() or abort.is_set() or stop.is_set():raise Cancelled('cancelled')

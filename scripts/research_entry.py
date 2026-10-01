@@ -30,11 +30,12 @@ def main():
     parser.add_argument('--verify-m12-r3', type=Path)
     args = parser.parse_args()  # Unknown switches fail closed, never open a GUI.
     bundle = Path(getattr(sys, '_MEIPASS', Path(__file__).resolve().parents[1]))
-    root = args.local_root or Path(os.environ['LOCALAPPDATA']) / 'PhoneticToolbox/v3/research-v1'
+    from ptb_desktop.platform_paths import user_data_root
+    root = args.local_root or user_data_root() / 'research-v1'
     from ptb_worker.local_workspace import prepare_workspace
     database, files = prepare_workspace(root, bundle / 'backend/migrations')
-    reaper = bundle / 'resources/research/reaper.exe'
-    if not getattr(sys, 'frozen', False):
+    reaper = bundle / 'resources/research' / ('reaper.exe' if sys.platform=='win32' else 'reaper')
+    if not getattr(sys, 'frozen', False) and sys.platform=='win32':
         reaper = bundle / 'phonetic_toolbox/core/acoustic/reaper.exe'
     if args.verify_repair:
         restore_worker_pipes()

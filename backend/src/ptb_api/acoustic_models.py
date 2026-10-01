@@ -133,6 +133,7 @@ class AcousticBackendObservation(WireModel):
 
 
 class AcousticMetadata(WireModel):
+    computation_revision: Literal['acoustic/1','acoustic/2'] = 'acoustic/1'
     schema_version: Literal['m01/1'] = SCHEMA_VERSION
     algorithm_id: Literal['m01.parameter_estimation'] = 'm01.parameter_estimation'
     algorithm_version: Literal['legacy-numeric/1'] = 'legacy-numeric/1'

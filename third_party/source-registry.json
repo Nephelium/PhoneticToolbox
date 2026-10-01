@@ -1403,7 +1403,9 @@
       "modules": [
         "shared-runtime",
         "M09",
-        "M12"
+        "M12",
+        "M01",
+        "M02"
       ],
       "actual_included_version": "0.13.1 in phonetic_311; M09 isolated runtime 0.13.1 in requirements-m09-ui.lock",
       "observed_upstream_commit": null,
@@ -1420,7 +1422,9 @@
       "distribution_status": "actual-wheel-and-native-audit-required",
       "acknowledgement_group": "software",
       "m02_m09_verification_date": "2026-09-11",
-      "m02_m09_evidence": "docs/testing/m02-m09-report.md; requirements-m09-ui.lock; tests/parity/test_spec2wav.py; backend/tests/test_m02_display.py"
+      "m02_m09_evidence": "docs/testing/m02-m09-report.md; requirements-m09-ui.lock; tests/parity/test_spec2wav.py; backend/tests/test_m02_display.py",
+      "m01_m02_r1_evidence": "docs/testing/2026-10-01-m01-m02-repairs-report.md",
+      "m01_m02_r1_usage": "Existing SoundFile/SciPy runtime reused in desktop/src/ptb_desktop/annotation_audio.py for opt-in bounded multichannel WAV previews; original source hash/duration preserved, no dependency upgrade or scientific-input replacement."
     },
     {
       "id": "PKG-OPENPYXL",
@@ -6853,7 +6857,8 @@
       "modules": [
         "M01",
         "M09",
-        "M12"
+        "M12",
+        "M02"
       ],
       "authors": "Not recorded in installed metadata",
       "actual_included_version": "1.16.3",
@@ -6877,7 +6882,9 @@
       "m01_io_evidence": "docs/testing/m01-io-report.md",
       "m01_execution_evidence": "docs/testing/m01-execution-preparation-report.md",
       "m02_m09_verification_date": "2026-09-11",
-      "m02_m09_evidence": "docs/testing/m02-m09-report.md; requirements-m09-ui.lock; tests/parity/test_spec2wav.py; backend/tests/test_m02_display.py"
+      "m02_m09_evidence": "docs/testing/m02-m09-report.md; requirements-m09-ui.lock; tests/parity/test_spec2wav.py; backend/tests/test_m02_display.py",
+      "m01_m02_r1_evidence": "docs/testing/2026-10-01-m01-m02-repairs-report.md",
+      "m01_m02_r1_usage": "Existing SoundFile/SciPy runtime reused in desktop/src/ptb_desktop/annotation_audio.py for opt-in bounded multichannel WAV previews; original source hash/duration preserved, no dependency upgrade or scientific-input replacement."
     },
     {
       "id": "M01-PY-SETUPTOOLS",

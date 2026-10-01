@@ -3,6 +3,18 @@ import hashlib
 from pathlib import Path
 from .acoustic_errors import AcousticFailure
 
+PORTABLE_FONTS = {
+    'zh': ('Noto Sans CJK SC','Noto Sans SC','Source Han Sans SC','Microsoft YaHei','PingFang SC','SimSun'),
+    'latin': ('DejaVu Sans','Liberation Sans','Noto Sans','Arial','Segoe UI'),
+}
+
+def find_face(font_manager, requested, role, portable):
+    candidates=(requested,)+PORTABLE_FONTS.get(role,()) if portable else (requested,)
+    for family in dict.fromkeys(candidates):
+        try:return Path(font_manager.findfont(font_manager.FontProperties(family=[family]),fallback_to_default=False))
+        except ValueError:continue
+    raise ValueError('Requested export font and permitted alternatives are unavailable')
+
 def check_fonts(snapshot):
     from matplotlib import font_manager
     from matplotlib.ft2font import FT2Font
@@ -14,7 +26,7 @@ def check_fonts(snapshot):
     for role,requested in [('zh',snapshot.zh),('latin',snapshot.latin),('ipa','Doulos SIL')]:
         try:
             if role=='ipa' and not fixed_available:raise ValueError('Bundled font unavailable')
-            path=fixed if role=='ipa' else Path(font_manager.findfont(font_manager.FontProperties(family=[requested]),fallback_to_default=False))
+            path=fixed if role=='ipa' else find_face(font_manager,requested,role,snapshot.fallback_policy=='portable')
             face=FT2Font(str(path))
             # Matplotlib resolves localized names through its own catalogue. The
             # exact resolved family and content fingerprint are part of evidence.

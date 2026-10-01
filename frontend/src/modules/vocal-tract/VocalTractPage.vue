@@ -2,9 +2,12 @@
 import {ref,onMounted,onUnmounted,watch} from 'vue';
 import {vocalRequest} from '../../platform/desktop.ts';
 import {fontPayload,fontRevision} from '../../state/fonts.ts';
-const props=defineProps<{active:boolean}>();
+import {resizePanels} from '../../layout/resizablePanels.ts';
+const props=defineProps<{active:boolean;stateKey?:string}>();
 const emit=defineEmits<{references:[];close:[];dirty:[value:boolean]}>();
 const frame=ref<HTMLIFrameElement>();const ready=!!vocalRequest;
+let columns:ReturnType<typeof resizePanels>|undefined;
+function loaded(){theme();columns?.destroy();const root=frame.value?.contentDocument?.querySelector<HTMLElement>('.workspace');if(root)columns=resizePanels(root,{key:props.stateKey??'M10',center:'.studio',centerMin:320,panels:[{selector:'.analysis',side:'right',variable:'--panel-analysis',label:'声学分析',initial:260,min:220,max:520},{selector:'.inspector',side:'right',label:'操作面板',initial:330,min:260,max:560}]});}
 const theme=()=>{frame.value?.contentWindow?.postMessage({type:'m10-theme',theme:document.documentElement.dataset.theme},'*');if(fontPayload.value)frame.value?.contentWindow?.postMessage({type:'m10-fonts',fonts:JSON.parse(JSON.stringify(fontPayload.value))},'*');};
 watch(fontRevision,theme);
 async function message(event:MessageEvent){
@@ -21,12 +24,12 @@ async function message(event:MessageEvent){
 let observer:MutationObserver;
 onMounted(()=>{window.addEventListener('message',message);observer=new MutationObserver(theme);observer.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});});
 watch(()=>props.active,active=>{if(!active)void vocalRequest?.('deactivate').catch(()=>{});else theme();});
-onUnmounted(()=>{observer?.disconnect();window.removeEventListener('message',message);void vocalRequest?.('shutdown').catch(()=>{});});
+onUnmounted(()=>{columns?.destroy();observer?.disconnect();window.removeEventListener('message',message);void vocalRequest?.('shutdown').catch(()=>{});});
 </script>
 <template>
-<section class="vocal-page">
-<iframe v-if="ready" ref="frame" src="./vocal-tract/index.html" title="声道工作台" @load="theme"/>
-<div v-else class="vocal-unavailable"><h2>声道工作台</h2><p>本轮已接入 Windows 本机应用。请从 v3 桌面应用打开声道工作台。</p><button @click="emit('references')">方法与来源</button></div>
+<section class="vocal-page" aria-label="声道工作区">
+<iframe v-if="ready" ref="frame" src="./vocal-tract/index.html" title="声道工作台" @load="loaded"/>
+<div v-else class="vocal-unavailable"><p>本轮已接入 Windows 本机应用。请从 v3 桌面应用打开声道工作台。</p><button @click="emit('references')">方法与来源</button></div>
 </section>
 </template>
 <style scoped>

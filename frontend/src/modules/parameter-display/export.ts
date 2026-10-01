@@ -1,5 +1,5 @@
 import {exportSize,png300dpi} from './png.ts';
-import {paintSvg} from '../../design/svg-fonts.ts';
+import {paintSvg,styledSvg} from '../../design/svg-fonts.ts';
 
 const ns='http://www.w3.org/2000/svg';
 // Detached print palette: never switch the live page's theme during export.
@@ -83,6 +83,19 @@ export async function wholeFigurePng(input:WholeFigure){
   const canvas=document.createElement('canvas');canvas.width=size.width;canvas.height=size.height;
   try{
     await paintSvg(canvas,snapshot.text,snapshot.width,snapshot.height);
+    const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error('PNG 编码失败。')),'image/png'));
+    return new Blob([png300dpi(new Uint8Array(await blob.arrayBuffer()))],{type:'image/png'});
+  }finally{canvas.width=canvas.height=1;}
+}
+
+export async function currentFigurePng(chart:SVGSVGElement){
+  const width=chart.viewBox.baseVal.width,height=chart.viewBox.baseVal.height;
+  const clone=styledSvg(chart);clone.setAttribute('xmlns',ns);
+  clone.setAttribute('width',String(width));clone.setAttribute('height',String(height));
+  const text=new XMLSerializer().serializeToString(clone),size=exportSize(width,height);
+  const canvas=document.createElement('canvas');canvas.width=size.width;canvas.height=size.height;
+  try{
+    await paintSvg(canvas,text,width,height);
     const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error('PNG 编码失败。')),'image/png'));
     return new Blob([png300dpi(new Uint8Array(await blob.arrayBuffer()))],{type:'image/png'});
   }finally{canvas.width=canvas.height=1;}

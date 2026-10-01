@@ -13,7 +13,7 @@ from ptb_api.acoustic_models import (AcousticRequest,AcousticResult,AcousticMeta
 
 SOURCE_IDS=('SRC-PRAAT','SRC-REAPER','SRC-IRAPT','SRC-WMPC','SRC-VOICESAUCE','SRC-OPENSAUCE',
             'REF-CPP','REF-HNR','REF-SHR','REF-ISELI','REF-HAWKS','REF-SOE')
-KNOWN_REASONS={'empty_audio','praat_missing','praat_failed','praat_insufficient',
+KNOWN_REASONS={'native_failed','empty_audio','praat_missing','praat_failed','praat_insufficient',
                'irapt_unavailable_or_insufficient','native_exit_1','native_exit_7','native_exit_9'}
 
 
@@ -42,7 +42,7 @@ def build_acoustic_result(result,audio,request: AcousticRequest,inputs,*,native_
             resource_sha256=native_sha256 if event['actual']=='native_reaper' else None))
     if request.config.backend_policy.reaper=='disabled':
         backends.append(AcousticBackendObservation(stage='reaper',actual='disabled'))
-    metadata=AcousticMetadata(core_version=core_version,project_id=request.project_id,inputs=inputs,decoded=decoded,
+    metadata=AcousticMetadata(core_version=core_version,computation_revision=result.computation_revision,project_id=request.project_id,inputs=inputs,decoded=decoded,
         config=request.config,config_sha256=config_digest(request.config),source_ids=list(SOURCE_IDS),backends=backends)
     frame=result.to_dataframe()
     if (len(frame)+1)*len(frame.columns)>MAX_CELLS:raise ValueError('Result cell budget exceeded')

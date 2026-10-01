@@ -33,7 +33,7 @@ export interface ResearchTasks {
   submit(operation:'acoustic_analysis'|'textgrid_segment',inputs:BatchSelection[],config:BatchConfig|null,layer:string|null,key:string):Promise<BatchView>;
   list():Promise<BatchView[]>;get(id:string):Promise<BatchView>;cancel(id:string):Promise<BatchView>;job(id:string):Promise<JobView>;
   retry(id:string,key:string):Promise<JobView>;
-  save?(id:string,directory:string):Promise<{count:number;saved:string[]}>;
+  save?(id:string,directory:string,besideSources?:boolean):Promise<{count:number;saved:string[]}>;
   download?(id:string,name:string):Promise<void>;
   reconstruct?(file:ResearchFile,config:ReconstructionConfig,key:string):Promise<JobView>;
   egg?(file:ResearchFile,config:EggTaskConfig,key:string):Promise<JobView>;
@@ -59,11 +59,17 @@ export interface ResearchFiles {
   m05?:LipPort;
   choose?(purpose:DirectoryGrant['purpose']):Promise<DirectoryGrant|null>;
   add?(files:File[]):void;
-  list(directory?:string):Promise<ResearchFile[]>;
+  list(directory?:string,recursive?:boolean):Promise<ResearchFile[]>;
+  previewAudio?(file:ResearchFile):Promise<{buffer:ArrayBuffer;sha256:string;sourceDuration:number;previewNote:string}>;
   read(file:ResearchFile,signal?:AbortSignal):Promise<{buffer:ArrayBuffer;sha256:string}>;
   textgrid(file:ResearchFile):Promise<{sha256:string;tiers:Tier[]}>;
   spectrogram?(file:ResearchFile,view:SpectrogramView):Promise<Spectrogram>;
   parameters?(file:ResearchFile):Promise<ParameterTable>;
+  eggPreview?:{
+    open(file:ResearchFile):Promise<components['schemas']['EggPreviewSession']>;
+    update(file:ResearchFile,session:string,config:EggTaskConfig):Promise<components['schemas']['EggInteractiveResult']>;
+    close(file:ResearchFile,session:string):Promise<unknown>;
+  };
   capture?():Promise<ResearchFile|null>;
   convertLip?(file:ResearchFile):Promise<{file:ResearchFile;companion_found:boolean}>;
   dispose():void;
@@ -72,6 +78,16 @@ export interface ResearchContext { key:string; label:string; files:ResearchFiles
 export const fileKind=(name:string):ResearchFile['kind']|null=>/\.(wav|mp3|flac)$/i.test(name)?'audio':/\.textgrid$/i.test(name)?'textgrid':/\.lip\.json$/i.test(name)?'lip':/\.lab$/i.test(name)?'lab':/\.(xlsx|ptb\.sqlite3?)$/i.test(name)?'parameter':/\.(png|jpg|jpeg|bmp)$/i.test(name)?'image':null;
 export async function audioPreview(files:ResearchFiles,file:ResearchFile,signal?:AbortSignal) {
   const data=await files.read(file,signal);return {asset:await decodeWav(data.buffer,file.name,signal),sha256:data.sha256};
+}
+// Explicit opt-in for M01/M02; scientific readers keep their original inputs.
+export async function researchAudio(files:ResearchFiles,file:ResearchFile,signal?:AbortSignal) {
+  if(!files.previewAudio||!file.name.toLowerCase().endsWith('.wav'))return {...await audioPreview(files,file,signal),previewNote:''};
+  signal?.throwIfAborted();
+  const data=await files.previewAudio(file);signal?.throwIfAborted();
+  const asset=await decodeWav(data.buffer,file.name,signal);
+  if(!Number.isFinite(data.sourceDuration)||data.sourceDuration<=0||Math.abs(asset.duration-data.sourceDuration)>1/asset.sampleRate+1e-9)throw Error('预览与原音频时间范围不一致。');
+  asset.duration=data.sourceDuration;
+  return {asset,sha256:data.sha256,previewNote:data.previewNote};
 }
 export async function sha256(buffer:ArrayBuffer) {return [...new Uint8Array(await crypto.subtle.digest('SHA-256',buffer))].map(n=>n.toString(16).padStart(2,'0')).join('');}
 
@@ -88,7 +104,7 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
   async function request(path:string,signal?:AbortSignal,method='GET',body?:unknown) {
     if(disposed)throw Error('项目会话已关闭。');
     const r=await fetch('/api/v1/'+path,{method,body:body?JSON.stringify(body):undefined,credentials:'same-origin',cache:'no-store',signal:signal?AbortSignal.any([abort.signal,signal]):abort.signal,headers:{'X-PTB-Account':owner,...(body?{'Content-Type':'application/json'}:{}),...(method!=='GET'?{'X-CSRF-Token':csrf?.()??''}:{})}});
-    if(!r.ok){const error=await r.json().catch(()=>({}));if(r.status===401||error.detail==='account_changed')onInvalid();if(r.status===422&&path==='jobs/spec2wav/create')throw Error('标定参数无效：请核对时间、频率、dB范围及迭代次数。');if(typeof error.detail==='string'&&(error.detail.startsWith('preview_')||error.detail.startsWith('m07_')||error.detail==='invalid_spectrogram_input'))throw Error(error.detail);throw Error(({input_unavailable:'源文件已失效或临近到期，请重新上传。',quota_exceeded:'文件空间不足，请清理不需要的文件后重试。',invalid_parameter_table:'参数表包含不支持的内容、公式或损坏结构。原文件未修改。',parameter_read_failed:'参数表超过读取预算或读取失败。',parameter_read_timeout:'参数表读取超时，请缩小数据。',asset_expired:'文件已到期，请重新上传。',invalid_textgrid:'TextGrid格式不受支持或不完整。',unsupported_textgrid:'TextGrid超过2 MB或类型不正确。'} as Record<string,string>)[error.detail]||'项目文件不可访问，请刷新或检查登录状态。');}
+    if(!r.ok){const error=await r.json().catch(()=>({}));if(r.status===401||error.detail==='account_changed')onInvalid();if(r.status===422&&path==='jobs/spec2wav/create')throw Error('标定参数无效：请核对时间、频率、dB范围及迭代次数。');if(typeof error.detail==='string'&&(error.detail.startsWith('egg_')||error.detail.startsWith('preview_')||error.detail.startsWith('m07_')||error.detail==='invalid_spectrogram_input'))throw Error(error.detail);throw Error(({input_unavailable:'源文件已失效或临近到期，请重新上传。',quota_exceeded:'文件空间不足，请清理不需要的文件后重试。',invalid_parameter_table:'参数表包含不支持的内容、公式或损坏结构。原文件未修改。',parameter_read_failed:'参数表超过读取预算或读取失败。',parameter_read_timeout:'参数表读取超时，请缩小数据。',asset_expired:'文件已到期，请重新上传。',invalid_textgrid:'TextGrid格式不受支持或不完整。',unsupported_textgrid:'TextGrid超过2 MB或类型不正确。'} as Record<string,string>)[error.detail]||'项目文件不可访问，请刷新或检查登录状态。');}
     return r;
   }
   async function verify(file:ResearchFile){const r=await request('assets/'+encodeURIComponent(file.id));const asset:components['schemas']['AssetView']=await r.json();if(asset.project_id!==project||asset.state!=='ready'||asset.sha256!==file.sha256)throw Error('文件已变化，请刷新项目列表。');return asset;}
@@ -114,6 +130,11 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
     async textgrid(file){await verify(file);const data:components['schemas']['TextGridPreview']=await(await request('assets/'+encodeURIComponent(file.id)+'/textgrid')).json();if(data.sha256!==file.sha256)throw Error('关联文件已变化，请刷新。');return data;},
     async spectrogram(file,view){await verify(file);const query=new URLSearchParams(Object.entries(view).map(([k,v])=>[k,String(v)]));const data:Spectrogram=await(await request('assets/'+encodeURIComponent(file.id)+'/spectrogram?'+query)).json();if(data.sha256!==file.sha256)throw Error('音频已变化，请刷新。');return data;},
     async parameters(file){await verify(file);const data:ParameterTable=await(await request('assets/'+encodeURIComponent(file.id)+'/parameters')).json();if(data.sha256!==file.sha256)throw Error('参数文件已变化，请刷新。');return data;},
+    eggPreview:{
+      async open(file){await verify(file);return (await request('assets/'+encodeURIComponent(file.id)+'/egg-preview',undefined,'POST')).json();},
+      async update(file,session,config){return (await request('assets/'+encodeURIComponent(file.id)+'/egg-preview/'+encodeURIComponent(session),undefined,'POST',config)).json();},
+      async close(file,session){return (await request('assets/'+encodeURIComponent(file.id)+'/egg-preview/'+encodeURIComponent(session),undefined,'DELETE')).json();}
+    },
     dispose(){disposed=true;abort.abort();}};
   if(csrf){
     adapter.m07=m07Port({project,async source(file){await verify(file);return {asset_id:file.id,sha256:file.sha256!};},async create(body){return (await request('jobs/m07/create',undefined,'POST',body)).json();},job:tasks.job,read:tasks.result!,cancel:tasks.cancelJob!,retry:tasks.retry,async list(){return ((await(await request('jobs?project_id='+encodeURIComponent(project))).json()).jobs as JobView[]).filter(j=>j.operation==='phonation_synthesis');}});

@@ -3,6 +3,15 @@
     "FigureFontSnapshot": {
       "additionalProperties": false,
       "properties": {
+        "fallback_policy": {
+          "default": "strict",
+          "enum": [
+            "strict",
+            "portable"
+          ],
+          "title": "Fallback Policy",
+          "type": "string"
+        },
         "ipa": {
           "const": "Doulos SIL",
           "default": "Doulos SIL",

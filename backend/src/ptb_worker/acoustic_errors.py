@@ -1,14 +1,16 @@
 """Fixed M01 public reasons. This module must remain free of scientific imports."""
 from .io.limits import Cancelled, FormatError, LimitError
+from phonetic_core.ports.errors import ACOUSTIC_STAGES
 
 from .m14_errors import M14_ERRORS
 
 from .mfa.errors import M11_ERRORS
 
-ACOUSTIC_ERRORS=M11_ERRORS | M14_ERRORS | frozenset({
+ACOUSTIC_ERRORS=M11_ERRORS | M14_ERRORS | frozenset(f'analysis_{stage}_failed' for stage in ACOUSTIC_STAGES) | frozenset({
     'resource_queue_full','resource_queue_timeout','resource_cleanup_required',
     'resource_admission_corrupt','resource_admission_unsafe','resource_profile_invalid',
     'trusted_worker_unavailable','server_resource_profile_required',
+    'scientific_platform_unavailable',
     'm08_audio_decode_failed','m08_input_changed','m08_input_budget','m08_output_budget',
     'm08_praat_error','m08_curve_length','m08_invalid_range','m08_execution_failed',
     'm08_transform_requires_whole','m08_nonfinite_audio','m08_controls_required',

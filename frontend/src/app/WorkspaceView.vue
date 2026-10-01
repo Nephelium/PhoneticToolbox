@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import ModuleFrame from '../components/ModuleFrame.vue';
+import ModuleToolbar from '../components/ModuleToolbar.vue';
+import {vResizablePanels} from '../layout/resizablePanels.ts';
 import { computed,ref } from 'vue';import type { Module } from './registry.ts';import { workspace,host,assignAsset,states } from '../state/workspace.ts';import { stop } from '../state/audio.ts';
 import AppIcon from '../components/AppIcon.vue';import WaveformViewport from '../components/WaveformViewport.vue';import ParameterDrawer from '../components/ParameterDrawer.vue';import TaskPanel from '../components/TaskPanel.vue';
 const props=defineProps<{module:Module;stateKey?:string}>();const emit=defineEmits<{references:[]}>();const state=computed(()=>workspace(props.stateKey??props.module.id));const drawer=ref(false),picker=ref<HTMLInputElement>();
@@ -7,16 +10,8 @@ function pick(e:Event){const input=e.target as HTMLInputElement;if(input.files?.
 async function demo(){const currentState=state.value;currentState.loading=true;try{const response=await fetch(new URL('../assets/SYN-EGG-44100.wav',import.meta.url).href);if(!response.ok)throw Error('测试音频读取失败');await load(new File([await response.arrayBuffer()],'公开测试音频 · 双声道.wav'));}catch(e){currentState.error=String(e);}finally{currentState.loading=false;}}
 </script>
 <template>
-<section class="workspace-page" :aria-label="module.title+' 工作区'">
-<header class="page-heading">
-<div>
-<p class="eyebrow">{{module.id}} · 研究工具</p>
-<h1>{{module.title}}</h1>
-<p class="muted">{{module.description}}</p>
-</div>
-<button @click="emit('references')">
-<AppIcon name="book"/>方法与引用</button>
-</header>
+<ModuleFrame :label="module.title+' 工作区'" class="workspace-page">
+<template #toolbar><ModuleToolbar><template #actions><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button></template></ModuleToolbar></template>
 <div class="notice">
 <span class="badge">待接入</span>
 <span>本模块的分析功能尚未迁入。下方可试用共用的文件预览、选区和试听。</span>
@@ -33,7 +28,7 @@ async function demo(){const currentState=state.value;currentState.loading=true;t
 <span>{{state.error}} {{state.asset?'已加载的音频仍保留。':'请选择有效的音频文件。'}}</span>
 <button @click="state.error=''">收起提示</button>
 </div>
-<div class="workbench-grid">
+<div class="workbench-grid" v-resizable-panels="{key:stateKey??module.id,center:'.signal-panel',panels:[{selector:'.file-panel',side:'left',label:'文件',initial:220,min:180,max:520},{selector:'.parameter-summary',side:'right',label:'参数',initial:250,min:200,max:560}]}">
 <aside class="file-panel">
 <div class="panel-heading">
 <h2>当前文件</h2>
@@ -85,5 +80,5 @@ async function demo(){const currentState=state.value;currentState.loading=true;t
 </div>
 <TaskPanel/>
 <ParameterDrawer v-if="drawer" :key="module.id" :selected="state.parameters" @close="drawer=false" @apply="state.parameters=$event;state.dirty=true;drawer=false"/>
-</section>
+</ModuleFrame>
 </template>

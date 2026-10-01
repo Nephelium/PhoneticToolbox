@@ -37,14 +37,14 @@ const fs=require('node:fs/promises'),path=require('node:path'),assert=require('n
   const windowStart=Number(await page.getByLabel('平移波形时间窗').inputValue());assert(Math.abs(windowStart-.3)<.001,'0.6-second cursor anchor stays at 75% after 2x zoom');
   await page.getByRole('button',{name:'适合窗口',exact:true}).click();
   checks.push('1440x900 complete spectrogram and per-track time axis; independent middle scroll; Ctrl-wheel cursor anchor');
-  await page.setViewportSize({width:1440,height:660});await page.locator('.workbench-columns.shared-scroll').waitFor();
-  const shared=await page.locator('.workbench-columns').evaluate(grid=>{
-   const children=[...grid.children],before=children.map(el=>el.getBoundingClientRect().top);grid.scrollTop=70;
-   return {amount:grid.scrollTop,deltas:children.map((el,i)=>before[i]-el.getBoundingClientRect().top)};
-  });assert(shared.amount>0);assert(shared.deltas.every(x=>Math.abs(x-shared.amount)<1));
-  await page.setViewportSize({width:1440,height:900});await page.locator('.workbench-columns:not(.shared-scroll)').waitFor();
-  await page.locator('.signal-panel').evaluate(el=>el.scrollTop=0);
-  checks.push('all three overflowing columns share workbench scroll at 660px height; independent scrolling restored at 900px');
+  await page.setViewportSize({width:1440,height:660});await page.locator('.workbench-columns:not(.shared-scroll)').waitFor();
+  const independent=await page.locator('.workbench-columns').evaluate(grid=>{
+   const middle=grid.querySelector('.signal-panel'),left=grid.querySelector('.file-panel'),right=grid.querySelector('.parameter-summary');
+   const before=[left.scrollTop,right.scrollTop];middle.scrollTop=70;
+   return {amount:middle.scrollTop,before,after:[left.scrollTop,right.scrollTop]};
+  });assert(independent.amount>0);assert.deepEqual(independent.before,independent.after);
+  await page.setViewportSize({width:1440,height:900});await page.locator('.signal-panel').evaluate(el=>el.scrollTop=0);
+  checks.push('M01-R1 independent pane scrolling remains active at 660px and 900px heights');
   assert(await page.locator('.spectrogram-canvas canvas').evaluate(canvas=>{const data=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;return data.some((v,i)=>i%4===0&&v<200)&&data.some((v,i)=>i%4===0&&v>240);}));
   await page.getByLabel('显示语谱图（Praat）').uncheck();assert.equal(await page.locator('.spectrogram-canvas').count(),0);
   checks.push('single/dual channel toggle, taller wave, compact rows, select all, actual Praat grayscale on/off');

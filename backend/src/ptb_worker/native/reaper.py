@@ -30,7 +30,10 @@ def collect_pipe(argv,pipe,cwd,limits,stop=lambda:False,on_started=None,on_chunk
             elif process.poll() is not None:
                 if process.poll()!=0:raise FormatError('native_exit_'+str(process.poll()))
                 return buffer.getvalue(),process.pid
-            time.sleep(.005)
+            # A ready pipe must drain at pipe speed. Sleeping after every 4 KiB
+            # throttled a 77 s EGG preview WAV for tens of seconds. Keep the
+            # cancellation/deadline/budget checks above on every iteration.
+            if not chunk: time.sleep(.005)
     finally:
         try:
             if process and evidence is not None:

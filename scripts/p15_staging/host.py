@@ -116,6 +116,8 @@ class SiteBoundary:
             return await reject('host_rejected',403)
         if scope['scheme']!='https': return await reject('https_required',400)
         mode=control_mode(self.control)
+        scope=dict(scope,**{'ptb.allowed_operations':self.allowed if mode=='open' else frozenset(),
+                           'ptb.storage_readonly':mode!='open'})
         path, method=scope['path'],scope['method']
         if mode=='blocked': return await reject('staging_control_unavailable',503)
         auth=path in ('/api/v1/auth/login','/api/v1/auth/logout')

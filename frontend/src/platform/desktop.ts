@@ -41,12 +41,17 @@ export async function initializePlatform(){
     lpc:(file,textgrid,config,key)=>task({op:'lpc',id:file.id,textgrid:textgrid?.id,config,key}),lpcJobs:()=>task({op:'lpc_jobs'}),lpcFonts:font=>task({op:'lpc_fonts',font}),
     async result(job,id,sha){const value=await task<{base64:string;sha256:string}>({op:'result',job,id});if(value.sha256!==sha)throw Error('结果来源已变化。');const text=atob(value.base64);return Uint8Array.from(text,c=>c.charCodeAt(0)).buffer;},
     list:()=>task({op:'list'}),get:id=>task({op:'get',id}),cancel:id=>task({op:'cancel',id}),job:id=>task({op:'job',id}),
-    retry:(id,key)=>task({op:'retry',id,key}),save:(id,directory)=>task({op:'save',id,directory})};
+    retry:(id,key)=>task({op:'retry',id,key}),save:(id,directory,besideSources=false)=>task({op:'save',id,directory,beside_sources:besideSources})};
   desktopFiles={kind:'desktop',tasks:hello.tasks?tasks:undefined,choose:(purpose:DirectoryGrant['purpose'])=>call('choose',{purpose}),
     annotation:hello.tasks?{async audio(file){const value=await task<{base64:string;sha256:string;sourceDuration:number;previewNote:string}>({op:'annotation_audio',id:file.id});const text=atob(value.base64),bytes=new Uint8Array(text.length);for(let i=0;i<text.length;i++)bytes[i]=text.charCodeAt(i);return {buffer:bytes.buffer,sha256:value.sha256,sourceDuration:value.sourceDuration,previewNote:value.previewNote};},scan:directory=>task({op:'annotation_scan',directory}),lip:file=>task({op:'annotation_lip',id:file.id}),target:(file,role,suffix)=>task({op:'annotation_target',id:file.id,role,suffix}),save:body=>task({op:'annotation_save',...body})}:undefined,
     parameters:file=>task({op:'parameters',id:file.id}),capture:()=>call('capture'),
+    eggPreview:hello.tasks?{open:file=>task({op:'egg_preview_open',id:file.id}),
+      update:(_file,session,config)=>task({op:'egg_preview_update',session,config}),
+      close:(_file,session)=>task({op:'egg_preview_close',session})}:undefined,
     convertLip:hello.tasks?file=>task({op:'convert_lip',id:file.id}):undefined,
-    list:(id='')=>call('list',{id}),async read(file){const v=await call<{base64:string;sha256:string}>('read',{id:file.id});const text=atob(v.base64),bytes=new Uint8Array(text.length);for(let i=0;i<text.length;i++)bytes[i]=text.charCodeAt(i);return {buffer:bytes.buffer,sha256:v.sha256};},
+    list:(id='',recursive=false)=>recursive?task({op:'research_scan',id}):call('list',{id}),
+    async previewAudio(file){const v=await task<{base64:string;sha256:string;sourceDuration:number;previewNote:string}>({op:'research_audio',id:file.id});const text=atob(v.base64),bytes=new Uint8Array(text.length);for(let i=0;i<text.length;i++)bytes[i]=text.charCodeAt(i);return {buffer:bytes.buffer,sha256:v.sha256,sourceDuration:v.sourceDuration,previewNote:v.previewNote};},
+    async read(file){const v=await call<{base64:string;sha256:string}>('read',{id:file.id});const text=atob(v.base64),bytes=new Uint8Array(text.length);for(let i=0;i<text.length;i++)bytes[i]=text.charCodeAt(i);return {buffer:bytes.buffer,sha256:v.sha256};},
     textgrid:file=>call('textgrid',{id:file.id}),
     spectrogram:(file,view)=>new Promise((resolve,reject)=>{const id=crypto.randomUUID();const timer=setTimeout(()=>{pending.delete(id);reject(Error('preview_timeout'));},35000);pending.set(id,{resolve,reject,timer});bridge.preview(id,JSON.stringify({id:file.id,...view}));}),dispose(){}};
   if(hello.tasks){let outputDirectory:string|undefined;

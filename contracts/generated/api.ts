@@ -69,6 +69,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/assets/{asset_id}/egg-preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Egg Open */
+        post: operations["open_asset_egg_preview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assets/{asset_id}/egg-preview/{session_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Egg Update */
+        post: operations["update_asset_egg_preview"];
+        /** Egg Close */
+        delete: operations["close_asset_egg_preview"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/assets/{asset_id}/parameters": {
         parameters: {
             query?: never;
@@ -852,6 +887,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/preview/egg": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Egg Open */
+        post: operations["open_local_egg_preview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/preview/egg/{session_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Egg Update */
+        post: operations["update_local_egg_preview"];
+        /** Egg Close */
+        delete: operations["close_local_egg_preview"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/preview/parameters": {
         parameters: {
             query?: never;
@@ -1234,6 +1304,12 @@ export interface components {
             algorithm_version: "legacy-numeric/1";
             /** Backends */
             backends: components["schemas"]["AcousticBackendObservation"][];
+            /**
+             * Computation Revision
+             * @default acoustic/1
+             * @enum {string}
+             */
+            computation_revision: "acoustic/1" | "acoustic/2";
             config: components["schemas"]["AcousticConfigSnapshot"];
             /** Config Sha256 */
             config_sha256: string;
@@ -1614,6 +1690,25 @@ export interface components {
             /** Active Jobs */
             active_jobs: string[];
         };
+        /** EggInteractiveResult */
+        EggInteractiveResult: {
+            /** Audio Base64 */
+            audio_base64?: string | null;
+            config: components["schemas"]["EggTaskConfig"];
+            /** Input Sha256 */
+            input_sha256: string;
+            preview: components["schemas"]["EggPreviewData"];
+            /** Psd Base64 */
+            psd_base64: string;
+            /** Sample Count */
+            sample_count: number;
+            /** Sample Rate Hz */
+            sample_rate_hz: number;
+            /** Selection */
+            selection: {
+                [key: string]: number;
+            };
+        };
         /** EggInverseData */
         EggInverseData: {
             /** Audio Db */
@@ -1742,6 +1837,16 @@ export interface components {
                 number
             ];
             sq: components["schemas"]["EggSeries"];
+        };
+        /** EggPreviewSession */
+        EggPreviewSession: {
+            /**
+             * Session Id
+             * Format: uuid
+             */
+            session_id: string;
+            /** Sha256 */
+            sha256: string;
         };
         /** EggRequest */
         EggRequest: {
@@ -1887,6 +1992,12 @@ export interface components {
         };
         /** FigureFontSnapshot */
         FigureFontSnapshot: {
+            /**
+             * Fallback Policy
+             * @default strict
+             * @enum {string}
+             */
+            fallback_policy: "strict" | "portable";
             /**
              * Ipa
              * @default Doulos SIL
@@ -3432,6 +3543,105 @@ export interface operations {
             };
         };
     };
+    open_asset_egg_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                asset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EggPreviewSession"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_asset_egg_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                asset_id: string;
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EggTaskConfig"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EggInteractiveResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    close_asset_egg_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                asset_id: string;
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     asset_parameter_table: {
         parameters: {
             query?: never;
@@ -4850,6 +5060,92 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    open_local_egg_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EggPreviewSession"];
+                };
+            };
+        };
+    };
+    update_local_egg_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EggTaskConfig"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EggInteractiveResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    close_local_egg_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */

@@ -1,6 +1,8 @@
 import type { ParameterTable, ResearchFile } from '../../platform/research.ts';
 
 export interface PlotGroup { id:number; title:string; parameters:string[] }
+export function clearGroup(groups:PlotGroup[],id:number):PlotGroup[]{return groups.map(g=>g.id===id?{...g,parameters:[]}:g);}
+export function deleteGroup(groups:PlotGroup[],id:number):PlotGroup[]{return groups.filter(g=>g.id!==id);}
 export function matchingTable(audio:ResearchFile,files:ResearchFile[]):ResearchFile|undefined {
   const stem=audio.name.replace(/\.wav$/i,'').toLowerCase();
   for(const suffix of ['.ptb.sqlite','.ptb.sqlite3','.xlsx']) {

@@ -40,6 +40,17 @@ def main() -> None:
     window.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen, True)
     window.resize(1440, 900)
     window.show()
+    assert not app.windowIcon().isNull() and not window.windowIcon().isNull()
+    # Inspect the actual HWND icon handles used by the caption and taskbar.
+    import ctypes
+    from ctypes import wintypes
+    send = ctypes.windll.user32.SendMessageW
+    send.argtypes = [wintypes.HWND, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM]
+    send.restype = ctypes.c_void_p
+    native_icons = {name: bool(send(int(window.winId()), 0x007F, kind, 0))
+                    for name, kind in [('small', 0), ('large', 1)]}
+    assert all(native_icons.values()), native_icons
+    window.windowIcon().pixmap(64, 64).save(str(out / 'window-icon.png'))
 
     click_nav = "[...document.querySelectorAll('.nav-item')].find(b=>b.textContent.includes('普通话转 IPA'))?.click()"
     fill = "(()=>{const e=document.querySelector('[aria-label=\"待转换汉字文本\"]');e.value='银行花';e.dispatchEvent(new Event('input',{bubbles:true}));})()"
@@ -52,6 +63,9 @@ def main() -> None:
         ("document.documentElement.dataset.theme==='light'&&document.querySelector('.mandarin-ipa-page')?.textContent.includes('保存本机草稿 *')", "__light__"),
         ("document.querySelector('[aria-label=\"待转换汉字文本\"]')?.value==='银行花'", "document.documentElement.dataset.theme='dark'"),
         ("document.documentElement.dataset.theme==='dark'&&getComputedStyle(document.querySelector('.m13-ipa')).fontFamily.includes('PTB-Doulos')", "__dark__"),
+        ("true", "document.querySelector('input[value=stacked]').click()"),
+        ("(()=>{const r=s=>document.querySelector(s).getBoundingClientRect(),i=r('.m13-input-section'),o=r('.m13-result-section'),c=r('.m13-settings-section');return o.top>=i.bottom&&c.left>=o.right-1;})()", "document.querySelector('.m13-ambiguous').click()"),
+        ("(()=>{const p=document.querySelector('.m13-variants')?.getBoundingClientRect(),a=document.querySelector('.m13-ambiguous[aria-expanded=true]')?.getBoundingClientRect();return p&&a&&Math.abs(p.width-p.height)<2&&p.right<=innerWidth&&p.bottom<=innerHeight&&p.top>=0;})()", "__dark__"),
     ]
     report = {
         "success": False,
@@ -59,6 +73,7 @@ def main() -> None:
         "host": "Qt WebEngine / ptbapp local-only scheme",
         "stages": [],
         "database_operations": "none",
+        "native_icons": native_icons,
     }
     index = 0
     pending = False

@@ -11,6 +11,7 @@ class FigureFontSnapshot(WireModel):
     latin: Family = 'Segoe UI'
     ipa: Literal['Doulos SIL'] = 'Doulos SIL'
     size_px: float = Field(default=12,ge=10,le=24)
+    fallback_policy: Literal['strict','portable'] = 'strict'
 
 class FontCheckItem(WireModel):
     role: Literal['zh','latin','ipa']

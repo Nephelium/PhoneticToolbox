@@ -23,7 +23,8 @@ def test_windows_missing_native_resource_is_not_available(monkeypatch):
     store = SimpleNamespace(batches=object(), files=SimpleNamespace(reaper_binary=None))
     with TestClient(create_app(job_store=store)) as client:
         result = client.get('/api/v1/capabilities').json()
-    assert result['algorithms'] == []
+    assert 'M01' not in result['algorithms']
+    assert 'acoustic_analysis' not in result['task_operations']
     assert any('registered_reaper_unavailable' in item for item in result['limitations'])
 
 

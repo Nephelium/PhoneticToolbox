@@ -1,5 +1,18 @@
 # PhoneticToolbox 3.0 · 开发工作台
 
+2026-10-01 M03-R2：井井要求实时交互、四图手势/布局、总览显示和IF图窗，并追加暂时移除声门活动、高低通数值输入及默认低通2000 Hz。已完成限定Windows真实EGG录音、Chrome/实际Qt验证，见 [报告](docs/testing/2026-10-01-m03-r2-report.md) 与 [ADR](docs/decisions/ADR-M03-R2.md)。交互改为有界内存会话，正式导出保留任务；12组数值/字节对照、7项会话/HTTP、28项架构、15项前端状态、14组Chrome及Qt PNG保存通过。连续更新约0.13–0.22秒，首次仍需加载，未承诺固定延迟。Linux实时准入未开放，旧EXE未更新，未DDL/push/改V2或原音频。
+
+
+**2026-10-01 M01/M02 试用修复：** 两页列表内部滚动，批次轮询不再造成按钮抖动，支持可选递归目录；修复TextGrid空白尾段导致的切分失败，新增图窗清空/删除，当前图默认PNG，桌面长WAV采用有界完整时长预览。真实48文件桌面切分、274片段采样核对及实际参数图操作通过。使用[当前源码入口](scripts/Start-M01-M02-Workbench.ps1)，[验证范围与限制](docs/testing/2026-10-01-m01-m02-repairs-report.md)。下方已交付EXE未包含本轮后续修复，真实长录音仍未验。
+
+**2026-10-01 Windows EXE 已更新：** [本机试用 EXE](dist/PhoneticToolbox-v3-LocalPreview-20261001/PhoneticToolbox-v3-LocalPreview-20261001.exe) 包含当前代码与蓝线定位修复。成品 10 项任务、15 页和退出清理通过，仍依赖本机独立科学环境；先关闭旧版再运行。原试用数据和旧包保留，详见[交付记录](docs/testing/2026-10-01-exe-update-report.md)。后续根据井井人工试用反馈逐项修复。
+
+**2026-10-01 P16 审查修复：** 已修复声学窗口累计偏移、共振峰数量失效、异常误报成功、REAPER 策略、MFA 桥接大小、导出字体、能力宣告、目录保存及 Command 快捷键，并修复侧栏边界遮挡波形。新声学结果标记 acoustic/2，旧结果仍可读。Windows 定向测试与前端构建完成，Linux 新 POSIX 保存/macOS 原生与完整发行待验，旧 EXE 未更新。见[逐项报告](docs/testing/2026-10-01-review-repairs-report.md)和[桌面运行时清单](docs/specs/desktop-bundle.md)。下方带日期条目为各阶段历史证据；当前网页政策代码为 1 GB/3 天，本轮未迁移现存数据库。
+
+**2026-09-29 EGG 修复：** 加载和参数变化自动绘图，修复运行中换选区后的空白、历史恢复与取消竞争，并去除管道及临时写入瓶颈。实际 77 秒录音已通过 Chrome/Qt，数值输出逐字节不变。使用 [M03 源码入口](scripts/Start-M03-Workbench.ps1)，旧 EXE 未更新，具体性能与边界见 [修复及审查报告](docs/testing/2026-09-29-m03-realtime-report.md)。
+
+**2026-09-29 P04-RESIZE / M02-DEFAULT：** 全部现有模块侧栏和导航栏统一边界拖动、按模块/账号记忆，M01 默认拓宽，M02 首次空图且移除宽度滑块。剩余重复模块页首/关闭入口已移除，设置与使用说明进入工作台标签。Windows Chrome/实际 Qt 开发态限定验证及 WSL 静态核对见[报告](docs/testing/p04-resize-report.md)，[操作说明](docs/manual/settings.md)。旧 EXE 未更新；Linux GUI、触屏与生产服务器未验。
+
 2026-09-27 M05：基线、浏览器候选、正式离线任务/文件和 Windows Chrome/实际 Qt 本机三模式录制已有分项证据。已按 V2 修复完整网格、同帧叠加、停止尺寸及 Qt 权限错误提示。浏览器新模型未通过等价门，正式结果保留 legacy；完整模块 in_progress，物理同步、Linux/远程准入及剩余设备矩阵待验。入口 `scripts/Start-M05-Workbench.ps1`，见 [M05 报告](docs/testing/m05-report.md) 与 [说明](docs/manual/lip-extraction.md)。未 push、DDL、部署或生成 EXE。
 
 M11 本轮开发入口：[MFA 使用与组件安装](docs/manual/mfa.md)。Windows 本地正式任务和离线候选已限定验证，完整迁移仍 in_progress；[报告与各平台边界](docs/testing/m11-report.md)、[远程接线要求](docs/specs/m11-remote-handoff.md)。主 EXE 未更新。

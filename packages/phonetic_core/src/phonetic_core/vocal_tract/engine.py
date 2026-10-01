@@ -12,6 +12,7 @@ import xml.etree.ElementTree as ET
 import numpy as np
 from scipy.signal import find_peaks
 from .source import validate_source
+from .native_resources import resolve_libraries
 from phonetic_core.vocal_tract.source_models import SOURCE_PRESETS, SOURCE_LIMITS
 
 
@@ -31,7 +32,10 @@ class Engine:
         if speaker not in ('JD2','M01','W02'): raise ValueError('Unknown speaker')
         self.speaker=speaker
         self.speaker_path=resource_dir/f'{speaker}.speaker'
-        self.lib=C.CDLL(str(resource_dir/'VocalTractLabApi.dll'))
+        synthesis_path,analysis_path,geometry_path=resolve_libraries(resource_dir)
+        if hashlib.sha256(analysis_path.read_bytes()).digest()!=hashlib.sha256(synthesis_path.read_bytes()).digest():
+            raise RuntimeError('Analysis library does not match pinned synthesis library')
+        self.lib=C.CDLL(str(synthesis_path))
         signatures={
             'vtlInitialize':([C.c_char_p],C.c_int),'vtlClose':([],C.c_int),
             'vtlGetVersion':([C.c_char_p],None),
@@ -48,9 +52,6 @@ class Engine:
         for name,(args,restype) in signatures.items():
             f=getattr(self.lib,name); f.argtypes=args; f.restype=restype
         check(self.lib.vtlInitialize(str(self.speaker_path).encode()))
-        analysis_path=resource_dir/'VocalTractLabAnalysis.dll'
-        if hashlib.sha256(analysis_path.read_bytes()).digest()!=hashlib.sha256((resource_dir/'VocalTractLabApi.dll').read_bytes()).digest():
-            raise RuntimeError('Analysis DLL does not match pinned synthesis DLL')
         self.analysis=C.CDLL(str(analysis_path))
         for name,(args,restype) in signatures.items():
             f=getattr(self.analysis,name); f.argtypes=args; f.restype=restype
@@ -71,7 +72,7 @@ class Engine:
         self.lock=threading.RLock()
         self.geometry_lock=threading.RLock()
         self.analysis_lock=threading.Lock()
-        self.geom=C.CDLL(str(resource_dir/'geometry_p2.dll'))
+        self.geom=C.CDLL(str(geometry_path))
         for name,args in {'p0_open':[C.c_char_p],'p0_update':[D,D],'p0_mesh':[C.c_int,D,I,I],'p0_sections':[D,D,D],'p0_profile':[C.c_int,D,D],'p1_contour':[C.c_int,D],'p1_nasal':[D,D,D]}.items():
             getattr(self.geom,name).argtypes=args; getattr(self.geom,name).restype=C.c_int
         self.geom.p0_close.argtypes=[]; self.geom.p0_close.restype=None

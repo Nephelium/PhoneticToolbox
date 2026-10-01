@@ -1,8 +1,15 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {matchingTable,visibleParameters,assignParameters,removeGroup,series,annotationRuns,overlayPlot} from '../src/modules/parameter-display/state.ts';
+import {matchingTable,visibleParameters,assignParameters,removeGroup,clearGroup,deleteGroup,series,annotationRuns,overlayPlot} from '../src/modules/parameter-display/state.ts';
 import type {ParameterTable,ResearchFile} from '../src/platform/research.ts';
 const audio:ResearchFile={id:'a',name:'阴平.wav',kind:'audio',size:12};
+test('M02 clear and delete affect only the selected plot and preserve source configuration',()=>{
+ const initial=[{id:1,title:'图窗 1',parameters:['pF0']},{id:2,title:'图窗 2',parameters:['rF0']}];
+ assert.deepEqual(clearGroup(initial,2).map(g=>g.parameters),[['pF0'],[]]);
+ assert.deepEqual(deleteGroup(initial,1),[initial[1]]);
+ assert.deepEqual(deleteGroup([initial[0]],1),[]);
+ assert.deepEqual(initial.map(g=>g.parameters),[['pF0'],['rF0']]);
+});
 test('M02 paired legacy formats prefer SQLite without guessing duplicates',()=>{const files:ResearchFile[]=[{id:'x',name:'阴平.xlsx',kind:'parameter',size:1},{id:'s',name:'阴平.ptb.sqlite',kind:'parameter',size:1}];assert.equal(matchingTable(audio,files)?.id,'s');assert.equal(matchingTable(audio,[...files,{...files[1],id:'duplicate'}]),undefined);});
 test('M02 independent reaper/correction filters do not mutate selection',()=>{const names=['pF0','rF0','H1*-H2*','H1-H2'];assert.deepEqual(visibleParameters(names,'',false,false),['pF0','H1-H2']);assert.deepEqual(visibleParameters(names,'',false,true),['pF0','H1*-H2*','H1-H2']);assert.equal(names.length,4);});
 test('M02 bulk assignment and merge preserve every parameter exactly once',()=>{const initial=[{id:1,title:'图1',parameters:['F0','Intensity','TextGrid']},{id:2,title:'图2',parameters:[]}];const groups=assignParameters(initial,['F0','TextGrid','F0'],2);assert.deepEqual(groups.map(g=>g.parameters),[['Intensity'],['F0','TextGrid']]);assert.deepEqual(initial[0].parameters,['F0','Intensity','TextGrid']);assert.deepEqual(removeGroup(groups,1)[0].parameters,['F0','TextGrid','Intensity']);assert.throws(()=>assignParameters(groups,['F0'],3));});

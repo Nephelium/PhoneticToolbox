@@ -32,6 +32,8 @@ def main():
         ('desktop', 'document.querySelector(".host-badge")?.textContent==="本地桌面"', click('参数显示'), None),
         ('module', '!!document.querySelector(".m02-page")', click('选择音频目录'), str(inputs)),
         ('files', 'document.querySelectorAll(".m02-files button").length===1', click('tone.wav'), None),
+        ('empty by default', '!!document.querySelector(".empty-plot")&&document.querySelectorAll(".m02-parameters input").length===4&&document.querySelectorAll(".m02-parameters input:checked").length===0', click('全选可见参数'), None),
+        ('select explicitly', 'document.querySelectorAll(".m02-parameters input:checked").length===3', click('将 3 项分配到图窗'), None),
         ('table', 'document.querySelectorAll(".parameter-curve").length===3', "document.documentElement.dataset.theme='light';"+click('保存整幅 PNG'), str(out/'light.png')),
         ('light saved', None, "document.documentElement.dataset.theme='dark';"+label('显示两个声道'), None),
         ('stereo', 'document.querySelectorAll(".m02-page .wave-track").length===2', click('保存整幅 PNG'), str(out/'dark-stereo.png')),
@@ -39,7 +41,7 @@ def main():
         ('Praat ready', '!!document.querySelector(".m02-page .spectrogram-canvas canvas")&&!document.querySelector(".m02-page .spectrogram-view [role=status]")', click('保存整幅 PNG'), str(out/'spectrogram.png')),
         ('spectrogram saved', None, 'document.querySelector(".m02-page button[aria-label=放大波形]").click()', None),
         ('zoom ready', '!!document.querySelector(".m02-page .spectrogram-canvas canvas")&&!document.querySelector(".m02-page .spectrogram-view [role=status]")', click('保存整幅 PNG'), str(out/'zoom.png')),
-        ('zoom saved', None, click('保存当前图'), str(out/'parameters.svg')),
+        ('zoom saved', None, "(()=>{const e=document.querySelector('.image-format');e.value='svg';e.dispatchEvent(new Event('change',{bubbles:true}));})();"+click('保存当前图'), str(out/'parameters.svg')),
         ('SVG saved', None, None, None),
     ]
     waits = {4:'light.png', 6:'dark-stereo.png', 8:'spectrogram.png', 10:'zoom.png', 11:'parameters.svg'}

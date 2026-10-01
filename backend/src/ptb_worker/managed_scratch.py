@@ -6,7 +6,10 @@ from .io.limits import LimitError
 
 
 class ManagedScratch(Scratch):
-    def __init__(self,files,identity,budget=128_000_000):
+    def __init__(self,files,identity,budget=128_000_000,*,write_chunk_bytes=65536):
+        if type(write_chunk_bytes) is not int or not 0 < write_chunk_bytes <= 1_048_576:
+            raise ValueError('Invalid scratch write chunk size')
+        self.write_chunk_bytes=write_chunk_bytes
         self.adapter,self.identity=files,identity
         self.budget,self.used=budget,0;self.files={};self.ids={}
         self.root=files.scratch_root
@@ -18,7 +21,8 @@ class ManagedScratch(Scratch):
         path=self.adapter.scratch_path(self.identity,asset['id'])
         self.files[path]=len(data);self.ids[path]=asset['id'];self.used+=len(data)
         try:
-            for offset in range(0,len(data),65536):self.adapter.write(self.identity,asset['id'],offset,data[offset:offset+65536])
+            for offset in range(0,len(data),self.write_chunk_bytes):
+                self.adapter.write(self.identity,asset['id'],offset,data[offset:offset+self.write_chunk_bytes])
         except BaseException:self.remove(path);raise
         return path
 
