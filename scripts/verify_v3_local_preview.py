@@ -105,7 +105,7 @@ def verify(bundle, out, natural_manifest=None):
             config = json.loads(data['m06.ptb.json'])['config']
             run('m06', action='synthesize', parameters=service.import_input(export_parameters(config).encode(), 'parameters.csv', 'table'))
 
-            run('lpc', audio=ref, config=dict(roi_start=.1, roi_end=.15, order=20))
+            lpc_job, lpc_data = run('lpc', audio=ref, config=dict(roi_start=.1, roi_end=.15, order=20))
             if natural:
                 egg_path=Path(natural['egg']['path'])
                 egg_bytes,egg_name=egg_path.read_bytes(),egg_path.name
@@ -195,6 +195,53 @@ def verify(bundle, out, natural_manifest=None):
             if natural:assert geometry['mainScroll']<=geometry['mainHeight']+2, (title,geometry)
             print(f'Verified {mode} page:', i, flush=True)
         if natural:
+            # Exercise the delivered Qt PNG action, not just the worker's PNG bytes.
+            from PyQt6.QtWidgets import QFileDialog
+            from PyQt6.QtGui import QImage
+            png_path = out / 'frozen-lpc-direct.png'
+            dialogs, download_states = [], []
+            choices = ['', str(png_path)]
+            original_dialog = QFileDialog.getSaveFileName
+            def png_dialog(*args, **kwargs):
+                dialogs.append(str(args[2]))
+                return (choices.pop(0), '')
+            def observe_download(download):
+                download.stateChanged.connect(lambda state: download_states.append(download.state().name))
+            def native_wait(condition):
+                end = time.monotonic() + 35
+                while time.monotonic() < end:
+                    if condition(): return
+                    pause()
+                raise AssertionError('Frozen LPC PNG condition timed out')
+            def click_button(text):
+                target = '[...document.querySelectorAll(".lpc-page button")].find(b=>b.offsetParent&&!b.disabled&&b.textContent.trim()===' + json.dumps(text) + ')'
+                wait('!!' + target)
+                js(target + '.click()')
+            QFileDialog.getSaveFileName = png_dialog
+            window.profile.downloadRequested.connect(observe_download)
+            try:
+                js('[...document.querySelectorAll("nav button")].find(b=>b.textContent.includes("LPC 谱图"))?.click()')
+                wait('!![...document.querySelectorAll(".lpc-page .history-links button")].find(b=>b.textContent.includes(' + json.dumps(lpc_job['id'][:8]) + '))')
+                js('[...document.querySelectorAll(".lpc-page .history-links button")].find(b=>b.textContent.includes(' + json.dumps(lpc_job['id'][:8]) + ')).click()')
+                wait('!!document.querySelector(".lpc-spectrum svg")')
+                click_button('保存 PNG 图片')
+                native_wait(lambda: len(dialogs) == 1)
+                for _ in range(2): pause()
+                assert not png_path.exists(), 'Cancelled PNG dialog must not write a file'
+                click_button('保存 PNG 图片')
+                native_wait(lambda: png_path.exists() and 'DownloadCompleted' in download_states)
+                expected = next(value for name, value in lpc_data.items() if name.endswith('.png'))
+                assert png_path.read_bytes() == expected, 'Frozen direct PNG differs from managed result'
+                image = QImage(str(png_path))
+                assert (image.width(), image.height()) == (2400, 1350)
+                report['lpc_png'] = dict(dialogs=len(dialogs), cancelled_without_write=True,
+                    download_states=download_states, sha256=hashlib.sha256(expected).hexdigest(),
+                    bytes=len(expected), width=image.width(), height=image.height(),
+                    dpi=image.dotsPerMeterX()*.0254, exact_managed_bytes=True)
+                window.view.grab().save(str(out / 'M04-result.png'))
+                print(f'Verified {mode} LPC PNG cancel and actual file save', flush=True)
+            finally:
+                QFileDialog.getSaveFileName = original_dialog
             report['originals_unchanged']=all(hashlib.sha256(path.read_bytes()).hexdigest()==digest for path,digest in originals.items())
             assert report['originals_unchanged']
         report['success'] = True

@@ -73,11 +73,13 @@ function wheel(event:WheelEvent){
 </svg>
 <div v-if="!hideTimeAxis" class="time-axis" aria-label="波形时间轴（秒）"><span v-for="i in 5" :key="i">{{(left+(i-1)*windowLength/4).toFixed(windowLength<.1?4:3)}}{{i===5?' s':''}}</span></div>
 </div>
-<SpectrogramViewport v-if="state.showSpectrogram&&spectrogramLoader" :loader="spectrogramLoader" :start="left" :end="left+windowLength" :channel="state.channel" :width="width" :selectable="spectrogramSelectable" :selection-start="state.start" :selection-end="state.end" @selection-end="selectSpectrogram" @view-wheel="wheel" @view-double-click="double"/>
-<div v-if="state.showSpectrogram&&spectrogramLoader" class="time-axis spectrogram-time-axis" aria-label="语谱图时间轴（秒）">
-<span v-for="i in 5" :key="i">{{(left+(i-1)*windowLength/4).toFixed(3)}}</span>
+<div v-if="state.showSpectrogram&&spectrogramLoader" class="wave-aligned-layer">
+<SpectrogramViewport :loader="spectrogramLoader" :start="left" :end="left+windowLength" :channel="state.channel" :width="width" :selectable="spectrogramSelectable" :selection-start="state.start" :selection-end="state.end" @selection-end="selectSpectrogram" @view-wheel="wheel" @view-double-click="double"/>
+<div class="time-axis spectrogram-time-axis" aria-label="语谱图时间轴（秒）">
+<span v-for="i in 5" :key="i">{{(left+(i-1)*windowLength/4).toFixed(windowLength<.1?4:3)}}{{i===5?' s':''}}</span>
 </div>
-<slot name="timeline" :start="left" :end="left+windowLength"/>
+</div>
+<div v-if="$slots.timeline" class="wave-aligned-layer"><slot name="timeline" :start="left" :end="left+windowLength"/></div>
 <div v-if="compactOverview&&!hideOverviewControls" class="wave-toolbar overview-controls">
 <strong>音频总览</strong>
 <label v-if="state.asset&&state.asset.channels.length>1"><input v-model="state.showBoth" type="checkbox"/>显示两个声道</label>
@@ -100,7 +102,7 @@ function wheel(event:WheelEvent){
 .compact-overview .overview-controls{justify-content:flex-start;flex-wrap:wrap;gap:8px 16px;margin:4px 0 0}
 .overview-controls label{display:flex;align-items:center;gap:5px}
 .compact-overview .wave-track svg{height:110px}
-.amplitude-scaled :deep(.spectrogram-view){margin-left:var(--wave-axis-width,64px)}
-.amplitude-scaled .spectrogram-time-axis{margin-left:var(--wave-axis-width,64px)}
+.wave-aligned-layer{min-width:0}
+.amplitude-scaled>.wave-aligned-layer{margin-left:var(--wave-axis-width,64px)}
 .wave-track svg{overflow:hidden}
 </style>
