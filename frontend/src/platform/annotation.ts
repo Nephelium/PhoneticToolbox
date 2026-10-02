@@ -21,7 +21,7 @@ export async function annotationAudio(files:ResearchFiles,file:ResearchFile,sign
  asset.duration=data.sourceDuration;
  return {asset,sha256:data.sha256,previewNote:data.previewNote};
 }
-export interface LipTrack {wire:any;times:number[];open:(number|null)[];width:(number|null)[];offset:number}
+export interface LipTrack {wire:any;times:number[];open:(number|null)[];width:(number|null)[];area:(number|null)[];circularity:(number|null)[];offset:number}
 export function lipTrack(wire:unknown):LipTrack {
   const doc=wire as {schema?:string;data?:Record<string,any>};
   if(doc?.schema!=='ptb.lip/1'||!doc.data||typeof doc.data!=='object')throw Error('唇形需要 ptb.lip/1 安全格式。');
@@ -39,7 +39,8 @@ export function lipTrack(wire:unknown):LipTrack {
   times=indices.map(i=>times[i]);
   if(times.length<2||indices.filter(i=>Number.isFinite(open[i])).length<2)throw Error('有效唇形数据不足。');
   if(!anchored&&meta.time_alignment_mode!=='anchored_audio_start'){const first=times[0];times=times.map(t=>t-first);}
-  return {wire:structuredClone(wire),times,open:indices.map(i=>Number.isFinite(open[i])?open[i]:null),width:width.length===open.length?indices.map(i=>Number.isFinite(width[i])?width[i]:null):[],offset};
+  const track=(values:number[])=>values.length===open.length?indices.map(i=>Number.isFinite(values[i])?values[i]:null):[];
+  return {wire:structuredClone(wire),times,open:track(open),width:track(width),area:track(vector('area')),circularity:track(vector('circularity')),offset};
 }
 export function portableAnnotation(files:ResearchFiles,upload?:(name:string,buffer:ArrayBuffer,key:string)=>Promise<ResearchFile>):AnnotationPort {
   const prepared=new Map<string,{target:AnnotationTarget;role:'textgrid'|'lip';file:ResearchFile;key:string}>();

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ptb://contracts/recording/project/1",
+  "title": "M16 local recording project",
+  "type": "object",
+  "required": ["schema_version", "id", "revision", "tasks", "takes", "selected"],
+  "properties": {
+    "schema_version": {"const": "ptb-recording/1"},
+    "id": {"type": "string", "minLength": 1},
+    "revision": {"type": "integer", "minimum": 1},
+    "tasks": {"type": "array", "maxItems": 10000, "items": {"$ref": "#/$defs/task"}},
+    "takes": {"type": "array", "maxItems": 10000, "items": {"$ref": "#/$defs/take"}},
+    "selected": {"type": "object", "additionalProperties": {"type": "string"}}
+  },
+  "$defs": {
+    "task": {"type": "object", "required": ["id", "prompt"], "properties": {"id": {"type": "string", "minLength": 1}, "prompt": {"type": "string", "maxLength": 20000}, "title": {"type": "string"}, "filename_stem": {"type": "string"}, "enabled": {"type": "boolean"}, "skipped": {"type": "boolean"}}},
+    "config": {"type": "object", "required": ["sample_rate", "channels", "roles"], "properties": {"sample_rate": {"enum": [16000, 22050, 32000, 44100, 48000, 88200, 96000]}, "channels": {"type": "integer", "minimum": 1, "maximum": 8}, "roles": {"type": "array", "minItems": 1, "maxItems": 8, "items": {"enum": ["microphone", "egg", "other"]}}, "gain_db": {"type": "number", "minimum": -60, "maximum": 24}}},
+    "span": {"type": "object", "required": ["file", "start", "end", "frames", "channels", "sha256"], "properties": {"file": {"type": "string", "pattern": "^[^:\\\\]+$"}, "start": {"type": "integer", "minimum": 0}, "end": {"type": "integer", "minimum": 1}, "frames": {"type": "integer", "minimum": 1}, "channels": {"type": "integer", "minimum": 1, "maximum": 8}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
+    "version": {"type": "object", "required": ["id", "kind", "spans", "metadata"], "properties": {"id": {"type": "string"}, "kind": {"enum": ["raw", "edited", "restored_raw", "denoised", "gain"]}, "spans": {"type": "array", "items": {"$ref": "#/$defs/span"}}, "metadata": {"type": "object"}, "parent": {"type": "string"}}},
+    "take": {"type": "object", "required": ["id", "config", "versions", "head", "status"], "properties": {"id": {"type": "string"}, "config": {"$ref": "#/$defs/config"}, "versions": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/version"}}, "head": {"type": "integer", "minimum": 0}, "status": {"enum": ["raw_saved", "recovered_partial"]}, "task_snapshot": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/task"}]}}}
+  }
+}

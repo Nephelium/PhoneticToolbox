@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "checked_on": "2026-10-02",
+  "merge_note": "M17 独立新增记录，供主代理合并 source-registry；原 ASSET-DOULOS 记录保持，不替换其历史证据。",
+  "sources": [
+    {
+      "id": "M17-IPA-CHART", "title": "International Phonetic Alphabet chart — 2026 reprint", "kind": "reference-chart", "modules": ["M17"],
+      "urls": {"homepage":"https://www.internationalphoneticassociation.org/content/ipa-chart","pdf":"https://www.internationalphoneticassociation.org/IPAcharts/common_files/pdfs/pdfs_IPA_charts_E/IPA_Kiel.pdf"},
+      "evidence": "官方页及表逐格视觉核对；IPA 244 个输入入口包括独立记号和原表例示。docs/references/m17-symbol-coverage.csv。",
+      "license": "CC BY-SA 4.0", "notes": "自绘交互表保留归属并以相同许可提供；2026 为重印年份，内容修订为 2015/2005。未将原 PDF 包入产品。", "verification_date":"2026-10-02", "actual_included_version":"2026 reprint; 2015/2005 content", "distribution_status":"attributed-interactive-chart", "authors":"International Phonetic Association", "year":2026, "acknowledgement_group":"academic", "used_at":["frontend/src/modules/ipa-plus/data/catalog.json","scripts/verify_m17_catalog.py"]
+    },
+    {
+      "id": "M17-EXTIPA-2025", "title": "Extensions to the IPA — 2025 chart", "kind":"reference-chart", "modules":["M17"],
+      "urls":{"homepage":"https://www.icpla.org.uk/resources"}, "evidence":"用户提供一页 PDF，逐格查看后建立191入口。文件哈希和排版编码差异见 m17-source-audit.md。", "license":"CC BY-SA 3.0 as identified on ICPLA resources; original chart reproduction wording also recorded", "notes":"自有中文说明、交互布局与现代Unicode映射；原图未随包。ICPLA页面同时要求原表复制不作变更，不能将该要求改称额外开放许可。", "verification_date":"2026-10-02", "actual_included_version":"extIPA 2025", "distribution_status":"attributed-symbol-data; no original PDF bundled", "authors":"International Clinical Phonetics and Linguistics Association", "year":2025, "acknowledgement_group":"academic", "used_at":["frontend/src/modules/ipa-plus/data/catalog.json","docs/references/m17-symbol-coverage.csv"]
+    },
+    {
+      "id":"M17-VOQS-BALL-2018", "title":"Revisions to the VoQS system for the transcription of voice quality", "kind":"academic-reference", "modules":["M17"],
+      "urls":{"paper":"https://doi.org/10.1017/S0025100317000159","chart":"https://www.icpla.org.uk/resources"}, "evidence":"用户论文 pp.165–171，p.169 Figure 2 逐格核对：56标准表项，9程度/范围/示例入口。", "license":"Article/chart copyright retained by rights holders; no redistribution grant inferred", "notes":"2016 修订表、2017 在线发表、2018 卷期分别记录。自有说明不作临床诊断，未打包论文或图版。", "verification_date":"2026-10-02", "actual_included_version":"VoQS revised to 2016", "distribution_status":"citation and independently authored symbol explanations only", "authors":"Martin J. Ball and John H. Esling and B. Craig Dickson", "year":2018, "citation_title":"Revisions to the VoQS system for the transcription of voice quality", "doi":"10.1017/S0025100317000159", "acknowledgement_group":"academic", "used_at":["frontend/src/modules/ipa-plus/data/catalog.json"]
+    },
+    {
+      "id":"M17-VOQS-ZH-UNTPHESOCA", "title":"VoQS：音质符号（2016 中英双语版）", "kind":"terminology-reference", "modules":["M17"],
+      "urls":{"article":"https://zhuanlan.zhihu.com/p/203037479"}, "evidence":"井井提供完整正文及双语图；官方知乎检索返回精确目标文章的前后两段，output/validation/m17/zhihu-203037479-search.json 与 zhihu-203037479-supralarynx.json。56个译名逐条断言。", "license":"Author's article/translation rights retained; terminology attributed, images/layout not bundled", "notes":"中文名严格采用该文，作者 UntPhesoca，2020 unt 译；原表 ©2016 Ball、Esling、Dickson。符号码位仍依据原表和现代Unicode核对，未照抄网页可能损坏的字符。", "verification_date":"2026-10-02", "actual_included_version":"2020 Chinese translation of 2016 chart", "distribution_status":"attributed terminology", "authors":"UntPhesoca (unt)", "year":2020, "acknowledgement_group":"academic", "used_at":["frontend/src/modules/ipa-plus/data/voqs-zh-names.json","frontend/src/modules/ipa-plus/data/sources.json"]
+    },
+    {
+      "id":"M17-PTB-IPA-PLUS-FONT", "title":"PTB IPA Plus 1.000 — module font derived from Doulos SIL 7.000", "kind":"bundled-font", "modules":["M17"],
+      "urls":{"upstream":"https://software.sil.org/doulos/","history":"https://software.sil.org/doulos/history/","noto_delimiters":"https://raw.githubusercontent.com/notofonts/noto-fonts/main/hinted/ttf/NotoSansMath/NotoSansMath-Regular.ttf","noto_license":"https://raw.githubusercontent.com/notofonts/noto-fonts/main/LICENSE"}, "evidence":"scripts/verify_m17_fonts.py 可复现构建；原3944字形编译字节完全保留，新增23字形；264目录字符cmap全覆盖，Chrome逐500节点CDP证实只用本模块字体。", "license":"SIL Open Font License 1.1", "notes":"派生字体改名避免保留名；仅此一个实际使用的派生ttf随M17打包。Noto两括号轮廓缩放合入，候选完整字体留在验证目录。原Doulos资源未改。形态验收与码位覆盖分开，详见字体审计。", "verification_date":"2026-10-02", "actual_included_version":"PTB IPA Plus 1.000 / Doulos SIL 7.000", "distribution_status":"bundled under OFL 1.1 with license and renamed family", "authors":"SIL Global; Noto authors; PhoneticToolbox contributors", "year":2026, "acknowledgement_group":"software", "used_at":["frontend/src/assets/ipa-plus/PTBIPAPlus-Regular.ttf","frontend/src/assets/ipa-plus/OFL-PTBIPAPlus.txt","frontend/src/assets/ipa-plus/OFL-Noto.txt","scripts/verify_m17_fonts.py"]
+    },
+    {
+      "id":"M17-UNICODE-PHONETIC-ENCODING", "title":"Unicode phonetic marks, VoQS glyph correction and cartouche encoding discussion", "kind":"encoding-reference", "modules":["M17"],
+      "urls":{"chapter7":"https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-7/","voqs_correction":"https://www.unicode.org/L2/L2020/20113-voqs-correction.pdf","cartouche":"https://www.unicode.org/L2/L2024/24182r-cartouche.pdf","bridges":"https://software.sil.org/fonts/bridging-diacritics/"}, "evidence":"区分组合左右括号、U+A7F8 petite-capital、连音桥和多字圈围；两项多字圈围公开采用文本替代并标明。", "license":"References only; no Unicode documents bundled", "notes":"L2/24-182R是讨论资料，不将提议码位当成已编码字符。⟅…⟆文本替代不可冒称标准VoQS/extIPA编码。", "verification_date":"2026-10-02", "actual_included_version":"Unicode references checked 2026-10-02", "distribution_status":"reference only", "acknowledgement_group":"academic", "used_at":["scripts/verify_m17_fonts.py","frontend/src/modules/ipa-plus/data/catalog.json"]
+    },
+    {
+      "id":"M17-CIN-REFERENCE", "title":"User-supplied ipa.cin lookup aliases", "kind":"local-reference", "modules":["M17"], "urls":{"unicode_mapping":"https://software.sil.org/doulos/history/"}, "evidence":"502映射/387不同输出/346不同字符；只读映射选取为检索别名。sha256记录见 m17-source-audit.md。", "license":"Original file provenance/license not established; original not bundled", "notes":"不执行、不修改、不分发用户CIN文件。F267→1DF06、F268→1DF04根据SIL资料映射；圈字母别名映射到组合圈序列。它不是完整符号清单或术语权威。", "verification_date":"2026-10-02", "actual_included_version":"User supplied file checked 2026-10-02", "distribution_status":"limited lookup aliases only; original excluded", "acknowledgement_group":"software", "used_at":["scripts/verify_m17_catalog.py","frontend/src/modules/ipa-plus/data/catalog.json"]
+    },
+    {
+      "id":"M17-INTERACTIVE-LAYOUT-REFERENCE", "title":"Interactive IPA chart — layout reference", "kind":"design-reference", "modules":["M17"], "urls":{"website":"https://www.ipachart.com/","alternative":"https://westonruter.github.io/ipa-chart/keyboard/"}, "evidence":"ipachart交互表网页结构实际读取；WestonRuter浏览器正文取回未成功，不冒称完整审阅。", "license":"No third-party code or assets copied", "notes":"借鉴按辅音表、元音图、附加符号分区的交互方式；本模块自行实现横向重排，以实际AppShell单屏测量验收。", "verification_date":"2026-10-02", "actual_included_version":"No external implementation included", "distribution_status":"reference only", "acknowledgement_group":"software", "used_at":["frontend/src/modules/ipa-plus/ChartView.vue"]
+    }
+  ]
+}

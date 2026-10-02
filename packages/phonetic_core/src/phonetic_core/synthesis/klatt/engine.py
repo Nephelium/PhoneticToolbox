@@ -1,4 +1,4 @@
-"""V2 array orchestration, extracted without changing numeric statements.
+"""M06/2 array orchestration with corrected, independently calibrated sources.
 
 Source: speech_synthesis_widget.py; tdklatt: SRC-TDKLATT / REF-KLATT.
 UI and path decoding are adapters. See M06-source-map.md for source hashes.
@@ -12,6 +12,7 @@ from .klatt_config import *
 from .input_parser import VOWEL_FORMANTS, parse_vowel_sequence
 from .tdklatt import KlattParam1980, klatt_make
 from .spectral_filter import SpectralFilter
+from .source_levels import INTERNAL_RATE, OUTPUT_GAIN
 from ...acoustic.f0_praat import compute_praat_f0
 from ...acoustic.formants_praat import compute_praat_formants
 from ...acoustic.energy import compute_energy
@@ -154,7 +155,7 @@ class Engine:
     def _synthesize_single_segment(self, arrays: dict[str, np.ndarray], effective_f0: np.ndarray, duration: float) -> np.ndarray:
         if duration <= 0:
             return np.array([], dtype=float)
-        klatt_fs = 10000
+        klatt_fs = INTERNAL_RATE
         kp = KlattParam1980(
             FS=klatt_fs,
             DUR=duration,
@@ -170,10 +171,11 @@ class Engine:
         kp.Jitter = self._resize_to(arrays["Jitter"], n_samp)
         kp.Shimmer = np.zeros(n_samp, dtype=float)
         kp.SHR = self._resize_to(arrays["SHR"], n_samp)
-        kp.Slope = self._resize_to(arrays["Slope"], n_samp)
+        # Slope is a project spectral extension, applied only once below.
+        kp.Slope = np.zeros(n_samp, dtype=float)
         kp.AV = self._resize_to(arrays["AV"], n_samp)
         kp.AVS = np.zeros(n_samp, dtype=float)
-        kp.AH = self._resize_to(np.maximum(0.0, 130.0 - arrays["HNR"]), n_samp)
+        kp.AH = self._resize_to(arrays["AH"], n_samp)
         for idx in range(5):
             f_key = f"F{idx + 1}"
             b_key = f"B{idx + 1}"
@@ -205,14 +207,16 @@ class Engine:
         spec_filter = SpectralFilter(self.fs)
         audio = spec_filter.process(
             audio,
-            self._resize_to(effective_f0, target_len),
+            np.where(resize_audio("AV") > 0, self._resize_to(effective_f0, target_len), 0.),
             resize_audio("H1H2"),
             resize_audio("Slope"),
             resize_audio("HNR"),
         )
-        audio = spec_filter.apply_agc(audio, target_rms=0.1)
         audio = spec_filter.apply_shimmer(audio, resize_audio("Shimmer") * 100.0)
-        return spec_filter.normalize(audio)
+        # Exact all-source silence must survive the logarithmic spectrum path.
+        if not np.any(arrays['AV'] > 0) and not np.any(arrays['AH'] > 0):
+            audio[:] = 0.
+        return audio
 
     def _fit_track_to_len(self, values: Optional[np.ndarray], target_len: int) -> np.ndarray:
         if values is None or target_len <= 0:
@@ -275,7 +279,8 @@ class Engine:
         }
         self.silence_intervals = []
         self.vowel_boundaries = [float(x) for x in boundaries]
-        av_default = self.params["AV"].default_value
+        # Vowel generation preserves the current source controls/preset.
+        av_values = self.params['AV'].get_array(self.duration, 100)
         for idx, seg in enumerate(segments):
             start = 0.0 if idx == 0 else float(boundaries[idx - 1])
             end = self.duration if idx == len(segments) - 1 else float(boundaries[idx])
@@ -296,7 +301,7 @@ class Engine:
                 grids["F1"][mask] = formants[0]
                 grids["F2"][mask] = formants[1]
                 grids["F3"][mask] = formants[2]
-                grids["AV"][mask] = av_default
+                grids["AV"][mask] = np.interp(t_grid[mask], np.linspace(0., self.duration, len(av_values)), av_values)
         smooth_size = self.smooth
         for key in ["F1", "F2", "F3"]:
             grids[key] = uniform_filter1d(grids[key], size=max(1, smooth_size), mode="nearest")
@@ -330,8 +335,6 @@ class Engine:
                     seg_rms = self._compute_rms(seg_audio)
                     if reference_rms is None and seg_rms > 1e-10:
                         reference_rms = seg_rms
-                    elif reference_rms is not None:
-                        seg_audio = self._match_rms(seg_audio, reference_rms)
                     pieces.append(seg_audio)
                 silence_len = int(round((end - start) * self.fs))
                 if silence_len > 0:
@@ -342,8 +345,6 @@ class Engine:
                 seg_f0 = self._slice_array_by_time(effective_f0, cursor, self.duration)
                 seg_audio = self._synthesize_single_segment(seg_arrays, seg_f0, self.duration - cursor)
                 seg_audio = self._apply_fade(seg_audio, fade_in_ms, fade_out_ms)
-                if reference_rms is not None:
-                    seg_audio = self._match_rms(seg_audio, reference_rms)
                 pieces.append(seg_audio)
             if not pieces:
                 raise ValueError('Synthesis produced empty output')
@@ -354,9 +355,10 @@ class Engine:
         target_total_len = int(round(self.duration * self.fs))
         if len(audio) != target_total_len:
             audio = self._resize_to(audio, target_total_len)
+        audio = audio * OUTPUT_GAIN
         mx = np.max(np.abs(audio))
-        if mx > 1e-08:
-            audio = audio / mx * 0.95
+        self.output_gain = min(1., .95 / mx) if mx > 0 else 1.
+        audio = audio * self.output_gain
         return audio
 
     def extract(self, audio, mono):
@@ -401,7 +403,14 @@ class Engine:
         self._apply_track_to_curve('F2', f2, target_len)
         self._apply_track_to_curve('F3', f3, target_len)
         self._apply_track_to_curve('F4', f4, target_len)
-        self._apply_track_to_curve('AV', energy, target_len)
+        # Recording level has no absolute inverse to AV. Initialize a relative
+        # envelope around AV60, keeping silent/unvoiced sources off, and report
+        # this as an estimate. Never copy SPL-like energy values into AV.
+        finite_energy = energy[np.isfinite(energy) & voiced_mask]
+        anchor = float(np.median(finite_energy)) if finite_energy.size else 0.
+        av = np.where(voiced_mask & np.isfinite(energy), np.clip(60. + energy - anchor, 1., 80.), 0.)
+        self._apply_track_to_curve('AV', av, target_len)
+        self._apply_track_to_curve('AH', np.zeros(target_len), target_len)
         self._apply_track_to_curve('HNR', hnr, target_len)
         self._apply_track_to_curve('SHR', shr, target_len)
         self._apply_track_to_curve('Jitter', jitter, target_len)

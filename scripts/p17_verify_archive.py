@@ -1,4 +1,4 @@
-"""Read back a P17 executable and compare its exact source/frontend payload."""
+"""Read back a local preview executable and compare its source/frontend payload."""
 import argparse
 import hashlib
 import json
@@ -42,6 +42,12 @@ def main():
     config = json.loads(archive.extract(names['local-preview.json']))
     assert config['portable'] is False
     assert not any(name.startswith('phonetic_toolbox/') for name in names)
+    if 'M17' in config.get('modules', ''):
+        for filename in ('OFL-PTBIPAPlus.txt', 'OFL-Noto.txt'):
+            target = 'third_party/licenses/ipa-plus/' + filename
+            expected = work / 'snapshot/ipa-plus-licenses' / filename
+            assert target in names and digest(archive.extract(names[target])) == digest(expected.read_bytes()), target
+            files.append(dict(path=target, sha256=digest(expected.read_bytes())))
     report = dict(success=True, files_checked=len(files), archive_entries=len(names),
                   executable=artifact.name, bytes=artifact.stat().st_size,
                   sha256=digest(artifact.read_bytes()), configuration=config, files=files,

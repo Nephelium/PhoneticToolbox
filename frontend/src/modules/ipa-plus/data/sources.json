@@ -1,0 +1,7 @@
+{
+  "ipa-chart-2026": {"title":"International Phonetic Association · 官方表 2026","url":"https://www.internationalphoneticassociation.org/content/ipa-chart","version":"2026 重印；内容修订 2015/2005","license":"CC BY-SA 4.0"},
+  "extipa-chart-2025": {"title":"ICPLA · extIPA 2025 表","url":"https://www.icpla.org.uk/resources","version":"2025","license":"CC BY-SA 3.0；原图不随包分发"},
+  "voqs-ball-2018": {"title":"Ball, Esling & Dickson (2018), pp. 165–171，图 2","url":"https://doi.org/10.1017/S0025100317000159","version":"2016 修订表；2017 在线发表；2018 卷期","license":"论文及图版版权保留，原 PDF 不随包分发"},
+  "voqs-zhihu-203037479": {"title":"UntPhesoca · VoQS：音质符号（2016 中英双语版），中文名称","url":"https://zhuanlan.zhihu.com/p/203037479","version":"2020 unt 译；© 2016 Ball、Esling、Dickson","license":"中文术语按井井指定文章采用，未复制文章图像或排版"},
+  "unicode-cartouche-2024": {"title":"Unicode L2/24-182R · 多字符圈围编码讨论","url":"https://www.unicode.org/L2/L2024/24182r-cartouche.pdf","version":"2024 提案及讨论，不能当作已分配新码位","license":"仅引用编码资料"}
+}

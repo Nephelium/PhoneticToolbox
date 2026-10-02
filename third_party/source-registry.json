@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
-  "checked_on": "2026-09-09",
-  "total_records": 335,
+  "checked_on": "2026-10-02",
+  "total_records": 345,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -485,10 +485,14 @@
       "evidence_files": [
         "third_party/evidence/SRC-TDKLATT/README.md",
         "docs/modules/evidence/M06-source-map.md",
-        "tests/fixtures/m06/v2.json"
+        "tests/fixtures/m06/v2.json",
+        "docs/references/m06-av-audit-2026-10-02.md",
+        "docs/testing/2026-10-02-m06-r2-report.md"
       ],
       "acknowledgement_group": "software",
-      "v3_migration": "2026-09-27 M06: direct V2 snapshot, original numerical functions retained; device/import exit/example removed; MIT notice and LICENSE included in core wheel. Original upstream included commit remains unknown."
+      "v3_migration": "2026-09-27 M06: direct V2 snapshot, original numerical functions retained; device/import exit/example removed; MIT notice and LICENSE included in core wheel. Original upstream included commit remains unknown.",
+      "av_audit_2026_10_02": "Source-level read-only audit: Klatt 1980 Table I and p.987, observed tdklatt commit 081f98431c2995187ecadb15d3667c7b6b7f8c73, local noise gain and AV/HNR mapping. Legacy scientific behavior retained; no upstream code newly incorporated.",
+      "m06_r2_revision": "2026-10-02 user-authorized klatt/2 correction: independent project digital source reference, AV/AH zero-off, noise FIR, 20 kHz internal rate, no legacy AGC, relative-energy AV initialization. Not original Klatt code or SPL calibration. No downloaded upstream implementation incorporated."
     },
     {
       "id": "REF-KLATT",
@@ -514,7 +518,13 @@
       "doi": "10.1121/1.383940",
       "venue": "Journal of the Acoustical Society of America",
       "pages": "971--995",
-      "acknowledgement_group": "academic"
+      "acknowledgement_group": "academic",
+      "evidence_files": [
+        "docs/references/m06-av-audit-2026-10-02.md",
+        "docs/testing/2026-10-02-m06-r2-report.md"
+      ],
+      "av_audit_2026_10_02": "Source-level read-only audit: Klatt 1980 Table I and p.987, observed tdklatt commit 081f98431c2995187ecadb15d3667c7b6b7f8c73, local noise gain and AV/HNR mapping. Legacy scientific behavior retained; no upstream code newly incorporated.",
+      "m06_r2_revision": "2026-10-02 user-authorized klatt/2 correction: independent project digital source reference, AV/AH zero-off, noise FIR, 20 kHz internal rate, no legacy AGC, relative-energy AV initialization. Not original Klatt code or SPL calibration. No downloaded upstream implementation incorporated."
     },
     {
       "id": "SRC-ZAIWA",
@@ -890,7 +900,8 @@
         "M02",
         "M03",
         "M09",
-        "M10"
+        "M10",
+        "M17"
       ],
       "urls": {
         "homepage": "https://software.sil.org/doulos/",
@@ -915,7 +926,8 @@
         "sha256": "cc89b87c047bcc8dc00246398218bb6343e0f2372b153cf560c29a77f27068ef",
         "license": "Complete OFL text accompanies both assets and is embedded with the font in editable SVG; backend text copy normalizes line endings to LF",
         "verified_on": "2026-09-12"
-      }
+      },
+      "m17_usage": "Unmodified upstream base for renamed PTB IPA Plus module font; see M17-PTB-IPA-PLUS-FONT."
     },
     {
       "id": "PENDING-EGG",
@@ -1125,7 +1137,8 @@
       "title": "SheetJS",
       "kind": "bundled-client-library",
       "modules": [
-        "M15"
+        "M15",
+        "M16"
       ],
       "urls": {
         "repository": "https://git.sheetjs.com/sheetjs/sheetjs",
@@ -1140,7 +1153,13 @@
       "observed_upstream_commit": null,
       "distribution_status": "license-included",
       "verification_status": "official-artifact-and-license-verified",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "m16_evidence": "docs/testing/m16-report.md",
+      "m16_usage": {
+        "numpy": "2.2.6",
+        "scipy": "1.16.3",
+        "SheetJS": "existing local frontend/src/modules/perception/vendor/xlsx.mjs; no upgrade or network import"
+      }
     },
     {
       "id": "SRC-LUCIDE",
@@ -1168,7 +1187,8 @@
       "title": "numpy",
       "kind": "installed-runtime-package",
       "modules": [
-        "shared-runtime"
+        "shared-runtime",
+        "M16"
       ],
       "actual_included_version": "2.2.6 in phonetic_311; v3 pin pending",
       "observed_upstream_commit": null,
@@ -1188,14 +1208,21 @@
       "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
       "license_metadata_file": "third_party/licenses/pypi/numpy-2.2.6-metadata.txt",
       "distribution_status": "actual-wheel-and-native-audit-required",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "m16_evidence": "docs/testing/m16-report.md",
+      "m16_usage": {
+        "numpy": "2.2.6",
+        "scipy": "1.16.3",
+        "SheetJS": "existing local frontend/src/modules/perception/vendor/xlsx.mjs; no upgrade or network import"
+      }
     },
     {
       "id": "PKG-SCIPY",
       "title": "scipy",
       "kind": "installed-runtime-package",
       "modules": [
-        "shared-runtime"
+        "shared-runtime",
+        "M16"
       ],
       "actual_included_version": "1.16.3 in phonetic_311; v3 pin pending",
       "observed_upstream_commit": null,
@@ -1214,7 +1241,13 @@
       "notes": "May overlap a method-specific entry. No claim that all transitive/native dependencies are enumerated.",
       "license_metadata_file": "third_party/licenses/pypi/scipy-1.16.3-metadata.txt",
       "distribution_status": "actual-wheel-and-native-audit-required",
-      "acknowledgement_group": "software"
+      "acknowledgement_group": "software",
+      "m16_evidence": "docs/testing/m16-report.md",
+      "m16_usage": {
+        "numpy": "2.2.6",
+        "scipy": "1.16.3",
+        "SheetJS": "existing local frontend/src/modules/perception/vendor/xlsx.mjs; no upgrade or network import"
+      }
     },
     {
       "id": "PKG-PANDAS",
@@ -1372,7 +1405,8 @@
       "title": "sounddevice",
       "kind": "installed-runtime-package",
       "modules": [
-        "shared-runtime"
+        "shared-runtime",
+        "M16"
       ],
       "actual_included_version": "0.5.3 in phonetic_311; v3 pin pending",
       "observed_upstream_commit": null,
@@ -1394,7 +1428,15 @@
       ],
       "m10_migration_evidence": "docs/modules/evidence/M10-migration.json",
       "m10_verification_date": "2026-09-11",
-      "m10_runtime_version": "0.5.3 in requirements-m10-ui.lock"
+      "m10_runtime_version": "0.5.3 in requirements-m10-ui.lock",
+      "m16_evidence": "docs/testing/m16-report.md",
+      "m16_usage": {
+        "id": "PKG-SOUNDDEVICE",
+        "add_module": "M16",
+        "actual_version": "0.5.3 in existing .venv/m09-ui",
+        "used_at": "desktop/src/ptb_desktop/recording/devices.py",
+        "note": "PortAudio stream; no dependency installation"
+      }
     },
     {
       "id": "PKG-SOUNDFILE",
@@ -1405,7 +1447,8 @@
         "M09",
         "M12",
         "M01",
-        "M02"
+        "M02",
+        "M16"
       ],
       "actual_included_version": "0.13.1 in phonetic_311; M09 isolated runtime 0.13.1 in requirements-m09-ui.lock",
       "observed_upstream_commit": null,
@@ -1424,7 +1467,15 @@
       "m02_m09_verification_date": "2026-09-11",
       "m02_m09_evidence": "docs/testing/m02-m09-report.md; requirements-m09-ui.lock; tests/parity/test_spec2wav.py; backend/tests/test_m02_display.py",
       "m01_m02_r1_evidence": "docs/testing/2026-10-01-m01-m02-repairs-report.md",
-      "m01_m02_r1_usage": "Existing SoundFile/SciPy runtime reused in desktop/src/ptb_desktop/annotation_audio.py for opt-in bounded multichannel WAV previews; original source hash/duration preserved, no dependency upgrade or scientific-input replacement."
+      "m01_m02_r1_usage": "Existing SoundFile/SciPy runtime reused in desktop/src/ptb_desktop/annotation_audio.py for opt-in bounded multichannel WAV previews; original source hash/duration preserved, no dependency upgrade or scientific-input replacement.",
+      "m16_evidence": "docs/testing/m16-report.md",
+      "m16_usage": {
+        "id": "PKG-SOUNDFILE",
+        "add_module": "M16",
+        "actual_version": "0.13.1 in existing .venv/m09-ui",
+        "used_at": "desktop/src/ptb_desktop/recording/jobs.py",
+        "note": "libsndfile WAV FLOAT/PCM24/PCM16 output and readback"
+      }
     },
     {
       "id": "PKG-OPENPYXL",
@@ -7366,6 +7417,256 @@
       "distribution_status": "test-only",
       "acknowledgement_group": "software",
       "evidence": "resources/m05/resources.json; public derived engineering fixtures only; not natural speech or physiological truth"
+    },
+    {
+      "id": "SRC-M16-VOICEVISTA",
+      "title": "VoiceVista egg_recorder 录音安全机制",
+      "kind": "reviewed-local-source",
+      "modules": [
+        "M16"
+      ],
+      "authors": "井井",
+      "year": 2026,
+      "license": "User-authored local source; public redistribution license not established",
+      "urls": {},
+      "evidence": "只读审阅 audio/wav_writer.py、recorder.py、metering.py；未运行旧程序或读取旧数据库；重写为 v3 独立原始 PCM/工程协议，不依赖旧路径或 PySide6。",
+      "notes": "旧实现会把数字增益写入音频，M16 改为原始优先；此变化不是逐位迁移。旧 EXE 与源码构建对应仍未建立。",
+      "verification_date": "2026-10-02",
+      "actual_included_version": "design-reviewed; no dynamic import; v3 implementation recording/1",
+      "distribution_status": "local-development-only",
+      "source_fingerprints": {
+        "audio/wav_writer.py": "BF35A1B82FBBAF264B26C40CF42153A06FB55E5390D513B6C42FD7889C36ADE0",
+        "audio/recorder.py": "85401234CE8CFA5951E9AF0B09CA056BD5EB6F0FC708CFC053B7ADE943B9902E",
+        "audio/metering.py": "39FC91440AAA4A5DBFC594A581AC01C9087DE13262F208DE4F7D37E7C4B1571C"
+      },
+      "used_at": [
+        "desktop/src/ptb_desktop/recording/capture.py",
+        "desktop/src/ptb_desktop/recording/storage.py",
+        "packages/phonetic_core/src/phonetic_core/recording/signal.py"
+      ],
+      "acknowledgement_group": "software"
+    },
+    {
+      "id": "METHOD-M16-SPECTRAL-SUBTRACTION",
+      "title": "M16 噪声样本功率谱减法（自有实现）",
+      "kind": "original-method-implementation",
+      "modules": [
+        "M16"
+      ],
+      "authors": "PhoneticToolbox project",
+      "year": 2026,
+      "license": "Project implementation; SciPy runtime license is separate",
+      "urls": {
+        "scipy_stft": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.stft.html",
+        "scipy_istft": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.istft.html"
+      },
+      "evidence": "ptb-spectral-subtraction/1：periodic Hann 1024，hop 256，均值噪声功率谱；gain=max(0.15,sqrt(max(P-alpha*N,0)/max(P,1e-20)))，三频点平滑，补零与重叠相加；独立块 1024 帧 halo。",
+      "notes": "不是标准 Wiener 实现，不复制或宣称等同 Adobe Audition。输出帧数及 EGG 逐样本不变分别验证；自然气声/擦音人听验收待做。",
+      "verification_date": "2026-10-02",
+      "actual_included_version": "ptb-spectral-subtraction/1",
+      "distribution_status": "local-development-only",
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/recording/signal.py",
+        "desktop/src/ptb_desktop/recording/jobs.py"
+      ],
+      "acknowledgement_group": "academic"
+    },
+    {
+      "id": "M17-IPA-CHART",
+      "title": "International Phonetic Alphabet chart — 2026 reprint",
+      "kind": "reference-chart",
+      "modules": [
+        "M17"
+      ],
+      "urls": {
+        "homepage": "https://www.internationalphoneticassociation.org/content/ipa-chart",
+        "pdf": "https://www.internationalphoneticassociation.org/IPAcharts/common_files/pdfs/pdfs_IPA_charts_E/IPA_Kiel.pdf"
+      },
+      "evidence": "官方页及表逐格视觉核对；IPA 244 个输入入口包括独立记号和原表例示。docs/references/m17-symbol-coverage.csv。",
+      "license": "CC BY-SA 4.0",
+      "notes": "自绘交互表保留归属并以相同许可提供；2026 为重印年份，内容修订为 2015/2005。未将原 PDF 包入产品。",
+      "verification_date": "2026-10-02",
+      "actual_included_version": "2026 reprint; 2015/2005 content",
+      "distribution_status": "attributed-interactive-chart",
+      "authors": "International Phonetic Association",
+      "year": 2026,
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "frontend/src/modules/ipa-plus/data/catalog.json",
+        "scripts/verify_m17_catalog.py"
+      ]
+    },
+    {
+      "id": "M17-EXTIPA-2025",
+      "title": "Extensions to the IPA — 2025 chart",
+      "kind": "reference-chart",
+      "modules": [
+        "M17"
+      ],
+      "urls": {
+        "homepage": "https://www.icpla.org.uk/resources"
+      },
+      "evidence": "用户提供一页 PDF，逐格查看后建立191入口。文件哈希和排版编码差异见 m17-source-audit.md。",
+      "license": "CC BY-SA 3.0 as identified on ICPLA resources; original chart reproduction wording also recorded",
+      "notes": "自有中文说明、交互布局与现代Unicode映射；原图未随包。ICPLA页面同时要求原表复制不作变更，不能将该要求改称额外开放许可。",
+      "verification_date": "2026-10-02",
+      "actual_included_version": "extIPA 2025",
+      "distribution_status": "attributed-symbol-data; no original PDF bundled",
+      "authors": "International Clinical Phonetics and Linguistics Association",
+      "year": 2025,
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "frontend/src/modules/ipa-plus/data/catalog.json",
+        "docs/references/m17-symbol-coverage.csv"
+      ]
+    },
+    {
+      "id": "M17-VOQS-BALL-2018",
+      "title": "Revisions to the VoQS system for the transcription of voice quality",
+      "kind": "academic-reference",
+      "modules": [
+        "M17"
+      ],
+      "urls": {
+        "paper": "https://doi.org/10.1017/S0025100317000159",
+        "chart": "https://www.icpla.org.uk/resources"
+      },
+      "evidence": "用户论文 pp.165–171，p.169 Figure 2 逐格核对：56标准表项，9程度/范围/示例入口。",
+      "license": "Article/chart copyright retained by rights holders; no redistribution grant inferred",
+      "notes": "2016 修订表、2017 在线发表、2018 卷期分别记录。自有说明不作临床诊断，未打包论文或图版。",
+      "verification_date": "2026-10-02",
+      "actual_included_version": "VoQS revised to 2016",
+      "distribution_status": "citation and independently authored symbol explanations only",
+      "authors": "Martin J. Ball and John H. Esling and B. Craig Dickson",
+      "year": 2018,
+      "citation_title": "Revisions to the VoQS system for the transcription of voice quality",
+      "doi": "10.1017/S0025100317000159",
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "frontend/src/modules/ipa-plus/data/catalog.json"
+      ]
+    },
+    {
+      "id": "M17-VOQS-ZH-UNTPHESOCA",
+      "title": "VoQS：音质符号（2016 中英双语版）",
+      "kind": "terminology-reference",
+      "modules": [
+        "M17"
+      ],
+      "urls": {
+        "article": "https://zhuanlan.zhihu.com/p/203037479"
+      },
+      "evidence": "井井提供完整正文及双语图；官方知乎检索返回精确目标文章的前后两段，output/validation/m17/zhihu-203037479-search.json 与 zhihu-203037479-supralarynx.json。56个译名逐条断言。",
+      "license": "Author's article/translation rights retained; terminology attributed, images/layout not bundled",
+      "notes": "中文名严格采用该文，作者 UntPhesoca，2020 unt 译；原表 ©2016 Ball、Esling、Dickson。符号码位仍依据原表和现代Unicode核对，未照抄网页可能损坏的字符。",
+      "verification_date": "2026-10-02",
+      "actual_included_version": "2020 Chinese translation of 2016 chart",
+      "distribution_status": "attributed terminology",
+      "authors": "UntPhesoca (unt)",
+      "year": 2020,
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "frontend/src/modules/ipa-plus/data/voqs-zh-names.json",
+        "frontend/src/modules/ipa-plus/data/sources.json"
+      ]
+    },
+    {
+      "id": "M17-PTB-IPA-PLUS-FONT",
+      "title": "PTB IPA Plus 1.000 — module font derived from Doulos SIL 7.000",
+      "kind": "bundled-font",
+      "modules": [
+        "M17"
+      ],
+      "urls": {
+        "upstream": "https://software.sil.org/doulos/",
+        "history": "https://software.sil.org/doulos/history/",
+        "noto_delimiters": "https://raw.githubusercontent.com/notofonts/noto-fonts/main/hinted/ttf/NotoSansMath/NotoSansMath-Regular.ttf",
+        "noto_license": "https://raw.githubusercontent.com/notofonts/noto-fonts/main/LICENSE"
+      },
+      "evidence": "scripts/verify_m17_fonts.py 可复现构建；原3944字形编译字节完全保留，新增23字形；264目录字符cmap全覆盖，Chrome逐500节点CDP证实只用本模块字体。",
+      "license": "SIL Open Font License 1.1",
+      "notes": "派生字体改名避免保留名；仅此一个实际使用的派生ttf随M17打包。Noto两括号轮廓缩放合入，候选完整字体留在验证目录。原Doulos资源未改。形态验收与码位覆盖分开，详见字体审计。",
+      "verification_date": "2026-10-02",
+      "actual_included_version": "PTB IPA Plus 1.000 / Doulos SIL 7.000",
+      "distribution_status": "bundled under OFL 1.1 with license and renamed family",
+      "authors": "SIL Global; Noto authors; PhoneticToolbox contributors",
+      "year": 2026,
+      "acknowledgement_group": "software",
+      "used_at": [
+        "frontend/src/assets/ipa-plus/PTBIPAPlus-Regular.ttf",
+        "frontend/src/assets/ipa-plus/OFL-PTBIPAPlus.txt",
+        "frontend/src/assets/ipa-plus/OFL-Noto.txt",
+        "scripts/verify_m17_fonts.py"
+      ]
+    },
+    {
+      "id": "M17-UNICODE-PHONETIC-ENCODING",
+      "title": "Unicode phonetic marks, VoQS glyph correction and cartouche encoding discussion",
+      "kind": "encoding-reference",
+      "modules": [
+        "M17"
+      ],
+      "urls": {
+        "chapter7": "https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-7/",
+        "voqs_correction": "https://www.unicode.org/L2/L2020/20113-voqs-correction.pdf",
+        "cartouche": "https://www.unicode.org/L2/L2024/24182r-cartouche.pdf",
+        "bridges": "https://software.sil.org/fonts/bridging-diacritics/"
+      },
+      "evidence": "区分组合左右括号、U+A7F8 petite-capital、连音桥和多字圈围；两项多字圈围公开采用文本替代并标明。",
+      "license": "References only; no Unicode documents bundled",
+      "notes": "L2/24-182R是讨论资料，不将提议码位当成已编码字符。⟅…⟆文本替代不可冒称标准VoQS/extIPA编码。",
+      "verification_date": "2026-10-02",
+      "actual_included_version": "Unicode references checked 2026-10-02",
+      "distribution_status": "reference only",
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "scripts/verify_m17_fonts.py",
+        "frontend/src/modules/ipa-plus/data/catalog.json"
+      ]
+    },
+    {
+      "id": "M17-CIN-REFERENCE",
+      "title": "User-supplied ipa.cin lookup aliases",
+      "kind": "local-reference",
+      "modules": [
+        "M17"
+      ],
+      "urls": {
+        "unicode_mapping": "https://software.sil.org/doulos/history/"
+      },
+      "evidence": "502映射/387不同输出/346不同字符；只读映射选取为检索别名。sha256记录见 m17-source-audit.md。",
+      "license": "Original file provenance/license not established; original not bundled",
+      "notes": "不执行、不修改、不分发用户CIN文件。F267→1DF06、F268→1DF04根据SIL资料映射；圈字母别名映射到组合圈序列。它不是完整符号清单或术语权威。",
+      "verification_date": "2026-10-02",
+      "actual_included_version": "User supplied file checked 2026-10-02",
+      "distribution_status": "limited lookup aliases only; original excluded",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "scripts/verify_m17_catalog.py",
+        "frontend/src/modules/ipa-plus/data/catalog.json"
+      ]
+    },
+    {
+      "id": "M17-INTERACTIVE-LAYOUT-REFERENCE",
+      "title": "Interactive IPA chart — layout reference",
+      "kind": "design-reference",
+      "modules": [
+        "M17"
+      ],
+      "urls": {
+        "website": "https://www.ipachart.com/",
+        "alternative": "https://westonruter.github.io/ipa-chart/keyboard/"
+      },
+      "evidence": "ipachart交互表网页结构实际读取；WestonRuter浏览器正文取回未成功，不冒称完整审阅。",
+      "license": "No third-party code or assets copied",
+      "notes": "借鉴按辅音表、元音图、附加符号分区的交互方式；本模块自行实现横向重排，以实际AppShell单屏测量验收。",
+      "verification_date": "2026-10-02",
+      "actual_included_version": "No external implementation included",
+      "distribution_status": "reference only",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "frontend/src/modules/ipa-plus/ChartView.vue"
+      ]
     }
   ]
 }

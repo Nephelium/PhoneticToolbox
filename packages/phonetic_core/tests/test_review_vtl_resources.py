@@ -20,3 +20,15 @@ def test_macos_cannot_fall_back_to_windows_dlls(tmp_path):
     for name in ('VocalTractLabApi.dll','VocalTractLabAnalysis.dll','geometry_p2.dll'):(tmp_path/name).write_bytes(b'windows')
     with pytest.raises(RuntimeError,match='native_resource_unavailable'):
         resolve_libraries(tmp_path,platform='darwin',arch='arm64')
+
+
+def test_windows_missing_machine_uses_native_api_only_when_not_explicit(monkeypatch,tmp_path):
+    import phonetic_core.vocal_tract.native_resources as resources
+    monkeypatch.setattr(resources.sys,'platform','win32')
+    monkeypatch.setattr(resources.host,'machine',lambda:'')
+    monkeypatch.setattr(resources,'_windows_process_architecture',lambda:'x86_64')
+    for name in ('VocalTractLabApi.dll','VocalTractLabAnalysis.dll','geometry_p2.dll'):
+        (tmp_path/name).write_bytes(b'fixture')
+    assert len(resolve_libraries(tmp_path))==3
+    with pytest.raises(RuntimeError,match='native_platform_unavailable'):
+        resolve_libraries(tmp_path,arch='')

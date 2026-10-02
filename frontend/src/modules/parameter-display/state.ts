@@ -10,6 +10,10 @@ export function matchingTable(audio:ResearchFile,files:ResearchFile[]):ResearchF
     if(found.length===1)return found[0];
     if(found.length>1)return undefined;
   }
+  for(const suffix of ['.lip.json','.pkl']){
+    const found=files.filter(f=>(f.kind==='lip'||f.kind==='lip_pickle')&&f.name.toLowerCase()===stem+suffix);
+    if(found.length===1)return found[0];if(found.length>1)return undefined;
+  }
 }
 export function visibleParameters(names:string[],query:string,reaper:boolean,correction:boolean) {
   return names.filter(name=>name.toLowerCase().includes(query.trim().toLowerCase())&&(reaper||!name.toLowerCase().includes('rf0'))&&(correction||!name.includes('*')));

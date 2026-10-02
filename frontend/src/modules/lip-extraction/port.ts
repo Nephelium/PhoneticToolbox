@@ -8,6 +8,9 @@ export interface LipPort {
  captureError?(message:string):Promise<string>;
  history?():Promise<{id:string;name:string}[]>;
  load?(id:string):Promise<LipResult>;
+ replay?(result:LipResult,start:number):Promise<{rows:LipRow[];complete:boolean}>;
+ saveRecording?(name:string,blob:Blob,metadata:Blob):Promise<{saved:boolean;recording?:Record<string,any>}>;
+ analyzeRecording?(token:string,config:OfflineConfig,signal:AbortSignal,progress:(s:string)=>void):Promise<LipResult>;
  reason?:string;
  analyze(file:File,config:OfflineConfig,signal:AbortSignal,progress:(message:string)=>void):Promise<LipResult>;
  save(result:LipResult,offset:number,action:'apply'|'save_without_offset'):Promise<boolean>;

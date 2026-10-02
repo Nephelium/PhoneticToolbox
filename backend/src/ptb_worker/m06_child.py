@@ -36,12 +36,12 @@ def compute(header,raw):
     import numpy as np
     from scipy.io import wavfile
     from phonetic_core.models.audio import AudioInput
-    from phonetic_core.synthesis.klatt.api import generate,synthesize,extract,export_parameters,import_parameters
+    from phonetic_core.synthesis.klatt.api import generate,synthesize_with_info,extract,export_parameters,import_parameters
     c=import_parameters(header['parameters']);action=header['action'];seed=header['seed']
     if c['duration']>10 or c['duration']*c['sample_rate']>480000:raise ValueError('m06_admission_budget')
     if hashlib.sha256(raw).hexdigest()!=header['input_sha256']:raise ValueError('m06_input_changed')
     np.random.seed(seed) # Isolated process only; legacy MT19937 random calls preserved.
-    files=[];spectra={}
+    files=[];spectra={};diagnostics={}
     if action=='generate':c=generate(c)
     elif action=='extract':
         try:rate,samples=wavfile.read(io.BytesIO(raw))
@@ -51,7 +51,7 @@ def compute(header,raw):
         channels=source.normalized_channels().astype(np.float32);mono=np.mean(channels,axis=1) if channels.ndim>1 else channels
         spectra=spectrograms(mono.astype(float),int(rate))
     elif action=='synthesize':
-        audio=synthesize(c)
+        audio,diagnostics=synthesize_with_info(c)
         # Use V2's actual libsndfile conversion. A float64 floor approximation
         # differs by one PCM unit for samples very close to a quantization boundary.
         import soundfile as sf
@@ -60,6 +60,7 @@ def compute(header,raw):
         spectra=spectrograms(audio,c['sample_rate'])
     else:raise ValueError('m06_invalid_action')
     metadata=dict(schema_version='m06/1',action=action,config=c,seed=seed,
+                  computation_revision='klatt/2',diagnostics=diagnostics,
                   input_sha256=header['input_sha256'],sample_rate_hz=c['sample_rate'],
                   sample_count=round(c['duration']*c['sample_rate']),
                   curve_time_axis='linspace(0,duration,N)',audio_time_axis='arange(N)/fs',

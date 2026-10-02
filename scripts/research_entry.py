@@ -19,7 +19,7 @@ def main():
     if '--m10-worker' in sys.argv:
         restore_worker_pipes()
         from ptb_desktop.vocal_tract.worker import main as worker
-        worker(); return 0
+        return worker() or 0
     import argparse
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--local-root', type=Path)

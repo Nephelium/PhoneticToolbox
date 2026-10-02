@@ -11,4 +11,4 @@ text=json.dumps(data,ensure_ascii=False,indent=2)+'\n'
 if '--check' in sys.argv:
  assert json.loads(target.read_text('utf8'))==json.loads(text),'M06 UI catalog drift'
 else:target.write_text(text,encoding='utf8')
-print('M06 catalog: 23 parameters, defaults, vowels and five presets agree')
+print(f'M06 catalog: {len(PARAM_DEFAULTS)} parameters, defaults, vowels and five presets agree')

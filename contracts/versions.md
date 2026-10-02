@@ -74,3 +74,6 @@ M03-E3：微观输入范围恢复为 5–5000 ms。`egg-preview/1.micro_sample_s
 ## M03-R2 临时预览增量（2026-10-01）
 
 新增 EggPreviewSession、EggInteractiveResult 及本机/已认证资源的打开、更新、关闭接口。沿用 EggTaskConfig（仅 preview 模式）和 egg-preview/1，不创建 JobView 或改变 m03/1 正式产物。JSON通过严格模型的JSON入口校验，坐标数组恢复元组语义。新前端和配套平台适配器同时更新，未配置新通道的环境不承诺实时计算。边界见 [ADR-M03-R2](../docs/decisions/ADR-M03-R2.md)。
+# 2026-10-02 M06 科研修订
+
+M06 任务请求和结果外层传输仍 m06/1；CSV `__PTB_CONFIG__` 及 JSON config 改为 m06/2，新增 AH 曲线、`f0_transform={preset:null|假声|嘎裂,offset_hz:number}`。结果元数据新增 `computation_revision=klatt/2`、diagnostics（内部率、数字源参考、固定输出增益、最终防溢出衰减）。这些为受控资源内部文档，不改变 API 请求或数据库 schema。旧 m06/1 科学配置及无新完整快照的旧 CSV 明确拒绝，避免不可靠的 AV200 换算。见 [ADR](../docs/decisions/ADR-M06-R2.md)。

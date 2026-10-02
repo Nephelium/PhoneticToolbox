@@ -1,0 +1,43 @@
+{
+  "version": "m17-font/1",
+  "font": "PTB IPA Plus 1.000",
+  "base": "Doulos SIL 7.000",
+  "base_sha256": "cc89b87c047bcc8dc00246398218bb6343e0f2372b153cf560c29a77f27068ef",
+  "sha256": "4219767c81bfb38e59fa1ec1fc995e40164c6896bf0eec8e9542061453ec2060",
+  "added_glyphs": [
+    "m17_1ABB",
+    "m17_1ABD",
+    "m17_1AC1",
+    "m17_1AC2",
+    "m17_1AC3",
+    "m17_1AC4",
+    "m17_circle",
+    "m17_emptycircle",
+    "m17_27C5",
+    "m17_27C6",
+    "m17_circled_0",
+    "m17_circled_1",
+    "m17_circled_2",
+    "m17_circled_3",
+    "m17_circled_4",
+    "m17_circled_5",
+    "m17_circled_6",
+    "m17_circled_7",
+    "m17_circled_8",
+    "m17_circled_9",
+    "m17_circled_10",
+    "m17_circled_11",
+    "m17_circled_12"
+  ],
+  "original_glyph_count": 3944,
+  "original_glyphs_byte_identical": true,
+  "unique_catalog_characters": 264,
+  "missing_cmap": [],
+  "visual_status": "see m17-report.md; cmap is not shape verification",
+  "source_urls": [
+    "https://software.sil.org/doulos/",
+    "https://raw.githubusercontent.com/notofonts/noto-fonts/main/hinted/ttf/NotoSansMath/NotoSansMath-Regular.ttf"
+  ],
+  "license": "OFL-1.1",
+  "family_renamed": true
+}

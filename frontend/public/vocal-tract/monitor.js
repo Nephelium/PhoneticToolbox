@@ -26,9 +26,9 @@ export function setupMonitor(post,isClosed){
     const data=latest?.spectrogram;
     if(data?.length){
       const cols=data.length,rows=data[0].length,img=new ImageData(cols,rows);
-      const night=dark();
+      const night=dark(),background=tint('#fffef9').match(/[\da-f]{2}/gi).map(v=>parseInt(v,16));
       for(let t=0;t<cols;t++)for(let f=0;f<rows;f++){const k=((rows-1-f)*cols+t)*4,v=data[t][f];
-        for(let channel=0;channel<3;channel++)img.data[k+channel]=night?[23,42,54][channel]+(230-[23,42,54][channel])*v/255:255-v;
+        for(let channel=0;channel<3;channel++)img.data[k+channel]=night?background[channel]+(230-background[channel])*v/255:255-v;
         img.data[k+3]=255;}
       const buffer=document.createElement('canvas');buffer.width=cols;buffer.height=rows;buffer.getContext('2d').putImageData(img,0,0);
       const x=36+(latest.end-latest.duration+latest.frame_offset-latest.hop_seconds/2-start)/seconds*(s.w-46);

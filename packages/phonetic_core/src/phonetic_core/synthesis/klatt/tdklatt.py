@@ -515,8 +515,9 @@ class KlattVoice1980(KlattSection):
         self.rgp = Resonator(mast=self.mast)
         self.rgz = Resonator(mast=self.mast, anti=True)
         self.rgs = Resonator(mast=self.mast)
-        self.av = Amplifier(mast=self.mast)
-        self.avs = Amplifier(mast=self.mast)
+        from .source_levels import REFERENCE_RMS, voice_reference_rms
+        self.av = SourceAmplifier(mast=self.mast, scale=REFERENCE_RMS / voice_reference_rms(self.mast.params['FS']))
+        self.avs = SourceAmplifier(mast=self.mast, scale=REFERENCE_RMS / voice_reference_rms(self.mast.params['FS'], True))
         self.mixer = Mixer(mast=self.mast)
         self.switch = Switch(mast=self.mast)
         self.tilt = SpectralTilt(mast=self.mast)
@@ -592,7 +593,7 @@ class KlattNoise1980(KlattSection):
     def do(self):
         self.noisegen.generate()
         self.lowpass.filter()
-        self.amp.amplify(dB=0)
+        self.amp.amplify(dB=-60)
 
 
 class KlattCascade1980(KlattSection):
@@ -624,7 +625,8 @@ class KlattCascade1980(KlattSection):
     """
     def __init__(self, mast):
         KlattSection.__init__(self, mast)
-        self.ah = Amplifier(mast=self.mast)
+        from .source_levels import REFERENCE_RMS
+        self.ah = SourceAmplifier(mast=self.mast, scale=REFERENCE_RMS / (np.sqrt(2.) * .001))
         self.mixer = Mixer(mast=self.mast)
         self.rnp = Resonator(mast=self.mast)
         self.rnz = Resonator(mast=self.mast, anti=True)
@@ -714,7 +716,8 @@ class KlattParallel1980(KlattSection):
     """
     def __init__(self, mast):
         KlattSection.__init__(self, mast)
-        self.af = Amplifier(mast=self.mast)
+        from .source_levels import REFERENCE_RMS
+        self.af = SourceAmplifier(mast=self.mast, scale=REFERENCE_RMS / (np.sqrt(2.) * .001))
         self.a1 = Amplifier(mast=self.mast)
         self.r1 = Resonator(mast=self.mast)
         self.first_diff = Firstdiff(mast=self.mast)
@@ -848,8 +851,8 @@ class OutputModule(KlattSection):
 
     def do(self):
         self.mixer.mix()
-        self.normalizer.normalize()
-        self.output[:] = self.normalizer.output[:]
+        # M06/2: keep source amplitude; the caller handles PCM overload once.
+        self.output[:] = self.mixer.output[:]
 
 
 ##### COMPONENT DEFINITIONS #####
@@ -1076,6 +1079,18 @@ class Amplifier(KlattComponent):
         self.send()
 
 
+class SourceAmplifier(Amplifier):
+    """Source-only dB control: 0 closes the source; ordinary 0 dB stays unity."""
+    def __init__(self, mast, scale=1.):
+        super().__init__(mast)
+        self.scale = scale
+
+    def amplify(self, dB):
+        from .source_levels import source_gain
+        self.output[:] = self.input * source_gain(dB) * self.scale
+        self.send()
+
+
 class Firstdiff(KlattComponent):
     """
     Simple first difference operator.
@@ -1112,7 +1127,7 @@ class Lowpass(KlattComponent):
         """
         self.output[0] = self.input[0]
         for n in range(1, self.mast.params["N_SAMP"]):
-            self.output[n] = self.input[n] + self.output[n-1]
+            self.output[n] = self.input[n] + self.input[n-1]
         self.send()
 
 

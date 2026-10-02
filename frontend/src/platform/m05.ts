@@ -56,8 +56,21 @@ export async function desktopM05(transport:Task,choose:()=>Promise<{id:string}|n
   async save(result,offset,action){const grant=await choose();if(!grant)return false;const resultSave=await task({op:'m05_save',job:result.id,directory:grant.id,offset,action});return resultSave.saved===true;},
   async history(){return (await task<JobView[]>({op:'m05_history'})).map(j=>({id:j.id,name:new Date(j.created_at*1000).toLocaleString()+' · '+j.id.slice(0,8)}));},
   async load(id){const job=await task<JobView>({op:'job',id});return run({asset_id:'',sha256:''},id.slice(0,8),{filter_enabled:true,cutoff_hz:15},new AbortController().signal,()=>{},{},job);},
+  replay(result,start){return task({op:'m05_replay',job:result.id,start});},
+  async analyzeRecording(token,config,signal,progress){if(signal.aborted)throw Error('任务已取消');progress('读取已核对的 MP4');const input=await task({op:'m05_recording_input',token});return run(input,'本地原始录制.mp4',config,signal,progress);},
+  async saveRecording(name,blob,metadata){
+   const grant=await choose();if(!grant)return {saved:false};
+   const session=await task({op:'m05_save_begin',directory:grant.id,name,size:blob.size,recording:true,metadata_size:metadata.size});
+   try{
+    for(const [id,data] of [[session.metadata_id,metadata],[session.id,blob]] as [string,Blob][]){
+     for(let offset=0;offset<data.size;offset+=262144)await task({op:'m05_save_block',id,offset,base64:encoded(await data.slice(offset,offset+262144).arrayBuffer())});
+     const response=await task({op:'m05_save_finish',id});if(id===session.id)return response;
+    }
+    throw Error('录制保存未完成');
+   }catch(e){await task({op:'m05_save_abort',id:session.id}).catch(()=>{});await task({op:'m05_save_abort',id:session.metadata_id}).catch(()=>{});throw e;}
+  },
   async exportAnimation(result,format,quality,signal){const config={filter_enabled:result.metadata.config.filter_enabled,cutoff_hz:result.metadata.config.cutoff_hz,animation:format,quality,offset:result.metadata.timing?.lip_manual_offset??0};
    const job=await task<JobView>({op:'m05_repeat',job:result.id,config});const rendered=await run({asset_id:'',sha256:''},result.name,config,signal,()=>{},{},job);return port.save(rendered,config.offset,'apply');},
-  async saveLocal(name,blob){const grant=await choose();if(!grant)return false;const session=await task({op:'m05_save_begin',directory:grant.id,name,size:blob.size});for(let offset=0;offset<blob.size;offset+=262144)await task({op:'m05_save_block',id:session.id,offset,base64:encoded(await blob.slice(offset,offset+262144).arrayBuffer())});return (await task({op:'m05_save_finish',id:session.id})).saved===true;}
+  async saveLocal(name,blob){const grant=await choose();if(!grant)return false;const session=await task({op:'m05_save_begin',directory:grant.id,name,size:blob.size});try{for(let offset=0;offset<blob.size;offset+=262144)await task({op:'m05_save_block',id:session.id,offset,base64:encoded(await blob.slice(offset,offset+262144).arrayBuffer())});return (await task({op:'m05_save_finish',id:session.id})).saved===true;}catch(e){await task({op:'m05_save_abort',id:session.id}).catch(()=>{});throw e;}}
  };return port;
 }

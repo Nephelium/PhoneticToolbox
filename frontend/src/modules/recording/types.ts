@@ -1,0 +1,13 @@
+export type Role='microphone'|'egg'|'other';
+export type Device={id:string;index:number;name:string;hostapi:string;inputs:number;outputs:number;default_rate:number};
+export type Task={id:string;title:string;prompt:string;filename_stem:string;group:string;note:string;enabled:boolean;skipped:boolean};
+export type Config={device:string;sample_rate:number;channels:number;roles:Role[];gain_db:number;device_name?:string;hostapi?:string};
+export type Version={id:string;kind:string;frames:number;created_at:string;metadata:Record<string,unknown>};
+export type Quality={raw_clip:number[];near_full_scale:number[];peak:number[];rms:number[]};
+export type Take={id:string;started_at:string;config:Config;task_snapshot:Task|null;versions:Version[];head:number;undo:number[];redo:number[];status:string;error:string;quality:Quality;frames:number};
+export type Project={schema_version:'ptb-recording/1';id:string;revision:number;label:string;tasks:Task[];takes:Take[];selected:Record<string,string>;recoveries:{id:string;frames:number;error:string}[]};
+export type Spectrum={rows:number[][];frequencies:number[];times:number[]};
+export type Preview={wave:number[][][];window_frames:number;frames:number;start_frame:number;sample_rate:number;spectrum:Spectrum|null;spectrum_window_frames?:number};
+export type Meter={peak:number[];rms:number[];dc:number[];raw_clip:number[];digital_clip:number[];near_full_scale:number[];correlation:number|null};
+export type JobStatus={state:string;error?:string;progress?:number;project?:Project;items?:{status:string;take_id:string;error?:string;files:{name:string}[]}[];success_count?:number;total?:number;directory_name?:string};
+export type RecordingStatus=Partial<Preview>&{recording:boolean;probing:boolean;capture_active?:boolean;error?:string;frames?:number;confirmed_frames?:number;meter?:Meter;queue_blocks?:number;disk_free?:number;job:JobStatus|null;playback:{playing:boolean;frame:number;error:string}};

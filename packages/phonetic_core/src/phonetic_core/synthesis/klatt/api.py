@@ -11,7 +11,7 @@ import math
 from .klatt_config import PARAM_DEFAULTS
 from .input_parser import VOWEL_FORMANTS
 
-VERSION = 'm06/1'
+VERSION = 'm06/2'
 MAX_DURATION = 100.
 MAX_SAMPLES = 4_800_000
 
@@ -20,7 +20,7 @@ def defaults():
     return dict(schema_version=VERSION, duration=2., sample_rate=16000, sequence='',
                 fade_in=50, fade_out=100, smooth=5, f0_range=[50.,500.],
                 curves={n:dict(points=[[0.,v[0]],[2.,v[0]]],override=None) for n,v in PARAM_DEFAULTS.items()},
-                silence=[], boundaries=[])
+                silence=[], boundaries=[], f0_transform=dict(preset=None, offset_hz=0.))
 
 
 def finite(value):
@@ -29,6 +29,8 @@ def finite(value):
 
 def validate(config):
     c=deepcopy(config)
+    if isinstance(c,dict) and c.get('schema_version') == 'm06/1':
+        raise ValueError('m06_legacy_parameters_need_revision')
     if not isinstance(c,dict) or set(c)!=set(defaults()) or c['schema_version']!=VERSION:
         raise ValueError('m06_invalid_config')
     if not finite(c['duration']) or not .1<=c['duration']<=MAX_DURATION:raise ValueError('m06_duration_range')
@@ -39,6 +41,14 @@ def validate(config):
         if type(c[n]) is not int or not lo<=c[n]<=hi:raise ValueError('m06_invalid_'+n)
     r=c['f0_range']
     if not isinstance(r,list) or len(r)!=2 or not all(finite(x) for x in r) or not 1<=r[0]<r[1]<=3000:raise ValueError('m06_f0_range')
+    transform=c['f0_transform']
+    if (not isinstance(transform,dict) or set(transform)!={'preset','offset_hz'} or
+            transform['preset'] not in (None,'假声','嘎裂') or not finite(transform['offset_hz']) or
+            abs(transform['offset_hz'])>2999 or
+            (transform['preset'] is None and transform['offset_hz']!=0) or
+            (transform['preset']=='假声' and transform['offset_hz']<0) or
+            (transform['preset']=='嘎裂' and transform['offset_hz']>0)):
+        raise ValueError('m06_f0_transform')
     if not isinstance(c['curves'],dict) or set(c['curves'])!=set(PARAM_DEFAULTS):raise ValueError('m06_curve_keys')
     for name,curve in c['curves'].items():
         if not isinstance(curve,dict) or set(curve)!= {'points','override'}:raise ValueError('m06_invalid_curve')
@@ -47,11 +57,13 @@ def validate(config):
         if any(not isinstance(p,(list,tuple)) or len(p)!=2 or not all(finite(v) for v in p) or not 0<=p[0]<=c['duration'] for p in points):
             raise ValueError('m06_invalid_curve')
         if any(a[0]>b[0] for a,b in zip(points,points[1:])):raise ValueError('m06_curve_order')
-        # V2 clips interpolated values; scalar override bypasses that clip. Keep
-        # valid override values exact; reject nonfinite/unbounded unsafe input.
+        lo,hi=r if name=='F0' else PARAM_DEFAULTS[name][1:3]
+        if any(not lo<=p[1]<=hi for p in points):raise ValueError('m06_curve_value_range')
+        if name=='F0' and any(not 1<=p[1]-transform['offset_hz']<=3000 for p in points):raise ValueError('m06_f0_transform')
         if curve['override'] is not None:
             lo,hi=r if name=='F0' else PARAM_DEFAULTS[name][1:3]
             if not finite(curve['override']) or not lo<=curve['override']<=hi:raise ValueError('m06_override_range')
+            if name=='F0' and not 1<=curve['override']-transform['offset_hz']<=3000:raise ValueError('m06_f0_transform')
     if not isinstance(c['silence'],list) or len(c['silence'])>2048:raise ValueError('m06_invalid_silence')
     for p in c['silence']:
         if not isinstance(p,(list,tuple)) or len(p)!=2 or not all(finite(v) for v in p) or not 0<=p[0]<p[1]<=c['duration']:raise ValueError('m06_invalid_silence')
@@ -87,14 +99,20 @@ def generate(config):
 
 
 def synthesize(config, *, cancelled=lambda:False):
+    return synthesize_with_info(config, cancelled=cancelled)[0]
+
+
+def synthesize_with_info(config, *, cancelled=lambda:False):
     import numpy as np
     from .engine import Engine
     c=validate(config)
     if cancelled():raise InterruptedError('m06_cancelled')
-    audio=Engine(c).synthesize()
+    engine=Engine(c);audio=engine.synthesize()
     if cancelled():raise InterruptedError('m06_cancelled')
     if audio.size!=round(c['duration']*c['sample_rate']) or not np.isfinite(audio).all():raise ValueError('m06_invalid_output')
-    return audio
+    return audio, dict(computation_revision='klatt/2', internal_rate_hz=20000,
+                       source_reference_db=60., source_reference_rms=.01,
+                       fixed_output_gain=64., output_gain=engine.output_gain)
 
 
 def extract(config, audio, *, cancelled=lambda:False):
@@ -111,6 +129,7 @@ def extract(config, audio, *, cancelled=lambda:False):
     # are set by extract; initialize a valid duration-scaled configuration first.
     for curve in c['curves'].values():curve['points']=[[0.,curve['points'][0][1]],[c['duration'],curve['points'][-1][1]]]
     c['silence']=[];c['boundaries']=[]
+    c['f0_transform']=dict(preset=None,offset_hz=0.)
     engine=Engine(c);engine.extract(audio,mono)
     if cancelled():raise InterruptedError('m06_cancelled')
     return snapshot(engine,c)
@@ -134,7 +153,7 @@ def import_parameters(text):
     if not isinstance(text,str) or len(text.encode('utf8'))>8_000_000:raise ValueError('m06_parameter_budget')
     if text.lstrip().startswith('{'):
         value=json.loads(text)
-        if isinstance(value,dict) and value.get('schema_version')==VERSION and isinstance(value.get('config'),dict):value=value['config']
+        if isinstance(value,dict) and value.get('schema_version') in ('m06/1',VERSION) and isinstance(value.get('config'),dict):value=value['config']
         return validate(value)
     reader=csv.DictReader(io.StringIO(text.lstrip('\ufeff')))
     if reader.fieldnames!=['Parameter','Time','Value','Global']:raise ValueError('m06_csv_header')
@@ -142,16 +161,4 @@ def import_parameters(text):
     full=[r for r in rows if r['Parameter']=='__PTB_CONFIG__']
     if len(full)>1:raise ValueError('m06_duplicate_snapshot')
     if full:return validate(json.loads(full[0]['Value']))
-    c=defaults();points={};overrides={}
-    for row in rows:
-        n=row['Parameter']
-        if n=='__DURATION__':c['duration']=float(row['Time'])
-        elif n=='__VOWEL_INPUT__':c['sequence']=row['Value']
-        elif n in PARAM_DEFAULTS:
-            if row['Global'].lower() in ('true','1','yes'):overrides[n]=float(row['Value'])
-            else:points.setdefault(n,[]).append([float(row['Time']),float(row['Value'])])
-        else:raise ValueError('m06_unknown_parameter')
-    for n,curve in c['curves'].items():
-        curve['points']=sorted(points.get(n,[[0.,PARAM_DEFAULTS[n][0]],[c['duration'],PARAM_DEFAULTS[n][0]]]))
-        curve['override']=overrides.get(n)
-    return validate(c)
+    raise ValueError('m06_legacy_parameters_need_revision')

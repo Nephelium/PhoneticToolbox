@@ -2,7 +2,13 @@ import {test} from 'node:test';import assert from 'node:assert/strict';import {r
 import {parseWav,selection,envelope} from '../src/platform/wav.ts';import {modules,groups} from '../src/app/registry.ts';
 const bytes=readFileSync(new URL('../src/assets/SYN-EGG-44100.wav',import.meta.url));
 const buffer=()=>bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength) as ArrayBuffer;
-test('P04 keeps all 15 module IDs and groups',()=>{assert.equal(new Set(modules.map(m=>m.id)).size,15);assert.equal(groups.length,3);assert.equal(modules.find(m=>m.id==='M03')?.title,'EGG 信号分析');});
+test('new modules preserve all original workspace IDs and remain in visible groups',()=>{
+ const original=['参数估计','参数显示','EGG 信号分析','LPC 谱图','唇形提取','语音合成','发声类型合成','变速变调','语谱图转音频','声道工作台','MFA 自动标注','语音标注对齐','普通话转 IPA','音系归纳','感知实验'];
+ original.forEach((title,i)=>{const m=modules.find(m=>m.id===`M${String(i+1).padStart(2,'0')}`);assert.equal(m?.title,title);assert.equal(m?.group,Math.floor(i/5));});
+ assert.equal(new Set(modules.map(m=>m.id)).size,17);assert.equal(groups.length,3);
+ assert.equal(modules.find(m=>m.id==='M16')?.group,0);assert.equal(modules.find(m=>m.id==='M17')?.group,2);
+ for(const module of modules)assert.ok(groups[module.group],`${module.id} must have a visible navigation group`);
+});
 test('real public stereo fixture retains samples, timing and channel order',()=>{
  const a=parseWav(buffer(),'fixture');assert.equal(a.sampleRate,44100);assert.equal(a.frames,35280);assert.equal(a.duration,.8);assert.equal(a.channels.length,2);
  const phase=2*Math.PI*120/44100;

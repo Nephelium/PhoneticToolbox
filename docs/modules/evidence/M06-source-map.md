@@ -1,5 +1,7 @@
 # M06 来源与操作映射
 
+**2026-10-02 更新：** [M06-R2](../../testing/2026-10-02-m06-r2-report.md) 已获授权直接修复科研行为。新增源校准与 AH、AV 0–80、20 kHz 内部率、声源关闭/噪声 FIR，移除归一化/AGC 与 HNR→AH 映射，预设保持 F0 形状。配置 m06/2，计算 klatt/2；旧逐位断言保留作为差异证据。以下 2026-09-27 记录是原样迁移的历史状态，不能作为当前计算说明。
+
 日期：2026-09-27。当前直接来源为相邻 `../PhoneticToolbox_v2`，未修改原文件或研究语料。对应原说明书 `Phonetic_Export/index.html` 4.1–4.5。状态按 [验收报告](../../testing/m06-report.md) 的平台范围读取。
 
 ## 六组功能逐项对应
@@ -38,3 +40,9 @@
 | `Phonetic_Export\index.html` | `a46c984929bcd8073ff1daf4e6b382a6685d4ca19e0fee0e29de3ecf0fb39ad5` |
 
 完整 acoustic 源文件 hash 与数组 shape/hash 在 `tests/fixtures/m06/v2.json`。MIT 许可随核心 wheel 打包为 `synthesis/klatt/LICENSE`，未把上游观测 commit 误作 V2 实际引入版本。
+
+## 2026-10-02 M06-R1 更新
+
+当前 UI 操作以 [M06-R1 报告](../../testing/2026-10-02-m06-r1-report.md) 和 [最新版说明](../../manual/speech-synthesis.md) 为准：辅音规则与右侧重复参数导出入口按用户要求移除，完整结果参数仍随音频目录导出。曲线覆盖中文化、参考共振峰、统一时间域与固定高度均属于交互改动。
+
+[AV 核查](../../references/m06-av-audit-2026-10-02.md) 已证实旧版噪声前级与所核查 tdklatt 上游不同，AV/HNR 映射、0 dB 声源语义和能量提取存在科学解释问题。本轮科研核心不变，原样迁移证据不等于标准 Klatt 校准或感知有效性证明。

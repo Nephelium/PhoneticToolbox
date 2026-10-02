@@ -4,9 +4,31 @@ import platform as host
 import sys
 
 
+def _windows_process_architecture():
+    """Query Windows when sanitized launchers omit processor environment fields."""
+    import ctypes
+    from ctypes import wintypes
+    class SystemInfo(ctypes.Structure):
+        _fields_ = [('architecture', wintypes.WORD), ('reserved', wintypes.WORD),
+                    ('page_size', wintypes.DWORD), ('minimum_address', ctypes.c_void_p),
+                    ('maximum_address', ctypes.c_void_p), ('processor_mask', ctypes.c_size_t),
+                    ('processor_count', wintypes.DWORD), ('processor_type', wintypes.DWORD),
+                    ('allocation_granularity', wintypes.DWORD), ('processor_level', wintypes.WORD),
+                    ('processor_revision', wintypes.WORD)]
+    info = SystemInfo()
+    query = ctypes.WinDLL('kernel32').GetSystemInfo
+    query.argtypes = [ctypes.POINTER(SystemInfo)]
+    query.restype = None
+    query(ctypes.byref(info))
+    return {9: 'x86_64', 12: 'arm64'}.get(info.architecture, '')
+
+
 def resolve_libraries(root, *, platform=None, arch=None):
     platform=sys.platform if platform is None else platform
-    arch=(host.machine() if arch is None else arch).lower()
+    detected=host.machine() if arch is None else arch
+    if arch is None and not detected and platform=='win32' and sys.platform=='win32':
+        detected=_windows_process_architecture()
+    arch=detected.lower()
     arch={'amd64':'x86_64','aarch64':'arm64'}.get(arch,arch)
     names={
         'win32':('VocalTractLabApi.dll','VocalTractLabAnalysis.dll','geometry_p2.dll'),

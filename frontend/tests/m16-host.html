@@ -1,0 +1,6 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><title>M16 isolated synthetic-device verification</title></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';import {initializePlatform} from '/src/platform/desktop.ts';import '/src/design/tokens.css';import {installPageZoom} from '/src/state/pageZoom.ts';
+const callbacks={};async function send(channel,body){const response=await fetch('/__m16_host',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({channel,body:JSON.parse(body)})});return response.text();}
+window.qt={webChannelTransport:{}};window.QWebChannel=class{constructor(_,ready){ready({objects:{files:{invoke:(body,reply)=>void send('invoke',body).then(reply),previewReady:{connect:f=>callbacks.preview=f},taskReady:{connect:f=>callbacks.task=f},task:(id,body)=>void send('task',body).then(raw=>callbacks.task(id,raw)),recordingReady:{connect:f=>callbacks.recording=f},recording:(id,body)=>void send('recording',body).then(raw=>callbacks.recording(id,raw))}}});}};
+installPageZoom();await initializePlatform();location.hash='M16';const {default:Shell}=await import('/src/app/AppShell.vue');createApp({render:()=>h(Shell)}).mount('#app');
+</script></body></html>

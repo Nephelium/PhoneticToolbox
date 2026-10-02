@@ -2,16 +2,16 @@
 import { computed,ref,onMounted,onUnmounted } from 'vue';import type { Workspace } from '../state/workspace.ts';import { envelope,selection,positionSelection } from '../platform/wav.ts';
 import SpectrogramViewport from './SpectrogramViewport.vue';import type {Spectrogram,SpectrogramView} from '../platform/research.ts';
 import {playback,isCurrentAudio} from '../state/audio.ts';import {amplitudeLimit,amplitudeLabel,sampleWavePath} from '../platform/waveform.ts';
-const props=withDefaults(defineProps<{state:Workspace;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;spectrogramSelectable?:boolean;maxWindowSeconds?:number;compactOverview?:boolean;overviewTop?:boolean;hideOverviewControls?:boolean;autoAmplitude?:boolean;normalizeDisplay?:boolean;clickMovesSelection?:boolean;selectionRequiresShift?:boolean;doubleClickAction?:'zoom'|'annotation';shiftWheelPan?:boolean;continuousDetail?:boolean;trackHeight?:number;hideTimeAxis?:boolean}>(),{autoAmplitude:true,continuousDetail:true});let anchor:number|null=null,anchorX=0,selectionLength=0,dragged=false,boundaryDrag=false;
+const props=withDefaults(defineProps<{state:Workspace;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;spectrogramSelectable?:boolean;maxWindowSeconds?:number;compactOverview?:boolean;overviewTop?:boolean;hideOverviewControls?:boolean;autoAmplitude?:boolean;normalizeDisplay?:boolean;clickMovesSelection?:boolean;selectionRequiresShift?:boolean;doubleClickAction?:'zoom'|'annotation';shiftWheelPan?:boolean;continuousDetail?:boolean;trackHeight?:number;hideTimeAxis?:boolean;timelineDuration?:number}>(),{autoAmplitude:true,continuousDetail:true});let anchor:number|null=null,anchorX=0,selectionLength=0,dragged=false,boundaryDrag=false;
 const emit=defineEmits<{'selection-end':[start:number,end:number];'time-double-click':[time:number,ctrl:boolean];'boundary-start':[event:PointerEvent,time:number,tolerance:number];'boundary-move':[event:PointerEvent,time:number];'boundary-end':[]}>();
 const viewport=ref<HTMLElement>(),width=ref(800);let observer:ResizeObserver;
 onMounted(()=>{observer=new ResizeObserver(entries=>{width.value=Math.max(100,Math.min(4096,Math.round(entries[0].contentRect.width)));});if(viewport.value)observer.observe(viewport.value);});
 onUnmounted(()=>observer?.disconnect());
-const duration=computed(()=>props.state.asset?.duration||0);const windowLength=computed(()=>duration.value/props.state.zoom);
+const duration=computed(()=>props.timelineDuration??props.state.asset?.duration??0);const windowLength=computed(()=>duration.value/props.state.zoom);
 const minZoom=computed(()=>Math.max(1,duration.value/(props.maxWindowSeconds??Infinity)));
 const left=computed(()=>Math.min(props.state.offset,Math.max(0,duration.value-windowLength.value)));
 const indices=computed(()=>{const a=props.state.asset;if(!a)return [];const selected=Math.min(props.state.channel,a.channels.length-1);return props.state.showBoth&&a.channels.length>1?[0,selected===0?1:selected]:[selected];});
-const tracks=computed(()=>indices.value.map(index=>{const asset=props.state.asset!,start=left.value*asset.sampleRate,end=(left.value+windowLength.value)*asset.sampleRate,points=envelope(asset.channels[index],start,end,width.value,asset.peaks?.[index]),limit=props.normalizeDisplay?Math.max(1e-20,points.reduce((peak,[lo,hi])=>Math.max(peak,Math.abs(lo),Math.abs(hi)),0))*37/40.5:props.autoAmplitude?amplitudeLimit(points):1;return {index,points,limit,detail:props.continuousDetail?sampleWavePath(asset.channels[index],start,end,limit,width.value):null};}));
+const tracks=computed(()=>indices.value.map(index=>{const asset=props.state.asset!,start=left.value*asset.sampleRate,end=(left.value+windowLength.value)*asset.sampleRate,points=envelope(asset.channels[index],start,end,width.value,asset.peaks?.[index]),limit=props.normalizeDisplay?Math.max(1e-20,points.reduce((peak,[lo,hi])=>Math.max(peak,Math.abs(lo),Math.abs(hi)),0))*37/40.5:props.autoAmplitude?amplitudeLimit(points):1;return {index,points,limit,span:Math.max(0,Math.min(end,asset.channels[index].length)-start)/(end-start),detail:props.continuousDetail?sampleWavePath(asset.channels[index],start,end,limit,width.value):null};}));
 function path(points:[number,number][],limit:number) {return points.map(([lo,hi],i)=>`M${i/Math.max(1,points.length-1)*1000},${45-hi/limit*37}V${45-lo/limit*37}`).join(' ');}
 function x(t:number){return Math.max(0,Math.min(1000,(t-left.value)/windowLength.value*1000));}
 function time(event:MouseEvent){const box=(event.currentTarget as Element).getBoundingClientRect();return left.value+Math.max(0,Math.min(1,(event.clientX-box.left)/box.width))*windowLength.value;}
@@ -26,12 +26,12 @@ function down(event:PointerEvent){
 }
 function move(event:PointerEvent){if(boundaryDrag){emit('boundary-move',event,time(event));return;}if(anchor!==null){
   if(Math.abs(event.clientX-anchorX)>=3)dragged=true;
-  if(!props.clickMovesSelection||dragged)[props.state.start,props.state.end]=selection(anchor,time(event),duration.value);
+  if(!props.clickMovesSelection||dragged)[props.state.start,props.state.end]=selection(anchor,time(event),props.state.asset?.duration??0);
 }}
 function up(event:PointerEvent){
   if(boundaryDrag){emit('boundary-move',event,time(event));boundaryDrag=false;emit('boundary-end');return;}
   if(anchor===null)return;move(event);
-  if(props.clickMovesSelection&&!dragged)[props.state.start,props.state.end]=positionSelection(anchor,selectionLength>0?selectionLength:Math.min(.5,duration.value),duration.value);
+  if(props.clickMovesSelection&&!dragged)[props.state.start,props.state.end]=positionSelection(anchor,selectionLength>0?selectionLength:Math.min(.5,duration.value),props.state.asset?.duration??0);
   anchor=null;emit('selection-end',props.state.start,props.state.end);
 }
 function cancel(){anchor=null;if(boundaryDrag){boundaryDrag=false;emit('boundary-end');}}
@@ -67,7 +67,7 @@ function wheel(event:WheelEvent){
 <svg viewBox="0 0 1000 90" preserveAspectRatio="none" role="img" :tabindex="doubleClickAction==='annotation'?0:undefined" :data-start="left" :data-end="left+windowLength" :style="trackHeight?{height:trackHeight+'px'}:undefined" :aria-label="'声道 '+(track.index+1)+' 原始波形；拖动选择时间范围'" @wheel="wheel" @dblclick="double" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="cancel">
 <path d="M0 45H1000" class="wave-baseline"/>
 <rect :x="x(state.start)" y="0" :width="Math.max(0,x(state.end)-x(state.start))" height="90" class="wave-selection"/>
-<path :d="track.detail??path(track.points,track.limit)" :data-mode="track.detail?'samples':'envelope'" class="wave-line"/>
+<path :d="track.detail??path(track.points,track.limit)" :transform="track.detail?undefined:`scale(${track.span},1)`" :data-mode="track.detail?'samples':'envelope'" class="wave-line"/>
 <slot name="annotations" :x="x" :start="left" :end="left+windowLength"/>
 <path v-if="state.asset&&isCurrentAudio(state.asset,state.channel)&&playback.position>=left&&playback.position<=left+windowLength" :d="`M${x(playback.position)} 0V90`" class="playback-cursor"/>
 </svg>

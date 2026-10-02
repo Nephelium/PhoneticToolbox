@@ -61,16 +61,50 @@ class Bridge(QObject):
     vocalReady=pyqtSignal(str,str)
     previewReady=pyqtSignal(str,str)
     taskReady=pyqtSignal(str,str)
+    recordingReady=pyqtSignal(str,str)
     def __init__(self,provider,service,window,*,test_dialog=False):
         super().__init__(window);self.provider,self.service,self.window=provider,service,window
         self.test_dialog=test_dialog
         self.preview_lock=threading.Lock()
         self.task_lock=threading.Lock()
+        self.recording_lock=threading.Lock()
+        self._recording_bridge=None
         from .task_bridge import TaskBridge
         self.tasks=TaskBridge(provider,service)
         self.vocal_slots=threading.BoundedSemaphore(12)
         from .vocal_tract.files import VocalFiles
         self.vocal_files=VocalFiles()
+
+    def recording_bridge(self):
+        # Created on the Qt thread, including its native directory picker.
+        if self._recording_bridge is None:
+            from .m16_bridge import M16Bridge
+            self._recording_bridge=M16Bridge(parent=self.window)
+        return self._recording_bridge
+
+    def close_recording(self):
+        try:return self._recording_bridge is None or self._recording_bridge.close()
+        except Exception:return False
+
+    @pyqtSlot(str,str)
+    def recording(self,request_id,raw):
+        if len(request_id)>64:return
+        try:
+            if len(raw)>3_000_000:raise ValueError('录音请求超过大小限制。')
+            body=json.loads(raw)
+            if not isinstance(body,dict) or not isinstance(body.get('op'),str):raise ValueError('录音请求格式无效。')
+            recording=self.recording_bridge()
+        except Exception as exc:
+            self.recordingReady.emit(request_id,json.dumps({'ok':False,'error':str(exc)},ensure_ascii=False));return
+        if not self.recording_lock.acquire(False):
+            self.recordingReady.emit(request_id,json.dumps({'ok':False,'error':'录音操作正在收尾，请稍后重试。'},ensure_ascii=False));return
+        def work():
+            try:result={'ok':True,'value':recording.dispatch(body)}
+            except Exception as exc:result={'ok':False,'error':str(exc)}
+            finally:self.recording_lock.release()
+            try:self.recordingReady.emit(request_id,json.dumps(result,ensure_ascii=False,allow_nan=False))
+            except RuntimeError:pass
+        threading.Thread(target=work,daemon=True).start()
 
     @pyqtSlot(str,str)
     def vocal(self,request_id,raw):
@@ -155,9 +189,15 @@ class Bridge(QObject):
                 health=self.service.get('/api/v1/health')
                 value={'kind':'desktop','session':self.provider.session,'api_version':health['api_version'],'tasks':bool(self.service.local_files_root)}
             elif op=='m05_media':
+                if self._recording_bridge is not None and self._recording_bridge.capturing:
+                    raise FileAccessError('录音模块正在使用输入设备，请先停止录音或录前检测。')
                 value=self.window.m05_media.arm()
             elif op=='m05_media_status':
                 value=self.window.m05_media.status()
+            elif op=='m16_choose':
+                purpose=body.get('purpose')
+                if purpose not in ('new','open','export'):raise FileAccessError('不支持的录音目录选择。')
+                value=self.recording_bridge().choose(purpose)
             elif op=='fonts':
                 from PyQt6.QtGui import QFontDatabase
                 value=sorted(QFontDatabase.families())
@@ -238,7 +278,7 @@ class Workbench(QMainWindow):
         self.channel.registerObject('files',self.bridge);self.page.setWebChannel(self.channel)
         self.page.windowCloseRequested.connect(self.accept_close)
         self.setCentralWidget(self.view)
-        self.view.load(QUrl('ptbapp://app/index.html'+('#M10' if start_module=='M10' else '')))
+        self.view.load(QUrl('ptbapp://app/index.html'+('#'+start_module if start_module in {'M10','M16','M17'} else '')))
 
     def fit_screen(self,screen=None,*,initial=False):
         screen=screen or self.screen()
@@ -258,10 +298,10 @@ class Workbench(QMainWindow):
     def save_download(self,download):
         # Only renderer-generated supported artifacts from this owned page.
         name=Path(download.suggestedFileName()).name
-        if download.page()!=self.page or download.url().scheme()!='blob' or not name.lower().endswith(('.svg','.png','.textgrid','.lip.json','.json','.csv','.xlsx')):
+        if download.page()!=self.page or download.url().scheme()!='blob' or not name.lower().endswith(('.svg','.png','.textgrid','.lip.json','.json','.csv','.xlsx','.txt')):
             download.cancel();return
         options=QFileDialog.Option.DontUseNativeDialog if self.bridge.test_dialog else QFileDialog.Option(0)
-        title,filter=('保存标注','Praat 标注 (*.TextGrid)') if name.lower().endswith('.textgrid') else ('保存安全唇形','安全唇形 (*.lip.json)') if name.lower().endswith('.lip.json') else ('保存实验文件','实验文件 (*.json *.csv *.xlsx)') if name.lower().endswith(('.json','.csv','.xlsx')) else ('保存图像','图像 (*.svg *.png)')
+        title,filter=('保存文本','UTF-8 文本 (*.txt)') if name.lower().endswith('.txt') else ('保存标注','Praat 标注 (*.TextGrid)') if name.lower().endswith('.textgrid') else ('保存安全唇形','安全唇形 (*.lip.json)') if name.lower().endswith('.lip.json') else ('保存实验文件','实验文件 (*.json *.csv *.xlsx)') if name.lower().endswith(('.json','.csv','.xlsx')) else ('保存图像','图像 (*.svg *.png)')
         selected=QFileDialog.getSaveFileName(self,title,name,filter,options=options)[0]
         if not selected:download.cancel();return
         target=Path(selected);download.setDownloadDirectory(str(target.parent));download.setDownloadFileName(target.name);download.accept()
@@ -270,6 +310,10 @@ class Workbench(QMainWindow):
     def closeEvent(self,event):
         if not self.closing:
             event.ignore();self.page.triggerAction(QWebEnginePage.WebAction.RequestClose);return
+        if not self.bridge.close_recording():
+            self.closing=False;event.ignore()
+            QMessageBox.warning(self,'录音尚未安全保存','录音收尾或工程保存失败。窗口继续保留，请回到录音页处理后再关闭。')
+            return
         self.bridge.vocal_files.close();self.vocal.close();self.provider.close();self.service.close();event.accept()
 
 
@@ -279,4 +323,5 @@ def run(dist,**options):
     window=Workbench(dist,**options)
     app.aboutToQuit.connect(window.service.close);app.aboutToQuit.connect(window.provider.close)
     app.aboutToQuit.connect(window.vocal.close)
+    app.aboutToQuit.connect(window.bridge.close_recording)
     window.show();code=app.exec();window.page.deleteLater();app.processEvents();return code

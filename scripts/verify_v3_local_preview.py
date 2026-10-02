@@ -168,6 +168,11 @@ def verify(bundle, out, natural_manifest=None):
             if natural and i==10:continue
             js('[...document.querySelectorAll("nav button")].find(b=>b.textContent.includes(' + json.dumps(title) + '))?.click()')
             wait('!!document.querySelector(' + json.dumps(selector) + ')')
+            if i == 10:
+                # A visible iframe alone must not conceal a failed native startup.
+                state = window.vocal.invoke('status')
+                assert isinstance(state, dict) and not state.get('active'), state
+                report['m10_native_startup'] = dict(ready=True, playback_active=False)
             if i == 12:
                 # Exercise the class update that displaced the blue resize line.
                 report['annotation_boundaries'] = []
@@ -194,6 +199,8 @@ def verify(bundle, out, natural_manifest=None):
             report['pages'].append(dict(title=title,geometry=geometry) if natural else title)
             if natural:assert geometry['mainScroll']<=geometry['mainHeight']+2, (title,geometry)
             print(f'Verified {mode} page:', i, flush=True)
+        from verify_m16_m17_frozen import verify as verify_local_modules
+        verify_local_modules(window, out, report)
         if natural:
             # Exercise the delivered Qt PNG action, not just the worker's PNG bytes.
             from PyQt6.QtWidgets import QFileDialog

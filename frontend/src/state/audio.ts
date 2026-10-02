@@ -1,5 +1,6 @@
 import { reactive,shallowRef,toRaw } from 'vue';
 import type { AudioAsset } from '../platform/types.ts';
+import {assertPlaybackAllowed} from '../platform/capture-lease.ts';
 export const playback=reactive({playing:false,position:0,volume:0.7,error:''});
 const currentAudio=shallowRef<{asset:AudioAsset;channel:number}>();
 export function isCurrentAudio(asset:AudioAsset|null,selectedChannel:number){return !!asset&&currentAudio.value?.asset===toRaw(asset)&&currentAudio.value?.channel===selectedChannel;}
@@ -20,6 +21,7 @@ export function seek(asset:AudioAsset,position:number,start:number,end:number,se
 export async function play(asset:AudioAsset,start:number,end:number,selectedChannel:number){
   pause();const request=generation;playback.error='';playback.position=Math.max(0,start);currentAudio.value={asset:toRaw(asset),channel:selectedChannel};
   try {
+    assertPlaybackAllowed();
     context??=new AudioContext();await context.resume();
     if(request!==generation)return;
     if(context.state!=='running')throw Error('音频设备未就绪，请重新点击播放。');

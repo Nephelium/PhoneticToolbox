@@ -40,7 +40,7 @@ def main():
         runtimes['PTB_M11_COMPONENT_ROOT'] = str(mfa_root)
     config = dict(kind='local-only-preview', source_commit=subprocess.check_output(
         ['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(), runtimes=runtimes,
-        portable=False, modules='M01-M15; per-module validation remains separate')
+        portable=False, modules='M01-M17; per-module validation remains separate')
     (snapshot / 'local-preview.json').write_text(json.dumps(config, indent=2), encoding='utf-8')
     args = [sys.executable, '-m', 'PyInstaller', '--noconfirm', '--onefile', '--windowed',
             '--name', name, '--distpath', str(destination), '--workpath', str(work / 'pyinstaller'),
@@ -67,6 +67,12 @@ def main():
              (ROOT / 'phonetic_toolbox/core/acoustic/reaper.exe', 'resources/research'),
              (ROOT / 'tests/fixtures/m14/public.xlsx', 'preview-fixtures'),
              (ROOT / 'tests/fixtures/m03/EGG-SYN-PCM16.npz', 'preview-fixtures')]
+    # The M17 help embeds these texts; retain standalone license files as well.
+    for filename in ('OFL-PTBIPAPlus.txt', 'OFL-Noto.txt'):
+        target = snapshot / 'ipa-plus-licenses' / filename
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / 'frontend/src/assets/ipa-plus' / filename, target)
+        data.append((target, 'third_party/licenses/ipa-plus'))
     for source, target in data:
         args += ['--add-data', str(source) + ';' + target]
     for package in ('ptb_worker', 'ptb_api', 'ptb_desktop', 'phonetic_core', 'uvicorn'):

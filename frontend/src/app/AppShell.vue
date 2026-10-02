@@ -16,6 +16,12 @@ import {defineAsyncComponent,h} from 'vue';
 import ModuleStatus from '../components/ModuleStatus.vue';
 const PerceptionPage=defineAsyncComponent({loader:()=>import('../modules/perception/PerceptionPage.vue'),loadingComponent:{setup:()=>()=>h(ModuleStatus,{kind:'loading',message:'正在载入感知实验…'})},errorComponent:{setup:()=>()=>h(ModuleStatus,{kind:'error',message:'感知实验资源载入失败，请检查连接后重开标签。'})}});
 const m15Page=ref<{save:()=>Promise<boolean>}>();const m15Dirty=ref(false),m15Focus=ref(false);
+const RecordingPage=defineAsyncComponent({loader:()=>import('../modules/recording/RecordingPage.vue'),loadingComponent:{setup:()=>()=>h(ModuleStatus,{kind:'loading',message:'正在载入录音工作台…'})},errorComponent:{setup:()=>()=>h(ModuleStatus,{kind:'error',message:'录音工作台载入失败，请重新打开标签。'})}});
+const IpaPlusPage=defineAsyncComponent({loader:()=>import('../modules/ipa-plus/IpaPlusPage.vue'),loadingComponent:{setup:()=>()=>h(ModuleStatus,{kind:'loading',message:'正在载入国际音标表…'})},errorComponent:{setup:()=>()=>h(ModuleStatus,{kind:'error',message:'音标与字体资源载入失败，请重新打开标签。'})}});
+const m16Page=ref<{save:()=>Promise<boolean>;beforeClose:()=>Promise<boolean>;isRecording:()=>boolean}>();
+const m17Page=ref<{save:()=>Promise<boolean>}>();
+const m16Dirty=ref(false),m16Recording=ref(false),m17Dirty=ref(false);
+function recordingChanged(value:boolean){m16Recording.value=value;if(value)stop();}
 const PhonologyInductionPage=defineAsyncComponent(()=>import('../modules/phonology-induction/PhonologyInductionPage.vue'));
 const m14Page=ref<{save:()=>boolean}>();const m14Dirty=ref(false);
 const LipExtractionPage=defineAsyncComponent(()=>import('../modules/lip-extraction/LipExtractionPage.vue'));
@@ -55,9 +61,9 @@ const m12Page=ref<{save:()=>Promise<boolean>}>();
 const m02Page=ref<{save:()=>boolean}>();
 const m13Page=ref<{save:()=>boolean}>();
 const m13Dirty=ref(false);
-const moduleDirty=(id:string)=>id==='settings'?settingsDirty.value:id==='M05'?m05Dirty.value:id==='M11'?m11Dirty.value:id==='M15'?m15Dirty.value:id==='M14'?m14Dirty.value:id==='M13'?m13Dirty.value:id==='M10'?m10Dirty.value:id==='M01'?dirty(m01.value):!!states[previewKey(id)]?.dirty;
-const recordingEntry=location.hash==='#M10';
-const active=ref(recordingEntry?'M10':'home'),tabs=ref<string[]>(recordingEntry?['home','M10']:['home']),query=ref('');const collapsed=ref(host.projects.read('collapsed',false));
+const moduleDirty=(id:string)=>id==='settings'?settingsDirty.value:id==='M16'?m16Dirty.value||m16Recording.value:id==='M17'?m17Dirty.value:id==='M05'?m05Dirty.value:id==='M11'?m11Dirty.value:id==='M15'?m15Dirty.value:id==='M14'?m14Dirty.value:id==='M13'?m13Dirty.value:id==='M10'?m10Dirty.value:id==='M01'?dirty(m01.value):!!states[previewKey(id)]?.dirty;
+const initialModule=modules.find(m=>location.hash==='#'+m.id)?.id;
+const active=ref(initialModule??'home'),tabs=ref<string[]>(initialModule?['home',initialModule]:['home']),query=ref('');const collapsed=ref(host.projects.read('collapsed',false));
 type Theme='system'|'light'|'dark';const savedTheme=host.projects.read<string>('theme','system');const theme=ref<Theme>(['system','light','dark'].includes(savedTheme)?savedTheme as Theme:'system');
 const system=matchMedia('(prefers-color-scheme: dark)');const applyTheme=()=>{if(m15Focus.value)return;document.documentElement.dataset.theme=theme.value==='system'?(system.matches?'dark':'light'):theme.value;};
 watch(m15Focus,v=>{if(!v)applyTheme();});
@@ -66,11 +72,20 @@ system.addEventListener('change',applyTheme);onUnmounted(()=>system.removeEventL
 const storedRecent=host.projects.read<unknown>('recent',[]);const recent=ref((Array.isArray(storedRecent)?storedRecent:[]).filter(id=>modules.some(m=>m.id===id)).slice(0,5));
 const current=computed(()=>modules.find(m=>m.id===active.value));const visible=computed(()=>modules.filter(m=>(m.title+' '+m.description+' '+m.id).toLowerCase().includes(query.value.trim().toLowerCase())));
 const modal=ref(''),closing=ref(''),notice=ref(''),closingBusy=ref(false);const referencesId=ref<string|undefined>();
-function open(id:string){if(m15Focus.value)return;stop();if(!tabs.value.includes(id))tabs.value.push(id);active.value=id;void nextTick(()=>document.getElementById('tab-'+id)?.scrollIntoView({block:'nearest',inline:'nearest'}));if(modules.some(m=>m.id===id)){if(id!=='M01')workspace(previewKey(id));recent.value=[id,...recent.value.filter(x=>x!==id)].slice(0,5);host.projects.write('recent',recent.value);}}
-function remove(id:string){stop();if(id==='settings')settingsDirty.value=false;if(id==='M05')m05Dirty.value=false;if(id==='M11')m11Dirty.value=false;if(id==='M15'){m15Dirty.value=false;m15Focus.value=false;}if(id==='M14')m14Dirty.value=false;if(id==='M13')m13Dirty.value=false;if(id==='M10')m10Dirty.value=false;const index=tabs.value.indexOf(id);tabs.value=tabs.value.filter(x=>x!==id);if(id==='M01')forgetM01(researchContext.value.key);else if(modules.some(m=>m.id===id))delete states[previewKey(id)];if(active.value===id)active.value=tabs.value[Math.max(0,index-1)];closing.value='';void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
-function close(id:string){notice.value='';if(moduleDirty(id))closing.value=id;else remove(id);}
-async function saveClose(){if(closing.value==='settings'){if(closingBusy.value)return;closingBusy.value=true;try{if(await settingsPage.value?.save())remove('settings');else notice.value='字体未能应用，设置和编辑已保留。请检查字体设置后重试。';}finally{closingBusy.value=false;}return;}if(closing.value==='M07'){if(m07Page.value?.save())remove('M07');else notice.value='发声连续统草稿未保存，请完成或取消当前操作。';return;}if(closing.value==='M05'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m05Page.value?.save())remove('M05');else notice.value='录制或结果尚未保存，请返回唇形模块处理。';}finally{closingBusy.value=false;}return;}if(closing.value==='M11'){if(m11Page.value?.save())remove('M11');else notice.value='MFA 参数未保存，请等待当前操作完成。';return;}if(closing.value==='M15'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m15Page.value?.save())remove('M15');else notice.value='请先暂停实验、保存项目，并导出结果后确认文件已保存。';}finally{closingBusy.value=false;}return;}if(closing.value==='M06'){if(m06Page.value?.save())remove('M06');else notice.value='语音合成参数未保存，标签和编辑仍保留。';return;}if(closing.value==='M14'){if(m14Page.value?.save())remove('M14');else notice.value='音系归纳草稿保存失败，请完成当前操作或检查本机存储。';return;}if(closing.value==='M08'){if(m08Page.value?.save())remove('M08');else notice.value='变速变调草稿保存失败，标签和编辑仍保留。';return;}if(closing.value==='M13'){if(m13Page.value?.save())remove('M13');else notice.value='普通话转 IPA 草稿保存失败，当前文本和排版仍保留。请检查本机存储后重试。';return;}if(closing.value==='M12'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m12Page.value?.save())remove('M12');else notice.value='标注或唇偏保存失败，编辑仍保留。请返回模块检查错误。';}finally{closingBusy.value=false;}return;}if(closing.value==='M04'){if(m04Page.value?.save())remove('M04');else notice.value='LPC 参数草稿无效或保存失败，请返回模块检查。';return;}if(closing.value==='M03'){if(m03Page.value?.save())remove('M03');else notice.value='参数草稿保存失败，标签和编辑仍保留。请检查本机存储后重试。';return;}if(closing.value==='M02'){if(m02Page.value?.save())remove('M02');return;}if(closing.value==='M10'){notice.value='请返回关键帧，保存或取消正在编辑的姿势后再关闭。';return;}if(closing.value==='M01'&&m01.value.drawer){notice.value='请先应用或取消参数/设置对话框中的编辑，再保存关闭。';return;}if(closing.value==='M01'?saveM01(researchContext.value.key):saveDraft(previewKey(closing.value)))remove(closing.value);else notice.value='本机草稿保存失败，标签仍保留。请检查浏览器存储权限。';}
-async function leaveProject(){if(closingBusy.value||m15Focus.value)return;closingBusy.value=true;try{if(settingsDirty.value&&!await settingsPage.value?.save())return;if(moduleDirty('M07')&&!m07Page.value?.save())return;if(moduleDirty('M05')&&!await m05Page.value?.save())return;if(moduleDirty('M11')&&!m11Page.value?.save())return;if(moduleDirty('M15')&&!await m15Page.value?.save())return;if(moduleDirty('M06')&&!m06Page.value?.save())return;if(moduleDirty('M14')&&!m14Page.value?.save())return;if(moduleDirty('M08')&&!m08Page.value?.save())return;if(m12Page.value&&!await m12Page.value.save())return;emit('leaveProject');}finally{closingBusy.value=false;}}
+function open(id:string){if(m15Focus.value)return;stop();if(!tabs.value.includes(id))tabs.value.push(id);active.value=id;void nextTick(()=>document.getElementById('tab-'+id)?.scrollIntoView({block:'nearest',inline:'nearest'}));if(modules.some(m=>m.id===id)){if(!['M01','M16','M17'].includes(id))workspace(previewKey(id));recent.value=[id,...recent.value.filter(x=>x!==id)].slice(0,5);host.projects.write('recent',recent.value);}}
+function remove(id:string){stop();if(id==='M16'){m16Dirty.value=false;m16Recording.value=false;}if(id==='M17')m17Dirty.value=false;if(id==='settings')settingsDirty.value=false;if(id==='M05')m05Dirty.value=false;if(id==='M11')m11Dirty.value=false;if(id==='M15'){m15Dirty.value=false;m15Focus.value=false;}if(id==='M14')m14Dirty.value=false;if(id==='M13')m13Dirty.value=false;if(id==='M10')m10Dirty.value=false;const index=tabs.value.indexOf(id);tabs.value=tabs.value.filter(x=>x!==id);if(id==='M01')forgetM01(researchContext.value.key);else if(modules.some(m=>m.id===id))delete states[previewKey(id)];if(active.value===id)active.value=tabs.value[Math.max(0,index-1)];closing.value='';void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
+async function finishRecordingClose(){
+ if(closingBusy.value)return;
+ closingBusy.value=true;notice.value='';
+ try{if((!m16Page.value&&!moduleDirty('M16'))||await m16Page.value?.beforeClose())remove('M16');else notice.value='录音或工程尚未保存，请返回录音页处理。';}
+ catch(error){notice.value=error instanceof Error?error.message:'录音保存失败，页面仍保留。';}
+ finally{closingBusy.value=false;}
+}
+function close(id:string){notice.value='';if(id==='M16'){closing.value=id;if(!moduleDirty(id))void finishRecordingClose();return;}if(moduleDirty(id))closing.value=id;else remove(id);}
+async function discardClose(){if(closing.value==='M16'){await finishRecordingClose();return;}remove(closing.value);}
+
+async function saveClose(){if(closing.value==='M16'){await finishRecordingClose();return;}if(closing.value==='M17'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m17Page.value?.save())remove('M17');else notice.value='音标草稿保存失败，文本仍保留。';}catch(error){notice.value=error instanceof Error?error.message:'音标草稿保存失败。';}finally{closingBusy.value=false;}return;}if(closing.value==='settings'){if(closingBusy.value)return;closingBusy.value=true;try{if(await settingsPage.value?.save())remove('settings');else notice.value='字体未能应用，设置和编辑已保留。请检查字体设置后重试。';}finally{closingBusy.value=false;}return;}if(closing.value==='M07'){if(m07Page.value?.save())remove('M07');else notice.value='发声连续统草稿未保存，请完成或取消当前操作。';return;}if(closing.value==='M05'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m05Page.value?.save())remove('M05');else notice.value='录制或结果尚未保存，请返回唇形模块处理。';}finally{closingBusy.value=false;}return;}if(closing.value==='M11'){if(m11Page.value?.save())remove('M11');else notice.value='MFA 参数未保存，请等待当前操作完成。';return;}if(closing.value==='M15'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m15Page.value?.save())remove('M15');else notice.value='请先暂停实验、保存项目，并导出结果后确认文件已保存。';}finally{closingBusy.value=false;}return;}if(closing.value==='M06'){if(m06Page.value?.save())remove('M06');else notice.value='语音合成参数未保存，标签和编辑仍保留。';return;}if(closing.value==='M14'){if(m14Page.value?.save())remove('M14');else notice.value='音系归纳草稿保存失败，请完成当前操作或检查本机存储。';return;}if(closing.value==='M08'){if(m08Page.value?.save())remove('M08');else notice.value='变速变调草稿保存失败，标签和编辑仍保留。';return;}if(closing.value==='M13'){if(m13Page.value?.save())remove('M13');else notice.value='普通话转 IPA 草稿保存失败，当前文本和排版仍保留。请检查本机存储后重试。';return;}if(closing.value==='M12'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m12Page.value?.save())remove('M12');else notice.value='标注或唇偏保存失败，编辑仍保留。请返回模块检查错误。';}finally{closingBusy.value=false;}return;}if(closing.value==='M04'){if(m04Page.value?.save())remove('M04');else notice.value='LPC 参数草稿无效或保存失败，请返回模块检查。';return;}if(closing.value==='M03'){if(m03Page.value?.save())remove('M03');else notice.value='参数草稿保存失败，标签和编辑仍保留。请检查本机存储后重试。';return;}if(closing.value==='M02'){if(m02Page.value?.save())remove('M02');return;}if(closing.value==='M10'){notice.value='请返回关键帧，保存或取消正在编辑的姿势后再关闭。';return;}if(closing.value==='M01'&&m01.value.drawer){notice.value='请先应用或取消参数/设置对话框中的编辑，再保存关闭。';return;}if(closing.value==='M01'?saveM01(researchContext.value.key):saveDraft(previewKey(closing.value)))remove(closing.value);else notice.value='本机草稿保存失败，标签仍保留。请检查浏览器存储权限。';}
+async function leaveProject(){if(closingBusy.value||m15Focus.value)return;closingBusy.value=true;try{if(m16Page.value&&!await m16Page.value.beforeClose())return;if(moduleDirty('M17')&&!await m17Page.value?.save())return;if(settingsDirty.value&&!await settingsPage.value?.save())return;if(moduleDirty('M07')&&!m07Page.value?.save())return;if(moduleDirty('M05')&&!await m05Page.value?.save())return;if(moduleDirty('M11')&&!m11Page.value?.save())return;if(moduleDirty('M15')&&!await m15Page.value?.save())return;if(moduleDirty('M06')&&!m06Page.value?.save())return;if(moduleDirty('M14')&&!m14Page.value?.save())return;if(moduleDirty('M08')&&!m08Page.value?.save())return;if(m12Page.value&&!await m12Page.value.save())return;emit('leaveProject');}finally{closingBusy.value=false;}}
 function refs(id?:string){referencesId.value=id;modal.value='references';}
 function tabKey(event:KeyboardEvent){let n=tabs.value.indexOf(active.value);if(event.key==='ArrowRight')n=(n+1)%tabs.value.length;else if(event.key==='ArrowLeft')n=(n-1+tabs.value.length)%tabs.value.length;else if(event.key==='Home')n=0;else if(event.key==='End')n=tabs.value.length-1;else return;event.preventDefault();open(tabs.value[n]);void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
 function beforeUnload(event:BeforeUnloadEvent){if(dirty(m01.value)||tabs.value.some(id=>moduleDirty(id))){event.preventDefault();event.returnValue='';}}
@@ -129,9 +144,10 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 </div>
 </div>
 <button v-if="research" class="project-return" :title="'返回项目与文件管理 · '+research.label" :disabled="closingBusy" @click="leaveProject">← 返回项目与文件管理 · {{research.label}}</button>
-<span v-else class="host-badge">{{host.kind==='desktop'?'本地桌面':'浏览器预览'}}</span>
+<button v-if="m16Recording" class="host-badge recording-indicator" aria-label="录音进行中，返回录音" @click="open('M16')">● 录音进行中</button>
+<span v-if="!research" class="host-badge">{{host.kind==='desktop'?'本地桌面':'浏览器预览'}}</span>
 </header>
-<main id="main-content" :class="{'pane-workspace':['M01','M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15'].includes(active)}" tabindex="-1" role="tabpanel" :aria-labelledby="'tab-'+active">
+<main id="main-content" :class="{'pane-workspace':['M01','M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15','M16','M17'].includes(active)}" tabindex="-1" role="tabpanel" :aria-labelledby="'tab-'+active">
 <div v-if="active==='home'" class="home-page">
 <header class="welcome">
 <div class="welcome-copy">
@@ -148,7 +164,7 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 </header>
 <div class="section-title">
 <h2>全部工具</h2>
-<span>15 个工具 · 3 个研究环节</span>
+<span>{{modules.length}} 个工具 · {{groups.length}} 个研究环节</span>
 </div>
 <div class="tool-groups">
 <section v-for="(group,index) in groups" :key="group" class="tool-group" :class="'group-'+index">
@@ -196,7 +212,7 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 </footer>
 </div>
 <ParameterEstimationPage v-else-if="current?.id==='M01'" :key="researchContext.key" :context="researchContext" @references="refs('M01')"/>
-<WorkspaceView v-else-if="current&&!['M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15'].includes(current.id)" :key="current.id" :module="current" :state-key="previewKey(current.id)" @references="refs(current?.id)"/>
+<WorkspaceView v-else-if="current&&!['M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15','M16','M17'].includes(current.id)" :key="current.id" :module="current" :state-key="previewKey(current.id)" @references="refs(current?.id)"/>
 <ParameterDisplayPage v-if="tabs.includes('M02')" v-show="active==='M02'" ref="m02Page" :key="researchContext.key+':M02'" :active="active==='M02'" :context="researchContext" :state-key="previewKey('M02')" @references="refs('M02')" @close="close('M02')"/>
 <AnnotationPage v-if="tabs.includes('M12')" v-show="active==='M12'" ref="m12Page" :key="researchContext.key+':M12'" :active="active==='M12'" :context="researchContext" :state-key="previewKey('M12')" @references="refs('M12')" @close="close('M12')"/>
 <EggAnalysisPage v-if="tabs.includes('M03')" v-show="active==='M03'" ref="m03Page" :key="researchContext.key+':M03'" :active="active==='M03'" :context="researchContext" :state-key="previewKey('M03')" @references="refs('M03')" @close="close('M03')"/>
@@ -209,6 +225,8 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 <MfaAlignmentPage v-if="tabs.includes('M11')" v-show="active==='M11'" ref="m11Page" :key="researchContext.key+':M11'" :state-key="previewKey('M11')" :context="researchContext" :active="active==='M11'" @references="refs('M11')" @dirty="m11Dirty=$event"/>
 <PhonologyInductionPage v-if="tabs.includes('M14')" v-show="active==='M14'" ref="m14Page" :key="researchContext.key+':M14'" :state-key="previewKey('M14')" :context="researchContext" :active="active==='M14'" @references="refs('M14')" @dirty="m14Dirty=$event"/>
 <MandarinIpaPage v-if="tabs.includes('M13')" v-show="active==='M13'" ref="m13Page" :key="researchContext.key+':M13'" :state-key="previewKey('M13')" @references="refs('M13')" @dirty="m13Dirty=$event"/>
+<RecordingPage v-if="tabs.includes('M16')" v-show="active==='M16'" ref="m16Page" :state-key="'local:M16'" :active="active==='M16'" @dirty="m16Dirty=$event" @recording="recordingChanged" @references="refs('M16')"/>
+<IpaPlusPage v-if="tabs.includes('M17')" v-show="active==='M17'" ref="m17Page" :state-key="'local:M17'" :active="active==='M17'" @dirty="m17Dirty=$event" @references="refs('M17')"/>
 <PerceptionPage v-if="tabs.includes('M15')" v-show="active==='M15'" ref="m15Page" :active="active==='M15'" @dirty="m15Dirty=$event" @focus="m15Focus=$event" @references="refs('M15')"/>
 <VocalTractPage :state-key="previewKey('M10')" v-if="tabs.includes('M10')" v-show="active==='M10'" :active="active==='M10'" @references="refs('M10')" @close="close('M10')" @dirty="m10Dirty=$event"/>
 <ModuleFrame v-if="tabs.includes('settings')" v-show="active==='settings'" label="工作台设置" class="utility-page"><h3>外观</h3>
@@ -225,18 +243,20 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 </ModuleFrame>
 <HelpPage v-if="tabs.includes('help')" v-show="active==='help'"/>
 </main>
-<div v-if="current&&!['M03','M04','M05','M06','M07','M08','M10','M11','M12','M13','M14','M15'].includes(current.id)" class="global-transport">
+<div v-if="current&&!['M03','M04','M05','M06','M07','M08','M10','M11','M12','M13','M14','M15','M16','M17'].includes(current.id)" class="global-transport">
 <AudioTransport :state="current.id==='M01'?m01.wave:workspace(previewKey(current.id))" :active="true"/>
 </div>
 <div class="statusbar">
 <span>
-<span class="status-dot"/>{{current?.id==='M05'?'唇形 · 本地候选预览与 legacy 离线任务':current?.id==='M11'?'MFA · 音频与已有文本强制对齐':current?.id==='M15'?'感知实验 · 客户端运行与本地恢复':current?.id==='M01'?'参数估计 · 文件、试听与任务':current?.id==='M02'?'参数显示 · 原帧与多图窗':current?.id==='M03'?'EGG · 接触商与声门事件':current?.id==='M07'?'发声连续统 · LPC 残差与持久任务':current?.id==='M06'?'语音合成 · 参数曲线与持久任务':current?.id==='M08'?'变速变调 · 持久任务与结果':current?.id==='M04'?'LPC · 线性预测谱包络':current?.id==='M09'?'语谱图重建 · 近似相位恢复':current?.id==='M10'?'声道工作台 · VTL 2.4':current?.id==='M12'?'标注对齐 · TextGrid 与唇偏独立保存':current?.id==='M14'?'音系归纳 · 字表、归并与三文件导出':current?.id==='M13'?'普通话转 IPA · 本地逐字映射与离线导出':current?'公共预览就绪 · 分析功能待接入':'就绪 · 选择工具开始'}}</span>
-<span>{{research?'当前账号的项目资源':'本机文件 · 无自动上传'}}</span>
+<span class="status-dot"/>{{current?.id==='M16'?'录音 · 本机采集与可恢复编辑':current?.id==='M17'?'国际音标 Plus · 本地输入与固定字体':current?.id==='M05'?'唇形 · 本地候选预览与 legacy 离线任务':current?.id==='M11'?'MFA · 音频与已有文本强制对齐':current?.id==='M15'?'感知实验 · 客户端运行与本地恢复':current?.id==='M01'?'参数估计 · 文件、试听与任务':current?.id==='M02'?'参数显示 · 原帧与多图窗':current?.id==='M03'?'EGG · 接触商与声门事件':current?.id==='M07'?'发声连续统 · LPC 残差与持久任务':current?.id==='M06'?'语音合成 · 参数曲线与持久任务':current?.id==='M08'?'变速变调 · 持久任务与结果':current?.id==='M04'?'LPC · 线性预测谱包络':current?.id==='M09'?'语谱图重建 · 近似相位恢复':current?.id==='M10'?'声道工作台 · VTL 2.4':current?.id==='M12'?'标注对齐 · TextGrid 与唇偏独立保存':current?.id==='M14'?'音系归纳 · 字表、归并与三文件导出':current?.id==='M13'?'普通话转 IPA · 本地逐字映射与离线导出':current?'公共预览就绪 · 分析功能待接入':'就绪 · 选择工具开始'}}</span>
+<span>{{research&&!['M16','M17'].includes(active)?'当前账号的项目资源':'本机文件 · 无自动上传'}}</span>
 </div>
 </div>
 </div>
-<ModalDialog v-if="closing" :title="closing==='settings'?'应用字体设置？':closing==='M15'?'保存实验与导出结果？':closing==='M12'?'保存标注修改？':closing==='M13'?'保存转换草稿？':'保存参数草稿？'" :close-disabled="closingBusy" @close="closing=''">
-<p v-if="closing==='settings'">字体编辑尚未应用。可以应用并关闭，或放弃本次字体编辑。主题和页面缩放已即时保存。</p>
+<ModalDialog v-if="closing" :title="closing==='M16'?'保存录音工程并关闭？':closing==='M17'?'保存音标草稿？':closing==='settings'?'应用字体设置？':closing==='M15'?'保存实验与导出结果？':closing==='M12'?'保存标注修改？':closing==='M13'?'保存转换草稿？':'保存参数草稿？'" :close-disabled="closingBusy" @close="closing=''">
+<p v-if="closing==='M16'">关闭前会停止录音并保存工程。原始录音与已有版本保留；保存失败时继续留在本页。</p>
+<p v-else-if="closing==='M17'">音标文本或布局尚未保存到本机草稿。保存失败时保留当前编辑，可返回页面复制文本。</p>
+<p v-else-if="closing==='settings'">字体编辑尚未应用。可以应用并关闭，或放弃本次字体编辑。主题和页面缩放已即时保存。</p>
 <p v-else-if="closing==='M12'">标注或唇形偏移尚未保存。标注写入 _自动保存，唇偏单独保存；任一失败将保留当前编辑。</p>
 <p v-else-if="closing==='M13'">文本、多音选择或排版尚未保存。保存草稿会将这些内容留在本机，导出图片请在模块中操作。</p>
 <p v-else-if="closing==='M15'">配置、刺激与结果保存在当前浏览器设备中；请显式导出结果文件并确认保存，再关闭标签。</p>
@@ -245,8 +265,8 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 <p v-if="notice" role="alert">{{notice}}</p>
 <template #footer>
 <button :disabled="closingBusy" @click="closing=''">取消关闭</button>
-<button :disabled="closingBusy" @click="remove(closing)">{{closing==='settings'?'放弃字体编辑并关闭':closing==='M12'?'放弃修改并关闭':'放弃草稿并关闭'}}</button>
-<button class="primary" :disabled="closingBusy" @click="saveClose">{{closingBusy?'正在保存…':closing==='settings'?'应用字体并关闭':closing==='M12'?'保存修改并关闭':'保存草稿并关闭'}}</button>
+<button v-if="closing!=='M16'" :disabled="closingBusy" @click="discardClose">{{closing==='settings'?'放弃字体编辑并关闭':closing==='M12'?'放弃修改并关闭':'放弃草稿并关闭'}}</button>
+<button class="primary" :disabled="closingBusy" @click="saveClose">{{closingBusy?'正在保存…':closing==='M16'?'停止并保存工程后关闭':closing==='settings'?'应用字体并关闭':closing==='M12'?'保存修改并关闭':'保存草稿并关闭'}}</button>
 </template>
 </ModalDialog>
 <ModalDialog v-if="modal" :title="modalTitle" :wide="modal==='references'" @close="modal=''">
@@ -270,3 +290,6 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 <MethodReferences v-else-if="modal==='references'" :module-id="referencesId"/>
 </ModalDialog>
 </template>
+<style scoped>
+.recording-indicator {color:var(--danger,#b63838);border:1px solid currentColor;border-radius:6px;background:var(--panel);white-space:nowrap;cursor:pointer;}
+</style>

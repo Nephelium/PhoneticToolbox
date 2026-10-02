@@ -1,4 +1,4 @@
-import {dark} from './theme.js';
+import {dark,themeColor} from './theme.js';
 import * as THREE from 'three';
 import {OrbitControls} from './vendor/OrbitControls.js';
 import {planeSegments,stitch,oralMesh,connectedAirway,nasalOutlet,sectionPaths,airwayGuide,displayLips} from './geometry.mjs';
@@ -12,7 +12,7 @@ export class VocalTractViewer{
   constructor(viewport,onDrag,{onStart=()=>{},onEnd=()=>{},onSelect=()=>{}}={}){
     Object.assign(this,{el:viewport,onDrag,onStart,onEnd,onSelect,sagittal:true,focused:true,labels:true,showHead:true,showNose:true,showTeeth:false,mode:'organs',selected:'tongue',zoom:1,pan:[0,0],state:null});
     this.svg=el('svg',{class:'sagittal-canvas','aria-label':'正中矢状截面'});viewport.append(this.svg);
-    this.renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,preserveDrawingBuffer:true});this.renderer.setPixelRatio(Math.min(devicePixelRatio,2));this.renderer.localClippingEnabled=true;this.renderer.setClearColor(dark()?0x192d39:0xf5f3eb,1);this.renderer.toneMapping=THREE.ACESFilmicToneMapping;viewport.append(this.renderer.domElement);
+    this.renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,preserveDrawingBuffer:true});this.renderer.setPixelRatio(Math.min(devicePixelRatio,2));this.renderer.localClippingEnabled=true;this.renderer.setClearColor(themeColor('--panel'),1);this.renderer.toneMapping=THREE.ACESFilmicToneMapping;viewport.append(this.renderer.domElement);
     this.scene=new THREE.Scene();this.camera=new THREE.PerspectiveCamera(34,1,.1,200);this.orbit=new OrbitControls(this.camera,this.renderer.domElement);this.orbit.enableDamping=true;this.orbit.minDistance=12;this.orbit.maxDistance=90;
     this.scene.add(new THREE.HemisphereLight(0xfff9ed,0x627c74,2));for(const [power,pos] of [[2,[10,20,25]],[1.5,[-15,8,-15]]]){const light=new THREE.DirectionalLight(0xfff9eb,power);light.position.set(...pos);this.scene.add(light);}
     this.halfPlane=new THREE.Plane(new THREE.Vector3(0,0,-1),0);this.meshes=new Map();this.controls=new Map();this.raycaster=new THREE.Raycaster();this.dragPlane=new THREE.Plane(new THREE.Vector3(0,0,1),0);
@@ -86,8 +86,8 @@ export class VocalTractViewer{
     this.svg.setAttribute('viewBox',[cx-w/2,-cy-h/2,w,h].join(' '));this.svg.replaceChildren();
     const defs=el('defs');defs.innerHTML='<linearGradient id="tongueFill" x2="0.2" y2="1"><stop stop-color="#e0adab"/><stop offset="1" stop-color="#b9797c"/></linearGradient>';this.svg.append(defs);
     const layer=el('g',{'stroke-linejoin':'round','stroke-linecap':'round'});this.svg.append(layer);
-    if(this.showHead)this.add(layer,this.headContour,{fill:'#eadfcd',stroke:'#d4c8b5','stroke-width':.03,opacity:.43},true);
-    const air=this.mode==='airway',overlay=this.mode==='overlay',airFill=air?'#a8d1c3':overlay?'#dce9df':'#fffdf6',tissueOpacity=air?.15:1;
+    if(this.showHead)this.add(layer,this.headContour,{fill:themeColor(dark()?'--muted':'--line'),stroke:themeColor('--line'),'stroke-width':.03,opacity:.43,'data-role':'head-outline'},true);
+    const air=this.mode==='airway',overlay=this.mode==='overlay',airFill=air?'#a8d1c3':overlay?'#dce9df':themeColor('--panel'),tissueOpacity=air?.15:1;
     if(this.showNose&&this.nosePaths)layer.append(el('path',{d:this.nosePaths.map(p=>path(p,false)).join(' '),fill:air||overlay?'#a8d1c3':'#eff2e8','fill-opacity':air?.9:.4,'fill-rule':'evenodd',stroke:'#72a394','stroke-width':.035,'stroke-dasharray':'.09 .06','data-role':'nasal-reference','data-registration':'nasal/3'}));
     if(this.showNose&&this.airData.connector){const lines=sectionPaths(this.airData.connector);layer.append(el('path',{d:lines.map(p=>path(p,true)).join(' '),fill:air||overlay?'#a8d1c3':'#eff2e8',stroke:'#91ac9d','stroke-width':.025,'fill-rule':'evenodd','data-role':'nasopharyngeal-connection'}));}
     layer.append(el('path',{d:this.airPaths.map(p=>path(p,true)).join(' '),fill:airFill,stroke:'#91ac9d','stroke-width':.035,'fill-rule':'evenodd','data-role':'midsagittal-airway'}));
@@ -142,7 +142,7 @@ export class VocalTractViewer{
     this.style3D();
   }
   style3D(){
-    this.needsRender=true;this.renderer.setClearColor(dark()?0x192d39:0xf5f3eb,1);
+    this.needsRender=true;this.renderer.setClearColor(themeColor('--panel'),1);
     if(!this.state)return;const air=this.mode==='airway',overlay=this.mode==='overlay';
     for(const [name,mesh] of this.meshes){const cover=name.includes('cover');mesh.visible=name==='uvula'?false:name.includes('teeth')?this.showTeeth:!air;
       mesh.material.clippingPlanes=cover||name==='tongue'?[this.halfPlane]:[];mesh.material.transparent=air||overlay||cover;mesh.material.opacity=air?.12:cover?.2:overlay?.64:1;mesh.material.depthWrite=!mesh.material.transparent;
@@ -151,7 +151,7 @@ export class VocalTractViewer{
     if(this.softPalate){for(const mesh of [this.softPalate,this.palateSection]){mesh.visible=true;mesh.material.clippingPlanes=mesh===this.softPalate?[this.halfPlane]:[];mesh.material.transparent=overlay;mesh.material.opacity=overlay?.72:1;}}
     if(this.airway){const opacities=air?[1,1,1]:overlay?[.25,.5,.65]:[.025,.10,0];this.airway.material.forEach((m,i)=>{m.opacity=opacities[i];m.transparent=!air;m.depthWrite=air;});}
     if(this.tongueSection){this.tongueSection.visible=!air;this.tongueSection.material.transparent=overlay;this.tongueSection.material.opacity=overlay?.64:1;this.tongueSection.material.depthWrite=!overlay;}
-    if(this.head){this.head.visible=this.showHead;this.head.material.color.set(dark()?0x91a3a2:0xc6bca6);}if(this.noseOutline)this.noseOutline.visible=this.showNose&&!air;
+    if(this.head){this.head.visible=this.showHead;this.head.material.color.set(themeColor('--muted'));}if(this.noseOutline)this.noseOutline.visible=this.showNose&&!air;
     const handles=this.handles();for(const [name,control] of this.controls){const h=handles.find(p=>p.name===name);control.mesh.visible=h.organ===this.selected;control.mesh.position.set(...h.p);control.label.textContent=h.label;control.label.hidden=!control.mesh.visible||!this.labels;}
   }
   orientation(){const compass=this.el.querySelector('.orientation');if(!compass)return;if(this.sagittal){compass.innerHTML='<span>上</span><div>后 ── 前</div><span>下</span>';return;}

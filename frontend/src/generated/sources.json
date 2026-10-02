@@ -479,7 +479,8 @@
       "M02",
       "M03",
       "M09",
-      "M10"
+      "M10",
+      "M17"
     ],
     "kind": "font",
     "acknowledgement_group": "software",
@@ -627,7 +628,8 @@
     "id": "SRC-SHEETJS",
     "title": "SheetJS",
     "modules": [
-      "M15"
+      "M15",
+      "M16"
     ],
     "kind": "bundled-client-library",
     "acknowledgement_group": "software",
@@ -657,7 +659,8 @@
     "id": "PKG-NUMPY",
     "title": "numpy",
     "modules": [
-      "shared-runtime"
+      "shared-runtime",
+      "M16"
     ],
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
@@ -678,7 +681,8 @@
     "id": "PKG-SCIPY",
     "title": "scipy",
     "modules": [
-      "shared-runtime"
+      "shared-runtime",
+      "M16"
     ],
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
@@ -809,7 +813,8 @@
     "id": "PKG-SOUNDDEVICE",
     "title": "sounddevice",
     "modules": [
-      "shared-runtime"
+      "shared-runtime",
+      "M16"
     ],
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
@@ -829,7 +834,8 @@
       "M09",
       "M12",
       "M01",
-      "M02"
+      "M02",
+      "M16"
     ],
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
@@ -5158,6 +5164,164 @@
     "urls": {
       "source": "https://scikit-image.org/docs/0.21.x/api/skimage.data.html#skimage.data.astronaut",
       "terms": "https://www.nasa.gov/nasa-brand-center/images-and-media/"
+    }
+  },
+  {
+    "id": "SRC-M16-VOICEVISTA",
+    "title": "VoiceVista egg_recorder 录音安全机制",
+    "modules": [
+      "M16"
+    ],
+    "kind": "reviewed-local-source",
+    "acknowledgement_group": "software",
+    "authors": "井井",
+    "version": "design-reviewed; no dynamic import; v3 implementation recording/1",
+    "license": "User-authored local source; public redistribution license not established",
+    "urls": {}
+  },
+  {
+    "id": "METHOD-M16-SPECTRAL-SUBTRACTION",
+    "title": "M16 噪声样本功率谱减法（自有实现）",
+    "modules": [
+      "M16"
+    ],
+    "kind": "original-method-implementation",
+    "acknowledgement_group": "academic",
+    "authors": "PhoneticToolbox project",
+    "version": "ptb-spectral-subtraction/1",
+    "license": "Project implementation; SciPy runtime license is separate",
+    "urls": {
+      "scipy_stft": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.stft.html",
+      "scipy_istft": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.istft.html"
+    }
+  },
+  {
+    "id": "M17-IPA-CHART",
+    "title": "International Phonetic Alphabet chart — 2026 reprint",
+    "modules": [
+      "M17"
+    ],
+    "kind": "reference-chart",
+    "acknowledgement_group": "academic",
+    "authors": "International Phonetic Association",
+    "version": "2026 reprint; 2015/2005 content",
+    "license": "CC BY-SA 4.0",
+    "urls": {
+      "homepage": "https://www.internationalphoneticassociation.org/content/ipa-chart",
+      "pdf": "https://www.internationalphoneticassociation.org/IPAcharts/common_files/pdfs/pdfs_IPA_charts_E/IPA_Kiel.pdf"
+    }
+  },
+  {
+    "id": "M17-EXTIPA-2025",
+    "title": "Extensions to the IPA — 2025 chart",
+    "modules": [
+      "M17"
+    ],
+    "kind": "reference-chart",
+    "acknowledgement_group": "academic",
+    "authors": "International Clinical Phonetics and Linguistics Association",
+    "version": "extIPA 2025",
+    "license": "CC BY-SA 3.0 as identified on ICPLA resources; original chart reproduction wording also recorded",
+    "urls": {
+      "homepage": "https://www.icpla.org.uk/resources"
+    }
+  },
+  {
+    "id": "M17-VOQS-BALL-2018",
+    "title": "Revisions to the VoQS system for the transcription of voice quality",
+    "modules": [
+      "M17"
+    ],
+    "kind": "academic-reference",
+    "acknowledgement_group": "academic",
+    "authors": "Martin J. Ball and John H. Esling and B. Craig Dickson",
+    "version": "VoQS revised to 2016",
+    "license": "Article/chart copyright retained by rights holders; no redistribution grant inferred",
+    "urls": {
+      "paper": "https://doi.org/10.1017/S0025100317000159",
+      "chart": "https://www.icpla.org.uk/resources"
+    }
+  },
+  {
+    "id": "M17-VOQS-ZH-UNTPHESOCA",
+    "title": "VoQS：音质符号（2016 中英双语版）",
+    "modules": [
+      "M17"
+    ],
+    "kind": "terminology-reference",
+    "acknowledgement_group": "academic",
+    "authors": "UntPhesoca (unt)",
+    "version": "2020 Chinese translation of 2016 chart",
+    "license": "Author's article/translation rights retained; terminology attributed, images/layout not bundled",
+    "urls": {
+      "article": "https://zhuanlan.zhihu.com/p/203037479"
+    }
+  },
+  {
+    "id": "M17-PTB-IPA-PLUS-FONT",
+    "title": "PTB IPA Plus 1.000 — module font derived from Doulos SIL 7.000",
+    "modules": [
+      "M17"
+    ],
+    "kind": "bundled-font",
+    "acknowledgement_group": "software",
+    "authors": "SIL Global; Noto authors; PhoneticToolbox contributors",
+    "version": "PTB IPA Plus 1.000 / Doulos SIL 7.000",
+    "license": "SIL Open Font License 1.1",
+    "urls": {
+      "upstream": "https://software.sil.org/doulos/",
+      "history": "https://software.sil.org/doulos/history/",
+      "noto_delimiters": "https://raw.githubusercontent.com/notofonts/noto-fonts/main/hinted/ttf/NotoSansMath/NotoSansMath-Regular.ttf",
+      "noto_license": "https://raw.githubusercontent.com/notofonts/noto-fonts/main/LICENSE"
+    }
+  },
+  {
+    "id": "M17-UNICODE-PHONETIC-ENCODING",
+    "title": "Unicode phonetic marks, VoQS glyph correction and cartouche encoding discussion",
+    "modules": [
+      "M17"
+    ],
+    "kind": "encoding-reference",
+    "acknowledgement_group": "academic",
+    "authors": "作者待核实",
+    "version": "Unicode references checked 2026-10-02",
+    "license": "References only; no Unicode documents bundled",
+    "urls": {
+      "chapter7": "https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-7/",
+      "voqs_correction": "https://www.unicode.org/L2/L2020/20113-voqs-correction.pdf",
+      "cartouche": "https://www.unicode.org/L2/L2024/24182r-cartouche.pdf",
+      "bridges": "https://software.sil.org/fonts/bridging-diacritics/"
+    }
+  },
+  {
+    "id": "M17-CIN-REFERENCE",
+    "title": "User-supplied ipa.cin lookup aliases",
+    "modules": [
+      "M17"
+    ],
+    "kind": "local-reference",
+    "acknowledgement_group": "software",
+    "authors": "作者待核实",
+    "version": "User supplied file checked 2026-10-02",
+    "license": "Original file provenance/license not established; original not bundled",
+    "urls": {
+      "unicode_mapping": "https://software.sil.org/doulos/history/"
+    }
+  },
+  {
+    "id": "M17-INTERACTIVE-LAYOUT-REFERENCE",
+    "title": "Interactive IPA chart — layout reference",
+    "modules": [
+      "M17"
+    ],
+    "kind": "design-reference",
+    "acknowledgement_group": "software",
+    "authors": "作者待核实",
+    "version": "No external implementation included",
+    "license": "No third-party code or assets copied",
+    "urls": {
+      "website": "https://www.ipachart.com/",
+      "alternative": "https://westonruter.github.io/ipa-chart/keyboard/"
     }
   }
 ]

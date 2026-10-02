@@ -1,9 +1,9 @@
 /* Shared host palette is delivered by the M10 platform port. */
-:root{--bg:#f3f6fb;--panel:#fff;--ink:#132a49;--muted:#566982;--line:#dce5f0;--green:#00787e;--serif:"Segoe UI","Microsoft YaHei",sans-serif}
-:root[data-theme=dark]{color-scheme:dark;--bg:#111b26;--panel:#182432;--ink:#e9f0f9;--muted:#a2b3c8;--line:#304154;--green:#7cdad4}
+:root{--bg:#f3f6fb;--panel:#ffffff;--ink:#132a49;--muted:#566982;--line:#dce5f0;--green:#00787e;--accent:#215bd6;--selected:#e4eeff;--serif:"Segoe UI","Microsoft YaHei",sans-serif}
+:root[data-theme=dark]{color-scheme:dark;--bg:#111b26;--panel:#182432;--ink:#e9f0f9;--muted:#a2b3c8;--line:#304154;--green:#7cdad4;--accent:#83b3ff;--selected:#24456f}
 body{padding:0 10px;background:var(--bg);color:var(--ink);grid-template-rows:42px minmax(0,1fr) 22px}
 .identity h1{font-size:17px}.identity p{display:none}.masthead{border-color:var(--line)}
-.workspace{padding-top:6px;gap:10px;grid-template-columns:minmax(320px,1fr) var(--panel-right,330px);min-height:0!important}.studio{min-height:0!important}#viewport{min-height:0!important}
+.workspace{padding-top:6px;gap:10px;grid-template-rows:minmax(0,1fr) 255px;grid-template-columns:minmax(320px,1fr) var(--panel-right,330px);min-height:0!important}.studio{min-height:0!important}#viewport{min-height:0!important}
 .inspector{overflow-y:auto;padding:4px 4px 8px;min-width:0;background:var(--bg)}.inspector-title{margin-bottom:4px}.inspector-tabs{position:sticky;top:0;z-index:5;background:var(--bg)}
 .parameter-group{padding:8px 0}.parameter-group .parameter{margin-top:7px}.group-title{font-size:12px}.history-actions{margin:5px 0}.edit-panel #editHint{font-size:10px;margin:4px 0}.root-mode{font-size:11px;display:block;padding:8px 0}
 .lip-width-panel{padding:8px 0}#lipFront{height:70px}.nasal-card{padding:8px!important}.nasal-safety{padding:8px 0;gap:4px}
@@ -22,11 +22,13 @@ body{padding:0 10px;background:var(--bg);color:var(--ink);grid-template-rows:42p
 :root[data-theme=dark] .selected,:root[data-theme=dark] [aria-selected=true]{background:#24456f!important;color:#e9f0f9!important}:root[data-theme=dark] .minor{color:var(--muted)}:root[data-theme=dark] .pose-name{color:var(--ink)}
 /* Scientific plots and reconstructed tissues share the host theme. */
 .charts canvas{border-radius:4px}
+/* Canvas backing-store pixels must not feed back into grid/flex sizing. */
+.analysis canvas{contain:size}
 
 .layout-picker{font-size:11px;display:flex;gap:5px;align-items:center}.layout-picker select{padding:4px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink)}
 .transport-bar{flex-wrap:wrap;margin:2px 0 8px;border:1px solid var(--line);border-radius:5px}.transport-bar button{font-size:11px;flex:1}.pose-card{cursor:pointer}.pose-card .pose-tools{flex-wrap:wrap;justify-content:flex-end}.pose-card .pose-tools button{font-size:9px;padding:2px 5px}.pose-card input{background:var(--panel);color:var(--ink)}
-html[data-columns=two] .workspace{grid-template-areas:"studio inspector" "analysis inspector"!important;grid-template-columns:minmax(320px,1fr) var(--panel-right,330px)!important;grid-template-rows:minmax(220px,1fr) 190px!important}
-html[data-columns=two] .studio{grid-area:studio!important}html[data-columns=two] .analysis{grid-area:analysis!important;overflow:auto;display:block}html[data-columns=two] .inspector{grid-area:inspector!important}
+html[data-columns=two] .workspace{grid-template-areas:"studio inspector" "analysis inspector"!important;grid-template-columns:minmax(320px,1fr) var(--panel-right,330px)!important;grid-template-rows:minmax(220px,1fr) 255px!important}
+html[data-columns=two] .studio{grid-area:studio!important}html[data-columns=two] .analysis{grid-area:analysis!important;overflow:auto;display:flex;flex-direction:column}html[data-columns=two] .inspector{grid-area:inspector!important}
 html[data-columns=two] .charts{display:grid;grid-template-columns:1fr 1fr .9fr;height:155px}html[data-columns=two] .charts>section{min-height:0;padding:8px}html[data-columns=two] .charts canvas{height:90px}html[data-columns=two] .charts .section-stage{height:100px}
 html[data-columns=three] .workspace{grid-template-areas:"studio analysis inspector"!important;grid-template-columns:minmax(320px,1fr) var(--panel-analysis,260px) var(--panel-right,330px)!important;grid-template-rows:minmax(0,1fr)!important;overflow-x:auto}
 html[data-columns=three] .studio{grid-area:studio!important}html[data-columns=three] .analysis{grid-area:analysis!important;overflow:auto;display:flex;flex-direction:column}html[data-columns=three] .inspector{grid-area:inspector!important}
@@ -35,14 +37,14 @@ html[data-columns=three] .charts{display:flex;flex-direction:column;height:auto;
 
 .view-toolbar{flex-wrap:wrap}.view-options{flex-wrap:wrap}.scene-heading{max-width:45%;color:#244b56}.scene-heading .eyebrow,.scene-heading p,.scene-foot{color:#586c72}
 .display-toolbar{background:var(--panel)}.display-toolbar>span{color:var(--muted)}
-#pitchCanvas{background:#fafbf7!important}#pitchDialog .pitch-dialog-header{color:var(--ink)}
+#pitchCanvas{background:var(--panel)!important}#pitchDialog .pitch-dialog-header{color:var(--ink)}
 html[data-columns=three] .analysis .charts>section{border-right:0;border-bottom:1px solid var(--line)}
 html[data-columns=three] .analysis .chart-heading{flex-wrap:wrap}
 
-:root[data-theme=dark] #viewport{background:radial-gradient(ellipse at 54% 43%,#213744,#142530)}
-:root[data-theme=dark] .charts canvas,:root[data-theme=dark] #pitchCanvas{background:#172a36!important}
+#viewport{background:var(--panel)}
+.charts canvas,#pitchCanvas{background:var(--panel)!important}
 :root[data-theme=dark] .scene-heading{color:#deebf0}:root[data-theme=dark] .scene-heading .eyebrow,:root[data-theme=dark] .scene-heading p,:root[data-theme=dark] .scene-foot{color:#a8bec7}
-:root[data-theme=dark] #lipFront{background:#172a36}:root[data-theme=dark] .control-labels span{background:#203744dd;color:#acdcd0}
+#lipFront{background:var(--panel)}:root[data-theme=dark] .control-labels span{background:#203744dd;color:#acdcd0}
 :root[data-theme=dark] .group-title,:root[data-theme=dark] .keyframe-actions{color:#bacdd8}
 :root[data-theme=dark] #lipFront path{fill:#27404c}
 :root[data-theme=dark] #monitorDialog,:root[data-theme=dark] #aboutDialog,:root[data-theme=dark] .segmented,:root[data-theme=dark] #motionHud{background:var(--panel);color:var(--ink);border-color:var(--line)}
@@ -66,3 +68,17 @@ select,textarea{font-family:var(--sans)}.ipa,.preset-ipa,#presets button,.pose-n
 
 /* Module name and closing remain in the parent workspace tabs. */
 .masthead{justify-content:flex-end}.top-actions{flex-wrap:wrap}.workspace.resizable-panels{position:relative}
+
+/* M10 appearance repair: use the same blue-white / blue-gray surfaces as U2.
+   Tissue and airway colors retain their scientific display roles. */
+.analysis,.segmented,select,#monitorDialog{background:var(--panel);color:var(--ink);border-color:var(--line)}
+button:hover{background:var(--selected)}
+.segmented .selected,.mode-switch .selected,.analysis-tabs .selected,.side-regions .selected,.inspector-tabs button[aria-selected=true]{background:var(--selected);color:var(--accent);box-shadow:none}
+.inspector-tabs button[aria-selected=true]{box-shadow:inset 0 -2px var(--accent)}
+.scene-heading{color:var(--ink)}.scene-heading .eyebrow,.scene-heading p,.scene-foot,.orientation,#editHint,#parameterGroups .group-title,.plot-label{color:var(--muted)}
+.control-labels span,:root[data-theme=dark] .control-labels span{background:var(--panel);color:var(--green)}
+/* Switching changes only the content inside the analysis panel. */
+.analysis[data-view=monitor]>.charts{display:none!important}
+.analysis[data-view=acoustics]>.charts,.analysis[data-view=monitor]>#monitorHome{animation:analysis-appear .16s ease-out}
+@keyframes analysis-appear{from{opacity:.35}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.analysis[data-view]>.charts,.analysis[data-view]>#monitorHome{animation:none}}

@@ -6,6 +6,8 @@ import {m08Port} from './m08.ts';
 import {m14Port} from './m14.ts';
 import {m11Port} from './m11.ts';
 import {desktopM05} from './m05.ts';
+import {recordingPort,installRecordingPort} from './recording.ts';
+import {recordingRequests,type RecordingChannel} from './recording-requests.ts';
 import type {Grant} from '../modules/mfa/port.ts';
 import type { HostCapabilities } from './types.ts';
 import type { DirectoryGrant,ResearchFiles,Spectrogram,ResearchTasks } from './research.ts';
@@ -24,6 +26,10 @@ export async function initializePlatform(){
   if(hello.kind!=='desktop'||hello.api_version!=='1.1.0'||!hello.session)throw Error('桌面接口版本不匹配。');
   desktopSession=hello.session;
   desktopFontFamilies=()=>call<string[]>('fonts');
+  const recordingBridge=bridge as Bridge & Partial<RecordingChannel>;
+  if(recordingBridge.recording&&recordingBridge.recordingReady){
+    installRecordingPort(recordingPort(recordingRequests(recordingBridge as RecordingChannel),purpose=>call('m16_choose',{purpose})));
+  }
   const vocalBridge=bridge as Bridge & {vocal?:(id:string,body:string)=>void;vocalReady?:{connect:(callback:(id:string,raw:string)=>void)=>void}};
   if(vocalBridge.vocal&&vocalBridge.vocalReady){
     const requests=new Map<string,{resolve:(value:unknown)=>void;reject:(error:Error)=>void;timer:ReturnType<typeof setTimeout>}>();
@@ -34,7 +40,7 @@ export async function initializePlatform(){
   bridge.previewReady.connect((id,text)=>{const request=pending.get(id);if(!request)return;pending.delete(id);clearTimeout(request.timer);try{const data=JSON.parse(text);if(!data.ok)throw Error(data.error);request.resolve(data.value);}catch(e){request.reject(e instanceof Error?e:Error('语谱图读取失败。'));}});
   const taskPending=new Map<string,{resolve:(value:any)=>void;reject:(error:Error)=>void;timer:ReturnType<typeof setTimeout>}>();
   bridge.taskReady?.connect((id,text)=>{const request=taskPending.get(id);if(!request)return;taskPending.delete(id);clearTimeout(request.timer);try{const data=JSON.parse(text);if(!data.ok)throw Error(data.error);request.resolve(data.value);}catch(e){request.reject(e instanceof Error?e:Error('任务读取失败。'));}});
-  const task=serialRequests(<T>(body:unknown):Promise<T>=>new Promise((resolve,reject)=>{const id=crypto.randomUUID(),timer=setTimeout(()=>{taskPending.delete(id);reject(Error('任务操作超时，刷新批次可核对实际状态。'));},(body as {op?:string})?.op==='m11_component'?930000:300000);taskPending.set(id,{resolve,reject,timer});bridge.task(id,JSON.stringify(body));}));
+  const task=serialRequests(<T>(body:unknown):Promise<T>=>new Promise((resolve,reject)=>{const id=crypto.randomUUID(),timer=setTimeout(()=>{taskPending.delete(id);reject(Error('任务操作超时，刷新批次可核对实际状态。'));},(body as {op?:string})?.op==='m11_component'?930000:(body as {op?:string})?.op==='m05_save_finish'?650000:300000);taskPending.set(id,{resolve,reject,timer});bridge.task(id,JSON.stringify(body));}));
   const tasks:ResearchTasks={parent:file=>task({op:'parent',id:file.id}),submit:(operation,inputs,config,layer,key)=>task({op:'submit',operation,inputs:inputs.map(item=>Object.fromEntries(Object.entries(item).filter(([,v])=>v!=null).map(([role,file])=>[role,role==='parent_result'?file:(file as {id:string}).id]))),config,layer,idempotency_key:key}),
     reconstruct:(file,config,key)=>task({op:'reconstruct',id:file.id,config,key}),reconstructions:()=>task({op:'reconstructions'}),cancelJob:id=>task({op:'cancel_job',id}),saveJob:(id,directory)=>task({op:'save_job',id,directory}),
     egg:async(file,config,key)=>{const {exportFontSnapshot}=await import('../state/fonts.ts');return task({op:'egg',id:file.id,config:{...config,font:config.font??exportFontSnapshot()},key});},eggJobs:()=>task({op:'egg_jobs'}),eggFonts:font=>task({op:'egg_fonts',font}),

@@ -5,8 +5,8 @@ module.exports=async({page,open,click,idle,reports,evidence})=>{
  await open('语音合成','M06');const m6=page.locator('.m06-page');
  const names=await m6.locator('.parameter-list button').allTextContents();for(let i=0;i<names.length;i++){await m6.locator('.parameter-list button').nth(i).click();assert.equal(await m6.locator('.parameter-list button').nth(i).getAttribute('aria-pressed'),'true');}reports.M06.checks.push('all 23 parameter selectors and selected state');
  await m6.locator('.parameter-list button').first().click();
- for(const value of ['120','100,200,150','100；200；150','100,200;150']){await field('Override curve').fill(value);await click('应用覆盖');assert.equal(await m6.locator('[role=alert]').count(),0);await click('清除覆盖');}
- await field('Override curve').fill('invalid');await click('应用覆盖');assert(await m6.locator('[role=alert]').count());await field('Override curve').fill('');await click('清除覆盖');reports.M06.checks.push('constant/interpolated/segmented/fullwidth overrides, invalid rejection, clearing');
+ for(const value of ['120','100,200,150','100；200；150','100,200;150']){await field('曲线覆盖').fill(value);await click('应用覆盖');assert.equal(await m6.locator('[role=alert]').count(),0);await click('清除覆盖');}
+ await field('曲线覆盖').fill('invalid');await click('应用覆盖');assert(await m6.locator('[role=alert]').count());await field('曲线覆盖').fill('');await click('清除覆盖');reports.M06.checks.push('constant/interpolated/segmented/fullwidth overrides, invalid rejection, clearing');
  for(const preset of ['常态浊声','气声','嘎裂','耳语','假声']){await field('发声类型预设').selectOption({label:preset});await click('应用预设');await click('应用并覆盖');}reports.M06.checks.push('five preset selectors and confirmed application');
  await click('清空参数');await click('取消');await click('清空参数');await click('应用并覆盖');
  for(const name of ['元音规则','辅音规则','帮助']){await click(name);await page.getByRole('dialog').waitFor();await page.keyboard.press('Escape');assert.equal(await page.getByRole('dialog').count(),0);}reports.M06.checks.push('reset confirmation and cancellation, three help dialogs Escape');

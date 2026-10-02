@@ -1,5 +1,15 @@
 # PhoneticToolbox 3.0 · 开发工作台
 
+**2026-10-02 M16/M17 R2 EXE：** [本机试用启动文件](dist/PhoneticToolbox-v3-M16-M17-20261002-R2/PhoneticToolbox-v3-M16-M17-20261002-R2.exe) 已生成并通过成品检查：10项计算任务、15个既有页面、两新增模块8组及六布局、声道引擎真实初始化、419文件哈希、30子进程退出。录音默认双音频、EGG手选，音标页长例句码位已精简；截图中的启动弹窗原因已修正并复验。[成品报告](docs/testing/2026-10-02-m16-m17-exe-report.md)。先关闭旧版再启动；依赖本机既有独立科学环境，实体音频设备留待手验。
+
+**2026-10-02 M16 录音 / M17 国际音标 Plus：** 新增本地录音工程、可选任务与表格导入、实时波形/语谱、可恢复剪辑/降噪、重录及批量保存；默认双声道音频，EGG 手动指定。音标页三表横向重排、固定内置字体、500个输入入口、底部编辑与本机草稿，VoQS 的56个中文名采用井井指定的 UntPhesoca 译表并纳入引用。使用 [源码工作台入口](scripts/Start-M16-M17-Workbench.ps1)，见 [联合验证](docs/testing/2026-10-02-m16-m17-integration-report.md)、[录音手册](docs/manual/recording.md)、[音标手册](docs/manual/ipa-plus.md)。无需服务器处理音频或输入文本。Windows 开发态功能/实际Qt/Chrome 已分项验证，实体声卡/EGG与完整跨平台验收仍待；追加R2 EXE交付见上方。
+
+**2026-10-02 唇形提取 M05-R1：** 采集状态移至左栏，画面下均匀显示四曲线；离线完整帧回放、连续录制、MP4 + WAV 保存及 V2/下游参数读取已修复。见 [验证报告](docs/testing/2026-10-02-m05-r1-report.md) 与 [操作说明](docs/manual/lip-extraction.md)。从 [Start-M05-Workbench.ps1](scripts/Start-M05-Workbench.ps1) 使用最新源码，旧 EXE 未更新；物理设备同步和 Linux 媒体链仍待验证。
+
+**2026-10-02 M06-R2：** AV/AH 标尺与源开关已修复，五类预设保留 F0 曲线并支持整体平移/编辑/回切，详见[修复报告](docs/testing/2026-10-02-m06-r2-report.md)。新配置 m06/2，旧参数标尺明确拒绝；源码入口 Start-M06-Workbench，现有 EXE 未重打。
+
+**2026-10-02 语音合成 M06-R1：** 图窗同页、时间轴/元音边界对齐、参考共振峰与即时应用时长已修复，见 [验证报告](docs/testing/2026-10-02-m06-r1-report.md)。[AV 专项核查](docs/references/m06-av-audit-2026-10-02.md)明确历史标尺与标准 Klatt 的差异。开发入口 `scripts/Start-M06-Workbench.ps1`，EXE 未更新。
+
 2026-10-01 M03-R2：井井要求实时交互、四图手势/布局、总览显示和IF图窗，并追加暂时移除声门活动、高低通数值输入及默认低通2000 Hz。已完成限定Windows真实EGG录音、Chrome/实际Qt验证，见 [报告](docs/testing/2026-10-01-m03-r2-report.md) 与 [ADR](docs/decisions/ADR-M03-R2.md)。交互改为有界内存会话，正式导出保留任务；12组数值/字节对照、7项会话/HTTP、28项架构、15项前端状态、14组Chrome及Qt PNG保存通过。连续更新约0.13–0.22秒，首次仍需加载，未承诺固定延迟。Linux实时准入未开放，旧EXE未更新，未DDL/push/改V2或原音频。
 
 

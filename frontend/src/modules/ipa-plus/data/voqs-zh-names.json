@@ -1,0 +1,294 @@
+{
+  "source": "https://zhuanlan.zhihu.com/p/203037479",
+  "title": "VoQS：音质符号（2016 中英双语版）",
+  "author": "UntPhesoca / unt",
+  "translationYear": 2020,
+  "checkedOn": "2026-10-02",
+  "evidence": [
+    "用户提供的完整正文及双语图",
+    "output/validation/m17/zhihu-203037479-search.json",
+    "output/validation/m17/zhihu-203037479-supralarynx.json"
+  ],
+  "terms": [
+    {
+      "symbolId": "voqs-airstream-001",
+      "nameEn": "buccal airstream",
+      "nameZh": "颊气流"
+    },
+    {
+      "symbolId": "voqs-airstream-002",
+      "nameEn": "pulmonic ingressive speech",
+      "nameZh": "肺部吸气言语"
+    },
+    {
+      "symbolId": "voqs-airstream-003",
+      "nameEn": "oesophageal airstream",
+      "nameZh": "食管气流"
+    },
+    {
+      "symbolId": "voqs-airstream-004",
+      "nameEn": "tracheo-oesophageal speech",
+      "nameZh": "气管–食管言语"
+    },
+    {
+      "symbolId": "voqs-phonation-001",
+      "nameEn": "modal voice",
+      "nameZh": "常态浊声"
+    },
+    {
+      "symbolId": "voqs-phonation-002",
+      "nameEn": "falsetto",
+      "nameZh": "假声"
+    },
+    {
+      "symbolId": "voqs-phonation-003",
+      "nameEn": "whisper",
+      "nameZh": "耳语"
+    },
+    {
+      "symbolId": "voqs-phonation-004",
+      "nameEn": "creak",
+      "nameZh": "嘎裂"
+    },
+    {
+      "symbolId": "voqs-phonation-005",
+      "nameEn": "whispery voice",
+      "nameZh": "耳语声"
+    },
+    {
+      "symbolId": "voqs-phonation-006",
+      "nameEn": "creaky voice",
+      "nameZh": "嘎裂声"
+    },
+    {
+      "symbolId": "voqs-phonation-007",
+      "nameEn": "breathy voice",
+      "nameZh": "气声"
+    },
+    {
+      "symbolId": "voqs-phonation-008",
+      "nameEn": "harsh voice",
+      "nameZh": "糙声"
+    },
+    {
+      "symbolId": "voqs-phonation-009",
+      "nameEn": "whispery falsetto",
+      "nameZh": "耳语假声"
+    },
+    {
+      "symbolId": "voqs-phonation-010",
+      "nameEn": "creaky falsetto",
+      "nameZh": "嘎裂假声"
+    },
+    {
+      "symbolId": "voqs-phonation-011",
+      "nameEn": "harsh falsetto",
+      "nameZh": "糙假声"
+    },
+    {
+      "symbolId": "voqs-phonation-012",
+      "nameEn": "harsh creak",
+      "nameZh": "糙嘎裂"
+    },
+    {
+      "symbolId": "voqs-phonation-013",
+      "nameEn": "harsh whispery voice",
+      "nameZh": "糙耳语声"
+    },
+    {
+      "symbolId": "voqs-phonation-014",
+      "nameEn": "harsh creaky voice",
+      "nameZh": "糙嘎裂声"
+    },
+    {
+      "symbolId": "voqs-phonation-015",
+      "nameEn": "whispery creaky voice",
+      "nameZh": "耳语嘎裂声"
+    },
+    {
+      "symbolId": "voqs-phonation-016",
+      "nameEn": "harsh whispery creaky voice",
+      "nameZh": "糙耳语嘎裂声"
+    },
+    {
+      "symbolId": "voqs-phonation-017",
+      "nameEn": "whispery creaky falsetto",
+      "nameZh": "耳语嘎裂假声"
+    },
+    {
+      "symbolId": "voqs-phonation-018",
+      "nameEn": "harsh whispery creaky falsetto",
+      "nameZh": "糙耳语嘎裂假声"
+    },
+    {
+      "symbolId": "voqs-phonation-019",
+      "nameEn": "slack/lax voice",
+      "nameZh": "弛/松声"
+    },
+    {
+      "symbolId": "voqs-phonation-020",
+      "nameEn": "pressed phonation/tight voice",
+      "nameZh": "挤喉发声/紧声"
+    },
+    {
+      "symbolId": "voqs-phonation-021",
+      "nameEn": "ventricular phonation",
+      "nameZh": "室襞性发声"
+    },
+    {
+      "symbolId": "voqs-phonation-022",
+      "nameEn": "diplophonia",
+      "nameZh": "复音"
+    },
+    {
+      "symbolId": "voqs-phonation-023",
+      "nameEn": "whispery ventricular phonation",
+      "nameZh": "耳语室襞性发声"
+    },
+    {
+      "symbolId": "voqs-phonation-024",
+      "nameEn": "aryepiglottic phonation",
+      "nameZh": "杓状会厌襞性发声"
+    },
+    {
+      "symbolId": "voqs-phonation-025",
+      "nameEn": "spasmodic dysphonia",
+      "nameZh": "痉挛性发声障碍"
+    },
+    {
+      "symbolId": "voqs-phonation-026",
+      "nameEn": "electrolarynx phonation",
+      "nameZh": "电子喉发声"
+    },
+    {
+      "symbolId": "voqs-larynx-001",
+      "nameEn": "raised-larynx voice",
+      "nameZh": "喉位偏高声"
+    },
+    {
+      "symbolId": "voqs-larynx-002",
+      "nameEn": "lowered-larynx voice",
+      "nameZh": "喉位偏低声"
+    },
+    {
+      "symbolId": "voqs-labial-001",
+      "nameEn": "labialized voice (open rounded)",
+      "nameZh": "唇化声（开圆唇）"
+    },
+    {
+      "symbolId": "voqs-labial-002",
+      "nameEn": "labialized voice (close rounded)",
+      "nameZh": "唇化声（闭圆唇）"
+    },
+    {
+      "symbolId": "voqs-labial-003",
+      "nameEn": "spread-lip voice",
+      "nameZh": "展唇声"
+    },
+    {
+      "symbolId": "voqs-labial-004",
+      "nameEn": "labio-dentalized voice",
+      "nameZh": "唇齿化声"
+    },
+    {
+      "symbolId": "voqs-lingual-001",
+      "nameEn": "linguo-apicalized voice",
+      "nameZh": "舌尖化声"
+    },
+    {
+      "symbolId": "voqs-lingual-002",
+      "nameEn": "linguo-laminalized voice",
+      "nameZh": "舌叶化声"
+    },
+    {
+      "symbolId": "voqs-lingual-003",
+      "nameEn": "retroflex voice",
+      "nameZh": "卷舌声"
+    },
+    {
+      "symbolId": "voqs-lingual-004",
+      "nameEn": "dentalized voice",
+      "nameZh": "齿化声"
+    },
+    {
+      "symbolId": "voqs-lingual-005",
+      "nameEn": "alveolarized voice",
+      "nameZh": "龈化声"
+    },
+    {
+      "symbolId": "voqs-lingual-006",
+      "nameEn": "palato-alveolarized voice",
+      "nameZh": "腭–龈化声"
+    },
+    {
+      "symbolId": "voqs-lingual-007",
+      "nameEn": "palatalized voice",
+      "nameZh": "腭化声"
+    },
+    {
+      "symbolId": "voqs-lingual-008",
+      "nameEn": "velarized voice",
+      "nameZh": "软腭化声"
+    },
+    {
+      "symbolId": "voqs-lingual-009",
+      "nameEn": "uvularized voice",
+      "nameZh": "小舌化声"
+    },
+    {
+      "symbolId": "voqs-lingual-010",
+      "nameEn": "pharyngealized voice",
+      "nameZh": "咽化声"
+    },
+    {
+      "symbolId": "voqs-lingual-011",
+      "nameEn": "laryngo-pharyngealized voice",
+      "nameZh": "喉–咽化声"
+    },
+    {
+      "symbolId": "voqs-lingual-012",
+      "nameEn": "faucalized voice",
+      "nameZh": "咽门化声"
+    },
+    {
+      "symbolId": "voqs-velum-001",
+      "nameEn": "nasalized voice",
+      "nameZh": "鼻化声"
+    },
+    {
+      "symbolId": "voqs-velum-002",
+      "nameEn": "denasalized voice",
+      "nameZh": "去鼻化声"
+    },
+    {
+      "symbolId": "voqs-jaw-001",
+      "nameEn": "open-jaw voice",
+      "nameZh": "颌位偏开声"
+    },
+    {
+      "symbolId": "voqs-jaw-002",
+      "nameEn": "close-jaw voice",
+      "nameZh": "颌位偏闭声"
+    },
+    {
+      "symbolId": "voqs-jaw-003",
+      "nameEn": "right offset-jaw voice",
+      "nameZh": "颌位偏右声"
+    },
+    {
+      "symbolId": "voqs-jaw-004",
+      "nameEn": "left offset-jaw voice",
+      "nameZh": "颌位偏左声"
+    },
+    {
+      "symbolId": "voqs-jaw-005",
+      "nameEn": "protruded-jaw voice",
+      "nameZh": "颌位突出声"
+    },
+    {
+      "symbolId": "voqs-jaw-006",
+      "nameEn": "protruded-tongue voice",
+      "nameZh": "舌突出声"
+    }
+  ]
+}

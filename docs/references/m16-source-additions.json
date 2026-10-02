@@ -1,0 +1,43 @@
+{
+  "checked_on": "2026-10-02",
+  "sources": [
+    {
+      "id": "SRC-M16-VOICEVISTA",
+      "title": "VoiceVista egg_recorder 录音安全机制",
+      "kind": "reviewed-local-source",
+      "modules": ["M16"],
+      "authors": "井井",
+      "year": 2026,
+      "license": "User-authored local source; public redistribution license not established",
+      "urls": {},
+      "evidence": "只读审阅 audio/wav_writer.py、recorder.py、metering.py；未运行旧程序或读取旧数据库；重写为 v3 独立原始 PCM/工程协议，不依赖旧路径或 PySide6。",
+      "notes": "旧实现会把数字增益写入音频，M16 改为原始优先；此变化不是逐位迁移。旧 EXE 与源码构建对应仍未建立。",
+      "verification_date": "2026-10-02",
+      "actual_included_version": "design-reviewed; no dynamic import; v3 implementation recording/1",
+      "distribution_status": "local-development-only",
+      "source_fingerprints": {"audio/wav_writer.py": "BF35A1B82FBBAF264B26C40CF42153A06FB55E5390D513B6C42FD7889C36ADE0", "audio/recorder.py": "85401234CE8CFA5951E9AF0B09CA056BD5EB6F0FC708CFC053B7ADE943B9902E", "audio/metering.py": "39FC91440AAA4A5DBFC594A581AC01C9087DE13262F208DE4F7D37E7C4B1571C"},
+      "used_at": ["desktop/src/ptb_desktop/recording/capture.py", "desktop/src/ptb_desktop/recording/storage.py", "packages/phonetic_core/src/phonetic_core/recording/signal.py"]
+    },
+    {
+      "id": "METHOD-M16-SPECTRAL-SUBTRACTION",
+      "title": "M16 噪声样本功率谱减法（自有实现）",
+      "kind": "original-method-implementation",
+      "modules": ["M16"],
+      "authors": "PhoneticToolbox project",
+      "year": 2026,
+      "license": "Project implementation; SciPy runtime license is separate",
+      "urls": {"scipy_stft": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.stft.html", "scipy_istft": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.istft.html"},
+      "evidence": "ptb-spectral-subtraction/1：periodic Hann 1024，hop 256，均值噪声功率谱；gain=max(0.15,sqrt(max(P-alpha*N,0)/max(P,1e-20)))，三频点平滑，补零与重叠相加；独立块 1024 帧 halo。",
+      "notes": "不是标准 Wiener 实现，不复制或宣称等同 Adobe Audition。输出帧数及 EGG 逐样本不变分别验证；自然气声/擦音人听验收待做。",
+      "verification_date": "2026-10-02",
+      "actual_included_version": "ptb-spectral-subtraction/1",
+      "distribution_status": "local-development-only",
+      "used_at": ["packages/phonetic_core/src/phonetic_core/recording/signal.py", "desktop/src/ptb_desktop/recording/jobs.py"]
+    }
+  ],
+  "existing_source_updates": [
+    {"id": "PKG-SOUNDDEVICE", "add_module": "M16", "actual_version": "0.5.3 in existing .venv/m09-ui", "used_at": "desktop/src/ptb_desktop/recording/devices.py", "note": "PortAudio stream; no dependency installation"},
+    {"id": "PKG-SOUNDFILE", "add_module": "M16", "actual_version": "0.13.1 in existing .venv/m09-ui", "used_at": "desktop/src/ptb_desktop/recording/jobs.py", "note": "libsndfile WAV FLOAT/PCM24/PCM16 output and readback"}
+  ],
+  "other_reused_dependencies": {"numpy": "2.2.6", "scipy": "1.16.3", "SheetJS": "existing local frontend/src/modules/perception/vendor/xlsx.mjs; no upgrade or network import"}
+}

@@ -4,9 +4,10 @@ import wave
 import json
 import math
 
-def extract_audio(source,directory,*,stop=lambda:False,max_bytes=128_000_000):
+def extract_audio(source,directory,*,stop=lambda:False,max_bytes=128_000_000,clock_policy='container_pts'):
     import av
     import numpy as np
+    if clock_policy not in ('container_pts','decoded_samples'):raise ValueError('m05_audio_clock_policy')
     directory=Path(directory)
     with av.open(str(source)) as container:
         if not container.streams.audio:return dict(present=False),[]
@@ -14,7 +15,7 @@ def extract_audio(source,directory,*,stop=lambda:False,max_bytes=128_000_000):
         channels=len(stream.codec_context.layout.channels)
         if not 8000<=rate<=192000 or channels not in (1,2):raise ValueError('m05_audio_format_limit')
         resampler=av.AudioResampler(format='s16',layout='mono' if channels==1 else 'stereo',rate=rate)
-        anchor=None;written=0;last=None;gaps=0;count=0;records=directory/'audio-timing.jsonl'
+        anchor=None;written=0;last=None;gaps=0;count=0;max_residual=0;records=directory/'audio-timing.jsonl'
         with wave.open(str(directory/'audio_recording.wav'),'wb') as output,records.open('x',encoding='utf8') as timeline:
             output.setparams((channels,2,rate,0,'NONE','not compressed'))
             for frame in container.decode(stream):
@@ -28,10 +29,19 @@ def extract_audio(source,directory,*,stop=lambda:False,max_bytes=128_000_000):
                     start=round((float(converted.pts*converted.time_base)-anchor)*rate)
                     gap=start-written
                     residual=gap
+                    max_residual=max(max_residual,abs(residual))
                     # A container tick rounds a packet timestamp, whereas its
                     # decoded sample count stays exact. Keep both observations.
-                    quantization=math.ceil(float(frame.time_base)*rate/2)+1
+                    # A difference of two rounded PTS (current minus anchor)
+                    # has up to one whole container tick of uncertainty.
+                    quantization=math.ceil(float(frame.time_base)*rate)+1
                     if abs(gap)<=quantization:gap=0
+                    # Browser recording export preserves every decoded PCM sample.
+                    # MediaRecorder PTS can jitter relative to the sample clock;
+                    # retain that discrepancy in the sidecar, without adding or
+                    # dropping audio samples. Formal arbitrary-input analysis keeps
+                    # the strict container-PTS policy by default.
+                    if clock_policy=='decoded_samples':gap=0
                     if gap < -1:raise ValueError('m05_audio_overlapping_samples')
                     payload=converted.to_ndarray().astype('<i2',copy=False).tobytes()
                     if (written+max(0,gap)+converted.samples)*channels*2+44>max_bytes:raise ValueError('m05_audio_output_budget')
@@ -47,5 +57,5 @@ def extract_audio(source,directory,*,stop=lambda:False,max_bytes=128_000_000):
             if resampler.resample(None):raise ValueError('m05_audio_unflushed_samples')
     return dict(present=True,sample_rate=rate,channels=channels,decoded_frames=count,samples=written,
                 first_decoded_pts_s=anchor,end_s=anchor+written/rate if anchor is not None else None,
-                inserted_silence_samples=gaps,encoding='PCM16 decoded derivative; original video retained',
-                drift_s=None,clock='container PTS'),['audio_recording.wav','audio-timing.jsonl']
+                inserted_silence_samples=gaps,encoding='PCM16 decoded derivative',
+                drift_s=None,clock=clock_policy,max_timestamp_residual_samples=max_residual),['audio_recording.wav','audio-timing.jsonl']

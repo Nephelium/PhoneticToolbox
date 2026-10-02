@@ -99,7 +99,6 @@ function setupControls(){
   $('f0Range').oninput=()=>{$('f0Output').textContent=$('f0Range').value+' Hz';dirty=true;queuePose();};
   $('sliceRange').oninput=()=>{dirty=true;queuePose();};
   $('liveButton').onclick=async()=>{try{if(!live&&(dirty||inFlight)){toast('正在更新构形，请稍后开始发声');return;}const s=await(await post('live',{active:!live})).json();updateAudio(s);}catch(e){toast(e.message);}};
-  $('previewButton').onclick=()=>preview(false);$('glideButton').onclick=()=>preview(true);
   for(const d of meta.output_devices){const option=document.createElement('option');option.value=d.id;option.textContent=d.name;$('outputDevice').append(option);}
   $('outputDevice').value=meta.audio_settings.device;$('volumeRange').value=Math.round(meta.audio_settings.volume*100);$('volumeOutput').textContent=$('volumeRange').value+'%';
   $('outputDevice').onchange=async()=>{try{updateAudio(await(await post('audio/settings',{device:$('outputDevice').value})).json());toast('输出设备已切换');}catch(e){toast(e.message);}};
@@ -107,8 +106,8 @@ function setupControls(){
   $('testToneButton').onclick=async()=>{try{updateAudio(await(await post('audio/test')).json());}catch(e){toast(e.message);}};
   $('aboutButton').onclick=()=>$('aboutDialog').showModal();$('sharedReferences').onclick=()=>parent.postMessage({type:'m10-references'},'*');$('closeAbout').onclick=()=>$('aboutDialog').close();
   $('audioBadge').hidden=!meta.audio_locked;$('sourceState').textContent=meta.audio_locked?'静音测试':'手动播放';
-  if(meta.audio_locked){document.body.classList.add('audio-locked');document.querySelectorAll('#oneSecondButton,#liveButton,#previewButton,#glideButton,#testToneButton,#volumeRange,#outputDevice,#gainSelect').forEach(e=>e.disabled=true);$('audioStatus').textContent='静音建模已锁定，后端不允许音频输出。';}
-  setupKeyframes({initialFrames:meta.saved_frames,initialCurve:meta.saved_curve,getPose:currentEdit,applyPose:(state,animated=false)=>{if(animated){manualRoot=state.manual_root??false;params=[...state.params];sourceSettings={...(state.source||meta.source_presets.voiced)};lipWidth=state.lip_width;selectedPreset='';snapshot=state;$('f0Range').value=state.f0;$('f0Output').textContent=Math.round(state.f0)+' Hz';updateControls();updateModel(state);drawCharts();}else{beginEdit();restoreEdit(state);endEdit();}},post,setBusy:value=>{motionBusy=value;viewer.playing=value;document.body.classList.toggle('motion-busy',value);document.querySelectorAll('#parameterGroups input,.lip-width-panel input,.source-panel button,.source-panel input,.source-panel select,.edit-panel button,#presets button,#portRange,#portToggle,#keepVowel,#sliceRange,#resetPose,#customPreset,#savePreset,#renamePreset').forEach(e=>e.disabled=value||(meta.audio_locked&&e.matches('#oneSecondButton,#liveButton,#previewButton,#glideButton,#testToneButton,#volumeRange,#outputDevice,#gainSelect')));if(!value){updateHistory();dirty=true;queuePose();}},isReady:()=>!dirty&&!inFlight&&!rendering,isSilent:meta.audio_locked,keepVowel:()=>$('keepVowel').checked,viewer});
+  if(meta.audio_locked){document.body.classList.add('audio-locked');document.querySelectorAll('#oneSecondButton,#liveButton,#testToneButton,#volumeRange,#outputDevice,#gainSelect').forEach(e=>e.disabled=true);$('audioStatus').textContent='静音建模已锁定，后端不允许音频输出。';}
+  setupKeyframes({initialFrames:meta.saved_frames,initialCurve:meta.saved_curve,getPose:currentEdit,applyPose:(state,animated=false)=>{if(animated){manualRoot=state.manual_root??false;params=[...state.params];sourceSettings={...(state.source||meta.source_presets.voiced)};lipWidth=state.lip_width;selectedPreset='';snapshot=state;$('f0Range').value=state.f0;$('f0Output').textContent=Math.round(state.f0)+' Hz';updateControls();updateModel(state);drawCharts();}else{beginEdit();restoreEdit(state);endEdit();}},post,setBusy:value=>{motionBusy=value;viewer.playing=value;document.body.classList.toggle('motion-busy',value);document.querySelectorAll('#parameterGroups input,.lip-width-panel input,.source-panel button,.source-panel input,.source-panel select,.edit-panel button,#presets button,#portRange,#portToggle,#keepVowel,#sliceRange,#resetPose,#customPreset,#savePreset,#renamePreset').forEach(e=>e.disabled=value||(meta.audio_locked&&e.matches('#oneSecondButton,#liveButton,#testToneButton,#volumeRange,#outputDevice,#gainSelect')));if(!value){updateHistory();dirty=true;queuePose();}},isReady:()=>!dirty&&!inFlight&&!rendering,isSilent:meta.audio_locked,keepVowel:()=>$('keepVowel').checked,viewer});
   updateControls();updateHistory();
 }
 function setLive(value){live=value;const b=$('liveButton');b.classList.toggle('active',live);b.lastElementChild.textContent=live?'停止播放':'持续发声';b.firstElementChild.textContent=live?'■':'▶';}
@@ -119,7 +118,7 @@ function updateAudio(s){if(s.audio_locked){$('audioStatus').textContent='静音�
 }
 async function preview(glide,duration=1.2){
   if(dirty||inFlight||motionBusy){toast('请等待构形更新完成');return;}
-  rendering=true;const buttons=[$('oneSecondButton'),$('previewButton'),$('glideButton'),$('liveButton')];buttons.forEach(b=>b.disabled=true);$('audioStatus').textContent='正在合成…';
+  rendering=true;const buttons=[$('oneSecondButton'),$('liveButton')];buttons.forEach(b=>b.disabled=true);$('audioStatus').textContent='正在合成…';
   try{const r=await post('preview',{params:[...params],lip_width:lipWidth,duration:glide?2.4:duration,sequence:glide?'a-i-u':null});updateAudio(await r.json());}
   catch(e){toast(e.message);$('audioStatus').textContent='试听失败：'+e.message;}finally{rendering=false;buttons.forEach(b=>b.disabled=!!meta.audio_locked);}
 }

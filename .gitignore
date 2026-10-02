@@ -85,6 +85,7 @@ playwright-report/
 !docs/modules/legacy-acceptance.csv
 !docs/modules/dual-platform-acceptance.csv
 !docs/modules/evidence/M01-acceptance.csv
+!docs/references/m17-symbol-coverage.csv
 # M03 deterministic public synthetic arrays only; private captures stay ignored.
 !/tests/fixtures/m03/EGG-SYN-*.npz
 
