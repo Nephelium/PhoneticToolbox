@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref,computed,watch } from 'vue';import parameters from '../generated/parameters.json';import ModalDialog from './ModalDialog.vue';
-const props=defineProps<{selected:string[];draft?:string[];requireSelection?:boolean}>();const emit=defineEmits<{close:[];apply:[keys:string[]];draft:[keys:string[]]}>();
+const props=defineProps<{selected:string[];draft?:string[];requireSelection?:boolean;columns?:2|4}>();const emit=defineEmits<{close:[];apply:[keys:string[]];draft:[keys:string[]]}>();
 const query=ref(''),draft=ref([...(props.draft??props.selected)]);const filtered=computed(()=>parameters.filter(p=>(p.label+' '+p.key).toLowerCase().includes(query.value.toLowerCase())));
 watch(draft,v=>emit('draft',[...v]),{deep:true});
 </script>
@@ -13,7 +13,7 @@ watch(draft,v=>emit('draft',[...v]),{deep:true});
 <button @click="draft=[]">全不选</button>
 <span class="mono">{{draft.length}} / 80 项</span>
 </div>
-<div class="parameter-grid">
+<div class="parameter-grid" :class="{'four-columns':columns===4}">
 <label v-for="p in filtered" :key="p.key">
 <input v-model="draft" type="checkbox" :value="p.key"/>
 <span>{{p.label}}<small>{{p.key}}</small>
@@ -27,3 +27,10 @@ watch(draft,v=>emit('draft',[...v]),{deep:true});
 </template>
 </ModalDialog>
 </template>
+<style scoped>
+.parameter-grid.four-columns{grid-template-columns:repeat(4,minmax(0,1fr));gap:0 12px}
+.parameter-grid.four-columns label{min-width:0;gap:6px}
+.parameter-grid.four-columns span{min-width:0;overflow-wrap:anywhere}
+@media(max-width:800px){.parameter-grid.four-columns{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:500px){.parameter-grid.four-columns{grid-template-columns:1fr}}
+</style>

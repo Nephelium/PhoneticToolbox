@@ -12,6 +12,34 @@ from .directory_io import pin_directory
 PROJECT='00000000-0000-4000-8000-000000000001'
 
 
+def parameter_export_paths(files,root,output,sha):
+    """Keep a parameter/segment pair together, using human-readable suffixes."""
+    groups={}
+    for file in files:
+        name=file['export_name']
+        extension=next((suffix for suffix in ('.ptb.sqlite','.xlsx','.wav') if name.lower().endswith(suffix)),None)
+        if extension is None:raise FileAccessError('参数结果文件格式不受支持。')
+        base=name[:-len(extension)]
+        groups.setdefault(base,[]).append((file,name[-len(extension):]))
+    paths={}
+    for base,group in groups.items():
+        for number in range(1,10001):
+            suffix='' if number==1 else f' ({number})'
+            candidates=[(file,root/(base+suffix+extension)) for file,extension in group]
+            if any(len(path.name)>220 for _,path in candidates):raise FileAccessError('输出文件名过长，请缩短音频名。')
+            conflict=False
+            for file,path in candidates:
+                if output.exists(path):
+                    checked_path(path)
+                    if output.stat(path).st_size!=file['size_bytes'] or sha(path,output)!=file['sha256']:
+                        conflict=True;break
+            if conflict:continue
+            paths.update((file['id'],path) for file,path in candidates)
+            break
+        else:raise FileAccessError('同名结果过多，请选择新的结果目录。')
+    return paths
+
+
 class TaskBridge:
     def __init__(self,provider,service):
         self.provider,self.service=provider,service
@@ -128,8 +156,11 @@ class TaskBridge:
                     if role=='parent_result':
                         if set(key)!={'asset_id','sha256'}:raise FileAccessError('参数来源不正确。')
                         mapped[role]=key;continue
-                    raw,_=self.provider.read(key);entry=self.provider.entries[key]
-                    mapped[role]=self.service.import_input(raw,entry.name,role)
+                    if role=='lip':
+                        raw,name,_=self.lip_input(key)
+                    else:
+                        raw,_=self.provider.read(key);name=self.provider.entries[key].name
+                    mapped[role]=self.service.import_input(raw,name,role)
                 inputs.append(mapped)
                 sources.append(self.provider.entries[item['audio']].directory)
             batch=self.service.request('/api/v1/jobs/batches/create','POST',dict(project_id=PROJECT,operation=body['operation'],inputs=inputs,
@@ -139,11 +170,12 @@ class TaskBridge:
         if op=='save':return self.save(str(UUID(body['id'])),body['directory'],beside_sources=body.get('beside_sources') is True)
         raise FileAccessError('不支持的任务操作。')
 
-    def convert_lip(self,file_id):
+    def lip_input(self,file_id):
+        """Read JSON or convert legacy lip data without writing to its directory."""
         raw,_=self.provider.read(file_id);entry=self.provider.entries[file_id]
+        if entry.name.lower().endswith('.lip.json'):return raw,entry.name,False
         if not entry.name.lower().endswith('.pkl') or entry.name.lower().endswith('_timestamps.pkl'):raise FileAccessError('请选择旧唇形 PKL。')
-        directory=self.provider.directory(entry.directory);root=directory.path
-        name=entry.name[:-4]+'.lip.json';target=root/name
+        name=entry.name[:-4]+'.lip.json'
         if len(name)>220:raise FileAccessError('转换文件名过长。')
         companions=[f for f in self.provider.list(entry.directory) if f['name'].casefold()==(entry.name[:-4]+'_timestamps.pkl').casefold()]
         if len(companions)>1:raise FileAccessError('伴随时间戳文件不明确。')
@@ -155,11 +187,18 @@ class TaskBridge:
             code=json.load(error).get('detail','')
             raise FileAccessError({'legacy_conversion_budget':'旧 PKL 超过转换预算（16 MB、数值或内存上限）。',
                 'legacy_conversion_timeout':'旧 PKL 转换超时，请缩短数据。','preview_busy':'预览或转换正在进行，请稍后重试。'}.get(code,'旧 PKL 含不支持或损坏的结构，未生成文件。')) from None
+        # Recheck both granted inputs after the bounded conversion child exits.
+        if self.provider.read(file_id)[0]!=raw:raise FileAccessError('旧 PKL 已变化，请刷新。')
+        if companions and self.provider.read(companions[0]['id'])[0]!=companion:raise FileAccessError('伴随时间戳已变化。')
+        return converted,name,bool(companions)
+
+    def convert_lip(self,file_id):
+        entry=self.provider.entries.get(file_id)
+        if not entry or not entry.name.lower().endswith('.pkl') or entry.name.lower().endswith('_timestamps.pkl'):raise FileAccessError('请选择旧唇形 PKL。')
+        converted,name,companion_found=self.lip_input(file_id)
+        directory=self.provider.directory(entry.directory);root=directory.path;target=root/name
         with pin_directory(root) as output:
             self.provider.directory(entry.directory)
-            # Recheck sources after conversion; no file output if the selected input changed.
-            if self.provider.read(file_id)[0]!=raw:raise FileAccessError('旧 PKL 已变化，请刷新。')
-            if companions and self.provider.read(companions[0]['id'])[0]!=companion:raise FileAccessError('伴随时间戳已变化。')
             if output.exists(target):raise FileAccessError('已有同名 .lip.json，保持原样；可直接关联它。')
             temp=root/('.ptb-'+uuid4().hex+'.part');original=None
             try:
@@ -169,7 +208,7 @@ class TaskBridge:
             finally:
                 if original:output.unlink(temp,original)
             file=next(f for f in self.provider.list(entry.directory) if f['name']==name)
-            return {'file':file,'companion_found':bool(companions)}
+            return {'file':file,'companion_found':companion_found}
 
     def save(self,batch_id,directory_id,*,single=False,beside_sources=False):
         directory=self.provider.directory(directory_id)
@@ -210,16 +249,23 @@ class TaskBridge:
                         meta=next(f for f in job['result_manifest']['files'] if f['name']==('lpc.ptb.json' if job['operation']=='lpc_analysis' else 'egg.ptb.json'))
                         verified=self.invoke(dict(op='result',job=job['id'],id=meta['id']))
                         export_names=json.loads(base64.b64decode(verified['base64'])).get('export_names',{})
+                    parameter_job=job['operation'] in ('acoustic_analysis','textgrid_segment')
+                    export_files=[]
                     for file in job['result_manifest']['files']:
                         name=file['name']
+                        if parameter_job and name.lower().endswith('.json'):continue
                         if job['operation'] in ('egg_analysis','lpc_analysis'):name=export_names.get(name,name)
                         if job['operation']=='acoustic_analysis':name=Path(batch['audio_names'][item['index']]).stem+name[len('result'):]
                         if not name or len(name)>220 or any(ord(c)<32 or c in '/\\:<>"|?*' for c in name):raise FileAccessError('输出文件名不受支持。')
-                        path=root/name
+                        export_files.append(dict(file,export_name=name))
+                    paths=parameter_export_paths(export_files,root,output,sha) if parameter_job else {}
+                    for file in export_files:
+                        name=file['export_name'];path=paths[file['id']] if parameter_job else root/name
                         if output.exists(path):
                             checked_path(path)
                             if output.stat(path).st_size==file['size_bytes'] and sha(path,output)==file['sha256']:
                                 saved.append(path.relative_to(directory.path).as_posix());continue
+                            if parameter_job:raise FileAccessError('结果目录在保存期间发生变化，请重新保存。')
                             path=root/(item['job_id'][:8]+'-'+name)
                         if output.exists(path):
                             checked_path(path)

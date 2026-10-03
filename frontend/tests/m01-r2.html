@@ -1,0 +1,16 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><base href="/"><title>M01-R2 interaction fixture</title></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';import Shell from '/src/app/AppShell.vue';import '/src/design/tokens.css';
+const buffer=await (await fetch('/__m01_r2_audio')).arrayBuffer();
+const file=(id,name,kind)=>({id,name,kind,size:kind==='audio'?buffer.byteLength:30});
+const inputs=['a','b','c'].flatMap(n=>[file(n,n+'.wav','audio'),file('g'+n,n+'.TextGrid','textgrid')]);
+inputs.push(file('old-a','a.pkl','lip_pickle'),file('time-a','a_timestamps.pkl','lip_pickle'));
+const lips=[file('new-a','a.lip.json','lip'),file('new-b','b.lip.json','lip'),file('old-b','b.pkl','lip_pickle')];
+window.qa={cancel:false,duplicate:false,submitted:[],choices:[]};
+const batch={id:'batch',operation:'acoustic_analysis',created_at:1,audio_names:['a.wav','b.wav','c.wav'],summary:{total:3,closed:false,complete:false,counts:{succeeded:0,failed:0,interrupted:0,not_started:3,running:0,cancelled:0},items:[0,1,2].map(index=>({index,state:'not_started',job_id:null,error_code:null}))}};
+const tasks={list:async()=>[],get:async()=>structuredClone(batch),job:async()=>{throw Error('No computed jobs in UI fixture');},parent:async()=>null,submit:async(operation,inputs)=>{window.qa.submitted.push({operation,inputs:JSON.parse(JSON.stringify(inputs))});return structuredClone(batch);}};
+const files={kind:'desktop',tasks,choose:async purpose=>{window.qa.choices.push(purpose);return window.qa.cancel?null:{id:purpose==='input'?'input':'lips',purpose,label:purpose==='input'?'录音副本':'唇形数据'};},
+ list:async id=>id==='input'?inputs:[...lips,...(window.qa.duplicate?[file('dup1','c.pkl','lip_pickle'),file('dup2','c.pkl','lip_pickle')]:[])],
+ read:async()=>({buffer:buffer.slice(0),sha256:'a'.repeat(64)}),
+ textgrid:async()=>({sha256:'b'.repeat(64),tiers:[{name:'区域',intervals:[{xmin:0,xmax:.4,text:'NP1'},{xmin:.4,xmax:.8,text:'NP2'}]},{name:'word',intervals:[{xmin:0,xmax:.8,text:'test'}]}]})};
+createApp({render:()=>h(Shell,{research:{key:'m01-r2-test',label:'M01-R2 UI fixture',files}})}).mount('#app');
+</script></body></html>

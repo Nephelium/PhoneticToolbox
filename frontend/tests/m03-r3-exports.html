@@ -1,0 +1,8 @@
+<div id="app" style="width:720px"></div>
+<script type="module">
+import {createApp,h,ref} from 'vue';
+import History from '../src/modules/pitch-manipulation/HistoryPlot.vue';
+import '../src/design/tokens.css';
+// Explicit display fixture, not measured phonation evidence.
+createApp({setup(){const plot=ref();window.exportHistory=()=>plot.value.png();return()=>h(History,{ref:plot,min:50,max:400,results:[0,1,2,3,4].map(i=>({id:String(i),name:`元音ɑ̃-${i+1}.wav`,times:[0,.2,.4,.6],original_f0:[100+i*30,120+i*30,0,160+i*30]}))});}}).mount('#app');
+</script>

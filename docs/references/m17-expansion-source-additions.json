@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "checked_on": "2026-10-03",
+  "merge_note": "M17-R1 来源增量；主代理合并统一登记并生成前端引用，既有历史来源证据保留。",
+  "sources": [
+    {
+      "id": "M17-EXTIPA-LV-JIANG-2013",
+      "title": "国际音标扩展表的分类、命名与功能",
+      "kind": "academic-reference",
+      "modules": ["M17"],
+      "authors": "吕佳、江荻",
+      "year": 2013,
+      "citation_title": "国际音标扩展表的分类、命名与功能",
+      "journal": "听力学及言语疾病杂志",
+      "volume": "21",
+      "issue": "6",
+      "pages": "665–668",
+      "doi": "10.3969/j.issn.1006-7299.2013.06.030",
+      "urls": {"paper": "https://doi.org/10.3969/j.issn.1006-7299.2013.06.030"},
+      "evidence": "用户指定PDF共4页实际渲染核对，特别是p.666表5、p.667表8与p.668版本说明；提取文本部分乱码，语义核对基于页面图像。",
+      "license": "Copyright retained; no redistribution permission inferred",
+      "notes": "2013论文解读2002版extIPA。中文术语和功能参考自行概述，不打包PDF或图表。2025版partially denasal仍称部分去鼻化；旧版外呼气流单列，不回填为2025新增符号。",
+      "verification_date": "2026-10-03",
+      "actual_included_version": "Independently authored Chinese explanations; 2002/2025 versions distinguished",
+      "distribution_status": "citation and attributed terminology only; original PDF excluded",
+      "acknowledgement_group": "academic",
+      "used_at": ["frontend/src/modules/ipa-plus/data/catalog.json", "frontend/src/modules/ipa-plus/data/sources.json", "docs/references/m17-expansion-diff.md"]
+    },
+    {
+      "id": "M17-IOS-IPA-PHONETICS-REFERENCE",
+      "title": "User-supplied iPA Phonetics Pro screenshot — visible symbol inventory reference",
+      "kind": "design-reference",
+      "modules": ["M17"],
+      "urls": {"symbol_rules": "https://www.internationalphoneticassociation.org/content/ipa-chart"},
+      "evidence": "用户截图15的辅音、清化、送气与塞擦音组合视觉核对。用于确定补充范围，不作为官方IPA版本或独立科学语义权威。",
+      "license": "Reference only; third-party screenshot, artwork, code and assets not copied",
+      "notes": "自行实现按方式分组的组合输入区，保留官方基础表；模糊的特殊拍音与未经确认的卷舌内爆音字形未臆造。既有extIPA截图16/17用来定位连续符号堆积问题。",
+      "verification_date": "2026-10-03",
+      "actual_included_version": "No external implementation or screenshot bundled",
+      "distribution_status": "inventory reference only",
+      "acknowledgement_group": "software",
+      "used_at": ["frontend/src/modules/ipa-plus/ChartView.vue", "docs/references/m17-expansion-diff.md"]
+    }
+  ]
+}

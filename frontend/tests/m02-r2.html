@@ -1,0 +1,17 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>M02-R2 synthetic display fixture</title><style>html,body,#app{height:100%}</style></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';
+import Page from '../src/modules/parameter-display/ParameterDisplayPage.vue';
+import {workspace} from '../src/state/workspace.ts';
+import {setFonts,preferences} from '../src/state/fonts.ts';
+import '../src/design/tokens.css';
+// Public synthetic input. This grayscale fixture does not validate Praat computation.
+const rate=8000,n=rate*4,buffer=new ArrayBuffer(44+n*2),v=new DataView(buffer);
+const text=(i,s)=>[...s].forEach((c,j)=>v.setUint8(i+j,c.charCodeAt(0)));
+text(0,'RIFF');v.setUint32(4,buffer.byteLength-8,true);text(8,'WAVEfmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,rate,true);v.setUint32(28,rate*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);text(36,'data');v.setUint32(40,n*2,true);
+for(let i=0;i<n;i++)v.setInt16(44+i*2,12000*Math.sin(2*Math.PI*i/40),true);
+const names=['F0 - REAPER','Intensity','small',...Array.from({length:76},(_,i)=>'H'+i+'-A3 (pF0) very long parameter'), 'TextGrid words','TextGrid phones'];
+const table={schema_version:'m02/1',sha256:'a'.repeat(64),columns:['Time_s',...names],kinds:['number',...names.map(n=>n.startsWith('TextGrid')?'text':'number')],rows:Array.from({length:400},(_,i)=>[i/100,...names.map((n,j)=>n==='TextGrid words'?(i<200?'The photographer':'the singer'):n==='TextGrid phones'?(i<200?'ɑ̃˥':'i˩'):j===2?1:200+30*Math.sin(i/20+j))])};
+const files=[{id:'wave',name:'display.wav',kind:'audio',size:buffer.byteLength},{id:'table',name:'display.ptb.sqlite',kind:'parameter',size:10}];
+window.qa={wave:workspace('m02-r2-test'),fonts:size=>setFonts({...preferences.value,figure:{...preferences.value.figure,follow:false,size}},false)};
+createApp({render:()=>h(Page,{stateKey:'m02-r2-test',active:true,context:{key:'synthetic',label:'Synthetic M02-R2',files:{kind:'preview',list:async()=>files,read:async()=>({buffer:buffer.slice(0),sha256:'a'.repeat(64)}),parameters:async()=>structuredClone(table),spectrogram:async(_,view)=>({width:32,height:16,pixels_base64:btoa(String.fromCharCode(...Array.from({length:512},(_,i)=>i%256))),frequency_max:4000,x1:view.start+(view.end-view.start)/64,dx:(view.end-view.start)/32,y1:125,dy:250,praat_version:'synthetic'})}}})}).mount('#app');
+</script></body></html>

@@ -1,7 +1,74 @@
 {
-  "ipa-chart-2026": {"title":"International Phonetic Association · 官方表 2026","url":"https://www.internationalphoneticassociation.org/content/ipa-chart","version":"2026 重印；内容修订 2015/2005","license":"CC BY-SA 4.0"},
-  "extipa-chart-2025": {"title":"ICPLA · extIPA 2025 表","url":"https://www.icpla.org.uk/resources","version":"2025","license":"CC BY-SA 3.0；原图不随包分发"},
-  "voqs-ball-2018": {"title":"Ball, Esling & Dickson (2018), pp. 165–171，图 2","url":"https://doi.org/10.1017/S0025100317000159","version":"2016 修订表；2017 在线发表；2018 卷期","license":"论文及图版版权保留，原 PDF 不随包分发"},
-  "voqs-zhihu-203037479": {"title":"UntPhesoca · VoQS：音质符号（2016 中英双语版），中文名称","url":"https://zhuanlan.zhihu.com/p/203037479","version":"2020 unt 译；© 2016 Ball、Esling、Dickson","license":"中文术语按井井指定文章采用，未复制文章图像或排版"},
-  "unicode-cartouche-2024": {"title":"Unicode L2/24-182R · 多字符圈围编码讨论","url":"https://www.unicode.org/L2/L2024/24182r-cartouche.pdf","version":"2024 提案及讨论，不能当作已分配新码位","license":"仅引用编码资料"}
+  "extipa-lv-jiang-2013": {
+    "title": "吕佳、江荻（2013）· 国际音标扩展表的分类、命名与功能，pp.665–668",
+    "url": "https://doi.org/10.3969/j.issn.1006-7299.2013.06.030",
+    "version": "2013论文解读2002版；用作中文术语参照",
+    "license": "原论文版权保留，PDF和图表不随包分发"
+  },
+  "ipa-chart-2026": {
+    "title": "International Phonetic Association · 官方表 2026",
+    "url": "https://www.internationalphoneticassociation.org/content/ipa-chart",
+    "version": "2026 重印；内容修订 2015/2005",
+    "license": "CC BY-SA 4.0"
+  },
+  "extipa-chart-2025": {
+    "title": "ICPLA · extIPA 2025 表",
+    "url": "https://www.icpla.org.uk/resources",
+    "version": "2025",
+    "license": "CC BY-SA 3.0；原图不随包分发"
+  },
+  "voqs-ball-2018": {
+    "title": "Ball, Esling & Dickson (2018), pp. 165–171，图 2",
+    "url": "https://doi.org/10.1017/S0025100317000159",
+    "version": "2016 修订表；2017 在线发表；2018 卷期",
+    "license": "论文及图版版权保留，原 PDF 不随包分发"
+  },
+  "voqs-zhihu-203037479": {
+    "title": "UntPhesoca · VoQS：音质符号（2016 中英双语版），中文名称",
+    "url": "https://zhuanlan.zhihu.com/p/203037479",
+    "version": "2020 unt 译；© 2016 Ball、Esling、Dickson",
+    "license": "中文术语按指定译表采用，未复制文章图像或排版"
+  },
+  "unicode-cartouche-2024": {
+    "title": "Unicode L2/24-182R · 多字符圈围编码讨论",
+    "url": "https://www.unicode.org/L2/L2024/24182r-cartouche.pdf",
+    "version": "2024 提案及讨论，不能当作已分配新码位",
+    "license": "仅引用编码资料"
+  },
+  "ipa-chart-zh-2007": {
+    "title": "中国语言学会语音学分会 · 国际音标中文版（2007；修订至2005年）",
+    "url": "https://doi.org/10.1017/S0025100311000156",
+    "version": "用户指定图4中文名称；同名中文表刊于JIPA 2011, 41(2)",
+    "license": "中文名称据用户指定图核对；原图与文章不随包分发"
+  },
+  "ipa-handbook-jiang-2008": {
+    "title": "国际语音学会编，江荻译（2008）· 国际语音学会手册：国际音标使用指南",
+    "url": "https://www.internationalphoneticassociation.org/content/handbook-ipa",
+    "version": "上海教育出版社，2008年第1版，ISBN 978-7-5444-1928-4；原著1999；本轮核对pp.9–24",
+    "license": "书籍版权保留；只使用自主短解释、书目信息和页码，原书与扫描图不随包"
+  },
+  "voice-quality-esling-2019": {
+    "title": "Esling, Moisik, Benner & Crevier-Buchman (2019) · Voice Quality: The Laryngeal Articulator Model",
+    "url": "https://doi.org/10.1017/9781108696555",
+    "version": "Cambridge University Press, 2019；ISBN 978-1-108-49842-5；本轮参考第1–2章",
+    "license": "书籍版权保留；自主概述并列准确章节页码，原PDF及图像不随包"
+  },
+  "extipa-ball-2018": {
+    "title": "Ball, Howard & Miller (2018) · Revisions to the extIPA chart, pp.155–164",
+    "url": "https://doi.org/10.1017/S0025100317000147",
+    "version": "2015修订表；2017在线发表；2018卷期48(2)，155–164",
+    "license": "原论文与图表不随包，条目含义自主概述"
+  },
+  "extipa-ball-2024": {
+    "title": "Ball (2024) · Changes to certain extIPA diacritics, pp.692–695",
+    "url": "https://doi.org/10.1080/02699206.2024.2365205",
+    "version": "2024-05-14 ICPLA批准三项调整；2024-07-01在线发表；38(7)，692–695",
+    "license": "原文CC BY-NC-ND 4.0；仅引用与自主解释，未复制或修改原图"
+  },
+  "extipa-ball-2025-reply": {
+    "title": "Ball (2025) · Reply to letter concerning the revisions to some diacritics of the extensions to the IPA (extIPA), Ball (2024), pp.911–912",
+    "url": "https://doi.org/10.1080/02699206.2025.2489577",
+    "version": "2025，39(9)，911–912；正文partially nasal用词与本目录核对的2025表partially denasal分开记录",
+    "license": "原文版权与许可保留；仅书目和版本差异说明，原PDF不随包"
+  }
 }

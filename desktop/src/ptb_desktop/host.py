@@ -86,6 +86,20 @@ class Bridge(QObject):
         try:return self._recording_bridge is None or self._recording_bridge.close()
         except Exception:return False
 
+    @pyqtSlot(str,result=str)
+    def writeClipboard(self,text):
+        # QWebChannel invokes this on the GUI thread. Keep clipboard permission
+        # narrowly scoped to plain-text writes; never return existing contents.
+        try:
+            if len(text)>2_000_000:raise ValueError('复制文字过长，请保存为文本文件。')
+            clipboard=QApplication.clipboard()
+            if clipboard is None:raise RuntimeError('clipboard unavailable')
+            clipboard.setText(text)
+            if clipboard.text()!=text:raise RuntimeError('clipboard write failed')
+            return json.dumps({'ok':True},ensure_ascii=False)
+        except ValueError as exc:return json.dumps({'ok':False,'error':str(exc)},ensure_ascii=False)
+        except Exception:return json.dumps({'ok':False,'error':'系统剪贴板暂不可用，请重试。'},ensure_ascii=False)
+
     @pyqtSlot(str,str)
     def recording(self,request_id,raw):
         if len(request_id)>64:return

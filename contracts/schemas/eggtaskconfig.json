@@ -66,6 +66,15 @@
       "title": "Export Policy",
       "type": "string"
     },
+    "f0_policy": {
+      "default": "legacy/1",
+      "enum": [
+        "legacy/1",
+        "audio-f0/2"
+      ],
+      "title": "F0 Policy",
+      "type": "string"
+    },
     "flip_channels": {
       "default": false,
       "title": "Flip Channels",
@@ -125,6 +134,11 @@
     "keep_praat_f0": {
       "default": true,
       "title": "Keep Praat F0",
+      "type": "boolean"
+    },
+    "keep_reaper_f0": {
+      "default": false,
+      "title": "Keep Reaper F0",
       "type": "boolean"
     },
     "lowpass_cutoff": {

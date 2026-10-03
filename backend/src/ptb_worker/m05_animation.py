@@ -7,7 +7,7 @@ from .m05_results import rows
 PROFILES={'high':(1080,20),'standard':(720,24),'small':(540,28)}
 
 
-def export_animation(frames_path,output,metadata,*,quality='standard',format='mp4',offset=0.,audio_path=None,stop=lambda:False,max_bytes=128_000_000):
+def export_animation(frames_path,output,metadata,*,quality='standard',format='mp4',offset=0.,audio_path=None,stop=lambda:False,max_bytes=128_000_000,fit_face=False,full_mesh=False):
     import av
     import cv2
     import numpy as np
@@ -21,6 +21,17 @@ def export_animation(frames_path,output,metadata,*,quality='standard',format='mp
     edge,crf=PROFILES[quality];scale=edge/max(source_width,source_height)
     width=max(2,int(source_width*scale)//2*2);height=max(2,int(source_height*scale)//2*2)
     rate=20 if format=='gif' else 30
+    bounds=None;edges=None
+    if fit_face:
+        for row in rows(frames_path):
+            if stop():raise InterruptedError('m05_cancelled')
+            if row.get('points'):
+                points=np.asarray(row['points'],dtype=float)
+                lo,hi=points.min(axis=0),points.max(axis=0)
+                bounds=(lo,hi) if bounds is None else (np.minimum(bounds[0],lo),np.maximum(bounds[1],hi))
+    if full_mesh:
+        from mediapipe.python.solutions.face_mesh_connections import FACEMESH_TESSELATION,FACEMESH_CONTOURS
+        edges=sorted(FACEMESH_TESSELATION|FACEMESH_CONTOURS)
     iterator=iter(rows(frames_path));previous=next(iterator,None)
     if previous is None:raise ValueError('m05_empty_animation')
     following=next(iterator,None);source_start=previous['time_s'];source_end=metadata['timing']['last_video_pts_s']-metadata['timing']['anchor_s']
@@ -81,9 +92,17 @@ def export_animation(frames_path,output,metadata,*,quality='standard',format='mp
                         points=points+(np.asarray(following['points'],dtype=np.float32)-points)*ratio
                 image=np.full((height,width,3),255,np.uint8)
                 if points is not None:
-                    points=np.rint(points*scale).astype(np.int32)
-                    for contour in (OUTER_LIP_LANDMARKS,INNER_LIP_LANDMARKS,FACE_OVAL):
-                        cv2.polylines(image,[points[contour]],True,(30,30,30),max(1,edge//540),cv2.LINE_AA)
+                    if bounds is not None:
+                        lo,hi=bounds;size=np.maximum(hi-lo,1e-6)
+                        points=(points-(lo+hi)/2)*min(width*.94/size[0],height*.94/size[1])+np.array([width/2,height/2])
+                    else:points=points*scale
+                    points=np.rint(points).astype(np.int32)
+                    if edges is not None:
+                        for a,b in edges:
+                            if a<len(points) and b<len(points):cv2.line(image,tuple(points[a]),tuple(points[b]),(30,130,30),1,cv2.LINE_AA)
+                    else:
+                        for contour in (OUTER_LIP_LANDMARKS,INNER_LIP_LANDMARKS,FACE_OVAL):
+                            cv2.polylines(image,[points[contour]],True,(30,30,30),max(1,edge//540),cv2.LINE_AA)
                 frame=av.VideoFrame.from_ndarray(image,format='bgr24');frame.pts=index;frame.time_base=Fraction(1,rate)
                 for packet in stream.encode(frame):container.mux(packet)
                 frames+=1
@@ -95,5 +114,5 @@ def export_animation(frames_path,output,metadata,*,quality='standard',format='mp
         handle.file.close()
         if audio:audio.close()
     return dict(format=format,quality=quality,width=width,height=height,fps=rate,frames=frames,
-                source_start_s=source_start,output_origin_s=start,lip_manual_offset=offset,visualization_resampled=True,audio_included=audio is not None,
+                source_start_s=source_start,output_origin_s=start,lip_manual_offset=offset,visualization_resampled=True,audio_included=audio is not None,face_fitted=fit_face,full_mesh=full_mesh,
                 warning='Animation time is visualization only; original per-frame timestamps remain authoritative')

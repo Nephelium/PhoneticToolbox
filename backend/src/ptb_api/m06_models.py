@@ -11,13 +11,13 @@ class M06Request(WireModel):
     schema_version: Literal['m06/1']='m06/1'
     project_id: Identifier
     idempotency_key: IdempotencyKey
-    action: Literal['generate','synthesize','extract']
+    action: Literal['generate','synthesize','extract','resynthesize']
     parameters: AcousticAssetRef
     audio: AcousticAssetRef | None=None
 
     @model_validator(mode='after')
     def valid(self):
-        if (self.action=='extract') != (self.audio is not None):raise ValueError('m06_audio_required_for_extract_only')
+        if (self.action in ('extract','resynthesize')) != (self.audio is not None):raise ValueError('m06_audio_action_mismatch')
         return self
 
 
@@ -27,4 +27,4 @@ class M06Manifest(WireModel):
     complete: Literal[True]=True
     operation: Literal['speech_synthesis']='speech_synthesis'
     core_version: str
-    files: list[AcousticManagedFile]=Field(min_length=2,max_length=3)
+    files: list[AcousticManagedFile]=Field(min_length=2,max_length=4)

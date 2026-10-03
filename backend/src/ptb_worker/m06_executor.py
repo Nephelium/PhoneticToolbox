@@ -17,7 +17,7 @@ def unpack(raw,sha,action):
     meta=json.loads(raw[4:4+size]);offset=4+size
     if meta.get('error'):raise FormatError(meta['error'])
     if meta.get('kind')!='prepared_m06' or meta.get('input_sha256')!=sha:raise FormatError('m06_input_changed')
-    expected=(['synthesis.wav'] if action=='synthesize' else [])+['m06.ptb.json','parameters.csv']
+    expected=(['synthesis.wav'] if action in ('synthesize','resynthesize') else [])+['m06.ptb.json','parameters.csv']+(['analysis.npz'] if action=='resynthesize' else [])
     if [f['name'] for f in meta['files']]!=expected:raise FormatError('m06_incomplete_output')
     values=[]
     for f in meta['files']:
@@ -53,10 +53,23 @@ def execute_claim(store,claim,worker_id,stop,*,on_started=None,evidence=None):
         raw=inputs.get('audio',b'');sha=hashlib.sha256(raw).hexdigest();config=snapshot['config']
         with ManagedScratch(files,identity) as scratch:
             header=dict(parameters=inputs['table'].decode('utf8'),action=config['action'],seed=config['seed'],input_sha256=sha)
-            request=scratch.create(json.dumps(header,allow_nan=False).encode()+b'\n'+raw,'.json')
-            from .acoustic_executor import collect_scientific
-            bundle=collect_scientific('m06',request,scratch,LIMITS,lambda:abort.is_set() or stop.is_set(),on_started,evidence)
-            values=unpack(bundle,sha,header['action'])
+            from phonetic_core.synthesis.klatt.api import import_parameters
+            parameters=import_parameters(header['parameters']);native=None
+            try:
+                if header['action'] in ('extract','resynthesize') and parameters['f0_method']=='reaper':
+                    from pathlib import Path
+                    from .native.reaper import REAPER_SHA256
+                    binary=Path(getattr(files,'reaper_binary',None) or '')
+                    if not binary.is_file() or binary.stat().st_size>16_000_000 or hashlib.sha256(binary.read_bytes()).hexdigest()!=REAPER_SHA256:
+                        raise ValueError('m06_reaper_unavailable')
+                    native=files.output(identity,'m06-native.wav','temporary',400_000)
+                    header.update(native_scratch=str(files.scratch_path(identity,native['id'])),reaper_binary=str(binary))
+                request=scratch.create(json.dumps(header,allow_nan=False).encode()+b'\n'+raw,'.json')
+                from .acoustic_executor import collect_scientific
+                bundle=collect_scientific('m06',request,scratch,LIMITS,lambda:abort.is_set() or stop.is_set(),on_started,evidence)
+                values=unpack(bundle,sha,header['action'])
+            finally:
+                if native:files.release_scratch(identity,native['id'])
         for name,value in values:
             if abort.is_set() or stop.is_set():raise Cancelled('cancelled')
             asset=files.output(identity,name,'result',len(value))

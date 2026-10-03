@@ -11,6 +11,9 @@ def request_payload(body, retry_of=None):
     if body.config.mode != 'preview':
         value['config'].pop('micro_center',None)
         value['config'].pop('micro_width_ms',None)
+    if body.config.f0_policy == 'legacy/1' and not body.config.keep_reaper_f0:
+        value['config'].pop('f0_policy',None)
+        value['config'].pop('keep_reaper_f0',None)
     return value
 
 
@@ -35,6 +38,7 @@ def submit(store, owner, body, *, retry_of=None):
             core_version=core_version,adapter_version=adapter_version,source_ids=['PENDING-EGG','SRC-PRAAT'],
             input_refs=refs,input_assets=sources,config=dict(inputs=[i['id'] for i in sources],
                 analysis=body.config.model_dump(),max_output_bytes=160_000_000))
+        if body.config.keep_reaper_f0 and body.config.mode != 'inverse':snapshot['source_ids'].append('SRC-REAPER')
         job_id = str(uuid4())
         tx.execute("INSERT INTO {jobs}(id,owner_id,project_id,idempotency_key,request_hash,snapshot,state,deadline,created_at,updated_at) VALUES(?,?,?,?,?,?,'queued',?,?,?)",
             (job_id,owner,body.project_id,body.idempotency_key,sha,canonical(snapshot),now+600,now,now))

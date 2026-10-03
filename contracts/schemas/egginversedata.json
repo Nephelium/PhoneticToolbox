@@ -34,6 +34,19 @@
       "title": "Egg Values",
       "type": "array"
     },
+    "fixed_window_crossings": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Fixed Window Crossings"
+    },
     "frequencies_hz": {
       "items": {
         "type": "number"
@@ -41,6 +54,35 @@
       "maxItems": 30000,
       "title": "Frequencies Hz",
       "type": "array"
+    },
+    "full_egg_values": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 48000,
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Full Egg Values"
+    },
+    "gci_count": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Gci Count"
     },
     "inverse_db": {
       "items": {
@@ -58,6 +100,20 @@
       "title": "Inverse Values",
       "type": "array"
     },
+    "lp_order": {
+      "anyOf": [
+        {
+          "maximum": 256,
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Lp Order"
+    },
     "relative_times_s": {
       "items": {
         "type": "number"
@@ -65,6 +121,20 @@
       "maxItems": 30000,
       "title": "Relative Times S",
       "type": "array"
+    },
+    "sample_rate_hz": {
+      "anyOf": [
+        {
+          "maximum": 96000,
+          "minimum": 8000,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Sample Rate Hz"
     },
     "schema_version": {
       "const": "egg-inverse-view/1",

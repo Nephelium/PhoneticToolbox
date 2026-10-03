@@ -6,21 +6,21 @@ import type {Workspace} from '../../state/workspace.ts';
 import {overlayPlot,annotationRuns,type PlotGroup,type OverlayCurve} from './state.ts';
 import {styledSvg,editableSvg} from '../../design/svg-fonts.ts';
 import {wholeFigurePng,currentFigurePng,downloadImage} from './export.ts';
-const props=defineProps<{table:ParameterTable;group:PlotGroup;wave:Workspace;waveform:()=>HTMLElement|undefined}>();
+const props=defineProps<{table:ParameterTable;group:PlotGroup;wave:Workspace;waveform:()=>HTMLElement|undefined;timeAxisInsets?:{left:number;right:number}}>();
 const exporting=ref(false);
 const format=ref<'png'|'svg'>('png');
 const svg=ref<SVGSVGElement>(),surface=ref<HTMLElement>(),error=ref(''),measuredWidth=ref(600);
 const viewportHeight=ref(window.innerHeight);const updateHeight=()=>{viewportHeight.value=window.innerHeight;};
 const fontScale=computed(()=>preferences.value.figure.size/12);
 const chartWidth=computed(()=>Math.max(Math.ceil(340*fontScale.value),measuredWidth.value));
-let resize:ResizeObserver|undefined;
-onMounted(()=>{window.addEventListener('resize',updateHeight);resize=new ResizeObserver(entries=>{const width=entries[0]?.contentRect.width;if(width)measuredWidth.value=Math.floor(width);});if(surface.value)resize.observe(surface.value);});
-onUnmounted(()=>{resize?.disconnect();window.removeEventListener('resize',updateHeight);});
+let resize:ResizeObserver|undefined,resizeFrame=0;
+onMounted(()=>{window.addEventListener('resize',updateHeight);resize=new ResizeObserver(entries=>{const width=entries[0]?.contentRect.width;if(!width)return;cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{measuredWidth.value=Math.floor(width);});});if(surface.value)resize.observe(surface.value);});
+onUnmounted(()=>{resize?.disconnect();cancelAnimationFrame(resizeFrame);window.removeEventListener('resize',updateHeight);});
 const duration=computed(()=>props.wave.asset?.duration??1),span=computed(()=>duration.value/props.wave.zoom);
 const start=computed(()=>Math.min(props.wave.offset,Math.max(0,duration.value-span.value)));
 const chart=computed(()=>overlayPlot(props.table,props.group.parameters,start.value,start.value+span.value,chartWidth.value));
 const annotations=computed(()=>props.group.parameters.filter(n=>props.table.kinds[props.table.columns.indexOf(n)]==='text').map(name=>({name,runs:annotationRuns(props.table,name,start.value,start.value+span.value)})));
-const plotLeft=computed(()=>76*fontScale.value),plotRight=computed(()=>chartWidth.value-(chart.value.dual?76:22)*fontScale.value),plotWidth=computed(()=>plotRight.value-plotLeft.value);
+const plotLeft=computed(()=>props.timeAxisInsets?.left??76*fontScale.value),plotRight=computed(()=>chartWidth.value-(props.timeAxisInsets?.right??(chart.value.dual?76:22)*fontScale.value)),plotWidth=computed(()=>Math.max(1,plotRight.value-plotLeft.value));
 const plotTop=computed(()=>(28+annotations.value.length*23)*fontScale.value),plotHeight=computed(()=>Math.max(220,viewportHeight.value-780)),plotBottom=computed(()=>plotTop.value+plotHeight.value);
 const legendColumns=computed(()=>Math.max(1,Math.floor(chartWidth.value/(210*fontScale.value)))),legendWidth=computed(()=>chartWidth.value/legendColumns.value);
 const chartHeight=computed(()=>plotBottom.value+(58+Math.ceil(chart.value.curves.length/legendColumns.value)*24)*fontScale.value);
@@ -32,10 +32,10 @@ const y=(curve:OverlayCurve,value:number)=>plotBottom.value-(value-scale(curve).
 function path(curve:OverlayCurve){let pen=false;return curve.points.map(point=>{if(point.value===null){pen=false;return '';}const command=pen?'L':'M';pen=true;return command+x(point.time).toFixed(3)+' '+y(curve,point.value).toFixed(3);}).join(' ');}
 function label(name:string){const max=Math.max(12,Math.floor((legendWidth.value-55)/(7*fontScale.value)));return name.length>max?name.slice(0,max-1)+'…':name;}
 const printable=(text:string)=>text&&!['sil','<sil>','eps','nan'].includes(text.toLowerCase());
-let drag:{x:number;offset:number;time:number;select:boolean}|null=null;
+let drag:{x:number;offset:number;time:number;select:boolean;id:number}|null=null;
 function time(event:PointerEvent){const rect=svg.value!.getBoundingClientRect();return Math.max(0,Math.min(duration.value,start.value+((event.clientX-rect.left)/rect.width*chartWidth.value-plotLeft.value)/plotWidth.value*span.value));}
-function down(event:PointerEvent){if(event.button!==0)return;drag={x:event.clientX,offset:start.value,time:time(event),select:event.shiftKey};svg.value!.setPointerCapture(event.pointerId);if(drag.select){props.wave.start=drag.time;props.wave.end=drag.time;}}
-function move(event:PointerEvent){if(!drag)return;if(drag.select){props.wave.start=Math.min(drag.time,time(event));props.wave.end=Math.max(drag.time,time(event));}else{const rect=svg.value!.getBoundingClientRect();const dx=(event.clientX-drag.x)/rect.width*chartWidth.value/plotWidth.value*span.value;props.wave.offset=Math.max(0,Math.min(duration.value-span.value,drag.offset-dx));}}
+function down(event:PointerEvent){if(event.button!==0)return;const rect=svg.value!.getBoundingClientRect(),px=(event.clientX-rect.left)/rect.width*chartWidth.value;if(px<plotLeft.value||px>plotRight.value)return;event.preventDefault();drag={x:event.clientX,offset:start.value,time:time(event),select:!event.shiftKey,id:event.pointerId};svg.value!.setPointerCapture(event.pointerId);if(drag.select){props.wave.start=drag.time;props.wave.end=drag.time;}}
+function move(event:PointerEvent){if(!drag||drag.id!==event.pointerId)return;if(drag.select){props.wave.start=Math.min(drag.time,time(event));props.wave.end=Math.max(drag.time,time(event));}else{const rect=svg.value!.getBoundingClientRect();const dx=(event.clientX-drag.x)/rect.width*chartWidth.value/plotWidth.value*span.value;props.wave.offset=Math.max(0,Math.min(duration.value-span.value,drag.offset-dx));}}
 function wheel(event:WheelEvent){if(!event.ctrlKey||!event.deltaY)return;event.preventDefault();const rect=svg.value!.getBoundingClientRect();const fraction=Math.max(0,Math.min(1,((event.clientX-rect.left)/rect.width*chartWidth.value-plotLeft.value)/plotWidth.value));const anchor=start.value+fraction*span.value;props.wave.zoom=Math.max(1,Math.min(Math.max(1,duration.value/.01),props.wave.zoom*(event.deltaY<0?1.25:.8)));props.wave.offset=Math.max(0,Math.min(duration.value-duration.value/props.wave.zoom,anchor-fraction*duration.value/props.wave.zoom));}
 async function save(){
  if(exporting.value)return;exporting.value=true;error.value='';
@@ -54,10 +54,10 @@ async function saveWhole(){
 }
 </script>
 <template><section class="parameter-figure">
-<header class="section-title"><div><h3>{{group.title}}</h3><small>{{chart.curves.length}} 条曲线叠加 · {{chart.dual?'自动双纵轴':'共用纵轴'}}</small></div><div><slot/><select v-model="format" :aria-label="group.title+'图片格式'" class="image-format"><option value="png">PNG</option><option value="svg">SVG</option></select><button @click="save" :disabled="!group.parameters.length||exporting" :title="'仅保存参数图 '+format.toUpperCase()">保存当前图</button><button @click="saveWhole" :disabled="!group.parameters.length||exporting" title="白底 300 dpi，包含波形、已开启语谱图及此参数图">{{exporting?'正在生成 PNG…':'保存整幅 PNG'}}</button></div></header>
+<header class="section-title"><div><h3>{{group.title}}</h3><small>{{chart.curves.length}} 条曲线叠加 · {{chart.dual?'自动双纵轴':'共用纵轴'}}</small></div><div><slot/><select v-model="format" :aria-label="group.title+'图片格式'" class="image-format"><option value="png">PNG</option><option value="svg">SVG</option></select><button class="primary" @click="save" :disabled="!group.parameters.length||exporting" :title="'仅保存参数图 '+format.toUpperCase()">保存当前图</button><button class="primary" @click="saveWhole" :disabled="!group.parameters.length||exporting" title="白底 300 dpi，包含波形、已开启语谱图及此参数图">{{exporting?'正在生成 PNG…':'保存整幅 PNG'}}</button></div></header>
 <p v-if="error" role="alert">{{error}}</p><div ref="surface" class="plot-surface">
 <div v-if="!group.parameters.length" class="empty-plot"><strong>{{group.title}} · 待分配参数</strong><p>勾选参数并分配到此图窗后，多条曲线将在同一绘图区叠加。</p></div>
-<svg v-else ref="svg" class="parameter-chart" :viewBox="'0 0 '+chartWidth+' '+chartHeight" :style="{height:chartHeight+'px',minWidth:Math.ceil(340*fontScale)+'px'}" role="img" :aria-label="group.title+'叠加参数曲线'" @pointerdown="down" @pointermove="move" @pointerup="move($event);drag=null" @pointercancel="drag=null" @wheel="wheel" @dblclick="wave.zoom=1;wave.offset=0">
+<svg v-else ref="svg" class="parameter-chart" :viewBox="'0 0 '+chartWidth+' '+chartHeight" :data-plot-left="plotLeft" :data-plot-right="plotRight" :style="{height:chartHeight+'px',minWidth:Math.ceil(340*fontScale)+'px'}" role="img" :aria-label="group.title+'叠加参数曲线'" @pointerdown="down" @pointermove="move" @pointerup="move($event);drag=null" @pointercancel="drag=null" @wheel="wheel" @dblclick="wave.zoom=1;wave.offset=0">
 <rect :width="chartWidth" :height="chartHeight" fill="var(--panel)"/>
 <g class="shared-plot-area" :data-plot-top="plotTop" :data-plot-bottom="plotBottom">
 <rect :x="Math.max(plotLeft,Math.min(plotRight,x(wave.start)))" :y="plotTop" :width="Math.max(0,Math.min(plotRight,x(wave.end))-Math.max(plotLeft,x(wave.start)))" :height="plotHeight" fill="var(--selection)"/>
@@ -75,8 +75,8 @@ async function saveWhole(){
 </g>
 <text :x="plotLeft+plotWidth/2" :y="plotBottom+44*fontScale" text-anchor="middle" fill="var(--text)" font-size="14">时间（秒）</text>
 <g v-for="(curve,index) in chart.curves" :key="'legend-'+curve.name" class="curve-legend" :transform="'translate('+((index%legendColumns)*legendWidth+8)+' '+(plotBottom+(64+Math.floor(index/legendColumns)*24)*fontScale)+')'"><path d="M0 -4H25" :stroke="styleFor(curve.name).color" :stroke-dasharray="curve.axis==='right'?'7 3':styleFor(curve.name).dash" stroke-width="2"/><text x="33" y="0" font-size="13" fill="var(--text)"><title>{{curve.name}}</title>{{label(curve.name)}}{{chart.dual?(curve.axis==='right'?' [右]':' [左]'):''}}</text></g>
-</svg></div><p v-if="group.parameters.length" class="plot-help">Ctrl＋滚轮缩放时间轴 · 左键拖动平移 · Shift＋拖动选区 · 双击全长<span v-if="chart.dual">。双轴沿用 v2 的量级判定；图例标明所属纵轴，原数值不归一化。</span></p></section></template>
+</svg></div><p v-if="group.parameters.length" class="plot-help">拖动选区 · Shift＋拖动平移 · Ctrl＋滚轮缩放时间轴 · 双击全长<span v-if="chart.dual">。双轴沿用 v2 的量级判定；图例标明所属纵轴，原数值不归一化。</span></p></section></template>
 <style scoped>
 .image-format{width:auto;max-width:90px}
-.parameter-figure{border:1px solid var(--border);border-radius:8px;background:var(--panel);padding:10px;margin:10px 0;min-width:0}.parameter-figure>.section-title{flex-wrap:wrap;margin-bottom:8px}.section-title>div{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.section-title h3{margin:0;font-size:15px}.section-title small{color:var(--muted);font-size:12px}.plot-surface{width:100%;min-width:0;overflow-x:auto}.parameter-chart{display:block;width:100%;min-width:340px;max-width:none;background:var(--panel);touch-action:none;font-family:var(--font-figure);cursor:grab}.parameter-chart:active{cursor:grabbing}.empty-plot{min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--muted);border:1px dashed var(--border);border-radius:5px;background:var(--app)}.empty-plot strong{font-size:16px;color:var(--text)}.empty-plot p{max-width:340px;line-height:1.7}.plot-help{font-size:12px;color:var(--muted);line-height:1.6;margin:10px 0 0}
+.parameter-figure{border:1px solid var(--border);border-radius:8px;background:var(--panel);padding:10px;margin:10px 0;min-width:0}.parameter-figure>.section-title{flex-wrap:wrap;margin-bottom:8px}.section-title>div{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.section-title h3{margin:0;font-size:15px}.section-title small{color:var(--muted);font-size:12px}.plot-surface{width:100%;min-width:0;overflow-x:auto}.parameter-chart{display:block;width:100%;min-width:340px;max-width:none;background:var(--panel);touch-action:none;user-select:none;font-family:var(--font-figure);cursor:crosshair}.empty-plot{min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--muted);border:1px dashed var(--border);border-radius:5px;background:var(--app)}.empty-plot strong{font-size:16px;color:var(--text)}.empty-plot p{max-width:340px;line-height:1.7}.plot-help{font-size:12px;color:var(--muted);line-height:1.6;margin:10px 0 0}
 </style>

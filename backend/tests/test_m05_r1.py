@@ -95,6 +95,13 @@ def test_recording_bundle_vfr_audio_and_candidate_exchange(tmp_path):
     data=decode_lip((target/'candidate.lip.json').read_bytes())
     assert data['relative_times']==[.1,.19,.24000000000000002]
     assert info['candidate_not_legacy'] and info['candidate_frames']==3
+    companion=target/'audio_recording.lip.json'
+    assert companion.read_bytes()==(target/'candidate.lip.json').read_bytes()
+    assert decode_lip(companion.read_bytes())['metadata']['source_backend']=='candidate-test'
+    assert decode_lip(companion.read_bytes())['metadata']['source_status']=='candidate'
+    assert info['audio']['signal']['peak_dbfs'] > -30
+    assert not info['audio']['signal']['low_signal']
+    assert all(entry['sha256']==hashlib.sha256((target/entry['name']).read_bytes()).hexdigest() for entry in info['files'])
 
 
 def test_saved_offset_is_on_the_auto_associated_file_and_original_is_kept(tmp_path):

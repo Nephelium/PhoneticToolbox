@@ -48,7 +48,8 @@ hr{border:0;border-top:1px solid var(--border);margin:22px 0}
 .brand img{width:32px;height:32px;object-fit:contain}
 .brand>span{font-size:13px;font-weight:700;letter-spacing:-.4px;flex:1}
 .brand small{display:block;font-size:12px;font-weight:400;letter-spacing:1px;margin-top:4px}
-.brand .icon-button{width:23px;min-width:23px}
+.brand .sidebar-toggle{width:28px;min-width:28px;min-height:30px;flex:none;padding:0;background:var(--sidebar);font-size:24px;line-height:1}
+.brand .sidebar-toggle:hover{background:var(--selected)}
 .search-box{display:flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:6px;background:var(--panel);padding-left:10px;margin-bottom:15px;color:var(--muted)}
 .search-box svg{width:15px}
 .search-box input{width:100%;border:0;background:none;font-size:12px;padding-left:0}
@@ -163,7 +164,7 @@ main{overflow:auto;flex:1;min-height:0;background:var(--panel);scrollbar-width:t
 .track-label{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
 .track-label small{font-size:12px}
 .wave-track svg{width:100%;height:92px;display:block;background:var(--app);border:1px solid var(--border);border-radius:3px;touch-action:none;cursor:crosshair}
-.wave-line{stroke:var(--wave);stroke-width:1;vector-effect:non-scaling-stroke;fill:none}
+.wave-line{stroke:var(--waveform-color,var(--wave));stroke-width:1;vector-effect:non-scaling-stroke;fill:none}
 .wave-baseline{stroke:var(--border);stroke-width:1;vector-effect:non-scaling-stroke}
 .wave-selection{fill:var(--selection)}
 .time-axis{display:flex;justify-content:space-between;font:12px Consolas,monospace;color:var(--muted);margin-bottom:12px}
@@ -261,7 +262,7 @@ dialog::backdrop{background:var(--overlay)}
 .brand{justify-content:center;flex-wrap:wrap;padding-bottom:12px}
 .brand>span,.nav-item>span:not(.ipa-icon),.nav-group h2,.utility-grid span{display:none}
 .nav-item{justify-content:center;padding:7px}
-.brand .icon-button{display:none}
+.brand .sidebar-toggle{display:none}
 .search-box{display:none}
 .utility-grid{grid-template-columns:1fr}
 .utility-grid button{justify-content:center}
@@ -465,3 +466,11 @@ code,pre{font-family:var(--font-mono,Consolas),monospace;font-variant-ligatures:
 .module-frame .module-toolbar .m01-directory-bar button{font-size:var(--control-size);min-height:var(--control-height)}
 
 .utility-page{max-width:1100px;margin:0 auto;gap:16px!important;padding:24px!important}.utility-page h3{margin-top:8px}.utility-page .help-list{margin:0;padding-left:24px}.utility-page .setting-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.settings-page{width:100%;max-width:1220px;margin:0 auto;padding:20px!important;flex:none}
+.settings-columns{display:grid;grid-template-columns:minmax(280px,.78fr) minmax(380px,1.22fr);gap:16px;align-items:start}
+.settings-card{min-width:0;border:1px solid var(--border);border-radius:10px;background:var(--panel);padding:18px}
+.settings-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:28px;margin:0}
+.settings-heading h3{font-size:15px;margin:0}.settings-heading>span{font-size:11px}
+.settings-note{font-size:12px;color:var(--muted);line-height:1.6}
+@container module (max-width:780px){.settings-columns{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){.settings-page{padding:12px!important}.settings-card{padding:14px}}

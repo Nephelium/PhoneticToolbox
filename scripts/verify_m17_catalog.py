@@ -9,12 +9,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEST = ROOT / 'frontend/src/modules/ipa-plus/data/catalog.json'
-VERSION = 'm17/1.0.0-20261002'
+VERSION = 'm17/1.2.0-20261003'
 ENTRIES = []
 CHARTS = {s: [] for s in ('ipa','extipa','voqs')}
 SOURCE = {'ipa':'ipa-chart-2026','extipa':'extipa-chart-2025','voqs':'voqs-ball-2018'}
 ALIASES = {}
-cin = Path.home() / 'Documents/ipa.cin'
+_source_parser=argparse.ArgumentParser(add_help=False)
+_source_parser.add_argument('--cin',type=Path)
+_source_options,_=_source_parser.parse_known_args()
+cin = _source_options.cin or Path.home() / 'Documents/ipa.cin'
+if _source_options.cin is not None and not cin.is_file():
+    raise FileNotFoundError('Explicit read-only CIN reference is missing: '+str(cin))
 if cin.exists():
     body=cin.read_text('utf-8').split('%chardef begin',1)[1].split('%chardef end',1)[0]
     for line in body.splitlines():
@@ -210,6 +215,93 @@ add('voqs',tools,'{V!  V!}','糙声范围','harsh voice span','以糙声标签�
 add('voqs',tools,'{3V! ˈvɛɹi ˈhɑ˞ʃ ˈvɔɪs 3V!}','强糙声（原表例句片段）','degree 3 harsh voice example','从原表底部完整例句截取的强糙声范围；两端用数字 3 标记较强程度。',example=True)
 add('voqs',tools,'[ˈnɔ˞məl ˈvɔɪs {3V! ˈvɛɹi ˈhɑ˞ʃ ˈvɔɪs 3V!} {L̝ 1V! ˈlɛs ˈhɑ˞ʃ ˈvɔɪs wɪð ˈɹeɪzd ˈlæɹɪŋks 1V! L̝}]','音质范围（原表完整例句）','complete labelled-brace example','原表底部例句先给常态浊声，再给较强糙声，最后组合升喉位和较弱糙声。不同维度可以组合，实际生理兼容性需依据材料。',example=True,display='[ˈnɔ˞məl …{3V!…}{L̝ 1V!…}]',usage='按钮显示紧凑预览。点击输入原表底部完整例句，包含方括号、重音和两个完整的带标签范围。')
 
+
+# M17 2026-10-03: independently composed combinations from the user's visual
+# inventory. The official pulmonic matrix is retained without new grey cells.
+combo=section('ipa','combinations','辅音补充组合','按发音方式组织的输入示例；组合音标不作为 IPA 官方新增基本字母计数。')
+combo['groups']=[]
+combination_rows=[
+ ('送气与部位细分','保留清浊、送气和前后位置的区别。',[
+  ('pʰ','双唇送气塞音'),('t̪ʰ','齿送气塞音'),('t̪','清齿塞音'),('d̪','浊齿塞音'),('t̠ʰ','龈后送气塞音'),('t̠','清龈后塞音'),('d̠','浊龈后塞音'),('ʈʰ','卷舌送气塞音'),('t̠ʲ','腭化龈后清塞音'),('d̠ʲ','腭化龈后浊塞音'),('cʰ','硬腭送气塞音'),('kʰ','软腭送气塞音'),('qʰ','小舌送气塞音')]),
+ ('清鼻音与鼻音部位','上置清化圈避开下伸笔画；清化和构音部位分别标记。',[
+  ('m̥','清双唇鼻音'),('ɱ̊','清唇齿鼻音'),('n̪̊','清齿鼻音'),('n̪','齿鼻音'),('n̠̊','清龈后鼻音'),('n̠','龈后鼻音'),('ɳ̊','清卷舌鼻音'),('n̠ʲ̊','清腭化龈后鼻音'),('n̠ʲ','腭化龈后鼻音'),('ɲ̊','清硬腭鼻音'),('ɴ̥','清小舌鼻音')]),
+ ('颤音与闪音','清化圈标记无声带振动；位置变化须与具体材料核对。',[
+  ('ʙ̥','清双唇颤音'),('r̪̊','清齿颤音'),('r̪','齿颤音'),('r̥','清齿龈颤音'),('r̠̊','清龈后颤音'),('r̠','龈后颤音'),('ʀ̥','清小舌颤音'),('ⱱ̟','前移唇齿闪音'),('ɾ̥','清齿龈闪音'),('ɽ̊','清卷舌闪音')]),
+ ('擦音的部位细分','以齿化、后移等附加号细化基本擦音。',[
+  ('s̪','齿化清咝擦音'),('z̪','齿化浊咝擦音'),('s̠','后移清咝擦音'),('z̠','后移浊咝擦音'),('ɬ̪','齿化清边擦音'),('ɮ̪','齿化浊边擦音'),('ɬ̠','龈后清边擦音'),('ɮ̠','龈后浊边擦音')]),
+ ('近音与边近音','降低号表示比擦音更开放；不预设固定的开口程度。',[
+  ('β̞','双唇近音'),('ð̞','齿近音'),('ɹ̼','舌唇近音'),('ɹ̪','齿近音（r型）'),('ɹ̥','清齿龈近音'),('ɻ̊','清卷舌近音'),('j̊','清硬腭近音'),('ɣ̞','软腭近音（降低）'),('ʁ̞','小舌近音'),('ʕ̞','咽近音'),('l̪','齿边近音'),('l̠','龈后边近音')]),
+ ('塞擦音 · 双唇至齿龈','上连音线把闭塞与摩擦释放关联为一个组合单位。',[
+  ('p͡ɸ','清双唇塞擦音'),('b͡β','浊双唇塞擦音'),('p̪͡f','清唇齿塞擦音'),('b̪͡v','浊唇齿塞擦音'),('t̪͡s̪','清齿咝塞擦音'),('d̪͡z̪','浊齿咝塞擦音'),('t̪͡θ','清齿非咝塞擦音'),('d̪͡ð','浊齿非咝塞擦音'),('t͡s','清齿龈塞擦音'),('d͡z','浊齿龈塞擦音')]),
+ ('塞擦音 · 龈后至会厌','符号描述闭塞和释放；实际发音可有协同构音。',[
+  ('t̠͡s̠','后移清齿龈塞擦音'),('d̠͡z̠','后移浊齿龈塞擦音'),('t͡ʃ','清龈后塞擦音'),('d͡ʒ','浊龈后塞擦音'),('ʈ͡ʂ','清卷舌塞擦音'),('ɖ͡ʐ','浊卷舌塞擦音'),('t͡ɕ','清龈腭塞擦音'),('d͡ʑ','浊龈腭塞擦音'),('c͡ç','清硬腭塞擦音'),('ɟ͡ʝ','浊硬腭塞擦音'),('k͡x','清软腭塞擦音'),('ɡ͡ɣ','浊软腭塞擦音'),('q͡χ','清小舌塞擦音'),('ɢ͡ʁ','浊小舌塞擦音'),('ʡ͡ħ','会厌闭塞与清咽摩擦释放'),('ʡ͡ʕ','会厌闭塞与浊咽摩擦释放')]),
+ ('边塞擦音与清内爆音','边音释放与清化内爆音是不同的组合维度。',[
+  ('t͡ɬ','清齿龈边塞擦音'),('d͡ɮ','浊齿龈边塞擦音'),('ɓ̥','清双唇内爆音'),('ɗ̥','清齿龈内爆音'),('ʄ̊','清硬腭内爆音'),('ɠ̊','清软腭内爆音'),('ʛ̥','清小舌内爆音')]),
+ ('挤喉音 · 擦音与塞擦音','使用 U+02BC 挤喉记号；与送气和普通引号区别。',[
+  ('fʼ','唇齿挤喉擦音'),('θʼ','齿挤喉擦音'),('t̪͡θʼ','齿挤喉塞擦音'),('rʼ','齿龈挤喉颤音'),('t͡sʼ','齿龈挤喉塞擦音'),('t͡ɬʼ','齿龈边挤喉塞擦音'),('ʃʼ','龈后挤喉擦音'),('t͡ʃʼ','龈后挤喉塞擦音'),('ʈʼ','卷舌挤喉塞音'),('ʂʼ','卷舌挤喉擦音'),('ʈ͡ʂʼ','卷舌挤喉塞擦音'),('t͡ɕʼ','龈腭挤喉塞擦音'),('cʼ','硬腭挤喉塞音'),('çʼ','硬腭挤喉擦音'),('c͡çʼ','硬腭挤喉塞擦音'),('xʼ','软腭挤喉擦音'),('k͡xʼ','软腭挤喉塞擦音'),('qʼ','小舌挤喉塞音'),('χʼ','小舌挤喉擦音'),('q͡χʼ','小舌挤喉塞擦音')]),
+]
+for label,hint,values in combination_rows:
+    ids=[]
+    for value,name in values:
+        ident=add('ipa',combo,value,name,'combined transcription: '+value,
+            name+'。'+''.join(explain for mark,explain in [('ʰ','上标h标记辅音释放后的送气。'),('̪','下桥标记齿部构音。'),('̠','后移号细化构音位置。'),('ʲ','上标j标记腭化。'),('̥','下置清化圈标记无声带振动。'),('̊','上置清化圈标记无声带振动，并避开下伸笔画。'),('̟','前移号细化构音位置。'),('̞','降低号表示比基底擦音更开放的构音。'),('̼','舌唇号标记舌与上唇的构音。'),('͡','连音线将闭塞和摩擦或边音释放关联为一个构音单位。'),('ʼ','挤喉号标记喉部外向气流机制。')] if mark in value)+'这是组合输入示例，未作为官方新增基本字母计数。',
+            example=True,usage='点击输入整个组合。可在编辑框继续修改各基底或附加记号；连音线和标记顺序原样保存。',
+            contrast='截图中的组合范围用于选择条目，具体记法按 IPA 构音和附加符号原则重写；不复制截图的美术布局，也不据此宣称某种组合在所有语言中成立。',
+            locator='组合规则：Diacritics / tie bars / Consonants (non-pulmonic)')
+        ENTRIES[-1]['notationStatus']='combination'
+        ids.append(ident)
+    combo['groups'].append({'label':label,'hint':hint,'ids':ids})
+
+# The 2013 Chinese paper discusses the 2002 chart. Newer meanings stay bound to
+# the 2025 chart; older outward airflow is explicitly separated below.
+extra=section('extipa','articulatory','构音部位 · 独立附加号','补出辅音表中使用的构音部位标记；中文参考吕佳、江荻（2013）表5和表8。')
+for value,zh,en,meaning,ex in [
+ ('͆','齿唇','dentolabial','上齿接触下唇的齿唇构音；与通常以下唇作为活动器官的唇齿音区分。',['p͆','b͆']),
+ ('̪͆','齿间／双齿','interdental / bidental','上、下齿相关的构音标记。音值依基底和具体构音说明区分，不能把齿间舌音与纯双齿气流混为同一音。',['n̪͆','h̪͆']),
+ ('͇','齿龈','alveolar','将主要构音位置标在齿龈区域。用于细化唇音或齿音时需说明活动器官。',['t͇','θ͇']),
+ ('̼','舌唇','linguolabial','舌与上唇接触或接近；以舌唇部位细化基底音。',['t̼','d̼'])]:
+    mark('extipa',extra,value,zh,en,meaning,ex,locator='2025 Consonants：相应部位组合；独立记号拆分输入')
+    for e in ENTRIES[-(1+len(ex)):]:
+        e['sourceRefs'].append({'sourceId':'extipa-lv-jiang-2013','locator':'p.666 表5；p.667 表8。中文术语参考，图版为2002版。'})
+        if e['isExample']: e['notationStatus']='combination'
+# Sequences visible in the screenshot involving extIPA dentolabial/linguolabial
+# bases belong here, with the current extIPA consonants as their source.
+extcomb=section('extipa','combinations','补充构音组合','完整组合示例；基础字母与附加号可在其他分区分别输入。')
+for value,zh in [('p͆͡f͆','清齿唇塞擦音'),('b͆͡v͆','浊齿唇塞擦音'),('r̼̊','清舌唇颤音'),('m̥͆','清齿唇鼻音')]:
+    add('extipa',extcomb,value,zh,'combined transcription: '+value,zh+'。以当前 extIPA 构音部位标记结合清化或 IPA 连音线构成输入示例。',example=True,locator='Consonants / dentolabial, linguolabial；组合规则')
+    ENTRIES[-1]['notationStatus']='combination'
+hist=section('extipa','historical','旧版记号 · 2002版文献','用于阅读旧资料，不混入现行2025基本表。')
+for value,zh in [('↑','外呼气流'),('t↑','外呼气流（示例）')]:
+    add('extipa',hist,value,zh,'egressive airflow (2002 chart)',
+        '气流朝口外流出。吕佳、江荻（2013）所述2002版表5和表8列有此记号，当前2025简表未单列。',
+        example=value!='↑',contrast='这是旧版扩展表的气流标记。不要与IPA的升阶符号ꜛ或整体上升箭头↗混用。',locator='2002版 extIPA，见2013论文p.666表5及p.667表8第662项')
+    ENTRIES[-1]['notationStatus']='historical';ENTRIES[-1]['sourceRefs']=[{'sourceId':'extipa-lv-jiang-2013','locator':'p.666 表5；p.667 表8，第662项'}]
+
+# R2 terminology and source-specific explanations; original IDs/text preserved.
+from m17_catalog_r2 import apply_r2
+apply_r2(ENTRIES, CHARTS)
+
+# Group neighbouring independent marks and original examples in readable rows.
+# These headings preserve the original entry IDs and insertion semantics.
+for sys in ('ipa','extipa'):
+    for sec in CHARTS[sys]:
+        if sec['kind']!='list' or sec.get('groups'): continue
+        rows=[]
+        for ident in sec['ids']:
+            e=next(x for x in ENTRIES if x['id']==ident)
+            if e['isExample'] and rows and sec['id'] not in ('other','combinations'):
+                rows[-1]['ids'].append(ident)
+            else:
+                rows.append({'label':e['nameZh'].replace('（示例）',''),'hint':e['descriptionZh'].split('。')[0]+'。','ids':[ident]})
+        sec['groups']=rows
+# Optional historical Chinese terms improve search without replacing the current
+# 2025 wording (e.g. partially denasal) or the fixed VoQS translation.
+term_aliases={'唇展':['唇展'],'强构音':['强发音','强式发音'],'弱构音':['弱发音','弱式发音'],'部分去鼻化':['非鼻化','去鼻化'],'摩擦性鼻漏气':['鼻漏气','鼻音溢出'],'腭咽摩擦':['软腭咽摩擦'],'滑动构音':['滑动发音','含混发音'],'吸气气流':['内吸气流'],'吹哨式构音':['啸音发声'],'预浊化':['前浊音'],'后浊化':['后浊音'],'无送气':['不送气'],'预送气':['前送气']}
+for e in ENTRIES:
+    if e['system']=='extipa' and e['nameZh'] in term_aliases:
+        e['aliases']=sorted(set(e['aliases']+term_aliases[e['nameZh']]))
+        e['sourceRefs'].append({'sourceId':'extipa-lv-jiang-2013','locator':'pp.666–668 术语与功能；旧版译词仅作检索参照，现行含义按2025表。'})
+
 def payload(): return {'version':VERSION, 'entries':ENTRIES, 'charts':CHARTS}
 def manifest():
     buf=io.StringIO(newline='');w=csv.writer(buf,lineterminator='\n')
@@ -218,7 +310,7 @@ def manifest():
         w.writerow([e['sourceRefs'][0]['sourceId'],e['sourceRefs'][0]['locator'],'169 Figure 2' if e['system']=='voqs' else '1',e['section'],e['display'],e['id'],e['insertText'],' '.join(e['codePoints']),e['insertionMode'],e['nameZh'],'click-'+e['id'],e.get('representation','')])
     return buf.getvalue()
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--write',action='store_true');args=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--write',action='store_true');p.add_argument('--cin',type=Path,help='Explicit read-only CIN source; defaults to ~/Documents/ipa.cin');args=p.parse_args()
     data=json.dumps(payload(),ensure_ascii=False,indent=2)+'\n';csvdata=manifest()
     coverage=ROOT/'docs/references/m17-symbol-coverage.csv'
     if args.write: DEST.write_text(data,'utf-8',newline='\n');coverage.write_text(csvdata,'utf-8',newline='\n')

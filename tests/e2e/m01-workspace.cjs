@@ -12,9 +12,9 @@ const fs=require('node:fs/promises'),path=require('node:path'),assert=require('n
   const back=async()=>{await page.getByRole('button',{name:/返回项目与文件管理/}).click();};
   await login(config.people[0]);await enter('测试项目甲');
   assert.equal(await page.locator('.m01-file-list .file-row').count(),17);
-  await page.locator('.m01-file-list .file-row').first().click();await page.locator('.m01-intervals button').first().waitFor();
-  assert.equal(await page.locator('.wave-track').count(),1);assert.equal(await page.locator('.m01-intervals button').count(),2);
-  await page.locator('.m01-intervals button').first().click();assert.equal(await page.getByLabel(/^终点/).inputValue(),'0.4');
+  await page.locator('.m01-file-list .file-row').first().click();await page.locator('.textgrid-tier:first-child .textgrid-interval').first().waitFor();
+  assert.equal(await page.locator('.wave-track').count(),1);assert.equal(await page.locator('.textgrid-tier:first-child .textgrid-interval').count(),2);
+  await page.locator('.textgrid-tier:first-child .textgrid-interval').first().click();assert.equal(await page.getByLabel(/^终点/).inputValue(),'0.4');
   checks.push('17 inputs, actual stereo WAV with default single-channel view, shared TextGrid preview and selection');
   await page.getByLabel('显示两个声道').check();assert.equal(await page.locator('.wave-track').count(),2);await page.getByLabel('显示两个声道').uncheck();
   assert((await page.locator('.wave-track svg').boundingBox()).height>=160);
@@ -56,8 +56,8 @@ const fs=require('node:fs/promises'),path=require('node:path'),assert=require('n
   assert((await page.locator('.audio-transport .mono').innerText()).startsWith('0.000 /'));
   await page.getByLabel('TextGrid关联',{exact:true}).selectOption('');await page.getByRole('button',{name:'刷新列表',exact:true}).click();
   await page.getByRole('button',{name:'刷新列表',exact:true}).waitFor();
-  assert.equal(await page.locator('.m01-intervals button').count(),0);
-  await page.getByLabel('TextGrid关联',{exact:true}).selectOption({label:'测试声调00.TextGrid'});await page.locator('.m01-intervals button').first().waitFor();
+  assert.equal(await page.locator('.textgrid-tier:first-child .textgrid-interval').count(),0);
+  await page.getByLabel('TextGrid关联',{exact:true}).selectOption({label:'测试声调00.TextGrid'});await page.locator('.textgrid-tier:first-child .textgrid-interval').first().waitFor();
   await page.locator('.m01-file-entry input').nth(2).check();
   assert((await page.locator('.m01-batch-bar strong').innerText()).includes('17'));
   let release,blocked;const held=new Promise(resolve=>release=resolve),seen=new Promise(resolve=>blocked=resolve);let first=true;
@@ -70,7 +70,7 @@ const fs=require('node:fs/promises'),path=require('node:path'),assert=require('n
   await page.waitForTimeout(300);
   assert((await page.locator('.signal-heading .mono').innerText()).includes('22050 Hz'));
   await page.unroute('**/api/v1/assets/*/content',delayed);
-  await page.locator('.m01-file-list .file-row').first().click();await page.locator('.m01-intervals button').first().waitFor();
+  await page.locator('.m01-file-list .file-row').first().click();await page.locator('.textgrid-tier:first-child .textgrid-interval').first().waitFor();
   checks.push('WebAudio selection end/stop, explicit no-association survives refresh, marked subset independent, stale response discarded');
   await page.getByRole('button',{name:'编辑14项设置'}).click();await page.getByLabel('帧移',{exact:true}).fill('10');await page.getByRole('button',{name:'取消',exact:true}).click();
   assert((await page.locator('.parameter-summary').innerText()).includes('帧移 5 ms'));
@@ -80,7 +80,7 @@ const fs=require('node:fs/promises'),path=require('node:path'),assert=require('n
   await page.getByRole('button',{name:'选择输出参数',exact:true}).click();await page.getByRole('button',{name:'全不选',exact:true}).click();assert(await page.getByRole('button',{name:'应用到草稿'}).isDisabled());
   await page.locator('.parameter-grid input[value="pF0"]').check();await page.getByRole('button',{name:'应用到草稿'}).click();await page.getByRole('button',{name:'保存草稿',exact:true}).click();
   await page.getByRole('button',{name:'关闭 参数估计',exact:true}).click();await page.locator('.nav-item[title="参数估计"]').click();
-  await page.locator('.m01-file-list .file-row').first().waitFor();await page.locator('.m01-file-list .file-row').first().click();await page.locator('.m01-intervals button').first().waitFor();
+  await page.locator('.m01-file-list .file-row').first().waitFor();await page.locator('.m01-file-list .file-row').first().click();await page.locator('.textgrid-tier:first-child .textgrid-interval').first().waitFor();
   assert(await page.getByRole('button',{name:'播放选区',exact:true}).isEnabled());assert.equal((await page.locator('.parameter-count strong').innerText()).trim(),'1');
   checks.push('settings cancel/apply, tab retention and close/reopen transport rebind, 80-key drawer and saved draft');
   await page.getByLabel('显示语谱图（Praat）').check();await page.locator('.spectrogram-canvas canvas').waitFor();await page.getByLabel('配色主题').selectOption('light');await page.screenshot({path:path.join(config.output,'m01-light.png'),fullPage:true,animations:'disabled'});

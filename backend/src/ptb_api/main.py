@@ -33,7 +33,8 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
         raise ValueError('Unsupported service mode')
     from contextlib import asynccontextmanager
     from ptb_worker.egg_interactive import InteractivePreview
-    egg_preview = InteractivePreview(memory_bytes=3_000_000_000 if mode == 'local' else 1_000_000_000)
+    egg_preview = InteractivePreview(memory_bytes=3_000_000_000 if mode == 'local' else 1_000_000_000,
+        reaper_binary=getattr(getattr(job_store,'files',None),'reaper_binary',None))
     from ptb_worker.spectrogram_session import SpectrogramSession
     spectrogram_session = SpectrogramSession() if mode == 'local' else None
     @asynccontextmanager

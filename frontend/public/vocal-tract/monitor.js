@@ -21,7 +21,7 @@ export function setupMonitor(post,isClosed){
     for(const {c,w,h} of [wave,spec]){c.fillStyle=tint('#fffef9');c.fillRect(0,0,w,h);c.fillStyle=tint('#7b877a');for(let i=0;i<=4;i++){const x=36+i*(w-46)/4;c.fillText((start+seconds*i/4).toFixed(1),x-5,h-3);}}
     const {c,w,h}=wave,yy=v=>8+(1-v)/2*(h-29),xx=t=>36+(t-start)/seconds*(w-46);
     c.strokeStyle=tint('#e0e4d9');for(const v of [-1,0,1]){c.beginPath();c.moveTo(36,yy(v));c.lineTo(w-10,yy(v));c.stroke();c.fillText(v,9,yy(v)+3);}
-    if(latest?.waveform.length){c.strokeStyle=tint('#386a5e');c.beginPath();latest.waveform.forEach(([lo,hi],i)=>{const x=xx(latest.end-latest.duration+(i+.5)/latest.waveform.length*latest.duration);c.moveTo(x,yy(lo));c.lineTo(x,yy(hi));});c.stroke();}
+    if(latest?.waveform.length){c.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--waveform-color').trim()||tint('#386a5e');c.beginPath();latest.waveform.forEach(([lo,hi],i)=>{const x=xx(latest.end-latest.duration+(i+.5)/latest.waveform.length*latest.duration);c.moveTo(x,yy(lo));c.lineTo(x,yy(hi));});c.stroke();}
     const s=spec;for(const f of [0,2000,4000,6000])s.c.fillText(f?f/1000+'k':'0',7,8+(1-f/6000)*(s.h-30)+3);
     const data=latest?.spectrogram;
     if(data?.length){

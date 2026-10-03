@@ -15,7 +15,7 @@ def extract_audio(source,directory,*,stop=lambda:False,max_bytes=128_000_000,clo
         channels=len(stream.codec_context.layout.channels)
         if not 8000<=rate<=192000 or channels not in (1,2):raise ValueError('m05_audio_format_limit')
         resampler=av.AudioResampler(format='s16',layout='mono' if channels==1 else 'stereo',rate=rate)
-        anchor=None;written=0;last=None;gaps=0;count=0;max_residual=0;records=directory/'audio-timing.jsonl'
+        anchor=None;written=0;last=None;gaps=0;count=0;max_residual=0;last_residual=0;records=directory/'audio-timing.jsonl'
         with wave.open(str(directory/'audio_recording.wav'),'wb') as output,records.open('x',encoding='utf8') as timeline:
             output.setparams((channels,2,rate,0,'NONE','not compressed'))
             for frame in container.decode(stream):
@@ -29,6 +29,7 @@ def extract_audio(source,directory,*,stop=lambda:False,max_bytes=128_000_000,clo
                     start=round((float(converted.pts*converted.time_base)-anchor)*rate)
                     gap=start-written
                     residual=gap
+                    last_residual=residual
                     max_residual=max(max_residual,abs(residual))
                     # A container tick rounds a packet timestamp, whereas its
                     # decoded sample count stays exact. Keep both observations.
@@ -58,4 +59,5 @@ def extract_audio(source,directory,*,stop=lambda:False,max_bytes=128_000_000,clo
     return dict(present=True,sample_rate=rate,channels=channels,decoded_frames=count,samples=written,
                 first_decoded_pts_s=anchor,end_s=anchor+written/rate if anchor is not None else None,
                 inserted_silence_samples=gaps,encoding='PCM16 decoded derivative',
-                drift_s=None,clock=clock_policy,max_timestamp_residual_samples=max_residual),['audio_recording.wav','audio-timing.jsonl']
+                drift_s=None,clock=clock_policy,max_timestamp_residual_samples=max_residual,last_timestamp_residual_samples=last_residual,
+                timestamp_vs_pcm_end_residual_s=last_residual/rate,physical_sync_verified=False),['audio_recording.wav','audio-timing.jsonl']

@@ -14,6 +14,8 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--name', default='PhoneticToolbox-v3-LocalPreview-20260927')
+    parser.add_argument('--lean-qt', action='store_true',
+                        help='Widgets/WebEngine build without unused QML plugins, debug resources or extra WebEngine locales')
     options = parser.parse_args()
     name = options.name
     if not name.replace('-', '').replace('_', '').isalnum():
@@ -40,11 +42,17 @@ def main():
         runtimes['PTB_M11_COMPONENT_ROOT'] = str(mfa_root)
     config = dict(kind='local-only-preview', source_commit=subprocess.check_output(
         ['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(), runtimes=runtimes,
-        portable=False, modules='M01-M17; per-module validation remains separate')
+        portable=False, modules='M01-M17; per-module validation remains separate',
+        bundle_profile='widgets-webengine-zh-en/1' if options.lean_qt else 'full/1')
     (snapshot / 'local-preview.json').write_text(json.dumps(config, indent=2), encoding='utf-8')
     args = [sys.executable, '-m', 'PyInstaller', '--noconfirm', '--onefile', '--windowed',
             '--name', name, '--distpath', str(destination), '--workpath', str(work / 'pyinstaller'),
             '--specpath', str(work)]
+    if options.lean_qt:
+        # Snapshot the policy too, so the resulting artifact remains auditable.
+        hooks = snapshot / 'bundle-hooks'
+        shutil.copytree(ROOT / 'scripts/bundle_hooks', hooks)
+        args += ['--additional-hooks-dir', str(hooks)]
     for relative in ('scripts', 'backend/src', 'desktop/src', 'packages/phonetic_core/src'):
         args += ['--paths', str(ROOT / relative)]
     # Another module can rebuild frontend/dist while PyInstaller is analyzing.
@@ -62,6 +70,15 @@ def main():
             raise RuntimeError('Build input changed while snapshotting: ' + relative)
         data.append((target, relative))
     data += [(snapshot / r, r) for r in ('backend/src', 'desktop/src', 'packages/phonetic_core/src')]
+    # Match the runtime window's visible footprint; the original K2 image stays intact.
+    import importlib.util
+    icon_spec = importlib.util.spec_from_file_location('ptb_build_icon', snapshot / 'desktop/src/ptb_desktop/app_icon.py')
+    icon_module = importlib.util.module_from_spec(icon_spec)
+    icon_spec.loader.exec_module(icon_module)
+    icon_source = next((snapshot / 'frontend/dist/assets').glob('k2-*.png'))
+    icon_target = snapshot / 'PhoneticToolbox-v3.ico'
+    icon_module.write_windows_icon(icon_source, icon_target)
+    args += ['--icon', str(icon_target)]
     data += [(snapshot / 'local-preview.json', '.'),
              (ROOT / 'third_party/source-registry.json', 'third_party'),
              (ROOT / 'phonetic_toolbox/core/acoustic/reaper.exe', 'resources/research'),
@@ -99,6 +116,8 @@ def main():
              '--hidden-import', '_cffi_backend', '--hidden-import', 'xlrd', '--exclude-module', 'matplotlib',
              '--exclude-module', 'IPython', str(ROOT / 'scripts/v3_local_preview_entry.py')]
     env = os.environ.copy()
+    if options.lean_qt:
+        env['PTB_BUNDLE_AUDIT_DIR'] = str(work)
     windows = Path(env.get('SystemRoot', 'C:/Windows'))
     env['PATH'] = os.pathsep.join(map(str, (Path(sys.executable).parent, Path(sys.base_prefix),
                                           windows / 'System32', windows)))

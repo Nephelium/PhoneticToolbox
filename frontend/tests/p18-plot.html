@@ -1,0 +1,8 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><title>P18 plot resizing regression</title></head><body><div id="app"></div><script type="module">
+import {createApp,h,ref} from 'vue';
+import Plot from '/src/components/ScientificPlot.vue';
+import '/src/design/tokens.css';
+const marker=ref(.5),events=[];
+window.__p18Plot={events,marker};
+createApp({render:()=>h('main',{style:'height:calc(100vh / var(--page-scale,1) - 32px);padding:16px;display:flex'},h(Plot,{title:'P18 coordinate fixture',style:'flex:1;min-height:0',fill:true,interactive:true,livePan:true,x:[0,1],y:[-1,1],unit:'幅度',traces:[{label:'解析几何数据',times:[0,.25,.5,.75,1],values:[0,.5,-.5,1,0],color:'var(--wave)'}],markers:[{time:marker.value,label:'定位'}],onSeek:time=>{marker.value=time;events.push({kind:'seek',value:time});},onPan:value=>events.push({kind:'pan',value}),onZoom:value=>events.push({kind:'zoom',value})}))}).mount('#app');
+</script></body></html>

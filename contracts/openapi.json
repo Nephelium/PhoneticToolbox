@@ -1120,7 +1120,7 @@
             "type": "integer"
           },
           "max_f0": {
-            "default": 880.0,
+            "default": 800.0,
             "maximum": 2000,
             "minimum": 50,
             "title": "Max F0",
@@ -1134,7 +1134,7 @@
             "type": "number"
           },
           "min_f0": {
-            "default": 60.0,
+            "default": 30.0,
             "maximum": 1000,
             "minimum": 10,
             "title": "Min F0",
@@ -1834,6 +1834,19 @@
             "title": "Egg Values",
             "type": "array"
           },
+          "fixed_window_crossings": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Fixed Window Crossings"
+          },
           "frequencies_hz": {
             "items": {
               "type": "number"
@@ -1841,6 +1854,35 @@
             "maxItems": 30000,
             "title": "Frequencies Hz",
             "type": "array"
+          },
+          "full_egg_values": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "maxItems": 48000,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Full Egg Values"
+          },
+          "gci_count": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Gci Count"
           },
           "inverse_db": {
             "items": {
@@ -1858,6 +1900,20 @@
             "title": "Inverse Values",
             "type": "array"
           },
+          "lp_order": {
+            "anyOf": [
+              {
+                "maximum": 256,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Lp Order"
+          },
           "relative_times_s": {
             "items": {
               "type": "number"
@@ -1865,6 +1921,20 @@
             "maxItems": 30000,
             "title": "Relative Times S",
             "type": "array"
+          },
+          "sample_rate_hz": {
+            "anyOf": [
+              {
+                "maximum": 96000,
+                "minimum": 8000,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Sample Rate Hz"
           },
           "schema_version": {
             "const": "egg-inverse-view/1",
@@ -2042,6 +2112,17 @@
             "title": "Raster Shape",
             "type": "array"
           },
+          "reaper": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EggSeries"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
           "schema_version": {
             "const": "egg-preview/1",
             "default": "egg-preview/1",
@@ -2084,6 +2165,28 @@
           },
           "sq": {
             "$ref": "#/components/schemas/EggSeries"
+          },
+          "suggested_db_range": {
+            "anyOf": [
+              {
+                "maxItems": 2,
+                "minItems": 2,
+                "prefixItems": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Suggested Db Range"
           }
         },
         "required": [
@@ -2208,6 +2311,15 @@
             "title": "Export Policy",
             "type": "string"
           },
+          "f0_policy": {
+            "default": "legacy/1",
+            "enum": [
+              "legacy/1",
+              "audio-f0/2"
+            ],
+            "title": "F0 Policy",
+            "type": "string"
+          },
           "flip_channels": {
             "default": false,
             "title": "Flip Channels",
@@ -2266,6 +2378,11 @@
           "keep_praat_f0": {
             "default": true,
             "title": "Keep Praat F0",
+            "type": "boolean"
+          },
+          "keep_reaper_f0": {
+            "default": false,
+            "title": "Keep Reaper F0",
             "type": "boolean"
           },
           "lowpass_cutoff": {
@@ -3539,7 +3656,7 @@
             "items": {
               "$ref": "#/components/schemas/AcousticManagedFile"
             },
-            "maxItems": 3,
+            "maxItems": 4,
             "minItems": 2,
             "title": "Files",
             "type": "array"
@@ -3580,7 +3697,8 @@
             "enum": [
               "generate",
               "synthesize",
-              "extract"
+              "extract",
+              "resynthesize"
             ],
             "title": "Action",
             "type": "string"

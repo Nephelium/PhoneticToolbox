@@ -14,13 +14,14 @@ MAX_INVERSE_SAMPLES = 48_000
 def digest(raw): return hashlib.sha256(raw).hexdigest()
 
 
-def prepare(raw, config, input_name='egg.wav'):
+def prepare(raw, config, input_name='egg.wav', *, reaper=None):
     from .egg_runtime import fingerprint
     runtime = fingerprint()
     import numpy as np
     from scipy.io import wavfile
     from phonetic_core.egg import EGGConfig, prepare as load, analyze_events
-    from phonetic_core.egg.f0 import praat_pitch, glottal_movement
+    from phonetic_core.egg.f0 import glottal_movement
+    from .egg_f0 import populate, evidence
     from phonetic_core.egg.inverse import inverse_filter
     from ptb_api.egg_models import EggTaskConfig, expected_names
     from .acoustic_errors import AcousticFailure
@@ -57,13 +58,14 @@ def prepare(raw, config, input_name='egg.wav'):
         frequencies, spectra, times, waves = inverse_comparison(audio,filtered,result.egg_signal_processed[first:last],int(fs))
         inverse_view = EggInverseData(frequencies_hz=frequencies.tolist(),audio_db=spectra[0].tolist(),
             inverse_db=spectra[1].tolist(),egg_db=spectra[2].tolist(),relative_times_s=times.tolist(),
-            audio_values=waves[0].tolist(),inverse_values=waves[1].tolist(),egg_values=waves[2].tolist()).model_dump()
+            audio_values=waves[0].tolist(),inverse_values=waves[1].tolist(),egg_values=waves[2].tolist(),
+            full_egg_values=result.egg_signal_processed[first:last].tolist(),sample_rate_hz=int(fs),
+            lp_order=settings.lp_order or int(fs/1000)+6,gci_count=len(gcis),
+            fixed_window_crossings=int(np.count_nonzero(np.diff((gcis*fs).astype(int)) < 1+int(.003*fs)))).model_dump()
         for name, values in [('egg_ORIG.wav',audio),('egg_IF.wav',filtered)]:
             stream = io.BytesIO(); wavfile.write(stream,int(fs),values.astype(np.float64)); blobs[name] = stream.getvalue()
     else:
-        if settings.mode == 'single' or settings.keep_praat_f0 or settings.glottal_movement:
-            track = praat_pitch(result.audio_signal,int(fs))
-            result.audio_f0_times, result.audio_f0_values = track.times,track.values
+        populate(result,settings,reaper,praat=settings.mode == 'single' or settings.keep_praat_f0 or settings.glottal_movement)
         if settings.glottal_movement:
             result.glottal_movement_events = glottal_movement(result.audio_f0_times,result.audio_f0_values)
         if settings.mode == 'preview':
@@ -85,6 +87,8 @@ def prepare(raw, config, input_name='egg.wav'):
         local_cq_policy='legacy-100ms-padding-repeat-filter',waveform_time='sample-index/fs',
         inverse=(dict(sample_count=last-first,lp_order=settings.lp_order or int(fs/1000)+6,
             original='normalized-analysis-audio',estimate='simplified-closed-phase-inverse-filter',wav_subtype='FLOAT64') if settings.mode=='inverse' else None))
+    metadata['f0_analysis']=evidence(settings,reaper if settings.mode!='inverse' else None)
+    if settings.keep_reaper_f0 and settings.mode!='inverse':metadata['source_ids'].append('SRC-REAPER')
     if preview is not None:
         metadata.update(preview=preview,csv_grid=None,csv_mask=None)
     if inverse_view is not None: metadata['inverse_view']=inverse_view
@@ -104,7 +108,9 @@ def main():
     with open(sys.argv[1],'rb') as handle:
         header = json.loads(handle.readline(16384)); raw = handle.read(INPUT_BYTES+1)
     if len(raw)>INPUT_BYTES or digest(raw)!=header['sha256']: raise ValueError('Input changed')
-    payload = prepare(raw,header['config'],header.get('input_name','egg.wav'))
+    from .egg_f0 import native_engine
+    with native_engine(header) as reaper:
+        payload = prepare(raw,header['config'],header.get('input_name','egg.wav'),reaper=reaper)
     with open(sys.argv[2],'wb',buffering=0) as out:
         for offset in range(0,len(payload),65536): out.write(payload[offset:offset+65536])
 

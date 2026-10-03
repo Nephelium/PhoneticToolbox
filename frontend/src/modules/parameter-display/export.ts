@@ -1,5 +1,7 @@
 import {exportSize,png300dpi} from './png.ts';
-import {paintSvg,styledSvg} from '../../design/svg-fonts.ts';
+import {paintSvg} from '../../design/svg-fonts.ts';
+import {withFigureTitle} from '../../design/figure-title.ts';
+import {waveformExportColor} from '../../design/waveform-color.ts';
 
 const ns='http://www.w3.org/2000/svg';
 // Detached print palette: never switch the live page's theme during export.
@@ -22,7 +24,7 @@ function printed(source:SVGSVGElement){
     if(element.tagName==='text')target.style.fill=palette['--text'];
     for(const key of Object.keys(palette))target.style.setProperty(key,palette[key]);
   });
-  clone.querySelectorAll('.wave-line').forEach(e=>{(e as SVGElement).style.stroke=palette['--accent'];});
+  clone.querySelectorAll('.wave-line').forEach(e=>{(e as SVGElement).style.stroke=waveformExportColor(palette['--accent']);});
   clone.querySelectorAll('.wave-baseline').forEach(e=>{(e as SVGElement).style.stroke=palette['--border'];});
   clone.querySelectorAll('.wave-selection').forEach(e=>{(e as SVGElement).style.fill=palette['--selection'];});
   clone.querySelectorAll('.playback-cursor').forEach(e=>e.remove());
@@ -49,25 +51,26 @@ export function wholeFigureSvg(input:WholeFigure){
   const root=node('svg',{xmlns:ns,width,height,viewBox:`0 0 ${width} ${height}`});
   root.style.fontFamily=getComputedStyle(chart).fontFamily;
   root.append(node('rect',{width,height,fill:'white'}));
-  root.append(node('text',{x:plotLeft,y:24*fontScale,fill:palette['--text'],'font-size':14*fontScale},title));
+  root.append(node('text',{x:width/2,y:24*fontScale,'text-anchor':'middle',fill:palette['--text'],'font-size':14*fontScale},title));
   function ticks(y:number){for(let i=0;i<5;i++)root.append(node('text',{x:plotLeft+i*(plotRight-plotLeft)/4,y,fill:palette['--muted'],'font-size':12*fontScale,'text-anchor':'middle'},(start+(end-start)*i/4).toFixed(3)));}
   waves.forEach((wave,index)=>{
     const y=48*fontScale+index*trackHeight,copy=printed(wave);
-    root.append(node('text',{x:plotLeft,y:y+14*fontScale,fill:palette['--text'],'font-size':12*fontScale},wave.parentElement?.querySelector('.track-label span')?.textContent??`声道 ${index+1}`));
-    // Waveform's responsive 1000x90 viewBox stretches its text on screen. Keep
-    // exported IPA glyphs at an undistorted font size while scaling geometry.
+    root.append(node('text',{x:width/2,y:y+14*fontScale,'text-anchor':'middle',fill:palette['--text'],'font-size':12*fontScale},wave.parentElement?.querySelector('.track-label span')?.textContent??`声道 ${index+1}`));
+    // Accept both legacy normalized geometry and the pixel-coordinate annotation
+    // surface. Keep print glyphs undistorted while scaling each track's geometry.
     const trackWidth=plotRight-plotLeft,labels=[...copy.querySelectorAll('text')];
-    const geometry=node('g',{transform:`scale(${trackWidth/1000} ${150/90})`});
+    const sourceWidth=wave.viewBox.baseVal.width,sourceHeight=wave.viewBox.baseVal.height;
+    const geometry=node('g',{transform:`scale(${trackWidth/sourceWidth} ${150/sourceHeight})`});
     while(copy.firstChild)geometry.append(copy.firstChild);
     copy.append(geometry);
-    labels.forEach(label=>{const x=Number(label.getAttribute('x')),ly=Number(label.getAttribute('y'));label.setAttribute('x',String(x*trackWidth/1000));label.setAttribute('y',String(ly*150/90));label.style.fontSize=12*fontScale+'px';copy.append(label);});
+    labels.forEach(label=>{const x=Number(label.getAttribute('x')),ly=Number(label.getAttribute('y'));label.setAttribute('x',String(x*trackWidth/sourceWidth));label.setAttribute('y',String(ly*150/sourceHeight));label.style.fontSize=12*fontScale+'px';copy.append(label);});
     copy.setAttribute('viewBox',`0 0 ${trackWidth} 150`);
     copy.setAttribute('x',String(plotLeft));copy.setAttribute('y',String(y+22*fontScale));copy.setAttribute('width',String(trackWidth));copy.setAttribute('height','150');
     root.append(copy);ticks(y+150+42*fontScale);
   });
   if(canvas){
     const y=48*fontScale+waves.length*trackHeight;
-    root.append(node('text',{x:plotLeft,y:y+14*fontScale,fill:palette['--text'],'font-size':12*fontScale},[...spec!.querySelectorAll('.track-label > *')].map(e=>e.textContent?.trim()).join(' · ')||'Praat 语谱图'));
+    root.append(node('text',{x:width/2,y:y+14*fontScale,'text-anchor':'middle',fill:palette['--text'],'font-size':12*fontScale},'语谱图'));
     root.append(node('image',{x:plotLeft,y:y+25*fontScale,width:plotRight-plotLeft,height:210,preserveAspectRatio:'none',href:canvas.toDataURL('image/png')}));
     const labels=[...spec!.querySelectorAll('.frequency-axis span')].map(e=>e.textContent??'');
     labels.forEach((label,i)=>root.append(node('text',{x:plotLeft-6,y:y+33*fontScale+i*100,'text-anchor':'end','font-size':11*fontScale,fill:palette['--muted']},label)));
@@ -89,10 +92,9 @@ export async function wholeFigurePng(input:WholeFigure){
 }
 
 export async function currentFigurePng(chart:SVGSVGElement){
-  const width=chart.viewBox.baseVal.width,height=chart.viewBox.baseVal.height;
-  const clone=styledSvg(chart);clone.setAttribute('xmlns',ns);
-  clone.setAttribute('width',String(width));clone.setAttribute('height',String(height));
-  const text=new XMLSerializer().serializeToString(clone),size=exportSize(width,height);
+  const title=chart.closest('.parameter-figure')?.querySelector('h3')?.textContent??'参数图';
+  const {root,width,height}=withFigureTitle(printed(chart),title,parseFloat(getComputedStyle(chart).fontSize)||12);
+  const text=new XMLSerializer().serializeToString(root),size=exportSize(width,height);
   const canvas=document.createElement('canvas');canvas.width=size.width;canvas.height=size.height;
   try{
     await paintSvg(canvas,text,width,height);

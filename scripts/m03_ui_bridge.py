@@ -39,7 +39,7 @@ def main():
         wavfile.write(inputs/'oversized.wav',44100,np.tile(samples,(151,1)))
     os.environ['PTB_EGG_PYTHON']=str(ROOT/'.venv/m03-compatible/python.exe')
     provider=FileProvider()
-    with LocalService(db,local_files_root=cache) as service:
+    with LocalService(db,local_files_root=cache,reaper_binary=ROOT/'phonetic_toolbox/core/acoustic/reaper.exe' if '--reaper' in sys.argv else None) as service:
         bridge=TaskBridge(provider,service)
         grants={role:provider.choose(role,lambda p=p:str(p)) for role,p in [('input',inputs),('output',saved)]}
         print(json.dumps({'ready':True,'out':str(out)},ensure_ascii=False),flush=True)

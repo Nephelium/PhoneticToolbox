@@ -1,4 +1,5 @@
 import { browser } from './browser.ts';
+import {installClipboardWriter} from './clipboard.ts';
 import {serialRequests} from './serial-requests.ts';
 import {m07Port} from './m07.ts';
 import {m06Port} from './m06.ts';
@@ -25,6 +26,13 @@ export async function initializePlatform(){
   const hello=await call<{kind:string;session:string;api_version:string;tasks?:boolean}>('hello');
   if(hello.kind!=='desktop'||hello.api_version!=='1.1.0'||!hello.session)throw Error('桌面接口版本不匹配。');
   desktopSession=hello.session;
+  const clipboardBridge=bridge as Bridge & {writeClipboard?:(text:string,callback:(result:string)=>void)=>void};
+  if(clipboardBridge.writeClipboard){
+    installClipboardWriter(text=>new Promise<void>((resolve,reject)=>{
+      const timer=setTimeout(()=>reject(Error('复制超时，请重试。')),5000);
+      clipboardBridge.writeClipboard!(text,raw=>{clearTimeout(timer);try{const result=JSON.parse(raw);if(!result.ok)throw Error(result.error);resolve();}catch(error){reject(error);}});
+    }));
+  }
   desktopFontFamilies=()=>call<string[]>('fonts');
   const recordingBridge=bridge as Bridge & Partial<RecordingChannel>;
   if(recordingBridge.recording&&recordingBridge.recordingReady){

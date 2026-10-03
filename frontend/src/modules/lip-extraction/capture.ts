@@ -1,19 +1,21 @@
 import {LipInference,type Detection} from './inference.ts';
 import {LandmarkStabilizer} from './stabilizer.ts';
 import {lipMetrics,type Point} from './metrics.ts';
+import {emptyInputLevel,InputMeter,preferredMicrophone,type InputLevel} from './audio-input.ts';
 import {newStats,MAX_LOCAL_RECORDING_BYTES,MAX_LOCAL_RESULT_BYTES,MAX_RECORDING_SECONDS,verifyLocalBudget,type CaptureMode,type CapturePhase,type CaptureStats} from './state.ts';
 export interface CapturedFrame {index:number;time_s:number;media_time_s:number;presentation_time_ms:number;capture_time_ms:number|null;detected:boolean;points:Point[]|null;metrics:Detection['metrics'];inference_ms:number;input_resolution:[number,number];video_presentation_number:number;callback_index:number;}
 export interface CaptureSettings {camera:string;microphone:string;mode:CaptureMode;filter:boolean;cutoff:number;delegate:'CPU'|'GPU';requestedFps:number;preferMp4?:boolean;}
-export interface CaptureState {phase:CapturePhase;error:string;stats:CaptureStats;latest:CapturedFrame|null;dirty:boolean;analysisTruncated:boolean;trackSettings:MediaTrackSettings|null;support:Record<string,unknown>|null;}
+export interface CaptureState {phase:CapturePhase;error:string;stats:CaptureStats;latest:CapturedFrame|null;dirty:boolean;analysisTruncated:boolean;trackSettings:MediaTrackSettings|null;support:Record<string,unknown>|null;audio:InputLevel;}
 const webmOptions=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'];
 const mp4Options=['video/mp4;codecs=avc1.42001E,mp4a.40.2','video/mp4'];
 export class LipCapture {
-  readonly state:CaptureState={phase:'idle',error:'',stats:newStats(),latest:null,dirty:false,analysisTruncated:false,trackSettings:null,support:null};
+  readonly state:CaptureState={phase:'idle',error:'',stats:newStats(),latest:null,dirty:false,analysisTruncated:false,trackSettings:null,support:null,audio:emptyInputLevel()};
   frames:CapturedFrame[]=[];
   previewFrame:ImageBitmap|null=null;
   chunks:Blob[]=[];
   chunkTimes:{timecode_ms:number;arrival_ms:number;bytes:number}[]=[];
   private stream:MediaStream|null=null;
+  private meter:InputMeter|null=null;
   private recorder:MediaRecorder|null=null;
   private engine:LipInference|null=null;
   private filter:LandmarkStabilizer|null=null;
@@ -48,7 +50,7 @@ export class LipCapture {
     this.previewFrame?.close();this.previewFrame=null;
     this.frames=[];this.chunks=[];this.chunkTimes=[];this.resultBytes=0;this.firstMedia=null;this.previousMedia=-Infinity;this.previousPresented=null;this.finalized=false;this.encodingComplete=true;this.inFlight=false;
     this.stopPromise=null;this.resolveStop=null;
-    Object.assign(this.state,{phase:'opening',error:'',stats:newStats(),latest:null,dirty:false,analysisTruncated:false,support:null,trackSettings:null});this.publish();
+    Object.assign(this.state,{phase:'opening',error:'',stats:newStats(),latest:null,dirty:false,analysisTruncated:false,support:null,trackSettings:null,audio:emptyInputLevel()});this.publish();
     let stage='检查本地存储';
     try{
       const memory=(performance as any).memory;
@@ -56,10 +58,35 @@ export class LipCapture {
       const storage=await navigator.storage?.estimate().catch(()=>null)??null;
       if(generation!==this.generation)return;
       this.state.support={storage_estimate:storage,heap_limit:memory?.jsHeapSizeLimit??null,storage_note:'当前录制驻内存，浏览器存储配额不等于下载磁盘可用空间'};
-      const constraints={video:{deviceId:settings.camera?{exact:settings.camera}:undefined,frameRate:{ideal:settings.requestedFps},width:{ideal:1280},height:{ideal:720}},audio:recording?{deviceId:settings.microphone?{exact:settings.microphone}:undefined,echoCancellation:false,noiseSuppression:false,autoGainControl:false}:false};
+      // Device labels may be hidden until permission is granted. Resolve again
+      // after acquiring, before starting the recorder. Explicit choices stay exact.
+      const before=recording&&!settings.microphone?await navigator.mediaDevices.enumerateDevices().catch(()=>[]):[];
+      if(generation!==this.generation)return;
+      const desired=settings.microphone||preferredMicrophone(before)?.deviceId||'';
+      const audioConstraints=(id:string)=>({deviceId:id?{exact:id}:undefined,echoCancellation:false,noiseSuppression:false,autoGainControl:false});
+      const constraints={video:{deviceId:settings.camera?{exact:settings.camera}:undefined,frameRate:{ideal:settings.requestedFps},width:{ideal:1280},height:{ideal:720}},audio:recording?audioConstraints(desired):false};
       stage='请求摄像头和麦克风';const stream=await this.acquire(constraints);
       if(generation!==this.generation){stream.getTracks().forEach(t=>t.stop());return;}
       this.stream=stream;this.state.trackSettings=stream.getVideoTracks()[0]?.getSettings()??null;
+      if(recording){
+        const after=!settings.microphone?await navigator.mediaDevices.enumerateDevices().catch(()=>[]):[];
+        if(generation!==this.generation)return;
+        const preferred=preferredMicrophone(after),current=stream.getAudioTracks()[0];
+        if(preferred&&preferred.deviceId!==desired&&preferred.deviceId!==current?.getSettings().deviceId){
+          stage='切换至自动选定的麦克风';const replacement=await this.acquire({video:false,audio:audioConstraints(preferred.deviceId)});
+          if(generation!==this.generation){replacement.getTracks().forEach(t=>t.stop());return;}
+          const track=replacement.getAudioTracks()[0];
+          if(!track){replacement.getTracks().forEach(t=>t.stop());throw Error('所选麦克风没有返回音轨，请重新选择输入设备');}
+          stream.getAudioTracks().forEach(t=>{stream.removeTrack(t);t.stop();});stream.addTrack(track);
+          replacement.getTracks().filter(t=>t!==track).forEach(t=>t.stop());
+        }
+        const track=stream.getAudioTracks()[0];
+        if(!track||track.readyState!=='live'||!track.enabled)throw Error('没有可用的麦克风音轨，请重新选择音频输入后录制');
+        const info=track.getSettings();Object.assign(this.state.audio,{label:track.label||'未命名音频输入',deviceId:info.deviceId??'',sampleRate:info.sampleRate??null,channelCount:info.channelCount??null,muted:track.muted});
+        const meter=new InputMeter();this.meter=meter;
+        try{await meter.start(track,this.state.audio,()=>this.publish());}catch{meter.close();if(generation===this.generation){this.meter=null;this.state.audio.monitorError='输入电平监测不可用，请停止后试听录制核对声音。';}}
+        if(generation!==this.generation)return;
+      }
       for(const track of stream.getTracks())track.addEventListener('ended',()=>{if(generation===this.generation&&['opening','previewing','recording'].includes(this.state.phase)){this.encodingComplete=false;this.state.error='设备已断开；正在收尾已采集数据。';void this.stop().catch(()=>{});}});
       this.video.srcObject=stream;this.video.muted=true;stage='启动视频预览';await this.video.play();
       if(generation!==this.generation)return;
@@ -140,13 +167,15 @@ export class LipCapture {
       finally{if(timeout)clearTimeout(timeout);}
     }
     this.state.stats.stopped=performance.now();this.release();
+    if(this.settings?.mode==='preview'){this.frames=[];this.state.latest=null;this.previewFrame?.close();this.previewFrame=null;this.state.dirty=false;}
+    if(this.settings?.mode!=='preview'&&!this.chunks.length){this.encodingComplete=false;this.state.phase='failed';this.state.error='录制未生成有效媒体片段，可能停止过早或编码器未输出。请重新录制并确认编码大小增加后停止。';this.publish();throw Error(this.state.error);}
     // ready means finalized IN MEMORY, never saved/downloaded.
     this.state.phase='ready';this.publish();
   }
   blob(){if(!['ready','failed'].includes(this.state.phase))throw Error('录制尚未收尾');if(!this.chunks.length)throw Error('没有已编码录制');return new Blob(this.chunks,{type:this.chunks[0].type});}
-  metadata(){return {schema:'m05-capture/1',backend:['preview','realtime'].includes(this.settings?.mode??'')?'mediapipe-web/0.10.14/float16-1/candidate':'capture-only/1',inference_requested:['preview','realtime'].includes(this.settings?.mode??''),settings:this.settings,support:this.state.support,track_settings:this.state.trackSettings,
+  metadata(){return {schema:'m05-capture/1',backend:['preview','realtime'].includes(this.settings?.mode??'')?'mediapipe-web/0.10.14/float16-1/candidate':'capture-only/1',inference_requested:['preview','realtime'].includes(this.settings?.mode??''),settings:this.settings,support:this.state.support,track_settings:this.state.trackSettings,audio_input:{...this.state.audio},
     model_smoothing:['preview','realtime'].includes(this.settings?.mode??'')?'VIDEO numFaces=1 internal smoothing':null,post_filter:['preview','realtime'].includes(this.settings?.mode??'')?(this.settings?.filter??false):null,stats:this.state.stats,chunk_times:this.chunkTimes,
-    clock_mapping:{video:'requestVideoFrameCallback.mediaTime',video_origin_s:this.firstMedia,origin_observation:'video.currentTime at MediaRecorder.start; preview uses first callback',presentation:'performance.now',audio:'encoded container PTS; verify offline',audio_video_drift_s:null},
+    clock_mapping:{video:'requestVideoFrameCallback.mediaTime',video_origin_s:this.firstMedia,candidate_time_base:'recording_start_estimate',origin_observation:'video.currentTime at MediaRecorder.start; asynchronous encoder origin is not exposed',origin_uncertainty_s:null,physical_sync_verified:false,presentation:'performance.now',audio:'encoded container PTS; inspect after recording',audio_video_drift_s:null},
     limits:{media_bytes:MAX_LOCAL_RECORDING_BYTES,result_bytes:MAX_LOCAL_RESULT_BYTES},analysis_truncated:this.state.analysisTruncated,
     display_strategy:'candidate overlay uses exact submitted frame; source callback count is separate',
     overlay_display_fps:this.state.stats.processed>1&&this.state.stats.lastOverlayMs!>this.state.stats.firstOverlayMs!?(this.state.stats.processed-1)*1000/(this.state.stats.lastOverlayMs!-this.state.stats.firstOverlayMs!):null,
@@ -155,6 +184,6 @@ export class LipCapture {
     warning:this.state.error||null,complete:this.finalized&&this.encodingComplete,recording_saved:false};}
   markSaved(){this.state.dirty=false;this.publish();}
   discard(){if(!['idle','ready','failed'].includes(this.state.phase))throw Error('请先停止录制');this.generation++;this.previewFrame?.close();this.previewFrame=null;this.frames=[];this.chunks=[];this.chunkTimes=[];Object.assign(this.state,{dirty:false,phase:'idle',latest:null,error:'',stats:newStats()});this.publish();}
-  private release(){if(this.callback)this.video.cancelVideoFrameCallback(this.callback);this.callback=0;if(this.timer)clearTimeout(this.timer);this.timer=null;this.resolveStop?.();this.engine?.close();this.engine=null;this.stream?.getTracks().forEach(t=>t.stop());this.stream=null;this.video.srcObject=null;this.video.pause();this.recorder=null;this.stopPromise=null;this.resolveStop=null;this.filter=null;}
+  private release(){this.meter?.close();this.meter=null;if(this.callback)this.video.cancelVideoFrameCallback(this.callback);this.callback=0;if(this.timer)clearTimeout(this.timer);this.timer=null;this.resolveStop?.();this.engine?.close();this.engine=null;this.stream?.getTracks().forEach(t=>t.stop());this.stream=null;this.video.srcObject=null;this.video.pause();this.recorder=null;this.stopPromise=null;this.resolveStop=null;this.filter=null;}
   dispose(){this.generation++;if(this.callback)this.video.cancelVideoFrameCallback(this.callback);if(this.timer)clearTimeout(this.timer);if(this.recorder?.state!=='inactive')this.recorder?.stop();this.release();this.previewFrame?.close();this.previewFrame=null;}
 }

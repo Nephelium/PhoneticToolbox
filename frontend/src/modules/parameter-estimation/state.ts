@@ -20,27 +20,50 @@ export function validateSettings(value:Settings):string {
   if(typeof v!=='number'||!Number.isFinite(v)||(rule.type==='integer'&&!Number.isInteger(v))||(rule.minimum!==undefined&&v<rule.minimum)||(rule.exclusiveMinimum!==undefined&&v<=rule.exclusiveMinimum)||(rule.maximum!==undefined&&v>rule.maximum))return settingLabels[key as SettingKey][0]+'超出支持范围。';}
  return value.min_f0!>=value.max_f0!?'最小基频必须小于最大基频。':'';
 }
-export interface Association {textgrid:ResearchFile|null;lip:ResearchFile|null;legacy:ResearchFile|null;tiers:Tier[];gridHash:string;layer:number;error:string;manual:{textgrid:boolean;lip:boolean}}
+export interface Association {textgrid:ResearchFile|null;lip:ResearchFile|null;legacy:ResearchFile|null;tiers:Tier[];gridHash:string;layer:number;error:string;lipError:string;manual:{textgrid:boolean;lip:boolean}}
 export interface M01State {
  wave:Workspace;files:ResearchFile[];selected:string;marked:string[];associations:Record<string,Association>;
- input:DirectoryGrant|null;output:DirectoryGrant|null;associationDirectory:DirectoryGrant|null;sameDirectory:boolean;recursive:boolean;
+ input:DirectoryGrant|null;output:DirectoryGrant|null;associationDirectory:DirectoryGrant|null;lipDirectory:DirectoryGrant|null;sameDirectory:boolean;recursive:boolean;
  settings:Settings;settingsDraft:Settings;parameterDraft:string[];drawer:''|'parameters'|'settings';
  saved:string;loadVersion:number;listVersion:number;
 }
 export function createState(saved?:{parameters?:string[];settings?:Settings}):M01State {
  const settings=saved?.settings&&!validateSettings(saved.settings)?{...saved.settings}:defaults();
  const parameters=saved?.parameters?.length&&saved.parameters.every(k=>parameterKeys.includes(k as never))?[...new Set(saved.parameters)]:[...parameterKeys];
- const state:M01State={wave:{asset:null,start:0,end:0,channel:0,parameters,dirty:false,error:'',loading:false,zoom:1,offset:0},files:[],selected:'',marked:[],associations:{},input:null,output:null,associationDirectory:null,sameDirectory:true,recursive:false,
+ const state:M01State={wave:{asset:null,start:0,end:0,channel:0,parameters,dirty:false,error:'',loading:false,zoom:1,offset:0},files:[],selected:'',marked:[],associations:{},input:null,output:null,associationDirectory:null,lipDirectory:null,sameDirectory:true,recursive:false,
    settings,settingsDraft:{...settings},parameterDraft:[...parameters],drawer:'',saved:'',loadVersion:0,listVersion:0};state.saved=draftJson(state);return state;
 }
 export function draftJson(state:M01State){return JSON.stringify({parameters:state.wave.parameters,settings:state.settings});}
 export function dirty(state:M01State){return draftJson(state)!==state.saved|| (state.drawer==='settings'&&JSON.stringify(state.settingsDraft)!==JSON.stringify(state.settings))||(state.drawer==='parameters'&&JSON.stringify(state.parameterDraft)!==JSON.stringify(state.wave.parameters));}
 export function applyParameters(state:M01State,keys:string[]){if(!keys.length||new Set(keys).size!==keys.length||keys.some(k=>!parameterKeys.includes(k as never)))throw Error('请至少选择一个有效参数，且不能重复。');state.wave.parameters=[...keys];state.drawer='';state.wave.dirty=dirty(state);}
 export function applySettings(state:M01State,value:Settings){const error=validateSettings(value);if(error)throw Error(error);state.settings={...value};state.drawer='';state.wave.dirty=dirty(state);}
-export function association(state:M01State,id=state.selected):Association {return state.associations[id]??(state.associations[id]={textgrid:null,lip:null,legacy:null,tiers:[],gridHash:'',layer:0,error:'',manual:{textgrid:false,lip:false}});}
+export function association(state:M01State,id=state.selected):Association {return state.associations[id]??(state.associations[id]={textgrid:null,lip:null,legacy:null,tiers:[],gridHash:'',layer:0,error:'',lipError:'',manual:{textgrid:false,lip:false}});}
+export function isLipFile(file:ResearchFile){return file.kind==='lip'||(file.kind==='lip_pickle'&&!/_timestamps\.pkl$/i.test(file.name));}
+export function directoryResources(inputs:ResearchFile[],textgrids=inputs,lips=inputs){
+ const values=[...inputs.filter(f=>f.kind!=='textgrid'&&!isLipFile(f)),
+  ...textgrids.filter(f=>f.kind==='textgrid'||f.kind==='parameter'),...lips.filter(isLipFile)];
+ return [...new Map(values.map(f=>[f.id,f])).values()];
+}
+export function resetAssociations(state:M01State,kind:'textgrid'|'lip'){
+ for(const a of Object.values(state.associations)){
+  a[kind]=null;a.manual[kind]=false;
+  if(kind==='textgrid'){a.tiers=[];a.gridHash='';a.error='';}else a.lipError='';
+ }
+}
 export function matchAssociation(audio:ResearchFile,files:ResearchFile[],kind:'textgrid'|'lip'){
- const name=audio.name.replace(/\.wav$/i,'')+(kind==='textgrid'?'.textgrid':'.lip.json');const matches=files.filter(f=>f.kind===kind&&f.name.toLowerCase()===name.toLowerCase());
+ const stem=audio.name.replace(/\.wav$/i,'').toLowerCase();
+ let matches=files.filter(f=>f.kind===kind&&f.name.toLowerCase()===stem+(kind==='textgrid'?'.textgrid':'.lip.json'));
+ if(kind==='lip'&&!matches.length)matches=files.filter(f=>isLipFile(f)&&f.kind==='lip_pickle'&&f.name.toLowerCase()===stem+'.pkl');
  if(matches.length>1)throw Error('同名关联有多个候选，请为该音频明确选择。');return matches[0]??null;
+}
+export function associateLips(state:M01State,replaceManual=false){
+ const result={matched:0,missing:0,ambiguous:0,skipped:0};
+ for(const audio of state.files.filter(f=>f.kind==='audio')){
+  const a=association(state,audio.id);if(a.manual.lip&&!replaceManual){result.skipped++;continue;}
+  try{const file=matchAssociation(audio,state.files,'lip');a.lipError='';if(file){a.lip=file;a.manual.lip=false;result.matched++;}else{if(!a.manual.lip)a.lip=null;result.missing++;}}
+  catch(e){a.lipError=e instanceof Error?e.message:'唇形关联失败。';result.ambiguous++;}
+ }
+ return result;
 }
 export function reconcile(state:M01State,files:ResearchFile[]){
  if(new Set(files.map(f=>f.id)).size!==files.length)throw Error('文件列表含重复标识。');

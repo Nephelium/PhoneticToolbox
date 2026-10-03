@@ -1,6 +1,10 @@
 import catalog from './catalog.json' with {type:'json'};
 export interface Curve {points:[number,number][];override:number|null}
-export interface Config {schema_version:'m06/2';duration:number;sample_rate:number;sequence:string;fade_in:number;fade_out:number;smooth:number;f0_range:[number,number];curves:Record<string,Curve>;silence:[number,number][];boundaries:number[];f0_transform:{preset:'假声'|'嘎裂'|null;offset_hz:number}}
+export const f0Methods={praat_cc:'Praat 互相关（CC）',praat_ac:'Praat 自相关（AC）',reaper:'REAPER',harvest:'WORLD Harvest'} as const;
+export const synthesisMethods={klatt:'Klatt 参数合成',world:'WORLD 重合成',psola:'PSOLA 音高与时长'} as const;
+export interface Render {method:keyof typeof synthesisMethods;pitch:'original'|'curve';spectral_ratio:number;aperiodicity_ratio:number;source_sha256:string|null}
+export const renderDefaults=():Render=>({method:'klatt',pitch:'original',spectral_ratio:1,aperiodicity_ratio:1,source_sha256:null});
+export interface Config {schema_version:'m06/2';duration:number;sample_rate:number;sequence:string;fade_in:number;fade_out:number;smooth:number;f0_range:[number,number];f0_method:keyof typeof f0Methods;render:Render;curves:Record<string,Curve>;silence:[number,number][];boundaries:number[];f0_transform:{preset:'假声'|'嘎裂'|null;offset_hz:number}}
 export const parameters:Record<string,[number,number,number,string]>=Object.fromEntries(Object.entries(catalog.parameters).map(([n,v])=>[n,[Number(v[0]),Number(v[1]),Number(v[2]),String(v[3])]]));
 export const vowels=catalog.vowels;export const presets=catalog.presets as Record<string,Record<string,number>>;
 export const defaults=():Config=>JSON.parse(JSON.stringify(catalog.defaults));
@@ -9,6 +13,11 @@ export function number(value:unknown,label:string){if(value===''||value===null||
 export function valid(c:Config):Config {
  if((c.schema_version as string)==='m06/1')throw Error('此文件使用旧版 AV 标尺，无法直接换算。原文件保留，请使用新版参数。');
  if(c.schema_version!=='m06/2'||Object.keys(c.curves).sort().join()!=Object.keys(parameters).sort().join())throw Error('参数字段不完整');
+ if(!Object.hasOwn(c,'f0_method'))c.f0_method='praat_cc';
+ if(!Object.hasOwn(f0Methods,c.f0_method))throw Error('F0 提取算法无效');
+ if(!Object.hasOwn(c,'render'))c.render=renderDefaults();
+ const r=c.render;
+ if(!r||Object.keys(r).sort().join()!==Object.keys(renderDefaults()).sort().join()||!Object.hasOwn(synthesisMethods,r.method)||!['original','curve'].includes(r.pitch)||!Number.isFinite(r.spectral_ratio)||r.spectral_ratio<.5||r.spectral_ratio>2||!Number.isFinite(r.aperiodicity_ratio)||r.aperiodicity_ratio<0||r.aperiodicity_ratio>2||r.source_sha256!==null&&(typeof r.source_sha256!=='string'||!/^[a-f0-9]{64}$/.test(r.source_sha256)))throw Error('重合成设置无效');
  if(!Number.isFinite(c.duration)||c.duration<.1||c.duration>100)throw Error('总时长应为 0.1–100 秒');
  if(!Number.isInteger(c.sample_rate)||c.sample_rate<8000||c.sample_rate>192000)throw Error('采样率无效');
  if(!Array.isArray(c.f0_range)||c.f0_range.length!==2||!c.f0_range.every(Number.isFinite)||c.f0_range[0]<1||c.f0_range[1]>3000||c.f0_range[0]>=c.f0_range[1])throw Error('F0 范围无效');

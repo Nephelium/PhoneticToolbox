@@ -585,7 +585,7 @@
           "type": "integer"
         },
         "max_f0": {
-          "default": 880.0,
+          "default": 800.0,
           "maximum": 2000,
           "minimum": 50,
           "title": "Max F0",
@@ -599,7 +599,7 @@
           "type": "number"
         },
         "min_f0": {
-          "default": 60.0,
+          "default": 30.0,
           "maximum": 1000,
           "minimum": 10,
           "title": "Min F0",

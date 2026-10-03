@@ -57,6 +57,12 @@ export async function desktopM05(transport:Task,choose:()=>Promise<{id:string}|n
   async history(){return (await task<JobView[]>({op:'m05_history'})).map(j=>({id:j.id,name:new Date(j.created_at*1000).toLocaleString()+' · '+j.id.slice(0,8)}));},
   async load(id){const job=await task<JobView>({op:'job',id});return run({asset_id:'',sha256:''},id.slice(0,8),{filter_enabled:true,cutoff_hz:15},new AbortController().signal,()=>{},{},job);},
   replay(result,start){return task({op:'m05_replay',job:result.id,start});},
+  audioPreview(result){return task({op:'m05_audio_preview',job:result.id});},
+  async inspectRecording(blob){
+   const session=await task({op:'m05_inspect_begin',size:blob.size});
+   try{for(let offset=0;offset<blob.size;offset+=262144)await task({op:'m05_save_block',id:session.id,offset,base64:encoded(await blob.slice(offset,offset+262144).arrayBuffer())});return (await task({op:'m05_save_finish',id:session.id})).inspection;}
+   catch(e){await task({op:'m05_save_abort',id:session.id}).catch(()=>{});throw e;}
+  },
   async analyzeRecording(token,config,signal,progress){if(signal.aborted)throw Error('任务已取消');progress('读取已核对的 MP4');const input=await task({op:'m05_recording_input',token});return run(input,'本地原始录制.mp4',config,signal,progress);},
   async saveRecording(name,blob,metadata){
    const grant=await choose();if(!grant)return {saved:false};

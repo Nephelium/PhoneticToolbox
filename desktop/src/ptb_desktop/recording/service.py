@@ -9,9 +9,10 @@ import sys
 from pathlib import Path
 import numpy as np
 from phonetic_core.recording import meter
+from phonetic_core.recording.signal import DisplaySpectrum
 from phonetic_core.recording.edits import frames,select,remove,insert
 from .storage import Project,uid,now,read_range,iter_audio,atomic_json,read_json,safe_name
-from .capture import Capture,preview_array
+from .capture import Capture
 from .devices import devices,validate_config,Playback,PlaybackStartError
 from .jobs import process_audio,export_audio
 
@@ -129,16 +130,17 @@ class RecordingService:
             if not 0<=start<end<=n:raise ValueError('预览范围为空或越界')
             # Stream decimation for arbitrarily long takes. No whole-take RAM read.
             channels=take['config']['channels'];bins=min(width,end-start);edges=np.linspace(start,end,bins+1,dtype=np.int64);lo=np.full((bins,channels),np.inf);hi=np.full((bins,channels),-np.inf);offset=start
+            display=DisplaySpectrum(end-start,take['config']['sample_rate'],int(b.get('channel',0)),width) if b.get('spectrum') else None
             for block in iter_audio(self.project.root,select(v['spans'],start,end)):
+                if display is not None:display.add(block)
                 stop=offset+len(block);first=max(0,int(np.searchsorted(edges,offset,side='right')-1));last=min(bins,int(np.searchsorted(edges,stop,side='left'))+1)
                 for index in range(first,last):
                     a=max(int(edges[index]),offset)-offset;c=min(int(edges[index+1]),stop)-offset
                     if c>a:lo[index]=np.minimum(lo[index],block[a:c].min(axis=0));hi[index]=np.maximum(hi[index],block[a:c].max(axis=0))
                 offset=stop
             out={'wave':[np.stack((lo[:,c],hi[:,c]),axis=1).tolist() for c in range(channels)],'window_frames':end-start,'frames':n,'start_frame':start,'sample_rate':take['config']['sample_rate'],'spectrum':None}
-            if b.get('spectrum'):
-                duration=min(end-start,take['config']['sample_rate']*2);audio=read_range(self.project.root,v['spans'],start,start+duration)
-                out['spectrum']=preview_array(audio,take['config']['sample_rate'],True,int(b.get('channel',0)))['spectrum'];out['spectrum_window_frames']=duration
+            if display is not None:
+                out['spectrum']=display.result();out['spectrum_window_frames']=end-start
             return out
         if op in ('edit','undo','redo','restore','version'):
             self.require(idle=True);self.stop_play();take=self.take(b['id']);spans=take['versions'][take['head']]['spans']
@@ -248,13 +250,20 @@ class RecordingService:
 
     def poll_job(self):
         if not self.job:return None
-        job=self.job;value=read_json(job['result']) if job['result'].exists() else {'state':'running'}
-        alive=job['owner'].is_alive()
+        job=self.job;alive=job['owner'].is_alive();timeout_error=None
         if time.monotonic()-job['started']>1800 and alive:
             job['cancel'].touch(exist_ok=True);job['cancelled']=True
             if hasattr(job['owner'],'terminate'):job['owner'].terminate();job['owner'].join(2)
             alive=job['owner'].is_alive()
-            value={'state':'cancelling' if alive else 'failed','error':'本地处理超过 30 分钟，已请求取消，原始版本保留'}
+            timeout_error='本地处理超过 30 分钟，已请求取消，原始版本保留'
+        # Read after observing owner exit: reading first can retain stale running
+        # progress while the worker publishes its terminal result and exits.
+        value=read_json(job['result']) if job['result'].exists() else {'state':'running'}
+        if timeout_error:value={'state':'cancelling' if alive else 'failed','error':timeout_error}
+        if alive:
+            # A written result does not mean process/thread teardown or the parent
+            # project commit has completed. Keep UI and native busy gates aligned.
+            value={**value,'state':'cancelling' if job['cancelled'] or value['state'] in ('cancelled','cancelling') else 'running'}
         if not alive:
             if value['state']=='running':value={'state':'failed','error':'后台处理异常退出，未提交新版本'}
             if value['state']=='complete' and job['kind']!='export':

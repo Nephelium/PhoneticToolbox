@@ -1,0 +1,7 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><title>Shared transport regression</title></head><body><div id="app"></div><script type="module">
+import {createApp,h,reactive,markRaw} from 'vue';
+import AudioTransport from '/src/components/AudioTransport.vue';
+import '/src/design/tokens.css';
+const state=reactive({asset:markRaw({name:'transport.wav',sampleRate:8000,channels:[new Float32Array(16000)],duration:2,frames:16000}),start:0,end:2,channel:0,parameters:[],dirty:false,error:'',loading:false,zoom:1,offset:0});
+createApp({render:()=>h('main',[h(AudioTransport,{state,active:true}),h('output',{'aria-label':'Workspace range'},`${state.start},${state.end}`)])}).mount('#app');
+</script></body></html>

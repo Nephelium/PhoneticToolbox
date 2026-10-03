@@ -75,7 +75,7 @@ def main():
         for attempt in range(2):
             click('开始录制');wait("document.querySelector('.lip-state').textContent.includes('阶段 recording')");pause(1300)
             click('停止并收尾');wait("document.querySelector('.lip-state').textContent.includes('阶段 ready')")
-            click('保存录制（MP4 + 音频）');wait("document.querySelector('.lip-page').textContent.includes('MP4、WAV 与采集记录已保存并核对')")
+            click('保存录制（视频 + 音频 + 唇形）');wait("document.querySelector('.lip-page').textContent.includes('MP4、WAV 与采集记录已保存并核对')")
         report['checks'].append('actual Qt two synthetic recordings, native MP4/WAV save and same-page restart')
         click('参数显示');wait("!!document.querySelector('.m02-page')");click('选择音频目录')
         for stem in ('v3','v2'):

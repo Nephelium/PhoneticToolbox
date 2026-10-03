@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { ref,computed,watch,onMounted,onUnmounted } from 'vue';import type { Workspace } from '../state/workspace.ts';import {playback,play,pause,stop,volume,seek,isCurrentAudio} from '../state/audio.ts';import { selection } from '../platform/wav.ts';import AppIcon from './AppIcon.vue';
-const props=defineProps<{state:Workspace;active:boolean;compact?:boolean}>();
+const props=defineProps<{state:Workspace;selectionState?:Workspace;active:boolean;compact?:boolean}>();
+// EGG previews play normalized audio while selection edits own the source
+// workspace. Other modules use their existing single state unchanged.
+const rangeState=computed(()=>props.selectionState??props.state);
 const scrub=ref<number|null>(null);
 const owns=computed(()=>isCurrentAudio(props.state.asset,props.state.channel));
 const playing=computed(()=>owns.value&&playback.playing),position=computed(()=>owns.value?playback.position:props.state.start);
 watch(()=>[props.state.asset,props.state.start,props.state.end],()=>scrub.value=null);
 function seekTo(event:Event){if(props.state.asset)seek(props.state.asset,Number((event.target as HTMLInputElement).value),props.state.start,props.state.end,props.state.channel);scrub.value=null;}
-function range(){[props.state.start,props.state.end]=selection(props.state.start,props.state.end,props.state.asset?.duration||0);stop();}
+function range(){const state=rangeState.value;[state.start,state.end]=selection(state.start,state.end,state.asset?.duration||0);stop();}
 function toggle(){if(playing.value)pause();else if(props.state.asset)void play(props.state.asset,position.value>=props.state.start&&position.value<props.state.end?position.value:props.state.start,props.state.end,props.state.channel);}
 function key(e:KeyboardEvent){if(!props.active||e.code!=='Space'||e.repeat||document.querySelector('dialog[open]'))return;if((e.target as HTMLElement).closest('input,textarea,select,button,a,[contenteditable]'))return;e.preventDefault();toggle();}
 onMounted(()=>window.addEventListener('keydown',key));onUnmounted(()=>window.removeEventListener('keydown',key));
@@ -15,10 +18,10 @@ onMounted(()=>window.addEventListener('keydown',key));onUnmounted(()=>window.rem
 <div class="transport-controls" :class="{'transport-compact':compact}">
 <div v-if="!compact" class="selection-controls">
 <strong>时间选区</strong>
-<label>起点 <input v-model.number="state.start" type="number" min="0" :max="state.asset?.duration||0" step="0.001" :disabled="!state.asset" @change="range"/> s</label>
+<label>起点 <input v-model.number="rangeState.start" type="number" min="0" :max="rangeState.asset?.duration||0" step="0.001" :disabled="!rangeState.asset" @change="range"/> s</label>
 <span>—</span>
-<label>终点 <input v-model.number="state.end" type="number" min="0" :max="state.asset?.duration||0" step="0.001" :disabled="!state.asset" @change="range"/> s</label>
-<button :disabled="!state.asset" @click="state.start=0;state.end=state.asset!.duration;stop()">全部</button>
+<label>终点 <input v-model.number="rangeState.end" type="number" min="0" :max="rangeState.asset?.duration||0" step="0.001" :disabled="!rangeState.asset" @change="range"/> s</label>
+<button :disabled="!rangeState.asset" @click="rangeState.start=0;rangeState.end=rangeState.asset!.duration;stop()">全部</button>
 </div>
 <div class="audio-transport">
 <button :class="{primary:!compact}" :disabled="!state.asset||state.end<=state.start" @click="toggle">

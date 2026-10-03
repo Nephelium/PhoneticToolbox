@@ -11,13 +11,14 @@ from .metrics import calculate_cq_sq
 from .errors import EggError
 
 
-def batch_columns(result, *, keep_praat=True, keep_gci=True, silence_threshold=.01):
+def batch_columns(result, *, keep_praat=True, keep_gci=True, keep_reaper=False, silence_threshold=.01):
     times, cq, sq = calculate_cq_sq(result.gci_times, result.goi_times, result.peak_times)
     times = np.asarray(times if times is not None else [], dtype=float)
     columns = {'CQ': np.asarray(cq if cq is not None else [], dtype=float).copy(),
                'SQ': np.asarray(sq if sq is not None else [], dtype=float).copy()}
     for keep, key, t, v in [(keep_gci, 'F0_GCI (Hz)', result.gci_f0_times, result.gci_f0_values),
-                           (keep_praat, 'F0_Praat (Hz)', result.audio_f0_times, result.audio_f0_values)]:
+                           (keep_praat, 'F0_Praat (Hz)', result.audio_f0_times, result.audio_f0_values),
+                           (keep_reaper, 'F0_REAPER (Hz)', result.reaper_f0_times, result.reaper_f0_values)]:
         if keep:
             columns[key] = np.interp(times, t, v, left=np.nan, right=np.nan) if t is not None and len(t) else np.full(len(times), np.nan)
     # Same 20-ms mean absolute amplitude, not RMS. Short arrays are rejected

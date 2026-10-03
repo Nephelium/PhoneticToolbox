@@ -34,8 +34,8 @@ class AcousticSettings(WireModel):
     n_periods: int = Field(default=3,ge=1,le=100)
     num_formants: int = Field(default=5,ge=3,le=10)
     max_formant: float = Field(default=6000.,gt=0,le=10000)
-    min_f0: float = Field(default=60.,ge=10,le=1000)
-    max_f0: float = Field(default=880.,ge=50,le=2000)
+    min_f0: float = Field(default=30.,ge=10,le=1000)
+    max_f0: float = Field(default=800.,ge=50,le=2000)
     reaper_hilbert: bool = True
     reaper_no_highpass: bool = False
 

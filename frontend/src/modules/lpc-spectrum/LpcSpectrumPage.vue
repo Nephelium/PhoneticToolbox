@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import ModuleWorkbench from '../../components/ModuleWorkbench.vue';
-import ModuleSection from '../../components/ModuleSection.vue';
 import ModuleFrame from '../../components/ModuleFrame.vue';
 import ModuleToolbar from '../../components/ModuleToolbar.vue';
 import ModuleStatus from '../../components/ModuleStatus.vue';
@@ -11,33 +10,34 @@ import {stop} from '../../state/audio.ts';import {decodeWav} from '../../platfor
 import WaveformViewport from '../../components/WaveformViewport.vue';import AudioTransport from '../../components/AudioTransport.vue';import TaskPanel from '../../components/TaskPanel.vue';
 import TextGridTimeline from '../../components/TextGridTimeline.vue';
 import SpectrumPlot from './SpectrumPlot.vue';
+import {axisLimits} from './display.ts';import {spectrumPng} from './export.ts';import {downloadPng} from '../../design/plot-export.ts';
 import {restoreDraft,parameters,configuration,visibleRange,parseResult,sameAnalysis,jobError,audioSelection,gridRangeStatus,type LpcResult} from './state.ts';
 
 const props=defineProps<{context:ResearchContext;stateKey:string;active:boolean}>();const emit=defineEmits<{references:[];close:[]}>();
 const wave=workspace(props.stateKey),draft=ref(restoreDraft(host.projects.read('lpc.config.'+props.stateKey,null)));
 const resultWave=reactive<Workspace>({...wave,asset:null,dirty:false});
+const playbackState=computed(()=>mode.value==='spectrum'&&!wave.asset?resultWave:wave);
 const files=ref<ResearchFile[]>([]),source=ref<ResearchFile>(),grid=ref<ResearchFile|null>(null),tiers=ref<Tier[]>([]),tier=ref(''),directory=ref('');
 const picker=ref<HTMLInputElement>(),mode=ref<'wave'|'spectrum'>('wave'),selected=ref(false),start=ref('0'),end=ref('0');
 const error=ref(''),notice=ref(''),loading=ref(false),gridLoading=ref(false),submitting=ref(false),reading=ref(false),saving=ref(false),savingImage=ref(false),cancelPending=ref(false);
 const jobs=ref<JobView[]>([]),current=ref<JobView>(),resultJob=ref<JobView>(),result=shallowRef<LpcResult>();
 const tasks=computed(()=>props.context.files.tasks),audioFiles=computed(()=>files.value.filter(f=>f.kind==='audio')),grids=computed(()=>files.value.filter(f=>f.kind==='textgrid'));
-const spectrogramLoader=(view:SpectrogramView)=>{if(!source.value||!props.context.files.spectrogram)throw Error('当前入口没有语谱图预览能力。');return props.context.files.spectrogram(source.value,view);};
+const spectrogramLoader=computed(()=>{const file=source.value;return file&&props.context.files.spectrogram?(view:SpectrogramView)=>props.context.files.spectrogram!(file,view):undefined;});
 let disposed=false,fileEpoch=0,gridEpoch=0,resultEpoch=0,listEpoch=0,submitEpoch=0,abort:AbortController|undefined,polling=false;
 watch(draft,()=>wave.dirty=true,{deep:true});
 function save(){error.value='';try{parameters(draft.value);if(!host.projects.write('lpc.config.'+props.stateKey,{...draft.value}))throw Error('参数草稿保存失败，请检查本机存储权限。');wave.dirty=false;notice.value='LPC 参数草稿已保存。';return true;}catch(e){error.value=message(e);return false;}}
 defineExpose({save});
 const viewRange=computed(()=>visibleRange(wave.asset?.duration??0,wave.zoom,wave.offset));
-watch(viewRange,([a,b])=>{if(!selected.value){stop();start.value=String(a);end.value=String(b);wave.start=a;wave.end=b;}});
-function clearSelection(){stop();selected.value=false;[wave.start,wave.end]=viewRange.value;start.value=String(wave.start);end.value=String(wave.end);}
+watch(()=>[wave.start,wave.end],([a,b])=>{start.value=String(a);end.value=String(b);selected.value=true;},{flush:'sync'});
+watch(viewRange,()=>{if(!selected.value)clearSelection();});
+function clearSelection(){stop();[wave.start,wave.end]=viewRange.value;start.value=String(wave.start);end.value=String(wave.end);selected.value=false;}
 function selectRange(a:number,b:number){stop();const range=audioSelection(a,b,wave.asset?.duration??0);if(!range){wave.start=Number(start.value);wave.end=Number(end.value);return;}selected.value=true;[a,b]=range;start.value=String(a);end.value=String(b);wave.start=a;wave.end=b;}
-function editRange(){selected.value=true;stop();const a=Number(start.value),b=Number(end.value);if(start.value!==''&&end.value!==''&&Number.isFinite(a)&&Number.isFinite(b)&&a>=0&&b>a&&b<=(wave.asset?.duration??0)){wave.start=a;wave.end=b;}}
 const gridRange=computed(()=>wave.asset?gridRangeStatus(tiers.value,wave.asset.duration,wave.asset.sampleRate):'valid');
 const validation=computed(()=>{try{if(!wave.asset||!source.value)return {error:'请先选择 WAV 音频。'};if(gridLoading.value)return {error:'正在读取 TextGrid。'};if(grid.value&&!tier.value)return {error:'请选择有效的 TextGrid 层级。'};if(gridRange.value==='mismatch')return {error:jobError('lpc_textgrid_range')};return {config:configuration(draft.value,start.value,end.value,wave.asset.sampleRate,wave.asset.frames,grid.value?tier.value:null,exportFontSnapshot()),error:''};}catch(e){return {error:message(e)};}});
 const stale=computed(()=>!!result.value&&(!validation.value.config||!sameAnalysis(result.value,validation.value.config,source.value?.sha256??'',grid.value?.sha256??null)));
 const liveJob=computed(()=>current.value&&['queued','running','cancel_requested'].includes(current.value.state));
 const taskViews=computed(()=>jobs.value.map(j=>({id:j.id,title:`LPC · ${new Date(j.created_at*1000).toLocaleTimeString()} · ${j.id.slice(0,8)}`,status:j.state,error:j.error_code?jobError(j.error_code):undefined,canCancel:true,canRetry:true})));
-const playbackState=computed(()=>mode.value==='spectrum'?resultWave:wave);
-const playbackValid=computed(()=>mode.value==='spectrum'?!!resultWave.asset:!!wave.asset&&start.value!==''&&end.value!==''&&Number(start.value)>=0&&Number(end.value)>Number(start.value)&&Number(end.value)<=wave.asset.duration);
+const display=computed(()=>{if(!result.value)return;try{return {y:axisLimits(result.value,draft.value.dynamic_y,draft.value.amp_min_db,draft.value.amp_max_db),error:''};}catch(e){return {y:[result.value.spectrum.amp_min_db,result.value.spectrum.amp_max_db] as [number,number],error:message(e)};}});
 function message(e:unknown){return e instanceof Error?jobError(e.message):String(e);}
 function clearResult(){++resultEpoch;reading.value=false;result.value=undefined;resultJob.value=undefined;resultWave.asset=null;current.value=undefined;mode.value='wave';stop();}
 async function refresh(){const ticket=++listEpoch;try{const list=await props.context.files.list(directory.value||undefined);if(disposed||ticket!==listEpoch)return;files.value=list;
@@ -52,10 +52,15 @@ async function load(id:string){const file=audioFiles.value.find(f=>f.id===id);if
   try{if(file.size>64_000_000)throw Error('lpc_input_budget');const data=await audioPreview(props.context.files,file,abort.signal);if(disposed||ticket!==fileEpoch)return;const a=data.asset;if(a.frames>8_000_000||a.channels.length>8)throw Error('lpc_input_budget');if(a.sampleRate<8000||a.sampleRate>96000)throw Error('lpc_sample_rate');source.value={...file,sha256:data.sha256};wave.asset=markRaw(a);wave.zoom=1;wave.offset=0;wave.channel=0;clearSelection();const same=grids.value.filter(f=>f.name.replace(/\.TextGrid$/i,'').toLowerCase()===file.name.replace(/\.wav$/i,'').toLowerCase());if(same.length===1)await associate(same[0].id);
   }catch(e){if(!disposed&&ticket===fileEpoch)error.value=message(e);}finally{if(ticket===fileEpoch)loading.value=false;}}
 async function show(job:JobView){if(job.state!=='succeeded'||job.result_manifest?.kind!=='managed_lpc_files'||!tasks.value?.result)return;current.value=job;const ticket=++resultEpoch;reading.value=true;error.value='';notice.value='';stop();
-  try{const entries=job.result_manifest.files,json=entries.find(f=>f.name==='lpc.ptb.json')!,audio=entries.find(f=>f.name==='lpc_AUDIO.wav')!;
+  try{const entries=job.result_manifest.files,json=entries.find(f=>f.name==='lpc.ptb.json')!;
     const raw=await tasks.value.result(job.id,json.id,json.sha256);if(disposed||ticket!==resultEpoch)return;const data=parseResult(raw);
-    const wav=await tasks.value.result(job.id,audio.id,audio.sha256);if(disposed||ticket!==resultEpoch)return;const asset=await decodeWav(wav,audio.name);if(disposed||ticket!==resultEpoch)return;
-    result.value=data;resultJob.value=job;resultWave.asset=markRaw(asset);resultWave.start=0;resultWave.end=asset.duration;resultWave.channel=0;mode.value='spectrum';
+    if(!wave.asset){
+      const audio=entries.find(f=>f.name==='lpc_AUDIO.wav');if(!audio)throw Error('历史结果缺少试听音频。');
+      const wav=await tasks.value.result(job.id,audio.id,audio.sha256);if(disposed||ticket!==resultEpoch)return;
+      const asset=await decodeWav(wav,audio.name);if(disposed||ticket!==resultEpoch)return;
+      resultWave.asset=markRaw(asset);resultWave.start=0;resultWave.end=asset.duration;resultWave.channel=0;
+    }
+    result.value=data;resultJob.value=job;mode.value='spectrum';
   }catch(e){if(!disposed&&ticket===resultEpoch)error.value=message(e);}finally{if(ticket===resultEpoch)reading.value=false;}}
 async function poll(){if(polling||disposed||!tasks.value?.lpcJobs)return;polling=true;try{const data=await tasks.value.lpcJobs();if(disposed)return;jobs.value=data;const old=current.value;if(old){const next=data.find(j=>j.id===old.id);if(next){current.value=next;if(old.state!=='succeeded'&&next.state==='succeeded')await show(next);}}}catch(e){if(!disposed)error.value=message(e);}finally{polling=false;}}
 async function submit(){if(!source.value||!tasks.value?.lpc||submitting.value)return;const frozen=validation.value.config;if(!frozen){error.value=validation.value.error;return;}const ticket=++submitEpoch,fileTicket=fileEpoch,file={...source.value},textgrid=grid.value?{...grid.value}:null;submitting.value=true;cancelPending.value=false;error.value='';notice.value='';
@@ -72,53 +77,48 @@ async function saveImage(){
  const job=resultJob.value,data=result.value,ticket=resultEpoch;if(!job||!data||savingImage.value)return;
  savingImage.value=true;error.value='';notice.value='';
  try{
-  if(job.result_manifest?.kind!=='managed_lpc_files'||!tasks.value?.result)throw Error('当前结果尚不能读取 PNG，请重新打开任务结果。');
+  if(job.result_manifest?.kind!=='managed_lpc_files')throw Error('当前结果尚不能保存 PNG，请重新打开任务结果。');
   const file=job.result_manifest.files.find(f=>f.name.toLowerCase().endsWith('.png'));
   if(!file)throw Error('此任务没有 PNG 图片，请重新分析。');
-  const bytes=await tasks.value.result(job.id,file.id,file.sha256);if(disposed||ticket!==resultEpoch)return;
-  const signature=new Uint8Array(bytes,0,Math.min(8,bytes.byteLength));
-  if(signature.length!==8||![137,80,78,71,13,10,26,10].every((v,i)=>signature[i]===v))throw Error('PNG 结果内容无效，请重新读取或重新分析。');
-  const url=URL.createObjectURL(new Blob([bytes],{type:'image/png'})),link=document.createElement('a');
-  link.href=url;link.download=data.export_names[file.name]??file.name;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+  const y=axisLimits(data,draft.value.dynamic_y,draft.value.amp_min_db,draft.value.amp_max_db);
+  const image=await spectrumPng(data,y);if(disposed||ticket!==resultEpoch)return;
+  downloadPng(image,data.export_names[file.name]??file.name);
   notice.value=props.context.files.kind==='desktop'?'已打开 PNG 保存窗口，请选择位置或取消。':'PNG 图片已交给浏览器下载。';
  }catch(e){if(!disposed&&ticket===resultEpoch)error.value=message(e);}finally{savingImage.value=false;}
 }
-async function download(id:string,name:string){const ticket=resultEpoch;try{await tasks.value?.download?.(id,name);if(!disposed&&ticket===resultEpoch)notice.value='已交给浏览器下载：'+name;}catch(e){if(!disposed&&ticket===resultEpoch)error.value=message(e);}}
+async function download(id:string,name:string){if(name.toLowerCase().endsWith('.png'))return saveImage();const ticket=resultEpoch;try{await tasks.value?.download?.(id,name);if(!disposed&&ticket===resultEpoch)notice.value='已交给浏览器下载：'+name;}catch(e){if(!disposed&&ticket===resultEpoch)error.value=message(e);}}
 watch(()=>props.active,active=>{if(!active)stop();});watch(mode,()=>stop());
 onMounted(()=>{if(props.context.files.kind!=='desktop')void refresh();void poll();});const timer=setInterval(()=>void poll(),1500);
 onUnmounted(()=>{disposed=true;++fileEpoch;++gridEpoch;++resultEpoch;++listEpoch;abort?.abort();clearInterval(timer);stop();});
 </script>
 
-<template><ModuleFrame fit label="LPC 谱图 工作区" class="workspace-page lpc-page">
-<ModuleWorkbench :state-key="stateKey" left-label="文件与试听" right-label="任务与记录" :left-width="240" :right-width="300"><template #left><div class="lpc-files">
-<div class="actions"><button v-if="context.files.choose" @click="choose">打开 WAV 目录</button><template v-if="context.files.add"><input ref="picker" type="file" accept=".wav,.TextGrid" multiple hidden @change="addFiles"/><button @click="picker?.click()">导入文件</button></template><button @click="refresh">刷新文件</button></div>
+<template><ModuleFrame unified fit label="LPC 谱图 工作区" class="workspace-page lpc-page">
+<template #toolbar><ModuleToolbar><button class="primary" v-if="context.files.choose" @click="choose">打开 WAV 目录</button><template v-if="context.files.add"><input ref="picker" type="file" accept=".wav,.TextGrid" multiple hidden @change="addFiles"/><button class="primary" @click="picker?.click()">导入文件</button></template><button @click="refresh">刷新文件</button><template #actions><button @click="save">保存参数草稿</button><button @click="emit('references')">方法与引用</button></template></ModuleToolbar></template>
+<ModuleWorkbench unified :state-key="stateKey" left-label="文件与试听" right-label="任务与记录"><template #left><div class="lpc-files workbench-card">
+
 <label class="field">音频文件<select aria-label="LPC 音频文件" :value="source?.id??''" @change="load(($event.target as HTMLSelectElement).value)"><option disabled value="">选择 WAV</option><option v-for="file in audioFiles" :key="file.id" :value="file.id">{{file.name}}</option></select></label>
 <small v-if="wave.asset">{{wave.asset.sampleRate}} Hz · {{wave.asset.channels.length}} 声道 · {{wave.asset.duration.toFixed(3)}} s</small><ModuleStatus v-if="loading" kind="loading" message="正在读取音频…"/>
 <label class="field">关联 TextGrid<select aria-label="LPC TextGrid" :value="grid?.id??''" :disabled="!wave.asset" @change="associate(($event.target as HTMLSelectElement).value)"><option value="">不关联</option><option v-for="file in grids" :key="file.id" :value="file.id">{{file.name}}</option></select></label>
 <label class="field">标注层<select v-model="tier" aria-label="LPC 标注层" :disabled="!tiers.length||gridLoading"><option v-if="!tiers.length" value="">无标注</option><option v-for="t in tiers" :key="t.name" :value="t.name">{{t.name}}</option></select></label><button :disabled="tiers.length<2" @click="tier=tiers[(tiers.findIndex(t=>t.name===tier)+1)%tiers.length].name">下一层</button>
 <small class="file-hint">同名 TextGrid 自动关联 · 多声道均值分析</small>
 <small v-if="gridRange==='blank-overhang'" class="grid-notice">TextGrid 空白区间超出音频，选区以音频边界为限；原标注保持不变。</small>
-<ModuleSection label="选区试听" class="lpc-controls">
-<div class="control-row playback-row"><label v-if="mode==='wave'&&wave.asset&&wave.asset.channels.length>1">试听声道<select v-model.number="wave.channel" @change="stop"><option v-for="(_,i) in wave.asset.channels" :key="i" :value="i">{{i+1}}</option></select></label><AudioTransport v-if="playbackValid" :state="playbackState" :active="active" compact/><small>{{mode==='spectrum'?'试听该结果的单声道分析片段':'试听当前时间范围的原始声道'}}</small></div>
-
-</ModuleSection>
-</div></template>
+<label v-if="wave.asset&&wave.asset.channels.length>1" class="field">试听声道<select v-model.number="wave.channel" @change="stop"><option v-for="(_,i) in wave.asset.channels" :key="i" :value="i">声道 {{i+1}}</option></select></label>
+</div><section class="lpc-card lpc-analysis-settings"><div class="control-row"><strong>谱图参数</strong><small v-if="wave.dirty">参数尚未保存</small><label>阶数<input v-model="draft.order" aria-label="LPC 阶数" type="number" min="1" max="200"/></label><label>频率上限 Hz<input v-model="draft.freq_max_hz" aria-label="LPC 频率上限" type="number" min="100" max="48000"/></label><label>dB 下限<input v-model="draft.amp_min_db" aria-label="LPC 幅度下限" :disabled="draft.dynamic_y" type="number" min="-200" max="100"/></label><label>上限<input v-model="draft.amp_max_db" aria-label="LPC 幅度上限" :disabled="draft.dynamic_y" type="number" min="-200" max="100"/></label><small v-if="draft.dynamic_y">按频率范围内谱值自动留出 ±5 dB 余量</small></div><p v-if="!tasks?.lpc" class="muted">此入口可预览 WAV；计算请使用已启动任务服务的工作台或登录网页项目。</p>
+</section></template>
 
 <section class="lpc-card"><div class="view-tabs" aria-label="LPC 显示方式"><button :aria-pressed="mode==='wave'" @click="mode='wave'">波形</button><button :aria-pressed="mode==='spectrum'" :disabled="!result" @click="mode='spectrum'">LPC 频谱</button><label v-if="wave.asset"><input v-model="wave.showSpectrogram" type="checkbox" :disabled="!context.files.spectrogram"/>显示语谱图（Praat）</label><span v-if="reading" role="status">正在读取结果…</span></div>
-<div v-show="mode==='wave'"><WaveformViewport v-if="wave.asset" :state="wave" :spectrogram-loader="context.files.spectrogram?spectrogramLoader:undefined" spectrogram-selectable compact-overview @selection-end="selectRange"><template #timeline="{start:a,end:b}"><TextGridTimeline v-if="tier" :tiers="tiers.filter(t=>t.name===tier)" :start="a" :end="b" :selected="0" :selection-start="wave.start" :selection-end="wave.end" selected-tier-label="当前标注层" @select="(_i,s,e)=>selectRange(s,e)"/></template></WaveformViewport><ModuleStatus v-else kind="empty" message="选择 WAV 后显示原始波形。左键拖动选择分析片段，也可在右侧谱图参数中输入时间。"/></div>
-<SpectrumPlot v-if="result" v-show="mode==='spectrum'" :result="result"/>
+<div v-show="mode==='wave'"><WaveformViewport v-if="wave.asset" :state="wave" :spectrogram-loader="spectrogramLoader" spectrogram-selectable compact-overview @selection-end="selectRange"><template #timeline="{start:a,end:b}"><TextGridTimeline v-if="tier" :tiers="tiers.filter(t=>t.name===tier)" :start="a" :end="b" :selected="0" :selection-start="wave.start" :selection-end="wave.end" selected-tier-label="当前标注层" @select="(_i,s,e)=>selectRange(s,e)"/></template></WaveformViewport><ModuleStatus v-else kind="empty" message="选择 WAV 后显示原始波形。左键拖动选择分析片段，也可在下方时间选区中输入时间。"/></div>
+<SpectrumPlot v-if="result&&display" v-show="mode==='spectrum'" :result="result" :y="display.y" :dynamic="draft.dynamic_y" @axis-mode="draft.dynamic_y=$event"/><p v-if="display?.error" role="alert" class="error-text">{{display.error}}</p>
 <p v-if="result&&mode==='spectrum'" class="muted">{{result.input_name}} · {{result.selection.start_s.toFixed(6)}}–{{result.selection.end_s.toFixed(6)}} s · {{result.selection.end_sample-result.selection.start_sample}} 样本 · {{result.config.order}} 阶</p>
-<p v-if="result&&stale" class="notice">当前文件、选区或参数已改变。频谱与保存仍对应上方任务的原结果，请重新分析以更新。</p>
+<p v-if="result&&stale" class="notice">当前文件、选区或参数已改变。频谱仍对应上方任务的原分析片段，请重新分析以更新谱值。纵轴显示与 PNG 保存可即时调整。</p>
 </section>
 
-<template #right><div class="actions"><button @click="emit('references')">方法与引用</button></div><ModuleStatus v-if="error" kind="error" :message="error"/><ModuleStatus v-if="notice" :message="notice"/><section class="lpc-card lpc-analysis-settings"><div class="control-row"><strong>谱图参数</strong><button @click="save">保存参数草稿</button><small v-if="wave.dirty">参数尚未保存</small><label>阶数<input v-model="draft.order" aria-label="LPC 阶数" type="number" min="1" max="200"/></label><label>频率上限 Hz<input v-model="draft.freq_max_hz" aria-label="LPC 频率上限" type="number" min="100" max="48000"/></label><label>dB 下限<input v-model="draft.amp_min_db" aria-label="LPC 幅度下限" :disabled="draft.dynamic_y" type="number" min="-200" max="100"/></label><label>上限<input v-model="draft.amp_max_db" aria-label="LPC 幅度上限" :disabled="draft.dynamic_y" type="number" min="-200" max="100"/></label><label><input v-model="draft.dynamic_y" type="checkbox"/>动态纵轴</label><small v-if="draft.dynamic_y">按频率范围内谱值自动留出 ±5 dB 余量</small></div><div class="lpc-range-controls"><div class="control-row"><strong>时间范围</strong><label>起点 s<input v-model="start" aria-label="LPC 选区起点" type="number" min="0" step=".001" :disabled="!wave.asset" @input="editRange"/></label><label>终点 s<input v-model="end" aria-label="LPC 选区终点" type="number" min="0" step=".001" :disabled="!wave.asset" @input="editRange"/></label><button :disabled="!wave.asset" @click="clearSelection">清除选区</button><small>{{selected?'使用指定选区':'使用波形可见时间范围'}}</small></div>
-<div class="control-row"><button class="primary" :disabled="loading||gridLoading||submitting||!!liveJob||!tasks?.lpc||!wave.asset" @click="submit">{{submitting?'正在提交…':'开始分析'}}</button><button v-if="submitting||liveJob" :disabled="cancelPending" @click="cancel()">取消分析</button><small v-if="validation.error" class="muted">{{validation.error}}</small><small v-else>单次最多 48,000 样本 · 1024 点 LPC 谱包络 · 幅度未经声压校准</small></div>
-<p v-if="!tasks?.lpc" class="muted">此入口可预览 WAV；计算请使用已启动任务服务的工作台或登录网页项目。</p>
-</div></section><section v-if="result&&resultJob" class="lpc-card lpc-results"><div class="control-row"><strong>结果保存</strong><button class="primary" :disabled="savingImage||reading||!tasks?.result" @click="saveImage">{{savingImage?'正在读取 PNG…':'保存 PNG 图片'}}</button><button v-if="tasks?.saveJob" :disabled="saving||reading" @click="saveResult">选择目录保存完整结果</button><template v-if="tasks?.download&&resultJob.result_manifest?.kind==='managed_lpc_files'"><button v-for="file in resultJob.result_manifest.files" :key="file.id" @click="download(file.id,result!.export_names[file.name]??file.name)">下载 {{file.name.endsWith('.png')?'PNG':file.name.endsWith('.wav')?'选区 WAV':'参数与谱值 JSON'}}</button></template></div><small>PNG 为 300 DPI 白底黑线，包含标签。WAV 为多声道均值后的分析片段，JSON 保留参数、谱值与来源。</small><details><summary>查看此结果的参数快照</summary><pre>{{JSON.stringify(result.config,null,2)}}</pre></details></section>
+<template #right><section class="lpc-card lpc-run"><strong>分析与导出</strong><div class="control-row"><button class="primary" :disabled="loading||gridLoading||submitting||!!liveJob||!tasks?.lpc||!wave.asset" @click="submit">{{submitting?'正在提交…':'开始分析'}}</button><button v-if="submitting||liveJob" :disabled="cancelPending" @click="cancel()">取消分析</button><small v-if="validation.error" class="muted">{{validation.error}}</small><small v-else>单次最多 48,000 样本 · 1024 点 LPC 谱包络 · 幅度未经声压校准</small></div></section><ModuleStatus v-if="error" kind="error" :message="error"/><ModuleStatus v-if="notice" :message="notice"/><section v-if="result&&resultJob" class="lpc-card lpc-results"><div class="control-row"><strong>结果保存</strong><button class="primary" :disabled="savingImage||reading||!!display?.error" @click="saveImage">{{savingImage?'正在生成 PNG…':'保存 PNG 图片'}}</button><button class="primary" v-if="tasks?.saveJob" :disabled="saving||reading" @click="saveResult">选择目录保存完整结果</button><template v-if="tasks?.download&&resultJob.result_manifest?.kind==='managed_lpc_files'"><button v-for="file in resultJob.result_manifest.files" :key="file.id" @click="download(file.id,result!.export_names[file.name]??file.name)">下载 {{file.name.endsWith('.png')?'PNG':file.name.endsWith('.wav')?'选区 WAV':'参数与谱值 JSON'}}</button></template></div><small>保存 PNG 使用当前纵轴，300 DPI 白底黑线，包含标签。完整结果目录保留任务生成时的 PNG、WAV 与 JSON 快照。</small><details><summary>查看此结果的参数快照</summary><pre>{{JSON.stringify(result.config,null,2)}}</pre></details></section>
 <details class="lpc-card lpc-history" open><summary>分析任务与历史结果（{{jobs.length}}）</summary><TaskPanel :tasks="taskViews" empty-text="选择短时音频后开始分析。关闭模块后可从历史结果恢复。" @cancel="cancel" @retry="retry"/><div class="history-links"><button v-for="job in jobs.filter(j=>j.state==='succeeded')" :key="job.id" @click="show(job)">查看结果 {{new Date(job.created_at*1000).toLocaleTimeString()}} · {{job.id.slice(0,8)}}</button></div></details>
-</template></ModuleWorkbench></ModuleFrame></template>
+</template></ModuleWorkbench><div class="lpc-transport global-transport"><AudioTransport :state="playbackState" :active="active"/></div></ModuleFrame></template>
 <style scoped>
-.lpc-page{min-width:0}.lpc-layout{flex:1;min-height:0}.lpc-main{max-height:100%;overflow:auto;overscroll-behavior:contain}.actions,.control-row,.view-tabs{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.page-heading h1{margin:0}.page-heading p{margin:4px 0 0}.lpc-layout{display:grid;grid-template-columns:var(--panel-left,220px) minmax(280px,1fr);gap:12px;align-items:start;min-width:0}.lpc-files,.lpc-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:12px;min-width:0}.lpc-main{min-width:0;display:grid;gap:10px}.field{display:flex;flex-direction:column;gap:5px;margin:14px 0 8px}.field select{width:100%;min-width:0}.lpc-files small,.lpc-files p,.lpc-controls small,.lpc-results small{color:var(--muted);font-size:12px}.lpc-files p{line-height:1.6}.view-tabs{margin-bottom:10px}.view-tabs [aria-pressed=true]{color:var(--accent);background:var(--selection)}.control-row+.control-row{border-top:1px solid var(--border);padding-top:10px;margin-top:10px}.control-row label{display:flex;align-items:center;gap:5px}.control-row input[type=number]{width:88px}.control-row strong{font-size:13px}.control-row small{line-height:1.5}.playback-row small{flex-basis:100%}.lpc-labels{display:flex;flex-wrap:wrap;gap:12px;padding:6px;font-family:var(--font-figure-ipa)}.lpc-history summary{cursor:pointer}.history-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.lpc-history :deep(.task-panel){max-height:240px;overflow:auto;margin-top:10px}.lpc-card pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}.lpc-results details{margin-top:8px}.lpc-page :deep(.wave-track svg){height:max(160px,28dvh)}.lpc-page :deep(.transport-compact){min-width:0}.lpc-page :deep(.audio-transport){min-width:0}
+.lpc-page :deep(.module-workbench){flex:1;min-height:0;overflow:auto}
+.lpc-page{min-width:0}.lpc-transport{flex:none}.lpc-layout{flex:1;min-height:0}.lpc-main{max-height:100%;overflow:auto;overscroll-behavior:contain}.actions,.control-row,.view-tabs{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.page-heading h1{margin:0}.page-heading p{margin:4px 0 0}.lpc-layout{display:grid;grid-template-columns:var(--panel-left,220px) minmax(280px,1fr);gap:12px;align-items:start;min-width:0}.lpc-files,.lpc-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:12px;min-width:0}.lpc-main{min-width:0;display:grid;gap:10px}.field{display:flex;flex-direction:column;gap:5px;margin:14px 0 8px}.field select{width:100%;min-width:0}.lpc-files small,.lpc-files p,.lpc-controls small,.lpc-results small{color:var(--muted);font-size:12px}.lpc-files p{line-height:1.6}.view-tabs{margin-bottom:10px}.view-tabs [aria-pressed=true]{color:var(--accent);background:var(--selection)}.control-row+.control-row{border-top:1px solid var(--border);padding-top:10px;margin-top:10px}.control-row label{display:flex;align-items:center;gap:5px}.control-row input[type=number]{width:88px}.control-row strong{font-size:13px}.control-row small{line-height:1.5}.playback-row small{flex-basis:100%}.lpc-labels{display:flex;flex-wrap:wrap;gap:12px;padding:6px;font-family:var(--font-figure-ipa)}.lpc-history summary{cursor:pointer}.history-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.lpc-history :deep(.task-panel){max-height:240px;overflow:auto;margin-top:10px}.lpc-card pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}.lpc-results details{margin-top:8px}.lpc-page :deep(.wave-track svg){height:max(160px,28dvh)}.lpc-page :deep(.transport-compact){min-width:0}.lpc-page :deep(.audio-transport){min-width:0}
 .lpc-page :deep(.spectrogram-view){margin-block:0 6px}.lpc-page :deep(.spectrogram-canvas canvas){height:220px}.view-tabs label{display:inline-flex;align-items:center;gap:4px}
 .file-hint,.grid-notice{display:block;margin:8px 0;line-height:1.5}.grid-notice{color:var(--warning)}
 .lpc-controls{border:0;border-radius:0;padding:12px 0 0;margin-top:12px;border-top:1px solid var(--border)}

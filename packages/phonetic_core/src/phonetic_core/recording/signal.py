@@ -34,18 +34,58 @@ def meter(value, gain_db=0.0):
             'near_full_scale': np.sum(absolute>=0.98,axis=0).tolist(), 'correlation': corr}
 
 
+class DisplaySpectrum:
+    """Bounded, time-sampled display windows across an entire visible interval.
+
+    Sequential input may span disk chunks or edit boundaries. Each display cell
+    represents a periodic-Hann window at its centre, not an audio resampling or
+    an average of every FFT in that cell. Padding is confined to view edges.
+    """
+    def __init__(self, frames, sample_rate, channel=0, width=640):
+        if frames < 0 or sample_rate <= 0 or not 0 <= channel < 8:
+            raise ValueError('语谱范围、采样率或通道无效')
+        self.frames, self.sample_rate, self.channel = int(frames), sample_rate, channel
+        columns = min(max(1, int(width)), 640, (self.frames+HOP-1)//HOP)
+        self.edges = np.linspace(0, self.frames, columns+1)
+        self.centres = np.floor((self.edges[:-1]+self.edges[1:])/2).astype(np.int64)
+        self.starts = self.centres-NFFT//2
+        self.windows = np.zeros((columns, NFFT), dtype=np.float32)
+        self.offset = 0
+
+    def add(self, value):
+        x = audio(value)
+        if self.channel >= x.shape[1]:
+            raise ValueError('语谱通道不存在')
+        stop = self.offset+len(x)
+        if stop > self.frames:
+            raise ValueError('语谱输入超出可见范围')
+        first = np.searchsorted(self.starts+NFFT, self.offset, side='right')
+        last = np.searchsorted(self.starts, stop, side='left')
+        for i in range(first, last):
+            a, b = max(self.offset, self.starts[i]), min(stop, self.starts[i]+NFFT)
+            self.windows[i, a-self.starts[i]:b-self.starts[i]] = x[a-self.offset:b-self.offset, self.channel]
+        self.offset = stop
+
+    def result(self):
+        if self.offset != self.frames:
+            raise ValueError('语谱输入未覆盖完整可见范围')
+        if not len(self.windows):
+            return {'rows': [], 'frequencies': [], 'times': [], 'time_edges': [0.0]}
+        window = signal.get_window('hann', NFFT)
+        magnitude = np.abs(np.fft.rfft(self.windows*window, axis=1))/window.sum()
+        frequencies = np.fft.rfftfreq(NFFT, 1/self.sample_rate)
+        keep = frequencies <= min(5000, self.sample_rate/2)
+        return {'rows': np.maximum(-100,20*np.log10(np.maximum(magnitude[:,keep],1e-10))).tolist(),
+                'frequencies': frequencies[keep].tolist(), 'times': (self.centres/self.sample_rate).tolist(),
+                'time_edges': (self.edges/self.sample_rate).tolist(), 'max_frequency': min(5000,self.sample_rate/2),
+                'nfft': NFFT, 'time_sampled': self.frames > len(self.windows)*HOP}
+
+
 def spectrum(value, sample_rate, channel=0):
     x = audio(value)
-    if not 0 <= channel < x.shape[1]:
-        raise ValueError('语谱通道不存在')
-    if len(x)<NFFT:
-        return {'rows': [], 'frequencies': [], 'times': []}
-    f,t,z = signal.stft(x[:,channel],fs=sample_rate,window='hann',nperseg=NFFT,noverlap=NFFT-HOP,boundary=None,padded=False)
-    # Display only: bounded to at most 128 time bins and 128 frequency bins.
-    ti = np.linspace(0,len(t)-1,min(len(t),128),dtype=int)
-    fi = np.linspace(0,len(f)-1,min(len(f),128),dtype=int)
-    return {'rows': np.maximum(-100,20*np.log10(np.maximum(np.abs(z[np.ix_(fi,ti)]),1e-10))).T.tolist(),
-            'frequencies': f[fi].tolist(), 'times': t[ti].tolist()}
+    display = DisplaySpectrum(len(x), sample_rate, channel, width=128)
+    display.add(x)
+    return display.result()
 
 
 def noise_profile(value):

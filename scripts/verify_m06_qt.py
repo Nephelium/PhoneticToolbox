@@ -8,14 +8,15 @@ os.environ.setdefault('QTWEBENGINE_CHROMIUM_FLAGS','--disable-gpu')
 from PyQt6.QtCore import QEventLoop,QTimer
 from PyQt6.QtWidgets import QApplication,QFileDialog
 from ptb_desktop.host import Workbench,register_scheme
-from verify_m06_wiring import setup,ROOT
+from verify_m06_wiring import setup,ROOT,read
 
 
 def main():
     out,db,cache=setup();inputs=out/'inputs';inputs.mkdir();saved=out/'saved';saved.mkdir()
     (inputs/'合成.wav').write_bytes((ROOT/'tests/fixtures/m06/source.wav').read_bytes())
     register_scheme();app=QApplication(['M06-owned-QA'])
-    window=Workbench(ROOT/'frontend/dist',test=True,jobs_path=db,local_files_root=cache,vocal_profile=out/'vocal-profile')
+    manifest=json.loads((ROOT/'resources/manifests/acoustic.json').read_text('utf8'))
+    window=Workbench(ROOT/'frontend/dist',test=True,jobs_path=db,local_files_root=cache,vocal_profile=out/'vocal-profile',reaper_binary=ROOT/manifest['resources'][0]['validation_source'])
     window.resize(1920,1000);window.show()
     QFileDialog.getExistingDirectory=lambda *a,**k:str(saved if '结果' in str(a) else inputs)
     report=dict(success=False,checks=[],scope='Windows actual Qt offscreen; built frontend; synthetic audio')
@@ -76,6 +77,41 @@ def main():
         js('(()=>{const e=document.querySelector("[aria-label=总时长]");e.value="0.6";e.dispatchEvent(new Event("input",{bubbles:true}))})()');click('应用时长');pause(100)
         assert js('document.querySelector(".curve-editor svg").dataset.end')=='0.6'
         report['checks'].append('32 actual Qt layout/axis combinations; existing audio duration changes immediately')
+        click('打开音频目录');until('document.querySelector(".source-picker").options.length>1')
+        js('(()=>{const e=document.querySelector(".source-picker");e.selectedIndex=1;e.dispatchEvent(new Event("change",{bubbles:true}))})()')
+        until('document.body.innerText.includes("覆盖参数确认")');click('应用并覆盖')
+        until('document.body.innerText.includes("参数提取完成")')
+        report['r3_extractions']=[]
+        import sqlite3
+        for method in ['praat_cc','praat_ac','reaper']:
+            js('(()=>{const e=document.querySelector("[aria-label=F0提取算法]")||document.querySelector('+json.dumps('[aria-label="F0 提取算法"]')+');e.value='+json.dumps(method)+';e.dispatchEvent(new Event("change",{bubbles:true}))})()')
+            pause(80);click('提取参数');pause(150)
+            until('document.querySelector(".m06-page").getAttribute("aria-busy")==="false"')
+            assert '参数提取完成' in js('document.body.innerText')
+            with sqlite3.connect(db.as_uri()+'?mode=ro',uri=True) as conn:
+                job_id=conn.execute("SELECT id FROM jobs ORDER BY created_at DESC LIMIT 1").fetchone()[0]
+            task=window.service.get('/api/v1/jobs/'+job_id)
+            assert task['state']=='succeeded',task
+            file=next(f for f in task['result_manifest']['files'] if f['name']=='m06.ptb.json')
+            result=json.loads(read(window.service,file))
+            assert result['config']['f0_method']==method
+            assert result['diagnostics']['actual_f0_backend']==('native_reaper' if method=='reaper' else method)
+            report['r3_extractions'].append(dict(method=method,job=job_id,diagnostics=result['diagnostics']))
+        click('语谱图');pause(100)
+        report['r3_layouts']=[]
+        for width,height in [(1920,1000),(900,700)]:
+            window.resize(width,height);pause(200)
+            m=js("""(()=>{const r=document.querySelector('.m06-page'),b=e=>{const p=e.getBoundingClientRect();return [p.x,p.y,p.width,p.height,p.bottom]};return {root:b(r),work:b(r.querySelector('.module-workbench')),left:b(r.querySelector('.workbench-left')),center:b(r.querySelector('.workbench-center')),right:b(r.querySelector('.workbench-right')),bar:b(r.querySelector('.m06-transport')),label:b(r.querySelector('.preview-controls label')),select:b(r.querySelector('.preview-controls select')),players:r.querySelectorAll('.transport-controls').length,volume:!!r.querySelector('.m06-transport .volume')}})()""")
+            assert m['players']==1 and m['volume']
+            assert m['bar'][1]>=m['work'][4]-1 and m['bar'][4]<=m['root'][4]+1,m
+            assert abs(m['label'][1]-m['select'][1])<1,m
+            if m['work'][2]<=1060:assert m['right'][1]>=max(m['left'][4],m['center'][4])-1,m
+            report['r3_layouts'].append(m)
+            window.view.grab().save(str(out/f'r3-qt-{width}.png'))
+        report['checks'].append('R3 actual Qt CC/AC/native REAPER extraction and metadata, shared full-width transport and inline spectrum label at two sizes')
+        from verify_m06_r4_qt import verify as verify_r4
+        verify_r4(window,out,db,js,click,until,pause,report)
+        window.resize(1920,1000);pause(100)
         pause(250);window.view.grab().save(str(out/'qt.png'))
         report['success']=True
     finally:

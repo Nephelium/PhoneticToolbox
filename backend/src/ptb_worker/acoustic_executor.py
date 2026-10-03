@@ -107,10 +107,20 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None,process_
                 from ptb_api.egg_models import EggTaskConfig, expected_names
                 header=dict(config=snapshot['config']['analysis'],sha256=digest(blobs['audio']),
                     input_name=next(i['name'] for i in snapshot['input_assets'] if i['role']=='audio'))
-                request=scratch.create(json.dumps(header).encode()+b'\n'+blobs['audio'],'.json')
-                raw=collect_scientific('egg',request,scratch,
-                    replace(SEGMENT_LIMITS,timeout_seconds=240,process_bytes=3_000_000_000),
-                    lambda:abort.is_set() or stop.is_set(),on_started,process_evidence)
+                native=None
+                try:
+                    if header['config'].get('keep_reaper_f0') and header['config']['mode']!='inverse':
+                        from .egg_f0 import NATIVE_BYTES
+                        from .acoustic_errors import AcousticFailure
+                        if not getattr(files,'reaper_binary',None):raise AcousticFailure('egg_reaper_unavailable')
+                        native=files.output(identity,'egg-native.wav','temporary',NATIVE_BYTES)
+                        header.update(native_scratch=str(files.scratch_path(identity,native['id'])),reaper_binary=str(files.reaper_binary))
+                    request=scratch.create(json.dumps(header).encode()+b'\n'+blobs['audio'],'.json')
+                    raw=collect_scientific('egg',request,scratch,
+                        replace(SEGMENT_LIMITS,timeout_seconds=240,process_bytes=3_000_000_000),
+                        lambda:abort.is_set() or stop.is_set(),on_started,process_evidence)
+                finally:
+                    if native:files.release_scratch(identity,native['id'])
                 bundle=unpack_bundle(raw,64_000_000)
                 names=[f['name'] for f in bundle.manifest['files']]
                 if (bundle.manifest.get('audio_sha256')!=header['sha256'] or

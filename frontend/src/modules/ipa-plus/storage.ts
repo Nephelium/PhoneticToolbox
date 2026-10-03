@@ -1,13 +1,15 @@
 import type {Draft} from './types.ts';
 import {catalog} from './catalog.ts';
 export const DB_NAME='phonetic-toolbox-m17';
-export function createDraft(writer:string):Draft{return {version:1,catalogVersion:catalog.version,text:'',start:0,end:0,system:'ipa',introductions:true,textSize:28,editorHeight:120,revision:0,writer};}
+export function createDraft(writer:string):Draft{return {version:1,catalogVersion:catalog.version,text:'',start:0,end:0,system:'ipa',introductions:true,textSize:26,textSizeVersion:1,editorHeight:120,revision:0,writer};}
 export function restoreDraft(value:unknown,writer:string):{draft:Draft;blocked:boolean;message:string}{
   const fallback=createDraft(writer);if(value===undefined)return {draft:fallback,blocked:false,message:''};
   if(!value||typeof value!=='object')return {draft:fallback,blocked:true,message:'草稿格式无法识别，原记录已保留。请另存独立草稿。'};
   const d=value as Partial<Draft>;const text=typeof d.text==='string'?d.text:'';
+  // The former default was 28px; preserve non-default choices and migrate once.
+  const textSize=d.textSizeVersion===1||Number(d.textSize)!==28?Number(d.textSize)||26:26;
   const valid=d.version===1&&typeof d.text==='string'&&Number.isInteger(d.revision)&&Number(d.revision)>=0&&['ipa','extipa','voqs'].includes(d.system??'');
-  return {draft:{...fallback,text,start:Math.max(0,Math.min(text.length,Number(d.start)||0)),end:Math.max(0,Math.min(text.length,Number(d.end)||0)),system:valid?d.system!:'ipa',introductions:d.introductions!==false,textSize:Math.max(18,Math.min(54,Number(d.textSize)||28)),editorHeight:Math.max(96,Math.min(360,Number(d.editorHeight)||144)),revision:valid?d.revision!:0,writer},blocked:!valid,message:valid?'':'草稿版本未知，已取回可读文字并保留原记录。请导出文字或另存独立草稿。'};
+  return {draft:{...fallback,text,start:Math.max(0,Math.min(text.length,Number(d.start)||0)),end:Math.max(0,Math.min(text.length,Number(d.end)||0)),system:valid?d.system!:'ipa',introductions:d.introductions!==false,textSize:Math.max(18,Math.min(54,Math.round(textSize))),editorHeight:Math.max(96,Math.min(360,Number(d.editorHeight)||144)),revision:valid?d.revision!:0,writer},blocked:!valid,message:valid?'':'草稿版本未知，已取回可读文字并保留原记录。请导出文字或另存独立草稿。'};
 }
 let connection:Promise<IDBDatabase>|undefined;
 function database(){return connection??=new Promise<IDBDatabase>((resolve,reject)=>{

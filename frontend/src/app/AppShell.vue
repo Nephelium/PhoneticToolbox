@@ -2,6 +2,10 @@
 import { ref,computed,watch,onMounted,onUnmounted,nextTick } from 'vue';import { groups,modules } from './registry.ts';import { host,workspace,states,saveDraft } from '../state/workspace.ts';import { stop } from '../state/audio.ts';
 import ModuleFrame from '../components/ModuleFrame.vue';
 import HelpPage from './HelpPage.vue';
+import monoLicense from '../assets/JetBrainsMono-OFL.txt?raw';
+import '../design/buttons.css';
+import {installButtonAppearance} from '../state/buttons.ts';
+import {installWaveformAppearance} from '../state/waveform-color.ts';
 import {vResizablePanels} from '../layout/resizablePanels.ts';
 import AudioTransport from '../components/AudioTransport.vue';import AppIcon from '../components/AppIcon.vue';import ModalDialog from '../components/ModalDialog.vue';import MethodReferences from '../components/MethodReferences.vue';import WorkspaceView from './WorkspaceView.vue';import version from '../version.json';import fontLicense from '../assets/Doulos-OFL.txt?raw';import logo from '../assets/k2.png';
 import VocalTractPage from '../modules/vocal-tract/VocalTractPage.vue';
@@ -39,7 +43,12 @@ import {previewFiles,type ResearchContext} from '../platform/research.ts';
 import {desktopFiles} from '../platform/desktop.ts';
 import FontSettings from '../components/FontSettings.vue';
 import {selectFontOwner} from '../state/fonts.ts';
-import {installPageZoom,pageScale,setPageScale} from '../state/pageZoom.ts';
+import {installPageZoom} from '../state/pageZoom.ts';
+import AppearanceSettings from '../components/AppearanceSettings.vue';
+import {installPalettes,normalizePalette,normalizeMode,type ThemeMode} from '../state/appearance.ts';
+installPalettes();
+installButtonAppearance();
+installWaveformAppearance();
 installPageZoom();
 const props=defineProps<{research?:ResearchContext}>();const emit=defineEmits<{leaveProject:[]}>();
 const defaultContext:ResearchContext={key:'local:M01',label:desktopFiles?'本机目录':'本机预览',files:desktopFiles??previewFiles()};
@@ -64,10 +73,12 @@ const m13Dirty=ref(false);
 const moduleDirty=(id:string)=>id==='settings'?settingsDirty.value:id==='M16'?m16Dirty.value||m16Recording.value:id==='M17'?m17Dirty.value:id==='M05'?m05Dirty.value:id==='M11'?m11Dirty.value:id==='M15'?m15Dirty.value:id==='M14'?m14Dirty.value:id==='M13'?m13Dirty.value:id==='M10'?m10Dirty.value:id==='M01'?dirty(m01.value):!!states[previewKey(id)]?.dirty;
 const initialModule=modules.find(m=>location.hash==='#'+m.id)?.id;
 const active=ref(initialModule??'home'),tabs=ref<string[]>(initialModule?['home',initialModule]:['home']),query=ref('');const collapsed=ref(host.projects.read('collapsed',false));
-type Theme='system'|'light'|'dark';const savedTheme=host.projects.read<string>('theme','system');const theme=ref<Theme>(['system','light','dark'].includes(savedTheme)?savedTheme as Theme:'system');
-const system=matchMedia('(prefers-color-scheme: dark)');const applyTheme=()=>{if(m15Focus.value)return;document.documentElement.dataset.theme=theme.value==='system'?(system.matches?'dark':'light'):theme.value;};
+const theme=ref<ThemeMode>(normalizeMode(host.projects.read('theme','system')));
+const palette=ref(normalizePalette(host.projects.read('palette',null)));
+const system=matchMedia('(prefers-color-scheme: dark)');
+const applyTheme=()=>{if(m15Focus.value)return;document.documentElement.dataset.palette=palette.value;document.documentElement.dataset.theme=theme.value==='system'?(system.matches?'dark':'light'):theme.value;};
 watch(m15Focus,v=>{if(!v)applyTheme();});
-watch(theme,()=>{applyTheme();host.projects.write('theme',theme.value);},{immediate:true});watch(collapsed,v=>host.projects.write('collapsed',v));
+watch([theme,palette],()=>{applyTheme();host.projects.write('theme',theme.value);host.projects.write('palette',palette.value);},{immediate:true});watch(collapsed,v=>host.projects.write('collapsed',v));
 system.addEventListener('change',applyTheme);onUnmounted(()=>system.removeEventListener('change',applyTheme));
 const storedRecent=host.projects.read<unknown>('recent',[]);const recent=ref((Array.isArray(storedRecent)?storedRecent:[]).filter(id=>modules.some(m=>m.id===id)).slice(0,5));
 const current=computed(()=>modules.find(m=>m.id===active.value));const visible=computed(()=>modules.filter(m=>(m.title+' '+m.description+' '+m.id).toLowerCase().includes(query.value.trim().toLowerCase())));
@@ -95,13 +106,13 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 <template>
 <a href="#main-content" class="skip-link">跳到工作区</a>
 <div class="app-shell" :class="{collapsed}" v-resizable-panels="{key:research?.ownerId?'server:'+research.ownerId+':navigation':'navigation',center:'.main-shell',centerMin:540,disabled:collapsed,panels:[{selector:'.sidebar',side:'left',label:'工具导航',initial:224,min:184,max:360}]}">
-<aside class="sidebar" aria-label="工具导航">
+<aside id="tool-sidebar" class="sidebar" aria-label="工具导航">
 <div class="brand">
 <img :src="logo" alt="PhoneticToolbox 波形团子"/>
 <span>PhoneticToolbox<small>语音研究工具箱</small>
 </span>
-<button class="icon-button" :aria-label="collapsed?'展开侧栏':'收起侧栏'" @click="collapsed=!collapsed">
-<AppIcon name="menu"/>
+<button type="button" class="sidebar-toggle" :aria-label="collapsed?'展开侧栏':'收起侧栏'" :title="collapsed?'展开侧栏':'收起侧栏'" :aria-expanded="!collapsed" aria-controls="tool-sidebar" @click="collapsed=!collapsed">
+<span aria-hidden="true">{{collapsed?'›':'‹'}}</span>
 </button>
 </div>
 <label class="search-box">
@@ -229,17 +240,8 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 <IpaPlusPage v-if="tabs.includes('M17')" v-show="active==='M17'" ref="m17Page" :state-key="'local:M17'" :active="active==='M17'" @dirty="m17Dirty=$event" @references="refs('M17')"/>
 <PerceptionPage v-if="tabs.includes('M15')" v-show="active==='M15'" ref="m15Page" :active="active==='M15'" @dirty="m15Dirty=$event" @focus="m15Focus=$event" @references="refs('M15')"/>
 <VocalTractPage :state-key="previewKey('M10')" v-if="tabs.includes('M10')" v-show="active==='M10'" :active="active==='M10'" @references="refs('M10')" @close="close('M10')" @dirty="m10Dirty=$event"/>
-<ModuleFrame v-if="tabs.includes('settings')" v-show="active==='settings'" label="工作台设置" class="utility-page"><h3>外观</h3>
-<div class="setting-row"><span>页面缩放</span><div class="page-zoom-controls"><button aria-label="缩小页面" :disabled="pageScale<=70" @click="setPageScale(pageScale-10)">−</button><output aria-label="页面缩放比例">{{pageScale}}%</output><button aria-label="放大页面" :disabled="pageScale>=150" @click="setPageScale(pageScale+10)">+</button><button @click="setPageScale(100)">恢复 100%</button></div></div>
-<p class="muted">Ctrl＋滚轮只用于图内缩放。页面大小在这里调整。</p>
-<label class="setting-row">配色主题<select v-model="theme">
-<option value="system">跟随系统</option>
-<option value="light">浅色</option>
-<option value="dark">深色</option>
-</select>
-</label>
-<p class="muted">主题、侧栏宽度与最近工具保存在本机。各工具的参数在工具内单独设置。</p>
-<FontSettings ref="settingsPage" @dirty="settingsDirty=$event"/>
+<ModuleFrame v-if="tabs.includes('settings')" v-show="active==='settings'" label="工作台设置" class="settings-page">
+<div class="settings-columns"><AppearanceSettings v-model:mode="theme" v-model:palette="palette"/><FontSettings ref="settingsPage" @dirty="settingsDirty=$event"/></div>
 </ModuleFrame>
 <HelpPage v-if="tabs.includes('help')" v-show="active==='help'"/>
 </main>
@@ -283,10 +285,12 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 <p class="muted">界面试用版 · 共用前端与科研核心。各模块的实施范围和引用分别展示。</p>
 <button class="primary" @click="refs()">开源与学术致谢</button>
 <p>
-<button @click="modal='font-license'">Doulos SIL 字体版权与许可</button>
+<button @click="modal='font-license'">内置字体版权与许可</button>
 </p>
 </template>
-<pre v-else-if="modal==='font-license'" class="license-text">{{fontLicense}}</pre>
+<pre v-else-if="modal==='font-license'" class="license-text">{{fontLicense}}
+
+{{monoLicense}}</pre>
 <MethodReferences v-else-if="modal==='references'" :module-id="referencesId"/>
 </ModalDialog>
 </template>

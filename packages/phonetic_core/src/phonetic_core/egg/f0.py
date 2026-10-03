@@ -16,21 +16,42 @@ class PitchTrack:
     source_id: str = 'SRC-PRAAT'
 
 
-def praat_pitch(audio: np.ndarray, fs: int, *, cancel_event=None) -> PitchTrack:
-    """v2's 10ms / 75–600Hz autocorrelation, preserving both actual and old grids."""
+def praat_pitch(audio: np.ndarray, fs: int, *, pitch_floor=75., pitch_ceiling=600., cancel_event=None) -> PitchTrack:
+    """10 ms AC; explicit search bounds, with legacy defaults for old requests."""
     check_cancel(cancel_event)
     sample_rate(fs)
     audio = vector(audio)
     try:
         import parselmouth
         sound = parselmouth.Sound(np.asarray(audio, dtype=float), sampling_frequency=fs)
-        pitch = sound.to_pitch(time_step=.01, pitch_floor=75., pitch_ceiling=600.)
+        if not 0 < pitch_floor < pitch_ceiling < fs/2:
+            raise ValueError('invalid_pitch_range')
+        # A 30 Hz AC window needs 100 ms. Short files contain no complete frame.
+        if pitch_floor == 30. and len(audio)/fs < 3/pitch_floor:
+            return PitchTrack(np.array([]),np.array([]),np.array([]))
+        pitch = sound.to_pitch(time_step=.01, pitch_floor=pitch_floor, pitch_ceiling=pitch_ceiling)
     except Exception as exc:
         raise EggError('pitch_failed') from exc
     check_cancel(cancel_event)
     raw = np.asarray(pitch.selected_array['frequency'], dtype=float)
     values = np.where(raw <= 0, np.nan, raw)
     return PitchTrack(np.asarray(pitch.xs(), dtype=float), values, np.arange(len(values))*.01+.005)
+
+
+def reaper_pitch(audio, fs, backend):
+    """SRC-REAPER: use the injected native engine on the normalized audio track."""
+    from ..models.audio import AudioInput
+    audio = vector(audio); sample_rate(fs)
+    # Native REAPER needs enough context for its epoch lattice. Empty/silent
+    # tracks have no voiced estimate; do not invent a fallback frequency.
+    if len(audio)/fs < .1 or not np.any(audio):
+        return PitchTrack(np.array([]),np.array([]),np.array([]),'SRC-REAPER')
+    track = backend(AudioInput(audio,fs),.01,30.,800.,hilbert=False,no_highpass=False)
+    if track.actual_backend != 'native_reaper':raise EggError('egg_reaper_failed')
+    times=np.asarray(track.times,dtype=float);values=np.asarray(track.values,dtype=float)
+    if times.shape!=values.shape or not np.isfinite(times).all() or np.any(np.diff(times)<=0) or np.isinf(values).any():
+        raise EggError('egg_reaper_failed')
+    return PitchTrack(times,np.where(values>0,values,np.nan),times.copy(),'SRC-REAPER')
 
 
 def gci_pitch(gci_times):

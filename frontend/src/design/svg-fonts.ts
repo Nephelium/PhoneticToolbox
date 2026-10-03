@@ -9,7 +9,7 @@ async function doulosData(){
 export function styledSvg(source:SVGSVGElement){
  const clone=source.cloneNode(true) as SVGSVGElement;
  const originals=[source,...source.querySelectorAll<SVGElement>('*')],copies=[clone,...clone.querySelectorAll<SVGElement>('*')];
- originals.forEach((item,i)=>{const style=getComputedStyle(item);for(const key of ['fill','stroke','stroke-width','stroke-dasharray','font-family','font-size','font-weight','font-style','text-anchor','opacity'])copies[i].style.setProperty(key,style.getPropertyValue(key));});
+ originals.forEach((item,i)=>{const style=getComputedStyle(item);for(const key of ['fill','stroke','stroke-width','stroke-dasharray','stroke-linecap','font-family','font-size','font-weight','font-style','text-anchor','opacity'])copies[i].style.setProperty(key,style.getPropertyValue(key));});
  return clone;
 }
 export async function editableSvg(clone:SVGSVGElement){

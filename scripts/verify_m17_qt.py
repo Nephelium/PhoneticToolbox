@@ -73,25 +73,40 @@ def main():
             window.resize(width,height);pause(250)
             for label,system in [('IPA','ipa'),('extIPA','extipa'),('VoQS','voqs')]:
                 click(label);until('!!document.querySelector("[data-chart='+system+']")');pause(250)
-                geometry=js('''(()=>{const v=document.querySelector('.m17-chart-viewport'),e=document.querySelector('.m17-editor'),b=v.getBoundingClientRect(),r=e.getBoundingClientRect(),symbols=[...v.querySelectorAll('[data-symbol-id]')],outside=symbols.filter(x=>{const a=x.getBoundingClientRect();return a.left<b.left-1||a.right>b.right+1||a.top<b.top-1||a.bottom>b.bottom+1}).map(x=>x.dataset.symbolId);return {viewport:[innerWidth,innerHeight],chart:{width:v.clientWidth,height:v.clientHeight,scrollWidth:v.scrollWidth,scrollHeight:v.scrollHeight},editor:{top:r.top,bottom:r.bottom,height:r.height},symbolCount:symbols.length,outside,font:getComputedStyle(e).fontFamily}})()''')
-                actual=js('[...document.querySelectorAll(".m17-chart-viewport [data-symbol-id]")].map(e=>e.dataset.symbolId)')
                 expected=[entry['id'] for entry in catalog['entries'] if entry['system']==system]
-                assert sorted(actual)==sorted(expected),(system,'catalogue occurrence missing or duplicated')
-                report['layouts'].append({'width':width,'height':height,'system':system,**geometry})
-                assert geometry['symbolCount']>20
-                assert geometry['editor']['bottom']<=geometry['viewport'][1]
-                if args.require_single_screen:
-                    assert not geometry['outside'],(width,height,system,geometry)
-                    assert geometry['chart']['scrollHeight']<=geometry['chart']['height']+2,(width,height,system,geometry)
-                    assert geometry['chart']['scrollWidth']<=geometry['chart']['width']+2,(width,height,system,geometry)
-                # Offscreen WebEngine can present its prior frame on the first grab.
-                window.view.grab();pause(350)
-                assert window.view.grab().save(str(out/f'{width}x{height}-{system}.png'))
-        report['checks'].append('three complete table layouts and visible editor measured in the actual shared shell')
+                seen=[]
+                views=['base'] if system=='voqs' else (['base','marks'] if system=='ipa' else ['base','marks','context','combinations'])
+                for view in views:
+                    if system!='voqs':
+                        js('document.querySelector("[data-chart-view='+view+']").click()')
+                        until('document.querySelector("[data-chart-view-active]")?.dataset.chartViewActive==='+json.dumps(view))
+                    js('document.querySelector(".m17-chart-viewport").scrollTop=0');pause(250)
+                    geometry=js('''(()=>{const v=document.querySelector('.m17-chart-viewport'),e=document.querySelector('.m17-editor'),b=v.getBoundingClientRect(),r=e.getBoundingClientRect(),symbols=[...v.querySelectorAll('[data-symbol-id]')],outside=symbols.filter(x=>{const a=x.getBoundingClientRect();return a.left<b.left-1||a.right>b.right+1||a.top<b.top-1||a.bottom>b.bottom+1}).map(x=>x.dataset.symbolId);return {viewport:[innerWidth,innerHeight],chart:{width:v.clientWidth,height:v.clientHeight,scrollWidth:v.scrollWidth,scrollHeight:v.scrollHeight},editor:{top:r.top,bottom:r.bottom,height:r.height},symbolCount:symbols.length,outside,font:getComputedStyle(e).fontFamily}})()''')
+                    actual=js('[...document.querySelectorAll(".m17-chart-viewport [data-symbol-id]")].map(e=>e.dataset.symbolId)')
+                    seen.extend(actual)
+                    assert actual,(system,view,'empty view')
+                    report['layouts'].append({'width':width,'height':height,'system':system,'view':view,**geometry})
+                    assert geometry['editor']['bottom']<=geometry['viewport'][1]
+                    assert geometry['chart']['scrollWidth']<=geometry['chart']['width']+2,(width,height,system,view,geometry)
+                    if args.require_single_screen and view=='base' and system!='ipa':
+                        assert not geometry['outside'],(width,height,system,view,geometry)
+                        assert geometry['chart']['scrollHeight']<=geometry['chart']['height']+2,(width,height,system,view,geometry)
+                    # Supplemental explanations may scroll; prove the last symbol
+                    # can be reached with the editor still inside the viewport.
+                    js('document.querySelector(".m17-chart-viewport [data-symbol-id]:last-child")?.scrollIntoView({block:"nearest"})')
+                    last=js('(()=>{const v=document.querySelector(".m17-chart-viewport"),a=[...v.querySelectorAll("[data-symbol-id]")].at(-1);a.scrollIntoView({block:"nearest"});const b=a.getBoundingClientRect(),r=v.getBoundingClientRect();return b.top>=r.top-1&&b.bottom<=r.bottom+1})()')
+                    assert last,(system,view,'last input inaccessible')
+                    js('document.querySelector(".m17-chart-viewport").scrollTop=0')
+                    window.view.grab();pause(350)
+                    assert window.view.grab().save(str(out/f'{width}x{height}-{system}-{view}.png'))
+                assert sorted(seen)==sorted(expected),(system,'partition occurrence missing or duplicated')
+        report['checks'].append('all chart partitions cover the complete catalogue; extIPA/VoQS base fit one screen and merged IPA/supplemental rows scroll with editor visible')
         click('来源')
         until('document.body.innerText.includes("UntPhesoca (unt)")')
         assert js('[...document.querySelectorAll("a")].some(e=>e.href==="https://zhuanlan.zhihu.com/p/203037479")')
-        report['checks'].append('shared source panel includes the specified Zhihu translation with author and clickable article URL')
+        assert js('document.body.innerText.includes("吕佳") && document.body.innerText.includes("江荻")')
+        assert js('[...document.querySelectorAll("a")].some(e=>e.href==="https://doi.org/10.3969/j.issn.1006-7299.2013.06.030")')
+        report['checks'].append('shared source panel includes the specified Zhihu translation and clickable URL, plus Lv Jia, Jiang Di and DOI 10.3969/j.issn.1006-7299.2013.06.030')
         report['success']=True
     finally:
         (out/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),'utf8')

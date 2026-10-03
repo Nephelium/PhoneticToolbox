@@ -1,5 +1,17 @@
 import type {EggTaskConfig} from '../../platform/research.ts';
 import {defaults,taskConfig,validate} from './state.ts';
+// Visible voiced observations only; retain outliers so the display cannot hide
+// detector errors. This changes the axis, never the estimator's search limits.
+export function visibleF0Range(traces:readonly {times:readonly number[];values:readonly (number|null)[]}[],start:number,end:number):[number,number]|undefined {
+  let low=Infinity,high=-Infinity;
+  for(const trace of traces)for(let i=0;i<Math.min(trace.times.length,trace.values.length);i++){
+    const value=trace.values[i];
+    if(trace.times[i]>=start&&trace.times[i]<=end&&value!==null&&Number.isFinite(value)&&value>0){low=Math.min(low,value);high=Math.max(high,value);}
+  }
+  if(!Number.isFinite(low))return undefined;
+  const pad=Math.max(5,(high-low)*.1,high*.02);
+  return [Math.max(0,Math.floor(low-pad)),Math.ceil(high+pad)];
+}
 // Display coordinates only. The normalized analysis samples stay unchanged.
 export function visibleAmplitude(times:readonly number[],values:readonly (number|null)[],start:number,end:number):[number,number] {
   let peak=0;

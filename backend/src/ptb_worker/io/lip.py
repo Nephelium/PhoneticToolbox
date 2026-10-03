@@ -12,7 +12,7 @@ import pickletools
 from .limits import Limits, LimitError, FormatError
 
 VECTORS=('absolute_timestamps','relative_times','area','outer_width','open','circularity')
-METADATA=('audio_first_frame_time','lip_manual_offset','time_alignment_mode')
+METADATA=('audio_first_frame_time','lip_manual_offset','time_alignment_mode','source_backend','source_status')
 
 
 def bounded_tree(value,limits):
@@ -68,7 +68,7 @@ def normalize(data,limits,*,wire=False):
     for key in METADATA:
         if key not in meta:continue
         value=meta[key]
-        if key=='time_alignment_mode':
+        if key in ('time_alignment_mode','source_backend','source_status'):
             if type(value)!=str or len(value)>128:raise FormatError('Invalid lip alignment mode')
         elif value is not None:
             if type(value) not in (float,int):raise FormatError('Invalid lip anchor or offset')

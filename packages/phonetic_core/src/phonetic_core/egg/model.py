@@ -32,6 +32,8 @@ class EGGAnalysisResult:
     gci_f0_values: Optional[np.ndarray] = None
     audio_f0_times: Optional[np.ndarray] = None
     audio_f0_values: Optional[np.ndarray] = None
+    reaper_f0_times: Optional[np.ndarray] = None
+    reaper_f0_values: Optional[np.ndarray] = None
 
     # Metadata
     fs: int = 44100

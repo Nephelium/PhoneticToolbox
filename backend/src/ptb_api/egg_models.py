@@ -28,6 +28,9 @@ class EggTaskConfig(WireModel):
     spec_vmax: float = Field(default=-10.0, ge=-160, le=20)
     keep_praat_f0: bool = True
     keep_gci_f0: bool = True
+    keep_reaper_f0: bool = False
+    # Missing in historical snapshots: preserve their original Praat search.
+    f0_policy: Literal['legacy/1', 'audio-f0/2'] = 'legacy/1'
     glottal_movement: bool = False
     silence_threshold: float = Field(default=.01, ge=0, le=1)
     generate_images: bool = False
@@ -36,6 +39,8 @@ class EggTaskConfig(WireModel):
 
     @model_validator(mode='after')
     def ranges(self):
+        if self.keep_reaper_f0 and self.f0_policy != 'audio-f0/2':
+            raise ValueError('REAPER requires audio-f0/2')
         if self.mode != 'preview' and (self.micro_center is not None or self.micro_width_ms != 50.):
             raise ValueError('Micro viewport only applies to preview')
         if self.highpass_cutoff >= self.lowpass_cutoff or self.spec_vmin >= self.spec_vmax:
@@ -107,6 +112,7 @@ class EggPreviewData(WireModel):
     sq: EggSeries
     praat: EggSeries
     gci_f0: EggSeries
+    reaper: EggSeries | None = None
     audio: EggSeries
     egg: EggSeries
     gci: list[float] = Field(max_length=10000)
@@ -118,6 +124,8 @@ class EggPreviewData(WireModel):
     spectral_extent: tuple[float, float, float, float]
     spectral_shape: tuple[int, int]
     raster_shape: tuple[int, int]
+    # Display suggestion only. Older snapshots have no suggestion.
+    suggested_db_range: tuple[float, float] | None = None
     display_policy: Literal['legacy-roi-extent; grayscale-raster-only'] = 'legacy-roi-extent; grayscale-raster-only'
     micro_wave_policy: Literal['raw-100ms-padding-filter-crop'] = 'raw-100ms-padding-filter-crop'
     micro_event_policy: Literal['raw-50ms-padding'] = 'raw-50ms-padding'
@@ -136,4 +144,11 @@ class EggInverseData(WireModel):
     audio_values: DisplayValues
     inverse_values: DisplayValues
     egg_values: DisplayValues
+    # Full selected, filtered EGG from this task, never reconstructed from a
+    # different/current source. Optional for historical result compatibility.
+    full_egg_values: Annotated[list[float], Field(max_length=48000)] | None = None
+    sample_rate_hz: int | None = Field(default=None, ge=8000, le=96000)
+    lp_order: int | None = Field(default=None, ge=1, le=256)
+    gci_count: int | None = Field(default=None, ge=0)
+    fixed_window_crossings: int | None = Field(default=None, ge=0)
     spectral_policy: Literal['pad-44100-periodic-hamming-fft-80db-floor'] = 'pad-44100-periodic-hamming-fft-80db-floor'

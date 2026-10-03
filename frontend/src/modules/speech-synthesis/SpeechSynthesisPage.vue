@@ -5,7 +5,7 @@ import type {ResearchContext,ResearchFile,JobView} from '../../platform/research
 import {workspace,host} from '../../state/workspace.ts';import {stop} from '../../state/audio.ts';import {decodeWav} from '../../platform/decode.ts';
 import ModuleFrame from '../../components/ModuleFrame.vue';import ModuleToolbar from '../../components/ModuleToolbar.vue';import ModuleSection from '../../components/ModuleSection.vue';import ModuleStatus from '../../components/ModuleStatus.vue';import ModalDialog from '../../components/ModalDialog.vue';import WaveformViewport from '../../components/WaveformViewport.vue';import AudioTransport from '../../components/AudioTransport.vue';import TaskPanel from '../../components/TaskPanel.vue';
 import CurveEditor from './CurveEditor.vue';import SynthesisSpectrum from './SynthesisSpectrum.vue';
-import {defaults,parameters,vowels,presets,clone,valid,number,ipa,override,resize,f0Range,preset,exportParams,importParams,isCurrent,type Config} from './state.ts';
+import {defaults,parameters,vowels,presets,f0Methods,synthesisMethods,clone,valid,number,ipa,override,resize,f0Range,preset,exportParams,importParams,isCurrent,type Config} from './state.ts';
 import type {Action,Result,Raster} from './port.ts';import {downloadBytes} from '../../platform/m06.ts';
 const props=defineProps<{context:ResearchContext;stateKey:string;active:boolean}>();const emit=defineEmits<{references:[]}>();
 const wave=workspace(props.stateKey),config=reactive(defaults()),name=ref('F0'),overrideText=ref(''),durationText=ref('2'),low=ref('50'),high=ref('500');
@@ -16,11 +16,14 @@ const view=ref('wave'),windowMs=ref(20);let epoch=0,disposed=false,abort:AbortCo
 const sourceWave=workspace(props.stateKey+'.m06-source'),previewTarget=ref('result'),sourceSpectra=ref<Record<string,Raster>>({});
 const previewWave=computed(()=>previewTarget.value==='source'?sourceWave:wave),spectra=computed(()=>previewTarget.value==='source'?sourceSpectra.value:result.value?.metadata.spectrograms);
 const port=computed(()=>props.context.files.m06),stale=computed(()=>!!result.value&&resultRevision.value!==revision.value);
+const natural=computed(()=>config.render.method!=='klatt'),curveReadonly=computed(()=>natural.value&&config.render.pitch==='original');
 const activeRange=computed<[number,number]>(()=>{const p=previewWave.value,length=config.duration/p.zoom,start=Math.max(0,Math.min(p.offset,config.duration-length));return [start,start+length];});
 const tasks=computed(()=>job.value?[{id:job.value.id,title:'语音合成 · '+job.value.id.slice(0,8),status:job.value.state,progress:job.value.progress,error:job.value.error_code??undefined,canCancel:true}]:[]);
 watch(config,()=>{revision.value++;wave.dirty=true;stop();},{deep:true,flush:'sync'});
 watch(()=>props.active,v=>{if(!v)stop();});
 watch(name,()=>syncOverride());
+watch(source,()=>editPending(),{flush:'sync'});
+watch(()=>config.render.method,()=>{if(natural.value)name.value='F0';syncOverride();});
 function editPending(){revision.value++;wave.dirty=true;stop();}
 function requireApplied(){if(Number(durationText.value)!==config.duration||Number(low.value)!==config.f0_range[0]||Number(high.value)!==config.f0_range[1])throw Error('请先应用时长或 F0 范围');const v=config.curves[name.value].override;const expected=v===null?'':String(v*(name.value==='Shimmer'?100:1));if(overrideText.value!==expected)throw Error('请先应用曲线覆盖');}
 function copySymbol(s:string){void attempt(()=>navigator.clipboard.writeText(s));}
@@ -43,51 +46,60 @@ defineExpose({save});
 async function refresh(){files.value=(await props.context.files.list(directory.value||undefined)).filter(f=>/\.wav$/i.test(f.name));}
 async function choose(){await attempt(async()=>{const grant=await props.context.files.choose?.('input');if(grant){directory.value=grant.id;await refresh();}});}
 async function addAudio(event:Event){await attempt(async()=>{const target=event.target as HTMLInputElement;props.context.files.add?.([...target.files??[]]);target.value='';await refresh();});}
-function loadSource(event:Event){const id=(event.target as HTMLSelectElement).value;const f=files.value.find(f=>f.id===id);if(!f)return;confirm('加载音频并提取参数将覆盖当前曲线',()=>{source.value=f;void run('extract');});}
+async function loadSource(event:Event){const id=(event.target as HTMLSelectElement).value;const f=files.value.find(f=>f.id===id);if(!f)return;await attempt(async()=>{
+ if(natural.value&&config.render.source_sha256){const raw=await props.context.files.read(f);if(raw.sha256===config.render.source_sha256){const asset=await decodeWav(raw.buffer,f.name);source.value=f;sourceWave.asset=markRaw(asset);sourceWave.start=0;sourceWave.end=asset.duration;sourceWave.channel=0;sourceSpectra.value={};previewTarget.value='source';view.value='wave';notice.value='原录音已关联，保留导入的参数与 F0 编辑。';return;}}
+ confirm('加载音频并提取参数将覆盖当前曲线',()=>{source.value=f;void run('extract');});});}
 async function run(action:Action){await attempt(async()=>{
  if(!port.value)throw Error('当前宿主尚未提供 M06 科学任务能力');if(busy.value)throw Error('请等待当前任务完成或取消');
- requireApplied();const submitted=clone(valid(config));if(action==='generate')ipa(submitted.sequence);if(action==='extract'&&!source.value)throw Error('请先加载 WAV 音频');
+ requireApplied();const submitted=clone(valid(config));if(action==='generate')ipa(submitted.sequence);if(['extract','resynthesize'].includes(action)&&!source.value)throw Error('请先加载 WAV 音频');
  if(submitted.duration>10||submitted.duration*submitted.sample_rate>480000)throw Error('当前已验证任务预算为 10 秒且 480,000 样本，请缩短输入');
  const input=source.value;const rev=revision.value,ticket=++epoch;abort=new AbortController();busy.value=true;notice.value='';
  try{const completed=await port.value.run(action,submitted,input,abort.signal,j=>{if(!disposed&&ticket===epoch)job.value=j;});
   if(disposed||!isCurrent(rev,revision.value,ticket,epoch)){notice.value='任务完成期间配置已改变，迟到结果未应用。原结果保留。';return;}
-  if(action==='synthesize'){
+  if(action==='synthesize'||action==='resynthesize'){
    const asset=await decodeWav(completed.wav!,'合成结果.wav');if(disposed||!isCurrent(rev,revision.value,ticket,epoch))return;
-   previewTarget.value='result';result.value=completed;resultRevision.value=rev;wave.asset=markRaw(asset);wave.start=0;wave.end=asset.duration;wave.channel=0;resetRange();notice.value='合成完成，试听与导出绑定本次参数快照'+((completed.metadata.diagnostics?.output_gain??1)<1?'；输出超过安全幅度，已整体衰减 '+(-20*Math.log10(completed.metadata.diagnostics!.output_gain!)).toFixed(1)+' dB':'');
-  }else{if(action==='extract'&&input){const raw=await props.context.files.read(input,abort.signal);if(raw.sha256!==completed.metadata.input_sha256)throw Error('源音频在提取后已变化，未应用参数');const asset=await decodeWav(raw.buffer,input.name);if(disposed||!isCurrent(rev,revision.value,ticket,epoch))return;sourceWave.asset=markRaw(asset);sourceWave.start=0;sourceWave.end=asset.duration;sourceWave.channel=0;sourceSpectra.value=completed.metadata.spectrograms;previewTarget.value='source';}replace(completed.metadata.config);notice.value=action==='generate'?'元音曲线已生成，请点击合成音频':'参数提取完成。AV 按相对能量初始化，AH 为 0，请按需要调整声源后合成';}
+   previewTarget.value='result';result.value=completed;resultRevision.value=rev;wave.asset=markRaw(asset);wave.start=0;wave.end=asset.duration;wave.channel=0;resetRange();notice.value='合成完成，试听与导出绑定本次参数快照'+((completed.metadata.diagnostics?.output_gain??1)<1?'；输出超过安全幅度，已整体衰减 '+(-20*Math.log10(completed.metadata.diagnostics!.output_gain!)).toFixed(1)+' dB':'')+(completed.metadata.diagnostics?.voiced_frames===0?'；所选算法未检出有声帧，请试听核查，必要时切换算法或调整 F0 范围。':'');
+  }else{if(action==='extract'&&input){const raw=await props.context.files.read(input,abort.signal);if(raw.sha256!==completed.metadata.input_sha256)throw Error('源音频在提取后已变化，未应用参数');const asset=await decodeWav(raw.buffer,input.name);if(disposed||!isCurrent(rev,revision.value,ticket,epoch))return;sourceWave.asset=markRaw(asset);sourceWave.start=0;sourceWave.end=asset.duration;sourceWave.channel=0;sourceSpectra.value=completed.metadata.spectrograms;previewTarget.value='source';}replace(completed.metadata.config);notice.value=action==='generate'?'元音曲线已生成，请点击合成音频':natural.value?'F0 提取完成（'+f0Methods[completed.metadata.config.f0_method]+'）。重合成将直接读取原录音，保留其清音与噪声成分。'+(completed.metadata.diagnostics?.voiced_mask?.some(Boolean)===false?'未检出有声帧，请核查音频和 F0 范围。':''):'参数提取完成（'+f0Methods[completed.metadata.config.f0_method]+'）。AV 按相对能量初始化，AH 为 0，请按需要调整声源后合成'+(completed.metadata.diagnostics?.voiced_mask?.some(Boolean)===false?'。未检出有声帧，AV 全为 0；可调整 F0 范围或切换算法后重新提取':'');}
  }finally{if(ticket===epoch)busy.value=false;}
  });}
 async function cancel(){abort?.abort();if(job.value&&port.value)await attempt(async()=>{await port.value!.cancel(job.value!.id);});}
 async function exportAudio(){await attempt(async()=>{if(!result.value)throw Error('暂无合成结果');await port.value!.download(result.value,'synthesis.wav');notice.value=stale.value?'已导出旧结果及其实际合成快照':'已导出合成结果';});}
+async function exportAnalysis(){await attempt(async()=>{if(result.value)await port.value!.download(result.value,'analysis.npz');});}
 function exportCurrent(){void attempt(()=>{requireApplied();downloadBytes(exportParams(config),'语音合成参数.csv');});}
 async function importFile(event:Event){await attempt(async()=>{const target=event.target as HTMLInputElement,file=target.files?.[0];target.value='';if(!file)return;if(file.size>8_000_000)throw Error('参数文件超过 8 MB');const c=importParams(await file.text());confirm('导入参数将覆盖当前完整配置',()=>replace(c));});}
 onMounted(()=>{const draft=host.projects.read<Config|null>('m06.draft.'+props.stateKey,null);if(draft){try{replace(draft);wave.dirty=false;}catch{error.value='旧草稿无效，已保留存储内容并使用默认参数';}}void attempt(refresh);});
 onUnmounted(()=>{sourceWave.asset=null;disposed=true;epoch++;abort?.abort();stop();});
 </script>
 <template>
-<ModuleFrame fit label="语音合成工作区" class="m06-page" :aria-busy="busy">
+<ModuleFrame unified fit label="语音合成工作区" class="m06-page" :aria-busy="busy">
  <template #toolbar><ModuleToolbar>
-  <button v-if="context.files.choose" @click="choose">打开音频目录</button><button v-else @click="audioPicker?.click()">加载音频</button>
+  <button class="primary" v-if="context.files.choose" @click="choose">打开音频目录</button><button class="primary" v-else @click="audioPicker?.click()">加载音频</button>
   <input ref="audioPicker" hidden type="file" accept=".wav" @change="addAudio"/>
+  <label class="preset-picker">方法 <select v-model="config.render.method" aria-label="合成方法"><option v-for="(label,key) in synthesisMethods" :key="key" :value="key">{{label}}</option></select></label>
   <select class="source-picker" aria-label="源音频" :value="source?.id??''" @change="loadSource"><option value="">选择 WAV 后加载并提取</option><option v-for="f in files" :key="f.id" :value="f.id">{{f.name}}</option></select>
-  <button :disabled="busy||!source" @click="run('extract')">提取参数</button><button @click="paramPicker?.click()">导入参数</button>
+  <label class="preset-picker">F0 算法 <select v-model="config.f0_method" aria-label="F0 提取算法" title="用于下一次提取；范围使用左侧已应用的 F0 上下限"><option v-for="(label,key) in f0Methods" :key="key" :value="key">{{label}}</option></select></label>
+  <button class="primary" :disabled="busy||!source" @click="run('extract')">提取参数</button><button @click="paramPicker?.click()">导入参数</button>
   <input ref="paramPicker" hidden type="file" accept=".csv,.json" @change="importFile"/><button @click="exportCurrent">导出参数</button>
-  <label class="preset-picker">发声类型 <select v-model="selectedPreset" aria-label="发声类型预设"><option v-for="p in Object.keys(presets)" :key="p">{{p}}</option></select></label><button @click="applyPreset">应用预设</button>
-  <template #actions><button @click="help=true">帮助</button><button @click="emit('references')">方法与来源</button></template>
+  <label v-if="!natural" class="preset-picker">发声类型 <select v-model="selectedPreset" aria-label="发声类型预设"><option v-for="p in Object.keys(presets)" :key="p">{{p}}</option></select></label><button v-if="!natural" @click="applyPreset">应用预设</button>
+  <template #actions><button @click="save">保存参数草稿</button><button @click="help=true">帮助</button><button @click="emit('references')">方法与来源</button></template>
  </ModuleToolbar></template>
- <ModuleWorkbench :state-key="stateKey" :left-width="280" :right-width="270" left-label="合成参数" center-label="参数曲线与音频" right-label="合成与任务">
+ <ModuleWorkbench unified :state-key="stateKey" left-label="合成参数" center-label="参数曲线与音频" right-label="合成与任务">
   <template #left>
    <ModuleSection label="合成基础设置" class="base-settings"><div class="controls">
     <label>总时长 (s)<input v-model="durationText" aria-label="总时长" @input="editPending"/></label><button @click="applyDuration">应用时长</button>
-    <label>淡入 (ms)<input v-model.number="config.fade_in" type="number" min="0" max="1000"/></label><label>淡出 (ms)<input v-model.number="config.fade_out" type="number" min="0" max="1000"/></label>
-    <label>平滑点数<input v-model.number="config.smooth" type="number" min="1" max="50"/></label>
+    <label v-if="!natural">淡入 (ms)<input v-model.number="config.fade_in" type="number" min="0" max="1000"/></label><label v-if="!natural">淡出 (ms)<input v-model.number="config.fade_out" type="number" min="0" max="1000"/></label>
+    <label v-if="!natural">平滑点数<input v-model.number="config.smooth" type="number" min="1" max="50"/></label>
     <label>F0 下限 (Hz)<input v-model="low" aria-label="F0 下限" @input="editPending"/></label><label>F0 上限 (Hz)<input v-model="high" aria-label="F0 上限" @input="editPending"/></label><button @click="applyRange">应用 F0 范围</button>
    </div></ModuleSection>
-   <ModuleSection label="参数列表" class="parameters-section"><div class="parameter-list"><button v-for="(definition,key) in parameters" :key="key" :aria-pressed="name===key" @click="selectParameter(String(key))">{{key}} <small>{{definition[3]}}</small></button></div></ModuleSection>
+   <ModuleSection v-if="!natural" label="参数列表" class="parameters-section"><div class="parameter-list"><button v-for="(definition,key) in parameters" :key="key" :aria-pressed="name===key" @click="selectParameter(String(key))">{{key}} <small>{{definition[3]}}</small></button></div></ModuleSection>
+   <ModuleSection v-else label="重合成设置" class="natural-settings"><div class="controls synthesis-actions">
+    <label>音高 <select v-model="config.render.pitch" aria-label="重合成音高"><option value="original">保留原 F0</option><option value="curve">使用编辑 F0 曲线</option></select></label>
+    <template v-if="config.render.method==='world'"><label>谱包络频率比例<input v-model.number="config.render.spectral_ratio" aria-label="谱包络频率比例" type="number" min="0.5" max="2" step="0.05"/></label><label>非周期幅度比例<input v-model.number="config.render.aperiodicity_ratio" aria-label="非周期幅度比例" type="number" min="0" max="2" step="0.1"/></label></template>
+   </div><p v-if="config.render.method==='world'">默认比例 1 保留谱包络与非周期性。频率比例大于 1 将谱包络整体上移；非周期幅度比例仅作用于有声帧，不等同于 AH 或 HNR。</p><p v-else>重用原录音片段修改 F0 与时长。周期定位由 Praat 完成，极端变调及不规则发声需听辨核查。</p><p>总时长为输出目标，支持原录音的 0.5–2 倍。淡入淡出、发声预设及 Klatt 声质参数不参与此路径。</p></ModuleSection>
   </template>
   <ModuleSection label="参数曲线" class="curve-section">
-   <div class="controls curve-controls"><label>曲线覆盖<input v-model="overrideText" aria-label="曲线覆盖" placeholder="输入数值或分段序列" title="单个数值固定全段；逗号连接渐变值，分号分隔等长区段" @input="editPending"/></label><button @click="applyOverride">应用覆盖</button><button @click="overrideText='';applyOverride()">清除覆盖</button><button @click="resetRange">重置范围</button><button @click="clear">清空参数</button><button @click="save">保存参数草稿</button></div>
-   <CurveEditor :config="config" :name="name" :start="activeRange[0]" :end="activeRange[1]" @range="setRange" @error="error=$event"/>
+   <div class="controls curve-controls"><label>曲线覆盖<input v-model="overrideText" :disabled="curveReadonly" aria-label="曲线覆盖" placeholder="输入数值或分段序列" title="单个数值固定全段；逗号连接渐变值，分号分隔等长区段" @input="editPending"/></label><button :disabled="curveReadonly" @click="applyOverride">应用覆盖</button><button :disabled="curveReadonly" @click="overrideText='';applyOverride()">清除覆盖</button><button @click="resetRange">重置范围</button><button v-if="!natural" @click="clear">清空参数</button></div>
+   <CurveEditor :config="config" :name="name" :start="activeRange[0]" :end="activeRange[1]" :readonly="curveReadonly" @range="setRange" @error="error=$event"/>
   </ModuleSection>
   <ModuleSection label="音频预览" class="preview-section">
    <div class="controls preview-controls"><button :aria-pressed="previewTarget==='result'" @click="previewTarget='result';stop()">合成结果</button><button v-if="sourceWave.asset" :aria-pressed="previewTarget==='source'" @click="previewTarget='source';stop()">源音频</button><button :aria-pressed="view==='wave'" @click="view='wave'">波形</button><button :aria-pressed="view==='spectrum'" @click="view='spectrum'">语谱图</button><label v-if="view==='spectrum'">窗长<select v-model.number="windowMs" aria-label="语谱窗长"><option v-for="ms in [5,10,20,40]" :key="ms" :value="ms">{{ms}} ms</option></select></label></div>
@@ -96,28 +108,31 @@ onUnmounted(()=>{sourceWave.asset=null;disposed=true;epoch++;abort?.abort();stop
    </WaveformViewport>
    <SynthesisSpectrum v-else-if="spectra?.[String(windowMs)]&&view==='spectrum'" :data="spectra[String(windowMs)]" :start="activeRange[0]" :end="activeRange[1]" :window-ms="windowMs" :boundaries="config.boundaries"/>
    <ModuleStatus v-else kind="empty" message="暂无合成音频。生成元音后，点击合成音频即可试听和导出。"/>
-   <div class="preview-footer"><AudioTransport :state="previewWave" :active="active" compact/><span class="preview-caption">{{previewTarget==='source'?'源音频':'合成结果'}}{{stale&&previewTarget==='result'?' · 参数已修改':''}}</span></div>
   </ModuleSection>
   <template #right>
    <ModuleSection label="合成操作"><div class="controls synthesis-actions">
-    <label class="ipa-input">IPA 元音序列<input v-model="config.sequence" class="ipa-text" aria-label="IPA 元音序列" placeholder="a-i/- ///u+/e++o/-"/></label>
-    <button :disabled="busy||!port" @click="run('generate')">生成元音</button><button @click="rules=true">元音规则</button>
-    <button class="primary" :disabled="busy||!port" @click="run('synthesize')">合成音频</button><button :disabled="!result" @click="exportAudio">导出音频</button><button v-if="busy" @click="cancel">取消任务</button>
+    <template v-if="!natural"><label class="ipa-input">IPA 元音序列<input v-model="config.sequence" class="ipa-text" aria-label="IPA 元音序列" placeholder="a-i/- ///u+/e++o/-"/></label>
+    <button @click="rules=true">元音规则</button><button class="primary" :disabled="busy||!port" @click="run('generate')">生成元音</button></template>
+    <button class="primary" :disabled="busy||!port||(natural&&!source)" @click="run(natural?'resynthesize':'synthesize')">{{natural?'重合成音频':'合成音频'}}</button><button class="primary" :disabled="!result" @click="exportAudio">导出音频</button><button v-if="natural&&result?.metadata.action==='resynthesize'" @click="exportAnalysis">导出分析数据</button><button v-if="busy" @click="cancel">取消任务</button>
    </div></ModuleSection>
    <ModuleStatus v-if="error" kind="error" :message="error"/><ModuleStatus v-if="stale" kind="info" message="参数已修改，需重新合成。试听和音频导出仍对应旧结果。"/><ModuleStatus v-if="notice" kind="info" :message="notice"/><ModuleStatus v-if="!port" kind="info" message="当前为参数编辑模式，尚无可用的合成任务服务。"/>
    <details :open="busy" class="task-details"><summary>合成任务状态</summary><span v-if="result">结果 {{result.job.slice(0,8)}} · 随机种子 {{result.metadata.seed}}</span><TaskPanel :tasks="tasks" empty-title="尚未提交合成任务" empty-text="参数编辑不会自动触发音频合成" @cancel="cancel"/></details>
   </template>
  </ModuleWorkbench>
+ <div class="m06-transport global-transport"><AudioTransport :state="previewWave" :active="active"/></div>
  <ModalDialog v-if="pending" title="覆盖参数确认" @close="pending=null"><p>{{pendingLabel}}。现有合成音频保留并标记为旧结果。</p><template #footer><button @click="pending=null">取消</button><button @click="commitPending">应用并覆盖</button></template></ModalDialog>
  <ModalDialog v-if="rules" title="元音规则" @close="rules=false"><table><thead><tr><th>IPA</th><th>F1 Hz</th><th>F2 Hz</th><th>F3 Hz</th></tr></thead><tbody><tr v-for="(f,s) in vowels" :key="s"><td><button class="ipa-text" @click="copySymbol(s)">{{s}}</button></td><td v-for="(v,i) in f" :key="i">{{v}}</td></tr></tbody></table><p>点击音标复制。空格为静音段。+、-、*、/ 依次将相对时长乘以 1.1、0.9、2、0.5，再按总时长归一。生成元音更新共振峰与静音段，保留当前发声预设和 F0 曲线。</p></ModalDialog>
- <ModalDialog v-if="help" title="语音合成帮助" @close="help=false"><p>设置并应用时长 → 输入 IPA 并生成元音曲线 → 编辑参数 → 合成音频 → 试听或导出 WAV。</p><p>Shift 拖动绘制，Ctrl 拖动恢复默认值，普通拖动平移，Ctrl 滚轮缩放。曲线覆盖支持单个数值、逗号渐变和分号分段。清除覆盖可恢复手绘。Shimmer 显示百分数，文件保留小数。F1–F5 的虚线是其他共振峰的只读参考。</p><p>应用时长立即更新上下图时间轴。旧音频按真实时间显示，超出音频尾部留空，需重新合成才能得到新时长的音频。</p><p>导出参数保存当前编辑配置。导出音频保存上次合成结果，桌面目录保存同时包含实际合成参数与元数据。完整 CSV 保留采样率、淡入淡出、静音、覆盖下的原曲线。</p><p>加载 WAV 后提取参数，源录音采样率保留。复制合成与五类发声预设效果有限，输入参数不保证等于输出的声学测量值。AV 和 AH 分别控制周期声源与气流噪声，范围 0–80 dB，0 关闭对应声源。60 dB 使用本工具的数字参考标尺，不代表物理声压级。HNR、H1–H2、Slope 为扩展处理，输入值不保证等于输出测量值。假声将基础 F0 曲线整体抬高至平均至少 300 Hz，嘎裂整体降低至约 70 Hz并保留最低 20 Hz。常态浊声、耳语和气声撤去偏移，平移期间的编辑仍保留。重复应用同一预设不会累加偏移。当前任务上限为 10 秒且 480,000 样本。</p></ModalDialog>
+ <ModalDialog v-if="help" title="语音合成帮助" @close="help=false"><p>设置并应用时长 → 输入 IPA 并生成元音曲线 → 编辑参数 → 合成音频 → 试听或导出 WAV。</p><p>Shift 拖动绘制，Ctrl 拖动恢复默认值，普通拖动平移，Ctrl 滚轮缩放。曲线覆盖支持单个数值、逗号渐变和分号分段。清除覆盖可恢复手绘。Shimmer 显示百分数，文件保留小数。F1–F5 的虚线是其他共振峰的只读参考。</p><p>应用时长立即更新上下图时间轴。旧音频按真实时间显示，超出音频尾部留空，需重新合成才能得到新时长的音频。</p><p>导出参数保存当前编辑配置。导出音频保存上次合成结果，桌面目录保存同时包含实际合成参数与元数据。完整 CSV 保留采样率、淡入淡出、静音、覆盖下的原曲线。</p><p>加载 WAV 前可在顶栏选择 F0 提取算法：Praat 互相关 CC、自相关 AC、REAPER 或 WORLD Harvest。切换后点击提取参数重新计算，范围使用左侧已应用的 F0 上下限。REAPER 不可用时会报错，不自动改用其他算法。旧 m06/2 参数文件默认采用原来的 Praat CC。</p><p>顶栏可切换 Klatt、WORLD 和 PSOLA。WORLD 保留谱包络与非周期性，可修改音高、时长及两个比例；PSOLA 重用原片段，只修改音高和时长。两条路径默认保留原 F0，选择使用编辑 F0 曲线后才应用手绘或覆盖。Klatt 的淡入淡出、声质曲线与预设不参与重合成。WORLD / Harvest 要求 16–48 kHz、F0 范围 40–1000 Hz，PSOLA 也要求 F0 范围 40–1000 Hz。两条路径的目标时长为原录音的 0.5–2 倍。导出分析数据可保存实际 F0 与 WORLD 谱矩阵，桌面导出音频同时保存四件套。重新打开草稿后，选择同哈希的原 WAV 可关联并保留编辑。</p><p>底部时间选区、播放进度和音量跟随当前预览的源音频或合成结果。</p><p>加载 WAV 后提取参数，源录音采样率保留。复制合成与五类发声预设效果有限，输入参数不保证等于输出的声学测量值。AV 和 AH 分别控制周期声源与气流噪声，范围 0–80 dB，0 关闭对应声源。60 dB 使用本工具的数字参考标尺，不代表物理声压级。HNR、H1–H2、Slope 为扩展处理，输入值不保证等于输出测量值。假声将基础 F0 曲线整体抬高至平均至少 300 Hz，嘎裂整体降低至约 70 Hz并保留最低 20 Hz。常态浊声、耳语和气声撤去偏移，平移期间的编辑仍保留。重复应用同一预设不会累加偏移。当前任务上限为 10 秒且 480,000 样本。</p></ModalDialog>
 </ModuleFrame>
 </template>
 <style scoped>
-.controls{display:flex;align-items:end;gap:var(--control-gap);flex-wrap:wrap}.controls label{display:grid;gap:4px;min-width:0}.controls input{width:100px;min-width:0}.preset-picker{display:flex;align-items:center;gap:6px;white-space:nowrap}.source-picker{max-width:240px;min-width:100px}.curve-controls{flex:none}.curve-controls label{display:flex;align-items:center;gap:6px}.curve-controls input{width:160px}.base-settings .controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:end}.base-settings input{width:100%}.base-settings button{padding-inline:4px}.parameter-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px}.parameter-list button{min-width:0;min-height:28px;padding:3px 5px;white-space:nowrap;text-align:center}.parameter-list button[aria-pressed=true]{color:var(--accent);background:var(--selected)}.parameter-list small{margin-left:4px;color:var(--muted)}.synthesis-actions{display:grid;grid-template-columns:minmax(0,1fr)}.ipa-input input{width:100%}.ipa-text{font-family:var(--font-ipa)}.curve-section,.preview-section{display:flex;flex-direction:column;gap:8px;min-height:0}.preview-section{overflow:hidden}.preview-footer{display:flex;flex-wrap:wrap;align-items:center;gap:4px;flex:none}.preview-caption{color:var(--muted);font-size:var(--control-size);overflow-wrap:anywhere}.preview-controls{flex:none}.task-details{overflow-wrap:anywhere}.synthesis-wave{border:1px solid var(--border);border-radius:8px;--wave-axis-width:72px;padding-right:24px;overflow:hidden}.vowel-boundary{stroke:var(--warning);stroke-dasharray:4 4;vector-effect:non-scaling-stroke;pointer-events:none}table{width:100%;border-collapse:collapse}td,th{padding:6px;border-bottom:1px solid var(--border)}
+.controls{display:flex;align-items:end;gap:var(--control-gap);flex-wrap:wrap}.controls label{display:grid;gap:4px;min-width:0}.controls input{width:100px;min-width:0}.preset-picker{display:flex;align-items:center;gap:6px;white-space:nowrap}.source-picker{max-width:240px;min-width:100px}.curve-controls{flex:none}.curve-controls label{display:flex;align-items:center;gap:6px}.curve-controls input{width:160px}.base-settings .controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:end}.base-settings input{width:100%}.base-settings button{padding-inline:4px}.parameter-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px}.parameter-list button{min-width:0;min-height:28px;padding:3px 5px;white-space:nowrap;text-align:center}.parameter-list button[aria-pressed=true]{color:var(--accent);background:var(--selected)}.parameter-list small{margin-left:4px;color:var(--muted)}.synthesis-actions{display:grid;grid-template-columns:minmax(0,1fr)}.ipa-input input{width:100%}.ipa-text{font-family:var(--font-ipa)}.curve-section,.preview-section{display:flex;flex-direction:column;gap:8px;min-height:0}.preview-section{overflow:hidden}.preview-controls{flex:none}.task-details{overflow-wrap:anywhere}.synthesis-wave{border:1px solid var(--border);border-radius:8px;--wave-axis-width:72px;padding-right:24px;overflow:hidden}.vowel-boundary{stroke:var(--warning);stroke-dasharray:4 4;vector-effect:non-scaling-stroke;pointer-events:none}table{width:100%;border-collapse:collapse}td,th{padding:6px;border-bottom:1px solid var(--border)}
 .m06-page :deep(.workbench-center){display:grid;grid-template-rows:minmax(250px,1.1fr) minmax(220px,1fr);overflow:auto}
+.preview-controls{align-items:center}.preview-controls label{display:flex;align-items:center;gap:6px;white-space:nowrap}.m06-page{overflow:hidden}.m06-page :deep(.module-workbench){flex:1;min-height:0;overflow:auto}.m06-transport{flex:none}
+.parameter-list{min-height:0}.m06-page :deep(.workbench-left .parameter-list button){white-space:nowrap;overflow-wrap:normal;gap:3px}
+.natural-settings input,.natural-settings select{width:100%}.natural-settings p{font-size:var(--text-sm);line-height:1.6;overflow-wrap:anywhere}
 .m06-page :deep(.curve-editor){display:flex;flex-direction:column;flex:1;min-height:0}.m06-page :deep(.curve-editor svg){flex:1;height:0;min-height:100px}.m06-page :deep(.curve-editor .track-label){flex:none;font-size:var(--figure-size)}
 .m06-page :deep(.synthesis-wave),.m06-page :deep(.synthesis-spectrum){flex:1;min-height:0}.m06-page :deep(.synthesis-wave){display:flex;flex-direction:column}.m06-page :deep(.wave-track){flex:1;min-height:0;grid-template-rows:auto minmax(60px,1fr) auto}.m06-page :deep(.wave-track svg){height:100%;min-height:60px}.m06-page :deep(.pan-label){margin:0}.m06-page :deep(.transport-compact){flex:initial;min-width:0}
-@container module (max-width:1060px){.m06-page :deep(.workbench-center){grid-template-rows:340px 300px}}
+@container module (max-width:1060px){.m06-page :deep(.workbench-center){grid-template-rows:340px 300px}.m06-page :deep(.module-workbench){grid-auto-rows:max-content;align-content:start}}
 @container module (min-width:1061px){.parameters-section{flex:1;min-height:0;display:flex;flex-direction:column}.parameter-list{flex:1;grid-template-rows:repeat(12,minmax(24px,1fr))}.m06-page :deep(.workbench-left){gap:8px}.base-settings,.parameters-section{padding:8px}}
 </style>

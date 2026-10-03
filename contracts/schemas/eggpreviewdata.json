@@ -134,6 +134,17 @@
       "title": "Raster Shape",
       "type": "array"
     },
+    "reaper": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EggSeries"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
     "schema_version": {
       "const": "egg-preview/1",
       "default": "egg-preview/1",
@@ -176,6 +187,28 @@
     },
     "sq": {
       "$ref": "#/$defs/EggSeries"
+    },
+    "suggested_db_range": {
+      "anyOf": [
+        {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Suggested Db Range"
     }
   },
   "required": [

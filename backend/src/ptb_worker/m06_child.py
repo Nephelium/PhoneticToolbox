@@ -32,7 +32,7 @@ def spectrograms(audio,rate):
     return result
 
 
-def compute(header,raw):
+def compute(header,raw,reaper=None):
     import numpy as np
     from scipy.io import wavfile
     from phonetic_core.models.audio import AudioInput
@@ -41,15 +41,37 @@ def compute(header,raw):
     if c['duration']>10 or c['duration']*c['sample_rate']>480000:raise ValueError('m06_admission_budget')
     if hashlib.sha256(raw).hexdigest()!=header['input_sha256']:raise ValueError('m06_input_changed')
     np.random.seed(seed) # Isolated process only; legacy MT19937 random calls preserved.
-    files=[];spectra={};diagnostics={}
+    files=[];spectra={};diagnostics={};analysis=None
     if action=='generate':c=generate(c)
-    elif action=='extract':
+    elif action in ('extract','resynthesize'):
         try:rate,samples=wavfile.read(io.BytesIO(raw))
         except (ValueError,EOFError):raise ValueError('m06_audio_decode_failed') from None
         if samples.ndim>2 or len(samples)>480000 or len(samples)/rate>10 or (samples.ndim==2 and samples.shape[1]>8):raise ValueError('m06_input_budget')
-        source=AudioInput(samples,int(rate));c=extract(c,source)
+        source=AudioInput(samples,int(rate))
+        if action=='resynthesize':
+            if c['render']['source_sha256']!=header['input_sha256']:raise ValueError('m06_resynthesis_source_mismatch')
+            from phonetic_core.synthesis.resynthesis import resynthesize
+            if c['render']['method']=='psola':
+                from parselmouth.praat import run as praat_run
+                # Isolated task process only. Praat's UV overlap-add uses RNG;
+                # NumPy's seed alone does not control those windows.
+                praat_run(f'random_initializeWithSeedUnsafelyButPredictably ({int(seed)})')
+            audio,diagnostics,arrays=resynthesize(c,source,reaper=reaper)
+            if c['render']['method']=='psola':diagnostics['praat_seed']=int(seed)
+            c['sample_rate']=int(rate)
+            import soundfile as sf
+            stream=io.BytesIO();sf.write(stream,audio,int(rate),format='WAV',subtype='FLOAT')
+            files.append(('synthesis.wav',stream.getvalue()))
+            stream=io.BytesIO();np.savez_compressed(stream,**arrays);analysis=stream.getvalue()
+            spectra=spectrograms(audio,int(rate))
+        elif c['render']['method']=='klatt':c=extract(c,source,reaper=reaper,diagnostics=diagnostics)
+        else:
+            from phonetic_core.synthesis.resynthesis import extract_natural
+            c,diagnostics=extract_natural(c,source,reaper=reaper)
+        c['render']['source_sha256']=header['input_sha256']
+        if reaper is not None:diagnostics['reaper_binary_sha256']=reaper.sha256
         channels=source.normalized_channels().astype(np.float32);mono=np.mean(channels,axis=1) if channels.ndim>1 else channels
-        spectra=spectrograms(mono.astype(float),int(rate))
+        if action=='extract':spectra=spectrograms(mono.astype(float),int(rate))
     elif action=='synthesize':
         audio,diagnostics=synthesize_with_info(c)
         # Use V2's actual libsndfile conversion. A float64 floor approximation
@@ -60,13 +82,19 @@ def compute(header,raw):
         spectra=spectrograms(audio,c['sample_rate'])
     else:raise ValueError('m06_invalid_action')
     metadata=dict(schema_version='m06/1',action=action,config=c,seed=seed,
-                  computation_revision='klatt/2',diagnostics=diagnostics,
+                  computation_revision=diagnostics.get('computation_revision','klatt/2' if c['render']['method']=='klatt' else 'm06-natural-extract/1'),diagnostics=diagnostics,
                   input_sha256=header['input_sha256'],sample_rate_hz=c['sample_rate'],
                   sample_count=round(c['duration']*c['sample_rate']),
                   curve_time_axis='linspace(0,duration,N)',audio_time_axis='arange(N)/fs',
                   source_ids=['SRC-TDKLATT','REF-KLATT','SRC-PRAAT'],spectrograms=spectra)
+    if action=='extract':metadata['curve_time_axis']='arange(N)*0.01; final value held to duration'
+    if c['render']['method']!='klatt':metadata['source_ids']=['SRC-PRAAT']
+    if c['render']['method']=='world' or c['f0_method']=='harvest':metadata['source_ids'].extend(['SRC-PYWORLD','SRC-WORLD','REF-WORLD-2016','REF-D4C-2016'])
+    if action in ('extract','resynthesize') and c['f0_method']=='reaper':metadata['source_ids'].append('SRC-REAPER')
+    if action=='resynthesize':metadata['analysis_artifact']='analysis.npz'
     files.extend([('m06.ptb.json',json.dumps(metadata,ensure_ascii=False,allow_nan=False).encode()),
                   ('parameters.csv',export_parameters(c).encode('utf8'))])
+    if analysis is not None:files.append(('analysis.npz',analysis))
     return files
 
 
@@ -77,7 +105,14 @@ def run():
             path=Path(sys.argv[1])
             if path.stat().st_size>16_000_000:raise ValueError('m06_input_budget')
             line,raw=path.read_bytes().split(b'\n',1);header=json.loads(line)
-            files=compute(header,raw)
+            if header.get('native_scratch'):
+                from .managed_scratch import ReservedNativeScratch
+                from .native.reaper import Reaper
+                from .io.limits import Limits
+                with ReservedNativeScratch(header['native_scratch'],400_000) as scratch:
+                    native=Reaper(header['reaper_binary'],scratch,Limits(input_bytes=400_000,output_bytes=2_000_000,process_bytes=1_000_000_000,timeout_seconds=30))
+                    files=compute(header,raw,native)
+            else:files=compute(header,raw)
             payload=b''.join(v for _,v in files)
             meta=dict(kind='prepared_m06',input_sha256=header['input_sha256'],files=[dict(name=n,size=len(v),sha256=hashlib.sha256(v).hexdigest()) for n,v in files])
             encoded=json.dumps(meta).encode()

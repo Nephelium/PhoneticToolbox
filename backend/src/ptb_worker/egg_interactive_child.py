@@ -8,7 +8,7 @@ import sys
 
 
 class Session:
-    def __init__(self, raw):
+    def __init__(self, raw, *, reaper=None, native_header=None):
         from scipy.io import wavfile
         from .egg_runtime import fingerprint
         from .spectrogram_preview import PreviewError
@@ -22,10 +22,12 @@ class Session:
         self.prepared_key = self.events_key = self.audio_key = None
         self.result = None
         self.main = {}
+        self.reaper = reaper
+        self.native_header = native_header or {}
 
     def update(self, config):
         from phonetic_core.egg import EGGConfig, prepare, analyze_events
-        from phonetic_core.egg.f0 import praat_pitch
+        from .egg_f0 import populate, native_engine
         from ptb_api.egg_models import EggTaskConfig
         from .spectrogram_preview import PreviewError
         from .egg_preview import preview_files
@@ -35,7 +37,7 @@ class Session:
         last = len(self.samples) if settings.roi_end is None else int(settings.roi_end*self.fs)
         if not 0 <= first < last <= len(self.samples): raise PreviewError('egg_invalid_roi')
         numerical = EGGConfig.for_workbench(**{k:v for k,v in settings.model_dump().items() if k in EGGConfig.__dataclass_fields__})
-        key = (settings.flip_channels, settings.highpass_cutoff, settings.lowpass_cutoff)
+        key = (settings.flip_channels, settings.highpass_cutoff, settings.lowpass_cutoff, settings.f0_policy)
         if key != self.prepared_key:
             result = prepare(self.samples, int(self.fs), numerical, flip_channels=settings.flip_channels)
             self.result, self.prepared_key, self.events_key = result, key, None
@@ -46,9 +48,11 @@ class Session:
             result = self.result = analyze_events(result, numerical)
             self.events_key = events_key
             self.main.clear()
-        if settings.keep_praat_f0 and result.audio_f0_times is None:
-            track = praat_pitch(result.audio_signal, int(self.fs))
-            result.audio_f0_times, result.audio_f0_values = track.times, track.values
+        if ((settings.keep_praat_f0 and result.audio_f0_times is None) or
+                (settings.keep_reaper_f0 and result.reaper_f0_times is None)):
+            header=self.native_header if settings.keep_reaper_f0 and result.reaper_f0_times is None else {}
+            with native_engine(header) as native:
+                populate(result,settings,self.reaper or native,praat=settings.keep_praat_f0)
             self.main.clear()
         # Disabled tracks must match the old non-requested preview exactly.
         praat = result.audio_f0_times, result.audio_f0_values
@@ -77,7 +81,7 @@ def run():
                 if type(size) is not int or not 0 < size <= 64_000_000: raise ValueError()
                 raw = sys.stdin.buffer.read(size)
                 if len(raw) != size: raise ValueError()
-                session = Session(raw)
+                session = Session(raw,native_header=header)
                 value = dict(sha256=session.sha)
             elif session is not None:
                 value = session.update(header['config'])

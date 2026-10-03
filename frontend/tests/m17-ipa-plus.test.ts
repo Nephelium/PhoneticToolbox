@@ -6,8 +6,8 @@ import {graphemes,safeSelection,codePoints,suspiciousCharacters} from '../src/mo
 import type {Catalog,SymbolEntry} from '../src/modules/ipa-plus/types.ts';
 const catalog=JSON.parse(fs.readFileSync(new URL('../src/modules/ipa-plus/data/catalog.json',import.meta.url),'utf8')) as Catalog;
 test('M17 catalogue has complete declared counts and unique, attributable entries',()=>{
- assert.equal(catalog.entries.length,500);assert.equal(new Set(catalog.entries.map(e=>e.id)).size,500);
- assert.deepEqual(Object.fromEntries(['ipa','extipa','voqs'].map(s=>[s,catalog.entries.filter(e=>e.system===s).length])),{ipa:244,extipa:191,voqs:65});
+ assert.equal(catalog.entries.length,625);assert.equal(new Set(catalog.entries.map(e=>e.id)).size,625);
+ assert.deepEqual(Object.fromEntries(['ipa','extipa','voqs'].map(s=>[s,catalog.entries.filter(e=>e.system===s).length])),{ipa:351,extipa:209,voqs:65});
  for(const e of catalog.entries){assert(e.nameZh&&e.nameEn&&e.descriptionZh&&e.usageZh&&e.contrastZh&&e.sourceRefs.length);assert.deepEqual(e.codePoints,codePoints(e.insertText));assert(!/[\u0000-\u001f\ue000-\uf8ff]/u.test(e.insertText));assert(!e.insertText.includes('◌'));}
 });
 test('M17 every occurrence resolves exactly once in its system',()=>{
@@ -50,4 +50,32 @@ test('M17 all 56 VoQS names exactly match the user-specified UntPhesoca translat
 test('M17 extIPA partial parentheses, uncertainty and text downgrade are explicit',()=>{
  for(const value of ['̥᪽','̥᫃','̥᫄','̊᪻','̊᫁','̊᫂','̬᪽','̬᫃','̬᫄','C⃝','Ȼ⃝','Ṽ⃝','Ʞ⃝','σ⃝','⟅n̥ã⟆'])assert(catalog.entries.some(e=>e.insertText===value),value);
  assert(catalog.entries.filter(e=>e.insertText.includes('⟅')).every(e=>!!e.representation));
+});
+test('M17 R1 independently checked screenshot combinations remain distinct from basic symbols',()=>{
+ const additions=catalog.entries.filter(e=>e.section==='combinations');
+ assert.equal(additions.filter(e=>e.system==='ipa').length,107);
+ assert.equal(additions.filter(e=>e.system==='extipa').length,4);
+ for(const value of ['pʰ','t̪ʰ','r̪','s̠','ɻ̊','t͡ɕ','ɖ͡ʐ','ɓ̥','q͡χʼ','p͆͡f͆']){
+  const e=additions.find(e=>e.insertText===value)!;assert(e,value);assert.equal(e.notationStatus,'combination');assert.equal(e.isExample,true);
+ }
+ for(const value of ['r̪','r̠','ⱱ̟'])assert(!additions.find(e=>e.insertText===value)!.descriptionZh.includes('清化圈'));
+});
+test('M17 R1 group rows cover every listed entry exactly once',()=>{
+ for(const system of ['ipa','extipa'] as const)for(const section of catalog.charts[system]){
+  if(section.kind!=='list')continue;assert(section.groups?.length,section.id);
+  assert.deepEqual(section.groups!.flatMap(g=>g.ids).sort(),section.ids.slice().sort(),section.id);
+  assert(section.groups!.every(g=>g.label&&g.hint));
+ }
+});
+test('M17 R1 old extIPA direction is explicitly sourced to the 2002 chart discussion',()=>{
+ const historical=catalog.entries.filter(e=>e.notationStatus==='historical');
+ assert.deepEqual(historical.map(e=>e.insertText),['↑','t↑']);
+ for(const e of historical){assert.equal(e.section,'historical');assert(e.descriptionZh.includes('2002'));assert(e.descriptionZh.includes('2025'));assert(e.sourceRefs.some(s=>s.sourceId==='extipa-lv-jiang-2013'));}
+ const denasal=catalog.entries.find(e=>e.system==='extipa'&&e.insertText==='͊')!;
+ assert.equal(denasal.nameZh,'部分去鼻化');assert(denasal.aliases.includes('非鼻化'));
+});
+test('M17 R1 all source references resolve to available attributed links',()=>{
+ const sources=JSON.parse(fs.readFileSync(new URL('../src/modules/ipa-plus/data/sources.json',import.meta.url),'utf8'));
+ for(const e of catalog.entries)for(const source of e.sourceRefs){assert(sources[source.sourceId]?.title,source.sourceId);assert(sources[source.sourceId]?.url.startsWith('https://'));}
+ assert(sources['extipa-lv-jiang-2013'].title.includes('江荻'));
 });

@@ -15,12 +15,14 @@ from .spectrogram_preview import PreviewError
 
 
 class InteractivePreview:
-    def __init__(self, memory_bytes=3_000_000_000, idle_seconds=300):
+    def __init__(self, memory_bytes=3_000_000_000, idle_seconds=300, *, reaper_binary=None):
         self.memory_bytes, self.idle_seconds = memory_bytes, idle_seconds
         self.lock = threading.RLock()
         self.process = self.job = self.timer = None
         self.owner = self.token = None
         self.touched = 0
+        self.reaper_binary = str(reaper_binary) if reaper_binary else None
+        self.native_scratch = None
         atexit.register(self.close)
 
     def _rpc(self, header, raw=b'', timeout=30):
@@ -74,7 +76,16 @@ class InteractivePreview:
                 handle = win.checked(win.open_process(0x0101, False, pid))
                 try: win.checked(win.assign_job(self.job, handle))
                 finally: win.close(handle)
-                value = self._rpc(dict(size=len(raw)), raw)
+                header=dict(size=len(raw))
+                if self.reaper_binary:
+                    import tempfile
+                    from .io.scratch import Scratch
+                    from .egg_f0 import NATIVE_BYTES
+                    # Local transient session only; fixed bounded owner slot,
+                    # closed after the child/process group on every exit path.
+                    self.native_scratch=Scratch(tempfile.gettempdir(),NATIVE_BYTES)
+                    header.update(native_scratch=str(self.native_scratch.create(b'','.wav')),reaper_binary=self.reaper_binary)
+                value = self._rpc(header, raw)
                 self.owner, self.token = owner, str(uuid.uuid4())
                 self._schedule_expiry()
                 return dict(session_id=self.token, **value)
@@ -120,3 +131,6 @@ class InteractivePreview:
                 process.wait(timeout=5)
                 process.stdin.close(); process.stdout.close()
             self.owner = self.token = None
+            if self.native_scratch:
+                scratch,self.native_scratch=self.native_scratch,None
+                scratch.close()

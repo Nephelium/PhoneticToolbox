@@ -1,5 +1,45 @@
 # PhoneticToolbox v3 — Agent 工作规则
 
+2026-10-04 M06-R4：井井授权按自然度核查实施。可选 WORLD/PSOLA、Harvest F0、原音高/编辑音高、同源哈希关联及四件套保存完成，见[报告](docs/testing/2026-10-04-m06-r4-report.md)与[ADR](docs/decisions/ADR-M06-R4.md)。限定Windows开发态verified：268前端、41核心、112任务/契约、Chrome15组/12新增布局、实际Qt5组/12新增布局及两次原生四文件回读通过，WSL41纯核心。Klatt保留；新计算m06-world/1、m06-psola/1，自然提取m06-natural-extract/1。仅项目m09-ui和既有WSL M06环境添加锁定PyWORLD0.3.5，WSL另加Cython3.1.5，无全局安装。合成输入限定，真实听辨/硬件/DPI/Linux正式任务GUI未验，GlottDNN仍planned。入口Start-M06-Workbench，旧EXE未打，无DDL/push/发布/删除用户文件，保留同期改动。
+
+2026-10-04 M03-R5：井井授权 REAPER F0 和 Praat / REAPER 30–800Hz。限定Windows开发态verified，见[报告](docs/testing/2026-10-04-m03-r5-report.md)和[ADR](docs/decisions/ADR-M03-R5.md)。三开关、原生有界REAPER/缓存、批次与CSV/PNG、audio-f0/2来源元数据完成；历史legacy/1保留75–600Hz及旧幂等哈希，GCI/CQ/IF未改。266前端、56科学、21原宿主+3原生宿主、Chrome5组/6布局、实际Qt5组/2尺寸通过，WSL5纯核心含注入端口不等于Linux原生REAPER。原录音/引擎哈希不变。入口Start-M03-Workbench，旧EXE未打、硬件/DPI/Linux完整链未验，无DDL/push/发布/现存用户文件删除/环境安装，保留同期改动。
+
+2026-10-04 M01-F0：井井要求 REAPER 默认30–800Hz，实际原值60–880。共享F0设置/生成契约已更新，旧草稿与显式历史值保留，原V2审计/core独立默认不重写。266前端、84后端/契约、Chrome三组、配置传递与WSL三静态哈希通过，见[报告](docs/testing/2026-10-04-m01-f0-default-report.md)。限定默认配置/Windows开发态，嘎裂自然语料检出率未验，未重打EXE/push/DDL/发布/删除/环境安装，保留同期差异。
+
+2026-10-04 P19-R4：井井要求设置中允许主题/自定义波形线色。限定Windows开发态verified，见[报告](docs/testing/2026-10-04-p19-r4-waveform-color-report.md)。默认蓝色/主题色/色盘与HEX、本机即时记忆完成；公共/录音/EGG音频/M05偏移/M10监视接入，其他科研曲线色义保留。M02整幅/M03逆滤波前端PNG跟随显式选择，历史/后端结果不重写。266前端、Chrome5组含29配色×2模式/实际组件3×2/两PNG300dpi与精确色回读、实际Qt9记录通过；WSL4静态哈希一致，实体DPI/硬件/LinuxGUI未验。全库仍8条旧EXE缺链；未打EXE/DDL/push/发布/删除/环境安装，保留同期差异。
+
+2026-10-04 M01-R3：井井要求默认同音频目录、独立TextGrid/唇形选择、去任务前缀与两格式保存。限定Windows开发态verified，见[报告](docs/testing/2026-10-04-m01-r3-report.md)。两目录默认跟随/独立覆盖/重置、当前目录批量关联完成；用户保存XLSX/SQLite，切分另含WAV，JSON来源与同源父结果保留于内部。冲突整组末尾(2)等数字且重复复用，旧文件不覆盖。266前端、25桌面、Chrome5组/5布局、实际Qt4组/3布局含400时间点两格式/内部JSON逐值与真实任务切分及M02绘图通过；WSL4静态哈希一致。合成输入限定，硬件/DPI/Linux任务GUI未验；源码入口Start-M01-M02-Workbench，旧EXE未打，无DDL/push/发布/删除/环境安装，保留同期差异。全库仍8条旧EXE缺链。
+
+2026-10-04 M06-R3：井井要求窗长同排、完整底栏播放、AV/AH预设、元音按钮顺序及F0切换/自然度核查。限定Windows开发态verified，见[报告](docs/testing/2026-10-04-m06-r3-report.md)。CC/AC/原生REAPER、真实时间对齐、Shimmer百分数转比例完成，新提取记m06-extract/2，klatt/2与旧文件保留；M01/M06差异及WORLD/PSOLA候选见[核查](docs/references/m06-r3-resynthesis-audit.md)。264前端、Windows24核心/13任务、Chrome11功能组含129旧/8新布局、实际Qt4组含32旧/2新布局通过，WSL24纯核心。修复窄窗底栏与图表重叠；GUI后追加Shimmer纯核心修正已重新验证核心/任务，未重复GUI听辨。合成输入限定，自然语料听辨/硬件/DPI/LinuxGUI未验。入口Start-M06-Workbench，无EXE/DDL/push/发布/删除/环境安装，保留同期差异；全库仍8条旧EXE缺链。
+
+2026-10-04 P19-R3：井井授权全局按钮轻微光效/阴影、重要操作纯色高亮及设置开关。限定Windows开发态verified，见[报告](docs/testing/2026-10-04-p19-r3-buttons-report.md)。17模块梳理，20文件补92个primary标记；默认按重要性高亮且特效开启，可选全部高亮/全部普通、独立取消特效，本机即时记忆。声道iframe共用CSS并同步偏好，普通模式保留选择/焦点/持续发声active提示。264前端、Chrome16页×12组合/29配色×6组合/三布局、实际Qt21记录通过，WSL4项仅静态哈希一致。未改科研算法或操作事件，未打EXE/DDL/push/发布/删除/环境安装，保留同期其他改动；实体DPI/硬件/LinuxGUI未验。
+
+2026-10-04 M05-R3：井井授权三模式/选择保存/右栏视频/同步回放/偏移弹窗与布局修复。限定Windows开发态verified，见[报告](docs/testing/2026-10-04-m05-r3-report.md)。259前端、46科学与媒体、18桌面、Chrome四保存组合/三模式/离线任务及实际Qt三保存/三布局通过，最终8份录制34文件哈希与媒体回读通过；WSL仅同输出WAV/唇形/哈希。修复零点重复叠加，独立120帧实验仍见约12ms起点误差，默认0不代表物理校准，见[审计](docs/references/m05-r3-timing-audit.md)。异常PTS可保留原容器，未确定其产生根因。实时模型保持candidate、科学指标/滤波未改；R2停止自动保存改为结束后另存。入口Start-M05-Workbench，旧EXE未打，实体设备/长录制/DPI/LinuxGUI未验。无DDL/push/发布/环境安装，保留同期差异及原资料。
+
+2026-10-04 M16-R3：井井要求录音布局/删除任务/导入说明/紧凑控件/完整语谱和5000Hz范围。限定Windows开发态verified，见[报告](docs/testing/2026-10-04-m16-r3-report.md)。259前端、50 Python、Chrome18组/6布局与窄窗滚动、实际Qt10组/3布局通过；WSL16项纯核心。任务删除即时保存并保留take，失败保留草稿；实时128/录后640列有界时间抽样显示，放大查看细节，不改原始/降噪算法。修复新任务旧图、检测停止残图及窄窗结果重叠；入口Start-M16-M17-Workbench。合成设备限定，实体音频/DPI/LinuxGUI未验；无EXE/DDL/push/发布/文件删除/环境安装，保留同期其他改动。全库文档检查当时8条旧EXE和1条同期M05报告缺链，M16本轮链接通过。
+
+2026-10-04 M04-DISPLAY：井井要求动态纵轴按钮即时应用/固定纵轴、PNG沿用选定轴、修复语谱图改窗刷新及统一参数估计式播放栏。限定Windows开发态verified，见[报告](docs/testing/2026-10-04-m04-display-report.md)。254前端、Chrome10组/3尺寸及深色、5份PNG回读、实际Qt4类/2尺寸/3份原生保存PNG通过；WSL7项仅静态读取。独立PNG采用当前纵轴，完整结果目录保留原任务三件套；共享播放栏、历史片段试听保留。语谱图加载器随文件刷新、请求去重/计时器及迟到响应修复，未逐步复现截图持续等待的唯一根因。输入为合成短音频，未读截图WAV/论文目录，硬件/DPI/LinuxGUI未验。入口Start-M04-Workbench，未打EXE/DDL/push/发布/删除/环境安装，保留同期其他改动。
+
+2026-10-04 M03-R4：井井要求选区与试听移到底栏、批量入口放刷新右侧并增加低通。限定 Windows 开发态 verified，见[报告](docs/testing/2026-10-04-m03-r4-report.md)。复用公共 AudioTransport，原始选区与归一化试听分开绑定，时长/微观留左栏；批量弹窗分组并保留独立参数。254 前端、Chrome6功能组/6布局/3弹窗、实际Qt5记录含真实批次1500Hz保存通过，WSL6项仅静态资源/参数读取。修复窄窗底栏离屏及参数区压缩重叠，原录音哈希不变。入口Start-M03-Workbench，旧EXE未打、科学核心未改、设备/DPI/Linux完整链未验，无DDL/push/发布/删除/环境安装，保留同期改动。
+
+2026-10-04 M03-R3：井井授权紧凑侧栏、顶栏操作、逆滤波6/4/4/2图、全段EGG选显、导图居中精简，并追加动态F0轴和上下横轴对齐。限定Windows开发态verified，见[报告](docs/testing/2026-10-04-m03-r3-report.md)。251前端、48科学/14契约、Chrome10组/8侧栏、实际Qt12项含4种300dpiPNG及完整结果、公共图5/字体12/共享导图3组通过，WSL10项仅显示函数/契约/PNG。自动dB取当前PSD峰下50dB，保留手动；科学核心未改，6组原数据精确一致，原录音哈希不变。算法审查发现实际226起点有225个3ms窗跨下一GCI，阶数/阈值敏感性与未来方法planned见[核查](docs/references/m03-r3-algorithm-audit.md)，不宣称真实声门流。公共M02/M03/M08 PNG同步改进；旧EXE未打、设备/DPI/Linux完整链未验、无DDL/push/发布/删除/环境安装，保留同期改动。全库仍8条旧EXE缺失链接。
+
+2026-10-03 M02-R2：井井授权参数显示按钮间距、2/3/4列单行勾选、缩短滚动列表、波形文字不拉伸、所有横轴对齐及直接拖选。限定Windows开发态verified，见[报告](docs/testing/2026-10-03-m02-r2-report.md)。246前端、Chrome6类/11组几何、PNG3类/5份300dpi回读、字体导出和实际Qt4类/5组通过，WSL仅4项静态读取。M02参数图改为左键选区/Shift平移，其他模块波形保持默认选项；窄窗和大字号共用水平滚动。旧M01/M02和M12脚本分别被改版选择器阻断，大矩阵原生读取失败另列限制，不算通过。入口Start-M01-M02-Workbench，未新打EXE/DDL/push/环境安装，保留同期其他改动与V2/原数据。
+
+2026-10-03 M01-R2：井井要求左栏TextGrid切分、四列参数弹窗、新旧唇形自动加载及全列表关联。限定Windows开发态verified，见[报告](docs/testing/2026-10-03-m01-r2-report.md)。246前端、19桌面、Chrome5组/4弹窗尺寸/2侧栏高度、实际Qt混合PKL/JSON两任务/6结果/770时间点及四项唇形逐值一致通过，原文件哈希不变。唇形目录独立、JSON优先、歧义明确，单条改选/取消刷新保留；旧PKL提交时受限转换，不写原目录。WSL3哈希读取一致；硬件/DPI/LinuxGUI未验。源码入口Start-M01-M02-Workbench，旧EXE未重打，无DDL/push/发布/删除/环境安装，保留同期差异。
+
+2026-10-03 P19 外观 R1：按井井反馈将代码字体改为完整下拉，JetBrains Mono 内置项置顶，保留旧值与自定义；应用时清除旧预览。移除 PTB 配色，默认/旧 ptb 采用 Everforest，其他选择保留，并提示尝试更多配色。限定 Windows 开发态 verified，见[报告](docs/testing/2026-10-03-p19-appearance-r1-report.md)。242 前端、Chrome 11组/58主题/15布局、字体12组、实际Qt4类/58主题/6布局通过，WSL4静态资源读取。未重打EXE，未验实体DPI/LinuxGUI，无DDL/push/发布/环境安装，保留同期改动。
+
+2026-10-03 P20：井井授权最新本机EXE与旧包/备份/垃圾清理准备。最终 `dist/PhoneticToolbox-v3-Latest-20261003-R1/PhoneticToolbox-v3-Latest-20261003-R1.exe`，296.52MiB，见[成品报告](docs/testing/2026-10-03-p20-exe-report.md)。242前端、420包内文件、10任务/15页、M16/M17十一组及14布局、26子进程退出/三非法参数通过；首个Latest候选因字号验收选择器误取后台M13失败，R1仅修测试范围后重建通过，产品算法不改。仍portable:false、合成/Windows离屏限定，实体设备/DPI/跨平台未验。清理仅prepared，见[清单](docs/testing/2026-10-03-p20-cleanup-plan.md)：95目标18.48GiB，明确保留源码快照/日志/报告、实际MFA与科学环境、真实录制/数据/V2/Git；未删除，须井井明确授权具体范围后执行。不整删output或validation，无DDL/push/发布/环境安装，保留同期差异。
+
+2026-10-03 P19：井井要求Codex配色/深浅联动、两栏紧凑设置、内置代码字体/默认宋体与Times New Roman，以及放大任务栏图标。限定Windows开发态verified，见[报告](docs/testing/2026-10-03-p19-appearance-report.md)。29同名适配方案+原主题共30套，缺失模式由PTB补齐，不能称逐像素官方复制。JetBrains Mono2.304/OFL内置、旧显式偏好保留、缺默认系统字体有回退提示；IPA固定Doulos。K2显示可见宽79%→约94%，原资源保留，QIcon/后续ICO同源。242项前端、Chrome60主题/15布局与12组字体导出、Qt60主题/6布局/M10配色联动、2项图标通过；WSL4项资源静态读取。旧EXE未更新，实体任务栏/DPI/LinuxGUI未验；无DDL/push/发布/环境安装，保留同期差异。
+
+2026-10-03 M05-R2：井井要求本地录制有声、直接保存和放大面部。限定 Windows 开发态完成，见[报告](docs/testing/2026-10-03-m05-r2-report.md)。授权后麦克风优选/实际输入与电平、低信号提示、停止直接保存及另存、同名 WAV/唇形伴随与方法元数据、固定面部放大完成。239项前端、39项M05 Python、18项桌面、18项旧输入、Chrome7组及实际Qt5组通过，9份录制44哈希/媒体回读通过；WSL仅1项格式读取。实时仍为candidate，legacy重算可选，实体设备/同步/DPI/Linux媒体链未验。Qt离屏验证仅测试进程调整渲染参数，未改产品/系统。入口Start-M05-Workbench，旧EXE未更新，无DDL/push/发布/环境安装，保留同期其他修改。
+
+2026-10-03 P18 EXE：井井追加新包与体积检查授权。最终 `dist/PhoneticToolbox-v3-P18-20261003/PhoneticToolbox-v3-P18-20261003.exe`，含P18/M17紧凑显示，见[成品审计](docs/testing/2026-10-03-p18-exe-report.md)。新增可选 `--lean-qt` 及快照hook，仅排除Qt调试/QML未使用资源/额外WebEngine界面语言，QtQuick/Qml底层依赖、科学库、中文英文、字体许可保留。实际342.77→296.38MiB，减13.53%；OpenBLAS等固定装载路径重复副本记录后保留。419文件哈希、自然/合成各10任务、14/15页、M10真实原生引擎、M16/M17八组和18分区、各25子进程退出通过，真实输入/旧R2哈希不变。仍portable:false及既有独立环境，实体音频/DPI/跨平台未验。本轮只改打包与验证脚本/文档，不改科学算法，无现存库DDL/push/公开发布/删除旧包/环境安装。
+
+2026-10-03 P18/M17-R1：井井授权两名子代理统一15模块视觉与扩充音标，随后追加名称/符号紧凑多列、解释悬浮和上下滚动。限定Windows开发态完成，见[联合报告](docs/testing/2026-10-03-visual-and-ipa-report.md)。默认侧栏300px、栏框对齐、文件/草稿/引用/主要操作位置统一，M03操作栏移左且兼容旧宽度记忆；M10排除。IPA增加107、extIPA增加18输入入口，总625含组合/例示/旧版，不能称独立音标数；VoQS65入口/56指定译名与字体保留。231项前端、P18 Chrome92布局/5图表/8旧工作台、Qt60布局及指定音频真实预览、M17 Chrome36布局/17组625输入和实际Qt18分区/4组通过。原目录28顶层文件哈希不变，WSL显式CIN目录生成一致。原科学算法未改，实体DPI/硬件及LinuxGUI未验。全库文档检查仍有4条既有旧EXE缺失链接，未绕过。入口Start-M16-M17-Workbench，旧EXE未更新，无DDL/push/公开发布/环境安装。
+
 2026-10-02 GitHub 同步授权：井井在 M16/M17 R2 本机 EXE 交付后明确要求完成后上传 GitHub。本轮允许将当前已完成的两个模块、成品测试修复及已随成品验证的同期 M05/M06/M10 修改、来源许可与测试文档提交并推送至既有 `origin/codex/v3-rebuild`，含此前尚未推送的本地修复提交。下方“无push”为各阶段当时的记录；本次授权不包含改写历史、覆盖 main、发布 Release 或上传 EXE、私有语料和本地运行环境。
 
 2026-10-02 M16/M17-R2 EXE：井井追加本机打包授权并反馈测试弹窗。最终 `dist/PhoneticToolbox-v3-M16-M17-20261002-R2/PhoneticToolbox-v3-M16-M17-20261002-R2.exe`，见[报告](docs/testing/2026-10-02-m16-m17-exe-report.md)。227项前端、39项录音/宿主Python及6项原生启动回归；成品10任务/15旧页/M16-M17八组含六布局/419哈希/30子进程退出通过。补数字端点输入、在途轮询关闭等待、公共字体加载后的单屏留白；M10空CPU架构以Windows API回退，初始化失败走协议与日志，真实成品引擎启动已验，科学算法不变。首包及R1仅候选，标注未过验收；最终用R2。包仍依赖本机既有独立科学环境，实体麦克风/EGG/DPI/跨平台未验。旧EXE、原资料与同期改动保留，无现存库DDL/push/公开发布/环境安装。

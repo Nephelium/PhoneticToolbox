@@ -66,16 +66,16 @@ async function saveResults(){await operation(async()=>{if(!output.value)output.v
 </script>
 
 <template>
-<ModuleFrame fit class="mfa-page" label="MFA 自动标注工作区" :aria-busy="busy">
+<ModuleFrame unified fit class="mfa-page" label="MFA 自动标注工作区" :aria-busy="busy">
  <template #toolbar><ModuleToolbar>
-  <button v-if="port?.local" :disabled="busy" @click="chooseCorpus">选择语料目录</button>
-  <button :disabled="busy||!port" @click="fileInput?.click()">导入音频与转写</button>
+  <button class="primary" v-if="port?.local" :disabled="busy" @click="chooseCorpus">选择语料目录</button>
+  <button class="primary" :disabled="busy||!port" @click="fileInput?.click()">导入音频与转写</button>
   <input ref="fileInput" hidden type="file" multiple accept=".wav,.lab,.txt,.TextGrid" @change="imported"/>
-  <button :disabled="busy" @click="save">保存参数草稿</button>
-  <template #actions><button @click="help=true">帮助</button><button @click="emit('references')">方法与来源</button></template>
+
+  <template #actions><button :disabled="busy" @click="save">保存参数草稿</button><button @click="help=true">帮助</button><button @click="emit('references')">方法与来源</button></template>
  </ModuleToolbar></template>
  <template #status><ModuleStatus v-if="error" kind="error" :message="error"/><ModuleStatus v-else-if="busy" kind="loading" message="正在处理。组件检查会执行真实 MFA 小任务，请稍候…"/><ModuleStatus v-if="!port" kind="empty" message="请从本地研究工作台或已登录网页项目打开 MFA。"/></template>
- <ModuleWorkbench :state-key="stateKey" left-label="组件与模型" right-label="任务与记录" :left-width="290" :right-width="300">
+ <ModuleWorkbench unified :state-key="stateKey" left-label="组件与模型" right-label="任务与记录">
  <template #left>   <ModuleSection label="运行组件与模型" title="运行组件与模型">
     <div class="mfa-form"><label>运行环境<select v-model="runtime" :disabled="busy"><option value="">选择已检查组件</option><option v-for="r in catalog?.runtimes" :key="r.id" :value="r.id">MFA {{r.version}} · {{r.platform}} / {{r.arch}}</option></select></label>
      <label>声学模型<select v-model="model" :disabled="busy"><option value="">选择已登记模型</option><option v-for="m in models" :key="m.id" :value="m.id">{{m.name}}</option></select></label>
@@ -94,6 +94,10 @@ async function saveResults(){await operation(async()=>{if(!output.value)output.v
      <p class="muted">检查包含版本、原生依赖与公开合成音频实际对齐。安装失败保留当前版本。组件、模型与主程序分别管理。</p>
     </div>
    </ModuleSection>
+<ModuleSection label="对齐参数" title="对齐参数">
+    <div class="parameter-row"><label>Beam<input type="number" min="1" max="10000" :value="config.beam" :disabled="busy" @change="beamInput"/></label><label>Retry beam<input v-model.number="config.retry_beam" type="number" min="1" max="40000" :disabled="busy"/></label></div>
+
+   </ModuleSection>
 </template>
    <ModuleSection label="音频与既有转写" title="音频与既有转写">
     <ModuleStatus v-if="!corpus.length" kind="empty" message="导入同名 WAV 与 LAB、TXT 或 TextGrid。每份音频需有唯一转写。"/>
@@ -101,11 +105,8 @@ async function saveResults(){await operation(async()=>{if(!output.value)output.v
     <p class="muted">已选择 {{corpus.length}} 组。当前每份音频接收上限 120 秒，任务最多 100 份且输入合计最多 64 MB。</p>
     <div v-if="port?.chooseOutput" class="resource-line"><span>输出目录：{{output?.label||'保存结果时选择'}}</span><button :disabled="busy" @click="operation(async()=>{output=(await port!.chooseOutput!())??undefined;})">选择输出目录</button></div>
    </ModuleSection>
-   <ModuleSection label="对齐参数" title="对齐参数">
-    <div class="parameter-row"><label>Beam<input type="number" min="1" max="10000" :value="config.beam" :disabled="busy" @change="beamInput"/></label><label>Retry beam<input v-model.number="config.retry_beam" type="number" min="1" max="40000" :disabled="busy"/></label></div>
-    <div class="actions"><button class="primary" :disabled="busy||!port||!corpus.length||!runtime||!model||running" @click="start">开始对齐</button><button :disabled="busy||!running||selected?.state==='cancel_requested'" @click="cancel">取消任务</button></div>
-   </ModuleSection>
- <template #right>
+
+ <template #right><ModuleSection label="对齐任务" title="运行对齐"><div class="actions"><button class="primary" :disabled="busy||!port||!corpus.length||!runtime||!model||running" @click="start">开始对齐</button><button :disabled="busy||!running||selected?.state==='cancel_requested'" @click="cancel">取消任务</button></div></ModuleSection>
  <ModuleStatus v-if="message" kind="info" :message="message"/>
  <button :disabled="busy||!port" @click="refresh">刷新任务</button>
 
@@ -124,7 +125,7 @@ async function saveResults(){await operation(async()=>{if(!output.value)output.v
    <ModuleSection label="TextGrid 与溯源" title="TextGrid 与溯源">
     <ModuleStatus v-if="!resultFiles.length" kind="empty" message="完整结果发布后，可下载 TextGrid 和参数、输入、模型及运行时溯源。"/>
     <div v-for="f in resultFiles" :key="f.id" class="result-row"><span>{{f.name}}</span><span class="muted">{{f.size_bytes.toLocaleString()}} B</span><button :disabled="busy" @click="operation(()=>port!.download(selected!,f.id))">下载</button></div>
-    <button v-if="resultFiles.length&&port?.save" :disabled="busy" @click="saveResults">保存完整结果到输出目录</button>
+    <button class="primary" v-if="resultFiles.length&&port?.save" :disabled="busy" @click="saveResults">保存完整结果到输出目录</button>
     <p class="muted">自动边界需人工校对。保存使用独立结果子目录，保留原音频与原始 TextGrid。</p>
    </ModuleSection>
  </template>

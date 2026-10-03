@@ -9,6 +9,8 @@ export interface LipPort {
  history?():Promise<{id:string;name:string}[]>;
  load?(id:string):Promise<LipResult>;
  replay?(result:LipResult,start:number):Promise<{rows:LipRow[];complete:boolean}>;
+ inspectRecording?(blob:Blob):Promise<Record<string,any>>;
+ audioPreview?(result:LipResult):Promise<Record<string,any>>;
  saveRecording?(name:string,blob:Blob,metadata:Blob):Promise<{saved:boolean;recording?:Record<string,any>}>;
  analyzeRecording?(token:string,config:OfflineConfig,signal:AbortSignal,progress:(s:string)=>void):Promise<LipResult>;
  reason?:string;

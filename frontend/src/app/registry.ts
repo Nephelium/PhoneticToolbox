@@ -18,5 +18,5 @@ export const modules:Module[] = [
   {id:'M14',title:'音系归纳',description:'调查字表与同音字表',icon:'nodes',group:2},
   {id:'M15',title:'感知实验',description:'实验设计、配置与运行',icon:'headphones',group:2},
   {id:'M16',title:'录音',description:'本机采集、任务录音与可恢复剪辑',icon:'wave',group:0},
-  {id:'M17',title:'国际音标 Plus',description:'IPA、extIPA 与 VoQS 全表输入',icon:'ipa',group:2},
+  {id:'M17',title:'国际音标 Plus',description:'IPA、extIPA 与 VoQS 全表输入',icon:'ipa-keyboard',group:2},
 ];

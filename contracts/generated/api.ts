@@ -1443,7 +1443,7 @@ export interface components {
             lip_smooth_win_size: number;
             /**
              * Max F0
-             * @default 880
+             * @default 800
              */
             max_f0: number;
             /**
@@ -1453,7 +1453,7 @@ export interface components {
             max_formant: number;
             /**
              * Min F0
-             * @default 60
+             * @default 30
              */
             min_f0: number;
             /**
@@ -1719,14 +1719,39 @@ export interface components {
             egg_db: number[];
             /** Egg Values */
             egg_values: number[];
+            /**
+             * Fixed Window Crossings
+             * @default null
+             */
+            fixed_window_crossings: number | null;
             /** Frequencies Hz */
             frequencies_hz: number[];
+            /**
+             * Full Egg Values
+             * @default null
+             */
+            full_egg_values: number[] | null;
+            /**
+             * Gci Count
+             * @default null
+             */
+            gci_count: number | null;
             /** Inverse Db */
             inverse_db: number[];
             /** Inverse Values */
             inverse_values: number[];
+            /**
+             * Lp Order
+             * @default null
+             */
+            lp_order: number | null;
             /** Relative Times S */
             relative_times_s: number[];
+            /**
+             * Sample Rate Hz
+             * @default null
+             */
+            sample_rate_hz: number | null;
             /**
              * Schema Version
              * @default egg-inverse-view/1
@@ -1818,6 +1843,8 @@ export interface components {
                 number,
                 number
             ];
+            /** @default null */
+            reaper: components["schemas"]["EggSeries"] | null;
             /**
              * Schema Version
              * @default egg-preview/1
@@ -1837,6 +1864,14 @@ export interface components {
                 number
             ];
             sq: components["schemas"]["EggSeries"];
+            /**
+             * Suggested Db Range
+             * @default null
+             */
+            suggested_db_range: [
+                number,
+                number
+            ] | null;
         };
         /** EggPreviewSession */
         EggPreviewSession: {
@@ -1884,6 +1919,12 @@ export interface components {
              */
             export_policy: "sample-aligned/1";
             /**
+             * F0 Policy
+             * @default legacy/1
+             * @enum {string}
+             */
+            f0_policy: "legacy/1" | "audio-f0/2";
+            /**
              * Flip Channels
              * @default false
              */
@@ -1926,6 +1967,11 @@ export interface components {
              * @default true
              */
             keep_praat_f0: boolean;
+            /**
+             * Keep Reaper F0
+             * @default false
+             */
+            keep_reaper_f0: boolean;
             /**
              * Lowpass Cutoff
              * @default 1000
@@ -2487,7 +2533,7 @@ export interface components {
              * Action
              * @enum {string}
              */
-            action: "generate" | "synthesize" | "extract";
+            action: "generate" | "synthesize" | "extract" | "resynthesize";
             audio?: components["schemas"]["AcousticAssetRef"] | null;
             /** Idempotency Key */
             idempotency_key: string;

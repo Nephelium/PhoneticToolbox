@@ -58,9 +58,9 @@ async function main(){
    await page.getByLabel('模式',{exact:false}).first().selectOption(mode);await click('开始录制');await page.waitForFunction(()=>document.querySelector('.lip-state')?.textContent.includes('阶段 recording'));
    await page.waitForTimeout(1300);await click('停止并收尾');await page.waitForFunction(()=>document.querySelector('.lip-state')?.textContent.includes('阶段 ready'));
    if(mode==='realtime')assert.deepEqual(await page.locator('.lip-video canvas').evaluate(c=>[c.width,c.height]),[512,512],'stop preserves measured frame dimensions instead of resetting to 640x480');
-   await click('保存录制（MP4 + 音频）');await page.getByText('MP4、WAV 与采集记录已保存并核对。',{exact:true}).waitFor();await click('保存候选参数与时间记录');await page.getByText('候选参数与时间元数据已保存。',{exact:true}).waitFor();
+   await click('保存录制（视频 + 音频 + 唇形）');await page.getByText('MP4、WAV 与采集记录已保存并核对。',{exact:true}).waitFor();await click('仅保存候选参数记录');await page.getByText('候选参数与时间元数据已保存。',{exact:true}).waitFor();
    if(mode==='record_then_analyze'){
-    await click('对录制做正式离线分析');await page.getByText('正式分析完成，结果等待保存。',{exact:true}).waitFor();
+    await click('可选：按 V2 模型重新分析');await page.getByText('正式分析完成，结果等待保存。',{exact:true}).waitFor();
     await click('保存但不应用偏移');await page.getByText('完整结果与偏移写入完成。',{exact:true}).waitFor();
     checks.push('new recording saved MP4 is copied via owned token and analyzed by the real legacy worker');
    }
@@ -71,7 +71,7 @@ async function main(){
   await click('开始录制');await page.waitForFunction(()=>document.querySelector('.lip-state')?.textContent.includes('阶段 recording'));await page.waitForTimeout(1100);await click('停止并收尾');await page.waitForFunction(()=>document.querySelector('.lip-state')?.textContent.includes('阶段 ready'));
   let cancelled=false;await page.route('**/__m05_host',async route=>{const d=route.request().postDataJSON();if(!cancelled&&d.channel==='invoke'&&d.body.op==='choose'){cancelled=true;await route.fulfill({json:{ok:true,value:null}});}else await route.continue();});
   await click('保存并开始下一次');await page.getByText('已取消保存，录制保留。',{exact:true}).waitFor();assert(cancelled);assert((await page.locator('.lip-state').innerText()).includes('阶段 ready'));await page.unroute('**/__m05_host');
-  await click('保存并开始下一次');await page.waitForFunction(()=>document.querySelector('.lip-state')?.textContent.includes('阶段 recording'));await page.waitForTimeout(1100);await click('停止并收尾');await page.waitForFunction(()=>document.querySelector('.lip-state')?.textContent.includes('阶段 ready'));await click('保存录制（MP4 + 音频）');await page.getByText('MP4、WAV 与采集记录已保存并核对。',{exact:true}).waitFor();checks.push('save-and-next cancellation retains session, retry saves and starts next recording without reopening');
+  await click('保存并开始下一次');await page.waitForFunction(()=>document.querySelector('.lip-state')?.textContent.includes('阶段 recording'));await page.waitForTimeout(1100);await click('停止并收尾');await page.waitForFunction(()=>document.querySelector('.lip-state')?.textContent.includes('阶段 ready'));await click('保存录制（视频 + 音频 + 唇形）');await page.getByText('MP4、WAV 与采集记录已保存并核对。',{exact:true}).waitFor();checks.push('save-and-next cancellation retains session, retry saves and starts next recording without reopening');
   const paired=await page.evaluate(async()=>{
    const {LipCapture}=await import('/src/modules/lip-extraction/capture.ts');const {LipInference}=await import('/src/modules/lip-extraction/inference.ts');
    const source=document.createElement('canvas');source.width=320;source.height=240;const context=source.getContext('2d');let color=0;

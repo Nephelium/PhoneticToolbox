@@ -31,7 +31,7 @@ def test_actual_array_mask_decode_identity_and_request_isolation():
     assert wire.metadata.decoded.sample_count==44100
     assert wire.metadata.decoded.channels==2
     req.config.settings.min_f0=70.
-    assert wire.metadata.config.settings.min_f0==60.
+    assert wire.metadata.config.settings.min_f0==30.
     assert old_catalog is PARAMETER_MAPPING
 
 

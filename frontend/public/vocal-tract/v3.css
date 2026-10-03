@@ -19,7 +19,7 @@ body{padding:0 10px;background:var(--bg);color:var(--ink);grid-template-rows:42p
 .transport-bar{background:var(--panel);gap:4px;padding:6px}.transport-bar button{padding:5px 7px}#transportStatus{display:none}
 @media(min-width:1450px){.workspace{grid-template-columns:minmax(320px,1fr) var(--panel-analysis,260px) var(--panel-right,330px)}.analysis{grid-column:2;grid-row:1;display:flex;flex-direction:column;min-height:0;overflow:auto}.analysis .charts{display:flex;flex-direction:column;height:auto;flex:1}.charts>section{flex:1;min-height:150px}.charts canvas{height:110px}.charts .section-stage{height:150px}.inspector{grid-column:3;grid-row:1}.studio{grid-column:1;grid-row:1}}
 :root[data-theme=dark] button,:root[data-theme=dark] input,:root[data-theme=dark] select,:root[data-theme=dark] .keyframe-panel,:root[data-theme=dark] .source-panel,:root[data-theme=dark] .analysis,:root[data-theme=dark] .studio,:root[data-theme=dark] .nasal-card{background:var(--panel);color:var(--ink);border-color:var(--line)}
-:root[data-theme=dark] .selected,:root[data-theme=dark] [aria-selected=true]{background:#24456f!important;color:#e9f0f9!important}:root[data-theme=dark] .minor{color:var(--muted)}:root[data-theme=dark] .pose-name{color:var(--ink)}
+:root[data-theme=dark] .selected,:root[data-theme=dark] [aria-selected=true]{background:var(--selected)!important;color:var(--ink)!important}:root[data-theme=dark] .minor{color:var(--muted)}:root[data-theme=dark] .pose-name{color:var(--ink)}
 /* Scientific plots and reconstructed tissues share the host theme. */
 .charts canvas{border-radius:4px}
 /* Canvas backing-store pixels must not feed back into grid/flex sizing. */

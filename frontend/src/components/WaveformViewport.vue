@@ -2,11 +2,34 @@
 import { computed,ref,onMounted,onUnmounted } from 'vue';import type { Workspace } from '../state/workspace.ts';import { envelope,selection,positionSelection } from '../platform/wav.ts';
 import SpectrogramViewport from './SpectrogramViewport.vue';import type {Spectrogram,SpectrogramView} from '../platform/research.ts';
 import {playback,isCurrentAudio} from '../state/audio.ts';import {amplitudeLimit,amplitudeLabel,sampleWavePath} from '../platform/waveform.ts';
-const props=withDefaults(defineProps<{state:Workspace;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;spectrogramSelectable?:boolean;maxWindowSeconds?:number;compactOverview?:boolean;overviewTop?:boolean;hideOverviewControls?:boolean;autoAmplitude?:boolean;normalizeDisplay?:boolean;clickMovesSelection?:boolean;selectionRequiresShift?:boolean;doubleClickAction?:'zoom'|'annotation';shiftWheelPan?:boolean;continuousDetail?:boolean;trackHeight?:number;hideTimeAxis?:boolean;timelineDuration?:number}>(),{autoAmplitude:true,continuousDetail:true});let anchor:number|null=null,anchorX=0,selectionLength=0,dragged=false,boundaryDrag=false;
+const props=withDefaults(defineProps<{state:Workspace;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;spectrogramSelectable?:boolean;maxWindowSeconds?:number;compactOverview?:boolean;overviewTop?:boolean;hideOverviewControls?:boolean;autoAmplitude?:boolean;normalizeDisplay?:boolean;clickMovesSelection?:boolean;selectionRequiresShift?:boolean;doubleClickAction?:'zoom'|'annotation';shiftWheelPan?:boolean;continuousDetail?:boolean;trackHeight?:number;hideTimeAxis?:boolean;timelineDuration?:number;pixelAnnotations?:boolean;timeAxisInsets?:{left:number;right:number}}>(),{autoAmplitude:true,continuousDetail:true});let anchor:number|null=null,anchorX=0,selectionLength=0,dragged=false,boundaryDrag=false;
 const emit=defineEmits<{'selection-end':[start:number,end:number];'time-double-click':[time:number,ctrl:boolean];'boundary-start':[event:PointerEvent,time:number,tolerance:number];'boundary-move':[event:PointerEvent,time:number];'boundary-end':[]}>();
-const viewport=ref<HTMLElement>(),width=ref(800);let observer:ResizeObserver;
-onMounted(()=>{observer=new ResizeObserver(entries=>{width.value=Math.max(100,Math.min(4096,Math.round(entries[0].contentRect.width)));});if(viewport.value)observer.observe(viewport.value);});
-onUnmounted(()=>observer?.disconnect());
+const viewport=ref<HTMLElement>(),width=ref(800),annotationSize=ref({width:800,height:130});let observer:ResizeObserver,resizeFrame=0;
+const pendingSizes=new Map<Element,DOMRectReadOnly>(),observedTracks=new Set<Element>();
+onMounted(()=>{
+ observer=new ResizeObserver(entries=>{
+  for(const entry of entries)pendingSizes.set(entry.target,entry.contentRect);
+  if(resizeFrame)return;
+  resizeFrame=requestAnimationFrame(()=>{
+   resizeFrame=0;
+   for(const [target,size] of pendingSizes){
+    if(target===viewport.value){
+     width.value=Math.max(100,Math.min(4096,Math.round(size.width)));
+     if(props.pixelAnnotations){
+      const tracks=new Set<Element>(viewport.value?.querySelectorAll('.wave-track>svg'));
+      for(const old of observedTracks)if(!tracks.has(old)){observer.unobserve(old);observedTracks.delete(old);}
+      for(const el of tracks)if(!observedTracks.has(el)){observedTracks.add(el);observer.observe(el);}
+     }
+    }else if(size.width&&size.height)annotationSize.value={width:size.width,height:size.height};
+   }
+   pendingSizes.clear();
+  });
+ });
+ if(viewport.value)observer.observe(viewport.value);
+});
+onUnmounted(()=>{observer?.disconnect();cancelAnimationFrame(resizeFrame);});
+const waveformBox=computed(()=>props.pixelAnnotations?annotationSize.value:{width:1000,height:90});
+const insetStyle=computed(()=>props.timeAxisInsets?{'--wave-axis-width':props.timeAxisInsets.left+'px','--wave-right-width':props.timeAxisInsets.right+'px'}:undefined);
 const duration=computed(()=>props.timelineDuration??props.state.asset?.duration??0);const windowLength=computed(()=>duration.value/props.state.zoom);
 const minZoom=computed(()=>Math.max(1,duration.value/(props.maxWindowSeconds??Infinity)));
 const left=computed(()=>Math.min(props.state.offset,Math.max(0,duration.value-windowLength.value)));
@@ -46,7 +69,7 @@ function wheel(event:WheelEvent){
 }
 </script>
 <template>
-<div ref="viewport" class="wave-viewport" :class="{'compact-overview':compactOverview,'top-overview':overviewTop,'amplitude-scaled':autoAmplitude}">
+<div ref="viewport" class="wave-viewport" :style="insetStyle" :class="{'compact-overview':compactOverview,'top-overview':overviewTop,'amplitude-scaled':autoAmplitude}">
 <div v-if="!compactOverview" class="wave-toolbar">
 <span>原始波形 <small>· 振幅 / 秒</small>
 </span>
@@ -64,12 +87,14 @@ function wheel(event:WheelEvent){
 <small>{{track.index===state.channel?'试听声道':'原始数据'}}</small>
 </div>
 <div v-if="autoAmplitude" class="amplitude-axis" aria-label="波形振幅刻度" :data-limit="track.limit"><span v-for="(value,i) in [track.limit,0,-track.limit]" :key="i" :style="{top:(8.888889+i*41.111111)+'%'}">{{amplitudeLabel(value)}}</span></div>
-<svg viewBox="0 0 1000 90" preserveAspectRatio="none" role="img" :tabindex="doubleClickAction==='annotation'?0:undefined" :data-start="left" :data-end="left+windowLength" :style="trackHeight?{height:trackHeight+'px'}:undefined" :aria-label="'声道 '+(track.index+1)+' 原始波形；拖动选择时间范围'" @wheel="wheel" @dblclick="double" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="cancel">
+<svg :viewBox="'0 0 '+waveformBox.width+' '+waveformBox.height" preserveAspectRatio="none" role="img" :tabindex="doubleClickAction==='annotation'?0:undefined" :data-start="left" :data-end="left+windowLength" :style="trackHeight?{height:trackHeight+'px'}:undefined" :aria-label="'声道 '+(track.index+1)+' 原始波形；拖动选择时间范围'" @wheel="wheel" @dblclick="double" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="cancel">
+<g :transform="pixelAnnotations?'scale('+waveformBox.width/1000+' '+waveformBox.height/90+')':undefined">
 <path d="M0 45H1000" class="wave-baseline"/>
 <rect :x="x(state.start)" y="0" :width="Math.max(0,x(state.end)-x(state.start))" height="90" class="wave-selection"/>
 <path :d="track.detail??path(track.points,track.limit)" :transform="track.detail?undefined:`scale(${track.span},1)`" :data-mode="track.detail?'samples':'envelope'" class="wave-line"/>
-<slot name="annotations" :x="x" :start="left" :end="left+windowLength"/>
 <path v-if="state.asset&&isCurrentAudio(state.asset,state.channel)&&playback.position>=left&&playback.position<=left+windowLength" :d="`M${x(playback.position)} 0V90`" class="playback-cursor"/>
+</g>
+<slot name="annotations" :x="(t:number)=>x(t)*waveformBox.width/1000" :height="waveformBox.height" :start="left" :end="left+windowLength"/>
 </svg>
 <div v-if="!hideTimeAxis" class="time-axis" aria-label="波形时间轴（秒）"><span v-for="i in 5" :key="i">{{(left+(i-1)*windowLength/4).toFixed(windowLength<.1?4:3)}}{{i===5?' s':''}}</span></div>
 </div>
@@ -104,5 +129,6 @@ function wheel(event:WheelEvent){
 .compact-overview .wave-track svg{height:110px}
 .wave-aligned-layer{min-width:0}
 .amplitude-scaled>.wave-aligned-layer{margin-left:var(--wave-axis-width,64px)}
+.amplitude-scaled .wave-track,.amplitude-scaled>.wave-aligned-layer{margin-right:var(--wave-right-width,0px)}
 .wave-track svg{overflow:hidden}
 </style>

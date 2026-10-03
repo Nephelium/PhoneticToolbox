@@ -1,0 +1,25 @@
+/* Shared by the workbench and its owned M10 iframe. No layout changes. */
+html:root[data-button-style]{--button-shadow:rgba(0,0,0,.10);--button-edge:rgba(255,255,255,.30);--button-glow:color-mix(in srgb,var(--accent) 14%,transparent)}
+html:root[data-button-style][data-theme=dark]{--button-shadow:rgba(0,0,0,.23);--button-edge:rgba(255,255,255,.09);--button-glow:color-mix(in srgb,var(--accent) 18%,transparent)}
+html:root[data-button-style][data-button-style=auto] button.primary,
+html:root[data-button-style][data-button-style=all] button{
+ background:var(--accent)!important;border-color:var(--accent)!important;color:var(--on-accent)!important;filter:none!important;
+}
+html:root[data-button-style][data-button-style=auto] button.primary :is(svg,small,span,strong,em,.ipa-icon),
+html:root[data-button-style][data-button-style=all] button :is(svg,small,span,strong,em,.ipa-icon){color:inherit!important}
+html:root[data-button-style][data-button-style=plain] button{
+ background:var(--panel)!important;color:var(--text,var(--ink))!important;border-color:var(--border,var(--line))!important;filter:none!important;
+}
+html:root[data-button-style][data-button-style=plain] button:hover:not(:disabled){border-color:var(--accent)!important}
+/* Selection remains visible when solid highlighting is turned off. */
+html:root[data-button-style][data-button-style=plain] button:is([aria-pressed=true],[aria-selected=true],[aria-checked=true],.selected,.active,.m17-selected),
+html:root[data-button-style][data-button-style=all] button:is([aria-pressed=true],[aria-selected=true],[aria-checked=true],.selected,.active,.m17-selected),
+html:root[data-button-style][data-button-style=auto] button.active{outline:1px solid currentColor;outline-offset:-4px}
+html:root[data-button-style][data-button-effects=on] button:not(:disabled){box-shadow:0 1px 2px var(--button-shadow),inset 0 1px 0 var(--button-edge)!important}
+html:root[data-button-style][data-button-effects=on] button:hover:not(:disabled){box-shadow:0 2px 5px var(--button-shadow),0 0 0 1px var(--button-glow),inset 0 1px 0 var(--button-edge)!important}
+html:root[data-button-style][data-button-effects=on] button:active:not(:disabled){box-shadow:inset 0 1px 2px var(--button-shadow)!important}
+html:root[data-button-style] button:disabled,
+html:root[data-button-style][data-button-effects=off] button{box-shadow:none!important;filter:none!important;transition:none!important}
+html:root[data-button-style] button:focus-visible{outline:2px solid var(--accent)!important;outline-offset:3px!important}
+@media(prefers-reduced-motion:no-preference){html:root[data-button-style][data-button-effects=on] button{transition:background-color .12s,border-color .12s,box-shadow .14s}}
+@media(prefers-reduced-motion:reduce){html:root[data-button-style] button{transition:none!important}}

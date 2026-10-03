@@ -55,7 +55,7 @@ def verify(window, out, report):
     report['m16_m17_success'] = False
     report['m16_m17_scope'] = (
         'Actual existing Qt/QWebChannel window; explicitly synthetic dual audio; '
-        'real spawn processing and WAV readback; packaged font and six chart '
+        'real spawn processing and WAV readback; packaged font and fourteen chart '
         'layouts. No physical soundcard/EGG, physical DPI or cross-platform claim.'
     )
     report['m16_m17_output'] = str(evidence)
@@ -280,23 +280,85 @@ def verify(window, out, report):
         report['m17_packaged_font'] = font
         checks.append('M17 packaged PTB IPA Plus font loads; CJK/combining/non-BMP text, symbol insertion and undo/redo remain exact')
 
+        # Copy through the real frozen Qt bridge, never a simulated web API.
+        from PyQt6.QtCore import QMimeData
+        clipboard = app.clipboard()
+        previous = QMimeData()
+        current = clipboard.mimeData()
+        if current:
+            for fmt in current.formats():
+                previous.setData(fmt, current.data(fmt))
+        try:
+            clipboard.setText('P19 clipboard sentinel')
+            click('复制全部', '.ipa-plus-page button')
+            native_until(lambda: clipboard.text() == text + 'p')
+            assert js('document.querySelector(".m17-editor").value') == text + 'p'
+        finally:
+            if clipboard.text() in {'P19 clipboard sentinel', text + 'p'}:
+                clipboard.setMimeData(previous)
+        checks.append('M17 Copy All writes exact CJK/combining/non-BMP text via the frozen native clipboard bridge; previous MIME contents restored')
+        assert js('document.querySelectorAll(".ipa-plus-page input[aria-label=音标字号]").length') == 1
+        assert js('document.querySelectorAll(".m17-editor-toolbar input[type=number]").length') == 0
+        assert js('document.querySelectorAll(".ipa-plus-page input[type=number]").length') == 1
+        # M13 remains mounted behind its tab and shares this accessible label.
+        # Assert and edit M17's control, including when both modules are open.
+        report['m17_font_controls'] = js('''[...document.querySelectorAll('input[aria-label="音标字号"]')].map(e=>({module:e.closest('.ipa-plus-page')?'M17':e.closest('.mandarin-ipa-page')?'M13':'other',type:e.type,value:Number(e.value)}))''')
+        assert js('Number(document.querySelector(".ipa-plus-page input[aria-label=音标字号]").value)') == 26, report['m17_font_controls']
+        before_font = js('parseFloat(getComputedStyle(document.querySelector(".m17-symbol .m17-ipa")).fontSize)')
+        js('(()=>{const e=document.querySelector(".ipa-plus-page input[aria-label=音标字号]");e.value="28";e.dispatchEvent(new Event("change",{bubbles:true}));})()')
+        until('getComputedStyle(document.querySelector(".m17-editor")).fontSize==="28px"')
+        assert js('parseFloat(getComputedStyle(document.querySelector(".m17-symbol .m17-ipa")).fontSize)') > before_font
+        js('(()=>{const e=document.querySelector(".ipa-plus-page input[aria-label=音标字号]");e.value="26";e.dispatchEvent(new Event("change",{bubbles:true}));})()')
+        until('getComputedStyle(document.querySelector(".m17-editor")).fontSize==="26px"')
+        checks.append('M17 single top font control defaults to 26 and changes both table symbols and editor')
+
+        nav('普通话转 IPA')
+        until('!!document.querySelector(".m13-workspace")')
+        for layout in ['side-by-side', 'stacked']:
+            js('document.querySelector(".m13-settings-section input[value=' + layout + ']").click()')
+            pause(300)
+            geometry = js("""(()=>{const r=s=>document.querySelector(s).getBoundingClientRect(),a=r('.m13-settings-section'),i=r('.m13-input-section'),o=r('.m13-result-section');return {settings:{left:a.left,right:a.right},input:{left:i.left,right:i.right,top:i.top,bottom:i.bottom},result:{left:o.left,top:o.top}}})()""")
+            assert geometry['settings']['right'] <= min(geometry['input']['left'], geometry['result']['left']) + 1, geometry
+            if layout == 'stacked':
+                assert geometry['result']['top'] >= geometry['input']['bottom'] - 1, geometry
+            else:
+                assert geometry['result']['left'] >= geometry['input']['right'] - 1, geometry
+        assert js('''!!document.querySelector('.nav-item[title="普通话转 IPA"] .ipa-icon') && !!document.querySelector('.nav-item[title="国际音标 Plus"] svg path')''')
+        checks.append('M13 settings stay left in side-by-side and stacked layouts; M13/M17 have distinct icons')
+        nav('国际音标 Plus')
+        until('!!document.querySelector(".m17-chart-viewport")')
+
         for width, height in [(1366, 768), (1920, 1080)]:
             window.resize(width, height)
             pause(350)
-            for label, system, count in [('IPA', 'ipa', 244), ('extIPA', 'extipa', 191), ('VoQS', 'voqs', 65)]:
+            for label, system, count in [('IPA', 'ipa', 351), ('extIPA', 'extipa', 209), ('VoQS', 'voqs', 65)]:
                 click(label, '.ipa-plus-page button')
                 until('!!document.querySelector("[data-chart=' + system + ']")')
-                pause(250)
-                geometry = js('''(()=>{const v=document.querySelector('.m17-chart-viewport'),e=document.querySelector('.m17-editor'),b=v.getBoundingClientRect(),r=e.getBoundingClientRect(),symbols=[...v.querySelectorAll('[data-symbol-id]')],outside=symbols.filter(x=>{const a=x.getBoundingClientRect();return !a.width||!a.height||a.left<b.left-1||a.right>b.right+1||a.top<b.top-1||a.bottom>b.bottom+1}).map(x=>x.dataset.symbolId);return {viewport:[innerWidth,innerHeight],chart:{width:v.clientWidth,height:v.clientHeight,scrollWidth:v.scrollWidth,scrollHeight:v.scrollHeight,bottom:b.bottom,rectWidth:b.width,rectHeight:b.height,css:{border:getComputedStyle(v).border,padding:getComputedStyle(v).padding,zoom:getComputedStyle(v).zoom,transform:getComputedStyle(v).transform,outline:getComputedStyle(v).outline}},overflow:[...v.querySelectorAll('*')].filter(x=>{const a=x.getBoundingClientRect();return a.right>b.right+1||a.bottom>b.bottom+1}).map(x=>({tag:x.tagName,cls:x.className,text:x.textContent?.slice(0,30),rect:JSON.stringify(x.getBoundingClientRect())})).slice(0,20),editor:{top:r.top,bottom:r.bottom,height:r.height},symbolCount:symbols.length,uniqueCount:new Set(symbols.map(x=>x.dataset.symbolId)).size,outside}})()''')
-                layouts.append({'width': width, 'height': height, 'system': system, **geometry})
-                assert geometry['symbolCount'] == geometry['uniqueCount'] == count, geometry
-                assert not geometry['outside'], geometry
-                assert geometry['chart']['scrollWidth'] <= geometry['chart']['width'] + 2, geometry
-                assert geometry['chart']['scrollHeight'] <= geometry['chart']['height'] + 2, geometry
-                assert geometry['editor']['bottom'] <= geometry['viewport'][1] + 1, geometry
-                assert geometry['editor']['top'] >= geometry['chart']['bottom'] - 1, geometry
-                snapshot(f'm17-{width}x{height}-{system}.png')
-        checks.append('M17 all 244/191/65 symbols visible in six measured layouts at 1366x768/1920x1080, without table scrolling; editor below each table')
+                views = ['base'] if system == 'voqs' else (
+                    ['base', 'marks'] if system == 'ipa'
+                    else ['base', 'marks', 'context', 'combinations'])
+                seen = []
+                for view in views:
+                    if system != 'voqs':
+                        js('document.querySelector("[data-chart-view=' + view + ']").click()')
+                        until('document.querySelector("[data-chart-view-active]")?.dataset.chartViewActive===' + json.dumps(view))
+                    js('document.querySelector(".m17-chart-viewport").scrollTop=0')
+                    pause(250)
+                    geometry = js("""(()=>{const v=document.querySelector('.m17-chart-viewport'),e=document.querySelector('.m17-editor'),b=v.getBoundingClientRect(),r=e.getBoundingClientRect(),symbols=[...v.querySelectorAll('[data-symbol-id]')],outside=symbols.filter(x=>{const a=x.getBoundingClientRect();return !a.width||!a.height||a.left<b.left-1||a.right>b.right+1||a.top<b.top-1||a.bottom>b.bottom+1}).map(x=>x.dataset.symbolId);return {viewport:[innerWidth,innerHeight],chart:{width:v.clientWidth,height:v.clientHeight,scrollWidth:v.scrollWidth,scrollHeight:v.scrollHeight,bottom:b.bottom},editor:{top:r.top,bottom:r.bottom,height:r.height},ids:symbols.map(x=>x.dataset.symbolId),outside}})()""")
+                    layouts.append({'width': width, 'height': height, 'system': system, 'view': view, **geometry})
+                    assert geometry['ids'], geometry
+                    seen.extend(geometry['ids'])
+                    assert geometry['chart']['scrollWidth'] <= geometry['chart']['width'] + 2, geometry
+                    assert geometry['editor']['bottom'] <= geometry['viewport'][1] + 1, geometry
+                    assert geometry['editor']['top'] >= geometry['chart']['bottom'] - 1, geometry
+                    if view == 'base' and system != 'ipa':
+                        assert not geometry['outside'], geometry
+                        assert geometry['chart']['scrollHeight'] <= geometry['chart']['height'] + 2, geometry
+                    assert js("""(()=>{const v=document.querySelector('.m17-chart-viewport'),a=[...v.querySelectorAll('[data-symbol-id]')].at(-1);a.scrollIntoView({block:'nearest'});const b=a.getBoundingClientRect(),r=v.getBoundingClientRect();return b.top>=r.top-1&&b.bottom<=r.bottom+1})()"""), (system, view, 'Last input inaccessible')
+                    js('document.querySelector(".m17-chart-viewport").scrollTop=0')
+                    snapshot(f'm17-{width}x{height}-{system}-{view}.png')
+                assert len(seen) == len(set(seen)) == count, (system, len(seen), len(set(seen)))
+        checks.append('M17 all 351/209/65 input entries covered exactly once in 14 layouts; merged IPA base and supplements scroll to final input, extIPA/VoQS base fit one screen, editor stays visible')
 
         example = js('''(()=>{const e=[...document.querySelectorAll('.m17-chart-viewport .m17-example')].sort((a,b)=>Array.from(b.querySelector('.m17-ipa').textContent).length-Array.from(a.querySelector('.m17-ipa').textContent).length)[0];if(!e)return null;const text=e.querySelector('.m17-ipa').textContent;e.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true}));return {id:e.dataset.symbolId,text,codePointCount:Array.from(text).length}})()''')
         assert example and example['codePointCount'] > 8, example

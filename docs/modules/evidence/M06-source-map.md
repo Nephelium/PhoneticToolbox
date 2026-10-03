@@ -1,5 +1,9 @@
 # M06 来源与操作映射
 
+**2026-10-04 M06-R4：** 新增可选 WORLD/PSOLA 重合成及 Harvest F0，保留 Klatt。分别记 `m06-world/1`、`m06-psola/1`、`m06-natural-extract/1`。新增 `SRC-PYWORLD`/`SRC-WORLD`，保留独立 `SRC-PRAAT` 和 `SRC-REAPER` 来源。源哈希、种子、谱/非周期单位、数字零暂停恢复和四文件导出见 [ADR](../../decisions/ADR-M06-R4.md)；Windows 开发态及 WSL 纯核心的限定验证见 [R4 报告](../../testing/2026-10-04-m06-r4-report.md)。以下旧版本的算法及迁移结论按日期读取，不作为新路径的计算说明。
+
+**2026-10-04 M06-R3：** F03/F04改用横排窗长和模块底部完整共享播放条，F05增加已有Praat CC/AC及原生REAPER选择，保留元音规则和生成操作。提取改用真实帧时间并修复APQ5百分数/内部比例，单列 `m06-extract/2`；非旧V2逐位等价。历史文件保留，旧m06/2缺少算法字段补CC。见[核查](../../references/m06-r3-resynthesis-audit.md)和[ADR](../../decisions/ADR-M06-R3.md)。
+
 **2026-10-02 更新：** [M06-R2](../../testing/2026-10-02-m06-r2-report.md) 已获授权直接修复科研行为。新增源校准与 AH、AV 0–80、20 kHz 内部率、声源关闭/噪声 FIR，移除归一化/AGC 与 HNR→AH 映射，预设保持 F0 形状。配置 m06/2，计算 klatt/2；旧逐位断言保留作为差异证据。以下 2026-09-27 记录是原样迁移的历史状态，不能作为当前计算说明。
 
 日期：2026-09-27。当前直接来源为相邻 `../PhoneticToolbox_v2`，未修改原文件或研究语料。对应原说明书 `Phonetic_Export/index.html` 4.1–4.5。状态按 [验收报告](../../testing/m06-report.md) 的平台范围读取。

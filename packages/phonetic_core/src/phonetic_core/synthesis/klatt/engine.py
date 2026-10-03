@@ -13,7 +13,8 @@ from .input_parser import VOWEL_FORMANTS, parse_vowel_sequence
 from .tdklatt import KlattParam1980, klatt_make
 from .spectral_filter import SpectralFilter
 from .source_levels import INTERNAL_RATE, OUTPUT_GAIN
-from ...acoustic.f0_praat import compute_praat_f0
+from ...acoustic.f0_praat import compute_praat_f0_track
+from ...acoustic.alignment import align_track_to_grid
 from ...acoustic.formants_praat import compute_praat_formants
 from ...acoustic.energy import compute_energy
 from ...acoustic.hnr import compute_hnr
@@ -65,6 +66,7 @@ class Engine:
         self.smooth = config['smooth']
         self.sequence = config['sequence']
         self.f0_min_hz, self.f0_max_hz = config['f0_range']
+        self.f0_method = config.get('f0_method','praat_cc')
         self.params = {}
         for name, (default, lo, hi, _) in PARAM_DEFAULTS.items():
             if name == 'F0': lo, hi = config['f0_range']
@@ -253,8 +255,11 @@ class Engine:
         arr = self._sanitize_track_for_param(name, values, target_len)
         if arr.size == 0:
             return
-        times = np.linspace(0.0, self.duration, arr.size)
-        self.params[name].set_points([(float(t), float(v)) for t, v in zip(times, arr)])
+        times = np.arange(arr.size, dtype=float) * 10. / 1000.
+        points = [(float(t), float(v)) for t, v in zip(times, arr)]
+        if times[-1] < self.duration:
+            points.append((self.duration,float(arr[-1])))
+        self.params[name].set_points(points)
 
     def generate_vowels(self):
         text = self.sequence.strip()
@@ -361,7 +366,7 @@ class Engine:
         audio = audio * self.output_gain
         return audio
 
-    def extract(self, audio, mono):
+    def extract(self, audio, mono, *, reaper=None):
         y = mono
         fs = self.fs
         path = audio
@@ -369,9 +374,32 @@ class Engine:
         min_f0 = float(self.f0_min_hz)
         max_f0 = float(self.f0_max_hz)
         target_len = max(2, int(round(self.duration * 1000.0 / frameshift_ms)))
-        f0 = compute_praat_f0(path, frameshift_ms, min_f0, max_f0, method='cc')
-        f0 = self._fit_track_to_len(f0, target_len)
+        target_times = np.arange(target_len, dtype=float) * frameshift_ms / 1000.
+        if self.f0_method == 'harvest':
+            from ..resynthesis import f0_track
+            f0,actual=f0_track(audio,'harvest',target_times,[min_f0,max_f0])
+            f0=np.where(f0>0,f0,np.nan)
+        elif self.f0_method == 'reaper':
+            if reaper is None:
+                raise ValueError('m06_reaper_unavailable')
+            try:
+                track = reaper(audio,frameshift_ms/1000.,min_f0,max_f0,hilbert=False,no_highpass=False)
+            except Exception as exc:
+                raise ValueError('m06_reaper_failed') from exc
+            actual = track.actual_backend
+        else:
+            track = compute_praat_f0_track(path,frameshift_ms,min_f0,max_f0,method=self.f0_method.removeprefix('praat_'))
+            actual = self.f0_method
+        if self.f0_method != 'harvest':
+            f0 = align_track_to_grid(track.times,track.values,target_times)
         voiced_mask = compute_voiced_mask(f0)
+        self.extraction_info = dict(extraction_revision='m06-extract/2',f0_method=self.f0_method,
+            actual_f0_backend=actual,frame_shift_ms=frameshift_ms,f0_range_hz=[min_f0,max_f0],
+            reaper_hilbert=False,reaper_no_highpass=False,
+            f0_time_axis_s=target_times.tolist(),
+            measured_f0_hz=[float(v) if np.isfinite(v) else None for v in f0],
+            voiced_mask=voiced_mask.tolist(),unvoiced_f0_policy='editable_fill_with_AV_zero',
+            av_initialization='voiced_relative_energy_median_60',ah_initialization=0.)
         formants = compute_praat_formants(path, frameshift_ms, max_formant=6000.0, num_formants=5, pf0=f0)
         f1 = self._fit_track_to_len(formants.get('pF1'), target_len)
         f2 = self._fit_track_to_len(formants.get('pF2'), target_len)
@@ -414,7 +442,9 @@ class Engine:
         self._apply_track_to_curve('HNR', hnr, target_len)
         self._apply_track_to_curve('SHR', shr, target_len)
         self._apply_track_to_curve('Jitter', jitter, target_len)
-        self._apply_track_to_curve('Shimmer', shimmer, target_len)
+        # Acoustic APQ5 is a percentage; the synthesis curve stores a fraction
+        # (0.005 = 0.5%). The UI and synth adapter convert it back to percent.
+        self._apply_track_to_curve('Shimmer', shimmer / 100., target_len)
         self._apply_track_to_curve('Slope', slope, target_len)
         self._apply_track_to_curve('H1H2', h1h2, target_len)
         self._apply_track_to_curve('A1', a1, target_len)

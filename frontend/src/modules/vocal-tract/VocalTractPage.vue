@@ -3,12 +3,13 @@ import {ref,onMounted,onUnmounted,watch} from 'vue';
 import {vocalRequest} from '../../platform/desktop.ts';
 import {fontPayload,fontRevision} from '../../state/fonts.ts';
 import {resizePanels} from '../../layout/resizablePanels.ts';
+import buttonStyles from '../../design/buttons.css?inline';
 const props=defineProps<{active:boolean;stateKey?:string}>();
 const emit=defineEmits<{references:[];close:[];dirty:[value:boolean]}>();
 const frame=ref<HTMLIFrameElement>();const ready=!!vocalRequest;
 let columns:ReturnType<typeof resizePanels>|undefined;
 function loaded(){theme();columns?.destroy();const root=frame.value?.contentDocument?.querySelector<HTMLElement>('.workspace');if(root)columns=resizePanels(root,{key:props.stateKey??'M10',center:'.studio',centerMin:320,panels:[{selector:'.analysis',side:'right',variable:'--panel-analysis',label:'声学分析',initial:260,min:220,max:520},{selector:'.inspector',side:'right',label:'操作面板',initial:330,min:260,max:560}]});}
-const theme=()=>{frame.value?.contentWindow?.postMessage({type:'m10-theme',theme:document.documentElement.dataset.theme},'*');if(fontPayload.value)frame.value?.contentWindow?.postMessage({type:'m10-fonts',fonts:JSON.parse(JSON.stringify(fontPayload.value))},'*');};
+const theme=()=>{const style=getComputedStyle(document.documentElement);const colors=Object.fromEntries(['--app','--panel','--text','--muted','--border','--teal','--accent','--selected','--on-accent','--sidebar','--waveform-color'].map(key=>[key,style.getPropertyValue(key).trim()]));frame.value?.contentWindow?.postMessage({type:'m10-theme',theme:document.documentElement.dataset.theme,colors,buttons:{mode:document.documentElement.dataset.buttonStyle,effects:document.documentElement.dataset.buttonEffects,css:buttonStyles}},'*');if(fontPayload.value)frame.value?.contentWindow?.postMessage({type:'m10-fonts',fonts:JSON.parse(JSON.stringify(fontPayload.value))},'*');};
 watch(fontRevision,theme);
 async function message(event:MessageEvent){
   if(event.source!==frame.value?.contentWindow||!event.data||typeof event.data!=='object')return;
@@ -22,7 +23,7 @@ async function message(event:MessageEvent){
   catch(error){event.source?.postMessage({type:'m10-response',id,ok:false,error:error instanceof Error?error.message:'声道请求失败'},{targetOrigin:'*'});}
 }
 let observer:MutationObserver;
-onMounted(()=>{window.addEventListener('message',message);observer=new MutationObserver(theme);observer.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});});
+onMounted(()=>{window.addEventListener('message',message);observer=new MutationObserver(theme);observer.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','data-palette','data-button-style','data-button-effects','data-waveform-color']});});
 watch(()=>props.active,active=>{if(!active)void vocalRequest?.('deactivate').catch(()=>{});else theme();});
 onUnmounted(()=>{columns?.destroy();observer?.disconnect();window.removeEventListener('message',message);void vocalRequest?.('shutdown').catch(()=>{});});
 </script>

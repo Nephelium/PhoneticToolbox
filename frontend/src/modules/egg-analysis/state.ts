@@ -1,5 +1,5 @@
 import type {EggTaskConfig,EggPreviewData} from '../../platform/research.ts';
-export const defaults=():EggTaskConfig=>({mode:'preview',signal_mode:'filtered',flip_channels:false,roi_start:0,roi_end:.5,micro_center:.25,micro_width_ms:50,gci_method:'slope',goi_method:'scale',peak_prominence:.01,valley_prominence:.01,auto_prominence:true,highpass_cutoff:25,lowpass_cutoff:2000,spec_window_ms:20,spec_vmin:-70,spec_vmax:-10,keep_praat_f0:false,keep_gci_f0:false,glottal_movement:false,silence_threshold:.01,generate_images:false,lp_order:null,export_policy:'sample-aligned/1'});
+export const defaults=():EggTaskConfig=>({mode:'preview',signal_mode:'filtered',flip_channels:false,roi_start:0,roi_end:.5,micro_center:.25,micro_width_ms:50,gci_method:'slope',goi_method:'scale',peak_prominence:.01,valley_prominence:.01,auto_prominence:true,highpass_cutoff:25,lowpass_cutoff:2000,spec_window_ms:20,spec_vmin:-70,spec_vmax:-10,keep_praat_f0:false,keep_gci_f0:false,keep_reaper_f0:false,f0_policy:'audio-f0/2',glottal_movement:false,silence_threshold:.01,generate_images:false,lp_order:null,export_policy:'sample-aligned/1'});
 export function taskConfig(config:EggTaskConfig,mode:EggTaskConfig['mode'],order:number|null=null):EggTaskConfig {
   const result={...config,mode,font:undefined,lp_order:mode==='inverse'?order:null};
   if(mode!=='preview'){result.micro_center=null;result.micro_width_ms=50;}
@@ -19,6 +19,7 @@ export function validateParameters(config:EggTaskConfig){
 }
 export function validate(config:EggTaskConfig,duration:number,rate:number){
   validateParameters(config);
+  if(config.mode==='inverse'&&config.lp_order!=null&&(!Number.isInteger(config.lp_order)||config.lp_order<1||config.lp_order>Math.min(256,Math.floor(.003*rate)-1)))throw Error(`LP 阶数须为 1–${Math.min(256,Math.floor(.003*rate)-1)} 的整数，低于当前采样率下 3 ms 窗的样本数。留空使用 V2 自动阶数。`);
   if(config.mode==='preview'&&(!Number.isFinite(config.micro_width_ms)||config.micro_width_ms!<5||config.micro_width_ms!>5000))throw Error('微观窗口须在 5–5000 ms 范围内。');
   const end=config.roi_end??duration,start=config.roi_start??0;
   if(!Number.isFinite(start)||!Number.isFinite(end)||start<0||end<=start||end>duration)throw Error('分析选区须在音频范围内，且终点大于起点。');
@@ -27,6 +28,6 @@ export function validate(config:EggTaskConfig,duration:number,rate:number){
   if(duration>120||duration*rate>5_760_000)throw Error('当前 EGG 计算限 120 秒及 576 万帧，请先在参数估计中切分较长音频。总览可继续查看。');
 }
 export interface PreviewRecord {config:EggTaskConfig;input_sha256:string;sample_rate_hz:number;sample_count:number;preview:EggPreviewData;selection:{start_s:number;end_s:number}}
-export const errors:Record<string,string>={egg_preview_failed:'实时预览未能完成，请重试预览。',egg_invalid_preview:'预览参数无效，请检查当前设置。',preview_timeout:'预览更新超时，已回收计算进程，请重试预览。',preview_platform_unverified:'当前平台尚未配置经过验证的 EGG 实时预览环境。',egg_runtime_mismatch:'EGG 科学环境与项目锁定版本不一致。',quota_exceeded:'文件空间不足，请清理不需要的文件后重试。',asset_expired:'结果已到期，请重新计算。',egg_stereo_required:'EGG 需要双声道 WAV，默认左声道 EGG、右声道音频。',egg_input_budget:'超过 EGG 计算预算，请先切分为不超过 120 秒、576 万帧的音频。',egg_filter_failed:'滤波失败，请检查截止频率和片段长度。',egg_invalid_roi:'选区或微观中心超出音频范围。',egg_inverse_unavailable:'当前片段缺少足够的有效周期，无法进行简化 CP 逆滤波。',egg_inverse_budget:'逆滤波选区限 1 秒、48000 帧。',egg_runtime_unavailable:'EGG 独立科学运行环境尚未就绪。',analysis_resource_limit:'计算超过资源预算，请缩短音频或选区。',deadline_exceeded:'计算超时，请缩短音频后重试。',input_unavailable:'源文件已失效，请重新选择。',font_unavailable:'导出字体不可用，请在公共字体设置中检查。'};
+export const errors:Record<string,string>={egg_reaper_unavailable:'REAPER 原生引擎未就绪，请使用已配置 REAPER 的桌面入口。',egg_reaper_failed:'REAPER 基频提取失败，可取消勾选后继续查看其他曲线。',egg_preview_failed:'实时预览未能完成，请重试预览。',egg_invalid_preview:'预览参数无效，请检查当前设置。',preview_timeout:'预览更新超时，已回收计算进程，请重试预览。',preview_platform_unverified:'当前平台尚未配置经过验证的 EGG 实时预览环境。',egg_runtime_mismatch:'EGG 科学环境与项目锁定版本不一致。',quota_exceeded:'文件空间不足，请清理不需要的文件后重试。',asset_expired:'结果已到期，请重新计算。',egg_stereo_required:'EGG 需要双声道 WAV，默认左声道 EGG、右声道音频。',egg_input_budget:'超过 EGG 计算预算，请先切分为不超过 120 秒、576 万帧的音频。',egg_filter_failed:'滤波失败，请检查截止频率和片段长度。',egg_invalid_roi:'选区或微观中心超出音频范围。',egg_inverse_unavailable:'当前片段缺少足够的有效周期，无法进行简化 CP 逆滤波。',egg_inverse_budget:'逆滤波选区限 1 秒、48000 帧。',egg_runtime_unavailable:'EGG 独立科学运行环境尚未就绪。',analysis_resource_limit:'计算超过资源预算，请缩短音频或选区。',deadline_exceeded:'计算超时，请缩短音频后重试。',input_unavailable:'源文件已失效，请重新选择。',font_unavailable:'导出字体不可用，请在公共字体设置中检查。'};
 
 export function inverseAudioFiles<T extends {name:string}>(files:T[]){return ['egg_ORIG.wav','egg_IF.wav'].flatMap(name=>files.filter(file=>file.name===name));}

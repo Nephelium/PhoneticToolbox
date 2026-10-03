@@ -7,6 +7,16 @@ from phonetic_core.egg.metrics import calculate_cq_sq
 from phonetic_core.egg.export_series import batch_columns, waveform_series, spectral_series
 
 
+def f0_axis_range(values):
+    """Display-only counterpart of visibleF0Range; no detector limit changes."""
+    values=np.asarray(values,dtype=float)
+    values=values[np.isfinite(values)&(values>0)]
+    if not len(values):return None
+    low,high=float(values.min()),float(values.max())
+    pad=max(5,(high-low)*.1,high*.02)
+    return max(0,float(np.floor(low-pad))),float(np.ceil(high+pad))
+
+
 def cq_series(result, config, settings, start, end):
     values = (calculate_cq_sq(result.gci_times, result.goi_times, result.peak_times)
               if settings.mode == 'batch' else cq_segment(result, start, end, config, use_raw_signal=settings.signal_mode == 'raw'))
@@ -16,7 +26,7 @@ def cq_series(result, config, settings, start, end):
 def csv_bytes(result, config, settings, start, end):
     if settings.mode == 'batch':
         times, columns, mask = batch_columns(result, keep_praat=settings.keep_praat_f0,
-            keep_gci=settings.keep_gci_f0, silence_threshold=settings.silence_threshold)
+            keep_gci=settings.keep_gci_f0, keep_reaper=settings.keep_reaper_f0, silence_threshold=settings.silence_threshold)
         frame = pd.DataFrame({'Time (s)': times, **columns})
         return frame.to_csv(index=False, na_rep='NaN', float_format='%.6f').encode(), int(mask.sum())
     times, cq, sq = cq_series(result, config, settings, start, end)
@@ -31,6 +41,10 @@ def csv_bytes(result, config, settings, start, end):
     if settings.glottal_movement:
         events = [(t, v) for t, v in result.glottal_movement_events if start <= t < end]
         frame = frame.join(pd.DataFrame({'Glottal_Movement': [v for _,v in events]}, index=[t for t,_ in events]), how='outer')
+    if settings.keep_reaper_f0:
+        t=np.asarray(result.reaper_f0_times);v=np.asarray(result.reaper_f0_values)
+        take=(t>=start)&(t<end)
+        frame=frame.join(pd.DataFrame({'F0_REAPER (Hz)':v[take]},index=t[take]),how='outer')
     return frame.sort_index().to_csv(na_rep='NaN', index_label='Time (s)').encode(), 0
 
 
@@ -72,7 +86,8 @@ def plot_bytes(result, config, settings, first, last, font_evidence=None):
             a, = axis.plot(times,cq,color='blue',marker='.',linestyle='',markersize=2 if batch else 5,label='CQ')
             b, = right.plot(times,sq,color='green',marker='x',linestyle='',markersize=2 if batch else 5,label='SQ')
             axis.legend([a,b],['CQ','SQ'],loc='upper right')
-        axis.set(title=f'EGG CQ & SQ ({start:.2f}s - {end:.2f}s)',xlim=(start,end),ylim=(0,1))
+        axis.set(title='CQ / SQ',xlim=(start,end),ylim=(0,1),ylabel='CQ')
+        right.set_ylabel('SQ')
         right.set_ylim(-1.1,1.1); axis.tick_params(axis='y',colors='blue'); right.tick_params(axis='y',colors='green')
         axis.grid(True); fig.tight_layout(); save(fig,'egg_CQ_SQ.png')
 
@@ -95,16 +110,23 @@ def plot_bytes(result, config, settings, first, last, font_evidence=None):
         image = axis.imshow(np.flipud(db), origin='upper', aspect='auto', extent=extent,
                             cmap='gray_r',vmin=config.spec_vmin,vmax=config.spec_vmax)
         fig.colorbar(image,ax=axis,label='Magnitude (dB)')
+        visible_f0=[]
         for keep,t,v,color in [(settings.keep_praat_f0,result.audio_f0_times,result.audio_f0_values,'black'),
-                               (settings.keep_gci_f0,result.gci_f0_times,result.gci_f0_values,'red')]:
+                               (settings.keep_gci_f0,result.gci_f0_times,result.gci_f0_values,'red'),
+                               (settings.keep_reaper_f0,result.reaper_f0_times,result.reaper_f0_values,'#007a70')]:
             if keep and t is not None:
-                take = (t >= start) & (t < end); right.plot(t[take],v[take],color=color,marker='.',markersize=2,linestyle='None')
-        axis.set(title=f'Spectrogram ({start:.2f}s - {end:.2f}s)',xlim=(start,end),ylim=(0,5000)); right.set_ylim(50,500)
+                take = (t >= start) & (t < end) & np.isfinite(v) & (v>0)
+                visible_f0.extend(v[take]);right.plot(t[take],v[take],color=color,marker='.',markersize=2,linestyle='None')
+        axis.set(title='Spectrogram / F0',xlim=(start,end),ylim=(0,5000),ylabel='Hz')
+        limits=f0_axis_range(visible_f0)
+        if limits:right.set_ylim(*limits);right.set_ylabel('F0 (Hz)')
+        else:right.yaxis.set_visible(False)
         save(fig,'egg_SPEC_F0.png')
 
         fig = figure(); top = fig.add_subplot(211); bottom = fig.add_subplot(212,sharex=top)
         times,audio,values = waveform_series(result,config,first,last,raw=settings.signal_mode=='raw',batch=batch)
         top.plot(times,audio,color='black',lw=.5); bottom.plot(times,values,color='black',lw=.5)
-        fig.suptitle(f'Waveforms ({start:.2f}s - {end:.2f}s)')
+        top.set_title('Audio',loc='center');bottom.set_title('EGG',loc='center')
+        top.set_ylabel('Amplitude');bottom.set_ylabel('Amplitude');bottom.set_xlabel('Time (s)')
         top.grid(True); bottom.grid(True); bottom.set_xlim(start,end); fig.tight_layout(); save(fig,'egg_WAVEFORMS.png')
     return blobs

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
-  "checked_on": "2026-10-02",
-  "total_records": 345,
+  "checked_on": "2026-10-04",
+  "total_records": 362,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -24,7 +24,12 @@
         "paper": "https://doi.org/10.1016/j.wocn.2018.07.001",
         "pdf": "https://cris.vub.be/ws/files/38628284/jadoul_introducing_parselmouth_a_python_interface_to_praat.pdf",
         "spectrogram_analysis": "https://fon.hum.uva.nl/praat/manual/Sound__To_Spectrogram___.html",
-        "spectrogram_display": "https://www.fon.hum.uva.nl/praat/manual/Spectrogram__Paint___.html"
+        "spectrogram_display": "https://www.fon.hum.uva.nl/praat/manual/Spectrogram__Paint___.html",
+        "spectrogram_faq": "https://www.fon.hum.uva.nl/praat/manual/FAQ__Spectrograms.html",
+        "lpc_order": "https://www.fon.hum.uva.nl/praat/manual/Sound__To_LPC__covariance____.html",
+        "pitch_method_choice": "https://www.fon.hum.uva.nl/praat/manual/how_to_choose_a_pitch_analysis_method.html",
+        "overlap_add": "https://www.fon.hum.uva.nl/praat/manual/overlap-add.html",
+        "manipulation_source": "https://github.com/YannickJadoul/Parselmouth/blob/v0.4.7/praat/fon/Manipulation.cpp"
       },
       "evidence": "本地 acoustic/f0_praat.py、formants_praat.py、manipulation 使用 parselmouth；环境 praat-parselmouth 0.4.7。",
       "license": "GPL family; verify exact bundled Praat/Parselmouth licenses",
@@ -50,7 +55,8 @@
         "packages/phonetic_core/src/phonetic_core/textgrid.py",
         "packages/phonetic_core/src/phonetic_core/spectrogram.py",
         "frontend/src/components/SpectrogramViewport.vue",
-        "backend/src/ptb_worker/science_child.py"
+        "backend/src/ptb_worker/science_child.py",
+        "packages/phonetic_core/src/phonetic_core/synthesis/resynthesis.py"
       ],
       "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json",
       "m01_io_evidence": "docs/testing/m01-io-report.md",
@@ -63,7 +69,13 @@
       },
       "m01_preview_method": "Real Sound.to_spectrogram; own bounded grayscale renderer using Gaussian 5 ms, 50 dB relative range and 6 dB/oct display preemphasis. No calibrated SPL or pixel-for-pixel Praat editor claim.",
       "m07_migration_evidence": "docs/modules/evidence/M07-source-map.md",
-      "m07_scope": "V2 LPC-residual Python migration; independent original comparison, no paper-data redistribution; existing license review status retained."
+      "m07_scope": "V2 LPC-residual Python migration; independent original comparison, no paper-data redistribution; existing license review status retained.",
+      "m03_r3_audit": "docs/references/m03-r3-algorithm-audit.md; display range reference only, not a replacement of the Matplotlib PSD or legacy LPC",
+      "m06_r4_runtime": {
+        "parselmouth": "0.4.7",
+        "embedded_praat": "6.1.38",
+        "psola": "To Manipulation + replacement PitchTier/DurationTier; exact-zero pause restoration is PTB addition"
+      }
     },
     {
       "id": "SRC-REAPER",
@@ -72,6 +84,8 @@
       "modules": [
         "M01",
         "M02",
+        "M03",
+        "M06",
         "M07"
       ],
       "urls": {
@@ -106,12 +120,19 @@
         "backend/src/ptb_worker/native/reaper.py",
         "resources/manifests/acoustic.json",
         "backend/src/ptb_worker/science_child.py",
-        "backend/src/ptb_worker/managed_scratch.py"
+        "backend/src/ptb_worker/managed_scratch.py",
+        "packages/phonetic_core/src/phonetic_core/synthesis/klatt/engine.py",
+        "backend/src/ptb_worker/m06_child.py",
+        "backend/src/ptb_worker/m06_executor.py",
+        "packages/phonetic_core/src/phonetic_core/egg/f0.py",
+        "backend/src/ptb_worker/egg_f0.py"
       ],
       "m01_migration_evidence": "docs/modules/evidence/M01-core-migration.json",
       "m01_io_evidence": "docs/testing/m01-io-report.md",
       "m07_migration_evidence": "docs/modules/evidence/M07-source-map.md",
-      "m07_scope": "V2 LPC-residual Python migration; independent original comparison, no paper-data redistribution; existing license review status retained."
+      "m07_scope": "V2 LPC-residual Python migration; independent original comparison, no paper-data redistribution; existing license review status retained.",
+      "m06_scope": "2026-10-04: optional native F0 extraction via existing registered binary and owned process; no new third-party code/binary copied. Actual original build provenance remains unknown.",
+      "m03_scope": "2026-10-04: optional native audio F0, 30-800 Hz / 10 ms, existing hash-registered binary and bounded process. No new third-party copy; original build provenance remains unresolved."
     },
     {
       "id": "SRC-IRAPT",
@@ -945,7 +966,8 @@
       "observed_upstream_commit": null,
       "distribution_status": "review-required",
       "verification_status": "local-evidence-only",
-      "acknowledgement_group": "academic"
+      "acknowledgement_group": "academic",
+      "m03_r3_audit": "docs/references/m03-r3-algorithm-audit.md; 48 threshold cases and 6 LP orders; no physiological truth or upstream authorship claim"
     },
     {
       "id": "PENDING-DICTIONARY",
@@ -1222,7 +1244,8 @@
       "kind": "installed-runtime-package",
       "modules": [
         "shared-runtime",
-        "M16"
+        "M16",
+        "M03"
       ],
       "actual_included_version": "1.16.3 in phonetic_311; v3 pin pending",
       "observed_upstream_commit": null,
@@ -1233,7 +1256,8 @@
         "download": "https://github.com/scipy/scipy/releases",
         "homepage": "https://scipy.org/",
         "source": "https://github.com/scipy/scipy",
-        "tracker": "https://github.com/scipy/scipy/issues"
+        "tracker": "https://github.com/scipy/scipy/issues",
+        "peak_prominences": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.peak_prominences.html"
       },
       "license": "see exact release metadata / wheel audit pending",
       "authors": null,
@@ -1247,7 +1271,8 @@
         "numpy": "2.2.6",
         "scipy": "1.16.3",
         "SheetJS": "existing local frontend/src/modules/perception/vendor/xlsx.mjs; no upgrade or network import"
-      }
+      },
+      "m03_r3_audit": "docs/references/m03-r3-algorithm-audit.md; official definition reviewed 2026-10-04; runtime version unchanged, see m03-runtime-lock.json"
     },
     {
       "id": "PKG-PANDAS",
@@ -7667,6 +7692,438 @@
       "used_at": [
         "frontend/src/modules/ipa-plus/ChartView.vue"
       ]
+    },
+    {
+      "id": "M17-EXTIPA-LV-JIANG-2013",
+      "title": "国际音标扩展表的分类、命名与功能",
+      "kind": "academic-reference",
+      "modules": [
+        "M17"
+      ],
+      "authors": "吕佳、江荻",
+      "year": 2013,
+      "citation_title": "国际音标扩展表的分类、命名与功能",
+      "journal": "听力学及言语疾病杂志",
+      "volume": "21",
+      "issue": "6",
+      "pages": "665–668",
+      "doi": "10.3969/j.issn.1006-7299.2013.06.030",
+      "urls": {
+        "paper": "https://doi.org/10.3969/j.issn.1006-7299.2013.06.030"
+      },
+      "evidence": "用户指定PDF共4页实际渲染核对，特别是p.666表5、p.667表8与p.668版本说明；提取文本部分乱码，语义核对基于页面图像。",
+      "license": "Copyright retained; no redistribution permission inferred",
+      "notes": "2013论文解读2002版extIPA。中文术语和功能参考自行概述，不打包PDF或图表。2025版partially denasal仍称部分去鼻化；旧版外呼气流单列，不回填为2025新增符号。",
+      "verification_date": "2026-10-03",
+      "actual_included_version": "Independently authored Chinese explanations; 2002/2025 versions distinguished",
+      "distribution_status": "citation and attributed terminology only; original PDF excluded",
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "frontend/src/modules/ipa-plus/data/catalog.json",
+        "frontend/src/modules/ipa-plus/data/sources.json",
+        "docs/references/m17-expansion-diff.md"
+      ]
+    },
+    {
+      "id": "M17-IOS-IPA-PHONETICS-REFERENCE",
+      "title": "User-supplied iPA Phonetics Pro screenshot — visible symbol inventory reference",
+      "kind": "design-reference",
+      "modules": [
+        "M17"
+      ],
+      "urls": {
+        "symbol_rules": "https://www.internationalphoneticassociation.org/content/ipa-chart"
+      },
+      "evidence": "用户截图15的辅音、清化、送气与塞擦音组合视觉核对。用于确定补充范围，不作为官方IPA版本或独立科学语义权威。",
+      "license": "Reference only; third-party screenshot, artwork, code and assets not copied",
+      "notes": "自行实现按方式分组的组合输入区，保留官方基础表；模糊的特殊拍音与未经确认的卷舌内爆音字形未臆造。既有extIPA截图16/17用来定位连续符号堆积问题。",
+      "verification_date": "2026-10-03",
+      "actual_included_version": "No external implementation or screenshot bundled",
+      "distribution_status": "inventory reference only",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "frontend/src/modules/ipa-plus/ChartView.vue",
+        "docs/references/m17-expansion-diff.md"
+      ]
+    },
+    {
+      "id": "M17-IPA-CHART-ZH-2007",
+      "title": "中国语言学会语音学分会 · 国际音标中文版（2007；修订至2005年）",
+      "kind": "academic-reference",
+      "modules": [
+        "M17"
+      ],
+      "authors": "中国语言学会语音学分会",
+      "urls": {
+        "paper": "https://doi.org/10.1017/S0025100311000156"
+      },
+      "evidence": "2026-10-03只读本机授权资料并核对书目及章节；详细页码、SHA-256与名称差异见docs/references/m17-r2-terminology-sources.md。",
+      "license": "中文名称据用户指定图核对；原图与文章不随包分发",
+      "notes": "图4中文名称优先；英文原理、转写规则与版本证据分开。原资料、扫描页和本机绝对路径均不进入产品。",
+      "verification_date": "2026-10-03",
+      "actual_included_version": "用户指定图4中文名称；同名中文表刊于JIPA 2011, 41(2)",
+      "distribution_status": "citation and independently authored short explanations only",
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "frontend/src/modules/ipa-plus/data/catalog.json",
+        "frontend/src/modules/ipa-plus/data/sources.json",
+        "docs/references/m17-r2-terminology-sources.md"
+      ]
+    },
+    {
+      "id": "M17-IPA-HANDBOOK-JIANG-2008",
+      "title": "国际语音学会编，江荻译（2008）· 国际语音学会手册：国际音标使用指南",
+      "kind": "academic-reference",
+      "modules": [
+        "M17"
+      ],
+      "authors": "国际语音学会编；江荻译",
+      "urls": {
+        "paper": "https://www.internationalphoneticassociation.org/content/handbook-ipa"
+      },
+      "evidence": "2026-10-03只读本机授权资料并核对书目及章节；详细页码、SHA-256与名称差异见docs/references/m17-r2-terminology-sources.md。",
+      "license": "书籍版权保留；只使用自主短解释、书目信息和页码，原书与扫描图不随包",
+      "notes": "图4中文名称优先；英文原理、转写规则与版本证据分开。原资料、扫描页和本机绝对路径均不进入产品。",
+      "verification_date": "2026-10-03",
+      "actual_included_version": "上海教育出版社，2008年第1版，ISBN 978-7-5444-1928-4；原著1999；本轮核对pp.9–24",
+      "distribution_status": "citation and independently authored short explanations only",
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "frontend/src/modules/ipa-plus/data/catalog.json",
+        "frontend/src/modules/ipa-plus/data/sources.json",
+        "docs/references/m17-r2-terminology-sources.md"
+      ]
+    },
+    {
+      "id": "M17-VOICE-QUALITY-ESLING-2019",
+      "title": "Esling, Moisik, Benner & Crevier-Buchman (2019) · Voice Quality: The Laryngeal Articulator Model",
+      "kind": "academic-reference",
+      "modules": [
+        "M17"
+      ],
+      "authors": "John H. Esling; Scott R. Moisik; Allison Benner; Lise Crevier-Buchman",
+      "urls": {
+        "paper": "https://doi.org/10.1017/9781108696555"
+      },
+      "evidence": "2026-10-03只读本机授权资料并核对书目及章节；详细页码、SHA-256与名称差异见docs/references/m17-r2-terminology-sources.md。",
+      "license": "书籍版权保留；自主概述并列准确章节页码，原PDF及图像不随包",
+      "notes": "图4中文名称优先；英文原理、转写规则与版本证据分开。原资料、扫描页和本机绝对路径均不进入产品。",
+      "verification_date": "2026-10-03",
+      "actual_included_version": "Cambridge University Press, 2019；ISBN 978-1-108-49842-5；本轮参考第1–2章",
+      "distribution_status": "citation and independently authored short explanations only",
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "frontend/src/modules/ipa-plus/data/catalog.json",
+        "frontend/src/modules/ipa-plus/data/sources.json",
+        "docs/references/m17-r2-terminology-sources.md"
+      ]
+    },
+    {
+      "id": "M17-EXTIPA-BALL-2018",
+      "title": "Ball, Howard & Miller (2018) · Revisions to the extIPA chart, pp.155–164",
+      "kind": "academic-reference",
+      "modules": [
+        "M17"
+      ],
+      "authors": "Martin J. Ball; Sara J. Howard; Kirk Miller",
+      "urls": {
+        "paper": "https://doi.org/10.1017/S0025100317000147"
+      },
+      "evidence": "2026-10-03只读本机授权资料并核对书目及章节；详细页码、SHA-256与名称差异见docs/references/m17-r2-terminology-sources.md。",
+      "license": "原论文与图表不随包，条目含义自主概述",
+      "notes": "图4中文名称优先；英文原理、转写规则与版本证据分开。原资料、扫描页和本机绝对路径均不进入产品。",
+      "verification_date": "2026-10-03",
+      "actual_included_version": "2015修订表；2017在线发表；2018卷期48(2)，155–164",
+      "distribution_status": "citation and independently authored short explanations only",
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "frontend/src/modules/ipa-plus/data/catalog.json",
+        "frontend/src/modules/ipa-plus/data/sources.json",
+        "docs/references/m17-r2-terminology-sources.md"
+      ]
+    },
+    {
+      "id": "M17-EXTIPA-BALL-2024",
+      "title": "Ball (2024) · Changes to certain extIPA diacritics, pp.692–695",
+      "kind": "academic-reference",
+      "modules": [
+        "M17"
+      ],
+      "authors": "Martin J. Ball",
+      "urls": {
+        "paper": "https://doi.org/10.1080/02699206.2024.2365205"
+      },
+      "evidence": "2026-10-03只读本机授权资料并核对书目及章节；详细页码、SHA-256与名称差异见docs/references/m17-r2-terminology-sources.md。",
+      "license": "原文CC BY-NC-ND 4.0；仅引用与自主解释，未复制或修改原图",
+      "notes": "图4中文名称优先；英文原理、转写规则与版本证据分开。原资料、扫描页和本机绝对路径均不进入产品。",
+      "verification_date": "2026-10-03",
+      "actual_included_version": "2024-05-14 ICPLA批准三项调整；2024-07-01在线发表；38(7)，692–695",
+      "distribution_status": "citation and independently authored short explanations only",
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "frontend/src/modules/ipa-plus/data/catalog.json",
+        "frontend/src/modules/ipa-plus/data/sources.json",
+        "docs/references/m17-r2-terminology-sources.md"
+      ]
+    },
+    {
+      "id": "M17-EXTIPA-BALL-2025-REPLY",
+      "title": "Ball (2025) · Reply to letter concerning the revisions to some diacritics of the extensions to the IPA (extIPA), Ball (2024), pp.911–912",
+      "kind": "academic-reference",
+      "modules": [
+        "M17"
+      ],
+      "authors": "Martin J. Ball",
+      "urls": {
+        "paper": "https://doi.org/10.1080/02699206.2025.2489577"
+      },
+      "evidence": "2026-10-03只读本机授权资料并核对书目及章节；详细页码、SHA-256与名称差异见docs/references/m17-r2-terminology-sources.md。",
+      "license": "原文版权与许可保留；仅书目和版本差异说明，原PDF不随包",
+      "notes": "图4中文名称优先；英文原理、转写规则与版本证据分开。原资料、扫描页和本机绝对路径均不进入产品。",
+      "verification_date": "2026-10-03",
+      "actual_included_version": "2025，39(9)，911–912；正文partially nasal用词与本目录核对的2025表partially denasal分开记录",
+      "distribution_status": "citation and independently authored short explanations only",
+      "acknowledgement_group": "academic",
+      "used_at": [
+        "frontend/src/modules/ipa-plus/data/catalog.json",
+        "frontend/src/modules/ipa-plus/data/sources.json",
+        "docs/references/m17-r2-terminology-sources.md"
+      ]
+    },
+    {
+      "id": "SRC-JETBRAINS-MONO",
+      "title": "JetBrains Mono",
+      "kind": "font-resource",
+      "modules": [
+        "P04"
+      ],
+      "urls": {
+        "homepage": "https://www.jetbrains.com/lp/mono/",
+        "source": "https://github.com/JetBrains/JetBrainsMono/tree/v2.304",
+        "license": "https://github.com/JetBrains/JetBrainsMono/blob/v2.304/OFL.txt"
+      },
+      "authors": "The JetBrains Mono Project Authors",
+      "license": "SIL Open Font License 1.1",
+      "actual_included_version": "2.304 Regular WOFF2",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-10-03",
+      "distribution_status": "redistributable-with-license",
+      "evidence": "Pinned v2.304 WOFF2 and OFL downloaded from official repository; SHA-256 recorded in docs/references/p19-appearance-sources.md.",
+      "notes": "Unmodified bundled code font, loaded offline; no system installation. License shown in About and packaged.",
+      "acknowledgement_group": "software"
+    },
+    {
+      "id": "SRC-CODEX-PALETTE-REFERENCE",
+      "title": "Codex themes: visual reference",
+      "kind": "visual-reference",
+      "modules": [
+        "P04"
+      ],
+      "urls": {
+        "homepage": "https://openai.com/codex/"
+      },
+      "authors": "OpenAI and respective theme authors",
+      "license": "Reference only; proprietary application code not redistributed",
+      "actual_included_version": "PTB palette adaptations / 1; reference name set observed in Codex 26.930.3930.0",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-10-03",
+      "distribution_status": "reference-only",
+      "evidence": "User screenshot and read-only installed theme metadata; no application code/assets copied.",
+      "notes": "29 paired PTB adaptations, including independently completed missing variants. Not pixel-identical Codex themes; see docs/references/p19-appearance-sources.md.",
+      "acknowledgement_group": "software"
+    },
+    {
+      "id": "REF-DRUGMAN-GLOTTAL-COMPARISON",
+      "title": "A Comparative Study of Glottal Source Estimation Techniques",
+      "authors": "Thomas Drugman; Baris Bozkurt; Thierry Dutoit",
+      "kind": "reference-only",
+      "modules": [
+        "M03"
+      ],
+      "urls": {
+        "paper": "https://arxiv.org/abs/2001.00840v1",
+        "full_text": "https://arxiv.org/html/2001.00840v1"
+      },
+      "actual_included_version": "arXiv:2001.00840v1; deposited 2019-12-28, not a journal publication-year claim",
+      "license": "Reference and original-site link only; no paper or code redistribution",
+      "evidence": "Primary author manuscript section 2.1 reviewed; docs/references/m03-r3-algorithm-audit.md",
+      "verification_status": "primary-paper-reviewed",
+      "distribution_status": "citation-link-only",
+      "observed_upstream_commit": null,
+      "verification_date": "2026-10-04",
+      "acknowledgement_group": "academic",
+      "notes": "CPIF/DAP/IAIF comparison reference; not evidence of the local legacy code authorship or validation."
+    },
+    {
+      "id": "REF-WORLD-2016",
+      "title": "WORLD: A Vocoder-Based High-Quality Speech Synthesis System for Real-Time Applications",
+      "kind": "reference-only",
+      "modules": [
+        "M06"
+      ],
+      "urls": {
+        "paper": "https://www.jstage.jst.go.jp/article/transinf/E99.D/7/E99.D_2015EDP7457/_article"
+      },
+      "authors": "Masanori Morise; Fumiya Yokomori; Kenji Ozawa",
+      "year": 2016,
+      "citation_title": "WORLD: A Vocoder-Based High-Quality Speech Synthesis System for Real-Time Applications",
+      "venue": "IEICE Transactions on Information and Systems",
+      "pages": "1877--1884",
+      "license": "paper citation only; no redistribution licensed here",
+      "verification_date": "2026-10-04",
+      "actual_included_version": "paper citation; implementation recorded separately as SRC-WORLD / SRC-PYWORLD",
+      "observed_upstream_commit": null,
+      "distribution_status": "citation-only",
+      "acknowledgement_group": "academic",
+      "evidence": "Official author/publisher page checked 2026-10-04; comparison paper full text checked.",
+      "notes": "M06-R4通过独立登记的PyWORLD/WORLD依赖调用相关方法。本记录仅登记论文引用，不打包或再分发论文。",
+      "evidence_files": [
+        "docs/references/m06-r3-resynthesis-audit.md",
+        "docs/plans/2026-10-04-m06-r4-resynthesis.md"
+      ],
+      "doi": "10.1587/transinf.2015EDP7457"
+    },
+    {
+      "id": "REF-D4C-2016",
+      "title": "D4C, a band-aperiodicity estimator for high-quality speech synthesis",
+      "kind": "reference-only",
+      "modules": [
+        "M06"
+      ],
+      "urls": {
+        "paper": "https://www.isc.meiji.ac.jp/~mmorise/world/publications.html"
+      },
+      "authors": "Masanori Morise",
+      "year": 2016,
+      "citation_title": "D4C, a band-aperiodicity estimator for high-quality speech synthesis",
+      "venue": "Speech Communication",
+      "pages": "57--65",
+      "license": "paper citation only; no redistribution licensed here",
+      "verification_date": "2026-10-04",
+      "actual_included_version": "paper citation; implementation recorded separately as SRC-WORLD / SRC-PYWORLD",
+      "observed_upstream_commit": null,
+      "distribution_status": "citation-only",
+      "acknowledgement_group": "academic",
+      "evidence": "Official author/publisher page checked 2026-10-04; comparison paper full text checked.",
+      "notes": "M06-R4通过独立登记的PyWORLD/WORLD依赖调用相关方法。本记录仅登记论文引用，不打包或再分发论文。",
+      "evidence_files": [
+        "docs/references/m06-r3-resynthesis-audit.md",
+        "docs/plans/2026-10-04-m06-r4-resynthesis.md"
+      ]
+    },
+    {
+      "id": "REF-VOCODER-COMPARISON-2018",
+      "title": "Sound quality comparison among high-quality vocoders by using re-synthesized speech",
+      "kind": "reference-only",
+      "modules": [
+        "M06"
+      ],
+      "urls": {
+        "paper": "https://www.jstage.jst.go.jp/article/ast/39/3/39_E1779/_article/-char/en"
+      },
+      "authors": "Masanori Morise; Yusuke Watanabe",
+      "year": 2018,
+      "citation_title": "Sound quality comparison among high-quality vocoders by using re-synthesized speech",
+      "venue": "Acoustical Science and Technology",
+      "pages": "263--265",
+      "license": "paper citation only; no redistribution licensed here",
+      "verification_date": "2026-10-04",
+      "actual_included_version": "literature only; no implementation included",
+      "observed_upstream_commit": null,
+      "distribution_status": "citation-only",
+      "acknowledgement_group": "academic",
+      "evidence": "Official author/publisher page checked 2026-10-04; comparison paper full text checked.",
+      "notes": "候选重合成路线的文献对照，当前模块未实现这些方法，不表示当前算法依赖或效果保证。",
+      "evidence_files": [
+        "docs/references/m06-r3-resynthesis-audit.md"
+      ],
+      "doi": "10.1250/ast.39.263"
+    },
+    {
+      "id": "REF-GLOTTDNN-2016",
+      "title": "GlottDNN — A Full-Band Glottal Vocoder for Statistical Parametric Speech Synthesis",
+      "kind": "reference-only",
+      "modules": [
+        "M06"
+      ],
+      "urls": {
+        "paper": "https://www.isca-archive.org/interspeech_2016/airaksinen16b_interspeech.html"
+      },
+      "authors": "Manu Airaksinen; Bajibabu Bollepalli; Lauri Juvela; Zhizheng Wu; Simon King; Paavo Alku",
+      "year": 2016,
+      "citation_title": "GlottDNN — A Full-Band Glottal Vocoder for Statistical Parametric Speech Synthesis",
+      "venue": "Interspeech 2016",
+      "pages": "2473--2477",
+      "license": "paper citation only; no redistribution licensed here",
+      "verification_date": "2026-10-04",
+      "actual_included_version": "literature only; no implementation included",
+      "observed_upstream_commit": null,
+      "distribution_status": "citation-only",
+      "acknowledgement_group": "academic",
+      "evidence": "Official author/publisher page checked 2026-10-04; comparison paper full text checked.",
+      "notes": "候选重合成路线的文献对照，当前模块未实现这些方法，不表示当前算法依赖或效果保证。",
+      "evidence_files": [
+        "docs/references/m06-r3-resynthesis-audit.md"
+      ],
+      "doi": "10.21437/Interspeech.2016-342"
+    },
+    {
+      "kind": "runtime-and-method",
+      "modules": [
+        "M06"
+      ],
+      "verification_date": "2026-10-04",
+      "observed_upstream_commit": null,
+      "distribution_status": "license-verified",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/synthesis/resynthesis.py"
+      ],
+      "evidence_files": [
+        "docs/plans/2026-10-04-m06-r4-resynthesis.md"
+      ],
+      "id": "SRC-PYWORLD",
+      "title": "PyWORLD",
+      "authors": "Pyworld Contributors",
+      "year": 2025,
+      "license": "MIT",
+      "urls": {
+        "repository": "https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder",
+        "package": "https://pypi.org/project/pyworld/0.3.5/"
+      },
+      "actual_included_version": "0.3.5; CPython 3.11 Windows wheel and WSL local source build",
+      "evidence": "Official PyPI SHA-256 verified; wheel METADATA and LICENSE and sdist setup.py inspected.",
+      "license_file": "third_party/licenses/PyWORLD-0.3.5-MIT.txt",
+      "notes": "M06 optional WORLD backend. Runtime dependency NumPy 2.2.6 retained. Windows wheel SHA256 538a359862f4bcfa7a58c019644f78941c94dc66a654be8567054ee9c1fc8f1b; source SHA256 1b93e53cddb67a0e4faa34d6cf919ac6c662feb1c8c0ed901d71b595ab396aa3. WSL build tool Cython 3.1.5 and existing GCC, not a runtime dependency. No dependency upgrade."
+    },
+    {
+      "kind": "runtime-and-method",
+      "modules": [
+        "M06"
+      ],
+      "verification_date": "2026-10-04",
+      "observed_upstream_commit": null,
+      "distribution_status": "license-verified",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/synthesis/resynthesis.py"
+      ],
+      "evidence_files": [
+        "docs/plans/2026-10-04-m06-r4-resynthesis.md"
+      ],
+      "id": "SRC-WORLD",
+      "title": "WORLD (bundled with PyWORLD)",
+      "authors": "Masanori Morise",
+      "year": 2010,
+      "license": "BSD-3-Clause",
+      "urls": {
+        "repository": "https://github.com/mmorise/World",
+        "paper": "https://doi.org/10.1587/transinf.2015EDP7457"
+      },
+      "actual_included_version": "Source bundled in PyWORLD 0.3.5 sdist; upstream commit not embedded",
+      "evidence": "License copied from official pyworld-0.3.5.tar.gz lib/World/LICENSE.txt; CheapTrick/D4C/Harvest/synthesis via unchanged bindings.",
+      "license_file": "third_party/licenses/WORLD-PyWORLD-0.3.5-BSD.txt",
+      "notes": "Bundled C++ WORLD. Retain BSD attribution separately from MIT wrapper. Exact upstream commit remains unknown; no claim that this is the latest WORLD master."
     }
   ]
 }

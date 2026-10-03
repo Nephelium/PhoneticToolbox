@@ -13,7 +13,8 @@ def main():
     out,db,cache=setup();inputs=out/'input';inputs.mkdir();saved=out/'saved';saved.mkdir()
     (inputs/'source.wav').write_bytes((ROOT/'tests/fixtures/m06/source.wav').read_bytes())
     provider=FileProvider();directory=provider.choose('input',lambda:str(inputs));destination=provider.choose('output',lambda:str(saved))
-    with LocalService(db,local_files_root=cache) as service:
+    manifest=json.loads((ROOT/'resources/manifests/acoustic.json').read_text('utf8'))
+    with LocalService(db,local_files_root=cache,reaper_binary=ROOT/manifest['resources'][0]['validation_source']) as service:
         bridge=TaskBridge(provider,service)
         print(json.dumps(dict(ready=True,out=str(out))),flush=True)
         for line in sys.stdin:

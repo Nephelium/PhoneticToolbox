@@ -44,6 +44,14 @@ def preview_files(result, config, settings, first, last, *, cache=None, include_
         shape = visible.shape
         with np.errstate(divide='ignore'): np.log10(visible, out=visible)
         visible *= 10
+        # Same PSD, same visible frequency band. This is a one-shot display
+        # suggestion, not a change to the scientific spectrum or its units.
+        finite = visible[(freq[:rows] <= 5000) & (freq[:rows] >= 0)]
+        finite = finite[np.isfinite(finite)]
+        suggested = None
+        if finite.size:
+            upper = float(np.clip(np.ceil(finite.max()), -110, 20))
+            suggested = (upper-50., upper)
         gray = (255*(1-np.clip((visible-settings.spec_vmin)/(settings.spec_vmax-settings.spec_vmin),0,1))).astype(np.uint8)
         raster = Image.fromarray(np.flipud(gray))
         raster.thumbnail((1024,512), Image.Resampling.BILINEAR)
@@ -51,8 +59,9 @@ def preview_files(result, config, settings, first, last, *, cache=None, include_
         main = dict(cq=series(t,cq), sq=series(t,sq),
             praat=series(result.audio_f0_times,result.audio_f0_values),
             gci_f0=series(result.gci_f0_times,result.gci_f0_values) if settings.keep_gci_f0 else series([],[]),
+            reaper=series(result.reaper_f0_times,result.reaper_f0_values) if settings.keep_reaper_f0 else None,
             spectral_extent=(start,end,0.,rows*cell), spectral_shape=shape,
-            raster_shape=(raster.height,raster.width), png=stream.getvalue())
+            raster_shape=(raster.height,raster.width), suggested_db_range=suggested, png=stream.getvalue())
         if cache is not None:
             cache.clear(); cache[key] = main
     blobs = {'egg_PSD.png':main['png']}

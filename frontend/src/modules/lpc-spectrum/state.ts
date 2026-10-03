@@ -52,6 +52,6 @@ export function parseResult(raw:ArrayBuffer):LpcResult {
   if(!r.selection||!Number.isInteger(r.selection.start_sample)||!Number.isInteger(r.selection.end_sample)||r.selection.end_sample<=r.selection.start_sample||r.selection.interval!=='half-open'||!r.config||typeof r.input_name!=='string'||typeof r.input_sha256!=='string')throw Error('LPC 结果缺少有效时间与来源。');return r;
 }
 export function sameAnalysis(result:LpcResult,config:LpcTaskConfig,sha:string,gridSha:string|null){
-  return result.input_sha256===sha&&result.textgrid_sha256===gridSha&&(['order','freq_max_hz','amp_min_db','amp_max_db','dynamic_y','roi_start','roi_end','tier_name'] as const).every(k=>result.config[k]===config[k]);
+  return result.input_sha256===sha&&result.textgrid_sha256===gridSha&&(['order','freq_max_hz','roi_start','roi_end','tier_name'] as const).every(k=>result.config[k]===config[k]);
 }
 export const jobError=(code:string)=>({lpc_roi_budget:'选区超过 48,000 样本，请缩小范围。',lpc_segment_too_short:'选区过短，请扩大范围或降低阶数。',lpc_solver_failed:'当前选区无法求解 LPC，请检查静音或奇异信号。',lpc_invalid_roi:'时间选区无效，请重新选择。',lpc_textgrid_range:'TextGrid 中有非空标签超出音频范围。请关联匹配的标注，或选择“不关联”后分析。',missing_or_invalid_tier:'TextGrid 层级无效，请重新关联。',lpc_runtime_unavailable:'LPC 计算环境不可用，请重启工作台。',lpc_runtime_mismatch:'LPC 计算环境版本不匹配。',lpc_input_budget:'音频超过 64 MB、800 万帧或 8 声道限制。',lpc_sample_rate:'采样率须在 8–96 kHz 范围内。',font_unavailable:'导出字体不可用，请在工作台设置中检查图表字体。',deadline_exceeded:'计算超时，请缩小选区后重试。',input_unavailable:'源文件已失效，请重新上传或选择。',quota_exceeded:'文件空间不足，请清理项目文件后重试。',invalid_audio:'音频无效或包含不支持的样本。'} as Record<string,string>)[code]??code;

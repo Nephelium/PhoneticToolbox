@@ -18,3 +18,5 @@
 | recover / select_take | 接回已落盘且哈希通过的前缀、标记批次选用版本 |
 
 采集与处理/导出互斥。长处理只启动后台并轮询，不把降噪计算放入桥请求。所有资源 ID 属于当前已授权工程，跨工程粘贴不开放。原始采样是应用收到的 float32，不代表关闭了驱动或系统 AGC。
+
+2026-10-04 M16-R3 只读显示投影补充：`spectrum.time_edges` 为相对当前窗口起点的秒数，长度为时间列数加 1，首尾严格为 0 和 `window_frames / sample_rate`。`times` 为实际 FFT 窗中心，`frequencies` 是未拉伸的实际频率。`max_frequency` 为 5000 与奈奎斯特频率的较小值，`nfft=1024`；`time_sampled` 表示时间单元间隔大于原显示 hop 256 帧。实时最多 128 列，录后最多 640 列。音频工程 schema 不变，新增字段是显示元数据，既有 `rows/frequencies/times` 保留。

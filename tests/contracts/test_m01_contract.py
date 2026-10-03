@@ -105,7 +105,10 @@ def test_catalog_labels_units_and_settings_match_independent_audit():
     for row in audit['parameters']:
         assert PARAMETER_MAPPING[row['key']]==row['export_label']
         assert parameter_unit(row['key'])==row['legacy_unit']
-    assert AcousticSettings().model_dump()=={s['key']:s['default'] for s in audit['settings']}
+    expected={s['key']:s['default'] for s in audit['settings']}
+    # User-authorized M01 defaults; keep the original V2 audit unchanged.
+    expected.update(min_f0=30.,max_f0=800.)
+    assert AcousticSettings().model_dump()==expected
 
 
 @pytest.mark.parametrize('changes,code', [

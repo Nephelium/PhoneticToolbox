@@ -3,8 +3,8 @@ import {projects} from '../platform/browser.ts';
 import {fitPanels,layoutKey,panelWidth,type PanelLimit} from './panelWidths.ts';
 import styles from './resizablePanels.css?inline';
 
-interface Panel extends PanelLimit { selector:string; side:'left'|'right'; label:string; variable?:string }
-export interface PanelLayout { key:string; center:string; centerMin?:number; panels:Panel[]; disabled?:boolean }
+interface Panel extends PanelLimit { selector:string; side:'left'|'right'; label:string; variable?:string; savedVariable?:string }
+export interface PanelLayout { key:string; legacyKey?:string; center:string; centerMin?:number; panels:Panel[]; disabled?:boolean }
 type Store={read<T>(key:string,fallback:T):T;write(key:string,value:unknown):boolean};
 const controllers=new WeakMap<HTMLElement,ReturnType<typeof resizePanels>>();
 
@@ -13,14 +13,14 @@ export function resizePanels(root:HTMLElement,options:PanelLayout,store:Store=pr
   const doc=root.ownerDocument,win=doc.defaultView!;
   if(!doc.querySelector('style[data-panel-resize]')){const style=doc.createElement('style');style.dataset.panelResize='';style.textContent=styles;doc.head.append(style);}
   root.classList.add('resizable-panels');
-  const key=layoutKey(options.key),raw=store.read<unknown>(key,{});
+  const key=layoutKey(options.key),raw=store.read<unknown>(key,null)??(options.legacyKey?store.read<unknown>(layoutKey(options.legacyKey),{}):{});
   const saved=raw&&typeof raw==='object'?raw as Record<string,unknown>:{};
   const entries=options.panels.map(panel=>{
     const variable=panel.variable??'--panel-'+panel.side,handle=doc.createElement('div');
     handle.className='panel-resize-handle';handle.setAttribute('role','separator');handle.setAttribute('aria-orientation','vertical');handle.setAttribute('aria-label',panel.label+'宽度');handle.tabIndex=0;
     handle.title='拖动边界调整宽度；方向键微调，Home / End 调至最小 / 最大';
     root.append(handle);
-    const wanted=panelWidth(saved[variable],panel);
+    const wanted=panelWidth(saved[panel.savedVariable??variable],panel);
     // Each nested layout owns its variables; never inherit the navigation width.
     root.style.setProperty(variable,wanted+'px');
     return {panel,variable,handle,wanted,width:panel.initial,max:panel.max,visible:false};
@@ -58,7 +58,7 @@ export function resizePanels(root:HTMLElement,options:PanelLayout,store:Store=pr
     }
   }
   function persist(){
-    const widths=Object.fromEntries(entries.map(e=>[e.variable,e.wanted]));
+    const widths={...saved,...Object.fromEntries(entries.map(e=>[e.panel.savedVariable??e.variable,e.wanted]))};
     message.textContent=store.write(key,widths)?'':'栏宽未能保存，下次打开可能恢复默认宽度。';
   }
   function finish(cancel=false){

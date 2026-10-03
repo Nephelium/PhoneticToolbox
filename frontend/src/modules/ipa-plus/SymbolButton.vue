@@ -10,9 +10,9 @@ const emit=defineEmits<{insert:[entry:SymbolEntry];inspect:[entry:SymbolEntry];h
   </button>
 </template>
 <style scoped>
-.m17-symbol{min-width:23px;min-height:24px;padding:0 2px;border:1px solid transparent;border-radius:4px;background:transparent;gap:4px;line-height:1;white-space:nowrap;vertical-align:middle;color:var(--text)}
-.m17-symbol>.m17-ipa{font-size:22px;line-height:1;padding:0}
-.m17-symbol.m17-example>.m17-ipa{font-size:20px;color:var(--muted)}
+.m17-symbol{min-width:23px;min-height:24px;padding:0 2px;border:1px solid transparent;border-radius:4px;background:transparent;gap:4px;line-height:1;white-space:nowrap;vertical-align:middle;scroll-margin:48px 8px 8px;color:var(--text)}
+.m17-symbol>.m17-ipa{font-size:calc(var(--m17-font-size,26px) - 6px);line-height:1;padding:0}
+.m17-symbol.m17-example>.m17-ipa{font-size:calc(var(--m17-font-size,26px) - 8px);color:var(--muted)}
 .m17-symbol.m17-selected{border-color:var(--accent);background:var(--selected)}
 .m17-named{justify-content:flex-start;width:100%;text-align:left;min-height:26px}
 .m17-named>.m17-ipa{min-width:45px;text-align:center}

@@ -12,7 +12,7 @@ async function main(){
  page.on('pageerror',e=>errors.push(e.message));
  try{
   const base=server.resolvedUrls.local[0];await page.goto(base);await page.getByRole('button',{name:'设置',exact:true}).click();
-  await page.getByLabel('中文字体',{exact:true}).fill('SimSun');await page.getByLabel('英文与数字字体',{exact:true}).fill('Times New Roman');await page.getByLabel('代码与等宽字体',{exact:true}).fill('Consolas');
+  await page.getByLabel('中文字体',{exact:true}).fill('SimSun');await page.getByLabel('英文与数字字体',{exact:true}).fill('Times New Roman');await page.getByLabel('代码与等宽字体',{exact:true}).selectOption('Consolas');
   assert.equal(await page.getByLabel('IPA 字体').getAttribute('readonly'),'');
   await page.getByRole('button',{name:'应用字体',exact:true}).click();await page.getByRole('status').filter({hasText:'字体已应用'}).waitFor();
   const selected=await page.evaluate(async()=>{const f=await import('/src/state/fonts.ts');return {p:f.preferences.value,payload:f.fontPayload.value};});
