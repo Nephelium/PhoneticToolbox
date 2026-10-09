@@ -1,6 +1,6 @@
 module.exports=async({page,click,loaded,out,rpc,checks,modifier="Control"})=>{
  const fs=require('node:fs/promises'),path=require('node:path'),assert=require('node:assert/strict');
- await rpc({op:'r3_setup'});await click('语音标注对齐');await click('选择语料文件夹');await page.locator('.annotation-file-list button').filter({hasText:'split.wav'}).click();await loaded();
+ await rpc({op:'r3_setup'});await click('TextGrid标注');await click('选择语料文件夹');await page.locator('.annotation-file-list button').filter({hasText:'split.wav'}).click();await loaded();
  const color=()=>page.getByRole('button',{name:'下载当前 TextGrid',exact:true}).evaluate(e=>({background:getComputedStyle(e).backgroundColor,panel:getComputedStyle(e).getPropertyValue('--panel').trim(),transition:getComputedStyle(e).transitionDuration}));
  const before=await color();await page.evaluate(()=>document.documentElement.dataset.theme='dark');await page.clock.runFor(40);const early=await color();await page.clock.runFor(300);const mid=await color();await page.clock.resume();await page.waitForFunction(()=>getComputedStyle(document.querySelector('.annotation-settings button')).backgroundColor==='rgb(24, 36, 50)');const settled=await color();
  await fs.writeFile(path.join(out,'theme-colors.json'),JSON.stringify({before,early,mid,settled},null,2));assert.equal(settled.background,'rgb(24, 36, 50)');checks.push('global button settles at #182432; prior grey screenshot reproduced as theme-transition intermediate state');

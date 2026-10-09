@@ -41,6 +41,7 @@ export function overlayPlot(table:ParameterTable,names:string[],start:number,end
   const ti=table.columns.indexOf('Time_s');
   const stats=names.filter(name=>table.kinds[table.columns.indexOf(name)]==='number').map(name=>{
     const ci=table.columns.indexOf(name);let count=0,sum=0,min=Infinity,max=-Infinity;
+    if(table.stats?.[name]){const s=table.stats[name];return {name,mean:s.mean,min:s.min??Infinity,max:s.max??-Infinity,count:s.count};}
     for(const row of table.rows){const t=row[ti],v=row[ci];if(typeof t!=='number'||t<start||t>end||typeof v!=='number'||!Number.isFinite(v))continue;count++;sum+=Math.abs(v);min=Math.min(min,v);max=Math.max(max,v);}
     return {name,mean:count?sum/count:0,min,max,count};
   });
@@ -54,6 +55,7 @@ export function overlayPlot(table:ParameterTable,names:string[],start:number,end
 export function series(table:ParameterTable,name:string,start:number,end:number,width=900):Point[] {
   const ti=table.columns.indexOf('Time_s'),ci=table.columns.indexOf(name);
   if(ti<0||ci<0||!(end>start))return [];
+  if(table.tracks)return (table.tracks[name]??[]).filter(([t])=>t>=start&&t<=end).map(([time,v])=>({time,value:typeof v==='number'&&Number.isFinite(v)?v:null}));
   const points:Point[]=[];let bucket:Point[]=[];let pixel=-1;
   const flush=()=>{if(!bucket.length)return;let lo=0,hi=0;for(let i=1;i<bucket.length;i++){if(bucket[i].value!<bucket[lo].value!)lo=i;if(bucket[i].value!>bucket[hi].value!)hi=i;}for(const i of [...new Set([0,lo,hi,bucket.length-1])].sort((a,b)=>a-b))points.push(bucket[i]);bucket=[];};
   for(const row of table.rows){const time=row[ti] as number;if(time<start||time>end)continue;const raw=row[ci];const value=typeof raw==='number'&&Number.isFinite(raw)?raw:null;
@@ -63,6 +65,7 @@ export function series(table:ParameterTable,name:string,start:number,end:number,
 }
 export function annotationRuns(table:ParameterTable,name:string,start:number,end:number) {
   const ti=table.columns.indexOf('Time_s'),ci=table.columns.indexOf(name);if(ci<0||ti<0)return [];
+  if(table.tracks){const values=table.tracks[name]??[];return values.flatMap(([t,v],i)=>{const right=values[i+1]?.[0]??end;return t>end||right<start?[]:[{start:Math.max(start,t),end:Math.min(end,right),text:String(v??'')}];});}
   const runs:{start:number;end:number;text:string}[]=[];
   for(let i=0;i<table.rows.length;i++){const row=table.rows[i],left=row[ti] as number,right=(table.rows[i+1]?.[ti] as number|undefined)??end;if(left>end)break;if(right<start)continue;
     const text=String(row[ci]??'');const last=runs.at(-1);if(last&&last.text===text&&last.end===left)last.end=Math.min(end,right);else runs.push({start:Math.max(start,left),end:Math.min(end,right),text});}

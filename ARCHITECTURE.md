@@ -1,149 +1,144 @@
-# PhoneticToolbox v3 架构设计
+# PhoneticToolbox v3 架构
 
-**2026-09-26 追加规划：** [统筹计划](docs/plans/2026-09-26-server-coordination.md)与[远程计算协议提案](docs/specs/remote-compute.md)覆盖旧服务器假设。目标实际 Ubuntu 24.04.2/x86_64、2 vCPU，套餐 4 GiB 但系统可见约 3.4 GiB。以下现行容量要求更新为 1 GB/3 天，运行时代码与现存库尚未迁移；新增跨平台/远程能力均 planned。Windows 科学子进程不视为已可运行于 Linux。
+本页按当前源码说明系统怎样运行，详细实现分别维护在组件架构页。平台能力是否经过验收，查[任务台账](docs/plans/task-ledger.json)和对应报告。本页不保存逐次交付流水，也不把接口存在等同于生产部署完成。
 
-**D0.3 规划基础 / 2026-09-09 / P02 修订。** 已确认产品方向、功能保留、来源署名、登录隔离、5 GB 与 7 天；Windows 开发主线已按 P01 实测和 ADR-013 冻结，其他平台和发行门槛分别保留。
+## 系统与进程
 
-**P02 更新：** P01 Windows 原型与用户试用通过，开发主线已按 ADR-013 冻结；三包与契约的入口见 [开发说明](docs/development.md)。对应发行许可与跨平台实测继续保留独立门槛。
+PhoneticToolbox 使用一套 Vue 工作台，Windows 桌面由 Qt WebEngine 承载。科学计算主要运行于本机服务及其计算子进程，浏览器服务模式通过 HTTP 接入后端；感知实验等客户端能力直接在页面运行。
 
-**P01 实施记录：** 已授权最小原型。Windows 探针使用独立 CPython + PyQt6/Qt WebEngine，资源通过只读自定义 scheme 装载；这是 P01 的单页验证适配，不替代下文 P02/P06 的本地 API 与会话鉴权架构。当前实测结果与冻结边界见 ADR-012 和 P01 报告。
+~~~mermaid
+flowchart TD
+    Entry["源码启动器 / 冻结 EXE"] --> Qt["Qt 宿主 host.py"]
+    Qt --> View["Qt WebEngine：共用 Vue 工作台"]
+    Browser["普通浏览器：同一前端"] --> WebAPI["服务模式 API / 账号与存储"]
+    View --> Channel["QWebChannel：files / updates / papers"]
+    Channel --> Local["自有回环 API：LocalService"]
+    Local --> Worker["任务 worker"]
+    WebAPI --> ServerWorker["服务模式 worker"]
+    Worker --> Science["受控科学子进程 / phonetic_core"]
+    ServerWorker --> Science
+    Channel --> Native["M10 原生声道 / M16 设备与工程"]
+    Channel --> Content["更新与论文服务"]
+    View --> Client["纯客户端状态 / M15 IndexedDB"]
+~~~
 
-## 1. 目标与不可破坏的约束
-- 一套共用 Web 界面：U2 紧凑工作台、全部页面浅/深主题、统一侧栏和标签页。
-- 一个科学核心包，桌面本机与服务器分别安装同版本，独立运行；基础桌面分析不依赖网络登录。
-- 保留 v2 15 模块、83 功能组、80 参数键、14 参数估计设置及现有格式。用户界面可优化，科学语义不能静默改变。
-- 网页面向约 10 位并发研究者，独立登录；各人文件/任务/结果严格隔离，最多 1 GB，数据默认最多 3 天。新政策的实际迁移由 P07-POLICY 单列。
-- 不依赖旧方言站点、旧 FastAPI 工程或开发机 v2 路径。允许经核对后迁移 v2 可用代码和资源。
-- 所有第三方算法、实现、模型和素材有可追溯说明；学术方法与工程集成分别署名。
+图中的服务模式是源码接线，远程部署、数据库版本及计算准入须按实际环境核验。桌面基础分析不要求公网登录。M10 原生状态、M16 设备和 M18 内容分发各有专用通道，不绕道普通批任务队列。
 
-## 2. 总体结构
-```mermaid
-flowchart TB
-  UI["公共前端：页面、主题、图表、编辑状态"]
-  WEB["浏览器：登录、上传、项目结果"]
-  DESK["桌面宿主：窗口、本机文件与设备"]
-  CLOUD["服务器 API：用户、配额、任务、资源"]
-  LOCAL["本地 API / 适配器"]
-  DB["PostgreSQL：用户、额度、任务状态"]
-  W["计算工作进程：隔离原生状态"]
-  CW["本地工作进程"]
-  CORE["同版 phonetic_core 科学核心"]
-  DATA["私有文件存储与定时删除"]
-  UI --> WEB --> CLOUD
-  UI --> DESK --> LOCAL
-  CLOUD --> DB
-  CLOUD --> DATA
-  DB --> W --> CORE
-  LOCAL --> CW --> CORE
-```
-这里的 CORE 表示同源同版本的软件包，不是桌面和服务器共用一个远程实例。
+## 代码地图
 
-## 3. 技术选择及替代方案
-| 层 | 候选方案 | 理由 | 冻结条件 |
-| --- | --- | --- | --- |
-| 前端 | Vue 3 + TypeScript + Vite | 独立工程、组件复用、类型契约；不拷贝旧站构建 | 多轨音频、IPA 字体、选区精度、深浅主题验证 |
-| 桌面宿主 | PyQt6 + Qt WebEngine | 延续 Python/Qt 经验，容纳共用 UI，保留原生音频能力 | 单文件打包、启动/退出、音频设备、许可审查通过 |
-| HTTP | FastAPI + Pydantic | 接口模型可生成 OpenAPI，Python 核心复用 | 本地/服务器同契约测试 |
-| 核心 | Python 3.11 起步、NumPy/SciPy/Parselmouth 等锁定版本 | 先对齐现有 phonetic_311 数值行为 | 可安装 wheel，不依赖 Qt/HTTP/旧路径 |
-| 服务器状态 | PostgreSQL | 原子配额、多用户任务、重启后状态；开发与部署同数据库 | WSL 集成测试、额度竞态、迁移审阅 |
-| 任务调度 | PostgreSQL 任务表 + 独立 worker | 初期无需再运维一个消息中间件；适合有限规模 | 租约、幂等、取消、崩溃恢复测试 |
-| 文件存储 | 本地私有目录 + StorageAdapter | WSL/首台服务器部署简单 | 容量保护、删除/到期/下载鉴权验证 |
-| 大规模扩展 | Celery/专用队列、对象存储 | 作为后续替换接口，当前不先拆微服务 | 实测负载证明有需要再立 ADR |
-
-FastAPI BackgroundTasks 不作为可靠长计算队列；PostgreSQL SKIP LOCKED 可以用于消费者任务表，但租约、重试和结果幂等仍由应用设计。[FastAPI](https://fastapi.tiangolo.com/tutorial/background-tasks/)、[PostgreSQL](https://www.postgresql.org/docs/current/sql-select.html)
-
-Tauri/Electron 和 PySide6 属于宿主比较项，不在未验证前来回切换。不能把 PyQt 的许可等同于 Qt 的许可。[Riverbank](https://www.riverbankcomputing.com/software/pyqt/intro)
-
-## 4. 目录与允许依赖
-```text
-frontend/                     UI 和平台能力客户端
-backend/src/ptb_api/           API、鉴权、配额、服务端存储
-backend/src/ptb_worker/        作业认领、租约、执行与回收
-desktop/src/ptb_desktop/       Qt 宿主、本地启动、设备与目录
-packages/phonetic_core/        algorithms / models / services / ports
-contracts/                    OpenAPI、数据字典、兼容策略
-resources/                    字典、图标、字体、原生组件清单
-third_party/                  来源登记、参考文献、许可文本
-tests/                        parity / contracts / security / packaging / e2e
-docs/                         要求、计划、ADR、设计、验证与发行
-phonetic_toolbox/              原样继承的 v2 迁移来源，逐步退役
-```
-P02 已建立三个包的最小入口、生成契约与正式前端入口；上图中的业务算法、账号、任务与数据库仍按后续任务建立。
-
-依赖只能由外向内：frontend → contracts；backend/desktop → contracts + phonetic_core；phonetic_core 只能依赖标准库、数学/音频库与定义明确的 ports。core 不可反向导入业务外层。服务端和桌面不互相 import。部署/打包逻辑不进算法模块。
-
-科学服务允许编排数组、分段、参数和结果；文件持久化、网络、认证、数据库和设备由外层适配。原 v2 里耦合的文件服务先拆 I/O，再移入科学编排层。不能仅把 GUI 类换个目录就声称完成分层。
-
-## 5. 一套界面的平台能力协议
-| 能力 | 桌面 | 网页 |
+| 目录 | 当前职责 | 详细结构 |
 | --- | --- | --- |
-| FileProvider | 系统选择框；选择结果映射为资源句柄 | 上传或选择自己的项目资源 ID |
-| JobClient | 本地任务状态；退出时协调取消 | 持久服务端任务；关页后可重新登录查看 |
-| AudioController | 常规试听与原生实时音频适配 | 浏览器音频，实验刺激预加载 |
-| CaptureProvider | 本机相机/麦克风与原生模式 | HTTPS 与浏览器授权采集 |
-| ProjectStore | 本机文件夹与配置；不应用网页 3 天清理 | 账号归属、1 GB 和文件过期策略 |
-| CitationProvider | 离线内置来源文本；可选打开官方链接 | 同一版本来源登记与外链 |
+| frontend/ | 公共工作台、模块页面、平台适配、只读说明书阅读器 | [前端架构](frontend/ARCHITECTURE.md) |
+| desktop/ | Qt 宿主、本机文件授权、进程/设备生命周期、更新、论文、启动缓存 | [桌面架构](desktop/ARCHITECTURE.md) |
+| backend/ | FastAPI、账号/资源/任务接口、SQLite/PostgreSQL store、科学任务执行 | [后端架构](backend/ARCHITECTURE.md) |
+| packages/phonetic_core/ | 算法、科学数据模型、纯计算与原生能力 ports | [科学核心](packages/phonetic_core/ARCHITECTURE.md) |
+| contracts/ | API/schema 审阅快照、生成 TypeScript、协议版本与资源身份 | [协议架构](contracts/ARCHITECTURE.md) |
+| resources/、third_party/ | 运行资源、来源登记、许可及对应源码材料 | [资源](resources/ARCHITECTURE.md)、[来源](third_party/ARCHITECTURE.md) |
+| manual/、tools/manual-studio/ | 结构化说明书源工程、独立作者编辑器 | [说明书](manual/README.md)、[作者工具](tools/manual-studio/README.md) |
+| requirements/ | Python 模块依赖声明、版本锁及兼容环境清单 | [清单说明](requirements/README.md) |
+| scripts/、release/ | 开发入口、生成与核验脚本、冻结和发行包装 | [开发](docs/development.md)、[发行](release/README.md) |
+| packages/ptb_node/ | 外部可信节点客户端框架，绑定及科学准入尚有关闭的路径 | [节点架构](packages/ptb_node/ARCHITECTURE.md) |
+| tests/、docs/ | 科学基准、架构/协议/安全等测试；当前规范与历史证据 | [测试](tests/ARCHITECTURE.md)、[文档](docs/README.md) |
+| phonetic_toolbox/、run.py、run.spec | 继承的 v2 代码与资源，仍有实际资源引用 | 清理前查依赖，不能整目录视为无用 |
 
-页面只依赖这些协议，不能 scattered if desktop 分叉出另一套 UI。Web 不接收任意 D:\\ 路径；浏览器文件夹上传不等于服务器能访问本机目录。
+依赖方向为外层到科学核心。前端消费契约和平台接口；backend 与 desktop 分别适配 core，彼此通过受控进程及协议交互。core 不导入 Qt、FastAPI、账号或数据库。发行脚本只组合资源和运行时，不承担科学计算。
 
-## 6. 本地启动、网络与退出
-桌面只装载打包的静态前端，不启动 Vite 开发服务器，不运行 npm，不要求用户安装 Python/Node。
-宿主启动只监听 127.0.0.1 的随机端口服务，建立本次会话随机凭据、精确 Origin/Host 校验和健康握手；前端与 API 尽量同源。随机端口不等于鉴权。
-新窗口使用统一路由；IPA、感知实验、标注、声道不再自行开外部浏览器。
-退出顺序：询问未保存编辑 → 停止新增任务 → 请求本地任务取消 → 关闭相机/声卡 → 停止子进程和服务。只能停止记录的本应用子进程，不能按通用进程名或端口批量杀进程。
-页面外链默认交系统浏览器；第三方手册不进入拥有本地文件权限的宿主页。
-MFA、REAPER、VTL 等进程通过平台适配器启动，参数列表调用、有限超时、取消与错误分类；无全局 PATH 改写。
+## 开发与发行入口
 
-## 7. 数据与科学契约
-- 音频字段以 contracts 为准：sample_rate_hz、channel_roles、sample_count、origin；sample_count 指每声道采样帧数，内部选区使用整数采样点与半开区间 [start,end)。
-- 时间轨迹携带真实时间数组，不用序号冒充时间；输出时间换算只在边界进行。
-- 80 参数键为协议标识，不以中文标签代替。pF0/rF0 等算法来源分别可选。
-- NaN/无声/算法失败不合并：JSON 用 null + validity/reason，禁止非法 NaN；图上留缺口，不补 0 或自动跨无声区平滑。
-- 每任务记录 config_snapshot、core_version、adapter_version、算法后端、source_ids、输入内容校验和、随机种子（如适用）。
-- 显示降采样与计算/导出分开，图表缩放不得改变科研数据。
-- 采样率改变、WAV 量化、TextGrid 起点、毫秒/秒/采样点和缺失值属于回归重点。
-- PKL 为历史兼容格式，服务器不能直接反序列化任意用户 pickle；设计受限兼容读取或安全交换格式，迁移在单独任务审阅。
-- F0 跟踪回退必须记录实际后端；界面不再把 IRAPT 失败回退后的结果仍标成 IRAPT。
+### 开发运行
 
-## 8. 任务、账号与文件生命周期
-详细规范见 [账号与存储](docs/specs/accounts-storage-jobs.md)。
-所有资源必须属于 owner；下载、缩略图、波形、SSE、导出归档和取消同样检查权限。
-目标为 10 人并发交互；当前小服务器在能力验收前不开放重计算，通过准入后最多 1 个服务器计算槽、计算/预览/导出进程组初始合计约 1 GiB。每人 1 个运行任务，可信电脑采用独立节点资源预算和 HTTPS 主动领取。具体值按 P11 实测冻结，不承诺十个重任务同时计算。
-任务状态：queued → running → succeeded / failed / cancelled，并定义 cancel_requested 与 interrupted 的恢复规则。文件的 expired/deleting/delete_failed 是独立资源状态，不混入任务枚举。成功必须在产物写入、额度结算和结果清单提交之后。
-按账号原子预留空间再写文件，新政策实际占用 + 预留不超过 1,000,000,000；删除成功后释放实际额度。临时文件、解压展开和导出 ZIP 都不能绕过配额，另设全站磁盘保护。
-上传默认最多 3 天；科学结果从本次生成成功时起最多 3 天，复制/归档等派生资产不晚于输入期限；访问/下载不续期。账户信息与最少任务审计元数据可保留，原始语料及结果不长期存档。旧 7 天结果须兼容回读，实际存量变更先审阅增量迁移。
-到期不可被活动任务无限延长；任务创建前校验输入剩余有效期。到期自动取消相关未完成引用，不能用重试偷偷续期。
-调度器提前至截止前执行删除；到期 API 无条件拒绝访问。宕机恢复先清理再开放文件访问；记录物理删除延迟与失败，不能只从数据库隐藏文件。
-用户可以删除而不下载；不强制“一定先下载”。下载也不等于主动删除。
+[Start-Research-Workbench.ps1](scripts/Start-Research-Workbench.ps1)接受 home 或 M01–M18，使用已有 .venv/m14 主环境，经 [workbench_source.py](scripts/workbench_source.py)把当前 core/backend/desktop 源码放到导入路径前部并核查模块位置。各模块启动器是同一入口的快捷方式，不维护各自一份业务源码。
 
-## 9. 原生能力与平台边界
-VTL 当前 Windows DLL 不能搬到 Linux/macOS 使用；需保留可重建来源、ABI、架构与原生测试。一个 VTL 实例的状态不应被两个账号共享；采用进程隔离/受控实例池。
-MFA 与模型按平台单独验证；不是随便复制 Windows 环境即可跨平台。
-声道持续发声、摄像头高帧率、麦克风同步、感知实验时序均单独测量。Web 网络往返不参与刺激呈现计时，音频先下载预加载后由客户端计时。
-macOS 当前无实机，构建检查和实际设备通过分开记录；WSL 仅提供 Linux 服务环境证据。
+入口继续调用 [start_m01_workbench.py](scripts/start_m01_workbench.py)。该文件保留早期名称，实际承担共用工作台接线。它读取开发任务库、配置 LocalAcousticFiles 与 REAPER 后运行 Qt host。不会自动安装依赖、重建前端或迁移现存数据库。具体命令与环境见[源码入口说明](docs/development/source-entry.md)。
 
-## 10. 设计、说明书与来源
-设计规范只定义 UI，不为不存在的算法结果配假截图。全部页面有 empty/loading/running/error/cancelled/quota/expired 等适用状态。
-来源登记是一份结构化数据；软件关于页、各模块方法说明、说明书引用、BibTeX 和随包第三方清单从同一来源生成并交叉验证。
-文献存在、代码对应、许可证明确、数值等价是四种独立状态。找到了论文不代表完成代码来源审计，也不代表算法等价已验证。
+第三方依赖有兼容性隔离：主宿主使用 .venv/m14，EGG/LPC 使用 PTB_EGG_PYTHON 指向的 .venv/m03-compatible，唇形使用 PTB_M05_PYTHON 指向的 .venv/m05。环境中的第三方库与当前业务源码是两类对象，不能靠旧 site-packages 项目副本代替源码绑定。
 
-## 11. 失败模式与验证
-| 失败 | 行为与检查 |
-| --- | --- |
-| worker 崩溃 | 租约到期标 interrupted；释放/核对预留；不会出现伪成功结果 |
-| 磁盘不足 | 停止写入并返回可理解错误；不损坏既有产物；触发全局磁盘保护 |
-| 删除失败 | 仍计占用、不可访问，保留重试记录；不提前释放额度 |
-| 数据库不可用 | 暂停提交与新写入；不会只在内存接受丢失的任务 |
-| 刷新/断网 | 后台作业状态可恢复；编辑草稿规则明确；不得重复提交同一幂等请求 |
-| VTL/REAPER 不可用 | capability 报告真实缺失，不显示假可用按钮/曲线 |
-| 跨用户请求 | 资源枚举/下载/日志/取消均拒绝，响应不泄露他人文件名 |
-| 主题/缩放切换 | 不丢编辑、选区和任务状态 |
+### 冻结应用
 
-## 12. 更改控制与冻结
-P01 验证完冻结宿主和图表候选，P02 冻结包边界与接口版本，P03 冻结科学基线。此后改动上述决定需 ADR。
-新增平台、改变默认算法、删除功能、改持久化模型、改身份体系、突破容量保留规则，都不是随手修 UI 的附带修改。
-每个任务有可定位文件、回归样例、文档责任和退出条件。整个工作区遵守 AGENTS.md。
+[build_v3_local_preview.py](scripts/build_v3_local_preview.py)及 release/ 工具冻结同一份业务源码和静态资源。启动入口为 [v3_local_preview_entry.py](scripts/v3_local_preview_entry.py)，按发行清单恢复或复用运行时，再进入 [research_entry.py](scripts/research_entry.py)。
 
-## M15 纯客户端例外（2026-09-27）
+research_entry 在导入 GUI 前处理固定的 --ptb-worker、--local-service、--m10-worker 分派，未知开关拒绝运行。正常路径准备应用自己的本机工作区并打开同一个 Qt host。新建应用工作区与迁移现存研究数据库的授权边界分别处理。
 
-感知实验的配置、刺激读取/解码、调度、问卷、计时、持久化与导出全部在同一 Vue 工作台运行器执行。静态宿主只分发资源，Qt 仅提供既有窗口和本页 blob 原生保存。M15 不接 Python core/API、账号数据库、配额、任务队列或远程节点，P06/P07 通用模板不适用于此模块。IndexedDB 保存本机 Blob 与独立会话，每次提交经事务、revision CAS 与 Web Locks 保护，文件导出为必要交付。按需模块与固定本地 SheetJS/Doulos 资源不依赖 CDN。具体时钟、预算、异常、离线 A/B/C 见 [ADR-M15-001](docs/decisions/ADR-M15-client.md)，验证范围见 [M15 报告](docs/testing/m15-report.md)。
+持久启动缓存按 science、Qt、apps 等内容身份维护，校验后跨版本复用；共享文件优先硬链接，支持复制回退。详细限制、500,000,000 字节上限、MFA 排除及最终成品检查以[严格打包规则](release/PACKAGING_RULES.md)为准。
+
+## 工作台与模块执行方式
+
+模块 ID 与导航分组由 [registry.ts](frontend/src/app/registry.ts)维护。模块具体参数、格式和来源查[模块导航](docs/modules/module-migration.md)，总架构只列执行归属。
+
+| 模块 | 主职责 | 主要执行链 |
+| --- | --- | --- |
+| M01 参数估计 | 参数批处理、联合输入、TextGrid 切分 | ResearchFiles / ResearchTasks → API → acoustic worker → core |
+| M02 参数显示 | 参数表读取、选区与图表 | 文件预览/参数读取适配 → 页面显示 |
+| M03 EGG 信号分析 | EGG 交互、F0、逆滤波及导出 | 预览会话或 egg_analysis 任务 → 隔离科学环境 |
+| M04 LPC 谱图 | LPC、显示与导出 | lpc_analysis 任务及专用科学适配 |
+| M05 唇形提取 | 视频/摄像头输入、唇形跟踪和媒体导出 | M05 port → lip_analysis → 独立唇形环境，设备授权在宿主 |
+| M06 声学参数合成 | Klatt 参数合成、参数提取与连续统 | M06 port → speech_synthesis → core/原生适配 |
+| M07 发声类型合成 | 源信号、F0 与发声类型合成 | M07 port → phonation_synthesis → 科学子进程 |
+| M08 变速变调 | 音高/时长变换及批量导出 | M08 port → pitch_manipulation → core |
+| M09 语谱图转音频 | 图片重建、原音语谱编辑和涂鸦 | 预览适配及 spectrogram_to_audio → core |
+| M10 生理参数合成 | 声道几何、合成、关键帧与录制 | vocalRequest → VocalTractClient → 专用原生进程 |
+| M11 MFA 自动标注 | 模型/词典检查、对齐与 TextGrid | M11 port → mfa_alignment → 登记的外部组件环境 |
+| M12 TextGrid 标注 | 区间/点层编辑、关联和保存 | 页面编辑状态 → AnnotationPort → 本机授权文件或服务资源 |
+| M13 汉字转国际音标 | 字表规则转换、排版和图片导出 | 客户端规则/资源，桌面字体能力补充 |
+| M14 音系归纳 | 字表导入、符号归类、审阅和文档生成 | M14 port → phonology_induction → core 与文档 I/O |
+| M15 感知实验 | 设计、刺激、计时、问卷及结果 | 纯客户端运行器、IndexedDB、导出，无 Python 科学任务 |
+| M16 录音 | 同设备多道采集、处理、版本和导出 | recording 通道 → 本机设备/工程服务，独立后台处理 |
+| M17 国际音标表Plus | 音标目录、输入、介绍与媒体 | 客户端目录/草稿；独立本机内容维护入口 |
+| M18 语音学论文精读 | 双语 PDF、批注、引用和导出 | papers 通道 → 本机论文服务 → 校验后的内容分发 |
+
+同一模块在不同平台可能暴露不同能力。没有桌面桥的浏览器可使用本地预览和已实现的纯客户端流程；账号项目通过 serverFiles 接后端。不能因菜单可见就认定原生设备或服务器计算可用。
+
+## 三条典型数据流
+
+### 科学批任务
+
+1. 页面经 ResearchFiles 获得带 ID、类型、大小和摘要的输入。本机绝对目录由 Qt 授予 DirectoryGrant，服务端使用 owner 下的 asset_id。
+2. 提交 operation、输入摘要、config_snapshot、幂等键。API 验证身份、文件状态、格式与预算，store 固定任务快照。
+3. worker 认领任务，携带 worker_id 与 generation 更新租约/进度；executor 按 operation 选择科学执行器。
+4. 子进程使用受控输入、明确版本与实际算法后端，产物经解析/摘要检查、存储结算和结果清单提交后才发布成功。
+5. 页面读取任务/结果并展示。保存到用户目录是独立导出步骤，取消保存不等于取消已完成的计算。
+
+### 交互预览
+
+波形、参数表、语谱及 EGG 交互走预览接口或会话。视野、分辨率和显示降采样只影响展示；原始采样率、选区帧索引与最终导出语义不随窗口变化。会话关闭、切换输入和迟到响应均由相应页面/平台生命周期处理。长录音不能仅凭显示点数推断已经读取或计算完整原始数据。
+
+### 客户端与原生专用能力
+
+M15 刺激解码、预检、调度和计时留在客户端，网络往返不参与刺激时序。M10 可变原生状态由专用进程隔离，M16 原始采集和工程版本由设备服务持有。M18 内容下载和更新使用宿主服务，PDF 按内容摘要独立保存批注，原文与译文分别管理。
+
+## 持久数据与可再生目录
+
+| 位置 | 实际用途 | 清理边界 |
+| --- | --- | --- |
+| output/validation/p06/local-state.sqlite3 | 当前源码启动器读取的开发任务库 | 不能随验证目录整删，先确认当前入口和保留需求 |
+| output/validation/m01/workbench-local.json 及所指 workbench-cache-* | 源码入口的本机文件/任务缓存位置 | 先查配置和活动任务，再清理可再生内容 |
+| output/validation/m03-runtime 等 | 部分发行准备仍引用的运行时暂存 | 查 release/prepare_runtimes.py 的实际输入 |
+| %LOCALAPPDATA%/PhoneticToolbox/v3/local-preview-20260927 | 当前冻结入口默认的任务/文件工作区 | 名称保留兼容性，不按日期认定过期 |
+| %LOCALAPPDATA%/PhoneticToolbox-v3/workbench | Qt 网页持久存储、偏好与客户端草稿/数据库 | 与普通下载缓存区分，升级保持固定身份 |
+| %LOCALAPPDATA%/PhoneticToolbox/v3/startup-cache | 经内容校验的运行时/应用启动缓存 | 通过应用缓存管理和活动租约处理 |
+| %LOCALAPPDATA%/PhoneticToolbox/v3/updates、papers | 更新状态/下载；论文、首次日期和批注 | 不随启动缓存清理或源码测试清理删除 |
+| 用户选择的录音、工程和导出目录 | 原始研究数据和正式结果 | 由用户管理，测试清理授权不涵盖 |
+| manual/ | 正式可编辑说明书、素材和当前保留的作者历史 | 当前明确保留，生成阅读副本另行处理 |
+| .venv/、node_modules/、dist/、output/build-* | 第三方环境、依赖、成品与构建展开 | 依赖按用途复用，旧包成功换版后按规则清理 |
+
+操作系统路径由 [platform_paths.py](desktop/src/ptb_desktop/platform_paths.py)管理。上述 Windows 两个用户目录是当前兼容布局，未在文档整理中迁移。源码目录中的 papers/ 下载材料也与应用用户目录中的论文服务分开。
+
+项目变大的主要来源是依赖、构建展开、正式媒体和测试副本。规则见[仓库内容管理](docs/development/repository-hygiene.md)：生成长音频和测试工程用后清理，必要摘要留报告，不随每次修改再复制整套工程。Git 忽略不删除磁盘文件，也不自动移除已跟踪内容。
+
+## 科学契约、资源与生成链
+
+- 音频保留真实采样率、声道角色、每道帧数与摘要，选区为整数帧半开区间 [start,end)。轨迹保留真实时间、单位、validity/reason 与实际后端，JSON 中的 null 不能被自动补零。
+- 科研默认值、参数键、时间网格、NaN/无声/失败语义属于版本契约。显示降采样、配色和字体不改变科学输出。
+- 后端源模型经 scripts/generate_contracts.py 生成 contracts 快照，再由 frontend/scripts/generate-contracts.mjs 生成 TypeScript。
+- 参数目录与 third_party/source-registry.json 经 generate-ui-data.mjs 生成前端参数/致谢数据。运行资源还按各自 manifest/source lock 记录文件身份和来源。
+- manual/project.json、chapters/ 与资产经 scripts/manual/ 校验和构建为 frontend/public/manual，再进入前端静态构建。作者编辑器复用阅读组件，普通应用不依赖作者服务。
+- 固定运行资源在 contracts/resource-manifest.json 记录 SHA 与来源，自有交互资源显式标 origin=project。说明书通过单条 generated_resources 声明接入源工程、阅读索引和构建报告核验，不在公共清单反复登记上千个生成文件。scripts/check_architecture.py 核对生成内容、逐文件摘要、缺失/多余文件及联接；干净检出尚未生成的整棵阅读目录可缺省，已有目录必须完整且与源工程一致。
+- 文献引用、代码对应、再分发许可及数值等价分别举证，禁止用一个结论替代其他项。
+
+## 服务模式与当前边界
+
+API 支持 local/server 两种装配，store 有 SQLite 和 PostgreSQL 实现。服务端资源策略中的额度为 1,000,000,000 字节，最长保留期为 259,200 秒，定义在 [storage_policy.py](backend/src/ptb_api/storage_policy.py)。owner、上传预留、删除失败计量、到期及结果发布规则见[存储规格](docs/specs/accounts-storage-jobs.md)，本机用户工程不直接套用网页到期政策。
+
+已有队列、租约、重试、取消及远程协议代码不代表所有部署路径已经联调。ptb_node 仍含 protocol_unavailable/binding_pending 路径。约十位研究者并发交互是容量目标，实际重计算并发受部署配置和实测预算限制，不能据单 worker 或接口字段承诺吞吐。
+
+Windows 源码、浏览器、Qt、冻结 EXE、实体设备和其他平台各自验收。静态源码核对能够说明职责与调用关系，不能证明干净机器运行、自然语料准确性或长期稳定性。验证入口查[策略](docs/testing/verification-plan.md)，取舍查[ADR 索引](docs/decisions/ADR.md)。

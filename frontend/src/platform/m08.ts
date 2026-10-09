@@ -1,5 +1,6 @@
 import type {ResearchFile,JobView} from './research.ts';
-import type {M08Port,Result,Job,Config} from '../modules/pitch-manipulation/port.ts';
+import type {M08Port,Result,Job,Config,ExportReport} from '../modules/pitch-manipulation/port.ts';
+import {m08Archive} from './m08Archive.ts';
 import {sha256} from './research.ts';
 
 type Ref={asset_id:string;sha256:string};
@@ -12,6 +13,7 @@ export interface M08Transport {
  read(job:string,id:string,sha:string):Promise<ArrayBuffer>;
  cancel(id:string):Promise<unknown>;
  export?(result:Managed):Promise<string>;
+ exportMany?(results:Managed[]):Promise<ExportReport>;
 }
 /** Both production adapters use these exact task/ID contracts. No local compute. */
 export function m08Port(transport:M08Transport):M08Port {
@@ -53,6 +55,23 @@ export function m08Port(transport:M08Transport):M08Port {
   async history(file){const ref=await source(file);return (await transport.request<Managed[]>('history',{project_id:transport.project,source:ref})).map(mapped);},
   async save(r){const copy=await wait(await transport.request<JobView>('save',await scope([r.id])));const job=(await jobs()).find(j=>j.id===copy.id);if(!job?.results[0])throw Error('保存结果未发布');const saved=job.results[0];const name=await transport.export?.(results.get(saved.id)!);
    if(name&&name!==saved.name){await transport.request('rename',{...await scope([saved.id]),names:[name]});return mapped({...results.get(saved.id)!,name});}return saved;},
+  async saveMany(selected){
+   if(!selected.length||selected.length>256||new Set(selected.map(r=>r.id)).size!==selected.length)throw Error('请选择 1–256 个不同结果');
+   const values=selected.map(r=>results.get(r.id));if(values.some(r=>!r))throw Error('结果已失效，请刷新');
+   if(transport.exportMany)return transport.exportMany(values as Managed[]);
+   // One download avoids browser multi-download blocking. Keep owner/expiry/hash checks.
+   const files:{name:string;raw:ArrayBuffer}[]=[],used=new Set<string>();let total=0;
+   const saved=[];
+   for(const r of selected){
+    if(!/\.wav$/i.test(r.name)||/[\x00-\x1f/\\:<>"|?*]/.test(r.name))throw Error('无效音频文件名');
+    const raw=await audio(r);total+=raw.byteLength;if(total>64_000_000)throw Error('所选音频超过 64 MB 下载预算，请减少勾选数量');
+    let name=r.name,n=2;while(used.has(name.toLowerCase()))name=r.name.replace(/\.wav$/i,` (${n++}).wav`);
+    used.add(name.toLowerCase());files.push({name,raw});saved.push({id:r.id,name});
+   }
+   const blob=files.length===1?new Blob([files[0].raw],{type:'audio/wav'}):new Blob([m08Archive(files)],{type:'application/zip'});
+   const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=files.length===1?files[0].name:'变速变调_批量音频.zip';a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);
+   return {saved,failed:[]};
+  },
   async remove(ids){return transport.request('remove',await scope(ids));},
   async rename(changes){await transport.request('rename',{...await scope(changes.map(c=>c.id)),names:changes.map(c=>c.name)});return (await jobs()).flatMap(j=>j.results).filter(r=>changes.some(c=>c.id===r.id));},
   async download(r){const bytes=await audio(r),url=URL.createObjectURL(new Blob([bytes],{type:'audio/wav'}));const a=document.createElement('a');a.href=url;a.download=r.name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);},

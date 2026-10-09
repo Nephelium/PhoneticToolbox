@@ -1,7 +1,7 @@
 // P19-R3: owned headless Chrome + existing Vite, no dialogs, tasks or devices.
 const fs=require('node:fs/promises'),path=require('node:path'),assert=require('node:assert/strict'),{pathToFileURL}=require('node:url');
 const root=path.resolve(__dirname,'../..');
-const modules=[['M01','参数估计'],['M02','参数显示'],['M03','EGG 信号分析'],['M04','LPC 谱图'],['M05','唇形提取'],['M06','语音合成'],['M07','发声类型合成'],['M08','变速变调'],['M09','语谱图转音频'],['M11','MFA 自动标注'],['M12','语音标注对齐'],['M13','普通话转 IPA'],['M14','音系归纳'],['M15','感知实验'],['M16','录音'],['M17','国际音标 Plus']];
+const modules=[['M01','参数估计'],['M02','参数显示'],['M03','EGG 信号分析'],['M04','LPC 谱图'],['M05','唇形提取'],['M06','语音合成'],['M07','发声类型合成'],['M08','变速变调'],['M09','语谱图转音频'],['M11','MFA 自动标注'],['M12','TextGrid标注'],['M13','汉字转国际音标'],['M14','音系归纳'],['M15','感知实验'],['M16','录音'],['M17','国际音标表Plus']];
 async function main(){
  const out=path.join(root,'output/validation/p19-r3','chrome-'+Date.now());await fs.mkdir(out,{recursive:true});
  const {createServer}=await import(pathToFileURL(path.join(root,'frontend/node_modules/vite/dist/node/index.js')));
@@ -64,7 +64,7 @@ async function main(){
    await page.getByLabel('按钮高亮').scrollIntoViewIfNeeded();assert(await page.getByLabel('按钮高亮').isVisible());assert(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+2));
   }checks.push('settings accessible at desktop, narrow and 150% zoom');
   await page.setViewportSize({width:1920,height:1080});await page.evaluate(async()=>(await import('/src/state/pageZoom.ts')).setPageScale(100));
-  await page.locator('.nav-item').filter({hasText:'国际音标 Plus'}).click();await set('plain',false);
+  await page.locator('.nav-item').filter({hasText:'国际音标表Plus'}).click();await set('plain',false);
   const selected=active().locator('button[aria-pressed=true]').first();assert.equal(await selected.evaluate(b=>getComputedStyle(b).outlineStyle),'solid');await page.keyboard.press('Tab');await selected.focus();assert(await selected.evaluate(b=>b.matches(':focus-visible')));assert.equal(await selected.evaluate(b=>getComputedStyle(b).outlineWidth),'2px');
   await page.emulateMedia({reducedMotion:'reduce'});await set('all',true);assert.equal(await selected.evaluate(b=>getComputedStyle(b).transitionDuration),'0s');checks.push('plain mode keeps selected outline and keyboard focus; reduced motion disables transitions');
   await page.screenshot({path:path.join(out,'m17-all-dark.png')});

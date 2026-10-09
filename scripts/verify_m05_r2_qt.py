@@ -74,7 +74,7 @@ def main():
         click('参数显示');wait("!!document.querySelector('.m02-page')");click('选择音频目录');wait("!!document.querySelector('.m02-files button')");click('audio_recording.wav')
         wait("[...document.querySelectorAll('.m02-parameters label')].filter(e=>/Lip(Area|Width|Open|Circ)/.test(e.textContent)).length===4")
         click('全选可见参数');click('将 4 项分配到图窗');wait("document.querySelectorAll('.parameter-chart path').length>0");window.grab().save(str(out/'M02.png'))
-        click('语音标注对齐');wait("!!document.querySelector('.annotation-page')");click('选择语料文件夹')
+        click('TextGrid标注');wait("!!document.querySelector('.annotation-page')");click('选择语料文件夹')
         wait("!![...document.querySelectorAll('.annotation-file-list button')].find(e=>e.textContent.includes('audio_recording.wav'))")
         js("[...document.querySelectorAll('.annotation-file-list button')].find(e=>e.textContent.includes('audio_recording.wav')).click()")
         wait("(()=>{const s=document.querySelector('[aria-label=\"唇形记录\"]');return s&&!s.disabled&&s.selectedOptions[0]?.textContent==='audio_recording.lip.json'&&!document.querySelector('.annotation-page').textContent.includes('正在读取音频与标注')})()")

@@ -4,6 +4,10 @@ import type { ResearchFile,DirectoryGrant,Tier } from '../../platform/research.t
 import schema from '../../../../contracts/schemas/acousticrequest.json' with {type:'json'};
 export type Settings=components['schemas']['AcousticSettings'];
 export type SettingKey=keyof Settings;
+export type Extended=components['schemas']['AcousticExtended'];
+export type EggSettings=components['schemas']['JointEggSettings'];
+export const extendedDefaults=():Extended=>({revision:'bounded/1',max_duration_s:1800,audio_channel:null,egg:null,channel_overrides:{}});
+export const eggDefaults=():EggSettings=>({egg_channel:0,storage:'aligned',smooth_ms:20,max_gap_ms:50,derived:false,highpass_cutoff:25,lowpass_cutoff:2000,gci_method:'slope',goi_method:'scale',auto_prominence:true,peak_prominence:.01,valley_prominence:.01,silence_threshold:.01});
 type Rule={default:number|boolean;type:string;minimum?:number;exclusiveMinimum?:number;maximum?:number};
 export const rules=schema.$defs.AcousticSettings.properties as Record<SettingKey,Rule>;
 export const defaults=()=>Object.fromEntries(Object.entries(rules).map(([key,rule])=>[key,rule.default])) as Settings;
@@ -25,15 +29,16 @@ export interface M01State {
  wave:Workspace;files:ResearchFile[];selected:string;marked:string[];associations:Record<string,Association>;
  input:DirectoryGrant|null;output:DirectoryGrant|null;associationDirectory:DirectoryGrant|null;lipDirectory:DirectoryGrant|null;sameDirectory:boolean;recursive:boolean;
  settings:Settings;settingsDraft:Settings;parameterDraft:string[];drawer:''|'parameters'|'settings';
+ extended:Extended;channelOverrides:Record<string,number>;
  saved:string;loadVersion:number;listVersion:number;
 }
-export function createState(saved?:{parameters?:string[];settings?:Settings}):M01State {
+export function createState(saved?:{parameters?:string[];settings?:Settings;extended?:Extended}):M01State {
  const settings=saved?.settings&&!validateSettings(saved.settings)?{...saved.settings}:defaults();
  const parameters=saved?.parameters?.length&&saved.parameters.every(k=>parameterKeys.includes(k as never))?[...new Set(saved.parameters)]:[...parameterKeys];
  const state:M01State={wave:{asset:null,start:0,end:0,channel:0,parameters,dirty:false,error:'',loading:false,zoom:1,offset:0},files:[],selected:'',marked:[],associations:{},input:null,output:null,associationDirectory:null,lipDirectory:null,sameDirectory:true,recursive:false,
-   settings,settingsDraft:{...settings},parameterDraft:[...parameters],drawer:'',saved:'',loadVersion:0,listVersion:0};state.saved=draftJson(state);return state;
+   extended:{...extendedDefaults(),...saved?.extended,channel_overrides:{}},channelOverrides:{},settings,settingsDraft:{...settings},parameterDraft:[...parameters],drawer:'',saved:'',loadVersion:0,listVersion:0};state.saved=draftJson(state);return state;
 }
-export function draftJson(state:M01State){return JSON.stringify({parameters:state.wave.parameters,settings:state.settings});}
+export function draftJson(state:M01State){return JSON.stringify({parameters:state.wave.parameters,settings:state.settings,extended:state.extended});}
 export function dirty(state:M01State){return draftJson(state)!==state.saved|| (state.drawer==='settings'&&JSON.stringify(state.settingsDraft)!==JSON.stringify(state.settings))||(state.drawer==='parameters'&&JSON.stringify(state.parameterDraft)!==JSON.stringify(state.wave.parameters));}
 export function applyParameters(state:M01State,keys:string[]){if(!keys.length||new Set(keys).size!==keys.length||keys.some(k=>!parameterKeys.includes(k as never)))throw Error('请至少选择一个有效参数，且不能重复。');state.wave.parameters=[...keys];state.drawer='';state.wave.dirty=dirty(state);}
 export function applySettings(state:M01State,value:Settings){const error=validateSettings(value);if(error)throw Error(error);state.settings={...value};state.drawer='';state.wave.dirty=dirty(state);}

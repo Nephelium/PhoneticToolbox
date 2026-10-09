@@ -42,7 +42,7 @@ const resize=computed(()=>({key:props.stateKey+'.workbench',legacyKey:props.lega
 .workbench-left>:deep(*),.workbench-center>:deep(*),.workbench-right-body>:deep(*){min-width:0;flex-shrink:0}
 .workbench-right{display:flex;flex-direction:column;gap:var(--control-gap);min-width:0;min-height:0;border-left:1px solid var(--border);padding-left:var(--module-gap)}
 .workbench-right-heading{display:flex;align-items:center;justify-content:space-between;gap:var(--control-gap);flex:none;color:var(--text)}
-.workbench-right-heading button{width:30px;padding:2px;flex:none;font-size:20px;line-height:1}
+.workbench-right-heading button{width:30px;padding:2px;flex:none;font-size:1.428571rem;line-height:1}
 .workbench-right-body{flex:1}
 .right-collapsed{grid-template-columns:var(--panel-left,240px) minmax(0,1fr) 42px}
 .without-left{grid-template-columns:minmax(0,1fr) var(--panel-right,300px)}

@@ -30,8 +30,9 @@ export async function play(asset:AudioAsset,start:number,end:number,selectedChan
     buffer.copyToChannel(new Float32Array(asset.channels[selectedChannel]),0);
     source=context.createBufferSource();gain=context.createGain();gain.gain.value=playback.volume;
     source.buffer=buffer;source.connect(gain).connect(context.destination);
-    origin=Math.max(0,start);limit=Math.min(end,asset.duration);started=context.currentTime;
+    const audioOrigin=asset.originSeconds??0;
+    origin=Math.max(audioOrigin,start);limit=Math.min(end,asset.duration,audioOrigin+asset.frames/asset.sampleRate);started=context.currentTime;
     source.onended=()=>{playback.playing=false;playback.position=limit;cancelAnimationFrame(raf);source?.disconnect();source=undefined;gain?.disconnect();gain=undefined;};
-    source.start(0,origin,Math.max(0,limit-origin));playback.position=origin;playback.playing=true;tick();
+    source.start(0,origin-audioOrigin,Math.max(0,limit-origin));playback.position=origin;playback.playing=true;tick();
   }catch(error){if(request!==generation)return;stop();playback.error=error instanceof Error?error.message:'播放失败，请检查输出设备。';}
 }

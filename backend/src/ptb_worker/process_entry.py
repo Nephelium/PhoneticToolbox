@@ -3,11 +3,12 @@ import runpy
 import sys
 
 MODULES = frozenset({
+    'ptb_worker.acoustic_stream_child', 'ptb_worker.parameter_bundle_child',
     'ptb_worker.m06_child',
     'ptb_worker.m07_child',
     'ptb_worker.m14_child',
     'ptb_worker.m08_child', 'ptb_worker.cli', 'ptb_worker.core_child', 'ptb_worker.science_child',
-    'ptb_worker.segment_child', 'ptb_worker.spec2wav_child',
+    'ptb_worker.segment_child', 'ptb_worker.spec2wav_child', 'ptb_worker.spec2wav_preview',
     'ptb_worker.spectrogram_preview', 'ptb_worker.parameter_preview',
     'ptb_worker.legacy_conversion', 'ptb_worker.io.export_worker',
 })

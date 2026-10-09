@@ -17,3 +17,9 @@ def user_data_root(*, platform=None, environ=None, home=None):
         base=candidate if candidate.is_absolute() else home/'.local/share'
     else:raise ValueError('Unsupported desktop platform')
     return base/'PhoneticToolbox/v3'
+
+
+def windows_workbench_storage(*, environ=None, home=None):
+    # Keep the existing Qt application-name directory across executable names.
+    # Resolve from the same current-user base as the updater and task storage.
+    return user_data_root(platform='win32',environ=environ,home=home).parents[1]/'PhoneticToolbox-v3/workbench'

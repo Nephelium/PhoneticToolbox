@@ -21,7 +21,7 @@ export function setupPitch({initialCurve=[],getFrames,onChange,isBusy}){
     for(let i=0;i<=2;i++){c.textAlign=i===0?'left':i===2?'right':'center';c.fillText((total()*i/2).toFixed(2)+' s',x(i/2),h-3);}c.textAlign='left';
     for(const f of frameIntervals(getFrames())){
       const left=x(f.start/total()),right=x(f.end/total());
-      c.fillStyle=f.silent?'#7b879540':f.index%2?'#39877916':'#39877908';c.fillRect(left,0,right-left,h-bottom);
+      c.fillStyle=f.silent?(tint('#7b877a')+'40'):tint(f.index%2?'#39877916':'#39877908');c.fillRect(left,0,right-left,h-bottom);
       c.strokeStyle=tint('#adbaaf');c.setLineDash([2,3]);c.beginPath();c.moveTo(left,0);c.lineTo(left,h-bottom);c.moveTo(right,0);c.lineTo(right,h-bottom);c.stroke();c.setLineDash([]);
       c.save();c.beginPath();c.rect(left+2,0,Math.max(0,right-left-4),42);c.clip();c.fillStyle=tint('#51756b');c.textAlign='center';c.font=canvasFont(11,true);c.fillText(f.name,(left+right)/2,16);c.font=canvasFont(10);c.fillText(`${f.start.toFixed(2)}–${f.end.toFixed(2)} s`,(left+right)/2,32);c.restore();
     }

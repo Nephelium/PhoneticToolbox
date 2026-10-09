@@ -9,7 +9,7 @@ export function normalizeHex(value:unknown):string|null {
 }
 export function normalizeWaveformAppearance(value:unknown):WaveformAppearance {
  const saved=value&&typeof value==='object'&&!Array.isArray(value)?value as Record<string,unknown>:{};
- return {mode:saved.mode==='theme'||saved.mode==='custom'?saved.mode:'blue',custom:normalizeHex(saved.custom)??'#2463eb'};
+ return {mode:saved.mode==='blue'||saved.mode==='custom'?saved.mode:'theme',custom:normalizeHex(saved.custom)??'#2463eb'};
 }
 export function waveformCss(value:WaveformAppearance){return value.mode==='custom'?value.custom:value.mode==='theme'?'var(--accent)':'var(--wave)';}
 /** Preserve the established blue print palette unless a color is explicitly chosen. */

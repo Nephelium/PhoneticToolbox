@@ -11,7 +11,19 @@ class ImagePoint(WireModel):
     y:float=Field(ge=0,le=1)
 
 
+class SpectralStroke(WireModel):
+    color:Literal[0,255]=0
+    size:int=Field(default=12,ge=1,le=100)
+    opacity:float=Field(default=1,ge=0,le=1)
+    points:list[ImagePoint]=Field(min_length=1,max_length=4096)
+
+
 class Spec2WavConfig(WireModel):
+    mode:Literal['image','image_draw','audio_draw']='image'
+    strokes:list[SpectralStroke]=Field(default_factory=list,max_length=256)
+    channel:int=Field(default=0,ge=0,le=1)
+    audio_fft:Literal[512,1024,2048]=1024
+    dynamic_range:float=Field(default=60,ge=20,le=120)
     time_start:float=Field(default=0,ge=0,le=86400)
     time_end:float=Field(default=1,gt=0,le=86430)
     freq_start:float=Field(default=0,ge=0,lt=48000)
@@ -27,7 +39,14 @@ class Spec2WavConfig(WireModel):
     @model_validator(mode='after')
     def ranges(self):
         if not (0<self.time_end-self.time_start<=30 and self.freq_start<self.freq_end and self.min_db<self.max_db):raise ValueError('Invalid calibration range')
+        if sum(len(s.points) for s in self.strokes)>8192:raise ValueError('Stroke budget exceeded')
+        if self.mode=='image' and self.strokes:raise ValueError('Image mode does not accept strokes')
+        if self.mode=='audio_draw' and self.corners:raise ValueError('Audio does not accept image calibration')
         return self
+
+    def snapshot(self):
+        # Preserve legacy request hashes and retries when no new mode is selected.
+        return self.model_dump(exclude={'mode','strokes','channel','audio_fft','dynamic_range'} if self.mode=='image' else set())
 
 
 class Spec2WavRequest(WireModel):
@@ -36,6 +55,22 @@ class Spec2WavRequest(WireModel):
     idempotency_key:IdempotencyKey
     image:AcousticAssetRef
     config:Spec2WavConfig
+
+
+class Spec2WavPreview(WireModel):
+    image_base64:str
+    width:int
+    height:int
+    source_sha256:str
+    sample_rate:int|None=None
+    samples:int|None=None
+    channels:int|None=None
+    channel:int|None=None
+    duration:float|None=None
+    n_fft:int|None=None
+    hop_length:int|None=None
+    dynamic_range:float|None=None
+    reference_amplitude:float|None=None
 
 
 from .storage_policy import PolicyVersion, LEGACY_POLICY_VERSION

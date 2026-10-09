@@ -71,7 +71,7 @@ def main():
         assert bridge.service.capture.config['roles'] == ['microphone', 'microphone']
         assert bridge.service.capture.task is None
         report['checks'].append('untouched default captures two audio inputs without a task or implicit EGG role')
-        report['navClick']=js('(()=>{const e=[...document.querySelectorAll(".nav-item")].find(e=>e.title==="国际音标 Plus");if(!e)return "missing";e.click();return e.outerHTML})()')
+        report['navClick']=js('(()=>{const e=[...document.querySelectorAll(".nav-item")].find(e=>e.title==="国际音标表Plus");if(!e)return "missing";e.click();return e.outerHTML})()')
         until('document.querySelector(".m17-body")?.dataset.loaded==="true"')
         assert js('document.querySelector("#tab-M17").getAttribute("aria-selected")') == 'true'
         assert bridge.capturing

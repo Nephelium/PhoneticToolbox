@@ -3,10 +3,17 @@ import ast
 import hashlib
 import json
 import re
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from manual.resources import check_generated_manual, safe_path
+
 LEGACY = re.compile(r'phonetic_toolbox|PhoneticToolbox_v2|dialect[_-]?(?:web|api)', re.I)
+# Reviewed array-only OpenCV operations used by M09. No module namespace,
+# wildcard, dynamic import, file codecs, camera/video or window API in core.
+CORE_CV2_SYMBOLS = frozenset({'LINE_8', 'circle', 'getPerspectiveTransform', 'line', 'warpPerspective'})
 DENIED = {
     'core': {'PyQt6', 'PySide6', 'fastapi', 'starlette', 'pydantic', 'ptb_api', 'ptb_desktop',
              'requests', 'httpx', 'http', 'urllib', 'socket', 'sqlite3', 'sqlalchemy', 'psycopg',
@@ -28,6 +35,11 @@ def check_python(code, layer):
         if isinstance(node, ast.Import):
             names = [item.name for item in node.names]
         elif isinstance(node, ast.ImportFrom):
+            if layer == 'core' and node.level == 0 and node.module == 'cv2':
+                for item in node.names:
+                    if item.name not in CORE_CV2_SYMBOLS:
+                        errors.append('forbidden core OpenCV symbol: ' + item.name)
+                continue
             names = [node.module or ''] + [item.name for item in node.names]
         elif isinstance(node, ast.Call):
             func = node.func
@@ -60,19 +72,51 @@ def check_assets(root, manifest, source_ids):
     errors, registered = [], set()
     for item in manifest['resources']:
         relative = item['path']
-        path = (root / relative).resolve()
-        if not path.is_relative_to(root.resolve()):
-            errors.append('resource outside workspace: ' + relative)
+        try:
+            path = safe_path(root, relative)
+        except (ValueError, OSError) as exc:
+            errors.append('invalid resource path: ' + str(relative) + ': ' + str(exc))
             continue
+        if relative in registered:
+            errors.append('duplicate resource: ' + relative)
         registered.add(relative)
         if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != item['sha256']:
             errors.append('resource hash mismatch: ' + relative)
-        if item['source_id'] not in source_ids:
+        if item.get('origin') == 'project':
+            if item.get('source_id') or not item.get('description'):
+                errors.append('invalid project resource provenance: ' + relative)
+        elif item.get('source_id') not in source_ids:
             errors.append('unknown resource source: ' + relative)
+    generated_paths = set()
+    for declaration in manifest.get('generated_resources', []):
+        relative = declaration.get('path', '')
+        if declaration.get('kind') != 'manual-reader' or relative != 'frontend/public/manual':
+            errors.append('unknown generated resource declaration: ' + relative)
+            continue
+        if relative in generated_paths:
+            errors.append('duplicate generated resource declaration: ' + relative)
+        generated_paths.add(relative)
+        problems, files = check_generated_manual(root, declaration)
+        errors.extend(problems)
+        registered.update(files)
     for folder in ['frontend/public', 'frontend/src/assets', 'desktop/src/ptb_desktop/assets', 'packages/phonetic_core/src/phonetic_core/assets']:
-        for file in (root / folder).rglob('*'):
-            if file.is_file() and file.relative_to(root).as_posix() not in registered:
-                errors.append('unregistered resource: ' + file.relative_to(root).as_posix())
+        try:
+            start = safe_path(root, folder)
+            pending = [start] if start.is_dir() else []
+            while pending:
+                for file in pending.pop().iterdir():
+                    relative = file.relative_to(root).as_posix()
+                    try:
+                        safe_path(root, relative)
+                    except (ValueError, OSError) as exc:
+                        errors.append('invalid resource path: ' + relative + ': ' + str(exc))
+                        continue
+                    if file.is_dir():
+                        pending.append(file)
+                    elif file.is_file() and relative not in registered:
+                        errors.append('unregistered resource: ' + relative)
+        except (ValueError, OSError) as exc:
+            errors.append('resource scan failed: ' + folder + ': ' + str(exc))
     return errors
 
 

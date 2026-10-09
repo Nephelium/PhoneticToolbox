@@ -15,16 +15,21 @@ def main():
     provider=FileProvider();directory=provider.choose('input',lambda:str(inputs));destination=provider.choose('output',lambda:str(saved))
     with LocalService(db,local_files_root=cache) as service:
         bridge=TaskBridge(provider,service)
+        output_mode='normal';fail_export=None
         print(json.dumps(dict(ready=True,out=str(out))),flush=True)
         for line in sys.stdin:
             request=json.loads(line);body=request['body']
             try:
-                if request['channel']=='task':value=bridge.invoke(body)
+                if request['channel']=='test':
+                    output_mode=body.get('output_mode','normal');fail_export=body.get('fail_export');value=True
+                elif request['channel']=='task':
+                    if body.get('op')=='m08_export' and body.get('id')==fail_export:raise OSError('M08 test disk unavailable')
+                    value=bridge.invoke(body)
                 else:
                     op=body['op']
                     if op=='hello':value=dict(kind='desktop',session=provider.session,api_version='1.1.0',tasks=True)
                     elif op=='fonts':value=['Arial','Microsoft YaHei','Doulos SIL']
-                    elif op=='choose':value=destination if body['purpose']=='output' else directory
+                    elif op=='choose':value=(None if output_mode=='cancel' else destination) if body['purpose']=='output' else directory
                     elif op=='list':value=provider.list(body.get('id') or directory['id'])
                     elif op=='read':
                         raw,sha=provider.read(body['id']);value=dict(base64=base64.b64encode(raw).decode(),sha256=sha)

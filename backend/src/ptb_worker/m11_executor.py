@@ -21,6 +21,7 @@ def execute_claim(store,claim,worker_id,stop,*,evidence=None):
     snapshot=json.loads(claim['snapshot']);request=snapshot['request']
     done=threading.Event();abort=threading.Event();stage=['preparing'];resource=evidence if evidence is not None else {}
     root=registry_root()/'attempts'/f'{claim["id"]}-{claim["generation"]}-{uuid4().hex}'
+    retention=None;attempt_registered=False;runtime_invoked=False
     def pulse():
         while not done.is_set():
             try:
@@ -37,6 +38,8 @@ def execute_claim(store,claim,worker_id,stop,*,evidence=None):
         runtime,model=select(request['runtime_id'],request['model_id'],stop=cancelled)
         if (runtime['fingerprint'],model['model_sha256'],model['dictionary_sha256'])!=(snapshot['runtime_fingerprint'],snapshot['model_sha256'],snapshot['dictionary_sha256']):raise ValueError('m11_component_changed')
         no_links(root);root.mkdir(parents=True)
+        from .local_retention import LocalRetention
+        retention=LocalRetention(files);retention.register_mfa_attempt(root,identity);attempt_registered=True
         if shutil.disk_usage(root).free<TEMP_BYTES+64_000_000:raise ValueError('m11_temp_space')
         corpus=root/'corpus';corpus.mkdir()
         by_id={s['id']:s for s in snapshot['input_assets']}
@@ -68,8 +71,9 @@ def execute_claim(store,claim,worker_id,stop,*,evidence=None):
                 current=store._row(tx,claim['id'])
                 if current and current['worker_id']==worker_id and current['generation']==claim['generation']:
                     store._event(tx,current,'m11_'+value,tx.now())
+        runtime_invoked=True
         result=run(runtime['path'],root,dict(action='align',model=str(model_path),dictionary=str(dictionary),
-                   config=request['config'],expected_files=len(expected)),stop=cancelled,progress=progress,evidence=resource)
+                   config=request['config'],expected_files=len(expected),kernel_cache_key=runtime['fingerprint']),stop=cancelled,progress=progress,evidence=resource)
         outputs=[]
         for relative,name in expected.items():
             path=root/'output'/relative
@@ -80,7 +84,7 @@ def execute_claim(store,claim,worker_id,stop,*,evidence=None):
             model=dict(id=model['id'],sha256=digest(model_path)),dictionary_sha256=digest(dictionary),
             config=request['config'],inputs=request['corpus'],source_ids=['SRC-MFA','REF-MFA'],
             adaptation='ADR-M11-001',database='per-attempt-sqlite',resources=resource,
-            textgrids=result['textgrids'],warnings=result.get('warnings',[]))
+            textgrids=result['textgrids'],warnings=result.get('warnings',[]),execution=result.get('execution'),timings=result.get('timings'),transcript_adaptations=result.get('transcript_adaptations',[]))
         outputs.append(('m11-provenance.json',json.dumps(provenance,ensure_ascii=False,allow_nan=False).encode()))
         if sum(len(raw) for _,raw in outputs)>64_000_000:raise ValueError('m11_output_budget')
         for name,raw in outputs:
@@ -101,3 +105,10 @@ def execute_claim(store,claim,worker_id,stop,*,evidence=None):
         done.set()
         if thread.ident is not None:thread.join(timeout=6)
         if root.exists():atomic_json(root/'resources.json',resource)
+        if (attempt_registered and not thread.is_alive() and
+                (not runtime_invoked or resource.get('group_cleaned') is True)):
+            try:retention.complete_mfa_attempt(root,identity)
+            except Exception:
+                # A failed diagnostic receipt remains incomplete and protected.
+                # It must never turn a published alignment into a false failure.
+                pass

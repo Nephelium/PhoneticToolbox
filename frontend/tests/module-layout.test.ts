@@ -7,8 +7,8 @@ import ts from 'typescript';
 import {createSSRApp,h} from 'vue';
 import {renderToString} from '@vue/server-renderer';
 
-const require=createRequire(import.meta.url);
 function component(name:string){
+ const require=createRequire(new URL(`../src/components/${name}.vue`,import.meta.url));
  const source=readFileSync(new URL(`../src/components/${name}.vue`,import.meta.url),'utf8');
  const {descriptor}=parse(source),compiled=compileScript(descriptor,{id:name,inlineTemplate:true});
  const js=ts.transpileModule(compiled.content,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;

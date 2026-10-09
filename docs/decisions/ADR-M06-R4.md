@@ -1,5 +1,7 @@
 # ADR-M06-R4：保留原录音信息的可选重合成
 
+**Superseded by M06-R5（2026-10-04）：** 井井随后要求移除本模块 WORLD/PSOLA 及 Harvest。以下仅保留历史实施/验证记录，不代表当前可用功能。见 [R5 报告](../testing/2026-10-04-m06-r5-report.md)。
+
 日期：2026-10-04。状态：accepted，已实施；验证限定 Windows 开发态与 WSL 纯核心。井井在阅读 [M06-R3 核查](../references/m06-r3-resynthesis-audit.md)后要求按报告修改。
 
 ## 决策
@@ -23,7 +25,7 @@
 
 输入/输出各限 0.1–10 秒、480000 样本，目标时长比 0.5–2。WORLD 限 16–48 kHz；两条新路径的 F0 范围及非零目标 F0 限 40–1000 Hz。WORLD 在分配谱矩阵前限制 `max(源帧数,目标帧数) × 频率格数 <= 1000000`，可能比总时长上限更早拒绝高采样率/低 F0 的组合。源 WAV 沿用 8 MB 准入，worker 输入包 16 MB、结果包 24 MB。缺依赖、范围超限或算法失败均显式报错，无静默回退/重采样。
 
-PyWORLD 是可选依赖，精确哈希见 [锁文件](../../requirements-m06-world-additions.lock)。本次只安装到现有项目 `.venv/m09-ui` 及既有 WSL M06 环境；WSL 另用 Cython 3.1.5 和已有 GCC 构建。没有全局安装、系统配置变更或修改其他模块环境。封装 MIT 与所附 WORLD BSD 许可分别保存，实际归档内未提供精确 WORLD commit，保持 unknown。来源登记 `SRC-PYWORLD`、`SRC-WORLD`，已有 Praat/REAPER 来源保留。
+PyWORLD 是可选依赖，精确哈希见 历史锁文件 `requirements-m06-world-additions.lock`（已随功能移除）。本次只安装到现有项目 `.venv/m09-ui` 及既有 WSL M06 环境；WSL 另用 Cython 3.1.5 和已有 GCC 构建。没有全局安装、系统配置变更或修改其他模块环境。封装 MIT 与所附 WORLD BSD 许可分别保存，实际归档内未提供精确 WORLD commit，保持 unknown。来源登记 `SRC-PYWORLD`、`SRC-WORLD`，已有 Praat/REAPER 来源保留。
 
 ## 证据与限制
 

@@ -85,7 +85,7 @@ def main():
         'import phonetic_core,importlib.util,json; assert importlib.util.find_spec("fastapi") is None; '
         'assert importlib.util.find_spec("PyQt6") is None; '
         'print(json.dumps({"version":phonetic_core.__version__,"file":phonetic_core.__file__}))'], cwd=OUTPUT)
-    run('locked-install', ['uv', 'pip', 'install', '--python', clean_python, '--require-hashes', '-r', ROOT / 'requirements-v3-dev.lock'])
+    run('locked-install', ['uv', 'pip', 'install', '--python', clean_python, '--require-hashes', '-r', ROOT / 'requirements/requirements-v3-dev.lock'])
     run('api-desktop-install', ['uv', 'pip', 'install', '--python', clean_python, '--no-index', '--find-links', wheels,
                               'ptb-api==' + version, 'ptb-desktop==' + version])
     run('pip-check', ['uv', 'pip', 'check', '--python', clean_python])

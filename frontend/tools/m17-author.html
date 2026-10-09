@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>音标内容维护</title><link rel="stylesheet" href="/__m17_author/editor.css"></head>
+<body><header><div><h1>音标内容维护</h1><p>选择音标，编辑介绍与演示配置。保存后供下次应用构建使用。</p></div><button id="stop">关闭维护工具</button></header>
+<main><aside><input id="search" type="search" aria-label="检索音标" placeholder="符号、名称或ID"><select id="entries" size="22" aria-label="选择音标"></select></aside>
+<section><div class="heading"><h2 id="title">正在读取…</h2><small id="id"></small></div>
+<form id="form"><div class="two"><label>中文名称<input name="nameZh"></label><label>英文名称<input name="nameEn"></label></div>
+<label>含义<textarea name="descriptionZh" rows="4"></textarea></label><label>用法<textarea name="usageZh" rows="3"></textarea></label><label>区别与补充<textarea name="contrastZh" rows="3"></textarea></label><label>自写内容<textarea name="notesZh" rows="5"></textarea></label>
+<div class="two"><label>音频路径<input name="audio" placeholder="m17-media/example.wav"></label><label>视频路径<input name="video" placeholder="m17-media/example.mp4"></label></div>
+<p class="hint">素材放在 frontend/public 内，此处填写相对路径。音频和视频可以同时填写。</p>
+<label>实时动画配置（JSON，可留空）<textarea name="animation" rows="5" placeholder='{"renderer":"vocal-tract","version":1,"config":{}}'></textarea></label>
+<p class="hint">实时动画需在应用中登记对应渲染接口。这里保存配置，素材和动画实现另行添加。</p>
+<div class="actions"><button id="save" type="submit">保存此音标</button><button type="button" id="reset">恢复该项原介绍</button><span id="status" role="status"></span></div></form>
+<details><summary>内容预览</summary><article id="preview"></article></details>
+</section></main><script type="module" src="/__m17_author/editor.js"></script></body></html>

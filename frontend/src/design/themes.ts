@@ -3,7 +3,7 @@ export type ColorMode='light'|'dark';
 export type ThemeMode=ColorMode|'system';
 type Seed=readonly [background:string,foreground:string,accent:string];
 export interface Palette {id:string;name:string;light:Seed;dark:Seed}
-export const DEFAULT_PALETTE='everforest';
+export const DEFAULT_PALETTE='codex';
 export const palettes:Palette[]=[
  {id:'absolutely',name:'Absolutely',light:['#faf9f6','#34322f','#a94f31'],dark:['#202020','#e6e2dc','#e59b77']},
  {id:'ayu',name:'Ayu',light:['#fafafa','#575f66','#a76500'],dark:['#0b0e14','#bfbdb6','#e6b450']},

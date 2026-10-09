@@ -9,7 +9,7 @@ async function main(){
  const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
  const page=await browser.newPage({viewport:{width:1920,height:1000}}),results=[],errors=[];page.on('pageerror',e=>errors.push(e.message));
  try{await page.goto(server.resolvedUrls.local[0]);
- for(const [id,name] of [['M11','MFA 自动标注'],['M12','语音标注对齐'],['M13','普通话转 IPA'],['M14','音系归纳'],['M15','感知实验']]){
+ for(const [id,name] of [['M11','MFA 自动标注'],['M12','TextGrid标注'],['M13','汉字转国际音标'],['M14','音系归纳'],['M15','感知实验']]){
   await page.locator('.nav-item').filter({hasText:name}).click();await page.waitForTimeout(300);
   const active=page.locator('.module-frame:visible');await active.getByRole('button',{name:id==='M12'?'方法与引用':id==='M13'?'帮助与来源':'方法与来源',exact:true}).click();await page.getByRole('dialog').waitFor();await page.keyboard.press('Escape');results.push({id,methodDialog:true});
   const center=page.locator(id==='M12'?'.annotation-editor':id==='M13'?'.m13-result-section':'.workbench-center:visible');const before=await center.boundingBox();

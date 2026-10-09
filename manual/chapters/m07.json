@@ -1,0 +1,3732 @@
+{
+  "schemaVersion": "ptb-manual-chapter/1",
+  "id": "m07",
+  "title": "发声类型合成",
+  "moduleId": "M07",
+  "body": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-purpose",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "选择源音频与目标音频"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-purpose-method",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "先确定要改变什么"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "准备两份短 WAV，就可以逐级改变 F0、发声类型，或同时改变两者。每组以当前方向源音频的时长和声道滤波特性为基础，适合制作经过检查和预测试的实验刺激。先从一组九步结果开始，熟悉后再生成全部六组。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-input",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "准备短 WAV"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "尽量选择内容相近、有声部分清楚的材料，先核对音节、发音者与录音质量。两份录音不必等长，但这些差异会影响比较。每份须同时满足 "
+          },
+          {
+            "type": "text",
+            "text": "10 秒、480000 帧、8000000 字节",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，原采样率允许 1000–192000 Hz。例如 10 秒、96000 Hz 已超过帧数限制，需先另存短片段。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "波形选区只用于试听，不会裁剪分析输入。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb",
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 需要只分析一段时，请先在音频编辑工具中另存该段。分析统一使用 11025 Hz。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-input-platform",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "打开目录并试听两份材料"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击顶部 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "打开音频目录",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，选择包含两份 WAV 的目录。文件刚加入或改写时，点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "刷新文件",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在左栏 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "源音频",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 和 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "目标音频",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 中分别选择文件，等待中栏出现两幅实际波形。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在波形上拖出选区，再用图下播放条试听。播放另一份音频时，前一份会停止。空格用于当前活动音频的播放控制。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m07-figure-m07-overview-r2-light",
+          "assetId": "m07-input-loaded-light-scaled-r20261007",
+          "caption": "源与目标 WAV 已载入，两幅原文件波形可见；F0 曲线、控制表与合成结果尚未建立。",
+          "alt": "发声类型合成载入两份 WAV 后的最大化工作台，源和目标波形可见，F0 和合成图为空。",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "本章两份原音如下。先听清各自的音高走向与边界，后面的例音始终使用这同一对材料。播放器使用 MP3 试听副本，正式测量请使用保存的 WAV。"
+          }
+        ]
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m07-example-single-original",
+          "assetId": "single-original-mp3-r20261007",
+          "caption": "原始源音频：后续正向连续统的时长与声道基础。",
+          "alt": "",
+          "width": "100%",
+          "align": "left",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m07-example-single-target",
+          "assetId": "single-target-mp3-r20261007",
+          "caption": "原始目标音频：后续仅 F0 变化示例的另一端控制来源。",
+          "alt": "",
+          "width": "100%",
+          "align": "left",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "网页使用当前项目中的 WAV，有添加入口时点击 "
+          },
+          {
+            "type": "text",
+            "text": "添加 WAV",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。计算需宿主提供 M07 任务能力，输入和结果还受项目权限、额度与有效期限制。网页当前未提供合成控制 F0 读取；出现能力提示时，请核对入口。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-layout",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "快速辨认工作台"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "顶部",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "：打开/刷新文件、输出位置、保存参数草稿、帮助与方法与引用。"
+          }
+        ],
+        "attrs": {
+          "id": "m07-layout-toolbar"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "左栏",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "：选材料，提取 F0，调整对齐与点数，编辑数值并应用。较长的控制表在栏内滚动。"
+          }
+        ],
+        "attrs": {
+          "id": "m07-layout-left"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "中栏",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "：源、目标、F0、合成四图按 2×2 排列。源、目标、合成各有播放条；窄窗可滚动查看。"
+          }
+        ],
+        "attrs": {
+          "id": "m07-layout-center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "右栏",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "：设置连续统，查看任务进度，选择历史组并试听、保存。"
+          }
+        ],
+        "attrs": {
+          "id": "m07-layout-right"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "底栏",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "：论文、原始仓库、复制引用、改写说明。复制失败时可选中引用文字手动复制。"
+          }
+        ],
+        "attrs": {
+          "id": "m07-layout-footer"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-quick-start",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "提取并检查 F0"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-quick-nine",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "首次提取"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "两份波形都载入后，在左栏核对分析参数，点击 "
+          },
+          {
+            "type": "text",
+            "text": "提取 F0",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。选择文件后需要手动执行这一步。完成时会出现源/目标控制曲线和数值表，合成图此时仍为空。"
+          }
+        ],
+        "attrs": {
+          "id": "m07-controls-file"
+        }
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m07-controls-table",
+          "caption": "常用 F0 分析设置"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "参数"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "初始值"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "如何选"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "F0 后端"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Parselmouth / Praat"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "可切换 REAPER；切换后重新提取。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "最低 / 最高 F0 (Hz)"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "50 / 300"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "按材料设定。最低允许 20–500，最高 50–1000，最低须小于最高。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "F0 帧间隔 (ms)"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "1"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "允许 0.5–20；表示提取间隔。保存轨迹统一为 1 ms。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "嘎裂声或 F0 不规则材料可以比较 "
+          },
+          {
+            "type": "text",
+            "text": "REAPER",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 的结果。它是本工具新增的提取选项，实际效果仍需结合波形和听感检查；不可用时会提示错误，不会自动换后端。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m07-figure-f0-extracted",
+          "assetId": "m07-f0-extracted-light-scaled-r20261007",
+          "caption": "提取 F0 完成后，左栏出现 21 点控制表，图中出现源实线与目标虚线；合成音频仍为空。本例最高 F0 为 600 Hz。",
+          "alt": "分析完成的最大化工作台，归一化有声时长的 21 点表及源和目标 F0 曲线可见，未生成结果。",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "本章例音和结果图使用 "
+          },
+          {
+            "type": "text",
+            "text": "50–600 Hz",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，初始上限仍为 300 Hz。先查看曲线是否有明显倍频、半频或尖跳，再决定是否编辑。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-controls-analysis-advanced",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "必要时调整高级分析参数"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "点击 "
+          },
+          {
+            "type": "text",
+            "text": "高级分析参数",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 展开。初次可保留默认值，遇到分析问题再逐项改变并记录。"
+          },
+          {
+            "type": "text",
+            "text": "更换材料或修改任一分析参数后，都要重新提取 F0。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m07-figure-advanced-parameters",
+          "assetId": "m07-advanced-parameters-light-scaled-r20261007",
+          "caption": "展开高级分析参数后，可以逐项核对 LPC 帧长、帧移、阶数、窗函数与残差脉冲设置；图中各项使用初始默认值。",
+          "alt": "最大化工作台左栏展开高级分析参数，显示 128 点帧长、32 点帧移、20 阶 LPC 和其余默认参数。",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m07-advanced-controls-table",
+          "caption": "高级参数的默认值与主要约束"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "控件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "初始值"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "检查要点"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "帧长 / 帧移 (采样点)、LPC 阶数"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "128 / 32、20"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "范围分别为 32–1024、8–512、4–60；帧移和阶数须小于帧长。采样点以 11025 Hz 计。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "预加重、窗函数"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.98、hamming"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "预加重 0≤值<1；窗函数另有 hann、blackman、rectangular。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "负峰阈值"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "−0.005"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "允许 −0.2–0，影响残差脉冲检测。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "脉冲内窗 / 外窗 (周期)"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.5 / 1.5"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "范围 0.1–1.2 / 0.6–3；外窗须大于内窗。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "静音裁剪、静音阈值 (dB)"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "开启、−45"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "阈值允许 −80 至 −10；裁剪会改变分析信号长度，原波形仍显示原 WAV。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "静音 padding / 有声边界余量 (ms)"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "8 / 30"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "分别允许 0–80 / 0–120；调整后检查较弱起声和末尾。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "这些范围表示软件可接受的输入，具体组合还要结合材料判断。帧长、帧移与 F0 帧间隔的单位不同，填写时看清括号即可。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-advanced",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "编辑 F0 与查看曲线"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-controls-edit",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "先定对齐和点数"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "归一化有声时长",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 将两轨各自的有声部分映射到 0–100%。"
+          },
+          {
+            "type": "text",
+            "text": "起点对齐",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 从各自有声起点计毫秒，保留长短差异，较短轨末尾可能为空白。两种对齐都不会改变 WAV 时长。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "F0 控制点数量",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 初始为 21，允许 20–200。先定好对齐与点数，再编辑数值。改变任一设置会重建表格，尚未应用的手工值可能被替换。"
+          }
+        ],
+        "attrs": {
+          "id": "m07-edit-controls-table"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-alignment",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "修改数值并应用"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "源 F0 (Hz)",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 或 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "目标 F0 (Hz)",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 列输入数值。允许 0–1000，每轨至少保留一个正值，时间列不可编辑。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "核对曲线和右栏的未应用提示，然后点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "应用编辑",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。成功后提示编辑已应用，生成按钮恢复可用。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "如需保存本次应用轨迹，点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存 F0 CSV",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。文件为完整 1 ms 轨迹，行数通常多于表格控制点数。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m07-figure-f0-edit-pending",
+          "assetId": "m07-f0-edit-pending-light-scaled-r20261007",
+          "caption": "第一项源 F0 从分析值改为 110 Hz 后，表格和曲线已更新。右栏仍提示未应用修改，需点击应用编辑后才能生成。",
+          "alt": "源 F0 第一控制点被改为 110 Hz，右栏出现未应用编辑提示，应用编辑可用，生成按钮禁用。",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m07-f0-edit-pending-light-detail-figure",
+          "assetId": "m07-f0-edit-pending-light-detail-scaled-r20261007",
+          "caption": "源和目标 F0 控制点分别填写，改完还需应用修改。",
+          "alt": "源和目标 F0 控制点分别填写，改完还需应用修改。",
+          "width": "70%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "修改数值后须点击应用编辑，才会用于生成。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb",
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 空白按 0 处理，有效正值之间会插值，删空一个单元格不能用来精确插入一段静音。"
+          }
+        ],
+        "attrs": {
+          "id": "m07-f0-applied-note"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "应用编辑",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 更新 F0，继续复用已有声道、残差和脉冲分析。需要更新这些分析时，重新 "
+          },
+          {
+            "type": "text",
+            "text": "提取 F0",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。未修改控制点时可以直接生成。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-f0-display",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "纵轴与曲线显示"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "源 F0 为实线、目标 F0 为虚线，彩色 step 曲线对应所选结果。它们显示当前控制轨迹；选择历史组时，图面改用该组记录。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "彩色合成 F0 是生成控制轨迹，未从输出 WAV 重新测量。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 仅发声类型变化时，各步 F0 可以重合。若要核查实际输出，请另用参数估计等工具测量单步 WAV。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "在左栏 "
+          },
+          {
+            "type": "text",
+            "text": "F0 图窗纵轴",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 输入下限、上限，只改变显示。下限须为非负数，上限须大于下限；上限留空自动计算，"
+          },
+          {
+            "type": "text",
+            "text": "自动范围",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 恢复下限 0 和自动上限。无效输入会保留最近有效图面并提示，显示范围独立记忆。"
+          }
+        ],
+        "attrs": {
+          "id": "m07-f0-axis-note"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-controls",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "设置连续统并生成"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-controls-generation",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "类型、方向与步数"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-continuum-kinds",
+          "level": 4
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "选择变化对象"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m07-kinds-table",
+          "caption": "三种连续统的变化对象"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "类型"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "逐级改变"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "保留的基础"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "仅 F0 变化"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "F0 向另一端过渡"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "方向源的残差周期形态、声道与时长。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "仅发声类型变化"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "混合源/目标残差脉冲形态"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "方向源的 F0、声道与时长。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "F0 与发声类型同时变化"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "同时改变上述两项"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "方向源的声道与时长。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "合成方向",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 可选源到目标或目标到源。反向会交换计算角色，时长和声道基础也随之改变，下拉框中的文件角色仍保持原样。请用结果描述核对方向。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "连续统步数",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 初始 9，允许 2–50，包含两端。九步中 step01、step05、step09 分别对应 0、0.5、1 的控制比例。两端均经过重合成，末级也不能当作原目标的直接副本。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "幅度设置初始为 "
+          },
+          {
+            "type": "text",
+            "text": "周期能量匹配",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 开启、"
+          },
+          {
+            "type": "text",
+            "text": "输出幅度匹配源音频",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 开启、"
+          },
+          {
+            "type": "text",
+            "text": "输出峰值限制",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 0.98。前两项分别匹配残差周期绝对峰值和全段平均绝对振幅，不能保证物理能量或主观响度相等。峰值限制须大于 0 且不超过 1，也不能修复原录音削波。"
+          }
+        ],
+        "attrs": {
+          "id": "m07-generation-controls-table"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-six-groups",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "生成一组或全部六组"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "初次可选 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "仅 F0 变化、源到目标、9 步",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "生成当前",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。任务进行时显示进度和取消任务，生成按钮暂时禁用。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "需要双向三类结果时，点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "生成全部六组",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。顺序为正向仅 F0、仅发声类型、同时变化，再反向重复三类。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "等状态变为完整成功。每个成功组独立出现试听和保存入口，默认载入整组波形，"
+                  },
+                  {
+                    "type": "text",
+                    "text": "不会自动播放",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m07-figure-generation-task",
+          "assetId": "m07-generation-task-light-scaled-r20261007",
+          "caption": "九步任务已经提交，右栏显示 0 / 1 组完成并提供取消任务；正在执行时生成按钮禁用，尚无成功结果按钮。",
+          "alt": "真实九步生成任务运行中，右栏显示取消任务与 0 / 1 组完成，合成图仍为空。",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m07-figure-m07-nine-flow-r3-light",
+          "assetId": "m07-nine-step-result-light-scaled-r20261007",
+          "caption": "源到目标、仅 F0 变化的九步结果已完整成功，整组波形、各步生成控制 F0、任务描述和保存入口可见。",
+          "alt": "源到目标、仅 F0 变化的九步结果已完整成功，整组波形、各步生成控制 F0、任务描述和保存入口可见。",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "六组共用提交时的步数与幅度设置。每组九步时，共 54 个单步和六个拼接文件。提交后改控件不会改变已生成结果。取消或失败时，已成功组仍保留。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-quick-check",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "先比较两端"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "以下处理后例音来自同一次 "
+          },
+          {
+            "type": "text",
+            "text": "仅 F0 变化、源到目标、9 步",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 任务：50–600 Hz、1 ms、归一化有声时长、21 点。提取后未手改数值，按这 21 点应用编辑；两项幅度匹配开启、峰值限制 0.98，其余高级参数为默认值。"
+          }
+        ]
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m07-example-m07-step-01",
+          "assetId": "m07-step-01-approved-r20261007-mp3-r20261007",
+          "caption": "处理后第 1 步：同组起点，先与前面的原始源音频比较。",
+          "alt": "",
+          "width": "100%",
+          "align": "left",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m07-example-m07-step-09",
+          "assetId": "m07-step-09-approved-r20261007-mp3-r20261007",
+          "caption": "处理后第 9 步：同组终点，仍使用正向源音频的声道和时长。",
+          "alt": "",
+          "width": "100%",
+          "align": "left",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "先听两端的音高走向，再返回原音作对照。末级与目标原音不同是需要检查的结果，不能据这一组仅 F0 例音认定发声类别。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-playback",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "单步与整组对照试听"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-controls-results",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "选中要比较的任务"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "在右栏历史中选择成功生成任务，核对 "
+          },
+          {
+            "type": "text",
+            "text": "方向、类型、步数和任务短 ID",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。分析、应用或失败条目没有合成组。选择旧组只更换结果图面，左栏当前输入不会自动切回旧材料。"
+          }
+        ],
+        "attrs": {
+          "id": "m07-result-controls-table"
+        }
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "stepXX",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，立即载入并播放该步全长音频。合成波形及 F0 随之切换，图下当前试听文字显示文件和任务。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "需要只听局部时，在合成波形拖选范围，再用播放条试听。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "整组试听",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，按 step01 到末级连续播放。F0 图叠加各步曲线并突出当前步骤；曲线横轴按每步独立对齐，合成波形则是拼接时间轴。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m07-figure-step05-comparison",
+          "assetId": "m07-step05-comparison-light-scaled-r20261007",
+          "caption": "点击 step05 后载入该步的独立波形，F0 图仅加入第五步生成控制曲线；右下当前试听信息标出步骤文件和任务。",
+          "alt": "同一九步组选择第五步后的工作台，单步波形、step05 图例和当前试听说明可见。",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-playback-example",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "原音、中间步与整组比较"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "再听同一任务的第 5 步，它位于控制比例的中点。和原始源音频、前面的两端对照，留意音高走向、边界、异常噪声与级间突变。"
+          }
+        ]
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m07-example-source-before-step05",
+          "assetId": "single-original-mp3-r20261007",
+          "caption": "原始源音频：与下面同一组第 5 步作近邻对照。",
+          "width": "100%",
+          "align": "left"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m07-example-m07-step-05",
+          "assetId": "m07-step-05-approved-r20261007-mp3-r20261007",
+          "caption": "处理后第 5 步：同一九步组的中间控制比例。",
+          "alt": "",
+          "width": "100%",
+          "align": "left",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "最后听九步拼接，观察变化是否连贯。拼接不会自动加入步间静音，正式实验应使用独立 step 文件。"
+          }
+        ]
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m07-example-m07-combined",
+          "assetId": "m07-combined-approved-r20261007-mp3-r20261007",
+          "caption": "处理后九步拼接：按第 1 至第 9 步顺序连续试听。",
+          "alt": "",
+          "width": "100%",
+          "align": "left",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "暂停、停止、播放结束、切换任务或源/目标接管播放时，即时高亮会清除，曲线和结果仍在。正式使用前还需检查单步波形、实际 F0 和所需声学指标，并做小规模预测试。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-output",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "保存结果与恢复历史"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-output-files",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "完整组包含什么"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m07-output-files-table",
+          "caption": "音频、数据、参数和图片"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "文件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "用途"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "step01.wav 至 stepNN.wav"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "11025 Hz、PCM16、单声道的独立刺激。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "combined_steps.wav"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "同组按步骤顺序拼接的试听文件。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "edited_f0.csv"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "time_ms、source_f0、target_f0，完整 1 ms 源/目标控制轨迹；0 表示无有效值。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "m07.ptb.json"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "输入身份、参数、对齐、控制点、算法/运行时版本及输出清单。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "M07-任务短ID-F0.png"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "另行导出的当前 F0 图，300 dpi；未选结果时名为 M07-F0.png。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-output-save",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "先保存完整组"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选择成功组，点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存完整组",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。桌面未选输出位置时会先请求选择目录，结果保存在其内的 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "M07-完整任务ID",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 子目录。已有不同内容文件采用保护名称。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "网页点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "下载完整组",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，得到 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "M07-完整任务ID.zip",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。解压后检查所有单步、拼接 WAV、CSV 和 JSON。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "保存失败时检查目录是否可访问、空间和写入权限，再保存同一成功组。取消目录选择只退出此次保存。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m07-figure-save-complete",
+          "assetId": "m07-save-complete-light-scaled-r20261007",
+          "caption": "完整九步组保存成功后，右栏显示已保存本组完整文件和参数清单，顶部显示所选输出位置；F0 图像仍需另行导出。",
+          "alt": "保存完整九步组成功的工作台，顶部输出位置和右栏保存成功提示可见。",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "选中 step05 试听后，保存完整组仍会保存全部步骤。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb",
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 需要单个 WAV 时，从已保存的组目录取出对应文件。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-output-package",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "再保存 F0 图与单独文件"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选回需要的历史组和单步/整组，调整左栏纵轴。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击 F0 图右上 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "导出图片",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。PNG 保留点击时的轴、曲线与完整图例，超出范围的曲线裁剪在图框内，瞬时播放高亮不写入图片。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "核对图像的任务、轴单位及 step 图例，把图片同组文件一起保存。PNG 不自动包含在完整组中。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "保存 F0 CSV",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 导出左栏当前已应用轨迹，"
+          },
+          {
+            "type": "text",
+            "text": "参数与结果清单",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 导出所选组 JSON，"
+          },
+          {
+            "type": "text",
+            "text": "导出图片",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 保存当前图面。保存旧组时，优先保留该组目录内 CSV，避免混入后来分析的文件。CSV 与 JSON 当前没有导入入口。"
+          }
+        ],
+        "attrs": {
+          "id": "m07-save-boundary-note"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-history",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "历史与参数草稿"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "点击 "
+          },
+          {
+            "type": "text",
+            "text": "刷新任务历史",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 找回成功组。其试听、曲线和保存都使用该组记录，后来改变输入或参数不会改写旧组。可下载参数与结果清单，核对旧组输入和版本。"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "需要稍后继续编辑时，点击顶部 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存参数草稿",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。任务进行中先等待完成或取消。草稿会保留参数和未应用控制点。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "重开后重新选择目录和输入，再 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "提取 F0",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。只有文件内容、分析设置、点数和对齐均匹配时，才恢复草稿控制点。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "恢复控制点后仍点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "应用编辑",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，再生成。草稿不保存长期目录授权。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-recovery",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "遇到提示时怎么继续"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-recovery-state",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "按钮暂时不可用"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "提取 F0",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 禁用：确认两份文件均已选择、波形读取成功，没有正在执行的任务，且宿主提供 M07 能力。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "提示 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "原分析失效",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：材料或分析参数改变，重新提取 F0。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "提示 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "未应用修改",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：核对控制表后应用编辑。此时保存 F0 CSV 也暂不可用，旧成功组仍可保存。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-recovery-audio",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "输入或分析失败"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m07-error-table",
+          "caption": "常见提示的处理"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "提示或现象"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "接下来做什么"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "超过输入预算 / 音频损坏"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "检查时长、帧数、文件大小和 WAV 可读性，另存合适短材料后刷新、重选。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "没有有效有声区 / F0 分析失败"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "先听原材料，再调整 F0 范围并重新分析。不要仅凭失败判定材料无发声。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "有效脉冲不足"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "检查负峰阈值和脉冲内/外窗，从默认值逐项尝试，每次重提取。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "REAPER 不可用"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "检查当前运行环境。若改用 Parselmouth，手动选择并重新分析，记录后端改变。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "控制点或参数无效"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "使用有限数值、每轨至少一个正值，核对帧长/帧移/阶数及内外窗关系。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "合成 F0 读取失败 / 入口未提供曲线"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "刷新并重选完整成功组，核对宿主能力。仍可保存有效 WAV 到外部核查。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-recovery-batch",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "取消、部分完成与重试"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "点击 "
+          },
+          {
+            "type": "text",
+            "text": "取消任务",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，或历史行的 "
+          },
+          {
+            "type": "text",
+            "text": "取消此任务",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，等待状态结束。核对已完成组数，刷新历史并保存成功组。未完整成功的组和后续未提交组不会自动补算。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "失败、取消或中断条目可点击 "
+          },
+          {
+            "type": "text",
+            "text": "重试",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，再刷新查看。重试沿用该任务原输入与参数。要使用新参数，请重新分析/应用后生成；再次生成全部六组会建立新批次。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-recovery-save",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "读取与下载失败"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "结果缺失或校验失败时，先检查宿主和任务文件，勿把部分文件当完整组。网页权限、额度或有效期变化时，核对项目资源状态；仍有效的成功组可继续保存。单独下载 CSV、JSON、PNG 后，也请确认实际下载位置和完成状态。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-sources",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "方法与使用边界"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-sources-paper",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "论文与原始实现"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "本模块参考 Lu、Liang、Kong 的载瓦语声调研究及配套重合成代码。经 2026-09-10 作者邮件许可，将相关 MATLAB 代码改写为 Python，并引用、署名和说明改写。代码改写许可与论文、原录音、统计数据的使用范围分别适用。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "底栏的 "
+          },
+          {
+            "type": "text",
+            "text": "论文",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 打开出版方页面，"
+          },
+          {
+            "type": "text",
+            "text": "原始仓库",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 提供作者实现，"
+          },
+          {
+            "type": "text",
+            "text": "改写说明",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 介绍本工具适配；"
+          },
+          {
+            "type": "text",
+            "text": "方法与引用",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 可查看来源登记。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-sources-adaptation",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "效果需要结合材料判断"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "本工具增加了 REAPER 嘎裂声 F0 提取、控制点编辑和任务对照等操作。合成效果不理想时，可检查材料、F0、脉冲与声道估计，也可尝试作者团队的官方代码。本工具适配未声明精确复现论文全部流程，其表现应与原方法分别判断。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-sources-boundary",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "正式实验前的检查"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "本模块用 LPC 残差操纵制作刺激，不能直接还原声门生理状态。生成成功不等于发声类别已获知觉验证，九步也不保证知觉等距。保留输入、参数和版本，完成波形、实际 F0、所需指标检查与预测试后再用于正式实验。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m07-references",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "参考资料"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "attrs": {
+                  "textAlign": null,
+                  "id": null,
+                  "caption": null,
+                  "note": null,
+                  "color": null,
+                  "colorDark": null,
+                  "backgroundColorDark": null,
+                  "lineHeight": null,
+                  "marginTop": null,
+                  "marginBottom": null,
+                  "indent": 0,
+                  "backgroundColor": null
+                },
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "id": null,
+                      "referenceId": "SRC-PRAAT",
+                      "label": "Yannick Jadoul and Bill Thompson and Bart de Boer 2018 Introducing Parselmouth: A Python Interface to Praat"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "attrs": {
+                  "textAlign": null,
+                  "id": null,
+                  "caption": null,
+                  "note": null,
+                  "color": null,
+                  "colorDark": null,
+                  "backgroundColorDark": null,
+                  "lineHeight": null,
+                  "marginTop": null,
+                  "marginBottom": null,
+                  "indent": 0,
+                  "backgroundColor": null
+                },
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "id": null,
+                      "referenceId": "SRC-ZAIWA",
+                      "label": "Yao Lu and Changwei Liang and Jiangping Kong"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "attrs": {
+                  "textAlign": null,
+                  "id": null,
+                  "caption": null,
+                  "note": null,
+                  "color": null,
+                  "colorDark": null,
+                  "backgroundColorDark": null,
+                  "lineHeight": null,
+                  "marginTop": null,
+                  "marginBottom": null,
+                  "indent": 0,
+                  "backgroundColor": null
+                },
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "id": null,
+                      "referenceId": "REF-ZAIWA",
+                      "label": "Lu, Y., Liang, C., & Kong, J. (2025). Contribution of F0 and phonation to tone perception in the Zaiwa language. Journal of Phonetics, 110, 101413. https://doi.org/10.1016/j.wocn.2025.101413"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": null,
+          "id": null,
+          "caption": null,
+          "note": null,
+          "color": null,
+          "colorDark": null,
+          "backgroundColorDark": null,
+          "lineHeight": null,
+          "marginTop": null,
+          "marginBottom": null,
+          "indent": 0,
+          "backgroundColor": null
+        },
+        "content": [
+          {
+            "type": "text",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://doi.org/10.1016/j.wocn.2025.101413",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer",
+                  "class": null,
+                  "title": null
+                }
+              }
+            ],
+            "text": "10.1016/j.wocn.2025.101413"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": null,
+          "id": null,
+          "caption": null,
+          "note": null,
+          "color": null,
+          "colorDark": null,
+          "backgroundColorDark": null,
+          "lineHeight": null,
+          "marginTop": null,
+          "marginBottom": null,
+          "indent": 0,
+          "backgroundColor": null
+        },
+        "content": [
+          {
+            "type": "text",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://github.com/Luyao2025/Contribution-of-F0-and-phonation-to-tone-perception-in-the-Zaiwa-language",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer",
+                  "class": null,
+                  "title": null
+                }
+              }
+            ],
+            "text": "作者团队的官方仓库"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": null,
+          "id": null,
+          "caption": null,
+          "note": null,
+          "color": null,
+          "colorDark": null,
+          "backgroundColorDark": null,
+          "lineHeight": null,
+          "marginTop": null,
+          "marginBottom": null,
+          "indent": 0,
+          "backgroundColor": null
+        },
+        "content": [
+          {
+            "type": "text",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://parselmouth.readthedocs.io/en/stable/",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer",
+                  "class": null,
+                  "title": null
+                }
+              }
+            ],
+            "text": "Parselmouth 官方文档"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": null,
+          "id": null,
+          "caption": null,
+          "note": null,
+          "color": null,
+          "colorDark": null,
+          "backgroundColorDark": null,
+          "lineHeight": null,
+          "marginTop": null,
+          "marginBottom": null,
+          "indent": 0,
+          "backgroundColor": null
+        },
+        "content": [
+          {
+            "type": "text",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://github.com/google/REAPER",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer",
+                  "class": null,
+                  "title": null
+                }
+              }
+            ],
+            "text": "REAPER 官方仓库"
+          }
+        ]
+      }
+    ]
+  },
+  "summary": "选源与目标，检查并应用 F0，制作三类双向连续统，按端点/中间步/整组试听并保存完整结果。"
+}

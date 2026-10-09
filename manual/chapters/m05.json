@@ -1,0 +1,5696 @@
+{
+  "schemaVersion": "ptb-manual-chapter/1",
+  "id": "m05",
+  "title": "唇形提取",
+  "moduleId": "M05",
+  "body": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-purpose",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "从视频中提取唇形"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "先检查设备和画面，再录制或导入已有视频。本模块显示面部网格、唇形曲线和逐帧参数，可同步回放，并把音视频与数据保存到本机。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "实时预览和实时录制的唇形标记为候选（candidate）。正式离线分析使用另一套冻结模型，两类结果请分别使用。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb",
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218"
+                }
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m05-candidate-note"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-layout",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "先认清工作区"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m05-figure-m05-overview-r2-light",
+          "assetId": "m05-overview-light-scaled-r20261007-v2-876c96c6",
+          "caption": "实时预览的准备界面。顶部开始操作，左侧选择设备与参数，中央显示网格和曲线，右侧查看视频与历史。尚未开始采集。",
+          "alt": "唇形提取实时预览准备界面，尚未开始采集，设备、模型设置和历史区可见。",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m05-layout-table"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "位置"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "可以做什么"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "顶部"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "选择模式，开始或结束采集，另存录制、放弃未保存内容、检查偏移量。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "左栏"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "选摄像头和麦克风，设置帧率与防抖，查看电平、阶段和帧数。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "中央"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "查看面部网格、九项数值及四条唇形曲线。空白或 — 表示没有有效测量。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "右栏"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "播放视频，提交离线分析，恢复历史，选择结果并保存或导出动画。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "右栏收起后仍会继续采集。"
+          },
+          {
+            "type": "text",
+            "text": "录制时保持页面可见",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，后台或切换标签可能影响处理。顶部提示会显示进度、错误或保存结果。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-input",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "准备设备或已有视频"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-input-camera",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "采集前检查"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "固定机位，保持面部正对摄像头、嘴唇清楚可见，使用均匀照明。先检查网格是否稳定，避免遮挡和大幅转头。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在左栏选择摄像头。录制时还要选择目标麦克风并允许相机、麦克风权限。名称暂时显示未授权时，授权后再核对。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "先预览，再录一小段：检查"
+                  },
+                  {
+                    "type": "text",
+                    "text": "实际输入",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "名称、电平和画面，结束后试听。电平变化只表示有信号，仍需确认录到了目标人声。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "接入新设备后，停止采集再点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "刷新设备",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。所选设备消失时需重新选择。避免与录音模块同时占用设备。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m05-preflight-checks"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-input-video",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "已有视频的要求"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "可多选 "
+          },
+          {
+            "type": "text",
+            "text": ".mp4",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、"
+          },
+          {
+            "type": "text",
+            "text": ".mov",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、"
+          },
+          {
+            "type": "text",
+            "text": ".avi",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、"
+          },
+          {
+            "type": "text",
+            "text": ".mkv",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、"
+          },
+          {
+            "type": "text",
+            "text": ".wmv",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、"
+          },
+          {
+            "type": "text",
+            "text": ".m4v",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、"
+          },
+          {
+            "type": "text",
+            "text": ".webm",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          },
+          {
+            "type": "text",
+            "text": "每文件不超过 128 MB，每批最多 100 个，本页最多保留 100 项结果",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。画面像素总数上限为 1920×1080。较大材料先分段，并记录各段起点。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "无音轨的视频也能分析唇形，但无法导出原音频或用声音校对偏移。编码和逐帧时间戳须可解码；时间戳缺失或倒退时会拒绝正式结果。正式分析与完整目录保存请使用支持 M05 的 Windows 桌面工作台。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-quick-start",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "使用摄像头采集"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-modes",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "选择采集模式"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m05-modes-table"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "模式"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "采集内容"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "接下来做什么"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "实时预览"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "摄像头画面与候选网格，不录音视频。"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "检查构图后结束，换录制模式。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "实时录制"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "视频、音频和实时候选唇形。"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "结束、回放、按需校对，再另存。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "高帧率先录后算"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "只录视频与音频，不运行唇形模型。"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "另存后，在右栏选择所存视频做离线分析。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-controls-capture",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "设置设备与参数"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m05-controls-table"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "设置"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "新页面默认值"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "怎样使用"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "摄像头／麦克风"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "系统默认／自动选择麦克风"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "预览只用摄像头。录人声时明确选择实际麦克风，勿误选立体声混音或系统回放。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "请求帧率"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "30 fps"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "范围 1–240 fps。请求值、设备协商值和实际文件帧率分别查看。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "特征点防抖／截止频率"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "开启／15 Hz"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "截止频率范围 1–240 Hz。关闭防抖后输入禁用；较低值更平滑，也可能削弱快速动作。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "推理设备"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "CPU"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "可选 GPU，只用于实时模型。已有视频正式分析不由此切换 CPU/GPU。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "镜像预览"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "开启"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "只改变预览方向，原媒体和测量坐标不镜像。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "采集或分析运行时，大部分设置会锁定。先结束并等待收尾，再改设备、模式或参数。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-quick-realtime",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "预览后开始实时录制"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "顶部模式选"
+                  },
+                  {
+                    "type": "text",
+                    "text": "实时预览",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，左栏选摄像头，点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "打开预览",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "并允许权限。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "检查右栏画面和中央网格。网格消失时先改善光线、机位或遮挡。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "结束录制",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "退出预览。临时帧会清除，预览没有可保存的录音、视频或唇形记录。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m05-preview-steps",
+          "start": 1
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m05-figure-m05-realtime-idle-current-light",
+          "assetId": "m05-realtime-idle-current-light-scaled-r20261007",
+          "caption": "实时录制的准备界面。麦克风可选择，左栏提示音频与唇形数据始终保存。阶段仍为未开始。",
+          "alt": "实时录制尚未开始，麦克风可设置，30 fps、CPU和15 Hz防抖为当前设置。",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "模式改为"
+                  },
+                  {
+                    "type": "text",
+                    "text": "实时录制",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，选好摄像头与麦克风，点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "开始录制",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。先核对实际输入、电平和网格，再读正式材料。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "结束录制",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，等到编码和音频时间轴检查收尾。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在右栏播放视频或点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "同步回放",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。需要检查声音与唇形时间时，使用顶部"
+                  },
+                  {
+                    "type": "text",
+                    "text": "检查偏移量",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "另存录制",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，选择所需视频、动画，再选目录保存。具体组合见下一节。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m05-recording-steps",
+          "start": 1
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "结束录制只停止采集。请完成另存并看到保存成功提示，再开始下一次或关闭页面。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb",
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218"
+                }
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m05-stop-save-note"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-advanced",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "高帧率先录后算"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m05-figure-m05-record-then-analyze-idle-current-light",
+          "assetId": "m05-record-then-analyze-idle-current-light-scaled-r20261007",
+          "caption": "高帧率先录后算的准备界面。120 fps 是示例请求值，实际设备和文件帧率尚未测得。",
+          "alt": "高帧率先录后算未开始，请求120 fps，中央无测量网格。",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "模式选"
+                  },
+                  {
+                    "type": "text",
+                    "text": "高帧率先录后算",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，选设备和请求帧率，点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "开始录制",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。检查右栏画面、输入名称与电平。中央提示唇形稍后计算。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "结束录制",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "并等待收尾，再点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "另存录制",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "选择目录。此模式保存视频、WAV和回执，不生成唇形或动画。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在右栏"
+                  },
+                  {
+                    "type": "text",
+                    "text": "离线分析",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "重新选择保存的视频，点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "分析所选 1 个视频",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。按正式分析流程检查并保存结果。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m05-high-framerate-steps",
+          "start": 1
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "请求高帧率不会保证设备按该数值录制。保存后核对实际文件帧率，勿把示例120 fps当作已测值。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb",
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218"
+                }
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m05-fps-note"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-filter",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "选择防抖条件"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "在左栏勾选或取消"
+          },
+          {
+            "type": "text",
+            "text": "特征点防抖",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。开启时可编辑截止频率，关闭后保留数值但禁用输入。同一实验尽量保持设置一致，关注快速运动时请同时保留原视频。"
+          }
+        ],
+        "attrs": {
+          "id": "m05-filter-note"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m05-figure-m05-filter-off-idle-current-light",
+          "assetId": "m05-filter-off-idle-current-light-scaled-r20261007",
+          "caption": "实时预览准备界面中的防抖关闭状态。截止频率15 Hz保留显示并禁用，麦克风也因预览模式禁用。",
+          "alt": "未开始预览，特征点防抖未勾选，截止频率和麦克风控件禁用。",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m05-filter-detail-figure",
+          "assetId": "m05-filter-detail-scaled-r20261007",
+          "caption": "取消特征点防抖后，截止频率输入禁用。想修改截止频率时，先重新勾选防抖。",
+          "alt": "取消特征点防抖后，截止频率输入禁用。想修改截止频率时，先重新勾选防抖。",
+          "width": "70%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "这里关闭的是额外关键点防抖，实时模型仍可能有内部平滑。已有结果回放使用当时保存的设置，不按页面新值重新滤波。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-output",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "结束后保存录制"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-recording-save",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "选择要保存的画面"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "实时录制另存时，"
+          },
+          {
+            "type": "text",
+            "text": "音频、完整已测唇形和时间信息始终保存",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，视频与动画可自由组合。动画是面部网格画面。"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m05-save-matrix"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "视频"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "动画"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "同时保存的画面"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "勾选"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "勾选"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "原视频＋面部动画，默认组合。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "勾选"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "取消"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "只保留原视频。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "取消"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "勾选"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "只保留面部动画。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "取消"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "取消"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "不保存画面，仍保存音频与唇形。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "高帧率先录后算直接保存视频、音频和回执，不出现这组勾选项。实时录制没有有效面部点时，取消动画后可尝试保留音频及已有记录。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-controls-save-dialog",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "选目录并确认保存"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "另存录制",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。实时录制先确认视频、动画选项，点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "选择目录并保存",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "；高帧率模式直接进入目录选择。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选择输出目录，等待成功提示。程序会新建 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "M05-recording-*",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 子目录，检查其中的 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "recording-export.json",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 和实际文件。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "取消目录选择或保存失败时，当前录制仍保留，可调整选项、空间或目录后重试。开始下一次时，如有未保存内容，会先要求保存。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m05-save-recording-steps",
+          "start": 1
+        }
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m05-save-dialog-controls-table"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "操作"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "结果"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "取消／关闭保存弹窗"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "退出本次保存，当前录制保留。保存中请等待完成。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "放弃未保存内容 → 取消"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "返回当前内容。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "放弃未保存内容 → 放弃"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "清除本页尚未保存的录制和结果，磁盘原文件不变。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-recording-files",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "录制目录里有什么"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m05-recording-files-table"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "文件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "内容与条件"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "raw_recording.mp4",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "勾选视频时保存原画面的派生MP4。异常时间戳时可能保留原编码容器并提示，文件名以回执为准。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "face_animation.mp4",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "实时录制勾选动画且有有效点时保存，使用已有测量，未重新识别。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "audio_recording.wav",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "解码PCM16音频，采样率和声道数以实际文件为准。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "capture.m05-preview.json",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "实时录制的全部已测候选帧、关键点、参数和设置，含缺失或截断说明。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "candidate.lip.json",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": "／"
+                      },
+                      {
+                        "type": "text",
+                        "text": "audio_recording.lip.json",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "预算内的四轨交换文件。自动同名关联还需音轨和至少两帧有效open，条件不足时不生成。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "recording-export.json",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "本次文件名、大小、哈希、音轨、帧率、选项与时间来源的保存回执。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-video-demo",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "视频演示"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "真实摄像头操作视频暂留空，待实际录制素材补充。现有图片展示准备界面和来源窗口。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-quick-offline",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "分析已有视频"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "右栏"
+                  },
+                  {
+                    "type": "text",
+                    "text": "离线分析",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "选择一个或多个视频，核对文件名和大小。左栏防抖及截止频率用于本次正式分析，请先设置好。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "分析所选 N 个视频",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，观察顶部进度。文件逐项处理，当前项失败或取消时停止后续处理，已完成结果保留。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "完成后在"
+                  },
+                  {
+                    "type": "text",
+                    "text": "结果保存",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "选择对应文件，检查完整帧数、缺失、曲线与回放。有音轨时可用"
+                  },
+                  {
+                    "type": "text",
+                    "text": "检查偏移量",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "校对。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "应用偏移并保存",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "使用当前偏移，或点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存但不应用偏移",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "以零人工偏移导出。选择目录，等待完整结果写入成功。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m05-offline-steps",
+          "start": 1
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-controls-analysis",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "运行中取消与导出动画"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m05-analysis-controls-table"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "操作"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "用法"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "取消本次任务"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "仅运行时显示，停止当前分析或动画任务；已完成结果保留。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "选择唇形结果"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "切换文件、完整帧和该结果的偏移，逐项检查并保存。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "动画导出质量"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "默认标准720，也可选高清1080、小体积540。只影响导出画面。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "导出动画MP4／导出GIF"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "选好质量后点击，等待计算再选保存目录。正式结果会重新读取源输入生成动画。MP4可有音轨，GIF无声音。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-offline-files",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "保存完整数据"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "正式结果另存到新的 "
+          },
+          {
+            "type": "text",
+            "text": "M05-*",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 子目录，不覆盖原视频。查看 "
+          },
+          {
+            "type": "text",
+            "text": "saved-manifest.json",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 确认本次实际写入的文件。"
+          }
+        ],
+        "attrs": {
+          "id": "m05-offline-saving-note"
+        }
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m05-offline-files-table"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "文件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "用途与注意"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "measurements.csv",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "完整逐帧参数及detected标记，检测缺失保留为空。统计分析优先从此表开始。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "legacy-compatibility.csv",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "旧兼容表，缺失可能由首值或前值补齐，imputed标记补值；不算新检测。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "frames.jsonl",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "完整逐帧时间、关键点和指标，用于复核与回放。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "manifest.json",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": "／"
+                      },
+                      {
+                        "type": "text",
+                        "text": "preview.json",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "处理设置与来源／曲线显示预览。预览点不能替代完整数据。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "audio_recording.wav",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": "／"
+                      },
+                      {
+                        "type": "text",
+                        "text": "audio-timing.jsonl",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "有可处理音轨时输出音频与音频时间记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "audio_recording.lip.json",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "同名四轨交换文件，正式结果不超过6000帧且文件不超过2 MB时生成。长结果仍保留完整表和帧。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "unaligned.lip.json",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": "／"
+                      },
+                      {
+                        "type": "text",
+                        "text": "aligned.lip.json",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": "／"
+                      },
+                      {
+                        "type": "text",
+                        "text": "alignment.json",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "存在交换文件时，另留未调整和所选偏移版本，并记录偏移。原始逐帧数据不改。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "saved-manifest.json",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "另存清单与哈希。部分文件存在不能替代整组保存成功。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "lip-animation.mp4",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": "／"
+                      },
+                      {
+                        "type": "text",
+                        "text": "lip-animation.gif",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "单独导出的可视化动画，重采样不增加测量帧。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "id": "m05-read-csv",
+          "language": "python"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "import pandas as pd\nmeasurements = pd.read_csv(\"结果目录/measurements.csv\")\nobserved = measurements.loc[measurements[\"detected\"].eq(True)]"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-history",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "恢复历史并用于标注"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "重开工作台后，右栏点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "刷新本地历史任务",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，选择任务，再点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "读取历史结果",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。已完成分析可恢复，不必重算。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "尚未另存的录制存在页面内存中，不能从分析历史恢复。仅采集的视频需重新选择所存文件，再提交分析。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在参数估计、参数显示或TextGrid标注中选择对应WAV，按该模块的唇形关联流程读取同目录、同名的 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "audio_recording.lip.json",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。请保持每次录制的音频和唇形文件成组存放。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m05-history-steps",
+          "start": 1
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "下游操作参见 "
+          },
+          {
+            "type": "crossReference",
+            "attrs": {
+              "chapterId": "m01",
+              "targetId": "",
+              "label": "参数估计"
+            }
+          },
+          {
+            "type": "text",
+            "text": "、"
+          },
+          {
+            "type": "crossReference",
+            "attrs": {
+              "chapterId": "m02",
+              "targetId": "",
+              "label": "参数显示"
+            }
+          },
+          {
+            "type": "text",
+            "text": "和 "
+          },
+          {
+            "type": "crossReference",
+            "attrs": {
+              "chapterId": "m12",
+              "targetId": "",
+              "label": "TextGrid 标注"
+            }
+          },
+          {
+            "type": "text",
+            "text": "。旧PKL仅使用已有桌面受控读取或转换入口，网页不直接读取。请保留旧原文件。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-controls",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "查看结果与同步回放"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-controls-status",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "看懂采集状态"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m05-status-table"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "显示项"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "含义"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "阶段"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "准备中、录制中、正在结束、正在收尾、已结束或采集失败。未开始时没有有效采集。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "呈现／已推理／检出"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "显示帧、提交推理帧、检出面部帧，数值可以不同。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "跳过推理／呈现缺口"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "处理忙碌跳过帧／观察到显示间断，不直接等同文件丢帧。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "编码／设备／文件／实时"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "媒体暂存大小／设备协商参数／保存文件统计／实时处理统计。请分别核对。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "已保存"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "本次实际写入的文件列表，须结合成功提示和回执查看。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-replay",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "按帧检查画面与缺失"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选定结果，比较"
+                  },
+                  {
+                    "type": "text",
+                    "text": "完整帧数",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "与"
+                  },
+                  {
+                    "type": "text",
+                    "text": "曲线预览点数",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。正式曲线最多约241个展示点，按帧回放读取完整数据。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "播放右栏视频，查看中央网格与数值。缺失帧会留空，回看原画面确认遮挡、转头或其他原因。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "读取历史后若没有可播放源视频，仍可按测量时间回放网格。核对声音或原画面时，使用已另存的媒体。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m05-replay-steps",
+          "start": 1
+        }
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m05-playback-controls-table"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "控件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "操作"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "源视频播放器"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "播放、暂停或拖动进度，同步查看中央面部。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "同步回放／暂停回放"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "有视频时随视频播放，无视频时按测量时间播放网格。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "回放帧滑条"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "拖动后停止连续播放并查看所选帧。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "四条曲线"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "area、outer_width、open、circularity。横轴为实际时间，各轨独立纵轴，勿直接比较画面高度。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "实时推理忙碌时会跳帧，实时完整记录指本次全部已测帧。需要逐帧补算时使用原视频做正式离线分析。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-metrics",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "这些参数表示什么"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "参数来自二维关键点。除面宽、面高等像素量外，以下指标多为归一化比值，"
+          },
+          {
+            "type": "text",
+            "text": "不能直接换算成毫米或真实生理面积",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m05-metrics-table"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "键名"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "含义"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "area",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "外唇与内唇轮廓的面积差除以面轮廓面积。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "height",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "外唇纵向跨度除以面高，与内唇开口度open分开看。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "outer_width",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "外唇水平跨度除以面宽。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "inner_width",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "内唇水平跨度除以面宽。数值为零不能单独证明闭唇或某个音类。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "total_width",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "外唇与内唇水平跨度之和除以面宽。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "open",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "关键点14与13的纵向差除以面高。微小负值先核对画面，缺失不记为零。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "circularity",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "以轮廓面积差和外唇周长计算的形状指标，不能单独判定圆唇程度。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "face_width",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": "／"
+                      },
+                      {
+                        "type": "text",
+                        "text": "face_height",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "面部左右x、上下y投影差，单位像素，是归一化基准。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "*_px",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": "／"
+                      },
+                      {
+                        "type": "text",
+                        "text": "length",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "正式表中的像素跨度、开口或外唇周长。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "id": "m05-metric-formulas"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "指标关系："
+          },
+          {
+            "type": "text",
+            "text": "area=(外唇面积−内唇面积)/面面积；open=(y14−y13)/面高；circularity=4π×(外唇面积−内唇面积)/外唇周长²",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-timing",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "检查唇形与声音的时间对齐"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-timing-steps",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "使用检查偏移量"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "结束录制或选定有音轨的结果，点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "检查偏移量",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，等音频波形读取完成。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "先看默认勾选的open，需要时勾选其他参数。放大多个清楚事件，结合原画面和声音判断。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "编辑偏移并观察效果。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "正值向右移唇形，负值向左移",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。上图拖动平移视窗，下图拖动修改偏移。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "应用偏移量",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "更新回放，再另存录制或保存结果才写入文件。点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "取消",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "恢复打开弹窗前的偏移。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m05-offset-steps",
+          "start": 1
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "默认0 ms只表示未加人工偏移。声音振幅和唇开度并非一一对应，请核对多个事件，勿只对齐一个峰值。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m05-offset-caution"
+        }
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "id": "m05-offset-rule"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "唇形时间 = audio_relative_time_s + lip_manual_offset",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。界面编辑毫秒，文件保存秒，只应用一次，原视频和WAV不平移。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-controls-offset",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "偏移弹窗的操作"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m05-offset-controls-table"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "控件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "操作"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "唇形偏移量"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "范围−2000至2000 ms；直接输入整数毫秒。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "← 1 ms／1 ms →"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "单击微调，也可按左右键，长按连续调整。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "归零"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "将当前预览改为0，仍需应用并保存。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "放大时间轴／缩小时间轴／全段"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "上下图共用视窗，全段恢复全部范围；滚轮也可缩放。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "音频波形"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "拖动平移视窗。多声道只显示声道1，需要时另行检查其他声道。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "参数勾选／唇形参数对齐"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "可选九项参数，默认open。各轨仅在此归一化显示，原始数值不变；拖动下图改偏移。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "应用偏移量／取消"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "应用保留编辑，取消撤销本次编辑。音频读取失败或未结束时不能应用。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "当前录制和各个离线结果分别保留偏移。"
+          },
+          {
+            "type": "text",
+            "text": "保存但不应用偏移",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "以0导出，本页回放的编辑值不会被强制归零。历史自动建议不会在此自动应用。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-timing-clocks",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "正式实验前做同步检查"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "1 ms是编辑步长，设备时间精度需另行验证。用相同设备、分辨率和帧率录制可同时看见与听见的校准事件，在开头、中段、结尾检查固定偏差与漂移。模型、防抖响应和构音起声差异也需分别考虑。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-recovery",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "遇到问题时"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m05-recovery-table"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "现象"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "处理办法"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "无法打开设备或权限被拒绝"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "检查应用与系统媒体权限，再次开始。设备被占用时先结束占用它的采集。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "设备消失、静音、低信号或录到电脑声音"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "先结束，刷新并明确重选设备。录一小段，核对输入名称、电平和试听。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "网格空白、参数—或动画保存失败"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "检查光线、遮挡和构图。实时另存可取消动画，保留音频与已有记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "音频波形读取失败"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "保留录制，核对音轨和编码，再开检查偏移量重试；可先保存原始内容。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "无有效媒体片段或收尾失败"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "等待收尾。有片段先尝试另存，重新录制时确认编码大小增加。错误片段需单独核对完整性。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "取消目录选择、空间不足或保存失败"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "当前录制保留。换目录、释放空间或调整选项后重试，成功提示与回执齐全才算整组保存。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "媒体达到128 MB或30分钟"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "自动结束并收尾，尽早保存和检查完整性；下一次分段录制并记起点。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "候选参数达到32 MB"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "停止测量但媒体继续录制。结束并保存原视频，再做正式离线分析补算。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "离线分析时间戳、编码或资源超限"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "核对源文件，必要时分段或更换可解码材料。已完成结果仍保留，勿用标称帧率替代实际时间戳。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "录制视频时间戳异常"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "保存可能保留原编码容器，音频和唇形分别保存。该视频后续正式分析仍需通过时间戳检查。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "浏览器无法播放视频"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "保存后用本机播放器检查编码，仍可查看可用测量或WAV。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "离线分析或完整保存不可用"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "按页面提示使用支持M05的桌面工作台。当前录制保留，不把部分下载当完整保存。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "本机目录导出总预算512 MB，单份动画128 MB。采集时出现设备断开、后台节流或截断提示，请停止后查看原媒体和回执。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "未保存录制可能因强制关闭进程而丢失。离开提示中取消可保留当前内容；确认放弃会清除页面内存记录。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m05-unsaved-caution"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-sources",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "方法与引用"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-source-models",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "查看模型与软件来源"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "点工具栏"
+          },
+          {
+            "type": "text",
+            "text": "方法与引用",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，打开来源窗口。在"
+          },
+          {
+            "type": "text",
+            "text": "软件与代码来源",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "中查看作者、版本、许可和链接，点"
+          },
+          {
+            "type": "text",
+            "text": "复制引用",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "取得对应文字。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m05-figure-m05-methods-software-current-light",
+          "assetId": "m05-methods-software-current-light-scaled-r20261007",
+          "caption": "方法与引用的来源窗口，可查看MediaPipe、FFmpeg等记录并复制引用。测试素材登记不代表本章已录制演示视频。",
+          "alt": "唇形提取来源窗口，软件与代码来源页签显示具体组件和许可记录。",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "正式模型为MediaPipe legacy Face Mesh 0.10.14，实时为Face Landmarker 0.10.14／float16-1。详情见 "
+          },
+          {
+            "type": "text",
+            "text": "Face Landmarker说明",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://developers.google.com/edge/mediapipe/solutions/vision/face_landmarker/web_js",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer nofollow"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "和 "
+          },
+          {
+            "type": "text",
+            "text": "冻结Face Mesh文档",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://github.com/google-ai-edge/mediapipe/blob/v0.10.14/docs/solutions/face_mesh.md",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer nofollow"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。比较结果时保留模型与滤波条件，具体许可以来源登记为准。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-source-timing",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "时间记录参考"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "帧呈现和媒体录制接口的说明见 "
+          },
+          {
+            "type": "text",
+            "text": "逐帧回调规范",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://wicg.github.io/video-rvfc/",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer nofollow"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "和 "
+          },
+          {
+            "type": "text",
+            "text": "媒体录制规范",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://www.w3.org/TR/mediastream-recording/",
+                  "target": "_blank",
+                  "rel": "noopener noreferrer nofollow"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。帧呈现时间不能直接当作相机曝光时间。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m05-scientific-boundary",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "使用结果时记住"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "归一化仍受头姿、透视、遮挡与关键点误差影响。跨被试或机位比较前先检查可比性。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "网格放大、镜像和动画重采样只影响显示。检测缺失与兼容补值分别处理，单个指标不能独立判定发音类别。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "正式研究先用目标设备和材料做预测试，保存原始媒体、设置及完整结果。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

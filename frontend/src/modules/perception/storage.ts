@@ -18,7 +18,7 @@ export class LocalStore {
  async persist(){return navigator.storage?.persist?await navigator.storage.persist():false;}
  close(){this.db?.close();this.db=null;}
 }
-export async function lockSession(id:string):Promise<()=>void>{
+export async function lockSession(id:string):Promise<()=>Promise<void>>{
  if(!navigator.locks)throw Error('此浏览器缺少安全会话锁，无法正式运行。请使用支持 Web Locks 的浏览器。');
- return new Promise((resolve,reject)=>{void navigator.locks.request('ptb-m15:'+id,{ifAvailable:true},async lock=>{if(!lock){reject(Error('该会话正在另一个标签运行，请在那里暂停并退出运行视图后再恢复。'));return;}await new Promise<void>(release=>resolve(release));}).catch(reject);});
+ return new Promise((resolve,reject)=>{const completion=navigator.locks.request('ptb-m15:'+id,{ifAvailable:true},async lock=>{if(!lock){reject(Error('该会话正在另一个标签运行，请在那里暂停并退出运行视图后再恢复。'));return;}await new Promise<void>(release=>resolve(async()=>{release();await completion;}));});void completion.catch(reject);});
 }

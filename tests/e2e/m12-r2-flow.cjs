@@ -1,7 +1,7 @@
 module.exports=async({page,click,loaded,out,rpc,checks})=>{
  const assert=require('node:assert/strict'),path=require('node:path'),fs=require('node:fs/promises');
  const setup=(await rpc({op:'r2_setup'})).value;
- await click('语音标注对齐');await click('选择语料文件夹');
+ await click('TextGrid标注');await click('选择语料文件夹');
  const choose=async name=>{await page.locator('.annotation-file-list button').filter({hasText:name}).click();await loaded();};
  const select=async(time,row=0)=>{const g=page.locator('.annotation-grid');await g.scrollIntoViewIfNeeded();const r=await g.boundingBox();const span=Number(await page.getByLabel('标注可视时长').inputValue());await page.mouse.click(r.x+r.width*time/span,r.y+r.height*(row===0?.22:.73));};
  const wave=page.locator('.annotation-plots .wave-track svg').first();

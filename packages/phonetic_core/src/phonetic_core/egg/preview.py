@@ -23,8 +23,8 @@ def micro_waveforms(result, config, center, width_ms=50., *, raw=False):
         left, right = max(0, first-pad), min(len(result.time_vector), last+pad)
         values = apply_lowpass_filter(apply_highpass_filter(
             signal.detrend(result.egg_signal_raw[left:right]),
-            cutoff_freq=config.highpass_cutoff, fs=result.fs),
-            cutoff_freq=config.lowpass_cutoff, fs=result.fs)[first-left:last-left]
+            cutoff_freq=config.highpass_cutoff, fs=result.fs, stable=result.method_version == 'egg-bounded/2'),
+            cutoff_freq=config.lowpass_cutoff, fs=result.fs, stable=result.method_version == 'egg-bounded/2')[first-left:last-left]
     return result.time_vector[first:last], result.audio_signal[first:last], values
 
 

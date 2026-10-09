@@ -87,7 +87,7 @@ PowerShell，项目根目录，Node/npm 使用既有本机安装，Python 桥接
 
 ![M12 修改前，1280×800，浅色100%](../../output/validation/p04-unify/before-1790431903463/M12-loaded-light-1280-100.png)
 
-![M12 修改后，1280×800，浅色100%](../../output/validation/p04-unify/after-1790433643278/M12-loaded-light-1280-100.png)
+M12 修改后，1280×800，浅色100%（历史本地产物，当前工作区不存在；原路径 `../../output/validation/p04-unify/after-1790433643278/M12-loaded-light-1280-100.png`）
 
 ![M12 保存失败保留编辑，深色150%](../../output/validation/p04-unify/after-1790433643278/M12-close-save-failure-dark-150.png)
 

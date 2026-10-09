@@ -7,7 +7,7 @@ from ptb_api.egg_models import EggTaskConfig, EggManifest
 @pytest.mark.parametrize('change', [
     {'roi_start': .2}, {'roi_start': .3, 'roi_end': .2},
     {'mode': 'batch', 'roi_end': 1.0}, {'mode': 'batch', 'signal_mode': 'raw'},
-    {'mode': 'inverse', 'roi_end': 2.0}, {'lp_order': 0},
+    {'mode': 'inverse', 'roi_end': 10.0001}, {'lp_order': 0},
     {'highpass_cutoff': 1000.0}, {'spec_vmin': -1.0}, {'flip_channels': 1},
 ])
 def test_reject_inconsistent_settings(change):
@@ -60,3 +60,13 @@ def test_runtime_missing_or_wrong_build_is_explicit(monkeypatch):
     root=Path(__file__).resolve().parents[2]
     monkeypatch.setenv('PTB_EGG_PYTHON',str(root/'.venv/m03-ui/Scripts/python.exe'))
     with pytest.raises(AcousticFailure,match='egg_runtime_mismatch'):command('request','pipe')
+
+
+def test_new_long_csv_manifest_extends_only_csv_budget():
+    from uuid import uuid4
+    files=[dict(id=str(uuid4()),name=name,kind='result',size_bytes=(65000000 if name.endswith('.csv') else 100),sha256='a'*64,expires_at=None)
+        for name in ['egg_DATA.csv','egg.ptb.json']]
+    assert EggManifest(core_version='3.0.0',files=files,format_revision='m03/2').complete
+    with pytest.raises(ValidationError):EggManifest(core_version='3.0.0',files=files)
+    files[1]['size_bytes']=65000000
+    with pytest.raises(ValidationError):EggManifest(core_version='3.0.0',files=files,format_revision='m03/2')

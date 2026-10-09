@@ -8,8 +8,13 @@ from uuid import uuid4
 ROOT=Path(__file__).resolve().parents[1]
 
 
-def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--prepare-only',action='store_true');args=p.parse_args()
+def main(argv=None):
+    from workbench_source import MODULES, configure
+    p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--prepare-only',action='store_true')
+    p.add_argument('--module', choices=('home', *MODULES), default='home')
+    args=p.parse_args(argv)
+    configure()
     from ptb_worker.store import SQLiteJobStore
     from ptb_worker.acoustic_batches import AcousticBatches
     from ptb_worker.local_acoustic_files import LocalAcousticFiles,initialize_local_files
@@ -30,7 +35,8 @@ def main():
     files=LocalAcousticFiles(jobs,cache,reaper_binary=reaper);AcousticBatches(jobs,files)
     if args.prepare_only:print(json.dumps({'ready':True,'cache':str(cache)}));return
     from ptb_desktop.host import run
-    raise SystemExit(run(ROOT/'frontend/dist',jobs_path=jobs.path,local_files_root=cache,reaper_binary=reaper))
+    return run(ROOT/'frontend/dist',jobs_path=jobs.path,local_files_root=cache,reaper_binary=reaper,
+               start_module=None if args.module=='home' else args.module)
 
 
-if __name__=='__main__':main()
+if __name__=='__main__':raise SystemExit(main())

@@ -81,11 +81,75 @@
       "title": "AcousticBackendPolicy",
       "type": "object"
     },
+    "AcousticBundleFile": {
+      "additionalProperties": false,
+      "description": "M01's versioned file budget does not widen M03/M04 manifests.",
+      "properties": {
+        "expires_at": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Expires At"
+        },
+        "id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "result",
+          "default": "result",
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 255,
+          "title": "Name",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "size_bytes": {
+          "maximum": 4000000000,
+          "minimum": 1,
+          "title": "Size Bytes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "size_bytes",
+        "sha256",
+        "expires_at"
+      ],
+      "title": "AcousticBundleFile",
+      "type": "object"
+    },
     "AcousticConfigSnapshot": {
       "additionalProperties": false,
       "properties": {
         "backend_policy": {
           "$ref": "#/$defs/AcousticBackendPolicy"
+        },
+        "extended": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AcousticExtended"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         },
         "selection": {
           "$ref": "#/$defs/AcousticSelection"
@@ -138,6 +202,58 @@
         "sample_dtype"
       ],
       "title": "AcousticDecodedAudio",
+      "type": "object"
+    },
+    "AcousticExtended": {
+      "additionalProperties": false,
+      "properties": {
+        "audio_channel": {
+          "anyOf": [
+            {
+              "maximum": 7,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Audio Channel"
+        },
+        "channel_overrides": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "maxProperties": 1000,
+          "title": "Channel Overrides",
+          "type": "object"
+        },
+        "egg": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JointEggSettings"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "max_duration_s": {
+          "const": 1800,
+          "default": 1800,
+          "title": "Max Duration S",
+          "type": "integer"
+        },
+        "revision": {
+          "const": "bounded/1",
+          "default": "bounded/1",
+          "title": "Revision",
+          "type": "string"
+        }
+      },
+      "title": "AcousticExtended",
       "type": "object"
     },
     "AcousticFileManifest": {
@@ -696,12 +812,21 @@
         },
         "files": {
           "items": {
-            "$ref": "#/$defs/AcousticManagedFile"
+            "$ref": "#/$defs/AcousticBundleFile"
           },
           "maxItems": 3001,
           "minItems": 1,
           "title": "Files",
           "type": "array"
+        },
+        "format_revision": {
+          "default": "legacy/1",
+          "enum": [
+            "legacy/1",
+            "m01-bundle/2"
+          ],
+          "title": "Format Revision",
+          "type": "string"
         },
         "kind": {
           "const": "managed_acoustic_files",
@@ -735,6 +860,58 @@
       "title": "AcousticTaskManifest",
       "type": "object"
     },
+    "EggManagedFile": {
+      "additionalProperties": false,
+      "properties": {
+        "expires_at": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Expires At"
+        },
+        "id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "result",
+          "default": "result",
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 255,
+          "title": "Name",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "size_bytes": {
+          "maximum": 256000000,
+          "minimum": 1,
+          "title": "Size Bytes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "size_bytes",
+        "sha256",
+        "expires_at"
+      ],
+      "title": "EggManagedFile",
+      "type": "object"
+    },
     "EggManifest": {
       "additionalProperties": false,
       "properties": {
@@ -750,12 +927,21 @@
         },
         "files": {
           "items": {
-            "$ref": "#/$defs/AcousticManagedFile"
+            "$ref": "#/$defs/EggManagedFile"
           },
           "maxItems": 5,
           "minItems": 2,
           "title": "Files",
           "type": "array"
+        },
+        "format_revision": {
+          "default": "m03/1",
+          "enum": [
+            "m03/1",
+            "m03/2"
+          ],
+          "title": "Format Revision",
+          "type": "string"
         },
         "kind": {
           "const": "managed_egg_files",
@@ -868,6 +1054,106 @@
         "core_version"
       ],
       "title": "JobManifest",
+      "type": "object"
+    },
+    "JointEggSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "auto_prominence": {
+          "default": true,
+          "title": "Auto Prominence",
+          "type": "boolean"
+        },
+        "derived": {
+          "default": false,
+          "title": "Derived",
+          "type": "boolean"
+        },
+        "egg_channel": {
+          "default": 0,
+          "maximum": 7,
+          "minimum": 0,
+          "title": "Egg Channel",
+          "type": "integer"
+        },
+        "gci_method": {
+          "default": "slope",
+          "enum": [
+            "slope",
+            "scale"
+          ],
+          "title": "Gci Method",
+          "type": "string"
+        },
+        "goi_method": {
+          "default": "scale",
+          "enum": [
+            "slope",
+            "scale"
+          ],
+          "title": "Goi Method",
+          "type": "string"
+        },
+        "highpass_cutoff": {
+          "default": 25.0,
+          "exclusiveMinimum": 0,
+          "maximum": 10000,
+          "title": "Highpass Cutoff",
+          "type": "number"
+        },
+        "lowpass_cutoff": {
+          "default": 2000.0,
+          "exclusiveMinimum": 0,
+          "maximum": 48000,
+          "title": "Lowpass Cutoff",
+          "type": "number"
+        },
+        "max_gap_ms": {
+          "default": 50.0,
+          "exclusiveMinimum": 0,
+          "maximum": 1000,
+          "title": "Max Gap Ms",
+          "type": "number"
+        },
+        "peak_prominence": {
+          "default": 0.01,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Peak Prominence",
+          "type": "number"
+        },
+        "silence_threshold": {
+          "default": 0.01,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Silence Threshold",
+          "type": "number"
+        },
+        "smooth_ms": {
+          "default": 20.0,
+          "maximum": 1000,
+          "minimum": 0,
+          "title": "Smooth Ms",
+          "type": "number"
+        },
+        "storage": {
+          "default": "aligned",
+          "enum": [
+            "aligned",
+            "cycles"
+          ],
+          "title": "Storage",
+          "type": "string"
+        },
+        "valley_prominence": {
+          "default": 0.01,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Valley Prominence",
+          "type": "number"
+        }
+      },
+      "title": "JointEggSettings",
       "type": "object"
     },
     "LpcManifest": {

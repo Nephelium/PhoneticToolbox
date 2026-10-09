@@ -43,7 +43,7 @@ def main():
             'actual_included_version':d.version,'license':license_summary,
             'urls':{'release':f'https://pypi.org/project/{name}/{d.version}/'},
             'verification_date':'2026-09-09','distribution_status':'local-development-locked; redistribution review pending',
-            'acknowledgement_group':'software','used_at':['requirements-m01-science.lock' if normalized in RUNTIME else 'requirements-m01-test.lock'],
+            'acknowledgement_group':'software','used_at':['requirements/requirements-m01-science.lock' if normalized in RUNTIME else 'requirements/requirements-m01-test.lock'],
             'relationship':'Unmodified dependency installed from PyPI wheels in project-local M01 environments; no global or v2 changes',
             'evidence':'third_party/m01-dependency-inventory.json'}
     dump(ROOT/'third_party/m01-dependency-inventory.json',{'platform':'Windows x86_64','python':'3.11.14',

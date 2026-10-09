@@ -28,6 +28,13 @@ def main():
         # Explicit opt-in private regression input, only inside ignored evidence.
         private=Path(sys.argv[sys.argv.index('--realtime-input')+1])
         (inputs/'realtime.wav').write_bytes(private.read_bytes())
+    if '--db-ranges' in sys.argv:
+        # Public synthetic display fixture: strong, quiet and silent regions.
+        t=np.arange(44100*6)/44100
+        gain=np.where(t<2,.8,np.where(t<4,.04,0.))
+        audio=gain*(np.sin(2*np.pi*200*t)+.2*np.sin(2*np.pi*400*t))
+        egg=.5*np.sin(2*np.pi*200*t)
+        wavfile.write(inputs/'db-ranges.wav',44100,np.column_stack([egg,audio]).astype(np.float32))
     if '--ranges' in sys.argv:
         wavfile.write(inputs/'wide.wav',44100,np.tile(samples,(8,1)))
         wavfile.write(inputs/'long.wav',44100,np.tile(samples,(83,1)))

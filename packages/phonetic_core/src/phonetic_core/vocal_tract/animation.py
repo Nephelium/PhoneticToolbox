@@ -5,7 +5,7 @@ import numpy as np
 from phonetic_core.vocal_tract.trajectory import validate_frames, sample_trajectory, validate_pitch_curve
 from phonetic_core.vocal_tract.envelope import sequence_envelope
 
-def prepare_animation(engine,frames,section=65,*,pictures_enabled=True,pitch_curve=None,cancel=None):
+def prepare_animation(engine,frames,section=None,*,pictures_enabled=True,pitch_curve=None,cancel=None):
     curve=validate_pitch_curve(pitch_curve or [])
     sample_frame=lambda frames,seconds:sample_trajectory(frames,seconds,curve)
     def glottis(pose):
@@ -17,7 +17,7 @@ def prepare_animation(engine,frames,section=65,*,pictures_enabled=True,pitch_cur
         for f in frames:
             if not f['manual_root']:
                 engine.set_manual_root(False)
-                actual=engine.snapshot(f['params'],section,f['lip_width'])['limited']
+                actual=engine.snapshot(f['params'],section,f['lip_width'],f.get('larynx_height',0.))['limited']
                 for key in ('TRX','TRY'):
                     i=engine.names.index(key);f['params'][i]=actual[i]
                 f['manual_root']=True
@@ -30,7 +30,7 @@ def prepare_animation(engine,frames,section=65,*,pictures_enabled=True,pitch_cur
     chunks=[];gains=[];pictures=[];times=[];first=sample_frame(frames,0)
     with engine.lock:
         engine.set_manual_root(first.get('manual_root',False))
-        engine.reset_tube(engine.prepare_tube(first['params'],first['lip_width']),glottis(first))
+        engine.reset_tube(engine.prepare_tube(first['params'],first['lip_width'],first.get('larynx_height',0.)),glottis(first))
         offset=0;previous_silent=first.get('silent',False)
         while offset<n:
             if cancel is not None and cancel.is_set():raise ValueError('已取消生成')
@@ -39,7 +39,7 @@ def prepare_animation(engine,frames,section=65,*,pictures_enabled=True,pitch_cur
             # that block, even when its endpoint is the next silence boundary.
             pose=sample_frame(frames,(offset+size-(.25 if silent_intervals else 0))/engine.sr)
             engine.set_manual_root(pose.get('manual_root',False))
-            tube=engine.prepare_tube(pose['params'],pose['lip_width'])
+            tube=engine.prepare_tube(pose['params'],pose['lip_width'],pose.get('larynx_height',0.))
             if previous_silent and not pose.get('silent'):engine.reset_tube(tube,glottis(pose))
             chunks.append(engine.block_tube(tube,glottis(pose),size))
             gains.append(np.full(size,10**((pose.get('source') or {}).get('audition_gain_db',0)/20)))
@@ -51,7 +51,7 @@ def prepare_animation(engine,frames,section=65,*,pictures_enabled=True,pitch_cur
                 if cancel is not None and cancel.is_set():raise ValueError('已取消生成')
                 time=min(index/30,duration);shown=sample_frame(frames,time)
                 engine.set_manual_root(shown.get('manual_root',False))
-                state=engine.snapshot(shown['params'],section,shown['lip_width']);state['f0']=shown['f0']
+                state=engine.snapshot(shown['params'],section,shown['lip_width'],shown.get('larynx_height',0.));state['f0']=shown['f0']
                 state.update(source=shown.get('source'),manual_root=shown.get('manual_root',False))
                 if shown.get('silent'):state['silent']=True
                 pictures.append(zlib.compress(json.dumps(state,separators=(',',':')).encode(),1));times.append(time)

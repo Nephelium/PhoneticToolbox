@@ -10,7 +10,7 @@ document.getElementById('showTimeline').onclick=()=>selectPanel('motion');
 document.addEventListener('inspector-organ',()=>selectPanel('organs'));
 selectPanel('organs');
 
-const layout=document.getElementById('columnLayout');
-try{const saved=localStorage.getItem('m10-columns');if(['auto','two','three'].includes(saved))layout.value=saved;}catch{}
-function applyLayout(){document.documentElement.dataset.columns=layout.value;try{localStorage.setItem('m10-columns',layout.value);}catch{}window.dispatchEvent(new Event('resize'));}
-layout.onchange=applyLayout;applyLayout();
+let columns='auto';
+try{const saved=localStorage.getItem('m10-columns');if(['auto','two','three'].includes(saved))columns=saved;}catch{}
+document.documentElement.dataset.columns=columns;
+window.dispatchEvent(new Event('resize'));

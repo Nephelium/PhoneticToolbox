@@ -1,0 +1,392 @@
+{
+  "success": true,
+  "records": 391,
+  "ui_records": 372,
+  "hidden_license_count": 45,
+  "paper_references_hidden": 43,
+  "newly_hidden_unused": 6,
+  "confirmed_own_hidden": 5,
+  "original_versions_modules_titles_preserved": true,
+  "existing_email_records_unchanged": true,
+  "report_complete_unique_coverage": 391,
+  "changed_source_fields": {
+    "SRC-PRAAT": [
+      "license"
+    ],
+    "SRC-VOICESAUCE": [
+      "license",
+      "license_review_2026_10_05"
+    ],
+    "REF-CPP": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-HNR": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-SHR": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-ISELI": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-HAWKS": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-SOE": [
+      "license"
+    ],
+    "REF-KLATT": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-GRIFFINLIM": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "DOC-VTL24": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "DOC-VTL23": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-VTL2006": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "ASSET-NASAL": [
+      "license",
+      "license_review_2026_10_05"
+    ],
+    "SRC-VTLWRAPPER": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-MFA": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "PENDING-EGG": [
+      "acknowledgement_license_note",
+      "acknowledgement_visibility_note",
+      "author_confirmation_2026_10_05",
+      "authors",
+      "distribution_status",
+      "kind",
+      "license",
+      "notes",
+      "show_in_acknowledgements",
+      "show_license_in_acknowledgements",
+      "verification_date",
+      "verification_status"
+    ],
+    "PENDING-DICTIONARY": [
+      "acknowledgement_license_note",
+      "acknowledgement_visibility_note",
+      "author_confirmation_2026_10_05",
+      "authors",
+      "distribution_status",
+      "kind",
+      "license",
+      "notes",
+      "show_in_acknowledgements",
+      "show_license_in_acknowledgements",
+      "verification_date",
+      "verification_status"
+    ],
+    "PENDING-IPA": [
+      "acknowledgement_license_note",
+      "acknowledgement_visibility_note",
+      "author_confirmation_2026_10_05",
+      "authors",
+      "distribution_status",
+      "kind",
+      "license",
+      "notes",
+      "show_in_acknowledgements",
+      "show_license_in_acknowledgements",
+      "urls",
+      "verification_date",
+      "verification_status"
+    ],
+    "PENDING-PHONOLOGY": [
+      "acknowledgement_license_note",
+      "acknowledgement_visibility_note",
+      "author_confirmation_2026_10_05",
+      "authors",
+      "distribution_status",
+      "kind",
+      "license",
+      "notes",
+      "show_in_acknowledgements",
+      "show_license_in_acknowledgements",
+      "verification_date",
+      "verification_status"
+    ],
+    "ORIGIN-WEBEDITOR": [
+      "acknowledgement_license_note",
+      "acknowledgement_visibility_note",
+      "author_confirmation_2026_10_05",
+      "authors",
+      "distribution_status",
+      "kind",
+      "license",
+      "notes",
+      "show_in_acknowledgements",
+      "show_license_in_acknowledgements",
+      "verification_date",
+      "verification_status"
+    ],
+    "ASSET-MASCOT": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "SRC-HTML2CANVAS": [
+      "acknowledgement_visibility_note",
+      "show_in_acknowledgements"
+    ],
+    "SRC-REACT": [
+      "acknowledgement_visibility_note",
+      "show_in_acknowledgements"
+    ],
+    "SRC-BABEL": [
+      "acknowledgement_visibility_note",
+      "show_in_acknowledgements"
+    ],
+    "SRC-TAILWIND": [
+      "acknowledgement_visibility_note",
+      "show_in_acknowledgements"
+    ],
+    "SRC-LUCIDE": [
+      "acknowledgement_visibility_note",
+      "show_in_acknowledgements"
+    ],
+    "PKG-NUMPY": [
+      "license"
+    ],
+    "PKG-SCIPY": [
+      "license"
+    ],
+    "PKG-PANDAS": [
+      "license"
+    ],
+    "PKG-MATPLOTLIB": [
+      "license"
+    ],
+    "PKG-PYQT6": [
+      "license"
+    ],
+    "PKG-PYQTGRAPH": [
+      "license"
+    ],
+    "PKG-PRAAT-PARSELMOUTH": [
+      "license"
+    ],
+    "PKG-SOUNDDEVICE": [
+      "license"
+    ],
+    "PKG-SOUNDFILE": [
+      "license"
+    ],
+    "PKG-OPENPYXL": [
+      "license"
+    ],
+    "PKG-PYTHON-DOCX": [
+      "license"
+    ],
+    "PKG-OPENCV-CONTRIB-PYTHON": [
+      "license"
+    ],
+    "PKG-MEDIAPIPE": [
+      "license"
+    ],
+    "PKG-PYINSTALLER": [
+      "license"
+    ],
+    "P01-PY-COLORAMA": [
+      "license"
+    ],
+    "P01-PY-NUMPY": [
+      "license"
+    ],
+    "P01-PY-PYINSTALLER-HOOKS-CONTRIB": [
+      "license"
+    ],
+    "P01-PYSIDE6": [
+      "acknowledgement_visibility_note",
+      "show_in_acknowledgements"
+    ],
+    "P02-PY-COLORAMA": [
+      "license"
+    ],
+    "P02-PY-PYPROJECT-HOOKS": [
+      "license"
+    ],
+    "P05-REF-OWASP-SESSION": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "P05-REF-OWASP-CSRF": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "P06-PG-LOCKS": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "P07-PYTHON-FILES": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "P07-STARLETTE-RESPONSES": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "M01-PY-COLORAMA": [
+      "license"
+    ],
+    "M01-PY-NUMPY": [
+      "license"
+    ],
+    "M01-PY-PANDAS": [
+      "license"
+    ],
+    "M01-PY-PRAAT-PARSELMOUTH": [
+      "license"
+    ],
+    "M01-PY-PYPROJECT-HOOKS": [
+      "license"
+    ],
+    "M01-PY-PYTHON-DATEUTIL": [
+      "license"
+    ],
+    "M01-PY-SCIPY": [
+      "license"
+    ],
+    "M01-WIN32": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "M01-WAVE": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "M01-PICKLE": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-WEBCODECS": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-WEBM": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-PNG": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-FONT-RENDERING": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-YIN-EGG-THESIS": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-HENRICH-2004-DEGG": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-MAKHOUL-1975-LPC": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "SRC-M16-VOICEVISTA": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "M17-VOQS-BALL-2018": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "M17-VOQS-ZH-UNTPHESOCA": [
+      "authors",
+      "citation",
+      "distribution_status",
+      "license",
+      "notes",
+      "urls",
+      "verification_date",
+      "zenodo_license_review_2026_10_05"
+    ],
+    "M17-UNICODE-PHONETIC-ENCODING": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "M17-CIN-REFERENCE": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "M17-INTERACTIVE-LAYOUT-REFERENCE": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "M17-EXTIPA-LV-JIANG-2013": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "M17-IOS-IPA-PHONETICS-REFERENCE": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "M17-IPA-CHART-ZH-2007": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "M17-IPA-HANDBOOK-JIANG-2008": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "M17-VOICE-QUALITY-ESLING-2019": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "M17-EXTIPA-BALL-2018": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "M17-EXTIPA-BALL-2024": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "M17-EXTIPA-BALL-2025-REPLY": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "SRC-CODEX-PALETTE-REFERENCE": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-DRUGMAN-GLOTTAL-COMPARISON": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-VOCODER-COMPARISON-2018": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ],
+    "REF-GLOTTDNN-2016": [
+      "acknowledgement_license_note",
+      "show_license_in_acknowledgements"
+    ]
+  },
+  "baseline_sha256": "54bd17f756786b44097fbd1f452d0f6ee412a96ae022a1dbcff495eab7c886a4"
+}

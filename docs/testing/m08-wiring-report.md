@@ -51,7 +51,7 @@
 
 Chrome 验证了目录已有 `_9.wav` 时生成 `_10.wav`、历史显示实际名称，随后选中结果 rename/delete 保留该未选文件和原始输入；实际下载落盘，草稿写失败保留标签和 dirty，成功后关闭重开恢复参数。浅/深主题及失败截图均保存。原 Qt 两次测试脚本定位/时序失败保留；最终修正测试等待后通过，未降低产品约束。offscreen GPU 告警保留于 `qt-final-render.log`，不据此声称显卡、声卡或多屏验证通过。
 
-截图：[Chrome 浅色](../../output/validation/m08-wiring/e4497806fa2c445a906d0e5897ca31ff/light.png)、[深色](../../output/validation/m08-wiring/e4497806fa2c445a906d0e5897ca31ff/dark.png)、[保存失败](../../output/validation/m08-wiring/e4497806fa2c445a906d0e5897ca31ff/close-failed.png)、[Qt 实际合成](../../output/validation/m08-wiring/38cb604750174126964df946193dee15/qt.png)。
+截图：[Chrome 浅色](../../output/validation/m08-wiring/e4497806fa2c445a906d0e5897ca31ff/light.png)、深色（历史本地产物，当前工作区不存在；原路径 `../../output/validation/m08-wiring/e4497806fa2c445a906d0e5897ca31ff/dark.png`）、[保存失败](../../output/validation/m08-wiring/e4497806fa2c445a906d0e5897ca31ff/close-failed.png)、[Qt 实际合成](../../output/validation/m08-wiring/38cb604750174126964df946193dee15/qt.png)。
 
 主要复验命令（PowerShell）：
 

@@ -16,6 +16,17 @@ class M07Bridge:
         if body['op']=='m07_list':
             result=self.bridge.service.get('/api/v1/jobs?project_id='+PROJECT)
             return [j for j in result['jobs'] if j['operation']=='phonation_synthesis']
+        if body['op']=='m07_f0':
+            import base64
+            import json
+            from uuid import UUID
+            from phonetic_core.manipulation.m07_display import synthesis_f0_display
+            job_id=str(UUID(body['job']));job=self.bridge.service.get('/api/v1/jobs/'+job_id)
+            if job['operation']!='phonation_synthesis' or job['state']!='succeeded':raise FileAccessError('本组尚未完整成功')
+            meta=next(f for f in job['result_manifest']['files'] if f['name']=='m07.ptb.json')
+            if meta['size_bytes']>2_000_000:raise FileAccessError('M07 F0 快照超过显示预算')
+            verified=self.bridge.invoke(dict(op='result',job=job_id,id=meta['id']))
+            return synthesis_f0_display(json.loads(base64.b64decode(verified['base64'])))
         if body['op']=='m07_save':
             from uuid import UUID
             from .task_bridge import pin_directory

@@ -13,7 +13,7 @@ def dump(path,obj):path.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'
 def main():
     path=ROOT/'third_party/source-registry.json';registry=json.loads(path.read_text('utf-8'))
     sources={s['id']:s for s in registry['sources']};packages=[]
-    used=['backend/src/ptb_worker/io/parameter_exports.py','requirements-m01-io.lock']
+    used=['backend/src/ptb_worker/io/parameter_exports.py','requirements/requirements-m01-io.lock']
     for name in ('openpyxl','et-xmlfile'):
         d=metadata.distribution(name);sid='M01-PY-'+name.upper()
         code_files=[f for f in d.files or [] if str(f).endswith('.py') and d.locate_file(f).is_file()]
@@ -63,12 +63,12 @@ def main():
         matches=[s for s in sources.values() if s.get('title','').lower().replace('_','-')==name and d.version in str(s.get('actual_included_version',''))]
         if not matches:raise ValueError('Unregistered installed dependency: '+name)
         match=next((s for s in matches if s['id'].startswith('M01-PY-')),matches[0])
-        match['used_at']=list(dict.fromkeys(match.get('used_at',[])+['requirements-m01-io.lock']))
+        match['used_at']=list(dict.fromkeys(match.get('used_at',[])+['requirements/requirements-m01-io.lock']))
         environment.append({'name':name,'version':d.version,'source_id':match['id']})
     registry['sources']=list(sources.values());registry['total_records']=len(sources);dump(path,registry)
     dump(ROOT/'third_party/m01-io-inventory.json',{'task':'M01-C','python':'3.11.14','sqlite':sqlite3.sqlite_version,
-        'new_runtime_packages':packages,'all_locked_packages':environment,'science_runtime':'requirements-m01-science.lock',
-        'combined_lock_sha256':sha(ROOT/'requirements-m01-io.lock'),
+        'new_runtime_packages':packages,'all_locked_packages':environment,'science_runtime':'requirements/requirements-m01-science.lock',
+        'combined_lock_sha256':sha(ROOT/'requirements/requirements-m01-io.lock'),
         'note':'B inventory remains historical. Installed wheel metadata has MIT labels but no standalone license file; redistribution audit remains open.'})
     print(json.dumps({'sources':len(sources),'new_runtime_packages':2,'sqlite':sqlite3.sqlite_version}))
 

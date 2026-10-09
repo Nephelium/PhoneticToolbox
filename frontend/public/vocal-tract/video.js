@@ -55,7 +55,7 @@ export function setupVideo({post,viewer,getFrames,getCurve,prepare,lock,ready}){
       const tileW=six?width/3:width,tileH=six?(height-156)/2:height-156;
       const host=document.createElement('div');host.className='export-viewport';host.style.cssText=`position:fixed;left:-10000px;top:0;width:${tileW}px;height:${tileH}px;overflow:hidden`;document.body.append(host);
       exportViewer=new VocalTractViewer(host,()=>{});exportViewer.metadata=viewer.metadata;await exportViewer.load();
-      exportViewer.setOptions({head:viewer.showHead,nose:viewer.showNose,teeth:viewer.showTeeth,labels:viewer.labels,focused:viewer.focused});
+      exportViewer.setOptions({head:viewer.showHead,nose:viewer.showNose,fullModel:viewer.fullModel,teeth:viewer.showTeeth,labels:viewer.labels,focused:viewer.focused});
       exportViewer.zoom=viewer.zoom;exportViewer.pan=[...viewer.pan];exportViewer.camera.copy(viewer.camera);exportViewer.camera.aspect=tileW/tileH;exportViewer.camera.updateProjectionMatrix();exportViewer.orbit.target.copy(viewer.orbit.target);exportViewer.orbit.enableDamping=false;exportViewer.orbit.enabled=false;
       exportViewer.renderer.setPixelRatio(1);exportViewer.width=0;exportViewer.resize();
       const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const c=canvas.getContext('2d',{alpha:false});

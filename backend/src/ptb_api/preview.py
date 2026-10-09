@@ -22,11 +22,22 @@ def create_preview_router(mode,token,origin,*,egg_preview=None,spectrogram_sessi
     async def egg_open(request:Request):
         egg_auth(request)
         if request.headers.get('content-type') != 'application/octet-stream': raise HTTPException(415,'binary_audio_required')
-        data = bytearray()
-        async for chunk in request.stream():
-            if len(data)+len(chunk) > MAX_BYTES: raise HTTPException(413,'egg_input_budget')
-            data.extend(chunk)
-        return await run_in_threadpool(egg_preview.open, 'local', bytes(data))
+        import tempfile
+        from pathlib import Path
+        import shutil
+        scratch=tempfile.TemporaryDirectory(prefix='ptb-egg-source-')
+        path=Path(scratch.name)/'source.wav';size=0
+        try:
+            with path.open('xb') as output:
+                async for chunk in request.stream():
+                    size+=len(chunk)
+                    if size>2_000_000_000:raise HTTPException(413,'egg_input_budget')
+                    if shutil.disk_usage(scratch.name).free<len(chunk)+64_000_000:raise HTTPException(413,'disk_space_low')
+                    output.write(chunk)
+            if not size:raise HTTPException(413,'egg_input_budget')
+            return await run_in_threadpool(egg_preview.open,'local',b'',source_path=path,source_scratch=scratch)
+        except BaseException:
+            scratch.cleanup();raise
 
     @router.post('/egg/{session_id}', response_model=EggInteractiveResult, operation_id='update_local_egg_preview')
     async def egg_update(session_id:UUID, body:EggTaskConfig, request:Request):

@@ -6,7 +6,7 @@ from scipy import signal
 import warnings
 from .errors import EggError
 
-def apply_highpass_filter(data: np.ndarray, cutoff_freq: float, fs: int, order: int = 4) -> np.ndarray:
+def apply_highpass_filter(data: np.ndarray, cutoff_freq: float, fs: int, order: int = 4, *, stable: bool = False) -> np.ndarray:
     """
     Apply a high-pass Butterworth filter to the data.
 
@@ -29,13 +29,17 @@ def apply_highpass_filter(data: np.ndarray, cutoff_freq: float, fs: int, order: 
         return data
 
     try:
+        if stable:
+            y = signal.sosfiltfilt(signal.butter(order, cutoff, btype='high', output='sos'), data)
+            if not np.isfinite(y).all(): raise EggError('filter_failed')
+            return y
         b, a = signal.butter(order, cutoff, btype='high')
         y = signal.filtfilt(b, a, data)
         return y
     except ValueError as e:
         raise EggError('filter_failed') from e
 
-def apply_lowpass_filter(data: np.ndarray, cutoff_freq: float, fs: int, order: int = 4) -> np.ndarray:
+def apply_lowpass_filter(data: np.ndarray, cutoff_freq: float, fs: int, order: int = 4, *, stable: bool = False) -> np.ndarray:
     """
     Apply a low-pass Butterworth filter to the data.
 
@@ -58,6 +62,10 @@ def apply_lowpass_filter(data: np.ndarray, cutoff_freq: float, fs: int, order: i
         return data
 
     try:
+        if stable:
+            y = signal.sosfiltfilt(signal.butter(order, cutoff, btype='low', output='sos'), data)
+            if not np.isfinite(y).all(): raise EggError('filter_failed')
+            return y
         b, a = signal.butter(order, cutoff, btype='low')
         y = signal.filtfilt(b, a, data)
         return y

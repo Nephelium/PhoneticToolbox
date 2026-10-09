@@ -1,39 +1,28 @@
 <script setup lang="ts">
-import ModuleFrame from '../components/ModuleFrame.vue';
+import {onBeforeUnmount,onMounted,ref,shallowRef} from 'vue';
+import ManualReader from '../manual/ManualReader.vue';
+import {parseManualProject} from '../manual/content.ts';
+import type {ManualProject,ManualTarget,ManualLocation} from '../manual/types.ts';
+import {host} from '../state/workspace.ts';
+withDefaults(defineProps<{active?:boolean;target?:ManualTarget;requestKey?:number;playbackAllowed?:boolean;returnLabel?:string}>(),{active:true,playbackAllowed:true});
+const emit=defineEmits<{returnTool:[]}>();
+const project=shallowRef<ManualProject>(),error=ref(''),loading=ref(false);
+const assetBaseUrl=import.meta.env.BASE_URL+'manual/';
+const abort=new AbortController();
+const saved=host.projects.read<ManualLocation|undefined>('manual-location',undefined);
+const initialLocation=saved&&typeof saved.chapterId==='string'&&Number.isFinite(saved.scrollTop)?saved:undefined;
+async function load(){
+  loading.value=true;error.value='';
+  try{const response=await fetch(assetBaseUrl+'project.json',{signal:abort.signal,credentials:'same-origin'});if(!response.ok)throw Error('missing');project.value=parseManualProject(await response.json());}
+  catch(reason){if(!abort.signal.aborted)error.value='使用说明资源未能加载，请检查软件资源是否完整，或重新打开此标签。';}
+  finally{loading.value=false;}
+}
+onMounted(load);onBeforeUnmount(()=>abort.abort());
 </script>
-<template><ModuleFrame label="使用说明" class="utility-page"><h3>工作台的基本操作</h3>
-<p>拖动侧栏与内容区的边界调整宽度，各模块分别自动记忆。窄窗口按模块布局临时收缩、堆叠或横向滚动，放大后恢复偏好。设置和使用说明在标签页中打开，切换标签保留编辑。</p>
-<ol class="help-list">
-<li>在左侧搜索工具，或从首页三组入口打开。标签间切换会保留当前文件与参数。</li>
-<li>在“参数估计”选择音频目录，可勾选“包含子文件夹”读取下层文件，长列表在左栏内部滚动。网页版先在项目中上传 WAV 与 TextGrid。波形默认显示一个声道，可勾选两个声道；试听声道可单独选择。</li>
-<li>拖动波形选区，或输入起止秒数。按 Ctrl 滚轮围绕鼠标缩放，双击恢复全长；普通滚轮滚动当前列，时间窗滑块平移。</li>
-<li>点击播放选区；焦点不在控件内时，空格也可播放/暂停。切换标签会停止播放。</li>
-<li>“选择输出参数”提供 80 个独立参数键。应用后形成草稿，关闭时可保存、放弃或取消。</li>
-</ol>
-<h3>参数估计：分析与切分</h3>
-<ol class="help-list">
-<li>同名 TextGrid 自动关联，也可在音频上方改选。选择层后点击区间即可试听；勾选“显示语谱图（Praat）”查看灰度语谱图。</li>
-<li>“开始全列表分析”处理列表里的所有 WAV。先在右列选好 80 项参数和 14 项设置；文件勾选仅控制切分范围。</li>
-<li>切分时勾选所需音频，或在文件列按 Ctrl+A 全选，然后选择层并保存。未勾选时只切分当前音频；空白、sil、eps 区间跳过。</li>
-<li>勾选“同时切分参数结果”，可使用本应用的同源完整结果，或在切分区逐音频指定历史 XLSX/SQLite。输出标明用户关联、来源未核实；参数沿用原帧，不重新估计。</li>
-<li>桌面在旧文件兼容区选择唇形 PKL，点击“转换并保存 .lip.json”。同名伴随时间戳作为起点后备；原文件保留，已有文件不覆盖。网页上传转换后的 .lip.json。</li>
-<li>桌面默认保存到 WAV 目录，也可选择独立结果目录；已有不同内容的文件另名保留。网页在处理记录中下载 XLSX、SQLite 和来源 JSON，文件到期前请自行留存。</li>
-<li>处理记录显示每个文件的状态。取消保留已完成结果；失败或中断项可单独重试。重开工作台后可查看持久记录，再选择目录保存结果。</li>
-</ol>
-<p class="notice">桌面长WAV可生成完整时长的轻量预览，转换后的采样率、位深及声道会显示在波形上方。试听和预览语谱图使用这份预览，原始文件与计算输入不变。预览通过不改变切分和计算预算：切分输入64MB，当前单次参数估计200万采样值（所有声道合计）和240秒。</p>
-<h3>参数显示：已有结果与多图窗</h3>
-<p>选择 WAV 目录和参数目录，优先关联同名 SQLite，也可手动选择 XLSX。参数沿用原时间和缺失值，读取限 16 MB / 20 万单元格，不执行表内公式。首次读取不自动添加参数；在右栏勾选并分配后，所选参数叠加在一个绘图区，用颜色、线型和图例区分；共用纵轴，量级差距较大时沿用 v2 自动双轴。参数图 Ctrl＋滚轮缩放，普通滚轮滚动内容、左键拖动平移、Shift＋拖动选区。</p>
-<p>右侧可搜索、勾选多个参数，新建图窗后批量分配，也可清空或删除选定图窗。reaper / correction 只筛选候选项；合并图窗保留曲线。时间窗和选区同步，Ctrl+滚轮缩放，波形工具可平移。每张图可放大，保存当前图默认PNG，可显式选择SVG。白底300dpi整幅PNG包含波形、标注、已开启且完成的语谱图和此参数图。底部播放条试听。</p>
-<h3>LPC 谱图：短时选区与谱包络</h3>
-<p>选择 WAV 及可选 TextGrid，按住 Shift 拖动框选或输入起止秒数。清除选区后分析当前可见时间窗，单次最多 48,000 样本。默认 50 阶、8000 Hz、−5 至 35 dB；动态纵轴按谱值自动留出余量。切换波形与频谱不重算，频谱缩放不改变音频时间范围。</p>
-<p>波形试听原始所选声道，频谱试听任务的单声道均值片段。参数改变后旧图保留并提示需更新。结果提供 300 DPI 白底黑线 PNG、选区 WAV 与含全部谱值、参数及来源的 JSON，可从历史任务恢复并保存。</p>
-<h3>语谱图转音频：校正与重建</h3>
-<p>导入灰度 PNG/JPEG/BMP，桌面也可主动截图。按左上、右上、右下、左下选四点，填写图内时间、频率和灰度标定，设置窗长、迭代和种子后开始重建。网页截图先保存并上传到项目。</p>
-<p>结果提供 WAV、校正/重建 PNG 和来源 JSON。固定种子方便复核，非零频率起点采用频带插值并低频补零。输出时长可能因原帧步长取整稍短于标定时长。图像缺少相位，声音仅为近似重建；显示削波样本数，不能视为原录音恢复。</p>
-<h3>IPA 字符显示</h3>
-<p>“国际音标 Plus”提供 IPA、extIPA 与 VoQS 三张可点击表格。符号插入下方文本框的光标处，也可直接输入、复制全文和导出文本。悬停介绍可关闭。组合符号保留原字符序列，页面使用随应用提供的固定音标字体。</p>
-<h3>本地录音</h3>
-<p>在桌面版“录音”中新建本地工程，选择输入设备、物理通道角色与扬声器。默认两个通道均为音频，EGG 需要在对应通道中主动选择；单输入设备使用单声道音频。可以自由录音，也可以逐条设置任务或导入 CSV、TSV、XLSX 清单。先做录前检测，确认电平与削波提醒后开始录音。每次停止都保留新的录音版本，语谱图可随时关闭。</p>
-<p>拖动波形选择区间，空格播放选区，再按空格停止；没有选区时播放整段。在输入框内空格照常输入。剪切、删除和降噪保留原始录音，可撤销或恢复原始版本。降噪仅处理麦克风通道。保存与批量导出提供 WAV 和任务清单，重录不会覆盖已有录音。</p>
-<p class="ipa-sample">a ɑ ə ɚ ɤ ɿ ʅ ŋ ɲ ʂ ʐ tʰ ʈʂʰ ˥˩</p>
-</ModuleFrame></template>
+<template>
+  <ManualReader v-if="project" :project="project" :active="active" :target="target" :request-key="requestKey" :asset-base-url="assetBaseUrl" :playback-allowed="playbackAllowed" :return-label="returnLabel" :initial-location="initialLocation" @location="host.projects.write('manual-location',$event)" @return-tool="emit('returnTool')"/>
+  <section v-else class="manual-start-state" aria-label="使用说明"><p v-if="loading" role="status">正在载入使用说明…</p><template v-else><p role="alert">{{error}}</p><button type="button" @click="load">重新加载</button></template></section>
+</template>
+<style scoped>
+.manual-start-state{padding:24px;color:var(--text);font-size:var(--body-size)}
+</style>

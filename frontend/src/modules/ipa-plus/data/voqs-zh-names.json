@@ -1,11 +1,16 @@
 {
-  "source": "https://zhuanlan.zhihu.com/p/203037479",
+  "source": "https://doi.org/10.5281/zenodo.10206204",
+  "previousSource": "https://zhuanlan.zhihu.com/p/203037479",
   "title": "VoQS：音质符号（2016 中英双语版）",
-  "author": "UntPhesoca / unt",
+  "author": "王天恒 / Wang, Tianheng",
+  "citation": "王天恒. VoQS：音质符号（2016 中英双语版）[EB/OL]. Zenodo(2020-08-30)[2023-12-26]. https://doi.org/10.5281/zenodo.10206204.",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
   "translationYear": 2020,
-  "checkedOn": "2026-10-02",
+  "checkedOn": "2026-10-05",
   "evidence": [
     "用户提供的完整正文及双语图",
+    "third_party/evidence/p19-license-classification/voqs-zenodo-record.json",
     "output/validation/m17/zhihu-203037479-search.json",
     "output/validation/m17/zhihu-203037479-supralarynx.json"
   ],

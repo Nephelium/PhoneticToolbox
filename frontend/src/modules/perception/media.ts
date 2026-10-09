@@ -11,7 +11,8 @@ export async function importFiles(files:File[],group:Role,existing:Asset[],store
 export interface Prepared {asset:Asset;buffer?:AudioBuffer;text?:string;image?:HTMLImageElement;url?:string;bytes:number}
 export class MediaBank {
  context:AudioContext;
- cache=new Map<string,Prepared>();mode:'all'|'chunked'='all';used=0;
+ // Restored runners have not been preflighted. They must never grow an unbounded cache.
+ cache=new Map<string,Prepared>();mode:'all'|'chunked'='chunked';used=0;
  private store:LocalStore;
  constructor(store:LocalStore){this.store=store;this.context=new AudioContext();}
  async unlock(){assertPlaybackAllowed();await this.context.resume();if(this.context.state!=='running')throw Error('音频未解锁，请点击预检与试音');}

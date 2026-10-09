@@ -2,12 +2,20 @@
 import { ref,computed,watch,onMounted,onUnmounted,nextTick } from 'vue';import { groups,modules } from './registry.ts';import { host,workspace,states,saveDraft } from '../state/workspace.ts';import { stop } from '../state/audio.ts';
 import ModuleFrame from '../components/ModuleFrame.vue';
 import HelpPage from './HelpPage.vue';
-import monoLicense from '../assets/JetBrainsMono-OFL.txt?raw';
+import StorageSettings from '../components/StorageSettings.vue';
+import {storageAvailable} from '../platform/storage.ts';
+import UpdatePanel from '../components/UpdatePanel.vue';
+import UpdateNotice from '../components/UpdateNotice.vue';
+import {onUpdatePrepareClose,onUpdateCloseCancelled,replyUpdateClose,type UpdateCheck} from '../platform/updates.ts';
+import {captureOwner} from '../platform/capture-lease.ts';
+import {moduleHelpTarget,isModuleHelpLabel} from '../manual/help-navigation.ts';
+import type {ManualTarget} from '../manual/types.ts';
+import FontLicenses from '../components/FontLicenses.vue';
 import '../design/buttons.css';
 import {installButtonAppearance} from '../state/buttons.ts';
 import {installWaveformAppearance} from '../state/waveform-color.ts';
 import {vResizablePanels} from '../layout/resizablePanels.ts';
-import AudioTransport from '../components/AudioTransport.vue';import AppIcon from '../components/AppIcon.vue';import ModalDialog from '../components/ModalDialog.vue';import MethodReferences from '../components/MethodReferences.vue';import WorkspaceView from './WorkspaceView.vue';import version from '../version.json';import fontLicense from '../assets/Doulos-OFL.txt?raw';import logo from '../assets/k2.png';
+import AudioTransport from '../components/AudioTransport.vue';import AppIcon from '../components/AppIcon.vue';import ModalDialog from '../components/ModalDialog.vue';import MethodReferences from '../components/MethodReferences.vue';import WorkspaceView from './WorkspaceView.vue';import version from '../version.json';import logo from '../assets/k2.png';
 import VocalTractPage from '../modules/vocal-tract/VocalTractPage.vue';
 import ParameterEstimationPage from '../modules/parameter-estimation/ParameterEstimationPage.vue';
 import ParameterDisplayPage from '../modules/parameter-display/ParameterDisplayPage.vue';
@@ -19,8 +27,9 @@ import Spec2WavPage from '../modules/spectrogram-to-audio/Spec2WavPage.vue';
 import {defineAsyncComponent,h} from 'vue';
 import ModuleStatus from '../components/ModuleStatus.vue';
 const PerceptionPage=defineAsyncComponent({loader:()=>import('../modules/perception/PerceptionPage.vue'),loadingComponent:{setup:()=>()=>h(ModuleStatus,{kind:'loading',message:'正在载入感知实验…'})},errorComponent:{setup:()=>()=>h(ModuleStatus,{kind:'error',message:'感知实验资源载入失败，请检查连接后重开标签。'})}});
-const m15Page=ref<{save:()=>Promise<boolean>}>();const m15Dirty=ref(false),m15Focus=ref(false);
+const m15Page=ref<{save:()=>Promise<boolean>;updateBlocked:()=>boolean}>();const m15Dirty=ref(false),m15Focus=ref(false);
 const RecordingPage=defineAsyncComponent({loader:()=>import('../modules/recording/RecordingPage.vue'),loadingComponent:{setup:()=>()=>h(ModuleStatus,{kind:'loading',message:'正在载入录音工作台…'})},errorComponent:{setup:()=>()=>h(ModuleStatus,{kind:'error',message:'录音工作台载入失败，请重新打开标签。'})}});
+const PaperReadingPage=defineAsyncComponent(()=>import('../modules/paper-reading/PaperReadingPage.vue'));
 const IpaPlusPage=defineAsyncComponent({loader:()=>import('../modules/ipa-plus/IpaPlusPage.vue'),loadingComponent:{setup:()=>()=>h(ModuleStatus,{kind:'loading',message:'正在载入国际音标表…'})},errorComponent:{setup:()=>()=>h(ModuleStatus,{kind:'error',message:'音标与字体资源载入失败，请重新打开标签。'})}});
 const m16Page=ref<{save:()=>Promise<boolean>;beforeClose:()=>Promise<boolean>;isRecording:()=>boolean}>();
 const m17Page=ref<{save:()=>Promise<boolean>}>();
@@ -34,8 +43,8 @@ const MfaAlignmentPage=defineAsyncComponent(()=>import('../modules/mfa/MfaAlignm
 const m11Page=ref<{save:()=>boolean}>();const m11Dirty=ref(false);
 const MandarinIpaPage=defineAsyncComponent({
   loader:()=>import('../modules/mandarin-ipa/MandarinIpaPage.vue'),
-  loadingComponent:{setup:()=>()=>h(ModuleStatus,{kind:'loading',message:'正在载入普通话转 IPA…'})},
-  errorComponent:{setup:()=>()=>h(ModuleStatus,{kind:'error',message:'普通话转 IPA 载入失败，请检查连接。其他标签仍可继续使用。'})},
+  loadingComponent:{setup:()=>()=>h(ModuleStatus,{kind:'loading',message:'正在载入汉字转国际音标…'})},
+  errorComponent:{setup:()=>()=>h(ModuleStatus,{kind:'error',message:'汉字转国际音标 载入失败，请检查连接。其他标签仍可继续使用。'})},
 });
 import {m01State,saveM01,forgetM01} from '../modules/parameter-estimation/store.ts';
 import {dirty} from '../modules/parameter-estimation/state.ts';
@@ -65,6 +74,7 @@ const PhonationSynthesisPage=defineAsyncComponent(()=>import('../modules/phonati
 const m07Page=ref<{save:()=>boolean}>();
 const m06Page=ref<{save:()=>boolean}>();
 const m08Page=ref<{save:()=>boolean}>();
+const m09Page=ref<{save:()=>boolean}>();
 const m04Page=ref<{save:()=>boolean}>();
 const m12Page=ref<{save:()=>Promise<boolean>}>();
 const m02Page=ref<{save:()=>boolean}>();
@@ -82,8 +92,31 @@ watch([theme,palette],()=>{applyTheme();host.projects.write('theme',theme.value)
 system.addEventListener('change',applyTheme);onUnmounted(()=>system.removeEventListener('change',applyTheme));
 const storedRecent=host.projects.read<unknown>('recent',[]);const recent=ref((Array.isArray(storedRecent)?storedRecent:[]).filter(id=>modules.some(m=>m.id===id)).slice(0,5));
 const current=computed(()=>modules.find(m=>m.id===active.value));const visible=computed(()=>modules.filter(m=>(m.title+' '+m.description+' '+m.id).toLowerCase().includes(query.value.trim().toLowerCase())));
+const manualTarget=ref<ManualTarget>(),manualRequest=ref(0),manualOrigin=ref<string>();
+function openManual(moduleId?:string,targetId?:string){if(m15Focus.value)return;manualOrigin.value=moduleId&&modules.some(m=>m.id===moduleId)?moduleId:undefined;manualTarget.value=moduleHelpTarget(moduleId,targetId);manualRequest.value++;open('help');}
+function contextualHelp(event:MouseEvent){const button=event.target instanceof Element?event.target.closest('button'):null;if(current.value&&button&&!button.disabled&&isModuleHelpLabel(button.textContent??'')){event.preventDefault();event.stopPropagation();openManual(current.value.id);}}
+function returnFromManual(){if(manualOrigin.value)open(manualOrigin.value);}
 const modal=ref(''),closing=ref(''),notice=ref(''),closingBusy=ref(false);const referencesId=ref<string|undefined>();
-function open(id:string){if(m15Focus.value)return;stop();if(!tabs.value.includes(id))tabs.value.push(id);active.value=id;void nextTick(()=>document.getElementById('tab-'+id)?.scrollIntoView({block:'nearest',inline:'nearest'}));if(modules.some(m=>m.id===id)){if(!['M01','M16','M17'].includes(id))workspace(previewKey(id));recent.value=[id,...recent.value.filter(x=>x!==id)].slice(0,5);host.projects.write('recent',recent.value);}}
+const updateCheck=ref<UpdateCheck>();
+const updateClosing=ref(''),updateReady=ref(false);
+function cancelClose(){closing.value='';if(updateClosing.value){replyUpdateClose(updateClosing.value,false);updateClosing.value='';updateReady.value=false;}}
+function continueUpdateClose(){
+ if(!updateClosing.value||closingBusy.value||updateReady.value)return;
+ const next=tabs.value.find(id=>moduleDirty(id));
+ if(next){active.value=next;closing.value=next;return;}
+ stop();updateReady.value=true;replyUpdateClose(updateClosing.value,true);
+}
+const stopUpdateClose=onUpdatePrepareClose(token=>{
+ if(captureOwner()||m16Recording.value||m15Focus.value||m15Page.value?.updateBlocked()){
+  replyUpdateClose(token,false,'请先结束采集或感知实验，再退出。');return;
+ }
+ if(closing.value||closingBusy.value||updateClosing.value){replyUpdateClose(token,false,'请先处理当前保存对话框，再退出。');return;}
+ updateClosing.value=token;updateReady.value=false;modal.value='';continueUpdateClose();
+});
+const stopUpdateCancel=onUpdateCloseCancelled(token=>{if(updateClosing.value===token){updateClosing.value='';updateReady.value=false;closing.value='';}});
+watch([closing,closingBusy],()=>{if(updateClosing.value&&!closing.value&&!closingBusy.value)void nextTick(continueUpdateClose);});
+onUnmounted(()=>{if(updateClosing.value)replyUpdateClose(updateClosing.value,false);stopUpdateClose();stopUpdateCancel();});
+function open(id:string){if(m15Focus.value)return;stop();if(!tabs.value.includes(id))tabs.value.push(id);active.value=id;void nextTick(()=>document.getElementById('tab-'+id)?.scrollIntoView({block:'nearest',inline:'nearest'}));if(modules.some(m=>m.id===id)){if(!['M01','M16','M17','M18'].includes(id))workspace(previewKey(id));recent.value=[id,...recent.value.filter(x=>x!==id)].slice(0,5);host.projects.write('recent',recent.value);}}
 function remove(id:string){stop();if(id==='M16'){m16Dirty.value=false;m16Recording.value=false;}if(id==='M17')m17Dirty.value=false;if(id==='settings')settingsDirty.value=false;if(id==='M05')m05Dirty.value=false;if(id==='M11')m11Dirty.value=false;if(id==='M15'){m15Dirty.value=false;m15Focus.value=false;}if(id==='M14')m14Dirty.value=false;if(id==='M13')m13Dirty.value=false;if(id==='M10')m10Dirty.value=false;const index=tabs.value.indexOf(id);tabs.value=tabs.value.filter(x=>x!==id);if(id==='M01')forgetM01(researchContext.value.key);else if(modules.some(m=>m.id===id))delete states[previewKey(id)];if(active.value===id)active.value=tabs.value[Math.max(0,index-1)];closing.value='';void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
 async function finishRecordingClose(){
  if(closingBusy.value)return;
@@ -95,30 +128,32 @@ async function finishRecordingClose(){
 function close(id:string){notice.value='';if(id==='M16'){closing.value=id;if(!moduleDirty(id))void finishRecordingClose();return;}if(moduleDirty(id))closing.value=id;else remove(id);}
 async function discardClose(){if(closing.value==='M16'){await finishRecordingClose();return;}remove(closing.value);}
 
-async function saveClose(){if(closing.value==='M16'){await finishRecordingClose();return;}if(closing.value==='M17'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m17Page.value?.save())remove('M17');else notice.value='音标草稿保存失败，文本仍保留。';}catch(error){notice.value=error instanceof Error?error.message:'音标草稿保存失败。';}finally{closingBusy.value=false;}return;}if(closing.value==='settings'){if(closingBusy.value)return;closingBusy.value=true;try{if(await settingsPage.value?.save())remove('settings');else notice.value='字体未能应用，设置和编辑已保留。请检查字体设置后重试。';}finally{closingBusy.value=false;}return;}if(closing.value==='M07'){if(m07Page.value?.save())remove('M07');else notice.value='发声连续统草稿未保存，请完成或取消当前操作。';return;}if(closing.value==='M05'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m05Page.value?.save())remove('M05');else notice.value='录制或结果尚未保存，请返回唇形模块处理。';}finally{closingBusy.value=false;}return;}if(closing.value==='M11'){if(m11Page.value?.save())remove('M11');else notice.value='MFA 参数未保存，请等待当前操作完成。';return;}if(closing.value==='M15'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m15Page.value?.save())remove('M15');else notice.value='请先暂停实验、保存项目，并导出结果后确认文件已保存。';}finally{closingBusy.value=false;}return;}if(closing.value==='M06'){if(m06Page.value?.save())remove('M06');else notice.value='语音合成参数未保存，标签和编辑仍保留。';return;}if(closing.value==='M14'){if(m14Page.value?.save())remove('M14');else notice.value='音系归纳草稿保存失败，请完成当前操作或检查本机存储。';return;}if(closing.value==='M08'){if(m08Page.value?.save())remove('M08');else notice.value='变速变调草稿保存失败，标签和编辑仍保留。';return;}if(closing.value==='M13'){if(m13Page.value?.save())remove('M13');else notice.value='普通话转 IPA 草稿保存失败，当前文本和排版仍保留。请检查本机存储后重试。';return;}if(closing.value==='M12'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m12Page.value?.save())remove('M12');else notice.value='标注或唇偏保存失败，编辑仍保留。请返回模块检查错误。';}finally{closingBusy.value=false;}return;}if(closing.value==='M04'){if(m04Page.value?.save())remove('M04');else notice.value='LPC 参数草稿无效或保存失败，请返回模块检查。';return;}if(closing.value==='M03'){if(m03Page.value?.save())remove('M03');else notice.value='参数草稿保存失败，标签和编辑仍保留。请检查本机存储后重试。';return;}if(closing.value==='M02'){if(m02Page.value?.save())remove('M02');return;}if(closing.value==='M10'){notice.value='请返回关键帧，保存或取消正在编辑的姿势后再关闭。';return;}if(closing.value==='M01'&&m01.value.drawer){notice.value='请先应用或取消参数/设置对话框中的编辑，再保存关闭。';return;}if(closing.value==='M01'?saveM01(researchContext.value.key):saveDraft(previewKey(closing.value)))remove(closing.value);else notice.value='本机草稿保存失败，标签仍保留。请检查浏览器存储权限。';}
-async function leaveProject(){if(closingBusy.value||m15Focus.value)return;closingBusy.value=true;try{if(m16Page.value&&!await m16Page.value.beforeClose())return;if(moduleDirty('M17')&&!await m17Page.value?.save())return;if(settingsDirty.value&&!await settingsPage.value?.save())return;if(moduleDirty('M07')&&!m07Page.value?.save())return;if(moduleDirty('M05')&&!await m05Page.value?.save())return;if(moduleDirty('M11')&&!m11Page.value?.save())return;if(moduleDirty('M15')&&!await m15Page.value?.save())return;if(moduleDirty('M06')&&!m06Page.value?.save())return;if(moduleDirty('M14')&&!m14Page.value?.save())return;if(moduleDirty('M08')&&!m08Page.value?.save())return;if(m12Page.value&&!await m12Page.value.save())return;emit('leaveProject');}finally{closingBusy.value=false;}}
+async function saveClose(){if(closing.value==='M09'){cancelClose();return;}if(closing.value==='M16'){await finishRecordingClose();return;}if(closing.value==='M17'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m17Page.value?.save())remove('M17');else notice.value='音标草稿保存失败，文本仍保留。';}catch(error){notice.value=error instanceof Error?error.message:'音标草稿保存失败。';}finally{closingBusy.value=false;}return;}if(closing.value==='settings'){if(closingBusy.value)return;closingBusy.value=true;try{if(await settingsPage.value?.save())remove('settings');else notice.value='字体未能应用，设置和编辑已保留。请检查字体设置后重试。';}finally{closingBusy.value=false;}return;}if(closing.value==='M07'){if(m07Page.value?.save())remove('M07');else notice.value='发声连续统草稿未保存，请完成或取消当前操作。';return;}if(closing.value==='M05'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m05Page.value?.save())remove('M05');else notice.value='录制或结果尚未保存，请返回唇形模块处理。';}finally{closingBusy.value=false;}return;}if(closing.value==='M11'){if(m11Page.value?.save())remove('M11');else notice.value='MFA 参数未保存，请等待当前操作完成。';return;}if(closing.value==='M15'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m15Page.value?.save())remove('M15');else notice.value='请先暂停实验、保存项目，并导出结果后确认文件已保存。';}finally{closingBusy.value=false;}return;}if(closing.value==='M06'){if(m06Page.value?.save())remove('M06');else notice.value='声学参数合成参数未保存，标签和编辑仍保留。';return;}if(closing.value==='M14'){if(m14Page.value?.save())remove('M14');else notice.value='音系归纳草稿保存失败，请完成当前操作或检查本机存储。';return;}if(closing.value==='M08'){if(m08Page.value?.save())remove('M08');else notice.value='变速变调草稿保存失败，标签和编辑仍保留。';return;}if(closing.value==='M13'){if(m13Page.value?.save())remove('M13');else notice.value='汉字转国际音标 草稿保存失败，当前文本和排版仍保留。请检查本机存储后重试。';return;}if(closing.value==='M12'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m12Page.value?.save())remove('M12');else notice.value='标注或唇偏保存失败，编辑仍保留。请返回模块检查错误。';}finally{closingBusy.value=false;}return;}if(closing.value==='M04'){if(m04Page.value?.save())remove('M04');else notice.value='LPC 参数草稿无效或保存失败，请返回模块检查。';return;}if(closing.value==='M03'){if(m03Page.value?.save())remove('M03');else notice.value='参数草稿保存失败，标签和编辑仍保留。请检查本机存储后重试。';return;}if(closing.value==='M02'){if(m02Page.value?.save())remove('M02');return;}if(closing.value==='M10'){notice.value='请返回关键帧，保存或取消正在编辑的姿势后再关闭。';return;}if(closing.value==='M01'&&m01.value.drawer){notice.value='请先应用或取消参数/设置对话框中的编辑，再保存关闭。';return;}if(closing.value==='M01'?saveM01(researchContext.value.key):saveDraft(previewKey(closing.value)))remove(closing.value);else notice.value='本机草稿保存失败，标签仍保留。请检查浏览器存储权限。';}
+async function leaveProject(){if(closingBusy.value||m15Focus.value)return;closingBusy.value=true;try{if(m16Page.value&&!await m16Page.value.beforeClose())return;if(moduleDirty('M17')&&!await m17Page.value?.save())return;if(settingsDirty.value&&!await settingsPage.value?.save())return;if(moduleDirty('M07')&&!m07Page.value?.save())return;if(moduleDirty('M05')&&!await m05Page.value?.save())return;if(moduleDirty('M11')&&!m11Page.value?.save())return;if(moduleDirty('M15')&&!await m15Page.value?.save())return;if(moduleDirty('M06')&&!m06Page.value?.save())return;if(moduleDirty('M14')&&!m14Page.value?.save())return;if(moduleDirty('M08')&&!m08Page.value?.save())return;if(moduleDirty('M09')&&!m09Page.value?.save())return;if(m12Page.value&&!await m12Page.value.save())return;emit('leaveProject');}finally{closingBusy.value=false;}}
 function refs(id?:string){referencesId.value=id;modal.value='references';}
 function tabKey(event:KeyboardEvent){let n=tabs.value.indexOf(active.value);if(event.key==='ArrowRight')n=(n+1)%tabs.value.length;else if(event.key==='ArrowLeft')n=(n-1+tabs.value.length)%tabs.value.length;else if(event.key==='Home')n=0;else if(event.key==='End')n=tabs.value.length-1;else return;event.preventDefault();open(tabs.value[n]);void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
 function beforeUnload(event:BeforeUnloadEvent){if(dirty(m01.value)||tabs.value.some(id=>moduleDirty(id))){event.preventDefault();event.returnValue='';}}
 onMounted(()=>window.addEventListener('beforeunload',beforeUnload));onUnmounted(()=>window.removeEventListener('beforeunload',beforeUnload));
-const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticToolbox',references:'开源与学术致谢','font-license':'Doulos SIL 字体许可'}[modal.value]||''));
+const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticToolbox',references:'开源与学术致谢','font-license':'内置字体版权与许可'}[modal.value]||''));
 </script>
 <template>
 <a href="#main-content" class="skip-link">跳到工作区</a>
-<div class="app-shell" :class="{collapsed}" v-resizable-panels="{key:research?.ownerId?'server:'+research.ownerId+':navigation':'navigation',center:'.main-shell',centerMin:540,disabled:collapsed,panels:[{selector:'.sidebar',side:'left',label:'工具导航',initial:224,min:184,max:360}]}">
+<div class="app-shell" :class="{collapsed}" :inert="updateReady" v-resizable-panels="{key:research?.ownerId?'server:'+research.ownerId+':navigation':'navigation',center:'.main-shell',centerMin:540,disabled:collapsed,panels:[{selector:'.sidebar',side:'left',label:'工具导航',initial:224,min:184,max:360}]}">
 <aside id="tool-sidebar" class="sidebar" aria-label="工具导航">
 <div class="brand">
 <img :src="logo" alt="PhoneticToolbox 波形团子"/>
 <span>PhoneticToolbox<small>语音研究工具箱</small>
 </span>
-<button type="button" class="sidebar-toggle" :aria-label="collapsed?'展开侧栏':'收起侧栏'" :title="collapsed?'展开侧栏':'收起侧栏'" :aria-expanded="!collapsed" aria-controls="tool-sidebar" @click="collapsed=!collapsed">
-<span aria-hidden="true">{{collapsed?'›':'‹'}}</span>
-</button>
 </div>
+<div class="sidebar-search-row">
 <label class="search-box">
 <AppIcon name="search"/>
 <input v-model="query" aria-label="搜索工具" placeholder="搜索工具…"/>
 </label>
+<button type="button" class="sidebar-toggle" :aria-label="collapsed?'展开侧栏':'收起侧栏'" :title="collapsed?'展开侧栏':'收起侧栏'" :aria-expanded="!collapsed" aria-controls="tool-sidebar" @click="collapsed=!collapsed">
+<span aria-hidden="true">{{collapsed?'›':'‹'}}</span>
+</button>
+</div>
 <nav>
 <button class="nav-item" :class="{selected:active==='home'}" title="首页" @click="open('home')">
 <AppIcon name="home"/>
@@ -135,7 +170,7 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 </nav>
 <div class="sidebar-bottom">
 <div class="utility-grid">
-<button v-for="[key,label,icon] in [['settings','设置','settings'],['help','使用说明','book'],['update','检查更新','update'],['about','关于','info']]" :key="key" :title="label" @click="key==='settings'||key==='help'?open(key):modal=key">
+<button v-for="[key,label,icon] in [['settings','设置','settings'],['help','使用说明','book'],['about','关于','info'],['update','检查更新','update']]" :key="key" :title="label" @click="key==='help'?openManual(current?.id):key==='settings'?open(key):modal=key">
 <AppIcon :name="icon"/>
 <span>{{label}}</span>
 </button>
@@ -158,7 +193,7 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 <button v-if="m16Recording" class="host-badge recording-indicator" aria-label="录音进行中，返回录音" @click="open('M16')">● 录音进行中</button>
 <span v-if="!research" class="host-badge">{{host.kind==='desktop'?'本地桌面':'浏览器预览'}}</span>
 </header>
-<main id="main-content" :class="{'pane-workspace':['M01','M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15','M16','M17'].includes(active)}" tabindex="-1" role="tabpanel" :aria-labelledby="'tab-'+active">
+<main id="main-content" :class="{'pane-home':active==='home','pane-manual':active==='help','pane-workspace':['M01','M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15','M16','M17','M18'].includes(active)}" tabindex="-1" role="tabpanel" :aria-labelledby="'tab-'+active" @click.capture="contextualHelp">
 <div v-if="active==='home'" class="home-page">
 <header class="welcome">
 <div class="welcome-copy">
@@ -211,52 +246,55 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 </button>
 </div>
 </section>
-<button class="guide-banner" @click="open('help')">
+<button class="guide-banner" @click="openManual()">
 <AppIcon name="book"/>
 <span>第一次使用？<strong>了解工作台的基本操作</strong>
 </span>
-<span>打开使用说明 →</span>
+<span>打开帮助 →</span>
 </button>
 <footer class="home-footer">
 <span>PhoneticToolbox 3.0 · 界面试用版</span>
 <button @click="refs()">开源与学术致谢</button>
 </footer>
 </div>
-<ParameterEstimationPage v-else-if="current?.id==='M01'" :key="researchContext.key" :context="researchContext" @references="refs('M01')"/>
-<WorkspaceView v-else-if="current&&!['M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15','M16','M17'].includes(current.id)" :key="current.id" :module="current" :state-key="previewKey(current.id)" @references="refs(current?.id)"/>
-<ParameterDisplayPage v-if="tabs.includes('M02')" v-show="active==='M02'" ref="m02Page" :key="researchContext.key+':M02'" :active="active==='M02'" :context="researchContext" :state-key="previewKey('M02')" @references="refs('M02')" @close="close('M02')"/>
-<AnnotationPage v-if="tabs.includes('M12')" v-show="active==='M12'" ref="m12Page" :key="researchContext.key+':M12'" :active="active==='M12'" :context="researchContext" :state-key="previewKey('M12')" @references="refs('M12')" @close="close('M12')"/>
+<ParameterEstimationPage v-else-if="current?.id==='M01'" :key="researchContext.key" :context="researchContext" @references="refs('M01')" @help="openManual('M01')"/>
+<WorkspaceView v-else-if="current&&!['M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15','M16','M17','M18'].includes(current.id)" :key="current.id" :module="current" :state-key="previewKey(current.id)" @references="refs(current?.id)"/>
+<ParameterDisplayPage v-if="tabs.includes('M02')" v-show="active==='M02'" ref="m02Page" :key="researchContext.key+':M02'" :active="active==='M02'" :context="researchContext" :state-key="previewKey('M02')" @references="refs('M02')" @help="openManual('M02')" @close="close('M02')"/>
+<AnnotationPage v-if="tabs.includes('M12')" v-show="active==='M12'" ref="m12Page" :key="researchContext.key+':M12'" :active="active==='M12'" :context="researchContext" :state-key="previewKey('M12')" @references="refs('M12')" @help="openManual('M12')" @close="close('M12')"/>
 <EggAnalysisPage v-if="tabs.includes('M03')" v-show="active==='M03'" ref="m03Page" :key="researchContext.key+':M03'" :active="active==='M03'" :context="researchContext" :state-key="previewKey('M03')" @references="refs('M03')" @close="close('M03')"/>
 <PhonationSynthesisPage v-if="tabs.includes('M07')" v-show="active==='M07'" ref="m07Page" :key="researchContext.key+':M07'" :active="active==='M07'" :context="researchContext" :state-key="previewKey('M07')" @references="refs('M07')"/>
 <SpeechSynthesisPage v-if="tabs.includes('M06')" v-show="active==='M06'" ref="m06Page" :key="researchContext.key+':M06'" :active="active==='M06'" :context="researchContext" :state-key="previewKey('M06')" @references="refs('M06')"/>
 <PitchManipulationPage v-if="tabs.includes('M08')" v-show="active==='M08'" ref="m08Page" :key="researchContext.key+':M08'" :active="active==='M08'" :context="researchContext" :state-key="previewKey('M08')" @references="refs('M08')"/>
-<LpcSpectrumPage v-if="tabs.includes('M04')" v-show="active==='M04'" ref="m04Page" :key="researchContext.key+':M04'" :active="active==='M04'" :context="researchContext" :state-key="previewKey('M04')" @references="refs('M04')" @close="close('M04')"/>
-<Spec2WavPage v-if="tabs.includes('M09')" v-show="active==='M09'" :key="researchContext.key+':M09'" :context="researchContext" :state-key="previewKey('M09')" @references="refs('M09')" @close="close('M09')"/>
+<LpcSpectrumPage v-if="tabs.includes('M04')" v-show="active==='M04'" ref="m04Page" :key="researchContext.key+':M04'" :active="active==='M04'" :context="researchContext" :state-key="previewKey('M04')" @references="refs('M04')" @help="openManual('M04')" @close="close('M04')"/>
+<Spec2WavPage ref="m09Page" v-if="tabs.includes('M09')" v-show="active==='M09'" :key="researchContext.key+':M09'" :context="researchContext" :state-key="previewKey('M09')" @references="refs('M09')" @help="openManual('M09')" @close="close('M09')"/>
 <LipExtractionPage v-if="tabs.includes('M05')" v-show="active==='M05'" ref="m05Page" :key="researchContext.key+':M05'" :state-key="previewKey('M05')" :port="researchContext.files?.m05" :active="active==='M05'" @references="refs('M05')" @dirty="m05Dirty=$event"/>
 <MfaAlignmentPage v-if="tabs.includes('M11')" v-show="active==='M11'" ref="m11Page" :key="researchContext.key+':M11'" :state-key="previewKey('M11')" :context="researchContext" :active="active==='M11'" @references="refs('M11')" @dirty="m11Dirty=$event"/>
 <PhonologyInductionPage v-if="tabs.includes('M14')" v-show="active==='M14'" ref="m14Page" :key="researchContext.key+':M14'" :state-key="previewKey('M14')" :context="researchContext" :active="active==='M14'" @references="refs('M14')" @dirty="m14Dirty=$event"/>
-<MandarinIpaPage v-if="tabs.includes('M13')" v-show="active==='M13'" ref="m13Page" :key="researchContext.key+':M13'" :state-key="previewKey('M13')" @references="refs('M13')" @dirty="m13Dirty=$event"/>
-<RecordingPage v-if="tabs.includes('M16')" v-show="active==='M16'" ref="m16Page" :state-key="'local:M16'" :active="active==='M16'" @dirty="m16Dirty=$event" @recording="recordingChanged" @references="refs('M16')"/>
+<MandarinIpaPage v-if="tabs.includes('M13')" v-show="active==='M13'" ref="m13Page" :key="researchContext.key+':M13'" :state-key="previewKey('M13')" @references="refs('M13')" @help="openManual('M13')" @dirty="m13Dirty=$event"/>
+<RecordingPage v-if="tabs.includes('M16')" v-show="active==='M16'" ref="m16Page" :state-key="'local:M16'" :active="active==='M16'" @dirty="m16Dirty=$event" @recording="recordingChanged" @references="refs('M16')" @help="openManual('M16')"/>
+<PaperReadingPage v-if="tabs.includes('M18')" v-show="active==='M18'" :active="active==='M18'" @help="openManual('M18')"/>
 <IpaPlusPage v-if="tabs.includes('M17')" v-show="active==='M17'" ref="m17Page" :state-key="'local:M17'" :active="active==='M17'" @dirty="m17Dirty=$event" @references="refs('M17')"/>
 <PerceptionPage v-if="tabs.includes('M15')" v-show="active==='M15'" ref="m15Page" :active="active==='M15'" @dirty="m15Dirty=$event" @focus="m15Focus=$event" @references="refs('M15')"/>
-<VocalTractPage :state-key="previewKey('M10')" v-if="tabs.includes('M10')" v-show="active==='M10'" :active="active==='M10'" @references="refs('M10')" @close="close('M10')" @dirty="m10Dirty=$event"/>
+<VocalTractPage :state-key="previewKey('M10')" v-if="tabs.includes('M10')" v-show="active==='M10'" :active="active==='M10'" @references="refs('M10')" @help="openManual('M10')" @close="close('M10')" @dirty="m10Dirty=$event"/>
 <ModuleFrame v-if="tabs.includes('settings')" v-show="active==='settings'" label="工作台设置" class="settings-page">
 <div class="settings-columns"><AppearanceSettings v-model:mode="theme" v-model:palette="palette"/><FontSettings ref="settingsPage" @dirty="settingsDirty=$event"/></div>
+<StorageSettings v-if="storageAvailable"/>
 </ModuleFrame>
-<HelpPage v-if="tabs.includes('help')" v-show="active==='help'"/>
+<HelpPage v-if="tabs.includes('help')" v-show="active==='help'" :active="active==='help'" :target="manualTarget" :request-key="manualRequest" :playback-allowed="!m16Recording&&!m15Focus" :return-label="manualOrigin?'返回 '+tabTitle(manualOrigin):undefined" @return-tool="returnFromManual"/>
 </main>
-<div v-if="current&&!['M03','M04','M05','M06','M07','M08','M10','M11','M12','M13','M14','M15','M16','M17'].includes(current.id)" class="global-transport">
+<div v-if="current&&!['M03','M04','M05','M06','M07','M08','M10','M11','M12','M13','M14','M15','M16','M17','M18'].includes(current.id)" class="global-transport">
 <AudioTransport :state="current.id==='M01'?m01.wave:workspace(previewKey(current.id))" :active="true"/>
 </div>
 <div class="statusbar">
 <span>
-<span class="status-dot"/>{{current?.id==='M16'?'录音 · 本机采集与可恢复编辑':current?.id==='M17'?'国际音标 Plus · 本地输入与固定字体':current?.id==='M05'?'唇形 · 本地候选预览与 legacy 离线任务':current?.id==='M11'?'MFA · 音频与已有文本强制对齐':current?.id==='M15'?'感知实验 · 客户端运行与本地恢复':current?.id==='M01'?'参数估计 · 文件、试听与任务':current?.id==='M02'?'参数显示 · 原帧与多图窗':current?.id==='M03'?'EGG · 接触商与声门事件':current?.id==='M07'?'发声连续统 · LPC 残差与持久任务':current?.id==='M06'?'语音合成 · 参数曲线与持久任务':current?.id==='M08'?'变速变调 · 持久任务与结果':current?.id==='M04'?'LPC · 线性预测谱包络':current?.id==='M09'?'语谱图重建 · 近似相位恢复':current?.id==='M10'?'声道工作台 · VTL 2.4':current?.id==='M12'?'标注对齐 · TextGrid 与唇偏独立保存':current?.id==='M14'?'音系归纳 · 字表、归并与三文件导出':current?.id==='M13'?'普通话转 IPA · 本地逐字映射与离线导出':current?'公共预览就绪 · 分析功能待接入':'就绪 · 选择工具开始'}}</span>
-<span>{{research&&!['M16','M17'].includes(active)?'当前账号的项目资源':'本机文件 · 无自动上传'}}</span>
+<span class="status-dot"/>{{current?.id==='M18'?'语音学论文精读 · 服务器分发与本地阅读':current?.id==='M16'?'录音 · 本机采集与可恢复编辑':current?.id==='M17'?'国际音标表Plus · 本地输入与固定字体':current?.id==='M05'?'唇形 · 本地候选预览与 legacy 离线任务':current?.id==='M11'?'MFA · 音频与已有文本强制对齐':current?.id==='M15'?'感知实验 · 客户端运行与本地恢复':current?.id==='M01'?'参数估计 · 文件、试听与任务':current?.id==='M02'?'参数显示 · 原帧与多图窗':current?.id==='M03'?'EGG · 接触商与声门事件':current?.id==='M07'?'发声连续统 · LPC 残差与持久任务':current?.id==='M06'?'声学参数合成 · 参数曲线与持久任务':current?.id==='M08'?'变速变调 · 持久任务与结果':current?.id==='M04'?'LPC · 线性预测谱包络':current?.id==='M09'?'语谱图转音频 · 图片重建与频谱绘制':current?.id==='M10'?'生理参数合成 · VTL 2.4':current?.id==='M12'?'标注对齐 · TextGrid 与唇偏独立保存':current?.id==='M14'?'音系归纳 · 字表、归并与三文件导出':current?.id==='M13'?'汉字转国际音标 · 本地逐字映射与离线导出':current?'公共预览就绪 · 分析功能待接入':'就绪 · 选择工具开始'}}</span>
+<span>{{research&&!['M16','M17','M18'].includes(active)?'当前账号的项目资源':'本机文件 · 无自动上传'}}</span>
 </div>
 </div>
 </div>
-<ModalDialog v-if="closing" :title="closing==='M16'?'保存录音工程并关闭？':closing==='M17'?'保存音标草稿？':closing==='settings'?'应用字体设置？':closing==='M15'?'保存实验与导出结果？':closing==='M12'?'保存标注修改？':closing==='M13'?'保存转换草稿？':'保存参数草稿？'" :close-disabled="closingBusy" @close="closing=''">
-<p v-if="closing==='M16'">关闭前会停止录音并保存工程。原始录音与已有版本保留；保存失败时继续留在本页。</p>
+<ModalDialog v-if="closing" :title="closing==='M09'?'笔迹尚未生成音频':closing==='M16'?'保存录音工程并关闭？':closing==='M17'?'保存音标草稿？':closing==='settings'?'应用字体设置？':closing==='M15'?'保存实验与导出结果？':closing==='M12'?'保存标注修改？':closing==='M13'?'保存转换草稿？':'保存参数草稿？'" :close-disabled="closingBusy" @close="cancelClose">
+<p v-if="closing==='M09'">当前笔迹尚未提交生成。返回绘图并生成音频后，完整笔迹会保存在任务快照中，也可以放弃笔迹并关闭。</p>
+<p v-else-if="closing==='M16'">关闭前会停止录音并保存工程。原始录音与已有版本保留；保存失败时继续留在本页。</p>
 <p v-else-if="closing==='M17'">音标文本或布局尚未保存到本机草稿。保存失败时保留当前编辑，可返回页面复制文本。</p>
 <p v-else-if="closing==='settings'">字体编辑尚未应用。可以应用并关闭，或放弃本次字体编辑。主题和页面缩放已即时保存。</p>
 <p v-else-if="closing==='M12'">标注或唇形偏移尚未保存。标注写入 _自动保存，唇偏单独保存；任一失败将保留当前编辑。</p>
@@ -266,15 +304,15 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 <p v-if="closing==='M15'">实验结果需要显式导出文件。保存失败或未确认导出时不会关闭；放弃仅关闭标签，本机已提交记录可在资源与恢复中读取。</p>
 <p v-if="notice" role="alert">{{notice}}</p>
 <template #footer>
-<button :disabled="closingBusy" @click="closing=''">取消关闭</button>
-<button v-if="closing!=='M16'" :disabled="closingBusy" @click="discardClose">{{closing==='settings'?'放弃字体编辑并关闭':closing==='M12'?'放弃修改并关闭':'放弃草稿并关闭'}}</button>
-<button class="primary" :disabled="closingBusy" @click="saveClose">{{closingBusy?'正在保存…':closing==='M16'?'停止并保存工程后关闭':closing==='settings'?'应用字体并关闭':closing==='M12'?'保存修改并关闭':'保存草稿并关闭'}}</button>
+<button :disabled="closingBusy" @click="cancelClose">取消关闭</button>
+<button v-if="closing!=='M16'" :disabled="closingBusy" @click="discardClose">{{closing==='M09'?'放弃笔迹并关闭':closing==='settings'?'放弃字体编辑并关闭':closing==='M12'?'放弃修改并关闭':'放弃草稿并关闭'}}</button>
+<button class="primary" :disabled="closingBusy" @click="saveClose">{{closingBusy?'正在保存…':closing==='M09'?'返回绘图':closing==='M16'?'停止并保存工程后关闭':closing==='settings'?'应用字体并关闭':closing==='M12'?'保存修改并关闭':'保存草稿并关闭'}}</button>
 </template>
 </ModalDialog>
-<ModalDialog v-if="modal" :title="modalTitle" :wide="modal==='references'" @close="modal=''">
+<UpdateNotice v-if="!m15Focus&&!m16Recording" @checked="updateCheck=$event" @open="modal='update'"/>
+<ModalDialog v-if="modal" :title="modalTitle" :wide="modal==='references'||modal==='update'" @close="modal=''">
 <template v-if="modal==='update'">
-<p>当前版本 {{version.frontend_version}}</p>
-<p class="muted">更新服务尚未接入。此试用版没有查询远程版本，也没有自动下载更新。</p>
+<UpdatePanel :initial-result="updateCheck" @checked="updateCheck=$event"/>
 </template>
 <template v-else-if="modal==='about'">
 <div class="about-brand">
@@ -283,17 +321,19 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 </div>
 <p>为语音分析、合成、标注与实验构建的研究工作台。</p>
 <p class="muted">界面试用版 · 共用前端与科研核心。各模块的实施范围和引用分别展示。</p>
+<div class="about-actions">
 <button class="primary" @click="refs()">开源与学术致谢</button>
-<p>
 <button @click="modal='font-license'">内置字体版权与许可</button>
-</p>
+</div>
 </template>
-<pre v-else-if="modal==='font-license'" class="license-text">{{fontLicense}}
-
-{{monoLicense}}</pre>
+<FontLicenses v-else-if="modal==='font-license'"/>
 <MethodReferences v-else-if="modal==='references'" :module-id="referencesId"/>
 </ModalDialog>
 </template>
 <style scoped>
 .recording-indicator {color:var(--danger,#b63838);border:1px solid currentColor;border-radius:6px;background:var(--panel);white-space:nowrap;cursor:pointer;}
+.pane-manual{overflow:hidden;display:flex;flex-direction:column;min-height:0}
+.pane-manual>:deep(.manual-reader){flex:1;min-height:0}
+.module-manual-entry{flex:none;min-height:28px;padding:4px 8px;margin-bottom:6px;font-size:.857143rem}
+@media(max-width:700px){.module-manual-entry{max-width:64px;overflow:hidden;font-size:0}.module-manual-entry svg{width:16px;height:16px}}
 </style>

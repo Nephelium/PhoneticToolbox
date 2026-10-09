@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {vTimePrecision} from '../../design/time-precision.ts';
 import {computed,ref,watch} from 'vue';
 import ModalDialog from '../../components/ModalDialog.vue';
 import ScientificPlot from '../../components/ScientificPlot.vue';
@@ -22,7 +23,7 @@ function pan(delta:number){const [a,b]=range.value,start=Math.max(0,Math.min(dur
 </script>
 <template><ModalDialog title="检查偏移量" wide @close="emit('close')">
  <div class="offset-editor" tabindex="0" aria-label="偏移量编辑区" @keydown.capture="keys">
-  <div class="offset-controls"><label>唇形偏移量 <input v-model.number="value" type="number" min="-2000" max="2000" step="1" aria-label="唇形偏移量 ms" @input="change"/> ms</label><button @click="step(-1)">← 1 ms</button><button @click="step(1)">1 ms →</button><button @click="value=0;change()">归零</button><button @click="zoom(.5)">放大时间轴</button><button @click="zoom(2)">缩小时间轴</button><button @click="range=[0,duration]">全段</button></div>
+  <div class="offset-controls"><label>唇形偏移量 <input v-time-precision="'ms'" v-model.number="value" type="number" min="-2000" max="2000" step="1" aria-label="唇形偏移量 ms" @input="change"/> ms</label><button @click="step(-1)">← 1 ms</button><button @click="step(1)">1 ms →</button><button @click="value=0;change()">归零</button><button @click="zoom(.5)">放大时间轴</button><button @click="zoom(2)">缩小时间轴</button><button @click="range=[0,duration]">全段</button></div>
   <p>正值向右移动唇形，负值向左。左右方向键每次 1 ms，按住连续调整；也可拖动下方参数图。上下两图共用时间轴。</p>
   <p v-if="loading" role="status">正在读取音频波形…</p><p v-if="error||validation" role="alert">{{error||validation}}</p>
   <ScientificPlot title="音频波形" :x="range" :y="[-1,1]" unit="幅度" :traces="audio" :height="190" :axis-label-width="10" interactive wheel-zoom live-pan @zoom="zoom" @pan="pan"/>

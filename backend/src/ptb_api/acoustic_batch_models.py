@@ -63,21 +63,27 @@ class AcousticManagedFile(WireModel):
     expires_at: float | None
 
 
+class AcousticBundleFile(AcousticManagedFile):
+    """M01's versioned file budget does not widen M03/M04 manifests."""
+    size_bytes: int=Field(ge=1,le=4_000_000_000)
+
+
 from .storage_policy import PolicyVersion, LEGACY_POLICY_VERSION
 
 
 class AcousticTaskManifest(WireModel):
+    format_revision: Literal['legacy/1','m01-bundle/2']='legacy/1'
     policy_version: PolicyVersion = LEGACY_POLICY_VERSION
     kind: Literal['managed_acoustic_files']='managed_acoustic_files'
     complete: Literal[True]=True
     operation: Literal['acoustic_analysis','textgrid_segment']
     core_version: str
-    files: list[AcousticManagedFile]=Field(min_length=1,max_length=3001)
+    files: list[AcousticBundleFile]=Field(min_length=1,max_length=3001)
 
     @model_validator(mode='after')
     def output_set(self):
         if len({f.id for f in self.files})!=len(self.files):raise ValueError('Duplicate output')
         if self.operation=='acoustic_analysis' and sorted(f.name for f in self.files)!=['result.ptb.json','result.ptb.sqlite','result.xlsx']:
             raise ValueError('Analysis requires both parameter formats and its versioned result')
-        if sum(f.size_bytes for f in self.files)>64_000_000:raise ValueError('Result budget exceeded')
+        if sum(f.size_bytes for f in self.files)>(5_000_000_000 if self.format_revision=='m01-bundle/2' else 64_000_000):raise ValueError('Result budget exceeded')
         return self

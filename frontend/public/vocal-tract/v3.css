@@ -1,21 +1,23 @@
 /* Shared host palette is delivered by the M10 platform port. */
+:root{--body-size:14px;--m10-text-min:12px;font-size:max(var(--m10-text-min),var(--body-size))}
 :root{--bg:#f3f6fb;--panel:#ffffff;--ink:#132a49;--muted:#566982;--line:#dce5f0;--green:#00787e;--accent:#215bd6;--selected:#e4eeff;--serif:"Segoe UI","Microsoft YaHei",sans-serif}
 :root[data-theme=dark]{color-scheme:dark;--bg:#111b26;--panel:#182432;--ink:#e9f0f9;--muted:#a2b3c8;--line:#304154;--green:#7cdad4;--accent:#83b3ff;--selected:#24456f}
-body{padding:0 10px;background:var(--bg);color:var(--ink);grid-template-rows:42px minmax(0,1fr) 22px}
-.identity h1{font-size:17px}.identity p{display:none}.masthead{border-color:var(--line)}
+body{padding:0 10px;background:var(--bg);color:var(--ink);grid-template-rows:minmax(0,1fr)}
+.identity h1{font-size:1.214286rem}.identity p{display:none}.masthead{border-color:var(--line)}
 .workspace{padding-top:6px;gap:10px;grid-template-rows:minmax(0,1fr) 255px;grid-template-columns:minmax(320px,1fr) var(--panel-right,330px);min-height:0!important}.studio{min-height:0!important}#viewport{min-height:0!important}
-.inspector{overflow-y:auto;padding:4px 4px 8px;min-width:0;background:var(--bg)}.inspector-title{margin-bottom:4px}.inspector-tabs{position:sticky;top:0;z-index:5;background:var(--bg)}
-.parameter-group{padding:8px 0}.parameter-group .parameter{margin-top:7px}.group-title{font-size:12px}.history-actions{margin:5px 0}.edit-panel #editHint{font-size:10px;margin:4px 0}.root-mode{font-size:11px;display:block;padding:8px 0}
+.inspector{overflow:hidden;padding:4px 4px 8px;min-width:0;background:var(--bg)}.inspector-title{height:auto;min-height:30px;gap:8px;margin-bottom:4px}.inspector-title>div{display:flex;gap:2px}#aboutButton,#sharedHelp{white-space:nowrap;font-size:1rem;min-height:30px;padding:4px 9px;border:1px solid var(--line);border-radius:6px}.inspector-tabs{flex-shrink:0;background:var(--bg)}
+.inspector>[role=tabpanel]{overflow-y:auto;overflow-x:hidden;min-height:0;flex:1 1 0;overscroll-behavior:contain;scrollbar-width:thin;padding-right:5px}
+.parameter-group{padding:8px 0}.parameter-group .parameter{margin-top:7px}.group-title{font-size:max(var(--m10-text-min),0.857143rem)}.history-actions{margin:5px 0}.edit-panel #editHint{font-size:max(var(--m10-text-min),0.714286rem);margin:4px 0}.root-mode{font-size:max(var(--m10-text-min),0.785714rem);display:block;padding:8px 0}
 .lip-width-panel{padding:8px 0}#lipFront{height:70px}.nasal-card{padding:8px!important}.nasal-safety{padding:8px 0;gap:4px}
-.keyframe-panel{padding:0;border:0;background:transparent}.keyframe-heading h3{font-size:16px;margin:0 0 7px}.keyframe-heading .eyebrow{display:none}
+.keyframe-panel{padding:0;border:0;background:transparent}.keyframe-heading h3{font-size:1.142857rem;margin:0 0 7px}.keyframe-heading .eyebrow{display:none}
 #keyframeList{display:flex;flex-direction:column;gap:5px;overflow-y:auto;overflow-x:hidden;max-height:35vh;min-height:60px;padding:2px 2px 7px;scrollbar-width:thin}
 .pose-card{display:grid!important;grid-template-columns:minmax(0,1fr) auto;gap:4px 8px;flex:0 0 auto!important;min-height:0!important;height:auto!important;padding:7px!important;position:static!important;border-color:var(--line);background:var(--panel)}
 .pose-card[draggable=true]{cursor:grab}.pose-card.dragging{opacity:.4;cursor:grabbing}.pose-card.drop-before{box-shadow:0 -3px 0 var(--green)}.pose-card.drop-after{box-shadow:0 3px 0 var(--green)}.pose-card .pose-time{cursor:grab;user-select:none}
-.pose-card .pose-title{font-size:11px;padding:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;min-height:16px;text-align:left}.pose-card .pose-name{grid-column:1;grid-row:2;width:100%;font-size:13px;padding:3px 5px;min-height:25px}.pose-card small{grid-column:1;grid-row:3;font-size:9px;margin:0}.pose-card .pose-time{grid-column:2;grid-row:1;font-size:10px;color:var(--muted)}
-.pose-card label{grid-column:2;grid-row:2;font-size:10px}.pose-card label input{width:52px;padding:3px;min-height:25px}.pose-card .pose-tools{grid-column:2;grid-row:3;position:static!important;display:flex;gap:3px;margin:0}.pose-tools button{padding:2px 7px;min-height:20px;font-size:10px}
-#pitchEditor{width:100%}#pitchCanvas{height:190px!important;background:var(--panel);touch-action:none}.pitch-heading{display:flex;gap:6px;margin-top:9px}.pitch-heading button{font-size:11px}.pitch-heading span{margin-left:auto;font-size:10px}
+.pose-card .pose-title{font-size:max(var(--m10-text-min),0.785714rem);padding:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;min-height:16px;text-align:left}.pose-card .pose-name{grid-column:1;grid-row:2;width:100%;font-size:max(var(--m10-text-min),0.928571rem);padding:3px 5px;min-height:25px}.pose-card small{grid-column:1;grid-row:3;font-size:max(var(--m10-text-min),0.642857rem);margin:0}.pose-card .pose-time{grid-column:2;grid-row:1;font-size:max(var(--m10-text-min),0.714286rem);color:var(--muted)}
+.pose-card label{grid-column:2;grid-row:2;font-size:max(var(--m10-text-min),0.714286rem)}.pose-card label input{width:52px;padding:3px;min-height:25px}.pose-card .pose-tools{grid-column:2;grid-row:3;position:static!important;display:flex;gap:3px;margin:0}.pose-tools button{padding:2px 7px;min-height:20px;font-size:max(var(--m10-text-min),0.714286rem)}
+#pitchEditor{width:100%}#pitchCanvas{height:190px!important;background:var(--panel);touch-action:none}.pitch-heading{display:flex;gap:6px;margin-top:9px}.pitch-heading button{font-size:max(var(--m10-text-min),0.785714rem)}.pitch-heading span{margin-left:auto;font-size:max(var(--m10-text-min),0.714286rem)}
 #pitchDialog{width:90vw;max-width:none;height:80vh;padding:14px;background:var(--panel)}.pitch-dialog-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}#pitchDialogBody #pitchCanvas{height:calc(80vh - 150px)!important;min-height:260px}
-#sectionStatus{font-size:10px;line-height:1.4;margin:4px 0}.preset-bar{flex-wrap:wrap;gap:4px;padding:4px 8px}#presets{gap:2px;flex-wrap:wrap}#presets button{width:25px;font-size:18px}.preset-note{font-size:8px}
+#sectionStatus{font-size:max(var(--m10-text-min),0.714286rem);line-height:1.4;margin:4px 0}.preset-bar{flex-wrap:wrap;gap:4px;padding:4px 8px}#presets{gap:2px;flex-wrap:wrap}#presets button{width:25px;font-size:1.285714rem}.preset-note{font-size:max(var(--m10-text-min),0.571429rem)}
 .transport-bar{background:var(--panel);gap:4px;padding:6px}.transport-bar button{padding:5px 7px}#transportStatus{display:none}
 @media(min-width:1450px){.workspace{grid-template-columns:minmax(320px,1fr) var(--panel-analysis,260px) var(--panel-right,330px)}.analysis{grid-column:2;grid-row:1;display:flex;flex-direction:column;min-height:0;overflow:auto}.analysis .charts{display:flex;flex-direction:column;height:auto;flex:1}.charts>section{flex:1;min-height:150px}.charts canvas{height:110px}.charts .section-stage{height:150px}.inspector{grid-column:3;grid-row:1}.studio{grid-column:1;grid-row:1}}
 :root[data-theme=dark] button,:root[data-theme=dark] input,:root[data-theme=dark] select,:root[data-theme=dark] .keyframe-panel,:root[data-theme=dark] .source-panel,:root[data-theme=dark] .analysis,:root[data-theme=dark] .studio,:root[data-theme=dark] .nasal-card{background:var(--panel);color:var(--ink);border-color:var(--line)}
@@ -25,8 +27,8 @@ body{padding:0 10px;background:var(--bg);color:var(--ink);grid-template-rows:42p
 /* Canvas backing-store pixels must not feed back into grid/flex sizing. */
 .analysis canvas{contain:size}
 
-.layout-picker{font-size:11px;display:flex;gap:5px;align-items:center}.layout-picker select{padding:4px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink)}
-.transport-bar{flex-wrap:wrap;margin:2px 0 8px;border:1px solid var(--line);border-radius:5px}.transport-bar button{font-size:11px;flex:1}.pose-card{cursor:pointer}.pose-card .pose-tools{flex-wrap:wrap;justify-content:flex-end}.pose-card .pose-tools button{font-size:9px;padding:2px 5px}.pose-card input{background:var(--panel);color:var(--ink)}
+
+.transport-bar{flex-wrap:wrap;margin:2px 0 8px;border:1px solid var(--line);border-radius:5px}.transport-bar button{font-size:max(var(--m10-text-min),0.785714rem);flex:1}.pose-card{cursor:pointer}.pose-card .pose-tools{flex-wrap:wrap;justify-content:flex-end}.pose-card .pose-tools button{font-size:max(var(--m10-text-min),0.642857rem);padding:2px 5px}.pose-card input{background:var(--panel);color:var(--ink)}
 html[data-columns=two] .workspace{grid-template-areas:"studio inspector" "analysis inspector"!important;grid-template-columns:minmax(320px,1fr) var(--panel-right,330px)!important;grid-template-rows:minmax(220px,1fr) 255px!important}
 html[data-columns=two] .studio{grid-area:studio!important}html[data-columns=two] .analysis{grid-area:analysis!important;overflow:auto;display:flex;flex-direction:column}html[data-columns=two] .inspector{grid-area:inspector!important}
 html[data-columns=two] .charts{display:grid;grid-template-columns:1fr 1fr .9fr;height:155px}html[data-columns=two] .charts>section{min-height:0;padding:8px}html[data-columns=two] .charts canvas{height:90px}html[data-columns=two] .charts .section-stage{height:100px}
@@ -55,10 +57,20 @@ html[data-columns=three] .analysis .chart-heading{flex-wrap:wrap}
 /* Opaque modal layers avoid Chromium/Qt transparent WebGL compositing. */
 dialog::backdrop{background:var(--bg);backdrop-filter:none}dialog{isolation:isolate}#pitchDialogBody{background:var(--panel)}
 
-.phonation-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}.phonation-buttons button{height:43px;margin:0;font-size:13px}.phonation-buttons .active{background:#a85c63!important;color:#fff!important}
-.sequence-files{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}.sequence-files button{font-size:11px;flex:1;padding:5px}
-.preset-bar select{max-width:140px;padding:3px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:4px}.preset-bar>button{font-size:10px;padding:3px 6px}
-#presetDialog,#videoDialog{width:560px;max-width:85vw}#presetDialog label,#videoDialog label{display:flex;gap:12px;align-items:center;margin-top:16px}#presetName{flex:1;background:var(--panel);color:var(--ink);border:1px solid var(--line);padding:8px;border-radius:5px}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}#videoProgress{width:100%;accent-color:var(--green)}#videoDialog p,#presetDialog p{color:var(--muted)}
+.phonation-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}.phonation-buttons button{height:43px;margin:0;font-size:max(var(--m10-text-min),0.928571rem)}.phonation-buttons .active{background:#a85c63!important;color:#fff!important}
+.sequence-files{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}.sequence-files button{font-size:max(var(--m10-text-min),0.785714rem);flex:1;padding:5px}
+.preset-bar select{max-width:140px;padding:3px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:4px}.preset-bar>button{font-size:max(var(--m10-text-min),0.714286rem);padding:3px 6px}
+#videoDialog{width:560px;max-width:85vw}#videoDialog label{display:flex;gap:12px;align-items:center;margin-top:16px}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}#videoProgress{width:100%;accent-color:var(--green)}#videoDialog p,#presetDialog p{color:var(--muted)}
+#presetDialog{width:1360px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);padding:12px 14px;overflow-y:auto;line-height:1.4}
+.preset-dialog-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:-12px;background:var(--panel);z-index:2;padding:3px 0 6px}.preset-dialog-heading strong{font-size:1rem}.preset-dialog-actions{display:flex;align-items:center;gap:8px}.preset-dialog-actions button{font-size:max(var(--m10-text-min),.857143rem);padding:5px 9px;white-space:nowrap}#presetStatus{font-size:max(var(--m10-text-min),.857143rem);min-height:1.4em;margin:4px 0 8px}
+.preset-input-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:8px 0 10px;padding:8px;background:var(--bg);border:1px solid var(--line);border-radius:5px}.preset-input-row label{font-size:max(var(--m10-text-min),.857143rem)}.preset-input-row input{font-family:var(--font-ipa,"PTB-Doulos"),serif;font-size:1.285714rem;flex:1;min-width:120px;padding:4px 7px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink)}.preset-input-row button{font-size:max(var(--m10-text-min),.857143rem);padding:5px 9px}
+#customPresetSection{margin-top:14px;padding-top:8px;border-top:1px solid var(--line)}#presetDialog .custom-preset-ipa{height:auto;min-height:30px;padding:3px 7px;max-width:100%;overflow-wrap:anywhere;white-space:normal;border-color:var(--line);line-height:1.3}#customPresetEmpty{font-size:max(var(--m10-text-min),.785714rem)}
+.preset-chart h3{font-size:max(var(--m10-text-min),.857143rem);color:var(--muted);margin:6px 0;font-weight:500}.preset-consonants{overflow-x:auto}.preset-consonants table{border-collapse:collapse;table-layout:fixed;width:100%;min-width:1080px}.preset-consonants th,.preset-consonants td{border:1px solid var(--line);padding:1px;text-align:center}.preset-consonants th{font-size:max(var(--m10-text-min),.714286rem);font-weight:400;line-height:1.3;background:var(--bg)}.preset-consonants th:first-child{width:78px}.preset-consonants td{height:28px;white-space:normal}
+#presetDialog .preset-ipa{position:relative;font-family:var(--font-ipa,"PTB-Doulos"),serif;font-size:1.5rem;min-width:25px;height:29px;padding:0 2px;line-height:1;background:var(--panel);border:1px solid transparent;border-radius:4px;color:var(--ink);box-shadow:none;transition:none}
+#presetDialog .preset-consonants .preset-ipa{font-size:clamp(18px,1.285714rem,24px);min-width:22px;height:28px;padding:0 1px;vertical-align:middle}
+#presetDialog .preset-ipa:hover{background:var(--selected);border-color:var(--accent)}#presetDialog .preset-ipa.stored:after{content:'';position:absolute;bottom:0;left:calc(50% - 2px);width:4px;height:3px;border-radius:2px;background:var(--accent)}#presetDialog .preset-ipa:disabled{opacity:.3;cursor:default}#presetDialog .preset-ipa.selected{background:var(--selected);color:var(--accent);border-color:var(--accent)}
+.preset-chart-lower{display:grid;grid-template-columns:340px minmax(0,1fr);gap:18px}.preset-vowels{height:210px;position:relative;margin-top:18px}.preset-vowels svg{position:absolute;width:100%;height:100%;inset:0;overflow:visible}.preset-vowels path{fill:none;stroke:var(--line);stroke-width:.7}.preset-vowel-pair{position:absolute;display:flex;transform:translate(-50%,-50%);background:var(--panel)}.vowel-label{position:absolute;top:-15px;font-size:max(var(--m10-text-min),.714286rem);color:var(--muted)}.vowel-label.front{left:17%}.vowel-label.central{left:48%}.vowel-label.back{left:80%}.preset-symbol-flow{display:flex;flex-wrap:wrap;gap:5px;padding:4px 0}#legacyPresets{padding:8px 0;border:0}#legacyPresets summary{font-size:max(var(--m10-text-min),.857143rem)}#legacyPresetList{display:flex;flex-wrap:wrap;gap:5px;padding-top:6px}#legacyPresetList button{font-size:max(var(--m10-text-min),.857143rem);padding:4px 8px}
+@media(max-width:600px){.preset-chart-lower{grid-template-columns:minmax(0,1fr)}.preset-vowels{width:min(340px,100%);margin-inline:auto}}
 .export-viewport>canvas,.export-viewport>.sagittal-canvas{position:absolute;inset:0;width:100%;height:100%}
 
 /* P04-FONT: controls inherit the parent font roles; IPA remains fixed. */
@@ -82,3 +94,51 @@ button:hover{background:var(--selected)}
 .analysis[data-view=acoustics]>.charts,.analysis[data-view=monitor]>#monitorHome{animation:analysis-appear .16s ease-out}
 @keyframes analysis-appear{from{opacity:.35}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){.analysis[data-view]>.charts,.analysis[data-view]>#monitorHome{animation:none}}
+/* Main controls share the host text baseline; captions remain relatively smaller. */
+body,.parameter,.parameter label,.parameter input,.parameter select,.inspector-tabs button,.organ-picker button,.transport-bar button,.segmented button,.mode-switch button,.source-mode-row label,.source-mode-row select,.source-controls select,.source-panel .source-controls .parameter,.source-panel .audition-controls .parameter,.source-controls .parameter label,.audition-controls .parameter label{font-size:1rem}
+.parameter input,.parameter select{min-height:30px}.parameter-group .parameter{min-height:30px}.group-title{font-size:1rem}
+.inspector #lipFront path{fill:var(--panel);stroke:var(--accent)}.inspector #lipFront [data-width-side] circle:last-child{fill:var(--panel);stroke:var(--accent)}
+.analysis #sectionHandles circle[r="5"]{fill:var(--panel);stroke:var(--accent)}.analysis #sectionHandles circle[r="2"]{fill:var(--accent)}
+/* Non-model surfaces and controls use the same semantic palette in both modes. */
+.resonances,.model-note b,.divider,.source-panel>summary,.port-slider label,.port-ends,.port-state>span,.pose-card small,.pose-card label,.keyframe-actions span,:root[data-theme=dark] .keyframe-actions span{color:var(--muted)}
+.port-slider output,.nasal-bar .open,.port-state>span.open,.nasal-safety label,.pose-card input,.keyframe-panel button,.lip-width-panel button{color:var(--accent)}
+.nasal-safety .limited{color:var(--warning,var(--accent))}
+.organ-picker .selected{background:var(--selected);color:var(--accent);border-color:var(--accent)}
+.output-row select,.pose-card,.pose-card input,#pitchCanvas,#lipFront,.keyframe-panel button,.lip-width-panel button{background:var(--panel);border-color:var(--line)}
+.pose-card.current{border-color:var(--accent)}.nasal-card,.keyframe-panel{background:var(--panel);border-color:var(--line)}
+.lip-width-panel{border-color:var(--line)}.port-state button{background:var(--panel);border-color:var(--line);color:var(--ink)}
+.port-state button[aria-checked=true],.keyframe-panel button.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.play-button:hover{background:var(--accent);filter:brightness(.94)}.play-button.active,.phonation-buttons .active{background:var(--accent)!important;color:var(--on-accent)!important;box-shadow:inset 0 0 0 2px var(--ink);font-weight:700}
+.silent-badge{color:var(--muted);background:var(--selected)}#levelMeter{background:var(--line)}#levelFill{background:linear-gradient(90deg,var(--selected),var(--accent))}
+#toast{background:var(--ink);color:var(--panel)}dialog p{color:var(--muted)}dialog::backdrop,#monitorDialog::backdrop{background:color-mix(in srgb,var(--ink) 30%,transparent)}
+
+/* M10-R8: readable captions and compact slider rows at every viewport size. */
+.inspector-tabs{margin-bottom:6px}.inspector-tabs button{padding:6px}
+.edit-panel #editHint{min-height:0;line-height:1.45;margin:3px 0 5px}.history-actions{margin:3px 0}
+.parameter{grid-template-columns:minmax(0,1fr) auto;row-gap:2px;line-height:1.3;align-items:center;align-content:start}
+.parameter label{white-space:normal}.parameter output{white-space:nowrap}
+.inspector input[type=range]{min-height:18px;height:18px;padding:0;margin:0}
+#parameterGroups .parameter-group{column-gap:12px;row-gap:4px;padding:6px 0;margin-top:4px}
+#parameterGroups .group-title{font-size:1rem;margin:0 0 1px}
+#parameterGroups .parameter{margin-top:2px;row-gap:2px;min-height:0}
+#parameterGroups .parameter label{font-size:1rem;white-space:normal}
+.lip-width-panel{padding:5px 0}.lip-width-panel .parameter{margin:4px 0;row-gap:2px}
+#lipFront{height:52px}.lip-width-panel .minor{margin:3px 0 0;line-height:1.45}
+.root-mode{padding:4px 0;line-height:1.35}.nasal-safety{padding:4px 0;gap:4px;line-height:1.45}
+.port-slider input{margin:2px 0}.port-title{gap:4px}
+.source-controls,.audition-controls{gap:5px 10px}
+.source-panel .source-controls .parameter,.source-panel .audition-controls .parameter{row-gap:2px}
+#sourceHint{margin:5px 0 7px;line-height:1.45}.source-panel+.sound-note{margin-top:8px;padding-top:6px;line-height:1.45}
+.phonation-buttons{margin-bottom:8px}.section-title{margin-bottom:7px}
+.parameter label span{margin-left:3px}.minor{line-height:1.45}
+.plot-label{line-height:1.3}.monitor-plots,#monitorDialog .monitor-plots{grid-template-rows:max-content minmax(25px,1fr) max-content minmax(35px,1.8fr)}
+/* Geometry/status changes must not resize the metric drawing viewport. */
+#sectionStatus{height:2.8em;min-height:2.8em;flex:none;overflow-y:auto;line-height:1.4}
+.analysis .section-stage #sectionChart{height:100%;width:100%;flex:none}
+.charts .chart-heading{flex-wrap:wrap;align-items:flex-start}
+.charts .chart-heading h3,.charts .chart-heading>span{white-space:normal;overflow-wrap:anywhere}
+.charts .resonances{flex-wrap:wrap;gap:3px 8px}
+.area-legend{display:flex;flex-wrap:wrap;gap:2px 12px;color:var(--muted);font-size:max(var(--m10-text-min),.857143rem);padding:0 12px 3px;flex:none}
+#larynxControl{grid-column:1/-1}
+/* Keep IPA glyphs inside the preset controls when the shared body size grows. */
+#presets button{width:auto;min-width:1.45em;height:auto;min-height:1.65em;line-height:1.25;padding:.12em .18em}

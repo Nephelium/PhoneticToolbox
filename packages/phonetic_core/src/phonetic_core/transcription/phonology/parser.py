@@ -19,7 +19,10 @@ class ParsedSyllable:
 
 
 class PhonologyInductionParser:
-    def __init__(self):
+    def __init__(self, computation_revision: str = 'm14/1'):
+        if computation_revision not in ('m14/1', 'm14/2'):
+            raise ValueError('m14_unknown_revision')
+        self.computation_revision = computation_revision
         extra_vowels = {
             "ɿ",
             "ʅ",
@@ -204,6 +207,8 @@ class PhonologyInductionParser:
             key=len,
             reverse=True,
         )
+        if self.computation_revision == 'm14/2':
+            self.affricate_like_clusters = sorted({unicodedata.normalize('NFD', v) for v in self.affricate_like_clusters} | {'tʃ', 'dʒ'}, key=len, reverse=True)
 
     def parse(
         self, ipa_text: str, consonant_only_as_zero_initial: bool = True
@@ -254,6 +259,8 @@ class PhonologyInductionParser:
     def _find_first_vowel_index(self, text: str) -> int:
         for idx, ch in enumerate(text):
             if ch in self.vowel_symbols:
+                if self.computation_revision == 'm14/2' and ch in {'ɹ', 'ɻ'} and any(c in self.vowel_symbols - {'ɹ', 'ɻ'} for c in text[idx + 1:]):
+                    continue
                 return idx
         return -1
 
@@ -292,6 +299,15 @@ class PhonologyInductionParser:
         return text[:idx], text[idx:]
 
     def _match_affricate_cluster(self, text: str) -> str:
+        if self.computation_revision == 'm14/2':
+            plain = ''; positions = []
+            for index, char in enumerate(text):
+                if char not in {'͡', '͜'}:
+                    plain += char; positions.append(index + 1)
+            for cluster in self.affricate_like_clusters:
+                if plain.startswith(cluster):
+                    return text[:positions[len(cluster) - 1]]
+            return ''
         for cluster in self.affricate_like_clusters:
             if text.startswith(cluster):
                 return cluster
@@ -314,7 +330,12 @@ class PhonologyInductionParser:
             return ""
         translation = str.maketrans("０１２３４５６７８９", "0123456789")
         clean = ipa_text.translate(translation)
+        if self.computation_revision == 'm14/2':
+            clean = unicodedata.normalize('NFD', clean)
+            clean = clean.translate(str.maketrans('⁰¹²³⁴⁵⁶⁷⁸⁹', '0123456789'))
         clean = clean.strip()
         clean = clean.strip("[]/")
+        if self.computation_revision == 'm14/2':
+            clean = clean.strip().lstrip('ˈˌ')
         clean = re.sub(r"\s+", "", clean)
         return clean

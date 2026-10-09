@@ -129,8 +129,9 @@ class LegacyCalculations:
 
              # Re-process segment
              seg_detrend = signal.detrend(segment)
-             seg_hp = apply_highpass_filter(seg_detrend, cutoff_freq=config.highpass_cutoff, fs=fs)
-             seg_lp = apply_lowpass_filter(seg_hp, cutoff_freq=config.lowpass_cutoff, fs=fs)
+             stable = result.method_version == 'egg-bounded/2'
+             seg_hp = apply_highpass_filter(seg_detrend, cutoff_freq=config.highpass_cutoff, fs=fs, stable=stable)
+             seg_lp = apply_lowpass_filter(seg_hp, cutoff_freq=config.lowpass_cutoff, fs=fs, stable=stable)
              segment_to_analyze = seg_lp
         else:
              segment_to_analyze = segment
@@ -183,8 +184,9 @@ class LegacyCalculations:
         # Apply filters if needed (Display: Filtered)
         if not use_raw_signal:
              seg_detrend = signal.detrend(segment)
-             seg_hp = apply_highpass_filter(seg_detrend, cutoff_freq=config.highpass_cutoff, fs=fs)
-             seg_lp = apply_lowpass_filter(seg_hp, cutoff_freq=config.lowpass_cutoff, fs=fs)
+             stable = result.method_version == 'egg-bounded/2'
+             seg_hp = apply_highpass_filter(seg_detrend, cutoff_freq=config.highpass_cutoff, fs=fs, stable=stable)
+             seg_lp = apply_lowpass_filter(seg_hp, cutoff_freq=config.lowpass_cutoff, fs=fs, stable=stable)
              segment_to_analyze = seg_lp
         else:
              segment_to_analyze = segment

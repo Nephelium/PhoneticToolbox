@@ -29,7 +29,7 @@ def test_vtl24_consonant_areas_from_old_native_capture(engine):
     finally:engine.geom.p3_lateral_fit(1)
 
 def test_lateral_has_real_central_contact_and_two_side_passages(engine):
-    state=engine.snapshot(engine.presets['l'],section=109)
+    state=engine.snapshot(engine.presets['l'],section=round(109*(engine.section_count-1)/128))
     up=np.array([0 if v is None else v for v in state['upper']])
     lo=np.array([0 if v is None else v for v in state['lower']])
     gap=up-lo

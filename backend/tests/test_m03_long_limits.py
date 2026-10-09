@@ -9,4 +9,5 @@ def test_measured_long_input_limits():
 
 def test_micro_center_can_reach_long_recording_tail():
  assert EggTaskConfig(mode='preview',roi_start=119.5,roi_end=120,micro_center=119.75).micro_center==119.75
- with pytest.raises(ValueError):EggTaskConfig(mode='preview',micro_center=120.001)
+ assert EggTaskConfig(mode='preview',micro_center=1799.75).micro_center==1799.75
+ with pytest.raises(ValueError):EggTaskConfig(mode='preview',micro_center=1800.001)

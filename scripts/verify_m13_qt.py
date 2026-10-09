@@ -52,7 +52,7 @@ def main() -> None:
     assert all(native_icons.values()), native_icons
     window.windowIcon().pixmap(64, 64).save(str(out / 'window-icon.png'))
 
-    click_nav = "[...document.querySelectorAll('.nav-item')].find(b=>b.textContent.includes('普通话转 IPA'))?.click()"
+    click_nav = "[...document.querySelectorAll('.nav-item')].find(b=>b.textContent.includes('汉字转国际音标'))?.click()"
     fill = "(()=>{const e=document.querySelector('[aria-label=\"待转换汉字文本\"]');e.value='银行花';e.dispatchEvent(new Event('input',{bubbles:true}));})()"
     select_pinyin = "(()=>{const e=document.querySelector('[aria-label=\"转换标准\"]');e.value='汉语拼音';e.dispatchEvent(new Event('change',{bubbles:true}));})()"
     stages = [

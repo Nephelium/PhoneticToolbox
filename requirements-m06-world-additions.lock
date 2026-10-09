@@ -1,6 +1,0 @@
-# Optional M06 WORLD runtime. Runtime dependency numpy==2.2.6 is already locked
-# by requirements-m09-ui.lock. Install with --no-deps --require-hashes.
-# Official PyPI CPython 3.11 Windows amd64 wheel and source distribution.
-pyworld==0.3.5 \
-    --hash=sha256:538a359862f4bcfa7a58c019644f78941c94dc66a654be8567054ee9c1fc8f1b \
-    --hash=sha256:1b93e53cddb67a0e4faa34d6cf919ac6c662feb1c8c0ed901d71b595ab396aa3

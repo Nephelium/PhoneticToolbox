@@ -4,11 +4,12 @@ import json
 import mimetypes
 import os
 import threading
+import sys
 from pathlib import Path
 from dataclasses import asdict
 from urllib.parse import urlsplit,unquote
-from PyQt6.QtCore import QObject,QBuffer,QIODevice,QUrl,pyqtSlot,pyqtSignal,QStandardPaths
-from PyQt6.QtGui import QDesktopServices
+from PyQt6.QtCore import QObject,QBuffer,QIODevice,QUrl,pyqtSlot,pyqtSignal,QStandardPaths,QEvent,QTimer,Qt
+from PyQt6.QtGui import QDesktopServices,QColor,QPalette
 from PyQt6.QtWidgets import QApplication,QMainWindow,QFileDialog,QMessageBox
 from PyQt6.QtWebChannel import QWebChannel
 from PyQt6.QtWebEngineCore import (QWebEnginePage,QWebEngineProfile,QWebEngineSettings,
@@ -85,6 +86,12 @@ class Bridge(QObject):
     def close_recording(self):
         try:return self._recording_bridge is None or self._recording_bridge.close()
         except Exception:return False
+
+    @pyqtSlot(str)
+    def setSurfaceColor(self,color):
+        # Only an opaque CSS hex colour, never HTML/CSS or a system preference.
+        if len(color)!=7 or color[0]!='#' or any(c not in '0123456789abcdefABCDEF' for c in color[1:]):return
+        self.window.set_surface_color(QColor(color))
 
     @pyqtSlot(str,result=str)
     def writeClipboard(self,text):
@@ -202,6 +209,11 @@ class Bridge(QObject):
             if op=='hello':
                 health=self.service.get('/api/v1/health')
                 value={'kind':'desktop','session':self.provider.session,'api_version':health['api_version'],'tasks':bool(self.service.local_files_root)}
+            elif op=='clear_all_caches':
+                if body.get('purpose')!='confirmed':raise FileAccessError('请先确认清除缓存及退出。')
+                from .updates import UpdateError
+                try:value=self.window.update_coordinator.clear_caches()
+                except UpdateError as exc:raise FileAccessError(str(exc)) from None
             elif op=='m05_media':
                 if self._recording_bridge is not None and self._recording_bridge.capturing:
                     raise FileAccessError('录音模块正在使用输入设备，请先停止录音或录前检测。')
@@ -253,12 +265,29 @@ class Bridge(QObject):
 
 
 class Page(QWebEnginePage):
+    def __init__(self,*args):
+        super().__init__(*args)
+        # target=_blank, modified clicks and links in embedded modules share
+        # this path. External documents stay in the system browser.
+        self.newWindowRequested.connect(self.open_external_window)
+
+    @staticmethod
+    def external_url(url):
+        return url.isValid() and url.scheme() in ('http','https') and bool(url.host())
+
+    def open_external_window(self,request):
+        if request.isUserInitiated() and self.external_url(request.requestedUrl()):
+            QDesktopServices.openUrl(request.requestedUrl())
+
     def acceptNavigationRequest(self,url,navigation_type,is_main_frame):
-        if url.scheme()=='https' and navigation_type==QWebEnginePage.NavigationType.NavigationTypeLinkClicked:
+        if self.external_url(url) and navigation_type==QWebEnginePage.NavigationType.NavigationTypeLinkClicked:
             QDesktopServices.openUrl(url);return False
         return url.scheme()=='ptbapp' and url.host()=='app'
     def javaScriptConfirm(self,origin,message):
-        return QMessageBox.question(self.parent(),'未保存的草稿','关闭窗口将放弃未保存的编辑。是否关闭？',QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No)==QMessageBox.StandardButton.Yes
+        allowed=QMessageBox.question(self.parent(),'未保存的草稿','关闭窗口将放弃未保存的编辑。是否关闭？',QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No)==QMessageBox.StandardButton.Yes
+        window=self.parent().window()
+        if not allowed and hasattr(window,'update_coordinator'):window.update_coordinator.cancel()
+        return allowed
 
 
 class Workbench(QMainWindow):
@@ -270,6 +299,9 @@ class Workbench(QMainWindow):
         self.provider=FileProvider();self.service=LocalService(jobs_path,local_files_root=local_files_root,reaper_binary=reaper_binary);self.service.start();self.closing=False
         from .vocal_tract.client import VocalTractClient
         data=Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation))
+        if sys.platform=='win32':
+            from .platform_paths import windows_workbench_storage
+            data=windows_workbench_storage().parent
         legacy=Path(os.environ.get('LOCALAPPDATA',Path.home()))/'PhoneticToolbox/vocal_tract'
         self.vocal=VocalTractClient(vocal_resources or dist.parent.parent/'resources/vocal_tract/native',
             vocal_profile or data/'vocal-tract',legacy_profile=None if test else legacy)
@@ -278,21 +310,111 @@ class Workbench(QMainWindow):
         self.profile.setHttpCacheType(QWebEngineProfile.HttpCacheType.NoCache)
         if not test:
             data=QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
-            self.profile.setPersistentStoragePath(str(Path(data)/'workbench'))
+            if sys.platform=='win32':
+                from .platform_paths import windows_workbench_storage
+                storage=windows_workbench_storage()
+            else:storage=Path(data)/'workbench'
+            self.profile.setPersistentStoragePath(str(storage))
+            self.profile.setCachePath(str(storage/'http-cache'))
         self.assets=Assets(dist,self.profile);self.interceptor=LocalOnly(self.service.url,self.profile)
         self.profile.installUrlSchemeHandler(b'ptbapp',self.assets);self.profile.setUrlRequestInterceptor(self.interceptor)
         self.view=QWebEngineView(self);self.page=Page(self.profile,self.view);self.view.setPage(self.page)
+        from .presentation import FirstMaximizePresentation
+        self._first_maximize=FirstMaximizePresentation(self.view,self.page)
+        self.set_surface_color(QColor('#f9f9f9'))
+        self._render_refresh=QTimer(self);self._render_refresh.setSingleShot(True)
+        self._render_refresh.timeout.connect(self.refresh_surface)
+        self.view.loadFinished.connect(lambda ok:self.queue_surface_refresh() if ok else None)
         self.profile.downloadRequested.connect(self.save_download)
         from .m05_permissions import MediaPermission
         self.m05_media=MediaPermission(self)
         self.page.permissionRequested.connect(self.m05_media.requested)
         self.page.settings().setAttribute(QWebEngineSettings.WebAttribute.PlaybackRequiresUserGesture,True)
         self.page.settings().setAttribute(QWebEngineSettings.WebAttribute.JavascriptCanOpenWindows,False)
+        self.page.settings().setAttribute(QWebEngineSettings.WebAttribute.FullScreenSupportEnabled,True)
+        self.page.fullScreenRequested.connect(self.reader_fullscreen)
         self.channel=QWebChannel(self.page);self.bridge=Bridge(self.provider,self.service,self,test_dialog=test)
-        self.channel.registerObject('files',self.bridge);self.page.setWebChannel(self.channel)
+        self.channel.registerObject('files',self.bridge)
+        from .updates_bridge import UpdatesBridge
+        from .platform_paths import user_data_root
+        version_file=dist.parent.parent/'release/version.json'
+        update_version=json.loads(version_file.read_text('utf8'))['frontend_version'] if version_file.is_file() else '3.0.0-preview.1'
+        updates_root=user_data_root()/'updates'
+        if test:
+            import tempfile
+            self._updates_test_directory=tempfile.TemporaryDirectory(prefix='ptb-updates-qa-')
+            updates_root=Path(self._updates_test_directory.name)
+        from .update_coordinator import UpdateCoordinator
+        from .update_apply import package_kind
+        self.update_coordinator=UpdateCoordinator(self)
+        frozen=sys.platform=='win32' and getattr(sys,'frozen',False)
+        kind=package_kind() if frozen else 'portable'
+        self.updates_bridge=UpdatesBridge(self,current_version=update_version,data_root=updates_root,
+            package_kind=kind,apply_handler=self.update_coordinator.apply if frozen and not test else None)
+        self.updates_bridge.close_reply=self.update_coordinator.reply
+        if test:self.updates_bridge.service.set_preferences({'autoCheck':False})
+        else:self.updates_bridge.service.start_maintenance()
+        self.channel.registerObject('updates',self.updates_bridge)
+        from .papers_bridge import PapersBridge
+        papers_root=updates_root/'papers-qa' if test else user_data_root()/'papers'
+        self.papers_bridge=PapersBridge(papers_root,self,export_picker=self.pick_paper_export)
+        self.channel.registerObject('papers',self.papers_bridge)
+        self.page.setWebChannel(self.channel)
         self.page.windowCloseRequested.connect(self.accept_close)
         self.setCentralWidget(self.view)
-        self.view.load(QUrl('ptbapp://app/index.html'+('#'+start_module if start_module in {'M10','M16','M17'} else '')))
+        self._startup_presentation=None
+        if os.environ.get('PTB_STARTUP_READY_EVENT'):
+            from .startup_presentation import StartupPresentation
+            self._startup_presentation=StartupPresentation(self.view)
+        self.view.load(QUrl('ptbapp://app/index.html'+('#'+start_module if start_module in {f'M{i:02d}' for i in range(1,19)} else '')))
+
+    def set_surface_color(self,color):
+        self.page.setBackgroundColor(color)
+        self._first_maximize.set_color(color)
+        for widget in (self,self.view):
+            palette=widget.palette();palette.setColor(QPalette.ColorRole.Window,color);palette.setColor(QPalette.ColorRole.Base,color)
+            widget.setPalette(palette);widget.setAutoFillBackground(True)
+
+    def refresh_surface(self):
+        if self.closing:return
+        self._first_maximize.attach()
+        self.view.update()
+        # The Chromium child surface owns the pixels of QWebEngineView.
+        child=self.view.focusProxy()
+        if child is not None:child.update()
+        handle=self.windowHandle()
+        if handle is not None:handle.requestUpdate()
+
+    def queue_surface_refresh(self):
+        if hasattr(self,'_render_refresh'):
+            self.refresh_surface();self._render_refresh.start(80)
+
+    def resizeEvent(self,event):
+        super().resizeEvent(event);self.queue_surface_refresh()
+
+    def nativeEvent(self,event_type,message):
+        guard=getattr(self,'_first_maximize',None)
+        if sys.platform=='win32' and guard is not None and not guard.used:
+            from ctypes.wintypes import MSG
+            msg=MSG.from_address(int(message))
+            # SC_MAXIMIZE covers titlebar clicks/double clicks and the system
+            # menu. SIZE_MAXIMIZED covers OS paths without that command, before
+            # Qt delivers the WebEngine Resize event.
+            if (msg.message==0x112 and msg.wParam & 0xfff0==0xf030) or (msg.message==0x5 and msg.wParam==2):
+                guard.prepare()
+        return False,0
+
+    def showMaximized(self):
+        if hasattr(self,'_first_maximize'):
+            self._first_maximize.prepare(capture=self.isVisible())
+        super().showMaximized()
+
+    def changeEvent(self,event):
+        if event.type()==QEvent.Type.WindowStateChange and hasattr(self,'_first_maximize'):
+            if self.isMaximized():self._first_maximize.begin()
+            elif self._first_maximize.active:self._first_maximize.cancel()
+        super().changeEvent(event)
+        if event.type()==QEvent.Type.WindowStateChange:self.queue_surface_refresh()
 
     def fit_screen(self,screen=None,*,initial=False):
         screen=screen or self.screen()
@@ -309,16 +431,45 @@ class Workbench(QMainWindow):
             self.windowHandle().screenChanged.connect(self.fit_screen)
             self._screen_connected=True
 
+    def reader_fullscreen(self,request):
+        self._reader_fullscreen_generation=getattr(self,'_reader_fullscreen_generation',0)+1
+        generation=self._reader_fullscreen_generation
+        if request.toggleOn():
+            if not self.isFullScreen():
+                self._reader_previous_state=self.windowState()
+                self._reader_previous_geometry=self.saveGeometry()
+            request.accept();self.showFullScreen()
+        else:
+            request.accept()
+            previous=getattr(self,'_reader_previous_state',Qt.WindowState.WindowNoState)
+            geometry=getattr(self,'_reader_previous_geometry',None)
+            # Chromium completes its native fullscreen transition after this
+            # signal returns. Restore the host in the following event turn.
+            def restore():
+                if self.closing or generation!=self._reader_fullscreen_generation:return
+                if previous & Qt.WindowState.WindowMaximized:self.showMaximized()
+                else:
+                    self.showNormal()
+                    if geometry is not None:self.restoreGeometry(geometry)
+            QTimer.singleShot(0,restore)
+
+    def pick_paper_export(self,name):
+        options=QFileDialog.Option.DontUseNativeDialog if self.bridge.test_dialog else QFileDialog.Option(0)
+        return QFileDialog.getSaveFileName(self,'导出论文 PDF',name,'PDF 文档 (*.pdf)',options=options)[0]
+
     def save_download(self,download):
         # Only renderer-generated supported artifacts from this owned page.
         name=Path(download.suggestedFileName()).name
-        if download.page()!=self.page or download.url().scheme()!='blob' or not name.lower().endswith(('.svg','.png','.textgrid','.lip.json','.json','.csv','.xlsx','.txt')):
+        if download.page()!=self.page or download.url().scheme()!='blob' or not name.lower().endswith(('.svg','.png','.textgrid','.lip.json','.json','.csv','.xlsx','.docx','.txt')):
             download.cancel();return
         options=QFileDialog.Option.DontUseNativeDialog if self.bridge.test_dialog else QFileDialog.Option(0)
-        title,filter=('保存文本','UTF-8 文本 (*.txt)') if name.lower().endswith('.txt') else ('保存标注','Praat 标注 (*.TextGrid)') if name.lower().endswith('.textgrid') else ('保存安全唇形','安全唇形 (*.lip.json)') if name.lower().endswith('.lip.json') else ('保存实验文件','实验文件 (*.json *.csv *.xlsx)') if name.lower().endswith(('.json','.csv','.xlsx')) else ('保存图像','图像 (*.svg *.png)')
+        title,filter=('保存文本','UTF-8 文本 (*.txt)') if name.lower().endswith('.txt') else ('保存标注','Praat 标注 (*.TextGrid)') if name.lower().endswith('.textgrid') else ('保存安全唇形','安全唇形 (*.lip.json)') if name.lower().endswith('.lip.json') else ('保存归纳文档','Word 文档 (*.docx)') if name.lower().endswith('.docx') else ('保存实验文件','实验文件 (*.json *.csv *.xlsx)') if name.lower().endswith(('.json','.csv','.xlsx')) else ('保存图像','图像 (*.svg *.png)')
         selected=QFileDialog.getSaveFileName(self,title,name,filter,options=options)[0]
         if not selected:download.cancel();return
         target=Path(selected);download.setDownloadDirectory(str(target.parent));download.setDownloadFileName(target.name);download.accept()
+
+    def request_update_close(self):
+        if self.update_coordinator.pending:self.page.triggerAction(QWebEnginePage.WebAction.RequestClose)
 
     def accept_close(self):self.closing=True;self.close()
     def closeEvent(self,event):
@@ -326,8 +477,18 @@ class Workbench(QMainWindow):
             event.ignore();self.page.triggerAction(QWebEnginePage.WebAction.RequestClose);return
         if not self.bridge.close_recording():
             self.closing=False;event.ignore()
+            self.update_coordinator.cancel('录音尚未安全保存，已取消更新。')
             QMessageBox.warning(self,'录音尚未安全保存','录音收尾或工程保存失败。窗口继续保留，请回到录音页处理后再关闭。')
             return
+        try:self.update_coordinator.closed()
+        except Exception:
+            self.closing=False;event.ignore();self.update_coordinator.cancel('退出操作未完成，窗口保留。')
+            QMessageBox.warning(self,'退出操作未完成','更新或缓存清理未能完成。窗口保留，请检查占用后重试。')
+            return
+        self._first_maximize.finish()
+        if self._startup_presentation:self._startup_presentation.cancel()
+        if hasattr(self,'updates_bridge'):self.updates_bridge.close()
+        self.papers_bridge.close()
         self.bridge.vocal_files.close();self.vocal.close();self.provider.close();self.service.close();event.accept()
 
 
@@ -338,4 +499,9 @@ def run(dist,**options):
     app.aboutToQuit.connect(window.service.close);app.aboutToQuit.connect(window.provider.close)
     app.aboutToQuit.connect(window.vocal.close)
     app.aboutToQuit.connect(window.bridge.close_recording)
-    window.show();code=app.exec();window.page.deleteLater();app.processEvents();return code
+    window.show();code=app.exec();window.page.deleteLater();app.processEvents()
+    if not getattr(sys,'frozen',False):
+        from .startup_cache import clear_if_idle
+        from .cache_cleanup import disposable_caches
+        clear_if_idle(requested_only=True,extra_cleanup=disposable_caches)
+    return code

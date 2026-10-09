@@ -1,0 +1,5567 @@
+{
+  "schemaVersion": "ptb-manual-chapter/1",
+  "id": "m14",
+  "title": "音系归纳",
+  "moduleId": "M14",
+  "summary": "按导入列、调类、声韵和结果四步整理单音节调查字表，核对归并、搜索字项并保存两份 DOCX 与一份 XLSX。",
+  "body": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-purpose",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "开始前：准备调查字表"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "音系归纳把已经记好的单音节字表整理成同音字表：先选列，再确认调类、声韵顺序与归并，最后生成两份 DOCX 和一份 XLSX。分类仍需人工核对，模块没有录音识别或声学测量功能。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-preparation",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "字头、IPA 与备注"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "支持 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "XLSX、XLS、CSV、TSV、TXT、DOCX",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。Excel 选工作表，DOCX 选表格，普通段落不参与读取。每条记录对应一个音节，"
+                  },
+                  {
+                    "type": "text",
+                    "text": "字头和 IPA 必填",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，备注可省略，列的位置可以自选。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "IPA 使用实际音标字符，尾部普通、全角或上标数字会作为调值读取。未写数字时用 0 作为缺省标记。多音节记音应先拆成独立记录，词语、读法和语境写在备注中。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "字头中的第一个汉字成为条目，括号内容提取为备注；无括号的多汉字字段把整个词放入备注。提取备注与备注列合并。非汉字字段取首字符，导入后请特别核对。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "含公式的 XLSX 会被拒绝，先另存并核对一份"
+                  },
+                  {
+                    "type": "text",
+                    "text": "纯值副本",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。文本推荐 UTF-8；字段含逗号或换行时，用规范 CSV 引号包围。保留原表，格式转换在副本中进行。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "本章使用测试.xlsx：Sheet1 有 "
+          },
+          {
+            "type": "text",
+            "text": "5,453 行、3 列，无表头",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，字头、IPA、备注依次在第 1、2、3 列。下面摘录前 6 条，并仅为 CSV 示例增加列名。"
+          }
+        ],
+        "attrs": {
+          "id": "m14-source-example"
+        }
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "id": "m14-input-example",
+          "language": "csv"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "字头,IPA,备注\n知,tʂʯ1,\n蜘,tʂʯ1,\n䵹,tʂʯ1,\n鼅,tʂʯ1,\n支,tsɿ1,\n支,tsʰɿ1,（俗）一～筆"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "本章调类名称均为暂拟，只展示软件操作。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 尾部的 1、2、5、6、7、8 按源表编码理解，真实含义须依据调查规范确认。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-legacy-symbols",
+          "level": 4
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "传统记音字符"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "程序可处理以下传统记音字符，保留原始 IPA。表中是分类规则，具体音值仍需依据原记音核对。"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m14-table-traditional-symbols",
+          "caption": "传统记音字符的分类提示"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "字符"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Unicode"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "导入后核对"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "ɿ"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "U+027F"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "按韵母候选解析"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "ʅ"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "U+0285"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "按韵母候选解析"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "ʮ"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "U+02AE"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "按韵母候选解析"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "ʯ"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "U+02AF"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "按韵母候选解析"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "ᴀ"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "U+1D00"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "按韵母候选解析"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "ᴇ"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "U+1D07"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "按韵母候选解析"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "ȶ"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "U+0236"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "参与声母拆分及排序"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "ȡ"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "U+0221"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "参与声母拆分及排序"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "ȵ"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "U+0235"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "参与声母拆分及排序"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-interface",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "四步工作台"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "从首页或侧栏打开"
+          },
+          {
+            "type": "text",
+            "text": "音系归纳",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。左栏依次是导入、调类与调值、声韵排序归并、结果；中央随步骤显示操作内容，结果页右侧出现生成与保存入口。"
+          }
+        ],
+        "attrs": {
+          "id": "m14-overview-guide"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-figure-m14-overview-r2-light",
+          "assetId": "m14-test-overview-20261006-light-scaled-r20261007-v2-916b8bdd",
+          "caption": "音系归纳初始页。四步位于模块左栏，中央选择调查字表，全局侧栏已收起。",
+          "width": "100%",
+          "align": "center",
+          "alt": "浅色音系归纳初始页，模块左栏列出四步及导入设置，中央显示选择文件，左缘全局侧栏只保留图标。"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-controls-common",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "常用入口"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m14-table-common",
+          "caption": "常用入口及反馈"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "入口"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "用途与反馈"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "导入调查字表 / 选择文件 / 更换文件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "选择文件后先查看样例，确认导入成功才替换当前数据。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "左栏四步"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "点击切换已可用步骤，页内输入保留。成功导入前后续步骤不可选，任务中不能切换。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "取消任务"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "读取或生成期间出现。等待取消结束，当前已确认数据与已有结果保留。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "重新设置导入"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "把当前文件放回待导入状态。"
+                      },
+                      {
+                        "type": "text",
+                        "text": "再次确认会重建分类，替换原有排序、归并与生成结果",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": "。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "保存草稿"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "将当前数据和设置写入本机，具体条件见后面的草稿说明。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "帮助 / 方法与引用"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "查看本模块说明，或打开来源、依赖与许可信息。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-section-01",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "这份示例怎样使用"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "可先跟着原 XLSX 走完四步，再看列映射 CSV 和分号 TXT 的补充例子。原表成功导入后应有 "
+          },
+          {
+            "type": "text",
+            "text": "5,453 条记录、910 种原始 IPA",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，保留 11 条重复记录。演示中的 ph → pʰ 归并会在生成前撤销，最终保持 34 声母、44 韵母。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-controls",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "导入调查字表"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-controls-import",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "选择表格、列和开始行"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "导入调查字表",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "或"
+                  },
+                  {
+                    "type": "text",
+                    "text": "选择文件",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，选测试.xlsx。等样例出现，核对 Sheet1、5,453 行和 3 列。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "将"
+                  },
+                  {
+                    "type": "text",
+                    "text": "数据从第几行开始",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "改为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "1",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，字头列第 1 列、IPA 列第 2 列、备注列第 3 列。修改开始行会刷新样例，若提示样例设置已变化，点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "刷新样例",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "核对首行知 tʂʯ1 和三列原值，保持左栏单辅音策略为"
+                  },
+                  {
+                    "type": "text",
+                    "text": "作为韵母，声母记为 Ø",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "确认导入并继续",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。成功后进入调类页，左栏显示有效记录数和不同原始 IPA 数。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m14-import-actions"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-figure-m14-import-detail-r4-light",
+          "assetId": "m14-test-import-20261006-light-scaled-r20261007-v2-8325aa5e",
+          "caption": "测试.xlsx 无表头，从第 1 行读取，字头、IPA、备注分别对应第 1、2、3 列。",
+          "width": "100%",
+          "align": "center",
+          "alt": "浅色导入页显示测试.xlsx、Sheet1、5453 行和 3 列，开始行 1，字头第 1 列、IPA 第 2 列、备注第 3 列，首行是知 tʂʯ1。"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-test-import-20261006-light-detail-figure",
+          "assetId": "m14-test-import-20261006-light-detail-scaled-r20261007",
+          "caption": "红框标出开始行和三列映射。原表无表头，开始行要设为 1。",
+          "alt": "导入参数局部图，红框标出开始行 1、字头第 1 列、IPA 第 2 列、备注第 3 列，工作表为 Sheet1。",
+          "width": "70%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "无表头的文件要从第 1 行开始，避免漏掉第一条记录。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218",
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 新建页默认从第 2 行开始；恢复草稿会沿用已保存选项。两列表检查后，越界的备注列会改为不使用。"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m14-table-import",
+          "caption": "导入选项速查"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "选项"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "新建默认值"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "如何选择"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "工作表 / 表格"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第一张表"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Excel 选工作表名，DOCX 选表格编号，文本显示文本表格；切换后刷新样例。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "数据从第几行开始"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "2"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "行号从 1 开始。表头在第 1 行时用 2，无表头用 1；说明行较多时按实际首条记录设置。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "字头列 / IPA 列 / 备注列"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "第 1 / 2 / 3 列"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "选择不同的有效列，备注可选不使用。空 IPA 不由备注补位。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "单辅音策略"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "作为韵母，声母记为 Ø"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "也可作为声母，韵母记为空；修改后须重新确认导入才应用。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "文本编码"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "自动识别 BOM / UTF-8"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "可选 UTF-8、GB18030 / GBK、UTF-16。自动模式识别 UTF-16 BOM，否则按 UTF-8 读取。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "分隔符"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "自动识别"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "可选 Tab、逗号、分号、中文逗号或空格。空格需显式选择。改选项后查看刷新后的样例。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "刷新样例"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "—"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "样例与当前表、编码、分隔符或开始行不一致时先刷新；只改列映射无需重新解码。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "取消此次选择"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "—"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "放弃待导入文件，保留当前已确认数据与结果。确认成功后的导入不能由此撤销。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-advanced-import",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "单辅音与特殊记录"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "默认策略下，姆 m1 分为 Ø / m / 1，五 ŋ1 分为 Ø / ŋ / 1；选另一策略时分别为 m / 空韵 / 1、ŋ / 空韵 / 1。按研究中的成音节分析选择，"
+          },
+          {
+            "type": "text",
+            "text": "Ø 表示零声母",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，页面的空韵表示没有韵母字符。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "样例只辅助选列，完整分类要到结果页审阅。缺字头、缺 IPA、只有调值或疑似多音节记录会跳过并列出原因，含 ? 或替换字符时会提示人工核对。先修正源表再导入，别用后面的归并补救列号错误。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-import-example",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "说明行与非默认列"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "下面是测试.xlsx 的全量派生 CSV 副本：新增说明行、列名与编号，将字头移到第 4 列，原有字音和备注不变。代码只列开头，截图里的文件有 5,455 行、4 列。"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "id": "m14-worked-table",
+          "language": "csv"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "由测试.xlsx派生的列映射操作副本,,,\n编号,IPA,备注,字头\n1,tʂʯ1,,知\n2,tʂʯ1,,蜘\n3,tʂʯ1,,䵹\n4,tʂʯ1,,鼅\n5,tsɿ1,,支\n6,tsʰɿ1,（俗）一～筆,支"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选择该 CSV，文本编码用 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "UTF-8",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，分隔符用"
+                  },
+                  {
+                    "type": "text",
+                    "text": "逗号",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "开始行设为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "3",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，字头第 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "4",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 列，IPA 第 2 列，备注第 3 列。刷新后前两行弱化，知 tʂʯ1 位于第 3 行。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m14-columns-example-actions"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-figure-m14-selected-columns-r5-light",
+          "assetId": "m14-test-selected-columns-20261006-light-scaled-r20261007-v2-a2b7cf9d",
+          "caption": "全量派生 CSV 从第 3 行开始，字头改为第 4 列，前两行说明与列名不参与分析。",
+          "alt": "浅色导入页显示测试_列映射演示.csv、5455 行 4 列，开始行 3，字头第 4 列、IPA 第 2 列、备注第 3 列，UTF-8 与逗号已选。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "确认导入后仍应得到 5,453 条有效记录、910 种原始 IPA，来源行比原表增加 2。后续主例请重新选原测试.xlsx，恢复 Sheet1、第 1/2/3 列和开始行 1。只想看样例时点"
+          },
+          {
+            "type": "text",
+            "text": "取消此次选择",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-text-example",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "文本编码与分隔符"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "下面只摘录原表前三条，增加列名并用分号分列。保存为 UTF-8 TXT 后，选 "
+          },
+          {
+            "type": "text",
+            "text": "UTF-8、分号、开始行 2",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，三列仍依次是字头、IPA、备注。"
+          }
+        ],
+        "attrs": {
+          "id": "m14-text-example-actions"
+        }
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "id": "m14-semicolon-example",
+          "language": "text"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "字头;IPA;备注\n知;tʂʯ1;\n蜘;tʂʯ1;\n䵹;tʂʯ1;"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-figure-m14-gbk-delimiter-r5-light",
+          "assetId": "m14-test-semicolon-20261006-light-scaled-r20261007-v2-d9d65e3e",
+          "caption": "UTF-8 分号摘录共 4 行、3 列，从第 2 行读入知、蜘、䵹三条记录。",
+          "alt": "浅色导入页显示测试_分号摘录.txt、4 行 3 列，UTF-8、分号和开始行 2，三个数据行的 IPA 为 tʂʯ1，左栏保留已确认的测试.xlsx。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "整行挤在一列时改分隔符，中文或 IPA 乱码时改编码，等待样例刷新再确认。GBK 文件可先选 "
+          },
+          {
+            "type": "text",
+            "text": "GB18030 / GBK",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 再选文件。含引号内换行的 CSV 须从该记录的物理起始行读入，不能从记录内部开始。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-advanced",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "确认调类"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-controls-tone",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "核对调值、记录数与例字"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "导入后先对照原始调值、记录数和例字。测试.xlsx 有 1、2、5、6、7、8 六个编码，对应记录数为 "
+          },
+          {
+            "type": "text",
+            "text": "1,933、1,150、676、807、489、398",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。名称默认沿用原编码。"
+          }
+        ],
+        "attrs": {
+          "id": "m14-tone-read"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-figure-m14-tone-detail-r4-light",
+          "assetId": "m14-test-tone-original-20261006-light-scaled-r20261007-v2-039d565e",
+          "caption": "六个原始编码及各自记录数、例字。调类名称初始沿用编码。",
+          "width": "100%",
+          "align": "center",
+          "alt": "浅色调类页显示 1、2、5、6、7、8 六行，名称与编码相同，记录数依次为 1933、1150、676、807、489、398。"
+        }
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m14-table-tone",
+          "caption": "调类页操作"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "操作"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "反馈与作用"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "调类名称"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "可输入名称或编号，最多 100 字符；保存时去首尾空白，留空沿用原调值。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "顺序 ↑ / ↓、拖动行"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "上下按钮交换相邻行，拖动交换源行与目标行，决定输出顺序。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "记录数 / 例字"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "记录数包含重复记录，例字显示该编码前 6 条字头，仅供快速核对。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "还原本次编辑"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "恢复当前已保存名称与顺序，放弃尚未保存的修改。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "保存调类设置并继续"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "应用到当前工作草稿，进入声韵页。要留到下次使用，再点顶部保存草稿。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-advanced-tone",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "改名、同名归组与排序"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "给各行填写研究采用的调类名。只有确认多个编码属于同类时，才填写相同名称；同名记录在同一声韵组合下归组，统计仍保留原编码到名称的对应关系。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "需要调整展示顺序，用 "
+          },
+          {
+            "type": "text",
+            "text": "↑ / ↓",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 或拖动交换行。同名调类按表中首次出现的位置排列，同一最终声韵调类内的记录保持输入顺序。编辑后出现有未保存修改，完成后保存。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-tone-example",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "填写示例中的六个名称"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "本例按顺序填写 "
+          },
+          {
+            "type": "text",
+            "text": "1→阴平（暂拟）、2→阳平（暂拟）、5→阴去（暂拟）、6→阳去（暂拟）、7→阴入（暂拟）、8→阳入（暂拟）",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，保留原顺序，不增加源表未出现的编码 3、4。"
+          },
+          {
+            "type": "text",
+            "text": "这些名称不代表已确认的真实调类。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m14-tone-example-actions"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-figure-m14-tone-edited-r5-light",
+          "assetId": "m14-test-tone-edited-20261006-light-scaled-r20261007-v2-083e731f",
+          "caption": "六个编码填写独立暂拟名称，记录数不变，页面提示有未保存修改。",
+          "alt": "浅色调类页依次填入阴平、阳平、阴去、阳去、阴入、阳入，每项带暂拟标注，原编码、记录数与例字保留。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "点击"
+          },
+          {
+            "type": "text",
+            "text": "保存调类设置并继续",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，页面进入声韵排序归并，状态栏提示设置已保存到当前工作草稿。想放弃保存前的修改时点"
+          },
+          {
+            "type": "text",
+            "text": "还原本次编辑",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-controls-symbol",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "整理声母与韵母"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "声母和韵母分别排序。测试.xlsx 在本例策略下解析为 "
+          },
+          {
+            "type": "text",
+            "text": "34 个声母、44 个韵母",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，先核对候选，再决定哪些区别应保留。"
+          }
+        ],
+        "attrs": {
+          "id": "m14-symbol-read"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-figure-m14-symbol-detail-r4-light",
+          "assetId": "m14-test-symbols-20261006-light-scaled-r20261007-v2-98a4a5bc",
+          "caption": "声母和韵母双列表，初始有 34 声母、44 韵母，无归并映射。",
+          "width": "100%",
+          "align": "center",
+          "alt": "浅色声韵页并列显示 34 个声母与 44 个韵母，列表下方有上移、下移、归并和保存按钮。"
+        }
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m14-table-symbol",
+          "caption": "声韵页操作"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "操作"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "用途与反馈"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "搜索声母 / 搜索韵母"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "筛选对应列表，不删条目。清空搜索可查看完整列表。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "点击、Ctrl / ⌘、Shift"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "点击单选，Ctrl / ⌘ 离散多选，Shift 连续选择；聚焦条目后 Enter 或空格也可选择。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "拖动 / 上移 / 下移"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "整组插入同一列表目标项之前，或逐格上下移动，保持所选项相对顺序。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "归并声母 / 归并韵母"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "先单选源项，在页内选不同目标，核对影响记录数和例字后确认。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "取消本次归并 / 撤销"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "取消尚未确认的操作；已有映射右侧撤销可恢复源项。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "还原本次编辑"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "恢复当前已保存排序与归并，并取消待确认归并。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "保存声韵设置并继续"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "先确认或取消待处理归并，再应用设置并进入结果页。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-advanced-merge",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "查找、多选与排序"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "需要批量排序时先选择若干项，再拖动其中一项或用"
+          },
+          {
+            "type": "text",
+            "text": "上移 / 下移",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。Shift 的连续范围按完整列表计算，批量移动前建议清空搜索核对。声母、韵母各自在本列表内操作，跨列表拖动不会改变类别。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "归并只改变分类，原始字头、IPA、备注和调值保留。若目标又归到第三项，原源项也跟随该归并链；撤销其中一条后，请到结果页核对剩余关系。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-merge-example",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "演示一次归并，再撤销"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "原表捧 phoŋ1 的声母是 ph，批 pʰi1 等字使用 pʰ。下面仅演示操作，是否应统一须依据原记音约定。先点 "
+          },
+          {
+            "type": "text",
+            "text": "ph",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，按住 "
+          },
+          {
+            "type": "text",
+            "text": "Ctrl",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 再点 "
+          },
+          {
+            "type": "text",
+            "text": "pʰ",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，声母栏显示已选 2；这时可成组排序。"
+          }
+        ],
+        "attrs": {
+          "id": "m14-multiselect-actions"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-figure-m14-symbol-multiselect-r5-light",
+          "assetId": "m14-test-multiselect-20261006-light-scaled-r20261007-v2-04bc714b",
+          "caption": "ph 与 pʰ 已多选，声母栏显示已选 2。归并前需重新单选源项。",
+          "alt": "浅色声韵页中 ph 和 pʰ 两项高亮，34 个声母与 44 个韵母保留，尚无归并关系。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "重新单击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "ph",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，使它成为唯一源项，点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "归并声母",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。多选会提示先单选源音标。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在"
+                  },
+                  {
+                    "type": "text",
+                    "text": "归并目标",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "下拉中主动选 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "pʰ",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，核对影响 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "1",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 条记录、例字"
+                  },
+                  {
+                    "type": "text",
+                    "text": "捧",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。默认目标只是第一个不同项，务必检查。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "不准备归并时点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "取消本次归并",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "；本次演示点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "确认归并",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m14-merge-confirm-actions"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-figure-m14-merge-confirm-r5-light",
+          "assetId": "m14-test-merge-confirm-20261006-light-scaled-r20261007-v2-e15c95dd",
+          "caption": "归并确认区为 ph → pʰ，影响 1 条记录，例字捧。确认前 ph 仍在列表中。",
+          "alt": "浅色声韵页 ph 单选，归并目标 pʰ，确认区显示影响 1 条记录、例字捧，并有取消本次归并与确认归并按钮。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-test-merge-confirm-20261006-light-detail-figure",
+          "assetId": "m14-test-merge-confirm-20261006-light-detail-scaled-r20261007",
+          "caption": "局部图强调归并方向和取消、确认按钮，核对受影响记录后再操作。",
+          "alt": "归并确认区局部图，ph 指向 pʰ，影响 1 条记录、例字捧，红框标出取消本次归并和确认归并。",
+          "width": "70%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "确认后 ph 退出活动列表，声母暂为 "
+          },
+          {
+            "type": "text",
+            "text": "33",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 项，下方出现 "
+          },
+          {
+            "type": "text",
+            "text": "ph → pʰ",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 与"
+          },
+          {
+            "type": "text",
+            "text": "撤销",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。捧的原始 IPA 仍是 phoŋ1。"
+          }
+        ],
+        "attrs": {
+          "id": "m14-merge-applied-read"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-figure-m14-merge-applied-r5-light",
+          "assetId": "m14-test-merge-applied-20261006-light-scaled-r20261007-v2-0a84f75f",
+          "caption": "确认后声母暂为 33 项，下方显示 ph → pʰ 与撤销按钮。",
+          "alt": "浅色声韵页显示 33 个活动声母、44 个韵母，ph 退出列表，归并关系 ph → pʰ 旁有撤销按钮。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "本例生成前点击该映射右侧的撤销，恢复 ph 和 34 个声母。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218",
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 确认类别与顺序后点"
+          },
+          {
+            "type": "text",
+            "text": "保存声韵设置并继续",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。想放弃本轮全部尚未保存的排序和归并，可点"
+          },
+          {
+            "type": "text",
+            "text": "还原本次编辑",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-output",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "检查、生成与保存结果"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-controls-result",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "生成前先检查"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "进入结果页后，先看已确认设置下的预览，核对代表字、异常条目与备注。生成前显示当前设置预览，生成成功后显示生成结果快照。"
+          },
+          {
+            "type": "text",
+            "text": "修改设置后要先保存，再重新生成",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，上次生成文件仍对应旧设置。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-advanced-preview",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "三种预览与分页"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m14-table-result",
+          "caption": "预览与定位操作"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "操作"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "如何使用"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "声母 → 韵母 / 韵母 → 声母"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "按声母或韵母作为外层查看同一批记录，展开声母、韵母与声调统计核对类别和顺序。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "上一页 / 下一页"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "两种分组表每页 100 条，本例共 55 页；分组可能跨页。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "二维声韵表"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "行是韵母，列是声母。每组最多 12 行×10 列，组内通过横向、纵向滚动查看。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "上一组 / 下一组韵母、声母"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "切换超出当前窗口的行组或列组。本例 44 韵母、34 声母，各有 4 组。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "单格 ‹ / ›"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "每格每页 60 条，超过时用格内按钮继续查看。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "搜索字头或 IPA / 搜索范围"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "默认字头与 IPA，可只搜字头或原始 / 归并 IPA；不搜索备注和调类名称。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "↑ / ↓ / Enter / 清空"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "循环定位全表命中，自动切换页或矩阵位置并高亮。清空恢复完整审阅。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "导入与归并审阅"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "展开并滚动查看来源行、字头、原 IPA、备注与映射，每页 100 条。有查询时只列命中记录。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "跳过行与警告"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "查看来源行和原因，回原表核对。重复记录保留。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "分页、搜索和滚动只影响屏幕显示，"
+          },
+          {
+            "type": "text",
+            "text": "导出仍包含全部有效记录",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。二维表空格表示当前字表未收录该组合，不能单独据此判断某音节不存在。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-generated-example",
+          "level": 4
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "切换同一批记录的阅读方向"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "下面三图来自本例同一次生成，演示归并已撤销。点击"
+          },
+          {
+            "type": "text",
+            "text": "声母 → 韵母",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，展开"
+          },
+          {
+            "type": "text",
+            "text": "声母、韵母与声调统计",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，核对 34 声母、44 韵母及六个编码与暂拟名称。"
+          }
+        ],
+        "attrs": {
+          "id": "m14-initial-preview-actions"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-figure-m14-initial-preview-r5-light",
+          "assetId": "m14-test-initial-20261006-light-scaled-r20261007-v2-c0aa412c",
+          "caption": "声母 → 韵母快照展开统计，正文从 Ø 声母下的韵母组合开始。",
+          "alt": "浅色结果页选声母 → 韵母，统计展开显示声母、韵母和六个编码到暂拟名称，正文从 Ø 分类开始。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "点击"
+          },
+          {
+            "type": "text",
+            "text": "韵母 → 声母",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，同一批记录换成从韵母查声母。图中从 ã 韵母下的 Ø、m、b、p、pʰ 等组合开始，继续滚动或翻页查看其他韵母。"
+          }
+        ],
+        "attrs": {
+          "id": "m14-final-preview-actions"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-figure-m14-final-preview-r5-light",
+          "assetId": "m14-test-final-20261006-light-scaled-r20261007-v2-6c2efa83",
+          "caption": "韵母 → 声母快照从 ã 韵母下的声母组合开始，右栏仍为同一组三文件。",
+          "alt": "浅色结果页选韵母 → 声母，统计展开，正文按 ã 韵母查看 Ø、m、b、p、pʰ 等声母组合。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "点击"
+          },
+          {
+            "type": "text",
+            "text": "二维声韵表",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，从行列交点查看字项。图中是首组左侧的 Ø、m、b、p、ph 列；向右滚动查看该组其余列，向下滚动查看其余行，组切换按钮再查看其他组。"
+          }
+        ],
+        "attrs": {
+          "id": "m14-matrix-preview-actions"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-figure-m14-matrix-preview-r5-light",
+          "assetId": "m14-test-matrix-20261006-light-scaled-r20261007-v2-d28fbd81",
+          "caption": "二维表首组左侧列。横向、纵向滚动查看组内内容，组切换查看其他声韵类别。",
+          "alt": "浅色二维声韵表首组，可见左侧 Ø、m、b、p、ph 列及 ã、ei、i 等韵母行，顶部声母与韵母组均为 1 / 4。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-search-example",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "搜索字项并追查来源"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在搜索框输入 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "phoŋ1",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，范围保持"
+                  },
+                  {
+                    "type": "text",
+                    "text": "字头与 IPA",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，或选"
+                  },
+                  {
+                    "type": "text",
+                    "text": "原始 / 归并 IPA",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。本例显示第 1 / 1 个命中，定位到 oŋ / ph 格中的捧。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "向下滚动，展开"
+                  },
+                  {
+                    "type": "text",
+                    "text": "导入与归并审阅",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，核对来源行 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "3,193",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "、原始 IPA phoŋ1、声母 ph → ph。前面的演示归并已撤销，原分类保留。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m14-search-example-actions"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-figure-m14-merged-review-r5-light",
+          "assetId": "m14-test-review-20261006-light-scaled-r20261007-v2-785f3510",
+          "caption": "搜索 phoŋ1 定位并高亮捧，二维表位于第 2 组韵母、第 1 组声母。审阅入口在下方。",
+          "alt": "浅色二维表搜索 phoŋ1，显示第 1 / 1 个命中，高亮 oŋ 行、ph 列中的捧，组号为韵母 2 / 4、声母 1 / 4，审阅区位于可视区域下方。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "搜索支持等价 Unicode 写法，可查原始 IPA、归并声韵及组合 IPA。用 "
+          },
+          {
+            "type": "text",
+            "text": "↑ / ↓",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 或在搜索框按 "
+          },
+          {
+            "type": "text",
+            "text": "Enter",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 看下一个命中，同字异音和重复记录各自保留。没找到时先检查范围与符号，清空搜索即可恢复全表。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-output-files",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "生成和保存三份文件"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "确认调类、排序与归并均已保存，点击右栏"
+                  },
+                  {
+                    "type": "text",
+                    "text": "生成三份结果",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。等待成功提示及三份文件名、大小出现，中央预览变为生成结果快照。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "桌面点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "选择目录保存三份结果",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，选没有这三个同名文件的目录，等待"
+                  },
+                  {
+                    "type": "text",
+                    "text": "三份结果已保存",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。取消目录选择可稍后重新保存。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "也可逐份点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "下载",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，保存位置由宿主或浏览器控制。网页正式接口可用时，"
+                  },
+                  {
+                    "type": "text",
+                    "text": "下载完整结果包",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "会得到包含三文件的同音字表_完整结果.zip。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "打开两份 DOCX 和 XLSX，核对类别顺序、调类标签、备注与代表字项。再次改设置或导出字体后重新生成，并另存至能区分研究条件的目录。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m14-generate-save-actions"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-figure-m14-result-detail-r4-light",
+          "assetId": "m14-test-result-20261006-light-scaled-r20261007-v2-5537d505",
+          "caption": "全表生成后显示 5,453 条记录、34 声母、44 韵母，右栏出现三份文件与整组保存入口。",
+          "width": "100%",
+          "align": "center",
+          "alt": "浅色生成结果快照，中央声母 → 韵母预览，右栏列出两份 DOCX、一份 XLSX、逐项下载和选择目录保存三份结果。"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "任一同名成果已存在时，会拒绝整组保存。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 换一个新目录即可重试，无需重新生成。"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m14-table-files",
+          "caption": "三份成果的阅读方向"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "文件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "内容与保存后检查"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "同音字表_韵母到声母.docx"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "以韵母为外层、声母为内层，再按调类放置字头与下标备注。检查韵母顺序和各组合。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "同音字表_声母到韵母.docx"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "以声母为外层，使用相同记录与设置。检查两文档字项与归并是否一致。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "同音字表_二维表.xlsx"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "二维同音字表以韵母为行、声母为列，格内按调类放置字头与备注，冻结首行首列。检查单格全文和顺序。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "DOCX 还含声母、韵母、声调统计与代表例字，正文保留重复条目和组内输入顺序。三文件主要展示分类后的字头与备注，未逐行附完整原始 IPA、来源行或归并日志。"
+          },
+          {
+            "type": "text",
+            "text": "同时保留原字表与人工设置决定",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，才能回溯成果。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-advanced-draft",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "保存草稿与接着做"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "页内保存把调类、声韵编辑应用到当前工作数据，"
+          },
+          {
+            "type": "text",
+            "text": "顶部保存草稿",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "才写入本机。它也可合入尚未页内保存的编辑，但须先确认或取消待导入文件、待确认归并，并等待任务结束。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "草稿不包含三份生成文件，成果仍要另行保存。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218",
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 草稿保存导入选项、解析记录与设置，重开可继续研究并重新生成。旧版草稿会提示重新导入，以使用当前解析。源文件失效时，请重新选择原字表。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "关闭有未保存内容的标签时，可取消关闭、放弃编辑或保存后关闭。草稿写入失败会保留编辑与标签，先保持页面、保存必要成果，再处理存储问题并重试。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-section-02",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "遇到问题时"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m14-table-recovery",
+          "caption": "提示与恢复操作"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "现象"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "怎样继续"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "文件打不开、乱码或整行在一列"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "核对真实格式、损坏情况、编码与分隔符，刷新样例；不要只改扩展名。已确认数据与结果保留。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "确认导入不可用"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "核对列是否有效且互不重叠、开始行是否为有效整数，样例变化后先刷新。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "没有有效记录、跳过行或符号警告"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "核对工作表、字段、开始行和单音节内容。在结果审阅查看来源行与原因，回原表修正后重导。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "公式或预算超限"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "公式表另存纯值副本；超限时拆表或只保留所需行列，保留拆分依据。程序不会静默截断。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "归并无法继续"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "先单选源项，至少保留一个不同目标。待确认归并先确认或取消，再保存设置。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "生成按钮不可用或提示需重新生成"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "先保存页内编辑，等待任务结束；旧草稿重新导入。修改后的设置不会自动套到旧成果上。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "任务取消、执行或等待超时"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "等任务结束后再重试，复杂大表可拆分。当前已确认数据与旧结果保留，勿重复提交未结束任务。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "草稿保存失败、源文件或结果失效"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "保留页面并重试草稿保存；源文件失效时重新导入，结果失效或校验失败时重新生成。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "目录冲突、无写权限或空间不足"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "换没有同名成果的可写目录，恢复空间后重试。本页结果保留，受控写入失败会回滚本次新文件。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "正式接口尚不可用"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "colspan": 1,
+                  "rowspan": 1
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "查看当前宿主是否支持 M14，并使用具备正式接口的已验收入口；接口恢复后再导入或生成。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-recovery-columns",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "列映射重叠时"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "例如字头和 IPA 都误选第 2 列，页面红字提示须选择不同有效列。把测试.xlsx 的字头改回 "
+          },
+          {
+            "type": "text",
+            "text": "第 1 列",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，IPA 第 2 列、备注第 3 列、开始行 1，提示消失后再确认。"
+          }
+        ],
+        "attrs": {
+          "id": "m14-column-conflict-actions"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-figure-m14-column-conflict-r5-light",
+          "assetId": "m14-test-column-conflict-20261006-light-scaled-r20261007-v2-f3ff20b0",
+          "caption": "字头和 IPA 同设第 2 列时提示映射错误，样例仍保留。将字头改回第 1 列即可继续。",
+          "alt": "浅色原表导入页中，字头与 IPA 都为第 2 列，红字提示字头、IPA 与备注须选择不同有效列。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-recovery-save",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "输出目录已有同名成果时"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "即使只有一份同名文件存在，也会拒绝整组保存。点击"
+          },
+          {
+            "type": "text",
+            "text": "选择目录保存三份结果",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，换没有这些同名文件的新目录，等成功提示后核对三件齐全。原目录里的成果保留。"
+          }
+        ],
+        "attrs": {
+          "id": "m14-save-conflict-actions"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m14-figure-m14-save-conflict-r5-light",
+          "assetId": "m14-test-save-conflict-20261006-light-scaled-r20261007-v2-87acce1b",
+          "caption": "同名保存被拒绝，红字要求选择另一个目录。右栏三份生成文件仍可重新保存。",
+          "alt": "浅色结果页上方红字提示输出目录已有同名结果，请选择另一个目录，原文件保留；右栏保留三份文件和保存按钮。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-budgets",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "文件与处理上限"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "输入",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：不超过 2,000,000 字节，最多 10,001 条读取记录、10,000 条有效记录、64 列，每单元格 512 字符。表头与跳过行也占读取预算。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "压缩文档",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：XLSX/DOCX 最多 512 项，展开总量不超过 32,000,000 字节。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "输出",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：矩阵最多 20,000 格，单格 32,767 字符，三文件合计 16,000,000 字节。复杂处理有执行与等待期限，超时后等任务结束再重试。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "拆分后的统计和空格只代表对应子表，需要汇总后再解释完整材料。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-methods",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "来源与研究解释"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "解析、排序、归并和同音字表结构沿用作者的自有历史实现。点击"
+          },
+          {
+            "type": "text",
+            "text": "方法与引用",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "查看来源、字体和读写依赖的许可说明。研究使用时记录导入选项、解析版本与人工归并依据。"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "分类、同名调类和单辅音策略均需研究者确认，自动排列不能独立证明音位关系。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "调值来自记音文本，模块不测量 F0。示例的暂拟名称不能作为真实调类或音高证据。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "记录数包含重复项，不等于独立词项或发音人数量；未知符号与异常条目需要回原表核对。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m14-section-03",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "跨设备打开时检查"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "IPA 固定使用 "
+          },
+          {
+            "type": "text",
+            "text": "Doulos SIL",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，其他文本和字号采用生成时的公共导出字体设置。DOCX/XLSX 不嵌入字体，在其他设备阅读时需具备所用字体。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "页面预览用来核对内容与顺序，Word 的纸面分页请在实际文件中检查。XLSX 列宽固定，行高按内容估计；长格若显示不全，可在编辑栏查看全文或调整布局。"
+          }
+        ]
+      }
+    ]
+  }
+}

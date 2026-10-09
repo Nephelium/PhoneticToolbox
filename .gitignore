@@ -91,3 +91,42 @@ playwright-report/
 
 # M04 original V2 captures contain deterministic public synthetic arrays only.
 !/tests/fixtures/m04/arrays.npz
+# Generated local reading edition may include software-only recording assets.
+/frontend/public/manual/
+
+# Local editing history, downloads, audit snapshots and browser output.
+/manual/.studio/
+/docs/history/
+/.playwright-cli/
+/papers/
+# Unreferenced legacy illustrations retained locally, excluded from v3 source.
+/PT.png
+/image/ARCHITECTURE/1776325135506.png
+
+# Local databases and private credentials (never source fixtures).
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+*.sqlite-wal
+*.sqlite-shm
+*.pem
+*.key
+*.pfx
+*.p12
+.env.*.local
+
+# Downloaded installers and archives. Reviewed runtime/source exceptions below.
+*.exe
+*.msi
+*.msix
+*.appx
+*.dmg
+*.zip
+*.7z
+*.rar
+!/phonetic_toolbox/core/acoustic/reaper.exe
+!/phonetic_toolbox/gui/resources/perception_experiment.zip
+!/phonetic_toolbox/resources/vocal_tract/sources/VTL2.4-API-source.zip
+!/resources/vocal_tract/sources/VTL2.4-API-source.zip

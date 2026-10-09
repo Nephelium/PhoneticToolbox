@@ -17,7 +17,7 @@
 
 ## 实际环境与验证
 
-原工程环境`.venv/v3-dev`继续不安装NumPy。新建项目内`.venv/m01-ui`，使用[带hash锁](../../requirements-m01-ui.lock)，复用原科学版本和现有Qt/HTTP测试版本；安装三份最终wheel后共51包，`uv pip check`通过，core/API/desktop关键导入均来自site-packages。没有改变v2、全局依赖、系统CUDA、数据库schema或CI配置。
+原工程环境`.venv/v3-dev`继续不安装NumPy。新建项目内`.venv/m01-ui`，使用[带hash锁](../../requirements/requirements-m01-ui.lock)，复用原科学版本和现有Qt/HTTP测试版本；安装三份最终wheel后共51包，`uv pip check`通过，core/API/desktop关键导入均来自site-packages。没有改变v2、全局依赖、系统CUDA、数据库schema或CI配置。
 
 | 检查 | 实际结果 |
 | --- | --- |

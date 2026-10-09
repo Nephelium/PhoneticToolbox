@@ -243,9 +243,33 @@
 
     footer {
       min-height: 80px;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+      padding: 20px 0;
       border-top: 1px solid #e4ebeb;
       color: #718592;
       font-size: 12px;
+    }
+
+    .footer-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: 20px;
+    }
+
+    .icp-link {
+      color: #627887;
+      line-height: 1.8;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .icp-link:hover, .icp-link:focus-visible {
+      color: #14304a;
+      text-decoration: underline;
     }
 
     @media (max-width: 760px) {
@@ -309,8 +333,11 @@
     </main>
 
     <footer>
-      <span>© 2026 PhoneticToolbox</span>
-      <span class="footer-note">MADE FOR CURIOUS EARS</span>
+      <div class="footer-meta">
+        <span>© 2026 PhoneticToolbox</span>
+        <span class="footer-note">MADE FOR CURIOUS EARS</span>
+      </div>
+      <a class="icp-link" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">黑ICP备2024017318号</a>
     </footer>
   </div>
 </body>

@@ -18,6 +18,14 @@ def f0_axis_range(values):
 
 
 def cq_series(result, config, settings, start, end):
+    if result.method_version=='egg-bounded/2' and settings.mode!='batch' and end-start>60:
+        chunks=[]
+        for first in np.arange(start,end,20.):
+            last=min(end,first+20.)
+            t,cq,sq=cq_segment(result,first,last,config,use_raw_signal=settings.signal_mode=='raw')
+            if t is not None:
+                take=(t>=first)&(t<last);chunks.append((t[take],cq[take],sq[take]))
+        return tuple(np.concatenate([c[i] for c in chunks]) if chunks else np.array([]) for i in range(3))
     values = (calculate_cq_sq(result.gci_times, result.goi_times, result.peak_times)
               if settings.mode == 'batch' else cq_segment(result, start, end, config, use_raw_signal=settings.signal_mode == 'raw'))
     return tuple(np.asarray(v if v is not None else [], dtype=float) for v in values)
@@ -92,7 +100,8 @@ def plot_bytes(result, config, settings, first, last, font_evidence=None):
         axis.grid(True); fig.tight_layout(); save(fig,'egg_CQ_SQ.png')
 
         fig = figure(); fig.set_layout_engine('constrained'); axis = fig.add_subplot(111); right = axis.twinx()
-        power, frequencies, bins = spectral_series(result.audio_signal[first:last], result.fs, config.spec_window_ms)
+        power, frequencies, bins = spectral_series(result.audio_signal[first:last], result.fs, config.spec_window_ms,
+            **(dict(max_columns=2048,max_frequency=5000) if result.method_version=='egg-bounded/2' else {}))
         # The fixed export axis shows 0–5000 Hz. Crop invisible image rows before
         # RGBA allocation, preserving the original imshow pixel boundaries.
         cell_height=(frequencies[-1]-frequencies[0])/len(frequencies)

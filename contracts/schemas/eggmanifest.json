@@ -1,6 +1,6 @@
 {
   "$defs": {
-    "AcousticManagedFile": {
+    "EggManagedFile": {
       "additionalProperties": false,
       "properties": {
         "expires_at": {
@@ -36,7 +36,7 @@
           "type": "string"
         },
         "size_bytes": {
-          "maximum": 64000000,
+          "maximum": 256000000,
           "minimum": 1,
           "title": "Size Bytes",
           "type": "integer"
@@ -49,7 +49,7 @@
         "sha256",
         "expires_at"
       ],
-      "title": "AcousticManagedFile",
+      "title": "EggManagedFile",
       "type": "object"
     }
   },
@@ -68,12 +68,21 @@
     },
     "files": {
       "items": {
-        "$ref": "#/$defs/AcousticManagedFile"
+        "$ref": "#/$defs/EggManagedFile"
       },
       "maxItems": 5,
       "minItems": 2,
       "title": "Files",
       "type": "array"
+    },
+    "format_revision": {
+      "default": "m03/1",
+      "enum": [
+        "m03/1",
+        "m03/2"
+      ],
+      "title": "Format Revision",
+      "type": "string"
     },
     "kind": {
       "const": "managed_egg_files",

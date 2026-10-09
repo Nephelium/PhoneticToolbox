@@ -61,7 +61,7 @@
           "items": {
             "type": "number"
           },
-          "maxItems": 48000,
+          "maxItems": 960000,
           "type": "array"
         },
         {

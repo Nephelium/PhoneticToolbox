@@ -4,7 +4,7 @@ import doulosUrl from '../assets/DoulosSIL-Regular.ttf?url';
 import monoUrl from '../assets/JetBrainsMono-Regular.woff2?url';
 import {projects} from '../platform/browser.ts';
 export const preferences=ref(defaults()),fontError=ref(''),fontRevision=ref(0);
-export const fontPayload=shallowRef<{css:string;ui:string;figure:string;ipa:string;figureIpa:string;mono:string;size:number}>();
+export const fontPayload=shallowRef<{css:string;ui:string;figure:string;ipa:string;figureIpa:string;mono:string;size:number;bodySize:number}>();
 let owner:string|undefined,sequence=0,scopeRevision=0;
 let fixedFont:Promise<FontFace>|undefined;
 let bundledMono:Promise<FontFace>|undefined;
@@ -36,11 +36,11 @@ export async function prepareFonts(p:FontPreferences){
  const [uiLatin,figureLatin]=await Promise.all([latinFace(latin),latinFace(flat)]);
  const ui=`"PTB-IPA-Symbols","${uiLatin}",${quoteFamily(zh)},sans-serif`,figure=`"PTB-IPA-Symbols","${figureLatin}",${quoteFamily(fzh)},sans-serif`;
  const css=ipaCss()+`@font-face{font-family:"JetBrains Mono";src:${source(bundledFamily)}}`+[...new Map([[uiLatin,latin],[figureLatin,flat]])].map(([alias,name])=>`@font-face{font-family:"${alias}";src:${source(name)};unicode-range:${latinRange}}`).join('');
- return {css,ui,figure,ipa:`"PTB-Doulos",${quoteFamily(zh)},serif`,figureIpa:`"PTB-Doulos",${quoteFamily(fzh)},serif`,mono:`"PTB-IPA-Symbols",${quoteFamily(mono)},${quoteFamily(zh)},monospace`,size:f.size,resolved:{zh,latin,mono,figureZh:fzh,figureLatin:flat}};
+ return {css,ui,figure,ipa:`"PTB-Doulos",${quoteFamily(zh)},serif`,figureIpa:`"PTB-Doulos",${quoteFamily(fzh)},serif`,mono:`"PTB-IPA-Symbols",${quoteFamily(mono)},${quoteFamily(zh)},monospace`,size:f.size,bodySize:p.bodySize,resolved:{zh,latin,mono,figureZh:fzh,figureLatin:flat}};
 }
 function install(payload:Awaited<ReturnType<typeof prepareFonts>>){
  let style=document.getElementById('ptb-font-faces');if(!style){style=document.createElement('style');style.id='ptb-font-faces';document.head.append(style);}style.textContent=payload.css;
- const root=document.documentElement.style;for(const [name,value] of Object.entries({'--font':payload.ui,'--font-figure':payload.figure,'--font-ipa':payload.ipa,'--font-figure-ipa':payload.figureIpa,'--font-mono':payload.mono,'--figure-size':payload.size+'px'}))root.setProperty(name,value);
+ const root=document.documentElement.style;for(const [name,value] of Object.entries({'--font':payload.ui,'--font-figure':payload.figure,'--font-ipa':payload.ipa,'--font-figure-ipa':payload.figureIpa,'--font-mono':payload.mono,'--body-size':payload.bodySize+'px','--figure-size':payload.size+'px'}))root.setProperty(name,value);
  fontPayload.value=payload;fontRevision.value++;window.dispatchEvent(new Event('ptb-fonts-changed'));
 }
 export async function setFonts(value:unknown,persist=true){
@@ -57,7 +57,7 @@ export async function selectFontOwner(next?:string){
  const scope=++scopeRevision;owner=next;const saved=projects.read(fontKey(owner),defaults());
  // Clear prior owner's visible state before asynchronous font resolution.
  preferences.value=defaults();fontPayload.value=undefined;fontError.value='';++sequence;
- for(const name of ['--font','--font-figure','--font-ipa','--font-figure-ipa','--font-mono','--figure-size'])document.documentElement.style.removeProperty(name);
+ for(const name of ['--font','--font-figure','--font-ipa','--font-figure-ipa','--font-mono','--body-size','--figure-size'])document.documentElement.style.removeProperty(name);
  try{await setFonts(saved,false);}catch(e){
   if(scope!==scopeRevision)return;
   const error=e instanceof Error?e.message:'字体加载失败。';

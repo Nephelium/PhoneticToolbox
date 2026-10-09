@@ -6,4 +6,4 @@
 .panel-resize-handle[hidden]{display:none!important}
 .panel-resize-shield{position:fixed;inset:0;z-index:10000;cursor:col-resize;touch-action:none;user-select:none}
 .panel-resize-message:empty{display:none}
-.panel-resize-message{position:absolute;right:12px;bottom:8px;z-index:13;padding:8px 12px;background:var(--panel);color:var(--danger,#b52e40);border:1px solid currentColor;border-radius:6px;font-size:12px;max-width:90%}
+.panel-resize-message{position:absolute;right:12px;bottom:8px;z-index:13;padding:8px 12px;background:var(--panel);color:var(--danger,#b52e40);border:1px solid currentColor;border-radius:6px;font-size:0.857143rem;max-width:90%}

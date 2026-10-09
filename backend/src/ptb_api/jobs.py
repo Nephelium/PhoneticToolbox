@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request,Response
 from .job_models import JobInput, FileJobInput, JobView, JobList, JobEvents, RetryInput
 from ptb_worker.store import JobError
 from .acoustic_batch_models import BatchRequest,BatchView,BatchList
-from .spec2wav_models import Spec2WavRequest
+from .spec2wav_models import Spec2WavRequest,Spec2WavPreview
 from .egg_models import EggRequest
 from .lpc_models import LpcRequest
 from .m08_models import M08Request, M08Source, M08Manage
@@ -15,6 +15,7 @@ from .m07_models import M07Request
 from .m11_models import M11Request
 from .m05_models import M05Request, M05Upload, M05Block, M05Config
 from .font_models import FigureFontSnapshot,FontPreflight
+from .acoustic_extended import ParameterWindowRequest
 
 
 def create_job_router(ctx, store, *, local_token=None, local_origin=None):
@@ -37,6 +38,8 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
 
     from .m11_components import component_router
     router.include_router(component_router(ctx.mode,mutation))
+    from .local_retention import retention_router
+    router.include_router(retention_router(ctx.mode=='local', store, identity, mutation))
 
     @router.get('/m05/catalog', operation_id='lip_catalog')
     def m05_catalog(owner=Depends(identity)):
@@ -147,6 +150,11 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
     def cancel_batch(batch_id:UUID,owner=Depends(mutation)):
         return batches().cancel(owner['id'],str(batch_id))
 
+    @router.post('/spec2wav/preview',response_model=Spec2WavPreview,operation_id='preview_spec2wav_source')
+    def spec2wav_preview(body:Spec2WavRequest,owner=Depends(mutation)):
+        from ptb_worker.spec2wav_preview import preview_source
+        return preview_source(store,owner['id'],body)
+
     @router.post('/spec2wav/create',response_model=JobView,status_code=201,operation_id='create_spec2wav_job')
     def reconstruct(body:Spec2WavRequest,owner=Depends(mutation)):
         from ptb_worker.spec2wav_jobs import submit
@@ -165,7 +173,9 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
     @router.post('/m08/history',operation_id='m08_history')
     def m08_history(body:M08Source,owner=Depends(mutation)):
         from ptb_worker.m08_results import listing
-        return [r for j in listing(store,owner['id'],body.project_id,body.source.model_dump()) for r in j['results'] if r['saved']]
+        # Every completed synthesis has a durable PCM result and re-extracted F0.
+        # External export is independent of membership in the comparison history.
+        return [r for j in listing(store,owner['id'],body.project_id,body.source.model_dump()) for r in j['results']]
 
     @router.post('/m08/save',response_model=JobView,operation_id='save_m08_result')
     def m08_save(body:M08Manage,owner=Depends(mutation)):
@@ -201,6 +211,27 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
     def egg_fonts(body:FigureFontSnapshot,owner=Depends(mutation)):
         from ptb_worker.font_preflight import inspect_fonts
         return inspect_fonts(body)
+
+    @router.post('/local-parameter-window',operation_id='read_local_parameter_window')
+    def parameter_window(body:ParameterWindowRequest,owner=Depends(mutation)):
+        if ctx.mode!='local' or not getattr(store,'batches',None):raise HTTPException(404,'unavailable')
+        from ptb_worker.parameter_bundle_preview import render
+        from ptb_worker.spectrogram_preview import preview_slot
+        with preview_slot():return render(store.files,str(body.asset_id),body.view.model_dump() if body.view else None)
+
+    @router.post('/local-inputs/stream',operation_id='stream_local_acoustic_input')
+    async def stream_input(request:Request,role:str,name:str,size:int=Query(gt=0,le=4_000_000_000),owner=Depends(mutation)):
+        if ctx.mode!='local' or not getattr(store,'batches',None):raise HTTPException(404,'unavailable')
+        from starlette.concurrency import run_in_threadpool
+        key=await run_in_threadpool(store.files.begin_stream_input,name,role,size)
+        try:
+            async for block in request.stream():
+                for offset in range(0,len(block),1048576):
+                    await run_in_threadpool(store.files.append_stream_input,key,block[offset:offset+1048576])
+            return await run_in_threadpool(store.files.finish_stream_input,key)
+        except BaseException:
+            await run_in_threadpool(store.files.stream_input_failed,key)
+            raise
 
     @router.post('/local-inputs',operation_id='register_local_acoustic_input')
     async def local_input(request:Request,role:str,name:str,owner=Depends(mutation)):

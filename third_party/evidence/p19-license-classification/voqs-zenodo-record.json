@@ -1,0 +1,131 @@
+{
+  "created": "2023-11-25T15:29:32.596296+00:00",
+  "modified": "2024-07-10T17:39:07.514676+00:00",
+  "id": 10206204,
+  "conceptrecid": "10206203",
+  "doi": "10.5281/zenodo.10206204",
+  "conceptdoi": "10.5281/zenodo.10206203",
+  "doi_url": "https://doi.org/10.5281/zenodo.10206204",
+  "metadata": {
+    "title": "VoQS: 音质符号 (2016中英双语版)",
+    "doi": "10.5281/zenodo.10206204",
+    "publication_date": "2020-08-30",
+    "access_right": "open",
+    "creators": [
+      {
+        "name": "Wang, Tianheng",
+        "affiliation": null,
+        "orcid": "0009-0001-1306-7349"
+      }
+    ],
+    "related_identifiers": [
+      {
+        "identifier": "10.1017/S0025100317000159",
+        "relation": "isDerivedFrom",
+        "resource_type": "publication-article",
+        "scheme": "doi"
+      },
+      {
+        "identifier": "https://zhuanlan.zhihu.com/p/203037479",
+        "relation": "isIdenticalTo",
+        "resource_type": "other",
+        "scheme": "url"
+      }
+    ],
+    "resource_type": {
+      "title": "Other",
+      "type": "other"
+    },
+    "license": {
+      "id": "cc-by-4.0"
+    },
+    "relations": {
+      "version": [
+        {
+          "index": 0,
+          "is_last": true,
+          "parent": {
+            "pid_type": "recid",
+            "pid_value": "10206203"
+          }
+        }
+      ]
+    }
+  },
+  "title": "VoQS: 音质符号 (2016中英双语版)",
+  "links": {
+    "self": "https://zenodo.org/api/records/10206204",
+    "self_html": "https://zenodo.org/records/10206204",
+    "preview_html": "https://zenodo.org/records/10206204?preview=1",
+    "doi": "https://doi.org/10.5281/zenodo.10206204",
+    "self_doi": "https://doi.org/10.5281/zenodo.10206204",
+    "self_doi_html": "https://zenodo.org/doi/10.5281/zenodo.10206204",
+    "reserve_doi": "https://zenodo.org/api/records/10206204/draft/pids/doi",
+    "parent": "https://zenodo.org/api/records/10206203",
+    "parent_html": "https://zenodo.org/records/10206203",
+    "parent_doi": "https://doi.org/10.5281/zenodo.10206203",
+    "parent_doi_html": "https://zenodo.org/doi/10.5281/zenodo.10206203",
+    "self_iiif_manifest": "https://zenodo.org/api/iiif/record:10206204/manifest",
+    "self_iiif_sequence": "https://zenodo.org/api/iiif/record:10206204/sequence/default",
+    "files": "https://zenodo.org/api/records/10206204/files",
+    "media_files": "https://zenodo.org/api/records/10206204/media-files",
+    "thumbnails": {
+      "10": "https://zenodo.org/api/iiif/record:10206204:VoQS%20%E9%9F%B3%E8%B4%A8%E7%AC%A6%E5%8F%B7%20(2016%E4%B8%AD%E8%8B%B1%E5%8F%8C%E8%AF%AD%E7%89%88).pdf/full/%5E10,/0/default.jpg",
+      "50": "https://zenodo.org/api/iiif/record:10206204:VoQS%20%E9%9F%B3%E8%B4%A8%E7%AC%A6%E5%8F%B7%20(2016%E4%B8%AD%E8%8B%B1%E5%8F%8C%E8%AF%AD%E7%89%88).pdf/full/%5E50,/0/default.jpg",
+      "100": "https://zenodo.org/api/iiif/record:10206204:VoQS%20%E9%9F%B3%E8%B4%A8%E7%AC%A6%E5%8F%B7%20(2016%E4%B8%AD%E8%8B%B1%E5%8F%8C%E8%AF%AD%E7%89%88).pdf/full/%5E100,/0/default.jpg",
+      "250": "https://zenodo.org/api/iiif/record:10206204:VoQS%20%E9%9F%B3%E8%B4%A8%E7%AC%A6%E5%8F%B7%20(2016%E4%B8%AD%E8%8B%B1%E5%8F%8C%E8%AF%AD%E7%89%88).pdf/full/%5E250,/0/default.jpg",
+      "750": "https://zenodo.org/api/iiif/record:10206204:VoQS%20%E9%9F%B3%E8%B4%A8%E7%AC%A6%E5%8F%B7%20(2016%E4%B8%AD%E8%8B%B1%E5%8F%8C%E8%AF%AD%E7%89%88).pdf/full/%5E750,/0/default.jpg",
+      "1200": "https://zenodo.org/api/iiif/record:10206204:VoQS%20%E9%9F%B3%E8%B4%A8%E7%AC%A6%E5%8F%B7%20(2016%E4%B8%AD%E8%8B%B1%E5%8F%8C%E8%AF%AD%E7%89%88).pdf/full/%5E1200,/0/default.jpg"
+    },
+    "archive": "https://zenodo.org/api/records/10206204/files-archive",
+    "archive_media": "https://zenodo.org/api/records/10206204/media-files-archive",
+    "latest": "https://zenodo.org/api/records/10206204/versions/latest",
+    "latest_html": "https://zenodo.org/records/10206204/latest",
+    "versions": "https://zenodo.org/api/records/10206204/versions",
+    "draft": "https://zenodo.org/api/records/10206204/draft",
+    "access_links": "https://zenodo.org/api/records/10206204/access/links",
+    "access_grants": "https://zenodo.org/api/records/10206204/access/grants",
+    "access_users": "https://zenodo.org/api/records/10206204/access/users",
+    "access_request": "https://zenodo.org/api/records/10206204/access/request",
+    "access": "https://zenodo.org/api/records/10206204/access",
+    "communities": "https://zenodo.org/api/records/10206204/communities",
+    "communities-suggestions": "https://zenodo.org/api/records/10206204/communities-suggestions",
+    "request_deletion": "https://zenodo.org/api/records/10206204/request-deletion",
+    "file_modification": "https://zenodo.org/api/records/10206204/file-modification",
+    "quota_increase": "https://zenodo.org/api/records/10206204/quota-increase",
+    "requests": "https://zenodo.org/api/records/10206204/requests"
+  },
+  "updated": "2024-07-10T17:39:07.514676+00:00",
+  "recid": "10206204",
+  "revision": 8,
+  "files": [
+    {
+      "id": "0428324b-28f2-41f3-80ec-bb6fa915c7fd",
+      "key": "VoQS 音质符号 (2016中英双语版).pdf",
+      "size": 117976,
+      "checksum": "md5:a26cdca607ce71bec1151748b83bb563",
+      "links": {
+        "self": "https://zenodo.org/api/records/10206204/files/VoQS%20%E9%9F%B3%E8%B4%A8%E7%AC%A6%E5%8F%B7%20(2016%E4%B8%AD%E8%8B%B1%E5%8F%8C%E8%AF%AD%E7%89%88).pdf/content"
+      }
+    }
+  ],
+  "swh": {},
+  "owners": [
+    {
+      "id": "621138"
+    }
+  ],
+  "status": "published",
+  "stats": {
+    "downloads": 63,
+    "unique_downloads": 56,
+    "views": 92,
+    "unique_views": 85,
+    "version_downloads": 63,
+    "version_unique_downloads": 56,
+    "version_unique_views": 85,
+    "version_views": 92
+  },
+  "state": "done",
+  "submitted": true
+}

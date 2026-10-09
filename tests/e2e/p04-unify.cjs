@@ -14,7 +14,7 @@ async function main(){
  const {chromium}=require(path.join(process.env.USERPROFILE,'.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright'));
  const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--mute-audio']}),page=await browser.newPage({viewport:{width:1280,height:800}}),errors=[],checks=[],matrix=[];
  page.on('pageerror',e=>errors.push(e.message));
- const pages=[['M01','参数估计','.m01-page'],['M03','EGG 信号分析','.egg-page'],['M04','LPC 谱图','.lpc-page'],['M09','语谱图转音频','.m09-page'],['M12','语音标注对齐','.annotation-page']];
+ const pages=[['M01','参数估计','.m01-page'],['M03','EGG 信号分析','.egg-page'],['M04','LPC 谱图','.lpc-page'],['M09','语谱图转音频','.m09-page'],['M12','TextGrid标注','.annotation-page']];
  const snap=async name=>{await page.evaluate(()=>document.activeElement?.blur());await page.screenshot({path:path.join(out,name+'.png'),animations:'disabled'});};
  const appearance=async(theme,scale)=>{await page.evaluate(async({theme,scale})=>{document.documentElement.dataset.theme=theme;const m=await import('/src/state/pageZoom.ts');m.setPageScale(scale);},{theme,scale});await page.waitForTimeout(180);};
  try{
@@ -55,11 +55,11 @@ async function main(){
    await page.route('**/__m12',fail);await page.getByRole('button',{name:'audio_recording.wav',exact:true}).click();await page.getByRole('alert').filter({hasText:'受控读取失败'}).waitFor();await stateMatrix('error');await page.unroute('**/__m12',fail);
    await page.getByRole('button',{name:'audio_recording.wav',exact:true}).click();await page.waitForFunction(()=>document.querySelector('.annotation-page')?.getAttribute('aria-busy')==='false'&&document.querySelector('.annotation-grid'));
    await page.setViewportSize({width:1280,height:800});await appearance('light',100);await page.getByLabel('唇形共同偏移毫秒').fill('21');await page.getByLabel('唇形共同偏移毫秒').press('Tab');
-   await page.locator('nav').getByRole('button',{name:'LPC 谱图',exact:true}).click();await page.locator('nav').getByRole('button',{name:'语音标注对齐',exact:true}).click();assert.equal(await page.getByLabel('唇形共同偏移毫秒').inputValue(),'21');
+   await page.locator('nav').getByRole('button',{name:'LPC 谱图',exact:true}).click();await page.locator('nav').getByRole('button',{name:'TextGrid标注',exact:true}).click();assert.equal(await page.getByLabel('唇形共同偏移毫秒').inputValue(),'21');
    const failSave=async route=>{if(route.request().postDataJSON()?.op==='annotation_save')await route.fulfill({json:{error:'受控保存失败，编辑保留。'}});else await route.continue();};
-   await page.route('**/__m12',failSave);await page.getByLabel('关闭 语音标注对齐',{exact:true}).click();const dialog=page.getByRole('dialog',{name:'保存标注修改？'});await dialog.getByRole('button',{name:'保存修改并关闭',exact:true}).click();await dialog.getByRole('alert').waitFor();assert.equal(await page.getByLabel('唇形共同偏移毫秒').inputValue(),'21');
+   await page.route('**/__m12',failSave);await page.getByLabel('关闭 TextGrid标注',{exact:true}).click();const dialog=page.getByRole('dialog',{name:'保存标注修改？'});await dialog.getByRole('button',{name:'保存修改并关闭',exact:true}).click();await dialog.getByRole('alert').waitFor();assert.equal(await page.getByLabel('唇形共同偏移毫秒').inputValue(),'21');
    await appearance('dark',150);await dialog.screenshot({path:path.join(out,'M12-close-save-failure-dark-150.png'),animations:'disabled'});const rect=await dialog.boundingBox();assert(rect.x>=0&&rect.y>=0&&rect.x+rect.width<=1280&&rect.y+rect.height<=800);
-   await dialog.getByRole('button',{name:'取消关闭'}).click();await page.unroute('**/__m12',failSave);await page.getByLabel('关闭 语音标注对齐',{exact:true}).click();await dialog.getByRole('button',{name:'保存修改并关闭',exact:true}).click();await page.locator('.annotation-page').waitFor({state:'detached'});
+   await dialog.getByRole('button',{name:'取消关闭'}).click();await page.unroute('**/__m12',failSave);await page.getByLabel('关闭 TextGrid标注',{exact:true}).click();await dialog.getByRole('button',{name:'保存修改并关闭',exact:true}).click();await page.locator('.annotation-page').waitFor({state:'detached'});
    const saved=(await rpc({op:'inspect'})).value;assert.equal(saved.lip_offset,.021);
    checks.push('M12 loaded/loading/error 36 combinations; controlled read/save failure recovery, tab retention, cancel close, successful close and real lip file reread');
   }

@@ -1,8 +1,10 @@
 import {dark,themeColor} from './theme.js';
 import * as THREE from 'three';
 import {OrbitControls} from './vendor/OrbitControls.js';
-import {planeSegments,stitch,oralMesh,connectedAirway,nasalOutlet,sectionPaths,airwayGuide,displayLips} from './geometry.mjs';
+import {planeSegments,stitch,oralMesh,connectedAirway,nasalOutlet,sectionPaths,airwayGuide,displayLips,airwayReferencePaths} from './geometry.mjs';
 import {registerNose,velumModel} from './anatomy.mjs';
+import {subtractTeeth} from './rigid-contact.mjs';
+import {bladeSurfacePoint} from './controls.mjs';
 const NS='http://www.w3.org/2000/svg';
 const el=(name,attrs={})=>{const e=document.createElementNS(NS,name);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);return e;};
 const colors={upper_cover:'#c6a28e',lower_cover:'#c6a28e',upper_teeth:'#f5edda',lower_teeth:'#f5edda',upper_lip:'#bf757b',lower_lip:'#bf757b',tongue:'#c58b8c',uvula:'#b07783',epiglottis:'#b98b80'};
@@ -10,14 +12,14 @@ const path=(pts,close=false)=>pts?.length?'M'+pts.map(p=>p[0]+','+(-p[1])).join(
 function geometry(data){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(data.vertices,3));g.setIndex(data.triangles);g.computeVertexNormals();g.computeBoundingSphere();return g;}
 export class VocalTractViewer{
   constructor(viewport,onDrag,{onStart=()=>{},onEnd=()=>{},onSelect=()=>{}}={}){
-    Object.assign(this,{el:viewport,onDrag,onStart,onEnd,onSelect,sagittal:true,focused:true,labels:true,showHead:true,showNose:true,showTeeth:false,mode:'organs',selected:'tongue',zoom:1,pan:[0,0],state:null});
+    Object.assign(this,{el:viewport,onDrag,onStart,onEnd,onSelect,sagittal:true,focused:true,labels:true,showHead:true,showNose:true,showTeeth:false,fullModel:false,mode:'organs',selected:'tongue',zoom:1,pan:[0,0],state:null});
     this.svg=el('svg',{class:'sagittal-canvas','aria-label':'正中矢状截面'});viewport.append(this.svg);
     this.renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,preserveDrawingBuffer:true});this.renderer.setPixelRatio(Math.min(devicePixelRatio,2));this.renderer.localClippingEnabled=true;this.renderer.setClearColor(themeColor('--panel'),1);this.renderer.toneMapping=THREE.ACESFilmicToneMapping;viewport.append(this.renderer.domElement);
     this.scene=new THREE.Scene();this.camera=new THREE.PerspectiveCamera(34,1,.1,200);this.orbit=new OrbitControls(this.camera,this.renderer.domElement);this.orbit.enableDamping=true;this.orbit.minDistance=12;this.orbit.maxDistance=90;
     this.scene.add(new THREE.HemisphereLight(0xfff9ed,0x627c74,2));for(const [power,pos] of [[2,[10,20,25]],[1.5,[-15,8,-15]]]){const light=new THREE.DirectionalLight(0xfff9eb,power);light.position.set(...pos);this.scene.add(light);}
     this.halfPlane=new THREE.Plane(new THREE.Vector3(0,0,-1),0);this.meshes=new Map();this.controls=new Map();this.raycaster=new THREE.Raycaster();this.dragPlane=new THREE.Plane(new THREE.Vector3(0,0,1),0);
     this.controlLabels=document.createElement('div');this.controlLabels.className='control-labels';viewport.append(this.controlLabels);
-    for(const name of ['tongue','blade','tip','root','hyoid','upper_lip','lower_lip','velum','side1','side2','side3']){
+    for(const name of ['tongue','blade','tip','root','hyoid','larynx','upper_lip','lower_lip','velum','side1','side2','side3']){
       const mesh=new THREE.Mesh(new THREE.SphereGeometry(1,14,10),new THREE.MeshBasicMaterial({color:0x237768,depthTest:false}));mesh.userData.handle=name;mesh.renderOrder=12;this.scene.add(mesh);
       const label=document.createElement('span');this.controlLabels.append(label);this.controls.set(name,{mesh,label});
     }
@@ -59,17 +61,17 @@ export class VocalTractViewer{
     this.noseOutline.geometry.setAttribute('position',new THREE.Float32BufferAttribute(points,3));this.scene.add(this.noseOutline);this.resize();
   }
   select(organ){if(!['tongue','lips','velum'].includes(organ))return;this.selected=organ;this.onSelect(organ);this.draw2D();this.style3D();}
-  setOptions(options={}){for(const [key,value] of Object.entries(options)){const p={head:'showHead',nose:'showNose',teeth:'showTeeth'}[key]||key;this[p]=value;}if('focused' in options)this.reset();if(('nose' in options)&&this.state){this.airData=this.showNose?connectedAirway(this.state,this.noseData,this.outlet):oralMesh(this.state);this.airPaths=sectionPaths(oralMesh(this.state));}this.draw2D();if(!this.sagittal&&this.state)this.update3D();}
-  update(state){state=displayLips(state);this.state=state;this.palate=velumModel(state);this.airData=this.showNose?connectedAirway(state,this.noseData,this.outlet):oralMesh(state);this.airPaths=sectionPaths(oralMesh(this.state));this.velumPaths=sectionPaths(this.palate);this.draw2D();if(!this.sagittal)this.update3D();}
+  setOptions(options={}){for(const [key,value] of Object.entries(options)){const p={head:'showHead',nose:'showNose',teeth:'showTeeth'}[key]||key;this[p]=value;}if('focused' in options)this.reset();if(('nose' in options)&&this.state){this.airData=this.showNose?connectedAirway(this.state,this.noseData,this.outlet):oralMesh(this.state);this.airPaths=airwayReferencePaths(this.airData);}this.draw2D();if(!this.sagittal&&this.state)this.update3D();}
+  update(state){state=displayLips(state);this.state=state;this.palate=velumModel(state);this.airData=this.showNose?connectedAirway(state,this.noseData,this.outlet):oralMesh(state);this.airPaths=airwayReferencePaths(this.airData);this.velumPaths=[this.palate.profile];this.draw2D();if(!this.sagittal)this.update3D();}
   setView(value){this.sagittal=value;if(!value&&this.state)this.update3D();this.resize();}
   reset(){this.zoom=1;this.pan=[0,0];this.orbit.target.set(1,this.focused?-.1:4,0);this.camera.position.set(...(this.focused?[12,4.3,25.5]:[25,15,40]));this.orbit.update();this.draw2D();}
   resize(){const w=this.el.clientWidth,h=this.el.clientHeight;if(!w||!h)return;if(this.width!==w||this.height!==h){this.width=w;this.height=h;this.renderer.setSize(w,h,false);this.camera.aspect=w/h;this.camera.updateProjectionMatrix();this.needsRender=true;}this.svg.style.display=this.sagittal?'block':'none';this.renderer.domElement.style.display=this.sagittal?'none':'block';this.controlLabels.hidden=this.sagittal;this.draw2D();}
   svgPoint(e){const p=this.svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(this.svg.getScreenCTM().inverse());return [q.x,-q.y];}
-  dragBaseline(name){const p=[...this.state.params];const keys={blade:['TBX','TBY'],root:['TRX','TRY']}[name]||[];for(const key of keys){const i=this.metadata.parameters.findIndex(m=>m.name===key);p[i]=this.state.limited[i];}return p;}
+  dragBaseline(name){const p=[...this.state.params];p.larynx_height=this.state.larynx_height??0;const keys={tongue:['TCX','TCY'],tip:['TTX','TTY'],blade:['TBX','TBY'],root:['TRX','TRY']}[name]||[];for(const key of keys){const i=this.metadata.parameters.findIndex(m=>m.name===key);p[i]=this.state.limited[i];}return p;}
   handles(){
     const s=this.state,idx=n=>this.metadata.parameters.findIndex(p=>p.name===n),xy=(x,y)=>[s.limited[idx(x)],s.limited[idx(y)],.06];
-    const items=[{name:'tongue',label:'舌背',p:xy('TCX','TCY'),key:'TCX',organ:'tongue'},{name:'blade',label:'舌叶',p:xy('TBX','TBY'),key:'TBX',organ:'tongue'},{name:'root',label:'舌根',p:xy('TRX','TRY'),key:'TRX',organ:'tongue'},{name:'hyoid',label:'舌骨',p:[...s.contours.lower_cover[4],.06],key:'HY',organ:'tongue'},{name:'tip',label:'舌尖',p:xy('TTX','TTY'),key:'TTX',organ:'tongue'},
-      ...['upper','lower'].map(n=>({name:n+'_lip',label:n==='upper'?'上唇':'下唇',p:[...s.lipHandles[n+'_lip'],.06],key:'LP',organ:'lips'})),{name:'velum',label:'软腭 / 腭咽口',p:[...s.contours.uvula.at(-1),.06],key:'VO',organ:'velum'}];
+    const items=[{name:'tongue',label:'舌背',p:xy('TCX','TCY'),key:'TCX',organ:'tongue'},{name:'blade',label:'舌叶',p:[...bladeSurfacePoint(s),.06],key:'TBX',organ:'tongue'},{name:'root',label:'舌根',p:xy('TRX','TRY'),key:'TRX',organ:'tongue'},{name:'hyoid',label:'舌骨',p:[...s.contours.lower_cover[4],.06],key:'HY',organ:'tongue'},{name:'tip',label:'舌尖',p:xy('TTX','TTY'),key:'TTX',organ:'tongue'},
+      ...['upper','lower'].map(n=>({name:n+'_lip',label:n==='upper'?'上唇':'下唇',p:[...s.lipHandles[n+'_lip'],.06],key:'LP',organ:'lips'})),{name:'larynx',label:'声门高低',p:[(s.contours.upper_cover[0][0]+s.contours.lower_cover[0][0])/2,s.contours.lower_cover[0][1],.06],key:'HY',organ:'velum'},{name:'velum',label:'软腭 / 腭咽口',p:[...s.contours.uvula.at(-1),.06],key:'VO',organ:'velum'}];
     const tongue=s.meshes.find(m=>m.name==='tongue');
     for(let k=1;k<=3;k++){
       // Regional anchors on the native tongue surface, posterior to anterior.
@@ -88,28 +90,60 @@ export class VocalTractViewer{
     const layer=el('g',{'stroke-linejoin':'round','stroke-linecap':'round'});this.svg.append(layer);
     if(this.showHead)this.add(layer,this.headContour,{fill:themeColor(dark()?'--muted':'--line'),stroke:themeColor('--line'),'stroke-width':.03,opacity:.43,'data-role':'head-outline'},true);
     const air=this.mode==='airway',overlay=this.mode==='overlay',airFill=air?'#a8d1c3':overlay?'#dce9df':themeColor('--panel'),tissueOpacity=air?.15:1;
-    if(this.showNose&&this.nosePaths)layer.append(el('path',{d:this.nosePaths.map(p=>path(p,false)).join(' '),fill:air||overlay?'#a8d1c3':'#eff2e8','fill-opacity':air?.9:.4,'fill-rule':'evenodd',stroke:'#72a394','stroke-width':.035,'stroke-dasharray':'.09 .06','data-role':'nasal-reference','data-registration':'nasal/3'}));
-    if(this.showNose&&this.airData.connector){const lines=sectionPaths(this.airData.connector);layer.append(el('path',{d:lines.map(p=>path(p,true)).join(' '),fill:air||overlay?'#a8d1c3':'#eff2e8',stroke:'#91ac9d','stroke-width':.025,'fill-rule':'evenodd','data-role':'nasopharyngeal-connection'}));}
-    layer.append(el('path',{d:this.airPaths.map(p=>path(p,true)).join(' '),fill:airFill,stroke:'#91ac9d','stroke-width':.035,'fill-rule':'evenodd','data-role':'midsagittal-airway'}));
+    // Leave the soft palate in the same background as the surrounding head.
+    // Its actual silhouette still excludes air and receives pointer input.
+    const velumD=this.velumPaths.map(p=>path(p,true)).join(' '),airMask=el('mask',{id:'airOutsideVelum',maskUnits:'userSpaceOnUse',x:-1000,y:-1000,width:2000,height:2000});
+    airMask.append(el('rect',{x:-1000,y:-1000,width:2000,height:2000,fill:'white'}),el('path',{d:velumD,fill:'black','fill-rule':'evenodd'}));defs.append(airMask);
+    const teethD=['upper_teeth','lower_teeth'].map(n=>path(c[n],true)).join(' ');
+    const tongueMask=el('mask',{id:'tongueOutsideTeeth',maskUnits:'userSpaceOnUse',x:-1000,y:-1000,width:2000,height:2000});
+    tongueMask.append(el('rect',{x:-1000,y:-1000,width:2000,height:2000,fill:'white'}),el('path',{d:teethD,fill:'black'}));defs.append(tongueMask);
+    const airD=this.airPaths.map(p=>path(p,true)).join(' ');
+    const oralSurfaceClip=el('clipPath',{id:'oralSurfaceClip'});
+    // The posterior cover contains a mathematical velum bridge. Keep that
+    // region's welded nasal/velum section; use exact oral cuts anterior to it.
+    oralSurfaceClip.append(el('rect',{x:c.upper_cover[13][0],y:-1000,width:2000,height:2000}));defs.append(oralSurfaceClip);
+    const tissueMask=el('mask',{id:'sectionOutsideTissue',maskUnits:'userSpaceOnUse',x:-1000,y:-1000,width:2000,height:2000});
+    tissueMask.append(el('rect',{x:-1000,y:-1000,width:2000,height:2000,fill:'white'}),el('path',{d:path(s.tongueOutline,true),fill:'black'}),el('path',{d:teethD,fill:'black'}),el('path',{d:velumD,fill:'black'}));defs.append(tissueMask);
+    // Use cuts of the actual tissue for the oral silhouette. The tube loft
+    // remains the 3-D acoustic reference, not a second visible tongue edge.
+    layer.append(el('path',{d:airD,fill:airFill,stroke:'none','fill-rule':'evenodd',mask:'url(#sectionOutsideTissue)'}));
+    layer.append(el('path',{d:path(s.oralBoundary,true),fill:airFill,stroke:'none','data-role':'midsagittal-airway',mask:'url(#sectionOutsideTissue)','clip-path':'url(#oralSurfaceClip)'}));
+    if(this.showNose){
+      const cut=-this.palate.gate[1];
+      const oralClip=el('clipPath',{id:'oralReferenceClip'}),nasalClip=el('clipPath',{id:'nasalReferenceClip'});
+      oralClip.append(el('rect',{x:-1000,y:cut,width:2000,height:2000}));nasalClip.append(el('rect',{x:-1000,y:-1000,width:2000,height:1000+cut}));defs.append(oralClip,nasalClip);
+      layer.append(el('path',{d:airD,fill:'none',stroke:'#72a394','stroke-width':.035,'stroke-dasharray':'.09 .06','clip-path':'url(#nasalReferenceClip)',mask:'url(#sectionOutsideTissue)','data-role':'nasal-reference','data-registration':'nasal/3','data-section-transition':'oral 0 mm to nasal +5 mm'}));
+    }
     for(const pts of [c.upper_cover.slice(0,8),c.upper_cover.slice(13),c.lower_cover])this.add(layer,pts,{fill:'none',stroke:'#c9a593','stroke-width':.14,opacity:tissueOpacity});
-    this.add(layer,s.tongueOutline,{fill:air?'#e9ded0':'url(#tongueFill)',stroke:this.selected==='tongue'?'#93595f':'#b98587','stroke-width':this.selected==='tongue'?.065:.035,'data-organ':'tongue','data-role':'tongue-section',cursor:'pointer'},true);
+    this.add(layer,s.tongueOutline,{fill:air?'#e9ded0':'url(#tongueFill)',stroke:this.selected==='tongue'?'#93595f':'#b98587','stroke-width':this.selected==='tongue'?.065:.035,'data-organ':'tongue','data-role':'tongue-section',mask:'url(#tongueOutsideTeeth)',cursor:'pointer'},true);
     // Hidden teeth still constrain the airway and native acoustic calculations.
     if(this.showTeeth)for(const n of ['upper_teeth','lower_teeth'])this.add(layer,c[n],{fill:'#fff9e9',stroke:'#b6a486','stroke-width':.045,'data-role':'incisor-section'},true);
     for(const n of ['upper_lip','lower_lip']){this.add(layer,c[n],{fill:colors[n],stroke:this.selected==='lips'?'#93595f':'#a96a70','stroke-width':.045,opacity:tissueOpacity,'data-organ':'lips',cursor:'pointer'},true);}
-    layer.append(el('path',{d:this.velumPaths.map(p=>path(p,true)).join(' '),fill:'#c1848e',stroke:this.selected==='velum'?'#855566':'#a96f7c','stroke-width':.035,'fill-rule':'evenodd','data-organ':'velum','data-role':s.nasal.port_area>0?'open-nasal-port':'closed-nasal-port',cursor:'pointer',opacity:air?.65:1}));
+    // The dorsal roof and attachment close the tissue volume inside the head.
+    // Only the exposed oral/posterior surface is a visible boundary.
+    layer.append(el('path',{d:velumD,fill:'none',stroke:'none','fill-rule':'evenodd','data-organ':'velum','data-style':'head-background','data-role':s.nasal.port_area>0?'open-nasal-port':'closed-nasal-port','pointer-events':'all',cursor:'pointer'}));
+    this.add(layer,this.palate.exposedProfile,{fill:'none',stroke:this.selected==='velum'?'#91ac9d':'none','stroke-width':.018,'data-role':'velum-exposed-boundary','pointer-events':'none'});
     this.add(layer,c.epiglottis,{fill:'none',stroke:'#b77f76','stroke-width':.13});
     const guides=airwayGuide(s);let segment=[];
     const drawGuide=()=>{if(segment.length>1)this.add(layer,segment,{fill:'none',stroke:'#559386','stroke-width':.028,'stroke-dasharray':'.14 .12','data-role':'airway-guide'});segment=[];};
     for(const q of guides){if(q)segment.push(q.point);else drawGuide();}drawGuide();
     const q=guides[s.section];if(q)this.add(layer,[q.lower,q.upper],{stroke:'#327e70','stroke-width':.045,'stroke-dasharray':'.12 .1','data-role':'section-guide'});
+    else{
+      // A closed midline has no drawable air segment. Keep the selected
+      // station visible at its native contact point, including lateral sounds.
+      const sec=s.airway_sections[s.section],line=s.centerline[s.section];
+      const candidates=sec.upper.map((v,i)=>v===null||sec.lower[i]===null?null:i).filter(i=>i!==null);
+      const j=candidates.sort((a,b)=>Math.abs(a-48)-Math.abs(b-48))[0];
+      if(j!==undefined){const d=(sec.upper[j]+sec.lower[j])/2;layer.append(el('circle',{cx:line[0]+line[3]*d,cy:-(line[1]+line[4]*d),r:px*4.5,fill:'none',stroke:'#327e70','stroke-width':px*1.5,'data-role':'section-contact'}));}
+    }
     if(this.labels)for(const [label,p,offset] of [['硬腭',c.upper_cover[17],[.1,1]],['软腭 / 小舌',this.palate.tip,[-2.6,1.4]],['会厌',c.epiglottis.at(-1),[-2.2,-.5]],...(this.showTeeth?[['门齿截面',c.upper_teeth[2],[2.8,1.4]]]:[]),...(this.showNose?[['鼻腔参考 · 偏离中线 5 mm',[2,4.7],[1,1.4]]]:[])])this.annotation(layer,label,p,offset,px);
-    const offsets={tongue:[.25,.8],blade:[-.2,-.65],root:[-1.5,.1],hyoid:[-1.2,.5],tip:[.4,.7],upper_lip:[.6,-.35],lower_lip:[.6,.75],velum:[-2,.9]};
-    for(const item of this.handles().filter(p=>!p.side&&p.organ===this.selected)){
-      const {name,label,p,key}=item,index=this.metadata.parameters.findIndex(m=>m.name===key),param=this.metadata.parameters[index];
-      const g=el('g',{'data-handle':name,role:'slider','aria-label':'拖动'+label,'aria-valuemin':param.min,'aria-valuemax':param.max,'aria-valuenow':s.params[index],tabindex:0,class:'organ-handle',transform:'translate('+p[0]+' '+(-p[1])+')'});
+    const offsets={tongue:[.25,.8],blade:[-.2,-.65],root:[-1.5,.1],hyoid:[-1.2,.5],tip:[.4,.7],upper_lip:[.6,-.35],lower_lip:[.6,.75],velum:[-2,.9],larynx:[.6,.1]};
+    for(const item of this.handles().filter(p=>!p.side&&(p.name==='larynx'||p.organ===this.selected))){
+      const {name,label,p,key}=item,index=this.metadata.parameters.findIndex(m=>m.name===key),param=name==='larynx'?{min:-1,max:1}:this.metadata.parameters[index];
+      const g=el('g',{'data-handle':name,role:'slider','aria-label':'拖动'+label,'aria-valuemin':param.min,'aria-valuemax':param.max,'aria-valuenow':name==='larynx'?s.larynx_height:s.params[index],tabindex:0,class:'organ-handle',transform:'translate('+p[0]+' '+(-p[1])+')'});
       g.append(el('circle',{r:px*16,fill:'transparent'}),el('circle',{r:px*6,fill:'#fffdf5',stroke:'#327d6d','stroke-width':px*1.6}),el('circle',{r:px*2.5,fill:'#327d6d'}));
       if(this.labels){const [x,y]=offsets[name],text=el('text',{x,y,'font-size':px*11,fill:'#356f61','paint-order':'stroke',stroke:'#fffdf6','stroke-width':px*2});text.textContent=label;g.append(text);}layer.append(g);
-      g.addEventListener('keydown',e=>{if(this.playing||!e.key.startsWith('Arrow'))return;e.preventDefault();this.onStart();const d=e.shiftKey?.2:.04;this.onDrag(name,e.key==='ArrowLeft'?-d:e.key==='ArrowRight'?d:0,e.key==='ArrowUp'?d:e.key==='ArrowDown'?-d:0,[...this.state.params]);this.onEnd();});
+      g.addEventListener('keydown',e=>{if(this.playing||!e.key.startsWith('Arrow'))return;e.preventDefault();this.onStart();const d=e.shiftKey?.2:.04;this.onDrag(name,e.key==='ArrowLeft'?-d:e.key==='ArrowRight'?d:0,e.key==='ArrowUp'?d:e.key==='ArrowDown'?-d:0,this.dragBaseline(name));this.onEnd();});
       if(name===focus)g.focus({preventScroll:true});
     }
     if(dark()){
@@ -121,7 +155,7 @@ export class VocalTractViewer{
   }
   annotation(parent,label,p,offset,px){const end=[p[0]+offset[0],p[1]+offset[1]];this.add(parent,[p,end],{fill:'none',stroke:'#99a48f','stroke-width':.025});const text=el('text',{x:end[0],y:-end[1]-.12,'font-size':px*10.5,fill:'#6a7969','text-anchor':offset[0]<0?'end':'start','paint-order':'stroke',stroke:'#f8f5ec','stroke-width':px*2});text.textContent=label;parent.append(text);}
   update3D(){
-    const s=this.state;for(const data of s.meshes){let mesh=this.meshes.get(data.name);if(!mesh){mesh=new THREE.Mesh(geometry(data),new THREE.MeshStandardMaterial({color:colors[data.name],roughness:.7,side:THREE.DoubleSide}));mesh.userData.organ=data.name==='tongue'?'tongue':data.name.includes('lip')?'lips':data.name==='uvula'?'velum':null;this.meshes.set(data.name,mesh);this.scene.add(mesh);}else{mesh.geometry.attributes.position.array.set(data.vertices);mesh.geometry.attributes.position.needsUpdate=true;mesh.geometry.computeVertexNormals();mesh.geometry.computeBoundingSphere();}
+    const s=this.state;for(const data of s.meshes){let mesh=this.meshes.get(data.name);if(!mesh){mesh=new THREE.Mesh(geometry(data),new THREE.MeshStandardMaterial({color:colors[data.name],roughness:.7,side:THREE.DoubleSide}));mesh.userData.organ=data.name==='tongue'?'tongue':data.name.includes('lip')?'lips':data.name==='uvula'?'velum':null;this.meshes.set(data.name,mesh);this.scene.add(mesh);}else if(data.name==='tongue'){mesh.geometry.dispose();mesh.geometry=geometry(data);}else{mesh.geometry.attributes.position.array.set(data.vertices);mesh.geometry.attributes.position.needsUpdate=true;mesh.geometry.computeVertexNormals();mesh.geometry.computeBoundingSphere();}
     }
     // The native upper cover includes a mathematical back-wall bridge; remove
     // its velum cells and display the shared soft-tissue reconstruction instead.
@@ -131,7 +165,8 @@ export class VocalTractViewer{
     // A midline display cap makes the cut tongue legible as tissue. Its lower
     // boundary is the native mouth floor; it is not a measured tissue volume.
     const outline=s.tongueOutline;
-    const capGeometry=new THREE.ShapeGeometry(new THREE.Shape(outline.map(p=>new THREE.Vector2(...p))));
+    const cap=new THREE.ShapeGeometry(new THREE.Shape(outline.map(p=>new THREE.Vector2(...p))));
+    const capGeometry=geometry(subtractTeeth({vertices:Array.from(cap.attributes.position.array),triangles:Array.from(cap.index.array)},s.dentalSolids));cap.dispose();
     if(!this.tongueSection){this.tongueSection=new THREE.Mesh(capGeometry,new THREE.MeshStandardMaterial({color:colors.tongue,side:THREE.DoubleSide,roughness:.8}));this.tongueSection.position.z=.015;this.tongueSection.userData.organ='tongue';this.scene.add(this.tongueSection);}else{this.tongueSection.geometry.dispose();this.tongueSection.geometry=capGeometry;}
     if(this.airway){this.scene.remove(this.airway);this.airway.geometry.dispose();for(const m of this.airway.material)m.dispose();}
     const data=this.airData,g=geometry(data);this.connection=data.junction;
@@ -145,14 +180,14 @@ export class VocalTractViewer{
     this.needsRender=true;this.renderer.setClearColor(themeColor('--panel'),1);
     if(!this.state)return;const air=this.mode==='airway',overlay=this.mode==='overlay';
     for(const [name,mesh] of this.meshes){const cover=name.includes('cover');mesh.visible=name==='uvula'?false:name.includes('teeth')?this.showTeeth:!air;
-      mesh.material.clippingPlanes=cover||name==='tongue'?[this.halfPlane]:[];mesh.material.transparent=air||overlay||cover;mesh.material.opacity=air?.12:cover?.2:overlay?.64:1;mesh.material.depthWrite=!mesh.material.transparent;
+      mesh.material.clippingPlanes=this.fullModel?[]:[this.halfPlane];mesh.material.transparent=air||overlay||cover;mesh.material.opacity=air?.12:cover?.2:overlay?.64:1;mesh.material.depthWrite=!mesh.material.transparent;
       mesh.material.emissive.set(mesh.userData.organ===this.selected?0x22130e:0);mesh.material.emissiveIntensity=.15;
     }
-    if(this.softPalate){for(const mesh of [this.softPalate,this.palateSection]){mesh.visible=true;mesh.material.clippingPlanes=mesh===this.softPalate?[this.halfPlane]:[];mesh.material.transparent=overlay;mesh.material.opacity=overlay?.72:1;}}
-    if(this.airway){const opacities=air?[1,1,1]:overlay?[.25,.5,.65]:[.025,.10,0];this.airway.material.forEach((m,i)=>{m.opacity=opacities[i];m.transparent=!air;m.depthWrite=air;});}
-    if(this.tongueSection){this.tongueSection.visible=!air;this.tongueSection.material.transparent=overlay;this.tongueSection.material.opacity=overlay?.64:1;this.tongueSection.material.depthWrite=!overlay;}
-    if(this.head){this.head.visible=this.showHead;this.head.material.color.set(themeColor('--muted'));}if(this.noseOutline)this.noseOutline.visible=this.showNose&&!air;
-    const handles=this.handles();for(const [name,control] of this.controls){const h=handles.find(p=>p.name===name);control.mesh.visible=h.organ===this.selected;control.mesh.position.set(...h.p);control.label.textContent=h.label;control.label.hidden=!control.mesh.visible||!this.labels;}
+    if(this.softPalate){for(const mesh of [this.softPalate,this.palateSection]){mesh.visible=mesh===this.softPalate||!this.fullModel;mesh.material.clippingPlanes=mesh===this.softPalate&&!this.fullModel?[this.halfPlane]:[];mesh.material.transparent=overlay;mesh.material.opacity=overlay?.72:1;mesh.material.depthWrite=!overlay;}}
+    if(this.airway){const opacities=air?[1,1,1]:overlay?[.25,.5,.65]:[.025,.10,0];this.airway.material.forEach((m,i)=>{m.clippingPlanes=this.fullModel?[]:[this.halfPlane];m.opacity=opacities[i];m.transparent=!air;m.depthWrite=air;});}
+    if(this.tongueSection){this.tongueSection.visible=!air&&!this.fullModel;this.tongueSection.material.transparent=overlay;this.tongueSection.material.opacity=overlay?.64:1;this.tongueSection.material.depthWrite=!overlay;}
+    if(this.head){this.head.visible=this.showHead;this.head.material.clippingPlanes=this.fullModel?[]:[this.halfPlane];this.head.material.color.set(themeColor('--muted'));}if(this.noseOutline){this.noseOutline.visible=this.showNose&&!air;this.noseOutline.material.clippingPlanes=this.fullModel?[]:[this.halfPlane];}this.el.dataset.fullModel=String(this.fullModel);
+    const handles=this.handles();for(const [name,control] of this.controls){const h=handles.find(p=>p.name===name);control.mesh.visible=name==='larynx'||h.organ===this.selected;control.mesh.position.set(...h.p);control.label.textContent=h.label;control.label.hidden=!control.mesh.visible||!this.labels;}
   }
   orientation(){const compass=this.el.querySelector('.orientation');if(!compass)return;if(this.sagittal){compass.innerHTML='<span>上</span><div>后 ── 前</div><span>下</span>';return;}
     const q=this.camera.quaternion.clone().invert(),axes=[['前',new THREE.Vector3(1,0,0)],['上',new THREE.Vector3(0,1,0)],['侧',new THREE.Vector3(0,0,1)]];

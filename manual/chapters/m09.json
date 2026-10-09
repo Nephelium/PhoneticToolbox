@@ -1,0 +1,4244 @@
+{
+  "schemaVersion": "ptb-manual-chapter/1",
+  "id": "m09",
+  "title": "语谱图转音频",
+  "moduleId": "M09",
+  "body": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-purpose",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "用途与素材准备"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "可以从灰度语谱图生成近似声音，也可以在频谱上绘画并试听变化。先按素材选择 "
+          },
+          {
+            "type": "text",
+            "text": "图片重建",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、"
+          },
+          {
+            "type": "text",
+            "text": "图片涂鸦重建",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 或 "
+          },
+          {
+            "type": "text",
+            "text": "音频藏信息",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。图片需要手动标定，音频直接使用文件自带的时间、频率和声道。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "图片结果是近似重建，无法唯一恢复原录音。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218",
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 音频藏信息会改变声音，也不保证信息隐蔽、加密安全或压缩后仍清晰。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-input",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "准备图片或音频"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "图片",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：PNG、JPEG、BMP，≤16 MB。优先使用黑强白弱的灰度谱，时间向右、高频向上，频率轴为线性刻度。记录图中的时间、频率、灰度标度和分析窗长。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "彩色、反色或对数频率谱",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：先依据原色标和坐标轴转换。普通去色无法可靠还原任意色标。选区尽量避开标题、轴文字、网格和箭头，它们也会进入重建。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "音频",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：WAV、MP3、FLAC，≤64 MB、≤30 秒、8–96 kHz、单/双声道。保留原文件，有损格式以解码后的声音为起点。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "图片默认标定只是初始值。",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "color": "#b42318",
+                          "colorDark": "#ffb4ab"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 缺少原图条件时可试不同设置，但应记录假设，避免将结果当作原作者提供的录音。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-layout",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "选择模式与认识工作台"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-layout-toolbar",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "顶部模式与输入入口"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "顶部先选模式，再点击 "
+          },
+          {
+            "type": "text",
+            "text": "选择图片目录",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、"
+          },
+          {
+            "type": "text",
+            "text": "打开音频目录",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 或当前宿主提供的导入按钮。目录新增文件后用 "
+          },
+          {
+            "type": "text",
+            "text": "刷新列表",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。图片还可 "
+          },
+          {
+            "type": "text",
+            "text": "截取屏幕",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "；"
+          },
+          {
+            "type": "text",
+            "text": "方法与引用",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 查看来源，"
+          },
+          {
+            "type": "text",
+            "text": "帮助",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 打开本章，返回按钮可回到现有模块。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-layout-panels",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "标定、画布与任务区"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "图片模式左栏填标定，中栏选角点或绘图，右栏生成、查看任务和保存。音频模式隐藏图片标定，中栏改为音频选择、声道和频谱精度。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "生成完成后，中栏显示目标图、实际输出谱和波形，底部播放条可试听。切换模式后，从右栏 "
+          },
+          {
+            "type": "text",
+            "text": "重建任务",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 重新打开已有结果；展开 "
+          },
+          {
+            "type": "text",
+            "text": "查看此结果的原始参数快照",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 可核对当时设置。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-quick-start",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "图片重建：从灰度频谱生成声音"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-image-workflow",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "导入图片、标定并生成"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-image-import",
+          "level": 4
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "导入与定位频谱主体"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选择 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "图片重建",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "选择图片目录",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，再从左栏 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "选择图片",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 下拉选文件。有导入入口时先导入再选中，确认原图和尺寸已显示。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "整图已是所需矩形频谱时直接使用。需要排除边框或校正倾斜时，点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "选择四个角点",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，依次点 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "左上 → 右上 → 右下 → 左下",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。选满后在任务中校正，选错可重新选四点，或 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "重置为整图",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-image-calibration",
+          "level": 4
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "填写标定并提交任务"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "按图源填写时间左右边界、频率上下边界、"
+                  },
+                  {
+                    "type": "text",
+                    "text": "最小 dB（白）",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "、"
+                  },
+                  {
+                    "type": "text",
+                    "text": "最大 dB（黑）",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 和 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "窗长（ms）",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。终点须大于起点，时长≤30秒，最高频率≤48000 Hz。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "核对迭代次数、输出采样率和随机种子。点击右栏 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "开始重建",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，在 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "重建任务",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 查看排队中、重建中、已完成。任务接收后固定本次图片、角点和设置。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "先用 V2 的 DSPRelated 短句语谱图试一试。四角只选灰度谱，按图中坐标填写 0–1.5 秒、0–4000 Hz。演示采用白 −50 dB、黑 0 dB、窗长 20 ms、32 次迭代、44100 Hz 输出、种子 0；没有标出的灰度范围按演示设置试听，再自行调整。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-figure-m09-image-calibration-current-light",
+          "assetId": "m09-v2-steve-jobs-calibration-light-scaled-r20261007",
+          "caption": "DSPRelated 英语短句语谱图载入当前 V3，四角只包围语谱图内容，不把波形、坐标和文字一起选进去。",
+          "alt": "DSPRelated 英语短句语谱图载入当前 V3，四角只包围语谱图内容，不把波形、坐标和文字一起选进去。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-v2-four-corners-detail-figure",
+          "assetId": "m09-v2-four-corners-detail-scaled-r20261007",
+          "caption": "四个红圈标出灰度谱边界。只选择谱图主体，刻度和网页文字留在框外。",
+          "alt": "灰度谱四角的红圈局部图。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-image-result",
+          "level": 4
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "核查结果与保存"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "检查 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "已按四点透视校正",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 或 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "使用整张图片",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 提示，再看两图的谱带、起止、实际时长和削波样本数。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "拖动波形或输入底部时间选区起点、终点，点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "播放选区",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "、"
+                  },
+                  {
+                    "type": "text",
+                    "text": "暂停",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 或 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "停止",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "；"
+                  },
+                  {
+                    "type": "text",
+                    "text": "全部",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 恢复全段。播放进度滑条可定位，音量只影响试听。焦点在波形等非输入区域时，空格可播放或停止。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "用 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "音频总览",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 的 − / ＋ 或 Ctrl + 滚轮放大波形，再调 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "时间窗起点",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 查看局部。双击波形或 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "适合窗口",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 回到全长。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "选区和视野不会裁剪保存的 WAV。",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "backgroundColor": "#fff1c2",
+                          "backgroundColorDark": "#514218",
+                          "color": "#3b2f00",
+                          "colorDark": "#fff0bb"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "试听后点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存重建结果",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。核对 WAV、两张 PNG 和 JSON 均已保存；下载宿主需逐份取得四个文件。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "重建后先比较两张谱里的条纹、空白和起止，再试听。此例实际输出约 1.474 秒，填写范围为 1.5 秒，保存前以结果显示的实际时长为准。灰度图无法唯一还原原声，听出词句也不能证明恢复了原录音。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-figure-m09-image-result-current-light",
+          "assetId": "m09-v2-steve-jobs-result-light-scaled-r20261007",
+          "caption": "DSPRelated 英语短句语谱图的实际图片重建结果，左图是四点校正输入，右图是实际输出重新分析的频谱。",
+          "alt": "DSPRelated 英语短句语谱图的实际图片重建结果，左图是四点校正输入，右图是实际输出重新分析的频谱。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m09-example-image-reconstruction",
+          "assetId": "m09-v2-steve-jobs-reconstruction-approved-r20261007-mp3-r20261007",
+          "caption": "DSPRelated 英语短句语谱图在当前 V3 重新生成的近似声音。实际输出约 1.474 秒。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "id": "m09-v2-source-main"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "短句语谱图来源：Julius O. Smith 的 Spectrograms 教材页。",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://www.dsprelated.com/freebooks/mdft/Spectrograms.html"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-v2-more-examples",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "再试三张 V2 语谱图"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "id": "m09-v2-more-note"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "三例都只框选语谱图，排除波形、音标、刻度和页面文字。共同演示设置为白 −50 dB、黑 0 dB、32 次迭代、44100 Hz 输出、种子 0。Wikipedia 原图注明 5 ms 窗长，其余两例采用 20 ms 试听；演示设置可继续调整。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "id": "m09-v2-wikipedia-settings"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Wugapodes 的 Wikipedia 单词语谱图：时间 0–0.905578 秒，频率 0–5000 Hz。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-v2-wikipedia-calibration-light-figure",
+          "assetId": "m09-v2-wikipedia-calibration-light-scaled-r20261007",
+          "caption": "Wugapodes 的 Wikipedia 单词语谱图载入当前 V3，四角只包围语谱图内容，不把波形、坐标和文字一起选进去。",
+          "alt": "Wugapodes 的 Wikipedia 单词语谱图载入当前 V3，四角只包围语谱图内容，不把波形、坐标和文字一起选进去。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-v2-wikipedia-result-light-figure",
+          "assetId": "m09-v2-wikipedia-result-light-scaled-r20261007",
+          "caption": "Wugapodes 的 Wikipedia 单词语谱图的实际图片重建结果，左图是四点校正输入，右图是实际输出重新分析的频谱。",
+          "alt": "Wugapodes 的 Wikipedia 单词语谱图的实际图片重建结果，左图是四点校正输入，右图是实际输出重新分析的频谱。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m09-v2-wikipedia-reconstruction-example",
+          "assetId": "m09-v2-wikipedia-reconstruction-approved-r20261007-mp3-r20261007",
+          "caption": "Wugapodes 的 Wikipedia 单词语谱图在当前 V3 重新生成的近似声音。实际输出约 0.834 秒。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "id": "m09-v2-wikipedia-source"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "图源：Wugapodes 的 Wikipedia 单词语谱图。",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://commons.wikimedia.org/wiki/File:Waveform_spectrogram_and_transcription_of_wikipedia_in_praat.png"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "id": "m09-v2-levanten-settings"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Whitney Chappell 的 Levantan las olas 语谱图：时间 0–0.9334 秒，频率 0–5000 Hz。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-v2-levanten-calibration-light-figure",
+          "assetId": "m09-v2-levanten-calibration-light-scaled-r20261007",
+          "caption": "Whitney Chappell 的 Levantan las olas 语谱图载入当前 V3，四角只包围语谱图内容，不把波形、坐标和文字一起选进去。",
+          "alt": "Whitney Chappell 的 Levantan las olas 语谱图载入当前 V3，四角只包围语谱图内容，不把波形、坐标和文字一起选进去。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-v2-levanten-result-light-figure",
+          "assetId": "m09-v2-levanten-result-light-scaled-r20261007",
+          "caption": "Whitney Chappell 的 Levantan las olas 语谱图的实际图片重建结果，左图是四点校正输入，右图是实际输出重新分析的频谱。",
+          "alt": "Whitney Chappell 的 Levantan las olas 语谱图的实际图片重建结果，左图是四点校正输入，右图是实际输出重新分析的频谱。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m09-v2-levanten-reconstruction-example",
+          "assetId": "m09-v2-levanten-reconstruction-approved-r20261007-mp3-r20261007",
+          "caption": "Whitney Chappell 的 Levantan las olas 语谱图在当前 V3 重新生成的近似声音。实际输出约 0.929 秒。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "id": "m09-v2-levanten-source"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "图源：Whitney Chappell 的 Levantan las olas 语谱图。",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://www.researchgate.net/figure/Spectrogram-and-waveform-of-a-glottal-stop-in-Levantan-las-olas-the-waves-rise-up_fig4_349935398"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "id": "m09-v2-observo-settings"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Whitney Chappell 的 Observo 语谱图：时间 0–0.7278 秒，频率 0–5000 Hz。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-v2-observo-calibration-light-figure",
+          "assetId": "m09-v2-observo-calibration-light-scaled-r20261007",
+          "caption": "Whitney Chappell 的 Observo 语谱图载入当前 V3，四角只包围语谱图内容，不把波形、坐标和文字一起选进去。",
+          "alt": "Whitney Chappell 的 Observo 语谱图载入当前 V3，四角只包围语谱图内容，不把波形、坐标和文字一起选进去。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-v2-observo-result-light-figure",
+          "assetId": "m09-v2-observo-result-light-scaled-r20261007",
+          "caption": "Whitney Chappell 的 Observo 语谱图的实际图片重建结果，左图是四点校正输入，右图是实际输出重新分析的频谱。",
+          "alt": "Whitney Chappell 的 Observo 语谱图的实际图片重建结果，左图是四点校正输入，右图是实际输出重新分析的频谱。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m09-v2-observo-reconstruction-example",
+          "assetId": "m09-v2-observo-reconstruction-approved-r20261007-mp3-r20261007",
+          "caption": "Whitney Chappell 的 Observo 语谱图在当前 V3 重新生成的近似声音。实际输出约 0.638 秒。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "id": "m09-v2-observo-source"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "图源：Whitney Chappell 的 Observo 语谱图。",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://www.researchgate.net/figure/Coda-sibilance-insertion-in-observo-from-Observo-un-par-de-islas-I-see-a-couple-of_fig3_349935398"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-capture-workflow",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "桌面截图与四角确认"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在同一屏幕显示完整语谱主体，再回到图片模式点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "截取屏幕",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。工具箱暂时隐藏，进入四角选择界面。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "按左上、右上、右下、左下点击，连线应围成有效区域。选错用 Backspace、Delete 或右键撤销一点，按 R 重选。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选四点后还需按 Enter 确认。",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "backgroundColor": "#fff1c2",
+                          "backgroundColorDark": "#514218",
+                          "color": "#3b2f00",
+                          "colorDark": "#fff0bb"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " Esc 取消并返回。截图和角点载入后，继续填写标定；截图不会自动识别时间、频率、dB 或窗长。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-advanced",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "在频谱中绘制"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-image-drawing",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "图片涂鸦重建"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-image-drawing-load",
+          "level": 4
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "载入透视校正后的画布"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选择 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "图片涂鸦重建",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，选图并完成标定。展开 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "原图与四点校正",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，使用整图或选四角。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "应用校正并绘图",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。看到拉正的底图后开始画，时间向右、高频向上。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "载入画布还没有生成音频。",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "backgroundColor": "#fff1c2",
+                          "backgroundColorDark": "#514218",
+                          "color": "#3b2f00",
+                          "colorDark": "#fff0bb"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-image-drawing-generate",
+          "level": 4
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "绘制、生成并比较"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "黑色画笔",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 增强、"
+                  },
+                  {
+                    "type": "text",
+                    "text": "白色画笔",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 减弱，再调粗细和不透明度，用左键绘制。处理注释线时先小范围试画，避免覆盖真正的谱线。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "用 ＋ 或 Ctrl + 滚轮放大，选 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "拖动画面",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 或按 Shift 拖动查看细节，用 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "撤销",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "、"
+                  },
+                  {
+                    "type": "text",
+                    "text": "重做",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 比较修改。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "生成涂鸦音频",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。完成后对照包含笔迹的目标图和实际输出谱，试听并保存。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "换图片或角点后须重新载入，"
+                  },
+                  {
+                    "type": "text",
+                    "text": "重载会清空该画布的旧笔迹",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "backgroundColor": "#fff1c2",
+                          "backgroundColorDark": "#514218",
+                          "color": "#3b2f00",
+                          "colorDark": "#fff0bb"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。只改标定时可沿用笔迹重新生成，笔迹对应的时间、频率或幅值也会改变。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "白色画笔用于减弱，不能严格置零或恢复原图。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 要恢复上一笔请用 "
+          },
+          {
+            "type": "text",
+            "text": "撤销",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。图片涂鸦和图片重建都需估计相位。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "绘图另用一张由自然单音节制作的灰度谱，时间 0–0.67212 秒、频率 0–8000 Hz、白 −60 dB、黑 0 dB、窗长 16 ms、32 次迭代、16000 Hz 输出。画两笔：黑色折线粗细 4、不透明度 60%，白色横线粗细 10、不透明度 50%。撤销白线后计数由 2 笔变为 1 笔，重做恢复 2 笔。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-figure-m09-image-paint-current-light",
+          "assetId": "m09-image-paint-current-light-scaled-r20261007",
+          "caption": "图片涂鸦在透视校正后的网格画出黑色增强线和白色减弱线；画笔粗细、不透明度、缩放与两笔状态可见，尚未生成本次音频。",
+          "alt": "图片涂鸦在透视校正后的网格画出黑色增强线和白色减弱线；画笔粗细、不透明度、缩放与两笔状态可见，尚未生成本次音频。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-figure-m09-image-undo-current-light",
+          "assetId": "m09-image-undo-current-light-scaled-r20261007",
+          "caption": "撤销最后一笔后，画布只保留黑色增强线，计数回到一笔；重做按钮可用，可恢复白色减弱笔迹。",
+          "alt": "撤销最后一笔后，画布只保留黑色增强线，计数回到一笔；重做按钮可用，可恢复白色减弱笔迹。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "重做恢复白线后生成，先看新增谱带和减弱区域，再与同一底图未绘画的结果试听比较。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-figure-m09-image-drawn-result-current-light",
+          "assetId": "m09-image-drawn-result-current-light-scaled-r20261007",
+          "caption": "图片涂鸦的两笔已进入正式任务，校正后的输入含笔迹，右图为实际 Griffin–Lim 输出重新分析的频谱。",
+          "alt": "图片涂鸦的两笔已进入正式任务，校正后的输入含笔迹，右图为实际 Griffin–Lim 输出重新分析的频谱。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m09-example-source-original",
+          "assetId": "single-original-mp3-r20261007",
+          "caption": "绘图例子的自然单音节原声。可与下面同一底图的图片重建、图片涂鸦和音频藏信息结果对照。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m09-drawing-image-baseline-example",
+          "assetId": "m09-image-reconstruction-current-approved-r20261007-mp3-r20261007",
+          "caption": "绘图底图未加笔迹时的图片重建。与下一段加黑白两笔后的结果对照。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m09-example-image-drawing",
+          "assetId": "m09-image-drawing-current-approved-r20261007-mp3-r20261007",
+          "caption": "图片涂鸦结果：同一底图与标定加入黑色增强、白色减弱两笔，再经 32 次 Griffin–Lim 生成，16000 Hz PCM16、0.6680625 秒。与无笔迹图片结果比较新增频带和减弱区域。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-audio-drawing",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "音频藏信息"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-audio-drawing-load",
+          "level": 4
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "载入源音频与选择编辑声道"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选择 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "音频藏信息",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "打开音频目录",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，从 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "选择音频",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 下拉选文件。目录只有一个音频时自动载入；有导入入口时先导入。核对时长、采样率、声道数。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "双声道默认编辑左声道，可选择右声道。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "频谱精度",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 默认 1024，可选 512、2048。改声道或精度后点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "载入频谱",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，旧笔迹会清空。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-figure-m09-canvas-flow-r3-light",
+          "assetId": "m09-canvas-flow-r3-light-scaled-r20261007",
+          "caption": "音频藏信息模式载入单声道源音频后的频谱画布；图中尚无笔迹或生成结果。",
+          "width": "100%",
+          "align": "center",
+          "alt": "最大化的语谱图转音频工作台：音频藏信息模式显示频谱精度 1024、60 dB 显示范围、黑白画笔与零笔的源频谱画布。"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-audio-drawing-generate",
+          "level": 4
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "绘制、直接逆变换与核查"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在原声频谱上用黑白画笔绘制。需要细字或形状时放大并平移，调低不透明度可减轻修改。先画少量，再生成试听。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "生成藏信息音频",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。完成后比较 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "绘制后的目标频谱",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 与 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "重建音频的频谱",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，核对时长、采样率、声道和输出增益。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "试听并保存四件套。继续改画后需再次生成；选历史条目只查看当时结果，不会将新笔迹写回旧任务。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "音频模式保留原频谱相位并直接逆变换，保持原采样率、样本数和声道数。只有选定声道参与编辑，原幅值为零的位置采用零相位。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "有效绘制使编辑声道超出满幅时，程序将该声道峰值缩到 0.99，并记录 "
+          },
+          {
+            "type": "text",
+            "text": "输出增益",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。这会影响整个编辑声道的声音，另一声道不参与此增益调整。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "页内试听默认取左声道。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218",
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " "
+          },
+          {
+            "type": "text",
+            "text": "显示两个声道",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 只改变波形显示。编辑右声道后，请保存 WAV，在支持声道选择的播放器或分析工具中选右声道复核。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "本例直接编辑同一原声，频谱精度 1024，显示范围 60 dB，使用相同粗细和不透明度的黑白两笔。输出保持原时长，增益为 1.000。先与原声比较，再听图片涂鸦结果。两种画布网格不同，这组例音用于演示流程。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-figure-m09-audio-paint-current-light",
+          "assetId": "m09-audio-paint-current-light-scaled-r20261007",
+          "caption": "单音节原声频谱在 1024 点 FFT、60 dB 显示范围下绘入黑白两笔；音频模式隐藏图片标定，并采用原始相位直接逆变换。",
+          "alt": "单音节原声频谱在 1024 点 FFT、60 dB 显示范围下绘入黑白两笔；音频模式隐藏图片标定，并采用原始相位直接逆变换。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-audio-paint-current-light-detail-figure",
+          "assetId": "m09-audio-paint-current-light-detail-scaled-r20261007",
+          "caption": "画笔粗细和不透明度分别调整，先用小笔画试听效果。",
+          "alt": "画笔粗细和不透明度分别调整，先用小笔画试听效果。",
+          "width": "70%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-figure-m09-audio-result-current-light",
+          "assetId": "m09-audio-result-current-light-scaled-r20261007",
+          "caption": "音频藏信息任务完成，左图是绘制目标，右图是实际输出重新分析；两图同标度，结果保留 16000 Hz、原样本数与单声道。",
+          "alt": "音频藏信息任务完成，左图是绘制目标，右图是实际输出重新分析；两图同标度，结果保留 16000 Hz、原样本数与单声道。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m09-example-audio-drawing",
+          "assetId": "m09-audio-drawing-current-approved-r20261007-mp3-r20261007",
+          "caption": "音频藏信息结果：直接编辑源音的 1024 点 STFT 幅值，保留原始相位直接逆变换，不运行 Griffin–Lim。输出为 16000 Hz 单声道 FLOAT、0.672125 秒，增益 1.000。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-painting-gestures",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "缩放、撤销与未提交笔迹保护"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "显示缩放",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：100–800%，Ctrl + 滚轮或 − / ＋ 调整，"
+                  },
+                  {
+                    "type": "text",
+                    "text": "适合窗口",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 回到 100%。放大不增加原谱细节。画笔粗细按原网格计算，相同数值在不同图片或 FFT 下覆盖范围可能不同。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "逐笔撤销",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：Ctrl + Z；"
+                  },
+                  {
+                    "type": "text",
+                    "text": "重做",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：Ctrl + Shift + Z，需焦点位于画布。撤销后新增一笔会清空重做记录。多笔重复覆盖会叠加，不透明度 0% 无幅值效果。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "最多 256 笔、总计 8192 点，单笔 4096 点。达到上限时结束当前笔画，撤销不需要的笔迹再继续。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "两种绘图模式在当前标签中各自保留笔迹。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "更换源或重新载入画布会清空对应笔迹",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "关闭未提交笔迹时，选 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "返回绘图",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 或 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "取消关闭",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 继续，"
+                  },
+                  {
+                    "type": "text",
+                    "text": "放弃笔迹并关闭会失去未提交内容",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "color": "#b42318",
+                          "colorDark": "#ffb4ab"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。刷新或退出前先生成并保存；当前画布和撤销历史没有重开恢复入口。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-figure-m09-close-protection-current-light",
+          "assetId": "m09-close-protection-current-light-scaled-r20261007",
+          "caption": "提交后又新增一笔，关闭标签时提示笔迹尚未生成音频；返回绘图保留编辑，放弃笔迹并关闭会失去本次未提交笔迹。",
+          "alt": "提交后又新增一笔，关闭标签时提示笔迹尚未生成音频；返回绘图保留编辑，放弃笔迹并关闭会失去本次未提交笔迹。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-close-protection-current-light-detail-figure",
+          "assetId": "m09-close-protection-current-light-detail-scaled-r20261007",
+          "caption": "想继续保留笔迹时选返回绘图，放弃前先核对。",
+          "alt": "想继续保留笔迹时选返回绘图，放弃前先核对。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-comparison-scale",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "读图、阈值与 FFT 网格"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "图片两图灰度不同，比较谱带、条纹和起止即可；音频两图采用相同灰度标度，可定位绘制目标与真实输出的差异。精确测量请使用输出 WAV。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "图片的白黑 dB 是灰度端点，界面没有另一个二值化阈值。音频固定显示 60 dB；显示为白色的未绘制区域仍保留原幅值。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "图片没有单独的 FFT 输入，网格由校正图尺寸及标定决定。非零频率起点会在更低频处补零，窗长以实际处理条件为准。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "音频精度 512、1024、2048 决定分析窗长：较长窗便于区分相近频率，较短窗便于观察短时变化。换精度后重新载入，再绘制。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "比较设置时固定源文件，每次只改一个主要参数并保留 JSON。图片实际时长可能略短于填写范围；时间起点用于记录原图坐标，不会在 WAV 前自动补静音。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-controls",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "各模式控件速查"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "下表列出初始值。先按素材核对标定，再生成结果；当前设置变化不会更新历史任务。"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m09-controls-table",
+          "caption": "图片标定与绘图设置速查"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "设置"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "初始值"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "可选范围"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "使用要点"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "时间起点 / 终点（s）"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0 / 1"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "时长≤30秒"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "按图像左、右边界填写"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "频率起点 / 终点（Hz）"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0 / 11025"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "终点≤48000"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "按下、上边界填写，终点大于起点"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "最小 dB（白）/ 最大 dB（黑）"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "−30 / 0"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "−160至20"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "白端小于黑端，按图源灰度标度填写"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "窗长（ms）"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "10"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.01–1000"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "按原分析窗填写，实际值受频谱网格限制"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "迭代次数"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "32"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "整数1–128"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "只用于两种图片模式，增加次数会增加计算量"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "输出采样率"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "44100 Hz"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "原生或8/16/22.05/24/32/44.1/48/96 kHz"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "原生为2×频率终点取整；升采样率不补回原图细节"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "随机种子"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "整数0–4294967295"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "固定种子便于图片结果对照"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "编辑声道"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "左声道"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "双声道可选右声道"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "切换后重新载入，页内试听仍默认左声道"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "频谱精度"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "1024"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "512 / 1024 / 2048"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "仅音频模式；改变后重载清空旧笔迹"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "黑 / 白画笔"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "黑色"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "增强 / 减弱"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "白色不等于零幅值，恢复前一笔用撤销"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "粗细 / 不透明度"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "12 / 100%"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "1–100 / 0–100%"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "粗细按原网格，低不透明度适合先试画"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "播放音量"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "70%"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0–100%"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "仅影响试听，不改变输出WAV"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-output",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "输出与保存"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-output-files",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "四件套内容与格式"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m09-output-files-table",
+          "caption": "每个完成任务的四个结果文件"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "文件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "格式"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "保存内容"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "使用要点"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "reconstructed.wav"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "图片PCM16 / 音频FLOAT WAV"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "完整结果音频"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "试听选区不会裁剪此文件"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "calibrated.png"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "PNG"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "校正图片或绘制目标"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "涂鸦模式包含笔迹"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "reconstructed.png"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "PNG"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "实际输出重新分析的谱图"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "与目标图比较"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "reconstruction.ptb.json"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "JSON"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "源哈希、标定、角点、笔迹、方法与增益"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "用于复核条件，目前不能导入为可编辑画布"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "图片输出为 PCM16 WAV，满幅以外可能削波，请查看削波样本数。音频输出为 FLOAT WAV，注意结果中的增益。"
+          },
+          {
+            "type": "text",
+            "text": "两张 PNG 和 JSON 一起保存",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，可核对绘制目标及当时条件。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "音频未编辑声道不参与算法修改，但 FLOAT 文件写出仍有精度限制。保留原文件，避免把输出视为与源文件字节完全相同。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-save-workflow",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "保存、下载与历史结果"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在右栏 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "重建任务",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 选择 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "已完成",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 条目，核对两图及原始参数快照。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存重建结果",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 选择目录，等待 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "已保存 4 个结果文件",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。取消选目录时任务结果仍在，可稍后再存。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "核对实际目录和四个文件名。已有不同内容文件会保留，新结果使用新名称；提供下载按钮时逐份下载。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "旧结果不会随当前标定或笔迹改变。需要新设置时重新生成，之后仍可从历史选择旧任务。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m09-figure-m09-audio-save-current-light",
+          "assetId": "m09-audio-save-current-light-scaled-r20261007",
+          "caption": "同一音频藏信息任务保存四件套后，右栏显示已保存四个结果文件与已完成任务，中央保留目标和真实输出谱供对照。",
+          "alt": "同一音频藏信息任务保存四件套后，右栏显示已保存四个结果文件与已完成任务，中央保留目标和真实输出谱供对照。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-recovery",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "错误恢复"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-input-errors",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "源、角点与标定错误"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "格式或时长不符",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：使用支持格式，并按输入限制缩短音频。只改扩展名不会转换格式。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "四点不完整或交叉",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：补全有效四点，或 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "重置为整图",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 后再试。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "标定无效",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：检查时间、频率终点大于起点，白 dB 小于黑 dB，种子和迭代次数为合法整数。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "底图设置已改变",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：按提示重新载入。旧笔迹会清空，先保留需要的完成结果。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "源已失效或改变",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：重新选择或导入源，建立新任务。旧任务重试仍沿原条件。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-budget-errors",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "预算、取消与计算重试"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "图片原图≤2500万像素，重建区域≤100万像素，像素×迭代≤3200万，FFT≤16384点。音频还受时频网格限制，30秒和最高采样率的组合可能超限。"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "要停止排队或计算，点击该任务的 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "取消任务",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，等待已取消。切换模块可让已接收任务继续后台运行，关闭标签不会自动取消。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "失败、中断或取消后查看该行提示。条件无需变化时用 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "重试",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，仍使用原参数和完整笔迹。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "超预算、超时或资源不足时，缩小选区、缩短音频，或降低适当的迭代次数和频谱精度。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "改设置后重新生成，旧任务重试不会采用新设置。",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "backgroundColor": "#fff1c2",
+                          "backgroundColorDark": "#514218",
+                          "color": "#3b2f00",
+                          "colorDark": "#fff0bb"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "连接恢复后从任务历史核对状态。只有已完成任务提供完整结果，画布预览不能替代生成音频。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-save-errors",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "保存或读取失败时再试"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "保存失败",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：保留已完成任务，检查目录权限和剩余空间，改选可写目录再次保存，通常无需重算。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "读取或下载失败",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：重新选择完成任务或重试单个文件。结果已过期或无法访问时，按原条件重新生成。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "任务完成还需成功另存或完整下载四件套。",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "backgroundColor": "#fff1c2",
+                          "backgroundColorDark": "#514218",
+                          "color": "#3b2f00",
+                          "colorDark": "#fff0bb"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 保存后核对文件数量和实际名称。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-sources",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "方法来源与解释边界"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-griffin-lim-method",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "图片路径的相位估计与历史幅值映射"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "图片重建采用 Griffin 与 Lim（1984）的相位估计方法，详见本节参考资料和模块 "
+          },
+          {
+            "type": "text",
+            "text": "方法与引用",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "图片灰度映射沿用既有版本，和音频模式的幅值 dB 含义不同，不能直接当作声压级或绝对幅值测量。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "四点校正只修正选区几何。增加迭代或输出采样率无法补回原图缺失的相位和细节。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-original-phase-method",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "音频路径的原始相位与一致性"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "音频直接编辑原频谱幅值并保留相位。修改目标未必能完全对应一个声音，因此实际输出谱可能偏离笔迹。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "NumPy/SciPy、OpenCV 和 SoundFile 提供计算、图像校正和音频读写，来源分别列在 "
+          },
+          {
+            "type": "text",
+            "text": "方法与引用",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 中。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-interpretation-boundaries",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "结果可以支持的判断"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "适合比较图像条件下的近似重建，或观察同一音频绘制前后的变化。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "听起来像某个词句，不能证明恢复了原录音。",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "color": "#b42318",
+                          "colorDark": "#ffb4ab"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 字形可见也不保证输出谱完全保真、声音自然或信息不可察觉。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "需要用于研究时，请保存原文件、完整结果与参数，另行检查材料的音质和可懂度。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-references",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "参考资料"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "下列论文说明图片重建采用的方法，具体结果请结合保存的参数解释。"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "REF-GRIFFINLIM",
+                      "label": "Daniel W. Griffin and Jae S. Lim 1984 Signal estimation from modified short-time Fourier transform"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

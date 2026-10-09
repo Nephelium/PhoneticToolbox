@@ -1,0 +1,3 @@
+# M18 PDF annotation export, project-local CPython 3.11 host environment.
+# BSD-3-Clause, no extras or mandatory dependencies on Python 3.11.
+pypdf==6.19.0

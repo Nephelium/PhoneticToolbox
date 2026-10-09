@@ -1,6 +1,7 @@
 """M11 admission uses the current JobStore and P07 owner/input transactions."""
 import hashlib
 import os
+from pathlib import Path
 from uuid import uuid4
 from .store import JobError,LOCAL_PROJECT,canonical,core_version,adapter_version,public
 from .mfa.components import safe_name
@@ -14,7 +15,7 @@ def catalog(*,local):
         execution_available=local and os.name=='nt' and any(r.get('validated') for r in data['runtimes']),
         waiting_reason=None if local else 'm11_waiting_verified_node',
         runtimes=[{k:r.get(k) for k in ('id','version','platform','arch','validated','fingerprint','versions','installed_bytes','download_bytes','source','archive_sha256')} for r in data['runtimes']],
-        models=[{k:m.get(k) for k in ('id','name','model_sha256','dictionary_sha256','validated_runtime','model_bytes','dictionary_bytes')} for m in data['models']])
+        models=[{k:m.get(k) for k in ('id','name','model_sha256','dictionary_sha256','validated_runtime','model_bytes','dictionary_bytes')} | {'dictionary_name':m.get('dictionary_name') or Path(m.get('dictionary','')).name} for m in data['models']])
 
 
 def submit(store,owner,body,*,retry_of=None):

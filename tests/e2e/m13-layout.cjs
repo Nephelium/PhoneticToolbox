@@ -47,10 +47,10 @@ async function main(){
   await page.locator('.mandarin-ipa-page').evaluate(e=>e.scrollTop+=30);await idle();
   if(await page.locator('.m13-variants').count())await popupCheck();
   await page.keyboard.press('Escape');await page.getByLabel('待转换汉字文本').fill('银行花');
-  await page.goto(server.resolvedUrls.local[0]);await page.locator('.nav-item[title="普通话转 IPA"]').click();
+  await page.goto(server.resolvedUrls.local[0]);await page.locator('.nav-item[title="汉字转国际音标"]').click();
   await page.getByLabel('待转换汉字文本').fill('银行花');
   const collapse=page.getByRole('button',{name:'收起侧栏',exact:true});if(await collapse.count())await collapse.click();
-  const icon=page.locator('.nav-item[title="普通话转 IPA"] .ipa-icon');assert(await icon.isVisible());assert((await icon.boundingBox()).width>0);
+  const icon=page.locator('.nav-item[title="汉字转国际音标"] .ipa-icon');assert(await icon.isVisible());assert((await icon.boundingBox()).width>0);
   await page.setViewportSize({width:800,height:700});assert(await icon.isVisible());
   await page.getByLabel('上下排布',{exact:true}).check();await idle();
   const narrow=await rect('.m13-settings-section'),left=await rect('.m13-result-section');assert(narrow.x+narrow.width<=left.x+1);
@@ -58,9 +58,9 @@ async function main(){
   await page.evaluate(()=>document.documentElement.dataset.theme='light');await page.locator('.m13-ambiguous').first().click();await popupCheck();
   await page.screenshot({path:path.join(out,'side-light-collapsed-popup.png'),fullPage:true});
   await page.keyboard.press('Escape');
-  const symbols=page.locator('.nav-item[title="国际音标 Plus"] svg path');
+  const symbols=page.locator('.nav-item[title="国际音标表Plus"] svg path');
   assert.equal(await symbols.count(),1,'M17 uses a distinct symbol-keyboard SVG');
-  assert.equal(await page.locator('.nav-item[title="普通话转 IPA"] .ipa-icon').textContent(),'æ');
+  assert.equal(await page.locator('.nav-item[title="汉字转国际音标"] .ipa-icon').textContent(),'æ');
   for(const layout of ['左右排布','上下排布']){
    await page.getByLabel(layout,{exact:true}).check();await idle();
    const handle=page.getByRole('separator',{name:'转换与排版宽度',exact:true});
@@ -75,7 +75,7 @@ async function main(){
   }
   const remembered=(await rect('.m13-settings-section')).width;
   await page.getByRole('button',{name:/保存本机草稿/}).click();
-  await page.reload();await page.locator('.nav-item[title="普通话转 IPA"]').click();await idle();
+  await page.reload();await page.locator('.nav-item[title="汉字转国际音标"]').click();await idle();
   assert.equal(Math.round((await rect('.m13-settings-section')).width),Math.round(remembered),'width survives reload');
   assert(await page.getByLabel('上下排布',{exact:true}).isChecked());
   await page.getByRole('button',{name:'转换设置',exact:true}).click();await idle();assert.equal(await page.locator('.m13-settings-section:visible').count(),0);

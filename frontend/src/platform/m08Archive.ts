@@ -1,0 +1,9 @@
+// M08 result archive, using the existing project ZIP STORE implementation.
+export function m08Archive(files:{name:string;raw:ArrayBuffer}[]):ArrayBuffer {
+ // ZIP STORE with UTF-8 filenames; bounded to exactly the verified result set.
+ if(files.length>256||files.reduce((n,f)=>n+f.raw.byteLength,0)>64_000_000||files.some(f=>!f.name||/[\x00-\x1f/\\:<>"|?*]/.test(f.name)||new TextEncoder().encode(f.name).length>65535)||new Set(files.map(f=>f.name.toLowerCase())).size!==files.length)throw Error('结果打包超出预算');
+ const parts:Uint8Array[]=[],central:Uint8Array[]=[];let offset=0;
+ const crc=(v:Uint8Array)=>{let c=0xffffffff;for(const b of v){c^=b;for(let i=0;i<8;i++)c=(c>>>1)^((c&1)?0xedb88320:0);}return (c^0xffffffff)>>>0;};
+ for(const f of files){const name=new TextEncoder().encode(f.name),bytes=new Uint8Array(f.raw),hash=crc(bytes),local=new Uint8Array(30+name.length),v=new DataView(local.buffer);v.setUint32(0,0x04034b50,true);v.setUint16(4,20,true);v.setUint16(6,0x800,true);v.setUint32(14,hash,true);v.setUint32(18,bytes.length,true);v.setUint32(22,bytes.length,true);v.setUint16(26,name.length,true);local.set(name,30);parts.push(local,bytes);const c=new Uint8Array(46+name.length),d=new DataView(c.buffer);d.setUint32(0,0x02014b50,true);d.setUint16(4,20,true);d.setUint16(6,20,true);d.setUint16(8,0x800,true);d.setUint32(16,hash,true);d.setUint32(20,bytes.length,true);d.setUint32(24,bytes.length,true);d.setUint16(28,name.length,true);d.setUint32(42,offset,true);c.set(name,46);central.push(c);offset+=local.length+bytes.length;}
+ const size=central.reduce((n,c)=>n+c.length,0),end=new Uint8Array(22),e=new DataView(end.buffer);e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,size,true);e.setUint32(16,offset,true);const all=new Uint8Array(offset+size+22);let at=0;for(const p of [...parts,...central,end]){all.set(p,at);at+=p.length;}return all.buffer;
+}

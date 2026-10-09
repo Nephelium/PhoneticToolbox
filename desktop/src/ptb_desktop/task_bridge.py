@@ -6,7 +6,7 @@ import struct
 from contextlib import ExitStack
 from pathlib import Path
 from uuid import UUID,uuid4
-from .file_provider import checked_path,FileAccessError,identity
+from .file_provider import checked_path,FileAccessError,identity,open_locked
 from .directory_io import pin_directory
 
 PROJECT='00000000-0000-4000-8000-000000000001'
@@ -45,6 +45,7 @@ class TaskBridge:
         self.provider,self.service=provider,service
         self.batch_sources={}
         self.egg_preview_sources={}
+        self.stream_sources={}
         from .annotation import AnnotationFiles
         self.annotation=AnnotationFiles(provider)
         from .m08_bridge import M08Bridge
@@ -62,9 +63,17 @@ class TaskBridge:
 
     def invoke(self,body):
         op=body.get('op')
+        if op=='local_storage_status':return self.service.get('/api/v1/jobs/local-storage')
+        if op=='local_storage_policy':
+            return self.service.request('/api/v1/jobs/local-storage/policy','POST',body['policy'])
+        if op=='local_storage_cleanup':
+            return self.service.request('/api/v1/jobs/local-storage/cleanup','POST')
         if op=='egg_preview_open':
-            raw,sha=self.provider.read(body['id'])
-            try: value=self.service.egg_preview('open',raw)
+            try:
+                with self.provider.audio_stream(body['id']) as stream:
+                    from .annotation_audio import source_hash
+                    sha=source_hash(stream)
+                    value=self.service.egg_preview('open',stream)
             except ValueError as exc: raise FileAccessError(str(exc)) from None
             if value['sha256']!=sha: raise FileAccessError('音频校验失败。')
             self.egg_preview_sources={value['session_id']:body['id']}
@@ -102,15 +111,20 @@ class TaskBridge:
         if op=='lpc_jobs':return [j for j in self.service.get('/api/v1/jobs?project_id='+PROJECT)['jobs'] if j['operation']=='lpc_analysis']
         if op=='egg_fonts':return self.service.request('/api/v1/jobs/egg/fonts','POST',body['font'])
         if op=='egg':
-            raw,_=self.provider.read(body['id']);entry=self.provider.entries[body['id']]
-            ref=self.service.import_input(raw,entry.name,'audio')
+            ref=self.stream_input(body['id'],'audio')
             return self.service.request('/api/v1/jobs/egg/create','POST',dict(project_id=PROJECT,
                 idempotency_key=body['key'],audio=ref,config=body['config']))
         if op=='egg_jobs':return [j for j in self.service.get('/api/v1/jobs?project_id='+PROJECT)['jobs'] if j['operation']=='egg_analysis']
-        if op=='reconstruct':
+        if op in ('reconstruct','reconstruction_preview'):
             raw,_=self.provider.read(body['id']);entry=self.provider.entries[body['id']]
-            ref=self.service.import_input(raw,entry.name,'image')
-            return self.service.request('/api/v1/jobs/spec2wav/create','POST',dict(project_id=PROJECT,idempotency_key=body['key'],image=ref,config=body['config']))
+            ref=self.service.import_input(raw,entry.name,'audio' if body['config'].get('mode')=='audio_draw' else 'image')
+            endpoint='preview' if op=='reconstruction_preview' else 'create'
+            from urllib.error import HTTPError
+            try:return self.service.request('/api/v1/jobs/spec2wav/'+endpoint,'POST',dict(project_id=PROJECT,idempotency_key=body.get('key') or uuid4().hex,image=ref,config=body['config']))
+            except HTTPError as exc:
+                code=json.load(exc).get('detail')
+                message={'invalid_spectrogram_audio':'音频需为 30 秒内、8000–96000 Hz 的单声道或双声道文件。','invalid_image_corners':'四点须按左上、右上、右下、左下围成有效区域。','spectrogram_budget':'输入或笔迹超过预算，请缩小图片、缩短音频或减少笔迹。','preview_busy':'另一个预览正在处理，请稍后重试。','preview_timeout':'频谱预览超时，请缩小输入后重试。','input_unavailable':'源文件已失效，请重新选择。'}.get(code if isinstance(code,str) else '', '频谱参数或输入无效，请检查范围后重试。')
+                raise FileAccessError(message) from None
         if op=='reconstructions':return [j for j in self.service.get('/api/v1/jobs?project_id='+PROJECT)['jobs'] if j['operation']=='spectrogram_to_audio']
         if op=='cancel_job':return self.service.request('/api/v1/jobs/'+str(UUID(body['id']))+'/cancel','POST')
         if op=='save_job':return self.save(str(UUID(body['id'])),body['directory'],single=True)
@@ -125,6 +139,17 @@ class TaskBridge:
             if len(raw)!=file['size_bytes'] or hashlib.sha256(raw).hexdigest()!=file['sha256']:raise FileAccessError('结果校验失败。')
             return {'base64':base64.b64encode(raw).decode(),'sha256':file['sha256']}
         if op=='parameters':
+            entry=self.provider.entries.get(body['id'])
+            if entry and entry.name.lower().endswith(('.xlsx','.ptb.sqlite','.ptb.sqlite3')):
+                ref=self.stream_input(body['id'],'parameter_bundle')
+                from urllib.error import HTTPError
+                try:return self.service.request('/api/v1/jobs/local-parameter-window','POST',dict(asset_id=ref['asset_id'],view=body.get('view')))
+                except HTTPError as error:
+                    code=json.load(error).get('detail','')
+                    message={'preview_busy':'已有预览正在读取，请稍后重试。','parameter_read_timeout':'参数表索引超时，请优先打开同名 SQLite 结果。',
+                        'parameter_input_budget':'参数文件超过读取预算，请优先打开同名 SQLite 结果。','invalid_parameter_table':'参数文件结构不受支持或包含公式。',
+                        'parameter_read_failed':'参数读取进程未完成，请重新打开结果。'}.get(code if isinstance(code,str) else '', '参数窗口读取失败，请检查本机任务服务。')
+                    raise FileAccessError(message) from None
             raw,sha=self.provider.read(body['id']);entry=self.provider.entries[body['id']]
             from urllib.error import HTTPError
             try:result=self.service.parameters(raw,entry.name)
@@ -137,7 +162,11 @@ class TaskBridge:
         if op=='convert_lip':return self.convert_lip(body['id'])
         if op=='list':return self.service.get('/api/v1/jobs/batches/list?project_id='+PROJECT)['batches']
         if op=='parent':
-            _,sha=self.provider.read(body['id'])
+            self.provider.validate(body['id']);entry=self.provider.entries[body['id']]
+            h=hashlib.sha256();directory=self.provider.directory(entry.directory)
+            with open_locked(directory.path/entry.name,directory.path,entry.fingerprint) as stream:
+                for raw in iter(lambda:stream.read(1048576),b''):h.update(raw)
+            sha=h.hexdigest()
             return self.service.get('/api/v1/jobs/parents/latest?project_id='+PROJECT+'&sha256='+sha)
         if op in ('get','cancel','job','retry'):
             key=str(UUID(body['id']))
@@ -158,6 +187,8 @@ class TaskBridge:
                         mapped[role]=key;continue
                     if role=='lip':
                         raw,name,_=self.lip_input(key)
+                    elif role=='audio' and ((body.get('config') or {}).get('extended') or item.get('parent_result')):
+                        mapped[role]=self.stream_input(key,'audio');continue
                     else:
                         raw,_=self.provider.read(key);name=self.provider.entries[key].name
                     mapped[role]=self.service.import_input(raw,name,role)
@@ -169,6 +200,24 @@ class TaskBridge:
             return batch
         if op=='save':return self.save(str(UUID(body['id'])),body['directory'],beside_sources=body.get('beside_sources') is True)
         raise FileAccessError('不支持的任务操作。')
+
+    def stream_input(self,key,role):
+        self.provider.validate(key);entry=self.provider.entries[key]
+        cached=self.stream_sources.get((key,role))
+        if cached:return cached
+        directory=self.provider.directory(entry.directory)
+        with open_locked(directory.path/entry.name,directory.path,entry.fingerprint) as stream:
+            if role=='audio':
+                import soundfile as sf
+                from phonetic_core.models.audio_bounds import validate_source
+                with sf.SoundFile(stream,closefd=False) as source:
+                    try:validate_source(source.frames,source.samplerate,source.channels)
+                    except ValueError as error:
+                        raise FileAccessError(entry.name+'：'+('最长支持 30 分钟，请先切分音频。' if str(error)=='m01_duration_limit' else '音频采样率或声道格式不受支持。')) from None
+                stream.seek(0)
+            result=self.service.import_stream(stream,entry.name,role,entry.fingerprint[2])
+        self.stream_sources[(key,role)]=result
+        return result
 
     def lip_input(self,file_id):
         """Read JSON or convert legacy lip data without writing to its directory."""
@@ -221,7 +270,7 @@ class TaskBridge:
             if job['operation'] not in ('spectrogram_to_audio','egg_analysis','lpc_analysis','speech_synthesis','phonation_synthesis') or job['state']!='succeeded':raise FileAccessError('分析结果尚不可用。')
             batch={'summary':{'items':[dict(state='succeeded',job_id=batch_id,index=0)]}}
         else:batch=self.service.get('/api/v1/jobs/batches/'+batch_id)
-        created=[];pending={};saved=[]
+        created=[];pending={};saved=[];exported_ids=[]
         def sha(path,output):
             value=hashlib.sha256()
             with output.open(path,'rb') as f:
@@ -258,6 +307,7 @@ class TaskBridge:
                         if job['operation']=='acoustic_analysis':name=Path(batch['audio_names'][item['index']]).stem+name[len('result'):]
                         if not name or len(name)>220 or any(ord(c)<32 or c in '/\\:<>"|?*' for c in name):raise FileAccessError('输出文件名不受支持。')
                         export_files.append(dict(file,export_name=name))
+                    exported_ids.extend(file['id'] for file in export_files)
                     paths=parameter_export_paths(export_files,root,output,sha) if parameter_job else {}
                     for file in export_files:
                         name=file['export_name'];path=paths[file['id']] if parameter_job else root/name
@@ -290,7 +340,10 @@ class TaskBridge:
                         output.publish(temp,path)  # Atomic no-clobber on each supported platform.
                         original,_=pending.pop(temp)
                         created.append((path,original,file['sha256'],output));saved.append(path.relative_to(directory.path).as_posix())
-                return {'saved':saved,'count':len(saved),'batch_id':batch_id}
+                warning=self.record_export(exported_ids) if exported_ids else None
+                answer={'saved':saved,'count':len(saved),'batch_id':batch_id}
+                if warning:answer['retention_warning']=warning
+                return answer
             except BaseException:
                 for path,(original,output) in pending.items():
                     output.unlink(path,original)
@@ -299,3 +352,16 @@ class TaskBridge:
                         checked_path(path)
                         if sha(path,output)==digest:output.unlink(path,original)
                 raise
+
+    def record_export(self,asset_ids):
+        """Receipt after byte verification; never accept a renderer assertion."""
+        if not getattr(self.service,'local_files_root',None):return None
+        ids=list(dict.fromkeys(asset_ids))
+        try:
+            for start in range(0,len(ids),3004):
+                self.service.request('/api/v1/jobs/local-storage/export-receipt','POST',{'assets':ids[start:start+3004]})
+        except Exception:
+            # Saved external files are intact. Conservative unexported retention
+            # continues if recording the cache receipt fails.
+            return '文件已保存，但缓存导出登记失败。缓存暂按未导出结果的期限保留。'
+        return None

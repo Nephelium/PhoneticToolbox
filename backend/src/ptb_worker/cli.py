@@ -35,10 +35,27 @@ def main():
         files=LocalAcousticFiles(store,config['local_files_root'],reaper_binary=config.get('reaper_binary'))
         AcousticBatches(store,files);files.recover()
     stop=threading.Event()
+    cleaner=None
+    if config.get('local_files_root'):
+        from .local_retention import LocalRetention
+        def retention_loop():
+            while not stop.is_set():
+                try:LocalRetention(files).sweep()
+                except Exception:
+                    # Keep every uncertain file. A failed sweep is retried and
+                    # must never interrupt a research task or expose source paths.
+                    import logging
+                    logging.getLogger(__name__).warning('local_retention_retry_required')
+                stop.wait(3600)
+        cleaner=threading.Thread(target=retention_loop,daemon=True)
+        cleaner.start()
     def owner_closed():sys.stdin.readline();stop.set()
     threading.Thread(target=owner_closed,daemon=True).start()
     print(json.dumps({'ready':True}),flush=True)
-    run_worker(store,stop,str(uuid4()),step_delay=args.probe_step_delay)
+    try:run_worker(store,stop,str(uuid4()),step_delay=args.probe_step_delay)
+    finally:
+        stop.set()
+        if cleaner:cleaner.join(timeout=6)
 
 
 if __name__=='__main__':

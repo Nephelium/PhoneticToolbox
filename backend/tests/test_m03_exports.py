@@ -121,7 +121,6 @@ def test_inverse_pair_float64_exact_samples(frozen,order,key):
 @pytest.mark.parametrize('frames,channels,rate,config,code', [
     (1000,1,44100,{},'egg_stereo_required'),(1000,3,44100,{},'egg_stereo_required'),
     (8001,2,8000,{'roi_end':2.0},'egg_invalid_roi'),
-    (96000,2,96000,{'mode':'inverse','roi_end':1.0},'egg_inverse_budget'),
     (1000,2,4000,{},'egg_sample_rate'),
     (960001,2,8000,{},'egg_input_budget'),
 ])
@@ -176,3 +175,10 @@ def test_parallel_children_keep_independent_font_snapshots(frozen,tmp_path):
     finally:
         for process,_,_ in children:
             if process.poll() is None:process.kill();process.wait()
+
+
+def test_96khz_one_second_inverse_is_now_admitted_but_silence_is_unavailable():
+    from phonetic_core.egg.errors import EggError
+    stream=io.BytesIO();wavfile.write(stream,96000,np.zeros((96000,2),dtype=np.int16))
+    with pytest.raises(EggError,match='inverse_unavailable'):
+        export(stream.getvalue(),dict(mode='inverse',roi_end=1.0))

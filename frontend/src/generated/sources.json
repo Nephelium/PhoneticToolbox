@@ -10,13 +10,14 @@
       "M06",
       "M07",
       "M08",
-      "M12"
+      "M12",
+      "M16"
     ],
     "kind": "runtime-and-method",
     "acknowledgement_group": "software",
     "authors": "Yannick Jadoul and Bill Thompson and Bart de Boer",
     "version": "praat-parselmouth 0.4.7 in phonetic_311; embedded Praat version not probed",
-    "license": "GPL family; verify exact bundled Praat/Parselmouth licenses",
+    "license": "Parselmouth 0.4.7：GPL-3.0-or-later；内嵌 Praat 6.1.38：GPL-2.0-or-later。按组合发行适用条款提供许可与对应源码；依赖另列。",
     "urls": {
       "homepage": "https://www.praat.org/",
       "documentation": "https://parselmouth.readthedocs.io/en/stable/",
@@ -44,7 +45,7 @@
     "kind": "bundled-code",
     "acknowledgement_group": "software",
     "authors": "David Talkin and REAPER contributors",
-    "version": "实际版本待核实",
+    "version": "",
     "license": "Apache-2.0",
     "urls": {
       "repository": "https://github.com/google/REAPER"
@@ -59,7 +60,7 @@
     "kind": "ported-code-and-data",
     "acknowledgement_group": "software",
     "authors": "Elias Azarov and Maxim Vashkevich and Alexander A. Petrovsky",
-    "version": "实际版本待核实",
+    "version": "",
     "license": "GPL-3.0",
     "urls": {
       "repository": "https://github.com/Mak-Sim/IRAPT"
@@ -74,7 +75,7 @@
     "kind": "ported-method",
     "acknowledgement_group": "software",
     "authors": "Maxim Vashkevich and Alexander Petrovsky and Yuliya Rushkevich",
-    "version": "实际版本待核实",
+    "version": "",
     "license": "MPL-2.0 (Troparion repository)",
     "urls": {
       "repository": "https://github.com/Mak-Sim/Troparion",
@@ -93,8 +94,8 @@
     "kind": "reference-code-and-method",
     "acknowledgement_group": "software",
     "authors": "Yen-Liang Shue and Patricia Keating and Chad Vicenik and Kristine Yu",
-    "version": "实际版本待核实",
-    "license": "original MATLAB license not resolved",
+    "version": "",
+    "license": "已核对的 OpenSauce Octave 实现采用 BSD 两条款许可；原 VoiceSauce MATLAB 与 SoE 的具体适用许可仍需按函数核对。",
     "urls": {
       "homepage": "https://www.phonetics.ucla.edu/voicesauce/",
       "documentation": "https://www.phonetics.ucla.edu/voicesauce/documentation/index.html",
@@ -110,7 +111,7 @@
     "kind": "reference-implementation",
     "acknowledgement_group": "software",
     "authors": "Terri M. Yu and R. David Murray and Kate Silverstein and Kristine M. Yu",
-    "version": "实际版本待核实",
+    "version": "",
     "license": "Apache-2.0",
     "urls": {
       "repository": "https://github.com/voicesauce/opensauce-python",
@@ -126,8 +127,8 @@
     "kind": "paper",
     "acknowledgement_group": "academic",
     "authors": "James Hillenbrand and Ronald A. Cleveland and Robert L. Erickson",
-    "version": "实际版本待核实",
-    "license": "not-established",
+    "version": "",
+    "license": "",
     "urls": {
       "paper": "https://pubs.asha.org/doi/abs/10.1044/jshr.3704.769"
     }
@@ -141,8 +142,8 @@
     "kind": "paper",
     "acknowledgement_group": "academic",
     "authors": "Guus de Krom",
-    "version": "实际版本待核实",
-    "license": "not-established",
+    "version": "",
+    "license": "",
     "urls": {
       "paper": "https://pubs.asha.org/doi/10.1044/jshr.3602.254"
     }
@@ -156,8 +157,8 @@
     "kind": "paper",
     "acknowledgement_group": "academic",
     "authors": "Xuejing Sun",
-    "version": "实际版本待核实",
-    "license": "not-established",
+    "version": "",
+    "license": "",
     "urls": {
       "paper": "https://ieeexplore.ieee.org/document/5743722/"
     }
@@ -171,8 +172,8 @@
     "kind": "paper",
     "acknowledgement_group": "academic",
     "authors": "Markus Iseli and Abeer Alwan",
-    "version": "实际版本待核实",
-    "license": "not-established",
+    "version": "",
+    "license": "",
     "urls": {
       "pdf": "https://www.seas.ucla.edu/spapl/paper/iseli04.pdf"
     }
@@ -186,8 +187,8 @@
     "kind": "paper",
     "acknowledgement_group": "academic",
     "authors": "John W. Hawks and James D. Miller",
-    "version": "实际版本待核实",
-    "license": "not-established",
+    "version": "",
+    "license": "",
     "urls": {
       "paper": "https://profiles.wustl.edu/en/publications/a-formant-bandwidth-estimation-procedure-for-vowel-synthesis-4372",
       "doi": "https://doi.org/10.1121/1.412986"
@@ -202,8 +203,8 @@
     "kind": "method-chain",
     "acknowledgement_group": "academic",
     "authors": "K. Sri Rama Murty and B. Yegnanarayana",
-    "version": "实际版本待核实",
-    "license": "VoiceSauce source obligations unresolved",
+    "version": "",
+    "license": "SoE 实现明确参考 Soo Jin Park 的 func_getSoE.m；尚未找到覆盖该实现改写及分发的明确许可，需核对或向权利人确认。",
     "urls": {
       "documentation": "https://www.phonetics.ucla.edu/voicesauce/documentation/index.html"
     }
@@ -217,7 +218,7 @@
     "kind": "adapted-code",
     "acknowledgement_group": "software",
     "authors": "Adrian Y. Cho and Daniel R Guest",
-    "version": "实际版本待核实",
+    "version": "",
     "license": "MIT",
     "urls": {
       "repository": "https://github.com/guestdaniel/tdklatt"
@@ -232,8 +233,8 @@
     "kind": "paper",
     "acknowledgement_group": "academic",
     "authors": "Dennis H. Klatt",
-    "version": "实际版本待核实",
-    "license": "not-established",
+    "version": "",
+    "license": "",
     "urls": {
       "pdf": "https://sail.usc.edu/~lgoldste/Ling582/Week%2012/klatt1980.pdf",
       "doi": "https://doi.org/10.1121/1.383940"
@@ -248,11 +249,15 @@
     "kind": "adapted-method-and-source",
     "acknowledgement_group": "software",
     "authors": "Yao Lu and Changwei Liang and Jiangping Kong",
-    "version": "实际版本待核实",
-    "license": "no repository license detected",
+    "version": "",
+    "license": "（2026-09-10）作者邮件许可，允许相关 MATLAB 代码改写为 Python，集成至 PhoneticToolbox v3 免费开源发布，并按约定引用、署名致谢和说明改写。",
     "urls": {
       "repository": "https://github.com/Luyao2025/Contribution-of-F0-and-phonation-to-tone-perception-in-the-Zaiwa-language"
-    }
+    },
+    "attribution": "经许可改写自陆尧、梁昌维、孔江平团队发布的 MATLAB 重合成代码。感谢三位老师及北京大学语言学实验室的支持与授权。",
+    "permission_date": "2026-09-10",
+    "adaptation_note": "原始实现为作者团队发布的 MATLAB 重合成代码。PhoneticToolbox 经许可改写为 Python，沿用已核对的 LPC 逆滤波、残差与脉冲连续统计算，F0 提取可采用 Parselmouth / Praat。REAPER 算法作为 PhoneticToolbox 新增的 F0 提取选项，用于嘎裂声基频的提取，属于本次适配增加的功能。v3 增加显式源与目标、双方向、控制点编辑及应用、批次与任务历史、四图对照和完整组保存。",
+    "adaptation_caution": "若合成效果不够理想，很可能与 PhoneticToolbox 本次改写和适配仍有不足有关。恳请将本模块的表现与原论文方法区分看待，不宜据此判断原论文的合成效果。建议同时尝试作者团队发布的官方开源代码，以原始实现作为参考，也欢迎反馈问题，帮助完善本次改写。"
   },
   {
     "id": "REF-ZAIWA",
@@ -263,12 +268,13 @@
     "kind": "paper",
     "acknowledgement_group": "academic",
     "authors": "Yao Lu and Changwei Liang and Jiangping Kong",
-    "version": "实际版本待核实",
+    "version": "",
     "license": "article license is separate from code/data",
     "urls": {
       "paper": "https://www.sciencedirect.com/science/article/pii/S0095447025000245",
       "doi": "https://doi.org/10.1016/j.wocn.2025.101413"
-    }
+    },
+    "citation": "Lu, Y., Liang, C., & Kong, J. (2025). Contribution of F0 and phonation to tone perception in the Zaiwa language. Journal of Phonetics, 110, 101413. https://doi.org/10.1016/j.wocn.2025.101413"
   },
   {
     "id": "REF-GRIFFINLIM",
@@ -279,8 +285,8 @@
     "kind": "paper",
     "acknowledgement_group": "academic",
     "authors": "Daniel W. Griffin and Jae S. Lim",
-    "version": "实际版本待核实",
-    "license": "not-established",
+    "version": "",
+    "license": "",
     "urls": {
       "paper": "https://ieeexplore.ieee.org/document/1164317",
       "pdf": "https://dub.ucsd.edu/CATbox/Reader/GriffinLimMSTFT.pdf",
@@ -312,9 +318,9 @@
     ],
     "kind": "manual",
     "acknowledgement_group": "academic",
-    "authors": "作者待核实",
+    "authors": "Peter Birkholz",
     "version": "link only; manual 2.4",
-    "license": "not-established",
+    "license": "",
     "urls": {
       "pdf": "https://www.vocaltractlab.de/download-vocaltractlab/VTL2.4-manual.pdf"
     }
@@ -327,9 +333,9 @@
     ],
     "kind": "manual",
     "acknowledgement_group": "academic",
-    "authors": "作者待核实",
+    "authors": "Peter Birkholz",
     "version": "link only; manual 2.3",
-    "license": "not-established",
+    "license": "",
     "urls": {
       "pdf": "https://www.vocaltractlab.de/download-vocaltractlab/VTL2.3-manual.pdf"
     }
@@ -343,8 +349,8 @@
     "kind": "paper",
     "acknowledgement_group": "academic",
     "authors": "Peter Birkholz and Dietmar Jackèl and Bernd J. Kröger",
-    "version": "实际版本待核实",
-    "license": "not-established",
+    "version": "",
+    "license": "",
     "urls": {
       "pdf": "https://www.vocaltractlab.de/publications/birkholz-2006-icassp.pdf",
       "publications": "https://www.vocaltractlab.de/index.php?page=birkholz-publications"
@@ -358,7 +364,7 @@
     ],
     "kind": "bundled-code",
     "acknowledgement_group": "software",
-    "authors": "作者待核实",
+    "authors": "three.js authors",
     "version": "0.180.0 / r180",
     "license": "MIT",
     "urls": {
@@ -374,7 +380,7 @@
     "kind": "derived-asset",
     "acknowledgement_group": "software",
     "authors": "byzmod3d",
-    "version": "实际版本待核实",
+    "version": "",
     "license": "CC0-1.0",
     "urls": {
       "homepage": "https://opengameart.org/content/3d-human-parts-pack"
@@ -390,7 +396,7 @@
     "acknowledgement_group": "academic",
     "authors": "Jan Brüning and Thomas Hildebrandt and Werner Heppt and Nora Schmidt and Hans Lamecker and Angelika Szengel and Natalja Amiridze and Heiko Ramm and Matthias Bindernagel and Stefan Zachow and Leonid Goubergrits",
     "version": "v4 according to existing sources.lock.json",
-    "license": "CC-BY-4.0 per existing provenance; live v4 metadata pending",
+    "license": "CC BY 4.0（官方 v4 元数据与原始网格摘要已核对）。保留作者、来源、许可链接和修改说明。",
     "urls": {
       "doi": "https://doi.org/10.6084/m9.figshare.9585410.v4",
       "related_paper": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7048824/"
@@ -404,9 +410,9 @@
     ],
     "kind": "reference-only",
     "acknowledgement_group": "software",
-    "authors": "作者待核实",
+    "authors": "Paul Krug",
     "version": "reference commit bb37e1894a790f31d4ef7c19803c177cc095e290 from existing lock",
-    "license": "not assessed for redistribution; no bundled code claimed",
+    "license": "",
     "urls": {
       "repository": "https://github.com/paul-krug/VocalTractLab-Python"
     }
@@ -419,7 +425,7 @@
     ],
     "kind": "runtime-and-model",
     "acknowledgement_group": "software",
-    "authors": "作者待核实",
+    "authors": "The MediaPipe Authors",
     "version": "legacy Python 0.10.14; tasks-vision 0.10.14; face_landmarker float16/1",
     "license": "Apache-2.0 for code; bundled model terms require artifact audit",
     "urls": {
@@ -435,8 +441,8 @@
     ],
     "kind": "native-tool",
     "acknowledgement_group": "software",
-    "authors": "作者待核实",
-    "version": "实际版本待核实",
+    "authors": "FFmpeg contributors",
+    "version": "",
     "license": "build-dependent; not yet verified",
     "urls": {
       "homepage": "https://ffmpeg.org/",
@@ -451,8 +457,8 @@
     ],
     "kind": "external-tool-and-models",
     "acknowledgement_group": "software",
-    "authors": "作者待核实",
-    "version": "3.3.8 (optional local Windows candidate only; not bundled in main EXE)",
+    "authors": "Montreal Corpus Tools / Michael McAuliffe（MFA）；Daniel Povey 等（Kaldi）",
+    "version": "3.3.8 (Windows Preview independent bundled runtime)",
     "license": "each executable/model/dictionary must be checked",
     "urls": {
       "documentation": "https://montreal-forced-aligner.readthedocs.io/en/v3.3.8/",
@@ -468,8 +474,8 @@
     "kind": "paper",
     "acknowledgement_group": "academic",
     "authors": "Michael McAuliffe and Michaela Socolof and Sarah Mihuc and Michael Wagner and Morgan Sonderegger",
-    "version": "实际版本待核实",
-    "license": "not-established",
+    "version": "",
+    "license": "",
     "urls": {
       "paper": "https://www.isca-archive.org/interspeech_2017/mcauliffe17_interspeech.html",
       "doi": "https://doi.org/10.21437/Interspeech.2017-1386"
@@ -500,71 +506,6 @@
     }
   },
   {
-    "id": "PENDING-EGG",
-    "title": "EGG 事件分析/简化逆滤波方法",
-    "modules": [
-      "M03"
-    ],
-    "kind": "provenance-pending",
-    "acknowledgement_group": "academic",
-    "authors": "作者待核实",
-    "version": "V2 本地源码快照，8份文件 SHA-256 见 egg-migration.json（2026-09-13复核）",
-    "license": "not-established",
-    "urls": {}
-  },
-  {
-    "id": "PENDING-DICTIONARY",
-    "title": "内置普通话发音词典",
-    "modules": [
-      "M12"
-    ],
-    "kind": "provenance-pending",
-    "acknowledgement_group": "academic",
-    "authors": "作者待核实",
-    "version": "V2 local snapshot 2026-09-14; SHA-256 bbada4e40307447303f04bef5c36dfc2b1f17fea5c228aa7d9d266a3e8639a27",
-    "license": "not-established",
-    "urls": {}
-  },
-  {
-    "id": "PENDING-IPA",
-    "title": "11 套普通话转换规则及映射数据",
-    "modules": [
-      "M13"
-    ],
-    "kind": "provenance-pending",
-    "acknowledgement_group": "academic",
-    "authors": "作者待核实",
-    "version": "实际版本待核实",
-    "license": "not-established",
-    "urls": {}
-  },
-  {
-    "id": "PENDING-PHONOLOGY",
-    "title": "音系归纳规则和帮助材料",
-    "modules": [
-      "M14"
-    ],
-    "kind": "provenance-pending",
-    "acknowledgement_group": "academic",
-    "authors": "作者待核实",
-    "version": "实际版本待核实",
-    "license": "not-established",
-    "urls": {}
-  },
-  {
-    "id": "ORIGIN-WEBEDITOR",
-    "title": "本地 pitch_perception 的 web_praat_editor 来源链",
-    "modules": [
-      "M12"
-    ],
-    "kind": "provenance-pending",
-    "acknowledgement_group": "software",
-    "authors": "作者待核实",
-    "version": "V2 local snapshot 2026-09-14; editor app.js e739e9bcf5a445ce71eadeeba0d795d7519458c8680645b0b6043740f106a06c",
-    "license": "not-established",
-    "urls": {}
-  },
-  {
     "id": "ASSET-MASCOT",
     "title": "K2 蓝色波形团子与 U2 设计参考",
     "modules": [
@@ -572,64 +513,10 @@
     ],
     "kind": "provenance-pending",
     "acknowledgement_group": "software",
-    "authors": "作者待核实",
-    "version": "实际版本待核实",
-    "license": "not-established",
+    "authors": "",
+    "version": "",
+    "license": "",
     "urls": {}
-  },
-  {
-    "id": "SRC-HTML2CANVAS",
-    "title": "html2canvas",
-    "modules": [
-      "M13"
-    ],
-    "kind": "legacy-web-dependency",
-    "acknowledgement_group": "software",
-    "authors": "作者待核实",
-    "version": "实际版本待核实",
-    "license": "exact-version-license-pending",
-    "urls": {
-      "repository": "https://github.com/niklasvh/html2canvas"
-    }
-  },
-  {
-    "id": "SRC-REACT",
-    "title": "React",
-    "modules": [],
-    "kind": "legacy-web-dependency",
-    "acknowledgement_group": "software",
-    "authors": "作者待核实",
-    "version": "实际版本待核实",
-    "license": "exact-version-license-pending",
-    "urls": {
-      "repository": "https://github.com/facebook/react"
-    }
-  },
-  {
-    "id": "SRC-BABEL",
-    "title": "Babel standalone",
-    "modules": [],
-    "kind": "legacy-web-dependency",
-    "acknowledgement_group": "software",
-    "authors": "作者待核实",
-    "version": "实际版本待核实",
-    "license": "exact-version-license-pending",
-    "urls": {
-      "repository": "https://github.com/babel/babel"
-    }
-  },
-  {
-    "id": "SRC-TAILWIND",
-    "title": "Tailwind CSS",
-    "modules": [],
-    "kind": "legacy-web-dependency",
-    "acknowledgement_group": "software",
-    "authors": "作者待核实",
-    "version": "实际版本待核实",
-    "license": "exact-version-license-pending",
-    "urls": {
-      "repository": "https://github.com/tailwindlabs/tailwindcss"
-    }
   },
   {
     "id": "SRC-SHEETJS",
@@ -640,26 +527,13 @@
     ],
     "kind": "bundled-client-library",
     "acknowledgement_group": "software",
-    "authors": "作者待核实",
+    "authors": "SheetJS LLC",
     "version": "0.20.3",
     "license": "Apache-2.0",
     "urls": {
       "repository": "https://git.sheetjs.com/sheetjs/sheetjs",
       "distribution": "https://cdn.sheetjs.com/xlsx-0.20.3/package/xlsx.mjs",
       "license": "https://docs.sheetjs.com/docs/miscellany/license/"
-    }
-  },
-  {
-    "id": "SRC-LUCIDE",
-    "title": "Lucide",
-    "modules": [],
-    "kind": "legacy-web-dependency",
-    "acknowledgement_group": "software",
-    "authors": "作者待核实",
-    "version": "实际版本待核实",
-    "license": "exact-version-license-pending",
-    "urls": {
-      "repository": "https://github.com/lucide-icons/lucide"
     }
   },
   {
@@ -673,7 +547,7 @@
     "acknowledgement_group": "software",
     "authors": "Travis E. Oliphant et al.",
     "version": "2.2.6 in phonetic_311; v3 pin pending",
-    "license": "see exact release metadata / wheel audit pending",
+    "license": "BSD-3-Clause；实际 wheel 的原生组件与运行库许可另列",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/numpy/2.2.6/json",
       "documentation": "https://numpy.org/doc/",
@@ -694,9 +568,9 @@
     ],
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
-    "authors": "作者待核实",
+    "authors": "SciPy Developers",
     "version": "1.16.3 in phonetic_311; v3 pin pending",
-    "license": "see exact release metadata / wheel audit pending",
+    "license": "BSD-3-Clause；实际 wheel 的原生组件与运行库许可另列",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/scipy/1.16.3/json",
       "documentation": "https://docs.scipy.org/doc/scipy/",
@@ -715,9 +589,9 @@
     ],
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
-    "authors": "作者待核实",
+    "authors": "The Pandas Development Team",
     "version": "2.3.3 in phonetic_311; v3 pin pending",
-    "license": "see exact release metadata / wheel audit pending",
+    "license": "BSD-3-Clause",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/pandas/2.3.3/json",
       "documentation": "https://pandas.pydata.org/docs/",
@@ -736,7 +610,7 @@
     "acknowledgement_group": "software",
     "authors": "John D. Hunter, Michael Droettboom",
     "version": "3.10.8 in phonetic_311; v3 pin pending",
-    "license": "see exact release metadata / wheel audit pending",
+    "license": "Matplotlib 自有许可及历史组件许可，见原文；不能将 PSF 风格概括当成全部组件的单一许可",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/matplotlib/3.10.8/json",
       "Bug Tracker": "https://github.com/matplotlib/matplotlib/issues",
@@ -758,7 +632,7 @@
     "acknowledgement_group": "software",
     "authors": "Riverbank Computing Limited",
     "version": "6.6.1 in phonetic_311; v3 pin pending",
-    "license": "see exact release metadata / wheel audit pending",
+    "license": "GPLv3 / Riverbank 商业许可；PyPI 开源版本须遵守 GPL，Qt 与 Chromium 等组件许可另列",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/PyQt6/6.6.1/json",
       "Homepage": "https://www.riverbankcomputing.com/software/pyqt/"
@@ -774,7 +648,7 @@
     "acknowledgement_group": "software",
     "authors": "Luke Campagnola",
     "version": "0.14.0 in phonetic_311; v3 pin pending",
-    "license": "see exact release metadata / wheel audit pending",
+    "license": "MIT",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/pyqtgraph/0.14.0/json",
       "Documentation": "https://pyqtgraph.readthedocs.io",
@@ -791,7 +665,7 @@
     "acknowledgement_group": "software",
     "authors": "Yannick Jadoul",
     "version": "0.4.7 in phonetic_311; v3 pin pending",
-    "license": "see exact release metadata / wheel audit pending",
+    "license": "GPL-3.0-or-later；Praat 及其依赖另列",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/praat-parselmouth/0.4.7/json",
       "Bug Tracker": "https://github.com/YannickJadoul/Parselmouth/issues",
@@ -808,7 +682,7 @@
     ],
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
-    "authors": "作者待核实",
+    "authors": "The PyWavelets Developers",
     "version": "1.9.0 in phonetic_311; v3 pin pending",
     "license": "MIT AND BSD-3-Clause",
     "urls": {
@@ -829,7 +703,7 @@
     "acknowledgement_group": "software",
     "authors": "Matthias Geier",
     "version": "0.5.3 in phonetic_311; v3 pin pending",
-    "license": "see exact release metadata / wheel audit pending",
+    "license": "MIT；PortAudio 等原生组件许可另列",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/sounddevice/0.5.3/json",
       "Source": "https://github.com/spatialaudio/python-sounddevice"
@@ -849,8 +723,8 @@
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "Bastian Bechtold",
-    "version": "0.13.1 in phonetic_311; M09 isolated runtime 0.13.1 in requirements-m09-ui.lock",
-    "license": "see exact release metadata / wheel audit pending",
+    "version": "0.13.1 in phonetic_311; M09 isolated runtime 0.13.1 in requirements/requirements-m09-ui.lock",
+    "license": "BSD-3-Clause；libsndfile 等原生组件许可另列",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/soundfile/0.13.1/json",
       "Homepage": "https://github.com/bastibe/python-soundfile"
@@ -866,7 +740,7 @@
     "acknowledgement_group": "software",
     "authors": "See AUTHORS",
     "version": "3.1.5 in phonetic_311; v3 pin pending",
-    "license": "see exact release metadata / wheel audit pending",
+    "license": "MIT",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/openpyxl/3.1.5/json",
       "Documentation": "https://openpyxl.readthedocs.io/en/stable/",
@@ -883,9 +757,9 @@
     ],
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
-    "authors": "作者待核实",
+    "authors": "Steve Canny",
     "version": "1.2.0 in phonetic_311; v3 pin pending",
-    "license": "see exact release metadata / wheel audit pending",
+    "license": "MIT",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/python-docx/1.2.0/json",
       "Changelog": "https://github.com/python-openxml/python-docx/blob/master/HISTORY.rst",
@@ -903,9 +777,9 @@
     ],
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
-    "authors": "作者待核实",
-    "version": "4.13.0.92 in phonetic_311; M09 isolated runtime 4.13.0.92 in requirements-m09-ui.lock",
-    "license": "see exact release metadata / wheel audit pending",
+    "authors": "OpenCV Team",
+    "version": "4.13.0.92 in phonetic_311; M09 isolated runtime 4.13.0.92 in requirements/requirements-m09-ui.lock",
+    "license": "Apache-2.0；打包的第三方组件见 LICENSE-3RD-PARTY.txt",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/opencv-contrib-python/4.13.0.92/json",
       "Homepage": "https://github.com/opencv/opencv-python"
@@ -921,7 +795,7 @@
     "acknowledgement_group": "software",
     "authors": "The MediaPipe Authors",
     "version": "0.10.14 in phonetic_311; v3 pin pending",
-    "license": "see exact release metadata / wheel audit pending",
+    "license": "Apache-2.0；模型和原生依赖按具体资源分别核对",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/mediapipe/0.10.14/json",
       "Homepage": "https://github.com/google/mediapipe"
@@ -935,7 +809,7 @@
     ],
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
-    "authors": "作者待核实",
+    "authors": "Jeffrey A. Clark and contributors；Fredrik Lundh and contributors（PIL）",
     "version": "12.0.0 in phonetic_311; v3 pin pending",
     "license": "MIT-CMU",
     "urls": {
@@ -959,7 +833,7 @@
     "acknowledgement_group": "software",
     "authors": "Hartmut Goebel, Giovanni Bajo, David Vierra, David Cortesi, Martin Zibricky",
     "version": "6.17.0 in phonetic_311; v3 pin pending",
-    "license": "see exact release metadata / wheel audit pending",
+    "license": "GPL-2.0-or-later，含 bootloader 分发例外及 Apache-2.0 runtime hooks；构建工具许可不自动赋予应用相同许可",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/PyInstaller/6.17.0/json",
       "Documentation": "https://pyinstaller.org",
@@ -993,7 +867,7 @@
     "acknowledgement_group": "software",
     "authors": "Jonathan Hartley <tartley@tartley.com>",
     "version": "0.4.6",
-    "license": "unknown",
+    "license": "BSD-3-Clause",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/colorama/0.4.6/json"
     }
@@ -1023,7 +897,7 @@
     "acknowledgement_group": "software",
     "authors": "Travis E. Oliphant et al.",
     "version": "2.2.6",
-    "license": "See exact installed license metadata in third_party/p01-dependency-inventory.json",
+    "license": "BSD-3-Clause；wheel 内原生组件与运行库许可另列。",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/numpy/2.2.6/json"
     }
@@ -1141,9 +1015,9 @@
     ],
     "kind": "build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Legorooj（项目维护）",
     "version": "2026.7",
-    "license": "unknown",
+    "license": "普通构建 hooks：GPL-2.0-or-later；随应用打包的 runtime hooks：Apache-2.0。",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/pyinstaller-hooks-contrib/2026.7/json"
     }
@@ -1366,7 +1240,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -1381,7 +1255,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -1396,7 +1270,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -1411,7 +1285,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -1426,7 +1300,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -1441,7 +1315,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -1456,7 +1330,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -1471,7 +1345,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -1486,7 +1360,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -1501,7 +1375,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -1516,7 +1390,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -1531,7 +1405,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -1546,7 +1420,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -1561,7 +1435,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -1576,7 +1450,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -1591,7 +1465,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "rolldown/plugins repository contributors",
     "version": "1.0.1",
     "license": "MIT",
     "urls": {
@@ -1621,7 +1495,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Johnson Chu",
     "version": "2.4.28",
     "license": "MIT",
     "urls": {
@@ -1636,7 +1510,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Johnson Chu",
     "version": "2.4.28",
     "license": "MIT",
     "urls": {
@@ -1651,7 +1525,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Johnson Chu",
     "version": "2.4.28",
     "license": "MIT",
     "urls": {
@@ -1726,7 +1600,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Johnson Chu",
     "version": "3.3.11",
     "license": "MIT",
     "urls": {
@@ -1816,7 +1690,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Johnson Chu",
     "version": "3.2.1",
     "license": "MIT",
     "urls": {
@@ -1906,7 +1780,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Philipp Dunkel、Ben Noordhuis、Elan Shankar、Miroslav Bajtoš、Paul Miller",
     "version": "2.3.3",
     "license": "MIT",
     "urls": {
@@ -1921,7 +1795,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -1936,7 +1810,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -1951,7 +1825,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -1966,7 +1840,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -1981,7 +1855,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -1996,7 +1870,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -2011,7 +1885,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -2026,7 +1900,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -2041,7 +1915,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -2056,7 +1930,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -2071,7 +1945,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -2086,7 +1960,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -2116,7 +1990,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Johnson Chu",
     "version": "0.4.1",
     "license": "MIT",
     "urls": {
@@ -2206,7 +2080,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -2311,7 +2185,7 @@
     ],
     "kind": "probe-ui-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Johnson Chu",
     "version": "3.3.11",
     "license": "MIT",
     "urls": {
@@ -2332,22 +2206,6 @@
     "urls": {
       "runtime_builds": "https://github.com/astral-sh/python-build-standalone",
       "python": "https://www.python.org/"
-    }
-  },
-  {
-    "id": "P01-PYSIDE6",
-    "title": "PySide6 candidate host",
-    "modules": [
-      "P01-probe"
-    ],
-    "kind": "evaluated-alternative-dependency",
-    "acknowledgement_group": "software",
-    "authors": "The Qt Company Ltd. and Qt contributors",
-    "version": "PySide6 / Essentials / Addons / Shiboken6 6.11.2 in separate trial environment",
-    "license": "LGPL/GPL/commercial and component-specific terms; see Qt license inventory",
-    "urls": {
-      "licenses": "https://doc.qt.io/qtforpython-6/licenses.html",
-      "package": "https://pypi.org/project/PySide6/6.11.2/"
     }
   },
   {
@@ -2433,7 +2291,7 @@
     ],
     "kind": "runtime-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Pallets",
     "version": "8.5.0",
     "license": "BSD-3-Clause",
     "urls": {
@@ -2450,7 +2308,7 @@
     "acknowledgement_group": "software",
     "authors": "Jonathan Hartley <tartley@tartley.com>",
     "version": "0.4.6",
-    "license": "unknown",
+    "license": "BSD-3-Clause",
     "urls": {
       "release": "https://pypi.org/project/colorama/0.4.6/"
     }
@@ -2630,7 +2488,7 @@
     "acknowledgement_group": "software",
     "authors": "Thomas Kluyver <thomas@kluyver.me.uk>",
     "version": "1.2.0",
-    "license": "unknown",
+    "license": "MIT",
     "urls": {
       "release": "https://pypi.org/project/pyproject_hooks/1.2.0/"
     }
@@ -2640,7 +2498,8 @@
     "title": "PyQt6",
     "modules": [
       "P02",
-      "M01"
+      "M01",
+      "M18"
     ],
     "kind": "runtime-dependency",
     "acknowledgement_group": "software",
@@ -2656,7 +2515,8 @@
     "title": "PyQt6-Qt6",
     "modules": [
       "P02",
-      "M01"
+      "M01",
+      "M18"
     ],
     "kind": "runtime-dependency",
     "acknowledgement_group": "software",
@@ -2948,7 +2808,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Redocly Inc.",
     "version": "0.22.0",
     "license": "MIT",
     "urls": {
@@ -2963,7 +2823,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Redocly Inc.",
     "version": "1.34.19",
     "license": "MIT",
     "urls": {
@@ -2978,7 +2838,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -2993,7 +2853,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -3008,7 +2868,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -3023,7 +2883,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -3038,7 +2898,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -3053,7 +2913,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -3068,7 +2928,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -3083,7 +2943,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -3098,7 +2958,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -3113,7 +2973,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -3128,7 +2988,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -3143,7 +3003,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -3158,7 +3018,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -3173,7 +3033,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -3188,7 +3048,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -3203,7 +3063,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "rolldown/plugins repository contributors",
     "version": "1.0.1",
     "license": "MIT",
     "urls": {
@@ -3233,7 +3093,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Johnson Chu",
     "version": "2.4.28",
     "license": "MIT",
     "urls": {
@@ -3248,7 +3108,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Johnson Chu",
     "version": "2.4.28",
     "license": "MIT",
     "urls": {
@@ -3263,7 +3123,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Johnson Chu",
     "version": "2.4.28",
     "license": "MIT",
     "urls": {
@@ -3338,7 +3198,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Johnson Chu",
     "version": "3.3.11",
     "license": "MIT",
     "urls": {
@@ -3443,7 +3303,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Johnson Chu",
     "version": "3.2.1",
     "license": "MIT",
     "urls": {
@@ -3473,7 +3333,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "",
     "version": "2.0.1",
     "license": "Python-2.0",
     "urls": {
@@ -3653,7 +3513,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Philipp Dunkel、Ben Noordhuis、Elan Shankar、Miroslav Bajtoš、Paul Miller",
     "version": "2.3.3",
     "license": "MIT",
     "urls": {
@@ -3758,7 +3618,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -3773,7 +3633,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -3788,7 +3648,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -3803,7 +3663,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -3818,7 +3678,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -3833,7 +3693,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -3848,7 +3708,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -3863,7 +3723,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -3878,7 +3738,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -3893,7 +3753,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -3908,7 +3768,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -3923,7 +3783,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Devon Govett",
     "version": "1.33.0",
     "license": "MPL-2.0",
     "urls": {
@@ -3968,7 +3828,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Vercel, Inc.",
     "version": "2.1.3",
     "license": "MIT",
     "urls": {
@@ -3983,7 +3843,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Johnson Chu",
     "version": "0.4.1",
     "license": "MIT",
     "urls": {
@@ -4133,7 +3993,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "VoidZero Inc. & Contributors",
     "version": "1.2.7",
     "license": "MIT",
     "urls": {
@@ -4284,7 +4144,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "Johnson Chu",
     "version": "3.3.11",
     "license": "MIT",
     "urls": {
@@ -4299,7 +4159,7 @@
     ],
     "kind": "frontend-build-dependency",
     "acknowledgement_group": "software",
-    "authors": "unknown",
+    "authors": "MuleSoft, Inc.",
     "version": "0.0.43",
     "license": "Apache-2.0",
     "urls": {
@@ -4336,20 +4196,6 @@
       "runtime_builds": "https://github.com/astral-sh/python-build-standalone",
       "python": "https://www.python.org/"
     }
-  },
-  {
-    "id": "PROJECT-SYNTHETIC-WAV",
-    "title": "PhoneticToolbox 公开解析测试波形",
-    "modules": [
-      "P03",
-      "P04"
-    ],
-    "kind": "project-generated-fixture",
-    "acknowledgement_group": "software",
-    "authors": "PhoneticToolbox project",
-    "version": "P03 SYN-EGG-44100 recipe",
-    "license": "Project-authored test signal; no third-party recording",
-    "urls": {}
   },
   {
     "id": "P05-PY-ARGON2-CFFI",
@@ -4497,7 +4343,7 @@
     "acknowledgement_group": "software",
     "authors": "OWASP Cheat Sheet Series contributors",
     "version": "Online documentation reviewed 2026-09-09; commit unknown",
-    "license": "No text/code redistributed; document license not independently audited",
+    "license": "",
     "urls": {
       "documentation": "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html"
     }
@@ -4512,7 +4358,7 @@
     "acknowledgement_group": "software",
     "authors": "OWASP Cheat Sheet Series contributors",
     "version": "Online documentation reviewed 2026-09-09; commit unknown",
-    "license": "No text/code redistributed; document license not independently audited",
+    "license": "",
     "urls": {
       "documentation": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html"
     }
@@ -4526,7 +4372,7 @@
     ],
     "kind": "test-dependency",
     "acknowledgement_group": "software",
-    "authors": "PostgreSQL Global Development Group; EDB Windows distribution",
+    "authors": "PostgreSQL Global Development Group；EDB Windows distribution",
     "version": "17.11; EDB archive 17.11-3 Windows x64",
     "license": "PostgreSQL; bundled native dependencies have separate licenses",
     "urls": {
@@ -4566,7 +4412,7 @@
     "acknowledgement_group": "software",
     "authors": "PostgreSQL Global Development Group",
     "version": "PostgreSQL 17 documentation reviewed 2026-09-09; commit unknown",
-    "license": "Reference only; no documentation redistributed",
+    "license": "",
     "urls": {
       "select": "https://www.postgresql.org/docs/17/sql-select.html",
       "locking": "https://www.postgresql.org/docs/17/explicit-locking.html"
@@ -4582,7 +4428,7 @@
     "acknowledgement_group": "software",
     "authors": "Python Software Foundation and Python contributors",
     "version": "CPython 3.11.14; documentation branch 3.11 reviewed 2026-09-09",
-    "license": "Reference only; no documentation redistributed",
+    "license": "",
     "urls": {
       "fsync": "https://docs.python.org/3.11/library/os.html",
       "windows_locking": "https://docs.python.org/3.11/library/msvcrt.html",
@@ -4599,7 +4445,7 @@
     "acknowledgement_group": "software",
     "authors": "Starlette contributors",
     "version": "Documentation reviewed 2026-09-09; installed dependency remains in existing lock",
-    "license": "Reference only; no documentation redistributed",
+    "license": "",
     "urls": {
       "documentation": "https://starlette.dev/responses/"
     }
@@ -4661,7 +4507,7 @@
     "acknowledgement_group": "software",
     "authors": "Jonathan Hartley <tartley@tartley.com>",
     "version": "0.4.6",
-    "license": "unknown",
+    "license": "BSD-3-Clause",
     "urls": {
       "release": "https://pypi.org/project/colorama/0.4.6/"
     }
@@ -4692,7 +4538,7 @@
     "acknowledgement_group": "software",
     "authors": "Travis E. Oliphant et al.",
     "version": "2.2.6",
-    "license": "See installed distribution license texts; full review pending",
+    "license": "BSD-3-Clause；wheel 内 OpenBLAS/LAPACK/运行库等独立许可与例外须一并保留。",
     "urls": {
       "release": "https://pypi.org/project/numpy/2.2.6/"
     }
@@ -4722,7 +4568,7 @@
     "acknowledgement_group": "software",
     "authors": "The Pandas Development Team <pandas-dev@python.org>",
     "version": "2.3.3",
-    "license": "See installed distribution license texts; full review pending",
+    "license": "BSD-3-Clause；保留实际发行文件的版权和第三方通知。",
     "urls": {
       "release": "https://pypi.org/project/pandas/2.3.3/"
     }
@@ -4752,7 +4598,7 @@
     "acknowledgement_group": "software",
     "authors": "Yannick Jadoul",
     "version": "0.4.7",
-    "license": "GPLv3",
+    "license": "GPL-3.0-or-later（Parselmouth 0.4.7）；内嵌 Praat 与依赖许可另列。",
     "urls": {
       "release": "https://pypi.org/project/praat-parselmouth/0.4.7/"
     }
@@ -4782,7 +4628,7 @@
     "acknowledgement_group": "software",
     "authors": "Thomas Kluyver <thomas@kluyver.me.uk>",
     "version": "1.2.0",
-    "license": "unknown",
+    "license": "MIT",
     "urls": {
       "release": "https://pypi.org/project/pyproject_hooks/1.2.0/"
     }
@@ -4812,7 +4658,7 @@
     "acknowledgement_group": "software",
     "authors": "Gustavo Niemeyer",
     "version": "2.9.0.post0",
-    "license": "Dual License",
+    "license": "Apache-2.0（2017-12-01 后及已重新许可的贡献）与 BSD-3-Clause（早期贡献），按文件与原文范围保留。",
     "urls": {
       "release": "https://pypi.org/project/python-dateutil/2.9.0.post0/"
     }
@@ -4845,9 +4691,10 @@
     "acknowledgement_group": "software",
     "authors": "Not recorded in installed metadata",
     "version": "1.16.3",
-    "license": "See installed distribution license texts; full review pending",
+    "license": "BSD-3-Clause；wheel 内原生组件、运行库许可与例外须一并保留。",
     "urls": {
-      "release": "https://pypi.org/project/scipy/1.16.3/"
+      "release": "https://pypi.org/project/scipy/1.16.3/",
+      "m09_inverse_stft": "https://docs.scipy.org/doc/scipy-1.16.2/reference/generated/scipy.signal.istft.html"
     }
   },
   {
@@ -4951,7 +4798,7 @@
     "acknowledgement_group": "software",
     "authors": "Microsoft",
     "version": "Official documentation consulted 2026-09-09; Windows / CPython 3.11.14 APIs tested locally",
-    "license": "Documentation referenced, no third-party document/code redistributed",
+    "license": "",
     "urls": {
       "process": "https://learn.microsoft.com/en-us/windows/win32/procthread/process-creation-flags",
       "job": "https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects",
@@ -4969,7 +4816,7 @@
     "acknowledgement_group": "software",
     "authors": "Microsoft",
     "version": "Official documentation consulted 2026-09-09; Windows / CPython 3.11.14 APIs tested locally",
-    "license": "Documentation referenced, no third-party document/code redistributed",
+    "license": "",
     "urls": {
       "documentation": "https://learn.microsoft.com/en-us/windows/win32/api/mmreg/ns-mmreg-waveformatextensible"
     }
@@ -4984,23 +4831,10 @@
     "acknowledgement_group": "software",
     "authors": "Python Software Foundation",
     "version": "Official documentation consulted 2026-09-09; Windows / CPython 3.11.14 APIs tested locally",
-    "license": "Documentation referenced, no third-party document/code redistributed",
+    "license": "",
     "urls": {
       "documentation": "https://docs.python.org/3.11/library/pickle.html"
     }
-  },
-  {
-    "id": "PROJECT-M10",
-    "title": "PhoneticToolbox 声道界面与平台适配",
-    "modules": [
-      "M10"
-    ],
-    "kind": "project-integration",
-    "acknowledgement_group": "software",
-    "authors": "井韶子 / PhoneticToolbox contributors",
-    "version": "v3 M10 Windows recording R5 / m10/2",
-    "license": "Project integration; native-derived adapter GPL-3.0-or-later; third-party components separately listed",
-    "urls": {}
   },
   {
     "id": "REF-WEBCODECS",
@@ -5012,7 +4846,7 @@
     "acknowledgement_group": "software",
     "authors": "W3C Web Media Working Group",
     "version": "Specification consulted 2026-09-11; runtime encoder from existing Qt WebEngine 6.11.2",
-    "license": "Specification reference only; no specification text or external muxer source code redistributed",
+    "license": "",
     "urls": {
       "specification": "https://www.w3.org/TR/webcodecs/"
     }
@@ -5027,7 +4861,7 @@
     "acknowledgement_group": "software",
     "authors": "The WebM Project",
     "version": "Specification consulted 2026-09-11; runtime encoder from existing Qt WebEngine 6.11.2",
-    "license": "Specification reference only; no specification text or external muxer source code redistributed",
+    "license": "",
     "urls": {
       "specification": "https://www.webmproject.org/docs/container/"
     }
@@ -5042,7 +4876,7 @@
     "acknowledgement_group": "software",
     "authors": "W3C Portable Network Graphics Working Group",
     "version": "W3C Recommendation 24 June 2025, sections 5.5 and 11.3.4.3; canvas encoder from existing browser/Qt",
-    "license": "Specification reference only; no specification text or sample implementation redistributed",
+    "license": "",
     "urls": {
       "specification": "https://www.w3.org/TR/2025/REC-png-3-20250624/"
     }
@@ -5058,9 +4892,9 @@
     ],
     "kind": "specification-reference",
     "acknowledgement_group": "software",
-    "authors": "W3C CSS Working Group; The Qt Company; Matplotlib developers",
+    "authors": "W3C CSS Working Group；The Qt Company；Matplotlib developers",
     "version": "CSS Font Loading Level 3 WD 2023-04-06; Qt and Matplotlib online API references observed 2026-09-12; installed runtime versions remain independently locked",
-    "license": "API and specification reference only; no upstream example code copied",
+    "license": "",
     "urls": {
       "font_loading": "https://www.w3.org/TR/2023/WD-css-font-loading-3-20230406/",
       "qt_fonts": "https://doc.qt.io/qt-6/qfontdatabase.html",
@@ -5078,7 +4912,7 @@
     "acknowledgement_group": "academic",
     "authors": "尹基德",
     "version": "馆藏 020/D2010(71)；完整论文页码未核准",
-    "license": "引用与原站链接；论文全文未收录",
+    "license": "",
     "urls": {
       "catalog": "https://lib.chinese.pku.edu.cn/xueweilunwen?combine=&degree=All&degree_str=&field_xwlw_callno_value=&major=All&page=314&sort_by=field_xwlw_year_int_value&sort_order=DESC&year=&year_int_max=&year_int_min="
     }
@@ -5091,9 +4925,9 @@
     ],
     "kind": "reference-only",
     "acknowledgement_group": "academic",
-    "authors": "Nathalie Henrich; Christophe d’Alessandro; Boris Doval; Michèle Castellengo",
+    "authors": "Nathalie Henrich；Christophe d’Alessandro；Boris Doval；Michèle Castellengo",
     "version": "JASA 115(3), 1321–1332 (2004)；方法审阅参考",
-    "license": "© 2004 Acoustical Society of America；引用与原站链接，全文未收录",
+    "license": "",
     "urls": {
       "paper": "https://doi.org/10.1121/1.1646401",
       "author_pdf": "https://www.lam.jussieu.fr/Membres/Castellengo/publications/2004b-Voice%20DEGG.pdf"
@@ -5109,7 +4943,7 @@
     "acknowledgement_group": "academic",
     "authors": "John Makhoul",
     "version": "Proceedings of the IEEE 63(4), 561–580 (1975); method reference",
-    "license": "Citation and original link only; paper not bundled",
+    "license": "",
     "urls": {
       "paper": "https://doi.org/10.1109/PROC.1975.9792",
       "university_pdf": "https://www.commsp.ee.ic.ac.uk/~xl404/papers/Linear%20prediction%20A%20tutorial%20review.pdf"
@@ -5147,19 +4981,6 @@
     }
   },
   {
-    "id": "PROJECT-M05",
-    "title": "PhoneticToolbox 唇形指标迁移与本地采集适配",
-    "modules": [
-      "M05"
-    ],
-    "kind": "project-integration",
-    "acknowledgement_group": "software",
-    "authors": "井韶子 / PhoneticToolbox contributors",
-    "version": "m05/1; lip-metrics-v2/1; decoded-pts/1",
-    "license": "Project integration; third-party components separately listed",
-    "urls": {}
-  },
-  {
     "id": "ASSET-M05-NASA",
     "title": "NASA Eileen Collins portrait via scikit-image",
     "modules": [
@@ -5185,30 +5006,15 @@
     "acknowledgement_group": "software",
     "authors": "井井",
     "version": "design-reviewed; no dynamic import; v3 implementation recording/1",
-    "license": "User-authored local source; public redistribution license not established",
+    "license": "",
     "urls": {}
-  },
-  {
-    "id": "METHOD-M16-SPECTRAL-SUBTRACTION",
-    "title": "M16 噪声样本功率谱减法（自有实现）",
-    "modules": [
-      "M16"
-    ],
-    "kind": "original-method-implementation",
-    "acknowledgement_group": "academic",
-    "authors": "PhoneticToolbox project",
-    "version": "ptb-spectral-subtraction/1",
-    "license": "Project implementation; SciPy runtime license is separate",
-    "urls": {
-      "scipy_stft": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.stft.html",
-      "scipy_istft": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.istft.html"
-    }
   },
   {
     "id": "M17-IPA-CHART",
     "title": "International Phonetic Alphabet chart — 2026 reprint",
     "modules": [
-      "M17"
+      "M17",
+      "M10"
     ],
     "kind": "reference-chart",
     "acknowledgement_group": "academic",
@@ -5245,7 +5051,7 @@
     "acknowledgement_group": "academic",
     "authors": "Martin J. Ball and John H. Esling and B. Craig Dickson",
     "version": "VoQS revised to 2016",
-    "license": "Article/chart copyright retained by rights holders; no redistribution grant inferred",
+    "license": "",
     "urls": {
       "paper": "https://doi.org/10.1017/S0025100317000159",
       "chart": "https://www.icpla.org.uk/resources"
@@ -5259,12 +5065,15 @@
     ],
     "kind": "terminology-reference",
     "acknowledgement_group": "academic",
-    "authors": "UntPhesoca (unt)",
+    "authors": "王天恒（Wang, Tianheng）",
     "version": "2020 Chinese translation of 2016 chart",
-    "license": "Author's article/translation rights retained; terminology attributed, images/layout not bundled",
+    "license": "CC BY 4.0（Zenodo 对应中文译表记录）；保留作者、来源、许可链接及交互改写说明，原表作者另列，原 PDF 不随包。",
     "urls": {
-      "article": "https://zhuanlan.zhihu.com/p/203037479"
-    }
+      "doi": "https://doi.org/10.5281/zenodo.10206204",
+      "record": "https://zenodo.org/records/10206204",
+      "license": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "citation": "王天恒. VoQS：音质符号（2016 中英双语版）[EB/OL]. Zenodo(2020-08-30)[2023-12-26]. https://doi.org/10.5281/zenodo.10206204."
   },
   {
     "id": "M17-PTB-IPA-PLUS-FONT",
@@ -5274,7 +5083,7 @@
     ],
     "kind": "bundled-font",
     "acknowledgement_group": "software",
-    "authors": "SIL Global; Noto authors; PhoneticToolbox contributors",
+    "authors": "SIL Global；Noto authors",
     "version": "PTB IPA Plus 1.000 / Doulos SIL 7.000",
     "license": "SIL Open Font License 1.1",
     "urls": {
@@ -5292,9 +5101,9 @@
     ],
     "kind": "encoding-reference",
     "acknowledgement_group": "academic",
-    "authors": "作者待核实",
+    "authors": "The Unicode Consortium（Unicode 标准）；Kirk Miller、Martin Ball（两份提案）；SIL Global（字体资料）",
     "version": "Unicode references checked 2026-10-02",
-    "license": "References only; no Unicode documents bundled",
+    "license": "",
     "urls": {
       "chapter7": "https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-7/",
       "voqs_correction": "https://www.unicode.org/L2/L2020/20113-voqs-correction.pdf",
@@ -5310,9 +5119,9 @@
     ],
     "kind": "local-reference",
     "acknowledgement_group": "software",
-    "authors": "作者待核实",
+    "authors": "",
     "version": "User supplied file checked 2026-10-02",
-    "license": "Original file provenance/license not established; original not bundled",
+    "license": "",
     "urls": {
       "unicode_mapping": "https://software.sil.org/doulos/history/"
     }
@@ -5325,9 +5134,9 @@
     ],
     "kind": "design-reference",
     "acknowledgement_group": "software",
-    "authors": "作者待核实",
+    "authors": "Weston Ruter（IPA keyboard）",
     "version": "No external implementation included",
-    "license": "No third-party code or assets copied",
+    "license": "",
     "urls": {
       "website": "https://www.ipachart.com/",
       "alternative": "https://westonruter.github.io/ipa-chart/keyboard/"
@@ -5343,7 +5152,7 @@
     "acknowledgement_group": "academic",
     "authors": "吕佳、江荻",
     "version": "Independently authored Chinese explanations; 2002/2025 versions distinguished",
-    "license": "Copyright retained; no redistribution permission inferred",
+    "license": "",
     "urls": {
       "paper": "https://doi.org/10.3969/j.issn.1006-7299.2013.06.030"
     }
@@ -5356,9 +5165,9 @@
     ],
     "kind": "design-reference",
     "acknowledgement_group": "software",
-    "authors": "作者待核实",
+    "authors": "John Esling、Christopher Coey",
     "version": "No external implementation or screenshot bundled",
-    "license": "Reference only; third-party screenshot, artwork, code and assets not copied",
+    "license": "",
     "urls": {
       "symbol_rules": "https://www.internationalphoneticassociation.org/content/ipa-chart"
     }
@@ -5367,13 +5176,14 @@
     "id": "M17-IPA-CHART-ZH-2007",
     "title": "中国语言学会语音学分会 · 国际音标中文版（2007；修订至2005年）",
     "modules": [
-      "M17"
+      "M17",
+      "M10"
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
     "authors": "中国语言学会语音学分会",
     "version": "用户指定图4中文名称；同名中文表刊于JIPA 2011, 41(2)",
-    "license": "中文名称据用户指定图核对；原图与文章不随包分发",
+    "license": "",
     "urls": {
       "paper": "https://doi.org/10.1017/S0025100311000156"
     }
@@ -5382,13 +5192,14 @@
     "id": "M17-IPA-HANDBOOK-JIANG-2008",
     "title": "国际语音学会编，江荻译（2008）· 国际语音学会手册：国际音标使用指南",
     "modules": [
-      "M17"
+      "M17",
+      "M10"
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
     "authors": "国际语音学会编；江荻译",
     "version": "上海教育出版社，2008年第1版，ISBN 978-7-5444-1928-4；原著1999；本轮核对pp.9–24",
-    "license": "书籍版权保留；只使用自主短解释、书目信息和页码，原书与扫描图不随包",
+    "license": "",
     "urls": {
       "paper": "https://www.internationalphoneticassociation.org/content/handbook-ipa"
     }
@@ -5401,9 +5212,9 @@
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
-    "authors": "John H. Esling; Scott R. Moisik; Allison Benner; Lise Crevier-Buchman",
+    "authors": "John H. Esling；Scott R. Moisik；Allison Benner；Lise Crevier-Buchman",
     "version": "Cambridge University Press, 2019；ISBN 978-1-108-49842-5；本轮参考第1–2章",
-    "license": "书籍版权保留；自主概述并列准确章节页码，原PDF及图像不随包",
+    "license": "",
     "urls": {
       "paper": "https://doi.org/10.1017/9781108696555"
     }
@@ -5416,9 +5227,9 @@
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
-    "authors": "Martin J. Ball; Sara J. Howard; Kirk Miller",
+    "authors": "Martin J. Ball；Sara J. Howard；Kirk Miller",
     "version": "2015修订表；2017在线发表；2018卷期48(2)，155–164",
-    "license": "原论文与图表不随包，条目含义自主概述",
+    "license": "",
     "urls": {
       "paper": "https://doi.org/10.1017/S0025100317000147"
     }
@@ -5433,7 +5244,7 @@
     "acknowledgement_group": "academic",
     "authors": "Martin J. Ball",
     "version": "2024-05-14 ICPLA批准三项调整；2024-07-01在线发表；38(7)，692–695",
-    "license": "原文CC BY-NC-ND 4.0；仅引用与自主解释，未复制或修改原图",
+    "license": "",
     "urls": {
       "paper": "https://doi.org/10.1080/02699206.2024.2365205"
     }
@@ -5448,7 +5259,7 @@
     "acknowledgement_group": "academic",
     "authors": "Martin J. Ball",
     "version": "2025，39(9)，911–912；正文partially nasal用词与本目录核对的2025表partially denasal分开记录",
-    "license": "原文版权与许可保留；仅书目和版本差异说明，原PDF不随包",
+    "license": "",
     "urls": {
       "paper": "https://doi.org/10.1080/02699206.2025.2489577"
     }
@@ -5480,9 +5291,497 @@
     "acknowledgement_group": "software",
     "authors": "OpenAI and respective theme authors",
     "version": "PTB palette adaptations / 1; reference name set observed in Codex 26.930.3930.0",
-    "license": "Reference only; proprietary application code not redistributed",
+    "license": "",
     "urls": {
       "homepage": "https://openai.com/codex/"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-ABSOLUTELY",
+    "title": "配色 · Absolutely（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
+    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-AYU",
+    "title": "配色 · Ayu（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "Konstantin Pschera / ayu-theme contributors",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 ayu-theme/ayu-colors@b0fd979a1ddf",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "公开上游": "https://github.com/ayu-theme/ayu-colors",
+      "固定色板": "https://raw.githubusercontent.com/ayu-theme/ayu-colors/b0fd979a1ddf050101b43311fa598a1a9c5f1bbc/themes/dark.yaml",
+      "许可原文": "https://raw.githubusercontent.com/ayu-theme/ayu-colors/b0fd979a1ddf050101b43311fa598a1a9c5f1bbc/license"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-CATPPUCCIN",
+    "title": "配色 · Catppuccin（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "Catppuccin contributors",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 catppuccin/palette@07d02aa110ef",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "公开上游": "https://github.com/catppuccin/palette",
+      "固定色板": "https://raw.githubusercontent.com/catppuccin/palette/07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd/palette.json",
+      "许可原文": "https://raw.githubusercontent.com/catppuccin/palette/07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd/LICENSE"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-CODEX",
+    "title": "配色 · Codex（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "品牌参考：OpenAI",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
+    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "品牌视觉参考": "https://openai.com/codex/"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-DRACULA",
+    "title": "配色 · Dracula（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "Zeno Rocha / Dracula Theme contributors",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 dracula/visual-studio-code@a08a206f2c84",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "公开上游": "https://github.com/dracula/visual-studio-code",
+      "固定色板": "https://raw.githubusercontent.com/dracula/visual-studio-code/a08a206f2c8420ba3c05f0e8d01d43b2f933fdf8/src/dracula.yml",
+      "许可原文": "https://raw.githubusercontent.com/dracula/visual-studio-code/a08a206f2c8420ba3c05f0e8d01d43b2f933fdf8/LICENSE"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-EVERFOREST",
+    "title": "配色 · Everforest（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "sainnhe",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 sainnhe/everforest@85a86eb62409",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "公开上游": "https://github.com/sainnhe/everforest",
+      "固定色板": "https://raw.githubusercontent.com/sainnhe/everforest/85a86eb62409e3ec88713bff3d1b9d7374e112e4/palette.md",
+      "许可原文": "https://raw.githubusercontent.com/sainnhe/everforest/85a86eb62409e3ec88713bff3d1b9d7374e112e4/LICENSE"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-GITHUB",
+    "title": "配色 · GitHub（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "Primer / GitHub",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 primer/github-vscode-theme@cd78e5e4e7bc",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "公开上游": "https://github.com/primer/github-vscode-theme",
+      "固定色板": "https://raw.githubusercontent.com/primer/github-vscode-theme/cd78e5e4e7bcf132a6f428ae0f32264bb1b729cf/src/classic/colors.json",
+      "许可原文": "https://raw.githubusercontent.com/primer/github-vscode-theme/cd78e5e4e7bcf132a6f428ae0f32264bb1b729cf/LICENSE"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-GRUVBOX",
+    "title": "配色 · Gruvbox（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "morhetz",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 morhetz/gruvbox@ef8864bb42bf",
+    "license": "MIT/X11（上游 README 声明）。完整版权/许可通知尚未取得；PTB 独立适配，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "公开上游": "https://github.com/morhetz/gruvbox",
+      "固定色板": "https://raw.githubusercontent.com/morhetz/gruvbox/ef8864bb42bf244f0295d1c5a403b27e3d139695/colors/gruvbox.vim",
+      "许可声明": "https://raw.githubusercontent.com/morhetz/gruvbox/ef8864bb42bf244f0295d1c5a403b27e3d139695/README.md"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-LINEAR",
+    "title": "配色 · Linear（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "品牌参考：Linear",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
+    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "品牌视觉参考": "https://linear.app/brand"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-LOBSTER",
+    "title": "配色 · Lobster（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
+    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-MATERIAL",
+    "title": "配色 · Material（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "Mattia Astorino / Equinusocio（Material Theme 历史项目）",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
+    "license": "待确认：历史 Material Theme 上游已转向 Vira，当前未取得许可原文。未套用历史标签或其他同名项目许可。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "历史项目入口": "https://github.com/material-theme/vsc-material-theme",
+      "当前后继项目": "https://github.com/vira-soft/vira-assets"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-MATRIX",
+    "title": "配色 · Matrix（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
+    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-MONOKAI",
+    "title": "配色 · Monokai（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "Wimer Hazenberg（原设计）；Microsoft Corporation（公开实现）",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 microsoft/vscode@40bb6fae2075",
+    "license": "VS Code 公开实现为 MIT；经典 Monokai 原设计及 Codex 此方案许可链待确认。此项为 PTB 适配，不是 Monokai Pro。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "原作者历史": "https://monokai.pro/history",
+      "原作者Pro条件": "https://monokai.pro/contribute",
+      "公开实现": "https://raw.githubusercontent.com/microsoft/vscode/40bb6fae207507042de8b6d7b74e9aa374a212a4/extensions/theme-monokai/themes/monokai-color-theme.json",
+      "公开实现许可": "https://raw.githubusercontent.com/microsoft/vscode/40bb6fae207507042de8b6d7b74e9aa374a212a4/LICENSE.txt"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-NIGHT-OWL",
+    "title": "配色 · Night Owl（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "Sarah Drasner",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 sdras/night-owl-vscode-theme@cc291eba7976",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "公开上游": "https://github.com/sdras/night-owl-vscode-theme",
+      "固定色板": "https://raw.githubusercontent.com/sdras/night-owl-vscode-theme/cc291eba7976b20d7c66bde6883c27b902196b07/themes/Night%20Owl-color-theme.json",
+      "许可原文": "https://raw.githubusercontent.com/sdras/night-owl-vscode-theme/cc291eba7976b20d7c66bde6883c27b902196b07/LICENSE.md"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-NORD",
+    "title": "配色 · Nord（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "Sven Greb / Nord contributors",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 nordtheme/nord@1cef71605416",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "公开上游": "https://github.com/nordtheme/nord",
+      "固定色板": "https://raw.githubusercontent.com/nordtheme/nord/1cef71605416a222e57225b544540ce0fcec18d4/src/nord.css",
+      "许可原文": "https://raw.githubusercontent.com/nordtheme/nord/1cef71605416a222e57225b544540ce0fcec18d4/license"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-NOTION",
+    "title": "配色 · Notion（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "品牌参考：Notion",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
+    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "品牌视觉参考": "https://www.notion.com/"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-OG",
+    "title": "配色 · OG（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
+    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-OSCURANGE",
+    "title": "配色 · Oscurange（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
+    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-ONE",
+    "title": "配色 · One（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "GitHub Inc. / Atom contributors",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 atom/one-dark-syntax@9c96f4454362, atom/one-light-syntax@d84579027410",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "公开上游1": "https://github.com/atom/one-dark-syntax",
+      "固定色板1": "https://raw.githubusercontent.com/atom/one-dark-syntax/9c96f4454362267ac45322063e193ccf9d2debb1/styles/colors.less",
+      "许可原文1": "https://raw.githubusercontent.com/atom/one-dark-syntax/9c96f4454362267ac45322063e193ccf9d2debb1/LICENSE.md",
+      "公开上游2": "https://github.com/atom/one-light-syntax",
+      "固定色板2": "https://raw.githubusercontent.com/atom/one-light-syntax/d84579027410c576086dfca14d934c4bd74b0438/styles/colors.less",
+      "许可原文2": "https://raw.githubusercontent.com/atom/one-light-syntax/d84579027410c576086dfca14d934c4bd74b0438/LICENSE.md"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-PROOF",
+    "title": "配色 · Proof（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
+    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-RAYCAST",
+    "title": "配色 · Raycast（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "品牌参考：Raycast",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
+    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "品牌视觉参考": "https://www.raycast.com/pro"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-ROSE-PINE",
+    "title": "配色 · Rose Pine（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "mvllow / Rosé Pine contributors",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 rose-pine/rose-pine-palette@92af52b465ab",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "公开上游": "https://github.com/rose-pine/rose-pine-palette",
+      "固定色板": "https://raw.githubusercontent.com/rose-pine/rose-pine-palette/92af52b465ab6e47437aca223c9b8d3009a2023b/palette.json",
+      "许可原文": "https://raw.githubusercontent.com/rose-pine/rose-pine-palette/92af52b465ab6e47437aca223c9b8d3009a2023b/LICENSE"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-SENTRY",
+    "title": "配色 · Sentry（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "品牌参考：Sentry",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
+    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "品牌视觉参考": "https://sentry.io/"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-SOLARIZED",
+    "title": "配色 · Solarized（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "Ethan Schoonover",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 altercation/solarized@62f656a02f93",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "公开上游": "https://github.com/altercation/solarized",
+      "固定色板": "https://raw.githubusercontent.com/altercation/solarized/62f656a02f93c5190a8753159e34b385588d5ff3/README.md",
+      "许可原文": "https://raw.githubusercontent.com/altercation/solarized/62f656a02f93c5190a8753159e34b385588d5ff3/LICENSE"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-TEMPLE",
+    "title": "配色 · Temple（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
+    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-TOKYO-NIGHT",
+    "title": "配色 · Tokyo Night（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "Enkia / Tokyo Night contributors",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 tokyo-night/tokyo-night-vscode-theme@7c0f11eaef32",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "公开上游": "https://github.com/tokyo-night/tokyo-night-vscode-theme",
+      "固定色板": "https://raw.githubusercontent.com/tokyo-night/tokyo-night-vscode-theme/7c0f11eaef322f293621ca7befe462214b7ea468/themes/tokyo-night-color-theme.json",
+      "许可原文": "https://raw.githubusercontent.com/tokyo-night/tokyo-night-vscode-theme/7c0f11eaef322f293621ca7befe462214b7ea468/LICENSE.txt"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-VERCEL",
+    "title": "配色 · Vercel（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "品牌参考：Vercel",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
+    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "品牌视觉参考": "https://vercel.com/geist/introduction"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-VSCODE-PLUS",
+    "title": "配色 · VS Code Plus（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "Microsoft 名称仅作视觉参考",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
+    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "主题名称记录": "https://github.com/openai/codex/issues/15987"
+    }
+  },
+  {
+    "id": "SRC-PALETTE-XCODE",
+    "title": "配色 · Xcode（PTB 独立适配）",
+    "modules": [
+      "P04"
+    ],
+    "kind": "palette-reference-and-independent-adaptation",
+    "acknowledgement_group": "software",
+    "authors": "品牌参考：Apple / Xcode",
+    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
+    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "urls": {
+      "历史视觉参考": "https://openai.com/codex/",
+      "品牌视觉参考": "https://developer.apple.com/xcode/"
     }
   },
   {
@@ -5493,42 +5792,12 @@
     ],
     "kind": "reference-only",
     "acknowledgement_group": "academic",
-    "authors": "Thomas Drugman; Baris Bozkurt; Thierry Dutoit",
+    "authors": "Thomas Drugman；Baris Bozkurt；Thierry Dutoit",
     "version": "arXiv:2001.00840v1; deposited 2019-12-28, not a journal publication-year claim",
-    "license": "Reference and original-site link only; no paper or code redistribution",
+    "license": "",
     "urls": {
       "paper": "https://arxiv.org/abs/2001.00840v1",
       "full_text": "https://arxiv.org/html/2001.00840v1"
-    }
-  },
-  {
-    "id": "REF-WORLD-2016",
-    "title": "WORLD: A Vocoder-Based High-Quality Speech Synthesis System for Real-Time Applications",
-    "modules": [
-      "M06"
-    ],
-    "kind": "reference-only",
-    "acknowledgement_group": "academic",
-    "authors": "Masanori Morise; Fumiya Yokomori; Kenji Ozawa",
-    "version": "paper citation; implementation recorded separately as SRC-WORLD / SRC-PYWORLD",
-    "license": "paper citation only; no redistribution licensed here",
-    "urls": {
-      "paper": "https://www.jstage.jst.go.jp/article/transinf/E99.D/7/E99.D_2015EDP7457/_article"
-    }
-  },
-  {
-    "id": "REF-D4C-2016",
-    "title": "D4C, a band-aperiodicity estimator for high-quality speech synthesis",
-    "modules": [
-      "M06"
-    ],
-    "kind": "reference-only",
-    "acknowledgement_group": "academic",
-    "authors": "Masanori Morise",
-    "version": "paper citation; implementation recorded separately as SRC-WORLD / SRC-PYWORLD",
-    "license": "paper citation only; no redistribution licensed here",
-    "urls": {
-      "paper": "https://www.isc.meiji.ac.jp/~mmorise/world/publications.html"
     }
   },
   {
@@ -5539,9 +5808,9 @@
     ],
     "kind": "reference-only",
     "acknowledgement_group": "academic",
-    "authors": "Masanori Morise; Yusuke Watanabe",
+    "authors": "Masanori Morise；Yusuke Watanabe",
     "version": "literature only; no implementation included",
-    "license": "paper citation only; no redistribution licensed here",
+    "license": "",
     "urls": {
       "paper": "https://www.jstage.jst.go.jp/article/ast/39/3/39_E1779/_article/-char/en"
     }
@@ -5554,43 +5823,99 @@
     ],
     "kind": "reference-only",
     "acknowledgement_group": "academic",
-    "authors": "Manu Airaksinen; Bajibabu Bollepalli; Lauri Juvela; Zhizheng Wu; Simon King; Paavo Alku",
+    "authors": "Manu Airaksinen；Bajibabu Bollepalli；Lauri Juvela；Zhizheng Wu；Simon King；Paavo Alku",
     "version": "literature only; no implementation included",
-    "license": "paper citation only; no redistribution licensed here",
+    "license": "",
     "urls": {
       "paper": "https://www.isca-archive.org/interspeech_2016/airaksinen16b_interspeech.html"
     }
   },
   {
-    "id": "SRC-PYWORLD",
-    "title": "PyWORLD",
+    "id": "REF-M10-JORDAN-2017-MRI",
+    "title": "Examining Velopharyngeal Closure Patterns Based on Anatomic Variables",
     "modules": [
-      "M06"
+      "M10"
     ],
-    "kind": "runtime-and-method",
+    "kind": "paper",
+    "acknowledgement_group": "academic",
+    "authors": "Holly Nelson Jordan；Graham C. Schenck；Charles Ellis；Balaji Rangarathnam；Xiangming Fang；Jamie L. Perry",
+    "version": "",
+    "license": "",
+    "urls": {
+      "doi": "https://doi.org/10.1097/SCS.0000000000003284",
+      "paper": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5218844/",
+      "figure": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/6e4d/5218844/263855b1205b/nihms818229f1.jpg"
+    },
+    "citation": "Jordan, H. N., Schenck, G. C., Ellis, C., Rangarathnam, B., Fang, X., & Perry, J. L. (2017). Examining Velopharyngeal Closure Patterns Based on Anatomic Variables. Journal of Craniofacial Surgery, 28(1), 270–274. https://doi.org/10.1097/SCS.0000000000003284"
+  },
+  {
+    "id": "REF-M10-OLIVEIRA-2012-MRI",
+    "title": "An MRI study of the oral articulation of European Portuguese nasal vowels",
+    "modules": [
+      "M10"
+    ],
+    "kind": "paper",
+    "acknowledgement_group": "academic",
+    "authors": "Catarina Oliveira；Paula Martins；Samuel Silva；António Teixeira",
+    "version": "",
+    "license": "",
+    "urls": {
+      "doi": "https://doi.org/10.21437/Interspeech.2012-668",
+      "paper": "https://www.isca-archive.org/interspeech_2012/oliveira12b_interspeech.html",
+      "pdf": "https://www.isca-archive.org/interspeech_2012/oliveira12b_interspeech.pdf"
+    },
+    "citation": "Oliveira, C., Martins, P., Silva, S., & Teixeira, A. (2012). An MRI study of the oral articulation of European Portuguese nasal vowels. Proceedings of Interspeech 2012, 2690–2693. https://doi.org/10.21437/Interspeech.2012-668"
+  },
+  {
+    "id": "PKG-KATEX",
+    "title": "KaTeX",
+    "modules": [
+      "P10"
+    ],
+    "kind": "library",
     "acknowledgement_group": "software",
-    "authors": "Pyworld Contributors",
-    "version": "0.3.5; CPython 3.11 Windows wheel and WSL local source build",
+    "authors": "Khan Academy and other contributors",
+    "version": "0.19.0",
     "license": "MIT",
     "urls": {
-      "repository": "https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder",
-      "package": "https://pypi.org/project/pyworld/0.3.5/"
+      "homepage": "https://katex.org/",
+      "repository": "https://github.com/KaTeX/KaTeX",
+      "documentation": "https://katex.org/docs/security.html",
+      "license": "https://github.com/KaTeX/KaTeX/blob/v0.19.0/LICENSE"
     }
   },
   {
-    "id": "SRC-WORLD",
-    "title": "WORLD (bundled with PyWORLD)",
+    "id": "SRC-M18-ARTICULATORY-TTS-2610",
+    "title": "Articulatory Source-Filter TTS: Physically Grounded Control through Vocal Tract Kinematics",
     "modules": [
-      "M06"
+      "M18"
     ],
-    "kind": "runtime-and-method",
+    "kind": "paper",
+    "acknowledgement_group": "academic",
+    "authors": "Jesuraj Bandekar and Shinji Watanabe and Prasanta Kumar Ghosh",
+    "version": "arXiv:2610.00735v1; delivered separately from executable",
+    "license": "CC BY 4.0",
+    "urls": {
+      "paper": "https://arxiv.org/abs/2610.00735v1",
+      "pdf": "https://arxiv.org/pdf/2610.00735v1",
+      "license": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  },
+  {
+    "id": "SRC-M18-PYPDF",
+    "title": "pypdf",
+    "modules": [
+      "M18"
+    ],
+    "kind": "runtime-dependency",
     "acknowledgement_group": "software",
-    "authors": "Masanori Morise",
-    "version": "Source bundled in PyWORLD 0.3.5 sdist; upstream commit not embedded",
+    "authors": "pypdf contributors",
+    "version": "6.19.0",
     "license": "BSD-3-Clause",
     "urls": {
-      "repository": "https://github.com/mmorise/World",
-      "paper": "https://doi.org/10.1587/transinf.2015EDP7457"
+      "release": "https://pypi.org/project/pypdf/6.19.0/",
+      "repository": "https://github.com/py-pdf/pypdf",
+      "license": "https://github.com/py-pdf/pypdf/blob/6.19.0/LICENSE"
     }
   }
 ]

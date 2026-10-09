@@ -1,0 +1,1990 @@
+{
+  "schemaVersion": "ptb-manual-chapter/1",
+  "id": "getting-started",
+  "title": "开始使用与共同操作",
+  "body": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-section-01",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "这本手册怎样使用"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "从首页选择工具，就可以开始录音、分析、合成、标注或实验。需要读论文时，打开语音学论文精读。先按对应章节准备材料，处理后核对结果，再保存正式文件。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "第一次使用，先认清左侧工具导航、顶部标签和左下角的设置、使用说明。说明书左侧可以选章节、找小节和搜索操作词。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-first-run",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "第一次打开工作台"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在 Windows 中启动免安装 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "PhoneticToolbox.exe",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，或从安装后的开始菜单快捷方式打开。单文件程序首次启动可能需要等待资源展开与校验；看到“从这里开始”的首页后再选工具。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "浏览首页三组工具和“最近使用”。已知名称时，在左侧“搜索工具…”输入工具名或 M01–M18 编号；若无匹配，界面会显示“没有匹配的工具”。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击首页卡片或左侧导航里的工具。顶部出现同名标签；回到“首页”不会关闭工具。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在模块页面内点击“帮助”，先核对输入要求与保存步骤，返回模块后再导入自己的材料。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "getting-started-home-figure",
+          "assetId": "home-manual-expanded-light-scaled-r20261007",
+          "caption": "首页的工具分类、导航与底部入口。只有讲解导航的这张图展开侧栏。",
+          "width": "100%",
+          "align": "center",
+          "alt": "首页的工具分类、导航与底部入口。只有讲解导航的这张图展开侧栏。"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-section-02",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "从工具进入帮助"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "从首页卡片、左侧导航或“最近使用”打开目标模块。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在"
+                  },
+                  {
+                    "type": "text",
+                    "text": "模块页面内",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "点击“帮助”。工作台切换到“使用说明”标签并打开对应章节；生理参数合成的模型页在参数面板操作区提供入口。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在说明书左侧点章节或小节，正文滚动到目标位置并短暂高亮。也可用“搜索说明书”输入控件名或操作词；窄窗先点“目录与搜索”。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "若从模块进入说明书，点击阅读区上方的“返回＋模块名”回到工具。直接点顶部原模块标签也可切回，切换本身不会提交任务或导出。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "从首页横幅“第一次使用？了解工作台的基本操作”进入本章。左下角“使用说明”在当前模块打开对应章节，在首页打开本章。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "各模块都有页内帮助入口。章节加载失败时点重新加载，再试一次。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "getting-started-manual-figure",
+          "assetId": "manual-reader-light-scaled-r20261007-v2-728cffb1",
+          "caption": "左侧选择章节和小节，右侧阅读正文。搜索可查找工具、操作和参数。",
+          "width": "100%",
+          "align": "center",
+          "alt": "应用内使用说明章节目录、搜索和正文。"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-section-03",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "图、音频与表格"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "图片放在对应步骤旁，点击可放大。截图默认浅色，重点位置用局部图或红圈、红框标出。切换阅读主题后，截图仍保留拍摄时的颜色。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "例音只在需要比较原音和实际处理结果时出现，点击播放器才加载。播放另一段会暂停上一段；切换章节或离开说明书会停止播放。录音或采集时先结束采集，再试听例音。部分自然录音只随软件版提供，缺素材时播放器会显示提示。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-section-04",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "工作台的共同操作"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "首页用于选择工具，左侧导航用于随时切换，顶部标签承载已打开页面。多数模块在页面上方提供文件与任务操作、帮助及“方法与引用”。采用分栏布局的模块通常有独立滚动的输入栏、工作区和任务记录栏。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-section-05",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "打开、切换与关闭标签"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击工具名称打开模块；再次点击同一工具会切换到已有标签。顶部“首页”“设置”“使用说明”和模块标签可直接切换。切换时正在播放的声音会停止。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "编辑后留意标签名旁的圆点，它表示当前页有未保存内容。要长期保留时，先按该页的保存或导出按钮，确认保存对象。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击标签关闭按钮；如果有未保存编辑，按对话框选择保存、放弃或取消。取消会保留页面，保存失败也会留在页面并提示原因。录音、TextGrid、感知实验及未生成的绘图笔迹有特殊关闭保护，以当前提示为准。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "重开模块后检查草稿与处理记录。关闭标签不等于删除已提交结果；尚未导出的内部结果仍受缓存保留期限约束。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-section-06",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "调整布局"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击左侧搜索框旁的“收起侧栏”，可给工作区让出空间；再次点击“展开侧栏”恢复。工具导航与主区之间的分界线也可拖动。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在采用分栏布局的模块，拖动文件栏或记录栏与中央工作区的分界线调整宽度。若右栏有收起按钮，可暂时收起该模块的记录栏。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "窗口较窄时在所在内容栏滚动，必要时扩大窗口或收起侧栏。栏宽偏好会记忆；可拖范围和折叠方式依模块而异。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-section-07",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "选区、时间窗与试听"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "时间窗决定图上看到哪段，选区决定本次试听或处理哪段。拖选后核对起止时间，再看按钮写的是播放选区、当前视野，还是整段。"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "加载音频后先确认文件、时长和声道。在支持选区的波形上拖动选择片段；有起止时间输入时可用数值精确设定。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "按该页的缩放、平移或适合窗口控件查看细节。不同图窗手势不完全相同，合成曲线与 EGG 图以各自章节说明为准。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击播放或停止按钮核对声音。换文件或标签会停止旧声音。按钮被禁用时先检查输入是否载入、任务是否仍在运行、选区是否有效。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-appearance",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "主题、字号与字体"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击左下角“设置”。在“配色方案”中选配色，再用“显示模式”的“跟随系统”“浅色”“深色”切换明暗；页面即时变化。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "使用“页面缩放”的加减按钮以 10% 步长调整整个界面，或点“恢复 100%”。“按钮高亮”改变按钮外观，“波形线颜色”影响支持该偏好的波形。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在“字体”区域设置“中文字体”“英文与数字字体”“代码与等宽字体”“正文基础字号（px）”。看预览后点“应用字体”；所有 IPA 音标固定使用 Doulos SIL。图表与导出可跟随全局字体或单独设置。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "返回模块检查表单与图窗。主题、页面缩放即时保存；字体要点击“应用字体”才生效。关闭设置时若有字体编辑，可应用、放弃或取消关闭。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "getting-started-theme-figure",
+          "assetId": "getting-started-theme-and-zoom-detail-scaled-r20261007",
+          "caption": "显示模式切换浅色和深色；页面缩放调整整个界面，恢复 100% 可回到默认比例。",
+          "width": "100%",
+          "align": "center",
+          "alt": "显示模式切换浅色和深色；页面缩放调整整个界面，恢复 100% 可回到默认比例。"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-section-08",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "选择正确的工具"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "首页三组名称用于定位。想计算参数，从“参数估计”开始；已有参数表需要对照显示时，进入“参数显示”。采集、合成、标注和实验各有对应工具。下表按研究目标列出入口，进入后再阅读对应章节的准备条件。"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "研究目标"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "建议模块"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "继续阅读"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "录制并整理语料"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "录音 M16"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "输入设备、任务清单、工程与导出"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "从音视频提取唇形"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "唇形提取 M05"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "视频导入、录制与同步偏移"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "计算声学参数与EGG联合结果"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "参数估计 M01"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "文件、分析设置、联合 EGG 与批次"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "查看已有参数并排作图"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "参数显示 M02"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "曲线分配、时间轴与导图"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "观察EGG周期、CQ/SQ和事件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "EGG信号分析 M03"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "声道角色、四图、批次与逆滤波"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "短时谱包络分析"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "LPC谱图 M04"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "选区、阶数与导出"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "编辑声学参数合成音频"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "声学参数合成 M06"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Klatt参数曲线、元音及参数提取"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "调整生理构形并试听"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "生理参数合成 M10"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "模型页可进入；说明书正文待补"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "构造发声连续统"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "发声类型合成 M07"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "源/目标、处理步数与逐版本试听"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "操控时长和音高"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "变速变调 M08"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "手绘F0、拐点连接与批量处理"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "从语谱图或绘制频谱生成声音"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "语谱图转音频 M09"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "标定、原相位编辑与图片重建"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "输入和认识音标"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "国际音标表Plus M17"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "IPA/extIPA/VoQS及文本导出"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "汉字转写音标"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "汉字转国际音标 M13"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "逐字读音、标准、布局与图片"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "已有文本自动对齐音频"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "MFA自动标注 M11"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "模型词典、检查与TextGrid输出"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "编辑标注与同步唇形"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "TextGrid标注 M12"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "层、区间、边界和偏移"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "整理音系及合并分析"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "音系归纳 M14"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "字表、归并和三文件导出"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "运行听辨与反应实验"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "感知实验 M15"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "刺激、预检、被试流程与结果导出"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "caption": "从研究目标选择工具"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "M10 的模块入口可用，但本手册正文仍待编写。M15 已有感知实验章节；M05 的真人视频演示待补，文字步骤可先阅读。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-section-09",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "文件、保存与研究复现"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "文件进入模块、任务生成内部结果、显式导出正式文件，是三个不同步骤。开始前准备输入副本和可写结果位置，核对模块接受的格式和声道；计算后检查处理记录与导出提示。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-section-10",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "桌面文件与网页项目"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在桌面版按模块实际显示的“打开音频目录”“导入音频”“选择图片目录”等按钮选输入。选择后查看文件列表、时长或预览；选中输入并不表示已经提交计算。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "若模块有“输出位置”或“选择结果目录”，提交任务前检查位置和文件名规则。按钮不可用时，先完成文件载入、预检或参数填写。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "浏览器项目按当前账号的项目资源与权限工作，文件入口和原生能力可能不同。以网页当前显示的“添加文件”“导入”等按钮及该模块网页说明为准。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-section-11",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "草稿、任务结果和导出文件"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "“保存草稿”保存该模块声明的编辑状态；“处理记录”保存已提交任务的状态和内部结果；“保存结果”或“导出”才产生应在目标目录核对的正式研究文件。音频与标注原文件的覆盖规则依模块而异。"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "任务前记下输入、算法、参数与输出位置。草稿保存不会自动生成音频、图片或表格。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "任务结束后在“处理记录”“历史”等对应区域核对状态、参数快照与结果。失败时保留错误文字，修正输入后按模块说明重试。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "需要长期保留时显式导出并在目标目录检查文件名、格式和内容。比较研究批次时保留源录音、TextGrid、模型或词典标识、实际设置与软件版本。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-section-12",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "方法、引用与问题处理"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "模块操作栏的“方法与引用”列出论文、实现和依赖来源。方法出处、具体代码来源与软件许可应分别核对。手册示例展示可观察的界面和文件结果；实际语料准确率、自然度及设备时延仍需另行评估。"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "出现问题时记下模块名、输入类型、点击按钮、参数和原样错误提示。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "检查文件能否预览、所需模型或设备是否可用、输出位置是否可写，再按模块章节的恢复步骤操作。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "如果已产生部分结果，先查看处理记录与导出文件，再决定是否重试。录音、唇形与感知实验的中断恢复以各自章节为准。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-installed-update",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "安装、更新与设置保留"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "本说明书对应 "
+          },
+          {
+            "type": "text",
+            "text": "3.0.0-preview.1",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。交付的免安装 "
+          },
+          {
+            "type": "text",
+            "text": "PhoneticToolbox.exe",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 是单个可双击启动的应用；免安装 ZIP 内含同一应用和标识文件，解压后运行 EXE。安装版 "
+          },
+          {
+            "type": "text",
+            "text": "setup.exe",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 将同一应用安装到当前用户目录，通常不需要管理员权限。单文件首次启动需临时展开资源，请等待首页出现。MFA 独立环境、声学模型和词典需按 M11 章节另行准备。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "两种程序包使用固定的 Windows 用户数据位置：任务与缓存位于 "
+          },
+          {
+            "type": "text",
+            "text": "%LOCALAPPDATA%\\PhoneticToolbox\\v3",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，界面设置与本机草稿位于 "
+          },
+          {
+            "type": "text",
+            "text": "%LOCALAPPDATA%\\PhoneticToolbox-v3\\workbench",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。换版前先保存、导出工作。本机隔离测试已验证两种换版后主题、草稿和工程标记保留；另一台实体电脑上的全部环境尚未验收。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-update-check",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "在桌面版检查更新"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击左下角“检查更新”。需要时设置“下载来源”（自动选择、国内服务器、GitHub）、“版本通道”（Preview 或稳定版）和“启动时检查更新”。网页端会提示在线更新仅在桌面版提供。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击面板的“检查更新”，阅读当前版本、两个来源的状态和候选版本说明。若显示无可用发布或来源错误，稍后重试；按钮存在不表示已有新版。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "只有出现适用于当前包类型的新版本时，才点击“下载更新”并确认。等待大小与 SHA-256 校验完成；下载失败可在网络恢复后重试。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "仅在界面显示“退出并更新”时，先停止录音或实验、保存草稿并导出重要结果，再确认退出。若要求处理未保存标签，完成保存或取消换版。重新打开后核对版本、设置、项目和结果。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "截至本版编写时，公共 "
+          },
+          {
+            "type": "text",
+            "text": "latest",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 与 GitHub 发行渠道尚未发布此版本，在线检查可能没有候选包。本机隔离换版验证不能推定公开渠道已有可用更新。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-retention",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "处理结果保留期限"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "桌面版“设置”中的“本机存储与自动清理”默认清理超过 30 天的未导出处理结果缓存；已导出的应用内部副本默认保留 7 天。期限按生成、最近读取或成功导出等可用记录计算；旧结果缺可靠时间时从首次登记开始。活动任务及依赖项会保留，唇形录制结果有额外保护。"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击“设置”，滚动到“本机存储与自动清理”，查看处理结果缓存的大小和数量。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "按需关闭“自动清理过期的处理结果缓存”，或调整“未导出结果保留”“已导出副本的缓存保留”；两项都填写 1–3650 天整数。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击“保存清理设置”并确认成功提示。用“刷新占用”查看最新用量；如需立刻执行到期缓存清理，可点“清理已到期缓存”并阅读结果。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "长期成果应先在模块中显式导出并检查正式文件。原始输入、正式导出、录音工程、感知实验项目和 TextGrid 标注不属于自动结果缓存清理。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "crossReference",
+        "attrs": {
+          "chapterId": "settings",
+          "targetId": "settings-retention",
+          "label": "查看清理设置与更新选项"
+        }
+      }
+    ]
+  },
+  "status": "reviewed"
+}

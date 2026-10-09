@@ -6,7 +6,7 @@ import type {Workspace} from '../../state/workspace.ts';
 import {overlayPlot,annotationRuns,type PlotGroup,type OverlayCurve} from './state.ts';
 import {styledSvg,editableSvg} from '../../design/svg-fonts.ts';
 import {wholeFigurePng,currentFigurePng,downloadImage} from './export.ts';
-const props=defineProps<{table:ParameterTable;group:PlotGroup;wave:Workspace;waveform:()=>HTMLElement|undefined;timeAxisInsets?:{left:number;right:number}}>();
+const props=defineProps<{table:ParameterTable;group:PlotGroup;wave:Workspace;waveform:()=>HTMLElement|undefined;timeAxisInsets?:{left:number;right:number};pending?:boolean}>();
 const exporting=ref(false);
 const format=ref<'png'|'svg'>('png');
 const svg=ref<SVGSVGElement>(),surface=ref<HTMLElement>(),error=ref(''),measuredWidth=ref(600);
@@ -38,14 +38,14 @@ function down(event:PointerEvent){if(event.button!==0)return;const rect=svg.valu
 function move(event:PointerEvent){if(!drag||drag.id!==event.pointerId)return;if(drag.select){props.wave.start=Math.min(drag.time,time(event));props.wave.end=Math.max(drag.time,time(event));}else{const rect=svg.value!.getBoundingClientRect();const dx=(event.clientX-drag.x)/rect.width*chartWidth.value/plotWidth.value*span.value;props.wave.offset=Math.max(0,Math.min(duration.value-span.value,drag.offset-dx));}}
 function wheel(event:WheelEvent){if(!event.ctrlKey||!event.deltaY)return;event.preventDefault();const rect=svg.value!.getBoundingClientRect();const fraction=Math.max(0,Math.min(1,((event.clientX-rect.left)/rect.width*chartWidth.value-plotLeft.value)/plotWidth.value));const anchor=start.value+fraction*span.value;props.wave.zoom=Math.max(1,Math.min(Math.max(1,duration.value/.01),props.wave.zoom*(event.deltaY<0?1.25:.8)));props.wave.offset=Math.max(0,Math.min(duration.value-duration.value/props.wave.zoom,anchor-fraction*duration.value/props.wave.zoom));}
 async function save(){
- if(exporting.value)return;exporting.value=true;error.value='';
+ if(exporting.value||props.pending)return;exporting.value=true;error.value='';
  try{if(format.value==='png'){downloadImage(await currentFigurePng(svg.value!),props.group.title+'.png');return;}
   const clone=styledSvg(svg.value!);clone.style.width=chartWidth.value+'px';clone.style.height=chartHeight.value+'px';clone.setAttribute('width',String(chartWidth.value));clone.setAttribute('height',String(chartHeight.value));
   downloadImage(new Blob([await editableSvg(clone)],{type:'image/svg+xml;charset=utf-8'}),props.group.title+'.svg');
  }catch(e){error.value=e instanceof Error?e.message:'图片导出失败，请重试。';}finally{exporting.value=false;}
 }
 async function saveWhole(){
- if(exporting.value)return;error.value='';exporting.value=true;
+ if(exporting.value||props.pending)return;error.value='';exporting.value=true;
  try{const waveform=props.waveform();if(!svg.value||!waveform)throw Error('波形尚未就绪。');
   const name=(props.wave.asset?.name??'参数').replace(/\.wav$/i,'')+'-'+props.group.title;
   const blob=await wholeFigurePng({chart:svg.value,waveform,title:name,start:start.value,end:start.value+span.value,plotLeft:plotLeft.value,plotRight:plotRight.value});
@@ -53,8 +53,8 @@ async function saveWhole(){
  }catch(e){error.value=e instanceof Error?e.message:'整幅图片导出失败，请重试。';}finally{exporting.value=false;}
 }
 </script>
-<template><section class="parameter-figure">
-<header class="section-title"><div><h3>{{group.title}}</h3><small>{{chart.curves.length}} 条曲线叠加 · {{chart.dual?'自动双纵轴':'共用纵轴'}}</small></div><div><slot/><select v-model="format" :aria-label="group.title+'图片格式'" class="image-format"><option value="png">PNG</option><option value="svg">SVG</option></select><button class="primary" @click="save" :disabled="!group.parameters.length||exporting" :title="'仅保存参数图 '+format.toUpperCase()">保存当前图</button><button class="primary" @click="saveWhole" :disabled="!group.parameters.length||exporting" title="白底 300 dpi，包含波形、已开启语谱图及此参数图">{{exporting?'正在生成 PNG…':'保存整幅 PNG'}}</button></div></header>
+<template><section class="parameter-figure" :aria-busy="!!pending">
+<header class="section-title"><div><h3>{{group.title}}</h3><small>{{pending?'正在读取当前时间窗…':chart.curves.length+' 条曲线叠加'}} · {{chart.dual?'自动双纵轴':'共用纵轴'}}</small></div><div><slot/><select v-model="format" :aria-label="group.title+'图片格式'" class="image-format"><option value="png">PNG</option><option value="svg">SVG</option></select><button class="primary" @click="save" :disabled="!group.parameters.length||exporting||pending" :title="'仅保存参数图 '+format.toUpperCase()">保存当前图</button><button class="primary" @click="saveWhole" :disabled="!group.parameters.length||exporting||pending" title="白底 300 dpi，包含波形、已开启语谱图及此参数图">{{exporting?'正在生成 PNG…':'保存整幅 PNG'}}</button></div></header>
 <p v-if="error" role="alert">{{error}}</p><div ref="surface" class="plot-surface">
 <div v-if="!group.parameters.length" class="empty-plot"><strong>{{group.title}} · 待分配参数</strong><p>勾选参数并分配到此图窗后，多条曲线将在同一绘图区叠加。</p></div>
 <svg v-else ref="svg" class="parameter-chart" :viewBox="'0 0 '+chartWidth+' '+chartHeight" :data-plot-left="plotLeft" :data-plot-right="plotRight" :style="{height:chartHeight+'px',minWidth:Math.ceil(340*fontScale)+'px'}" role="img" :aria-label="group.title+'叠加参数曲线'" @pointerdown="down" @pointermove="move" @pointerup="move($event);drag=null" @pointercancel="drag=null" @wheel="wheel" @dblclick="wave.zoom=1;wave.offset=0">
@@ -78,5 +78,5 @@ async function saveWhole(){
 </svg></div><p v-if="group.parameters.length" class="plot-help">拖动选区 · Shift＋拖动平移 · Ctrl＋滚轮缩放时间轴 · 双击全长<span v-if="chart.dual">。双轴沿用 v2 的量级判定；图例标明所属纵轴，原数值不归一化。</span></p></section></template>
 <style scoped>
 .image-format{width:auto;max-width:90px}
-.parameter-figure{border:1px solid var(--border);border-radius:8px;background:var(--panel);padding:10px;margin:10px 0;min-width:0}.parameter-figure>.section-title{flex-wrap:wrap;margin-bottom:8px}.section-title>div{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.section-title h3{margin:0;font-size:15px}.section-title small{color:var(--muted);font-size:12px}.plot-surface{width:100%;min-width:0;overflow-x:auto}.parameter-chart{display:block;width:100%;min-width:340px;max-width:none;background:var(--panel);touch-action:none;user-select:none;font-family:var(--font-figure);cursor:crosshair}.empty-plot{min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--muted);border:1px dashed var(--border);border-radius:5px;background:var(--app)}.empty-plot strong{font-size:16px;color:var(--text)}.empty-plot p{max-width:340px;line-height:1.7}.plot-help{font-size:12px;color:var(--muted);line-height:1.6;margin:10px 0 0}
+.parameter-figure{border:1px solid var(--border);border-radius:8px;background:var(--panel);padding:10px;margin:10px 0;min-width:0}.parameter-figure>.section-title{flex-wrap:wrap;margin-bottom:8px}.section-title>div{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.section-title h3{margin:0;font-size:1.071429rem}.section-title small{color:var(--muted);font-size:0.857143rem}.plot-surface{width:100%;min-width:0;overflow-x:auto}.parameter-chart{display:block;width:100%;min-width:340px;max-width:none;background:var(--panel);touch-action:none;user-select:none;font-family:var(--font-figure);cursor:crosshair}.empty-plot{min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--muted);border:1px dashed var(--border);border-radius:5px;background:var(--app)}.empty-plot strong{font-size:1.142857rem;color:var(--text)}.empty-plot p{max-width:340px;line-height:1.7}.plot-help{font-size:0.857143rem;color:var(--muted);line-height:1.6;margin:10px 0 0}
 </style>

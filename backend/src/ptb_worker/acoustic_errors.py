@@ -22,7 +22,7 @@ ACOUSTIC_ERRORS=M11_ERRORS | M14_ERRORS | frozenset(f'analysis_{stage}_failed' f
     'egg_runtime_unavailable','egg_runtime_mismatch','egg_input_budget','egg_stereo_required',
     'egg_sample_rate','egg_invalid_roi','egg_inverse_budget','egg_incomplete_export',
     'egg_filter_failed','egg_inverse_unavailable','egg_pitch_failed','egg_reaper_unavailable','egg_reaper_failed',
-    'invalid_spectrogram_image','invalid_spectrogram_config','invalid_spectrogram_result','spectrogram_budget','invalid_image_corners',
+    'invalid_spectrogram_audio','invalid_spectrogram_image','invalid_spectrogram_config','invalid_spectrogram_result','spectrogram_budget','invalid_image_corners',
     'invalid_audio','invalid_textgrid','invalid_lip','analysis_sample_limit',
     'analysis_output_limit','analysis_resource_limit','no_parameter_frames',
     'deadline_exceeded','invalid_segment_input','segment_budget_exceeded',
@@ -57,10 +57,10 @@ def public_error(error):
 
 # M06 fixed child/domain errors; paths and exception text are not exposed.
 ACOUSTIC_ERRORS |= {'m06_invalid_f0_method','m06_reaper_unavailable','m06_reaper_failed'}
-ACOUSTIC_ERRORS |= {'m06_invalid_render','m06_method_action_mismatch','m06_world_unavailable',
-    'm06_world_version','m06_world_input_range','m06_psola_f0_range','m06_resynthesis_pitch_range',
-    'm06_resynthesis_duration','m06_world_matrix_budget','m06_invalid_output_length','m06_resynthesis_source_mismatch','m06_psola_no_voiced'}
+ACOUSTIC_ERRORS |= {'m06_removed_synthesis_method','m06_removed_f0_method'}
 ACOUSTIC_ERRORS |= {"m06_invalid_config","m06_invalid_sequence","m06_invalid_ipa","m06_empty_sequence", "m06_admission_budget","m06_input_budget","m06_input_changed","m06_audio_decode_failed","m06_execution_failed","m06_invalid_output","m06_invalid_bundle","m06_output_hash","m06_incomplete_output","m06_output_budget","m06_timeout"}
 
 from .m07_errors import ERRORS as M07_ERRORS
 ACOUSTIC_ERRORS |= M07_ERRORS
+
+ACOUSTIC_ERRORS |= {"m01_duration_limit","m01_invalid_source","m01_channel_invalid","m01_egg_filter_range","m01_frame_budget", "m01_output_budget","m01_invalid_output","m01_column_changed","m01_time_order","m01_runtime_not_admitted","m01_process_failed"}

@@ -211,7 +211,7 @@ tools=section('voqs','scope','带标签的大括号和数字','大括号界定�
 for n,z in [('1','较弱'),('2','中等'),('3','较强')]:add('voqs',tools,n,z+'程度','degree '+n,f'附在音质标签旁表示相对{z}的程度。原表不把这些数字规定为统一声学量或临床量表分数。')
 for c,z in [('{','左大括号'),('}','右大括号')]:add('voqs',tools,c,z,'scope brace','带标签大括号界定音质影响的连续范围，左右范围标签应相互对应。')
 add('voqs',tools,'{}','空范围','empty scope', '用来构造带音质标签的作用范围。',mode='paired-span',prefix='{',suffix='}',display='{…}',usage='包住选区；没有选区时，光标放在括号中间。')
-add('voqs',tools,'{V!  V!}','糙声范围','harsh voice span','以糙声标签界定其作用片段；用户可自由修改标签和程度。',mode='paired-span',prefix='{V! ',suffix=' V!}',display='{V! … V!}')
+add('voqs',tools,'{V!  V!}','糙声范围','harsh voice span','以糙声标签界定其作用片段；可按转写需要修改标签和程度。',mode='paired-span',prefix='{V! ',suffix=' V!}',display='{V! … V!}')
 add('voqs',tools,'{3V! ˈvɛɹi ˈhɑ˞ʃ ˈvɔɪs 3V!}','强糙声（原表例句片段）','degree 3 harsh voice example','从原表底部完整例句截取的强糙声范围；两端用数字 3 标记较强程度。',example=True)
 add('voqs',tools,'[ˈnɔ˞məl ˈvɔɪs {3V! ˈvɛɹi ˈhɑ˞ʃ ˈvɔɪs 3V!} {L̝ 1V! ˈlɛs ˈhɑ˞ʃ ˈvɔɪs wɪð ˈɹeɪzd ˈlæɹɪŋks 1V! L̝}]','音质范围（原表完整例句）','complete labelled-brace example','原表底部例句先给常态浊声，再给较强糙声，最后组合升喉位和较弱糙声。不同维度可以组合，实际生理兼容性需依据材料。',example=True,display='[ˈnɔ˞məl …{3V!…}{L̝ 1V!…}]',usage='按钮显示紧凑预览。点击输入原表底部完整例句，包含方括号、重音和两个完整的带标签范围。')
 

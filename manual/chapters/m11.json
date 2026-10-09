@@ -1,0 +1,3529 @@
+{
+  "schemaVersion": "ptb-manual-chapter/1",
+  "id": "m11",
+  "title": "MFA 自动标注",
+  "moduleId": "M11",
+  "summary": "准备配套环境、模型、词典和转写，完成资源检查、对齐、取消与恢复，保存 TextGrid 和溯源文件后人工复核。",
+  "body": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-purpose",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "用途与输入准备"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "MFA 自动标注把"
+          },
+          {
+            "type": "text",
+            "text": "已有转写与录音",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "强制对齐，生成词和音素时间边界的 TextGrid。适合已经知道录音内容、需要初步标注的语料。词层的单位由转写分词和词典决定。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "使用前核对文字，完成后检查边界。"
+          },
+          {
+            "type": "text",
+            "text": "自动边界需要人工复核。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218",
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 本模块不生成语音识别转写。"
+          }
+        ]
+      },
+      {
+        "type": "crossReference",
+        "attrs": {
+          "chapterId": "m12",
+          "targetId": "m12-purpose",
+          "label": "继续阅读 TextGrid标注与人工复核"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "当前本地流程使用 "
+          },
+          {
+            "type": "text",
+            "text": "Windows x86_64 的 MFA 3.3.8",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 和 CPU。主程序不附带完整 MFA 环境、模型或词典，首次使用需单独准备并检查。资源就绪后，本地对齐可离线运行。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-preparation",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "输入准备"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "先用一份短 WAV 和同名 LAB/TXT 跑通流程。试听录音，核对漏词、重复词及未读出的文字。转写只写实际内容，建议保存为 "
+          },
+          {
+            "type": "text",
+            "text": "UTF-8",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，备注另存。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-corpus",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "音频与转写的配对"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "每份 WAV 配一份"
+          },
+          {
+            "type": "text",
+            "text": "同目录、同基本名",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "的 LAB、TXT 或 TextGrid，例如 "
+          },
+          {
+            "type": "text",
+            "text": "sample.wav",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 配 "
+          },
+          {
+            "type": "text",
+            "text": "sample.lab",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。不同说话人子目录可保留同名文件。"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "text"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "speaker01/\n  sample.wav\n  sample.lab\nspeaker02/\n  sample.wav\n  sample.lab"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "单任务最多 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "100 份 WAV",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，每份最多 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "120 秒",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，接受单/双声道，总输入最多 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "64 MB（64,000,000 B）",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。超限时分批或自行切分并准备对应转写。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "目录读取最多 10,000 条目，单份转写非空且不超过 2 MB。相对 WAV 路径最多 110 个 UTF-8 字节，路径提示超长时选更具体的目录或缩短语料副本路径。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "自动 · 唯一同名转写",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "要求每份 WAV 只有一个候选。LAB、TXT、TextGrid 共存时，在"
+          },
+          {
+            "type": "text",
+            "text": "转写来源",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "中明确选一种。"
+          },
+          {
+            "type": "text",
+            "text": "更改来源后，必须重新读取目录或导入文件。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 所选格式缺失时不会改用另一格式。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "TextGrid 可使用独立转写区间层。若没有可用独立转写层，且只有一个非空 "
+          },
+          {
+            "type": "text",
+            "text": "words",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 层，程序会按顺序取其词标签重新对齐，"
+          },
+          {
+            "type": "text",
+            "text": "原 words 边界不约束新结果。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218",
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " "
+          },
+          {
+            "type": "text",
+            "text": "phones",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 层不能作词转写。原文件保留。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-interface",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "工作台与初始配置"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "左栏",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：选择环境、模型、词典，检查新资源，设置 Beam 和 Retry beam。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "组件、资源与校验信息",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "可查看版本及摘要。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "中区",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：选转写来源，核对文件清单和组数，选择输出目录。清单无逐行勾选，提交包含全部已读入语料。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "右栏",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：运行或取消任务，选择历史任务、刷新状态、查看日志及保存成果。顶部另有"
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存参数草稿",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "、"
+                  },
+                  {
+                    "type": "text",
+                    "text": "帮助",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "和"
+                  },
+                  {
+                    "type": "text",
+                    "text": "方法与引用",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m11-figure-initial-workbench",
+          "assetId": "m11-overview-light-scaled-r20261007",
+          "caption": "MFA 工作台初始配置。左栏准备环境、模型与词典，中区读取配对语料，右栏查看任务和成果。",
+          "alt": "最大化 MFA 自动标注初始工作台，环境与模型未选择，语料及结果为空，Beam 100 与 Retry beam 400。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-resources",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "选择并检查运行环境、模型和词典"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "模型与词典需要配套，转写还要与词典词条一致。"
+          },
+          {
+            "type": "text",
+            "text": "词条未收录",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "和"
+          },
+          {
+            "type": "text",
+            "text": "音素不兼容",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "是两类错误，文件名相近不能证明兼容。"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m11-model-dictionary-table",
+          "caption": "普通话模型、词典与转写的配套关系"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "转写"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "声学模型"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "发音词典"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "填写方式"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "汉字"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "mandarin_mfa.zip",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "mandarin_mfa.dict",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "使用该词典收录的汉字词条，检查分词。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "拼音"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "mandarin.zip",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "指定的 "
+                      },
+                      {
+                        "type": "text",
+                        "text": "mandarin_pinyin_tab.dict",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "拼音和数字声调，词条之间用空格，例如 "
+                      },
+                      {
+                        "type": "text",
+                        "text": "dai1 dai1 tai2 tai2 tai1 tai1",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": "。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "指定拼音词典不能与 mandarin_mfa.zip 混配。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 更换词典时查其第一列词条，确认 "
+          },
+          {
+            "type": "text",
+            "text": "ü",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "/"
+          },
+          {
+            "type": "text",
+            "text": "v",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、轻声、大小写和分词写法。V2 的 "
+          },
+          {
+            "type": "text",
+            "text": "lv4 se4 de5 ye4 zi5",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 只适用于对应词典。中英混读也需要词条覆盖和兼容音素。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-resource-check",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "导入并检查新资源"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在"
+                  },
+                  {
+                    "type": "text",
+                    "text": "运行环境",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "中选已检查环境。首次为空时，展开"
+                  },
+                  {
+                    "type": "text",
+                    "text": "组件安装与环境检查",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，在"
+                  },
+                  {
+                    "type": "text",
+                    "text": "已有环境 / auto_alignment",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "处点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "选择",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，指定环境根目录。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "上方"
+                  },
+                  {
+                    "type": "text",
+                    "text": "声学模型",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "下拉框选"
+                  },
+                  {
+                    "type": "text",
+                    "text": "导入其他声学模型…",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，再从"
+                  },
+                  {
+                    "type": "text",
+                    "text": "发音词典",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "导入配套词典。选入后显示"
+                  },
+                  {
+                    "type": "text",
+                    "text": "待检查",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，开始对齐暂不可用。取消文件对话框会保留原选择。"
+                  }
+                ],
+                "attrs": {
+                  "id": "m11-resource-pending-step"
+                }
+              },
+              {
+                "type": "image",
+                "attrs": {
+                  "id": "m11-figure-pending-resources",
+                  "assetId": "m11-pending-resources-light-scaled-r20261007",
+                  "caption": "顶部导入两份新资源后显示待检查。旧的已应用组合仍保留，检查通过前暂停提交对齐。",
+                  "alt": "最大化 MFA 工作台，声学模型与发音词典显示待检查，上方有检查并应用和取消选择按钮，开始对齐禁用。",
+                  "width": "100%",
+                  "align": "center"
+                }
+              },
+              {
+                "type": "image",
+                "attrs": {
+                  "id": "m11-resource-check-detail-figure",
+                  "assetId": "m11-resource-check-detail-scaled-r20261007",
+                  "caption": "红框中的模型和词典需要配套。选好后按检查并应用所选资源，再开始对齐。",
+                  "alt": "红框中的模型和词典需要配套。选好后按检查并应用所选资源，再开始对齐。",
+                  "width": "100%",
+                  "align": "center"
+                }
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "检查并应用所选资源",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，等待版本、依赖和资源检查及真实小任务结束。首次检查可能较慢，请稍候。"
+                  }
+                ],
+                "attrs": {
+                  "id": "m11-resource-check-step"
+                }
+              },
+              {
+                "type": "image",
+                "attrs": {
+                  "id": "m11-figure-check-running",
+                  "assetId": "m11-check-running-light-scaled-r20261007",
+                  "caption": "检查中请等待真实环境及兼容性验证结束，再根据检查结果继续。",
+                  "alt": "最大化 MFA 工作台正在检查已选模型与词典，资源及提交控件暂时禁用。",
+                  "width": "100%",
+                  "align": "center"
+                }
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "通过后核对"
+                  },
+                  {
+                    "type": "text",
+                    "text": "已检查并应用",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "提示和模型、词典名称。待检查提示消失，组合自动登记并记住。"
+                  }
+                ],
+                "attrs": {
+                  "id": "m11-resource-applied-step"
+                }
+              },
+              {
+                "type": "image",
+                "attrs": {
+                  "id": "m11-figure-checked-resources",
+                  "assetId": "m11-checked-resources-light-scaled-r20261007",
+                  "caption": "公开 a1 小任务通过后，mandarin.zip 与配套拼音词典已检查并应用。",
+                  "alt": "最大化 MFA 工作台显示已检查并应用资源，模型为 mandarin.zip，词典为 mandarin_pinyin_tab.dict，待检查提示消失。",
+                  "width": "100%",
+                  "align": "center"
+                }
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "失败时重选有问题的文件并检查，或点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "取消待检查选择",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "恢复当前已应用组合。若提示选择记忆保存失败，下次需重新选择。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "start": 1,
+          "id": "m11-resource-check-steps"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "当前小任务检查使用词典中的 "
+          },
+          {
+            "type": "text",
+            "text": "a",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、"
+          },
+          {
+            "type": "text",
+            "text": "啊",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 或 "
+          },
+          {
+            "type": "text",
+            "text": "a1",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。缺少这些词条时会提示尚不能登记，其他语言需相应验证支持；不要为通过检查随意改写词典。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-offline",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "可信离线组件与已有环境"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m11-figure-component-manager",
+          "assetId": "m11-component-detail-r4-light-scaled-r20261007",
+          "caption": "展开组件管理后可选择已有环境和可信离线包。模型与词典仍在上方下拉框导入，下载入口保持待发布。",
+          "alt": "最大化 MFA 工作台展开组件管理，显示已有环境、离线 ZIP、可信 JSON 清单、SHA-256 字段及校验导入入口。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "已有环境",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：选择固定 MFA 3.3.8 / Windows x86_64 环境，模型和词典仍在上方导入，再点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "检查并应用所选资源",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。旧 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "auto_alignment",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 放在 EXE 旁边不会自动登记。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "离线组件",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：在组件管理选择配套 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "ZIP",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 与"
+                  },
+                  {
+                    "type": "text",
+                    "text": "可信发布清单 JSON",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，填写发布者独立可信渠道公布的"
+                  },
+                  {
+                    "type": "text",
+                    "text": "清单 SHA-256",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，准备模型及词典后点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "校验并导入离线组件",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "导入成功后核对当前环境和已应用组合。失败时按提示补齐资料或空间，原可用版本保留。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "下载并安装组件 · 待发布",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "目前不可用，日常对齐无需重复导入。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "start": 1
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "新电脑需先备齐兼容的环境、模型和词典。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218",
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " ZIP 内自带的摘要或自行计算的摘要不能代替来源核实。环境检查和导入不会自动升级已有环境。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-workflow",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "单文件对齐的完整操作"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "先确认左栏"
+                  },
+                  {
+                    "type": "text",
+                    "text": "已应用",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "的模型与词典适合转写，没有待检查提示。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选定"
+                  },
+                  {
+                    "type": "text",
+                    "text": "转写来源",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。桌面点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "打开音频目录",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "递归读取目录及子目录；也可点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "导入音频与转写",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "同时选 WAV 与转写，仅读取手选文件。核对格式和总组数。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "选择输出目录",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "指定可写文件夹，也可留到保存时选择。先用 Beam "
+                  },
+                  {
+                    "type": "text",
+                    "text": "100",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "、Retry beam "
+                  },
+                  {
+                    "type": "text",
+                    "text": "400",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，旧草稿则核对当前显示值。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "开始对齐",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。右栏选中本次任务，显示阶段、进度和日志。等待"
+                  },
+                  {
+                    "type": "text",
+                    "text": "完整结果已发布",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "后保存；失败按错误提示修正后提交新任务。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存完整结果到输出目录",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，核对保存提示中的子目录，再用原 WAV 与 TextGrid 人工复核。网页则按结果行逐项"
+                  },
+                  {
+                    "type": "text",
+                    "text": "下载",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "start": 1,
+          "id": "m11-workflow-steps"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-format-example",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "同名 LAB 与 TextGrid 共存时的读入实例"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "以下公开合成样例只演示来源选择。已应用 "
+          },
+          {
+            "type": "text",
+            "text": "mandarin.zip",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 与指定拼音词典，LAB 和 TextGrid 的 words 层均写四个 "
+          },
+          {
+            "type": "text",
+            "text": "a1",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。两份转写可一起保留。"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "language": "text"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "probe.wav\nprobe.lab          a1 a1 a1 a1\nprobe.TextGrid     一个非空 speaker_words 层，另有 speaker_phones 层"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "保持"
+                  },
+                  {
+                    "type": "text",
+                    "text": "自动",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "并打开样例目录，会提示同名转写不唯一。改选所需格式即可，无需删除另一份文件。"
+                  }
+                ],
+                "attrs": {
+                  "id": "m11-example-ambiguous-step"
+                }
+              },
+              {
+                "type": "image",
+                "attrs": {
+                  "id": "m11-figure-transcript-ambiguous",
+                  "assetId": "m11-transcript-ambiguous-light-scaled-r20261007",
+                  "caption": "自动来源遇到多种同名转写会报歧义。明确选择本次使用的格式后重新读取。",
+                  "alt": "最大化 MFA 工作台的自动转写来源读入同名 LAB 与 TextGrid 后报告唯一同名转写歧义，清单没有可提交配对。",
+                  "width": "100%",
+                  "align": "center"
+                }
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "LAB",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 后重新打开目录。清单应显示 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "probe.wav",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "、"
+                  },
+                  {
+                    "type": "text",
+                    "text": ".lab",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 和 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "1 组",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ],
+                "attrs": {
+                  "id": "m11-example-lab-step"
+                }
+              },
+              {
+                "type": "image",
+                "attrs": {
+                  "id": "m11-figure-lab-config",
+                  "assetId": "m11-lab-config-light-scaled-r20261007",
+                  "caption": "显式选择 LAB 并重读后，清单采用 .lab，其余转写可同目录保留。",
+                  "alt": "最大化 MFA 工作台，转写来源为 LAB，清单一组 probe.wav 与 .lab，已应用兼容模型词典，Beam 100、Retry beam 400。",
+                  "width": "100%",
+                  "align": "center"
+                }
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "改选 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "TextGrid",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 时，页面提示重新读取，开始对齐暂不可用。此时旧清单仍是 LAB。"
+                  }
+                ],
+                "attrs": {
+                  "id": "m11-example-reload-step"
+                }
+              },
+              {
+                "type": "image",
+                "attrs": {
+                  "id": "m11-figure-transcript-reload",
+                  "assetId": "m11-transcript-reload-light-scaled-r20261007",
+                  "caption": "来源改变后旧清单暂停提交，需重新打开目录或导入文件。",
+                  "alt": "最大化 MFA 工作台，转写来源已经改为 TextGrid，但清单仍显示旧 LAB，提示重新读取且开始对齐禁用。",
+                  "width": "100%",
+                  "align": "center"
+                }
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "重新打开同一目录，确认清单为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": ".TextGrid",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，再开始对齐。词标签用于新对齐，原 LAB/TextGrid 保留。"
+                  }
+                ],
+                "attrs": {
+                  "id": "m11-example-textgrid-step"
+                }
+              },
+              {
+                "type": "image",
+                "attrs": {
+                  "id": "m11-figure-textgrid-config",
+                  "assetId": "m11-textgrid-config-light-scaled-r20261007",
+                  "caption": "重读后的清单明确采用 TextGrid，任务按这一来源提交。",
+                  "alt": "最大化 MFA 工作台，TextGrid 来源读入完成，清单一组 probe.wav 与 .TextGrid，开始对齐可用。",
+                  "width": "100%",
+                  "align": "center"
+                }
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "start": 1,
+          "id": "m11-format-example-steps"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-controls",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "搜索参数与控件查阅"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m11-controls-table",
+          "caption": "常用设置和操作"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "控件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "使用要点"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Beam",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "新草稿 100，整数 1–10000。调高时 Retry beam 至少升到四倍，调低不会把 Retry beam 自动降回。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Retry beam",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "新草稿 400，整数 1–40000。保存/提交时若不大于 Beam，会改为 Beam 的四倍。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "转写来源",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "默认自动。多种同名转写共存时选 LAB、TXT 或 TextGrid，并重新读取。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "保存参数草稿",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "保存参数、环境、模型组合和转写来源。重开后需重新选择待提交语料、输出目录及未登记网页词典。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "组件、资源与校验信息",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "查看实际来源、版本、平台、大小和 SHA-256。摘要核对文件身份，不能证明标注准确。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "任务记录 / 刷新任务",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "选历史任务看状态与日志。刷新只更新显示，不重新执行。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "下载 / 保存完整结果到输出目录",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "针对右栏选中的成功任务。参数草稿与任务成果分别保存。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "帮助 / 方法与引用",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "查看操作摘要或方法、资源与许可信息，可复制引用和打开来源。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "旧草稿的已存参数保留，调整只影响下一次提交。"
+          },
+          {
+            "type": "text",
+            "text": "保存参数草稿后，仍需单独保存任务成果。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-advanced",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "任务管理、日志与边界复核"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-dictionary-check",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "词典兼容性、未登录词与参数调整"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "OOV",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 表示词典未收录转写中的词。选失败任务，展开"
+          },
+          {
+            "type": "text",
+            "text": "查看脱敏 MFA 日志",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "找具体词，检查汉字/拼音、声调、分词与大小写。修改源转写后"
+          },
+          {
+            "type": "text",
+            "text": "重新读取",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，已读入文件不会自动更新。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "音素不兼容时恢复配套模型与词典，或导入兼容组合重新检查。提高 Beam 无法解决这种错误。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Beam 和 Retry beam 是搜索宽度，无物理单位。先用 "
+          },
+          {
+            "type": "text",
+            "text": "100/400",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "；输入与资源无误但仍不能有效对齐时再试调整。更宽搜索可能更慢，不保证边界更准。例如 Beam 改为 200，Retry beam 至少升为 800。实际参数可在 "
+          },
+          {
+            "type": "text",
+            "text": "m11-provenance.json",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 核对。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-performance",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "批量处理、进度与取消"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "多个短文件可在输入上限内一并提交。环境和词典初始化需要时间，"
+          },
+          {
+            "type": "text",
+            "text": "进度只表示阶段",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，不估算剩余时间。对齐阶段较久时可看日志；当前对齐期限 180 秒，临时空间预算 512 MB，未超输入上限也可能触及执行限制。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m11-figure-task-aligning",
+          "assetId": "m11-task-aligning-light-scaled-r20261007",
+          "caption": "CPU 对齐任务显示实际运行阶段与事件。阶段进度不能据以推算剩余时间。",
+          "alt": "最大化 MFA 工作台真实 TextGrid 任务处于 MFA 正在对齐阶段，右栏显示阶段进度、任务记录、取消按钮和事件。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在"
+                  },
+                  {
+                    "type": "text",
+                    "text": "任务记录",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "选中目标任务，运行或排队中点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "取消任务",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。等待停止状态，再"
+                  },
+                  {
+                    "type": "text",
+                    "text": "刷新任务",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "或等自动刷新。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "确认"
+                  },
+                  {
+                    "type": "text",
+                    "text": "任务已取消",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "后再提交。关闭页面不会自动取消任务，之后可从任务记录继续查看。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "修正文件或资源，重新读取有变化的语料，再点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "开始对齐",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "建立新任务。本页没有一键重试，失败/取消的部分输出只用于诊断。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "start": 1
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-review",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "结果边界的人工复核"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "把原 WAV 与结果 TextGrid 一起送入 "
+          },
+          {
+            "type": "text",
+            "text": "TextGrid标注",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "或 Praat，核对时长、词序、词和音素层，再检查停顿、弱读、连读及研究关注的边界。修订另存，保留原始对齐结果。"
+          }
+        ]
+      },
+      {
+        "type": "crossReference",
+        "attrs": {
+          "chapterId": "m12",
+          "targetId": "m12-gestures",
+          "label": "查看 TextGrid 中的选择、边界移动与撤销操作"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-output",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "输出与保存"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "完整成功后，每份 WAV 输出一份 TextGrid，例如 "
+          },
+          {
+            "type": "text",
+            "text": "001_sample.TextGrid",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，编号区分不同目录的同名文件；另有 "
+          },
+          {
+            "type": "text",
+            "text": "m11-provenance.json",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 保存输入对应关系、资源版本/摘要、实际参数和对齐信息。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m11-figure-task-results",
+          "assetId": "m11-task-results-light-scaled-r20261007",
+          "caption": "成功任务显示完整结果已发布，下方 TextGrid 与溯源区域列出成果，可在右栏继续向下滚动查看完整清单。",
+          "alt": "最大化 MFA 工作台真实任务完整结果已发布，进度 100%，事件包含 TextGrid 回读，右栏下方显示 001_probe.TextGrid 下载行。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "长期保存时一并保留原 WAV、转写和使用的模型/词典版本，溯源 JSON 不包含完整原音频。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-save-results",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "完整保存和单文件下载"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在"
+                  },
+                  {
+                    "type": "text",
+                    "text": "任务记录",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "确认选中所需成功任务，状态为"
+                  },
+                  {
+                    "type": "text",
+                    "text": "完整结果已发布",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存针对右栏选中任务。",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "backgroundColor": "#fff1c2",
+                          "backgroundColorDark": "#514218",
+                          "color": "#3b2f00",
+                          "colorDark": "#fff0bb"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 中区当前语料可能与历史任务不同。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "选择输出目录",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，再点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存完整结果到输出目录",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。若未提前选目录，首次保存会弹出目录选择；取消选择不影响已完成成果。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "按保存提示找到新建的 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "MFA-任务号-随机串",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 子目录。输出目录可与输入目录相同，结果另放子目录，原文件保留；再次保存会新建子目录。"
+                  }
+                ],
+                "attrs": {
+                  "id": "m11-save-confirm-step"
+                }
+              },
+              {
+                "type": "image",
+                "attrs": {
+                  "id": "m11-figure-saved-results",
+                  "assetId": "m11-saved-results-light-scaled-r20261007",
+                  "caption": "完整保存后提示本次创建的 MFA 子目录。按自己选中的输出目录核对 TextGrid 和溯源 JSON。",
+                  "alt": "最大化 MFA 工作台显示完整保存成功及独立 MFA 结果子目录，当前任务为完整结果已发布，输出目录为 saved。",
+                  "width": "100%",
+                  "align": "center"
+                }
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "核对 TextGrid 数量和 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "m11-provenance.json",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，打开结果检查。保存中断时已写文件保留，换可写目录后重新完整保存，核对新子目录。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "单文件用结果行的"
+                  },
+                  {
+                    "type": "text",
+                    "text": "下载",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，位置按平台下载设置。需要完整档案时下载全部 TextGrid 和溯源 JSON。"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "start": 1,
+          "id": "m11-save-result-steps"
+        }
+      },
+      {
+        "type": "crossReference",
+        "attrs": {
+          "chapterId": "m12",
+          "targetId": "m12-output",
+          "label": "查看 TextGrid标注的保存与导出"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-web",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "网页使用与数据保留"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "网页使用已登录项目和管理员登记的环境/模型，导入词典只影响本次页面任务。当前远程执行未开放，"
+          },
+          {
+            "type": "text",
+            "text": "等待已验证节点",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "时可改用已检查的 Windows 本地环境，刷新不会让旧任务重新执行。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "及时下载完整结果。网页文件当前默认保留 "
+          },
+          {
+            "type": "text",
+            "text": "3 天",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，账号额度 "
+          },
+          {
+            "type": "text",
+            "text": "1 GB",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，下载不延长到期时间。本机诊断及任务文件也占空间，保留与清理见设置；自行导出的成果请另行管理。"
+          }
+        ]
+      },
+      {
+        "type": "crossReference",
+        "attrs": {
+          "chapterId": "settings",
+          "targetId": "settings-retention",
+          "label": "查看存储保留与清理设置"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-recovery",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "错误恢复"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-recovery-disabled",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "开始对齐不可用或读取失败"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "开始对齐灰色",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：确认环境/模型、语料组数、待检查提示和来源更改提示。完成资源检查，或取消待检查选择，再重新读取语料。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "同名转写缺失或不唯一",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：核对目录、基本名和扩展名。多格式共存时明确选来源；缺少所选格式时补齐该文件。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "TextGrid 转写层不可用",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：整理独立转写区间层或唯一非空 words 层，或改用同名 LAB/TXT。多个 words 层不能自动猜选。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "输入或路径超限",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：选更具体目录、缩短副本路径或分批。切分长音频时同步准备各片段转写并保留切分位置。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-recovery-resources",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "资源或环境检查失败"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "环境不存在、版本或依赖错误",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：选择实际可用的 MFA 3.3.8 环境重新检查。不要仅按 DLL 名称安装来源不明的文件。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "模型/词典不兼容",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：按上方配套表重新选择，检查词典格式、音素和转写。资源内容变更后需要重新导入检查。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "探针词不可用",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：当前只支持 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "a",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "、"
+                  },
+                  {
+                    "type": "text",
+                    "text": "啊",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "、"
+                  },
+                  {
+                    "type": "text",
+                    "text": "a1",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，使用已有已检查组合或等待相应语言支持。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "离线摘要、路径或空间错误",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：重新取得配套可信 ZIP/清单，核对独立公布的摘要和可用空间。路径过长时使用较短组件位置。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-recovery-execution",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "任务失败、取消、等待或保存失败"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "未登录词",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：选失败任务看具体 OOV，纠正源转写或换兼容词典，再重新读取并提交。"
+                  }
+                ],
+                "attrs": {
+                  "id": "m11-oov-recovery-step"
+                }
+              },
+              {
+                "type": "image",
+                "attrs": {
+                  "id": "m11-figure-oov-failure",
+                  "assetId": "m11-oov-failure-light-scaled-r20261007",
+                  "caption": "未登录词使任务失败，完整成果不发布。展开日志后可在日志框继续滚动查具体词，修正并重新读入后提交新任务。",
+                  "alt": "最大化 MFA 工作台公开测试词未被词典收录，右栏任务失败并提示核对汉字拼音与声调，脱敏 MFA 日志已展开。",
+                  "width": "100%",
+                  "align": "center"
+                }
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "未得到有效对齐 / 特征提取失败",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：先检查音频可读且有语音、转写完整及资源匹配，再考虑搜索参数。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "超时 / 临时预算 / 子进程异常",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：任务未发布完整成果。按日志减小批次并检查环境，避免相同输入反复等待。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "已取消 / 等待节点",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：取消后先确认终态；等待节点的任务可继续查看，当前需即时对齐时使用本地可用环境。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "下载或保存失败",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：刷新并选中正确成功任务，确认结果未到期。完整性错误时重试下载；目录不可写时重新选择并完整保存。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "需要诊断时记下任务时间、错误提示和使用的资源。提供日志前检查是否含语料、个人信息或私有路径。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-sources",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "方法来源与解释边界"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "本模块采用 Montreal Forced Aligner 与 Kaldi。"
+          },
+          {
+            "type": "text",
+            "text": "方法与引用",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "可查看方法、资源和许可信息。运行环境、模型和词典的适用范围及许可分别判断。"
+          }
+        ]
+      },
+      {
+        "type": "citation",
+        "attrs": {
+          "referenceId": "REF-MFA",
+          "label": "Michael McAuliffe and Michaela Socolof and Sarah Mihuc and Michael Wagner and Morgan Sonderegger 2017 Montreal Forced Aligner: Trainable Text-Speech Alignment Using Kaldi"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "成功对齐仍可能存在边界偏差。科研使用需记录模型/词典版本、实际参数、转写来源和人工复核规则，不能从小样例推定全部语言或自然语料准确率。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-references",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "参考资料"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "REF-MFA",
+                      "label": "Michael McAuliffe and Michaela Socolof and Sarah Mihuc and Michael Wagner and Morgan Sonderegger 2017 Montreal Forced Aligner: Trainable Text-Speech Alignment Using Kaldi"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,5 +1,9 @@
 # M08 · 变速变调迁移计划
 
+2026-10-05 M08-R2：按井井截图反馈修正历史图窗/空态、固定选框、小数中间态及本地导出位置提示，限定Windows源码verified；见[计划](../2026-10-05-m08-r2-input-layout-save.md)和[报告](../../testing/2026-10-05-m08-r2-report.md)。科学算法和下文跨平台未决门保留。
+
+2026-10-04 M08-R1：井井明确要求整理生成 / 试听 / 保存。当前交互以[本轮计划](../2026-10-04-m08-r1-workflow.md)、[ADR](../../decisions/ADR-M08-R1.md)及[报告](../../testing/2026-10-04-m08-r1-report.md)为准。下表中的添加 / 清除拐点通过表内添加行 / 删除行完成，合成结果自动进入历史，外部保存与生成分离。旧功能映射作为迁移记录保留。
+
 状态：in_progress。2026-09-27 已完成正式任务/存储 adapter、三格式解码、AppShell 注册及限定 Windows HTTP/Chrome/Qt 验收，见 [正式接线报告](../../testing/m08-wiring-report.md)。真实 PostgreSQL 网页因政策门受阻，Linux 正式受限链路与跨平台精确门仍未完成。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
 

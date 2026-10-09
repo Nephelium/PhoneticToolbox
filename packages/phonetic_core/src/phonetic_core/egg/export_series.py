@@ -25,6 +25,15 @@ def batch_columns(result, *, keep_praat=True, keep_gci=True, keep_reaper=False, 
     # explicitly rather than letting np.convolve('same') change frame count.
     window = int(.02 * result.fs)
     if window > len(result.audio_signal): raise EggError('invalid_audio')
+    if result.method_version=='egg-bounded/2':
+        mask=np.zeros(len(times),dtype=bool);frames=len(result.time_vector);half=window//2
+        for first in range(0,frames,result.fs*20):
+            last=min(frames,first+result.fs*20);left=max(0,first-half-2);right=min(frames,last+half+2)
+            envelope=np.convolve(np.abs(result.audio_signal[left:right]),np.ones(window)/window,mode='same')
+            take=(times>=first/result.fs)&(times<last/result.fs)
+            mask[take]=np.interp(times[take],result.time_vector[left:right],envelope)<silence_threshold
+        for values in columns.values(): values[mask]=np.nan
+        return times,columns,mask
     envelope = np.abs(result.audio_signal)
     if window > 0: envelope = np.convolve(envelope, np.ones(window)/window, mode='same')
     mask = np.interp(times, result.time_vector, envelope) < silence_threshold
@@ -34,6 +43,18 @@ def batch_columns(result, *, keep_praat=True, keep_gci=True, keep_reaper=False, 
 
 def waveform_series(result, config, start_sample, end_sample, *, raw=False, batch=False):
     if not 0 <= start_sample < end_sample <= len(result.time_vector): raise EggError('invalid_roi')
+    if result.method_version=='egg-bounded/2':
+        # Pixel envelope only: preserve both extrema, not one periodic sample.
+        count=min(4096,end_sample-start_sample)
+        edges=start_sample+np.arange(count+1,dtype=np.int64)*(end_sample-start_sample)//count
+        output=np.empty((2,count*2));time=np.empty(count*2)
+        signal_source=result.egg_signal_raw if raw else result.egg_signal_processed
+        for index in range(count):
+            first,last=int(edges[index]),int(edges[index+1])
+            a=result.audio_signal[first:last];y=signal_source[first:last]
+            output[:,index*2]=[np.min(a),np.min(y)];output[:,index*2+1]=[np.max(a),np.max(y)]
+            time[index*2:index*2+2]=[first/result.fs,(last-1)/result.fs]
+        return time,output[0],output[1]
     times = result.time_vector[start_sample:end_sample]
     audio = result.audio_signal[start_sample:end_sample]
     values = (result.egg_signal_raw if raw else result.egg_signal_processed)[start_sample:end_sample]
@@ -44,7 +65,7 @@ def waveform_series(result, config, start_sample, end_sample, *, raw=False, batc
     return times[::step], audio[::step], values[::step]
 
 
-def spectral_series(audio, fs, window_ms):
+def spectral_series(audio, fs, window_ms, *, max_columns=None, max_frequency=None):
     # Exactly the V2 Matplotlib specgram default PSD calculation. Backend only
     # renders this array; it must not substitute the M01 Praat spectrogram.
     from matplotlib.mlab import specgram
@@ -55,11 +76,20 @@ def spectral_series(audio, fs, window_ms):
     count=1+(len(audio)-nfft)//hop
     # FFT windows are independent. Limit temporary complex matrices without
     # changing windows, overlap, PSD normalization or time/frequency grids.
-    power=np.empty((nfft//2+1,count),dtype=np.float64)
+    rows=nfft//2+1
+    if max_frequency is not None:
+        rows=min(rows,int(np.ceil(max_frequency*nfft/fs))+2)
+    columns=min(count,max_columns) if max_columns else count
+    power=np.full((rows,columns),-np.inf,dtype=np.float64) if columns<count else np.empty((rows,count),dtype=np.float64)
     frequencies=None
     for first in range(0,count,256):
         last=min(count,first+256)
         chunk,frequencies,_=specgram(audio[first*hop:(last-1)*hop+nfft],NFFT=nfft,Fs=fs,noverlap=overlap)
-        power[:,first:last]=chunk
+        if columns==count: power[:,first:last]=chunk[:rows]
+        else:
+            targets=np.arange(first,last,dtype=np.int64)*columns//count
+            for target in np.unique(targets):
+                power[:,target]=np.maximum(power[:,target],np.max(chunk[:rows,targets==target],axis=1))
     bins=np.arange(nfft/2,len(audio)-nfft/2+1,hop)/fs
-    return power,frequencies,bins
+    if columns<count: bins=bins[np.minimum(count-1,np.arange(columns)*count//columns)]
+    return power,frequencies[:rows],bins

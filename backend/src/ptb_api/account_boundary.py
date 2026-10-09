@@ -19,11 +19,12 @@ class AccountBoundary:
                 return await reject('host_rejected',403)
         # This binary route authenticates before reading and bounds its stream
         # per input role. Do not buffer audio as small account JSON here.
-        if scope['method']=='POST' and scope['path'] in ('/api/v1/jobs/local-inputs','/api/v1/jobs/local-lip-conversion','/api/v1/preview/egg','/api/v1/preview/spectrogram','/api/v1/preview/parameters'):
+        if scope['method']=='POST' and scope['path'] in ('/api/v1/jobs/local-inputs','/api/v1/jobs/local-inputs/stream','/api/v1/jobs/local-lip-conversion','/api/v1/preview/egg','/api/v1/preview/spectrogram','/api/v1/preview/parameters'):
             return await self.app(scope,receive,send)
         if scope['method'] in ('POST','PATCH','PUT'):
             limit = CHUNK_BYTES if scope['method']=='PUT' and re.fullmatch(r'/api/v1/uploads/[0-9a-fA-F-]{36}/blocks',scope['path']) else self.max_bytes
             if scope['method']=='POST' and scope['path']=='/api/v1/jobs/batches/create':limit=1_000_000
+            if scope['method']=='POST' and scope['path'] in ('/api/v1/jobs/spec2wav/create','/api/v1/jobs/spec2wav/preview'):limit=1_000_000
             if scope['method']=='PUT' and re.fullmatch(r'/api/v1/jobs/m05/uploads/[0-9a-fA-F-]{36}',scope['path']):limit=350_000
             size=0
             chunks=[]

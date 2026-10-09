@@ -1,0 +1,39 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ptb-manual-chapter.schema.json",
+  "title":"PhoneticToolbox manual chapter v1",
+  "type":"object",
+  "required":["schemaVersion","id","title","body"],
+  "properties":{
+    "schemaVersion":{"const":"ptb-manual-chapter/1"},"id":{"$ref":"#/$defs/id"},"title":{"type":"string","minLength":1},"moduleId":{"type":"string"},"summary":{"type":"string"},
+    "body":{"allOf":[{"$ref":"#/$defs/node"},{"properties":{"type":{"const":"doc"}}}]}
+  },
+  "$defs":{
+    "id":{"type":"string","pattern":"^[A-Za-z0-9][A-Za-z0-9._:-]{0,159}$"},
+    "node":{"type":"object","required":["type"],"properties":{"type":{"type":"string","minLength":1},"text":{"type":"string"},"attrs":{"type":"object","properties":{"id":{"$ref":"#/$defs/id"}}},"marks":{"type":"array","items":{"$ref":"#/$defs/mark"}},"content":{"type":"array","items":{"$ref":"#/$defs/node"}}},"description":"Tiptap document JSON. Unknown nodes are preserved and visibly reported. Authoring validation restricts nodes and attrs before editing."},
+    "mark":{"type":"object","required":["type"],"properties":{"type":{"type":"string"},"attrs":{"type":"object"}}}
+  },
+  "x-supportedNodes":["doc","paragraph","heading","text","bulletList","orderedList","listItem","blockquote","codeBlock","table","tableRow","tableCell","tableHeader","horizontalRule","hardBreak","image","audio","video","formula","crossReference","columns","column","footnote","admonition","citation"],
+  "x-supportedMarks":["bold","italic","underline","strike","code","subscript","superscript","link","textStyle","highlight","ipa"],
+  "x-nodeAttrs":{
+    "heading":["id","level","textAlign","lineHeight","marginTop","marginBottom","indent"],
+    "paragraph":["id","textAlign","lineHeight","marginTop","marginBottom","indent"],
+    "image":["id","assetId","caption","alt","width","align"],
+    "audio":["id","assetId","caption","width","align"],
+    "video":["id","assetId","caption","width","align"],
+    "formula":["id","latex","display","caption"],
+    "table":["id","caption","note"],
+    "tableCell":["id","colspan","rowspan","colwidth","backgroundColor","backgroundColorDark","color","colorDark","textAlign"],
+    "tableHeader":["id","colspan","rowspan","colwidth","backgroundColor","backgroundColorDark","color","colorDark","textAlign"],
+    "crossReference":["id","chapterId","targetId","label"],
+    "citation":["id","referenceId","label"],
+    "admonition":["id","kind"],
+    "footnote":["id","label"],
+    "codeBlock":["id","language"],"orderedList":["id","start"],"columns":["id"],"column":["id"]
+  },
+  "x-markAttrs":{
+    "link":["href","target","rel","class"],
+    "textStyle":["color","colorDark","backgroundColor","backgroundColorDark","fontSize","fontFamily"],
+    "highlight":["color","colorDark"]
+  }
+}

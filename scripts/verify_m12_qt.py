@@ -29,38 +29,38 @@ def main(*, bundle=ROOT, out=None, database=None, cache=None, reaper=None, r1=Fa
     window=Workbench(bundle/'frontend/dist',test=True,jobs_path=database or ROOT/'output/validation/p06/local-state.sqlite3',local_files_root=cache,
                      reaper_binary=reaper,vocal_resources=bundle/'resources/vocal_tract/native')
     window.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen,True);window.resize(1500,1050);window.show()
-    click=lambda label:"[...document.querySelectorAll('button')].find(b=>b.offsetParent&&b.textContent.trim()==="+json.dumps(label,ensure_ascii=False)+")?.click()"
+    click=lambda label:"[...document.querySelectorAll('button')].find(b=>b.offsetParent&&b.textContent.trim().replace(/\\s*\\*$/,'')==="+json.dumps(label.rstrip(' *'),ensure_ascii=False)+")?.click()"
     stages=[
-      ("document.querySelector('.host-badge')?.textContent==='本地桌面'",click('语音标注对齐'),False),
-      ("!!document.querySelector('.annotation-page')",click('选择语料文件夹'),inputs),
+      ("document.querySelector('.host-badge')?.textContent==='本地桌面'",click('TextGrid标注'),False),
+      ("!!document.querySelector('.annotation-page')",click('打开音频目录'),inputs),
       ("document.querySelectorAll('.annotation-file-list button').length==="+str(3 if r1 else 2),"document.querySelector('.annotation-file-list button').click()",False),
       ("!!document.querySelector('.annotation-grid')&&document.querySelector('.annotation-page').getAttribute('aria-busy')==='false'", "(()=>{const c=document.querySelector('.annotation-grid'),b=c.getBoundingClientRect();c.dispatchEvent(new MouseEvent('dblclick',{clientX:b.x+b.width*.15,clientY:b.y+b.height*.2,bubbles:true}));})()",False),
       ("!document.querySelector('[aria-label=\"编辑选中标注文本\"]').disabled", "(()=>{const e=document.querySelector('[aria-label=\"编辑选中标注文本\"]');e.value='Qt 中文 æ';e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));})()",False),
-      ("document.querySelector('.annotation-page').textContent.includes('保存 TextGrid *')",click('保存 TextGrid *'),False),
-      ("document.querySelector('.notice')?.textContent.includes('已保存：')", "(()=>{const e=document.querySelector('[aria-label=\"唇形共同偏移毫秒\"]');e.value='-21';e.dispatchEvent(new Event('change',{bubbles:true}));})()",False),
-      ("document.querySelector('.annotation-page').textContent.includes('保存唇偏 *')",click('保存唇偏 *'),False),
-      ("document.querySelector('.notice')?.textContent.includes('唇偏已独立保存')",click('下载当前 TextGrid'),out/'qt-download.TextGrid'),
-      ("document.querySelector('.notice')?.textContent.includes('已发起下载')",click('下载安全唇形 JSON'),out/'qt-download.lip.json'),
-      ("document.querySelector('.notice')?.textContent.includes('已发起下载')",None,False),
+      ("document.querySelector('[aria-label=\"编辑选中标注文本\"]').value==='Qt 中文 æ'",click('保存 TextGrid'),False),
+      ("document.querySelector('.annotation-settings .module-status')?.textContent.includes('已保存：')", "(()=>{const e=document.querySelector('[aria-label=\"唇形共同偏移毫秒\"]');e.value='-21';e.dispatchEvent(new Event('change',{bubbles:true}));})()",False),
+      ("document.body.textContent.includes('保存唇偏 *')",click('保存唇偏 *'),False),
+      ("document.querySelector('.annotation-settings .module-status')?.textContent.includes('唇偏已独立保存')",click('下载当前 TextGrid'),out/'qt-download.TextGrid'),
+      ("document.querySelector('.annotation-settings .module-status')?.textContent.includes('已发起下载')",click('下载安全唇形 JSON'),out/'qt-download.lip.json'),
+      ("document.querySelector('.annotation-settings .module-status')?.textContent.includes('已发起下载')",None,False),
     ]
     if r1:
         double=lambda at,ctrl=False:"(()=>{const e=document.querySelector('.annotation-plots .wave-track svg'),r=e.getBoundingClientRect();e.dispatchEvent(new MouseEvent('dblclick',{clientX:r.x+r.width*"+str(at/2)+",clientY:r.y+r.height*.5,ctrlKey:"+str(ctrl).lower()+",bubbles:true}));})()"
         stages[-1]=(stages[-1][0],"[...document.querySelectorAll('.annotation-file-list button')].find(b=>b.textContent.includes('r1 空白.wav')).click()",False)
         stages.extend([
-          ("document.querySelector('.notice')?.textContent.includes('请点击')",click('创建标注层'),False),
+          ("document.querySelector('.annotation-settings .module-status')?.textContent.includes('请点击')",click('创建标注层'),False),
           ("!!document.querySelector('[aria-label=\"新建音节层名\"]')","(()=>{for(const [label,text] of [['新建音节层名','音节'],['新建音素层名','音素']]){const e=document.querySelector('[aria-label=\"'+label+'\"]');e.value=text;e.dispatchEvent(new Event('input',{bubbles:true}));}})()",False),
           ("document.querySelector('[aria-label=\"新建音素层名\"]')?.value==='音素'",click('创建层'),False),
-          ("document.querySelector('.notice')?.textContent.includes('已创建')",click('粘贴词表'),False),
+          ("document.querySelector('.annotation-settings .module-status')?.textContent.includes('已创建')",click('粘贴词表'),False),
           ("!!document.querySelector('[aria-label=\"拼音词表\"]')","(()=>{const e=document.querySelector('[aria-label=\"拼音词表\"]');e.value='zhe4 shi4 shang4';e.dispatchEvent(new Event('input',{bubbles:true}));})()",False),
           ("document.querySelector('[aria-label=\"拼音词表\"]')?.value==='zhe4 shi4 shang4'",click('应用词表'),False),
-          ("document.querySelector('.notice')?.textContent.includes('已应用词表')","document.querySelector('.sequence-toggle input[type=checkbox]').click()",False),
+          ("document.querySelector('.annotation-settings .module-status')?.textContent.includes('已应用词表')","document.querySelector('.sequence-toggle input[type=checkbox]').click()",False),
           ("document.querySelector('.sequence-toggle input[type=checkbox]')?.checked",double(.2),False),
           ("!!document.querySelector('.sequence-hint strong')",double(.7),False),
           ("document.querySelector('[aria-label=\"下一音节\"]')?.value==='1'",double(.35),False),
-          ("document.querySelector('.notice')?.textContent.includes('已按')",double(1.1,True),False),
+          ("document.querySelector('.annotation-settings .module-status')?.textContent.includes('已按')",double(1.1,True),False),
           ("document.querySelector('[aria-label=\"下一音节\"]')?.value==='2'","document.body.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}))",False),
-          ("document.querySelector('.notice')?.textContent.includes('右移 1 ms')",click('保存 TextGrid *'),False),
-          ("document.querySelector('.notice')?.textContent.includes('已保存：r1 空白_自动保存.TextGrid')",None,False),
+          ("document.querySelector('.annotation-settings .module-status')?.textContent.includes('右移 1 ms')",click('保存 TextGrid *'),False),
+          ("document.querySelector('.annotation-settings .module-status')?.textContent.includes('已保存：r1 空白_自动保存.TextGrid')",None,False),
         ])
     if r2:
         stages[-1]=(stages[-1][0],"document.querySelector('.annotation-grid').scrollIntoView({block:'center'})",False)
@@ -81,8 +81,8 @@ def main(*, bundle=ROOT, out=None, database=None, cache=None, reaper=None, r1=Fa
           ("!document.querySelector('.sequence-toggle input[type=checkbox]').checked",double(1.3),False),
           ("!!document.querySelector('.sequence-hint strong')",double(1.5),False),
           ("!document.querySelector('.sequence-hint strong')&&!document.querySelector('[aria-label=\"编辑选中标注文本\"]').disabled","(()=>{const e=document.querySelector('[aria-label=\"编辑选中标注文本\"]');e.value='R3 新增';e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));})()",False),
-          ("document.querySelector('.annotation-page').textContent.includes('保存 TextGrid *')",click('保存 TextGrid *'),False),
-          ("document.querySelector('.notice')?.textContent.includes('已保存：r1 空白_自动保存.TextGrid')&&!([...document.querySelectorAll('button')].some(b=>['清空文本','删除边界'].includes(b.textContent.trim())))",None,False),
+          ("document.body.textContent.includes('保存 TextGrid *')",click('保存 TextGrid *'),False),
+          ("document.querySelector('.annotation-settings .module-status')?.textContent.includes('已保存：r1 空白_自动保存.TextGrid')&&!([...document.querySelectorAll('button')].some(b=>['清空文本','删除边界'].includes(b.textContent.trim())))",None,False),
         ])
         stages[-1]=(stages[-1][0],"(()=>{const e=document.querySelector('[aria-label=\"标注可视时长\"]');e.value='.08';e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));})()",False)
         stages.extend([
@@ -94,11 +94,11 @@ def main(*, bundle=ROOT, out=None, database=None, cache=None, reaper=None, r1=Fa
         stages[-1]=(stages[-1][0],"(()=>{const e=document.querySelector('[aria-label=\"标注可视时长\"]');e.value='2';e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));})()",False)
         stages.extend([
           ("document.querySelector('[aria-label=\"标注可视时长\"]').value==='2.000'",phone_double,False),
-          ("document.querySelector('.notice')?.textContent.includes('首个边界 0.78')||document.querySelector('.notice')?.textContent.includes('首个边界 0.77')",click('保存 TextGrid *'),False),
-          ("document.querySelector('.notice')?.textContent.includes('已保存：')",click('撤销'),False),
-          ("document.querySelector('.annotation-page').textContent.includes('保存 TextGrid *')","(()=>{const e=document.querySelector('[aria-label=\"音素首个切分点\"]');e.value='equal';e.dispatchEvent(new Event('change',{bubbles:true}));})();"+phone_double,False),
-          ("document.querySelector('.notice')?.textContent.includes('已按等分切分')",click('保存 TextGrid *'),False),
-          ("document.querySelector('.notice')?.textContent.includes('已保存：')","document.querySelector('[aria-label=\"标注语谱图与唇形曲线\"]').scrollIntoView({block:'center'})",False),
+          ("document.querySelector('.annotation-settings .module-status')?.textContent.includes('首个边界 0.78')||document.querySelector('.annotation-settings .module-status')?.textContent.includes('首个边界 0.77')",click('保存 TextGrid *'),False),
+          ("document.querySelector('.annotation-settings .module-status')?.textContent.includes('已保存：')",click('撤销'),False),
+          ("document.body.textContent.includes('保存 TextGrid *')","(()=>{const e=document.querySelector('[aria-label=\"音素首个切分点\"]');e.value='equal';e.dispatchEvent(new Event('change',{bubbles:true}));})();"+phone_double,False),
+          ("document.querySelector('.annotation-settings .module-status')?.textContent.includes('已按等分切分')",click('保存 TextGrid *'),False),
+          ("document.querySelector('.annotation-settings .module-status')?.textContent.includes('已保存：')","document.querySelector('[aria-label=\"标注语谱图与唇形曲线\"]').scrollIntoView({block:'center'})",False),
           ("document.querySelector('[aria-label=\"标注语谱图与唇形曲线\"]').getBoundingClientRect().top>=0","__spectrum_drag__",False),
           ("(()=>{const a=document.querySelector('[aria-label=\"语谱图选区\"]'),b=document.querySelector('[aria-label=\"标注层选区\"]');return a&&b&&Math.abs(Number(a.dataset.start)-.5)<.01&&Math.abs(Number(a.dataset.end)-1.2)<.01&&a.dataset.start===b.dataset.start&&a.dataset.end===b.dataset.end&&document.querySelector('[aria-label=\"编辑选中标注文本\"]').disabled;})()",None,False),
         ])

@@ -1,0 +1,4308 @@
+{
+  "schemaVersion": "ptb-manual-chapter/1",
+  "id": "m04",
+  "title": "LPC 谱图",
+  "moduleId": "M04",
+  "summary": "加载 WAV 和可选 TextGrid，定位并试听短片段，计算 LPC 谱包络，再保存当前 PNG 与完整结果。",
+  "body": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-purpose",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "打开 WAV，准备短片段"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "LPC 谱图用于观察短片段的谱包络，例如擦音的宽带峰形或元音的谱形变化。常用流程是 "
+          },
+          {
+            "type": "text",
+            "text": "打开 WAV → 选区试听 → 设置参数 → 开始分析 → 保存图与数据",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-preparation",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "加载音频与标注"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "准备 WAV，需要按标注定位时再配同名 TextGrid。目录可包含多个文件，当前每次分析一个文件的一段选区。"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "m04-load-steps",
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击顶部 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "打开音频目录",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，选择含 WAV 的文件夹。显示 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "导入文件",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 的入口可一次添加 WAV 和 TextGrid；外部增改文件后点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "刷新文件",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在左栏 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "音频文件",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 中选择 WAV，等待读取完成。核对文件名、采样率、声道数与时长，中区应出现波形。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "需要标注时，检查 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "关联 TextGrid",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 和 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "标注层",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。唯一同名文件会自动关联；可手动改选，也可选 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "不关联",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。没有标注也能分析。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m04-figure-loaded-current",
+          "assetId": "m04-loaded-current-light-scaled-r20261007",
+          "caption": "加载完成的波形工作区，左栏可见 16000 Hz、单声道和约 0.672 s。示例 TextGrid 已关联，底部为全长范围。",
+          "alt": "WAV加载完成，显示波形、输入信息、示例标注层与底部全长时间范围。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "id": "m04-input-example",
+          "language": "text"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "speech.wav\nspeech.TextGrid"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "输入 WAV 限 "
+          },
+          {
+            "type": "text",
+            "text": "64,000,000 字节、800 万帧、8 声道、8–96 kHz",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "；预览另限各声道合计 3200 万采样值。"
+          },
+          {
+            "type": "text",
+            "text": "单次 LPC 选区最多 48,000 样本",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218",
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，48 kHz 下约 1 s，默认 50 阶至少需 52 样本。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "多声道 LPC 使用各声道均值",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，导出的分析 WAV 为单声道。"
+          },
+          {
+            "type": "text",
+            "text": "试听声道",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 只改变播放、波形和语谱预览，不能指定某个声道独立计算。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-interface",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "工作区各部分做什么"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "attrs": {
+          "id": "m04-interface-areas"
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "左栏",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：选择文件、标注层和试听声道，下方设置阶数、频率上限与固定 dB 范围。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "中区",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：在 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "波形",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 与 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "LPC 频谱",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 间切换，查看选区、语谱图和谱包络。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "右栏",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：开始或取消分析，查看任务状态、参数快照与历史，保存结果。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "底部",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：输入起点、终点，选择全部，播放、暂停或停止，调整进度与音量。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-file-controls",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "标注、声道与常用工具"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m04-controls-table",
+          "caption": "文件与常用工具"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "控件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "用法"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "标注层 / 下一层",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "选择当前层；两层以上可用下一层循环切换。标签轨随之更新。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "试听声道",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "多声道文件可选单个原始声道试听；切换会停止播放。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "保存参数草稿",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "保存阶数、频率上限和纵轴设置，供下次沿用。有效草稿可能覆盖初始默认值；不保存音频和结果。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "帮助 / 方法与引用",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "帮助打开本章，点击返回 LPC 谱图继续原工作区；方法与引用可查来源和许可。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-controls",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "定位并试听分析片段"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-time-view",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "选短片段，核对起止时间"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "每次分析前以底部起点、终点为准",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218",
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。尚未明确选区时，范围跟随可见窗；一旦拖选、点击标注、编辑时间或点全部，随后缩放只改变观察范围。"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "m04-time-steps",
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在波形上按 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "Ctrl＋滚轮",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，或点图下 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "＋",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 放大。放大后拖动 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "时间窗起点",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 滑条寻找目标声音；双击波形或点 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "适合窗口",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 返回全长。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "用"
+                  },
+                  {
+                    "type": "text",
+                    "text": "左键拖动",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "选出片段，不必按 Shift。也可点击 TextGrid 标签区间，再在底部 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "起点 / 终点",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 中输入准确秒数。反向拖选同样有效。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "播放选区",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 确认声音。点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "暂停",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 保留位置，再次播放可继续；"
+                  },
+                  {
+                    "type": "text",
+                    "text": "停止",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 结束播放。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "全部",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 选中完整音频，分析前仍须检查样本上限。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "示例采用 16000 Hz 单音节 WAV：在底部输入 "
+          },
+          {
+            "type": "text",
+            "text": "0.1–0.4 s",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，选区为 4800 个样本。图中的示例标注只演示定位操作；试听使用底部播放栏。"
+          }
+        ],
+        "attrs": {
+          "id": "m04-example-single-original"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m04-figure-selection-current",
+          "assetId": "m04-selection-current-light-scaled-r20261007",
+          "caption": "底部输入 0.1–0.4 s 后，波形和标签轨高亮对应范围。阶数为 50，尚未开始分析。",
+          "alt": "波形与标签轨高亮0.1至0.4秒，底部起止时间一致。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-textgrid-labels",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "按 TextGrid 定位与切层"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "m04-textgrid-steps",
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "关联 TextGrid",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 选择匹配文件，等待层名出现。检查波形下方标签轨；读取失败时改选可解析的文件。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选择 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "标注层",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 或点 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "下一层",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。示例由定位示例切到对照层，标签轨随之改变。切层影响结果标签，需要新图时重新分析。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "示例已明确选定 "
+          },
+          {
+            "type": "text",
+            "text": "0.1–0.4 s",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，再放大到 2× 时可见窗约为 0–0.336 s。选区终点暂在图外，底部起止值仍保持原范围。"
+          }
+        ],
+        "attrs": {
+          "id": "m04-tier-zoom-feedback"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m04-figure-tier-zoom-round2",
+          "assetId": "m04-textgrid-tier-zoom-round2-light-scaled-r20261007",
+          "caption": "切到对照层并放大到 2×，标签轨更新，可见窗缩短。底部明确选区仍为 0.1–0.4 s。",
+          "alt": "标注层切为对照层，波形放大2倍，底部明确选区保持0.1至0.4秒。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "m04-textgrid-selection-steps",
+          "start": 3
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击目标标签区间后，底部时间变为该区间与音频的交集。可继续缩短到目标声音的稳定部分，再核对层名与秒数。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "出现非空标签越界提示时，检查录音和标注是否来自同一裁剪版本。改选匹配文件；确实不使用标注时选择 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "不关联",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 再分析。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "关联 TextGrid 的"
+          },
+          {
+            "type": "text",
+            "text": "全部层",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "都会检查。任一非空标签超出音频范围会阻止分析；空白末端可裁到音频边界，原标注保持不变。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "结果标签取当前层的非空文字，去重后用 "
+          },
+          {
+            "type": "text",
+            "text": "＋",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 拼接。只在选区末端相交且未包含起点的区间会被排除，不能单靠标签判断全部分析范围。"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "id": "m04-label-example",
+          "language": "text"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "标注：a 0.00–0.10 s，b 0.10–0.20 s，c 0.20–0.30 s\n选区：0.05–0.25 s → 结果标签 a+b\nc 仅在选区末端重叠，按当前规则排除。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-praat-preview",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "用语谱图辅助定位"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "语谱预览固定为 Gaussian 5 ms 窗、50 dB 相对灰度、6 dB/oct 显示预加重，最高频率为 5000 Hz 与采样率一半中的较小值。它帮助定位，不替代 LPC 结果。"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "m04-praat-steps",
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在波形视图勾选 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "显示语谱图（Praat）",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，等待灰度图出现。它与波形共用时间轴，可直接左键拖选。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "放大、平移或切换试听声道后，等待当前窗预览刷新。只改选区且可见窗未变时，无须重算预览。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "忙碌时稍等，失败时点击提示中的 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "重试",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。可见窗不足 10 ms 时放宽，超时时缩小；暂不需要预览时可关闭它继续 LPC 分析。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m04-figure-praat-current",
+          "assetId": "m04-praat-current-light-scaled-r20261007",
+          "caption": "勾选显示语谱图后，波形与 Praat 灰度图共用 0.1–0.4 s 选区。",
+          "alt": "实际Praat灰度语谱图位于波形下方，时间轴与选区一致。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-analysis-controls",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "设置参数并开始分析"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m04-analysis-table",
+          "caption": "LPC 计算与显示参数"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "参数"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "初始值 / 范围"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "操作要点"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "阶数",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "50 / 整数 1–200"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "改变谱包络的模型复杂程度。修改后重新分析；阶数更高不保证更准确。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "频率上限 Hz",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "8000 / 100–48000 Hz"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "设置结果图的频率范围。修改后重新分析；高于采样率一半的区域没有数据。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "dB 下限 / 上限",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "−5 / 35；各值 −200–100 dB"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "固定纵轴时立即应用已有谱值。"
+                      },
+                      {
+                        "type": "text",
+                        "text": "下限须小于上限",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": "；动态纵轴时暂不可编辑。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "时间选区",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "底部起点、终点，单位 s"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "整段选区参与一次计算。单次最多 48,000 样本，至少为阶数＋2。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-workflow",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "提交并核对结果"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "m04-workflow-steps",
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "核对 WAV、标注层和底部选区，试听确认片段。在左栏设置阶数、频率上限及所需图轴。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击右栏 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "开始分析",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。如有输入提示，先修正再提交；运行期间可查看状态或 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "取消分析",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，无需重复点击。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "完成后自动打开 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "LPC 频谱",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "先核对图下文件名、实际时间、样本数和阶数",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "backgroundColor": "#fff1c2",
+                          "backgroundColorDark": "#514218",
+                          "color": "#3b2f00",
+                          "colorDark": "#fff0bb"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，再展开 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "查看此结果的参数快照",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "修改选区、阶数、频率上限、音频或标注层后，旧图会显示提示。需要对应的新结果时再次 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "开始分析",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m04-figure-m04-overview-r2-light",
+          "assetId": "m04-overview-light-scaled-r20261007",
+          "caption": "0.1–0.4 s、4800 样本、50 阶分析完成。当前固定纵轴为 −5 至 35 dB，右栏出现保存与任务记录。",
+          "width": "100%",
+          "align": "center",
+          "alt": "LPC分析完成，固定轴谱包络、结果保存与已完成任务可见。"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m04-figure-parameters-current",
+          "assetId": "m04-parameters-current-light-scaled-r20261007",
+          "caption": "展开结果参数快照，核对本次时间、50 阶、8000 Hz 和原任务纵轴。",
+          "alt": "右栏参数快照展开，与图下原文件和选区信息对照。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m04-parameters-current-light-focused-detail-figure",
+          "assetId": "m04-parameters-current-light-focused-detail-scaled-r20261007",
+          "caption": "阶数、频率上限和幅度范围分开填写。修改后重新分析，结果才会采用新参数。",
+          "alt": "阶数、频率上限和幅度范围分开填写。修改后重新分析，结果才会采用新参数。",
+          "width": "70%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-task-controls",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "查看任务与参数"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m04-task-table",
+          "caption": "任务记录常用操作"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "控件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "作用"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "查看此结果的参数快照",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "查看创建该任务时的选区、阶数、频率上限、图轴、层名和字体。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "分析任务与历史结果 / 查看结果",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "按时间与短 ID 找到任务，打开已完成结果。读取失败可再次查看。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "取消分析 / 取消此任务",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "请求停止提交、排队或运行中的任务，继续观察最终状态。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "重试此任务",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "失败、中断或取消后按原输入、原配置重试。需要修改参数时另行开始分析。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-advanced",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "读图、试听与比较"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-frequency-view",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "放大谱图与调整纵轴"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "低于固定轴下限的曲线会被裁切，可切换动态轴或降低下限。频率超过采样率一半的空白区域没有额外数据。"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "m04-axis-steps",
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "打开已完成结果，核对图下信息。谱图横轴为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "Hz",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，纵轴为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "dB",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "；当前只显示一条 LPC 谱包络。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "动态纵轴",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 先看整体谱形。它在任务频率范围内的最小、最大谱值外各留 5 dB，横向放大不会重新改变纵轴。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m04-figure-m04-overview-light",
+          "assetId": "m04-dynamic-axis-current-light-scaled-r20261007",
+          "caption": "同一结果切换为动态纵轴，较低幅度部分显示，左栏 dB 输入暂不可编辑。",
+          "alt": "动态纵轴按钮选中，完整谱包络显示，分析范围和任务数量保持。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "m04-fixed-axis-steps",
+          "start": 3
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "固定纵轴",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，在左栏编辑 dB 范围。示例把下限改为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "−30",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "、上限保持 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "35",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，较低部分立即显示，任务数量不增加。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "右栏快照仍是原 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "−5 至 35 dB",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。当前改轴只影响显示与单独 PNG，完整任务结果保留原设置。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "若上下限无效，页面提示错误并禁用 PNG 保存。恢复有效范围即可继续，无须为改轴另建任务。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m04-figure-fixed-edited-round2",
+          "assetId": "m04-fixed-axis-edited-round2-light-scaled-r20261007",
+          "caption": "当前固定下限改为 −30 dB 后立即应用，右栏原任务快照仍为 −5 至 35 dB。",
+          "alt": "左栏当前下限为负30，右栏原任务下限仍为负5，中区显示低幅度谱线。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "m04-axis-finish-steps",
+          "start": 6
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "用 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "Ctrl＋滚轮",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "、图下 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "− / ＋",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 或键盘加减键放大，拖动或左右方向键平移。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "适合频率范围",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "、双击或 Home 恢复完整频率范围。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "比较多个结果时采用相同固定轴。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "横向放大只帮助读图，保存 PNG 仍覆盖任务完整频率范围",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "backgroundColor": "#fff1c2",
+                          "backgroundColorDark": "#514218",
+                          "color": "#3b2f00",
+                          "colorDark": "#fff0bb"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-view-controls",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "图窗与播放操作速查"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m04-view-table",
+          "caption": "图窗与播放操作"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "操作"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "结果"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "波形 / LPC 频谱",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "完成分析后可切换；保留时间选区，不重新计算。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "显示两个声道",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "多声道时可同时看声道 1 与所选声道；选中声道 1 时另一条为声道 2。只改变波形显示。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "适合窗口 / 全部",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "前者恢复全长视窗；后者明确选满音频。两者作用不同，仍以底部时间为准。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "播放进度 / 播放音量",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "在选区内跳转播放位置，或调节试听音量。均不修改分析范围、谱值和导出 WAV。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "空格",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "图区可播放或停止。编辑输入框时保留正常输入；切换文件、视图或模块会停止播放。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-history-playback",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "打开历史结果并试听"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "原 WAV 已加载时，打开历史谱图不会换掉正在试听的原音频",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。先核对图下文件名；需要对应原片段时加载匹配 WAV 并选回原始范围。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "历史片段读取后会自动选满，底部为 "
+          },
+          {
+            "type": "text",
+            "text": "0–片段时长",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，播放按钮可用。打开结果不会自动播放；之后缩短过试听范围时，可用 "
+          },
+          {
+            "type": "text",
+            "text": "全部",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 再次选满。"
+          }
+        ],
+        "attrs": {
+          "id": "m04-history-current-limit"
+        }
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "m04-history-range-steps",
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "分析任务与历史结果",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 中点击目标任务的 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "查看结果",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，等待谱线和图下文件信息出现。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "未加载原 WAV 时，示例原选区 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "0.1–0.4 s",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 恢复为一段 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "0.3 s",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 的单声道分析音频，底部自动为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "0–0.3 s",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "播放选区",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "、"
+                  },
+                  {
+                    "type": "text",
+                    "text": "暂停",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 或 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "停止",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 试听。片段内 0.1 s 对应原音频约 0.2 s；需要新分析时，先加载原 WAV，再按原始时间选区。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m04-figure-history-fragment-round2",
+          "assetId": "m04-history-fragment-round2-light-scaled-r20261007",
+          "caption": "未加载原 WAV，历史结果的试听范围为片段内 0–0.3 s。图下仍为原录音 0.1–0.4 s，开始分析不可用。",
+          "alt": "历史单声道片段以相对0至0.3秒试听，图下保留原始绝对时间。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-multiple-analyses",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "逐个比较文件或片段"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "m04-multiple-steps",
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "先选一个短片段确定比较设置，分析并保存结果。记下原文件、标注层、选区与阶数。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "同文件的下一片段：返回 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "波形",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 重新选区。另一文件：在 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "音频文件",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 中切换，重新检查关联标注，然后开始分析。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "从历史记录逐个打开结果，以相同固定轴单独保存 PNG，并保留各任务 WAV 和 JSON。当前没有全目录批处理或批量下载，导入多文件需逐个处理。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-output",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "保存图片与数据"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-output-files",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "三份结果各保存什么"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "成功任务有三份结果："
+          },
+          {
+            "type": "text",
+            "text": "PNG",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 是谱图，"
+          },
+          {
+            "type": "text",
+            "text": "WAV",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 是保持原采样率的 FLOAT64 单声道分析片段，"
+          },
+          {
+            "type": "text",
+            "text": "JSON",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 保存参数、谱值、源文件校验信息和实际边界。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "建议文件名含源文件主名、标签与时间，如下例。特殊字符或过长部分会调整，准确来源仍以 JSON 为准。"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "id": "m04-export-example",
+          "language": "text"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "LPC_speech_a_0.100000-0.200000s_SPECTRUM.png\nLPC_speech_a_0.100000-0.200000s_AUDIO.wav\nLPC_speech_a_0.100000-0.200000s.ptb.json"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-current-png",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "保存当前显示的 PNG"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "m04-png-steps",
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "打开目标结果并核对来源。选择 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "动态纵轴",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 或 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "固定纵轴",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "；固定模式下确认 dB 范围有效。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存 PNG 图片",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，选择位置和文件名后确认。网页则由浏览器下载。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "看到保存窗口或下载提示后，还需确认实际文件已保存",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "color": "#b42318",
+                          "colorDark": "#ffb4ab"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "打开图片检查曲线与标签。图片固定为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "2400×1350 像素、300 dpi、白底黑线",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，不随窗口大小、主题和横向缩放改变。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "导出沿用该任务的图表字体。希望改用新的设置字体时，重新分析后再保存。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m04-figure-current-export",
+          "assetId": "m04-current-export-plot",
+          "caption": "实际独立 PNG：固定 −5 至 35 dB，完整 0–8000 Hz，2400×1350 像素、300 dpi。此任务未关联 TextGrid。",
+          "alt": "白底黑线LPC导出图，固定负5至35dB，频率0至8000Hz，无标注标题。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "m04-png-axis-comparison-steps",
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "保留默认 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "−5 至 35 dB",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 的 PNG，再把同一结果改为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "−30 至 35 dB",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，换一个文件名保存，比较低幅度部分。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "再保存完整三份结果，原任务 PNG 和 JSON 中的纵轴仍为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "−5 至 35 dB",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。两份单独 PNG 使用同一谱值，显示范围不同。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m04-figure-expanded-export-round2",
+          "assetId": "m04-expanded-fixed-export-round2",
+          "caption": "同一谱值以 −30 至 35 dB 另存的 PNG，低幅度部分显示，频率仍为完整 0–8000 Hz。",
+          "alt": "白底黑线独立PNG，固定负30至35dB，保留较低谱线，无标注标题。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-complete-save",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "保存完整任务结果"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "m04-complete-steps",
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击右栏 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "选择目录保存完整结果",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，选择可写目录。此入口保存任务最初生成的 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "PNG、WAV 和 JSON",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，不采用后来编辑的显示轴。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "核对保存反馈与目录中的三份文件。同名不同内容会另名保留，已有相同内容可复用；取消窗口不表示已保存。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "网页入口用 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "下载选区 WAV",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "、"
+                  },
+                  {
+                    "type": "text",
+                    "text": "下载参数与谱值 JSON",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 逐份保存。PNG 下载使用当前纵轴，另记所用范围。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "长期保留原 WAV、原 TextGrid 与完整结果。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "只留图片会丢失准确边界、参数和谱值",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "backgroundColor": "#fff1c2",
+                          "backgroundColorDark": "#514218",
+                          "color": "#3b2f00",
+                          "colorDark": "#fff0bb"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m04-figure-complete-save-current",
+          "assetId": "m04-complete-save-current-light-scaled-r20261007",
+          "caption": "完整结果保存后，右栏确认已保存 3 个文件。单独 PNG 与完整结果保存入口并列。",
+          "alt": "右栏显示已保存3个结果文件，并列两个保存入口。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-json-reading",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "复核实际分析边界"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "实际选区包含起点样本，不包含终点样本。以下为 JSON 字段节选：选区样本数＝end_sample−start_sample；sample_count 是原文件帧数。JSON 用于复核，页面没有导入它重新配置的入口。"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "id": "m04-json-example",
+          "language": "json"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"sample_rate_hz\": 48000,\n  \"selection\": {\n    \"start_sample\": 4800,\n    \"end_sample\": 9600,\n    \"start_s\": 0.1,\n    \"end_s\": 0.2,\n    \"interval\": \"half-open\"\n  }\n}"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-recovery",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "遇到提示时怎样恢复"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-input-recovery",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "文件、选区与计算提示"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "attrs": {
+          "id": "m04-errors"
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "超过 48,000 样本",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：缩短底部选区。降低频率上限不能减少样本数，程序不会自动截短。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选区过短",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：至少需阶数＋2 个样本。扩大有效片段，或按分析目的降低阶数；达到门槛仍需检查谱形。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "时间、阶数或 dB 无效",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：完成数值输入，确认终点大于起点、阶数为整数、dB 下限小于上限。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "静音、无法求解或音频无效",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：检查波形与试听，换有效片段。失败不会生成可用的零幅度谱。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "文件或预览超限",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：另行准备符合输入限制的 WAV。只缩放视窗不能减少整个文件的读取量。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "标注越界、无有效层或标签过长",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：核对 WAV 裁剪版本、全部标注层与选区。合并标签最多 200 字符；不需要标注时选不关联。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "源文件失效或内容变化",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：刷新并重新选择或上传。原任务重试仍需访问原输入。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "超时、环境或空间提示",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：缩短选区后重新分析；环境不可用时重启工作台，空间不足时先检查项目可用空间。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-short-selection-example",
+          "level": 4
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "示例：选区过短后继续"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "m04-short-selection-steps",
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "16000 Hz WAV、50 阶下，填写 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "0.1–0.1001 s",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 并点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "开始分析",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。该范围仅一个样本，页面提示至少需要 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "52 个样本",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "波形和输入保留，任务数量仍为 0，尚未生成结果。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m04-figure-short-error-round2",
+          "assetId": "m04-short-selection-error-round2-light-scaled-r20261007",
+          "caption": "50 阶下填写 0.1–0.1001 s，页面提示至少需 52 样本。WAV 和输入保留，任务数量为 0。",
+          "alt": "选区过短提示至少52样本，底部0.1至0.1001秒可见，尚无任务结果。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "m04-short-selection-recovery-steps",
+          "start": 3
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "把终点改为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "0.4 s",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，核对起点仍为 0.1 s，再点 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "开始分析",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。选区变为 4800 样本，完成后出现频谱与已完成任务。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-preview-recovery",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "预览、旧图与试听问题"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "attrs": {
+          "id": "m04-display-errors"
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "语谱图忙碌或失败",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：等候或点击重试，按提示调整可见窗，也可关闭预览继续分析。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "旧图仍显示",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：核对图下文件与时间。输入已改变时重新开始分析；纵轴调整只改变显示。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "历史图与试听不对应",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：原 WAV 已加载时，播放仍用当前原音频；未加载时用历史单声道片段。核对文件名和两种时间。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "开始分析不可用",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：先加载原 WAV。仅预览入口需切换到具备任务服务的工作台或登录网页项目。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "试听无声",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：检查音量、所选声道和实际播放设备，再点击播放；无声试听不能据此判断计算失败。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-task-recovery",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "取消、重试与保存失败"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "m04-retry-steps",
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "用 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "取消分析",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 或 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "取消此任务",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 请求停止，等待最终状态。正在取消时无需重复提交。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "失败、中断或取消后，先处理具体错误。原设置仍适用时点 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "重试此任务",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "；需改选区、参数、文件或字体时回到输入并 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "开始分析",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "结果读取失败可再次 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "查看结果",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。字体缺失时到工作台设置检查图表字体，重新分析。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "保存取消或失败后，当前结果可继续保留。重选可写目录或重新保存 PNG，检查空间、权限和下载状态，直到文件可打开。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-sources",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "使用范围与方法来源"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-method",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "本页固定的分析设置"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "固定预加重系数为 "
+          },
+          {
+            "type": "text",
+            "text": "0.97",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，整段选区采用 "
+          },
+          {
+            "type": "text",
+            "text": "Hamming 窗",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，输出 "
+          },
+          {
+            "type": "text",
+            "text": "1024 点 LPC 谱包络",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。本页没有可调窗长、窗函数、预加重或 FFT 点数。"
+          }
+        ],
+        "attrs": {
+          "id": "m04-algorithm"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-reference-boundary",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "解释结果时注意什么"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "LPC 计算来自项目 V2。Praat / Parselmouth 在本页负责语谱预览。默认参数是本项目设置；方法论文、代码来源及分发许可可在 "
+          },
+          {
+            "type": "text",
+            "text": "方法与引用",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 分别查阅。"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "attrs": {
+          "id": "m04-interpretation"
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "谱峰不自动代表经过核验的 F1、F2 等真实共振峰",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "color": "#b42318",
+                          "colorDark": "#ffb4ab"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。当前没有峰表或共振峰追踪，谱值可随 JSON 保存。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "纵轴 dB 未经声压校准。录音条件、选区与阶数会影响谱形；跨材料比较时记录这些条件，统一图轴只帮助观察。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "多声道均值可能因相位相反而抵消。先检查原始声道；试听声道和音量不会改变 LPC 分析值。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m04-references",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "进一步阅读"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "方法背景见以下资料。具体分析以保存的音频、选区和参数为准。"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "SRC-PRAAT",
+                      "label": "Yannick Jadoul and Bill Thompson and Bart de Boer 2018 Introducing Parselmouth: A Python Interface to Praat"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "REF-MAKHOUL-1975-LPC",
+                      "label": "John Makhoul 1975"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

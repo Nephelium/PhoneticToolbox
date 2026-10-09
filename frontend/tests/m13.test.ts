@@ -2,11 +2,11 @@ import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {addToneMark,convertText,createDraft,dataInventory,displayEntry,effectiveIpaSize,mappingStandards,plainOutput,restoreDraft,standards,variantsFor} from '../src/modules/mandarin-ipa/state.ts';
+import {addToneMark,convertText,createDraft,createPageDraft,dataInventory,displayEntry,effectiveIpaSize,mappingStandards,moveVariantChoices,plainOutput,restoreDraft,snapshotDraft,standards,variantsFor} from '../src/modules/mandarin-ipa/state.ts';
 
 test('M13-F01 freezes all eleven legacy columns and the default standard',()=>{
   assert.equal(standards.length,11);assert.deepEqual(standards,[...mappingStandards,'汉语拼音']);
-  assert.equal(createDraft().standard,'Standard Chinese (Beijing)严');
+  assert.equal(createDraft().standard,'Standard Chinese (Beijing)');
   const expected=['ma˥','ma̠˥','mᴀ˥','mᴀ˥','mᴀ˥','mᴀ˥','mᴀ˥','mᴀ˥','ma˥','mä˥','mā'];
   assert.deepEqual(standards.map(standard=>plainOutput(convertText('妈',standard))),expected);
 });
@@ -31,7 +31,37 @@ test('M13-F01 preserves punctuation, Latin text, whitespace and explicit newline
 test('M13-F02/F03 restores only bounded layout state and keeps the IPA-only legacy default size',()=>{
   const defaults=createDraft();assert.equal(effectiveIpaSize(defaults),16);defaults.display='ipa-only';assert.equal(effectiveIpaSize(defaults),28);defaults.ipaSizeUserSet=true;assert.equal(effectiveIpaSize(defaults),16);
   const restored=restoreDraft({...defaults,hanziSize:999,ipaSize:9,gap:-99,lineHeight:9,standard:'invented',selectedVariants:{'行_0':2,'bad':9}});
-  assert.equal(restored.hanziSize,24);assert.equal(restored.ipaSize,16);assert.equal(restored.gap,0);assert.equal(restored.lineHeight,1.8);assert.equal(restored.standard,'Standard Chinese (Beijing)严');assert.deepEqual(restored.selectedVariants,{'行_0':2});
+  assert.equal(restored.hanziSize,24);assert.equal(restored.ipaSize,16);assert.equal(restored.gap,0);assert.equal(restored.lineHeight,1.8);assert.equal(restored.standard,'Standard Chinese (Beijing)');assert.deepEqual(restored.selectedVariants,{'行_0':2});
+});
+
+test('M13-R2 hides only tone letters and preserves segmental diacritics and pinyin ü',()=>{
+  assert.equal(plainOutput(convertText('妈麻马骂吗','Standard Chinese (Beijing)',{},false)),'mamamamama');
+  assert.equal(plainOutput(convertText('妈','Standard Chinese (Beijing)严',{},false)),'ma̠');
+  assert.equal(plainOutput(convertText('妈','UntPhesoca严',{},false)),'mä');
+  assert.equal(plainOutput(convertText('妈女略','汉语拼音',{},false)),'manülüe');
+  assert.equal(plainOutput(convertText('妈女略','汉语拼音')),'mānǚlüè');
+  const token=convertText('行','Standard Chinese (Beijing)严',{'行_0':1},false)[0];assert.equal(token.kind,'mapped');if(token.kind!=='mapped')return;
+  assert.equal(token.value,'xa̝ŋ');assert.equal(token.entry.tone,2);assert.equal(token.selectedVariant,1);
+  assert.equal(variantsFor(token,'Standard Chinese (Beijing)严',false)[1].value,'xa̝ŋ');
+  assert.equal(plainOutput(convertText('A1，\n妈','Standard Chinese (Beijing)',{},false)),'A1，\nma');
+});
+
+test('M13-R2 starts empty with Beijing while explicit restore preserves the complete old draft',()=>{
+  const saved={...createDraft(),text:'银行',standard:'UntPhesoca严',selectedVariants:{'行_1':1},hanziSize:32,ipaColor:'#123abc',hanziColor:'#fedcba',hanziFont:'KaiTi',showTone:false};
+  const fresh=createPageDraft(saved);assert.equal(fresh.text,'');assert.equal(fresh.standard,'Standard Chinese (Beijing)');assert.deepEqual(fresh.selectedVariants,{});assert.equal(fresh.hanziSize,32);assert.equal(fresh.showTone,false);
+  assert.equal(restoreDraft(saved).text,'银行');assert.deepEqual(restoreDraft(saved).selectedVariants,{'行_1':1});
+  const roundtrip=restoreDraft(snapshotDraft(restoreDraft(saved)));assert.deepEqual(roundtrip,saved);
+  const malformed=restoreDraft({...saved,ipaColor:'red;',hanziColor:'<bad>',hanziFont:'bad;family',showTone:'false'});
+  assert.equal(malformed.ipaColor,'');assert.equal(malformed.hanziColor,'');assert.equal(malformed.hanziFont,'');assert.equal(malformed.showTone,true);
+  const legacy=restoreDraft({version:1,text:'妈',standard:'UntPhesoca严'});assert.equal(legacy.showTone,true);assert.equal(legacy.hanziFont,'');
+});
+
+test('M13-R2 moves choices with unchanged characters and discards replaced positions',()=>{
+  assert.deepEqual(moveVariantChoices('行行','行',{'行_0':1,'行_1':2}),{'行_0':1});
+  assert.deepEqual(moveVariantChoices('银行','😀银行',{'行_1':1}),{'行_2':1});
+  assert.deepEqual(moveVariantChoices('银行','河行',{'行_1':1}),{'行_1':1});
+  assert.deepEqual(moveVariantChoices('银行','行行',{'行_0':1,'行_1':2}),{'行_1':2});
+  assert.deepEqual(moveVariantChoices('银行','新的文本',{'行_1':1}),{});
 });
 
 test('M13 long text conversion is complete and deterministic',()=>{

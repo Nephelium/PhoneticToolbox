@@ -54,7 +54,8 @@ class LocalService:
             headers={'Authorization': 'Bearer ' + self.token, 'Origin':self.url, 'Content-Type':'application/json'})
         # Local traffic does not inherit a user's HTTP proxy.
         opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
-        with opener.open(request, timeout=900 if path=='/api/v1/jobs/m11/component' else 35 if path=='/api/v1/jobs/egg/fonts' else 5) as response:
+        # Cleanup keeps running after a client timeout; wait for its actual result.
+        with opener.open(request, timeout=None if path in ('/api/v1/jobs/local-storage/cleanup','/api/v1/jobs/local-storage/clear-all') else 50 if path=='/api/v1/jobs/spec2wav/preview' else 330 if path=='/api/v1/jobs/local-parameter-window' else 900 if path=='/api/v1/jobs/m11/component' else 35 if path=='/api/v1/jobs/egg/fonts' else 5) as response:
             return json.load(response)
 
     def close(self):
@@ -83,6 +84,14 @@ class LocalService:
         path='/api/v1/jobs/local-inputs?'+urlencode(dict(name=name,role=role))
         return json.loads(self.binary(path,'POST',payload))
 
+    def import_stream(self,stream,name,role,size):
+        from urllib.parse import urlencode
+        request=urllib.request.Request(self.url+'/api/v1/jobs/local-inputs/stream?'+urlencode(dict(name=name,role=role,size=size)),
+            data=stream,method='POST',headers={'Authorization':'Bearer '+self.token,'Origin':self.url,
+                'Content-Type':'application/octet-stream','Content-Length':str(size)})
+        opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
+        with opener.open(request,timeout=300) as response:return json.load(response)
+
     def binary(self,path,method='GET',payload=None,*,max_bytes=1_048_576):
         if not path.startswith('/api/v1/jobs/') or '://' in path:raise ValueError('Invalid local task path')
         request=urllib.request.Request(self.url+path,data=payload,method=method,
@@ -109,12 +118,15 @@ class LocalService:
         path='/api/v1/preview/egg'+('/'+str(UUID(session)) if session else '')
         binary=action=='open'
         body=payload if binary else json.dumps(payload).encode() if payload is not None else None
+        headers={'Authorization':'Bearer '+self.token,'Origin':self.url,
+                 'Content-Type':'application/octet-stream' if binary else 'application/json'}
+        if binary and hasattr(payload,'seek'):
+            size=payload.seek(0,2);payload.seek(0);headers['Content-Length']=str(size)
         request=urllib.request.Request(self.url+path,data=body,method='DELETE' if action=='close' else 'POST',
-            headers={'Authorization':'Bearer '+self.token,'Origin':self.url,
-                     'Content-Type':'application/octet-stream' if binary else 'application/json'})
+            headers=headers)
         opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
         try:
-            with opener.open(request,timeout=35) as response:
+            with opener.open(request,timeout=125) as response:
                 raw=response.read(64_000_001)
                 if len(raw)>64_000_000: raise ValueError('egg_preview_failed')
                 return json.loads(raw)

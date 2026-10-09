@@ -11,7 +11,8 @@ import threading
 import time
 from queue import Queue, Full, Empty
 import numpy as np
-from phonetic_core.recording import meter, spectrum
+from phonetic_core.recording import meter
+from phonetic_core.recording.praat_display import spectrum
 from .storage import save_pcm, atomic_json, CHUNK_FRAMES, uid, now
 
 

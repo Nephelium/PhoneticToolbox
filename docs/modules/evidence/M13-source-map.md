@@ -1,5 +1,7 @@
 # M13 V2 说明书、源码与 V3 功能映射
 
+2026-10-05 P19-R13 来源补充：项目作者已直接确认 11 套 IPA 规则与映射为自有历史工作，并提供其另一账号的 [IPA-lab](https://github.com/Nephelium-chryseum/IPA-lab)。官方 API 的 2020-03-14 至 15 日创建/提交记录已核对。`PENDING-IPA` 保留稳定 ID，之前未决字段留档，当前自有来源见[本轮核查](../../references/p19-license-classification-audit.md)。这项作者确认不替代各标准的书目核实，也不声称当前 V3 文件与 2020 仓库逐字一致。
+
 2026-09-26 完成逐项对照。说明书来源为相邻 V2 `Phonetic_Export/index.html` 第 10.1–10.2 节，SHA-256 `a46c984929bcd8073ff1daf4e6b382a6685d4ca19e0fee0e29de3ecf0fb39ad5`。实际页面来源为 `phonetic_toolbox/gui/resources/ipa_trans/ipa_converter.html`，SHA-256 `11a5c8cc7315d04bc2beece64519247ab86f80e7e9fb37510704b8d1e4ec6451`；生成脚本 SHA-256 `676a03094f003a27575961c383ff59998bff284d02e01ed7fc9f584fc8b4dfba`。
 
 11 个名称是旧数据列名或旧页面生成项。本轮只验证本地来源、列和值的迁移一致性，没有把名称当作相应著作、体系或规范来源已经核验。`PENDING-IPA` 仍为来源与许可待处理项。
@@ -10,6 +12,10 @@
 | M13-F02 文字排版 | 汉字/音标独立字号、字音间距、行距、粗体、斜体、下划线 | `hanziFontSize=24`、`ipaFontSize=16`、`ipaHanziGap=0`、`hanziLineHeight=1.8`；仅音标且未手调时为 28 px；`getHanziStyle` 实际把粗斜体/下划线用于汉字。旧帮助气泡把对象写成音标，与说明书及代码不一致 | `MandarinIpaPage.vue` 的独立排版状态和有界恢复；IPA 固定公共 Doulos SIL；普通项和多音按钮统一盒模型，避免多音按钮公共 gap 抬高音标 | Chrome 测量 `银行花` 三个 IPA 顶坐标差及汉字顶坐标差均 < 0.5 px；浅深主题、组合符号、下划线与 Qt 截图见验收报告 |
 | M13-F03 显示方式 | 仅音标/字音同显、横向/上下排布 | `showWithHanzi=true`、`verticalLayout=false`；切换只重排，不清空输入或多音选择 | 页面 display/layout 状态、公共模块容器查询；横向三栏和上下单栏均保留同一 token 列表 | 两种显示、两种排布、长文本 1,200 个已映射字符及 AppShell 关闭保存/重开恢复见 Chrome 报告 |
 | M13-F04 输出与帮助 | 保存图片、使用说明 | `saveAsImage` 调用运行时 CDN `html2canvas`，3 倍白底 PNG；失败使用 `alert` | `export.ts` 直接使用浏览器 Canvas 和内置字体，无新增图片库、后端任务或文本上传；错误留在模块状态区，草稿与结果不清空 | Chrome 切到离线后真实下载 PNG，像素回读和 canvas 字体调用确认 Doulos；字体加载失败、PNG 编码失败均可恢复；Linux 只验证本地静态托管 |
+
+## 2026-10-05 M13-R2 显示修订
+
+本轮按井井授权：默认使用 Standard Chinese (Beijing)，重新打开空文本，旧草稿显式恢复。新增颜色、汉字字体和声调显示开关，IPA 固定 Doulos，原始映射与候选顺序不变。仅显示端将拼音键盘记法 v 规范为 ü，并修复修改文本后的选择位置与仅音标字号提示。导出复用已加载字体、自选样式和声调快照。此前表格记录的旧默认与自动恢复行为作为历史保留，当前行为以[决策](../../decisions/ADR-M13-R2.md)与[验证报告](../../testing/2026-10-05-m13-r2-report.md)为准。
 
 ## 映射资源
 

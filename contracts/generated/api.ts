@@ -394,6 +394,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/jobs/local-inputs/stream": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Stream Input */
+        post: operations["stream_local_acoustic_input"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/jobs/local-lip-conversion": {
         parameters: {
             query?: never;
@@ -411,6 +428,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/jobs/local-parameter-window": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Parameter Window */
+        post: operations["read_local_parameter_window"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/jobs/local-results/{asset_id}": {
         parameters: {
             query?: never;
@@ -422,6 +456,91 @@ export interface paths {
         get: operations["read_local_acoustic_result"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/local-storage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Status */
+        get: operations["local_storage_status"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/local-storage/cleanup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cleanup */
+        post: operations["clean_expired_local_results"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/local-storage/clear-all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Clear All */
+        post: operations["clear_all_local_result_caches"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/local-storage/export-receipt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Exported */
+        post: operations["acknowledge_local_export"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/local-storage/policy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Policy */
+        post: operations["configure_local_retention"];
         delete?: never;
         options?: never;
         head?: never;
@@ -819,6 +938,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/jobs/spec2wav/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Spec2Wav Preview */
+        post: operations["preview_spec2wav_source"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/jobs/{job_id}": {
         parameters: {
             query?: never;
@@ -1142,6 +1278,11 @@ export interface components {
             /** Job Id */
             job_id: string | null;
             /**
+             * Progress
+             * @default 0
+             */
+            progress: number;
+            /**
              * State
              * @enum {string}
              */
@@ -1176,9 +1317,33 @@ export interface components {
             /** Total */
             total: number;
         };
+        /**
+         * AcousticBundleFile
+         * @description M01's versioned file budget does not widen M03/M04 manifests.
+         */
+        AcousticBundleFile: {
+            /** Expires At */
+            expires_at: number | null;
+            /** Id */
+            id: string;
+            /**
+             * Kind
+             * @default result
+             * @constant
+             */
+            kind: "result";
+            /** Name */
+            name: string;
+            /** Sha256 */
+            sha256: string;
+            /** Size Bytes */
+            size_bytes: number;
+        };
         /** AcousticConfigSnapshot */
         AcousticConfigSnapshot: {
             backend_policy?: components["schemas"]["AcousticBackendPolicy"];
+            /** @default null */
+            extended: components["schemas"]["AcousticExtended"] | null;
             selection?: components["schemas"]["AcousticSelection"];
             settings?: components["schemas"]["AcousticSettings"];
         };
@@ -1198,6 +1363,32 @@ export interface components {
             sample_dtype: "uint8" | "int16" | "int32" | "float32" | "float64";
             /** Sample Rate Hz */
             sample_rate_hz: number;
+        };
+        /** AcousticExtended */
+        AcousticExtended: {
+            /**
+             * Audio Channel
+             * @default null
+             */
+            audio_channel: number | null;
+            /** Channel Overrides */
+            channel_overrides?: {
+                [key: string]: number;
+            };
+            /** @default null */
+            egg: components["schemas"]["JointEggSettings"] | null;
+            /**
+             * Max Duration S
+             * @default 1800
+             * @constant
+             */
+            max_duration_s: 1800;
+            /**
+             * Revision
+             * @default bounded/1
+             * @constant
+             */
+            revision: "bounded/1";
         };
         /** AcousticFileManifest */
         AcousticFileManifest: {
@@ -1508,7 +1699,13 @@ export interface components {
             /** Core Version */
             core_version: string;
             /** Files */
-            files: components["schemas"]["AcousticManagedFile"][];
+            files: components["schemas"]["AcousticBundleFile"][];
+            /**
+             * Format Revision
+             * @default legacy/1
+             * @enum {string}
+             */
+            format_revision: "legacy/1" | "m01-bundle/2";
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
@@ -1694,6 +1891,11 @@ export interface components {
         EggInteractiveResult: {
             /** Audio Base64 */
             audio_base64?: string | null;
+            /**
+             * Audio Start S
+             * @default 0
+             */
+            audio_start_s: number;
             config: components["schemas"]["EggTaskConfig"];
             /** Input Sha256 */
             input_sha256: string;
@@ -1765,6 +1967,25 @@ export interface components {
              */
             spectral_policy: "pad-44100-periodic-hamming-fft-80db-floor";
         };
+        /** EggManagedFile */
+        EggManagedFile: {
+            /** Expires At */
+            expires_at: number | null;
+            /** Id */
+            id: string;
+            /**
+             * Kind
+             * @default result
+             * @constant
+             */
+            kind: "result";
+            /** Name */
+            name: string;
+            /** Sha256 */
+            sha256: string;
+            /** Size Bytes */
+            size_bytes: number;
+        };
         /** EggManifest */
         EggManifest: {
             /**
@@ -1776,7 +1997,13 @@ export interface components {
             /** Core Version */
             core_version: string;
             /** Files */
-            files: components["schemas"]["AcousticManagedFile"][];
+            files: components["schemas"]["EggManagedFile"][];
+            /**
+             * Format Revision
+             * @default m03/1
+             * @enum {string}
+             */
+            format_revision: "m03/1" | "m03/2";
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
@@ -1875,6 +2102,12 @@ export interface components {
         };
         /** EggPreviewSession */
         EggPreviewSession: {
+            /** Overview Base64 */
+            overview_base64?: string | null;
+            /** Sample Count */
+            sample_count?: number | null;
+            /** Sample Rate Hz */
+            sample_rate_hz?: number | null;
             /**
              * Session Id
              * Format: uuid
@@ -2035,6 +2268,11 @@ export interface components {
              * @default 0.01
              */
             valley_prominence: number;
+        };
+        /** ExportReceipt */
+        ExportReceipt: {
+            /** Assets */
+            assets: string[];
         };
         /** FigureFontSnapshot */
         FigureFontSnapshot: {
@@ -2286,6 +2524,77 @@ export interface components {
             /** Waiting Reason */
             waiting_reason?: string | null;
         };
+        /** JointEggSettings */
+        JointEggSettings: {
+            /**
+             * Auto Prominence
+             * @default true
+             */
+            auto_prominence: boolean;
+            /**
+             * Derived
+             * @default false
+             */
+            derived: boolean;
+            /**
+             * Egg Channel
+             * @default 0
+             */
+            egg_channel: number;
+            /**
+             * Gci Method
+             * @default slope
+             * @enum {string}
+             */
+            gci_method: "slope" | "scale";
+            /**
+             * Goi Method
+             * @default scale
+             * @enum {string}
+             */
+            goi_method: "slope" | "scale";
+            /**
+             * Highpass Cutoff
+             * @default 25
+             */
+            highpass_cutoff: number;
+            /**
+             * Lowpass Cutoff
+             * @default 2000
+             */
+            lowpass_cutoff: number;
+            /**
+             * Max Gap Ms
+             * @default 50
+             */
+            max_gap_ms: number;
+            /**
+             * Peak Prominence
+             * @default 0.01
+             */
+            peak_prominence: number;
+            /**
+             * Silence Threshold
+             * @default 0.01
+             */
+            silence_threshold: number;
+            /**
+             * Smooth Ms
+             * @default 20
+             */
+            smooth_ms: number;
+            /**
+             * Storage
+             * @default aligned
+             * @enum {string}
+             */
+            storage: "aligned" | "cycles";
+            /**
+             * Valley Prominence
+             * @default 0.01
+             */
+            valley_prominence: number;
+        };
         /** LocalM11ComponentRequest */
         LocalM11ComponentRequest: {
             /**
@@ -2533,7 +2842,7 @@ export interface components {
              * Action
              * @enum {string}
              */
-            action: "generate" | "synthesize" | "extract" | "resynthesize";
+            action: "generate" | "synthesize" | "extract";
             audio?: components["schemas"]["AcousticAssetRef"] | null;
             /** Idempotency Key */
             idempotency_key: string;
@@ -2885,12 +3194,12 @@ export interface components {
         M11Config: {
             /**
              * Beam
-             * @default 10
+             * @default 100
              */
             beam: number;
             /**
              * Retry Beam
-             * @default 40
+             * @default 400
              */
             retry_beam: number;
         };
@@ -2964,19 +3273,62 @@ export interface components {
              * Action
              * @enum {string}
              */
-            action: "preview" | "export";
+            action: "inspect" | "preview" | "export";
+            /**
+             * Character Column
+             * @default 1
+             */
+            character_column: number;
+            /**
+             * Computation Revision
+             * @default m14/1
+             * @enum {string}
+             */
+            computation_revision: "m14/1" | "m14/2";
             /**
              * Consonant Only As Zero Initial
              * @default true
              */
             consonant_only_as_zero_initial: boolean;
+            /**
+             * Delimiter
+             * @default auto
+             * @enum {string}
+             */
+            delimiter: "auto" | "tab" | "comma" | "semicolon" | "chinese_comma" | "space";
+            /**
+             * Encoding
+             * @default auto
+             * @enum {string}
+             */
+            encoding: "auto" | "utf-8-sig" | "gb18030" | "utf-16";
             font?: components["schemas"]["FigureFontSnapshot"] | null;
+            /**
+             * Ipa Column
+             * @default 2
+             */
+            ipa_column: number;
+            /**
+             * Note Column
+             * @default 3
+             */
+            note_column: number | null;
             settings?: components["schemas"]["M14Settings"] | null;
             /**
              * Skip First Row
              * @default true
              */
             skip_first_row: boolean;
+            /**
+             * Start Row
+             * @default 2
+             */
+            start_row: number;
+            /**
+             * Table Index
+             * @default 0
+             */
+            table_index: number;
         };
         /** M14Manifest */
         M14Manifest: {
@@ -3061,6 +3413,29 @@ export interface components {
             /** Sha256 */
             sha256: string;
         };
+        /** ParameterView */
+        ParameterView: {
+            /** End */
+            end: number;
+            /** Parameters */
+            parameters?: string[];
+            /**
+             * Start
+             * @default 0
+             */
+            start: number;
+            /**
+             * Width
+             * @default 1200
+             */
+            width: number;
+        };
+        /** ParameterWindowRequest */
+        ParameterWindowRequest: {
+            /** Asset Id */
+            asset_id: string;
+            view?: components["schemas"]["ParameterView"] | null;
+        };
         /** PreviewInterval */
         PreviewInterval: {
             /** Text */
@@ -3135,6 +3510,18 @@ export interface components {
             /** Manifest */
             manifest: components["schemas"]["JobManifest"] | components["schemas"]["FileManifest"] | components["schemas"]["AcousticFileManifest"] | components["schemas"]["AcousticTaskManifest"] | components["schemas"]["Spec2WavManifest"] | components["schemas"]["EggManifest"] | components["schemas"]["LpcManifest"] | components["schemas"]["M08Manifest"] | components["schemas"]["M14Manifest"] | components["schemas"]["M06Manifest"] | components["schemas"]["M07Manifest"] | components["schemas"]["M11Manifest"] | components["schemas"]["M05Manifest"];
         };
+        /** RetentionPolicy */
+        RetentionPolicy: {
+            /** Days */
+            days: number;
+            /** Enabled */
+            enabled: boolean;
+            /**
+             * Exported Cache Days
+             * @default 7
+             */
+            exported_cache_days: number;
+        };
         /** RetryInput */
         RetryInput: {
             /** Idempotency Key */
@@ -3165,8 +3552,24 @@ export interface components {
         };
         /** Spec2WavConfig */
         Spec2WavConfig: {
+            /**
+             * Audio Fft
+             * @default 1024
+             * @enum {integer}
+             */
+            audio_fft: 512 | 1024 | 2048;
+            /**
+             * Channel
+             * @default 0
+             */
+            channel: number;
             /** Corners */
             corners?: components["schemas"]["ImagePoint"][] | null;
+            /**
+             * Dynamic Range
+             * @default 60
+             */
+            dynamic_range: number;
             /**
              * Freq End
              * @default 11025
@@ -3188,6 +3591,12 @@ export interface components {
              */
             min_db: number;
             /**
+             * Mode
+             * @default image
+             * @enum {string}
+             */
+            mode: "image" | "image_draw" | "audio_draw";
+            /**
              * N Iter
              * @default 32
              */
@@ -3197,6 +3606,8 @@ export interface components {
              * @default 0
              */
             seed: number;
+            /** Strokes */
+            strokes?: components["schemas"]["SpectralStroke"][];
             /**
              * Target Sr
              * @default 44100
@@ -3249,6 +3660,35 @@ export interface components {
              */
             policy_version: 1 | 2;
         };
+        /** Spec2WavPreview */
+        Spec2WavPreview: {
+            /** Channel */
+            channel?: number | null;
+            /** Channels */
+            channels?: number | null;
+            /** Duration */
+            duration?: number | null;
+            /** Dynamic Range */
+            dynamic_range?: number | null;
+            /** Height */
+            height: number;
+            /** Hop Length */
+            hop_length?: number | null;
+            /** Image Base64 */
+            image_base64: string;
+            /** N Fft */
+            n_fft?: number | null;
+            /** Reference Amplitude */
+            reference_amplitude?: number | null;
+            /** Sample Rate */
+            sample_rate?: number | null;
+            /** Samples */
+            samples?: number | null;
+            /** Source Sha256 */
+            source_sha256: string;
+            /** Width */
+            width: number;
+        };
         /** Spec2WavRequest */
         Spec2WavRequest: {
             config: components["schemas"]["Spec2WavConfig"];
@@ -3263,6 +3703,27 @@ export interface components {
              * @constant
              */
             schema_version: "m09/1";
+        };
+        /** SpectralStroke */
+        SpectralStroke: {
+            /**
+             * Color
+             * @default 0
+             * @enum {integer}
+             */
+            color: 0 | 255;
+            /**
+             * Opacity
+             * @default 1
+             */
+            opacity: number;
+            /** Points */
+            points: components["schemas"]["ImagePoint"][];
+            /**
+             * Size
+             * @default 12
+             */
+            size: number;
         };
         /** SpectrogramPreview */
         SpectrogramPreview: {
@@ -4205,6 +4666,39 @@ export interface operations {
             };
         };
     };
+    stream_local_acoustic_input: {
+        parameters: {
+            query: {
+                role: string;
+                name: string;
+                size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     convert_local_legacy_lip: {
         parameters: {
             query?: never;
@@ -4225,6 +4719,39 @@ export interface operations {
             };
         };
     };
+    read_local_parameter_window: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ParameterWindowRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     read_local_acoustic_result: {
         parameters: {
             query?: {
@@ -4238,6 +4765,132 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    local_storage_status: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    clean_expired_local_results: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    clear_all_local_result_caches: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    acknowledge_local_export: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExportReceipt"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    configure_local_retention: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RetentionPolicy"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -4976,6 +5629,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    preview_spec2wav_source: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Spec2WavRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Spec2WavPreview"];
                 };
             };
             /** @description Validation Error */

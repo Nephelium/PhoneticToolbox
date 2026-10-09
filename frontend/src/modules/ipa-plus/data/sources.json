@@ -24,10 +24,12 @@
     "license": "论文及图版版权保留，原 PDF 不随包分发"
   },
   "voqs-zhihu-203037479": {
-    "title": "UntPhesoca · VoQS：音质符号（2016 中英双语版），中文名称",
-    "url": "https://zhuanlan.zhihu.com/p/203037479",
-    "version": "2020 unt 译；© 2016 Ball、Esling、Dickson",
-    "license": "中文术语按指定译表采用，未复制文章图像或排版"
+    "title": "王天恒. VoQS：音质符号（2016 中英双语版）[EB/OL]. Zenodo(2020-08-30)[2023-12-26]. https://doi.org/10.5281/zenodo.10206204.",
+    "url": "https://doi.org/10.5281/zenodo.10206204",
+    "version": "2020-08-30 中文版；2016 原表",
+    "license": "CC BY 4.0（Zenodo 对应译表记录）；保留原表作者及改写说明，原图不随包分发",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "previousUrl": "https://zhuanlan.zhihu.com/p/203037479"
   },
   "unicode-cartouche-2024": {
     "title": "Unicode L2/24-182R · 多字符圈围编码讨论",
@@ -38,8 +40,8 @@
   "ipa-chart-zh-2007": {
     "title": "中国语言学会语音学分会 · 国际音标中文版（2007；修订至2005年）",
     "url": "https://doi.org/10.1017/S0025100311000156",
-    "version": "用户指定图4中文名称；同名中文表刊于JIPA 2011, 41(2)",
-    "license": "中文名称据用户指定图核对；原图与文章不随包分发"
+    "version": "2007中文版中文名称；同名中文表刊于JIPA 2011, 41(2)",
+    "license": "中文名称据中文版图表核对；原图与文章不随包分发"
   },
   "ipa-handbook-jiang-2008": {
     "title": "国际语音学会编，江荻译（2008）· 国际语音学会手册：国际音标使用指南",

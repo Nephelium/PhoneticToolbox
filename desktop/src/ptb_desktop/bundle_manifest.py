@@ -8,6 +8,7 @@ import json
 from pathlib import Path, PurePosixPath
 import platform
 import sys
+import sysconfig
 
 RUNTIMES=frozenset({'PTB_EGG_PYTHON','PTB_M05_PYTHON'})
 
@@ -15,6 +16,15 @@ RUNTIMES=frozenset({'PTB_EGG_PYTHON','PTB_M05_PYTHON'})
 def architecture(value):
     value=value.lower()
     return {'amd64':'x86_64','aarch64':'arm64'}.get(value,value)
+
+
+def process_architecture():
+    value = platform.machine()
+    # Windows may omit PROCESSOR_ARCHITECTURE in a clean launch environment.
+    # The interpreter's build platform still identifies the executable ABI.
+    if not value and sys.platform == 'win32':
+        value = sysconfig.get_platform().removeprefix('win-')
+    return architecture(value)
 
 
 def bundled_path(root,relative):
@@ -36,7 +46,7 @@ def runtime_bindings(root, *, host_platform=None, host_arch=None):
     if manifest.stat().st_size>1_000_000:raise ValueError('Bundle manifest too large')
     value=json.loads(manifest.read_text('utf-8'))
     target=sys.platform if host_platform is None else host_platform
-    arch=architecture(platform.machine() if host_arch is None else host_arch)
+    arch=process_architecture() if host_arch is None else architecture(host_arch)
     if (value.get('schema')!='desktop-bundle/1' or value.get('portable') is not True or
         value.get('platform')!=target or value.get('architecture')!=arch):
         raise ValueError('Bundle platform, architecture or portability mismatch')
@@ -50,4 +60,12 @@ def runtime_bindings(root, *, host_platform=None, host_arch=None):
         with path.open('rb') as stream:digest=hashlib.file_digest(stream,'sha256').hexdigest()
         if digest!=item.get('sha256'):raise ValueError('Bundled runtime hash mismatch')
         bindings[key]=str(path)
+    mfa=value.get('mfa')
+    if mfa is not None:
+        if not isinstance(mfa,dict):raise ValueError('Invalid bundled MFA component')
+        path=bundled_path(root,mfa.get('registry'))
+        if not path.is_file():raise ValueError('Bundled MFA registry missing')
+        with path.open('rb') as stream:digest=hashlib.file_digest(stream,'sha256').hexdigest()
+        if digest!=mfa.get('sha256'):raise ValueError('Bundled MFA registry hash mismatch')
+        bindings['PTB_M11_BUNDLED_COMPONENTS']=str(path.parent)
     return bindings

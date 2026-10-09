@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import type {BatchView,JobView} from '../../platform/research.ts';
-defineProps<{batches:BatchView[];active:BatchView|null;jobs:JobView[];busy:boolean;desktop:boolean}>();
+import {computed} from 'vue';
+const props=defineProps<{batches:BatchView[];active:BatchView|null;jobs:JobView[];busy:boolean;desktop:boolean}>();
+const current=computed(()=>props.active?.summary.items.find(i=>['running','cancel_requested'].includes(i.state))??props.active?.summary.items.filter(i=>!['not_started','queued'].includes(i.state)).at(-1));
+const fileProgress=computed(()=>current.value?.state==='succeeded'?1:current.value?.progress??0);
+const phase=computed(()=>!current.value?'等待开始':current.value.state!=='running'?labels[current.value.state]:fileProgress.value<.1?'读取与全段统计':fileProgress.value<.25?'检测 EGG 周期':fileProgress.value<.75?'分段计算参数':fileProgress.value<.94?'写入参数表':'整理结果');
 defineEmits<{select:[id:string];cancel:[];save:[];retry:[id:string];download:[id:string,name:string]}>();
 const labels:Record<string,string>={not_started:'未开始',queued:'排队',running:'计算中',cancel_requested:'正在取消',cancelled:'已取消',succeeded:'已完成',failed:'失败',interrupted:'已中断'};
 const errors:Record<string,string>={input_unavailable:'输入已变化、删除或到期',worker_interrupted:'计算进程已中断，可重试',execution_failed:'处理失败，请检查音频与关联文件',deadline_exceeded:'处理时间超过上限',output_budget_exceeded:'结果超过当前大小上限',disk_space_low:'可用磁盘空间不足',quota_exceeded:'项目空间不足',cancelled:'已取消'};
 Object.assign(errors,{
+ m01_egg_filter_range:'EGG低通频率必须低于音频采样率的一半，请调整 EGG 计算设置。',
+ m01_duration_limit:'最长支持 30 分钟，请先切分音频。',m01_invalid_source:'音频格式或采样率不受支持。',m01_channel_invalid:'分析声道不存在或音频与 EGG 选择了同一声道。',m01_frame_budget:'帧移过小，超过 200 万帧预算。',m01_output_budget:'输出超过当前磁盘预算，请减少参数或加大帧移。',m01_runtime_not_admitted:'该分段计算功能目前仅在 Windows 本机研究工作台开放。',m01_process_failed:'计算子进程未完成，请检查本机任务记录。',
  analysis_energy_failed:'强度计算失败，本文件未生成结果。',
  analysis_formants_failed:'共振峰计算失败，本文件未生成结果。',
  analysis_praat_pitch_failed:'Praat 基频计算失败，本文件未生成结果。',
@@ -40,11 +46,12 @@ function downloadName(batch:BatchView,job:JobView,name:string){return job.operat
 </script>
 <template>
 <section class="m01-results" aria-label="批次与结果">
+  <div class="m01-file-progress" aria-label="当前音频进度"><div><strong>单个音频</strong><span>{{Math.round(fileProgress*100)}}%</span></div><p :title="current&&active?active.audio_names[current.index]:''">{{current&&active?active.audio_names[current.index]:'等待开始'}}</p><progress aria-label="单个音频处理进度" :max="1" :value="fileProgress"/><small aria-live="polite">{{phase}}</small></div>
   <label v-if="batches.length">处理记录<select :value="active?.id" :disabled="busy" @change="$emit('select',($event.target as HTMLSelectElement).value)"><option v-for="batch in batches" :key="batch.id" :value="batch.id">{{batch.operation==='acoustic_analysis'?'参数分析':'TextGrid切分'}} · {{batch.summary.total}}个 · {{new Date(batch.created_at*1000).toLocaleTimeString()}}</option></select></label>
   <template v-if="active"><p aria-live="polite"><strong>{{active.summary.counts.succeeded}} / {{active.summary.total}} 已完成</strong><br/><span class="muted">失败 {{active.summary.counts.failed}} · 中断 {{active.summary.counts.interrupted}} · 未开始 {{active.summary.counts.not_started}}</span></p>
     <progress aria-label="批次处理进度" :max="active.summary.total" :value="active.summary.counts.succeeded+active.summary.counts.failed+active.summary.counts.cancelled+active.summary.counts.interrupted"/>
-    <div class="toolbar"><button v-if="!active.summary.closed" :disabled="busy" @click="$emit('cancel')">取消后续处理</button><button class="primary" v-if="desktop&&active.summary.counts.succeeded" :disabled="busy" @click="$emit('save')">保存已完成结果</button></div>
-    <p v-if="active.summary.closed&&!active.summary.complete" class="hint">本批次未全部成功。已完成文件仍可保存；失败或中断项可以单独重试。</p>
+    <div class="toolbar m01-result-actions"><button :disabled="busy||active.summary.closed" @click="$emit('cancel')">取消后续处理</button><button class="primary" v-if="desktop" :disabled="busy||!active.summary.counts.succeeded" @click="$emit('save')">保存已完成结果</button></div>
+    <p class="hint result-outcome" :class="{hidden:!active.summary.closed||active.summary.complete}">本批次未全部成功。已完成文件仍可保存；失败或中断项可以单独重试。</p>
     <ol class="m01-result-items"><li v-for="item in active.summary.items" :key="item.index"><div><strong>{{active.audio_names[item.index]}}</strong><span :class="['failed','interrupted'].includes(item.state)?'danger-text':'muted'">{{labels[item.state]}}</span></div><small v-if="item.error_code" class="danger-text" :title="item.error_code">{{errors[item.error_code]??'处理未完成，请检查输入后重试'}}</small><button v-if="['failed','interrupted','cancelled'].includes(item.state)&&item.job_id&&active.summary.closed" :disabled="busy" @click="$emit('retry',item.job_id)">重试此文件</button></li></ol>
     <template v-if="!desktop"><div v-for="job in jobs.filter(j=>j.state==='succeeded')" :key="job.id" class="m01-result-downloads"><template v-if="job.result_manifest?.kind==='managed_acoustic_files'"><strong>{{audioName(active,job)}}</strong><button v-for="file in job.result_manifest.files.filter(f=>!f.name.toLowerCase().endsWith('.json'))" :key="file.id" :disabled="busy" @click="$emit('download',file.id,downloadName(active,job,file.name))">{{downloadName(active,job,file.name)}}</button></template></div></template>
   </template><p v-else class="empty-small">尚无处理记录。</p>
@@ -52,5 +59,6 @@ function downloadName(batch:BatchView,job:JobView,name:string){return job.operat
 </template>
 <style scoped>
 .m01-results{min-width:0}.m01-results progress{display:block;width:100%;max-width:100%}.m01-results button{white-space:normal}.m01-result-downloads strong,.m01-results .danger-text{overflow-wrap:anywhere}
-.m01-results label{display:flex;flex-direction:column;gap:6px}.m01-results select{max-width:100%;min-width:0}.m01-result-items{list-style:none;padding:0;margin:12px 0;max-height:300px;overflow:auto}.m01-result-items li{padding:8px 0;border-bottom:1px solid var(--border)}.m01-result-items li>div{display:flex;gap:8px;justify-content:space-between}.m01-result-items strong{font-size:12px;overflow-wrap:anywhere}.m01-result-items span,.m01-result-items small{font-size:12px}.m01-result-items button{margin-top:5px}.m01-result-downloads{display:flex;flex-direction:column;gap:5px;margin-top:8px}.m01-result-downloads button{overflow-wrap:anywhere;text-align:left;font-size:12px}
+.m01-file-progress{padding:10px;border:1px solid var(--border);border-radius:var(--radius);margin:8px 0 12px}.m01-file-progress>div{display:flex;justify-content:space-between;gap:8px}.m01-file-progress p{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:6px 0;min-height:1.5em}.m01-file-progress small{display:block;min-height:1.5em;margin-top:5px}.m01-result-actions{display:grid;grid-template-columns:1fr;gap:6px}.result-outcome{min-height:3em}.result-outcome.hidden{visibility:hidden}
+.m01-results label{display:flex;flex-direction:column;gap:6px}.m01-results select{max-width:100%;min-width:0}.m01-result-items{list-style:none;padding:0;margin:12px 0;max-height:300px;overflow:auto}.m01-result-items li{padding:8px 0;border-bottom:1px solid var(--border)}.m01-result-items li>div{display:flex;gap:8px;justify-content:space-between}.m01-result-items strong{font-size:0.857143rem;overflow-wrap:anywhere}.m01-result-items span,.m01-result-items small{font-size:0.857143rem}.m01-result-items button{margin-top:5px}.m01-result-downloads{display:flex;flex-direction:column;gap:5px;margin-top:8px}.m01-result-downloads button{overflow-wrap:anywhere;text-align:left;font-size:0.857143rem}
 </style>

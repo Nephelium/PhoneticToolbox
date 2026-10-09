@@ -31,12 +31,18 @@ from ..acoustic import (
     compute_voiced_mask
 )
 
-def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, backends=None, cancellation=None) -> AnalysisResult:
+def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, backends=None, cancellation=None, *, extra_f0=None, silence_reference_db=None, selective=False) -> AnalysisResult:
     """Array-only M01 computation. Native execution and persistence belong to adapters."""
     if not isinstance(audio,AudioInput): raise TypeError('audio must be AudioInput')
     backends=backends or AcousticBackends()
     associations=associations or AcousticAssociations()
     backend_events=[]
+    selected = set(config.selected_parameter_keys or ())
+    def needs(*keys):
+        return not selective or not selected or bool(selected.intersection(keys))
+    def branch_needed(kind):
+        return not selective or not selected or any(k.endswith('_'+kind) for k in selected)
+
     def checkpoint():
         if cancellation is not None: cancellation()
     checkpoint()
@@ -72,6 +78,8 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
 
         # Determine silence threshold in dB using new core function
         silence_mask = compute_silence_mask(intensity, config.silence_threshold)
+        if silence_reference_db is not None:
+            silence_mask = (~np.isfinite(intensity)) | (intensity < silence_reference_db + 20*np.log10(max(1e-9, config.silence_threshold)))
 
     except Exception as e:
         raise_stage_failure('energy', e)
@@ -151,7 +159,12 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
 
     derived_data = {}
 
-    for f0_type in ["pF0", "rF0"]:
+    if extra_f0 is not None:
+        f0_data['gF0'] = np.asarray(extra_f0(target_times), dtype=float)
+        if f0_data['gF0'].shape != target_times.shape: raise ValueError('invalid_gci_f0_grid')
+        derived_data['gF0'] = f0_data['gF0'].copy()
+    for f0_type in ["pF0", "rF0"] + (['gF0'] if extra_f0 is not None else []):
+        if f0_type != 'gF0' and not branch_needed(f0_type): continue
         checkpoint()
         f0 = f0_data[f0_type]
         suffix = f"_{f0_type}" # e.g. _pF0
@@ -171,114 +184,120 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
 
         voiced_mask = compute_voiced_mask(f0, curr_silence_mask)
 
-        # 4.1 Harmonics (H1, H2, H4) and Amplitudes (A1, A2, A3) and H2K, H5K
-        # Use new Batch Computation
-        try:
-            spec_res = compute_spectral_features_batch(
-                y, fs, frameshift_ms, f0, pF1, pF2, pF3, n_periods, voiced_mask
-            )
-            # Unpack
-            h1 = spec_res["H1"]
-            h2 = spec_res["H2"]
-            h4 = spec_res["H4"]
-            a1 = spec_res["A1"]
-            a2 = spec_res["A2"]
-            a3 = spec_res["A3"]
-            h2k = spec_res["H2K"]
-            h5k = spec_res["H5K"]
+        if f0_type == 'gF0' or not selective or not selected or any(k.endswith(suffix) and k.startswith(('H','A')) and not k.startswith('HNR') for k in selected):
+            # 4.1 Harmonics (H1, H2, H4) and Amplitudes (A1, A2, A3) and H2K, H5K
+            # Use new Batch Computation
+            try:
+                spec_res = compute_spectral_features_batch(
+                    y, fs, frameshift_ms, f0, pF1, pF2, pF3, n_periods, voiced_mask
+                )
+                # Unpack
+                h1 = spec_res["H1"]
+                h2 = spec_res["H2"]
+                h4 = spec_res["H4"]
+                a1 = spec_res["A1"]
+                a2 = spec_res["A2"]
+                a3 = spec_res["A3"]
+                h2k = spec_res["H2K"]
+                h5k = spec_res["H5K"]
 
-            # Store raw
-            derived_data[f"H1{suffix}"] = h1
-            derived_data[f"H2{suffix}"] = h2
-            derived_data[f"H4{suffix}"] = h4
-            derived_data[f"A1{suffix}"] = a1
-            derived_data[f"A2{suffix}"] = a2
-            derived_data[f"A3{suffix}"] = a3
-            derived_data[f"H2K{suffix}"] = h2k
-            derived_data[f"H5K{suffix}"] = h5k
+                # Store raw
+                derived_data[f"H1{suffix}"] = h1
+                derived_data[f"H2{suffix}"] = h2
+                derived_data[f"H4{suffix}"] = h4
+                derived_data[f"A1{suffix}"] = a1
+                derived_data[f"A2{suffix}"] = a2
+                derived_data[f"A3{suffix}"] = a3
+                derived_data[f"H2K{suffix}"] = h2k
+                derived_data[f"H5K{suffix}"] = h5k
 
-        except Exception as e:
-            raise_stage_failure('spectrum', e)
+            except Exception as e:
+                raise_stage_failure('spectrum', e)
 
-        # 4.3 Uncorrected Tilts (H1-H2, H1-A1, etc.)
-        # "H1H2u" means uncorrected
-        try:
-            derived_data[f"H1H2u{suffix}"] = h1 - h2
-            derived_data[f"H2H4u{suffix}"] = h2 - h4
-            derived_data[f"H1A1u{suffix}"] = h1 - a1
-            derived_data[f"H1A2u{suffix}"] = h1 - a2
-            derived_data[f"H1A3u{suffix}"] = h1 - a3
-            derived_data[f"H42Ku{suffix}"] = h4 - h2k
-            derived_data[f"H2KH5Ku{suffix}"] = h2k - h5k
-        except Exception as e:
-            raise_stage_failure('tilt', e)
+            # 4.3 Uncorrected Tilts (H1-H2, H1-A1, etc.)
+            # "H1H2u" means uncorrected
+            try:
+                derived_data[f"H1H2u{suffix}"] = h1 - h2
+                derived_data[f"H2H4u{suffix}"] = h2 - h4
+                derived_data[f"H1A1u{suffix}"] = h1 - a1
+                derived_data[f"H1A2u{suffix}"] = h1 - a2
+                derived_data[f"H1A3u{suffix}"] = h1 - a3
+                derived_data[f"H42Ku{suffix}"] = h4 - h2k
+                derived_data[f"H2KH5Ku{suffix}"] = h2k - h5k
+            except Exception as e:
+                raise_stage_failure('tilt', e)
 
-        # 4.4 Corrected Tilts
-        try:
-            h_corr = compute_H1H2_H2H4_corrected(h1, h2, h4, fs, f0, pF1, pF2, pB1, pB2)
-            derived_data[f"H1H2c{suffix}"] = h_corr["H1H2c"]
-            derived_data[f"H2H4c{suffix}"] = h_corr["H2H4c"]
+            # 4.4 Corrected Tilts
+            try:
+                h_corr = compute_H1H2_H2H4_corrected(h1, h2, h4, fs, f0, pF1, pF2, pB1, pB2)
+                derived_data[f"H1H2c{suffix}"] = h_corr["H1H2c"]
+                derived_data[f"H2H4c{suffix}"] = h_corr["H2H4c"]
 
-            a_corr = compute_H1A1A2A3_corrected(h1, a1, a2, a3, fs, f0, pF1, pF2, pF3, pB1, pB2, pB3)
-            derived_data[f"H1A1c{suffix}"] = a_corr["H1A1c"]
-            derived_data[f"H1A2c{suffix}"] = a_corr["H1A2c"]
-            derived_data[f"H1A3c{suffix}"] = a_corr["H1A3c"]
+                a_corr = compute_H1A1A2A3_corrected(h1, a1, a2, a3, fs, f0, pF1, pF2, pF3, pB1, pB2, pB3)
+                derived_data[f"H1A1c{suffix}"] = a_corr["H1A1c"]
+                derived_data[f"H1A2c{suffix}"] = a_corr["H1A2c"]
+                derived_data[f"H1A3c{suffix}"] = a_corr["H1A3c"]
 
-            # Corrected 2K, 5K using Iseli correction
-            # Ensure F4/B4 are arrays (might be None if num_formants < 4)
-            f4_arr = pF4 if pF4 is not None else np.full(target_len, np.nan)
-            b4_arr = pB4 if pB4 is not None else np.full(target_len, np.nan)
+                # Corrected 2K, 5K using Iseli correction
+                # Ensure F4/B4 are arrays (might be None if num_formants < 4)
+                f4_arr = pF4 if pF4 is not None else np.full(target_len, np.nan)
+                b4_arr = pB4 if pB4 is not None else np.full(target_len, np.nan)
 
-            corr_res = compute_corrections_H2KH5K(
-                h4, h2k, h5k, int(fs), f0,
-                pF1, pF2, pF3, f4_arr,
-                pB1, pB2, pB3, b4_arr
-            )
+                corr_res = compute_corrections_H2KH5K(
+                    h4, h2k, h5k, int(fs), f0,
+                    pF1, pF2, pF3, f4_arr,
+                    pB1, pB2, pB3, b4_arr
+                )
 
-            derived_data[f"H42Kc{suffix}"] = corr_res["H42Kc"]
-            derived_data[f"H2KH5Kc{suffix}"] = corr_res["H2KH5Kc"]
-        except Exception as e:
-            raise_stage_failure('correction', e)
+                derived_data[f"H42Kc{suffix}"] = corr_res["H42Kc"]
+                derived_data[f"H2KH5Kc{suffix}"] = corr_res["H2KH5Kc"]
+            except Exception as e:
+                raise_stage_failure('correction', e)
 
-        # 4.6 CPP
-        try:
-            cpp_val = compute_cpp(y, fs, frameshift_ms, f0, n_periods, voiced_mask)
-            derived_data[f"CPP{suffix}"] = cpp_val
-        except Exception as e:
-            raise_stage_failure('cpp', e)
+        if f0_type == 'gF0' or needs('CPP'+suffix):
+            # 4.6 CPP
+            try:
+                cpp_val = compute_cpp(y, fs, frameshift_ms, f0, n_periods, voiced_mask)
+                derived_data[f"CPP{suffix}"] = cpp_val
+            except Exception as e:
+                raise_stage_failure('cpp', e)
 
-        # 4.7 HNR
-        try:
-            hnr_res = compute_hnr(y, fs, frameshift_ms, f0, n_periods, voiced_mask=voiced_mask)
-            # output_text.py expects HNR05_pF0, HNR15_pF0...
-            for hk, hv in hnr_res.items():
-                # hk is like HNR05, HNR15
-                derived_data[f"{hk}{suffix}"] = hv[:target_len]
-        except Exception as e:
-            raise_stage_failure('hnr', e)
+        if f0_type == 'gF0' or needs(*('HNR'+v+suffix for v in ('05','15','25','35'))):
+            # 4.7 HNR
+            try:
+                hnr_res = compute_hnr(y, fs, frameshift_ms, f0, n_periods, voiced_mask=voiced_mask)
+                # output_text.py expects HNR05_pF0, HNR15_pF0...
+                for hk, hv in hnr_res.items():
+                    # hk is like HNR05, HNR15
+                    derived_data[f"{hk}{suffix}"] = hv[:target_len]
+            except Exception as e:
+                raise_stage_failure('hnr', e)
 
-        # 4.8 SHR
-        try:
-            shr_val = compute_shr(y, fs, frameshift_ms, f0, min_f0, max_f0, voiced_mask=voiced_mask)
-            derived_data[f"SHR{suffix}"] = shr_val[:target_len]
-        except Exception as e:
-            raise_stage_failure('shr', e)
+        if f0_type == 'gF0' or needs('SHR'+suffix):
+            # 4.8 SHR
+            try:
+                shr_val = compute_shr(y, fs, frameshift_ms, f0, min_f0, max_f0, voiced_mask=voiced_mask)
+                derived_data[f"SHR{suffix}"] = shr_val[:target_len]
+            except Exception as e:
+                raise_stage_failure('shr', e)
 
-        # 4.9 Spectral Slope
-        try:
-            slope = compute_spectral_slope(y, fs, frameshift_ms, f0, min_pitch=min_f0, voiced_mask=voiced_mask)
-            derived_data[f"SpectralSlope{suffix}"] = slope[:target_len]
-        except Exception as e:
-            raise_stage_failure('slope', e)
+        if f0_type == 'gF0' or needs('SpectralSlope'+suffix):
+            # 4.9 Spectral Slope
+            try:
+                slope = compute_spectral_slope(y, fs, frameshift_ms, f0, min_pitch=min_f0, voiced_mask=voiced_mask)
+                derived_data[f"SpectralSlope{suffix}"] = slope[:target_len]
+            except Exception as e:
+                raise_stage_failure('slope', e)
 
-        # 4.10 SOE (Strength of Excitation)
-        try:
-            # Use compute_soe which uses ZFF
-            # compute_soe returns (soe_array, epoch_indices)
-            soe_val, _ = compute_soe(y, fs, frameshift_ms, f0, target_len)
-            derived_data[f"SOE{suffix}"] = soe_val
-        except Exception as e:
-            raise_stage_failure('soe', e)
+        if needs('SOE'+suffix):
+            # 4.10 SOE (Strength of Excitation)
+            try:
+                # Use compute_soe which uses ZFF
+                # compute_soe returns (soe_array, epoch_indices)
+                soe_val, _ = compute_soe(y, fs, frameshift_ms, f0, target_len)
+                derived_data[f"SOE{suffix}"] = soe_val
+            except Exception as e:
+                raise_stage_failure('soe', e)
 
     checkpoint()
     # --- 5. Global Parameters (Intensity, Jitter, Shimmer) ---
@@ -286,18 +305,19 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
     # Already calculated at step 0
     derived_data["Intensity"] = intensity[:target_len]
 
-    # Jitter/Shimmer (Using Praat pF0 logic usually)
-    try:
-        # compute_jitter_shimmer uses Praat internally
-        # Use larger window to ensure enough pulses for APQ11 (needs 11 periods)
-        # For min_f0=75Hz, period is ~13.3ms. 11 periods ~ 147ms.
-        # We use max(160, config.windowsize_ms) to be safe for low pitch.
-        js_win = max(160, config.windowsize_ms)
-        js_res = compute_jitter_shimmer(y, fs, frameshift_ms, js_win, voiced_mask=(f0_data["pF0"] > 0), min_f0=min_f0, max_f0=max_f0, f0_provider=backends.wm_f0, backend_events=backend_events)
-        for k, v in js_res.items():
-            derived_data[k] = v[:target_len]
-    except Exception as e:
-        raise_stage_failure('jitter_shimmer', e)
+    if not selective or not selected or any(k.startswith(('Jitter_', 'Shimmer_')) for k in selected):
+        # Jitter/Shimmer (Using Praat pF0 logic usually)
+        try:
+            # compute_jitter_shimmer uses Praat internally
+            # Use larger window to ensure enough pulses for APQ11 (needs 11 periods)
+            # For min_f0=75Hz, period is ~13.3ms. 11 periods ~ 147ms.
+            # We use max(160, config.windowsize_ms) to be safe for low pitch.
+            js_win = max(160, config.windowsize_ms)
+            js_res = compute_jitter_shimmer(y, fs, frameshift_ms, js_win, voiced_mask=(f0_data["pF0"] > 0), min_f0=min_f0, max_f0=max_f0, f0_provider=backends.wm_f0, backend_events=backend_events)
+            for k, v in js_res.items():
+                derived_data[k] = v[:target_len]
+        except Exception as e:
+            raise_stage_failure('jitter_shimmer', e)
 
     # CPP (Generic) - usually copy CPP_pF0
     if "CPP_pF0" in derived_data:
@@ -388,6 +408,16 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
         else:
             final_mask = np.pad(silence_mask, (0, target_len - len(silence_mask)), constant_values=True)
 
+    if silence_reference_db is not None:
+        # Bounded/1 uses the full recording's reference even when only_voiced
+        # is enabled: quiet blocks must not redefine the silence threshold.
+        global_silence = np.ones(target_len,dtype=bool)
+        n = min(target_len,len(silence_mask))
+        global_silence[:n] = silence_mask[:n]
+        final_mask = global_silence if final_mask is None else final_mask | global_silence
+
+    gci_keys = tuple(k for k in result.parameters if k == 'gF0' or k.endswith('_gF0'))
+    gci_values = {k: result.parameters[k].copy() for k in gci_keys}
     # Apply mask
     if final_mask is not None:
         # Apply masking to AnalysisResult fields
@@ -402,6 +432,8 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
         for k, v in result.parameters.items():
             if np.issubdtype(v.dtype, np.number):
                  v[final_mask] = np.nan
+
+    for k,v in gci_values.items(): result.parameters[k] = v
 
     # --- 9. Smoothing (Optional) ---
     if config.smooth_win_size > 1:
@@ -431,8 +463,8 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
                 val = getattr(result, attr)
                 if val is not None:
                     val[final_mask] = np.nan
-            for value in result.parameters.values():
-                if np.issubdtype(value.dtype, np.number):
+            for key, value in result.parameters.items():
+                if key not in gci_keys and np.issubdtype(value.dtype, np.number):
                     value[final_mask] = np.nan
 
     # --- 10. Lip Smoothing (Optional, separate) ---
@@ -449,7 +481,10 @@ def analyze_audio(audio: AudioInput, config: AcousticConfig, associations=None, 
     checkpoint()
     result.backend_events=backend_events
     result.config_snapshot=asdict(config)
-    return _apply_selected_parameters(result, config.selected_parameter_keys)
+    gci_values = {k: result.parameters[k] for k in gci_keys}
+    result = _apply_selected_parameters(result, config.selected_parameter_keys)
+    result.parameters.update(gci_values)
+    return result
 
 def _apply_selected_parameters(result: AnalysisResult, selected_keys: Optional[List[str]]) -> AnalysisResult:
     if not selected_keys:

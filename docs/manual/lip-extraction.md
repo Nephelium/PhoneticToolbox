@@ -40,7 +40,7 @@
 
 「刷新本地历史任务」与「读取历史结果」可恢复已完成任务。结果另存到新目录，原文件不覆盖。结果提供应用偏移并保存、保存但不应用偏移；弹窗内取消撤销本次偏移编辑。自动关联的 `audio_recording.lip.json` 直接包含选定偏移，未调整的原始数据另存为 `unaligned.lip.json`，`saved-manifest.json` 记录另存文件哈希。时间按 `audio_relative_time + lip_manual_offset` 应用一次。历史结果可能包含 V2 互相关建议元数据，不自动应用，也不代表物理同步或生理对齐。
 
-正式结果有音频流时同时保存 `audio_recording.wav`。参数估计、参数显示、语音标注对齐沿用共同音频相对时间轴，支持安全 `.lip.json` 及桌面受控读取的 V2 `.pkl` / `_timestamps.pkl`。参数显示可直接选择 WAV，并关联同名唇形记录，得到 LipArea、LipWidth、LipOpen、LipCirc。M05-R2 实时录制的 `audio_recording.lip.json` 也可直接关联；旧包只有 `candidate.lip.json` 时仍需手动选择。实时方法保持浏览器候选身份，不能和 legacy 结果混称同一算法。保留 V2 原文件；网页不直接执行或加载 PKL。
+正式结果有音频流时同时保存 `audio_recording.wav`。参数估计、参数显示、TextGrid标注沿用共同音频相对时间轴，支持安全 `.lip.json` 及桌面受控读取的 V2 `.pkl` / `_timestamps.pkl`。参数显示可直接选择 WAV，并关联同名唇形记录，得到 LipArea、LipWidth、LipOpen、LipCirc。M05-R2 实时录制的 `audio_recording.lip.json` 也可直接关联；旧包只有 `candidate.lip.json` 时仍需手动选择。实时方法保持浏览器候选身份，不能和 legacy 结果混称同一算法。保留 V2 原文件；网页不直接执行或加载 PKL。
 
 可播放唇形动画、原始视频音频，并导出 MP4/GIF。原始容器不能被浏览器解码时显示提示，可从结果读取音频或使用本地播放器。视频/GIF 支持高清 1080、标准 720、小体积 540；动画重采样属于可视化，不增加测量帧。离线正式结果的动画导出会复用原输入提交新正式任务，有计算成本；实时录制另存动画直接使用本次已有测量。
 

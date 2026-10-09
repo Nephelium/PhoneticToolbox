@@ -1,5 +1,7 @@
 # M13 · 普通话转 IPA迁移计划
 
+2026-10-05 M13-R2：本轮空文本启动/Beijing 默认、显式恢复草稿、固定设置栏、独立颜色/汉字字体及声调开关取代下文对应历史行为。实施与限定验收见[计划](../2026-10-05-m13-r2-formatting.md)、[决策](../../decisions/ADR-M13-R2.md)及[报告](../../testing/2026-10-05-m13-r2-report.md)。旧字表与 Doulos 资源保留。
+
 状态：**verified（限定 2026-09-26 Windows Chrome、Windows Qt 宿主和 WSL2 Ubuntu 静态托管）**。M13 是本地前端逐字转换，不依赖服务器科学计算链路；来源/许可 `PENDING-IPA`、生产部署及 Linux 真实浏览器交互仍单列未完成。证据见 [验收报告](../../testing/m13-report.md) 和 [源码映射](../../modules/evidence/M13-source-map.md)。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
 ## 现有代码与目标文件

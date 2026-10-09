@@ -57,7 +57,7 @@ def main():
         ("document.querySelector('[aria-label=\"姓名/编号\"]')?.value==='Qt synthetic'", click('建立独立会话')),
         (phase('intro'), '__click:开始实验'),
         (phase('responding'), '__key'),
-        (phase('completed'), click('完整溯源 JSON')),
+        (phase('completed'), click('导出结果')),
         ("document.body.textContent.includes('下载请求已发出')", '__capture'),
     ]
     report = {'success':False, 'host':'actual Windows Qt Workbench / ptbapp', 'database_operations':'none', 'stages':[], 'physical_timing_measured':False, 'save_dialog':'destination supplied by test'}

@@ -1,5 +1,7 @@
 # M06 来源与操作映射
 
+**2026-10-04 M06-R5：** 已按井井要求移除本模块 WORLD/PSOLA/Harvest，恢复 Klatt 单一路径。源文件选择移到左侧首项，加载与提取分开；元音表紧凑化，复制接公共剪贴板。当前范围见 [R5 报告](../../testing/2026-10-04-m06-r5-report.md)。下文旧检查点按日期读取。
+
 **2026-10-04 M06-R4：** 新增可选 WORLD/PSOLA 重合成及 Harvest F0，保留 Klatt。分别记 `m06-world/1`、`m06-psola/1`、`m06-natural-extract/1`。新增 `SRC-PYWORLD`/`SRC-WORLD`，保留独立 `SRC-PRAAT` 和 `SRC-REAPER` 来源。源哈希、种子、谱/非周期单位、数字零暂停恢复和四文件导出见 [ADR](../../decisions/ADR-M06-R4.md)；Windows 开发态及 WSL 纯核心的限定验证见 [R4 报告](../../testing/2026-10-04-m06-r4-report.md)。以下旧版本的算法及迁移结论按日期读取，不作为新路径的计算说明。
 
 **2026-10-04 M06-R3：** F03/F04改用横排窗长和模块底部完整共享播放条，F05增加已有Praat CC/AC及原生REAPER选择，保留元音规则和生成操作。提取改用真实帧时间并修复APQ5百分数/内部比例，单列 `m06-extract/2`；非旧V2逐位等价。历史文件保留，旧m06/2缺少算法字段补CC。见[核查](../../references/m06-r3-resynthesis-audit.md)和[ADR](../../decisions/ADR-M06-R3.md)。

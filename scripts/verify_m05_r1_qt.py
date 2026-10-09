@@ -85,7 +85,7 @@ def main():
             wait("document.querySelectorAll('.parameter-chart path').length>0")
             window.grab().save(str(out/('M02-'+stem+'.png')))
             report['checks'].append('M02 reads '+stem+' WAV and all four directly associated lip tracks')
-        click('语音标注对齐');wait("!!document.querySelector('.annotation-page')");click('选择语料文件夹')
+        click('TextGrid标注');wait("!!document.querySelector('.annotation-page')");click('选择语料文件夹')
         for stem in ('v3','v2'):
             wait("!![...document.querySelectorAll('.annotation-file-list button')].find(e=>e.textContent.includes("+json.dumps(stem+'.wav')+"))")
             assert js("(()=>{[...document.querySelectorAll('.annotation-file-list button')].find(e=>e.textContent.includes("+json.dumps(stem+'.wav')+")).click();return true})()")

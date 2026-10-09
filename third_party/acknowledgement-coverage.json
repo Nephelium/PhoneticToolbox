@@ -1,0 +1,380 @@
+{
+  "schema_version": "acknowledgement-coverage/1",
+  "checked_on": "2026-10-07",
+  "scope": "18 live modules and their displayed shared/supplementary sources; historical documents are separate",
+  "modules": [
+    {
+      "id": "M01",
+      "source_ids": [
+        "SRC-PRAAT",
+        "SRC-REAPER",
+        "SRC-IRAPT",
+        "SRC-WMPC",
+        "SRC-VOICESAUCE",
+        "SRC-OPENSAUCE",
+        "REF-CPP",
+        "REF-HNR",
+        "REF-SHR",
+        "REF-ISELI",
+        "REF-HAWKS",
+        "REF-SOE",
+        "ASSET-DOULOS",
+        "PKG-SOUNDFILE",
+        "P02-PY-PYQT6",
+        "P02-PY-PYQT6-QT6",
+        "P02-PY-PYQT6-WEBENGINE",
+        "P02-PY-PYQT6-WEBENGINE-QT6",
+        "P02-PY-PYQT6-SIP",
+        "P06-SQLITE",
+        "P06-PG-LOCKS",
+        "M01-PY-BUILD",
+        "M01-PY-COLORAMA",
+        "M01-PY-INICONFIG",
+        "M01-PY-NUMPY",
+        "M01-PY-PACKAGING",
+        "M01-PY-PANDAS",
+        "M01-PY-PLUGGY",
+        "M01-PY-PRAAT-PARSELMOUTH",
+        "M01-PY-PYGMENTS",
+        "M01-PY-PYPROJECT-HOOKS",
+        "M01-PY-PYTEST",
+        "M01-PY-PYTHON-DATEUTIL",
+        "M01-PY-PYTZ",
+        "M01-PY-SCIPY",
+        "M01-PY-SETUPTOOLS",
+        "M01-PY-SIX",
+        "M01-PY-TZDATA",
+        "M01-PY-WHEEL",
+        "M01-PY-OPENPYXL",
+        "M01-PY-ET-XMLFILE",
+        "M01-WIN32",
+        "M01-WAVE",
+        "M01-PICKLE"
+      ]
+    },
+    {
+      "id": "M02",
+      "source_ids": [
+        "SRC-PRAAT",
+        "SRC-REAPER",
+        "SRC-VOICESAUCE",
+        "ASSET-DOULOS",
+        "PKG-SOUNDFILE",
+        "P06-SQLITE",
+        "M01-PY-SCIPY",
+        "M01-PY-OPENPYXL",
+        "REF-PNG",
+        "REF-FONT-RENDERING"
+      ]
+    },
+    {
+      "id": "M03",
+      "source_ids": [
+        "SRC-PRAAT",
+        "SRC-REAPER",
+        "ASSET-DOULOS",
+        "PKG-SCIPY",
+        "REF-FONT-RENDERING",
+        "REF-YIN-EGG-THESIS",
+        "REF-HENRICH-2004-DEGG",
+        "REF-DRUGMAN-GLOTTAL-COMPARISON"
+      ]
+    },
+    {
+      "id": "M04",
+      "source_ids": [
+        "SRC-PRAAT",
+        "PKG-MATPLOTLIB",
+        "REF-MAKHOUL-1975-LPC",
+        "M04-PY-NUMPY",
+        "M04-PY-SCIPY"
+      ]
+    },
+    {
+      "id": "M05",
+      "source_ids": [
+        "SRC-MEDIAPIPE",
+        "SRC-FFMPEG",
+        "ASSET-M05-NASA"
+      ]
+    },
+    {
+      "id": "M06",
+      "source_ids": [
+        "SRC-PRAAT",
+        "SRC-REAPER",
+        "SRC-TDKLATT",
+        "REF-KLATT",
+        "REF-VOCODER-COMPARISON-2018",
+        "REF-GLOTTDNN-2016"
+      ]
+    },
+    {
+      "id": "M07",
+      "source_ids": [
+        "SRC-PRAAT",
+        "SRC-REAPER",
+        "SRC-ZAIWA",
+        "REF-ZAIWA"
+      ]
+    },
+    {
+      "id": "M08",
+      "source_ids": [
+        "SRC-PRAAT"
+      ]
+    },
+    {
+      "id": "M09",
+      "source_ids": [
+        "REF-GRIFFINLIM",
+        "ASSET-DOULOS",
+        "PKG-SOUNDFILE",
+        "PKG-OPENCV-CONTRIB-PYTHON",
+        "M01-PY-NUMPY",
+        "M01-PY-SCIPY"
+      ]
+    },
+    {
+      "id": "M10",
+      "source_ids": [
+        "SRC-VTL",
+        "DOC-VTL24",
+        "DOC-VTL23",
+        "REF-VTL2006",
+        "SRC-THREE",
+        "ASSET-HEAD",
+        "ASSET-NASAL",
+        "SRC-VTLWRAPPER",
+        "ASSET-DOULOS",
+        "REF-WEBCODECS",
+        "REF-WEBM",
+        "REF-FONT-RENDERING",
+        "M17-IPA-CHART",
+        "M17-IPA-CHART-ZH-2007",
+        "M17-IPA-HANDBOOK-JIANG-2008",
+        "REF-M10-JORDAN-2017-MRI",
+        "REF-M10-OLIVEIRA-2012-MRI"
+      ]
+    },
+    {
+      "id": "M11",
+      "source_ids": [
+        "SRC-MFA",
+        "REF-MFA"
+      ]
+    },
+    {
+      "id": "M12",
+      "source_ids": [
+        "SRC-PRAAT",
+        "PKG-SOUNDFILE",
+        "M01-PY-SCIPY"
+      ]
+    },
+    {
+      "id": "M13",
+      "source_ids": [
+        "ASSET-DOULOS"
+      ]
+    },
+    {
+      "id": "M14",
+      "source_ids": []
+    },
+    {
+      "id": "M15",
+      "source_ids": [
+        "SRC-SHEETJS",
+        "P02-NPM-VUE-3-5-42"
+      ]
+    },
+    {
+      "id": "M16",
+      "source_ids": [
+        "SRC-PRAAT",
+        "SRC-SHEETJS",
+        "PKG-NUMPY",
+        "PKG-SCIPY",
+        "PKG-SOUNDDEVICE",
+        "PKG-SOUNDFILE",
+        "SRC-M16-VOICEVISTA"
+      ]
+    },
+    {
+      "id": "M17",
+      "source_ids": [
+        "ASSET-DOULOS",
+        "M17-IPA-CHART",
+        "M17-EXTIPA-2025",
+        "M17-VOQS-BALL-2018",
+        "M17-VOQS-ZH-UNTPHESOCA",
+        "M17-PTB-IPA-PLUS-FONT",
+        "M17-UNICODE-PHONETIC-ENCODING",
+        "M17-CIN-REFERENCE",
+        "M17-INTERACTIVE-LAYOUT-REFERENCE",
+        "M17-EXTIPA-LV-JIANG-2013",
+        "M17-IOS-IPA-PHONETICS-REFERENCE",
+        "M17-IPA-CHART-ZH-2007",
+        "M17-IPA-HANDBOOK-JIANG-2008",
+        "M17-VOICE-QUALITY-ESLING-2019",
+        "M17-EXTIPA-BALL-2018",
+        "M17-EXTIPA-BALL-2024",
+        "M17-EXTIPA-BALL-2025-REPLY"
+      ]
+    },
+    {
+      "id": "M18",
+      "source_ids": [
+        "P02-PY-PYQT6",
+        "P02-PY-PYQT6-QT6",
+        "SRC-M18-ARTICULATORY-TTS-2610",
+        "SRC-M18-PYPDF"
+      ]
+    }
+  ],
+  "supplementary_links": [
+    {
+      "module": "M17",
+      "file": "frontend/src/modules/ipa-plus/data/sources.json",
+      "local_source": "extipa-lv-jiang-2013",
+      "source_id": "M17-EXTIPA-LV-JIANG-2013",
+      "url": "https://doi.org/10.3969/j.issn.1006-7299.2013.06.030"
+    },
+    {
+      "module": "M17",
+      "file": "frontend/src/modules/ipa-plus/data/sources.json",
+      "local_source": "ipa-chart-2026",
+      "source_id": "M17-IPA-CHART",
+      "url": "https://www.internationalphoneticassociation.org/content/ipa-chart"
+    },
+    {
+      "module": "M17",
+      "file": "frontend/src/modules/ipa-plus/data/sources.json",
+      "local_source": "extipa-chart-2025",
+      "source_id": "M17-EXTIPA-2025",
+      "url": "https://www.icpla.org.uk/resources"
+    },
+    {
+      "module": "M17",
+      "file": "frontend/src/modules/ipa-plus/data/sources.json",
+      "local_source": "voqs-ball-2018",
+      "source_id": "M17-VOQS-BALL-2018",
+      "url": "https://doi.org/10.1017/S0025100317000159"
+    },
+    {
+      "module": "M17",
+      "file": "frontend/src/modules/ipa-plus/data/sources.json",
+      "local_source": "voqs-zhihu-203037479",
+      "source_id": "M17-VOQS-ZH-UNTPHESOCA",
+      "url": "https://doi.org/10.5281/zenodo.10206204"
+    },
+    {
+      "module": "M17",
+      "file": "frontend/src/modules/ipa-plus/data/sources.json",
+      "local_source": "unicode-cartouche-2024",
+      "source_id": "M17-UNICODE-PHONETIC-ENCODING",
+      "url": "https://www.unicode.org/L2/L2024/24182r-cartouche.pdf"
+    },
+    {
+      "module": "M17",
+      "file": "frontend/src/modules/ipa-plus/data/sources.json",
+      "local_source": "ipa-chart-zh-2007",
+      "source_id": "M17-IPA-CHART-ZH-2007",
+      "url": "https://doi.org/10.1017/S0025100311000156"
+    },
+    {
+      "module": "M17",
+      "file": "frontend/src/modules/ipa-plus/data/sources.json",
+      "local_source": "ipa-handbook-jiang-2008",
+      "source_id": "M17-IPA-HANDBOOK-JIANG-2008",
+      "url": "https://www.internationalphoneticassociation.org/content/handbook-ipa"
+    },
+    {
+      "module": "M17",
+      "file": "frontend/src/modules/ipa-plus/data/sources.json",
+      "local_source": "voice-quality-esling-2019",
+      "source_id": "M17-VOICE-QUALITY-ESLING-2019",
+      "url": "https://doi.org/10.1017/9781108696555"
+    },
+    {
+      "module": "M17",
+      "file": "frontend/src/modules/ipa-plus/data/sources.json",
+      "local_source": "extipa-ball-2018",
+      "source_id": "M17-EXTIPA-BALL-2018",
+      "url": "https://doi.org/10.1017/S0025100317000147"
+    },
+    {
+      "module": "M17",
+      "file": "frontend/src/modules/ipa-plus/data/sources.json",
+      "local_source": "extipa-ball-2024",
+      "source_id": "M17-EXTIPA-BALL-2024",
+      "url": "https://doi.org/10.1080/02699206.2024.2365205"
+    },
+    {
+      "module": "M17",
+      "file": "frontend/src/modules/ipa-plus/data/sources.json",
+      "local_source": "extipa-ball-2025-reply",
+      "source_id": "M17-EXTIPA-BALL-2025-REPLY",
+      "url": "https://doi.org/10.1080/02699206.2025.2489577"
+    },
+    {
+      "module": "M10",
+      "file": "frontend/public/vocal-tract/index.html",
+      "source_id": "REF-M10-JORDAN-2017-MRI",
+      "url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/6e4d/5218844/263855b1205b/nihms818229f1.jpg"
+    },
+    {
+      "module": "M10",
+      "file": "frontend/public/vocal-tract/index.html",
+      "source_id": "REF-M10-OLIVEIRA-2012-MRI",
+      "url": "https://www.isca-archive.org/interspeech_2012/oliveira12b_interspeech.pdf"
+    },
+    {
+      "module": "M10",
+      "file": "frontend/public/vocal-tract/index.html",
+      "source_id": "SRC-VTL",
+      "url": "https://www.vocaltractlab.de/"
+    },
+    {
+      "module": "M10",
+      "file": "frontend/public/vocal-tract/index.html",
+      "source_id": "SRC-VTLWRAPPER",
+      "url": "https://github.com/paul-krug/VocalTractLab-Python"
+    },
+    {
+      "module": "M10",
+      "file": "frontend/public/vocal-tract/index.html",
+      "source_id": "ASSET-HEAD",
+      "url": "https://opengameart.org/content/3d-human-parts-pack"
+    },
+    {
+      "module": "M10",
+      "file": "frontend/public/vocal-tract/index.html",
+      "source_id": "ASSET-NASAL",
+      "url": "https://doi.org/10.6084/m9.figshare.9585410.v4"
+    }
+  ],
+  "supplementary_details": [
+    {
+      "module": "M07",
+      "file": "frontend/src/modules/phonation-synthesis/SourceAcknowledgement.vue",
+      "source_ids": [
+        "SRC-ZAIWA",
+        "REF-ZAIWA"
+      ],
+      "fields": [
+        "attribution",
+        "permission_date",
+        "adaptation_note",
+        "adaptation_caution",
+        "citation"
+      ]
+    }
+  ],
+  "notes": [
+    "Global and module references use the same generated sources by stable ID.",
+    "Self-owned project entries remain excluded as requested.",
+    "M14 has no displayed independent external reference after author ownership confirmation; shared dependencies remain in the global software group."
+  ]
+}

@@ -48,7 +48,10 @@ class M14Bridge:
                     provider.directory(directory_id);target=root/name
                     os.rename(temp,target)  # Windows non-overwriting atomic rename.
                     created[target]=(ident,hashlib.sha256(raw).digest());del pending[temp]
-                return dict(count=3,saved=list(NAMES))
+                answer=dict(count=3,saved=list(NAMES))
+                warning=self.bridge.record_export([item['id'] for item in files])
+                if warning:answer['retention_warning']=warning
+                return answer
             except BaseException:
                 for p,ident in pending.items():
                     if p.exists() and identity(p.stat())==ident:checked_path(p);p.unlink()

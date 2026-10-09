@@ -331,14 +331,7 @@
       "preset": null,
       "offset_hz": 0.0
     },
-    "f0_method": "praat_cc",
-    "render": {
-      "method": "klatt",
-      "pitch": "original",
-      "spectral_ratio": 1.0,
-      "aperiodicity_ratio": 1.0,
-      "source_sha256": null
-    }
+    "f0_method": "praat_cc"
   },
   "parameters": {
     "F0": [

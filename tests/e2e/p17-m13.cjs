@@ -47,10 +47,10 @@ async function main(){
   await page.locator('.mandarin-ipa-page').evaluate(e=>e.scrollTop+=30);await idle();
   if(await page.locator('.m13-variants').count())await popupCheck();
   await page.keyboard.press('Escape');await page.getByLabel('待转换汉字文本').fill('银行花');
-  await page.goto(server.resolvedUrls.local[0]);await page.locator('.nav-item[title="普通话转 IPA"]').click();
+  await page.goto(server.resolvedUrls.local[0]);await page.locator('.nav-item[title="汉字转国际音标"]').click();
   await page.getByLabel('待转换汉字文本').fill('银行花');
   const collapse=page.getByRole('button',{name:'收起侧栏',exact:true});if(await collapse.count())await collapse.click();
-  const icon=page.locator('.nav-item[title="普通话转 IPA"] .ipa-icon');assert(await icon.isVisible());assert((await icon.boundingBox()).width>0);
+  const icon=page.locator('.nav-item[title="汉字转国际音标"] .ipa-icon');assert(await icon.isVisible());assert((await icon.boundingBox()).width>0);
   await page.setViewportSize({width:800,height:700});assert(await icon.isVisible());
   await page.getByLabel('上下排布',{exact:true}).check();await idle();
   const narrow=await rect('.m13-settings-section'),left=await rect('.m13-result-section');assert(narrow.x>=left.x+left.width-1);

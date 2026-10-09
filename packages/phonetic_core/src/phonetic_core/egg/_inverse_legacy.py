@@ -10,6 +10,11 @@ from .errors import check_cancel, EggCancelled
 
 def autocorrelation(y: np.ndarray, order: int) -> np.ndarray:
     """计算自相关函数"""
+    # Keep every previously admitted <=48000-sample ROI on its exact legacy
+    # reduction path. New larger IF windows only need order+1 lags. Avoid the quadratic full
+    # correlation (especially the whole-ROI first-order tilt estimate).
+    if len(y) > 48000 and len(y) > order:
+        return np.array([np.dot(y[:len(y)-lag], y[lag:]) for lag in range(order+1)])
     r = np.correlate(y, y, mode='full')
     needed_len = 2 * order + 1
     if len(r) < needed_len:

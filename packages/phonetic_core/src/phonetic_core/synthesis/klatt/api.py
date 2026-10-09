@@ -21,12 +21,7 @@ def defaults():
                 fade_in=50, fade_out=100, smooth=5, f0_range=[50.,500.],
                 curves={n:dict(points=[[0.,v[0]],[2.,v[0]]],override=None) for n,v in PARAM_DEFAULTS.items()},
                 silence=[], boundaries=[], f0_transform=dict(preset=None, offset_hz=0.),
-                f0_method='praat_cc',render=render_defaults())
-
-
-def render_defaults():
-    return dict(method='klatt',pitch='original',spectral_ratio=1.,
-                aperiodicity_ratio=1.,source_sha256=None)
+                f0_method='praat_cc')
 
 
 def finite(value):
@@ -39,19 +34,17 @@ def validate(config):
         raise ValueError('m06_legacy_parameters_need_revision')
     if isinstance(c,dict) and c.get('schema_version') == VERSION:
         c.setdefault('f0_method','praat_cc')
-        c.setdefault('render',render_defaults())
+        # R4 Klatt snapshots remain readable. Retired engines must not silently
+        # render through Klatt and produce a different scientific result.
+        if 'render' in c:
+            if not isinstance(c['render'],dict) or c['render'].get('method')!='klatt':
+                raise ValueError('m06_removed_synthesis_method')
+            c.pop('render')
+        if c['f0_method']=='harvest':raise ValueError('m06_removed_f0_method')
     if not isinstance(c,dict) or set(c)!=set(defaults()) or c['schema_version']!=VERSION:
         raise ValueError('m06_invalid_config')
-    if c['f0_method'] not in ('praat_cc','praat_ac','reaper','harvest'):
+    if c['f0_method'] not in ('praat_cc','praat_ac','reaper'):
         raise ValueError('m06_invalid_f0_method')
-    r=c['render']
-    if (not isinstance(r,dict) or set(r)!=set(render_defaults()) or
-            r['method'] not in ('klatt','world','psola') or r['pitch'] not in ('original','curve') or
-            not finite(r['spectral_ratio']) or not .5<=r['spectral_ratio']<=2. or
-            not finite(r['aperiodicity_ratio']) or not 0.<=r['aperiodicity_ratio']<=2. or
-            (r['source_sha256'] is not None and (not isinstance(r['source_sha256'],str) or
-             len(r['source_sha256'])!=64 or any(x not in '0123456789abcdef' for x in r['source_sha256'])))):
-        raise ValueError('m06_invalid_render')
     if not finite(c['duration']) or not .1<=c['duration']<=MAX_DURATION:raise ValueError('m06_duration_range')
     if type(c['sample_rate']) is not int or not 8000<=c['sample_rate']<=192000 or c['duration']*c['sample_rate']>MAX_SAMPLES:
         raise ValueError('m06_sample_budget')
@@ -114,7 +107,6 @@ def snapshot(engine, config):
 def generate(config):
     from .engine import Engine
     c=validate(config);validate_sequence(c['sequence']);engine=Engine(c);engine.generate_vowels()
-    if c['render']['method']!='klatt':raise ValueError('m06_method_action_mismatch')
     return snapshot(engine,c)
 
 
@@ -126,7 +118,6 @@ def synthesize_with_info(config, *, cancelled=lambda:False):
     import numpy as np
     from .engine import Engine
     c=validate(config)
-    if c['render']['method']!='klatt':raise ValueError('m06_method_action_mismatch')
     if cancelled():raise InterruptedError('m06_cancelled')
     engine=Engine(c);audio=engine.synthesize()
     if cancelled():raise InterruptedError('m06_cancelled')

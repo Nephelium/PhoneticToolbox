@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "ES2022", "module": "ESNext", "moduleResolution": "Bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"], "strict": true,
+    "skipLibCheck": true, "esModuleInterop": true, "allowJs": true, "allowImportingTsExtensions": true,
+    "resolveJsonModule": true, "types": ["vite/client"], "noEmit": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.vue", "../../frontend/src/manual/**/*.ts", "../../frontend/src/manual/ManualDocument.vue", "../../frontend/src/manual/ManualNode.vue"]
+}

@@ -47,10 +47,24 @@ def fingerprint(root, *, stop=lambda: False):
     visit(root)
     # Every code/native/data file is hashed; inspect each directory entry once.
     # Installed package metadata is not treated as proof of binary integrity.
-    for p in sorted(paths):
-        if stop():raise ValueError('cancelled')
-        h.update(p.relative_to(root).as_posix().encode())
-        h.update(bytes.fromhex(digest(p)))
+    # Concurrent reads reduce Windows small-file overhead without caching or
+    # skipping content. Bounded batches retain canonical sorted hash order.
+    from concurrent.futures import ThreadPoolExecutor
+    def content(p):
+        value=hashlib.sha256()
+        with p.open('rb') as stream:
+            while chunk:=stream.read(1024*1024):
+                if stop():raise ValueError('cancelled')
+                value.update(chunk)
+        return value.digest()
+    paths.sort()
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        for offset in range(0,len(paths),64):
+            batch=paths[offset:offset+64]
+            for p,value in zip(batch,pool.map(content,batch)):
+                if stop():raise ValueError('cancelled')
+                h.update(p.relative_to(root).as_posix().encode())
+                h.update(value)
     return h.hexdigest()
 
 
@@ -61,6 +75,18 @@ def run(runtime, workspace, request, *, stop=lambda: False, progress=lambda _: N
     no_links(root)
     root.mkdir(parents=True, exist_ok=True)
     request = dict(request, workspace=str(root), runtime=str(runtime))
+    # Reuse only Numba's compiled library kernels. User audio, dictionary,
+    # database and MFA state stay inside the attempt. The verified full-runtime
+    # content fingerprint invalidates this host-owned cache after any drift.
+    kernel_cache=None
+    request.pop('kernel_cache',None)
+    cache_key=request.pop('kernel_cache_key',None)
+    if cache_key is not None:
+        import re
+        if not isinstance(cache_key,str) or not re.fullmatch('[a-f0-9]{64}',cache_key):raise ValueError('m11_runtime_changed')
+        kernel_cache=registry_root()/'kernel-cache'/cache_key
+        no_links(kernel_cache);kernel_cache.mkdir(parents=True,exist_ok=True)
+        request['kernel_cache']=str(kernel_cache)
     atomic_json(root / 'request.json', request)
     child = Path(sys._MEIPASS)/'resources/mfa/child.py' if getattr(sys,'frozen',False) else Path(__file__).with_name('child.py').absolute()
     if not child.is_file():raise ValueError('m11_bootstrap_missing')
@@ -84,7 +110,8 @@ def run(runtime, workspace, request, *, stop=lambda: False, progress=lambda _: N
             if time.monotonic() - started > timeout:
                 raise ValueError('m11_timeout')
             size = 0
-            for p in root.rglob('*'):
+            watched=[root]+([kernel_cache] if kernel_cache else [])
+            for p in (p for folder in watched for p in folder.rglob('*')):
                 if p.is_symlink() or getattr(p, 'is_junction', lambda: False)():
                     raise ValueError('m11_attempt_link')
                 try:
@@ -134,9 +161,29 @@ def registry_root():
 def load_registry():
     path = registry_root() / 'registry.json'
     no_links(path)
-    if not path.exists():
-        return dict(schema='m11-registry/1', runtimes=[], models=[])
-    return json.loads(path.read_text(encoding='utf-8'))
+    value=json.loads(path.read_text(encoding='utf-8')) if path.exists() else dict(schema='m11-registry/1',runtimes=[],models=[])
+    bundled=os.environ.get('PTB_M11_BUNDLED_COMPONENTS')
+    if not bundled:return value
+    # Read-only built-ins follow the current application version. User imports
+    # and validation records remain in the stable writable component directory.
+    root=Path(bundled).resolve();no_links(root)
+    manifest=root/'registry-bundled.json';no_links(manifest)
+    if manifest.stat().st_size>1_000_000:raise ValueError('m11_manifest_invalid')
+    source=json.loads(manifest.read_text('utf8'))
+    if source.get('schema')!='m11-registry/1':raise ValueError('m11_manifest_invalid')
+    from .components import safe_name
+    for group,fields in (('runtimes',('path','receipt')),('models',('model','dictionary'))):
+        rows=[]
+        for row in source[group]:
+            row=dict(row)
+            for field in fields:
+                target=root.joinpath(*safe_name(row[field]).parts);no_links(target)
+                if not target.resolve().is_relative_to(root) or not target.exists():raise ValueError('m11_component_missing')
+                row[field]=str(target)
+            rows.append(row)
+        custom_ids={row['id'] for row in value[group]}
+        value[group]=[row for row in rows if row['id'] not in custom_ids]+value[group]
+    return value
 
 
 def select(runtime_id, model_id, *, verify_content=True, stop=lambda: False):

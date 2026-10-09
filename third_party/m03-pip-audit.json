@@ -15,7 +15,7 @@
         "release notes, https://numpy.org/doc/stable/release"
       ],
       "relationship": "runtime-or-test-dependency",
-      "verification": "installed-distribution-metadata; archive hashes in requirements-m03-compatible.lock"
+      "verification": "installed-distribution-metadata; archive hashes in requirements/requirements-m03-compatible.lock"
     },
     {
       "name": "praat-parselmouth",
@@ -28,7 +28,7 @@
         "Source Code, https://github.com/YannickJadoul/Parselmouth"
       ],
       "relationship": "runtime-or-test-dependency",
-      "verification": "installed-distribution-metadata; archive hashes in requirements-m03-compatible.lock"
+      "verification": "installed-distribution-metadata; archive hashes in requirements/requirements-m03-compatible.lock"
     },
     {
       "name": "pandas",
@@ -41,7 +41,7 @@
         "repository, https://github.com/pandas-dev/pandas"
       ],
       "relationship": "runtime-or-test-dependency",
-      "verification": "installed-distribution-metadata; archive hashes in requirements-m03-compatible.lock"
+      "verification": "installed-distribution-metadata; archive hashes in requirements/requirements-m03-compatible.lock"
     },
     {
       "name": "python-dateutil",
@@ -53,7 +53,7 @@
         "Source, https://github.com/dateutil/dateutil"
       ],
       "relationship": "runtime-or-test-dependency",
-      "verification": "installed-distribution-metadata; archive hashes in requirements-m03-compatible.lock"
+      "verification": "installed-distribution-metadata; archive hashes in requirements/requirements-m03-compatible.lock"
     },
     {
       "name": "six",
@@ -62,7 +62,7 @@
       "license": "MIT",
       "project_urls": [],
       "relationship": "runtime-or-test-dependency",
-      "verification": "installed-distribution-metadata; archive hashes in requirements-m03-compatible.lock"
+      "verification": "installed-distribution-metadata; archive hashes in requirements/requirements-m03-compatible.lock"
     },
     {
       "name": "pytz",
@@ -71,7 +71,7 @@
       "license": "MIT",
       "project_urls": [],
       "relationship": "runtime-or-test-dependency",
-      "verification": "installed-distribution-metadata; archive hashes in requirements-m03-compatible.lock"
+      "verification": "installed-distribution-metadata; archive hashes in requirements/requirements-m03-compatible.lock"
     },
     {
       "name": "tzdata",
@@ -84,7 +84,7 @@
         "Documentation, https://tzdata.readthedocs.io"
       ],
       "relationship": "runtime-or-test-dependency",
-      "verification": "installed-distribution-metadata; archive hashes in requirements-m03-compatible.lock"
+      "verification": "installed-distribution-metadata; archive hashes in requirements/requirements-m03-compatible.lock"
     },
     {
       "name": "pytest",
@@ -100,7 +100,7 @@
         "Tracker, https://github.com/pytest-dev/pytest/issues"
       ],
       "relationship": "runtime-or-test-dependency",
-      "verification": "installed-distribution-metadata; archive hashes in requirements-m03-compatible.lock"
+      "verification": "installed-distribution-metadata; archive hashes in requirements/requirements-m03-compatible.lock"
     },
     {
       "name": "build",
@@ -114,7 +114,7 @@
         "source, https://github.com/pypa/build"
       ],
       "relationship": "runtime-or-test-dependency",
-      "verification": "installed-distribution-metadata; archive hashes in requirements-m03-compatible.lock"
+      "verification": "installed-distribution-metadata; archive hashes in requirements/requirements-m03-compatible.lock"
     },
     {
       "name": "setuptools",
@@ -127,7 +127,7 @@
         "Changelog, https://setuptools.pypa.io/en/stable/history.html"
       ],
       "relationship": "runtime-or-test-dependency",
-      "verification": "installed-distribution-metadata; archive hashes in requirements-m03-compatible.lock"
+      "verification": "installed-distribution-metadata; archive hashes in requirements/requirements-m03-compatible.lock"
     },
     {
       "name": "wheel",
@@ -141,7 +141,7 @@
         "Source, https://github.com/pypa/wheel"
       ],
       "relationship": "runtime-or-test-dependency",
-      "verification": "installed-distribution-metadata; archive hashes in requirements-m03-compatible.lock"
+      "verification": "installed-distribution-metadata; archive hashes in requirements/requirements-m03-compatible.lock"
     },
     {
       "name": "colorama",
@@ -152,7 +152,7 @@
         "Homepage, https://github.com/tartley/colorama"
       ],
       "relationship": "runtime-or-test-dependency",
-      "verification": "installed-distribution-metadata; archive hashes in requirements-m03-compatible.lock"
+      "verification": "installed-distribution-metadata; archive hashes in requirements/requirements-m03-compatible.lock"
     },
     {
       "name": "iniconfig",
@@ -163,7 +163,7 @@
         "Homepage, https://github.com/pytest-dev/iniconfig"
       ],
       "relationship": "runtime-or-test-dependency",
-      "verification": "installed-distribution-metadata; archive hashes in requirements-m03-compatible.lock"
+      "verification": "installed-distribution-metadata; archive hashes in requirements/requirements-m03-compatible.lock"
     },
     {
       "name": "packaging",
@@ -175,7 +175,7 @@
         "Source, https://github.com/pypa/packaging"
       ],
       "relationship": "runtime-or-test-dependency",
-      "verification": "installed-distribution-metadata; archive hashes in requirements-m03-compatible.lock"
+      "verification": "installed-distribution-metadata; archive hashes in requirements/requirements-m03-compatible.lock"
     },
     {
       "name": "pluggy",
@@ -184,7 +184,7 @@
       "license": "MIT",
       "project_urls": [],
       "relationship": "runtime-or-test-dependency",
-      "verification": "installed-distribution-metadata; archive hashes in requirements-m03-compatible.lock"
+      "verification": "installed-distribution-metadata; archive hashes in requirements/requirements-m03-compatible.lock"
     },
     {
       "name": "pygments",
@@ -199,7 +199,7 @@
         "Changelog, https://github.com/pygments/pygments/blob/master/CHANGES"
       ],
       "relationship": "runtime-or-test-dependency",
-      "verification": "installed-distribution-metadata; archive hashes in requirements-m03-compatible.lock"
+      "verification": "installed-distribution-metadata; archive hashes in requirements/requirements-m03-compatible.lock"
     },
     {
       "name": "pyproject-hooks",
@@ -212,7 +212,7 @@
         "Source, https://github.com/pypa/pyproject-hooks"
       ],
       "relationship": "runtime-or-test-dependency",
-      "verification": "installed-distribution-metadata; archive hashes in requirements-m03-compatible.lock"
+      "verification": "installed-distribution-metadata; archive hashes in requirements/requirements-m03-compatible.lock"
     }
   ]
 }

@@ -9,6 +9,14 @@ import numpy as np
 import parselmouth
 
 
+def grayscale_pixels(power, frequencies, frequency_step):
+    """Shared Praat-style 50 dB range and 6 dB/oct display preemphasis."""
+    if np.max(power)<=0:return np.full(power.shape,255,dtype=np.uint8)
+    db=10*np.log10(np.maximum(power,np.finfo(float).tiny))
+    db+=6*np.log2(np.maximum(frequencies,frequency_step/2)/1000)[:,None]
+    return np.rint(255*np.clip((np.max(db)-db)/50,0,1)).astype(np.uint8)
+
+
 def spectrogram_preview(audio,*,channel,start,end,width=1000):
     fs=audio.sample_rate_hz;data=audio.samples;duration=len(data)/fs
     channels=1 if data.ndim==1 else data.shape[1]
@@ -32,12 +40,7 @@ def spectrogram_preview(audio,*,channel,start,end,width=1000):
         raise ValueError('Spectrogram grid unavailable or exceeds display budget')
     if not np.isfinite(power).all() or np.any(power<0):
         raise ValueError('Spectrogram power is not finite and nonnegative')
-    if np.max(power)<=0:pixels=np.full(power.shape,255,dtype=np.uint8)
-    else:
-        db=10*np.log10(np.maximum(power,np.finfo(float).tiny))
-        # Praat-style display slope above/below 1000 Hz; DC uses half a bin.
-        db+=6*np.log2(np.maximum(freq,spectrum.dy/2)/1000)[:,None]
-        pixels=np.rint(255*np.clip((np.max(db)-db)/50,0,1)).astype(np.uint8)
+    pixels=grayscale_pixels(power,freq,spectrum.dy)
     return dict(start=float(start),end=float(end),frequency_max=fmax,x1=float(times[0]),dx=float(spectrum.dx),
         y1=float(spectrum.y1),dy=float(spectrum.dy),width=int(power.shape[1]),height=int(power.shape[0]),
         pixels=pixels.tobytes(),backend='praat',parselmouth_version=parselmouth.__version__,praat_version=parselmouth.PRAAT_VERSION,

@@ -15,3 +15,10 @@ test('M15 runner ignores modifier/repeat/IME and cannot answer while playing',as
 test('M15 storage write failure stops automatic progression and preserves exportable response',async()=>{const {r,setFail}=fixture();await responding(r);setFail(true);r.keydown(event('f'));await pause(2);assert.equal(r.phase,'saving-error');assert.equal(r.session.attempts[0].status,'completed');assert.equal(r.session.nextIndex,1);setFail(false);await r.retrySave();assert.equal(r.phase,'completed');});
 test('M15 interrupted response is never normal and explicit retry retains prior attempt',async()=>{const {r}=fixture();await responding(r);await r.interrupt('blur');assert.equal(r.session.attempts[0].status,'interrupted');assert.equal(r.session.attempts[0].rtMs,null);assert.equal(r.session.nextIndex,0);await responding(r);r.keydown(event('f'));await pause(2);assert.deepEqual(r.session.attempts.map(a=>a.status),['interrupted','completed']);assert.equal(r.session.attempts[1].attempt,2);});
 test('M15 failed scheduling marks invalid instead of entering response phase',async()=>{const {r}=fixture();r.bank.context.createBufferSource=()=>{throw Error('device error');};await r.start();r.continue();await pause(5);assert.equal(r.phase,'paused');assert.equal(r.session.attempts[0].status,'invalid');assert.equal(r.session.attempts[0].rtMs,null);});
+test('M15-R1 a late answer commit cannot start another trial after end',async()=>{
+ const {r}=fixture();r.session.project.trials.push({...r.session.project.trials[0],id:'second'});await responding(r);
+ let release!:()=>void,entered!:()=>void;const gate=new Promise<void>(resolve=>release=resolve),started=new Promise<void>(resolve=>entered=resolve);const commit=r.store.commit.bind(r.store);let first=true;
+ r.store.commit=async s=>{if(first){first=false;entered();await gate;}await commit(s);};
+ r.keydown(event('j'));await started;const ending=r.end();release();assert.equal(await ending,true);await pause(80);
+ assert.equal(r.phase,'completed');assert.equal(r.session.status,'ended');assert.equal(r.session.nextIndex,1);assert.equal(r.session.attempts.length,1);assert.equal(r.session.attempts[0].status,'completed');
+});

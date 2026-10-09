@@ -29,7 +29,7 @@ def main():
     window.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen,True);window.resize(1500,1050);window.show()
     click=lambda text:"[...document.querySelectorAll('button')].find(b=>b.offsetParent&&b.textContent.trim()==="+json.dumps(text,ensure_ascii=False)+")?.click()"
     stages=[
-        ("document.querySelector('.host-badge')?.textContent==='本地桌面'",click('语音标注对齐')),
+        ("document.querySelector('.host-badge')?.textContent==='本地桌面'",click('TextGrid标注')),
         ("!!document.querySelector('.annotation-page')",click('选择语料文件夹')),
         ("document.querySelectorAll('.annotation-file-list button').length===1","document.querySelector('.annotation-file-list button').click()"),
         ("document.querySelector('.notice')?.textContent.includes('_初始定位.TextGrid')&&document.querySelector('.annotation-page')?.getAttribute('aria-busy')==='false'","(()=>{const e=document.querySelector('[aria-label=\"平移波形时间窗\"]');e.value=e.max;e.dispatchEvent(new Event('input',{bubbles:true}));})()"),

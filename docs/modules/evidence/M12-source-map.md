@@ -1,5 +1,7 @@
 # M12 V2 源码与说明书映射
 
+2026-10-05 P19-R13 来源补充：项目作者已直接确认 TextGrid 编辑器和内置发音词典为自身历史实现/整理成果。`ORIGIN-WEBEDITOR`、`PENDING-DICTIONARY` 稳定 ID 保留，之前未决字段留档，当前结论见[本轮核查](../../references/p19-license-classification-audit.md)。第三方库和通用格式参考仍分别记录。
+
 2026-09-14，Windows 开发态功能 verified；逐组证据见 [验收报告](../../testing/m12-report.md)。来源是相邻 V2 的 `phonetic_toolbox/gui/resources/web_praat_editor/app.js`、`index.html`、`default.dict`、`services/web_praat_server.py`、`services/io/lip.py` 与 `Phonetic_Export/index.html` 第 13.1–13.6 节。散列清单由迁移脚本生成于 `third_party/m12-migration.json`。
 
 | 功能 | V2 函数/行为 | V3 落点与验收重点 |

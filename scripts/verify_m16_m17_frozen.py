@@ -151,7 +151,9 @@ def verify(window, out, report):
         click('新建工程')
         until('document.body.innerText.includes("本地录音工程已建立")')
         click('设备与录前检测')
+        click('刷新设备')
         device = service.dispatch({'op': 'devices'})[0]['id']
+        until('!![...document.querySelectorAll(\'select[aria-label="输入设备"] option\')].find(e=>e.value==='+json.dumps(device)+')')
         js('(()=>{const e=document.querySelector(\'select[aria-label="输入设备"]\');e.value=' +
            json.dumps(device) + ';e.dispatchEvent(new Event("change",{bubbles:true}));})()')
         until('document.querySelectorAll("select[aria-label^=物理输入]").length===2')
@@ -161,7 +163,7 @@ def verify(window, out, report):
         native_until(lambda: service.capture is not None and service.capture.received >= 40000)
         assert service.capture.config['roles'] == ['microphone', 'microphone']
         assert service.capture.task is None
-        click('■ 停止录音 / 检测')
+        click('■ 停止录音')
         until('document.body.innerText.includes("已存入本地工程，尚未导出")')
         assert not bridge.capturing and len(service.project.data['takes']) == 1
         assert take()['task_snapshot'] is None and take()['config']['roles'] == ['microphone', 'microphone']
@@ -186,9 +188,9 @@ def verify(window, out, report):
 
         fill('起点（帧）', 0)
         fill('终点（帧）', 10000)
-        click('设为噪声样本')
+        click('将选区设为噪声样本')
         until('document.body.innerText.includes("噪声样本：")')
-        click('一键降噪（完整版本）', wait_ms=0)
+        click('整段降噪', wait_ms=0)
         native_until(lambda: service.job is not None and service.job['kind'] == 'denoise')
         process = service.job['owner']
         child_image = _process_image(process)
@@ -233,9 +235,9 @@ def verify(window, out, report):
         checks.append('M16 FLOAT WAV reopens with exact derived samples, original frame count, two channels and verified manifest hash')
         snapshot('m16-export.png')
 
-        click('● 重录 / 新 take')
+        click('● 重新录音')
         native_until(lambda: service.capture is not None and service.capture.received >= 4000)
-        nav('国际音标 Plus')
+        nav('国际音标表Plus')
         until('document.querySelector(".m17-body")?.dataset.loaded==="true" && document.querySelector(".m17-body")?.dataset.fontReady==="true"')
         assert bridge.capturing
         text = '中文 ḁ 𝼆 V𐞀 '
@@ -312,7 +314,7 @@ def verify(window, out, report):
         until('getComputedStyle(document.querySelector(".m17-editor")).fontSize==="26px"')
         checks.append('M17 single top font control defaults to 26 and changes both table symbols and editor')
 
-        nav('普通话转 IPA')
+        nav('汉字转国际音标')
         until('!!document.querySelector(".m13-workspace")')
         for layout in ['side-by-side', 'stacked']:
             js('document.querySelector(".m13-settings-section input[value=' + layout + ']").click()')
@@ -323,9 +325,9 @@ def verify(window, out, report):
                 assert geometry['result']['top'] >= geometry['input']['bottom'] - 1, geometry
             else:
                 assert geometry['result']['left'] >= geometry['input']['right'] - 1, geometry
-        assert js('''!!document.querySelector('.nav-item[title="普通话转 IPA"] .ipa-icon') && !!document.querySelector('.nav-item[title="国际音标 Plus"] svg path')''')
+        assert js('''!!document.querySelector('.nav-item[title="汉字转国际音标"] .ipa-icon') && !!document.querySelector('.nav-item[title="国际音标表Plus"] svg path')''')
         checks.append('M13 settings stay left in side-by-side and stacked layouts; M13/M17 have distinct icons')
-        nav('国际音标 Plus')
+        nav('国际音标表Plus')
         until('!!document.querySelector(".m17-chart-viewport")')
 
         for width, height in [(1366, 768), (1920, 1080)]:

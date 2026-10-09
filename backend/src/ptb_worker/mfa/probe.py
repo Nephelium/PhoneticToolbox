@@ -27,6 +27,32 @@ def generate(root, word='a', syllables=4):
     (root/'probe.lab').write_text(' '.join([word]*syllables),encoding='utf8')
 
 
+def probe_word(dictionary_path):
+    """Known /a/ spellings for the public probe; never guess a lexicon's first word."""
+    words=set()
+    with Path(dictionary_path).open(encoding='utf-8-sig') as stream:
+        for line in stream:
+            fields=line.split()
+            if fields and fields[0] in ('a','啊','a1'):words.add(fields[0])
+    for word in ('a','啊','a1'):
+        if word in words:return word
+    raise ValueError('m11_probe_word_unavailable')
+
+
+def resource_name(root,role,source,sha256):
+    """Rechecking managed bytes retains their original human-readable filename."""
+    import json
+    root,source=Path(root),Path(source)
+    suffix='.zip' if role=='model' else '.dict'
+    registry=root/'registry.json'
+    if source==root/'resources'/role/(sha256+suffix) and registry.is_file():
+        for record in json.loads(registry.read_text('utf8'))['models']:
+            if record.get(role+'_sha256')==sha256:
+                name=record.get('name' if role=='model' else 'dictionary_name')
+                if name:return name
+    return source.name
+
+
 def register(runtime_path, model_path, dictionary_path, *, root=None, publish=True):
     from .runtime import registry_root, run, fingerprint, resolve_runtime, load_registry
     from .components import atomic_json, digest, no_links
@@ -44,13 +70,7 @@ def register(runtime_path, model_path, dictionary_path, *, root=None, publish=Tr
         raise ValueError('m11_model_budget')
     # Model-specific public probe support is explicit. Do not swap the model or
     # dictionary to make an unsupported environment appear validated.
-    words=set()
-    with dictionary.open(encoding='utf-8-sig') as stream:
-        for line in stream:
-            fields=line.split()
-            if fields and fields[0] in ('a','啊'):words.add(fields[0])
-    if not words:raise ValueError('m11_probe_word_unavailable')
-    word='a' if 'a' in words else '啊'
+    word=probe_word(dictionary)
     workspace=root/'checks'/uuid4().hex
     workspace.mkdir(parents=True)
     generate(workspace/'corpus',word)
@@ -67,7 +87,7 @@ def register(runtime_path, model_path, dictionary_path, *, root=None, publish=Tr
     except Exception as exc:
         atomic_json(workspace/'receipt.json',dict(success=False,error=str(exc),resources=evidence))
         raise
-    receipt=dict(success=True,versions=response['versions'],resources=evidence,probe='public-formant-a/1',
+    receipt=dict(success=True,versions=response['versions'],resources=evidence,probe='public-formant-a/1',probe_word=word,
                  runtime_fingerprint=before,**hashes)
     atomic_json(workspace/'receipt.json',receipt)
     runtime_id='mfa338-'+before[:16]
@@ -90,7 +110,7 @@ def register(runtime_path, model_path, dictionary_path, *, root=None, publish=Tr
             os.replace(temporary,destination)
         if digest(destination)!=hashes[role+'_sha256']:raise ValueError('m11_model_changed')
         managed[role]=str(destination)
-    m=dict(id=model_id,name=model.name,**managed,validated_runtime=runtime_id,model_bytes=model.stat().st_size,dictionary_bytes=dictionary.stat().st_size,**hashes)
+    m=dict(id=model_id,name=resource_name(root,'model',model,hashes['model_sha256']),dictionary_name=resource_name(root,'dictionary',dictionary,hashes['dictionary_sha256']),**managed,validated_runtime=runtime_id,model_bytes=model.stat().st_size,dictionary_bytes=dictionary.stat().st_size,**hashes)
     prepared=dict(runtime_id=runtime_id,model_id=model_id,receipt=receipt,runtime_record=r,model_record=m)
     if publish: publish_registration(prepared,root)
     return prepared

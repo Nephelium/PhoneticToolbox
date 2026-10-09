@@ -37,7 +37,9 @@ def preview_files(result, config, settings, first, last, *, cache=None, include_
     gci, goi, _ = events_segment(result, lo, hi, config, use_raw_signal=raw)
     if main is None:
         t, cq, sq = cq_segment(result, start, end, config, use_raw_signal=raw)
-        power, freq, _ = spectral_series(result.audio_signal[first:last], result.fs, config.spec_window_ms)
+        bounded = result.method_version == 'egg-bounded/2'
+        power, freq, _ = spectral_series(result.audio_signal[first:last], result.fs, config.spec_window_ms,
+            **(dict(max_columns=2048,max_frequency=5000) if bounded else {}))
         cell = (freq[-1]-freq[0])/len(freq)
         rows = min(len(freq), int(np.ceil(5000/cell))+2)
         visible = power[:rows].copy(); del power
@@ -66,7 +68,8 @@ def preview_files(result, config, settings, first, last, *, cache=None, include_
             cache.clear(); cache[key] = main
     blobs = {'egg_PSD.png':main['png']}
     if include_audio:
-        wav = io.BytesIO(); wavfile.write(wav, result.fs, result.audio_signal.astype(np.float32))
+        values = result.audio_signal[first:last] if result.method_version == 'egg-bounded/2' else result.audio_signal
+        wav = io.BytesIO(); wavfile.write(wav, result.fs, values.astype(np.float32))
         blobs['egg_AUDIO.wav'] = wav.getvalue()
     data = EggPreviewData(**{k:v for k,v in main.items() if k != 'png'},
         audio=series(micro_t[::stride],audio[::stride],False), egg=series(micro_t[::stride],egg[::stride],False),

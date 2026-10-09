@@ -2,6 +2,8 @@
 
 2026-09-27。范围：继承 V2 的 LPC 逆滤波—残差—脉冲连续统，不借用 M06、PSOLA 或另一合成器。原五文件 SHA256 对照见 `tests/fixtures/m07/v2.json`。相邻 V2、继承源码和原始语料未修改。
 
+2026-10-04 补充：井井提供作者邮件许可并授权主页三栏底部来源与致谢，许可记录已按该证据更新，见[R2 报告](../../testing/2026-10-04-m07-r2-attribution-report.md)。其余科学迁移与上游观测时间沿用下述既有证据。
+
 | 功能 | 原实现 | v3 实现与验证 |
 |---|---|---|
 | F01 文件、源/目标、输出目录 | widget 文件选择；service.analyze_file | 公共文件句柄/项目资产；两份独立波形与试听；桌面独立组目录，网页单份完整 ZIP；Chrome、Qt、认证网页实测 |
@@ -35,7 +37,7 @@
 
 本轮读取既有登记、继承 Python、原说明书及本地证据，没有重开无边界检索。历史上游记录日期仍为2026-09-09，不声称本轮重新核验上游最新版。
 
-- `SRC-ZAIWA`：Python移植来源；登记无明确仓库LICENSE，`review-required`保持。v3原计算来自已核对V2，不能据此宣称精确复现论文所有流程。
+- `SRC-ZAIWA`：Python移植来源。2026-09-09 未发现明确仓库 LICENSE 为历史观测。2026-10-04 根据井井提供的 2026-09-10 作者邮件回复，代码改写、引用与 PhoneticToolbox v3 免费开源集成许可更新为 `author-permission-granted`，见[摘要](../../../third_party/evidence/SRC-ZAIWA/permission-summary.md)。v3原计算来自已核对V2，不能据此宣称精确复现论文所有流程。原音节和统计数据未新增分发。
 - `REF-ZAIWA`：Lu、Liang、Kong (2025)，Journal of Phonetics，DOI `10.1016/j.wocn.2025.101413`，书目信息沿用已有核对。论文方法、改编Python和v3迁移分别标注。
 - `SRC-PRAAT`：本轮Parselmouth0.4.7实际F0调用；GPL相关分发审查状态不改变。
 - `SRC-REAPER`：固定已登记Windows二进制 SHA256 `279fecc82ed0a49b0277b114270771d7670299068e849058b392672825981824`；Apache-2.0来源登记与具体旧二进制构建出处未闭合分别保留。

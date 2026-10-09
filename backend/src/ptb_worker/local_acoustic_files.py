@@ -93,7 +93,7 @@ class LocalAcousticFiles:
         if shutil.disk_usage(self.root).free-reserved-extra<1_000_000_000:raise StorageError('disk_space_low',507)
 
     def import_input(self,raw,name,role):
-        suffix={'transcript':('.lab','.txt','.textgrid'),'dictionary':('.dict','.txt'),'table':('.xlsx','.xls','.csv','.txt','.tsv'),'audio':('.wav','.mp3','.flac'),'textgrid':'.textgrid','lip':'.lip.json','parent_result':'.ptb.json','legacy_result':('.xlsx','.ptb.sqlite','.ptb.sqlite3'),'image':('.png','.jpg','.jpeg','.bmp')}.get(role)
+        suffix={'spectral_drawing':'.m09-drawing.json','transcript':('.lab','.txt','.textgrid'),'dictionary':('.dict','.txt'),'table':('.xlsx','.xls','.csv','.txt','.tsv','.docx'),'audio':('.wav','.mp3','.flac'),'textgrid':'.textgrid','lip':'.lip.json','parent_result':'.ptb.json','legacy_result':('.xlsx','.ptb.sqlite','.ptb.sqlite3'),'image':('.png','.jpg','.jpeg','.bmp')}.get(role)
         limit=64_000_000 if role=='audio' else 16_000_000 if role=='dictionary' else 16_000_000 if role in ('parent_result','legacy_result','image') else 2_000_000
         if not suffix or not 0<len(raw)<=limit or not isinstance(name,str) or not 0<len(name)<=220 or any(c in name for c in '/\\:\x00') or not name.lower().endswith(suffix):
             raise JobError('invalid_local_input',422)
@@ -126,7 +126,56 @@ class LocalAcousticFiles:
             try:self._readable(tx,a)
             except (StorageError,OSError):raise JobError('input_unavailable',409) from None
             result.append(dict(id=a['id'],role=role,sha256=a['sha256'],expires_at=None,size_bytes=a['size_bytes'],name=a['name']))
+            if role=='parent_result' and producer:
+                manifest=json.loads(producer['result_manifest'])
+                if manifest.get('format_revision')=='m01-bundle/2':
+                    table=next(f for f in manifest['files'] if f['name']=='result.ptb.sqlite')
+                    sibling=self._asset(table['id']);self._readable(tx,sibling)
+                    result.append(dict(id=sibling['id'],role='parent_table',sha256=sibling['sha256'],expires_at=None,size_bytes=sibling['size_bytes'],name=sibling['name']))
         return result
+
+    def begin_stream_input(self,name,role,size):
+        suffixes={'audio':('.wav',),'parameter_bundle':('.xlsx','.ptb.sqlite','.ptb.sqlite3')}
+        limit=2_000_000_000 if role=='audio' else 4_000_000_000
+        if role not in suffixes or type(size)!=int or not 0<size<=limit or not isinstance(name,str) or not 0<len(name)<=220 or any(c in name for c in '/\\:\x00') or not name.lower().endswith(suffixes[role]):
+            raise JobError('invalid_local_input',422)
+        with self.locked() as state:
+            self._budget(size);key=str(uuid4())
+            row=dict(id=key,name=name,role=role,kind='input',state='uploading',sha256=None,size_bytes=0,
+                     expected_bytes=size,reserved_bytes=size,job_id=None,generation=0)
+            state['assets'][key]=row;self._save(state)
+            with self._path(key).open('xb'):pass
+            return key
+
+    def append_stream_input(self,key,raw):
+        with self.locked():
+            a=self._asset(key)
+            if a['state']!='uploading' or a['kind']!='input' or not 0<len(raw)<=1_048_576 or a['size_bytes']+len(raw)>a['expected_bytes']:
+                raise JobError('invalid_local_input',422)
+            with self._path(key).open('ab') as f:f.write(raw)
+            a['size_bytes']+=len(raw);a['reserved_bytes']-=len(raw);self._save(self.state)
+
+    def finish_stream_input(self,key):
+        with self.locked():
+            a=self._asset(key)
+            if a['state']!='uploading' or a['size_bytes']!=a['expected_bytes']:raise JobError('invalid_local_input',422)
+            h=hashlib.sha256()
+            with self._path(key).open('rb') as f:
+                for raw in iter(lambda:f.read(1048576),b''):h.update(raw)
+            if a['role']=='audio':
+                import soundfile as sf
+                from phonetic_core.models.audio_bounds import validate_source
+                try:
+                    with sf.SoundFile(self._path(key)) as snd:validate_source(snd.frames,snd.samplerate,snd.channels)
+                except ValueError as exc:raise JobError(str(exc),422) from None
+            a.update(state='ready',reserved_bytes=0,sha256=h.hexdigest());self._save(self.state)
+            return dict(asset_id=key,sha256=a['sha256'])
+
+    def stream_input_failed(self,key):
+        # Retain owned partial input for recovery. Never publish it as ready.
+        with self.locked():
+            a=self._asset(key)
+            if a['state']=='uploading':a.update(state='failed',reserved_bytes=0);self._save(self.state)
 
     def link_batch_inputs(self,*args):pass  # Immutable P06 snapshot records the local references.
 
@@ -170,7 +219,7 @@ class LocalAcousticFiles:
             if len(outputs)>=3004 or sum(a['size_bytes']+a['reserved_bytes'] for a in outputs)+expected>json.loads(job['snapshot'])['config']['max_output_bytes']:
                 raise StorageError('output_budget_exceeded',413)
             asset_id=str(uuid4());a=dict(id=asset_id,name=name,role=None,kind=kind,state='uploading',sha256=None,size_bytes=0,
-                reserved_bytes=expected,expected_bytes=expected,job_id=job['id'],generation=identity[2])
+                reserved_bytes=expected,expected_bytes=expected,job_id=job['id'],generation=identity[2],retention_created_at=tx.now())
             self.state['assets'][asset_id]=a;self._save(self.state)
             with self._path(asset_id).open('xb') as f:f.flush();os.fsync(f.fileno())
             return dict(a)
@@ -250,7 +299,12 @@ class LocalAcousticFiles:
             if operation=='egg_analysis':
                 from ptb_api.egg_models import EggManifest
                 model=EggManifest
-            manifest=model(policy_version=POLICY_VERSION,operation=operation,core_version=core_version,
+            extra={}
+            if operation=='egg_analysis':
+                if json.loads(job['snapshot'])['config'].get('egg_bundle_revision')=='m03/2':extra['format_revision']='m03/2'
+            if model is AcousticTaskManifest and ((json.loads(job['snapshot'])['config'].get('analysis') or {}).get('extended') or json.loads(job['snapshot'])['config'].get('bounded_bundle')):
+                extra['format_revision']='m01-bundle/2'
+            manifest=model(**extra,policy_version=POLICY_VERSION,operation=operation,core_version=core_version,
                 files=[dict(id=a['id'],name=a['name'],kind='result',size_bytes=a['size_bytes'],sha256=a['sha256'],expires_at=None) for a in outputs]).model_dump()
             self._fence(tx,identity)
             for a in outputs:a.update(state='ready',reserved_bytes=0)
@@ -276,6 +330,9 @@ class LocalAcousticFiles:
         if owner!='local' or offset<0 or not 0<size<=1_048_576:raise StorageError('invalid_read',403)
         with self.batch_transaction() as tx:
             a=self._asset(asset_id);self._readable(tx,a)
+            now=tx.now()
+            if now-a.get('retention_touched_at',0)>=3600:
+                a['retention_touched_at']=now;self._save(self.state)
             with self._path(asset_id).open('rb') as f:f.seek(offset);return f.read(size)
 
     def recover(self):

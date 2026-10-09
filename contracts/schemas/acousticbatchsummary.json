@@ -104,6 +104,13 @@
           ],
           "title": "Job Id"
         },
+        "progress": {
+          "default": 0.0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Progress",
+          "type": "number"
+        },
         "state": {
           "enum": [
             "not_started",

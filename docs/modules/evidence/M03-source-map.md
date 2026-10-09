@@ -1,5 +1,9 @@
 # M03 说明书与源码审阅
 
+2026-10-07 M03-R7：井井授权长录音及 10 秒逆滤波。Windows 本地新增独立 `egg-bounded/2` 科学路径及 `m03/2` 结果传输修订，旧短文件路径保留。全局参考、20 秒 SOS 重叠裁剪、局部稳定滤波和视野 F0 缓存、完整导出及 IF 的准确边界见[报告](../../testing/2026-10-07-m03-r7-report.md)与[ADR](../../decisions/ADR-M03-R7.md)。仅使用既有 SciPy/Praat/REAPER 和项目自有代码，未引入新的外部方法实现，不把分块近似与显示压缩宣称为整段逐位等价。旧 EXE 未更新。
+
+2026-10-05 P19-R13 来源补充：项目作者已直接确认 EGG 与简化逆滤波为自身历史工作，部分历史项目有 AI 辅助。`PENDING-EGG` 稳定 ID 保留，当前自有来源与历史未决字段见[本轮核查](../../references/p19-license-classification-audit.md)。下面的许可待确认表述是原审阅时的历史状态，方法引用和科研有效性仍分别核查，Parselmouth 等第三方依赖许可继续适用。
+
 2026-09-12。初次规划时仅完成源码/说明书映射，随后井井授权M03-A。当前 A/B/C/D 与 E1 已完成各自限定 Windows 验收，最新逐项证据见[联合收口记录](../../testing/m03-report.md)，完整 M03 仍 in_progress。对照相邻 v2 `Phonetic_Export/index.html` 的 3.1–3.4 全文与本工程继承源码；A阶段直接只读调用原v2核实。说明书纯文本仅留在忽略的 `output/validation/20260912-closeout/manual-text.txt`，未复制其图片或全文进发行物。
 
 2026-09-13重新逐段核对3.1–3.4及原GUI/批次源码，八文件与手册哈希一致，六功能组最新入口和证据见[开发态功能复核](../../testing/m03-function-review.md)。补齐单击总览保留选区定位和提交期间取消，历史E1的范围/待验描述由后续专项覆盖，完整M03仍in_progress，EXE暂停。

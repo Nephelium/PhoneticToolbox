@@ -1,7 +1,7 @@
 module.exports=async({page,click,loaded,out,rpc,checks})=>{
  const assert=require('node:assert/strict'),path=require('node:path');
  const setup=(await rpc({op:'r1_setup'})).value;
- await click('语音标注对齐');await click('选择语料文件夹');
+ await click('TextGrid标注');await click('选择语料文件夹');
  const choose=async name=>{await page.locator('.annotation-file-list button').filter({hasText:name}).click();await loaded();};
  const create=async()=>{await click('创建标注层');await page.getByLabel('新建音节层名').fill('words');await page.getByLabel('新建音素层名').fill('phones');await click('创建层');};
  const save=async()=>{await page.getByRole('button',{name:/^保存 TextGrid/,exact:false}).first().click();await page.waitForFunction(()=>document.querySelector('.notice')?.textContent.includes('已保存：')&&document.querySelector('.annotation-page')?.getAttribute('aria-busy')==='false');const result=await rpc({op:'r1_inspect'});assert(!result.error,result.error);return result.value;};

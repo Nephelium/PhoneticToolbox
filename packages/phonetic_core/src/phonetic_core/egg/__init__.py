@@ -12,6 +12,9 @@ METHOD_VERSION = 'egg-legacy/1'
 
 
 def analyze_events(result, config, cancel_event=None):
+    if result.method_version == 'egg-bounded/2':
+        from .bounded import analyze_events as bounded_events
+        return bounded_events(result, config, cancel_event)
     check_cancel(cancel_event)
     cutoffs(config, result.fs)
     updated = LegacyCalculations().analyze_events(replace(result, analysis_config=config), config, cancel_event)

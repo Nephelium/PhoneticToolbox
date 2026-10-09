@@ -1,11 +1,7 @@
-# packages/phonetic_core — 工作规则
+# 科学核心 — 工作规则
 
-继承 [根 AGENTS.md](../../AGENTS.md)，先读本目录 [ARCHITECTURE.md](ARCHITECTURE.md)。2026-09-09 已获 P02 工程骨架实施授权，范围见根规则与 P02 计划；不扩大为全面业务迁移或部署授权。
+继承[根规则](../../AGENTS.md)，结构见[本目录架构](ARCHITECTURE.md)。这里只补充本目录约束。
 
-- 负责：纯科学计算、模型与可移植研究业务。
-- 允许依赖：Python 标准库、锁定的 NumPy/SciPy/Parselmouth 等科学依赖；定义清晰的 F0/native ports。
-- 禁止：Qt、FastAPI、HTTP、数据库、登录、进程全局用户设置、硬编码开发机路径。
-- 每次开始定位总计划任务 ID、相关文件、来源和验收项；已有可用代码优先迁移并保留证据。
-- 源数组不原地覆盖；保留原算法默认值、边界与 NaN。迁移第一步做 import/I/O 解耦，不顺便改公式。tdklatt 现有音频设备导入必须移到外层再进入纯核心。移植和参考代码保留 source_id。
-- 预定验证：python -m pytest packages/phonetic_core/tests -q；python -m pytest tests/parity -q；安装 wheel 到干净环境再测试。这些命令需要相应计划中的脚手架先实现，当前不声称可运行或通过。
-- 改动边界/算法/平台承诺前同步 ADR 和任务；不通过放宽检查来获得“完成”。
+- 只依赖标准库、锁定科学库和明确的 ports。不得导入 Qt、FastAPI、HTTP、数据库、账号设置或固定开发机路径。
+- 不原地覆盖输入数组，保留默认值、边界和 NaN 语义。迁移先解耦 import/I/O，不顺带改公式；音频设备与持久化放外层，移植实现保留 source_id。
+- 使用对应科学环境运行本包 tests 和 tests/parity；改包结构时追加独立 wheel 安装检查，数值预期来自独立基准。

@@ -43,7 +43,7 @@ def main():
             'license': license_text if len(license_text) < 200 else 'See p02-dependency-inventory.json for full metadata',
             'urls': {'release': f'https://pypi.org/project/{name}/{version}/'},
             'verification_date': '2026-09-09', 'distribution_status': 'development-only-native-release-audit-pending',
-            'evidence': 'Installed metadata and requirements-v3-dev.lock; wheel hash verification at clean installation.',
+            'evidence': 'Installed metadata and requirements/requirements-v3-dev.lock; wheel hash verification at clean installation.',
             'notes': 'Unmodified upstream dependency; no v2 algorithm migration. Build/test dependencies are not necessarily runtime contents.'}
     frontend = ROOT / 'frontend'
     lock = json.loads((frontend / 'package-lock.json').read_text('utf-8'))

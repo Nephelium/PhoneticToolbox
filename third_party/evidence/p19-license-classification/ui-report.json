@@ -1,0 +1,8 @@
+{
+  "success": true,
+  "checks": [
+    "light: paper license hidden, author/pdf/copy retained; dataset license and synthesis email permission retained; GPL wording corrected, obsolete and self-owned components hidden; exact Wang Tianheng Zenodo citation, DOI and CC BY license verified",
+    "dark: paper license hidden, author/pdf/copy retained; dataset license and synthesis email permission retained; GPL wording corrected, obsolete and self-owned components hidden; exact Wang Tianheng Zenodo citation, DOI and CC BY license verified"
+  ],
+  "errors": []
+}

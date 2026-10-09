@@ -10,7 +10,7 @@ from .font_models import FigureFontSnapshot
 class EggTaskConfig(WireModel):
     font: FigureFontSnapshot | None = None  # None preserves historical task rendering.
     mode: Literal['single', 'batch', 'inverse', 'preview'] = 'single'
-    micro_center: float | None = Field(default=None, ge=0, le=120)
+    micro_center: float | None = Field(default=None, ge=0, le=1800)
     micro_width_ms: float = Field(default=50., ge=5, le=5000)
     flip_channels: bool = False
     signal_mode: Literal['raw', 'filtered'] = 'filtered'
@@ -49,8 +49,8 @@ class EggTaskConfig(WireModel):
             raise ValueError('Specify a nonempty ROI or the whole file')
         if self.mode == 'batch' and (self.roi_start != 0 or self.roi_end is not None or self.signal_mode != 'filtered'):
             raise ValueError('Batch analysis uses the complete filtered file')
-        if self.mode == 'inverse' and (self.roi_end is None or self.roi_end-self.roi_start > 1):
-            raise ValueError('Inverse filtering requires an explicit ROI of at most one second')
+        if self.mode == 'inverse' and (self.roi_end is None or self.roi_end-self.roi_start > 10):
+            raise ValueError('Inverse filtering requires an explicit ROI of at most ten seconds')
         if self.mode != 'inverse' and self.lp_order is not None:
             raise ValueError('LP order only applies to inverse filtering')
         return self
@@ -77,13 +77,24 @@ def expected_names(config):
 from .storage_policy import PolicyVersion, LEGACY_POLICY_VERSION
 
 
+class EggManagedFile(AcousticManagedFile):
+    size_bytes: int=Field(ge=1,le=256_000_000)
+
+    @model_validator(mode='after')
+    def display_budget(self):
+        if not self.name.endswith('.csv') and self.size_bytes>64_000_000:
+            raise ValueError('EGG display/audio file exceeds budget')
+        return self
+
+
 class EggManifest(WireModel):
     policy_version: PolicyVersion = LEGACY_POLICY_VERSION
+    format_revision: Literal['m03/1','m03/2'] = 'm03/1'
     kind: Literal['managed_egg_files'] = 'managed_egg_files'
     complete: Literal[True] = True
     operation: Literal['egg_analysis'] = 'egg_analysis'
     core_version: str
-    files: list[AcousticManagedFile] = Field(min_length=2, max_length=5)
+    files: list[EggManagedFile] = Field(min_length=2, max_length=5)
 
     @model_validator(mode='after')
     def complete_set(self):
@@ -91,7 +102,7 @@ class EggManifest(WireModel):
         sets = [expected_names(EggTaskConfig()), expected_names(EggTaskConfig(mode='batch')),
                 expected_names(EggTaskConfig(mode='inverse', roi_end=1.0)), expected_names(EggTaskConfig(mode='preview'))]
         if (names not in [sorted(s) for s in sets] or len({f.id for f in self.files}) != len(names)
-                or sum(f.size_bytes for f in self.files) > 64_000_000):
+                or sum(f.size_bytes for f in self.files) > (256_000_000 if self.format_revision=='m03/2' else 64_000_000)):
             raise ValueError('Incomplete EGG export')
         return self
 
@@ -146,7 +157,7 @@ class EggInverseData(WireModel):
     egg_values: DisplayValues
     # Full selected, filtered EGG from this task, never reconstructed from a
     # different/current source. Optional for historical result compatibility.
-    full_egg_values: Annotated[list[float], Field(max_length=48000)] | None = None
+    full_egg_values: Annotated[list[float], Field(max_length=960000)] | None = None
     sample_rate_hz: int | None = Field(default=None, ge=8000, le=96000)
     lp_order: int | None = Field(default=None, ge=1, le=256)
     gci_count: int | None = Field(default=None, ge=0)

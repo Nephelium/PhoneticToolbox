@@ -1,0 +1,699 @@
+{
+  "schemaVersion": "ptb-manual-chapter/1",
+  "id": "m18",
+  "moduleId": "M18",
+  "title": "语音学论文精读",
+  "status": "reviewed",
+  "summary": "连续阅读原文与译文，折叠信息、全屏、选择复制、批注与荧光笔，并导出 PDF 和复制文献引用。",
+  "body": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m18-start"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "打开论文精读"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "从侧栏打开语音学论文精读。左侧按栏目发布日期选择论文，右侧阅读原文或中文译文。首次获取需要联网，已下载内容可离线阅读。右上角的帮助按钮直接打开本章，返回工具后可以继续阅读。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "论文详细信息默认收起。点击题名旁的论文信息，可同时展开完整中英文题名、作者、日期、版本、翻译说明和阅读导引；再次点击收起信息，腾出正文空间。收起后仍保留许可入口与引用格式按钮。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m18-r2-reader-collapsed-20261008-figure",
+          "assetId": "m18-r2-reader-collapsed-20261008",
+          "caption": "论文信息默认收起，右侧保留连续阅读区；右上角帮助可返回本章。",
+          "alt": "论文信息默认收起，右侧保留连续阅读区；右上角帮助可返回本章。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m18-new-papers"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "查看新论文"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "软件首次启动包含论文精读能力的版本时记录日期。默认获取该日期当日及以后在栏目发布的论文，升级不会重置这个日期。左栏的日期是栏目发布日期，论文原稿日期在展开的信息区查看。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "打开模块时检查新论文，在模块前台每 15 分钟检查一次，也可点击检查新论文。完成的原文和译文会保存在本机，下载失败可以重试。PDF 随服务器独立分发，不打包进 EXE。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m18-history"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "获取往期论文"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击右上角获取往期。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选择起始日期，范围包含当天及之后已发布的论文。核对总篇数、待下载篇数和预计大小，已完整下载的论文会跳过。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击获取，等待完成后关闭窗口。选择往期不会改变默认起点。下载期间可取消，已完成的文件保留。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m18-guide"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "选论文，先看导读"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "在左栏点击论文卡片，再展开论文信息查看阅读导引。导引说明研究问题、方法、关键图表以及结论需要注意的边界。阅读论文时可以随时收起，返回正文。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "首篇以构音声源—滤波器语音合成为例。导读提醒区分由模型推断的构音目标与实际 EMA 测量，并指出正文陈述与部分表格数值需要对照的位置。导读不替代原文的实验条件和结果。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m18-r2-reader-details-20261008-figure",
+          "assetId": "m18-r2-reader-details-20261008",
+          "caption": "点击论文信息展开题名、署名、许可、翻译说明和阅读导引，再次点击即可整体收起。",
+          "alt": "点击论文信息展开题名、署名、许可、翻译说明和阅读导引，再次点击即可整体收起。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m18-reading"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "连续阅读与全屏"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击原文或中文译文切换文档。两者分别保留当前模块标签内的页码，分页可能不同。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在纸面区域上下滚动，连续阅读相邻页。页码随当前阅读位置更新；尚未加载的页面会显示加载提示。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "使用左右方向键，或点击 ‹ / › 跳到上一页、下一页。也可输入页码后按 Enter 或移开焦点。输入框、批注编辑框和弹窗内的方向键仍用于编辑，不会误翻页。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击适宽让纸面适应阅读区，或选择 75% 至 200% 的缩放。放大后可横向和纵向滚动。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击全屏阅读隐藏工具箱导航、日期列表和论文信息，只保留阅读工具与纸面。全屏中也可以切换语言和添加批注。点击退出全屏或按 Esc 返回之前的窗口状态。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "连续阅读会按视野加载附近页面。快速跳转到未加载的远页时可能短暂等待，页码和页面占位仍保持连续。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m18-r2-reader-fullscreen-20261008-figure",
+          "assetId": "m18-r2-reader-fullscreen-20261008",
+          "caption": "全屏仅保留阅读工具和正文，点击退出全屏或按 Esc 返回工作台。",
+          "alt": "全屏仅保留阅读工具和正文，点击退出全屏或按 Esc 返回工作台。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m18-page-text"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "直接选择与复制文字"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在 PDF 纸面文字上按住鼠标左键拖选。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "按 Ctrl+C 直接复制，或点击复制选文。可以在相邻的已加载页面之间选择文字。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "需要查看纯文本时点击本页文字，再次点击返回纸面。复制公式、音标、连字或双栏内容后，请对照原文核对字符与阅读顺序。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "选字来自 PDF 内嵌文本层，扫描图片或图内转为轮廓的文字无法直接选择。此模块不执行 OCR。所选文字可用于个人笔记，引用时仍须保留作者和出处。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m18-annotations"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "荧光笔与文字批注"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在纸面选择要标记的文字，工具栏会显示已选择的页数。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选择黄色、绿色或粉色，再点击荧光笔。跨页选文会按页分别保存标记。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "需要说明时，在一页内选择文字，点击添加批注，输入内容后点击保存批注。保存成功会提示已保存到本机，纸面显示批注标记。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击批注按钮展开列表，可以跳到对应页、编辑或删除。删除需要再点击一次确认删除。点击纸面的笔形标记也能编辑该处文字批注。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "批注与荧光笔按 PDF 文件版本分别保存，原文和译文互不混用。关闭模块或重启软件后仍可读取，不上传服务器，也不改动下载的原 PDF。一个 PDF 最多保存 1000 条批注，每条文字最多 5000 字。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "如果另一窗口修改了同一文档的批注，保存会提示冲突并保留当前输入。点击重新载入批注，核对后再保存。存储失败或记录损坏时会提示错误，不会把未保存内容当成保存成功。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m18-r2-reader-annotations-20261008-figure",
+          "assetId": "m18-r2-reader-annotations-20261008",
+          "caption": "选中文字添加荧光笔或批注，右侧列表可定位、编辑和删除。图中为操作示例。",
+          "alt": "选中文字添加荧光笔或批注，右侧列表可定位、编辑和删除。图中为操作示例。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m18-export"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "导出原文、译文和批注副本"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击导出 PDF，选择原文或中文译文。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "只需论文文件时保持包含本机批注未勾选，导出内容与下载文件一致。需要带走阅读记录时勾选包含此文档的本机批注与荧光笔。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击选择位置并导出，在保存窗口选择文件夹与文件名。完成后核对提示；取消保存窗口不会生成新文件。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "含批注副本保留原 PDF 的文字、图片和矢量内容，荧光笔与文字说明采用标准 PDF 批注。外部阅读器的批注图标、弹窗和打印设置可能不同，分享或打印前请打开副本确认。导出当前选择语言的批注，原文批注不会映射到译文。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m18-r2-reader-export-20261008-figure",
+          "assetId": "m18-r2-reader-export-20261008",
+          "caption": "选择原文或中文译文，勾选是否带上本机批注，再选择保存位置。",
+          "alt": "选择原文或中文译文，勾选是否带上本机批注，再选择保存位置。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m18-citations"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "复制引用格式"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击紧凑题名栏右侧的引用格式。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选择 GB/T 7714—2015、ASA（美国社会学会）、MLA 9、APA 7 或 BibTeX。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "检查预览的作者、标题、年份和固定版本链接，点击复制引用，再粘贴到文档或文献管理工具。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "引用指向 arXiv 原文版本，年份使用原稿日期，访问日期按当前日期生成。中文译文用于辅助阅读，不会被当成另行发表的论文。预印本没有已核实的期刊、卷期或页码时不会填入这些信息。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "GB/T 选项明确采用 2015 版，若学校或期刊指定其他版本应据其要求调整。ASA 在此指美国社会学会。复制得到纯文本，斜体、悬挂缩进及作者姓名拆分等请按投稿规范复核。BibTeX 可交由文献管理器按所需样式排版。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m18-r2-reader-citations-20261008-figure",
+          "assetId": "m18-r2-reader-citations-20261008",
+          "caption": "选择引用格式，核对固定版本与作者后复制到文档。",
+          "alt": "选择引用格式，核对固定版本与作者后复制到文档。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m18-attribution"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "查看作者、版本与许可"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "收起信息时仍可点击许可链接；展开后可查看作者、原稿日期、固定版本、原文链接和翻译说明。示例论文采用 CC BY 4.0，中文翻译与导读注明 AI 辅助翻译、改编和未经原作者审校。译文保留图内英文标签和参考文献条目。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "分享原文、译文或带批注副本前，请查看具体许可和第三方材料声明，保留署名、原文链接、许可及修改说明。应用提供的引用格式不能替代许可要求。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m18-offline"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "网络中断后继续阅读"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "已完整下载的论文在离线时仍可阅读、复制、批注和导出。检查新论文失败时会显示网络提示，现有有效目录和本机文件保留。缺失或校验失败的文件需要联网重新获取。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "批注保存在固定用户数据目录，与启动运行缓存分开。清除启动缓存不会清除论文和批注；手动删除整个用户数据目录或重装系统前，应先导出需要保留的批注副本。普通浏览器预览仅提示在桌面版使用。"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -17,7 +17,15 @@ class M14Settings(WireModel):
 
 
 class M14Config(WireModel):
-    action:Literal['preview','export']
+    action:Literal['inspect','preview','export']
+    computation_revision:Literal['m14/1','m14/2']='m14/1'
+    character_column:int=Field(default=1,ge=1,le=64)
+    ipa_column:int=Field(default=2,ge=1,le=64)
+    note_column:int|None=Field(default=3,ge=1,le=64)
+    start_row:int=Field(default=2,ge=1,le=10001)
+    table_index:int=Field(default=0,ge=0,le=10000)
+    encoding:Literal['auto','utf-8-sig','gb18030','utf-16']='auto'
+    delimiter:Literal['auto','tab','comma','semicolon','chinese_comma','space']='auto'
     skip_first_row:bool=True
     consonant_only_as_zero_initial:bool=True
     settings:M14Settings|None=None
@@ -25,6 +33,10 @@ class M14Config(WireModel):
 
     @model_validator(mode='after')
     def export_fields(self):
+        if self.action!='inspect' and self.computation_revision=='m14/2' and len({self.character_column,self.ipa_column})!=2:
+            raise ValueError('m14_column_selection')
+        if self.action!='inspect' and self.computation_revision=='m14/2' and self.note_column in (self.character_column,self.ipa_column):
+            raise ValueError('m14_column_selection')
         if self.action=='export' and (self.settings is None or self.font is None):raise ValueError('m14_export_config_required')
         return self
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppIcon from '../../components/AppIcon.vue';
 import ModuleWorkbench from '../../components/ModuleWorkbench.vue';
 import {computed,onMounted,onUnmounted,ref,shallowRef,watch,nextTick,markRaw} from 'vue';
 import ModuleToolbar from '../../components/ModuleToolbar.vue';
@@ -149,7 +150,7 @@ onUnmounted(()=>{disposed=true;canvasObserver?.disconnect();saveDecision?.(false
   <button class="primary" :disabled="!canSaveRecording" @click="requestSave">另存录制</button>
   <button :disabled="recording||busy||!dirty" @click="confirmDiscard=true">放弃未保存内容</button>
   <button :disabled="recording||busy||!rows.length||(!selected&&!recordingUrl)" @click="openOffset">检查偏移量</button>
-  <template #actions><button @click="help=!help">使用说明</button><button @click="emit('references')">方法与引用</button></template>
+  <template #actions><button @click="help=!help">帮助</button><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button></template>
  </ModuleToolbar></template>
  <template #status><ModuleStatus v-if="error||state?.error" kind="error" :message="error||state?.error||''"/><ModuleStatus v-if="notice||progress" kind="info" :message="progress||notice"/></template>
  <ModuleWorkbench unified :state-key="stateKey??'M05'" left-label="设备与采集" right-label="视频与记录">

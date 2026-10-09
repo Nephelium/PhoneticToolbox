@@ -1,0 +1,3459 @@
+{
+  "schemaVersion": "ptb-manual-chapter/1",
+  "id": "m13",
+  "title": "汉字转国际音标",
+  "moduleId": "M13",
+  "summary": "输入汉字并实时转换，逐位置核对多音字，调整声调、字体与排版，保存 PNG 和本机草稿。",
+  "body": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-purpose",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "用途与输入准备"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "本模块把汉字逐字转换为国际音标或汉语拼音，适合制作读音对照、教学示例和经人工校对的转写图片。"
+          },
+          {
+            "type": "text",
+            "text": "文本在本机转换，不上传。",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "多音字需按词义人工选择。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb",
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 初始采用字表第一条读音；结果为单字读音，不自动处理语流变调、轻声、儿化或连读。连续语流转写还需结合实际录音核对。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-preparation",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "准备文本、标准和字体"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "从首页或侧栏打开"
+          },
+          {
+            "type": "text",
+            "text": "汉字转国际音标",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，在汉字输入框键入或粘贴文本。可保留标点、数字、英文、表情和换行，无须导入音频或字表。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "重新打开页面时文本为空，标准为 Standard Chinese (Beijing)。",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 已保存的排版偏好可沿用；切回仍打开的标签会保留当前编辑。需要旧文本时，使用顶部的"
+          },
+          {
+            "type": "text",
+            "text": "恢复本机草稿",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "转换标准依次为 Standard Chinese (Beijing)、Standard Chinese (Beijing)严、胡裕树《现代汉语》、黄伯荣、廖序东《现代汉语》、钱乃荣《现代汉语》、吴宗济、赵元任《汉语口语语法》、《汉语方音字汇》、UntPhesoca宽、UntPhesoca严、汉语拼音。名称沿用历史字表，选好标准后再校对读音。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "音标字体固定为 Doulos SIL",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "；结果中的汉字可另选本机字体。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-interface",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "界面区块"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "顶部操作栏",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：保存为 PNG、保存本机草稿、恢复本机草稿、帮助、方法与引用。恢复按钮仅在存有非空草稿时出现；有未保存修改时暂不可用。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "转换与排版",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：选择标准、显示内容、声调、排布、字号、间距、样式、颜色和汉字字体。底部选项看不到时，在设置栏内滚动。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "汉字输入与转换结果",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：输入后立即显示字音对照。字符计数包含标点、空白、换行和表情，不能当作汉字数。结果中带 ▼ 的字组可选读音。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "顶部状态提示",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：生成图片时显示进度提示，字体或保存失败时显示错误。收起提示仅隐藏文字，仍需处理原因后重试。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "左右排布依次显示设置、输入、结果。"
+          },
+          {
+            "type": "text",
+            "text": "上下排布",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "把输入放在结果上方，设置栏仍在左侧。可拖动栏间分隔线调宽，设置栏和输入栏宽度各为 240–560 px。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-m13-overview-r2-light",
+          "assetId": "m13-overview-light-scaled-r20261007",
+          "caption": "最大化后的汉字转国际音标工作区：左侧转换与排版，中间汉字输入，右侧转换结果；空文本时结果区显示输入提示。",
+          "alt": "最大化的浅色工作台，转换标准为 Standard Chinese (Beijing)，左栏显示声调和排版控件，中间输入框为空，右侧结果区等待输入。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-workflow",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "最短完整流程"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1,
+          "id": "m13-workflow-steps"
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "输入"
+                  },
+                  {
+                    "type": "text",
+                    "text": "银行",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，确认标准为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "Standard Chinese (Beijing)",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，查看实时结果。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击结果中带 ▼ 的"
+                  },
+                  {
+                    "type": "text",
+                    "text": "行",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，在读音窗选择 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "hang2",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。小窗关闭，这一位置更新；同字在别处需分别选择。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "调整显示、声调和排版，检查附加符号与换行。默认字号为汉字 24 px、音标 16 px。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存本机草稿",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，确认按钮星号和标签未保存标记消失。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存为 PNG",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，完成系统保存或浏览器下载，再打开实际文件核对内容。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "PNG 与本机草稿需分别保存。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb",
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " PNG 用于固定外观，草稿用于继续编辑；导出图片不会自动保存草稿。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-controls",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "逐控件与参数说明"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "下表为没有已存偏好时的默认值。修改立即反映在结果区，已保存的排版可在下次打开时沿用。"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m13-controls-table",
+          "caption": "汉字转国际音标控件与参数"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "控件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "默认值 / 范围"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "怎样使用"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "字音同显 / 仅音标",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "字音同显"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "字音同显把音标放在参考汉字上方；仅音标隐藏已转换字的汉字，标点和未收录字符仍可见。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "显示声调",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "开启"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "再次点击关闭。IPA 末尾调符或拼音调标被隐藏，ü 和音段附加符号保留；多音窗仍显示读音编号。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "左右排布 / 上下排布",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "左右排布"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "改变输入和结果的位置。导出的 PNG 只包含结果，不包含工作台设置和输入框。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "汉字字号",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "24 px / 16–72 px"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "控制结果中的参考汉字和字音同显下的原样字符，不改变输入框字号。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "音标字号",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "字音同显 16 px；仅音标 28 px / 12–48 px"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "未手调时按显示模式切换字号。手调一次后，两种模式都沿用所设值。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "字音间距",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0 px / −12–20 px"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "控制同组音标与汉字的距离。负值使两层靠近，不能用来添加音节间空格。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "行距",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "1.8 / 0.8–3.0，步进 0.1"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "调整行间距离。附加符号拥挤时适当增大；PNG 会保留避免行重叠所需的最小间隔。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "B 粗体 / I 斜体 / U 下划线",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "均关闭"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "三个开关可分别使用，作用于参考汉字和字音同显下的原样字符，IPA 层保持原样。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-advanced",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "进阶操作与图表"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-input-live",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "输入和即时转换"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在"
+                  },
+                  {
+                    "type": "text",
+                    "text": "汉字输入",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "键入两行：第一行 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "实验语音学",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，第二行 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "重行长乐",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。保持 Beijing、字音同显和声调开启。右侧立即显示两行结果，计数为 10，含一个换行。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "对照原文检查每个字。标点、数字、英文和未收录字符按原样显示；已有读音在当前 IPA 标准中缺值时显示 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "?",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "输入框改字、插字或删字后，结果立即刷新。接着核对受影响的多音位置。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-convert-flow-light",
+          "assetId": "m13-convert-flow-light-scaled-r20261007",
+          "caption": "在汉字输入区分两行输入实验语音学和重行长乐后，右侧按 Standard Chinese (Beijing) 实时显示字音对照；多音字组右下显示三角标记。",
+          "alt": "最大化浅色汉字转国际音标工作台，输入区为实验语音学和重行长乐两行文本，计数为10个字符；转换标准为 Standard Chinese (Beijing)，字音同显和声调显示开启，结果区显示对应的两行 IPA 与汉字。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-reading",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "逐位置读音与缺失映射"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击带 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "▼",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 的字组，读音窗列出"
+                  },
+                  {
+                    "type": "text",
+                    "text": "拼音、声调编号或轻声标签、当前标准的转写",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。按文本意义选择一项，这一位置立即更新，小窗关闭。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "同一个字出现多次时，逐个位置核对。按 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "Esc",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "、点 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "×",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 或点窗外可关闭小窗并保留原选择；目标字滚出可见区时，小窗也会关闭。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-m13-polyphony-detail-r4-light",
+          "assetId": "m13-polyphony-detail-r4-light-scaled-r20261007",
+          "caption": "点击第一行结果中的实字组后，读音窗显示 shi2 和 shi（轻声）两个候选，shi2 为当前选项。点击候选只作用于实在这一位置的读音。",
+          "alt": "输入实验语音学和重行长乐两行文本的浅色工作台；结果中实的读音窗打开，上方 shi2 候选高亮，下方 shi（轻声）未选中，二者右侧显示各自 IPA。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-reading-choice-detail-figure",
+          "assetId": "m13-reading-choice-detail-scaled-r20261007",
+          "caption": "点击带三角标记的字后，在读音列表中选择。此处只改变当前这个字的位置。",
+          "alt": "点击带三角标记的字后，在读音列表中选择。此处只改变当前这个字的位置。",
+          "width": "70%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "图中打开"
+          },
+          {
+            "type": "text",
+            "text": "实",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "的读音窗，当前项为 "
+          },
+          {
+            "type": "text",
+            "text": "shi2",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。再点 shi2 只是确认当前读音；改选轻声会去掉该位置的调符，其他字保持原样。本例应按实际词义决定，候选顺序不表示推荐程度。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "再输入"
+          },
+          {
+            "type": "text",
+            "text": "银行行走",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，点第一处"
+          },
+          {
+            "type": "text",
+            "text": "行",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "并选择 "
+          },
+          {
+            "type": "text",
+            "text": "hang2",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，再次打开可核对高亮项。关闭小窗后，第一处为 "
+          },
+          {
+            "type": "text",
+            "text": "xaŋ˧˥",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，第二处仍为首条 xing2 对应的 "
+          },
+          {
+            "type": "text",
+            "text": "ɕiŋ˧˥",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ],
+        "attrs": {
+          "id": "m13-bank-choice-example"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-m13-hang-position-choice-r2-light",
+          "assetId": "m13-hang-position-choice-r2-light-scaled-r20261007",
+          "caption": "银行行走中，第一个行已选择 hang2；再次点这个字组，读音窗突出显示当前 hang2，并列出 xing2、hang4、heng2 候选。",
+          "alt": "最大化浅色工作台输入银行行走，第一处行读音窗打开，hang2候选带选中高亮，xing2、hang4和heng2候选可见。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "在最前插入 "
+          },
+          {
+            "type": "text",
+            "text": "🙂",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，形成"
+          },
+          {
+            "type": "text",
+            "text": "🙂银行行走",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，计数变为 5。表情原样保留，两个行的已选读音随未改变的文字向后移动。"
+          }
+        ],
+        "attrs": {
+          "id": "m13-position-edit-example"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-m13-position-edit-r2-light",
+          "assetId": "m13-position-edit-r2-light-scaled-r20261007",
+          "caption": "在银行行走前插入一个表情字符后，字符计数成为 5；两个行的读音选择分别保留，表情按原字符显示。",
+          "alt": "最大化浅色工作台输入🙂银行行走，计数5，结果保留表情，第一个行显示xaŋ˧˥，第二个行显示ɕiŋ˧˥。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "替换文字后，重新检查多音字。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 未变化的前后片段可保留选择，被替换片段回到字表首条；位置保留不能判断新词义。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "字符原样显示或出现 "
+          },
+          {
+            "type": "text",
+            "text": "?",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 时，先分辨未收录与当前列缺值。可切换标准帮助核对，再按所需标准查证；本页没有新增字表或自由修改单个映射的入口。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-tone-pinyin",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "声调显示和拼音 ü"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1,
+          "id": "m13-pinyin-on-steps"
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "输入"
+                  },
+                  {
+                    "type": "text",
+                    "text": "妈女略",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，选"
+                  },
+                  {
+                    "type": "text",
+                    "text": "汉语拼音",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，保持声调开启。结果为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "mā、nǚ、lüè",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，字表中的 v 自动显示为 ü。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-m13-pinyin-umlaut-r2-light",
+          "assetId": "m13-pinyin-umlaut-r2-light-scaled-r20261007",
+          "caption": "汉语拼音模式下，妈女略显示 mā、nǚ、lüè；女和略的结果使用 ü。",
+          "alt": "最大化浅色工作台，转换标准汉语拼音，输入妈女略，显示声调开启，字音结果依次为mā、nǚ、lüè。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 2,
+          "id": "m13-pinyin-off-steps"
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "显示声调",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "关闭，结果为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "ma、nü、lüe",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。再次点击可恢复调标，ü 始终保留。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-m13-pinyin-toneoff-r2-light",
+          "assetId": "m13-pinyin-toneoff-r2-light-scaled-r20261007",
+          "caption": "关闭显示声调后，同一文本成为 ma、nü、lüe，ü 保留；按钮呈关闭状态。",
+          "alt": "最大化浅色工作台，输入妈女略，转换标准汉语拼音，显示声调按钮关闭，字音结果依次为ma、nü、lüe。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 3
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "切回 IPA 后，关闭声调只去掉末尾 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "˥˦˧˨˩",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。例如北京严式中的 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "ma̠˥",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 变为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "ma̠",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，音段附加符号保留。多音窗继续显示读音编号，方便选择。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-standard-comparison",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "比较不同映射列"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "先固定"
+          },
+          {
+            "type": "text",
+            "text": "文本、逐位置读音、声调与字号",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，再切换标准。同一妈读音行在 Beijing 为 "
+          },
+          {
+            "type": "text",
+            "text": "ma˥",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、Beijing 严为 "
+          },
+          {
+            "type": "text",
+            "text": "ma̠˥",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、UntPhesoca 严为 "
+          },
+          {
+            "type": "text",
+            "text": "mä˥",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。这些是字表值，不用于排序各标准的精度。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "输入两行"
+          },
+          {
+            "type": "text",
+            "text": "春江花月夜",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "与"
+          },
+          {
+            "type": "text",
+            "text": "银行行走女略",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，选 "
+          },
+          {
+            "type": "text",
+            "text": "Standard Chinese (Beijing)严",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "和"
+          },
+          {
+            "type": "text",
+            "text": "仅音标",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。未手调时音标字号为 28 px。图中两个行均为首条 xing2，作列间对照；最终用于银行一词时，应先把第一处改为 hang2。"
+          }
+        ],
+        "attrs": {
+          "id": "m13-strict-onlyipa-example"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-m13-beijing-strict-onlyipa-r2-light",
+          "assetId": "m13-beijing-strict-onlyipa-r2-light-scaled-r20261007",
+          "caption": "选择 Standard Chinese (Beijing)严与仅音标后，右侧保留原来的两行顺序，音标字号显示为 28 px。",
+          "alt": "最大化浅色工作台，输入两行春江花月夜和银行行走女略，计数12，转换标准 Standard Chinese (Beijing)严，仅音标开启，音标字号28px，右侧为两行IPA。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-example-six",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "用同一文本核对六种显示"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "可依次比较 "
+          },
+          {
+            "type": "text",
+            "text": "Beijing、Beijing 严、赵元任《汉语口语语法》、UntPhesoca 严、胡裕树《现代汉语》、汉语拼音",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，也可选择其余标准。每次切换后检查标准名，再分别导出，用文件名区分。当前每次显示一项，需手动切换保存。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "下列两图使用相同两行文本、字音同显、声调开启、汉字 24 px、音标 16 px，两个行均保留 xing2，便于比较同一读音行。"
+          }
+        ],
+        "attrs": {
+          "id": "m13-standard-shots-intro"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "选择"
+          },
+          {
+            "type": "text",
+            "text": "赵元任《汉语口语语法》",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，春显示 "
+          },
+          {
+            "type": "text",
+            "text": "tʂʰuən˥",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，女显示 "
+          },
+          {
+            "type": "text",
+            "text": "ny˨˩˦",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ],
+        "attrs": {
+          "id": "m13-zhao-example"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-m13-zhao-comparison-r2-light",
+          "assetId": "m13-zhao-comparison-r2-light-scaled-r20261007",
+          "caption": "相同两行文本切换到赵元任《汉语口语语法》列，字音同显便于逐字查看该列结果。",
+          "alt": "最大化浅色工作台，转换标准赵元任《汉语口语语法》，输入春江花月夜与银行行走女略两行，右侧字音同显，两个行均为首条读音，汉字24px和音标16px。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "只把标准改为 "
+          },
+          {
+            "type": "text",
+            "text": "UntPhesoca严",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，春变为 "
+          },
+          {
+            "type": "text",
+            "text": "t͡s̟ʰuɘ̹̑˗n̚˥",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。附加符号较密时，放大检查上下记号与连音线。"
+          }
+        ],
+        "attrs": {
+          "id": "m13-unt-example"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-m13-unt-comparison-r2-light",
+          "assetId": "m13-unt-comparison-r2-light-scaled-r20261007",
+          "caption": "保持字音同显与两行文本，仅把转换标准改为 UntPhesoca严，右侧使用该列符号。",
+          "alt": "最大化浅色工作台，同一两行文本和首条读音选择，转换标准UntPhesoca严，右侧字音同显，附加符号与连音线可见。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-layout",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "排版、字体和颜色"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "确定最终标准后，选"
+                  },
+                  {
+                    "type": "text",
+                    "text": "字音同显",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "或"
+                  },
+                  {
+                    "type": "text",
+                    "text": "仅音标",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，再选排布并调宽结果区。仅音标模式下，参考汉字样式不再显示。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "先调两层字号，再调字音间距和行距。检查首行、中间和末行，避免负间距或过小行距挤压附加符号。需要突出参考汉字时，再开启粗体、斜体或下划线。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在"
+                  },
+                  {
+                    "type": "text",
+                    "text": "汉字字体",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "选系统默认或本机字体。选"
+                  },
+                  {
+                    "type": "text",
+                    "text": "自定义字体…",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "后填写准确的已安装名称。字体只改变结果中的汉字与原样字符，输入框和固定 Doulos 音标保持各自字体。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "分别设置"
+                  },
+                  {
+                    "type": "text",
+                    "text": "音标颜色",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "与"
+                  },
+                  {
+                    "type": "text",
+                    "text": "汉字颜色",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "跟随主题",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "会同时清除两项自选颜色；尚未自选时按钮不可用。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "PNG 固定白底，自选浅色也会保留，请检查对比。",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "color": "#3b2f00",
+                          "colorDark": "#fff0bb",
+                          "backgroundColor": "#fff1c2",
+                          "backgroundColorDark": "#514218"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "排版示例：输入"
+          },
+          {
+            "type": "text",
+            "text": "春江花月夜",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "与"
+          },
+          {
+            "type": "text",
+            "text": "女略",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "两行，选 Beijing 严、字音同显、上下排布。设汉字 "
+          },
+          {
+            "type": "text",
+            "text": "32 px",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、音标 "
+          },
+          {
+            "type": "text",
+            "text": "22 px",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、间距 "
+          },
+          {
+            "type": "text",
+            "text": "4 px",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、行距 "
+          },
+          {
+            "type": "text",
+            "text": "2.2",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，开启粗体，汉字字体选 "
+          },
+          {
+            "type": "text",
+            "text": "KaiTi · 楷体",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，音标色 "
+          },
+          {
+            "type": "text",
+            "text": "#2345AB",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、汉字色 "
+          },
+          {
+            "type": "text",
+            "text": "#AB4523",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ],
+        "attrs": {
+          "id": "m13-layout-example"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-m13-stacked-kaiti-colors-export-r2-light",
+          "assetId": "m13-stacked-kaiti-colors-export-r2-light-scaled-r20261007",
+          "caption": "上下排布把输入放在结果上方；本例使用楷体、汉字 32 px、音标 22 px、间距 4 px、行距 2.2，并分别设置两层文字颜色。",
+          "alt": "最大化浅色工作台采用上下排布，上方春江花月夜和女略两行输入，下方蓝色Doulos音标与棕色楷体粗体汉字；左侧显示32px汉字、22px音标、4px间距、2.2行距及KaiTi · 楷体。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-output",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "输出与保存"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-output-copy",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "复制文字用于核对"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1,
+          "id": "m13-copy-source-steps"
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "要保留原文本，点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "汉字输入框",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，拖选文字或按 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "Ctrl+A",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 全选，使用系统复制后粘贴到独立文本文件，同时记录标准与人工读音决定。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "页面没有文本导出或复制纯音标按钮。",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "color": "#3b2f00",
+                          "colorDark": "#fff0bb",
+                          "backgroundColor": "#fff1c2",
+                          "backgroundColorDark": "#514218"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-m13-input-selected-r2-light",
+          "assetId": "m13-input-selected-r2-light-scaled-r20261007",
+          "caption": "在汉字输入框按 Ctrl+A 后，当前两行文本被选中，可用系统复制操作保留原始文本。",
+          "alt": "最大化浅色上下排布工作台，汉字输入框获得焦点，春江花月夜与女略两行全部呈蓝色选区高亮，右下结果继续可见。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "临时从结果区选取文字复制时，粘贴后检查字符顺序、汉字层、标点、换行和附加符号。结果按字组排版，复制内容需校对后使用。固定外观用 PNG，继续编辑用本机草稿。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-output-png",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "导出当前排版 PNG"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "PNG 固定白底，顶部包含"
+          },
+          {
+            "type": "text",
+            "text": "国际音标",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "与"
+          },
+          {
+            "type": "text",
+            "text": "当前标准名",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。文字、读音、声调和排版采用点击导出时的状态，多音 ▼ 也可能保留。"
+          },
+          {
+            "type": "text",
+            "text": " 输入只有空白或正在生成时，保存按钮不可用。"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "文本非空且已完成校对后，点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存为 PNG",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。按钮显示"
+                  },
+                  {
+                    "type": "text",
+                    "text": "正在生成…",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，程序等待内置与自选字体就绪；编辑继续保留。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "浏览器按下载设置保存，建议名为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "ipa_output_时间戳.png",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "；桌面通过原生保存框选择目录和名称。取消保存后可再次导出，文本不受影响。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "打开实际文件，检查标准名、读音、声调、分行、附加符号、字体与颜色。导出期间若修改过设置，再次导出才能得到新样式。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "下图为前节楷体与两色示例的实际 PNG，设置栏和输入框未写入。检查附加符号、调符和行尾，再用于展示。"
+          }
+        ],
+        "attrs": {
+          "id": "m13-export-result-example"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-export-kaiti-independent-colors",
+          "assetId": "m13-export-kaiti-independent-colors",
+          "caption": "实际导出的白底 PNG：标题标明 Standard Chinese (Beijing)严，音标为蓝色 Doulos，参考汉字为棕色楷体粗体，两行文本保留。",
+          "alt": "实际落盘PNG，白底上方为国际音标与Standard Chinese (Beijing)严，正文第一行春江花月夜、第二行女略，每字上方蓝色IPA、下方棕色楷体粗体汉字，花和月下方有蓝色三角。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "图片按结果区宽度重新排版，自动换行可能与预览略有不同。通常以 3 倍像素生成，长图会降低倍率；仍过长时提示分段导出。PNG 为固定图像，不含可恢复的编辑记录，也不保证固定纸张尺寸或打印 DPI。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-output-draft",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "保存、恢复与关闭草稿"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "草稿保存"
+          },
+          {
+            "type": "text",
+            "text": "文本、标准、逐位置读音和全部排版设置",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          },
+          {
+            "type": "text",
+            "text": "再次保存会替换本工作区的上一份草稿。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 本机草稿没有历史列表，长期材料还需另存原文本与读音决定。"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1,
+          "id": "m13-draft-reopen-steps"
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "有修改时点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存本机草稿",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，成功后星号与标签未保存标记消失。保存失败时保持页面，先外存原文本，再检查本机存储。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "关闭后重新打开模块，文本为空、标准为 Beijing，已存排版偏好可保留。有非空已存文本时，顶部出现"
+                  },
+                  {
+                    "type": "text",
+                    "text": "恢复本机草稿",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-m13-draft-explicit-restore-r2-light",
+          "assetId": "m13-draft-explicit-restore-r2-light-scaled-r20261007",
+          "caption": "保存草稿并重新打开后，输入区为空、转换标准为 Beijing，工具栏出现可点击的恢复本机草稿。已保存的排版偏好仍可见。",
+          "alt": "最大化浅色上下排布工作台，输入计数0，转换标准Standard Chinese (Beijing)，恢复本机草稿按钮可用，保存草稿与保存PNG按钮禁用，已存32px/22px和楷体排版仍显示。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "当前没有未保存修改时，点击"
+          },
+          {
+            "type": "text",
+            "text": "恢复本机草稿",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。本例读回春江花月夜与女略，标准回到 Beijing 严，读音和排版一同恢复。"
+          }
+        ],
+        "attrs": {
+          "id": "m13-draft-restored-example"
+        }
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1,
+          "id": "m13-draft-close-steps"
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "恢复按钮禁用时，先决定保留当前编辑还是旧草稿。要读回旧草稿，先外存当前原文本及读音决定，再关闭标签，选"
+                  },
+                  {
+                    "type": "text",
+                    "text": "放弃草稿并关闭",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，重开后恢复。直接保存当前编辑会覆盖旧草稿。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "关闭未保存标签时，"
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存转换草稿？",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "提供三项："
+                  },
+                  {
+                    "type": "text",
+                    "text": "取消关闭",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "返回编辑；"
+                  },
+                  {
+                    "type": "text",
+                    "text": "放弃草稿并关闭",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "放弃当前未保存修改，已存草稿保留；"
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存草稿并关闭",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存成功后关闭，失败时保留标签和编辑。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-m13-unsaved-close-dialog-r2-light",
+          "assetId": "m13-unsaved-close-dialog-r2-light-scaled-r20261007",
+          "caption": "修改已恢复的文本再关闭标签时，应用显示取消关闭、放弃草稿并关闭、保存草稿并关闭三个选择。",
+          "alt": "最大化浅色工作台显示保存转换草稿对话框，背景两行输入末尾有新加叹号，弹窗提供取消关闭、放弃草稿并关闭、保存草稿并关闭。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "本机草稿属于当前设备和存储环境。刷新、退出或清理存储前，确认需要的材料已保存；转到其他电脑时另行携带原文本、读音记录与 PNG。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-recovery",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "错误恢复"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m13-errors-table",
+          "caption": "常见现象与恢复步骤"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "现象或提示"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "恢复办法"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "读音不符合词义",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "点击该位置的 ▼，按拼音与编号重新选择。编辑过文本后核对替换区和重复字，再保存。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "字符原样显示 / 映射为 ?",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "原样字符可能未收录；"
+                      },
+                      {
+                        "type": "text",
+                        "text": "?",
+                        "marks": [
+                          {
+                            "type": "code"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": " 表示当前标准缺值。切换标准辅助核对并查证来源，需要补写时另用文本工具。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "恢复草稿不显示 / 不可用",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "仅非空草稿显示恢复入口，当前未保存时禁用。按前节外存当前材料、关闭放弃、重开恢复，并核对文本和标准。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "草稿保存失败",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "保持页面，先外存原文与设置，检查本机存储权限或空间后重试。未保存标记消失后再关闭。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Doulos SIL 字体加载失败 / 未就绪",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "等待加载后重试；资源损坏时换用包含完整内置字体的应用版本。保留编辑，并检查新 PNG 的组合符号。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "汉字字体在当前设备不可用",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "核对名称，改选系统默认或已安装字体，再保存 PNG。回退预览不能证明指定字体可用。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "输出内容过长，请分段导出。",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "先保存完整原文和草稿，再按段导出。修改输入后复核多音位置，按文件名记录段落顺序。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "图像绘制环境不可用 / PNG 编码失败",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "保留原文和草稿，待环境恢复后重试。需要重开时先确认草稿已保存，再检查新文件能否打开。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "找不到 PNG / 取消保存",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "检查下载记录或所选目录，必要时重新导出并完成保存。页面没有成功路径清单，以实际文件为准。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "颜色难读 / 符号拥挤 / 换行不同",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "调整颜色、字号、间距、行距或结果区宽度后重导，打开原图核对。收起提示只隐藏错误文字。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "字体错误示例：在"
+          },
+          {
+            "type": "text",
+            "text": "自定义字体…",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "填写本机未安装的 "
+          },
+          {
+            "type": "text",
+            "text": "PTB-NotInstalled-M13-Manual",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，再保存 PNG。顶部提示该汉字字体不可用，输入和结果继续保留。"
+          }
+        ],
+        "attrs": {
+          "id": "m13-unavailable-font-example"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-m13-unavailable-font-error-r2-light",
+          "assetId": "m13-unavailable-font-error-r2-light-scaled-r20261007",
+          "caption": "填写本机没有安装的 PTB-NotInstalled-M13-Manual 后导出，顶部提示汉字字体不可用；输入和结果仍保留。",
+          "alt": "最大化浅色工作台顶部红色状态栏提示汉字字体PTB-NotInstalled-M13-Manual在当前设备不可用，请选择已安装的字体后重试；两行输入和字音结果仍在。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "改选"
+          },
+          {
+            "type": "text",
+            "text": "系统默认",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "或本机已安装的 "
+          },
+          {
+            "type": "text",
+            "text": "KaiTi",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，再次保存为 PNG，并打开文件检查。设置变化会清除旧错误，仍需完成重试。"
+          }
+        ],
+        "attrs": {
+          "id": "m13-unavailable-font-retry"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-sources",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "方法来源与解释边界"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "顶部"
+          },
+          {
+            "type": "text",
+            "text": "方法与引用",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "可查看规则、字表和内置 Doulos SIL 的来源与许可。标准名称沿用旧字表，具体著作版次及单字条目仍需按研究用途核对。制作语料时保存标准名称与人工读音决定，便于复核。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "内置 Doulos SIL 按 SIL Open Font License 1.1 保留许可。本机汉字字体不会随 PNG 打包为字体文件；需要另行分发字体时，核对该字体的许可。"
+          }
+        ]
+      }
+    ]
+  }
+}

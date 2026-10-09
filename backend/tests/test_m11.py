@@ -147,3 +147,72 @@ def test_runtime_content_identity_detects_native_drift_even_with_unchanged_metad
     before=fingerprint(root);native.write_bytes(b'new');os.utime(native,ns=(stamp.st_atime_ns,stamp.st_mtime_ns))
     assert fingerprint(root)!=before
     with pytest.raises(ValueError,match='cancelled'):fingerprint(root,stop=lambda:True)
+
+
+def test_m11_r1_new_defaults_do_not_rewrite_explicit_historical_values():
+    from ptb_api.m11_models import M11Config
+    assert M11Config().model_dump()==dict(beam=100,retry_beam=400)
+    assert M11Config(beam=10,retry_beam=40).model_dump()==dict(beam=10,retry_beam=40)
+
+
+def test_m11_r1_parallel_fingerprint_is_canonical_full_content_hash(tmp_path):
+    from ptb_worker.mfa.runtime import fingerprint
+    root=tmp_path/'env';(root/'conda-meta').mkdir(parents=True)
+    executable=root/('python.exe' if os.name=='nt' else 'bin/python');executable.parent.mkdir(exist_ok=True);executable.write_bytes(b'fixture')
+    (root/'conda-meta/montreal-forced-aligner-3.3.8.json').write_text('{"version":"3.3.8"}')
+    for i in range(130):(root/f'{i:03d}.dat').write_bytes(bytes([i])*20)
+    reference=hashlib.sha256()
+    for path in sorted(p for p in root.rglob('*') if p.is_file()):
+        reference.update(path.relative_to(root).as_posix().encode())
+        reference.update(hashlib.sha256(path.read_bytes()).digest())
+    assert fingerprint(root)==reference.hexdigest()
+
+
+@pytest.mark.skipif(os.name!='nt',reason='Windows Job Object orchestration')
+def test_m11_r1_kernel_cache_is_host_owned_and_isolated_by_content(tmp_path,monkeypatch):
+    import ptb_worker.mfa.runtime as runtime
+    from ptb_worker.native import windows
+    monkeypatch.setenv('PTB_M11_COMPONENT_ROOT',str(tmp_path/'components'))
+    monkeypatch.setattr(runtime,'resolve_runtime',lambda _: (tmp_path,tmp_path/'python.exe'))
+    class FixtureProcess:
+        pid=1
+        group_cleaned=False
+        def __init__(self,argv,root,memory):
+            (root/'response.json').write_text('{"success":true}',encoding='utf8')
+        def poll(self):return 0
+        def memory_peak(self):return 0
+        def close(self):self.group_cleaned=True
+    monkeypatch.setattr(windows,'OwnedProcess',FixtureProcess)
+    paths=[]
+    for i,key in enumerate(('a'*64,'b'*64,'a'*64)):
+        attempt=tmp_path/f'attempt{i}'
+        result=runtime.run(tmp_path,attempt,dict(kernel_cache_key=key,kernel_cache='untrusted-input-path'))
+        assert result['success']
+        request=json.loads((attempt/'request.json').read_text('utf8'))
+        paths.append(request['kernel_cache'])
+        assert Path(paths[-1])==tmp_path/'components/kernel-cache'/key
+    assert paths[0]==paths[2] and paths[0]!=paths[1]
+    with pytest.raises(ValueError,match='m11_runtime_changed'):
+        runtime.run(tmp_path,tmp_path/'invalid',dict(kernel_cache_key='../escape'))
+
+
+@pytest.mark.skipif(os.name!='nt',reason='Windows Job Object orchestration')
+def test_m11_r1_shared_kernel_cache_remains_within_monitored_budget(tmp_path,monkeypatch):
+    import ptb_worker.mfa.runtime as runtime
+    from ptb_worker.native import windows
+    monkeypatch.setenv('PTB_M11_COMPONENT_ROOT',str(tmp_path/'components'))
+    monkeypatch.setattr(runtime,'resolve_runtime',lambda _: (tmp_path,tmp_path/'python.exe'))
+    cache=tmp_path/'components/kernel-cache'/('a'*64);cache.mkdir(parents=True)
+    (cache/'kernel.nbc').write_bytes(b'k'*2000)
+    class FixtureProcess:
+        pid=1
+        group_cleaned=False
+        def __init__(self,*args):pass
+        def poll(self):return None
+        def memory_peak(self):return 0
+        def close(self):self.group_cleaned=True
+    monkeypatch.setattr(windows,'OwnedProcess',FixtureProcess)
+    evidence={}
+    with pytest.raises(ValueError,match='m11_temp_budget'):
+        runtime.run(tmp_path,tmp_path/'attempt',dict(kernel_cache_key='a'*64),disk=1500,evidence=evidence)
+    assert evidence['group_cleaned'] and evidence['temp_peak_sampled_bytes']>=2000

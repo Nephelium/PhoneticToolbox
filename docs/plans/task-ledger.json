@@ -3,6 +3,92 @@
   "created_on": "2026-09-09",
   "tasks": [
     {
+      "id": "GITHUB-SOURCE-SYNC",
+      "title": "当前 v3 源码同步至 GitHub",
+      "status": "in_progress",
+      "files": "当前已审阅工作树源码、必要资源、说明书工具、依赖目录和文档；停止跟踪两份论文 PDF 与两张无引用旧图；见本机明确文件清单",
+      "verification_scope": "Windows current source, publication-boundary review, frontend/studio/desktop checks; existing codex/v3-rebuild branch only",
+      "note": "用户明确授权 GitHub 更新及无用仓库内容清理。已 fetch 并核对起点一致，953 项受限素材无索引记录；3 处凭据扫描命中均为素材 ID。两份论文 PDF 及两张仅历史清单引用的旧图停止跟踪并保留本机，仍被回归/资源链引用的 v2 内容保留。文档和架构检查通过，前端 345、作者工具 38、桌面及源码/打包边界 363 passed/2 skipped，前端构建通过；暂存空白提示按报告保留。官网备案号已独立授权部署并回读核验。",
+      "current_evidence": ["docs/testing/github-source-sync.md"],
+      "local_evidence": "output/maintenance/github-sync/reviewed-files.json 及测试日志",
+      "remaining": ["提交明确清单并推送现有分支，核对远程提交身份", "完整科学/实体设备/跨平台/最终 EXE 未在本次重验"]
+    },
+    {
+      "id": "P15-ICP-FOOTER",
+      "title": "静态首页 ICP 备案号展示",
+      "status": "verified",
+      "files": "temporary-site/index.html；docs/project-status.md；docs/plans/task-ledger.json",
+      "verification_scope": "Windows local static page, isolated headless Chrome at widths 1440/390/320; authorized production static HTML deployment and HTTPS byte verification",
+      "note": "按用户提供的黑ICP备2024017318号原文添加底部居中链接，目标为 https://beian.miit.gov.cn/。Playwright 本地三种宽度检查通过。用户确认更新后核对服务器原页摘要，保留私有回退副本并原子替换首页，公网返回 200 且 9955 字节与本地一致，SHA-256 dc72fb49d10f46bd2ba5ba06b4377577f130362edccb56dd1b52928dc4259ac3。备案号与域名对应关系未登录备案系统独立核实。",
+      "local_evidence": "output/playwright/icp-footer/result.json；deployment.json；1440.png；390.png；320.png",
+      "remaining": [
+        "公安联网备案由用户办理，取得编号后另补展示"
+      ]
+    },
+    {
+      "id": "P19-Startup-R1",
+      "title": "每次启动进度反馈与内容校验提速",
+      "dependencies": "P19；持久启动缓存；井井授权改善再次启动与每次显示进度",
+      "files": "desktop/src/ptb_desktop/startup_cache.py；startup_progress.py；startup_ready.py；startup_presentation.py；host.py；scripts/cache_launcher_entry.py；scripts/build_v3_local_preview.py",
+      "status": "verified",
+      "verification_scope": "Windows current frozen source, native startup card, Qt and final portable EXE; offscreen startup measurement",
+      "note": "每次普通启动卡片、真实检查进度、加载活动条及专属就绪事件通过；四线程每次实际内容校验，compact 构建自动继承。352 桌面/2 平台跳过、345 前端及最终工程外科学/帮助/TextGrid/复制修复/设置清理/安装卸载/两种换版通过。三轮后续中位数 6.917→6.352 秒，首次 41.637→38.083 秒；现场额外延迟来源未确认。仅本地免安装交付，未发布/push/系统修改，另一实体电脑/真实 GPU 首帧/长期/跨平台未验。",
+      "steps": [
+        "聚焦现场缓存与启动计时",
+        "接入公共每次启动反馈和安全并行读取",
+        "验证当前源码、真实卡片、Qt 与最终成品",
+        "交替测量并交付免安装 EXE，清理本轮临时输入"
+      ],
+      "acceptance": "普通首次/再次启动均有反馈；不伪造进度、不跨启动免检内容；现有缓存更新及清理行为保留；最终字节验收和速度范围如实记录",
+      "execution_evidence": [
+        "docs/plans/2026-10-08-startup-feedback-design.md",
+        "docs/testing/2026-10-08-startup-feedback-report.md",
+        "release/PACKAGING_RULES.md"
+      ]
+    },
+    {
+      "id": "M18-R2",
+      "title": "论文连续阅读、批注导出与说明书",
+      "dependencies": "M18-R1",
+      "files": "frontend/src/modules/paper-reading；desktop/src/ptb_desktop/papers.py；desktop/src/ptb_desktop/papers_bridge.py；manual/chapters/m18.json",
+      "status": "verified",
+      "verification_scope": "Windows current source and native Qt reader",
+      "note": "信息折叠、全屏及窗口恢复、原译连续滚动和文字复制、方向键、持久批注/荧光笔、原生 PDF 导出、引用复制、帮助与手册六图通过。345 桌面/2 跳过、345 前端；未打 EXE、未修改服务器或公开发布，跨平台/实体 DPI/长期未验。",
+      "steps": [
+        "扩展现有 Qt PDF 与本机内容能力",
+        "添加文本几何层、连续视图与批注",
+        "验证原生导出、窗口恢复和持久存储",
+        "更新手册正文、截图及入口"
+      ],
+      "acceptance": "已授权阅读操作可用；源 PDF 保持不变；批注错误不静默丢失；帮助跳转与手册一致",
+      "execution_evidence": [
+        "docs/plans/2026-10-07-m18-reader-r2.md",
+        "docs/testing/2026-10-08-m18-r2-report.md"
+      ]
+    },
+    {
+      "id": "M18-R1",
+      "title": "语音学论文精读与服务器内容分发",
+      "dependencies": "P04；P19；用户明确授权论文发布与旧部署清理",
+      "files": "frontend/src/modules/paper-reading；desktop/src/ptb_desktop/papers.py；desktop/src/ptb_desktop/papers_bridge.py；deployment/papers/publish.py",
+      "status": "verified",
+      "verification_scope": "Windows current source, native Qt reader and server paper distribution",
+      "note": "原译文切换、许可与导读、首次启动日期持久、历史数量与主动获取、离线及真实 HTTPS 分发通过。首页摘要不变，已清理确认归属的旧部署。未打 EXE，未验跨平台、另一实体电脑或长期运行；完整软件发行许可不在本项验收范围。",
+      "steps": [
+        "核验固定版本论文与许可，制作有来源映射的中文译文",
+        "接入公共主题和原生 PDF 能力，持久化首次日期并按日期获取",
+        "发布目录和双语 PDF，核验摘要并按授权清理旧部署",
+        "验证日期边界、失败恢复、实际阅读器与打包排除"
+      ],
+      "acceptance": "双语阅读与许可可见；论文独立于 EXE；历史获取不重置首次日期；服务器首页保持原样；验证边界如实记录",
+      "execution_evidence": [
+        "docs/plans/2026-10-07-m18-paper-reading.md",
+        "docs/decisions/ADR-M18-paper-distribution.md",
+        "docs/testing/2026-10-07-m18-paper-reading-report.md",
+        "docs/deployment/paper-reading.md"
+      ]
+    },
+    {
       "id": "P00",
       "title": "建立可追溯源码与规划基线",
       "dependencies": "无",
@@ -214,11 +300,11 @@
     },
     {
       "id": "P07",
-      "title": "5 GB 配额、7 天清理和结果管理",
+      "title": "文件持久化与历史存储基线",
       "dependencies": "P05,P06",
       "files": "backend/src/ptb_api/quota.py；backend/src/ptb_api/storage.py；backend/src/ptb_worker/cleanup.py；frontend/src/account/ProjectStorage.vue",
       "status": "verified",
-      "note": "003/004 均获具体授权并执行，Windows 受控存储、工程生成和有界 ZIP 联合范围 verified。真实 PG/磁盘/配额/TCP、输入引用、整批结果提交、旧 worker 拒绝、进程中断重试与两标签页竞态通过；不代表科学模块、任意原生输出目录、硬断电、持续生产负载或跨平台发行通过。",
+      "note": "早期存储基线已验；当前政策目标为 1 GB/3 天。新政策代码已完成，目标库迁移单列 P07-POLICY，不能将历史 5 GB/7 天当现行新策略。",
       "steps": [
         "实现账户字节计量、原子预留、受控 writer 和恢复核对",
         "实现上传/解压/生成/ZIP 全链路计量，不能靠前端判断",
@@ -253,7 +339,12 @@
         "date": "2026-09-26",
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "note": "保留历史限定验收；UI/远程/1GB三天/Linux 为独立追加任务，不扩展 verified。"
-      }
+      },
+      "current_evidence": [
+        "docs/testing/p07-storage-report.md",
+        "docs/testing/p07-policy-closeout-report.md"
+      ],
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
     },
     {
       "id": "P08",
@@ -261,7 +352,7 @@
       "dependencies": "P03,P04,P06,P07",
       "files": "docs/plans/modules/M01-parameter-estimation.md 等模块计划；packages/phonetic_core/src/phonetic_core/；frontend/src/modules/",
       "status": "in_progress",
-      "note": "2026-09-12: M01/M02/M09 bounded Windows evidence retained; M02 development PNG verified, EXE unchanged. M03-A/B baseline and pure-core wheel verified in a locked Windows Conda/MKL runtime, full M03 in_progress; next task/file/export adapters. Other modules remain pending.",
+      "note": "当前科研模块已有 Windows 实现及专项证据；原定全部双端/输入矩阵仍未闭合，见当前状态页。",
       "steps": [
         "按 M01/M02/M03/M04/M06/M07/M08/M09/M13/M14 顺序逐个执行对应文件级计划",
         "先原样搬可用算法，再拆外层 I/O；不把算法重写和 UI 换肤混成一个提交",
@@ -290,15 +381,20 @@
         "date": "2026-09-26",
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "note": "保留历史限定验收；UI/远程/1GB三天/Linux 为独立追加任务，不扩展 verified。"
-      }
+      },
+      "current_evidence": [
+        "docs/testing/2026-10-01-p17-report.md",
+        "docs/testing/p11-task-flow.md"
+      ],
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
     },
     {
       "id": "P09",
       "title": "设备、时序和原生高风险模块迁移",
       "dependencies": "P01,P03,P04,P06,P07",
       "files": "docs/plans/modules/M05-lip-extraction.md；M10-vocal-tract.md；M11-mfa.md；M12-annotation.md；M15-perception.md",
-      "status": "planned",
-      "note": "Overall planned. M10/R4 has bounded Windows recording verification; R5 implemented and packaged without tests by explicit request. Other P09 modules not migrated; no full P09 verification. M12 Windows development editing/native files/hosted web verified on 2026-09-14; no EXE or general P09 completion.",
+      "status": "in_progress",
+      "note": "TextGrid、声道、录音、唇形及感知实验均已有 Windows 实现；实体设备同步/时序、完整组合与跨平台继续单列。",
       "steps": [
         "唇形：验证摄像头/麦克风权限、帧率、时间轴与平台差异",
         "声道：VTL 原生构建、实例隔离、真实音频输出、几何与生理说明",
@@ -315,15 +411,20 @@
         "date": "2026-09-26",
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "note": "保留历史限定验收；UI/远程/1GB三天/Linux 为独立追加任务，不扩展 verified。"
-      }
+      },
+      "current_evidence": [
+        "docs/testing/2026-10-01-p17-report.md",
+        "docs/testing/2026-10-04-m16-r4-report.md"
+      ],
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
     },
     {
       "id": "P10",
       "title": "全项目来源、说明书与软件致谢",
       "dependencies": "P04,P08,P09",
       "files": "third_party/source-registry.json；third_party/references.bib；docs/manual/methods-and-credits.md；frontend/src/modules/about/ReferencesPage.vue",
-      "status": "planned",
-      "note": "planned",
+      "status": "in_progress",
+      "note": "说明书、作者工具、模块帮助及来源分类已实现；内容预留、具体许可与最终对应源码义务尚未全部关闭。",
       "steps": [
         "逐函数复查优先算法，区分移植、依赖、论文方法和项目集成",
         "补齐实际使用版本、原版权/许可证、修改说明和数据使用范围",
@@ -333,15 +434,20 @@
         "解决未明确授权的代码/数据；必要时联系作者前另获发信授权，或采用合规替代方案并审阅"
       ],
       "acceptance": "没有未登记外部组件；不存在“全部原创”错误归属；对应发行许可缺口未解决则该发行物不发布",
-      "execution_evidence": []
+      "execution_evidence": [],
+      "current_evidence": [
+        "docs/testing/2026-10-05-preview-release-report.md",
+        "docs/testing/2026-10-05-preview-source-preparation.md"
+      ],
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
     },
     {
       "id": "P11",
       "title": "逐模块 Linux 验证、小服务器性能与联合负载测试",
       "dependencies": "ENV 可先行；Linux/性能随模块开展；联合收口依赖各开放模块及相关来源门",
       "files": "tests/security/；tests/performance/；tests/e2e/；docs/testing/load-report.md",
-      "status": "planned",
-      "note": "2026-09-26 新统筹计划前移 Linux 验证；Ubuntu 24.04.2/x86_64、2 vCPU、套餐 4 GiB/50 GiB，系统可见约 3.4 GiB，无 Swap。新增实现和云端验证仍 planned。",
+      "status": "in_progress",
+      "note": "环境、三模块 Linux 任务与限定负载已验证；全模块、账号/PG/生产和完整跨平台证据尚未闭合。",
       "steps": [
         "只读核实授权服务器或专用 WSL 环境，未经批准不修改系统/现存库",
         "抽取 Windows/Linux 受限进程适配与实际 capability",
@@ -351,15 +457,21 @@
         "依实測定义服务器与远程节点准入，不因预算改变科学结果"
       ],
       "acceptance": "10 人场景指标有实测；安全/配额/TTL 必测全通过，设备未测不被掩盖",
-      "execution_evidence": []
+      "execution_evidence": [],
+      "current_evidence": [
+        "docs/testing/linux-environment.md",
+        "docs/testing/p11-task-flow.md",
+        "docs/testing/p11-perf-report.md"
+      ],
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
     },
     {
       "id": "P12",
       "title": "Windows 单文件与安装版发行链",
       "dependencies": "P01,P08,P09,P10",
       "files": "desktop/packaging/windows/phonetictoolbox.spec；desktop/packaging/windows/installer.iss；scripts/build_windows.ps1",
-      "status": "planned",
-      "note": "planned",
+      "status": "verified",
+      "note": "Windows 紧凑单文件、安装与更新链已有本机最终成品验证；当前保留的安装版和最新免安装版不是同一快照。另一干净实体电脑、设备/长期及公开发行另验。",
       "steps": [
         "构建前端与核心 wheel，生成带版本和 hash 的发行清单",
         "收集 WebEngine、Python、REAPER/VTL/其他原生依赖和字体字典",
@@ -369,7 +481,12 @@
         "验证版本一致、来源清单在包内、默认保留用户研究数据"
       ],
       "acceptance": "单文件和安装版分别有验收记录；文件夹诊断版不冒充单文件交付",
-      "execution_evidence": []
+      "execution_evidence": [],
+      "current_evidence": [
+        "docs/testing/2026-10-07-persistent-startup-cache-report.md",
+        "docs/testing/2026-10-08-startup-feedback-report.md"
+      ],
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
     },
     {
       "id": "P13",
@@ -485,8 +602,8 @@
         "docs/testing/m01-legacy-report.md",
         "docs/testing/m01-final-review.md"
       ],
-      "note": "Final 39-row review completed under renewed user authorization. Joint wheel regression 472 passed. No repeat DDL. Stop after M01/M02/M09 as instructed.",
-      "verification_scope": "Windows local and Windows hosted Chrome; bounded existing workflows",
+      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate",
       "platform_status": {
         "windows_local": "verified",
         "windows_hosted_web": "verified",
@@ -500,7 +617,10 @@
         "ui_unification": "planned",
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
-      }
+      },
+      "current_evidence": [
+        "docs/testing/2026-10-04-m01-r5-selected-report.md"
+      ]
     },
     {
       "id": "M02",
@@ -517,8 +637,8 @@
         "docs/testing/m02-m09-report.md",
         "docs/testing/m02-png-closeout-report.md"
       ],
-      "verification_scope": "Windows local and Windows hosted Chrome; bounded existing workflows",
-      "note": "Bounded Windows workflows verified; 2026-09-12 whole-figure PNG added and verified in development Qt and independent Chrome fixture. Historical EXE unchanged.",
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate",
+      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
       "platform_status": {
         "windows_local": "verified",
         "windows_hosted_web": "verified",
@@ -532,7 +652,10 @@
         "ui_unification": "planned",
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
-      }
+      },
+      "current_evidence": [
+        "docs/testing/2026-10-03-m02-r2-report.md"
+      ]
     },
     {
       "id": "M03",
@@ -554,7 +677,7 @@
         "docs/testing/m03-e2-report.md",
         "docs/testing/m03-e3-report.md"
       ],
-      "note": "M03-A/B/C/D verified only within their Windows baseline, installed-core, task/export and development UI scopes. D: shared V3 theme/fonts/components, V2 four-plot layout, grouped controls, 122 scientific/export/font checks, 14 M03 contract checks, 47 frontend checks and real Qt/Chrome operations. Existing M01 Scratch cleanup showed one intermittent WinError32 in broad regression; isolated rerun passed, root cause open. Whole M03 in_progress; next E joint/source/manual closure, then F frozen EXE. No DDL, v2/environment/old EXE changes or push. E1限定Windows默认/导出/手势对齐已验，完整E仍in_progress，下一批E2网页/自然录音/切换竞争。 E2限定双账号/服务器下载/受控配额到期/自然录音页面/迟到视图通过，下一项E3范围差异与来源。 E3微观5–5000ms与方法审阅限定验证，完整E3仍in_progress，下一项E3-B长文件/字体预检与剩余边界。",
+      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
       "planning_evidence": [
         "docs/modules/evidence/M03-source-map.md",
         "docs/plans/2026-09-12-m03-implementation.md"
@@ -566,7 +689,11 @@
         "ui_unification": "planned",
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
-      }
+      },
+      "current_evidence": [
+        "docs/testing/2026-10-07-m03-r7-report.md"
+      ],
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate"
     },
     {
       "id": "M04",
@@ -592,7 +719,12 @@
         "ui_unification": "planned",
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
-      }
+      },
+      "current_evidence": [
+        "docs/testing/2026-10-04-m04-display-report.md"
+      ],
+      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate"
     },
     {
       "id": "M05",
@@ -618,7 +750,12 @@
         "ui_unification": "common frame/theme/fonts/toolbar/close guard wired",
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "windows_scope": "Windows public and authorized natural baselines, Chrome/Qt physical capture, local tasks and exports verified within m05-report; physical sync and remaining hardware matrix pending"
-      }
+      },
+      "current_evidence": [
+        "docs/testing/2026-10-04-m05-r3-report.md"
+      ],
+      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate"
     },
     {
       "id": "M06",
@@ -643,7 +780,12 @@
         "ui_unification": "verified: common shell/frame/toolbar/section/status/player/tasks/close guard, scoped Windows",
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "windows_scope": "verified: Windows exact V2 core, Chrome, Qt actual host and synthetic PostgreSQL only"
-      }
+      },
+      "current_evidence": [
+        "docs/testing/2026-10-04-m06-r5-report.md"
+      ],
+      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate"
     },
     {
       "id": "M07",
@@ -654,7 +796,7 @@
         "P06",
         "P07"
       ],
-      "status": "planned",
+      "status": "in_progress",
       "plan": "modules/M07-phonation-synthesis.md",
       "execution_evidence": [],
       "additional_gates_2026_09_26": {
@@ -664,7 +806,12 @@
         "ui_unification": "planned",
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
-      }
+      },
+      "current_evidence": [
+        "docs/testing/2026-10-05-m07-r3-report.md"
+      ],
+      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate"
     },
     {
       "id": "M08",
@@ -675,7 +822,7 @@
         "P06",
         "P07"
       ],
-      "status": "planned",
+      "status": "in_progress",
       "plan": "modules/M08-pitch-manipulation.md",
       "execution_evidence": [],
       "additional_gates_2026_09_26": {
@@ -685,7 +832,12 @@
         "ui_unification": "planned",
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
-      }
+      },
+      "current_evidence": [
+        "docs/testing/2026-10-05-m08-r2-report.md"
+      ],
+      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate"
     },
     {
       "id": "M09",
@@ -701,8 +853,8 @@
       "execution_evidence": [
         "docs/testing/m02-m09-report.md"
       ],
-      "verification_scope": "Windows local file input / bounded reconstruction and Windows hosted Chrome; multi-screen capture and other platforms not verified",
-      "note": "User-authorized M02/M09 scoped Windows workflows verified. M02 manual 2.2 overlay semantics corrected and reverified; adapted SVG export excludes waveform. M09 screen-capture devices not verified. See joint report/source map. This task stops here, preserving parallel M10 work.",
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate",
+      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
       "platform_status": {
         "windows_local": "verified",
         "windows_hosted_web": "verified",
@@ -716,7 +868,10 @@
         "ui_unification": "planned",
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
-      }
+      },
+      "current_evidence": [
+        "docs/testing/2026-10-05-m09-r1-report.md"
+      ]
     },
     {
       "id": "M10",
@@ -738,7 +893,7 @@
         "docs/testing/m10-recording-features-report.md",
         "docs/plans/2026-09-11-m10-onset.md"
       ],
-      "verification_scope": "Windows local vocal-tract recording only",
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate",
       "frozen": true,
       "platform_status": {
         "windows_local": "verified",
@@ -747,7 +902,7 @@
         "linux": "planned"
       },
       "recording_revision": "R4",
-      "note": "Windows M10/R4 verified and frozen after the user-authorized recording additions. Portable frames and presets, 50 ms minimum / 200 ms new frames, silent frames without F0, 150 Hz defaults, replay cache and synchronized current/six-view video. 169 Python and 22 frontend tests, 12 geometry cases, both frozen Qt suites and independent video decoding passed. Native m10/2 unchanged. Other modules follow their own plans. Not full v3 or cross-platform release. R5 onset envelope, drag reorder and clear/undo implemented; user requested build only, no verification. The verified scope above remains R4.",
+      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
       "latest_revision": "R5",
       "latest_revision_verification": "not_run_by_user_request",
       "additional_gates_2026_09_26": {
@@ -757,7 +912,10 @@
         "ui_unification": "planned",
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
-      }
+      },
+      "current_evidence": [
+        "docs/testing/2026-10-07-m10-r14-report.md"
+      ]
     },
     {
       "id": "M11",
@@ -783,7 +941,12 @@
         "ui_unification": "verified: actual Qt common workbench, limited Windows viewport checks",
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "windows_scope": "verified: source Qt/local HTTP and optional component, public fixtures only"
-      }
+      },
+      "current_evidence": [
+        "docs/testing/2026-10-05-m11-r2-report.md"
+      ],
+      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate"
     },
     {
       "id": "M12",
@@ -803,8 +966,8 @@
         "docs/testing/m12-report.md",
         "docs/manual/annotation.md"
       ],
-      "verification_scope": "Windows development: installed Qt host, independent Chrome/native files and local hosted PostgreSQL web",
-      "note": "User requested M12 ahead of M04 on 2026-09-14. Seven functional groups complete in bounded Windows development scope. EXE not built; no DDL/push/V2 changes. Cross-platform, production and full early provenance remain unverified.",
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate",
+      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
       "additional_gates_2026_09_26": {
         "linux_service_scope": "planned",
         "server_small_profile": "planned",
@@ -813,7 +976,10 @@
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
       },
-      "current_scope_note": "2026-09-19 R6 Windows/Chrome/冻结基础链路限定 verified，见 docs/testing/m12-r6-report.md；旧 note 是 2026-09-14 历史，Linux/UI 新门均未完成。"
+      "current_scope_note": "2026-09-19 R6 Windows/Chrome/冻结基础链路限定 verified，见 docs/testing/m12-r6-report.md；旧 note 是 2026-09-14 历史，Linux/UI 新门均未完成。",
+      "current_evidence": [
+        "docs/testing/p17/M12-report.md"
+      ]
     },
     {
       "id": "M13",
@@ -824,7 +990,7 @@
         "P06",
         "P07"
       ],
-      "status": "planned",
+      "status": "in_progress",
       "plan": "modules/M13-mandarin-ipa.md",
       "execution_evidence": [],
       "additional_gates_2026_09_26": {
@@ -834,7 +1000,12 @@
         "ui_unification": "planned",
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
-      }
+      },
+      "current_evidence": [
+        "docs/testing/2026-10-05-m13-r3-package-report.md"
+      ],
+      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate"
     },
     {
       "id": "M14",
@@ -845,7 +1016,7 @@
         "P06",
         "P07"
       ],
-      "status": "planned",
+      "status": "in_progress",
       "plan": "modules/M14-phonology-induction.md",
       "execution_evidence": [],
       "additional_gates_2026_09_26": {
@@ -855,7 +1026,12 @@
         "ui_unification": "planned",
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
-      }
+      },
+      "current_evidence": [
+        "docs/testing/2026-10-05-m14-r1-report.md"
+      ],
+      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate"
     },
     {
       "id": "M15",
@@ -867,8 +1043,8 @@
       ],
       "status": "in_progress",
       "plan": "modules/M15-perception.md",
-      "verification_scope": "Windows Chrome official client module and offline A; actual Qt X/offline C; WSL static artifacts only",
-      "note": "2026-09-27: pure-client functionality delivered. No API/SQL/remote-worker or P06/P07 dependency. Offline B left as user-approved scoped proposal; Linux browser and physical end-to-end latency unverified.",
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate",
+      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
       "execution_evidence": [
         "docs/testing/m15-report.md",
         "docs/testing/m15-coordination-summary.md",
@@ -882,15 +1058,18 @@
         "ui_unification": "verified within M15 Windows Chrome/Qt scope",
         "plan": "docs/plans/2026-09-26-server-coordination.md",
         "windows_scope": "docs/testing/m15-report.md; no hardware timing or packaged EXE claim"
-      }
+      },
+      "current_evidence": [
+        "docs/testing/2026-10-05-m15-r1-report.md"
+      ]
     },
     {
       "id": "P11-ENV",
       "title": "环境盘点及 Linux 测试入口",
       "dependencies": "无",
       "files": "docs/testing/linux-environment.md（待新建）；scripts/verify_linux_environment.py（待新建）",
-      "status": "planned",
-      "note": "Implementation not started. User assigns implementation agents separately.",
+      "status": "verified",
+      "note": "WSL 与实际 Linux 主机已有环境、wheel、字体及基础进程组证据，限定报告环境；无需再标未开始。",
       "plan": "docs/plans/2026-09-26-server-coordination.md",
       "steps": [
         "阅读对应任务卡并核对文件归属",
@@ -899,15 +1078,19 @@
         "提交分平台报告与未测项"
       ],
       "acceptance": "明确 WSL/实际主机、Linux wheel/解释器/字体/cgroup 证据，不重配其他环境",
-      "execution_evidence": []
+      "execution_evidence": [],
+      "current_evidence": [
+        "docs/testing/linux-environment.md"
+      ],
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
     },
     {
       "id": "P07-POLICY",
       "title": "1 GB / 3 天政策与存量兼容迁移",
       "dependencies": "实施前审阅具体增量迁移",
       "files": "backend/src/ptb_api/quota.py；acoustic_models.py；storage.py；frontend/src/account/ProjectStorage.vue；contracts/；下一号增量迁移（待审阅）",
-      "status": "planned",
-      "note": "Implementation not started. User assigns implementation agents separately.",
+      "status": "in_progress",
+      "note": "1 GB/3 天代码、契约及隔离 PG/WSL 检查完成；目标专用数据库未迁移，新政策未在该库生效。",
       "plan": "docs/plans/2026-09-26-server-coordination.md",
       "steps": [
         "阅读对应任务卡并核对文件归属",
@@ -916,15 +1099,19 @@
         "提交分平台报告与未测项"
       ],
       "acceptance": "额度/期限边界、旧超额账号和旧 manifest 兼容、并发/过期/生成协议及实际库证据",
-      "execution_evidence": []
+      "execution_evidence": [],
+      "current_evidence": [
+        "docs/testing/p07-policy-closeout-report.md"
+      ],
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
     },
     {
       "id": "P11-LINUX",
       "title": "Linux 受限执行与真实 capability",
       "dependencies": "P11-ENV",
       "files": "backend/src/ptb_worker/native/；acoustic_executor.py；egg_runtime.py；lpc_runtime.py；backend/src/ptb_api/main.py",
-      "status": "planned",
-      "note": "Implementation not started. User assigns implementation agents separately.",
+      "status": "in_progress",
+      "note": "LPC/EGG/M01 实际受限 Linux 任务链路和结果下载已验；保留早期精确数值差异及实用等价边界，其他模块、真实账号/PG 和生产仍待验。",
       "plan": "docs/plans/2026-09-26-server-coordination.md",
       "steps": [
         "阅读对应任务卡并核对文件归属",
@@ -933,15 +1120,22 @@
         "提交分平台报告与未测项"
       ],
       "acceptance": "Windows 回归+Linux 数值/任务/预览/字体/取消与进程树预算",
-      "execution_evidence": []
+      "execution_evidence": [],
+      "current_evidence": [
+        "docs/testing/linux-environment.md",
+        "docs/testing/p11-numeric-compatibility.md",
+        "docs/testing/p11-task-flow.md",
+        "docs/testing/p11-perf-report.md"
+      ],
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
     },
     {
       "id": "P11-PERF",
       "title": "小服务器基准与统一资源准入",
       "dependencies": "P11-ENV；执行器改动依赖 P11-LINUX",
       "files": "scripts/benchmark_modules.py（待新建）；tests/performance/（待补）；模块性能报告",
-      "status": "planned",
-      "note": "Implementation not started. User assigns implementation agents separately.",
+      "status": "verified",
+      "note": "统一跨进程单槽准入及指定合成输入 30 分钟服务器负载已验；更大输入、长时常驻及生产不在该验证范围。",
       "plan": "docs/plans/2026-09-26-server-coordination.md",
       "steps": [
         "阅读对应任务卡并核对文件归属",
@@ -950,15 +1144,19 @@
         "提交分平台报告与未测项"
       ],
       "acceptance": "1 槽初始约 1 GiB 的云端科学预算实测、10 人混合负载与科学差异对照",
-      "execution_evidence": []
+      "execution_evidence": [],
+      "current_evidence": [
+        "docs/testing/p11-perf-report.md"
+      ],
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
     },
     {
       "id": "P06-REMOTE",
       "title": "可信计算节点主动领取与回传",
       "dependencies": "P11-ENV,P07-POLICY；协同 P11-LINUX/P11-PERF",
       "files": "backend/src/ptb_agent/（待新建）；worker 专用 API/认证（待新建）；contracts/；ptb_worker/store.py,policy.py,files.py",
-      "status": "planned",
-      "note": "Implementation not started. User assigns implementation agents separately.",
+      "status": "in_progress",
+      "note": "可信节点控制、传输/租约组件已实现并有 WSL 合成验证；CLI 协议/binding 门关闭，未接通真实科学任务。",
       "plan": "docs/plans/2026-09-26-server-coordination.md",
       "steps": [
         "阅读对应任务卡并核对文件归属",
@@ -967,15 +1165,20 @@
         "提交分平台报告与未测项"
       ],
       "acceptance": "两节点竞争/旧租约/取消/断线/隔离/配额及实际科学产物对照",
-      "execution_evidence": []
+      "execution_evidence": [],
+      "current_evidence": [
+        "docs/testing/p06-node-report.md",
+        "docs/testing/p06-remote-report.md"
+      ],
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
     },
     {
       "id": "P04-UNIFY",
       "title": "模块页首精简与公共布局",
       "dependencies": "无",
       "files": "frontend/src/app/AppShell.vue；frontend/src/design/tokens.css；components/；各模块页面",
-      "status": "planned",
-      "note": "Implementation not started. User assigns implementation agents separately.",
+      "status": "verified",
+      "note": "公共布局组件和 Windows Chrome 定向交互已完成，后续模块共享壳/主题/帮助已有专项证据；不扩展成所有平台/设备/交互通过。",
       "plan": "docs/plans/2026-09-26-server-coordination.md",
       "steps": [
         "阅读对应任务卡并核对文件归属",
@@ -984,15 +1187,20 @@
         "提交分平台报告与未测项"
       ],
       "acceptance": "无重复大标题/关闭按钮、全部操作可达，浅深/缩放/中文IPA/关闭保护/真实科研交互",
-      "execution_evidence": []
+      "execution_evidence": [],
+      "current_evidence": [
+        "docs/testing/p04-unify-report.md",
+        "docs/testing/2026-10-06-p19-r17-report.md"
+      ],
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
     },
     {
       "id": "P08-CROSS",
       "title": "逐模块平台资源界面追加验收",
       "dependencies": "按模块依赖公共能力",
       "files": "docs/plans/modules/；各 Mxx 科学核心与页面；对应测试报告",
-      "status": "planned",
-      "note": "Implementation not started. User assigns implementation agents separately.",
+      "status": "in_progress",
+      "note": "Windows 模块与部分 Linux 科学任务已形成分轴证据；完整跨平台矩阵未完成。",
       "plan": "docs/plans/2026-09-26-server-coordination.md",
       "steps": [
         "阅读对应任务卡并核对文件归属",
@@ -1001,15 +1209,20 @@
         "提交分平台报告与未测项"
       ],
       "acceptance": "Windows/Linux/小服务器/远程适用范围/UI 分轴证据，旧 verified 不扩大",
-      "execution_evidence": []
+      "execution_evidence": [],
+      "current_evidence": [
+        "docs/testing/2026-10-01-p17-report.md",
+        "docs/testing/p11-task-flow.md"
+      ],
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
     },
     {
       "id": "P15-STAGING",
       "title": "真实域名与服务器联合验收准备",
       "dependencies": "P11-ENV,P07-POLICY；所开放模块的 Linux/资源门",
       "files": "docs/deployment/production-runbook.md（待新建）；rollback.md（待新建）；正式服务入口与配置提案",
-      "status": "planned",
-      "note": "Implementation not started. User assigns implementation agents separately.",
+      "status": "in_progress",
+      "note": "薄宿主、同源模板、验收驱动已准备；当前源码的 P15-F01 ZIP 宣告差异经定向测试确认已修复。真实域名/PG/最终 Linux 运行时联合部署与验收未执行；可信节点仅在首期依赖时作为上线前置。",
       "plan": "docs/plans/2026-09-26-server-coordination.md",
       "steps": [
         "阅读对应任务卡并核对文件归属",
@@ -1018,7 +1231,12 @@
         "提交分平台报告与未测项"
       ],
       "acceptance": "目标主机+域名HTTPS+权限/上传下载+节点离线+恢复；生产写操作遵守授权",
-      "execution_evidence": []
+      "execution_evidence": [],
+      "current_evidence": [
+        "docs/testing/p15-staging-report.md",
+        "docs/testing/desktop-web-readiness.md"
+      ],
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
     },
     {
       "id": "P11-COORD",
@@ -1040,14 +1258,164 @@
         "docs/specs/remote-compute.md",
         "docs/testing/2026-09-26-planning-audit.md"
       ]
+    },
+    {
+      "id": "M16",
+      "title": "录音",
+      "status": "in_progress",
+      "dependencies": "公共工作台及对应本机能力",
+      "files": "frontend/src/modules/recording; desktop/src/ptb_desktop",
+      "verification_scope": "Windows implemented and bounded verification; remaining content/device/platform work is explicit",
+      "note": "当前实现、已验范围和剩余任务见 docs/project-status.md。",
+      "steps": [
+        "维护当前实现",
+        "按证据补齐剩余范围"
+      ],
+      "acceptance": "完成对应模块功能及明确列出的内容、设备与平台验收",
+      "current_evidence": [
+        "docs/testing/2026-10-04-m16-r4-report.md"
+      ]
+    },
+    {
+      "id": "M17",
+      "title": "国际音标表Plus",
+      "status": "in_progress",
+      "dependencies": "公共工作台及对应本机能力",
+      "files": "frontend/src/modules/ipa-plus",
+      "verification_scope": "Windows implemented and bounded verification; remaining content/device/platform work is explicit",
+      "note": "当前实现、已验范围和剩余任务见 docs/project-status.md。",
+      "steps": [
+        "维护当前实现",
+        "按证据补齐剩余范围"
+      ],
+      "acceptance": "完成对应模块功能及明确列出的内容、设备与平台验收",
+      "current_evidence": [
+        "docs/testing/2026-10-05-m17-r3-report.md"
+      ]
+    },
+    {
+      "id": "M18",
+      "title": "语音学论文精读",
+      "status": "in_progress",
+      "dependencies": "公共工作台及对应本机能力",
+      "files": "frontend/src/modules/paper-reading; desktop/src/ptb_desktop/papers.py",
+      "verification_scope": "Windows implemented and bounded verification; remaining content/device/platform work is explicit",
+      "note": "当前实现、已验范围和剩余任务见 docs/project-status.md。",
+      "steps": [
+        "维护当前实现",
+        "按证据补齐剩余范围"
+      ],
+      "acceptance": "完成对应模块功能及明确列出的内容、设备与平台验收",
+      "current_evidence": [
+        "docs/testing/2026-10-08-m18-r2-report.md"
+      ]
+    },
+    {
+      "id": "WORKSPACE-MAINTENANCE",
+      "title": "当前状态、文档与测试/打包产物整理",
+      "status": "verified",
+      "files": "当前项目目录、状态文档、测试与打包脚本",
+      "note": "限定当前 Windows 项目整理范围：文档按主题整合，18 模块和平台状态已核实、M10 正文状态已纠正，规则要求每次修改同步更新台账。重点测试入口采用 scratch 收尾，打包入口记录生命周期并保护活动/失败目录。两批 528 个目标/2326 文件已删除，逻辑长度约 34.14→29.97 GB。15 项定向 Python、1799 文件文档检查及清理/脚本验证通过；1 个 7 字节策略拒删项交手动清单。全库架构原 1635 项已在 ARCHITECTURE-RESOURCE-CHECK 收口，历史脚本其余接入/旧环境退役/新成品和跨平台验收未完成，不扩大 verified 范围。",
+      "current_evidence": [
+        "docs/project-status.md",
+        "docs/development/artifact-lifecycle.md"
+      ],
+      "local_evidence": "output/maintenance/README.md; verification.json; cleanup-results.json; manual-cleanup-results.json; inventory.json; manual-delete.md",
+      "remaining": [
+        "历史验证入口复用时接入 scratch 生命周期",
+        "旧环境/验证大目录依赖闭合后退役",
+        "手动清单 1 个 7 字节策略拒删文件"
+      ]
+    },
+    {
+      "id": "MANUAL-AUTOSAVE-RETENTION",
+      "title": "说明书仅保留最新自动恢复稿",
+      "status": "verified",
+      "files": "作者保存生命周期、manual/.studio 旧自动副本、项目规则和台账",
+      "note": "限定 Windows 本机作者工具及已核实自动副本：默认仅保留最后一份恢复稿，原子发布后清旧稿，成功保存后清历史/已提交事务，失败恢复证据及清理受阻回执保留。200 个目标、1962 文件、3227463336 字节已删除，974 个正式文件 SHA 不变；20 章/953 素材严格校验零错误。38 项作者工具测试、类型检查、构建通过。未重验完整浏览器/跨平台/长期编辑。",
+      "current_evidence": [
+        "tools/manual-studio/README.md",
+        "tools/manual-studio/tests/store.test.mjs",
+        "docs/project-status.md"
+      ],
+      "local_evidence": "output/maintenance/manual-cleanup-results.json; manual-integrity.json; manual-check.json; manual-studio-tests.txt",
+      "remaining": [
+        "保存失败或清理受阻时按 retention-report.json 核对恢复证据",
+        "完整浏览器、跨平台与长期编辑未在本次重验"
+      ]
+    },
+    {
+      "id": "ARCHITECTURE-RESOURCE-CHECK",
+      "title": "生成说明书资源核验与 M09 数组依赖边界收口",
+      "status": "verified",
+      "files": "资源清单、架构检查、说明书生成链路、M09 明确函数导入、对应测试与架构文档",
+      "note": "限定 Windows 当前源码、资源及清理范围 verified；文档检查 1801 文件零错误，配置内 Git diff --check 通过。固定资源 7 项已登记，生成说明书按源工程、报告、SHA、多余/缺失文件和联接核验；旧生成媒体 658 文件/158139933 字节已删，974 正式文件 SHA 不变。M09 五个明确数组计算符号，I/O/设备/窗口仍禁止；六组数组及元数据修改前后一致。65 项 Python 回归（含真实 Windows 联接，无跳过）、38 项作者工具测试通过，架构检查零错误。未重打 EXE、未重验完整 GUI/设备/跨平台。",
+      "current_evidence": [
+        "docs/testing/architecture-resources-report.md",
+        "docs/project-status.md",
+        "tests/architecture/test_generated_resources.py"
+      ],
+      "remaining": [
+        "EXE 未重打，当前改动尚未进入现有成品",
+        "完整 GUI、实体设备、跨平台和长期运行未在本次重验；来源许可发行义务单独验收"
+      ],
+      "local_evidence": "output/maintenance/architecture/: pytest.txt, manual-studio-tests.txt, m09-comparison.json, stale-media-plan.json, stale-media-results.json; output/maintenance/architecture-check.json"
+    },
+    {
+      "id": "PACKAGE-SIZE-REVIEW",
+      "title": "清理后的 EXE 包体与进一步缩减空间核查",
+      "status": "verified",
+      "files": "现有 EXE 只读盘点、冻结清单、压缩样本和当前打包策略",
+      "note": "限定现有 EXE 只读盘点和局部压缩测量：467869830 字节及 SHA 已复核；science 238184372 / host 119863056 / apps 99952672 / bootstrap 9869730 字节。当前 338 个说明书引用 ID 与包一致，清理项目目录不直接减少同等包体。发行说明书采集元数据单独 XZ 差额 357624 字节；NumPy 上游测试候选 13191656 字节、样本压缩 1145140 字节，尚未完成裁剪依赖验收，不能相加承诺 EXE 净减量。原包/依赖/正式素材与构建脚本未改。",
+      "current_evidence": [
+        "docs/testing/package-size-review.md"
+      ],
+      "remaining": [
+        "井井已决定暂不推进进一步缩包；候选只保留审阅证据，重新提出时再实施及验证"
+      ],
+      "local_evidence": "output/maintenance/package-size/embedded-inventory.json; compression-samples.json"
+    },
+    {
+      "id": "DESKTOP-WEB-READINESS",
+      "title": "桌面遗留项与网页登录上线准备核查",
+      "status": "verified",
+      "files": "当前源码与成品只读核查；docs/testing/desktop-web-readiness.md；当前状态、README 和任务台账",
+      "verification_scope": "Read-only source and retained artifact review, targeted Windows API/deployment tests; no production or full EXE rerun",
+      "note": "当前 EXE SHA 与原验收一致；628 个冻结 Python 文件无缺失，12 个不同包含 1 个业务计算文件及 11 个构建/检查脚本。架构零错误、前端类型通过、说明书 20 章/953 素材严格零错误；40 项账号/能力/部署边界测试通过，2 条既有弃用警告。确认 P15-F01 当前源码已修复；发现 M15/M17 本地数据未按网页账号隔离。安装版快照、启动现场延迟、设备与公开分发待办如实保留。纠正两处 M10 章节暂空的旧说明。未改业务代码、未构建/部署/迁移或 push。",
+      "current_evidence": [
+        "docs/testing/desktop-web-readiness.md"
+      ],
+      "remaining": [
+        "完整 EXE/实体设备/长期验证未重做",
+        "真实 HTTPS/PG/目标库政策与最终 Linux 负载未验",
+        "WEB-ACCOUNT-BOUNDARIES 单列实施，公开分发材料按实际渠道收口"
+      ]
+    },
+    {
+      "id": "WEB-ACCOUNT-BOUNDARIES",
+      "title": "网页登录数据归属与模块平台能力收口",
+      "status": "planned",
+      "files": "frontend/src/modules/perception；frontend/src/modules/ipa-plus；frontend/src/app/AppShell.vue；frontend/src/account；frontend/src/platform",
+      "note": "只读审阅确认 M15 公共 IndexedDB 与 M17 固定 local:M17 草稿键不随网页登录账号区分。现在预留 owner/project 与平台能力边界，正式登录版启用前实施；不改变 M15 客户端计时、不默认上传实验数据、不自动认领旧无主数据。",
+      "acceptance": "同浏览器 A/B 切换、多标签、会话到期、迟到响应、未保存保护、旧无主记录显式导入；页面实际能力与后端准入一致，保留桌面行为。",
+      "current_evidence": [
+        "docs/testing/desktop-web-readiness.md"
+      ],
+      "remaining": [
+        "确定本地独立模式与账号模式的数据归属并实施兼容隔离",
+        "对所开放模块实现平台适配和能力提示",
+        "实际浏览器双账号回归，不以静态代码核查代替"
+      ]
     }
   ],
-  "updated_on": "2026-09-26",
+  "updated_on": "2026-10-08",
   "current_coordination_plan": "docs/plans/2026-09-26-server-coordination.md",
   "policy_target": {
     "quota_bytes": 1000000000,
     "retention_seconds": 259200,
-    "implementation_status": "planned",
-    "existing_data_strategy": "proposed: preserve original expiry; block growth for over-quota accounts; review before migration"
-  }
+    "implementation_status": "in_progress",
+    "existing_data_strategy": "Implemented and isolated-test verified: preserve original expiry and block growth for over-quota accounts; target database migration and deployment acceptance remain pending."
+  },
+  "current_status_document": "docs/project-status.md",
+  "status_convention": "status refers to the task acceptance scope; current Windows functionality, platform gaps and retained artifacts are maintained in docs/project-status.md. Historical reports describe their own snapshots."
 }

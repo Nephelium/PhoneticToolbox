@@ -17,7 +17,7 @@ def unpack(raw,sha,action):
     meta=json.loads(raw[4:4+size]);offset=4+size
     if meta.get('error'):raise FormatError(meta['error'])
     if meta.get('kind')!='prepared_m06' or meta.get('input_sha256')!=sha:raise FormatError('m06_input_changed')
-    expected=(['synthesis.wav'] if action in ('synthesize','resynthesize') else [])+['m06.ptb.json','parameters.csv']+(['analysis.npz'] if action=='resynthesize' else [])
+    expected=(['synthesis.wav'] if action=='synthesize' else [])+['m06.ptb.json','parameters.csv']
     if [f['name'] for f in meta['files']]!=expected:raise FormatError('m06_incomplete_output')
     values=[]
     for f in meta['files']:
@@ -56,7 +56,7 @@ def execute_claim(store,claim,worker_id,stop,*,on_started=None,evidence=None):
             from phonetic_core.synthesis.klatt.api import import_parameters
             parameters=import_parameters(header['parameters']);native=None
             try:
-                if header['action'] in ('extract','resynthesize') and parameters['f0_method']=='reaper':
+                if header['action']=='extract' and parameters['f0_method']=='reaper':
                     from pathlib import Path
                     from .native.reaper import REAPER_SHA256
                     binary=Path(getattr(files,'reaper_binary',None) or '')

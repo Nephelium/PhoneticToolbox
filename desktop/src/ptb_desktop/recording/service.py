@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 import numpy as np
 from phonetic_core.recording import meter
-from phonetic_core.recording.signal import DisplaySpectrum
+from phonetic_core.recording.praat_display import PraatDisplaySpectrum as DisplaySpectrum
 from phonetic_core.recording.edits import frames,select,remove,insert
 from .storage import Project,uid,now,read_range,iter_audio,atomic_json,read_json,safe_name
 from .capture import Capture
@@ -42,7 +42,7 @@ class RecordingService:
     def take(self,take_id):
         p=self.require()
         item=next((t for t in p.data['takes'] if t['id']==take_id),None)
-        if item is None:raise ValueError('录音 take 不存在')
+        if item is None:raise ValueError('录音条目不存在')
         return item
 
     def view(self):
@@ -72,7 +72,9 @@ class RecordingService:
             try:found=devices(self.backend);reason=''
             except Exception as exc:found=[];reason='原生设备库不可用：'+str(exc)
             return {'available':True,'schema':'ptb-recording/1','devices':found,'device_error':reason,'project':self.view(),'local_only':True}
-        if op=='devices':return devices(self.backend)
+        if op=='devices':
+            if self.capture:raise ValueError('请先停止录音或录前检测，再刷新设备')
+            return devices(self.backend)
         if op=='open':
             if self.capture or self.job:raise ValueError('请先停止采集和后台处理')
             self.stop_play();root=self.granted(b['grant'],('new','open'))
@@ -218,7 +220,7 @@ class RecordingService:
         capture=self.capture;item=capture.stop()
         if not capture.probe:
             if item['spans']:self.commit_capture(copy.deepcopy(item))
-            elif not item['error']:item['error']='未采集到有效音频，未创建空 take'
+            elif not item['error']:item['error']='未采集到有效音频，未创建空录音条目'
         self.capture=None;return {'project':self.view(),'error':item['error'],'frames':item['frames'],'probe':capture.probe,'quality':item['quality']}
 
     def stop_play(self):

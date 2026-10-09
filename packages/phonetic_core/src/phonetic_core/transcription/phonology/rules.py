@@ -36,8 +36,8 @@ class PhonologyRules:
         "其他",
     ]
 
-    def __init__(self):
-        self._parser = PhonologyInductionParser()
+    def __init__(self, computation_revision: str = 'm14/1'):
+        self._parser = PhonologyInductionParser(computation_revision)
 
     def analyze(
         self,

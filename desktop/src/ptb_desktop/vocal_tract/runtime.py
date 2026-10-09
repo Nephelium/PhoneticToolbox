@@ -23,7 +23,7 @@ class Runtime:
         self.engine=Engine(resource_dir=resource_dir)
         self.profile=ProfileStore(profile_dir,legacy_directory=legacy_profile)
         self.live=LiveAudio(self.engine,playback_allowed=playback_allowed,config_path=Path(profile_dir)/'audio-settings.json')
-        self.revision=0;self.section=65;self.animation=None;self.animation_id=0;self.animation_playing=False
+        self.revision=0;self.section=self.engine.section_count//2;self.animation=None;self.animation_id=0;self.animation_playing=False
         self.cancel=threading.Event();self.manual_root=False
         self.cancel_generation=0;self.render_lock=threading.Lock()
         self.animation_keys=set();self.prepare_count=0
@@ -69,16 +69,18 @@ class Runtime:
             if type(rev) is not int or rev<=self.revision:raise ValueError('过期的构形请求')
             f0=float(obj.get('f0',150));self.engine.glottis(f0)
             source=validate_source(obj.get('source'));width=float(obj.get('lip_width',1))
+            larynx=self.engine.validated_larynx(obj.get('larynx_height',0.))
             manual=obj.get('manual_root',False)
             if type(manual) is not bool:raise ValueError('无效的舌根模式')
             self.engine.set_manual_root(manual)
             notice=None
-            if obj.get('keep_vowel',False):p,notice=self.engine.constrain_nasal_opening(p,width)
-            state=self.engine.snapshot(p,int(obj.get('section',65)),width)
+            if obj.get('keep_vowel',False):p,notice=self.engine.constrain_nasal_opening(p,width,larynx)
+            state=self.engine.snapshot(p,int(obj.get('section',self.section)),width,larynx)
             state.update(nasal_constraint=notice,source=source,revision=rev,manual_root=manual)
             self.revision=rev;self.section=state['section'];self.manual_root=manual
             self.live.params=p;self.live.f0=f0;self.live.lip_width=width;self.live.source=source
-            if self.live.active and self.live.mode=='live':self.live.tube=self.engine.prepare_tube(p,width)
+            self.live.larynx_height=larynx
+            if self.live.active and self.live.mode=='live':self.live.tube=self.engine.prepare_tube(p,width,larynx)
             return state
         if path in ('animation/stop','deactivate') or (path=='live' and not obj.get('active')):
             with self.render_lock:
@@ -91,7 +93,7 @@ class Runtime:
             p=self.engine.validated(obj.get('params',self.live.params));duration=float(obj.get('duration',1.2))
             if not .3<=duration<=5:raise ValueError('试听时长应为 0.3–5 秒')
             poses=[self.engine.presets[n] for n in ('a','i','u')] if obj.get('sequence')=='a-i-u' else [p.tolist(),p.tolist()]
-            frames=[{'params':q,'lip_width':float(obj.get('lip_width',1)),'f0':self.live.f0,'source':self.live.source,
+            frames=[{'params':q,'larynx_height':self.engine.validated_larynx(obj.get('larynx_height',self.live.larynx_height)),'lip_width':float(obj.get('lip_width',1)),'f0':self.live.f0,'source':self.live.source,
                 'duration':duration/len(poses),'manual_root':self.manual_root} for q in poses]
             prepared=prepare_animation(self.engine,frames,pictures_enabled=False,cancel=self.cancel)
             if self.cancel.is_set():raise ValueError('已取消生成')
@@ -105,7 +107,7 @@ class Runtime:
             if obj.get('keep_vowel',False):
                 for f in frames:
                     self.engine.set_manual_root(f.get('manual_root',False))
-                    f['params']=self.engine.constrain_nasal_opening(f['params'],f['lip_width'])[0].tolist()
+                    f['params']=self.engine.constrain_nasal_opening(f['params'],f['lip_width'],f.get('larynx_height',0.))[0].tolist()
             prepared=prepare_animation(self.engine,frames,self.section,pitch_curve=curve,cancel=self.cancel)
             if self.cancel.is_set():raise ValueError('已取消生成')
             self.animation=prepared
@@ -135,12 +137,13 @@ class Runtime:
             if self.animation_playing and not self.live.active:
                 self.animation_playing=False;self.live.params=self.engine.validated(state['params'])
                 self.live.lip_width=state['lip_width'];self.live.f0=state['f0'];self.live.source=state.get('source')
+                self.live.larynx_height=state.get('larynx_height',0.)
             return {'index':index,'time':seconds,'duration':self.animation['duration'],'active':self.live.active,
                 'completed':self.live.completed,'audio_error':self.live.error,'state':state}
         raise ValueError('不支持的声道操作')
 
     def animation_key(self,frames,curve,keep):
-        obj={'frames':frames,'curve':curve,'keep':keep,'section':self.section,'version':'m10-r5'}
+        obj={'frames':frames,'curve':curve,'keep':keep,'section':self.section,'version':'m10-r11-contact'}
         return hashlib.sha256(json.dumps(obj,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
 
     def animation_info(self,cached):

@@ -24,12 +24,12 @@
     },
     {
       "path": "frontend/public/vocal-tract/anatomy.mjs",
-      "sha256": "725b86d4616309bdf76ac02cdb6a23ac239bfaf1859d6c5e17f7a7ee7f739486",
+      "sha256": "a044ddcfd576f3fe216d44010a1b0d4e6373558f5d64a350896a3d659eedb510",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/app.js",
-      "sha256": "effa43d65ca3b0298e344d46abea33d496b6ed9de2093cfb5934c8aaf9525402",
+      "sha256": "b926604fc80be96d2e4769cea3ed38222f2bd08193f6ca007062f276df7feee6",
       "source_id": "PROJECT-M10"
     },
     {
@@ -44,72 +44,72 @@
     },
     {
       "path": "frontend/public/vocal-tract/controls.mjs",
-      "sha256": "ea6debe95b511aee48d427c1661bb91972a6dc0c5781b08d7bbd86db4d73fe03",
+      "sha256": "90bcec20dc76efa93fa3ad6db735b8cd20ddd7085226a14876aceb73b55e52f4",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/desktop.css",
-      "sha256": "ab8803993d67bc7be1181467f52dcf40878411772bfccca7b4666286fa67b1e2",
+      "sha256": "b26ec961757d1e6ca37b01de67bffc74bbaa08d10d1ded790e2dc0bd8c31d958",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/geometry.mjs",
-      "sha256": "6063894e4cda75c8d9e924f10e084c20ff7fba664e79ac922e4f3ba08bcdb7ff",
+      "sha256": "f749543144bab9bd30517f6da41391f8d71e9da68f9b88eb605d4e9962631869",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/index.html",
-      "sha256": "88f2b7ce2ff0a83cf0f744fe90c84a2a05541a022253479d92c17ad20617dfee",
+      "sha256": "001660baab10965a83c64492de95eb0d5f2cf967f4aac6d8817f136da7fa386c",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/keyframes.js",
-      "sha256": "8683a15e5727f6698ecc1446d29c14248a2f00489245f214a4b6d48e3b3205d5",
+      "sha256": "f669221c0c0a93366200855d912cf2ed85ec9e08ef52610d8685197dfc7520a6",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/layout.js",
-      "sha256": "04182fb97df89f9d86aa76570a92944b0eeb040f63da4d17f5ebbb3f8e871514",
+      "sha256": "343c6949a3931b8e2d2f48f59c75a412e9bfd05ac04813efe29176bbb0e12e82",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/monitor.js",
-      "sha256": "81ea57d67de4ee399f0367ec968000eb423c9948d4fc39230903c9dc1d4b1f79",
+      "sha256": "802ea78cd6e89278d6f6aa1f28b00bd184e774ed370ce7e2f6c8091ad2f7b796",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/pitch.js",
-      "sha256": "70195668e2b94c9efe7256910aa098d2e4608d5e9810b2cc9c1f993509e7a5b6",
+      "sha256": "2efeee5de8b2299f276013a8672330218deb68c1bd5a1e4a5fa62b47b957dcd8",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/platform.js",
-      "sha256": "7a84683e992ea0b74be120f9d590ac17a014a31035c84e650950ebd23f15d50d",
+      "sha256": "2c812e786da79baabb8e3900fcfe073e082c027733d72ad305e7db2842604900",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/presets.js",
-      "sha256": "0940c9beac8623eadbc845311bd07f4d77c7e2d0cad6ed2e5ea5a4ec36fdee77",
+      "sha256": "9d20a947de9b5bcaf69fbeb1cad5faaa0d84f46deedb23c38590835ff361f575",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/scene.js",
-      "sha256": "8678b1d11e4e8c84da0b090fe71b7c65a72f7652535d36f80b7d1ac44df98fd6",
+      "sha256": "007d186a6ced6abc5f8abb25f861884dce38f0f3eb5462141a7dd743d2398dfe",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/styles.css",
-      "sha256": "8242a942be946da16f3ef1de79c1d6f0a08af8c0bd9a60c9dbf6ca5f12de03df",
+      "sha256": "c29897860c0edb277b5629b6664713fda16a4abae933fd17e234b20e5bc20d87",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/theme.js",
-      "sha256": "25a9059f80a705ed4ac5d70211011ddccb2028a8d4f6d54f52fdf8ad492681b0",
+      "sha256": "f0c024902e11d51309147f61b27b93f227c8874e29279a60f61b7b2e080bf879",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/v3.css",
-      "sha256": "ee7fd736e53c63b9ec412a4a233fb78662c9105a7d78913d957b3860e9cc7546",
+      "sha256": "33bba33cf0561c48ad85fd4576d025ca52c44ac68360b6214a63897429143e86",
       "source_id": "PROJECT-M10"
     },
     {
@@ -134,7 +134,7 @@
     },
     {
       "path": "frontend/public/vocal-tract/video.js",
-      "sha256": "3bc5161a1fcf2ef58bacf589bd2bea0d775f10d75b54ab84817f049c4ed94b8c",
+      "sha256": "b0d33315139b4afc4fe118d7448716365325180f456adf01f44bed8febf0d1e6",
       "source_id": "PROJECT-M10"
     },
     {
@@ -144,12 +144,12 @@
     },
     {
       "path": "resources/vocal_tract/bundle-manifest.json",
-      "sha256": "56f8c4d7fc1c1acc782e9b2dcedaebf821eb1977be1c575ee0641bef363386b5",
+      "sha256": "b29f0dcff4acdc3152cee565ab29b266099ed8bf30ffd96183ed72566fe1a492",
       "source_id": "SRC-VTL"
     },
     {
       "path": "resources/vocal_tract/native/geometry_p2.dll",
-      "sha256": "3a3bb343af6671cd786b46de67d499f3d8c72264ff2320f1a4877af5760406b2",
+      "sha256": "8f9ac397ab24efc25955b07b7159718822e77e2d62d46f1b864d0f1f620d7686",
       "source_id": "SRC-VTL"
     },
     {
@@ -184,12 +184,12 @@
     },
     {
       "path": "resources/vocal_tract/sources/geometry_bridge.cpp",
-      "sha256": "0f8f5b3dcb4bd8b7fc3f855e87159b4f9d50746e2f19d03ce8ad55865ae01f81",
+      "sha256": "529154d6a90429e625e207cbf9cf9439dace08ac8cc143459b0061337c8e9ca7",
       "source_id": "SRC-VTL"
     },
     {
       "path": "resources/vocal_tract/sources/M10-build.md",
-      "sha256": "b5a71242cd5c02c8d9fb3af11143efa7f064baf8d8afb990ccddf5123023ec14",
+      "sha256": "33e775ac07c990f330bb86e13434fa129df1cb794390f8791e6ce4d5c346e583",
       "source_id": "SRC-VTL"
     },
     {
@@ -199,7 +199,7 @@
     },
     {
       "path": "resources/vocal_tract/sources/README.md",
-      "sha256": "98bd2d9dfb69ac9bbc0b2c8151a7bb3eca551de6f3b850e21d95d0333e618cac",
+      "sha256": "33c65a69fbffe4de7c1dcc541a7845446ca86ba63dd82508c7592e5371031e79",
       "source_id": "SRC-VTL"
     },
     {
@@ -214,7 +214,7 @@
     },
     {
       "path": "resources/vocal_tract/THIRD_PARTY_NOTICES.md",
-      "sha256": "87c51bccb1f5b94cf612dbb41e573189b3ab84dc7a41b88c1ad9100e52495af2",
+      "sha256": "947db4e5d2a467870c30631f7a3c36c6acff0f245695aaeff6fa79f833197e2a",
       "source_id": "SRC-VTL"
     },
     {
@@ -225,7 +225,7 @@
     {
       "path": "frontend/public/vocal-tract/fonts.js",
       "source_id": "PROJECT-M10",
-      "sha256": "72618d854a73ddbcd3236430a26df05a8eb2d5c1bce747fc3cad754954951ea7"
+      "sha256": "f2db3d10ce895c1d92cb287f97089d317202067bc5eedf66512001ebc04aa7a3"
     },
     {
       "path": "backend/src/ptb_worker/assets/DoulosSIL-Regular.ttf",
@@ -286,6 +286,121 @@
       "path": "frontend/public/m05/worker.js",
       "sha256": "bb3181c23f97f7c6ff87bfef21e720dca049b82fbb6ba348bc9401f5c4d852fc",
       "source_id": "PROJECT-M05"
+    },
+    {
+      "path": "frontend/public/vocal-tract/area-view.mjs",
+      "source_id": "PROJECT-M10",
+      "sha256": "6363051e3733b2bbb020049ca68c2be62ebb2dafb6692e74f41b4efe4d1520e8"
+    },
+    {
+      "path": "frontend/public/vocal-tract/section-view.mjs",
+      "source_id": "PROJECT-M10",
+      "sha256": "caf9692eb9e5a1a98cc8a1e8fe0f34bf40a308cbfcd5f2abc032281727b9d284"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r11_patch.py",
+      "source_id": "SRC-VTL",
+      "sha256": "7747724e1b71fd31268783dd1565bd83f54c9cf98678f5e7cbda3e5b2066efc0"
+    },
+    {
+      "path": "frontend/public/vocal-tract/surface-contact.mjs",
+      "source_id": "PROJECT-M10",
+      "sha256": "88f47a9e2cc8f3ff93e6326bf33c07809b4c6a41f30ae2bb4f7f2f77b7dff0ff"
+    },
+    {
+      "path": "frontend/public/vocal-tract/rigid-contact.mjs",
+      "source_id": "PROJECT-M10",
+      "sha256": "0cde767530ce6d343fea96458958b2ddc15c88332be21bd5d459642e137ef59c"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r12_patch.py",
+      "source_id": "SRC-VTL",
+      "sha256": "6ab7dd630db53e873bf9dd8d9ccf19bc728b030e68c66a98503536a54c4d3739"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r13_patch.py",
+      "source_id": "SRC-VTL",
+      "sha256": "65e60dbfeb0ca41cdddd4c159f788c0c1458b9add400a97bbfd281b6c5e328e9"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r14_patch.py",
+      "source_id": "SRC-VTL",
+      "sha256": "db65aeca97cc36428ca1a5e468c6825d5c3606bdf77d7733b65087299cb1128d"
+    },
+    {
+      "path": "frontend/public/manual/assets/software-only/m18-r2-20261008/m18-r2-reader-annotations-20261008.png",
+      "sha256": "fbf724c66fed3c9ef95f67e46cef32a3e74deb1ab0df3c27f3212ba80af84f1c",
+      "source_id": "SRC-M18-ARTICULATORY-TTS-2610"
+    },
+    {
+      "path": "frontend/public/manual/assets/software-only/m18-r2-20261008/m18-r2-reader-citations-20261008.png",
+      "sha256": "c1281aea26809ebd802ebcabe4488d4db514678837719db694d61a8f92a56d5f",
+      "source_id": "SRC-M18-ARTICULATORY-TTS-2610"
+    },
+    {
+      "path": "frontend/public/manual/assets/software-only/m18-r2-20261008/m18-r2-reader-collapsed-20261008.png",
+      "sha256": "4a3682ba179bad7778bd1ca647e2fca1d0b2cb4c6b9747df9722de96328bebc4",
+      "source_id": "SRC-M18-ARTICULATORY-TTS-2610"
+    },
+    {
+      "path": "frontend/public/manual/assets/software-only/m18-r2-20261008/m18-r2-reader-details-20261008.png",
+      "sha256": "2acd2e856aa7c0b6c3f2798de26612a492c8f2b3a87991dc93f7f5671811748f",
+      "source_id": "SRC-M18-ARTICULATORY-TTS-2610"
+    },
+    {
+      "path": "frontend/public/manual/assets/software-only/m18-r2-20261008/m18-r2-reader-export-20261008.png",
+      "sha256": "75cef384e5c33bc7fc9df6310000456676ddf41644f54fe3f6a880e6fbb72d21",
+      "source_id": "SRC-M18-ARTICULATORY-TTS-2610"
+    },
+    {
+      "path": "frontend/public/manual/assets/software-only/m18-r2-20261008/m18-r2-reader-fullscreen-20261008.png",
+      "sha256": "79745fce269cc67c1d20031327540d32fe62f03981a0dcf54629c633080ce416",
+      "source_id": "SRC-M18-ARTICULATORY-TTS-2610"
+    },
+    {
+      "path": "frontend/src/assets/JetBrainsMono-OFL.txt",
+      "sha256": "30f0c136e3c88e422d0791acd97238870f9054a9729bc34cf2ff0d4ed8cac4ad",
+      "source_id": "SRC-JETBRAINS-MONO"
+    },
+    {
+      "path": "frontend/src/assets/JetBrainsMono-Regular.woff2",
+      "sha256": "a9cb1cd82332b23a47e3a1239d25d13c86d16c4220695e34b243effa999f45f2",
+      "source_id": "SRC-JETBRAINS-MONO"
+    },
+    {
+      "path": "frontend/src/assets/ipa-plus/OFL-Noto.txt",
+      "sha256": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb",
+      "source_id": "M17-PTB-IPA-PLUS-FONT"
+    },
+    {
+      "path": "frontend/src/assets/ipa-plus/OFL-PTBIPAPlus.txt",
+      "sha256": "713432cfd3a6a60561d33df1f5fcfc8c158e53867af5349b3563ae4328ca7565",
+      "source_id": "M17-PTB-IPA-PLUS-FONT"
+    },
+    {
+      "path": "frontend/src/assets/ipa-plus/PTBIPAPlus-Regular.ttf",
+      "sha256": "4219767c81bfb38e59fa1ec1fc995e40164c6896bf0eec8e9542061453ec2060",
+      "source_id": "M17-PTB-IPA-PLUS-FONT"
+    },
+    {
+      "path": "frontend/public/interaction-selection.css",
+      "sha256": "d21972e5e18778002926bfd36852d96766434746a6e9e1fb5d8c438ae1c446ec",
+      "origin": "project",
+      "description": "Project-owned control/text selection behavior shared by the workbench and vocal-tract document."
+    },
+    {
+      "path": "frontend/public/interaction-selection.js",
+      "sha256": "1e28e794f69875ecffb24b8a4c8d0d287bc731d6a08df218b3ae73582fca4e38",
+      "origin": "project",
+      "description": "Project-owned control/text selection behavior shared by the workbench and vocal-tract document."
+    }
+  ],
+  "generated_resources": [
+    {
+      "path": "frontend/public/manual",
+      "kind": "manual-reader",
+      "source_project": "manual",
+      "distribution": "software"
     }
   ]
 }

@@ -29,7 +29,7 @@ class M08Bridge:
             # External exports remain explicit snapshots. Before modifying an exported
             # result, require its originally granted directory and exact current hash.
             ids=value.get('ids',[])
-            selected=[(i,self.exports[i]) for i in ids if i in self.exports]
+            selected=[(i,record) for i in ids for record in self.exports.get(i,[])]
             for _,record in selected:self._verify(record)
             if action=='rename':
                 for result_id,record in selected:
@@ -43,7 +43,7 @@ class M08Bridge:
                     self._verify(record)
                     try:
                         if action=='remove' and result_id in answer['removed']:
-                            record['path'].unlink();del self.exports[result_id]
+                            record['path'].unlink();self.exports[result_id].remove(record)
                         elif action=='rename':
                             destination=record['path'].parent/value['names'][ids.index(result_id)]
                             if destination!=record['path']:os.rename(record['path'],destination)
@@ -66,15 +66,26 @@ class M08Bridge:
         if job['operation']!='pitch_manipulation' or job['state']!='succeeded':raise FileAccessError('结果未完成。')
         item=next((f for f in job['result_manifest']['files'] if f['id']==body['id'] and f['name'].endswith('.wav')),None)
         if not item or item['id'] in job['result_manifest'].get('deleted',[]):raise FileAccessError('结果不可用。')
+        direct=body.get('direct') is True
         name=job['result_manifest'].get('aliases',{}).get(item['id'],item['name'])
         if not name or any(ord(c)<32 or c in '/\\:<>"|?*' for c in name):raise FileAccessError('无效结果名。')
         verified=self.bridge.invoke(dict(op='result',job=job['id'],id=item['id']))
         raw=base64.b64decode(verified['base64']);root=directory.path
+        if direct:
+            for record in self.exports.get(item['id'],[]):
+                if record['path'].parent==root:
+                    self._verify(record)
+                    self.bridge.record_export([item['id']])
+                    return dict(name=record['path'].name,id=item['id'],directory=str(root))
         with pin_directory(root):
             self.provider.directory(body['directory'])
             # Exclusive creation is the final cross-process allocation gate.
-            match=re.match(r'^(.*_modified_)(\d+)\.wav$',name)
-            for _ in range(10000):
+            match=None if direct else re.match(r'^(.*_modified_)(\d+)\.wav$',name)
+            base_name=name
+            for index in range(10000):
+                if direct and index:
+                    suffix=f' ({index+1}).wav'
+                    name=Path(base_name).stem[:180-len(suffix)]+suffix
                 if match:
                     numbers=[int(m.group(1)) for p in root.iterdir() if (m:=re.fullmatch(re.escape(match.group(1))+r'(\d+)\.wav',p.name,re.I))]
                     name=match.group(1)+str(max(numbers,default=0)+1)+'.wav'
@@ -86,10 +97,13 @@ class M08Bridge:
                         stream.write(raw);stream.flush();os.fsync(stream.fileno())
                     break
                 except FileExistsError:
-                    if not match:raise FileAccessError('结果文件名已存在。') from None
+                    if not match and not direct:raise FileAccessError('结果文件名已存在。') from None
                 except BaseException:
                     if created and path.exists() and identity(path.stat())==created:path.unlink()
                     raise
             else:raise FileAccessError('无法分配结果编号。')
-            self.exports[item['id']]=dict(path=path,directory=body['directory'],identity=identity(path.stat()),sha256=item['sha256'])
-            return dict(name=name,id=item['id'])
+            self.exports.setdefault(item['id'],[]).append(dict(path=path,directory=body['directory'],identity=identity(path.stat()),sha256=item['sha256']))
+            answer=dict(name=name,id=item['id'],directory=str(root))
+            warning=self.bridge.record_export([item['id']])
+            if warning:answer['retention_warning']=warning
+            return answer

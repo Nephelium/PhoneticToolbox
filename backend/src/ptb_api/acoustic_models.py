@@ -7,7 +7,8 @@ import hashlib
 import json
 import math
 from typing import Annotated, Literal
-from pydantic import Field, field_validator, model_validator
+from pydantic import Field, field_validator, model_validator, model_serializer
+from .acoustic_extended import AcousticExtended
 from phonetic_core.catalog import PARAMETER_MAPPING
 from .models import WireModel, Hash, Identifier, IdempotencyKey
 from .storage_policy import (QUOTA_BYTES, RETENTION_SECONDS, LEGACY_QUOTA_BYTES,
@@ -66,6 +67,13 @@ class AcousticConfigSnapshot(WireModel):
     settings: AcousticSettings = Field(default_factory=AcousticSettings)
     selection: AcousticSelection = Field(default_factory=AcousticSelection)
     backend_policy: AcousticBackendPolicy = Field(default_factory=AcousticBackendPolicy)
+    extended: AcousticExtended | None = None
+
+    @model_serializer(mode='wrap')
+    def legacy_shape(self,handler):
+        data=handler(self)
+        if self.extended is None:data.pop('extended',None)
+        return data
 
 
 def config_digest(snapshot):
@@ -280,6 +288,7 @@ BatchState = Literal['not_started','queued','running','cancel_requested','succee
 
 
 class AcousticBatchItem(WireModel):
+    progress: float = Field(default=0.,ge=0,le=1)
     index: int = Field(ge=0,le=9999)
     audio_asset_id: Identifier
     job_id: Identifier | None

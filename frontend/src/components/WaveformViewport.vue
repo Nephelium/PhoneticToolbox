@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { computed,ref,onMounted,onUnmounted } from 'vue';import type { Workspace } from '../state/workspace.ts';import { envelope,selection,positionSelection } from '../platform/wav.ts';
 import SpectrogramViewport from './SpectrogramViewport.vue';import type {Spectrogram,SpectrogramView} from '../platform/research.ts';
+import {useAudioSelection} from '../state/audio-selection.ts';
+import {stop} from '../state/audio.ts';
 import {playback,isCurrentAudio} from '../state/audio.ts';import {amplitudeLimit,amplitudeLabel,sampleWavePath} from '../platform/waveform.ts';
-const props=withDefaults(defineProps<{state:Workspace;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;spectrogramSelectable?:boolean;maxWindowSeconds?:number;compactOverview?:boolean;overviewTop?:boolean;hideOverviewControls?:boolean;autoAmplitude?:boolean;normalizeDisplay?:boolean;clickMovesSelection?:boolean;selectionRequiresShift?:boolean;doubleClickAction?:'zoom'|'annotation';shiftWheelPan?:boolean;continuousDetail?:boolean;trackHeight?:number;hideTimeAxis?:boolean;timelineDuration?:number;pixelAnnotations?:boolean;timeAxisInsets?:{left:number;right:number}}>(),{autoAmplitude:true,continuousDetail:true});let anchor:number|null=null,anchorX=0,selectionLength=0,dragged=false,boundaryDrag=false;
+const props=withDefaults(defineProps<{state:Workspace;emptyMessage?:string;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;spectrogramSelectable?:boolean;maxWindowSeconds?:number;compactOverview?:boolean;overviewTop?:boolean;hideOverviewControls?:boolean;autoAmplitude?:boolean;normalizeDisplay?:boolean;clickMovesSelection?:boolean;selectionRequiresShift?:boolean;doubleClickAction?:'zoom'|'annotation';shiftWheelPan?:boolean;continuousDetail?:boolean;trackHeight?:number;hideTimeAxis?:boolean;timelineDuration?:number;pixelAnnotations?:boolean;timeAxisInsets?:{left:number;right:number}}>(),{autoAmplitude:true,continuousDetail:true,emptyMessage:'选择音频后显示实际波形。'});let anchor:number|null=null,anchorX=0,selectionLength=0,dragged=false,boundaryDrag=false;
 const emit=defineEmits<{'selection-end':[start:number,end:number];'time-double-click':[time:number,ctrl:boolean];'boundary-start':[event:PointerEvent,time:number,tolerance:number];'boundary-move':[event:PointerEvent,time:number];'boundary-end':[]}>();
+const selectionGroup=useAudioSelection();const unregister=selectionGroup?.register(()=>props.state);onUnmounted(()=>unregister?.());
+function select(){selectionGroup?.select(props.state);stop();}
 const viewport=ref<HTMLElement>(),width=ref(800),annotationSize=ref({width:800,height:130});let observer:ResizeObserver,resizeFrame=0;
 const pendingSizes=new Map<Element,DOMRectReadOnly>(),observedTracks=new Set<Element>();
 onMounted(()=>{
@@ -43,6 +47,7 @@ function down(event:PointerEvent){
   if(event.button!==0||(props.selectionRequiresShift&&!event.shiftKey))return;
   emit('boundary-start',event,time(event),windowLength.value*6/(event.currentTarget as Element).getBoundingClientRect().width);
   if(event.defaultPrevented){boundaryDrag=true;(event.currentTarget as Element).setPointerCapture(event.pointerId);return;}
+  select();(event.currentTarget as SVGElement).focus({preventScroll:true});
   anchor=time(event);anchorX=event.clientX;dragged=false;selectionLength=props.state.end-props.state.start;
   (event.currentTarget as Element).setPointerCapture(event.pointerId);
   if(!props.clickMovesSelection){props.state.start=anchor;props.state.end=anchor;}
@@ -58,7 +63,7 @@ function up(event:PointerEvent){
   anchor=null;emit('selection-end',props.state.start,props.state.end);
 }
 function cancel(){anchor=null;if(boundaryDrag){boundaryDrag=false;emit('boundary-end');}}
-function selectSpectrogram(start:number,end:number){props.state.start=start;props.state.end=end;emit('selection-end',start,end);}
+function selectSpectrogram(start:number,end:number){select();props.state.start=start;props.state.end=end;emit('selection-end',start,end);}
 const maxZoom=computed(()=>Math.max(1,Math.min(65536,duration.value/.01)));
 function zoom(value:number,fraction=0){const anchor=left.value+fraction*windowLength.value;props.state.zoom=Math.max(minZoom.value,Math.min(maxZoom.value,value));props.state.offset=Math.max(0,Math.min(anchor-fraction*windowLength.value,duration.value-windowLength.value));}
 function wheel(event:WheelEvent){
@@ -69,7 +74,7 @@ function wheel(event:WheelEvent){
 }
 </script>
 <template>
-<div ref="viewport" class="wave-viewport" :style="insetStyle" :class="{'compact-overview':compactOverview,'top-overview':overviewTop,'amplitude-scaled':autoAmplitude}">
+<div ref="viewport" class="wave-viewport" :data-selection-active="selectionGroup?.selected(state)" :style="insetStyle" :class="{'compact-overview':compactOverview,'top-overview':overviewTop,'amplitude-scaled':autoAmplitude}">
 <div v-if="!compactOverview" class="wave-toolbar">
 <span>原始波形 <small>· 振幅 / 秒</small>
 </span>
@@ -81,13 +86,19 @@ function wheel(event:WheelEvent){
 </div>
 </div>
 <div v-if="!compactOverview" class="display-options"><slot name="controls"/><label v-if="state.asset&&state.asset.channels.length>1"><input v-model="state.showBoth" type="checkbox"/>显示两个声道</label><label v-if="spectrogramLoader"><input v-model="state.showSpectrogram" type="checkbox"/>显示语谱图（Praat）</label><small class="muted">振幅随可见窗调整 · 细节显示原始采样点</small></div>
+<div v-if="!state.asset&&emptyMessage" class="wave-track waveform-placeholder" :aria-busy="state.loading||undefined">
+<div v-if="!compactOverview" class="track-label"><span>波形</span><small>等待音频</small></div>
+<svg :viewBox="'0 0 '+waveformBox.width+' '+waveformBox.height" :style="trackHeight?{height:trackHeight+'px'}:undefined" role="img" :aria-label="emptyMessage"/>
+<p class="wave-empty-message">{{emptyMessage}}</p>
+<div v-if="!hideTimeAxis" class="time-axis" aria-label="波形时间轴（秒）"><span v-for="i in 5" :key="i">—{{i===5?' s':''}}</span></div>
+</div>
 <div v-for="track in tracks" :key="track.index" class="wave-track">
 <div v-if="!compactOverview||state.showBoth" class="track-label">
 <span>声道 {{track.index+1}}</span>
 <small>{{track.index===state.channel?'试听声道':'原始数据'}}</small>
 </div>
 <div v-if="autoAmplitude" class="amplitude-axis" aria-label="波形振幅刻度" :data-limit="track.limit"><span v-for="(value,i) in [track.limit,0,-track.limit]" :key="i" :style="{top:(8.888889+i*41.111111)+'%'}">{{amplitudeLabel(value)}}</span></div>
-<svg :viewBox="'0 0 '+waveformBox.width+' '+waveformBox.height" preserveAspectRatio="none" role="img" :tabindex="doubleClickAction==='annotation'?0:undefined" :data-start="left" :data-end="left+windowLength" :style="trackHeight?{height:trackHeight+'px'}:undefined" :aria-label="'声道 '+(track.index+1)+' 原始波形；拖动选择时间范围'" @wheel="wheel" @dblclick="double" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="cancel">
+<svg :viewBox="'0 0 '+waveformBox.width+' '+waveformBox.height" preserveAspectRatio="none" role="img" tabindex="0" :data-start="left" :data-end="left+windowLength" :style="trackHeight?{height:trackHeight+'px'}:undefined" :aria-label="'声道 '+(track.index+1)+' 原始波形；拖动选择时间范围'" @wheel="wheel" @dblclick="double" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="cancel">
 <g :transform="pixelAnnotations?'scale('+waveformBox.width/1000+' '+waveformBox.height/90+')':undefined">
 <path d="M0 45H1000" class="wave-baseline"/>
 <rect :x="x(state.start)" y="0" :width="Math.max(0,x(state.end)-x(state.start))" height="90" class="wave-selection"/>
@@ -122,6 +133,8 @@ function wheel(event:WheelEvent){
 </div>
 </template>
 <style scoped>
+.wave-empty-message{grid-area:2/2;align-self:center;justify-self:center;max-width:90%;text-align:center;color:var(--muted);font-size:var(--support-size);margin:0;z-index:1;pointer-events:none}.waveform-placeholder svg{background:var(--app);pointer-events:none}
+
 .top-overview{display:flex;flex-direction:column}.top-overview .overview-controls{order:-2;margin:0 0 6px}.top-overview .pan-label{order:-1;margin:0 0 8px}
 .amplitude-scaled .wave-track{display:grid;grid-template-columns:var(--wave-axis-width,64px) minmax(0,1fr);grid-template-rows:auto auto auto}.amplitude-scaled .track-label{grid-area:1/2}.amplitude-scaled .wave-track svg{grid-area:2/2}.amplitude-scaled .time-axis{grid-area:3/2}.amplitude-axis{grid-area:2/1;position:relative;font-family:var(--font-figure);font-size:var(--figure-size);color:var(--muted);pointer-events:none}.amplitude-axis span{position:absolute;right:8px;transform:translateY(-50%);white-space:nowrap}
 .compact-overview .overview-controls{justify-content:flex-start;flex-wrap:wrap;gap:8px 16px;margin:4px 0 0}

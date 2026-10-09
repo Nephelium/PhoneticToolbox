@@ -13,8 +13,10 @@ import type {M14Port} from '../modules/phonology-induction/port.ts';
 import type {M08Port} from '../modules/pitch-manipulation/port.ts';
 export type Tier=components['schemas']['TextGridPreview']['tiers'][number];
 export type Spectrogram=components['schemas']['SpectrogramPreview'];
-export type ParameterTable=components['schemas']['ParameterTable'];
+export type ParameterTable=components['schemas']['ParameterTable'] & {streamed?:boolean;duration_s?:number;tracks?:Record<string,[number,number|string|null][]>;stats?:Record<string,{count:number;mean:number;min:number|null;max:number|null}>;metadata?:Record<string,unknown>};
+export interface ParameterView {start:number;end:number;width:number;parameters:string[]}
 export type ReconstructionConfig=components['schemas']['Spec2WavConfig'];
+export type ReconstructionPreview=components['schemas']['Spec2WavPreview'];
 export type EggTaskConfig=components['schemas']['EggTaskConfig'];
 export type LpcTaskConfig=components['schemas']['LpcTaskConfig'];
 export type LpcSpectrumData=components['schemas']['LpcSpectrumData'];
@@ -36,6 +38,7 @@ export interface ResearchTasks {
   save?(id:string,directory:string,besideSources?:boolean):Promise<{count:number;saved:string[]}>;
   download?(id:string,name:string):Promise<void>;
   reconstruct?(file:ResearchFile,config:ReconstructionConfig,key:string):Promise<JobView>;
+  reconstructionPreview?(file:ResearchFile,config:ReconstructionConfig):Promise<ReconstructionPreview>;
   egg?(file:ResearchFile,config:EggTaskConfig,key:string):Promise<JobView>;
   eggJobs?():Promise<JobView[]>;
   eggFonts?(font:FigureFontSnapshot):Promise<FontPreflight>;
@@ -64,7 +67,7 @@ export interface ResearchFiles {
   read(file:ResearchFile,signal?:AbortSignal):Promise<{buffer:ArrayBuffer;sha256:string}>;
   textgrid(file:ResearchFile):Promise<{sha256:string;tiers:Tier[]}>;
   spectrogram?(file:ResearchFile,view:SpectrogramView):Promise<Spectrogram>;
-  parameters?(file:ResearchFile):Promise<ParameterTable>;
+  parameters?(file:ResearchFile,view?:ParameterView):Promise<ParameterTable>;
   eggPreview?:{
     open(file:ResearchFile):Promise<components['schemas']['EggPreviewSession']>;
     update(file:ResearchFile,session:string,config:EggTaskConfig):Promise<components['schemas']['EggInteractiveResult']>;
@@ -110,6 +113,7 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
   async function verify(file:ResearchFile){const r=await request('assets/'+encodeURIComponent(file.id));const asset:components['schemas']['AssetView']=await r.json();if(asset.project_id!==project||asset.state!=='ready'||asset.sha256!==file.sha256)throw Error('文件已变化，请刷新项目列表。');return asset;}
   const tasks:ResearchTasks={async parent(file){if(!file.sha256)return null;return (await request('jobs/parents/latest?'+new URLSearchParams({project_id:project,sha256:file.sha256}))).json();},async submit(operation,inputs,config,layer,key){const mapped=inputs.map(item=>Object.fromEntries(Object.entries(item).filter(([,v])=>v!=null).map(([role,value])=>{if(role==='parent_result')return [role,value];const file=value as ResearchFile;if(!file.sha256)throw Error('文件缺少校验值，请刷新。');return [role,{asset_id:file.id,sha256:file.sha256}];})));return (await request('jobs/batches/create',undefined,'POST',{project_id:project,operation,inputs:mapped,config,layer,idempotency_key:key})).json();},
     async reconstruct(file,config,key){if(!file.sha256)throw Error('图片缺少校验值。');return (await request('jobs/spec2wav/create',undefined,'POST',{project_id:project,idempotency_key:key,image:{asset_id:file.id,sha256:file.sha256},config})).json();},
+    async reconstructionPreview(file,config){if(!file.sha256)throw Error('输入缺少校验值。');return (await request('jobs/spec2wav/preview',undefined,'POST',{project_id:project,idempotency_key:crypto.randomUUID(),image:{asset_id:file.id,sha256:file.sha256},config})).json();},
     async egg(file,config,key){if(!file.sha256)throw Error('音频缺少校验值。');const {exportFontSnapshot}=await import('../state/fonts.ts');return (await request('jobs/egg/create',undefined,'POST',{project_id:project,idempotency_key:key,audio:{asset_id:file.id,sha256:file.sha256},config:{...config,font:config.font??exportFontSnapshot()}})).json();},
     async eggJobs(){const data:components['schemas']['JobList']=await(await request('jobs?project_id='+encodeURIComponent(project))).json();return data.jobs.filter(j=>j.operation==='egg_analysis');},
     async eggFonts(font){return (await request('jobs/egg/fonts',undefined,'POST',font)).json();},

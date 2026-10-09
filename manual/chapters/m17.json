@@ -1,0 +1,5490 @@
+{
+  "schemaVersion": "ptb-manual-chapter/1",
+  "id": "m17",
+  "title": "国际音标表Plus",
+  "moduleId": "M17",
+  "body": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m17-purpose"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "用途与准备"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "在这里浏览、查找和输入 IPA、extIPA、VoQS，也能查看记号的用法与来源。三套表共用下方文本框，可混合输入音段、附加号、声调和音质范围。文字只在本机编辑。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-prepare-input"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "开始输入"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "打开"
+                  },
+                  {
+                    "type": "text",
+                    "text": "国际音标表Plus",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，等待读取草稿结束。首次是空文本；已有草稿会恢复正文与设置。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在下方文本框输入或粘贴文字，"
+                  },
+                  {
+                    "type": "text",
+                    "text": "先放好光标或选中待替换内容",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，再点图表中的符号。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选体系：一般音段和韵律用 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "IPA",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，额外构音、部分发声、无声构音或外来噪声查 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "extIPA",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，一段言语的音质设置查 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "VoQS",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "输入文字时保持点击播放关闭。",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "backgroundColor": "#fff1c2",
+                          "backgroundColorDark": "#514218",
+                          "color": "#3b2f00",
+                          "colorDark": "#fff0bb"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-prepare-font"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "字体与离线使用"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "音标使用随模块提供的 PTB IPA Plus 字体，无须另装系统字体；中文沿用应用字体。底部显示"
+          },
+          {
+            "type": "text",
+            "text": "固定字体就绪",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "后可核对附加号。桌面资源随应用提供；网页加载完成后可断网编辑，关闭后再离线打开可能无法载入。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "三套表有 625 个入口：IPA 351、extIPA 209、VoQS 65，包含组合、例示和工具，并非 625 个独立音标。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m17-layout"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "界面怎么看"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m17-figure-overview-v3",
+          "assetId": "m17-overview-light-scaled-r20261007",
+          "caption": "IPA 基础图表：顶部工具、中部辅音矩阵、右侧元音图与下方文本框。",
+          "width": "100%",
+          "align": "center",
+          "alt": "IPA 基础图表：顶部工具、中部辅音矩阵、右侧元音图与下方文本框。"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "查表、检索和看介绍都会保留正文。表区可上下、左右滚动；文本较多时，向上拖文本框上沿的分隔条，让更多行露出来。"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m17-layout-table",
+          "caption": "工作区位置与用途"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "位置"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "内容与用法"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "顶部"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "切体系、检索、改字号，开关悬停介绍与点击播放；右侧是帮助和方法与引用。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "表区上方"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "显示表版与输入提示；IPA、extIPA 另有分区按钮。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "中部表区"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "浏览矩阵、元音图或分类记号，点击输入，右键看详情。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "下方文本框"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "手动输入、粘贴、选区编辑；上沿分隔条可调高度。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "底部工具与状态"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "复制、全选、撤销、重做、保存、清空，以及草稿、字体和码位提示。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "符号介绍面板"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "悬停速览，右键或 Alt+Enter 固定展开；有演示素材时也在这里显示。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m17-workflow"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "先试一遍"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-section-01"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "输入、修改与输出"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "IPA → 基础图表",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "的元音图点 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "a",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，下方出现 a。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "搜索"
+                  },
+                  {
+                    "type": "text",
+                    "text": "鼻化",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。把光标放到 a 后，"
+                  },
+                  {
+                    "type": "text",
+                    "text": "取消选区",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，点深色 ◌̃，得到 ã。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选中整个 ã，再点另一普通符号或完整例示，会替换这段文字。点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "撤销",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "可恢复。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "悬停或右键符号",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "查看用法与实际输入；看完可收起详情。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "复制全部",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "粘贴到目标文档，或点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存文本",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "下载 TXT。核对字符和实际文件后再离开。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "浅色按钮会输入完整例示。例如 ẽ 会整串写入并替换选区，不会只给原字母加鼻化。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-workflow-search"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "搜不到时怎么找"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "先选 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "IPA / extIPA / VoQS",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，检索只在当前体系内进行。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "输入符号、中英文名称、"
+                  },
+                  {
+                    "type": "text",
+                    "text": "U+1DF06",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 形式的码位或已有 CIN 别名。支持部分词匹配，不区分英文大小写。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "核对"
+                  },
+                  {
+                    "type": "text",
+                    "text": "找到项数、名称与当前体系",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "后再点结果。搜索时分区按钮隐藏。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "清空搜索",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "返回原分区。换体系后搜索词仍在，需要重新核对结果。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m17-figure-search-replace-r2-light",
+          "assetId": "m17-search-replace-r2-light-scaled-r20261007",
+          "caption": "搜索 U+0062 后，IPA 结果显示浊双唇爆发音 b，下方选中的 ã 已替换为 b。",
+          "alt": "搜索 U+0062 后，IPA 结果显示浊双唇爆发音 b，下方选中的 ã 已替换为 b。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m17-controls"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "常用控件"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-controls-top"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "查表与显示"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "下列为没有草稿时的默认值。已有草稿会恢复体系、悬停介绍、字号和文本框高度；搜索词、分区页、播放开关、详情和撤销历史不恢复。"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m17-controls-top-table",
+          "caption": "顶部工具与默认状态"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "控件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "默认状态"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "操作"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "IPA / extIPA / VoQS",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "IPA"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "换表与检索范围，保留正文、光标和当前撤销历史。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "分区按钮",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "IPA 基础图表；extIPA 辅音图表"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "IPA 两页、extIPA 四页；VoQS 直接分类。搜索非空时隐藏。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "符号 / 名称 / U+ / CIN",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "空"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "查显示字符、实际输入、名称、码位和别名。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "字号",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "26px；18–54，步长 1"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "同时调整图表和文本框。普通符号通常比设定值小 6px，例示会再缩小；名称字号不变。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "悬停介绍",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "开启"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "自动显示说明；关闭后仍可右键或 Alt+Enter 看详情。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "点击播放",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "关闭，重开仍关闭"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "开启后点符号或聚焦后按 Enter 触发演示，正文与选区保持；关闭后恢复输入。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "帮助",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "未打开"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "进入本章，点返回 国际音标表Plus 回到原正文和选区。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "方法与引用",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "关闭"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "查看出处与许可、复制引用、主动打开公开链接。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m17-figure-help-open-r2-light",
+          "assetId": "m17-help-open-r2-light-scaled-r20261007",
+          "caption": "本模块说明书的目录、搜索与右上返回 国际音标表Plus 按钮。",
+          "alt": "本模块说明书的目录、搜索与右上返回 国际音标表Plus 按钮。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "字号提交时取整并限制在 18–54，空值或无效值恢复 26。它只改变显示，正文字符和导出编码保持原样。页面缩放与应用基础字号在全局设置中调整。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-controls-editor"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "编辑文字"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m17-controls-editor-table",
+          "caption": "文本编辑工具"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "控件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "用法与反馈"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "国际音标文本",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "支持手动输入、粘贴、中文和换行。读取草稿时暂不可输入。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "文本区分隔条",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "默认 120px，范围 96–360。向上拖加高；聚焦后 ↑/↓ 每次调 16px，Home 最小、End 最大。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "复制全部 / 全选",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "复制整份正文；空文本给提示。全选用于替换、包围范围或手工复制。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "撤销 / 重做",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Ctrl/⌘+Z 撤销，Ctrl/⌘+Shift+Z 或 Ctrl+Y 重做。没有历史时禁用；撤销后新编辑会清掉重做分支。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "保存文本",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "发起 UTF-8 TXT 下载，空正文也可保存。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "清空",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "空文本时禁用。清空可撤销，已经导出的文件保留。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "另存独立草稿",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "草稿错误提示中出现，用来保护当前正文；仍需同时导出 TXT。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-controls-symbol"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "符号与介绍面板"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m17-controls-symbol-table",
+          "caption": "符号与面板操作"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "入口"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "用法"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "深色符号"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "按实际输入写入光标处或替换选区，也可能是组合记号。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "浅色完整例示"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "输入整串字符，不表示禁用。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "名称简释 / 悬停介绍"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "悬停名称看简释；符号悬停或键盘聚焦约 420ms 后显示介绍，可移入阅读、滚动。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "右键 / Alt+Enter",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "右键符号，或 Tab 聚焦后按 Alt+Enter，固定展开详情。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "输入此项 / 播放此项",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "按顶部播放开关的当前模式执行。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "收起",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "关闭详情并停止当前演示。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "音频 / 视频控件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "有素材时显示，可暂停、拖进度；独立音轨存在时视频静音，两路进度不联动。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "字体许可"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "左下关于 → 内置字体版权与许可 → PTB IPA Plus；窗口默认先显示 Doulos SIL。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-controls-status"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "底部提示"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m17-controls-status-table",
+          "caption": "草稿与字符提示"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "提示"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "怎么看"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "本机草稿"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "读取结束后可编辑；改动显示未保存，写入成功才显示已保存。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "字符数"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "按 Unicode 码点计数，字母和附加号可能各占一项，不等于音段数。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "固定字体就绪 / 字体加载中"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "显示字体载入状态，失败会报错。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "选区码位"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "选择不超过 8 个码点的短片段，底部显示 U+ 序列。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "控制 / 私用区字符"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "列出数量及前几项位置，原文保留，不会自动清理。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "操作反馈"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "显示复制、下载、输入法或组合操作的结果。发起下载后还需检查文件。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m17-advanced"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "三套表与组合输入"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-chart-ipa"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "IPA"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在"
+                  },
+                  {
+                    "type": "text",
+                    "text": "基础图表",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "按辅音方式与部位找符号，或到元音图定位。同格多个按钮先核对名称和清浊。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "需要鼻化、送气、声调或韵律记号时，切到"
+                  },
+                  {
+                    "type": "text",
+                    "text": "附加符号与韵律",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。深色附加号放在基底后，浅色按钮输入完整例示。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "滚动可看屏幕外的条目，右键核对实际输入与来源。分区按钮消失时，"
+                  },
+                  {
+                    "type": "text",
+                    "text": "清空搜索",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "即可恢复。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m17-figure-vowel-detail-r2-light",
+          "assetId": "m17-vowel-detail-r2-light-scaled-r20261007",
+          "caption": "元音 a 的详细介绍展开，名称、码位与说明可见，下方正文为 a。",
+          "alt": "元音 a 的详细介绍展开，名称、码位与说明可见，下方正文为 a。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "辅音矩阵按 14 个部位、13 种方式排列，包含非肺部辅音与补充组合。需要精确查找时，用名称或码位检索更省事。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "空格表示当前未收录入口。标为"
+          },
+          {
+            "type": "text",
+            "text": "组合输入示例",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "的条目沿用既有字母与附加号，不代表新基础字母。"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m17-chart-ipa-table",
+          "caption": "IPA 两页内容"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "分区"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "内容与输入提示"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "辅音（186）"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "基础图表的方式×部位矩阵，同格符号分别可点。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "元音（28）"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "按前、央、后与高低排列，成对时左不圆唇、右圆唇。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "其他符号与连音线（9）"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "区分深色连接工具与浅色 k͡p、t͜s 等完整例示。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "附加符号（80）"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "独立附加号与完整组合。虚线圆只显示位置。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "声调与词重调（34）"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "独立记号与组合例示分开；调级是相对等级，不转换为 Hz。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "超音段（14）"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "重音、长度、音节与韵律边界等，位置依条目说明。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "宽窗的元音图与其他符号在辅音矩阵右侧，窄窗移到下方。大字号下可横向或纵向滚动。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-chart-extipa"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "extIPA"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "extIPA 提供额外构音、部分发声、节奏、不确定片段及外来声音记号。辅音矩阵有 13 个部位、9 种方式、66 个入口。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m17-figure-extipa-consonants-v3",
+          "assetId": "m17-extipa-detail-r4-light-scaled-r20261007",
+          "caption": "extIPA 辅音矩阵、原表阴影格及上方四个分区按钮。",
+          "width": "100%",
+          "align": "center",
+          "alt": "extIPA 辅音矩阵、原表阴影格及上方四个分区按钮。"
+        }
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "extIPA → 辅音图表",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，按方式和部位定位。灰色格表示原表判定不可能的构音，右半灰格表示浊音一侧受限；普通空格表示未收录。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在"
+                  },
+                  {
+                    "type": "text",
+                    "text": "附加符号与发声",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "找独立附加号、发声方向与例示；在"
+                  },
+                  {
+                    "type": "text",
+                    "text": "节奏与其他",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "找范围工具，先选正文再点。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "补充与旧版",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "分开列现行组合与旧记号。输入前右键核对表版和实际字符。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m17-chart-extipa-table",
+          "caption": "extIPA 四页内容"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "分区"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "内容与注意点"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "辅音图表"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "额外辅音 66 项，分别核对清/浊成员。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "附加符号与发声"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "附加符号 26、发声与送气 32、构音部位独立附加号 12。半括号方向有用途区别，先看详情。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "节奏与其他"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "节奏/响度/速度 26，不确定性/无声构音/外来噪声 23，其他声音 18。范围工具包围选区，标签与完整例示按实际输入写入。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "补充与旧版"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "补充构音组合 4，2002 版文献记号 2。补充组合和旧版项目都有专门提示。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m17-figure-extipa-voicing-r2-light",
+          "assetId": "m17-extipa-voicing-r2-light-scaled-r20261007",
+          "caption": "extIPA 附加符号与发声页：附加号、发声与送气、构音部位记号分组显示，下方保留 t͡s。",
+          "alt": "extIPA 附加符号与发声页：附加号、发声与送气、构音部位记号分组显示，下方保留 t͡s。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "当前采用 "
+          },
+          {
+            "type": "text",
+            "text": "ICPLA 2025 表",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，2013 年中文论文讨论的是 2002 版。旧名可用于检索，解释要对照所列版本；部分去鼻化与 VoQS 去鼻化声也需分别查看。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-chart-voqs"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "VoQS"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "VoQS 直接分类展示，无额外分区页。56 项原表术语采用王天恒双语译表，另有 9 个数字、括号、范围和例句入口。V、W、Ṿ、C、V̰、V̤ 等相近标签，先看名称和用法再选。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m17-figure-voqs-categories-v3",
+          "assetId": "m17-voqs-detail-r4-light-scaled-r20261007",
+          "caption": "VoQS 的发声类型、喉上形态、气流类型与范围、程度工具。",
+          "width": "100%",
+          "align": "center",
+          "alt": "VoQS 的发声类型、喉上形态、气流类型与范围、程度工具。"
+        }
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "VoQS",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，按发声类型、喉上形态、气流类型等分组找条目。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "右键看详情",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，核对相近标签。深色写入单项，浅色输入完整例句。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "标记一段音质时，"
+                  },
+                  {
+                    "type": "text",
+                    "text": "先选中正文，再点带标签的大括号工具",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。程度数字只写数字，不会判断强度。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m17-chart-voqs-table",
+          "caption": "VoQS 分类与范围工具"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "分类"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "内容与用法"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "气流类型（4）"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "颊气流、肺部吸气言语、食管气流、气管–食管言语。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "发声类型（26）"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "常态浊声、假声、耳语、嘎裂、气声、糙声及组合。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "喉位高度（2）"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "喉位偏高声、喉位偏低声。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "喉上形态"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "唇部 4、舌部 12、软腭 2、颌和舌的形态 6，按范围设置解释。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "大括号与数字（9）"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "程度 1/2/3 表示相对较弱/中等/较强；范围包围正文，完整例句整串写入。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "例如选中 aː，点"
+          },
+          {
+            "type": "text",
+            "text": "糙声范围 {V! … V!}",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，得到 {V! aː V!}，aː 仍选中，可继续核对或嵌套。程度数字不对应统一分贝值、声学阈值或病理严重度。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m17-figure-voqs-range-detail-r2-light",
+          "assetId": "m17-voqs-range-detail-r2-light-scaled-r20261007",
+          "caption": "糙声范围详情展开，文本 aː 位于左右 V! 标签之间并保持选中。",
+          "alt": "糙声范围详情展开，文本 aː 位于左右 V! 标签之间并保持选中。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-insertion"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "组合与范围工具"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 4,
+          "id": "m17-insertion-combining"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "附加号和完整例示"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "要给 a 加鼻化，"
+          },
+          {
+            "type": "text",
+            "text": "光标放到 a 后并取消选区",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，再点深色 ◌̃。虚线圆只显示位置，不会写入。"
+          },
+          {
+            "type": "text",
+            "text": "有选区时，附加号会替换整个选区。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "操作不对就撤销，再重新放光标。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m17-figure-nasal-selection-r2-light",
+          "assetId": "m17-nasal-selection-r2-light-scaled-r20261007",
+          "caption": "ã 保持选中，底部显示 U+0061 与 U+0303；虚线圆未写入正文。",
+          "alt": "ã 保持选中，底部显示 U+0061 与 U+0303；虚线圆未写入正文。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "浅色 ẽ、b̤ 或音质例句会整串写入。显示与写入不一致时，查看详情中的"
+          },
+          {
+            "type": "text",
+            "text": "实际输入",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 4,
+          "id": "m17-insertion-bridge"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "连音线与滑动箭头"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "输入 t 和 s，"
+                  },
+                  {
+                    "type": "text",
+                    "text": "恰好选中两个字素",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。一个字母及其附加号通常一起算一个字素。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "IPA → 其他符号与连音线",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "中的深色上连音线或下连音线，得到 t͡s 或 t͜s；extIPA 滑动构音工具同样连接两个字素。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选区数量不对会提示且不改正文。重新选择，或点浅色完整例示。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m17-figure-tie-combination-r2-light",
+          "assetId": "m17-tie-combination-r2-light-scaled-r20261007",
+          "caption": "下方 t͡s 已选中，底部可见连接字符 U+0361，右侧是连音线区域。",
+          "alt": "下方 t͡s 已选中，底部可见连接字符 U+0361，右侧是连音线区域。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m17-tie-combination-r2-light-focused-detail-figure",
+          "assetId": "m17-tie-combination-r2-light-focused-detail-scaled-r20261007",
+          "caption": "红框标出深色上、下连音线工具，旁边较浅的按钮为完整例示。",
+          "alt": "上、下连音线区域局部图，深色工具与浅色完整例示并列，红框标出工具入口",
+          "width": "70%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "没有选区时，连接工具只在光标处插入连接字符。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218",
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "它不会自动寻找前后字母。插入与替换会保护字母及其附加号的边界，仍需核对转写。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 4,
+          "id": "m17-insertion-span"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "范围与嵌套"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "先选中文字，再点范围工具",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，原文保留在左右标签之间。extIPA 可用 {f … f}、{allegro … allegro}，VoQS 可用 {…}、{V! … V!}。没有选区时生成空范围，光标放在内部。继续包围选区可嵌套，最后核对每组起止标签。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m17-figure-extipa-loud-range-r2-light",
+          "assetId": "m17-extipa-loud-range-r2-light-scaled-r20261007",
+          "caption": "较响范围包住 pa ta，形成 {f pa ta f}，内部文字仍选中。",
+          "alt": "较响范围包住 pa ta，形成 {f pa ta f}，内部文字仍选中。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 4,
+          "id": "m17-insertion-history"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "输入法与撤销"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "中文输入法请"
+          },
+          {
+            "type": "text",
+            "text": "先完成选词，再点符号",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，否则会提示结束当前组合。手动输入、粘贴、符号点击和清空共用撤销历史，一次输入法提交算一步。历史保留最多 120 步，并有累计容量限制，正文不会因此截断；重开后不恢复撤销历史。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-section-03"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "看介绍与表版"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "悬停介绍默认开启。停留后可读含义、用法、区别、码位与短来源。浮窗会在符号附近避开指针；"
+          },
+          {
+            "type": "text",
+            "text": "移入浮窗可继续阅读和滚动",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，离开自动收起。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "关闭悬停后，"
+          },
+          {
+            "type": "text",
+            "text": "右键符号或 Tab 聚焦后按 Alt+Enter",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "仍可展开详情，并查看实际输入、例示与别名。留意组合输入示例、旧版文献记号和文本替代提示。来源链接需主动点击。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-section-02"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "点击播放"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "勾选"
+                  },
+                  {
+                    "type": "text",
+                    "text": "点击播放",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，点符号或聚焦后按 Enter，展开演示详情，正文与选区保持。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "有素材时可点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "播放此项",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "重复播放，音频/视频分别暂停、拖进度。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "收起",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "、关闭播放、换体系或离开模块会停止演示。继续输入时取消点击播放。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "当前音标例音与实时声道动画仍预留，点击播放默认关闭。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "尚无真实条目素材时会提示此音标尚未添加演示内容；播放失败也会保留文字，不会改成插入字符。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m17-figure-playback-unavailable-r2-light",
+          "assetId": "m17-playback-unavailable-r2-light-scaled-r20261007",
+          "caption": "点击播放已开启，详情提示此音标尚未添加演示内容；原范围文字与选区保留。",
+          "alt": "点击播放已开启，详情提示此音标尚未添加演示内容；原范围文字与选区保留。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "后续条目可提供音频、视频或实时动画。素材不可播放、动画尚未接入都有提示。音视频的进度不联动，暂不能据此要求精确同步。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-section-05"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "固定字体与圈围文本"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "PTB IPA Plus 1.000 基于 Doulos SIL 7.000，补充组合括号、圈围定位和两个文本替代分隔符。13 种单字符圈围用实际字母加 U+20DD，可复制保存。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "多字符圈围用 "
+          },
+          {
+            "type": "text",
+            "text": "⟅…⟆",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、⟅n̥ã⟆ 等文本替代，详情会说明差异。任意多字串不会自动变成原图椭圆框；外部软件还需支持对应字符与字体组合。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m17-output"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "复制与保存"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-section-04"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "导出文本"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "核对附加号、范围标签和换行；选短片段可在底部读 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "U+ 码位",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "复制全部",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，看到已复制全部文字后，到目标文档粘贴核对。复制只带纯文本。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "保存文本",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，完成浏览器或桌面保存流程。默认文件名为 国际音标-YYYY-MM-DD.txt。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "到目标目录确认 TXT 存在，并按 UTF-8 打开核对。",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "backgroundColor": "#fff1c2",
+                          "backgroundColorDark": "#514218",
+                          "color": "#3b2f00",
+                          "colorDark": "#fff0bb"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "发起下载提示只表示下载已启动。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m17-figure-copy-confirmed-r2-light",
+          "assetId": "m17-copy-confirmed-r2-light-scaled-r20261007",
+          "caption": "三行组合与范围文字可见，底部提示已复制全部文字，选区保留。",
+          "alt": "三行组合与范围文字可见，底部提示已复制全部文字，选区保留。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "TXT 保存完整多行文本，不内嵌字体、字号、图表、介绍、素材或编辑历史，也不转换音标体系。Windows 剪贴板的换行形式可能变化，粘贴后核对即可。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m17-figure-save-request-r2-light",
+          "assetId": "m17-save-request-r2-light-scaled-r20261007",
+          "caption": "底部提示已发起 UTF-8 文本下载，文本框仍保留三行正文。",
+          "alt": "底部提示已发起 UTF-8 文本下载，文本框仍保留三行正文。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-output-draft"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "本机草稿"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "编辑后约 450ms 自动保存。"
+          },
+          {
+            "type": "text",
+            "text": "本机草稿已保存",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "表示当前记录写入成功，包含正文、记录中的光标/选区、体系、悬停开关、字号与高度。只移动光标未必触发保存。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "重开恢复已存草稿。旧默认 28px 会迁移到 26px，自选字号与关闭悬停的偏好保留。搜索、分区页、播放、详情及撤销历史不恢复。不同浏览器、桌面实例的草稿可能不同，没有跨设备同步。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "草稿不能代替导出备份。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "显示未保存或存储错误时，先复制或保存 TXT；保护草稿时不要清除站点数据或替换用户数据目录。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m17-recovery"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "遇到问题"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-recovery-conflict"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "草稿冲突"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "出现另一窗口已经修改此草稿时，本窗口停止覆盖，文字仍在。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "先保存 TXT 或复制全部",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "比较另一窗口的版本。要继续保存当前内容，点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "另存独立草稿",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，等待成功提示，再导出。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "独立草稿保留本窗口分支，原记录不覆盖。默认入口仍读原草稿，"
+                  },
+                  {
+                    "type": "text",
+                    "text": "关闭前务必确认外部文件可读。",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "color": "#b42318",
+                          "colorDark": "#ffb4ab"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m17-recovery-conflict-table",
+          "caption": "常见提示与恢复"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "提示或现象"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "处理"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "正在读取草稿"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "等待读取结束；转为错误时先导出可见文字。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "冲突、原草稿被移除或版本/格式未知"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "原记录保留。导出可读正文，再另存独立草稿。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "存储无法打开、读取/写入失败"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "立即复制或导出。另存也可能受同一存储问题影响。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "剪贴板不可用"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "程序会全选；按 Ctrl+C / ⌘C 手工复制，或保存 TXT。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "连线需要恰好两个字素"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "失败不改正文，重选两个完整字素，或用完整例示。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "请先结束当前输入法组合"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "完成选词后重试。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "固定音标字体载入失败"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "文字保留。先导出，再恢复模块资源重开，不按异常字形改转写。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "没有匹配项目"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "换体系、改用码位、缩短词或清空搜索，正文保持。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "无演示、素材无法播放、动画尚未接入"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "正文与选区保持。收起面板，关闭点击播放继续输入；素材需后续补充。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-recovery-external"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "外部显示与下载"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "粘贴后出现空框、圈围分离或附加号错位，先核对码位，再检查目标软件字体。字形异常不一定是字符损坏；控制/私用区提示也不会自动改正文。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "下载取消、被阻止或未选好路径时，可重新保存并检查文件。离开前仍有未保存内容，环境可能提示确认关闭，"
+          },
+          {
+            "type": "text",
+            "text": "先导出再离开",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m17-sources"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "图表与字体的来源"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-sources-editions"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "版本与中文术语"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "IPA 采用 "
+          },
+          {
+            "type": "citation",
+            "attrs": {
+              "referenceId": "M17-IPA-CHART",
+              "label": "International Phonetic Association (2026). International Phonetic Alphabet chart — 2026 reprint"
+            }
+          },
+          {
+            "type": "text",
+            "text": "，界面注明 2026 重印、内容修订至 2015/2005。中文名称参照 "
+          },
+          {
+            "type": "citation",
+            "attrs": {
+              "referenceId": "M17-IPA-CHART-ZH-2007",
+              "label": "中国语言学会语音学分会（2007）. 国际音标中文版（修订至 2005 年）"
+            }
+          },
+          {
+            "type": "text",
+            "text": "，重印年与内容版次分开看。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "IPA 解释参考 "
+          },
+          {
+            "type": "citation",
+            "attrs": {
+              "referenceId": "M17-IPA-HANDBOOK-JIANG-2008",
+              "label": "《国际语音学会手册：国际音标使用指南》"
+            }
+          },
+          {
+            "type": "text",
+            "text": "（2008，第 9–24 页）；英文原版为 1999 年。原书与扫描页不随模块提供。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "extIPA 采用 "
+          },
+          {
+            "type": "citation",
+            "attrs": {
+              "referenceId": "M17-EXTIPA-2025",
+              "label": "ICPLA《Extensions to the IPA — 2025 chart》"
+            }
+          },
+          {
+            "type": "text",
+            "text": " 的 2025 表。"
+          },
+          {
+            "type": "citation",
+            "attrs": {
+              "referenceId": "M17-EXTIPA-LV-JIANG-2013",
+              "label": "吕佳、江荻（2013）《国际音标扩展表的分类、命名与功能》"
+            }
+          },
+          {
+            "type": "text",
+            "text": "（2013，21(6)，665–668）讨论 2002 版，旧版另列。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "VoQS 采用 "
+          },
+          {
+            "type": "citation",
+            "attrs": {
+              "referenceId": "M17-VOQS-BALL-2018",
+              "label": "Revisions to the VoQS system for the transcription of voice quality"
+            }
+          },
+          {
+            "type": "text",
+            "text": " 的图 2：2016 表版，2017 在线发表，2018 卷期。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "56 项中文名称采用 "
+          },
+          {
+            "type": "citation",
+            "attrs": {
+              "referenceId": "M17-VOQS-ZH-UNTPHESOCA",
+              "label": "王天恒《VoQS：音质符号（2016 中英双语版）》"
+            }
+          },
+          {
+            "type": "text",
+            "text": "（Zenodo，DOI 10.5281/zenodo.10206204）。原表作者另列，软件整理为交互目录并补充用途说明。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "音质解释另参考 "
+          },
+          {
+            "type": "citation",
+            "attrs": {
+              "referenceId": "M17-VOICE-QUALITY-ESLING-2019",
+              "label": "Esling、Moisik、Benner 与 Crevier-Buchman（2019）《Voice Quality: The Laryngeal Articulator Model》"
+            }
+          },
+          {
+            "type": "text",
+            "text": " 的第 1–2 章；各条目保留具体来源定位。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-sources-license"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "查看许可"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m17-sources-license-table",
+          "caption": "图表、译表与字体的许可范围"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "对象"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "来源与范围"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "IPA 图表"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "International Phonetic Association，CC BY-SA 4.0。交互表保留归属与相同许可，原 PDF 不随包。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "extIPA 2025 图表"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "ICPLA 资源页列 CC BY-SA 3.0及原图复制不改动要求。模块自主重排与解释，不提供原图。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "VoQS 中文译表"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "王天恒，Zenodo DOI 10.5281/zenodo.10206204，CC BY 4.0。保留译者、原作者与交互改写说明。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "论文与书籍"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "引用不代表获得原 PDF 或图版的分发许可。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "PTB IPA Plus 字体"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Doulos SIL 7.000、Noto 及项目派生字体，SIL Open Font License 1.1。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "CIN 与历史资料"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "仅用于有限别名检索与现代编码核对，原文件许可单独处理。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "译表、图表、论文与字体的许可各自适用。公开条款可查看："
+          },
+          {
+            "type": "text",
+            "text": "VoQS 译表 CC BY 4.0",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://creativecommons.org/licenses/by/4.0/",
+                  "target": "_blank"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、"
+          },
+          {
+            "type": "text",
+            "text": "IPA 图表 CC BY-SA 4.0",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://creativecommons.org/licenses/by-sa/4.0/",
+                  "target": "_blank"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "字体来源见 "
+          },
+          {
+            "type": "citation",
+            "attrs": {
+              "referenceId": "M17-PTB-IPA-PLUS-FONT",
+              "label": "SIL Global; Noto authors; PhoneticToolbox contributors (2026). PTB IPA Plus 1.000 — module font derived from Doulos SIL 7.000"
+            }
+          },
+          {
+            "type": "text",
+            "text": "。查看全文："
+          },
+          {
+            "type": "text",
+            "text": "左下关于 → 内置字体版权与许可 → PTB IPA Plus",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，包含 Doulos、Noto 与 OFL。"
+          },
+          {
+            "type": "text",
+            "text": "亦可打开 "
+          },
+          {
+            "type": "text",
+            "text": "SIL Open Font License 1.1 官方文本",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://openfontlicense.org/open-font-license-official-text/",
+                  "target": "_blank"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m17-figure-font-license-r2-light",
+          "assetId": "m17-font-license-r2-light-scaled-r20261007",
+          "caption": "内置字体许可窗口的 PTB IPA Plus 页签，显示版本、Doulos/Noto 来源与 OFL 原文。",
+          "alt": "内置字体许可窗口的 PTB IPA Plus 页签，显示版本、Doulos/Noto 来源与 OFL 原文。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3,
+          "id": "m17-sources-boundary"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "使用时的边界"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "模块输出字符与说明，不分析音频或自动判断转写是否合适。图表位置、声调等级和 VoQS 数字也不提供个体测量或诊断。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "补充组合、旧版记号与圈围文本都有具体用途提示，复制后仍需核对目标软件显示。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "当前例音与声道动画预留；有播放入口不代表每个条目已有演示。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m17-references",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "参考资料"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "完整书目如下；实际转写请对照所用图表的版次。"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "M17-IPA-CHART",
+                      "label": "International Phonetic Association (2026). International Phonetic Alphabet chart — 2026 reprint"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "M17-EXTIPA-2025",
+                      "label": "International Clinical Phonetics and Linguistics Association (2025). Extensions to the IPA — 2025 chart"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "M17-VOQS-BALL-2018",
+                      "label": "Martin J. Ball and John H. Esling and B. Craig Dickson (2018). Revisions to the VoQS system for the transcription of voice quality"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "M17-VOQS-ZH-UNTPHESOCA",
+                      "label": "王天恒. VoQS：音质符号（2016 中英双语版）[EB/OL]. Zenodo(2020-08-30)[2023-12-26]. https://doi.org/10.5281/zenodo.10206204."
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "M17-PTB-IPA-PLUS-FONT",
+                      "label": "SIL Global; Noto authors; PhoneticToolbox contributors (2026). PTB IPA Plus 1.000 — module font derived from Doulos SIL 7.000"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "M17-EXTIPA-LV-JIANG-2013",
+                      "label": "吕佳、江荻 (2013). 国际音标扩展表的分类、命名与功能"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "M17-IPA-CHART-ZH-2007",
+                      "label": "中国语言学会语音学分会（2007）. 国际音标中文版（修订至 2005 年）"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "M17-IPA-HANDBOOK-JIANG-2008",
+                      "label": "国际语音学会编，江荻译（2008）. 国际语音学会手册：国际音标使用指南"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "M17-VOICE-QUALITY-ESLING-2019",
+                      "label": "Esling, J. H., Moisik, S. R., Benner, A., & Crevier-Buchman, L. (2019). Voice Quality: The Laryngeal Articulator Model"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "M17-EXTIPA-BALL-2018",
+                      "label": "Ball, M. J., Howard, S. J., & Miller, K. (2018). Revisions to the extIPA chart"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "M17-EXTIPA-BALL-2024",
+                      "label": "Ball, M. J. (2024). Changes to certain extIPA diacritics"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "M17-EXTIPA-BALL-2025-REPLY",
+                      "label": "Ball, M. J. (2025). Reply to letter concerning the revisions to some diacritics of the extensions to the IPA (extIPA), Ball (2024)"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

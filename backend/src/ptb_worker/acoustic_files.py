@@ -31,7 +31,7 @@ class AcousticFiles(FilePipeline):
                 if str(item['project_id'])!=project or item['sha256']!=ref['sha256'] or item['expires_at']<=now+300:
                     raise JobError('input_unavailable',409)
                 limit=32_000_000 if role=='m07_analysis' else 64_000_000 if role=='audio' else 16_000_000 if role=='dictionary' else 16_000_000 if role in ('parent_result','legacy_result','image') else 2_000_000
-                suffix={'m07_analysis':'.m07.json','transcript':('.lab','.txt','.textgrid'),'dictionary':('.dict','.txt'),'table':('.xlsx','.xls','.csv','.txt','.tsv'),'audio':('.wav','.mp3','.flac'),'textgrid':'.textgrid','lip':'.lip.json','parent_result':'.ptb.json','legacy_result':('.xlsx','.ptb.sqlite','.ptb.sqlite3'),'image':('.png','.jpg','.jpeg','.bmp')}.get(role)
+                suffix={'m07_analysis':'.m07.json','spectral_drawing':'.m09-drawing.json','transcript':('.lab','.txt','.textgrid'),'dictionary':('.dict','.txt'),'table':('.xlsx','.xls','.csv','.txt','.tsv','.docx'),'audio':('.wav','.mp3','.flac'),'textgrid':'.textgrid','lip':'.lip.json','parent_result':'.ptb.json','legacy_result':('.xlsx','.ptb.sqlite','.ptb.sqlite3'),'image':('.png','.jpg','.jpeg','.bmp')}.get(role)
                 if not suffix:raise JobError('invalid_input',422)
                 if item['size_bytes']>limit or not item['name'].lower().endswith(suffix):raise JobError('invalid_input',422)
                 if role=='parent_result':

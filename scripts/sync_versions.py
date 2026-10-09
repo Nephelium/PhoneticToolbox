@@ -16,8 +16,10 @@ def main():
     for package in ['packages/phonetic_core', 'backend', 'desktop']:
         path = ROOT / package / 'pyproject.toml'
         content = path.read_text('utf-8')
-        content = re.sub(r'(?m)^version = ".*"$', f'version = "{version["app_version"]}"', content)
-        content = re.sub(r'phonetic-core==[^"\s]+', 'phonetic-core==' + version['app_version'], content)
+        core_version=version.get('core_version',version['app_version'])
+        package_version=core_version if package=='packages/phonetic_core' else version['app_version']
+        content = re.sub(r'(?m)^version = ".*"$', f'version = "{package_version}"', content)
+        content = re.sub(r'phonetic-core==[^"\s]+', 'phonetic-core==' + core_version, content)
         outputs[path] = content
     frontend = ROOT / 'frontend/package.json'
     value = json.loads(frontend.read_text('utf-8'))

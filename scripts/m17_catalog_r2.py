@@ -60,17 +60,17 @@ def apply_r2(entries, charts):
   if s in ('pulmonic','nonpulmonic','combinations'):
    for old,new in [('闪音／拍音','拍音或闪音'),('挤喉音','喷音'),('挤喉号','喷音号'),('挤喉记号','喷音记号'),('吸气音','啧音')]:
     for key in ('descriptionZh','contrastZh'):e[key]=e[key].replace(old,new)
-  ref(e,'ipa-chart-zh-2007','用户指定图4：2007中文版（修订至2005年）／'+({'pulmonic':'辅音(肺部气流)','nonpulmonic':'辅音(非肺部气流)','vowels':'元音','other':'其他符号','diacritics':'附加符号','suprasegmentals':'超音段','tones':'声调与词重调','combinations':'构音术语与附加符号组合'}[s])+'；中文名称优先依据')
+  ref(e,'ipa-chart-zh-2007','2007中文版（修订至2005年）／'+({'pulmonic':'辅音(肺部气流)','nonpulmonic':'辅音(非肺部气流)','vowels':'元音','other':'其他符号','diacritics':'附加符号','suprasegmentals':'超音段','tones':'声调与词重调','combinations':'构音术语与附加符号组合'}[s]))
   loc={'pulmonic':'第2.4节，pp.9–12（PDF pp.28–31）','nonpulmonic':'第2.5节，pp.12–13（PDF pp.31–32）','vowels':'第2.6节，pp.13–17（PDF pp.32–36）','other':'第2.9节，pp.23–24（PDF pp.42–43）','diacritics':'第2.8节，pp.20–23（PDF pp.39–42）','suprasegmentals':'第2.7节，pp.17–20（PDF pp.36–39）','tones':'第2.7节，pp.18–20（PDF pp.37–39）','combinations':'第2.4、2.8–2.9节，p.12、pp.20–24（PDF p.31、pp.39–43）'}[s]
-  ref(e,'ipa-handbook-jiang-2008',loc+'；构音和转写原则，自主概述；名称与图4冲突时从图4')
+  ref(e,'ipa-handbook-jiang-2008',loc)
   if s=='pulmonic' and v in ('t','d','n','r','ɾ','ɹ','l','ɬ','ɮ'):
-   e['descriptionZh']+='图4中除擦音外的齿、龈、龈后三栏共用相应基本符号；本扩展矩阵以龈栏为导航锚点，具体部位可用附加符号细化。' if v not in ('ɬ','ɮ') else ''
+   e['descriptionZh']+='中文版中除擦音外的齿、龈、龈后三栏共用相应基本符号；本扩展矩阵以龈栏为导航锚点，具体部位可用附加符号细化。' if v not in ('ɬ','ɮ') else ''
   if s=='nonpulmonic' and v in 'ʘǀǃǂǁ':
    ref(e,'ipa-chart-zh-2007','中文名称：啧音，按中文版图表及校正图核对')
   if s=='nonpulmonic' and v in 'ʘǀǃǂǁ':e['contrastZh']='啧音采用舌气流机制，前后闭塞间腔体扩大后释放前部闭塞；与肺部吸气言语区分。ǃ是音标字母，不能以普通感叹号替换。'
   if s=='nonpulmonic' and v in 'ɓɗʄɠʛ':e['contrastZh']='内爆音与喉部上升形成的喷音相区别；也不同于肺部吸气言语。'
   if s=='diacritics' and not e['isExample']:
-   if v=='̚':e['contrastZh']='无闻除阻是图4的名称，指未听到独立的爆破释放。闭塞可以经鼻腔、舌侧或后续音段解除，不能据此判定从未除阻。'
+   if v=='̚':e['contrastZh']='无闻除阻指未听到独立的爆破释放。闭塞可以经鼻腔、舌侧或后续音段解除，不能据此判定从未除阻。'
    if v=='˞':e['contrastZh']='r音色描述听觉性质。舌尖后卷和团舌等不同舌形都可能产生相关音色，不能从此符号唯一反推出舌形。'
    if v in ('̝','̞'):e['contrastZh']='偏高、偏低可改变元音舌位，也可改变辅音的狭窄程度；ɹ̝可用于更强摩擦的实现，β̞可用于近音实现。'
   if s=='vowels':e['descriptionZh']=e['descriptionZh'].replace('高前','闭前').replace('高央','闭央').replace('高后','闭后').replace('半高','半闭').replace('半低','半开').replace('次低','次开').replace('低前','开前').replace('低后','开后')

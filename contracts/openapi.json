@@ -207,6 +207,13 @@
             ],
             "title": "Job Id"
           },
+          "progress": {
+            "default": 0.0,
+            "maximum": 1,
+            "minimum": 0,
+            "title": "Progress",
+            "type": "number"
+          },
           "state": {
             "enum": [
               "not_started",
@@ -290,11 +297,75 @@
         "title": "AcousticBatchSummary",
         "type": "object"
       },
+      "AcousticBundleFile": {
+        "additionalProperties": false,
+        "description": "M01's versioned file budget does not widen M03/M04 manifests.",
+        "properties": {
+          "expires_at": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          },
+          "id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "const": "result",
+            "default": "result",
+            "title": "Kind",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 255,
+            "title": "Name",
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Sha256",
+            "type": "string"
+          },
+          "size_bytes": {
+            "maximum": 4000000000,
+            "minimum": 1,
+            "title": "Size Bytes",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "size_bytes",
+          "sha256",
+          "expires_at"
+        ],
+        "title": "AcousticBundleFile",
+        "type": "object"
+      },
       "AcousticConfigSnapshot": {
         "additionalProperties": false,
         "properties": {
           "backend_policy": {
             "$ref": "#/components/schemas/AcousticBackendPolicy"
+          },
+          "extended": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AcousticExtended"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
           },
           "selection": {
             "$ref": "#/components/schemas/AcousticSelection"
@@ -347,6 +418,58 @@
           "sample_dtype"
         ],
         "title": "AcousticDecodedAudio",
+        "type": "object"
+      },
+      "AcousticExtended": {
+        "additionalProperties": false,
+        "properties": {
+          "audio_channel": {
+            "anyOf": [
+              {
+                "maximum": 7,
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Audio Channel"
+          },
+          "channel_overrides": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "maxProperties": 1000,
+            "title": "Channel Overrides",
+            "type": "object"
+          },
+          "egg": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JointEggSettings"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "max_duration_s": {
+            "const": 1800,
+            "default": 1800,
+            "title": "Max Duration S",
+            "type": "integer"
+          },
+          "revision": {
+            "const": "bounded/1",
+            "default": "bounded/1",
+            "title": "Revision",
+            "type": "string"
+          }
+        },
+        "title": "AcousticExtended",
         "type": "object"
       },
       "AcousticFileManifest": {
@@ -1209,12 +1332,21 @@
           },
           "files": {
             "items": {
-              "$ref": "#/components/schemas/AcousticManagedFile"
+              "$ref": "#/components/schemas/AcousticBundleFile"
             },
             "maxItems": 3001,
             "minItems": 1,
             "title": "Files",
             "type": "array"
+          },
+          "format_revision": {
+            "default": "legacy/1",
+            "enum": [
+              "legacy/1",
+              "m01-bundle/2"
+            ],
+            "title": "Format Revision",
+            "type": "string"
           },
           "kind": {
             "const": "managed_acoustic_files",
@@ -1755,6 +1887,13 @@
             ],
             "title": "Audio Base64"
           },
+          "audio_start_s": {
+            "default": 0.0,
+            "maximum": 1800.0,
+            "minimum": 0.0,
+            "title": "Audio Start S",
+            "type": "number"
+          },
           "config": {
             "$ref": "#/components/schemas/EggTaskConfig"
           },
@@ -1861,7 +2000,7 @@
                 "items": {
                   "type": "number"
                 },
-                "maxItems": 48000,
+                "maxItems": 960000,
                 "type": "array"
               },
               {
@@ -1962,6 +2101,58 @@
         "title": "EggInverseData",
         "type": "object"
       },
+      "EggManagedFile": {
+        "additionalProperties": false,
+        "properties": {
+          "expires_at": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          },
+          "id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "const": "result",
+            "default": "result",
+            "title": "Kind",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 255,
+            "title": "Name",
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Sha256",
+            "type": "string"
+          },
+          "size_bytes": {
+            "maximum": 256000000,
+            "minimum": 1,
+            "title": "Size Bytes",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "size_bytes",
+          "sha256",
+          "expires_at"
+        ],
+        "title": "EggManagedFile",
+        "type": "object"
+      },
       "EggManifest": {
         "additionalProperties": false,
         "properties": {
@@ -1977,12 +2168,21 @@
           },
           "files": {
             "items": {
-              "$ref": "#/components/schemas/AcousticManagedFile"
+              "$ref": "#/components/schemas/EggManagedFile"
             },
             "maxItems": 5,
             "minItems": 2,
             "title": "Files",
             "type": "array"
+          },
+          "format_revision": {
+            "default": "m03/1",
+            "enum": [
+              "m03/1",
+              "m03/2"
+            ],
+            "title": "Format Revision",
+            "type": "string"
           },
           "kind": {
             "const": "managed_egg_files",
@@ -2210,6 +2410,40 @@
       },
       "EggPreviewSession": {
         "properties": {
+          "overview_base64": {
+            "anyOf": [
+              {
+                "maxLength": 24000000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Overview Base64"
+          },
+          "sample_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sample Count"
+          },
+          "sample_rate_hz": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sample Rate Hz"
+          },
           "session_id": {
             "format": "uuid",
             "title": "Session Id",
@@ -2408,7 +2642,7 @@
           "micro_center": {
             "anyOf": [
               {
-                "maximum": 120.0,
+                "maximum": 1800.0,
                 "minimum": 0.0,
                 "type": "number"
               },
@@ -2509,6 +2743,26 @@
           }
         },
         "title": "EggTaskConfig",
+        "type": "object"
+      },
+      "ExportReceipt": {
+        "additionalProperties": false,
+        "properties": {
+          "assets": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "maxItems": 3004,
+            "minItems": 1,
+            "title": "Assets",
+            "type": "array"
+          }
+        },
+        "required": [
+          "assets"
+        ],
+        "title": "ExportReceipt",
         "type": "object"
       },
       "FigureFontSnapshot": {
@@ -3154,6 +3408,106 @@
         "title": "JobView",
         "type": "object"
       },
+      "JointEggSettings": {
+        "additionalProperties": false,
+        "properties": {
+          "auto_prominence": {
+            "default": true,
+            "title": "Auto Prominence",
+            "type": "boolean"
+          },
+          "derived": {
+            "default": false,
+            "title": "Derived",
+            "type": "boolean"
+          },
+          "egg_channel": {
+            "default": 0,
+            "maximum": 7,
+            "minimum": 0,
+            "title": "Egg Channel",
+            "type": "integer"
+          },
+          "gci_method": {
+            "default": "slope",
+            "enum": [
+              "slope",
+              "scale"
+            ],
+            "title": "Gci Method",
+            "type": "string"
+          },
+          "goi_method": {
+            "default": "scale",
+            "enum": [
+              "slope",
+              "scale"
+            ],
+            "title": "Goi Method",
+            "type": "string"
+          },
+          "highpass_cutoff": {
+            "default": 25.0,
+            "exclusiveMinimum": 0,
+            "maximum": 10000,
+            "title": "Highpass Cutoff",
+            "type": "number"
+          },
+          "lowpass_cutoff": {
+            "default": 2000.0,
+            "exclusiveMinimum": 0,
+            "maximum": 48000,
+            "title": "Lowpass Cutoff",
+            "type": "number"
+          },
+          "max_gap_ms": {
+            "default": 50.0,
+            "exclusiveMinimum": 0,
+            "maximum": 1000,
+            "title": "Max Gap Ms",
+            "type": "number"
+          },
+          "peak_prominence": {
+            "default": 0.01,
+            "maximum": 1,
+            "minimum": 0,
+            "title": "Peak Prominence",
+            "type": "number"
+          },
+          "silence_threshold": {
+            "default": 0.01,
+            "maximum": 1,
+            "minimum": 0,
+            "title": "Silence Threshold",
+            "type": "number"
+          },
+          "smooth_ms": {
+            "default": 20.0,
+            "maximum": 1000,
+            "minimum": 0,
+            "title": "Smooth Ms",
+            "type": "number"
+          },
+          "storage": {
+            "default": "aligned",
+            "enum": [
+              "aligned",
+              "cycles"
+            ],
+            "title": "Storage",
+            "type": "string"
+          },
+          "valley_prominence": {
+            "default": 0.01,
+            "maximum": 1,
+            "minimum": 0,
+            "title": "Valley Prominence",
+            "type": "number"
+          }
+        },
+        "title": "JointEggSettings",
+        "type": "object"
+      },
       "LocalM11ComponentRequest": {
         "additionalProperties": false,
         "properties": {
@@ -3697,8 +4051,7 @@
             "enum": [
               "generate",
               "synthesize",
-              "extract",
-              "resynthesize"
+              "extract"
             ],
             "title": "Action",
             "type": "string"
@@ -4410,14 +4763,14 @@
         "additionalProperties": false,
         "properties": {
           "beam": {
-            "default": 10,
+            "default": 100,
             "maximum": 10000.0,
             "minimum": 1.0,
             "title": "Beam",
             "type": "integer"
           },
           "retry_beam": {
-            "default": 40,
+            "default": 400,
             "maximum": 40000.0,
             "minimum": 1.0,
             "title": "Retry Beam",
@@ -4579,16 +4932,57 @@
         "properties": {
           "action": {
             "enum": [
+              "inspect",
               "preview",
               "export"
             ],
             "title": "Action",
             "type": "string"
           },
+          "character_column": {
+            "default": 1,
+            "maximum": 64.0,
+            "minimum": 1.0,
+            "title": "Character Column",
+            "type": "integer"
+          },
+          "computation_revision": {
+            "default": "m14/1",
+            "enum": [
+              "m14/1",
+              "m14/2"
+            ],
+            "title": "Computation Revision",
+            "type": "string"
+          },
           "consonant_only_as_zero_initial": {
             "default": true,
             "title": "Consonant Only As Zero Initial",
             "type": "boolean"
+          },
+          "delimiter": {
+            "default": "auto",
+            "enum": [
+              "auto",
+              "tab",
+              "comma",
+              "semicolon",
+              "chinese_comma",
+              "space"
+            ],
+            "title": "Delimiter",
+            "type": "string"
+          },
+          "encoding": {
+            "default": "auto",
+            "enum": [
+              "auto",
+              "utf-8-sig",
+              "gb18030",
+              "utf-16"
+            ],
+            "title": "Encoding",
+            "type": "string"
           },
           "font": {
             "anyOf": [
@@ -4599,6 +4993,27 @@
                 "type": "null"
               }
             ]
+          },
+          "ipa_column": {
+            "default": 2,
+            "maximum": 64.0,
+            "minimum": 1.0,
+            "title": "Ipa Column",
+            "type": "integer"
+          },
+          "note_column": {
+            "anyOf": [
+              {
+                "maximum": 64.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": 3,
+            "title": "Note Column"
           },
           "settings": {
             "anyOf": [
@@ -4614,6 +5029,20 @@
             "default": true,
             "title": "Skip First Row",
             "type": "boolean"
+          },
+          "start_row": {
+            "default": 2,
+            "maximum": 10001.0,
+            "minimum": 1.0,
+            "title": "Start Row",
+            "type": "integer"
+          },
+          "table_index": {
+            "default": 0,
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Table Index",
+            "type": "integer"
           }
         },
         "required": [
@@ -4834,6 +5263,69 @@
           "rows"
         ],
         "title": "ParameterTable",
+        "type": "object"
+      },
+      "ParameterView": {
+        "additionalProperties": false,
+        "properties": {
+          "end": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 1800.0,
+            "title": "End",
+            "type": "number"
+          },
+          "parameters": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 128,
+            "title": "Parameters",
+            "type": "array"
+          },
+          "start": {
+            "default": 0,
+            "maximum": 1800.0,
+            "minimum": 0.0,
+            "title": "Start",
+            "type": "number"
+          },
+          "width": {
+            "default": 1200,
+            "maximum": 4000.0,
+            "minimum": 32.0,
+            "title": "Width",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "end"
+        ],
+        "title": "ParameterView",
+        "type": "object"
+      },
+      "ParameterWindowRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "asset_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Asset Id",
+            "type": "string"
+          },
+          "view": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ParameterView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "asset_id"
+        ],
+        "title": "ParameterWindowRequest",
         "type": "object"
       },
       "PreviewInterval": {
@@ -5081,6 +5573,34 @@
         "title": "ResultManifestEnvelope",
         "type": "object"
       },
+      "RetentionPolicy": {
+        "additionalProperties": false,
+        "properties": {
+          "days": {
+            "maximum": 3650.0,
+            "minimum": 1.0,
+            "title": "Days",
+            "type": "integer"
+          },
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "exported_cache_days": {
+            "default": 7,
+            "maximum": 3650.0,
+            "minimum": 1.0,
+            "title": "Exported Cache Days",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "enabled",
+          "days"
+        ],
+        "title": "RetentionPolicy",
+        "type": "object"
+      },
       "RetryInput": {
         "additionalProperties": false,
         "properties": {
@@ -5154,6 +5674,23 @@
       "Spec2WavConfig": {
         "additionalProperties": false,
         "properties": {
+          "audio_fft": {
+            "default": 1024,
+            "enum": [
+              512,
+              1024,
+              2048
+            ],
+            "title": "Audio Fft",
+            "type": "integer"
+          },
+          "channel": {
+            "default": 0,
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Channel",
+            "type": "integer"
+          },
           "corners": {
             "anyOf": [
               {
@@ -5169,6 +5706,13 @@
               }
             ],
             "title": "Corners"
+          },
+          "dynamic_range": {
+            "default": 60,
+            "maximum": 120.0,
+            "minimum": 20.0,
+            "title": "Dynamic Range",
+            "type": "number"
           },
           "freq_end": {
             "default": 11025,
@@ -5198,6 +5742,16 @@
             "title": "Min Db",
             "type": "number"
           },
+          "mode": {
+            "default": "image",
+            "enum": [
+              "image",
+              "image_draw",
+              "audio_draw"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
           "n_iter": {
             "default": 32,
             "maximum": 128.0,
@@ -5211,6 +5765,14 @@
             "minimum": 0.0,
             "title": "Seed",
             "type": "integer"
+          },
+          "strokes": {
+            "items": {
+              "$ref": "#/components/schemas/SpectralStroke"
+            },
+            "maxItems": 256,
+            "title": "Strokes",
+            "type": "array"
           },
           "target_sr": {
             "default": 44100,
@@ -5304,6 +5866,134 @@
         "title": "Spec2WavManifest",
         "type": "object"
       },
+      "Spec2WavPreview": {
+        "additionalProperties": false,
+        "properties": {
+          "channel": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Channel"
+          },
+          "channels": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Channels"
+          },
+          "duration": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration"
+          },
+          "dynamic_range": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dynamic Range"
+          },
+          "height": {
+            "title": "Height",
+            "type": "integer"
+          },
+          "hop_length": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hop Length"
+          },
+          "image_base64": {
+            "title": "Image Base64",
+            "type": "string"
+          },
+          "n_fft": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "N Fft"
+          },
+          "reference_amplitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reference Amplitude"
+          },
+          "sample_rate": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sample Rate"
+          },
+          "samples": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Samples"
+          },
+          "source_sha256": {
+            "title": "Source Sha256",
+            "type": "string"
+          },
+          "width": {
+            "title": "Width",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "image_base64",
+          "width",
+          "height",
+          "source_sha256"
+        ],
+        "title": "Spec2WavPreview",
+        "type": "object"
+      },
       "Spec2WavRequest": {
         "additionalProperties": false,
         "properties": {
@@ -5337,6 +6027,48 @@
           "config"
         ],
         "title": "Spec2WavRequest",
+        "type": "object"
+      },
+      "SpectralStroke": {
+        "additionalProperties": false,
+        "properties": {
+          "color": {
+            "default": 0,
+            "enum": [
+              0,
+              255
+            ],
+            "title": "Color",
+            "type": "integer"
+          },
+          "opacity": {
+            "default": 1,
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Opacity",
+            "type": "number"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/ImagePoint"
+            },
+            "maxItems": 4096,
+            "minItems": 1,
+            "title": "Points",
+            "type": "array"
+          },
+          "size": {
+            "default": 12,
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Size",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "points"
+        ],
+        "title": "SpectralStroke",
         "type": "object"
       },
       "SpectrogramPreview": {
@@ -6863,6 +7595,66 @@
         ]
       }
     },
+    "/api/v1/jobs/local-inputs/stream": {
+      "post": {
+        "operationId": "stream_local_acoustic_input",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "role",
+            "required": true,
+            "schema": {
+              "title": "Role",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "required": true,
+            "schema": {
+              "exclusiveMinimum": 0,
+              "maximum": 4000000000,
+              "title": "Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Stream Input",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
     "/api/v1/jobs/local-lip-conversion": {
       "post": {
         "operationId": "convert_local_legacy_lip",
@@ -6877,6 +7669,45 @@
           }
         },
         "summary": "Convert Lip",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/local-parameter-window": {
+      "post": {
+        "operationId": "read_local_parameter_window",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParameterWindowRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Parameter Window",
         "tags": [
           "jobs"
         ]
@@ -6941,6 +7772,141 @@
           }
         },
         "summary": "Local Result",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/local-storage": {
+      "get": {
+        "operationId": "local_storage_status",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Status",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/local-storage/cleanup": {
+      "post": {
+        "operationId": "clean_expired_local_results",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Cleanup",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/local-storage/clear-all": {
+      "post": {
+        "operationId": "clear_all_local_result_caches",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Clear All",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/local-storage/export-receipt": {
+      "post": {
+        "operationId": "acknowledge_local_export",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportReceipt"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Exported",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/local-storage/policy": {
+      "post": {
+        "operationId": "configure_local_retention",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RetentionPolicy"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Policy",
         "tags": [
           "jobs"
         ]
@@ -7862,6 +8828,47 @@
           }
         },
         "summary": "Reconstruct",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/spec2wav/preview": {
+      "post": {
+        "operationId": "preview_spec2wav_source",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Spec2WavRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Spec2WavPreview"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Spec2Wav Preview",
         "tags": [
           "jobs"
         ]

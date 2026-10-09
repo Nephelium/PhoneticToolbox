@@ -1,0 +1,1638 @@
+{
+  "verifiedAt": "2026-10-05",
+  "scope": "Standalone author tool only; excluded from product build",
+  "method": "Official npm lock integrity and installed package metadata/license files; Tiptap official docs/repository checked independently",
+  "packages": [
+    {
+      "name": "@babel/helper-string-parser",
+      "version": "7.29.7",
+      "license": "MIT",
+      "repository": "https://github.com/babel/babel.git",
+      "homepage": "https://babel.dev/docs/en/next/babel-helper-string-parser",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@babel/helper-string-parser/-/helper-string-parser-7.29.7.tgz",
+      "integrity": "sha512-Pb5ijPrZ89GDH8223L4UP8i6QApWxs04RbPQJTeWDV0/keR2E36MeKnyr6LYmUUvqRRI+Iv87SuF1W6ErINzYw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_babel_helper-string-parser/LICENSE",
+          "sha256": "117da2af0d4ce0fe1c8e19b5cff9dcd806adf973d328d27b11d4448c4ff24f76"
+        }
+      ]
+    },
+    {
+      "name": "@babel/helper-validator-identifier",
+      "version": "7.29.7",
+      "license": "MIT",
+      "repository": "https://github.com/babel/babel.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@babel/helper-validator-identifier/-/helper-validator-identifier-7.29.7.tgz",
+      "integrity": "sha512-qehxGkRj55h/ff8EMaJ+cYhyaKlHIxqYDn682wQD7RNp9UujOQsHog2uS0r2vzr4pW+sXf90NeeayjcNaX3fFg==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_babel_helper-validator-identifier/LICENSE",
+          "sha256": "117da2af0d4ce0fe1c8e19b5cff9dcd806adf973d328d27b11d4448c4ff24f76"
+        }
+      ]
+    },
+    {
+      "name": "@babel/parser",
+      "version": "7.29.9",
+      "license": "MIT",
+      "repository": "https://github.com/babel/babel.git",
+      "homepage": "https://babel.dev/docs/en/next/babel-parser",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@babel/parser/-/parser-7.29.9.tgz",
+      "integrity": "sha512-CjXrNHTnvqBVqHgdBysY3vk2T8tpJHb5/RMeHJBTyVa9xgugCB0CJTx/3oO8RV2QRQP391RWpB7D6hLjm8V9uA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_babel_parser/LICENSE",
+          "sha256": "2e97627cb278aa7556fb9e8817368302301a595b6c7582512b8d74c57b773652"
+        }
+      ]
+    },
+    {
+      "name": "@babel/types",
+      "version": "7.29.8",
+      "license": "MIT",
+      "repository": "https://github.com/babel/babel.git",
+      "homepage": "https://babel.dev/docs/en/next/babel-types",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@babel/types/-/types-7.29.8.tgz",
+      "integrity": "sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_babel_types/LICENSE",
+          "sha256": "117da2af0d4ce0fe1c8e19b5cff9dcd806adf973d328d27b11d4448c4ff24f76"
+        }
+      ]
+    },
+    {
+      "name": "@floating-ui/core",
+      "version": "1.8.0",
+      "license": "MIT",
+      "repository": "https://github.com/floating-ui/floating-ui.git",
+      "homepage": "https://floating-ui.com",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@floating-ui/core/-/core-1.8.0.tgz",
+      "integrity": "sha512-0CIZ5itps/8x7BG8dEIhs53BvCUH2PCoogtakwRTut+Arm58sJooJ0AuZhLw2HJYIR5cMLNPBSS728sPho2khQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_floating-ui_core/LICENSE",
+          "sha256": "0e4c9a9b6c71019cbbea3bdc20b01223110a9035700f9c960c8fcbf78c2325ce"
+        }
+      ]
+    },
+    {
+      "name": "@floating-ui/dom",
+      "version": "1.8.0",
+      "license": "MIT",
+      "repository": "https://github.com/floating-ui/floating-ui.git",
+      "homepage": "https://floating-ui.com",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@floating-ui/dom/-/dom-1.8.0.tgz",
+      "integrity": "sha512-yXSrzeHZBTZadLOlfyhCkJHNeLJnHRnRInwdZ40L7ZiaAtrBwoYlsDrX3v5zB1Utk7CLfzcOVnVVWoXEky7Ceg==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_floating-ui_dom/LICENSE",
+          "sha256": "0e4c9a9b6c71019cbbea3bdc20b01223110a9035700f9c960c8fcbf78c2325ce"
+        }
+      ]
+    },
+    {
+      "name": "@floating-ui/utils",
+      "version": "0.2.12",
+      "license": "MIT",
+      "repository": "https://github.com/floating-ui/floating-ui.git",
+      "homepage": "https://floating-ui.com",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@floating-ui/utils/-/utils-0.2.12.tgz",
+      "integrity": "sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_floating-ui_utils/LICENSE",
+          "sha256": "0e4c9a9b6c71019cbbea3bdc20b01223110a9035700f9c960c8fcbf78c2325ce"
+        }
+      ]
+    },
+    {
+      "name": "@jridgewell/sourcemap-codec",
+      "version": "1.6.0",
+      "license": "MIT",
+      "repository": "git+https://github.com/jridgewell/sourcemaps.git",
+      "homepage": "https://github.com/jridgewell/sourcemaps/tree/main/packages/sourcemap-codec",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.6.0.tgz",
+      "integrity": "sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_jridgewell_sourcemap-codec/LICENSE",
+          "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c"
+        }
+      ]
+    },
+    {
+      "name": "@oxc-project/types",
+      "version": "0.152.0",
+      "license": "MIT",
+      "repository": "git+https://github.com/oxc-project/oxc.git",
+      "homepage": "https://oxc.rs",
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/@oxc-project/types/-/types-0.152.0.tgz",
+      "integrity": "sha512-oM/5rLBm2tPkg0iBgkH/FOeR3PCDpY19GTgAZjMFM8h9WI9VW7cLgzp6nwtarYKmovavIQZ+Fe/RKX/8C8O/Rw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_oxc-project_types/LICENSE",
+          "sha256": "95ced5ecf1133fbf41d409b5555c86c344f83f3b019926057ddbc07cfdcc27b3"
+        }
+      ]
+    },
+    {
+      "name": "@rolldown/binding-win32-x64-msvc",
+      "version": "1.2.12",
+      "license": "MIT",
+      "repository": "git+https://github.com/rolldown/rolldown.git",
+      "homepage": "https://rolldown.rs/",
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/@rolldown/binding-win32-x64-msvc/-/binding-win32-x64-msvc-1.2.12.tgz",
+      "integrity": "sha512-WIw2haVKwjuYdXkHaoC0mF8Le71TuCBxjrdKqLbJGctbBABj+ClfmNvtbOnzpq3RokNo5+V1qhtSzJyXorsklQ==",
+      "licenseFiles": []
+    },
+    {
+      "name": "@rolldown/pluginutils",
+      "version": "1.0.1",
+      "license": "MIT",
+      "repository": "git+https://github.com/rolldown/plugins.git",
+      "homepage": "https://github.com/rolldown/plugins/tree/main/packages/pluginutils#readme",
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/@rolldown/pluginutils/-/pluginutils-1.0.1.tgz",
+      "integrity": "sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_rolldown_pluginutils/LICENSE",
+          "sha256": "e1919b3b98b8bf6c1b99fcc60a0ed46027c97ac947432e1278446c9606f50161"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/core",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/core/-/core-3.31.4.tgz",
+      "integrity": "sha512-cIVUQYBycighzsk6GbmCef8ZiEDVxoT5EuAe4xg2q9dNkDqCXVqI4YGr9aavCQEiAS4uHiRwqvcsPqJHipFDfg==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_core/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-blockquote",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-blockquote/-/extension-blockquote-3.31.4.tgz",
+      "integrity": "sha512-FHnbvCIW0eDKgUUFjmvEB0ax9YUBW7/Unm+38qpuQROvU872yRqhnDtycKT9IKk46jNdjM4A4fAGUbge10CrAA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-blockquote/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-bold",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-bold/-/extension-bold-3.31.4.tgz",
+      "integrity": "sha512-QX1xoXvO0gz6uVsoLegumqQ4MJXL7lcUDQZ4J7la7LBqiIh4efrCmp2EXbhpr37M/YQL7w8q3g7H/VovSh7xIg==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-bold/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-bubble-menu",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-bubble-menu/-/extension-bubble-menu-3.31.4.tgz",
+      "integrity": "sha512-Ml/yswuys+3QkOMajfXyAGlUKCxEbT3dMyF8vHwQ5mDk9MDm+dqp10It5CrDBkUT/KkVTa6AJI3kb0TXZJZiAA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-bubble-menu/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-bullet-list",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-bullet-list/-/extension-bullet-list-3.31.4.tgz",
+      "integrity": "sha512-gHn1RDR4olCnmKpH+G9x+f8R+iKPNVdLlvbFkIpR/stjabZi7fB4Rr5GiHWsulbtxAjdQrNjnVeNdGM4rBxApw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-bullet-list/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-code",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-code/-/extension-code-3.31.4.tgz",
+      "integrity": "sha512-pzi8GNDs5J1DEoO1HNYiJ5WZpgOZzlc/2VIa77mMpEuD4hZxuK0BQzlF/O6Ps/O5P1lGJT4xS0Yowpzb9mD9RA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-code/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-code-block",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-code-block/-/extension-code-block-3.31.4.tgz",
+      "integrity": "sha512-su/B/cfQ1HpiHl6JfJ6wa+RVEptiYsV4dCntE8XQNj2dUcII4y6w6PQbbswOoDrU79uXHsAvpy44215rghG4LA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-code-block/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-document",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-document/-/extension-document-3.31.4.tgz",
+      "integrity": "sha512-vT20u62RWR+BLIyNJ54e24MPUY4zm8VF7tcgJnxQXi7BgVJWcNMtMWWDIkPJ4JNXwfoIznKh3jzYsaYmbCJgQQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-document/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-dropcursor",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-dropcursor/-/extension-dropcursor-3.31.4.tgz",
+      "integrity": "sha512-5TbCPCC4RL+QT1NYHjXCYDBHBtVqYOFvFEnk3v98lvXCM2PNL13ofXUfJPuykAVy1OdTAx4DlZOQAD9WKy/IdQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-dropcursor/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-floating-menu",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-floating-menu/-/extension-floating-menu-3.31.4.tgz",
+      "integrity": "sha512-pKzulkDmolpVt7IP9FSPsC5pKbXQ5pyeqkaAYr8cyOVW+KUObpPRIzAuXvEso8PCjWgwJ1f2qyishOEMw8MbfQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-floating-menu/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-gapcursor",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-gapcursor/-/extension-gapcursor-3.31.4.tgz",
+      "integrity": "sha512-hBogUAepQH6IQUhaePhPWzQ1Oeu+yqlJVMKO06Eue5m36uRy1PZZAQ780pCGT0SC4R5MH2td1N8EUQ7bupQdDA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-gapcursor/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-hard-break",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-hard-break/-/extension-hard-break-3.31.4.tgz",
+      "integrity": "sha512-oLNajLyUvRMg1qtzFgKGduygTlpaHFB9PU+M+pUWdA4sa1bRnxS2Y++Ao4lHYopJ7nxatLndrYoCIHkotqkPDQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-hard-break/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-heading",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-heading/-/extension-heading-3.31.4.tgz",
+      "integrity": "sha512-KqlSeLathpdxCc3kVHBCA/RkHvb+V7u5vgiSEu1Cv3L70r7F19COMGODav/k1AGYBgEXKL6lM9cy8cloE5/28g==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-heading/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-highlight",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-highlight/-/extension-highlight-3.31.4.tgz",
+      "integrity": "sha512-mv6h1eJTp6nZ850JB59T/o6AP/nAVP/GrQwhSTM2eeegcKUn7IdeerPZfvkZbYlvV5ilGPAoSOmYtWW7ZiEkmQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-highlight/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-horizontal-rule",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-horizontal-rule/-/extension-horizontal-rule-3.31.4.tgz",
+      "integrity": "sha512-ws0Kh8kfHL7ESILSXj0HJAXs8G10ewlW1sedXKm8dm0op9L8il+xl8bEJVoqG/jMf77900Fc2CaQldcCGRpF1g==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-horizontal-rule/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-italic",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-italic/-/extension-italic-3.31.4.tgz",
+      "integrity": "sha512-pftTQBPYZocNDAj/u6OyDIp7YxmN0+N895cQPogJQ6qMHdLiRhzgawiEewJkniyN1w8k3Wx/Etp8pTKrxaOOBQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-italic/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-link",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-link/-/extension-link-3.31.4.tgz",
+      "integrity": "sha512-LLxW3qfeL9gvDdMPVdxYFYZ0zZSjsoIDhOqjJ5U2UfaK3U2iwkKTBgV2qT+FWf3uUHmBRjBZ08q3dRPmWBAD5g==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-link/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-list",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-list/-/extension-list-3.31.4.tgz",
+      "integrity": "sha512-Wd4YRYxOdf+TtF33/QsRo1RK1CecVxjYGjUBIKNGHAywfh8tghgV4YOUCiV1iJqYt2IBs+RWlIqTmdIPzBrd4A==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-list/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-list-item",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-list-item/-/extension-list-item-3.31.4.tgz",
+      "integrity": "sha512-ao8XAPvhOrtGFILs+fKtOM91omDSpUC8X19m44gbaq5xJDVpIMZ0rP+NAVUS72G7LskhcHa0bu/Pm022bUVjVw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-list-item/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-list-keymap",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-list-keymap/-/extension-list-keymap-3.31.4.tgz",
+      "integrity": "sha512-etdkl/YnYfwtALDxecJ+4WYgJAez1fn1vzzZqJklZBpgqiZtny3NxpvWS7/JhsltNG84Wo/oovpfJgVmzhddrw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-list-keymap/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-ordered-list",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-ordered-list/-/extension-ordered-list-3.31.4.tgz",
+      "integrity": "sha512-UNWyF+Dhm08znszIMnT8Y2kJ1lvtiCvUGs1aG7m9cPHxDa7VycWnOqdtXWkc+6xRLNiC0zgWCFWgLLHduV8pRQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-ordered-list/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-paragraph",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-paragraph/-/extension-paragraph-3.31.4.tgz",
+      "integrity": "sha512-WZlBgw+XVKXerRlmEsoQ7x1PwSU+dh3X+b70+ViZsLebdfsmmYBIaNDrvIGwG9UQr5eLnddJnZplMSTI2YKs+g==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-paragraph/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-strike",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-strike/-/extension-strike-3.31.4.tgz",
+      "integrity": "sha512-4MBr63TJIMqxCjE+gAPdlY1IdELgvbAP516K3Ntn/BkcpEbEoPMEYVz+XTxULyHQEuARDO6jsXPPxRXpA74jaw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-strike/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-subscript",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-subscript/-/extension-subscript-3.31.4.tgz",
+      "integrity": "sha512-90gg5+av98JxdVTIR7PcZWIJj/fMI+3SJlIXIYBhpU6I7ZE02rUPz4DWluSlzNB04TFy+f4++CyB0wBiCwxpQQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-subscript/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-superscript",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-superscript/-/extension-superscript-3.31.4.tgz",
+      "integrity": "sha512-fN2sVrfYfFHXUSWOnAplHfOBbVhYi9SRuESAvwlNqq/8Em0U7NSNmGG3MipOZaPwWZ2/N4GtkViuk22gYrCdQA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-superscript/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-table",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-table/-/extension-table-3.31.4.tgz",
+      "integrity": "sha512-ai7DLwg/xmhlUas3LgWaPQdPlZ8StliY6Dn+iUH6eyZ/TQqRDY/oeIsKWaHpXq22T5M5dMlZPTg172ZdtwKswQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-table/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-text",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-text/-/extension-text-3.31.4.tgz",
+      "integrity": "sha512-WL2ZRpFksgQcXJN05/UQH09YCH9LlhdLrSEcviASvEH/aAfsKiJlDrouN8PET+YAWK/F5xFc5/Q1z0xj+I23jw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-text/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-text-align",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-text-align/-/extension-text-align-3.31.4.tgz",
+      "integrity": "sha512-Z8x/x2N4BiFwu7+UfJABT/OQbwZPUHbmvAH6Fo5lefgeIlTwAXFBzz4x7Eeed7iJAcXUzOnyd6bmkhK36gYJ2g==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-text-align/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-text-style",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-text-style/-/extension-text-style-3.31.4.tgz",
+      "integrity": "sha512-djeemliEWmqs3cJrUyMG+17HbjHyf6D/0NkIHl/RkVHYOCX1AYMZ7r+XLefApSNBCAx/aFh1hJzaMlnGbnTaAw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-text-style/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extension-underline",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extension-underline/-/extension-underline-3.31.4.tgz",
+      "integrity": "sha512-0iFGPIqmqGkCrOFh1OPo7Dzv5s86dVN3bZaugsz0jK04otkb8bn04ZDKP2/6Wq+lcK0M9DfJ0QqfW5hC2nBZxQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extension-underline/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/extensions",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/extensions/-/extensions-3.31.4.tgz",
+      "integrity": "sha512-nIupIne/sHpV2Kw1M4MOmr4+G454KI8BXM5+LWKOU2EpzfALZWVSy7koF9lVRna4Zp5Gv8hfg5Z8kvmrYQvhkw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_extensions/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/pm",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/pm/-/pm-3.31.4.tgz",
+      "integrity": "sha512-x7dwth79cQp4QGae66/RJqMDJQv0+n7b7dD7cyFQBWqzPFLJxN/4paHY4qbWedZjNLhRyIOAD9a5q4AYM1zmPA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_pm/LICENSE",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/starter-kit",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/starter-kit/-/starter-kit-3.31.4.tgz",
+      "integrity": "sha512-u7HIJ9vK6kFe4S4J2CIcDLrhRZzoTMSyU0XxjQ6lUNF7pWW3rMi//pvi8RcsZmxGjyb8CpXAqYgNl7f9WyaUeA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_starter-kit/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@tiptap/vue-3",
+      "version": "3.31.4",
+      "license": "MIT",
+      "repository": "https://github.com/ueberdosis/tiptap",
+      "homepage": "https://tiptap.dev",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@tiptap/vue-3/-/vue-3-3.31.4.tgz",
+      "integrity": "sha512-xi/t4EfSX9QEbOSC0RhkzhT78GJSeJ2Jmz0EBV860lcxDdNd+Xw1pfOjFseNz2E+r3zhTcKDBsLblhCao7eF5Q==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_tiptap_vue-3/LICENSE.md",
+          "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+        }
+      ]
+    },
+    {
+      "name": "@vitejs/plugin-vue",
+      "version": "6.0.8",
+      "license": "MIT",
+      "repository": "git+https://github.com/vitejs/vite-plugin-vue.git",
+      "homepage": "https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue#readme",
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/@vitejs/plugin-vue/-/plugin-vue-6.0.8.tgz",
+      "integrity": "sha512-0ZjgOg7oO6farnNGup7yvoM/YXZV84OZxHAwtflItNa/6zzQyVb5LNxyea3FEKEX2XlagIKzrlH7wwxkKgtiew==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_vitejs_plugin-vue/LICENSE",
+          "sha256": "29b68325fe026047d13e187b44c33b2acacf7dc647dec4583702e59f235e13b5"
+        }
+      ]
+    },
+    {
+      "name": "@volar/language-core",
+      "version": "2.4.28",
+      "license": "MIT",
+      "repository": "https://github.com/volarjs/volar.js.git",
+      "homepage": null,
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/@volar/language-core/-/language-core-2.4.28.tgz",
+      "integrity": "sha512-w4qhIJ8ZSitgLAkVay6AbcnC7gP3glYM3fYwKV3srj8m494E3xtrCv6E+bWviiK/8hs6e6t1ij1s2Endql7vzQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_volar_language-core/LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ]
+    },
+    {
+      "name": "@volar/source-map",
+      "version": "2.4.28",
+      "license": "MIT",
+      "repository": "https://github.com/volarjs/volar.js.git",
+      "homepage": null,
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/@volar/source-map/-/source-map-2.4.28.tgz",
+      "integrity": "sha512-yX2BDBqJkRXfKw8my8VarTyjv48QwxdJtvRgUpNE5erCsgEUdI2DsLbpa+rOQVAJYshY99szEcRDmyHbF10ggQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_volar_source-map/LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ]
+    },
+    {
+      "name": "@volar/typescript",
+      "version": "2.4.28",
+      "license": "MIT",
+      "repository": "https://github.com/volarjs/volar.js.git",
+      "homepage": null,
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/@volar/typescript/-/typescript-2.4.28.tgz",
+      "integrity": "sha512-Ja6yvWrbis2QtN4ClAKreeUZPVYMARDYZl9LMEv1iQ1QdepB6wn0jTRxA9MftYmYa4DQ4k/DaSZpFPUfxl8giw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_volar_typescript/LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ]
+    },
+    {
+      "name": "@vue/compiler-core",
+      "version": "3.5.42",
+      "license": "MIT",
+      "repository": "git+https://github.com/vuejs/core.git",
+      "homepage": "https://github.com/vuejs/core/tree/main/packages/compiler-core#readme",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@vue/compiler-core/-/compiler-core-3.5.42.tgz",
+      "integrity": "sha512-2Ye1ilMtKXxl8qZUrQ5j0CdgenFp/HFQmta6rfRyfEsTG69L6Wk+tWuNoHYHMx9E8tF2Slvdg1FuwDvAXdy1LQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_vue_compiler-core/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/compiler-dom",
+      "version": "3.5.42",
+      "license": "MIT",
+      "repository": "git+https://github.com/vuejs/core.git",
+      "homepage": "https://github.com/vuejs/core/tree/main/packages/compiler-dom#readme",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@vue/compiler-dom/-/compiler-dom-3.5.42.tgz",
+      "integrity": "sha512-qbhQZEFmycr+ni/qyuccS4sucNN7VAbDfbkvNxWOX2VfgFm90MNs3/UhRNKoPMEIVn0F8gdlYjLPvqxHwHeQOA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_vue_compiler-dom/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/compiler-sfc",
+      "version": "3.5.42",
+      "license": "MIT",
+      "repository": "git+https://github.com/vuejs/core.git",
+      "homepage": "https://github.com/vuejs/core/tree/main/packages/compiler-sfc#readme",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@vue/compiler-sfc/-/compiler-sfc-3.5.42.tgz",
+      "integrity": "sha512-fkCAFB4okcAANGMThboWnScp/gzWjU0ZSkVnjTIiplmMDq2uq0tIB3j+xVu4rhv5rvOgBySCysudmbMd6xRRqw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_vue_compiler-sfc/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/compiler-ssr",
+      "version": "3.5.42",
+      "license": "MIT",
+      "repository": "git+https://github.com/vuejs/core.git",
+      "homepage": "https://github.com/vuejs/core/tree/main/packages/compiler-ssr#readme",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@vue/compiler-ssr/-/compiler-ssr-3.5.42.tgz",
+      "integrity": "sha512-xmLk3wLkbizPAiLyomjgFFosf2ys9b5Ghb+oh/k2tnvipNz8OFrQOiTcWCzyK7MpBp9KkyGtfvgfLUivbmuGYA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_vue_compiler-ssr/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/language-core",
+      "version": "3.3.11",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/language-tools.git",
+      "homepage": null,
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/@vue/language-core/-/language-core-3.3.11.tgz",
+      "integrity": "sha512-QJmpliwAVpC/OxubIByPAhNzsQPRc8/gxlN2qnVzVfIMjMDz/9RnXRFoetjz5yEgXVXyp4LqhXq3V53PjmNzFw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_vue_language-core/LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ]
+    },
+    {
+      "name": "@vue/reactivity",
+      "version": "3.5.42",
+      "license": "MIT",
+      "repository": "git+https://github.com/vuejs/core.git",
+      "homepage": "https://github.com/vuejs/core/tree/main/packages/reactivity#readme",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@vue/reactivity/-/reactivity-3.5.42.tgz",
+      "integrity": "sha512-TzNNfKpb7hDxbQltwAut8VDQA5YP+BuRlxntHUuRjyKwlMvmAPbs3unhCvieijifY6vFfVBwsS7wG/C7uq+bEQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_vue_reactivity/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/runtime-core",
+      "version": "3.5.42",
+      "license": "MIT",
+      "repository": "git+https://github.com/vuejs/core.git",
+      "homepage": "https://github.com/vuejs/core/tree/main/packages/runtime-core#readme",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@vue/runtime-core/-/runtime-core-3.5.42.tgz",
+      "integrity": "sha512-9uACtuHs7vJGkm5Bp3xu4xRDLFTIYy5DgxpToVjqGIAhAEKwQfsaLvKINhM6nFVp6bZPRFGdDqd1g52MqKsotA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_vue_runtime-core/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/runtime-dom",
+      "version": "3.5.42",
+      "license": "MIT",
+      "repository": "git+https://github.com/vuejs/core.git",
+      "homepage": "https://github.com/vuejs/core/tree/main/packages/runtime-dom#readme",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@vue/runtime-dom/-/runtime-dom-3.5.42.tgz",
+      "integrity": "sha512-rsCmhiWLaRxGltLwhlCWyYkFn7WAbKRh0q17eZ1A6Dq6eqc2ACQ61IIryxz0LrsvCzHSilLA9JHovVwM8CNE2g==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_vue_runtime-dom/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/server-renderer",
+      "version": "3.5.42",
+      "license": "MIT",
+      "repository": "git+https://github.com/vuejs/core.git",
+      "homepage": "https://github.com/vuejs/core/tree/main/packages/server-renderer#readme",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@vue/server-renderer/-/server-renderer-3.5.42.tgz",
+      "integrity": "sha512-2++5dUyYS4gvo7xQXSECUDhB7TS0aOl5SeVfC5qSq1Jgfhjvegw1zqhwTIR3imZ+QYPJQw9gfcFvXGAjGZ7ajQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_vue_server-renderer/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/shared",
+      "version": "3.5.42",
+      "license": "MIT",
+      "repository": "git+https://github.com/vuejs/core.git",
+      "homepage": "https://github.com/vuejs/core/tree/main/packages/shared#readme",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/@vue/shared/-/shared-3.5.42.tgz",
+      "integrity": "sha512-2rPxex1jQf4jvl9MOHl6YaXCPcrNqz/FstMOEh3QWY+/OME9nQTvl9WYeCwhW7AFjaR0SnngZGlp/wkR6rkI6g==",
+      "licenseFiles": [
+        {
+          "path": "licenses/_vue_shared/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "alien-signals",
+      "version": "3.2.1",
+      "license": "MIT",
+      "repository": "git+https://github.com/stackblitz/alien-signals.git",
+      "homepage": null,
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/alien-signals/-/alien-signals-3.2.1.tgz",
+      "integrity": "sha512-I8FjmltrfnDFoZedi5CG8DghVYNhzb/Ijluz7tCSJH0xpd0484Kowhbb1XDYOxfJpU1p5wnM2X54dA+IfGyD1g==",
+      "licenseFiles": [
+        {
+          "path": "licenses/alien-signals/LICENSE",
+          "sha256": "75863f712f8f0603b0dba33edf4b725bab80fc858a51756e5905a3c4c8087169"
+        }
+      ]
+    },
+    {
+      "name": "commander",
+      "version": "15.0.0",
+      "license": "MIT",
+      "repository": "git+https://github.com/tj/commander.js.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/commander/-/commander-15.0.0.tgz",
+      "integrity": "sha512-z67u4ZhzCL/Tydu1lJARtEZYWbWaN7oYLHbsuzocr6y4N6WZAagG3RQ4FW61V1/0+jImpj293XfrcYnd1qxtPg==",
+      "licenseFiles": [
+        {
+          "path": "licenses/commander/LICENSE",
+          "sha256": "04512a63dce4d2d506ad612dc0bd7681ccf6e3655f7b6eaef7dfac8323d1ec0b"
+        }
+      ]
+    },
+    {
+      "name": "csstype",
+      "version": "3.2.3",
+      "license": "MIT",
+      "repository": "https://github.com/frenic/csstype",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/csstype/-/csstype-3.2.3.tgz",
+      "integrity": "sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/csstype/LICENSE",
+          "sha256": "11d55bd4541c75ee7879547ac49089c489163dae49551389713c3d026cab383e"
+        }
+      ]
+    },
+    {
+      "name": "detect-libc",
+      "version": "2.1.2",
+      "license": "Apache-2.0",
+      "repository": "git://github.com/lovell/detect-libc.git",
+      "homepage": null,
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/detect-libc/-/detect-libc-2.1.2.tgz",
+      "integrity": "sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/detect-libc/LICENSE",
+          "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1"
+        }
+      ]
+    },
+    {
+      "name": "entities",
+      "version": "7.0.1",
+      "license": "BSD-2-Clause",
+      "repository": "https://github.com/fb55/entities.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/entities/-/entities-7.0.1.tgz",
+      "integrity": "sha512-TWrgLOFUQTH994YUyl1yT4uyavY5nNB5muff+RtWaqNVCAK408b5ZnnbNAUEWLTCpum9w6arT70i1XdQ4UeOPA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/entities/LICENSE",
+          "sha256": "cb992345949ccd6e8394b2cd6c465f7b897c864f845937dbf64e8997f389e164"
+        }
+      ]
+    },
+    {
+      "name": "estree-walker",
+      "version": "2.0.2",
+      "license": "MIT",
+      "repository": "https://github.com/Rich-Harris/estree-walker",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/estree-walker/-/estree-walker-2.0.2.tgz",
+      "integrity": "sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==",
+      "licenseFiles": [
+        {
+          "path": "licenses/estree-walker/LICENSE",
+          "sha256": "8a6dcbabe7179f9c8489c08a7d874d0f1e093ae7449e03756ccf87cb9d0e296e"
+        }
+      ]
+    },
+    {
+      "name": "fdir",
+      "version": "6.5.0",
+      "license": "MIT",
+      "repository": "git+https://github.com/thecodrr/fdir.git",
+      "homepage": "https://github.com/thecodrr/fdir#readme",
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/fdir/-/fdir-6.5.0.tgz",
+      "integrity": "sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg==",
+      "licenseFiles": [
+        {
+          "path": "licenses/fdir/LICENSE",
+          "sha256": "9a39f2aadab11a3697edd668ff2d8ad885b649737b7ab4d3bf12b34e5ada0c86"
+        }
+      ]
+    },
+    {
+      "name": "katex",
+      "version": "0.19.0",
+      "license": "MIT",
+      "repository": "https://github.com/KaTeX/KaTeX.git",
+      "homepage": "https://katex.org",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/katex/-/katex-0.19.0.tgz",
+      "integrity": "sha512-v6Tznz3zJ7u3niRCoDTsumM2+HA2XXcCu+WAacCeHD2z3p9A9Ks987o5FzfTGBN0e8A0vjEgIDvLbICrXpdw/Q==",
+      "licenseFiles": [
+        {
+          "path": "licenses/katex/LICENSE",
+          "sha256": "766ccc1f306c885aa45542a9846bbd0a505b27a0374f146778171c2254ce18e3"
+        }
+      ]
+    },
+    {
+      "name": "lightningcss",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "repository": "https://github.com/parcel-bundler/lightningcss.git",
+      "homepage": null,
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/lightningcss/-/lightningcss-1.33.0.tgz",
+      "integrity": "sha512-WkUDrojuJs0xkgGf2udWxa3yGBRxPtxUkB79i6aCZLRgc7PM8fZe9TosfPDcvEpQZbuFASnHYmRLBLUbmLOIIA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/lightningcss/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ]
+    },
+    {
+      "name": "lightningcss-win32-x64-msvc",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "repository": "https://github.com/parcel-bundler/lightningcss.git",
+      "homepage": null,
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/lightningcss-win32-x64-msvc/-/lightningcss-win32-x64-msvc-1.33.0.tgz",
+      "integrity": "sha512-OlEICDx/Xl0FqSp4bry8zFnCvGpig3Gl4gCquvYwHuqJKEC1+n9NgDniFvqHGmMv1ZkqDJrDqKKSykTDX+ehuA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/lightningcss-win32-x64-msvc/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ]
+    },
+    {
+      "name": "linkifyjs",
+      "version": "4.3.3",
+      "license": "MIT",
+      "repository": "git+https://github.com/nfrasser/linkifyjs.git",
+      "homepage": "https://linkify.js.org",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/linkifyjs/-/linkifyjs-4.3.3.tgz",
+      "integrity": "sha512-P8aEP5U/D1/IlTY2OeYsErdwh9bGuLE30NcXtKEjgdHcahveQoQwM2yZNsioQHsWFz0P7KKudisbrzCgR0sDHg==",
+      "licenseFiles": [
+        {
+          "path": "licenses/linkifyjs/LICENSE",
+          "sha256": "58e6f3677452cca096ce5328ebf7de37a1406bbeeb2f263c1b2ededc8c7d0228"
+        }
+      ]
+    },
+    {
+      "name": "magic-string",
+      "version": "0.30.21",
+      "license": "MIT",
+      "repository": "git+https://github.com/Rich-Harris/magic-string.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/magic-string/-/magic-string-0.30.21.tgz",
+      "integrity": "sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/magic-string/LICENSE",
+          "sha256": "1cbe51b907662f6cb1492b16c359384a595180bf0e4d101603ed525e75c4e484"
+        }
+      ]
+    },
+    {
+      "name": "muggle-string",
+      "version": "0.4.1",
+      "license": "MIT",
+      "repository": "https://github.com/johnsoncodehk/muggle-string.git",
+      "homepage": null,
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/muggle-string/-/muggle-string-0.4.1.tgz",
+      "integrity": "sha512-VNTrAak/KhO2i8dqqnqnAHOa3cYBwXEZe9h+D5h/1ZqFSTEFHdM65lR7RoIqq3tBBYavsOXV84NoHXZ0AkPyqQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/muggle-string/LICENSE",
+          "sha256": "df52411dcd3c8f5897bbbec8c94e971519e13e75818c263e9a99a86255dd301b"
+        }
+      ]
+    },
+    {
+      "name": "nanoid",
+      "version": "3.3.19",
+      "license": "MIT",
+      "repository": "ai/nanoid",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/nanoid/-/nanoid-3.3.19.tgz",
+      "integrity": "sha512-Y2tUNy4ouw6tq5oDSKeQYGOyhkUBhNOcGV/02KC+6kd9eDGqdZd++mjMiIDilrBYvjEnCYvVtsuHCuP+okSfug==",
+      "licenseFiles": [
+        {
+          "path": "licenses/nanoid/LICENSE",
+          "sha256": "da4db1480d9beea3483a2eda5c53b22238d0827d57da162b48f122e04d2d9987"
+        }
+      ]
+    },
+    {
+      "name": "orderedmap",
+      "version": "2.1.1",
+      "license": "MIT",
+      "repository": "git+https://github.com/marijnh/orderedmap.git",
+      "homepage": "https://github.com/marijnh/orderedmap#readme",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/orderedmap/-/orderedmap-2.1.1.tgz",
+      "integrity": "sha512-TvAWxi0nDe1j/rtMcWcIj94+Ffe6n7zhow33h40SKxmsmozs6dz/e+EajymfoFcHd7sxNn8yHM8839uixMOV6g==",
+      "licenseFiles": [
+        {
+          "path": "licenses/orderedmap/LICENSE",
+          "sha256": "869c30f368eb08735e779027b9f4bc9fea2f39624351856aebe42741f0bc0884"
+        }
+      ]
+    },
+    {
+      "name": "path-browserify",
+      "version": "1.0.1",
+      "license": "MIT",
+      "repository": "git://github.com/browserify/path-browserify.git",
+      "homepage": "https://github.com/browserify/path-browserify",
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/path-browserify/-/path-browserify-1.0.1.tgz",
+      "integrity": "sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==",
+      "licenseFiles": [
+        {
+          "path": "licenses/path-browserify/LICENSE",
+          "sha256": "a22b9d5763f574e5db347c30acc0b33eaf4846767c03d2e27d012e864e79a824"
+        }
+      ]
+    },
+    {
+      "name": "picocolors",
+      "version": "1.1.1",
+      "license": "ISC",
+      "repository": "alexeyraspopov/picocolors",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz",
+      "integrity": "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/picocolors/LICENSE",
+          "sha256": "6582629e2979466878f6014313dcc2f3756c9616148682227ce3063dde310750"
+        }
+      ]
+    },
+    {
+      "name": "picomatch",
+      "version": "4.0.7",
+      "license": "MIT",
+      "repository": "micromatch/picomatch",
+      "homepage": "https://github.com/micromatch/picomatch",
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/picomatch/-/picomatch-4.0.7.tgz",
+      "integrity": "sha512-qcJu88Q2IWqJsDD529JKMdwGm/dvInW4HvQnRwiH9JtihJvzGOscDtHE3x1pBKeUOTysQ8kVmLnJ2kJu7yhcGA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/picomatch/LICENSE",
+          "sha256": "d0cd141b0c322fded5dfad1d4645bb2fedfc05b7321fe1009469638190d59ef9"
+        }
+      ]
+    },
+    {
+      "name": "postcss",
+      "version": "8.5.28",
+      "license": "MIT",
+      "repository": "postcss/postcss",
+      "homepage": "https://postcss.org/",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/postcss/-/postcss-8.5.28.tgz",
+      "integrity": "sha512-RRuzqDtt5Y9h3quz5hWhK+TPnsmVs6WwSU6LkJMeY4HstUEDuYTG8UJSdawMRzmzAtV+KEoG8N3Qg2qLy5vM/A==",
+      "licenseFiles": [
+        {
+          "path": "licenses/postcss/LICENSE",
+          "sha256": "5be1f3465bba68a626777f984878814aaf35e7ef8e9fd314d469bcf887050fb8"
+        }
+      ]
+    },
+    {
+      "name": "prosemirror-changeset",
+      "version": "2.4.4",
+      "license": "MIT",
+      "repository": "git+https://code.haverbeke.berlin/prosemirror/prosemirror-changeset.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/prosemirror-changeset/-/prosemirror-changeset-2.4.4.tgz",
+      "integrity": "sha512-Gyuz9jYdrAeA9I7AholyOes9KUmv/lEwsC5O9s5xF5VB3EgTPsXMGUxz4+H1B+wKVPdZbvRcg1Cp3x8qX+8ofA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/prosemirror-changeset/LICENSE",
+          "sha256": "7543dfe82fa61d5bb2478c78cbd9dfb2cbd500b6ac2893b24ed925773b67fb70"
+        }
+      ]
+    },
+    {
+      "name": "prosemirror-commands",
+      "version": "1.7.2",
+      "license": "MIT",
+      "repository": "git+https://code.haverbeke.berlin/prosemirror/prosemirror-commands.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/prosemirror-commands/-/prosemirror-commands-1.7.2.tgz",
+      "integrity": "sha512-q6Q6szxqdu9Xd6EcdKsqXghu5nQdZTpB4Q9yd04WRc7/jt763e/rT60Owh0L1GYY+T46o5rD+9lEN36dZS43tw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/prosemirror-commands/LICENSE",
+          "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+        }
+      ]
+    },
+    {
+      "name": "prosemirror-dropcursor",
+      "version": "1.8.4",
+      "license": "MIT",
+      "repository": "git+https://code.haverbeke.berlin/prosemirror/prosemirror-dropcursor.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/prosemirror-dropcursor/-/prosemirror-dropcursor-1.8.4.tgz",
+      "integrity": "sha512-VmKxhcA6a+h5oPSYmfF1ZNeQqPbyYaIxqZsKqeYCyTlPtrjUgNaHL3P8vVaO19oqAV0zuaM/axkowZHrB1P3Tg==",
+      "licenseFiles": [
+        {
+          "path": "licenses/prosemirror-dropcursor/LICENSE",
+          "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+        }
+      ]
+    },
+    {
+      "name": "prosemirror-gapcursor",
+      "version": "1.4.1",
+      "license": "MIT",
+      "repository": "git://github.com/prosemirror/prosemirror-gapcursor.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/prosemirror-gapcursor/-/prosemirror-gapcursor-1.4.1.tgz",
+      "integrity": "sha512-pMdYaEnjNMSwl11yjEGtgTmLkR08m/Vl+Jj443167p9eB3HVQKhYCc4gmHVDsLPODfZfjr/MmirsdyZziXbQKw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/prosemirror-gapcursor/LICENSE",
+          "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+        }
+      ]
+    },
+    {
+      "name": "prosemirror-history",
+      "version": "1.5.1",
+      "license": "MIT",
+      "repository": "git+https://code.haverbeke.berlin/prosemirror/prosemirror-history.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/prosemirror-history/-/prosemirror-history-1.5.1.tgz",
+      "integrity": "sha512-onlwnqKvgtFg6srZOmDOAhlAy1FIHQpOExORybX0S+DvJepE5tPALrB9iGet/2sqqqrelSnB10OoiOJqAvu2DA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/prosemirror-history/LICENSE",
+          "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+        }
+      ]
+    },
+    {
+      "name": "prosemirror-inputrules",
+      "version": "1.5.1",
+      "license": "MIT",
+      "repository": "git://github.com/prosemirror/prosemirror-inputrules.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/prosemirror-inputrules/-/prosemirror-inputrules-1.5.1.tgz",
+      "integrity": "sha512-7wj4uMjKaXWAQ1CDgxNzNtR9AlsuwzHfdFH1ygEHA2KHF2DOEaXl1CJfNPAKCg9qNEh4rum975QLaCiQPyY6Fw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/prosemirror-inputrules/LICENSE",
+          "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+        }
+      ]
+    },
+    {
+      "name": "prosemirror-keymap",
+      "version": "1.2.3",
+      "license": "MIT",
+      "repository": "git://github.com/prosemirror/prosemirror-keymap.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/prosemirror-keymap/-/prosemirror-keymap-1.2.3.tgz",
+      "integrity": "sha512-4HucRlpiLd1IPQQXNqeo81BGtkY8Ai5smHhKW9jjPKRc2wQIxksg7Hl1tTI2IfT2B/LgX6bfYvXxEpJl7aKYKw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/prosemirror-keymap/LICENSE",
+          "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+        }
+      ]
+    },
+    {
+      "name": "prosemirror-model",
+      "version": "1.25.12",
+      "license": "MIT",
+      "repository": "git+https://code.haverbeke.berlin/prosemirror/prosemirror-model.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/prosemirror-model/-/prosemirror-model-1.25.12.tgz",
+      "integrity": "sha512-Ue2gTmXMa7EhpLNhC7J+h4+ykD8ha12K6rrZFFKKJHBForfIStw5gJ6Zrf1mqqAa9NmpmEB4wp9bKmA4eUVjWg==",
+      "licenseFiles": [
+        {
+          "path": "licenses/prosemirror-model/LICENSE",
+          "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+        }
+      ]
+    },
+    {
+      "name": "prosemirror-schema-list",
+      "version": "1.5.1",
+      "license": "MIT",
+      "repository": "git://github.com/prosemirror/prosemirror-schema-list.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/prosemirror-schema-list/-/prosemirror-schema-list-1.5.1.tgz",
+      "integrity": "sha512-927lFx/uwyQaGwJxLWCZRkjXG0p48KpMj6ueoYiu4JX05GGuGcgzAy62dfiV8eFZftgyBUvLx76RsMe20fJl+Q==",
+      "licenseFiles": [
+        {
+          "path": "licenses/prosemirror-schema-list/LICENSE",
+          "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+        }
+      ]
+    },
+    {
+      "name": "prosemirror-state",
+      "version": "1.4.4",
+      "license": "MIT",
+      "repository": "git://github.com/prosemirror/prosemirror-state.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/prosemirror-state/-/prosemirror-state-1.4.4.tgz",
+      "integrity": "sha512-6jiYHH2CIGbCfnxdHbXZ12gySFY/fz/ulZE333G6bPqIZ4F+TXo9ifiR86nAHpWnfoNjOb3o5ESi7J8Uz1jXHw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/prosemirror-state/LICENSE",
+          "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+        }
+      ]
+    },
+    {
+      "name": "prosemirror-tables",
+      "version": "1.8.5",
+      "license": "MIT",
+      "repository": "https://github.com/ProseMirror/prosemirror-tables.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/prosemirror-tables/-/prosemirror-tables-1.8.5.tgz",
+      "integrity": "sha512-V/0cDCsHKHe/tfWkeCmthNUcEp1IVO3p6vwN8XtwE9PZQLAZJigbw3QoraAdfJPir4NKJtNvOB8oYGKRl+t0Dw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/prosemirror-tables/LICENSE",
+          "sha256": "d1d2046ebbe6362f9ad8fd4d62e9074f2553f289c0e1de895a650f10ba5f4239"
+        }
+      ]
+    },
+    {
+      "name": "prosemirror-transform",
+      "version": "1.12.2",
+      "license": "MIT",
+      "repository": "git+https://code.haverbeke.berlin/prosemirror/prosemirror-transform.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/prosemirror-transform/-/prosemirror-transform-1.12.2.tgz",
+      "integrity": "sha512-PE/aY0HEY4zczvmqrilgkUK/WautF0chvMqkmM/iN5/aPHvwrCWaQZjS6CIZp+K84YrvPFqrL+YArrfJX8xX7g==",
+      "licenseFiles": [
+        {
+          "path": "licenses/prosemirror-transform/LICENSE",
+          "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+        }
+      ]
+    },
+    {
+      "name": "prosemirror-view",
+      "version": "1.42.6",
+      "license": "MIT",
+      "repository": "git+https://code.haverbeke.berlin/prosemirror/prosemirror-view.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/prosemirror-view/-/prosemirror-view-1.42.6.tgz",
+      "integrity": "sha512-3g25f6hKV2bBxo3puH3EcYWmmVNSH0iWmNsMVT7sugDSpA025jgpOLarcDWr39SdzPjYMaiYtRdNtXialPSjEQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/prosemirror-view/LICENSE",
+          "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+        }
+      ]
+    },
+    {
+      "name": "rolldown",
+      "version": "1.2.12",
+      "license": "MIT",
+      "repository": "git+https://github.com/rolldown/rolldown.git",
+      "homepage": "https://rolldown.rs/",
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/rolldown/-/rolldown-1.2.12.tgz",
+      "integrity": "sha512-8wafseiaG80xmXSfqidUNqZcylTlhmPZZt+za2m+js2sFZ8dTNlhIOV2WcbIPx2hgwPBJpEUGFAMZ9bgBBLTSQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/rolldown/LICENSE",
+          "sha256": "23ecfff35a5a2e80d92142f75228912c3b1abc4b5a8337a821ff4397e2f9f734"
+        }
+      ]
+    },
+    {
+      "name": "rope-sequence",
+      "version": "1.3.4",
+      "license": "MIT",
+      "repository": "git+https://github.com/marijnh/rope-sequence.git",
+      "homepage": null,
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/rope-sequence/-/rope-sequence-1.3.4.tgz",
+      "integrity": "sha512-UT5EDe2cu2E/6O4igUr5PSFs23nvvukicWHx6GnOPlHAiiYbzNuCRQCuiUdHJQcqKalLKlrYJnjY0ySGsXNQXQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/rope-sequence/LICENSE",
+          "sha256": "530424aebdd0e73f53238d1f89df250057bc8d8ce090cf5954197fadce5bf226"
+        }
+      ]
+    },
+    {
+      "name": "source-map-js",
+      "version": "1.2.2",
+      "license": "BSD-3-Clause",
+      "repository": "7rulnik/source-map-js",
+      "homepage": "https://github.com/7rulnik/source-map-js",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.2.tgz",
+      "integrity": "sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/source-map-js/LICENSE",
+          "sha256": "6cb0631f71c7749763fd3dd1d5bee52dd1070ec17f2edc1710079ad070bd2fbd"
+        }
+      ]
+    },
+    {
+      "name": "tinyglobby",
+      "version": "0.2.17",
+      "license": "MIT",
+      "repository": "git+https://github.com/SuperchupuDev/tinyglobby.git",
+      "homepage": "https://superchupu.dev/tinyglobby",
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/tinyglobby/-/tinyglobby-0.2.17.tgz",
+      "integrity": "sha512-wXR/dYpcqKmfWpEdZjiKJOwCNFndD0DMnrW/cYjVGttEkBfVgcLFHoNrlj47mjOVic9yyNu65alsgF4NQyTa2g==",
+      "licenseFiles": [
+        {
+          "path": "licenses/tinyglobby/LICENSE",
+          "sha256": "22c68811e174cbbfb3813d4135918df4f540959c14d872e601d9abe83d3cde8f"
+        }
+      ]
+    },
+    {
+      "name": "typescript",
+      "version": "5.9.3",
+      "license": "Apache-2.0",
+      "repository": "https://github.com/microsoft/TypeScript.git",
+      "homepage": "https://www.typescriptlang.org/",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.9.3.tgz",
+      "integrity": "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==",
+      "licenseFiles": [
+        {
+          "path": "licenses/typescript/LICENSE.txt",
+          "sha256": "a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47"
+        }
+      ]
+    },
+    {
+      "name": "vite",
+      "version": "8.2.2",
+      "license": "MIT",
+      "repository": "git+https://github.com/vitejs/vite.git",
+      "homepage": "https://vite.dev",
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/vite/-/vite-8.2.2.tgz",
+      "integrity": "sha512-cFKLV/PRgAUlIRm5WjMjJ86jrftzpqcgH+Us+DS8mI3CDNiH30Whrz8uHL3+MOLPAgqbMBAqWdAHAphOAM+z/Q==",
+      "licenseFiles": [
+        {
+          "path": "licenses/vite/LICENSE.md",
+          "sha256": "387dd7baa307083401a27c58c362c30832f5ba1dba84f10cc22c33401523f45c"
+        }
+      ]
+    },
+    {
+      "name": "vscode-uri",
+      "version": "3.2.0",
+      "license": "MIT",
+      "repository": "git+https://github.com/microsoft/vscode-uri.git",
+      "homepage": "https://github.com/microsoft/vscode-uri#readme",
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/vscode-uri/-/vscode-uri-3.2.0.tgz",
+      "integrity": "sha512-m2gXo3bn0G1kT9InzMf07fTbqMbGtyckj3bH5ktLO+1Ssv+yiATZ4dhwaQv9UZWxJh6E9IFGnQyjgWVDWVBDrg==",
+      "licenseFiles": [
+        {
+          "path": "licenses/vscode-uri/LICENSE.md",
+          "sha256": "c669138cb1eb01fbb745e8e460b291e4f2869c14a40061390b6095d845ed4c82"
+        }
+      ]
+    },
+    {
+      "name": "vue",
+      "version": "3.5.42",
+      "license": "MIT",
+      "repository": "git+https://github.com/vuejs/core.git",
+      "homepage": "https://vuejs.org/",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/vue/-/vue-3.5.42.tgz",
+      "integrity": "sha512-4RyHQTbQvOPs3MfvUO1Sg0YRrKNnA0mAVtvpd12Tg1fKDN7OHBUl1IqSn8zGJjK9nI3NkNp8cgTpVrSZC5TTcA==",
+      "licenseFiles": [
+        {
+          "path": "licenses/vue/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "vue-tsc",
+      "version": "3.3.11",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/language-tools.git",
+      "homepage": null,
+      "scope": "author-development",
+      "resolved": "https://registry.npmjs.org/vue-tsc/-/vue-tsc-3.3.11.tgz",
+      "integrity": "sha512-gOb0B9rtU2+f1dszwPqSH5kAieIF9ReeLhD3kSRNHv5WZZUQz/JdVXW0RTdqhNTMlQkqKzrTTviqKr/4FYZraQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/vue-tsc/LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ]
+    },
+    {
+      "name": "w3c-keyname",
+      "version": "2.2.8",
+      "license": "MIT",
+      "repository": "git+https://github.com/marijnh/w3c-keyname.git",
+      "homepage": "https://github.com/marijnh/w3c-keyname#readme",
+      "scope": "author-runtime",
+      "resolved": "https://registry.npmjs.org/w3c-keyname/-/w3c-keyname-2.2.8.tgz",
+      "integrity": "sha512-dpojBhNsCNN7T82Tm7k26A6G9ML3NkhDsnw9n/eoxSRlVBB4CEtIQ/KTCLI2Fwf3ataSXRhYFkQi3SlnFwPvPQ==",
+      "licenseFiles": [
+        {
+          "path": "licenses/w3c-keyname/LICENSE",
+          "sha256": "869c30f368eb08735e779027b9f4bc9fea2f39624351856aebe42741f0bc0884"
+        }
+      ]
+    }
+  ],
+  "fonts": [
+    {
+      "name": "Doulos SIL",
+      "source": "Existing verified product font asset",
+      "fontFile": "DoulosSIL-Regular.ttf",
+      "sha256": "cc89b87c047bcc8dc00246398218bb6343e0f2372b153cf560c29a77f27068ef",
+      "license": "OFL-1.1",
+      "licenseFile": "licenses/fonts/Doulos-OFL.txt",
+      "licenseSha256": "940b145e55e07109fba236378a55eab74247189f4932cfd13b4de32c83ffddc3"
+    },
+    {
+      "name": "JetBrains Mono",
+      "source": "Existing verified product font asset",
+      "fontFile": "JetBrainsMono-Regular.woff2",
+      "sha256": "a9cb1cd82332b23a47e3a1239d25d13c86d16c4220695e34b243effa999f45f2",
+      "license": "OFL-1.1",
+      "licenseFile": "licenses/fonts/JetBrainsMono-OFL.txt",
+      "licenseSha256": "30f0c136e3c88e422d0791acd97238870f9054a9729bc34cf2ff0d4ed8cac4ad"
+    }
+  ]
+}

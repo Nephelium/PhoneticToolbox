@@ -2,10 +2,21 @@ EGG numerical implementation migrated locally from PhoneticToolbox v2, 2026-09-1
 Source IDs: PENDING-EGG (event, CQ/SQ, filters, simplified CP inverse filter),
 SRC-PRAAT (Parselmouth/Praat pitch backend).
 Original file hashes and adaptations: third_party/egg-migration.json.
-Original authorship/method attribution and redistribution license for PENDING-EGG
-are not established. This local migration does not grant redistribution rights.
+On 2026-10-05 the project author directly confirmed this local implementation as
+their own prior work, with some AI assistance across the confirmed projects.
+The earlier unresolved ownership record is retained in the source registry.
+This confirmation does not replace licenses for identified third-party components.
 Praat/Parselmouth licensing and authorship remain in the shared source registry.
 The legacy SQ formula is normalized asymmetry, not a duration ratio:
 (decontacting_duration - contacting_duration) / contact_duration.
 CQ and SQ missing masks are independent. ROI CQ and ROI events deliberately
 retain distinct filtering/padding rules pending a separately reviewed correction.
+
+2026-10-07 M03-R7 adds the separately versioned egg-bounded/2 long-file path:
+global peak and linear trend references, Butterworth4 SOS forward/backward
+overlap-crop filtering, block ownership and viewport pitch caching. Local
+long-file filters also use SOS while retaining distinct legacy padding rules. Long-file
+edges and pitch outlier references are not whole-recording bitwise equivalents.
+New inverse ROIs above 48000 samples compute only required correlation lags;
+previously admitted ROI sizes retain the original reduction. This adds no new
+external method/code source; existing SciPy, Praat and REAPER notices still apply.

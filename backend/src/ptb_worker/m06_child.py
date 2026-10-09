@@ -41,34 +41,14 @@ def compute(header,raw,reaper=None):
     if c['duration']>10 or c['duration']*c['sample_rate']>480000:raise ValueError('m06_admission_budget')
     if hashlib.sha256(raw).hexdigest()!=header['input_sha256']:raise ValueError('m06_input_changed')
     np.random.seed(seed) # Isolated process only; legacy MT19937 random calls preserved.
-    files=[];spectra={};diagnostics={};analysis=None
+    files=[];spectra={};diagnostics={}
     if action=='generate':c=generate(c)
-    elif action in ('extract','resynthesize'):
+    elif action=='extract':
         try:rate,samples=wavfile.read(io.BytesIO(raw))
         except (ValueError,EOFError):raise ValueError('m06_audio_decode_failed') from None
         if samples.ndim>2 or len(samples)>480000 or len(samples)/rate>10 or (samples.ndim==2 and samples.shape[1]>8):raise ValueError('m06_input_budget')
         source=AudioInput(samples,int(rate))
-        if action=='resynthesize':
-            if c['render']['source_sha256']!=header['input_sha256']:raise ValueError('m06_resynthesis_source_mismatch')
-            from phonetic_core.synthesis.resynthesis import resynthesize
-            if c['render']['method']=='psola':
-                from parselmouth.praat import run as praat_run
-                # Isolated task process only. Praat's UV overlap-add uses RNG;
-                # NumPy's seed alone does not control those windows.
-                praat_run(f'random_initializeWithSeedUnsafelyButPredictably ({int(seed)})')
-            audio,diagnostics,arrays=resynthesize(c,source,reaper=reaper)
-            if c['render']['method']=='psola':diagnostics['praat_seed']=int(seed)
-            c['sample_rate']=int(rate)
-            import soundfile as sf
-            stream=io.BytesIO();sf.write(stream,audio,int(rate),format='WAV',subtype='FLOAT')
-            files.append(('synthesis.wav',stream.getvalue()))
-            stream=io.BytesIO();np.savez_compressed(stream,**arrays);analysis=stream.getvalue()
-            spectra=spectrograms(audio,int(rate))
-        elif c['render']['method']=='klatt':c=extract(c,source,reaper=reaper,diagnostics=diagnostics)
-        else:
-            from phonetic_core.synthesis.resynthesis import extract_natural
-            c,diagnostics=extract_natural(c,source,reaper=reaper)
-        c['render']['source_sha256']=header['input_sha256']
+        c=extract(c,source,reaper=reaper,diagnostics=diagnostics)
         if reaper is not None:diagnostics['reaper_binary_sha256']=reaper.sha256
         channels=source.normalized_channels().astype(np.float32);mono=np.mean(channels,axis=1) if channels.ndim>1 else channels
         if action=='extract':spectra=spectrograms(mono.astype(float),int(rate))
@@ -82,19 +62,15 @@ def compute(header,raw,reaper=None):
         spectra=spectrograms(audio,c['sample_rate'])
     else:raise ValueError('m06_invalid_action')
     metadata=dict(schema_version='m06/1',action=action,config=c,seed=seed,
-                  computation_revision=diagnostics.get('computation_revision','klatt/2' if c['render']['method']=='klatt' else 'm06-natural-extract/1'),diagnostics=diagnostics,
+                  computation_revision=diagnostics.get('computation_revision','klatt/2'),diagnostics=diagnostics,
                   input_sha256=header['input_sha256'],sample_rate_hz=c['sample_rate'],
                   sample_count=round(c['duration']*c['sample_rate']),
                   curve_time_axis='linspace(0,duration,N)',audio_time_axis='arange(N)/fs',
                   source_ids=['SRC-TDKLATT','REF-KLATT','SRC-PRAAT'],spectrograms=spectra)
     if action=='extract':metadata['curve_time_axis']='arange(N)*0.01; final value held to duration'
-    if c['render']['method']!='klatt':metadata['source_ids']=['SRC-PRAAT']
-    if c['render']['method']=='world' or c['f0_method']=='harvest':metadata['source_ids'].extend(['SRC-PYWORLD','SRC-WORLD','REF-WORLD-2016','REF-D4C-2016'])
-    if action in ('extract','resynthesize') and c['f0_method']=='reaper':metadata['source_ids'].append('SRC-REAPER')
-    if action=='resynthesize':metadata['analysis_artifact']='analysis.npz'
+    if action=='extract' and c['f0_method']=='reaper':metadata['source_ids'].append('SRC-REAPER')
     files.extend([('m06.ptb.json',json.dumps(metadata,ensure_ascii=False,allow_nan=False).encode()),
                   ('parameters.csv',export_parameters(c).encode('utf8'))])
-    if analysis is not None:files.append(('analysis.npz',analysis))
     return files
 
 

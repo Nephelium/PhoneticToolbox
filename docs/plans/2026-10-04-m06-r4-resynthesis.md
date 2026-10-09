@@ -1,5 +1,7 @@
 # M06-R4 自然重合成
 
+**Superseded by M06-R5（2026-10-04）：** 井井随后要求移除本模块 WORLD/PSOLA 及 Harvest。以下仅保留历史实施/验证记录，不代表当前可用功能。见 [R5 报告](../testing/2026-10-04-m06-r5-report.md)。
+
 状态：verified，限定 Windows 开发态与 WSL 纯核心，见[验收报告](../testing/2026-10-04-m06-r4-report.md)。2026-10-04井井明确要求按M06-R3核查报告实施。下列步骤1–5已完成，步骤6的方法/验证报告已完成，自然语料对照仍待指定输入，未宣称自然度已改善。
 
 范围：保留Klatt现有24参数路径，增加可选WORLD及Praat overlap-add路径。WORLD使用锁定PyWORLD 0.3.5的CheapTrick/D4C，保存完整谱包络/非周期性而不把它们改名为AH或HNR。PSOLA用于音高和时长。声门神经模型仍为planned。

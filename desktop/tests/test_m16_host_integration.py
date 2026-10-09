@@ -26,12 +26,13 @@ class NativeRecordingRouteTest(unittest.TestCase):
         self.assertFalse(values[-1]['ok']);route.dispatch.assert_not_called()
 
     def test_close_failure_keeps_window_and_owned_services_alive(self):
-        owner=SimpleNamespace(closing=True,bridge=SimpleNamespace(close_recording=lambda:False,vocal_files=Mock()),vocal=Mock(),provider=Mock(),service=Mock())
+        owner=SimpleNamespace(closing=True,bridge=SimpleNamespace(close_recording=lambda:False,vocal_files=Mock()),vocal=Mock(),provider=Mock(),service=Mock(),update_coordinator=Mock())
         event=Mock()
         with patch('ptb_desktop.host.QMessageBox.warning'):
             Workbench.closeEvent(owner,event)
         self.assertFalse(owner.closing);event.ignore.assert_called_once();event.accept.assert_not_called()
         owner.vocal.close.assert_not_called();owner.provider.close.assert_not_called();owner.service.close.assert_not_called()
+        owner.update_coordinator.cancel.assert_called_once()
 
     def test_recording_close_exception_is_failure(self):
         owner=SimpleNamespace(_recording_bridge=SimpleNamespace(close=Mock(side_effect=OSError('disk unavailable'))))

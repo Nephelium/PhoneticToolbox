@@ -1,6 +1,6 @@
 from pathlib import Path
 import pytest
-from ptb_desktop.platform_paths import user_data_root
+from ptb_desktop.platform_paths import user_data_root,windows_workbench_storage
 
 
 @pytest.mark.parametrize('platform,env,suffix',[
@@ -19,3 +19,9 @@ def test_relative_xdg_directory_is_ignored(tmp_path):
 
 def test_unknown_platform_fails_explicitly(tmp_path):
     with pytest.raises(ValueError):user_data_root(platform='other',environ={},home=tmp_path)
+
+
+def test_windows_ui_storage_preserves_original_qt_directory(tmp_path):
+    location=windows_workbench_storage(environ={'LOCALAPPDATA':str(tmp_path)},home=tmp_path)
+    assert location==tmp_path/'PhoneticToolbox-v3/workbench'
+    assert windows_workbench_storage(environ={'LOCALAPPDATA':'relative'},home=tmp_path)==tmp_path/'AppData/Local/PhoneticToolbox-v3/workbench'

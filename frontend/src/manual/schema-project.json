@@ -1,0 +1,21 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ptb-manual-project.schema.json",
+  "title":"PhoneticToolbox manual project v1",
+  "type":"object",
+  "required":["schemaVersion","id","title","chapters","assets"],
+  "properties":{
+    "schemaVersion":{"const":"ptb-manual/1"},
+    "id":{"$ref":"#/$defs/id"},
+    "title":{"type":"string","minLength":1},
+    "language":{"type":"string"},"version":{"type":"string"},"softwareVersion":{"type":"string"},
+    "chapters":{"type":"array","items":{"type":"object","required":["id","title","path"],"properties":{"id":{"$ref":"#/$defs/id"},"moduleId":{"type":"string"},"title":{"type":"string","minLength":1},"path":{"$ref":"#/$defs/path"},"status":{"type":"string"},"summary":{"type":"string"},"sections":{"type":"array","items":{"type":"object","required":["id","title","level"],"properties":{"id":{"$ref":"#/$defs/id"},"title":{"type":"string"},"level":{"type":"integer","minimum":1,"maximum":6}}}}}}},
+    "assets":{"type":"array","items":{"type":"object","required":["id","path","kind","distribution"],"properties":{"id":{"$ref":"#/$defs/id"},"path":{"$ref":"#/$defs/path"},"kind":{"enum":["image","audio","video","example"]},"distribution":{"enum":["public","software-only"]},"mime":{"type":"string"},"sha256":{"type":"string"},"caption":{"type":"string"},"alt":{"type":"string"},"title":{"type":"string"},"source":{"type":["string","object"]},"sourceType":{"type":"string"},"git":{"type":"boolean"},"width":{"type":"number","exclusiveMinimum":0},"height":{"type":"number","exclusiveMinimum":0},"duration":{"type":"number","minimum":0},"sampleRate":{"type":"number","exclusiveMinimum":0},"channels":{"type":"integer","minimum":1}}}},
+    "references":{"type":"array","items":{"type":"object","required":["id","label"],"properties":{"id":{"$ref":"#/$defs/id"},"label":{"type":"string"},"url":{"type":"string"}}}},
+    "searchIndex":{"type":"array","items":{"type":"object","required":["chapterId","text"],"properties":{"chapterId":{"$ref":"#/$defs/id"},"targetId":{"$ref":"#/$defs/id"},"text":{"type":"string"},"title":{"type":"string"}}}}
+  },
+  "$defs":{
+    "id":{"type":"string","pattern":"^[A-Za-z0-9][A-Za-z0-9._:-]{0,159}$"},
+    "path":{"type":"string","minLength":1,"description":"Publication-relative path only. Runtime additionally rejects absolute paths, dot segments, query/hash, backslashes, colons, controls and encoded traversal."}
+  }
+}

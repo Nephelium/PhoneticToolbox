@@ -18,7 +18,7 @@ for sid,paths in {
  s=sources[sid];s['used_at']=list(dict.fromkeys(s.get('used_at',[])+paths));s['m10_migration_evidence']='docs/modules/evidence/M10-migration.json'
  sources[sid]['m10_verification_date']='2026-09-11'
 sources['SRC-VTL']['m10_modifications']='API 2.4 binary unchanged. Bridge m10/2: manual tongue root, physical anterior lateral relief, narrow-gap readout and shared tube recomputation. R4 constrains posterior targets against speaker pharynx/body dimensions. Whisper audition +24 dB, native raw synthesis unchanged. TS3 l=-0.6; internal s=0.32 baseline retained but its UI example removed. GPL-3.0-or-later.'
-sources['PKG-SOUNDDEVICE']['m10_runtime_version']='0.5.3 in requirements-m10-ui.lock'
+sources['PKG-SOUNDDEVICE']['m10_runtime_version']='0.5.3 in requirements/requirements-m10-ui.lock'
 sources['ASSET-NASAL']['m10_modifications']='nasal/3 display registration: y += 1.14 - 0.28*x cm, for all vertices and landmarks. Original triangles retained. Both +/-5 mm slice contours checked within head; true outlet closures replace spurious SVG chords. No change to acoustic nasal tube.'
 if 'PROJECT-M10' not in sources:
  registry['sources'].append({'id':'PROJECT-M10','title':'PhoneticToolbox 声道界面与平台适配','kind':'project-integration','modules':['M10'],

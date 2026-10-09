@@ -62,6 +62,9 @@ class Engine:
         check(self.lib.vtlGetConstants(*[C.byref(c) for c in cs]))
         self.sr,self.ntube,self.ntract,self.nglottis=[c.value for c in cs]
         self.names,self.minimum,self.maximum,self.neutral=self._info('Tract',self.ntract)
+        self.legacy_maximum=self.maximum.copy()
+        self.maximum[self.names.index('TTX')]=7.5
+        self.maximum[self.names.index('TBX')]=6.5
         anatomy=ET.parse(self.speaker_path).getroot().find('vocal_tract_model/anatomy')
         pharynx=anatomy.find('pharynx');body=anatomy.find('tongue/body')
         angle=np.deg2rad(float(pharynx.get('rotation_angle_deg')))
@@ -82,6 +85,11 @@ class Engine:
         self.geom.p3_manual_root.argtypes=[C.c_int];self.geom.p3_manual_root.restype=C.c_int
         self.geom.p3_profile.argtypes=[C.c_int,D,D];self.geom.p3_profile.restype=C.c_int
         self.geom.p3_lateral_fit.argtypes=[C.c_int];self.geom.p3_lateral_fit.restype=None
+        self.geom.p4_larynx.argtypes=[C.c_double];self.geom.p4_larynx.restype=C.c_int
+        self.geom.p4_uvula_contact.argtypes=[];self.geom.p4_uvula_contact.restype=C.c_double
+        self.geom.p4_blade_rib.argtypes=[];self.geom.p4_blade_rib.restype=C.c_double
+        self.geom.p4_section_count.argtypes=[];self.geom.p4_section_count.restype=C.c_int
+        self.section_count=self.geom.p4_section_count()
         self.manual_root=False
         self.meshmeta=[]
         for i in range(len(PARTS)):
@@ -173,10 +181,19 @@ class Engine:
         fade=min(480,n//4); audio[:fade]*=np.linspace(0,1,fade); audio[-fade:]*=np.linspace(1,0,fade)
         return audio
 
-    def prepare_tube(self,p,lip_width=1.):
+    @staticmethod
+    def validated_larynx(value=0.):
+        if isinstance(value,bool):raise ValueError('Invalid larynx height')
+        value=float(value)
+        if not np.isfinite(value) or not -1.<=value<=1.:raise ValueError('声门高低范围为 -1 至 1 cm')
+        return value
+
+    def prepare_tube(self,p,lip_width=1.,larynx_height=0.):
         p=self.validated(p)
+        larynx_height=self.validated_larynx(larynx_height)
         if not np.isfinite(lip_width) or not .55<=lip_width<=1.6:raise ValueError('Invalid lip width')
         with self.geometry_lock:
+            check(self.geom.p4_larynx(larynx_height))
             limited=np.empty(self.ntract);check(self.geom.p2_update(dp(p),lip_width,dp(limited)))
             return self._current_tube()
 
@@ -193,39 +210,41 @@ class Engine:
         if not np.isfinite(out[:n]).all():raise RuntimeError('Nonfinite synthesis')
         return out[:n]
 
-    def constrain_nasal_opening(self,p,lip_width=1.):
+    def constrain_nasal_opening(self,p,lip_width=1.,larynx_height=0.):
         p=self.validated(p);index=self.names.index('VO');requested=max(0.,p[index]);base=p.copy();base[index]=0
         if requested<=0:return p,None
         with self.geometry_lock:
-            baseline=float(self.prepare_tube(base,lip_width)['areas'][16:].min())
+            baseline=float(self.prepare_tube(base,lip_width,larynx_height)['areas'][16:].min())
             threshold=min(.08,baseline*.5)
-            if baseline<.01 or self.prepare_tube(p,lip_width)['areas'][16:].min()>=threshold:return p,None
+            if baseline<.01 or self.prepare_tube(p,lip_width,larynx_height)['areas'][16:].min()>=threshold:return p,None
             # Find the first unsafe interval, then bisect. Do not assume the
             # entire native response is monotonic over arbitrarily large VO.
             low=0.;high=requested
             for value in np.linspace(0,requested,13)[1:]:
                 q=p.copy();q[index]=value
-                if self.prepare_tube(q,lip_width)['areas'][16:].min()<threshold:high=value;break
+                if self.prepare_tube(q,lip_width,larynx_height)['areas'][16:].min()<threshold:high=value;break
                 low=value
             for _ in range(9):
                 mid=(low+high)/2;q=p.copy();q[index]=mid
-                if self.prepare_tube(q,lip_width)['areas'][16:].min()>=threshold:low=mid
+                if self.prepare_tube(q,lip_width,larynx_height)['areas'][16:].min()>=threshold:low=mid
                 else:high=mid
             p[index]=max(0.,np.floor(low*100)/100)
         return p,{'requested_area':requested,'accepted_area':float(p[index]),'minimum_oral_area':threshold}
 
-    def snapshot(self,p,section=65,lip_width=1.):
-        p=self.validated(p); section=int(np.clip(section,0,128)); started=time.perf_counter()
+    def snapshot(self,p,section=None,lip_width=1.,larynx_height=0.):
+        p=self.validated(p); section=int(np.clip(self.section_count//2 if section is None else section,0,self.section_count-1)); started=time.perf_counter()
+        larynx_height=self.validated_larynx(larynx_height)
         if not np.isfinite(lip_width) or not .55<=lip_width<=1.6:raise ValueError('Invalid lip width')
         with self.geometry_lock:
+            check(self.geom.p4_larynx(larynx_height))
             limited=np.zeros(self.ntract); check(self.geom.p2_update(dp(p),float(lip_width),dp(limited)))
             meshes=[]
             for i,(nv,nf,nr,np_) in enumerate(self.meshmeta):
                 v=np.empty((nv,3)); f=np.empty((nf,3),dtype=np.int32); c=np.zeros(4,dtype=np.int32)
                 check(self.geom.p0_mesh(i,dp(v),ip(f),ip(c)))
                 meshes.append({'name':PARTS[i],'vertices':v.round(5).ravel().tolist(),'triangles':f.ravel().tolist(),'ribs':int(nr),'points':int(np_)})
-            center=np.empty((129,5)); areas=np.empty(129); tube=np.empty(self.ntube)
-            assert self.geom.p0_sections(dp(center),dp(areas),dp(tube)) == 129
+            center=np.empty((self.section_count,5)); areas=np.empty(self.section_count); tube=np.empty(self.ntube)
+            assert self.geom.p0_sections(dp(center),dp(areas),dp(tube)) == self.section_count
             upper=np.empty(96); lower=np.empty(96)
             assert self.geom.p3_profile(section,dp(upper),dp(lower)) == 96
             contours={}
@@ -235,19 +254,23 @@ class Engine:
             nasal_lengths=np.empty(19);nasal_areas=np.empty(19);nasal_port=np.empty(2)
             assert self.geom.p1_nasal(dp(nasal_lengths),dp(nasal_areas),dp(nasal_port))==19
             airway_sections=[]
-            for i in range(129):
+            for i in range(self.section_count):
                 up=np.empty(96);lo=np.empty(96);self.geom.p3_profile(i,dp(up),dp(lo))
                 ok=(np.abs(up)<100)&(np.abs(lo)<100)&(up>=lo)
-                airway_sections.append({'index':i,'upper':[round(float(v),5) if flag else None for v,flag in zip(up,ok)],'lower':[round(float(v),5) if flag else None for v,flag in zip(lo,ok)]})
+                gap=np.where(ok,np.maximum(0,up-lo),0)
+                airway_sections.append({'index':i,'area':float(np.sum((gap[:-1]+gap[1:])*.5)*(7/96)),
+                    'upper':[round(float(v),5) if flag else None for v,flag in zip(up,ok)],'lower':[round(float(v),5) if flag else None for v,flag in zip(lo,ok)]})
             acoustic=self._current_tube();lengths=acoustic['lengths'];tube_api=acoustic['areas']
             mag=np.empty(4096); phase=np.empty(4096)
             check(self.geom.p2_transfer(4096,dp(mag),dp(phase)))
+            uvula_contact_lift=float(self.geom.p4_uvula_contact())
+            tongue_blade_rib=float(self.geom.p4_blade_rib())
         freq=np.arange(4096)*self.sr/4096; keep=(freq<=6000)
         db=20*np.log10(np.maximum(mag,1e-10))
         peaks,_=find_peaks(db[:513],prominence=3,distance=8)
         peaks=peaks[freq[peaks]>100][:4]
         valid=(np.abs(upper)<100)&(np.abs(lower)<100)&(upper>=lower)
-        return {'params':p.tolist(),'manual_root':self.manual_root,'lip_width':float(lip_width),'limited':limited.tolist(),'meshes':meshes,'contours':contours,'airway_sections':airway_sections,
+        return {'params':p.tolist(),'geometry_version':'m10/3','tongue_blade_rib':tongue_blade_rib,'uvula_contact_lift':uvula_contact_lift,'larynx_height':larynx_height,'manual_root':self.manual_root,'lip_width':float(lip_width),'limited':limited.tolist(),'meshes':meshes,'contours':contours,'airway_sections':airway_sections,
             'nasal':{'lengths':nasal_lengths.round(5).tolist(),'areas':nasal_areas.round(5).tolist(),'port_position':float(nasal_port[0]),'port_area':float(nasal_port[1])},
             'centerline':center.round(5).tolist(),'raw_areas':areas.round(6).tolist(),
             'tube_areas':tube_api.round(6).tolist(),'tube_lengths':lengths.round(6).tolist(),
@@ -259,7 +282,7 @@ class Engine:
             'resonances':freq[peaks].round(1).tolist(),'compute_ms':(time.perf_counter()-started)*1000}
 
     def metadata(self):
-        return {'version':self.version,'geometry_version':'m10/2','posterior_limits':self.posterior,'speaker':self.speaker,'sample_rate':self.sr,'num_tube_sections':self.ntube,'source_presets':SOURCE_PRESETS,'source_limits':SOURCE_LIMITS,
+        return {'version':self.version,'geometry_version':'m10/3','section_count':self.section_count,'larynx_limits':[-1.,1.],'posterior_limits':self.posterior,'speaker':self.speaker,'sample_rate':self.sr,'num_tube_sections':self.ntube,'source_presets':SOURCE_PRESETS,'source_limits':SOURCE_LIMITS,
             'parameters':[{'name':n,'label':LABELS[n],'min':float(lo),'max':float(hi),'neutral':float(ne)} for n,lo,hi,ne in zip(self.names,self.minimum,self.maximum,self.neutral)],
             'presets':self.presets,'consonants':self.consonants,'glottis_names':self.gnames,'glottis_neutral':self.gneutral.tolist(),
             'speaker_sha256':hashlib.sha256(self.speaker_path.read_bytes()).hexdigest()}

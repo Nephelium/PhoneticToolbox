@@ -1,0 +1,1140 @@
+{
+  "checked_on": "2026-10-05",
+  "task": "P19-R12",
+  "verified_or_partially_verified_authors": [
+    {
+      "id": "DOC-VTL24",
+      "authors": "Peter Birkholz",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://vocaltractlab.de/download-vocaltractlab/VTL2.4-manual.pdf"
+      ],
+      "basis": "Official manual title page, 2025-12-05",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "DOC-VTL23",
+      "authors": "Peter Birkholz",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://vocaltractlab.de/download-vocaltractlab/VTL2.3-manual.pdf"
+      ],
+      "basis": "Official manual title page, 2020-08-09",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "SRC-THREE",
+      "authors": "three.js authors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://raw.githubusercontent.com/mrdoob/three.js/r180/LICENSE"
+      ],
+      "basis": "Release r180 copyright attribution",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "SRC-VTLWRAPPER",
+      "authors": "Paul Krug",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://raw.githubusercontent.com/paul-krug/VocalTractLab-Python/master/setup.py"
+      ],
+      "basis": "Upstream setup.py author field",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "SRC-MEDIAPIPE",
+      "authors": "The MediaPipe Authors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://raw.githubusercontent.com/google-ai-edge/mediapipe/v0.10.14/setup.py"
+      ],
+      "basis": "v0.10.14 setup.py author and copyright fields",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "SRC-FFMPEG",
+      "authors": "FFmpeg contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://raw.githubusercontent.com/FFmpeg/FFmpeg/master/CREDITS"
+      ],
+      "basis": "Official CREDITS identifies project contributors by Git history",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "SRC-MFA",
+      "authors": "Montreal Corpus Tools / Michael McAuliffe（MFA）；Daniel Povey 等（Kaldi）",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://pypi.org/pypi/Montreal-Forced-Aligner/3.3.8/json",
+        "https://kaldi-asr.org/doc/about.html"
+      ],
+      "basis": "MFA 3.3.8 author/maintainer fields and official Kaldi citation; individual model authors remain separate",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "SRC-HTML2CANVAS",
+      "authors": "Niklas von Hertzen",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://raw.githubusercontent.com/niklasvh/html2canvas/v1.4.1/package.json"
+      ],
+      "basis": "v1.4.1 package.json author field and LICENSE copyright",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "SRC-REACT",
+      "authors": "Meta Platforms, Inc. and affiliates",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://raw.githubusercontent.com/facebook/react/main/LICENSE"
+      ],
+      "basis": "Upstream copyright attribution",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "SRC-BABEL",
+      "authors": "Sebastian McKenzie and other contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://raw.githubusercontent.com/babel/babel/main/LICENSE"
+      ],
+      "basis": "Upstream copyright attribution",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "SRC-TAILWIND",
+      "authors": "Tailwind Labs, Inc.",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://raw.githubusercontent.com/tailwindlabs/tailwindcss/main/LICENSE"
+      ],
+      "basis": "Upstream copyright attribution",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "SRC-SHEETJS",
+      "authors": "SheetJS LLC",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://docs.sheetjs.com/docs/miscellany/license/"
+      ],
+      "basis": "Official license page names rights holder",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "SRC-LUCIDE",
+      "authors": "Lucide Icons and Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://raw.githubusercontent.com/lucide-icons/lucide/main/LICENSE"
+      ],
+      "basis": "Upstream copyright attribution",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "PKG-SCIPY",
+      "authors": "SciPy Developers",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://pypi.org/pypi/scipy/1.16.3/json"
+      ],
+      "basis": "1.16.3 release maintainer metadata names development team",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "PKG-PANDAS",
+      "authors": "The Pandas Development Team",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://pypi.org/pypi/pandas/2.3.3/json"
+      ],
+      "basis": "2.3.3 release author metadata",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "PKG-PYWAVELETS",
+      "authors": "The PyWavelets Developers",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://pypi.org/pypi/PyWavelets/1.9.0/json"
+      ],
+      "basis": "1.9.0 release maintainer metadata names development team",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "PKG-PYTHON-DOCX",
+      "authors": "Steve Canny",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://pypi.org/pypi/python-docx/1.2.0/json"
+      ],
+      "basis": "1.2.0 release author metadata",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "PKG-OPENCV-CONTRIB-PYTHON",
+      "authors": "OpenCV Team",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://pypi.org/pypi/opencv-contrib-python/4.13.0.92/json"
+      ],
+      "basis": "4.13.0.92 release maintainer metadata",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "PKG-PILLOW",
+      "authors": "Jeffrey A. Clark and contributors；Fredrik Lundh and contributors（PIL）",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://pypi.org/pypi/Pillow/12.0.0/json"
+      ],
+      "basis": "12.0.0 release author metadata and project description distinguishes Pillow/PIL",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "M17-UNICODE-PHONETIC-ENCODING",
+      "authors": "The Unicode Consortium（Unicode 标准）；Kirk Miller、Martin Ball（两份提案）；SIL Global（字体资料）",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://www.unicode.org/versions/Unicode16.0.0/",
+        "https://www.unicode.org/L2/L2020/20113-voqs-correction.pdf",
+        "https://www.unicode.org/L2/L2024/24182r-cartouche.pdf",
+        "https://software.sil.org/fonts/bridging-diacritics/"
+      ],
+      "basis": "Official standard citation, proposal title-page bylines and SIL copyright attribution",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "M17-INTERACTIVE-LAYOUT-REFERENCE",
+      "authors": "Weston Ruter（IPA keyboard）",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://raw.githubusercontent.com/westonruter/ipa-chart/master/README.md"
+      ],
+      "basis": "Upstream README developer credit; ipachart.com page owner remains unidentified, audio credits do not identify layout author",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "M17-IOS-IPA-PHONETICS-REFERENCE",
+      "authors": "John Esling、Christopher Coey",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://apps.apple.com/us/app/ipa-phonetics/id869642260"
+      ],
+      "basis": "Official App Store copyright attribution; screenshot version not inferred from current release",
+      "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
+    },
+    {
+      "id": "P01-PY-PYINSTALLER-HOOKS-CONTRIB",
+      "authors": "Legorooj（项目维护）",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://pypi.org/pypi/pyinstaller-hooks-contrib/2026.7/json",
+        "https://raw.githubusercontent.com/pyinstaller/pyinstaller-hooks-contrib/master/setup.cfg"
+      ],
+      "basis": "Exact release maintainer field and official setup.cfg; maintainer role is explicit, not a complete author list",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-ANDROID-ARM-EABI",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-android-arm-eabi/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-ANDROID-ARM64",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-android-arm64/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-DARWIN-ARM64",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-darwin-arm64/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-DARWIN-X64",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-darwin-x64/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-FREEBSD-X64",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-freebsd-x64/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-ARM-GNUEABIHF",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-arm-gnueabihf/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-ARM64-GNU",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-arm64-gnu/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-ARM64-MUSL",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-arm64-musl/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-PPC64-GNU",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-ppc64-gnu/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-S390X-GNU",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-s390x-gnu/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-X64-GNU",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-x64-gnu/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-LINUX-X64-MUSL",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-x64-musl/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-OPENHARMONY-ARM64",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-openharmony-arm64/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-WIN32-ARM64-MSVC",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-win32-arm64-msvc/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-BINDING-WIN32-X64-MSVC",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-win32-x64-msvc/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN-PLUGINUTILS",
+      "authors": "rolldown/plugins repository contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fpluginutils/1.0.1",
+        "https://registry.npmjs.org/@rolldown/pluginutils/-/pluginutils-1.0.1.tgz"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-VOLAR-LANGUAGE-CORE",
+      "authors": "Johnson Chu",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40volar%2Flanguage-core/2.4.28",
+        "https://raw.githubusercontent.com/volarjs/volar.js/master/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-VOLAR-SOURCE-MAP",
+      "authors": "Johnson Chu",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40volar%2Fsource-map/2.4.28",
+        "https://raw.githubusercontent.com/volarjs/volar.js/master/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-VOLAR-TYPESCRIPT",
+      "authors": "Johnson Chu",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40volar%2Ftypescript/2.4.28",
+        "https://raw.githubusercontent.com/volarjs/volar.js/master/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-VUE-LANGUAGE-CORE",
+      "authors": "Johnson Chu",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40vue%2Flanguage-core/3.3.11",
+        "https://raw.githubusercontent.com/vuejs/language-tools/master/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ALIEN-SIGNALS",
+      "authors": "Johnson Chu",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/alien-signals/3.2.1",
+        "https://raw.githubusercontent.com/stackblitz/alien-signals/master/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-FSEVENTS",
+      "authors": "Philipp Dunkel、Ben Noordhuis、Elan Shankar、Miroslav Bajtoš、Paul Miller",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/fsevents/2.3.3"
+      ],
+      "basis": "Release contributors field",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-ANDROID-ARM64",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-android-arm64/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-DARWIN-ARM64",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-darwin-arm64/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-DARWIN-X64",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-darwin-x64/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-FREEBSD-X64",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-freebsd-x64/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-LINUX-ARM-GNUEABIHF",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-linux-arm-gnueabihf/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-LINUX-ARM64-GNU",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-linux-arm64-gnu/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-LINUX-ARM64-MUSL",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-linux-arm64-musl/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-LINUX-X64-GNU",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-linux-x64-gnu/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-LINUX-X64-MUSL",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-linux-x64-musl/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-WIN32-ARM64-MSVC",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-win32-arm64-msvc/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-LIGHTNINGCSS-WIN32-X64-MSVC",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-win32-x64-msvc/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-MUGGLE-STRING",
+      "authors": "Johnson Chu",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/muggle-string/0.4.1",
+        "https://raw.githubusercontent.com/johnsoncodehk/muggle-string/master/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-ROLLDOWN",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/rolldown/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P01-NPM-VUE-TSC",
+      "authors": "Johnson Chu",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/vue-tsc/3.3.11",
+        "https://raw.githubusercontent.com/vuejs/language-tools/master/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-PY-CLICK",
+      "authors": "Pallets",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://pypi.org/pypi/click/8.5.0/json",
+        "https://raw.githubusercontent.com/pallets/click/main/LICENSE.txt"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-REDOCLY-CONFIG-0-22-0",
+      "authors": "Redocly Inc.",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40redocly%2Fconfig/0.22.0",
+        "https://raw.githubusercontent.com/Redocly/redocly-cli/main/LICENSE.md"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-REDOCLY-OPENAPI-CORE-1-34-19",
+      "authors": "Redocly Inc.",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40redocly%2Fopenapi-core/1.34.19",
+        "https://raw.githubusercontent.com/Redocly/redocly-cli/main/LICENSE.md"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-ANDROID-ARM-EABI-1-2-7",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-android-arm-eabi/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-ANDROID-ARM64-1-2-7",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-android-arm64/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-DARWIN-ARM64-1-2-7",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-darwin-arm64/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-DARWIN-X64-1-2-7",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-darwin-x64/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-FREEBSD-X64-1-2-7",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-freebsd-x64/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-ARM-GNUEABIHF-1-2-7",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-arm-gnueabihf/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-ARM64-GNU-1-2-7",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-arm64-gnu/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-ARM64-MUSL-1-2-7",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-arm64-musl/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-PPC64-GNU-1-2-7",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-ppc64-gnu/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-S390X-GNU-1-2-7",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-s390x-gnu/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-X64-GNU-1-2-7",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-x64-gnu/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-LINUX-X64-MUSL-1-2-7",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-linux-x64-musl/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-OPENHARMONY-ARM64-1-2-7",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-openharmony-arm64/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-WIN32-ARM64-MSVC-1-2-7",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-win32-arm64-msvc/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-BINDING-WIN32-X64-MSVC-1-2-7",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fbinding-win32-x64-msvc/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-PLUGINUTILS-1-0-1",
+      "authors": "rolldown/plugins repository contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40rolldown%2Fpluginutils/1.0.1",
+        "https://registry.npmjs.org/@rolldown/pluginutils/-/pluginutils-1.0.1.tgz"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-VOLAR-LANGUAGE-CORE-2-4-28",
+      "authors": "Johnson Chu",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40volar%2Flanguage-core/2.4.28",
+        "https://raw.githubusercontent.com/volarjs/volar.js/master/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-VOLAR-SOURCE-MAP-2-4-28",
+      "authors": "Johnson Chu",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40volar%2Fsource-map/2.4.28",
+        "https://raw.githubusercontent.com/volarjs/volar.js/master/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-VOLAR-TYPESCRIPT-2-4-28",
+      "authors": "Johnson Chu",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40volar%2Ftypescript/2.4.28",
+        "https://raw.githubusercontent.com/volarjs/volar.js/master/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-VUE-LANGUAGE-CORE-3-3-11",
+      "authors": "Johnson Chu",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/%40vue%2Flanguage-core/3.3.11",
+        "https://raw.githubusercontent.com/vuejs/language-tools/master/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ALIEN-SIGNALS-3-2-1",
+      "authors": "Johnson Chu",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/alien-signals/3.2.1",
+        "https://raw.githubusercontent.com/stackblitz/alien-signals/master/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-FSEVENTS-2-3-3",
+      "authors": "Philipp Dunkel、Ben Noordhuis、Elan Shankar、Miroslav Bajtoš、Paul Miller",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/fsevents/2.3.3"
+      ],
+      "basis": "Release contributors field",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-1-33-0",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-ANDROID-ARM64-1-33-0",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-android-arm64/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-DARWIN-ARM64-1-33-0",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-darwin-arm64/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-DARWIN-X64-1-33-0",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-darwin-x64/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-FREEBSD-X64-1-33-0",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-freebsd-x64/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-LINUX-ARM-GNUEABIHF-1-33-0",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-linux-arm-gnueabihf/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-LINUX-ARM64-GNU-1-33-0",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-linux-arm64-gnu/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-LINUX-ARM64-MUSL-1-33-0",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-linux-arm64-musl/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-LINUX-X64-GNU-1-33-0",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-linux-x64-gnu/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-LINUX-X64-MUSL-1-33-0",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-linux-x64-musl/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-WIN32-ARM64-MSVC-1-33-0",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-win32-arm64-msvc/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-LIGHTNINGCSS-WIN32-X64-MSVC-1-33-0",
+      "authors": "Devon Govett",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/lightningcss-win32-x64-msvc/1.33.0",
+        "https://raw.githubusercontent.com/parcel-bundler/lightningcss/master/Cargo.toml"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-MS-2-1-3",
+      "authors": "Vercel, Inc.",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/ms/2.1.3",
+        "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
+      ],
+      "basis": "Exact 2.1.3 release copyright notice",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-MUGGLE-STRING-0-4-1",
+      "authors": "Johnson Chu",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/muggle-string/0.4.1",
+        "https://raw.githubusercontent.com/johnsoncodehk/muggle-string/master/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-ROLLDOWN-1-2-7",
+      "authors": "VoidZero Inc. & Contributors",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/rolldown/1.2.7",
+        "https://raw.githubusercontent.com/rolldown/rolldown/main/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-VUE-TSC-3-3-11",
+      "authors": "Johnson Chu",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/vue-tsc/3.3.11",
+        "https://raw.githubusercontent.com/vuejs/language-tools/master/LICENSE"
+      ],
+      "basis": "Publisher metadata and official project copyright attribution; original included version unchanged",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    },
+    {
+      "id": "P02-NPM-YAML-AST-PARSER-0-0-43",
+      "authors": "MuleSoft, Inc.",
+      "checked_on": "2026-10-05",
+      "urls": [
+        "https://registry.npmjs.org/yaml-ast-parser/0.0.43",
+        "https://registry.npmjs.org/yaml-ast-parser/-/yaml-ast-parser-0.0.43.tgz"
+      ],
+      "basis": "Exact 0.0.43 release copyright notice",
+      "scope": "Attributed author, team, rights holder or explicitly labeled maintainer; no included-version or license change"
+    }
+  ],
+  "unresolved_authors": [
+    "PENDING-EGG",
+    "PENDING-DICTIONARY",
+    "PENDING-IPA",
+    "PENDING-PHONOLOGY",
+    "ORIGIN-WEBEDITOR",
+    "ASSET-MASCOT",
+    "M17-CIN-REFERENCE"
+  ],
+  "unresolved_reason": "Existing local records and identified source files contain insufficient original author attribution; no author inferred from current project ownership. The original CIN file is excluded and its author is not established.",
+  "hidden_project_entries": [
+    "PROJECT-SYNTHETIC-WAV",
+    "PROJECT-M10",
+    "PROJECT-M05",
+    "METHOD-M16-SPECTRAL-SUBTRACTION"
+  ],
+  "historical_versions_and_licenses": "Unchanged",
+  "build_metadata_query": {
+    "unique_packages": 44,
+    "metadata_success_count": 43,
+    "fallback": "Official project copyright files and exact published archives read without executing scripts"
+  },
+  "unresolved_build_authors": [
+    {
+      "id": "P02-NPM-ARGPARSE-2-0-1",
+      "title": "argparse",
+      "urls": [
+        "https://registry.npmjs.org/argparse/2.0.1"
+      ],
+      "reason": "Release metadata lacks author attribution; release license alone credits upstream Python rights holders and does not establish JavaScript port author"
+    }
+  ]
+}

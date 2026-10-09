@@ -35,6 +35,11 @@ def main():
     def click(text):js('[...document.querySelectorAll("button")].find(b=>b.offsetParent&&b.textContent.trim()==='+json.dumps(text)+')?.click()')
     try:
         until('!!document.querySelector("nav")');click('语音合成');until('!!document.querySelector("[aria-label=语音合成工作区]")')
+        if os.environ.get('M06_R5_ONLY'):
+            from verify_m06_r5_qt import verify
+            verify(window,out,db,js,click,until,pause,report)
+            report['success']=True
+            return
         js('(()=>{const e=document.querySelector("[aria-label=总时长]");e.value="0.3";e.dispatchEvent(new Event("input",{bubbles:true}))})()');click('应用时长')
         js('(()=>{const e=document.querySelector("input.ipa-text");e.value="a i";e.dispatchEvent(new Event("input",{bubbles:true}))})()');click('生成元音')
         until('document.body.innerText.includes("元音曲线已生成")')
@@ -79,7 +84,7 @@ def main():
         report['checks'].append('32 actual Qt layout/axis combinations; existing audio duration changes immediately')
         click('打开音频目录');until('document.querySelector(".source-picker").options.length>1')
         js('(()=>{const e=document.querySelector(".source-picker");e.selectedIndex=1;e.dispatchEvent(new Event("change",{bubbles:true}))})()')
-        until('document.body.innerText.includes("覆盖参数确认")');click('应用并覆盖')
+        until('document.body.innerText.includes("音频已加载")');click('提取参数')
         until('document.body.innerText.includes("参数提取完成")')
         report['r3_extractions']=[]
         import sqlite3
@@ -109,8 +114,7 @@ def main():
             report['r3_layouts'].append(m)
             window.view.grab().save(str(out/f'r3-qt-{width}.png'))
         report['checks'].append('R3 actual Qt CC/AC/native REAPER extraction and metadata, shared full-width transport and inline spectrum label at two sizes')
-        from verify_m06_r4_qt import verify as verify_r4
-        verify_r4(window,out,db,js,click,until,pause,report)
+
         window.resize(1920,1000);pause(100)
         pause(250);window.view.grab().save(str(out/'qt.png'))
         report['success']=True

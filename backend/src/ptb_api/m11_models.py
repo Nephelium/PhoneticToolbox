@@ -8,8 +8,8 @@ from .storage_policy import PolicyVersion, LEGACY_POLICY_VERSION
 
 
 class M11Config(WireModel):
-    beam: int = Field(default=10, ge=1, le=10000, strict=True)
-    retry_beam: int = Field(default=40, ge=1, le=40000, strict=True)
+    beam: int = Field(default=100, ge=1, le=10000, strict=True)
+    retry_beam: int = Field(default=400, ge=1, le=40000, strict=True)
 
     @model_validator(mode='after')
     def retry_constraint(self):

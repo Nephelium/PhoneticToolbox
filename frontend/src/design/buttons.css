@@ -21,5 +21,14 @@ html:root[data-button-style][data-button-effects=on] button:active:not(:disabled
 html:root[data-button-style] button:disabled,
 html:root[data-button-style][data-button-effects=off] button{box-shadow:none!important;filter:none!important;transition:none!important}
 html:root[data-button-style] button:focus-visible{outline:2px solid var(--accent)!important;outline-offset:3px!important}
+/* Navigation already has its own selected item and whole-tab indicators. */
+html:root[data-button-style] :is(.nav-item,.tab-wrap>button):is(:enabled,:disabled){outline:none!important;outline-offset:0!important}
+html:root[data-button-style] .nav-item{background:transparent!important;border-color:transparent!important;color:var(--text)!important}
+html:root[data-button-style] .nav-item.selected{background:var(--selected)!important;border-color:var(--accent)!important;color:var(--accent)!important}
+html:root[data-button-style] .tab-wrap>button:is(:enabled,:disabled){background:transparent!important;border:0!important;box-shadow:none!important;filter:none!important}
+html:root[data-button-style] .tab-wrap>button[aria-selected=true]:is(:enabled,:disabled){background:var(--selected)!important}
+html:root[data-button-style] .tab-wrap>button{color:var(--muted)!important}
+html:root[data-button-style] .tab-wrap.active>button{color:var(--accent)!important}
+html:root[data-button-style] :is(.nav-item,.tab-wrap>button):focus-visible{text-decoration:underline;text-underline-offset:3px}
 @media(prefers-reduced-motion:no-preference){html:root[data-button-style][data-button-effects=on] button{transition:background-color .12s,border-color .12s,box-shadow .14s}}
 @media(prefers-reduced-motion:reduce){html:root[data-button-style] button{transition:none!important}}

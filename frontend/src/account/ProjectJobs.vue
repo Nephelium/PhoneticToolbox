@@ -65,7 +65,7 @@ onUnmounted(()=>{disposed=true;abort.abort();clearTimeout(timer);pending.clear()
 </template>
 <style scoped>
 .project-jobs {margin-top:1.5rem;border-top:1px solid var(--border);padding-top:1rem;min-width:0}
-.project-jobs :deep(.task-panel) {margin-top:1rem;display:flex;flex-direction:column;align-items:flex-start;gap:.5rem;font-size:13px;line-height:1.6}
+.project-jobs :deep(.task-panel) {margin-top:1rem;display:flex;flex-direction:column;align-items:flex-start;gap:.5rem;font-size:0.928571rem;line-height:1.6}
 .project-jobs :deep(.status-dot) {display:none}
 .project-jobs :deep(.task-row) {display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;padding:.7rem 0}
 .job-record-buttons {display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem}

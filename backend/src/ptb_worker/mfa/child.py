@@ -32,13 +32,14 @@ def main():
     runtime = Path(request['runtime'])
     root.mkdir(parents=True, exist_ok=True)
     for key in ('MFA_ROOT_DIR', 'TEMP', 'TMP', 'TMPDIR', 'JOBLIB_TEMP_FOLDER', 'NUMBA_CACHE_DIR'):
-        folder = root / ('mfa-root' if key == 'MFA_ROOT_DIR' else 'temp')
+        folder = Path(request['kernel_cache']) if key=='NUMBA_CACHE_DIR' and request.get('kernel_cache') else root / ('mfa-root' if key == 'MFA_ROOT_DIR' else 'temp')
         folder.mkdir(exist_ok=True)
         os.environ[key] = str(folder)
     for key in ('BLAS_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'OMP_NUM_THREADS', 'MKL_NUM_THREADS', 'VECLIB_MAXIMUM_THREADS', 'NUMEXPR_NUM_THREADS', 'MFA_NUM_JOBS', 'CALC_JOBS', 'NUM_JOBS'):
         os.environ[key] = '1'
     # ADR-M11-001: V2's disabled JIT breaks current kalpy/librosa MFCC generation.
-    # Enable it only here; the cache is confined to this attempt.
+    # Enable it only here; the host may provide a cache of library kernels,
+    # isolated by verified runtime content identity. Audio/state are never cached.
     os.environ['NUMBA_DISABLE_JIT'] = '0'
     os.environ['JOBLIB_MULTIPROCESSING'] = '0'
     for key in ('PYTHONPATH', 'MFA_PROFILE', 'PGHOST', 'PGPORT', 'PGUSER', 'PGPASSWORD', 'PGDATABASE', 'DATABASE_URL', 'GITHUB_TOKEN', 'HF_TOKEN'):
@@ -70,9 +71,19 @@ def main():
         config.AUTO_SERVER = False
         config.NUM_JOBS = 1
         config.USE_MP = False
+        # 3.3.8 run_kaldi_function still starts a worker with USE_MP=False.
+        # Its default USE_THREADING=False spawns another Python per stage on
+        # Windows. Keep one CPU job and use MFA's supported thread worker.
+        config.USE_THREADING = True
+        config.BLAS_NUM_THREADS = 1
+        config.TEMPORARY_DIRECTORY = root / 'mfa_temp'
         if hasattr(config, 'GLOBAL_CONFIG'):
             config.GLOBAL_CONFIG.current_profile.use_postgres = False
             config.GLOBAL_CONFIG.current_profile.auto_server = False
+            config.GLOBAL_CONFIG.current_profile.use_threading = True
+            config.GLOBAL_CONFIG.current_profile.use_mp = False
+            config.GLOBAL_CONFIG.current_profile.num_jobs = 1
+            config.GLOBAL_CONFIG.current_profile.blas_num_threads = 1
         import _kalpy
         import soundfile
         from montreal_forced_aligner.alignment import PretrainedAligner
@@ -87,26 +98,63 @@ def main():
             if info.frames <= 0 or info.channels not in (1, 2) or info.duration > 120:
                 raise ValueError('m11_audio_budget')
         from praatio import textgrid
+        adaptations=[]
         for transcript in corpus.rglob('*.TextGrid'):
             tg=textgrid.openTextgrid(str(transcript),includeEmptyIntervals=True)
             usable=[tg.getTier(name) for name in tg.tierNames if name.lower()!='notes' and not name.endswith(('words','phones'))]
             if not any(isinstance(tier,textgrid.IntervalTier) and any(e.label.strip() for e in tier.entries) for tier in usable):
-                raise ValueError('m11_transcript_tiers')
-        write_json(root / 'status.json', dict(stage='aligning', versions=versions))
-        aligner = PretrainedAligner(
-            corpus_directory=str(corpus), dictionary_path=request['dictionary'],
-            acoustic_model_path=request['model'], output_directory=str(output),
-            temporary_directory=str(root / 'mfa_temp'), clean=True, verbose=True,
-            num_jobs=1, use_mp=False, beam=request['config']['beam'], retry_beam=request['config']['retry_beam'])
-        aligner.setup()
-        if aligner.excluded_phones or aligner.excluded_pronunciation_count:
-            raise ValueError('m11_model_mismatch')
+                words=[tg.getTier(name) for name in tg.tierNames if name.endswith('words') and isinstance(tg.getTier(name),textgrid.IntervalTier) and any(e.label.strip() for e in tg.getTier(name).entries)]
+                if len(words)!=1:raise ValueError('m11_transcript_tiers')
+                # Input is a host-owned copy. Preserve source files, and use
+                # word labels as whole-recording text without old boundaries.
+                labels=' '.join(e.label.strip() for e in words[0].entries if e.label.strip())
+                converted=textgrid.Textgrid()
+                converted.addTier(textgrid.IntervalTier('utterance',[(tg.minTimestamp,tg.maxTimestamp,labels)],minT=tg.minTimestamp,maxT=tg.maxTimestamp))
+                converted.save(str(transcript),format='long_textgrid',includeBlankSpaces=True)
+                adaptations.append(dict(file=transcript.relative_to(corpus).as_posix(),source_tier=words[0].name,mode='words-to-whole-recording-transcript'))
+        timings={}
         diagnostics = root / 'diagnostics'
         diagnostics.mkdir(exist_ok=True)
+        class CheckedAligner(PretrainedAligner):
+            def dictionary_setup(self):
+                begin=time.monotonic()
+                try:return super().dictionary_setup()
+                finally:timings['dictionary_seconds']=time.monotonic()-begin
+            def normalize_text(self):
+                begin=time.monotonic()
+                try:
+                    value=super().normalize_text()
+                    # Native normalization is authoritative. Check before
+                    # lexicon compilation and MFCC generation, not after setup.
+                    if self.excluded_phones or self.excluded_pronunciation_count:raise ValueError('m11_model_mismatch')
+                    self.save_oovs_found(str(diagnostics))
+                    oov_files=[p for p in diagnostics.glob('oovs_found_*.txt') if p.stat().st_size]
+                    if oov_files:
+                        print('M11 未登录词（词典未收录）：',flush=True)
+                        for p in oov_files:
+                            print(p.read_text(encoding='utf8')[:4096],flush=True)
+                        raise ValueError('m11_oov_words')
+                    return value
+                finally:timings['normalize_seconds']=time.monotonic()-begin
+            def generate_features(self):
+                begin=time.monotonic()
+                try:return super().generate_features()
+                finally:timings['features_seconds']=time.monotonic()-begin
+        write_json(root / 'status.json', dict(stage='aligning', versions=versions))
+        aligner = CheckedAligner(
+            corpus_directory=str(corpus), dictionary_path=request['dictionary'],
+            acoustic_model_path=request['model'], beam=request['config']['beam'], retry_beam=request['config']['retry_beam'])
+        begin=time.monotonic()
+        aligner.setup()
+        timings['setup_seconds']=time.monotonic()-begin
+        if aligner.excluded_phones or aligner.excluded_pronunciation_count:
+            raise ValueError('m11_model_mismatch')
         aligner.save_oovs_found(str(diagnostics))
         if any(p.stat().st_size for p in diagnostics.glob('oovs_found_*.txt')):
             raise ValueError('m11_oov_words')
+        begin=time.monotonic()
         aligner.align()
+        timings['alignment_seconds']=time.monotonic()-begin
         write_json(root / 'status.json', dict(stage='exporting', versions=versions))
         aligner.export_files(str(output))
         # Parse actual output; a zero exit or empty output directory is insufficient.
@@ -131,7 +179,8 @@ def main():
         if len(summaries) != request['expected_files']:
             raise ValueError('m11_incomplete_output')
         write_json(root / 'response.json', dict(success=True, versions=versions, textgrids=summaries,
-                   elapsed_seconds=time.monotonic()-started, database='per-attempt-sqlite'))
+                   elapsed_seconds=time.monotonic()-started, database='per-attempt-sqlite',timings=timings,
+                   execution=dict(device='cpu',num_jobs=1,use_threading=True,use_mp=False,kernel_cache=bool(request.get('kernel_cache'))),transcript_adaptations=adaptations))
         write_json(root / 'status.json', dict(stage='complete', versions=versions))
     except BaseException as exc:
         import traceback
@@ -146,7 +195,7 @@ def main():
             'ModuleNotFoundError': 'm11_dependency_missing', 'ImportError': 'm11_dependency_missing',
             'FeatureGenerationError': 'm11_feature_failed',
         }.get(kind, 'm11_execution_failed')
-        write_json(root / 'response.json', dict(success=False, error=code, exception=kind))
+        write_json(root / 'response.json', dict(success=False, error=code, exception=kind,timings=locals().get('timings',{})))
     finally:
         log.close()
 

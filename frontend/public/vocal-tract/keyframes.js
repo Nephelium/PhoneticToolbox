@@ -68,7 +68,10 @@ export function setupKeyframes({initialFrames=[],initialCurve=[],getPose,applyPo
       name.onchange=()=>{f.name=name.value.trim();save();render();};
       const detail=document.createElement('small');detail.textContent=f.silent?'静音 · 保持构形 · 无基频':`唇宽 ${Math.round(f.lip_width*100)}% · ${{voiceless:'清声',whisper:'耳语近似',transition:'模式过渡'}[f.source?.mode]||Math.round(f.f0)+' Hz'}`;
       const label=document.createElement('label');label.textContent=f.silent?'静音':i===frames.length-1?'停留':'过渡';
-      const duration=document.createElement('input');Object.assign(duration,{type:'number',min:.05,max:3,step:.05,value:f.duration,disabled:busy});duration.setAttribute('aria-label',`姿势 ${i+1} ${f.silent?'静音':i===frames.length-1?'停留':'过渡'}秒数`);
+      const duration=document.createElement('input');Object.assign(duration,{type:'number',min:.05,max:3,step:.05,value:Number(f.duration.toFixed(5)),disabled:busy});duration.dataset.timeUnit='s';duration.setAttribute('aria-label',`姿势 ${i+1} ${f.silent?'静音':i===frames.length-1?'停留':'过渡'}秒数`);
+      const precision=()=>{if(duration.value.trim()&&Number.isFinite(+duration.value))duration.value=String(Number((+duration.value).toFixed(5)));};
+      duration.addEventListener('input',()=>{if(/e/i.test(duration.value)||(duration.value.split('.')[1]?.length??0)>5)precision();},true);
+      duration.addEventListener('change',precision,true);
       duration.onchange=()=>{const n=+duration.value;if(Number.isFinite(n)&&n>=.05&&n<=3){f.duration=n;save();}else duration.value=f.duration;render();};label.append(duration,document.createTextNode('秒'));
       const tools=document.createElement('div');tools.className='pose-tools';
       const edit=document.createElement('button');edit.textContent=editing===i?'保存':'编辑';edit.disabled=busy||(editing>=0&&editing!==i);edit.setAttribute('aria-label',`${editing===i?'保存':'编辑'}姿势 ${i+1}`);

@@ -2,6 +2,8 @@
 
 查验日期：2026-10-03。
 
+2026-10-05 P19-R11 补充：现有 29 套配色的逐项公开上游、作者、固定查验版本、许可原文及未决项见[主题许可核查](p19-theme-license-audit.md)。下文保留最初实施时的视觉参考记录；本次公开上游查验不倒推为最初引入版本，也不替代历史安装包读取方式的条款判断。
+
 ## 配色
 
 参考井井提供的 Codex 外观截图，以及本机安装包版本 26.930.3930.0 中主题名称与模式元数据，只读核对 29 个名称。未把 Codex 的 JavaScript、CSS、图标或字体复制进本项目。原应用实现的许可不在此声称为开源。
@@ -11,6 +13,8 @@
 上游名称/模式核对清单：Absolutely、Ayu、Catppuccin、Codex、Dracula、Everforest、GitHub、Gruvbox、Linear、Lobster、Material、Matrix、Monokai、Night Owl、Nord、Notion、OG、Oscurange、One、Proof、Raycast、Rose Pine、Sentry、Solarized、Temple、Tokyo Night、Vercel、VS Code Plus、Xcode。原元数据中 Ayu/Dracula/Lobster/Material/Matrix/Monokai/Night Owl/Nord/OG/Oscurange/Sentry/Temple/Tokyo Night 仅深色、Proof 仅浅色；本项目为这些补齐另一模式。
 
 关系：视觉参考与本项目独立适配。公共参考入口：[Codex](https://openai.com/codex/)。这些名称用于说明配色参考来源，不表示 OpenAI 或主题作者背书。科学轨道配色不随主题重新赋予意义。截图的相对路径仅用于本轮读取，不写入产品运行路径。
+
+当前实际选项为 29 套，已移除最初的 PhoneticToolbox 配色，默认采用 Codex。11 套公开上游的完整 MIT 许可原文已核对并保存，Gruvbox 的 MIT/X11 声明与 Monokai 的公开实现许可分列，另有 16 套保留来源或许可待确认。此计数描述来源证据完整程度，不表示全部配色已经取得公开发行授权。软件致谢由统一登记生成，保留每项的适配关系与未决标记。
 
 ## JetBrains Mono
 
@@ -22,7 +26,10 @@
 - 许可文件 `third_party/licenses/JetBrainsMono-OFL.txt` 与前端显示副本，SHA-256 `30f0c136e3c88e422d0791acd97238870f9054a9729bc34cf2ff0d4ed8cac4ad`。
 - 关于页同时显示 Doulos SIL 与 JetBrains Mono 许可。
 - 宋体、Times New Roman 使用设备已安装字体，不随应用分发商业字体文件。
+- 2026-10-07 首次准备窗口按井井要求使用楷体（KaiTi）与 Times New Roman。仅通过 Windows 字体接口选择设备字体，缺失时由系统回退，无字体文件分发或全局安装。
 
 ## K2 图标
 
 复用既有 `frontend/src/assets/k2.png`。显示时按 alpha >=32 的可见边界裁定占用，保留比例和边距，生成 16/24/32/48/64/128/256 尺寸图标。没有改画 logo 或覆盖原图片；Windows 窗口 QIcon 与后续打包 ICO 共用逻辑。已有冻结 EXE 保持原资源，不代表其图标自动更新。
+
+2026-10-07 首次准备卡片直接读取同一 ICO 对应的 EXE 内嵌图标资源，使用 Windows 原生绘制，不提前加载 Qt 或增加图像库。具体状态见[启动卡片验证](../testing/2026-10-07-startup-card-report.md)。

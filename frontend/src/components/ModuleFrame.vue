@@ -1,5 +1,8 @@
 <script setup lang="ts">
-// Layout only: the page owns data, jobs, dirty state, playback and visibility.
+import {onUnmounted} from 'vue';
+import {provideAudioSelection} from '../state/audio-selection.ts';
+// The page owns scientific data and jobs; audio selection is scoped to this frame.
+const selection=provideAudioSelection();onUnmounted(selection.dispose);
 defineProps<{label:string;fit?:boolean;unified?:boolean}>();
 </script>
 <template>

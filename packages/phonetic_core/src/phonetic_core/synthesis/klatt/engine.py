@@ -375,11 +375,7 @@ class Engine:
         max_f0 = float(self.f0_max_hz)
         target_len = max(2, int(round(self.duration * 1000.0 / frameshift_ms)))
         target_times = np.arange(target_len, dtype=float) * frameshift_ms / 1000.
-        if self.f0_method == 'harvest':
-            from ..resynthesis import f0_track
-            f0,actual=f0_track(audio,'harvest',target_times,[min_f0,max_f0])
-            f0=np.where(f0>0,f0,np.nan)
-        elif self.f0_method == 'reaper':
+        if self.f0_method == 'reaper':
             if reaper is None:
                 raise ValueError('m06_reaper_unavailable')
             try:
@@ -390,8 +386,7 @@ class Engine:
         else:
             track = compute_praat_f0_track(path,frameshift_ms,min_f0,max_f0,method=self.f0_method.removeprefix('praat_'))
             actual = self.f0_method
-        if self.f0_method != 'harvest':
-            f0 = align_track_to_grid(track.times,track.values,target_times)
+        f0 = align_track_to_grid(track.times,track.values,target_times)
         voiced_mask = compute_voiced_mask(f0)
         self.extraction_info = dict(extraction_revision='m06-extract/2',f0_method=self.f0_method,
             actual_f0_backend=actual,frame_shift_ms=frameshift_ms,f0_range_hz=[min_f0,max_f0],

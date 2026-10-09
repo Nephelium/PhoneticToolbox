@@ -998,7 +998,7 @@
       "source_id": "M01-PY-WHEEL"
     }
   ],
-  "science_runtime": "requirements-m01-science.lock",
+  "science_runtime": "requirements/requirements-m01-science.lock",
   "combined_lock_sha256": "9b8239ed44dfd12695fc1289dc835ec77945eb4eee04f06aa77b4b429ffc1a5e",
   "note": "B inventory remains historical. Installed wheel metadata has MIT labels but no standalone license file; redistribution audit remains open."
 }

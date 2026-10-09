@@ -32,7 +32,7 @@ class AcousticBatches:
     def _view(self,tx,row):
         items=self._items(tx,row)
         result=summarize(row['id'],[dict(index=i['ordinal'],audio_asset_id=str(i['audio_asset_id']),
-            job_id=i['child_job_id'],state=i['state'] or 'not_started',error_code=i['error_code']) for i in items],
+            job_id=i['child_job_id'],state=i['state'] or 'not_started',error_code=i['error_code'],progress=i['progress'] or 0.) for i in items],
             cancel_requested=bool(row['cancel_requested'])).model_dump()
         names=json.loads(row['config_snapshot']).get('audio_names') or [next((a['name'] for a in json.loads(i['snapshot'])['input_assets'] if a['role']=='audio'),f'Audio {i["ordinal"]+1}') if i['snapshot'] else f'Audio {i["ordinal"]+1}' for i in items]
         return dict(id=row['id'],project_id=str(row['project_id']),operation=row['operation'],audio_names=names,
@@ -42,6 +42,7 @@ class AcousticBatches:
     def submit(self,owner,body):
         body=BatchRequest.model_validate(body);frozen=freeze_request(body)
         common=json.loads(frozen.serialized);inputs=common.pop('inputs')
+        if self.jobs.postgres and (common.get('config') or {}).get('extended'):raise JobError('m01_runtime_not_admitted',422)
         with self.resources.batch_transaction() as tx:
             old=tx.execute(f'SELECT * FROM {self.table("batches")} WHERE owner_id=? AND idempotency_key=?',(owner,body.idempotency_key)).fetchone()
             if old:
@@ -88,13 +89,15 @@ class AcousticBatches:
             core_version=core_version,adapter_version=adapter_version,source_ids=['SRC-PRAAT','SRC-REAPER'],
             batch_id=row['id'],batch_index=pending['ordinal'],batch_sha256=row['request_hash'].strip(),
             input_refs=inputs,input_assets=resolved,layer=common['layer'],
-            config={'inputs':[x['id'] for x in resolved],'analysis':common['config'],'max_output_bytes':192_000_000})
+            config={'inputs':[x['id'] for x in resolved],'analysis':common['config'],'max_output_bytes':6_000_000_000 if (common.get('config') or {}).get('extended') else 192_000_000})
+        bounded=bool((common.get('config') or {}).get('extended')) or any(a['role']=='parent_table' for a in resolved)
+        if bounded:snapshot['config'].update(bounded_bundle=True,max_output_bytes=6_000_000_000)
         encoded=canonical(snapshot)
         if len(encoded.encode())>16384:raise JobError('snapshot_too_large',413)
         job_id=str(uuid4());state='failed' if source_error else 'queued'
         tx.execute('''INSERT INTO {jobs}(id,owner_id,project_id,idempotency_key,request_hash,snapshot,state,
             deadline,created_at,updated_at,error_code) VALUES(?,?,?,?,?,?,?,?,?,?,?)''',
-            (job_id,row['owner_id'],row['project_id'],key,hashlib.sha256(encoded.encode()).hexdigest(),encoded,state,now+300,now,now,source_error))
+            (job_id,row['owner_id'],row['project_id'],key,hashlib.sha256(encoded.encode()).hexdigest(),encoded,state,now+(21600 if bounded else 300),now,now,source_error))
         self.resources.link_batch_inputs(tx,job_id,row,resolved,now)
         tx.execute(f'UPDATE {self.table("items")} SET child_job_id=? WHERE batch_id=? AND ordinal=?',(job_id,row['id'],pending['ordinal']))
         tx.execute(f'UPDATE {self.table("batches")} SET updated_at=? WHERE id=?',(now,row['id']))
@@ -158,7 +161,7 @@ class AcousticBatches:
             now=tx.now();sources=self.resources.validate_batch_input(tx,owner,str(old['project_id']),snap['input_refs'],now)
             new_id=str(uuid4())
             tx.execute("INSERT INTO {jobs}(id,owner_id,project_id,idempotency_key,request_hash,snapshot,state,deadline,created_at,updated_at) VALUES(?,?,?,?,?,?,'queued',?,?,?)",
-                (new_id,owner,old['project_id'],key,digest,encoded,now+300,now,now))
+                (new_id,owner,old['project_id'],key,digest,encoded,now+(21600 if snap['config'].get('bounded_bundle') else 300),now,now))
             self.resources.link_batch_inputs(tx,new_id,batch,sources,now)
             tx.execute(f'UPDATE {self.table("items")} SET child_job_id=?,attempt=attempt+1 WHERE batch_id=? AND ordinal=?',(new_id,batch['id'],item['ordinal']))
             tx.execute(f'UPDATE {self.table("batches")} SET closed_at=NULL,updated_at=? WHERE id=?',(now,batch['id']))

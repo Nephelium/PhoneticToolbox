@@ -1,7 +1,7 @@
 // P18: owned headless Chrome; source UI only, no production database or capture.
 const fs=require('node:fs/promises'),path=require('node:path'),assert=require('node:assert/strict'),{pathToFileURL}=require('node:url');
 const root=path.resolve(__dirname,'../..');
-const modules=[['M01','参数估计'],['M02','参数显示'],['M03','EGG 信号分析'],['M04','LPC 谱图'],['M05','唇形提取'],['M06','语音合成'],['M07','发声类型合成'],['M08','变速变调'],['M09','语谱图转音频'],['M11','MFA 自动标注'],['M12','语音标注对齐'],['M13','普通话转 IPA'],['M14','音系归纳'],['M15','感知实验'],['M16','录音']];
+const modules=[['M01','参数估计'],['M02','参数显示'],['M03','EGG 信号分析'],['M04','LPC 谱图'],['M05','唇形提取'],['M06','语音合成'],['M07','发声类型合成'],['M08','变速变调'],['M09','语谱图转音频'],['M11','MFA 自动标注'],['M12','TextGrid标注'],['M13','汉字转国际音标'],['M14','音系归纳'],['M15','感知实验'],['M16','录音']];
 async function main(){
  const out=path.join(root,'output/validation/p18/layout',String(Date.now()));await fs.mkdir(out,{recursive:true});
  const {createServer}=await import(pathToFileURL(path.join(root,'frontend/node_modules/vite/dist/node/index.js')));
@@ -47,7 +47,7 @@ async function main(){
   const handle=page.getByRole('separator',{name:'参数、试听与任务宽度'});await handle.focus();await page.keyboard.press('ArrowRight');await settle();assert.equal(Math.round((await geometry()).left.width),360);
   assert.deepEqual(await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),legacyKey),{'--panel-left':250,'--panel-right':350},'M03 resizing preserves legacy M01 width');
   await page.reload();await page.locator('.nav-item').filter({hasText:'EGG 信号分析'}).click();await settle();assert.equal(Math.round((await geometry()).left.width),360,'moved preference persists after resize');checks.push({id:'M03',name:'old dual-key width moves left, new resize persists independently of M01'});
-  await page.locator('.nav-item').filter({hasText:'普通话转 IPA'}).click();await settle();await page.getByLabel('上下排布').check();await settle();
+  await page.locator('.nav-item').filter({hasText:'汉字转国际音标'}).click();await settle();await page.getByLabel('上下排布').check();await settle();
   let setting=await page.locator('.m13-settings-section').boundingBox(),input=await page.locator('.m13-input-section').boundingBox();assert(setting.x<input.x,'stacked M13 settings on left');
   const m13handle=page.getByRole('separator',{name:'转换与排版宽度'});await m13handle.focus();await page.keyboard.press('ArrowRight');await settle();assert.equal(Math.round((await page.locator('.m13-settings-section').boundingBox()).width),310);checks.push({id:'M13',name:'stacked settings on left, keyboard resize'});
   assert.deepEqual(errors,[]);assert.deepEqual(await page.evaluate(()=>window.__p18Errors),[]);await fs.writeFile(path.join(out,'report.json'),JSON.stringify({checks,errors},null,2));console.log(JSON.stringify({out,checks:checks.length,errors}));

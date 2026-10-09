@@ -1,96 +1,41 @@
-# v3 开发入口 · P02
+# 开发与验证入口
 
-## 当前M01持久参数估计入口（2026-09-10）
+业务代码在 frontend、backend、desktop 与 packages/phonetic_core。根 run.py/run.spec 与继承的 phonetic_toolbox 是迁移来源，不作为当前 v3 的日常入口。
 
-使用本轮新建的项目内m01-ui环境（含固定Praat/Qt依赖），无需全局安装。默认命令仍是短诊断；打开实际共同工作台使用：
+## 启动与修改
+
+先按[源码入口说明](development/source-entry.md)检查既有解释器和绑定：
 
 ```powershell
-npm --prefix frontend run build
-& 'D:/PhoneticToolbox/PhoneticToolbox_v3/scripts/Start-M01-Workbench.ps1'
+.\scripts\Start-Research-Workbench.ps1 -CheckOnly
+.\scripts\Start-Research-Workbench.ps1
+.\scripts\Start-Research-Workbench.ps1 -Module M10
 ```
 
-点击“参数估计”选择输入目录。默认一条波形，可勾选“显示两个声道”与“显示语谱图（Praat）”；切换试听声道同步更新显示。文件行支持全选切分范围；批处理范围仍是整个输入列表。F2已接通参数计算、持久批次/取消/重试、三种结果保存及按TextGrid切分。可勾选“同时切分最近一次完整参数结果”；没有父结果时仅切分音频。WAV预览限64,000,000字节/3200万采样值，按像素聚合只优化显示，不改音频。
+第一条只读检查，不打开窗口。主环境与独立科学环境按原有兼容性保留；不照旧阶段文档重建环境、不回退到已安装的旧项目源码，也不修改 v2。已运行的 Python 进程需要重启，成品需要重新构建才会包含修改。
 
-本轮 [布局修订](testing/m01-layout-report.md)：目录与输出控件按宽度同排，批量区在右侧；宽屏三列按内容独立滚动，全部溢出时共同滚动。波形下有秒刻度，Ctrl+滚轮缩放、双击全长；底部进度条可定位当前选区，点“全部”后可定位全文件。文件列表获得焦点后 Ctrl+A 全选。更新前端后重新打开工作台加载本轮构建。
-
-服务器仍从`/server/`账号项目进入同一工作台；后端需使用含固定科学包的环境才能执行语谱图。未连接账号/存储时不伪造项目；公共静态浏览器预览只在本机解码WAV，没有Praat服务。旧P04实验宿主没有新目录握手，请用上述入口。详情见[M01-E报告](testing/m01-workspace-report.md)及[F2报告](testing/m01-persistent-report.md)。新的开发启动器使用已审阅的固定SQLite；第一次创建自己的缓存，以后复用`output/validation/m01/workbench-local.json`引用。它不自动建表/升级环境。单次科学分析限200万采样值（声道合计），较长输入可先切分。服务器与独立worker均需明确配置`enable_acoustic_batches=true`和同一存储；worker另接收已登记`reaper_binary`。
-
-以下P02–P07章节保留各阶段历史与工程诊断方法，不代表历史入口具有全部新增功能。
-
-新工程入口为 frontend、backend、desktop、packages/phonetic_core。根目录 run.py / run.spec / pyproject.toml 保留为 v2 迁移来源，不用于安装或启动正式 v3。
-
-## 本机独立环境
-
-Windows x86_64，项目内独立 CPython 3.11.14；Node 24.13.0 / npm 11.6.2 为已存在工具，未安装新全局依赖。`.venv/v3-dev` 与 P01 探针、原 conda phonetic_311 分开。Python 传递依赖用 [带 hash 的 lock](../requirements-v3-dev.lock)，前端用 [npm lock](../frontend/package-lock.json)。此锁仅在 Windows 验证，不能当作其他平台已通过。
-
-在项目根目录 PowerShell 执行：
+前端修改后按需运行（工程根目录）：
 
 ```powershell
-uv venv --python '.venv/runtimes/cpython-3.11.14-windows-x86_64-none/python.exe' '.venv/v3-dev'
-uv pip install --python '.venv/v3-dev/Scripts/python.exe' --require-hashes -r requirements-v3-dev.lock
-uv pip install --python '.venv/v3-dev/Scripts/python.exe' --no-build-isolation -e packages/phonetic_core -e backend -e desktop
-npm --prefix frontend ci --ignore-scripts
-```
-
-已有环境不必重复建。新机器先安装同版项目内解释器（`uv python install 3.11.14 --install-dir .venv/runtimes --no-bin --no-registry`）；uv/Node 可由开发者选择现有可信安装，以上脚本不自动改系统。更新依赖须改 `.in` 和包声明，经试验后重新编译 lock、更新来源清单；不能自动升级 v2。
-
-## 使用与验证
-
-```powershell
-# 只读服务器开发入口：绑定 127.0.0.1 随机端口，控制台输出实际 URL，Ctrl+C 退出。
-& '.venv/v3-dev/Scripts/python.exe' -m ptb_api.cli --mode server
-# 桌面本地服务诊断：启动、会话握手、退出，输出版本与退出结果。
-& '.venv/v3-dev/Scripts/python.exe' -m ptb_desktop.main
-# 前端开发入口，当前为 P04 工作台试用版。
-npm --prefix frontend run dev
-```
-
-P02 server 模式仅为 loopback 开发入口，无账号/任务/语料接口，不能部署给研究者使用。local 模式由 desktop 通过标准输入提供一次性凭据，URL 不含 token，服务校验 Host/Origin/Authorization。桌面启动器不会 import backend；三个 wheel 由同一发行组合安装。后续 P06 负责接入完整窗口与工作进程生命周期。
-
-```powershell
-& '.venv/v3-dev/Scripts/python.exe' scripts/generate_contracts.py --check
 npm --prefix frontend run contracts:check
-& '.venv/v3-dev/Scripts/python.exe' scripts/check_architecture.py
-& '.venv/v3-dev/Scripts/python.exe' scripts/validate_docs.py
-& '.venv/v3-dev/Scripts/python.exe' scripts/verify_p02.py
-```
-
-完整验证会另建带时间戳的干净环境，真实构建/安装三个 wheel，并从非项目目录运行两种服务与定向测试；所有日志保存在忽略的 output/validation/p02 下。不会删除已有环境。
-
-架构检查覆盖正式源码的 Python 导入、前端导入、旧路径与规定资源目录，不是任意动态 Python 的安全沙箱。历史文档快照和第三方摘录保留原字节：校验 hash，并另报其未解决的相对链接；现行文档缺失链接会使检查失败。
-
-## P04 工作台试用
-
-在项目根目录执行，使用现有隔离环境，无需再安装依赖：
-
-```powershell
-# 浏览器试用；终端保持运行，Ctrl+C 退出。
-npm --prefix frontend run dev -- --port 5174 --strictPort
-# Qt 原生窗口试用；先构建，同一静态前端直接由自定义 scheme 加载。
+npm --prefix frontend run ui-data:check
+npm --prefix frontend run typecheck
+npm --prefix frontend test
 npm --prefix frontend run build
-& '.venv/v3-dev/Scripts/python.exe' desktop/experiments/p04_host.py
 ```
 
-浏览器地址为 http://127.0.0.1:5174/ 。Qt 入口不启动额外 HTTP 服务。两端目前仅提供共同 UI、本机 WAV 预览/选区/试听；15 模块的算法、实际分析任务、摄像头、目录批处理和正式发行仍待后续任务。仅支持单个不超过 64 MB 的 WAV。文件不会自动上传或跨启动保存。
+需要更新生成物时分别用 contracts、ui-data 命令，不手改生成副本。依赖已可用时不重复安装；依赖变化同时维护声明、锁和来源登记。模块依赖清单集中在 [requirements/](../requirements/README.md)，从仓库根目录引用时使用新路径；清单内部的相对引用保持不变。
 
-试用 EGG：点击 EGG 信号分析，载入公开测试音频或选择自己的双声道 WAV。音频声道选择控制试听：1–4.wav 为右音频/左 EGG；牧歌.wav 为左音频/右 EGG。程序不按文件名猜测角色，需要显式选择，原文件不改写。可试切换主题、调整选区、缩放平移、参数草稿、标签切换与关闭提示。视觉验收和限制见 [P04 报告](testing/p04-workbench-report.md)。
+## 检查与记录
 
-## P05 已验证的隔离测试实例
+- Python、原生、契约、UI 和发行检查按[验证策略](testing/verification-plan.md)及对应模块选取，使用该任务实际需要的解释器。
+- 文档/来源检查：`.\.venv\m14\Scripts\python.exe -B -X utf8 scripts/validate_docs.py`。失败须区分本次问题与已有历史问题，不能只略过报错。
+- 架构检查入口是 scripts/check_architecture.py，源码绑定专项入口和副作用见[入口说明](development/source-entry.md)。文档变更无须运行 GUI 或全量科学计算。
+- 账号、worker、文件与远程能力必须显式配置。服务入口不作为迁移授权，历史测试数据库可能已清理，复验按相关脚本重新建立独立测试对象，不能指向研究数据目录。
+- UI 验证使用独立浏览器/Qt 和用户配置，退出只回收自有进程。生成输入、隔离数据库与导出副本按[产物生命周期](development/artifact-lifecycle.md)放入 scratch，用后清理，保留必要生成条件及结果。
 
-[P05 报告](testing/p05-accounts-report.md) 区分测试替身、真实 PostgreSQL 与进程重启证据。井井已授权并执行 [专属空库迁移](testing/p05-migration-review.md)，数据库 ptb_p05_test_20260909 保存在 output/validation/p05/postgres-data，运行时位于 .venv/postgresql-17.11-3/pgsql；测试结束已停止。已有表不应再次建表；工具会拒绝非空库。后续数据库变更需按根规则独立授权。
+## 发行与协作
 
-后端仍可用 P02 命令启动只读骨架，未配置账号存储时 auth/projects 返回 503；本机模式返回 404。P05 原型服务使用 `python -m ptb_api.server --port 5175 --frontend frontend/dist`，从标准输入读取一行私密 JSON（dsn、signing_key），仅回环监听；不用 .env，不在命令行/URL中传凭据。该入口不作生产部署。
+Windows 打包只按 [release/PACKAGING_RULES.md](../release/PACKAGING_RULES.md)；旧 EXE 不能证明当前源码行为。提交前核查[仓库内容边界](development/repository-hygiene.md)，本地构建、提交、push 与发布分别按授权执行。
 
-`tests/support/account_ui_host.py` 仅供自动验证浏览器流程，使用测试替身，重启不保存数据，不用于研究者试用或真实账号。项目中无默认生产管理员密码。正式账号创建使用 `scripts/p05_database.py create-user` 的隐藏提示；首次建表和测试数据创建都遵守迁移审阅授权。
-
-## P06 已验证任务流程
-
-见 [P06 报告](testing/p06-jobs-report.md)。任务 API 仅在显式配置已初始化存储后开放；后端入口不迁移数据库。服务器私密配置 enable_jobs=true 启用现有 PG 任务表，worker 通过 ptb_worker.cli 从 stdin 读取配置；桌面 LocalService(jobs_path=...) 使用相同接口和独立 worker。新表已按 [专项审阅](testing/p06-migration-review.md)建立，真实 PG/SQLite 与本机服务验收通过，勿重复执行初始化。默认未配置存储时仍返回 503。
-
-复验入口：`python scripts/run_p06_validation.py --approved-p06-test-data`（复用已有表，不带 --apply-reviewed-schema），随后 `python scripts/verify_p06_local_service.py --approved-test-data`。使用现有 .venv/v3-dev 解释器。Codex 内置测试页关闭两次关联退出，暂行测试方式见 [恢复记录](testing/p06-recovery-and-codex-exit.md)。
-
-## P07 单文件存储（Windows 定向验收通过）
-
-见 [P07 报告](testing/p07-storage-report.md)与 [已授权的具体迁移审阅](testing/p07-migration-review.md)。003 已执行，专属测试文件范围内的 PG/磁盘与独立浏览器验证通过；复验使用 run_p07_validation.py --approved-p07-schema-and-test-files，不重复应用 003。后端私密配置可显式指定 storage_root；必须是已初始化且 instance_id 与 PG 匹配的私有目录，构造函数不建表。启动恢复会处理到期文件，因此不得把研究者的普通文件目录配置为该私有根。未配置时文件 API 明确 503，桌面为 404。[004 任务文件关联扩展](testing/p07-job-assets-review.md)已获授权并执行；默认命令会验证单文件和任务/ZIP 联合行为，不再执行 DDL。
-
-原始文件分块接口每块最多 256 KiB。/uploads 创建保留幂等键，PUT /uploads/{id}/blocks 使用 offset，POST finalize 完成服务器 SHA-256 和尺寸核对。文件以二进制原样保存，不自动解析 ZIP、Pickle 或执行代码。下载按单个 Range 和逐块截止/会话校验；DELETE 仅从会话确定 owner。受控任务/ZIP 联合门已通过，见 [联合报告](testing/p07-job-files-report.md)。文件任务要求服务器私有配置 enable_jobs=true、enable_file_jobs=true、storage_root 为已初始化根；独立 worker 的同库配置也须提供相同 storage_root。只有 capability 返回的操作可以启用；生成的工程测试文件不能称为科学分析产物，未受控的原生目录写入仍未开放。
+进度更新已有任务台账条目，命令和实际结果进入对应报告。本页只维护现行开发入口，不追加每次模块交付历史。

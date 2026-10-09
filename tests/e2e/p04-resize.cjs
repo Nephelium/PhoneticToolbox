@@ -55,7 +55,7 @@ async function main(){
   await page.waitForFunction(()=>document.querySelector('.m02-columns [aria-label="音频列表宽度"]')?.getAttribute('aria-valuenow')==='520');
   near(await size('.m02-columns>.file-panel'),520,'pointer cancel');
   checks.push('M02 logical-pixel drag at 70/100/150%, narrow restore, keyboard limits and Escape cancel');
-  const layouts=[['LPC 谱图','.lpc-layout',1],['唇形提取','.lip-columns',1],['语音合成','.editor-layout',1],['发声类型合成','.editor-layout',1],['语谱图转音频','.m09-columns',1],['MFA 自动标注','.mfa-columns',1],['语音标注对齐','.annotation-layout',2],['普通话转 IPA','.m13-workspace',2]];
+  const layouts=[['LPC 谱图','.lpc-layout',1],['唇形提取','.lip-columns',1],['语音合成','.editor-layout',1],['发声类型合成','.editor-layout',1],['语谱图转音频','.m09-columns',1],['MFA 自动标注','.mfa-columns',1],['TextGrid标注','.annotation-layout',2],['汉字转国际音标','.m13-workspace',2]];
   for(const [title,selector,count] of layouts){
    await open(title);const layout=page.locator(selector+':visible');await layout.waitFor();const handles=layout.locator('.panel-resize-handle:visible');assert.equal(await handles.count(),count,title);
    const h=handles.first(),before=Number(await h.getAttribute('aria-valuenow'));await drag(h,20);assert.notEqual(Number(await h.getAttribute('aria-valuenow')),before,title+' pointer boundary');await h.focus();await h.press('ArrowRight');await page.waitForTimeout(100);
@@ -64,12 +64,12 @@ async function main(){
   checks.push('All eight other layouts expose functional shared boundaries');
   for(const title of ['EGG 信号分析','变速变调','音系归纳','感知实验']){await open(title);assert.equal(await page.locator('main h1:visible').count(),0);}
   checks.push('Modules with no sidebars retain their existing content layout and omit redundant headings');
-  for(const [title,selector] of [['参数估计','.m01-page'],['参数显示','.m02-page'],['LPC 谱图','.lpc-page'],['唇形提取','.lip-page'],['语音合成','section[aria-label="语音合成工作区"]'],['发声类型合成','section[aria-label="发声类型连续统工作区"]'],['语谱图转音频','.m09-page'],['MFA 自动标注','section[aria-label="MFA 自动标注工作区"]'],['语音标注对齐','.annotation-page'],['普通话转 IPA','.mandarin-ipa-page']]){
+  for(const [title,selector] of [['参数估计','.m01-page'],['参数显示','.m02-page'],['LPC 谱图','.lpc-page'],['唇形提取','.lip-page'],['语音合成','section[aria-label="语音合成工作区"]'],['发声类型合成','section[aria-label="发声类型连续统工作区"]'],['语谱图转音频','.m09-page'],['MFA 自动标注','section[aria-label="MFA 自动标注工作区"]'],['TextGrid标注','.annotation-page'],['汉字转国际音标','.mandarin-ipa-page']]){
    await open(title);
    for(const [width,height,scale,theme] of [[1280,800,100,'light'],[1280,800,150,'dark'],[1920,1080,70,'light'],[800,650,100,'dark']]){
     await page.setViewportSize({width,height});await page.evaluate(async({scale,theme})=>{(await import('/src/state/pageZoom.ts')).setPageScale(scale);document.documentElement.dataset.theme=theme;},{scale,theme});await page.waitForTimeout(150);
     const geometry=await page.locator(selector).evaluate(el=>({width:el.clientWidth,scroll:el.scrollWidth,handles:[...el.querySelectorAll('.panel-resize-handle:not([hidden])')].map(h=>({width:Number(h.getAttribute('aria-valuenow')),min:Number(h.getAttribute('aria-valuemin'))}))}));
-    if(title==='普通话转 IPA'&&geometry.scroll>geometry.width+2){await page.locator('.m13-settings-section').evaluate(el=>el.scrollIntoView({block:'nearest',inline:'end'}));assert(await page.locator(selector).evaluate(el=>el.scrollLeft>0&&getComputedStyle(el).overflowX==='auto'),'M13 keeps its separately requested right panel reachable by scrolling');}else assert(geometry.scroll<=geometry.width+2,title+' overflow '+JSON.stringify({width,scale,...geometry}));for(const h of geometry.handles)assert(h.width>=h.min,title+' minimum width');assert.equal(await page.locator(selector+' h1:visible').count(),0);
+    if(title==='汉字转国际音标'&&geometry.scroll>geometry.width+2){await page.locator('.m13-settings-section').evaluate(el=>el.scrollIntoView({block:'nearest',inline:'end'}));assert(await page.locator(selector).evaluate(el=>el.scrollLeft>0&&getComputedStyle(el).overflowX==='auto'),'M13 keeps its separately requested right panel reachable by scrolling');}else assert(geometry.scroll<=geometry.width+2,title+' overflow '+JSON.stringify({width,scale,...geometry}));for(const h of geometry.handles)assert(h.width>=h.min,title+' minimum width');assert.equal(await page.locator(selector+' h1:visible').count(),0);
     matrix.push({title,width,height,scale,theme,...geometry});
     if(title==='参数估计'||title==='参数显示')await snap(`${title}-${width}-${scale}-${theme}`);
    }

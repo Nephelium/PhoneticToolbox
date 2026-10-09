@@ -1,4 +1,5 @@
 import rawData from './ipa-data.json' with {type:'json'};
+import {validFamily} from '../../design/fonts.ts';
 
 export const mappingStandards=[
   'Standard Chinese (Beijing)',
@@ -33,6 +34,7 @@ export interface MandarinIpaDraft {
   version:1;text:string;standard:IpaStandard;display:DisplayMode;layout:PageLayout;
   hanziSize:number;ipaSize:number;ipaSizeUserSet:boolean;gap:number;lineHeight:number;
   bold:boolean;italic:boolean;underline:boolean;selectedVariants:Record<string,number>;
+  showTone:boolean;ipaColor:string;hanziColor:string;hanziFont:string;
 }
 
 const data=rawData as RawData;
@@ -65,28 +67,42 @@ export function addToneMark(pinyin:string,tone:number){
   return mark?pinyin.slice(0,target)+mark+pinyin.slice(target+1):pinyin;
 }
 
-export function displayEntry(entry:IpaEntry,standard:IpaStandard){
-  if(standard==='汉语拼音')return entry.tone===0?entry.pinyin:addToneMark(entry.pinyin,entry.tone);
-  const value=entry.values[standardColumn.get(standard)!];return value||'?';
+export function displayEntry(entry:IpaEntry,standard:IpaStandard,showTone=true){
+  if(standard==='汉语拼音'){const pinyin=entry.pinyin.replace(/v/g,'ü');return showTone&&entry.tone!==0?addToneMark(pinyin,entry.tone):pinyin;}
+  const value=entry.values[standardColumn.get(standard)!]||'?';return showTone?value:value.replace(/[˥˦˧˨˩]+$/u,'');
 }
 export const variantKey=(char:string,position:number)=>`${char}_${position}`;
-export function convertText(text:string,standard:IpaStandard,selectedVariants:Readonly<Record<string,number>>={}):ConversionToken[]{
+export function convertText(text:string,standard:IpaStandard,selectedVariants:Readonly<Record<string,number>>={},showTone=true):ConversionToken[]{
   const result:ConversionToken[]=[];
   [...text].forEach((char,position)=>{
     const variants=index.get(char);
     if(!variants?.length){result.push({kind:'literal',index:position,char,newline:char==='\n'});return;}
     const requested=selectedVariants[variantKey(char,position)],selected=Number.isInteger(requested)&&requested>=0&&requested<variants.length?requested:0;
-    const entry=variants[selected];result.push({kind:'mapped',index:position,char,value:displayEntry(entry,standard),entry,variants,selectedVariant:selected});
+    const entry=variants[selected];result.push({kind:'mapped',index:position,char,value:displayEntry(entry,standard,showTone),entry,variants,selectedVariant:selected});
   });
   return result;
 }
-export function variantsFor(token:MappedToken,standard:IpaStandard):VariantOption[]{
-  return token.variants.map((entry,index)=>({index,pinyin:entry.pinyin,tone:entry.tone,toneLabel:entry.tone===0?'轻声':String(entry.tone),value:displayEntry(entry,standard)}));
+export function variantsFor(token:MappedToken,standard:IpaStandard,showTone=true):VariantOption[]{
+  return token.variants.map((entry,index)=>({index,pinyin:entry.pinyin,tone:entry.tone,toneLabel:entry.tone===0?'轻声':String(entry.tone),value:displayEntry(entry,standard,showTone)}));
 }
 export function plainOutput(tokens:readonly ConversionToken[]){return tokens.map(token=>token.kind==='mapped'?token.value:token.char).join('');}
 export function effectiveIpaSize(draft:Pick<MandarinIpaDraft,'display'|'ipaSize'|'ipaSizeUserSet'>){return draft.display==='ipa-only'&&!draft.ipaSizeUserSet?28:draft.ipaSize;}
 
-export function createDraft():MandarinIpaDraft{return {version:1,text:'',standard:'Standard Chinese (Beijing)严',display:'paired',layout:'side-by-side',hanziSize:24,ipaSize:16,ipaSizeUserSet:false,gap:0,lineHeight:1.8,bold:false,italic:false,underline:false,selectedVariants:{}};}
+export function createDraft():MandarinIpaDraft{return {version:1,text:'',standard:'Standard Chinese (Beijing)',display:'paired',layout:'side-by-side',hanziSize:24,ipaSize:16,ipaSizeUserSet:false,gap:0,lineHeight:1.8,bold:false,italic:false,underline:false,selectedVariants:{},showTone:true,ipaColor:'',hanziColor:'',hanziFont:''};}
+export function createPageDraft(saved:unknown):MandarinIpaDraft{return {...restoreDraft(saved),text:'',standard:createDraft().standard,selectedVariants:{}};}
+// Keep choices attached to unchanged Unicode characters before/after an edit.
+export function moveVariantChoices(previous:string,next:string,choices:Readonly<Record<string,number>>){
+  const before=[...previous],after=[...next];let prefix=0,suffix=0;
+  while(prefix<Math.min(before.length,after.length)&&before[prefix]===after[prefix])prefix++;
+  while(suffix<Math.min(before.length,after.length)-prefix&&before[before.length-1-suffix]===after[after.length-1-suffix])suffix++;
+  const moved:Record<string,number>={};
+  for(let old=0;old<before.length;old++){
+    const choice=choices[variantKey(before[old],old)];if(choice===undefined)continue;
+    const position=old<prefix?old:old>=before.length-suffix?old+after.length-before.length:-1;
+    if(position>=0)moved[variantKey(after[position],position)]=choice;
+  }
+  return moved;
+}
 export function snapshotDraft(draft:MandarinIpaDraft):MandarinIpaDraft{return {...draft,selectedVariants:{...draft.selectedVariants}};}
 const number=(value:unknown,fallback:number,min:number,max:number)=>typeof value==='number'&&Number.isFinite(value)&&value>=min&&value<=max?value:fallback;
 export function restoreDraft(value:unknown):MandarinIpaDraft{
@@ -97,7 +113,9 @@ export function restoreDraft(value:unknown):MandarinIpaDraft{
   if(saved.layout==='side-by-side'||saved.layout==='stacked')draft.layout=saved.layout;
   draft.hanziSize=number(saved.hanziSize,draft.hanziSize,16,72);draft.ipaSize=number(saved.ipaSize,draft.ipaSize,12,48);
   draft.gap=number(saved.gap,draft.gap,-12,20);draft.lineHeight=number(saved.lineHeight,draft.lineHeight,.8,3);
-  for(const key of ['ipaSizeUserSet','bold','italic','underline'] as const)if(typeof saved[key]==='boolean')draft[key]=saved[key];
+  for(const key of ['ipaSizeUserSet','bold','italic','underline','showTone'] as const)if(typeof saved[key]==='boolean')draft[key]=saved[key];
+  for(const key of ['ipaColor','hanziColor'] as const)if(typeof saved[key]==='string'&&/^#[\da-f]{6}$/i.test(saved[key]))draft[key]=saved[key];
+  if(validFamily(saved.hanziFont))draft.hanziFont=saved.hanziFont.trim();
   if(saved.selectedVariants&&typeof saved.selectedVariants==='object'&&!Array.isArray(saved.selectedVariants))for(const [key,entry] of Object.entries(saved.selectedVariants))if(/^._\d+$/u.test(key)&&Number.isInteger(entry)&&Number(entry)>=0&&Number(entry)<=6)draft.selectedVariants[key]=Number(entry);
   return draft;
 }

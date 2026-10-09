@@ -1,0 +1,3612 @@
+{
+  "schemaVersion": "ptb-manual-chapter/1",
+  "id": "m10",
+  "title": "生理参数合成",
+  "moduleId": "M10",
+  "body": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-purpose",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "先合成一秒声音"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "生理参数合成把舌位、唇形、软腭等构形与声门声源连起来。可以边调边听，也可以把多个姿势排成一段动作，保存带声音的视频。第一次使用，先从一个预设和一秒短音开始吧。"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在左侧模块列表打开生理参数合成，等到头部模型和声学图出现。当前功能使用 Windows 本机应用，无需登录。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在模型下方的构形起点点击 a。模型、面积函数和传递函数会一起更新。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击右侧声音页签，在声音输出中选择要使用的扬声器或耳机，把试听音量调低一些。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "发声 1 秒",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，等待合成后听一段短音。需要边调边听时点击持续发声，再点变为停止播放的同一个按钮结束。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "如果提示正在更新构形，请稍候再点发声。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb",
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "在清声或耳语模式下没有明显声音时，先切回浊声 · 周期振动完成这次练习。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-first-sound-result"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-input",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "打开工作区与找到控件"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "工作区中，模型负责观察和拖动，声学分析区显示面积、传递函数与横截面，右侧操作面板分为器官、声音、关键帧。窗口较窄时，声学分析区会移到模型下方。右侧内容超出可见范围时，用滚轮向下查看。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-workspace-layout"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-overview-light-figure",
+          "assetId": "m10-overview-light-scaled-r20261007",
+          "caption": "器官页中拖动模型圆点，右侧调整参数；下方同时查看面积、截面和传递函数。",
+          "alt": "器官页中拖动模型圆点，右侧调整参数；下方同时查看面积、截面和传递函数。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "模型下方的构形起点、自存构形、保存构形用于当前姿势。连续发音的保存当前姿势、添加静音帧、播放与文件操作在关键帧页签中。参数控制标题旁的帮助打开本章，方法与引用查看模型说明与来源。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "打开模块本身不会发声。切换到其他模块会停止本模块声音，退出 PhoneticToolbox 会关闭工作台。下次从模块列表重新打开即可。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-view",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "在二维和三维中观察与拖动"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m10-view-table",
+          "caption": "模型视图的鼠标操作"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "位置或按钮"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "操作与反馈"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "正中矢状截面"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "在空白处按住鼠标拖动平移，滚轮围绕指针缩放。拖动器官圆点改变构形；按住 Shift 拖动圆点位置可平移观察。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "三维视图"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "空白处左键拖动旋转，右键拖动平移，滚轮缩放。绿色圆点用于调节器官。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "查看整头 / 聚焦声道"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "切换观察范围，不改器官参数。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "重置视角"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "恢复模型的观察方向、平移与缩放，不重置姿势。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "器官观察 / 气腔观察 / 叠加观察"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "分别看粉红色组织、青绿色气腔或两者叠加。青绿色表示空气空间。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "头部轮廓 / 鼻腔 / 牙齿 / 标注"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "分别控制可见性。隐藏牙齿后，牙齿的构形约束仍在。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "显示完整模型"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "三维默认显示半侧，便于看内部。勾选后查看完整模型；旧视图偏好可能保留上次选择。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "点击模型中的舌头、嘴唇或软腭，可切换正在操作的器官及其圆点。声门高低点在二维和三维中常驻，无需先选软腭。二维圆点获得焦点后可用方向键微调，Shift 加方向键增大步长。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-view-drag-result"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "观察时先放大要调整的部位，再用小幅拖动。模型离开画面就点击重置视角。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-view-three-result"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-three-half-light-figure",
+          "assetId": "m10-three-half-light-scaled-r20261007",
+          "caption": "三维视图默认显示半侧模型，圆点沿用当前器官；空白区域拖动可转动观察。",
+          "alt": "三维视图默认显示半侧模型，圆点沿用当前器官；空白区域拖动可转动观察。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-three-full-light-figure",
+          "assetId": "m10-three-full-light-scaled-r20261007",
+          "caption": "勾选显示完整模型后可观察外部形态。再次取消勾选即可恢复半侧。",
+          "alt": "勾选显示完整模型后可观察外部形态。再次取消勾选即可恢复半侧。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-parameters",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "调整发音器官"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "先在构形起点中选接近目标的姿势，再到器官页签微调。a、i、u、e、o、ɛ、y、ø 为元音起点，l、n、t 为另外三个构形示例。"
+          },
+          {
+            "type": "text",
+            "text": "预设和自存音标的名称不表示已生成标准发音。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m10-parameter-table",
+          "caption": "器官控件与常用调整"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "控件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "怎样调"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "嘴唇与下颌"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "下颌开合、唇前突、唇开度分别控制开口和唇形。侧面上唇、下唇圆点可前后、上下拖动。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "唇部左右宽度"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "范围 55%–160%，初始为 100%。拖动滑块或正面示意图的左右圆点，左右宽度随之改变，上下开度仍单独控制。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "下颌开合联动唇开度"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "默认勾选。调整下颌时联动唇开度；需要分开调时取消勾选。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "舌头"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "舌背、舌叶、舌尖各有前后和高低滑块，也可拖动相应圆点。舌叶可下压，抬起舌尖后可向后收。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "舌根"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "拖动舌根或调整舌根滑块会自动开启手动舌根。取消手动舌根后恢复自动联动。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "舌骨"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "用舌骨前后、舌骨高低滑块或对应圆点调整。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "声门高低"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "相对舌骨的独立偏移，范围 −1 至 1 cm，初始为 0。用滑块或常驻圆点调整。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "舌侧缘"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "后、中、前侧缘分别调整，左右联动；可在三维或当前横截面中拖动。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "参数滑块旁会显示当前数值。拖动后，模型与声学图同步更新。抵达参数范围或组织限制时，会显示已达到器官约束等提示，圆点可能无法继续跟随指针。此时以实际显示构形为准，不必反复用力拖动。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-organ-adjust-result"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-tongue-drag-light-figure",
+          "assetId": "m10-tongue-drag-light-scaled-r20261007",
+          "caption": "舌叶圆点贴在组织表面，舌尖与声门高低圆点可分别拖动；修改后可撤销。",
+          "alt": "舌叶圆点贴在组织表面，舌尖与声门高低圆点可分别拖动；修改后可撤销。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-lips-controls-light-figure",
+          "assetId": "m10-lips-controls-light-scaled-r20261007",
+          "caption": "唇宽和唇形正视图可一起核对。其他器官控制在同一页向下滚动查看。",
+          "alt": "唇宽和唇形正视图可一起核对。其他器官控制在同一页向下滚动查看。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "需要恢复上一步时，点击器官页签里的撤销、重做，也可用 Ctrl+Z、Ctrl+Shift+Z。重置舌头、重置唇与下颌或重置软腭与咽部只恢复所选器官的一组参数。要从完整 /a/ 构形重新开始，点下方构形起点中的 a。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-velum",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "打开或关闭腭咽口"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "到器官页签下方找到腭咽口，可点击其标题在模型中选中软腭。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击已关闭 / 已开放按钮切换口鼻连接，或拖动开口面积滑块作小幅调整。软腭下降开放，抬起关闭；旁边状态显示口鼻气腔连通或软腭封闭入口。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "观察模型中的间隙和当前横截面下方的腭咽口读数。软腭形态和腭咽口开口面积是两个控件，按需要分别微调。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "保持元音口腔通路默认勾选。某些舌位下，开放过大可能新产生口腔闭塞，软件会限制接受的开口并显示实际面积。研究闭塞时可取消勾选，再结合面积图检查。"
+          },
+          {
+            "type": "text",
+            "text": "鼻腔显示勾选框只改变画面，口鼻是否连通要看腭咽口设置。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb",
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218"
+                }
+              }
+            ]
+          }
+        ],
+        "attrs": {
+          "id": "m10-velum-result"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-velum-port-light-figure",
+          "assetId": "m10-velum-port-light-scaled-r20261007",
+          "caption": "腭咽口滑块调整口鼻连接，实际面积与限制提示显示在控制旁。",
+          "alt": "腭咽口滑块调整口鼻连接，实际面积与限制提示显示在控制旁。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-velum-port-light-detail",
+          "assetId": "m10-velum-port-light-detail-scaled-r20261007",
+          "caption": "滑块旁的实际读数与提示一起核对，限制生效时以接受值为准。",
+          "alt": "滑块旁的实际读数与提示一起核对，限制生效时以接受值为准。",
+          "width": "65%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-sections",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "选取横截面并看面积变化"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在口腔声道面积函数上点击，或按住鼠标左右拖动。图上的竖线、声门至该处的距离读数、模型截面线和当前横截面会一起更新。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "需要逐个截面查看时，先点击面积图使其获得焦点，再用左右方向键移动。Home、End 可到两端。当前默认沿声道取 257 个截面。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "要调整舌侧缘，先点击模型中的舌头，再在横截面下方选后侧缘、中侧缘或前侧缘。软件会定位到相应区域，拖动截面中的圆点调整，两侧联动。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "当前横截面固定采用 7 × 7 cm 视野，横纵等比例，左下标尺为 1 cm。同样大小的图窗中，切换姿势与截面不会自动放大某个狭窄位置，适合直接比较气腔变化。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-section-result"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-lateral-section-light-figure",
+          "assetId": "m10-lateral-section-light-scaled-r20261007",
+          "caption": "前舌侧缘可改变侧腔。面积图及截面随当前构形更新，截面保持相同比例。",
+          "alt": "前舌侧缘可改变侧腔。面积图及截面随当前构形更新，截面保持相同比例。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m10-acoustic-table",
+          "caption": "声学图的读法"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "画面"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "观察重点"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "面积函数实线"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "当前几何截面积，横轴从声门到唇，距离为 cm，面积为 cm²。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "面积函数虚线"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "合成使用的声学修正面积。它可能与几何面积不同。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "当前横截面"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "看中央接触和两侧是否仍有通路。提示正中接触，侧面仍有通路时，中央接触不等于整个截面封闭。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "声道传递函数"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "当前模型的频率响应。下方 F1、F2、F3 来自曲线谱峰；腭咽口开放时改显示峰 1、峰 2、峰 3。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "口腔面积图没有包含鼻腔分支。口腔局部闭塞时，开放的鼻通路仍可能传声。传递函数和 F0 曲线也都属于模型计算或合成控制，不能当作对录音重新测量的结果。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-source",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "设置声源、音量与基频"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击声音页签，在声音输出中选好设备。设备刚切换或没有声音时，可点击测试音检查路由。测试音会实际发声，先确认音量合适。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在声源模式中选浊声 · 周期振动、清声 · 不振动或耳语近似 · 后部缝隙。切换模式会载入该模式的声门初值，并保留当前驱动气压。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "拖动驱动气压、声门半宽、后部缝隙滑块微调。先用发声 1 秒听结果，再决定是否持续发声。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "浊声模式可用基频 F0 滑块调音高。持续发声时修改器官或声源，声音会随当前构形更新。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m10-source-table",
+          "caption": "声音控件的范围与初始值"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "控件"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "范围或初始值"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "操作提示"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "基频 F0"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "60–350 Hz；初始 150 Hz"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "控制周期振动片段的音高。清声和耳语无周期振动时，当前 F0 不生效。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "驱动气压"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0–1600 Pa；初始 800 Pa"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "气压增减改变驱动，不把此值读作气流速度。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "声门半宽"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0–3 mm"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "浊声初值 0.20 mm，清声 1.20 mm，耳语近似 0.05 mm。减小表示更内收。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "后部缝隙"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0–25 mm²"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "浊声初值 3 mm²，清声 6 mm²，耳语近似 4 mm²。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "试听音量"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0%–100%；初次 80%"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "送往选定设备的音量，已有设备与音量设置会保留。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "弱音增益"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0、+12、+24 dB"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "仅放大监听信号，便于听较弱声音，不改变气压或声道面积。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "耳语近似默认还有 24 dB 试听补偿，提示行会显示，动作播放和视频音轨也使用它。比较不同声源时注意这个补偿，避免单凭播放响度判断模型声源强弱。清声或耳语在低气压、较大开度等设置下可能很弱，关闭振动也不保证一定产生明显噪声。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-source-result"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-sound-source-light-figure",
+          "assetId": "m10-sound-source-light-scaled-r20261007",
+          "caption": "耳语近似关闭周期振动，默认试听补偿为 24 dB。切回浊声后再调 F0。",
+          "alt": "耳语近似关闭周期振动，默认试听补偿为 24 dB。切回浊声后再调 F0。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-sound-source-light-detail",
+          "assetId": "m10-sound-source-light-detail-scaled-r20261007",
+          "caption": "先选声源模式。耳语近似的试听补偿会改变听到的响度。",
+          "alt": "先选声源模式。耳语近似的试听补偿会改变听到的响度。",
+          "width": "65%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m10-a-whisper-default-example",
+          "assetId": "m10-a-whisper-default-native-r20261007-mp3-r20261007",
+          "caption": "同一 a 构形的耳语近似，含默认 24 dB 试听补偿。响度不宜直接比较。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "可以用同一构形比较不同声源，也可以保持浊声与 150 Hz，依次选择 a、u 后各发声 1 秒，听声道构形变化带来的差别。下面的例音用于认识操作结果，具体语音类别仍需另行判断。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-vowel-audio-result"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m10-a-voiced-150-example",
+          "assetId": "m10-a-voiced-150-native-r20261007-mp3-r20261007",
+          "caption": "模型合成示例：a 构形，浊声，F0 150 Hz。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m10-u-voiced-150-example",
+          "assetId": "m10-u-voiced-150-native-r20261007-mp3-r20261007",
+          "caption": "模型合成示例：u 构形，其余声源设置与 a 示例相同。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-monitor",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "边听边看实时波形和语谱图"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击声学分析区的实时波形 · 语谱图，再手动发声。上方显示波形，下方显示该模块的实际输出语谱图，无需麦克风。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "按观察目的选择显示时长、分析窗长和时间步长。需要看更大的图时，点击展开 ↗。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "放大窗口中点击返回工作台或按 Esc 回来。收起只收起实时图，结束声音仍要使用停止播放，或放大窗口中的停止发声。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m10-monitor-table",
+          "caption": "实时图的可选设置"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "设置"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "可选值"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "怎样选择"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "显示时长"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "1、3、5、12 s；初始 3 s"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "观察较长动作选更长时间。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "分析窗长"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "5、10、20、40、80 ms；初始 20 ms"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "短窗便于看瞬时变化，长窗便于看邻近频率。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "时间步长"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "5、10、20、40 ms；初始 10 ms"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "实际步长可能因数据量调整，以状态行读数为准。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "图像反映送往设备的合成输出，包含试听音量、弱音增益和耳语补偿。停止后会保留最后一段，不继续移动是正常状态。语谱图纵轴为 0–6 kHz，浅色主题中较深的纹理表示较强能量，深色主题中较亮的纹理表示较强能量。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-monitor-result"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-presets",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "用音标保存和加载构形"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-preset-save",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "保存当前构形"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "先调好器官、唇宽、手动舌根或自动舌根、声门高低、声源和 F0，等待构形更新结束。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击模型下方的保存构形，弹窗标题为保存构形 · 选择音标。辅音表、元音表和其他辅音可滚动查看；窄窗下辅音表可横向滚动。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击要用作名称的音标。出现 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "已保存…构形与声源设置",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 提示后，构形已进入本机库。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "表中没有所需组合时，点击右上方输入音标，在自定义音标中输入 ã、ãː 等，点击保存构形或按 Enter。输入须为不超过 80 字的单行文本。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "同一音标再次保存会更新已有构形。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#b42318",
+                  "colorDark": "#ffb4ab"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "如果要同时保留两个版本，请先决定不同名称。保存失败时，弹窗会保留并显示原因，处理后可再次点击保存；没有成功提示前不要当作已存好。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-preset-save-result"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-save-ipa-light-figure",
+          "assetId": "m10-save-ipa-light-scaled-r20261007",
+          "caption": "点击输入音标后填写 ã，再按保存构形。组合符号可完整保留。",
+          "alt": "点击输入音标后填写 ã，再按保存构形。组合符号可完整保留。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-save-ipa-light-detail",
+          "assetId": "m10-save-ipa-light-detail-scaled-r20261007",
+          "caption": "红框中填写自定义音标，组合符号也可以完整保存。",
+          "alt": "红框中填写自定义音标，组合符号也可以完整保存。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-preset-load",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "加载已有构形"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击自存构形，打开同一音标表。带标记的符号表示已有记录，未保存的音标暂不可点击。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击已存音标，模型会载入其姿势，声源与 F0 一并恢复。自定义音标在其他辅音下方，直接点击即可。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "载入后可继续调整，再用保存构形更新原音标或另存新名称。内置构形起点保留当前声源和 F0；缺少声源字段的旧记录也保留当前声源。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "保存到音标库方便下次使用。它只给当前构形一个名称，不会自动求解该音标的标准姿势，也不会自动生成关键帧。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-preset-load-result"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-load-ipa-light-figure",
+          "assetId": "m10-load-ipa-light-scaled-r20261007",
+          "caption": "保存过的构形在表中有标记。点击音标可恢复构形与声源设置。",
+          "alt": "保存过的构形在表中有标记。点击音标可恢复构形与声源设置。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-keyframes",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "把多个姿势排成连续发音"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-frame-create",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "添加姿势与设置时长"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "摆出第一个姿势，在声音页签设置声源和 F0，然后切到关键帧，点击＋ 保存当前姿势。新卡片默认 0.2 秒。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "继续摆出下一个姿势并保存，至少准备两个关键帧。每张卡片保存当时的器官、唇宽、舌根模式、声门高低、声源和 F0。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "可直接修改卡片名称，再在秒数输入框填写时长，单帧允许 0.05–3 秒。填写完成后离开输入框，让设置生效。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "普通帧的过渡秒数是从这一帧走到下一帧的时间；最后一帧的停留秒数是保持末姿势的时间。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb",
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "单次动作总计不超过 12 秒。列表可保留更多姿势，超过 12 秒时先缩短时长或移除部分帧，才能播放和保存动作视频。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-keyframe-create-result"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-frame-sort",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "载入、编辑与排序"
+          }
+        ]
+      },
+      {
+        "type": "bulletList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击卡片空白处或标题按钮载入该姿势。修改当前模型不会自动覆盖已保存的卡片。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "要修改已有卡片，点其编辑，切到器官或声音页签调整，再回来点击这张卡片的保存。点取消会恢复原卡片姿势。先保存或取消，才能编辑另一张卡片。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "拖动卡片空白处或时间旁的 ⠿ 标记上下排序，拖到列表边缘会自动滚动。也可点 ← / → 前移、后移，或让卡片获得焦点后按 Alt+上/下方向键。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "移除只移除对应卡片。清空列表会同时清除整段关键帧和手绘 F0；误清空后立即点撤销清空可恢复，开始新建或编辑后该入口结束。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "排序、改名、改时长后，卡片时间区间和下方 F0 画布的名称与分界线会同步变化。列表不分页，内容较多时在列表内滚动。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-keyframe-sort-result"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-edit-keyframe-light-figure",
+          "assetId": "m10-edit-keyframe-light-scaled-r20261007",
+          "caption": "编辑后可切到器官或声音页调整，返回动作页按保存；取消则恢复原帧。",
+          "alt": "编辑后可切到器官或声音页调整，返回动作页按保存；取消则恢复原帧。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-frame-silence",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "插入静音段"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "先摆出希望静音期间保持的姿势，点击＋ 添加静音帧。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "修改静音卡片的秒数与名称，再移动到需要的位置。静音帧在这段时间保持构形并输出静音。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "观察 F0 图中的灰色留白区。静音段无基频，鼠标和键盘都不能在其中绘制 F0。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "静音帧是明确指定的时间段。器官形成闭塞时是否仍有声音，则由模型和口鼻通路共同决定，两者应分别观察。静音类型会随关键帧文件和本机草稿一起保存。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-keyframe-silence-result"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-keyframes-silence-light-figure",
+          "assetId": "m10-keyframes-silence-light-scaled-r20261007",
+          "caption": "三帧依次为 a、静音和 u。普通帧的时间表示过渡，最后一帧表示停留。",
+          "alt": "三帧依次为 a、静音和 u。普通帧的时间表示过渡，最后一帧表示停留。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-keyframes-silence-light-detail",
+          "assetId": "m10-keyframes-silence-light-detail-scaled-r20261007",
+          "caption": "中间这一帧标为静音，时间是 0.3 秒；末帧标为停留。",
+          "alt": "中间这一帧标为静音，时间是 0.3 秒；末帧标为停留。",
+          "width": "65%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-f0",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "给连续发音画一条 F0 曲线"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "准备至少两个关键帧，在关键帧下方展开手绘基频 F0。需要更宽画布时点击放大绘制 ↗。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "尚未手绘时，虚线表示每个姿势保存的 F0 及其过渡。横轴覆盖整段时长，顶部标出帧名称、起止时间和分界线，纵轴为 60–350 Hz。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在非静音区域按住鼠标绘制，实线表示启用的手绘曲线。可只重画一小段，也可从右向左修改，未画到的部分保持原曲线。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "撤销笔画恢复上一笔，恢复逐帧基频停用手绘曲线。画布获得焦点后，Ctrl+Z 撤销笔画，左右方向键移动时间位置，上下方向键以 5 Hz 微调。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击播放动作与声音试听。手绘曲线只用于关键帧动作，持续发声仍使用声音页签中的当前 F0。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "修改总时长后，手绘 F0 随整段时间等比例伸缩。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb",
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "排序或增减姿势后，它也沿整段时间轴解释，不会自动固定在原来的某张卡片上。需要把转折对齐到某一姿势时，按新的分界线重画。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-f0-result"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-f0-expanded-light-figure",
+          "assetId": "m10-f0-expanded-light-scaled-r20261007",
+          "caption": "在非静音段拖动绘制 F0。灰色静音段不接受绘制，撤销笔画可退回上一步。",
+          "alt": "在非静音段拖动绘制 F0。灰色静音段不接受绘制，撤销笔画可退回上一步。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "清声和耳语无周期振动的部分不执行音高控制。画面中保留的 F0 是编辑轨迹；重新进入有振动的段落后再沿轨迹发声。静音灰区始终留白。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-example",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "练习：a、静音与 u 的连续动作"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "选择浊声 · 周期振动，将 F0 设为 150 Hz，保持合适试听音量。选构形起点 a，保存当前姿势并把第一帧过渡改为 0.8 秒。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "当前仍为 a 时添加静音帧，将静音改为 0.3 秒。随后选 u 并保存第三帧，将末帧停留改为 0.5 秒。检查顺序为 a、静音、u，总长 1.6 秒。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击播放动作与声音，等待正在生成声音与同步画面的提示结束。播放时进度条与模型一起更新；正常结束保留最后姿势。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "需要中断时点击停止。播放期间器官和声源编辑暂时锁定，仍可旋转、平移或缩放视图。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "再次播放同一序列，或在非静音区手绘从约 120 Hz 上升到 200 Hz 的轨迹再播放，比较音高变化。保持静音段留白。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "这段练习中，第一普通帧在 0.8 秒内过渡到静音帧保存的构形，静音帧随后保持 0.3 秒，末帧 u 保持 0.5 秒。可按需要改姿势与时长，再听新的结果。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-example-result"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m10-a-silence-u-baseline-example",
+          "assetId": "m10-a-silence-u-baseline-native-r20261007-mp3-r20261007",
+          "caption": "三帧动作：a 0.8 秒、静音 0.3 秒、u 0.5 秒，F0 150 Hz。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m10-a-silence-u-drawn-f0-example",
+          "assetId": "m10-a-silence-u-drawn-f0-native-r20261007-mp3-r20261007",
+          "caption": "同一三帧动作，使用截图中实际手绘的 F0 曲线，静音段仍保持静音。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "姿势、时长、声源和 F0 未变时，再次播放可复用本会话已经准备的动作与音频。重新打开工作台后首次播放仍需要准备。准备或播放失败时，查看关键帧状态行，调整设置后重新播放。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-output",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "保存关键帧文件与带声音的视频"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-document",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "导出和导入关键帧"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "需要保留或交换动作时，点击导出关键帧，在本机保存对话框选择位置，保存为 .ptb-vocal.json。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "该文件保存名称、顺序、时长、器官参数、声源、静音类型和手绘 F0。关闭再打开模块时，本机草稿也会恢复列表与 F0，但另存文件更方便整理和备份。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "要载入另一段动作，先导出当前需要保留的序列，再点击导入关键帧选择文件。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "导入成功会整体替换当前序列。",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "color": "#b42318",
+                          "colorDark": "#ffb4ab"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "文件损坏、版本或模型不匹配、参数越界时会拒绝导入，并提示当前序列保留。取消文件选择也保留当前内容。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "关键帧文件容量上限为 8 MB，保存的是动作数据，不包含音频或视频。扩展舌位和非零声门高低可能使用较新的文件版本，较早程序可能无法读取。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-document-result"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-video",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "保存同步动作视频"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "确认至少有两个关键帧，总长不超过 12 秒，且已有卡片编辑已保存或取消。点击保存动作视频。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在画面中选择当前视图或全部六视图 · 2 × 3。当前视图保留所选二维或三维、显示模式和观察方向，输出 1280 × 720；六视图输出 1920 × 1080，上排二维、下排三维，每排依次是器官、气腔、叠加观察。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击选择位置并导出，在本机保存对话框指定 .webm 文件。等待准备动作与音频、逐帧导出的进度完成。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "看到已保存文件名、帧数和秒数后，到所选位置打开视频。视频为 30 帧/秒，带同步音轨、姿势名称、时间区间、F0 曲线与时间游标。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "视频音轨使用当前试听音量、弱音增益和声源补偿。",
+            "marks": [
+              {
+                "type": "bold"
+              },
+              {
+                "type": "textStyle",
+                "attrs": {
+                  "color": "#3b2f00",
+                  "colorDark": "#fff0bb",
+                  "backgroundColor": "#fff1c2",
+                  "backgroundColorDark": "#514218"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "保存前先检查音量，尤其避免把试听音量保持为 0。导出期间无需让扬声器发声。需要中断时点击取消导出，取消或失败不会替换已有目标文件。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-video-result"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m10-video-dialog-light-figure",
+          "assetId": "m10-video-dialog-light-scaled-r20261007",
+          "caption": "选择当前视图或全部六视图后，再选择位置并导出同步声音的 WebM 视频。",
+          "alt": "选择当前视图或全部六视图后，再选择位置并导出同步声音的 WebM 视频。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "本模块当前提供音频试听和带同步音轨的视频保存，没有独立的 WAV 保存按钮。要反复修改动作，保留关键帧文件；要分享声音和模型演示，保存 WebM 视频。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-audio-save-boundary"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-recovery",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "遇到问题时怎么恢复"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m10-recovery-table",
+          "caption": "常见现象与处理"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "现象"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "处理步骤"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "模型尚未显示或载入失败"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "先等后台准备。持续出现载入失败时，记下提示并从模块列表关闭后重新打开；使用包含本模块资源的完整 Windows 应用。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "普通浏览器显示不可用提示"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "从 v3 Windows 桌面应用打开生理参数合成。当前页面依赖本机声道能力。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "没有声音"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "到声音页签检查设备和试听音量，再低音量点击测试音。设备断开后重新选择。清声、耳语或低气压构形可很弱，先用浊声与 a 起点检查。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "发声前提示构形还在更新"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "等待模型与声学图更新结束，再点击发声、保存构形或播放动作。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "拖动到某处就停下"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "查看器官约束提示。减小幅度或改另一项参数，再结合模型、面积图检查；用撤销恢复上一步。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "横截面中央闭合却仍有声音"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "检查两侧通路与腭咽口。隐藏鼻腔或牙齿只影响观察，不能替代通路设置。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "播放或保存视频按钮不可用"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "检查至少两个关键帧、总长不超过 12 秒，且没有正在编辑的卡片；先保存或取消编辑。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "手绘 F0 没有效果"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "使用播放动作与声音，并检查该段有周期振动。静音区不能画，清声和耳语无周期振动时也不执行音高控制。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "误清空关键帧"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "立即点击撤销清空。新建或编辑后撤销入口会结束；已另存的序列也可重新导入。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "构形或关键帧保存失败"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "查看弹窗或关键帧状态行的原因，保留当前工作区，处理写入问题后重试。不要把未成功保存的内存内容当作备份。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "导入失败"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "当前序列会保留。重新选择有效的 .ptb-vocal.json，核对版本和模型；不要手工删改参数来绕过校验。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "实时图不再移动"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "停止播放后图中保留最后一段；再次发声会开始新的输出。收起监测与停止声音是不同操作。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "视频导出失败"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "记下视频状态行原因。确认输出位置可写，必要时重新导出；编码不受支持时使用新版 Windows 应用。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "关键帧与构形库分别保存在本机用户目录的 keyframes.json、presets.json。出现配置读取错误时，先保留并备份原文件，再处理；不要用清空或删除配置作为第一步。重要动作可另外导出 .ptb-vocal.json 备份。"
+          }
+        ],
+        "attrs": {
+          "id": "m10-recovery-result"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m10-limits",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "使用结果时保留哪些边界"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "这是一套可调的声道与几何声门模型。构形起点、合成音和谱峰适合操作演示与模型探索，尚不能单凭图形或音标名称判断自然发音是否正确，也不能把参数当作某个人的解剖测量。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "头部轮廓与平均鼻腔为分别配准的外观参考，与声道模型并非同一个体。当前声源按给定参数产生声音，没有计算声带组织的自主力学振动。需要查看具体方法、来源与许可时，打开参数控制标题旁的方法与引用，再进入完整来源说明。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "比较实验条件时保留器官参数、声源、F0、帧时长以及音量和增益设置。F0 画布是合成控制轨迹，传递函数谱峰是模型计算结果。需要对输出作声学测量时，另行使用实际音频开展分析。"
+          }
+        ]
+      }
+    ]
+  }
+}

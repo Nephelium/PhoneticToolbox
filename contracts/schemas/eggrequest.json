@@ -134,7 +134,7 @@
         "micro_center": {
           "anyOf": [
             {
-              "maximum": 120,
+              "maximum": 1800,
               "minimum": 0,
               "type": "number"
             },

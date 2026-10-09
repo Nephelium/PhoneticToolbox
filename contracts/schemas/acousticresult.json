@@ -87,6 +87,17 @@
         "backend_policy": {
           "$ref": "#/$defs/AcousticBackendPolicy"
         },
+        "extended": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AcousticExtended"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "selection": {
           "$ref": "#/$defs/AcousticSelection"
         },
@@ -138,6 +149,58 @@
         "sample_dtype"
       ],
       "title": "AcousticDecodedAudio",
+      "type": "object"
+    },
+    "AcousticExtended": {
+      "additionalProperties": false,
+      "properties": {
+        "audio_channel": {
+          "anyOf": [
+            {
+              "maximum": 7,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Audio Channel"
+        },
+        "channel_overrides": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "maxProperties": 1000,
+          "title": "Channel Overrides",
+          "type": "object"
+        },
+        "egg": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JointEggSettings"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "max_duration_s": {
+          "const": 1800,
+          "default": 1800,
+          "title": "Max Duration S",
+          "type": "integer"
+        },
+        "revision": {
+          "const": "bounded/1",
+          "default": "bounded/1",
+          "title": "Revision",
+          "type": "string"
+        }
+      },
+      "title": "AcousticExtended",
       "type": "object"
     },
     "AcousticInputSnapshot": {
@@ -683,6 +746,106 @@
         "values"
       ],
       "title": "AcousticTextColumn",
+      "type": "object"
+    },
+    "JointEggSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "auto_prominence": {
+          "default": true,
+          "title": "Auto Prominence",
+          "type": "boolean"
+        },
+        "derived": {
+          "default": false,
+          "title": "Derived",
+          "type": "boolean"
+        },
+        "egg_channel": {
+          "default": 0,
+          "maximum": 7,
+          "minimum": 0,
+          "title": "Egg Channel",
+          "type": "integer"
+        },
+        "gci_method": {
+          "default": "slope",
+          "enum": [
+            "slope",
+            "scale"
+          ],
+          "title": "Gci Method",
+          "type": "string"
+        },
+        "goi_method": {
+          "default": "scale",
+          "enum": [
+            "slope",
+            "scale"
+          ],
+          "title": "Goi Method",
+          "type": "string"
+        },
+        "highpass_cutoff": {
+          "default": 25.0,
+          "exclusiveMinimum": 0,
+          "maximum": 10000,
+          "title": "Highpass Cutoff",
+          "type": "number"
+        },
+        "lowpass_cutoff": {
+          "default": 2000.0,
+          "exclusiveMinimum": 0,
+          "maximum": 48000,
+          "title": "Lowpass Cutoff",
+          "type": "number"
+        },
+        "max_gap_ms": {
+          "default": 50.0,
+          "exclusiveMinimum": 0,
+          "maximum": 1000,
+          "title": "Max Gap Ms",
+          "type": "number"
+        },
+        "peak_prominence": {
+          "default": 0.01,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Peak Prominence",
+          "type": "number"
+        },
+        "silence_threshold": {
+          "default": 0.01,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Silence Threshold",
+          "type": "number"
+        },
+        "smooth_ms": {
+          "default": 20.0,
+          "maximum": 1000,
+          "minimum": 0,
+          "title": "Smooth Ms",
+          "type": "number"
+        },
+        "storage": {
+          "default": "aligned",
+          "enum": [
+            "aligned",
+            "cycles"
+          ],
+          "title": "Storage",
+          "type": "string"
+        },
+        "valley_prominence": {
+          "default": 0.01,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Valley Prominence",
+          "type": "number"
+        }
+      },
+      "title": "JointEggSettings",
       "type": "object"
     }
   },

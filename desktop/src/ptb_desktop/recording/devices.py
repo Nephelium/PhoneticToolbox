@@ -11,9 +11,20 @@ def devices(backend=None):
     if backend is None:
         import sounddevice as backend
     hosts=backend.query_hostapis();result=[]
+    # WASAPI enumerates DEVICE_STATE_ACTIVE endpoints. Other Windows APIs also
+    # expose aliases, duplicate endpoints and disconnected legacy driver pins.
+    wasapi=next((i for i,h in enumerate(hosts) if h['name']=='Windows WASAPI'),None)
     for i,d in enumerate(backend.query_devices()):
+        if wasapi is not None and d['hostapi']!=wasapi:continue
         item={'index':i,'name':d['name'],'hostapi':hosts[d['hostapi']]['name'],'inputs':int(d['max_input_channels']),'outputs':int(d['max_output_channels']),'default_rate':int(d['default_samplerate'])}
-        item['id']=hashlib.sha256(json.dumps(item,sort_keys=True).encode()).hexdigest()[:24];result.append(item)
+        item['id']=hashlib.sha256(json.dumps(item,sort_keys=True).encode()).hexdigest()[:24]
+        if wasapi is not None:
+            # Format queries do not open or start a capture/playback stream.
+            for key,check in [('inputs',backend.check_input_settings),('outputs',backend.check_output_settings)]:
+                if item[key]:
+                    try:check(device=i,channels=min(2,item[key]),dtype='float32',samplerate=item['default_rate'])
+                    except Exception:item[key]=0
+        if item['inputs'] or item['outputs']:result.append(item)
     return result
 
 

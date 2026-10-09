@@ -1,0 +1,4550 @@
+{
+  "scope": "Read-only metadata and license files in existing project environments and frontend locks; no execution of dependency code; not a full native transitive binary compliance audit.",
+  "python_unique_name_versions": [
+    {
+      "name": "annotated-doc",
+      "version": "0.0.5",
+      "metadata": ".venv/m01-io/Lib/site-packages/annotated_doc-0.0.5.dist-info/METADATA",
+      "metadata_sha256": "8c24d70c5d9153d22123353a906042fd7603df2d15c2196290b0f8a962558c46",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/annotated_doc-0.0.5.dist-info/licenses/LICENSE",
+          "sha256": "fff170779a6acbf65abdb405c087f1cee1786691e4a96a4034517e4a504a0cdf"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "annotated-types",
+      "version": "0.8.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/annotated_types-0.8.0.dist-info/METADATA",
+      "metadata_sha256": "614985b278f601b8ef863f82783b991cc3ada4b89f592eb71c7c48c5f2ef2298",
+      "expression": "MIT",
+      "classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/annotated_types-0.8.0.dist-info/licenses/LICENSE",
+          "sha256": "fe1049884b1a0d9342901e88e07f32925d24b3121d9972b6a6805fb9824b095d"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m03-compatible",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "anyio",
+      "version": "4.15.1",
+      "metadata": ".venv/m01-io/Lib/site-packages/anyio-4.15.1.dist-info/METADATA",
+      "metadata_sha256": "043aecb571af7189e8a6c528f5d8e32545f1b2cdfaaf761d51e6d5b67ea3ca81",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/anyio-4.15.1.dist-info/licenses/LICENSE",
+          "sha256": "5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "argon2-cffi",
+      "version": "25.1.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/argon2_cffi-25.1.0.dist-info/METADATA",
+      "metadata_sha256": "e90851075b68261faccf407b29430f45e6a5b1a0759a0d50b8d93101b0de2179",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/argon2_cffi-25.1.0.dist-info/licenses/LICENSE",
+          "sha256": "b6944d386e87ccf49d9632da083685a4b7624733e686a7fe283dd2d428341d77"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "argon2-cffi-bindings",
+      "version": "26.1.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/argon2_cffi_bindings-26.1.0.dist-info/METADATA",
+      "metadata_sha256": "f6bd89c593104a1d78990be57cdf022b414b666c7630a480de6d67309a02323b",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/argon2_cffi_bindings-26.1.0.dist-info/licenses/LICENSE",
+          "sha256": "966998dc37070a83cc0507bed5e3241d31782c078d0d24870090dead7c471e36"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "build",
+      "version": "1.6.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/build-1.6.0.dist-info/METADATA",
+      "metadata_sha256": "6399192076e22393d93555c9c94d526be8dde83dd5bb4638b1f6e69ce03f6147",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/build-1.6.0.dist-info/licenses/LICENSE",
+          "sha256": "aaf9a29ca5907971ccf07de025375db34539a8d5eeebce20b46099805722106f"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "cffi",
+      "version": "2.1.1",
+      "metadata": ".venv/m01-io/Lib/site-packages/cffi-2.1.1.dist-info/METADATA",
+      "metadata_sha256": "67b6a7595df7ede2195016a05d285faa7d362a8f57c238984edb8bb674b5770d",
+      "expression": "MIT-0",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/cffi-2.1.1.dist-info/licenses/LICENSE",
+          "sha256": "5ba24ddc57067f9249add644c3afc41a5d6dc37e23433ef759d95df370b0af63"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m05",
+        "m09-ui",
+        "m10-ui",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "click",
+      "version": "8.5.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/click-8.5.0.dist-info/METADATA",
+      "metadata_sha256": "e87bce0bd194de70dfb8e708e0a6b0483009f25611804eaf87bfeb63e6c20501",
+      "expression": "BSD-3-Clause",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/click-8.5.0.dist-info/licenses/LICENSE.txt",
+          "sha256": "9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "colorama",
+      "version": "0.4.6",
+      "metadata": ".venv/m01-io/Lib/site-packages/colorama-0.4.6.dist-info/METADATA",
+      "metadata_sha256": "7baed29eb50c3b29bdb33ff84e3177bf1bc05784f7685ecdcaa4471c7dd810cc",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/colorama-0.4.6.dist-info/licenses/LICENSE.txt",
+          "sha256": "cac35c02686e5d04a5a7140bfb3b36e73aed496656e891102e428886d7930318"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m05",
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "et_xmlfile",
+      "version": "2.0.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/et_xmlfile-2.0.0.dist-info/METADATA",
+      "metadata_sha256": "0e97d7ea909ed0fbe03d88bc8b6f58677cee1b07bd3353ce361cd2405915204e",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_files": [],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m09-ui",
+        "m10-ui"
+      ]
+    },
+    {
+      "name": "fastapi",
+      "version": "0.141.1",
+      "metadata": ".venv/m01-io/Lib/site-packages/fastapi-0.141.1.dist-info/METADATA",
+      "metadata_sha256": "1010c29547b4026bdb3cd1c406e0570b9d79bb448b5a61fa4d5bb5a5eb0b752c",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/fastapi-0.141.1.dist-info/licenses/LICENSE",
+          "sha256": "4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "h11",
+      "version": "0.16.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/h11-0.16.0.dist-info/METADATA",
+      "metadata_sha256": "28f326098ac09fcba79b8f180f96087c841fe2456215cb7b872a9c7d5cd19d64",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/h11-0.16.0.dist-info/licenses/LICENSE.txt",
+          "sha256": "37db5bb85926db28a427a25867f10b1232003aea1be69ccb851138adb8e6f361"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "idna",
+      "version": "3.19",
+      "metadata": ".venv/m01-io/Lib/site-packages/idna-3.19.dist-info/METADATA",
+      "metadata_sha256": "4d113161aca8582e8d28fddf3ea50f19b607209c2b3e4364379a163454680084",
+      "expression": "BSD-3-Clause",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/idna-3.19.dist-info/licenses/LICENSE.md",
+          "sha256": "1a9a4f0e3d479a27240ddd59a9137a66ab4a0f9dfdc8ca6188cc0bfd85187f04"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "iniconfig",
+      "version": "2.3.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/iniconfig-2.3.0.dist-info/METADATA",
+      "metadata_sha256": "40d773f84e4e112f495bbf4f1be9cbd2d456c0aeb6ef5311f75d1bf322f2165b",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/iniconfig-2.3.0.dist-info/licenses/LICENSE",
+          "sha256": "3409fa91f7ace557894632676656e32264fe5ef7581535725dc9a23774551bd4"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m05",
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "itsdangerous",
+      "version": "2.2.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/itsdangerous-2.2.0.dist-info/METADATA",
+      "metadata_sha256": "d2b934fb56708a1b94e439f0255c0f5a8108e3258ec827b18a1dc9c991db9611",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/itsdangerous-2.2.0.dist-info/LICENSE.txt",
+          "sha256": "63af09891b6be8ad1a4252ed43af0f4efba7fc948e228367bed7f3c5ae0b09d7"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "numpy",
+      "version": "2.2.6",
+      "metadata": ".venv/m01-io/Lib/site-packages/numpy-2.2.6.dist-info/METADATA",
+      "metadata_sha256": "229f3544b02805e0f6a12030e155d8a45fd3a4100b3291574175e6a76f20e1e1",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/numpy-2.2.6.dist-info/LICENSE.txt",
+          "sha256": "14256cc3a2c9d32ac284da96b937feb44f72dd90bee2317ac3020166846ad99d"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m05",
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone"
+      ]
+    },
+    {
+      "name": "openpyxl",
+      "version": "3.1.5",
+      "metadata": ".venv/m01-io/Lib/site-packages/openpyxl-3.1.5.dist-info/METADATA",
+      "metadata_sha256": "23f80ca9830dd89435da1710f26deda8f81e5409287e74540210c72627a4ad96",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_files": [],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m09-ui",
+        "m10-ui"
+      ]
+    },
+    {
+      "name": "packaging",
+      "version": "26.3",
+      "metadata": ".venv/m01-io/Lib/site-packages/packaging-26.3.dist-info/METADATA",
+      "metadata_sha256": "70fdb89fc4d4a9a043bf7372b8972bcc883fddff34ab55e9cf80d73875384763",
+      "expression": "Apache-2.0 OR BSD-2-Clause",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/packaging-26.3.dist-info/licenses/LICENSE",
+          "sha256": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48"
+        },
+        {
+          "path": ".venv/m01-io/Lib/site-packages/packaging-26.3.dist-info/licenses/LICENSE.APACHE",
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+        },
+        {
+          "path": ".venv/m01-io/Lib/site-packages/packaging-26.3.dist-info/licenses/LICENSE.BSD",
+          "sha256": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m05",
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "pandas",
+      "version": "2.3.3",
+      "metadata": ".venv/m01-io/Lib/site-packages/pandas-2.3.3.dist-info/METADATA",
+      "metadata_sha256": "243674e606b51e70e5858596c7bfc9b58875d531d56577927c0a9944693f6c2f",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/pandas-2.3.3.dist-info/LICENSE",
+          "sha256": "533eb6d0b98e5be3ddd12dce97be35dd11282f5c47cdf8d08c81756fd5d70a26"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m09-ui",
+        "m10-ui"
+      ]
+    },
+    {
+      "name": "phonetic-core",
+      "version": "3.0.0a1",
+      "metadata": ".venv/m01-io/Lib/site-packages/phonetic_core-3.0.0a1.dist-info/METADATA",
+      "metadata_sha256": "6bab7ae6d5f250182336fda4b80e35fe886f4add85a65017e40d87fc1544e06b",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "pluggy",
+      "version": "1.6.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/pluggy-1.6.0.dist-info/METADATA",
+      "metadata_sha256": "7438c35ee25a095eb7416f84b461c2d74425c5e734ad54c3912453c65244e01c",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/pluggy-1.6.0.dist-info/licenses/LICENSE",
+          "sha256": "d6b65e6c213a5d0b577911d34d6e5949b9f59d76c238c5071a2f3fc16cfb2606"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m05",
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "praat-parselmouth",
+      "version": "0.4.7",
+      "metadata": ".venv/m01-io/Lib/site-packages/praat_parselmouth-0.4.7.dist-info/METADATA",
+      "metadata_sha256": "f2d7b62dfe8987746e759df468ba7a71ccf3f60aaa8242b732a8bb1e2bea8f62",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/praat_parselmouth-0.4.7.dist-info/licenses/LICENSE",
+          "sha256": "0b383d5a63da644f628d99c33976ea6487ed89aaa59f0b3257992deac1171e6b"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m09-ui",
+        "m10-ui"
+      ]
+    },
+    {
+      "name": "psycopg",
+      "version": "3.3.3",
+      "metadata": ".venv/m01-io/Lib/site-packages/psycopg-3.3.3.dist-info/METADATA",
+      "metadata_sha256": "2795bcbf48c7a79e5fb23b742a0b7a3f4e57e36a8443e73ae28483c348adec02",
+      "expression": "LGPL-3.0-only",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/psycopg-3.3.3.dist-info/licenses/LICENSE.txt",
+          "sha256": "e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "psycopg-binary",
+      "version": "3.3.3",
+      "metadata": ".venv/m01-io/Lib/site-packages/psycopg_binary-3.3.3.dist-info/METADATA",
+      "metadata_sha256": "a2dcd360698dc9423b6802271640d6ff3c674196e8195d87e7597ccd030f8779",
+      "expression": "LGPL-3.0-only",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/psycopg_binary-3.3.3.dist-info/licenses/LICENSE.txt",
+          "sha256": "7d3a95e5e06978064ed3f8e2b7c8f845e7fd8a405294727cc708f94cb83b8059"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "ptb-api",
+      "version": "3.0.0a1",
+      "metadata": ".venv/m01-io/Lib/site-packages/ptb_api-3.0.0a1.dist-info/METADATA",
+      "metadata_sha256": "9489e82fc9d9f7e1f59dc1b56c7488710d5dc55dd74833971d0613bc48a3b1f3",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "pycparser",
+      "version": "3.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/pycparser-3.0.dist-info/METADATA",
+      "metadata_sha256": "f547a60b0ab54cc2f242213d1f87960ad80df7dd5dfeb98d17a444d48bfb6b93",
+      "expression": "BSD-3-Clause",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/pycparser-3.0.dist-info/licenses/LICENSE",
+          "sha256": "0c846399369ea76ddd7b5c44fe6d16497415fcf015f5cbb508c24bf98b81c5b1"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m05",
+        "m09-ui",
+        "m10-ui",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "pydantic",
+      "version": "2.13.5",
+      "metadata": ".venv/m01-io/Lib/site-packages/pydantic-2.13.5.dist-info/METADATA",
+      "metadata_sha256": "0685830d13647bd6f3f05526043d32a8b2a221d86b53773053d6c52bb17a9c07",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/pydantic-2.13.5.dist-info/licenses/LICENSE",
+          "sha256": "a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m03-compatible",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "pydantic_core",
+      "version": "2.46.5",
+      "metadata": ".venv/m01-io/Lib/site-packages/pydantic_core-2.46.5.dist-info/METADATA",
+      "metadata_sha256": "a193d0a16e9372c99b84b9216e274e28521fe5e5bf7be7b8b11be1c3c50cd9ca",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/pydantic_core-2.46.5.dist-info/licenses/LICENSE",
+          "sha256": "fbe7f615f18d135c07000e5a86325db27f42c7729699ef166ac1f7a3f4586bf4"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m03-compatible",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "Pygments",
+      "version": "2.21.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/pygments-2.21.0.dist-info/METADATA",
+      "metadata_sha256": "1dde075570136774c706bf0009183a793fe0ee262e4a5590cc6eff8453eedd43",
+      "expression": "BSD-2-Clause",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/pygments-2.21.0.dist-info/licenses/LICENSE",
+          "sha256": "a9d66f1d526df02e29dce73436d34e56e8632f46c275bbdffc70569e882f9f17"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "pyproject_hooks",
+      "version": "1.2.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/pyproject_hooks-1.2.0.dist-info/METADATA",
+      "metadata_sha256": "3bfd818e5a898e2c01d849e2342920136d822b59454b599ad55c0d293428654c",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/pyproject_hooks-1.2.0.dist-info/LICENSE",
+          "sha256": "1b22b049b5267d6dfc23a67bf4a84d8ec04b9fdfb1a51d360e42b4342c8b4154"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "pytest",
+      "version": "9.1.1",
+      "metadata": ".venv/m01-io/Lib/site-packages/pytest-9.1.1.dist-info/METADATA",
+      "metadata_sha256": "c5d032518012789cabc870d46589aca3aeda36cf9fa4399ee88bda3d10438451",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/pytest-9.1.1.dist-info/licenses/LICENSE",
+          "sha256": "ca836a5f9ecca3b2f350230faa20a48fb8b145653b5568d784862df864706b9b"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "python-dateutil",
+      "version": "2.9.0.post0",
+      "metadata": ".venv/m01-io/Lib/site-packages/python_dateutil-2.9.0.post0.dist-info/METADATA",
+      "metadata_sha256": "a9d436da322be808332f98d88325998e87cb693a678a9969feb4cfad729a6e93",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: BSD License",
+        "License :: OSI Approved :: Apache Software License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/python_dateutil-2.9.0.post0.dist-info/LICENSE",
+          "sha256": "ba00f51a0d92823b5a1cde27d8b5b9d2321e67ed8da9bc163eff96d5e17e577e"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m05",
+        "m09-ui",
+        "m10-ui"
+      ]
+    },
+    {
+      "name": "pytz",
+      "version": "2025.2",
+      "metadata": ".venv/m01-io/Lib/site-packages/pytz-2025.2.dist-info/METADATA",
+      "metadata_sha256": "e620e4e1f9f1c8019619388d4da496eb02119a13f35aaad55f022694a3c81f6c",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/pytz-2025.2.dist-info/LICENSE.txt",
+          "sha256": "be8b1a37ebe26c592a90f6c0eb33103a7f383ce2f4d7498c0af9a526990a07b8"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m09-ui",
+        "m10-ui"
+      ]
+    },
+    {
+      "name": "scipy",
+      "version": "1.16.3",
+      "metadata": ".venv/m01-io/Lib/site-packages/scipy-1.16.3.dist-info/METADATA",
+      "metadata_sha256": "3c3c96d16069fa4380860e4181a707fd70717a58566f81429f926a3478216310",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/scipy-1.16.3.dist-info/LICENSE.txt",
+          "sha256": "564d63dbef2ef3eb1dec94908966d3edf5f11c487ee2cf2baf8bf3faef01bdd9"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m09-ui",
+        "m10-ui"
+      ]
+    },
+    {
+      "name": "setuptools",
+      "version": "84.0.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/setuptools-84.0.0.dist-info/METADATA",
+      "metadata_sha256": "3ef2975718dd31cabdd5829455e9b868ca14dbf79ed8fed2de0af4e87347006e",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/setuptools-84.0.0.dist-info/licenses/LICENSE",
+          "sha256": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "six",
+      "version": "1.17.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/six-1.17.0.dist-info/METADATA",
+      "metadata_sha256": "562042078c2752549f6d8a7c86dbc5dd708088a7be6d80672ec7b07100b72468",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/six-1.17.0.dist-info/LICENSE",
+          "sha256": "4375ba20e2b9c6c4e7cad2940a628fd90e95cc3d50ee92aae755715d8ba1fbd0"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m05",
+        "m09-ui",
+        "m10-ui"
+      ]
+    },
+    {
+      "name": "starlette",
+      "version": "1.6.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/starlette-1.6.0.dist-info/METADATA",
+      "metadata_sha256": "43f6240f976044f4cf9a573506d96d895391094717c55682700c931d5cd3c5a2",
+      "expression": "BSD-3-Clause",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/starlette-1.6.0.dist-info/licenses/LICENSE.md",
+          "sha256": "dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.16.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/typing_extensions-4.16.0.dist-info/METADATA",
+      "metadata_sha256": "b05084ca1d50879865178d9fff9fabeab61bdfb1f361bfbde95421ffc8f9be46",
+      "expression": "PSF-2.0",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/typing_extensions-4.16.0.dist-info/licenses/LICENSE",
+          "sha256": "3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m03-compatible",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "typing-inspection",
+      "version": "0.4.4",
+      "metadata": ".venv/m01-io/Lib/site-packages/typing_inspection-0.4.4.dist-info/METADATA",
+      "metadata_sha256": "bad3d9e6342ef6750cf5128ec942327b8bebdce0b6e4d6f67cb15b27ae5118da",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/typing_inspection-0.4.4.dist-info/licenses/LICENSE",
+          "sha256": "804b59b25f2c31bd278f9202a19ae49a3945aa2664387e2d0a128c7cacc61ec3"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m03-compatible",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "tzdata",
+      "version": "2025.2",
+      "metadata": ".venv/m01-io/Lib/site-packages/tzdata-2025.2.dist-info/METADATA",
+      "metadata_sha256": "c2cc876ee200b84d1b8bee22290bc673ae4cf8e8be1a85cd2909a2715215794b",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: Apache Software License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/tzdata-2025.2.dist-info/licenses/LICENSE",
+          "sha256": "33e8e5002d3512d3fcc2282b995e6bad9d334781b9c5ac31843f404900e1f3b4"
+        },
+        {
+          "path": ".venv/m01-io/Lib/site-packages/tzdata-2025.2.dist-info/licenses/licenses/LICENSE_APACHE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m09-ui",
+        "m10-ui"
+      ]
+    },
+    {
+      "name": "uvicorn",
+      "version": "0.52.4",
+      "metadata": ".venv/m01-io/Lib/site-packages/uvicorn-0.52.4.dist-info/METADATA",
+      "metadata_sha256": "6cea83c70e4f2746374ca19af72a52406aa706ad8735b11d72fbd5fd82f7cbff",
+      "expression": "BSD-3-Clause",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/uvicorn-0.52.4.dist-info/licenses/LICENSE.md",
+          "sha256": "efe1acf3e62fb99c288b0ec73e5a773b7268ef4320fe757ea994214e4b63c371"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "wheel",
+      "version": "0.48.0",
+      "metadata": ".venv/m01-io/Lib/site-packages/wheel-0.48.0.dist-info/METADATA",
+      "metadata_sha256": "e702fede719fefbb8accad64c01c78efe8d7efea27a7dcef3423f83ffaadfc48",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-io/Lib/site-packages/wheel-0.48.0.dist-info/licenses/LICENSE.txt",
+          "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+        }
+      ],
+      "environments": [
+        "m01-io",
+        "m01-science",
+        "m01-ui",
+        "m01-wheelcheck",
+        "m03-compatible",
+        "m03-ui",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "certifi",
+      "version": "2026.7.22",
+      "metadata": ".venv/m01-ui/Lib/site-packages/certifi-2026.7.22.dist-info/METADATA",
+      "metadata_sha256": "ef5af1638fbb23676ac3c5777dfcfc2cd9c348fe4172ed5ba3d277655b248090",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m01-ui/Lib/site-packages/certifi-2026.7.22.dist-info/licenses/LICENSE",
+          "sha256": "e93716da6b9c0d5a4a1df60fe695b370f0695603d21f6f83f053e42cfc10caf7"
+        }
+      ],
+      "environments": [
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "httpcore",
+      "version": "1.0.9",
+      "metadata": ".venv/m01-ui/Lib/site-packages/httpcore-1.0.9.dist-info/METADATA",
+      "metadata_sha256": "fe2d4fda6199128978779e0cf27f3c045c531863fcdd987eacc74f3a18d41c21",
+      "expression": "BSD-3-Clause",
+      "classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m01-ui/Lib/site-packages/httpcore-1.0.9.dist-info/licenses/LICENSE.md",
+          "sha256": "fdcb59154c74cbaba16a11242f7740bea9f23d6feb5547917d8c5f94a80392a5"
+        }
+      ],
+      "environments": [
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "httpx",
+      "version": "0.28.1",
+      "metadata": ".venv/m01-ui/Lib/site-packages/httpx-0.28.1.dist-info/METADATA",
+      "metadata_sha256": "febb9b0f8f3e80d57c8199c304f35c4336e8581d1d18d7983c92766b82793b25",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m01-ui/Lib/site-packages/httpx-0.28.1.dist-info/licenses/LICENSE.md",
+          "sha256": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d"
+        }
+      ],
+      "environments": [
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "ptb-desktop",
+      "version": "3.0.0a1",
+      "metadata": ".venv/m01-ui/Lib/site-packages/ptb_desktop-3.0.0a1.dist-info/METADATA",
+      "metadata_sha256": "4b2d32c6f1b855bd3e2d424a081071e91e7c9701da9cff1acf1fb7cde266fd83",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [],
+      "environments": [
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "PyQt6",
+      "version": "6.11.0",
+      "metadata": ".venv/m01-ui/Lib/site-packages/pyqt6-6.11.0.dist-info/METADATA",
+      "metadata_sha256": "543a8ca18a258ac7a39d2b63531d672661b973073f875173c206ab1114125674",
+      "expression": "GPL-3.0-only",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-ui/Lib/site-packages/pyqt6-6.11.0.dist-info/licenses/LICENSE",
+          "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+        }
+      ],
+      "environments": [
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "PyQt6-Qt6",
+      "version": "6.11.2",
+      "metadata": ".venv/m01-ui/Lib/site-packages/pyqt6_qt6-6.11.2.dist-info/METADATA",
+      "metadata_sha256": "50f8232404005fc326ba1baac660972328d6ba0e8d14e9bee17626ee3820bdd3",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-ui/Lib/site-packages/pyqt6_qt6-6.11.2.dist-info/LICENSE",
+          "sha256": "6c671e2912ec69c0832f32066c0313cee5fdc3bbcbce237822e89f3da58edd4e"
+        }
+      ],
+      "environments": [
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "PyQt6_sip",
+      "version": "13.12.0",
+      "metadata": ".venv/m01-ui/Lib/site-packages/pyqt6_sip-13.12.0.dist-info/METADATA",
+      "metadata_sha256": "bbb61e2ef97d8c9df643d8acf14eebdfc41d0083a22479051a6407b94eea65f6",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-ui/Lib/site-packages/pyqt6_sip-13.12.0.dist-info/licenses/LICENSE",
+          "sha256": "3e6f5b427c36f94ecf86bc01698af7030a1ed6eb3748110d5dbb8d142d804611"
+        }
+      ],
+      "environments": [
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "PyQt6-WebEngine",
+      "version": "6.11.0",
+      "metadata": ".venv/m01-ui/Lib/site-packages/pyqt6_webengine-6.11.0.dist-info/METADATA",
+      "metadata_sha256": "7948d4f283f79a6ff8d8290845a209fe32832bb989c13c5f82ba6425a1ba1326",
+      "expression": "GPL-3.0-only",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-ui/Lib/site-packages/pyqt6_webengine-6.11.0.dist-info/licenses/LICENSE",
+          "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+        }
+      ],
+      "environments": [
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "PyQt6-WebEngine-Qt6",
+      "version": "6.11.2",
+      "metadata": ".venv/m01-ui/Lib/site-packages/pyqt6_webengine_qt6-6.11.2.dist-info/METADATA",
+      "metadata_sha256": "a0cd0ae63793f4878c7f9046d987a7a2166a11d80966542a7a14d1e35bf80569",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m01-ui/Lib/site-packages/pyqt6_webengine_qt6-6.11.2.dist-info/LICENSE",
+          "sha256": "6c671e2912ec69c0832f32066c0313cee5fdc3bbcbce237822e89f3da58edd4e"
+        }
+      ],
+      "environments": [
+        "m01-ui",
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone",
+        "p02-clean-20260909-162710",
+        "p02-clean-20260909-162915",
+        "v3-dev"
+      ]
+    },
+    {
+      "name": "contourpy",
+      "version": "1.3.3",
+      "metadata": ".venv/m03-compatible/Lib/site-packages/contourpy-1.3.3.dist-info/METADATA",
+      "metadata_sha256": "c43cef86baef09cff9c77975e578fa8cca0c9454df40dc176938b499a63de54a",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/contourpy-1.3.3.dist-info/LICENSE",
+          "sha256": "8553102e03001dd966278098cc027d0683c412b34ea141351b060be4330f39a9"
+        }
+      ],
+      "environments": [
+        "m03-compatible",
+        "m05"
+      ]
+    },
+    {
+      "name": "cycler",
+      "version": "0.12.1",
+      "metadata": ".venv/m03-compatible/Lib/site-packages/cycler-0.12.1.dist-info/METADATA",
+      "metadata_sha256": "23289e19b76f1e01394227696e6af2b6cd1ce79e89731209bf9195148b18ed36",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/cycler-0.12.1.dist-info/LICENSE",
+          "sha256": "f1218143d766da3fea66f13396b7f15df46a83303f29bf96ba6e98eb4d42f408"
+        }
+      ],
+      "environments": [
+        "m03-compatible",
+        "m05"
+      ]
+    },
+    {
+      "name": "fonttools",
+      "version": "4.61.0",
+      "metadata": ".venv/m03-compatible/Lib/site-packages/fonttools-4.61.0.dist-info/METADATA",
+      "metadata_sha256": "4271c4753e155f1086221814503a03cccf1db06c8b1012288814a4d671aa78f7",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/fonttools-4.61.0.dist-info/licenses/LICENSE",
+          "sha256": "22bef80697ecfaa17f97e62b9a26dfa12820be05583e8dd12ad169b241274c99"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/fonttools-4.61.0.dist-info/licenses/LICENSE.external",
+          "sha256": "b082a5f86775b2641f01bccb8b9c82908481de5f502bb254b1e13bfc2a9f303d"
+        }
+      ],
+      "environments": [
+        "m03-compatible"
+      ]
+    },
+    {
+      "name": "kiwisolver",
+      "version": "1.4.9",
+      "metadata": ".venv/m03-compatible/Lib/site-packages/kiwisolver-1.4.9.dist-info/METADATA",
+      "metadata_sha256": "9f7bc22ee908c83900551ae1605165c2aff9c6f60311682ac2c365f6c15b1424",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/kiwisolver-1.4.9.dist-info/licenses/LICENSE",
+          "sha256": "ec817f05f420b00835020fb5c7067433ade3424d256dd3a78a1a8f8a5d9d87f3"
+        }
+      ],
+      "environments": [
+        "m03-compatible"
+      ]
+    },
+    {
+      "name": "matplotlib",
+      "version": "3.10.8",
+      "metadata": ".venv/m03-compatible/Lib/site-packages/matplotlib-3.10.8.dist-info/METADATA",
+      "metadata_sha256": "271a91ad64b587781e3ccc76add7e042acb74e1ee94081decf4dc382be91fa06",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: Python Software Foundation License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/matplotlib-3.10.8.dist-info/LICENSE",
+          "sha256": "dbb9ad7495a83b0f2f48c94b06e23020587d82f8d1492dcb717fb1ebc2f86c18"
+        }
+      ],
+      "environments": [
+        "m03-compatible"
+      ]
+    },
+    {
+      "name": "pillow",
+      "version": "12.0.0",
+      "metadata": ".venv/m03-compatible/Lib/site-packages/pillow-12.0.0.dist-info/METADATA",
+      "metadata_sha256": "a36873a6d9125b8d6482dfb573c6082262143ff626ee3f535a7770577a8c9846",
+      "expression": "MIT-CMU",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pillow-12.0.0.dist-info/licenses/LICENSE",
+          "sha256": "9a083a15f1026b3d7096629be74f79cc80544ebf443e652d434c19f2594574d7"
+        }
+      ],
+      "environments": [
+        "m03-compatible"
+      ]
+    },
+    {
+      "name": "pip",
+      "version": "25.3",
+      "metadata": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/METADATA",
+      "metadata_sha256": "2a1ba0725e7d236fbe2d5c50a4fff9c9e3fe34ca494f2cebde5c45c3791379d3",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/LICENSE.txt",
+          "sha256": "634300a669d49aeae65b12c6c48c924c51a4cdf3d1ff086dc3456dc8bcaa2104"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/cachecontrol/LICENSE.txt",
+          "sha256": "86eeee87be2a43f3ff1f56496f451f69243926f025fedbb033666c304c4c161b"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/certifi/LICENSE",
+          "sha256": "e93716da6b9c0d5a4a1df60fe695b370f0695603d21f6f83f053e42cfc10caf7"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/dependency_groups/LICENSE.txt",
+          "sha256": "1ab36e3e2a4ba8631625384f87e9e091db1faed034c5b23325b3239abf2cc525"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/distlib/LICENSE.txt",
+          "sha256": "808e10c8a6ab8deb149ff9b3fb19f447a808094606d712a9ca57fead3552599d"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/distro/LICENSE",
+          "sha256": "cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/idna/LICENSE.md",
+          "sha256": "a59f0b0ef3635874109a4461ca44ff7a70d50696e814767bfaf721d4c9b0db0f"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/msgpack/COPYING",
+          "sha256": "492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/packaging/LICENSE",
+          "sha256": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/packaging/LICENSE.APACHE",
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/packaging/LICENSE.BSD",
+          "sha256": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/pkg_resources/LICENSE",
+          "sha256": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/platformdirs/LICENSE",
+          "sha256": "29e0fd62e929850e86eb28c3fdccf0cefdf4fa94879011cffb3d0d4bed6d4db6"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/pygments/LICENSE",
+          "sha256": "a9d66f1d526df02e29dce73436d34e56e8632f46c275bbdffc70569e882f9f17"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/pyproject_hooks/LICENSE",
+          "sha256": "1b22b049b5267d6dfc23a67bf4a84d8ec04b9fdfb1a51d360e42b4342c8b4154"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/requests/LICENSE",
+          "sha256": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/resolvelib/LICENSE",
+          "sha256": "f388fd38cad13112c1dc0f669bbe80e7f84541edbafb72f3030d2ca7642c3c9d"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/rich/LICENSE",
+          "sha256": "deed7c17a4318158190a3ea239cc879a5a50271cebb98ae7025f48fbe58dca15"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/tomli/LICENSE",
+          "sha256": "b80816b0d530b8accb4c2211783790984a6e3b61922c2b5ee92f3372ab2742fe"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/tomli_w/LICENSE",
+          "sha256": "b80816b0d530b8accb4c2211783790984a6e3b61922c2b5ee92f3372ab2742fe"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/truststore/LICENSE",
+          "sha256": "33be7b7e8fa4fd19b1760e1a8ed8a668bdab852c91b692dd41424bcb725a9fca"
+        },
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pip-25.3.dist-info/licenses/src/pip/_vendor/urllib3/LICENSE.txt",
+          "sha256": "c37bf186e27cf9dbe9619e55edfe3cea7b30091ceb3da63c7dacbe0e6d77907b"
+        }
+      ],
+      "environments": [
+        "m03-compatible"
+      ]
+    },
+    {
+      "name": "pyparsing",
+      "version": "3.2.5",
+      "metadata": ".venv/m03-compatible/Lib/site-packages/pyparsing-3.2.5.dist-info/METADATA",
+      "metadata_sha256": "cd543f26f0f59ac7b446f57cc91e8def7a3eb735fdd5e91c4e402b8725696eba",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m03-compatible/Lib/site-packages/pyparsing-3.2.5.dist-info/licenses/LICENSE",
+          "sha256": "10d5120a16805804ffda8b688c220bfb4e8f39741b57320604d455a309e01972"
+        }
+      ],
+      "environments": [
+        "m03-compatible"
+      ]
+    },
+    {
+      "name": "absl-py",
+      "version": "2.5.0",
+      "metadata": ".venv/m05/Lib/site-packages/absl_py-2.5.0.dist-info/METADATA",
+      "metadata_sha256": "24eb8b2dbab3053ea20e46ae02ddb3b9157b5be7e7a38ad931fd0c596f517015",
+      "expression": "Apache-2.0",
+      "classifiers": [
+        "License :: OSI Approved :: Apache Software License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/absl_py-2.5.0.dist-info/licenses/LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "attrs",
+      "version": "26.1.0",
+      "metadata": ".venv/m05/Lib/site-packages/attrs-26.1.0.dist-info/METADATA",
+      "metadata_sha256": "4cd40e690f23bf37cbcad34efd6758e062df1df07c86833f7e3ce95bf1fa38cc",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/attrs-26.1.0.dist-info/licenses/LICENSE",
+          "sha256": "882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "av",
+      "version": "16.1.0",
+      "metadata": ".venv/m05/Lib/site-packages/av-16.1.0.dist-info/METADATA",
+      "metadata_sha256": "2afaca0789ddf1c3b225d722aea306281435489e5ef4cfd7b66d09ac9d4d5a8c",
+      "expression": "BSD-3-Clause",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/av-16.1.0.dist-info/licenses/LICENSE.txt",
+          "sha256": "f32ebcb6007dcc05eea369b3820e6391b0a7ef1ed763f30f1aca15dfdbacbe96"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "flatbuffers",
+      "version": "25.12.19",
+      "metadata": ".venv/m05/Lib/site-packages/flatbuffers-25.12.19.dist-info/METADATA",
+      "metadata_sha256": "9f38239f96faa21522a6aadab6912e1e560708bbe9c9f696a0679c9403fa089e",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: Apache Software License"
+      ],
+      "license_files": [],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "fonttools",
+      "version": "4.66.0",
+      "metadata": ".venv/m05/Lib/site-packages/fonttools-4.66.0.dist-info/METADATA",
+      "metadata_sha256": "bc3c7de35597a5568c9e2f608a513b3c79882b9a5791aef574f98f9205c68a93",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/fonttools-4.66.0.dist-info/licenses/LICENSE",
+          "sha256": "22bef80697ecfaa17f97e62b9a26dfa12820be05583e8dd12ad169b241274c99"
+        },
+        {
+          "path": ".venv/m05/Lib/site-packages/fonttools-4.66.0.dist-info/licenses/LICENSE.external",
+          "sha256": "b082a5f86775b2641f01bccb8b9c82908481de5f502bb254b1e13bfc2a9f303d"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "jax",
+      "version": "0.10.2",
+      "metadata": ".venv/m05/Lib/site-packages/jax-0.10.2.dist-info/METADATA",
+      "metadata_sha256": "bde94bcaca6ffaac846cdc7e61ca10893e929ee50bc4bb05513a29630662033f",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/jax-0.10.2.dist-info/licenses/LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "jaxlib",
+      "version": "0.10.2",
+      "metadata": ".venv/m05/Lib/site-packages/jaxlib-0.10.2.dist-info/METADATA",
+      "metadata_sha256": "33e3ea0a28b77500955db97578f6165c8c0ebd40727d5c9890dbb0de902d2cc6",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/jaxlib-0.10.2.dist-info/licenses/LICENSE.txt",
+          "sha256": "e3d8688a2c75d4e33641cc88046a8a1593ee79822411fa45a7bd32e37f847d29"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "kiwisolver",
+      "version": "1.5.1",
+      "metadata": ".venv/m05/Lib/site-packages/kiwisolver-1.5.1.dist-info/METADATA",
+      "metadata_sha256": "4e635948bf0b496e7e1bf6b8f7f577504670453459bd98e8dcfb0b919257d476",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/kiwisolver-1.5.1.dist-info/licenses/LICENSE",
+          "sha256": "b24c2bf6185f31a124ad6bacccae3071bdc7ad7882de00b00110aa62abb76a15"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "matplotlib",
+      "version": "3.11.2",
+      "metadata": ".venv/m05/Lib/site-packages/matplotlib-3.11.2.dist-info/METADATA",
+      "metadata_sha256": "e5f532226d1025af2dd15ff951df27391f66d46403b8244ea61e6b8eb3e4d806",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: Python Software Foundation License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/matplotlib-3.11.2.dist-info/LICENSE",
+          "sha256": "822e8e528147569a41975592aee19c11992ab667ba50451cd929031d5fc74491"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "mediapipe",
+      "version": "0.10.14",
+      "metadata": ".venv/m05/Lib/site-packages/mediapipe-0.10.14.dist-info/METADATA",
+      "metadata_sha256": "e4f047f0d0f704abc06c37c343ccc9e320ed8f6e92362a368d726a7b4fb1afd0",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: Apache Software License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/mediapipe-0.10.14.dist-info/LICENSE",
+          "sha256": "8707eef0533987efc5b155d64761eeb6e20793f50b9bd1a68dad1cf4719d0ed8"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "ml_dtypes",
+      "version": "0.6.0",
+      "metadata": ".venv/m05/Lib/site-packages/ml_dtypes-0.6.0.dist-info/METADATA",
+      "metadata_sha256": "363d582174259be78c619e314216fc8979e5a5ec245337ee236b244945df3f01",
+      "expression": "Apache-2.0",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/ml_dtypes-0.6.0.dist-info/licenses/LICENSE",
+          "sha256": "3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5"
+        },
+        {
+          "path": ".venv/m05/Lib/site-packages/ml_dtypes-0.6.0.dist-info/licenses/LICENSE.eigen",
+          "sha256": "9221c2f936159b8446d329249fb4c0f25be510f447383a0f13336ac7985668a3"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "opencv-contrib-python",
+      "version": "4.13.0.92",
+      "metadata": ".venv/m05/Lib/site-packages/opencv_contrib_python-4.13.0.92.dist-info/METADATA",
+      "metadata_sha256": "43998672e8e2ccfd48349334a32d1d748527f370ed8bb194dfef83f56b42c19b",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: Apache Software License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/opencv_contrib_python-4.13.0.92.dist-info/LICENSE-3RD-PARTY.txt",
+          "sha256": "55bf7d4a1de21d130a39ca38824eb61ba061edbf8449838634246bde30fde403"
+        },
+        {
+          "path": ".venv/m05/Lib/site-packages/opencv_contrib_python-4.13.0.92.dist-info/LICENSE.txt",
+          "sha256": "edef0fac1eb08d29d34563f724742e078da2513e196133a12c6ad9ff01e26107"
+        }
+      ],
+      "environments": [
+        "m05",
+        "m09-ui"
+      ]
+    },
+    {
+      "name": "opt_einsum",
+      "version": "3.4.0",
+      "metadata": ".venv/m05/Lib/site-packages/opt_einsum-3.4.0.dist-info/METADATA",
+      "metadata_sha256": "9f6791140c5e1be4f1b189365e6312d711a1eaaeb399b5dd6741f7a4bd99d03b",
+      "expression": "MIT",
+      "classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/opt_einsum-3.4.0.dist-info/licenses/LICENSE",
+          "sha256": "7b26691a7c8ee48af425a53cbaeaabc9aa3a84ea2e93fe47a1ecc550c1de76db"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "pillow",
+      "version": "12.3.0",
+      "metadata": ".venv/m05/Lib/site-packages/pillow-12.3.0.dist-info/METADATA",
+      "metadata_sha256": "2c4378001803cfac65809a50722d46e0da4ce8061e717f103e5d52734bab30f5",
+      "expression": "MIT-CMU",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/pillow-12.3.0.dist-info/licenses/LICENSE",
+          "sha256": "4f7866a74802c6326f81faff59a56546b6aec2b10b91973e0e9308de95e79857"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "pip",
+      "version": "24.0",
+      "metadata": ".venv/m05/Lib/site-packages/pip-24.0.dist-info/METADATA",
+      "metadata_sha256": "90d11f277fd5868da679ee257c97656dde511c8aac7d025231407e6ce90839e2",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/pip-24.0.dist-info/LICENSE.txt",
+          "sha256": "634300a669d49aeae65b12c6c48c924c51a4cdf3d1ff086dc3456dc8bcaa2104"
+        }
+      ],
+      "environments": [
+        "m05",
+        "m14"
+      ]
+    },
+    {
+      "name": "protobuf",
+      "version": "4.25.9",
+      "metadata": ".venv/m05/Lib/site-packages/protobuf-4.25.9.dist-info/METADATA",
+      "metadata_sha256": "3da5f3926e76da3e27271c4d8832d173d24c5a0a9d766ad89f3b47a3dc7b0de8",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/protobuf-4.25.9.dist-info/LICENSE",
+          "sha256": "6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "psutil",
+      "version": "7.0.0",
+      "metadata": ".venv/m05/Lib/site-packages/psutil-7.0.0.dist-info/METADATA",
+      "metadata_sha256": "8c4198dfca297dfee074ee46394207f317965c25dc1af8ad38862b954795a7c1",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/psutil-7.0.0.dist-info/LICENSE",
+          "sha256": "c7adc4d5d1337a548b967421f1fbe258b93033a0417708fd6f4e38f8ecbceb80"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "pyparsing",
+      "version": "3.3.3",
+      "metadata": ".venv/m05/Lib/site-packages/pyparsing-3.3.3.dist-info/METADATA",
+      "metadata_sha256": "f2ca34052d720622d300023472ef8ae94fe5b57d69acbb28a8667f6dd0e13497",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/pyparsing-3.3.3.dist-info/licenses/LICENSE",
+          "sha256": "a5425f9dc14ac74d4c5f0b679e941f2442e32cca7452a4418d5b1a49893ebe4e"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "pytest",
+      "version": "8.3.5",
+      "metadata": ".venv/m05/Lib/site-packages/pytest-8.3.5.dist-info/METADATA",
+      "metadata_sha256": "a54cbabd23e0bd941349ffb37b851a7e07b8bfe76a3b1588fc47c012c57a8688",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/pytest-8.3.5.dist-info/LICENSE",
+          "sha256": "ca836a5f9ecca3b2f350230faa20a48fb8b145653b5568d784862df864706b9b"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "scipy",
+      "version": "1.17.1",
+      "metadata": ".venv/m05/Lib/site-packages/scipy-1.17.1.dist-info/METADATA",
+      "metadata_sha256": "3a61ac02d145c9ca53f53d3f6f58d09017727a317731d0af02909730d4403e32",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/scipy-1.17.1.dist-info/LICENSE.txt",
+          "sha256": "564d63dbef2ef3eb1dec94908966d3edf5f11c487ee2cf2baf8bf3faef01bdd9"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "setuptools",
+      "version": "79.0.1",
+      "metadata": ".venv/m05/Lib/site-packages/setuptools-79.0.1.dist-info/METADATA",
+      "metadata_sha256": "d3152caeb1486d143b30b1d41fffaaddb7ea95fdc9547ae1135ce697b1a420b5",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/setuptools-79.0.1.dist-info/licenses/LICENSE",
+          "sha256": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741"
+        }
+      ],
+      "environments": [
+        "m05",
+        "m14"
+      ]
+    },
+    {
+      "name": "sounddevice",
+      "version": "0.5.6",
+      "metadata": ".venv/m05/Lib/site-packages/sounddevice-0.5.6.dist-info/METADATA",
+      "metadata_sha256": "0e95620083c46c892d3c78f5cae5db01d63814db395c1b170d2c013cb9e0b4de",
+      "expression": "MIT",
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m05/Lib/site-packages/sounddevice-0.5.6.dist-info/licenses/LICENSE",
+          "sha256": "b6eea21bbafbaf7a2177e492f1be6b5efc6f4e708b1980773de51cdaa52f8211"
+        }
+      ],
+      "environments": [
+        "m05"
+      ]
+    },
+    {
+      "name": "altgraph",
+      "version": "0.17.5",
+      "metadata": ".venv/m09-ui/Lib/site-packages/altgraph-0.17.5.dist-info/METADATA",
+      "metadata_sha256": "dc60641dba229a3aef09f764f562c38d908b930c92615af2e626af31d6ff19b5",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m09-ui/Lib/site-packages/altgraph-0.17.5.dist-info/LICENSE",
+          "sha256": "6c194d6db0c64d45535d10c95142b9b0cda7b7dcc7f1ddee302b3d536f3dbe46"
+        }
+      ],
+      "environments": [
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone"
+      ]
+    },
+    {
+      "name": "pefile",
+      "version": "2024.8.26",
+      "metadata": ".venv/m09-ui/Lib/site-packages/pefile-2024.8.26.dist-info/METADATA",
+      "metadata_sha256": "8ad83a5f8659e8da6eeaabf2dafa0eebb8c05832a3def16a5db4dd0d52e72474",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m09-ui/Lib/site-packages/pefile-2024.8.26.dist-info/LICENSE",
+          "sha256": "b44409c067c6da52bfb54bb6624fb11a7b52157c3a13ae1400232f8196e86ad3"
+        }
+      ],
+      "environments": [
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone"
+      ]
+    },
+    {
+      "name": "pyinstaller",
+      "version": "6.22.2",
+      "metadata": ".venv/m09-ui/Lib/site-packages/pyinstaller-6.22.2.dist-info/METADATA",
+      "metadata_sha256": "e5c6c30c203497ef05953191e727172817e9337a446d236540928d533781b121",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: GNU General Public License v2 (GPLv2)"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m09-ui/Lib/site-packages/pyinstaller-6.22.2.dist-info/licenses/COPYING.txt",
+          "sha256": "dcf75fdb959db1e3b41c0f8505069d2ece781b5ec6b3d0a4d30975cfc6580245"
+        }
+      ],
+      "environments": [
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone"
+      ]
+    },
+    {
+      "name": "pyinstaller-hooks-contrib",
+      "version": "2026.7",
+      "metadata": ".venv/m09-ui/Lib/site-packages/pyinstaller_hooks_contrib-2026.7.dist-info/METADATA",
+      "metadata_sha256": "66f4b89882a0f846cb3f3cd6379d74b85cbf096a88b73689a557438a7ccf431e",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: Apache Software License",
+        "License :: OSI Approved :: GNU General Public License v2 (GPLv2)"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m09-ui/Lib/site-packages/pyinstaller_hooks_contrib-2026.7.dist-info/licenses/LICENSE",
+          "sha256": "91d0baaff00773038e72c0a1fc9d5d2d38706b7a2b9c04f34296608f931b9cd0"
+        }
+      ],
+      "environments": [
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone"
+      ]
+    },
+    {
+      "name": "pywin32-ctypes",
+      "version": "0.2.3",
+      "metadata": ".venv/m09-ui/Lib/site-packages/pywin32_ctypes-0.2.3.dist-info/METADATA",
+      "metadata_sha256": "1e3767d3faff4d5b9c347160883831098d1f25acf4306b02c9acdcc6bfb5883b",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m09-ui/Lib/site-packages/pywin32_ctypes-0.2.3.dist-info/LICENSE.txt",
+          "sha256": "dfa83b3e2709adfcdb838d9ad55823ca674abb780e60563d9dd9544ccbf785e9"
+        }
+      ],
+      "environments": [
+        "m09-ui",
+        "m10-ui",
+        "p01-pyqt6",
+        "p01-standalone"
+      ]
+    },
+    {
+      "name": "sounddevice",
+      "version": "0.5.3",
+      "metadata": ".venv/m09-ui/Lib/site-packages/sounddevice-0.5.3.dist-info/METADATA",
+      "metadata_sha256": "02c629959916852859e5363fcec9179193ee9410167b7094819d6637ede988c3",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m09-ui/Lib/site-packages/sounddevice-0.5.3.dist-info/licenses/LICENSE",
+          "sha256": "b6eea21bbafbaf7a2177e492f1be6b5efc6f4e708b1980773de51cdaa52f8211"
+        }
+      ],
+      "environments": [
+        "m09-ui",
+        "m10-ui"
+      ]
+    },
+    {
+      "name": "soundfile",
+      "version": "0.13.1",
+      "metadata": ".venv/m09-ui/Lib/site-packages/soundfile-0.13.1.dist-info/METADATA",
+      "metadata_sha256": "0e4254c32f48852e0789e265aee10208a9bb778113ae8c5420d680393b7d32a1",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m09-ui/Lib/site-packages/soundfile-0.13.1.dist-info/LICENSE",
+          "sha256": "0dd2e411fed553ba891845077e5a32c5b726d1bbc46ff31a2118ae1ccf816752"
+        }
+      ],
+      "environments": [
+        "m09-ui"
+      ]
+    },
+    {
+      "name": "lxml",
+      "version": "6.1.3",
+      "metadata": ".venv/m14/Lib/site-packages/lxml-6.1.3.dist-info/METADATA",
+      "metadata_sha256": "4038f4e4decac1c15eb5fd883abf1370f2df9b176b53bd172dd709d4542e2a48",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/m14/Lib/site-packages/lxml-6.1.3.dist-info/licenses/LICENSE.txt",
+          "sha256": "e7c3ce8d76331b0101cc46790ab43958ea90a364bcf962ed8763d5a818340e69"
+        },
+        {
+          "path": ".venv/m14/Lib/site-packages/lxml-6.1.3.dist-info/licenses/LICENSES.txt",
+          "sha256": "df682c668de65321677b5e4861dca4128a8bad8067f230956e9da3f985b3d398"
+        }
+      ],
+      "environments": [
+        "m14"
+      ]
+    },
+    {
+      "name": "python-docx",
+      "version": "1.2.0",
+      "metadata": ".venv/m14/Lib/site-packages/python_docx-1.2.0.dist-info/METADATA",
+      "metadata_sha256": "4c4cc819ebe6de4aca44daccfd3f9173e6f46d9ed900ad1c388ff9efb7b6b1d7",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m14/Lib/site-packages/python_docx-1.2.0.dist-info/licenses/LICENSE",
+          "sha256": "7652f271e46d0d533e9dc463f3b5fcbdcacf4d6a9c8d6b554d15efd0f37f6132"
+        }
+      ],
+      "environments": [
+        "m14"
+      ]
+    },
+    {
+      "name": "xlrd",
+      "version": "2.0.2",
+      "metadata": ".venv/m14/Lib/site-packages/xlrd-2.0.2.dist-info/METADATA",
+      "metadata_sha256": "ae263dba4d616210bb2d709cd091ba453984314f79f8f50f44af864352656dec",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/m14/Lib/site-packages/xlrd-2.0.2.dist-info/LICENSE",
+          "sha256": "b5a5dbce60265e305a815a6cb83ed07f24519d8ba644f2a307994488bced8815"
+        }
+      ],
+      "environments": [
+        "m14"
+      ]
+    },
+    {
+      "name": "xlwt",
+      "version": "1.3.0",
+      "metadata": ".venv/m14/Lib/site-packages/xlwt-1.3.0.dist-info/METADATA",
+      "metadata_sha256": "7fdd11a8ef6c0fb3c5c275a37ad3d0f864f7e94d665f39b4c58ca75739308516",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_files": [],
+      "environments": [
+        "m14"
+      ]
+    },
+    {
+      "name": "psutil",
+      "version": "7.2.2",
+      "metadata": ".venv/p01-pyqt6/Lib/site-packages/psutil-7.2.2.dist-info/METADATA",
+      "metadata_sha256": "a263a40220d921d9cb963fc636d34f817aa2eb72c2696e3e3465d088cdb1976b",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/p01-pyqt6/Lib/site-packages/psutil-7.2.2.dist-info/LICENSE",
+          "sha256": "c7adc4d5d1337a548b967421f1fbe258b93033a0417708fd6f4e38f8ecbceb80"
+        }
+      ],
+      "environments": [
+        "p01-pyqt6",
+        "p01-pyside6",
+        "p01-standalone"
+      ]
+    },
+    {
+      "name": "PyAudioWPatch",
+      "version": "0.2.12.8",
+      "metadata": ".venv/p01-pyqt6/Lib/site-packages/pyaudiowpatch-0.2.12.8.dist-info/METADATA",
+      "metadata_sha256": "08f2903e39af161f0db3a798a6974d158827a693add2bab1516f3a4b0b151821",
+      "expression": null,
+      "classifiers": [
+        "License :: OSI Approved :: Apache Software License"
+      ],
+      "license_files": [
+        {
+          "path": ".venv/p01-pyqt6/Lib/site-packages/pyaudiowpatch-0.2.12.8.dist-info/licenses/LICENSE.txt",
+          "sha256": "2b94fbbfe7259b16c5426692398ac816c520b8d0e9d234330df05ac75331f0a6"
+        }
+      ],
+      "environments": [
+        "p01-pyqt6",
+        "p01-standalone"
+      ]
+    },
+    {
+      "name": "PySide6",
+      "version": "6.11.2",
+      "metadata": ".venv/p01-pyside6/Lib/site-packages/pyside6-6.11.2.dist-info/METADATA",
+      "metadata_sha256": "bddd6d1e6f840de4ecf6464c1afe885491c76d1081c72ce30744deaa74949276",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/p01-pyside6/Lib/site-packages/pyside6-6.11.2.dist-info/licenses/LicenseRef-Qt-Commercial.txt",
+          "sha256": "4f54763ac0fe2abd8f7f8d8fe370a94a08ebf84786aa0b91045bd6628deb08a3"
+        }
+      ],
+      "environments": [
+        "p01-pyside6"
+      ]
+    },
+    {
+      "name": "PySide6_Addons",
+      "version": "6.11.2",
+      "metadata": ".venv/p01-pyside6/Lib/site-packages/pyside6_addons-6.11.2.dist-info/METADATA",
+      "metadata_sha256": "6c14f94cb03f754a3d8e9ada4d726dbc08aff04d4f0b4377483f9921aa646952",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/p01-pyside6/Lib/site-packages/pyside6_addons-6.11.2.dist-info/licenses/LicenseRef-Qt-Commercial.txt",
+          "sha256": "4f54763ac0fe2abd8f7f8d8fe370a94a08ebf84786aa0b91045bd6628deb08a3"
+        }
+      ],
+      "environments": [
+        "p01-pyside6"
+      ]
+    },
+    {
+      "name": "PySide6_Essentials",
+      "version": "6.11.2",
+      "metadata": ".venv/p01-pyside6/Lib/site-packages/pyside6_essentials-6.11.2.dist-info/METADATA",
+      "metadata_sha256": "a9bdd4937ee837eb46e0c38f9c0ab6c59a6f788d711b96b63c726247ca7a2379",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/p01-pyside6/Lib/site-packages/pyside6_essentials-6.11.2.dist-info/licenses/LicenseRef-Qt-Commercial.txt",
+          "sha256": "4f54763ac0fe2abd8f7f8d8fe370a94a08ebf84786aa0b91045bd6628deb08a3"
+        }
+      ],
+      "environments": [
+        "p01-pyside6"
+      ]
+    },
+    {
+      "name": "shiboken6",
+      "version": "6.11.2",
+      "metadata": ".venv/p01-pyside6/Lib/site-packages/shiboken6-6.11.2.dist-info/METADATA",
+      "metadata_sha256": "d118511674eb858e7e0666fae0de10ac79ae31800ad1215ad57285953d4ad241",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/p01-pyside6/Lib/site-packages/shiboken6-6.11.2.dist-info/licenses/LicenseRef-Qt-Commercial.txt",
+          "sha256": "4f54763ac0fe2abd8f7f8d8fe370a94a08ebf84786aa0b91045bd6628deb08a3"
+        }
+      ],
+      "environments": [
+        "p01-pyside6"
+      ]
+    },
+    {
+      "name": "tzdata",
+      "version": "2026.3",
+      "metadata": ".venv/v3-dev/Lib/site-packages/tzdata-2026.3.dist-info/METADATA",
+      "metadata_sha256": "511c019df477939fe7f4c38e32ad74a570c4ebb05b13fd2fffd0f0f2dbe6f7b1",
+      "expression": null,
+      "classifiers": [],
+      "license_files": [
+        {
+          "path": ".venv/v3-dev/Lib/site-packages/tzdata-2026.3.dist-info/licenses/LICENSE",
+          "sha256": "df58f69ea88683035d720b5375bcef0cf5aeaa98a1d098d572e0992c378deb46"
+        },
+        {
+          "path": ".venv/v3-dev/Lib/site-packages/tzdata-2026.3.dist-info/licenses/licenses/LICENSE_APACHE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        }
+      ],
+      "environments": [
+        "v3-dev"
+      ]
+    }
+  ],
+  "npm": [
+    {
+      "name": "@babel/code-frame",
+      "version": "7.29.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@babel/code-frame/LICENSE",
+          "sha256": "117da2af0d4ce0fe1c8e19b5cff9dcd806adf973d328d27b11d4448c4ff24f76"
+        }
+      ]
+    },
+    {
+      "name": "@babel/helper-string-parser",
+      "version": "7.29.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-Pb5ijPrZ89GDH8223L4UP8i6QApWxs04RbPQJTeWDV0/keR2E36MeKnyr6LYmUUvqRRI+Iv87SuF1W6ErINzYw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@babel/helper-string-parser/LICENSE",
+          "sha256": "117da2af0d4ce0fe1c8e19b5cff9dcd806adf973d328d27b11d4448c4ff24f76"
+        }
+      ]
+    },
+    {
+      "name": "@babel/helper-validator-identifier",
+      "version": "7.29.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-qehxGkRj55h/ff8EMaJ+cYhyaKlHIxqYDn682wQD7RNp9UujOQsHog2uS0r2vzr4pW+sXf90NeeayjcNaX3fFg==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@babel/helper-validator-identifier/LICENSE",
+          "sha256": "117da2af0d4ce0fe1c8e19b5cff9dcd806adf973d328d27b11d4448c4ff24f76"
+        }
+      ]
+    },
+    {
+      "name": "@babel/parser",
+      "version": "7.29.8",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-E8lTAYNB1KW+FH+VGJuZM1ioAx2E6oVlvQFRrf5P8ZZmsiJXYAD9vTFV7yyEURNzgh1dFqMZuO6tUwcARbqFCA==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@babel/parser/LICENSE",
+          "sha256": "2e97627cb278aa7556fb9e8817368302301a595b6c7582512b8d74c57b773652"
+        }
+      ]
+    },
+    {
+      "name": "@babel/types",
+      "version": "7.29.8",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@babel/types/LICENSE",
+          "sha256": "117da2af0d4ce0fe1c8e19b5cff9dcd806adf973d328d27b11d4448c4ff24f76"
+        }
+      ]
+    },
+    {
+      "name": "@jridgewell/sourcemap-codec",
+      "version": "1.6.0",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@jridgewell/sourcemap-codec/LICENSE",
+          "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c"
+        }
+      ]
+    },
+    {
+      "name": "@oxc-project/types",
+      "version": "0.148.0",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-Nm4s/jB+4FpFsPhWGEC4h7rzksesmtnMXomo6rCMcg/b8zLQuOziRgkCS1fxDCXOlJB/6Q8oABOZ/OP6RIPj9A==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@oxc-project/types/LICENSE",
+          "sha256": "95ced5ecf1133fbf41d409b5555c86c344f83f3b019926057ddbc07cfdcc27b3"
+        }
+      ]
+    },
+    {
+      "name": "@redocly/ajv",
+      "version": "8.11.2",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-io1JpnwtIcvojV7QKDUSIuMN/ikdOUd1ReEnUnMKGfDVridQZ31J0MmIuqwuRjWDZfmvr+Q0MqCcfHM2gTivOg==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@redocly/ajv/LICENSE",
+          "sha256": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3"
+        }
+      ]
+    },
+    {
+      "name": "@redocly/config",
+      "version": "0.22.0",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-gAy93Ddo01Z3bHuVdPWfCwzgfaYgMdaZPcfL7JZ7hWJoK9V0lXDbigTWkhiPFAaLWzbOJ+kbUQG1+XwIm0KRGQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@redocly/config/LICENSE",
+          "sha256": "92bb818822d131f7c4987ee5c4191eb3d73ea831b1f40904ea4f028b3cde1d64"
+        }
+      ]
+    },
+    {
+      "name": "@redocly/openapi-core",
+      "version": "1.34.19",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-o/0VgsBXgwcY1lyeqcVtSGdTQAPnVggo0fbFVPlxl5XVDKUcVH0OLRqt3CbkwByT5FU305E0iE0O7MzThjDblw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-android-arm-eabi",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-EypzgnYCwyVY4NDHKzGmNJT5b+XaQEBniHxsMdeIQLB/tcCzZnhqrzHpZFbX9iaxx+5RiB8caATBtfvZP7zVxQ==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-android-arm64",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-l17HE9EweWaqJZhuUuNBN/FzM62xw+DECVnJyvMsxn8vJFAGLy5QfLDoYAcronkAN8VxKZHezDpulHDPx95vFw==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-darwin-arm64",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-8ED8ELFvHXc6OCETIn4gXObPiaR6bckM/ipXtbzlPVDRMBfEGjCKgO90F9YtfdpDatVx/ZQw7aZ1vUMf/+T3Mw==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-darwin-x64",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-/WPripjtiAIZ2tWY7ddijORT0Ujg87wxWW/qcoFVCKAWVDPhtY0xr7Dj0M3GyNGz60jGwTElhro/mkF9dT7dDQ==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-freebsd-x64",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-14DI4NcqpvbICxSnGLx3PmtDaWqRP/KGSGb6C+JLLVPeZRl6dKdHba3pGsqT3vpdTqhEYIPG0MMQ8c0xYqoJxA==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-linux-arm-gnueabihf",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-bxrWIRvHWQvbJwi+VIie/kDJmQxcNE6xxWwZdqF/ExVAigtHkv54WTLQPb+QsZdnFy18fg7JPfWGL0RH6vwIlQ==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-linux-arm64-gnu",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-toOY2BChBZyuxU7OYX6Tn389di4IzAqPTycVcci0O7FSfBqzRB3RZn+K5Is6ANf4tmgRd/K1yZTsNTXbkXsnLg==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-linux-arm64-musl",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-lAIXTH/aiLRLxsTgQvfhjo4K1ydWIp00+V0voOr9beb/9ZmkUFrSIb03dXNFRgMNvkE6oGsF10ioQ6UsI+vS5Q==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-linux-ppc64-gnu",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-kdnwS28Pkenp/mZMRwjXXXwxQ7pIsm+bF919LUK93BOyhcLsrVKdP2p9fxpiPNPAbNuch8ypQt0pm2P2LYCAGg==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-linux-s390x-gnu",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-516OdsyLdr5E65paF3yBF55t8mfm9+gmtCsK3xI7XKXIT7EfRlHhxL8K/NR6Hu8BWSgF5+1w74lTL0+nxcc8Qw==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-linux-x64-gnu",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-r8/z8n7GFaYRln3xmP1Cxy0HH/HLM0uBUPkEuSVEfKGDA89M0FsZRZJRSwe/tJjRx+fpH/gjorfhB8tmEbSFLA==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-linux-x64-musl",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-pAsE8iiDxUg1xBqdhrTfg45AVDVpirjz00sblEYClGNNcMnDb+e8beQgqIAw6LvauX/APvgxUnwrgun/YYGBhw==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-openharmony-arm64",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-lTcIYmmnQQA8Or/2DatS6oSqcdLHvendjS+zLu+FwgToynWMRSmQdpM65fTANJgIS4mjbMOo5KT2lnT9SAb96w==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-win32-arm64-msvc",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-e3Gu3WxbNk/UqQhxqU7YIYO+9ZBvWNz3U+h/qRFosscMFzdRPbXYSaSWgSnklv2fz1TgzBTcti2z35c/7irsHw==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-win32-x64-msvc",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-W/jg5qoRSqjsEv0+dZi4e687mcHqmVuU0P4fK6qS/xjetW2Gmc1W8j//z5nAeNcC8Ttm0hV46IjcYeuVwYhuiw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/pluginutils",
+      "version": "1.0.1",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@rolldown/pluginutils/LICENSE",
+          "sha256": "e1919b3b98b8bf6c1b99fcc60a0ed46027c97ac947432e1278446c9606f50161"
+        }
+      ]
+    },
+    {
+      "name": "@vitejs/plugin-vue",
+      "version": "6.0.8",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-0ZjgOg7oO6farnNGup7yvoM/YXZV84OZxHAwtflItNa/6zzQyVb5LNxyea3FEKEX2XlagIKzrlH7wwxkKgtiew==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@vitejs/plugin-vue/LICENSE",
+          "sha256": "29b68325fe026047d13e187b44c33b2acacf7dc647dec4583702e59f235e13b5"
+        }
+      ]
+    },
+    {
+      "name": "@volar/language-core",
+      "version": "2.4.28",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-w4qhIJ8ZSitgLAkVay6AbcnC7gP3glYM3fYwKV3srj8m494E3xtrCv6E+bWviiK/8hs6e6t1ij1s2Endql7vzQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@volar/language-core/LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ]
+    },
+    {
+      "name": "@volar/source-map",
+      "version": "2.4.28",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-yX2BDBqJkRXfKw8my8VarTyjv48QwxdJtvRgUpNE5erCsgEUdI2DsLbpa+rOQVAJYshY99szEcRDmyHbF10ggQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@volar/source-map/LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ]
+    },
+    {
+      "name": "@volar/typescript",
+      "version": "2.4.28",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-Ja6yvWrbis2QtN4ClAKreeUZPVYMARDYZl9LMEv1iQ1QdepB6wn0jTRxA9MftYmYa4DQ4k/DaSZpFPUfxl8giw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@volar/typescript/LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ]
+    },
+    {
+      "name": "@vue/compiler-core",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-2Ye1ilMtKXxl8qZUrQ5j0CdgenFp/HFQmta6rfRyfEsTG69L6Wk+tWuNoHYHMx9E8tF2Slvdg1FuwDvAXdy1LQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@vue/compiler-core/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/compiler-dom",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-qbhQZEFmycr+ni/qyuccS4sucNN7VAbDfbkvNxWOX2VfgFm90MNs3/UhRNKoPMEIVn0F8gdlYjLPvqxHwHeQOA==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@vue/compiler-dom/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/compiler-sfc",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-fkCAFB4okcAANGMThboWnScp/gzWjU0ZSkVnjTIiplmMDq2uq0tIB3j+xVu4rhv5rvOgBySCysudmbMd6xRRqw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@vue/compiler-sfc/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/compiler-ssr",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-xmLk3wLkbizPAiLyomjgFFosf2ys9b5Ghb+oh/k2tnvipNz8OFrQOiTcWCzyK7MpBp9KkyGtfvgfLUivbmuGYA==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@vue/compiler-ssr/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/language-core",
+      "version": "3.3.11",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-QJmpliwAVpC/OxubIByPAhNzsQPRc8/gxlN2qnVzVfIMjMDz/9RnXRFoetjz5yEgXVXyp4LqhXq3V53PjmNzFw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@vue/language-core/LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ]
+    },
+    {
+      "name": "@vue/reactivity",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-TzNNfKpb7hDxbQltwAut8VDQA5YP+BuRlxntHUuRjyKwlMvmAPbs3unhCvieijifY6vFfVBwsS7wG/C7uq+bEQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@vue/reactivity/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/runtime-core",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-9uACtuHs7vJGkm5Bp3xu4xRDLFTIYy5DgxpToVjqGIAhAEKwQfsaLvKINhM6nFVp6bZPRFGdDqd1g52MqKsotA==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@vue/runtime-core/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/runtime-dom",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-rsCmhiWLaRxGltLwhlCWyYkFn7WAbKRh0q17eZ1A6Dq6eqc2ACQ61IIryxz0LrsvCzHSilLA9JHovVwM8CNE2g==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@vue/runtime-dom/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/server-renderer",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-2++5dUyYS4gvo7xQXSECUDhB7TS0aOl5SeVfC5qSq1Jgfhjvegw1zqhwTIR3imZ+QYPJQw9gfcFvXGAjGZ7ajQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@vue/server-renderer/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/shared",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-2rPxex1jQf4jvl9MOHl6YaXCPcrNqz/FstMOEh3QWY+/OME9nQTvl9WYeCwhW7AFjaR0SnngZGlp/wkR6rkI6g==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/@vue/shared/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "agent-base",
+      "version": "7.1.4",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/agent-base/LICENSE",
+          "sha256": "8d8c55319c7729d57be811c747452636688d54f19701ee0752b6b15ad3771d9a"
+        }
+      ]
+    },
+    {
+      "name": "alien-signals",
+      "version": "3.2.1",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-I8FjmltrfnDFoZedi5CG8DghVYNhzb/Ijluz7tCSJH0xpd0484Kowhbb1XDYOxfJpU1p5wnM2X54dA+IfGyD1g==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/alien-signals/LICENSE",
+          "sha256": "75863f712f8f0603b0dba33edf4b725bab80fc858a51756e5905a3c4c8087169"
+        }
+      ]
+    },
+    {
+      "name": "ansi-colors",
+      "version": "4.1.3",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-/6w/C21Pm1A7aZitlI5Ni/2J6FFQN8i1Cvz3kHABAAbw93v/NlvKdVOqz7CCWz/3iv/JplRSEEZ83XION15ovw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/ansi-colors/LICENSE",
+          "sha256": "94e1923e52409cfd50e97988d9772c0de15f65700097e3227fec367a39e82b94"
+        }
+      ]
+    },
+    {
+      "name": "argparse",
+      "version": "2.0.1",
+      "license": "Python-2.0",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==",
+      "local_version_matches": true,
+      "local_license": "Python-2.0",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/argparse/LICENSE",
+          "sha256": "de4d1f2d2ad5ad0cfd1657a106476b31cb5db5ef9d1ff842b237c0c81f0c8a23"
+        }
+      ]
+    },
+    {
+      "name": "balanced-match",
+      "version": "1.0.2",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/balanced-match/LICENSE.md",
+          "sha256": "a1bd5deadb6a06dd74efa852c1b8b23f63b67f2214fbe9c8bd591da51da69268"
+        }
+      ]
+    },
+    {
+      "name": "brace-expansion",
+      "version": "2.1.4",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-hGfVzPxthbf3+2yjg/RBs60cB0FhqBS/zvdV/4wn4/BmN0bNMMHPc4V/BbFieqf1TKAGGAHnY4eSjajCl0f2Xg==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/brace-expansion/LICENSE",
+          "sha256": "68f12f6e2c33688699249c01d8f9623c534da20aa71989c57b061b7bc1676d14"
+        }
+      ]
+    },
+    {
+      "name": "change-case",
+      "version": "5.4.4",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-HRQyTk2/YPEkt9TnUPbOpr64Uw3KOicFWPVBb+xiHvd6eBx/qPr9xqfBFDT8P2vWsvvz4jbEkfDe71W3VyNu2w==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": []
+    },
+    {
+      "name": "colorette",
+      "version": "1.4.0",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-Y2oEozpomLn7Q3HFP7dpww7AtMJplbM9lGZP6RDfHqmbeRjiwRg4n6VM6j4KLmRke85uWEI7JqF17f3pqdRA0g==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/colorette/LICENSE.md",
+          "sha256": "f101c761d255d0dddc77dd8a9327733b03d381798ec54a1bb718367207b48a8e"
+        }
+      ]
+    },
+    {
+      "name": "csstype",
+      "version": "3.2.3",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/csstype/LICENSE",
+          "sha256": "11d55bd4541c75ee7879547ac49089c489163dae49551389713c3d026cab383e"
+        }
+      ]
+    },
+    {
+      "name": "debug",
+      "version": "4.4.3",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/debug/LICENSE",
+          "sha256": "3a61c6c96caf5c1d9b623fb9b04c822b783dfcb78aa7e49c76a3f643e6ed7f95"
+        }
+      ]
+    },
+    {
+      "name": "detect-libc",
+      "version": "2.1.2",
+      "license": "Apache-2.0",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==",
+      "local_version_matches": true,
+      "local_license": "Apache-2.0",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/detect-libc/LICENSE",
+          "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1"
+        }
+      ]
+    },
+    {
+      "name": "entities",
+      "version": "7.0.1",
+      "license": "BSD-2-Clause",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-TWrgLOFUQTH994YUyl1yT4uyavY5nNB5muff+RtWaqNVCAK408b5ZnnbNAUEWLTCpum9w6arT70i1XdQ4UeOPA==",
+      "local_version_matches": true,
+      "local_license": "BSD-2-Clause",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/entities/LICENSE",
+          "sha256": "cb992345949ccd6e8394b2cd6c465f7b897c864f845937dbf64e8997f389e164"
+        }
+      ]
+    },
+    {
+      "name": "estree-walker",
+      "version": "2.0.2",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/estree-walker/LICENSE",
+          "sha256": "8a6dcbabe7179f9c8489c08a7d874d0f1e093ae7449e03756ccf87cb9d0e296e"
+        }
+      ]
+    },
+    {
+      "name": "fast-deep-equal",
+      "version": "3.1.3",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/fast-deep-equal/LICENSE",
+          "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a"
+        }
+      ]
+    },
+    {
+      "name": "fdir",
+      "version": "6.5.0",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/fdir/LICENSE",
+          "sha256": "9a39f2aadab11a3697edd668ff2d8ad885b649737b7ab4d3bf12b34e5ada0c86"
+        }
+      ]
+    },
+    {
+      "name": "fsevents",
+      "version": "2.3.3",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "https-proxy-agent",
+      "version": "7.0.6",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-vK9P5/iUfdl95AI+JVyUuIcVtd4ofvtrOr3HNtM2yxC9bnMbEdp3x01OhQNnjb8IJYi38VlTE3mBXwcfvywuSw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/https-proxy-agent/LICENSE",
+          "sha256": "8d8c55319c7729d57be811c747452636688d54f19701ee0752b6b15ad3771d9a"
+        }
+      ]
+    },
+    {
+      "name": "index-to-position",
+      "version": "1.2.0",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-Yg7+ztRkqslMAS2iFaU+Oa4KTSidr63OsFGlOrJoW981kIYO3CGCS3wA95P1mUi/IVSJkn0D479KTJpVpvFNuw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/index-to-position/license",
+          "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+        }
+      ]
+    },
+    {
+      "name": "js-levenshtein",
+      "version": "1.1.6",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-X2BB11YZtrRqY4EnQcLX5Rh373zbK4alC1FW7D7MBhL2gtcC17cTnr6DmfHZeS0s2rTHjUTMMHfG7gO8SSdw+g==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/js-levenshtein/LICENSE",
+          "sha256": "0f57363c43caf754cf943327878c910ce1386c82c029462cf7274c4a50b5961f"
+        }
+      ]
+    },
+    {
+      "name": "js-tokens",
+      "version": "4.0.0",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/js-tokens/LICENSE",
+          "sha256": "2213d91c606205c71eb051a199478cdc2adde945893404d7f1421436dd6d5cc1"
+        }
+      ]
+    },
+    {
+      "name": "js-yaml",
+      "version": "4.3.2",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-SFNOvSJ+Dgf/9An904Yx+CgSlIPCkIpao4qo51lpee25TIRejdH3rhR4EZMGoNx3/TP3O+wzWuiTFl4sqbltzA==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/js-yaml/LICENSE",
+          "sha256": "a07bc24468b9654ce76a547d47a2db282d07733b715db4c73a98bd63961f9550"
+        }
+      ]
+    },
+    {
+      "name": "json-schema-traverse",
+      "version": "1.0.0",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/json-schema-traverse/LICENSE",
+          "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a"
+        }
+      ]
+    },
+    {
+      "name": "lightningcss",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-WkUDrojuJs0xkgGf2udWxa3yGBRxPtxUkB79i6aCZLRgc7PM8fZe9TosfPDcvEpQZbuFASnHYmRLBLUbmLOIIA==",
+      "local_version_matches": true,
+      "local_license": "MPL-2.0",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/lightningcss/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ]
+    },
+    {
+      "name": "lightningcss-android-arm64",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-gEpRTalKdosp4Bb8qWtc2iOgE5SeIHlpS1up9bFq2wAyYhl1UdTObYiHe98zEM9SQvSoqQZ1IQD0JNpg3Ml5pg==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-darwin-arm64",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-Sciaz8eenNTKn9b3t7+xr0ipTp9YxKQY4npwQ3mrRuL0BAVHBLyZxofhaKBAVtzmtRZ/zTyo0/to4B1uWG/Djg==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-darwin-x64",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-Z5UPAxzrjlWNNyGy6i65cJzzvgJ5D3T6wMvs+gWpY9d7qRhANrxqAp6LhxIgZhWEw18RfJTGcRxjuLIBr+m8XQ==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-freebsd-x64",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-QQM/Ti/hQajJwCY+RiWuCZ9sdtI/XQk7nDK5vC8kkdwixezOlDgvDx7+RT+QjK6FcFT4MpsuoBnHIo/O3StRRg==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-linux-arm-gnueabihf",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-N7FVBe6iS24MlM6R/4RBTxGhQheZGs7tiQ9U32UtF75NzP5Q7xWPRqLBCKxlRQRk3rY1jCIPLzx7WzOhuUIRLQ==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-linux-arm64-gnu",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-j2v/itmy4HlNxlc6voKXYgBqNi0Ng2LShg4z7GufpEgs05P+2suBVyi9I6YHq5uoVFx9ETin3eCEhLVyXGQnKg==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-linux-arm64-musl",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-yiO5ROMuYQgXbC60yjZU5CYSFZGKXL0HFATXt9mHJn1+zW55oCtMI9NfcVhYLMFDL7gV7oBPon/EmMMGg2OvtQ==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-linux-x64-gnu",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-ar+Ju7LmcN0Jo4FpL4hpFybwNG9/3A/Br5KW2n2jyODg3MEZXaDYADdemoNS+BDNfMgKvylJLj4S5tyRActuAg==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-linux-x64-musl",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-RYiYbkokw0trfKqqzfF55lginwEPrD3OJDfTuJzFs1MK6iFnDenaz1fqLLtX4ITG3OktJQXOeTaw1awrBAlZPw==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-win32-arm64-msvc",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-1K+MPfLSFVpphzpdbfkhlWk6wBrTObBzS2T6db10PNOZgR9GoVsAWzwNyuhUYYbTp23j+4RrncfujZ4uAzXvwA==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-win32-x64-msvc",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-OlEICDx/Xl0FqSp4bry8zFnCvGpig3Gl4gCquvYwHuqJKEC1+n9NgDniFvqHGmMv1ZkqDJrDqKKSykTDX+ehuA==",
+      "local_version_matches": true,
+      "local_license": "MPL-2.0",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/lightningcss-win32-x64-msvc/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ]
+    },
+    {
+      "name": "magic-string",
+      "version": "0.30.21",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/magic-string/LICENSE",
+          "sha256": "1cbe51b907662f6cb1492b16c359384a595180bf0e4d101603ed525e75c4e484"
+        }
+      ]
+    },
+    {
+      "name": "minimatch",
+      "version": "5.1.9",
+      "license": "ISC",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-7o1wEA2RyMP7Iu7GNba9vc0RWWGACJOCZBJX2GJWip0ikV+wcOsgVuY9uE8CPiyQhkGFSlhuSkZPavN7u1c2Fw==",
+      "local_version_matches": true,
+      "local_license": "ISC",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/minimatch/LICENSE",
+          "sha256": "d11323827fa4edeaafc437cc5b91b6971b335f0127efeeb42bf5122fe8657e8f"
+        }
+      ]
+    },
+    {
+      "name": "ms",
+      "version": "2.1.3",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/ms/license.md",
+          "sha256": "1662fae9b5314d11cf51284e2dcd1f006a354f7343f08712a730fcff9a359801"
+        }
+      ]
+    },
+    {
+      "name": "muggle-string",
+      "version": "0.4.1",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-VNTrAak/KhO2i8dqqnqnAHOa3cYBwXEZe9h+D5h/1ZqFSTEFHdM65lR7RoIqq3tBBYavsOXV84NoHXZ0AkPyqQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/muggle-string/LICENSE",
+          "sha256": "df52411dcd3c8f5897bbbec8c94e971519e13e75818c263e9a99a86255dd301b"
+        }
+      ]
+    },
+    {
+      "name": "nanoid",
+      "version": "3.3.18",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/nanoid/LICENSE",
+          "sha256": "da4db1480d9beea3483a2eda5c53b22238d0827d57da162b48f122e04d2d9987"
+        }
+      ]
+    },
+    {
+      "name": "openapi-typescript",
+      "version": "7.13.0",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-EFP392gcqXS7ntPvbhBzbF8TyBA+baIYEm791Hy5YkjDYKTnk/Tn5OQeKm5BIZvJihpp8Zzr4hzx0Irde1LNGQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/openapi-typescript/LICENSE",
+          "sha256": "ed4b2c8f3a9aad2bd9fb8088d3e2a142116a13627c7223c28315c65e3ab9bd41"
+        }
+      ]
+    },
+    {
+      "name": "parse-json",
+      "version": "8.3.0",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-ybiGyvspI+fAoRQbIPRddCcSTV9/LsJbf0e/S85VLowVGzRmokfneg2kwVW/KU5rOXrPSbF1qAKPMgNTqqROQQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/parse-json/license",
+          "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+        }
+      ]
+    },
+    {
+      "name": "path-browserify",
+      "version": "1.0.1",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/path-browserify/LICENSE",
+          "sha256": "a22b9d5763f574e5db347c30acc0b33eaf4846767c03d2e27d012e864e79a824"
+        }
+      ]
+    },
+    {
+      "name": "picocolors",
+      "version": "1.1.1",
+      "license": "ISC",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==",
+      "local_version_matches": true,
+      "local_license": "ISC",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/picocolors/LICENSE",
+          "sha256": "6582629e2979466878f6014313dcc2f3756c9616148682227ce3063dde310750"
+        }
+      ]
+    },
+    {
+      "name": "picomatch",
+      "version": "4.0.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-qcJu88Q2IWqJsDD529JKMdwGm/dvInW4HvQnRwiH9JtihJvzGOscDtHE3x1pBKeUOTysQ8kVmLnJ2kJu7yhcGA==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/picomatch/LICENSE",
+          "sha256": "d0cd141b0c322fded5dfad1d4645bb2fedfc05b7321fe1009469638190d59ef9"
+        }
+      ]
+    },
+    {
+      "name": "pluralize",
+      "version": "8.0.0",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/pluralize/LICENSE",
+          "sha256": "5822e0d816e53e3537b306a4132cb7a70881897cf51bf483282148a602979076"
+        }
+      ]
+    },
+    {
+      "name": "postcss",
+      "version": "8.5.28",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-RRuzqDtt5Y9h3quz5hWhK+TPnsmVs6WwSU6LkJMeY4HstUEDuYTG8UJSdawMRzmzAtV+KEoG8N3Qg2qLy5vM/A==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/postcss/LICENSE",
+          "sha256": "5be1f3465bba68a626777f984878814aaf35e7ef8e9fd314d469bcf887050fb8"
+        }
+      ]
+    },
+    {
+      "name": "require-from-string",
+      "version": "2.0.2",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/require-from-string/license",
+          "sha256": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f"
+        }
+      ]
+    },
+    {
+      "name": "rolldown",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-g0EtLvBjTUB7jhyV0S/TCup3v/XSVl45vUIGbOGU4QPiyjTenCe4mKuFvW9fEgYmS2Fo42AUssRmNuMziXdrig==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/rolldown/LICENSE",
+          "sha256": "23ecfff35a5a2e80d92142f75228912c3b1abc4b5a8337a821ff4397e2f9f734"
+        },
+        {
+          "path": "frontend/node_modules/rolldown/THIRD-PARTY-LICENSE",
+          "sha256": "a877291d800ed43692f3f9ae09d8e01cc6f7293ad39d43896059c188ffbb8b7c"
+        }
+      ]
+    },
+    {
+      "name": "source-map-js",
+      "version": "1.2.1",
+      "license": "BSD-3-Clause",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==",
+      "local_version_matches": true,
+      "local_license": "BSD-3-Clause",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/source-map-js/LICENSE",
+          "sha256": "6cb0631f71c7749763fd3dd1d5bee52dd1070ec17f2edc1710079ad070bd2fbd"
+        }
+      ]
+    },
+    {
+      "name": "supports-color",
+      "version": "10.2.2",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-SS+jx45GF1QjgEXQx4NJZV9ImqmO2NPz5FNsIHrsDjh2YsHnawpan7SNQ1o8NuhrbHZy9AZhIoCUiCeaW/C80g==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/supports-color/license",
+          "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+        }
+      ]
+    },
+    {
+      "name": "tinyglobby",
+      "version": "0.2.17",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-wXR/dYpcqKmfWpEdZjiKJOwCNFndD0DMnrW/cYjVGttEkBfVgcLFHoNrlj47mjOVic9yyNu65alsgF4NQyTa2g==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/tinyglobby/LICENSE",
+          "sha256": "22c68811e174cbbfb3813d4135918df4f540959c14d872e601d9abe83d3cde8f"
+        }
+      ]
+    },
+    {
+      "name": "type-fest",
+      "version": "4.41.0",
+      "license": "(MIT OR CC0-1.0)",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-TeTSQ6H5YHvpqVwBRcnLDCBnDOHWYu7IvGbHT6N8AOymcr9PJGjc1GTtiWZTYg0NCgYwvnYWEkVChQAr9bjfwA==",
+      "local_version_matches": true,
+      "local_license": "(MIT OR CC0-1.0)",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/type-fest/license-cc0",
+          "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499"
+        },
+        {
+          "path": "frontend/node_modules/type-fest/license-mit",
+          "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+        }
+      ]
+    },
+    {
+      "name": "typescript",
+      "version": "5.9.3",
+      "license": "Apache-2.0",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==",
+      "local_version_matches": true,
+      "local_license": "Apache-2.0",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/typescript/LICENSE.txt",
+          "sha256": "a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47"
+        },
+        {
+          "path": "frontend/node_modules/typescript/ThirdPartyNoticeText.txt",
+          "sha256": "1af3c68039c57e539422da82a4faada506ce6d0ea6f90e0b699d02dbcdb7a90c"
+        }
+      ]
+    },
+    {
+      "name": "uri-js-replace",
+      "version": "1.0.1",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-W+C9NWNLFOoBI2QWDp4UT9pv65r2w5Cx+3sTYFvtMdDBxkKt1syCqsUdSFAChbEe1uK5TfS04wt/nGwmaeIQ0g==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": []
+    },
+    {
+      "name": "vite",
+      "version": "8.2.2",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-cFKLV/PRgAUlIRm5WjMjJ86jrftzpqcgH+Us+DS8mI3CDNiH30Whrz8uHL3+MOLPAgqbMBAqWdAHAphOAM+z/Q==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/vite/LICENSE.md",
+          "sha256": "387dd7baa307083401a27c58c362c30832f5ba1dba84f10cc22c33401523f45c"
+        }
+      ]
+    },
+    {
+      "name": "vscode-uri",
+      "version": "3.2.0",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-m2gXo3bn0G1kT9InzMf07fTbqMbGtyckj3bH5ktLO+1Ssv+yiATZ4dhwaQv9UZWxJh6E9IFGnQyjgWVDWVBDrg==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/vscode-uri/LICENSE.md",
+          "sha256": "c669138cb1eb01fbb745e8e460b291e4f2869c14a40061390b6095d845ed4c82"
+        }
+      ]
+    },
+    {
+      "name": "vue",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-4RyHQTbQvOPs3MfvUO1Sg0YRrKNnA0mAVtvpd12Tg1fKDN7OHBUl1IqSn8zGJjK9nI3NkNp8cgTpVrSZC5TTcA==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/vue/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "vue-tsc",
+      "version": "3.3.11",
+      "license": "MIT",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-gOb0B9rtU2+f1dszwPqSH5kAieIF9ReeLhD3kSRNHv5WZZUQz/JdVXW0RTdqhNTMlQkqKzrTTviqKr/4FYZraQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/vue-tsc/LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ]
+    },
+    {
+      "name": "yaml-ast-parser",
+      "version": "0.0.43",
+      "license": "Apache-2.0",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-2PTINUwsRqSd+s8XxKaJWQlUuEMHJQyEuh2edBbW8KNJz0SJPwUSD2zRWqezFEdN7IzAgeuYHFUCF7o8zRdZ0A==",
+      "local_version_matches": true,
+      "local_license": "Apache-2.0",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/yaml-ast-parser/license.txt",
+          "sha256": "bf602897f63ff2706e3059fd60321ab5273a691833c98820433ef1d18abed6a2"
+        }
+      ]
+    },
+    {
+      "name": "yargs-parser",
+      "version": "21.1.1",
+      "license": "ISC",
+      "lock": "frontend/package-lock.json",
+      "integrity": "sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==",
+      "local_version_matches": true,
+      "local_license": "ISC",
+      "license_files": [
+        {
+          "path": "frontend/node_modules/yargs-parser/LICENSE.txt",
+          "sha256": "365496ca1f56da40b23c9815fc40fa9005847b2f8f8fd1c1a4929ef25ec8cd1d"
+        }
+      ]
+    },
+    {
+      "name": "@babel/helper-string-parser",
+      "version": "7.29.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-Pb5ijPrZ89GDH8223L4UP8i6QApWxs04RbPQJTeWDV0/keR2E36MeKnyr6LYmUUvqRRI+Iv87SuF1W6ErINzYw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@babel/helper-string-parser/LICENSE",
+          "sha256": "117da2af0d4ce0fe1c8e19b5cff9dcd806adf973d328d27b11d4448c4ff24f76"
+        }
+      ]
+    },
+    {
+      "name": "@babel/helper-validator-identifier",
+      "version": "7.29.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-qehxGkRj55h/ff8EMaJ+cYhyaKlHIxqYDn682wQD7RNp9UujOQsHog2uS0r2vzr4pW+sXf90NeeayjcNaX3fFg==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@babel/helper-validator-identifier/LICENSE",
+          "sha256": "117da2af0d4ce0fe1c8e19b5cff9dcd806adf973d328d27b11d4448c4ff24f76"
+        }
+      ]
+    },
+    {
+      "name": "@babel/parser",
+      "version": "7.29.8",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-E8lTAYNB1KW+FH+VGJuZM1ioAx2E6oVlvQFRrf5P8ZZmsiJXYAD9vTFV7yyEURNzgh1dFqMZuO6tUwcARbqFCA==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@babel/parser/LICENSE",
+          "sha256": "2e97627cb278aa7556fb9e8817368302301a595b6c7582512b8d74c57b773652"
+        }
+      ]
+    },
+    {
+      "name": "@babel/types",
+      "version": "7.29.8",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@babel/types/LICENSE",
+          "sha256": "117da2af0d4ce0fe1c8e19b5cff9dcd806adf973d328d27b11d4448c4ff24f76"
+        }
+      ]
+    },
+    {
+      "name": "@jridgewell/sourcemap-codec",
+      "version": "1.6.0",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@jridgewell/sourcemap-codec/LICENSE",
+          "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c"
+        }
+      ]
+    },
+    {
+      "name": "@oxc-project/types",
+      "version": "0.148.0",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-Nm4s/jB+4FpFsPhWGEC4h7rzksesmtnMXomo6rCMcg/b8zLQuOziRgkCS1fxDCXOlJB/6Q8oABOZ/OP6RIPj9A==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@oxc-project/types/LICENSE",
+          "sha256": "95ced5ecf1133fbf41d409b5555c86c344f83f3b019926057ddbc07cfdcc27b3"
+        }
+      ]
+    },
+    {
+      "name": "@rolldown/binding-android-arm-eabi",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-EypzgnYCwyVY4NDHKzGmNJT5b+XaQEBniHxsMdeIQLB/tcCzZnhqrzHpZFbX9iaxx+5RiB8caATBtfvZP7zVxQ==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-android-arm64",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-l17HE9EweWaqJZhuUuNBN/FzM62xw+DECVnJyvMsxn8vJFAGLy5QfLDoYAcronkAN8VxKZHezDpulHDPx95vFw==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-darwin-arm64",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-8ED8ELFvHXc6OCETIn4gXObPiaR6bckM/ipXtbzlPVDRMBfEGjCKgO90F9YtfdpDatVx/ZQw7aZ1vUMf/+T3Mw==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-darwin-x64",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-/WPripjtiAIZ2tWY7ddijORT0Ujg87wxWW/qcoFVCKAWVDPhtY0xr7Dj0M3GyNGz60jGwTElhro/mkF9dT7dDQ==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-freebsd-x64",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-14DI4NcqpvbICxSnGLx3PmtDaWqRP/KGSGb6C+JLLVPeZRl6dKdHba3pGsqT3vpdTqhEYIPG0MMQ8c0xYqoJxA==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-linux-arm-gnueabihf",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-bxrWIRvHWQvbJwi+VIie/kDJmQxcNE6xxWwZdqF/ExVAigtHkv54WTLQPb+QsZdnFy18fg7JPfWGL0RH6vwIlQ==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-linux-arm64-gnu",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-toOY2BChBZyuxU7OYX6Tn389di4IzAqPTycVcci0O7FSfBqzRB3RZn+K5Is6ANf4tmgRd/K1yZTsNTXbkXsnLg==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-linux-arm64-musl",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-lAIXTH/aiLRLxsTgQvfhjo4K1ydWIp00+V0voOr9beb/9ZmkUFrSIb03dXNFRgMNvkE6oGsF10ioQ6UsI+vS5Q==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-linux-ppc64-gnu",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-kdnwS28Pkenp/mZMRwjXXXwxQ7pIsm+bF919LUK93BOyhcLsrVKdP2p9fxpiPNPAbNuch8ypQt0pm2P2LYCAGg==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-linux-s390x-gnu",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-516OdsyLdr5E65paF3yBF55t8mfm9+gmtCsK3xI7XKXIT7EfRlHhxL8K/NR6Hu8BWSgF5+1w74lTL0+nxcc8Qw==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-linux-x64-gnu",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-r8/z8n7GFaYRln3xmP1Cxy0HH/HLM0uBUPkEuSVEfKGDA89M0FsZRZJRSwe/tJjRx+fpH/gjorfhB8tmEbSFLA==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-linux-x64-musl",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-pAsE8iiDxUg1xBqdhrTfg45AVDVpirjz00sblEYClGNNcMnDb+e8beQgqIAw6LvauX/APvgxUnwrgun/YYGBhw==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-openharmony-arm64",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-lTcIYmmnQQA8Or/2DatS6oSqcdLHvendjS+zLu+FwgToynWMRSmQdpM65fTANJgIS4mjbMOo5KT2lnT9SAb96w==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-win32-arm64-msvc",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-e3Gu3WxbNk/UqQhxqU7YIYO+9ZBvWNz3U+h/qRFosscMFzdRPbXYSaSWgSnklv2fz1TgzBTcti2z35c/7irsHw==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/binding-win32-x64-msvc",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-W/jg5qoRSqjsEv0+dZi4e687mcHqmVuU0P4fK6qS/xjetW2Gmc1W8j//z5nAeNcC8Ttm0hV46IjcYeuVwYhuiw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": []
+    },
+    {
+      "name": "@rolldown/pluginutils",
+      "version": "1.0.1",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@rolldown/pluginutils/LICENSE",
+          "sha256": "e1919b3b98b8bf6c1b99fcc60a0ed46027c97ac947432e1278446c9606f50161"
+        }
+      ]
+    },
+    {
+      "name": "@vitejs/plugin-vue",
+      "version": "6.0.8",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-0ZjgOg7oO6farnNGup7yvoM/YXZV84OZxHAwtflItNa/6zzQyVb5LNxyea3FEKEX2XlagIKzrlH7wwxkKgtiew==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@vitejs/plugin-vue/LICENSE",
+          "sha256": "29b68325fe026047d13e187b44c33b2acacf7dc647dec4583702e59f235e13b5"
+        }
+      ]
+    },
+    {
+      "name": "@volar/language-core",
+      "version": "2.4.28",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-w4qhIJ8ZSitgLAkVay6AbcnC7gP3glYM3fYwKV3srj8m494E3xtrCv6E+bWviiK/8hs6e6t1ij1s2Endql7vzQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@volar/language-core/LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ]
+    },
+    {
+      "name": "@volar/source-map",
+      "version": "2.4.28",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-yX2BDBqJkRXfKw8my8VarTyjv48QwxdJtvRgUpNE5erCsgEUdI2DsLbpa+rOQVAJYshY99szEcRDmyHbF10ggQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@volar/source-map/LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ]
+    },
+    {
+      "name": "@volar/typescript",
+      "version": "2.4.28",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-Ja6yvWrbis2QtN4ClAKreeUZPVYMARDYZl9LMEv1iQ1QdepB6wn0jTRxA9MftYmYa4DQ4k/DaSZpFPUfxl8giw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@volar/typescript/LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ]
+    },
+    {
+      "name": "@vue/compiler-core",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-2Ye1ilMtKXxl8qZUrQ5j0CdgenFp/HFQmta6rfRyfEsTG69L6Wk+tWuNoHYHMx9E8tF2Slvdg1FuwDvAXdy1LQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@vue/compiler-core/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/compiler-dom",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-qbhQZEFmycr+ni/qyuccS4sucNN7VAbDfbkvNxWOX2VfgFm90MNs3/UhRNKoPMEIVn0F8gdlYjLPvqxHwHeQOA==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@vue/compiler-dom/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/compiler-sfc",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-fkCAFB4okcAANGMThboWnScp/gzWjU0ZSkVnjTIiplmMDq2uq0tIB3j+xVu4rhv5rvOgBySCysudmbMd6xRRqw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@vue/compiler-sfc/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/compiler-ssr",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-xmLk3wLkbizPAiLyomjgFFosf2ys9b5Ghb+oh/k2tnvipNz8OFrQOiTcWCzyK7MpBp9KkyGtfvgfLUivbmuGYA==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@vue/compiler-ssr/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/language-core",
+      "version": "3.3.11",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-QJmpliwAVpC/OxubIByPAhNzsQPRc8/gxlN2qnVzVfIMjMDz/9RnXRFoetjz5yEgXVXyp4LqhXq3V53PjmNzFw==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@vue/language-core/LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ]
+    },
+    {
+      "name": "@vue/reactivity",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-TzNNfKpb7hDxbQltwAut8VDQA5YP+BuRlxntHUuRjyKwlMvmAPbs3unhCvieijifY6vFfVBwsS7wG/C7uq+bEQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@vue/reactivity/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/runtime-core",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-9uACtuHs7vJGkm5Bp3xu4xRDLFTIYy5DgxpToVjqGIAhAEKwQfsaLvKINhM6nFVp6bZPRFGdDqd1g52MqKsotA==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@vue/runtime-core/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/runtime-dom",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-rsCmhiWLaRxGltLwhlCWyYkFn7WAbKRh0q17eZ1A6Dq6eqc2ACQ61IIryxz0LrsvCzHSilLA9JHovVwM8CNE2g==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@vue/runtime-dom/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/server-renderer",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-2++5dUyYS4gvo7xQXSECUDhB7TS0aOl5SeVfC5qSq1Jgfhjvegw1zqhwTIR3imZ+QYPJQw9gfcFvXGAjGZ7ajQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@vue/server-renderer/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "@vue/shared",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-2rPxex1jQf4jvl9MOHl6YaXCPcrNqz/FstMOEh3QWY+/OME9nQTvl9WYeCwhW7AFjaR0SnngZGlp/wkR6rkI6g==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/@vue/shared/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "alien-signals",
+      "version": "3.2.1",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-I8FjmltrfnDFoZedi5CG8DghVYNhzb/Ijluz7tCSJH0xpd0484Kowhbb1XDYOxfJpU1p5wnM2X54dA+IfGyD1g==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/alien-signals/LICENSE",
+          "sha256": "75863f712f8f0603b0dba33edf4b725bab80fc858a51756e5905a3c4c8087169"
+        }
+      ]
+    },
+    {
+      "name": "csstype",
+      "version": "3.2.3",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/csstype/LICENSE",
+          "sha256": "11d55bd4541c75ee7879547ac49089c489163dae49551389713c3d026cab383e"
+        }
+      ]
+    },
+    {
+      "name": "detect-libc",
+      "version": "2.1.2",
+      "license": "Apache-2.0",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==",
+      "local_version_matches": true,
+      "local_license": "Apache-2.0",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/detect-libc/LICENSE",
+          "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1"
+        }
+      ]
+    },
+    {
+      "name": "entities",
+      "version": "7.0.1",
+      "license": "BSD-2-Clause",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-TWrgLOFUQTH994YUyl1yT4uyavY5nNB5muff+RtWaqNVCAK408b5ZnnbNAUEWLTCpum9w6arT70i1XdQ4UeOPA==",
+      "local_version_matches": true,
+      "local_license": "BSD-2-Clause",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/entities/LICENSE",
+          "sha256": "cb992345949ccd6e8394b2cd6c465f7b897c864f845937dbf64e8997f389e164"
+        }
+      ]
+    },
+    {
+      "name": "estree-walker",
+      "version": "2.0.2",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/estree-walker/LICENSE",
+          "sha256": "8a6dcbabe7179f9c8489c08a7d874d0f1e093ae7449e03756ccf87cb9d0e296e"
+        }
+      ]
+    },
+    {
+      "name": "fdir",
+      "version": "6.5.0",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/fdir/LICENSE",
+          "sha256": "9a39f2aadab11a3697edd668ff2d8ad885b649737b7ab4d3bf12b34e5ada0c86"
+        }
+      ]
+    },
+    {
+      "name": "fsevents",
+      "version": "2.3.3",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-WkUDrojuJs0xkgGf2udWxa3yGBRxPtxUkB79i6aCZLRgc7PM8fZe9TosfPDcvEpQZbuFASnHYmRLBLUbmLOIIA==",
+      "local_version_matches": true,
+      "local_license": "MPL-2.0",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/lightningcss/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ]
+    },
+    {
+      "name": "lightningcss-android-arm64",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-gEpRTalKdosp4Bb8qWtc2iOgE5SeIHlpS1up9bFq2wAyYhl1UdTObYiHe98zEM9SQvSoqQZ1IQD0JNpg3Ml5pg==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-darwin-arm64",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-Sciaz8eenNTKn9b3t7+xr0ipTp9YxKQY4npwQ3mrRuL0BAVHBLyZxofhaKBAVtzmtRZ/zTyo0/to4B1uWG/Djg==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-darwin-x64",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-Z5UPAxzrjlWNNyGy6i65cJzzvgJ5D3T6wMvs+gWpY9d7qRhANrxqAp6LhxIgZhWEw18RfJTGcRxjuLIBr+m8XQ==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-freebsd-x64",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-QQM/Ti/hQajJwCY+RiWuCZ9sdtI/XQk7nDK5vC8kkdwixezOlDgvDx7+RT+QjK6FcFT4MpsuoBnHIo/O3StRRg==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-linux-arm-gnueabihf",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-N7FVBe6iS24MlM6R/4RBTxGhQheZGs7tiQ9U32UtF75NzP5Q7xWPRqLBCKxlRQRk3rY1jCIPLzx7WzOhuUIRLQ==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-linux-arm64-gnu",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-j2v/itmy4HlNxlc6voKXYgBqNi0Ng2LShg4z7GufpEgs05P+2suBVyi9I6YHq5uoVFx9ETin3eCEhLVyXGQnKg==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-linux-arm64-musl",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-yiO5ROMuYQgXbC60yjZU5CYSFZGKXL0HFATXt9mHJn1+zW55oCtMI9NfcVhYLMFDL7gV7oBPon/EmMMGg2OvtQ==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-linux-x64-gnu",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-ar+Ju7LmcN0Jo4FpL4hpFybwNG9/3A/Br5KW2n2jyODg3MEZXaDYADdemoNS+BDNfMgKvylJLj4S5tyRActuAg==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-linux-x64-musl",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-RYiYbkokw0trfKqqzfF55lginwEPrD3OJDfTuJzFs1MK6iFnDenaz1fqLLtX4ITG3OktJQXOeTaw1awrBAlZPw==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-win32-arm64-msvc",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-1K+MPfLSFVpphzpdbfkhlWk6wBrTObBzS2T6db10PNOZgR9GoVsAWzwNyuhUYYbTp23j+4RrncfujZ4uAzXvwA==",
+      "local_version_matches": false,
+      "local_license": null,
+      "license_files": []
+    },
+    {
+      "name": "lightningcss-win32-x64-msvc",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-OlEICDx/Xl0FqSp4bry8zFnCvGpig3Gl4gCquvYwHuqJKEC1+n9NgDniFvqHGmMv1ZkqDJrDqKKSykTDX+ehuA==",
+      "local_version_matches": true,
+      "local_license": "MPL-2.0",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/lightningcss-win32-x64-msvc/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ]
+    },
+    {
+      "name": "magic-string",
+      "version": "0.30.21",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/magic-string/LICENSE",
+          "sha256": "1cbe51b907662f6cb1492b16c359384a595180bf0e4d101603ed525e75c4e484"
+        }
+      ]
+    },
+    {
+      "name": "muggle-string",
+      "version": "0.4.1",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-VNTrAak/KhO2i8dqqnqnAHOa3cYBwXEZe9h+D5h/1ZqFSTEFHdM65lR7RoIqq3tBBYavsOXV84NoHXZ0AkPyqQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/muggle-string/LICENSE",
+          "sha256": "df52411dcd3c8f5897bbbec8c94e971519e13e75818c263e9a99a86255dd301b"
+        }
+      ]
+    },
+    {
+      "name": "nanoid",
+      "version": "3.3.18",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/nanoid/LICENSE",
+          "sha256": "da4db1480d9beea3483a2eda5c53b22238d0827d57da162b48f122e04d2d9987"
+        }
+      ]
+    },
+    {
+      "name": "path-browserify",
+      "version": "1.0.1",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/path-browserify/LICENSE",
+          "sha256": "a22b9d5763f574e5db347c30acc0b33eaf4846767c03d2e27d012e864e79a824"
+        }
+      ]
+    },
+    {
+      "name": "picocolors",
+      "version": "1.1.1",
+      "license": "ISC",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==",
+      "local_version_matches": true,
+      "local_license": "ISC",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/picocolors/LICENSE",
+          "sha256": "6582629e2979466878f6014313dcc2f3756c9616148682227ce3063dde310750"
+        }
+      ]
+    },
+    {
+      "name": "picomatch",
+      "version": "4.0.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-qcJu88Q2IWqJsDD529JKMdwGm/dvInW4HvQnRwiH9JtihJvzGOscDtHE3x1pBKeUOTysQ8kVmLnJ2kJu7yhcGA==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/picomatch/LICENSE",
+          "sha256": "d0cd141b0c322fded5dfad1d4645bb2fedfc05b7321fe1009469638190d59ef9"
+        }
+      ]
+    },
+    {
+      "name": "postcss",
+      "version": "8.5.28",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-RRuzqDtt5Y9h3quz5hWhK+TPnsmVs6WwSU6LkJMeY4HstUEDuYTG8UJSdawMRzmzAtV+KEoG8N3Qg2qLy5vM/A==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/postcss/LICENSE",
+          "sha256": "5be1f3465bba68a626777f984878814aaf35e7ef8e9fd314d469bcf887050fb8"
+        }
+      ]
+    },
+    {
+      "name": "rolldown",
+      "version": "1.2.7",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-g0EtLvBjTUB7jhyV0S/TCup3v/XSVl45vUIGbOGU4QPiyjTenCe4mKuFvW9fEgYmS2Fo42AUssRmNuMziXdrig==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/rolldown/LICENSE",
+          "sha256": "23ecfff35a5a2e80d92142f75228912c3b1abc4b5a8337a821ff4397e2f9f734"
+        },
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/rolldown/THIRD-PARTY-LICENSE",
+          "sha256": "a877291d800ed43692f3f9ae09d8e01cc6f7293ad39d43896059c188ffbb8b7c"
+        }
+      ]
+    },
+    {
+      "name": "source-map-js",
+      "version": "1.2.1",
+      "license": "BSD-3-Clause",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==",
+      "local_version_matches": true,
+      "local_license": "BSD-3-Clause",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/source-map-js/LICENSE",
+          "sha256": "6cb0631f71c7749763fd3dd1d5bee52dd1070ec17f2edc1710079ad070bd2fbd"
+        }
+      ]
+    },
+    {
+      "name": "tinyglobby",
+      "version": "0.2.17",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-wXR/dYpcqKmfWpEdZjiKJOwCNFndD0DMnrW/cYjVGttEkBfVgcLFHoNrlj47mjOVic9yyNu65alsgF4NQyTa2g==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/tinyglobby/LICENSE",
+          "sha256": "22c68811e174cbbfb3813d4135918df4f540959c14d872e601d9abe83d3cde8f"
+        }
+      ]
+    },
+    {
+      "name": "typescript",
+      "version": "5.9.3",
+      "license": "Apache-2.0",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==",
+      "local_version_matches": true,
+      "local_license": "Apache-2.0",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/typescript/LICENSE.txt",
+          "sha256": "a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47"
+        },
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/typescript/ThirdPartyNoticeText.txt",
+          "sha256": "1af3c68039c57e539422da82a4faada506ce6d0ea6f90e0b699d02dbcdb7a90c"
+        }
+      ]
+    },
+    {
+      "name": "vite",
+      "version": "8.2.2",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-cFKLV/PRgAUlIRm5WjMjJ86jrftzpqcgH+Us+DS8mI3CDNiH30Whrz8uHL3+MOLPAgqbMBAqWdAHAphOAM+z/Q==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/vite/LICENSE.md",
+          "sha256": "387dd7baa307083401a27c58c362c30832f5ba1dba84f10cc22c33401523f45c"
+        }
+      ]
+    },
+    {
+      "name": "vscode-uri",
+      "version": "3.2.0",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-m2gXo3bn0G1kT9InzMf07fTbqMbGtyckj3bH5ktLO+1Ssv+yiATZ4dhwaQv9UZWxJh6E9IFGnQyjgWVDWVBDrg==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/vscode-uri/LICENSE.md",
+          "sha256": "c669138cb1eb01fbb745e8e460b291e4f2869c14a40061390b6095d845ed4c82"
+        }
+      ]
+    },
+    {
+      "name": "vue",
+      "version": "3.5.42",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-4RyHQTbQvOPs3MfvUO1Sg0YRrKNnA0mAVtvpd12Tg1fKDN7OHBUl1IqSn8zGJjK9nI3NkNp8cgTpVrSZC5TTcA==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/vue/LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ]
+    },
+    {
+      "name": "vue-tsc",
+      "version": "3.3.11",
+      "license": "MIT",
+      "lock": "frontend/experiments/audio-viewport/package-lock.json",
+      "integrity": "sha512-gOb0B9rtU2+f1dszwPqSH5kAieIF9ReeLhD3kSRNHv5WZZUQz/JdVXW0RTdqhNTMlQkqKzrTTviqKr/4FYZraQ==",
+      "local_version_matches": true,
+      "local_license": "MIT",
+      "license_files": [
+        {
+          "path": "frontend/experiments/audio-viewport/node_modules/vue-tsc/LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ]
+    }
+  ]
+}

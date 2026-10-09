@@ -37,11 +37,12 @@ def submit(store, owner, body, *, retry_of=None):
         snapshot = dict(operation='egg_analysis',schema_version='m03/1',project_id=body.project_id,retry_of=retry_of,
             core_version=core_version,adapter_version=adapter_version,source_ids=['PENDING-EGG','SRC-PRAAT'],
             input_refs=refs,input_assets=sources,config=dict(inputs=[i['id'] for i in sources],
-                analysis=body.config.model_dump(),max_output_bytes=160_000_000))
+                analysis=body.config.model_dump(),max_output_bytes=(160_000_000 if store.postgres else sources[0]['size_bytes']+320_000_000)))
+        if not store.postgres:snapshot['config']['egg_bundle_revision']='m03/2'
         if body.config.keep_reaper_f0 and body.config.mode != 'inverse':snapshot['source_ids'].append('SRC-REAPER')
         job_id = str(uuid4())
         tx.execute("INSERT INTO {jobs}(id,owner_id,project_id,idempotency_key,request_hash,snapshot,state,deadline,created_at,updated_at) VALUES(?,?,?,?,?,?,'queued',?,?,?)",
-            (job_id,owner,body.project_id,body.idempotency_key,sha,canonical(snapshot),now+600,now,now))
+            (job_id,owner,body.project_id,body.idempotency_key,sha,canonical(snapshot),now+(3600 if not store.postgres else 600),now,now))
         store.files.link_batch_inputs(tx,job_id,dict(owner_id=owner,project_id=body.project_id),sources,now)
         job=store._row(tx,job_id); store._event(tx,job,'queued',now)
         return public(job)

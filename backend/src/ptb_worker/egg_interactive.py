@@ -23,6 +23,8 @@ class InteractivePreview:
         self.touched = 0
         self.reaper_binary = str(reaper_binary) if reaper_binary else None
         self.native_scratch = None
+        self.source_scratch = None
+        self.long_source = False
         atexit.register(self.close)
 
     def _rpc(self, header, raw=b'', timeout=30):
@@ -47,8 +49,8 @@ class InteractivePreview:
         self.touched = time.monotonic()
         return value
 
-    def open(self, owner, raw):
-        if not 0 < len(raw) <= 64_000_000: raise PreviewError('egg_input_budget', 413)
+    def open(self, owner, raw, *, source_path=None, source_scratch=None):
+        if source_path is None and not 0 < len(raw) <= 64_000_000: raise PreviewError('egg_input_budget', 413)
         if os.name != 'nt': raise PreviewError('preview_platform_unverified', 503)
         from .resource_profiles import selected_profile
         from .io.limits import FormatError
@@ -59,6 +61,7 @@ class InteractivePreview:
         from .egg_runtime import command
         with self.lock:
             self.close()
+            self.source_scratch = source_scratch
             try:
                 args = command('', '')[:-2]+['--interactive']
                 self.job = win.checked(win.create_job(None, None))
@@ -76,7 +79,7 @@ class InteractivePreview:
                 handle = win.checked(win.open_process(0x0101, False, pid))
                 try: win.checked(win.assign_job(self.job, handle))
                 finally: win.close(handle)
-                header=dict(size=len(raw))
+                header=dict(source_path=str(source_path)) if source_path else dict(size=len(raw))
                 if self.reaper_binary:
                     import tempfile
                     from .io.scratch import Scratch
@@ -85,7 +88,8 @@ class InteractivePreview:
                     # closed after the child/process group on every exit path.
                     self.native_scratch=Scratch(tempfile.gettempdir(),NATIVE_BYTES)
                     header.update(native_scratch=str(self.native_scratch.create(b'','.wav')),reaper_binary=self.reaper_binary)
-                value = self._rpc(header, raw)
+                value = self._rpc(header, raw, timeout=120 if source_path else 30)
+                self.long_source = bool(value.get('overview_base64'))
                 self.owner, self.token = owner, str(uuid.uuid4())
                 self._schedule_expiry()
                 return dict(session_id=self.token, **value)
@@ -98,7 +102,7 @@ class InteractivePreview:
         with self.lock:
             if self.owner != owner or self.token != str(token) or self.process is None:
                 raise PreviewError('egg_preview_expired', 410)
-            try: return self._rpc(dict(config=config))
+            try: return self._rpc(dict(config=config),timeout=120 if self.long_source else 30)
             except PreviewError:
                 # Keep a healthy child after a validation/scientific error.
                 if self.process is not None and self.process.poll() is not None: self.close()
@@ -134,3 +138,7 @@ class InteractivePreview:
             if self.native_scratch:
                 scratch,self.native_scratch=self.native_scratch,None
                 scratch.close()
+            if self.source_scratch:
+                scratch,self.source_scratch=self.source_scratch,None
+                scratch.cleanup()
+            self.long_source = False

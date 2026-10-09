@@ -40,6 +40,8 @@ def validate_frames(engine,frames,*,for_storage=False):
         manual=frame.get('manual_root',False)
         if type(manual) is not bool:raise ValueError('无效的舌根模式')
         result[-1].update(name=name,manual_root=manual)
+        if 'larynx_height' in frame:
+            result[-1]['larynx_height']=engine.validated_larynx(frame['larynx_height'])
         if silent:result[-1]['silent']=True
         if 'source' in frame:result[-1]['source']=validate_source(frame['source'])
     if not for_storage and round(sum(f['duration'] for f in result),9)>12:raise ValueError('关键帧总时长不能超过 12 秒')
@@ -49,13 +51,14 @@ def sample_frame(frames,seconds):
     elapsed=0.
     for i,frame in enumerate(frames[:-1]):
         if seconds<elapsed+frame['duration']:
-            if frame.get('silent',False):return {key:frame[key] for key in ['params','lip_width','f0','source','manual_root','silent'] if key in frame}
+            if frame.get('silent',False):return {key:frame[key] for key in ['params','lip_width','f0','source','manual_root','silent','larynx_height'] if key in frame}
             t=float(np.clip((seconds-elapsed)/frame['duration'],0,1));t=t*t*(3-2*t);end=frames[i+1]
             result={'params':((1-t)*np.array(frame['params'])+t*np.array(end['params'])).tolist(),
                     'lip_width':(1-t)*frame['lip_width']+t*end['lip_width'],'f0':(1-t)*frame['f0']+t*(frame['f0'] if end.get('silent') else end['f0']),
                     'manual_root':frame.get('manual_root',False) or end.get('manual_root',False)}
             if 'source' in frame or 'source' in end:result['source']=interpolate_source(frame.get('source'),frame.get('source') if end.get('silent') else end.get('source'),t)
+            if 'larynx_height' in frame or 'larynx_height' in end:result['larynx_height']=(1-t)*frame.get('larynx_height',0.)+t*end.get('larynx_height',0.)
             return result
         elapsed+=frame['duration']
-    return {key:frames[-1][key] for key in ['params','lip_width','f0','source','manual_root','silent'] if key in frames[-1]}
+    return {key:frames[-1][key] for key in ['params','lip_width','f0','source','manual_root','silent','larynx_height'] if key in frames[-1]}
 

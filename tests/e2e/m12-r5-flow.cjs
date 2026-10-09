@@ -1,6 +1,6 @@
 module.exports=async({page,click,loaded,out,rpc,checks})=>{
  const assert=require('node:assert/strict'),path=require('node:path');
- await rpc({op:'r3_setup'});await click('语音标注对齐');await click('选择语料文件夹');
+ await rpc({op:'r3_setup'});await click('TextGrid标注');await click('选择语料文件夹');
  const choose=async name=>{await page.locator('.annotation-file-list button').filter({hasText:name}).click();await loaded();};
  await choose('split.wav');
  const view=async span=>{await page.getByLabel('标注可视时长').fill(String(span));await page.getByLabel('标注可视时长').press('Tab');await page.clock.runFor(40);};await view(2);

@@ -36,6 +36,12 @@ def collect_scientific(entry, request, scratch, limits, stop, on_started=None, e
 
 def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None,process_evidence=None):
     files=store.files;identity=(claim['id'],worker_id,claim['generation']);snapshot=json.loads(claim['snapshot'])
+    if snapshot['operation']=='egg_analysis' and not store.postgres:
+        from .egg_executor import execute_claim
+        return execute_claim(store,claim,worker_id,stop,on_started=on_started,evidence=process_evidence)
+    if snapshot['config'].get('bounded_bundle') or (snapshot['operation']=='acoustic_analysis' and (snapshot['config'].get('analysis') or {}).get('extended')):
+        from .acoustic_stream_executor import execute_claim
+        return execute_claim(store,claim,worker_id,stop,evidence=process_evidence,on_started=on_started)
     # Offline EGG already permits 1 MiB reads/writes. Use that existing bound
     # instead of hundreds of tiny durable scratch transactions per interaction.
     # Hosted storage and other modules retain their established chunk sizes.
@@ -128,8 +134,12 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None,process_
                     raise FormatError('source_mismatch')
                 payloads=list(zip(names,bundle.payloads))
             elif snapshot['operation']=='spectrogram_to_audio':
-                header=dict(config=snapshot['config']['analysis'],sha256=digest(blobs['image']))
-                request=scratch.create(json.dumps(header).encode()+b'\n'+blobs['image'],'.json')
+                source=blobs['audio'] if snapshot['config']['analysis'].get('mode')=='audio_draw' else blobs['image']
+                header=dict(config=snapshot['config']['analysis'],sha256=digest(source))
+                if 'spectral_drawing' in blobs:
+                    from .spec2wav_drawing import expand
+                    header['config']=expand(header['config'],blobs['spectral_drawing'])
+                request=scratch.create(json.dumps(header).encode()+b'\n'+source,'.json')
                 raw=collect_scientific('spec2wav',request,scratch,replace(SEGMENT_LIMITS,timeout_seconds=240),
                     lambda:abort.is_set() or stop.is_set(),on_started)
                 bundle=unpack_bundle(raw,64_000_000)

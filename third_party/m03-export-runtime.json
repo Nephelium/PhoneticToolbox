@@ -2,7 +2,7 @@
   "checked_on": "2026-09-12",
   "scope": "Installed metadata; not full redistribution approval",
   "runtime": "project-local m03-compatible; no replacement of Conda SciPy",
-  "lock": "requirements-m03-exports.lock",
+  "lock": "requirements/requirements-m03-exports.lock",
   "lock_sha256": "acceee153423a3add8db48a84e5cc3467a6c829dd2ed9ac115f73802ec6e477a",
   "packages": [
     {

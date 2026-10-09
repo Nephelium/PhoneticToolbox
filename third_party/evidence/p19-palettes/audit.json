@@ -1,0 +1,1665 @@
+{
+  "schema_version": 1,
+  "task": "P19-R11",
+  "checked_on": "2026-10-05",
+  "palette_count": 29,
+  "status_counts": {
+    "source-or-permission-unresolved": 16,
+    "public-upstream-license-verified": 11,
+    "upstream-license-declaration-only": 1,
+    "public-port-original-license-unresolved": 1
+  },
+  "scope": "Public-source and license evidence audit; does not grant release clearance or resolve historical package-inspection terms",
+  "site_observations": {
+    "codex": {
+      "requested_url": "https://openai.com/codex/",
+      "error": "HTTP Error 403: Forbidden",
+      "scope": "No palette license inferred"
+    },
+    "openai_terms": {
+      "requested_url": "https://openai.com/policies/terms-of-use/",
+      "final_url": "https://openai.com/policies/terms-of-use/",
+      "http_status": 200,
+      "content_sha256": "58d84bfa0a2c39e8c29a7a71f6190eda2e4f3fc2e3a7136ea932ecc5ba772469",
+      "title": "Terms of Use | OpenAI",
+      "content_saved": false,
+      "scope": "Public page/brand/context reference only; not evidence of palette redistribution permission"
+    },
+    "openai_brand": {
+      "requested_url": "https://openai.com/brand/",
+      "error": "HTTP Error 403: Forbidden",
+      "scope": "No palette license inferred"
+    },
+    "linear": {
+      "requested_url": "https://linear.app/brand",
+      "final_url": "https://linear.app/brand",
+      "http_status": 200,
+      "content_sha256": "6d6d387aac913716a99804348f0de8ba74ab39b8efa32c92b80ed3394b2ba0b9",
+      "title": "Brand Guidelines – Linear",
+      "content_saved": false,
+      "scope": "Public page/brand/context reference only; not evidence of palette redistribution permission"
+    },
+    "notion": {
+      "requested_url": "https://www.notion.com/",
+      "final_url": "https://www.notion.com/",
+      "http_status": 200,
+      "content_sha256": "8b0a715486320583e73c36ec94fd0ab55821e6838ff4aa7fa811fd3f355a7f00",
+      "title": "The AI workspace that works for you. | Notion",
+      "content_saved": false,
+      "scope": "Public page/brand/context reference only; not evidence of palette redistribution permission"
+    },
+    "raycast": {
+      "requested_url": "https://www.raycast.com/pro",
+      "final_url": "https://www.raycast.com/pro",
+      "http_status": 200,
+      "content_sha256": "d385613b5318856719c304598bc28408ffd9ef7aa2f6502ead6b197782bea5e3",
+      "title": "Raycast Pro: AI, Cloud Sync &amp; Custom Themes, Your Way",
+      "content_saved": false,
+      "scope": "Public page/brand/context reference only; not evidence of palette redistribution permission"
+    },
+    "sentry": {
+      "requested_url": "https://sentry.io/",
+      "final_url": "https://sentry.io/welcome/",
+      "http_status": 200,
+      "content_sha256": "4aa2d451399bf867725b504f23e8202905a551f4c15fddc44e2dd71095a93c4f",
+      "title": "Application Performance Monitoring &amp; Error Tracking Software | Sentry",
+      "content_saved": false,
+      "scope": "Public page/brand/context reference only; not evidence of palette redistribution permission"
+    },
+    "vercel": {
+      "requested_url": "https://vercel.com/geist/introduction",
+      "final_url": "https://vercel.com/geist/introduction",
+      "http_status": 200,
+      "content_sha256": "1b24dfc6bbbe92f8bfe90447a092a6c4b97d2a709a9338618fa2f06ba471725d",
+      "title": "Geist",
+      "content_saved": false,
+      "scope": "Public page/brand/context reference only; not evidence of palette redistribution permission"
+    },
+    "xcode": {
+      "requested_url": "https://developer.apple.com/xcode/",
+      "final_url": "https://developer.apple.com/xcode/",
+      "http_status": 200,
+      "content_sha256": "15efe8105d05fb9114a5b3ba19c3fd24ad54bcdc8273d3da6850dd1bf3d06399",
+      "title": "Xcode - Apple Developer",
+      "content_saved": false,
+      "scope": "Public page/brand/context reference only; not evidence of palette redistribution permission"
+    },
+    "vscode-plus": {
+      "requested_url": "https://github.com/openai/codex/issues/15987",
+      "final_url": "https://github.com/openai/codex/issues/15987",
+      "http_status": 200,
+      "content_sha256": "806f3fbc9ef00c2c5c87eb8a156e508c07485740cd97f2ea8d432dae347397db",
+      "title": "VS Code Plus makes skill chips hard to see · Issue #15987 · openai/codex · GitHub",
+      "content_saved": false,
+      "scope": "Public page/brand/context reference only; not evidence of palette redistribution permission"
+    },
+    "material": {
+      "requested_url": "https://github.com/material-theme/vsc-material-theme",
+      "final_url": "https://github.com/vira-soft/vira-assets",
+      "http_status": 200,
+      "content_sha256": "a20b61e9bdb150996b770c84ea1c16a39550ba9d2e91c46b62febbd3aaf0e189",
+      "title": "GitHub - vira-soft/vira-assets: Vira Theme is the official successor of the popular Material Theme. This premium version is actively maintained, includes hand-curated icons and more features · GitHub",
+      "content_saved": false,
+      "scope": "Public page/brand/context reference only; not evidence of palette redistribution permission"
+    },
+    "monokai-history": {
+      "requested_url": "https://monokai.pro/history",
+      "final_url": "https://monokai.pro/history",
+      "http_status": 200,
+      "content_sha256": "dc29fef4122edcd48d4767e8d032718428109e7f1a174b78b65ade667f1e94f4",
+      "title": "The history of Monokai",
+      "content_saved": false,
+      "scope": "Public page/brand/context reference only; not evidence of palette redistribution permission"
+    },
+    "monokai-pro-conditions": {
+      "requested_url": "https://monokai.pro/contribute",
+      "final_url": "https://monokai.pro/contribute",
+      "http_status": 200,
+      "content_sha256": "8cdcbbc1c825314af09e24c6272c3d78a3c7c454713b73bb38d89b0b9dc6fe6e",
+      "title": "Contribute to Monokai Pro",
+      "content_saved": false,
+      "scope": "Public page/brand/context reference only; not evidence of palette redistribution permission"
+    }
+  },
+  "bounded_searches": [
+    "Absolutely / Lobster / Oscurange / Proof / Temple with Codex and license",
+    "Matrix / OG / Temple with Codex themes license",
+    "VS Code Plus theme license",
+    "Raycast official theme license",
+    "Linear / Notion / Raycast / Sentry / Vercel theme license in official OpenAI documentation"
+  ],
+  "items": [
+    {
+      "id": "absolutely",
+      "name": "Absolutely",
+      "light": [
+        "#faf9f6",
+        "#34322f",
+        "#a94f31"
+      ],
+      "dark": [
+        "#202020",
+        "#e6e2dc",
+        "#e59b77"
+      ],
+      "source_id": "SRC-PALETTE-ABSOLUTELY",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "source-or-permission-unresolved",
+      "license_spdx": null,
+      "unresolved": "仅能确认 Codex 同名内置方案；未取得可对应的原作者声明或主题许可。社区移植的许可证不能替代原方案授权。",
+      "authors": "Codex 同名内置方案原作者待确认",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": []
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/"
+      }
+    },
+    {
+      "id": "ayu",
+      "name": "Ayu",
+      "light": [
+        "#fafafa",
+        "#575f66",
+        "#a76500"
+      ],
+      "dark": [
+        "#0b0e14",
+        "#bfbdb6",
+        "#e6b450"
+      ],
+      "source_id": "SRC-PALETTE-AYU",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [
+        {
+          "repo": "ayu-theme/ayu-colors",
+          "commit": "b0fd979a1ddf050101b43311fa598a1a9c5f1bbc",
+          "path": "themes/dark.yaml",
+          "url": "https://raw.githubusercontent.com/ayu-theme/ayu-colors/b0fd979a1ddf050101b43311fa598a1a9c5f1bbc/themes/dark.yaml",
+          "content_sha256_utf8": "e2d7c9f40875a59202462fd37fce0763644509e1081c8f91059447af3ac2372f",
+          "scope": "2026-10-05 public upstream observation; historical import commit remains unknown",
+          "authors": "Konstantin Pschera / ayu-theme contributors",
+          "license_spdx": "MIT",
+          "license_url": "https://raw.githubusercontent.com/ayu-theme/ayu-colors/b0fd979a1ddf050101b43311fa598a1a9c5f1bbc/license",
+          "license_file": "third_party/licenses/p19-palettes/ayu-MIT.txt",
+          "license_sha256": "0e516038e9348d278dd886a2f07826b78e851f6e5f002c62096529d508c55be1",
+          "copyright_notice": "Copyright (c) Konstantin Pschera <me@kons.ch> (kons.ch)"
+        }
+      ],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "public-upstream-license-verified",
+      "license_spdx": "MIT",
+      "authors": "Konstantin Pschera / ayu-theme contributors",
+      "unresolved": "最初引入版本未记录；当前公开上游查验不能倒推历史复制版本，也不证明与 Codex 全部颜色一致。",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": [
+          {
+            "seed": "#fafafa",
+            "url": "https://raw.githubusercontent.com/ayu-theme/ayu-colors/b0fd979a1ddf050101b43311fa598a1a9c5f1bbc/themes/light.yaml",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#bfbdb6",
+            "url": "https://raw.githubusercontent.com/ayu-theme/ayu-colors/b0fd979a1ddf050101b43311fa598a1a9c5f1bbc/themes/dark.yaml",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#e6b450",
+            "url": "https://raw.githubusercontent.com/ayu-theme/ayu-colors/b0fd979a1ddf050101b43311fa598a1a9c5f1bbc/themes/dark.yaml",
+            "match": "hex-literal",
+            "hsl": []
+          }
+        ]
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "公开上游": "https://github.com/ayu-theme/ayu-colors",
+        "固定色板": "https://raw.githubusercontent.com/ayu-theme/ayu-colors/b0fd979a1ddf050101b43311fa598a1a9c5f1bbc/themes/dark.yaml",
+        "许可原文": "https://raw.githubusercontent.com/ayu-theme/ayu-colors/b0fd979a1ddf050101b43311fa598a1a9c5f1bbc/license"
+      }
+    },
+    {
+      "id": "catppuccin",
+      "name": "Catppuccin",
+      "light": [
+        "#eff1f5",
+        "#4c4f69",
+        "#8839ef"
+      ],
+      "dark": [
+        "#1e1e2e",
+        "#cdd6f4",
+        "#cba6f7"
+      ],
+      "source_id": "SRC-PALETTE-CATPPUCCIN",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [
+        {
+          "repo": "catppuccin/palette",
+          "commit": "07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd",
+          "path": "palette.json",
+          "url": "https://raw.githubusercontent.com/catppuccin/palette/07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd/palette.json",
+          "content_sha256_utf8": "4bc114bb6b3c9a9c9e156564aa84625aef32c5da514d9dd431cf1fcad433a05f",
+          "scope": "2026-10-05 public upstream observation; historical import commit remains unknown",
+          "authors": "Catppuccin contributors",
+          "license_spdx": "MIT",
+          "license_url": "https://raw.githubusercontent.com/catppuccin/palette/07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd/LICENSE",
+          "license_file": "third_party/licenses/p19-palettes/catppuccin-MIT.txt",
+          "license_sha256": "814096d2c34cc216c624738a49356f32b7237733b4f7edb0685f4e50ef5074ba",
+          "copyright_notice": "Copyright (c) 2021 Catppuccin"
+        }
+      ],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "public-upstream-license-verified",
+      "license_spdx": "MIT",
+      "authors": "Catppuccin contributors",
+      "unresolved": "最初引入版本未记录；当前公开上游查验不能倒推历史复制版本，也不证明与 Codex 全部颜色一致。",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": [
+          {
+            "seed": "#eff1f5",
+            "url": "https://raw.githubusercontent.com/catppuccin/palette/07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd/palette.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#4c4f69",
+            "url": "https://raw.githubusercontent.com/catppuccin/palette/07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd/palette.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#8839ef",
+            "url": "https://raw.githubusercontent.com/catppuccin/palette/07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd/palette.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#1e1e2e",
+            "url": "https://raw.githubusercontent.com/catppuccin/palette/07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd/palette.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#cdd6f4",
+            "url": "https://raw.githubusercontent.com/catppuccin/palette/07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd/palette.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#cba6f7",
+            "url": "https://raw.githubusercontent.com/catppuccin/palette/07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd/palette.json",
+            "match": "hex-literal",
+            "hsl": []
+          }
+        ]
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "公开上游": "https://github.com/catppuccin/palette",
+        "固定色板": "https://raw.githubusercontent.com/catppuccin/palette/07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd/palette.json",
+        "许可原文": "https://raw.githubusercontent.com/catppuccin/palette/07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd/LICENSE"
+      }
+    },
+    {
+      "id": "codex",
+      "name": "Codex",
+      "light": [
+        "#f9f9f9",
+        "#202020",
+        "#0969da"
+      ],
+      "dark": [
+        "#171717",
+        "#ededed",
+        "#79aaff"
+      ],
+      "source_id": "SRC-PALETTE-CODEX",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "source-or-permission-unresolved",
+      "license_spdx": null,
+      "unresolved": "OpenAI 官方应用及品牌指南可查；未找到桌面 Codex 此配色的独立开源许可。Codex CLI 的开源许可不外推到桌面应用主题。",
+      "authors": "品牌参考：OpenAI；Codex 同名方案原作者待确认",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": []
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "品牌视觉参考": "https://openai.com/codex/"
+      }
+    },
+    {
+      "id": "dracula",
+      "name": "Dracula",
+      "light": [
+        "#f7f5fb",
+        "#39354a",
+        "#8751a8"
+      ],
+      "dark": [
+        "#282a36",
+        "#f8f8f2",
+        "#ff79c6"
+      ],
+      "source_id": "SRC-PALETTE-DRACULA",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [
+        {
+          "repo": "dracula/visual-studio-code",
+          "commit": "a08a206f2c8420ba3c05f0e8d01d43b2f933fdf8",
+          "path": "src/dracula.yml",
+          "url": "https://raw.githubusercontent.com/dracula/visual-studio-code/a08a206f2c8420ba3c05f0e8d01d43b2f933fdf8/src/dracula.yml",
+          "content_sha256_utf8": "c0b212b19bdaab789d56322783dd0ac32b43ee9a30ed5bd4d1e4b8a45dbe2c63",
+          "scope": "2026-10-05 public upstream observation; historical import commit remains unknown",
+          "authors": "Zeno Rocha / Dracula Theme contributors",
+          "license_spdx": "MIT",
+          "license_url": "https://raw.githubusercontent.com/dracula/visual-studio-code/a08a206f2c8420ba3c05f0e8d01d43b2f933fdf8/LICENSE",
+          "license_file": "third_party/licenses/p19-palettes/dracula-MIT.txt",
+          "license_sha256": "f08d0bba7f8906ed4e7a76d7e555a883968d83eb550ae298ce893a65aee15dff",
+          "copyright_notice": "Copyright (c) 2016 Dracula Theme"
+        }
+      ],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "public-upstream-license-verified",
+      "license_spdx": "MIT",
+      "authors": "Zeno Rocha / Dracula Theme contributors",
+      "unresolved": "最初引入版本未记录；当前公开上游查验不能倒推历史复制版本，也不证明与 Codex 全部颜色一致。",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": [
+          {
+            "seed": "#282a36",
+            "url": "https://raw.githubusercontent.com/dracula/visual-studio-code/a08a206f2c8420ba3c05f0e8d01d43b2f933fdf8/src/dracula.yml",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#f8f8f2",
+            "url": "https://raw.githubusercontent.com/dracula/visual-studio-code/a08a206f2c8420ba3c05f0e8d01d43b2f933fdf8/src/dracula.yml",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#ff79c6",
+            "url": "https://raw.githubusercontent.com/dracula/visual-studio-code/a08a206f2c8420ba3c05f0e8d01d43b2f933fdf8/src/dracula.yml",
+            "match": "hex-literal",
+            "hsl": []
+          }
+        ]
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "公开上游": "https://github.com/dracula/visual-studio-code",
+        "固定色板": "https://raw.githubusercontent.com/dracula/visual-studio-code/a08a206f2c8420ba3c05f0e8d01d43b2f933fdf8/src/dracula.yml",
+        "许可原文": "https://raw.githubusercontent.com/dracula/visual-studio-code/a08a206f2c8420ba3c05f0e8d01d43b2f933fdf8/LICENSE"
+      }
+    },
+    {
+      "id": "everforest",
+      "name": "Everforest",
+      "light": [
+        "#fdf6e3",
+        "#5c6a72",
+        "#657b35"
+      ],
+      "dark": [
+        "#2d353b",
+        "#d3c6aa",
+        "#a7c080"
+      ],
+      "source_id": "SRC-PALETTE-EVERFOREST",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [
+        {
+          "repo": "sainnhe/everforest",
+          "commit": "85a86eb62409e3ec88713bff3d1b9d7374e112e4",
+          "path": "palette.md",
+          "url": "https://raw.githubusercontent.com/sainnhe/everforest/85a86eb62409e3ec88713bff3d1b9d7374e112e4/palette.md",
+          "content_sha256_utf8": "76c4b1a1bb612a0bdb39db0f5af944ea2fb83495423398e7dfb6d540c7120414",
+          "scope": "2026-10-05 public upstream observation; historical import commit remains unknown",
+          "authors": "sainnhe",
+          "license_spdx": "MIT",
+          "license_url": "https://raw.githubusercontent.com/sainnhe/everforest/85a86eb62409e3ec88713bff3d1b9d7374e112e4/LICENSE",
+          "license_file": "third_party/licenses/p19-palettes/everforest-MIT.txt",
+          "license_sha256": "6504b9e62794cb58b61c90ea5fe598274086119f2126b8d8245708b2bfcc0e36",
+          "copyright_notice": "Copyright (c) 2019 sainnhe"
+        }
+      ],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "public-upstream-license-verified",
+      "license_spdx": "MIT",
+      "authors": "sainnhe",
+      "unresolved": "最初引入版本未记录；当前公开上游查验不能倒推历史复制版本，也不证明与 Codex 全部颜色一致。",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": [
+          {
+            "seed": "#fdf6e3",
+            "url": "https://raw.githubusercontent.com/sainnhe/everforest/85a86eb62409e3ec88713bff3d1b9d7374e112e4/palette.md",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#5c6a72",
+            "url": "https://raw.githubusercontent.com/sainnhe/everforest/85a86eb62409e3ec88713bff3d1b9d7374e112e4/palette.md",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#2d353b",
+            "url": "https://raw.githubusercontent.com/sainnhe/everforest/85a86eb62409e3ec88713bff3d1b9d7374e112e4/palette.md",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#d3c6aa",
+            "url": "https://raw.githubusercontent.com/sainnhe/everforest/85a86eb62409e3ec88713bff3d1b9d7374e112e4/palette.md",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#a7c080",
+            "url": "https://raw.githubusercontent.com/sainnhe/everforest/85a86eb62409e3ec88713bff3d1b9d7374e112e4/palette.md",
+            "match": "hex-literal",
+            "hsl": []
+          }
+        ]
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "公开上游": "https://github.com/sainnhe/everforest",
+        "固定色板": "https://raw.githubusercontent.com/sainnhe/everforest/85a86eb62409e3ec88713bff3d1b9d7374e112e4/palette.md",
+        "许可原文": "https://raw.githubusercontent.com/sainnhe/everforest/85a86eb62409e3ec88713bff3d1b9d7374e112e4/LICENSE"
+      }
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "light": [
+        "#f6f8fa",
+        "#24292f",
+        "#0969da"
+      ],
+      "dark": [
+        "#0d1117",
+        "#c9d1d9",
+        "#58a6ff"
+      ],
+      "source_id": "SRC-PALETTE-GITHUB",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [
+        {
+          "repo": "primer/github-vscode-theme",
+          "commit": "cd78e5e4e7bcf132a6f428ae0f32264bb1b729cf",
+          "path": "src/classic/colors.json",
+          "url": "https://raw.githubusercontent.com/primer/github-vscode-theme/cd78e5e4e7bcf132a6f428ae0f32264bb1b729cf/src/classic/colors.json",
+          "content_sha256_utf8": "f382edbf5c1707fc21417829fe948ec4d83d1e349fd429ed61b5ed93d1a6f3d4",
+          "scope": "2026-10-05 public upstream observation; historical import commit remains unknown",
+          "authors": "Primer / GitHub",
+          "license_spdx": "MIT",
+          "license_url": "https://raw.githubusercontent.com/primer/github-vscode-theme/cd78e5e4e7bcf132a6f428ae0f32264bb1b729cf/LICENSE",
+          "license_file": "third_party/licenses/p19-palettes/github-MIT.txt",
+          "license_sha256": "e2c871bb6effe9f6ec8d94d6596db33c4bfe4dd94969a6a9a2fb0473ebe6442e",
+          "copyright_notice": "Copyright (c) 2020 Primer"
+        }
+      ],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "public-upstream-license-verified",
+      "license_spdx": "MIT",
+      "authors": "Primer / GitHub",
+      "unresolved": "最初引入版本未记录；当前公开上游查验不能倒推历史复制版本，也不证明与 Codex 全部颜色一致。",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": [
+          {
+            "seed": "#f6f8fa",
+            "url": "https://raw.githubusercontent.com/primer/github-vscode-theme/cd78e5e4e7bcf132a6f428ae0f32264bb1b729cf/src/classic/colors.json",
+            "match": "hex-literal",
+            "hsl": []
+          }
+        ]
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "公开上游": "https://github.com/primer/github-vscode-theme",
+        "固定色板": "https://raw.githubusercontent.com/primer/github-vscode-theme/cd78e5e4e7bcf132a6f428ae0f32264bb1b729cf/src/classic/colors.json",
+        "许可原文": "https://raw.githubusercontent.com/primer/github-vscode-theme/cd78e5e4e7bcf132a6f428ae0f32264bb1b729cf/LICENSE"
+      }
+    },
+    {
+      "id": "gruvbox",
+      "name": "Gruvbox",
+      "light": [
+        "#fbf1c7",
+        "#3c3836",
+        "#427b58"
+      ],
+      "dark": [
+        "#282828",
+        "#ebdbb2",
+        "#8ec07c"
+      ],
+      "source_id": "SRC-PALETTE-GRUVBOX",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [
+        {
+          "repo": "morhetz/gruvbox",
+          "commit": "ef8864bb42bf244f0295d1c5a403b27e3d139695",
+          "path": "colors/gruvbox.vim",
+          "url": "https://raw.githubusercontent.com/morhetz/gruvbox/ef8864bb42bf244f0295d1c5a403b27e3d139695/colors/gruvbox.vim",
+          "content_sha256_utf8": "55116926ba2b625837d9ae89349a5688d60d0b32acdbd8887e1c0d225f079c3d",
+          "scope": "2026-10-05 public upstream observation; historical import commit remains unknown",
+          "authors": "morhetz",
+          "license_spdx": "MIT",
+          "license_url": "https://raw.githubusercontent.com/morhetz/gruvbox/ef8864bb42bf244f0295d1c5a403b27e3d139695/README.md",
+          "declaration_file": "third_party/evidence/p19-palettes/gruvbox-license-declaration.txt",
+          "declaration_sha256": "a6834147abf42c6e3219cbb28e1dc5848965d4f711800a1a7d5812fd7b5c0bc3",
+          "declaration_scope": "MIT/X11 declaration in upstream README; no standalone full copyright/permission notice found in inspected tree"
+        }
+      ],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "upstream-license-declaration-only",
+      "license_spdx": "MIT",
+      "authors": "morhetz",
+      "unresolved": "上游 README 声明 MIT/X11，已保存声明原文；未取得独立完整版权及许可通知，未伪造作者版权年份或完整许可文件。历史引入版本未记录。",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": [
+          {
+            "seed": "#fbf1c7",
+            "url": "https://raw.githubusercontent.com/morhetz/gruvbox/ef8864bb42bf244f0295d1c5a403b27e3d139695/colors/gruvbox.vim",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#3c3836",
+            "url": "https://raw.githubusercontent.com/morhetz/gruvbox/ef8864bb42bf244f0295d1c5a403b27e3d139695/colors/gruvbox.vim",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#427b58",
+            "url": "https://raw.githubusercontent.com/morhetz/gruvbox/ef8864bb42bf244f0295d1c5a403b27e3d139695/colors/gruvbox.vim",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#282828",
+            "url": "https://raw.githubusercontent.com/morhetz/gruvbox/ef8864bb42bf244f0295d1c5a403b27e3d139695/colors/gruvbox.vim",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#ebdbb2",
+            "url": "https://raw.githubusercontent.com/morhetz/gruvbox/ef8864bb42bf244f0295d1c5a403b27e3d139695/colors/gruvbox.vim",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#8ec07c",
+            "url": "https://raw.githubusercontent.com/morhetz/gruvbox/ef8864bb42bf244f0295d1c5a403b27e3d139695/colors/gruvbox.vim",
+            "match": "hex-literal",
+            "hsl": []
+          }
+        ]
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "公开上游": "https://github.com/morhetz/gruvbox",
+        "固定色板": "https://raw.githubusercontent.com/morhetz/gruvbox/ef8864bb42bf244f0295d1c5a403b27e3d139695/colors/gruvbox.vim",
+        "许可声明": "https://raw.githubusercontent.com/morhetz/gruvbox/ef8864bb42bf244f0295d1c5a403b27e3d139695/README.md"
+      }
+    },
+    {
+      "id": "linear",
+      "name": "Linear",
+      "light": [
+        "#f8f9fc",
+        "#292a35",
+        "#5b56bd"
+      ],
+      "dark": [
+        "#17181c",
+        "#e6e6ed",
+        "#a6a0ff"
+      ],
+      "source_id": "SRC-PALETTE-LINEAR",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "source-or-permission-unresolved",
+      "license_spdx": null,
+      "unresolved": "仅以 Linear 官方品牌页记录视觉参考；没有证据把 Codex 的同名适配绑定到 Linear 或某个社区主题仓库的许可。",
+      "authors": "品牌参考：Linear；Codex 同名方案原作者待确认",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": []
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "品牌视觉参考": "https://linear.app/brand"
+      }
+    },
+    {
+      "id": "lobster",
+      "name": "Lobster",
+      "light": [
+        "#fff5f1",
+        "#472c29",
+        "#b52f28"
+      ],
+      "dark": [
+        "#141824",
+        "#f4ded7",
+        "#ff6f61"
+      ],
+      "source_id": "SRC-PALETTE-LOBSTER",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "source-or-permission-unresolved",
+      "license_spdx": null,
+      "unresolved": "仅能确认 Codex 同名内置方案；未取得相应主题作者及许可。与宠物或其他同名项目无已证实来源关系。",
+      "authors": "Codex 同名内置方案原作者待确认",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": []
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/"
+      }
+    },
+    {
+      "id": "material",
+      "name": "Material",
+      "light": [
+        "#fafafa",
+        "#455a64",
+        "#007d86"
+      ],
+      "dark": [
+        "#263238",
+        "#eeffff",
+        "#80cbc4"
+      ],
+      "source_id": "SRC-PALETTE-MATERIAL",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "source-or-permission-unresolved",
+      "license_spdx": null,
+      "unresolved": "Mattia Astorino / Equinusocio 的旧 Material Theme 仓库现重定向至 vira-soft/vira-assets，当前仅有 live 分支、无 tags，未取得许可证。第三方保存的历史 Apache-2.0 标签未作为本项授权证据。Google Material Design 同名资源的许可也不能套用。",
+      "authors": "Mattia Astorino / Equinusocio（Material Theme 历史项目）；Codex 同名方案作者待确认",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": []
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "历史项目入口": "https://github.com/material-theme/vsc-material-theme",
+        "当前后继项目": "https://github.com/vira-soft/vira-assets"
+      }
+    },
+    {
+      "id": "matrix",
+      "name": "Matrix",
+      "light": [
+        "#f0f7ef",
+        "#233c27",
+        "#236e36"
+      ],
+      "dark": [
+        "#0d150f",
+        "#c0dfbd",
+        "#6cdb7b"
+      ],
+      "source_id": "SRC-PALETTE-MATRIX",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "source-or-permission-unresolved",
+      "license_spdx": null,
+      "unresolved": "仅能确认 Codex 同名内置方案；绿色终端视觉和同名社区主题不能证明本项的具体来源或许可。",
+      "authors": "Codex 同名内置方案原作者待确认",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": []
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/"
+      }
+    },
+    {
+      "id": "monokai",
+      "name": "Monokai",
+      "light": [
+        "#faf8ee",
+        "#49483e",
+        "#9b3864"
+      ],
+      "dark": [
+        "#272822",
+        "#f8f8f2",
+        "#a6e22e"
+      ],
+      "source_id": "SRC-PALETTE-MONOKAI",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [
+        {
+          "repo": "microsoft/vscode",
+          "commit": "40bb6fae207507042de8b6d7b74e9aa374a212a4",
+          "path": "extensions/theme-monokai/themes/monokai-color-theme.json",
+          "url": "https://raw.githubusercontent.com/microsoft/vscode/40bb6fae207507042de8b6d7b74e9aa374a212a4/extensions/theme-monokai/themes/monokai-color-theme.json",
+          "content_sha256_utf8": "5681bcdc2e8f2994a41233bfdd1b02c2cfd90da5c6a4f5ebd4c8f42ef90d1b5f",
+          "scope": "Public Microsoft implementation only; not proof of the original Monokai or Codex desktop palette license",
+          "authors": "Microsoft Corporation",
+          "license_spdx": "MIT",
+          "license_url": "https://raw.githubusercontent.com/microsoft/vscode/40bb6fae207507042de8b6d7b74e9aa374a212a4/LICENSE.txt",
+          "license_file": "third_party/licenses/p19-palettes/monokai-vscode-port-MIT.txt",
+          "license_sha256": "9480271317925265e806a9a196aaa33410a962fa9d4d1e248a4a5187bc8c9df9",
+          "copyright_notice": "Copyright (c) 2015 - present Microsoft Corporation"
+        }
+      ],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "public-port-original-license-unresolved",
+      "license_spdx": null,
+      "authors": "Wimer Hazenberg（原设计）；Microsoft Corporation（公开实现）",
+      "unresolved": "经典 Monokai 的三项深色 seed 与 VS Code 公开实现一致，Microsoft 仓库 MIT 原文已保存；原设计及 Codex 此方案的具体许可链未闭合。Monokai Pro 有另外的社区移植条件，未套用其许可或将本项称为 Pro。",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": [
+          {
+            "seed": "#272822",
+            "url": "https://raw.githubusercontent.com/microsoft/vscode/40bb6fae207507042de8b6d7b74e9aa374a212a4/extensions/theme-monokai/themes/monokai-color-theme.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#f8f8f2",
+            "url": "https://raw.githubusercontent.com/microsoft/vscode/40bb6fae207507042de8b6d7b74e9aa374a212a4/extensions/theme-monokai/themes/monokai-color-theme.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#a6e22e",
+            "url": "https://raw.githubusercontent.com/microsoft/vscode/40bb6fae207507042de8b6d7b74e9aa374a212a4/extensions/theme-monokai/themes/monokai-color-theme.json",
+            "match": "hex-literal",
+            "hsl": []
+          }
+        ]
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "原作者历史": "https://monokai.pro/history",
+        "原作者Pro条件": "https://monokai.pro/contribute",
+        "公开实现": "https://raw.githubusercontent.com/microsoft/vscode/40bb6fae207507042de8b6d7b74e9aa374a212a4/extensions/theme-monokai/themes/monokai-color-theme.json",
+        "公开实现许可": "https://raw.githubusercontent.com/microsoft/vscode/40bb6fae207507042de8b6d7b74e9aa374a212a4/LICENSE.txt"
+      }
+    },
+    {
+      "id": "night-owl",
+      "name": "Night Owl",
+      "light": [
+        "#f7fafb",
+        "#403f53",
+        "#356c9c"
+      ],
+      "dark": [
+        "#011627",
+        "#d6deeb",
+        "#82aaff"
+      ],
+      "source_id": "SRC-PALETTE-NIGHT-OWL",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [
+        {
+          "repo": "sdras/night-owl-vscode-theme",
+          "commit": "cc291eba7976b20d7c66bde6883c27b902196b07",
+          "path": "themes/Night Owl-color-theme.json",
+          "url": "https://raw.githubusercontent.com/sdras/night-owl-vscode-theme/cc291eba7976b20d7c66bde6883c27b902196b07/themes/Night%20Owl-color-theme.json",
+          "content_sha256_utf8": "5f7a6aebcb28e803f30b54dc4d401a8c5f9ca42d83a31d1fadcb2494fe1dc78b",
+          "scope": "2026-10-05 public upstream observation; historical import commit remains unknown",
+          "authors": "Sarah Drasner",
+          "license_spdx": "MIT",
+          "license_url": "https://raw.githubusercontent.com/sdras/night-owl-vscode-theme/cc291eba7976b20d7c66bde6883c27b902196b07/LICENSE.md",
+          "license_file": "third_party/licenses/p19-palettes/night-owl-MIT.txt",
+          "license_sha256": "7167d2a386e197ad4bf85f9bc60653ddce195bfc1243733dc92975e77dc94968",
+          "copyright_notice": "Copyright (c) 2018 Sarah Drasner"
+        }
+      ],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "public-upstream-license-verified",
+      "license_spdx": "MIT",
+      "authors": "Sarah Drasner",
+      "unresolved": "最初引入版本未记录；当前公开上游查验不能倒推历史复制版本，也不证明与 Codex 全部颜色一致。",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": [
+          {
+            "seed": "#403f53",
+            "url": "https://raw.githubusercontent.com/sdras/night-owl-vscode-theme/cc291eba7976b20d7c66bde6883c27b902196b07/themes/Night%20Owl-Light-color-theme.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#011627",
+            "url": "https://raw.githubusercontent.com/sdras/night-owl-vscode-theme/cc291eba7976b20d7c66bde6883c27b902196b07/themes/Night%20Owl-color-theme.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#011627",
+            "url": "https://raw.githubusercontent.com/sdras/night-owl-vscode-theme/cc291eba7976b20d7c66bde6883c27b902196b07/themes/Night%20Owl-Light-color-theme.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#d6deeb",
+            "url": "https://raw.githubusercontent.com/sdras/night-owl-vscode-theme/cc291eba7976b20d7c66bde6883c27b902196b07/themes/Night%20Owl-color-theme.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#82aaff",
+            "url": "https://raw.githubusercontent.com/sdras/night-owl-vscode-theme/cc291eba7976b20d7c66bde6883c27b902196b07/themes/Night%20Owl-color-theme.json",
+            "match": "hex-literal",
+            "hsl": []
+          }
+        ]
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "公开上游": "https://github.com/sdras/night-owl-vscode-theme",
+        "固定色板": "https://raw.githubusercontent.com/sdras/night-owl-vscode-theme/cc291eba7976b20d7c66bde6883c27b902196b07/themes/Night%20Owl-color-theme.json",
+        "许可原文": "https://raw.githubusercontent.com/sdras/night-owl-vscode-theme/cc291eba7976b20d7c66bde6883c27b902196b07/LICENSE.md"
+      }
+    },
+    {
+      "id": "nord",
+      "name": "Nord",
+      "light": [
+        "#eceff4",
+        "#2e3440",
+        "#466680"
+      ],
+      "dark": [
+        "#2e3440",
+        "#eceff4",
+        "#88c0d0"
+      ],
+      "source_id": "SRC-PALETTE-NORD",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [
+        {
+          "repo": "nordtheme/nord",
+          "commit": "1cef71605416a222e57225b544540ce0fcec18d4",
+          "path": "src/nord.css",
+          "url": "https://raw.githubusercontent.com/nordtheme/nord/1cef71605416a222e57225b544540ce0fcec18d4/src/nord.css",
+          "content_sha256_utf8": "b931ac3732582b2066b2d6cadec02d9820ba7081e6e3e404c31cb62d9315a962",
+          "scope": "2026-10-05 public upstream observation; historical import commit remains unknown",
+          "authors": "Sven Greb / Nord contributors",
+          "license_spdx": "MIT",
+          "license_url": "https://raw.githubusercontent.com/nordtheme/nord/1cef71605416a222e57225b544540ce0fcec18d4/license",
+          "license_file": "third_party/licenses/p19-palettes/nord-MIT.txt",
+          "license_sha256": "25ac8188d670bd2ad2ce2f4f55ab88573010ee9f7a4502543cb1eea1e2274f8a",
+          "copyright_notice": "Copyright (c) 2016-present Sven Greb <development@svengreb.de> (https://www.svengreb.de)"
+        }
+      ],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "public-upstream-license-verified",
+      "license_spdx": "MIT",
+      "authors": "Sven Greb / Nord contributors",
+      "unresolved": "最初引入版本未记录；当前公开上游查验不能倒推历史复制版本，也不证明与 Codex 全部颜色一致。",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": [
+          {
+            "seed": "#eceff4",
+            "url": "https://raw.githubusercontent.com/nordtheme/nord/1cef71605416a222e57225b544540ce0fcec18d4/src/nord.css",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#2e3440",
+            "url": "https://raw.githubusercontent.com/nordtheme/nord/1cef71605416a222e57225b544540ce0fcec18d4/src/nord.css",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#88c0d0",
+            "url": "https://raw.githubusercontent.com/nordtheme/nord/1cef71605416a222e57225b544540ce0fcec18d4/src/nord.css",
+            "match": "hex-literal",
+            "hsl": []
+          }
+        ]
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "公开上游": "https://github.com/nordtheme/nord",
+        "固定色板": "https://raw.githubusercontent.com/nordtheme/nord/1cef71605416a222e57225b544540ce0fcec18d4/src/nord.css",
+        "许可原文": "https://raw.githubusercontent.com/nordtheme/nord/1cef71605416a222e57225b544540ce0fcec18d4/license"
+      }
+    },
+    {
+      "id": "notion",
+      "name": "Notion",
+      "light": [
+        "#f7f7f5",
+        "#37352f",
+        "#8b5e3c"
+      ],
+      "dark": [
+        "#191919",
+        "#d4d4d4",
+        "#d8ad78"
+      ],
+      "source_id": "SRC-PALETTE-NOTION",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "source-or-permission-unresolved",
+      "license_spdx": null,
+      "unresolved": "仅记录 Notion 官方产品视觉参考；公开产品页面没有提供可对应此配色的再分发许可。",
+      "authors": "品牌参考：Notion；Codex 同名方案原作者待确认",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": []
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "品牌视觉参考": "https://www.notion.com/"
+      }
+    },
+    {
+      "id": "og",
+      "name": "OG",
+      "light": [
+        "#f4f9f7",
+        "#243a34",
+        "#15765f"
+      ],
+      "dark": [
+        "#17211e",
+        "#e2eee7",
+        "#72c7a8"
+      ],
+      "source_id": "SRC-PALETTE-OG",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "source-or-permission-unresolved",
+      "license_spdx": null,
+      "unresolved": "仅能确认 Codex 内置 OG 名称；未取得可对应的独立上游及主题许可。",
+      "authors": "Codex 同名内置方案原作者待确认",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": []
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/"
+      }
+    },
+    {
+      "id": "oscurange",
+      "name": "Oscurange",
+      "light": [
+        "#fff5e9",
+        "#4c352b",
+        "#a84d15"
+      ],
+      "dark": [
+        "#211a17",
+        "#efdccc",
+        "#eea064"
+      ],
+      "source_id": "SRC-PALETTE-OSCURANGE",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "source-or-permission-unresolved",
+      "license_spdx": null,
+      "unresolved": "仅能确认 Codex 同名内置方案；公开检索未取得可对应的作者仓库及主题许可。",
+      "authors": "Codex 同名内置方案原作者待确认",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": []
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/"
+      }
+    },
+    {
+      "id": "one",
+      "name": "One",
+      "light": [
+        "#fafafa",
+        "#383a42",
+        "#4078b5"
+      ],
+      "dark": [
+        "#282c34",
+        "#abb2bf",
+        "#61afef"
+      ],
+      "source_id": "SRC-PALETTE-ONE",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [
+        {
+          "repo": "atom/one-dark-syntax",
+          "commit": "9c96f4454362267ac45322063e193ccf9d2debb1",
+          "path": "styles/colors.less",
+          "url": "https://raw.githubusercontent.com/atom/one-dark-syntax/9c96f4454362267ac45322063e193ccf9d2debb1/styles/colors.less",
+          "content_sha256_utf8": "3f060ae1d0f2ebb27ccb60cf5088bd68ddaa8f38288569bf4ac47015b4595438",
+          "scope": "2026-10-05 public upstream observation; historical import commit remains unknown",
+          "authors": "GitHub Inc. / Atom contributors",
+          "license_spdx": "MIT",
+          "license_url": "https://raw.githubusercontent.com/atom/one-dark-syntax/9c96f4454362267ac45322063e193ccf9d2debb1/LICENSE.md",
+          "license_file": "third_party/licenses/p19-palettes/one-1-MIT.txt",
+          "license_sha256": "e1bd6bab503e4d7990504df1e646f6e7465a9096648304335e4c0b55c88f1f54",
+          "copyright_notice": "Copyright (c) 2016 GitHub Inc."
+        },
+        {
+          "repo": "atom/one-light-syntax",
+          "commit": "d84579027410c576086dfca14d934c4bd74b0438",
+          "path": "styles/colors.less",
+          "url": "https://raw.githubusercontent.com/atom/one-light-syntax/d84579027410c576086dfca14d934c4bd74b0438/styles/colors.less",
+          "content_sha256_utf8": "f22d02919b3986ed73484eb6d6ae706a7d8781244ce71c3a85194d50118b9937",
+          "scope": "2026-10-05 public upstream observation; historical import commit remains unknown",
+          "authors": "GitHub Inc. / Atom contributors",
+          "license_spdx": "MIT",
+          "license_url": "https://raw.githubusercontent.com/atom/one-light-syntax/d84579027410c576086dfca14d934c4bd74b0438/LICENSE.md",
+          "license_file": "third_party/licenses/p19-palettes/one-2-MIT.txt",
+          "license_sha256": "e1bd6bab503e4d7990504df1e646f6e7465a9096648304335e4c0b55c88f1f54",
+          "copyright_notice": "Copyright (c) 2016 GitHub Inc."
+        }
+      ],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "public-upstream-license-verified",
+      "license_spdx": "MIT",
+      "authors": "GitHub Inc. / Atom contributors",
+      "unresolved": "最初引入版本未记录；当前公开上游查验不能倒推历史复制版本，也不证明与 Codex 全部颜色一致。",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": [
+          {
+            "seed": "#61afef",
+            "url": "https://raw.githubusercontent.com/atom/one-dark-syntax/9c96f4454362267ac45322063e193ccf9d2debb1/styles/colors.less",
+            "match": "HSL-to-RGB-rounded",
+            "hsl": [
+              [
+                "207",
+                "82",
+                "66"
+              ]
+            ]
+          }
+        ]
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "公开上游1": "https://github.com/atom/one-dark-syntax",
+        "固定色板1": "https://raw.githubusercontent.com/atom/one-dark-syntax/9c96f4454362267ac45322063e193ccf9d2debb1/styles/colors.less",
+        "许可原文1": "https://raw.githubusercontent.com/atom/one-dark-syntax/9c96f4454362267ac45322063e193ccf9d2debb1/LICENSE.md",
+        "公开上游2": "https://github.com/atom/one-light-syntax",
+        "固定色板2": "https://raw.githubusercontent.com/atom/one-light-syntax/d84579027410c576086dfca14d934c4bd74b0438/styles/colors.less",
+        "许可原文2": "https://raw.githubusercontent.com/atom/one-light-syntax/d84579027410c576086dfca14d934c4bd74b0438/LICENSE.md"
+      }
+    },
+    {
+      "id": "proof",
+      "name": "Proof",
+      "light": [
+        "#f7f5ee",
+        "#39382f",
+        "#75642b"
+      ],
+      "dark": [
+        "#22221c",
+        "#e2dfce",
+        "#c5b675"
+      ],
+      "source_id": "SRC-PALETTE-PROOF",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "source-or-permission-unresolved",
+      "license_spdx": null,
+      "unresolved": "仅能确认 Codex 的浅色 Proof 方案；未取得可对应的原作者及许可。PTB 深色是自行补齐。",
+      "authors": "Codex 同名内置方案原作者待确认",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": []
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/"
+      }
+    },
+    {
+      "id": "raycast",
+      "name": "Raycast",
+      "light": [
+        "#faf8f8",
+        "#302c2d",
+        "#ba3945"
+      ],
+      "dark": [
+        "#19191b",
+        "#e9e7e8",
+        "#ff7480"
+      ],
+      "source_id": "SRC-PALETTE-RAYCAST",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "source-or-permission-unresolved",
+      "license_spdx": null,
+      "unresolved": "仅记录 Raycast 官方外观/产品参考；未找到可对应本项的官方主题开源仓库。Raycast 扩展仓库的 MIT 不外推到应用界面配色。",
+      "authors": "品牌参考：Raycast；Codex 同名方案原作者待确认",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": []
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "品牌视觉参考": "https://www.raycast.com/pro"
+      }
+    },
+    {
+      "id": "rose-pine",
+      "name": "Rose Pine",
+      "light": [
+        "#faf4ed",
+        "#575279",
+        "#b4637a"
+      ],
+      "dark": [
+        "#191724",
+        "#e0def4",
+        "#ebbcba"
+      ],
+      "source_id": "SRC-PALETTE-ROSE-PINE",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [
+        {
+          "repo": "rose-pine/rose-pine-palette",
+          "commit": "92af52b465ab6e47437aca223c9b8d3009a2023b",
+          "path": "palette.json",
+          "url": "https://raw.githubusercontent.com/rose-pine/rose-pine-palette/92af52b465ab6e47437aca223c9b8d3009a2023b/palette.json",
+          "content_sha256_utf8": "8b71546357c65ee23715e77f144d914e5f415f44f3ef3b0179bbe1f17d69211d",
+          "scope": "2026-10-05 public upstream observation; historical import commit remains unknown",
+          "authors": "mvllow / Rosé Pine contributors",
+          "license_spdx": "MIT",
+          "license_url": "https://raw.githubusercontent.com/rose-pine/rose-pine-palette/92af52b465ab6e47437aca223c9b8d3009a2023b/LICENSE",
+          "license_file": "third_party/licenses/p19-palettes/rose-pine-MIT.txt",
+          "license_sha256": "0e691132d5d92a848a1688b90fd4c662f62f78f3bd550ba46826ec31ec98fc70",
+          "copyright_notice": "Copyright (c) mvllow"
+        }
+      ],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "public-upstream-license-verified",
+      "license_spdx": "MIT",
+      "authors": "mvllow / Rosé Pine contributors",
+      "unresolved": "最初引入版本未记录；当前公开上游查验不能倒推历史复制版本，也不证明与 Codex 全部颜色一致。",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": [
+          {
+            "seed": "#faf4ed",
+            "url": "https://raw.githubusercontent.com/rose-pine/rose-pine-palette/92af52b465ab6e47437aca223c9b8d3009a2023b/palette.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#b4637a",
+            "url": "https://raw.githubusercontent.com/rose-pine/rose-pine-palette/92af52b465ab6e47437aca223c9b8d3009a2023b/palette.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#191724",
+            "url": "https://raw.githubusercontent.com/rose-pine/rose-pine-palette/92af52b465ab6e47437aca223c9b8d3009a2023b/palette.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#e0def4",
+            "url": "https://raw.githubusercontent.com/rose-pine/rose-pine-palette/92af52b465ab6e47437aca223c9b8d3009a2023b/palette.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#ebbcba",
+            "url": "https://raw.githubusercontent.com/rose-pine/rose-pine-palette/92af52b465ab6e47437aca223c9b8d3009a2023b/palette.json",
+            "match": "hex-literal",
+            "hsl": []
+          }
+        ]
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "公开上游": "https://github.com/rose-pine/rose-pine-palette",
+        "固定色板": "https://raw.githubusercontent.com/rose-pine/rose-pine-palette/92af52b465ab6e47437aca223c9b8d3009a2023b/palette.json",
+        "许可原文": "https://raw.githubusercontent.com/rose-pine/rose-pine-palette/92af52b465ab6e47437aca223c9b8d3009a2023b/LICENSE"
+      }
+    },
+    {
+      "id": "sentry",
+      "name": "Sentry",
+      "light": [
+        "#faf5fb",
+        "#463451",
+        "#7950a0"
+      ],
+      "dark": [
+        "#241c2f",
+        "#eee2f0",
+        "#cda7e6"
+      ],
+      "source_id": "SRC-PALETTE-SENTRY",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "source-or-permission-unresolved",
+      "license_spdx": null,
+      "unresolved": "仅记录 Sentry 官方产品视觉参考；Sentry 代码库或 SDK 的许可未被用作 Codex 同名主题的授权。",
+      "authors": "品牌参考：Sentry；Codex 同名方案原作者待确认",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": []
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "品牌视觉参考": "https://sentry.io/"
+      }
+    },
+    {
+      "id": "solarized",
+      "name": "Solarized",
+      "light": [
+        "#fdf6e3",
+        "#586e75",
+        "#006c91"
+      ],
+      "dark": [
+        "#002b36",
+        "#93a1a1",
+        "#60b3d1"
+      ],
+      "source_id": "SRC-PALETTE-SOLARIZED",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [
+        {
+          "repo": "altercation/solarized",
+          "commit": "62f656a02f93c5190a8753159e34b385588d5ff3",
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/altercation/solarized/62f656a02f93c5190a8753159e34b385588d5ff3/README.md",
+          "content_sha256_utf8": "f10571c994648365faab9c4f83bdd7699aa2cd056f111af5e29099c2673c5bc1",
+          "scope": "2026-10-05 public upstream observation; historical import commit remains unknown",
+          "authors": "Ethan Schoonover",
+          "license_spdx": "MIT",
+          "license_url": "https://raw.githubusercontent.com/altercation/solarized/62f656a02f93c5190a8753159e34b385588d5ff3/LICENSE",
+          "license_file": "third_party/licenses/p19-palettes/solarized-MIT.txt",
+          "license_sha256": "494aefdabf86acce06bd63001ad8aedad4ee38da23509d3f917d95aa3368b9a6",
+          "copyright_notice": "Copyright (c) 2011 Ethan Schoonover"
+        }
+      ],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "public-upstream-license-verified",
+      "license_spdx": "MIT",
+      "authors": "Ethan Schoonover",
+      "unresolved": "最初引入版本未记录；当前公开上游查验不能倒推历史复制版本，也不证明与 Codex 全部颜色一致。",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": [
+          {
+            "seed": "#fdf6e3",
+            "url": "https://raw.githubusercontent.com/altercation/solarized/62f656a02f93c5190a8753159e34b385588d5ff3/README.md",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#586e75",
+            "url": "https://raw.githubusercontent.com/altercation/solarized/62f656a02f93c5190a8753159e34b385588d5ff3/README.md",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#002b36",
+            "url": "https://raw.githubusercontent.com/altercation/solarized/62f656a02f93c5190a8753159e34b385588d5ff3/README.md",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#93a1a1",
+            "url": "https://raw.githubusercontent.com/altercation/solarized/62f656a02f93c5190a8753159e34b385588d5ff3/README.md",
+            "match": "hex-literal",
+            "hsl": []
+          }
+        ]
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "公开上游": "https://github.com/altercation/solarized",
+        "固定色板": "https://raw.githubusercontent.com/altercation/solarized/62f656a02f93c5190a8753159e34b385588d5ff3/README.md",
+        "许可原文": "https://raw.githubusercontent.com/altercation/solarized/62f656a02f93c5190a8753159e34b385588d5ff3/LICENSE"
+      }
+    },
+    {
+      "id": "temple",
+      "name": "Temple",
+      "light": [
+        "#f8f4e9",
+        "#454739",
+        "#617649"
+      ],
+      "dark": [
+        "#22271e",
+        "#dbe2ce",
+        "#b5c48e"
+      ],
+      "source_id": "SRC-PALETTE-TEMPLE",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "source-or-permission-unresolved",
+      "license_spdx": null,
+      "unresolved": "仅能确认 Codex 同名内置方案；未取得可对应的独立作者仓库及主题许可。",
+      "authors": "Codex 同名内置方案原作者待确认",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": []
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/"
+      }
+    },
+    {
+      "id": "tokyo-night",
+      "name": "Tokyo Night",
+      "light": [
+        "#e1e2e7",
+        "#3760bf",
+        "#5a4a78"
+      ],
+      "dark": [
+        "#1a1b26",
+        "#c0caf5",
+        "#7aa2f7"
+      ],
+      "source_id": "SRC-PALETTE-TOKYO-NIGHT",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [
+        {
+          "repo": "tokyo-night/tokyo-night-vscode-theme",
+          "commit": "7c0f11eaef322f293621ca7befe462214b7ea468",
+          "path": "themes/tokyo-night-color-theme.json",
+          "url": "https://raw.githubusercontent.com/tokyo-night/tokyo-night-vscode-theme/7c0f11eaef322f293621ca7befe462214b7ea468/themes/tokyo-night-color-theme.json",
+          "content_sha256_utf8": "e08d77c898ead9ed129dc18ff4f841e2353477e69ccd6fa7d0610561c31da4d8",
+          "scope": "2026-10-05 public upstream observation; historical import commit remains unknown",
+          "authors": "Enkia / Tokyo Night contributors",
+          "license_spdx": "MIT",
+          "license_url": "https://raw.githubusercontent.com/tokyo-night/tokyo-night-vscode-theme/7c0f11eaef322f293621ca7befe462214b7ea468/LICENSE.txt",
+          "license_file": "third_party/licenses/p19-palettes/tokyo-night-MIT.txt",
+          "license_sha256": "e3f5d0d772cda0f4f67405696f15a0f335460a2b3944eff40f00675aadacb31b",
+          "copyright_notice": "Copyright (c) 2018-present Enkia"
+        }
+      ],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "public-upstream-license-verified",
+      "license_spdx": "MIT",
+      "authors": "Enkia / Tokyo Night contributors",
+      "unresolved": "最初引入版本未记录；当前公开上游查验不能倒推历史复制版本，也不证明与 Codex 全部颜色一致。",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": [
+          {
+            "seed": "#1a1b26",
+            "url": "https://raw.githubusercontent.com/tokyo-night/tokyo-night-vscode-theme/7c0f11eaef322f293621ca7befe462214b7ea468/themes/tokyo-night-color-theme.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#c0caf5",
+            "url": "https://raw.githubusercontent.com/tokyo-night/tokyo-night-vscode-theme/7c0f11eaef322f293621ca7befe462214b7ea468/themes/tokyo-night-color-theme.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#7aa2f7",
+            "url": "https://raw.githubusercontent.com/tokyo-night/tokyo-night-vscode-theme/7c0f11eaef322f293621ca7befe462214b7ea468/themes/tokyo-night-color-theme.json",
+            "match": "hex-literal",
+            "hsl": []
+          },
+          {
+            "seed": "#7aa2f7",
+            "url": "https://raw.githubusercontent.com/tokyo-night/tokyo-night-vscode-theme/7c0f11eaef322f293621ca7befe462214b7ea468/themes/tokyo-night-light-color-theme.json",
+            "match": "hex-literal",
+            "hsl": []
+          }
+        ]
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "公开上游": "https://github.com/tokyo-night/tokyo-night-vscode-theme",
+        "固定色板": "https://raw.githubusercontent.com/tokyo-night/tokyo-night-vscode-theme/7c0f11eaef322f293621ca7befe462214b7ea468/themes/tokyo-night-color-theme.json",
+        "许可原文": "https://raw.githubusercontent.com/tokyo-night/tokyo-night-vscode-theme/7c0f11eaef322f293621ca7befe462214b7ea468/LICENSE.txt"
+      }
+    },
+    {
+      "id": "vercel",
+      "name": "Vercel",
+      "light": [
+        "#fafafa",
+        "#171717",
+        "#404040"
+      ],
+      "dark": [
+        "#0a0a0a",
+        "#ededed",
+        "#bdbdbd"
+      ],
+      "source_id": "SRC-PALETTE-VERCEL",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "source-or-permission-unresolved",
+      "license_spdx": null,
+      "unresolved": "仅记录 Vercel Geist 官方设计参考；Geist 字体等资源的开源许可不外推到 Codex 同名配色。",
+      "authors": "品牌参考：Vercel；Codex 同名方案原作者待确认",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": []
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "品牌视觉参考": "https://vercel.com/geist/introduction"
+      }
+    },
+    {
+      "id": "vscode-plus",
+      "name": "VS Code Plus",
+      "light": [
+        "#f3f3f3",
+        "#333333",
+        "#005a9e"
+      ],
+      "dark": [
+        "#1e1e1e",
+        "#d4d4d4",
+        "#75beff"
+      ],
+      "source_id": "SRC-PALETTE-VSCODE-PLUS",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "source-or-permission-unresolved",
+      "license_spdx": null,
+      "unresolved": "可在 openai/codex 问题记录中确认 VS Code Plus 桌面主题名称。尚无证据证明它等同于 Microsoft 的 Dark+ / Light+，因此未套用 VS Code 仓库 MIT。",
+      "authors": "Codex 同名方案原作者待确认；Microsoft 名称仅作视觉参考",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": []
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "主题名称记录": "https://github.com/openai/codex/issues/15987"
+      }
+    },
+    {
+      "id": "xcode",
+      "name": "Xcode",
+      "light": [
+        "#f5f5f5",
+        "#292a30",
+        "#9b2393"
+      ],
+      "dark": [
+        "#292a30",
+        "#dfdfe0",
+        "#ff8ab0"
+      ],
+      "source_id": "SRC-PALETTE-XCODE",
+      "verification_date": "2026-10-05",
+      "historical_source": "Codex screenshot and read-only installed metadata; see p19-appearance-sources.md",
+      "historical_import_commit": null,
+      "relationship": "palette-family visual reference and independently authored PTB adaptation",
+      "adaptation": "Three seed colors per mode; PTB mixes semantic UI tokens and adjusts contrast. Missing Codex variants were completed by PTB. No upstream theme implementation or icons added.",
+      "public_upstream_references": [],
+      "release_clearance": "not asserted by this metadata audit",
+      "status": "source-or-permission-unresolved",
+      "license_spdx": null,
+      "unresolved": "仅记录 Apple Xcode 官方产品视觉参考；未取得可对应此配色的独立再分发许可，未引入 Apple 图标或界面资源。",
+      "authors": "品牌参考：Apple / Xcode；Codex 同名方案原作者待确认",
+      "seed_correspondence": {
+        "scope": "Literal/HSL matches support family resemblance only; not a historical copying or license determination",
+        "matches": []
+      },
+      "urls": {
+        "历史视觉参考": "https://openai.com/codex/",
+        "品牌视觉参考": "https://developer.apple.com/xcode/"
+      }
+    }
+  ]
+}

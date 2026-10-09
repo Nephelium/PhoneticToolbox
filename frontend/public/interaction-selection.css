@@ -1,0 +1,11 @@
+/* Only controls and drawing surfaces opt out; ordinary text remains selectable. */
+:is(button,summary,[role="button"],[role="tab"],[role="option"],[role="separator"],[role="img"],[data-no-text-selection],svg,canvas,img),
+:is(button,summary,[role="button"],[role="tab"],[role="option"],[role="separator"],[role="img"],[data-no-text-selection],svg) * {
+  -webkit-user-select:none;
+  user-select:none;
+}
+/* Keep a gesture that started on a plot/control from selecting adjacent text. */
+html[data-ptb-selection-lock],html[data-ptb-selection-lock] * {
+  -webkit-user-select:none!important;
+  user-select:none!important;
+}
