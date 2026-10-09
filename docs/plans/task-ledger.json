@@ -5,13 +5,15 @@
     {
       "id": "GITHUB-SOURCE-SYNC",
       "title": "当前 v3 源码同步至 GitHub",
-      "status": "in_progress",
+      "status": "verified",
       "files": "当前已审阅工作树源码、必要资源、说明书工具、依赖目录和文档；停止跟踪两份论文 PDF 与两张无引用旧图；见本机明确文件清单",
       "verification_scope": "Windows current source, publication-boundary review, frontend/studio/desktop checks; existing codex/v3-rebuild branch only",
       "note": "用户明确授权 GitHub 更新及无用仓库内容清理。已 fetch 并核对起点一致，953 项受限素材无索引记录；3 处凭据扫描命中均为素材 ID。两份论文 PDF 及两张仅历史清单引用的旧图停止跟踪并保留本机，仍被回归/资源链引用的 v2 内容保留。文档和架构检查通过，前端 345、作者工具 38、桌面及源码/打包边界 363 passed/2 skipped，前端构建通过；暂存空白提示按报告保留。官网备案号已独立授权部署并回读核验。",
       "current_evidence": ["docs/testing/github-source-sync.md"],
       "local_evidence": "output/maintenance/github-sync/reviewed-files.json 及测试日志",
-      "remaining": ["提交明确清单并推送现有分支，核对远程提交身份", "完整科学/实体设备/跨平台/最终 EXE 未在本次重验"]
+      "source_commit": "795c2dc",
+      "remote_result": "已推送 origin/codex/v3-rebuild，git ls-remote 与本地提交一致；四项仓库移除对象不在提交树中且本机文件保留",
+      "remaining": ["完整科学/实体设备/跨平台/最终 EXE 未在本次重验"]
     },
     {
       "id": "P15-ICP-FOOTER",
