@@ -11857,18 +11857,18 @@
       "acknowledgement_group": "software",
       "authors": "作者提供；录音参与者身份不公开",
       "urls": {},
-      "actual_included_version": "2026-10-11 capture; input and image SHA-256 in docs/assets/readme/provenance.json",
+      "actual_included_version": "2026-10-12 Absolutely light capture; input and image SHA-256 in docs/assets/readme/provenance.json",
       "used_at": [
         "README.md",
         "docs/assets/readme/README.md",
         "docs/assets/readme/provenance.json"
       ],
-      "evidence": "本次用户明确要求配图使用真实音频，并指定本机语句、TextGrid 与 EGG 输入；本机审计保存来源映射，公开文档仅存通用名称、摘要与静态截图。",
+      "evidence": "用户明确要求GitHub README展示全部模块，并可使用正式说明书素材；统一Absolutely日间配色。当前Windows工作台使用正式说明书自然语音/EGG及公开字表，公开候选仅有静态界面截图和匿名输入摘要。",
       "license": "本次指示允许制作 GitHub 主页配图，不构成原始录音或 TextGrid 的公开再分发许可；未赋予素材开放许可证。",
       "distribution_status": "documentation-screenshots-only; raw-inputs-private",
       "relationship": "user-supplied-natural-recordings-to-actual-application-screenshots",
-      "modifications": "仅在临时副本中使用通用文件名；输入字节保持不变。应用实际计算波形、语谱图、LPC 与 EGG，截图未经裁剪、缩放或重绘。",
-      "verification_date": "2026-10-11",
+      "modifications": "正式说明书音频仅复制到任务临时目录并使用通用文件名；字节不变。TextGrid为本次编写的单层示例。工作台实际计算与加载后截图，图片原字节复制，无裁剪、缩放或重绘。",
+      "verification_date": "2026-10-12",
       "show_in_acknowledgements": false,
       "show_in_license_notice": false,
       "unresolved_items": [

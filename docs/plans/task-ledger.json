@@ -17,7 +17,17 @@
       "remote_result": "已推送 origin/codex/v3-rebuild，git ls-remote 与本地提交一致；四项仓库移除对象不在提交树中且本机文件保留",
       "remaining": [
         "完整科学/实体设备/跨平台/最终 EXE 未在本次重验"
-      ]
+      ],
+      "current_review": {
+        "date": "2026-10-12",
+        "remote_main": "8cf5c5396fcab63cf431c69b2cb4712af6a12430",
+        "business_source_last_synced": "795c2dc",
+        "working_changes_at_review_start": {
+          "tracked_modified": 279,
+          "untracked_files": 263
+        },
+        "scope": "Current remote-tree audit only; yesterday business changes remain local. Two root convenience CMD files excluded from index and ignored locally, original files retained; removal pending authorized push. Historical verified status refers to October 9 source synchronization."
+      }
     },
     {
       "id": "P15-ICP-FOOTER",
@@ -1416,32 +1426,35 @@
     {
       "id": "DOCS-GITHUB-HOMEPAGE",
       "title": "GitHub 图文主页与模块文档入口",
-      "status": "verified",
-      "files": "README.md; docs/README.md; docs/assets/readme; docs/testing/github-readme.md; third_party/source-registry.json; docs/project-status.md; docs/plans/task-ledger.json",
-      "note": "根 README 图文主页与18个模块入口已整理。六张原始 Qt 截图使用用户本次指定的真实语句录音、原始 TextGrid 和双声道 EGG；不含合成音频或公开原始语料。远端只读核对 main=v2、codex/v3-rebuild=v3、v2.1.4 标签保留。",
-      "verification_scope": "Windows 实际 Qt M01/LPC/EGG/原TextGrid计算与加载；原件哈希不变；六张未编辑截图；18模块README及75个文档本地引用（根README 44个）；1200/390宽度本地GFM渲染、六图解码/无页面溢出/有效锚点；UI data --check通过。独立scratch退出后安全清理成功。",
-      "remaining": [],
+      "status": "in_progress",
+      "files": "README.md; .gitignore; docs/assets/readme; docs/manual/ipa-content-authoring.md; docs/testing/github-readme.md; docs/testing/github-source-sync.md; third_party/source-registry.json; docs/project-status.md; docs/plans/task-ledger.json; two root CMD index exclusions",
+      "note": "按2026-10-12最新要求展示全部18模块，统一Absolutely浅色。复用说明书正式示例素材并重新采集实际工作台；两个根目录本机快捷启动CMD停止Git跟踪，文件保留本机。核查远端main为8cf5c53，10月11日提交仅为主页、截图和检查记录，当前积累代码尚未同步。",
+      "verification_scope": "Windows实际Qt源码工作台18模块、首页及设置的20张Absolutely/light未编辑截图；正式说明书原音频摘要不变；实际声学、LPC、EGG、F0与公开字表结果；截图字节摘要一致；论文实际全屏无本机路径；1200/390独立Chrome本地GFM渲染、21图解码、18模块链接、56本地引用、有效锚点且无横向溢出；文档验证1953文件、415来源、88任务零错误；七轮scratch退出后按归属清理成功。",
+      "remaining": [
+        "公开推送至main需明确授权；本地主页候选已完成，其他未提交业务改动未包含"
+      ],
       "outside_verified_scope": [
-        "未提交、push、上传或修改默认分支；GitHub实际页面未发布验收",
         "未重新构建应用；截图不代表科研准确率、物理设备或跨平台验收"
       ],
       "evidence": [
         "docs/testing/github-readme.md",
         "docs/assets/readme/provenance.json",
-        "output/validation/readme-homepage/render-report.json"
+        "docs/testing/github-source-sync.md",
+        "output/playwright/readme-absolutely/render-report.json",
+        "output/maintenance/readme-absolutely-update/reviewed-files.json"
       ]
     },
     {
       "id": "GIT-V3-MAIN",
       "title": "v2 分支保留、v3 主分支与图文主页发布",
-      "status": "in_progress",
+      "status": "verified",
       "files": "AGENTS.md; README.md; docs/development/repository-hygiene.md; docs/testing/github-source-sync.md; docs/testing/github-readme.md; docs/assets/readme; docs/project-status.md; docs/plans/task-ledger.json; third_party/source-registry.json",
-      "note": "用户明确授权保留 v2 为独立分支，让 v3 使用默认 main，上传本轮图文主页，保留旧版本及标签，并记录以后 v3 上传 main 的持续约定。只提交本轮文档与配图，其他并行业务改动留在工作树。",
-      "verification_scope": "提交清单和公开素材审阅；Git commit ancestry；远端分支/默认分支/旧标签/Release及附件身份；README和配图回读；本机工作树与上游映射。",
-      "remaining": [
-        "保留远端 v2、调整本地分支和上游",
-        "上传明确的图文/规则提交并核对 GitHub 页面",
-        "将持续分支约定写入项目规则与用户要求的记忆更新"
+      "note": "远端 v2 保留原 main 的 4eeff893；v3 图文提交 e3f0e7c 已以快进方式推送 main 并设为默认。旧 codex/v3-rebuild、11 个标签、7 个 Release 与7个附件身份保持不变。v3跟踪origin/main，v2跟踪origin/v2，v2工作树文件和差异不变。长期约定已写入根规则、仓库边界文档及用户要求的记忆更新。",
+      "verification_scope": "GitHub API/ls-remote回读默认分支、提交、旧标签/Release/附件、README/AGENTS/六PNG摘要；v2前后status和diff摘要相同；仅18项文档及公开截图提交。",
+      "remaining": [],
+      "evidence": [
+        "docs/testing/github-source-sync.md",
+        "output/maintenance/github-main-transition/after-publish.json"
       ]
     }
   ],

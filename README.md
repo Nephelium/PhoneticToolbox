@@ -12,7 +12,7 @@
 
 PhoneticToolbox 面向语言学、实验语音学的研究与教学。十八个工具共用侧栏、标签页、设置、文件操作和使用说明。从录音出发，可以查看波形与语谱图、提取参数、整理标注，再进入语音合成、音系分析或感知实验。
 
-![PhoneticToolbox 3.0.0 的工作台首页，按分析与采集、合成与操控、标注与实验、文献与学习组织十八个工具](docs/assets/readme/release-300-home.png)
+![PhoneticToolbox 3.0.0 的工作台首页，按分析与采集、合成与操控、标注与实验、文献与学习组织十八个工具](docs/assets/readme/absolutely-home.png)
 
 ## 下载与开始使用
 
@@ -50,32 +50,6 @@ PhoneticToolbox 面向语言学、实验语音学的研究与教学。十八个�
 
 波形、语谱图、参数轨迹与 TextGrid 在相应工具中共享时间位置。可以从整段录音定位到局部选区，核对标签与信号，再保存所需的数值和图片。MFA 的自动对齐结果可交给 TextGrid 标注工具人工复核。
 
-### 查找、输入和说明音标
-
-**国际音标表Plus**提供 IPA、extIPA 与 VoQS 三套表，支持符号、名称和码位检索，查看符号介绍、输入文本及保存草稿。音标字体随应用提供，便于标注、写作与课堂演示。音标演示媒体仍在持续制作，当前可用内容以界面为准。
-
-![PhoneticToolbox 3.0.0 的国际音标表Plus，展示交互式 IPA 表与文本编辑区](docs/assets/readme/release-300-ipa.png)
-
-### 把汉字与读音放在一起
-
-**汉字转国际音标**实时显示字音对照，提供转换标准、多音字选读、儿化组合和结果排版。可调整字音字号、颜色、间距与对齐，再保存为 PNG。转换在本机进行，多音字需人工选读音，工具不自动处理语流变调。
-
-![PhoneticToolbox 3.0.0 的汉字转国际音标，展示本地文本转换与字音对照排版](docs/assets/readme/release-300-mandarin.png)
-
-### 从声道构形观察发音
-
-**生理参数合成**将发音器官、声道面积与传递函数放在同一工作区。可以从预设构形开始，调整器官参数，比较截面与声学变化，再用关键帧组织发音动作、试听或保存同步视频。下图展示默认的 VTL `/a/` 构形及其模型计算结果，预设用于构形起点，普通话标准音仍需结合声学与听辨核对。
-
-![PhoneticToolbox 3.0.0 的生理参数合成，展示默认声道构形、面积函数、传递函数和器官参数](docs/assets/readme/release-300-vocal.png)
-
-### 调整工作台外观与设置
-
-设置分为外观、字体、图标、本机存储与自动清理四类。配色支持浅色、深色和跟随系统，可调整页面缩放、正文与图表字体、按钮高亮和波形颜色。侧栏及部分工具面板可以拖动调整宽度，偏好在本机保存。启动提示的图标与配色会随所选应用图标调整。
-
-![PhoneticToolbox 3.0.0 的外观设置，展示配色、深浅模式、页面缩放与波形颜色](docs/assets/readme/release-300-settings.png)
-
-本页当前应用截图由同一份 Windows 3.0.0 EXE 实际运行取得。采集方式、文件摘要和展示范围见[配图说明](docs/assets/readme/README.md)。
-
 ## 全部模块
 
 每个模块的独立 README 说明功能、输入输出、方法来源和验证范围。应用内说明书提供面向操作的图文步骤。
@@ -100,6 +74,130 @@ PhoneticToolbox 面向语言学、实验语音学的研究与教学。十八个�
 | 标注与实验 | [音系归纳](frontend/src/modules/phonology-induction/README.md) | 调查字表、音系分析与同音字表 |
 | 标注与实验 | [感知实验](frontend/src/modules/perception/README.md) | 实验设计、配置与运行 |
 | 文献与学习 | [语音学论文精读](frontend/src/modules/paper-reading/README.md) | 论文库、PDF 阅读、译读对照与批注 |
+
+配图统一采用 **Absolutely 浅色配色**。点击图片可查看完整尺寸，采集来源见[配图说明](docs/assets/readme/README.md)。
+
+### 分析与采集
+
+#### 录音
+
+建立录音任务清单，查看音频与 EGG 声道，剪辑并保存需要的片段。
+
+![录音工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-recording.png)
+
+#### 唇形提取
+
+选择采集模式、设备与帧率，进行实时预览、录制及唇形分析。
+
+![唇形提取工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-lip-extraction.png)
+
+#### 参数估计
+
+查看波形与语谱图，选择声学参数，批量分析并关联 TextGrid。
+
+![参数估计工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-acoustic-analysis.png)
+
+#### 参数显示
+
+将不同参数分配到图窗，共享时间选区，比较轨迹并导出图像。
+
+![参数显示工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-parameter-display.png)
+
+#### EGG 信号分析
+
+联动查看音频、EGG、接触商和声门事件，在局部窗口核对波形。
+
+![EGG 信号分析工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-egg-analysis.png)
+
+#### LPC 谱图
+
+从波形选取短时片段，比较 LPC 包络与频谱，并参考标注定位。
+
+![LPC 谱图工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-lpc-analysis.png)
+
+### 合成与操控
+
+#### 声学参数合成
+
+提取并编辑 Klatt 参数轨迹，设置合成与淡入淡出参数。
+
+![声学参数合成工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-speech-synthesis.png)
+
+#### 生理参数合成
+
+调整发音器官，比较声道截面、面积函数与传递函数，再组织动态发音。
+
+![生理参数合成工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-vocal-tract.png)
+
+#### 发声类型合成
+
+比较源音与目标音的参数，生成不同插值位置的声音。
+
+![发声类型合成工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-phonation-synthesis.png)
+
+#### 变速变调
+
+在波形与基频轨迹上调整语速、音高和时长，试听并保存处理结果。
+
+![变速变调工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-pitch-manipulation.png)
+
+#### 语谱图转音频
+
+载入图片或音频频谱，用画笔编辑频谱，再重建声音。
+
+![语谱图转音频工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-spectrogram-to-audio.png)
+
+### 标注与实验
+
+#### 国际音标表Plus
+
+查询 IPA、extIPA 与 VoQS，查看符号介绍，输入音标并保存草稿。
+
+![国际音标表Plus工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-ipa-chart.png)
+
+#### 汉字转国际音标
+
+实时转换汉字读音，选择多音字与儿化形式，调整字音对照排版。
+
+![汉字转国际音标工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-mandarin-ipa.png)
+
+#### MFA 自动标注
+
+导入音频和已有转写，检查模型与词典，将强制对齐结果保存为 TextGrid。
+
+![MFA 自动标注工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-mfa-alignment.png)
+
+#### TextGrid 标注
+
+对照音频波形编辑标注层、区间边界与标签，并关联唇形数据。
+
+![TextGrid 标注工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-textgrid-annotation.png)
+
+#### 音系归纳
+
+导入调查字表，整理调类、声韵与音位，生成两种排列的同音字表和二维表。
+
+![音系归纳工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-phonology-induction.png)
+
+#### 感知实验
+
+导入刺激，选择实验范式，设置呈现与响应流程，保存实验配置。
+
+![感知实验工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-perception-experiment.png)
+
+### 文献与学习
+
+#### 语音学论文精读
+
+管理本机论文库，阅读 PDF 与译读内容，添加高亮、批注和笔记。
+
+![语音学论文精读工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-paper-reading.png)
+
+### 工作台设置
+
+外观、字体、图标、本机存储与自动清理集中在设置中。配色支持浅色、深色和跟随系统，页面缩放、正文与图表字体、按钮高亮和波形颜色可按需要调整。
+
+![工作台设置，选用 Absolutely 浅色配色](docs/assets/readme/absolutely-settings.png)
 
 ## MFA 独立组件
 

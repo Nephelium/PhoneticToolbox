@@ -4,13 +4,13 @@
 
 ## 当前可用范围
 
-GitHub 主线切换：`GIT-V3-MAIN` 正在按本次授权保留 v2 独立分支、将 v3 设为默认 main 并上传图文主页。长期目标已写入根规则，远端完成状态以[源码同步报告](testing/github-source-sync.md)为准。
+GitHub 主线：`GIT-V3-MAIN` 为 `verified`。默认 `main` 已承载 v3，v2 原 main 保留在独立 `v2` 分支，两个工作树分别跟踪 `origin/main` 和 `origin/v2`。旧 codex 分支、11 个标签、7 个历史 Release 及附件完整保留，图文主页已上传，见[源码同步报告](testing/github-source-sync.md)。
 
-GitHub 图文主页：`DOCS-GITHUB-HOMEPAGE` 在本机文档范围内为 `verified`。根 README 已整理为访客入口，包含全部18个模块 README 与6张真实 Qt 配图，使用本次指定的真人录音、原始 TextGrid 和双声道 EGG 数据。输入原件哈希不变，图片来源登记、本地文件引用、1200/390宽度渲染及生成数据一致性通过，临时副本已清理。未提交、上传、切换分支或重打应用，详见[检查报告](testing/github-readme.md)。
+GitHub 图文主页：`DOCS-GITHUB-HOMEPAGE` 按最新要求补齐18模块配图，统一使用Absolutely浅色。示例输入采用正式说明书中的自然语音与EGG，TextGrid为本次编写的单层示例；唇形图展示采集准备界面，没有启动摄像头或麦克风。首页与设置一并统一配色。两个根目录本机快捷启动CMD已停止Git跟踪，本机文件保留；本轮20张图的本地采集、来源核对和1200/390宽度排版检查通过，公开main仍为8cf5c53，尚未上传。范围见[检查报告](testing/github-readme.md)。
 
 静态官网备案展示：已按授权更新 `www.phonetictoolbox.com` 首页，展示用户提供的 `黑ICP备2024017318号` 及工信部查询链接。1440/390/320 宽度本地浏览器检查、公网 HTTPS 200 与文件摘要一致性检查通过，`P15-ICP-FOOTER` 为 `verified`。公安联网备案待办理，备案系统中的域名对应关系尚未独立核实。
 
-GitHub 源码同步：当前工程已按授权以源码提交 `795c2dc` 推送至既有 `codex/v3-rebuild` 分支，远程提交身份已核对。两份下载论文及两张无引用旧图已从当前分支移除，本机保留，详见[同步记录](testing/github-source-sync.md)。本次范围不包括软件发行包或主分支合并。
+GitHub 源码同步：10月9日已授权的源码同步提交为 `795c2dc`，随后随v3主线进入main。2026-10-12核查时，公开main与本地HEAD同为 `8cf5c53`，10月11日只同步主页、图片及检查文档；同期业务改动仍在本机工作树。此次主页候选单独审阅，未提交的业务代码未包含，详见[同步记录](testing/github-source-sync.md)。
 
 Windows 工作台的 18 个模块均已有实现和限定范围的验证。公共侧栏、标签、主题、设置、文件授权、托管任务、说明书和来源入口已经接通。完整科学准确性、设备兼容性、所有交互组合和全平台发行仍须分别验收，菜单存在或专项 verified 都不代表这些项目全部完成。
 

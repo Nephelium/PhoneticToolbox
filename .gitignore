@@ -99,6 +99,9 @@ playwright-report/
 /docs/history/
 /.playwright-cli/
 /papers/
+# Local convenience launchers stay on the author's machine.
+/打开语音学论文精读.cmd
+/打开音标内容编辑器.cmd
 # Unreferenced legacy illustrations retained locally, excluded from v3 source.
 /PT.png
 /image/ARCHITECTURE/1776325135506.png

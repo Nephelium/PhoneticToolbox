@@ -1,112 +1,332 @@
 {
   "current_readme": {
-    "captured_on": "2026-10-11T14:52:36.730Z",
-    "executable": {
-      "name": "PhoneticToolbox-windows-x64.exe",
-      "version": "3.0.0",
-      "bytes": 496815155,
-      "sha256": "162c8fa542b7b3b1203ce535e3021235e261f0dfaeb095659f9946baec055edb"
-    },
-    "source_snapshot_sha256": "3d1fd7bb865ca389df96ca0b90a3a39327267e90ca76df3fd01abc30e4ffa880",
-    "capture": "Actual packaged Windows EXE; isolated windows Qt process; its own CDP application target; webview viewport 1600 x 1050 CSS pixels, DPR 1.5; UI page zoom 120%; original PNG bytes without cropping, scaling or retouching",
-    "private_research_inputs": false,
-    "demonstration_text": "语音学工具箱\n采集、分析、标注、合成\n普通话国际音标",
-    "screenshots": [
+    "captured_on": "2026-10-12",
+    "capture": "Actual Windows Qt current source workbench; isolated profile, task database and cache; original complete screenshots, copied byte for byte",
+    "source_kind": "current-source-workbench",
+    "theme": "light",
+    "palette": "absolutely",
+    "private_research_inputs": true,
+    "raw_inputs_published": false,
+    "source_inputs": [
       {
-        "file": "release-300-home.png",
-        "module": "home",
-        "description": "Unified eighteen-module workbench; W1 default application icon; Everforest light",
-        "bytes": 433298,
-        "sha256": "960e3ae5ba1ef9090e2552afd2371610b8eb354c2e041e762097f0eb1189d482",
-        "width": 2400,
-        "height": 1575,
-        "viewport": {
-          "width": 1600,
-          "height": 1050
-        },
-        "dpr": 1.5,
-        "pageScale": 1.2,
-        "theme": "light",
-        "palette": "everforest"
+        "name": "语句示例.wav",
+        "sha256": "d6981c40c85a45c824238cba2a29d20d4332330112afa57611b12be7cb49c3b2",
+        "bytes": 1014812,
+        "transform": "byte-identical copy; anonymous filename",
+        "frames": 253692,
+        "sampleRate": 48000,
+        "channels": 2,
+        "seconds": 5.28525
       },
       {
-        "file": "release-300-ipa.png",
-        "module": "M17",
-        "description": "Actual interactive IPA chart and text editor; Catppuccin dark; no media playback",
-        "bytes": 423886,
-        "sha256": "0cdabdcde1dabf886aba0e4d216692339f73e8351094cf5e8929a91eeb1fa855",
-        "width": 2400,
-        "height": 1575,
-        "viewport": {
-          "width": 1600,
-          "height": 1050
-        },
-        "dpr": 1.5,
-        "pageScale": 1.2,
-        "theme": "dark",
-        "palette": "catppuccin"
+        "name": "语句示例.TextGrid",
+        "sha256": "4cb3456aad2872e22f71dca62d2bd7d42be394f76c7a5e0bca94114a167230ff",
+        "bytes": 149,
+        "transform": "Task-authored single-tier demonstration annotation, generic filename; not an original detailed phonetic annotation"
       },
       {
-        "file": "release-300-mandarin.png",
-        "module": "M13",
-        "description": "Local conversion of task-authored generic demonstration text; Rose Pine light; default conversion standard",
-        "bytes": 393362,
-        "sha256": "76e3db0f06b05b1f0ad0a54113b85c715dea21272296f9d93a3e4699933c390a",
-        "width": 2400,
-        "height": 1575,
-        "viewport": {
-          "width": 1600,
-          "height": 1050
-        },
-        "dpr": 1.5,
-        "pageScale": 1.2,
-        "theme": "light",
-        "palette": "rose-pine"
+        "name": "EGG示例.wav",
+        "sha256": "99091c2bfa40698e1d9e7ca35498eb826bacbe8f5756512534e15d82d2a23ce1",
+        "bytes": 27261998,
+        "transform": "byte-identical copy; anonymous filename",
+        "frames": 3406696,
+        "sampleRate": 44100,
+        "channels": 2,
+        "seconds": 77.24934240362812
       },
       {
-        "file": "release-300-vocal.png",
-        "module": "M10",
-        "description": "Actual default VTL /a/ configuration, vocal tract, area function and transfer function; Solarized light; 129 sections; no playback or private input",
-        "bytes": 582760,
-        "sha256": "0fcb8af64b44d0bf00473146928cac922a7510fe8dc3efa67a60f1efed1a25b8",
-        "width": 2400,
-        "height": 1575,
-        "viewport": {
-          "width": 1600,
-          "height": 1050
-        },
-        "dpr": 1.5,
-        "pageScale": 1.2,
-        "theme": "light",
-        "palette": "solarized",
-        "model": {
-          "engineState": "ready",
-          "posePending": "false",
-          "sections": 129,
-          "resonances": "F1 633F2 1137F3 2695",
-          "geometricArea": "2.1901419134818134"
-        }
+        "name": "目标单音.wav",
+        "sha256": "22a64bbd09a1535feac791676546c145cebcdb4cbf3e4668a1e16083972d40b3",
+        "bytes": 62964,
+        "transform": "byte-identical copy; anonymous filename",
+        "frames": 31460,
+        "sampleRate": 44100,
+        "channels": 1,
+        "seconds": 0.7133786848072562
       },
       {
-        "file": "release-300-settings.png",
-        "module": "settings",
-        "description": "Appearance settings with palette, theme mode, page zoom and waveform colour; Tokyo Night dark",
-        "bytes": 386980,
-        "sha256": "6f26be09d1596552b3cb94be66ff0c5aa2dcf8768bc6b7b6bdeb6be4ea2bf61c",
-        "width": 2400,
-        "height": 1575,
-        "viewport": {
-          "width": 1600,
-          "height": 1050
-        },
-        "dpr": 1.5,
-        "pageScale": 1.2,
-        "theme": "dark",
-        "palette": "tokyo-night"
+        "name": "源单音.wav",
+        "sha256": "0d50b1834d6073e0d17b7ca04c86387a25d12196258a51c8c3ccbe1e3d80493f",
+        "bytes": 21552,
+        "transform": "byte-identical copy of formal manual single-original.wav; anonymous filename"
+      },
+      {
+        "name": "公开调查字表.xlsx",
+        "sha256": "12c0283a29d44df53c7088d36c698537fb4479b5a25ad1277434f13ceef17004",
+        "bytes": 5367,
+        "transform": "Existing public example; raw input excluded from this publication candidate"
+      },
+      {
+        "name": "公开协同发音论文示例.pdf",
+        "sha256": "7b3a2b865becaabd3b027533f4a8ce03d8047a7fec012d30c3b853eec376af54",
+        "bytes": 813444,
+        "transform": "Existing public example; raw input excluded from this publication candidate"
       }
     ],
-    "scope": "Five original screenshots from one final Windows 3.0.0 R7 executable, with built-in default content and task-authored generic text. Demonstrates visible UI and loaded default model only; no scientific accuracy, audio playback, physical device, or other-platform guarantee.",
-    "build_candidate": "R7"
+    "screenshots": [
+      {
+        "file": "absolutely-home.png",
+        "module": "home",
+        "description": "Unified eighteen-module current Windows workbench; Absolutely light",
+        "bytes": 360071,
+        "sha256": "b343c4f176944d4a9a0c066f68e80392f69d147b2b8096cab46799c0fe046719",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-acoustic-analysis.png",
+        "module": "M01",
+        "description": "M01: real natural speech, task-authored demonstration TextGrid, actual Praat F0/F1/F2 task and spectrogram",
+        "bytes": 623841,
+        "sha256": "e770d2430d84e40bf2685b4c43bf10db299a11c06670d26c6abbb09b9510ce96",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-parameter-display.png",
+        "module": "M02",
+        "description": "M02: one actual plot window containing three analyzed parameter curves; empty plot removed through its normal UI",
+        "bytes": 417642,
+        "sha256": "c491472c2ff1928475cc59d3dea77bba9e6b7ad7f188f2802b8e6282136a29b8",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-lpc-analysis.png",
+        "module": "M04",
+        "description": "M04: actual LPC spectrum, 1.80–1.95 s natural speech",
+        "bytes": 364325,
+        "sha256": "007a870d021fc52bfce6f5c0943c289471ff26736497d2cf23d408e266505efa",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-egg-analysis.png",
+        "module": "M03",
+        "description": "M03: formal manual EGG stereo original, continuous voiced 40–41 s, actual CQ/SQ and microscopic waveforms",
+        "bytes": 711580,
+        "sha256": "7a817eeb16855c74acdbe3db952219f1f9a670bbd5643edc9338fd1cfd2ff838",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-textgrid-annotation.png",
+        "module": "M12",
+        "description": "M12: natural speech and task-authored single-tier demonstration TextGrid",
+        "bytes": 599447,
+        "sha256": "792afa78309de91b5756f2dc44b607bdad18c8a9fa4277e8c36e97e269001c2d",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-speech-synthesis.png",
+        "module": "M06",
+        "description": "M06: actual Klatt parameter extraction from natural speech; editable tracks, natural manual demonstration input",
+        "bytes": 422999,
+        "sha256": "14381a2e611f1e36f6bb820674b30788241de1f8d1b5eba82648f31374e21de9",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-phonation-synthesis.png",
+        "module": "M07",
+        "description": "M07: F0 extracted from two natural speech recordings for source and target comparison",
+        "bytes": 507907,
+        "sha256": "d2d9a7dbe8df8e1b1c50a5d6ec29dd2b0a8eb40f9acfea04ab932d0ab409536e",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-pitch-manipulation.png",
+        "module": "M08",
+        "description": "M08: natural speech waveform and actual pitch track in time/pitch editor",
+        "bytes": 410597,
+        "sha256": "58dcf680d083045ec6b11442fada5a6c9df3f83f667e13312875f872bea48984",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-spectrogram-to-audio.png",
+        "module": "M09",
+        "description": "M09: spectrogram from natural speech loaded in spectral editing canvas",
+        "bytes": 622266,
+        "sha256": "747ce02a268591e3d1e4f80dfdb63bfab8a8b477159efe594271de1091b7ddd6",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-vocal-tract.png",
+        "module": "M10",
+        "description": "M10: native vocal tract geometry with articulator controls; no synthetic audio example",
+        "bytes": 587890,
+        "sha256": "d32164b9e24542686a36c848717c467d9b4a76f26194c21571d2a064f796cc94",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-lip-extraction.png",
+        "module": "M05",
+        "description": "M05: acquisition mode and device controls; camera and microphone remain idle",
+        "bytes": 296189,
+        "sha256": "0ed75d15a0a4be5ce9bcdf4f9ef381f3ea14c86418f721d483bd345193db5a3e",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-mfa-alignment.png",
+        "module": "M11",
+        "description": "M11: natural speech and existing transcript imported, official resources and independent component installation UI",
+        "bytes": 410479,
+        "sha256": "20c85fa946681525c1005ddee2072e0919d091554538f3c4e10147b96a43dc46",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-mandarin-ipa.png",
+        "module": "M13",
+        "description": "M13: genuine Hanzi to IPA conversion results",
+        "bytes": 305965,
+        "sha256": "5720fab3666f8ae1615a9807f2f3b88d3b76315329d2f9b1f615d08559d2f508",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-ipa-chart.png",
+        "module": "M17",
+        "description": "M17: interactive IPA chart and symbol input",
+        "bytes": 393595,
+        "sha256": "62de9926761e83969111c7a84b28e2761e401ed5629cb4614983c8ae8b92f8fc",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-phonology-induction.png",
+        "module": "M14",
+        "description": "M14: real public survey fixture, tone/segment settings and three actual generated documents",
+        "bytes": 349265,
+        "sha256": "f1d8a06291b418e28d830c01441227d8340b3cef08e74f7b7b0bb283f1068ee3",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-perception-experiment.png",
+        "module": "M15",
+        "description": "M15: natural speech stimulus imported in experiment design; no participant run",
+        "bytes": 288019,
+        "sha256": "f54936c89c236a34c7fd26cd37b5889144f4f48ebd652ead18a7cf4300ffe4d3",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-recording.png",
+        "module": "M16",
+        "description": "M16: real native recording project and task list, microphone not started",
+        "bytes": 318933,
+        "sha256": "87620ae8870063124fbca028b633c6e942774a44fd26e7931906c3a53bbed50d",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-paper-reading.png",
+        "module": "M18",
+        "description": "M18: actual full-screen reader of existing public coarticulation paper; folder path outside the full-screen view",
+        "bytes": 725165,
+        "sha256": "d396ece6a1d132e8f78be1afd14a033b9708344a95f1a16e361026df8b2b2e35",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      },
+      {
+        "file": "absolutely-settings.png",
+        "module": "settings",
+        "description": "Appearance settings with Absolutely light selected",
+        "bytes": 307941,
+        "sha256": "34a8f9a002c95397e600da4cbbe8d15d36933f5bd14b024c2afc6610e5e80fa5",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "theme": "light",
+        "palette": "absolutely",
+        "pageScale": 1
+      }
+    ],
+    "scope": "All eighteen modules, home and appearance settings. Formal manual natural-audio examples; task-authored single-tier TextGrid; public phonology fixture; existing public-paper example. No camera or microphone acquisition. Current source UI evidence, separate from published R7 executable identity.",
+    "input_scope": "Authorized formal manual media used only to make static README screenshots; raw audio and annotation files are excluded from public Git"
   },
   "website_button": {
     "file": "website-button.svg",
@@ -208,5 +428,116 @@
       }
     ],
     "scope": "Actual Qt screenshots across two capture runs; image and input identities verified. No single frozen application or EXE identity asserted."
-  }
+  },
+  "previous_readmes": [
+    {
+      "captured_on": "2026-10-11T14:52:36.730Z",
+      "executable": {
+        "name": "PhoneticToolbox-windows-x64.exe",
+        "version": "3.0.0",
+        "bytes": 496815155,
+        "sha256": "162c8fa542b7b3b1203ce535e3021235e261f0dfaeb095659f9946baec055edb"
+      },
+      "source_snapshot_sha256": "3d1fd7bb865ca389df96ca0b90a3a39327267e90ca76df3fd01abc30e4ffa880",
+      "capture": "Actual packaged Windows EXE; isolated windows Qt process; its own CDP application target; webview viewport 1600 x 1050 CSS pixels, DPR 1.5; UI page zoom 120%; original PNG bytes without cropping, scaling or retouching",
+      "private_research_inputs": false,
+      "demonstration_text": "语音学工具箱\n采集、分析、标注、合成\n普通话国际音标",
+      "screenshots": [
+        {
+          "file": "release-300-home.png",
+          "module": "home",
+          "description": "Unified eighteen-module workbench; W1 default application icon; Everforest light",
+          "bytes": 433298,
+          "sha256": "960e3ae5ba1ef9090e2552afd2371610b8eb354c2e041e762097f0eb1189d482",
+          "width": 2400,
+          "height": 1575,
+          "viewport": {
+            "width": 1600,
+            "height": 1050
+          },
+          "dpr": 1.5,
+          "pageScale": 1.2,
+          "theme": "light",
+          "palette": "everforest"
+        },
+        {
+          "file": "release-300-ipa.png",
+          "module": "M17",
+          "description": "Actual interactive IPA chart and text editor; Catppuccin dark; no media playback",
+          "bytes": 423886,
+          "sha256": "0cdabdcde1dabf886aba0e4d216692339f73e8351094cf5e8929a91eeb1fa855",
+          "width": 2400,
+          "height": 1575,
+          "viewport": {
+            "width": 1600,
+            "height": 1050
+          },
+          "dpr": 1.5,
+          "pageScale": 1.2,
+          "theme": "dark",
+          "palette": "catppuccin"
+        },
+        {
+          "file": "release-300-mandarin.png",
+          "module": "M13",
+          "description": "Local conversion of task-authored generic demonstration text; Rose Pine light; default conversion standard",
+          "bytes": 393362,
+          "sha256": "76e3db0f06b05b1f0ad0a54113b85c715dea21272296f9d93a3e4699933c390a",
+          "width": 2400,
+          "height": 1575,
+          "viewport": {
+            "width": 1600,
+            "height": 1050
+          },
+          "dpr": 1.5,
+          "pageScale": 1.2,
+          "theme": "light",
+          "palette": "rose-pine"
+        },
+        {
+          "file": "release-300-vocal.png",
+          "module": "M10",
+          "description": "Actual default VTL /a/ configuration, vocal tract, area function and transfer function; Solarized light; 129 sections; no playback or private input",
+          "bytes": 582760,
+          "sha256": "0fcb8af64b44d0bf00473146928cac922a7510fe8dc3efa67a60f1efed1a25b8",
+          "width": 2400,
+          "height": 1575,
+          "viewport": {
+            "width": 1600,
+            "height": 1050
+          },
+          "dpr": 1.5,
+          "pageScale": 1.2,
+          "theme": "light",
+          "palette": "solarized",
+          "model": {
+            "engineState": "ready",
+            "posePending": "false",
+            "sections": 129,
+            "resonances": "F1 633F2 1137F3 2695",
+            "geometricArea": "2.1901419134818134"
+          }
+        },
+        {
+          "file": "release-300-settings.png",
+          "module": "settings",
+          "description": "Appearance settings with palette, theme mode, page zoom and waveform colour; Tokyo Night dark",
+          "bytes": 386980,
+          "sha256": "6f26be09d1596552b3cb94be66ff0c5aa2dcf8768bc6b7b6bdeb6be4ea2bf61c",
+          "width": 2400,
+          "height": 1575,
+          "viewport": {
+            "width": 1600,
+            "height": 1050
+          },
+          "dpr": 1.5,
+          "pageScale": 1.2,
+          "theme": "dark",
+          "palette": "tokyo-night"
+        }
+      ],
+      "scope": "Five original screenshots from one final Windows 3.0.0 R7 executable, with built-in default content and task-authored generic text. Demonstrates visible UI and loaded default model only; no scientific accuracy, audio playback, physical device, or other-platform guarantee.",
+      "build_candidate": "R7"
+    }
+  ]
 }
