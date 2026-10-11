@@ -1,91 +1,212 @@
 {
-  "captured_on": "2026-10-11",
-  "source_id": "DOC-README-NATURAL-AUDIO",
-  "capture": "Actual Windows Qt Workbench; 2561 x 1601 native pixels; DPR 1.5; page zoom 1; no cropping, scaling, retouching or synthetic audio",
-  "source_inputs": [
-    {
-      "name": "语句示例.wav",
-      "sha256": "b4185d7b488330a7d7e200cd051dbcb8bacc8b7df111d246c05a307dce5336fe",
-      "bytes": 824080,
-      "transform": "byte-identical copy; anonymous filename",
-      "frames": 206009,
-      "sampleRate": 44100,
-      "channels": 2,
-      "seconds": 4.67140589569161
+  "current_readme": {
+    "captured_on": "2026-10-11T14:52:36.730Z",
+    "executable": {
+      "name": "PhoneticToolbox-windows-x64.exe",
+      "version": "3.0.0",
+      "bytes": 496815155,
+      "sha256": "162c8fa542b7b3b1203ce535e3021235e261f0dfaeb095659f9946baec055edb"
     },
-    {
-      "name": "语句示例.TextGrid",
-      "sha256": "0fdacf9ef6c73d151b730d42cd3db7eecd82cc07f10b3872fa59b9ca94bd4619",
-      "bytes": 8310,
-      "transform": "byte-identical copy; anonymous filename"
-    },
-    {
-      "name": "EGG示例.wav",
-      "sha256": "cacce9835054f5a799774ee05c57f47a0e90dd96ee14df820529a74cffa83ab7",
-      "bytes": 5181138,
-      "transform": "byte-identical copy; anonymous filename",
-      "frames": 646699,
-      "sampleRate": 44100,
-      "channels": 2,
-      "seconds": 14.66437641723356
-    }
-  ],
-  "originals_unchanged": true,
-  "screenshots": [
-    {
-      "name": "home",
-      "description": "Unified workbench with all eighteen modules",
-      "width": 2561,
-      "height": 1601,
-      "dpr": 1.5,
-      "sha256": "f0cb26349f6f0206a5c42623571469956c6790deeb84436882f876b554b70a3c",
-      "file": "home.png"
-    },
-    {
-      "name": "acoustic-analysis",
-      "description": "User-authorized natural speech: actual waveform, spectrogram, original TextGrid and completed F0/F1/F2 task",
-      "width": 2561,
-      "height": 1601,
-      "dpr": 1.5,
-      "sha256": "186818aedf211ba77c57a11848793d88eb9f052b04eb8035ce7c88fe04cd2318",
-      "file": "acoustic-analysis.png"
-    },
-    {
-      "name": "lpc-analysis",
-      "description": "Actual LPC result from 1.80–1.95 seconds of the same natural recording",
-      "width": 2561,
-      "height": 1601,
-      "dpr": 1.5,
-      "sha256": "7053b022cf763d8f1605a561f828ab30de3d6b338384ab77874c39c251cc2e4a",
-      "file": "lpc-analysis.png"
-    },
-    {
-      "name": "textgrid-annotation",
-      "description": "Natural speech and its unmodified original TextGrid labels",
-      "width": 2561,
-      "height": 1601,
-      "dpr": 1.5,
-      "sha256": "b83588263bfdb873e55adee51c5d42d5d1f791c639f4676dfce881a1282e1a63",
-      "file": "textgrid-annotation.png"
-    },
-    {
-      "name": "egg-analysis",
-      "description": "Actual stereo EGG and speech recording: 3.00–3.50 s analysis",
-      "width": 2561,
-      "height": 1601,
-      "dpr": 1.5,
-      "sha256": "ffe87f2cd35ef4655ae2e47c782dc6c9858b926c0cdc355bd7b8b35a2c56cd85",
-      "file": "egg-analysis.png"
-    },
-    {
-      "name": "ipa-chart",
-      "description": "Interactive phonetic alphabet table; no audio synthesis",
-      "width": 2561,
-      "height": 1601,
-      "dpr": 1.5,
-      "sha256": "62d54e6174ece6b6ccf966f2606bbff33ffab21628f1e28dca164e0eaa8c7a92",
-      "file": "ipa-chart.png"
-    }
-  ],
-  "scope": "Actual Qt screenshots across two capture runs; image and input identities verified. No single frozen application or EXE identity asserted."
+    "source_snapshot_sha256": "3d1fd7bb865ca389df96ca0b90a3a39327267e90ca76df3fd01abc30e4ffa880",
+    "capture": "Actual packaged Windows EXE; isolated windows Qt process; its own CDP application target; webview viewport 1600 x 1050 CSS pixels, DPR 1.5; UI page zoom 120%; original PNG bytes without cropping, scaling or retouching",
+    "private_research_inputs": false,
+    "demonstration_text": "语音学工具箱\n采集、分析、标注、合成\n普通话国际音标",
+    "screenshots": [
+      {
+        "file": "release-300-home.png",
+        "module": "home",
+        "description": "Unified eighteen-module workbench; W1 default application icon; Everforest light",
+        "bytes": 433298,
+        "sha256": "960e3ae5ba1ef9090e2552afd2371610b8eb354c2e041e762097f0eb1189d482",
+        "width": 2400,
+        "height": 1575,
+        "viewport": {
+          "width": 1600,
+          "height": 1050
+        },
+        "dpr": 1.5,
+        "pageScale": 1.2,
+        "theme": "light",
+        "palette": "everforest"
+      },
+      {
+        "file": "release-300-ipa.png",
+        "module": "M17",
+        "description": "Actual interactive IPA chart and text editor; Catppuccin dark; no media playback",
+        "bytes": 423886,
+        "sha256": "0cdabdcde1dabf886aba0e4d216692339f73e8351094cf5e8929a91eeb1fa855",
+        "width": 2400,
+        "height": 1575,
+        "viewport": {
+          "width": 1600,
+          "height": 1050
+        },
+        "dpr": 1.5,
+        "pageScale": 1.2,
+        "theme": "dark",
+        "palette": "catppuccin"
+      },
+      {
+        "file": "release-300-mandarin.png",
+        "module": "M13",
+        "description": "Local conversion of task-authored generic demonstration text; Rose Pine light; default conversion standard",
+        "bytes": 393362,
+        "sha256": "76e3db0f06b05b1f0ad0a54113b85c715dea21272296f9d93a3e4699933c390a",
+        "width": 2400,
+        "height": 1575,
+        "viewport": {
+          "width": 1600,
+          "height": 1050
+        },
+        "dpr": 1.5,
+        "pageScale": 1.2,
+        "theme": "light",
+        "palette": "rose-pine"
+      },
+      {
+        "file": "release-300-vocal.png",
+        "module": "M10",
+        "description": "Actual default VTL /a/ configuration, vocal tract, area function and transfer function; Solarized light; 129 sections; no playback or private input",
+        "bytes": 582760,
+        "sha256": "0fcb8af64b44d0bf00473146928cac922a7510fe8dc3efa67a60f1efed1a25b8",
+        "width": 2400,
+        "height": 1575,
+        "viewport": {
+          "width": 1600,
+          "height": 1050
+        },
+        "dpr": 1.5,
+        "pageScale": 1.2,
+        "theme": "light",
+        "palette": "solarized",
+        "model": {
+          "engineState": "ready",
+          "posePending": "false",
+          "sections": 129,
+          "resonances": "F1 633F2 1137F3 2695",
+          "geometricArea": "2.1901419134818134"
+        }
+      },
+      {
+        "file": "release-300-settings.png",
+        "module": "settings",
+        "description": "Appearance settings with palette, theme mode, page zoom and waveform colour; Tokyo Night dark",
+        "bytes": 386980,
+        "sha256": "6f26be09d1596552b3cb94be66ff0c5aa2dcf8768bc6b7b6bdeb6be4ea2bf61c",
+        "width": 2400,
+        "height": 1575,
+        "viewport": {
+          "width": 1600,
+          "height": 1050
+        },
+        "dpr": 1.5,
+        "pageScale": 1.2,
+        "theme": "dark",
+        "palette": "tokyo-night"
+      }
+    ],
+    "scope": "Five original screenshots from one final Windows 3.0.0 R7 executable, with built-in default content and task-authored generic text. Demonstrates visible UI and loaded default model only; no scientific accuracy, audio playback, physical device, or other-platform guarantee.",
+    "build_candidate": "R7"
+  },
+  "website_button": {
+    "file": "website-button.svg",
+    "kind": "Static task-authored SVG, no external resources or active content",
+    "target": "https://www.phonetictoolbox.com/",
+    "alt": "访问软件官网 ↗",
+    "width": 300,
+    "height": 58,
+    "bytes": 888,
+    "sha256": "35ea337c69f4a79af075eed78ddf43225fd8ca3bc703c8b67fbea47dbc651ff3"
+  },
+  "historical_source_workbench": {
+    "captured_on": "2026-10-11",
+    "source_id": "DOC-README-NATURAL-AUDIO",
+    "capture": "Actual Windows Qt Workbench; 2561 x 1601 native pixels; DPR 1.5; page zoom 1; no cropping, scaling, retouching or synthetic audio",
+    "source_inputs": [
+      {
+        "name": "语句示例.wav",
+        "sha256": "b4185d7b488330a7d7e200cd051dbcb8bacc8b7df111d246c05a307dce5336fe",
+        "bytes": 824080,
+        "transform": "byte-identical copy; anonymous filename",
+        "frames": 206009,
+        "sampleRate": 44100,
+        "channels": 2,
+        "seconds": 4.67140589569161
+      },
+      {
+        "name": "语句示例.TextGrid",
+        "sha256": "0fdacf9ef6c73d151b730d42cd3db7eecd82cc07f10b3872fa59b9ca94bd4619",
+        "bytes": 8310,
+        "transform": "byte-identical copy; anonymous filename"
+      },
+      {
+        "name": "EGG示例.wav",
+        "sha256": "cacce9835054f5a799774ee05c57f47a0e90dd96ee14df820529a74cffa83ab7",
+        "bytes": 5181138,
+        "transform": "byte-identical copy; anonymous filename",
+        "frames": 646699,
+        "sampleRate": 44100,
+        "channels": 2,
+        "seconds": 14.66437641723356
+      }
+    ],
+    "originals_unchanged": true,
+    "screenshots": [
+      {
+        "name": "home",
+        "description": "Unified workbench with all eighteen modules",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "sha256": "f0cb26349f6f0206a5c42623571469956c6790deeb84436882f876b554b70a3c",
+        "file": "home.png"
+      },
+      {
+        "name": "acoustic-analysis",
+        "description": "User-authorized natural speech: actual waveform, spectrogram, original TextGrid and completed F0/F1/F2 task",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "sha256": "186818aedf211ba77c57a11848793d88eb9f052b04eb8035ce7c88fe04cd2318",
+        "file": "acoustic-analysis.png"
+      },
+      {
+        "name": "lpc-analysis",
+        "description": "Actual LPC result from 1.80–1.95 seconds of the same natural recording",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "sha256": "7053b022cf763d8f1605a561f828ab30de3d6b338384ab77874c39c251cc2e4a",
+        "file": "lpc-analysis.png"
+      },
+      {
+        "name": "textgrid-annotation",
+        "description": "Natural speech and its unmodified original TextGrid labels",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "sha256": "b83588263bfdb873e55adee51c5d42d5d1f791c639f4676dfce881a1282e1a63",
+        "file": "textgrid-annotation.png"
+      },
+      {
+        "name": "egg-analysis",
+        "description": "Actual stereo EGG and speech recording: 3.00–3.50 s analysis",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "sha256": "ffe87f2cd35ef4655ae2e47c782dc6c9858b926c0cdc355bd7b8b35a2c56cd85",
+        "file": "egg-analysis.png"
+      },
+      {
+        "name": "ipa-chart",
+        "description": "Interactive phonetic alphabet table; no audio synthesis",
+        "width": 2561,
+        "height": 1601,
+        "dpr": 1.5,
+        "sha256": "62d54e6174ece6b6ccf966f2606bbff33ffab21628f1e28dca164e0eaa8c7a92",
+        "file": "ipa-chart.png"
+      }
+    ],
+    "scope": "Actual Qt screenshots across two capture runs; image and input identities verified. No single frozen application or EXE identity asserted."
+  }
 }

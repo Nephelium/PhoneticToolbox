@@ -1,50 +1,51 @@
 # GitHub 图文 README 检查
 
-任务：`DOCS-GITHUB-HOMEPAGE`。日期：2026-10-11。状态：`verified`，限本机文档、真实界面配图与本地渲染。
+任务：`DOCS-GITHUB-HOMEPAGE`。日期：2026-10-11。状态：`verified`，限本机文档、最终 EXE 界面截图与本地渲染；远端发布验收待同步后补齐。
 
 ## 交付内容
 
-- 根 README 改为访客入口，包含工作台概览、真实录音分析、EGG、TextGrid、LPC、音标表、18 个模块链接、安装架构、MFA 独立组件与开发导航。
-- `docs/assets/readme/` 保存六张原始 Qt 截图、来源说明和 SHA-256 清单，共约 2.97 MB PNG。
-- 输入由用户在当前任务中明确指定。语句示例含同名原始 TextGrid，EGG 输入为真实双声道记录；WAV / TextGrid 仅复制并使用通用名称，字节保持一致。公开文档不含原始语料、参与者身份或私人绝对路径。
-- 来源登记 `DOC-README-NATURAL-AUDIO` 仅服务文档，不进入软件致谢或随包许可生成项。原始语料没有据此获得开放再分发许可。
+根 README 面向使用者介绍 3.0.0 工作台、Windows 下载与首次使用、研究流程、18 个模块、MFA 独立组件、帮助与反馈、数据保存及开发入口。官网入口采用本地静态 SVG 图片按钮，黄蓝配色与默认 W1 图标一致，不依赖动态图片服务。全文没有 HTML 折叠块。
+
+当前主页展示五张同一份最终 Windows EXE 的原始截图：工作台首页、国际音标表Plus、汉字转国际音标、生理参数合成和外观设置。截图与按钮位于 `docs/assets/readme/`，来源、尺寸和 SHA-256 见[配图说明](../assets/readme/README.md)及[来源摘要](../assets/readme/provenance.json)。此前六张源码工作台图片及其原有输入授权保留为历史证据，根 README 已改用新图。
+
+## 本次最终截图身份
+
+| 对象 | 已核对的值 |
+| --- | --- |
+| 应用 | `PhoneticToolbox-windows-x64.exe`，版本 3.0.0，本轮候选 R7 |
+| 文件大小 | 496,815,155 字节 |
+| 应用 SHA-256 | `162c8fa542b7b3b1203ce535e3021235e261f0dfaeb095659f9946baec055edb` |
+| 源码快照 SHA-256 | `3d1fd7bb865ca389df96ca0b90a3a39327267e90ca76df3fd01abc30e4ffa880` |
+| 采集环境 | Windows 实际 Qt 进程，任务独立 C 盘配置与缓存，仅连接该进程自己的 Qt WebEngine 应用目标 |
+| 页面与图片 | 1600 × 1050 CSS 像素视口，DPR 1.5，应用页面缩放 120%，原始 PNG 2400 × 1575 |
+| 图片总大小 | 五张 PNG 共 2,220,286 字节，无裁剪、缩放、拼贴或重绘 |
+| 输入 | 默认应用内容及本次编写的通用汉字示例，无私有研究数据、原始录音或私人路径 |
+
+M10 使用默认 VTL `/a/` 构形，模型状态为 `ready`，构形等待状态为 `false`，129 个截面已就绪。该图同时显示器官视图、面积函数、截面与传递函数。没有把模型默认构形写成标准普通话准确率验证，也没有将本轮截图视为音频试听结果。
 
 ## 已执行的检查
 
 | 项目 | 实际结果 |
 | --- | --- |
-| 模块入口 | 18 个注册模块均有独立 README，根 README 包含全部 18 个唯一链接 |
-| 真实 Qt 配图 | Windows Qt 原生工作台实际加载真人语句与 TextGrid，完成 pF0 / pF1 / pF2、LPC 与 EGG 交互分析；共六张最终 PNG，2561 × 1601，DPR 1.5、页面 100%；原始截图未裁剪或缩放 |
-| 来源一致性 | 三份输入的临时副本与原件 SHA-256 一致，结束后再次检查原件未变；最终输入和图片摘要见 provenance.json |
-| 本地 README 渲染 | 既有 marked + 独立无头 Chrome / Playwright 渲染 GFM，1200 px 与 390 px 两种宽度；6 张图均完整解码，无页面横向溢出，页内导航有效 |
-| 文件引用 | 根 README 的 44 个本地文件引用有效；含导航、来源和检查报告共核对 75 个本地文件引用，全部有效 |
-| 生成数据 | `node frontend/scripts/generate-ui-data.mjs --check` 通过，80 参数、391 个界面来源；隐藏的文档来源没有改变应用生成数据 |
-| 文本与仓库边界 | 新文档 UTF-8 无 BOM；配图目录仅含 PNG、Markdown、JSON；临时脚本和私有来源路径位于 Git 忽略的 output 中；无 `.github/README.md` 覆盖根 README |
-| 临时材料清理 | 截图进程退出后执行 `scripts/cleanup_test_scratch.ps1`，复核归属、联接与进程，三轮完成截图的 scratch 回执均为 deleted；不涉及原始资料 |
+| 截图采集 | 最终 EXE 正常启动，五个实际页面截图完成，进程正常退出，退出码 0 |
+| 原始图片 | 对公开目录副本与采集原图逐一核对 SHA-256 与字节大小，PNG 尺寸一致；已逐张目视检查 |
+| 模块入口 | 根 README 含 18 个唯一模块 README 链接，目标均存在 |
+| 本地 README 渲染 | 既有 marked、独立无头 Chrome 和 Playwright 渲染 GFM，1200 px 与 390 px 两种宽度均通过；完整页及顶部视图已目视检查 |
+| 图片与导航 | 五张 PNG 和一张 SVG 均完整解码；两种宽度无页面横向溢出；四个页内导航目标有效；无 HTML 折叠块 |
+| 官网按钮 | 静态 SVG 无脚本、事件处理器、foreignObject 或外部资源；图片替代文字为“访问软件官网 ↗”，点击目标为 `https://www.phonetictoolbox.com/` |
+| 文件引用 | 根 README 的 41 个本地文件引用均有效；连同配图说明与本报告，共复核 60 个本地引用，均存在 |
+| 组件说明 | 官网 MFA 3.3.8-r1 元数据可读，ZIP 为 812,556,132 字节，安装后为 2,805,971,894 字节；README 采用约 813 MB / 2.81 GB，并说明主包不包含 MFA、模型与词典 |
+| 文本与仓库边界 | 本次 Markdown、JSON、SVG 均为 UTF-8 无 BOM；公开候选仅包含 README、配图与必要来源/检查说明，采集脚本、配置、状态和预览留在忽略的 output 中 |
+| 运行缓存清理 | 截图进程退出后按实际归属清理其解包缓存，活动进程为 0，清理完成，无剩余启动目录；小型隔离配置保留在任务临时位置，未进入公开候选 |
 
 ## 本机证据与修正
 
-证据根目录为忽略的 `output/validation/readme-homepage/`，脚本、截图、输入摘要、渲染报告和清理回执保留在本机。
+- `output/validation/readme-release300/` 保存本轮采集脚本、最终采集报告、页面状态和缓存清理回执。成功采集报告中的应用身份、五张图片摘要及其原始字节已核对。
+- `output/playwright/readme-release300/` 保存本地预览、两种宽度的完整页与顶部截图、渲染报告。该目录被 Git 忽略。
+- 首轮截图脚本在插入多行示例文本时出现转义错误，已改为明确的 JSON 字符串编码；未修改业务代码。其所属进程结束并清理缓存后，最终一次采集完整成功。公开目录只采用成功运行的五张图片。
 
-- `local-audio-47cf3f673eb9447db52e4b518132dbb2/report.json`：六个真实界面状态及输入来源摘要，原件不变。
-- `m01-spectrogram-b6282c98a6854a0eb104ce0fbc348829/report.json`：M01 补开实际 Praat 语谱图，替换最终主页 M01 配图。
-- `render-report.json`：两种宽度、六张图片、模块入口和页内锚点结果；`preview.html` 与 `readme-1200.png` / `readme-390.png` 供本机预览。
-- 首次探索公开语音时，Python wave 不接受输入的浮点 WAV，随后改用 soundfile 读取元数据。用户指定本机数据后，最终图片全部改用指定本机录音，公开朗读图未进入交付目录。
-- 本地渲染脚本初次存在一个正则表达式语法错误，改为明确的路径前缀判断后执行通过。截图程序退出上下文时 Qt 子进程尚未完全释放，自动清理先保留 scratch；主进程结束后使用既有安全清理入口成功清理。
+## 发布目标与验证边界
 
-## v2 / v3 远端只读核对
+本工作树的主线为 `main`，上游为 `origin/main`，远端仓库为 `Nephelium/PhoneticToolbox`。用户已明确授权本次 README 与公开配图同步，提交使用单独审阅的文件清单，不包含同一工作区的其他改动、安装包、私有研究数据或受限媒体。GitHub Releases 的历史发布保留，本轮应用下载入口为官网与 GitHub Releases。
 
-执行 `git ls-remote --symref origin HEAD refs/heads/main refs/heads/codex/v3-rebuild refs/tags/v2.1.4`：
-
-| 对象 | 观察到的指向 |
-| --- | --- |
-| 默认 HEAD | `refs/heads/main` |
-| `main` | `4eeff893eb6cdcddb40456072571dd5d30c51a76`，v2 |
-| `codex/v3-rebuild` | `ef764e2d4e32ba442b02350e1168d4e2b538e87d`，v3 |
-| `v2.1.4` 标签 | 与上述 `main` 指向相同提交 |
-
-改变默认分支只影响默认展示与相关工作流，不自动删除其他分支，也不自动建立名为 v2 的分支。[GitHub 默认分支说明](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-branches-in-your-repository/changing-the-default-branch)与[根 README 展示规则](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes)已核对。未来若要求 v3 使用 main 名称，应先明确保留 v2 分支及旧版本标签，再执行指定的切换步骤。
-
-## 未包括的范围
-
-没有提交、push、上传图文、重命名分支、修改默认分支或重新构建应用。渲染采用本地 GFM 与近似 GitHub 样式，尚未在 GitHub 页面实际发布验收。界面截图证明示例路径完成，不外推科学准确率、物理设备、安装包或跨平台验证。
+当前状态只确认本机图文与渲染通过，尚未断言远端图文已上线。本地 GFM 使用近似 GitHub 的样式，实际 GitHub 图片、按钮和链接需在同步后读取远端页面确认。最终 EXE 的其他发行验证见 [Windows 当前发行检查](windows-current-release.md)。本报告不外推科学准确率、物理音视频设备、长期运行或其他系统的验证结论。
