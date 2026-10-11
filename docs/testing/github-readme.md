@@ -1,6 +1,6 @@
 # GitHub 图文 README 检查
 
-任务：`DOCS-GITHUB-HOMEPAGE`。核查日期：2026-10-12。当前状态：`in_progress`，本轮18模块补图、来源检查与本地排版验证完成，尚未推送main。
+任务：`DOCS-GITHUB-HOMEPAGE`。核查日期：2026-10-12。当前状态：`verified`。本轮18模块补图、来源检查、本地排版及GitHub公开页面检查完成，主页提交为 `2c93da2`。
 
 ## 本轮展示内容
 
@@ -20,19 +20,20 @@
 | 隔离输入与缓存 | 七轮采集及调整的独立scratch均在进程退出后核对归属清理，cleanup.json为deleted |
 | 本地排版与引用 | 1200/390宽度通过；21张图像解码、18模块链接、56个本地引用、锚点及无页面横向溢出通过 |
 | 文档结构 | scripts/validate_docs.py通过，1953文件、415条来源、88项任务，errors为空；旧历史快照链接保持单列 |
-| 公开GitHub | 本轮未推送，当前远端main为8cf5c5396fcab63cf431c69b2cb4712af6a12430 |
+| 公开GitHub | 已按用户确认推送main，主页提交2c93da2；实际1200/390宽度均为HTTP 200，20张截图与官网按钮完整解码，锚点点击到达，无折叠块或README横向溢出 |
+| 远端文件身份 | GitHub API回读30项新增/修改文件的Git blob身份一致，两个CMD不在main树；本机原文件及其余539项工作文件摘要不变 |
 
-本机脚本、采集原图、状态、错误诊断和清理回执位于忽略的 `output/validation/readme-homepage/`；排版预览位于 `output/playwright/readme-absolutely/`。
+本机脚本、采集原图、状态、错误诊断和清理回执位于忽略的 `output/validation/readme-homepage/`；本地和GitHub实际排版证据位于 `output/playwright/readme-absolutely/`，公开文件身份回执位于 `output/maintenance/readme-absolutely-update/published-tree.json`。
 
 首次复用脚本等待已经自动载入后禁用的“载入频谱”按钮，已移除此冗余点击并核对实际画布。另一处使用旧 `.m05-page` 选择器，改为当前可访问的“采集模式”控件后采集完成。有效原图保留，未改业务代码或检验标准。参数显示在目视检查中发现空图窗占用空间，本轮以实际删除空图窗的UI操作重新采集该页。论文页改用实际全屏阅读，未裁剪或重绘图片；模拟点击须发给Qt WebEngine的真实focusProxy，随后确认DOM fullscreenElement为pdf-reader并采集。
 
 ## 仓库排除与源码同步核查
 
-两个根目录本机快捷启动文件 `打开语音学论文精读.cmd`、`打开音标内容编辑器.cmd` 已停止本地Git跟踪，并写入精确忽略规则，本机原文件保留。它们仅转发现有PowerShell入口，必要启动脚本仍保留在scripts中。
+两个根目录本机快捷启动文件 `打开语音学论文精读.cmd`、`打开音标内容编辑器.cmd` 已从公开main停止Git跟踪，并写入精确忽略规则，本机原文件保留。它们仅转发现有PowerShell入口，必要启动脚本仍保留在scripts中。
 
-远端main经实时ls-remote核对与本地HEAD相同。10月11日提交仅包括README、图片、规则与检查文档，最近业务源码同步为10月9日795c2dc。此次核查开始时，工作树有279个已跟踪文件修改、263个未跟踪新文件，包含代码、文档和资源。它们尚未随本轮主页准备提交。
+本轮修改前，远端main经实时ls-remote核对与本地HEAD同为8cf5c53。10月11日提交仅包括README、图片、规则与检查文档，最近业务源码同步为10月9日795c2dc。此次核查开始时，工作树有279个已跟踪文件修改、263个未跟踪新文件，包含代码、文档和资源。本轮主页提交没有包含这些业务源码改动。
 
-main的2,997个文件合计147,945,364字节。953项software-only/git:false登记的素材文件均未进入main，未发现运行环境、缓存、数据库或私钥文件；明显凭据模式命中均为任务ID或证据路径。两份早期下载论文已从main当前树移除，v2及旧历史继续保留，未改写历史。详细同步范围见 [源码同步记录](github-source-sync.md)。
+修改前main的2,997个文件合计147,945,364字节。953项software-only/git:false登记的素材文件均未进入main，未发现运行环境、缓存、数据库或私钥文件；明显凭据模式命中均为任务ID或证据路径。两份早期下载论文已从main当前树移除，v2及旧历史继续保留，未改写历史。详细同步范围见 [源码同步记录](github-source-sync.md)。
 
 ## 既有公开版本
 

@@ -20,13 +20,14 @@
       ],
       "current_review": {
         "date": "2026-10-12",
-        "remote_main": "8cf5c5396fcab63cf431c69b2cb4712af6a12430",
+        "remote_main": "2c93da292b05272fe58b36c1d3c12b4177efd969",
         "business_source_last_synced": "795c2dc",
         "working_changes_at_review_start": {
           "tracked_modified": 279,
           "untracked_files": 263
         },
-        "scope": "Current remote-tree audit only; yesterday business changes remain local. Two root convenience CMD files excluded from index and ignored locally, original files retained; removal pending authorized push. Historical verified status refers to October 9 source synchronization."
+        "scope": "Remote-tree audit and authorized homepage-only publication verified. Yesterday business changes remain local; two root CMD files removed from public main, local originals retained. Historical verified source sync remains October 9.",
+        "main_before_homepage_update": "8cf5c5396fcab63cf431c69b2cb4712af6a12430"
       }
     },
     {
@@ -1426,13 +1427,11 @@
     {
       "id": "DOCS-GITHUB-HOMEPAGE",
       "title": "GitHub 图文主页与模块文档入口",
-      "status": "in_progress",
+      "status": "verified",
       "files": "README.md; .gitignore; docs/assets/readme; docs/manual/ipa-content-authoring.md; docs/testing/github-readme.md; docs/testing/github-source-sync.md; third_party/source-registry.json; docs/project-status.md; docs/plans/task-ledger.json; two root CMD index exclusions",
-      "note": "按2026-10-12最新要求展示全部18模块，统一Absolutely浅色。复用说明书正式示例素材并重新采集实际工作台；两个根目录本机快捷启动CMD停止Git跟踪，文件保留本机。核查远端main为8cf5c53，10月11日提交仅为主页、截图和检查记录，当前积累代码尚未同步。",
-      "verification_scope": "Windows实际Qt源码工作台18模块、首页及设置的20张Absolutely/light未编辑截图；正式说明书原音频摘要不变；实际声学、LPC、EGG、F0与公开字表结果；截图字节摘要一致；论文实际全屏无本机路径；1200/390独立Chrome本地GFM渲染、21图解码、18模块链接、56本地引用、有效锚点且无横向溢出；文档验证1953文件、415来源、88任务零错误；七轮scratch退出后按归属清理成功。",
-      "remaining": [
-        "公开推送至main需明确授权；本地主页候选已完成，其他未提交业务改动未包含"
-      ],
+      "note": "按2026-10-12要求补齐18模块、首页及设置共20张Absolutely浅色配图；两个本机快捷CMD从main停止跟踪，原文件保留。用户确认后以2c93da2推送main，GitHub实际页面和远端30项文件身份检查通过，其他业务改动未包含。",
+      "verification_scope": "Windows实际Qt源码工作台18模块、首页及设置的20张Absolutely/light未编辑截图；正式说明书原音频摘要不变；实际声学、LPC、EGG、F0与公开字表结果；截图字节摘要一致；论文实际全屏无本机路径；1200/390独立Chrome本地GFM渲染、21图解码、18模块链接、56本地引用、有效锚点且无横向溢出；文档验证1953文件、415来源、88任务零错误；七轮scratch退出后按归属清理成功。 GitHub实际公开页1200/390宽度HTTP 200，21图解码与4个导航锚点点击通过，无折叠块或README横向溢出；远端文件身份一致，其他539项工作文件摘要保持一致。",
+      "remaining": [],
       "outside_verified_scope": [
         "未重新构建应用；截图不代表科研准确率、物理设备或跨平台验收"
       ],
@@ -1441,8 +1440,22 @@
         "docs/assets/readme/provenance.json",
         "docs/testing/github-source-sync.md",
         "output/playwright/readme-absolutely/render-report.json",
-        "output/maintenance/readme-absolutely-update/reviewed-files.json"
-      ]
+        "output/maintenance/readme-absolutely-update/reviewed-files.json",
+        "output/playwright/readme-absolutely/github-live-report.json",
+        "output/maintenance/readme-absolutely-update/published-tree.json"
+      ],
+      "remote_result": {
+        "homepage_commit": "2c93da292b05272fe58b36c1d3c12b4177efd969",
+        "branch": "main",
+        "remote_tree_files": 3015,
+        "remote_blobs_verified": 30,
+        "removed_cmd_files": 2,
+        "preserved_other_working_files": 539,
+        "live_widths": [
+          1200,
+          390
+        ]
+      }
     },
     {
       "id": "GIT-V3-MAIN",
@@ -1458,7 +1471,7 @@
       ]
     }
   ],
-  "updated_on": "2026-10-11",
+  "updated_on": "2026-10-12",
   "current_coordination_plan": "docs/plans/2026-09-26-server-coordination.md",
   "policy_target": {
     "quota_bytes": 1000000000,

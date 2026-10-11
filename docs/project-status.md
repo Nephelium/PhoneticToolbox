@@ -6,11 +6,11 @@
 
 GitHub 主线：`GIT-V3-MAIN` 为 `verified`。默认 `main` 已承载 v3，v2 原 main 保留在独立 `v2` 分支，两个工作树分别跟踪 `origin/main` 和 `origin/v2`。旧 codex 分支、11 个标签、7 个历史 Release 及附件完整保留，图文主页已上传，见[源码同步报告](testing/github-source-sync.md)。
 
-GitHub 图文主页：`DOCS-GITHUB-HOMEPAGE` 按最新要求补齐18模块配图，统一使用Absolutely浅色。示例输入采用正式说明书中的自然语音与EGG，TextGrid为本次编写的单层示例；唇形图展示采集准备界面，没有启动摄像头或麦克风。首页与设置一并统一配色。两个根目录本机快捷启动CMD已停止Git跟踪，本机文件保留；本轮20张图的本地采集、来源核对和1200/390宽度排版检查通过，公开main仍为8cf5c53，尚未上传。范围见[检查报告](testing/github-readme.md)。
+GitHub 图文主页：`DOCS-GITHUB-HOMEPAGE` 为 `verified`。18模块、首页及设置共20张配图统一使用Absolutely浅色，主页提交 `2c93da2` 已按用户确认推送main。实际GitHub在1200/390宽度下图片、按钮、锚点及无横向溢出检查通过，远端文件身份一致。两个根目录本机快捷启动CMD已从main停止跟踪，本机文件保留。范围见[检查报告](testing/github-readme.md)。
 
 静态官网备案展示：已按授权更新 `www.phonetictoolbox.com` 首页，展示用户提供的 `黑ICP备2024017318号` 及工信部查询链接。1440/390/320 宽度本地浏览器检查、公网 HTTPS 200 与文件摘要一致性检查通过，`P15-ICP-FOOTER` 为 `verified`。公安联网备案待办理，备案系统中的域名对应关系尚未独立核实。
 
-GitHub 源码同步：10月9日已授权的源码同步提交为 `795c2dc`，随后随v3主线进入main。2026-10-12核查时，公开main与本地HEAD同为 `8cf5c53`，10月11日只同步主页、图片及检查文档；同期业务改动仍在本机工作树。此次主页候选单独审阅，未提交的业务代码未包含，详见[同步记录](testing/github-source-sync.md)。
+GitHub 源码同步：10月9日源码同步提交为 `795c2dc`，随后随v3主线进入main。本轮只以 `2c93da2` 上传主页、静态截图及相关文档，未包含同期未提交业务源码；其余工作文件摘要保持一致，详见[同步记录](testing/github-source-sync.md)。
 
 Windows 工作台的 18 个模块均已有实现和限定范围的验证。公共侧栏、标签、主题、设置、文件授权、托管任务、说明书和来源入口已经接通。完整科学准确性、设备兼容性、所有交互组合和全平台发行仍须分别验收，菜单存在或专项 verified 都不代表这些项目全部完成。
 
