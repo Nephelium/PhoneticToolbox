@@ -14,6 +14,12 @@ GitHub 保存维护代码、可公开的必要资源和技术文档。工作目�
 | 当前规则、架构、必要验收与来源证据 | 简短入口，详细资料按需阅读 | 保留可公开内容 |
 | 整理前文本快照、临时截图与重复副本 | 本机追溯材料或用后清理 | 忽略，不逐次堆备份 |
 
+## 分支与同步目标
+
+GitHub `Nephelium/PhoneticToolbox` 的默认分支 `main` 承载 v3。当前 v3 工作树应显示 `main`，上游为 `origin/main`。以后获准上传 v3 时使用这一目标；`codex/v3-rebuild` 仅保留为历史分支。v2 的独立分支为 `v2`，上游为 `origin/v2`，旧版本标签及 GitHub Releases 保留。
+
+上传前核对 `git branch --show-current` 与 `git rev-parse --abbrev-ref --symbolic-full-name @{upstream}`，不要把旧聊天或旧报告里的分支名当成当前目标。本机未提交的并行任务仍按明确文件清单审阅，不因切换主线而自动上传全部改动。
+
 ## 提交前检查
 
 在本项目根目录核对 `git rev-parse --show-toplevel --git-common-dir`、`git status --short`、本次候选文件和 `git diff --cached --stat` / `git diff --cached --name-status`。采用明确文件清单，避免对大量未审阅变动直接 `git add .`。

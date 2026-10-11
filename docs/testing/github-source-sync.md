@@ -1,6 +1,8 @@
 # GitHub 源码同步
 
-核对日期：2026-10-09。用户明确授权将当前项目代码更新至 GitHub。目标为 `Nephelium/PhoneticToolbox` 的既有 `codex/v3-rebuild` 分支，不合并主分支、不改写历史、不生成 Release 或上传安装包。
+当前同步目标：GitHub `Nephelium/PhoneticToolbox` 的 v3 主线为 `main`，旧版保留在 `v2`，旧标签与 Release 保留。本次 2026-10-11 的分支切换及图文主页上传已获用户明确授权，验收见下文。
+
+原有源码同步证据对应 2026-10-09，当时目标是 `codex/v3-rebuild`。这些历史命令不再作为后续 v3 上传目标。
 
 ## 内容范围与来源
 
@@ -30,3 +32,15 @@
 ## 同步状态
 
 源码提交 `795c2dc` 已推送至 `origin/codex/v3-rebuild`，`git ls-remote` 与本地提交身份一致。提交涵盖 1098 个文件变更（包含目录移动和先前已发生的清理）。四项本轮仓库移除对象均未出现在提交树中，且仍保留在本机；工作树在源码提交后干净。本记录与台账的完成状态随后以单独文档提交同步。
+
+## v3 主线与图文主页发布
+
+任务 `GIT-V3-MAIN` 当前为 `in_progress`。远端原 main / 本机 v2 提交为 `4eeff893eb6cdcddb40456072571dd5d30c51a76`，原 v3 提交为 `ef764e2d4e32ba442b02350e1168d4e2b538e87d`。祖先关系检查通过，v3 已在原 main 基础上推进69个提交，因此本次通过普通快进推送保留完整历史。
+
+远端 `v2` 已建立并回读为原 v2 提交。本地原 main 重命名为 v2，v2 工作树跟踪 origin/v2；v3 工作树重命名为 main，跟踪 origin/main。旧 codex/v3-rebuild 在本地及远端继续保留为历史参考。此次重命名只调整 Git 分支关系，没有检出或重写 v2 文件。
+
+本次提交范围为根规则、图文 README、六张 PNG 与来源清单、公开文档导航、仓库分支约定、本轮相关验收和台账。共享的来源登记/任务台账/项目状态采用已提交基线加本轮条目的方式暂存，不把其他任务的未提交改动混入图文提交。配图不包含原始录音、TextGrid 或私人绝对路径。近期安装包报告仅作为主页已有链接的支持文档纳入，没有上传安装包。
+
+尚待：main 推送与默认分支核对、旧标签及7个旧 Release / 7个附件身份比较、GitHub README与六张图片回读。基线与实际提交清单保存在忽略的 output/maintenance/github-main-transition/。
+
+后续规则的唯一维护位置为根 [AGENTS](../../AGENTS.md) 与 [仓库内容管理](../development/repository-hygiene.md)：获准上传 v3 时直接使用 main，不再上传旧 codex/v3-rebuild。该目标约定不会自动授权上传无关改动。

@@ -9,11 +9,15 @@
       "files": "当前已审阅工作树源码、必要资源、说明书工具、依赖目录和文档；停止跟踪两份论文 PDF 与两张无引用旧图；见本机明确文件清单",
       "verification_scope": "Windows current source, publication-boundary review, frontend/studio/desktop checks; existing codex/v3-rebuild branch only",
       "note": "用户明确授权 GitHub 更新及无用仓库内容清理。已 fetch 并核对起点一致，953 项受限素材无索引记录；3 处凭据扫描命中均为素材 ID。两份论文 PDF 及两张仅历史清单引用的旧图停止跟踪并保留本机，仍被回归/资源链引用的 v2 内容保留。文档和架构检查通过，前端 345、作者工具 38、桌面及源码/打包边界 363 passed/2 skipped，前端构建通过；暂存空白提示按报告保留。官网备案号已独立授权部署并回读核验。",
-      "current_evidence": ["docs/testing/github-source-sync.md"],
+      "current_evidence": [
+        "docs/testing/github-source-sync.md"
+      ],
       "local_evidence": "output/maintenance/github-sync/reviewed-files.json 及测试日志",
       "source_commit": "795c2dc",
       "remote_result": "已推送 origin/codex/v3-rebuild，git ls-remote 与本地提交一致；四项仓库移除对象不在提交树中且本机文件保留",
-      "remaining": ["完整科学/实体设备/跨平台/最终 EXE 未在本次重验"]
+      "remaining": [
+        "完整科学/实体设备/跨平台/最终 EXE 未在本次重验"
+      ]
     },
     {
       "id": "P15-ICP-FOOTER",
@@ -1408,9 +1412,40 @@
         "对所开放模块实现平台适配和能力提示",
         "实际浏览器双账号回归，不以静态代码核查代替"
       ]
+    },
+    {
+      "id": "DOCS-GITHUB-HOMEPAGE",
+      "title": "GitHub 图文主页与模块文档入口",
+      "status": "verified",
+      "files": "README.md; docs/README.md; docs/assets/readme; docs/testing/github-readme.md; third_party/source-registry.json; docs/project-status.md; docs/plans/task-ledger.json",
+      "note": "根 README 图文主页与18个模块入口已整理。六张原始 Qt 截图使用用户本次指定的真实语句录音、原始 TextGrid 和双声道 EGG；不含合成音频或公开原始语料。远端只读核对 main=v2、codex/v3-rebuild=v3、v2.1.4 标签保留。",
+      "verification_scope": "Windows 实际 Qt M01/LPC/EGG/原TextGrid计算与加载；原件哈希不变；六张未编辑截图；18模块README及75个文档本地引用（根README 44个）；1200/390宽度本地GFM渲染、六图解码/无页面溢出/有效锚点；UI data --check通过。独立scratch退出后安全清理成功。",
+      "remaining": [],
+      "outside_verified_scope": [
+        "未提交、push、上传或修改默认分支；GitHub实际页面未发布验收",
+        "未重新构建应用；截图不代表科研准确率、物理设备或跨平台验收"
+      ],
+      "evidence": [
+        "docs/testing/github-readme.md",
+        "docs/assets/readme/provenance.json",
+        "output/validation/readme-homepage/render-report.json"
+      ]
+    },
+    {
+      "id": "GIT-V3-MAIN",
+      "title": "v2 分支保留、v3 主分支与图文主页发布",
+      "status": "in_progress",
+      "files": "AGENTS.md; README.md; docs/development/repository-hygiene.md; docs/testing/github-source-sync.md; docs/testing/github-readme.md; docs/assets/readme; docs/project-status.md; docs/plans/task-ledger.json; third_party/source-registry.json",
+      "note": "用户明确授权保留 v2 为独立分支，让 v3 使用默认 main，上传本轮图文主页，保留旧版本及标签，并记录以后 v3 上传 main 的持续约定。只提交本轮文档与配图，其他并行业务改动留在工作树。",
+      "verification_scope": "提交清单和公开素材审阅；Git commit ancestry；远端分支/默认分支/旧标签/Release及附件身份；README和配图回读；本机工作树与上游映射。",
+      "remaining": [
+        "保留远端 v2、调整本地分支和上游",
+        "上传明确的图文/规则提交并核对 GitHub 页面",
+        "将持续分支约定写入项目规则与用户要求的记忆更新"
+      ]
     }
   ],
-  "updated_on": "2026-10-08",
+  "updated_on": "2026-10-11",
   "current_coordination_plan": "docs/plans/2026-09-26-server-coordination.md",
   "policy_target": {
     "quota_bytes": 1000000000,

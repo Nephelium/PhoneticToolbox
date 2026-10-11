@@ -4,6 +4,7 @@
 
 | 要找的内容 | 维护位置 |
 | --- | --- |
+| 对外项目介绍与配图 | [项目主页](../README.md)、[配图来源](assets/readme/README.md)、[主页检查报告](testing/github-readme.md) |
 | 工作边界与清理规则 | [根 AGENTS](../AGENTS.md)，子目录仅补充当地差异 |
 | 当前结构与依赖 | [总架构](../ARCHITECTURE.md)，子目录架构定位代码 |
 | 启动、修改、检查 | [开发说明](development.md)、[源码入口](development/source-entry.md) |

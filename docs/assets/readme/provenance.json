@@ -1,0 +1,91 @@
+{
+  "captured_on": "2026-10-11",
+  "source_id": "DOC-README-NATURAL-AUDIO",
+  "capture": "Actual Windows Qt Workbench; 2561 x 1601 native pixels; DPR 1.5; page zoom 1; no cropping, scaling, retouching or synthetic audio",
+  "source_inputs": [
+    {
+      "name": "语句示例.wav",
+      "sha256": "b4185d7b488330a7d7e200cd051dbcb8bacc8b7df111d246c05a307dce5336fe",
+      "bytes": 824080,
+      "transform": "byte-identical copy; anonymous filename",
+      "frames": 206009,
+      "sampleRate": 44100,
+      "channels": 2,
+      "seconds": 4.67140589569161
+    },
+    {
+      "name": "语句示例.TextGrid",
+      "sha256": "0fdacf9ef6c73d151b730d42cd3db7eecd82cc07f10b3872fa59b9ca94bd4619",
+      "bytes": 8310,
+      "transform": "byte-identical copy; anonymous filename"
+    },
+    {
+      "name": "EGG示例.wav",
+      "sha256": "cacce9835054f5a799774ee05c57f47a0e90dd96ee14df820529a74cffa83ab7",
+      "bytes": 5181138,
+      "transform": "byte-identical copy; anonymous filename",
+      "frames": 646699,
+      "sampleRate": 44100,
+      "channels": 2,
+      "seconds": 14.66437641723356
+    }
+  ],
+  "originals_unchanged": true,
+  "screenshots": [
+    {
+      "name": "home",
+      "description": "Unified workbench with all eighteen modules",
+      "width": 2561,
+      "height": 1601,
+      "dpr": 1.5,
+      "sha256": "f0cb26349f6f0206a5c42623571469956c6790deeb84436882f876b554b70a3c",
+      "file": "home.png"
+    },
+    {
+      "name": "acoustic-analysis",
+      "description": "User-authorized natural speech: actual waveform, spectrogram, original TextGrid and completed F0/F1/F2 task",
+      "width": 2561,
+      "height": 1601,
+      "dpr": 1.5,
+      "sha256": "186818aedf211ba77c57a11848793d88eb9f052b04eb8035ce7c88fe04cd2318",
+      "file": "acoustic-analysis.png"
+    },
+    {
+      "name": "lpc-analysis",
+      "description": "Actual LPC result from 1.80–1.95 seconds of the same natural recording",
+      "width": 2561,
+      "height": 1601,
+      "dpr": 1.5,
+      "sha256": "7053b022cf763d8f1605a561f828ab30de3d6b338384ab77874c39c251cc2e4a",
+      "file": "lpc-analysis.png"
+    },
+    {
+      "name": "textgrid-annotation",
+      "description": "Natural speech and its unmodified original TextGrid labels",
+      "width": 2561,
+      "height": 1601,
+      "dpr": 1.5,
+      "sha256": "b83588263bfdb873e55adee51c5d42d5d1f791c639f4676dfce881a1282e1a63",
+      "file": "textgrid-annotation.png"
+    },
+    {
+      "name": "egg-analysis",
+      "description": "Actual stereo EGG and speech recording: 3.00–3.50 s analysis",
+      "width": 2561,
+      "height": 1601,
+      "dpr": 1.5,
+      "sha256": "ffe87f2cd35ef4655ae2e47c782dc6c9858b926c0cdc355bd7b8b35a2c56cd85",
+      "file": "egg-analysis.png"
+    },
+    {
+      "name": "ipa-chart",
+      "description": "Interactive phonetic alphabet table; no audio synthesis",
+      "width": 2561,
+      "height": 1601,
+      "dpr": 1.5,
+      "sha256": "62d54e6174ece6b6ccf966f2606bbff33ffab21628f1e28dca164e0eaa8c7a92",
+      "file": "ipa-chart.png"
+    }
+  ],
+  "scope": "Actual Qt screenshots across two capture runs; image and input identities verified. No single frozen application or EXE identity asserted."
+}

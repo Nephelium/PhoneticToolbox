@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-10-05",
-  "total_records": 397,
+  "total_records": 398,
   "sources": [
     {
       "id": "SRC-PRAAT",
@@ -11847,6 +11847,32 @@
       "acknowledgement_group": "software",
       "used_at": [
         "desktop/src/ptb_desktop/papers.py"
+      ]
+    },
+    {
+      "id": "DOC-README-NATURAL-AUDIO",
+      "title": "GitHub README 真人语句与同步 EGG 分析配图",
+      "kind": "documentation-media",
+      "modules": [],
+      "acknowledgement_group": "software",
+      "authors": "作者提供；录音参与者身份不公开",
+      "urls": {},
+      "actual_included_version": "2026-10-11 capture; input and image SHA-256 in docs/assets/readme/provenance.json",
+      "used_at": [
+        "README.md",
+        "docs/assets/readme/README.md",
+        "docs/assets/readme/provenance.json"
+      ],
+      "evidence": "本次用户明确要求配图使用真实音频，并指定本机语句、TextGrid 与 EGG 输入；本机审计保存来源映射，公开文档仅存通用名称、摘要与静态截图。",
+      "license": "本次指示允许制作 GitHub 主页配图，不构成原始录音或 TextGrid 的公开再分发许可；未赋予素材开放许可证。",
+      "distribution_status": "documentation-screenshots-only; raw-inputs-private",
+      "relationship": "user-supplied-natural-recordings-to-actual-application-screenshots",
+      "modifications": "仅在临时副本中使用通用文件名；输入字节保持不变。应用实际计算波形、语谱图、LPC 与 EGG，截图未经裁剪、缩放或重绘。",
+      "verification_date": "2026-10-11",
+      "show_in_acknowledgements": false,
+      "show_in_license_notice": false,
+      "unresolved_items": [
+        "未经另行授权不公开原始语料；截图制作不代表科研方法准确率验收。"
       ]
     }
   ]
