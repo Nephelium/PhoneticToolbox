@@ -355,7 +355,7 @@ defineExpose({save:savePending});
 .annotation-page{height:100%;min-height:0;overflow:auto;--annotation-plot-height:max(110px,calc(15dvh / var(--page-scale,1)));--annotation-grid-height:max(96px,calc(12dvh / var(--page-scale,1)))}
 .annotation-layout{flex:1;min-height:0;align-items:stretch;gap:var(--module-gap)}
 .annotation-files,.annotation-settings,.annotation-editor{min-height:0;overflow:auto;overscroll-behavior:contain}
-.annotation-files,.annotation-settings{height:100%;padding:8px;background:var(--app);scrollbar-gutter:stable}
+.annotation-files,.annotation-settings{height:100%;padding:8px;background:var(--rail,var(--app));scrollbar-gutter:stable}
 .annotation-file-list{flex:1;min-height:80px;max-height:none}
 .annotation-card{padding:8px}.annotation-editor{gap:var(--module-gap)}
 .annotation-editor>.annotation-card{flex-shrink:0}

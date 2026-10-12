@@ -14,12 +14,12 @@ export async function saveM05Local(name:string,blob:Blob):Promise<'saved'|'downl
  const link=document.createElement('a'),url=URL.createObjectURL(blob);link.href=url;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(url),60000);
  return 'download_requested';
 }
-export const unavailableLipPort:LipPort={kind:'browser',available:false,reason:'当前宿主尚未开放 legacy 离线任务，请使用本地 M05 分析入口。候选预览不能替代正式结果。',
+export const unavailableLipPort:LipPort={kind:'browser',available:false,reason:'当前环境支持实时预览，离线分析请使用桌面版。',
  async analyze(){throw Error(this.reason);},async save(){throw Error(this.reason);}};
 
 type Task=<T=any>(body:unknown)=>Promise<T>;
 function encoded(bytes:ArrayBuffer){const data=new Uint8Array(bytes);let binary='';for(let i=0;i<data.length;i+=32768)binary+=String.fromCharCode(...data.subarray(i,i+32768));return btoa(binary);}
-const errorMessages:Record<string,string>={m05_runtime_not_admitted:"当前 M05 科学运行环境尚未通过准入。",m05_memory_budget:"唇形任务超过本地内存预算，未发布部分结果。",m05_timeout:"唇形任务超过 30 分钟期限，已回收计算进程。",m05_output_budget:"结果超过 512 MB 预算，请分段分析并保留原始时间信息。",m05_execution_failed:"唇形任务未完成，请检查本地任务诊断及视频编码。",m05_legacy_runtime_version_mismatch:"科学依赖版本与冻结版本不一致，已拒绝生成正式结果。",m05_legacy_model_hash_mismatch:"FaceMesh 模型哈希不匹配，已拒绝运行。",m05_nonmonotonic_decoded_pts:"视频时间戳不递增，无法生成正式时间轴。",m05_missing_decoded_pts:"视频缺少实际解码时间戳，不能用标称帧率替代。",m05_unsupported_display_rotation:"此视频的旋转元数据尚未通过迁移验证。",m05_unsupported_display_reflection:"此视频含镜像显示矩阵，暂不进行正式测量。"};
+const errorMessages:Record<string,string>={m05_runtime_not_admitted:"唇形分析暂时无法运行。可在关于页反馈此问题。",m05_memory_budget:"唇形任务超过本地内存预算，未发布部分结果。",m05_timeout:"唇形任务超过 30 分钟期限，已回收计算进程。",m05_output_budget:"结果超过 512 MB 预算，请分段分析并保留原始时间信息。",m05_execution_failed:"唇形分析未完成，请换用其他视频重试。若仍有问题，可在关于页反馈。",m05_legacy_runtime_version_mismatch:"唇形分析暂时无法运行。可在关于页反馈此问题。",m05_legacy_model_hash_mismatch:"唇形分析暂时无法运行。可在关于页反馈此问题。",m05_nonmonotonic_decoded_pts:"视频时间戳不递增，无法生成正式时间轴。",m05_missing_decoded_pts:"视频缺少逐帧时间戳，请换用保留完整时间信息的视频。",m05_unsupported_display_rotation:"暂不支持此视频的旋转信息，请先转为正常方向的视频。",m05_unsupported_display_reflection:"此视频含镜像显示矩阵，暂不进行正式测量。"};
 export async function desktopM05(transport:Task,choose:()=>Promise<{id:string}|null>):Promise<LipPort>{
  const task:Task=async body=>{try{return await transport(body);}catch(e){throw Error(errorMessages[(e as Error).message]??(e as Error).message);}};
  const support=await task({op:'m05_catalog'});
@@ -42,7 +42,7 @@ export async function desktopM05(transport:Task,choose:()=>Promise<{id:string}|n
    return {id:job.id,name,backend:data.backend,rows:data.rows,metadata:data.metadata,files:files.map(f=>({id:f.id,name:f.name,bytes:f.size_bytes,sha256:f.sha256}))};
   }finally{signal.removeEventListener('abort',cancel);}
  }
- const port:LipPort={kind:'desktop',available:support.available,reason:support.available?undefined:'M05 专用运行环境尚未准入，请从 Start-M05-Workbench.ps1 启动。',
+ const port:LipPort={kind:'desktop',available:support.available,reason:support.available?undefined:'唇形分析暂时无法运行。可在关于页反馈此问题。',
   async analyze(file,config,signal,progress){
    if(file.size<=0||file.size>128_000_000)throw Error('视频须为 1 字节至 128 MB；更长输入可使用流式本地 CLI。');
    const upload=await task({op:'m05_upload_begin',name:file.name,size:file.size});

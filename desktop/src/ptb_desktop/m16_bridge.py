@@ -20,7 +20,7 @@ class M16Bridge:
         return self.service.grant(selected,purpose) if selected else None
 
     def dispatch(self,body):
-        if not isinstance(body,dict):raise ValueError('M16 请求须为对象')
+        if not isinstance(body,dict):raise ValueError('录音请求格式无效')
         try:return self.service.dispatch(body)
         except Exception as exc:self.last_error=str(exc);raise
 

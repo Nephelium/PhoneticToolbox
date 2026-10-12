@@ -41,3 +41,17 @@ export function searchEntries(rows:Entry[],query:string,scope:'all'|'character'|
  const normalize=(s:string)=>s.normalize('NFD').toLocaleLowerCase();const q=normalize(query.trim());if(!q)return [];
  return rows.filter(r=>{const ipa=[r.ipa,r.mapped_initial,r.mapped_final,(r.mapped_initial==='Ø'?'':r.mapped_initial)+r.mapped_final+r.tone_value];return (scope==='character'?[r.character]:scope==='ipa'?ipa:[r.character,...ipa]).some(v=>normalize(v).includes(q));}).map(r=>r.index);
 }
+// Word selects the first five distinct (character, note) examples in input order.
+export function summaryEntries(rows:Entry[],settings:Settings){
+ const collect=(values:string[],key:(r:Entry)=>string,title:(v:string)=>string)=>{
+  const examples=new Map(values.map(v=>[v,[] as Entry[]])),seen=new Map(values.map(v=>[v,new Set<string>()]));
+  for(const row of rows){const value=key(row),list=examples.get(value),identity=JSON.stringify([row.character,row.note]);if(list&&list.length<5&&!seen.get(value)!.has(identity)){seen.get(value)!.add(identity);list.push(row);}}
+  const lines=values.map(v=>({label:title(v),items:examples.get(v)!})),half=Math.ceil(lines.length/2);
+  return lines.slice(0,half).map((line,i)=>[line,lines[i+half]]);
+ };
+ return [
+  {title:'声母统计',rows:collect(settings.initial_order,r=>r.mapped_initial,v=>label(v)+':')},
+  {title:'韵母统计',rows:collect(settings.final_order,r=>r.mapped_final,v=>label(v)+':')},
+  {title:'声调统计',rows:collect(settings.tone_order,r=>r.tone_value,v=>v+' → '+(settings.tone_map[v]||v||'0')+':')},
+ ];
+}

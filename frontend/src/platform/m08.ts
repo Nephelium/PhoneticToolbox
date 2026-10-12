@@ -28,7 +28,7 @@ export function m08Port(transport:M08Transport):M08Port {
    if(Date.now()>until)throw Error('任务仍在处理，可在任务列表查询或取消。');
    await new Promise(resolve=>setTimeout(resolve,150));job=await transport.job(job.id);
   }
-  if(job.state!=='succeeded')throw Error(job.error_code??'M08 任务未完成');return job;
+  if(job.state!=='succeeded')throw Error(job.error_code??'变速变调任务未完成');return job;
  }
  async function submit(file:ResearchFile,config:Config,key:string){
   const ref=await source(file);const j=await transport.request<JobView>('create',{project_id:transport.project,audio:ref,config,idempotency_key:key});
@@ -47,7 +47,7 @@ export function m08Port(transport:M08Transport):M08Port {
    const created=await transport.request<JobView>('create',{project_id:transport.project,audio:ref,config:{action:'preview'},idempotency_key:'m08-preview-'+crypto.randomUUID()});
    const job=await wait(created,signal);const files=job.result_manifest&&'files' in job.result_manifest?job.result_manifest.files:[];
    const metadata=files.find(f=>f.name==='m08.ptb.json'),wav=files.find(f=>f.name==='m08-preview.wav');
-   if(!metadata||!wav)throw Error('M08 预览产物不完整');
+   if(!metadata||!wav)throw Error('变速变调预览文件不完整');
    const data=JSON.parse(new TextDecoder().decode(await transport.read(job.id,metadata.id,metadata.sha256)));
    if(data.audio_sha256!==ref.sha256)throw Error('源音频校验不一致');
    return {...data,sha256:ref.sha256,wav:await transport.read(job.id,wav.id,wav.sha256)};

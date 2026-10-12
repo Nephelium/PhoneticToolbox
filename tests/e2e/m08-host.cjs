@@ -13,7 +13,7 @@ async function main(){
  let success=false;
  try{
   await page.goto(server.resolvedUrls.local[0]+'tests/m08-host.html');await open();await click('打开音频目录');
-  const select=page.getByLabel('M08 音频'),options=await select.locator('option').evaluateAll(items=>items.map(x=>({value:x.value,text:x.textContent})));
+  const select=page.getByLabel('变速变调音频'),options=await select.locator('option').evaluateAll(items=>items.map(x=>({value:x.value,text:x.textContent})));
   await select.selectOption(options.find(x=>x.text.endsWith('.wav')).value);await page.locator('.m08-curve').waitFor();await idle();checks.push('production desktop M08Port / TaskBridge / HTTP / durable preview in AppShell');
   await page.getByLabel('语速倍率').fill('0.8');await click('合成当前视野');await page.getByText('输出 1.250 s',{exact:false}).waitFor();await idle();
   await click('保存并编号');await idle();await page.locator('.history li').first().waitFor();const firstNames=await fs.readdir(path.join(out,'saved')),occupied=firstNames[0].replace(/_1\.wav$/,'_9.wav');await fs.writeFile(path.join(out,'saved',occupied),'unrelated synthetic existing file');await click('保存并编号');await idle();assert.equal(await page.locator('.history li').count(),2);const names=await fs.readdir(path.join(out,'saved'));assert(names.some(n=>n.endsWith('_1.wav'))&&names.some(n=>n.endsWith('_10.wav')));assert((await page.locator('.history').innerText()).includes('_10.wav'));checks.push('actual synthesis, PCM16 saved copies, atomic native numbering, persisted history');

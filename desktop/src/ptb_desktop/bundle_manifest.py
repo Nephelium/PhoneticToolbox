@@ -59,7 +59,8 @@ def runtime_bindings(root, *, host_platform=None, host_arch=None):
         if not path.is_file():raise ValueError('Bundled runtime missing')
         with path.open('rb') as stream:digest=hashlib.file_digest(stream,'sha256').hexdigest()
         if digest!=item.get('sha256'):raise ValueError('Bundled runtime hash mismatch')
-        bindings[key]=str(path)
+        from ptb_worker.native_runtime import runtime_entry
+        bindings[key]=runtime_entry(path)
     mfa=value.get('mfa')
     if mfa is not None:
         if not isinstance(mfa,dict):raise ValueError('Invalid bundled MFA component')

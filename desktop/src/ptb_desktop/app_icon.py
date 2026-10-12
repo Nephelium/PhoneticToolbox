@@ -1,24 +1,62 @@
-"""Use the same bundled K2 asset as the workbench home and sidebar."""
+"""Render selected artwork identically in the workbench and Windows host."""
+import json
 import sys
 import struct
 from pathlib import Path
 
-from PyQt6.QtCore import Qt, QBuffer, QIODevice
-from PyQt6.QtGui import QIcon, QImage, QPainter, QPixmap
+from PyQt6.QtCore import Qt, QBuffer, QIODevice, QRectF
+from PyQt6.QtGui import QIcon, QImage, QPainter, QPainterPath, QPixmap
 from PyQt6.QtWidgets import QApplication
 
 
 ICON_SIZES = (16, 24, 32, 48, 64, 128, 256)
 
 
-def icon_images(source: Path) -> list[QImage]:
+def builtin_catalog(dist: Path) -> dict:
+    path = dist / 'app-icons/catalog.json'
+    if not path.is_file():
+        return {}
+    catalog = json.loads(path.read_text(encoding='utf-8'))
+    if catalog.get('schema') != 'ptb-app-icons/1':
+        raise ValueError('Unsupported application icon catalog')
+    return {entry['id']: entry for entry in catalog['icons']}
+
+
+def builtin_image(dist: Path, identity='default') -> QImage:
+    entry = builtin_catalog(dist).get(identity)
+    if not entry:
+        raise ValueError('内置图标不存在。')
+    if Path(entry['sheet']).name != entry['sheet']:
+        raise ValueError('Invalid icon sheet path')
+    image = QImage(str(dist / 'app-icons/sheets' / entry['sheet']))
+    x, y, width, height = entry['rect']
+    if image.isNull() or x < 0 or y < 0 or x + width > image.width() or y + height > image.height():
+        raise ValueError('内置图标素材无法读取。')
+    scale = 256 / max(width, height)
+    w, h = width * scale, height * scale
+    target = QImage(256, 256, QImage.Format.Format_ARGB32_Premultiplied)
+    target.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(target)
+    painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+    painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+    rect = QRectF((256 - w) / 2, (256 - h) / 2, w, h)
+    clip = QPainterPath()
+    radius = min(w, h) * entry['radius']
+    clip.addRoundedRect(rect, radius, radius)
+    painter.setClipPath(clip)
+    painter.drawImage(rect, image, QRectF(x, y, width, height))
+    painter.end()
+    return target
+
+
+def icon_images(source: Path | QImage) -> list[QImage]:
     """Normalize K2's visible footprint for Windows without changing the artwork.
 
     The source includes wide transparent padding and very faint edge specks.
     Bounds use alpha >= 32, with a small safety margin around the visible body.
     Scaling at each target size retains the square aspect ratio and rounded corners.
     """
-    image = QImage(str(source)).convertToFormat(QImage.Format.Format_RGBA8888)
+    image = (source if isinstance(source, QImage) else QImage(str(source))).convertToFormat(QImage.Format.Format_RGBA8888)
     if image.isNull():
         return []
     raw = image.constBits().asstring(image.sizeInBytes())
@@ -55,8 +93,9 @@ def configure_app_icon(dist: Path) -> QIcon:
     # Vite emits this imported asset with a content hash in both source and EXE builds.
     candidates = sorted((dist / 'assets').glob('k2-*.png'))
     icon = QIcon()
-    if candidates:
-        for image in icon_images(candidates[0]):
+    source = builtin_image(dist) if builtin_catalog(dist) else candidates[0] if candidates else None
+    if source is not None:
+        for image in icon_images(source):
             icon.addPixmap(QPixmap.fromImage(image))
     app = QApplication.instance()
     if app is not None and not icon.isNull():
@@ -70,9 +109,9 @@ def configure_app_icon(dist: Path) -> QIcon:
 
 def write_windows_icon(source: Path, destination: Path) -> None:
     """Write the same PNG-backed resolutions into a Windows ICO for future builds."""
-    images = icon_images(source)
+    images = icon_images(builtin_image(source) if source.is_dir() else source)
     if not images:
-        raise ValueError('K2 application icon is unavailable')
+        raise ValueError('Application icon is unavailable')
     payloads = []
     for image in images:
         buffer = QBuffer()

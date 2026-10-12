@@ -6,7 +6,8 @@ import sys
 
 
 def configure(*, runtime=True):
-    bundle = Path(getattr(sys, '_MEIPASS', Path(__file__).resolve().parents[1]))
+    # Resource capability checks use the physical tree; native loaders retain the short sys._MEIPASS entry.
+    bundle = Path(getattr(sys, '_MEIPASS', Path(__file__).resolve().parents[1])).resolve()
     # External scientific bootstraps require real files in the reviewed layout.
     for relative in ('packages/phonetic_core/src', 'desktop/src', 'backend/src'):
         path = bundle / relative
@@ -22,6 +23,8 @@ def configure(*, runtime=True):
             ('PTB_M11_COMPONENT_ROOT','output/m11c-028b881d')):
             if (bundle/relative).exists():os.environ.setdefault(key,str(bundle/relative))
     config = bundle / 'local-preview.json'
+    from ptb_worker.source_runtime import prepare_native_import_paths
+    prepare_native_import_paths()
     portable = bundle / 'desktop-bundle.json'
     if not runtime:
         return bundle
@@ -96,16 +99,18 @@ def main():
 
 
 def guarded_main():
-    # Owned distribution validation must leave a diagnostic rather than a
-    # PyInstaller popup, including failures before the validator imports.
-    if len(sys.argv) == 3 and sys.argv[1] == '--verify-distribution':
+    # All explicitly owned QA launches leave diagnostics and exit nonzero,
+    # including import failures before the window or validator is created.
+    owned_log = os.environ.get('PTB_OWNED_BOOTSTRAP_LOG')
+    distribution = len(sys.argv) == 3 and sys.argv[1] == '--verify-distribution'
+    if owned_log or distribution:
         try:
             return main()
         except Exception:
             import traceback
-            output = Path(sys.argv[2]).absolute()
-            output.mkdir(parents=True, exist_ok=True)
-            (output/'startup-error.log').write_text(traceback.format_exc(),encoding='utf-8')
+            diagnostic = Path(owned_log).absolute() if owned_log else Path(sys.argv[2]).absolute()/'startup-error.log'
+            diagnostic.parent.mkdir(parents=True, exist_ok=True)
+            diagnostic.write_text(traceback.format_exc(),encoding='utf-8')
             return 1
     return main()
 

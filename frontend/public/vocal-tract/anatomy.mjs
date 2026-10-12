@@ -1,4 +1,5 @@
 import {fitSoftTissue} from './surface-contact.mjs';
+import {constrainVentralMesh,constrainVentralLine} from './floor-contact.mjs';
 // The display reconstruction has one 3-D authority; sagittal lines are slices.
 // Native VTL defines the oral surface. MRI informs the dorsal tissue envelope.
 export function registerNose(source){
@@ -112,16 +113,18 @@ export const smoothContour=points=>smooth(points);
 // VTL's four ventral ribs are a sparse construction boundary (including a
 // vertical ray to the floor). Keep the 34 dorsal/contact ribs exactly and loft
 // a display-only ventral surface back to the native floor attachment.
-export function tongueEnvelope(state){
+export function tongueEnvelope(state,{surface=true}={}){
   const native=state.meshes.find(m=>m.name==='tongue'),P=native.points,D=34,Q=24;
   const tip=state.contours.tongue[D-1],floor=state.contours.lower_cover;
   const p=state.limited,curl=Math.max(0,Math.min(1,(p[12]-p[10])/.75))*Math.max(0,Math.min(1,(p[11]-p[13])/.5));
-  let anchor=7;
-  for(let i=7;i<floor.length;i++)if(floor[i][0]<tip[0]-.8+1.6*curl&&floor[i][1]<tip[1]-.15)anchor=i;
+  // A material station in the mandible frame. Tongue controls cannot select
+  // another floor point; jaw translation/rotation still moves the attachment.
+  const anchor=state.tongue_floor_rib??10;
   const end=floor[anchor],vertices=native.vertices.slice(0,D*P*3),triangles=[];
   // Retain the native diagonals too: flipping a non-planar quad's diagonal
   // changes the contact surface even when all four vertices are unchanged.
   for(let i=0;i<native.triangles.length;i+=3){const face=native.triangles.slice(i,i+3);if(face.every(j=>j<D*P))triangles.push(...face);}
+  const shape=state.tongue_shape??[0,0,0,0];
   const floorMesh=state.meshes.find(m=>m.name==='lower_cover');
   for(let r=1;r<=Q;r++)for(let j=0;j<P;j++){
     const a=native.vertices.slice(((D-1)*P+j)*3,((D-1)*P+j)*3+3),t=r/Q,u=1-t;
@@ -132,12 +135,34 @@ export function tongueEnvelope(state){
     // A curled tip's underside returns around the anterior blade, not through
     // the descending dorsal surface. Blend with the ordinary ventral loft.
     const prev=native.vertices.slice(((D-2)*P+j)*3,((D-2)*P+j)*3+3),length=Math.hypot(a[0]-prev[0],a[1]-prev[1])||1;
-    const cx=a[0]-.14,dx=b[0]+Math.max(.12,(a[0]-b[0])*.26);
+    // The more posterior attachment needs a forward/downward return before
+    // turning back to the floor, also for a raised uncurled blade.
+    const cx=a[0]+.14,dx=Math.max(b[0]+.12,front+.2);
     const c=[cx+curl*(a[0]+.38*(a[0]-prev[0])/length-cx),a[1]-.36+curl*(.36+.38*(a[1]-prev[1])/length),a[2]],d=[dx+curl*(Math.max(dx,front+.45)-dx),b[1]+.08,b[2]];
-    for(let k=0;k<3;k++)vertices.push(u*u*u*a[k]+3*u*u*t*c[k]+3*u*t*t*d[k]+t*t*t*b[k]);
+    const point=[0,1,2].map(k=>u*u*u*a[k]+3*u*u*t*c[k]+3*u*t*t*d[k]+t*t*t*b[k]);
+    if(shape[2]||shape[3]){
+      const weight=16*t*t*u*u,baseY=point[1];point[0]+=weight*shape[2];point[1]+=weight*shape[3];
+      // Keep the adjustable underside below the actual dorsal meridian at
+      // this transverse column. Floor/teeth contact is applied afterwards.
+      let ceiling=Infinity;
+      for(let rib=1;rib<D;rib++){
+        const v=(rib*P+j)*3,w=((rib-1)*P+j)*3,x0=native.vertices[w],x1=native.vertices[v];
+        if(point[0]<Math.min(x0,x1)||point[0]>Math.max(x0,x1)||Math.abs(x1-x0)<1e-9)continue;
+        const f=(point[0]-x0)/(x1-x0),y=native.vertices[w+1]+f*(native.vertices[v+1]-native.vertices[w+1]);
+        if(y>baseY+.01)ceiling=Math.min(ceiling,y-.02);
+      }
+      point[1]=Math.min(point[1],ceiling);
+    }
+    vertices.push(...point);
   }
   const R=D+Q;
   for(let r=D;r<R;r++)for(let j=0;j<P-1;j++){const a=(r-1)*P+j,b=a+1,c=r*P+j,d=c+1;triangles.push(a,b,c,b,d,c);}
-  const contour=Array.from({length:R},(_,r)=>vertices.slice((r*P+Math.floor(P/2))*3,(r*P+Math.floor(P/2))*3+2));
-  return {mesh:{...native,vertices,triangles,ribs:R,dynamicRibs:D},outline:[...contour,...floor.slice(4,anchor).toReversed()],contour,anchor,end};
+  // The sagittal display is z=0. The material centre column can have a small
+  // lateral offset, which must not shift the drawn incisor contact sideways.
+  const middle=Array.from({length:R},(_,r)=>[...vertices.slice((r*P+Math.floor(P/2))*3,(r*P+Math.floor(P/2))*3+2),0]);
+  const lowerTeeth=state.meshes.find(m=>m.name==='lower_teeth');
+  const contour=[...middle.slice(0,D-1),...constrainVentralLine(middle.slice(D-1),floorMesh,lowerTeeth)].map(p=>p.slice(0,2));
+  const mesh=surface?constrainVentralMesh({...native,vertices,triangles,ribs:R,dynamicRibs:D},floorMesh,D*P,lowerTeeth):null;
+  const belly=constrainVentralLine([middle[D-1+Q/2]],floorMesh,lowerTeeth)[0].slice(0,2);
+  return {mesh,belly,outline:[...contour,...floor.slice(4,anchor).toReversed()],contour,anchor,end};
 }

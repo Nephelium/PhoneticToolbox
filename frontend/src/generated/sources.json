@@ -15,8 +15,8 @@
     ],
     "kind": "runtime-and-method",
     "acknowledgement_group": "software",
-    "authors": "Yannick Jadoul and Bill Thompson and Bart de Boer",
-    "version": "praat-parselmouth 0.4.7 in phonetic_311; embedded Praat version not probed",
+    "authors": "Paul Boersma、David Weenink（Praat）；Yannick Jadoul、Bill Thompson、Bart de Boer（Parselmouth）",
+    "version": "Parselmouth 0.4.7；文档所列 Praat 6.1.38",
     "license": "Parselmouth 0.4.7：GPL-3.0-or-later；内嵌 Praat 6.1.38：GPL-2.0-or-later。按组合发行适用条款提供许可与对应源码；依赖另列。",
     "urls": {
       "homepage": "https://www.praat.org/",
@@ -30,7 +30,8 @@
       "pitch_method_choice": "https://www.fon.hum.uva.nl/praat/manual/how_to_choose_a_pitch_analysis_method.html",
       "overlap_add": "https://www.fon.hum.uva.nl/praat/manual/overlap-add.html",
       "manipulation_source": "https://github.com/YannickJadoul/Parselmouth/blob/v0.4.7/praat/fon/Manipulation.cpp"
-    }
+    },
+    "citation": "JADOUL Y, THOMPSON B, DE BOER B. Introducing Parselmouth: A Python interface to Praat[J]. Journal of Phonetics, 2018, 71: 1-15. DOI: 10.1016/j.wocn.2018.07.001.\nBOERSMA P, WEENINK D. Praat: doing phonetics by computer: Version 6.1.38[EB/OL]. (2021)[2026-10-11]. https://www.praat.org/."
   },
   {
     "id": "SRC-REAPER",
@@ -120,22 +121,24 @@
   },
   {
     "id": "REF-CPP",
-    "title": "CPP: Hillenbrand, Cleveland & Erickson",
+    "title": "Acoustic Correlates of Breathy Vocal Quality",
     "modules": [
       "M01"
     ],
     "kind": "paper",
     "acknowledgement_group": "academic",
-    "authors": "James Hillenbrand and Ronald A. Cleveland and Robert L. Erickson",
+    "authors": "James Hillenbrand；Ronald A. Cleveland；Robert L. Erickson",
     "version": "",
     "license": "",
     "urls": {
-      "paper": "https://pubs.asha.org/doi/abs/10.1044/jshr.3704.769"
-    }
+      "paper": "https://pubs.asha.org/doi/abs/10.1044/jshr.3704.769",
+      "doi": "https://doi.org/10.1044/jshr.3704.769"
+    },
+    "citation": "HILLENBRAND J, CLEVELAND R A, ERICKSON R L. Acoustic Correlates of Breathy Vocal Quality[J]. Journal of Speech and Hearing Research, 1994, 37(4): 769-778. DOI: 10.1044/jshr.3704.769."
   },
   {
     "id": "REF-HNR",
-    "title": "HNR: de Krom",
+    "title": "A Cepstrum-Based Technique for Determining a Harmonics-to-Noise Ratio in Speech Signals",
     "modules": [
       "M01"
     ],
@@ -145,12 +148,14 @@
     "version": "",
     "license": "",
     "urls": {
-      "paper": "https://pubs.asha.org/doi/10.1044/jshr.3602.254"
-    }
+      "paper": "https://pubs.asha.org/doi/10.1044/jshr.3602.254",
+      "doi": "https://doi.org/10.1044/jshr.3602.254"
+    },
+    "citation": "DE KROM G. A Cepstrum-Based Technique for Determining a Harmonics-to-Noise Ratio in Speech Signals[J]. Journal of Speech and Hearing Research, 1993, 36(2): 254-266. DOI: 10.1044/jshr.3602.254."
   },
   {
     "id": "REF-SHR",
-    "title": "SHR: Xuejing Sun",
+    "title": "Pitch determination and voice quality analysis using Subharmonic-to-Harmonic Ratio",
     "modules": [
       "M01"
     ],
@@ -160,54 +165,61 @@
     "version": "",
     "license": "",
     "urls": {
-      "paper": "https://ieeexplore.ieee.org/document/5743722/"
-    }
+      "paper": "https://ieeexplore.ieee.org/document/5743722/",
+      "doi": "https://doi.org/10.1109/ICASSP.2002.5743722"
+    },
+    "citation": "SUN X. Pitch determination and voice quality analysis using Subharmonic-to-Harmonic Ratio[C]//2002 IEEE International Conference on Acoustics, Speech, and Signal Processing. [S.l.]: IEEE, 2002: I-333-I-336. DOI: 10.1109/ICASSP.2002.5743722."
   },
   {
     "id": "REF-ISELI",
-    "title": "谐波幅度校正: Iseli & Alwan",
+    "title": "An improved correction formula for the estimation of harmonic magnitudes and its application to open quotient estimation",
     "modules": [
       "M01"
     ],
     "kind": "paper",
     "acknowledgement_group": "academic",
-    "authors": "Markus Iseli and Abeer Alwan",
+    "authors": "Markus Iseli；Abeer Alwan",
     "version": "",
     "license": "",
     "urls": {
-      "pdf": "https://www.seas.ucla.edu/spapl/paper/iseli04.pdf"
-    }
+      "pdf": "https://www.seas.ucla.edu/spapl/paper/iseli04.pdf",
+      "doi": "https://doi.org/10.1109/ICASSP.2004.1326074"
+    },
+    "citation": "ISELI M, ALWAN A. An improved correction formula for the estimation of harmonic magnitudes and its application to open quotient estimation[C]//2004 IEEE International Conference on Acoustics, Speech, and Signal Processing. [S.l.]: IEEE, 2004: I-669-I-672. DOI: 10.1109/ICASSP.2004.1326074."
   },
   {
     "id": "REF-HAWKS",
-    "title": "共振峰带宽估计: Hawks & Miller",
+    "title": "A formant bandwidth estimation procedure for vowel synthesis",
     "modules": [
       "M01"
     ],
     "kind": "paper",
     "acknowledgement_group": "academic",
-    "authors": "John W. Hawks and James D. Miller",
+    "authors": "John W. Hawks；James D. Miller",
     "version": "",
     "license": "",
     "urls": {
       "paper": "https://profiles.wustl.edu/en/publications/a-formant-bandwidth-estimation-procedure-for-vowel-synthesis-4372",
       "doi": "https://doi.org/10.1121/1.412986"
-    }
+    },
+    "citation": "HAWKS J W, MILLER J D. A formant bandwidth estimation procedure for vowel synthesis[J]. The Journal of the Acoustical Society of America, 1995, 97(2): 1343-1344. DOI: 10.1121/1.412986."
   },
   {
     "id": "REF-SOE",
-    "title": "Strength of Excitation / epoch extraction",
+    "title": "Epoch Extraction From Speech Signals",
     "modules": [
       "M01"
     ],
     "kind": "method-chain",
     "acknowledgement_group": "academic",
-    "authors": "K. Sri Rama Murty and B. Yegnanarayana",
+    "authors": "K. Sri Rama Murty；B. Yegnanarayana",
     "version": "",
-    "license": "SoE 实现明确参考 Soo Jin Park 的 func_getSoE.m；尚未找到覆盖该实现改写及分发的明确许可，需核对或向权利人确认。",
+    "license": "",
     "urls": {
-      "documentation": "https://www.phonetics.ucla.edu/voicesauce/documentation/index.html"
-    }
+      "documentation": "https://www.phonetics.ucla.edu/voicesauce/documentation/index.html",
+      "doi": "https://doi.org/10.1109/TASL.2008.2004526"
+    },
+    "citation": "MURTY K S R, YEGNANARAYANA B. Epoch Extraction From Speech Signals[J]. IEEE Transactions on Audio, Speech, and Language Processing, 2008, 16(8): 1602-1613. DOI: 10.1109/TASL.2008.2004526."
   },
   {
     "id": "SRC-TDKLATT",
@@ -226,7 +238,7 @@
   },
   {
     "id": "REF-KLATT",
-    "title": "Klatt formant synthesizer",
+    "title": "Software for a cascade/parallel formant synthesizer",
     "modules": [
       "M06"
     ],
@@ -238,7 +250,8 @@
     "urls": {
       "pdf": "https://sail.usc.edu/~lgoldste/Ling582/Week%2012/klatt1980.pdf",
       "doi": "https://doi.org/10.1121/1.383940"
-    }
+    },
+    "citation": "KLATT D H. Software for a cascade/parallel formant synthesizer[J]. The Journal of the Acoustical Society of America, 1980, 67(3): 971-995. DOI: 10.1121/1.383940."
   },
   {
     "id": "SRC-ZAIWA",
@@ -257,41 +270,42 @@
     "attribution": "经许可改写自陆尧、梁昌维、孔江平团队发布的 MATLAB 重合成代码。感谢三位老师及北京大学语言学实验室的支持与授权。",
     "permission_date": "2026-09-10",
     "adaptation_note": "原始实现为作者团队发布的 MATLAB 重合成代码。PhoneticToolbox 经许可改写为 Python，沿用已核对的 LPC 逆滤波、残差与脉冲连续统计算，F0 提取可采用 Parselmouth / Praat。REAPER 算法作为 PhoneticToolbox 新增的 F0 提取选项，用于嘎裂声基频的提取，属于本次适配增加的功能。v3 增加显式源与目标、双方向、控制点编辑及应用、批次与任务历史、四图对照和完整组保存。",
-    "adaptation_caution": "若合成效果不够理想，很可能与 PhoneticToolbox 本次改写和适配仍有不足有关。恳请将本模块的表现与原论文方法区分看待，不宜据此判断原论文的合成效果。建议同时尝试作者团队发布的官方开源代码，以原始实现作为参考，也欢迎反馈问题，帮助完善本次改写。"
+    "adaptation_caution": "PhoneticToolbox 提供经许可改写的 Python 实现。需要比较原始流程与合成效果时，可运行作者团队发布的 MATLAB 代码，并核对输入材料和参数设置。"
   },
   {
     "id": "REF-ZAIWA",
-    "title": "F0 与发声类型对载瓦语声调感知的贡献",
+    "title": "Contribution of F0 and phonation to tone perception in the Zaiwa language",
     "modules": [
       "M07"
     ],
     "kind": "paper",
     "acknowledgement_group": "academic",
-    "authors": "Yao Lu and Changwei Liang and Jiangping Kong",
+    "authors": "Yao Lu；Changwei Liang；Jiangping Kong",
     "version": "",
     "license": "article license is separate from code/data",
     "urls": {
       "paper": "https://www.sciencedirect.com/science/article/pii/S0095447025000245",
       "doi": "https://doi.org/10.1016/j.wocn.2025.101413"
     },
-    "citation": "Lu, Y., Liang, C., & Kong, J. (2025). Contribution of F0 and phonation to tone perception in the Zaiwa language. Journal of Phonetics, 110, 101413. https://doi.org/10.1016/j.wocn.2025.101413"
+    "citation": "LU Y, LIANG C, KONG J. Contribution of F0 and phonation to tone perception in the Zaiwa language[J]. Journal of Phonetics, 2025, 110: 101413. DOI: 10.1016/j.wocn.2025.101413."
   },
   {
     "id": "REF-GRIFFINLIM",
-    "title": "Griffin–Lim 重建",
+    "title": "Signal estimation from modified short-time Fourier transform",
     "modules": [
       "M09"
     ],
     "kind": "paper",
     "acknowledgement_group": "academic",
-    "authors": "Daniel W. Griffin and Jae S. Lim",
+    "authors": "Daniel W. Griffin；Jae S. Lim",
     "version": "",
     "license": "",
     "urls": {
       "paper": "https://ieeexplore.ieee.org/document/1164317",
       "pdf": "https://dub.ucsd.edu/CATbox/Reader/GriffinLimMSTFT.pdf",
       "doi": "https://doi.org/10.1109/TASSP.1984.1164317"
-    }
+    },
+    "citation": "GRIFFIN D W, LIM J S. Signal estimation from modified short-time Fourier transform[J]. IEEE Transactions on Acoustics, Speech, and Signal Processing, 1984, 32(2): 236-243. DOI: 10.1109/TASSP.1984.1164317."
   },
   {
     "id": "SRC-VTL",
@@ -312,49 +326,55 @@
   },
   {
     "id": "DOC-VTL24",
-    "title": "VocalTractLab 2.4 官方手册",
+    "title": "VocalTractLab 2.4 User Manual",
     "modules": [
       "M10"
     ],
     "kind": "manual",
     "acknowledgement_group": "academic",
     "authors": "Peter Birkholz",
-    "version": "link only; manual 2.4",
+    "version": "2.4",
     "license": "",
     "urls": {
-      "pdf": "https://www.vocaltractlab.de/download-vocaltractlab/VTL2.4-manual.pdf"
-    }
+      "pdf": "https://www.vocaltractlab.de/download-vocaltractlab/VTL2.4-manual.pdf",
+      "official_download": "https://www.vocaltractlab.de/index.php?page=vocaltractlab-download"
+    },
+    "citation": "BIRKHOLZ P. VocalTractLab 2.4 User Manual[Z/OL]. (2025-12-05)[2026-10-11]. https://www.vocaltractlab.de/download-vocaltractlab/VTL2.4-manual.pdf."
   },
   {
     "id": "DOC-VTL23",
-    "title": "VocalTractLab 2.3 官方手册（补充）",
+    "title": "VocalTractLab 2.3 User Manual",
     "modules": [
       "M10"
     ],
     "kind": "manual",
     "acknowledgement_group": "academic",
     "authors": "Peter Birkholz",
-    "version": "link only; manual 2.3",
+    "version": "2.3",
     "license": "",
     "urls": {
-      "pdf": "https://www.vocaltractlab.de/download-vocaltractlab/VTL2.3-manual.pdf"
-    }
+      "pdf": "https://www.vocaltractlab.de/download-vocaltractlab/VTL2.3-manual.pdf",
+      "official_download": "https://www.vocaltractlab.de/index.php?page=vocaltractlab-download"
+    },
+    "citation": "BIRKHOLZ P. VocalTractLab 2.3 User Manual[Z/OL]. (2020-08-09)[2026-10-11]. https://www.vocaltractlab.de/download-vocaltractlab/VTL2.3-manual.pdf."
   },
   {
     "id": "REF-VTL2006",
-    "title": "三维声道模型",
+    "title": "Construction and Control of a Three-Dimensional Vocal Tract Model",
     "modules": [
       "M10"
     ],
     "kind": "paper",
     "acknowledgement_group": "academic",
-    "authors": "Peter Birkholz and Dietmar Jackèl and Bernd J. Kröger",
+    "authors": "Peter Birkholz；Dietmar Jackèl；Bernd J. Kröger",
     "version": "",
     "license": "",
     "urls": {
       "pdf": "https://www.vocaltractlab.de/publications/birkholz-2006-icassp.pdf",
-      "publications": "https://www.vocaltractlab.de/index.php?page=birkholz-publications"
-    }
+      "publications": "https://www.vocaltractlab.de/index.php?page=birkholz-publications",
+      "doi": "https://doi.org/10.1109/ICASSP.2006.1660160"
+    },
+    "citation": "BIRKHOLZ P, JACKÈL D, KRÖGER B J. Construction and Control of a Three-Dimensional Vocal Tract Model[C]//2006 IEEE International Conference on Acoustics, Speech and Signal Processing. [S.l.]: IEEE, 2006: I-873-I-876. DOI: 10.1109/ICASSP.2006.1660160."
   },
   {
     "id": "SRC-THREE",
@@ -388,19 +408,22 @@
   },
   {
     "id": "ASSET-NASAL",
-    "title": "Healthy nasal cavities — averaged geometry",
+    "title": "Data for \"Characterization of the Airflow within an Average Geometry of the Healthy Human Nasal Cavity\"",
     "modules": [
       "M10"
     ],
     "kind": "derived-research-data",
     "acknowledgement_group": "academic",
-    "authors": "Jan Brüning and Thomas Hildebrandt and Werner Heppt and Nora Schmidt and Hans Lamecker and Angelika Szengel and Natalja Amiridze and Heiko Ramm and Matthias Bindernagel and Stefan Zachow and Leonid Goubergrits",
-    "version": "v4 according to existing sources.lock.json",
+    "authors": "Jan Brüning；Thomas Hildebrandt；Werner Heppt；Hans Lamecker；Nora Schmidt；Angelika Szengel；Natalja Amiridze；Heiko Ramm；Matthias Bindernagel；Stefan Zachow；Leonid Goubergrits",
+    "version": "v4",
     "license": "CC BY 4.0（官方 v4 元数据与原始网格摘要已核对）。保留作者、来源、许可链接和修改说明。",
     "urls": {
       "doi": "https://doi.org/10.6084/m9.figshare.9585410.v4",
+      "dataset": "https://figshare.com/articles/dataset/Data_for_Characterization_of_the_Airflow_within_an_Average_Geometry_of_the_Healthy_Human_Nasal_Cavity_/9585410/4",
+      "metadata": "https://api.figshare.com/v2/articles/9585410/versions/4",
       "related_paper": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7048824/"
-    }
+    },
+    "citation": "BRÜNING J, HILDEBRANDT T, HEPPT W, et al. Data for \"Characterization of the Airflow within an Average Geometry of the Healthy Human Nasal Cavity\": version 4[DS/OL]. figshare, 2020-02-25[2026-10-11]. https://doi.org/10.6084/m9.figshare.9585410.v4. DOI: 10.6084/m9.figshare.9585410.v4."
   },
   {
     "id": "SRC-VTLWRAPPER",
@@ -411,7 +434,7 @@
     "kind": "reference-only",
     "acknowledgement_group": "software",
     "authors": "Paul Krug",
-    "version": "reference commit bb37e1894a790f31d4ef7c19803c177cc095e290 from existing lock",
+    "version": "参考提交 bb37e1894a790f31d4ef7c19803c177cc095e290",
     "license": "",
     "urls": {
       "repository": "https://github.com/paul-krug/VocalTractLab-Python"
@@ -427,7 +450,7 @@
     "acknowledgement_group": "software",
     "authors": "The MediaPipe Authors",
     "version": "legacy Python 0.10.14; tasks-vision 0.10.14; face_landmarker float16/1",
-    "license": "Apache-2.0 for code; bundled model terms require artifact audit",
+    "license": "Apache-2.0（代码）",
     "urls": {
       "documentation": "https://developers.google.com/edge/mediapipe/solutions/vision/face_landmarker",
       "repository": "https://github.com/google-ai-edge/mediapipe"
@@ -437,13 +460,14 @@
     "id": "SRC-FFMPEG",
     "title": "FFmpeg",
     "modules": [
-      "M05"
+      "M05",
+      "M10"
     ],
     "kind": "native-tool",
     "acknowledgement_group": "software",
     "authors": "FFmpeg contributors",
     "version": "",
-    "license": "build-dependent; not yet verified",
+    "license": "",
     "urls": {
       "homepage": "https://ffmpeg.org/",
       "license": "https://ffmpeg.org/legal.html"
@@ -458,8 +482,8 @@
     "kind": "external-tool-and-models",
     "acknowledgement_group": "software",
     "authors": "Montreal Corpus Tools / Michael McAuliffe（MFA）；Daniel Povey 等（Kaldi）",
-    "version": "3.3.8 (Windows Preview independent bundled runtime)",
-    "license": "each executable/model/dictionary must be checked",
+    "version": "MFA 3.3.8；独立组件3.3.8-r1",
+    "license": "MIT（MFA）；Kaldi、模型、词典与原生依赖分别保留许可",
     "urls": {
       "documentation": "https://montreal-forced-aligner.readthedocs.io/en/v3.3.8/",
       "license": "https://github.com/MontrealCorpusTools/Montreal-Forced-Aligner/blob/v3.3.8/LICENSE"
@@ -467,19 +491,20 @@
   },
   {
     "id": "REF-MFA",
-    "title": "Montreal Forced Aligner 论文",
+    "title": "Montreal Forced Aligner: Trainable Text-Speech Alignment Using Kaldi",
     "modules": [
       "M11"
     ],
     "kind": "paper",
     "acknowledgement_group": "academic",
-    "authors": "Michael McAuliffe and Michaela Socolof and Sarah Mihuc and Michael Wagner and Morgan Sonderegger",
+    "authors": "Michael McAuliffe；Michaela Socolof；Sarah Mihuc；Michael Wagner；Morgan Sonderegger",
     "version": "",
     "license": "",
     "urls": {
       "paper": "https://www.isca-archive.org/interspeech_2017/mcauliffe17_interspeech.html",
       "doi": "https://doi.org/10.21437/Interspeech.2017-1386"
-    }
+    },
+    "citation": "MCAULIFFE M, SOCOLOF M, MIHUC S, et al. Montreal Forced Aligner: Trainable Text-Speech Alignment Using Kaldi[C]//Interspeech 2017. [S.l.]: ISCA, 2017: 498-502. DOI: 10.21437/Interspeech.2017-1386."
   },
   {
     "id": "ASSET-DOULOS",
@@ -498,7 +523,7 @@
     "kind": "font",
     "acknowledgement_group": "software",
     "authors": "SIL International",
-    "version": "Version 7.000; read from the included font name table",
+    "version": "7.000",
     "license": "SIL Open Font License 1.1; embedded license extracted without modification",
     "urls": {
       "homepage": "https://software.sil.org/doulos/",
@@ -507,14 +532,14 @@
   },
   {
     "id": "ASSET-MASCOT",
-    "title": "K2 蓝色波形团子与 U2 设计参考",
+    "title": "PhoneticToolbox 31款语音学应用图标",
     "modules": [
       "global"
     ],
     "kind": "provenance-pending",
     "acknowledgement_group": "software",
     "authors": "",
-    "version": "",
+    "version": "ptb-app-icons/1",
     "license": "",
     "urls": {}
   },
@@ -546,7 +571,7 @@
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "Travis E. Oliphant et al.",
-    "version": "2.2.6 in phonetic_311; v3 pin pending",
+    "version": "2.2.6",
     "license": "BSD-3-Clause；实际 wheel 的原生组件与运行库许可另列",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/numpy/2.2.6/json",
@@ -569,7 +594,7 @@
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "SciPy Developers",
-    "version": "1.16.3 in phonetic_311; v3 pin pending",
+    "version": "1.16.3",
     "license": "BSD-3-Clause；实际 wheel 的原生组件与运行库许可另列",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/scipy/1.16.3/json",
@@ -590,7 +615,7 @@
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "The Pandas Development Team",
-    "version": "2.3.3 in phonetic_311; v3 pin pending",
+    "version": "2.3.3",
     "license": "BSD-3-Clause",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/pandas/2.3.3/json",
@@ -609,7 +634,7 @@
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "John D. Hunter, Michael Droettboom",
-    "version": "3.10.8 in phonetic_311; v3 pin pending",
+    "version": "3.10.8",
     "license": "Matplotlib 自有许可及历史组件许可，见原文；不能将 PSF 风格概括当成全部组件的单一许可",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/matplotlib/3.10.8/json",
@@ -631,7 +656,7 @@
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "Riverbank Computing Limited",
-    "version": "6.6.1 in phonetic_311; v3 pin pending",
+    "version": "6.6.1",
     "license": "GPLv3 / Riverbank 商业许可；PyPI 开源版本须遵守 GPL，Qt 与 Chromium 等组件许可另列",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/PyQt6/6.6.1/json",
@@ -647,7 +672,7 @@
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "Luke Campagnola",
-    "version": "0.14.0 in phonetic_311; v3 pin pending",
+    "version": "0.14.0",
     "license": "MIT",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/pyqtgraph/0.14.0/json",
@@ -664,7 +689,7 @@
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "Yannick Jadoul",
-    "version": "0.4.7 in phonetic_311; v3 pin pending",
+    "version": "0.4.7",
     "license": "GPL-3.0-or-later；Praat 及其依赖另列",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/praat-parselmouth/0.4.7/json",
@@ -683,7 +708,7 @@
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "The PyWavelets Developers",
-    "version": "1.9.0 in phonetic_311; v3 pin pending",
+    "version": "1.9.0",
     "license": "MIT AND BSD-3-Clause",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/PyWavelets/1.9.0/json",
@@ -702,7 +727,7 @@
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "Matthias Geier",
-    "version": "0.5.3 in phonetic_311; v3 pin pending",
+    "version": "0.5.3",
     "license": "MIT；PortAudio 等原生组件许可另列",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/sounddevice/0.5.3/json",
@@ -723,7 +748,7 @@
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "Bastian Bechtold",
-    "version": "0.13.1 in phonetic_311; M09 isolated runtime 0.13.1 in requirements/requirements-m09-ui.lock",
+    "version": "0.13.1",
     "license": "BSD-3-Clause；libsndfile 等原生组件许可另列",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/soundfile/0.13.1/json",
@@ -739,7 +764,7 @@
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "See AUTHORS",
-    "version": "3.1.5 in phonetic_311; v3 pin pending",
+    "version": "3.1.5",
     "license": "MIT",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/openpyxl/3.1.5/json",
@@ -758,7 +783,7 @@
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "Steve Canny",
-    "version": "1.2.0 in phonetic_311; v3 pin pending",
+    "version": "1.2.0",
     "license": "MIT",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/python-docx/1.2.0/json",
@@ -778,7 +803,7 @@
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "OpenCV Team",
-    "version": "4.13.0.92 in phonetic_311; M09 isolated runtime 4.13.0.92 in requirements/requirements-m09-ui.lock",
+    "version": "4.13.0.92",
     "license": "Apache-2.0；打包的第三方组件见 LICENSE-3RD-PARTY.txt",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/opencv-contrib-python/4.13.0.92/json",
@@ -794,7 +819,7 @@
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "The MediaPipe Authors",
-    "version": "0.10.14 in phonetic_311; v3 pin pending",
+    "version": "0.10.14",
     "license": "Apache-2.0；模型和原生依赖按具体资源分别核对",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/mediapipe/0.10.14/json",
@@ -810,7 +835,7 @@
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "Jeffrey A. Clark and contributors；Fredrik Lundh and contributors（PIL）",
-    "version": "12.0.0 in phonetic_311; v3 pin pending",
+    "version": "12.0.0",
     "license": "MIT-CMU",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/Pillow/12.0.0/json",
@@ -832,7 +857,7 @@
     "kind": "installed-runtime-package",
     "acknowledgement_group": "software",
     "authors": "Hartmut Goebel, Giovanni Bajo, David Vierra, David Cortesi, Martin Zibricky",
-    "version": "6.17.0 in phonetic_311; v3 pin pending",
+    "version": "6.17.0",
     "license": "GPL-2.0-or-later，含 bootloader 分发例外及 Apache-2.0 runtime hooks；构建工具许可不自动赋予应用相同许可",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/PyInstaller/6.17.0/json",
@@ -2201,8 +2226,8 @@
     "kind": "probe-runtime-dependency",
     "acknowledgement_group": "software",
     "authors": "Python Software Foundation and python-build-standalone contributors",
-    "version": "CPython 3.11.14, uv-managed Windows x86_64 standalone distribution",
-    "license": "PSF-2.0 and bundled component terms; runtime distribution audit pending",
+    "version": "CPython 3.11.14",
+    "license": "PSF-2.0（CPython）；随包组件分别保留许可",
     "urls": {
       "runtime_builds": "https://github.com/astral-sh/python-build-standalone",
       "python": "https://www.python.org/"
@@ -4190,8 +4215,8 @@
     "kind": "development-runtime",
     "acknowledgement_group": "software",
     "authors": "Python Software Foundation and python-build-standalone contributors",
-    "version": "CPython 3.11.14, uv-managed Windows x86_64 standalone distribution",
-    "license": "PSF-2.0 and bundled component terms; runtime distribution audit pending",
+    "version": "CPython 3.11.14",
+    "license": "PSF-2.0（CPython）；随包组件分别保留许可",
     "urls": {
       "runtime_builds": "https://github.com/astral-sh/python-build-standalone",
       "python": "https://www.python.org/"
@@ -4342,7 +4367,7 @@
     "kind": "reference-only",
     "acknowledgement_group": "software",
     "authors": "OWASP Cheat Sheet Series contributors",
-    "version": "Online documentation reviewed 2026-09-09; commit unknown",
+    "version": "",
     "license": "",
     "urls": {
       "documentation": "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html"
@@ -4357,7 +4382,7 @@
     "kind": "reference-only",
     "acknowledgement_group": "software",
     "authors": "OWASP Cheat Sheet Series contributors",
-    "version": "Online documentation reviewed 2026-09-09; commit unknown",
+    "version": "",
     "license": "",
     "urls": {
       "documentation": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html"
@@ -4411,7 +4436,7 @@
     "kind": "reference-only",
     "acknowledgement_group": "software",
     "authors": "PostgreSQL Global Development Group",
-    "version": "PostgreSQL 17 documentation reviewed 2026-09-09; commit unknown",
+    "version": "",
     "license": "",
     "urls": {
       "select": "https://www.postgresql.org/docs/17/sql-select.html",
@@ -4427,7 +4452,7 @@
     "kind": "reference-only",
     "acknowledgement_group": "software",
     "authors": "Python Software Foundation and Python contributors",
-    "version": "CPython 3.11.14; documentation branch 3.11 reviewed 2026-09-09",
+    "version": "Python 3.11",
     "license": "",
     "urls": {
       "fsync": "https://docs.python.org/3.11/library/os.html",
@@ -4444,7 +4469,7 @@
     "kind": "reference-only",
     "acknowledgement_group": "software",
     "authors": "Starlette contributors",
-    "version": "Documentation reviewed 2026-09-09; installed dependency remains in existing lock",
+    "version": "",
     "license": "",
     "urls": {
       "documentation": "https://starlette.dev/responses/"
@@ -4459,7 +4484,7 @@
     "kind": "test-dependency",
     "acknowledgement_group": "software",
     "authors": "Microsoft and Playwright contributors",
-    "version": "1.62.1 (Codex bundled workspace runtime)",
+    "version": "1.62.1",
     "license": "Apache-2.0",
     "urls": {
       "homepage": "https://playwright.dev/",
@@ -4475,7 +4500,7 @@
     "kind": "dependency",
     "acknowledgement_group": "software",
     "authors": "Python Software Foundation and Python contributors",
-    "version": "CPython 3.11.14 standard library; 3.11 documentation branch reviewed 2026-09-09",
+    "version": "Python 3.11",
     "license": "PSF-2.0 (existing CPython runtime)",
     "urls": {
       "documentation": "https://docs.python.org/3.11/library/zipfile.html",
@@ -4689,7 +4714,7 @@
     ],
     "kind": "dependency",
     "acknowledgement_group": "software",
-    "authors": "Not recorded in installed metadata",
+    "authors": "SciPy Developers",
     "version": "1.16.3",
     "license": "BSD-3-Clause；wheel 内原生组件、运行库许可与例外须一并保留。",
     "urls": {
@@ -4797,7 +4822,7 @@
     "kind": "documentation-reference",
     "acknowledgement_group": "software",
     "authors": "Microsoft",
-    "version": "Official documentation consulted 2026-09-09; Windows / CPython 3.11.14 APIs tested locally",
+    "version": "",
     "license": "",
     "urls": {
       "process": "https://learn.microsoft.com/en-us/windows/win32/procthread/process-creation-flags",
@@ -4815,7 +4840,7 @@
     "kind": "documentation-reference",
     "acknowledgement_group": "software",
     "authors": "Microsoft",
-    "version": "Official documentation consulted 2026-09-09; Windows / CPython 3.11.14 APIs tested locally",
+    "version": "",
     "license": "",
     "urls": {
       "documentation": "https://learn.microsoft.com/en-us/windows/win32/api/mmreg/ns-mmreg-waveformatextensible"
@@ -4830,7 +4855,7 @@
     "kind": "documentation-reference",
     "acknowledgement_group": "software",
     "authors": "Python Software Foundation",
-    "version": "Official documentation consulted 2026-09-09; Windows / CPython 3.11.14 APIs tested locally",
+    "version": "Python 3.11",
     "license": "",
     "urls": {
       "documentation": "https://docs.python.org/3.11/library/pickle.html"
@@ -4845,7 +4870,7 @@
     "kind": "specification-reference",
     "acknowledgement_group": "software",
     "authors": "W3C Web Media Working Group",
-    "version": "Specification consulted 2026-09-11; runtime encoder from existing Qt WebEngine 6.11.2",
+    "version": "",
     "license": "",
     "urls": {
       "specification": "https://www.w3.org/TR/webcodecs/"
@@ -4860,7 +4885,7 @@
     "kind": "specification-reference",
     "acknowledgement_group": "software",
     "authors": "The WebM Project",
-    "version": "Specification consulted 2026-09-11; runtime encoder from existing Qt WebEngine 6.11.2",
+    "version": "",
     "license": "",
     "urls": {
       "specification": "https://www.webmproject.org/docs/container/"
@@ -4875,7 +4900,7 @@
     "kind": "specification-reference",
     "acknowledgement_group": "software",
     "authors": "W3C Portable Network Graphics Working Group",
-    "version": "W3C Recommendation 24 June 2025, sections 5.5 and 11.3.4.3; canvas encoder from existing browser/Qt",
+    "version": "第三版，W3C Recommendation 2025-06-24",
     "license": "",
     "urls": {
       "specification": "https://www.w3.org/TR/2025/REC-png-3-20250624/"
@@ -4893,7 +4918,7 @@
     "kind": "specification-reference",
     "acknowledgement_group": "software",
     "authors": "W3C CSS Working Group；The Qt Company；Matplotlib developers",
-    "version": "CSS Font Loading Level 3 WD 2023-04-06; Qt and Matplotlib online API references observed 2026-09-12; installed runtime versions remain independently locked",
+    "version": "CSS Font Loading Level 3，Working Draft 2023-04-06",
     "license": "",
     "urls": {
       "font_loading": "https://www.w3.org/TR/2023/WD-css-font-loading-3-20230406/",
@@ -4904,18 +4929,20 @@
   },
   {
     "id": "REF-YIN-EGG-THESIS",
-    "title": "汉语韵律的嗓音发声研究（旧版手册引用）",
+    "title": "汉语韵律的嗓音发声研究",
     "modules": [
       "M03"
     ],
     "kind": "reference-only",
     "acknowledgement_group": "academic",
     "authors": "尹基德",
-    "version": "馆藏 020/D2010(71)；完整论文页码未核准",
+    "version": "",
     "license": "",
     "urls": {
       "catalog": "https://lib.chinese.pku.edu.cn/xueweilunwen?combine=&degree=All&degree_str=&field_xwlw_callno_value=&major=All&page=314&sort_by=field_xwlw_year_int_value&sort_order=DESC&year=&year_int_max=&year_int_min="
-    }
+    },
+    "citation": "尹基德. 汉语韵律的嗓音发声研究[D]. 北京: 北京大学, 2010.",
+    "reference_note": "北京大学博士学位论文，封面日期为2010年12月。"
   },
   {
     "id": "REF-HENRICH-2004-DEGG",
@@ -4926,28 +4953,31 @@
     "kind": "reference-only",
     "acknowledgement_group": "academic",
     "authors": "Nathalie Henrich；Christophe d’Alessandro；Boris Doval；Michèle Castellengo",
-    "version": "JASA 115(3), 1321–1332 (2004)；方法审阅参考",
+    "version": "",
     "license": "",
     "urls": {
       "paper": "https://doi.org/10.1121/1.1646401",
-      "author_pdf": "https://www.lam.jussieu.fr/Membres/Castellengo/publications/2004b-Voice%20DEGG.pdf"
-    }
+      "author_pdf": "https://www.lam.jussieu.fr/Membres/Castellengo/publications/2004b-Voice%20DEGG.pdf",
+      "doi": "https://doi.org/10.1121/1.1646401"
+    },
+    "citation": "HENRICH N, D’ALESSANDRO C, DOVAL B, et al. On the use of the derivative of electroglottographic signals for characterization of nonpathological phonation[J]. The Journal of the Acoustical Society of America, 2004, 115(3): 1321-1332. DOI: 10.1121/1.1646401."
   },
   {
     "id": "REF-MAKHOUL-1975-LPC",
-    "title": "Linear Prediction: A Tutorial Review",
+    "title": "Linear prediction: A tutorial review",
     "modules": [
       "M04"
     ],
     "kind": "reference-only",
     "acknowledgement_group": "academic",
     "authors": "John Makhoul",
-    "version": "Proceedings of the IEEE 63(4), 561–580 (1975); method reference",
+    "version": "",
     "license": "",
     "urls": {
       "paper": "https://doi.org/10.1109/PROC.1975.9792",
       "university_pdf": "https://www.commsp.ee.ic.ac.uk/~xl404/papers/Linear%20prediction%20A%20tutorial%20review.pdf"
-    }
+    },
+    "citation": "MAKHOUL J. Linear prediction: A tutorial review[J]. Proceedings of the IEEE, 1975, 63(4): 561-580. https://doi.org/10.1109/PROC.1975.9792."
   },
   {
     "id": "M04-PY-NUMPY",
@@ -4958,8 +4988,8 @@
     "kind": "dependency",
     "acknowledgement_group": "software",
     "authors": "NumPy contributors",
-    "version": "2.2.6; existing project Conda/MKL compatible runtime",
-    "license": "See existing installed distribution licenses; no new library redistribution in this stage",
+    "version": "2.2.6",
+    "license": "BSD-3-Clause（项目代码）；原生组件与运行库分别保留许可",
     "urls": {
       "release": "https://numpy.org/doc/2.2/reference/generated/numpy.correlate.html"
     }
@@ -4973,8 +5003,8 @@
     "kind": "dependency",
     "acknowledgement_group": "software",
     "authors": "SciPy contributors",
-    "version": "1.16.3; existing project Conda/MKL compatible runtime",
-    "license": "See existing installed distribution licenses; no new library redistribution in this stage",
+    "version": "1.16.3",
+    "license": "BSD-3-Clause（项目代码）；原生组件与运行库分别保留许可",
     "urls": {
       "solver": "https://github.com/scipy/scipy/blob/v1.16.3/scipy/linalg/_basic.py",
       "response": "https://github.com/scipy/scipy/blob/v1.16.3/scipy/signal/_filter_design.py"
@@ -4998,20 +5028,21 @@
   },
   {
     "id": "SRC-M16-VOICEVISTA",
-    "title": "VoiceVista egg_recorder 录音安全机制",
+    "title": "VoiceVista 录音模块",
     "modules": [
       "M16"
     ],
     "kind": "reviewed-local-source",
     "acknowledgement_group": "software",
     "authors": "井井",
-    "version": "design-reviewed; no dynamic import; v3 implementation recording/1",
+    "version": "",
     "license": "",
-    "urls": {}
+    "urls": {},
+    "reference_note": "录音流程与文件保存机制参考。"
   },
   {
     "id": "M17-IPA-CHART",
-    "title": "International Phonetic Alphabet chart — 2026 reprint",
+    "title": "The International Phonetic Alphabet",
     "modules": [
       "M17",
       "M10"
@@ -5019,27 +5050,30 @@
     "kind": "reference-chart",
     "acknowledgement_group": "academic",
     "authors": "International Phonetic Association",
-    "version": "2026 reprint; 2015/2005 content",
+    "version": "2026年重印；图表修订至2015/2005",
     "license": "CC BY-SA 4.0",
     "urls": {
       "homepage": "https://www.internationalphoneticassociation.org/content/ipa-chart",
       "pdf": "https://www.internationalphoneticassociation.org/IPAcharts/common_files/pdfs/pdfs_IPA_charts_E/IPA_Kiel.pdf"
-    }
+    },
+    "citation": "INTERNATIONAL PHONETIC ASSOCIATION. The International Phonetic Alphabet[EB/OL]. (2026)[2026-10-11]. https://www.internationalphoneticassociation.org/IPAcharts/common_files/pdfs/pdfs_IPA_charts_E/IPA_Kiel.pdf."
   },
   {
     "id": "M17-EXTIPA-2025",
-    "title": "Extensions to the IPA — 2025 chart",
+    "title": "ExtIPA symbols for disordered speech",
     "modules": [
       "M17"
     ],
     "kind": "reference-chart",
     "acknowledgement_group": "academic",
-    "authors": "International Clinical Phonetics and Linguistics Association",
-    "version": "extIPA 2025",
+    "authors": "International Clinical Phonetics；Linguistics Association",
+    "version": "2025年图表",
     "license": "CC BY-SA 3.0 as identified on ICPLA resources; original chart reproduction wording also recorded",
     "urls": {
-      "homepage": "https://www.icpla.org.uk/resources"
-    }
+      "homepage": "https://www.icpla.org.uk/resources",
+      "pdf": "https://drive.google.com/file/d/1innt3AxeLuAj0p8_7_PpHV8aOY8LbpK3/view"
+    },
+    "citation": "INTERNATIONAL CLINICAL PHONETICS AND LINGUISTICS ASSOCIATION. ExtIPA symbols for disordered speech[EB/OL]. (2025)[2026-10-11]. https://www.icpla.org.uk/resources."
   },
   {
     "id": "M17-VOQS-BALL-2018",
@@ -5049,31 +5083,34 @@
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
-    "authors": "Martin J. Ball and John H. Esling and B. Craig Dickson",
-    "version": "VoQS revised to 2016",
+    "authors": "Martin J. Ball；John H. Esling；B. Craig Dickson",
+    "version": "VoQS 2016年修订图",
     "license": "",
     "urls": {
       "paper": "https://doi.org/10.1017/S0025100317000159",
+      "publisher": "https://www.cambridge.org/core/journals/journal-of-the-international-phonetic-association/article/abs/revisions-to-the-voqs-system-for-the-transcription-of-voice-quality/67662EA00A0B1D77136AF8514B6F230B",
       "chart": "https://www.icpla.org.uk/resources"
-    }
+    },
+    "citation": "BALL M J, ESLING J H, DICKSON B C. Revisions to the VoQS system for the transcription of voice quality[J]. Journal of the International Phonetic Association, 2018, 48(2): 165-171. https://doi.org/10.1017/S0025100317000159."
   },
   {
     "id": "M17-VOQS-ZH-UNTPHESOCA",
-    "title": "VoQS：音质符号（2016 中英双语版）",
+    "title": "VoQS: 音质符号 (2016中英双语版)",
     "modules": [
       "M17"
     ],
     "kind": "terminology-reference",
     "acknowledgement_group": "academic",
-    "authors": "王天恒（Wang, Tianheng）",
-    "version": "2020 Chinese translation of 2016 chart",
+    "authors": "王天恒（Wang, Tianheng），译",
+    "version": "v1；2020年译制的VoQS 2016年修订图",
     "license": "CC BY 4.0（Zenodo 对应中文译表记录）；保留作者、来源、许可链接及交互改写说明，原表作者另列，原 PDF 不随包。",
     "urls": {
       "doi": "https://doi.org/10.5281/zenodo.10206204",
       "record": "https://zenodo.org/records/10206204",
+      "author": "https://phesoca.com/wang/",
       "license": "https://creativecommons.org/licenses/by/4.0/"
     },
-    "citation": "王天恒. VoQS：音质符号（2016 中英双语版）[EB/OL]. Zenodo(2020-08-30)[2023-12-26]. https://doi.org/10.5281/zenodo.10206204."
+    "citation": "王天恒, 译. VoQS: 音质符号 (2016中英双语版)[EB/OL]. (2020-08-30)[2026-10-11]. https://doi.org/10.5281/zenodo.10206204."
   },
   {
     "id": "M17-PTB-IPA-PLUS-FONT",
@@ -5095,52 +5132,41 @@
   },
   {
     "id": "M17-UNICODE-PHONETIC-ENCODING",
-    "title": "Unicode phonetic marks, VoQS glyph correction and cartouche encoding discussion",
+    "title": "Unicode 音标与附加符号编码资料",
     "modules": [
       "M17"
     ],
     "kind": "encoding-reference",
     "acknowledgement_group": "academic",
-    "authors": "The Unicode Consortium（Unicode 标准）；Kirk Miller、Martin Ball（两份提案）；SIL Global（字体资料）",
-    "version": "Unicode references checked 2026-10-02",
+    "authors": "The Unicode Consortium（Unicode标准）；Kirk Miller、Martin Ball（两份提案）；SIL Global（字体资料）",
+    "version": "Unicode 16.0.0；L2/20-113；L2/24-182R",
     "license": "",
     "urls": {
       "chapter7": "https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-7/",
       "voqs_correction": "https://www.unicode.org/L2/L2020/20113-voqs-correction.pdf",
       "cartouche": "https://www.unicode.org/L2/L2024/24182r-cartouche.pdf",
       "bridges": "https://software.sil.org/fonts/bridging-diacritics/"
-    }
-  },
-  {
-    "id": "M17-CIN-REFERENCE",
-    "title": "User-supplied ipa.cin lookup aliases",
-    "modules": [
-      "M17"
-    ],
-    "kind": "local-reference",
-    "acknowledgement_group": "software",
-    "authors": "",
-    "version": "User supplied file checked 2026-10-02",
-    "license": "",
-    "urls": {
-      "unicode_mapping": "https://software.sil.org/doulos/history/"
-    }
+    },
+    "citation": "THE UNICODE CONSORTIUM. The Unicode Standard, Version 16.0.0: Chapter 7, Europe-I[S/OL]. (2024-09-10)[2026-10-11]. https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-7/.\nMILLER K, BALL M. Unicode request for modification of VoQS character: L2/20-113[R/OL]. (2020-01-19)[2026-10-11]. https://www.unicode.org/L2/L2020/20113-voqs-correction.pdf.\nMILLER K, BALL M. Unicode request for ExtIPA cartouche: L2/24-182R[R/OL]. (2024-09-04)[2026-10-11]. https://www.unicode.org/L2/L2024/24182r-cartouche.pdf.\nSIL GLOBAL. Using bridging diacritics[EB/OL]. (2025-06-02)[2026-10-11]. https://software.sil.org/fonts/bridging-diacritics/."
   },
   {
     "id": "M17-INTERACTIVE-LAYOUT-REFERENCE",
-    "title": "Interactive IPA chart — layout reference",
+    "title": "Interactive IPA Chart 与 IPA Unicode Keyboard",
     "modules": [
       "M17"
     ],
     "kind": "design-reference",
     "acknowledgement_group": "software",
-    "authors": "Weston Ruter（IPA keyboard）",
-    "version": "No external implementation included",
+    "authors": "IPAChart.com；Weston Ruter（IPA Unicode Keyboard）",
+    "version": "",
     "license": "",
     "urls": {
-      "website": "https://www.ipachart.com/",
-      "alternative": "https://westonruter.github.io/ipa-chart/keyboard/"
-    }
+      "Interactive IPA Chart": "https://www.ipachart.com/",
+      "IPA Unicode Keyboard": "https://westonruter.github.io/ipa-chart/keyboard/",
+      "Keyboard源码": "https://github.com/westonruter/ipa-chart"
+    },
+    "citation": "IPAChart.com. Interactive IPA Chart[EB/OL]. [2026-10-11]. https://www.ipachart.com/.\nRUTER W. International Phonetic Alphabet (IPA) Unicode Chart and Character Picker[EB/OL]. [2026-10-11]. https://github.com/westonruter/ipa-chart.",
+    "reference_note": "参考音标表的交互与分区方式。"
   },
   {
     "id": "M17-EXTIPA-LV-JIANG-2013",
@@ -5150,119 +5176,140 @@
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
-    "authors": "吕佳、江荻",
-    "version": "Independently authored Chinese explanations; 2002/2025 versions distinguished",
+    "authors": "吕佳；江荻",
+    "version": "",
     "license": "",
     "urls": {
-      "paper": "https://doi.org/10.3969/j.issn.1006-7299.2013.06.030"
-    }
+      "paper": "https://jasptl.haoyicn.cn/summary/19224?eng=0&type=history",
+      "doi": "https://doi.org/10.3969/j.issn.1006-7299.2013.06.030",
+      "funding_record": "https://www.nopss.gov.cn/n/2015/0721/c358205-27339164.html"
+    },
+    "citation": "吕佳, 江荻. 国际音标扩展表的分类、命名与功能[J]. 听力学及言语疾病杂志, 2013, 21(6): 665-668."
   },
   {
     "id": "M17-IOS-IPA-PHONETICS-REFERENCE",
-    "title": "User-supplied iPA Phonetics Pro screenshot — visible symbol inventory reference",
+    "title": "iPA Phonetics（iPA Phonetics Pro）",
     "modules": [
       "M17"
     ],
-    "kind": "design-reference",
+    "kind": "software-reference",
     "acknowledgement_group": "software",
     "authors": "John Esling、Christopher Coey",
-    "version": "No external implementation or screenshot bundled",
+    "version": "",
     "license": "",
     "urls": {
-      "symbol_rules": "https://www.internationalphoneticassociation.org/content/ipa-chart"
-    }
+      "App Store": "https://apps.apple.com/us/app/ipa-phonetics/id869642260"
+    },
+    "citation": "ESLING J, COEY C. iPA Phonetics: Version 3.0[EB/OL]. App Store, (2025-02-15)[2026-10-11]. https://apps.apple.com/us/app/ipa-phonetics/id869642260.",
+    "reference_note": "参考应用的符号展示与组合输入方式。"
   },
   {
     "id": "M17-IPA-CHART-ZH-2007",
-    "title": "中国语言学会语音学分会 · 国际音标中文版（2007；修订至2005年）",
+    "title": "The chart of the International Phonetic Alphabet in Chinese (2007)",
     "modules": [
       "M17",
       "M10"
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
-    "authors": "中国语言学会语音学分会",
-    "version": "用户指定图4中文名称；同名中文表刊于JIPA 2011, 41(2)",
+    "authors": "Phonetic Association of China（中国语言学会语音学分会）",
+    "version": "2007年中文版（IPA修订至2005年）",
     "license": "",
     "urls": {
-      "paper": "https://doi.org/10.1017/S0025100311000156"
-    }
+      "paper": "https://doi.org/10.1017/S0025100311000156",
+      "publisher": "https://www.cambridge.org/core/journals/journal-of-the-international-phonetic-association/article/abs/chart-of-the-international-phonetic-alphabet-in-chinese-2007/372C851EDD231F03709B56339F4DB400",
+      "association": "https://www.internationalphoneticassociation.org/IPAcharts/IPA_charts_T/IPA_charts_T.html"
+    },
+    "citation": "PHONETIC ASSOCIATION OF CHINA. The chart of the International Phonetic Alphabet in Chinese (2007)[J]. Journal of the International Phonetic Association, 2011, 41(2): 245. https://doi.org/10.1017/S0025100311000156."
   },
   {
     "id": "M17-IPA-HANDBOOK-JIANG-2008",
-    "title": "国际语音学会编，江荻译（2008）· 国际语音学会手册：国际音标使用指南",
+    "title": "国际语音学会手册：国际音标使用指南",
     "modules": [
       "M17",
       "M10"
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
-    "authors": "国际语音学会编；江荻译",
-    "version": "上海教育出版社，2008年第1版，ISBN 978-7-5444-1928-4；原著1999；本轮核对pp.9–24",
+    "authors": "国际语音学会，编著；江荻，译",
+    "version": "2008年中文译本",
     "license": "",
     "urls": {
-      "paper": "https://www.internationalphoneticassociation.org/content/handbook-ipa"
-    }
+      "catalogue": "https://ci.nii.ac.jp/ncid/BB01991047",
+      "original": "https://www.internationalphoneticassociation.org/content/handbook-ipa"
+    },
+    "citation": "国际语音学会. 国际语音学会手册：国际音标使用指南[M]. 江荻, 译. 上海: 上海教育出版社, 2008."
   },
   {
     "id": "M17-VOICE-QUALITY-ESLING-2019",
-    "title": "Esling, Moisik, Benner & Crevier-Buchman (2019) · Voice Quality: The Laryngeal Articulator Model",
+    "title": "Voice quality: The laryngeal articulator model",
     "modules": [
       "M17"
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
     "authors": "John H. Esling；Scott R. Moisik；Allison Benner；Lise Crevier-Buchman",
-    "version": "Cambridge University Press, 2019；ISBN 978-1-108-49842-5；本轮参考第1–2章",
+    "version": "",
     "license": "",
     "urls": {
-      "paper": "https://doi.org/10.1017/9781108696555"
-    }
+      "paper": "https://doi.org/10.1017/9781108696555",
+      "publisher": "https://www.cambridge.org/core/books/voice-quality/62327F676CC6B8823389A76449731F85",
+      "catalogue": "https://ci.nii.ac.jp/ncid/BB28502458"
+    },
+    "citation": "ESLING J H, MOISIK S R, BENNER A, et al. Voice quality: The laryngeal articulator model[M]. Cambridge: Cambridge University Press, 2019. https://doi.org/10.1017/9781108696555."
   },
   {
     "id": "M17-EXTIPA-BALL-2018",
-    "title": "Ball, Howard & Miller (2018) · Revisions to the extIPA chart, pp.155–164",
+    "title": "Revisions to the extIPA chart",
     "modules": [
       "M17"
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
     "authors": "Martin J. Ball；Sara J. Howard；Kirk Miller",
-    "version": "2015修订表；2017在线发表；2018卷期48(2)，155–164",
+    "version": "extIPA 2015年修订图",
     "license": "",
     "urls": {
-      "paper": "https://doi.org/10.1017/S0025100317000147"
-    }
+      "paper": "https://doi.org/10.1017/S0025100317000147",
+      "publisher": "https://www.cambridge.org/core/journals/journal-of-the-international-phonetic-association/article/abs/revisions-to-the-extipa-chart/06C01EA81DA2AECA2AC52AAF21556B33",
+      "chart": "https://www.internationalphoneticassociation.org/sites/default/files/extIPA_2016.pdf"
+    },
+    "citation": "BALL M J, HOWARD S J, MILLER K. Revisions to the extIPA chart[J]. Journal of the International Phonetic Association, 2018, 48(2): 155-164. https://doi.org/10.1017/S0025100317000147."
   },
   {
     "id": "M17-EXTIPA-BALL-2024",
-    "title": "Ball (2024) · Changes to certain extIPA diacritics, pp.692–695",
+    "title": "Changes to certain extIPA diacritics",
     "modules": [
       "M17"
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
     "authors": "Martin J. Ball",
-    "version": "2024-05-14 ICPLA批准三项调整；2024-07-01在线发表；38(7)，692–695",
+    "version": "extIPA 2024年修订图",
     "license": "",
     "urls": {
-      "paper": "https://doi.org/10.1080/02699206.2024.2365205"
-    }
+      "paper": "https://doi.org/10.1080/02699206.2024.2365205",
+      "publisher": "https://www.tandfonline.com/doi/full/10.1080/02699206.2024.2365205"
+    },
+    "citation": "BALL M J. Changes to certain extIPA diacritics[J]. Clinical Linguistics & Phonetics, 2024, 38(7): 692-695. https://doi.org/10.1080/02699206.2024.2365205."
   },
   {
     "id": "M17-EXTIPA-BALL-2025-REPLY",
-    "title": "Ball (2025) · Reply to letter concerning the revisions to some diacritics of the extensions to the IPA (extIPA), Ball (2024), pp.911–912",
+    "title": "Reply to letter concerning the revisions to some diacritics of the extensions to the IPA (extIPA), Ball (2024)",
     "modules": [
       "M17"
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
     "authors": "Martin J. Ball",
-    "version": "2025，39(9)，911–912；正文partially nasal用词与本目录核对的2025表partially denasal分开记录",
+    "version": "",
     "license": "",
     "urls": {
-      "paper": "https://doi.org/10.1080/02699206.2025.2489577"
-    }
+      "paper": "https://doi.org/10.1080/02699206.2025.2489577",
+      "publisher": "https://www.tandfonline.com/doi/full/10.1080/02699206.2025.2489577",
+      "pdf": "https://www.tandfonline.com/doi/pdf/10.1080/02699206.2025.2489577"
+    },
+    "citation": "BALL M J. Reply to letter concerning the revisions to some diacritics of the extensions to the IPA (extIPA), Ball (2024)[J]. Clinical Linguistics & Phonetics, 2025, 39(9): 911-912. https://doi.org/10.1080/02699206.2025.2489577."
   },
   {
     "id": "SRC-JETBRAINS-MONO",
@@ -5283,14 +5330,14 @@
   },
   {
     "id": "SRC-CODEX-PALETTE-REFERENCE",
-    "title": "Codex themes: visual reference",
+    "title": "Codex 配色参考",
     "modules": [
       "P04"
     ],
     "kind": "visual-reference",
     "acknowledgement_group": "software",
     "authors": "OpenAI and respective theme authors",
-    "version": "PTB palette adaptations / 1; reference name set observed in Codex 26.930.3930.0",
+    "version": "",
     "license": "",
     "urls": {
       "homepage": "https://openai.com/codex/"
@@ -5305,8 +5352,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
-    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/"
     }
@@ -5320,8 +5367,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "Konstantin Pschera / ayu-theme contributors",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 ayu-theme/ayu-colors@b0fd979a1ddf",
-    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；由 PTB 独立适配。",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "公开上游": "https://github.com/ayu-theme/ayu-colors",
@@ -5338,8 +5385,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "Catppuccin contributors",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 catppuccin/palette@07d02aa110ef",
-    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；由 PTB 独立适配。",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "公开上游": "https://github.com/catppuccin/palette",
@@ -5356,8 +5403,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "品牌参考：OpenAI",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
-    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "品牌视觉参考": "https://openai.com/codex/"
@@ -5372,8 +5419,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "Zeno Rocha / Dracula Theme contributors",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 dracula/visual-studio-code@a08a206f2c84",
-    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；由 PTB 独立适配。",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "公开上游": "https://github.com/dracula/visual-studio-code",
@@ -5390,8 +5437,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "sainnhe",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 sainnhe/everforest@85a86eb62409",
-    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；由 PTB 独立适配。",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "公开上游": "https://github.com/sainnhe/everforest",
@@ -5408,8 +5455,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "Primer / GitHub",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 primer/github-vscode-theme@cd78e5e4e7bc",
-    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；由 PTB 独立适配。",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "公开上游": "https://github.com/primer/github-vscode-theme",
@@ -5426,8 +5473,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "morhetz",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 morhetz/gruvbox@ef8864bb42bf",
-    "license": "MIT/X11（上游 README 声明）。完整版权/许可通知尚未取得；PTB 独立适配，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "公开上游": "https://github.com/morhetz/gruvbox",
@@ -5444,8 +5491,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "品牌参考：Linear",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
-    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "品牌视觉参考": "https://linear.app/brand"
@@ -5460,8 +5507,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
-    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/"
     }
@@ -5475,8 +5522,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "Mattia Astorino / Equinusocio（Material Theme 历史项目）",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
-    "license": "待确认：历史 Material Theme 上游已转向 Vira，当前未取得许可原文。未套用历史标签或其他同名项目许可。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "历史项目入口": "https://github.com/material-theme/vsc-material-theme",
@@ -5492,8 +5539,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
-    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/"
     }
@@ -5507,8 +5554,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "Wimer Hazenberg（原设计）；Microsoft Corporation（公开实现）",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 microsoft/vscode@40bb6fae2075",
-    "license": "VS Code 公开实现为 MIT；经典 Monokai 原设计及 Codex 此方案许可链待确认。此项为 PTB 适配，不是 Monokai Pro。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "原作者历史": "https://monokai.pro/history",
@@ -5526,8 +5573,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "Sarah Drasner",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 sdras/night-owl-vscode-theme@cc291eba7976",
-    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；由 PTB 独立适配。",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "公开上游": "https://github.com/sdras/night-owl-vscode-theme",
@@ -5544,8 +5591,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "Sven Greb / Nord contributors",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 nordtheme/nord@1cef71605416",
-    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；由 PTB 独立适配。",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "公开上游": "https://github.com/nordtheme/nord",
@@ -5562,8 +5609,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "品牌参考：Notion",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
-    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "品牌视觉参考": "https://www.notion.com/"
@@ -5578,8 +5625,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
-    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/"
     }
@@ -5593,8 +5640,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
-    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/"
     }
@@ -5608,8 +5655,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "GitHub Inc. / Atom contributors",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 atom/one-dark-syntax@9c96f4454362, atom/one-light-syntax@d84579027410",
-    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；由 PTB 独立适配。",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "公开上游1": "https://github.com/atom/one-dark-syntax",
@@ -5629,8 +5676,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
-    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/"
     }
@@ -5644,8 +5691,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "品牌参考：Raycast",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
-    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "品牌视觉参考": "https://www.raycast.com/pro"
@@ -5660,8 +5707,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "mvllow / Rosé Pine contributors",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 rose-pine/rose-pine-palette@92af52b465ab",
-    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；由 PTB 独立适配。",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "公开上游": "https://github.com/rose-pine/rose-pine-palette",
@@ -5678,8 +5725,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "品牌参考：Sentry",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
-    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "品牌视觉参考": "https://sentry.io/"
@@ -5694,8 +5741,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "Ethan Schoonover",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 altercation/solarized@62f656a02f93",
-    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；由 PTB 独立适配。",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "公开上游": "https://github.com/altercation/solarized",
@@ -5712,8 +5759,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
-    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/"
     }
@@ -5727,8 +5774,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "Enkia / Tokyo Night contributors",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 tokyo-night/tokyo-night-vscode-theme@7c0f11eaef32",
-    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；PTB 独立适配，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "MIT（已核对公开上游许可原文）。保留作者与许可声明；由 PTB 独立适配。",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "公开上游": "https://github.com/tokyo-night/tokyo-night-vscode-theme",
@@ -5745,8 +5792,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "品牌参考：Vercel",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
-    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "品牌视觉参考": "https://vercel.com/geist/introduction"
@@ -5761,8 +5808,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "Microsoft 名称仅作视觉参考",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
-    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "主题名称记录": "https://github.com/openai/codex/issues/15987"
@@ -5777,8 +5824,8 @@
     "kind": "palette-reference-and-independent-adaptation",
     "acknowledgement_group": "software",
     "authors": "品牌参考：Apple / Xcode",
-    "version": "PTB palette adaptations / 1；历史引入版本 unknown；本次查验 公开上游版本待确认",
-    "license": "待确认：未取得可对应此主题的公开再分发许可。PTB 独立适配，名称仅说明视觉参考，不表示官方授权或背书。",
+    "version": "PTB palette adaptations / 1",
+    "license": "",
     "urls": {
       "历史视觉参考": "https://openai.com/codex/",
       "品牌视觉参考": "https://developer.apple.com/xcode/"
@@ -5793,12 +5840,14 @@
     "kind": "reference-only",
     "acknowledgement_group": "academic",
     "authors": "Thomas Drugman；Baris Bozkurt；Thierry Dutoit",
-    "version": "arXiv:2001.00840v1; deposited 2019-12-28, not a journal publication-year claim",
+    "version": "arXiv:2001.00840v1",
     "license": "",
     "urls": {
       "paper": "https://arxiv.org/abs/2001.00840v1",
-      "full_text": "https://arxiv.org/html/2001.00840v1"
-    }
+      "full_text": "https://arxiv.org/html/2001.00840v1",
+      "doi": "https://doi.org/10.48550/arXiv.2001.00840"
+    },
+    "citation": "DRUGMAN T, BOZKURT B, DUTOIT T. A comparative study of glottal source estimation techniques: arXiv:2001.00840v1[EB/OL]. (2019-12-28)[2026-10-11]. https://arxiv.org/abs/2001.00840v1."
   },
   {
     "id": "REF-VOCODER-COMPARISON-2018",
@@ -5809,11 +5858,13 @@
     "kind": "reference-only",
     "acknowledgement_group": "academic",
     "authors": "Masanori Morise；Yusuke Watanabe",
-    "version": "literature only; no implementation included",
+    "version": "",
     "license": "",
     "urls": {
-      "paper": "https://www.jstage.jst.go.jp/article/ast/39/3/39_E1779/_article/-char/en"
-    }
+      "paper": "https://www.jstage.jst.go.jp/article/ast/39/3/39_E1779/_article/-char/en",
+      "doi": "https://doi.org/10.1250/ast.39.263"
+    },
+    "citation": "MORISE M, WATANABE Y. Sound quality comparison among high-quality vocoders by using re-synthesized speech[J]. Acoustical Science and Technology, 2018, 39(3): 263-265. https://doi.org/10.1250/ast.39.263."
   },
   {
     "id": "REF-GLOTTDNN-2016",
@@ -5824,11 +5875,13 @@
     "kind": "reference-only",
     "acknowledgement_group": "academic",
     "authors": "Manu Airaksinen；Bajibabu Bollepalli；Lauri Juvela；Zhizheng Wu；Simon King；Paavo Alku",
-    "version": "literature only; no implementation included",
+    "version": "",
     "license": "",
     "urls": {
-      "paper": "https://www.isca-archive.org/interspeech_2016/airaksinen16b_interspeech.html"
-    }
+      "paper": "https://www.isca-archive.org/interspeech_2016/airaksinen16b_interspeech.html",
+      "doi": "https://doi.org/10.21437/Interspeech.2016-342"
+    },
+    "citation": "AIRAKSINEN M, BOLLEPALLI B, JUVELA L, et al. GlottDNN — A full-band glottal vocoder for statistical parametric speech synthesis[C]//Interspeech 2016. [S.l.]: ISCA, 2016: 2473-2477. https://doi.org/10.21437/Interspeech.2016-342."
   },
   {
     "id": "REF-M10-JORDAN-2017-MRI",
@@ -5846,7 +5899,7 @@
       "paper": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5218844/",
       "figure": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/6e4d/5218844/263855b1205b/nihms818229f1.jpg"
     },
-    "citation": "Jordan, H. N., Schenck, G. C., Ellis, C., Rangarathnam, B., Fang, X., & Perry, J. L. (2017). Examining Velopharyngeal Closure Patterns Based on Anatomic Variables. Journal of Craniofacial Surgery, 28(1), 270–274. https://doi.org/10.1097/SCS.0000000000003284"
+    "citation": "JORDAN H N, SCHENCK G C, ELLIS C, et al. Examining Velopharyngeal Closure Patterns Based on Anatomic Variables[J]. Journal of Craniofacial Surgery, 2017, 28(1): 270-274. DOI: 10.1097/SCS.0000000000003284."
   },
   {
     "id": "REF-M10-OLIVEIRA-2012-MRI",
@@ -5864,7 +5917,7 @@
       "paper": "https://www.isca-archive.org/interspeech_2012/oliveira12b_interspeech.html",
       "pdf": "https://www.isca-archive.org/interspeech_2012/oliveira12b_interspeech.pdf"
     },
-    "citation": "Oliveira, C., Martins, P., Silva, S., & Teixeira, A. (2012). An MRI study of the oral articulation of European Portuguese nasal vowels. Proceedings of Interspeech 2012, 2690–2693. https://doi.org/10.21437/Interspeech.2012-668"
+    "citation": "OLIVEIRA C, MARTINS P, SILVA S, et al. An MRI study of the oral articulation of European Portuguese nasal vowels[C]//Interspeech 2012. ISCA, 2012: 2690-2693. DOI: 10.21437/Interspeech.2012-668."
   },
   {
     "id": "PKG-KATEX",
@@ -5892,14 +5945,33 @@
     ],
     "kind": "paper",
     "acknowledgement_group": "academic",
-    "authors": "Jesuraj Bandekar and Shinji Watanabe and Prasanta Kumar Ghosh",
-    "version": "arXiv:2610.00735v1; delivered separately from executable",
+    "authors": "Jesuraj Bandekar；Shinji Watanabe；Prasanta Kumar Ghosh",
+    "version": "arXiv:2610.00735v1",
     "license": "CC BY 4.0",
     "urls": {
       "paper": "https://arxiv.org/abs/2610.00735v1",
       "pdf": "https://arxiv.org/pdf/2610.00735v1",
       "license": "https://creativecommons.org/licenses/by/4.0/"
-    }
+    },
+    "citation": "BANDEKAR J, WATANABE S, GHOSH P K. Articulatory Source-Filter TTS: Physically Grounded Control through Vocal Tract Kinematics: arXiv:2610.00735v1[EB/OL]. (2026-09-30)[2026-10-11]. https://arxiv.org/abs/2610.00735v1."
+  },
+  {
+    "id": "SRC-M18-COARTICULATION-2408",
+    "title": "Towards a Quantitative Analysis of Coarticulation with a Phoneme-to-Articulatory Model",
+    "modules": [
+      "M18"
+    ],
+    "kind": "paper",
+    "acknowledgement_group": "academic",
+    "authors": "Chaofei Fan；Jaimie M. Henderson；Chris Manning；Francis R. Willett",
+    "version": "arXiv:2408.05641v1",
+    "license": "CC BY 4.0",
+    "urls": {
+      "paper": "https://arxiv.org/abs/2408.05641v1",
+      "pdf": "https://arxiv.org/pdf/2408.05641v1",
+      "license": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "citation": "FAN C, HENDERSON J M, MANNING C, et al. Towards a Quantitative Analysis of Coarticulation with a Phoneme-to-Articulatory Model: arXiv:2408.05641v1[EB/OL]. (2024-08-10)[2026-10-11]. https://arxiv.org/abs/2408.05641v1."
   },
   {
     "id": "SRC-M18-PYPDF",
@@ -5916,6 +5988,343 @@
       "release": "https://pypi.org/project/pypdf/6.19.0/",
       "repository": "https://github.com/py-pdf/pypdf",
       "license": "https://github.com/py-pdf/pypdf/blob/6.19.0/LICENSE"
+    }
+  },
+  {
+    "id": "PKG-PYAV",
+    "title": "PyAV",
+    "modules": [
+      "M05",
+      "M10"
+    ],
+    "kind": "software-library",
+    "acknowledgement_group": "software",
+    "authors": "PyAV contributors",
+    "version": "16.1.0",
+    "license": "BSD-3-Clause (binding); bundled FFmpeg codecs have separate build-dependent terms",
+    "urls": {
+      "homepage": "https://pyav.basswood-io.com",
+      "source": "https://github.com/PyAV-Org/PyAV"
+    }
+  },
+  {
+    "id": "REF-M13-LEE-ZEE-2003",
+    "title": "Standard Chinese (Beijing)",
+    "modules": [
+      "M13"
+    ],
+    "kind": "academic-reference",
+    "acknowledgement_group": "academic",
+    "authors": "Wai-Sum Lee；Eric Zee",
+    "version": "",
+    "license": "",
+    "urls": {
+      "论文 DOI": "https://doi.org/10.1017/S0025100303001208"
+    },
+    "citation": "LEE W S, ZEE E. Standard Chinese (Beijing)[J]. Journal of the International Phonetic Association, 2003, 33(1): 109-112. DOI: 10.1017/S0025100303001208.",
+    "reference_note": "对应 Standard Chinese (Beijing) 及其严式选项。论文书目已核实，宽严两列与论文的逐字对应尚待核对。"
+  },
+  {
+    "id": "REF-M13-HU-1995",
+    "title": "现代汉语: 重订本",
+    "modules": [
+      "M13"
+    ],
+    "kind": "academic-reference",
+    "acknowledgement_group": "academic",
+    "authors": "胡裕树（主编）",
+    "version": "",
+    "license": "",
+    "urls": {
+      "馆藏书目": "https://ci.nii.ac.jp/ncid/BA71639299"
+    },
+    "citation": "胡裕树. 现代汉语: 重订本[M]. 6版. 上海: 上海教育出版社, 1995.",
+    "reference_note": "对应胡裕树《现代汉语》选项。此处引用已核实的1995年重订本（第6版）；历史字表未记录所据版次和页码。"
+  },
+  {
+    "id": "REF-M13-HUANG-LIAO-2012",
+    "title": "现代汉语: 上册",
+    "modules": [
+      "M13"
+    ],
+    "kind": "academic-reference",
+    "acknowledgement_group": "academic",
+    "authors": "黄伯荣；廖序东（主编）",
+    "version": "",
+    "license": "",
+    "urls": {
+      "出版社书目": "https://xuanshu.hep.com.cn/front/book/findBookDetails?bookId=59cd328fba9eb884cf819448"
+    },
+    "citation": "黄伯荣, 廖序东. 现代汉语: 上册[M]. 增订5版. 北京: 高等教育出版社, 2012.",
+    "reference_note": "对应黄伯荣、廖序东《现代汉语》选项。此处引用含语音章节的2012年增订五版上册；历史字表未记录所据版次和页码。"
+  },
+  {
+    "id": "REF-M13-QIAN-1990",
+    "title": "现代汉语",
+    "modules": [
+      "M13"
+    ],
+    "kind": "academic-reference",
+    "acknowledgement_group": "academic",
+    "authors": "钱乃荣（主编）",
+    "version": "",
+    "license": "",
+    "urls": {
+      "编写者著作目录": "https://zhwx.ecnu.edu.cn/ae/57/c14647a175703/page.htm"
+    },
+    "citation": "钱乃荣. 现代汉语[M]. 北京: 高等教育出版社, 1990.",
+    "reference_note": "对应钱乃荣《现代汉语》选项。此处引用1990年高等教育出版社版；2001年江苏教育出版社修订本另有出版记录，历史字表未记录所据版次和页码。"
+  },
+  {
+    "id": "REF-M13-WU-1992",
+    "title": "现代汉语语音概要",
+    "modules": [
+      "M13"
+    ],
+    "kind": "academic-reference",
+    "acknowledgement_group": "academic",
+    "authors": "吴宗济（主编）；赵金铭、朱竹、刘骥（编写）",
+    "version": "",
+    "license": "",
+    "urls": {
+      "馆藏书目": "https://ci.nii.ac.jp/ncid/BA3058811X"
+    },
+    "citation": "吴宗济. 现代汉语语音概要[M]. 北京: 华语教学出版社, 1992.",
+    "reference_note": "为吴宗济选项补充的语音学参考。历史列只记作者名，尚未确认具体依据是否为本书及相应页码。"
+  },
+  {
+    "id": "REF-M13-CHAO-1979",
+    "title": "汉语口语语法",
+    "modules": [
+      "M13"
+    ],
+    "kind": "academic-reference",
+    "acknowledgement_group": "academic",
+    "authors": "赵元任；吕叔湘（译）",
+    "version": "",
+    "license": "",
+    "urls": {
+      "出版社书目": "https://www.cp.com.cn/book/9a9ee7ef-1.html",
+      "初版出版记录": "https://www.cp.com.cn/Content/2017/02-16/1622474939.html"
+    },
+    "citation": "赵元任. 汉语口语语法[M]. 吕叔湘, 译. 北京: 商务印书馆, 1979.",
+    "reference_note": "对应赵元任《汉语口语语法》选项。引用吕叔湘译本的1979年初版；出版社产品页为后出的重印版，历史字表所据版次和页码待核对。"
+  },
+  {
+    "id": "REF-M13-FANGYIN-2003",
+    "title": "汉语方音字汇（第二版重排本）",
+    "modules": [
+      "M13"
+    ],
+    "kind": "academic-reference",
+    "acknowledgement_group": "academic",
+    "authors": "北京大学中国语言文学系语言学教研室（编）",
+    "version": "",
+    "license": "",
+    "urls": {
+      "国家图书馆书目": "https://ndlsearch.ndl.go.jp/books/R100000002-Ia1000027590"
+    },
+    "citation": "北京大学中国语言文学系语言学教研室. 汉语方音字汇[M]. 2版重排本. 北京: 语文出版社, 2003.",
+    "reference_note": "对应《汉语方音字汇》选项。此处引用2003年第二版重排本；历史字表所据版次及北京音条目页码待核对。"
+  },
+  {
+    "id": "REF-M13-UNTPHESOCA-2019",
+    "title": "新老派普通话的宽严式记音（含儿化韵）",
+    "modules": [
+      "M13"
+    ],
+    "kind": "academic-reference",
+    "acknowledgement_group": "academic",
+    "authors": "UntPhesoca（unt）",
+    "version": "正文更新记录：2024-10-11（2026-10-11访问）",
+    "license": "",
+    "urls": {
+      "知乎原文": "https://zhuanlan.zhihu.com/p/38258415",
+      "作者网站": "https://phesoca.com/aws/268/"
+    },
+    "citation": "UntPhesoca. 新老派普通话的宽严式记音（含儿化韵）[EB/OL]. (2019-04-22)[2026-10-11]. https://phesoca.com/aws/268/.",
+    "reference_note": "对应 UntPhesoca宽、UntPhesoca严。采用作者网站2026-10-11访问正文，更新记录至2024-10-11。两列采用中派基准，自由变体取第一项，宽式上声214、严式上声213。支持自动或手动组合儿化及逐项拆分。"
+  },
+  {
+    "id": "REF-M13-PINYIN-1958",
+    "title": "汉语拼音方案",
+    "modules": [
+      "M13"
+    ],
+    "kind": "academic-reference",
+    "acknowledgement_group": "academic",
+    "authors": "中国文字改革委员会",
+    "version": "",
+    "license": "",
+    "urls": {
+      "教育部原文": "https://www.moe.gov.cn/jyb_sjzl/ziliao/A19/195802/t19580201_186000.html",
+      "批准日期依据": "https://www.moe.gov.cn/ewebeditor/uploadfile/2015/01/13/20150113091717604.pdf"
+    },
+    "citation": "中国文字改革委员会. 汉语拼音方案[S/OL]. (1958-02-11)[2026-10-11]. https://www.moe.gov.cn/jyb_sjzl/ziliao/A19/195802/t19580201_186000.html.",
+    "reference_note": "对应汉语拼音选项，供字母、音节及标调规则参考。方案于1958年2月11日批准；当前模块不提供按词分写的正词法转换。"
+  },
+  {
+    "id": "REF-M10-MILLS-2019",
+    "title": "What is a tongue tie? Defining the anatomy of the in-situ lingual frenulum",
+    "modules": [
+      "M10"
+    ],
+    "kind": "paper",
+    "acknowledgement_group": "academic",
+    "authors": "Nikki Mills；Seth M. Pransky；Donna T. Geddes；Seyed Ali Mirjalili",
+    "version": "",
+    "license": "Reference only; no article assets copied",
+    "urls": {
+      "paper": "https://pubmed.ncbi.nlm.nih.gov/30701608/",
+      "doi": "https://doi.org/10.1002/ca.23343"
+    },
+    "citation": "MILLS N, PRANSKY S M, GEDDES D T, et al. What is a tongue tie? Defining the anatomy of the in-situ lingual frenulum[J]. Clinical Anatomy, 2019, 32(6): 749-761. DOI: 10.1002/ca.23343."
+  },
+  {
+    "id": "REF-M10-MILLS-2020",
+    "title": "Understanding the Lingual Frenulum: Histological Structure, Tissue Composition, and Implications for Tongue Tie Surgery",
+    "modules": [
+      "M10"
+    ],
+    "kind": "paper",
+    "acknowledgement_group": "academic",
+    "authors": "Nikki Mills；Donna T. Geddes；Satya Amirapu；S. Ali Mirjalili",
+    "version": "",
+    "license": "Reference only; no article assets copied",
+    "urls": {
+      "paper": "https://pubmed.ncbi.nlm.nih.gov/32774383/",
+      "doi": "https://doi.org/10.1155/2020/1820978"
+    },
+    "citation": "MILLS N, GEDDES D T, AMIRAPU S, et al. Understanding the Lingual Frenulum: Histological Structure, Tissue Composition, and Implications for Tongue Tie Surgery[J]. International Journal of Otolaryngology, 2020, 2020(1): 1820978. DOI: 10.1155/2020/1820978."
+  },
+  {
+    "id": "REF-M13-READING-REPAIRS-2021",
+    "title": "重編國語辭典修訂本（2021年版）及異體字字典",
+    "modules": [
+      "M13"
+    ],
+    "kind": "academic-reference",
+    "acknowledgement_group": "academic",
+    "authors": "教育部",
+    "version": "重編國語辭典修訂本：2021年版；異體字字典：臺灣學術網路十四版（正式七版，2024）",
+    "license": "",
+    "urls": {
+      "修訂本": "https://dict.revised.moe.edu.tw/",
+      "異體字字典": "https://dict.variants.moe.edu.tw/"
+    },
+    "citation": "教育部. 重編國語辭典修訂本[DB/OL]. 臺灣學術網路第6版. (2021-11)[2026-10-11]. https://dict.revised.moe.edu.tw/.\n教育部. 異體字字典[DB/OL]. 臺灣學術網路第14版（正式7版）. (2024-03)[2026-10-11]. https://dict.variants.moe.edu.tw/.",
+    "reference_note": "用于核对字表中的异常读音和简繁字形，修正应用于全部转换标准。"
+  },
+  {
+    "id": "P04-NPM-MARKDOWN-IT",
+    "title": "markdown-it",
+    "modules": [
+      "P04"
+    ],
+    "kind": "ui-runtime-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Vitaly Puzrin；Alex Kocharin",
+    "version": "15.0.2",
+    "license": "MIT",
+    "urls": {
+      "repository": "https://github.com/markdown-it/markdown-it",
+      "registry": "https://www.npmjs.com/package/markdown-it/v/15.0.2"
+    }
+  },
+  {
+    "id": "P04-NPM-MDURL",
+    "title": "mdurl",
+    "modules": [
+      "P04"
+    ],
+    "kind": "ui-runtime-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Vitaly Puzrin；Alex Kocharin",
+    "version": "2.1.0",
+    "license": "MIT",
+    "urls": {
+      "repository": "https://github.com/markdown-it/mdurl",
+      "registry": "https://www.npmjs.com/package/mdurl/v/2.1.0"
+    }
+  },
+  {
+    "id": "P04-NPM-ARGPARSE",
+    "title": "argparse",
+    "modules": [
+      "P04"
+    ],
+    "kind": "ui-tooling-transitive-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Python Software Foundation",
+    "version": "3.0.2",
+    "license": "PSF-2.0",
+    "urls": {
+      "repository": "https://github.com/nodeca/argparse",
+      "registry": "https://www.npmjs.com/package/argparse/v/3.0.2"
+    }
+  },
+  {
+    "id": "P04-NPM-ENTITIES",
+    "title": "entities",
+    "modules": [
+      "P04"
+    ],
+    "kind": "ui-runtime-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Felix Böhm",
+    "version": "8.1.0",
+    "license": "BSD-2-Clause",
+    "urls": {
+      "repository": "https://github.com/fb55/entities",
+      "registry": "https://www.npmjs.com/package/entities/v/8.1.0"
+    }
+  },
+  {
+    "id": "P04-NPM-UC-MICRO",
+    "title": "uc.micro",
+    "modules": [
+      "P04"
+    ],
+    "kind": "ui-runtime-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Mathias Bynens",
+    "version": "3.0.0",
+    "license": "MIT",
+    "urls": {
+      "repository": "https://github.com/markdown-it/uc.micro",
+      "registry": "https://www.npmjs.com/package/uc.micro/v/3.0.0"
+    }
+  },
+  {
+    "id": "P04-NPM-LINKIFY-IT",
+    "title": "linkify-it",
+    "modules": [
+      "P04"
+    ],
+    "kind": "ui-runtime-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Vitaly Puzrin",
+    "version": "6.1.0",
+    "license": "MIT",
+    "urls": {
+      "repository": "https://github.com/markdown-it/linkify-it",
+      "registry": "https://www.npmjs.com/package/linkify-it/v/6.1.0"
+    }
+  },
+  {
+    "id": "P04-NPM-PUNYCODE-JS",
+    "title": "punycode.js",
+    "modules": [
+      "P04"
+    ],
+    "kind": "ui-runtime-dependency",
+    "acknowledgement_group": "software",
+    "authors": "Mathias Bynens",
+    "version": "2.3.1",
+    "license": "MIT",
+    "urls": {
+      "repository": "https://github.com/mathiasbynens/punycode.js",
+      "registry": "https://www.npmjs.com/package/punycode.js/v/2.3.1"
     }
   }
 ]

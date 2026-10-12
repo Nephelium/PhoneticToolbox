@@ -3,6 +3,1206 @@
   "created_on": "2026-09-09",
   "tasks": [
     {
+      "id": "RELEASE-301",
+      "title": "3.0.1 Windows构建与服务器/GitHub发行",
+      "status": "in_progress",
+      "files": [
+        "release/version.json",
+        "scripts/sync_versions.py",
+        "release/notes/3.0.1.md",
+        "CHANGELOG.md",
+        "docs/project-status.md",
+        "scripts/build_v3_local_preview.py",
+        "release/README.md",
+        "deployment/publish_download_page.py",
+        "frontend/package.json",
+        "frontend/package-lock.json",
+        "backend/pyproject.toml",
+        "desktop/pyproject.toml",
+        "packages/phonetic_core/pyproject.toml",
+        "docs/testing/release-3.0.1-publish.md",
+        ".gitignore",
+        "README.md",
+        "docs/development.md",
+        "scripts/prepare_public_source_assets.py"
+      ],
+      "note": "用户确认其最终稿，先上传服务器，再上传GitHub附件，最后按规则同步源码至main。官网页面与下载按钮由其他人维护，本任务未部署网站。已完成服务器五文件和stable/preview两频道发布，GitHub五附件已到草稿，当前审阅公开源码并提交。",
+      "verification_scope": "Windows x64，仅本轮资源生成与构建内部身份/大小/布局；科研、GUI、设备、安装/换版及性能验收按用户要求免测。",
+      "verification": "版本同步、说明书software阅读资源、独立前端build、EXE/安装器/更新ZIP构建完成，三包495837756/497754059/495838322字节。finalize记录20个主QtDLL和压缩包/共享身份；package记录三包SHA、ZIP CRC及布局。这些为构建完整性，不代表最终功能verified。用户免测请求保留。 服务器回执五文件与两频道全部成功；Github草稿已具备三包、清单和SHA256SUMS。源码按明确清单审阅、排除受限媒体，未运行新增功能测试。",
+      "remaining": [
+        "将审阅源码推送origin/main",
+        "Release标签绑定本次源码提交并公开发布",
+        "最终发布回执与状态收尾"
+      ],
+      "local_evidence": "output/launch-301-review/；output/validation/release-301/",
+      "current_evidence": [
+        "docs/testing/release-3.0.1-publish.md"
+      ]
+    },
+    {
+      "id": "P04-HOME-ICON-SIZE",
+      "title": "首页图标大小可调",
+      "status": "verified",
+      "files": [
+        "frontend/src/state/app-icon.ts",
+        "frontend/src/app/AppShell.vue",
+        "frontend/src/components/IconSettings.vue",
+        "frontend/src/design/tokens.css",
+        "tests/e2e/settings-navigation.cjs",
+        "manual/chapters/settings.json",
+        "CHANGELOG.md",
+        "docs/project-status.md",
+        "docs/testing/settings-navigation-report.md"
+      ],
+      "note": "2026-10-12按用户首页截图增加图标大小滑块50–300%、5%步进、100%默认恢复；沿用响应式基础尺寸，首页图标等比例显示，轻量本机偏好存储；保存失败保留旧值并提示。",
+      "verification_scope": "Windows源码、独立Chrome；静态构建/现有EXE/Qt证据分别记录",
+      "verification": "类型、前端build通过；独立Chrome7组行为/48布局通过，含首页50/200%尺寸、侧栏尺寸保留、200%实际重载保存、100%恢复和键盘300%上限。说明书20章/1053素材严格校验无错误/警告，阅读资源生成；定向Git差异检查通过。截图初次截到首页0.22秒淡入，修正为等待动画结束后重拍；现场opacity0.274414/running恢复1，标题rgb(68,78,84)，截图文字正常。实际Qt本轮未新增验证。",
+      "remaining": [
+        "已运行源码窗口须正常重开才能载入新控件，未擅自关闭用户窗口",
+        "现有EXE未重建；实际Qt及跨平台本轮未新增验证"
+      ],
+      "current_evidence": [
+        "docs/testing/settings-navigation-report.md"
+      ],
+      "local_evidence": "output/validation/settings-navigation/chrome-1791818805641/；output/validation/settings-navigation/home-icon-manual-validation.json；output/validation/settings-navigation/home-icon-build.log"
+    },
+    {
+      "id": "P04-ICON-CROP-POPUPS",
+      "title": "图标裁剪与纯色去底、模式卡片及不透明弹窗",
+      "status": "verified",
+      "files": [
+        "frontend/src/components/IconCropDialog.vue",
+        "frontend/src/components/IconSettings.vue",
+        "frontend/src/components/ThemeModeCards.vue",
+        "frontend/src/components/AppearanceSettings.vue",
+        "frontend/src/design/icon-crop.ts",
+        "frontend/src/design/background.css",
+        "frontend/src/design/buttons.css",
+        "frontend/src/platform/icons.ts",
+        "frontend/src/platform/icon-sources.ts",
+        "frontend/src/platform/image-storage.ts",
+        "frontend/src/state/app-icon.ts",
+        "frontend/src/state/background.ts",
+        "desktop/src/ptb_desktop/icon_preferences.py",
+        "desktop/tests/test_application_icons.py",
+        "frontend/tests/icon-crop.test.ts",
+        "frontend/tests/image-storage.test.ts",
+        "tests/e2e/icon-crop-popups.cjs",
+        "tests/e2e/settings-navigation.cjs",
+        "tests/e2e/palette-surfaces.cjs",
+        "scripts/verify_icon_crop_popups_qt.py",
+        "manual/chapters/settings.json",
+        "manual/chapters/getting-started.json",
+        "manual/project.json",
+        "CHANGELOG.md",
+        "docs/project-status.md",
+        "docs/testing/settings-navigation-report.md"
+      ],
+      "note": "2026-10-12：方形默认/其他比例/原图重裁，白色默认及点图/HEX/色盘去底、边缘连通与容差；三模式卡片直接切换；弹窗/下拉/菜单/提示框隔离全局透明规则，录音遮罩保留；图片存储打开受阻/超时给出恢复提示，迟到连接关闭。用户正常关闭共用持久配置的两窗口后已启动一份当前源码窗口。",
+      "verification_scope": "Windows 当前源码、独立Chrome和隔离Qt静态宿主；最终EXE、跨平台另计",
+      "verification": "定向前端13项、原生图标16项、类型/契约/来源、build通过。Chrome图标/弹窗4组7例，设置导航6组48布局；Qt4组，含实际PNG/透明像素/原图重载/替换、2主题×2材质。M10仅现存HTML dialog展示合成，未验证科学引擎启动或按钮链。18模块×6浅色方案108组色面回归通过。说明书严格校验20章/1053素材无错误/警告、阅读资源生成、两张当前Qt配图实读与导航6组48布局回归通过；文档检查2000文件/424来源/99任务errors为空，Git定向差异检查通过。全项目架构检查未通过：同期声道app.js/index.html/presets.js/scene.js/v3.css摘要差异及default-presets.json漏登记，保留边界且未替同期任务修改登记。",
+      "remaining": [
+        "未重建EXE；其他平台、长期持久存储及全部浮层逐项操作未验",
+        "全项目架构检查的同期声道资源5项摘要差异和1项漏登记仍由相应声道任务处理；本次M10只验证dialog合成，科学启动/按钮链未验"
+      ],
+      "current_evidence": [
+        "docs/testing/settings-navigation-report.md"
+      ],
+      "local_evidence": "output/validation/icon-crop-popups/；output/validation/settings-navigation/chrome-1791816969530/；output/launch-icon-crop-review/launch.json；output/validation/palette-surfaces/chrome-1791817582974/；output/validation/settings-navigation/chrome-1791817838927/；output/validation/icon-crop-popups/manual-validation.json；output/validation/icon-crop-popups/docs-validation.json"
+    },
+    {
+      "id": "P04-CUSTOM-APPEARANCE",
+      "title": "全局背景图、自定义色系和可调磨砂玻璃按钮",
+      "status": "verified",
+      "files": [
+        "frontend/src/design/background.ts",
+        "frontend/src/design/background.css",
+        "frontend/src/state/background.ts",
+        "frontend/src/components/BackgroundSettings.vue",
+        "frontend/src/components/CustomPaletteSettings.vue",
+        "frontend/src/design/themes.ts",
+        "frontend/src/state/appearance.ts",
+        "frontend/src/design/buttons.ts",
+        "frontend/src/design/buttons.css",
+        "frontend/src/state/buttons.ts",
+        "frontend/src/components/AppearanceSettings.vue",
+        "frontend/src/components/PalettePicker.vue",
+        "frontend/src/components/ScientificPlot.vue",
+        "frontend/src/modules/recording/RecordingWave.vue",
+        "frontend/src/modules/vocal-tract/VocalTractPage.vue",
+        "frontend/src/platform/color-picker.ts",
+        "frontend/src/platform/desktop.ts",
+        "frontend/src/main.ts",
+        "desktop/src/ptb_desktop/color_picker.py",
+        "desktop/src/ptb_desktop/host.py",
+        "frontend/tests/background.test.ts",
+        "frontend/tests/buttons.test.ts",
+        "desktop/tests/test_color_picker.py",
+        "tests/e2e/appearance-background.cjs",
+        "manual/chapters/settings.json",
+        "manual/chapters/getting-started.json",
+        "manual/project.json",
+        "scripts/verify_custom_appearance_qt.py",
+        "frontend/src/design/tokens.css",
+        "CHANGELOG.md",
+        "docs/testing/settings-navigation-report.md",
+        "tests/e2e/settings-navigation.cjs"
+      ],
+      "verification_scope": "Windows 当前源码、独立Chrome、实际Qt；最终EXE另计",
+      "note": "2026-10-12用户指定背景透过标签/文本框、图窗保留底色；增加自定义色系/吸管/HEX、按钮材质及玻璃不透明度和模糊强度。本机IndexedDB保存背景图片，独立轻量偏好保存效果；无外部素材/依赖新增。 本轮追加：设置分类随页滚动，上传/恢复背景图自动启用磨砂玻璃，选中按钮/标签取消框线并以底色/文字区分。",
+      "verification": "Windows源码：8项前端及2项Qt取色控件测试、类型、契约、来源与前端build通过；独立Chrome8组/33例，含18模块、12组缩放/窄宽布局、坏图保护、HEX/背景像素取色与刷新恢复。实际Qt5组通过：静态应用上传、2主题×3高亮、20%玻璃/24px模糊、原生取色确认/取消、真实重载、M10本地背景对齐与图窗保护、移除/普通材质恢复；DPR1.5。修复构建优化仅保留webkit模糊属性的问题、M10颜色白名单丢弃尺寸单位问题，嵌入页本地合成对齐背景使模糊可采样。源码说明书正文及当前Qt配图同步。所有scratch已清理，回执保留。 既有settings-navigation回归6组/48布局通过，说明书4张配图按权威资产尺寸验证；保留同期RELEASE-301的自动玻璃和选中样式修改，其成品验收独立记录。",
+      "remaining": [
+        "未重建EXE；未实际执行全屏像素吸管或物理多屏取样，原生控件/回调/取消已验证；其他平台未验。"
+      ],
+      "current_evidence": [
+        "docs/testing/settings-navigation-report.md"
+      ],
+      "local_evidence": "output/validation/custom-appearance/chrome-1791812050495/；output/validation/custom-appearance/qt-db1a419cbef942cda554451710c538fd/；output/validation/custom-appearance/website-1791811613716/；output/validation/settings-navigation/chrome-1791812408055/"
+    },
+    {
+      "id": "P04-UPDATE-DIALOG",
+      "title": "更新说明Markdown、关于页按钮和发行文案审阅",
+      "status": "verified",
+      "files": [
+        "frontend/src/components/UpdatePanel.vue",
+        "frontend/src/components/ModalDialog.vue",
+        "frontend/src/platform/release-notes.ts",
+        "frontend/src/app/AppShell.vue",
+        "frontend/tests/release-notes.test.ts",
+        "frontend/tests/updates-browser.mjs",
+        "frontend/package.json",
+        "frontend/package-lock.json",
+        "frontend/src/generated/sources.json",
+        "third_party/source-registry.json",
+        "third_party/licenses/update-markdown/",
+        "AGENTS.md",
+        "release/README.md",
+        "CHANGELOG.md",
+        "docs/testing/p04-unify-report.md",
+        "docs/project-status.md"
+      ],
+      "note": "按截图采用版本对照、滚动说明卡片及底部操作，支持常用Markdown，保留下载/退出两次确认及校验门槛。关于页四个入口统一高亮。每次Release文案先交井井审阅确认，规则唯一维护在根AGENTS.md。新增解析依赖及7项实际版本/许可登记。",
+      "verification_scope": "Windows 当前前端源码与独立 Chrome，原生更新协议模拟；不查询或修改公开发布，不代表最终 EXE 验收。",
+      "verification": "21项说明解析/更新协议/外观/按钮/来源测试、类型、契约、来源及build通过；末次首行缩进修正后12项更新测试、类型与build再次通过。Chrome19项格式、浅深主题/窄窗口/150%缩放/大字号、取消/校验错误/成功及两次确认通过，关于页四个入口高亮一致，无pageerror。源码入口检查及当前程序窗口启动已验；演示更新预览实际显示后已关闭。测试scratch均清理，预览WAL盘点失败已修复并按既有归属/摘要入口恢复清理，诊断保留。",
+      "remaining": [
+        "未重新打包EXE；原生Qt更新交互、物理DPI和其他平台未重验。"
+      ],
+      "local_evidence": "output/validation/updates-ui/check-36e79a74-d553-450c-babb-a3c0a3a6d763/；output/validation/updates-ui/source-launch-988b18165ce5432c80093b4387afa9f6/；output/validation/updates-ui/preview-7dc8d5e4-5799-4226-8e6b-7ade672ea6e7/",
+      "current_evidence": [
+        "docs/testing/p04-unify-report.md"
+      ]
+    },
+    {
+      "id": "M10-R19",
+      "title": "牙齿邻域、舌底衔接、常驻控制点及默认构形",
+      "status": "verified",
+      "files": "frontend/public/vocal-tract scene/floor-contact/app/presets/v3.css/index/default-presets.json；定向前端/Qt测试、模块README、说明书m10、CHANGELOG和状态台账",
+      "verification_scope": "Windows 当前源码、前端构建和独立 Qt；未重打包 EXE",
+      "note": "t/l使用用户保存完整设置，n与t相同，s默认及本机常用移除。鼻腔保留。平面图常驻11个正中点、不显示侧缘，三维14点。默认64段/65截面；旧自动保存129转65，后续手选档位持久化。",
+      "verification": "29项M10前端、类型/构建、说明书严格验证/生成通过；36组显示几何全三角面约束/无自交/固定附着及原生摘要通过。最终65截面Qt深浅主题50状态共18436牙齿内部及1628邻域像素采样无错误；取消裁切的对照43点中35点错误，加回裁切为0。鼻腔开关13855点中5038改变，二维/三维及连续编辑正常。控制点可见性/直接操作、t/n/l默认、保存明暗及回读、65默认与129/65切换通过，scratch已清理。此前129截面50状态同样通过。",
+      "remaining": [
+        "未重建最终EXE；完整参数/缩放/显卡组合和跨平台未验。"
+      ],
+      "current_evidence": [
+        "docs/testing/2026-10-12-m10-r19-report.md"
+      ],
+      "local_evidence": "output/validation/m10-r19/qt-5dbfc4603627496e88076b8ab3d29dc1/；output/validation/m10-r19/qt-706e730b24714f298070982ed0f2d3d4/；output/validation/m10-r18/geometry-54cbcb0f87694fb4979fdf25d4e05cf6/；output/validation/m10-r19/default-source-check.json"
+    },
+    {
+      "id": "M10-R18",
+      "title": "舌面与舌底局部控制、常用构形、送气帧",
+      "status": "verified",
+      "files": "resources/vocal_tract 原生局部舌面补丁/桥接与重建；core shape/engine/trajectory/animation/document；desktop profile/runtime/audio_output；frontend 控制点/构形库/关键帧/F0/视频；来源、测试与说明书",
+      "verification_scope": "Windows 当前源码、原生 DLL、独立 Qt 与实际 MP4 导出；未重打包 EXE",
+      "note": "按用户授权完成后续两个控制点、常用构形及送气帧；送气名称默认上标字符 ʰ，可编辑并同步保存/视频。舌面改变原生声学，舌底只控制受约束的显示组织回接。",
+      "verification": "47项Python、31项前端、类型/契约/来源与构建通过。六构形零偏移数值摘要与R17一致，36组局部偏移/下颌/牙齿约束通过。完整R17/R18 Qt回归及最终实际指针、常用持久化、v5导入导出、10ms清声、ʰ默认与改名通过；H264/AAC MP4实际导出并解码验证名称。说明书严格验证/生成通过，测试scratch清理留回执。 文档/架构errors为空，56项资源与包清单摘要一致，所涉差异空白检查通过。",
+      "remaining": [
+        "最终EXE、实体声卡耳机听辨、跨平台及完整参数空间未验证；局部偏移范围为模型约束，舌底没有独立舌下声学分支。"
+      ],
+      "current_evidence": [
+        "docs/testing/2026-10-12-m10-r18-report.md",
+        "docs/decisions/ADR-M10-tongue-transverse-and-floor.md"
+      ],
+      "local_evidence": "output/validation/m10-r18/geometry-681c8e7adaf443ee9cf2c0093e1e1c72/；qt-1a9e22ea070644c9ac0291d28e98470a/；qt-27ff366053b64a7fa26487e29ea32d22/"
+    },
+    {
+      "id": "M10-R17",
+      "title": "舌叶约束、后移口底、窄缝声学与实时交互",
+      "status": "verified",
+      "files": "resources/vocal_tract 原生补丁及桥接；core vocal_tract engine/document；frontend vocal-tract 几何/拖动/monitor；来源清单、测试脚本、说明书、CHANGELOG",
+      "verification_scope": "Windows 当前源码、原生 DLL、独立 Qt；未重新打包 EXE",
+      "verification": "原批次56项Python通过；本次波形/输出20项、前端28项、类型/契约/构建、说明书严格验证及生成通过。45组下颌/上下牙全三角面约束及二维/三维轮廓软腭等价性通过，三档原生18组与12组气腔几何复查通过。Qt真实侧缘指针、Ctrl滚轮、文件/关键帧及下牙接触通过；弱PCM解析夹具连续周期与1ms的48原始采样点通过。最后窄栏时间标签、深浅主题与展开图复查通过；文档/架构errors为空，测试scratch完成清理并留回执。",
+      "remaining": [
+        "未重打包EXE；原生双击、实体听辨、完整参数空间及跨平台未验",
+        "最终Qt选定构形二维显示更新111–134ms，不作全部构形帧率保证"
+      ],
+      "current_evidence": [
+        "docs/testing/2026-10-12-m10-r17-report.md"
+      ],
+      "local_evidence": "output/validation/m10-r17/jaw-8fd6796ff4d54e6f9b3dcb758186b58a/report.json；output/validation/m10-r17/qt-c928a1f201e3419486dd50e079a2057e/report.json",
+      "note": "下牙/下颌显示约束和原始PCM缩放已实现。用户新增控制点、常用构形、送气帧另列R18，按明确澄清在本项之后继续实施。"
+    },
+    {
+      "id": "M18-R6",
+      "title": "论文右键删除、批注侧栏、统一引用字体与修订重开",
+      "status": "verified",
+      "files": "desktop papers/papers_bridge/paper_library；frontend papers/PaperReadingPage/PdfReader/citations；定向验证、模块说明及台账",
+      "verification_scope": "Windows当前源码、定向Qt与手册；授权说明目录/HTTPS分发。用户2026-10-12改为直接运行，不以成品验收为本轮交付要求。",
+      "note": "用户授权右键删除后可重新获取、检查批注、引用继承应用字体。推荐删除跳过自动补回，个人库内文件进回收站，批注保留。",
+      "remaining": [
+        "独立实体电脑、其他平台和长期阅读未验；本轮EXE仅built/静态审计，用户要求停止后未完成成品行为验收。",
+        "两份工程外QA缓存保留，运行时联接清理被自动审批拒绝（仅返回blocked by policy）；未通过替代路径删除。"
+      ],
+      "verification": "53项桌面测试、370项前端、类型/来源/构建/说明书严格及生产解析通过；当前Qt DPR1.5置顶、批注/笔记导出、动态引用字体、推荐删除/重取保留批注、个人真实回收站、翻译SHA修订重开及5→2页恢复范围通过。最终免安装R8构建进行中。 用户要求直接运行后，已停止后续成品验证并用Start-Research-Workbench.ps1 -Module M18启动源码，真实窗口PID23460、句柄3214752确认。R8已构建496815658字节并静态/20QtDLL核验，不标最终成品verified或published。 最终全工程文档检查出现同期M10未生成报告的3条缺链，M18链接正常，未将该末次检查标通过。",
+      "current_evidence": [
+        "docs/testing/2026-10-12-m18-r6-report.md"
+      ],
+      "local_evidence": "output/validation/m18/r6-qt-7b80e7c7b92f4fb3b99231807942db01/report.json"
+    },
+    {
+      "id": "M18-INTRO-NOTICE",
+      "title": "请看这里~ 栏目置顶说明",
+      "status": "verified",
+      "note": "2026-10-12已收到用户改定文案和设计要求，按原文制作一页A4说明。独立目录字段与置顶入口实施中，启动时接收说明不获取已关闭的论文订阅。",
+      "remaining": [
+        "独立实体电脑、其他平台和长期阅读未验；本轮EXE仅built/静态审计，用户要求停止后未完成成品行为验收。"
+      ],
+      "verification_scope": "Windows当前源码、定向Qt与手册；授权说明目录/HTTPS分发。用户2026-10-12改为直接运行，不以成品验收为本轮交付要求。",
+      "verification": "按用户改定文字制作一页A4，统一完整字体、去头像与紫色标签、放大圆角描边猫图、井韶子页脚、突出强调完成。目录可选notice已上线，HTTPS目录及7资产SHA通过；2科学论文不变。源码关闭自动获取仍启动接收说明、日期与列表/计数独立通过，最终EXE待验。 用户要求直接运行后，已停止后续成品验证并用Start-Research-Workbench.ps1 -Module M18启动源码，真实窗口PID23460、句柄3214752确认。R8已构建496815658字节并静态/20QtDLL核验，不标最终成品verified或published。"
+    },
+    {
+      "id": "M18-P2A-LAYOUT",
+      "title": "2408.05641v1 中文译文恢复原稿双栏排版并更新论文服务器",
+      "status": "verified",
+      "files": "scripts/reformat_p2a_translation.py；deployment/papers/publish_revision.py；既有私有论文制作项目；论文部署说明、R4内容验收、修改记录、状态与台账",
+      "verification_scope": "原稿固定版本、既有34译文块、原生图表/公式与双栏PDF；授权服务器内容更新及客户端修订接收",
+      "note": "用户明确要求按原文格式重新排中文译文并推送服务器。复用原稿Interspeech2024类及矢量图，不修改应用或重新翻译正文。稳定论文ID与栏目日期保留。",
+      "verification": "5页双栏译文、34原译文块、5矢量图/1表/4编号公式/1未编号序列/33参考文献核对及逐页渲染通过，字体嵌入、无缺字或越界。原文和解读摘要不变，仅translation/translationNote/updatedAt改变，稳定ID与栏目日期保持；服务器发布成功，目录与6资产HTTPS长度/SHA通过，首页摘要未变。隔离旧缓存仅下载421173字节新版译文，第二次0下载，Qt读到5页；旧3文件及原批注记录保留，自有暂存退出后清理deleted。查询依赖时MiKTeX意外自动安装caption/siunitx/lipsum三包，已停止查询并披露；随后XeLaTeX编译使用-disable-installer/-no-shell-escape，未卸载现有包。",
+      "remaining": [
+        "用户正在运行的GUI未直接操作，检查后须重新打开中文译文",
+        "旧译文页码批注按旧内容摘要保留，不自动迁移到5页新版",
+        "译文沿用既有正文，未增加独立专家审校或跨平台检查"
+      ],
+      "current_evidence": [
+        "docs/testing/2026-10-10-m18-r4-report.md"
+      ],
+      "local_evidence": "output/paper-reading/2408.05641v1/layout-20261012/；output/validation/m18/p2a-layout-revision-cc8880eb183548a0abf95fe0e126123f/report.json"
+    },
+    {
+      "id": "DOCS-CHANGELOG",
+      "title": "每次修改记录与发行更新日志维护规则",
+      "status": "verified",
+      "files": [
+        "AGENTS.md",
+        "CHANGELOG.md",
+        "docs/README.md",
+        "docs/ARCHITECTURE.md",
+        "release/README.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json"
+      ],
+      "note": "按用户要求建立每次修改必须留文档记录的项目规则，以 CHANGELOG.md 累积未发布改动，并补录图片反相；发行时仅汇总冻结成品实际纳入的变化，供 Release 正文及自动更新清单 notes 使用。",
+      "verification_scope": "本地文档内容与引用目标、任务台账 JSON 结构；未修改更新程序，未执行产品测试、构建或公开发布。",
+      "verification": [
+        "项目规则、文档导航、文档架构及发行入口统一指向 CHANGELOG.md 与 release/notes。",
+        "图片反相记录包含用户可见变化、涉及文件、免测要求及尚未纳入 EXE 的边界。",
+        "任务台账 JSON 可读取，相关本地文档链接目标存在。"
+      ],
+      "remaining": [],
+      "evidence": [
+        "AGENTS.md",
+        "CHANGELOG.md",
+        "release/README.md"
+      ]
+    },
+    {
+      "id": "LOCAL-PREVIEW-UNINSTALL",
+      "title": "关闭卡住的本机旧安装并清理卸载残留",
+      "status": "blocked",
+      "files": [
+        "docs/testing/local-preview-uninstall.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json"
+      ],
+      "verification_scope": "Windows 当前用户旧安装实际卸载及三个旧测试登记清理已验证。程序、快捷方式、运行缓存内容和四条卸载记录均已移除，研究数据、设置、草稿、论文库、源码环境及现有成品保留。完整清理仅余两个空缓存目录，其删除被自动审批拒绝。",
+      "verification": [
+        "开始菜单目标与实际安装登记一致，安装元数据为 3.0.0-preview.1；卸载器调用 --ptb-clear-all-caches 的子进程停在启动阶段。",
+        "按实际路径和父子关系关闭 4 个主程序进程及 2 个卸载器进程，复查归属进程为零。",
+        "归属、绝对路径、全部祖先及树内联接检查后移除 11 项应用目录/文件与 4 条卸载登记，另清理旧执行文件的 MuiCache 显示名属性。",
+        "重复清理进程曾造成启动缓存检查冲突，重复进程已停止，原失败回执保留；顺序重检和剩余目录清理成功，最终 15 项目标均不存在。",
+        "最终复查主程序/卸载进程为零，HKCU/HKLM 卸载登记为零，6 个研究数据及设置根目录的文件元数据与小型 JSON/数据库哈希前后一致；独立反馈管理工具的两个进程保留。",
+        "两个空缓存目录的删除被自动审批拒绝，工具仅返回 blocked by policy；只读复查均无子项，未换渠道重复删除。"
+      ],
+      "evidence": [
+        "output/validation/local-preview-uninstall-20261012/before.json",
+        "output/validation/local-preview-uninstall-20261012/cleanup-plan.json",
+        "output/validation/local-preview-uninstall-20261012/cleanup-receipt.json",
+        "output/validation/local-preview-uninstall-20261012/protected-before.json",
+        "output/validation/local-preview-uninstall-20261012/protected-after.json",
+        "output/validation/local-preview-uninstall-20261012/summary.json",
+        "output/validation/local-preview-uninstall-20261012/mui-receipt.json",
+        "output/validation/local-preview-uninstall-20261012/summary-first-pass.json",
+        "output/validation/local-preview-uninstall-20261012/final-verification.json"
+      ],
+      "remaining": [
+        "仅剩 %LOCALAPPDATA%/PhoneticToolbox/cache 与 %LOCALAPPDATA%/PhoneticToolbox/v3/cache 两个已空目录，自动审批拒绝删除；程序卸载本身已验证。"
+      ]
+    },
+    {
+      "id": "RELEASE-3.0.0-PUBLISH",
+      "title": "3.0.0 更新与长路径修复、最终成品及官网发布",
+      "status": "verified",
+      "files": [
+        "docs/plans/2026-10-11-release-300.md",
+        "desktop/src/ptb_desktop/updates.py",
+        "desktop/src/ptb_desktop/bundle_manifest.py",
+        "backend/src/ptb_worker/source_runtime.py",
+        "backend/src/ptb_worker/m05_child.py",
+        "release/version.json",
+        "release/installer.iss",
+        "release/prepare_lean_runtimes.py",
+        "scripts/build_v3_local_preview.py",
+        "scripts/verify_distribution.py",
+        "desktop/tests/test_updates.py",
+        "scripts/sync_versions.py",
+        "backend/src/ptb_api/protocol_version.py",
+        "backend/src/ptb_worker/egg_runtime.py",
+        "backend/src/ptb_worker/native/capabilities.py",
+        "backend/src/ptb_worker/spec2wav_child.py",
+        "backend/src/ptb_worker/m05_media_export.py",
+        "desktop/src/ptb_desktop/vocal_tract/mp4.py",
+        "desktop/src/ptb_desktop/host.py",
+        "scripts/v3_local_preview_entry.py",
+        "backend/tests/test_native_import_paths.py",
+        "desktop/tests/test_review_bundle.py",
+        "temporary-site/index.html",
+        "temporary-site/site.js",
+        "scripts/verify_website.cjs",
+        "deployment/publish_release.py",
+        "deployment/publish_download_page.py",
+        "backend/pyproject.toml",
+        "desktop/pyproject.toml",
+        "packages/phonetic_core/pyproject.toml",
+        "frontend/package.json",
+        "frontend/package-lock.json",
+        "frontend/src/version.json",
+        "backend/src/ptb_worker/native_runtime.py",
+        "backend/src/ptb_worker/m05_executor.py",
+        "backend/tests/test_native_runtime.py",
+        "backend/src/ptb_worker/native/windows.py",
+        "backend/tests/test_native_working_directory.py",
+        "scripts/cache_launcher_entry.py",
+        "scripts/bundle_hooks/persistent_cache_runtime.py",
+        "docs/testing/release-3.0.0-publish.md",
+        "backend/src/ptb_worker/native/reaper.py",
+        "README.md",
+        "docs/assets/readme/website-button.svg",
+        "docs/assets/readme/README.md",
+        "docs/assets/readme/provenance.json",
+        "docs/testing/github-readme.md",
+        "scripts/research_entry.py",
+        "desktop/src/ptb_desktop/startup_progress.py",
+        "release/cached_launcher.py",
+        "desktop/tests/test_startup_icon_palette.py",
+        "desktop/tests/test_m10_native_paths.py",
+        "docs/decisions/ADR-persistent-startup-cache.md",
+        "manual/chapters/getting-started.json",
+        "release/README.md",
+        "docs/testing/windows-current-release.md"
+      ],
+      "note": "用户授权官网应用/MFA/更新清单上线与按钮绑定；另授权主README优化、最终成品截图与main推送、黄蓝官网按钮、启动卡按所选图标自适应色相；最新追加授权GitHub Releases上传，以及子代理清理已结束测试临时目录，无法删除项列清单和人工脚本。",
+      "verification_scope": "R7最终字节Windows本机功能、官网HTTPS/浏览器、GitHub发布与发布后启动对照维持原verified。追加清理限定原20.59GB库存及原先未计MEI残留：完整源码ZIP/许可、当前源码/运行时/打包输入和真实开始菜单入口保留，旧拒绝对象经新授权复审后正常审批清理完成；未运行新的完整产品/设备/跨平台验收。",
+      "remaining": [
+        "Two complete source/license ZIPs and necessary QA evidence retained; duplicate expanded source, downloads, verification and old test caches removed; see cleanup-remaining-final.json. Previously retained installed-r5 uninstaller and the real user installation were removed under LOCAL-PREVIEW-UNINSTALL; two empty cache folders remain approval-blocked."
+      ],
+      "verification": [
+        "只读服务器预检通过：既有站点及反馈服务 active，磁盘剩余 44 GB",
+        "长路径同字节 Pillow 普通路径失败、扩展路径成功的最小复现",
+        "版本生成及三份 setuptools 元数据检查通过，核心科学库指纹不变",
+        "146 项更新/缓存/源码定向回归、M03 指定环境 11 项、修订后的深路径真实扩展加载等 73 项回归通过",
+        "说明书严格检查及阅读器、前端类型/测试/生成/构建通过，官网本地两按钮下载路由及布局验证通过",
+        "MFA 主组件/对应源码/release.json 已上传且服务器完整 SHA 匹配；公网主组件 812556132 字节完整下载摘要匹配，三个端点 HEAD 200 与 Range 206",
+        "R1/R2 最终字节检查发现扩展命名空间资源路径、超长子进程入口及 MKL 内部加载问题，候选未发布；短 ASCII 私有联接入口保持原科学运行库字节。",
+        "长路径 EGG/MKL 与 M05 全运行库探针通过；中文运行库 M05 的 468/478 点模型、离线流水线、音视频导出与回读全部通过，alias-probe.json。",
+        "72 项更新/绑定/原生长路径/私有入口回归通过，覆盖中文 TEMP 回退、未知或改指联接拒绝、退出仅清理自建入口。正式版默认 stable 并保留已有频道选择。",
+        "R4 成品中文超长缓存目录在 PyInstaller 主加载器失败，未发布；主EXE采用短私有硬链接/校验复制及 _internal 联接。相同 R4 主EXE 经该入口的真实 TextGrid 流程通过（10.06秒），仅机制探针，不等同 R5 成品验收。",
+        "OwnedProcess 统一短工作目录入口保持相对 I/O 语义，真实285+字符中文目录与异常启动清理、主EXE硬链接/跨盘复制4项通过；子代理只读复核与发布准备复核完成。用户新默认图标与 R4 冻结 ICO 完全同字节；启动卡片直接读取 EXE 图标，发布前仍核对成品。",
+        "R5科学验收失败于REAPER资源no_links拒绝私有_internal联接，候选未发布；实际R5启动卡新W1图标已确认。当前M05源码在真实长运行库及超过260字符中文任务数据目录的完整科学探针通过，不等同最终包。",
+        "R6前定向：80项更新/绑定/原生入口/深路径测试通过；当前EGG与M05源代码在真实深层运行库和超过260字符中文数据目录的完整PROBE通过，REAPER、模型、音视频导出回读完成。仍待新包最终字节验收。",
+        "R6前真实REAPER长EXE/中文深scratch与native/IO/pipe 37项通过；M10深中文原生三DLL+speaker+metadata/snapshot/close及失败清理3项通过，短入口退出清理。",
+        "启动卡读取既有内置/自定义图标偏好并生成浅色同色相配色，默认W1暖黄；9项定向检查与默认/内置/深紫自定义的实际Win32绘图通过，无Qt/PIL/numpy启动依赖；内置32款缩略资源共208448字节。",
+        "R6最终成品生成：免安装496810649字节、更新ZIP496811215字节、安装498727123字节，全在500000000上限内且应用同SHA；711个冻结源文件与111前端资产当前身份匹配，架构检查errors为空。",
+        "R6最终EXE工程外Windows-only PATH：普通用户目录完整分发171.422秒、TextGrid18.375秒、160字符中文用户目录及深层实际任务目录完整分发172.89秒，全部exit0；两科学分支原生探针、11托管任务、18模块帮助、M10及M16/M17等通过。",
+        "R6三文件已在服务器私有/home/admin暂存，完整SHA一致，尚未公开链接。最终payload故障边界已验证模拟无空间、实际受控DACL拒绝及保护路径冲突，DACL恢复与清理成功。",
+        "R6直接GUI/恢复/自然退出通过；9729科学文件与418宿主文件真实复制和完整SHA、同大小同时间戳损坏修复、中断与并发准备均通过。启动卡最终默认暖黄截图、双进程自然退出和自有目录清理完成。",
+        "设置缓存重试的实际清理/取消/保存草稿/重开均完成，两个EXE自然exit0；QA Node被未释放300秒计时器保活后由自有协议终止，真实退出码保留，已有结果独立严格复核exit0。README十文件/五幅R6 EXE截图及60处远端tree引用核对通过，尚未推送。",
+        "R6实际安装exit0/59.312秒，缓存复用exit0/4.813秒，活动租约阻止卸载符合预期；释放租约后的卸载exit1/5.094秒，原生短入口_internal联接读取抛WinError448。原始报告保留，换版与性能尚未运行，未公开R6。",
+        "子代理精确核对六处已结束旧测试根后清理完成，120份必要JSON/log/PNG已异地保留且SHA一致；19764965280逻辑字节含硬链接重复，不能当实际释放空间。活动R6与基线/当前构建保留，审批拒绝项未重试。",
+        "Guard最小复现：当前Windows 10.0.26300 direct policy=0正常，显式policy=1和真实Inno默认子进程policy=1均复现448。修复限定冻结运行文件无联接私有镜像，不关闭保护、不复制用户任务目录；12项定向测试通过，真实内层EXE和postinstall政策探针正在验证，尚未构建新候选。",
+        "R7验收脚本已在独立r7目录准备，先安装卸载再其它功能，修正QA定时器且将额外清理延后性能测量；前端当前源码生产构建exit0。人工删除脚本生成也被自动审查blocked by policy拒绝，未创建进程或文件、未重试。",
+        "Guard修复源码实测：12项定向测试与72项更新/绑定/原生入口回归通过；真实R6内层EXE在新wrapper guard=1 下以12676文件/2038732116字节跨卷SHA镜像完成清理命令exit0并删除私有镜像，原文件保留。该探针不等同新成品。",
+        "当前系统安装后直接启动也实测继承guard；安装器移除该可选启动链，双语完成提示引导开始菜单/桌面打开，原模板tiny默认guard安装通过且无Run/无child。说明书当前版本和安装名改为3.0.0，strict校验/阅读资源/生产前端重建通过，R7正在冻结构建。",
+        "R7当前：免安装496815155字节/SHA162c8fa542b7b3b1203ce535e3021235e261f0dfaeb095659f9946baec055edb，ZIP496815721/安装498729076均小于上限；快照SHA3d1fd7bb865ca389df96ca0b90a3a39327267e90ca76df3fd01abc30e4ffa880。711源码/111前端匹配当前、源码差异空、ZIP应用同SHA，finalize/audit通过。",
+        "R7当前：qa-report完整success，13正式命令全exit0/同最终SHA。普通科学201.875秒、中文160字符profile/深任务目录178.453秒、TextGrid17.812秒；独立真实安装/卸载数据保留、GUI、复制修复155.953秒、中断并发78.812秒、设置142.422秒通过。",
+        "R7当前：两类真实旧辅助进程至R7换版通过，science/host复用/apps重建，主题/草稿/研究标记/9媒体16图片完成。原QA布局/D盘不足Node4294967295及两observer-only失败保留；portable实际TEMP无MEI但未捕获应用自然退出码，installer真实句柄exit0。",
+        "R7当前：final-failures三个预期失败exit23，无ready/last-launch、保护数据不变，DACL精确恢复与scratch清理完成；默认W1卡暖黄FFF9E8实际截图、双进程自然exit0/MEI0/缓存清理通过。card nonce精确清理被审批blocked by policy拒绝，未创建进程/未删除/未重试。",
+        "R7当前：用户明确取消发布前启动速度检查并要求发布后再测，仅终止本次拥有的timing进程树，startup-report success=false/status=waived_by_user，三份partial测量保留，不判性能通过。功能/身份门槛不变。",
+        "R7当前：官网实际公开6上线步骤exit0，三文件服务器完整SHA/HEAD200/首尾Range206相同，清单和SHA256SUMS公开完整SHA、stable/preview实际解析、34网页资源及原路由通过。Chromium12项success/errors0/requests0；原runner1为finally进程退出竞态，原回执保留，确认进程退出后scratch精确清理exit0/deleted。独立publication-result success。",
+        "GitHub最终：v3.0.0正式Latest，tag b669645ff779886b039f040f96cd7f113fbbbd3f/tree0971b9ad09ac6221924f493a8e2abdc9e30a558b；main最终8cf5c5396fcab63cf431c69b2cb4712af6a12430。5asset公开身份及真实UpdateService两包解析、README/GitHub浏览器验真完成。",
+        "发布后启动对照：startup-report-postrelease.json success，旧冷63.8756秒/新冷61.1529秒/暖9.52655秒，cross apps-only science/host复用及apps准备通过；全部计时进程自然exit0。原发布前waived_by_user报告与partial保持原样。",
+        "最终清理：本轮91项全部deleted，422份证据保留，229075505186逻辑字节含硬链接重复；C剩319239852032B、D剩58181951488B，第二阶段可用净增74244362240B/43459899392B。原67根未清部分20594027040逻辑字节，根级去重并排除已清空祖先旧大小，精确清单交付；5审批受限/10DQA归属不足不重试。两公共报告冻结未改。",
+        "追加剩余清理：78项deleted与4联接入口移除，逻辑18338041002B；原库存剩2279402923B。414份必要证据保存SHA一致，两个完整源码ZIP及原生开发/打包输入保留。旧5类拒绝对象在新授权/复审/正常审批后均已清。C/D可用净增4422680576/9523499008B。旧QA注册卸载器保留，真实开始菜单目标存在；两公共报告未修改。"
+      ],
+      "evidence": [
+        "docs/plans/2026-10-11-release-300.md",
+        "docs/testing/release-3.0.0-publish.md",
+        "docs/testing/windows-current-release.md",
+        "output/validation/release-300/r7/final-identity.json",
+        "output/validation/release-300/r7/final-failures.json",
+        "output/validation/release-300/startup-card-r7/report.json",
+        "output/validation/release-300/r7/publication-result.json",
+        "output/validation/release-300/r7/startup-report.json",
+        "output/validation/release-300/r7/timing-cancelled-processes.json",
+        "output/validation/release-300/cleanup-final-plan-r6-r7.json",
+        "output/validation/release-300/cleanup-final-process-snapshot.json",
+        "output/validation/release-300/r7/startup-report-postrelease.json",
+        "output/validation/release-300/cleanup-final-summary.json",
+        "output/validation/release-300/cleanup-final-remaining.json",
+        "output/validation/release-300/cleanup-space-before-incremental.json",
+        "output/validation/release-300/cleanup-space-after.json",
+        "output/validation/release-300/cleanup-remaining-closeout.json",
+        "output/validation/release-300/cleanup-remaining-final.json",
+        "output/validation/release-300/cleanup-remaining-source-archive-proof.json",
+        "output/validation/release-300/cleanup-remaining-space-before.json",
+        "output/validation/release-300/cleanup-remaining-space-after.json",
+        "output/validation/release-300/cleanup-installed-r5-shortcut-readonly.json"
+      ],
+      "post_publish_cleanup_remaining_audit": {
+        "schema": "ptb-remaining-cleanup-closeout/1",
+        "recordedAt": "2026-10-11T16:40:12.439834+00:00",
+        "status": "completed_with_necessary_retention",
+        "originalRemainingInventoryLogicalBytes": 20594027040,
+        "deletedItems": 78,
+        "removedReparseEntries": 4,
+        "deletedLogicalBytes": 18338041002,
+        "deletedOriginallyCountedLogicalBytes": 18314624117,
+        "remainingOriginalInventoryLogicalBytes": 2279402923,
+        "currentlyObservedRemainingRootsLogicalBytes": 2418998399,
+        "preservedEvidenceFiles": 414,
+        "preservedEvidenceBytes": 24300074,
+        "space": [
+          {
+            "drive": "C",
+            "beforeAvailableBytes": 319247233024,
+            "afterAvailableBytes": 323669913600,
+            "observedNetIncreaseBytes": 4422680576
+          },
+          {
+            "drive": "D",
+            "beforeAvailableBytes": 58181636096,
+            "afterAvailableBytes": 67705135104,
+            "observedNetIncreaseBytes": 9523499008
+          }
+        ],
+        "receipts": [
+          "remaining-exe-apply-20261012-002245.json",
+          "cleanup-renewed-two-plain-roots.json",
+          "renewed-roots-apply-20261012-002934.json",
+          "cleanup-remaining-source-receipt.json",
+          "cleanup-remaining-small-receipt.json"
+        ],
+        "remainingManifest": "cleanup-remaining-final.json",
+        "previousApprovalLimitedObjects": "All five historical categories were reaudited under renewed user authorization and removed successfully through the original normal tool approval channel; old rejection receipts retained as history",
+        "protectedCurrentInputs": [
+          "Current source worktree, .venv/m14 with .pth borrowed runtimes, .venv/m03-compatible, .venv/m05 and their CPython bases",
+          "output/validation/m03-runtime and actual MFA environment/models/dictionaries",
+          "R7 dist/build/release-staging and formal manual media/research inputs",
+          "Two complete historical corresponding-source/license ZIPs"
+        ],
+        "verification": [
+          "All deletion receipts success; no reparse targets followed",
+          "Complete retained ZIP SHA256 and 2773/3464 member SHA256 checked before duplicate removal",
+          "Two duplicate comparison downloads SHA256 identical to protected live MFA model/dictionary",
+          "Source workbench CheckOnly after cleanup resolved current worktree sources and actual retained runtimes",
+          "Current real Start Menu target exists in LOCALAPPDATA/Programs/PhoneticToolbox; old QA uninstall DisplayIcon refers to removed old EXE; uninstaller retained",
+          "No diff in the two frozen public release reports"
+        ],
+        "notRun": [
+          "No complete product test suite, GUI launch, native algorithm rerun, rebuilt EXE or installer test for this cleanup"
+        ],
+        "boundaries": [
+          "Logical lengths may double count hard links; available-space change is system-wide net observation, not precise bytes physically reclaimed by this process",
+          "Old inventory had excluded the MEI forced-interruption subtree (23416884 bytes) and 1-byte startup-card root, so those bytes are not subtracted again from 20594027040",
+          "Current observed roots include previously archived and newly retained evidence; do not compare their total directly with the original logical inventory as physical space",
+          "Historical QA hard-coded old package paths now require regeneration; current development, packaging and application source inputs preserved",
+          "System registry entries and shortcuts were only read; no modification or uninstall performed; no Git commit or push"
+        ]
+      }
+    },
+    {
+      "id": "RELEASE-3.0.0-REVIEW",
+      "title": "3.0.0 发布前现存 EXE 与当前源码审查",
+      "status": "verified",
+      "files": [
+        "docs/testing/release-3.0.0-review.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json"
+      ],
+      "note": "仅审查、复现与证据记录完成，未修产品、重打包或发布；verified 不代表正式版发布通过。",
+      "verification_scope": "Windows 本机 MFA-R3 最终字节、当前源码、公开下载端点；独立合成输入和隔离状态",
+      "verification": [
+        "EXE/安装包/ZIP 大小及摘要复核一致，ZIP 内应用同 SHA",
+        "工程外 Windows-only PATH 的 --verify-distribution 与 --verify-m12 成功，11 托管任务、18 帮助及客户端保存回读",
+        "180 项桌面/发行等 Python 定向检查、指定环境 M03-R8 11 项、前端 366 项、类型/契约/UI 数据/文档/架构通过",
+        "实际 EXE MFA 删除命令在合成目录中保留外部环境和设置",
+        "GitHub 有效新版与实际旧 Release 混合列表复现 CHECKSUM_MISSING 和候选丢失；组件及更新清单地址 HTTP 404",
+        "长路径隔离失败、错误 EGG 环境及清理拦截均保留原始记录，不纳入产品通过结论"
+      ],
+      "remaining": [
+        "修复 GitHub 历史发布阻断新版候选",
+        "发布前准备并验证 MFA 固定组件和官网更新清单",
+        "正式版本号与当前源码重新冻结，重新验最终字节",
+        "既有 SoE/总 LICENSE/对应源码交付门槛待收口",
+        "干净 Windows、实体音视频、DPI、多屏、长期运行、完整科学参数矩阵未验",
+        "自动审批拒绝删除工程外 QA 目录及源码测试联接；两个隔离目录保留，见清理回执"
+      ],
+      "evidence": [
+        "docs/testing/release-3.0.0-review.md",
+        "output/validation/release-review-20261011/frozen-short/distribution-report.json",
+        "output/validation/release-review-20261011/frozen-short/textgrid-report.json",
+        "output/validation/release-review-20261011/targeted-9fc4e83fd3224bff9eb5b65b907e46da/github-regression.json",
+        "output/validation/release-review-20261011/network.json"
+      ]
+    },
+    {
+      "id": "SOURCE-CITATION-NORMALIZATION",
+      "title": "全局软件致谢清理与48条学术来源核实",
+      "status": "verified",
+      "files": [
+        "third_party/source-registry.json",
+        "third_party/references.bib",
+        "third_party/acknowledgement-coverage.json",
+        "frontend/scripts/generate-ui-data.mjs",
+        "frontend/src/generated/sources.json",
+        "frontend/src/components/MethodReferences.vue",
+        "frontend/tests/source-coverage.test.ts",
+        "docs/testing/source-citation-normalization-report.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json",
+        "manual/project.json",
+        "manual/chapters/getting-started.json",
+        "docs/manual/methods-and-credits.md",
+        "scripts/manual/build.py",
+        "frontend/src/modules/ipa-plus/data/sources.json",
+        "scripts/verify_source_citations.py",
+        "tests/e2e/source-citations.cjs",
+        "manual/chapters/m17.json",
+        "docs/references/m03-method-audit.md"
+      ],
+      "note": "已按用户授权隐藏私人ipa.cin致谢，保留别名与内部证据；整理软件题名、署名、版本与许可显示。三个gpt-6.1-sol/high子代理核查48条学术来源，48条核心书目确认，尹基德论文根据用户补充的原论文封面确认2010年12月及博士学位层级，去除年份推定标记与待核说明，全部GB/T7714-2015引用及BibTeX同步。29条说明书引用索引、M17的11条完整学术引用与入门说明已更新。仅相同内容跳过阅读资源重复写入，Windows锁边界实测通过。详见docs/testing/source-citation-normalization-report.md。",
+      "verification_scope": "Windows源码：4项定向测试、类型/生成数据检查/前端构建；独立Chrome浅深主题×两宽度48条引用复制与模块/全局一致，说明书11条引用实际阅读；20章1044素材严格验证、生成资源1066文件核对与真实Windows文件锁检查。非最终EXE。全项目架构检查仅受同期反馈头像未登记影响。 尹基德封面补核后重新检查来源测试/生成数据/类型/前端构建，未重复浏览器验收。",
+      "remaining": [
+        "尹基德论文全文引述页码、吕佳/江荻原DOI、M13七项历史字表对应及Mills2020具体月日差异留档",
+        "全项目架构的同期反馈头像资源登记由所属任务处理；最终EXE、跨平台与完整再分发许可不在本轮范围"
+      ]
+    },
+    {
+      "id": "P04-WINDOW-RESTORE",
+      "title": "最小化恢复后的黑屏检查与修复",
+      "status": "verified",
+      "files": [
+        "desktop/src/ptb_desktop/host.py",
+        "desktop/src/ptb_desktop/window_chrome.py",
+        "scripts/verify_window_restore_qt.py",
+        "docs/plans/task-ledger.json",
+        "frontend/src/design/buttons.css",
+        "desktop/ARCHITECTURE.md",
+        "docs/testing/compact-shell-report.md",
+        "docs/testing/window-restore-report.md",
+        "docs/project-status.md"
+      ],
+      "note": "最大化→最小化→Windows原生恢复稳定复现绘图区误扣系统框架及黑屏。移除提前消费WM_NCCALCSIZE，交给Qt更新框架边距缓存；不重载页面。最大化按钮outline移除。",
+      "verification_scope": "Windows当前源码、隔离Qt实例与用户提供截图；不操作摄像头或麦克风",
+      "remaining": [
+        "最终EXE、Windows10、多屏跨DPI、其他平台与休眠唤醒未验",
+        "全仓库文档检查现有source_registry计数414/413不一致，来源清单未改；孤立过渡黑帧未在最终38次及此前66次恢复中重现，长期稳定性仍以实际使用确认"
+      ],
+      "verification": [
+        "浅深模式三页面36次原生恢复及2次字体草稿恢复通过，viewport/激活标签/文档标记保留，全部真实窗口采样非黑比例1.0",
+        "最大化按钮键盘激活outline/boxShadow=none；最大化工作区通过",
+        "额外连续48次恢复、首轮18次通过；首次最大化保护9项、配色5项、typecheck及build通过",
+        "Qt框架、关闭保护与阅读侧栏回归通过；架构errors=[]",
+        "9个自有Qt scratch已清理，保留报告和截图；源码通过统一启动器重启",
+        "实际统一启动器GUI完成4次最大化原生恢复，像素1.0，保留窗口试用；source-restore.json"
+      ],
+      "evidence": [
+        "output/validation/window-restore/qt-bc58ac4fa2014e1fb0cd0e4940fa52b2/report.json",
+        "output/validation/window-restore/qt-a014e69f493e43c48e4fb5da1f46ed42/report.json",
+        "output/validation/compact-shell/qt-b7cb857829564ad891d25bcad301651c/report.json",
+        "docs/testing/window-restore-report.md",
+        "output/validation/window-restore/source-restore.json"
+      ]
+    },
+    {
+      "id": "M17-APP-CITATION",
+      "title": "iPA Phonetics应用规范引用",
+      "status": "verified",
+      "files": [
+        "third_party/source-registry.json",
+        "third_party/references.bib",
+        "frontend/src/generated/sources.json",
+        "docs/references/m17-expansion-diff.md",
+        "docs/testing/m17-app-citation-report.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json"
+      ],
+      "note": "按井井要求将截图核对记录的可见题名改为应用本身的书目引用，官方App Store名称iPA Phonetics、3.0、2025-02-15、作者Esling与Coey；Pro别名据UVic作者主页。截图版本及未打包资源说明仅留内部，保留软件来源分组。",
+      "verification_scope": "来源登记、生成引用数据与当前前端构建；音标库存和交互不变",
+      "remaining": [
+        "历史截图版本仍未确认；最终EXE未重建，实际Qt/浏览器弹窗未另验"
+      ],
+      "verification": "2026-10-11核对官方App Store与UVic作者主页；ui-data及ui-data:check、source-coverage 2项、typecheck和build通过；引用生成字段一致、当前文档及候选差异检查通过。未验实际Qt/浏览器弹窗和最终EXE。",
+      "current_evidence": [
+        "docs/testing/m17-app-citation-report.md"
+      ]
+    },
+    {
+      "id": "P04-COMPACT-SHELL",
+      "title": "顶边标签栏、颜色选中目录与可拖动阅读侧栏",
+      "status": "verified",
+      "files": [
+        "desktop/src/ptb_desktop/host.py",
+        "desktop/src/ptb_desktop/window_chrome.py",
+        "frontend/src/platform/desktop.ts",
+        "frontend/src/app/AppShell.vue",
+        "frontend/src/design/tokens.css",
+        "frontend/src/design/buttons.css",
+        "frontend/src/manual/ManualReader.vue",
+        "frontend/src/manual/manual.css",
+        "frontend/src/modules/paper-reading/PaperReadingPage.vue",
+        "scripts/verify_compact_shell_qt.py",
+        "tests/e2e/manual-outline.cjs",
+        "docs/plans/task-ledger.json",
+        "scripts/verify_window_chrome_qt.py",
+        "scripts/manual/capture_settings.py",
+        "scripts/manual/register_compact_shell.py",
+        "manual/chapters/getting-started.json",
+        "manual/chapters/settings.json",
+        "manual/chapters/m18.json",
+        "manual/project.json",
+        "frontend/src/manual/README.md",
+        "frontend/src/modules/paper-reading/README.md",
+        "desktop/ARCHITECTURE.md",
+        "docs/design/UI_SPEC.md",
+        "docs/manual/settings.md",
+        "docs/testing/compact-shell-report.md",
+        "docs/testing/window-chrome-report.md",
+        "docs/project-status.md"
+      ],
+      "note": "按用户要求将Windows标签与品牌放入窗口顶边，标签和关闭按钮同色；致谢放首页内容区右上角，移除首页试用版行。说明书跳转标题无框线、目录以颜色选中，说明书目录和论文库复用统一分栏拖动并分别保存宽度。",
+      "verification_scope": "Windows当前源码实际Qt窗口、前端构建、阅读页及文档；最终EXE未纳入本次请求",
+      "remaining": [
+        "最终EXE未重建；Windows10、其他平台、多屏/其他DPI、完整贴边与真实鼠标跨屏移动未实测"
+      ],
+      "verification": "Windows 11实际Qt：顶边单一品牌，致谢位于首页内容区右上且标签栏无该入口，最小化/最大化/还原、工作区/全屏尺寸、原生缩放命中、浅深同色标签、两阅读侧栏真实拖动/独立宽度/窄窗恢复、真实关闭按钮未保存确认及取消保留通过。独立Chrome18图标/5组目录行为/6组字号主题通过，23项阅读分栏论文及5项配色通过，类型/contracts/ui-data/构建及文档架构检查通过。说明书文字、首页目录四设置页配图同步。 正式说明书20章1042素材生成warnings=[]，11个自有Qt scratch清理deleted。",
+      "current_evidence": [
+        "docs/testing/compact-shell-report.md"
+      ],
+      "local_evidence": "output/validation/compact-shell/qt-99a0fc40c3ad436e809eed92d56efe20/report.json；output/validation/manual-outline/navigation-1791701609545/report.json；output/validation/compact-shell-architecture.json、compact-shell-docs.json。 最终配图output/validation/settings-navigation/manual-qt-35e0d0489e2e4b1c9b1d219eaf294fc3/report.json。 源码启动output/validation/compact-shell/workbench-20261011-150759.stderr.log。"
+    },
+    {
+      "id": "M13-RESULT-LAYOUT",
+      "title": "转换排版、统一字音修复与150%DPI说明书",
+      "status": "verified",
+      "files": [
+        "frontend/src/modules/mandarin-ipa/MandarinIpaPage.vue",
+        "frontend/src/modules/mandarin-ipa/state.ts",
+        "frontend/src/modules/mandarin-ipa/layout.ts",
+        "frontend/src/modules/mandarin-ipa/export.ts",
+        "tests/e2e/m13-result-layout.cjs",
+        "scripts/verify_m13_result_layout.py",
+        "frontend/src/modules/mandarin-ipa/README.md",
+        "manual/chapters/m13.json",
+        "manual/project.json",
+        "docs/project-status.md",
+        "docs/testing/m13-result-layout-report.md",
+        "docs/plans/task-ledger.json",
+        "frontend/tests/m13.test.ts",
+        "scripts/manual/capture_m13_result_layout.py",
+        "docs/manual/mandarin-ipa.md",
+        "frontend/src/modules/mandarin-ipa/reading-repairs.json",
+        "frontend/src/modules/mandarin-ipa/reading-repairs.ts",
+        "frontend/src/modules/mandarin-ipa/generate-data.mjs",
+        "frontend/src/modules/mandarin-ipa/ipa-data.json",
+        "frontend/src/modules/mandarin-ipa/unt.ts",
+        "frontend/tests/m13-unt.test.ts",
+        "third_party/source-registry.json",
+        "frontend/src/generated/sources.json",
+        "frontend/src/layout/resizablePanels.ts",
+        "frontend/src/manual/TextNode.ts",
+        "frontend/src/manual/manual.css",
+        "frontend/tests/manual-reader-render.test.ts",
+        "frontend/src/manual/README.md",
+        "scripts/manual/register_m13_result_layout.py",
+        "frontend/src/modules/mandarin-ipa/unt-rules.json",
+        "third_party/references.bib",
+        "docs/modules/evidence/M13-source-map.md",
+        "docs/decisions/ADR-M13-unt-erhua.md",
+        "docs/testing/m13-unt-erhua-report.md",
+        "tests/e2e/m13-sources.cjs",
+        "tests/e2e/m13-unt.cjs"
+      ],
+      "note": "按用户要求新增可切换的等宽排版。字音单元与儿化字组按当前结果最大自然宽度对齐，标点占同宽单元，字号/读音/字体变化重测；默认关闭，旧草稿兼容。实际行距由行间空隙控制，PNG沿用同一行高规则并去除多音三角。 输入标题右侧显示字符数并对齐输入/结果框底边，儿化提示改为独立的儿字。 最新授权删除引用中的单字词条链接，已核实异常读音统一修正至全部标准，历史HTML仍冻结。 默认输入与结果等宽，允许手调栏宽；先修模块后更新说明书，删除声调/拼音ü独立小节和女略例子，说明书IPA使用内置Doulos，全部本章工作台配图重拍150%DPI。",
+      "verification_scope": "当前Windows源码、真实页面几何及实际PNG；正式说明书按Qt DPR1.5、页面100%、2560×1600截图规范更新",
+      "remaining": [
+        "未重打最终EXE；实体输入法、多屏/其他物理DPI和跨平台未验",
+        "全表逐字词典核验、其他标准原书版次/页码对应未验；作者未列音值及萡/be继续缺值"
+      ],
+      "verification": "33项定向前端测试、typecheck、build、UI来源登记与字表再生成检查通过；Chrome排版8组、Unt4组、来源4组通过。实际Qt DPR1.5/pageZoom1重拍本章17张2560×1600图并保存3600×906无三角PNG。两栏各649.333374 CSS px，底边差0；说明书18图解码与Doulos字体加载通过，严格校验零警告零错误。全表审计仅10条已查证字音修正至所有标准、29条nan恢复：拼音39、声调4、其他八列IPA各10，其他单元和行序保持。 最终18图与章节source/public/dist字节一致，文档扫描1918文件当前errors=[]。",
+      "current_evidence": [
+        "docs/testing/m13-result-layout-report.md"
+      ],
+      "local_evidence": "output/validation/m13-result-layout/mapping-audit.json；manual-qt-026ce15269b2471c80a85723f36a6ce0/report.json；chrome-4bb55b9cd4c3417787e31784e175c5ea/report.json；output/validation/m13-unt/chrome-5a231fe6da3847b6a23420363f6cde53/report.json。测试scratch已清理。"
+    },
+    {
+      "id": "P04-WINDOW-CHROME",
+      "title": "Windows主题标题栏与细圆角滚动条",
+      "status": "verified",
+      "files": "desktop window_chrome/host主题桥；frontend desktop同步/shared scrollbars/M10导入；资源摘要、说明书、状态、验收",
+      "note": "本条保留原生DWM标题栏配色检查点，当前Windows框架与单一品牌由P04-COMPACT-SHELL取代。细圆角透明无箭头滚动条、M10共用CSS和下拉下默认展开的配色说明继续沿用。",
+      "verification": "Windows 11 build 26300 / 实际Qt：4方案/模式标题栏像素与CSS同步；原生最小化/最大化/还原/移动、非法颜色拒绝、无重复桌面品牌、说明默认展开位置、9px透明轨道无箭头、PageDown/拖动/横向滚动、M10独立文档样式均通过。四设置页及LPC/M02当前Qt配图同步正式说明书。前端appearance 5项、typecheck、contracts/ui-data、build通过；最终架构/文档 errors=[]，20章1018素材说明书生成 warnings=[]；源码已重新启动。",
+      "remaining": [
+        "Windows 10与其他平台保留系统标题栏且未实测；未重打最终EXE"
+      ],
+      "current_evidence": [
+        "docs/testing/window-chrome-report.md"
+      ],
+      "local_evidence": "output/validation/window-chrome/qt-07a00e4742584259afad5495a7f1a98e/report.json；output/validation/settings-navigation/manual-qt-1b79428decf24b85930602f31b2284b1/report.json；测试库/profile scratch已在进程退出后清理。 源码启动日志 output/validation/settings-icons/workbench-launch-20261011-142754.stderr.log。"
+    },
+    {
+      "id": "USER-COPY-REVIEW",
+      "title": "用户说明与界面提示的直接表达及开发编号清理",
+      "status": "verified",
+      "files": [
+        "manual/chapters/*.json",
+        "manual/project.json",
+        "docs/manual/*.md",
+        "frontend/src/components",
+        "frontend/src/modules",
+        "frontend/src/platform",
+        "frontend/src/app/AppShell.vue",
+        "frontend/public/vocal-tract/index.html",
+        "third_party/source-registry.json",
+        "frontend/src/generated/sources.json",
+        "README.md",
+        "tests/e2e",
+        "docs/testing/user-copy-review.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json",
+        "frontend/src/account/ProjectJobs.vue",
+        "frontend/src/account/ProjectStorage.vue",
+        "frontend/scripts/generate-ui-data.mjs",
+        "desktop/src/ptb_desktop/*_bridge.py",
+        "desktop/src/ptb_desktop/recording/service.py",
+        "backend/src/ptb_worker/mfa/child.py",
+        "contracts/resource-manifest.json",
+        "resources/vocal_tract/bundle-manifest.json",
+        "manual/AUTHORING.md",
+        "frontend/src/manual/ManualMedia.vue",
+        "frontend/src/manual/ManualNode.vue",
+        "frontend/src/manual/ManualReader.vue",
+        "frontend/tests/manual-reader-render.test.ts"
+      ],
+      "note": "按用户要求完成20章正文、图注、相关界面提示及用户使用文档审校。删除多余防御表述与开发状态说明，以功能名称和实际操作表达；说明书中的开发编号文件名示意改为用途描述，实际导出文件名未改。阅读页隐藏素材制作/验收记录与内部错误标识，保留来源登记、媒体类型、时长和采样信息；未知节点原文保留。同期新增设置截图保留。用户无法处理的开发问题由开发者负责，规则已写入编写约定。",
+      "verification_scope": "Windows 当前源码与生成阅读资源；20章实际Qt阅读、全文搜索和配色说明；科学参数/媒体字节保留，算法及最终EXE未重验",
+      "verification": "严格说明书校验20章/1010素材零警告零错误；阅读资源与前端构建成功；55项定向前端检查通过，类型与UI登记生成检查通过；实际Qt阅读20章、无可见开发编号、搜索与设置说明通过；1030个阅读文件的public/dist哈希与构建记录一致。8个错误文案Python文件语法检查通过。格式/本地链接及候选diff检查另见报告。全仓架构检查有同期platform.js/v3.css资源摘要不一致，未改动该两项。",
+      "remaining": [],
+      "current_evidence": [
+        "docs/testing/user-copy-review.md"
+      ],
+      "local_evidence": "output/validation/user-copy-review/；各Qt检查的scratch由项目清理脚本在进程退出后回收，保留报告与截图。"
+    },
+    {
+      "id": "P04-LIGHT-PALETTE",
+      "title": "各模块浅色底色统一与三模式预览对齐",
+      "status": "verified",
+      "files": "公共paletteTokens、ModuleWorkbench与公共CSS；M09/M16语谱/图片周围，标注/录音/汉字转IPA/论文目录长栏，M10主题桥/遗留CSS/资源摘要；外观三预览；相关测试/说明书/状态/台账",
+      "note": "浅色面板保留配色底色。导航/顶栏略灰，模块贯穿侧栏微深，内部卡片轻亮，白底主题保持简洁。科学图像/PDF纸面/器官配色保留；跟随系统/浅色/深色三预览与按钮对齐。",
+      "verification": "当前源码29套浅深文字/状态/按钮对比度≥4.5，Everforest三层微差和中性白底保持、浅色panel差≤3 RGB通过。18模块×6方案108入口的导航/顶栏/长侧栏真实底色；M10三方案×浅深主题桥及rail；1440/800三卡对齐/系统媒体响应；实际Qt LPC/M02层次与四设置页通过。前端25项、typecheck/build、资源摘要/架构、说明书校验/生成及文档检查通过。",
+      "remaining": [
+        "科研非空结果与设备流程未扩大核验；最终EXE、跨平台、完整物理DPI未验"
+      ],
+      "current_evidence": [
+        "docs/testing/palette-surfaces-report.md"
+      ],
+      "verification_scope": "Windows source interface colours; scientific jobs/results unchanged and not revalidated",
+      "local_evidence": "output/validation/palette-surfaces/chrome-1791695539740/；output/validation/settings-navigation/manual-qt-92ce7f8df99c4fb099e2ced5e8a8b596/；scratch deleted。"
+    },
+    {
+      "id": "M13-UNT-ERHUA",
+      "title": "Unt作者网站现行记音与可逆儿化组合",
+      "status": "verified",
+      "dependencies": [
+        "M13-ACADEMIC-SOURCES",
+        "用户2026-10-11明确授权仅更新Unt两列并增加儿化组合与拆分",
+        "用户要求儿化操作区和组合/拆分按钮仅在Unt两项下显示"
+      ],
+      "copy_revision": {
+        "request": "删除Unt引用说明中的独立的儿需人工核对",
+        "scope": "仅统一来源登记的reference_note及生成界面引用数据",
+        "status": "verified",
+        "validation": "ui-data:check通过，source-coverage两项通过；登记与生成引用数据均不再包含该句；本次仅文案修改，未重打EXE"
+      },
+      "files": [
+        "frontend/src/modules/mandarin-ipa/unt.ts",
+        "frontend/src/modules/mandarin-ipa/unt-rules.json",
+        "frontend/src/modules/mandarin-ipa/generate-data.mjs",
+        "frontend/src/modules/mandarin-ipa/ipa-data.json",
+        "frontend/src/modules/mandarin-ipa/state.ts",
+        "frontend/src/modules/mandarin-ipa/MandarinIpaPage.vue",
+        "frontend/src/modules/mandarin-ipa/README.md",
+        "frontend/tests/m13-unt.test.ts",
+        "frontend/tests/source-coverage.test.ts",
+        "third_party/source-registry.json",
+        "third_party/references.bib",
+        "third_party/acknowledgement-coverage.json",
+        "frontend/src/generated/sources.json",
+        "manual/chapters/m13.json",
+        "manual/project.json",
+        "manual/assets/software-only/screenshots/m13-*-20261011.png",
+        "docs/modules/evidence/M13-source-map.md",
+        "docs/decisions/ADR-M13-unt-erhua.md",
+        "docs/testing/m13-unt-erhua-report.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json",
+        "scripts/verify_m13_unt.py",
+        "tests/e2e/m13-unt.cjs",
+        "tests/e2e/m13-sources.cjs"
+      ],
+      "verification_scope": "首轮历史验证：Windows源码、生成字表、Unt中派基准及可逆儿化，21572行非Unt列当时保持，18项测试及独立Chrome通过。后续统一字音修复、真实Qt与150%DPI说明书由M13-RESULT-LAYOUT取代当前范围，历史摘要保留。",
+      "remaining": [
+        "作者未列hm/hng音值、io/ê等儿化对应，不造值；自动组合不判断词义；萡/be保留缺值",
+        "全表字音和其他标准原书版次/页码对应未验；最终EXE、实体输入法、多屏/其他物理DPI、跨平台未验"
+      ],
+      "execution_evidence": [
+        "docs/testing/m13-unt-erhua-report.md",
+        "output/validation/m13-unt-source/source-lock.json",
+        "output/validation/m13-unt-source/mapping-audit.json",
+        "output/validation/m13-unt-source/manual-validation.json",
+        "output/validation/m13-unt/chrome-4227bd567091411cb7a0fc68650d5ada/report.json",
+        "output/validation/m13-unt/chrome-4227bd567091411cb7a0fc68650d5ada/cleanup.json",
+        "output/validation/m13-sources/chrome-d88c6e9d0c694f58802ad11173c9c2fe/report.json",
+        "output/validation/m13-sources/chrome-d88c6e9d0c694f58802ad11173c9c2fe/cleanup.json",
+        "output/validation/m13-unt/chrome-b9bc543a0500425b95c415af6e65f5c0/report.json",
+        "output/validation/m13-unt/chrome-b9bc543a0500425b95c415af6e65f5c0/cleanup.json",
+        "output/validation/m13-unt/chrome-b3cdd13071404671ae4086b60d6c8edd/browser.log"
+      ],
+      "validation": {
+        "changed_unt_cells": {
+          "broad": 6858,
+          "narrow": 9613
+        },
+        "preserved_other_columns": true,
+        "tests": 18,
+        "browser_cases": 4,
+        "source_ui_cases": 4,
+        "non_unt_controls_hidden_per_case": 9,
+        "png": {
+          "bytes": 84791,
+          "width": 1638,
+          "height": 666
+        },
+        "checks": [
+          "typecheck通过",
+          "映射生成--check通过",
+          "ui-data:check、contracts:check通过",
+          "前端build通过，既有chunk提示保留",
+          "说明书严格校验errors=[]、warnings=[]；生成正文与构建副本一致",
+          "两个浏览器运行均无页面错误或外部请求，scratch清理deleted",
+          "说明书实际帮助入口、儿化小节及2560px新截图加载通过；M13搜索索引同步，4张截图更新",
+          "仅Unt两项显示儿化控件，其他9项及其多音小窗逐一验证隐藏，回切保留组合决定",
+          "首次标题自动编号和单读音测试字定位问题已修正，保留诊断并按原验收要求重验通过"
+        ],
+        "global_docs_scan": "8 missing README image/document links outside M13"
+      },
+      "current_evidence": [
+        "docs/testing/m13-unt-erhua-report.md",
+        "docs/testing/m13-result-layout-report.md"
+      ]
+    },
+    {
+      "id": "P04-SETTINGS-NAVIGATION",
+      "title": "设置页四分类、分栏与应用图标选择",
+      "status": "verified",
+      "files": "公共四类设置/分栏、31款紧凑图标和编辑W1；前端图标平台/状态；Qt偏好/宿主/打包ICO入口；资源清单/来源及生成数据；说明书/四页截图；桌面架构/相关模块说明/验收/状态/台账",
+      "note": "当前31款图标：用户确认黄底雾紫声波/深蓝末端W1默认，移除原第2与第8项K1-A/X3，其余ID不变；已保存退役项回到默认。README首页、说明书正文与六幅配图、官网品牌与四幅展示同步。",
+      "verification": "本轮原生14项、独立Chrome六行为/48布局及31项选择、类型与前端构建通过。实际Qt默认/选图/自定义导入/重开与截图通过，说明书严格校验20章1050素材无错误/警告，生成阅读资源。scratch已清。现有EXE未重打包。",
+      "remaining": [
+        "最终EXE未重新打包；已固定Windows入口与现存EXE使用独立图标",
+        "其他平台、完整物理DPI/多屏及长期使用未验"
+      ],
+      "verification_scope": "Windows current source, actual independent Chrome and source Qt; final EXE, other platforms and physical multi-monitor/DPI matrix not revalidated",
+      "current_evidence": [
+        "docs/testing/settings-navigation-report.md"
+      ],
+      "local_evidence": "output/validation/settings-icons/native-8d67afd5f7f74628b1cdd2eee30480ca/; output/validation/settings-navigation/chrome-1791810675352/; output/validation/settings-navigation/manual-qt-16279e2dd1db4747944b1926271bcc07/"
+    },
+    {
+      "id": "M18-R5",
+      "title": "PDF特殊符号叠影、高清重绘与Ctrl滚轮缩放",
+      "status": "verified",
+      "files": "M18 PDF前端/原生渲染与定向验收；模块帮助/状态/台账；本轮免安装成品",
+      "verification_scope": "Windows current application source and final M18-R6 bytes; owned source Qt DPR1.5/native wheel, out-of-workspace single EXE with Windows PATH and DPR1. User screenshot ghosting not reproduced; no all-PDF/separate-PC/cross-platform/long-term claim.",
+      "note": "用户发现少数PDF音标显示异常、画面发糊，并要求Ctrl+滚轮缩放。先分离原生图和透明文字层，再验证DPR、分辨率缓存与滚轮锚点。",
+      "verification": "源码 Qt：extIPA零叠字绘制、DPR1.5下200%由1315重绘2448像素、原生Ctrl滚轮锚点/选择/持久荧光笔、快速缩放切换、暗色及高瘦页像素限制通过；41桌面、7定向前端及类型/构建通过。旧R5实际EXE复现200%沿用998像素图，原截图字形异常尚未复现。 最终源码强制黑色字层仍零绘制差异、真实Ctrl滚轮锚点最大变化0.000101，完整357项前端、说明书生产解析及架构/文档0错误；源码QA副本已清理。 最终R6为473416215字节，SHA 9c8a105f10609aabf9945d52eb885543edc65774de877f0a5c6ce154998240f1，683源码自校验/20Qt DLL/包审计通过。工程外同字节自动获取2论文6资产、5/11/6页、extIPA无额外字层绘制、200%重绘2040像素、实际Ctrl滚轮200→239%、正常退出0；--verify-distribution两科学环境/11任务/18帮助/原生和客户端通过。临时外部QA、源QA副本与本轮合成WAV清理deleted；旧R5成品因用户使用保留。",
+      "remaining": [
+        "用户截图叠影在源码与旧/新EXE隔离环境均未复现，绘制隔离效果仍需用户本机确认",
+        "所有PDF、其他平台、独立电脑、多显示器与长期阅读未穷举；未重复本轮未改动的安装卸载/换版专题",
+        "只交付免安装R6；安装版仍为此前R1冻结，没有公开发布应用或push"
+      ],
+      "current_evidence": [
+        "docs/testing/2026-10-11-m18-r5-report.md"
+      ],
+      "local_evidence": "output/validation/m18/r5-qt-3f05d592bf64425cb92e18a34d24ef7d/；output/validation/m18-r6-package/；output/validation/m18/r5-doc-validation-final.json（1874文件/410来源/70任务0错误）；最终成品长度与SHA复查一致，git diff --check通过"
+    },
+    {
+      "id": "M10-R16",
+      "title": "舌前侧缘沟槽、分叉气腔与稳定口底附着",
+      "status": "verified",
+      "plan": "modules/M10-vocal-tract.md",
+      "files": "原生 R16 补丁/桥接/构建与资源；核心 engine/document；前端 tongue/airway/controls/scene；定向测试与验证脚本；M10说明书、来源、ADR及状态台账",
+      "verification_scope": "Windows当前源码及最终R16原生DLL，JD2/65/129/257；Qt浅深主题；未覆盖冻结EXE、全部参数组合或医学/自然听辨",
+      "note": "实施已获用户明确确认。保持左右联动，方法m10/r16与文件版本3明确结果变化。原版VTL面积断言由未改动API DLL核查，R14旧基准未覆盖。接触边界细化消除复现跳变；来源与说明书同步。",
+      "current_evidence": [
+        "docs/decisions/ADR-M10-tongue-transverse-and-floor.md",
+        "docs/testing/2026-10-10-m10-r16-report.md"
+      ],
+      "remaining": [
+        "现有EXE未纳入本次修改，完整冻结包和跨平台未验",
+        "有限参数/采样检查不代表全部组合或医学真实性，合成仍为等效声管，实体耳机听辨未验"
+      ],
+      "local_evidence": "output/validation/m10-r16/geometry-b410ae22de9640ca9a45a46ed7d54b5b/；output/validation/m10-r16/qt-e2b4c531288c4d3ba9db674627d616f6/",
+      "verification": "55项Python、22项前端、类型/契约/来源生成/构建通过。20组native/display构形，243步侧缘扫描及153步接触细扫描通过；/s/中央窄沟、/l/双侧通路、/t/闭塞，牙齿三角形内部排除及舌腹回接检查通过。实际Qt撤销重做、固定口底点、v3导出/旧文件提示及零音量动作播放通过；说明书严格校验、架构与文档链接通过。"
+    },
+    {
+      "id": "M10-AUDIO-WASAPI",
+      "title": "生理参数合成适配不同采样率的WASAPI输出端点",
+      "status": "verified",
+      "files": "desktop/src/ptb_desktop/vocal_tract/audio_output.py；desktop/tests/test_m10_audio_output.py；docs/testing/m10-audio-wasapi-report.md；M10模块计划/README；当前状态与任务台账",
+      "verification_scope": "Windows当前源码；六个真实WASAPI端点，共24条零监听音量test/preview/animation/live路径，PCM/时钟/停止失败保护回归",
+      "note": "UR22C Voice/Music/DAW默认44100Hz，原直接48000Hz格式查询返回PaErrorCode -9997；启用auto_convert后通过。源码已对WASAPI单流启用共享模式自动转换，不改变科学合成/导出/时钟或系统设备设置。",
+      "remaining": [
+        "现有EXE未纳入本次修复，实体耳机听辨和跨平台未验"
+      ],
+      "verification": "UR22C Voice/Music/DAW 的44100Hz默认格式拒绝原48000Hz流，启用共享模式自动转换后成功。六端点24路径通过，设备专题及录制23项测试通过；最终与R16综合回归55项通过。",
+      "local_evidence": "output/validation/m10-audio/wasapi-90b270b6dba74fcdb24f0d2edec055df/",
+      "current_evidence": [
+        "docs/testing/m10-audio-wasapi-report.md"
+      ]
+    },
+    {
+      "id": "M13-ACADEMIC-SOURCES",
+      "title": "汉字转国际音标学术来源与规范引用",
+      "dependencies": [
+        "M13",
+        "P10",
+        "用户要求补齐学术来源并引用UntPhesoca文章"
+      ],
+      "status": "verified",
+      "files": [
+        "third_party/source-registry.json",
+        "third_party/references.bib",
+        "third_party/acknowledgement-coverage.json",
+        "frontend/scripts/generate-ui-data.mjs",
+        "frontend/src/generated/sources.json",
+        "frontend/src/components/MethodReferences.vue",
+        "frontend/src/modules/mandarin-ipa/README.md",
+        "docs/modules/evidence/M13-source-map.md",
+        "docs/testing/m13-academic-sources-report.md",
+        "frontend/tests/source-coverage.test.ts",
+        "scripts/verify_m13_sources.py",
+        "tests/e2e/m13-sources.cjs",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json"
+      ],
+      "verification_scope": "Windows 当前源码、书目、十一项标准覆盖与共用来源界面；独立 Chrome 浅深主题、1440/900px，模块与关于页显示/搜索/复制；转换表摘要未变；Qt和最终EXE另验",
+      "execution_evidence": [
+        "docs/testing/m13-academic-sources-report.md",
+        "output/validation/m13-sources/chrome-e4ebe6c65f204510bd5defb402ee4f4e/report.json",
+        "output/validation/m13-sources/chrome-e4ebe6c65f204510bd5defb402ee4f4e/cleanup.json"
+      ],
+      "remaining": [
+        "其他标准历史字表的版次、页码和逐字对应未验证；吴宗济具体直接著作未确认。Unt访问快照、正文规则与儿化后续已在M13-UNT-ERHUA核验",
+        "知乎原页本次未能抓取，原链接由用户提供，首发日期由作者网站核实",
+        "当前双版本EXE尚未纳入本次修改；Qt专项与跨平台GUI未验"
+      ],
+      "validation": {
+        "source_count": 9,
+        "standards_covered": 11,
+        "checks": [
+          "ui-data生成及ui-data:check通过",
+          "contracts:check、typecheck通过",
+          "M13及来源覆盖13项定向测试通过",
+          "前端build通过，既有大chunk提示保留",
+          "validate_docs.py：errors=[]，历史快照缺链单独保留",
+          "独立Chrome四组页面通过，无页面错误/外部请求/横向溢出",
+          "scratch清理回执deleted",
+          "字表SHA-256未变"
+        ]
+      }
+    },
+    {
+      "id": "M18-R4",
+      "title": "新增授权论文推送、收藏夹删除与本地PDF切换修复",
+      "status": "verified",
+      "files": "M18本地库/服务/桥接/前端；QA启动诊断及短路径；授权全文译读/服务器目录；M18说明书/素材登记/来源/部署/状态/验收；本轮免安装EXE",
+      "verification_scope": "Windows source and final M18-R5 bytes, native Qt/owned rapid-switch stress, isolated out-of-workspace EXE with Windows PATH, authorized live HTTPS content. Not separate PC, installer revision, cross-platform or expert translation review.",
+      "note": "用户要求新增一篇 CC BY 4.0 全文译文与解读验证接收，并修复收藏夹无法删除。选用2408.05641v1，原始发表于2024-08-10，本栏目2026-10-10新收录。删除分类保留推荐文件；删除本地子文件夹将全部内容移到上一级，重名整批停止，不删除PDF。",
+      "remaining": [
+        "8个合成科学QA WAV副本共729440字节，自动审批两次拒绝清理，仅返回blocked by policy；审阅清单保留，未绕过拒绝",
+        "译文独立专家审校、另一实体电脑/新Windows、跨平台及长期运行未验",
+        "安装包仍为此前R1冻结；未公开发布应用或push"
+      ],
+      "verification": "已发布CC BY 4.0的2408.05641v1，原稿2024-08-10、栏目2026-10-10；原文5页、全文译文11页、独立解读6页，2目录项/6资产HTTPS大小及SHA核验。R1实际EXE自动取得新内容。41项桌面/351项前端、说明书20章988素材/生产解析、来源/类型/构建/架构/文档通过。72份PDF和长名称控件不越界，30次延迟渲染快速切换无繁忙。取消排队Future释放槽位、活动调用继续计数，8项上限保持。最终M18-R5免安装473408428字节，SHA c87a152e65e45922e1b8028fd7efb34838f2ba04dafd725682bf6d00f24fcb37；包审计、20Qt DLL、工程外单EXE正常启动/下载阅读/切换/删除及负向启动日志通过，同字节科学/11任务/18帮助/客户端通过。M18说明书19标题17实图。3050 Git候选凭据0命中。已清理自有库/短路径缓存/失败候选，R1占用成品保留。 冻结680源码再次自校验通过；与活动树4差异仅为独立QA异常预期及同期M10后续3文件，成品不计入M10-R16验收。最终文档1864文件/410来源/69任务校验0错误，文件长度和SHA复查未变。",
+      "local_evidence": "output/paper-reading/2408.05641v1/；output/validation/m18/；output/validation/m18-r5-package/",
+      "current_evidence": [
+        "docs/testing/2026-10-10-m18-r4-report.md"
+      ]
+    },
+    {
+      "id": "RELEASE-CURRENT-WINDOWS",
+      "title": "当前冻结应用的 Windows 安装与免安装交付",
+      "status": "verified",
+      "files": "manual/chapters/getting-started.json; README; release build/finalize/package/installer/gui QA; release docs; current status/report/ledger",
+      "verification_scope": "Windows x64 final application and current-user installer; source and final-byte checks tracked separately",
+      "note": "FEEDBACK-R3：官网入口、头像署名、反馈邮件选择，本地冻结3.0.0-preview.1成品；后续工作树版本/运行时源码变动未纳入。MFA卸载删除选项保留此前未验范围。",
+      "local_evidence": "output/validation/feedback-manager/",
+      "current_evidence": [
+        "docs/testing/windows-current-release.md"
+      ],
+      "verification": "当前最终字节：科学/托管任务/GUI/媒体、反馈会话及邮件开关、工程外单EXE、包/Qt/冻结身份、OwnedQA安装卸载、两类真实辅助更新、实际缓存中断/并发/设置清理通过。性能未对照。",
+      "remaining": [
+        "MFA 卸载可选删除交互/删除范围未专验（前轮用户免检）。",
+        "Windows 10、ARM64、x86拒绝界面及独立干净系统未实测；实体设备与长期运行未重验。",
+        "未公开上传或push。",
+        "自动审批拒绝删除自有QA目录，测试副本与大型合成夹具暂留。",
+        "后续工作树版本/运行时源码不同于本次冻结快照，差异已记录；未声称整个当前源码已打包。"
+      ],
+      "delivery_status": "verified",
+      "artifacts": {
+        "PhoneticToolbox-windows-x64.exe": {
+          "size": 496539816,
+          "sha256": "28615fe0f7c39efe4a59f3621064f88a26ed2247641d69df7816c885e6bd9f1e"
+        },
+        "PhoneticToolbox-3.0.0-preview.1-windows-x64-portable.zip": {
+          "size": 496540392,
+          "sha256": "6ca070b04f37a8f375ae3f7f64d559f55077cc595be87c9ee74acedf71949c64"
+        },
+        "PhoneticToolbox-3.0.0-preview.1-windows-x64-setup.exe": {
+          "size": 498456559,
+          "sha256": "fbe3b3456d48d55c48e13b1709bcabb8b6bab600c8cddc5057dff8b147774a33"
+        }
+      },
+      "cleanup": "Standard build/package cleanup passed. QA directory removal rejected by automatic approval review; emulator stopped, fixtures retained, cleanup-r3.json success=false.",
+      "platform_naming": {
+        "status": "verified",
+        "systems": "Windows 10 1809+ / Windows 11 x64",
+        "portable": "PhoneticToolbox-windows-x64.exe",
+        "installed_entry": "PhoneticToolbox.exe",
+        "verification": "Current Windows x64 final-byte launch, install mapping, update handoff, manual parse and package identity passed; unsupported OS rejection not device-tested."
+      }
+    },
+    {
+      "id": "FEEDBACK-R1",
+      "title": "反馈会话、独立管理工具与服务器推送及邮件",
+      "status": "verified",
+      "files": "backend/src/ptb_api/feedback*、__init__.py及main接线；desktop/src/ptb_desktop/feedback*与host接线；frontend反馈组件及独立入口；contracts生成物；deployment/feedback；反馈启动/验收脚本；README/计划/ADR/验收/状态；服务器私有SMTP配置（不进入工程）",
+      "verification_scope": "Current Windows source and source-launched Qt tool; prior 112 targeted Python/contracts checks and Qt/HTTPS/SSE/daily acceptance. Current 16 feedback tests; Windows and Ubuntu real SMTP authentication; deployed HTTPS verification email received; isolated Linux reply outbox mail and image received through exact-ID read-only IMAP. Production conversations preserved. Document validator errors empty, touched documentation UTF8/no BOM and SMTP-secret absence verified. Final frozen GUI feedback matrix not rerun.",
+      "note": "用户提供客户端授权码后已接通邮件。脚本原腾讯地址认证535；按中大学生邮箱官方设置在私有部署输入中改用网易smtphz.qiye.163.com:465，未修改批量脚本。两端真实TLS认证通过，原子更新服务器SMTP配置0600并重启，HTTPS回读mailConfigured:true/allowUnverified:false/dailyHour:9，服务active/enabled。生产验证码与Linux隔离回复outbox共2封到用户自己的邮箱，只读IMAP按特定Message-ID确认收件，回复图片摘要一致；45秒首轮等待超时，稍后准确收到，未重复请求验证码。生产身份/消息/附件数量未变，验证邮件正文已清空，隔离库已清。已有未验证会话可补验证后接收后续邮件，不自动补发旧回复。Windows管理身份及每日北京时间09:00检查保留。",
+      "execution_evidence": [
+        "docs/plans/2026-10-10-feedback.md",
+        "docs/decisions/ADR-feedback.md"
+      ],
+      "remaining": [
+        "本次邮件回复使用Linux隔离outbox验收，生产已有会话未增加自检消息；生产真实用户长期双通道与多邮箱供应商仍待观察",
+        "反馈已纳入RELEASE-CURRENT-WINDOWS冻结应用；主应用完整成品反馈矩阵未重验。独立管理EXE/APK最终字节验收见FEEDBACK-R2",
+        "真实OS托盘展示、电脑断网/关机、其他桌面平台、长期压力未验",
+        "此前M05/M10来源覆盖差异已在RELEASE-CURRENT-WINDOWS按现有登记补齐，全量349项通过",
+        "最新Qt验收scratch因关联的系统输入法进程保留，清理回执已记录，未结束输入法或绕过检查"
+      ],
+      "current_evidence": [
+        "docs/testing/feedback-report.md"
+      ]
+    },
+    {
+      "id": "FEEDBACK-R2",
+      "title": "Windows反馈管理EXE、安卓管理APK与即时通知",
+      "status": "verified",
+      "files": "backend反馈即时事件与feedback_admin设备授权接口及定向测试；desktop反馈客户端/桥/管理宿主和共用web_assets；共用管理界面与手机桥；tools/feedback-manager独立Windows与Android构建/验证/使用说明；contracts生成物与对应计划/ADR/部署/架构/验收/状态",
+      "note": "井井已明确要求手机回复、双击EXE、简洁美观APK和新消息提醒；手机为小米/红米HyperOS。复用已有HTTPS反馈与SMTP，新增独立可撤销设备配对，现有库schema不变。",
+      "verification_scope": "29 targeted Python and 366 frontend tests, typecheck/contracts/ui-data, compatible host imports passed. Actual final Windows 11 one-file EXE alone outside checkout with Windows-only PATH: private TLS, text/image replies, persistent drafts/theme, immediate SSE, pairing/revoke, mobile layout, tray hide/reactivate/single-instance, clean exit. Signed final Android APK on owned Android 36.1 emulator against public HTTPS: pairing, text/image replies received by user API, login after force-stop/update/reboot, draft restore, background system and ongoing notification, foreground resume after actual reboot before app launch, live revoke clears identity. APK signature and full lint 0 errors/2 reviewed warnings. Ubuntu deployment retained schema 2, SMTP/config and original conversations; owned test device revoked, synthetic conversation resolved/read, emulator/AVD/private fixture/old build/QA copies cleaned. Final bytes and credential/license audit passed; document validator errors empty. Physical HyperOS and Windows toast not tested.",
+      "current_evidence": [
+        "docs/plans/2026-10-11-feedback-manager.md",
+        "docs/testing/feedback-manager-report.md",
+        "tools/feedback-manager/使用说明.md"
+      ],
+      "remaining": [
+        "小米/红米HyperOS实体手机的后台菜单、自启动、长期提醒需现场核验，Android其他版本/厂商未逐设备验收",
+        "Windows系统弹出通知、其他电脑长期运行未专验；主应用完整反馈矩阵未重验，未公开发布安装包"
+      ]
+    },
+    {
+      "id": "FEEDBACK-R3",
+      "title": "官网入口、井韶子头像与聊天界面、用户可选邮件提醒",
+      "status": "verified",
+      "files": "反馈服务器偏好及投递队列、用户原生桥、共享聊天界面及头像、关于页、管理EXE/APK、本地主应用包及验收文档",
+      "note": "按用户最新要求复用官网头像；邮件开关由用户自主选择、服务器持久保存，应用对话不受影响。新增JSON元数据，现有SQLite schema不变。",
+      "verification_scope": "Windows 11 actual final main and manager EXE; signed final Android 36.1 emulator APK and public HTTPS; Ubuntu isolated mail fixture and production service. Physical HyperOS/clean Windows not tested.",
+      "current_evidence": [
+        "docs/testing/feedback-r3-report.md"
+      ],
+      "remaining": [
+        "自动审批拒绝测试目录删除，仅返回 blocked by policy；模拟器已停、自检设备撤销，AVD/运行副本/大型私有合成夹具暂留，cleanup-r3.json success=false",
+        "HyperOS实机、干净Windows及Windows系统弹窗和长期后台未验；本轮APK未重验重启与相册回复",
+        "本轮主应用为冻结时3.0.0-preview.1，后续同期版本/运行时源码变动未纳入；未公开上传"
+      ],
+      "verification": "32 feedback Python + 23 startup/cache checks; 367 frontend tests, typecheck/contracts/ui-data/architecture. Native Qt website activation, user mail opt-out and persistent chat, final EXE name/avatar/text/image/draft/SSE/tray/pairing; final APK avatar/reply/email suppression/login after force-stop and signed update/background notification/live revocation. Main final distribution, package/Qt identity, OwnedQA install/uninstall, both real update handoffs, interrupted/concurrent cache and settings cleanup passed. Documentation and architecture checks errors=[]. Final user EXE delivery identity rechecked after concurrent dist replacement; independent delivery path preserves the verified bytes.",
+      "artifacts": {
+        "反馈收件箱.exe": {
+          "bytes": 199159289,
+          "sha256": "d7f5b04eda4c184cc6f960f9887959f15fa6906024e9acbda6c010c58624eb23"
+        },
+        "反馈收件箱.apk": {
+          "bytes": 1202012,
+          "sha256": "2abb66a3e3cb5b24d1ea4fae3e90ed64001a974612da8a2776967cff0423b3a4"
+        },
+        "PhoneticToolbox-windows-x64.exe": {
+          "path": "output/feedback-manager/1.0.1/PhoneticToolbox-windows-x64.exe",
+          "bytes": 496539816,
+          "sha256": "28615fe0f7c39efe4a59f3621064f88a26ed2247641d69df7816c885e6bd9f1e"
+        }
+      },
+      "local_evidence": "output/validation/feedback-manager/",
+      "cleanup": "blocked_by_automatic_approval_review"
+    },
+    {
+      "id": "M18-R3",
+      "title": "论文获取控制、本地文件夹库与独立解读分发",
+      "status": "verified",
+      "files": "desktop/src/ptb_desktop/papers.py、papers_bridge.py、paper_library.py 与 host 接线；frontend paper-reading/papers；定向测试与截图工具；manual M18 正文/索引；论文准备/发布工具；来源/架构/部署/状态/验收文档",
+      "verification_scope": "Windows source: 35 service/native unit tests, 5 frontend tests, isolated Chrome catalogue simulation, actual Qt and manual; authorized HTTPS paper publication",
+      "note": "用户授权范围实现并验证。2610.00735v1 为已有 CC BY 4.0 论文补充六页独立解读，保留稳定 ID，目录及全部三个 PDF 经 HTTPS 回读 SHA 核验。个人四份 PDF 副本导入、真实移动与原文件不变通过。启动只查一次、可调定时与关闭偏好通过。M18 11 张当前 Qt 图及应用帮助通过。临时副本清理后回执 deleted。导入保留文件修改时间以支持年月筛选，最终 35 项测试通过。凭据仓库外加密保存，3037 个 Git 候选文件中指定密码 0 命中，未写 Git、未 push、未发布应用。",
+      "execution_evidence": [
+        "docs/plans/2026-10-10-m18-library.md",
+        "docs/testing/2026-10-10-m18-r3-report.md"
+      ],
+      "remaining": [
+        "已纳入RELEASE-CURRENT-WINDOWS最终EXE；完整R3 PDF/库操作矩阵未在成品重验，其他平台/电脑未验",
+        "真实六小时持续运行及长期 PDF 流畅度未验",
+        "完整训练代码许可与独立专家翻译审校未确认"
+      ]
+    },
+    {
       "id": "GITHUB-SOURCE-SYNC",
       "title": "当前 v3 源码同步至 GitHub",
       "status": "verified",
@@ -619,8 +1819,8 @@
         "docs/testing/m01-legacy-report.md",
         "docs/testing/m01-final-review.md"
       ],
-      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
-      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate",
+      "note": "已实现 Windows 工作台功能并有专项验证；共用基频范围已移入常用设置（12 项），REAPER 页只保留两个预处理开关。正式说明书 M01 章、五张设置图片及搜索索引同步，当前章节审阅和实际 Qt 读取通过；测试库与缓存已按回执清理。全量检查仍有既有 M05 PyAV 来源覆盖差异和同期 M03 报告链接缺失，未修改相关文件。完成范围与未验项按 current_evidence 核对。",
+      "verification_scope": "Windows functionality within current_evidence; current shared settings UI and M01 manual reviewed/Qt verified; full scientific input/device/platform and frozen EXE acceptance are separate",
       "platform_status": {
         "windows_local": "verified",
         "windows_hosted_web": "verified",
@@ -636,7 +1836,8 @@
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
       },
       "current_evidence": [
-        "docs/testing/2026-10-04-m01-r5-selected-report.md"
+        "docs/testing/2026-10-04-m01-r5-selected-report.md",
+        "docs/testing/m01-settings-and-manual-report.md"
       ]
     },
     {
@@ -685,6 +1886,49 @@
       ],
       "status": "in_progress",
       "plan": "modules/M03-egg-analysis.md",
+      "display_and_f0_controls": {
+        "id": "M03-R8",
+        "status": "verified",
+        "scope": "Windows 源码的指定图例/colorbar 隐藏与绘图区增高、dB 行重排、微观窗长度与范围遮罩、Praat/REAPER 共用可调 F0 搜索上下限、正式说明书文字和 8 张真实录音新图同步",
+        "validation": [
+          "科学与缓存回归 52 passed；宿主 17 passed / 2 deselected；前端定向 21 passed",
+          "typecheck、契约及 UI 数据快照检查通过；当前前端构建通过",
+          "独立 Chrome 七组实际交互/导出/草稿/帮助检查与六种浅深布局通过",
+          "实际 Windows Qt 8 张真实录音图，2560×1600 / DPR 1.5 / 页面100%，原录音摘要一致，逐图检查及阅读器解码通过",
+          "说明书 strict 20 章 / 962 素材，0 错误 / 0 警告，software 阅读资源已重建，撤下 2 处旧合成截图正文引用",
+          "本轮受管科学/浏览器/Qt scratch 回执 deleted",
+          "全套前端 345 passed / 1 failed：既有 M05 PKG-PYAV 来源覆盖差异单列，未修改",
+          "文档检查 1818 文件、当前资源/架构检查及受影响文件 diff --check 通过；同期其他章更新后的阅读资源已重建，M03 与 8 张新图摘要匹配"
+        ],
+        "remaining": [
+          "已纳入RELEASE-CURRENT-WINDOWS并完成成品定向任务；R8完整图表/F0组合未在成品重验，Linux/服务器、实体音频设备与长期运行未验",
+          "完整自然语料准确率与全部 F0/长录音规格组合未穷举",
+          "原M05/M10来源覆盖差异已在RELEASE-CURRENT-WINDOWS按现有登记补齐，全量349项通过"
+        ],
+        "files": [
+          "backend/src/ptb_api/egg_models.py",
+          "backend/src/ptb_worker/egg_f0.py",
+          "backend/src/ptb_worker/egg_interactive_child.py",
+          "backend/src/ptb_worker/egg_jobs.py",
+          "packages/phonetic_core/src/phonetic_core/egg/f0.py",
+          "frontend/src/components/ScientificPlot.vue",
+          "frontend/src/modules/egg-analysis/",
+          "contracts/openapi.json",
+          "contracts/schemas/eggrequest.json",
+          "contracts/schemas/eggtaskconfig.json",
+          "contracts/generated/api.ts",
+          "backend/tests/test_m03_r8.py",
+          "backend/tests/test_m03_r5_host.py",
+          "frontend/tests/m03.test.ts",
+          "scripts/m03_ui_bridge.py",
+          "tests/e2e/m03-r8.cjs",
+          "scripts/manual/capture_m03_r8.py",
+          "manual/chapters/m03.json",
+          "manual/project.json",
+          "manual/assets/software-only/m03-r8-20261010/"
+        ],
+        "evidence": "docs/testing/2026-10-10-m03-r8-report.md"
+      },
       "execution_evidence": [
         "docs/testing/m03-baseline-report.md",
         "docs/testing/m03-core-report.md",
@@ -694,7 +1938,7 @@
         "docs/testing/m03-e2-report.md",
         "docs/testing/m03-e3-report.md"
       ],
-      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
+      "note": "已实现 Windows 工作台功能并有专项验证；R8 的四图/共用 F0 范围和真实录音说明书修订已在源码范围 verified，已纳入RELEASE-CURRENT-WINDOWS冻结应用及定向任务验收。M03 整体仍为 in_progress，完成范围与未验项按 current_evidence 核对。",
       "planning_evidence": [
         "docs/modules/evidence/M03-source-map.md",
         "docs/plans/2026-09-12-m03-implementation.md"
@@ -708,7 +1952,8 @@
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
       },
       "current_evidence": [
-        "docs/testing/2026-10-07-m03-r7-report.md"
+        "docs/testing/2026-10-07-m03-r7-report.md",
+        "docs/testing/2026-10-10-m03-r8-report.md"
       ],
       "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate"
     },
@@ -775,6 +2020,30 @@
       "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate"
     },
     {
+      "id": "M05-MANUAL-LIVE",
+      "title": "唇形说明书实时预览演示补齐",
+      "dependencies": "M05,P10",
+      "status": "verified",
+      "files": "manual/chapters/m05.json；manual/project.json；manual/assets/software-only/m05-live-20261010/m05-live-preview.webm；README.md；manual/README.md；manual/AUTHORING.md；manual/V2_STYLE_GUIDE.md；frontend/src/modules/lip-extraction/README.md；docs/testing/m05-manual-live-report.md；docs/project-status.md",
+      "verification_scope": "M05 说明书文字及搜索锚点、当前源码对照、严格结构/媒体摘要、生成阅读资源与视频播放；Windows 实体摄像头预览已观察；当前冻结阅读资源身份见RELEASE-CURRENT-WINDOWS",
+      "note": "已补预览状态、画面与曲线反馈、回放范围及高帧率模式说明。按作者最新要求完整保留13.333秒录屏，400帧、1920×1080、30fps，压缩至2525223字节；Qt不支持原H264/AAC，改用WebM VP9/Opus并登记software-only/git:false。全片解码、浏览器说明书播放/拖动/搜索锚点及Qt实际Assets媒体播放通过，生成阅读资源及前端构建完成。",
+      "current_evidence": [
+        "docs/testing/m05-manual-live-report.md"
+      ],
+      "remaining": [
+        "已纳入RELEASE-CURRENT-WINDOWS并通过章节帮助打开；完整视频播放组合与实体音视频同步未在成品重验"
+      ],
+      "verification": [
+        "说明书严格校验：20章/954素材，零错误和警告",
+        "scripts/manual/build.py：生成软件分发阅读资源通过",
+        "npm --prefix frontend run build：通过，既有大分块提示保留",
+        "FFprobe核对400帧及尺寸帧率，FFmpeg全片解码无错误；Qt WebEngine与隔离Chrome说明书播放、拖动、结束通过",
+        "源视频SHA未变，源工程/生成资源/frontend dist正式视频字节与登记摘要一致",
+        "scripts/validate_docs.py：1811文件，零当前错误，历史链接另列",
+        "限定改动文件 git diff --check 通过"
+      ]
+    },
+    {
       "id": "M06",
       "title": "语音合成",
       "dependencies": [
@@ -799,7 +2068,8 @@
         "windows_scope": "verified: Windows exact V2 core, Chrome, Qt actual host and synthetic PostgreSQL only"
       },
       "current_evidence": [
-        "docs/testing/2026-10-04-m06-r5-report.md"
+        "docs/testing/2026-10-04-m06-r5-report.md",
+        "docs/testing/m06-manual-report.md"
       ],
       "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
       "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate"
@@ -865,13 +2135,34 @@
         "P06",
         "P07"
       ],
-      "status": "verified",
+      "status": "in_progress",
       "plan": "modules/M09-spectrogram-to-audio.md",
       "execution_evidence": [
         "docs/testing/m02-m09-report.md"
       ],
-      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate",
-      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
+      "verification_scope": "Historical Windows functionality verified within current_evidence; image inversion implementation has no test or application-build evidence",
+      "note": "已有功能保留原专项验证范围；新增图片反相已完成源码修改，按井井本次要求未运行测试或应用构建，未纳入现有 EXE。",
+      "image_inversion": {
+        "status": "in_progress",
+        "implementation": "complete",
+        "files": [
+          "frontend/src/modules/spectrogram-to-audio/Spec2WavPage.vue",
+          "frontend/src/modules/spectrogram-to-audio/README.md",
+          "backend/src/ptb_api/spec2wav_models.py",
+          "backend/src/ptb_worker/spec2wav_child.py",
+          "contracts/openapi.json",
+          "contracts/generated/api.ts",
+          "contracts/versions.md",
+          "docs/project-status.md",
+          "docs/plans/task-ledger.json"
+        ],
+        "changes": "原图与四点校正操作栏增加可切换的图片反相按钮；原图预览、校正绘图底图和重建同步反相，切换图片恢复未反相；反相在笔迹之前作用于底图，并记录到任务快照和结果参数。",
+        "verification": "按用户明确要求未运行测试、类型检查、GUI 验证或应用构建；仅生成 OpenAPI 与前端契约类型，并阅读相关改动。",
+        "remaining": [
+          "新增反相行为未测试",
+          "现有 EXE 未重建"
+        ]
+      },
       "platform_status": {
         "windows_local": "verified",
         "windows_hosted_web": "verified",
@@ -911,7 +2202,7 @@
         "docs/plans/2026-09-11-m10-onset.md"
       ],
       "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate",
-      "frozen": true,
+      "frozen": false,
       "platform_status": {
         "windows_local": "verified",
         "server": "planned",
@@ -919,9 +2210,9 @@
         "linux": "planned"
       },
       "recording_revision": "R4",
-      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
-      "latest_revision": "R5",
-      "latest_revision_verification": "not_run_by_user_request",
+      "note": "Windows 源码工作台已实施 R15 并完成报告内定向验证；现有冻结 EXE 未包含本次变更。平台、设备和完整科研验收按 current_evidence 与 docs/project-status.md 分别核对。",
+      "latest_revision": "R15",
+      "latest_revision_verification": "verified_windows_source_with_reported_scope",
       "additional_gates_2026_09_26": {
         "linux_service_scope": "planned",
         "server_small_profile": "planned",
@@ -931,11 +2222,66 @@
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
       },
       "current_evidence": [
+        "docs/testing/2026-10-10-m10-r15-report.md",
         "docs/testing/2026-10-07-m10-r14-report.md"
       ]
     },
     {
       "id": "M11",
+      "model_resource_inspection": {
+        "status": "verified",
+        "scope": "Local English MFA 3.1.0 official download and Mandarin MFA 2.0.0a copy from existing component; model ZIP metadata and paired dictionary phones only",
+        "report": "docs/testing/m11-model-phone-inspection.md",
+        "deliverables": "output/validation/m11-model-inspection",
+        "verification": "Official English asset lengths, both model ZIP CRC checks, Mandarin pinned SHA-256, UTF-8 dictionary parsing and phone-set inclusion passed; 100 English and 133 Mandarin metadata phone labels extracted",
+        "remaining": "Feedback user's actual model ZIP/MFA version/old TextGrid not supplied; resource acquisition did not change application registration. Actual supplied WAV/LAB/dictionary comparison recorded separately in feedback_dictionary_diagnosis."
+      },
+      "feedback_dictionary_diagnosis": {
+        "status": "verified",
+        "scope": "Four user-supplied synthetic WAV/LAB pairs; original five-entry dictionary and a test copy removing only unused ʂ; current checked child and upstream MFA 3.3.8 on Windows; diagnosis only",
+        "report": "docs/testing/m11-model-phone-inspection.md",
+        "evidence": "output/validation/m11-feedback-1012/summary.json",
+        "verification": "Checked Mandarin and upstream English each generated all four TextGrids with 18 nonempty word/phone labels per file; native English excluded one unused ʂ pronunciation; unchanged checked English retry failed m11_model_mismatch. Removing only that dictionary row made checked English succeed on all four with exact LAB label sequences. Mandarin rerun with the same four-row dictionary also passed all four and delivered TextGrids to the requested desktop folder; existing WAV hashes unchanged. Original archive/model/child hashes retained.",
+        "finding": "Whole-dictionary exclusion gate rejects an English combination even when its only unsupported ʂ entry is unused by the supplied LABs; provided archive also separates LAB/WAV folders requiring same-directory pairing for desktop import.",
+        "cleanup": "Five owned scratch roots have deleted receipts; retain logs, results, twelve project TextGrids plus four requested desktop Mandarin outputs, hashes, recipes and four-row dictionary; original archive and destination audio untouched.",
+        "mandarin_delivery_evidence": "output/validation/m11-feedback-1012/mandarin-delivery-summary.json",
+        "cross_language_example": {
+          "status": "verified",
+          "scope": "New four WAV/LAB pairs with unchanged 29-entry supplied IPA dictionary; both current checked model paths; diagnosis only",
+          "evidence": "output/validation/m11-feedback-1012-2/summary.json",
+          "verification": "Actual English3.1.0 and Mandarin2.0.0a runs both returned m11_model_mismatch. English unsupported set ɑ̃/ɕ/ʁ/ː includes used ː; Mandarin has 14 unsupported dictionary phones including 8 used in LAB. Raw LAB also contains standalone ˈ absent from dictionary. All original file hashes unchanged; scratch deleted.",
+          "remaining": "No token/dictionary repair, phone mapping, direct upstream continuation, GUI/frozen EXE or boundary accuracy validation. Isolated stress-token normalization/OOV behavior not tested."
+        },
+        "remaining": "First checked English startup timeout before runtime_checked receipt has no established cause; feedback original model ZIP/version/old output, GUI/frozen EXE, boundary accuracy and cross-platform unverified. No product fix implemented."
+      },
+      "component_delivery": {
+        "status": "verified",
+        "plan": "docs/plans/2026-10-11-m11-component-delivery.md",
+        "scope": "Windows single ZIP, automatic pinned verification, progress/rate, bundled Mandarin pair, official resource buttons, source companion and manual; local delivery only",
+        "verification": [
+          "54 Python checks; 5 MFA frontend checks; 13 manual reader checks passed",
+          "Final ZIP and sources SHA/CRC passed; 193 exact Conda archives, 207 license texts, 36 source bindings",
+          "Final ZIP and extracted folder through actual Qt/native bridge/API/public MFA alignment succeeded: m11d-837a69",
+          "Actual Vue progress/rate and official resource link-click tests in isolated Chrome; light/dark layouts",
+          "Manual strict validation, production reader parse, frontend typecheck/build, contracts/UI data and docs validation passed",
+          "MFA-R1 final EXE: cached official ZIP installation button, real Mandarin probe, official links, updated manual and clean exit passed; both installer and portable delivered."
+        ],
+        "remaining": [
+          "User uploads both ZIPs to website or mirror; live HTTPS full transfer not yet verified",
+          "Another clean Windows computer, other platforms and full official-language catalog not verified"
+        ],
+        "report": "docs/testing/2026-10-11-m11-component-delivery.md",
+        "deliverables": "output/mfa-delivery/3.3.8-r1-publish",
+        "cleanup": "Owned native/browser test scratch finalized; receipts in validation runs. Formal media and prior diagnostic candidate retained.",
+        "uninstall_option": {
+          "status": "in_progress",
+          "scope": "Interactive uninstall optionally removes app-managed version copies, unshared bundled model copies and cached ZIPs; default/silent retain; external environments retained.",
+          "verification": "User explicitly waived checks for this revision.",
+          "delivery_status": "built",
+          "files": "release/installer.iss; scripts/cache_launcher_entry.py; desktop/src/ptb_desktop/mfa_uninstall.py",
+          "remaining": "Runtime verification explicitly waived; implemented and packaged, not verified."
+        }
+      },
       "title": "MFA 自动标注",
       "dependencies": [
         "P03",
@@ -960,6 +2306,7 @@
         "windows_scope": "verified: source Qt/local HTTP and optional component, public fixtures only"
       },
       "current_evidence": [
+        "docs/testing/2026-10-11-m11-component-delivery.md",
         "docs/testing/2026-10-05-m11-r2-report.md"
       ],
       "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
@@ -1019,7 +2366,9 @@
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
       },
       "current_evidence": [
-        "docs/testing/2026-10-05-m13-r3-package-report.md"
+        "docs/testing/2026-10-05-m13-r3-package-report.md",
+        "docs/testing/m13-result-layout-report.md",
+        "docs/testing/m13-unt-erhua-report.md"
       ],
       "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
       "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate"
@@ -1045,10 +2394,46 @@
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
       },
       "current_evidence": [
-        "docs/testing/2026-10-05-m14-r1-report.md"
+        "docs/testing/2026-10-05-m14-r1-report.md",
+        "docs/testing/m14-layout-and-preview-report.md"
       ],
       "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
-      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate"
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate",
+      "ui_preview_revision": {
+        "id": "M14-R2",
+        "status": "verified",
+        "scope": "自适应四步工作区、DOCX 双栏统计与正文预览、二维表缓存与分帧呈现、本章说明书",
+        "validation": [
+          "Windows typecheck and 6 frontend tests",
+          "51 core/backend tests",
+          "R1 real host regression and 32 layouts",
+          "R2 5452/10000 records, 22 button geometry cases and manual reader",
+          "Native Qt 5453 records, generation, source SHA and five 2560x1600 DPR1.5 screenshots",
+          "Strict manual validation, reader resource build, architecture hashes and frontend build"
+        ],
+        "remaining": [
+          "最终 EXE 尚未纳入",
+          "实体 Office 纸面分页、完整 DPI/IME、跨平台和长期性能未验"
+        ],
+        "evidence": "docs/testing/m14-layout-and-preview-report.md",
+        "changed_files": [
+          "frontend/src/modules/phonology-induction",
+          "frontend/tests/m14.test.ts",
+          "tests/e2e/m14-r1.cjs",
+          "tests/e2e/m14-r2.cjs",
+          "scripts/verify_m14_r2_host.py",
+          "scripts/manual/capture_m14_r2.py",
+          "scripts/manual/register_m14_r2.py",
+          "manual/chapters/m14.json",
+          "manual/project.json"
+        ],
+        "performance": {
+          "metric": "same-machine first-paint switch median, 8 samples each",
+          "baseline_ms": 25.1,
+          "current_ms": 13.75
+        },
+        "cleanup": "11 owned scratch directories deleted and cleanup receipts verified; author table, formal media and evidence retained"
+      }
     },
     {
       "id": "M15",
@@ -1190,6 +2575,54 @@
       "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
     },
     {
+      "id": "P04-SELECTION-SPACE",
+      "title": "TextGrid 与其他音频选区的空格播放修复",
+      "status": "verified",
+      "files": "frontend/src/state/audio-shortcuts.ts；components/AudioTransport.vue、TextGridTimeline.vue；M01/M02/M04/M07/M08 页面与 M02 参数图表；frontend/tests/playback-shortcuts.html；tests/e2e/playback-shortcuts.cjs；docs/testing/playback-shortcuts-report.md；docs/project-status.md",
+      "note": "复现并修复 M01/M04 TextGrid 按钮焦点、M02 图表拖选旧焦点；音频选择入口显式放行，M07 结果与 M08 直接试听同享空格播放/停止，带音频的结果弹窗只响应弹窗内播放器。保留普通控件与其他模块的独立快捷键、同期图标和 M10 改动。",
+      "verification_scope": "Windows frontend source, independent Chrome and real muted WebAudio scheduling; module audit and bounded unit regressions; Qt/devices/final EXE not revalidated",
+      "current_evidence": [
+        "docs/testing/playback-shortcuts-report.md"
+      ],
+      "local_evidence": "output/validation/playback-shortcuts/before-1791614549069/、after-1791615032540/ 的 report.json、实际截图、run 与 cleanup.json",
+      "verification": "修复前 3 组复现，修复后 8 组浏览器回归通过且无 pageerror；typecheck、36 项定向测试、contracts:check、ui-data:check、build 通过；文档校验 errors=[]，本任务差异检查通过；所有本任务浏览器 scratch 已清理",
+      "remaining": [
+        "修复已纳入RELEASE-CURRENT-WINDOWS并完成成品科学/音频/TextGrid烟雾检查；该专项完整Qt键盘组合、实体声音/录音设备、其他平台和所有模块全流程未重验"
+      ]
+    },
+    {
+      "id": "P04-HOME-ICONS",
+      "title": "主页分组图标去重",
+      "status": "verified",
+      "files": "frontend/src/components/AppIcon.vue；frontend/src/app/AppShell.vue；docs/testing/p04-unify-report.md；docs/project-status.md",
+      "note": "按 2026-10-10 用户标圈反馈，为分析、合成、文献分组新增分析放大镜、音叉和书架 SVG，保留模块图标；补齐第四组映射，消除默认回退波形。底部帮助入口改用问号，与论文精读的书本区分。",
+      "verification_scope": "Windows frontend source and independent Chrome homepage only; final EXE not rebuilt",
+      "current_evidence": [
+        "docs/testing/p04-unify-report.md"
+      ],
+      "local_evidence": "output/validation/home-icons/report.json、浅深主题实际页面截图及 cleanup.json",
+      "verification": "typecheck、6 项 workbench 测试、contracts:check、ui-data:check 与 build 通过；独立 Chrome 两种窗口/浅深主题共 4 组，23 个分组/工具/帮助图形互不重复，无 pageerror；文档校验 errors=[]，本任务差异检查通过；scratch 已清理",
+      "remaining": [
+        "图标已纳入RELEASE-CURRENT-WINDOWS，冻结身份与工程外启动通过；该专项完整Qt/DPI组合与其他平台未重验"
+      ]
+    },
+    {
+      "id": "P04-HOME-UPDATE-COPY",
+      "title": "主页右上文案与更新页重复标题精简",
+      "status": "verified",
+      "files": "frontend/src/app/AppShell.vue；frontend/src/components/UpdatePanel.vue；frontend/src/design/tokens.css；docs/testing/p04-unify-report.md；docs/project-status.md",
+      "note": "按当前截图要求删除主页右上文案、状态圆点和工具/环节数量；更新弹窗保留外层标题，移除内容区重复大标题并上移说明、版本与设置。保留同期改动。",
+      "verification_scope": "Windows frontend source and independent Chrome homepage/update layout; synthetic native updater preferences/result; Qt/physical DPI/other platforms/final EXE not revalidated",
+      "current_evidence": [
+        "docs/testing/p04-unify-report.md"
+      ],
+      "local_evidence": "output/validation/home-update-copy/ 的 verify.cjs、report.json、8 张实际截图及 cleanup.json",
+      "verification": "typecheck、25 项相关测试、contracts:check、ui-data:check、build 通过；独立 Chrome 浅深主题与 1440×900/1280×800 共 4 组主页/更新弹窗检查通过，外层标题保留、说明/版本/设置上移、18 个工具保留，无 pageerror/横向溢出；文档校验 errors=[]、本任务差异检查通过；scratch 已清理",
+      "remaining": [
+        "最终 EXE 未重新打包；Qt、物理 DPI 和其他平台未重验；更新后端/真实发布未重验"
+      ]
+    },
+    {
       "id": "P04-UNIFY",
       "title": "模块页首精简与公共布局",
       "dependencies": "无",
@@ -1301,13 +2734,29 @@
       "files": "frontend/src/modules/ipa-plus",
       "verification_scope": "Windows implemented and bounded verification; remaining content/device/platform work is explicit",
       "note": "当前实现、已验范围和剩余任务见 docs/project-status.md。",
+      "latest_adjustment": {
+        "id": "M17-HOVER-ALL-VIEW",
+        "status": "verified",
+        "scope": "长例句悬停与详情换行；暂时禁用点击播放并显示创作提示；王天恒引用访问日期2026-10-10；IPA/extIPA默认显示全部与表区滚动",
+        "verification": "Windows：类型、22项M17测试、契约/UI来源一致性、说明书严格检查及生成、架构零错误、前端构建通过；Chrome16组全部显示与24组悬停布局、短组合及输入/撤销回归通过；受影响文件编码/JSON/引用日期/本地链接与差异检查通过，scratch已清理。未重验Qt/DPI/最终EXE或播放接口。",
+        "evidence": "docs/testing/m17-hover-and-all-view-report.md"
+      },
+      "content_adjustment": {
+        "id": "M17-VOQS-EXPLANATIONS",
+        "status": "verified",
+        "scope": "参考作者提供文章修订VoQS全部65个入口的含义、用法与区别，重点发声类型26项；保留原表译名、Unicode、范围模板及现有引用，不新增该文章引用；同步模块README与说明书",
+        "verification": "Windows：65项文本覆盖/格式、22项M17测试、类型、契约/UI来源、说明书严格检查与阅读资源生成、架构零错误、前端构建通过。独立Chrome逐项核对65项详情和48组悬停布局，输入/撤销/范围包裹通过，页面错误为0，scratch已清理。未验证Qt/最终EXE/跨平台。",
+        "evidence": "docs/testing/m17-voqs-explanations-report.md"
+      },
       "steps": [
         "维护当前实现",
         "按证据补齐剩余范围"
       ],
       "acceptance": "完成对应模块功能及明确列出的内容、设备与平台验收",
       "current_evidence": [
-        "docs/testing/2026-10-05-m17-r3-report.md"
+        "docs/testing/2026-10-05-m17-r3-report.md",
+        "docs/testing/m17-hover-and-all-view-report.md",
+        "docs/testing/m17-app-citation-report.md"
       ]
     },
     {
@@ -1331,17 +2780,37 @@
       "id": "WORKSPACE-MAINTENANCE",
       "title": "当前状态、文档与测试/打包产物整理",
       "status": "verified",
-      "files": "当前项目目录、状态文档、测试与打包脚本",
-      "note": "限定当前 Windows 项目整理范围：文档按主题整合，18 模块和平台状态已核实、M10 正文状态已纠正，规则要求每次修改同步更新台账。重点测试入口采用 scratch 收尾，打包入口记录生命周期并保护活动/失败目录。两批 528 个目标/2326 文件已删除，逻辑长度约 34.14→29.97 GB。15 项定向 Python、1799 文件文档检查及清理/脚本验证通过；1 个 7 字节策略拒删项交手动清单。全库架构原 1635 项已在 ARCHITECTURE-RESOURCE-CHECK 收口，历史脚本其余接入/旧环境退役/新成品和跨平台验收未完成，不扩大 verified 范围。",
+      "files": "scripts/prepare_test_cleanup.py、cleanup_test_temporaries.ps1、cleanup_workspace.ps1；tests/test_test_cleanup.py；docs/development/artifact-lifecycle.md、testing/test-temporaries-cleanup.md、README.md、project-status.md；本机忽略的 output/maintenance 与已核实测试对象",
+      "note": "限定当前 Windows 项目整理及清理机制。清单生成器仅接纳已审阅测试对象和 ready 且摘要一致的 scratch，实际执行复核保护父子路径、Git 跟踪/忽略及大小写别名、联接、文件/保留证据 SHA 与进程引用。27 个目标、45934 文件、16087103776 字节已删除，最新盘点约 58.32→42.26 GB 逻辑长度；已删路径均不存在，21 份必要证据及 R7 免安装/安装/更新三件套摘要不变。正式说明书、用户原件、实际环境/构建、同期发行验收与未确认混合数据保留。清单/回执原位维护，9 个此前策略拒删的小文件存在与 SHA 已复核并集中列出，无新增拒删项。此前文档/说明书副本及架构整理证据按各专项范围保留。",
+      "verification_scope": "Windows 已确认测试临时对象、清理脚本及相关文档；未重打或复跑完整 EXE/科研/GUI/设备/跨平台验证；未提交或上传",
+      "verification": "7 项新单元测试、6 项既有生命周期回归通过；6 项原生边界预检符合预期；2 份 PowerShell 脚本语法零错误，批量入口独立空清单预检通过。全仓库文档检查 1952 文件零错误，历史快照旧链接独立登记。实际删除回执与删除后路径/证据/成品摘要核验通过，最新目录盘点零读取错误，相关本机清单均被 Git 忽略。",
       "current_evidence": [
         "docs/project-status.md",
-        "docs/development/artifact-lifecycle.md"
+        "docs/development/artifact-lifecycle.md",
+        "docs/testing/test-temporaries-cleanup.md"
       ],
-      "local_evidence": "output/maintenance/README.md; verification.json; cleanup-results.json; manual-cleanup-results.json; inventory.json; manual-delete.md",
+      "local_evidence": "output/maintenance/README.md；test-temporaries-list.md、rules.json、plan.json、review.json、results.json、verification.json、audio-recipes.json（均 test-temporaries- 前缀）；test-temporaries-engine-check.json、wrapper-review.json、tests.txt、lifecycle-tests.txt、docs.json；inventory.json；manual-delete.md/.txt/.json；前次 cleanup-results.json、manual-cleanup-results.json 与 verification.json",
       "remaining": [
         "历史验证入口复用时接入 scratch 生命周期",
-        "旧环境/验证大目录依赖闭合后退役",
-        "手动清单 1 个 7 字节策略拒删文件"
+        "旧环境及混合验证目录逐项闭合依赖/原件/证据，尤其替换 m08-wiring 的硬编码输入后再退役",
+        "同期发行验收与构建由对应任务核对收尾，本轮不接管清理",
+        "手动清单 9 个此前自动审批拒删测试文件，共 729447 字节，未绕过拒绝"
+      ]
+    },
+    {
+      "id": "MANUAL-OUTLINE-TYPOGRAPHY",
+      "title": "说明书目录层级、展开与阅读标记",
+      "status": "verified",
+      "files": "frontend/src/manual/ManualReader.vue、manual.css、README.md；frontend/src/app/HelpPage.vue；frontend/tests/manual-reader-render.test.ts；tests/e2e/manual-outline.cjs；docs/testing/p04-unify-report.md；docs/project-status.md",
+      "note": "一级目录与二级同字号，默认14/14/12，一级加粗；正文章标题与二级标题同为1.52em。保留此前图标层级、折叠与单一阅读标记。",
+      "verification_scope": "Windows frontend source and independent Chrome manual sidebar; Qt/physical DPI/other platforms/final EXE not revalidated",
+      "current_evidence": [
+        "docs/testing/p04-unify-report.md"
+      ],
+      "local_evidence": "output/validation/manual-outline/navigation-1791694687869/ report.json、6组主题/字号截图与cleanup.json",
+      "verification": "本轮相关前端25项含13项说明书测试，typecheck/build通过；独立Chrome5组行为含18模块一级图标、折叠/点击/滚动/搜索/单一标记，浅深×14/18/24px与宽窄窗口6组通过；一级与二级目录同字号、一级加粗，正文章h1/h2同字号实测通过。无横向溢出/pageerror，scratch deleted。",
+      "remaining": [
+        "当前EXE未纳入本轮修改，完整物理DPI、Qt专项与跨平台未验"
       ]
     },
     {
@@ -1380,17 +2849,17 @@
     },
     {
       "id": "PACKAGE-SIZE-REVIEW",
-      "title": "清理后的 EXE 包体与进一步缩减空间核查",
+      "title": "EXE 包体、按需组件、增量更新与旧缓存核查",
       "status": "verified",
       "files": "现有 EXE 只读盘点、冻结清单、压缩样本和当前打包策略",
-      "note": "限定现有 EXE 只读盘点和局部压缩测量：467869830 字节及 SHA 已复核；science 238184372 / host 119863056 / apps 99952672 / bootstrap 9869730 字节。当前 338 个说明书引用 ID 与包一致，清理项目目录不直接减少同等包体。发行说明书采集元数据单独 XZ 差额 357624 字节；NumPy 上游测试候选 13191656 字节、样本压缩 1145140 字节，尚未完成裁剪依赖验收，不能相加承诺 EXE 净减量。原包/依赖/正式素材与构建脚本未改。",
+      "note": "2026-10-11 再次只读核查实际 M18-R6 单 EXE：473416215 B；科学段238184372、宿主119863056、应用105497372、引导9871415。识别 EGG/LPC、M05 和说明书媒体按需候选，核对当前完整更新下载、内容缓存复用、7天下载缓存维护及设置/卸载清理。未实现组件化增量或旧版本缓存精细回收，压缩差额不得由展开占用直接相加。",
       "current_evidence": [
         "docs/testing/package-size-review.md"
       ],
       "remaining": [
-        "井井已决定暂不推进进一步缩包；候选只保留审阅证据，重新提出时再实施及验证"
+        "井井明确决定暂不实施组件化、增量下载或旧组件精细回收，维持当前方案。"
       ],
-      "local_evidence": "output/maintenance/package-size/embedded-inventory.json; compression-samples.json"
+      "local_evidence": "output/validation/m11-delivery/current-app-footprint.json; output/maintenance/package-size/compression-samples.json"
     },
     {
       "id": "DESKTOP-WEB-READINESS",
@@ -1422,6 +2891,63 @@
         "确定本地独立模式与账号模式的数据归属并实施兼容隔离",
         "对所开放模块实现平台适配和能力提示",
         "实际浏览器双账号回归，不以静态代码核查代替"
+      ]
+    },
+    {
+      "id": "M10-R15",
+      "title": "生理参数合成 MP4、单关键帧、可选采样与静音动程",
+      "status": "verified",
+      "plan": "modules/M10-vocal-tract.md",
+      "note": "默认 129，可选 65/257；单帧动作、声音/F0 与 MP4 原子保存；非末尾静音帧沿用普通帧平滑动程，普通帧行为保持。同步模块说明、正式章节正文、来源/资源与冻结入口 helper。Windows 源码定向验证通过，已纳入RELEASE-CURRENT-WINDOWS，原生引擎/合成/动画及DLL/helper身份通过。",
+      "execution_evidence": [
+        "docs/testing/2026-10-10-m10-r15-report.md"
+      ],
+      "files": [
+        "packages/phonetic_core/src/phonetic_core/vocal_tract/engine.py",
+        "packages/phonetic_core/src/phonetic_core/vocal_tract/trajectory.py",
+        "desktop/src/ptb_desktop/vocal_tract/",
+        "desktop/src/ptb_desktop/host.py",
+        "frontend/public/vocal-tract/",
+        "resources/vocal_tract/",
+        "scripts/build_m10_geometry.py",
+        "scripts/build_v3_local_preview.py",
+        "scripts/register_m10_r12_resources.py",
+        "scripts/verify_m10_r15.py",
+        "tests/parity/test_vocal_r15.py",
+        "tests/fixtures/m10-r14-257-digests.json",
+        "frontend/src/modules/vocal-tract/README.md",
+        "docs/manual/vocal-tract.md",
+        "manual/chapters/m10.json",
+        "manual/project.json",
+        "third_party/source-registry.json",
+        "contracts/resource-manifest.json",
+        "docs/decisions/ADR-M10-sampling-and-video.md"
+      ],
+      "verification_scope": "Windows source workbench and current native DLL; 32 Python and 16 frontend checks, real Qt zero-volume playback, five MP4 exports independently decoded, 257 exact R14 digest regression, manual strict validation/build; see report for commands and limits.",
+      "remaining": [
+        "已纳入RELEASE-CURRENT-WINDOWS并完成原生引擎/合成/动画烟雾检查；工程外完整R15视频导出矩阵未重验",
+        "实体声音听辨、不同性能电脑及跨平台未验证",
+        "早期说明书视频对话框截图已标注历史版本，未重新拍摄正式 DPI 素材"
+      ]
+    },
+    {
+      "id": "M06-MANUAL",
+      "title": "声学参数合成说明书与元音例音修订",
+      "dependencies": [
+        "M06",
+        "P10"
+      ],
+      "status": "verified",
+      "files": "manual/chapters/m06.json；manual/project.json；M06 正式媒体；scripts/manual/repair_m06_examples.py；tests/e2e/m06-manual.cjs；frontend/src/modules/speech-synthesis/README.md；docs/manual/speech-synthesis.md；docs/testing/m06-manual-report.md；docs/project-status.md",
+      "note": "旧 a/i/u 快照序列各异但 F1–F3 均为默认 500/1500/2500 Hz。已通过实际 Qt 生成曲线、合成并原生导出，重做四例及两张截图；补复杂语法 a-i/- ///u+/e++o/- 与 100/100、30/80 ms 渐入渐出三组图音。正文、目录与搜索索引按当前源码及 V2 参考核对。",
+      "current_evidence": [
+        "docs/testing/m06-manual-report.md"
+      ],
+      "verification_scope": "Windows 当前源码 Qt 生成/合成/原生导出、WAV/MP3 数字校验、严格说明书 20 章/971 素材零错误警告、前端构建、架构与文档检查通过；独立 Chrome 九例静音播放到末尾、媒体摘要与下载、浅深主题及 960×760 无溢出通过。本章正文/目录/搜索与生成资源一致，引用媒体在源工程/阅读资源/dist 中摘要一致，隔离 scratch 已清理。",
+      "remaining": [],
+      "outside_verified_scope": [
+        "已纳入RELEASE-CURRENT-WINDOWS，九例实际解码/互斥及图片流程通过；完整本章合成/导出矩阵未在成品重验",
+        "人类元音辨认、自然度听辨、实体声卡与其他平台 GUI 未验"
       ]
     },
     {
@@ -1469,6 +2995,72 @@
         "docs/testing/github-source-sync.md",
         "output/maintenance/github-main-transition/after-publish.json"
       ]
+    },
+    {
+      "id": "WEBSITE-REDESIGN",
+      "title": "官网功能展示、试听小实验与支持页面",
+      "status": "in_progress",
+      "files": [
+        "temporary-site/index.html",
+        "temporary-site/site.css",
+        "temporary-site/site.js",
+        "temporary-site/assets/",
+        "temporary-site/README.md",
+        "scripts/build_website_assets.py",
+        "scripts/capture_website.cjs",
+        "scripts/verify_website.cjs",
+        "third_party/source-registry.json",
+        "docs/testing/website-redesign.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json",
+        "scripts/capture_website_modules.py",
+        "scripts/capture_website_examples.py",
+        "scripts/prepare_website_lip.cjs",
+        "scripts/capture_website_pitch.py",
+        "scripts/build_website_author_note.py",
+        "scripts/capture_website_stacks.py",
+        "scripts/capture_website_spectrum.py",
+        "scripts/update_website_stacks.py",
+        "docs/testing/website-font-license-audit.md",
+        "deployment/temporary-site/publish.py",
+        "CHANGELOG.md",
+        "scripts/build_website_expansion.py",
+        "scripts/build_website_experiments.py",
+        "scripts/capture_website_expansion.py",
+        "scripts/capture_website_phonology.py",
+        "scripts/export_website_long_images.cjs",
+        "deployment/temporary-site/collect_stats.py",
+        "deployment/temporary-site/install_stats.py",
+        "deployment/temporary-site/test_stats.py",
+        "deployment/temporary-site/website-stats.nginx.conf",
+        "frontend/src/modules/lpc-spectrum/SpectrumPlot.vue",
+        "scripts/website_feedback_fixture.py",
+        "scripts/verify_website_feedback.cjs",
+        "scripts/build_website_spectrogram_audio.py"
+      ],
+      "note": "既有官网扩展完成。本轮按用户选择改用m01/m05重建七步连续统，加入三张指定语谱图的署名引用及实际重建试听，顶栏桌面字号升至20px并恢复GitHub入口，增加阅读进度、随行目录和返回顶部。底部授权段逐字替换，两行祝愿保留原紫色和字号，字体包含新增字。官网发布及三张连续长图交付完成。 本轮三段图片重建修正为−30–0dB/10ms，默认品牌改为雾紫声波/深蓝末端，31项图标展示与提示框自动换行/边缘定位同步。 最新请求：移除深浅配色整块，在说明书展示后、小实验前新增用户原始两张自定义背景截图，DeepSeek居前错落叠放；本地与公网检查通过，rdccdfc56fbd82ee1已发布，三张新长图已交付并核对分界。 2026-10-13：新增指定3.0.1更新小记快照并按版本号排序，默认展示最新，保留3.0.0切换；更换后层首页背景截图，DeepSeek仍居前，本地定向检查通过，正在上线与更新长图。",
+      "verification_scope": "Windows独立Chrome、原生Qt截图、公网静态发布和三张长图。网页反馈使用真实FeedbackService的隔离数据库与邮件捕获器，不发送生产测试消息或真实邮件，不重建EXE。",
+      "verification": "rdccdfc56fbd82ee1的70资源HTTPS大小/SHA256一致，论文目录摘要和反馈服务保持。公网verify-1791815875900通过26图加载、17叠图逐张点击查看与键盘返回、DeepSeek在前及guide/background/lab位置、旧深浅配色块消失、20音频、阅读目录/进度/返回顶部、四宽度、无JS和减少动效，错误和失败请求为空。long-images-1791815035679三图1600×9084/8528/7961，连续边界0/9084/17612/25573，两处分界目视无截断。用户两张原图逐字节复制，原始摘要一致。HTML构建幂等、差异检查和文档检查1996文件/424来源/98任务通过。保留首次公网音频异步断言竞态失败证据，修正验证等待播放后完整复查通过。",
+      "remaining": [
+        "Safari/Firefox、实体手机及长期压力未验",
+        "本轮反馈未发送真实邮件；公网接口已核对，流程由隔离邮件捕获器验证"
+      ],
+      "current_evidence": [
+        "docs/testing/website-redesign.md"
+      ],
+      "local_evidence": "output/validation/website/verify-1791806969330/report.json; output/validation/website/verify-1791807264208/report.json; output/validation/website/verify-1791807727783/report.json; output/validation/website/website-77a49a510de749f384725f822f2dfd7a/deployment.json; output/validation/website/website-77a49a510de749f384725f822f2dfd7a/https-readback.json; output/validation/website/long-images-1791811178260/report.json; temporary-site/assets/spectrogram-examples/provenance.json; temporary-site/assets/audio/provenance.json; output/validation/website/feedback-web-1791804522277/report.json; output/validation/website/spectrogram-parameter-audit-20261012/verification.json; output/validation/website/verify-1791809371549/report.json; output/validation/website/verify-1791810891275/report.json; output/validation/website/capture-1791810675209/report.json; output/validation/website/website-149aa34d220b4d74b25d9f8e81974d2a/deployment.json; output/validation/website/website-149aa34d220b4d74b25d9f8e81974d2a/https-readback.json; output/validation/website/verify-1791811177900/report.json; output/validation/website/verify-1791811178074/report.json; output/validation/website/verify-1791814659343/report.json; output/validation/website/verify-1791815035675/report.json; output/validation/website/verify-1791815875900/report.json; output/validation/website/website-0f881001ad2848c997fb38ee0237d55c/deployment.json; output/validation/website/website-0f881001ad2848c997fb38ee0237d55c/https-readback.json; output/validation/website/long-images-1791815035679/report.json",
+      "local_changes": {
+        "date": "2026-10-12",
+        "topic": "连续统与变速变调两处小字标注SCSC语料来源",
+        "files": [
+          "temporary-site/index.html",
+          "temporary-site/site.css"
+        ],
+        "status": "in_progress",
+        "verification": "独立Chrome本地1440/390 px，两个区域均13px，小字无溢出、文字及链接准确；未部署。",
+        "remaining": "本轮未获新部署授权，修改仅在本地。",
+        "local_evidence": "output/validation/custom-appearance/website-1791811613716/"
+      }
     },
     {
       "id": "DOCS-RELEASE-300-NOTES",

@@ -8,7 +8,11 @@ export default defineComponent({
   props:{node:{type:Object as PropType<ManualNode>,required:true},chapterId:{type:String,required:true}},
   emits:{navigate:(_target:ManualTarget)=>true},
   setup(props,{emit}){return ()=>{
-    let value:VNodeChild=props.node.text??'';
+    // Existing prose may omit an explicit IPA mark. Keep Chinese and ordinary
+    // text in the UI font while phonetic runs use the bundled Doulos face.
+    const phoneticRun=/([A-Za-zæøðŋœβθχ\u0250-\u02ff\u0300-\u036f\u1d00-\u1dbf]+)/u;
+    const phoneticSymbol=/[æøðŋœβθχ\u0250-\u02ff\u0300-\u036f\u1d00-\u1dbf]/u;
+    let value:VNodeChild=(props.node.text??'').split(phoneticRun).map(part=>phoneticSymbol.test(part)?h('span',{class:'manual-ipa'},part):part);
     for(const mark of props.node.marks??[]){
       const tag=({bold:'strong',italic:'em',underline:'u',strike:'s',code:'code',subscript:'sub',superscript:'sup',ipa:'span'} as Record<string,string>)[mark.type];
       if(tag)value=h(tag,mark.type==='ipa'?{class:'manual-ipa'}:null,[value]);

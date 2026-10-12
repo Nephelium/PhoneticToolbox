@@ -49,7 +49,8 @@ const resize=computed(()=>({key:props.stateKey+'.workbench',legacyKey:props.lega
 .without-left.right-collapsed{grid-template-columns:minmax(0,1fr) 42px}
 .without-right{grid-template-columns:var(--panel-left,240px) minmax(0,1fr)}
 .without-left.without-right{grid-template-columns:minmax(0,1fr)}
-.workbench-unified>.workbench-left,.workbench-unified>.workbench-right{border:1px solid var(--border);border-radius:var(--radius);background:var(--app);padding:var(--workbench-pane-padding,8px)}
+.workbench-left,.workbench-right{background:var(--rail,var(--app))}
+.workbench-unified>.workbench-left,.workbench-unified>.workbench-right{border:1px solid var(--border);border-radius:var(--radius);background:var(--rail,var(--app));padding:var(--workbench-pane-padding,8px)}
 .workbench-unified>.workbench-left,.workbench-unified .workbench-right-body{scrollbar-gutter:stable}
 .workbench-unified .workbench-right-heading{min-height:var(--control-height);padding-bottom:var(--control-gap);border-bottom:1px solid var(--border);font-size:var(--control-size)}
 .workbench-unified .workbench-right-heading button{min-height:var(--control-height)}

@@ -52,8 +52,9 @@ const citation = (source: { authors: string; title: string; citation?: string })
     <article v-for="s in visible" :key="s.id" class="reference-row">
       <h3>{{ s.title }}</h3>
       <small class="reference-modules">用于：{{ moduleNames(s.modules) }}</small>
-      <p class="selectable">{{ citation(s) }}</p>
-      <small>{{ [s.kind, s.version].filter(Boolean).join(' · ') }}</small>
+      <p class="selectable reference-citation">{{ citation(s) }}</p>
+      <p v-if="s.reference_note" class="hint selectable">{{ s.reference_note }}</p>
+      <small v-if="s.version">版本：{{ s.version }}</small>
       <small v-if="s.license">{{ s.license }}</small>
       <p v-if="s.attribution" class="selectable">{{ s.attribution }}<span v-if="s.permission_date">（{{ s.permission_date }} 作者邮件许可）</span></p>
       <details v-if="s.adaptation_note" class="reference-adaptation"><summary>改写说明</summary>
@@ -71,4 +72,5 @@ const citation = (source: { authors: string; title: string; citation?: string })
 .reference-scope label{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
 .reference-scope select{max-width:100%}.reference-modules{color:var(--muted)}
 .reference-adaptation{margin:6px 0}.reference-adaptation p{overflow-wrap:anywhere}
+.reference-citation{white-space:pre-line;overflow-wrap:anywhere}
 </style>

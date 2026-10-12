@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {select,move,swap,merge,resolve,undoMerge,entries,groupEntries,orderedEntries,searchEntries,pairKey} from '../src/modules/phonology-induction/state.ts';
+import {select,move,swap,merge,resolve,undoMerge,entries,groupEntries,orderedEntries,searchEntries,pairKey,summaryEntries} from '../src/modules/phonology-induction/state.ts';
 test('M14 Ctrl/Shift selection retains empty-final identity',()=>{assert.deepEqual(select(['','a','i'],[''],'','i',false,true).selected,['','a','i']);assert.deepEqual(select(['a','i'],['a'],'a','i',true,false).selected,['a','i']);});
 test('M14 group drag preserves selected relative order; tone drag swaps',()=>{assert.deepEqual(move(['p','t','k','m'],['t','m'],'p'),['t','m','p','k']);assert.deepEqual(swap(['55','35','214'],'55','214'),['214','35','55']);});
 test('M14 merge chain and empty final do not mutate source text',()=>{const s={tone_map:{},tone_order:[],initial_order:['p','t','k'],final_order:['','a'],initial_map:{},final_map:{}};merge(s,'initial','p','t');merge(s,'initial','t','k');merge(s,'final','','a');assert.equal(resolve('p',s.initial_map),'k');assert.equal(resolve('',s.final_map),'a');assert.throws(()=>resolve('p',{p:'t',t:'p'}));});
@@ -18,4 +18,13 @@ test('M14 R1 search covers records beyond 200 and undone chains remain resolvabl
  merge(settings,'initial','p','t');merge(settings,'initial','t','k');undoMerge(settings,'initial','t',['p','t','k']);assert.equal(resolve('p',settings.initial_map),'t');assert.deepEqual(settings.initial_order,['t','k']);
  const mapped=entries(Array.from({length:320},(_,i)=>({character:i===319?'罕':'妈',ipa:'pa55',note:'',initial:'p',final:'a',tone_value:'55'})),settings);
  assert.deepEqual(searchEntries(mapped,'罕','all'),[319]);assert.equal(mapped.length,320);
+});
+
+test('M14 R2 Word statistics use input-order distinct examples and column-major tables',()=>{
+ const settings={tone_map:{'55':'平'},tone_order:['55'],initial_order:['m','p','t'],final_order:['a'],initial_map:{b:'m'},final_map:{}};
+ const rows=['甲','甲','乙','丙','丁','戊','己'].map((character,i)=>({character,ipa:'ba55',note:i===1?'另义':'',initial:'b',final:'a',tone_value:'55'}));
+ const stats=summaryEntries(entries(rows,settings),settings);
+ assert.deepEqual(stats[0].rows.map(row=>row.map(c=>c?.label)),[['m:','t:'],['p:',undefined]]);
+ assert.deepEqual(stats[0].rows[0][0]!.items.map(r=>[r.character,r.note]),[['甲',''],['甲','另义'],['乙',''],['丙',''],['丁','']]);
+ assert.equal(stats[2].rows[0][0]!.label,'55 → 平:');
 });

@@ -24,21 +24,23 @@ def main():
     if len(raw)>4_000_000:raise ValueError('Catalogue too large')
     catalog=json.loads(raw);assert catalog['schema']=='ptb-papers/1'
     verified=[]
-    for paper in catalog['papers']:
-        for kind in ('original','translation'):
-            asset=paper[kind];relative=asset['path']
-            assert re.fullmatch(r'[a-zA-Z0-9_-]+/[a-zA-Z0-9_.-]+\.pdf',relative)
-            source=stage/relative;target=root/relative
-            if not source.is_file():source=target
-            assert not source.is_symlink() and (source.resolve().is_relative_to(stage) or source.resolve().is_relative_to(root))
-            assert source.stat().st_size==asset['size']<=50_000_000
-            assert hashlib.sha256(source.read_bytes()).hexdigest()==asset['sha256']
-            if source!=target:
-                target.parent.mkdir(exist_ok=True)
-                assert target.parent.resolve().is_relative_to(root)
-                temp=target.with_name(target.name+'.'+uuid.uuid4().hex+'.tmp')
-                shutil.copyfile(source,temp);temp.chmod(0o644);os.replace(temp,target)
-            verified.append({'path':relative,'size':asset['size'],'sha256':asset['sha256']})
+    entries=[paper[kind] for paper in catalog['papers']
+             for kind in (('original','translation','analysisPdf') if 'analysisPdf' in paper else ('original','translation'))]
+    if 'notice' in catalog: entries.append(catalog['notice']['pdf'])
+    for asset in entries:
+        relative=asset['path']
+        assert re.fullmatch(r'[a-zA-Z0-9_-]+/[a-zA-Z0-9_.-]+\.pdf',relative)
+        source=stage/relative;target=root/relative
+        if not source.is_file():source=target
+        assert not source.is_symlink() and (source.resolve().is_relative_to(stage) or source.resolve().is_relative_to(root))
+        assert source.stat().st_size==asset['size']<=50_000_000
+        assert hashlib.sha256(source.read_bytes()).hexdigest()==asset['sha256']
+        if source!=target:
+            target.parent.mkdir(exist_ok=True)
+            assert target.parent.resolve().is_relative_to(root)
+            temp=target.with_name(target.name+'.'+uuid.uuid4().hex+'.tmp')
+            shutil.copyfile(source,temp);temp.chmod(0o644);os.replace(temp,target)
+        verified.append({'path':relative,'size':asset['size'],'sha256':asset['sha256']})
     temporary=root/('catalog.'+uuid.uuid4().hex+'.tmp')
     temporary.write_bytes(raw);temporary.chmod(0o644);os.replace(temporary,root/'catalog.json')
     print(json.dumps({'schema':'ptb-paper-publication/1','files':verified,'catalogSha256':hashlib.sha256(raw).hexdigest()}))

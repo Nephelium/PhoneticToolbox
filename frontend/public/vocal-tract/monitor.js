@@ -1,8 +1,18 @@
 import {canvasFont} from './fonts.js';
 import {tint} from './theme.js';
+import {zoomMonitor,monitorRange,monitorTimeLabel,waveformLimit} from './monitor-view.mjs';
 export function setupMonitor(post,isClosed){
   const $=id=>document.getElementById(id);let latest=null,pending=false,visible=false,lastKey='';
   const panel=$('monitorPanel'),home=$('monitorHome'),dialog=$('monitorDialog');
+  let view={span:+$('monitorSeconds').value,lag:0};
+  function resetZoom(){view={span:+$('monitorSeconds').value,lag:0};lastKey='';draw();poll();}
+  for(const id of ['waveCanvas','spectrogramCanvas']){
+    const canvas=$(id);canvas.title='Ctrl＋滚轮缩放时间；双击恢复显示时长';
+    canvas.addEventListener('wheel',e=>{if(!e.ctrlKey)return;e.preventDefault();e.stopPropagation();
+      const rect=canvas.getBoundingClientRect(),delta=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?rect.height:1);
+      view=zoomMonitor(view,delta,(e.clientX-rect.left-36)/(rect.width-46));draw();lastKey='';poll();
+    },{passive:false});canvas.addEventListener('dblclick',resetZoom);
+  }
   function select(view){visible=view==='monitor';document.querySelector('.analysis').dataset.view=view;panel.hidden=!visible;
     for(const b of document.querySelectorAll('[data-analysis]')){b.classList.toggle('selected',b.dataset.analysis===view);b.setAttribute('aria-pressed',b.dataset.analysis===view);}
     if(visible){poll();draw();}
@@ -12,16 +22,33 @@ export function setupMonitor(post,isClosed){
   $('monitorExpand').onclick=()=>{dialog.querySelector('.monitor-dialog-body').append(panel);dialog.showModal();draw();};
   $('monitorClose').onclick=()=>dialog.close();dialog.addEventListener('close',()=>{home.append(panel);draw();});
   $('monitorStop').onclick=async()=>{if(!$('stopFrames').disabled)$('stopFrames').click();try{await post('deactivate');}catch(e){$('monitorStatus').textContent='停止失败：'+e.message;}};
-  for(const id of ['monitorSeconds','monitorWindow','monitorHop'])$(id).onchange=()=>{lastKey='';poll();};
+  $('monitorSeconds').onchange=resetZoom;
+  $('monitorAmplitude').onchange=draw;
+  for(const id of ['monitorWindow','monitorHop'])$(id).onchange=()=>{lastKey='';poll();};
   function context(id){const canvas=$(id),w=canvas.clientWidth,h=canvas.clientHeight,d=Math.min(devicePixelRatio,2);canvas.width=w*d;canvas.height=h*d;const c=canvas.getContext('2d');c.scale(d,d);c.font=canvasFont(9);return {c,w,h};}
   function draw(){
     if(!visible)return;
     const wave=context('waveCanvas'),spec=context('spectrogramCanvas');if(!wave.w)return;
-    const seconds=latest?.seconds||+$('monitorSeconds').value,end=Math.max(seconds,latest?.end||0),start=end-seconds;
-    for(const {c,w,h} of [wave,spec]){c.fillStyle=tint('#fffef9');c.fillRect(0,0,w,h);c.fillStyle=tint('#7b877a');for(let i=0;i<=4;i++){const x=36+i*(w-46)/4;c.fillText((start+seconds*i/4).toFixed(1),x-5,h-3);}}
-    const {c,w,h}=wave,yy=v=>8+(1-v)/2*(h-29),xx=t=>36+(t-start)/seconds*(w-46);
-    c.strokeStyle=tint('#e0e4d9');for(const v of [-1,0,1]){c.beginPath();c.moveTo(36,yy(v));c.lineTo(w-10,yy(v));c.stroke();c.fillText(v,9,yy(v)+3);}
-    if(latest?.waveform.length){c.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--waveform-color').trim()||tint('#386a5e');c.beginPath();latest.waveform.forEach(([lo,hi],i)=>{const x=xx(latest.end-latest.duration+(i+.5)/latest.waveform.length*latest.duration);c.moveTo(x,yy(lo));c.lineTo(x,yy(hi));});c.stroke();}
+    const {seconds,start,end}=monitorRange(view,latest?.end||0);
+    $('waveLabel').textContent='波形 · 振幅 · '+(seconds<1?(seconds*1000).toFixed(seconds<.01?1:0)+' ms':seconds.toFixed(2)+' s');
+    for(const id of ['waveCanvas','spectrogramCanvas'])Object.assign($(id).dataset,{viewStart:String(start),viewEnd:String(end),viewSeconds:String(seconds)});
+    for(const {c,w,h} of [wave,spec]){
+      c.fillStyle=tint('#fffef9');c.fillRect(0,0,w,h);c.fillStyle=tint('#7b877a');
+      const labelWidth=Math.max(c.measureText(monitorTimeLabel(start,seconds)).width,c.measureText(monitorTimeLabel(end,seconds)).width);
+      const ticks=Math.max(1,Math.min(4,Math.floor((w-46)/(labelWidth+12))-1));
+      for(let i=0;i<=ticks;i++){const x=36+i*(w-46)/ticks;c.textAlign=i===0?'left':i===ticks?'right':'center';c.fillText(monitorTimeLabel(start+seconds*i/ticks,seconds),x,h-3);}c.textAlign='left';
+    }
+    const limit=waveformLimit(latest?.waveform_peak,$('monitorAmplitude').value==='auto');
+    const {c,w,h}=wave,yy=v=>8+(1-v/limit)/2*(h-29),xx=t=>36+(t-start)/seconds*(w-46);
+    c.strokeStyle=tint('#e0e4d9');for(const v of [-limit,0,limit]){c.beginPath();c.moveTo(36,yy(v));c.lineTo(w-10,yy(v));c.stroke();c.fillText(Number(v.toPrecision(2)).toString(),2,yy(v)+3);}
+    const raw=latest?.waveform_samples||[],envelope=latest?.waveform||[];
+    Object.assign($('waveCanvas').dataset,{waveMode:latest?.waveform_mode||'envelope',sampleCount:String(raw.length),amplitudeLimit:String(limit)});
+    if(raw.length||envelope.length){
+      c.save();c.beginPath();c.rect(36,8,w-46,h-29);c.clip();c.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--waveform-color').trim()||tint('#386a5e');c.beginPath();
+      if(latest.waveform_mode==='samples')raw.forEach((v,i)=>{const x=xx(latest.waveform_start+i/latest.sample_rate);if(i===0)c.moveTo(x,yy(v));else c.lineTo(x,yy(v));});
+      else envelope.forEach(([lo,hi],i)=>{const x=xx(latest.waveform_start+(i+.5)/envelope.length*latest.waveform_duration);c.moveTo(x,yy(lo));c.lineTo(x,yy(hi));});
+      c.stroke();c.restore();
+    }
     const s=spec;for(const f of [0,2000,4000,6000])s.c.fillText(f?f/1000+'k':'0',7,8+(1-f/6000)*(s.h-30)+3);
     const data=latest?.spectrogram;
     if(data?.length){
@@ -37,8 +64,10 @@ export function setupMonitor(post,isClosed){
     }else{s.c.fillStyle=tint('#839080');s.c.fillText('点击发声后显示实际输出音频',45,s.h/2);}
   }
   async function poll(){if(pending||!visible||isClosed()||document.hidden)return;pending=true;
-    try{const s=await(await post('audio/monitor',{seconds:+$('monitorSeconds').value,window_ms:+$('monitorWindow').value,hop_ms:+$('monitorHop').value})).json();
-      const key=[s.generation,s.end,s.seconds,s.window_ms,s.hop_seconds].join(':');latest=s;
+    try{const requested={...view},width=Math.max(64,Math.min(2048,Math.ceil($('waveCanvas').clientWidth-46)));
+      const s=await(await post('audio/monitor',{seconds:Math.max(1,Math.min(12,requested.span+requested.lag)),window_ms:+$('monitorWindow').value,hop_ms:+$('monitorHop').value,view_seconds:requested.span,view_lag:requested.lag,waveform_width:width})).json();
+      if(requested.span!==view.span||requested.lag!==view.lag)return;
+      const key=[s.generation,s.end,s.seconds,s.window_ms,s.hop_seconds,requested.span,requested.lag,width].join(':');latest=s;
       $('monitorStatus').textContent=`48 kHz 输出 · 分析窗 ${s.window_ms} ms（1/T ≈ ${Math.round(s.resolution_hz)} Hz）· 实际步长 ${(s.hop_seconds*1000).toFixed(1)} ms · 90 dB`;
       if(key!==lastKey){lastKey=key;draw();}
     }catch(e){$('monitorStatus').textContent='分析未更新：'+e.message;}finally{pending=false;}

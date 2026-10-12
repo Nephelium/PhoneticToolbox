@@ -30,9 +30,12 @@ def main():
     if source.parent != ROOT / 'dist' or output.parent != ROOT / 'output/release-staging':
         raise ValueError('Expected new owned release directories')
     metadata = json.loads((source / 'application.json').read_text('utf8'))
-    executable = source / 'PhoneticToolbox.exe'
+    build_info = json.loads((source / 'build-info.json').read_text('utf8'))
+    executable = source / build_info['exe']
+    if executable.parent != source or executable.name not in ('PhoneticToolbox.exe', 'PhoneticToolbox-windows-x64.exe'):
+        raise ValueError('Unexpected portable executable name')
     if (metadata.get('schema') != 'ptb-desktop-release/1' or metadata.get('layout') != 'onefile/1' or
-            metadata.get('entry') != executable.name or executable.stat().st_size > LIMIT or
+            metadata.get('entry') != 'PhoneticToolbox.exe' or executable.stat().st_size > LIMIT or
             metadata['executable'] != dict(size=executable.stat().st_size, sha256=digest(executable))):
         raise ValueError('Single-file build did not pass identity and size checks')
     output.mkdir(parents=True, exist_ok=False)
@@ -44,13 +47,13 @@ def main():
         portable = executable
         archive = artifacts / f'PhoneticToolbox-{version}-windows-x64-portable.zip'
         with zipfile.ZipFile(archive, 'x', compression=zipfile.ZIP_STORED) as stream:
-            for path in (package / 'PhoneticToolbox.exe', package / 'application.json'):
-                stream.write(path, 'PhoneticToolbox/' + path.name)
+            stream.write(executable, 'PhoneticToolbox/PhoneticToolbox.exe')
+            stream.write(package / 'application.json', 'PhoneticToolbox/application.json')
         compiler = ROOT / 'output/release-tools/inno-7.1.0/compiler/ISCC.exe'
         with (output / 'installer-build.log').open('wb') as log:
             persistent=json.loads((source/'build-info.json').read_text('utf8')).get('startup_cache')=='content-addressed/1'
             subprocess.run([str(compiler), '/DCompactOnefile', *(['/DPersistentCache'] if persistent else []), '/DPackageDir=' + str(package), '/DReleaseDir=' + str(artifacts),
-                            '/DVersion=' + version, str(ROOT / 'release/installer.iss')],
+                            '/DAppExecutable=' + executable.name, '/DVersion=' + version, str(ROOT / 'release/installer.iss')],
                            cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=True)
         setup = artifacts / f'PhoneticToolbox-{version}-windows-x64-setup.exe'
         report = dict(schema='ptb-compact-package/1', version=version, layout='onefile/1',

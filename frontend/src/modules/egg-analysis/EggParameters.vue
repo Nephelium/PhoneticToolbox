@@ -13,14 +13,21 @@ const emit=defineEmits<{autoDb:[]}>();
 <label>GCI<select v-model="config.gci_method"><option value="slope">斜率</option><option value="scale">尺度 0.25</option></select></label>
 <label>GOI<select v-model="config.goi_method"><option value="slope">斜率</option><option value="scale">尺度 0.25</option></select></label>
 </div></section>
-<section class="parameter-group"><div class="parameter-heading"><span>语谱图与 F0</span><button type="button" :aria-pressed="!!autoDbEnabled" :title="autoDbEnabled?'已开启：拖动或缩放后按当前选区 PSD 更新 50 dB 色阶。点击关闭，可手动调整。':'已关闭：保留手动 dB 范围。点击开启实时自动色阶。'" @click="emit('autoDb')">自动 dB</button></div><small class="db-mode-note">{{autoDbEnabled?(autoDbEmpty?'自动已开启 · 静音区间保留当前色阶':'自动已开启 · 随可见区间更新'):'自动已关闭 · 手动色阶'}}</small>
-<div class="egg-field-grid">
+<section class="parameter-group"><div class="parameter-heading"><span>语谱图与 F0</span></div>
+<div class="egg-field-grid egg-spectral-grid">
 <label>谱窗 ms<input v-time-precision="'ms'" v-model.number="config.spec_window_ms" type="number" min="5" max="50" step="1"/></label>
+<button class="auto-db" type="button" :aria-pressed="!!autoDbEnabled" :title="autoDbEnabled?'已开启：拖动或缩放后按当前选区 PSD 更新 50 dB 色阶。点击关闭，可手动调整。':'已关闭：保留手动 dB 范围。点击开启实时自动色阶。'" @click="emit('autoDb')">自动 dB</button>
 <label>dB 下限<input v-model.number="config.spec_vmin" aria-label="EGG dB 下限" type="number" min="-160" max="20" :disabled="autoDbEnabled"/></label>
 <label>dB 上限<input v-model.number="config.spec_vmax" aria-label="EGG dB 上限" type="number" min="-160" max="20" :disabled="autoDbEnabled"/></label>
-</div><div class="egg-checks"><label title="音频 Praat AC，搜索范围 30–800 Hz"><input v-model="config.keep_praat_f0" type="checkbox"/>Praat F0</label><label><input v-model="config.keep_gci_f0" type="checkbox"/>GCI F0</label><label title="音频 REAPER，搜索范围 30–800 Hz"><input v-model="config.keep_reaper_f0" type="checkbox"/>REAPER F0</label></div>
+</div><small class="db-mode-note">{{autoDbEnabled?(autoDbEmpty?'自动已开启 · 静音区间保留当前色阶':'自动已开启 · 随可见区间更新'):'自动已关闭 · 手动色阶'}}</small>
+<div class="egg-field-grid egg-f0-grid" title="Praat AC 与 REAPER 共用搜索范围，GCI F0 不受此设置影响。">
+<label>F0 下限 Hz<input v-model.number="config.f0_min_hz" aria-label="EGG F0 下限 Hz" type="number" min="10" max="2000" step="1"/></label>
+<label>F0 上限 Hz<input v-model.number="config.f0_max_hz" aria-label="EGG F0 上限 Hz" type="number" min="10" max="2000" step="1"/></label>
+</div><div class="egg-checks"><label title="音频 Praat AC，使用上方 F0 上下限"><input v-model="config.keep_praat_f0" type="checkbox"/>Praat F0</label><label><input v-model="config.keep_gci_f0" type="checkbox"/>GCI F0</label><label title="音频 REAPER，使用上方 F0 上下限"><input v-model="config.keep_reaper_f0" type="checkbox"/>REAPER F0</label></div>
 </section></div></template>
 <style scoped>
-.parameter-heading button[aria-pressed=true]{background:var(--selected);color:var(--accent);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);font-weight:600}.parameter-heading button[aria-pressed=true]::after{content:'✓';font-size:0.785714rem}.db-mode-note{color:var(--muted);font-size:0.785714rem}
+.auto-db[aria-pressed=true]{background:var(--selected);color:var(--accent);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);font-weight:600}.auto-db[aria-pressed=true]::after{content:'✓';font-size:0.785714rem}.auto-db{justify-self:end;min-height:28px;padding:3px 6px;font-size:var(--control-size,12px)}.db-mode-note{color:var(--muted);font-size:0.785714rem}
 .egg-parameter-row{display:grid;gap:10px;border-top:1px solid var(--border);padding-top:8px}.parameter-group{display:grid;gap:6px;min-width:0}.parameter-heading{display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:var(--control-size,12px);color:var(--muted)}.parameter-heading button{min-height:26px;padding:2px 6px;font-size:inherit}.parameter-heading .check{display:flex;align-items:center;gap:4px;color:var(--text)}.egg-field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,145px),1fr));gap:5px 10px}.egg-field-grid label{display:grid;grid-template-columns:minmax(0,1fr) minmax(64px,86px);align-items:center;gap:5px;font-size:var(--control-size,12px)}.egg-field-grid input,.egg-field-grid select{width:100%;min-width:0;min-height:28px;padding:3px 5px;font-size:inherit;line-height:1.25}.egg-checks{display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px;font-size:var(--control-size,12px)}.egg-checks label{display:flex;align-items:center;gap:4px}
+.egg-spectral-grid,.egg-f0-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.egg-spectral-grid label{grid-template-columns:minmax(0,1fr) minmax(50px,64px)}.egg-f0-grid label{grid-template-columns:1fr;gap:2px}
 </style>

@@ -5,6 +5,6 @@ export const projects:ProjectStore = {
   write(key,value){try{localStorage.setItem('ptb.v3.'+key,JSON.stringify(value));return true;}catch{return false;}},
 };
 export const browser:HostCapabilities={kind:'browser',projects,jobs:false,capture:false,files:{async load(file){
-  if(file.size>64_000_000) throw Error('当前预览支持 64 MB 以内的 WAV；大文件流式读取待接入。');
+  if(file.size>64_000_000) throw Error('请选择 64 MB 以内的 WAV 文件进行预览。');
   return decodeWav(await file.arrayBuffer(),file.name);
 }}};

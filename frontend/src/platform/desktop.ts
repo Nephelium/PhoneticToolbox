@@ -1,4 +1,6 @@
 import {installPapersChannel,type PapersChannel} from './papers.ts';
+import {ref} from 'vue';
+import {installFeedbackChannel,type FeedbackChannel} from './feedback.ts';
 import { browser } from './browser.ts';
 import {installClipboardWriter} from './clipboard.ts';
 import {serialRequests} from './serial-requests.ts';
@@ -9,6 +11,8 @@ import {m14Port} from './m14.ts';
 import {m11Port} from './m11.ts';
 import {desktopM05} from './m05.ts';
 import {installStoragePort} from './storage.ts';
+import {installIconPort} from './icons.ts';
+import {installColorPicker} from './color-picker.ts';
 import {installUpdatesChannel,type UpdatesChannel} from './updates.ts';
 import {recordingPort,installRecordingPort} from './recording.ts';
 import {recordingRequests,type RecordingChannel} from './recording-requests.ts';
@@ -16,23 +20,43 @@ import type {Grant} from '../modules/mfa/port.ts';
 import type { HostCapabilities } from './types.ts';
 import type { DirectoryGrant,ResearchFiles,Spectrogram,ResearchTasks } from './research.ts';
 type Bridge={invoke:(body:string,callback:(value:string)=>void)=>void;preview:(id:string,body:string)=>void;previewReady:{connect:(fn:(id:string,body:string)=>void)=>void};task:(id:string,body:string)=>void;taskReady:{connect:(fn:(id:string,body:string)=>void)=>void}};
-declare global {interface Window {qt?:{webChannelTransport:unknown};QWebChannel?:new(transport:unknown,callback:(channel:{objects:{files:Bridge;updates?:UpdatesChannel;papers?:PapersChannel}})=>void)=>unknown}}
+declare global {interface Window {qt?:{webChannelTransport:unknown};QWebChannel?:new(transport:unknown,callback:(channel:{objects:{files:Bridge;updates?:UpdatesChannel;papers?:PapersChannel;feedback?:FeedbackChannel}})=>void)=>unknown}}
 let active:HostCapabilities=browser;
 export let desktopFiles:ResearchFiles|undefined;
 export let desktopSession='';
+export const integratedTitlebar=ref(false),desktopMaximized=ref(false);
+let windowAction:((action:string)=>void)|undefined;
+export function desktopWindowAction(action:'move'|'minimize'|'maximize'|'close'){windowAction?.(action);}
 export let desktopFontFamilies:(()=>Promise<string[]>)|undefined;
 export let vocalRequest:((op:string,body?:unknown)=>Promise<unknown>)|undefined;
 export async function initializePlatform(){
   if(!window.qt?.webChannelTransport||!window.QWebChannel)return;
-  const bridge=await new Promise<Bridge>((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('桌面握手超时。')),15000);new window.QWebChannel!(window.qt!.webChannelTransport,channel=>{clearTimeout(timer);installUpdatesChannel(channel.objects.updates);installPapersChannel(channel.objects.papers);resolve(channel.objects.files);});});
+  const bridge=await new Promise<Bridge>((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('桌面握手超时。')),15000);new window.QWebChannel!(window.qt!.webChannelTransport,channel=>{clearTimeout(timer);installUpdatesChannel(channel.objects.updates);installPapersChannel(channel.objects.papers);installFeedbackChannel(channel.objects.feedback);resolve(channel.objects.files);});});
   const call=<T>(op:string,extra:Record<string,string>={}):Promise<T>=>new Promise((resolve,reject)=>bridge.invoke(JSON.stringify({op,...extra}),text=>{try{const result=JSON.parse(text);if(!result.ok)throw Error(result.error);resolve(result.value);}catch(e){reject(e);}}));
-  const hello=await call<{kind:string;session:string;api_version:string;tasks?:boolean}>('hello');
+  const hello=await call<{kind:string;session:string;api_version:string;tasks?:boolean;integrated_titlebar?:boolean;window_maximized?:boolean}>('hello');
   if(hello.kind!=='desktop'||hello.api_version!=='1.1.0'||!hello.session)throw Error('桌面接口版本不匹配。');
   desktopSession=hello.session;
-  const surfaceBridge=bridge as Bridge & {setSurfaceColor?:(color:string)=>void};
+  const windowBridge=bridge as Bridge & {windowAction?:(action:string)=>void;windowStateChanged?:{connect:(callback:(maximized:boolean)=>void)=>void}};
+  integratedTitlebar.value=!!hello.integrated_titlebar&&!!windowBridge.windowAction;
+  desktopMaximized.value=!!hello.window_maximized;
+  windowAction=windowBridge.windowAction;
+  windowBridge.windowStateChanged?.connect(maximized=>{desktopMaximized.value=maximized;});
+  const colorBridge=bridge as Bridge & {pickColor?:(initial:string,callback:(value:string)=>void)=>void};
+  if(colorBridge.pickColor)installColorPicker(initial=>new Promise((resolve,reject)=>colorBridge.pickColor!(initial,raw=>{try{const result=JSON.parse(raw);if(!result.ok)throw Error(result.error);resolve(result.color??null);}catch(error){reject(error);}})));
+  const iconBridge=bridge as Bridge & {applicationIcon?:(body:string,callback:(value:string)=>void)=>void};
+  if(iconBridge.applicationIcon)installIconPort(request=>new Promise((resolve,reject)=>{
+    const timer=setTimeout(()=>reject(Error('图标设置响应超时，请重新打开设置核对当前选择。')),15000);
+    iconBridge.applicationIcon!(JSON.stringify(request),raw=>{clearTimeout(timer);try{const result=JSON.parse(raw);if(!result.ok)throw Error(result.error);resolve(result.value);}catch(error){reject(error);}});
+  }));
+  const surfaceBridge=bridge as Bridge & {setSurfaceColor?:(color:string)=>void;setCaptionColors?:(background:string,foreground:string)=>void};
   if(surfaceBridge.setSurfaceColor){
-    const syncSurface=()=>{const color=getComputedStyle(document.documentElement).getPropertyValue('--app').trim();if(/^#[0-9a-f]{6}$/i.test(color))surfaceBridge.setSurfaceColor!(color);};
-    new MutationObserver(syncSurface).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','data-palette']});syncSurface();
+    const syncSurface=()=>{
+      const styles=getComputedStyle(document.documentElement),color=styles.getPropertyValue('--app').trim();
+      if(/^#[0-9a-f]{6}$/i.test(color))surfaceBridge.setSurfaceColor!(color);
+      const background=styles.getPropertyValue('--sidebar').trim(),foreground=styles.getPropertyValue('--text').trim();
+      if(/^#[0-9a-f]{6}$/i.test(background)&&/^#[0-9a-f]{6}$/i.test(foreground))surfaceBridge.setCaptionColors?.(background,foreground);
+    };
+    new MutationObserver(syncSurface).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','data-palette','data-custom-palette']});syncSurface();
   }
   const clipboardBridge=bridge as Bridge & {writeClipboard?:(text:string,callback:(result:string)=>void)=>void};
   if(clipboardBridge.writeClipboard){
@@ -56,12 +80,13 @@ export async function initializePlatform(){
   bridge.previewReady.connect((id,text)=>{const request=pending.get(id);if(!request)return;pending.delete(id);clearTimeout(request.timer);try{const data=JSON.parse(text);if(!data.ok)throw Error(data.error);request.resolve(data.value);}catch(e){request.reject(e instanceof Error?e:Error('语谱图读取失败。'));}});
   const taskPending=new Map<string,{resolve:(value:any)=>void;reject:(error:Error)=>void;timer?:ReturnType<typeof setTimeout>}>();
   bridge.taskReady?.connect((id,text)=>{const request=taskPending.get(id);if(!request)return;taskPending.delete(id);if(request.timer!==undefined)clearTimeout(request.timer);try{const data=JSON.parse(text);if(!data.ok)throw Error(data.error);request.resolve(data.value);}catch(e){request.reject(e instanceof Error?e:Error('任务读取失败。'));}});
-  const task=serialRequests(<T>(body:unknown):Promise<T>=>new Promise((resolve,reject)=>{
+  const nativeTask=<T>(body:unknown):Promise<T>=>new Promise((resolve,reject)=>{
     const id=crypto.randomUUID(),op=(body as {op?:string})?.op;
     // Cleanup must receive the native completion before releasing the task queue.
-    const timer=op==='local_storage_cleanup'?undefined:setTimeout(()=>{taskPending.delete(id);reject(Error('任务操作超时，刷新批次可核对实际状态。'));},op==='m11_component'?930000:op==='m05_save_finish'?650000:op==='parameters'?350000:300000);
+    const timer=op==='local_storage_cleanup'?undefined:setTimeout(()=>{taskPending.delete(id);reject(Error('任务操作超时，刷新批次可核对实际状态。'));},op==='m11_component'?7230000:op==='m05_save_finish'?650000:op==='parameters'?350000:300000);
     taskPending.set(id,{resolve,reject,timer});bridge.task(id,JSON.stringify(body));
-  }));
+  });
+  const task=serialRequests(nativeTask);
   const tasks:ResearchTasks={parent:file=>task({op:'parent',id:file.id}),submit:(operation,inputs,config,layer,key)=>task({op:'submit',operation,inputs:inputs.map(item=>Object.fromEntries(Object.entries(item).filter(([,v])=>v!=null).map(([role,file])=>[role,role==='parent_result'?file:(file as {id:string}).id]))),config,layer,idempotency_key:key}),
     reconstruct:(file,config,key)=>task({op:'reconstruct',id:file.id,config,key}),reconstructionPreview:(file,config)=>task({op:'reconstruction_preview',id:file.id,config}),reconstructions:()=>task({op:'reconstructions'}),cancelJob:id=>task({op:'cancel_job',id}),saveJob:(id,directory)=>task({op:'save_job',id,directory}),
     egg:async(file,config,key)=>{const {exportFontSnapshot}=await import('../state/fonts.ts');return task({op:'egg',id:file.id,config:{...config,font:config.font??exportFontSnapshot()},key});},eggJobs:()=>task({op:'egg_jobs'}),eggFonts:font=>task({op:'egg_fonts',font}),
@@ -92,7 +117,7 @@ export async function initializePlatform(){
       catalog:()=>task({op:'m11_catalog'}),history:()=>task({op:'m11_jobs'}),events:id=>task({op:'m11_events',id}),
       async upload(file,role){const bytes=new Uint8Array(await file.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));return task({op:'m11_import',name:file.name,role,base64:btoa(binary)});},
       create:body=>task({op:'m11_create',body}),job:tasks.job,cancel:tasks.cancelJob!,read:tasks.result!,
-      pick:purpose=>call<Grant|null>('m11_pick',{purpose}),dictionaryFromGrant:grant=>task({op:'m11_dictionary',id:grant.id}),corpus:(grant,source='auto')=>task({op:'m11_corpus',id:grant.id,transcript_source:source}),component:body=>task({op:'m11_component',body}),
+      pick:purpose=>call<Grant|null>('m11_pick',{purpose}),dictionaryFromGrant:grant=>task({op:'m11_dictionary',id:grant.id}),corpus:(grant,source='auto')=>task({op:'m11_corpus',id:grant.id,transcript_source:source}),component:body=>nativeTask({op:'m11_component',body}),
       chooseOutput:()=>call<Grant|null>('choose',{purpose:'output'}),save:(job,grant)=>task({op:'m11_save',job:job.id,directory:grant.id})});
     desktopFiles.m14=m14Port({project:'00000000-0000-4000-8000-000000000001',
       async upload(file){const bytes=new Uint8Array(await file.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));return task({op:'m14_import',name:file.name,base64:btoa(binary)});},

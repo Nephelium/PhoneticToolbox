@@ -1,0 +1,24 @@
+[Unit]
+Description=PhoneticToolbox feedback and daily notifications
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ptb-feedback
+Group=ptb-feedback
+WorkingDirectory=/opt/phonetictoolbox-feedback
+ExecStart=/opt/phonetictoolbox-feedback/.venv-feedback/bin/python deployment/feedback/server.py --config /etc/phonetictoolbox-feedback/private.json
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/phonetictoolbox-feedback
+MemoryMax=256M
+TasksMax=32
+
+[Install]
+WantedBy=multi-user.target

@@ -55,7 +55,7 @@ class LocalService:
         # Local traffic does not inherit a user's HTTP proxy.
         opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
         # Cleanup keeps running after a client timeout; wait for its actual result.
-        with opener.open(request, timeout=None if path in ('/api/v1/jobs/local-storage/cleanup','/api/v1/jobs/local-storage/clear-all') else 50 if path=='/api/v1/jobs/spec2wav/preview' else 330 if path=='/api/v1/jobs/local-parameter-window' else 900 if path=='/api/v1/jobs/m11/component' else 35 if path=='/api/v1/jobs/egg/fonts' else 5) as response:
+        with opener.open(request, timeout=None if path in ('/api/v1/jobs/local-storage/cleanup','/api/v1/jobs/local-storage/clear-all') else 50 if path=='/api/v1/jobs/spec2wav/preview' else 330 if path=='/api/v1/jobs/local-parameter-window' else 7200 if path=='/api/v1/jobs/m11/component' else 35 if path=='/api/v1/jobs/egg/fonts' else 5) as response:
             return json.load(response)
 
     def close(self):

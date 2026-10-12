@@ -2,17 +2,18 @@
 import {ref,computed,nextTick,watch,onUnmounted} from 'vue';
 import {palettes,normalizePalette,paletteTokens,type ThemeMode,type ColorMode} from '../design/themes.ts';
 import {useFloatingPicker} from './floating-picker.ts';
+import {paletteRevision} from '../state/appearance.ts';
 const props=defineProps<{modelValue:string;mode:ThemeMode}>();
 const emit=defineEmits<{'update:modelValue':[value:string]}>();
 const anchor=ref<HTMLElement>(),panel=ref<HTMLElement>();
 const {open,position}=useFloatingPicker(anchor,panel);
-const current=computed(()=>palettes.find(p=>p.id===normalizePalette(props.modelValue))!);
+const current=computed(()=>{paletteRevision.value;return palettes.find(p=>p.id===normalizePalette(props.modelValue))!;});
 const system=window.matchMedia('(prefers-color-scheme: dark)'),systemDark=ref(system.matches);
 const systemChanged=(event:MediaQueryListEvent)=>systemDark.value=event.matches;
 system.addEventListener('change',systemChanged);onUnmounted(()=>system.removeEventListener('change',systemChanged));
 const mode=computed<ColorMode>(()=>props.mode==='system'?(systemDark.value?'dark':'light'):props.mode);
 const hover=ref(''),previewStyle=ref<Record<string,string>>({}),active=ref(0);
-const preview=computed(()=>palettes.find(p=>p.id===hover.value));
+const preview=computed(()=>{paletteRevision.value;return palettes.find(p=>p.id===hover.value);});
 const tokens=(id:string)=>paletteTokens(id,mode.value);
 function badge(id:string){const t=tokens(id);return {background:t['--app'],color:t['--accent'],borderColor:t['--border']};}
 function previewAt(id:string,element:HTMLElement){

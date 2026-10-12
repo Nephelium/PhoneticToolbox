@@ -31,6 +31,9 @@ class EggTaskConfig(WireModel):
     keep_reaper_f0: bool = False
     # Missing in historical snapshots: preserve their original Praat search.
     f0_policy: Literal['legacy/1', 'audio-f0/2'] = 'legacy/1'
+    # None retains the policy's historical bounds in old task snapshots.
+    f0_min_hz: float | None = Field(default=None, ge=10, le=2000)
+    f0_max_hz: float | None = Field(default=None, ge=10, le=2000)
     glottal_movement: bool = False
     silence_threshold: float = Field(default=.01, ge=0, le=1)
     generate_images: bool = False
@@ -41,6 +44,10 @@ class EggTaskConfig(WireModel):
     def ranges(self):
         if self.keep_reaper_f0 and self.f0_policy != 'audio-f0/2':
             raise ValueError('REAPER requires audio-f0/2')
+        low = self.f0_min_hz if self.f0_min_hz is not None else (30. if self.f0_policy == 'audio-f0/2' else 75.)
+        high = self.f0_max_hz if self.f0_max_hz is not None else (800. if self.f0_policy == 'audio-f0/2' else 600.)
+        if low >= high:
+            raise ValueError('F0 floor must be lower than ceiling')
         if self.mode != 'preview' and (self.micro_center is not None or self.micro_width_ms != 50.):
             raise ValueError('Micro viewport only applies to preview')
         if self.highpass_cutoff >= self.lowpass_cutoff or self.spec_vmin >= self.spec_vmax:

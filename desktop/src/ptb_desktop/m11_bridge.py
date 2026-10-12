@@ -34,6 +34,13 @@ class M11Bridge:
         if op=='m11_create':return service.request('/api/v1/jobs/m11/create','POST',body['body'])
         if op=='m11_component':
             values=body['body'];action=values['action']
+            if action in ('install_zip','install_folder','download'):
+                request=dict(action=action)
+                if action=='install_zip':request['archive']=str(self.path(values['archive'],'archive'))
+                if action=='install_folder':request['runtime']=str(self.path(values['runtime'],'runtime'))
+                from urllib.error import HTTPError
+                try:return service.request('/api/v1/jobs/m11/component','POST',request)
+                except HTTPError as exc:raise FileAccessError(json.load(exc).get('detail','m11_component_failed')) from None
             from ptb_worker.mfa.runtime import load_registry
             from ptb_worker.mfa.components import digest
             registry=load_registry()

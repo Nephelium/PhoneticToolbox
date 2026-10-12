@@ -10,8 +10,11 @@ from ptb_api.m11_models import M11Request
 
 
 def catalog(*,local):
+    from .mfa.release_catalog import RELEASE
+    from .mfa.delivery import status
     data=load_registry()
-    return dict(schema_version='m11/1',download_available=False,download_reason='m11_download_not_published',
+    return dict(schema_version='m11/1',download_available=bool(local and RELEASE.get('sha256')),download_reason='' if local and RELEASE.get('sha256') else 'm11_download_not_published',
+        component_status=status() if local else None,
         execution_available=local and os.name=='nt' and any(r.get('validated') for r in data['runtimes']),
         waiting_reason=None if local else 'm11_waiting_verified_node',
         runtimes=[{k:r.get(k) for k in ('id','version','platform','arch','validated','fingerprint','versions','installed_bytes','download_bytes','source','archive_sha256')} for r in data['runtimes']],

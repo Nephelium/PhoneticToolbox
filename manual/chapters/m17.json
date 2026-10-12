@@ -159,7 +159,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "输入文字时保持点击播放关闭。",
+                    "text": "当前点击播放暂不可用，点符号即可输入文字。",
                     "marks": [
                       {
                         "type": "bold"
@@ -221,7 +221,7 @@
         "content": [
           {
             "type": "text",
-            "text": "三套表有 625 个入口：IPA 351、extIPA 209、VoQS 65，包含组合、例示和工具，并非 625 个独立音标。"
+            "text": "三套表有 625 个入口：IPA 351、extIPA 209、VoQS 65，入口包含组合、例示和工具。"
           }
         ]
       },
@@ -323,7 +323,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "切体系、检索、改字号，开关悬停介绍与点击播放；右侧是帮助和方法与引用。"
+                        "text": "切体系、检索、改字号和开关悬停介绍；点击播放暂不可用，右侧是帮助和方法与引用。"
                       }
                     ]
                   }
@@ -356,7 +356,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "显示表版与输入提示；IPA、extIPA 另有分区按钮。"
+                        "text": "显示表版与输入提示；IPA、extIPA 默认显示全部，也可选择分区。"
                       }
                     ]
                   }
@@ -1012,7 +1012,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "IPA 基础图表；extIPA 辅音图表"
+                        "text": "IPA 与 extIPA 均为显示全部"
                       }
                     ]
                   }
@@ -1220,7 +1220,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "关闭，重开仍关闭"
+                        "text": "暂不可用"
                       }
                     ]
                   }
@@ -1234,7 +1234,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "开启后点符号或聚焦后按 Enter 触发演示，正文与选区保持；关闭后恢复输入。"
+                        "text": "演示内容正在创作中，悬停可查看提示；当前点击符号用于输入。"
                       }
                     ]
                   }
@@ -1800,7 +1800,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "输入整串字符，不表示禁用。"
+                        "text": "点击可一次输入整串组合字符。"
                       }
                     ]
                   }
@@ -1890,7 +1890,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "输入此项 / 播放此项",
+                        "text": "输入此项",
                         "marks": [
                           {
                             "type": "bold"
@@ -1909,7 +1909,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "按顶部播放开关的当前模式执行。"
+                        "text": "将当前项插入编辑框。"
                       }
                     ]
                   }
@@ -1947,40 +1947,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "关闭详情并停止当前演示。"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "tableRow",
-            "content": [
-              {
-                "type": "tableCell",
-                "content": [
-                  {
-                    "type": "paragraph",
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": "音频 / 视频控件"
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "tableCell",
-                "content": [
-                  {
-                    "type": "paragraph",
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": "有素材时显示，可暂停、拖进度；独立音轨存在时视频静音，两路进度不联动。"
+                        "text": "关闭详情。"
                       }
                     ]
                   }
@@ -2134,7 +2101,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "按 Unicode 码点计数，字母和附加号可能各占一项，不等于音段数。"
+                        "text": "按 Unicode 码点计数，字母和附加号可能各占一项。"
                       }
                     ]
                   }
@@ -2426,7 +2393,7 @@
           },
           {
             "type": "text",
-            "text": "的条目沿用既有字母与附加号，不代表新基础字母。"
+            "text": "的条目由既有字母与附加号组成。"
           }
         ]
       },
@@ -3032,7 +2999,7 @@
         "content": [
           {
             "type": "text",
-            "text": "VoQS 直接分类展示，无额外分区页。56 项原表术语采用王天恒双语译表，另有 9 个数字、括号、范围和例句入口。V、W、Ṿ、C、V̰、V̤ 等相近标签，先看名称和用法再选。"
+            "text": "VoQS 直接分类展示，无额外分区页。56 项原表术语采用王天恒双语译表，另有 9 个数字、括号、范围和例句入口。悬停介绍逐项说明发声特点、符号构成与相近标签的区别，重点区分耳语、耳语声、气声、嘎裂及嘎裂声。室襞性发声也称假声带发声，复音也称双音调嗓音，可在解释中对照理解。"
           }
         ]
       },
@@ -3753,84 +3720,11 @@
         ]
       },
       {
-        "type": "orderedList",
+        "type": "paragraph",
         "content": [
           {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "勾选"
-                  },
-                  {
-                    "type": "text",
-                    "text": "点击播放",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "，点符号或聚焦后按 Enter，展开演示详情，正文与选区保持。"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "有素材时可点"
-                  },
-                  {
-                    "type": "text",
-                    "text": "播放此项",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "重复播放，音频/视频分别暂停、拖进度。"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "收起",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "、关闭播放、换体系或离开模块会停止演示。继续输入时取消点击播放。"
-                  }
-                ]
-              }
-            ]
+            "type": "text",
+            "text": "点击播放暂时禁用。鼠标悬停在此按钮上可看到演示内容正在创作中，将在后续更新中开放的提示。当前点击音标用于插入文字。"
           }
         ]
       },
@@ -3839,7 +3733,7 @@
         "content": [
           {
             "type": "text",
-            "text": "当前音标例音与实时声道动画仍预留，点击播放默认关闭。",
+            "text": "当前点击播放暂不可用，演示内容正在制作。",
             "marks": [
               {
                 "type": "bold"
@@ -3855,7 +3749,7 @@
           },
           {
             "type": "text",
-            "text": "尚无真实条目素材时会提示此音标尚未添加演示内容；播放失败也会保留文字，不会改成插入字符。"
+            "text": "当前点击符号用于输入文字，正文编辑与保存可继续使用。"
           }
         ]
       },
@@ -3864,8 +3758,8 @@
         "attrs": {
           "id": "m17-figure-playback-unavailable-r2-light",
           "assetId": "m17-playback-unavailable-r2-light-scaled-r20261007",
-          "caption": "点击播放已开启，详情提示此音标尚未添加演示内容；原范围文字与选区保留。",
-          "alt": "点击播放已开启，详情提示此音标尚未添加演示内容；原范围文字与选区保留。",
+          "caption": "早期演示界面。当前点击播放暂不可用，悬停按钮可查看创作进度提示。",
+          "alt": "早期演示界面。当前点击播放暂不可用，悬停按钮可查看创作进度提示。",
           "width": "100%",
           "align": "center"
         }
@@ -3875,7 +3769,7 @@
         "content": [
           {
             "type": "text",
-            "text": "后续条目可提供音频、视频或实时动画。素材不可播放、动画尚未接入都有提示。音视频的进度不联动，暂不能据此要求精确同步。"
+            "text": "演示内容正在制作，当前点击符号用于输入文字。"
           }
         ]
       },
@@ -4059,7 +3953,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "发起下载提示只表示下载已启动。"
+                    "text": "取消或未完成下载时，可重新保存。"
                   }
                 ]
               }
@@ -4138,7 +4032,7 @@
         "content": [
           {
             "type": "text",
-            "text": "重开恢复已存草稿。旧默认 28px 会迁移到 26px，自选字号与关闭悬停的偏好保留。搜索、分区页、播放、详情及撤销历史不恢复。不同浏览器、桌面实例的草稿可能不同，没有跨设备同步。"
+            "text": "重开恢复已存草稿。已有草稿的字号与悬停偏好按记录恢复。搜索、分区页、播放、详情及撤销历史不恢复。不同浏览器、桌面实例的草稿可能不同，没有跨设备同步。"
           }
         ]
       },
@@ -4597,7 +4491,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "无演示、素材无法播放、动画尚未接入"
+                        "text": "点击播放不可用"
                       }
                     ]
                   }
@@ -4611,7 +4505,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "正文与选区保持。收起面板，关闭点击播放继续输入；素材需后续补充。"
+                        "text": "演示内容仍在创作中，点击播放暂不可用。当前点击符号用于输入。"
                       }
                     ]
                   }
@@ -4713,7 +4607,7 @@
             "type": "citation",
             "attrs": {
               "referenceId": "M17-IPA-CHART-ZH-2007",
-              "label": "中国语言学会语音学分会（2007）. 国际音标中文版（修订至 2005 年）"
+              "label": "中国语言学会语音学分会（2011）. 国际音标中文版（2007年图，修订至2005年）"
             }
           },
           {
@@ -5010,7 +4904,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "引用不代表获得原 PDF 或图版的分发许可。"
+                        "text": "分享原 PDF 或图版时，需查看对应文件的分发许可。"
                       }
                     ]
                   }
@@ -5203,7 +5097,7 @@
         "content": [
           {
             "type": "text",
-            "text": "使用时的边界"
+            "text": "使用与结果解释"
           }
         ]
       },
@@ -5218,7 +5112,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "模块输出字符与说明，不分析音频或自动判断转写是否合适。图表位置、声调等级和 VoQS 数字也不提供个体测量或诊断。"
+                    "text": "模块提供字符输入与用法说明。转写需结合实际言语判断，声调等级与 VoQS 程度数字按所用记音规则解释。"
                   }
                 ]
               }
@@ -5246,7 +5140,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "当前例音与声道动画预留；有播放入口不代表每个条目已有演示。"
+                    "text": "当前点击播放暂不可用，演示内容正在制作。"
                   }
                 ]
               }
@@ -5289,7 +5183,7 @@
                     "type": "citation",
                     "attrs": {
                       "referenceId": "M17-IPA-CHART",
-                      "label": "International Phonetic Association (2026). International Phonetic Alphabet chart — 2026 reprint"
+                      "label": "INTERNATIONAL PHONETIC ASSOCIATION. The International Phonetic Alphabet[EB/OL]. (2026)[2026-10-11]. https://www.internationalphoneticassociation.org/IPAcharts/common_files/pdfs/pdfs_IPA_charts_E/IPA_Kiel.pdf."
                     }
                   }
                 ]
@@ -5306,7 +5200,7 @@
                     "type": "citation",
                     "attrs": {
                       "referenceId": "M17-EXTIPA-2025",
-                      "label": "International Clinical Phonetics and Linguistics Association (2025). Extensions to the IPA — 2025 chart"
+                      "label": "INTERNATIONAL CLINICAL PHONETICS AND LINGUISTICS ASSOCIATION. ExtIPA symbols for disordered speech[EB/OL]. (2025)[2026-10-11]. https://www.icpla.org.uk/resources."
                     }
                   }
                 ]
@@ -5323,7 +5217,7 @@
                     "type": "citation",
                     "attrs": {
                       "referenceId": "M17-VOQS-BALL-2018",
-                      "label": "Martin J. Ball and John H. Esling and B. Craig Dickson (2018). Revisions to the VoQS system for the transcription of voice quality"
+                      "label": "BALL M J, ESLING J H, DICKSON B C. Revisions to the VoQS system for the transcription of voice quality[J]. Journal of the International Phonetic Association, 2018, 48(2): 165-171. https://doi.org/10.1017/S0025100317000159."
                     }
                   }
                 ]
@@ -5340,7 +5234,7 @@
                     "type": "citation",
                     "attrs": {
                       "referenceId": "M17-VOQS-ZH-UNTPHESOCA",
-                      "label": "王天恒. VoQS：音质符号（2016 中英双语版）[EB/OL]. Zenodo(2020-08-30)[2023-12-26]. https://doi.org/10.5281/zenodo.10206204."
+                      "label": "王天恒, 译. VoQS: 音质符号 (2016中英双语版)[EB/OL]. (2020-08-30)[2026-10-11]. https://doi.org/10.5281/zenodo.10206204."
                     }
                   }
                 ]
@@ -5374,7 +5268,7 @@
                     "type": "citation",
                     "attrs": {
                       "referenceId": "M17-EXTIPA-LV-JIANG-2013",
-                      "label": "吕佳、江荻 (2013). 国际音标扩展表的分类、命名与功能"
+                      "label": "吕佳, 江荻. 国际音标扩展表的分类、命名与功能[J]. 听力学及言语疾病杂志, 2013, 21(6): 665-668."
                     }
                   }
                 ]
@@ -5391,7 +5285,7 @@
                     "type": "citation",
                     "attrs": {
                       "referenceId": "M17-IPA-CHART-ZH-2007",
-                      "label": "中国语言学会语音学分会（2007）. 国际音标中文版（修订至 2005 年）"
+                      "label": "PHONETIC ASSOCIATION OF CHINA. The chart of the International Phonetic Alphabet in Chinese (2007)[J]. Journal of the International Phonetic Association, 2011, 41(2): 245. https://doi.org/10.1017/S0025100311000156."
                     }
                   }
                 ]
@@ -5408,7 +5302,7 @@
                     "type": "citation",
                     "attrs": {
                       "referenceId": "M17-IPA-HANDBOOK-JIANG-2008",
-                      "label": "国际语音学会编，江荻译（2008）. 国际语音学会手册：国际音标使用指南"
+                      "label": "国际语音学会. 国际语音学会手册：国际音标使用指南[M]. 江荻, 译. 上海: 上海教育出版社, 2008."
                     }
                   }
                 ]
@@ -5425,7 +5319,7 @@
                     "type": "citation",
                     "attrs": {
                       "referenceId": "M17-VOICE-QUALITY-ESLING-2019",
-                      "label": "Esling, J. H., Moisik, S. R., Benner, A., & Crevier-Buchman, L. (2019). Voice Quality: The Laryngeal Articulator Model"
+                      "label": "ESLING J H, MOISIK S R, BENNER A, et al. Voice quality: The laryngeal articulator model[M]. Cambridge: Cambridge University Press, 2019. https://doi.org/10.1017/9781108696555."
                     }
                   }
                 ]
@@ -5442,7 +5336,7 @@
                     "type": "citation",
                     "attrs": {
                       "referenceId": "M17-EXTIPA-BALL-2018",
-                      "label": "Ball, M. J., Howard, S. J., & Miller, K. (2018). Revisions to the extIPA chart"
+                      "label": "BALL M J, HOWARD S J, MILLER K. Revisions to the extIPA chart[J]. Journal of the International Phonetic Association, 2018, 48(2): 155-164. https://doi.org/10.1017/S0025100317000147."
                     }
                   }
                 ]
@@ -5459,7 +5353,7 @@
                     "type": "citation",
                     "attrs": {
                       "referenceId": "M17-EXTIPA-BALL-2024",
-                      "label": "Ball, M. J. (2024). Changes to certain extIPA diacritics"
+                      "label": "BALL M J. Changes to certain extIPA diacritics[J]. Clinical Linguistics & Phonetics, 2024, 38(7): 692-695. https://doi.org/10.1080/02699206.2024.2365205."
                     }
                   }
                 ]
@@ -5476,7 +5370,7 @@
                     "type": "citation",
                     "attrs": {
                       "referenceId": "M17-EXTIPA-BALL-2025-REPLY",
-                      "label": "Ball, M. J. (2025). Reply to letter concerning the revisions to some diacritics of the extensions to the IPA (extIPA), Ball (2024)"
+                      "label": "BALL M J. Reply to letter concerning the revisions to some diacritics of the extensions to the IPA (extIPA), Ball (2024)[J]. Clinical Linguistics & Phonetics, 2025, 39(9): 911-912. https://doi.org/10.1080/02699206.2025.2489577."
                     }
                   }
                 ]

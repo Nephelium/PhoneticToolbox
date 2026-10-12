@@ -104,7 +104,7 @@ research_entry 在导入 GUI 前处理固定的 --ptb-worker、--local-service�
 
 ### 客户端与原生专用能力
 
-M15 刺激解码、预检、调度和计时留在客户端，网络往返不参与刺激时序。M10 可变原生状态由专用进程隔离，M16 原始采集和工程版本由设备服务持有。M18 内容下载和更新使用宿主服务，PDF 按内容摘要独立保存批注，原文与译文分别管理。
+M15 刺激解码、预检、调度和计时留在客户端，网络往返不参与刺激时序。M10 可变原生状态由专用进程隔离，M16 原始采集和工程版本由设备服务持有。M18 推荐内容下载、启动和周期检查使用宿主服务，个人 PDF 归用户选定的真实文件夹库，PDF 按内容摘要独立保存批注，原文、译文与独立解读分别管理。
 
 ## 持久数据与可再生目录
 
@@ -116,7 +116,8 @@ M15 刺激解码、预检、调度和计时留在客户端，网络往返不参�
 | %LOCALAPPDATA%/PhoneticToolbox/v3/local-preview-20260927 | 当前冻结入口默认的任务/文件工作区 | 名称保留兼容性，不按日期认定过期 |
 | %LOCALAPPDATA%/PhoneticToolbox-v3/workbench | Qt 网页持久存储、偏好与客户端草稿/数据库 | 与普通下载缓存区分，升级保持固定身份 |
 | %LOCALAPPDATA%/PhoneticToolbox/v3/startup-cache | 经内容校验的运行时/应用启动缓存 | 通过应用缓存管理和活动租约处理 |
-| %LOCALAPPDATA%/PhoneticToolbox/v3/updates、papers | 更新状态/下载；论文、首次日期和批注 | 不随启动缓存清理或源码测试清理删除 |
+| %LOCALAPPDATA%/PhoneticToolbox/v3/updates、papers | 更新状态/下载；推荐论文、首次日期、偏好、个人库路径和批注 | 不随启动缓存清理或源码测试清理删除 |
+| 用户在 M18 选择的论文根文件夹 | 个人 PDF 与真实收藏子文件夹 | 导入保留来源，整理移动库内文件，不上传服务器 |
 | 用户选择的录音、工程和导出目录 | 原始研究数据和正式结果 | 由用户管理，测试清理授权不涵盖 |
 | manual/ | 正式可编辑说明书、素材和当前保留的作者历史 | 当前明确保留，生成阅读副本另行处理 |
 | .venv/、node_modules/、dist/、output/build-* | 第三方环境、依赖、成品与构建展开 | 依赖按用途复用，旧包成功换版后按规则清理 |
@@ -136,6 +137,8 @@ M15 刺激解码、预检、调度和计时留在客户端，网络往返不参�
 - 文献引用、代码对应、再分发许可及数值等价分别举证，禁止用一个结论替代其他项。
 
 ## 服务模式与当前边界
+
+反馈使用独立服务与 schema 2 的反馈库，和研究账号、任务库、资源额度分离。关于页通过原生反馈桥访问固定 HTTPS，服务器保存私有文字/图片会话及邮件队列。独立 Windows/Android 管理工具共用 Vue 管理页面，消息即时事件与09:00每日检查持久保存后经SSE推送；手机配对授权使用独立HMAC记录与可撤销凭据，Windows DPAPI、Android Keystore各自保护本机身份。共享静态资源类在 `desktop/src/ptb_desktop/web_assets.py`，管理EXE不导入工作台科学模块。边界见[反馈ADR](docs/decisions/ADR-feedback.md)与[管理工具](tools/feedback-manager/README.md)。
 
 API 支持 local/server 两种装配，store 有 SQLite 和 PostgreSQL 实现。服务端资源策略中的额度为 1,000,000,000 字节，最长保留期为 259,200 秒，定义在 [storage_policy.py](backend/src/ptb_api/storage_policy.py)。owner、上传预留、删除失败计量、到期及结果发布规则见[存储规格](docs/specs/accounts-storage-jobs.md)，本机用户工程不直接套用网页到期政策。
 

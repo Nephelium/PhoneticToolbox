@@ -23,7 +23,7 @@ class M08Bridge:
         if op=='m08_call':
             action=body['action']
             if action=='list':return self.service.get('/api/v1/jobs/m08/list/'+PROJECT)
-            if action not in ('create','save','history','remove','rename'):raise FileAccessError('M08 操作不可用。')
+            if action not in ('create','save','history','remove','rename'):raise FileAccessError('变速变调操作不可用。')
             value=body['body']
             if value.get('project_id')!=PROJECT:raise FileAccessError('项目不匹配。')
             # External exports remain explicit snapshots. Before modifying an exported
@@ -52,7 +52,7 @@ class M08Bridge:
                         raise FileAccessError('受管结果已更新，但本地导出副本操作失败，请核对输出目录。') from exc
             return answer
         if op=='m08_export':return self.export(body)
-        raise FileAccessError('M08 操作不可用。')
+        raise FileAccessError('变速变调操作不可用。')
 
     def _verify(self,record):
         self.provider.directory(record['directory']);path=checked_path(record['path'])

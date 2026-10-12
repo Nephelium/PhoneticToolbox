@@ -206,7 +206,7 @@ class RecordingService:
             return {'playing':True}
         if op=='play_stop':self.stop_play();return {'playing':False}
         if op=='export_start':return self.start_export(b)
-        raise ValueError('M16 不支持该操作')
+        raise ValueError('录音不支持该操作')
 
     def commit_capture(self,item):
         p=self.require();data=copy.deepcopy(p.data)

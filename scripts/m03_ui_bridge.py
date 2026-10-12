@@ -10,12 +10,11 @@ from ptb_desktop.task_bridge import TaskBridge
 from ptb_worker.local_acoustic_files import initialize_local_files
 
 ROOT=Path(__file__).resolve().parents[1]
-def main():
-    out=ROOT/'output/validation/m03-ui'/('chrome-'+uuid4().hex);out.mkdir(parents=True)
-    db=out/'jobs.sqlite3'
+def run(out, scratch):
+    db=scratch/'jobs.sqlite3'
     with sqlite3.connect((ROOT/'output/validation/p06/local-state.sqlite3').as_uri()+'?mode=ro',uri=True) as source,sqlite3.connect(db) as target:
         assert not source.execute("SELECT 1 FROM jobs WHERE state IN ('queued','running','cancel_requested')").fetchone();source.backup(target)
-    cache=out/'cache';cache.mkdir();initialize_local_files(cache);inputs=out/'inputs';inputs.mkdir();saved=out/'saved';saved.mkdir()
+    cache=scratch/'cache';cache.mkdir();initialize_local_files(cache);inputs=scratch/'inputs';inputs.mkdir();saved=scratch/'saved';saved.mkdir()
     if '--real-only' in sys.argv:
         private=Path(r'C:\Users\13680\Desktop\project\音频数据\EGG测试\3.wav')
         raw=private.read_bytes()
@@ -49,7 +48,7 @@ def main():
     with LocalService(db,local_files_root=cache,reaper_binary=ROOT/'phonetic_toolbox/core/acoustic/reaper.exe' if '--reaper' in sys.argv else None) as service:
         bridge=TaskBridge(provider,service)
         grants={role:provider.choose(role,lambda p=p:str(p)) for role,p in [('input',inputs),('output',saved)]}
-        print(json.dumps({'ready':True,'out':str(out)},ensure_ascii=False),flush=True)
+        print(json.dumps({'ready':True,'out':str(out),'scratch':str(scratch)},ensure_ascii=False),flush=True)
         for line in sys.stdin:
             try:
                 request=json.loads(line);op=request['op']
@@ -63,5 +62,15 @@ def main():
                 print(json.dumps({'id':request['rpc_id'],'value':value},ensure_ascii=False),flush=True)
             except Exception as e:print(json.dumps({'id':request.get('rpc_id'),'error':str(e)},ensure_ascii=False),flush=True)
     provider.close()
+
+
+def main():
+    if '--managed-scratch' in sys.argv:
+        from verification_artifacts import verification_run
+        with verification_run('m03-ui','r8','Public EGG-SYN-PCM16 fixture, 44100 Hz stereo; isolated copied test database; real native REAPER') as (out,scratch):
+            run(out,scratch)
+    else:
+        out=ROOT/'output/validation/m03-ui'/('chrome-'+uuid4().hex);out.mkdir(parents=True)
+        run(out,out)
 
 if __name__=='__main__':main()

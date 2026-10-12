@@ -14,6 +14,9 @@ def request_payload(body, retry_of=None):
     if body.config.f0_policy == 'legacy/1' and not body.config.keep_reaper_f0:
         value['config'].pop('f0_policy',None)
         value['config'].pop('keep_reaper_f0',None)
+    for name in ('f0_min_hz','f0_max_hz'):
+        if value['config'][name] is None:
+            value['config'].pop(name)
     return value
 
 

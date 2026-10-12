@@ -4,11 +4,13 @@ Opaque XZ segments precede the launcher's CArchive, so PyInstaller only expands
 its small bootstrap. Large segments are read on demand by absolute offsets.
 """
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import shutil
 import subprocess
 import sys
+import struct
 import tarfile
 
 from PyInstaller.archive.readers import CArchiveReader
@@ -21,6 +23,40 @@ def identity(path):
 
 def json_hash(value):
     return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+
+
+def prepare_startup_icons(snapshot, output):
+    """Derive small bootstrap previews from the same frozen artwork."""
+    from PyQt6.QtCore import QBuffer, QIODevice, Qt
+    from PyQt6.QtGui import QImage
+    def module(name, relative):
+        spec = importlib.util.spec_from_file_location(name, snapshot / relative)
+        value = importlib.util.module_from_spec(spec); spec.loader.exec_module(value)
+        return value
+    artwork = module('startup_build_artwork', 'desktop/src/ptb_desktop/app_icon.py')
+    progress = module('startup_build_palette', 'desktop/src/ptb_desktop/startup_progress.py')
+    dist = snapshot / 'frontend/dist'
+    output.mkdir()
+    rows = {}
+    for size in (96, 64):
+        for identity in artwork.builtin_catalog(dist):
+            if identity == 'default':
+                continue  # The full-resolution default is already in the PE.
+            image = artwork.builtin_image(dist, identity).convertToFormat(QImage.Format.Format_RGBA8888)
+            raw = image.constBits().asstring(image.sizeInBytes())
+            palette = progress.light_palette(tuple(raw[index:index + 4]) for index in range(0, len(raw), 4))
+            thumb = image.scaled(size, size, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+            buffer = QBuffer(); buffer.open(QIODevice.OpenModeFlag.WriteOnly)
+            if not thumb.save(buffer, 'PNG'): raise RuntimeError('Startup icon encoding failed')
+            png = bytes(buffer.data())
+            name = identity + '.ico'
+            (output / name).write_bytes(struct.pack('<HHH', 0, 1, 1) + struct.pack('<BBBBHHII', size, size, 0, 0, 1, 32, len(png), 22) + png)
+            rows[identity] = {'file': name, 'palette': palette}
+        (output / 'catalog.json').write_text(json.dumps({'schema': 'ptb-startup-icons/1', 'icons': rows}, separators=(',', ':')), 'utf8')
+        total = sum(file.stat().st_size for file in output.iterdir())
+        if total <= 425_000:
+            return {'files': len(rows), 'thumbnailSize': size, 'bytes': total}
+    raise ValueError('Startup icon previews exceed the bounded bootstrap budget')
 
 
 def build(application, destination, work, snapshot, host_archive, *, env):
@@ -43,6 +79,8 @@ def build(application, destination, work, snapshot, host_archive, *, env):
             if target in combined: raise ValueError('Cached runtime collides with the application')
             combined[target]=row
     pack = work/'cached-launcher'; pack.mkdir()
+    startup_icons = pack / 'startup-icons'
+    startup_icon_report = prepare_startup_icons(snapshot, startup_icons)
     app_archive = pack/'application.tar.xz'
     with tarfile.open(app_archive,'w:xz',preset=9) as archive:
         for name in files:
@@ -60,6 +98,7 @@ def build(application, destination, work, snapshot, host_archive, *, env):
             '--name','PhoneticToolboxBootstrap','--distpath',str(pack/'dist'),'--workpath',str(pack/'build'),
             '--specpath',str(pack),'--paths',str(snapshot/'desktop/src'),
             '--icon',str(snapshot/'PhoneticToolbox-v3.ico'),'--add-data',str(descriptor)+';.',
+            '--add-data',str(startup_icons)+';startup-icons',
             '--exclude-module','PyQt6','--exclude-module','numpy',str(snapshot/'scripts/cache_launcher_entry.py')],
             cwd=snapshot,env=env,stdout=log,stderr=subprocess.STDOUT,check=True)
     bootstrap=pack/'dist/PhoneticToolboxBootstrap.exe'
@@ -75,6 +114,6 @@ def build(application, destination, work, snapshot, host_archive, *, env):
         raise ValueError('Cached launcher metadata did not survive wrapping')
     report={'schema':'ptb-cached-build/1','executable':identity(destination),
             'components':{name:{'id':row['id'],'files':len(row['files']),'expandedBytes':sum(r['size'] for r in row['files'].values())} for name,row in config['components'].items()},
-            'bootstrapBytes':bootstrap.stat().st_size,'blobs':config['blobs']}
+            'bootstrapBytes':bootstrap.stat().st_size,'blobs':config['blobs'], 'startupIcons':startup_icon_report}
     (work/'cached-launcher-report.json').write_text(json.dumps(report,indent=2),'utf8')
     return report

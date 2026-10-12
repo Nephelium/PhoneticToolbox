@@ -1,7 +1,13 @@
 import {setupPitch} from './pitch.js';
-export const frameName=f=>f.name|| (f.silent?'静音':f.preset?'/'+({E:'ɛ','2':'ø'}[f.preset]||f.preset)+'/':'自定义姿势');
-export function frameIntervals(frames){let time=0;return frames.map((f,index)=>{const start=time;time+=f.duration;return {index,name:frameName(f),start,end:time,silent:!!f.silent};});}
-export function silentAt(frames,x){const intervals=frameIntervals(frames),time=x*(intervals.at(-1)?.end||0);return !!(intervals.find(f=>time<f.end)||intervals.at(-1))?.silent;}
+export const frameName=f=>f.name|| (f.aspiration?'ʰ':f.silent?'静音':f.preset?'/'+({E:'ɛ','2':'ø'}[f.preset]||f.preset)+'/':'自定义姿势');
+export function frameIntervals(frames){let time=0;return frames.map((f,index)=>{const start=time;time+=f.duration;return {index,name:frameName(f),start,end:time,silent:!!f.silent,aspiration:!!f.aspiration};});}
+export function silentAt(frames,x){const intervals=frameIntervals(frames),time=x*(intervals.at(-1)?.end||0),f=intervals.find(f=>time<f.end)||intervals.at(-1);return !!(f?.silent||f?.aspiration);}
+export function framePitch(frames,seconds){
+  const all=frameIntervals(frames),knots=all.filter(f=>!f.aspiration);if(!knots.length)return 150;
+  const a=knots.findLast(f=>f.start<=seconds)||knots[0],b=knots.find(f=>f.start>seconds)||knots.at(-1),left=frames[a.index],right=frames[b.index];
+  let u=a===b?0:Math.max(0,Math.min(1,(seconds-a.start)/(b.start-a.start)));u=u*u*(3-2*u);
+  return left.silent?left.f0:left.f0*(1-u)+(right.silent?left.f0:right.f0)*u;
+}
 export function setupKeyframes({initialFrames=[],initialCurve=[],getPose,applyPose,post,setBusy,isReady,isSilent,keepVowel,viewer}){
   const $=id=>document.getElementById(id);let frames=initialFrames,busy=false,generation=0,selected=-1,editing=-1,saveQueue=Promise.resolve(),saveVersion=0,savedVersion=0;
   let clearedSnapshot=null,dragIndex=-1,dropIndex=-1,dragY=0,dragScroll=0,suppressClick=false;
@@ -59,26 +65,26 @@ export function setupKeyframes({initialFrames=[],initialCurve=[],getPose,applyPo
       };
       card.ondragend=()=>{clearDrag();setTimeout(()=>{suppressClick=false;},0);};
       card.tabIndex=0;card.setAttribute('aria-label',`载入姿势 ${i+1} ${frameName(f)}`);
-      const select=()=>{if(busy)return;if(editing>=0&&editing!==i){text('请先保存或取消正在编辑的姿势。');return;}selected=i;if(editing!==i)applyPose(f);render();};
+      const select=()=>{if(busy)return;if(editing>=0&&editing!==i){text('请先保存或取消正在编辑的姿势。');return;}selected=i;if(editing!==i&&!f.aspiration)applyPose(f);render();};
       card.onclick=e=>{if(!suppressClick&&!e.target.closest('button,input,label'))select();};
       card.onkeydown=e=>{if(e.target!==card)return;if(e.altKey&&['ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();moveFrame(i,i+(e.key==='ArrowUp'?-1:1));}else if(['Enter',' '].includes(e.key)){e.preventDefault();select();}};
       const title=document.createElement('button');title.className='pose-title';title.textContent=`${i+1} · ${frameName(f)}`;title.disabled=busy;
       title.onclick=select;
       const name=document.createElement('input');Object.assign(name,{type:'text',value:frameName(f),maxLength:80,disabled:busy});name.className='pose-name';name.setAttribute('aria-label',`姿势 ${i+1} 名称`);
       name.onchange=()=>{f.name=name.value.trim();save();render();};
-      const detail=document.createElement('small');detail.textContent=f.silent?'静音 · 保持构形 · 无基频':`唇宽 ${Math.round(f.lip_width*100)}% · ${{voiceless:'清声',whisper:'耳语近似',transition:'模式过渡'}[f.source?.mode]||Math.round(f.f0)+' Hz'}`;
-      const label=document.createElement('label');label.textContent=f.silent?'静音':i===frames.length-1?'停留':'过渡';
-      const duration=document.createElement('input');Object.assign(duration,{type:'number',min:.05,max:3,step:.05,value:Number(f.duration.toFixed(5)),disabled:busy});duration.dataset.timeUnit='s';duration.setAttribute('aria-label',`姿势 ${i+1} ${f.silent?'静音':i===frames.length-1?'停留':'过渡'}秒数`);
+      const detail=document.createElement('small');detail.textContent=f.aspiration?'清声 · 沿前后构形连续过渡 · 无基频':f.silent?`静音 · ${i===frames.length-1?'保持构形':'连续移至下一姿势'} · 无基频`:`唇宽 ${Math.round(f.lip_width*100)}% · ${{voiceless:'清声',whisper:'耳语近似',transition:'模式过渡'}[f.source?.mode]||Math.round(f.f0)+' Hz'}`;
+      const label=document.createElement('label');label.textContent=f.aspiration?'送气':f.silent?'静音':i===frames.length-1?'停留':'过渡';
+      const duration=document.createElement('input');Object.assign(duration,{type:'number',min:f.aspiration?.01:.05,max:3,step:f.aspiration?.01:.05,value:Number(f.duration.toFixed(5)),disabled:busy});duration.dataset.timeUnit='s';duration.setAttribute('aria-label',`姿势 ${i+1} ${f.aspiration?'送气':f.silent?'静音':i===frames.length-1?'停留':'过渡'}秒数`);
       const precision=()=>{if(duration.value.trim()&&Number.isFinite(+duration.value))duration.value=String(Number((+duration.value).toFixed(5)));};
       duration.addEventListener('input',()=>{if(/e/i.test(duration.value)||(duration.value.split('.')[1]?.length??0)>5)precision();},true);
       duration.addEventListener('change',precision,true);
-      duration.onchange=()=>{const n=+duration.value;if(Number.isFinite(n)&&n>=.05&&n<=3){f.duration=n;save();}else duration.value=f.duration;render();};label.append(duration,document.createTextNode('秒'));
+      duration.onchange=()=>{const n=+duration.value;if(Number.isFinite(n)&&n>=(f.aspiration?.01:.05)&&n<=3){f.duration=n;save();}else duration.value=f.duration;render();};label.append(duration,document.createTextNode('秒'));
       const tools=document.createElement('div');tools.className='pose-tools';
       const edit=document.createElement('button');edit.textContent=editing===i?'保存':'编辑';edit.disabled=busy||(editing>=0&&editing!==i);edit.setAttribute('aria-label',`${editing===i?'保存':'编辑'}姿势 ${i+1}`);
       edit.onclick=async()=>{
         if(editing===i){if(!isReady()){text('正在更新构形，请稍后保存。');return;}const pose=getPose();frames[i]={...pose,params:[...pose.params],duration:f.duration,name:f.name||frameName(f),...(f.silent?{silent:true}:{})};try{await save();editing=-1;syncDirty();render();text('当前关键帧已保存。');}catch{frames[i]=f;}}
         else{editing=i;selected=i;applyPose(f);dirty(true);render();text('正在编辑 '+frameName(f)+'，可切换到器官或声音调整，再返回保存。');}
-      };tools.append(edit);
+      };if(!f.aspiration)tools.append(edit);
       if(editing===i){const cancel=document.createElement('button');cancel.textContent='取消';cancel.onclick=()=>{editing=-1;applyPose(f);syncDirty();render();};tools.append(cancel);}
       for(const [name,fn,disabled] of [['←',()=>{[frames[i-1],frames[i]]=[frames[i],frames[i-1]];selected=i-1;},i===0],['→',()=>{[frames[i+1],frames[i]]=[frames[i],frames[i+1]];selected=i+1;},i===frames.length-1],['移除',()=>{frames.splice(i,1);selected=-1;},false]]){
         const b=document.createElement('button');b.textContent=name;b.disabled=busy||disabled||editing>=0;b.setAttribute('aria-label',`${name==='←'?'前移':name==='→'?'后移':'移除'}姿势 ${i+1}`);b.onclick=()=>{fn();save();render();};tools.append(b);
@@ -87,19 +93,20 @@ export function setupKeyframes({initialFrames=[],initialCurve=[],getPose,applyPo
       card.append(title,name,detail,timing,label,tools);$('keyframeList').append(card);
     });
     const total=Math.round(frames.reduce((s,f)=>s+f.duration,0)*48000)/48000;
-    $('frameCount').textContent=frames.length;$('transportStatus').textContent=frames.length?`${frames.length} 个姿势 · ${total.toFixed(2)} 秒`:'保存多个姿势后连续播放';
-    $('captureFrame').disabled=busy||editing>=0;$('captureSilence').disabled=busy||editing>=0;$('playFrames').disabled=busy||editing>=0||isSilent||frames.length<2||total>12;$('stopFrames').disabled=!busy;
+    $('frameCount').textContent=frames.length;$('transportStatus').textContent=frames.length?`${frames.length} 个姿势 · ${total.toFixed(2)} 秒`:'保存姿势后播放';
+    $('captureFrame').disabled=busy||editing>=0;$('captureSilence').disabled=busy||editing>=0;$('captureAspiration').disabled=busy||editing>=0;$('playFrames').disabled=busy||editing>=0||isSilent||!frames.some(f=>!f.aspiration)||total>12;$('stopFrames').disabled=!busy;
     for(const id of ['importFrames','exportFrames'])$(id).disabled=busy||editing>=0;
     $('clearFrames').disabled=busy||editing>=0||!frames.length;
     $('undoClearFrames').hidden=!clearedSnapshot;$('undoClearFrames').disabled=busy||editing>=0;
-    $('exportVideo').disabled=busy||editing>=0||frames.length<2||total>12;
+    $('exportVideo').disabled=busy||editing>=0||!frames.some(f=>!f.aspiration)||total>12;
     $('keyframeList').scrollTop=scroll;
     pitch.draw();
-    if(!busy)text(editing>=0?'正在编辑 '+frameName(frames[editing])+' · 调整后点击此卡片的保存':frames.length?`${frames.length} 个姿势 · ${total.toFixed(2)} 秒${total>12?'，请缩短到 12 秒以内':''}`:'先摆出姿势，再保存；至少需要两个关键帧。');
+    if(!busy)text(editing>=0?'正在编辑 '+frameName(frames[editing])+' · 调整后点击此卡片的保存':frames.length?`${frames.length} 个姿势 · ${total.toFixed(2)} 秒${total>12?'，请缩短到 12 秒以内':''}`:'先摆出姿势，再保存；一个关键帧即可播放或保存视频。');
   }
   function lock(value){busy=value;setBusy(value);$('motionHud').hidden=!value;render();}
   function capture(silent=false){if(!isReady()){text('正在更新构形，稍后再保存。');return;}const pose=getPose();frames.push({...pose,params:[...pose.params],duration:.2,...(silent?{silent:true,name:'静音'}:{})});selected=frames.length-1;save();render();$('keyframeList').lastElementChild?.scrollIntoView({block:'nearest'});}
   $('captureFrame').onclick=()=>capture();$('captureSilence').onclick=()=>capture(true);
+  $('captureAspiration').onclick=()=>{if(busy||editing>=0)return;const index=selected<0?frames.length:selected+1;frames.splice(index,0,{aspiration:true,duration:.05,name:'ʰ'});selected=index;save();render();list.children[index]?.scrollIntoView({block:'nearest'});};
   $('clearFrames').onclick=()=>{
     if(busy||editing>=0||!frames.length)return;
     clearedSnapshot={frames:JSON.parse(JSON.stringify(frames)),curve:pitch.getCurve(),selected};
@@ -130,7 +137,7 @@ export function setupKeyframes({initialFrames=[],initialCurve=[],getPose,applyPo
     try{
       await saveQueue;const result=await(await post('document/open')).json();if(result.cancelled)return;
       const incoming=result.document;await post('keyframes',{frames:incoming.frames,pitch_curve:incoming.pitch_curve});
-      frames=incoming.frames;clearedSnapshot=null;pitch.setCurve(incoming.pitch_curve);selected=-1;message='已导入 '+result.name+' · '+frames.length+' 个姿势';
+      frames=incoming.frames;clearedSnapshot=null;pitch.setCurve(incoming.pitch_curve);selected=-1;message='已导入 '+result.name+' · '+frames.length+' 个姿势'+(incoming.geometry_notice?' · '+incoming.geometry_notice:'');
     }catch(e){message='导入失败，当前序列保留：'+e.message;}
     finally{lock(false);if(message)text(message);}
   };

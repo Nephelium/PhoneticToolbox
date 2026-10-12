@@ -4,7 +4,7 @@
   "resources": [
     {
       "path": "frontend/src/assets/k2.png",
-      "sha256": "0ccfb1c0cc094720afcee9e06e85b1d5b89a7bdc594322c3fb8a1cb814626c9e",
+      "sha256": "9cfd518526fa4546e45f48069b7c014be05c5df760432e5fd061b16b53add170",
       "source_id": "ASSET-MASCOT"
     },
     {
@@ -24,12 +24,12 @@
     },
     {
       "path": "frontend/public/vocal-tract/anatomy.mjs",
-      "sha256": "a044ddcfd576f3fe216d44010a1b0d4e6373558f5d64a350896a3d659eedb510",
+      "sha256": "d0159cf0137e36ac5934b604f0f5b0c532663f27f47fec7bd8641dcbe1f715e5",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/app.js",
-      "sha256": "b926604fc80be96d2e4769cea3ed38222f2bd08193f6ca007062f276df7feee6",
+      "sha256": "5e4934074ac2fdec1b8f0b7771cdf8ce0cadbed9de15160c191026806b7d7509",
       "source_id": "PROJECT-M10"
     },
     {
@@ -44,27 +44,27 @@
     },
     {
       "path": "frontend/public/vocal-tract/controls.mjs",
-      "sha256": "90bcec20dc76efa93fa3ad6db735b8cd20ddd7085226a14876aceb73b55e52f4",
+      "sha256": "b1405240a664e622b8aa4aa6f71d0ac334e1322a5a67459434d65c306b102754",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/desktop.css",
-      "sha256": "b26ec961757d1e6ca37b01de67bffc74bbaa08d10d1ded790e2dc0bd8c31d958",
+      "sha256": "7e43a6284d1c0ad97b3bb5c0407f9051b417a14047718ec7f24061ce737fcb34",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/geometry.mjs",
-      "sha256": "f749543144bab9bd30517f6da41391f8d71e9da68f9b88eb605d4e9962631869",
+      "sha256": "4fa29f3ff76dda0cbdf419a19580acbd7c83f828c41f9fb26d51304c914e1ef4",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/index.html",
-      "sha256": "001660baab10965a83c64492de95eb0d5f2cf967f4aac6d8817f136da7fa386c",
+      "sha256": "7f626e18969c7ecd5cdc55f3a9063a57806afc76f6f57b8b3dc3bee532f9f38c",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/keyframes.js",
-      "sha256": "f669221c0c0a93366200855d912cf2ed85ec9e08ef52610d8685197dfc7520a6",
+      "sha256": "8e79c1b9880521b82ee782741a4a9417aa7cea73c6183c0b16be7ea35ed5d821",
       "source_id": "PROJECT-M10"
     },
     {
@@ -74,27 +74,27 @@
     },
     {
       "path": "frontend/public/vocal-tract/monitor.js",
-      "sha256": "802ea78cd6e89278d6f6aa1f28b00bd184e774ed370ce7e2f6c8091ad2f7b796",
+      "sha256": "a75469742e1d2fb77a8dca552762d538a4eea961adcf60c280879e7f1b8cfa3a",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/pitch.js",
-      "sha256": "2efeee5de8b2299f276013a8672330218deb68c1bd5a1e4a5fa62b47b957dcd8",
+      "sha256": "c866cd4184c291e256dfc3a037d0aec42c00583415efa5e3f6a0d3abcb8336b1",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/platform.js",
-      "sha256": "2c812e786da79baabb8e3900fcfe073e082c027733d72ad305e7db2842604900",
+      "sha256": "75e30a05751af8b103a2c8bb17113e072ea0ce6cd140e7f5261d24acd4fb0f33",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/presets.js",
-      "sha256": "9d20a947de9b5bcaf69fbeb1cad5faaa0d84f46deedb23c38590835ff361f575",
+      "sha256": "b239db0044a3c4b5a5baa06e09fa4efb4379f32e9692846870eeca2c88283a3b",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/scene.js",
-      "sha256": "007d186a6ced6abc5f8abb25f861884dce38f0f3eb5462141a7dd743d2398dfe",
+      "sha256": "f6ca621a2a6d9efde40cad24525a43d56f62985d22664660397752907e77eb5b",
       "source_id": "PROJECT-M10"
     },
     {
@@ -109,7 +109,7 @@
     },
     {
       "path": "frontend/public/vocal-tract/v3.css",
-      "sha256": "33bba33cf0561c48ad85fd4576d025ca52c44ac68360b6214a63897429143e86",
+      "sha256": "bbb5b29cb6963f0f1e45074929705c700f5e38d2b356655a9567b1ab65504414",
       "source_id": "PROJECT-M10"
     },
     {
@@ -134,7 +134,7 @@
     },
     {
       "path": "frontend/public/vocal-tract/video.js",
-      "sha256": "b0d33315139b4afc4fe118d7448716365325180f456adf01f44bed8febf0d1e6",
+      "sha256": "ea4b765e6f9546e4cdece2ace573fc90c1919759b23bc7160120dddfced0ed89",
       "source_id": "PROJECT-M10"
     },
     {
@@ -144,12 +144,12 @@
     },
     {
       "path": "resources/vocal_tract/bundle-manifest.json",
-      "sha256": "b29f0dcff4acdc3152cee565ab29b266099ed8bf30ffd96183ed72566fe1a492",
+      "sha256": "b4f49b8544083732250101469c93e03c26c405aa4cf0069a04db3c1e0af7768a",
       "source_id": "SRC-VTL"
     },
     {
       "path": "resources/vocal_tract/native/geometry_p2.dll",
-      "sha256": "8f9ac397ab24efc25955b07b7159718822e77e2d62d46f1b864d0f1f620d7686",
+      "sha256": "61d6ecf8f5dc15462a8c3b486f00902d702297dca56ed756537d76ba2e67131b",
       "source_id": "SRC-VTL"
     },
     {
@@ -184,12 +184,12 @@
     },
     {
       "path": "resources/vocal_tract/sources/geometry_bridge.cpp",
-      "sha256": "529154d6a90429e625e207cbf9cf9439dace08ac8cc143459b0061337c8e9ca7",
+      "sha256": "3fee2d2bcd9ed70f108dfd96d193d8c7ff8c911a807dc0549566a84a162506bf",
       "source_id": "SRC-VTL"
     },
     {
       "path": "resources/vocal_tract/sources/M10-build.md",
-      "sha256": "33e775ac07c990f330bb86e13434fa129df1cb794390f8791e6ce4d5c346e583",
+      "sha256": "b2a30fa415ee42000bca942d841c82ee44b9a1230d33aabece829917a1469c1e",
       "source_id": "SRC-VTL"
     },
     {
@@ -199,7 +199,7 @@
     },
     {
       "path": "resources/vocal_tract/sources/README.md",
-      "sha256": "33c65a69fbffe4de7c1dcc541a7845446ca86ba63dd82508c7592e5371031e79",
+      "sha256": "56418e21990ae7046bb34dcaf4dbd5c7992f0425d861df33ee6740093bf3c48f",
       "source_id": "SRC-VTL"
     },
     {
@@ -214,7 +214,7 @@
     },
     {
       "path": "resources/vocal_tract/THIRD_PARTY_NOTICES.md",
-      "sha256": "947db4e5d2a467870c30631f7a3c36c6acff0f245695aaeff6fa79f833197e2a",
+      "sha256": "8340398bd81e248279c640c229f753ae9acfea626000bf2b2e4342a11d78c95e",
       "source_id": "SRC-VTL"
     },
     {
@@ -310,7 +310,7 @@
     {
       "path": "frontend/public/vocal-tract/rigid-contact.mjs",
       "source_id": "PROJECT-M10",
-      "sha256": "0cde767530ce6d343fea96458958b2ddc15c88332be21bd5d459642e137ef59c"
+      "sha256": "a07402e12410138093c2fe462625b83acc67ecad287b3e24e796caca97a2e86b"
     },
     {
       "path": "resources/vocal_tract/sources/m10_r12_patch.py",
@@ -393,6 +393,122 @@
       "sha256": "1e28e794f69875ecffb24b8a4c8d0d287bc731d6a08df218b3ae73582fca4e38",
       "origin": "project",
       "description": "Project-owned control/text selection behavior shared by the workbench and vocal-tract document."
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r15_patch.py",
+      "source_id": "SRC-VTL",
+      "sha256": "2dad780dccea0b4f7ed1e0f2289927020c212d71aba9435d7d4652f3e42895ea"
+    },
+    {
+      "path": "frontend/public/vocal-tract/airway-mesh.mjs",
+      "source_id": "PROJECT-M10",
+      "sha256": "b8b2103d26833cc78f92f1360535dee6b7ee7a23fc7339b320290f20a1315edb"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r16_patch.py",
+      "source_id": "SRC-VTL",
+      "sha256": "413fb2847791afb5d3e22556cb1755e9770f7ff01317dc904970862b7f2b3a51"
+    },
+    {
+      "path": "frontend/public/app-icons/catalog.json",
+      "source_id": "ASSET-MASCOT",
+      "sha256": "4db05dd495dde4e8f61c1b9c648e24233e710348120a1305be432877424a453a"
+    },
+    {
+      "path": "frontend/public/app-icons/provenance.json",
+      "source_id": "ASSET-MASCOT",
+      "sha256": "bd7d246709d623f4f589737a2e30cd600207a5214668f1ecb00366d4f7f75158"
+    },
+    {
+      "path": "frontend/public/app-icons/sheets/ipa-ad.png",
+      "source_id": "ASSET-MASCOT",
+      "sha256": "804aec01d6a4139c3aa877bb13cdf858c8ac26ac2550e2df92f1515eff23743a"
+    },
+    {
+      "path": "frontend/public/app-icons/sheets/ipa-eh.png",
+      "source_id": "ASSET-MASCOT",
+      "sha256": "b93874492e6e7dc378817b44d28c1c7fe2342eec2eaa467d4940573ef795c0e1"
+    },
+    {
+      "path": "frontend/public/app-icons/sheets/ipa-il.png",
+      "source_id": "ASSET-MASCOT",
+      "sha256": "3c2331c178c786a7a2a1270f09ad79e7d9ee4e9a6686aaf70783457570f98e69"
+    },
+    {
+      "path": "frontend/public/app-icons/sheets/ipa-mp.png",
+      "source_id": "ASSET-MASCOT",
+      "sha256": "e5b194e6f06864288ebf8728953225b426586ba5a24a33799a1b0ac531e4dc95"
+    },
+    {
+      "path": "frontend/public/app-icons/sheets/ipa-qt.png",
+      "source_id": "ASSET-MASCOT",
+      "sha256": "f7124f2c34f4f4085be9b1c1ee9024f131fd4b4002e30c3d6206a54a073646e8"
+    },
+    {
+      "path": "frontend/public/app-icons/sheets/k.png",
+      "source_id": "ASSET-MASCOT",
+      "sha256": "824d85be970ca7bce81857191097ac69adee27602e211ca20fc905a5cf623c10"
+    },
+    {
+      "path": "frontend/public/app-icons/sheets/m.png",
+      "source_id": "ASSET-MASCOT",
+      "sha256": "33211d73098e841e85c5a04eecf7e213e41d0eb9a3917d05d5ce39c613b707d1"
+    },
+    {
+      "path": "frontend/public/app-icons/sheets/r.png",
+      "source_id": "ASSET-MASCOT",
+      "sha256": "f6aaa7048006e8cb7ad0ae812bc8483309369522bf46ad3fdb5b96f9c366e540"
+    },
+    {
+      "path": "frontend/public/app-icons/sheets/v.png",
+      "source_id": "ASSET-MASCOT",
+      "sha256": "74a6875f9f518e0d24a06d292fbc2fa319e952ba14a3a19832646ed40cab4dbe"
+    },
+    {
+      "path": "frontend/public/app-icons/sheets/w.png",
+      "source_id": "ASSET-MASCOT",
+      "sha256": "44cfc090dd95b9f9d66cf7bdeca07605250b96942650f144f78b299a4ef6e861"
+    },
+    {
+      "path": "frontend/public/app-icons/sheets/w1-edited.png",
+      "source_id": "ASSET-MASCOT",
+      "sha256": "042dc5af25c438f0f3507954ec40b8ae719f30c9a37d937b56ab8ba14aedf226"
+    },
+    {
+      "path": "frontend/public/app-icons/sheets/x.png",
+      "source_id": "ASSET-MASCOT",
+      "sha256": "f5af5b322afb8ed6139ab10465ce12ac369d4f291ec1bfe272c20b2136b3489d"
+    },
+    {
+      "path": "frontend/public/scrollbars.css",
+      "sha256": "c2383583fe46b2c5f198a648d47b2f35bcbf5d86da976beb3d3c53a4d3400697",
+      "origin": "project",
+      "description": "Project-owned rounded transparent scrollbars shared by the workbench and vocal-tract document."
+    },
+    {
+      "path": "frontend/src/assets/feedback-avatar.jpg",
+      "sha256": "42e8c236689c3f9cd79f73d9b3ae0e6d53124d5e0aa3c5cbdb3a1930192ee22e",
+      "source_id": "WEBSITE-AUTHOR-NOTE"
+    },
+    {
+      "path": "frontend/public/vocal-tract/monitor-view.mjs",
+      "source_id": "PROJECT-M10",
+      "sha256": "b23528a43bd4ed13755f50226bee8c52d730415b901fbd00e7626a07f841e98b"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r17_patch.py",
+      "source_id": "SRC-VTL",
+      "sha256": "dc3f7f36581b1098cc5c2d986ade45e2a384aaa2e2211b3248ad12dcbbf1d473"
+    },
+    {
+      "path": "frontend/public/vocal-tract/floor-contact.mjs",
+      "source_id": "PROJECT-M10",
+      "sha256": "0040502299b747a69d9f0acf94b6f2adf208eaed8d5b8f2465494c65c75df082"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r18_patch.py",
+      "source_id": "SRC-VTL",
+      "sha256": "832608c8fcc465eef681346f39d3928b0b68b7e0bf0f1242fbf954124132e5ee"
     }
   ],
   "generated_resources": [

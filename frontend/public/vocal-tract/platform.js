@@ -20,7 +20,7 @@ window.addEventListener('message',event=>{
   }
   if(data?.type==='m10-theme'){
     const root=document.documentElement;
-    const map={'--app':'--bg','--panel':'--panel','--text':'--ink','--muted':'--muted','--border':'--line','--accent':'--accent','--selected':'--selected','--on-accent':'--on-accent','--warning':'--warning','--danger':'--danger','--sidebar':'--sidebar','--waveform-color':'--waveform-color'};
+    const map={'--app':'--bg','--panel':'--panel','--text':'--ink','--muted':'--muted','--border':'--line','--accent':'--accent','--selected':'--selected','--on-accent':'--on-accent','--warning':'--warning','--danger':'--danger','--sidebar':'--sidebar','--rail':'--rail','--waveform-color':'--waveform-color'};
     for(const [key,target] of Object.entries(map)){const value=data.colors?.[key];if(typeof value==='string'&&/^#[0-9a-f]{3,8}$/i.test(value))root.style.setProperty(target,value);else root.style.removeProperty(target);}
     root.style.setProperty('--green',root.style.getPropertyValue('--accent')||'#0969da');
     root.dataset.theme=data.theme==='dark'?'dark':'light';root.style.colorScheme=root.dataset.theme;document.dispatchEvent(new Event('m10-theme'));

@@ -274,6 +274,8 @@ def recording_bundle(source, directory, *, max_bytes=512_000_000, metadata_path=
 if __name__ == '__main__':
     root = Path(__file__).resolve().parents[3]
     sys.path[:0] = [str(root/'backend/src'), str(root/'packages/phonetic_core/src')]
+    from ptb_worker.source_runtime import prepare_native_import_paths
+    prepare_native_import_paths()
     from ptb_worker.m05_media_export import recording_bundle,inspect_recording
     request = Path(sys.argv[1])
     try:

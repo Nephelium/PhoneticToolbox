@@ -33,4 +33,4 @@ python scripts/manual/build.py --project manual --output output/manual-public-pr
 
 公开构建保留说明和素材标识，过滤受限媒体。已有同名输出含不同媒体时，构建会拒绝覆盖，请选择新目录。
 
-生理参数合成章节已有正文，当前工程登记为 reviewed，后续随模块继续修订。唇形视频演示待作者后续录制，未插入虚构示例。
+生理参数合成章节已有正文，当前工程登记为 reviewed，后续随模块继续修订。唇形章节已补入作者提供的完整实时预览录屏，保留 13.333 秒和全部画面范围，仅压缩编码；视频按 software-only / git:false 登记。

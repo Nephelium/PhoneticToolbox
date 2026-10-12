@@ -30,6 +30,7 @@ class Session:
         if self.recording is None:
             self.validate_short()
         self.prepared_key = self.events_key = self.audio_key = None
+        self.pitch_bounds = None
         self.result = None
         self.main = {}
         from collections import OrderedDict
@@ -45,7 +46,7 @@ class Session:
 
     def update(self, config):
         from phonetic_core.egg import EGGConfig, prepare, analyze_events
-        from .egg_f0 import populate, native_engine
+        from .egg_f0 import populate, native_engine, bounds
         from ptb_api.egg_models import EggTaskConfig
         from .spectrogram_preview import PreviewError
         from .egg_preview import preview_files
@@ -56,6 +57,7 @@ class Session:
         if not 0 <= first < last <= len(self.samples): raise PreviewError('egg_invalid_roi')
         if self.recording and last-first > self.fs*60: raise PreviewError('egg_viewport_budget')
         numerical = EGGConfig.for_workbench(**{k:v for k,v in settings.model_dump().items() if k in EGGConfig.__dataclass_fields__})
+        pitch_bounds = bounds(settings)
         key = (settings.flip_channels, settings.highpass_cutoff, settings.lowpass_cutoff, settings.f0_policy)
         if key != self.prepared_key:
             result = (self.recording.result(numerical, settings.flip_channels) if self.recording else
@@ -77,12 +79,17 @@ class Session:
             else: result = self.result = analyze_events(result, numerical)
             self.events_key = events_key
             self.main.clear()
-        pitch_key=(settings.flip_channels,settings.f0_policy,first,last)
+        pitch_key=(settings.flip_channels,settings.f0_policy,*pitch_bounds,first,last)
         if self.recording:
             cached=self.pitch_cache.get(pitch_key,{})
             for prefix in ('audio','reaper'):
                 for suffix in ('times','values'):
                     setattr(result,prefix+'_f0_'+suffix,cached.get(prefix+'_f0_'+suffix))
+        elif pitch_bounds != self.pitch_bounds:
+            result.audio_f0_times = result.audio_f0_values = None
+            result.reaper_f0_times = result.reaper_f0_values = None
+            self.main.clear()
+        self.pitch_bounds = pitch_bounds
         if ((settings.keep_praat_f0 and result.audio_f0_times is None) or
                 (settings.keep_reaper_f0 and result.reaper_f0_times is None)):
             header=self.native_header if settings.keep_reaper_f0 and result.reaper_f0_times is None else {}

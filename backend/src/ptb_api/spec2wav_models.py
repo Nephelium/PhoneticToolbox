@@ -20,6 +20,7 @@ class SpectralStroke(WireModel):
 
 class Spec2WavConfig(WireModel):
     mode:Literal['image','image_draw','audio_draw']='image'
+    invert_image:bool=False
     strokes:list[SpectralStroke]=Field(default_factory=list,max_length=256)
     channel:int=Field(default=0,ge=0,le=1)
     audio_fft:Literal[512,1024,2048]=1024
@@ -42,11 +43,14 @@ class Spec2WavConfig(WireModel):
         if sum(len(s.points) for s in self.strokes)>8192:raise ValueError('Stroke budget exceeded')
         if self.mode=='image' and self.strokes:raise ValueError('Image mode does not accept strokes')
         if self.mode=='audio_draw' and self.corners:raise ValueError('Audio does not accept image calibration')
+        if self.mode=='audio_draw' and self.invert_image:raise ValueError('Audio does not accept image inversion')
         return self
 
     def snapshot(self):
-        # Preserve legacy request hashes and retries when no new mode is selected.
-        return self.model_dump(exclude={'mode','strokes','channel','audio_fft','dynamic_range'} if self.mode=='image' else set())
+        # Preserve existing request hashes and retries when inversion is disabled.
+        excluded={'mode','strokes','channel','audio_fft','dynamic_range'} if self.mode=='image' else set()
+        if not self.invert_image:excluded.add('invert_image')
+        return self.model_dump(exclude=excluded)
 
 
 class Spec2WavRequest(WireModel):

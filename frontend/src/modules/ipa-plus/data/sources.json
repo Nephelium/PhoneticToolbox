@@ -1,76 +1,88 @@
 {
   "extipa-lv-jiang-2013": {
-    "title": "吕佳、江荻（2013）· 国际音标扩展表的分类、命名与功能，pp.665–668",
-    "url": "https://doi.org/10.3969/j.issn.1006-7299.2013.06.030",
-    "version": "2013论文解读2002版；用作中文术语参照",
-    "license": "原论文版权保留，PDF和图表不随包分发"
+    "title": "吕佳, 江荻. 国际音标扩展表的分类、命名与功能[J]. 听力学及言语疾病杂志, 2013, 21(6): 665-668.",
+    "url": "https://jasptl.haoyicn.cn/summary/19224?eng=0&type=history",
+    "version": "",
+    "license": "原论文版权保留，PDF和图表不随包分发",
+    "provenance_version": "2013论文解读2002版；用作中文术语参照"
   },
   "ipa-chart-2026": {
-    "title": "International Phonetic Association · 官方表 2026",
+    "title": "INTERNATIONAL PHONETIC ASSOCIATION. The International Phonetic Alphabet[EB/OL]. (2026)[2026-10-11]. https://www.internationalphoneticassociation.org/IPAcharts/common_files/pdfs/pdfs_IPA_charts_E/IPA_Kiel.pdf.",
     "url": "https://www.internationalphoneticassociation.org/content/ipa-chart",
-    "version": "2026 重印；内容修订 2015/2005",
-    "license": "CC BY-SA 4.0"
+    "version": "2026年重印；图表修订至2015/2005",
+    "license": "CC BY-SA 4.0",
+    "provenance_version": "2026 重印；内容修订 2015/2005"
   },
   "extipa-chart-2025": {
-    "title": "ICPLA · extIPA 2025 表",
+    "title": "INTERNATIONAL CLINICAL PHONETICS AND LINGUISTICS ASSOCIATION. ExtIPA symbols for disordered speech[EB/OL]. (2025)[2026-10-11]. https://www.icpla.org.uk/resources.",
     "url": "https://www.icpla.org.uk/resources",
-    "version": "2025",
-    "license": "CC BY-SA 3.0；原图不随包分发"
+    "version": "2025年图表",
+    "license": "CC BY-SA 3.0；原图不随包分发",
+    "provenance_version": "2025"
   },
   "voqs-ball-2018": {
-    "title": "Ball, Esling & Dickson (2018), pp. 165–171，图 2",
+    "title": "BALL M J, ESLING J H, DICKSON B C. Revisions to the VoQS system for the transcription of voice quality[J]. Journal of the International Phonetic Association, 2018, 48(2): 165-171. https://doi.org/10.1017/S0025100317000159.",
     "url": "https://doi.org/10.1017/S0025100317000159",
-    "version": "2016 修订表；2017 在线发表；2018 卷期",
-    "license": "论文及图版版权保留，原 PDF 不随包分发"
+    "version": "VoQS 2016年修订图",
+    "license": "论文及图版版权保留，原 PDF 不随包分发",
+    "provenance_version": "2016 修订表；2017 在线发表；2018 卷期"
   },
   "voqs-zhihu-203037479": {
-    "title": "王天恒. VoQS：音质符号（2016 中英双语版）[EB/OL]. Zenodo(2020-08-30)[2023-12-26]. https://doi.org/10.5281/zenodo.10206204.",
+    "title": "王天恒, 译. VoQS: 音质符号 (2016中英双语版)[EB/OL]. (2020-08-30)[2026-10-11]. https://doi.org/10.5281/zenodo.10206204.",
     "url": "https://doi.org/10.5281/zenodo.10206204",
-    "version": "2020-08-30 中文版；2016 原表",
+    "version": "v1；2020年译制的VoQS 2016年修订图",
     "license": "CC BY 4.0（Zenodo 对应译表记录）；保留原表作者及改写说明，原图不随包分发",
     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
-    "previousUrl": "https://zhuanlan.zhihu.com/p/203037479"
+    "previousUrl": "https://zhuanlan.zhihu.com/p/203037479",
+    "provenance_version": "2020-08-30 中文版；2016 原表"
   },
   "unicode-cartouche-2024": {
-    "title": "Unicode L2/24-182R · 多字符圈围编码讨论",
+    "title": "MILLER K, BALL M. Unicode request for ExtIPA cartouche: L2/24-182R[R/OL]. (2024-09-04)[2026-10-11]. https://www.unicode.org/L2/L2024/24182r-cartouche.pdf.",
     "url": "https://www.unicode.org/L2/L2024/24182r-cartouche.pdf",
-    "version": "2024 提案及讨论，不能当作已分配新码位",
-    "license": "仅引用编码资料"
+    "version": "L2/24-182R；编码提案",
+    "license": "仅引用编码资料",
+    "provenance_version": "2024 提案及讨论，不能当作已分配新码位"
   },
   "ipa-chart-zh-2007": {
-    "title": "中国语言学会语音学分会 · 国际音标中文版（2007；修订至2005年）",
+    "title": "PHONETIC ASSOCIATION OF CHINA. The chart of the International Phonetic Alphabet in Chinese (2007)[J]. Journal of the International Phonetic Association, 2011, 41(2): 245. https://doi.org/10.1017/S0025100311000156.",
     "url": "https://doi.org/10.1017/S0025100311000156",
-    "version": "2007中文版中文名称；同名中文表刊于JIPA 2011, 41(2)",
-    "license": "中文名称据中文版图表核对；原图与文章不随包分发"
+    "version": "2007年中文版（IPA修订至2005年）",
+    "license": "中文名称据中文版图表核对；原图与文章不随包分发",
+    "provenance_version": "2007中文版中文名称；同名中文表刊于JIPA 2011, 41(2)"
   },
   "ipa-handbook-jiang-2008": {
-    "title": "国际语音学会编，江荻译（2008）· 国际语音学会手册：国际音标使用指南",
-    "url": "https://www.internationalphoneticassociation.org/content/handbook-ipa",
-    "version": "上海教育出版社，2008年第1版，ISBN 978-7-5444-1928-4；原著1999；本轮核对pp.9–24",
-    "license": "书籍版权保留；只使用自主短解释、书目信息和页码，原书与扫描图不随包"
+    "title": "国际语音学会. 国际语音学会手册：国际音标使用指南[M]. 江荻, 译. 上海: 上海教育出版社, 2008.",
+    "url": "https://ci.nii.ac.jp/ncid/BB01991047",
+    "version": "2008年中文译本",
+    "license": "书籍版权保留；只使用自主短解释、书目信息和页码，原书与扫描图不随包",
+    "provenance_version": "上海教育出版社，2008年第1版，ISBN 978-7-5444-1928-4；原著1999；本轮核对pp.9–24"
   },
   "voice-quality-esling-2019": {
-    "title": "Esling, Moisik, Benner & Crevier-Buchman (2019) · Voice Quality: The Laryngeal Articulator Model",
+    "title": "ESLING J H, MOISIK S R, BENNER A, et al. Voice quality: The laryngeal articulator model[M]. Cambridge: Cambridge University Press, 2019. https://doi.org/10.1017/9781108696555.",
     "url": "https://doi.org/10.1017/9781108696555",
-    "version": "Cambridge University Press, 2019；ISBN 978-1-108-49842-5；本轮参考第1–2章",
-    "license": "书籍版权保留；自主概述并列准确章节页码，原PDF及图像不随包"
+    "version": "",
+    "license": "书籍版权保留；自主概述并列准确章节页码，原PDF及图像不随包",
+    "provenance_version": "Cambridge University Press, 2019；ISBN 978-1-108-49842-5；本轮参考第1–2章"
   },
   "extipa-ball-2018": {
-    "title": "Ball, Howard & Miller (2018) · Revisions to the extIPA chart, pp.155–164",
+    "title": "BALL M J, HOWARD S J, MILLER K. Revisions to the extIPA chart[J]. Journal of the International Phonetic Association, 2018, 48(2): 155-164. https://doi.org/10.1017/S0025100317000147.",
     "url": "https://doi.org/10.1017/S0025100317000147",
-    "version": "2015修订表；2017在线发表；2018卷期48(2)，155–164",
-    "license": "原论文与图表不随包，条目含义自主概述"
+    "version": "extIPA 2015年修订图",
+    "license": "原论文与图表不随包，条目含义自主概述",
+    "provenance_version": "2015修订表；2017在线发表；2018卷期48(2)，155–164"
   },
   "extipa-ball-2024": {
-    "title": "Ball (2024) · Changes to certain extIPA diacritics, pp.692–695",
+    "title": "BALL M J. Changes to certain extIPA diacritics[J]. Clinical Linguistics & Phonetics, 2024, 38(7): 692-695. https://doi.org/10.1080/02699206.2024.2365205.",
     "url": "https://doi.org/10.1080/02699206.2024.2365205",
-    "version": "2024-05-14 ICPLA批准三项调整；2024-07-01在线发表；38(7)，692–695",
-    "license": "原文CC BY-NC-ND 4.0；仅引用与自主解释，未复制或修改原图"
+    "version": "extIPA 2024年修订图",
+    "license": "原文CC BY-NC-ND 4.0；仅引用与自主解释，未复制或修改原图",
+    "provenance_version": "2024-05-14 ICPLA批准三项调整；2024-07-01在线发表；38(7)，692–695"
   },
   "extipa-ball-2025-reply": {
-    "title": "Ball (2025) · Reply to letter concerning the revisions to some diacritics of the extensions to the IPA (extIPA), Ball (2024), pp.911–912",
+    "title": "BALL M J. Reply to letter concerning the revisions to some diacritics of the extensions to the IPA (extIPA), Ball (2024)[J]. Clinical Linguistics & Phonetics, 2025, 39(9): 911-912. https://doi.org/10.1080/02699206.2025.2489577.",
     "url": "https://doi.org/10.1080/02699206.2025.2489577",
-    "version": "2025，39(9)，911–912；正文partially nasal用词与本目录核对的2025表partially denasal分开记录",
-    "license": "原文版权与许可保留；仅书目和版本差异说明，原PDF不随包"
+    "version": "",
+    "license": "原文版权与许可保留；仅书目和版本差异说明，原PDF不随包",
+    "provenance_version": "2025，39(9)，911–912；正文partially nasal用词与本目录核对的2025表partially denasal分开记录"
   }
 }

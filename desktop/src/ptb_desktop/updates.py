@@ -188,9 +188,12 @@ class Release:
 
 
 class UpdateService:
-    def __init__(self, *, current_version='3.0.0-preview.1', data_root=None, transport=None,
+    def __init__(self, *, current_version=None, data_root=None, transport=None,
                  clock=time.time, monotonic=time.monotonic, system_country=_system_country,
                  check_interval=CHECK_INTERVAL, package_kind='portable', apply_handler=None):
+        if current_version is None:
+            from . import __version__
+            current_version = __version__
         self.current = SemVer(current_version)
         self.root = Path(data_root) if data_root is not None else user_data_root() / 'updates'
         self.transport = transport or HttpsTransport()
@@ -217,8 +220,9 @@ class UpdateService:
 
     def preferences(self):
         with self._lock:
+            default_channel = 'preview' if self.current.pre else 'stable'
             return {'source': self.state.get('source', 'auto') if self.state.get('source', 'auto') in ('auto', 'server', 'github') else 'auto',
-                    'channel': self.state.get('channel', 'preview') if self.state.get('channel', 'preview') in ('preview', 'stable') else 'preview',
+                    'channel': self.state.get('channel', default_channel) if self.state.get('channel', default_channel) in ('preview', 'stable') else default_channel,
                     'autoCheck': self.state.get('autoCheck', True) is not False,
                     'currentVersion': self.current.value, 'packageKind': self.package_kind,
                     'checkIntervalHours': self.check_interval / 3600, 'applyAvailable': self.apply_handler is not None}
@@ -366,6 +370,10 @@ class UpdateService:
                 except UpdateError:
                     continue
                 if channel == 'stable' and (version.pre or item.get('prerelease')):
+                    continue
+                # Older releases can use retired packaging conventions. They
+                # cannot update this app and must not invalidate newer assets.
+                if version < self.current:
                     continue
                 assets = item.get('assets', [])
                 if not isinstance(assets, list):

@@ -157,7 +157,7 @@ class M05Bridge:
                 del self.writes[body['id']]
                 return dict(saved=True,recording=info)
             del self.writes[body['id']];return dict(saved=True)
-        raise FileAccessError('M05 操作不受支持。')
+        raise FileAccessError('唇形提取不支持此操作。')
     @staticmethod
     def file_hash(path):
         with path.open('rb') as stream:return hashlib.file_digest(stream,'sha256').hexdigest()
@@ -166,7 +166,7 @@ class M05Bridge:
         from ptb_worker.native.windows import OwnedProcess
         from ptb_worker import m05_media_export
         runtime=os.environ.get('PTB_M05_PYTHON')
-        if not runtime or not Path(runtime).is_file():raise FileAccessError('M05 编码运行环境不可用，原录制仍保留。')
+        if not runtime or not Path(runtime).is_file():raise FileAccessError('视频编码环境不可用，原录制仍保留。')
         root=source.parent;request=root/'export-request.json'
         M05Bridge.write_json(request,dict(source=str(source),action=action,**(dict(destination=str(destination)) if destination else {})))
         process=None;started=time.monotonic()

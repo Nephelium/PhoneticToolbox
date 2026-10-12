@@ -7,6 +7,9 @@ import time
 
 ROOT=Path(__file__).resolve().parents[3]
 if __name__=='__main__':sys.path[:0]=[str(ROOT/'backend/src'),str(ROOT/'packages/phonetic_core/src')]
+if __name__=='__main__':
+    from ptb_worker.source_runtime import prepare_native_import_paths
+    prepare_native_import_paths()
 
 def atomic(path,value):
     pending=path.with_suffix('.next')

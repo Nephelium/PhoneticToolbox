@@ -10,7 +10,7 @@ const asset=computed(()=>props.assets.find(item=>item.id===props.assetId&&item.k
 const url=computed(()=>{const value=asset.value;if(!value)return null;return safeMediaSource(props.assetResolver?props.assetResolver(value):assetUrl(props.assetBaseUrl,value.path));});
 const caption=computed(()=>unnumberedCaption(props.caption||asset.value?.caption||asset.value?.title||''));
 const numberedCaption=computed(()=>caption.value&&props.displayNumber?(props.kind==='image'?'图':props.kind==='audio'?'例音':'视频')+' '+props.displayNumber+'：'+caption.value:caption.value);
-const source=computed(()=>{const value=asset.value?.source;return typeof value==='string'?value:typeof value?.label==='string'?value.label:'';});
+const sourceType=computed(()=>{const value=asset.value?.sourceType||'';return ({'v3 实际处理':'处理音频','v3 实际处理音频':'处理音频','V3 实际处理音频':'处理音频','实际应用合成输出':'合成音频','实际原生参数模型合成':'模型合成示例','合成信号实际操作示例':'合成信号示例','作者提供的实际应用屏幕录制':'操作录屏'} as Record<string,string>)[value]||value;});
 const unavailable=computed(()=>!asset.value||!url.value||failed.value);
 watch(url,()=>{failed.value=false;playError.value='';zoomed.value=false;});
 watch(()=>props.playbackAllowed,allowed=>{if(!allowed)stop();});
@@ -22,7 +22,7 @@ onBeforeUnmount(stop);onDeactivated(stop);
 </script>
 <template>
   <figure class="manual-media" :class="['manual-media-'+kind,{unavailable}]" :style="{textAlign:align==='center'?'center':align==='right'?'right':'left'}" :data-asset-id="assetId">
-    <div v-if="unavailable" class="manual-media-error" role="status">{{kind==='image'?'图片':kind==='audio'?'音频':'视频'}}素材暂不可用。请检查说明书素材包。<span class="manual-media-id">素材标识：{{assetId}}</span></div>
+    <div v-if="unavailable" class="manual-media-error" role="status">{{kind==='image'?'图片暂时无法显示':kind==='audio'?'音频暂时无法播放':'视频暂时无法播放'}}。可在关于页反馈此问题。</div>
     <template v-else>
       <button v-if="kind==='image'" class="manual-image-button" type="button" :aria-label="'放大图片：'+(alt||asset?.alt||caption)" @click="zoomed=true">
         <img :src="url!" :alt="alt||asset?.alt||caption" :width="asset?.width" :height="asset?.height" :style="{width:mediaWidth(width)}" loading="lazy" decoding="async" @error="failure"/>
@@ -32,7 +32,7 @@ onBeforeUnmount(stop);onDeactivated(stop);
       <a v-if="kind!=='image'" class="manual-download" :href="url!" :download="asset?.path.split('/').at(-1)">保存示例文件</a>
     </template>
     <figcaption v-if="numberedCaption">{{numberedCaption}}</figcaption>
-    <p v-if="kind!=='image'&&asset" class="manual-media-meta"><span v-if="asset.sourceType">{{asset.sourceType}}</span><span v-if="asset.duration!==undefined">{{asset.duration.toFixed(3)}} 秒</span><span v-if="asset.sampleRate">{{asset.sampleRate}} Hz</span><span v-if="asset.channels">{{asset.channels}} 声道</span><span v-if="source">{{source}}</span></p>
+    <p v-if="kind!=='image'&&asset" class="manual-media-meta"><span v-if="sourceType">{{sourceType}}</span><span v-if="asset.duration!==undefined">{{asset.duration.toFixed(3)}} 秒</span><span v-if="asset.sampleRate">{{asset.sampleRate}} Hz</span><span v-if="asset.channels">{{asset.channels}} 声道</span></p>
     <p v-if="playError" role="status" class="manual-media-error">{{playError}}</p>
     <div v-if="zoomed&&!unavailable" class="manual-image-overlay" role="dialog" aria-modal="true" :aria-label="numberedCaption||'图片预览'" tabindex="-1" @click.self="zoomed=false" @keydown.esc="zoomed=false">
       <button type="button" autofocus @click="zoomed=false">关闭图片</button><img :src="url!" :alt="alt||asset?.alt||caption"/><p>{{numberedCaption}}</p>

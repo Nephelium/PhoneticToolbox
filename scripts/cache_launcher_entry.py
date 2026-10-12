@@ -14,13 +14,16 @@ from ptb_desktop.startup_ready import ReadyEvent, ENVIRONMENT
 
 def main():
     arguments = sys.argv[1:]
+    if arguments == ['--ptb-remove-managed-mfa']:
+        from ptb_desktop.mfa_uninstall import remove_managed_mfa
+        return 0 if remove_managed_mfa()['complete'] else 21
     uninstall = arguments == ['--ptb-clear-all-caches']
     if uninstall and cache_root().exists():
         with maintenance(cache_root()):
             if active_leases(cache_root()): return 21
     if arguments == ['--ptb-clear-startup-cache']:
         return 0 if clear_if_idle()['complete'] else 21
-    progress = PreparationWindow(); live = None; ready = None
+    progress = PreparationWindow(); live = None; ready = None; application_entry = None
     if os.environ.get('PTB_OWNED_BOOTSTRAP_LOG') and os.environ.get('PTB_OWNED_STARTUP_CARD')=='offscreen':
         progress.offscreen=True;progress.quiet=False
     try:
@@ -59,7 +62,12 @@ def main():
             if not api.SetHandleInformation(handle,1,1):raise ctypes.WinError(ctypes.get_last_error())
             startup=subprocess.STARTUPINFO();startup.lpAttributeList={'handle_list':[handle]}
             options.update(startupinfo=startup,close_fds=True)
-        child = subprocess.Popen([str(application), *arguments], env=env, cwd=str(Path(sys.executable).parent), **options)
+        from ptb_worker.native_runtime import FrozenApplicationEntry
+        # The frozen bootloader must find python311.dll before Python hooks run.
+        application_entry=FrozenApplicationEntry(application)
+        entry=application_entry.path
+        child = subprocess.Popen([str(entry), *arguments], executable=str(entry), env=env,
+                                 cwd=str(entry.parent), **options)
         if ready:
             started=time.monotonic();slow=False
             while child.poll() is None and not ready.is_set():
@@ -77,6 +85,7 @@ def main():
         progress.close()
         if ready:ready.close()
         if live: live.close()
+        if application_entry:application_entry.close()
         from ptb_desktop.cache_cleanup import disposable_caches
         clear_if_idle(requested_only=True,extra_cleanup=disposable_caches)
 

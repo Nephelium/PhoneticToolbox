@@ -1,9 +1,10 @@
 import {fontsReady} from '../../state/fonts.ts';
 import {quoteFamily} from '../../design/fonts.ts';
 import {effectiveIpaSize,type ConversionToken,type MandarinIpaDraft} from './state.ts';
+import {resultMetrics} from './layout.ts';
 
 export interface MandarinIpaExportSnapshot {
-  tokens:readonly ConversionToken[];draft:MandarinIpaDraft;width:number;uiFont:string;ipaColor?:string;
+  tokens:readonly ConversionToken[];draft:MandarinIpaDraft;width:number;uiFont:string;ipaColor?:string;cellWidth?:number;
 }
 export interface ExportHooks {
   ready?:()=>Promise<void>;createCanvas?:()=>HTMLCanvasElement;fontAvailable?:(font:string,text:string)=>boolean;
@@ -15,25 +16,30 @@ function font(size:number,family:string,bold=false,italic=false){return `${itali
 function layout(ctx:CanvasRenderingContext2D,snapshot:MandarinIpaExportSnapshot){
   const {draft,tokens}=snapshot,ipaSize=effectiveIpaSize(draft),padding=28,titleHeight=38,contentWidth=clamp(snapshot.width,420,1200)-padding*2;
   const uiFont=snapshot.uiFont||'sans-serif',hanziFont=draft.hanziFont?quoteFamily(draft.hanziFont)+', '+uiFont:uiFont,ipaFont='"PTB-Doulos", "Doulos SIL", serif';
-  const pairHeight=draft.display==='paired'?ipaSize*1.45+draft.gap+draft.hanziSize*1.35:ipaSize*1.65;
-  const lineAdvance=Math.max(pairHeight+8,Math.max(ipaSize,draft.hanziSize)*draft.lineHeight);
-  const placed:Positioned[]=[];let x=0,row=0;
-  for(const token of tokens){
-    if(token.kind==='literal'&&token.newline){x=0;row++;continue;}
+  const {ipaHeight,unitHeight,lineAdvance,columnGap}=resultMetrics(draft);
+  const widths=tokens.map(token=>{
+    if(token.kind==='literal'&&token.newline)return 0;
     let width:number;
     if(token.kind==='mapped'){
       ctx.font=font(ipaSize,ipaFont);const ipaWidth=ctx.measureText(token.value).width;
       ctx.font=font(draft.hanziSize,hanziFont,draft.bold,draft.italic);const hanziWidth=ctx.measureText(token.char).width;
-      width=Math.max(ipaWidth,draft.display==='paired'?hanziWidth:0)+12;
+      width=Math.max(ipaWidth,draft.display==='paired'?hanziWidth:0)+8;
     }else{
       ctx.font=font(draft.display==='paired'?draft.hanziSize:ipaSize,hanziFont,draft.bold&&draft.display==='paired',draft.italic&&draft.display==='paired');
       width=Math.max(ctx.measureText(token.char).width,token.char.trim()?0:draft.hanziSize*.5)+8;
     }
-    if(x>0&&x+width>contentWidth){x=0;row++;}
+    return width;
+  });
+  const equalWidth=Math.max(Math.ceil(widths.reduce((max,width)=>Math.max(max,width),0)),snapshot.cellWidth??0);
+  const placed:Positioned[]=[];let x=0,row=0;
+  tokens.forEach((token,index)=>{
+    if(token.kind==='literal'&&token.newline){x=0;row++;return;}
+    const width=draft.equalWidth?equalWidth:widths[index],gap=x>0?columnGap:0;
+    if(x>0&&x+gap+width>contentWidth){x=0;row++;}else x+=gap;
     placed.push({token,x:padding+x+width/2,y:padding+titleHeight+row*lineAdvance,width});x+=width;
-  }
-  const rows=Math.max(1,row+1),height=Math.ceil(padding*2+titleHeight+rows*lineAdvance);
-  return {placed,width:contentWidth+padding*2,height,padding,titleHeight,lineAdvance,ipaSize,ipaFont,uiFont,hanziFont};
+  });
+  const rows=Math.max(1,row+1),height=Math.ceil(padding*2+titleHeight+unitHeight+(rows-1)*lineAdvance);
+  return {placed,width:contentWidth+padding*2,height,padding,titleHeight,lineAdvance,ipaSize,ipaHeight,ipaFont,uiFont,hanziFont};
 }
 
 export async function renderMandarinIpaPng(snapshot:MandarinIpaExportSnapshot,hooks:ExportHooks={}){
@@ -65,17 +71,16 @@ export async function renderMandarinIpaPng(snapshot:MandarinIpaExportSnapshot,ho
   ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.fillStyle='#182332';ctx.font=font(18,model.uiFont,true);ctx.fillText('国际音标',model.padding,model.padding+20);
   ctx.font=font(11,model.uiFont);ctx.fillStyle='#475569';ctx.fillText(snapshot.draft.standard,model.padding+88,model.padding+20);
   for(const item of model.placed){
-    const {token,x,y,width}=item;
+    const {token,x,y}=item;
     if(token.kind==='mapped'){
-      ctx.textAlign='center';ctx.textBaseline='top';ctx.font=font(model.ipaSize,model.ipaFont);ctx.fillStyle=ipaColor;ctx.fillText(token.value,x,y);
+      ctx.textAlign='center';ctx.textBaseline='top';ctx.font=font(model.ipaSize,model.ipaFont);ctx.fillStyle=ipaColor;ctx.fillText(token.value,x,y+2+model.ipaSize*.12);
       if(snapshot.draft.display==='paired'){
-        const hanziY=y+model.ipaSize*1.4+snapshot.draft.gap;ctx.font=font(snapshot.draft.hanziSize,model.hanziFont,snapshot.draft.bold,snapshot.draft.italic);ctx.fillStyle=hanziColor;ctx.fillText(token.char,x,hanziY);
+        const hanziY=y+2+model.ipaHeight+snapshot.draft.gap;ctx.font=font(snapshot.draft.hanziSize,model.hanziFont,snapshot.draft.bold,snapshot.draft.italic);ctx.fillStyle=hanziColor;ctx.fillText(token.char,x,hanziY);
         if(snapshot.draft.underline){const measured=ctx.measureText(token.char).width;ctx.beginPath();ctx.moveTo(x-measured/2,hanziY+snapshot.draft.hanziSize*1.15);ctx.lineTo(x+measured/2,hanziY+snapshot.draft.hanziSize*1.15);ctx.strokeStyle=hanziColor;ctx.lineWidth=1;ctx.stroke();}
       }
-      if(token.variants.length>1){ctx.textAlign='right';ctx.font=font(8,model.uiFont);ctx.fillStyle=ipaColor;ctx.fillText('▼',x+width/2-1,y+model.lineAdvance-11);}
     }else{
       ctx.textAlign='center';ctx.textBaseline='top';ctx.font=font(snapshot.draft.display==='paired'?snapshot.draft.hanziSize:model.ipaSize,model.hanziFont,snapshot.draft.bold&&snapshot.draft.display==='paired',snapshot.draft.italic&&snapshot.draft.display==='paired');ctx.fillStyle=hanziColor;
-      const literalY=snapshot.draft.display==='paired'?y+model.ipaSize*1.4+snapshot.draft.gap:y;ctx.fillText(token.char,x,literalY);
+      const literalY=snapshot.draft.display==='paired'?y+2+model.ipaHeight+snapshot.draft.gap:y+2+model.ipaSize*.12;ctx.fillText(token.char,x,literalY);
       if(snapshot.draft.display==='paired'&&snapshot.draft.underline&&token.char.trim()){const measured=ctx.measureText(token.char).width;ctx.beginPath();ctx.moveTo(x-measured/2,literalY+snapshot.draft.hanziSize*1.15);ctx.lineTo(x+measured/2,literalY+snapshot.draft.hanziSize*1.15);ctx.strokeStyle=hanziColor;ctx.stroke();}
     }
   }

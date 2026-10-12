@@ -1,0 +1,43 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><title>Selection playback keyboard regression</title><style>html,body,#app{height:100%}.fixture{height:100%;display:flex;flex-direction:column}.fixture>main{overflow:auto;flex:1}</style></head><body><div id="app"></div><script type="module">
+import {createApp,h,reactive,ref,markRaw} from 'vue';
+import ModuleFrame from '/src/components/ModuleFrame.vue';
+import ModalDialog from '/src/components/ModalDialog.vue';
+import WaveformViewport from '/src/components/WaveformViewport.vue';
+import TextGridTimeline from '/src/components/TextGridTimeline.vue';
+import AudioTransport from '/src/components/AudioTransport.vue';
+import M02 from '/src/modules/parameter-display/ParameterDisplayPage.vue';
+import M07 from '/src/modules/phonation-synthesis/PhonationSynthesisPage.vue';
+import M08 from '/src/modules/pitch-manipulation/PitchManipulationPage.vue';
+import {defaults as analysisDefaults,generationDefaults} from '/src/modules/phonation-synthesis/state.ts';
+import {defaults as pitchDefaults} from '/src/modules/pitch-manipulation/state.ts';
+import Shell from '/src/app/AppShell.vue';
+import {previewFiles} from '/src/platform/research.ts';
+import {parseGrid} from '/src/modules/annotation/format.ts';
+import {workspace} from '/src/state/workspace.ts';
+import {playback,stop,play,isCurrentAudio} from '/src/state/audio.ts';
+import '/src/design/tokens.css';
+const mode=new URLSearchParams(location.search).get('mode')??'shared',active=ref(true),modal=ref(false),nativeClicks=ref(0);
+const rate=8000,frames=rate*3,bytes=new ArrayBuffer(44+frames*2),v=new DataView(bytes),text=(offset,value)=>[...value].forEach((c,i)=>v.setUint8(offset+i,c.charCodeAt(0)));
+text(0,'RIFF');v.setUint32(4,bytes.byteLength-8,true);text(8,'WAVEfmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,rate,true);v.setUint32(28,rate*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);text(36,'data');v.setUint32(40,frames*2,true);for(let i=0;i<frames;i++)v.setInt16(44+2*i,Math.round(10000*Math.sin(2*Math.PI*200*i/rate)),true);
+const asset=name=>markRaw({name,sampleRate:rate,frames,duration:3,channels:[Float32Array.from({length:frames},(_,i)=>Math.sin(2*Math.PI*200*i/rate)/3)]});
+const states=['a','b'].map(id=>reactive({...workspace('keyboard-'+id),asset:asset(id),start:0,end:0}));
+const tiers=[{name:'words',kind:'interval',intervals:[{xmin:0,xmax:1,text:'a'},{xmin:1,xmax:2.5,text:'b'},{xmin:2.5,xmax:3,text:'c'}]}];
+const file={id:'wave',name:'space.wav',kind:'audio',size:bytes.byteLength},tableFile={id:'table',name:'space.ptb.sqlite',kind:'parameter',size:1};
+const table={schema_version:'m02/1',sha256:'a'.repeat(64),columns:['Time_s','F0'],kinds:['number','number'],rows:Array.from({length:31},(_,i)=>[i/10,200+i])};
+const context={key:'keyboard:M01',label:'Public synthetic keyboard fixture',files:{kind:'preview',list:async()=>[file,tableFile],read:async()=>({buffer:bytes.slice(0),sha256:'b'.repeat(64)}),parameters:async()=>table}};
+const reads=ref(0),resultBytes=bytes.slice(0),resultView=new DataView(resultBytes);for(let i=0;i<frames;i++)resultView.setInt16(44+2*i,-v.getInt16(44+2*i,true),true);
+const generated={job:'generated',files:[{id:'combined',name:'combined_steps.wav',size_bytes:bytes.byteLength,sha256:'c'.repeat(64)}],metadata:{action:'generate',analysis:analysisDefaults(),generation:{...generationDefaults(),step_count:2},alignment:'normalize',point_count:0,controls:{axis:[],source:[],target:[]},source_f0:[],target_f0:[],source_samples:frames,target_samples:frames,continuum_type:2,reverse_direction:false,batch_id:null,batch_group_index:0,batch_group_count:1,analysis_job_id:null,inputs:{source:{asset_id:file.id,sha256:'b'.repeat(64)},target:{asset_id:file.id,sha256:'b'.repeat(64)}},runtime:{},algorithm:'synthetic keyboard fixture'}};
+context.files.m07={list:async()=>[{id:generated.job,state:'succeeded'}],result:async()=>generated,read:async()=>{reads.value++;return resultBytes.slice(0);}};
+const historyResult={id:'result',name:'history.wav',source_id:file.id,start:0,end:3,config:pitchDefaults(),times:[0,.5,1,1.5,2,2.5,3],original_f0:[200,200,200,200,200,200,200]};
+const m08={preview:async()=>({sha256:'b'.repeat(64),wav:bytes.slice(0),times:historyResult.times,original_f0:historyResult.original_f0}),jobs:async()=>[],history:async()=>[historyResult],audio:async()=>{reads.value++;return resultBytes.slice(0);}};
+window.qa={states,active,modal,playback,stop,play,isCurrentAudio,nativeClicks,reads,wave:workspace('keyboard-m02'),m07States:[workspace('keyboard-m07.source'),workspace('keyboard-m07.target'),workspace('keyboard-m07')],m08Source:workspace('keyboard-m08')};
+const local=previewFiles();local.textgrid=async file=>{const data=await local.read(file),grid=parseGrid(new TextDecoder().decode(data.buffer));return {sha256:data.sha256,tiers:grid.tiers.map(t=>({name:t.name,intervals:t.intervals??[]}))};};
+const timeline=state=>h(TextGridTimeline,{state,tiers,start:0,end:3,selected:0,selectionStart:state.start,selectionEnd:state.end,onSelect:(_tier,start,end)=>{stop();state.start=start;state.end=end;}});
+const controls=()=>h('section',{'aria-label':'Focus guards'},[h('input',{'aria-label':'Text input'}),h('textarea',{'aria-label':'Text area'}),h('select',{'aria-label':'Native select'},[h('option','one')]),h('input',{type:'checkbox','aria-label':'Checkbox'}),h('input',{type:'range','aria-label':'Range'}),h('div',{contenteditable:'true','aria-label':'Editable text',tabindex:0},'text'),h('button',{onClick:()=>nativeClicks.value++},'Native action'),h('a',{href:'#anchor'},'Native link'),h('details',[h('summary','Native summary'),h('p','body')]),modal.value?h('dialog',{open:true},'modal'):null]);
+createApp({render(){
+ if(mode==='shell')return h(Shell,{research:{key:'keyboard-shell:M01',label:'Real browser WAV and parsed TextGrid fixture',files:local}});
+ if(mode==='m07'||mode==='m08')return h(mode==='m07'?M07:M08,{context,stateKey:'keyboard-'+mode,active:active.value,...(mode==='m08'?{port:m08}:{})});
+ if(mode==='modal')return h(ModuleFrame,{label:'Audio result modal fixture'},()=>[h(WaveformViewport,{state:states[0]}),h(AudioTransport,{state:states[0],active:true}),h('button',{onClick:()=>modal.value=true},'Open audio dialog'),modal.value?h(ModalDialog,{title:'Audio result',onClose:()=>modal.value=false},()=>[h(WaveformViewport,{state:states[1]}),h(AudioTransport,{state:states[1],active:true}),h('button',{onClick:()=>nativeClicks.value++},'Native dialog action')]):null]);
+ return h('div',{class:'fixture'},mode==='m02'?[h(M02,{context,stateKey:'keyboard-m02',active:active.value}),h(AudioTransport,{state:qa.wave,active:active.value})]:[h(ModuleFrame,{label:'Shared multi-audio fixture'},()=>[h('main',states.map((state,i)=>h('section',{'data-track':i},[h(WaveformViewport,{state}, {timeline:()=>timeline(state)}),h(AudioTransport,{state,active:active.value})]))),controls()])]);
+}}).mount('#app');
+</script></body></html>

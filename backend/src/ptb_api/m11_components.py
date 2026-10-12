@@ -8,10 +8,10 @@ from .models import WireModel
 
 
 class LocalM11ComponentRequest(WireModel):
-    action: Literal['check','import']
+    action: Literal['check','import','install_zip','install_folder','download']
     runtime: str | None = Field(default=None,max_length=4096)
-    model: str = Field(max_length=4096)
-    dictionary: str = Field(max_length=4096)
+    model: str | None = Field(default=None,max_length=4096)
+    dictionary: str | None = Field(default=None,max_length=4096)
     archive: str | None = Field(default=None,max_length=4096)
     manifest: str | None = Field(default=None,max_length=4096)
     trusted_manifest_sha256: str | None = Field(default=None,pattern=r'^[a-f0-9]{64}$')
@@ -27,6 +27,12 @@ def component_router(mode,mutation):
         from ptb_worker.mfa.components import ComponentManager,digest,no_links
         from ptb_worker.mfa.runtime import registry_root
         try:
+            if body.action in ('install_zip','install_folder','download'):
+                from ptb_worker.mfa.delivery import install
+                if body.action=='install_zip' and not body.archive:raise ValueError('m11_archive_missing')
+                if body.action=='install_folder' and not body.runtime:raise ValueError('m11_runtime_missing')
+                return install(body.action,archive=body.archive,folder=body.runtime)
+            if not body.model or not body.dictionary:raise ValueError('m11_model_missing')
             if body.action=='check':
                 if not body.runtime:raise ValueError('m11_runtime_missing')
                 result=register(body.runtime,body.model,body.dictionary)
@@ -49,6 +55,10 @@ def component_router(mode,mutation):
             publish_registration(prepared,registry_root())
             return dict(success=True,runtime_id=prepared['runtime_id'],model_id=prepared['model_id'])
         except (ValueError,OSError,KeyError) as exc:
+            from urllib.error import HTTPError, URLError
+            if isinstance(exc,HTTPError):
+                raise HTTPException(422,'m11_download_not_uploaded' if exc.code==404 else 'm11_download_failed') from None
+            if isinstance(exc,URLError):raise HTTPException(422,'m11_download_failed') from None
             code=str(exc)
             raise HTTPException(422,code if code.startswith('m11_') and len(code)<80 else 'm11_component_failed') from None
     return router

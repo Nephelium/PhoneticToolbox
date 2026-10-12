@@ -1,0 +1,16 @@
+/* Shared by the workbench and the embedded vocal-tract document. */
+*{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--text,var(--ink,#566982)) 18%,transparent) transparent}
+@supports selector(::-webkit-scrollbar){
+  /* Use the custom Chromium scrollbar even on elements requesting native thin. */
+  *{scrollbar-width:auto!important;scrollbar-color:auto}
+  ::-webkit-scrollbar{width:9px;height:9px;background:transparent}
+  ::-webkit-scrollbar-track,::-webkit-scrollbar-corner{background:transparent}
+  ::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--text,var(--ink,#566982)) 18%,transparent);border:2px solid transparent;border-radius:999px;background-clip:padding-box;min-height:28px;min-width:28px}
+  ::-webkit-scrollbar-thumb:hover{background-color:color-mix(in srgb,var(--text,var(--ink,#566982)) 32%,transparent)}
+  ::-webkit-scrollbar-thumb:active{background-color:color-mix(in srgb,var(--text,var(--ink,#566982)) 42%,transparent)}
+  ::-webkit-scrollbar-button{display:none;width:0;height:0}
+}
+@media(forced-colors:active){
+  *{scrollbar-color:auto}
+  ::-webkit-scrollbar-thumb{background:CanvasText}
+}

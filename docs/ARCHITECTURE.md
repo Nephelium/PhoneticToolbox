@@ -6,6 +6,7 @@
 | --- | --- |
 | `requirements.md、design/、specs/` | 用户需求、视觉标准和数据/流程规范。 |
 | `project-status.md` | 当前已实现部分、验证边界与后续清单。 |
+| 根目录 `CHANGELOG.md`、`release/notes/` | 每次修改记录与按实际冻结成品整理的版本更新说明，供 Release 正文及自动更新日志使用。 |
 | `plans/、modules/` | 任务台账、实施计划及迁移基线。 |
 | `decisions/、testing/` | 独立设计取舍与限定范围的验证证据。 |
 | `development/、deployment/、references/、baseline/` | 开发/运维入口、来源审计与只读历史基准。 |

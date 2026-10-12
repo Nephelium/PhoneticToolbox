@@ -28,10 +28,9 @@ def test_p19_real_icon_has_consistent_visible_footprint_and_keeps_source(tmp_pat
         # The enlarged artwork keeps its rounded transparent corners.
         assert all(image.pixelColor(x, y).alpha() < 32
                    for x, y in [(0, 0), (size - 1, 0), (0, size - 1), (size - 1, size - 1)])
-        # Independent audit of the original alpha>=32 bounds: 990 x 973.
-        # The visible artwork is slightly rectangular, even though its canvas is square.
-        # Preserve that ratio to within one output pixel of raster quantization.
-        assert abs((max(ys) - min(ys) + 1) - (max(xs) - min(xs) + 1) * 973 / 990) <= 1
+        # Current approved W1 runtime artwork has equal 256 x 256 alpha bounds.
+        # Preserve its square aspect ratio to within one rasterized pixel.
+        assert abs((max(ys) - min(ys) + 1) - (max(xs) - min(xs) + 1) * 1) <= 1
     target = tmp_path / 'app.ico'
     write_windows_icon(source, target)
     blob = target.read_bytes()

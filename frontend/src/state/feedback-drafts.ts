@@ -1,0 +1,7 @@
+import type {FeedbackImage} from '../platform/feedback.ts';
+export interface FeedbackDraft {text:string;images:FeedbackImage[];requestId:string;contentHash?:string}
+const memory=new Map<string,FeedbackDraft>();
+function database():Promise<IDBDatabase>{return new Promise((resolve,reject)=>{const request=indexedDB.open('ptb-feedback-drafts',1);request.onupgradeneeded=()=>request.result.createObjectStore('drafts');request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});}
+export function newFeedbackDraft():FeedbackDraft{return {text:'',images:[],requestId:crypto.randomUUID()};}
+export async function loadFeedbackDraft(key:string){if(memory.has(key))return memory.get(key)!;const db=await database();try{const result=await new Promise<FeedbackDraft|undefined>((resolve,reject)=>{const request=db.transaction('drafts').objectStore('drafts').get(key);request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});const draft=result??newFeedbackDraft();memory.set(key,draft);return draft;}finally{db.close();}}
+export async function saveFeedbackDraft(key:string,draft:FeedbackDraft){const copy=structuredClone(draft);memory.set(key,copy);const db=await database();try{await new Promise<void>((resolve,reject)=>{const transaction=db.transaction('drafts','readwrite');transaction.objectStore('drafts').put(copy,key);transaction.oncomplete=()=>resolve();transaction.onerror=()=>reject(transaction.error);});}finally{db.close();}}

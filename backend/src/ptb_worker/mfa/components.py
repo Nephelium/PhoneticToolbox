@@ -71,7 +71,7 @@ class ComponentManager:
         self.root = Path(root or default_root()).absolute()
         no_links(self.root)
 
-    def import_archive(self, archive, trusted, self_test):
+    def import_archive(self, archive, trusted, self_test, *, progress=lambda done, total: None):
         if trusted.get('schema') != 'm11-component/1' or not re.fullmatch(r'[A-Za-z0-9_-]{1,80}', trusted.get('id', '')):
             raise ValueError('m11_manifest_invalid')
         expected_platform = 'windows' if os.name == 'nt' else 'linux'
@@ -122,6 +122,7 @@ class ComponentManager:
                 members[key] = info
             if set(members) != set(expected):
                 raise ValueError('m11_archive_manifest_mismatch')
+            extracted = 0
             for key, info in members.items():
                 row = expected[key]
                 destination = target / row['path']
@@ -139,6 +140,8 @@ class ComponentManager:
                     raise ValueError('m11_file_hash_mismatch')
                 if expected_platform == 'linux' and (info.external_attr >> 16) & 0o111:
                     destination.chmod(0o700)
+                extracted += count
+                progress(extracted, total)
         # Explicit trusted fixed relocation, when declared, belongs in self_test.
         # Unsuccessful candidates remain inspectable and never replace current.
         receipt = self_test(target)
@@ -148,7 +151,7 @@ class ComponentManager:
         atomic_json(self.root / 'current.json', dict(id=trusted['id'], path=str(target), receipt=receipt))
         return target
 
-    def download(self, trusted):
+    def download(self, trusted, *, progress=lambda done, total: None):
         url = trusted.get('url')
         if not url:
             raise ValueError('m11_download_not_published')
@@ -164,11 +167,18 @@ class ComponentManager:
         path = cache / (sha + '.part')
         no_links(path)
         offset = path.stat().st_size if path.exists() else 0
+        import shutil
+        if shutil.disk_usage(cache).free < max(0, size - offset) + trusted.get('installed_bytes', 0) + 576_000_000:
+            raise ValueError('m11_component_disk_full')
         if offset > size:
+            path.replace(path.with_name(path.name + '.rejected-' + uuid4().hex[:8]))
             raise ValueError('m11_download_size_mismatch')
+        progress(offset, size)
         if offset < size:
             request = urllib.request.Request(url, headers={'Range': f'bytes={offset}-', 'Accept-Encoding': 'identity'})
             with urllib.request.build_opener(NoRedirect).open(request, timeout=30) as response:
+                if response.status not in (200, 206):
+                    raise ValueError('m11_download_failed')
                 if offset and (response.status != 206 or response.headers.get('Content-Range') != f'bytes {offset}-{size - 1}/{size}'):
                     raise ValueError('m11_download_resume_rejected')
                 with path.open('ab') as stream:
@@ -177,6 +187,12 @@ class ComponentManager:
                         if offset > size:
                             raise ValueError('m11_download_size_mismatch')
                         stream.write(chunk)
-        if offset != size or digest(path) != sha:
+                        progress(offset, size)
+        if offset != size:
+            # Preserve an interrupted transfer for a verified Range retry.
+            raise ValueError('m11_download_incomplete')
+        if digest(path) != sha:
+            # Keep diagnostic bytes without trapping every retry on bad cache.
+            path.replace(path.with_name(path.name + '.rejected-' + uuid4().hex[:8]))
             raise ValueError('m11_archive_hash_mismatch')
         return path

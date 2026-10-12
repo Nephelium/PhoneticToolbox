@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Frontend view model only; the P06 JobClient will map actual task contracts here.
 interface TaskView {id:string;title:string;status:'queued'|'running'|'cancel_requested'|'cancelled'|'succeeded'|'failed'|'interrupted';progress?:number;error?:string;canCancel?:boolean;canRetry?:boolean}
-withDefaults(defineProps<{tasks?:TaskView[];emptyText?:string;emptyTitle?:string}>(),{tasks:()=>[],emptyTitle:'暂无分析任务',emptyText:'分析服务尚未接入。文件预览与试听可用。'});
+withDefaults(defineProps<{tasks?:TaskView[];emptyText?:string;emptyTitle?:string}>(),{tasks:()=>[],emptyTitle:'暂无分析任务',emptyText:'可以预览文件和试听音频。分析请使用桌面版。'});
 const emit=defineEmits<{cancel:[id:string];retry:[id:string]}>();
 const labels={queued:'排队中',running:'运行中',cancel_requested:'正在取消',cancelled:'已取消',succeeded:'已完成',failed:'失败',interrupted:'已中断'};
 </script>

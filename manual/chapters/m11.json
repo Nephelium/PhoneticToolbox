@@ -3,7 +3,7 @@
   "id": "m11",
   "title": "MFA 自动标注",
   "moduleId": "M11",
-  "summary": "准备配套环境、模型、词典和转写，完成资源检查、对齐、取消与恢复，保存 TextGrid 和溯源文件后人工复核。",
+  "summary": "安装独立 MFA 组件，选择配套模型、词典和转写，完成资源检查、对齐、取消与恢复，保存 TextGrid 和溯源文件后人工复核。",
   "body": {
     "type": "doc",
     "content": [
@@ -69,7 +69,7 @@
           },
           {
             "type": "text",
-            "text": " 本模块不生成语音识别转写。"
+            "text": " 请先准备录音对应的转写。"
           }
         ]
       },
@@ -99,7 +99,7 @@
           },
           {
             "type": "text",
-            "text": " 和 CPU。主程序不附带完整 MFA 环境、模型或词典，首次使用需单独准备并检查。资源就绪后，本地对齐可离线运行。"
+            "text": "。MFA 3.3.8 对齐组件使用 CPU。主程序与 MFA 独立组件分开提供，首次使用需安装组件。资源就绪后，本地对齐可离线运行。"
           }
         ]
       },
@@ -424,7 +424,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "：选择环境、模型、词典，检查新资源，设置 Beam 和 Retry beam。"
+                    "text": "：安装独立组件，选择环境、模型、词典，检查新资源，设置 Beam 和 Retry beam。"
                   },
                   {
                     "type": "text",
@@ -550,7 +550,351 @@
         "content": [
           {
             "type": "text",
-            "text": "选择并检查运行环境、模型和词典"
+            "text": "安装组件并选择模型与词典"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "独立组件 ZIP 包含运行环境 "
+          },
+          {
+            "type": "text",
+            "text": "env/",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 和配套资源 "
+          },
+          {
+            "type": "text",
+            "text": "models/",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，默认提供官方普通话声学模型 "
+          },
+          {
+            "type": "text",
+            "text": "mandarin_mfa.zip",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 与发音词典 "
+          },
+          {
+            "type": "text",
+            "text": "mandarin_mfa.dict",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。组件安装成功后自动应用这套汉字转写组合，模型与词典仍可单独更换。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m11-offline",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "安装并应用独立组件"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m11-figure-component-manager",
+          "assetId": "m11-component-delivery-r1-3951c0ab",
+          "caption": "组件内已附普通话模型和词典。可从官网安装组件，也可选择下载好的 ZIP 或已解压文件夹；另有两个按钮打开官方资源目录，便于更换模型和词典。",
+          "alt": "MFA 组件安装三个入口和官方声学模型、发音词典下载按钮。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1,
+          "id": "m11-component-install-steps"
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "展开左栏的 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "组件安装与环境检查",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。首次安装无须预先选择运行环境、声学模型或词典。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "按文件准备情况选择一种入口："
+                  }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "下载并安装组件",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "text",
+                            "text": "：从官网固定版本入口取得组件 ZIP，下载完成后自动进入安装。"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "选择组件压缩包",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "text",
+                            "text": "：在原生文件对话框选择已下载的同版 ZIP。网盘提供的同一 ZIP 也使用此入口，选中后自动安装。"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "选择已解压文件夹",
+                            "marks": [
+                              {
+                                "type": "bold"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "text",
+                            "text": "：在原生目录对话框选择同版 ZIP 解压后的单包根目录。这个目录应同时包含 "
+                          },
+                          {
+                            "type": "text",
+                            "text": "env/",
+                            "marks": [
+                              {
+                                "type": "code"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "text",
+                            "text": " 与 "
+                          },
+                          {
+                            "type": "text",
+                            "text": "models/",
+                            "marks": [
+                              {
+                                "type": "code"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "text",
+                            "text": "，不要只选 "
+                          },
+                          {
+                            "type": "text",
+                            "text": "env/",
+                            "marks": [
+                              {
+                                "type": "code"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "text",
+                            "text": " 子目录。"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "下载阶段显示进度条、百分比、已下载/总大小（MB 或 GB）及实时下载速度（KB/s 或 MB/s）。下载完成后自动转入校验、解压和 MFA 对齐检查。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "选择后等待程序完成文件校验、安装和运行检查。"
+                  },
+                  {
+                    "type": "text",
+                    "text": "文件完整性由程序自动校验。",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "检查结束前请等待当前操作完成。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "成功后核对运行环境、声学模型与发音词典。程序自动登记并应用包内的 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "mandarin_mfa.zip",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 和 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "mandarin_mfa.dict",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，随后即可读入汉字转写语料。要使用拼音或其他资源，再按下节更换并检查。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "官网下载入口使用固定的 "
+          },
+          {
+            "type": "text",
+            "text": "MFA 3.3.8-r1 组件目录",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://www.phonetictoolbox.com/releases/components/mfa/3.3.8-r1/"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。官网下载不可用时，可使用发布者提供的同版 ZIP 离线安装。失败时按提示重新选择组件文件或安装位置，并检查可用空间，当前已应用环境与资源保留。日常对齐无需重复安装。"
           }
         ]
       },
@@ -585,7 +929,7 @@
           },
           {
             "type": "text",
-            "text": "是两类错误，文件名相近不能证明兼容。"
+            "text": "是两类错误，分别检查词条覆盖和音素集匹配。"
           }
         ]
       },
@@ -891,7 +1235,7 @@
         "content": [
           {
             "type": "text",
-            "text": "导入并检查新资源"
+            "text": "更换并检查模型与词典"
           }
         ]
       },
@@ -906,7 +1250,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "在"
+                    "text": "在 "
                   },
                   {
                     "type": "text",
@@ -919,46 +1263,88 @@
                   },
                   {
                     "type": "text",
-                    "text": "中选已检查环境。首次为空时，展开"
+                    "text": " 中选已检查环境。首次使用先完成上述组件安装。使用包内默认模型和词典时无需重复导入，要改用其他资源再继续以下步骤。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "attrs": {
+                  "id": "m11-official-resource-step"
+                },
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "默认组件已经包含普通话模型与词典，使用这套组合无需另外下载。需要换语言时，点资源区下方的 "
                   },
                   {
                     "type": "text",
-                    "text": "组件安装与环境检查",
+                    "text": "下载声学模型（官方）",
                     "marks": [
                       {
                         "type": "bold"
+                      },
+                      {
+                        "type": "link",
+                        "attrs": {
+                          "href": "https://mfa-models.readthedocs.io/en/latest/acoustic/index.html"
+                        }
                       }
                     ]
                   },
                   {
                     "type": "text",
-                    "text": "，在"
+                    "text": " 和 "
                   },
                   {
                     "type": "text",
-                    "text": "已有环境 / auto_alignment",
+                    "text": "下载发音词典（官方）",
                     "marks": [
                       {
                         "type": "bold"
+                      },
+                      {
+                        "type": "link",
+                        "attrs": {
+                          "href": "https://mfa-models.readthedocs.io/en/latest/dictionary/index.html"
+                        }
                       }
                     ]
                   },
                   {
                     "type": "text",
-                    "text": "处点"
+                    "text": "，分别打开官方资源目录。按目录中的兼容说明选择适用于 MFA 3.3.8、目标语言和音素集相匹配的模型与词典。声学模型保留 "
                   },
                   {
                     "type": "text",
-                    "text": "选择",
+                    "text": "ZIP",
                     "marks": [
                       {
-                        "type": "bold"
+                        "type": "code"
                       }
                     ]
                   },
                   {
                     "type": "text",
-                    "text": "，指定环境根目录。"
+                    "text": " 格式，词典使用 "
+                  },
+                  {
+                    "type": "text",
+                    "text": ".dict",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 文件，下载后回到本页继续导入和检查。"
                   }
                 ]
               }
@@ -1076,7 +1462,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "，等待版本、依赖和资源检查及真实小任务结束。首次检查可能较慢，请稍候。"
+                    "text": "，等待资源检查结束。首次检查可能较慢，请稍候。"
                   }
                 ],
                 "attrs": {
@@ -1088,7 +1474,7 @@
                 "attrs": {
                   "id": "m11-figure-check-running",
                   "assetId": "m11-check-running-light-scaled-r20261007",
-                  "caption": "检查中请等待真实环境及兼容性验证结束，再根据检查结果继续。",
+                  "caption": "检查中请等待操作结束，再根据结果继续。",
                   "alt": "最大化 MFA 工作台正在检查已选模型与词典，资源及提交控件暂时禁用。",
                   "width": "100%",
                   "align": "center"
@@ -1129,7 +1515,7 @@
                 "attrs": {
                   "id": "m11-figure-checked-resources",
                   "assetId": "m11-checked-resources-light-scaled-r20261007",
-                  "caption": "公开 a1 小任务通过后，mandarin.zip 与配套拼音词典已检查并应用。",
+                  "caption": "mandarin.zip 与配套拼音词典检查通过，页面显示已检查并应用。",
                   "alt": "最大化 MFA 工作台显示已检查并应用资源，模型为 mandarin.zip，词典为 mandarin_pinyin_tab.dict，待检查提示消失。",
                   "width": "100%",
                   "align": "center"
@@ -1175,7 +1561,7 @@
         "content": [
           {
             "type": "text",
-            "text": "当前小任务检查使用词典中的 "
+            "text": "当前资源检查要求词典含有 "
           },
           {
             "type": "text",
@@ -1214,36 +1600,29 @@
           },
           {
             "type": "text",
-            "text": "。缺少这些词条时会提示尚不能登记，其他语言需相应验证支持；不要为通过检查随意改写词典。"
+            "text": "。请使用含有这些词条的配套模型与词典。"
           }
         ]
       },
       {
         "type": "heading",
         "attrs": {
-          "id": "m11-offline",
+          "id": "m11-existing-environment",
           "level": 3
         },
         "content": [
           {
             "type": "text",
-            "text": "可信离线组件与已有环境"
+            "text": "高级：使用其他已有环境"
           }
         ]
       },
       {
-        "type": "image",
-        "attrs": {
-          "id": "m11-figure-component-manager",
-          "assetId": "m11-component-detail-r4-light-scaled-r20261007",
-          "caption": "展开组件管理后可选择已有环境和可信离线包。模型与词典仍在上方下拉框导入，下载入口保持待发布。",
-          "alt": "最大化 MFA 工作台展开组件管理，显示已有环境、离线 ZIP、可信 JSON 清单、SHA-256 字段及校验导入入口。",
-          "width": "100%",
-          "align": "center"
-        }
-      },
-      {
         "type": "orderedList",
+        "attrs": {
+          "start": 1,
+          "id": "m11-existing-environment-steps"
+        },
         "content": [
           {
             "type": "listItem",
@@ -1253,7 +1632,11 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "已有环境",
+                    "text": "已准备其他兼容环境时，展开组件管理内的 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "高级：使用其他已有环境",
                     "marks": [
                       {
                         "type": "bold"
@@ -1262,11 +1645,11 @@
                   },
                   {
                     "type": "text",
-                    "text": "：选择固定 MFA 3.3.8 / Windows x86_64 环境，模型和词典仍在上方导入，再点"
+                    "text": "，点 "
                   },
                   {
                     "type": "text",
-                    "text": "检查并应用所选资源",
+                    "text": "选择已有环境",
                     "marks": [
                       {
                         "type": "bold"
@@ -1275,20 +1658,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "。旧 "
-                  },
-                  {
-                    "type": "text",
-                    "text": "auto_alignment",
-                    "marks": [
-                      {
-                        "type": "code"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": " 放在 EXE 旁边不会自动登记。"
+                    "text": " 并指定 MFA 3.3.8 / Windows x86_64 环境根目录。"
                   }
                 ]
               }
@@ -1302,7 +1672,11 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "离线组件",
+                    "text": "在上方 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "声学模型",
                     "marks": [
                       {
                         "type": "bold"
@@ -1311,11 +1685,11 @@
                   },
                   {
                     "type": "text",
-                    "text": "：在组件管理选择配套 "
+                    "text": " 与 "
                   },
                   {
                     "type": "text",
-                    "text": "ZIP",
+                    "text": "发音词典",
                     "marks": [
                       {
                         "type": "bold"
@@ -1324,11 +1698,11 @@
                   },
                   {
                     "type": "text",
-                    "text": " 与"
+                    "text": " 中选择配套资源，再点 "
                   },
                   {
                     "type": "text",
-                    "text": "可信发布清单 JSON",
+                    "text": "检查并应用所选资源",
                     "marks": [
                       {
                         "type": "bold"
@@ -1337,24 +1711,25 @@
                   },
                   {
                     "type": "text",
-                    "text": "，填写发布者独立可信渠道公布的"
+                    "text": "。环境版本、依赖、模型与词典必须一同检查通过。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "成功后核对已应用组合。检查失败时保留原登记，修正环境或资源后重新检查；要继续使用原组合，可点 "
                   },
                   {
                     "type": "text",
-                    "text": "清单 SHA-256",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "，准备模型及词典后点"
-                  },
-                  {
-                    "type": "text",
-                    "text": "校验并导入离线组件",
+                    "text": "取消待检查选择",
                     "marks": [
                       {
                         "type": "bold"
@@ -1368,63 +1743,6 @@
                 ]
               }
             ]
-          },
-          {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "导入成功后核对当前环境和已应用组合。失败时按提示补齐资料或空间，原可用版本保留。"
-                  },
-                  {
-                    "type": "text",
-                    "text": "下载并安装组件 · 待发布",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "目前不可用，日常对齐无需重复导入。"
-                  }
-                ]
-              }
-            ]
-          }
-        ],
-        "attrs": {
-          "start": 1
-        }
-      },
-      {
-        "type": "paragraph",
-        "content": [
-          {
-            "type": "text",
-            "text": "新电脑需先备齐兼容的环境、模型和词典。",
-            "marks": [
-              {
-                "type": "bold"
-              },
-              {
-                "type": "textStyle",
-                "attrs": {
-                  "backgroundColor": "#fff1c2",
-                  "backgroundColorDark": "#514218",
-                  "color": "#3b2f00",
-                  "colorDark": "#fff0bb"
-                }
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": " ZIP 内自带的摘要或自行计算的摘要不能代替来源核实。环境检查和导入不会自动升级已有环境。"
           }
         ]
       },
@@ -2113,6 +2431,44 @@
                     "content": [
                       {
                         "type": "text",
+                        "text": "下载声学模型（官方） / 下载发音词典（官方）",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "分别打开官方声学模型与发音词典目录。默认普通话组合已包含在组件中；换语言时选择兼容 MFA 3.3.8、语言和音素集匹配的资源，再从上方下拉框导入检查。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
                         "text": "保存参数草稿",
                         "marks": [
                           {
@@ -2170,7 +2526,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "查看实际来源、版本、平台、大小和 SHA-256。摘要核对文件身份，不能证明标注准确。"
+                        "text": "查看组件与资源的来源、版本和文件信息。"
                       }
                     ]
                   }
@@ -2416,7 +2772,7 @@
           },
           {
             "type": "text",
-            "text": "；输入与资源无误但仍不能有效对齐时再试调整。更宽搜索可能更慢，不保证边界更准。例如 Beam 改为 200，Retry beam 至少升为 800。实际参数可在 "
+            "text": "；输入与资源无误但仍不能有效对齐时再试调整。更宽搜索可能增加耗时，边界质量仍需人工复核。例如 Beam 改为 200，Retry beam 至少升为 800。实际参数可在 "
           },
           {
             "type": "text",
@@ -2473,7 +2829,7 @@
         "attrs": {
           "id": "m11-figure-task-aligning",
           "assetId": "m11-task-aligning-light-scaled-r20261007",
-          "caption": "CPU 对齐任务显示实际运行阶段与事件。阶段进度不能据以推算剩余时间。",
+          "caption": "CPU 对齐任务显示当前运行阶段与事件。",
           "alt": "最大化 MFA 工作台真实 TextGrid 任务处于 MFA 正在对齐阶段，右栏显示阶段进度、任务记录、取消按钮和事件。",
           "width": "100%",
           "align": "center"
@@ -2941,29 +3297,7 @@
         "content": [
           {
             "type": "text",
-            "text": "网页使用与数据保留"
-          }
-        ]
-      },
-      {
-        "type": "paragraph",
-        "content": [
-          {
-            "type": "text",
-            "text": "网页使用已登录项目和管理员登记的环境/模型，导入词典只影响本次页面任务。当前远程执行未开放，"
-          },
-          {
-            "type": "text",
-            "text": "等待已验证节点",
-            "marks": [
-              {
-                "type": "bold"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "时可改用已检查的 Windows 本地环境，刷新不会让旧任务重新执行。"
+            "text": "数据保留"
           }
         ]
       },
@@ -3157,6 +3491,78 @@
                 "content": [
                   {
                     "type": "text",
+                    "text": "官网下载失败",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：官网下载不可用时，取得发布者提供的完整同版 ZIP，使用离线安装入口。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "已解压目录识别失败",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：选择同时包含 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "env/",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 与 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "models/",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 的单包根目录，保留包内清单与文件结构，不混用多个版本的文件。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
                     "text": "环境不存在、版本或依赖错误",
                     "marks": [
                       {
@@ -3166,7 +3572,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "：选择实际可用的 MFA 3.3.8 环境重新检查。不要仅按 DLL 名称安装来源不明的文件。"
+                    "text": "：重新安装发布者提供的组件，或从高级入口选择实际可用的 MFA 3.3.8 环境重新检查。"
                   }
                 ]
               }
@@ -3203,7 +3609,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "探针词不可用",
+                    "text": "检查词条缺失",
                     "marks": [
                       {
                         "type": "bold"
@@ -3251,7 +3657,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "，使用已有已检查组合或等待相应语言支持。"
+                    "text": "，请使用包含其中词条的配套资源。"
                   }
                 ]
               }
@@ -3265,7 +3671,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "离线摘要、路径或空间错误",
+                    "text": "组件文件、路径或空间错误",
                     "marks": [
                       {
                         "type": "bold"
@@ -3274,7 +3680,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "：重新取得配套可信 ZIP/清单，核对独立公布的摘要和可用空间。路径过长时使用较短组件位置。"
+                    "text": "：重新取得发布者提供的同版 ZIP，或重新解压后选择单包根目录。检查剩余空间，路径过长时使用较短组件位置。"
                   }
                 ]
               }
@@ -3366,7 +3772,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "超时 / 临时预算 / 子进程异常",
+                    "text": "任务超时或运行失败",
                     "marks": [
                       {
                         "type": "bold"
@@ -3375,7 +3781,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "：任务未发布完整成果。按日志减小批次并检查环境，避免相同输入反复等待。"
+                    "text": "：减小批次后重新提交；使用包内默认资源仍反复失败时，保存错误提示并反馈问题。"
                   }
                 ]
               }
@@ -3389,7 +3795,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "已取消 / 等待节点",
+                    "text": "任务已取消",
                     "marks": [
                       {
                         "type": "bold"
@@ -3398,7 +3804,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "：取消后先确认终态；等待节点的任务可继续查看，当前需即时对齐时使用本地可用环境。"
+                    "text": "：确认任务已停止后，再重新提交。"
                   }
                 ]
               }
@@ -3485,7 +3891,7 @@
         "content": [
           {
             "type": "text",
-            "text": "成功对齐仍可能存在边界偏差。科研使用需记录模型/词典版本、实际参数、转写来源和人工复核规则，不能从小样例推定全部语言或自然语料准确率。"
+            "text": "科研使用时记录模型/词典版本、实际参数、转写来源和人工复核规则，并结合研究语料评估词与音素边界的质量。"
           }
         ]
       },
@@ -3525,5 +3931,6 @@
         ]
       }
     ]
-  }
+  },
+  "status": "reviewed"
 }

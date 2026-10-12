@@ -1,10 +1,10 @@
 {
-  "version": "3.0.0-m10.r14",
+  "version": "3.0.0-m10.r18",
   "files": [
     {
       "path": "resources/vocal_tract/native/geometry_p2.dll",
-      "bytes": 272384,
-      "sha256": "8f9ac397ab24efc25955b07b7159718822e77e2d62d46f1b864d0f1f620d7686"
+      "bytes": 275968,
+      "sha256": "61d6ecf8f5dc15462a8c3b486f00902d702297dca56ed756537d76ba2e67131b"
     },
     {
       "path": "resources/vocal_tract/native/JD2.speaker",
@@ -38,8 +38,8 @@
     },
     {
       "path": "resources/vocal_tract/sources/geometry_bridge.cpp",
-      "bytes": 13781,
-      "sha256": "529154d6a90429e625e207cbf9cf9439dace08ac8cc143459b0061337c8e9ca7"
+      "bytes": 14341,
+      "sha256": "3fee2d2bcd9ed70f108dfd96d193d8c7ff8c911a807dc0549566a84a162506bf"
     },
     {
       "path": "frontend/public/vocal-tract/assets/head.json",
@@ -53,38 +53,38 @@
     },
     {
       "path": "frontend/public/vocal-tract/anatomy.mjs",
-      "bytes": 10025,
-      "sha256": "a044ddcfd576f3fe216d44010a1b0d4e6373558f5d64a350896a3d659eedb510"
+      "bytes": 11734,
+      "sha256": "d0159cf0137e36ac5934b604f0f5b0c532663f27f47fec7bd8641dcbe1f715e5"
     },
     {
       "path": "frontend/public/vocal-tract/app.js",
-      "bytes": 33184,
-      "sha256": "b926604fc80be96d2e4769cea3ed38222f2bd08193f6ca007062f276df7feee6"
+      "bytes": 34952,
+      "sha256": "5e4934074ac2fdec1b8f0b7771cdf8ce0cadbed9de15160c191026806b7d7509"
     },
     {
       "path": "frontend/public/vocal-tract/controls.mjs",
-      "bytes": 3360,
-      "sha256": "90bcec20dc76efa93fa3ad6db735b8cd20ddd7085226a14876aceb73b55e52f4"
+      "bytes": 4057,
+      "sha256": "b1405240a664e622b8aa4aa6f71d0ac334e1322a5a67459434d65c306b102754"
     },
     {
       "path": "frontend/public/vocal-tract/desktop.css",
-      "bytes": 17304,
-      "sha256": "b26ec961757d1e6ca37b01de67bffc74bbaa08d10d1ded790e2dc0bd8c31d958"
+      "bytes": 17449,
+      "sha256": "7e43a6284d1c0ad97b3bb5c0407f9051b417a14047718ec7f24061ce737fcb34"
     },
     {
       "path": "frontend/public/vocal-tract/geometry.mjs",
-      "bytes": 17257,
-      "sha256": "f749543144bab9bd30517f6da41391f8d71e9da68f9b88eb605d4e9962631869"
+      "bytes": 20429,
+      "sha256": "4fa29f3ff76dda0cbdf419a19580acbd7c83f828c41f9fb26d51304c914e1ef4"
     },
     {
       "path": "frontend/public/vocal-tract/index.html",
-      "bytes": 18917,
-      "sha256": "001660baab10965a83c64492de95eb0d5f2cf967f4aac6d8817f136da7fa386c"
+      "bytes": 19870,
+      "sha256": "7f626e18969c7ecd5cdc55f3a9063a57806afc76f6f57b8b3dc3bee532f9f38c"
     },
     {
       "path": "frontend/public/vocal-tract/keyframes.js",
-      "bytes": 14780,
-      "sha256": "f669221c0c0a93366200855d912cf2ed85ec9e08ef52610d8685197dfc7520a6"
+      "bytes": 16131,
+      "sha256": "8e79c1b9880521b82ee782741a4a9417aa7cea73c6183c0b16be7ea35ed5d821"
     },
     {
       "path": "frontend/public/vocal-tract/layout.js",
@@ -93,23 +93,23 @@
     },
     {
       "path": "frontend/public/vocal-tract/monitor.js",
-      "bytes": 4821,
-      "sha256": "802ea78cd6e89278d6f6aa1f28b00bd184e774ed370ce7e2f6c8091ad2f7b796"
+      "bytes": 7204,
+      "sha256": "a75469742e1d2fb77a8dca552762d538a4eea961adcf60c280879e7f1b8cfa3a"
     },
     {
       "path": "frontend/public/vocal-tract/pitch.js",
-      "bytes": 6337,
-      "sha256": "2efeee5de8b2299f276013a8672330218deb68c1bd5a1e4a5fa62b47b957dcd8"
+      "bytes": 6131,
+      "sha256": "c866cd4184c291e256dfc3a037d0aec42c00583415efa5e3f6a0d3abcb8336b1"
     },
     {
       "path": "frontend/public/vocal-tract/platform.js",
-      "bytes": 2557,
-      "sha256": "2c812e786da79baabb8e3900fcfe073e082c027733d72ad305e7db2842604900"
+      "bytes": 2575,
+      "sha256": "75e30a05751af8b103a2c8bb17113e072ea0ce6cd140e7f5261d24acd4fb0f33"
     },
     {
       "path": "frontend/public/vocal-tract/scene.js",
-      "bytes": 29720,
-      "sha256": "007d186a6ced6abc5f8abb25f861884dce38f0f3eb5462141a7dd743d2398dfe"
+      "bytes": 31854,
+      "sha256": "f6ca621a2a6d9efde40cad24525a43d56f62985d22664660397752907e77eb5b"
     },
     {
       "path": "frontend/public/vocal-tract/styles.css",
@@ -123,8 +123,8 @@
     },
     {
       "path": "frontend/public/vocal-tract/v3.css",
-      "bytes": 21937,
-      "sha256": "33bba33cf0561c48ad85fd4576d025ca52c44ac68360b6214a63897429143e86"
+      "bytes": 23079,
+      "sha256": "bbb5b29cb6963f0f1e45074929705c700f5e38d2b356655a9567b1ab65504414"
     },
     {
       "path": "frontend/public/vocal-tract/vendor/OrbitControls.js",
@@ -158,8 +158,8 @@
     },
     {
       "path": "resources/vocal_tract/sources/M10-build.md",
-      "bytes": 4514,
-      "sha256": "33e775ac07c990f330bb86e13434fa129df1cb794390f8791e6ce4d5c346e583"
+      "bytes": 7823,
+      "sha256": "b2a30fa415ee42000bca942d841c82ee44b9a1230d33aabece829917a1469c1e"
     },
     {
       "path": "resources/vocal_tract/sources/M10-geometric-readout.patch",
@@ -168,8 +168,8 @@
     },
     {
       "path": "resources/vocal_tract/sources/README.md",
-      "bytes": 2636,
-      "sha256": "33c65a69fbffe4de7c1dcc541a7845446ca86ba63dd82508c7592e5371031e79"
+      "bytes": 2561,
+      "sha256": "56418e21990ae7046bb34dcaf4dbd5c7992f0425d861df33ee6740093bf3c48f"
     },
     {
       "path": "resources/vocal_tract/sources.lock.json",
@@ -178,8 +178,8 @@
     },
     {
       "path": "resources/vocal_tract/THIRD_PARTY_NOTICES.md",
-      "bytes": 4284,
-      "sha256": "947db4e5d2a467870c30631f7a3c36c6acff0f245695aaeff6fa79f833197e2a"
+      "bytes": 5946,
+      "sha256": "8340398bd81e248279c640c229f753ae9acfea626000bf2b2e4342a11d78c95e"
     },
     {
       "path": "resources/vocal_tract/VTL-LICENSE.txt",
@@ -188,13 +188,13 @@
     },
     {
       "path": "frontend/public/vocal-tract/presets.js",
-      "bytes": 7757,
-      "sha256": "9d20a947de9b5bcaf69fbeb1cad5faaa0d84f46deedb23c38590835ff361f575"
+      "bytes": 10451,
+      "sha256": "b239db0044a3c4b5a5baa06e09fa4efb4379f32e9692846870eeca2c88283a3b"
     },
     {
       "path": "frontend/public/vocal-tract/video.js",
-      "bytes": 11054,
-      "sha256": "b0d33315139b4afc4fe118d7448716365325180f456adf01f44bed8febf0d1e6"
+      "bytes": 11123,
+      "sha256": "ea4b765e6f9546e4cdece2ace573fc90c1919759b23bc7160120dddfced0ed89"
     },
     {
       "path": "frontend/public/vocal-tract/fonts.js",
@@ -223,8 +223,8 @@
     },
     {
       "path": "frontend/public/vocal-tract/rigid-contact.mjs",
-      "bytes": 3424,
-      "sha256": "0cde767530ce6d343fea96458958b2ddc15c88332be21bd5d459642e137ef59c"
+      "bytes": 4139,
+      "sha256": "a07402e12410138093c2fe462625b83acc67ecad287b3e24e796caca97a2e86b"
     },
     {
       "path": "resources/vocal_tract/sources/m10_r12_patch.py",
@@ -240,6 +240,46 @@
       "path": "resources/vocal_tract/sources/m10_r14_patch.py",
       "bytes": 2474,
       "sha256": "db65aeca97cc36428ca1a5e468c6825d5c3606bdf77d7733b65087299cb1128d"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r15_patch.py",
+      "bytes": 1331,
+      "sha256": "2dad780dccea0b4f7ed1e0f2289927020c212d71aba9435d7d4652f3e42895ea"
+    },
+    {
+      "path": "frontend/public/vocal-tract/airway-mesh.mjs",
+      "bytes": 2674,
+      "sha256": "b8b2103d26833cc78f92f1360535dee6b7ee7a23fc7339b320290f20a1315edb"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r16_patch.py",
+      "bytes": 6855,
+      "sha256": "413fb2847791afb5d3e22556cb1755e9770f7ff01317dc904970862b7f2b3a51"
+    },
+    {
+      "path": "frontend/public/scrollbars.css",
+      "bytes": 1136,
+      "sha256": "c2383583fe46b2c5f198a648d47b2f35bcbf5d86da976beb3d3c53a4d3400697"
+    },
+    {
+      "path": "frontend/public/vocal-tract/monitor-view.mjs",
+      "bytes": 987,
+      "sha256": "b23528a43bd4ed13755f50226bee8c52d730415b901fbd00e7626a07f841e98b"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r17_patch.py",
+      "bytes": 2265,
+      "sha256": "dc3f7f36581b1098cc5c2d986ade45e2a384aaa2e2211b3248ad12dcbbf1d473"
+    },
+    {
+      "path": "frontend/public/vocal-tract/floor-contact.mjs",
+      "bytes": 6350,
+      "sha256": "0040502299b747a69d9f0acf94b6f2adf208eaed8d5b8f2465494c65c75df082"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r18_patch.py",
+      "bytes": 2196,
+      "sha256": "832608c8fcc465eef681346f39d3928b0b68b7e0bf0f1242fbf954124132e5ee"
     }
   ],
   "presentation_revision": "P04-FONT 2026-09-12; development typography only, no EXE rebuilt"

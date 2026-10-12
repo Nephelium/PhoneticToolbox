@@ -5,12 +5,13 @@ import {computed} from 'vue';
 import {contentFor} from './content.ts';
 const props=defineProps<{entry:SymbolEntry;compact?:boolean}>();
 const content=computed(()=>contentFor(props.entry));
+const longExample=computed(()=>props.entry.isExample&&Array.from(props.entry.display).length>12);
 // Keep the short chart citation here. Complete bibliography remains in Sources.
 const visibleSources=computed(()=>props.entry.sourceRefs.filter(s=>!['ipa-chart-zh-2007','ipa-handbook-jiang-2008'].includes(s.sourceId)));
 </script>
 <template>
   <div class="m17-details-content">
-    <div class="m17-detail-heading"><strong class="m17-ipa">{{entry.display}}</strong><div><b>{{content.nameZh}}</b><small>{{content.nameEn}}</small></div></div>
+    <div class="m17-detail-heading" :class="{'m17-detail-heading-example':longExample}"><strong class="m17-ipa">{{entry.display}}</strong><div><b>{{content.nameZh}}</b><small>{{content.nameEn}}</small></div></div>
     <small v-if="entry.notationStatus==='combination'" class="m17-notation-status">组合输入示例 · 沿用既有字母与附加符号</small><small v-else-if="entry.notationStatus==='historical'" class="m17-notation-status">旧版文献记号 · 未列入当前2025基本表</small>
     <p v-if="content.descriptionZh">{{content.descriptionZh}}</p><p v-if="content.usageZh">{{content.usageZh}}</p>
     <p v-if="content.contrastZh" class="hint">{{content.contrastZh}}</p>
@@ -26,6 +27,7 @@ const visibleSources=computed(()=>props.entry.sourceRefs.filter(s=>!['ipa-chart-
 <style scoped>
 .m17-details-content{display:flex;flex-direction:column;gap:8px;line-height:1.5;font-size:0.928571rem}
 .m17-detail-heading{display:flex;align-items:center;gap:12px}.m17-detail-heading>strong{font-size:2.571429rem;flex:none;line-height:1.4}.m17-detail-heading small{display:block;margin-top:3px}
+.m17-detail-heading>div{min-width:0}.m17-detail-heading-example{flex-direction:column;align-items:flex-start;gap:6px}.m17-detail-heading-example>strong{font-size:1.571429rem;max-width:100%;white-space:normal;overflow-wrap:anywhere}
 .m17-details-content p{line-height:1.65}.m17-details-content code{white-space:normal;overflow-wrap:anywhere;font-size:0.857143rem;color:var(--muted)}
 .m17-detail-example{font-size:1.571429rem;margin-right:12px}.m17-representation{color:var(--warning)}.m17-details-content a{font-size:0.857143rem}
 .m17-custom-notes{white-space:pre-wrap}.m17-details-content{overflow-wrap:anywhere}

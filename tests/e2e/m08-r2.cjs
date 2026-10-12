@@ -25,7 +25,7 @@ async function main(){
  let success=false;
  try{
   await page.goto(server.resolvedUrls.local[0]+'tests/m08-host.html');await page.locator('nav').getByRole('button',{name:'变速变调',exact:true}).click();await click('打开音频目录');
-  const select=page.getByLabel('M08 音频');await page.waitForFunction(()=>document.querySelector('[aria-label="M08 音频"]')?.options.length>1);
+  const select=page.getByLabel('变速变调音频');await page.waitForFunction(()=>document.querySelector('[aria-label="变速变调音频"]')?.options.length>1);
   const option=await select.locator('option').evaluateAll(es=>es.find(o=>o.textContent.endsWith('.wav')).value);await select.selectOption(option);await idle();await page.locator('svg.m08-curve').waitFor();
   await click('编辑拐点表');await click('添加行');await decimal('时间 1','0','.3');await click('取消');checks.push('incremental decimal time survives reactive redraw and job polling');
   await layout(1800,1100,'light',true);await layout(1800,1100,'dark',true);checks.push('empty history uses shared placeholder and equal outer panels');

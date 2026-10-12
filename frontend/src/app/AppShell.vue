@@ -3,8 +3,13 @@ import { ref,computed,watch,onMounted,onUnmounted,nextTick } from 'vue';import {
 import ModuleFrame from '../components/ModuleFrame.vue';
 import HelpPage from './HelpPage.vue';
 import StorageSettings from '../components/StorageSettings.vue';
+import IconSettings from '../components/IconSettings.vue';
+import {applicationIcon as logo,homeIconScale} from '../state/app-icon.ts';
 import {storageAvailable} from '../platform/storage.ts';
 import UpdatePanel from '../components/UpdatePanel.vue';
+import FeedbackPanel from '../components/FeedbackPanel.vue';
+import {officialWebsite} from '../platform/feedback-profile.ts';
+import FeedbackNotice from '../components/FeedbackNotice.vue';
 import UpdateNotice from '../components/UpdateNotice.vue';
 import {onUpdatePrepareClose,onUpdateCloseCancelled,replyUpdateClose,type UpdateCheck} from '../platform/updates.ts';
 import {captureOwner} from '../platform/capture-lease.ts';
@@ -15,7 +20,8 @@ import '../design/buttons.css';
 import {installButtonAppearance} from '../state/buttons.ts';
 import {installWaveformAppearance} from '../state/waveform-color.ts';
 import {vResizablePanels} from '../layout/resizablePanels.ts';
-import AudioTransport from '../components/AudioTransport.vue';import AppIcon from '../components/AppIcon.vue';import ModalDialog from '../components/ModalDialog.vue';import MethodReferences from '../components/MethodReferences.vue';import WorkspaceView from './WorkspaceView.vue';import version from '../version.json';import logo from '../assets/k2.png';
+import {integratedTitlebar,desktopMaximized,desktopWindowAction} from '../platform/desktop.ts';
+import AudioTransport from '../components/AudioTransport.vue';import AppIcon from '../components/AppIcon.vue';import ModalDialog from '../components/ModalDialog.vue';import MethodReferences from '../components/MethodReferences.vue';import WorkspaceView from './WorkspaceView.vue';import version from '../version.json';
 import VocalTractPage from '../modules/vocal-tract/VocalTractPage.vue';
 import ParameterEstimationPage from '../modules/parameter-estimation/ParameterEstimationPage.vue';
 import ParameterDisplayPage from '../modules/parameter-display/ParameterDisplayPage.vue';
@@ -67,6 +73,16 @@ const previewKey=(id:string)=>props.research?researchContext.value.key.replace(/
 const m01=computed(()=>m01State(researchContext.value.key));
 const m10Dirty=ref(false);
 const settingsPage=ref<{save:()=>Promise<boolean>}>(),settingsDirty=ref(false);
+const settingsSections=[{id:'appearance',label:'外观'},{id:'fonts',label:'字体'},{id:'icons',label:'图标'},{id:'storage',label:'本机存储与自动清理'}] as const;
+const settingsSection=ref<(typeof settingsSections)[number]['id']>('appearance');
+function navigateSettings(event:KeyboardEvent,index:number){
+ const offset=event.key==='ArrowRight'?1:event.key==='ArrowLeft'?-1:0;
+ if(!offset&&event.key!=='Home'&&event.key!=='End')return;
+ event.preventDefault();
+ const next=event.key==='Home'?0:event.key==='End'?settingsSections.length-1:(index+offset+settingsSections.length)%settingsSections.length;
+ settingsSection.value=settingsSections[next]!.id;
+ (event.currentTarget as HTMLElement).parentElement?.querySelectorAll<HTMLButtonElement>('[role=tab]')[next]?.focus();
+}
 const tabTitle=(id:string)=>id==='home'?'首页':id==='settings'?'设置':id==='help'?'使用说明':modules.find(m=>m.id===id)?.title??id;
 const m03Page=ref<{save:()=>boolean}>();
 const SpeechSynthesisPage=defineAsyncComponent(()=>import('../modules/speech-synthesis/SpeechSynthesisPage.vue'));
@@ -131,17 +147,19 @@ async function discardClose(){if(closing.value==='M16'){await finishRecordingClo
 async function saveClose(){if(closing.value==='M09'){cancelClose();return;}if(closing.value==='M16'){await finishRecordingClose();return;}if(closing.value==='M17'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m17Page.value?.save())remove('M17');else notice.value='音标草稿保存失败，文本仍保留。';}catch(error){notice.value=error instanceof Error?error.message:'音标草稿保存失败。';}finally{closingBusy.value=false;}return;}if(closing.value==='settings'){if(closingBusy.value)return;closingBusy.value=true;try{if(await settingsPage.value?.save())remove('settings');else notice.value='字体未能应用，设置和编辑已保留。请检查字体设置后重试。';}finally{closingBusy.value=false;}return;}if(closing.value==='M07'){if(m07Page.value?.save())remove('M07');else notice.value='发声连续统草稿未保存，请完成或取消当前操作。';return;}if(closing.value==='M05'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m05Page.value?.save())remove('M05');else notice.value='录制或结果尚未保存，请返回唇形模块处理。';}finally{closingBusy.value=false;}return;}if(closing.value==='M11'){if(m11Page.value?.save())remove('M11');else notice.value='MFA 参数未保存，请等待当前操作完成。';return;}if(closing.value==='M15'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m15Page.value?.save())remove('M15');else notice.value='请先暂停实验、保存项目，并导出结果后确认文件已保存。';}finally{closingBusy.value=false;}return;}if(closing.value==='M06'){if(m06Page.value?.save())remove('M06');else notice.value='声学参数合成参数未保存，标签和编辑仍保留。';return;}if(closing.value==='M14'){if(m14Page.value?.save())remove('M14');else notice.value='音系归纳草稿保存失败，请完成当前操作或检查本机存储。';return;}if(closing.value==='M08'){if(m08Page.value?.save())remove('M08');else notice.value='变速变调草稿保存失败，标签和编辑仍保留。';return;}if(closing.value==='M13'){if(m13Page.value?.save())remove('M13');else notice.value='汉字转国际音标 草稿保存失败，当前文本和排版仍保留。请检查本机存储后重试。';return;}if(closing.value==='M12'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m12Page.value?.save())remove('M12');else notice.value='标注或唇偏保存失败，编辑仍保留。请返回模块检查错误。';}finally{closingBusy.value=false;}return;}if(closing.value==='M04'){if(m04Page.value?.save())remove('M04');else notice.value='LPC 参数草稿无效或保存失败，请返回模块检查。';return;}if(closing.value==='M03'){if(m03Page.value?.save())remove('M03');else notice.value='参数草稿保存失败，标签和编辑仍保留。请检查本机存储后重试。';return;}if(closing.value==='M02'){if(m02Page.value?.save())remove('M02');return;}if(closing.value==='M10'){notice.value='请返回关键帧，保存或取消正在编辑的姿势后再关闭。';return;}if(closing.value==='M01'&&m01.value.drawer){notice.value='请先应用或取消参数/设置对话框中的编辑，再保存关闭。';return;}if(closing.value==='M01'?saveM01(researchContext.value.key):saveDraft(previewKey(closing.value)))remove(closing.value);else notice.value='本机草稿保存失败，标签仍保留。请检查浏览器存储权限。';}
 async function leaveProject(){if(closingBusy.value||m15Focus.value)return;closingBusy.value=true;try{if(m16Page.value&&!await m16Page.value.beforeClose())return;if(moduleDirty('M17')&&!await m17Page.value?.save())return;if(settingsDirty.value&&!await settingsPage.value?.save())return;if(moduleDirty('M07')&&!m07Page.value?.save())return;if(moduleDirty('M05')&&!await m05Page.value?.save())return;if(moduleDirty('M11')&&!m11Page.value?.save())return;if(moduleDirty('M15')&&!await m15Page.value?.save())return;if(moduleDirty('M06')&&!m06Page.value?.save())return;if(moduleDirty('M14')&&!m14Page.value?.save())return;if(moduleDirty('M08')&&!m08Page.value?.save())return;if(moduleDirty('M09')&&!m09Page.value?.save())return;if(m12Page.value&&!await m12Page.value.save())return;emit('leaveProject');}finally{closingBusy.value=false;}}
 function refs(id?:string){referencesId.value=id;modal.value='references';}
+function titleDrag(event:PointerEvent){if(event.button===0&&!(event.target as HTMLElement).closest('button,input,a,[role=separator]'))desktopWindowAction('move');}
+function titleDoubleClick(event:MouseEvent){if(!(event.target as HTMLElement).closest('button,input,a'))desktopWindowAction('maximize');}
 function tabKey(event:KeyboardEvent){let n=tabs.value.indexOf(active.value);if(event.key==='ArrowRight')n=(n+1)%tabs.value.length;else if(event.key==='ArrowLeft')n=(n-1+tabs.value.length)%tabs.value.length;else if(event.key==='Home')n=0;else if(event.key==='End')n=tabs.value.length-1;else return;event.preventDefault();open(tabs.value[n]);void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
 function beforeUnload(event:BeforeUnloadEvent){if(dirty(m01.value)||tabs.value.some(id=>moduleDirty(id))){event.preventDefault();event.returnValue='';}}
 onMounted(()=>window.addEventListener('beforeunload',beforeUnload));onUnmounted(()=>window.removeEventListener('beforeunload',beforeUnload));
-const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticToolbox',references:'开源与学术致谢','font-license':'内置字体版权与许可'}[modal.value]||''));
+const modalTitle=computed(()=>({update:updateCheck.value?.candidate?'发现新版本':'检查更新',about:'关于 PhoneticToolbox',feedback:'问题反馈',references:'开源与学术致谢','font-license':'内置字体版权与许可'}[modal.value]||''));
 </script>
 <template>
 <a href="#main-content" class="skip-link">跳到工作区</a>
-<div class="app-shell" :class="{collapsed}" :inert="updateReady" v-resizable-panels="{key:research?.ownerId?'server:'+research.ownerId+':navigation':'navigation',center:'.main-shell',centerMin:540,disabled:collapsed,panels:[{selector:'.sidebar',side:'left',label:'工具导航',initial:224,min:184,max:360}]}">
+<div class="app-shell" :class="{collapsed,'integrated-titlebar':integratedTitlebar}" :inert="updateReady" v-resizable-panels="{key:research?.ownerId?'server:'+research.ownerId+':navigation':'navigation',center:'.main-shell',centerMin:540,disabled:collapsed,panels:[{selector:'.sidebar',side:'left',label:'工具导航',initial:224,min:184,max:360}]}">
 <aside id="tool-sidebar" class="sidebar" aria-label="工具导航">
-<div class="brand">
-<img :src="logo" alt="PhoneticToolbox 波形团子"/>
+<div v-if="host.kind!=='desktop'||integratedTitlebar" class="brand" @pointerdown="integratedTitlebar&&titleDrag($event)" @dblclick="integratedTitlebar&&titleDoubleClick($event)">
+<img :src="logo" alt="PhoneticToolbox 应用图标"/>
 <span>PhoneticToolbox<small>语音研究工具箱</small>
 </span>
 </div>
@@ -178,7 +196,7 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 </div>
 </aside>
 <div class="main-shell">
-<header class="topbar">
+<header class="topbar" @pointerdown="integratedTitlebar&&titleDrag($event)" @dblclick="integratedTitlebar&&titleDoubleClick($event)">
 <div class="workspace-tabs" role="tablist" aria-label="工作区标签">
 <div v-for="id in tabs" :key="id" class="tab-wrap" :class="{active:active===id}">
 <button :id="'tab-'+id" role="tab" :aria-selected="active===id" :tabindex="active===id?0:-1" aria-controls="main-content" @click="open(id)" @keydown="tabKey">
@@ -192,30 +210,32 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 <button v-if="research" class="project-return" :title="'返回项目与文件管理 · '+research.label" :disabled="closingBusy" @click="leaveProject">← 返回项目与文件管理 · {{research.label}}</button>
 <button v-if="m16Recording" class="host-badge recording-indicator" aria-label="录音进行中，返回录音" @click="open('M16')">● 录音进行中</button>
 <span v-if="!research" class="host-badge">{{host.kind==='desktop'?'本地桌面':'浏览器预览'}}</span>
+<div v-if="integratedTitlebar" class="window-controls" aria-label="窗口操作">
+<button aria-label="最小化窗口" @click="desktopWindowAction('minimize')"><span aria-hidden="true">─</span></button>
+<button :aria-label="desktopMaximized?'还原窗口':'最大化窗口'" @click="desktopWindowAction('maximize')"><svg viewBox="0 0 16 16" aria-hidden="true"><path v-if="desktopMaximized" d="M5 3h8v8M3 5h8v8H3z"/><rect v-else x="3" y="3" width="10" height="10"/></svg></button>
+<button class="window-close" aria-label="关闭窗口" @click="desktopWindowAction('close')"><AppIcon name="close"/></button>
+</div>
 </header>
 <main id="main-content" :class="{'pane-home':active==='home','pane-manual':active==='help','pane-workspace':['M01','M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15','M16','M17','M18'].includes(active)}" tabindex="-1" role="tabpanel" :aria-labelledby="'tab-'+active" @click.capture="contextualHelp">
 <div v-if="active==='home'" class="home-page">
 <header class="welcome">
 <div class="welcome-copy">
-<img :src="logo" alt=""/>
+<img :src="logo" alt="" :style="{'--home-icon-scale':homeIconScale/100}"/>
 <div>
 <p class="eyebrow">PHONETIC TOOLBOX 3.0</p>
 <h1>从这里开始</h1>
 <p>选择一个工具，开始语音分析、合成与实验。</p>
 </div>
 </div>
-<div class="welcome-note">
-<span class="status-dot"/>你的语音研究工作台<small>把精力留给声音本身。</small>
-</div>
+<button class="home-credits" @click="refs()">开源与学术致谢</button>
 </header>
 <div class="section-title">
 <h2>全部工具</h2>
-<span>{{modules.length}} 个工具 · {{groups.length}} 个研究环节</span>
 </div>
 <div class="tool-groups">
 <section v-for="(group,index) in groups" :key="group" class="tool-group" :class="'group-'+index">
 <header>
-<AppIcon :name="['chart','wave','align'][index]"/>
+<AppIcon :name="['analysis','synthesis','align','library'][index]"/>
 <h2>{{group}}</h2>
 <small>0{{index+1}}</small>
 </header>
@@ -247,15 +267,11 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 </div>
 </section>
 <button class="guide-banner" @click="openManual()">
-<AppIcon name="book"/>
+<AppIcon name="help"/>
 <span>第一次使用？<strong>了解工作台的基本操作</strong>
 </span>
 <span>打开帮助 →</span>
 </button>
-<footer class="home-footer">
-<span>PhoneticToolbox 3.0 · 界面试用版</span>
-<button @click="refs()">开源与学术致谢</button>
-</footer>
 </div>
 <ParameterEstimationPage v-else-if="current?.id==='M01'" :key="researchContext.key" :context="researchContext" @references="refs('M01')" @help="openManual('M01')"/>
 <WorkspaceView v-else-if="current&&!['M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15','M16','M17','M18'].includes(current.id)" :key="current.id" :module="current" :state-key="previewKey(current.id)" @references="refs(current?.id)"/>
@@ -277,8 +293,13 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 <PerceptionPage v-if="tabs.includes('M15')" v-show="active==='M15'" ref="m15Page" :active="active==='M15'" @dirty="m15Dirty=$event" @focus="m15Focus=$event" @references="refs('M15')"/>
 <VocalTractPage :state-key="previewKey('M10')" v-if="tabs.includes('M10')" v-show="active==='M10'" :active="active==='M10'" @references="refs('M10')" @help="openManual('M10')" @close="close('M10')" @dirty="m10Dirty=$event"/>
 <ModuleFrame v-if="tabs.includes('settings')" v-show="active==='settings'" label="工作台设置" class="settings-page">
-<div class="settings-columns"><AppearanceSettings v-model:mode="theme" v-model:palette="palette"/><FontSettings ref="settingsPage" @dirty="settingsDirty=$event"/></div>
-<StorageSettings v-if="storageAvailable"/>
+<div class="settings-navigation" role="tablist" aria-label="设置分类">
+<button v-for="(section,index) in settingsSections" :id="'settings-tab-'+section.id" :key="section.id" type="button" role="tab" :aria-selected="settingsSection===section.id" :aria-controls="'settings-panel-'+section.id" :tabindex="settingsSection===section.id?0:-1" @click="settingsSection=section.id" @keydown="navigateSettings($event,index)">{{section.label}}</button>
+</div>
+<div id="settings-panel-appearance" v-show="settingsSection==='appearance'" class="settings-panel" role="tabpanel" aria-labelledby="settings-tab-appearance" tabindex="0"><AppearanceSettings v-model:mode="theme" v-model:palette="palette"/></div>
+<div id="settings-panel-fonts" v-show="settingsSection==='fonts'" class="settings-panel" role="tabpanel" aria-labelledby="settings-tab-fonts" tabindex="0"><FontSettings ref="settingsPage" @dirty="settingsDirty=$event"/></div>
+<div id="settings-panel-icons" v-show="settingsSection==='icons'" class="settings-panel" role="tabpanel" aria-labelledby="settings-tab-icons" tabindex="0"><IconSettings/></div>
+<div id="settings-panel-storage" v-show="settingsSection==='storage'" class="settings-panel" role="tabpanel" aria-labelledby="settings-tab-storage" tabindex="0"><StorageSettings v-if="storageAvailable"/><p v-else class="settings-card muted" role="status">本机存储与自动清理在桌面版中提供。请打开桌面工作台管理本机缓存。</p></div>
 </ModuleFrame>
 <HelpPage v-if="tabs.includes('help')" v-show="active==='help'" :active="active==='help'" :target="manualTarget" :request-key="manualRequest" :playback-allowed="!m16Recording&&!m15Focus" :return-label="manualOrigin?'返回 '+tabTitle(manualOrigin):undefined" @return-tool="returnFromManual"/>
 </main>
@@ -287,7 +308,7 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 </div>
 <div class="statusbar">
 <span>
-<span class="status-dot"/>{{current?.id==='M18'?'语音学论文精读 · 服务器分发与本地阅读':current?.id==='M16'?'录音 · 本机采集与可恢复编辑':current?.id==='M17'?'国际音标表Plus · 本地输入与固定字体':current?.id==='M05'?'唇形 · 本地候选预览与 legacy 离线任务':current?.id==='M11'?'MFA · 音频与已有文本强制对齐':current?.id==='M15'?'感知实验 · 客户端运行与本地恢复':current?.id==='M01'?'参数估计 · 文件、试听与任务':current?.id==='M02'?'参数显示 · 原帧与多图窗':current?.id==='M03'?'EGG · 接触商与声门事件':current?.id==='M07'?'发声连续统 · LPC 残差与持久任务':current?.id==='M06'?'声学参数合成 · 参数曲线与持久任务':current?.id==='M08'?'变速变调 · 持久任务与结果':current?.id==='M04'?'LPC · 线性预测谱包络':current?.id==='M09'?'语谱图转音频 · 图片重建与频谱绘制':current?.id==='M10'?'生理参数合成 · VTL 2.4':current?.id==='M12'?'标注对齐 · TextGrid 与唇偏独立保存':current?.id==='M14'?'音系归纳 · 字表、归并与三文件导出':current?.id==='M13'?'汉字转国际音标 · 本地逐字映射与离线导出':current?'公共预览就绪 · 分析功能待接入':'就绪 · 选择工具开始'}}</span>
+<span class="status-dot"/>{{current?.id==='M18'?'语音学论文精读 · 服务器分发与本地阅读':current?.id==='M16'?'录音 · 本机采集与可恢复编辑':current?.id==='M17'?'国际音标表Plus · 本地输入与固定字体':current?.id==='M05'?'唇形提取 · 实时预览与视频分析':current?.id==='M11'?'MFA · 音频与已有文本强制对齐':current?.id==='M15'?'感知实验 · 客户端运行与本地恢复':current?.id==='M01'?'参数估计 · 文件、试听与任务':current?.id==='M02'?'参数显示 · 原帧与多图窗':current?.id==='M03'?'EGG · 接触商与声门事件':current?.id==='M07'?'发声类型合成 · LPC 残差连续统':current?.id==='M06'?'声学参数合成 · 参数曲线与音频合成':current?.id==='M08'?'变速变调 · 基频编辑与音频合成':current?.id==='M04'?'LPC · 线性预测谱包络':current?.id==='M09'?'语谱图转音频 · 图片重建与频谱绘制':current?.id==='M10'?'生理参数合成 · VTL 2.4':current?.id==='M12'?'标注对齐 · TextGrid 与唇偏独立保存':current?.id==='M14'?'音系归纳 · 字表、归并与三文件导出':current?.id==='M13'?'汉字转国际音标 · 本地逐字映射与离线导出':current?'就绪 · 选择文件开始':'就绪 · 选择工具开始'}}</span>
 <span>{{research&&!['M16','M17','M18'].includes(active)?'当前账号的项目资源':'本机文件 · 无自动上传'}}</span>
 </div>
 </div>
@@ -310,27 +331,35 @@ const modalTitle=computed(()=>({update:'检查更新',about:'关于 PhoneticTool
 </template>
 </ModalDialog>
 <UpdateNotice v-if="!m15Focus&&!m16Recording" @checked="updateCheck=$event" @open="modal='update'"/>
-<ModalDialog v-if="modal" :title="modalTitle" :wide="modal==='references'||modal==='update'" @close="modal=''">
+<FeedbackNotice v-if="!m15Focus&&!m16Recording" @open="modal='feedback'"/>
+<ModalDialog v-if="modal" :title="modalTitle" :wide="modal==='references'||modal==='update'||modal==='feedback'" :variant="modal==='update'?'update':undefined" @close="modal=''">
 <template v-if="modal==='update'">
 <UpdatePanel :initial-result="updateCheck" @checked="updateCheck=$event"/>
 </template>
 <template v-else-if="modal==='about'">
 <div class="about-brand">
-<img :src="logo" alt="波形团子"/>
+<img :src="logo" alt="应用图标"/>
 <h3>PhoneticToolbox 3.0</h3>
 </div>
 <p>为语音分析、合成、标注与实验构建的研究工作台。</p>
 <p class="muted">界面试用版 · 共用前端与科研核心。各模块的实施范围和引用分别展示。</p>
 <div class="about-actions">
+            <a :href="officialWebsite" target="_blank" rel="noopener noreferrer" class="about-website primary">官方网站 ↗</a>
+<button class="primary" @click="modal='feedback'">问题反馈</button>
 <button class="primary" @click="refs()">开源与学术致谢</button>
-<button @click="modal='font-license'">内置字体版权与许可</button>
+<button class="primary" @click="modal='font-license'">内置字体版权与许可</button>
 </div>
 </template>
+<FeedbackPanel v-else-if="modal==='feedback'"/>
 <FontLicenses v-else-if="modal==='font-license'"/>
 <MethodReferences v-else-if="modal==='references'" :module-id="referencesId"/>
 </ModalDialog>
 </template>
 <style scoped>
+.about-website.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.about-website.primary:hover{background:var(--accent);color:var(--on-accent);filter:brightness(.94)}
+:global(html[data-button-style=plain]) .about-website.primary{background:var(--panel);color:var(--text);border-color:var(--border);filter:none}
+:global(html[data-button-style=plain]) .about-website.primary:hover{border-color:var(--accent)}
 .recording-indicator {color:var(--danger,#b63838);border:1px solid currentColor;border-radius:6px;background:var(--panel);white-space:nowrap;cursor:pointer;}
 .pane-manual{overflow:hidden;display:flex;flex-direction:column;min-height:0}
 .pane-manual>:deep(.manual-reader){flex:1;min-height:0}

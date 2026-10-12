@@ -1,0 +1,57 @@
+{
+  "schema": "ptb-m10-native-digests/1",
+  "source_id": "SRC-VTL",
+  "revision": "M10-R14",
+  "sections": 257,
+  "source_dll_sha256": "8f9ac397ab24efc25955b07b7159718822e77e2d62d46f1b864d0f1f620d7686",
+  "fields": {
+    "a": {
+      "contours": "6c8e800bd80eaa0606d512667ca0253010800b94d923106fd24a96f9957bd2d3",
+      "centerline": "40697a09bc696c7d50cf4c92a2ef92f187f8230a815f043eb5f6155bcaa97c26",
+      "tube_areas": "89ccdce66d3d7d9bc504b97e1ed524cfe51de0590c5ea06efdb9a5c58039be11",
+      "transfer_db": "07059a81a35c4c9470aa8b3630a435f3c224bdf497a3c79dc9875700453c4b0a",
+      "resonances": "c447bf21b1c6b5117d6cc7ee239ed2b22755fe686d50b47b9ba7b2649ff37d27",
+      "airway_sections": "072254a2c92c5ad1f23d4a697746209a37e00e0812ff96546e61a0a631a174e3"
+    },
+    "i": {
+      "contours": "3ab796ffa97364abfb20d615b07e16d81fd328e50b162ea5861fb2e600f61c95",
+      "centerline": "e95993fd62be76d22a76a0197ec6792ea6edcf37b3c2e1de9c3ec5efea9f1a70",
+      "tube_areas": "295ae5ed230b8008be8b085e9a2cf6523057aab3b3a6c84787df3905f9a00106",
+      "transfer_db": "f7e06a415390a6d6987db56a23d8a849688366f372eb6307c5a7f03147b586c5",
+      "resonances": "115de252292800edb7ff0d40ad793b2c8ac38678e945912a13b191c742c7fa34",
+      "airway_sections": "b329cbb214252909aa8238483bc67b252e7b99d1a1d0f370b2347901dd744b52"
+    },
+    "u": {
+      "contours": "4970a53d8ff2e1e5d90ff278eb8ae064cbf44a406a9c454636f6df840843ce42",
+      "centerline": "37f90c1c8316886a322e616fcd3a752eeb9afc9d7f316d11b1ad9ee9213c0aeb",
+      "tube_areas": "882fab25d215848089aa4ad096fca041fcd1dfe1d761f7cfd916ea681eae8fc2",
+      "transfer_db": "f2805bf2a7243e638ec645cda44161c567840b4e606290d2a30ea2cbc31043c1",
+      "resonances": "51d6882cd01a7583991f46754d2684bb17a84e78dfd29ac602fad70bad89dc8c",
+      "airway_sections": "216baef49718905e11b6d8d61522f76e57030f1f939484b2074c20a34cf42ba6"
+    },
+    "n": {
+      "contours": "727aa3a73643bc8dd0a726103e0ef4435f6db6a35f6eaf638c46cad3a9653cbd",
+      "centerline": "d12427e2517309e8213fab21b68795d47df62361e6d1ee64889c46a426e2ada9",
+      "tube_areas": "0112984ca7fc8eec472210f9bd6affd7b6712bfda9babdcefae991669f07116d",
+      "transfer_db": "bd6d9ddc7b15a490bdac0b74615615c718e067d19faf4ee08be1dab274d558e6",
+      "resonances": "95a53303093a677ff91e17f90ef419b487837527b023b1d457a3b8b06a15090c",
+      "airway_sections": "f1ca5581d2fb89bb83e2364f24d6c22d50b2c0368c98c82796aecfaac2ef5747"
+    },
+    "l": {
+      "contours": "73ce04d2998a55b6bd0d0dc0378ce3902506f56f32ef86a840ea98ffa7fe79ea",
+      "centerline": "6605afeaaa7db338907df4a87516e57fe7c7b94f89782070b8c347bfff2f11b8",
+      "tube_areas": "c4ebddc67302e0394dd1fd6771f13f10fee0b1cfbeb8024b066f67f8de11cdad",
+      "transfer_db": "54d241fbf6cac4b161de641fd447806c94db3d47251a9c867447c854f5281e1e",
+      "resonances": "beb2d9773d6b1d4df6f06da371861b40bc4851a628d4dd53c4b740534966eaa6",
+      "airway_sections": "49f5ffc8f7d46ee527cbc76405f580f89f49f0055550272a21b673e6bbc981fb"
+    },
+    "s": {
+      "contours": "5f298e142eb9e5fe2fdfa6b2c2f244ff97c60100c21723f07a656ab1191530aa",
+      "centerline": "d7418c76677e22856054bc6e31e4ed9ed02ccbc22e6005a77d488b4a33b4dc73",
+      "tube_areas": "74c6454c59a0de4d432d6fa7ef05b80147fe0a1d83917ed016962e2dc0b9f1bb",
+      "transfer_db": "cd0fe82b7f6c5ad0bab02f67f6efadfb7aaaad10aa1dd1ec5677034c5e2b8c55",
+      "resonances": "2c36bea09776063a7e8984bd1ed3523b8d20b4a958108f351940aae6ae356766",
+      "airway_sections": "9146f2c6db1de720d0c6ce7e074e59566e405489a5eafeef6597a69bedb57a9b"
+    }
+  }
+}

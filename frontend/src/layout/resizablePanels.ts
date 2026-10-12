@@ -3,7 +3,7 @@ import {projects} from '../platform/browser.ts';
 import {fitPanels,layoutKey,panelWidth,type PanelLimit} from './panelWidths.ts';
 import styles from './resizablePanels.css?inline';
 
-interface Panel extends PanelLimit { selector:string; side:'left'|'right'; label:string; variable?:string; savedVariable?:string }
+interface Panel extends PanelLimit { selector:string; side:'left'|'right'; label:string; variable?:string; savedVariable?:string; initialFractionOfRemaining?:number }
 export interface PanelLayout { key:string; legacyKey?:string; center:string; centerMin?:number; panels:Panel[]; disabled?:boolean }
 type Store={read<T>(key:string,fallback:T):T;write(key:string,value:unknown):boolean};
 const controllers=new WeakMap<HTMLElement,ReturnType<typeof resizePanels>>();
@@ -23,12 +23,12 @@ export function resizePanels(root:HTMLElement,options:PanelLayout,store:Store=pr
     const wanted=panelWidth(saved[panel.savedVariable??variable],panel);
     // Each nested layout owns its variables; never inherit the navigation width.
     root.style.setProperty(variable,wanted+'px');
-    return {panel,variable,handle,wanted,width:panel.initial,max:panel.max,visible:false};
+    return {panel,variable,handle,wanted,width:panel.initial,max:panel.max,visible:false,automatic:typeof saved[panel.savedVariable??variable]!=='number'&&typeof panel.initialFractionOfRemaining==='number'};
   });
   const message=doc.createElement('span');message.className='panel-resize-message';message.setAttribute('role','status');root.append(message);
   let frame=0,dead=false,disabled=!!options.disabled;
   type Entry=typeof entries[number];
-  let drag:{entry:Entry;id:number;x:number;width:number;scale:number;shield:HTMLElement;wanted:number}|undefined;
+  let drag:{entry:Entry;id:number;x:number;width:number;scale:number;shield:HTMLElement;wanted:number;automatic:boolean}|undefined;
   const schedule=()=>{if(!dead){win.cancelAnimationFrame(frame);frame=win.requestAnimationFrame(measure);}};
   function measure(){
     if(dead)return;
@@ -46,6 +46,11 @@ export function resizePanels(root:HTMLElement,options:PanelLayout,store:Store=pr
     const active=entries.filter(e=>e.visible);
     if(!cr||!active.length)return;
     const gap=parseFloat(win.getComputedStyle(root).columnGap)||0;
+    const rootStyle=win.getComputedStyle(root),innerWidth=parseFloat(rootStyle.width)-(rootStyle.boxSizing==='border-box'?['paddingLeft','paddingRight','borderLeftWidth','borderRightWidth'].reduce((sum,key)=>sum+(parseFloat(rootStyle[key as keyof CSSStyleDeclaration] as string)||0),0):0);
+    for(const e of active.filter(entry=>entry.automatic)){
+      const remaining=innerWidth-gap*active.length-active.filter(entry=>entry!==e).reduce((sum,entry)=>sum+entry.wanted,0);
+      e.wanted=Math.max(e.panel.min,Math.min(e.panel.max,remaining*Math.max(0,Math.min(1,e.panel.initialFractionOfRemaining!))));
+    }
     const widths=fitPanels(active.map(e=>e.wanted),active.map(e=>e.panel.min),root.clientWidth-gap*active.length-(options.centerMin??280));
     active.forEach((e,i)=>{const value=widths[i]+'px';if(root.style.getPropertyValue(e.variable)!==value)root.style.setProperty(e.variable,value);});
     const content=root.querySelector<HTMLElement>(options.center)!.getBoundingClientRect();
@@ -65,13 +70,13 @@ export function resizePanels(root:HTMLElement,options:PanelLayout,store:Store=pr
     if(!drag)return;const d=drag;drag=undefined;
     d.shield.remove();d.entry.handle.classList.remove('dragging');
     if(d.entry.handle.hasPointerCapture(d.id))d.entry.handle.releasePointerCapture(d.id);
-    if(cancel)d.entry.wanted=d.wanted;else persist();schedule();
+    if(cancel){d.entry.wanted=d.wanted;d.entry.automatic=d.automatic;}else persist();schedule();
   }
   for(const e of entries){
     e.handle.addEventListener('pointerdown',event=>{
       if(event.button!==0||!e.visible)return;event.preventDefault();finish();measure();
       const shield=doc.createElement('div');shield.className='panel-resize-shield';doc.body.append(shield);
-      drag={entry:e,id:event.pointerId,x:event.clientX,width:e.width,scale:root.getBoundingClientRect().width/root.offsetWidth||1,shield,wanted:e.wanted};
+      drag={entry:e,id:event.pointerId,x:event.clientX,width:e.width,scale:root.getBoundingClientRect().width/root.offsetWidth||1,shield,wanted:e.wanted,automatic:e.automatic};e.automatic=false;
       e.handle.focus({preventScroll:true});e.handle.setPointerCapture(event.pointerId);e.handle.classList.add('dragging');
     });
     e.handle.addEventListener('pointermove',event=>{
@@ -83,6 +88,7 @@ export function resizePanels(root:HTMLElement,options:PanelLayout,store:Store=pr
       if(event.key==='Escape'){finish(true);return;}
       if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)||!e.visible)return;
       event.preventDefault();measure();const direction=(event.key==='ArrowRight'?1:-1)*(e.panel.side==='left'?1:-1);
+      e.automatic=false;
       e.wanted=panelWidth(event.key==='Home'?e.panel.min:event.key==='End'?e.max:Math.min(e.max,e.width+direction*(event.shiftKey?40:10)),e.panel);measure();persist();
     });
   }

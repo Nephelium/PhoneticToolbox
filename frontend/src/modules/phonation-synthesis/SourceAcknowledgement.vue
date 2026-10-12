@@ -33,7 +33,7 @@ async function copy(){
   <p>{{upstream.adaptation_note}}</p>
   <p>{{upstream.license}}</p>
   <p>{{upstream.adaptation_caution}} <a :href="upstream.urls.repository" target="_blank" rel="noopener noreferrer">尝试作者团队的官方开源代码</a></p>
-  <p>本模块用于制作 LPC 残差操纵的实验刺激。上述适配不表示精确复现原论文全部流程，也未验证发声类别知觉效度或连续统的知觉等距。原论文、配套录音与统计数据的许可分别处理，Parselmouth、REAPER 等组件保留各自来源与许可。</p>
+  <p>本模块通过 LPC 残差操纵制作实验刺激。用于感知实验前，请检验刺激的发声类别和步长知觉差异。论文、代码、录音及统计数据的许可，以及 Parselmouth、REAPER 等组件的来源，见方法与引用。</p>
   <p class="paper-citation">{{paper.citation}}</p>
   <button type="button" @click="references"><AppIcon name="book"/>方法与引用</button>
  </ModalDialog>

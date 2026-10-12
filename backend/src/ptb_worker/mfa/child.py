@@ -130,7 +130,7 @@ def main():
                     self.save_oovs_found(str(diagnostics))
                     oov_files=[p for p in diagnostics.glob('oovs_found_*.txt') if p.stat().st_size]
                     if oov_files:
-                        print('M11 未登录词（词典未收录）：',flush=True)
+                        print('词典未收录以下词语：',flush=True)
                         for p in oov_files:
                             print(p.read_text(encoding='utf8')[:4096],flush=True)
                         raise ValueError('m11_oov_words')

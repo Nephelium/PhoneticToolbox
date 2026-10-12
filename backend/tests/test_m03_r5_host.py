@@ -20,6 +20,16 @@ def test_legacy_idempotency_omits_additive_defaults():
         assert request_payload(request)['config']['f0_policy']=='audio-f0/2'
 
 
+def test_optional_f0_bounds_preserve_old_request_hashes_and_explicit_edits():
+    for policy in ['legacy/1','audio-f0/2']:
+        request=EggRequest(project_id=LOCAL_PROJECT,idempotency_key='r8-compatible',
+            audio=dict(asset_id=LOCAL_PROJECT,sha256='a'*64),config=dict(f0_policy=policy))
+        assert not {'f0_min_hz','f0_max_hz'} & request_payload(request)['config'].keys()
+        request.config.f0_min_hz,request.config.f0_max_hz=80,260
+        config=request_payload(request)['config']
+        assert config['f0_min_hz']==80 and config['f0_max_hz']==260
+
+
 def test_native_preview_caches_and_releases_owned_slot(monkeypatch):
     monkeypatch.setenv('PTB_EGG_PYTHON',str(ROOT/'.venv/m03-compatible/python.exe'))
     manager=InteractivePreview(reaper_binary=ROOT/'phonetic_toolbox/core/acoustic/reaper.exe')

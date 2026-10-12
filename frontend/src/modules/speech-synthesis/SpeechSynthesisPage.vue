@@ -64,7 +64,7 @@ async function selectSource(id:string){
  finally{if(ticket===loadEpoch)sourceLoading.value=false;}
 }
 async function run(action:Action){await attempt(async()=>{
- if(!port.value)throw Error('当前宿主尚未提供 M06 科学任务能力');if(busy.value)throw Error('请等待当前任务完成或取消');
+ if(!port.value)throw Error('当前环境无法进行声学参数合成，请使用桌面版');if(busy.value)throw Error('请等待当前任务完成或取消');
  requireApplied();const submitted=clone(valid(config));if(action==='generate')ipa(submitted.sequence);if(action==='extract'&&(!source.value||sourceLoading.value))throw Error('请先加载 WAV 音频');
  if(submitted.duration>10||submitted.duration*submitted.sample_rate>480000)throw Error('当前已验证任务预算为 10 秒且 480,000 样本，请缩短输入');
  const input=source.value;const rev=revision.value,ticket=++epoch;abort=new AbortController();busy.value=true;notice.value='';
@@ -123,14 +123,14 @@ onUnmounted(()=>{loadEpoch++;loadAbort?.abort();sourceWave.asset=null;disposed=t
     <button @click="rules=true">元音规则</button><button class="primary" :disabled="busy||!port" @click="run('generate')">生成元音</button>
     <button class="primary" :disabled="busy||!port" @click="run('synthesize')">合成音频</button><button class="primary" :disabled="!result" @click="exportAudio">导出音频</button><button v-if="busy" @click="cancel">取消任务</button>
    </div></ModuleSection>
-   <ModuleStatus v-if="error" kind="error" :message="error"/><ModuleStatus v-if="stale" kind="info" message="参数已修改，需重新合成。试听和音频导出仍对应旧结果。"/><ModuleStatus v-if="notice" kind="info" :message="notice"/><ModuleStatus v-if="!port" kind="info" message="当前为参数编辑模式，尚无可用的合成任务服务。"/>
+   <ModuleStatus v-if="error" kind="error" :message="error"/><ModuleStatus v-if="stale" kind="info" message="参数已修改，需重新合成。试听和音频导出仍对应旧结果。"/><ModuleStatus v-if="notice" kind="info" :message="notice"/><ModuleStatus v-if="!port" kind="info" message="当前支持参数编辑，音频合成请使用桌面版。"/>
    <details :open="busy" class="task-details"><summary>合成任务状态</summary><span v-if="result">结果 {{result.job.slice(0,8)}} · 随机种子 {{result.metadata.seed}}</span><TaskPanel :tasks="tasks" empty-title="尚未提交合成任务" empty-text="参数编辑不会自动触发音频合成" @cancel="cancel"/></details>
   </template>
  </ModuleWorkbench>
  <div class="m06-transport global-transport"><AudioTransport :state="previewWave" :active="active"/></div>
  <ModalDialog v-if="pending" title="覆盖参数确认" @close="pending=null"><p>{{pendingLabel}}。现有合成音频保留并标记为旧结果。</p><template #footer><button @click="pending=null">取消</button><button @click="commitPending">应用并覆盖</button></template></ModalDialog>
  <ModalDialog v-if="rules" title="元音规则" @close="rules=false"><p class="copy-feedback" role="status">{{copyNotice}}</p><div v-if="copyError" class="copy-fallback"><p role="alert">{{copyError}}</p><input :value="copyValue" readonly aria-label="待复制音标" @focus="($event.target as HTMLInputElement).select()"/></div><table class="vowel-rules"><thead><tr><th>IPA</th><th>F1 Hz</th><th>F2 Hz</th><th>F3 Hz</th></tr></thead><tbody><tr v-for="(f,s) in vowels" :key="s"><td><button class="ipa-text" @click="copySymbol(s)">{{s}}</button></td><td v-for="(v,i) in f" :key="i">{{v}}</td></tr></tbody></table><p>点击音标复制。空格为静音段。+、-、*、/ 依次将相对时长乘以 1.1、0.9、2、0.5，再按总时长归一。生成元音更新共振峰与静音段，保留当前发声预设和 F0 曲线。</p></ModalDialog>
- <ModalDialog v-if="help" title="声学参数合成帮助" @close="help=false"><p>设置并应用时长 → 输入 IPA 并生成元音曲线 → 编辑参数 → 合成音频 → 试听或导出 WAV。</p><p>Shift 拖动绘制，Ctrl 拖动恢复默认值，普通拖动平移，Ctrl 滚轮缩放。曲线覆盖支持单个数值、逗号渐变和分号分段。清除覆盖可恢复手绘。Shimmer 显示百分数，文件保留小数。F1–F5 的虚线是其他共振峰的只读参考。</p><p>应用时长立即更新上下图时间轴。旧音频按真实时间显示，超出音频尾部留空，需重新合成才能得到新时长的音频。</p><p>导出参数保存当前编辑配置。导出音频保存上次合成结果，桌面目录保存同时包含实际合成参数与元数据。完整 CSV 保留采样率、淡入淡出、静音、覆盖下的原曲线。</p><p>加载 WAV 前可在顶栏选择 F0 提取算法：Praat 互相关 CC、自相关 AC或 REAPER。切换后点击提取参数重新计算，范围使用左侧已应用的 F0 上下限。REAPER 不可用时会报错，不自动改用其他算法。旧 m06/2 参数文件默认采用原来的 Praat CC。</p><p>底部时间选区、播放进度和音量跟随当前预览的源音频或合成结果。</p><p>左侧选择 WAV 只加载预览，点击顶栏提取参数后才更新曲线。未加载音频时无法提取，源录音采样率保留。复制合成与五类发声预设效果有限，输入参数不保证等于输出的声学测量值。AV 和 AH 分别控制周期声源与气流噪声，范围 0–80 dB，0 关闭对应声源。60 dB 使用本工具的数字参考标尺，不代表物理声压级。HNR、H1–H2、Slope 为扩展处理，输入值不保证等于输出测量值。假声将基础 F0 曲线整体抬高至平均至少 300 Hz，嘎裂整体降低至约 70 Hz并保留最低 20 Hz。常态浊声、耳语和气声撤去偏移，平移期间的编辑仍保留。重复应用同一预设不会累加偏移。当前任务上限为 10 秒且 480,000 样本。</p></ModalDialog>
+ <ModalDialog v-if="help" title="声学参数合成帮助" @close="help=false"><p>设置并应用时长 → 输入 IPA 并生成元音曲线 → 编辑参数 → 合成音频 → 试听或导出 WAV。</p><p>Shift 拖动绘制，Ctrl 拖动恢复默认值，普通拖动平移，Ctrl 滚轮缩放。曲线覆盖支持单个数值、逗号渐变和分号分段。清除覆盖可恢复手绘。Shimmer 显示百分数，文件保留小数。F1–F5 的虚线是其他共振峰的只读参考。</p><p>应用时长立即更新上下图时间轴。旧音频按真实时间显示，超出音频尾部留空，需重新合成才能得到新时长的音频。</p><p>导出参数保存当前编辑配置。导出音频保存上次合成结果，桌面目录保存同时包含实际合成参数与元数据。完整 CSV 保留采样率、淡入淡出、静音、覆盖下的原曲线。</p><p>加载 WAV 前可在顶栏选择 F0 提取算法：Praat 互相关 CC、自相关 AC或 REAPER。切换后点击提取参数重新计算，范围使用左侧已应用的 F0 上下限。REAPER 不可用时会报错，不自动改用其他算法。旧 m06/2 参数文件默认采用原来的 Praat CC。</p><p>底部时间选区、播放进度和音量跟随当前预览的源音频或合成结果。</p><p>左侧选择 WAV 只加载预览，点击顶栏提取参数后才更新曲线。未加载音频时无法提取，源录音采样率保留。复制合成与五类发声预设用于设置合成控制参数，输出特征可通过参数估计重新测量。AV 和 AH 分别控制周期声源与气流噪声，范围 0–80 dB，0 关闭对应声源。60 dB 使用本工具的数字参考标尺。HNR、H1–H2、Slope 通过扩展处理调节声音，输出的声学值需重新测量；研究物理声压级时需另行校准。假声将基础 F0 曲线整体抬高至平均至少 300 Hz，嘎裂整体降低至约 70 Hz并保留最低 20 Hz。常态浊声、耳语和气声撤去偏移，平移期间的编辑仍保留。重复应用同一预设不会累加偏移。当前任务上限为 10 秒且 480,000 样本。</p></ModalDialog>
 </ModuleFrame>
 </template>
 <style scoped>

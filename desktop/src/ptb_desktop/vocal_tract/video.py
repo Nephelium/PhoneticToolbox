@@ -1,11 +1,16 @@
-"""Bounded WebM container writer for WebCodecs VP8/Opus packets.
+"""Bounded WebCodecs packets, WebM assembly and atomic MP4 saving.
 
 Format reference: https://www.webmproject.org/docs/container/ (not copied code).
 No encoder processes, filesystem paths, or audio devices are exposed to JS.
 """
 import base64
 import math
+import json
+import os
 import struct
+import tempfile
+import threading
+import time
 import uuid
 from pathlib import Path
 
@@ -72,9 +77,14 @@ class VideoSession:
         width=config.get('width');height=config.get('height');duration=config.get('duration');fps=config.get('fps')
         if type(width) is not int or type(height) is not int or not 64<=width<=1920 or not 64<=height<=1080 or fps!=30:
             raise ValueError('不支持的视频尺寸或帧率')
-        if type(duration) not in (int,float) or not math.isfinite(duration) or not .1<=duration<=12:raise ValueError('视频时长应为 0.1–12 秒')
+        if type(duration) not in (int,float) or not math.isfinite(duration) or not .05<=duration<=12:raise ValueError('视频时长应为 0.05–12 秒')
         self.id=uuid.uuid4().hex;self.target=Path(target);self.width=width;self.height=height;self.fps=fps;self.duration=round(duration*48000)/48000
         self.packets=[];self.size=0;self.opus=None;self.closed=False
+        self.cancelled=threading.Event()
+        if self.target.suffix.lower() not in ('.mp4','.webm'):raise ValueError('视频扩展名应为 .mp4 或 .webm')
+        self.runtime=os.environ.get('PTB_M05_PYTHON')
+        if self.target.suffix.lower()=='.mp4' and (not self.runtime or not Path(self.runtime).is_file()):
+            raise ValueError('MP4 编码运行环境不可用，请通过统一工作台入口启动')
 
     def append(self,obj):
         if self.closed:raise ValueError('视频导出会话已结束')
@@ -105,12 +115,37 @@ class VideoSession:
         raw=webm(self.width,self.height,self.fps,self.duration,self.packets,self.opus)
         temporary=self.target.with_name('.'+self.target.name+'.'+self.id+'.tmp')
         try:
-            with temporary.open('xb') as f:f.write(raw);f.flush()
+            if self.target.suffix.lower()=='.mp4':self.encode_mp4(raw,temporary)
+            else:
+                with temporary.open('xb') as f:f.write(raw);f.flush()
+            if self.cancelled.is_set():raise ValueError('已取消导出')
+            size=temporary.stat().st_size
             temporary.replace(self.target)
         finally:
             # Only the unique temporary file created by this session is cleaned.
             if temporary.exists():temporary.unlink()
         self.closed=True;self.packets.clear()
-        return {'saved':True,'name':self.target.name,'bytes':len(raw),'duration':self.duration,'frames':len(videos)}
+        return {'saved':True,'name':self.target.name,'bytes':size,'duration':self.duration,'frames':len(videos)}
 
-    def cancel(self):self.closed=True;self.packets.clear();return {'cancelled':True}
+    def encode_mp4(self,raw,target):
+        from ptb_worker.native.windows import OwnedProcess
+        from . import mp4
+        with tempfile.TemporaryDirectory(prefix='ptb-m10-mp4-') as directory:
+            scratch=Path(directory);source=scratch/'input.webm';source.write_bytes(raw)
+            request=scratch/'request.json'
+            request.write_text(json.dumps(dict(source=str(source),target=str(target),config=dict(width=self.width,height=self.height,duration=self.duration))),encoding='utf-8')
+            process=None;started=time.monotonic()
+            try:
+                process=OwnedProcess([self.runtime,'-I','-B',mp4.__file__,str(request)],scratch,1_073_741_824)
+                while process.poll() is None:
+                    if self.cancelled.is_set():raise ValueError('已取消导出')
+                    if time.monotonic()-started>180:raise ValueError('MP4 编码超时，未替换目标文件')
+                    time.sleep(.05)
+                response=scratch/'response.json'
+                if process.poll()!=0 or not response.is_file():raise ValueError('MP4 编码未完成，未替换目标文件')
+                value=json.loads(response.read_text('utf-8'))
+                if not value.get('ok'):raise ValueError(value.get('error','MP4 编码失败'))
+            finally:
+                if process:process.close()
+
+    def cancel(self):self.cancelled.set();self.closed=True;self.packets.clear();return {'cancelled':True}

@@ -93,6 +93,8 @@ playwright-report/
 !/tests/fixtures/m04/arrays.npz
 # Generated local reading edition may include software-only recording assets.
 /frontend/public/manual/
+# Author avatar is authorized for application/website distribution only.
+/frontend/src/assets/feedback-avatar.jpg
 
 # Local editing history, downloads, audit snapshots and browser output.
 /manual/.studio/

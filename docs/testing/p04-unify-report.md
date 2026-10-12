@@ -2,6 +2,67 @@
 
 2026-09-26。**Windows Chrome 的本轮布局、状态和定向交互范围 verified。** 不扩大为 Linux 服务、物理系统 DPI、所有桌面宿主或全部科学模块通过。全局主题保持 U2，原有未提交成果保留。
 
+## 首页图标区分
+
+2026-10-10，`P04-HOME-ICONS` 在 Windows 前端源码及独立 Chrome 的主页范围内 verified。
+
+分析与采集改用带参数柱的放大镜，合成与操控改用音叉，文献与学习改用书架。第四组现在有明确映射，避免缺失名称回退为 EGG 波形。底部帮助入口改用圆形问号，与论文精读的书本区分。十八个工具图标、分组颜色、布局与业务行为保持原样。SVG 路径由本项目新增，没有引入第三方素材或依赖。
+
+本次源码改动限于 `frontend/src/components/AppIcon.vue` 和 `frontend/src/app/AppShell.vue`，同步本报告、状态页与任务台账。已有 M10-R15 等同期改动保留，不计入本任务。
+
+| 检查 | 实际结果 |
+| --- | --- |
+| `npm --prefix frontend run typecheck` | 通过 |
+| `node --test frontend/tests/workbench.test.ts` | 6 passed，0 failed |
+| `npm --prefix frontend run contracts:check` | 生成契约一致 |
+| `npm --prefix frontend run ui-data:check` | 80 参数、377 来源一致 |
+| `npm --prefix frontend run build` | 通过，保留既有 chunk >500 KB 提示 |
+| `.venv/m14/Scripts/python.exe -B -X utf8 scripts/validate_docs.py` | 1805 文件，当前文档 errors=[]；旧快照缺链另列，不扩展本次修改范围 |
+| `git -c core.safecrlf=false diff --check -- <本任务五个文件>` | 通过 |
+| `node verify.cjs`，工作目录 `output/validation/home-icons` | Chrome 154.0.8037.98，1440×900 / 1920×1080 与浅深主题共 4 组；4 个分组、18 个工具与帮助入口的 23 个图形互不重复，分组 SVG 边界在 24×24 内，无 pageerror |
+
+脚本、实际页面截图与 `report.json` 保留在 `output/validation/home-icons/`。浏览器使用专属临时用户配置并在检查后关闭，`cleanup.json` 为 deleted，已清理可重建的配置与缓存。最近使用和侧栏继续复用同一工具的图标，保持入口识别一致。本轮未重跑 Qt、物理 DPI、其他平台或最终 EXE，也未重打安装包。
+
+## 更新弹窗与关于页按钮
+
+2026-10-12，任务 `P04-UPDATE-DIALOG`。更新弹窗参照井井截图，使用共享对话框的专用外观，单一发现新版本标题、当前与新版本对照、可滚动的说明卡片及居中底部操作。使用 markdown-it 15.0.2，支持标题、加粗、斜体、删除线、嵌套/有序/无序列表、引用、网页链接、行内/围栏/缩进代码、表格与分隔线。旧纯文本短标题冒号兼容强调，原始HTML转为文字；HTTP/HTTPS链接在新窗口打开，图片不自动加载。下载来源、通道、启动检查与各来源返回状态保留在可展开设置中。关于页四个入口统一为高亮控件，仍使用公共主题，全部普通按钮偏好仍生效。
+
+下载与退出分别通过公共对话框确认，下载仍使用原生不透明发布身份，大小与 SHA-256 校验仍由既有桌面服务执行；传输达到 100% 不能提前开启退出更新。取消或校验失败后保持当前应用，清除失效进度。设置改变后清除旧候选并同步外层标题。
+
+修改范围：`frontend/src/components/UpdatePanel.vue`、`ModalDialog.vue`、`frontend/src/platform/release-notes.ts`、`frontend/src/app/AppShell.vue`、`frontend/tests/release-notes.test.ts` 与 `updates-browser.mjs`，前端包/锁文件和来源登记/许可证/生成目录。新增7项直接/传递依赖的实际版本和许可核验，保留许可原文，未修改上游代码。根规则增加具体版本文案审阅与确认要求，发行入口指向唯一规则；未修改公开 Release 和现存成品。每轮验证的独立 HTML、Vite 缓存和 Chrome profile 放 `output/validation/updates-ui/<run>/scratch/`，关闭自有浏览器与服务后通过既有清理入口写回执。
+
+已执行 `node --test frontend/tests/updates.test.ts frontend/tests/release-notes.test.ts frontend/tests/appearance.test.ts frontend/tests/buttons.test.ts frontend/tests/source-coverage.test.ts frontend/tests/sources.test.ts`，21项通过。`npm --prefix frontend run typecheck`、`contracts:check`、`ui-data:check`、`build` 均通过。末次首行缩进兼容修正后12项更新定向测试、类型与构建再次通过。
+
+`node frontend/tests/updates-browser.mjs` 使用真实 App.vue、AppShell、公共对话框及专属 Chrome profile，19项检查通过。浅深主题各覆盖1440×900/100%/14px、1280×800/150%/18px、560×760/100%/18px，共6组；弹窗和下载按钮可见，无横向溢出。Markdown格式、原始HTML不可执行、两来源返回状态、取消下载确认/下载、校验错误、传输100%但未校验时无退出按钮、完整校验及单独退出确认、偏好清除旧候选、双来源失败及取消后的迟到结果均通过。关于页四个入口在浅深主题过渡完成后最终颜色一致，无pageerror。
+
+最终收尾修正后的成功证据：`output/validation/updates-ui/check-36e79a74-d553-450c-babb-a3c0a3a6d763/` 的report、截图与cleanup，19项再次通过，scratch为deleted。前轮成功及失败诊断保留；失败暴露status角色覆盖h3的heading语义，以及截图过早读取主题过渡颜色，已修正，未取消断言或放宽颜色要求。原生校验失败由协议模拟返回，没有实际下载、校验或执行安装。
+
+统一源码入口的 `-CheckOnly` 确认当前源码、科学运行时及frontend/dist绑定，最后构建后从 `scripts/Start-Research-Workbench.ps1` 启动首页。启动与窗口证据在 `output/validation/updates-ui/source-launch-988b18165ce5432c80093b4387afa9f6/`；程序窗口标题PhoneticToolbox 3.0，句柄非零、响应正常。演示预览从 `node frontend/tests/updates-browser.mjs --preview` 打开，3.0.1为模拟版本。实际显示后预览已关闭，源码工作台保留。
+
+预览证据在 `output/validation/updates-ui/preview-7dc8d5e4-5799-4226-8e6b-7ade672ea6e7/`。Chrome关闭时自行删除DIPS-wal，旧收尾盘点发生ENOENT；界面report为success且无pageerror。收尾已记录浏览器自行移除的文件，其他错误保留retained回执；确认原Node/Chrome均停止后，用既有inventory、no_links与cleanup_test_scratch.ps1恢复盘点和清理，545文件/37,675,360字节，cleanup为deleted。文档校验1974文件、423来源、95任务，errors=[]，历史快照缺链保持独立列项；本次候选文件diff --check通过。最终EXE、原生Qt更新交互、物理DPI及其他平台未重验。
+
+## 主页与更新页文字精简
+
+`P04-HOME-UPDATE-COPY` 在 Windows 前端源码与独立 Chrome 范围内 `verified`。主页右上角的工作台文案、绿色圆点和工具/研究环节数量已删除。更新弹窗保留外层的检查更新标题，内容区删除重复大标题；说明文字、当前版本和设置随之上移，说明段落无额外上下外距。更新来源、版本通道、自动检查、手动检查与结果状态保持可达，区域保留可访问名称。
+
+修改范围为 `frontend/src/app/AppShell.vue`、`frontend/src/components/UpdatePanel.vue` 和 `frontend/src/design/tokens.css` 的对应模板/样式，并同步本报告、状态页与台账。`npm --prefix frontend run typecheck`、25 项说明书/工作台/更新定向测试、`contracts:check`、`ui-data:check` 与 `build` 通过。来源数据检查为 80 参数、378 来源，构建保留已有大 chunk 提示。`.venv/m14/Scripts/python.exe -B -X utf8 scripts/validate_docs.py` 检查 1847 文件，当前 errors=[]，未修改的历史快照缺链另列；本任务文件的 `git -c core.safecrlf=false diff --check` 通过。
+
+`node output/validation/home-update-copy/verify.cjs` 使用 Chrome `154.0.8037.98`、专属临时 profile，验证浅深主题与 1440×900、1280×800 共 4 组。主页文案/统计/圆点消失，18 个工具保留；更新弹窗只有一个外层标题，说明段落外距为零，首行从面板内距开始，设置/版本可见，无横向溢出和 pageerror。更新偏好和两来源失败结果来自明确的协议模拟，仅用于界面布局，不查询真实发布、下载或执行更新。实际浅色主页与更新截图已目视核查。报告、脚本、8 张截图和清理回执位于 `output/validation/home-update-copy/`，scratch 已清理。本次未重验 Qt、物理 DPI、其他平台，也未重打 EXE。
+
+## 说明书目录字号
+
+正文章标题 h1 与二级标题 h2 同为 1.52em，章标题加粗。实际 6 组主题/字号/宽窄窗口同时核对正文章标题同字号，保留原有目录及阅读标记行为。
+
+`MANUAL-OUTLINE-TYPOGRAPHY` 在 Windows 前端源码及独立 Chrome 的说明书侧栏范围内 `verified`。
+
+一级章节使用 `1rem`、字重 700，二级小节使用 `1rem`、正常字重 400，三级使用 `.857143rem`。基础字号 14 px 时分别为 14／14／12 px，随全局基础字号缩放。三级使用 1.3 倍行高、上下各 3 px 内距，默认单行高度约 21.6 px。目录初始只显示一级章节，点击展开/收起，同一时间只展开一个章节。按用户最新更正，图标仅在一级章节显示，二级小节不加图标。一级图标由 HelpPage 根据模块注册表传入共用阅读器，18 个模块使用与侧栏相同的 SVG 或 IPA 符号，通用章默认书本。编号和图标布局适应标题换行。
+
+阅读位置、展开状态和直接点击标记分开处理，正常滚动仅圈选当前三级条目，一、二级祖先不同时圈选。直接点击一级或二级只圈选该条目，继续滚动恢复三级阅读标记。选中圈使用主题强调色内边线与透明背景，搜索、深层锚点与恢复定位仍通过原有章节加载链路。修改范围为 `frontend/src/manual/ManualReader.vue`、`manual.css`、阅读层 README、`frontend/src/app/HelpPage.vue`、已有 SSR 默认折叠断言及 `tests/e2e/manual-outline.cjs`，同步本报告、状态与台账；同期其他任务改动保留。
+
+本轮实际执行 `node --test frontend/tests/appearance.test.ts frontend/tests/fonts.test.ts frontend/tests/storage-cleanup.test.ts frontend/tests/manual-reader.test.ts frontend/tests/manual-reader-render.test.ts`，25 项通过，含 13 项说明书测试，无失败/跳过；`npm run typecheck` 和 `npm run build` 通过，构建保留现有大 chunk 提示。`node tests/e2e/manual-outline.cjs` 使用独立 Chrome `154.0.8037.98` 打开正式生成说明书，5 组行为检查通过：初始折叠/点击/Enter、18 个模块一级图标与侧栏一致且二级无图标及单章展开、点击/实际滚动的单一标记、全文搜索定位、6 组主题/字号/布局。通过真实设置入口切换浅深主题及 14／18／24 px 基础字号，14／18 px 使用 1440×900，24 px 使用 960×760 的目录抽屉。字号/字重、三级行高与内距、透明选中圈、展开及阅读定位正确，目录和所选按钮无横向溢出，无 pageerror。实际默认浅色和大字号深色截图已检查。
+
+最新本机证据位于 `output/validation/manual-outline/navigation-1791694687869/`，包含报告、初始折叠与 6 组主题/字号截图、run 和 cleanup 回执。早期 M13 文字 IPA 图标诊断位于 `navigation-1791626928804/`，旧层级证据仅作历史参考。本任务独立浏览器 scratch 已清理，`cleanup.json` 为 `deleted`。字号调整本身不改变章节正文；设置专项的正文与四张截图同步见[设置报告](settings-navigation-report.md)。本轮未重验 Qt、物理 DPI、其他平台，也未重打 EXE。
+
 ## 实现与边界
 
 新增 ModuleFrame、ModuleToolbar、ModuleSection、ModuleStatus，接口及逐页操作迁移见 [公共接口](../design/module-layout-contract.md)。M01/M03/M04/M09/M12 已逐项移除模块大标题、副说明和重复关闭，名称与关闭仍由工作台标签承担。文件/刷新/批量进入统一工具栏，方法/帮助固定在工具组，M03/M04 草稿保存放参数区。M09 的相位缺失警示属于科研限制，继续显示。

@@ -13,8 +13,8 @@ async function demo(){const currentState=state.value;currentState.loading=true;t
 <ModuleFrame :label="module.title+' 工作区'" class="workspace-page">
 <template #toolbar><ModuleToolbar><template #actions><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button></template></ModuleToolbar></template>
 <div class="notice">
-<span class="badge">待接入</span>
-<span>本模块的分析功能尚未迁入。下方可试用共用的文件预览、选区和试听。</span>
+<span class="badge">音频预览</span>
+<span>选择音频后，可查看波形、设置选区和试听。</span>
 </div>
 <div class="workspace-toolbar">
 <input ref="picker" type="file" accept=".wav,audio/wav" class="visually-hidden" aria-label="选择 WAV 音频" @change="pick"/>

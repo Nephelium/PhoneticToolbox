@@ -25,6 +25,7 @@ defineExpose({save:apply});
 <template><section class="font-settings settings-card" aria-label="字体设置">
 <div class="section-title settings-heading"><h3>字体</h3><button @click="list" :disabled="busy">读取本机字体列表</button></div>
 <p class="settings-note">默认宋体与 Times New Roman。选择自定义字体可填写本机已安装的名称。</p>
+<div class="settings-columns"><div class="settings-column">
 <div class="settings-section"><h4>界面字体</h4><div class="font-fields">
 <FontFamilySelect v-model="draft.zh" label="中文字体" :names="names" :labels="fontLabels" :reset-token="resetToken"/>
 <FontFamilySelect v-model="draft.latin" label="英文与数字字体" :names="names" :labels="fontLabels" :reset-token="resetToken"/>
@@ -36,9 +37,11 @@ defineExpose({save:apply});
 <div v-if="!draft.figure.follow" class="font-fields"><FontFamilySelect v-model="draft.figure.zh" label="图表中文字体" :names="names" :labels="fontLabels" :reset-token="resetToken"/><FontFamilySelect v-model="draft.figure.latin" label="图表英文字体" :names="names" :labels="fontLabels" :reset-token="resetToken"/></div>
 <label class="setting-row">图表基础字号（px）<input v-model.number="draft.figure.size" type="number" min="10" max="24" step="1" aria-label="图表基础字号"/></label>
 <p class="settings-note">导出优先使用所选字体，缺失时使用兼容字体并记录实际字体。</p></div>
+</div><div class="settings-column">
 <div class="settings-section font-preview-section"><h4>字体预览</h4>
 <div class="font-preview" :style="preview"><span>声学参数 · 中文字体预览</span><span>PhoneticToolbox 0123456789 −12.5 Hz</span><span class="ipa-text">[aː tʰ ɕ ŋ ə ã n̩ ɑ²]</span><code class="font-code-preview" :style="{fontFamily:preview['--preview-mono']}">f0 = signal[0:10]  # Hz != ms</code><svg viewBox="0 0 420 72" role="img" aria-label="图表字体预览" :style="{fontFamily:preview['--preview-figure']||'var(--font-figure)',fontSize:preview['--preview-size']||'var(--figure-size)'}"><path d="M40 5V42H405" fill="none" stroke="currentColor"/><text x="48" y="24" fill="currentColor">基频 F0 · −12.5 Hz</text><text x="240" y="64" fill="currentColor">时间 Time (s)</text></svg></div>
 <p class="settings-note">预览后点击应用字体，设置将保存到本机。</p></div>
+</div></div>
 <p v-if="message||fontError" role="status">{{message||fontError}}</p>
 <div class="font-actions"><button @click="draft=defaults();resetToken++;message='已填入默认设置，点击应用字体后生效。'" :disabled="busy">恢复默认</button><button @click="cancel" :disabled="busy">取消字体编辑</button><button @click="show" :disabled="busy">预览字体</button><button class="primary" @click="apply" :disabled="busy">{{busy?'检查字体…':'应用字体'}}</button></div>
 </section></template>

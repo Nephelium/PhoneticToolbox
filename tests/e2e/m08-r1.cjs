@@ -20,7 +20,7 @@ async function main(){
  let success=false;
  try{
   await page.goto(server.resolvedUrls.local[0]+'tests/m08-host.html');await page.locator('nav').getByRole('button',{name:'变速变调',exact:true}).click();await click('打开音频目录');
-  const select=page.getByLabel('M08 音频');await page.waitForFunction(()=>document.querySelector('[aria-label="M08 音频"]')?.options.length>1);
+  const select=page.getByLabel('变速变调音频');await page.waitForFunction(()=>document.querySelector('[aria-label="变速变调音频"]')?.options.length>1);
   const options=await select.locator('option').evaluateAll(es=>es.map(e=>({value:e.value,text:e.textContent})));await select.selectOption(options.find(o=>o.text.endsWith('.wav')).value);await idle();await page.locator('svg.m08-curve').waitFor();
   const before=await page.locator('.m08-curve .modified').getAttribute('d'),curve=await page.locator('.m08-curve').boundingBox();
   await page.keyboard.down('Shift');await page.mouse.move(curve.x+curve.width*.25,curve.y+curve.height*.35);await page.mouse.down();await page.mouse.move(curve.x+curve.width*.8,curve.y+curve.height*.55,{steps:24});await page.mouse.up();await page.keyboard.up('Shift');assert.notEqual(await page.locator('.m08-curve .modified').getAttribute('d'),before);
@@ -60,7 +60,7 @@ async function main(){
   await control({});await click('保存所选音频');await idle();await page.getByText('已保存 1 个音频',{exact:true}).waitFor();checks.push('partial save reports 4 successes and 1 failure, retries only the failed ID');const saved=await fs.readdir(path.join(out,'saved'));assert.equal(saved.length,5);await count(5);assert.equal(requests.filter(r=>r.body.action==='create'||r.body.action==='save').length,jobsBefore);checks.push('one directory choice exports five real WAVs without duplicate history or compute');
   await click('批量保存');await click('保存所选音频');await idle();assert.deepEqual(await fs.readdir(path.join(out,'saved')),saved);checks.push('repeat export reuses unchanged files');
   // Reload verifies persisted history without copying or silently recomputing.
-  await click('保存编辑草稿');await page.reload();await page.locator('nav').getByRole('button',{name:'变速变调',exact:true}).click();await click('打开音频目录');await page.getByLabel('M08 音频').selectOption(options.find(o=>o.text.endsWith('.wav')).value);await idle();await count(5);checks.push('all generated histories survive page reload');
+  await click('保存编辑草稿');await page.reload();await page.locator('nav').getByRole('button',{name:'变速变调',exact:true}).click();await click('打开音频目录');await page.getByLabel('变速变调音频').selectOption(options.find(o=>o.text.endsWith('.wav')).value);await idle();await count(5);checks.push('all generated histories survive page reload');
   const audition=page.getByRole('button',{name:'试听此版本',exact:true}).last();const auditionCount=await page.evaluate(()=>starts.length);await audition.click();await page.waitForFunction(n=>starts.length>n,auditionCount);await page.getByText('输出 1.000 s',{exact:false}).waitFor();await click('停止');
   const download=page.waitForEvent('download');await click('保存对比图');await(await download).saveAs(path.join(out,'comparison.png'));checks.push('history PNG exported after reload');
   for(const [width,height]of [[1800,1100],[1280,800],[900,760]]){await page.setViewportSize({width,height});await page.screenshot({path:path.join(out,`m08-r1-${width}.png`)});const box=await page.locator('.m08-page').evaluate(e=>({client:e.clientWidth,scroll:e.scrollWidth}));assert(box.scroll<=box.client+2,JSON.stringify(box));layouts.push({width,height,...box});}

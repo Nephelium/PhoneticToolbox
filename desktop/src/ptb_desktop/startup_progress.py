@@ -1,8 +1,14 @@
 """Lightweight branded Win32 preparation card; no Qt, image or font dependency."""
 import ctypes as c
 from ctypes import wintypes as w
+import base64
+import colorsys
+import hashlib
+import json
 import os
 from pathlib import Path
+import struct
+import sys
 import threading
 import time
 
@@ -23,6 +29,78 @@ LABELS = {
 }
 STEPS = {'science': 1, 'host': 2, 'apps': 3,
          'verify-science': 1, 'verify-host': 2, 'verify-apps': 3}
+
+DEFAULT_PALETTE = {'surface': 'FFF9E8', 'border': 'E8DCB8', 'line': 'E7DDBE',
+                   'track': 'EEE5CA', 'accent': '306B9C', 'accentLight': '91C1DD'}
+
+
+def light_palette(pixels):
+    """Retain artwork hue while keeping every preparation card light."""
+    buckets = {}
+    for red, green, blue, alpha in pixels:
+        if alpha < 64:
+            continue
+        hue, saturation, value = colorsys.rgb_to_hsv(red / 255, green / 255, blue / 255)
+        if saturation >= .2 and value >= .05:
+            bucket = round(hue * 36) % 36
+            buckets[bucket] = buckets.get(bucket, 0) + 1
+    if not buckets:
+        return {'surface': 'F7F8FA', 'border': 'D9DFE6', 'line': 'DEE3E9',
+                'track': 'E8ECF0', 'accent': '425C75', 'accentLight': 'A3B7CA'}
+    hue = max(buckets, key=buckets.get) / 36
+    def color(saturation, value):
+        return ''.join(f'{round(channel * 255):02X}' for channel in colorsys.hsv_to_rgb(hue, saturation, value))
+    return {'surface': color(.09, .99), 'border': color(.19, .86), 'line': color(.13, .89),
+            'track': color(.13, .93), 'accent': color(.7, .48), 'accentLight': color(.33, .85)}
+
+
+def startup_choice(preferences_path=None, assets_root=None):
+    """Read the existing bounded preference without importing its Qt writer."""
+    fallback = {'id': 'default', 'palette': dict(DEFAULT_PALETTE)}
+    try:
+        if preferences_path is None:
+            from .platform_paths import user_data_root
+            preferences_path = user_data_root() / 'icons/preferences.json'
+        path = Path(preferences_path)
+        if not path.is_file() or path.stat().st_size > 4_400_000:
+            return fallback
+        state = json.loads(path.read_text('utf8'))
+        if not isinstance(state, dict) or state.get('version') != 1:
+            return fallback
+        selected = state.get('selected')
+        if selected in ('default', 'builtin-002'):
+            return fallback
+        if isinstance(selected, str) and selected.startswith('custom-'):
+            entries = state.get('custom')
+            if not isinstance(entries, list) or len(entries) > 8:
+                return fallback
+            entry = next(item for item in entries if item.get('id') == selected)
+            url = entry.get('dataUrl')
+            if not isinstance(url, str) or not url.startswith('data:image/png;base64,') or len(url) > 540_000:
+                return fallback
+            data = base64.b64decode(url.split(',', 1)[1], validate=True)
+            if len(data) > 400_000 or len(data) < 24 or data[:8] != b'\x89PNG\r\n\x1a\n' or struct.unpack('>II', data[16:24]) != (256, 256):
+                return fallback
+            if selected != 'custom-' + hashlib.sha256(data).hexdigest():
+                return fallback
+            return {'id': selected, 'png': data}
+        root = Path(assets_root) if assets_root else Path(getattr(sys, '_MEIPASS', '')) / 'startup-icons'
+        catalog = json.loads((root / 'catalog.json').read_text('utf8'))
+        if catalog.get('schema') != 'ptb-startup-icons/1':
+            return fallback
+        entry = catalog['icons'][selected]
+        palette = entry['palette']
+        if set(palette) != set(DEFAULT_PALETTE) or any(len(value) != 6 or any(char not in '0123456789ABCDEF' for char in value) for value in palette.values()):
+            return fallback
+        name = entry['file']
+        if not isinstance(name, str) or Path(name).name != name or not name.endswith('.ico'):
+            return fallback
+        icon = root / name
+        if not icon.is_file() or icon.stat().st_size > 50_000:
+            return fallback
+        return {'id': selected, 'path': icon, 'palette': palette}
+    except (OSError, ValueError, TypeError, KeyError, AttributeError, StopIteration):
+        return fallback
 
 
 def _rgb(value):
@@ -45,8 +123,9 @@ class _Gradient(c.Structure):
 
 class _Canvas:
     """DPI-scaled, double-buffered GDI drawing with owned native handles."""
-    def __init__(self, user, dpi):
+    def __init__(self, user, dpi, palette=None):
         self.user, self.dpi, self.fonts, self.resolved_fonts = user, dpi, {}, {}
+        self.palette = dict(DEFAULT_PALETTE if palette is None else palette)
         self.gdi = c.WinDLL('gdi32', use_last_error=True)
         self.msimg = c.WinDLL('msimg32', use_last_error=True)
         def api(dll, name, result, *arguments):
@@ -73,6 +152,41 @@ class _Canvas:
         api(self.gdi, 'GetTextFaceW', c.c_int, w.HDC, c.c_int, w.LPWSTR)
         api(self.gdi, 'CreateFontW', w.HFONT, *([c.c_int] * 5), *([w.DWORD] * 8), w.LPCWSTR)
         api(self.msimg, 'GradientFill', w.BOOL, w.HDC, c.POINTER(_Vertex), w.ULONG, c.POINTER(_Gradient), w.ULONG, w.ULONG)
+
+    def icon_palette(self, icon):
+        class IconInfo(c.Structure):
+            _fields_ = [('icon', w.BOOL), ('x', w.DWORD), ('y', w.DWORD), ('mask', w.HBITMAP), ('color', w.HBITMAP)]
+        class Bitmap(c.Structure):
+            _fields_ = [('type', w.LONG), ('width', w.LONG), ('height', w.LONG), ('stride', w.LONG),
+                        ('planes', w.WORD), ('bits', w.WORD), ('data', c.c_void_p)]
+        class Header(c.Structure):
+            _fields_ = [('size', w.DWORD), ('width', w.LONG), ('height', w.LONG), ('planes', w.WORD),
+                        ('bits', w.WORD), ('compression', w.DWORD), ('bytes', w.DWORD),
+                        ('x', w.LONG), ('y', w.LONG), ('used', w.DWORD), ('important', w.DWORD)]
+        self.user.GetIconInfo.argtypes = (w.HICON, c.POINTER(IconInfo))
+        self.gdi.GetObjectW.argtypes = (w.HGDIOBJ, c.c_int, c.c_void_p)
+        self.gdi.GetDIBits.argtypes = (w.HDC, w.HBITMAP, w.UINT, w.UINT, c.c_void_p, c.c_void_p, w.UINT)
+        info = IconInfo()
+        if not self.user.GetIconInfo(icon, c.byref(info)):
+            return dict(DEFAULT_PALETTE)
+        dc = None
+        try:
+            bitmap = Bitmap()
+            if not info.color or not self.gdi.GetObjectW(info.color, c.sizeof(bitmap), c.byref(bitmap)):
+                return dict(DEFAULT_PALETTE)
+            if not 0 < bitmap.width <= 256 or not 0 < bitmap.height <= 256:
+                return dict(DEFAULT_PALETTE)
+            header = Header(c.sizeof(Header), bitmap.width, -bitmap.height, 1, 32, 0, 0, 0, 0, 0, 0)
+            buffer = c.create_string_buffer(bitmap.width * bitmap.height * 4)
+            dc = self.gdi.CreateCompatibleDC(None)
+            if not self.gdi.GetDIBits(dc, info.color, 0, bitmap.height, buffer, c.byref(header), 0):
+                return dict(DEFAULT_PALETTE)
+            raw = buffer.raw
+            return light_palette((raw[index + 2], raw[index + 1], raw[index], raw[index + 3]) for index in range(0, len(raw), 4))
+        finally:
+            if dc: self.gdi.DeleteDC(dc)
+            if info.color: self.gdi.DeleteObject(info.color)
+            if info.mask: self.gdi.DeleteObject(info.mask)
 
     def px(self, value):
         return round(value * self.dpi / 96)
@@ -140,18 +254,19 @@ class _Canvas:
             raise c.WinError(c.get_last_error())
         old = self.gdi.SelectObject(dc, bitmap)
         try:
-            self.gradient(dc, (0, 0, 620, 312), 'FFFFFF', 'F9FBFF', vertical=True)
-            self.rounded(dc, (0, 0, 620, 312), 17, 'FBFCFF', 'DCE5F0')
+            palette = self.palette
+            self.gradient(dc, (0, 0, 620, 312), palette['surface'], palette['surface'], vertical=True)
+            self.rounded(dc, (0, 0, 620, 312), 17, palette['surface'], palette['border'])
             self.user.DrawIconEx(dc, self.px(36), self.px(32), icon, self.px(72), self.px(72), 0, None, 3)
             self.text(dc, 'PhoneticToolbox', (128, 34, 450, 43), english=True, size=34, color='233A59')
             self.text(dc, '语音分析与实验工具箱', (130, 81, 420, 26), size=18, color='60748F')
-            self.gradient(dc, (36, 126, 548, 1), 'D9E5F4', 'F0F4FA')
+            self.gradient(dc, (36, 126, 548, 1), palette['line'], palette['surface'])
             stage, label, percent, known = state
             self.text(dc, label, (36, 150, 453, 31), size=22, color='263D5C')
             self.text(dc, f'{percent}%' if known else '…', (486, 145, 98, 39),
-                      size=32, english=True, color='387ED0', right=True)
+                      size=32, english=True, color=palette['accent'], right=True)
             self.text(dc, '正在检查运行文件并加载界面，请耐心等待。', (36, 189, 548, 25), size=16)
-            self.rounded(dc, (36, 232, 548, 10), 5, 'E6EDF7')
+            self.rounded(dc, (36, 232, 548, 10), 5, palette['track'])
             if known:
                 start, length = 36, 548 * percent / 100
             else:
@@ -162,7 +277,7 @@ class _Canvas:
                                                      region_box.bottom, self.px(10), self.px(10))
                 self.gdi.SelectClipRgn(dc, region)
                 try:
-                    self.gradient(dc, (start, 232, max(length, 1), 10), '87C6F4', '397FD2')
+                    self.gradient(dc, (start, 232, max(length, 1), 10), palette['accentLight'], palette['accent'])
                 finally:
                     self.gdi.SelectClipRgn(dc, None); self.gdi.DeleteObject(region)
             self.text(dc, '主界面就绪后自动关闭此提示', (36, 264, 450, 25), size=15, color='71829A')
@@ -180,12 +295,15 @@ class _Canvas:
 
 
 class PreparationWindow:
-    def __init__(self, *, offscreen=False, dpi=None, icon_path=None):
+    def __init__(self, *, offscreen=False, dpi=None, icon_path=None, preferences_path=None, assets_root=None):
         self.hwnd = None; self.thread = None; self.failure = None
         self.message = ''; self.percent = 0
         self.stopped = threading.Event(); self.visible = threading.Event()
         self.quiet = bool(os.environ.get('PTB_OWNED_BOOTSTRAP_LOG'))
         self.offscreen, self.test_dpi, self.icon_path = offscreen, dpi, icon_path
+        self.choice = startup_choice(preferences_path, assets_root)
+        self.selected_icon_id = self.choice['id']
+        self.palette = dict(self.choice.get('palette', DEFAULT_PALETTE))
         if dpi is not None and (not offscreen or dpi not in (96, 120, 144, 192, 240)):
             raise ValueError('Explicit DPI is only for an owned offscreen preview')
         self.state = ('starting', LABELS['starting'], 0, False)
@@ -211,22 +329,39 @@ class PreparationWindow:
         user.SetThreadDpiAwarenessContext.argtypes = (c.c_void_p,)
         user.SetThreadDpiAwarenessContext.restype = c.c_void_p
         prior_dpi = user.SetThreadDpiAwarenessContext(c.c_void_p(-4))
-        canvas = _Canvas(user, self.test_dpi or user.GetDpiForSystem())
+        canvas = _Canvas(user, self.test_dpi or user.GetDpiForSystem(), self.palette)
         self.dpi = canvas.dpi
         kernel.GetModuleHandleW.restype = w.HMODULE
         instance = kernel.GetModuleHandleW(None)
         user.LoadImageW.argtypes = (w.HINSTANCE, w.LPCWSTR, w.UINT, c.c_int, c.c_int, w.UINT)
         user.LoadImageW.restype = w.HANDLE
         user.DestroyIcon.argtypes = (w.HICON,)
+        user.CreateIconFromResourceEx.argtypes = (c.c_void_p, w.DWORD, w.BOOL, w.DWORD, c.c_int, c.c_int, w.UINT)
+        user.CreateIconFromResourceEx.restype = w.HICON
         # The application artwork already lives in the EXE icon resources.
         # Source previews receive the same ICO explicitly, without adding Qt.
         resource = str(Path(self.icon_path)) if self.icon_path else c.cast(c.c_void_p(1), w.LPCWSTR)
-        icon = user.LoadImageW(None if self.icon_path else instance, resource, 1, canvas.px(72), canvas.px(72), 0x10 if self.icon_path else 0)
+        def load_icon():
+            if 'png' in self.choice:
+                data = c.create_string_buffer(self.choice['png'])
+                selected = user.CreateIconFromResourceEx(data, len(self.choice['png']), True, 0x30000, canvas.px(72), canvas.px(72), 0)
+            elif 'path' in self.choice:
+                selected = user.LoadImageW(None, str(self.choice['path']), 1, canvas.px(72), canvas.px(72), 0x10)
+            else:
+                selected = None
+            if selected:
+                return selected
+            self.selected_icon_id = 'default'; self.palette = dict(DEFAULT_PALETTE)
+            return user.LoadImageW(None if self.icon_path else instance, resource, 1, canvas.px(72), canvas.px(72), 0x10 if self.icon_path else 0)
+        icon = load_icon()
         if not icon:
             canvas.close()
             if prior_dpi: user.SetThreadDpiAwarenessContext(prior_dpi)
             raise RuntimeError('应用图标未能读取。')
         icons = [icon]
+        if 'png' in self.choice and self.selected_icon_id != 'default':
+            self.palette = canvas.icon_palette(icon)
+        canvas.palette = self.palette
         proc_type = c.WINFUNCTYPE(c.c_ssize_t, w.HWND, w.UINT, w.WPARAM, w.LPARAM)
         user.DefWindowProcW.argtypes = (w.HWND, w.UINT, w.WPARAM, w.LPARAM)
         user.DefWindowProcW.restype = c.c_ssize_t
@@ -263,9 +398,8 @@ class PreparationWindow:
                     y = c.c_short((lp >> 16) & 0xffff).value - bounds.top
                     return 2 if 0 <= y < canvas.px(126) else 1
                 if msg == 0x2E0 and self.test_dpi is None:
-                    canvas.close(); canvas = _Canvas(user, wp & 0xffff); self.dpi = canvas.dpi
-                    scaled_icon = user.LoadImageW(None if self.icon_path else instance, resource, 1,
-                                                   canvas.px(72), canvas.px(72), 0x10 if self.icon_path else 0)
+                    canvas.close(); canvas = _Canvas(user, wp & 0xffff, self.palette); self.dpi = canvas.dpi
+                    scaled_icon = load_icon()
                     if scaled_icon:
                         icons.append(scaled_icon); icon = scaled_icon
                     bounds = c.cast(lp, c.POINTER(w.RECT)).contents

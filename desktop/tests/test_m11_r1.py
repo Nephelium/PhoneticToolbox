@@ -11,6 +11,17 @@ class ImportService:
         return dict(asset_id=name,sha256='a'*64)
 
 
+def test_m11_delivery_install_requires_only_native_archive_grant(tmp_path):
+    class Service:
+        def request(self,path,method,body):return body
+    bridge=M11Bridge(SimpleNamespace(service=Service()))
+    path=tmp_path/'component.zip';path.write_bytes(b'fixture')
+    grant=bridge.grant('archive',path)
+    value=bridge.invoke(dict(op='m11_component',body=dict(action='install_zip',archive=grant['id'])))
+    assert value==dict(action='install_zip',archive=str(path))
+    assert bridge.invoke(dict(op='m11_component',body=dict(action='download')))==dict(action='download')
+
+
 @pytest.mark.parametrize('source,expected',[('.lab','a.lab'),('.TextGrid','a.TextGrid'),('.txt','a.txt')])
 def test_m11_r1_reads_only_selected_transcript(tmp_path,source,expected):
     for name in ('a.wav','a.lab','a.TextGrid','a.txt'):(tmp_path/name).write_bytes(b'fixture')

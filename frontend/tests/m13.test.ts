@@ -4,6 +4,15 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {addToneMark,convertText,createDraft,createPageDraft,dataInventory,displayEntry,effectiveIpaSize,mappingStandards,moveVariantChoices,plainOutput,restoreDraft,snapshotDraft,standards,variantsFor} from '../src/modules/mandarin-ipa/state.ts';
 
+test('M13 equal width remains opt-in and survives v1 draft snapshots',()=>{
+  assert.equal(createDraft().equalWidth,false);
+  assert.equal(restoreDraft({version:1,text:'旧草稿'}).equalWidth,false);
+  assert.equal(restoreDraft({version:1,equalWidth:'true'}).equalWidth,false);
+  const draft=createDraft();draft.text='银行';draft.equalWidth=true;
+  assert.equal(restoreDraft(snapshotDraft(draft)).equalWidth,true);
+  assert.equal(createPageDraft(snapshotDraft(draft)).equalWidth,true);
+});
+
 test('M13-F01 freezes all eleven legacy columns and the default standard',()=>{
   assert.equal(standards.length,11);assert.deepEqual(standards,[...mappingStandards,'汉语拼音']);
   assert.equal(createDraft().standard,'Standard Chinese (Beijing)');

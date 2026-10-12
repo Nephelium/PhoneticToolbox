@@ -83,7 +83,10 @@ class Reaper:
             if sys.platform!='linux':
                 from .windows import InputPipe
                 pipe=InputPipe()
-            argv=[str(self.binary),'-i',str(path),'-f',pipe.name if pipe else '', '-a','-e',str(float(frame_interval_sec)),
+            # Scratch owns this ASCII filename; the native Windows CRT reads it
+            # relative to the same directory held by OwnedProcess's entry.
+            input_path=path.name if sys.platform=='win32' else str(path)
+            argv=[str(self.binary),'-i',input_path,'-f',pipe.name if pipe else '', '-a','-e',str(float(frame_interval_sec)),
                   '-m',str(float(min_f0)),'-x',str(float(max_f0))]
             if hilbert:argv.append('-t')
             if no_highpass:argv.append('-s')

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {vTimePrecision} from '../design/time-precision.ts';
 import {useAudioSelection} from '../state/audio-selection.ts';
+import {spacePlaybackShortcut} from '../state/audio-shortcuts.ts';
 import { ref,computed,watch,onMounted,onUnmounted } from 'vue';import type { Workspace } from '../state/workspace.ts';import {playback,play,pause,stop,volume,seek,isCurrentAudio} from '../state/audio.ts';import { selection } from '../platform/wav.ts';import AppIcon from './AppIcon.vue';
 const props=defineProps<{state:Workspace;selectionState?:Workspace;active:boolean;compact?:boolean;externalPlayback?:boolean}>();
 const emit=defineEmits<{'selection-play':[];stop:[]}>();
@@ -9,7 +10,7 @@ const emit=defineEmits<{'selection-play':[];stop:[]}>();
 const rangeState=computed(()=>props.selectionState??props.state);
 const selectionGroup=useAudioSelection();const unregister=selectionGroup?.register(()=>rangeState.value);onUnmounted(()=>unregister?.());
 function select(){selectionGroup?.select(rangeState.value);}
-const scrub=ref<number|null>(null);
+const scrub=ref<number|null>(null),transport=ref<HTMLDivElement>();
 const owns=computed(()=>!props.externalPlayback&&isCurrentAudio(props.state.asset,props.state.channel));
 const playing=computed(()=>owns.value&&playback.playing),position=computed(()=>owns.value?playback.position:props.state.start);
 watch(()=>[props.state.asset,props.state.start,props.state.end],()=>scrub.value=null);
@@ -21,17 +22,23 @@ function stopPlayback(){emit('stop');stop();}
 // owner in sync so Space and the transport operate on the same audio afterward.
 async function selectAll(autoplay=false){if(!props.state.asset)return;select();props.state.start=0;props.state.end=props.state.asset.duration;stop();scrub.value=null;if(autoplay&&props.active)await play(props.state.asset,0,props.state.asset.duration,props.state.channel);}
 defineExpose({selectAll});
-function key(e:KeyboardEvent){if(e.defaultPrevented||!props.active||e.code!=='Space'||e.repeat||document.querySelector('dialog[open]'))return;if((e.target as HTMLElement).closest('input,textarea,select,button,a,[contenteditable]'))return;if(selectionGroup&&!selectionGroup.keyboard(rangeState.value))return;if(!props.state.asset||props.state.end<=props.state.start)return;e.preventDefault();if(playing.value)stopPlayback();else toggle();}
+function key(e:KeyboardEvent){
+ if(!props.active||!spacePlaybackShortcut(e,transport.value))return;
+ if(props.externalPlayback&&isCurrentAudio(props.state.asset,props.state.channel)&&playback.playing){e.preventDefault();stopPlayback();return;}
+ if(selectionGroup&&!selectionGroup.keyboard(rangeState.value))return;
+ if(!props.state.asset||props.state.end<=props.state.start)return;
+ e.preventDefault();if(playing.value)stopPlayback();else toggle();
+}
 onMounted(()=>window.addEventListener('keydown',key));onUnmounted(()=>window.removeEventListener('keydown',key));
 </script>
 <template>
-<div class="transport-controls" :class="{'transport-compact':compact}">
+<div ref="transport" class="transport-controls" :class="{'transport-compact':compact}">
 <div v-if="!compact" class="selection-controls">
 <strong>时间选区</strong>
 <label>起点 <input v-time-precision="'s'" v-model.number="rangeState.start" type="number" min="0" :max="rangeState.asset?.duration||0" step="0.001" :disabled="!rangeState.asset" @change="range"/> s</label>
 <span>—</span>
 <label>终点 <input v-time-precision="'s'" v-model.number="rangeState.end" type="number" min="0" :max="rangeState.asset?.duration||0" step="0.001" :disabled="!rangeState.asset" @change="range"/> s</label>
-<button :disabled="!rangeState.asset" @click="select();rangeState.start=0;rangeState.end=rangeState.asset!.duration;stop()">全部</button>
+<button data-audio-selection :disabled="!rangeState.asset" @click="select();rangeState.start=0;rangeState.end=rangeState.asset!.duration;stop()">全部</button>
 </div>
 <div class="audio-transport">
 <button :class="{primary:!compact}" :disabled="!state.asset||state.end<=state.start" @click="toggle">

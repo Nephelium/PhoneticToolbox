@@ -586,7 +586,7 @@
           },
           {
             "type": "text",
-            "text": "，一次选入 WAV、TextGrid、LAB 和需要的安全唇形 JSON，再从左侧打开录音。服务器项目读取项目内资源。该页直接在工作台使用，无需另开服务。"
+            "text": "，一次选入 WAV、TextGrid、LAB 和需要的安全唇形 JSON，再从左侧打开录音。服务器项目读取项目内资源。"
           }
         ]
       },
@@ -1098,7 +1098,7 @@
         "attrs": {
           "id": "m12-figure-association-current-light",
           "assetId": "m12-association-current-light-scaled-r20261007",
-          "caption": "多个候选时明确选择本次使用的 TextGrid，再点击打开标注。候选为同一自然语句标注的私有副本。",
+          "caption": "多个候选时明确选择本次使用的 TextGrid，再点击打开标注。",
           "alt": "最大化 V3 Qt 浅色窗口中，association-demo.wav 的候选弹窗选中 association-demo_B.TextGrid，取消和打开标注按钮可见。",
           "width": "100%",
           "align": "center"
@@ -2688,7 +2688,7 @@
         "attrs": {
           "id": "m12-figure-sequence-start-current-light",
           "assetId": "m12-sequence-start-current-light-scaled-r20261007",
-          "caption": "第一次双击后显示待定起点，等待终点建立当前条目。示例点击位置只演示操作，未作为该录音的科学边界。",
+          "caption": "第一次双击后显示待定起点，等待终点建立当前条目。标注时结合原录音定位边界。",
           "alt": "最大化 V3 Qt 浅色窗口中，practice.wav 的波形出现红色起点虚线，两标注层仍为空，右栏提示再双击终点生成 zhe4。",
           "width": "100%",
           "align": "center"
@@ -2809,7 +2809,7 @@
         "attrs": {
           "id": "m12-figure-sequence-phones-current-light",
           "assetId": "m12-sequence-phones-current-light-scaled-r20261007",
-          "caption": "建立 zhe4 后在内部双击，形成 zh / e4 两段，右栏反馈首个边界位置。示例标签与时间仅供操作说明。",
+          "caption": "建立 zhe4 后在内部双击，形成 zh / e4 两段，右栏反馈首个边界位置。结合录音检查切分位置。",
           "alt": "最大化 V3 Qt 浅色窗口中，音节层选中 zhe4，下方音素层出现 zh 和 e4，红色内部边界及共享选区可见，右栏显示按双击位置切分的成功反馈。",
           "width": "100%",
           "align": "center"
@@ -6832,7 +6832,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "，确认实际保存位置。独立下载保持编辑状态，不代表原目标已写入。"
+                    "text": "，确认实际保存位置。下载用于归档，原目标需通过保存 TextGrid 写入。"
                   }
                 ]
               }
@@ -8590,7 +8590,7 @@
         "content": [
           {
             "type": "text",
-            "text": "方法来源与解释边界"
+            "text": "方法来源与结果解释"
           }
         ]
       },
@@ -8671,7 +8671,7 @@
         "content": [
           {
             "type": "text",
-            "text": "词典均分和强度贴合提供编辑初值，边界仍需人工核对。预览细节受采样率与量化限制，六位小数保存精度不等于人工定位或设备精度。"
+            "text": "词典均分和强度贴合提供编辑初值，边界需人工核对。预览细节受采样率与量化限制；保存时间采用六位小数，实际定位精度取决于录音、预览和人工判断。"
           }
         ]
       },
@@ -8693,7 +8693,7 @@
         "content": [
           {
             "type": "text",
-            "text": "上方官方链接说明 TextGrid 格式。以下论文介绍应用其他模块使用的 Parselmouth，供需要时查阅，不作为本页图窗算法说明。"
+            "text": "上方官方链接说明 TextGrid 格式，以下论文介绍应用其他模块使用的 Parselmouth。"
           }
         ]
       },

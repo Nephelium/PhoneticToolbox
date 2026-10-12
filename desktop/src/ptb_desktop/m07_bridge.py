@@ -7,7 +7,7 @@ class M07Bridge:
     def invoke(self,body):
         if body['op']=='m07_source':
             raw,sha=self.bridge.provider.read(body['id']);entry=self.bridge.provider.entries[body['id']]
-            if len(raw)>8_000_000 or not entry.name.lower().endswith('.wav'):raise FileAccessError('M07 仅接受 8 MB 内 WAV')
+            if len(raw)>8_000_000 or not entry.name.lower().endswith('.wav'):raise FileAccessError('发声类型合成支持 8 MB 以内的 WAV 文件')
             if body.get('sha256') and body['sha256']!=sha:raise FileAccessError('输入音频已变化')
             return self.bridge.service.import_input(raw,entry.name,'audio')
         if body['op']=='m07_create':
@@ -24,7 +24,7 @@ class M07Bridge:
             job_id=str(UUID(body['job']));job=self.bridge.service.get('/api/v1/jobs/'+job_id)
             if job['operation']!='phonation_synthesis' or job['state']!='succeeded':raise FileAccessError('本组尚未完整成功')
             meta=next(f for f in job['result_manifest']['files'] if f['name']=='m07.ptb.json')
-            if meta['size_bytes']>2_000_000:raise FileAccessError('M07 F0 快照超过显示预算')
+            if meta['size_bytes']>2_000_000:raise FileAccessError('基频曲线数据过多，请缩小分析范围')
             verified=self.bridge.invoke(dict(op='result',job=job_id,id=meta['id']))
             return synthesis_f0_display(json.loads(base64.b64decode(verified['base64'])))
         if body['op']=='m07_save':
@@ -41,4 +41,4 @@ class M07Bridge:
                 destination.mkdir(exist_ok=True);checked_path(destination)
                 grant=self.bridge.provider.choose('output',lambda:str(destination))
                 return self.bridge.save(job_id,grant['id'],single=True)
-        raise FileAccessError('M07 操作不可用')
+        raise FileAccessError('发声类型合成操作不可用')

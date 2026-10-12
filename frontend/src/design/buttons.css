@@ -11,10 +11,6 @@ html:root[data-button-style][data-button-style=plain] button{
  background:var(--panel)!important;color:var(--text,var(--ink))!important;border-color:var(--border,var(--line))!important;filter:none!important;
 }
 html:root[data-button-style][data-button-style=plain] button:hover:not(:disabled){border-color:var(--accent)!important}
-/* Selection remains visible when solid highlighting is turned off. */
-html:root[data-button-style][data-button-style=plain] button:is([aria-pressed=true],[aria-selected=true],[aria-checked=true],.selected,.active,.m17-selected),
-html:root[data-button-style][data-button-style=all] button:is([aria-pressed=true],[aria-selected=true],[aria-checked=true],.selected,.active,.m17-selected),
-html:root[data-button-style][data-button-style=auto] button.active{outline:1px solid currentColor;outline-offset:-4px}
 html:root[data-button-style][data-button-effects=on] button:not(:disabled){box-shadow:0 1px 2px var(--button-shadow),inset 0 1px 0 var(--button-edge)!important}
 html:root[data-button-style][data-button-effects=on] button:hover:not(:disabled){box-shadow:0 2px 5px var(--button-shadow),0 0 0 1px var(--button-glow),inset 0 1px 0 var(--button-edge)!important}
 html:root[data-button-style][data-button-effects=on] button:active:not(:disabled){box-shadow:inset 0 1px 2px var(--button-shadow)!important}
@@ -24,11 +20,41 @@ html:root[data-button-style] button:focus-visible{outline:2px solid var(--accent
 /* Navigation already has its own selected item and whole-tab indicators. */
 html:root[data-button-style] :is(.nav-item,.tab-wrap>button):is(:enabled,:disabled){outline:none!important;outline-offset:0!important}
 html:root[data-button-style] .nav-item{background:transparent!important;border-color:transparent!important;color:var(--text)!important}
-html:root[data-button-style] .nav-item.selected{background:var(--selected)!important;border-color:var(--accent)!important;color:var(--accent)!important}
-html:root[data-button-style] .tab-wrap>button:is(:enabled,:disabled){background:transparent!important;border:0!important;box-shadow:none!important;filter:none!important}
-html:root[data-button-style] .tab-wrap>button[aria-selected=true]:is(:enabled,:disabled){background:var(--selected)!important}
-html:root[data-button-style] .tab-wrap>button{color:var(--muted)!important}
-html:root[data-button-style] .tab-wrap.active>button{color:var(--accent)!important}
+html:root[data-button-style] .nav-item.selected{background:var(--selected)!important;border-color:transparent!important;color:var(--accent)!important}
+html:root[data-button-style][data-button-effects] .tab-wrap>button:is(:enabled,:disabled){background:transparent!important;border:0!important;box-shadow:none!important;filter:none!important}
+html:root[data-button-style] .tab-wrap>button{color:inherit!important}
+html:root[data-button-style][data-button-effects] .manual-toc button:is(:enabled,:disabled){background:transparent!important;border:0!important;box-shadow:none!important;outline:none!important;color:var(--muted)!important}
+html:root[data-button-style][data-button-effects] .manual-toc button.active:is(:enabled,:disabled){background:var(--selected)!important;color:var(--accent)!important}
+html:root[data-button-style] .manual-toc button:focus-visible{text-decoration:underline;text-underline-offset:3px}
+html:root[data-button-style][data-button-effects] .window-controls button:is(:enabled,:disabled){background:transparent!important;color:var(--text)!important;border:0!important;box-shadow:none!important;outline:none!important;outline-offset:0!important}
+html:root[data-button-style][data-button-effects] .window-controls button:hover{background:var(--selected)!important}
+html:root[data-button-style][data-button-effects] .window-controls .window-close:hover{background:#c42b1c!important;color:#fff!important}
 html:root[data-button-style] :is(.nav-item,.tab-wrap>button):focus-visible{text-decoration:underline;text-underline-offset:3px}
 @media(prefers-reduced-motion:no-preference){html:root[data-button-style][data-button-effects=on] button{transition:background-color .12s,border-color .12s,box-shadow .14s}}
 @media(prefers-reduced-motion:reduce){html:root[data-button-style] button{transition:none!important}}
+/* Material is independent of highlighting and effects. Tabs remain transparent. */
+html:root[data-button-style][data-button-material=glass] button:is(:enabled,:disabled):not([role=tab]):not(.tab-close){
+ background:color-mix(in srgb,var(--panel) var(--button-glass-opacity,35%),transparent)!important;color:var(--text,var(--ink))!important;
+ backdrop-filter:blur(var(--button-glass-blur,12px)) saturate(1.15);
+ border-color:color-mix(in srgb,var(--border,var(--line)) 75%,transparent)!important;
+}
+html:root[data-button-material=glass][data-button-style=auto] button.primary:is(:enabled,:disabled),
+html:root[data-button-material=glass][data-button-style=all] button:is(:enabled,:disabled):not([role=tab]):not(.tab-close){
+ background:color-mix(in srgb,var(--accent) var(--button-glass-opacity,35%),transparent)!important;color:var(--text,var(--ink))!important;border-color:var(--accent)!important;
+}
+html:root[data-button-style][data-button-material=glass] button:is(:enabled,:disabled):hover:not([role=tab]):not(.tab-close){border-color:var(--accent)!important}
+/* Selection uses a filled colour; the outline is reserved for keyboard focus. */
+html:root[data-button-style]{--button-selected-background:color-mix(in srgb,var(--accent) 24%,var(--panel))}
+html:root[data-button-style][data-button-material=glass]{--button-selected-background:color-mix(in srgb,var(--accent) max(45%,var(--button-glass-opacity,35%)),transparent)}
+html:root[data-button-style][data-button-style] button:is([aria-pressed=true],[aria-selected=true],[aria-checked=true],.selected,.active,.m17-selected):not(.tab-wrap>button):not(.window-controls button){
+ background:var(--button-selected-background)!important;color:var(--text,var(--ink))!important;border-color:transparent!important;outline:none!important;font-weight:600;
+}
+html:root[data-button-style] .tab-wrap.active{background:var(--button-selected-background)!important;border-color:transparent!important;outline:none!important;box-shadow:none!important;color:var(--text)!important}
+html:root[data-button-style][data-button-style] button:is([aria-pressed=true],[aria-selected=true],[aria-checked=true],.selected,.active,.m17-selected):not(.tab-wrap>button):not(.window-controls button):focus-visible{outline:2px solid var(--accent)!important;outline-offset:3px!important}
+html:root[data-button-style] :is(.nav-item,.tab-wrap>button):focus-visible{outline:none!important;text-decoration:underline;text-underline-offset:3px}
+/* Mode cards are palette previews as well as controls; material/highlight must not recolour them. */
+html:root[data-button-style][data-button-material] button.theme-mode-card.theme-mode-card:is(:enabled,:disabled){
+ background:var(--mode-card-bg,var(--panel))!important;color:var(--mode-card-text,var(--text))!important;border:2px solid transparent!important;box-shadow:none!important;backdrop-filter:none!important;filter:none!important;outline:none!important;
+}
+html:root[data-button-style][data-button-material] button.theme-mode-card.theme-mode-card:is(:enabled,:disabled)[aria-pressed=true]{border-color:var(--accent)!important}
+html:root[data-button-style][data-button-material] button.theme-mode-card.theme-mode-card:is(:enabled,:disabled):focus-visible{outline:2px solid var(--accent)!important;outline-offset:2px!important}

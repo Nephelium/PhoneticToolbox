@@ -18,18 +18,20 @@ def main():
     parser.add_argument('--metadata',type=Path,required=True)
     parser.add_argument('--original',type=Path,required=True)
     parser.add_argument('--translation',type=Path,required=True)
+    parser.add_argument('--analysis',type=Path)
     parser.add_argument('--catalog',type=Path,help='Existing full catalogue; preserve older entries.')
     parser.add_argument('--output',type=Path,required=True)
     args=parser.parse_args()
     metadata=json.loads(args.metadata.read_text('utf8'))
     catalog=json.loads(args.catalog.read_text('utf8')) if args.catalog else {'schema':'ptb-papers/1','papers':[]}
     files=[]
-    for kind in ('original','translation'):
+    for kind in (('original','translation','analysis') if args.analysis else ('original','translation')):
         path=getattr(args,kind);raw=path.read_bytes()
         if not raw.startswith(b'%PDF-'):raise ValueError('Expected PDF: '+str(path))
         digest=hashlib.sha256(raw).hexdigest()
-        metadata[kind]={'path':f'{metadata["id"]}/{kind}-{digest[:16]}.pdf','size':len(raw),'sha256':digest}
-        files.append((path,metadata[kind]['path']))
+        field='analysisPdf' if kind=='analysis' else kind
+        metadata[field]={'path':f'{metadata["id"]}/{kind}-{digest[:16]}.pdf','size':len(raw),'sha256':digest}
+        files.append((path,metadata[field]['path']))
     catalog['papers']=[p for p in catalog['papers'] if p['id']!=metadata['id']]+[metadata]
     validate_catalog(catalog)
     for source,relative in files:

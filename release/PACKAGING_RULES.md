@@ -6,7 +6,7 @@
 
 - 按本次源码的实际模块与资源清单核对所需程序和依赖；新增模块分别记录验收范围，排除 M11 的 MFA 环境、声学模型与词典。MFA 的外部环境接入界面可以保留，不得因此声称 MFA 开箱可用。
 - 使用者无需自行安装 Python、Conda、Node 或项目依赖。运行时绑定只能指向本包，不能依赖开发电脑的 `.venv`、PATH 或绝对源码路径。
-- 免安装版必须是双击直接启动的 `PhoneticToolbox.exe`。安装版安装同一应用 EXE；更新 ZIP 必须包含同一个 SHA-256 的 EXE。
+- 免安装版必须是双击直接启动的 `PhoneticToolbox-windows-x64.exe`。安装版安装同一应用 EXE，安装后及更新 ZIP 内继续使用 `PhoneticToolbox.exe`；更新 ZIP 必须包含同一个 SHA-256 的 EXE。`build-info.json.exe` 记录分发名，`application.json.entry` 记录安装/更新布局的固定名。
 - 三种分发文件均不得超过 **500,000,000 字节**。报告使用十进制 MB，可另列 MiB。该限制是交付上限；本次约 448 MB 的结果不是所有未来版本的理论最低值。
 - 交付时分别说明下载体积、首次展开后的持久占用、小型启动临时文件与清理行为。不能用展开重复量冒充 EXE 减少量。
 
@@ -57,7 +57,7 @@ node frontend/scripts/verify-manual-runtime.mjs frontend/dist/manual
 ```powershell
 .\.venv\m14\Scripts\python.exe -B -X utf8 scripts/build_v3_local_preview.py --name <新构建名> --lean-qt --compact-onefile --persistent-cache --runtime-bundle-cache output/build-<已验证构建>/snapshot --host-archive-cache output/build-<已验证构建>/host-archive
 .\.venv\m14\Scripts\python.exe -B -X utf8 release/finalize_compact.py --package dist/<新构建名> --work output/build-<新构建名>
-.\.venv\m14\Scripts\python.exe -B -X utf8 scripts/audit_release_contents.py dist/<新构建名>/PhoneticToolbox.exe --output output/validation/<本次验收>/package-audit.json
+.\.venv\m14\Scripts\python.exe -B -X utf8 scripts/audit_release_contents.py dist/<新构建名>/PhoneticToolbox-windows-x64.exe --output output/validation/<本次验收>/package-audit.json
 ```
 
 占位符须替换为本次已确认路径。没有可靠缓存时，从已盘点的运行时 stage 重新准备，不猜测其它目录。需要安装版时再执行：

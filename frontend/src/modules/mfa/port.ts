@@ -7,6 +7,7 @@ export type Request=components['schemas']['M11Request'];
 export interface Grant {id:string;label:string;purpose:string}
 export interface Catalog {
  schema_version:string;download_available:boolean;download_reason:string;execution_available:boolean;waiting_reason:string|null;
+ component_status?:{stage:string;completed:number;total:number;bytes_per_second?:number}|null;
  runtimes:{id:string;version:string;platform:string;arch:string;validated:boolean;fingerprint:string;versions?:Record<string,string>;installed_bytes?:number;download_bytes?:number|null;source?:string;archive_sha256?:string}[];
  models:{id:string;name:string;model_sha256:string;dictionary_sha256:string;validated_runtime:string;dictionary_name?:string;model_bytes?:number;dictionary_bytes?:number}[];
 }

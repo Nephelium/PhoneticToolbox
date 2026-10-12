@@ -13,6 +13,10 @@
 
 此网络限制作用于嵌入网页。论文和更新的联网由各自宿主服务执行，并按自身来源、清单和内容摘要规则核验。
 
+Assets、LocalOnly、URL校验与scheme注册共用 [web_assets.py](src/ptb_desktop/web_assets.py)，主宿主保留导入名称兼容。工作台另注册 feedback 原生桥。独立 [feedback_manager.py](src/ptb_desktop/feedback_manager.py)只装配管理静态页、反馈桥、DPAPI与托盘，不导入工作台或科学运行时；同一用户的数据目录对应一个本机实例，再次启动唤起已有窗口。文字、私有图片、设备配对及SSE请求均由原生网络层核验HTTPS。关闭隐藏到托盘，退出关闭本工具的连接与线程。最终EXE有独立入口及工程外验证，见[工具说明](../tools/feedback-manager/README.md)。
+
+[window_chrome.py](src/ptb_desktop/window_chrome.py) 在 Windows 将标签与单一品牌区放入窗口顶边，由前端绘制主题一致的控制按钮。宿主保留 Windows 缩放/贴边样式，以原生边缘命中测试调整大小，最大化使用屏幕工作区。无边框客户区计算交给 Qt 的 WM_NCCALCSIZE 路径，避免宿主提前消费消息导致原生框架边距缓存失配；Windows 原生恢复保留最大化状态和页面，不重载编辑内容。files.windowAction 仅分派移动、最小化、最大化/还原和既有关闭协商，不扩大文件访问能力。状态信号同步还原图标，关闭仍经过未保存编辑保护。其他平台保留系统装饰；兼容的 files.setCaptionColors 仍只接受两个不透明六位十六进制颜色，不修改系统设置。
+
 ## 本地服务及工作进程
 
 [local_service.py](src/ptb_desktop/local_service.py)只经受控协议访问后端，不 import API 实现。源码模式启动 python -m ptb_api.cli --mode local，冻结模式由同一 EXE 的 --local-service 分派。
@@ -29,11 +33,12 @@
 | vocal_tract/client.py、worker.py、runtime.py | M10 专用进程、原生引擎、状态隔离和明确资源位置 |
 | vocal_tract/audio_output.py | 声道模块的本机音频输出 |
 | recording/、m16_bridge.py | M16 设备枚举/租约、采集、工程、编辑/处理、后台保存与导出 |
-| papers.py、papers_bridge.py | 论文目录/下载、首次日期、离线读取、批注与导出 |
+| papers.py、papers_bridge.py、paper_library.py | 推荐目录/选择下载、启动及可调周期检查、个人文件夹库、离线读取、批注与导出 |
 | updates_bridge.py、update_coordinator.py、update_apply.py | 更新检查/下载、关闭协商、独立换版助手 |
 | startup_cache.py、compact_runtime.py、bundle_manifest.py | 持久缓存、压缩运行时展开、依赖身份与运行绑定 |
 | startup_*.py、presentation.py | 准备进度、启动显示和窗口呈现 |
 | platform_paths.py、cache_cleanup.py | 用户目录身份及受控缓存清理 |
+| app_icon.py、icon_preferences.py | 共享图标目录、窗口/打包图标与原子保存的个人图标选择 |
 
 M10 的可变原生引擎与 M16 的采集工程各有独立生命周期。M16 使用 recording(request_id, JSON)/recordingReady，长处理先启动后台再轮询；停止检测、停止录音、取消处理和取消导出不能互相混同。协议见[recording/1](../contracts/recording/README.md)。
 
@@ -41,9 +46,11 @@ M10 的可变原生引擎与 M16 的采集工程各有独立生命周期。M16 �
 
 platform_paths 以操作系统用户数据目录为基础，Windows 主数据位于 %LOCALAPPDATA%/PhoneticToolbox/v3。Qt WebEngine 沿用 %LOCALAPPDATA%/PhoneticToolbox-v3/workbench，以保持网页草稿、偏好和 IndexedDB 身份。声道用户资料由 host 单独指定。
 
+应用图标选择与规范化的自定义 PNG 保存在主数据目录的 icons/preferences.json，升级后保留。files.applicationIcon 使用独立的有界请求，不扩大既有 invoke 限额。前端和桌面读取同一随包 catalog，科学任务与可再生缓存清理不修改这些偏好。
+
 冻结入口默认任务目录 local-preview-20260927 保留兼容命名。源码启动器使用工程 output/validation 中既有数据库/缓存。两者不能相互当作无用副本清理，完整位置表见[总架构](../ARCHITECTURE.md)。
 
-用户选择的正式录音、导出和工程由用户管理。startup-cache 是可再生运行缓存，papers 含论文及批注，updates 含更新状态，不能因同在用户目录而一并删除。
+用户选择的正式录音、导出和工程由用户管理。startup-cache 是可再生运行缓存，papers 含推荐论文、偏好及按内容摘要绑定的批注，updates 含更新状态，不能因同在用户目录而一并删除。个人 PDF 另存用户选定的根文件夹，收藏夹为真实子文件夹，导入保留来源；papers 只记录库根路径和批注。网络与 Qt PDF 操作分开排队，文档对象始终归阅读线程。
 
 ## 打包与测试边界
 

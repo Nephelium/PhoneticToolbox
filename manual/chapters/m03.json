@@ -101,7 +101,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "准备同步录制的双声道 WAV，默认左 EGG、右音频。普通立体声音乐或两支麦克风录音不能代替 EGG 与音频。"
+                    "text": "准备同步录制的双声道 WAV，默认左 EGG、右音频。两条声道须分别来自 EGG 设备和同步录音。"
                   }
                 ]
               }
@@ -129,7 +129,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "按设备接线记录核对声道及 EGG 极性。交换声道只交换角色，不能翻转极性或校正两信号的录制时延。"
+                    "text": "按设备接线记录核对声道及 EGG 极性。交换声道用于交换角色；极性和录制时延需分别核对。"
                   }
                 ]
               }
@@ -328,9 +328,9 @@
         "type": "image",
         "attrs": {
           "id": "m03-figure-m03-overview-r2-light",
-          "assetId": "m03-analysis-roi-light-scaled-r20261007",
-          "caption": "同步 EGG 与音频的 40.00–40.50 秒分析选区；CQ/SQ、语谱及音频和 EGG 微观图均为实时计算结果。",
-          "alt": "同步 EGG 与音频的 40.00–40.50 秒分析选区；CQ/SQ、语谱及音频和 EGG 微观图均为实时计算结果。",
+          "assetId": "m03-r8-analysis-roi",
+          "caption": "同步 EGG 与音频的 40.00–40.50 s 分析选区，左图的半透明矩形与右图的 50 ms 微观窗对应。",
+          "alt": "真实 3.wav 的当前 EGG 工作台，40至40.5秒选区、左图半透明微观范围、右图50毫秒总窗和红色0毫秒参考线可见",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -356,7 +356,7 @@
         "content": [
           {
             "type": "text",
-            "text": "本例 3.wav 应为左 EGG、右音频。下图仅示范交换后的角色提示，看完请恢复正确接线；曲线平滑不能证明声道正确。"
+            "text": "本例 3.wav 应为左 EGG、右音频。下图仅示范交换后的角色提示，看完请恢复正确接线。声道角色以接线记录和波形核对为准。"
           }
         ]
       },
@@ -691,7 +691,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "按需开启 Praat F0、GCI F0、REAPER F0 作对照。"
+                    "text": "按录音需要设置左栏 F0 下限 Hz、F0 上限 Hz，再开启 Praat F0、GCI F0、REAPER F0 作对照。"
                   }
                 ]
               }
@@ -896,7 +896,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "四图依次为左上 CQ/SQ、左下语谱/F0、右上音频微观、右下 EGG 微观。窄窗口可滚动查看。"
+                    "text": "四图依次为左上 CQ/SQ、左下语谱/F0、右上音频微观、右下 EGG 微观。CQ/SQ 和两张微观图用图头与坐标轴标明内容，不另列图例小标题。窄窗口可滚动查看。"
                   }
                 ]
               }
@@ -1078,7 +1078,7 @@
         "content": [
           {
             "type": "text",
-            "text": "CQ 读左轴（0–1），SQ 读右轴（−1.1 至 1.1）。语谱频率读左轴（0–5000 Hz），F0 读右轴。微观横轴为距中心的毫秒，图头显示绝对时间；GCI 实线、GOI 虚线。"
+            "text": "CQ 读左轴（0–1），SQ 读右轴（−1.1 至 1.1）。语谱频率读左轴（0–5000 Hz），F0 读右轴。音频 · 微观、EGG · 微观标题后的毫秒数表示总窗长，图头同时保留绝对中心时间。右图横轴为距中心的毫秒，红色 0 ms 参考线标出中心，GCI 实线、GOI 虚线。"
           }
         ]
       },
@@ -1168,7 +1168,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "点击左两图定位微观中心。左图缩放/平移改变宏观选区，右图缩放/平移只改变微观范围。"
+                    "text": "点击左两图定位微观中心。左图红色竖线标出中心，主题半透明矩形覆盖中心前后各半个微观窗长，与右两图的范围对应。左图缩放/平移改变宏观选区，右图缩放/平移只改变微观范围。"
                   }
                 ]
               }
@@ -1264,9 +1264,9 @@
         "type": "image",
         "attrs": {
           "id": "m03-figure-analysis-roi-light",
-          "assetId": "m03-analysis-roi-light-scaled-r20261007",
-          "caption": "40.00–40.50 s 选区的四图与底栏起终点。",
-          "alt": "40至40.5秒选区下的四图与底栏起终点，左图定位宏观时间，右图显示周期细节",
+          "assetId": "m03-r8-analysis-roi",
+          "caption": "40.00–40.50 s 选区的四图与底栏起终点，微观中心为 40.25 s，右图总窗长 50 ms。",
+          "alt": "真实录音40至40.5秒选区下的四图与底栏，左图定位40.25秒中心及微观覆盖范围，右图显示50毫秒周期细节",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -1476,9 +1476,9 @@
         "type": "image",
         "attrs": {
           "id": "m03-figure-m03-event-10ms-light",
-          "assetId": "m03-event-10ms-light-scaled-r20261007",
-          "caption": "10 ms 微观窗中的 GCI 实线、GOI 虚线及事件设置。",
-          "alt": "10毫秒EGG与音频微观波形中的GCI实线和GOI虚线，左侧保留默认事件参数",
+          "assetId": "m03-r8-micro-events",
+          "caption": "10 ms 微观总窗中的红色 0 ms 中心参考线、GCI 实线与 GOI 虚线。",
+          "alt": "真实录音10毫秒音频与EGG微观波形，标题标明总窗长，红色0毫秒参考线与GCI实线、GOI虚线可见",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -1645,7 +1645,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "按需比较四种 GCI/GOI 组合，核对事件和 CQ/SQ 对设置的敏感程度。曲线平滑不足以证明定位准确。"
+                    "text": "按需比较四种 GCI/GOI 组合，核对事件和 CQ/SQ 对设置的敏感程度。定位准确性请结合周期波形和事件标线核对。"
                   }
                 ]
               }
@@ -3788,7 +3788,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "总长 5–5000 ms，文件边缘按实际样本。"
+                        "text": "总长 5–5000 ms。右图标题标总长，左图矩形标覆盖范围，文件边缘按实际样本。"
                       }
                     ]
                   }
@@ -5019,7 +5019,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "语谱图与 F0 / 切换按钮"
+                        "text": "语谱图与 F0，谱窗右侧 / 切换按钮"
                       }
                     ]
                   }
@@ -5208,7 +5208,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "语谱图与 F0 / dB"
+                        "text": "语谱图与 F0，谱窗下一行 / dB"
                       }
                     ]
                   }
@@ -5397,7 +5397,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "语谱图与 F0 / dB"
+                        "text": "语谱图与 F0，谱窗下一行 / dB"
                       }
                     ]
                   }
@@ -5490,6 +5490,384 @@
                       {
                         "type": "text",
                         "text": "−160 至 20，须大于下限，未校准声压。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "id": "m03-f0-floor-cell-1",
+                  "caption": null,
+                  "note": null,
+                  "color": null,
+                  "textAlign": null,
+                  "colorDark": null,
+                  "backgroundColorDark": null,
+                  "lineHeight": null,
+                  "marginTop": null,
+                  "marginBottom": null,
+                  "indent": 0,
+                  "backgroundColor": null,
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "colwidth": null,
+                  "align": null
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "attrs": {
+                      "textAlign": null,
+                      "id": "m03-f0-floor-paragraph-1",
+                      "caption": null,
+                      "note": null,
+                      "color": null,
+                      "colorDark": null,
+                      "backgroundColorDark": null,
+                      "lineHeight": null,
+                      "marginTop": null,
+                      "marginBottom": null,
+                      "indent": 0,
+                      "backgroundColor": null
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "F0 下限 Hz"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "id": "m03-f0-floor-cell-2",
+                  "caption": null,
+                  "note": null,
+                  "color": null,
+                  "textAlign": null,
+                  "colorDark": null,
+                  "backgroundColorDark": null,
+                  "lineHeight": null,
+                  "marginTop": null,
+                  "marginBottom": null,
+                  "indent": 0,
+                  "backgroundColor": null,
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "colwidth": null,
+                  "align": null
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "attrs": {
+                      "textAlign": null,
+                      "id": "m03-f0-floor-paragraph-2",
+                      "caption": null,
+                      "note": null,
+                      "color": null,
+                      "colorDark": null,
+                      "backgroundColorDark": null,
+                      "lineHeight": null,
+                      "marginTop": null,
+                      "marginBottom": null,
+                      "indent": 0,
+                      "backgroundColor": null
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "语谱图与 F0 / Hz"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "id": "m03-f0-floor-cell-3",
+                  "caption": null,
+                  "note": null,
+                  "color": null,
+                  "textAlign": null,
+                  "colorDark": null,
+                  "backgroundColorDark": null,
+                  "lineHeight": null,
+                  "marginTop": null,
+                  "marginBottom": null,
+                  "indent": 0,
+                  "backgroundColor": null,
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "colwidth": null,
+                  "align": null
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "attrs": {
+                      "textAlign": null,
+                      "id": "m03-f0-floor-paragraph-3",
+                      "caption": null,
+                      "note": null,
+                      "color": null,
+                      "colorDark": null,
+                      "backgroundColorDark": null,
+                      "lineHeight": null,
+                      "marginTop": null,
+                      "marginBottom": null,
+                      "indent": 0,
+                      "backgroundColor": null
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "30"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "id": "m03-f0-floor-cell-4",
+                  "caption": null,
+                  "note": null,
+                  "color": null,
+                  "textAlign": null,
+                  "colorDark": null,
+                  "backgroundColorDark": null,
+                  "lineHeight": null,
+                  "marginTop": null,
+                  "marginBottom": null,
+                  "indent": 0,
+                  "backgroundColor": null,
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "colwidth": null,
+                  "align": null
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "attrs": {
+                      "textAlign": null,
+                      "id": "m03-f0-floor-paragraph-4",
+                      "caption": null,
+                      "note": null,
+                      "color": null,
+                      "colorDark": null,
+                      "backgroundColorDark": null,
+                      "lineHeight": null,
+                      "marginTop": null,
+                      "marginBottom": null,
+                      "indent": 0,
+                      "backgroundColor": null
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "10–2000，须小于上限。Praat AC 与 REAPER 共用，修改后更新检测和缓存，不改 GCI F0 或事件检测。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "id": "m03-f0-ceiling-cell-1",
+                  "caption": null,
+                  "note": null,
+                  "color": null,
+                  "textAlign": null,
+                  "colorDark": null,
+                  "backgroundColorDark": null,
+                  "lineHeight": null,
+                  "marginTop": null,
+                  "marginBottom": null,
+                  "indent": 0,
+                  "backgroundColor": null,
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "colwidth": null,
+                  "align": null
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "attrs": {
+                      "textAlign": null,
+                      "id": "m03-f0-ceiling-paragraph-1",
+                      "caption": null,
+                      "note": null,
+                      "color": null,
+                      "colorDark": null,
+                      "backgroundColorDark": null,
+                      "lineHeight": null,
+                      "marginTop": null,
+                      "marginBottom": null,
+                      "indent": 0,
+                      "backgroundColor": null
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "F0 上限 Hz"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "id": "m03-f0-ceiling-cell-2",
+                  "caption": null,
+                  "note": null,
+                  "color": null,
+                  "textAlign": null,
+                  "colorDark": null,
+                  "backgroundColorDark": null,
+                  "lineHeight": null,
+                  "marginTop": null,
+                  "marginBottom": null,
+                  "indent": 0,
+                  "backgroundColor": null,
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "colwidth": null,
+                  "align": null
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "attrs": {
+                      "textAlign": null,
+                      "id": "m03-f0-ceiling-paragraph-2",
+                      "caption": null,
+                      "note": null,
+                      "color": null,
+                      "colorDark": null,
+                      "backgroundColorDark": null,
+                      "lineHeight": null,
+                      "marginTop": null,
+                      "marginBottom": null,
+                      "indent": 0,
+                      "backgroundColor": null
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "语谱图与 F0 / Hz"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "id": "m03-f0-ceiling-cell-3",
+                  "caption": null,
+                  "note": null,
+                  "color": null,
+                  "textAlign": null,
+                  "colorDark": null,
+                  "backgroundColorDark": null,
+                  "lineHeight": null,
+                  "marginTop": null,
+                  "marginBottom": null,
+                  "indent": 0,
+                  "backgroundColor": null,
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "colwidth": null,
+                  "align": null
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "attrs": {
+                      "textAlign": null,
+                      "id": "m03-f0-ceiling-paragraph-3",
+                      "caption": null,
+                      "note": null,
+                      "color": null,
+                      "colorDark": null,
+                      "backgroundColorDark": null,
+                      "lineHeight": null,
+                      "marginTop": null,
+                      "marginBottom": null,
+                      "indent": 0,
+                      "backgroundColor": null
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "800"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "attrs": {
+                  "id": "m03-f0-ceiling-cell-4",
+                  "caption": null,
+                  "note": null,
+                  "color": null,
+                  "textAlign": null,
+                  "colorDark": null,
+                  "backgroundColorDark": null,
+                  "lineHeight": null,
+                  "marginTop": null,
+                  "marginBottom": null,
+                  "indent": 0,
+                  "backgroundColor": null,
+                  "colspan": 1,
+                  "rowspan": 1,
+                  "colwidth": null,
+                  "align": null
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "attrs": {
+                      "textAlign": null,
+                      "id": "m03-f0-ceiling-paragraph-4",
+                      "caption": null,
+                      "note": null,
+                      "color": null,
+                      "colorDark": null,
+                      "backgroundColorDark": null,
+                      "lineHeight": null,
+                      "marginTop": null,
+                      "marginBottom": null,
+                      "indent": 0,
+                      "backgroundColor": null
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "10–2000，须大于下限。随单文件导出与参数草稿保存，批次使用独立配置。"
                       }
                     ]
                   }
@@ -5678,7 +6056,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "音频 AC，30–800 Hz、10 ms，单文件 CSV 始终保留。"
+                        "text": "音频 AC，使用 F0 上下限，步长 10 ms，单文件 CSV 始终保留。"
                       }
                     ]
                   }
@@ -5867,7 +6245,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "EGG 事件周期，单文件 CSV 始终保留。"
+                        "text": "EGG 事件周期，不受音频 F0 上下限影响，单文件 CSV 始终保留。"
                       }
                     ]
                   }
@@ -6056,7 +6434,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "音频估计，30–800 Hz、10 ms，开启才导出此列。"
+                        "text": "音频估计，使用 F0 上下限，步长 10 ms，开启才导出此列。"
                       }
                     ]
                   }
@@ -8513,7 +8891,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "存配置及 LP，不存音频和正式结果。"
+                        "text": "存配置及 LP，包括音频 F0 上下限，不存音频和正式结果。"
                       }
                     ]
                   }
@@ -8991,7 +9369,7 @@
         "content": [
           {
             "type": "text",
-            "text": "自动 dB 随当前可见 PSD 更新 50 dB 灰度范围，静音时保留原范围。它只改显示，正式导图使用提交时范围。"
+            "text": "自动 dB 位于谱窗 ms 右侧，下一行并列显示 dB 下限、dB 上限。开启后随当前可见 PSD 更新 50 dB 灰度范围，静音时保留原范围。实时语谱图上方不显示色条，当前范围查看左栏上下限。自动 dB 只改显示，正式导图使用提交时范围。"
           }
         ]
       },
@@ -9089,9 +9467,9 @@
         "type": "image",
         "attrs": {
           "id": "m03-figure-m03-spectrum-50ms-light",
-          "assetId": "m03-spectrum-50ms-light-scaled-r20261007",
-          "caption": "50 ms 谱窗下的谐波细节与自动 dB 色条。",
-          "alt": "40至40.5秒选区的50毫秒谱窗语谱图与自动dB灰度条",
+          "assetId": "m03-r8-spec-50ms",
+          "caption": "50 ms 谱窗下的谐波细节，自动 dB 范围为 −76 至 −26 dB，数值显示在左栏。",
+          "alt": "真实录音40至40.5秒选区的50毫秒谱窗语谱图，左栏自动dB开启，上下限为负76和负26dB，图上方没有实时色条",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -9128,7 +9506,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "再改为 5 ms，对照快速变化与谐波细节，留意色条也会更新。"
+                    "text": "再改为 5 ms，对照快速变化与谐波细节，留意左栏 dB 上下限也会更新。"
                   }
                 ]
               }
@@ -9140,9 +9518,9 @@
         "type": "image",
         "attrs": {
           "id": "m03-figure-m03-spectrum-5ms-light",
-          "assetId": "m03-spectrum-5ms-light-scaled-r20261007",
-          "caption": "同一选区改为 5 ms 谱窗，观察快速变化与色条。",
-          "alt": "相同40至40.5秒选区改为5毫秒谱窗后的语谱图，谱窗输入和自动dB色条可见",
+          "assetId": "m03-r8-spec-5ms",
+          "caption": "同一选区改为 5 ms 谱窗，观察快速变化，左栏自动 dB 范围为 −86 至 −36 dB。",
+          "alt": "相同真实录音选区改为5毫秒谱窗后的语谱图，左栏自动dB上下限为负86和负36dB",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -9168,7 +9546,7 @@
         "content": [
           {
             "type": "text",
-            "text": "本例自动范围分别为 −76 至 −26 dB 和 −86 至 −36 dB。明暗变化同时受窗长和色阶影响，不能直接当作录音强度变化。比较后可改回 20 ms。"
+            "text": "本例两种谱窗的自动范围分别为 −76 至 −26 dB 和 −86 至 −36 dB，数值查看左栏 dB 上下限。明暗变化同时受窗长和色阶影响，比较录音强度时请核对原信号与刻度。比较后可改回 20 ms。"
           }
         ]
       },
@@ -9254,7 +9632,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "要看清局部结构，开启自动 dB，并核对色条。自动图的明暗不能单独反映绝对强度。"
+                    "text": "要看清局部结构，开启自动 dB，并核对左栏 dB 上下限。比较绝对强度时，请使用统一色阶并核对原信号。"
                   }
                 ]
               }
@@ -9333,9 +9711,22 @@
         "content": [
           {
             "type": "text",
-            "text": "Praat（自相关）与 REAPER 从音频估计 F0，新任务均搜索 30–800 Hz、步长 10 ms。长录音首次开启新视野的 F0 可能需等待，已算视野可复用缓存。"
+            "text": "Praat（自相关）与 REAPER 从音频估计 F0，共同使用左栏 F0 下限 Hz、F0 上限 Hz，默认 30–800 Hz，步长固定 10 ms。修改上下限会按新范围重新估计，缓存也按检测范围区分。长录音首次开启新视野的 F0 可能需等待，相同范围下已算视野可复用缓存。下图将共用范围改为 80–350 Hz 作操作示范，三个 F0 开关均开启。"
           }
         ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m03-figure-shared-f0-range",
+          "assetId": "m03-r8-shared-f0-range",
+          "caption": "将音频 F0 搜索范围设为 80–350 Hz，Praat 与 REAPER 共用此范围，GCI 仍按 EGG 事件周期计算。三个 F0 开关均开启。",
+          "alt": "真实录音共用F0范围设置为下限80Hz、上限350Hz，Praat、GCI与REAPER三个开关均开启，语谱右轴显示来源对照",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
+        }
       },
       {
         "type": "orderedList",
@@ -9367,7 +9758,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "只勾选 Praat F0，等待紫色点与右轴出现。"
+                    "text": "先按录音需要设置 F0 下限 Hz、F0 上限 Hz，两值均须在 10–2000 Hz 内且下限小于上限。只勾选 Praat F0，等待紫色点与右轴出现。"
                   }
                 ]
               }
@@ -9379,9 +9770,9 @@
         "type": "image",
         "attrs": {
           "id": "m03-figure-m03-praat-f0-light",
-          "assetId": "m03-praat-f0-light-scaled-r20261007",
-          "caption": "仅开启 Praat F0，紫色点读语谱右轴。",
-          "alt": "只勾选Praat F0后的语谱右轴和紫色基频轨迹",
+          "assetId": "m03-r8-praat-only",
+          "caption": "仅开启 Praat F0，音频搜索范围为 30–800 Hz，紫色点读语谱右轴。",
+          "alt": "真实录音仅开启Praat F0，左栏共用范围30至800Hz，语谱右轴显示紫色基频点",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -9407,7 +9798,7 @@
         "content": [
           {
             "type": "text",
-            "text": "GCI F0 来自相邻 EGG 事件间隔的倒数，并作异常值筛选。它有自己的时间点和范围，不逐点修改 Praat，也不受音频 30–800 Hz 搜索范围约束。"
+            "text": "GCI F0 来自相邻 EGG 事件间隔的倒数，并作异常值筛选。它有自己的时间点和范围，不逐点修改 Praat。音频 F0 上下限不改变 GCI F0 或 GCI/GOI 事件检测范围。"
           }
         ]
       },
@@ -9453,9 +9844,9 @@
         "type": "image",
         "attrs": {
           "id": "m03-figure-m03-gci-f0-light",
-          "assetId": "m03-gci-f0-light-scaled-r20261007",
-          "caption": "仅开启 GCI F0，红点来自 EGG 事件周期。",
-          "alt": "只勾选GCI F0后的语谱右轴和红色事件周期基频轨迹",
+          "assetId": "m03-r8-gci-only",
+          "caption": "仅开启 GCI F0，红点来自 EGG 事件周期，音频 F0 上下限不参与此来源的计算。",
+          "alt": "真实录音仅开启GCI F0，语谱右轴显示红色EGG事件周期基频点",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -9489,9 +9880,9 @@
         "type": "image",
         "attrs": {
           "id": "m03-figure-three-f0-light",
-          "assetId": "m03-three-f0-light-scaled-r20261007",
-          "caption": "三个 F0 来源在同一右轴比较。",
-          "alt": "左栏三个基频开关已勾选，语谱上有三种来源的基频点和独立右纵轴",
+          "assetId": "m03-r8-three-f0",
+          "caption": "三个 F0 来源在同一右轴比较，Praat 与 REAPER 共用 30–800 Hz 音频搜索范围。",
+          "alt": "真实录音三个F0开关均开启，左栏音频范围30至800Hz，语谱右轴比较Praat、GCI与REAPER基频点",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -9712,7 +10103,7 @@
           },
           {
             "type": "text",
-            "text": "。高 F0 时可跨周期，改变 LP 阶数不能消除此问题，计数为零也不证明闭相成立。10 s 内仍用同一组平均系数，声道变化时请缩短选区。"
+            "text": "。高 F0 时可能跨周期，闭相位置需结合 GOI 和周期波形另行核对。LP 阶数及跨周期计数用于检查计算条件。10 s 内使用同一组平均系数，声道变化时请缩短选区。"
           }
         ]
       },
@@ -9808,7 +10199,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "音频实线、IF 虚线、EGG 点线。频谱保留各自幅度标尺并在谱峰下 80 dB 截底；不能用归一化波形高度比较绝对幅度。"
+                    "text": "音频实线、IF 虚线、EGG 点线。频谱保留各自幅度标尺并在谱峰下 80 dB 截底；归一化波形用于比较形状，绝对幅度请读取频谱刻度。"
                   }
                 ]
               }
@@ -13832,7 +14223,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "等最新预览完成并核对选区、F0，点击保存 CSV / 三图。更新中或没有有效源文件时按钮禁用。"
+                    "text": "等最新预览完成并核对选区、F0 上下限及显示来源，点击保存 CSV / 三图。更新中或没有有效源文件时按钮禁用。"
                   }
                 ]
               }
@@ -13916,7 +14307,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "保留 CSV、三张 PNG 和 .ptb.json。JSON 记录输入摘要、实际边界、声道、方法及参数，便于复查。"
+                    "text": "保留 CSV、三张 PNG 和 .ptb.json。JSON 记录输入摘要、实际边界、声道、方法及参数，包含本次 Praat/REAPER 的 F0 检测上下限，便于复查。"
                   }
                 ]
               }
@@ -14082,7 +14473,7 @@
         "content": [
           {
             "type": "text",
-            "text": "静态语谱保留提交时的谱窗、色阶和已选 F0。Praat 黑点、GCI 红点、REAPER 青绿色点，Praat 颜色与工作台不同。频率读左轴，F0 读右轴。"
+            "text": "静态语谱 PNG 保留色标、提交时的谱窗、色阶和已选 F0。Praat 黑点、GCI 红点、REAPER 青绿色点，Praat 颜色与工作台不同。频率读左轴，F0 读右轴。"
           }
         ]
       },
@@ -14250,28 +14641,6 @@
             "text": "。保持一个有效的 60 s 内预览，点击该按钮即可处理 0 s 到文件末尾，不必把实时选区扩到全段。完成后仍从处理记录查看、选择目录保存。"
           }
         ]
-      },
-      {
-        "type": "image",
-        "attrs": {
-          "id": "m03-long-export-controls-light-figure",
-          "assetId": "m03-long-export-controls-light-scaled-r20261007",
-          "caption": "30 分钟、8000 Hz 双声道合成演示文件。保存 CSV / 三图针对当前选区，保存完整录音 CSV / 三图用于完整文件；预览视野限 60 秒。",
-          "alt": "30 分钟、8000 Hz 双声道合成演示文件。保存 CSV / 三图针对当前选区，保存完整录音 CSV / 三图用于完整文件；预览视野限 60 秒。",
-          "width": "100%",
-          "align": "center"
-        }
-      },
-      {
-        "type": "image",
-        "attrs": {
-          "id": "m03-long-export-controls-light-focused-detail-figure",
-          "assetId": "m03-long-export-controls-light-focused-detail-scaled-r20261007",
-          "caption": "红框中的两个保存入口分别用于当前选区和完整录音，先核对要保存的范围。",
-          "alt": "红框中的两个保存入口分别用于当前选区和完整录音，先核对要保存的范围。",
-          "width": "70%",
-          "align": "center"
-        }
       },
       {
         "type": "paragraph",
@@ -14507,7 +14876,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "。批次按独立参数处理各文件全段，始终滤波，不继承单文件选区或 F0 开关。"
+                    "text": "。批次按独立参数处理各文件全段，始终滤波，不继承单文件选区、F0 开关或音频 F0 上下限。"
                   }
                 ]
               }
@@ -14929,7 +15298,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "无文件或任务接口时禁用"
+                        "text": "未选择文件时禁用"
                       }
                     ]
                   }
@@ -17083,7 +17452,7 @@
         "content": [
           {
             "type": "text",
-            "text": "弹窗未列出的设置独立保存：新批次峰自动开启，峰/谷 0.01，谱窗 20 ms，dB −70 至 −10。主页面自动 dB 不带入。首个任务接收后保存批次草稿，下次恢复。"
+            "text": "弹窗未列出的设置独立保存：新批次峰自动开启，峰/谷 0.01，谱窗 20 ms，dB −70 至 −10，音频 F0 默认搜索 30–800 Hz、步长 10 ms。批次弹窗没有 F0 上下限控件，主页面的音频 F0 范围和自动 dB 不带入。首个任务接收后保存批次草稿，下次恢复。"
           }
         ]
       },
@@ -17209,7 +17578,7 @@
         "content": [
           {
             "type": "text",
-            "text": "批次 CSV 将所选 F0 插值到 GCI 周期时间点，行数与单文件可不同。20 ms 平均绝对音频振幅低于阈值时，该行参数置为 NaN，不能据此判断声带是否振动。勾选图片才生成三张 PNG。"
+            "text": "批次 CSV 将所选 F0 插值到 GCI 周期时间点，行数与单文件可不同。20 ms 平均绝对音频振幅低于阈值时，该行参数置为 NaN，声带振动状态需结合 EGG 波形判断。勾选图片才生成三张 PNG。"
           }
         ]
       },
@@ -17279,7 +17648,7 @@
         "content": [
           {
             "type": "text",
-            "text": "保存参数草稿保留分析配置和 LP 阶数，空白为自动。只改 LP 不影响四图。自动 dB 单独记忆，批次配置独立保存。"
+            "text": "保存参数草稿保留分析配置，包括 Praat/REAPER 共用的 F0 上下限，以及 LP 阶数，LP 空白为自动。只改 LP 不影响四图。自动 dB 单独记忆，批次配置独立保存。"
           },
           {
             "type": "text",
@@ -17324,7 +17693,7 @@
         "content": [
           {
             "type": "text",
-            "text": "未存参数时关闭标签，可取消或按 Escape 留在页面，也可保存草稿并关闭，或放弃草稿并关闭。保存失败时页面保留，恢复本机存储后重试。历史任务用自身快照，旧 F0 范围保持原设置，新任务用 30–800 Hz。"
+            "text": "未存参数时关闭标签，可取消或按 Escape 留在页面，也可保存草稿并关闭，或放弃草稿并关闭。保存失败时页面保留，恢复本机存储后重试。历史任务用自身快照，旧 F0 范围保持原设置。新单文件任务使用当前左栏范围，新批次使用独立配置。"
           }
         ]
       },
@@ -17429,7 +17798,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "参数无效或滤波失败：检查 0 < 高通 < 低通 < 采样率/2、谱窗 5–50 ms、dB 下限 < 上限，以及有效选区。修正后等预览更新。"
+                    "text": "参数无效或滤波失败：检查 0 < 高通 < 低通 < 采样率/2、谱窗 5–50 ms、dB 下限 < 上限，以及有效选区。F0 下限和上限均须在 10–2000 Hz 内，且下限小于上限。修正后等预览更新。"
                   }
                 ]
               }
@@ -17457,7 +17826,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "语谱过深/过淡：核对色条，重新开启自动 dB。静音时保留色阶属正常行为。"
+                    "text": "语谱过深/过淡：核对左栏 dB 下限、dB 上限，重新开启自动 dB。静音时保留色阶属正常行为。"
                   }
                 ]
               }
@@ -17794,7 +18163,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "IF 提示跨下一 GCI：回看周期，结果只作探索。缩短选区或改阶数不能自动确认闭相。"
+                    "text": "IF 提示跨下一 GCI：回看周期，并结合 GOI 和波形核对闭相范围。"
                   }
                 ]
               }
@@ -17886,7 +18255,7 @@
         "content": [
           {
             "type": "text",
-            "text": "方法来源与解释边界"
+            "text": "方法来源与结果解释"
           }
         ]
       },
@@ -17980,7 +18349,7 @@
         "content": [
           {
             "type": "text",
-            "text": "CQ 只保留 0.05 < CQ < 0.95；CQ/SQ 各自可能缺失。此处 SQ 是归一化时长不对称量。它们受极性、滤波、方法与阈值影响，不能直接当作接触面积或组织运动测量。"
+            "text": "CQ 只保留 0.05 < CQ < 0.95；CQ/SQ 各自可能缺失。此处 SQ 是归一化时长不对称量。它们描述 EGG 周期的时间关系，受极性、滤波、方法与阈值影响。接触面积或组织运动需采用相应测量方法。"
           }
         ]
       },
@@ -18050,7 +18419,7 @@
         "content": [
           {
             "type": "text",
-            "text": "当前 IF 未确认闭相、校正录制时延或校准流量单位。它可用于当前算法下的形状比较，不能当作直接测得的声门流。"
+            "text": "IF 可用于当前算法下的声源形状比较。闭相、录制时延及流量单位需另行核对与校准。"
           }
         ]
       },
@@ -18289,7 +18658,7 @@
           },
           {
             "type": "text",
-            "text": "，用于理解 EGG/DEGG 方法。当前尺度 0.25 分支不等于完整 DECOM。"
+            "text": "，用于理解 EGG/DEGG 方法。本页尺度分支使用局部幅度跨度的 0.25 交叉点；DECOM 的完整方法见该论文。"
           }
         ]
       },

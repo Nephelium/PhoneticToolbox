@@ -1,0 +1,462 @@
+{
+  "schema": "ptb-app-icons/1",
+  "default": "default",
+  "groups": [
+    {
+      "id": "waveform",
+      "name": "波形"
+    },
+    {
+      "id": "spectrogram",
+      "name": "语谱"
+    },
+    {
+      "id": "mouth",
+      "name": "口形"
+    },
+    {
+      "id": "annotation",
+      "name": "标注"
+    },
+    {
+      "id": "ipa",
+      "name": "IPA"
+    }
+  ],
+  "icons": [
+    {
+      "id": "default",
+      "number": 1,
+      "group": "waveform",
+      "original": "W1（雾紫声波、深蓝末端）",
+      "sheet": "w1-edited.png",
+      "rect": [
+        53,
+        53,
+        1148,
+        1148
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-003",
+      "number": 2,
+      "group": "waveform",
+      "original": "W2",
+      "sheet": "w.png",
+      "rect": [
+        655,
+        52,
+        527,
+        497
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-004",
+      "number": 3,
+      "group": "waveform",
+      "original": "W3",
+      "sheet": "w.png",
+      "rect": [
+        74,
+        631,
+        527,
+        502
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-005",
+      "number": 4,
+      "group": "waveform",
+      "original": "W4",
+      "sheet": "w.png",
+      "rect": [
+        655,
+        631,
+        527,
+        502
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-006",
+      "number": 5,
+      "group": "waveform",
+      "original": "X1",
+      "sheet": "x.png",
+      "rect": [
+        45,
+        31,
+        559,
+        525
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-007",
+      "number": 6,
+      "group": "waveform",
+      "original": "X2",
+      "sheet": "x.png",
+      "rect": [
+        651,
+        31,
+        559,
+        525
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-009",
+      "number": 7,
+      "group": "waveform",
+      "original": "X4",
+      "sheet": "x.png",
+      "rect": [
+        651,
+        618,
+        559,
+        528
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-010",
+      "number": 8,
+      "group": "spectrogram",
+      "original": "M3-A",
+      "sheet": "m.png",
+      "rect": [
+        99,
+        31,
+        531,
+        510
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-011",
+      "number": 9,
+      "group": "mouth",
+      "original": "R1-A",
+      "sheet": "r.png",
+      "rect": [
+        180,
+        35,
+        484,
+        471
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-012",
+      "number": 10,
+      "group": "annotation",
+      "original": "V4-B",
+      "sheet": "v.png",
+      "rect": [
+        690,
+        52,
+        480,
+        466
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-013",
+      "number": 11,
+      "group": "annotation",
+      "original": "V4-C",
+      "sheet": "v.png",
+      "rect": [
+        143,
+        603,
+        480,
+        465
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-014",
+      "number": 12,
+      "group": "ipa",
+      "original": "IPA-A",
+      "sheet": "ipa-ad.png",
+      "rect": [
+        74,
+        40,
+        532,
+        523
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-015",
+      "number": 13,
+      "group": "ipa",
+      "original": "IPA-B",
+      "sheet": "ipa-ad.png",
+      "rect": [
+        648,
+        40,
+        532,
+        523
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-016",
+      "number": 14,
+      "group": "ipa",
+      "original": "IPA-C",
+      "sheet": "ipa-ad.png",
+      "rect": [
+        74,
+        627,
+        532,
+        524
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-017",
+      "number": 15,
+      "group": "ipa",
+      "original": "IPA-D",
+      "sheet": "ipa-ad.png",
+      "rect": [
+        648,
+        627,
+        532,
+        524
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-018",
+      "number": 16,
+      "group": "ipa",
+      "original": "IPA-E",
+      "sheet": "ipa-eh.png",
+      "rect": [
+        70,
+        20,
+        527,
+        524
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-019",
+      "number": 17,
+      "group": "ipa",
+      "original": "IPA-F",
+      "sheet": "ipa-eh.png",
+      "rect": [
+        655,
+        20,
+        529,
+        524
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-020",
+      "number": 18,
+      "group": "ipa",
+      "original": "IPA-G",
+      "sheet": "ipa-eh.png",
+      "rect": [
+        70,
+        623,
+        527,
+        532
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-021",
+      "number": 19,
+      "group": "ipa",
+      "original": "IPA-H",
+      "sheet": "ipa-eh.png",
+      "rect": [
+        655,
+        623,
+        530,
+        532
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-022",
+      "number": 20,
+      "group": "ipa",
+      "original": "IPA-I",
+      "sheet": "ipa-il.png",
+      "rect": [
+        81,
+        42,
+        521,
+        512
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-023",
+      "number": 21,
+      "group": "ipa",
+      "original": "IPA-J",
+      "sheet": "ipa-il.png",
+      "rect": [
+        650,
+        42,
+        522,
+        512
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-024",
+      "number": 22,
+      "group": "ipa",
+      "original": "IPA-K",
+      "sheet": "ipa-il.png",
+      "rect": [
+        81,
+        633,
+        521,
+        517
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-025",
+      "number": 23,
+      "group": "ipa",
+      "original": "IPA-L",
+      "sheet": "ipa-il.png",
+      "rect": [
+        650,
+        631,
+        522,
+        519
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-026",
+      "number": 24,
+      "group": "ipa",
+      "original": "IPA-M",
+      "sheet": "ipa-mp.png",
+      "rect": [
+        64,
+        53,
+        549,
+        550
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-027",
+      "number": 25,
+      "group": "ipa",
+      "original": "IPA-N",
+      "sheet": "ipa-mp.png",
+      "rect": [
+        642,
+        53,
+        550,
+        550
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-028",
+      "number": 26,
+      "group": "ipa",
+      "original": "IPA-O",
+      "sheet": "ipa-mp.png",
+      "rect": [
+        64,
+        632,
+        549,
+        543
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-029",
+      "number": 27,
+      "group": "ipa",
+      "original": "IPA-P",
+      "sheet": "ipa-mp.png",
+      "rect": [
+        642,
+        632,
+        550,
+        543
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-030",
+      "number": 28,
+      "group": "ipa",
+      "original": "IPA-Q",
+      "sheet": "ipa-qt.png",
+      "rect": [
+        83,
+        41,
+        525,
+        519
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-031",
+      "number": 29,
+      "group": "ipa",
+      "original": "IPA-R",
+      "sheet": "ipa-qt.png",
+      "rect": [
+        645,
+        41,
+        526,
+        519
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-032",
+      "number": 30,
+      "group": "ipa",
+      "original": "IPA-S",
+      "sheet": "ipa-qt.png",
+      "rect": [
+        83,
+        628,
+        525,
+        517
+      ],
+      "radius": 0.18
+    },
+    {
+      "id": "builtin-033",
+      "number": 31,
+      "group": "ipa",
+      "original": "IPA-T",
+      "sheet": "ipa-qt.png",
+      "rect": [
+        645,
+        628,
+        526,
+        517
+      ],
+      "radius": 0.18
+    }
+  ]
+}

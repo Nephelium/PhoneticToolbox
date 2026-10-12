@@ -77,7 +77,7 @@ async function stop(){try{await capture?.stop();if(capture?.chunks.length){
 function setupCaptureReplay(){if(!rows.value.length)return;replayStore=new LipReplay({id:'capture',name:'本次录制',backend:'candidate',rows:recordedRows.value,metadata:{},files:[]},{...port.value,replay:undefined});void seekFrame(0,false);}
 async function decodeWaveform(blob:Blob){const context=new AudioContext();try{const buffer=await context.decodeAudioData(await blob.arrayBuffer());if(buffer.length>60000000)throw Error('音频超出波形预览预算。');waveform.value=waveformEnvelope(buffer);}finally{await context.close();}}
 async function openOffset(){stopReplay();offsetDialog.value=true;offsetPreview.value=offset.value;alignmentError.value='';alignmentLoading.value=true;
- try{if(selected.value){waveform.value=null;if(!port.value.audioPreview)throw Error('当前宿主不支持读取结果音频。');const data=await port.value.audioPreview(selected.value);waveform.value=data.waveform;}
+ try{if(selected.value){waveform.value=null;if(!port.value.audioPreview)throw Error('当前无法读取结果音频。');const data=await port.value.audioPreview(selected.value);waveform.value=data.waveform;}
  else if(!inspection.value&&port.value.inspectRecording){inspection.value=await port.value.inspectRecording(capture!.blob());waveform.value=inspection.value.waveform;setupCaptureReplay();}
  else if(!waveform.value)await decodeWaveform(capture!.blob());}
  catch(e){alignmentError.value=(e as Error).message;}finally{alignmentLoading.value=false;}}
@@ -93,7 +93,7 @@ function requestSave():Promise<boolean>{if(saveDialog.value)return Promise.resol
 function cancelSave(){saveDialog.value=false;saveDecision?.(false);saveDecision=undefined;}
 async function confirmSave(){const ok=await saveRecording();if(ok){saveDialog.value=false;saveDecision?.(true);saveDecision=undefined;}}
 async function saveRecording(){if(busy.value)return false;stopReplay();error.value='';busy.value=true;try{const blob=capture!.blob();
- if(!port.value.saveRecording)throw Error('当前浏览器宿主没有本地录制导出能力，请从桌面工作台保存；录制仍保留。');
+ if(!port.value.saveRecording)throw Error('录制已保留，导出请使用桌面版。');
  progress.value='正在保存所选媒体、音频与唇形数据…';const saved=await port.value.saveRecording('唇形原始录制.'+(blob.type.includes('mp4')?'mp4':'webm'),blob,captureMetadata());
  if(saved.saved){localSaved.value=true;exportInfo.value=saved.recording;capture?.markSaved();notice.value='所选录制文件已保存并核对。'+(saved.recording?.video_timing_warning??'');return true;}
  notice.value='已取消保存，录制保留。';return false;

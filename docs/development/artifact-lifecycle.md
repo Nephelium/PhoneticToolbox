@@ -49,3 +49,14 @@ with verification_run('module-id', 'case', '生成脚本、采样率、时长、
 ```
 
 删除回执和待人工处理列表应写实际结果，不把计划字节数当成释放量。未确认用途的目录另列审阅项，不能混进可批量删除清单。所有这些本机清单、临时输入和安装包均受 Git 忽略规则保护；提交源码时仍检查已跟踪内容。每次脚本修改和实际清理同步原位更新[任务台账](../plans/task-ledger.json)的范围、状态、验证与遗留项。
+
+测试临时文件的批量入口为 [cleanup_test_temporaries.ps1](../../scripts/cleanup_test_temporaries.ps1)。本机 `output/maintenance/test-temporaries-rules.json` 原位列明已审阅的测试对象、删除理由、保留证据及保护路径。[清单生成器](../../scripts/prepare_test_cleanup.py)只接纳 Git 忽略且未跟踪的测试内容，另发现 `ready` 且与收尾摘要完全一致的 scratch；active 标记、来源不明对象及运行时依赖不自动接管。历史测试副本须逐项指定外置报告/生成配方，不能按目录名或扩展名推断用途。
+
+```powershell
+# 默认仅生成逐文件清单并预检。
+.\scripts\cleanup_test_temporaries.ps1
+# 已授权清理时使用；仍逐项复核摘要、保留证据、联接和活动进程。
+.\scripts\cleanup_test_temporaries.ps1 -Apply
+```
+
+`test-temporaries-plan.json`、`test-temporaries-review.json` 与 `test-temporaries-results.json` 分别保存清单、预检与实际结果，反复使用时原位更新。规则中的保护路径会传至实际删除入口，父目录也不能绕过保护。文件或保留证据变化、占用或权限错误均留在回执中；列入清单不代表已删除。临时目录可能含硬链接与稀疏虚拟磁盘，逻辑长度须与磁盘实测变化分开。最新验收见[测试临时文件整理](../testing/test-temporaries-cleanup.md)。

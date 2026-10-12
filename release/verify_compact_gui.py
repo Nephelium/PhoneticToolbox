@@ -25,7 +25,10 @@ def main():
         check.bind(('127.0.0.1', args.port))
     output.mkdir(parents=True, exist_ok=False)
     payload = output / 'payload'; payload.mkdir()
-    executable = payload / 'PhoneticToolbox.exe'
+    entry = json.loads((source / 'build-info.json').read_text('utf8'))['exe']
+    if entry not in ('PhoneticToolbox.exe', 'PhoneticToolbox-windows-x64.exe'):
+        raise ValueError('Unexpected portable executable name')
+    executable = payload / entry
     shutil.copyfile(source / executable.name, executable)
     profile, temp = output / 'profile', output / 'temp'
     profile.mkdir(); temp.mkdir()

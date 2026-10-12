@@ -1,6 +1,7 @@
 import hashlib
 import json
 import pytest
+from pathlib import Path
 from ptb_desktop.bundle_manifest import runtime_bindings
 
 
@@ -14,7 +15,8 @@ def test_runtime_binding_survives_moving_the_bundle(tmp_path):
     root=tmp_path/'staged';root.mkdir();value=fixture(root)
     (root/'desktop-bundle.json').write_text(json.dumps(value))
     moved=tmp_path/'moved';root.rename(moved)
-    assert runtime_bindings(moved,host_platform='win32',host_arch='AMD64')['PTB_EGG_PYTHON']==str(moved/'runtimes/egg/python.exe')
+    bound=runtime_bindings(moved,host_platform='win32',host_arch='AMD64')['PTB_EGG_PYTHON']
+    assert Path(bound).samefile(moved/'runtimes/egg/python.exe')
 
 
 def test_clean_windows_environment_uses_interpreter_abi(tmp_path,monkeypatch):

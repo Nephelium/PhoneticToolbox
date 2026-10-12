@@ -65,6 +65,7 @@ def make_service(tmp_path, *, server=None, github=None, country='CN', now=None, 
                  SERVER_PACKAGE: (BODY, {'Content-Length': str(len(BODY))}),
                  GITHUB_PACKAGE: (BODY, {'Content-Length': str(len(BODY))})}
     transport = Transport(responses)
+    kwargs.setdefault('current_version', '3.0.0-preview.1')
     service = UpdateService(data_root=tmp_path, transport=transport, clock=(lambda: now[0]) if now else (lambda: 1000000), **kwargs)
     return service, transport
 
@@ -72,6 +73,14 @@ def make_service(tmp_path, *, server=None, github=None, country='CN', now=None, 
 @pytest.mark.parametrize('value', ['0.0.0', '3.0.0-preview.1', '3.0.0-preview.10', '3.0.0-alpha.0', '3.0.0+001', '3.0.0-a-b.1', 'v3.0.0', '3.0.0a1'])
 def test_valid_versions(value):
     assert SemVer(value).value
+
+
+def test_stable_build_defaults_to_stable_but_preserves_explicit_preview(tmp_path):
+    service, _ = make_service(tmp_path, current_version='3.0.0')
+    assert service.preferences()['channel'] == 'stable'
+    service.set_preferences({'channel': 'preview'})
+    restored, _ = make_service(tmp_path, current_version='3.0.0')
+    assert restored.preferences()['channel'] == 'preview'
 
 
 @pytest.mark.parametrize('value', ['01.0.0', '1.00.0', '1.0.01', '1.0', '1.0.0-01', '1.0.0-x.01', '1.0.0-', '1.0.0+', '1.0.0-ä', '１.0.0', None, '3.0.0a01'])
@@ -178,6 +187,29 @@ def test_missing_checksum_does_not_claim_up_to_date(tmp_path):
     service, _ = make_service(tmp_path, server=manifest('2.0.0'), github=[github_release('3.0.0-preview.3', digest=False)])
     result = service.check(manual=True)
     assert result['status'] == 'incomplete'
+    assert result['sources']['github']['code'] == 'CHECKSUM_MISSING'
+
+
+@pytest.mark.parametrize('old_first', [False, True])
+def test_legacy_release_does_not_discard_verified_new_candidate(tmp_path, old_first):
+    legacy = {'tag_name': 'v2.1.4', 'assets': [{'name': 'PhoneticToolbox_v2.1.4.exe',
+              'digest': 'sha256:' + SHA, 'size': len(BODY)}]}
+    releases = [github_release('3.0.1'), legacy]
+    if old_first:
+        releases.reverse()
+    service, _ = make_service(tmp_path, current_version='3.0.0',
+                             server=TimeoutError(), github=releases)
+    result = service.check(manual=True, source='github', channel='stable')
+    assert result['status'] == 'available'
+    assert result['candidate']['version'] == '3.0.1'
+    assert result['sources']['github']['status'] == 'checked'
+
+
+def test_new_release_without_checksum_still_blocks_older_candidate(tmp_path):
+    service, _ = make_service(tmp_path, current_version='3.0.0', server=TimeoutError(),
+        github=[github_release('3.0.1'), github_release('3.0.2', digest=False)])
+    result = service.check(manual=True, source='github', channel='stable')
+    assert result['candidate'] is None
     assert result['sources']['github']['code'] == 'CHECKSUM_MISSING'
 
 

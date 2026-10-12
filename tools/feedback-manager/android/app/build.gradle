@@ -1,0 +1,18 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'com.phonetictoolbox.feedback'
+    compileSdk 35
+    defaultConfig { applicationId 'com.phonetictoolbox.feedback'; minSdk 26; targetSdk 35; versionCode 2; versionName '1.0.1' }
+    signingConfigs {
+        release {
+            storeFile file(System.getenv('PTB_FEEDBACK_KEYSTORE'))
+            storePassword System.getenv('PTB_FEEDBACK_STORE_PASSWORD')
+            keyAlias 'feedback'
+            keyPassword System.getenv('PTB_FEEDBACK_STORE_PASSWORD')
+        }
+    }
+    buildTypes { release { signingConfig signingConfigs.release; minifyEnabled false } }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+    sourceSets.main.assets.srcDirs = ['../../../../output/build-feedback-manager/web']
+    buildDir = file('../../../../output/build-feedback-manager/android-app')
+}

@@ -35,6 +35,34 @@
           "title": "Export Policy",
           "type": "string"
         },
+        "f0_max_hz": {
+          "anyOf": [
+            {
+              "maximum": 2000,
+              "minimum": 10,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "F0 Max Hz"
+        },
+        "f0_min_hz": {
+          "anyOf": [
+            {
+              "maximum": 2000,
+              "minimum": 10,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "F0 Min Hz"
+        },
         "f0_policy": {
           "default": "legacy/1",
           "enum": [

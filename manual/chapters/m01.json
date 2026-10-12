@@ -405,7 +405,7 @@
         "content": [
           {
             "type": "text",
-            "text": "项目网页版先在文件管理中上传素材，再回来刷新。只有"
+            "text": "项目网页版先在文件管理中上传素材，再回来刷新。点击"
           },
           {
             "type": "text",
@@ -418,7 +418,7 @@
           },
           {
             "type": "text",
-            "text": "的预览入口供试听，未连接任务服务时不能计算。"
+            "text": "即可试听 WAV。"
           }
         ]
       },
@@ -730,7 +730,7 @@
           },
           {
             "type": "text",
-            "text": " 试听选区不会缩短计算范围，每次分析读取完整 WAV。"
+            "text": " 试听范围由选区控制，分析始终读取完整 WAV。"
           }
         ]
       },
@@ -1163,7 +1163,7 @@
         "attrs": {
           "id": "m01-figure-m01-parameters-empty-light",
           "assetId": "m01-parameters-empty-light-scaled-r20261007",
-          "caption": "全不选后的阻断：未保留任何输出参数时，应用到草稿不可用。",
+          "caption": "全不选状态：勾选至少一项输出参数后可应用到草稿。",
           "alt": "最大化V3输出参数弹窗显示0/80，所有复选框为空，应用到草稿按钮禁用。",
           "width": "100%",
           "align": "center",
@@ -1508,59 +1508,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "点"
-                  },
-                  {
-                    "type": "text",
-                    "text": "编辑14项设置",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "，在"
-                  },
-                  {
-                    "type": "text",
-                    "text": "常用设置 · 10",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "检查帧移、分析窗、阈值和平滑。默认帧移 "
-                  },
-                  {
-                    "type": "text",
-                    "text": "5 ms",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "、分析窗 "
-                  },
-                  {
-                    "type": "text",
-                    "text": "40 ms",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "，详细范围见后面的速查表。"
+                    "text": "点编辑14项设置，在常用设置 · 12检查帧移、分析窗、阈值、平滑和最小／最大基频。新草稿默认帧移 5 ms、分析窗 40 ms，F0 范围 30–800 Hz；旧草稿沿用已保存值。基频上下限同时影响 Praat、REAPER、WM 链及部分依赖 F0 的指标，与共振峰上限分别设置。详细范围见后面的速查表。"
                   }
                 ]
               }
@@ -1573,187 +1521,13 @@
         "attrs": {
           "id": "m01-figure-m01-settings-r2",
           "assetId": "m01-settings-scaled-r20261007",
-          "caption": "常用设置页：核对能量窗口、帧移、静音阈值和分析窗口等字段。",
-          "alt": "最大化的 V3 工作台打开分析设置常用设置页，可见能量窗口 40 ms、帧移 5 ms、静音阈值 0.03 和分析窗口 40 ms。",
+          "caption": "常用设置页：12 项共用设置，包含最小基频和最大基频。",
+          "alt": "最大化的 V3 工作台打开分析设置常用设置页，包含 12 项设置，最小基频 30 Hz、最大基频 800 Hz。",
           "width": "100%",
           "align": "center",
           "crop": null,
           "title": ""
         }
-      },
-      {
-        "type": "heading",
-        "attrs": {
-          "textAlign": null,
-          "id": "m01-workflow-reaper",
-          "caption": null,
-          "note": null,
-          "color": null,
-          "colorDark": null,
-          "backgroundColorDark": null,
-          "lineHeight": null,
-          "marginTop": null,
-          "marginBottom": null,
-          "indent": 0,
-          "backgroundColor": null,
-          "level": 4
-        },
-        "content": [
-          {
-            "type": "text",
-            "text": "REAPER 设置"
-          }
-        ]
-      },
-      {
-        "type": "orderedList",
-        "attrs": {
-          "id": "orderedList-4ff23148-c5d1-4fd3-ac48-83c321ca99bc",
-          "start": 1,
-          "type": null
-        },
-        "content": [
-          {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "attrs": {
-                  "textAlign": null,
-                  "id": "paragraph-e85f0974-b424-4738-9582-7964be94062c",
-                  "caption": null,
-                  "note": null,
-                  "color": null,
-                  "colorDark": null,
-                  "backgroundColorDark": null,
-                  "lineHeight": null,
-                  "marginTop": null,
-                  "marginBottom": null,
-                  "indent": 0,
-                  "backgroundColor": null
-                },
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "切到"
-                  },
-                  {
-                    "type": "text",
-                    "text": "REAPER设置 · 4",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "。新草稿 F0 范围为 "
-                  },
-                  {
-                    "type": "text",
-                    "text": "30–800 Hz",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "，旧草稿沿用已保存值。上下限也影响 Praat 和其他依赖 F0 的指标；Hilbert 与高通选项可先保持默认，再点"
-                  },
-                  {
-                    "type": "text",
-                    "text": "应用设置",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "。"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "type": "image",
-        "attrs": {
-          "id": "m01-figure-m01-reaper-r2",
-          "assetId": "m01-reaper-scaled-r20261007",
-          "caption": "REAPER 设置页：核对 F0 搜索范围、Hilbert 变换与高通开关。",
-          "alt": "最大化的 V3 工作台打开 REAPER 设置页，可见最大基频 800 Hz、最小基频 30 Hz，Hilbert 已勾选、禁用高通未勾选。",
-          "width": "100%",
-          "align": "center",
-          "crop": null,
-          "title": ""
-        }
-      },
-      {
-        "type": "image",
-        "attrs": {
-          "id": "m01-reaper-detail-figure",
-          "assetId": "m01-reaper-detail-scaled-r20261007",
-          "caption": "REAPER 的两个开关各自控制一种预处理，勾选前核对标签。",
-          "alt": "REAPER 的两个开关各自控制一种预处理，勾选前核对标签。",
-          "width": "100%",
-          "align": "center"
-        }
-      },
-      {
-        "type": "paragraph",
-        "attrs": {
-          "textAlign": null,
-          "id": "paragraph-8420f745-5118-495b-b033-a5f2a764c604",
-          "caption": null,
-          "note": null,
-          "color": null,
-          "colorDark": null,
-          "backgroundColorDark": null,
-          "lineHeight": null,
-          "marginTop": null,
-          "marginBottom": null,
-          "indent": 0,
-          "backgroundColor": null
-        },
-        "content": [
-          {
-            "type": "text",
-            "text": "弹窗关闭后，左栏更新帧移和分析窗摘要。"
-          },
-          {
-            "type": "text",
-            "text": "应用设置",
-            "marks": [
-              {
-                "type": "bold"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "用于本次分析，"
-          },
-          {
-            "type": "text",
-            "text": "保存草稿",
-            "marks": [
-              {
-                "type": "bold"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "用于下次进入时恢复。"
-          }
-        ]
       },
       {
         "type": "paragraph",
@@ -1774,23 +1548,7 @@
         "content": [
           {
             "type": "text",
-            "text": "最小基频必须小于最大基频。",
-            "marks": [
-              {
-                "type": "bold"
-              },
-              {
-                "type": "textStyle",
-                "attrs": {
-                  "color": "#b42318",
-                  "colorDark": "#ffb4ab"
-                }
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": " 例如填成 900–800 Hz，会提示错误并留在弹窗，尚未应用。"
+            "text": "在常用设置中，最小基频必须小于最大基频。例如填成 900–800 Hz，会提示错误并留在弹窗，尚未应用。"
           }
         ]
       },
@@ -1800,7 +1558,7 @@
           "id": "m01-figure-m01-settings-f0-invalid-light",
           "assetId": "m01-settings-f0-invalid-light-scaled-r20261007",
           "caption": "最小基频高于最大基频时，应用设置被校验阻止并保留弹窗。",
-          "alt": "最大化V3分析设置的REAPER页，最小基频900Hz、最大800Hz，下方提示最小基频必须小于最大基频。",
+          "alt": "最大化V3分析设置的常用设置页，最小基频900Hz、最大800Hz，下方提示最小基频必须小于最大基频。",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -1879,6 +1637,141 @@
                 ]
               }
             ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "textAlign": null,
+          "id": "m01-workflow-reaper",
+          "caption": null,
+          "note": null,
+          "color": null,
+          "colorDark": null,
+          "backgroundColorDark": null,
+          "lineHeight": null,
+          "marginTop": null,
+          "marginBottom": null,
+          "indent": 0,
+          "backgroundColor": null,
+          "level": 4
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "REAPER 设置"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "id": "orderedList-4ff23148-c5d1-4fd3-ac48-83c321ca99bc",
+          "start": 1,
+          "type": null
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "attrs": {
+                  "textAlign": null,
+                  "id": "paragraph-e85f0974-b424-4738-9582-7964be94062c",
+                  "caption": null,
+                  "note": null,
+                  "color": null,
+                  "colorDark": null,
+                  "backgroundColorDark": null,
+                  "lineHeight": null,
+                  "marginTop": null,
+                  "marginBottom": null,
+                  "indent": 0,
+                  "backgroundColor": null
+                },
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "切到REAPER设置 · 2，包含 REAPER Hilbert变换和禁用REAPER高通滤波两个开关。默认启用 Hilbert 变换，禁用高通开关默认关闭，即仍使用高通滤波。核对后点应用设置。切换页签保留尚未应用的输入，取消放弃本次修改。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m01-figure-m01-reaper-r2",
+          "assetId": "m01-reaper-scaled-r20261007",
+          "caption": "REAPER 设置页：仅含 Hilbert 变换和禁用高通滤波两个开关。",
+          "alt": "最大化的 V3 工作台打开 REAPER 设置页，仅含两个预处理开关，Hilbert 已勾选、禁用高通未勾选。",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m01-reaper-detail-figure",
+          "assetId": "m01-reaper-detail-scaled-r20261007",
+          "caption": "REAPER 的两个开关各自控制一种预处理，勾选前核对标签。",
+          "alt": "REAPER 的两个开关各自控制一种预处理，勾选前核对标签。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": null,
+          "id": "paragraph-8420f745-5118-495b-b033-a5f2a764c604",
+          "caption": null,
+          "note": null,
+          "color": null,
+          "colorDark": null,
+          "backgroundColorDark": null,
+          "lineHeight": null,
+          "marginTop": null,
+          "marginBottom": null,
+          "indent": 0,
+          "backgroundColor": null
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "弹窗关闭后，左栏更新帧移和分析窗摘要。"
+          },
+          {
+            "type": "text",
+            "text": "应用设置",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "用于本次分析，"
+          },
+          {
+            "type": "text",
+            "text": "保存草稿",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "用于下次进入时恢复。"
           }
         ]
       },
@@ -2647,7 +2540,7 @@
           },
           {
             "type": "text",
-            "text": "，M01 没有新的延迟校准控件，时间范围外不补值。"
+            "text": "。需要调整延迟时回到唇形提取或标注页面核对偏移，记录时间范围外保持空缺。"
           }
         ]
       },
@@ -5046,20 +4939,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "拖选波形或输入起止秒数。点击 TextGrid 区间也能设选区，再点"
-                  },
-                  {
-                    "type": "text",
-                    "text": "播放选区",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "才会播放。"
+                    "text": "拖选波形或输入起止秒数。点击 TextGrid 区间也能设选区，再点播放选区或按空格开始试听；再次按空格停止。输入框和普通按钮获得焦点时保留各自的键盘操作。"
                   }
                 ]
               }
@@ -5193,7 +5073,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "恢复整段试听，仍不会改变分析范围。"
+                    "text": "恢复整段试听；分析始终读取完整 WAV。"
                   }
                 ]
               }
@@ -20819,7 +20699,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "常用设置 · 10／REAPER设置 · 4"
+                        "text": "常用设置 · 12／REAPER设置 · 2"
                       }
                     ]
                   }
@@ -22234,7 +22114,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "有 WAV 和任务服务"
+                        "text": "已选择 WAV 文件"
                       }
                     ]
                   }
@@ -25032,7 +24912,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "0 或 1 不平滑，帧数不等于毫秒。"
+                        "text": "0 或 1 不平滑，平滑长度以帧数计。"
                       }
                     ]
                   }
@@ -39850,7 +39730,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "数字强度轨迹，未经设备标定不能当作 dB SPL。"
+                        "text": "数字强度轨迹，解释为 dB SPL 需另做设备标定。"
                       }
                     ]
                   }
@@ -45066,7 +44946,7 @@
           },
           {
             "type": "text",
-            "text": "，这些帧并非逐帧重新测量视频；记录范围外保持空缺。"
+            "text": "，记录范围外保持空缺。"
           }
         ]
       },
@@ -45251,7 +45131,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "：比较其他软件时先核对定义和配置，不能只凭相同名称直接合并。"
+                    "text": "：比较或合并其他软件的结果时，先核对定义和配置。"
                   }
                 ]
               }
@@ -45279,16 +45159,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "Jitter／Shimmer",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "：沿 WM／IRAPT 方法，单位为百分数，分析窗至少 160 ms。"
+                    "text": "Jitter／Shimmer：沿 WM／IRAPT 方法，单位为百分数。WM 实际计算窗口为 max(160 ms, 分析窗口)，界面分析窗口可保留默认 40 ms。"
                   }
                 ]
               }
@@ -45389,7 +45260,7 @@
         "content": [
           {
             "type": "text",
-            "text": "长文件自动分段计算并带上下文，结果不保证与历史整段调用逐位相同。比较数据时保留版本和配置。"
+            "text": "长文件自动分段计算并带上下文，与历史整段计算可能有数值差异。比较数据时保留版本和配置。"
           }
         ]
       },

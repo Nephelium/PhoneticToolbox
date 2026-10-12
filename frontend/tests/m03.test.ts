@@ -29,3 +29,15 @@ test('shared parameter limits preserve contract endpoints without pretending to 
 });
 
 test('M03 R7 accepts 30 minutes and ten-second IF at the original sample rate',()=>{assert.doesNotThrow(()=>validate(defaults(),1800,96000));assert.doesNotThrow(()=>validate({...taskConfig(defaults(),'inverse'),roi_start:1790,roi_end:1800},1800,96000));assert.throws(()=>validate({...taskConfig(defaults(),'inverse'),roi_start:1789.999,roi_end:1800},1800,96000));});
+
+test('shared F0 bounds validate editing and remain in saved/exported snapshots',()=>{
+  const c={...defaults(),f0_min_hz:80,f0_max_hz:260};
+  assert.doesNotThrow(()=>validate(c,1,16000));
+  for(const changes of [{f0_min_hz:9},{f0_max_hz:2001},{f0_min_hz:260},{f0_max_hz:NaN},{f0_min_hz:'' as unknown as number}])assert.throws(()=>validateParameters({...c,...changes}),/F0/);
+  assert.equal(taskConfig(c,'single').f0_min_hz,80);assert.equal(taskConfig(c,'inverse').f0_max_hz,260);
+  assert.equal(defaults().f0_min_hz,30);assert.equal(defaults().f0_max_hz,800);
+  assert.notEqual(signature(c),signature({...c,f0_max_hz:300}));
+  assert.equal(batchDefaults().f0_min_hz,30);
+  assert.equal(signature({...c,f0_min_hz:null,f0_max_hz:null}),signature({...c,f0_min_hz:30,f0_max_hz:800}));
+  assert.equal(signature({...c,f0_policy:'legacy/1',f0_min_hz:null,f0_max_hz:null}),signature({...c,f0_policy:'legacy/1',f0_min_hz:75,f0_max_hz:600}));
+});

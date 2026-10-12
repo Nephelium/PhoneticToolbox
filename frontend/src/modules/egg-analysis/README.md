@@ -4,7 +4,7 @@
 
 ## 功能概览
 
-- CQ/SQ、语谱及 F0、音频微观、EGG 微观四图联动，支持总览定位与自动更新。
+- CQ/SQ、语谱及 F0、音频微观、EGG 微观四图联动，支持总览定位与自动更新。左两图用半透明矩形显示微观范围，红线为微观中心；右两图标题显示总窗长（ms），红线为 0 ms。
 - GCI/GOI、滤波、微观时间窗和自动 dB 显示可调整。
 - Praat、GCI 与 REAPER F0 可分别显示。新单文件预览三个开关均关闭；批次默认开启 Praat/GCI、关闭 REAPER，使用独立配置。
 - 保存 CSV/三图，或查看与保存逆滤波的图形和音频。
@@ -23,7 +23,7 @@
 
 1. 打开目录并选择双声道 WAV，核对接线角色；加载后自动分析。
 2. 在总览选择宏观范围，在左图定位微观中心，调整滤波和事件参数。
-3. 按需要开启 Praat/GCI/REAPER F0。新 Praat AC 与 REAPER 使用 30–800 Hz、10 ms。
+3. 按需要开启 Praat/GCI/REAPER F0。Praat AC 与 REAPER 共用左侧 F0 下限/上限，默认 30–800 Hz、10 ms；可调范围为 10–2000 Hz，下限须小于上限。改动后两者重新检测，单文件导出和草稿保留这组参数，GCI F0 不受此设置影响。
 4. 用底部播放栏试听选区，等待最新预览完成后保存 CSV/三图。
 5. 逆滤波选择稳定短元音；批量分析在独立弹窗设置完整文件参数。
 
@@ -38,7 +38,7 @@
 - 微观窗为 5–5000 ms，显示抽点不改变滤波、事件或 CSV/WAV。
 - 简化 IF 使用 GCI 后固定 3 ms 自相关 LPC 片段，未根据 GOI 确认闭相，也未按下一 GCI 截断。10 秒选区仍使用同一组平均 LPC 系数，声道状态变化时应缩短选区。高 F0 时可跨周期，不能将结果当作直接测得的声门流。LP 自动阶数为 `floor(fs/1000)+6`，合法阶数不保证闭相取窗可靠。
 - 新 F0 来源记为 `audio-f0/2`。旧任务保留原范围，REAPER 缺失时明确报错。
-- 自动 dB 随可见区间 PSD 更新 50 dB 灰度，仅改显示，不改 PSD、F0、事件、CQ/SQ。手动模式导航保留上下限，无声区间不伪造范围。
+- 自动 dB 位于谱窗右侧，dB 上下限下一行并列。实时语谱不显示 colorbar，当前范围查看左栏；静态 PNG 仍保留色标。自动范围随可见区间 PSD 更新 50 dB 灰度，仅改显示，不改 PSD、F0、事件、CQ/SQ。手动模式导航保留上下限，无声区间不伪造范围。
 - 单文件 CSV 保留各来源原时间网格并外连接，Praat/GCI 列始终保留。批次 CSV 插值到 GCI 网格，20 ms 平均绝对振幅仅遮罩 CSV。两类导出行时间不必一致。
 - 单文件科学三图为 150 dpi，批次可选三图为 100 dpi；IF 的 6/4/4/2 图组合及单图 PNG 为 300 dpi。保存均从正式任务结果进行。
 - 静态语谱/F0 PNG 当前用黑色 Praat、红色 GCI 和青绿色 REAPER 点，工作台的 Praat 用紫色。比较时核对各自坐标与任务参数快照。
@@ -55,9 +55,11 @@
 
 ## 开发与定向验证
 
-从仓库根目录运行[源码启动器](../../../../scripts/Start-M03-Workbench.ps1)，宿主使用统一主环境，科学子进程使用已有 M03 兼容环境。公共前端检查使用 `npm --prefix frontend run typecheck`、`npm --prefix frontend test` 和 `npm --prefix frontend run build`。
+从仓库根目录运行[统一源码启动器](../../../../scripts/Start-Research-Workbench.ps1)，宿主使用统一主环境，科学子进程使用已有 M03 兼容环境。公共前端检查使用 `npm --prefix frontend run typecheck`、`npm --prefix frontend test` 和 `npm --prefix frontend run build`。
 
 定向入口：[F0 Qt 检查](../../../../scripts/verify_m03_r5_qt.py)、[自动 dB 交互检查](../../../../tests/e2e/m03-r6.cjs)。[F0 报告](../../../../docs/testing/2026-10-04-m03-r5-report.md)、[公共显示报告](../../../../docs/testing/2026-10-04-p19-r5-m03-r6-report.md)与[页内帮助报告](../../../../docs/testing/2026-10-06-p19-r17-report.md)记录限定 Windows 源码/Qt/Chrome 验证；WSL 纯核心不等于完整 Linux 原生 REAPER 或 GUI 验收。实体设备、物理 DPI 与近期源码的成品功能未全面重验。
+
+布局、共用 F0 范围和真实录音说明书截图的定向验证见 [M03-R8 报告](../../../../docs/testing/2026-10-10-m03-r8-report.md)。
 
 ## 方法与来源
 

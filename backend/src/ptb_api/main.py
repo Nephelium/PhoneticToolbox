@@ -28,7 +28,7 @@ from .job_models import ResultManifestEnvelope
 
 def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: AccountStore | None = None,
                auth_settings: AuthSettings | None = None, job_store: JobStore | None = None,
-               local_token: str | None = None, local_origin: str | None = None, storage=None) -> FastAPI:
+               local_token: str | None = None, local_origin: str | None = None, storage=None, feedback_service=None) -> FastAPI:
     if mode not in ('local', 'server'):
         raise ValueError('Unsupported service mode')
     from contextlib import asynccontextmanager
@@ -39,8 +39,18 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
     spectrogram_session = SpectrogramSession() if mode == 'local' else None
     @asynccontextmanager
     async def lifespan(app):
+        feedback_task = None
+        if feedback_service is not None:
+            import asyncio
+            from .feedback import maintain_feedback
+            feedback_task = asyncio.create_task(maintain_feedback(feedback_service))
         try: yield
         finally:
+            if feedback_task:
+                feedback_task.cancel()
+                import asyncio
+                try: await feedback_task
+                except asyncio.CancelledError: pass
             egg_preview.close()
             if spectrogram_session is not None:spectrogram_session.close()
     app = FastAPI(title='PhoneticToolbox API', version=API_VERSION, lifespan=lifespan,
@@ -51,6 +61,8 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
     app.include_router(create_job_router(ctx,job_store,local_token=local_token,local_origin=local_origin))
     app.include_router(create_storage_router(ctx, storage, egg_preview=egg_preview))
     app.include_router(create_preview_router(mode,local_token,local_origin,egg_preview=egg_preview,spectrogram_session=spectrogram_session))
+    from .feedback import configure_feedback
+    configure_feedback(app,feedback_service)
 
     @app.exception_handler(PreviewError)
     async def preview_error(request: Request,exc):

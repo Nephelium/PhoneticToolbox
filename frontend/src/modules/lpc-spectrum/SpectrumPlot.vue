@@ -17,6 +17,6 @@ function reset(){zoom.value=1;offset.value=0;}
 <div class="actions"><button aria-label="缩小 LPC 频谱" :disabled="zoom<=1" @click="scale(zoom/2)">−</button><span class="mono">{{Number(zoom.toFixed(2))}}×</span><button aria-label="放大 LPC 频谱" :disabled="zoom>=64" @click="scale(zoom*2)">+</button><button @click="reset">适合频率范围</button><button :aria-pressed="dynamic" @click="emit('axis-mode',true)">动态纵轴</button><button :aria-pressed="!dynamic" @click="emit('axis-mode',false)">固定纵轴</button><small>Ctrl＋滚轮缩放 · 拖动或方向键平移 · 不改变分析选区</small></div>
 </div></template>
 <style scoped>
-.lpc-spectrum{min-width:0;display:flex;flex-direction:column;height:max(340px,58dvh)}.lpc-spectrum :deep(.scientific-plot){flex:1;min-height:0}.lpc-label{font-family:var(--font-figure-ipa);font-size:var(--figure-size,12px);text-align:center;margin:4px 0;overflow-wrap:anywhere}.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}.actions small{color:var(--muted)}
+.lpc-spectrum{min-width:0;display:flex;flex-direction:column;height:max(340px,calc(58dvh / var(--page-scale,1)))}.lpc-spectrum :deep(.scientific-plot){flex:1;min-height:0}.lpc-label{font-family:var(--font-figure-ipa);font-size:var(--figure-size,12px);text-align:center;margin:4px 0;overflow-wrap:anywhere}.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}.actions small{color:var(--muted)}
 .actions [aria-pressed=true]{color:var(--accent);background:var(--selection)}
 </style>

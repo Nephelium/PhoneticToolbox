@@ -11,9 +11,10 @@
 | 用户要求 | [需求](requirements.md) |
 | 模块入口及迁移基线 | [模块导航](modules/module-migration.md) |
 | 当前任务状态与证据 | [当前实现与后续任务](project-status.md)；[任务台账](plans/task-ledger.json)按任务 ID 检索 |
+| 每次修改与版本更新内容 | [更新记录](../CHANGELOG.md)累积未发布修改；正式版本说明位于 [release/notes](../release/notes/) |
 | 界面、数据与远程协议 | [界面规范](design/UI_SPEC.md)、[账号/存储](specs/accounts-storage-jobs.md)、[remote/1](specs/remote-protocol-v1.md) |
 | 验证要求与结果 | [验证策略](testing/verification-plan.md)；具体报告位于 testing/ |
-| 发行及公开仓库边界 | [严格打包](../release/PACKAGING_RULES.md)、[仓库内容管理](development/repository-hygiene.md)、[产物生命周期](development/artifact-lifecycle.md) |
+| 发行及公开仓库边界 | [严格打包](../release/PACKAGING_RULES.md)、[仓库内容管理](development/repository-hygiene.md)、[产物生命周期](development/artifact-lifecycle.md)、[测试临时清理](testing/test-temporaries-cleanup.md) |
 | 设计取舍及来源 | [ADR 索引](decisions/ADR.md)、[来源登记](../third_party/README.md) |
 
 规则说明应该怎样做，架构说明代码怎样分工，台账记录目前到哪一步，报告记录当时实际验证了什么。每类信息只在自己的位置维护，其他文档使用链接。

@@ -18,7 +18,10 @@ def main():
     folder, work = options.package.resolve(), options.work.resolve()
     if not folder.is_relative_to(ROOT / 'dist') or not work.is_relative_to(ROOT / 'output'):
         raise ValueError('Expected an owned compact build')
-    executable = folder / 'PhoneticToolbox.exe'
+    previous = json.loads((folder / 'build-info.json').read_text('utf8'))
+    executable = folder / previous['exe']
+    if executable.parent != folder or executable.name not in ('PhoneticToolbox.exe', 'PhoneticToolbox-windows-x64.exe'):
+        raise ValueError('Unexpected portable executable name')
     if not 0 < executable.stat().st_size <= 500_000_000:
         raise ValueError('EXE exceeds the authorized limit')
     archive = DistributionReader(executable)
@@ -62,9 +65,9 @@ def main():
         raise ValueError('Embedded Qt identity differs from the reviewed host')
     with executable.open('rb') as stream:
         sha = hashlib.file_digest(stream, 'sha256').hexdigest()
-    application = dict(schema='ptb-desktop-release/1', version=value['version'], entry=executable.name,
+    # This identity file describes the stable installed/update ZIP layout.
+    application = dict(schema='ptb-desktop-release/1', version=value['version'], entry='PhoneticToolbox.exe',
                        layout='onefile/1', executable=dict(size=executable.stat().st_size, sha256=sha))
-    previous = json.loads((folder/'build-info.json').read_text('utf8'))
     for name, metadata in [('application.json', application), ('build-info.json', previous | dict(
             kind='distributable-preview', portable=True, bundle_profile='compact-onefile-no-mfa/1',
             version=value['version'], exe=executable.name, bytes=executable.stat().st_size, sha256=sha,

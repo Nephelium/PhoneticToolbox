@@ -7,7 +7,7 @@ from ptb_desktop.startup_cache import cache_root, maintenance, lease
 
 _ptb_cache = cache_root()
 try:
-    if Path(sys._MEIPASS).is_relative_to(_ptb_cache / 'apps'):
+    if Path(sys._MEIPASS).resolve().is_relative_to(_ptb_cache.resolve() / 'apps'):
         with maintenance(_ptb_cache):
             _ptb_lease = lease(_ptb_cache)
         atexit.register(_ptb_lease.close)

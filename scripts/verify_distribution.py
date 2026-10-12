@@ -19,7 +19,8 @@ def verify(bundle, output):
     try:
         from ptb_desktop.bundle_manifest import runtime_bindings
         bindings = runtime_bindings(bundle)
-        assert all(Path(value).is_relative_to(bundle) for key, value in bindings.items() if key != 'PTB_M11_COMPONENT_ROOT')
+        # Private launch aliases must resolve to this relocated bundle's bytes.
+        assert all(Path(value).resolve().is_relative_to(bundle.resolve()) for value in bindings.values())
         os.environ.update(bindings)
         report['checks'].append('All pinned scientific runtimes resolve inside the relocated package')
         # A complete model initialization exercises the packaged graph payload.
@@ -45,7 +46,7 @@ def verify(bundle, output):
             for name, key in [('egg', 'PTB_EGG_PYTHON'), ('m05', 'PTB_M05_PYTHON')]:
                 probe_output = output / ('scientific-' + name)
                 probe = subprocess.run([bindings[key], '-I', '-B', str(bundle / 'preview-fixtures/runtime-probe.py'),
-                                        name, str(bundle), str(probe_output)], cwd=output, env=environment,
+                                        name, str(bundle), str(probe_output)], executable=bindings[key], cwd=output, env=environment,
                                        capture_output=True, text=True, timeout=240,
                                        creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
                 (output / ('probe-' + name + '.log')).write_text(probe.stdout + '\n' + probe.stderr, 'utf8')
@@ -53,8 +54,10 @@ def verify(bundle, output):
                 result = json.loads((probe_output / 'result.json').read_text('utf8'))
                 report['scientific_probes'].append(dict(runtime=name, result=result))
         model = subprocess.run([bindings['PTB_M05_PYTHON'], '-I', '-B', '-c',
+            'import sys; sys.path.insert(0, '+repr(str(bundle/'backend/src'))+'); '
+            'from ptb_worker.source_runtime import prepare_native_import_paths; prepare_native_import_paths(); '
             'import mediapipe as mp; m=mp.solutions.face_mesh.FaceMesh(static_image_mode=True,max_num_faces=1); m.close(); print("model initialized")'],
-            cwd=output, env=environment, capture_output=True, text=True, timeout=90,
+            executable=bindings['PTB_M05_PYTHON'], cwd=output, env=environment, capture_output=True, text=True, timeout=90,
             creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
         assert model.returncode == 0, model.stderr[-2500:]
         report['checks'].append('Relocated MediaPipe FaceMesh graph initialization, no camera or video processing')

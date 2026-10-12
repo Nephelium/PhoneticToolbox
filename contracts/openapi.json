@@ -1872,6 +1872,27 @@
         "title": "DeleteImpact",
         "type": "object"
       },
+      "DeviceStart": {
+        "additionalProperties": false,
+        "properties": {
+          "deviceToken": {
+            "pattern": "^[A-Za-z0-9_-]{43,64}$",
+            "title": "Devicetoken",
+            "type": "string"
+          },
+          "email": {
+            "maxLength": 254,
+            "title": "Email",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "deviceToken"
+        ],
+        "title": "DeviceStart",
+        "type": "object"
+      },
       "EggInteractiveResult": {
         "additionalProperties": false,
         "properties": {
@@ -2545,6 +2566,32 @@
             "title": "Export Policy",
             "type": "string"
           },
+          "f0_max_hz": {
+            "anyOf": [
+              {
+                "maximum": 2000.0,
+                "minimum": 10.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "F0 Max Hz"
+          },
+          "f0_min_hz": {
+            "anyOf": [
+              {
+                "maximum": 2000.0,
+                "minimum": 10.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "F0 Min Hz"
+          },
           "f0_policy": {
             "default": "legacy/1",
             "enum": [
@@ -3083,6 +3130,21 @@
         "title": "Health",
         "type": "object"
       },
+      "ImageInput": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "maxLength": 2666668,
+            "title": "Data",
+            "type": "string"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "title": "ImageInput",
+        "type": "object"
+      },
       "ImagePoint": {
         "additionalProperties": false,
         "properties": {
@@ -3514,7 +3576,10 @@
           "action": {
             "enum": [
               "check",
-              "import"
+              "import",
+              "install_zip",
+              "install_folder",
+              "download"
             ],
             "title": "Action",
             "type": "string"
@@ -3532,9 +3597,16 @@
             "title": "Archive"
           },
           "dictionary": {
-            "maxLength": 4096,
-            "title": "Dictionary",
-            "type": "string"
+            "anyOf": [
+              {
+                "maxLength": 4096,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dictionary"
           },
           "manifest": {
             "anyOf": [
@@ -3549,9 +3621,16 @@
             "title": "Manifest"
           },
           "model": {
-            "maxLength": 4096,
-            "title": "Model",
-            "type": "string"
+            "anyOf": [
+              {
+                "maxLength": 4096,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
           },
           "runtime": {
             "anyOf": [
@@ -3579,9 +3658,7 @@
           }
         },
         "required": [
-          "action",
-          "model",
-          "dictionary"
+          "action"
         ],
         "title": "LocalM11ComponentRequest",
         "type": "object"
@@ -5198,6 +5275,70 @@
         "title": "M14Settings",
         "type": "object"
       },
+      "MailPreferences": {
+        "additionalProperties": false,
+        "properties": {
+          "mailNotifications": {
+            "title": "Mailnotifications",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "mailNotifications"
+        ],
+        "title": "MailPreferences",
+        "type": "object"
+      },
+      "ManagerPairing": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "pattern": "^[0-9]{8}$",
+            "title": "Code",
+            "type": "string"
+          },
+          "name": {
+            "default": "安卓管理端",
+            "maxLength": 40,
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "title": "ManagerPairing",
+        "type": "object"
+      },
+      "MessageInput": {
+        "additionalProperties": false,
+        "properties": {
+          "images": {
+            "items": {
+              "$ref": "#/components/schemas/ImageInput"
+            },
+            "maxItems": 4,
+            "title": "Images",
+            "type": "array"
+          },
+          "requestId": {
+            "pattern": "^[A-Za-z0-9_-]{8,96}$",
+            "title": "Requestid",
+            "type": "string"
+          },
+          "text": {
+            "default": "",
+            "maxLength": 12000,
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "requestId"
+        ],
+        "title": "MessageInput",
+        "type": "object"
+      },
       "ParameterTable": {
         "additionalProperties": false,
         "properties": {
@@ -5452,6 +5593,21 @@
           "created_at"
         ],
         "title": "ProjectView",
+        "type": "object"
+      },
+      "ReadInput": {
+        "additionalProperties": false,
+        "properties": {
+          "through": {
+            "minimum": 0.0,
+            "title": "Through",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "through"
+        ],
+        "title": "ReadInput",
         "type": "object"
       },
       "ResultFile": {
@@ -5727,6 +5883,11 @@
             "minimum": 0.0,
             "title": "Freq Start",
             "type": "number"
+          },
+          "invert_image": {
+            "default": false,
+            "title": "Invert Image",
+            "type": "boolean"
           },
           "max_db": {
             "default": 0,
@@ -6176,6 +6337,21 @@
         "title": "SpectrogramPreview",
         "type": "object"
       },
+      "StatusInput": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "pattern": "^(open|resolved)$",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "StatusInput",
+        "type": "object"
+      },
       "StorageUsage": {
         "properties": {
           "available_bytes": {
@@ -6461,6 +6637,43 @@
           "type"
         ],
         "title": "ValidationError",
+        "type": "object"
+      },
+      "VerifyFinish": {
+        "additionalProperties": false,
+        "properties": {
+          "challenge": {
+            "maxLength": 80,
+            "minLength": 16,
+            "title": "Challenge",
+            "type": "string"
+          },
+          "code": {
+            "pattern": "^\\d{6}$",
+            "title": "Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "challenge",
+          "code"
+        ],
+        "title": "VerifyFinish",
+        "type": "object"
+      },
+      "VerifyStart": {
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "maxLength": 254,
+            "title": "Email",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "title": "VerifyStart",
         "type": "object"
       },
       "Viewport": {
@@ -7184,6 +7397,736 @@
           }
         },
         "summary": "Capabilities"
+      }
+    },
+    "/api/v1/feedback/admin/conversations": {
+      "get": {
+        "operationId": "admin_conversations_api_v1_feedback_admin_conversations_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Admin Conversations",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/admin/conversations/{owner}": {
+      "get": {
+        "operationId": "admin_conversation_api_v1_feedback_admin_conversations__owner__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "owner",
+            "required": true,
+            "schema": {
+              "title": "Owner",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "after",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "title": "After",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Admin Conversation",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/admin/conversations/{owner}/messages": {
+      "post": {
+        "operationId": "admin_send_api_v1_feedback_admin_conversations__owner__messages_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "owner",
+            "required": true,
+            "schema": {
+              "title": "Owner",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Admin Send",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/admin/conversations/{owner}/read": {
+      "post": {
+        "operationId": "admin_read_api_v1_feedback_admin_conversations__owner__read_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "owner",
+            "required": true,
+            "schema": {
+              "title": "Owner",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReadInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Admin Read",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/admin/conversations/{owner}/status": {
+      "post": {
+        "operationId": "status_api_v1_feedback_admin_conversations__owner__status_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "owner",
+            "required": true,
+            "schema": {
+              "title": "Owner",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StatusInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Status",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/admin/devices": {
+      "get": {
+        "operationId": "devices_api_v1_feedback_admin_devices_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Devices",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/admin/devices/pairing": {
+      "post": {
+        "operationId": "pairing_api_v1_feedback_admin_devices_pairing_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Pairing",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/admin/devices/pairing/complete": {
+      "post": {
+        "operationId": "pair_complete_api_v1_feedback_admin_devices_pairing_complete_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManagerPairing"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Pair Complete",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/admin/devices/{device_id}/revoke": {
+      "post": {
+        "operationId": "revoke_api_v1_feedback_admin_devices__device_id__revoke_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "device_id",
+            "required": true,
+            "schema": {
+              "title": "Device Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Revoke",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/admin/events": {
+      "get": {
+        "operationId": "stream_api_v1_feedback_admin_events_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "after",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "title": "After",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Stream",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/admin/mail/{mid}/retry": {
+      "post": {
+        "operationId": "retry_api_v1_feedback_admin_mail__mid__retry_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mid",
+            "required": true,
+            "schema": {
+              "title": "Mid",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Retry",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/conversation": {
+      "get": {
+        "operationId": "conversation_api_v1_feedback_conversation_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "after",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "title": "After",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Conversation",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/health": {
+      "get": {
+        "operationId": "health_api_v1_feedback_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/identity": {
+      "post": {
+        "operationId": "device_start_api_v1_feedback_identity_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceStart"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Device Start",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/messages": {
+      "post": {
+        "operationId": "send_api_v1_feedback_messages_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Send",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/preferences": {
+      "post": {
+        "operationId": "preferences_api_v1_feedback_preferences_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MailPreferences"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Preferences",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/read": {
+      "post": {
+        "operationId": "read_api_v1_feedback_read_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReadInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/unread": {
+      "get": {
+        "operationId": "unread_api_v1_feedback_unread_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Unread",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/verification": {
+      "post": {
+        "operationId": "start_api_v1_feedback_verification_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyStart"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Start",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/verification/complete": {
+      "post": {
+        "operationId": "complete_api_v1_feedback_verification_complete_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyFinish"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Complete",
+        "tags": [
+          "feedback"
+        ]
       }
     },
     "/api/v1/health": {

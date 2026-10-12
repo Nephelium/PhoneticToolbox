@@ -59,7 +59,7 @@
         "content": [
           {
             "type": "text",
-            "text": "生成元音和提取参数都只更新曲线。要听到新结果，还须点击合成音频。",
+            "text": "输入 IPA 只改变序列文本，尚未改变共振峰。生成元音和提取参数都只更新曲线。生成成功后，还须点击合成音频，播放器和音频导出才会更新为新结果。",
             "marks": [
               {
                 "type": "bold"
@@ -375,7 +375,7 @@
           },
           {
             "type": "text",
-            "text": "，源音频是原录音，合成结果是最后一次采用的 WAV。修改曲线后，右栏会提示旧结果，原 WAV 仍可试听和保存。源预览按原音真实时长显示，改变编辑时长不会改变旧音频，超出旧音频尾部的区域留空。"
+            "text": "，源音频是原录音，合成结果是最后一次成功并采用的 WAV。有合成结果时，输入新 IPA、生成或提取曲线后，右栏会提示旧结果，原 WAV 仍可试听和保存。重新合成成功才会替换它。源预览按原音真实时长显示，改变编辑时长不会改变旧音频，超出旧音频尾部的区域留空。"
           }
         ]
       },
@@ -644,7 +644,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "。F0 编辑曲线可能填补了缺值，有连续曲线不代表每时刻都测得了音高。提取帧移固定为 10 ms。"
+                    "text": "。F0 编辑曲线可能填补了缺值，测得轨迹及有声掩码请查看提取结果记录。提取帧移固定为 10 ms。"
                   }
                 ]
               }
@@ -1225,7 +1225,7 @@
           },
           {
             "type": "text",
-            "text": "，输入值可能与输出重新测得的值不同。AV/AH 使用工具内数字参考，不能当作实测声压级。"
+            "text": "，输入值可能与输出重新测得的值不同。AV/AH 使用工具内数字参考，实际声压级需另行测量和标定。"
           }
         ]
       },
@@ -1836,7 +1836,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "表示 3%，并非 0.03%。"
+                        "text": "表示 3%。"
                       }
                     ]
                   }
@@ -2174,226 +2174,288 @@
         "content": [
           {
             "type": "text",
-            "text": "来听一组吧：总时长均为 0.8 秒，生成单个元音后明确应用常态浊声预设，再把 F0 覆盖为 150 Hz 并合成。三段只切换元音规则，可比较 a、i、u 的差别。"
+            "text": "下面三例从同一新配置基线分别制作，共用常态浊声预设、F0 控制值 150 Hz 和 0.8 秒时长，分别生成 a、i、u 的共振峰曲线再合成。可按以下顺序制作一组对照。"
           }
         ]
       },
       {
-        "type": "image",
+        "type": "orderedList",
         "attrs": {
-          "id": "m06-a-modal-150-light-example-figure",
-          "assetId": "m06-a-modal-150-light-scaled-r20261007",
-          "caption": "a 元音规则，常态浊声，F0 150 Hz，时长 0.8 秒。",
-          "alt": "a 元音规则，常态浊声，F0 150 Hz，时长 0.8 秒。",
-          "width": "100%",
-          "align": "center"
-        }
-      },
-      {
-        "type": "audio",
-        "attrs": {
-          "id": "m06-a-modal-150-example",
-          "assetId": "m06-a-modal-150-approved-r20261007-mp3-r20261007",
-          "caption": "a 元音规则，常态浊声，F0 150 Hz，时长 0.8 秒。",
-          "align": "left"
-        }
-      },
-      {
-        "type": "audio",
-        "attrs": {
-          "id": "m06-i-modal-150-example",
-          "assetId": "m06-i-modal-150-approved-r20261007-mp3-r20261007",
-          "caption": "i 元音规则，F0 与时长和前例相同，试听元音差异。",
-          "align": "left"
-        }
-      },
-      {
-        "type": "audio",
-        "attrs": {
-          "id": "m06-u-modal-150-example",
-          "assetId": "m06-u-modal-150-approved-r20261007-mp3-r20261007",
-          "caption": "u 元音规则，F0 与时长和前例相同。",
-          "align": "left"
-        }
-      },
-      {
-        "type": "paragraph",
-        "content": [
-          {
-            "type": "text",
-            "text": "生成会重建 F1–F3、AV、静音区和边界，F4/F5 恢复初值，F0 和其余声源控制保留。"
-          },
-          {
-            "type": "text",
-            "text": "需要手绘共振峰时，先生成再编辑",
-            "marks": [
-              {
-                "type": "bold"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "，再次生成可能替换这些编辑。"
-          }
-        ]
-      },
-      {
-        "type": "heading",
-        "attrs": {
-          "id": "m06-vowel-syntax",
-          "level": 3
+          "start": 1
         },
         "content": [
           {
-            "type": "text",
-            "text": "停顿与相对时长"
-          }
-        ]
-      },
-      {
-        "type": "paragraph",
-        "content": [
-          {
-            "type": "text",
-            "text": "内部普通空格生成静音段，元音和空格的初始权重均为 1，两端空格会裁去。紧跟元音或空格的 "
-          },
-          {
-            "type": "text",
-            "text": "+ - * /",
-            "marks": [
+            "type": "listItem",
+            "content": [
               {
-                "type": "code"
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "先导出需要保留的当前参数。将总时长设为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "0.8",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 秒并点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "应用时长",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。下列例音采用淡入 50 ms、淡出 100 ms、平滑点数 5。"
+                  }
+                ]
               }
             ]
           },
           {
-            "type": "text",
-            "text": " 依次将权重乘以 1.1、0.9、2、0.5，可叠加。各段按权重分配总时长。"
-          },
-          {
-            "type": "text",
-            "text": "e++",
-            "marks": [
+            "type": "listItem",
+            "content": [
               {
-                "type": "code"
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "顶部选择"
+                  },
+                  {
+                    "type": "text",
+                    "text": "常态浊声",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "应用预设",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "并在确认窗点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "应用并覆盖",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。选择左栏 F0，在曲线覆盖输入 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "150",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "应用覆盖",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。"
+                  }
+                ]
               }
             ]
           },
           {
-            "type": "text",
-            "text": " 为 1.21 倍，连续三个 "
-          },
-          {
-            "type": "text",
-            "text": "/",
-            "marks": [
+            "type": "listItem",
+            "content": [
               {
-                "type": "code"
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "右栏 IPA 元音序列输入 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "a",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "生成元音",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，等到元音曲线已生成提示。依次选择 F1、F2、F3，核对曲线值与下表一致。"
+                  }
+                ]
               }
             ]
           },
           {
-            "type": "text",
-            "text": " 为 0.125 倍。"
-          }
-        ]
-      },
-      {
-        "type": "codeBlock",
-        "attrs": {
-          "id": "m06-vowel-syntax-example",
-          "language": "text"
-        },
-        "content": [
-          {
-            "type": "text",
-            "text": "总时长 2 秒\nai：两个连续元音，各 1 秒\na i：元音、静音、元音，各约 0.667 秒\na* i：三段分别 1、0.5、0.5 秒"
-          }
-        ]
-      },
-      {
-        "type": "paragraph",
-        "content": [
-          {
-            "type": "text",
-            "text": "输入规则表符号和 ASCII 修饰符。非法字符会提示位置，修正后重试。平滑点数只影响重新生成的 F1–F3，修改后需再点生成元音。"
-          }
-        ]
-      },
-      {
-        "type": "image",
-        "attrs": {
-          "id": "m06-figure-vowel-rules-bottom-current-light",
-          "assetId": "m06-vowel-rules-bottom-current-light-scaled-r20261007",
-          "caption": "规则窗滚至末尾，ɹ、ɻ 的历史规则和空格静音、乘法权重说明可见。",
-          "alt": "最大化工作台的元音规则对话框滚动到底部，显示后部 IPA 规则及 +、-、*、/ 的时长乘法。",
-          "width": "100%",
-          "align": "center"
-        }
-      },
-      {
-        "type": "heading",
-        "attrs": {
-          "id": "m06-vowel-rules",
-          "level": 4
-        },
-        "content": [
-          {
-            "type": "text",
-            "text": "查看和复制规则"
-          }
-        ]
-      },
-      {
-        "type": "paragraph",
-        "content": [
-          {
-            "type": "text",
-            "text": "点击右栏"
-          },
-          {
-            "type": "text",
-            "text": "元音规则",
-            "marks": [
+            "type": "listItem",
+            "content": [
               {
-                "type": "bold"
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "合成音频",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，等到合成完成提示，再选择"
+                  },
+                  {
+                    "type": "text",
+                    "text": "合成结果",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "试听和导出这次音频。"
+                  }
+                ]
               }
             ]
           },
           {
-            "type": "text",
-            "text": "，单击音标按钮复制，关闭弹窗后粘贴到 IPA 输入区。复制失败时按弹窗提示选中音标，按 Ctrl+C。可在弹窗内滚动查看全部条目和末尾时长说明。"
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "保持基础设置和声源参数，改输入 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "i",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，先重新点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "生成元音",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "并核对 F1–F3，再点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "合成音频",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。改输入 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "u",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "时也分别完成这两个任务。每次成功合成后再试听、保存对应结果。"
+                  }
+                ]
+              }
+            ]
           }
         ]
-      },
-      {
-        "type": "image",
-        "attrs": {
-          "id": "m06-figure-vowel-rules-current-light",
-          "assetId": "m06-vowel-rules-current-light-scaled-r20261007",
-          "caption": "规则窗上部列出 IPA 与 F1–F3；右侧滚动条用于继续查看余下条目。",
-          "alt": "元音规则对话框上部，IPA 音标按钮与三个共振峰数值列可见。",
-          "width": "100%",
-          "align": "center"
-        }
-      },
-      {
-        "type": "image",
-        "attrs": {
-          "id": "m06-vowel-rules-current-light-detail-figure",
-          "assetId": "m06-vowel-rules-current-light-detail-scaled-r20261007",
-          "caption": "元音规则窗口可填写序列和时间，核对后再生成曲线。",
-          "alt": "元音规则窗口可填写序列和时间，核对后再生成曲线。",
-          "width": "100%",
-          "align": "center"
-        }
       },
       {
         "type": "table",
         "attrs": {
           "id": "m06-vowels-table",
-          "caption": "常用元音规则示例"
+          "caption": "三组例音的 F1–F3 合成控制值"
         },
         "content": [
           {
@@ -2450,6 +2512,67 @@
                       {
                         "type": "text",
                         "text": "F3 / Hz"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "a"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "730"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "1090"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "2440"
                       }
                     ]
                   }
@@ -2578,6 +2701,365 @@
                 ]
               }
             ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "只修改 IPA 文本后直接合成，会继续使用现有共振峰曲线。生成成功后，播放器和音频导出仍绑定上一次成功合成的 WAV，须再次合成成功才会更新。上述 F0 和表中的 F1–F3 均为合成控制值，输出重新测得的值可能不同。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m06-a-modal-150-light-example-figure",
+          "assetId": "m06-a-modal-150-light-scaled-r20261007",
+          "caption": "a：F1/F2/F3 控制值 730/1090/2440 Hz，常态浊声，F0 控制值 150 Hz，时长 0.8 秒。",
+          "alt": "a 元音合成状态，F0 曲线覆盖为 150 Hz，总时长为 0.8 秒。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m06-a-modal-150-example",
+          "assetId": "m06-a-modal-150-approved-r20261007-mp3-r20261007",
+          "caption": "a：F1/F2/F3 控制值 730/1090/2440 Hz，常态浊声，F0 控制值 150 Hz，时长 0.8 秒。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m06-i-modal-150-example",
+          "assetId": "m06-i-modal-150-approved-r20261007-mp3-r20261007",
+          "caption": "i：F1/F2/F3 控制值 270/2290/3010 Hz，常态浊声，F0 控制值 150 Hz，时长 0.8 秒。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m06-u-modal-150-example",
+          "assetId": "m06-u-modal-150-approved-r20261007-mp3-r20261007",
+          "caption": "u：F1/F2/F3 控制值 300/870/2240 Hz，常态浊声，F0 控制值 150 Hz，时长 0.8 秒。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "保持试听音量一致，依次听 a、i、u，留意元音音色的变化，也可在语谱图中对照共振频带的位置。三例的 F0 控制值相同，这组对照展示元音规则带来的音色与共振频带差异。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "生成会重建 F1–F3、AV、静音区和边界，F4/F5 恢复初值，F0 和其余声源控制保留。"
+          },
+          {
+            "type": "text",
+            "text": "需要手绘共振峰时，先生成再编辑",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，再次生成可能替换这些编辑。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m06-vowel-syntax",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "停顿与相对时长"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "内部普通空格生成静音段，元音和空格的初始权重均为 1，两端空格会裁去。紧跟元音或空格的 "
+          },
+          {
+            "type": "text",
+            "text": "+ - * /",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 依次将权重乘以 1.1、0.9、2、0.5，可叠加。默认无修饰的元音和内部普通空格都占权重 1，各段按最终权重分配总时长。"
+          },
+          {
+            "type": "text",
+            "text": "e++",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 为 1.21 倍，连续三个 "
+          },
+          {
+            "type": "text",
+            "text": "/",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 为 0.125 倍。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m06-vowel-syntax-simple",
+          "level": 4
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "先看三个简单输入"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "id": "m06-vowel-syntax-example",
+          "language": "text"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "总时长 2 秒\nai：两个连续元音，各 1 秒\na i：元音、静音、元音，各约 0.667 秒\na* i：三段分别 1、0.5、0.5 秒"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m06-vowel-syntax-complex",
+          "level": 4
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "组合修饰符，生成一段元音序列"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "用下面这串输入练习连续修饰符。"
+          },
+          {
+            "type": "text",
+            "text": "i/-",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 后只有一个普通空格，紧随空格的三个 "
+          },
+          {
+            "type": "text",
+            "text": "/",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 修饰静音段。各符号从左到右作用于当时的权重，"
+          },
+          {
+            "type": "text",
+            "text": "+",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 后再接 "
+          },
+          {
+            "type": "text",
+            "text": "-",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 得到 1.1 × 0.9 = 0.99，不会恰好恢复原权重。"
+          }
+        ]
+      },
+      {
+        "type": "codeBlock",
+        "attrs": {
+          "id": "m06-vowel-syntax-complex-input",
+          "language": "text"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "a-i/- ///u+/e++o/-"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "总时长设为 2 秒时，总权重为 3.685。每段时长 = 2 × 该段权重 ÷ 3.685，累计得到以下时间位置。"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "attrs": {
+          "id": "m06-vowel-syntax-complex-table",
+          "caption": "复杂元音序列的权重与时间分配"
+        },
+        "content": [
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "输入段"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "权重计算"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "最终权重"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "时长 / s"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "起点 / s"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableHeader",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "终点 / s"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "type": "tableRow",
@@ -2590,7 +3072,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "a"
+                        "text": "a-"
                       }
                     ]
                   }
@@ -2604,7 +3086,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "730"
+                        "text": "1 × 0.9"
                       }
                     ]
                   }
@@ -2618,7 +3100,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "1090"
+                        "text": "0.9"
                       }
                     ]
                   }
@@ -2632,7 +3114,480 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "2440"
+                        "text": "0.488"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.000"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.488"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "i/-"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "1 × 0.5 × 0.9"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.45"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.244"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.488"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.733"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "空格///"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "1 × 0.5 × 0.5 × 0.5"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.125"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.068"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.733"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.801"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "u+/"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "1 × 1.1 × 0.5"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.55"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.299"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.801"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "1.099"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "e++"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "1 × 1.1 × 1.1"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "1.21"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.657"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "1.099"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "1.756"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "o/-"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "1 × 0.5 × 0.9"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.45"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "0.244"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "1.756"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "2.000"
                       }
                     ]
                   }
@@ -2647,7 +3602,254 @@
         "content": [
           {
             "type": "text",
-            "text": "完整规则表有 30 条，数值是工具内合成起点，生成后可调整。ɹ、ɻ 是保留的舌尖音近似规则，它们在 IPA 中属于近音符号。"
+            "text": "表中秒数显示三位小数，时长和累计边界分别从未舍入值计算后显示。四舍五入可能造成显示段长合计或起终点相减与实际值略有不同，复算时请使用权重公式。该序列只有 "
+          },
+          {
+            "type": "text",
+            "text": "0.733–0.801 秒",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 附近这一段静音，实际边界约为 0.732700 秒和 0.800543 秒。"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "输入总时长 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "2",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 秒并点"
+                  },
+                  {
+                    "type": "text",
+                    "text": "应用时长",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。应用"
+                  },
+                  {
+                    "type": "text",
+                    "text": "常态浊声",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "预设并确认，将 F0 曲线覆盖设为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "150",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " Hz 并应用。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在右栏输入上述完整序列，点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "生成元音",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。成功后选择 F1，核对共振峰轨迹、分界虚线和空格静音底色。单个元音之后的修饰符只改变相对时长，不单独改变 F0。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "合成音频",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "并等待合成完成，再查看 2 秒结果波形或语谱图。试听时按 a、i、短停顿、u、e、o 的顺序观察，停顿两侧的淡化设置也会影响声音包络。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m06-vowel-syntax-complex-figure",
+          "assetId": "m06-vowel-syntax-complex-light",
+          "caption": "a-i/- ///u+/e++o/-：总时长 2 秒，F0 控制值 150 Hz，常态浊声；共振峰与分段边界对应下方结果。",
+          "align": "center",
+          "alt": "复杂 IPA 序列生成后的 F1、其他共振峰参考曲线、分界虚线与静音底色，下方显示 2 秒合成结果。",
+          "width": "100%"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m06-vowel-syntax-complex-audio",
+          "assetId": "m06-vowel-syntax-complex-mp3",
+          "caption": "a-i/- ///u+/e++o/-：总时长 2 秒，F0 控制值 150 Hz，常态浊声；比较元音次序、相对长短与短静音。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "输入规则表符号和 ASCII 修饰符。非法字符会提示位置，修正后重试。平滑点数只影响重新生成的 F1–F3，修改后需再点生成元音。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m06-figure-vowel-rules-bottom-current-light",
+          "assetId": "m06-vowel-rules-bottom-current-light-scaled-r20261007",
+          "caption": "规则窗滚至末尾，ɹ、ɻ 的历史规则和空格静音、乘法权重说明可见。",
+          "alt": "最大化工作台的元音规则对话框滚动到底部，显示后部 IPA 规则及 +、-、*、/ 的时长乘法。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m06-vowel-rules",
+          "level": 4
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "查看和复制规则"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "点击右栏"
+          },
+          {
+            "type": "text",
+            "text": "元音规则",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，单击音标按钮复制，关闭弹窗后粘贴到 IPA 输入区。复制失败时按弹窗提示选中音标，按 Ctrl+C。可在弹窗内滚动查看全部条目和末尾时长说明。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m06-figure-vowel-rules-current-light",
+          "assetId": "m06-vowel-rules-current-light-scaled-r20261007",
+          "caption": "规则窗上部列出 IPA 与 F1–F3；右侧滚动条用于继续查看余下条目。",
+          "alt": "元音规则对话框上部，IPA 音标按钮与三个共振峰数值列可见。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m06-vowel-rules-current-light-detail-figure",
+          "assetId": "m06-vowel-rules-current-light-detail-scaled-r20261007",
+          "caption": "规则窗提供 F1–F3 参考值和音标复制按钮；复制后关闭弹窗，在右栏输入序列并生成。",
+          "alt": "元音规则弹窗中的 IPA 复制按钮、共振峰数值列与右上角关闭按钮。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "完整规则表有 30 条，数值是工具内合成起点，生成后可调整。上方 a、i、u 对照列出了其中三条。ɹ、ɻ 是保留的舌尖音近似规则，它们在 IPA 中属于近音符号。"
           }
         ]
       },
@@ -2905,6 +4107,292 @@
                 ]
               }
             ]
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m06-fade-controls",
+          "level": 4
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "比较淡入和淡出"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "淡入、淡出控制连续有声段起止处的振幅包络，单位为毫秒。用 "
+          },
+          {
+            "type": "text",
+            "text": "a a",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、总时长 1 秒作对照，两枚 a 和中间普通空格的权重均为 1，各占三分之一秒。中间约 0.333–0.667 秒是静音，静音两侧的 a 分别淡入和淡出，包含整段音频的首尾。"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "应用总时长 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "1",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 秒，显式应用"
+                  },
+                  {
+                    "type": "text",
+                    "text": "常态浊声",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "预设并确认，应用 F0 常量 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "150",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " Hz。右栏输入 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "a a",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "生成元音",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "，确认两个分界线和中间静音段。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "将淡入设为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "100",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " ms，淡出设为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "100",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " ms。这两个数值直接采用，点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "合成音频",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "并等待完成，试听和导出第一组。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "保持元音曲线、F0 和总时长，将淡入改为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "30",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " ms，淡出改为 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "80",
+                    "marks": [
+                      {
+                        "type": "code"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " ms，再次点击"
+                  },
+                  {
+                    "type": "text",
+                    "text": "合成音频",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "并等待完成。只改淡化设置时无需再生成元音，新的 WAV 仍须重新合成。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m06-fade-100-100-figure",
+          "assetId": "m06-fade-100-100-light",
+          "caption": "a a：总时长 1 秒，F0 控制值 150 Hz，常态浊声，淡入 100 ms、淡出 100 ms。",
+          "align": "center",
+          "alt": "a a 合成波形中两个有声段由中间静音隔开，左栏显示淡入 100 ms 和淡出 100 ms。",
+          "width": "100%"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m06-fade-100-100-audio",
+          "assetId": "m06-fade-100-100-mp3",
+          "caption": "a a：总时长 1 秒，F0 控制值 150 Hz，常态浊声，淡入 100 ms、淡出 100 ms。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m06-fade-30-80-figure",
+          "assetId": "m06-fade-30-80-light",
+          "caption": "a a：总时长 1 秒，F0 控制值 150 Hz，常态浊声，淡入 30 ms、淡出 80 ms。",
+          "align": "center",
+          "alt": "同一 a a 序列与相同时长、F0，左栏淡入 30 ms 和淡出 80 ms，下方波形可对照包络变化。",
+          "width": "100%"
+        }
+      },
+      {
+        "type": "audio",
+        "attrs": {
+          "id": "m06-fade-30-80-audio",
+          "assetId": "m06-fade-30-80-mp3",
+          "caption": "a a：总时长 1 秒，F0 控制值 150 Hz，常态浊声，淡入 30 ms、淡出 80 ms。",
+          "align": "left"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "保持相同试听音量，先比较两组波形的起止包络，再听每段 a 的进入和结束。淡化时间超过某一有声段长度时，程序将该次淡化截到段长，包络覆盖这整段。淡入和淡出的作用范围重叠时，两种包络相乘，整段可能明显减弱。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "分界虚线表示元音和空格的分段位置。淡入、淡出调振幅包络，平滑点数则用于重新生成 F1–F3 的过渡曲线。相邻元音间没有静音时，元音分界线本身不会触发新的淡化；淡化也不延长有声段或调整段长权重。"
           }
         ]
       },
@@ -3277,7 +4765,7 @@
         "content": [
           {
             "type": "text",
-            "text": "再听同一 a 元音的气声预设。F0 仍为 150 Hz，时长仍为 0.8 秒，可与上面的常态浊声 a 对照。需要改细节时，应用预设后继续编辑相关参数即可。"
+            "text": "再听同一 a 元音规则的气声预设。确认 F1–F3 仍为 730、1090、2440 Hz 后，应用气声预设，保留 F0 控制值 150 Hz 和 0.8 秒时长，再点击合成音频。可与上面的常态浊声 a 对照，留意噪声和音色变化。应用预设后可继续编辑相关参数，每次修改后需重新合成。"
           }
         ]
       },
@@ -3286,7 +4774,7 @@
         "attrs": {
           "id": "m06-a-breathy-150-light-example-figure",
           "assetId": "m06-a-breathy-150-light-scaled-r20261007",
-          "caption": "同一 a 元音规则，应用气声预设，F0 150 Hz；预设只是可编辑起点。",
+          "caption": "a 的气声预设：F1/F2/F3 控制值 730/1090/2440 Hz，F0 控制值 150 Hz，时长 0.8 秒。",
           "alt": "同一 a 元音规则，应用气声预设，F0 150 Hz；预设只是可编辑起点。",
           "width": "100%",
           "align": "center"
@@ -3297,7 +4785,7 @@
         "attrs": {
           "id": "m06-a-breathy-150-example",
           "assetId": "m06-a-breathy-150-approved-r20261007-mp3-r20261007",
-          "caption": "同一 a 元音规则，应用气声预设，F0 150 Hz；预设只是可编辑起点。",
+          "caption": "a 的气声预设：F1/F2/F3 控制值 730/1090/2440 Hz，F0 控制值 150 Hz，时长 0.8 秒。",
           "align": "left"
         }
       },
@@ -3871,7 +5359,7 @@
         "content": [
           {
             "type": "text",
-            "text": "当前参数导出可能含合成后的新编辑，不能拿它替换旧 WAV 自带的 parameters.csv。",
+            "text": "当前参数导出包含现有编辑；归档旧 WAV 时请保留它自带的 parameters.csv。",
             "marks": [
               {
                 "type": "bold"
@@ -3992,7 +5480,7 @@
         "content": [
           {
             "type": "text",
-            "text": "当前页面没有自动批量合成入口。需要多份材料时，逐份选择录音或导入配置、检查参数、合成，再按材料和设置分目录保存。每份 WAV 使用自己的 JSON/CSV，完成一份后再继续下一份。"
+            "text": "需要多份材料时，逐份选择录音或导入配置、检查参数、合成，再按材料和设置分目录保存。每份 WAV 使用自己的 JSON/CSV，完成一份后再继续下一份。"
           }
         ]
       },
@@ -4343,39 +5831,6 @@
                 ]
               }
             ]
-          },
-          {
-            "type": "tableRow",
-            "content": [
-              {
-                "type": "tableCell",
-                "content": [
-                  {
-                    "type": "paragraph",
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": "尚无任务服务"
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "tableCell",
-                "content": [
-                  {
-                    "type": "paragraph",
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": "可编辑和保存配置，计算需使用提供 M06 能力的宿主。"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
           }
         ]
       },
@@ -4622,7 +6077,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "非输入区且无弹窗时播放/停止，输入框内可正常输入空格。"
+                        "text": "图窗等非输入区域可用空格播放/停止，按钮和链接保留自身键盘操作。输入框可正常输入空格；弹窗打开时本章底栏不响应。"
                       }
                     ]
                   }
@@ -4752,6 +6207,29 @@
                 ]
               }
             ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "换了 IPA 却仍听到相近的元音",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "：先查看 F1–F3 是否已更新到目标规则值。只填写 IPA 会保留已有曲线，须生成元音成功后再合成。检查当前预览是否为合成结果，并确认已出现新的合成完成提示。"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -4788,7 +6266,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "：核对原音、F0 范围和算法，重新提取。检查 AV/AH 是否均为 0、静音段和淡入淡出。填补的 F0 不代表检测成功。"
+                    "text": "：核对原音、F0 范围和算法，重新提取。检查 AV/AH 是否均为 0、静音段和淡入淡出。原始测得轨迹和有声掩码请查看提取结果记录。"
                   }
                 ]
               }
@@ -5018,7 +6496,7 @@
         "content": [
           {
             "type": "text",
-            "text": "AV/AH 的 60 dB 是工具内数字参考，0 表示关闭。AH 噪声源与 HNR 扩展处理各有作用。HNR、H1H2、Slope、扰动和共振峰相互影响，输入值不保证等于输出重测值。"
+            "text": "AV/AH 的 60 dB 是工具内数字参考，0 表示关闭。AH 噪声源与 HNR 扩展处理各有作用。HNR、H1H2、Slope、扰动和共振峰相互影响，输出重测值可能与输入控制值不同。"
           }
         ]
       },
@@ -5040,7 +6518,7 @@
         "content": [
           {
             "type": "text",
-            "text": "归档原 WAV 和每次三件套。需要研究比较时，对原音和输出使用一致的独立分析设置，并按研究目的验证听辨效果。预设名称和提取成功都不直接证明自然度、发声类别或感知效果。"
+            "text": "归档原 WAV 和每次三件套。需要研究比较时，对原音和输出使用一致的独立分析设置，并按研究目的验证听辨效果。正式研究中的自然度、发声类别和感知效果请通过材料检查与听辨预测试核对。"
           }
         ]
       },
@@ -5114,5 +6592,5 @@
       }
     ]
   },
-  "summary": "按录音手动提取、曲线编辑、Klatt 合成、对比试听、保存及逐份材料恢复说明当前操作。"
+  "summary": "按录音手动提取、元音生成后显式合成、曲线编辑、对比试听、保存及逐份材料恢复说明当前操作。"
 }

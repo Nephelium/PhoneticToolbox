@@ -10,6 +10,8 @@ class VocalFiles:
     def __init__(self):self.video=None;self.lock=threading.RLock()
 
     def invoke(self,op,body,client,path=None):
+        if op=='video/cancel' and self.video and self.video.id==body.get('id'):
+            self.video.cancelled.set()
         with self.lock:
             if op in ('document/open','document/save','video/begin') and not path:return {'cancelled':True}
             if op=='document/open':
@@ -38,5 +40,6 @@ class VocalFiles:
             raise ValueError('不支持的声道文件操作')
 
     def close(self):
+        if self.video:self.video.cancelled.set()
         with self.lock:
             if self.video:self.video.cancel()

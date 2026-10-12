@@ -12,7 +12,8 @@ from .io.scratch import no_links
 def run_child(root,request,stop,progress,evidence):
     from .native.windows import OwnedProcess
     from .m05_child import atomic
-    runtime=Path(os.environ['PTB_M05_PYTHON']).absolute();no_links(runtime)
+    from .native_runtime import checked_runtime
+    runtime=checked_runtime(os.environ['PTB_M05_PYTHON'])
     atomic(root/'request.json',request)
     process=None;started=time.monotonic();peak_disk=0
     try:

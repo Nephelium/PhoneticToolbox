@@ -16,11 +16,21 @@ if ($plan.manual_autosave_authorized -eq $true) {
         (Get-FileHash -LiteralPath $recoveryPath -Algorithm SHA256).Hash -ne $plan.keep_recovery.sha256) { throw 'The retained latest recovery is missing or changed.' }
 }
 $protected = @('output\validation\p06\', 'output\validation\m01\', 'output\validation\m03-runtime\', 'output\validation\p03\')
+$preservedPaths = @($plan.protected_paths | Where-Object { $_ } | ForEach-Object {
+    $p = [IO.Path]::GetFullPath((Join-Path $root $_)).TrimEnd('\')
+    if (-not $p.StartsWith($root + '\', [StringComparison]::OrdinalIgnoreCase)) { throw 'A preserved path is outside this project.' }
+    $p
+})
 function Assert-SafePath([string]$Path) {
     if (-not $Path.StartsWith($root + '\', [StringComparison]::OrdinalIgnoreCase)) { throw 'Target is outside this project.' }
     $relative = $Path.Substring($root.Length + 1).TrimEnd('\') + '\'
     if (-not @($allowed | Where-Object { $relative.StartsWith($_, [StringComparison]::OrdinalIgnoreCase) }).Count -or
         @($protected | Where-Object { $relative.StartsWith($_, [StringComparison]::OrdinalIgnoreCase) }).Count) { throw 'Target is outside the approved scratch scope or is protected.' }
+    if ($allowed -contains $relative) { throw 'Whole scratch scope roots cannot be deleted.' }
+    foreach ($preserved in $preservedPaths) {
+        if ($Path -eq $preserved -or $Path.StartsWith($preserved + '\', [StringComparison]::OrdinalIgnoreCase) -or
+            $preserved.StartsWith($Path + '\', [StringComparison]::OrdinalIgnoreCase)) { throw 'Target overlaps an explicitly preserved dependency or active acceptance scope.' }
+    }
     $cursor = $Path
     while ($cursor) {
         if (Test-Path -LiteralPath $cursor) {
@@ -54,8 +64,20 @@ foreach ($entry in $plan.targets) {
         }
         if (-not (Test-Path -LiteralPath $target)) { $result.status='already_absent' }
         else {
+            foreach ($evidencePath in $entry.evidence) {
+                $proof = [IO.Path]::GetFullPath((Join-Path $root $evidencePath))
+                if (-not $proof.StartsWith($root + '\', [StringComparison]::OrdinalIgnoreCase) -or
+                    $proof -eq $target -or $proof.StartsWith($target + '\', [StringComparison]::OrdinalIgnoreCase)) { throw 'Retained evidence has an unsafe path.' }
+                $cursor = $proof
+                while ($cursor) {
+                    if ((Test-Path -LiteralPath $cursor) -and ((Get-Item -LiteralPath $cursor -Force).Attributes -band [IO.FileAttributes]::ReparsePoint)) { throw 'Retained evidence contains a link.' }
+                    $cursor = [IO.Path]::GetDirectoryName($cursor)
+                }
+                $expectedEvidence = $plan.retained_evidence_sha256.PSObject.Properties[$evidencePath].Value
+                if (-not $expectedEvidence -or (Get-FileHash -LiteralPath $proof -Algorithm SHA256).Hash -ne $expectedEvidence) { throw 'Retained evidence changed since review.' }
+            }
             $relative = $target.Substring($root.Length + 1).Replace('\', '/')
-            $tracked = @(& git -C $root ls-files -- $relative)
+            $tracked = @(& git -C $root ls-files -- ":(literal,icase)$relative")
             if ($LASTEXITCODE -ne 0 -or $tracked.Count) { throw 'Tracked or uninspectable content is retained.' }
             & git -C $root check-ignore -q -- $relative
             if ($LASTEXITCODE -ne 0) { throw 'Only ignored scratch is eligible.' }

@@ -6,10 +6,13 @@ import {headingAtReadingLine,manualReadingPath,manualTocSections} from './naviga
 import {ManualChapterRepository} from './loader.ts';
 import {manualPlayback} from './playback.ts';
 import ManualDocument from './ManualDocument.vue';
-const props=withDefaults(defineProps<{project:ManualProject;target?:ManualTarget;requestKey?:number;chapterLoader?:ChapterLoader;assetBaseUrl?:string;assetResolver?:AssetResolver;playbackAllowed?:boolean;active?:boolean;returnLabel?:string;initialLocation?:ManualLocation}>(),{assetBaseUrl:'./manual/',playbackAllowed:true,active:true});
+import AppIcon from '../components/AppIcon.vue';
+import {vResizablePanels} from '../layout/resizablePanels.ts';
+const props=withDefaults(defineProps<{project:ManualProject;chapterIcons?:Record<string,string>;target?:ManualTarget;requestKey?:number;chapterLoader?:ChapterLoader;assetBaseUrl?:string;assetResolver?:AssetResolver;playbackAllowed?:boolean;active?:boolean;returnLabel?:string;initialLocation?:ManualLocation}>(),{assetBaseUrl:'./manual/',playbackAllowed:true,active:true});
 const emit=defineEmits<{navigate:[target:ManualTarget];location:[location:ManualLocation];returnTool:[]}>();
 const root=ref<HTMLElement>(),navigation=ref<HTMLElement>(),scroll=ref<HTMLElement>(),query=ref(''),drawer=ref(false),loading=ref(false),error=ref(''),notice=ref(''),currentId=ref(''),targetId=ref<string>();
 const chapter=shallowRef<ManualChapter>(),cacheRevision=ref(0);
+const expandedChapter=ref<string>(),outlineClick=shallowRef<ManualTarget>();
 let request=0,abort:AbortController|undefined,observer:ResizeObserver|undefined,frame:number|undefined,jumpTop:number|undefined;
 let repository=new ManualChapterRepository((descriptor,signal)=>props.chapterLoader?props.chapterLoader(descriptor,signal):fetchChapter(props.assetBaseUrl,descriptor,signal));
 const positions=new Map<string,number>();
@@ -17,6 +20,9 @@ const currentIndex=computed(()=>props.project.chapters.findIndex(item=>item.id==
 const currentDescriptor=computed(()=>props.project.chapters[currentIndex.value]);
 const sections=computed(()=>chapter.value?chapterSections(chapter.value):[]);
 const readingPath=computed(()=>chapter.value?manualReadingPath(chapter.value,targetId.value):{});
+// Browsing marks only the third-level entry; direct outline clicks can mark a parent.
+const outlineSelection=computed(()=>outlineClick.value??(readingPath.value.subsectionId?{chapterId:currentId.value,targetId:readingPath.value.subsectionId}:undefined));
+function selectedOutline(chapterId:string,targetId?:string){return outlineSelection.value?.chapterId===chapterId&&outlineSelection.value.targetId===targetId;}
 const numberedToc=computed(()=>props.project.chapters.map((item,index)=>{
   const available=item.id===currentId.value&&chapter.value?sections.value:item.sections??[];
   return {item,number:index+1,sections:manualTocSections(available,index+1)};
@@ -40,6 +46,7 @@ function headingInView(){
   // A clamped jump near the chapter end must still select the explicitly clicked entry.
   if(jumpTop!==undefined&&Math.abs(container.scrollTop-jumpTop)<1)return;
   jumpTop=undefined;
+  outlineClick.value=undefined;
   const top=container.getBoundingClientRect().top;
   const headings=sections.value.flatMap(section=>{const node=targetNode(section.id);return node?[{id:section.id,top:node.getBoundingClientRect().top-top}]:[];});
   targetId.value=headingAtReadingLine(headings,{viewportHeight:container.clientHeight,scrollTop:container.scrollTop,scrollHeight:container.scrollHeight});
@@ -72,9 +79,11 @@ async function locate(target:ManualTarget,restore=false,generation=request){
   if(!restore)jumpTop=container.scrollTop;
   observe();remember();
 }
-async function navigate(target:ManualTarget,notify=true,restore=false){
+async function navigate(target:ManualTarget,notify=true,restore=false,fromOutline=false){
   const descriptor=props.project.chapters.find(item=>item.id===target.chapterId);
   if(!descriptor){notice.value='此章节尚未收录，请从目录选择已有章节。';return;}
+  outlineClick.value=fromOutline?target:undefined;
+  if(!fromOutline){if(target.targetId)expandedChapter.value=target.chapterId;else if(expandedChapter.value!==target.chapterId)expandedChapter.value=undefined;}
   remember();manualPlayback.pause();abort?.abort();abort=new AbortController();const generation=++request;
   loading.value=true;error.value='';notice.value='';drawer.value=false;stopTracking();jumpTop=undefined;
   try{
@@ -83,12 +92,16 @@ async function navigate(target:ManualTarget,notify=true,restore=false){
     chapter.value=loaded;currentId.value=descriptor.id;targetId.value=target.targetId;loading.value=false;cacheRevision.value++;
     if(notify)emit('navigate',target);
     await locate(target,restore,generation);
-  }catch(reason){if(generation!==request)return;loading.value=false;if(reason instanceof DOMException&&reason.name==='AbortError')return;chapter.value=undefined;currentId.value=descriptor.id;error.value=reason instanceof Error&&/^(章节|正文)/.test(reason.message)?reason.message:'章节加载失败，请检查说明书资源后重试。';}
+  }catch(reason){if(generation!==request)return;loading.value=false;if(reason instanceof DOMException&&reason.name==='AbortError')return;chapter.value=undefined;currentId.value=descriptor.id;error.value=reason instanceof Error&&/^(章节|正文)/.test(reason.message)?reason.message:'章节暂时无法打开，请重试。仍无法打开时，可在关于页反馈此问题。';}
+}
+function outlineNavigate(target:ManualTarget){
+  expandedChapter.value=!target.targetId&&expandedChapter.value===target.chapterId?undefined:target.chapterId;
+  void navigate(target,true,false,true);
 }
 function previous(){const item=props.project.chapters[currentIndex.value-1];if(item)void navigate({chapterId:item.id});}
 function next(){const item=props.project.chapters[currentIndex.value+1];if(item)void navigate({chapterId:item.id});}
 watch(()=>[props.target?.chapterId,props.target?.targetId,props.requestKey] as const,()=>{if(props.target)void navigate(props.target,false);});
-watch(()=>[currentId.value,readingPath.value.sectionId,readingPath.value.subsectionId,searching.value,drawer.value],()=>{void revealCurrent();});
+watch(()=>[currentId.value,readingPath.value.sectionId,readingPath.value.subsectionId,outlineSelection.value,expandedChapter.value,searching.value,drawer.value],()=>{void revealCurrent();});
 watch(()=>props.active,active=>{if(!active){manualPlayback.pause();remember();stopTracking();}else if(chapter.value)void locate({chapterId:currentId.value},true);});
 watch(()=>[props.project.id,props.project.version,props.project.chapters.map(item=>item.id+':'+item.path).join('|')] as const,()=>{repository.clear();const target=props.target??{chapterId:props.project.chapters[0]?.id};if(target.chapterId)void navigate(target,false);});
 onMounted(()=>{const location=props.initialLocation;if(location)positions.set(location.chapterId,location.scrollTop);const target=props.target??location??{chapterId:props.project.chapters[0]?.id};if(target.chapterId)void navigate(target,false,!!location&&!props.target);});
@@ -97,19 +110,19 @@ onDeactivated(()=>{remember();stopTracking();manualPlayback.pause();});
 defineExpose({navigate,pause:()=>manualPlayback.pause()});
 </script>
 <template>
-  <section ref="root" class="manual-reader" aria-label="使用说明" :class="{'manual-drawer-open':drawer}">
+  <section ref="root" class="manual-reader" aria-label="使用说明" :class="{'manual-drawer-open':drawer}" v-resizable-panels="{key:'manual:reader',center:'.manual-reading-pane',centerMin:420,panels:[{selector:'.manual-navigation',side:'left',label:'说明书目录',initial:250,min:190,max:420}]}">
     <nav ref="navigation" class="manual-navigation" aria-label="说明书目录">
       <header><strong>{{project.title}}</strong><button class="manual-drawer-close" type="button" @click="drawer=false">收起目录</button></header>
       <label class="manual-search-label">搜索说明书<input v-model="query" type="search" placeholder="输入控件、参数或关键词" aria-label="搜索说明书"/></label>
       <div v-if="searching" class="manual-search-results" role="region" aria-label="搜索结果"><p class="manual-search-count">{{hits.length}} 条结果<span v-if="hits.length>=80">，请缩小搜索范围</span></p><p v-if="!project.searchIndex?.length" class="manual-index-warning">当前搜索范围包含目录及已打开的章节。</p><button v-for="(hit,index) in hits" :key="index" type="button" @click="navigate(hit)"><strong>{{hit.title||project.chapters.find(item=>item.id===hit.chapterId)?.title}}</strong><span>{{hit.excerpt}}</span></button><p v-if="!hits.length" class="manual-empty">未找到匹配内容。</p></div>
       <ol v-else class="manual-toc">
         <li v-for="entry in numberedToc" :key="entry.item.id">
-          <button type="button" :data-manual-chapter="entry.item.id" :class="{active:entry.item.id===currentId}" :aria-current="entry.item.id===currentId?'page':undefined" @click="navigate({chapterId:entry.item.id})"><span class="manual-toc-number">{{entry.number}}</span>{{entry.item.title}}</button>
-          <ol v-if="entry.sections.length">
+          <button type="button" :data-manual-chapter="entry.item.id" :class="{active:selectedOutline(entry.item.id)}" :aria-current="selectedOutline(entry.item.id)?'page':undefined" :aria-expanded="entry.sections.length?expandedChapter===entry.item.id:undefined" :aria-controls="entry.sections.length?manualAnchor(entry.item.id,'chapter-toc'):undefined" @click="outlineNavigate({chapterId:entry.item.id})"><AppIcon :name="chapterIcons?.[entry.item.id]??'book'" class="manual-toc-chapter-icon"/><span class="manual-toc-number">{{entry.number}}</span><span class="manual-toc-title">{{entry.item.title}}</span><AppIcon v-if="entry.sections.length" name="arrow" class="manual-toc-toggle" :class="{expanded:expandedChapter===entry.item.id}"/></button>
+          <ol v-if="entry.sections.length&&expandedChapter===entry.item.id" :id="manualAnchor(entry.item.id,'chapter-toc')">
             <li v-for="section in entry.sections" :key="section.id">
-              <button type="button" :data-manual-section="section.id" :class="{active:entry.item.id===currentId&&section.id===readingPath.sectionId}" :aria-current="entry.item.id===currentId&&section.id===readingPath.sectionId&&!readingPath.subsectionId?'location':undefined" :aria-expanded="section.children.length?entry.item.id===currentId&&section.id===readingPath.sectionId:undefined" :aria-controls="section.children.length?manualAnchor(entry.item.id,section.id)+'-toc':undefined" @click="navigate({chapterId:entry.item.id,targetId:section.id})"><span class="manual-toc-number">{{section.number}}</span>{{section.title}}</button>
+              <button type="button" :data-manual-section="section.id" :class="{active:selectedOutline(entry.item.id,section.id)}" :aria-current="selectedOutline(entry.item.id,section.id)?'location':undefined" :aria-expanded="section.children.length?entry.item.id===currentId&&section.id===readingPath.sectionId:undefined" :aria-controls="section.children.length?manualAnchor(entry.item.id,section.id)+'-toc':undefined" @click="outlineNavigate({chapterId:entry.item.id,targetId:section.id})"><span class="manual-toc-number">{{section.number}}</span><span class="manual-toc-title">{{section.title}}</span></button>
               <ol v-if="section.children.length&&entry.item.id===currentId&&section.id===readingPath.sectionId" :id="manualAnchor(entry.item.id,section.id)+'-toc'" class="manual-toc-subsections">
-                <li v-for="subsection in section.children" :key="subsection.id"><button type="button" :data-manual-subsection="subsection.id" :class="{active:subsection.id===readingPath.subsectionId}" :aria-current="subsection.id===readingPath.subsectionId?'location':undefined" @click="navigate({chapterId:entry.item.id,targetId:subsection.id})"><span class="manual-toc-number">{{subsection.number}}</span>{{subsection.title}}</button></li>
+                <li v-for="subsection in section.children" :key="subsection.id"><button type="button" :data-manual-subsection="subsection.id" :class="{active:selectedOutline(entry.item.id,subsection.id)}" :aria-current="selectedOutline(entry.item.id,subsection.id)?'location':undefined" @click="outlineNavigate({chapterId:entry.item.id,targetId:subsection.id})"><span class="manual-toc-number">{{subsection.number}}</span>{{subsection.title}}</button></li>
               </ol>
             </li>
           </ol>

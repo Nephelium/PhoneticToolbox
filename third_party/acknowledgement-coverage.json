@@ -1,6 +1,6 @@
 {
   "schema_version": "acknowledgement-coverage/1",
-  "checked_on": "2026-10-07",
+  "checked_on": "2026-10-10",
   "scope": "18 live modules and their displayed shared/supplementary sources; historical documents are separate",
   "modules": [
     {
@@ -95,7 +95,8 @@
       "source_ids": [
         "SRC-MEDIAPIPE",
         "SRC-FFMPEG",
-        "ASSET-M05-NASA"
+        "ASSET-M05-NASA",
+        "PKG-PYAV"
       ]
     },
     {
@@ -146,6 +147,7 @@
         "ASSET-HEAD",
         "ASSET-NASAL",
         "SRC-VTLWRAPPER",
+        "SRC-FFMPEG",
         "ASSET-DOULOS",
         "REF-WEBCODECS",
         "REF-WEBM",
@@ -154,7 +156,10 @@
         "M17-IPA-CHART-ZH-2007",
         "M17-IPA-HANDBOOK-JIANG-2008",
         "REF-M10-JORDAN-2017-MRI",
-        "REF-M10-OLIVEIRA-2012-MRI"
+        "REF-M10-OLIVEIRA-2012-MRI",
+        "PKG-PYAV",
+        "REF-M10-MILLS-2019",
+        "REF-M10-MILLS-2020"
       ]
     },
     {
@@ -175,7 +180,17 @@
     {
       "id": "M13",
       "source_ids": [
-        "ASSET-DOULOS"
+        "ASSET-DOULOS",
+        "REF-M13-LEE-ZEE-2003",
+        "REF-M13-HU-1995",
+        "REF-M13-HUANG-LIAO-2012",
+        "REF-M13-QIAN-1990",
+        "REF-M13-WU-1992",
+        "REF-M13-CHAO-1979",
+        "REF-M13-FANGYIN-2003",
+        "REF-M13-UNTPHESOCA-2019",
+        "REF-M13-PINYIN-1958",
+        "REF-M13-READING-REPAIRS-2021"
       ]
     },
     {
@@ -211,7 +226,6 @@
         "M17-VOQS-ZH-UNTPHESOCA",
         "M17-PTB-IPA-PLUS-FONT",
         "M17-UNICODE-PHONETIC-ENCODING",
-        "M17-CIN-REFERENCE",
         "M17-INTERACTIVE-LAYOUT-REFERENCE",
         "M17-EXTIPA-LV-JIANG-2013",
         "M17-IOS-IPA-PHONETICS-REFERENCE",
@@ -229,6 +243,7 @@
         "P02-PY-PYQT6",
         "P02-PY-PYQT6-QT6",
         "SRC-M18-ARTICULATORY-TTS-2610",
+        "SRC-M18-COARTICULATION-2408",
         "SRC-M18-PYPDF"
       ]
     }
@@ -239,7 +254,7 @@
       "file": "frontend/src/modules/ipa-plus/data/sources.json",
       "local_source": "extipa-lv-jiang-2013",
       "source_id": "M17-EXTIPA-LV-JIANG-2013",
-      "url": "https://doi.org/10.3969/j.issn.1006-7299.2013.06.030"
+      "url": "https://jasptl.haoyicn.cn/summary/19224?eng=0&type=history"
     },
     {
       "module": "M17",
@@ -288,7 +303,7 @@
       "file": "frontend/src/modules/ipa-plus/data/sources.json",
       "local_source": "ipa-handbook-jiang-2008",
       "source_id": "M17-IPA-HANDBOOK-JIANG-2008",
-      "url": "https://www.internationalphoneticassociation.org/content/handbook-ipa"
+      "url": "https://ci.nii.ac.jp/ncid/BB01991047"
     },
     {
       "module": "M17",

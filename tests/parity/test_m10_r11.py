@@ -117,7 +117,7 @@ def test_extended_pose_survives_preset_file_sequence_and_animation(runtime):
     saved=runtime.invoke('presets/save',{'presets':[original]})
     assert runtime.invoke('presets/load')==saved
     frames=validate_frames(e,[original,dict(original,larynx_height=-.4)])
-    doc=make_document(e,frames,[]);assert doc['version']==2
+    doc=make_document(e,frames,[]);assert doc['version']==4 and doc['geometry_method']=='m10/r17'
     assert sequence_document(e,json.loads(json.dumps(doc)))==doc
     downgraded=dict(doc,version=1,model='VTL-2.4-JD2')
     with pytest.raises(ValueError,match='版本 2'):sequence_document(e,downgraded)
@@ -128,8 +128,18 @@ def test_extended_pose_survives_preset_file_sequence_and_animation(runtime):
     last=json.loads(zlib.decompress(prepared['pictures'][-1]))
     assert last['larynx_height']==-.4
     np.testing.assert_array_equal(last['tube_areas'],e.snapshot(p,larynx_height=-.4)['tube_areas'])
-    old=make_document(e,[{'params':e.presets['a']}],[])
-    assert old['version']==1 and sequence_document(e,old)['frames'][0].get('larynx_height',0)==0
+    old=dict(make_document(e,[{'params':e.presets['a']}],[]),version=1,model='VTL-2.4-JD2')
+    old.pop('geometry_method')
+    restored=sequence_document(e,old)
+    assert old['version']==1 and restored['frames'][0].get('larynx_height',0)==0
+    assert '按当前 R17 几何重新计算' in restored['geometry_notice']
+    assert restored['frames'][0]['params']==old['frames'][0]['params']
+    previous=dict(make_document(e,[{'params':e.presets['a']}],[]),version=3,model='VTL-2.4-JD2-M10-R16',geometry_method='m10/r16')
+    restored=sequence_document(e,previous)
+    assert restored['geometry_method']=='m10/r16' and 'R17' in restored['geometry_notice']
+    assert restored['frames']==previous['frames']
+    newer=dict(make_document(e,[{'params':e.presets['a']}],[]),geometry_method='future')
+    with pytest.raises(ValueError,match='几何方法'):sequence_document(e,newer)
 
 
 def test_runtime_pose_and_preview_share_the_extension(runtime):

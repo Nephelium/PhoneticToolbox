@@ -3,7 +3,7 @@
   "id": "m13",
   "title": "汉字转国际音标",
   "moduleId": "M13",
-  "summary": "输入汉字并实时转换，逐位置核对多音字，调整声调、字体与排版，保存 PNG 和本机草稿。",
+  "summary": "本地汉字转写、多音选择、Unt作者网站现行中派记音、可逆儿化组合与PNG导出。",
   "body": {
     "type": "doc",
     "content": [
@@ -61,7 +61,7 @@
           },
           {
             "type": "text",
-            "text": " 初始采用字表第一条读音；结果为单字读音，不自动处理语流变调、轻声、儿化或连读。连续语流转写还需结合实际录音核对。"
+            "text": " 初始采用字表第一条读音；结果为单字读音，不自动处理语流变调、轻声词法判断或连读；Unt两列可主动组合和拆分儿化。连续语流转写还需结合实际录音核对。"
           }
         ]
       },
@@ -237,7 +237,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "：输入后立即显示字音对照。字符计数包含标点、空白、换行和表情，不能当作汉字数。结果中带 ▼ 的字组可选读音。"
+                    "text": "：输入后立即显示字音对照。字符计数在汉字输入标题右侧，包含标点、空白、换行和表情。左右排布默认让输入与结果两栏等宽，可拖动边界调整。结果中带 ▼ 的字组可选读音。"
                   }
                 ]
               }
@@ -294,9 +294,9 @@
         "type": "image",
         "attrs": {
           "id": "m13-figure-m13-overview-r2-light",
-          "assetId": "m13-overview-light-scaled-r20261007",
-          "caption": "最大化后的汉字转国际音标工作区：左侧转换与排版，中间汉字输入，右侧转换结果；空文本时结果区显示输入提示。",
-          "alt": "最大化的浅色工作台，转换标准为 Standard Chinese (Beijing)，左栏显示声调和排版控件，中间输入框为空，右侧结果区等待输入。",
+          "assetId": "m13-overview-current-20261011",
+          "caption": "工作台总览：输入与结果两栏默认等宽，字符数在输入标题右侧，左侧提供等宽排版；儿化操作区仅在Unt两项下显示。",
+          "alt": "2560×1600、150%DPI的最大化浅色Qt工作台，侧栏收起，输入与结果等宽，输入标题右侧显示0个字符，两框底边对齐。",
           "width": "100%",
           "align": "center"
         }
@@ -930,7 +930,54 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "调整行间距离。附加符号拥挤时适当增大；PNG 会保留避免行重叠所需的最小间隔。"
+                        "text": "控制结果实际的行间空隙。0.8为紧排，增大数值可拉开各行，页面和PNG都生效；字音间距另外控制同一字组内的两层文字。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "等宽排版"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "默认关闭"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "开启后，各字音单元按当前结果最宽的字组统一宽度并居中，标点和儿化字组也参与对齐。字号、字体或读音变化时自动重算；再次点击恢复自然宽度。"
                       }
                     ]
                   }
@@ -983,6 +1030,100 @@
                       {
                         "type": "text",
                         "text": "三个开关可分别使用，作用于参考汉字和字音同显下的原样字符，IPA 层保持原样。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "自动组合儿化 / 全部拆分"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "仅Unt宽式或严式下显示"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "一次组合所有可转写的相邻字＋儿/兒；全部拆分恢复逐字结果。"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "组合儿化 / 拆分儿化"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "仅Unt下，点击结果字组的近旁小窗"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "可手动组合单个位置或拆分已组合字组，保留原文字及逐位置读音。"
                       }
                     ]
                   }
@@ -1250,7 +1391,7 @@
           "assetId": "m13-reading-choice-detail-scaled-r20261007",
           "caption": "点击带三角标记的字后，在读音列表中选择。此处只改变当前这个字的位置。",
           "alt": "点击带三角标记的字后，在读音列表中选择。此处只改变当前这个字的位置。",
-          "width": "70%",
+          "width": "100%",
           "align": "center"
         }
       },
@@ -1285,7 +1426,7 @@
           },
           {
             "type": "text",
-            "text": "。再点 shi2 只是确认当前读音；改选轻声会去掉该位置的调符，其他字保持原样。本例应按实际词义决定，候选顺序不表示推荐程度。"
+            "text": "。再点 shi2 只是确认当前读音；改选轻声会去掉该位置的调符，其他字保持原样。本例应按实际词义决定，按词义选读音，候选按字表顺序排列。"
           }
         ]
       },
@@ -1476,213 +1617,6 @@
       {
         "type": "heading",
         "attrs": {
-          "id": "m13-tone-pinyin",
-          "level": 3
-        },
-        "content": [
-          {
-            "type": "text",
-            "text": "声调显示和拼音 ü"
-          }
-        ]
-      },
-      {
-        "type": "orderedList",
-        "attrs": {
-          "start": 1,
-          "id": "m13-pinyin-on-steps"
-        },
-        "content": [
-          {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "输入"
-                  },
-                  {
-                    "type": "text",
-                    "text": "妈女略",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "，选"
-                  },
-                  {
-                    "type": "text",
-                    "text": "汉语拼音",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "，保持声调开启。结果为 "
-                  },
-                  {
-                    "type": "text",
-                    "text": "mā、nǚ、lüè",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "，字表中的 v 自动显示为 ü。"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "type": "image",
-        "attrs": {
-          "id": "m13-figure-m13-pinyin-umlaut-r2-light",
-          "assetId": "m13-pinyin-umlaut-r2-light-scaled-r20261007",
-          "caption": "汉语拼音模式下，妈女略显示 mā、nǚ、lüè；女和略的结果使用 ü。",
-          "alt": "最大化浅色工作台，转换标准汉语拼音，输入妈女略，显示声调开启，字音结果依次为mā、nǚ、lüè。",
-          "width": "100%",
-          "align": "center"
-        }
-      },
-      {
-        "type": "orderedList",
-        "attrs": {
-          "start": 2,
-          "id": "m13-pinyin-off-steps"
-        },
-        "content": [
-          {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "点击"
-                  },
-                  {
-                    "type": "text",
-                    "text": "显示声调",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "关闭，结果为 "
-                  },
-                  {
-                    "type": "text",
-                    "text": "ma、nü、lüe",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "。再次点击可恢复调标，ü 始终保留。"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "type": "image",
-        "attrs": {
-          "id": "m13-figure-m13-pinyin-toneoff-r2-light",
-          "assetId": "m13-pinyin-toneoff-r2-light-scaled-r20261007",
-          "caption": "关闭显示声调后，同一文本成为 ma、nü、lüe，ü 保留；按钮呈关闭状态。",
-          "alt": "最大化浅色工作台，输入妈女略，转换标准汉语拼音，显示声调按钮关闭，字音结果依次为ma、nü、lüe。",
-          "width": "100%",
-          "align": "center"
-        }
-      },
-      {
-        "type": "orderedList",
-        "attrs": {
-          "start": 3
-        },
-        "content": [
-          {
-            "type": "listItem",
-            "content": [
-              {
-                "type": "paragraph",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "切回 IPA 后，关闭声调只去掉末尾 "
-                  },
-                  {
-                    "type": "text",
-                    "text": "˥˦˧˨˩",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "。例如北京严式中的 "
-                  },
-                  {
-                    "type": "text",
-                    "text": "ma̠˥",
-                    "marks": [
-                      {
-                        "type": "code"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": " 变为 "
-                  },
-                  {
-                    "type": "text",
-                    "text": "ma̠",
-                    "marks": [
-                      {
-                        "type": "code"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "，音段附加符号保留。多音窗继续显示读音编号，方便选择。"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "type": "heading",
-        "attrs": {
           "id": "m13-standard-comparison",
           "level": 3
         },
@@ -1750,7 +1684,7 @@
           },
           {
             "type": "text",
-            "text": "。这些是字表值，不用于排序各标准的精度。"
+            "text": "。这些值来自各标准的字表，可按所用记音体系分别核对。"
           }
         ]
       },
@@ -1776,7 +1710,7 @@
           },
           {
             "type": "text",
-            "text": "银行行走女略",
+            "text": "银行行走",
             "marks": [
               {
                 "type": "bold"
@@ -1811,7 +1745,7 @@
           },
           {
             "type": "text",
-            "text": "。未手调时音标字号为 28 px。图中两个行均为首条 xing2，作列间对照；最终用于银行一词时，应先把第一处改为 hang2。"
+            "text": "。未手调时音标字号为28px。图中第一处行已选择hang2，第二处保留xing2；切换标准时保持这些逐位置读音决定。"
           }
         ],
         "attrs": {
@@ -1824,7 +1758,7 @@
           "id": "m13-figure-m13-beijing-strict-onlyipa-r2-light",
           "assetId": "m13-beijing-strict-onlyipa-r2-light-scaled-r20261007",
           "caption": "选择 Standard Chinese (Beijing)严与仅音标后，右侧保留原来的两行顺序，音标字号显示为 28 px。",
-          "alt": "最大化浅色工作台，输入两行春江花月夜和银行行走女略，计数12，转换标准 Standard Chinese (Beijing)严，仅音标开启，音标字号28px，右侧为两行IPA。",
+          "alt": "最大化浅色工作台，输入两行春江花月夜和银行行走，计数10，转换标准 Standard Chinese (Beijing)严，仅音标开启，音标字号28px，右侧为两行IPA。",
           "width": "100%",
           "align": "center"
         }
@@ -1869,7 +1803,7 @@
         "content": [
           {
             "type": "text",
-            "text": "下列两图使用相同两行文本、字音同显、声调开启、汉字 24 px、音标 16 px，两个行均保留 xing2，便于比较同一读音行。"
+            "text": "下列两图使用相同两行文本、字音同显、声调开启、汉字24px、音标16px。银行的行已选择hang2，行走的行保留xing2，便于比较同一读音在不同标准中的记法。"
           }
         ],
         "attrs": {
@@ -1881,46 +1815,20 @@
         "content": [
           {
             "type": "text",
-            "text": "选择"
-          },
-          {
-            "type": "text",
-            "text": "赵元任《汉语口语语法》",
-            "marks": [
-              {
-                "type": "bold"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "，春显示 "
+            "text": "选择赵元任《汉语口语语法》，春显示 "
           },
           {
             "type": "text",
             "text": "tʂʰuən˥",
             "marks": [
               {
-                "type": "code"
+                "type": "ipa"
               }
             ]
           },
           {
             "type": "text",
-            "text": "，女显示 "
-          },
-          {
-            "type": "text",
-            "text": "ny˨˩˦",
-            "marks": [
-              {
-                "type": "code"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "。"
+            "text": "。比较时保持逐位置读音选择。"
           }
         ],
         "attrs": {
@@ -1933,7 +1841,7 @@
           "id": "m13-figure-m13-zhao-comparison-r2-light",
           "assetId": "m13-zhao-comparison-r2-light-scaled-r20261007",
           "caption": "相同两行文本切换到赵元任《汉语口语语法》列，字音同显便于逐字查看该列结果。",
-          "alt": "最大化浅色工作台，转换标准赵元任《汉语口语语法》，输入春江花月夜与银行行走女略两行，右侧字音同显，两个行均为首条读音，汉字24px和音标16px。",
+          "alt": "最大化浅色Qt工作台，输入春江花月夜与银行行走，第一处行已选hang2，第二处保留xing2，赵元任列字音同显，汉字24px和音标16px。",
           "width": "100%",
           "align": "center"
         }
@@ -1960,7 +1868,7 @@
           },
           {
             "type": "text",
-            "text": "t͡s̟ʰuɘ̹̑˗n̚˥",
+            "text": "t͡ʂ̺ʰuɘ̹̑˗n̚˥",
             "marks": [
               {
                 "type": "code"
@@ -1980,12 +1888,83 @@
         "type": "image",
         "attrs": {
           "id": "m13-figure-m13-unt-comparison-r2-light",
-          "assetId": "m13-unt-comparison-r2-light-scaled-r20261007",
-          "caption": "保持字音同显与两行文本，仅把转换标准改为 UntPhesoca严，右侧使用该列符号。",
-          "alt": "最大化浅色工作台，同一两行文本和首条读音选择，转换标准UntPhesoca严，右侧字音同显，附加符号与连音线可见。",
+          "assetId": "m13-unt-current-20261011",
+          "caption": "当前Unt严式采用作者网站中派基准，春的声母为t͡ʂ̺ʰ，走的严式上声为213。",
+          "alt": "最大化浅色Qt工作台，输入春江花月夜与银行行走，第一处行已选hang2，第二处保留xing2，Unt严式字音同显，附加符号与连音线可见。",
           "width": "100%",
           "align": "center"
         }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m13-erhua",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "组合与拆分儿化韵"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "选择 UntPhesoca宽 或 UntPhesoca严，左侧出现儿化操作区。输入花儿女儿门儿，点击自动组合儿化，相邻的字＋儿/兒会组合为一个字组，保留前字声调，原输入文字不改动。组合不跨空格、标点或换行。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "点击女儿字组，在近旁小窗选择拆分儿化，恢复女和儿的两个独立音节。自动组合不判断词义，女儿、婴儿等独立的儿字需要逐项核对。点击未组合的字＋儿中的前字，选择组合儿化，可直接手动组合；全部拆分恢复所有逐字结果。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "例如花儿在Unt宽式为xwɐɚ˥，严式为x̞ʷwɐɻ˕˥。组合会按韵母规则处理韵腹、韵尾、鼻化和儿化合流，不能简单在单字音标后添加r。宽式上声为214，严式采用正文中派上声213。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-erhua-current",
+          "assetId": "m13-erhua-current-20261011",
+          "caption": "Unt严式组合花儿和门儿，并把女儿手动拆分为两个音节；输入框保留原文字。",
+          "alt": "浅色实际Qt工作台显示自动组合儿化、全部拆分、已组合2处及花儿女儿门儿的结果。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-erhua-split",
+          "assetId": "m13-erhua-split-20261011",
+          "caption": "点击花儿字组可选择拆分儿化，也可核对前字的读音。",
+          "alt": "花儿旁的实际读音小窗提供拆分儿化操作。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "儿化组合决定随草稿和PNG快照保存。左侧儿化操作区及读音小窗中的组合、拆分按钮仅在Unt宽式或严式下显示。切换到其他转换标准时隐藏这些控件，保持其原逐字结果，切回Unt后恢复组合。编辑文本时，完整且未改变的前后字对保留组合，被替换或插入文字拆开的字对清除。作者正文未列儿化对应的音节不会组合。"
+          }
+        ]
       },
       {
         "type": "heading",
@@ -2054,7 +2033,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "先调两层字号，再调字音间距和行距。检查首行、中间和末行，避免负间距或过小行距挤压附加符号。需要突出参考汉字时，再开启粗体、斜体或下划线。"
+                    "text": "先调两层字号，再调字音间距和行距。行距同时作用于手动换行与自动换行，数值增大时行间空隙随之增大，空行保留。需要对齐各字组时，点击等宽排版。需要突出参考汉字时，再开启粗体、斜体或下划线。"
                   }
                 ]
               }
@@ -2195,7 +2174,7 @@
           },
           {
             "type": "text",
-            "text": "女略",
+            "text": "银行行走",
             "marks": [
               {
                 "type": "bold"
@@ -2306,9 +2285,29 @@
         "type": "image",
         "attrs": {
           "id": "m13-figure-m13-stacked-kaiti-colors-export-r2-light",
-          "assetId": "m13-stacked-kaiti-colors-export-r2-light-scaled-r20261007",
+          "assetId": "m13-layout-current-20261011",
           "caption": "上下排布把输入放在结果上方；本例使用楷体、汉字 32 px、音标 22 px、间距 4 px、行距 2.2，并分别设置两层文字颜色。",
-          "alt": "最大化浅色工作台采用上下排布，上方春江花月夜和女略两行输入，下方蓝色Doulos音标与棕色楷体粗体汉字；左侧显示32px汉字、22px音标、4px间距、2.2行距及KaiTi · 楷体。",
+          "alt": "最大化浅色工作台采用上下排布，上方春江花月夜和银行行走两行输入，下方蓝色Doulos音标与棕色楷体粗体汉字；左侧显示32px汉字、22px音标、4px间距、2.2行距及KaiTi · 楷体。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "点击等宽排版后，每个汉字及其音标共同占一个等宽单元，宽度取当前完整结果中最宽的字组。标点、原样字符和已组合的儿化字组也使用同样宽度。调整左侧字号、更换字体或选择读音时会自动重算，再次点击可恢复各字组的自然宽度。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m13-figure-equal-width",
+          "assetId": "m13-equal-width-20261011",
+          "caption": "开启等宽排版：各字组和标点占相同宽度，汉字26px、音标20px；输入与结果两栏默认等宽，字符数显示在输入标题右侧。",
+          "alt": "最大化浅色Qt工作台，输入两行春江潮水连海平等文字，右侧所有字组按当前最宽单元对齐，左侧等宽排版按钮开启。",
           "width": "100%",
           "align": "center"
         }
@@ -2412,7 +2411,7 @@
           "id": "m13-figure-m13-input-selected-r2-light",
           "assetId": "m13-input-selected-r2-light-scaled-r20261007",
           "caption": "在汉字输入框按 Ctrl+A 后，当前两行文本被选中，可用系统复制操作保留原始文本。",
-          "alt": "最大化浅色上下排布工作台，汉字输入框获得焦点，春江花月夜与女略两行全部呈蓝色选区高亮，右下结果继续可见。",
+          "alt": "最大化浅色上下排布工作台，汉字输入框获得焦点，春江花月夜与银行行走两行全部呈蓝色选区高亮，右下结果继续可见。",
           "width": "100%",
           "align": "center"
         }
@@ -2470,7 +2469,7 @@
           },
           {
             "type": "text",
-            "text": "。文字、读音、声调和排版采用点击导出时的状态，多音 ▼ 也可能保留。"
+            "text": "。文字、读音、声调、等宽排版和行距采用点击导出时的状态，图片不包含多音小三角或读音选择窗。"
           },
           {
             "type": "text",
@@ -2585,7 +2584,7 @@
           "id": "m13-figure-export-kaiti-independent-colors",
           "assetId": "m13-export-kaiti-independent-colors",
           "caption": "实际导出的白底 PNG：标题标明 Standard Chinese (Beijing)严，音标为蓝色 Doulos，参考汉字为棕色楷体粗体，两行文本保留。",
-          "alt": "实际落盘PNG，白底上方为国际音标与Standard Chinese (Beijing)严，正文第一行春江花月夜、第二行女略，每字上方蓝色IPA、下方棕色楷体粗体汉字，花和月下方有蓝色三角。",
+          "alt": "实际落盘PNG，白底上方为国际音标与Standard Chinese (Beijing)严，正文第一行春江花月夜、第二行银行行走，每字上方蓝色IPA、下方棕色楷体粗体汉字，图中不包含多音小三角。",
           "width": "100%",
           "align": "center"
         }
@@ -2595,7 +2594,7 @@
         "content": [
           {
             "type": "text",
-            "text": "图片按结果区宽度重新排版，自动换行可能与预览略有不同。通常以 3 倍像素生成，长图会降低倍率；仍过长时提示分段导出。PNG 为固定图像，不含可恢复的编辑记录，也不保证固定纸张尺寸或打印 DPI。"
+            "text": "图片按结果区宽度重新排版，自动换行可能与预览略有不同。通常以 3 倍像素生成，长图会降低倍率；仍过长时提示分段导出。PNG 保存固定图像，继续编辑请另存本机草稿；打印时按实际图片尺寸设置纸张和缩放。"
           }
         ]
       },
@@ -2621,7 +2620,7 @@
           },
           {
             "type": "text",
-            "text": "文本、标准、逐位置读音和全部排版设置",
+            "text": "文本、标准、逐位置读音、儿化组合决定和全部排版设置",
             "marks": [
               {
                 "type": "bold"
@@ -2746,7 +2745,7 @@
           },
           {
             "type": "text",
-            "text": "。本例读回春江花月夜与女略，标准回到 Beijing 严，读音和排版一同恢复。"
+            "text": "。本例读回春江花月夜与银行行走，标准回到 Beijing 严，读音和排版一同恢复。"
           }
         ],
         "attrs": {
@@ -3123,7 +3122,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "等待加载后重试；资源损坏时换用包含完整内置字体的应用版本。保留编辑，并检查新 PNG 的组合符号。"
+                        "text": "先保留原文和草稿，稍后重试；持续失败时记录提示并反馈问题，导出后核对组合符号。"
                       }
                     ]
                   }
@@ -3161,7 +3160,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "核对名称，改选系统默认或已安装字体，再保存 PNG。回退预览不能证明指定字体可用。"
+                        "text": "核对名称，改选系统默认或已安装字体，再保存 PNG。导出前会检查指定字体是否可用。"
                       }
                     ]
                   }
@@ -3218,7 +3217,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "图像绘制环境不可用 / PNG 编码失败",
+                        "text": "无法导出 PNG",
                         "marks": [
                           {
                             "type": "bold"
@@ -3237,7 +3236,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "保留原文和草稿，待环境恢复后重试。需要重开时先确认草稿已保存，再检查新文件能否打开。"
+                        "text": "先保留原文和草稿，再重新导出。仍然失败时记录提示并反馈问题。"
                       }
                     ]
                   }
@@ -3328,33 +3327,7 @@
         "content": [
           {
             "type": "text",
-            "text": "字体错误示例：在"
-          },
-          {
-            "type": "text",
-            "text": "自定义字体…",
-            "marks": [
-              {
-                "type": "bold"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "填写本机未安装的 "
-          },
-          {
-            "type": "text",
-            "text": "PTB-NotInstalled-M13-Manual",
-            "marks": [
-              {
-                "type": "code"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "，再保存 PNG。顶部提示该汉字字体不可用，输入和结果继续保留。"
+            "text": "导出时会检查字体。所选字体不可用时，页面保留输入与结果，并提示改选本机已安装的字体。"
           }
         ],
         "attrs": {
@@ -3366,8 +3339,8 @@
         "attrs": {
           "id": "m13-figure-m13-unavailable-font-error-r2-light",
           "assetId": "m13-unavailable-font-error-r2-light-scaled-r20261007",
-          "caption": "填写本机没有安装的 PTB-NotInstalled-M13-Manual 后导出，顶部提示汉字字体不可用；输入和结果仍保留。",
-          "alt": "最大化浅色工作台顶部红色状态栏提示汉字字体PTB-NotInstalled-M13-Manual在当前设备不可用，请选择已安装的字体后重试；两行输入和字音结果仍在。",
+          "caption": "输入未安装的字体名后导出，页面提示汉字字体不可用，输入和结果保留。",
+          "alt": "浅色工作台提示所选汉字字体不可用，请选择已安装的字体后重试；两行输入和字音结果保留。",
           "width": "100%",
           "align": "center"
         }
@@ -3419,7 +3392,7 @@
         "content": [
           {
             "type": "text",
-            "text": "方法来源与解释边界"
+            "text": "方法来源与转写范围"
           }
         ]
       },
@@ -3441,7 +3414,7 @@
           },
           {
             "type": "text",
-            "text": "可查看规则、字表和内置 Doulos SIL 的来源与许可。标准名称沿用旧字表，具体著作版次及单字条目仍需按研究用途核对。制作语料时保存标准名称与人工读音决定，便于复核。"
+            "text": "可查看书目、版本说明和内置 Doulos SIL 的来源与许可。Unt两列采用作者网站2026-10-11访问正文的中派基准，更新记录至2024-10-11；自由变体取第一项。其他标准沿用各自历史记音规则；已核实的异常字音键统一修正，正常映射保持原样。具体著作版次及单字条目仍需按研究用途核对。制作语料时保存标准名称与人工读音决定，便于复核。"
           }
         ]
       },
@@ -3451,6 +3424,15 @@
           {
             "type": "text",
             "text": "内置 Doulos SIL 按 SIL Open Font License 1.1 保留许可。本机汉字字体不会随 PNG 打包为字体文件；需要另行分发字体时，核对该字体的许可。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Unt引用：UntPhesoca. 新老派普通话的宽严式记音（含儿化韵）[EB/OL]. (2019-04-22)[2026-10-11]. https://phesoca.com/aws/268/. 首发知乎：https://zhuanlan.zhihu.com/p/38258415。hm/hng 音值及 io/ê 的儿化对应在作者正文中未列出，使用时需另行查证。"
           }
         ]
       }

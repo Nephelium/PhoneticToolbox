@@ -1,4 +1,4 @@
-<h1 align="center">PhoneticToolbox 3.0.0 正式版</h1>
+<h1 align="center">PhoneticToolbox 3.0.1 正式版</h1>
 
 <p align="center"><strong>语音学工具箱</strong><br>把录音、分析、标注、合成与感知实验放进同一个工作台。</p>
 
@@ -14,9 +14,9 @@ PhoneticToolbox 是韶子为语言学、实验语音学研究与教学制作的�
 
 到了 v3，十八个工具共用侧栏、标签页、设置和使用说明。从一段录音出发，可以查看波形与语谱图、提取参数、整理标注，再继续做语音合成、音系分析或感知实验。也可以打开音标表、设计实验，或切到论文阅读页读几页文献。
 
-下面先介绍下载与使用，再逐个展示工具和实际示例。想了解 v3 的具体升级，也可以看看[这一版的发行说明](https://github.com/Nephelium/PhoneticToolbox/releases/tag/v3.0.0)。
+下面先介绍下载与使用，再逐个展示工具和实际示例。想了解 v3 的具体升级，也可以看看[这一版的发行说明](https://github.com/Nephelium/PhoneticToolbox/releases/tag/v3.0.1)。
 
-![PhoneticToolbox 3.0.0 的工作台首页，按分析与采集、合成与操控、标注与实验、文献与学习组织十八个工具](docs/assets/readme/absolutely-home.png)
+![PhoneticToolbox 3.0.1 的工作台首页，按分析与采集、合成与操控、标注与实验、文献与学习组织十八个工具](docs/assets/readme/absolutely-home.png)
 
 ## 下载与开始使用
 
@@ -27,13 +27,13 @@ PhoneticToolbox 是韶子为语言学、实验语音学研究与教学制作的�
 | 版本 | 文件名 | 使用方式 |
 | --- | --- | --- |
 | 免安装版 | `PhoneticToolbox-windows-x64.exe` | 双击启动，无需运行安装向导 |
-| 安装版 | `PhoneticToolbox-3.0.0-windows-x64-setup.exe` | 按当前用户安装，默认不要求管理员权限，创建应用入口 |
+| 安装版 | `PhoneticToolbox-3.0.1-windows-x64-setup.exe` | 按当前用户安装，默认不要求管理员权限，创建应用入口 |
 
 系统要求为 **Windows 10 1809 及以上或 Windows 11、64 位 x64 系统**。可在 Windows **设置 → 系统 → 关于 → 系统类型**中核对。当前尚未提供 x86、ARM64、macOS 或 Linux 发行包。
 
 安装版默认放在 `%LOCALAPPDATA%\Programs\PhoneticToolbox`。安装完成后，从开始菜单或已创建的桌面快捷方式启动应用。主程序下载包小于 500 MB，第一次打开会准备本机运行文件，展开后的磁盘占用更大。**MFA 运行环境、声学模型和发音词典独立下载，主包不包含这些组件。**
 
-也可以从 [GitHub Releases](https://github.com/Nephelium/PhoneticToolbox/releases)下载，旧版本仍然保留，查阅或对照时都能找到。下载前请核对版本号，当前 Windows 成品的实际检查范围见[发行说明](docs/testing/windows-current-release.md)。
+也可以从 [GitHub Releases](https://github.com/Nephelium/PhoneticToolbox/releases)下载，旧版本仍然保留，查阅或对照时都能找到。下载前请核对版本号，当前 Windows 成品的实际检查范围见[发行说明](docs/testing/release-3.0.1-publish.md)。
 
 ### 第一次使用
 

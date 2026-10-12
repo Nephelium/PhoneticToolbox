@@ -48,6 +48,12 @@ s=runpy.run_path(str(ROOT/'resources/vocal_tract/sources/m10_r11_patch.py'))['ap
 s=runpy.run_path(str(ROOT/'resources/vocal_tract/sources/m10_r12_patch.py'))['apply'](s)
 s=runpy.run_path(str(ROOT/'resources/vocal_tract/sources/m10_r13_patch.py'))['apply'](s)
 s=runpy.run_path(str(ROOT/'resources/vocal_tract/sources/m10_r14_patch.py'))['apply'](s)
+runtime_patch=runpy.run_path(str(ROOT/'resources/vocal_tract/sources/m10_r15_patch.py'))['apply']
+h,s=runtime_patch(header.read_text('utf-8'),s)
+h,s=runpy.run_path(str(ROOT/'resources/vocal_tract/sources/m10_r16_patch.py'))['apply'](h,s)
+h,s=runpy.run_path(str(ROOT/'resources/vocal_tract/sources/m10_r17_patch.py'))['apply'](h,s)
+h,s=runpy.run_path(str(ROOT/'resources/vocal_tract/sources/m10_r18_patch.py'))['apply'](h,s)
+header.write_text(h,encoding='utf-8')
 source.write_text(s,encoding='utf-8')
 vswhere=Path(os.environ['ProgramFiles(x86)'])/'Microsoft Visual Studio/Installer/vswhere.exe'
 vs=subprocess.check_output([str(vswhere),'-latest','-products','*','-requires','Microsoft.VisualStudio.Component.VC.Tools.x86.x64','-property','installationPath'],text=True).strip()

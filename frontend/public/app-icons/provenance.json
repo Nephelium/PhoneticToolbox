@@ -1,0 +1,73 @@
+{
+  "generator": "OpenAI built-in image generation",
+  "selected_by": "User selection in this task",
+  "manipulation": "Original sheets preserved; runtime viewports exclude printed design labels and clip rounded tile corners; W1 has a separate user-requested built-in image edit recoloring the body muted purple and terminal deep navy, selected as the default; choices K1-A and X3 retired while all surviving preference IDs remain stable",
+  "edit": {
+    "target": "W1",
+    "source_sheet": "w.png",
+    "generation": "1edf2cd1-0646-41f5-9377-2595ce0fe386",
+    "prompt": "Preserve W1 silhouette, eyes, smile and textured yellow tile. Recolor body muted purple #8061A5 and far-right terminal deep navy #173A72; cream outer corners clipped at runtime. User approved on 2026-10-12."
+  },
+  "sheets": [
+    {
+      "sheet": "k",
+      "generation": "f55d91eb-646c-4dea-a76b-da20c914cf5f",
+      "sha256": "824d85be970ca7bce81857191097ac69adee27602e211ca20fc905a5cf623c10"
+    },
+    {
+      "sheet": "m",
+      "generation": "20df6156-4e81-41fd-9eaf-682495066169",
+      "sha256": "33211d73098e841e85c5a04eecf7e213e41d0eb9a3917d05d5ce39c613b707d1"
+    },
+    {
+      "sheet": "r",
+      "generation": "3b1bb6c6-7487-4564-ad1d-2205b14bff12",
+      "sha256": "f6aaa7048006e8cb7ad0ae812bc8483309369522bf46ad3fdb5b96f9c366e540"
+    },
+    {
+      "sheet": "v",
+      "generation": "f44be893-37a5-40d7-8267-193c680765d3",
+      "sha256": "74a6875f9f518e0d24a06d292fbc2fa319e952ba14a3a19832646ed40cab4dbe"
+    },
+    {
+      "sheet": "ipa-ad",
+      "generation": "793bbc69-3bec-48ff-8479-bc6e24e79e48",
+      "sha256": "804aec01d6a4139c3aa877bb13cdf858c8ac26ac2550e2df92f1515eff23743a"
+    },
+    {
+      "sheet": "ipa-eh",
+      "generation": "f0df7683-1735-4032-9809-1af67017e5ef",
+      "sha256": "b93874492e6e7dc378817b44d28c1c7fe2342eec2eaa467d4940573ef795c0e1"
+    },
+    {
+      "sheet": "ipa-il",
+      "generation": "ff7d0700-9044-4c82-87d6-39aa0a1bd476",
+      "sha256": "3c2331c178c786a7a2a1270f09ad79e7d9ee4e9a6686aaf70783457570f98e69"
+    },
+    {
+      "sheet": "ipa-mp",
+      "generation": "a11116d9-a8c3-4b81-8803-bbee1e413be4",
+      "sha256": "e5b194e6f06864288ebf8728953225b426586ba5a24a33799a1b0ac531e4dc95"
+    },
+    {
+      "sheet": "ipa-qt",
+      "generation": "1714924f-84e1-47da-86a4-931d9a3bfd84",
+      "sha256": "f7124f2c34f4f4085be9b1c1ee9024f131fd4b4002e30c3d6206a54a073646e8"
+    },
+    {
+      "sheet": "w",
+      "generation": "bc555c24-1325-4a2e-9392-9922c6cd47f9",
+      "sha256": "44cfc090dd95b9f9d66cf7bdeca07605250b96942650f144f78b299a4ef6e861"
+    },
+    {
+      "sheet": "w1-edited",
+      "generation": "1edf2cd1-0646-41f5-9377-2595ce0fe386",
+      "sha256": "042dc5af25c438f0f3507954ec40b8ae719f30c9a37d937b56ab8ba14aedf226"
+    },
+    {
+      "sheet": "x",
+      "generation": "2922fd02-6a57-45d2-b4af-ac810acd7261",
+      "sha256": "f5af5b322afb8ed6139ab10465ce12ac369d4f291ec1bfe272c20b2136b3489d"
+    }
+  ]
+}

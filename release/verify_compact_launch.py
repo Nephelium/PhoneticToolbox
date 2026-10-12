@@ -22,7 +22,11 @@ def main():
         raise ValueError('Expected owned build and new D-drive QA directory')
     output.mkdir(parents=True, exist_ok=False)
     executable = output / 'PhoneticToolbox.exe'
-    shutil.copyfile(source / 'PhoneticToolbox.exe', executable)
+    build = json.loads((source / 'build-info.json').read_text('utf8'))
+    entry = build['exe']
+    if entry not in ('PhoneticToolbox.exe', 'PhoneticToolbox-windows-x64.exe'):
+        raise ValueError('Unexpected frozen application entry')
+    shutil.copyfile(source / entry, executable)
     with executable.open('rb') as stream:
         sha = hashlib.file_digest(stream, 'sha256').hexdigest()
     descriptor = json.loads((source / 'application.json').read_text('utf8'))

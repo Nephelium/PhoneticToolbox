@@ -83,6 +83,8 @@ def main():
                         help='Reuse a completed compact build snapshot without expanding its scientific runtimes')
     parser.add_argument('--host-archive-cache', type=Path,
                         help='Reuse an owned host archive when all analyzed native inputs still match')
+    parser.add_argument('--frontend-dist', type=Path,
+                        help='Use a freshly generated frontend in an owned output directory')
     options = parser.parse_args()
     # Every compact distribution uses the shared persistent launcher, even if
     # a caller omits the historical opt-in flag. Future releases inherit the
@@ -103,12 +105,16 @@ def main():
     work = ROOT / 'output' / ('build-' + name)
     if destination.exists() or work.exists():
         raise ValueError('Choose a new name; existing artifacts are retained')
-    if sys.platform != 'win32' or not (ROOT / 'frontend/dist/index.html').is_file():
+    frontend_dist = (options.frontend_dist or ROOT / 'frontend/dist').resolve()
+    if frontend_dist != (ROOT / 'frontend/dist').resolve() and not frontend_dist.is_relative_to(ROOT / 'output'):
+        raise ValueError('Frontend input must be the shared dist or an owned output directory')
+    if sys.platform != 'win32' or not (frontend_dist / 'index.html').is_file():
         raise ValueError('Windows and a built frontend are required')
     # A Python schema check alone does not prove that the actual reader accepts
     # exported editor attributes. Fail before spending time on native archives.
+    subprocess.run([sys.executable, '-B', str(ROOT/'scripts/sync_versions.py'), '--check'], cwd=ROOT, check=True)
     subprocess.run(['node',str(ROOT/'frontend/scripts/verify-manual-runtime.mjs'),
-                    str(ROOT/'frontend/dist/manual')],cwd=ROOT,check=True)
+                    str(frontend_dist/'manual')],cwd=ROOT,check=True)
     work.mkdir(parents=True)
     with build_workspace(work, 'build'):
         snapshot = work / 'snapshot'
@@ -211,6 +217,8 @@ def main():
         for relative in ('frontend/dist', 'resources/vocal_tract', 'resources/m05',
                          'contracts', 'backend/migrations', 'docs/manual', 'third_party/licenses'):
             source, target = ROOT / relative, snapshot / relative
+            if relative == 'frontend/dist':
+                source = frontend_dist
             reason = exclusion(relative)
             if reason:
                 excluded_data.extend(dict(path=p.relative_to(ROOT).as_posix(), bytes=p.stat().st_size, reason=reason)
@@ -243,17 +251,16 @@ def main():
         data += [(snapshot / r, r) for r in ('backend/src', 'desktop/src', 'packages/phonetic_core/src')]
         if options.compact_onefile:
             data += [(snapshot / 'runtime-archive' / filename, '.') for filename in ('runtime-payload.tar.xz', 'runtime-files.json')]
-            probe = bundle_cache / 'runtime-probe.py' if bundle_cache else runtime_stage / 'validation/probe.py'
-            if not probe.is_file():
-                raise ValueError('Compact stage lacks the actual scientific entry probe')
-            shutil.copyfile(probe, snapshot / 'runtime-probe.py')
+            # Reuse only runtime bytes, never an older verification entry point.
+            from prepare_lean_runtimes import PROBE
+            (snapshot / 'runtime-probe.py').write_text(PROBE, encoding='utf-8')
             data.append((snapshot / 'runtime-probe.py', 'preview-fixtures'))
-        # Match the runtime window's visible footprint; the original K2 image stays intact.
+        # Match the default selected artwork in the frozen frontend catalog.
         import importlib.util
         icon_spec = importlib.util.spec_from_file_location('ptb_build_icon', snapshot / 'desktop/src/ptb_desktop/app_icon.py')
         icon_module = importlib.util.module_from_spec(icon_spec)
         icon_spec.loader.exec_module(icon_module)
-        icon_source = next((snapshot / 'frontend/dist/assets').glob('k2-*.png'))
+        icon_source = snapshot / 'frontend/dist'
         icon_target = snapshot / 'PhoneticToolbox-v3.ico'
         icon_module.write_windows_icon(icon_source, icon_target)
         args += ['--icon', str(icon_target)]
@@ -273,6 +280,9 @@ def main():
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / 'frontend/src/assets/ipa-plus' / filename, target)
             data.append((target, 'third_party/licenses/ipa-plus'))
+        # The isolated PyAV interpreter executes this authoritative helper as
+        # a script. PYZ bytecode alone cannot provide that external file.
+        data.append((snapshot / 'desktop/src/ptb_desktop/vocal_tract/mp4.py', 'ptb_desktop/vocal_tract'))
         for source, target in data:
             args += ['--add-data', str(source) + ';' + target]
         for package in ('ptb_worker', 'ptb_api', 'ptb_desktop', 'phonetic_core', 'uvicorn'):
@@ -366,6 +376,10 @@ def main():
         if options.compact_onefile:
             if exe.stat().st_size > 500_000_000:
                 raise RuntimeError('Compact EXE exceeds the authorized 500 MB size limit: ' + str(exe.stat().st_size))
+            # Public download name; installer/update layouts keep their stable entry.
+            published_exe = package / 'PhoneticToolbox-windows-x64.exe'
+            exe.rename(published_exe)
+            exe = published_exe
             (package / 'application.json').write_text(json.dumps(dict(schema='ptb-desktop-release/1',
                 version=manifest['version'], entry='PhoneticToolbox.exe', layout='onefile/1',
                 executable=dict(size=exe.stat().st_size, sha256=hashlib.sha256(exe.read_bytes()).hexdigest())), indent=2) + '\n', 'utf8')

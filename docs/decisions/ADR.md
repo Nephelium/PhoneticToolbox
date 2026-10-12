@@ -4,6 +4,7 @@
 
 ## 专题决策
 
+- [邮箱反馈会话与独立管理员通知](ADR-feedback.md)
 - [相同依赖只保存一份，原路径恢复](ADR-cross-archive-dedup.md)
 - [ADR-M01-M02-R1：列表、切分与长录音预览修复](ADR-M01-M02-R1.md)
 - [ADR-M01-R4：30分钟有界分析与 EGG 联合参数](ADR-M01-R4.md)
@@ -28,6 +29,7 @@
 - [M10-R12 舌位自由度与刚性牙齿接触](ADR-M10-R12.md)
 - [M10-R13 圆弧与组织连接](ADR-M10-R13.md)
 - [ADR-M10-R14 舌体厚度、表面控制与 257 截面](ADR-M10-R14.md)
+- [M10 可选采样、静音动程与 MP4](ADR-M10-sampling-and-video.md)
 - [ADR-M10-R6 音标索引的本机构形库](ADR-M10-R6.md)
 - [ADR-M11-001：可选运行时、旧运行适配故障与准入](ADR-M11-001.md)
 - [ADR-M11-R1：显式转写来源与 CPU 运行开销](ADR-M11-R1.md)

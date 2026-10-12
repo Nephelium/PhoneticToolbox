@@ -23,7 +23,7 @@ TextGrid／唇形目录默认跟随音频，显式选择后保留，重置恢复
 
 [契约设置](../../../../contracts/schemas/acousticrequest.json)给出新草稿默认值与范围。默认帧移 5 ms、能量窗 40 ms、分析窗 40 ms、参数平滑 10 帧、唇形平滑 0、F0 范围 30–800 Hz。旧草稿恢复有效的已保存值。
 
-- 最小／最大 F0 位于 REAPER 页签，但同时用于 Praat、REAPER、WM 链及部分派生指标。
+- 最小／最大 F0 位于常用设置页签，同时用于 Praat、REAPER、WM 链及部分派生指标。常用设置共 12 项，REAPER 设置仅保留 Hilbert 变换和禁用高通滤波两个开关。
 - 仅有声帧最终由 Praat／REAPER 有效正基频并集判定。新 `acoustic-bounded/1` 同时使用全段强度静音参考，避免低振幅块自行改变阈值。
 - 分析窗不统一控制全部算法。WM Jitter／Shimmer 采用 `max(160 ms, windowsize_ms)`；Burg 共振峰固定 25 ms 窗；谐波、CPP 与 HNR 使用 `n_periods` 周期窗；SHR 固定 40 ms；Slope 固定 5 周期。
 - 共振峰数量传入 Burg 候选数，但目录仅输出 F1–F4／B1–B4，沿当前分槽阈值；不能推断为无筛选 Praat 同序候选。

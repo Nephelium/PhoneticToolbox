@@ -107,14 +107,16 @@ from fractions import Fraction
 
 kind, snapshot, output = sys.argv[1], Path(sys.argv[2]), Path(sys.argv[3])
 output.mkdir(parents=True, exist_ok=False)
+sys.path[:0]=[str(snapshot/'backend/src'),str(snapshot/'packages/phonetic_core/src')]
+from ptb_worker.source_runtime import prepare_native_import_paths
+prepare_native_import_paths()
 prefix=Path(sys.prefix)
 os.environ['PATH']=os.pathsep.join([str(prefix), str(prefix/'Library/bin'),
     str(Path(os.environ['SystemRoot'])/'System32'), os.environ['SystemRoot']])
 os.environ['MPLCONFIGDIR']=str(output/'matplotlib-cache')
 os.environ['MPLBACKEND']='Agg'
 handles=[]
-if (prefix/'Library/bin').is_dir():handles.append(os.add_dll_directory(str(prefix/'Library/bin')))
-sys.path[:0]=[str(snapshot/'backend/src'),str(snapshot/'packages/phonetic_core/src')]
+if (prefix/'Library/bin').is_dir():handles.append(os.add_dll_directory('\\\\?\\'+str(prefix/'Library/bin')))
 def digest(raw):return hashlib.sha256(raw).hexdigest()
 def file_sha(path):return digest(Path(path).read_bytes())
 def decode_bundle(payload):
@@ -236,7 +238,7 @@ try:
     # application sources are separately hashed and not an ambient PYTHONPATH.
     watched=('numpy','scipy','pandas','parselmouth','matplotlib') if kind=='egg' else ('numpy','cv2','av','mediapipe')
     report['module_files']={n:str(Path(sys.modules[n].__file__).resolve()) for n in watched if n in sys.modules}
-    assert all(Path(p).is_relative_to(prefix) for p in report['module_files'].values())
+    assert all(Path(p).is_relative_to(prefix.resolve()) for p in report['module_files'].values())
     report['success']=True
 finally:
     (output/'result.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n','utf8')

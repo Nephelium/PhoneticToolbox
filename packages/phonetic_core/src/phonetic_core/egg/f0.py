@@ -27,7 +27,7 @@ def praat_pitch(audio: np.ndarray, fs: int, *, pitch_floor=75., pitch_ceiling=60
         if not 0 < pitch_floor < pitch_ceiling < fs/2:
             raise ValueError('invalid_pitch_range')
         # A 30 Hz AC window needs 100 ms. Short files contain no complete frame.
-        if pitch_floor == 30. and len(audio)/fs < 3/pitch_floor:
+        if pitch_floor <= 30. and len(audio)/fs < 3/pitch_floor:
             return PitchTrack(np.array([]),np.array([]),np.array([]))
         pitch = sound.to_pitch(time_step=.01, pitch_floor=pitch_floor, pitch_ceiling=pitch_ceiling)
     except Exception as exc:
@@ -38,15 +38,17 @@ def praat_pitch(audio: np.ndarray, fs: int, *, pitch_floor=75., pitch_ceiling=60
     return PitchTrack(np.asarray(pitch.xs(), dtype=float), values, np.arange(len(values))*.01+.005)
 
 
-def reaper_pitch(audio, fs, backend):
+def reaper_pitch(audio, fs, backend, *, pitch_floor=30., pitch_ceiling=800.):
     """SRC-REAPER: use the injected native engine on the normalized audio track."""
     from ..models.audio import AudioInput
     audio = vector(audio); sample_rate(fs)
+    if not 0 < pitch_floor < pitch_ceiling < fs/2:
+        raise EggError('invalid_pitch_range')
     # Native REAPER needs enough context for its epoch lattice. Empty/silent
     # tracks have no voiced estimate; do not invent a fallback frequency.
     if len(audio)/fs < .1 or not np.any(audio):
         return PitchTrack(np.array([]),np.array([]),np.array([]),'SRC-REAPER')
-    track = backend(AudioInput(audio,fs),.01,30.,800.,hilbert=False,no_highpass=False)
+    track = backend(AudioInput(audio,fs),.01,pitch_floor,pitch_ceiling,hilbert=False,no_highpass=False)
     if track.actual_backend != 'native_reaper':raise EggError('egg_reaper_failed')
     times=np.asarray(track.times,dtype=float);values=np.asarray(track.values,dtype=float)
     if times.shape!=values.shape or not np.isfinite(times).all() or np.any(np.diff(times)<=0) or np.isinf(values).any():

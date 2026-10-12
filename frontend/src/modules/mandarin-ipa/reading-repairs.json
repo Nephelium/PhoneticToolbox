@@ -1,0 +1,74 @@
+{
+  "version": "m13-reading-repairs/2026-10-11",
+  "access_date": "2026-10-11",
+  "repairs": [
+    {
+      "characters": "丢丟",
+      "legacy_pinyin": "diu1",
+      "legacy_tone": 0,
+      "pinyin": "diu",
+      "tone": 1,
+      "url": "https://dict.revised.moe.edu.tw/dictView.jsp?ID=2222&la=0&powerMode=0",
+      "mapping_basis": "di-onset-plus-liu-rime-existing-columns"
+    },
+    {
+      "characters": "铥銩",
+      "legacy_pinyin": "diu1",
+      "legacy_tone": 0,
+      "pinyin": "diu",
+      "tone": 1,
+      "url": "https://dict.revised.moe.edu.tw/dictView.jsp?ID=2223&la=0&powerMode=0",
+      "mapping_basis": "di-onset-plus-liu-rime-existing-columns"
+    },
+    {
+      "characters": "呗唄",
+      "legacy_pinyin": "bei0",
+      "legacy_tone": 0,
+      "pinyin": "bei",
+      "tone": 0,
+      "url": "https://dict.revised.moe.edu.tw/dictView.jsp?ID=200&la=0&powerMode=0",
+      "mapping_basis": "same-syllable-existing-columns"
+    },
+    {
+      "characters": "数",
+      "legacy_pinyin": "ashu",
+      "legacy_tone": 4,
+      "pinyin": "shu",
+      "tone": 4,
+      "url": "https://dict.variants.moe.edu.tw/dictView.jsp?ID=18983",
+      "reading_url": "https://dict.revised.moe.edu.tw/dictView.jsp?ID=9131&la=0&powerMode=0",
+      "mapping_basis": "same-syllable-existing-columns"
+    },
+    {
+      "characters": "葛",
+      "legacy_pinyin": "be",
+      "legacy_tone": 2,
+      "pinyin": "ge",
+      "tone": 2,
+      "url": "https://dict.revised.moe.edu.tw/dictView.jsp?ID=3973&la=0&powerMode=0",
+      "mapping_basis": "same-syllable-existing-columns"
+    },
+    {
+      "characters": "额",
+      "legacy_pinyin": "ge",
+      "legacy_tone": 2,
+      "pinyin": "e",
+      "tone": 2,
+      "url": "https://dict.variants.moe.edu.tw/dictView.jsp?ID=-50417",
+      "mapping_basis": "same-syllable-existing-columns",
+      "overwrite_existing_mismatched_reading": true
+    },
+    {
+      "characters": "距",
+      "legacy_pinyin": "shu",
+      "legacy_tone": 4,
+      "pinyin": "ju",
+      "tone": 4,
+      "url": "https://dict.revised.moe.edu.tw/dictView.jsp?ID=6052&la=0&powerMode=0",
+      "mapping_basis": "same-syllable-existing-columns",
+      "overwrite_existing_mismatched_reading": true
+    }
+  ],
+  "missing_nan_characters": "囡男抩枏枬侽南柟娚畘莮难喃遖暔楠煵諵難萳嫨赧揇湳腩戁蝻婻",
+  "missing_nan_basis": "历史各列IPA一致记nan；拼音nan在旧表生成时被当作缺失值，恢复文本键，原声调与各列IPA不改。"
+}

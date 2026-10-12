@@ -39,7 +39,8 @@ def m01_capability(store):
             return False, 'registered_reaper_mismatch'
     except (OSError, ValueError, ImportError):
         return False, 'registered_reaper_unavailable'
-    expected = {'phonetic-core': '3.0.0a1', 'numpy': '2.2.6', 'scipy': '1.16.3',
+    from ptb_api.protocol_version import CORE_VERSION
+    expected = {'phonetic-core': CORE_VERSION, 'numpy': '2.2.6', 'scipy': '1.16.3',
                 'praat-parselmouth': '0.4.7', 'pandas': '2.3.3'}
     try:
         if any(metadata.version(name) != version for name, version in expected.items()):

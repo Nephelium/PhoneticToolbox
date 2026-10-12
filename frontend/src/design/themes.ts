@@ -3,7 +3,7 @@ export type ColorMode='light'|'dark';
 export type ThemeMode=ColorMode|'system';
 type Seed=readonly [background:string,foreground:string,accent:string];
 export interface Palette {id:string;name:string;light:Seed;dark:Seed}
-export const DEFAULT_PALETTE='codex';
+export const DEFAULT_PALETTE='everforest';
 export const palettes:Palette[]=[
  {id:'absolutely',name:'Absolutely',light:['#faf9f6','#34322f','#a94f31'],dark:['#202020','#e6e2dc','#e59b77']},
  {id:'ayu',name:'Ayu',light:['#fafafa','#575f66','#a76500'],dark:['#0b0e14','#bfbdb6','#e6b450']},
@@ -41,6 +41,10 @@ const rgb=(hex:string)=>[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));
 export function mix(a:string,b:string,amount:number){return '#'+rgb(a).map((x,i)=>Math.round(x*(1-amount)+rgb(b)[i]*amount).toString(16).padStart(2,'0')).join('');}
 const luminance=(hex:string)=>rgb(hex).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;}).reduce((s,x,i)=>s+x*[.2126,.7152,.0722][i],0);
 export function contrast(a:string,b:string){const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);}
+export function customPalette(color:string):Palette {
+ return {id:'custom',name:'自定义色系',light:[mix(color,'#ffffff',.94),mix(color,'#000000',.82),color],dark:[mix(color,'#000000',.86),mix(color,'#ffffff',.86),mix(color,'#ffffff',.4)]};
+}
+palettes.push(customPalette('#657b35'));
 function readable(color:string,backgrounds:string[],minimum=4.5){
  const target=contrast('#000000',backgrounds[0])>contrast('#ffffff',backgrounds[0])?'#000000':'#ffffff';
  for(let step=0;step<=100;step++){const next=mix(color,target,step/100);if(backgrounds.every(bg=>contrast(next,bg)>=minimum))return next;}
@@ -48,10 +52,14 @@ function readable(color:string,backgrounds:string[],minimum=4.5){
 }
 export function paletteTokens(id:string,mode:ColorMode):Record<string,string>{
  const seed=palettes.find(p=>p.id===normalizePalette(id))![mode],isDark=mode==='dark';
- const [app,ink,hue]=seed,panel=mix(app,'#ffffff',isDark?.035:.55),sidebar=mix(app,ink,isDark?.025:.035);
- const selected=mix(panel,hue,isDark?.16:.10),surfaces=[app,panel,sidebar,selected];
+ // Keep tinted light surfaces close to their seed instead of washing panels white.
+ const [app,ink,hue]=seed,panel=mix(app,'#ffffff',isDark?.035:.05);
+ const sidebar=isDark?mix(app,ink,.025):mix(mix(app,'#ececec',.20),ink,.04);
+ const tinted=Math.max(...rgb(app))-Math.min(...rgb(app))>5;
+ const rail=isDark?sidebar:tinted?mix(app,ink,.022):app;
+ const selected=mix(panel,hue,isDark?.16:.10),surfaces=[app,panel,sidebar,rail,selected];
  const text=readable(ink,surfaces,7),muted=readable(mix(ink,app,.30),surfaces),accent=readable(hue,surfaces);
- return {'--app':app,'--panel':panel,'--sidebar':sidebar,'--text':text,'--muted':muted,'--border':mix(panel,ink,.20),'--accent':accent,'--selected':selected,
+ return {'--app':app,'--panel':panel,'--sidebar':sidebar,'--rail':rail,'--text':text,'--muted':muted,'--border':mix(panel,ink,.20),'--accent':accent,'--selected':selected,
  '--on-accent':contrast('#ffffff',accent)>contrast('#111111',accent)?'#ffffff':'#111111',
  '--success':readable(isDark?'#86c99a':'#267544',surfaces),'--warning':readable(isDark?'#e9c17e':'#8a5a13',surfaces),'--danger':readable(isDark?'#f69ba1':'#b33448',surfaces),
  '--teal':readable(isDark?'#80c6c2':'#287d79',surfaces),'--teal-bg':mix(panel,'#398779',.10),'--violet':readable(isDark?'#c6b4ec':'#7557a1',surfaces),'--violet-bg':mix(panel,'#9975bc',.09),

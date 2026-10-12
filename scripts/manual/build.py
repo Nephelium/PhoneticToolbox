@@ -28,6 +28,10 @@ def reader_chapter(chapter: dict) -> dict:
 
 
 def write_atomic(path: Path, data: bytes) -> None:
+    # An open reader may hold media on Windows. Identical bytes are already
+    # published, so leave that file and its handle untouched.
+    if path.is_file() and path.read_bytes() == data:
+        return
     path.parent.mkdir(parents=True, exist_ok=True)
     temp = path.with_name(path.name + '.tmp-' + str(uuid.uuid4()))
     try:

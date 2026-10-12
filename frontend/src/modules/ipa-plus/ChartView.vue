@@ -8,12 +8,17 @@ const props=defineProps<{system:ChartSystem;query:string;selected?:string;playOn
 const emit=defineEmits<{insert:[entry:SymbolEntry];inspect:[entry:SymbolEntry];hover:[value:HoverTarget|null]}>();
 const sections=computed(()=>catalog.charts[props.system]);const results=computed(()=>searchEntries(props.system,props.query));
 const entry=(id:string)=>entries.get(id)!;
-const views={
+const partitions={
  ipa:[{id:'base',label:'基础图表',groups:[['extended'],['vowels','extras']]},{id:'marks',label:'附加符号与韵律',groups:[['diacritics'],['tones'],['suprasegmentals']]}],
  extipa:[{id:'base',label:'辅音图表',groups:[['consonants']]},{id:'marks',label:'附加符号与发声',groups:[['diacritics'],['voicing'],['articulatory']]},{id:'context',label:'节奏与其他',groups:[['rhythm'],['uncertainty'],['other']]},{id:'combinations',label:'补充与旧版',groups:[['combinations'],['historical']]}],
  voqs:[{id:'base',label:'VoQS',groups:[['phonation'],['lingual'],['labial','velum','jaw'],['airstream','larynx','scope']]}],
 };
-const activeView=ref<Record<ChartSystem,string>>({ipa:'base',extipa:'base',voqs:'base'});
+const views={
+ ipa:[{id:'all',label:'显示全部',groups:partitions.ipa.flatMap(view=>view.groups)},...partitions.ipa],
+ extipa:[{id:'all',label:'显示全部',groups:partitions.extipa.flatMap(view=>view.groups)},...partitions.extipa],
+ voqs:partitions.voqs,
+};
+const activeView=ref<Record<ChartSystem,string>>({ipa:'all',extipa:'all',voqs:'base'});
 const currentView=computed(()=>views[props.system].find(v=>v.id===activeView.value[props.system])!);
 const groups=computed(()=>currentView.value.groups.map(ids=>ids.map(id=>sections.value.find(s=>s.id===id)!)));
 </script>
@@ -60,5 +65,6 @@ h3{font-size:0.857143rem;line-height:1.2;color:var(--muted);background:var(--app
 .m17-combination-groups{grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:0 16px}.m17-combination-groups .m17-explained-row{flex-direction:column;align-items:stretch;justify-content:flex-start;padding:7px 0}.m17-combination-groups .m17-row-caption{flex:none}.m17-combination-groups .m17-row-symbols{justify-content:flex-start;max-width:100%}.m17-combination-groups .m17-row-symbols :deep(.m17-symbol){min-height:32px;min-width:36px;border-color:var(--border);background:var(--app);padding:2px 5px}.m17-combination-groups .m17-row-symbols :deep(.m17-example>.m17-ipa){font-size:calc(var(--m17-font-size,26px) - 5px)}
 .m17-section-rhythm .m17-explained-groups,.m17-section-uncertainty .m17-explained-groups{grid-template-columns:repeat(auto-fit,minmax(285px,1fr))}.m17-section-rhythm .m17-row-symbols,.m17-section-uncertainty .m17-row-symbols{max-width:68%}.m17-row-symbols :deep(.m17-symbol){max-width:100%}.m17-section-rhythm :deep(.m17-example>.m17-ipa),.m17-section-uncertainty :deep(.m17-example>.m17-ipa){white-space:normal;overflow-wrap:anywhere;font-size:calc(var(--m17-font-size,26px) - 9px)}.m17-section-historical{border-style:dashed}
 .m17-section-tabs{position:sticky;top:0;z-index:2;background:var(--panel)}.m17-section-tabs button{transition:none}.m17-section-tabs button[aria-pressed=true],.m17-section-tabs button[aria-pressed=true]:hover{background:var(--accent);color:var(--on-accent);border-color:var(--accent);opacity:1;filter:none}
+.m17-chart-grid.m17-view-all{grid-template-columns:minmax(0,1fr)}.m17-chart-grid.m17-view-all .m17-chart-column{grid-column:1/-1;display:flex}.m17-chart-ipa.m17-view-all .m17-group-1{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
 @container module (min-width:1500px){.m17-chart-grid{gap:8px}.m17-matrix td{height:30px}.m17-chart-extipa .m17-matrix td{height:30px}.m17-chart-ipa.m17-view-base{grid-template-columns:minmax(0,1fr) calc(var(--m17-font-size,26px) * 11.54)}.m17-chart-ipa.m17-view-base .m17-group-0{grid-column:1}.m17-chart-ipa.m17-view-base .m17-group-1{grid-column:2;display:flex}.m17-vowels{height:calc(var(--m17-font-size,26px) * 9)}.m17-symbol-flow{gap:2px;padding:4px}}
 </style>

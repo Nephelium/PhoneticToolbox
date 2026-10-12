@@ -4,6 +4,8 @@ import ManualReader from '../manual/ManualReader.vue';
 import {parseManualProject} from '../manual/content.ts';
 import type {ManualProject,ManualTarget,ManualLocation} from '../manual/types.ts';
 import {host} from '../state/workspace.ts';
+import {modules} from './registry.ts';
+const chapterIcons=Object.fromEntries(modules.map(item=>[item.id.toLowerCase(),item.icon]));
 withDefaults(defineProps<{active?:boolean;target?:ManualTarget;requestKey?:number;playbackAllowed?:boolean;returnLabel?:string}>(),{active:true,playbackAllowed:true});
 const emit=defineEmits<{returnTool:[]}>();
 const project=shallowRef<ManualProject>(),error=ref(''),loading=ref(false);
@@ -20,7 +22,7 @@ async function load(){
 onMounted(load);onBeforeUnmount(()=>abort.abort());
 </script>
 <template>
-  <ManualReader v-if="project" :project="project" :active="active" :target="target" :request-key="requestKey" :asset-base-url="assetBaseUrl" :playback-allowed="playbackAllowed" :return-label="returnLabel" :initial-location="initialLocation" @location="host.projects.write('manual-location',$event)" @return-tool="emit('returnTool')"/>
+  <ManualReader v-if="project" :project="project" :chapter-icons="chapterIcons" :active="active" :target="target" :request-key="requestKey" :asset-base-url="assetBaseUrl" :playback-allowed="playbackAllowed" :return-label="returnLabel" :initial-location="initialLocation" @location="host.projects.write('manual-location',$event)" @return-tool="emit('returnTool')"/>
   <section v-else class="manual-start-state" aria-label="使用说明"><p v-if="loading" role="status">正在载入使用说明…</p><template v-else><p role="alert">{{error}}</p><button type="button" @click="load">重新加载</button></template></section>
 </template>
 <style scoped>

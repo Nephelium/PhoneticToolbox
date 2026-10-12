@@ -30,7 +30,7 @@
 
 ## 旧手册推荐论文
 
-北京大学中文系图书馆的[学位论文目录](https://lib.chinese.pku.edu.cn/xueweilunwen?combine=&degree=All&degree_str=&field_xwlw_callno_value=&major=All&page=314&sort_by=field_xwlw_year_int_value&sort_order=DESC&year=&year_int_max=&year_int_min=)登记《汉语韵律的嗓音发声研究》，作者尹基德，专业语言学与应用语言学，导师孔江平，索书号 `020/D2010(71)`。单条记录地址 `/node/150402` 本次读取超时。已确认题名、作者和馆藏，未取得可核页码的完整论文。
+北京大学中文系图书馆的[学位论文目录](https://lib.chinese.pku.edu.cn/xueweilunwen?combine=&degree=All&degree_str=&field_xwlw_callno_value=&major=All&page=314&sort_by=field_xwlw_year_int_value&sort_order=DESC&year=&year_int_max=&year_int_min=)登记《汉语韵律的嗓音发声研究》，作者尹基德，专业语言学与应用语言学，导师孔江平，索书号 `020/D2010(71)`。单条记录地址 `/node/150402` 本次读取超时。已确认题名、作者和馆藏。用户提供的原论文封面进一步确认这是北京大学博士学位论文，封面日期为2010年12月；全文引述页码尚未核对。
 
 旧手册 §3.3 图3-8 原图 `Phonetic_Export/images/img_7zxbhjwy4.jpg` 已在相邻 v2 中只读查看，SHA-256 `d3075669e5a6e6d38c0ea5b73516ac63582f9ae2bbc6365ceadea1a039d44c5b`。图中包含 Rothenberg、Henrich、Howard 等方法讨论，但截图没有页码和完整题名页。因此不能补写为论文某页已核准。截图不复制到 v3 或发行包。
 

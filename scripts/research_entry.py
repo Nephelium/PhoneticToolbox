@@ -29,7 +29,7 @@ def main():
     parser.add_argument('--verify-m12-r2', type=Path)
     parser.add_argument('--verify-m12-r3', type=Path)
     args = parser.parse_args()  # Unknown switches fail closed, never open a GUI.
-    bundle = Path(getattr(sys, '_MEIPASS', Path(__file__).resolve().parents[1]))
+    bundle = Path(getattr(sys, '_MEIPASS', Path(__file__).resolve().parents[1])).resolve()
     from ptb_desktop.platform_paths import user_data_root
     root = args.local_root or user_data_root() / 'research-v1'
     from ptb_worker.local_workspace import prepare_workspace

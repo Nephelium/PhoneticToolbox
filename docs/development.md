@@ -4,6 +4,8 @@
 
 ## 启动与修改
 
+从公开仓库首次准备前端时，先运行 `python scripts/prepare_public_source_assets.py`。作者头像仅授权随软件和官网分发，公开源码不含该原图；脚本在缺图时用现有应用图标生成本机占位头像，已存在的图片保留。说明书公开阅读资源用 `scripts/manual/build.py --project manual --output frontend/public/manual --distribution public` 生成，软件专用原媒体不随源码提供。
+
 先按[源码入口说明](development/source-entry.md)检查既有解释器和绑定：
 
 ```powershell

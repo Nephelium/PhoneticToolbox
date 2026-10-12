@@ -26,6 +26,7 @@ def source(raw, settings):
     except cv2.error:raise ValueError('invalid_spectrogram_image') from None
     if gray is None:raise ValueError('invalid_spectrogram_image')
     gray=rectify(gray,[p.model_dump() for p in settings.corners] if settings.corners else None)
+    if settings.invert_image:gray=255-gray
     return gray,dict(width=gray.shape[1],height=gray.shape[0]),None
 
 
@@ -60,12 +61,13 @@ def prepare(raw,config):
             gray=result['target']
         else:
             if strokes:gray=np.rint(paint(gray,strokes)[0]).astype(np.uint8)
-            result=reconstruct(gray,**settings.model_dump(exclude={'corners','mode','strokes','channel','audio_fft','dynamic_range'}))
+            result=reconstruct(gray,**settings.model_dump(exclude={'corners','mode','invert_image','strokes','channel','audio_fft','dynamic_range'}))
             result['metadata']['phase_method']='griffin-lim'
             if settings.mode=='image_draw':result['metadata']['schema_version']='m09-image-draw/1'
     except ValueError as exc:raise AcousticFailure(str(exc)) from None
     wav=io.BytesIO();sf.write(wav,result['audio'],result['sr'],format='WAV',subtype='FLOAT' if audio is not None else 'PCM_16')
-    metadata=result['metadata']|dict(config=settings.model_dump(),image_sha256=digest(raw),source_ids=['REF-GRIFFINLIM','M01-PY-NUMPY','M01-PY-SCIPY','PKG-OPENCV-CONTRIB-PYTHON','PKG-SOUNDFILE'],core_version='3.0.0a1',image_shape=list(gray.shape))
+    from ptb_api.protocol_version import CORE_VERSION
+    metadata=result['metadata']|dict(config=settings.model_dump(),image_sha256=digest(raw),source_ids=['REF-GRIFFINLIM','M01-PY-NUMPY','M01-PY-SCIPY','PKG-OPENCV-CONTRIB-PYTHON','PKG-SOUNDFILE'],core_version=CORE_VERSION,image_shape=list(gray.shape))
     metadata.update(source_sha256=digest(raw),source_kind='audio' if audio is not None else 'image',geometry='perspective-four-corners' if settings.corners else 'full-source',stroke_count=len(strokes))
     blobs=[cv2.imencode('.png',gray)[1].tobytes(),cv2.imencode('.png',result['image'])[1].tobytes(),wav.getvalue(),json.dumps(metadata,allow_nan=False).encode()]
     names=[('calibrated.png','png'),('reconstructed.png','png'),('reconstructed.wav','wav'),('reconstruction.ptb.json','json')]

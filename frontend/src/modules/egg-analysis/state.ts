@@ -1,5 +1,5 @@
 import type {EggTaskConfig,EggPreviewData} from '../../platform/research.ts';
-export const defaults=():EggTaskConfig=>({mode:'preview',signal_mode:'filtered',flip_channels:false,roi_start:0,roi_end:.5,micro_center:.25,micro_width_ms:50,gci_method:'slope',goi_method:'scale',peak_prominence:.01,valley_prominence:.01,auto_prominence:true,highpass_cutoff:25,lowpass_cutoff:2000,spec_window_ms:20,spec_vmin:-70,spec_vmax:-10,keep_praat_f0:false,keep_gci_f0:false,keep_reaper_f0:false,f0_policy:'audio-f0/2',glottal_movement:false,silence_threshold:.01,generate_images:false,lp_order:null,export_policy:'sample-aligned/1'});
+export const defaults=():EggTaskConfig=>({mode:'preview',signal_mode:'filtered',flip_channels:false,roi_start:0,roi_end:.5,micro_center:.25,micro_width_ms:50,gci_method:'slope',goi_method:'scale',peak_prominence:.01,valley_prominence:.01,auto_prominence:true,highpass_cutoff:25,lowpass_cutoff:2000,spec_window_ms:20,spec_vmin:-70,spec_vmax:-10,keep_praat_f0:false,keep_gci_f0:false,keep_reaper_f0:false,f0_policy:'audio-f0/2',f0_min_hz:30,f0_max_hz:800,glottal_movement:false,silence_threshold:.01,generate_images:false,lp_order:null,export_policy:'sample-aligned/1'});
 export function taskConfig(config:EggTaskConfig,mode:EggTaskConfig['mode'],order:number|null=null):EggTaskConfig {
   const result={...config,mode,font:undefined,lp_order:mode==='inverse'?order:null};
   if(mode!=='preview'){result.micro_center=null;result.micro_width_ms=50;}
@@ -7,7 +7,7 @@ export function taskConfig(config:EggTaskConfig,mode:EggTaskConfig['mode'],order
   return result;
 }
 export const batchDefaults=():EggTaskConfig=>({...taskConfig(defaults(),'batch'),keep_praat_f0:true,keep_gci_f0:true});
-export function signature(config:EggTaskConfig){const c={...defaults(),...config};delete c.font;return JSON.stringify(Object.keys(c).sort().map(k=>[k,c[k as keyof EggTaskConfig]]));}
+export function signature(config:EggTaskConfig){const c={...defaults(),...config};c.f0_min_hz=config.f0_min_hz??(c.f0_policy==='audio-f0/2'?30:75);c.f0_max_hz=config.f0_max_hz??(c.f0_policy==='audio-f0/2'?800:600);delete c.font;return JSON.stringify(Object.keys(c).sort().map(k=>[k,c[k as keyof EggTaskConfig]]));}
 // Parameter-only checks mirror M03/1. Per-file rate/ROI checks remain separate.
 export function validateParameters(config:EggTaskConfig){
   const bounded=(value:unknown,min:number,max:number)=>typeof value==='number'&&Number.isFinite(value)&&value>=min&&value<=max;
@@ -16,6 +16,8 @@ export function validateParameters(config:EggTaskConfig){
   if(!bounded(config.peak_prominence,0,10)||!bounded(config.valley_prominence,0,10))throw Error('峰、谷显著度须在 0–10 范围内。');
   if(!bounded(config.spec_window_ms,5,50))throw Error('谱窗须在 5–50 ms 范围内。');
   if(!bounded(config.spec_vmin,-160,20)||!bounded(config.spec_vmax,-160,20)||config.spec_vmin!>=config.spec_vmax!)throw Error('语谱图 dB 上下限须在 -160–20 范围内，且下限小于上限。');
+  const low=config.f0_min_hz??(config.f0_policy==='audio-f0/2'?30:75),high=config.f0_max_hz??(config.f0_policy==='audio-f0/2'?800:600);
+  if(!bounded(low,10,2000)||!bounded(high,10,2000)||low>=high)throw Error('F0 上下限须在 10–2000 Hz 范围内，且下限小于上限。Praat 与 REAPER 共用此范围。');
 }
 export function validate(config:EggTaskConfig,duration:number,rate:number){
   validateParameters(config);

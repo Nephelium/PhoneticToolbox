@@ -42,7 +42,7 @@ async function act(action:'create'|'cancel'|'retry',id='') {
       : action==='retry'?{idempotency_key:pending.get(slot)}:undefined;
     const job=await request<Job>(path,'POST',body);
     if(!disposed){jobs.value=[job,...jobs.value.filter(j=>j.id!==job.id)];pending.delete(slot);}
-  } catch {if(!disposed)message.value='操作未确认，请稍后重试。同一次提交会保留请求标识，避免重复创建任务。';}
+  } catch {if(!disposed)message.value='操作未确认，请稍后重试。';}
   finally {busy.value=false;}
 }
 async function showEvents(id:string) {
@@ -55,10 +55,9 @@ onUnmounted(()=>{disposed=true;abort.abort();clearTimeout(timer);pending.clear()
 </script>
 <template>
   <section class="project-jobs" aria-label="项目任务">
-    <h3>任务记录</h3><p class="muted">当前可检查任务流程：排队、执行、取消和恢复。语音分析将在模块接入后开放。</p>
-    <button :disabled="busy || !enabled" @click="act('create')">运行流程检查</button>
+    <h3>任务记录</h3><p class="muted">查看本项目的任务进度和处理记录。</p>
     <p v-if="!enabled" class="hint">任务服务尚未启用。</p><p v-if="message" role="status">{{message}}</p>
-    <TaskPanel :tasks="tasks" empty-title="暂无任务" empty-text="此项目还没有任务。流程检查不会上传或分析音频。" @cancel="act('cancel',$event)" @retry="act('retry',$event)"/>
+    <TaskPanel :tasks="tasks" empty-title="暂无任务" empty-text="此项目还没有任务。" @cancel="act('cancel',$event)" @retry="act('retry',$event)"/>
     <div class="job-record-buttons"><button v-for="job in jobs" :key="job.id" @click="showEvents(job.id)">查看 {{job.id.slice(0,8)}} 的记录</button></div>
     <ol v-if="events.length" aria-label="任务运行记录"><li v-for="event in events" :key="event.sequence">{{states[event.state]}} · {{Math.round(event.progress*100)}}%</li></ol>
   </section>

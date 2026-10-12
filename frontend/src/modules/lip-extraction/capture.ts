@@ -57,7 +57,7 @@ export class LipCapture {
       if(recording&&memory&&memory.usedJSHeapSize>memory.jsHeapSizeLimit*.85)throw Error('浏览器可观测堆内存已接近上限，请先保存并关闭其他任务，或使用桌面磁盘录制。');
       const storage=await navigator.storage?.estimate().catch(()=>null)??null;
       if(generation!==this.generation)return;
-      this.state.support={storage_estimate:storage,heap_limit:memory?.jsHeapSizeLimit??null,storage_note:'当前录制驻内存，浏览器存储配额不等于下载磁盘可用空间'};
+      this.state.support={storage_estimate:storage,heap_limit:memory?.jsHeapSizeLimit??null,storage_note:'当前录制暂存在内存中，保存前请检查目标磁盘的可用空间'};
       // Device labels may be hidden until permission is granted. Resolve again
       // after acquiring, before starting the recorder. Explicit choices stay exact.
       const before=recording&&!settings.microphone?await navigator.mediaDevices.enumerateDevices().catch(()=>[]):[];

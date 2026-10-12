@@ -20,45 +20,11 @@ from .file_provider import FileProvider,FileAccessError
 from .local_service import LocalService
 
 
-def register_scheme():
-    scheme=QWebEngineUrlScheme(b'ptbapp');scheme.setSyntax(QWebEngineUrlScheme.Syntax.Host)
-    scheme.setFlags(QWebEngineUrlScheme.Flag.SecureScheme|QWebEngineUrlScheme.Flag.LocalScheme|
-        QWebEngineUrlScheme.Flag.LocalAccessAllowed|QWebEngineUrlScheme.Flag.CorsEnabled|QWebEngineUrlScheme.Flag.FetchApiAllowed)
-    QWebEngineUrlScheme.registerScheme(scheme)
-
-
-def permitted_url(url,service_url):
-    part=urlsplit(url)
-    return (part.scheme=='ptbapp' and part.netloc=='app') or url=='qrc:///qtwebchannel/qwebchannel.js' or part.scheme in ('data','blob') or (
-        part.scheme=='http' and part.netloc==urlsplit(service_url).netloc and part.path.startswith('/api/v1/'))
-
-
-class Assets(QWebEngineUrlSchemeHandler):
-    def __init__(self,root,parent):super().__init__(parent);self.root=root.resolve()
-    def requestStarted(self,job):
-        if job.requestUrl().host()!='app' or bytes(job.requestMethod())!=b'GET':
-            job.fail(QWebEngineUrlRequestJob.Error.RequestDenied);return
-        try:
-            name=unquote(job.requestUrl().path()).lstrip('/') or 'index.html'
-            if '\\' in name or ':' in name or '..' in Path(name).parts:raise ValueError()
-            path=(self.root/name).resolve()
-            if not path.is_relative_to(self.root) or not path.is_file():raise ValueError()
-            raw=path.read_bytes()
-            if name=='index.html':
-                raw=raw.replace(b'<head>',b'<head><script src="qrc:///qtwebchannel/qwebchannel.js"></script>')
-            buffer=QBuffer(job);buffer.setData(raw);buffer.open(QIODevice.OpenModeFlag.ReadOnly)
-            mime={'.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.svg':'image/svg+xml'}.get(path.suffix,mimetypes.guess_type(path.name)[0] or 'application/octet-stream')
-            job.reply(mime.encode('ascii'),buffer)
-        except (OSError,ValueError):job.fail(QWebEngineUrlRequestJob.Error.UrlNotFound)
-
-
-class LocalOnly(QWebEngineUrlRequestInterceptor):
-    def __init__(self,url,parent):super().__init__(parent);self.url=url
-    def interceptRequest(self,info):
-        if not permitted_url(info.requestUrl().toString(),self.url):info.block(True)
+from .web_assets import Assets,LocalOnly,register_scheme,permitted_url
 
 
 class Bridge(QObject):
+    windowStateChanged=pyqtSignal(bool)
     vocalReady=pyqtSignal(str,str)
     previewReady=pyqtSignal(str,str)
     taskReady=pyqtSignal(str,str)
@@ -68,6 +34,7 @@ class Bridge(QObject):
         self.test_dialog=test_dialog
         self.preview_lock=threading.Lock()
         self.task_lock=threading.Lock()
+        self.m11_component_lock=threading.Lock()
         self.recording_lock=threading.Lock()
         self._recording_bridge=None
         from .task_bridge import TaskBridge
@@ -93,6 +60,24 @@ class Bridge(QObject):
         if len(color)!=7 or color[0]!='#' or any(c not in '0123456789abcdefABCDEF' for c in color[1:]):return
         self.window.set_surface_color(QColor(color))
 
+    @pyqtSlot(str,str)
+    def setCaptionColors(self,background,foreground):
+        from .window_chrome import valid_colour
+        if valid_colour(background) and valid_colour(foreground):
+            self.window.set_caption_colors(background,foreground)
+
+    @pyqtSlot(str)
+    def windowAction(self,action):
+        if not self.window.integrated_chrome:return
+        if action=='move':
+            handle=self.window.windowHandle()
+            if handle is not None:handle.startSystemMove()
+        elif action=='minimize':self.window.showMinimized()
+        elif action=='maximize':
+            if self.window.isMaximized():self.window.showNormal()
+            else:self.window.showMaximized()
+        elif action=='close':self.window.close()
+
     @pyqtSlot(str,result=str)
     def writeClipboard(self,text):
         # QWebChannel invokes this on the GUI thread. Keep clipboard permission
@@ -106,6 +91,15 @@ class Bridge(QObject):
             return json.dumps({'ok':True},ensure_ascii=False)
         except ValueError as exc:return json.dumps({'ok':False,'error':str(exc)},ensure_ascii=False)
         except Exception:return json.dumps({'ok':False,'error':'系统剪贴板暂不可用，请重试。'},ensure_ascii=False)
+
+    @pyqtSlot(str,result=str)
+    def pickColor(self, initial):
+        from .color_picker import pick_color
+        try:
+            color = pick_color(self.window, initial)
+            return json.dumps({'ok': True, 'color': color}, ensure_ascii=False)
+        except Exception:
+            return json.dumps({'ok': False, 'error': '屏幕取色暂不可用，请使用色盘或 HEX 代码。'}, ensure_ascii=False)
 
     @pyqtSlot(str,str)
     def recording(self,request_id,raw):
@@ -141,7 +135,8 @@ class Bridge(QObject):
                     selected=QFileDialog.getOpenFileName(self.window,'导入声道关键帧','','声道关键帧 (*.ptb-vocal.json *.json)')[0]
                 else:
                     video=op=='video/begin'
-                    selected=QFileDialog.getSaveFileName(self.window,'保存动作视频' if video else '导出声道关键帧','声道动作.webm' if video else '声道关键帧.ptb-vocal.json','WebM 视频 (*.webm)' if video else '声道关键帧 (*.ptb-vocal.json)')[0]
+                    selected=QFileDialog.getSaveFileName(self.window,'保存动作视频' if video else '导出声道关键帧','声道动作.mp4' if video else '声道关键帧.ptb-vocal.json','MP4 视频 (*.mp4)' if video else '声道关键帧 (*.ptb-vocal.json)')[0]
+                    if video and selected and not Path(selected).suffix:selected+='.mp4'
         except Exception as exc:
             self.vocal_slots.release();self.vocalReady.emit(request_id,json.dumps({'ok':False,'error':str(exc)}));return
         def work():
@@ -166,13 +161,16 @@ class Bridge(QObject):
             decoded=decode_task_request(raw)
         except (ValueError,TypeError):
             self.taskReady.emit(request_id,json.dumps({'ok':False,'error':'请求结构或大小不正确。'}));return
-        if not self.task_lock.acquire(False):
+        # Component transfer can take minutes. Keep catalogue/progress reads and
+        # unrelated task operations responsive while serializing installations.
+        task_lock=self.m11_component_lock if decoded.get('op')=='m11_component' else self.task_lock
+        if not task_lock.acquire(False):
             self.taskReady.emit(request_id,json.dumps({'ok':False,'error':'任务操作正在进行，请稍候。'}));return
         def work():
             try:result={'ok':True,'value':self.tasks.invoke(decoded)}
             except FileAccessError as exc:result={'ok':False,'error':str(exc)}
             except Exception:result={'ok':False,'error':'任务操作失败，请检查文件关联、目录权限或任务服务。'}
-            finally:self.task_lock.release()
+            finally:task_lock.release()
             try:self.taskReady.emit(request_id,json.dumps(result,ensure_ascii=False,allow_nan=False))
             except RuntimeError:pass
         threading.Thread(target=work,daemon=True).start()
@@ -200,6 +198,16 @@ class Bridge(QObject):
         threading.Thread(target=work,daemon=True).start()
 
     @pyqtSlot(str,result=str)
+    def applicationIcon(self, raw):
+        try:
+            if len(raw) > 600_000:
+                raise ValueError('图标请求过大。')
+            value = self.window.icon_preferences.request(json.loads(raw))
+            return json.dumps({'ok': True, 'value': value}, ensure_ascii=False)
+        except (ValueError, TypeError, OSError) as error:
+            return json.dumps({'ok': False, 'error': str(error)}, ensure_ascii=False)
+
+    @pyqtSlot(str,result=str)
     def invoke(self,raw):
         try:
             if len(raw)>8192:raise FileAccessError('请求过长。')
@@ -208,7 +216,7 @@ class Bridge(QObject):
             op=body.get('op')
             if op=='hello':
                 health=self.service.get('/api/v1/health')
-                value={'kind':'desktop','session':self.provider.session,'api_version':health['api_version'],'tasks':bool(self.service.local_files_root)}
+                value={'kind':'desktop','session':self.provider.session,'api_version':health['api_version'],'tasks':bool(self.service.local_files_root),'integrated_titlebar':getattr(self.window,'integrated_chrome',False),'window_maximized':getattr(self.window,'isMaximized',lambda:False)()}
             elif op=='clear_all_caches':
                 if body.get('purpose')!='confirmed':raise FileAccessError('请先确认清除缓存及退出。')
                 from .updates import UpdateError
@@ -293,6 +301,9 @@ class Page(QWebEnginePage):
 class Workbench(QMainWindow):
     def __init__(self,dist,*,test=False,jobs_path=None,local_files_root=None,reaper_binary=None,vocal_resources=None,vocal_profile=None,start_module=None):
         super().__init__();self.setWindowTitle('PhoneticToolbox 3.0');self.resize(1440,900)
+        self.integrated_chrome=sys.platform=='win32'
+        if self.integrated_chrome:self.setWindowFlag(Qt.WindowType.FramelessWindowHint,True)
+        self._caption_colors=('#f9f9f9','#34404a')
         from .app_icon import configure_app_icon
         self.setWindowIcon(configure_app_icon(dist))
         self.fit_screen(initial=True)
@@ -338,12 +349,20 @@ class Workbench(QMainWindow):
         from .updates_bridge import UpdatesBridge
         from .platform_paths import user_data_root
         version_file=dist.parent.parent/'release/version.json'
-        update_version=json.loads(version_file.read_text('utf8'))['frontend_version'] if version_file.is_file() else '3.0.0-preview.1'
+        from . import __version__
+        update_version=json.loads(version_file.read_text('utf8'))['frontend_version'] if version_file.is_file() else __version__
         updates_root=user_data_root()/'updates'
         if test:
             import tempfile
             self._updates_test_directory=tempfile.TemporaryDirectory(prefix='ptb-updates-qa-')
             updates_root=Path(self._updates_test_directory.name)
+        from .icon_preferences import IconPreferences
+        icon_root = updates_root / 'icons-qa' if test else user_data_root() / 'icons'
+        self.icon_preferences = IconPreferences(icon_root, self.windowIcon(), self, dist)
+        try:
+            self.icon_preferences.apply(self.icon_preferences.read())
+        except (ValueError, OSError):
+            pass  # Settings reports the read error; retain the original preference file.
         from .update_coordinator import UpdateCoordinator
         from .update_apply import package_kind
         self.update_coordinator=UpdateCoordinator(self)
@@ -357,8 +376,13 @@ class Workbench(QMainWindow):
         self.channel.registerObject('updates',self.updates_bridge)
         from .papers_bridge import PapersBridge
         papers_root=updates_root/'papers-qa' if test else user_data_root()/'papers'
-        self.papers_bridge=PapersBridge(papers_root,self,export_picker=self.pick_paper_export)
+        self.papers_bridge=PapersBridge(papers_root,self,export_picker=self.pick_paper_export,root_picker=self.pick_paper_library,import_picker=self.pick_local_papers)
         self.channel.registerObject('papers',self.papers_bridge)
+        from .feedback_bridge import FeedbackBridge
+        feedback_root=updates_root/'feedback-qa' if test else user_data_root()/'feedback'
+        self.feedback_bridge=FeedbackBridge(feedback_root,self)
+        self.channel.registerObject('feedback',self.feedback_bridge)
+        if not test:self.papers_bridge.start_maintenance()
         self.page.setWebChannel(self.channel)
         self.page.windowCloseRequested.connect(self.accept_close)
         self.setCentralWidget(self.view)
@@ -374,6 +398,16 @@ class Workbench(QMainWindow):
         for widget in (self,self.view):
             palette=widget.palette();palette.setColor(QPalette.ColorRole.Window,color);palette.setColor(QPalette.ColorRole.Base,color)
             widget.setPalette(palette);widget.setAutoFillBackground(True)
+
+    def set_caption_colors(self,background,foreground):
+        self._caption_colors=(background,foreground)
+        self.apply_caption_colors()
+
+    def apply_caption_colors(self):
+        from .window_chrome import apply_caption_colours
+        handle=self.windowHandle()
+        if handle is not None:
+            self._caption_applied=apply_caption_colours(int(handle.winId()),*self._caption_colors)
 
     def refresh_surface(self):
         if self.closing:return
@@ -393,6 +427,10 @@ class Workbench(QMainWindow):
         super().resizeEvent(event);self.queue_surface_refresh()
 
     def nativeEvent(self,event_type,message):
+        if getattr(self,'integrated_chrome',False):
+            from .window_chrome import integrated_frame_event
+            handled=integrated_frame_event(message,self)
+            if handled is not None:return handled
         guard=getattr(self,'_first_maximize',None)
         if sys.platform=='win32' and guard is not None and not guard.used:
             from ctypes.wintypes import MSG
@@ -415,6 +453,10 @@ class Workbench(QMainWindow):
             elif self._first_maximize.active:self._first_maximize.cancel()
         super().changeEvent(event)
         if event.type()==QEvent.Type.WindowStateChange:self.queue_surface_refresh()
+        if event.type()==QEvent.Type.WindowStateChange and hasattr(self,'bridge'):
+            self.bridge.windowStateChanged.emit(self.isMaximized())
+        if event.type()==QEvent.Type.ActivationChange and hasattr(self,'_caption_colors'):
+            self.apply_caption_colors()
 
     def fit_screen(self,screen=None,*,initial=False):
         screen=screen or self.screen()
@@ -427,6 +469,11 @@ class Workbench(QMainWindow):
 
     def showEvent(self,event):
         super().showEvent(event)
+        if self.integrated_chrome and not getattr(self,'_integrated_frame_ready',False):
+            self._integrated_frame_ready=True
+            from .window_chrome import configure_integrated_frame
+            configure_integrated_frame(int(self.winId()))
+        self.apply_caption_colors()
         if not getattr(self,'_screen_connected',False) and self.windowHandle():
             self.windowHandle().screenChanged.connect(self.fit_screen)
             self._screen_connected=True
@@ -456,6 +503,14 @@ class Workbench(QMainWindow):
     def pick_paper_export(self,name):
         options=QFileDialog.Option.DontUseNativeDialog if self.bridge.test_dialog else QFileDialog.Option(0)
         return QFileDialog.getSaveFileName(self,'导出论文 PDF',name,'PDF 文档 (*.pdf)',options=options)[0]
+
+    def pick_paper_library(self):
+        options=QFileDialog.Option.DontUseNativeDialog if self.bridge.test_dialog else QFileDialog.Option(0)
+        return QFileDialog.getExistingDirectory(self,'选择本地论文文件夹',options=options)
+
+    def pick_local_papers(self):
+        options=QFileDialog.Option.DontUseNativeDialog if self.bridge.test_dialog else QFileDialog.Option(0)
+        return QFileDialog.getOpenFileNames(self,'导入 PDF 到本地论文库','','PDF 文档 (*.pdf)',options=options)[0]
 
     def save_download(self,download):
         # Only renderer-generated supported artifacts from this owned page.
@@ -489,6 +544,7 @@ class Workbench(QMainWindow):
         if self._startup_presentation:self._startup_presentation.cancel()
         if hasattr(self,'updates_bridge'):self.updates_bridge.close()
         self.papers_bridge.close()
+        self.feedback_bridge.close()
         self.bridge.vocal_files.close();self.vocal.close();self.provider.close();self.service.close();event.accept()
 
 

@@ -12,7 +12,7 @@ onMounted(async()=>{
  try{
   await nextTick();
   const spec=media.value?.animation;
-  if(spec){const renderer=symbolAnimation(spec.renderer);if(!renderer)message.value='此项实时动画尚未接入。';else{
+  if(spec){const renderer=symbolAnimation(spec.renderer);if(!renderer)message.value='此符号暂时没有实时动画，可查看发音说明。';else{
    const cleanup=await renderer({entry:props.entry,version:spec.version,config:spec.config,container:animation.value!,signal:abort.signal});
    if(abort.signal.aborted){if(typeof cleanup==='function')cleanup();return;}if(typeof cleanup==='function')stop=cleanup;
   }}

@@ -11,21 +11,21 @@ import {setupKeyframes} from './keyframes.js';
 import {moveControl,PoseHistory,ORGAN_PARAMS} from './controls.mjs';
 
 const $=id=>document.getElementById(id);
-let sourceSettings,manualRoot=false,presetLibrary,larynxHeight=0;
+let sourceSettings,manualRoot=false,presetLibrary,larynxHeight=0,tongueShape=[0,0,0,0];
 let meta,params,snapshot,token,revision=0,dirty=false,inFlight=false,live=false,closed=false;
 let toastTimer,selectedPreset='a',rendering=false,lipWidth=1,motionBusy=false;
 const inputs=new Map();
 const history=new PoseHistory();let selectedSide=2,lastOpenArea=.7;
-const currentEdit=()=>({params:[...params],preset:selectedPreset,name:presetLibrary?.getName(selectedPreset)||'',manual_root:manualRoot,larynx_height:larynxHeight,lip_width:lipWidth,f0:+$('f0Range').value,source:{...sourceSettings}});
+const currentEdit=()=>({params:[...params],preset:selectedPreset,name:presetLibrary?.getName(selectedPreset)||'',manual_root:manualRoot,larynx_height:larynxHeight,tongue_shape:[...tongueShape],lip_width:lipWidth,f0:+$('f0Range').value,source:{...sourceSettings}});
 function beginEdit(){if(params)history.begin(currentEdit());}
 function endEdit(){if(params)history.commit(currentEdit());updateHistory();}
 function updateHistory(){$('undoButton').disabled=!history.past.length;$('redoButton').disabled=!history.future.length;}
-function restoreEdit(state){if(!state)return;manualRoot=state.manual_root??false;larynxHeight=state.larynx_height??0;params=[...state.params];sourceSettings={...(state.source||meta.source_presets.voiced)};selectedPreset=state.preset||'';lipWidth=state.lip_width??1;$('f0Range').value=state.f0??150;$('f0Output').textContent=$('f0Range').value+' Hz';updateControls();dirty=true;queuePose();updateHistory();}
+function restoreEdit(state){if(!state)return;manualRoot=state.manual_root??false;larynxHeight=state.larynx_height??0;tongueShape=[...(state.tongue_shape??[0,0,0,0])];params=[...state.params];sourceSettings={...(state.source||meta.source_presets.voiced)};selectedPreset=state.preset||'';lipWidth=state.lip_width??1;$('f0Range').value=state.f0??150;$('f0Output').textContent=$('f0Range').value+' Hz';updateControls();dirty=true;queuePose();updateHistory();}
 function saveView(){try{localStorage.setItem('vtl-view-v2',JSON.stringify({mode:viewer.mode,teeth:viewer.showTeeth,head:viewer.showHead,nose:viewer.showNose,labels:viewer.labels,fullModel:viewer.fullModel}));}catch{}}
 function selectInspector(organ){
   const labels={tongue:'舌头',lips:'唇与下颌',velum:'软腭与咽部'};
   document.querySelectorAll('[data-select-organ]').forEach(b=>{b.classList.toggle('selected',b.dataset.selectOrgan===organ);b.setAttribute('aria-pressed',b.dataset.selectOrgan===organ);});
-  $('resetOrgan').textContent='重置'+labels[organ];$('editHint').textContent=organ==='tongue'?'拖动舌背、舌叶、舌尖；侧缘在横截面与三维中调整，左右联动。':organ==='lips'?'侧面左右拖动改变前突，上下改变开度；正面圆点调整左右宽度。':'软腭抬起关闭，下降开放。使用面积滑块微调。';
+  $('resetOrgan').textContent='重置'+labels[organ];$('editHint').textContent=organ==='tongue'?'拖动舌背、舌面、舌叶、舌尖与舌底；侧缘在横截面与三维中调整，左右联动。':organ==='lips'?'侧面左右拖动改变前突，上下改变开度；正面圆点调整左右宽度。':'软腭抬起关闭，下降开放。使用面积滑块微调。';
   document.querySelectorAll('#parameterGroups .parameter-group').forEach(d=>{d.open=true;d.hidden=false;});
   document.querySelector('.lip-width-panel').hidden=false;$('velumControls').hidden=false;
   document.dispatchEvent(new CustomEvent('inspector-organ')); 
@@ -40,10 +40,11 @@ function markChanged(){dirty=true;selectedPreset='';updateControls();queuePose()
 async function queuePose(){
   if(inFlight||!dirty||closed||!params||motionBusy)return;
   inFlight=true;document.body.dataset.posePending='true';dirty=false;const rev=++revision;
-  try{const r=await post('pose',{params:[...params],manual_root:manualRoot,larynx_height:larynxHeight,revision:rev,section:+$('sliceRange').value,f0:+$('f0Range').value,lip_width:lipWidth,source:{...sourceSettings},keep_vowel:$('keepVowel').checked});
-    const state=await r.json();if(state.revision===rev){snapshot=state;if(!dirty){params=[...state.params];lipWidth=state.lip_width;larynxHeight=state.larynx_height??0;if(!manualRoot)for(const key of ['TRX','TRY']){const i=meta.parameters.findIndex(p=>p.name===key);params[i]=state.limited[i];}updateControls();}updateModel(state);drawCharts();$('sceneMetrics').textContent=state.uvula_contact_lift>1e-5?'小舌已接触舌面':'软腭 · 同一三维模型截面';document.body.dataset.computeMs=String(Math.round(state.compute_ms));const limited=state.nasal_constraint;$('portConstraint').classList.toggle('limited',!!limited);$('portConstraint').textContent=limited?`该舌位下开口已限制为 ${limited.accepted_area.toFixed(2)} cm²，避免新产生口腔闭塞。`:'软腭下降开放，抬起关闭。';if(meta.parameters.some((p,i)=>ORGAN_PARAMS[viewer.selected].includes(p.name)&&Math.abs(state.params[i]-state.limited[i])>.04))$('editHint').textContent='已达到器官约束，显示的是引擎允许的构形。';}
+  try{const r=await post('pose',{params:[...params],manual_root:manualRoot,larynx_height:larynxHeight,tongue_shape:[...tongueShape],revision:rev,section_count:+$('sectionCount').value,section:+$('sliceRange').value,f0:+$('f0Range').value,lip_width:lipWidth,source:{...sourceSettings},keep_vowel:$('keepVowel').checked});
+    const state=await r.json();if(state.revision===rev){snapshot=state;try{localStorage.setItem('m10-section-count-r19',String(state.section_count));}catch{}if(!dirty){params=[...state.params];lipWidth=state.lip_width;larynxHeight=state.larynx_height??0;tongueShape=[...(state.tongue_shape??[0,0,0,0])];if(!manualRoot)for(const key of ['TRX','TRY']){const i=meta.parameters.findIndex(p=>p.name===key);params[i]=state.limited[i];}updateControls();}updateModel(state);drawCharts();$('sceneMetrics').textContent=state.uvula_contact_lift>1e-5?'小舌已接触舌面':'软腭 · 同一三维模型截面';document.body.dataset.computeMs=String(Math.round(state.compute_ms));const limited=state.nasal_constraint;$('portConstraint').classList.toggle('limited',!!limited);$('portConstraint').textContent=limited?`该舌位下开口已限制为 ${limited.accepted_area.toFixed(2)} cm²，避免新产生口腔闭塞。`:'软腭下降开放，抬起关闭。';if(meta.parameters.some((p,i)=>ORGAN_PARAMS[viewer.selected].includes(p.name)&&Math.abs(state.params[i]-state.limited[i])>.04))$('editHint').textContent='已达到器官约束，显示的是引擎允许的构形。';}
   }catch(e){toast(e.message);}finally{inFlight=false;document.body.dataset.poseRevision=String(rev);document.body.dataset.posePending=String(dirty);if(dirty)setTimeout(queuePose,0);}
 }
+$('sectionCount').onchange=()=>{const old=snapshot?.centerline.length??129,count=+$('sectionCount').value;$('sliceRange').value=Math.round(+$('sliceRange').value*(count-1)/(old-1));dirty=true;queuePose();};
 function updateControls(){
   $('manualRoot').checked=manualRoot;
   if($('larynxHeight')){$('larynxHeight').value=larynxHeight;$('larynxHeightValue').textContent=larynxHeight.toFixed(2)+' cm';}
@@ -55,7 +56,7 @@ function updateControls(){
   $('lipWidthRange').value=Math.round(lipWidth*100);$('lipWidthValue').textContent=Math.round(lipWidth*100)+'%';
   $('portRange').value=area;$('portValue').textContent=area.toFixed(2)+' cm²';$('portToggle').setAttribute('aria-checked',area>0);$('portToggle').textContent=area>0?'已开放':'已关闭';
 }
-function choosePreset(name){beginEdit();manualRoot=false;larynxHeight=0;params=[...meta.presets[name]];lipWidth=1;selectedPreset=name;updateControls();dirty=true;queuePose();endEdit();}
+function choosePreset(name){beginEdit();const pose=meta.default_poses[name];if(pose)restoreEdit({...pose,preset:name});else{manualRoot=false;larynxHeight=0;tongueShape=[0,0,0,0];params=[...meta.presets[name]];lipWidth=1;selectedPreset=name;updateControls();dirty=true;queuePose();}endEdit();}
 function updateSourceControls(){
   if(!sourceSettings)return;
   $('sourceMode').value=sourceSettings.mode;
@@ -63,6 +64,7 @@ function updateSourceControls(){
   $('f0Range').disabled=motionBusy||sourceSettings.vibration===0;
   $('sourceHint').textContent=sourceSettings.vibration===0?'周期振动已关闭；减小开度使声门更内收。F0 在此模式不生效。':'减小声门半宽或后部缝隙表示更内收；气流速度由气压和声道阻力共同决定。';
   if(sourceSettings.mode==='whisper')$('sourceHint').textContent+=` 耳语试听补偿 ${sourceSettings.audition_gain_db??24} dB，播放与视频一致。`;
+  if(sourceSettings.mode==='voiceless')$('sourceHint').textContent+=' 舌尖擦音需保留中央窄缝并抬高前侧缘；声音过轻可调整弱音增益。';
 }
 function setupControls(){
   sourceSettings={...meta.source_presets.voiced};
@@ -75,9 +77,8 @@ function setupControls(){
   $('gainSelect').value=meta.audio_settings.gain_db||0;
   $('gainSelect').onchange=async()=>{try{updateAudio(await(await post('audio/settings',{gain_db:+$('gainSelect').value})).json());}catch(e){toast(e.message);}};
 
-  const symbols={E:'ɛ',y:'y','2':'ø'};
-  for(const name of ['a','i','u','e','o','E','y','2','l','n','t'].filter(n=>meta.presets[n])){const b=document.createElement('button');b.textContent=symbols[name]||name;b.dataset.preset=name;b.title=`载入 VTL /${symbols[name]||name}/ 构形`;b.onclick=()=>choosePreset(name);$('presets').append(b);}
-  presetLibrary=setupPresets({initial:meta.custom_presets,chart:meta.ipa_chart,getPose:currentEdit,post,isReady:()=>!motionBusy&&!dirty&&!inFlight,onSaved:p=>{selectedPreset=p.id;updateControls();},notify:toast,apply:p=>{beginEdit();restoreEdit({...p,preset:p.id,source:p.source||sourceSettings});endEdit();}});
+  const symbols={E:'ɛ','2':'ø'};
+  presetLibrary=setupPresets({initial:meta.custom_presets,builtins:Object.keys(meta.presets).map(id=>({id,name:symbols[id]||id,builtin:true})),favorites:meta.favorites,chooseBuiltin:choosePreset,chart:meta.ipa_chart,getPose:currentEdit,post,isReady:()=>!motionBusy&&!dirty&&!inFlight,onSaved:p=>{selectedPreset=p.id;updateControls();},notify:toast,apply:p=>{beginEdit();restoreEdit({...p,preset:p.id,source:p.source||sourceSettings});endEdit();}});
   const groups=[['嘴唇与下颌',['JA','LP','LD'],false,'lips'],['舌头',['TCX','TCY','TBX','TBY','TTX','TTY'],true,'tongue'],['舌根',['TRX','TRY'],true,'tongue'],['舌骨',['HX','HY'],true,'tongue'],['软腭',['VS'],false,'velum'],['舌侧缘',['TS1','TS2','TS3'],true,'tongue']];
   for(const [label,names,open,organ] of groups){const details=document.createElement('section');details.className='parameter-group';details.dataset.organ=organ;const summary=document.createElement('h3');summary.className='group-title';summary.textContent=label;details.append(summary);
     for(const name of names){const index=meta.parameters.findIndex(x=>x.name===name),p=meta.parameters[index],row=document.createElement('div');row.className='parameter';
@@ -94,7 +95,7 @@ function setupControls(){
   $('larynxHeight').oninput=()=>{beginEdit();larynxHeight=+$('larynxHeight').value;markChanged();};
   $('manualRoot').onchange=()=>{beginEdit();manualRoot=$('manualRoot').checked;markChanged();endEdit();};
   $('undoButton').onclick=()=>restoreEdit(history.undo(currentEdit()));$('redoButton').onclick=()=>restoreEdit(history.redo(currentEdit()));
-  $('resetOrgan').onclick=()=>{beginEdit();if(viewer.selected==='lips')lipWidth=1;if(viewer.selected==='velum')larynxHeight=0;for(const name of ORGAN_PARAMS[viewer.selected]){const i=meta.parameters.findIndex(p=>p.name===name);params[i]=meta.presets.a[i];}markChanged();endEdit();};
+  $('resetOrgan').onclick=()=>{beginEdit();if(viewer.selected==='tongue')tongueShape=[0,0,0,0];if(viewer.selected==='lips')lipWidth=1;if(viewer.selected==='velum')larynxHeight=0;for(const name of ORGAN_PARAMS[viewer.selected]){const i=meta.parameters.findIndex(p=>p.name===name);params[i]=meta.presets.a[i];}markChanged();endEdit();};
   document.querySelectorAll('[data-select-organ]').forEach(b=>b.onclick=()=>viewer.select(b.dataset.selectOrgan));
   const portIndex=meta.parameters.findIndex(p=>p.name==='VO');$('portRange').max=meta.parameters[portIndex].max;
   $('portRange').onpointerdown=beginEdit;$('portRange').onkeydown=beginEdit;$('portRange').onchange=endEdit;
@@ -114,7 +115,7 @@ function setupControls(){
   $('aboutButton').onclick=()=>$('aboutDialog').showModal();$('sharedReferences').onclick=()=>parent.postMessage({type:'m10-references'},'*');$('sharedHelp').onclick=()=>parent.postMessage({type:'m10-help'},'*');$('closeAbout').onclick=()=>$('aboutDialog').close();
   $('sourceState').textContent=meta.audio_locked?'静音测试':'手动播放';
   if(meta.audio_locked){document.body.classList.add('audio-locked');document.querySelectorAll('#oneSecondButton,#liveButton,#testToneButton,#volumeRange,#outputDevice,#gainSelect').forEach(e=>e.disabled=true);$('audioStatus').textContent='静音建模已锁定，后端不允许音频输出。';}
-  setupKeyframes({initialFrames:meta.saved_frames,initialCurve:meta.saved_curve,getPose:currentEdit,applyPose:(state,animated=false)=>{if(animated){manualRoot=state.manual_root??false;larynxHeight=state.larynx_height??0;params=[...state.params];sourceSettings={...(state.source||meta.source_presets.voiced)};lipWidth=state.lip_width;selectedPreset='';snapshot=state;$('f0Range').value=state.f0;$('f0Output').textContent=Math.round(state.f0)+' Hz';updateControls();updateModel(state);drawCharts();}else{beginEdit();restoreEdit(state);endEdit();}},post,setBusy:value=>{motionBusy=value;viewer.playing=value;document.body.classList.toggle('motion-busy',value);document.querySelectorAll('#parameterGroups input,.lip-width-panel input,.source-panel button,.source-panel input,.source-panel select,.edit-panel button,#presets button,#portRange,#portToggle,#keepVowel,#sliceRange,#customPreset,#savePreset').forEach(e=>e.disabled=value||(meta.audio_locked&&e.matches('#oneSecondButton,#liveButton,#testToneButton,#volumeRange,#outputDevice,#gainSelect')));if(!value){updateHistory();dirty=true;queuePose();}},isReady:()=>!dirty&&!inFlight&&!rendering,isSilent:meta.audio_locked,keepVowel:()=>$('keepVowel').checked,viewer});
+  setupKeyframes({initialFrames:meta.saved_frames,initialCurve:meta.saved_curve,getPose:currentEdit,applyPose:(state,animated=false)=>{if(animated){manualRoot=state.manual_root??false;larynxHeight=state.larynx_height??0;tongueShape=[...(state.tongue_shape??[0,0,0,0])];params=[...state.params];sourceSettings={...(state.source||meta.source_presets.voiced)};lipWidth=state.lip_width;selectedPreset='';snapshot=state;$('f0Range').value=state.f0;$('f0Output').textContent=Math.round(state.f0)+' Hz';updateControls();updateModel(state);drawCharts();}else{beginEdit();restoreEdit(state);endEdit();}},post,setBusy:value=>{motionBusy=value;viewer.playing=value;document.body.classList.toggle('motion-busy',value);document.querySelectorAll('#parameterGroups input,.lip-width-panel input,.source-panel button,.source-panel input,.source-panel select,.edit-panel button,#presets button,#portRange,#portToggle,#keepVowel,#sliceRange,#sectionCount,#customPreset,#savePreset').forEach(e=>e.disabled=value||(meta.audio_locked&&e.matches('#oneSecondButton,#liveButton,#testToneButton,#volumeRange,#outputDevice,#gainSelect')));if(!value){updateHistory();dirty=true;queuePose();}},isReady:()=>!dirty&&!inFlight&&!rendering,isSilent:meta.audio_locked,keepVowel:()=>$('keepVowel').checked,viewer});
   updateControls();updateHistory();
 }
 function setLive(value){live=value;const b=$('liveButton');b.classList.toggle('active',live);b.lastElementChild.textContent=live?'停止播放':'持续发声';b.firstElementChild.textContent=live?'■':'▶';}
@@ -126,15 +127,15 @@ function updateAudio(s){if(s.audio_locked){$('audioStatus').textContent='静音�
 async function preview(glide,duration=1.2){
   if(dirty||inFlight||motionBusy){toast('请等待构形更新完成');return;}
   rendering=true;const buttons=[$('oneSecondButton'),$('liveButton')];buttons.forEach(b=>b.disabled=true);$('audioStatus').textContent='正在合成…';
-  try{const r=await post('preview',{params:[...params],lip_width:lipWidth,larynx_height:larynxHeight,duration:glide?2.4:duration,sequence:glide?'a-i-u':null});updateAudio(await r.json());}
+  try{const r=await post('preview',{params:[...params],lip_width:lipWidth,larynx_height:larynxHeight,tongue_shape:[...tongueShape],duration:glide?2.4:duration,sequence:glide?'a-i-u':null});updateAudio(await r.json());}
   catch(e){toast(e.message);$('audioStatus').textContent='试听失败：'+e.message;}finally{rendering=false;buttons.forEach(b=>b.disabled=!!meta.audio_locked);}
 }
 
 const viewport=$('viewport');
 export const viewer=new VocalTractViewer(viewport,(name,dx,dy,baseline)=>{
-  if(motionBusy)return;if(name==='larynx'){larynxHeight=Math.max(-1,Math.min(1,(baseline.larynx_height??0)+dy));markChanged();return;}if(name==='root')manualRoot=true;const moved=moveControl(meta,baseline,name,dx,dy);params=moved.params;markChanged();if(moved.limited)$('editHint').textContent='已达到该参数的移动边界。';
+  if(motionBusy)return;if(name==='larynx'){larynxHeight=Math.max(-1,Math.min(1,(baseline.larynx_height??0)+dy));markChanged();return;}if(name==='root')manualRoot=true;const moved=moveControl(meta,baseline,name,dx,dy);params=moved.params;if(moved.tongue_shape)tongueShape=moved.tongue_shape;markChanged();if(moved.limited)$('editHint').textContent='已达到该参数的移动边界。';
 },{onStart:beginEdit,onEnd:endEdit,onSelect:selectInspector});
-function updateModel(state){state.section=+$('sliceRange').value;state.upper=state.airway_sections[state.section].upper;state.lower=state.airway_sections[state.section].lower;viewer.update(state);drawLipFront(viewer.state);$('loadIndicator').hidden=true;$('slicePosition').textContent=state.centerline[state.section][2].toFixed(1)+' cm';const area=state.nasal.port_area;$('nasalPortStatus').textContent=area>0?'口鼻气腔连通':'软腭封闭入口';$('nasalPortStatus').classList.toggle('open',area>0);}
+function updateModel(state){state.section=Math.max(0,Math.min(state.centerline.length-1,+$('sliceRange').value));state.upper=state.airway_sections[state.section].upper;state.lower=state.airway_sections[state.section].lower;if(sideDrag){const h=state.lower[sideDrag.sample],p=state.params[sideDrag.index];if(h!==null){const dh=h-sideDrag.height,dp=p-sideDrag.parameter;if(Math.abs(dh)>.002&&dp/dh>0)sideDrag.gain=Math.max(.05,Math.min(3,dp/dh));sideDrag.height=h;sideDrag.parameter=p;sideDrag.params=[...state.params];}}viewer.update(state);drawLipFront(viewer.state);$('loadIndicator').hidden=true;$('slicePosition').textContent=state.centerline[state.section][2].toFixed(1)+' cm';const area=state.nasal.port_area;$('nasalPortStatus').textContent=area>0?'口鼻气腔连通':'软腭封闭入口';$('nasalPortStatus').classList.toggle('open',area>0);}
 let widthDrag=null;
 function drawLipFront(state){
   const svg=$('lipFront'),upper=state.meshes.find(m=>m.name==='upper_lip'),lower=state.meshes.find(m=>m.name==='lower_lip');
@@ -154,15 +155,15 @@ for(const [id,key] of [['headToggle','head'],['noseToggle','nose'],['labelsToggl
 function setMode(mode){viewer.setOptions({mode});document.querySelectorAll('[data-mode]').forEach(b=>{b.classList.toggle('selected',b.dataset.mode===mode);b.setAttribute('aria-pressed',b.dataset.mode===mode);});$('modeLegend').textContent=mode==='organs'?'粉红：软组织 · 淡线：气腔参考':mode==='airway'?'青绿：空气占据的空间 · 粉红：软腭阀门':'粉红：软组织 · 青绿：气腔叠加';saveView();}
 document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
 let sideDrag=null,sectionScale=1;
-$('sectionHandles').addEventListener('pointerdown',e=>{const t=e.target.closest('[data-side]');if(!t||motionBusy)return;beginEdit();sideDrag={start:e.clientY,params:[...params],name:'side'+selectedSide};$('sectionHandles').setPointerCapture(e.pointerId);e.preventDefault();});
-$('sectionHandles').addEventListener('pointermove',e=>{if(!sideDrag)return;params=moveControl(meta,sideDrag.params,sideDrag.name,0,(sideDrag.start-e.clientY)/sectionScale).params;markChanged();});
+$('sectionHandles').addEventListener('pointerdown',e=>{const t=e.target.closest('[data-side]');if(!t||motionBusy)return;beginEdit();const svg=$('sectionHandles'),sample=+t.dataset.sample,index=meta.parameters.findIndex(p=>p.name==='TS'+selectedSide),height=snapshot.lower[sample];sideDrag={start:e.clientY,params:[...params],index,sample,origin:height,height,parameter:params[index],gain:[1.2,.36,.3][selectedSide-1],scale:sectionScale*svg.getBoundingClientRect().height/svg.viewBox.baseVal.height};svg.setPointerCapture(e.pointerId);e.preventDefault();});
+$('sectionHandles').addEventListener('pointermove',e=>{if(!sideDrag)return;const d=sideDrag,error=d.origin+(d.start-e.clientY)/d.scale-d.height,p=meta.parameters[d.index];params=[...d.params];let base=d.parameter;if(selectedSide<3)base=error<0?Math.min(.3,base):Math.max(-.15,base);params[d.index]=Math.max(p.min,Math.min(p.max,base+error*d.gain));markChanged();});
 for(const event of ['pointerup','pointercancel','lostpointercapture'])$('sectionHandles').addEventListener(event,()=>{if(sideDrag){sideDrag=null;endEdit();}});
 document.querySelectorAll('[data-side-region]').forEach(b=>b.onclick=()=>{selectedSide=+b.dataset.sideRegion;document.querySelectorAll('[data-side-region]').forEach(t=>t.classList.toggle('selected',t===b));if(snapshot){const target=viewer.handles().find(h=>h.name==='side'+selectedSide).p;let best=3;for(let i=4;i<snapshot.centerline.length-3;i++)if(Math.hypot(snapshot.centerline[i][0]-target[0],snapshot.centerline[i][1]-target[1])<Math.hypot(snapshot.centerline[best][0]-target[0],snapshot.centerline[best][1]-target[1]))best=i;$('sliceRange').value=best;dirty=true;queuePose();}});
 function drawSideHandles(s,w,h,x,y,scale){
   sectionScale=scale;const svg=$('sectionHandles'),focus=svg.contains(document.activeElement);svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.replaceChildren();svg.hidden=viewer.selected!=='tongue';if(svg.hidden)return;
   const valid=s.lower.map((v,i)=>v===null?null:i).filter(i=>i!==null);if(valid.length<2)return;
   for(const fraction of [.15,.85]){const i=valid[Math.round((valid.length-1)*fraction)],g=document.createElementNS('http://www.w3.org/2000/svg','g');g.dataset.side=selectedSide;g.setAttribute('tabindex','0');g.setAttribute('role','slider');g.setAttribute('aria-label','拖动'+['后','中','前'][selectedSide-1]+'侧缘');const p=meta.parameters.find(p=>p.name==='TS'+selectedSide);g.setAttribute('aria-valuemin',p.min);g.setAttribute('aria-valuemax',p.max);g.setAttribute('aria-valuenow',params[meta.parameters.indexOf(p)]);
-    g.setAttribute('transform',`translate(${x(i)} ${y(s.lower[i])})`);g.innerHTML='<circle r="14" fill="transparent"/><circle r="5" fill="#fffdf6" stroke="#2c7b6a" stroke-width="1.4"/><circle r="2" fill="#2c7b6a"/>';g.addEventListener('keydown',e=>{if(motionBusy||!['ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();beginEdit();params=moveControl(meta,params,'side'+selectedSide,0,e.key==='ArrowUp'?.05:-.05).params;markChanged();endEdit();});svg.append(g);
+    g.dataset.sample=i;g.setAttribute('transform',`translate(${x(i)} ${y(s.lower[i])})`);g.innerHTML='<circle r="14" fill="transparent"/><circle r="5" fill="#fffdf6" stroke="#2c7b6a" stroke-width="1.4"/><circle r="2" fill="#2c7b6a"/>';g.addEventListener('keydown',e=>{if(motionBusy||!['ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();beginEdit();params=moveControl(meta,params,'side'+selectedSide,0,e.key==='ArrowUp'?.05:-.05).params;markChanged();endEdit();});svg.append(g);
   }if(focus)svg.firstElementChild.focus({preventScroll:true});
 }
 function chart(id,xmax,ymin,ymax,xlabel){
@@ -209,7 +210,7 @@ for(const event of ['pointerup','pointercancel','lostpointercapture'])$('areaCha
 $('areaChart').onkeydown=e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();selectSection(e.key==='Home'?0:e.key==='End'?snapshot.centerline.length-1:+$('sliceRange').value+(e.key==='ArrowRight'?1:-1));}};
 new ResizeObserver(()=>drawCharts()).observe(document.querySelector('.charts'));
 async function boot(){try{
-  meta=await request('meta');revision=(await request('status')).revision;params=[...meta.presets.a];viewer.metadata=meta;$('sliceRange').value=Math.floor((meta.section_count??129)/2);const savedResponse=await response('keyframes/load');if(!savedResponse.ok)throw Error('关键帧配置无法读取，请检查用户目录中的 keyframes.json');const sequence=await savedResponse.json();meta.custom_presets=await request('presets/load');meta.ipa_chart=await ipaChart;meta.saved_frames=sequence.frames;meta.saved_curve=sequence.pitch_curve||[];setupControls();setupMonitor(post,()=>closed);await viewer.load();let saved={};try{saved=JSON.parse(localStorage.getItem('vtl-view-v2')||'{}');}catch{}for(const [id,key] of [['headToggle','head'],['noseToggle','nose'],['labelsToggle','labels'],['teethToggle','teeth'],['fullModelToggle','fullModel']]){if(typeof saved[key]==='boolean')$(id).checked=saved[key];viewer.setOptions({[key]:$(id).checked});}setMode(['organs','airway','overlay'].includes(saved.mode)?saved.mode:'organs');dirty=true;await queuePose();selectInspector('tongue');document.body.dataset.engineState='ready';
+  meta=await request('meta');const defaultResponse=await fetch('default-presets.json');if(!defaultResponse.ok)throw Error('默认构形无法读取');const defaults=await defaultResponse.json();meta.default_poses=defaults.presets;for(const name of defaults.excluded)delete meta.presets[name];revision=(await request('status')).revision;params=[...meta.presets.a];viewer.metadata=meta;let count=65;try{const current=localStorage.getItem('m10-section-count-r19'),saved=Number(current??localStorage.getItem('m10-section-count'));if(meta.section_options.includes(saved)&&(current!==null||saved!==129))count=saved;}catch{}$('sectionCount').value=count;$('sliceRange').value=Math.floor(count/2);const savedResponse=await response('keyframes/load');if(!savedResponse.ok)throw Error('关键帧配置无法读取，请检查用户目录中的 keyframes.json');const sequence=await savedResponse.json();meta.custom_presets=await request('presets/load');meta.favorites=await request('favorites/load');meta.ipa_chart=await ipaChart;meta.saved_frames=sequence.frames;meta.saved_curve=sequence.pitch_curve||[];setupControls();setupMonitor(post,()=>closed);await viewer.load();let saved={};try{saved=JSON.parse(localStorage.getItem('vtl-view-v2')||'{}');}catch{}for(const [id,key] of [['headToggle','head'],['noseToggle','nose'],['labelsToggle','labels'],['teethToggle','teeth'],['fullModelToggle','fullModel']]){if(typeof saved[key]==='boolean')$(id).checked=saved[key];viewer.setOptions({[key]:$(id).checked});}setMode(['organs','airway','overlay'].includes(saved.mode)?saved.mode:'organs');dirty=true;await queuePose();selectInspector('tongue');document.body.dataset.engineState='ready';
   setInterval(async()=>{if(closed)return;try{const s=await(await post('heartbeat')).json();updateAudio(s);document.body.dataset.engineState='ready';}catch(e){setLive(false);document.body.dataset.engineState='offline';if(!$('loadIndicator').hidden)$('loadIndicator').textContent='服务已离线，请重新打开生理参数合成';}},250);
   window.addEventListener('pagehide',()=>{request('deactivate').catch(()=>{});});
 }catch(e){$('loadIndicator').textContent='载入失败：'+e.message;document.body.dataset.engineState='failed';console.error(e);}}

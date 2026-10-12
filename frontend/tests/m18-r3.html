@@ -1,0 +1,19 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><title>M18 isolated catalogue interaction</title><style>html,body,#app{height:100%;margin:0}</style></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';import Page from '/src/modules/paper-reading/PaperReadingPage.vue';import {installPapersChannel} from '/src/platform/papers.ts';import '/src/design/tokens.css';import '/src/design/buttons.css';
+// Simulated catalogue for year/month combinations. Native file/PDF tests are separate.
+const asset={path:'fixture.pdf',size:100,sha256:'a'.repeat(64)};
+const paper=(id,date,downloaded=false)=>({id,title:'English title '+id,titleZh:'中文题名 '+id,authors:'Test Author',version:'v1',sourceUrl:'https://arxiv.org/abs/2610.00735v1',publishedAt:date,submittedAt:date,license:{id:'CC-BY-4.0',url:'https://creativecommons.org/licenses/by/4.0/'},guide:'Catalogue fixture only',translationNote:'Fixture',abstract:'English abstract '+id,abstractZh:'中文摘要 '+id,original:asset,translation:asset,downloaded});
+const state={firstLaunch:'2026-10-10',warning:'',autoReceive:true,checkIntervalHours:6,folders:[],collections:{},papers:[paper('a','2026-10-09'),paper('b','2026-09-01'),paper('c','2026-09-20'),paper('d','2025-12-01'),paper('e','2025-12-02',true)]};
+const callbacks={};window.m18Calls=[];window.m18State=state;
+installPapersChannel({ready:{connect(fn){callbacks.ready=fn}},progress:{connect(){}},request(id,payload){const {operation,args}=JSON.parse(payload);window.m18Calls.push({operation,args});let value;
+if(operation==='status'||operation==='refresh')value=state;
+else if(operation==='library')value={root:'',folders:[],documents:[]};
+else if(operation==='downloadSelected'){for(const p of state.papers)if(args.ids.includes(p.id))p.downloaded=true;value=state;}
+else if(operation==='autoReceive'){state.autoReceive=args.enabled;value=state;}
+else if(operation==='interval'){state.checkIntervalHours=args.hours;value=state;}
+else if(operation==='annotations')value={revision:0,items:[]};
+else if(operation==='render')value={pages:1,page:1,image:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jJzQAAAAASUVORK5CYII=',text:'Fixture',ratio:1.4,ratios:[1.4],lines:[]};
+else throw Error('Unexpected operation '+operation);
+setTimeout(()=>callbacks.ready(id,JSON.stringify({ok:true,value})),10);},cancel(){}});
+createApp({render:()=>h(Page,{active:true})}).mount('#app');
+</script></body></html>

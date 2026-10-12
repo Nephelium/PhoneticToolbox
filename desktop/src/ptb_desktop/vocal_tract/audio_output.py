@@ -23,7 +23,7 @@ class LiveAudio:
     def __init__(self,engine,*,playback_allowed=False,config_path=None):
         # Tests can explicitly prohibit all physical-device access.
         self.playback_allowed=playback_allowed
-        self.engine=engine;self.params=engine.params.copy();self.f0=150.;self.volume=.8;self.lip_width=1.;self.larynx_height=0.;self.tube=None
+        self.engine=engine;self.params=engine.params.copy();self.f0=150.;self.volume=.8;self.lip_width=1.;self.larynx_height=0.;self.tongue_shape=[0.]*4;self.tube=None
         self.source=None;self.gain_db=0.
         self.output_history=OutputHistory(engine.sr)
         devices=output_devices() if playback_allowed else []
@@ -70,7 +70,7 @@ class LiveAudio:
             if self.device_key not in [d['id'] for d in output_devices()]:raise ValueError('输出设备已断开，请选择其他设备')
             self.buffer=buffer;self.envelope=envelope;self.mode=mode;self.active=True;self.error=None;self.heartbeat=time.monotonic();self._reset_stats();self.clock_start=None;self.completed=False;self.last_position=0.
             self.output_history.reset()
-            if buffer is None:self.tube=self.engine.prepare_tube(self.params,self.lip_width,self.larynx_height)
+            if buffer is None:self.tube=self.engine.prepare_tube(self.params,self.lip_width,self.larynx_height,self.tongue_shape)
             self.thread=threading.Thread(target=self._run,daemon=True);self.thread.start()
 
     def stop(self):
@@ -88,7 +88,11 @@ class LiveAudio:
             n=960;offset=0;g=glottis();tube=self.tube
             if self.buffer is None:
                 with self.engine.lock:self.engine.reset_tube(tube,g)
-            with sd.OutputStream(samplerate=self.engine.sr,channels=device['channels'],dtype='float32',blocksize=n,latency=.04,device=device['index']) as stream:
+            # VTL produces 48 kHz PCM. A shared WASAPI endpoint may run at
+            # 44.1 kHz (e.g. UR22C); let the Windows mixer convert at playback.
+            # Keep synthesis/export samples and their animation clock unchanged.
+            extra=sd.WasapiSettings(exclusive=False,auto_convert=True) if device['id'].startswith('Windows WASAPI|') else None
+            with sd.OutputStream(samplerate=self.engine.sr,channels=device['channels'],dtype='float32',blocksize=n,latency=.04,device=device['index'],extra_settings=extra) as stream:
                 self.stats['device_latency_ms']=stream.latency*1000;self.stats['device']=device['name']
                 while self.active and time.monotonic()-self.heartbeat<5:
                     t=time.perf_counter()

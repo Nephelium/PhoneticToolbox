@@ -36,5 +36,5 @@ const caption=computed(()=>typeof attrs.value.caption==='string'?unnumberedCapti
     <small v-if="node.type==='footnote'">注 {{attrs.label||attrs.id||''}}</small>
     <ManualNode v-for="(child,index) in node.content" :key="index" :node="child" :chapter-id="chapterId" :numbering="numbering" :assets="assets" :references="references" :asset-base-url="assetBaseUrl" :asset-resolver="assetResolver" :playback-allowed="playbackAllowed" @navigate="emit('navigate',$event)"/>
   </component>
-  <aside v-else :id="id" class="manual-unsupported" role="status"><strong>当前阅读器尚未支持 {{node.type}} 内容。</strong><p v-if="nodeText(node)">{{nodeText(node)}}</p><span>原始节点保留在说明书工程中，请在作者工具中修订。</span></aside>
+  <aside v-else :id="id" class="manual-unsupported" role="status"><strong>此段内容暂时无法完整显示。</strong><p v-if="nodeText(node)">{{nodeText(node)}}</p><span>可在关于页反馈此问题。</span></aside>
 </template>

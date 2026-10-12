@@ -25,7 +25,7 @@ const errors: Record<string, string> = {
   disk_space_low: '服务器磁盘空间不足，现有文件仍可下载和清理。',
   storage_service_unavailable: '文件服务尚未启用或暂时无法连接。',
   storage_recovery_required: '文件服务正在核对存储，请稍后再试。',
-  storage_policy_migration_required: '新存储政策尚待管理员完成迁移，新增写入暂不可用。现有有效文件仍可下载或删除。',
+  storage_policy_migration_required: '当前暂时无法上传文件。现有有效文件仍可下载或删除。',
   storage_busy: '文件服务正在处理其他请求，请稍后重试。',
   upload_closed: '这次上传已关闭或到期，请重新选择文件。',
   asset_expired: '文件已到期，不能继续下载。',

@@ -67,10 +67,23 @@ def checked(value):
     return value
 
 
+def application_path(executable):
+    """Extend only the Win32 application path; preserve argv and short paths."""
+    executable=os.fspath(executable)
+    if len(executable)<260 or executable.startswith(('\\\\?\\','\\\\.\\')):
+        return executable
+    absolute=os.path.abspath(executable)
+    if absolute.startswith('\\\\'):
+        return '\\\\?\\UNC\\'+absolute[2:]
+    return '\\\\?\\'+absolute
+
+
 class OwnedProcess:
     def __init__(self, argv, cwd, memory_bytes):
-        self.job=None;self.info=ProcessInfo();self.closed=False
+        self.job=None;self.info=ProcessInfo();self.closed=False;self.working_directory=None
         try:
+            from ..native_runtime import DirectoryEntry
+            self.working_directory=DirectoryEntry(cwd)
             self.job=checked(create_job(None,None))
             limits=ExtendedLimit()
             # KILL_ON_JOB_CLOSE | PROCESS_MEMORY | JOB_MEMORY; aggregate includes descendants.
@@ -79,7 +92,7 @@ class OwnedProcess:
             checked(set_job(self.job,9,c.byref(limits),c.sizeof(limits)))
             startup=Startup();startup.cb=c.sizeof(startup)
             command=c.create_unicode_buffer(subprocess.list2cmdline([str(x) for x in argv]))
-            checked(create_process(str(argv[0]),command,None,None,False,0x08000000|4,None,str(cwd),c.byref(startup),c.byref(self.info)))
+            checked(create_process(application_path(argv[0]),command,None,None,False,0x08000000|4,None,str(self.working_directory.path),c.byref(startup),c.byref(self.info)))
             checked(assign_job(self.job,self.info.process))
             if resume(self.info.thread)==0xffffffff: raise c.WinError(c.get_last_error())
             close(self.info.thread);self.info.thread=None
@@ -130,6 +143,7 @@ class OwnedProcess:
                 if info.active==0:self.group_cleaned=True;break
                 time.sleep(.01)
             close(self.job)
+        if self.working_directory:self.working_directory.close()
 
 
 create_pipe=api('CreateNamedPipeW',[w.LPCWSTR,w.DWORD,w.DWORD,w.DWORD,w.DWORD,w.DWORD,w.DWORD,c.c_void_p],w.HANDLE)

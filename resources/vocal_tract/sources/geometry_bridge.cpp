@@ -80,7 +80,22 @@ static void resolveUvulaContact(){
 }
 API double p4_uvula_contact(){return uvulaContactLift;}
 API double p4_blade_rib(){return tract ? tract->m10BladeRib : 0.0;}
-API int p4_section_count(){return VocalTract::NUM_CENTERLINE_POINTS;}
+API int p6_geometry_revision(){return 18;}
+API double p8_surface_rib(){return tract ? tract->m10SurfaceRib : 0.0;}
+API int p8_tongue_shape(double x,double y){
+    if(!tract || !std::isfinite(x) || !std::isfinite(y) || x<-.5 || x>.5 || y<-.3 || y>.8)return 2;
+    tract->m10SurfaceX=x;tract->m10SurfaceY=y;return 0;
+}
+API int p6_floor_rib(){return VocalTract::M10_FLOOR_RIB;}
+API double p6_side_rib(int region){return tract && region>=0 && region<3 ? tract->m10SideRibs[region] : 0.0;}
+API int p4_section_count(){return tract ? tract->m10SectionCount : 0;}
+API int p5_section_capacity(){return VocalTract::NUM_CENTERLINE_POINTS;}
+API int p5_sections(int count){
+    if(!tract || (count!=65 && count!=129 && count!=257) || count>VocalTract::NUM_CENTERLINE_POINTS) return 2;
+    tract->m10SectionCount=count;
+    tract->m10SectionExponent=count==65 ? 6 : count==129 ? 7 : 8;
+    return 0;
+}
 API int p0_open(const char* file) {
     try { tract.reset(new VocalTract()); tract->readFromXml(file); tract->calculateAll(); return 0; }
     catch (...) { tract.reset(); return 1; }
@@ -152,7 +167,7 @@ API int p2_update(double* params,double width,double* limited) {
     if(lateralFit && lateral>0.0){
       auto& s=tract->surfaces[VocalTract::TONGUE];
       for(int r=0;r<34;r++)for(int j=0;j<s.numRibPoints;j++){
-        double front=std::max(0.0,std::min(1.0,(r-18.0)/10.0));front=front*front*(3.0-2.0*front);
+        const double front=tract->m10FrontWeight[r];
         const double transverse=std::abs(2.0*j/(s.numRibPoints-1)-1.0);
         const double side=std::max(0.0,(transverse-0.4)/0.6);
         const double contact=std::max(0.0,1.0-transverse/0.4);
@@ -163,10 +178,8 @@ API int p2_update(double* params,double width,double* limited) {
     tract->refreshM10Geometry();tract->calcCenterLine();tract->calcCrossSections();
     // An empirical area correction must not reopen a completely sealed native
     // cross-section. Preserve real lateral passages and the solver's own floor.
-    for(int i=0;i<VocalTract::NUM_CENTERLINE_POINTS;i++){
-      double up[VocalTract::NUM_PROFILE_SAMPLES],lo[VocalTract::NUM_PROFILE_SAMPLES];
-      Tube::Articulator art;auto& c=tract->centerLine[i];
-      tract->getCrossProfiles(c.point,c.normal,up,lo,true,art,false,true);
+    for(int i=0;i<tract->m10SectionCount;i++){
+      const double* up=tract->m10Upper[i];const double* lo=tract->m10Lower[i];
       bool open=false;
       for(int j=0;j<VocalTract::NUM_PROFILE_SAMPLES;j++)if(std::abs(up[j])<100 && std::abs(lo[j])<100 && up[j]-lo[j]>0.000001)open=true;
       if(!open){tract->crossSection[i].area=0.0;tract->crossSection[i].circ=0.0;}
@@ -203,27 +216,27 @@ API int p0_mesh(int which, double* xyz, int* triangles, int* counts) {
 }
 API int p0_sections(double* center, double* areas, double* tubeAreas) {
     if (!tract) return 1;
-    for (int i=0;i<VocalTract::NUM_CENTERLINE_POINTS;i++) {
+    for (int i=0;i<tract->m10SectionCount;i++) {
         auto& c=tract->centerLine[i];
         center[5*i]=c.point.x; center[5*i+1]=c.point.y; center[5*i+2]=c.pos;
         center[5*i+3]=c.normal.x; center[5*i+4]=c.normal.y;
         areas[i]=tract->crossSection[i].area;
     }
     for (int i=0;i<VocalTract::NUM_TUBE_SECTIONS;i++) tubeAreas[i]=tract->tubeSection[i].area;
-    return VocalTract::NUM_CENTERLINE_POINTS;
+    return tract->m10SectionCount;
 }
 API int p0_profile(int section, double* upper, double* lower) {
-    if (!tract || section < 0 || section >= VocalTract::NUM_CENTERLINE_POINTS) return -1;
+    if (!tract || section < 0 || section >= tract->m10SectionCount) return -1;
     Tube::Articulator articulator;
     auto& c=tract->centerLine[section];
     tract->getCrossProfiles(c.point,c.normal,upper,lower,true,articulator);
     return VocalTract::NUM_PROFILE_SAMPLES;
 }
 API int p3_profile(int section, double* upper, double* lower) {
-    if (!tract || section < 0 || section >= VocalTract::NUM_CENTERLINE_POINTS) return -1;
-    Tube::Articulator articulator;
-    auto& c=tract->centerLine[section];
-    tract->getCrossProfiles(c.point,c.normal,upper,lower,true,articulator,false,true);
+    if (!tract || section < 0 || section >= tract->m10SectionCount) return -1;
+    for(int j=0;j<VocalTract::NUM_PROFILE_SAMPLES;j++) {
+      upper[j]=tract->m10Upper[section][j];lower[j]=tract->m10Lower[section][j];
+    }
     return VocalTract::NUM_PROFILE_SAMPLES;
 }
 

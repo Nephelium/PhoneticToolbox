@@ -37,11 +37,13 @@ class OutputHistory:
             return self.data[indices].copy(), self.count/self.sample_rate, self.generation
 
 
-def analyze_output(samples, sample_rate, *, seconds=3., window_ms=20., hop_ms=10., end=0., generation=0):
+def analyze_output(samples, sample_rate, *, seconds=3., window_ms=20., hop_ms=10., end=0., generation=0,
+                   view_seconds=None, view_lag=0., waveform_width=700):
     """Hann-window amplitude spectrum, dBFS; zero padding does not add resolution.
 
-    Waveform is a min/max envelope (preserves short peaks). Spectrum uses a
-    low-pass decimation to 16 kHz, then centers each window at its real time.
+    The visible waveform uses exact samples at close zoom and pixel min/max
+    at longer spans. Spectrum uses low-pass decimation to 16 kHz, then centers
+    each window at its real time. Neither changes output samples or gain.
     """
     settings = np.asarray([seconds, window_ms, hop_ms], dtype=float)
     if not np.isfinite(settings).all() or not 1 <= seconds <= 12 or not 5 <= window_ms <= 80 or not 5 <= hop_ms <= 40:
@@ -50,9 +52,20 @@ def analyze_output(samples, sample_rate, *, seconds=3., window_ms=20., hop_ms=10
     if not np.isfinite(samples).all():
         raise ValueError('Non-finite output samples')
     duration = len(samples)/sample_rate
-    bins = min(700, len(samples))
-    edges = np.linspace(0, len(samples), bins+1, dtype=int)
-    waveform = [[float(samples[a:b].min()), float(samples[a:b].max())] for a,b in zip(edges[:-1], edges[1:])]
+    if not np.isfinite([view_lag, waveform_width]).all() or not 0 <= view_lag <= 12 or not 64 <= waveform_width <= 2048:
+        raise ValueError('无效的波形显示范围')
+    first, stop = 0, len(samples)
+    if view_seconds is not None:
+        if not np.isfinite(view_seconds) or not .001 <= view_seconds <= 12 or view_seconds+view_lag > 12+1e-9:
+            raise ValueError('波形显示时长应为 0.001–12 秒')
+        right = max(view_seconds+view_lag, end)-view_lag
+        first = int(np.clip(round((right-view_seconds-(end-duration))*sample_rate), 0, len(samples)))
+        stop = int(np.clip(round((right-(end-duration))*sample_rate), first, len(samples)))
+    visible = samples[first:stop]
+    detailed = view_seconds is not None and view_seconds*sample_rate <= 8192
+    bins = min(int(waveform_width), len(visible))
+    edges = np.linspace(0, len(visible), bins+1, dtype=int)
+    waveform = [] if detailed else [[float(visible[a:b].min()), float(visible[a:b].max())] for a,b in zip(edges[:-1], edges[1:])]
     rate = 16000
     if sample_rate != 48000:
         raise ValueError('Output monitor requires 48 kHz output')
@@ -79,6 +92,11 @@ def analyze_output(samples, sample_rate, *, seconds=3., window_ms=20., hop_ms=10
         frequency_step = rate/nfft
     return {'generation':generation, 'end':end, 'duration':duration, 'seconds':seconds,
             'waveform':waveform, 'spectrogram':spectral,
+            'waveform_mode':'samples' if detailed else 'envelope',
+            'waveform_samples':visible.tolist() if detailed else [],
+            'waveform_start':end-duration+first/sample_rate,
+            'waveform_duration':len(visible)/sample_rate, 'sample_rate':sample_rate,
+            'waveform_peak':float(np.max(np.abs(visible))) if len(visible) else 0.,
             'frame_offset':size/(2*rate), 'hop_seconds':hop/rate,
             'frequency_step':frequency_step, 'window_ms':window_ms,
             'bin_hz':rate/nfft, 'resolution_hz':1000/window_ms, 'db_range':90}

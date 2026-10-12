@@ -1,6 +1,7 @@
 """M10 numeric/behavior regression; native VTL required, no soundcard access."""
 from pathlib import Path
 import threading
+import ctypes as C
 import numpy as np
 import pytest
 from phonetic_core.vocal_tract.engine import Engine
@@ -19,14 +20,17 @@ def frame(e,preset='a',**kw):
     return dict(params=e.presets[preset],f0=125,lip_width=1,duration=.2,**kw)
 
 def test_vtl24_consonant_areas_from_old_native_capture(engine):
-    engine.set_manual_root(False)
-    engine.geom.p3_lateral_fit(0)
-    try:
-        for name,area in [('lateral',.2),('fricative',.15),('closure',.0001)]:
-            state=engine.snapshot(engine.preset('tt-alveolar-'+name+'(a)'))
-            assert state['oral_min_area']==pytest.approx(area,abs=1e-10)
-            assert state['nasal']['port_area']==0
-    finally:engine.geom.p3_lateral_fit(1)
+    # R16 intentionally changes native geometry. Check the preserved upstream
+    # capture against the unmodified API DLL, not the adapted geometry DLL.
+    from phonetic_core.vocal_tract.engine import dp,ip,check
+    for name,area in [('lateral',.2),('fricative',.15),('closure',.0001)]:
+        p=engine.preset('tt-alveolar-'+name+'(a)')
+        lengths=np.empty(engine.ntube);areas=np.empty(engine.ntube);art=np.empty(engine.ntube,dtype=np.int32)
+        extras=[C.c_double() for _ in range(3)]
+        check(engine.lib.vtlTractToTube(dp(p),dp(lengths),dp(areas),ip(art),*[C.byref(v) for v in extras]))
+        assert areas.min()==pytest.approx(area,abs=1e-10)
+        # Upstream API reports its tube floor, unlike the geometric port area.
+        assert extras[2].value==pytest.approx(.0001,abs=1e-10)
 
 def test_lateral_has_real_central_contact_and_two_side_passages(engine):
     state=engine.snapshot(engine.presets['l'],section=round(109*(engine.section_count-1)/128))
@@ -53,6 +57,21 @@ def test_full_closure_is_near_silent_without_output_gating(engine):
 def test_nasal_opening_keeps_path_even_with_oral_closure(engine):
     state=engine.snapshot(engine.presets['n'])
     assert state['nasal']['port_area']==pytest.approx(.5)
+
+def test_frication_has_high_frequency_noise_and_depends_on_pressure(engine):
+    from scipy.signal import welch
+    def measure(pressure,side=.32):
+        p=list(engine.presets['s']);p[18]=side
+        tube=engine.prepare_tube(p);g=engine.glottis(source={'mode':'voiceless','pressure_pa':pressure})
+        engine.reset_tube(tube,g)
+        y=np.concatenate([engine.block_tube(tube,g) for _ in range(50)])[-24000:]
+        f,power=welch(y,engine.sr,nperseg=2048)
+        return np.std(y),power[f>=3000].sum()/max(power.sum(),1e-30)
+    rms,high=measure(800)
+    assert rms>1e-4 and high>.8
+    low,_=measure(400);zero,_=measure(0);lateral,side_high=measure(800,-.6)
+    assert rms>low*2 and zero<1e-10
+    assert lateral<rms and side_high<high*.5
 
 def test_manual_root_changes_real_geometry_and_auto_remains_default(engine):
     p=np.array(engine.presets['a']);i=engine.names.index('TRX');p[i]-=.5

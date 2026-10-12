@@ -20,7 +20,7 @@ class M14Bridge:
             if body['body'].get('project_id')!=PROJECT:raise FileAccessError('项目不匹配。')
             return self.bridge.service.request('/api/v1/jobs/m14/create','POST',body['body'])
         if body['op']=='m14_save':return self.save(body['job'],body['directory'])
-        raise FileAccessError('M14 操作不可用。')
+        raise FileAccessError('音系归纳操作不可用。')
 
     def save(self,job_id,directory_id):
         provider=self.bridge.provider;directory=provider.directory(directory_id)

@@ -1,0 +1,8 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><title>M11 delivery interaction fixture</title><style>html,body,#app{height:100%;margin:0}</style></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';import Page from '/src/modules/mfa/MfaAlignmentPage.vue';import '/src/design/tokens.css';import '/src/design/buttons.css';
+const catalog={schema_version:'m11/1',download_available:true,download_reason:'',execution_available:false,waiting_reason:null,runtimes:[],models:[],component_status:{stage:'idle',completed:0,total:0}};
+window.calls=[];window.cat=catalog;let finish;
+const port={local:true,catalog:async()=>structuredClone(catalog),history:async()=>[],pick:async purpose=>window.cancelPick?null:{id:'grant',label:'组件.zip',purpose},component:async body=>{window.calls.push(body);catalog.component_status={stage:'downloading',completed:250000000,total:1000000000,bytes_per_second:2500000};return new Promise(resolve=>{finish=()=>{catalog.runtimes=[{id:'r',version:'3.3.8',platform:'windows',arch:'x86_64',validated:true,fingerprint:'a'}];catalog.models=[{id:'m',name:'mandarin_mfa.zip',dictionary_name:'mandarin_mfa.dict',validated_runtime:'r',model_sha256:'a',dictionary_sha256:'b'}];resolve({runtime_id:'r',model_id:'m'});};});}};
+window.finishInstall=()=>finish();
+createApp({render:()=>h(Page,{context:{key:'fixture',files:{m11:port}},stateKey:'delivery-fixture',active:true})}).mount('#app');
+</script></body></html>

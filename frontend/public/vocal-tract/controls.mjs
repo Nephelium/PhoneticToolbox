@@ -1,14 +1,17 @@
 export const ORGAN_PARAMS={tongue:['TCX','TCY','TTX','TTY','TBX','TBY','TRX','TRY','HX','HY','TS1','TS2','TS3'],lips:['LP','LD','JA'],velum:['VO','VS','HX','HY']};
-export function bladeSurfacePoint(state){
+export function surfacePoint(state){return materialPoint(state,state.tongue_surface_rib??16);}
+export function bladeSurfacePoint(state){return materialPoint(state,state.tongue_blade_rib??21);}
+function materialPoint(state,station){
   // Native fractional station follows the blade segment through re-sampling
   // and hard-tissue contact. Interpolate the actual meridian, never TBX/TBY.
   const points=state.contours.tongue;
-  const rib=Math.max(0,Math.min(32,state.tongue_blade_rib??21));
+  const rib=Math.max(0,Math.min(32,station));
   const lo=Math.floor(rib),hi=Math.ceil(rib),t=rib-lo;
   return [0,1].map(k=>points[lo][k]*(1-t)+points[hi][k]*t);
 }
 export function moveControl(meta,baseline,name,dx,dy){
   const next=[...baseline];let limited=false;
+  if(['surface','belly'].includes(name)){const shape=[...(baseline.tongue_shape??[0,0,0,0])],start=name==='surface'?0:2;for(const [k,d] of [[start,dx],[start+1,dy]]){const [lo,hi]=meta.tongue_shape_limits[k],v=shape[k]+d;shape[k]=Math.max(lo,Math.min(hi,v));limited ||= shape[k]!==v;}return {params:next,tongue_shape:shape,limited};}
   const get=k=>baseline[meta.parameters.findIndex(p=>p.name===k)],set=(key,value)=>{const i=meta.parameters.findIndex(p=>p.name===key),p=meta.parameters[i],v=Math.max(p.min,Math.min(p.max,value));limited ||= v!==value;next[i]=v;};
   // The flexible blade midpoint has 5/8 influence from its two interior
   // controls. Compensate that gain when dragging the surface attachment.
@@ -21,9 +24,9 @@ export function moveControl(meta,baseline,name,dx,dy){
     if(name==='side3'){
       // Invert the native elevation plus M10 lateral relief so the front edge
       // follows centimetres of pointer motion through its saturation regions.
-      const p=get(key),height=p<-.15?-.5+(p+.15)*.6/.85:p<=.3?p/.3:1+(p-.3)*.3;
-      const h=height+dy;set(key,h<-.5?-.15+(h+.5)*.85/.6:h<=1?h*.3:.3+(h-1)/.3);
-    }else set(key,get(key)+dy*.6);
+      const p=get(key),height=p<-.15?-.5+(p+.15)*.6/.85:p<=.3?p/.3:1+(p-.3)*.4;
+      const h=height+dy;set(key,h<-.5?-.15+(h+.5)*.85/.6:h<=1?h*.3:.3+(h-1)/.4);
+    }else set(key,(dy<0?Math.min(.3,get(key)):Math.max(-.15,get(key)))+dy*.3);
   }
   if(meta.posterior_limits&&['tongue','root'].includes(name)){
     const w=meta.posterior_limits,back=y=>w.x+(y-w.y)*w.slope;
@@ -33,8 +36,8 @@ export function moveControl(meta,baseline,name,dx,dy){
   }
   return {params:next,limited};
 }
-const equal=(a,b)=>(a.larynx_height??0)===(b.larynx_height??0)&&(a.manual_root??false)===(b.manual_root??false)&&a.preset===b.preset&&(a.lip_width??1)===(b.lip_width??1)&&(a.f0??150)===(b.f0??150)&&JSON.stringify(a.source||null)===JSON.stringify(b.source||null)&&a.params.every((v,i)=>Math.abs(v-b.params[i])<1e-8);
-const copy=s=>({...s,params:[...s.params],...(s.source?{source:{...s.source}}:{})});
+const equal=(a,b)=>JSON.stringify(a.tongue_shape??[0,0,0,0])===JSON.stringify(b.tongue_shape??[0,0,0,0])&&(a.larynx_height??0)===(b.larynx_height??0)&&(a.manual_root??false)===(b.manual_root??false)&&a.preset===b.preset&&(a.lip_width??1)===(b.lip_width??1)&&(a.f0??150)===(b.f0??150)&&JSON.stringify(a.source||null)===JSON.stringify(b.source||null)&&a.params.every((v,i)=>Math.abs(v-b.params[i])<1e-8);
+const copy=s=>({...s,params:[...s.params],...(s.tongue_shape?{tongue_shape:[...s.tongue_shape]}:{}),...(s.source?{source:{...s.source}}:{})});
 export class PoseHistory{
   constructor(limit=80){this.limit=limit;this.past=[];this.future=[];this.start=null;}
   begin(state){if(!this.start)this.start=copy(state);}

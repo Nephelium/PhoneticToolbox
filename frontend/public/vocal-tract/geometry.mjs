@@ -1,6 +1,7 @@
 // Display geometry only. The native VTL tube remains the acoustic authority.
 import {velumModel,smoothContour,tongueEnvelope} from './anatomy.mjs';
 import {dentalSolids,subtractTeeth} from './rigid-contact.mjs';
+import {nativeAirwayMesh} from './airway-mesh.mjs';
 export const point=(mesh,i)=>mesh.vertices.slice(i*3,i*3+3);
 // VTL's reference axis is not necessarily inside the changing air space.
 // Draw at the actual midline profile midpoint; retain native distance/index.
@@ -27,7 +28,7 @@ export function oralSectionBoundary(state){
 
 // Local display relief at the vermilion/teeth join. Acoustic surfaces are intact.
 // Both scene views and lip handles consume the same adjusted vertices.
-export function displayLips(state){
+export function displayLips(state,{surface=true}={}){
   const oralBoundary=oralSectionBoundary(state);
   const contours={...state.contours},lipHandles={},lipEdges={};
   const nativeUpper=state.meshes.find(m=>m.name==='upper_lip'),nativeLower=state.meshes.find(m=>m.name==='lower_lip');
@@ -50,9 +51,18 @@ export function displayLips(state){
     contours[mesh.name]=profiles[midline].map(p=>p.slice(0,2));
     return {...mesh,vertices:profiles.flat(2),triangles,points:N};
   });
-  const tongue=tongueEnvelope(state),solids=dentalSolids(state.meshes);
-  meshes[meshes.findIndex(m=>m.name==='tongue')]=subtractTeeth(tongue.mesh,solids,34*tongue.mesh.points);
-  return {...state,meshes,contours,lipHandles,lipEdges,dentalSolids:solids,tongueOutline:tongue.outline,oralBoundary};
+  const tongue=tongueEnvelope(state,{surface}),solids=dentalSolids(state.meshes);
+  // Native dorsal faces can also enter a tooth during extreme tip extension.
+  // Clip the whole displayed surface against both dental arches. Retained
+  // faces keep their native positions; acoustic surfaces remain in the engine.
+  const native=state.meshes.find(m=>m.name==='tongue');
+  // The 2-D view needs the exact bounded outline and dorsal contact faces.
+  // Defer the full ventral surface until 3-D is visible; both use the same
+  // floor/tooth planes. Never send this partial surface to the 3-D renderer.
+  const contactFaces=[];
+  if(!surface)for(let i=0;i<native.triangles.length;i+=3){const f=native.triangles.slice(i,i+3);if(f.every(j=>j<34*native.points))contactFaces.push(...f);}
+  meshes[meshes.findIndex(m=>m.name==='tongue')]=subtractTeeth(surface?tongue.mesh:{...native,triangles:contactFaces},solids);
+  return {...state,meshes,contours,lipHandles,lipEdges,dentalSolids:solids,tongueOutline:tongue.outline,tongueBelly:tongue.belly,oralBoundary};
 }
 const distance=(a,b)=>Math.hypot(...a.map((v,i)=>v-b[i]));
 const mean=points=>points[0].map((_,k)=>points.reduce((s,p)=>s+p[k],0)/points.length);
@@ -104,7 +114,7 @@ function resampleClosed(points,n){
   const lengths=[0];for(let i=1;i<=points.length;i++)lengths.push(lengths.at(-1)+distance(points[i%points.length],points[i-1]));
   const out=[];let j=0;for(let i=0;i<n;i++){const d=i/n*lengths.at(-1);while(j<points.length-1&&lengths[j+1]<d)j++;const a=points[j],b=points[(j+1)%points.length],t=(d-lengths[j])/(lengths[j+1]-lengths[j]||1);out.push(a.map((v,k)=>v+t*(b[k]-v)));}return out;
 }
-export function oralMesh(state){
+function oralRingMesh(state){
   const vertices=[],triangles=[],N=64;
   for(const sec of state.airway_sections){const c=state.centerline[sec.index],valid=sec.upper.map((v,i)=>v===null?null:i).filter(v=>v!==null);let points=[];
     if(valid.length>1){
@@ -118,6 +128,9 @@ export function oralMesh(state){
   }
   for(let r=1;r<state.airway_sections.length;r++)for(let j=0;j<N;j++){const a=(r-1)*N+j,b=(r-1)*N+(j+1)%N,c=r*N+j,d=r*N+(j+1)%N;triangles.push(a,b,c,b,d,c);}
   return {vertices,triangles,ringSize:N};
+}
+export function oralMesh(state){
+  return subtractTeeth(nativeAirwayMesh(state),state.dentalSolids??dentalSolids(state.meshes));
 }
 // Align cyclic boundaries before a zipper loft. Shared indices eliminate cracks.
 function align(mesh,a,b){
@@ -181,8 +194,19 @@ export function airwayReferencePaths(mesh){
   const vertices=mesh.vertices.map((v,i)=>i%3===2?v-mesh.referenceDepth[(i-2)/3]:v);
   return sectionPaths({vertices,triangles:mesh.triangles});
 }
-export function connectedAirway(state,nose,outlet=nasalOutlet(nose)){
-  const native=oralMesh(state),N=native.ringSize,positions=state.centerline.map(c=>c[2]);
+export function referenceNose(nose,outlet,z=.5){
+  // A section can intersect only triangles that straddle its plane. Retain
+  // those exact triangles plus the welded outlet, once per loaded anatomy.
+  const indices=[],used=new Set(outlet);
+  for(let i=0;i<nose.triangles.length;i+=3){
+    const tri=nose.triangles.slice(i,i+3),depth=tri.map(j=>nose.vertices[j*3+2]-z);
+    if(Math.min(...depth)<=0&&Math.max(...depth)>0){indices.push(...tri);tri.forEach(j=>used.add(j));}
+  }
+  const ids=[...used],map=new Map(ids.map((j,i)=>[j,i]));
+  return {nose:{vertices:ids.flatMap(j=>point(nose,j)),triangles:indices.map(j=>map.get(j))},outlet:outlet.map(j=>map.get(j))};
+}
+export function connectedAirway(state,nose,outlet=nasalOutlet(nose),palate=velumModel(state)){
+  const native=oralRingMesh(state),N=native.ringSize,positions=state.centerline.map(c=>c[2]);
   // Insert the branch at its continuous native distance. Picking the nearest
   // centre-line row made the junction jump when VO crossed a row midpoint.
   // The complete 1.4 cm attachment replaces the mathematical back-wall
@@ -192,6 +216,8 @@ export function connectedAirway(state,nose,outlet=nasalOutlet(nose)){
   const port=Math.max(positions[1]+branchSpan,Math.min(positions.at(-2)-branchSpan,state.nasal.port_position));
   const distances=[...positions.filter(p=>p<port-branchSpan),port-branchSpan,port,port+branchSpan,...positions.filter(p=>p>port+branchSpan)];
   const r0=distances.indexOf(port-branchSpan),r1=r0+2,rows=distances.length,oral={vertices:[]};
+  const cutSection=positions.findIndex(p=>p>port+branchSpan);
+  const cutRow=distances.indexOf(positions[cutSection]);
   let lo=0;
   for(const s of distances){
     while(lo<positions.length-2&&positions[lo+1]<s)lo++;
@@ -204,8 +230,7 @@ export function connectedAirway(state,nose,outlet=nasalOutlet(nose)){
   const width=8,j0=jCenter-width,j1=jCenter+width,id=(r,j)=>r*N+(j+N*2)%N;
   const patch=[];for(let j=j0;j<=j1;j++)patch.push(id(r0,j));for(let r=r0+1;r<=r1;r++)patch.push(id(r,j1));for(let j=j1-1;j>=j0;j--)patch.push(id(r1,j));for(let r=r1-1;r>r0;r--)patch.push(id(r,j0));
   const holeCells=new Set();for(let j=j0;j<j1;j++)holeCells.add((j+N*2)%N);
-  const vertices=[...oral.vertices,...nose.vertices],triangles=[];
-  const palate=velumModel(state);
+  const vertices=[...oral.vertices],triangles=[];
   // Keep the reference posterior wall independent of the moving soft palate.
   // The native upper-cover bridge is a construction surface, not tissue pulled
   // into the velum. Replace only its posterior display patch, not acoustic areas.
@@ -215,12 +240,23 @@ export function connectedAirway(state,nose,outlet=nasalOutlet(nose)){
     const t=Math.max(0,Math.min(1,(.8-Math.abs(distances[r]-port))/.5)),blend=t*t*(3-2*t);
     vertices[i]=x+(wall-x)*blend;
   }
-  for(let r=0;r<rows-1;r++)for(let j=0;j<N;j++){
+  for(let r=0;r<cutRow-1;r++)for(let j=0;j<N;j++){
     if(r>=r0&&r<r1&&holeCells.has(j))continue;
     const a=id(r,j),b=id(r,j+1),c=id(r+1,j),d=id(r+1,j+1);triangles.push(a,b,c,b,d,c);
   }
-  const noseOffset=oral.vertices.length/3;for(const i of nose.triangles)triangles.push(noseOffset+i);
-  const mesh={vertices,triangles,referenceDepth:[...Array(noseOffset).fill(0),...Array(nose.vertices.length/3).fill(.5)]},start=mean(patch.map(i=>point(mesh,i))),end=mean(outlet.map(i=>point(nose,i)));
+  const front=nativeAirwayMesh(state,cutSection),frontOffset=vertices.length/3;
+  for(const v of front.vertices)vertices.push(v);for(const i of front.triangles)triangles.push(frontOffset+i);
+  const mesh={vertices,triangles};
+  const c=state.centerline[cutSection],atInlet=p=>Math.abs((p[0]-c[0])*c[4]-(p[1]-c[1])*c[3])<1e-5;
+  const inlet=boundaryLoops(front).filter(loop=>loop.every(i=>atInlet(point(front,i))));
+  // At this posterior station the nasal attachment is still a single channel.
+  // Do not join an unrelated exit if the pharynx happens to be completely shut.
+  if(inlet.length===1)loft(mesh,Array.from({length:N},(_,j)=>id(cutRow-1,j)),inlet[0].map(i=>frontOffset+i));
+  else cap(mesh,Array.from({length:N},(_,j)=>id(cutRow-1,j)));
+  const oralIndexCount=triangles.length,noseOffset=vertices.length/3;
+  for(const v of nose.vertices)vertices.push(v);for(const i of nose.triangles)triangles.push(noseOffset+i);
+  mesh.referenceDepth=[...Array(noseOffset).fill(0),...Array(nose.vertices.length/3).fill(.5)];
+  const start=mean(patch.map(i=>point(mesh,i))),end=mean(outlet.map(i=>point(nose,i)));
   // Local registration uses a horizontal ellipse between the native branch and
   // measured nasal outlet. Its polygon area is VO, independent of render density.
   const center=palate.gate,area=Math.max(0,state.nasal.port_area),K=48;
@@ -233,15 +269,16 @@ export function connectedAirway(state,nose,outlet=nasalOutlet(nose)){
   // A zipper may reverse a ring to avoid twisting. Propagate that winding
   // across shared seams, including the nasal surface and closed-port caps.
   if((noseLoop.indexOf(noseAligned[1])-noseLoop.indexOf(noseAligned[0])+noseLoop.length)%noseLoop.length!==1){
-    const first=(rows-1)*N*6-2*width*2*6;
+    const first=oralIndexCount;
     for(let i=first;i<first+nose.triangles.length;i+=3)[mesh.triangles[i+1],mesh.triangles[i+2]]=[mesh.triangles[i+2],mesh.triangles[i+1]];
   }
   if(!opened){cap(mesh,lowerAligned);cap(mesh,upperAligned.toReversed());}
-  const oralIndexCount=(rows-1)*N*6-2*width*2*6;
   const connector={vertices:mesh.vertices,triangles:mesh.triangles.slice(oralIndexCount+nose.triangles.length)};
   // The parasagittal nasal reference and its connector are cut together, so
   // the actual welded outlet is no longer drawn as a separate diagonal seam.
   const nasalReference={vertices:mesh.vertices,triangles:mesh.triangles.slice(oralIndexCount)};
-  return {...mesh,connector,nasalReference,oralVertexCount:noseOffset,oralIndexCount,
+  const clipped=subtractTeeth({vertices:mesh.vertices,triangles:mesh.triangles.slice(0,oralIndexCount)},state.dentalSolids??dentalSolids(state.meshes));
+  const clippedMesh={...mesh,vertices:clipped.vertices,triangles:[...clipped.triangles,...mesh.triangles.slice(oralIndexCount)],referenceDepth:[...mesh.referenceDepth,...Array((clipped.vertices.length-mesh.vertices.length)/3).fill(0)]};
+  return {...clippedMesh,connector,nasalReference,oralVertexCount:noseOffset,oralIndexCount:clipped.triangles.length,
     junction:{open:opened,area,center,start,end,throat:lower.map(i=>point(mesh,i)),seamVertices:patch.length+outlet.length,reference:true}};
 }
