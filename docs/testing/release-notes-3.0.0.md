@@ -1,9 +1,9 @@
 # 3.0.0 Release 文案核对
 
-任务 `DOCS-RELEASE-300-NOTES`，日期2026-10-12，状态 `in_progress`。用户要求语气亲切、可爱，并用井韶子写作风格skill说明v3的具体升级。正文唯一维护在 [3.0.0 说明](../../release/notes/3.0.0.md)。
+任务 `DOCS-RELEASE-300-NOTES`，日期2026-10-12，状态 `verified`。用户要求语气亲切、可爱，并用井韶子写作风格skill说明v3的具体升级。正文唯一维护在 [3.0.0 说明](../../release/notes/3.0.0.md)。
 
 内容依据 [v2 基线](../baseline/v2-README.md)、[R7正式发行](release-3.0.0-publish.md)及模块文档。v2已有声学、合成、音系、感知等功能，因此不将它们全部写成新增工具。主要升级写为统一宿主与操作流程，另说明独立录音、音标表Plus和论文阅读，以及现有模块的具体能力。
 
 保留下载方式、Windows/x64边界、MFA独立安装、首次展开空间与源码归档范围。技术文件说明折叠展示，正文不堆字节大小或QA流水。语气采用第三人称韶子、短段落、少量颜文字与括号吐槽，功能术语和使用条件保持准确。
 
-公开对象为 `Nephelium/PhoneticToolbox` 的 `v3.0.0` Release正文。本次不改发布名称、tag、目标提交、draft/prerelease或附件。编辑前后回读Release ID、五件附件ID/名称/大小/摘要及正文内容；正文已通过本地1200/390宽度GFM渲染。GitHub Release ID 409734752的正文回读与源文件一致，五件附件ID/名称/大小/摘要、tag、名称、目标及发布标记前后一致；本轮源文件和最终记录等待提交。此文案修改不重新构建或替换应用。
+公开对象为 `Nephelium/PhoneticToolbox` 的 `v3.0.0` Release正文。本次不改发布名称、tag、目标提交、draft/prerelease或附件。编辑前后回读Release ID、五件附件ID/名称/大小/摘要及正文内容；正文已通过本地1200/390宽度GFM渲染。GitHub Release ID 409734752的正文回读与源文件一致，五件附件ID/名称/大小/摘要、tag、名称、目标及发布标记前后一致；本轮源文件已随主页提交4a5cd82公开。实际Release在1200/390宽度下HTTP 200、正文与升级标题可见且无横向溢出。附件前后身份回执位于本机忽略目录output/maintenance/readme-rich-examples/release-body-verification.json。此文案修改不重新构建或替换应用。

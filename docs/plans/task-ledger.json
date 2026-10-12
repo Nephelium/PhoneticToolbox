@@ -1427,13 +1427,11 @@
     {
       "id": "DOCS-GITHUB-HOMEPAGE",
       "title": "GitHub 图文主页与模块文档入口",
-      "status": "in_progress",
+      "status": "verified",
       "files": "README.md; .gitignore; docs/assets/readme; docs/manual/ipa-content-authoring.md; docs/testing/github-readme.md; docs/testing/github-source-sync.md; third_party/source-registry.json; docs/project-status.md; docs/plans/task-ledger.json; two root CMD index exclusions",
-      "note": "本轮按用户最新要求细化M08/M09/M13/M14/M15/M18的实际示例，六图已采集核对；完整20图仍为Absolutely浅色。此前2c93da2公开主页与两个CMD移出保持。",
+      "note": "本轮按指定输入完成六图细化，完整20图保持Absolutely浅色，4a5cd82已推送main；实际GitHub桌面/窄屏显示和15项文件身份通过；其他539项工作文件摘要不变，原始输入未公开。",
       "verification_scope": "Windows实际Qt源码工作台18模块、首页及设置的20张Absolutely/light未编辑截图；正式说明书原音频摘要不变；实际声学、LPC、EGG、F0与公开字表结果；截图字节摘要一致；论文实际全屏无本机路径；1200/390独立Chrome本地GFM渲染、21图解码、18模块链接、56本地引用、有效锚点且无横向溢出；文档验证1953文件、415来源、88任务零错误；七轮scratch退出后按归属清理成功。 GitHub实际公开页1200/390宽度HTTP 200，21图解码与4个导航锚点点击通过，无折叠块或README横向溢出；远端文件身份一致，其他539项工作文件摘要保持一致。 本轮6例：指定5453记录字表全部导入/3文件生成；12试次ABX保存；春江花月夜252汉字全文；实际变调合成与图片重建；普通PDF阅读完整首页；九轮scratch均已清。",
-      "remaining": [
-        "完成本轮README本地排版验证、精确文件提交与GitHub实际回读"
-      ],
+      "remaining": [],
       "outside_verified_scope": [
         "未重新构建应用；截图不代表科研准确率、物理设备或跨平台验收"
       ],
@@ -1447,16 +1445,15 @@
         "output/maintenance/readme-absolutely-update/published-tree.json"
       ],
       "remote_result": {
-        "homepage_commit": "2c93da292b05272fe58b36c1d3c12b4177efd969",
-        "branch": "main",
-        "remote_tree_files": 3015,
-        "remote_blobs_verified": 30,
-        "removed_cmd_files": 2,
-        "preserved_other_working_files": 539,
+        "homepage_commit": "4a5cd82e2fcc8537db02509f1e228e19b4828a42",
+        "changed_pngs": 6,
+        "total_pngs": 20,
+        "remote_blobs_verified": 15,
         "live_widths": [
           1200,
           390
-        ]
+        ],
+        "protected_working_files": 539
       }
     },
     {
@@ -1475,22 +1472,27 @@
     {
       "id": "DOCS-RELEASE-300-NOTES",
       "title": "3.0.0 Release说明与具体升级",
-      "status": "in_progress",
+      "status": "verified",
       "files": [
         "release/notes/3.0.0.md",
         "docs/testing/release-notes-3.0.0.md",
         "docs/project-status.md",
         "docs/plans/task-ledger.json"
       ],
-      "note": "按用户指定井韶子写作风格skill调整语气，按v2基线与已公开R7证据核对升级。仅修改Release正文，保留标签、名称、五件附件与摘要。",
-      "verification_scope": "v2基线README、R7发行记录与模块能力核对；正文草稿完成",
-      "remaining": [
-        "核对排版，编辑公开Release正文并回读；附件身份前后一致"
-      ],
+      "note": "按用户指定井韶子写作风格说明具体升级，GitHub v3.0.0 Release正文已更新并回读与源文件一致；名称/tag/目标/发布标记和五件附件ID/大小/摘要不变。",
+      "verification_scope": "v2基线、R7已公开功能与模块资料核对；本地及实际GitHub在1200/390宽度通过；Release正文精确回读，5件附件和发布属性前后一致。",
+      "remaining": [],
       "evidence": [
         "release/notes/3.0.0.md",
         "docs/testing/release-notes-3.0.0.md"
-      ]
+      ],
+      "remote_result": {
+        "release_id": 409734752,
+        "tag": "v3.0.0",
+        "body_sha256": "b1200636bcc2f85998b2eb03d4c02e087a7dc5179d5ba92ddd4e979468253956",
+        "assets_unchanged": 5,
+        "homepage_commit": "4a5cd82e2fcc8537db02509f1e228e19b4828a42"
+      }
     }
   ],
   "updated_on": "2026-10-12",
