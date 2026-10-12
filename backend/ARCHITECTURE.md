@@ -24,6 +24,8 @@ capabilities 根据实际配置、资源、运行时及 store 能力计算。HTT
 
 本机 [ptb_api/cli.py](src/ptb_api/cli.py)由 Qt 所有者启动，绑定回环临时端口，校验 Host、Origin 和每次会话 token。SQLiteJobStore 读取指定既有任务库；LocalAcousticFiles 持有本机受管输入/结果，AcousticBatches 提供批次规则。CLI 启动一个自己拥有的 worker，父 stdin 结束即启动收尾。
 
+卸载的专用缓存清理服务沿用相同回环身份和结果清理协议，只开放健康检查与清空受管结果，不启动计算worker。冻结入口跳过此模式不需要的科学运行时联接，保留Windows RedirectionGuard；正常任务服务仍初始化科学运行时并启动worker。
+
 服务模式经 create_app 装配账号、项目、数据库与 Storage，研究文件使用 owner/asset ID。SQLite 与 PostgreSQL 的部署和迁移分别核验，公开部署另见[平台部署说明](../docs/deployment/platform-release.md)。CLI 的回环开发入口不能替代生产服务部署入口。
 
 网页额度/期限由 [storage_policy.py](src/ptb_api/storage_policy.py)定义，完整资源状态机见[账号与存储规格](../docs/specs/accounts-storage-jobs.md)。LocalRetention 是本机受管结果的独立维护机制，不将网页到期策略套到用户原始工程。

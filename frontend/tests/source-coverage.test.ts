@@ -10,7 +10,10 @@ test('academic acknowledgements copy complete citations and keep private lookup 
  const registry=read('third_party/source-registry.json');
  const sources=read('frontend/src/generated/sources.json');
  const academic=sources.filter((s:any)=>s.acknowledgement_group==='academic');
- assert.equal(academic.length,48);
+ assert.equal(academic.length,51);
+ for(const id of ['REF-SHUE-VOICE-SOURCE-2010','REF-VOICESAUCE-2011','REF-LING-VOICESAUCE-2019'])assert(academic.some((s:any)=>s.id===id),id);
+ assert(!sources.some((s:any)=>s.id==='SRC-M16-VOICEVISTA'));
+ assert(registry.sources.find((s:any)=>s.id==='SRC-M16-VOICEVISTA').evidence,'recording source audit retained');
  for(const source of academic){
   const original=registry.sources.find((s:any)=>s.id===source.id);
   assert(source.citation?.trim(),source.id);

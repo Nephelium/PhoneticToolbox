@@ -12,9 +12,13 @@ for part in PARTS:
     sys.path.insert(0, str(ROOT / part))
 os.environ['PYTHONPATH'] = os.pathsep.join(str(ROOT / part) for part in PARTS)
 os.environ['QTWEBENGINE_CHROMIUM_FLAGS'] = '--mute-audio'
+os.environ['QT_QPA_PLATFORM'] = 'windows'
+os.environ['QT_LOGGING_RULES'] = 'qt.webenginecontext=true;qt.webengine.compositor=true'
 
 
 def main():
+    from workbench_source import configure
+    configure()
     from verification_artifacts import verification_run
     from PyQt6.QtCore import QEventLoop, QTimer
     from PyQt6.QtGui import QColor
@@ -85,10 +89,11 @@ def main():
                 click('浅色' if mode == 'light' else '深色')
                 for highlighting in ('auto', 'all', 'plain'):
                     set_control('#button-style-choice', highlighting)
-                    pause(250)
-                    material = js("(()=>{const b=[...document.querySelectorAll('button')].find(b=>b.textContent==='更换背景图');const c=getComputedStyle(b);return {background:c.backgroundColor,blur:c.backdropFilter,webkit:c.webkitBackdropFilter,variable:getComputedStyle(document.documentElement).getPropertyValue('--button-glass-blur'),support:CSS.supports('backdrop-filter','blur(12px)'),agent:navigator.userAgent};})()")
+                    until("getComputedStyle(document.documentElement).getPropertyValue('--button-glass-image').includes('blob:')")
+                    pause(350)
+                    material = js("(()=>{const b=[...document.querySelectorAll('button')].find(b=>b.textContent==='更换背景图');const c=getComputedStyle(b);return {background:c.backgroundColor,image:c.backgroundImage,blur:c.backdropFilter,webkit:c.webkitBackdropFilter,variable:getComputedStyle(document.documentElement).getPropertyValue('--button-glass-blur'),support:CSS.supports('backdrop-filter','blur(12px)'),agent:navigator.userAgent};})()")
                     report['last_material']=material
-                    assert '0.2' in material['background'] and '24px' in material['blur'], material
+                    assert '0.2' in material['background'] and material['blur']=='none' and 'blob:' in material['image'], material
                 assert js("getComputedStyle(document.querySelector('input[aria-label=搜索工具]')).backgroundColor==='rgba(0, 0, 0, 0)'")
                 window.view.grab().save(str(out / ('appearance-' + mode + '.png')))
             report['checks'].append('Real Qt upload; custom palette; transparent text; 2 themes x 3 highlight modes at 20% glass/24px blur')
@@ -123,15 +128,15 @@ def main():
             until("!!document.querySelector('.vocal-page iframe')?.contentDocument?.querySelector('#ptb-background-style')")
             until("document.querySelector('.vocal-page iframe').contentDocument.documentElement.dataset.buttonStyle==='plain'")
             pause(300)
-            state = js("(()=>{const f=document.querySelector('.vocal-page iframe'),d=f.contentDocument,r=d.documentElement,b=d.querySelector('button'),c=getComputedStyle(b),image=d.querySelector('.app-background-layer'),outer=document.querySelector('.app-background-layer'),a=outer.getBoundingClientRect(),i=image.getBoundingClientRect(),fr=f.getBoundingClientRect(),scale=parseFloat(document.documentElement.style.zoom)||1;return {background:r.dataset.backgroundImage,material:r.dataset.buttonMaterial,root:getComputedStyle(r).backgroundColor,body:getComputedStyle(d.body).backgroundColor,glass:c.backdropFilter,alpha:c.backgroundColor,wallpaper:getComputedStyle(image).backgroundImage===getComputedStyle(outer).backgroundImage,offset:[Math.abs(i.left*scale+fr.left-a.left),Math.abs(i.top*scale+fr.top-a.top)],canvas:[...d.querySelectorAll('canvas')].map(c=>getComputedStyle(c).backgroundColor)};})()")
+            state = js("(()=>{const f=document.querySelector('.vocal-page iframe'),d=f.contentDocument,r=d.documentElement,b=d.querySelector('#threeButton'),c=getComputedStyle(b),image=d.querySelector('.app-background-layer'),outer=document.querySelector('.app-background-layer'),a=outer.getBoundingClientRect(),i=image.getBoundingClientRect(),fr=f.getBoundingClientRect(),scale=parseFloat(document.documentElement.style.zoom)||1;return {background:r.dataset.backgroundImage,material:r.dataset.buttonMaterial,root:getComputedStyle(r).backgroundColor,body:getComputedStyle(d.body).backgroundColor,glass:c.backdropFilter,glassImage:c.backgroundImage,alpha:c.backgroundColor,wallpaper:getComputedStyle(image).backgroundImage===getComputedStyle(outer).backgroundImage,offset:[Math.abs(i.left*scale+fr.left-a.left),Math.abs(i.top*scale+fr.top-a.top)],canvas:[...d.querySelectorAll('canvas')].map(c=>getComputedStyle(c).backgroundColor)};})()")
             assert state['background'] == 'on' and state['material'] == 'glass', state
             assert state['root'] != 'rgba(0, 0, 0, 0)' and state['body'] == 'rgba(0, 0, 0, 0)', state
             assert state['wallpaper'] and max(state['offset']) < 1, state
-            assert '24px' in state['glass'] and '0.2' in state['alpha'], state
+            assert state['glass']=='none' and 'blob:' in state['glassImage'] and '0.2' in state['alpha'], state
             assert state['canvas'] and all(color != 'rgba(0, 0, 0, 0)' for color in state['canvas']), state
             report['m10'] = state
             window.view.grab().save(str(out / 'm10-glass.png'))
-            report['checks'].append('Actual M10 local wallpaper matches outer image/coordinates for backdrop-filter; custom theme/glass sync and scientific canvases opaque')
+            report['checks'].append('Actual M10 local wallpaper matches outer image/coordinates for shared raster glass; custom theme/glass sync and scientific canvases opaque')
             click('设置')
             click('移除背景图')
             until("document.documentElement.dataset.backgroundImage==='off'")

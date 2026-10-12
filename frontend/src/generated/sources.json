@@ -1,5 +1,55 @@
 [
   {
+    "id": "REF-SHUE-VOICE-SOURCE-2010",
+    "title": "The Voice Source in Speech Production: Data, Analysis and Models",
+    "modules": [
+      "M01",
+      "M02"
+    ],
+    "kind": "dissertation",
+    "acknowledgement_group": "academic",
+    "authors": "Yen-Liang Shue",
+    "version": "",
+    "license": "",
+    "urls": {
+      "pdf": "https://www.phonetics.ucla.edu/voiceproject/Publications/shue_dissertation.pdf"
+    },
+    "citation": "SHUE Y L. The Voice Source in Speech Production: Data, Analysis and Models[D]. Los Angeles: University of California, Los Angeles, 2010."
+  },
+  {
+    "id": "REF-VOICESAUCE-2011",
+    "title": "VoiceSauce: A program for voice analysis",
+    "modules": [
+      "M01",
+      "M02"
+    ],
+    "kind": "paper",
+    "acknowledgement_group": "academic",
+    "authors": "Yen-Liang Shue；Patricia Keating；Chad Vicenik；Kristine Yu",
+    "version": "",
+    "license": "",
+    "urls": {
+      "pdf": "https://www.phonetics.ucla.edu/voiceproject/Publications/Shue-etal_2011_ICPhS.pdf",
+      "slides": "https://www.phonetics.ucla.edu/voiceproject/Publications/Shue-etal_2011_ICPhS_slides.pdf"
+    },
+    "citation": "SHUE Y L, KEATING P, VICENIK C, et al. VoiceSauce: A program for voice analysis[C]//Proceedings of the 17th International Congress of Phonetic Sciences. Hong Kong, 2011: 1846-1849."
+  },
+  {
+    "id": "REF-LING-VOICESAUCE-2019",
+    "title": "发声态研究的相关问题与VoiceSauce的使用",
+    "modules": [
+      "M01",
+      "M02"
+    ],
+    "kind": "paper",
+    "acknowledgement_group": "academic",
+    "authors": "凌锋；史濛辉；袁丹；沈瑞清",
+    "version": "",
+    "license": "",
+    "urls": {},
+    "citation": "凌锋, 史濛辉, 袁丹, 等. 发声态研究的相关问题与VoiceSauce的使用[J]. 方言, 2019(4): 385-397."
+  },
+  {
     "id": "SRC-PRAAT",
     "title": "Praat / Parselmouth",
     "modules": [
@@ -5025,20 +5075,6 @@
       "source": "https://scikit-image.org/docs/0.21.x/api/skimage.data.html#skimage.data.astronaut",
       "terms": "https://www.nasa.gov/nasa-brand-center/images-and-media/"
     }
-  },
-  {
-    "id": "SRC-M16-VOICEVISTA",
-    "title": "VoiceVista 录音模块",
-    "modules": [
-      "M16"
-    ],
-    "kind": "reviewed-local-source",
-    "acknowledgement_group": "software",
-    "authors": "井井",
-    "version": "",
-    "license": "",
-    "urls": {},
-    "reference_note": "录音流程与文件保存机制参考。"
   },
   {
     "id": "M17-IPA-CHART",

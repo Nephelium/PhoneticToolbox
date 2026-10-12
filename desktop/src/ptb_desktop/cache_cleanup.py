@@ -17,7 +17,7 @@ def result_caches():
             raise ValueError('本机任务缓存归属未确认，现有文件已保留。')
         database=plain(root/'jobs.sqlite3',root);files=plain(root/'files',root)
         if not database.is_file() or not files.is_dir():raise ValueError('本机任务目录不完整，已保留。')
-        with LocalService(database,local_files_root=files) as service:
+        with LocalService(database,local_files_root=files,cache_cleanup=True) as service:
             result=service.request('/api/v1/jobs/local-storage/clear-all','POST')
         results.append(result)
     return {'complete':all(row.get('complete',False) for row in results),'workspaces':results}

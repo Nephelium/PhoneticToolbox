@@ -1,11 +1,14 @@
 {
   "schema_version": "acknowledgement-coverage/1",
-  "checked_on": "2026-10-10",
+  "checked_on": "2026-10-13",
   "scope": "18 live modules and their displayed shared/supplementary sources; historical documents are separate",
   "modules": [
     {
       "id": "M01",
       "source_ids": [
+        "REF-SHUE-VOICE-SOURCE-2010",
+        "REF-VOICESAUCE-2011",
+        "REF-LING-VOICESAUCE-2019",
         "SRC-PRAAT",
         "SRC-REAPER",
         "SRC-IRAPT",
@@ -55,6 +58,9 @@
     {
       "id": "M02",
       "source_ids": [
+        "REF-SHUE-VOICE-SOURCE-2010",
+        "REF-VOICESAUCE-2011",
+        "REF-LING-VOICESAUCE-2019",
         "SRC-PRAAT",
         "SRC-REAPER",
         "SRC-VOICESAUCE",
@@ -212,8 +218,7 @@
         "PKG-NUMPY",
         "PKG-SCIPY",
         "PKG-SOUNDDEVICE",
-        "PKG-SOUNDFILE",
-        "SRC-M16-VOICEVISTA"
+        "PKG-SOUNDFILE"
       ]
     },
     {

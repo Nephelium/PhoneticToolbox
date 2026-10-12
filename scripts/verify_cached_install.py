@@ -17,6 +17,7 @@ def main():
     parser.add_argument('--setup',type=Path,required=True)
     parser.add_argument('--exe',type=Path,required=True)
     parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--with-workspace',action='store_true',help='Exercise the frozen cleanup service with an owned completed result')
     args=parser.parse_args();out=args.output.resolve();setup=args.setup.resolve()
     if not out.is_relative_to(Path('D:/PTB-Compact-QA-20261006')) or not setup.is_relative_to(ROOT/'output/validation'):
         raise ValueError('Only a dedicated OwnedQA setup and new external QA directory are allowed')
@@ -46,6 +47,24 @@ def main():
         report['prepareAgain']=run([app,'--ptb-prepare-cache'],'warm')
         assert report['prepareAgain']['exitCode']==0
         report['warm']=json.loads((cache/'last-launch.json').read_text('utf8'));assert report['warm']['prepared']==[] and report['warm']['reused']==['science','host','apps']
+        result_path=None
+        if args.with_workspace:
+            for part in ('backend/src','packages/phonetic_core/src'):sys.path.insert(0,str(ROOT/part))
+            from ptb_worker.local_workspace import prepare_workspace
+            from ptb_worker.local_acoustic_files import LocalAcousticFiles
+            from ptb_worker.store import SQLiteJobStore,LOCAL_PROJECT,canonical
+            from uuid import uuid4
+            workspace=profile/'PhoneticToolbox/v3/local-preview-20260927'
+            database,files_root=prepare_workspace(workspace,ROOT/'backend/migrations')
+            store=SQLiteJobStore(database);files=LocalAcousticFiles(store,files_root)
+            job,key=str(uuid4()),str(uuid4());raw=b'owned cached result';sha=hashlib.sha256(raw).hexdigest();now=int(time.time())
+            with files.locked() as state:
+                with store.transaction() as tx:
+                    tx.execute('INSERT INTO jobs(id,owner_id,project_id,idempotency_key,request_hash,snapshot,state,deadline,created_at,updated_at,result_manifest) VALUES(?,?,?,?,?,?,?,?,?,?,?)',
+                        (job,'local',LOCAL_PROJECT,uuid4().hex,'0'*64,canonical({'operation':'acoustic_batch'}),'succeeded',now+1000,now,now,canonical({'files':[dict(id=key,name='cache-result.bin',size_bytes=len(raw),sha256=sha)]})))
+                state['assets'][key]=dict(id=key,name='cache-result.bin',role=None,kind='result',state='ready',sha256=sha,size_bytes=len(raw),reserved_bytes=0,expected_bytes=len(raw),job_id=job,generation=0,retention_created_at=now)
+                result_path=files._path(key);result_path.write_bytes(raw);files._save(state)
+            report['seededOwnedResult']={'job':job,'asset':key,'bytes':len(raw)}
         markers=[profile/'PhoneticToolbox/v3/owned-research-project.wav',profile/'PhoneticToolbox-v3/workbench/owned-settings.json']
         for file in markers:file.parent.mkdir(parents=True,exist_ok=True);file.write_bytes(b'RESEARCH AND SETTINGS MUST SURVIVE')
         original={str(f):digest(f) for f in markers}
@@ -57,6 +76,9 @@ def main():
         report['uninstall']=run([uninstaller,'/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/LOG='+str(out/'uninstall.log')],'uninstall')
         assert report['uninstall']['exitCode']==0
         assert not app.exists() and not cache.exists()
+        if result_path is not None:
+            assert not result_path.exists(),'Frozen maintenance API must clear completed managed results'
+            report['completedResultRemoved']=True
         assert {str(f):digest(f) for f in markers}==original
         report['researchAndSettingsPreserved']=original
         deadline=time.monotonic()+10

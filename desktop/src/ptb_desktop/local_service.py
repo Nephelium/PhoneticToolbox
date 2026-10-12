@@ -9,7 +9,7 @@ import urllib.request
 
 
 class LocalService:
-    def __init__(self, jobs_path=None, *, local_files_root=None,reaper_binary=None):
+    def __init__(self, jobs_path=None, *, local_files_root=None,reaper_binary=None,cache_cleanup=False):
         self.token = secrets.token_urlsafe(32)
         self.process = None
         self.url = None
@@ -17,17 +17,20 @@ class LocalService:
         self.jobs_path = str(jobs_path) if jobs_path is not None else None
         self.local_files_root=str(local_files_root) if local_files_root is not None else None
         self.reaper_binary=str(reaper_binary) if reaper_binary is not None else None
+        self.cache_cleanup=cache_cleanup
 
     def start(self):
         if self.process is not None:
             raise RuntimeError('Service already started')
         self.process = subprocess.Popen(
-            ([sys.executable, '--local-service', '--mode', 'local'] if getattr(sys,'frozen',False) else [sys.executable, '-m', 'ptb_api.cli', '--mode', 'local']),
+            ([sys.executable, '--local-cache-cleanup-service' if self.cache_cleanup else '--local-service', '--mode', 'local'] if getattr(sys,'frozen',False) else [sys.executable, '-m', 'ptb_api.cli', '--mode', 'local']),
             stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
             text=True, encoding='utf-8', creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
         try:
-            self.process.stdin.write(json.dumps({'token': self.token, 'jobs_path':self.jobs_path,
-                'local_files_root':self.local_files_root,'reaper_binary':self.reaper_binary}) + '\n')
+            config={'token': self.token, 'jobs_path':self.jobs_path,
+                'local_files_root':self.local_files_root,'reaper_binary':self.reaper_binary}
+            if self.cache_cleanup:config['cache_cleanup']=True
+            self.process.stdin.write(json.dumps(config) + '\n')
             self.process.stdin.flush()
             lines = queue.Queue()
             threading.Thread(target=lambda: lines.put(self.process.stdout.readline()), daemon=True).start()

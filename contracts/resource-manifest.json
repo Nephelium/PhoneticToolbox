@@ -109,7 +109,7 @@
     },
     {
       "path": "frontend/public/vocal-tract/v3.css",
-      "sha256": "bbb5b29cb6963f0f1e45074929705c700f5e38d2b356655a9567b1ab65504414",
+      "sha256": "ccc3f742c065c49c5fed64812573dd85daacdf190cc7eb99fb3280eca0888af6",
       "source_id": "PROJECT-M10"
     },
     {
@@ -509,6 +509,11 @@
       "path": "resources/vocal_tract/sources/m10_r18_patch.py",
       "source_id": "SRC-VTL",
       "sha256": "832608c8fcc465eef681346f39d3928b0b68b7e0bf0f1242fbf954124132e5ee"
+    },
+    {
+      "path": "frontend/public/vocal-tract/default-presets.json",
+      "source_id": "PROJECT-M10",
+      "sha256": "ee929d3e800ff2081c540032852dde4a65364ad3b40ca2d341ad2723d3fe9d69"
     }
   ],
   "generated_resources": [

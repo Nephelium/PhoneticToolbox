@@ -18,8 +18,9 @@ from ptb_worker.store import SQLiteJobStore
 
 
 class LoopbackGuard:
-    def __init__(self, app, authority: str, token: str | None):
+    def __init__(self, app, authority: str, token: str | None, *, cache_cleanup=False):
         self.app, self.authority, self.token = app, authority, token
+        self.cache_cleanup=cache_cleanup
 
     async def __call__(self, scope, receive, send):
         if scope['type'] == 'http':
@@ -31,6 +32,9 @@ class LoopbackGuard:
             if self.token is not None:
                 permitted = permitted and len(auth) == 1 and hmac.compare_digest(
                     auth[0].encode('latin1'), ('Bearer ' + self.token).encode('ascii'))
+            if self.cache_cleanup:
+                permitted=permitted and (scope['method'],scope['path']) in {
+                    ('GET','/api/v1/health'),('POST','/api/v1/jobs/local-storage/clear-all')}
             if not permitted:
                 await JSONResponse({'code': 'permission_denied'}, status_code=403)(scope, receive, send)
                 return
@@ -61,7 +65,8 @@ def main():
         from ptb_worker.acoustic_batches import AcousticBatches
         files=LocalAcousticFiles(jobs,config['local_files_root'],reaper_binary=config.get('reaper_binary'))
         AcousticBatches(jobs,files);files.recover()
-    app = LoopbackGuard(create_app(args.mode,job_store=jobs,local_token=token,local_origin='http://'+authority), authority, token)
+    cache_cleanup=args.mode=='local' and config.get('cache_cleanup') is True
+    app = LoopbackGuard(create_app(args.mode,job_store=jobs,local_token=token,local_origin='http://'+authority), authority, token,cache_cleanup=cache_cleanup)
     server = uvicorn.Server(uvicorn.Config(app, log_level='warning', access_log=False))
 
     if args.managed or args.mode == 'local':
@@ -81,7 +86,8 @@ def main():
 
     worker=None
     try:
-        if jobs:
+        # Result-cache maintenance never admits jobs or needs a scientific worker.
+        if jobs and not cache_cleanup:
             worker=subprocess.Popen(command('ptb_worker.cli'),stdin=subprocess.PIPE,
                                     stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True,encoding='utf-8',
                                     creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))

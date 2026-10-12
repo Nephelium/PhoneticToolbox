@@ -1,8 +1,9 @@
-import {ref} from 'vue';
+import {ref,watch} from 'vue';
 import {projects} from '../platform/browser.ts';
 import {normalizeBackground,type BackgroundAppearance} from '../design/background.ts';
 import {buttonAppearance,installButtonAppearance,setButtonAppearance} from './buttons.ts';
 import {openImageDatabase} from '../platform/image-storage.ts';
+import {refreshGlassWallpaper,syncGlassWallpaperFrame} from './glass-wallpaper.ts';
 export const backgroundAppearance=ref(normalizeBackground(null)),backgroundUrl=ref(''),backgroundName=ref(''),backgroundError=ref('');
 let initialized:Promise<void>|undefined,layer:HTMLDivElement;
 interface SavedImage {blob:Blob;name:string}
@@ -22,6 +23,7 @@ function apply(){
  layer.style.backgroundImage=backgroundUrl.value?`url("${backgroundUrl.value}")`:'none';
  layer.style.filter=`blur(${blur}px)`;layer.style.opacity=String(opacity/100);
  layer.style.inset=`-${Math.ceil(blur*3)}px`;
+ refreshGlassWallpaper({url:backgroundUrl.value,blur,opacity,glassBlur:buttonAppearance.value.glassBlur});
 }
 function show(image?:SavedImage){
  const old=backgroundUrl.value;
@@ -35,6 +37,7 @@ function show(image?:SavedImage){
 export function initializeBackground(){return initialized??=(async()=>{
  layer=document.createElement('div');layer.className='app-background-layer';layer.setAttribute('aria-hidden','true');document.body.prepend(layer);
  backgroundAppearance.value=normalizeBackground(projects.read('backgroundAppearance',null));apply();
+ watch(()=>buttonAppearance.value.glassBlur,apply);
  try{const image=await imageStore();if(image?.blob instanceof Blob)show(image);}
  catch(error){backgroundError.value=error instanceof Error?error.message:'背景图未能读取，请重新选择图片。';}
 })();}
@@ -63,8 +66,7 @@ export async function changeBackground(file?:File){
  try{const image=file?await prepareBackground(file):undefined;await imageStore(image??null);show(image);return true;}
  catch(error){backgroundError.value=error instanceof Error?error.message:'背景图未能保存，请重试。';return false;}
 }
-/** Frames need a local image for backdrop-filter to sample across their own document.
- * Align it with the outer wallpaper and composite once over the same theme base. */
+/** Align the frame wallpaper and shared glass bitmap with the outer document. */
 export function syncBackgroundFrame(frame:HTMLIFrameElement){
  const doc=frame.contentDocument;if(!doc||!layer)return;
  let image=doc.querySelector<HTMLDivElement>('.app-background-layer');
@@ -73,4 +75,5 @@ export function syncBackgroundFrame(frame:HTMLIFrameElement){
  image.style.display=backgroundUrl.value?'block':'none';
  const scale=parseFloat(document.documentElement.style.zoom)||1,outer=layer.getBoundingClientRect(),bounds=frame.getBoundingClientRect();
  image.style.inset='auto';image.style.left=(outer.left-bounds.left)/scale+'px';image.style.top=(outer.top-bounds.top)/scale+'px';image.style.width=outer.width/scale+'px';image.style.height=outer.height/scale+'px';
+ syncGlassWallpaperFrame(frame);
 }

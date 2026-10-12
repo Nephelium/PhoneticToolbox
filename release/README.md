@@ -2,6 +2,8 @@
 
 构建参数、依赖边界、500,000,000 字节上限和最终成品验收唯一维护在 [PACKAGING_RULES.md](PACKAGING_RULES.md)。本页只说明入口与产物位置，历史报告不构成当前上传授权。
 
+每次打包先复查严格规则第 0 节的历史故障表，在本轮验收记录中逐项写明适用性、最终包身份和检查结果。新增故障回填同一张表，下次构建继续复查。
+
 | 任务 | 入口 |
 | --- | --- |
 | 准备/核查独立运行时 | [prepare_lean_runtimes.py](prepare_lean_runtimes.py)、[verify_runtimes.py](verify_runtimes.py) |

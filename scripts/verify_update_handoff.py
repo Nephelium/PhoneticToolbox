@@ -19,7 +19,7 @@ for folder in ('desktop/src','backend/src','packages/phonetic_core/src'):
 os.environ['PYTHONPATH']=os.pathsep.join(str(ROOT/p) for p in ('desktop/src','backend/src','packages/phonetic_core/src'))
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--package',required=True,type=Path);parser.add_argument('--origin',required=True,type=Path);parser.add_argument('--output',required=True,type=Path);parser.add_argument('--kind',choices=('portable','installer'),required=True);parser.add_argument('--port',required=True,type=int);parser.add_argument('--profile',type=Path);args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--package',required=True,type=Path);parser.add_argument('--origin',required=True,type=Path);parser.add_argument('--output',required=True,type=Path);parser.add_argument('--kind',choices=('portable','installer'),required=True);parser.add_argument('--port',required=True,type=int);parser.add_argument('--profile',type=Path);parser.add_argument('--target-version',default='3.0.0-preview.1');parser.add_argument('--current-version',default='3.0.0-preview.0');args=parser.parse_args()
     out=args.output.resolve();out.mkdir(parents=True,exist_ok=False)
     if not out.is_relative_to(ROOT/'output/validation'):raise ValueError('Expected owned output')
     profile=args.profile.resolve() if args.profile else out/'profile'
@@ -65,7 +65,7 @@ def main():
     with download.open('rb') as stream:
         digest=hashlib.file_digest(stream,'sha256').hexdigest()
     from ptb_desktop.update_apply import prepare_handoff,launch_handoff
-    request,plan=prepare_handoff(updates,download,args.kind,download.stat().st_size,digest,'3.0.0-preview.1','3.0.0-preview.0',origin=args.origin)
+    request,plan=prepare_handoff(updates,download,args.kind,download.stat().st_size,digest,args.target_version,args.current_version,origin=args.origin)
     # Seeding is complete. The actual frozen helper and next process receive
     # Windows-only PATH and no checkout/runtime environment bindings.
     for name in list(os.environ):

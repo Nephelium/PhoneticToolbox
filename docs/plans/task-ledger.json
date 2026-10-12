@@ -3,6 +3,88 @@
   "created_on": "2026-09-09",
   "tasks": [
     {
+      "id": "RELEASE-301-RENDERING",
+      "title": "3.0.1全局绘制、侧栏及鼻音构型修复与成品替换",
+      "status": "verified",
+      "files": [
+        "frontend/src/design/buttons.css",
+        "frontend/src/design/background.css",
+        "frontend/src/state/background.ts",
+        "frontend/src/state/glass-wallpaper.ts",
+        "frontend/public/vocal-tract/default-presets.json",
+        "frontend/public/vocal-tract/v3.css",
+        "contracts/resource-manifest.json",
+        "scripts/verify_custom_appearance_qt.py",
+        "scripts/verify_rendering_qt.py",
+        "scripts/verify_rendering_cdp.mjs",
+        "scripts/verify_rendering_pixels.py",
+        "release/PACKAGING_RULES.md",
+        "docs/testing/rendering-stability.md",
+        "release/README.md",
+        "docs/testing/release-3.0.1-publish.md",
+        "CHANGELOG.md",
+        "docs/project-status.md"
+      ],
+      "note": "用户报告R5安装版全局闪烁、滚动残影与间歇侧栏焦点框，要求修复、n构型打开腭咽口并重新打包上传3.0.1。保留其他工作。 用户追加要求全部完成后自动关机。 用户追加授权源码提交并推送main，要求将故障经验写成每次打包必查规范；停止新增公网整包下载。",
+      "verification": "392前端、类型/说明书/UI数据、源码Qt151帧；R6默认GPU可见窗口84组/168帧像素和原生滚轮/最大化、n鼻端0.50 cm²/3D通过。最终分发、实际安装/卸载/租约保护和研究设置保留、两种真实换版通过。服务器六文件/GitHub四附件及摘要核对完成。现有ZIP/文案/标签保持。5项既有M10摘要错误及原间歇现象未完整复现边界保留。",
+      "current_evidence": [
+        "docs/testing/rendering-stability.md"
+      ],
+      "verification_scope": "Windows local source and exact R6 EXE bytes, visible native Qt default Intel D3D11 GPU, isolated install/uninstall/handoff, server and GitHub asset identity. Other machines/drivers/cross-platform not verified. Source synchronization authorized separately; Release tag/old ZIP unchanged.",
+      "local_evidence": "output/validation/rendering-20261013/release-gate.json; output/validation/rendering-20261013/qa-evidence; output/validation/rendering-20261013/replace-final.json; output/validation/rendering-20261013/github-asset-verification.json; output/validation/rendering-20261013/qa-cleanup/cleanup.json"
+    },
+    {
+      "id": "RELEASE-301-APPS-REPLACE",
+      "title": "3.0.1字体与致谢修订、卸载修复及两件应用替换",
+      "status": "verified",
+      "files": [
+        "third_party/source-registry.json",
+        "third_party/references.bib",
+        "third_party/acknowledgement-coverage.json",
+        "frontend/src/generated/sources.json",
+        "frontend/tests/source-coverage.test.ts",
+        "scripts/v3_local_preview_entry.py",
+        "desktop/src/ptb_desktop/cache_cleanup.py",
+        "desktop/src/ptb_desktop/local_service.py",
+        "backend/src/ptb_api/cli.py",
+        "backend/ARCHITECTURE.md",
+        "tests/test_cache_cleanup_entry.py",
+        "scripts/verify_cached_install.py",
+        "scripts/verify_update_handoff.py",
+        "docs/testing/m07-resize-stability.md",
+        "docs/testing/release-3.0.1-publish.md",
+        "CHANGELOG.md",
+        "docs/project-status.md"
+      ],
+      "note": "用户要求追加三文献、移除VoiceVista可见条目、检验其他字体字号，保持3.0.1并仅替换服务器/GitHub两件EXE。对应校验字段同步，ZIP/正文/标签/官网保持。R3实际卸载WinError448后，用户明确授权修复并重新打包，不豁免失败；R4途中补全清理worker隔离，停止自有构建，重新冻结R5。",
+      "verification": "原文首页与英文官方来源核对，42页VoiceSauce讲稿实际为2011。392前端、Chrome126/源码Qt63/R5最终EXE63字体布局和致谢通过。清理主入口及专用服务避免科学联接/计算worker，37项检查及最终R5工程外科学/11任务/18帮助、安装/缓存/卸载、租约阻止和研究设置保留、两种helper换版/媒体通过。服务器六文件/GitHub四附件替换及公网完整下载SHA成功；原ZIP/Release正文/标签保持，源码未推送。QA副本、合成WAV和缓存按逐项归属清理，报告保留。7项既有M10登记错误与原R2冻结资产字节一致，未扩改。",
+      "current_evidence": [
+        "docs/testing/m07-resize-stability.md"
+      ],
+      "verification_scope": "Windows source, R5 exact frozen bytes, isolated native Qt, install/uninstall/handoff and server/GitHub/public HTTPS identities. Old remote ZIP and Release tag source unchanged; original user window, separate computer, physical devices and cross-platform unverified.",
+      "local_evidence": "output/validation/m07-resize-20261013/replace-final.json; output/validation/m07-resize-20261013/public-https.json; output/validation/m07-resize-20261013/qa-evidence; output/validation/m07-resize-20261013/qa-cleanup/cleanup.json"
+    },
+    {
+      "id": "M07-RESIZE-STABILITY",
+      "title": "发声类型合成窗口尺寸与滚动切换稳定性",
+      "status": "verified",
+      "files": [
+        "frontend/src/modules/phonation-synthesis/PhonationSynthesisPage.vue",
+        "scripts/verify_m07_resize.cjs",
+        "scripts/verify_m07_resize_qt.py",
+        "docs/testing/m07-resize-stability.md",
+        "CHANGELOG.md",
+        "docs/project-status.md"
+      ],
+      "note": "两张截图差分确认中间图窗与右栏跳变。只为M07工作区和中间图窗保留稳定滚动条空间，消除宽度反馈；不改科学参数、算法与公共布局。保留同期官网工作。",
+      "verification": "Windows源码类型/build、12项定向测试通过。可见滚动条对照修复前右栏横移9 CSS px而失败，修复后工作区及图宽差0。楷体15号Chrome42组窗口/浅深主题/70-150%页面比例稳定；实际Qt41相邻尺寸和滚动切换稳定，合成输入完成真实分析/九步双变化/step09试听。临时WAV、任务库和缓存清理，参数、摘要、报告和截图保留。",
+      "verification_scope": "Windows source, isolated Chrome/native Qt and R5 final EXE with 63 font-size-window combinations and zero scrollbar width change; sustained original installed-app oscillation not fully reproduced; original user window, other devices and cross-platform unverified",
+      "current_evidence": [
+        "docs/testing/m07-resize-stability.md"
+      ],
+      "local_evidence": "output/validation/m07-resize-20261013/before-gutter.json; output/validation/m07-resize-20261013/browser-report.json; output/validation/m07/resize-qt-041070e6f20e41b09a869b00eb3dbbd9/report.json"
+    },
+    {
       "id": "RELEASE-301",
       "title": "3.0.1 Windows构建与服务器/GitHub发行",
       "status": "verified",

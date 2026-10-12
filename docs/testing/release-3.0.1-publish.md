@@ -1,20 +1,22 @@
 # 3.0.1 构建与发行记录
 
-当前状态：`built` / `published`。2026-10-13 服务器版本文件、应用更新频道、GitHub Release 和审阅源码同步均已完成。发布回执完整；科研、GUI、设备、安装/换版和性能验收按用户要求免测，不标功能 `verified`。
+当前状态：`built` / `verified` / `published`。2026-10-13首发、R5替换之后，两件EXE现已替换为R6。默认GPU可见窗口绘制、侧栏、滚动、n构型、最终工程外分发、安装/卸载和换版在本机最终字节范围通过。线上ZIP、Release正文和标签保持首发内容，不能把R6证据转用于原ZIP。详见[绘制回归](rendering-stability.md)和前轮[尺寸、致谢与卸载检查](m07-resize-stability.md)。
 
-用户于 2026-10-12 恢复构建与发布，并明确要求不用验证。随后要求用井韶子写作风格技能整理完整更新说明并先交其审阅。本轮不运行科研、GUI、设备、安装/换版或性能验收，不能把历史源码或其它 EXE 的结果转移到本轮成品。
+用户于 2026-10-12 恢复构建与发布，并明确要求不用验证。随后要求用井韶子写作风格技能整理完整更新说明并先交其审阅。该首发阶段未运行科研、GUI、设备、安装/换版或性能验收；随后R5/R6按追加要求完成各自验收，证据分开记录。
 
 ## 当前成品
 
-本轮冻结开始于 2026-10-12，构建完成于 2026-10-13。三种分发使用同一个应用 EXE，主包不含 MFA 环境、模型或词典。
+当前两件EXE为2026-10-13 R6同一应用，主包不含MFA环境、模型或词典。用户限定仅替换两件应用，线上ZIP保留首发R2字节。
 
 | 文件 | 字节数 | SHA-256 |
 | --- | ---: | --- |
-| `dist/PhoneticToolbox-301-20261012-R2/PhoneticToolbox-windows-x64.exe` | 495837756 | `dcf95ba9f69a18a787b05b2693e54b4b3a7bde4f28587a8e322d63e1805e73bc` |
-| `output/release-staging/release-301-20261013-r2/artifacts/PhoneticToolbox-3.0.1-windows-x64-setup.exe` | 497754059 | `c982dd7745ff7a444d40e45bb026a9d5be6f4c3a5fe199683829936251ddd013` |
-| `output/release-staging/release-301-20261013-r2/artifacts/PhoneticToolbox-3.0.1-windows-x64-portable.zip` | 495838322 | `41c100d88f3c2439517f0f8bc54c02b196d2e16de737b4a5d12c7e7c7d085736` |
+| `dist/PhoneticToolbox-301-render-20261013-R6/PhoneticToolbox-windows-x64.exe` | 495841235 | `27d0a664667dc9cb2c871aa1c29e4a4404564533d152c468cb130280659c5b08` |
+| `output/release-staging/release-301-render-20261013-R6/artifacts/PhoneticToolbox-3.0.1-windows-x64-setup.exe` | 497757168 | `d65b1c4d72880ab6e87c89d681229746f049e8914f9d5383430dca48fe5c3910` |
+| 线上既有 `PhoneticToolbox-3.0.1-windows-x64-portable.zip`（R2） | 495838322 | `41c100d88f3c2439517f0f8bc54c02b196d2e16de737b4a5d12c7e7c7d085736` |
 
-三文件均小于 500000000 字节。来源基准提交 `3759c4320586f51ed9fdfb69251c117c457d6eab`，其后的本机源码通过冻结清单单列，不能用基准提交代替冻结内容。`output/build-PhoneticToolbox-301-20261012-R2/snapshot/source-snapshot.json` 的 SHA-256 为 `29553b146d8adbcdd94fe075b4926d503a136bdbd0134a22e87ba41fbcd183f0`。
+三文件均小于500000000字节。R6源码快照SHA为 `319e20f0e1f89dfca3290d0447dfc3078101a88c129a6c19be9c42a031bcc894`。服务器六文件及GitHub四附件回执保存于 `output/validation/rendering-20261013/replace-final.json`，原文件有私有回滚备份。固定版本及两频道清单SHA为 `ab246f342c3631810cedf587a99503a7ed55892ef0c1d2949f538327a6a6b6d2`，仅同步两应用大小/摘要，notes保持首发原文。用户后续要求不再公网整包下载，先前校验已经结束，此后未再下载。本轮应用源码与打包规范经追加授权同步main，同期官网保持本地原状，标签不移动。前轮R5回执仍在 `output/validation/m07-resize-20261013/`，本轮以R6记录为准。
+
+首发R2两EXE的大小/摘要分别为495837756/`dcf95ba9f69a18a787b05b2693e54b4b3a7bde4f28587a8e322d63e1805e73bc`、497754059/`c982dd7745ff7a444d40e45bb026a9d5be6f4c3a5fe199683829936251ddd013`。首发来源基准提交为 `3759c4320586f51ed9fdfb69251c117c457d6eab`，本机冻结清单另列；其源码快照SHA为 `29553b146d8adbcdd94fe075b4926d503a136bdbd0134a22e87ba41fbcd183f0`。下列执行/发布结果均是首发历史范围，不能替代R6回执。
 
 ## 执行范围
 

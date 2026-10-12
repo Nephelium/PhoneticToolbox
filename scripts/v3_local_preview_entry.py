@@ -47,10 +47,16 @@ def configure(*, runtime=True):
 
 def main():
     helper = len(sys.argv) > 1 and sys.argv[1] == '--ptb-apply-update'
-    bundle = configure(runtime=not helper)
-    if sys.argv[1:]==['--ptb-clear-user-caches']:
+    clear_caches = sys.argv[1:] == ['--ptb-clear-user-caches']
+    cleanup_service = sys.argv[1:4] == ['--local-cache-cleanup-service', '--mode', 'local'] and len(sys.argv) == 4
+    # Inno's RedirectionGuard is inherited by uninstall children. Cache
+    # maintenance needs the bundled service, never scientific runtime junctions.
+    bundle = configure(runtime=not (helper or clear_caches or cleanup_service))
+    if clear_caches:
         from ptb_desktop.cache_cleanup import result_caches
         return 0 if result_caches()['complete'] else 21
+    if cleanup_service:
+        sys.argv[1] = '--local-service'
     if helper:
         from ptb_desktop.update_apply import helper_main
         return helper_main(sys.argv[2:])

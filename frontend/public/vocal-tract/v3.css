@@ -61,7 +61,7 @@ html[data-columns=three] .analysis .chart-heading{flex-wrap:wrap}
 @media(min-width:1450px){html[data-columns=auto] .workspace{grid-template-areas:"studio analysis inspector";grid-template-rows:minmax(0,1fr)}}
 
 /* Opaque modal layers avoid Chromium/Qt transparent WebGL compositing. */
-dialog::backdrop{background:var(--bg);backdrop-filter:none}dialog{isolation:isolate}#pitchDialogBody{background:var(--panel)}
+dialog::backdrop,#monitorDialog::backdrop{background:var(--bg);backdrop-filter:none}dialog{isolation:isolate}#pitchDialogBody{background:var(--panel)}
 
 .phonation-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}.phonation-buttons button{height:43px;margin:0;font-size:max(var(--m10-text-min),0.928571rem)}.phonation-buttons .active{background:#a85c63!important;color:#fff!important}
 .sequence-files{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}.sequence-files button{font-size:max(var(--m10-text-min),0.785714rem);flex:1;padding:5px}
