@@ -1427,13 +1427,11 @@
     {
       "id": "DOCS-GITHUB-HOMEPAGE",
       "title": "GitHub 图文主页与模块文档入口",
-      "status": "in_progress",
+      "status": "verified",
       "files": "README.md; .gitignore; docs/assets/readme; docs/manual/ipa-content-authoring.md; docs/testing/github-readme.md; docs/testing/github-source-sync.md; third_party/source-registry.json; docs/project-status.md; docs/plans/task-ledger.json; two root CMD index exclusions",
-      "note": "六张细化示例和Release正文均已公开验证。根据最新要求，README采用井韶子语气并保持文档的克制与准确，正在完成排版与上传回读。",
-      "verification_scope": "Windows实际Qt源码工作台18模块、首页及设置的20张Absolutely/light未编辑截图；正式说明书原音频摘要不变；实际声学、LPC、EGG、F0与公开字表结果；截图字节摘要一致；论文实际全屏无本机路径；1200/390独立Chrome本地GFM渲染、21图解码、18模块链接、56本地引用、有效锚点且无横向溢出；文档验证1953文件、415来源、88任务零错误；七轮scratch退出后按归属清理成功。 GitHub实际公开页1200/390宽度HTTP 200，21图解码与4个导航锚点点击通过，无折叠块或README横向溢出；远端文件身份一致，其他539项工作文件摘要保持一致。 本轮6例：指定5453记录字表全部导入/3文件生成；12试次ABX保存；春江花月夜252汉字全文；实际变调合成与图片重建；普通PDF阅读完整首页；九轮scratch均已清。",
-      "remaining": [
-        "完成README文风调整后的本地排版与GitHub回读"
-      ],
+      "note": "六张细化示例和Release文案均已公开验证。按用户最新要求，README采用自然温和、稍正式的井韶子语气，34e1825已上传并通过实际GitHub1200/390检查；20张配图、既有链接和技术信息保留。",
+      "verification_scope": "Windows实际Qt源码工作台18模块、首页及设置的20张Absolutely/light未编辑截图；正式说明书原音频摘要不变；实际声学、LPC、EGG、F0与公开字表结果；截图字节摘要一致；论文实际全屏无本机路径；1200/390独立Chrome本地GFM渲染、21图解码、18模块链接、56本地引用、有效锚点且无横向溢出；文档验证1953文件、415来源、88任务零错误；七轮scratch退出后按归属清理成功。 GitHub实际公开页1200/390宽度HTTP 200，21图解码与4个导航锚点点击通过，无折叠块或README横向溢出；远端文件身份一致，其他539项工作文件摘要保持一致。 本轮6例：指定5453记录字表全部导入/3文件生成；12试次ABX保存；春江花月夜252汉字全文；实际变调合成与图片重建；普通PDF阅读完整首页；九轮scratch均已清。 README文风调整后既有66项链接目标保留；本地和实际GitHub1200/390宽度、21图解码、锚点点击及无横向溢出通过。",
+      "remaining": [],
       "outside_verified_scope": [
         "未重新构建应用；截图不代表科研准确率、物理设备或跨平台验收"
       ],
@@ -1455,7 +1453,8 @@
           1200,
           390
         ],
-        "protected_working_files": 539
+        "protected_working_files": 539,
+        "readme_voice_commit": "34e182512fc5ca233e81132cb6cdd767be3099df"
       }
     },
     {

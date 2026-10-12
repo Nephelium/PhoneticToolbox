@@ -6,7 +6,7 @@
 
 GitHub 主线：`GIT-V3-MAIN` 为 `verified`。默认 `main` 已承载 v3，v2 原 main 保留在独立 `v2` 分支，两个工作树分别跟踪 `origin/main` 和 `origin/v2`。旧 codex 分支、11 个标签、7 个历史 Release 及附件完整保留，图文主页已上传，见[源码同步报告](testing/github-source-sync.md)。
 
-GitHub 图文主页：`DOCS-GITHUB-HOMEPAGE` 为 `verified`。本轮六个模块使用指定输入完成实际变调合成、图片重建、字表导出、ABX序列和全文转换，论文为普通工作台完整首页；主页提交 `4a5cd82` 已上传。`DOCS-RELEASE-300-NOTES` 已按井韶子文风重写具体升级并更新公开Release正文，五件附件、标签和应用包身份不变。两处实际桌面/窄屏显示与文件回读通过，见[主页检查](testing/github-readme.md)及[Release文案检查](testing/release-notes-3.0.0.md)。 README正按最新要求调整为韶子语气的较正式版本，配图与技术信息保留，本地排版检查通过，待上传回读。
+GitHub 图文主页：`DOCS-GITHUB-HOMEPAGE` 为 `verified`。本轮六个模块使用指定输入完成实际变调合成、图片重建、字表导出、ABX序列和全文转换，论文为普通工作台完整首页；主页提交 `4a5cd82` 已上传。`DOCS-RELEASE-300-NOTES` 已按井韶子文风重写具体升级并更新公开Release正文，五件附件、标签和应用包身份不变。两处实际桌面/窄屏显示与文件回读通过，见[主页检查](testing/github-readme.md)及[Release文案检查](testing/release-notes-3.0.0.md)。 README的较正式井韶子语气版本已以 `34e1825` 上传，20张配图、原有链接和技术信息保留；本地与实际GitHub桌面/窄屏检查通过。
 
 静态官网备案展示：已按授权更新 `www.phonetictoolbox.com` 首页，展示用户提供的 `黑ICP备2024017318号` 及工信部查询链接。1440/390/320 宽度本地浏览器检查、公网 HTTPS 200 与文件摘要一致性检查通过，`P15-ICP-FOOTER` 为 `verified`。公安联网备案待办理，备案系统中的域名对应关系尚未独立核实。
 
