@@ -1,6 +1,6 @@
 # GitHub 图文 README 检查
 
-任务：`DOCS-GITHUB-HOMEPAGE`。核查日期：2026-10-12。当前状态：`verified`。本轮按指定输入细化六图，主页提交 `4a5cd82` 已推送main，GitHub实际1200/390页面、远端15项文件身份及本机原件检查通过。
+任务：`DOCS-GITHUB-HOMEPAGE`。核查日期：2026-10-12。当前状态：`in_progress`。六图细化与Release文案已公开验证；本轮按用户补充要求调整README语气，保留韶子的自然温和，同时保持README功能信息、参数与链接准确。
 
 ## 本轮展示内容
 
