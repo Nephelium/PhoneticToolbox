@@ -1,6 +1,6 @@
 # 3.0.1 构建与发行记录
 
-当前状态：`built`，用户已完成文案修订并确认采用最终稿，服务器上传和 GitHub 草稿附件上传正在执行，尚未切换应用更新频道。
+当前状态：`built` / `published`。2026-10-13 服务器版本文件、应用更新频道、GitHub Release 和审阅源码同步均已完成。发布回执完整；科研、GUI、设备、安装/换版和性能验收按用户要求免测，不标功能 `verified`。
 
 用户于 2026-10-12 恢复构建与发布，并明确要求不用验证。随后要求用井韶子写作风格技能整理完整更新说明并先交其审阅。本轮不运行科研、GUI、设备、安装/换版或性能验收，不能把历史源码或其它 EXE 的结果转移到本轮成品。
 
@@ -33,4 +33,14 @@
 
 用户已完成右侧更新说明修订，`output/validation/release-301/approved-notes.md` 保留其原文，`notes-review.json` 绑定最终正文摘要。服务器版本清单与 GitHub Release 使用相同正文。服务器版本文件、两个应用更新频道和 GitHub Release 属于当前发布范围；用户最新明确把官网交给其他人，未修改或部署官网页面，先前本地候选不采用。
 
-服务器初次上传尚未连接时，构建环境缺少 Windows 凭据模块，退出1；改用服务器连接说明已有的 Miniconda 解释器，不安装新依赖、不修改凭据。初次诊断见 `server-upload-initial.log`，本轮上传日志及回执原位记录实际结果。没有提交或推送未审阅的业务源码，也没有公开完整软件分发专用冻结快照。当前未标功能 `verified`。
+服务器初次上传尚未连接时，构建环境缺少 Windows 凭据模块，退出1；改用服务器连接说明已有的 Miniconda 解释器，不安装新依赖、不修改凭据。初次诊断见 `server-upload-initial.json`。随后一次 SSH 传输被远端断开，日志 `server-upload-attempt-2.log` 保留；从任务专用分片续传成功。应用户要求先服务器、再 GitHub，精确停止本任务 GitHub 上传进程21972，保留草稿和已到位的两个小附件，服务器完成后继续上传三个应用包。
+
+## 发布结果
+
+- `app-upload-plan.receipt.json`：三个应用文件、固定版本清单及 SHA256SUMS 五项 success，服务器完整大小/SHA匹配本轮文件。
+- `manifest-upload-plan.receipt.json`：stable/preview 两频道 `latest.json` 原子发布 success，与3.0.1固定清单同SHA `6bc235a75ac4915b0c79329dbdc719ea670f2a95548b488cb90e85d7b98e9c94`。
+- [GitHub Release v3.0.1](https://github.com/Nephelium/PhoneticToolbox/releases/tag/v3.0.1) 已公开并设为最新版本。`github-release-receipt.json` 五附件均 uploaded，其大小及 GitHub SHA-256与上表/服务器一致；Release正文与用户最终稿一致。
+- 源码明确审阅574个候选文件后提交 `9fd58a7fbaa2005d054a95b6d6891653e3fa9c74`，已推送 `origin/main`；Release标签指向该提交。运行环境、缓存、安装包、软件专用说明书原媒体、作者头像、下载论文与官网同期工程不进入提交。头像缺图的公开源码准备入口不进入已冻结应用；另清理9处空白格式问题，不替换已上传成品。冻结文件的原字节继续以上述构建清单为准。
+- 官网仅因用户询问进行了只读状态查询，当时3.0.1更新小记已由其他任务出现、下载按钮仍为3.0.0。本任务没有部署官网、修改线上下载按钮或替代网站任务。
+
+最终发布记录/台账文档另行同步到main，不改应用成品及已确认的用户文案。当前结果不等同于干净Windows、Windows10实机、实体设备或跨平台功能通过。

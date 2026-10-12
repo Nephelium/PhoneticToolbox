@@ -5,7 +5,7 @@
     {
       "id": "RELEASE-301",
       "title": "3.0.1 Windows构建与服务器/GitHub发行",
-      "status": "in_progress",
+      "status": "verified",
       "files": [
         "release/version.json",
         "scripts/sync_versions.py",
@@ -26,13 +26,11 @@
         "docs/development.md",
         "scripts/prepare_public_source_assets.py"
       ],
-      "note": "用户确认其最终稿，先上传服务器，再上传GitHub附件，最后按规则同步源码至main。官网页面与下载按钮由其他人维护，本任务未部署网站。已完成服务器五文件和stable/preview两频道发布，GitHub五附件已到草稿，当前审阅公开源码并提交。",
-      "verification_scope": "Windows x64，仅本轮资源生成与构建内部身份/大小/布局；科研、GUI、设备、安装/换版及性能验收按用户要求免测。",
-      "verification": "版本同步、说明书software阅读资源、独立前端build、EXE/安装器/更新ZIP构建完成，三包495837756/497754059/495838322字节。finalize记录20个主QtDLL和压缩包/共享身份；package记录三包SHA、ZIP CRC及布局。这些为构建完整性，不代表最终功能verified。用户免测请求保留。 服务器回执五文件与两频道全部成功；Github草稿已具备三包、清单和SHA256SUMS。源码按明确清单审阅、排除受限媒体，未运行新增功能测试。",
+      "note": "3.0.1免测构建与发行作业完成。用户最终文案原文用于Release和更新清单；按最新要求先服务器，再Github附件，随后审阅源码推送main并让Release标签指向本次提交。官网由其他人维护，未部署或修改线上页面。",
+      "verification_scope": "Windows x64构建完整性、服务器/GitHub上传回执、正文与源代码同步；科研、GUI、设备、安装/换版及性能按用户要求免测，状态verified仅指发行作业。",
+      "verification": "三个分发495837756/497754059/495838322字节，包内构建完整性与ZIP布局记录完成。服务器五文件和两频道success；GitHub五附件uploaded且大小/摘要匹配，公开最新v3.0.1正文与用户稿一致，标签绑定已推送main的9fd58a7f。574文件明确清单审阅，无运行文件/受限媒体/作者头像；提交差异检查通过。源码准备辅助入口和格式清理不改已冻结成品。",
       "remaining": [
-        "将审阅源码推送origin/main",
-        "Release标签绑定本次源码提交并公开发布",
-        "最终发布回执与状态收尾"
+        "本轮软件功能/设备/安装/更新/性能完整验收明确免测，不计为失败或通过。"
       ],
       "local_evidence": "output/launch-301-review/；output/validation/release-301/",
       "current_evidence": [
