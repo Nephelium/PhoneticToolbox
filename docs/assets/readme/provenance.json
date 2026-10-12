@@ -61,6 +61,84 @@
         "sha256": "7b3a2b865becaabd3b027533f4a8ce03d8047a7fec012d30c3b853eec376af54",
         "bytes": 813444,
         "transform": "Existing public example; raw input excluded from this publication candidate"
+      },
+      {
+        "name": "单音节示例01.wav",
+        "sha256": "0d50b1834d6073e0d17b7ca04c86387a25d12196258a51c8c3ccbe1e3d80493f",
+        "bytes": 21552,
+        "transform": "User-specified private example; copied byte for byte to task-owned scratch; raw input not published"
+      },
+      {
+        "name": "测试.xlsx",
+        "sha256": "a4696b9399aeb67134111c795d0c8d2230c6f13ce0c8e12b708a9e9dbb6f1501",
+        "bytes": 138717,
+        "transform": "User-specified private example; copied byte for byte to task-owned scratch; raw input not published"
+      },
+      {
+        "name": "单音节示例03.wav",
+        "sha256": "7a1daab1834d93b5675dd1709d81844ad96fb71a9027fa7bd55d620ce843c018",
+        "bytes": 26414,
+        "transform": "User-specified private example; copied byte for byte to task-owned scratch; raw input not published"
+      },
+      {
+        "name": "单音节示例04.wav",
+        "sha256": "01025125b6cc0c0df6da015b3529953c59ddc31e95d5e416560530d0ab6a90dc",
+        "bytes": 18480,
+        "transform": "User-specified private example; copied byte for byte to task-owned scratch; raw input not published"
+      },
+      {
+        "name": "单音节示例05.wav",
+        "sha256": "0466e9108cb0e3793de6a565d7783c14fa27ed937c9784a7eb125a27db8d9e7c",
+        "bytes": 17082,
+        "transform": "User-specified private example; copied byte for byte to task-owned scratch; raw input not published"
+      },
+      {
+        "name": "单音节示例06.wav",
+        "sha256": "5b45f4474c4c2fac195b77f32a984b6a6641feca1c14c6f0098c923e30463a8b",
+        "bytes": 17398,
+        "transform": "User-specified private example; copied byte for byte to task-owned scratch; raw input not published"
+      },
+      {
+        "name": "单音节示例07.wav",
+        "sha256": "ebbbdb54a5036f8222145644c877a4929c7754ad6c057d8545e9e1ca82474f05",
+        "bytes": 16542,
+        "transform": "User-specified private example; copied byte for byte to task-owned scratch; raw input not published"
+      },
+      {
+        "name": "单音节示例08.wav",
+        "sha256": "d1f970730c03d141a1dde6c179bd98b1ede1350f7b11a062983ed5538e2f691e",
+        "bytes": 18078,
+        "transform": "User-specified private example; copied byte for byte to task-owned scratch; raw input not published"
+      },
+      {
+        "name": "单音节示例09.wav",
+        "sha256": "e406e9efbb90837714752ac2f579fac0b3f03a1a2617051f62a8f4c9c761f318",
+        "bytes": 19578,
+        "transform": "User-specified private example; copied byte for byte to task-owned scratch; raw input not published"
+      },
+      {
+        "name": "单音节示例10.wav",
+        "sha256": "c6c36c461207f989e04d94a9b6add8cc5c5f2b3556afc82baa02b02177b60822",
+        "bytes": 19600,
+        "transform": "User-specified private example; copied byte for byte to task-owned scratch; raw input not published"
+      },
+      {
+        "name": "单音节示例11.wav",
+        "sha256": "b059165a58798c6b08dedc98077112343de529484ab62dc0f8c82d81a639bff1",
+        "bytes": 17656,
+        "transform": "User-specified private example; copied byte for byte to task-owned scratch; raw input not published"
+      },
+      {
+        "name": "单音节示例12.wav",
+        "sha256": "90390900b4f18704466bfea98c01f5e45c0a9c1c3448453098869431e4da13b7",
+        "bytes": 25026,
+        "transform": "User-specified private example; copied byte for byte to task-owned scratch; raw input not published"
+      },
+      {
+        "name": "单音节示例13.wav",
+        "sha256": "5827b94b620650c1fd58539a1592bd209df480a6dd447c5b9c3ae6202abdfe0a",
+        "bytes": 22940,
+        "transform": "User-specified private example; copied byte for byte to task-owned scratch; raw input not published"
       }
     ],
     "screenshots": [
@@ -171,9 +249,9 @@
       {
         "file": "absolutely-pitch-manipulation.png",
         "module": "M08",
-        "description": "M08: natural speech waveform and actual pitch track in time/pitch editor",
-        "bytes": 410597,
-        "sha256": "58dcf680d083045ec6b11442fada5a6c9df3f83f667e13312875f872bea48984",
+        "description": "Actual user-authorized ma monosyllable; imported 230-to-110 Hz falling F0 and completed whole-clip synthesis with original/output waveforms",
+        "bytes": 473002,
+        "sha256": "d58ade499edf7e6bf79b0995a3ddab1f8dc6c48f214ae6f55e16ca1a4f4297b0",
         "width": 2561,
         "height": 1601,
         "dpr": 1.5,
@@ -184,9 +262,9 @@
       {
         "file": "absolutely-spectrogram-to-audio.png",
         "module": "M09",
-        "description": "M09: spectrogram from natural speech loaded in spectral editing canvas",
-        "bytes": 622266,
-        "sha256": "747ce02a268591e3d1e4f80dfdb63bfab8a8b477159efe594271de1091b7ddd6",
+        "description": "Actual grayscale spectrogram image reconstructed through normal image mode, with completed audio waveform and calibrated/reconstructed spectrogram comparison",
+        "bytes": 532410,
+        "sha256": "902aa9c48acb983b9d0a1285a3c7169fd148d41280469df6ebbc4b3eeab55dad",
         "width": 2561,
         "height": 1601,
         "dpr": 1.5,
@@ -236,9 +314,9 @@
       {
         "file": "absolutely-mandarin-ipa.png",
         "module": "M13",
-        "description": "M13: genuine Hanzi to IPA conversion results",
-        "bytes": 305965,
-        "sha256": "5720fab3666f8ae1615a9807f2f3b88d3b76315329d2f9b1f615d08559d2f508",
+        "description": "Complete 36-line, 252-character Chunjiang Huayueye by Zhang Ruoxu input and converted IPA; source Wikisource, simplified characters",
+        "bytes": 615153,
+        "sha256": "c6fa1d5b3a215205990c36e5f40e51f8d44e121ddb979322ad50cda00398b4aa",
         "width": 2561,
         "height": 1601,
         "dpr": 1.5,
@@ -262,9 +340,9 @@
       {
         "file": "absolutely-phonology-induction.png",
         "module": "M14",
-        "description": "M14: real public survey fixture, tone/segment settings and three actual generated documents",
-        "bytes": 349265,
-        "sha256": "f1d8a06291b418e28d830c01441227d8340b3cef08e74f7b7b0bb283f1068ee3",
+        "description": "Actual author-specified 5453-row 测试.xlsx, first row included, complete three-result generation and document preview",
+        "bytes": 465048,
+        "sha256": "ad1830a164c615a991dc4dba2ff6a41b5d49c7523864689a1691c1bc62006666",
         "width": 2561,
         "height": 1601,
         "dpr": 1.5,
@@ -275,9 +353,9 @@
       {
         "file": "absolutely-perception-experiment.png",
         "module": "M15",
-        "description": "M15: natural speech stimulus imported in experiment design; no participant run",
-        "bytes": 288019,
-        "sha256": "f54936c89c236a34c7fd26cd37b5889144f4f48ebd652ead18a7cf4300ffe4d3",
+        "description": "Actual ABX project with 36 imported role-specific mono audio assets, 12 generated/shuffled trials, configured F/J response labels; no participant session",
+        "bytes": 435349,
+        "sha256": "bdca289833c2feff616bb3e70c498cbf6508c61fd9207bad4c017054dd6e60fe",
         "width": 2561,
         "height": 1601,
         "dpr": 1.5,
@@ -301,9 +379,9 @@
       {
         "file": "absolutely-paper-reading.png",
         "module": "M18",
-        "description": "M18: actual full-screen reader of existing public coarticulation paper; folder path outside the full-screen view",
-        "bytes": 725165,
-        "sha256": "d396ece6a1d132e8f78be1afd14a033b9708344a95f1a16e361026df8b2b2e35",
+        "description": "Ordinary non-full-screen eighteen-module workbench reader, complete first page at 50% zoom, actual previously published recommendation cached locally; no personal path",
+        "bytes": 650059,
+        "sha256": "bfbafa0db043ddd0eaf39f09fe0d066b437a2af21235d07e8bbdb8df46e033ad",
         "width": 2561,
         "height": 1601,
         "dpr": 1.5,
@@ -325,8 +403,65 @@
         "pageScale": 1
       }
     ],
-    "scope": "All eighteen modules, home and appearance settings. Formal manual natural-audio examples; task-authored single-tier TextGrid; public phonology fixture; existing public-paper example. No camera or microphone acquisition. Current source UI evidence, separate from published R7 executable identity.",
-    "input_scope": "Authorized formal manual media used only to make static README screenshots; raw audio and annotation files are excluded from public Git"
+    "scope": "All eighteen modules, home and settings. Six richer examples refined on user request: actual monosyllable pitch synthesis; image reconstruction and results; full Chunjiang Huayueye; 5453-row survey and exports; 12-trial ABX design; normal PDF reader with complete first page. Static screenshots only; no camera, microphone or participant acquisition.",
+    "input_scope": "Authorized formal manual media used only to make static README screenshots; raw audio and annotation files are excluded from public Git",
+    "example_refinement": {
+      "date": "2026-10-12",
+      "modules": [
+        "M08",
+        "M09",
+        "M13",
+        "M14",
+        "M15",
+        "M18"
+      ],
+      "raw_inputs_published": false,
+      "spectrogram_input": {
+        "method": "scipy.signal.stft of actual authorized monosyllable; Hann 512 samples at 10 kHz; hop 64; 0-5000 Hz; 0 to -80 dB; grayscale high frequencies at top",
+        "duration": 0.6722,
+        "width": 107,
+        "height": 257,
+        "sha256": "fa96893185da9eccbdd5dc75dba10ce3f89e7bc236801f9a1223f5fa11428f30"
+      },
+      "poem": {
+        "title": "春江花月夜",
+        "author": "张若虚",
+        "source": "https://zh.wikisource.org/zh-hans/春江花月夜_(張若虛)",
+        "chinese_characters": 252,
+        "verses": 36,
+        "text_lines": 18,
+        "sha256": "326bd497728a58215a6bf283e32ecce6c5a12ce9f989f55db640e9585e63b548"
+      },
+      "pdf_view": {
+        "bottom": 808.3542175292969,
+        "fullScreen": false,
+        "height": 577.0208740234375,
+        "top": 231.33334350585938,
+        "viewport": 1067,
+        "zoom": "50"
+      },
+      "phonology": {
+        "input_rows": 5453,
+        "start_row": 1,
+        "generated_files": 3
+      },
+      "perception": {
+        "paradigm": "ABX",
+        "role_assets": 36,
+        "trials": 12,
+        "seed": 20260927,
+        "participant_sessions": 0
+      },
+      "pitch": {
+        "input": "actual user-specified monosyllable ma",
+        "imported_f0_sequence_hz": [
+          230,
+          110
+        ],
+        "action": "whole-clip synthesis",
+        "result_waveform_and_reestimated_f0": true
+      }
+    }
   },
   "website_button": {
     "file": "website-button.svg",

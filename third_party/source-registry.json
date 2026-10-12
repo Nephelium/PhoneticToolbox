@@ -11851,23 +11851,25 @@
     },
     {
       "id": "DOC-README-NATURAL-AUDIO",
-      "title": "GitHub README 真人语句与同步 EGG 分析配图",
+      "title": "GitHub README 实际示例配图",
       "kind": "documentation-media",
       "modules": [],
       "acknowledgement_group": "software",
       "authors": "作者提供；录音参与者身份不公开",
-      "urls": {},
-      "actual_included_version": "2026-10-12 Absolutely light capture; input and image SHA-256 in docs/assets/readme/provenance.json",
+      "urls": {
+        "poem": "https://zh.wikisource.org/zh-hans/春江花月夜_(張若虛)"
+      },
+      "actual_included_version": "2026-10-12 Absolutely light, six rich examples refined; source and screenshot SHA-256 in provenance",
       "used_at": [
         "README.md",
         "docs/assets/readme/README.md",
         "docs/assets/readme/provenance.json"
       ],
-      "evidence": "用户明确要求GitHub README展示全部模块，并可使用正式说明书素材；统一Absolutely日间配色。当前Windows工作台使用正式说明书自然语音/EGG及公开字表，公开候选仅有静态界面截图和匿名输入摘要。",
+      "evidence": "用户明确指定字表、单音节目录及春江花月夜全文，并要求先完成合成/图片重建/实验序列再截图上传。原件仅作本机输入，公开静态截图及匿名摘要。",
       "license": "本次指示允许制作 GitHub 主页配图，不构成原始录音或 TextGrid 的公开再分发许可；未赋予素材开放许可证。",
       "distribution_status": "documentation-screenshots-only; raw-inputs-private",
       "relationship": "user-supplied-natural-recordings-to-actual-application-screenshots",
-      "modifications": "正式说明书音频仅复制到任务临时目录并使用通用文件名；字节不变。TextGrid为本次编写的单层示例。工作台实际计算与加载后截图，图片原字节复制，无裁剪、缩放或重绘。",
+      "modifications": "私有字表与单音节原字节复制，原件摘要不变；从单音节STFT生成灰度图片并实际重建；实际导入下降F0并合成；原字节Qt截图，无裁剪或重绘。春江花月夜使用公有领域原诗，简体字按维基文库核对。",
       "verification_date": "2026-10-12",
       "show_in_acknowledgements": false,
       "show_in_license_notice": false,

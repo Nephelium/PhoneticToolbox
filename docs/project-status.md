@@ -6,7 +6,7 @@
 
 GitHub 主线：`GIT-V3-MAIN` 为 `verified`。默认 `main` 已承载 v3，v2 原 main 保留在独立 `v2` 分支，两个工作树分别跟踪 `origin/main` 和 `origin/v2`。旧 codex 分支、11 个标签、7 个历史 Release 及附件完整保留，图文主页已上传，见[源码同步报告](testing/github-source-sync.md)。
 
-GitHub 图文主页：`DOCS-GITHUB-HOMEPAGE` 为 `verified`。18模块、首页及设置共20张配图统一使用Absolutely浅色，主页提交 `2c93da2` 已按用户确认推送main。实际GitHub在1200/390宽度下图片、按钮、锚点及无横向溢出检查通过，远端文件身份一致。两个根目录本机快捷启动CMD已从main停止跟踪，本机文件保留。范围见[检查报告](testing/github-readme.md)。
+GitHub 图文主页：此前20张Absolutely浅色图及两个CMD移出已公开；本轮按最新要求细化六个模块的实际示例，六图采集与输入核对完成，正在排版检查与上传。Release说明同时按井韶子文风修改，具体升级以v2基线与已公开R7为准；应用包、标签与附件保持。见[主页检查](testing/github-readme.md)及[Release文案检查](testing/release-notes-3.0.0.md)。
 
 静态官网备案展示：已按授权更新 `www.phonetictoolbox.com` 首页，展示用户提供的 `黑ICP备2024017318号` 及工信部查询链接。1440/390/320 宽度本地浏览器检查、公网 HTTPS 200 与文件摘要一致性检查通过，`P15-ICP-FOOTER` 为 `verified`。公安联网备案待办理，备案系统中的域名对应关系尚未独立核实。
 

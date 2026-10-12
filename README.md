@@ -141,11 +141,15 @@ PhoneticToolbox 面向语言学、实验语音学的研究与教学。十八个�
 
 ![变速变调工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-pitch-manipulation.png)
 
+示例使用单音节 ma，导入 230→110 Hz 的下降基频序列后合成整段，查看原音、合成波形和输出 F0。
+
 #### 语谱图转音频
 
 载入图片或音频频谱，用画笔编辑频谱，再重建声音。
 
 ![语谱图转音频工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-spectrogram-to-audio.png)
+
+示例把单音节的灰度语谱图作为图片输入，完成重建后对照输入频谱、输出频谱和实际音频波形。
 
 ### 标注与实验
 
@@ -160,6 +164,8 @@ PhoneticToolbox 面向语言学、实验语音学的研究与教学。十八个�
 实时转换汉字读音，选择多音字与儿化形式，调整字音对照排版。
 
 ![汉字转国际音标工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-mandarin-ipa.png)
+
+示例输入张若虚《春江花月夜》全文，共 36 句、252 个汉字，展示字音同显的转换结果。
 
 #### MFA 自动标注
 
@@ -179,11 +185,15 @@ PhoneticToolbox 面向语言学、实验语音学的研究与教学。十八个�
 
 ![音系归纳工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-phonology-induction.png)
 
+示例使用《测试.xlsx》的全部 5,453 条记录，从第一行导入，生成两份同音字表和二维声韵表。
+
 #### 感知实验
 
 导入刺激，选择实验范式，设置呈现与响应流程，保存实验配置。
 
 ![感知实验工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-perception-experiment.png)
+
+示例为单音节 ABX 辨别设计：36 份分组素材、12 个试次，已生成并洗牌保存。
 
 ### 文献与学习
 
@@ -192,6 +202,8 @@ PhoneticToolbox 面向语言学、实验语音学的研究与教学。十八个�
 管理本机论文库，阅读 PDF 与译读内容，添加高亮、批注和笔记。
 
 ![语音学论文精读工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-paper-reading.png)
+
+示例在普通工作台内以 50% 缩放阅读协同发音论文，完整显示首页，可切换原文、中文译文与论文解读。
 
 ### 工作台设置
 
