@@ -1609,18 +1609,19 @@
     {
       "id": "GITHUB-SOURCE-SYNC",
       "title": "当前 v3 源码同步至 GitHub main",
-      "status": "in_progress",
-      "files": "当前已审阅工作树源码、必要资源、说明书工具、依赖目录和文档；停止跟踪两份论文 PDF 与两张无引用旧图；见本机明确文件清单",
+      "status": "verified",
+      "files": "243 reviewed source, tooling, resource and documentation files; see explicit local allowlist",
       "verification_scope": "Current source publication review and focused Windows checks; origin/main only",
-      "note": "2026-10-16 用户授权当前代码上传。代理 fetch 确认 main 与 origin/main 起点一致。已审阅明确清单，排除50项网站专用素材/参数权重/本机启动器；前端397项及类型/契约/UI数据通过，Python与其他验证进行中。",
+      "note": "本轮源码同步完成，243文件。50项权重/官网专用媒体/本机启动器排除，1053项受限说明书素材不在清单。397前端与114 Python定向检查、类型/契约/UI数据/build和文档检查通过；架构5项既有声道摘要不匹配保留。",
       "current_evidence": [
         "docs/testing/github-source-sync.md"
       ],
       "local_evidence": "output/maintenance/github-sync-20261016/",
-      "remote_result": "待本轮提交与推送",
+      "remote_result": "2026-10-16 pushed origin/main through the current user proxy; git ls-remote matches the source commit.",
       "remaining": [
-        "待当前提交推送及远端身份回读",
-        "完整科学/实体设备/跨平台/最终EXE未重验"
+        "5项既有声道静态资源摘要不一致",
+        "模型权重公开分发未确认，新检出源码需另行提供获准资源",
+        "完整科学/Qt/实体设备/跨平台/最终EXE未重验"
       ],
       "previous_sync": {
         "source_commit": "795c2dc",
@@ -1636,7 +1637,8 @@
           "scope": "Remote-tree audit and authorized homepage-only publication verified. Yesterday business changes remain local; two root CMD files removed from public main, local originals retained. Historical verified source sync remains October 9.",
           "main_before_homepage_update": "8cf5c5396fcab63cf431c69b2cb4712af6a12430"
         }
-      }
+      },
+      "source_commit": "37b4d4842514e8abc90aa3181d2dc2a89bdd67f7"
     },
     {
       "id": "P15-ICP-FOOTER",
@@ -1881,7 +1883,8 @@
         "jobs_resources_joint_acceptance": "planned",
         "api_and_database_process_restart_restore": "verified",
         "jobs_events_cancel_retry_isolation": "verified"
-      }
+      },
+      "current_goal": "历史登录隔离基线保留；自助注册/邮件验证/找回增量由WEB-REGISTRATION承担，尚未实施。"
     },
     {
       "id": "P06",
@@ -1929,7 +1932,7 @@
       "dependencies": "P05,P06",
       "files": "backend/src/ptb_api/quota.py；backend/src/ptb_api/storage.py；backend/src/ptb_worker/cleanup.py；frontend/src/account/ProjectStorage.vue",
       "status": "verified",
-      "note": "早期存储基线已验；当前政策目标为 1 GB/3 天。新政策代码已完成，目标库迁移单列 P07-POLICY，不能将历史 5 GB/7 天当现行新策略。",
+      "note": "历史存储基线已验；现有1 GB/3天实现保留兼容。2026-10-16新网页目标为临时工作区、退出清理和断线30分钟，实施与目标库迁移见P07-POLICY，尚未生效。",
       "steps": [
         "实现账户字节计量、原子预留、受控 writer 和恢复核对",
         "实现上传/解压/生成/ZIP 全链路计量，不能靠前端判断",
@@ -2077,18 +2080,19 @@
         "只读核实授权服务器或专用 WSL 环境，未经批准不修改系统/现存库",
         "抽取 Windows/Linux 受限进程适配与实际 capability",
         "Windows 后逐模块执行 Linux 数值/文件/字体/接口验证",
-        "测量 10 人交互、1 个准入计算+9 人交互、批次与可信节点在线/离线",
+        "以10人交互为基线，按25/50/100阶梯和单计算槽混合负载找容量边界，非预先承载承诺",
         "记录系统可用资源、进程树峰值、等待/计算/传输时间及故障恢复",
         "依实測定义服务器与远程节点准入，不因预算改变科学结果"
       ],
-      "acceptance": "10 人场景指标有实测；安全/配额/TTL 必测全通过，设备未测不被掩盖",
+      "acceptance": "以实际机器确定并发/排队/输出/磁盘预算，轻API与交互p95等有测量；临时工作区、全局水位与公平性适用门通过",
       "execution_evidence": [],
       "current_evidence": [
         "docs/testing/linux-environment.md",
         "docs/testing/p11-task-flow.md",
         "docs/testing/p11-perf-report.md"
       ],
-      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates",
+      "plan": "docs/plans/2026-10-16-web-launch.md"
     },
     {
       "id": "P12",
@@ -2152,10 +2156,10 @@
     {
       "id": "P15",
       "title": "正式部署与分平台发布准备",
-      "dependencies": "按交付拆分：Web=P11；Windows=P12；macOS=P13；Linux=P14",
+      "dependencies": "WEB-REGISTRATION,P07-POLICY,WEB-ACCOUNT-BOUNDARIES,WEB-MFA-DESKTOP,WEB-CLIENT-COMPUTE,WEB-CAPACITY；实际开放操作的Linux/来源门",
       "files": "docs/deployment/production-runbook.md；docs/deployment/rollback.md；docs/releases/3.0.0.md",
       "status": "planned",
-      "note": "2026-09-26 真实域名与服务器联调由 P15-STAGING 前置准备；生产部署与发布仍需明确授权。",
+      "note": "2026-10-16更新首期为开放自助注册、临时工作区30分钟、MFA桌面推理及浏览器优先。已有部署模板/历史证据保留，新增策略、最终HTTPS/PG/Linux/跨平台与容量未验。生产部署未执行。",
       "steps": [
         "审查各平台验收状态，区分完成/未测/阻断，不夸大覆盖",
         "核实已购阿里云轻量 Ubuntu 服务器与域名，按 P11 实测制定容量/部署/回滚方案，不新增购买",
@@ -2179,7 +2183,13 @@
         "linux": [
           "P14"
         ]
-      }
+      },
+      "plan": "docs/plans/2026-10-16-web-launch.md",
+      "remaining": [
+        "注册/邮件恢复与工作区新策略实施",
+        "首期操作白名单、当前服务器容量和浏览器兼容实测",
+        "目标数据库迁移、生产部署与恢复回退另行授权"
+      ]
     },
     {
       "id": "P16",
@@ -3191,24 +3201,30 @@
     },
     {
       "id": "P07-POLICY",
-      "title": "1 GB / 3 天政策与存量兼容迁移",
+      "title": "网页临时工作区、30分钟断线保留与存量兼容",
       "dependencies": "实施前审阅具体增量迁移",
-      "files": "backend/src/ptb_api/quota.py；acoustic_models.py；storage.py；frontend/src/account/ProjectStorage.vue；contracts/；下一号增量迁移（待审阅）",
-      "status": "in_progress",
-      "note": "1 GB/3 天代码、契约及隔离 PG/WSL 检查完成；目标专用数据库未迁移，新政策未在该库生效。",
-      "plan": "docs/plans/2026-09-26-server-coordination.md",
+      "files": "backend storage/auth/jobs/worker cleanup；frontend account/platform；contracts；新版本迁移提案；当前阶段只更新相关文档",
+      "status": "planned",
+      "note": "原1 GB/3天代码与隔离验证作为历史基线保留。新需求已确认，工作区/标签租约/关闭及重启清理/任务fencing/新协议尚待实施；本轮未变更现存库。",
+      "plan": "docs/plans/2026-10-16-web-launch.md",
       "steps": [
-        "阅读对应任务卡并核对文件归属",
-        "建立行为/失败证据",
-        "最小实施与定向验证",
-        "提交分平台报告与未测项"
+        "审阅工作区、标签租约、邮箱验证及资源绑定的增量schema/协议方案",
+        "实现主动退出立即封锁与清理；直接关页/断网/崩溃统一1800秒保留，刷新/多标签不提前删除",
+        "原子封锁到期工作区、取消任务，清除文件/历史/派生缓存，物理删除失败重试且不提前释放账本",
+        "验证旧3天/7天manifest与存量数据兼容、重启/迟到结果/备份恢复",
+        "针对已明确目标另行审阅迁移、停写/回退及生产验证"
       ],
-      "acceptance": "额度/期限边界、旧超额账号和旧 manifest 兼容、并发/过期/生成协议及实际库证据",
+      "acceptance": "Q01–Q35适用项及Windows/macOS浏览器、真实PG/Linux证据分别通过；直接关页与断网同为1800秒，主动退出独立立即清理；文档不作为上线证据",
       "execution_evidence": [],
       "current_evidence": [
         "docs/testing/p07-policy-closeout-report.md"
       ],
-      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
+      "verification_scope": "Historical policy-v2 evidence retained; new ephemeral requirements documented only",
+      "requirement_status": "confirmed",
+      "remaining": [
+        "全部新工作区行为尚未实施",
+        "目标库迁移及生产验证待具体授权"
+      ]
     },
     {
       "id": "P11-LINUX",
@@ -3372,11 +3388,11 @@
     {
       "id": "P15-STAGING",
       "title": "真实域名与服务器联合验收准备",
-      "dependencies": "P11-ENV,P07-POLICY；所开放模块的 Linux/资源门",
+      "dependencies": "WEB-REGISTRATION,P07-POLICY,WEB-ACCOUNT-BOUNDARIES,WEB-MFA-DESKTOP,WEB-CLIENT-COMPUTE,WEB-CAPACITY；实际开放操作的Linux/来源门",
       "files": "docs/deployment/production-runbook.md（待新建）；rollback.md（待新建）；正式服务入口与配置提案",
       "status": "in_progress",
-      "note": "薄宿主、同源模板、验收驱动已准备；当前源码的 P15-F01 ZIP 宣告差异经定向测试确认已修复。真实域名/PG/最终 Linux 运行时联合部署与验收未执行；可信节点仅在首期依赖时作为上线前置。",
-      "plan": "docs/plans/2026-09-26-server-coordination.md",
+      "note": "2026-10-16更新首期为开放自助注册、临时工作区30分钟、MFA桌面推理及浏览器优先。已有部署模板/历史证据保留，新增策略、最终HTTPS/PG/Linux/跨平台与容量未验。生产部署未执行。",
+      "plan": "docs/plans/2026-10-16-web-launch.md",
       "steps": [
         "阅读对应任务卡并核对文件归属",
         "建立行为/失败证据",
@@ -3389,7 +3405,12 @@
         "docs/testing/p15-staging-report.md",
         "docs/testing/desktop-web-readiness.md"
       ],
-      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates",
+      "remaining": [
+        "注册/邮件恢复与工作区新策略实施",
+        "首期操作白名单、当前服务器容量和浏览器兼容实测",
+        "目标数据库迁移、生产部署与恢复回退另行授权"
+      ]
     },
     {
       "id": "P11-COORD",
@@ -3582,26 +3603,32 @@
         "docs/testing/desktop-web-readiness.md"
       ],
       "remaining": [
-        "完整 EXE/实体设备/长期验证未重做",
-        "真实 HTTPS/PG/目标库政策与最终 Linux 负载未验",
-        "WEB-ACCOUNT-BOUNDARIES 单列实施，公开分发材料按实际渠道收口"
-      ]
+        "新工作区策略、自助注册/MFA禁用/浏览器适配未实施",
+        "Windows/macOS浏览器与真实HTTPS/PG/Linux容量待验",
+        "历史桌面/EXE范围未扩大"
+      ],
+      "current_review": {
+        "date": "2026-10-16",
+        "scope": "Source-only 18-module capability inventory and updated requirements; no new browser or production validation",
+        "evidence": "docs/plans/2026-10-16-web-launch.md"
+      }
     },
     {
       "id": "WEB-ACCOUNT-BOUNDARIES",
       "title": "网页登录数据归属与模块平台能力收口",
       "status": "planned",
       "files": "frontend/src/modules/perception；frontend/src/modules/ipa-plus；frontend/src/app/AppShell.vue；frontend/src/account；frontend/src/platform",
-      "note": "只读审阅确认 M15 公共 IndexedDB 与 M17 固定 local:M17 草稿键不随网页登录账号区分。现在预留 owner/project 与平台能力边界，正式登录版启用前实施；不改变 M15 客户端计时、不默认上传实验数据、不自动认领旧无主数据。",
+      "note": "保留已发现M15公共IndexedDB与M17固定草稿键缺口。新网页以owner/workspace/generation隔离，退出撤销旧回调、对象URL与内存引用；显式本地持久项目独立于服务器TTL，不自动上传/认领旧记录。",
       "acceptance": "同浏览器 A/B 切换、多标签、会话到期、迟到响应、未保存保护、旧无主记录显式导入；页面实际能力与后端准入一致，保留桌面行为。",
       "current_evidence": [
         "docs/testing/desktop-web-readiness.md"
       ],
       "remaining": [
-        "确定本地独立模式与账号模式的数据归属并实施兼容隔离",
-        "对所开放模块实现平台适配和能力提示",
-        "实际浏览器双账号回归，不以静态代码核查代替"
-      ]
+        "本地文件适配与账号/工作区命名空间实施",
+        "多标签/跨设备/A退出B登录/迟到回调及到期后的浏览器恢复验证",
+        "不支持能力提示与后端准入一致，Mac/Windows分别验证"
+      ],
+      "plan": "docs/plans/2026-10-16-web-launch.md"
     },
     {
       "id": "M10-R15",
@@ -3960,15 +3987,123 @@
         "assets_unchanged": 5,
         "homepage_commit": "4a5cd82e2fcc8537db02509f1e228e19b4828a42"
       }
+    },
+    {
+      "id": "WEB-LAUNCH-PLAN",
+      "title": "网页版上线需求与浏览器计算分工",
+      "status": "verified",
+      "verification_scope": "Requirements, source inspection and documentation only; implementation planned",
+      "note": "用户确认开放自助注册，主动退出立即启动清理，直接关页/断网/崩溃统一最后心跳后30分钟。完成18模块源码能力清单、临时工作区/MFA/跨平台与负载验收方案，更新原任务目标。",
+      "remaining": [
+        "按阶段实施并获得实际平台证据"
+      ],
+      "date": "2026-10-16",
+      "plan": "docs/plans/2026-10-16-web-launch.md",
+      "current_evidence": [
+        "docs/plans/2026-10-16-web-launch.md",
+        "docs/decisions/ADR-web-ephemeral-client-first.md"
+      ],
+      "files": [
+        "docs/requirements.md",
+        "docs/specs/accounts-storage-jobs.md",
+        "docs/plans/2026-10-16-web-launch.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json",
+        "docs/testing/desktop-web-readiness.md",
+        "docs/testing/verification-plan.md",
+        "ARCHITECTURE.md",
+        "docs/README.md",
+        "docs/decisions/ADR.md",
+        "docs/decisions/ADR-web-ephemeral-client-first.md",
+        "docs/plans/2026-09-26-server-coordination.md",
+        "docs/plans/2026-09-26-p07-policy.md",
+        "docs/plans/2026-09-27-p15-staging.md",
+        "docs/plans/2026-09-09-p05-accounts.md",
+        "docs/decisions/ADR-P07-publication-policy.md",
+        "docs/deployment/p15-staging-runbook.md",
+        "docs/specs/remote-compute.md",
+        "CHANGELOG.md"
+      ],
+      "verification": "18模块源码接点与官方浏览器生命周期文档复核；requirements/spec/plan/ADR/当前状态/旧计划替代说明/台账一致性及UTF-8/链接/JSON检查；未执行新网页功能。"
+    },
+    {
+      "id": "WEB-REGISTRATION",
+      "title": "开放注册、邮箱验证和密码恢复",
+      "status": "planned",
+      "dependencies": "P05",
+      "files": "backend auth/users/mail challenge；frontend account；增量迁移提案",
+      "acceptance": "邮箱验证后准入；一次性令牌/过期/重放/账号枚举/注册找回限流与真实邮件验证；重置撤销旧会话",
+      "date": "2026-10-16",
+      "plan": "docs/plans/2026-10-16-web-launch.md",
+      "current_evidence": [
+        "docs/plans/2026-10-16-web-launch.md",
+        "docs/decisions/ADR-web-ephemeral-client-first.md"
+      ],
+      "verification_scope": "Planned only; no new implementation or runtime validation"
+    },
+    {
+      "id": "WEB-MFA-DESKTOP",
+      "title": "MFA网页限制与桌面引导",
+      "status": "planned",
+      "files": "frontend MFA page/platform；backend capabilities/job admission",
+      "acceptance": "网页清楚说明服务器性能限制，下载链接准确标明平台；直调/恢复/预览等所有MFA推理请求后端拒绝，不影响本地TextGrid编辑",
+      "date": "2026-10-16",
+      "plan": "docs/plans/2026-10-16-web-launch.md",
+      "current_evidence": [
+        "docs/plans/2026-10-16-web-launch.md",
+        "docs/decisions/ADR-web-ephemeral-client-first.md"
+      ],
+      "verification_scope": "Planned only; no new implementation or runtime validation"
+    },
+    {
+      "id": "WEB-CLIENT-COMPUTE",
+      "title": "浏览器优先处理与逐模块适配",
+      "status": "planned",
+      "files": "frontend platform/Workers/各模块及必要WASM适配；科学基准",
+      "acceptance": "先复用音标转换/音标表/感知实验，再本地文件/标注/绘图/录音；按18模块清单实测网络与结果语义，Win/Mac浏览器分别验证，WebGPU非硬依赖",
+      "date": "2026-10-16",
+      "plan": "docs/plans/2026-10-16-web-launch.md",
+      "current_evidence": [
+        "docs/plans/2026-10-16-web-launch.md",
+        "docs/decisions/ADR-web-ephemeral-client-first.md"
+      ],
+      "verification_scope": "Planned only; no new implementation or runtime validation"
+    },
+    {
+      "id": "WEB-CAPACITY",
+      "title": "公开网页版容量与资源准入",
+      "status": "planned",
+      "dependencies": "P11,P07-POLICY,WEB-REGISTRATION；首期操作白名单",
+      "files": "tests/performance；staging admission；部署预算提案",
+      "acceptance": "当前目标资源盘点、10/25/50/100阶梯边界、单槽混合负载、内存/全局磁盘/队列/上传限制、取消清理与公平性；据实决定准入，未测人数不承诺",
+      "date": "2026-10-16",
+      "plan": "docs/plans/2026-10-16-web-launch.md",
+      "current_evidence": [
+        "docs/plans/2026-10-16-web-launch.md",
+        "docs/decisions/ADR-web-ephemeral-client-first.md"
+      ],
+      "verification_scope": "Planned only; no new implementation or runtime validation"
     }
   ],
   "updated_on": "2026-10-16",
-  "current_coordination_plan": "docs/plans/2026-09-26-server-coordination.md",
+  "current_coordination_plan": "docs/plans/2026-10-16-web-launch.md",
   "policy_target": {
     "quota_bytes": 1000000000,
-    "retention_seconds": 259200,
-    "implementation_status": "in_progress",
-    "existing_data_strategy": "Implemented and isolated-test verified: preserve original expiry and block growth for over-quota accounts; target database migration and deployment acceptance remain pending."
+    "quota_status": "Existing cap retained provisionally; global disk and per-operation admission to be measured.",
+    "mode": "ephemeral-workspace",
+    "disconnect_grace_seconds": 1800,
+    "explicit_exit": "Revoke workspace and cancel jobs immediately, then delete owned data with durable retry.",
+    "page_close": "No early deletion on page-close events; direct close, disconnection and crash expire 1800 seconds after last valid heartbeat.",
+    "registration": "public self-service with email verification and password recovery",
+    "web_mfa": "disabled; supported desktop download",
+    "implementation_status": "planned",
+    "requirements_confirmed_on": "2026-10-16",
+    "existing_implementation": {
+      "policy_version": 2,
+      "retention_seconds": 259200,
+      "status": "Legacy code and isolated tests; target database migration not performed."
+    },
+    "existing_data_strategy": "No automatic deletion or migration of existing data; review a versioned workspace migration before applying to a named target."
   },
   "current_status_document": "docs/project-status.md",
   "status_convention": "status refers to the task acceptance scope; current Windows functionality, platform gaps and retained artifacts are maintained in docs/project-status.md. Historical reports describe their own snapshots."

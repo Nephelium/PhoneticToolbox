@@ -1,5 +1,7 @@
 # P15-STAGING 部署、排空与回滚手册
 
+2026-10-16：本手册对应已有部署工具，其1 GB/3天探针仍属历史策略。上线前须按[当前计划](../plans/2026-10-16-web-launch.md)补齐注册、工作区30分钟、MFA关闭及浏览器能力验收；本轮未执行部署、DDL或运行恢复清理。
+
 2026-09-27。**可审阅准备件，未上线。** [专项计划](../plans/2026-09-27-p15-staging.md) · [验收/阻断](../testing/p15-staging-report.md) · [宿主决策](../decisions/p15-staging-host.md) · [开放候选](p15-capabilities.md)。
 
 ## 1. 明确目标与配置

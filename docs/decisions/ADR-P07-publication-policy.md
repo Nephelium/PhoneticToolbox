@@ -1,5 +1,7 @@
 # ADR-053 补充：按任务快照确定发布期限
 
+2026-10-16：下文是旧1 GB/3天发布器的实现决策。新网页研究数据共同受[临时工作区决策](ADR-web-ephemeral-client-first.md)约束，退出/到期后新结果不得重新发布；旧manifest回读与存量迁移证据保留。
+
 2026-09-27。状态：按井井已批准的新政策完成代码与合成验证，具体库迁移待授权。关联[ADR-053](ADR.md)和[收口报告](../testing/p07-policy-closeout-report.md)。
 
 公共发布器从 storage_policy 取得额度/期限与分类，不在各模块散落 TTL。operation 仅提供初始分类，M08 的 saved_copy/source_ref/copy_result 表明复制路径时必须继承受管输入截止。科学新结果在最后 fencing 后原子发布，资产版本与 manifest 版本同时成为 2。历史缺字段按 1 回读，不改旧 JSON/资产截止。

@@ -14,7 +14,14 @@
 
 暂存检查发现官网生成脚本末尾空行，已清理；ZCOOL 原始 OFL 文本第21行保留上游行尾空格，未改写许可证。除该原始许可行外，暂存差异空白检查通过。
 
-提交与远端回读结果待本轮完成后原位补充。
+源码提交 `37b4d4842514e8abc90aa3181d2dc2a89bdd67f7` 已推送 `origin/main`，随后 `git ls-remote` 回读相同身份；共243文件、17819行新增/892行删除。后续网页版需求及本记录的收口文档独立提交，不创建Release。
+
+### 本轮检查命令与范围
+
+- `npm --prefix frontend run typecheck`、`run contracts:check`、`run ui-data:check`、`test`、`run build`。
+- Python以项目m14解释器、`PYTHONPATH=backend/src;packages/phonetic_core/src;desktop/src`、`-B -X utf8 -m pytest -c tests/pytest.ini -q`运行：backend/tests中的test_local_retention、test_m09_parameters、test_m09_pipeline、test_m09_runtime、test_m09_vocoder、test_m05_offline_exports，desktop/tests中的test_m09_bridge、test_paper_reader_updates，以及packages/phonetic_core/tests/test_m09_editing.py、tests/parity/test_spec2wav.py。唇形test_m05_offline_exports.py使用既有m05解释器复验。
+- 项目m14解释器运行 `scripts/validate_docs.py` 和 `scripts/check_architecture.py`；按上文分别记录文档通过与架构失败，未混为全部通过。测试使用本机现有科学资源，未进行仅公开仓库的新克隆复现。
+- `git diff --cached --check` 保留一处上游OFL空格；排除该许可证后源码检查通过。需求文档提交的完整diff检查须无错误。
 
 当前同步目标：GitHub `Nephelium/PhoneticToolbox` 的 v3 主线为 `main`，旧版保留在 `v2`，旧标签与 Release 保留。本次 2026-10-11 的分支切换及图文主页上传已获用户明确授权，验收见下文。
 

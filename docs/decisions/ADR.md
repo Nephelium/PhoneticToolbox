@@ -4,6 +4,8 @@
 
 ## 专题决策
 
+- [网页临时工作区与浏览器优先计算](ADR-web-ephemeral-client-first.md)
+
 - [邮箱反馈会话与独立管理员通知](ADR-feedback.md)
 - [相同依赖只保存一份，原路径恢复](ADR-cross-archive-dedup.md)
 - [ADR-M01-M02-R1：列表、切分与长录音预览修复](ADR-M01-M02-R1.md)
