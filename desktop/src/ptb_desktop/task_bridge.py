@@ -60,9 +60,19 @@ class TaskBridge:
         self.m07=M07Bridge(self)
         from .m06_bridge import M06Bridge
         self.m06=M06Bridge(self)
+        from .m09_bridge import M09Bridge
+        self.m09=M09Bridge()
 
     def invoke(self,body):
         op=body.get('op')
+        if op=='m09_check_python':return self.m09.check(body.get('grant'))
+        if op=='m09_vocoder_status':return self.service.get('/api/v1/jobs/spec2wav/vocoder')
+        if op=='m09_vocoder_download':
+            try:return self.service.request('/api/v1/jobs/spec2wav/vocoder/download','POST')
+            except Exception as exc:
+                from urllib.error import HTTPError
+                if isinstance(exc,HTTPError):raise FileAccessError('声码器下载或校验未完成，请重试。') from None
+                raise
         if op=='local_storage_status':return self.service.get('/api/v1/jobs/local-storage')
         if op=='local_storage_policy':
             return self.service.request('/api/v1/jobs/local-storage/policy','POST',body['policy'])

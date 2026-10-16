@@ -80,7 +80,7 @@ def execute_claim(store,claim,worker_id,stop,*,evidence=None):
                 with store.transaction() as tx:
                     current=store._row(tx,claim['id'])
                     if current and current['worker_id']==worker_id and current['generation']==claim['generation']:store._event(tx,current,'m05_frames_'+str(count),tx.now())
-        result=run_child(root,dict(input=input_name,original_name=source['name'],config=request['config']),cancelled,progress,resource)
+        result=run_child(root,dict(input=input_name,original_name=source['name'],input_asset={k:source[k] for k in ('id','name','size_bytes','sha256')},config=request['config']),cancelled,progress,resource)
         atomic(root/'results'/'resources.json',resource);result['files'].append('resources.json')
         if sum((root/'results'/n).stat().st_size for n in result['files'])>512_000_000:raise ValueError('m05_output_budget')
         for name in result['files']:

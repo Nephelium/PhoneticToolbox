@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {syncNumberInput} from '../../design/numeric-input.ts';
 import AppIcon from '../../components/AppIcon.vue';
 import {computed,onMounted,onUnmounted,ref,watch} from 'vue';
 import ModuleFrame from '../../components/ModuleFrame.vue';
@@ -68,7 +69,7 @@ watch(runtime,()=>{if(catalog.value&&!models.value.some(m=>m.id===model.value))m
 
 onMounted(()=>{void refresh();timer=setInterval(()=>{if(installing.value||(!busy.value&&props.active!==false))void refresh();},1000);});
 onUnmounted(()=>{alive=false;controller.abort();if(timer)clearInterval(timer);});
-function beamInput(event:Event){try{config.value=beamChanged(config.value,Number((event.target as HTMLInputElement).value));error.value='';}catch(e){error.value=(e as Error).message;}}
+const beamInput=computed({get:()=>config.value.beam,set:(value:number|string)=>{try{config.value=beamChanged(config.value,Number(value));error.value='';}catch(e){error.value=(e as Error).message;}}});
 async function imported(event:Event){const input=event.target as HTMLInputElement,files=Array.from(input.files??[]);input.value='';if(!files.length||!port.value)return;await operation(async()=>{corpus.value=await port.value!.import(files,controller.signal,transcriptSource.value);loadedSource.value=transcriptSource.value;dirty.value=true;message.value=`已导入 ${corpus.value.length} 组音频与已有转写。`;});}
 function chooseAcoustic(event:Event){const select=event.target as HTMLSelectElement,id=select.value;if(id==='import'){select.value=acousticSelection.value;void pick('model');}else if(id!=='pending-model'){model.value=id;customDictionaryId.value='';delete grants.value.model;delete grants.value.dictionary;}}
 function chooseDictionary(event:Event){const select=event.target as HTMLSelectElement,id=select.value;if(id==='import'){select.value=dictionarySelection.value;if(port.value?.local&&port.value.pick&&port.value.dictionaryFromGrant)void importNativeDictionary();else dictInput.value?.click();}else{const imported=importedDictionaries.value.find(d=>d.id===id);if(imported){customDictionaryId.value=id;if(imported.grant)grants.value.dictionary=imported.grant;}else{customDictionaryId.value='';model.value=id;delete grants.value.dictionary;}}}
@@ -123,7 +124,7 @@ async function saveResults(){await operation(async()=>{if(!output.value)output.v
     </div>
    </ModuleSection>
 <ModuleSection label="对齐参数" title="对齐参数">
-    <div class="parameter-row"><label>Beam<input type="number" min="1" max="10000" :value="config.beam" :disabled="busy" @change="beamInput"/></label><label>Retry beam<input v-model.number="config.retry_beam" type="number" min="1" max="40000" :disabled="busy"/></label></div>
+    <div class="parameter-row"><label>Beam<input type="number" min="1" max="10000" v-model.lazy.number="beamInput" @change="syncNumberInput($event,beamInput)" :disabled="busy"/></label><label>Retry beam<input v-model.number="config.retry_beam" type="number" min="1" max="40000" :disabled="busy"/></label></div>
     <p class="muted">当前 MFA 3.3.8 对齐组件使用 CPU，暂不提供 GPU 加速。与本机是否配备显卡无关。</p>
 
    </ModuleSection>

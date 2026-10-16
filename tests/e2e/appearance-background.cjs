@@ -24,7 +24,7 @@ async function main(){
   assert.deepEqual(await page.locator('.app-background-layer').evaluate(e=>({blur:e.style.filter,opacity:e.style.opacity})),{blur:'blur(16px)',opacity:'0.65'});
   assert.equal(await side.locator('input').evaluate(e=>getComputedStyle(e).backgroundColor),'rgba(0, 0, 0, 0)');
   assert.equal(await page.locator('.appearance-settings').evaluate(e=>getComputedStyle(e).backgroundColor),'rgba(0, 0, 0, 0)');
-  assert.notEqual(await side.getByRole('button',{name:'首页',exact:true}).evaluate(e=>getComputedStyle(e).backgroundColor),'rgba(0, 0, 0, 0)');
+  assert.equal(await side.getByRole('button',{name:'首页',exact:true}).evaluate(e=>getComputedStyle(e).backgroundColor),'rgba(0, 0, 0, 0)');
   report.checks.push('Real file upload; single global layer; Gaussian blur/opacity applied; panels/search/text inputs transparent');
   await upload.setInputFiles({name:'坏图.png',mimeType:'image/png',buffer:Buffer.from('bad')});await page.getByRole('alert').filter({hasText:'无法读取'}).waitFor();
   assert.equal(await page.locator('.app-background-layer').evaluate(e=>getComputedStyle(e).backgroundImage),image);
@@ -44,13 +44,13 @@ async function main(){
   for(const mode of ['auto','all','plain']){
    await page.getByRole('combobox',{name:'按钮高亮',exact:true}).selectOption(mode);
    await page.waitForTimeout(180);
-   const glass=await page.getByRole('button',{name:'更换背景图',exact:true}).evaluate(e=>({bg:getComputedStyle(e).backgroundColor,filter:getComputedStyle(e).backdropFilter}));assert.match(glass.filter,/blur\(12px\)/);assert(glass.bg.includes('0.35'),glass.bg);report.cases.push({mode,glass});
+   const glass=await page.locator('.background-actions button').first().evaluate(e=>({bg:getComputedStyle(e).backgroundColor,filter:getComputedStyle(e).backdropFilter,image:getComputedStyle(e).backgroundImage}));assert.equal(glass.filter,'none');assert.match(glass.image,/url\(/);assert(glass.image.includes('0.35'),glass.image);report.cases.push({mode,glass});
   }
-  await page.getByRole('combobox',{name:'按钮材质',exact:true}).selectOption('solid');assert.equal(await page.getByRole('button',{name:'更换背景图',exact:true}).evaluate(e=>getComputedStyle(e).backdropFilter),'none');
+  await page.getByRole('combobox',{name:'按钮材质',exact:true}).selectOption('solid');assert.equal(await page.locator('.background-actions button').first().evaluate(e=>getComputedStyle(e).backdropFilter),'none');
   await page.getByRole('combobox',{name:'按钮材质',exact:true}).selectOption('glass');
   await page.reload();await side.waitFor();await settings();assert.equal(await hex.inputValue(),sampled);assert.equal(await page.getByRole('combobox',{name:'按钮材质',exact:true}).inputValue(),'glass');
   await page.locator('#button-glass-opacity').fill('20');await page.locator('#button-glass-blur').fill('24');await page.waitForTimeout(180);
-  const adjusted=await page.getByRole('button',{name:'更换背景图',exact:true}).evaluate(e=>({bg:getComputedStyle(e).backgroundColor,filter:getComputedStyle(e).backdropFilter}));assert(adjusted.bg.includes('0.2'),adjusted.bg);assert.match(adjusted.filter,/blur\(24px\)/);
+  const adjusted=await page.locator('.background-actions button').first().evaluate(e=>({bg:getComputedStyle(e).backgroundColor,filter:getComputedStyle(e).backdropFilter,image:getComputedStyle(e).backgroundImage}));assert(adjusted.image.includes('0.2'),adjusted.image);assert.match(adjusted.image,/url\(/);assert.equal(adjusted.filter,'none');assert.equal(await page.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--button-glass-blur').trim()),'24px');
   await page.reload();await side.waitFor();await settings();assert.equal(await page.locator('#button-glass-opacity').inputValue(),'20');assert.equal(await page.locator('#button-glass-blur').inputValue(),'24');
   report.checks.push('Independent glass opacity/blur changes material and persists after reload');
   assert.equal(await page.getByRole('spinbutton',{name:'背景图高斯模糊值'}).inputValue(),'16');assert.equal(await page.getByRole('spinbutton',{name:'背景图不透明度值'}).inputValue(),'65');await page.waitForFunction(()=>document.documentElement.dataset.backgroundImage==='on');
@@ -69,7 +69,7 @@ async function main(){
   await page.setViewportSize({width:1440,height:900});await page.evaluate(async()=>{const {setPageScale}=await import('/src/state/pageZoom.ts');setPageScale(100);});
   await page.getByRole('button',{name:'浅色',exact:true}).click();await page.screenshot({path:path.join(out,'appearance-light.png')});await page.getByRole('button',{name:'深色',exact:true}).click();await page.screenshot({path:path.join(out,'appearance-dark.png')});
   report.checks.push('Manual page uses global background; 12 light/dark/wide/narrow/zoom layouts fit');
-  await page.getByRole('button',{name:'移除背景图',exact:true}).click();await page.waitForFunction(()=>document.documentElement.dataset.backgroundImage==='off');await page.reload();await side.waitFor();assert.equal(await page.evaluate(()=>document.documentElement.dataset.backgroundImage),'off');
+  await page.locator('.background-item').first().getByRole('button',{name:/^移除背景图：/}).click();await page.waitForFunction(()=>document.documentElement.dataset.backgroundImage==='off');await page.reload();await side.waitFor();assert.equal(await page.evaluate(()=>document.documentElement.dataset.backgroundImage),'off');
   report.checks.push('Remove persists across reload and restores original surfaces');assert.deepEqual(report.errors,[]);report.success=true;
  }catch(error){report.failure=String(error);if(page)await page.screenshot({path:path.join(out,'failure.png')}).catch(()=>{});throw error;}
  finally{

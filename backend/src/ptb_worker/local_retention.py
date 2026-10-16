@@ -27,7 +27,7 @@ class LocalRetention:
         no_links(path)
         if not path.exists():
             return dict(schema='ptb-retention/1', instance_id=state['instance_id'],
-                        enabled=True, days=30, exported_cache_days=7, last_sweep=0,
+                        enabled=True, days=3, exported_cache_days=1, last_sweep=0,
                         records={}, mfa_attempts={}, last_result=None)
         if not path.is_file() or path.stat().st_nlink != 1 or path.stat().st_size > 16_000_000:
             raise JobError('local_retention_metadata_rejected', 503)
@@ -131,7 +131,7 @@ class LocalRetention:
             state=self.files.state;value=self._load(state)
             completed(path,identity,state,value,now);self._save(value)
 
-    def configure(self, *, enabled, days, exported_cache_days=7):
+    def configure(self, *, enabled, days, exported_cache_days=1):
         if (type(enabled) is not bool or type(days) is not int or not 1 <= days <= 3650 or
                 type(exported_cache_days) is not int or not 1 <= exported_cache_days <= 3650):
             raise JobError('invalid_retention_policy', 422)

@@ -1,0 +1,14 @@
+{
+  "version": "3.0.2",
+  "files": {
+    "PhoneticToolbox-windows-x64.exe": {
+      "size": 495855100,
+      "sha256": "0d0ab31d26eb4ec4563b03d246cacb3250778f71bbcce2ad6dd7e2faa6c518b9"
+    },
+    "PhoneticToolbox-3.0.2-windows-x64-setup.exe": {
+      "size": 497771194,
+      "sha256": "19c55057d074c217a9d502ccd01d704dd72a1aa20c67e02a8570bd451c46e95e"
+    }
+  },
+  "source": "https://www.phonetictoolbox.com/releases/windows-x64/3.0.2/ptb-release.json"
+}

@@ -105,3 +105,24 @@ M10使用同一背景CSS/材质CSS，数字样式通过当前同源文档同步�
 初次home-icon-200截图未等待首页0.22秒arrive淡入完成，整页显淡；按用户指出的问题改为等待opacity=1及动画结束后截取。实测捕获时opacity=0.274414且animation running，结束后opacity=1，标题rgb(68,78,84)，重拍图目视颜色正常。保留早先截图及报告作为诊断，没有更改产品文字配色或移除既有动画。
 
 本轮Windows源码/Chrome范围为verified；实际Qt、成品EXE和跨平台未新增验证。已有运行窗口需正常重开加载新页面，未擅自关闭用户窗口。
+
+
+## 背景图库、模式示意与缓存默认期限
+
+2026-10-13，任务 `P04-BACKGROUND-LIBRARY`。当前 Windows 源码及独立 Chrome 范围通过，现有 EXE 未重建。
+
+背景图改为本机最多 8 张的缩略图列表，上传后选中，点击切换，逐项移除。“不使用背景图”只停用显示并保留图库；移除当前项回到配色底色。沿用旧 IndexedDB 的 current 图片，不修改数据库版本；首次图库写入在同一事务保存 library 并清除旧键。处理后相同图片复用已有项。写入成功后才更新显示，读取失败后再次操作先重读图库，避免空列表覆盖已有保存。原始图片保留。
+
+显示模式缩略图改为工具栏、侧栏、波形图窗和状态行，保留浅深主题、系统并排显示及键盘切换。删除外观页“默认使用 Everforest。”说明。用户随后明确要求将新用户默认改为 Absolutely，源码 DEFAULT_PALETTE、定向检查和说明书开始使用说明同步；已保存的 Everforest 等个人选择仍优先。
+
+缓存默认未导出 3 天、已导出副本 1 天，同步前端初值、后端新策略及省略导出期限时的默认值。已有保存策略继续沿用。MFA 诊断期限仍为 7 天。说明书设置正文、表格、相关图注及搜索索引同步。
+
+实际验证：
+
+- `npm run typecheck`、前端 build、background/image-storage/appearance/buttons 10 项通过。
+- m14 科学环境，PYTHONPATH 显式绑定本工程 backend/src、phonetic_core/src、ptb_node/src，`pytest -c tests/pytest.ini backend/tests/test_local_retention.py backend/tests/test_mfa_retention.py -q`：36 项通过，2 条既有依赖弃用警告。新增 3 天／1 天到期前后边界及旧 30／7 设置重新读取检查；原整组导出测试显式设置其研究用的 30／7 策略。初次缺少 PYTHONPATH 导致收集失败，修正入口后通过。
+- `node tests/e2e/background-library.cjs`：独立 Chrome 隔离配置，7 组行为／4 个浅深和 1440、800 布局通过。新增实际Chrome空白配置默认Absolutely、手动保存Everforest后重载保留检查。实际文件上传、旧单图读取、双图重载、重复复用、停用／移除、坏图和满库保护，以及模拟 IndexedDB 写入失败后原图库／选择保留；缓存页采用浏览器模拟 port 验显示值，真实默认与到期语义由前述 Python 检查覆盖。最终 `output/validation/background-library/chrome-1791880476278/report.json`，截图人工检查。
+- `node tests/e2e/appearance-background.cjs`：8 组／33 例通过，含背景效果、取色、18 模块入口、说明书及 12 个布局。旧脚本还断言侧栏普通按钮有底色、逐按钮实时 backdrop-filter，这与已发布 R6 明确排除导航及共用预绘制背景的规则冲突；按现行 CSS 检查透明导航、玻璃图像／tint／参数和无实时滤镜后完整通过，失败报告 `chrome-1791880058321` 保留。最终 `output/validation/custom-appearance/chrome-1791880128383/report.json`。图库前两轮失败为异步保存等待和文件控件同名选择器，修正测试同步／定位后通过。
+- 说明书严格校验与阅读资源生成：20 章／1053 素材，errors、warnings 为空。文档检查 2011 文件／427 来源／105 任务，errors 为空；定向 git diff --check 通过。独立测试 scratch 已按归属清理，报告／截图／清理回执保留。
+
+本轮未新增 Qt／最终 EXE／其他平台验收，未打包或公开发布。说明书现有配图保留其历史素材身份，本轮同步正文和图注，没有替换整页历史截图。

@@ -38,6 +38,9 @@ def preview(raw,config):
     from .segmentation import digest
     settings=Spec2WavConfig.model_validate(config)
     gray,meta,_=source(raw,settings)
+    if settings.mode!='audio_draw' and settings.auto_parameters:
+        from .m09_parameters import predict
+        meta['prediction']=predict(gray,settings.model_dump())
     png=cv2.imencode('.png',np.rint(gray).astype(np.uint8))[1].tobytes()
     return dict(image_base64=base64.b64encode(png).decode('ascii'),source_sha256=digest(raw),**meta)
 
@@ -61,13 +64,44 @@ def prepare(raw,config):
             gray=result['target']
         else:
             if strokes:gray=np.rint(paint(gray,strokes)[0]).astype(np.uint8)
-            result=reconstruct(gray,**settings.model_dump(exclude={'corners','mode','invert_image','strokes','channel','audio_fft','dynamic_range'}))
-            result['metadata']['phase_method']='griffin-lim'
+            if settings.algorithm=='neural_pipeline':
+                from .vocoder_components import pipeline
+                result=pipeline(gray,settings.model_dump())
+            else:
+                applied=settings.model_dump()
+                prediction=None
+                if settings.auto_parameters:
+                    from .m09_parameters import predict
+                    prediction=predict(gray,applied)
+                    for key in ('win_length_ms','min_db','max_db'):applied[key]=prediction[key]
+                args={k:v for k,v in applied.items() if k not in {'corners','mode','invert_image','vocoder','strokes','channel','audio_fft','dynamic_range','algorithm','auto_parameters','frequency_axis','reconstruction_profile','inference_device','phase_initialization'}}
+                if settings.reconstruction_profile=='calibrated' or prediction or settings.frequency_axis=='log' or settings.phase_initialization!='auto':
+                    from phonetic_core.spec2wav.adaptive import reconstruct_calibrated
+                    result=reconstruct_calibrated(gray,frequency_axis=settings.frequency_axis,phase_initialization=settings.phase_initialization,**args)
+                else:result=reconstruct(gray,**args)
+                result['metadata']['phase_method']='griffin-lim'
+                if prediction:
+                    result['metadata'].update(prediction=prediction,applied_config=applied,
+                                              parameter_backend='builtin-numpy-float32')
+            if settings.vocoder=='bigvgan' and settings.algorithm!='neural_pipeline':
+                from .vocoder_components import apply
+                result=apply(result,device=settings.inference_device)
+            from phonetic_core.spec2wav.adaptive import auto_gain
+            result['audio'],gain=auto_gain(result['audio'])
+            gain['output_gain']*=result['metadata'].get('output_gain',1.)
+            result['metadata'].update(gain)
+            result['metadata']['pcm16_clipped_samples']=0
+            from phonetic_core.spec2wav.adaptive import comparison_image
+            result['image']=comparison_image(result['audio'],result['sr'],result['metadata'],settings.model_dump(),gray.shape)
+            result['metadata']['comparison_grid']=dict(shape=list(gray.shape),freq_start=settings.freq_start,
+                freq_end=settings.freq_end,frequency_axis=settings.frequency_axis,time_start=settings.time_start,time_end=settings.time_end)
             if settings.mode=='image_draw':result['metadata']['schema_version']='m09-image-draw/1'
     except ValueError as exc:raise AcousticFailure(str(exc)) from None
     wav=io.BytesIO();sf.write(wav,result['audio'],result['sr'],format='WAV',subtype='FLOAT' if audio is not None else 'PCM_16')
     from ptb_api.protocol_version import CORE_VERSION
     metadata=result['metadata']|dict(config=settings.model_dump(),image_sha256=digest(raw),source_ids=['REF-GRIFFINLIM','M01-PY-NUMPY','M01-PY-SCIPY','PKG-OPENCV-CONTRIB-PYTHON','PKG-SOUNDFILE'],core_version=CORE_VERSION,image_shape=list(gray.shape))
+    if settings.vocoder=='bigvgan' or settings.algorithm=='neural_pipeline':metadata['source_ids'].append('PKG-BIGVGAN-BASE')
+    if result['metadata'].get('phase_initialization')=='pulse':metadata['source_ids'].append('WEBSITE-AOKI-SHORT-WINDOWS')
     metadata.update(source_sha256=digest(raw),source_kind='audio' if audio is not None else 'image',geometry='perspective-four-corners' if settings.corners else 'full-source',stroke_count=len(strokes))
     blobs=[cv2.imencode('.png',gray)[1].tobytes(),cv2.imencode('.png',result['image'])[1].tobytes(),wav.getvalue(),json.dumps(metadata,allow_nan=False).encode()]
     names=[('calibrated.png','png'),('reconstructed.png','png'),('reconstructed.wav','wav'),('reconstruction.ptb.json','json')]

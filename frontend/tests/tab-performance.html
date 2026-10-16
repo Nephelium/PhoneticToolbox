@@ -1,0 +1,24 @@
+<!doctype html><html><head><meta charset="utf-8"/></head><body><div id="app"></div>
+<script type="module">
+import {createApp,reactive,ref,shallowRef,markRaw,h} from 'vue';
+import AppShell from '../src/app/AppShell.vue';
+import WaveformViewport from '../src/components/WaveformViewport.vue';
+import ScientificPlot from '../src/components/ScientificPlot.vue';
+import '../src/design/tokens.css';
+const samples=Float32Array.from({length:48000*60},(_,i)=>Math.sin(i*.037)*.7);
+const times=Array.from({length:12000},(_,i)=>i/200),values=times.map(t=>Math.sin(t));
+const counts={paths:0,requests:[]};
+times.map=function(fn){counts.paths++;return Array.prototype.map.call(this,fn);};
+const asset=markRaw({name:'synthetic.wav',sampleRate:48000,frames:samples.length,channels:[samples],duration:60});
+const panes=Array.from({length:6},(_,id)=>({id,wave:reactive({asset,start:2,end:8,channel:0,showSpectrogram:true,zoom:1,offset:0,parameters:[],dirty:false,error:'',loading:false}),
+ traces:shallowRef(markRaw([{label:'Signal',times,values,color:'#246',points:false}])),
+ loader:async view=>{counts.requests.push({id,...view});return {width:2,height:2,pixels_base64:'AAAAAA==',x1:15,dx:30,y1:1000,dy:2000,frequency_max:5000};}}));
+const active=ref(0),cursor=ref(1);window.qa={panes,active,cursor,counts};
+const x=[0,60],y=[-1,1];
+if(new URLSearchParams(location.search).has('shell')){
+ const buffer=new ArrayBuffer(44+8000*2),v=new DataView(buffer),text=(i,s)=>[...s].forEach((c,j)=>v.setUint8(i+j,c.charCodeAt(0)));
+ text(0,'RIFF');v.setUint32(4,buffer.byteLength-8,true);text(8,'WAVEfmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,8000,true);v.setUint32(28,16000,true);v.setUint16(32,2,true);v.setUint16(34,16,true);text(36,'data');v.setUint32(40,16000,true);
+ const files=[{id:'wave',name:'synthetic.wav',kind:'audio',size:buffer.byteLength}];counts.lists=0;
+ createApp({setup:()=>()=>h(AppShell,{research:{key:'tab-performance:M01',label:'Synthetic',files:{kind:'preview',list:async()=>{counts.lists++;return files;},read:async()=>({buffer,sha256:'a'.repeat(64)}),textgrid:async()=>({sha256:'b'.repeat(64),tiers:[]}),dispose(){}}}})}).mount('#app');
+}else createApp({setup:()=>()=>h('div',[h('nav',panes.map(p=>h('button',{onClick:()=>active.value=p.id},'Tab '+(p.id+1)))),...panes.map(p=>h('section',{'data-pane':p.id,style:{display:active.value===p.id?'':'none'}},[h(WaveformViewport,{state:p.wave,spectrogramLoader:p.loader,compactOverview:true}),h(ScientificPlot,{title:'Synthetic trace',x,y,traces:p.traces.value,markers:[{time:cursor.value,label:'cursor'}]})]))])}).mount('#app');
+</script><style>section{width:1100px;margin:20px}nav{display:flex;gap:12px}</style></body></html>

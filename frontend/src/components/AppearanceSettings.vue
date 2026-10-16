@@ -27,7 +27,7 @@ const current=computed(()=>{paletteRevision.value;return palettes.find(p=>p.id==
  <div class="setting-block"><label for="palette-choice">配色方案</label><PalettePicker :model-value="palette" :mode="mode" @update:model-value="emit('update:palette',$event)"/></div>
  <CustomPaletteSettings @select="emit('update:palette','custom')"/>
  <details open class="palette-details"><summary>关于配色</summary><p class="settings-note">这些配色参考 Codex 同名主题，由 PhoneticToolbox 适配并补齐深浅版本。各主题的来源与许可见关于页。科研曲线沿用各轨道的颜色含义。</p></details>
- <p class="settings-note">默认使用 Everforest。展开列表后，悬停或用方向键浏览配色，查看文字、按钮与波形的小窗预览。</p>
+ <p class="settings-note">展开列表后，悬停或用方向键浏览配色，查看文字、按钮与波形的小窗预览。</p>
  <ThemeModeCards :mode="mode" :palette="current" @select="emit('update:mode',$event)"/>
  <p class="settings-note">同一方案的深浅配色同步切换。跟随系统会自动响应系统外观。</p>
  <div class="appearance-divider"/>

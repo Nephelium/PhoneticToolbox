@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 240" role="img" aria-label="[ɻ]">
+<title>[ɻ] — Doulos-based designed relief</title>
+<defs><linearGradient id="face" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#50324d"/><stop offset=".65" stop-color="#301934"/><stop offset="1" stop-color="#25102d"/></linearGradient>
+<filter id="relief" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="2" dy="7" stdDeviation="2.8" flood-color="#251630" flood-opacity=".28"/></filter>
+<path id="glyph" d="M137 55 L132 144 C130 167 142 183 156 183 C169 183 177 173 177 163 M133 116 C123 135 107 147 95 139"/>
+<path id="brackets" d="M65 43 H44 V192 H65 M196 43 H216 V192 H196"/></defs>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<g filter="url(#relief)" stroke="url(#face)"><use href="#brackets" stroke-width="11"/><use href="#glyph" stroke-width="20"/></g>
+<g transform="translate(-1,-2)" stroke="#fff" opacity=".18"><use href="#glyph" stroke-width="15"/><use href="#brackets" stroke-width="6"/></g>
+</g></svg>

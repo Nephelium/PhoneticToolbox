@@ -40,7 +40,7 @@ def safe_name(name):
 def no_links(path):
     p = Path(path).absolute()
     for item in (p, *p.parents):
-        if item.is_symlink() or getattr(item, 'is_junction', lambda: False)():
+        if item.is_symlink() or getattr(item, 'is_junction', lambda: False)() or (item.exists() and getattr(item.lstat(), 'st_file_attributes', 0) & 0x400):
             raise ValueError('m11_component_link')
 
 
@@ -67,12 +67,14 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
 
 class ComponentManager:
-    def __init__(self, root=None):
+    def __init__(self, root=None, *, schema='m11-component/1', version_field='mfa_version',
+                 version='3.3.8', prefix='mfa338'):
         self.root = Path(root or default_root()).absolute()
+        self.schema, self.version_field, self.version, self.prefix = schema, version_field, version, prefix
         no_links(self.root)
 
     def import_archive(self, archive, trusted, self_test, *, progress=lambda done, total: None):
-        if trusted.get('schema') != 'm11-component/1' or not re.fullmatch(r'[A-Za-z0-9_-]{1,80}', trusted.get('id', '')):
+        if trusted.get('schema') != self.schema or not re.fullmatch(r'[A-Za-z0-9_-]{1,80}', trusted.get('id', '')):
             raise ValueError('m11_manifest_invalid')
         expected_platform = 'windows' if os.name == 'nt' else 'linux'
         arch = platform.machine().lower().replace('amd64', 'x86_64')
@@ -80,7 +82,7 @@ class ComponentManager:
             arch = 'x86_64'
         if trusted.get('platform') != expected_platform or trusted.get('arch') != arch:
             raise ValueError('m11_platform_mismatch')
-        if trusted.get('mfa_version') != '3.3.8' or not trusted.get('source') or not isinstance(trusted.get('dependencies'), list):
+        if trusted.get(self.version_field) != self.version or not trusted.get('source') or not isinstance(trusted.get('dependencies'), list):
             raise ValueError('m11_manifest_invalid')
         archive = Path(archive)
         no_links(archive)
@@ -102,7 +104,7 @@ class ComponentManager:
         if shutil.disk_usage(self.root).free < total + 512_000_000 + 64_000_000:
             raise ValueError('m11_component_disk_full')
         # This IS the permanent version path. No post-relocation rename.
-        target = self.root / 'versions' / ('mfa338-' + uuid4().hex[:16])
+        target = self.root / 'versions' / (self.prefix + '-' + uuid4().hex[:16])
         if expected_platform == 'windows' and any(len(str(target / row['path']))>=240 for row in records if row['path'].lower().endswith(('.pyd','.dll','.exe'))):
             raise ValueError('m11_install_path_too_long')
         no_links(target)

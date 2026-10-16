@@ -7,6 +7,7 @@ import os
 import shutil
 import time
 import tempfile
+import threading
 from pathlib import Path
 from uuid import UUID,uuid4
 from .file_provider import FileAccessError,checked_path
@@ -14,7 +15,7 @@ from .file_provider import FileAccessError,checked_path
 class M05Bridge:
     def __init__(self,bridge):
         from .m05_replay import ReplayReader
-        self.bridge=bridge;self.writes={};self.replay=ReplayReader();self.recordings={}
+        self.bridge=bridge;self.writes={};self.replay=ReplayReader();self.recordings={};self.exports={};self.metadata={}
     def invoke(self,body):
         from urllib.error import HTTPError
         try:return self._invoke(body)
@@ -61,7 +62,39 @@ class M05Bridge:
             except Exception:
                 service.request('/api/v1/jobs/m05/uploads/'+upload['id']+'/abort','POST')
                 raise
-        if op=='m05_history':return [j for j in service.get('/api/v1/jobs?project_id=00000000-0000-4000-8000-000000000001')['jobs'] if j['operation']=='lip_analysis' and j['state']=='succeeded'][:100]
+        if op=='m05_history':
+            jobs=[j for j in service.get('/api/v1/jobs?project_id=00000000-0000-4000-8000-000000000001')['jobs'] if j['operation']=='lip_analysis' and j['state']=='succeeded'][:100]
+            from urllib.error import HTTPError
+            history=[]
+            for job in jobs:
+                try:name=self.result_metadata(job).get('input_name') or ('视频 '+job['id'][:8])
+                except (FileAccessError,HTTPError):continue
+                history.append(dict(id=job['id'],name=name))
+            return history
+        if op in ('m05_source_info','m05_source_block'):
+            job=self.checked_job(body['job']);source=self.result_metadata(job).get('input_asset')
+            if not source:raise FileAccessError('此历史结果缺少原视频，请重新选择文件分析。')
+            if op=='m05_source_info':return source
+            offset=body.get('offset')
+            if type(offset) is not int or not 0<=offset<source['size_bytes']:raise FileAccessError('视频读取范围不正确。')
+            raw=service.binary(f'/api/v1/jobs/local-results/{str(UUID(source["id"]))}?offset={offset}&size={min(262144,source["size_bytes"]-offset)}')
+            return dict(base64=base64.b64encode(raw).decode())
+        if op=='m05_cancel_export':
+            key=str(UUID(body['export_id']));event=self.exports.get(key)
+            if event:event.set()
+            return dict(cancelled=event is not None)
+        if op=='m05_export_animation':
+            job=self.checked_job(body['job']);directory=self.bridge.provider.directory(body['directory'])
+            if directory.purpose!='output':raise FileAccessError('请选择输出目录。')
+            offset=self.checked_offset(body['offset']);format=body['format'];quality=body['quality']
+            if format not in ('mp4','gif') or quality not in ('high','standard','small'):raise FileAccessError('动画设置不正确。')
+            name='lip-animation-'+job['id'][:8]+'-'+uuid4().hex[:8]+'.'+format
+            key=str(UUID(body['export_id']));event=threading.Event()
+            if len(self.exports)>=4:raise FileAccessError('正在导出其他动画，请稍后重试。')
+            self.exports[key]=event
+            try:self.render_result(job,directory.path,dict(video=False,animation=True,quality=quality,format=format),offset,animation_name=name,cancel=event)
+            finally:self.exports.pop(key,None)
+            return dict(saved=True,file=name)
         if op=='m05_repeat':return service.request('/api/v1/jobs/m05/'+str(UUID(body['job']))+'/repeat','POST',body['config'])
         if op=='m05_create':return service.request('/api/v1/jobs/m05/create','POST',body['body'])
         if op=='m05_upload_begin':return service.request('/api/v1/jobs/m05/uploads','POST',dict(name=body['name'],size=body['size']))
@@ -73,11 +106,14 @@ class M05Bridge:
             if job['state']!='succeeded' or job['operation']!='lip_analysis':raise FileAccessError('唇形完整结果尚不可用。')
             directory=self.bridge.provider.directory(body['directory'])
             if directory.purpose!='output':raise FileAccessError('请选择输出目录。')
-            offset=body['offset'];action=body['action']
+            offset=self.checked_offset(body['offset']);action=body['action']
+            options=body.get('options',dict(video=False,animation=False,quality='high'))
+            if set(options)!={'video','animation','quality'} or any(type(options[k]) is not bool for k in ('video','animation')) or options['quality'] not in ('high','standard','small'):raise FileAccessError('结果保存选项不正确。')
             if action not in ('apply','save_without_offset') or not isinstance(offset,(float,int)) or not math.isfinite(offset) or abs(offset)>2:raise FileAccessError('偏移参数不正确。')
             target=directory.path/('M05-'+job['id'][:8]+'-'+uuid4().hex[:8]);checked_path(directory.path);target.mkdir()
             for item in job['result_manifest']['files']:
                 name=item['name']
+                if 'options' in body and name in ('lip-animation.mp4','lip-animation.gif'):continue
                 if Path(name).name!=name or any(c in name for c in '/\\:\x00'):raise FileAccessError('结果名不安全。')
                 checked_path(target);h=hashlib.sha256();size=0
                 with (target/name).open('xb') as stream:
@@ -88,6 +124,7 @@ class M05Bridge:
                     stream.flush();os.fsync(stream.fileno())
                 if size!=item['size_bytes'] or h.hexdigest()!=item['sha256']:raise FileAccessError('保存校验失败，部分结果已保留。')
             applied=offset if action=='apply' else 0.
+            media=self.render_result(job,target,options,applied,base_bytes=sum(p.stat().st_size for p in target.iterdir() if p.is_file())) if options['video'] or options['animation'] else None
             alignment=dict(schema='m05-alignment/1',lip_manual_offset=applied,apply='time_s + lip_manual_offset exactly once',parent_job=job['id'])
             exchange=target/'audio_recording.lip.json'
             if exchange.exists():
@@ -98,7 +135,7 @@ class M05Bridge:
                 self.write_json(target/'aligned.lip.json',value)
             self.write_json(target/'alignment.json',alignment)
             self.write_json(target/'saved-manifest.json',dict(schema='m05-saved/1',parent_job=job['id'],lip_manual_offset=applied,
-                source_manifest='manifest.json',source_exchange='unaligned.lip.json',files=[dict(name=p.name,bytes=p.stat().st_size,sha256=self.file_hash(p)) for p in target.iterdir() if p.is_file()]))
+                source_manifest='manifest.json',source_exchange='unaligned.lip.json',save_options=options,media=media,files=[dict(name=p.name,bytes=p.stat().st_size,sha256=self.file_hash(p)) for p in target.iterdir() if p.is_file()]))
             return dict(saved=True,directory=target.name)
         if op=='m05_save_begin':
             directory=self.bridge.provider.directory(body['directory']);name=body['name'];size=body['size']
@@ -158,21 +195,71 @@ class M05Bridge:
                 return dict(saved=True,recording=info)
             del self.writes[body['id']];return dict(saved=True)
         raise FileAccessError('唇形提取不支持此操作。')
+    def checked_job(self,key):
+        job=self.bridge.service.get('/api/v1/jobs/'+str(UUID(key)))
+        if job['operation']!='lip_analysis' or job['state']!='succeeded':raise FileAccessError('唇形完整结果尚不可用。')
+        return job
+    def result_metadata(self,job):
+        item=next((f for f in job['result_manifest']['files'] if f['name']=='manifest.json'),None)
+        if not item or not 0<item['size_bytes']<=16_000_000:raise FileAccessError('结果信息不完整。')
+        key=(job['id'],item['sha256'])
+        if key in self.metadata:return self.metadata[key]
+        raw=bytearray()
+        for offset in range(0,item['size_bytes'],262144):raw.extend(self.bridge.service.binary(f'/api/v1/jobs/local-results/{item["id"]}?offset={offset}&size={min(262144,item["size_bytes"]-offset)}'))
+        if len(raw)!=item['size_bytes'] or hashlib.sha256(raw).hexdigest()!=item['sha256']:raise FileAccessError('结果信息校验失败。')
+        value=json.loads(raw)
+        if len(self.metadata)>=100:self.metadata.pop(next(iter(self.metadata)))
+        self.metadata[key]=value
+        return value
+    def download_file(self,item,target):
+        if type(item['size_bytes']) is not int or not 0<item['size_bytes']<=512_000_000:raise FileAccessError('媒体读取超出预算。')
+        checked_path(target.parent);h=hashlib.sha256();size=0
+        with target.open('xb') as dest:
+            for offset in range(0,item['size_bytes'],262144):
+                raw=self.bridge.service.binary(f'/api/v1/jobs/local-results/{str(UUID(item["id"]))}?offset={offset}&size={min(262144,item["size_bytes"]-offset)}')
+                if dest.write(raw)!=len(raw):raise OSError('short_write')
+                h.update(raw);size+=len(raw)
+        if size!=item['size_bytes'] or h.hexdigest()!=item['sha256']:raise FileAccessError('媒体读取校验失败。')
+    def render_result(self,job,target,options,offset,*,animation_name='lip-animation.mp4',cancel=None,base_bytes=0):
+        checked_path(target)
+        if shutil.disk_usage(target).free<650_000_000 or shutil.disk_usage(tempfile.gettempdir()).free<1_000_000_000:raise FileAccessError('媒体导出磁盘空间不足。')
+        with tempfile.TemporaryDirectory(prefix='ptb-m05-result-') as scratch:
+            stage=Path(scratch)
+            needed={'manifest.json'}|({'frames.jsonl','audio_recording.wav'} if options['animation'] else set())
+            for name in needed:
+                item=next((f for f in job['result_manifest']['files'] if f['name']==name),None)
+                if item is None:
+                    if name=='audio_recording.wav':continue
+                    raise FileAccessError('动画所需结果不完整。')
+                self.download_file(item,stage/name)
+            source=None
+            if options['video']:
+                metadata=json.loads((stage/'manifest.json').read_text('utf8'));item=metadata.get('input_asset')
+                if not item:raise FileAccessError('此历史结果缺少原视频，请重新选择文件分析后保存视频。')
+                suffix=Path(item['name']).suffix.lower()
+                if suffix not in ('.mp4','.mov','.avi','.mkv','.wmv','.m4v','.webm'):raise FileAccessError('视频类型不正确。')
+                source=stage/('source'+suffix);self.download_file(item,source)
+            return self.export_recording(stage/'manifest.json',destination=target,action='render_result',cancel=cancel,options=options,offset=offset,source_video=str(source) if source else None,animation_name=animation_name,base_bytes=base_bytes)
+    @staticmethod
+    def checked_offset(value):
+        if type(value) not in (int,float) or not math.isfinite(value) or abs(value)>2:raise FileAccessError('偏移参数不正确。')
+        return value
     @staticmethod
     def file_hash(path):
         with path.open('rb') as stream:return hashlib.file_digest(stream,'sha256').hexdigest()
     @staticmethod
-    def export_recording(source,*,destination=None,action='export'):
+    def export_recording(source,*,destination=None,action='export',cancel=None,**options):
         from ptb_worker.native.windows import OwnedProcess
         from ptb_worker import m05_media_export
         runtime=os.environ.get('PTB_M05_PYTHON')
         if not runtime or not Path(runtime).is_file():raise FileAccessError('视频编码环境不可用，原录制仍保留。')
         root=source.parent;request=root/'export-request.json'
-        M05Bridge.write_json(request,dict(source=str(source),action=action,**(dict(destination=str(destination)) if destination else {})))
+        M05Bridge.write_json(request,dict(source=str(source),action=action,**options,**(dict(destination=str(destination)) if destination else {})))
         process=None;started=time.monotonic()
         try:
             process=OwnedProcess([runtime,'-I','-B',str(Path(m05_media_export.__file__)),str(request)],root,1_073_741_824)
             while process.poll() is None:
+                if cancel is not None and cancel.is_set():raise FileAccessError('动画导出已取消，分析结果保留。')
                 if time.monotonic()-started>620:raise FileAccessError('MP4 保存超时，原录制仍保留。')
                 time.sleep(.05)
             response=root/'export-response.json'
@@ -180,7 +267,7 @@ class M05Bridge:
             value=json.loads(response.read_text('utf8'))
             if not value.get('ok'):raise FileAccessError(value.get('error','MP4 保存失败。'))
             # Source is a uniquely created scratch file owned by this save operation.
-            if action!='inspect':source.unlink()
+            if action=='export':source.unlink()
             return value['value']
         finally:
             if process:process.close()

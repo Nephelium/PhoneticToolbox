@@ -4,6 +4,19 @@ import pytest
 from phonetic_core.spec2wav.editing import edit_audio, analyze_audio, paint, rectify
 
 
+@pytest.mark.parametrize('size',[1,2,3,74,200])
+def test_pixel_diameter_and_legacy_footprint(size):
+    gray=np.full((401,401),255,np.uint8)
+    mark=dict(color=0,opacity=1,size=size,size_unit='px',points=[dict(x=.5,y=.5)])
+    output,touched=paint(gray,[mark]);ys,xs=np.where(touched)
+    assert xs.max()-xs.min()+1==size and ys.max()-ys.min()+1==size
+    assert np.all(output[touched]==0)
+    if size==1:
+        assert touched.sum()==1
+        legacy=dict(mark);legacy.pop('size_unit')
+        assert paint(gray,[legacy])[1].sum()==5
+
+
 def stroke(color=0,opacity=1,points=None,size=5):
     return dict(color=color,opacity=opacity,size=size,points=points or [dict(x=.5,y=.5)])
 

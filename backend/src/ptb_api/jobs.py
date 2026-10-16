@@ -38,6 +38,8 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
 
     from .m11_components import component_router
     router.include_router(component_router(ctx.mode,mutation))
+    from .m09_components import component_router as vocoder_router
+    router.include_router(vocoder_router(ctx.mode,identity,mutation))
     from .local_retention import retention_router
     router.include_router(retention_router(ctx.mode=='local', store, identity, mutation))
 

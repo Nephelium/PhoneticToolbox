@@ -174,24 +174,29 @@ class PaperService:
     def notice(self):
         n = self.catalog.get('notice')
         if not n or max(n['publishedAt'], n['updatedAt']) > self.today().isoformat(): return None
+        dismissed = n['id'] in self.preferences().get('removedRecommendations', [])
         return dict(id=n['id'], title=n['title'], titleZh=n['title'], authors=n['authors'],
                     publishedAt=n['publishedAt'], submittedAt=n['publishedAt'], updatedAt=n['updatedAt'],
                     version='栏目说明', license={'id': '', 'url': ''}, sourceUrl='',
                     translationNote='', guide='', original=n['pdf'], translation=n['pdf'],
-                    notice=True, downloaded=self._verified(n['pdf']))
+                    notice=True, dismissed=dismissed, downloaded=not dismissed and self._verified(n['pdf']))
 
     def download_notice(self, cancel):
-        n = self.notice()
-        if not n or n['downloaded']: return
+        with self._settings_lock:
+            n = self.notice()
+            if not n or n['downloaded'] or n['dismissed']: return
+            version = self._removal_versions.get(n['id'], 0)
         asset = n['original']; data = self._read(asset['path'], asset['size'], cancel)
         if len(data) != asset['size'] or hashlib.sha256(data).hexdigest() != asset['sha256'] or not data.startswith(b'%PDF-'):
             raise PaperError('栏目说明完整性校验失败，请稍后重试。')
         if cancel.is_set(): raise PaperError('获取已取消。')
         path = self._path(asset); temp = path.with_suffix('.' + uuid.uuid4().hex + '.part')
         try:
-            with temp.open('xb') as stream:
-                stream.write(data); stream.flush(); os.fsync(stream.fileno())
-            os.replace(temp, path)
+            with self._settings_lock:
+                if self._removal_versions.get(n['id'], 0) != version or n['id'] in self.preferences().get('removedRecommendations', []): return
+                with temp.open('xb') as stream:
+                    stream.write(data); stream.flush(); os.fsync(stream.fileno())
+                os.replace(temp, path)
         finally: temp.unlink(missing_ok=True)
 
     def preferences(self):
@@ -228,6 +233,8 @@ class PaperService:
         Other recommendations sharing a content hash retain their asset.
         """
         paper = next((p for p in self.catalog['papers'] if p['id'] == paper_id), None)
+        n = self.notice()
+        if paper is None and n and n['id'] == paper_id: paper = n
         if paper is None: raise PaperError('推荐论文不存在，请刷新目录。')
         self.close_documents()
         with self._settings_lock:
@@ -235,8 +242,7 @@ class PaperService:
             removed = set(value.get('removedRecommendations', []))
             shared = {paper_asset(p, k)['sha256'] for p in self.catalog['papers']
                       if p['id'] != paper_id and p['id'] not in removed for k in asset_kinds(p)}
-            n = self.notice()
-            if n: shared.add(n['original']['sha256'])
+            if n and n['id'] != paper_id and n['id'] not in removed: shared.add(n['original']['sha256'])
             paths = {self._path(paper_asset(paper, k)) for k in asset_kinds(paper)
                      if paper_asset(paper, k)['sha256'] not in shared}
             for path in (self.files, *paths):
@@ -342,7 +348,10 @@ class PaperService:
     def download(self, since, cancel, progress, ids=None):
         since = iso_date(since)
         today = self.today().isoformat()
-        papers = [p for p in self.catalog['papers'] if p['publishedAt'] <= today and p.get('updatedAt', p['publishedAt']) <= today and
+        candidates = list(self.catalog['papers'])
+        n = self.notice()
+        if ids is not None and n: candidates.append(n)
+        papers = [p for p in candidates if p['publishedAt'] <= today and p.get('updatedAt', p['publishedAt']) <= today and
                   (p['publishedAt'] >= since or p.get('updatedAt', '') >= since or all(self._verified(p[k]) for k in ('original','translation')))]
         if ids is not None:
             if not isinstance(ids, list) or len(ids) > 10000 or not all(isinstance(i, str) for i in ids): raise PaperError('勾选论文无效。')

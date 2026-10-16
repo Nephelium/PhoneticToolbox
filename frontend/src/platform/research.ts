@@ -39,6 +39,10 @@ export interface ResearchTasks {
   download?(id:string,name:string):Promise<void>;
   reconstruct?(file:ResearchFile,config:ReconstructionConfig,key:string):Promise<JobView>;
   reconstructionPreview?(file:ResearchFile,config:ReconstructionConfig):Promise<ReconstructionPreview>;
+  vocoderStatus?():Promise<{ready:boolean;pipeline_ready?:boolean;pipeline_available?:boolean;pipeline_download_bytes?:number;available:boolean;model:string;download_bytes:number;installed_bytes:number;gpu_ready?:boolean;gpu_name?:string|null;python_name?:string|null;progress:{stage:string;completed:number;total:number}}>;
+  chooseInferencePython?():Promise<{id:string;name:string}|null>;
+  checkInferencePython?(grant:string):Promise<{cuda:boolean;gpu_name?:string;model_checked?:boolean}>;
+  downloadVocoder?():Promise<unknown>;
   egg?(file:ResearchFile,config:EggTaskConfig,key:string):Promise<JobView>;
   eggJobs?():Promise<JobView[]>;
   eggFonts?(font:FigureFontSnapshot):Promise<FontPreflight>;

@@ -42,6 +42,8 @@ Assets、LocalOnly、URL校验与scheme注册共用 [web_assets.py](src/ptb_desk
 
 M10 的可变原生引擎与 M16 的采集工程各有独立生命周期。M16 使用 recording(request_id, JSON)/recordingReady，长处理先启动后台再轮询；停止检测、停止录音、取消处理和取消导出不能互相混同。协议见[recording/1](../contracts/recording/README.md)。
 
+M09 的已有Python入口由 `m09_bridge.py` 管理：原生文件选择产生绑定解释器身份的grant，前端仅传grant请求兼容性检查，不能提交任意路径。检查在后台任务队列运行，验证依赖、实际CUDA运算及可用组件模型，成功后由worker原子保存解释器身份；运行前复核文件摘要，不安装或修改用户环境。状态查询与研究任务共用串行队列，组件下载沿用独立队列。
+
 ## 数据位置和升级
 
 platform_paths 以操作系统用户数据目录为基础，Windows 主数据位于 %LOCALAPPDATA%/PhoneticToolbox/v3。Qt WebEngine 沿用 %LOCALAPPDATA%/PhoneticToolbox-v3/workbench，以保持网页草稿、偏好和 IndexedDB 身份。声道用户资料由 host 单独指定。

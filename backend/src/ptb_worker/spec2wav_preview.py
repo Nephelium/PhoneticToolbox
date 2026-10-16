@@ -17,7 +17,7 @@ def render(payload, config, timeout=40):
     try:
         job=win.checked(win.create_job(None,None));limits=win.ExtendedLimit()
         limits.basic.flags=0x2000|0x100|0x200
-        limits.process_memory=1_000_000_000;limits.job_memory=1_000_000_000
+        limits.process_memory=3_000_000_000 if config.get('algorithm')=='neural_pipeline' else 1_000_000_000;limits.job_memory=limits.process_memory
         win.checked(win.set_job(job,9,win.c.byref(limits),win.c.sizeof(limits)))
         process=subprocess.Popen(command('ptb_worker.spec2wav_preview'),stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,creationflags=subprocess.CREATE_NO_WINDOW,

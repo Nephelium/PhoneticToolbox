@@ -1295,6 +1295,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/jobs/spec2wav/vocoder": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Status */
+        get: operations["local_vocoder_status"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/spec2wav/vocoder/download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Download */
+        post: operations["download_local_vocoder"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/jobs/{job_id}": {
         parameters: {
             query?: never;
@@ -3906,7 +3940,7 @@ export interface components {
             enabled: boolean;
             /**
              * Exported Cache Days
-             * @default 7
+             * @default 1
              */
             exported_cache_days: number;
         };
@@ -3941,11 +3975,22 @@ export interface components {
         /** Spec2WavConfig */
         Spec2WavConfig: {
             /**
+             * Algorithm
+             * @default griffin_lim
+             * @enum {string}
+             */
+            algorithm: "griffin_lim" | "neural_pipeline";
+            /**
              * Audio Fft
              * @default 1024
              * @enum {integer}
              */
             audio_fft: 512 | 1024 | 2048;
+            /**
+             * Auto Parameters
+             * @default false
+             */
+            auto_parameters: boolean;
             /**
              * Channel
              * @default 0
@@ -3968,6 +4013,18 @@ export interface components {
              * @default 0
              */
             freq_start: number;
+            /**
+             * Frequency Axis
+             * @default linear
+             * @enum {string}
+             */
+            frequency_axis: "linear" | "log";
+            /**
+             * Inference Device
+             * @default auto
+             * @enum {string}
+             */
+            inference_device: "auto" | "cpu" | "cuda";
             /**
              * Invert Image
              * @default false
@@ -3995,6 +4052,18 @@ export interface components {
              */
             n_iter: number;
             /**
+             * Phase Initialization
+             * @default auto
+             * @enum {string}
+             */
+            phase_initialization: "auto" | "pulse" | "random";
+            /**
+             * Reconstruction Profile
+             * @default legacy
+             * @enum {string}
+             */
+            reconstruction_profile: "legacy" | "calibrated";
+            /**
              * Seed
              * @default 0
              */
@@ -4017,6 +4086,12 @@ export interface components {
              * @default 0
              */
             time_start: number;
+            /**
+             * Vocoder
+             * @default none
+             * @enum {string}
+             */
+            vocoder: "none" | "bigvgan";
             /**
              * Win Length Ms
              * @default 10
@@ -4071,6 +4146,10 @@ export interface components {
             image_base64: string;
             /** N Fft */
             n_fft?: number | null;
+            /** Prediction */
+            prediction?: {
+                [key: string]: unknown;
+            } | null;
             /** Reference Amplitude */
             reference_amplitude?: number | null;
             /** Sample Rate */
@@ -4117,6 +4196,12 @@ export interface components {
              * @default 12
              */
             size: number;
+            /**
+             * Size Unit
+             * @default legacy
+             * @enum {string}
+             */
+            size_unit: "legacy" | "px";
         };
         /** SpectrogramPreview */
         SpectrogramPreview: {
@@ -6674,6 +6759,46 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    local_vocoder_status: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    download_local_vocoder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
         };

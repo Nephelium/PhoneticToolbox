@@ -1,0 +1,19 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>M09 decimal input regression</title><style>html,body,#app{height:100%}</style></head><body><div id="app"></div><script type="module">
+import {createApp,h,reactive,withDirectives,vModelText} from 'vue';
+import Page from '../src/modules/spectrogram-to-audio/Spec2WavPage.vue';
+import {vTimePrecision} from '../src/design/time-precision.ts';
+import '../src/design/tokens.css';
+// Synthetic image and in-memory task snapshot. No audio, research data or database.
+const canvas=document.createElement('canvas');canvas.width=canvas.height=8;
+const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png')),buffer=await blob.arrayBuffer();
+const file={id:'synthetic-image',name:'decimal-fixture.png',kind:'image',size:buffer.byteLength};
+const state=reactive({text:'1',tick:0});window.qa={state,submitted:[]};
+const context={key:'m09-decimals',label:'Synthetic decimals',files:{kind:'preview',list:async()=>[file],read:async()=>({buffer:buffer.slice(0)}),tasks:{
+ reconstructions:async()=>[],reconstruct:async(_,config)=>{window.qa.submitted.push(structuredClone(config));return {id:'synthetic-job',state:'queued',created_at:0};}
+}}};
+createApp({render:()=>h('main',{style:'height:100%'},[
+ h(Page,{stateKey:'m09-decimal-input',context}),
+ withDirectives(h('input',{type:'text','aria-label':'Shared text seconds','onUpdate:modelValue':v=>state.text=v}),[[vTimePrecision,'s'],[vModelText,state.text]]),
+ h('span',String(state.tick))
+])}).mount('#app');
+</script></body></html>

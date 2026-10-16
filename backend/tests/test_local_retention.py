@@ -43,11 +43,19 @@ def add(storage, *, age=31, operation='acoustic_analysis', count=1, legacy=False
 def alive(storage,key):
     with storage[1].locked() as state:return state['assets'][key]['state']=='ready'
 
+
+def test_defaults_and_saved_policy_survive_reopening(storage):
+    policy=storage[2].status()
+    assert (policy['days'],policy['exported_cache_days'])==(3,1)
+    storage[2].configure(enabled=True,days=30,exported_cache_days=7)
+    restored=LocalRetention(storage[1]).status()
+    assert (restored['days'],restored['exported_cache_days'])==(30,7)
+
 def test_old_unknown_assets_get_full_grace(storage):
     _,ids=add(storage,age=300,legacy=True)
     assert storage[2].sweep(now=NOW,force=True)['count']==0
-    assert storage[2].sweep(now=NOW+30*DAY-1,force=True)['count']==0
-    assert storage[2].sweep(now=NOW+30*DAY,force=True)['count']==1
+    assert storage[2].sweep(now=NOW+3*DAY-1,force=True)['count']==0
+    assert storage[2].sweep(now=NOW+3*DAY,force=True)['count']==1
 
 def test_only_owned_expired_results_removed(storage,tmp_path):
     _,ids=add(storage)
@@ -96,11 +104,21 @@ def test_recent_read_keeps_complete_bundle(storage):
     assert all(alive(storage,key) for key in ids)
 
 def test_export_receipt_shortens_duplicate_cache_only(storage):
+    storage[2].configure(enabled=True,days=30,exported_cache_days=7)
     _,ids=add(storage,age=10,count=2)
     storage[2].exported([ids[0]],now=NOW-8*DAY)
     assert storage[2].sweep(now=NOW,force=True)['count']==0
     storage[2].exported([ids[1]],now=NOW-8*DAY)
     assert storage[2].sweep(now=NOW,force=True)['count']==2
+
+def test_new_default_expiry_boundaries(storage):
+    _,ids=add(storage,age=3)
+    assert storage[2].sweep(now=NOW-1,force=True)['count']==0
+    assert storage[2].sweep(now=NOW,force=True)['count']==1
+    _,exported=add(storage,age=2)
+    storage[2].exported(exported,now=NOW)
+    assert storage[2].sweep(now=NOW+DAY-1,force=True)['count']==0
+    assert storage[2].sweep(now=NOW+DAY,force=True)['count']==1
 
 def test_active_consumer_and_parent_job_chain_are_protected(storage):
     parent,ids=add(storage)

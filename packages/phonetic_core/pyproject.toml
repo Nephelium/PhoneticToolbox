@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phonetic-core"
-version = "3.0.1"
+version = "3.0.2"
 description = "PhoneticToolbox scientific core; M01 array algorithms and explicit backend ports"
 requires-python = ">=3.11,<3.12"
 dependencies = []
@@ -23,4 +23,5 @@ where = ["src"]
 "phonetic_core.egg" = ["NOTICE.txt"]
 
 "phonetic_core.lpc" = ["NOTICE.txt"]
+"phonetic_core.spec2wav" = ["data/*.npz", "data/*.json"]
 "phonetic_core.synthesis.klatt" = ["LICENSE", "NOTICE.md", "presets.json"]

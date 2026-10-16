@@ -83,11 +83,13 @@ export async function initializePlatform(){
   const nativeTask=<T>(body:unknown):Promise<T>=>new Promise((resolve,reject)=>{
     const id=crypto.randomUUID(),op=(body as {op?:string})?.op;
     // Cleanup must receive the native completion before releasing the task queue.
-    const timer=op==='local_storage_cleanup'?undefined:setTimeout(()=>{taskPending.delete(id);reject(Error('任务操作超时，刷新批次可核对实际状态。'));},op==='m11_component'?7230000:op==='m05_save_finish'?650000:op==='parameters'?350000:300000);
+    const timer=op==='local_storage_cleanup'?undefined:setTimeout(()=>{taskPending.delete(id);reject(Error('任务操作超时，刷新批次可核对实际状态。'));},op==='m11_component'||op==='m09_vocoder_download'?7230000:op==='m05_save_finish'?650000:op==='parameters'?350000:300000);
     taskPending.set(id,{resolve,reject,timer});bridge.task(id,JSON.stringify(body));
   });
   const task=serialRequests(nativeTask);
   const tasks:ResearchTasks={parent:file=>task({op:'parent',id:file.id}),submit:(operation,inputs,config,layer,key)=>task({op:'submit',operation,inputs:inputs.map(item=>Object.fromEntries(Object.entries(item).filter(([,v])=>v!=null).map(([role,file])=>[role,role==='parent_result'?file:(file as {id:string}).id]))),config,layer,idempotency_key:key}),
+    vocoderStatus:()=>task({op:'m09_vocoder_status'}),downloadVocoder:()=>nativeTask({op:'m09_vocoder_download'}),
+    chooseInferencePython:()=>call('m09_pick_python'),checkInferencePython:grant=>task({op:'m09_check_python',grant}),
     reconstruct:(file,config,key)=>task({op:'reconstruct',id:file.id,config,key}),reconstructionPreview:(file,config)=>task({op:'reconstruction_preview',id:file.id,config}),reconstructions:()=>task({op:'reconstructions'}),cancelJob:id=>task({op:'cancel_job',id}),saveJob:(id,directory)=>task({op:'save_job',id,directory}),
     egg:async(file,config,key)=>{const {exportFontSnapshot}=await import('../state/fonts.ts');return task({op:'egg',id:file.id,config:{...config,font:config.font??exportFontSnapshot()},key});},eggJobs:()=>task({op:'egg_jobs'}),eggFonts:font=>task({op:'egg_fonts',font}),
     lpc:(file,textgrid,config,key)=>task({op:'lpc',id:file.id,textgrid:textgrid?.id,config,key}),lpcJobs:()=>task({op:'lpc_jobs'}),lpcFonts:font=>task({op:'lpc_fonts',font}),

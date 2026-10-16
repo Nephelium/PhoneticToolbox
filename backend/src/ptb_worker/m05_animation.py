@@ -1,5 +1,6 @@
 """Bounded timestamp-driven animation rendering. Frames are visualization, not measurements."""
 import math
+import json
 from pathlib import Path
 from fractions import Fraction
 from .m05_results import rows
@@ -20,7 +21,7 @@ def export_animation(frames_path,output,metadata,*,quality='standard',format='mp
     source_width,source_height=dimensions[0]
     edge,crf=PROFILES[quality];scale=edge/max(source_width,source_height)
     width=max(2,int(source_width*scale)//2*2);height=max(2,int(source_height*scale)//2*2)
-    rate=20 if format=='gif' else 30
+    rate=30
     bounds=None;edges=None
     if fit_face:
         for row in rows(frames_path):
@@ -30,13 +31,15 @@ def export_animation(frames_path,output,metadata,*,quality='standard',format='mp
                 lo,hi=points.min(axis=0),points.max(axis=0)
                 bounds=(lo,hi) if bounds is None else (np.minimum(bounds[0],lo),np.maximum(bounds[1],hi))
     if full_mesh:
-        from mediapipe.python.solutions.face_mesh_connections import FACEMESH_TESSELATION,FACEMESH_CONTOURS
-        edges=sorted(FACEMESH_TESSELATION|FACEMESH_CONTOURS)
+        # The preview uses the same frozen adjacency. Loading the inference
+        # package just for constants can exhaust the bounded encoder process.
+        spec=json.loads((Path(__file__).resolve().parents[3]/'resources/m05/metric-spec.json').read_text('utf8'))
+        edges=[(i,j) for i,neighbors in enumerate(spec['neighbors']) for j in neighbors if i<j]
     iterator=iter(rows(frames_path));previous=next(iterator,None)
     if previous is None:raise ValueError('m05_empty_animation')
     following=next(iterator,None);source_start=previous['time_s'];source_end=metadata['timing']['last_video_pts_s']-metadata['timing']['anchor_s']
     audio=None;audio_offset=0.;audio_samples=0
-    if format=='mp4' and audio_path is not None:
+    if audio_path is not None:
         import wave
         audio=wave.open(str(audio_path),'rb')
         if audio.getsampwidth()!=2:audio.close();raise ValueError('m05_animation_audio_format')
@@ -61,14 +64,21 @@ def export_animation(frames_path,output,metadata,*,quality='standard',format='mp
         with av.open(handle,'w',format='gif' if format=='gif' else 'mp4',options=options) as container:
             stream=container.add_stream('gif' if format=='gif' else 'libx264',rate=rate)
             stream.width=width;stream.height=height
-            stream.pix_fmt='rgb8' if format=='gif' else 'yuv420p'
+            stream.pix_fmt='pal8' if format=='gif' else 'yuv420p'
+            # A shared white-to-line palette preserves the thin antialiased
+            # mesh. RGB8's coarse fixed cube loses faint interior edge pixels.
+            palette=None
+            if format=='gif':
+                color=np.array([30,130,30] if full_mesh else [30,30,30])
+                rgb=np.rint(255+np.arange(256)[:,None]/255*(color-255)).astype(np.uint8)
+                palette=np.column_stack((np.full(256,255,np.uint8),rgb))
             if format=='mp4':stream.options={'crf':str(crf),'preset':'veryfast'}
             sound=None
-            if audio:
+            if audio and format=='mp4':
                 sound=container.add_stream('aac',rate=audio.getframerate());sound.layout='mono' if audio.getnchannels()==1 else 'stereo'
             def audio_until(t):
                 nonlocal audio_samples
-                if not audio:return
+                if not sound:return
                 while audio_samples<audio.getnframes() and audio_offset+audio_samples/audio.getframerate()<=t:
                     if stop():raise InterruptedError('m05_cancelled')
                     raw=audio.readframes(1024)
@@ -103,7 +113,11 @@ def export_animation(frames_path,output,metadata,*,quality='standard',format='mp
                     else:
                         for contour in (OUTER_LIP_LANDMARKS,INNER_LIP_LANDMARKS,FACE_OVAL):
                             cv2.polylines(image,[points[contour]],True,(30,30,30),max(1,edge//540),cv2.LINE_AA)
-                frame=av.VideoFrame.from_ndarray(image,format='bgr24');frame.pts=index;frame.time_base=Fraction(1,rate)
+                if format=='gif':
+                    indices=np.rint((255-image[:,:,0].astype(np.float32))*255/225).astype(np.uint8)
+                    frame=av.VideoFrame.from_ndarray((indices,palette),format='pal8')
+                else:frame=av.VideoFrame.from_ndarray(image,format='bgr24')
+                frame.pts=index;frame.time_base=Fraction(1,rate)
                 for packet in stream.encode(frame):container.mux(packet)
                 frames+=1
             for packet in stream.encode():container.mux(packet)
@@ -114,5 +128,5 @@ def export_animation(frames_path,output,metadata,*,quality='standard',format='mp
         handle.file.close()
         if audio:audio.close()
     return dict(format=format,quality=quality,width=width,height=height,fps=rate,frames=frames,
-                source_start_s=source_start,output_origin_s=start,lip_manual_offset=offset,visualization_resampled=True,audio_included=audio is not None,face_fitted=fit_face,full_mesh=full_mesh,
+                source_start_s=source_start,output_origin_s=start,lip_manual_offset=offset,visualization_resampled=True,audio_included=audio is not None and format=='mp4',face_fitted=fit_face,full_mesh=full_mesh,
                 warning='Animation time is visualization only; original per-frame timestamps remain authoritative')

@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import {vTimePrecision} from '../../design/time-precision.ts';
+import {computed} from 'vue';
 import type {EggTaskConfig} from '../../platform/research.ts';
 const config=defineModel<EggTaskConfig>({required:true});
-defineProps<{start:number;end:number;duration:number}>();
+const props=defineProps<{start:number;end:number;duration:number}>();
 const emit=defineEmits<{range:[start:number,end:number]}>();
+const durationInput=computed({get:()=>props.end-props.start,set:(value:number|string)=>emit('range',props.start,props.start+Number(value))});
 </script>
 <template><div class="egg-control-row">
 <div class="control-group"><span class="control-group-label">显示范围</span><div class="group-controls egg-field-grid">
-<label>时长 s<input v-time-precision="'s'" aria-label="EGG 选区时长" :value="end-start" type="number" min=".001" :max="duration" step=".001" @change="emit('range',start,start+Number(($event.target as HTMLInputElement).value))"/></label>
+<label>时长 s<input v-time-precision="'s'" aria-label="EGG 选区时长" v-model.lazy.number="durationInput" type="number" min=".001" :max="duration" step=".001"/></label>
 <label>微观 ms<input v-time-precision="'ms'" v-model.number="config.micro_width_ms" aria-label="EGG 微观窗口" type="number" min="5" max="5000" step="5"/></label>
 </div></div>
 </div></template>

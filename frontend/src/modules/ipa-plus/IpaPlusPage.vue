@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {syncNumberInput} from '../../design/numeric-input.ts';
 import AppIcon from '../../components/AppIcon.vue';
 import {computed,nextTick,onBeforeUnmount,onMounted,reactive,ref,watch} from 'vue';
 import ModuleFrame from '../../components/ModuleFrame.vue';
@@ -46,7 +47,7 @@ watch(()=>props.active,value=>{if(!value){clearHover();playing.value=false;}});
 watch(()=>draft.system,()=>{clearHover();playing.value=false;});
 watch(playOnClick,()=>{playing.value=false;clearHover();});
 watch(query,clearHover);
-function changeTextSize(event:Event){const input=event.target as HTMLInputElement;const value=Number(input.value);draft.textSize=Number.isFinite(value)&&input.value.trim()?Math.max(18,Math.min(54,Math.round(value))):26;input.value=String(draft.textSize);}
+const textSizeInput=computed({get:()=>draft.textSize,set:(input:number|string)=>{const value=Number(input);draft.textSize=Number.isFinite(value)&&String(input).trim()?Math.max(18,Math.min(54,Math.round(value))):26;}});
 function captureSelection(){if(!editor.value||composing)return;draft.start=editor.value.selectionStart;draft.end=editor.value.selectionEnd;history.select(draft.start,draft.end);}
 function snapshot():EditorSnapshot{return {text:draft.text,start:draft.start,end:draft.end};}
 async function showSelection(focus=true){await nextTick();if(!editor.value)return;if(focus)editor.value.focus({preventScroll:true});editor.value.setSelectionRange(draft.start,draft.end);}
@@ -132,12 +133,14 @@ defineExpose({save});
 </script>
 <template>
  <ModuleFrame label="国际音标表Plus 工作区" class="ipa-plus-page" :style="{'--m17-font-size':draft.textSize+'px'}" fit>
-  <template #toolbar><ModuleToolbar label="国际音标表与检索"><div class="m17-tabs" role="group" aria-label="选择音标体系"><button v-for="system in systems" :key="system.id" type="button" :aria-pressed="draft.system===system.id" :class="{primary:draft.system===system.id}" @click="draft.system=system.id;hovered=undefined">{{system.label}}</button></div><input v-model="query" class="m17-search" aria-label="查找符号、名称、码位或 CIN" placeholder="符号 / 名称 / U+ / CIN"><label class="m17-size-control">字号 <input :value="draft.textSize" type="number" min="18" max="54" step="1" aria-label="音标字号" @change="changeTextSize"></label><label class="m17-toggle"><input v-model="draft.introductions" type="checkbox">悬停介绍</label><label class="m17-toggle m17-toggle-unavailable" title="演示内容正在创作中，将在后续更新中开放。"><input v-model="playOnClick" type="checkbox" disabled>点击播放</label><template #actions><button type="button" @click="helpOpen=!helpOpen">帮助</button><button type="button" @click="emit('references')"><AppIcon name="book"/>方法与引用</button></template></ModuleToolbar></template>
+  <template #toolbar><ModuleToolbar label="国际音标表与检索"><div class="m17-tabs" role="group" aria-label="选择音标体系"><button v-for="system in systems" :key="system.id" type="button" :aria-pressed="draft.system===system.id" :class="{primary:draft.system===system.id}" @click="draft.system=system.id;hovered=undefined">{{system.label}}</button></div><input v-model="query" class="m17-search" aria-label="查找符号、名称、码位或 CIN" placeholder="符号 / 名称 / U+ / CIN"><label class="m17-size-control">字号 <input v-model.lazy.number="textSizeInput" @change="syncNumberInput($event,textSizeInput)" type="number" min="18" max="54" step="1" aria-label="音标字号"></label><label class="m17-toggle"><input v-model="draft.introductions" type="checkbox">悬停介绍</label><label class="m17-toggle m17-toggle-unavailable" title="演示内容正在创作中，将在后续更新中开放。"><input v-model="playOnClick" type="checkbox" disabled>点击播放</label><template #actions><button type="button" @click="helpOpen=!helpOpen">帮助</button><button type="button" @click="emit('references')"><AppIcon name="book"/>方法与引用</button></template></ModuleToolbar></template>
   <div ref="page" class="m17-body" :data-font-ready="fontReady" :data-loaded="loaded">
-   <div class="m17-chart-meta"><span>{{currentSystem.version}}</span><span>{{playOnClick?'点击符号播放演示':'深色符号＝独立输入 · 浅色＝完整示例'}}</span></div>
    <ModuleStatus v-if="fontError" kind="error" :message="fontError"/>
    <ModuleStatus v-if="error" kind="error" :message="error"><button class="primary" type="button" @click="forkDraft">另存独立草稿</button></ModuleStatus>
-   <div ref="chart" class="m17-chart-viewport" @scroll="clearHover"><ChartView :system="draft.system" :query="query" :selected="selected?.id" :play-on-click="playOnClick" @insert="activate" @hover="hover" @inspect="inspect"/></div>
+   <div ref="chart" class="m17-chart-viewport" @scroll="clearHover">
+    <div class="m17-chart-meta"><span>{{currentSystem.version}}</span><span>{{playOnClick?'点击符号播放演示':'深色符号＝独立输入 · 浅色＝完整示例'}}</span></div>
+    <ChartView :system="draft.system" :query="query" :selected="selected?.id" :play-on-click="playOnClick" @insert="activate" @hover="hover" @inspect="inspect"/>
+   </div>
    <div class="m17-divider" role="separator" tabindex="0" aria-label="拖动调整文本区高度" aria-orientation="horizontal" :aria-valuenow="draft.editorHeight" :aria-valuemin="96" :aria-valuemax="360" @pointerdown="resizeDown" @pointermove="resizeMove" @pointerup="resizeStart=undefined" @pointercancel="resizeStart=undefined" @keydown="resizeKey"><span></span></div>
    <div class="m17-editor-area" :style="{height:draft.editorHeight+'px'}"><textarea ref="editor" :value="draft.text" class="m17-editor m17-ipa" :style="{fontSize:draft.textSize+'px'}" aria-label="国际音标文本" spellcheck="false" autocomplete="off" autocapitalize="off" :disabled="!loaded" placeholder="在此手动输入或粘贴，点击上方符号插入到光标处……" @input="input" @select="captureSelection" @keyup="captureSelection" @pointerup="captureSelection" @blur="captureSelection" @keydown="keydown" @beforeinput="beforeInput" @compositionstart="compositionStart" @compositionend="compositionEnd"/></div>
    <div class="m17-editor-toolbar"><button type="button" class="primary" @click="copyAll">复制全部</button><button type="button" @click="selectAll">全选</button><button type="button" :disabled="!canUndo" @click="undo">撤销</button><button type="button" :disabled="!canRedo" @click="redo">重做</button><button class="primary" type="button" @click="exportText">保存文本</button><button type="button" :disabled="!draft.text" @click="clear">清空</button><span class="m17-save-state" role="status">{{!loaded?'读取草稿…':dirty?'本机草稿未保存':'本机草稿已保存'}}</span></div>

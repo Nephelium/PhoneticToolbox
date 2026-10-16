@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {syncNumberInput} from '../../design/numeric-input.ts';
 import AppIcon from '../../components/AppIcon.vue';
 import {vTimePrecision} from '../../design/time-precision.ts';
 import {vResizablePanels} from '../../layout/resizablePanels.ts';
@@ -239,7 +240,7 @@ function view(){const value=Number(durationInput.value),d=wave.asset?.duration??
 function nudge(ms:number){if(!lip.value)return;const value=lipOffset.value+ms/1000;if(Math.abs(value)<=3600)lipOffset.value=Number(value.toFixed(6));}
 function stopRepeat(){if(repeat)clearTimeout(repeat);repeat=undefined;}
 function startRepeat(ms:number){stopRepeat();nudge(ms);repeat=setTimeout(function tick(){nudge(ms);repeat=setTimeout(tick,40);},150);}
-function offsetInput(event:Event){const value=(event.target as HTMLInputElement).value;if(!value.trim()||!Number.isFinite(Number(value))||Math.abs(Number(value))>3_600_000){error.value='唇偏毫秒数无效。';return;}lipOffset.value=Number(value)/1000;error.value='';}
+const lipOffsetInput=computed({get:()=>lipOffset.value*1000,set:(value:number|string)=>{if(!String(value).trim()||!Number.isFinite(Number(value))||Math.abs(Number(value))>3_600_000){error.value='唇偏毫秒数无效。';return;}lipOffset.value=Number(value)/1000;error.value='';}});
 function search(){controls.searchInput.value=query.value;editor.doSearch(query.value);changed();}
 async function action(name:'fit'|'splice'|'phones'|'delete'){
  error.value='';try{
@@ -323,7 +324,7 @@ defineExpose({save:savePending});
   <label>起点（秒）<input v-time-precision="'s'" v-model="controls.spliceStart.value" aria-label="参考起点" type="number" step=".001"/></label><label>终点（秒）<input v-time-precision="'s'" v-model="controls.spliceEnd.value" aria-label="参考终点" type="number" step=".001" :disabled="['before','after'].includes(controls.spliceMode.value)"/></label>
   <button :disabled="!source||busy" @click="action('splice')">复用参考标注</button><small>对所有同名层应用所选范围，可撤销。起点之后从起点延伸到文件末尾。</small>
   <hr/><h2>唇形对齐</h2><label>唇形记录<select :value="lipFile?.id??''" aria-label="唇形记录" :disabled="!source||busy||saving" @change="chooseLip(($event.target as HTMLSelectElement).value)"><option value="">不关联</option><option v-for="f in lipChoices" :key="f.id" :value="f.id">{{f.name}}</option></select></label>
-  <template v-if="lip"><div class="actions"><label><input v-model="showOpen" type="checkbox"/>唇开</label><label><input v-model="showWidth" type="checkbox" :disabled="!lip.width.length"/>唇宽</label></div><label>共同时间偏移（ms）<input v-time-precision="'ms'" :value="lipOffset*1000" aria-label="唇形共同偏移毫秒" type="number" step="1" @change="offsetInput"/></label><div class="actions"><button aria-label="唇形左移" @pointerdown="startRepeat($event.shiftKey?-10:-1)" @pointerup="stopRepeat" @pointerleave="stopRepeat" @pointercancel="stopRepeat" @keydown.enter.prevent="nudge(-1)">← 1 ms</button><button aria-label="唇形右移" @pointerdown="startRepeat($event.shiftKey?10:1)" @pointerup="stopRepeat" @pointerleave="stopRepeat" @pointercancel="stopRepeat" @keydown.enter.prevent="nudge(1)">1 ms →</button></div><button class="primary" :disabled="!lipDirty||saving||busy" @click="saveLip">保存唇偏{{lipDirty?' *':''}}</button><small>正值向更晚平移。按住连续微调，Shift 为 10 ms；Alt＋方向键同效。两条曲线只有一个偏移。</small></template>
+  <template v-if="lip"><div class="actions"><label><input v-model="showOpen" type="checkbox"/>唇开</label><label><input v-model="showWidth" type="checkbox" :disabled="!lip.width.length"/>唇宽</label></div><label>共同时间偏移（ms）<input v-time-precision="'ms'" v-model.lazy.number="lipOffsetInput" @change="syncNumberInput($event,lipOffsetInput)" aria-label="唇形共同偏移毫秒" type="number" step="1"/></label><div class="actions"><button aria-label="唇形左移" @pointerdown="startRepeat($event.shiftKey?-10:-1)" @pointerup="stopRepeat" @pointerleave="stopRepeat" @pointercancel="stopRepeat" @keydown.enter.prevent="nudge(-1)">← 1 ms</button><button aria-label="唇形右移" @pointerdown="startRepeat($event.shiftKey?10:1)" @pointerup="stopRepeat" @pointerleave="stopRepeat" @pointercancel="stopRepeat" @keydown.enter.prevent="nudge(1)">1 ms →</button></div><button class="primary" :disabled="!lipDirty||saving||busy" @click="saveLip">保存唇偏{{lipDirty?' *':''}}</button><small>正值向更晚平移。按住连续微调，Shift 为 10 ms；Alt＋方向键同效。两条曲线只有一个偏移。</small></template>
   <p v-else class="hint">找到同名唇形记录时自动关联，也可明确选择。网页使用 .lip.json。</p>
  </aside>
  </div>

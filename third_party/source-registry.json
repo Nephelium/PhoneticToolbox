@@ -2,19 +2,347 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-10-05",
-  "total_records": 427,
+  "total_records": 441,
   "sources": [
+    {
+      "id": "WEBSITE-AOKI-SHORT-WINDOWS",
+      "title": "Technique of improving speech restoration from spectrograms of short windows for the Griffin–Lim algorithm",
+      "kind": "paper",
+      "modules": [
+        "M09"
+      ],
+      "authors": "Naofumi Aoki",
+      "year": 2023,
+      "venue": "Acoustical Science and Technology 44(3)",
+      "pages": "186–188",
+      "doi": "10.1250/ast.44.186",
+      "urls": {
+        "paper": "https://www.jstage.jst.go.jp/article/ast/44/3/44_E2297/_article/-char/en",
+        "doi": "https://doi.org/10.1250/ast.44.186"
+      },
+      "actual_included_version": "2023 published article; external link only",
+      "observed_upstream_commit": null,
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/spec2wav/adaptive.py",
+        "scripts/build_website_expansion.py",
+        "temporary-site/index.html",
+        "temporary-site/assets/spectrogram-examples/comparison.json"
+      ],
+      "relationship": "method-reference-for-short-window-phase-initialization",
+      "evidence": "Official J-STAGE article and three-page PDF verified 2026-10-15, section 3: vertical amplitude projection and peak pulses initialize Griffin–Lim phase. Website explicitly presents NAFNet/BigVGAN as the author's subsequent training route.",
+      "license": "Article copyright retained by author/publisher; no article PDF or code included",
+      "distribution_status": "external-reference-only",
+      "verification_date": "2026-10-15",
+      "acknowledgement_group": "academic",
+      "show_in_acknowledgements": true,
+      "show_in_license_notice": false,
+      "notes": "The 15 ms product threshold is user specified, not a claim from the paper. The paper does not introduce NAFNet or BigVGAN. Only its phase-initialization idea is attributed to Aoki; three figure examples keep their separate Smith/Chappell attribution.",
+      "citation": "AOKI N. Technique of improving speech restoration from spectrograms of short windows for the Griffin–Lim algorithm[J]. Acoustical Science and Technology, 2023, 44(3): 186-188. DOI: 10.1250/ast.44.186.",
+      "citation_format": "GB/T 7714-2015",
+      "acknowledgement_version": "",
+      "show_license_in_acknowledgements": false,
+      "reference_note": "用于短时窗的脉冲相位初始化。可在两种重建算法中选择开启、关闭或按窗长自动使用。"
+    },
+    {
+      "id": "MODEL-M09-REPAIR80",
+      "title": "条件化 NAFNet Mel 谱修复模型",
+      "kind": "project-trained-model",
+      "modules": [
+        "M09"
+      ],
+      "authors": "PhoneticToolbox",
+      "actual_included_version": "80 带 Mel 谱",
+      "acknowledgement_version": "80 带 Mel 谱",
+      "urls": {},
+      "used_at": [
+        "backend/src/ptb_worker/m09_neural_models.py",
+        "backend/src/ptb_worker/m09_pipeline_child.py"
+      ],
+      "reference_note": "本项目基于 NAFNet 方法训练的语谱图修复模型。修复 GL 波形提取的 80 带 Mel 谱，再交给 BigVGAN 合成。",
+      "relationship": "project-trained weights; method attribution separately registered",
+      "evidence": "docs/testing/m09-neural-pipeline.md; checkpoint or exported resource SHA256 705e9ac5a3eb17ce4b74f3f3eaa03b6b6c9654579471748f64c5033ce204f522",
+      "license": "Public weight redistribution conditions remain under review",
+      "show_license_in_acknowledgements": false,
+      "distribution_status": "local-integration; public distribution not enabled",
+      "verification_date": "2026-10-15",
+      "acknowledgement_group": "software",
+      "show_in_acknowledgements": true,
+      "show_in_license_notice": false
+    },
+    {
+      "id": "MODEL-M09-PARAMETERS",
+      "title": "窗长与动态范围预测模型",
+      "kind": "project-trained-model",
+      "modules": [
+        "M09"
+      ],
+      "authors": "PhoneticToolbox",
+      "actual_included_version": "v5 · 应用内置",
+      "acknowledgement_version": "v5 · 应用内置",
+      "urls": {},
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/spec2wav/parameters.py",
+        "backend/src/ptb_worker/m09_parameters.py"
+      ],
+      "reference_note": "本项目训练。根据语谱图、时长及频率标定预测窗长和动态范围；内置 NumPy 推理，基础 GL 也可使用。",
+      "relationship": "project-trained weights; method attribution separately registered",
+      "evidence": "docs/testing/m09-neural-pipeline.md; checkpoint or exported resource SHA256 e6edbf5c450fc08f4ff4c39d2828a15e24c4dd7286c619308c671ed4df7dffdc",
+      "license": "Public weight redistribution conditions remain under review",
+      "show_license_in_acknowledgements": false,
+      "distribution_status": "local-integration; public distribution not enabled",
+      "verification_date": "2026-10-15",
+      "acknowledgement_group": "software",
+      "show_in_acknowledgements": true,
+      "show_in_license_notice": false
+    },
+    {
+      "id": "REF-BIGVGAN",
+      "title": "BigVGAN: A Universal Neural Vocoder with Large-Scale Training",
+      "kind": "paper",
+      "modules": [
+        "M09"
+      ],
+      "authors": "Sang-gil Lee; Wei Ping; Boris Ginsburg; Bryan Catanzaro; Sungroh Yoon",
+      "year": 2023,
+      "citation": "LEE S G, PING W, GINSBURG B, et al. BigVGAN: A universal neural vocoder with large-scale training[C/OL]//The Eleventh International Conference on Learning Representations. 2023[2026-10-15]. https://openreview.net/forum?id=iTtGCMDEzS_.",
+      "citation_format": "GB/T 7714-2015",
+      "urls": {
+        "论文": "https://openreview.net/forum?id=iTtGCMDEzS_",
+        "开放版本": "https://arxiv.org/abs/2206.04658"
+      },
+      "actual_included_version": "2023 published method reference",
+      "acknowledgement_version": "",
+      "observed_upstream_commit": null,
+      "used_at": [
+        "backend/src/ptb_worker/vocoder_child.py",
+        "backend/src/ptb_worker/m09_pipeline_child.py"
+      ],
+      "relationship": "method-reference",
+      "reference_note": "用于将 80 带 Mel 谱合成为波形。本模块采用 NVIDIA 发布的 BigVGAN base 22.05 kHz 预训练模型。",
+      "license": "Article rights remain with authors and publisher; reference only",
+      "show_license_in_acknowledgements": false,
+      "distribution_status": "external-reference-only",
+      "verification_date": "2026-10-15",
+      "acknowledgement_group": "academic",
+      "evidence": "Title, authors and publication checked against the linked publisher or author source on 2026-10-15.",
+      "show_in_acknowledgements": true,
+      "show_in_license_notice": false
+    },
+    {
+      "id": "REF-NAFNET",
+      "title": "Simple Baselines for Image Restoration",
+      "kind": "paper",
+      "modules": [
+        "M09"
+      ],
+      "authors": "Liangyu Chen; Xiaojie Chu; Xiangyu Zhang; Jian Sun",
+      "year": 2022,
+      "citation": "CHEN L, CHU X, ZHANG X, et al. Simple baselines for image restoration[C]//Computer Vision – ECCV 2022. Cham: Springer, 2022: 17-33. DOI: 10.1007/978-3-031-20071-7_2.",
+      "citation_format": "GB/T 7714-2015",
+      "urls": {
+        "论文": "https://link.springer.com/chapter/10.1007/978-3-031-20071-7_2",
+        "开放版本": "https://arxiv.org/abs/2204.04676",
+        "作者代码": "https://github.com/megvii-research/NAFNet"
+      },
+      "actual_included_version": "2022 published method reference",
+      "acknowledgement_version": "",
+      "observed_upstream_commit": null,
+      "used_at": [
+        "backend/src/ptb_worker/m09_neural_models.py"
+      ],
+      "relationship": "method-reference",
+      "reference_note": "80 带 Mel 谱修复采用 NAFNet 结构，并加入频率、覆盖范围及声学条件。本模块使用本项目训练的修复权重。",
+      "license": "Article rights remain with authors and publisher; reference only",
+      "show_license_in_acknowledgements": false,
+      "distribution_status": "external-reference-only",
+      "verification_date": "2026-10-15",
+      "acknowledgement_group": "academic",
+      "evidence": "Title, authors and publication checked against the linked publisher or author source on 2026-10-15.",
+      "show_in_acknowledgements": true,
+      "show_in_license_notice": false,
+      "doi": "10.1007/978-3-031-20071-7_2"
+    },
+    {
+      "id": "REF-FAST-GRIFFINLIM",
+      "title": "A fast Griffin–Lim algorithm",
+      "kind": "paper",
+      "modules": [
+        "M09"
+      ],
+      "authors": "Nathanaël Perraudin; Peter Balazs; Peter L. Søndergaard",
+      "year": 2013,
+      "citation": "PERRAUDIN N, BALAZS P, SØNDERGAARD P L. A fast Griffin–Lim algorithm[C]//2013 IEEE Workshop on Applications of Signal Processing to Audio and Acoustics. IEEE, 2013: 1-4. DOI: 10.1109/WASPAA.2013.6701851.",
+      "citation_format": "GB/T 7714-2015",
+      "urls": {
+        "作者论文": "https://perraudin.info/publications/perraudin-note-002.pdf",
+        "DOI": "https://doi.org/10.1109/WASPAA.2013.6701851"
+      },
+      "actual_included_version": "2013 published method reference",
+      "acknowledgement_version": "",
+      "observed_upstream_commit": null,
+      "used_at": [
+        "packages/phonetic_core/src/phonetic_core/spec2wav/adaptive.py"
+      ],
+      "relationship": "method-reference",
+      "reference_note": "用于带动量的 Griffin–Lim 迭代，加速幅度谱的相位估计。",
+      "license": "Article rights remain with authors and publisher; reference only",
+      "show_license_in_acknowledgements": false,
+      "distribution_status": "external-reference-only",
+      "verification_date": "2026-10-15",
+      "acknowledgement_group": "academic",
+      "evidence": "Title, authors and publication checked against the linked publisher or author source on 2026-10-15.",
+      "show_in_acknowledgements": true,
+      "show_in_license_notice": false,
+      "doi": "10.1109/WASPAA.2013.6701851"
+    },
+    {
+      "id": "EVAL-M09-VOCOS-24KHZ",
+      "title": "Vocos 24 kHz local spectrogram evaluation",
+      "kind": "evaluation-only-model",
+      "modules": [
+        "M09"
+      ],
+      "authors": "Hubert Siuzdak; Charactr Inc.",
+      "actual_included_version": "Not included in application; local vocos 0.1.0, charactr/vocos-mel-24khz revision 0feb3fdd929bcd6649e0e7c5a688cf7dd012ef21",
+      "urls": {
+        "code": "https://github.com/gemelo-ai/vocos",
+        "model": "https://huggingface.co/charactr/vocos-mel-24khz"
+      },
+      "license": "MIT for upstream Vocos code and model card; evaluation runtime dependencies separately inventoried",
+      "verification_date": "2026-10-14",
+      "distribution_status": "local-validation-only; no application or public model distribution",
+      "acknowledgement_group": "software",
+      "show_in_acknowledgements": false,
+      "used_at": [
+        "docs/testing/m09-neural-vocoder-evaluation.md"
+      ],
+      "relationship": "Unmodified upstream decoder and fixed official weights used only for user-requested local A/B audition; no private input uploaded",
+      "evidence": "docs/testing/m09-neural-vocoder-evaluation.md; model SHA256 97ec976ad1fd67a33ab2682d29c0ac7df85234fae875aefcc5fb215681a91b2a matches official Hugging Face LFS object; installed direct/transitive dependencies in the local run dependencies.json and requirements/requirements-m09-vocoder-eval.lock"
+    },
+    {
+      "id": "EVAL-M09-HIFIGAN-V3",
+      "title": "HiFi-GAN v3 LJ Speech local spectrogram evaluation",
+      "kind": "evaluation-only-model",
+      "modules": [
+        "M09"
+      ],
+      "authors": "Jungil Kong; Jaehyeon Kim; Jaekyoung Bae; TorchAudio contributors",
+      "actual_included_version": "Not included in application; torchaudio 2.8.0+cpu HiFi-GAN v3 implementation and official converted LJ Speech checkpoint",
+      "urls": {
+        "code": "https://github.com/jik876/hifi-gan",
+        "pipeline": "https://docs.pytorch.org/audio/2.8/_modules/torchaudio/prototype/pipelines/hifigan_pipeline.html",
+        "weights": "https://download.pytorch.org/torchaudio/models/hifigan_vocoder_v3_ljspeech.pth"
+      },
+      "license": "Original HiFi-GAN code/checkpoint MIT per TorchAudio bundle attribution; TorchAudio BSD-2-Clause, runtime dependencies separately inventoried",
+      "verification_date": "2026-10-14",
+      "distribution_status": "local-validation-only; no application or public model distribution",
+      "acknowledgement_group": "software",
+      "show_in_acknowledgements": false,
+      "used_at": [
+        "docs/testing/m09-neural-vocoder-evaluation.md"
+      ],
+      "relationship": "Unmodified installed upstream generator and mel transform; weight loaded with weights_only=True and strict state matching; single-speaker English checkpoint, no general-language quality claim",
+      "evidence": "docs/testing/m09-neural-vocoder-evaluation.md; downloaded weight SHA256 4401d1af120ae40784c5b65222118056696ee4e55ae1451ebf6c9b5cbfc26afc; model and direct/transitive runtime inventory in local evaluation results.json/dependencies.json"
+    },
+    {
+      "id": "PKG-BIGVGAN-BASE",
+      "title": "BigVGAN base 22 kHz",
+      "acknowledgement_version": "预训练模型 · 22.05 kHz · 80 带",
+      "kind": "optional-vocoder-component",
+      "modules": [
+        "M09"
+      ],
+      "authors": "Sang-gil Lee; Wei Ping; Boris Ginsburg; Bryan Catanzaro; Sungroh Yoon; NVIDIA Corporation",
+      "actual_included_version": "Optional CPU component r1; nvidia/bigvgan_base_22khz_80band source/config/weights revision 760f0c694aba68b8c200dd52ffd3b4ecafa7028c; main EXE excludes model and runtime",
+      "urls": {
+        "code": "https://github.com/NVIDIA/BigVGAN",
+        "model": "https://huggingface.co/nvidia/bigvgan_base_22khz_80band",
+        "论文": "https://openreview.net/forum?id=iTtGCMDEzS_"
+      },
+      "license": "NVIDIA BigVGAN code/model MIT; included alias-free Torch activation adapted under Apache-2.0; runtime dependencies separately inventoried",
+      "verification_date": "2026-10-15",
+      "distribution_status": "optional-component; local validation and download publication tracked in docs/testing/m09-neural-vocoder-evaluation.md",
+      "acknowledgement_group": "software",
+      "show_in_acknowledgements": true,
+      "used_at": [
+        "backend/src/ptb_worker/vocoder_child.py",
+        "backend/src/ptb_worker/m09_pipeline_child.py",
+        "docs/testing/m09-neural-pipeline.md"
+      ],
+      "relationship": "Pinned upstream generator and official weights; torch inference on CPU or user-selected checked CUDA environment, without compiling custom CUDA kernels.",
+      "evidence": "docs/testing/m09-neural-vocoder-evaluation.md; official revision/tree and LFS identity recorded in local model download-manifest.json; full execution and dependency inventory in results.json/dependencies.json",
+      "reference_note": "NVIDIA 发布的 80 带 Mel 声码器，用于完整修复流程或 GL 后单独再合成。支持 CPU，也可使用已通过检查的 CUDA Python 环境。"
+    },
+    {
+      "id": "EVAL-M09-PUBLIC-AUDIO",
+      "title": "Six public speech samples for local BigVGAN audition",
+      "kind": "evaluation-only-audio",
+      "modules": [
+        "M09"
+      ],
+      "authors": "sherpa-onnx contributors; NVIDIA BigVGAN contributors; source speaker attribution not independently established",
+      "actual_included_version": "No application inclusion; sherpa SenseVoice test WAVs revision 2365baeacb507f821a0c8120fcee3d484dba7a07; BigVGAN LibriTTS example commit 7d2b454564a6c7d014227f635b7423881f14bdac",
+      "urls": {
+        "sherpa": "https://k2-fsa.github.io/sherpa/onnx/sense-voice/pretrained.html",
+        "sherpa_audio": "https://huggingface.co/csukuangfj/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-2024-07-17",
+        "bigvgan_audio": "https://github.com/NVIDIA/BigVGAN/blob/7d2b454564a6c7d014227f635b7423881f14bdac/demo/examples/libritts_24k.wav"
+      },
+      "license": "Audio redistribution permission unknown; code/model licences are not applied to these recordings",
+      "verification_date": "2026-10-14",
+      "distribution_status": "local user-requested audition and small paired training prototype only; source audio and derived trained model excluded from application, component, website and GitHub",
+      "acknowledgement_group": "software",
+      "show_in_acknowledgements": false,
+      "used_at": [
+        "docs/testing/m09-neural-vocoder-evaluation.md"
+      ],
+      "relationship": "Official public example recordings downloaded to owned scratch; independently generated grayscale STFT images for local comparison and explicitly authorized small source-disjoint paired image-to-Mel training prototype; derived model not publicly distributed",
+      "evidence": "docs/testing/m09-neural-vocoder-evaluation.md; exact source URLs, revisions, source bytes/SHA256, trim and STFT parameters recorded in local results.json",
+      "open_questions": [
+        "Public redistribution of source recordings, processed audition audio or derived training model requires separate licence verification"
+      ]
+    },
+    {
+      "id": "EVAL-M09-PRAAT-PSD",
+      "title": "Praat spectrogram settings for local paper-condition evaluation",
+      "kind": "evaluation-only-runtime-and-method",
+      "modules": [
+        "M09"
+      ],
+      "authors": "Paul Boersma; David Weenink; Yannick Jadoul; Bill Thompson; Bart de Boer",
+      "actual_included_version": "Local evaluation only: praat-parselmouth 0.4.7, embedded Praat 6.1.38, Gaussian spectrogram PSD; no addition to BigVGAN component",
+      "urls": {
+        "analysis": "https://www.fon.hum.uva.nl/praat/manual/Sound__To_Spectrogram___.html",
+        "display": "https://www.fon.hum.uva.nl/praat/manual/Advanced_spectrogram_settings___.html",
+        "source": "https://github.com/praat/praat/blob/master/fon/Spectrogram.cpp",
+        "runtime": "https://parselmouth.readthedocs.io/en/stable/"
+      },
+      "license": "Parselmouth GPL-3.0-or-later; embedded Praat under its corresponding licence, see SRC-PRAAT; local evaluation installation only",
+      "verification_date": "2026-10-14",
+      "distribution_status": "local-validation-only; no new component or application distribution",
+      "acknowledgement_group": "software",
+      "show_in_acknowledgements": false,
+      "used_at": [
+        "docs/testing/m09-neural-vocoder-evaluation.md"
+      ],
+      "relationship": "Calls installed official Gaussian PSD backend, records runtime version and actual grids; explicitly simulates 6 dB/oct display preemphasis and lossy paper raster separately from current Hann reconstruction",
+      "evidence": "docs/testing/m09-neural-vocoder-evaluation.md; paper-condition results.json; requirements/requirements-m09-vocoder-eval.lock"
+    },
     {
       "id": "REF-SHUE-VOICE-SOURCE-2010",
       "title": "The Voice Source in Speech Production: Data, Analysis and Models",
       "kind": "dissertation",
-      "modules": ["M01", "M02"],
+      "modules": [
+        "M01",
+        "M02"
+      ],
       "authors": "Yen-Liang Shue",
       "year": 2010,
       "venue": "University of California, Los Angeles",
       "citation": "SHUE Y L. The Voice Source in Speech Production: Data, Analysis and Models[D]. Los Angeles: University of California, Los Angeles, 2010.",
       "citation_format": "GB/T 7714-2015",
-      "urls": {"pdf": "https://www.phonetics.ucla.edu/voiceproject/Publications/shue_dissertation.pdf"},
+      "urls": {
+        "pdf": "https://www.phonetics.ucla.edu/voiceproject/Publications/shue_dissertation.pdf"
+      },
       "acknowledgement_group": "academic",
       "actual_included_version": null,
       "distribution_status": "reference-only",
@@ -22,20 +350,40 @@
       "show_license_in_acknowledgements": false,
       "evidence": "用户提供的220页博士学位论文封面核对题名、作者、学位、学校及2010年份；UCLA官方学术来源页面与PDF交叉核对。仅登记引用与官方外链，不打包原PDF。",
       "verification_date": "2026-10-13",
-      "citation_verification": {"date": "2026-10-13", "status": "verified", "verified_fields": ["title", "authors", "year", "degree", "institution"], "sources": ["provided PDF title page", "UCLA Voice Quality Project publications"]}
+      "citation_verification": {
+        "date": "2026-10-13",
+        "status": "verified",
+        "verified_fields": [
+          "title",
+          "authors",
+          "year",
+          "degree",
+          "institution"
+        ],
+        "sources": [
+          "provided PDF title page",
+          "UCLA Voice Quality Project publications"
+        ]
+      }
     },
     {
       "id": "REF-VOICESAUCE-2011",
       "title": "VoiceSauce: A program for voice analysis",
       "kind": "paper",
-      "modules": ["M01", "M02"],
+      "modules": [
+        "M01",
+        "M02"
+      ],
       "authors": "Yen-Liang Shue；Patricia Keating；Chad Vicenik；Kristine Yu",
       "year": 2011,
       "venue": "Proceedings of the 17th International Congress of Phonetic Sciences",
       "pages": "1846--1849",
       "citation": "SHUE Y L, KEATING P, VICENIK C, et al. VoiceSauce: A program for voice analysis[C]//Proceedings of the 17th International Congress of Phonetic Sciences. Hong Kong, 2011: 1846-1849.",
       "citation_format": "GB/T 7714-2015",
-      "urls": {"pdf": "https://www.phonetics.ucla.edu/voiceproject/Publications/Shue-etal_2011_ICPhS.pdf", "slides": "https://www.phonetics.ucla.edu/voiceproject/Publications/Shue-etal_2011_ICPhS_slides.pdf"},
+      "urls": {
+        "pdf": "https://www.phonetics.ucla.edu/voiceproject/Publications/Shue-etal_2011_ICPhS.pdf",
+        "slides": "https://www.phonetics.ucla.edu/voiceproject/Publications/Shue-etal_2011_ICPhS_slides.pdf"
+      },
       "acknowledgement_group": "academic",
       "actual_included_version": null,
       "distribution_status": "reference-only",
@@ -43,13 +391,31 @@
       "show_license_in_acknowledgements": false,
       "evidence": "用户文件名标2009，但实际是42页ICPhS 2011同题讲稿，首页列四位作者。按原文2011及官方会议论文登记，保留官方讲稿外链；与SRC-VOICESAUCE软件来源分别显示，不打包PDF。",
       "verification_date": "2026-10-13",
-      "citation_verification": {"date": "2026-10-13", "status": "verified", "verified_fields": ["title", "authors", "year", "venue", "pages"], "sources": ["provided ICPhS 2011 slides title page", "UCLA official paper metadata", "Kristine Yu author bibliography"]}
+      "citation_verification": {
+        "date": "2026-10-13",
+        "status": "verified",
+        "verified_fields": [
+          "title",
+          "authors",
+          "year",
+          "venue",
+          "pages"
+        ],
+        "sources": [
+          "provided ICPhS 2011 slides title page",
+          "UCLA official paper metadata",
+          "Kristine Yu author bibliography"
+        ]
+      }
     },
     {
       "id": "REF-LING-VOICESAUCE-2019",
       "title": "发声态研究的相关问题与VoiceSauce的使用",
       "kind": "paper",
-      "modules": ["M01", "M02"],
+      "modules": [
+        "M01",
+        "M02"
+      ],
       "authors": "凌锋；史濛辉；袁丹；沈瑞清",
       "year": 2019,
       "venue": "方言",
@@ -65,7 +431,21 @@
       "show_license_in_acknowledgements": false,
       "evidence": "用户提供的13页原刊PDF首页核对四位作者、题名、方言2019年第4期及385-397页。仅登记学术引文，不打包原PDF。",
       "verification_date": "2026-10-13",
-      "citation_verification": {"date": "2026-10-13", "status": "verified", "verified_fields": ["title", "authors", "year", "venue", "issue", "pages"], "sources": ["provided original journal PDF title page"]}
+      "citation_verification": {
+        "date": "2026-10-13",
+        "status": "verified",
+        "verified_fields": [
+          "title",
+          "authors",
+          "year",
+          "venue",
+          "issue",
+          "pages"
+        ],
+        "sources": [
+          "provided original journal PDF title page"
+        ]
+      }
     },
     {
       "id": "SRC-PRAAT",
@@ -15018,21 +15398,108 @@
         "smith": "https://www.dsprelated.com/freebooks/mdft/Spectrogram_Speech.html",
         "chappell": "https://doi.org/10.4324/9781003153948-11"
       },
-      "actual_included_version": "Smith 2007 Fig. 8.10; Chappell 2021 Figs. 7.4 and 7.3; user-supplied screenshots",
+      "actual_included_version": "Smith 2007 Fig. 8.10; Chappell 2021 Figs. 7.4 and 7.3; user-supplied screenshots; user-provided 2-second/0–6kHz spectral crop for the requested six-case comparison",
       "used_at": [
         "temporary-site/assets/spectrogram-examples/provenance.json",
-        "scripts/build_website_spectrogram_audio.py"
+        "scripts/build_website_spectrogram_audio.py",
+        "docs/testing/m09-neural-vocoder-evaluation.md",
+        "temporary-site/assets/spectrogram-examples/uploaded.png",
+        "temporary-site/assets/spectrogram-examples/comparison.json"
       ],
-      "evidence": "User explicitly requested these three figure excerpts and reaffirmed use as attributed quotations for explaining image-to-audio reconstruction. Smith source verified on DSPRelated; Chappell bibliographic record verified against UTSA author profile and publisher preview figure list. Only figure regions quoted, with author/work/figure/page and source link adjacent; no surrounding page text or advertising republished.",
+      "evidence": "User explicitly requested these three figure excerpts and reaffirmed use as attributed quotations for explaining image-to-audio reconstruction. Smith source verified on DSPRelated; Chappell bibliographic record verified against UTSA author profile and publisher preview figure list. Only figure regions quoted, with author/work/figure/page and source link adjacent; no surrounding page text or advertising republished.; 2026-10-15 user explicitly requested the previously uploaded 2-second/6kHz example; preserve user-provided crop and synthetic reconstruction, no external attribution invented.",
       "license": "Copyright retained by authors/publishers. No open license or author permission claimed. Limited explanatory quotation under the user-requested scope; application of a copyright exception is context-dependent, not a general reuse grant.",
       "distribution_status": "limited-attributed-explanatory-quotation",
       "relationship": "figure-excerpts-for-method-demonstration",
       "modifications": "Crop user-provided screenshots to the figures for display and spectral raster for numerical reconstruction. Calibrate axes; M09 Griffin–Lim with explicit settings and approximate-output labels. Original audio not included.",
-      "verification_date": "2026-10-12",
+      "verification_date": "2026-10-15",
       "acknowledgement_group": "software",
       "show_in_acknowledgements": false,
       "show_in_license_notice": false,
-      "unresolved_items": []
+      "unresolved_items": [
+        "Author and publication for the additional user-provided 2-second/6kHz figure are unknown; caption identifies it as user-provided."
+      ]
+    },
+    {
+      "id": "EVAL-M09-BIGVGAN-V2-24K",
+      "title": "BigVGAN v2 24kHz 100band local experiment",
+      "kind": "evaluation-only-model",
+      "modules": [
+        "M09"
+      ],
+      "authors": "NVIDIA Corporation; BigVGAN authors",
+      "actual_included_version": "nvidia/bigvgan_v2_24khz_100band_256x revision c329ede9e9bbc100ddf5c91e2330a61921262370",
+      "urls": {
+        "model": "https://huggingface.co/nvidia/bigvgan_v2_24khz_100band_256x",
+        "code": "https://github.com/NVIDIA/BigVGAN"
+      },
+      "license": "MIT as published in downloaded model repository LICENSE; runtime code reused from existing pinned BASE source",
+      "verification_date": "2026-10-14",
+      "distribution_status": "Local experiment only; not in application/component/release",
+      "acknowledgement_group": "software",
+      "show_in_acknowledgements": false,
+      "show_in_license_notice": false,
+      "used_at": [
+        "docs/testing/m09-neural-vocoder-evaluation.md"
+      ],
+      "relationship": "Frozen official generator and exact100-band frontend labels; original adapter trained separately",
+      "evidence": "Generator450088331bytes;SHA2566f9c5715550c9d0f11159ceb8935638da5aeb19e27d1e63677632df095e376f5;strict weights_only CPU load passed;local download-manifest.json"
+    },
+    {
+      "id": "EVAL-M09-AUTHORIZED-LOCAL-CORPUS",
+      "title": "User-authorized local Mandarin single-syllable research audio",
+      "kind": "evaluation-only-audio",
+      "modules": [
+        "M09"
+      ],
+      "authors": "User-provided research corpus; attribution retained in private source manifest",
+      "actual_included_version": "Selected webedit subset; original files remain outside repository; no application inclusion",
+      "urls": {},
+      "license": "User explicitly authorized temporary local training use in this conversation; no public redistribution permission inferred",
+      "verification_date": "2026-10-14",
+      "distribution_status": "Private local training and user audition only;source/derived checkpoints/audio excluded from GitHub and releases",
+      "acknowledgement_group": "software",
+      "show_in_acknowledgements": false,
+      "show_in_license_notice": false,
+      "used_at": [
+        "docs/testing/m09-neural-vocoder-evaluation.md"
+      ],
+      "relationship": "Read-only native recordings generate calibrated spectrogram images and separate official targetMel; speaker-disjoint splits",
+      "evidence": "Private selected-file hashes and source root in ignored dataset-private.json;no source_audio paths outside authorized data root followed",
+      "open_questions": [
+        "Public redistribution of trained weights or audio is outside current authorization"
+      ]
+    },
+    {
+      "id": "EVAL-M09-LU2025-FIGURES",
+      "title": "Contribution of F0 and phonation to tone perception in the Zaiwa language",
+      "kind": "documentation-media",
+      "modules": [
+        "M09"
+      ],
+      "authors": "Yao Lu; Changwei Liang; Jiangping Kong",
+      "urls": {
+        "doi": "https://doi.org/10.1016/j.wocn.2025.101413"
+      },
+      "actual_included_version": "User-supplied screenshot of paired modal/pressed examples; Journal of Phonetics110 (2025),101413",
+      "used_at": [
+        "docs/testing/m09-neural-vocoder-evaluation.md",
+        "temporary-site/assets/spectrogram-examples/lu2025-modal.png",
+        "temporary-site/assets/spectrogram-examples/lu2025-pressed.png",
+        "temporary-site/assets/spectrogram-examples/comparison.json"
+      ],
+      "relationship": "Independent external evaluation and user-requested attributed explanatory figure quotations; excluded from training and checkpoint selection",
+      "modifications": "Crop only spectral raster; preserve screenshot and pixel bounds in local evaluation manifest; no source waveform available",
+      "license": "Copyright retained by authors/publisher. User requested the two spectral excerpts on the website for reconstruction comparison. No open license or author permission claimed.",
+      "verification_date": "2026-10-15",
+      "distribution_status": "limited-attributed-explanatory-quotation",
+      "evidence": "Author/title/DOI checked against publisher landing page;0–0.5102s and0–0.5236s,0–5000Hz transcribed from user screenshot;window and gray calibration unknown; 2026-10-15 user explicitly requested public modal/pressed before/after examples. Only spectral crops displayed beside author/year/DOI, plus synthetic reconstructions; no paper PDF or source recording uploaded.",
+      "show_in_acknowledgements": false,
+      "show_in_license_notice": false,
+      "acknowledgement_group": "software",
+      "unresolved_items": [
+        "Original STFT window and display dynamic range unknown",
+        "Source waveform unavailable;PESQ cannot be calculated from figure alone"
+      ]
     }
   ]
 }

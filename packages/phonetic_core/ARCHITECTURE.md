@@ -11,7 +11,7 @@ phonetic_core 是桌面与服务端共享的科学包。输入为明确模型、
 | acoustic/ | 参数估计与轨迹处理 |
 | egg/、lpc/、lip/ | EGG、LPC 和唇形相关纯计算 |
 | synthesis/、manipulation/ | 合成、发声类型及音高/时长变换 |
-| spec2wav/ | 语谱图重建、原音语谱编辑及相关变换 |
+| spec2wav/ | 语谱图重建、原音语谱编辑、内置参数模型的纯 NumPy 推理与固定权重 |
 | vocal_tract/ | 声道模型、数据与原生能力边界 |
 | annotation/、textgrid.py | 标注及 TextGrid 解析/变换 |
 | transcription/ | 转写/音系相关规则与数据处理 |
@@ -26,6 +26,8 @@ backend/ptb_worker 负责请求快照、受控文件、原生适配及计算进�
 解析和科学格式变换可以位于本包，用户路径授权、上传/下载、持久化事务、原生进程与设备生命周期在外层。共享函数不能通过 cwd、环境中旧项目包或固定开发机路径寻找隐式输入。
 
 M09 的 OpenCV 使用范围限定为数组计算：LINE_8、circle、line、getPerspectiveTransform、warpPerspective。核心以明确 from-import 导入这五个符号，维持既有透视插值和画笔像素语义。架构检查仍禁止 cv2 整包、通配符、动态导入、图像文件编解码、窗口、摄像头与视频接口；编解码由 worker 适配。这是静态依赖约束，不充当安全沙箱。
+
+新涂鸦以 `size_unit=px` 显式标记1–200像素直径，在校正图像网格上使用圆端点与线段距离栅格化，旧快照省略该字段时保留OpenCV画笔语义。显示缩放不参与实际笔迹计算。
 
 ## 科学结果约定
 

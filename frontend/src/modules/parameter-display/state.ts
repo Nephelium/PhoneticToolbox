@@ -64,10 +64,13 @@ export function series(table:ParameterTable,name:string,start:number,end:number,
   flush();return points;
 }
 export function annotationRuns(table:ParameterTable,name:string,start:number,end:number) {
-  const ti=table.columns.indexOf('Time_s'),ci=table.columns.indexOf(name);if(ci<0||ti<0)return [];
-  if(table.tracks){const values=table.tracks[name]??[];return values.flatMap(([t,v],i)=>{const right=values[i+1]?.[0]??end;return t>end||right<start?[]:[{start:Math.max(start,t),end:Math.min(end,right),text:String(v??'')}];});}
+  const ti=table.columns.indexOf('Time_s'),ci=table.columns.indexOf(name);if(ci<0||ti<0||!(end>start))return [];
+  // Both streamed tracks and legacy rows store text per frame, not per interval.
+  const values=table.tracks?(table.tracks[name]??[]):table.rows;
+  const timeIndex=table.tracks?0:ti,textIndex=table.tracks?1:ci;
   const runs:{start:number;end:number;text:string}[]=[];
-  for(let i=0;i<table.rows.length;i++){const row=table.rows[i],left=row[ti] as number,right=(table.rows[i+1]?.[ti] as number|undefined)??end;if(left>end)break;if(right<start)continue;
-    const text=String(row[ci]??'');const last=runs.at(-1);if(last&&last.text===text&&last.end===left)last.end=Math.min(end,right);else runs.push({start:Math.max(start,left),end:Math.min(end,right),text});}
+  for(let i=0;i<values.length;i++){const row=values[i],left=row[timeIndex] as number,right=(values[i+1]?.[timeIndex] as number|undefined)??end;if(left>=end)break;if(right<=start)continue;
+    const clippedLeft=Math.max(start,left),clippedRight=Math.min(end,right);if(!(clippedRight>clippedLeft))continue;
+    const text=String(row[textIndex]??'');const last=runs.at(-1);if(last&&last.text===text&&last.end===clippedLeft)last.end=clippedRight;else runs.push({start:clippedLeft,end:clippedRight,text});}
   return runs;
 }

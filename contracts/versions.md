@@ -40,6 +40,8 @@ P05 新增 auth challenge/login/me/logout 与 projects list/create/get/rename，
 
 新增可选字段可以兼容扩展；单位、键名或状态语义改变必须升级 API major。应用版本与算法版本分开，科学依赖迁移要有 P03 证据。生成快照、包锁和来源登记与变更同批提交。
 
+2026-10-14 M09 可选增量：Spec2WavConfig.vocoder 为 none/bigvgan，默认 none；默认值从任务快照排除，保持旧请求哈希。bigvgan 显式进入快照与来源清单，audio_draw 拒绝启用。增加本机身份保护的组件状态和固定组件下载接口，服务模式返回 404。输出保留原采样率与样本数，JSON 追加模型/增益元数据及 griffin-lim+bigvgan 方法标记，无数据库迁移。
+
 ## M01-D 新协议及旧行为差异
 
 2026-09-09至10实施，API 1.1新增共享模型，科学schema单独标记`m01/1`，算法版本`legacy-numeric/1`、适配版本`m01-adapter/1`。当前HTTP路径及旧任务模型保持不变，尚未开放acoustic_analysis操作。新结构不改P02 Track的validity语义；旧值中的NaN无法判定生理或失败原因，因此M01使用独立mask结构。详见[验收报告](../docs/testing/m01-contract-report.md)。
@@ -81,3 +83,5 @@ M03-E3：微观输入范围恢复为 5–5000 ms。`egg-preview/1.micro_sample_s
 # 2026-10-02 M06 科研修订
 
 M06 任务请求和结果外层传输仍 m06/1；CSV `__PTB_CONFIG__` 及 JSON config 改为 m06/2，新增 AH 曲线、`f0_transform={preset:null|假声|嘎裂,offset_hz:number}`。结果元数据新增 `computation_revision=klatt/2`、diagnostics（内部率、数字源参考、固定输出增益、最终防溢出衰减）。这些为受控资源内部文档，不改变 API 请求或数据库 schema。旧 m06/1 科学配置及无新完整快照的旧 CSV 明确拒绝，避免不可靠的 AV200 换算。见 [ADR](../docs/decisions/ADR-M06-R2.md)。
+
+2026-10-15 M09 自动重建：增加algorithm、frequency_axis、auto_parameters以及reconstruction_profile=legacy/calibrated、phase_initialization=auto/pulse/random、inference_device=auto/cpu/cuda。旧快照省略新增默认字段保持幂等哈希；旧neural缺省auto_parameters仍为true。新UI先显式预测再以false提交当前值，固定calibrated避免编辑值切换算法。新笔迹size_unit=px、size范围1–200；旧笔迹不带单位仍保留旧栅格化。GL上限256。输出率0在新UI表示ceil(2*fmax)，比较PNG按输入频带与shape生成。GPU Python仅通过原生文件选择授权，不接受HTTP或前端原始路径，不修改数据库schema。

@@ -34,6 +34,7 @@ def run(request,root):
             LipConfig(config['filter_enabled'],config['cutoff_hz']),limits=VideoLimits(input_bytes=128_000_000,output_bytes=400_000_000),progress=progress)
         output.flush();os.fsync(output.fileno())
     meta['input_name']=request.get('original_name',request['input'])
+    if request.get('input_asset'):meta['input_asset']=request['input_asset']
     from ptb_worker.m05_audio import extract_audio
     meta['audio'],audio_names=extract_audio(root/request['input'],target)
     from ptb_worker.m05_alignment import suggest_offset
@@ -42,7 +43,7 @@ def run(request,root):
     if config.get('animation','none')!='none':
         from ptb_worker.m05_animation import export_animation
         name='lip-animation.'+config['animation']
-        meta['animation']=export_animation(target/'frames.jsonl',target/name,meta,quality=config['quality'],format=config['animation'],offset=config['offset'],audio_path=target/'audio_recording.wav' if meta['audio']['present'] else None)
+        meta['animation']=export_animation(target/'frames.jsonl',target/name,meta,quality=config['quality'],format=config['animation'],offset=config['offset'],audio_path=target/'audio_recording.wav' if meta['audio']['present'] else None,fit_face=True,full_mesh=True)
         names.append(name)
     meta['input_name']=request.get('original_name',request['input'])
     meta['files']=[dict(name=name,bytes=(target/name).stat().st_size,sha256=sha256_file(target/name)) for name in names]

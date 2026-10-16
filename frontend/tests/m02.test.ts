@@ -15,6 +15,16 @@ test('M02 independent reaper/correction filters do not mutate selection',()=>{co
 test('M02 bulk assignment and merge preserve every parameter exactly once',()=>{const initial=[{id:1,title:'图1',parameters:['F0','Intensity','TextGrid']},{id:2,title:'图2',parameters:[]}];const groups=assignParameters(initial,['F0','TextGrid','F0'],2);assert.deepEqual(groups.map(g=>g.parameters),[['Intensity'],['F0','TextGrid']]);assert.deepEqual(initial[0].parameters,['F0','Intensity','TextGrid']);assert.deepEqual(removeGroup(groups,1)[0].parameters,['F0','TextGrid','Intensity']);assert.throws(()=>assignParameters(groups,['F0'],3));});
 const table:ParameterTable={schema_version:'m02/1',sha256:'a'.repeat(64),columns:['Time_s','pF0','TextGrid'],kinds:['number','number','text'],rows:[[0,100,'a'],[.01,110,'a'],[.02,null,'b'],[.03,120,'b'],[.04,'Infinity','']]};
 test('M02 original time and missing values remain explicit gaps',()=>{assert.deepEqual(series(table,'pF0',0,.05,1),[{time:0,value:100},{time:.01,value:110},{time:.02,value:null},{time:.03,value:120},{time:.04,value:null}]);assert.deepEqual(annotationRuns(table,'TextGrid',.005,.035),[{start:.005,end:.02,text:'a'},{start:.02,end:.035,text:'b'}]);});
+test('M02 streamed annotations merge adjacent equal frames and retain blank separators',()=>{
+ const tracks:ParameterTable={...table,rows:[],tracks:{TextGrid:[[0,'shang4'],[.01,'shang4'],[.02,'yi1'],[.03,'yi1'],[.04,null],[.05,''],[.06,'shang4'],[.07,'shang4']]}};
+ const expected=[{start:0,end:.02,text:'shang4'},{start:.02,end:.04,text:'yi1'},{start:.04,end:.06,text:''},{start:.06,end:.08,text:'shang4'}];
+ assert.deepEqual(annotationRuns(tracks,'TextGrid',0,.08),expected);
+ assert.deepEqual(annotationRuns({...tracks,tracks:undefined,rows:tracks.tracks!.TextGrid.map(([time,text])=>[time,null,text])},'TextGrid',0,.08),expected);
+ assert.deepEqual(annotationRuns(tracks,'TextGrid',.005,.035),[{start:.005,end:.02,text:'shang4'},{start:.02,end:.035,text:'yi1'}]);
+ assert.deepEqual(annotationRuns(tracks,'TextGrid',.02,.04),[{start:.02,end:.04,text:'yi1'}]);
+ assert.deepEqual(annotationRuns(tracks,'TextGrid',.075,.08),[{start:.075,end:.08,text:'shang4'}]);
+ assert.deepEqual(annotationRuns(tracks,'TextGrid',.02,.02),[]);
+});
 test('M02 extrema retained in pixel decimation',()=>{const data={...table,rows:[[0,100,''],[.001,500,''],[.002,1,''],[.003,100,'']]};assert.deepEqual(series(data,'pF0',0,1,1).map(p=>p.value),[100,500,1,100]);});
 test('M02 manual 2.2 multiple curves share one coordinate scale, without normalization',()=>{
   const data:ParameterTable={...table,columns:['Time_s','pF0','rF0'],kinds:['number','number','number'],rows:[[0,100,100],[.01,150,200],[.02,null,300]]};

@@ -1,0 +1,16 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>M09 optional vocoder</title><style>html,body,#app{height:100%}</style></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';
+import Page from '../src/modules/spectrogram-to-audio/Spec2WavPage.vue';
+import '../src/design/tokens.css';
+const canvas=document.createElement('canvas');canvas.width=400;canvas.height=240;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,400,240);
+const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png')),buffer=await blob.arrayBuffer();
+const file={id:'synthetic-image',name:'vocoder-fixture.png',kind:'image',size:buffer.byteLength};
+window.qa={submitted:[],status:{ready:false,pipeline_ready:false,pipeline_available:true,available:true,model:'BigVGAN base',download_bytes:297000000,installed_bytes:850000000,progress:{stage:'idle',completed:0,total:0}},fail:false};
+const context={key:'m09-vocoder',label:'Synthetic vocoder',files:{kind:'preview',list:async()=>[file],read:async()=>({buffer:buffer.slice(0)}),tasks:{
+ reconstructionPreview:async()=>{qa.predictions=(qa.predictions||0)+1;await new Promise(r=>setTimeout(r,qa.delay||80));return {image_base64:canvas.toDataURL('image/png').split(',')[1],width:400,height:240,source_sha256:'fixture',prediction:{predicted_window_ms:10.4,win_length_ms:10,hop_ms:2.5,min_db:-60,max_db:0}};},
+ reconstructions:async()=>[],reconstruct:async(_,config)=>{qa.submitted.push(structuredClone(config));return {id:'synthetic-job',state:'queued',created_at:0};},
+ chooseInferencePython:async()=>({id:'python-grant',name:'fixture / python.exe'}),checkInferencePython:async()=>{qa.status.gpu_ready=true;qa.status.gpu_name='fixture GPU';return {cuda:true,gpu_name:'fixture GPU',model_checked:true};},
+ vocoderStatus:async()=>JSON.parse(JSON.stringify(qa.status)),downloadVocoder:async()=>{qa.downloads=(qa.downloads||0)+1;await new Promise(r=>setTimeout(r,200));if(qa.fail)throw Error('controlled failure');qa.status.ready=true;qa.status.pipeline_ready=true;qa.status.progress.stage='complete';}
+}}};
+createApp({render:()=>h(Page,{stateKey:'m09-vocoder',context})}).mount('#app');
+</script></body></html>

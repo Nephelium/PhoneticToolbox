@@ -31,7 +31,9 @@ def test_v2_fixed_seed_exact_waveform_and_actual_wav(seed,height,width,freq,sr):
     np.testing.assert_array_equal(result['audio'],expected);np.testing.assert_array_equal(before[1],after[1]);assert before[2:]==after[2:]
     encoded=cv2.imencode('.png',gray)[1].tobytes();bundle=unpack_bundle(prepare(encoded,config),64_000_000)
     raw=bundle.payloads[2];decoded,rate=sf.read(io.BytesIO(raw))
-    original=io.BytesIO();sf.write(original,expected,sr or int(2*freq),format='WAV',subtype='PCM_16')
+    # Core remains bit-exact; the requested export gain is independently calculated.
+    gain=min(.08/np.sqrt(np.mean(expected**2)),.95/np.max(np.abs(expected)))
+    original=io.BytesIO();sf.write(original,expected*gain,sr or int(2*freq),format='WAV',subtype='PCM_16')
     assert raw==original.getvalue();assert len(decoded)==len(expected)
 
 
@@ -63,11 +65,11 @@ def test_four_corner_warp_against_opencv_and_invalid_crossed_quad():
     with pytest.raises(ValueError,match='invalid_image_corners'):prepare(raw,config)
 
 
-@pytest.mark.parametrize('config',[dict(time_end=0),dict(time_end=31),dict(freq_start=5000,freq_end=4000),dict(seed=-1),dict(n_iter=129),dict(min_db=0,max_db=0),dict(freq_end=float('nan'))])
+@pytest.mark.parametrize('config',[dict(time_end=0),dict(time_end=31),dict(freq_start=5000,freq_end=4000),dict(seed=-1),dict(n_iter=257),dict(min_db=0,max_db=0),dict(freq_end=float('nan'))])
 def test_config_bounds(config):
     with pytest.raises(ValueError):Spec2WavConfig(**config)
 
 
 def test_corrupt_image_and_compute_budget():
     with pytest.raises(ValueError):prepare(b'not an image',{})
-    with pytest.raises(ValueError,match='spectrogram_budget'):reconstruct(np.zeros((1000,1000),np.uint8),n_iter=128)
+    with pytest.raises(ValueError,match='spectrogram_budget'):reconstruct(np.zeros((1000,1000),np.uint8),n_iter=256,freq_start=1000)

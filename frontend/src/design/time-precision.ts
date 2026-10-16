@@ -18,9 +18,14 @@ export function limitTimeInput(value:string,unit:TimeUnit):string {
 
 type State={unit:TimeUnit|undefined;input:()=>void;commit:()=>void};
 const states=new WeakMap<HTMLInputElement,State>();
+function setDisplay(el:HTMLInputElement,value:string){
+ // Reassigning even an equal number value clears Chromium's partial decimal;
+ // on text controls it also moves the caret to the end of the field.
+ if(el.value!==value)el.value=value;
+}
 function display(el:HTMLInputElement){
  const unit=states.get(el)?.unit;
- if(unit)el.value=document.activeElement===el?limitTimeInput(el.value,unit):timeText(el.value,unit);
+ if(unit)setDisplay(el,document.activeElement===el?limitTimeInput(el.value,unit):timeText(el.value,unit));
 }
 function unit(el:HTMLInputElement,value:TimeUnit|undefined){
  states.get(el)!.unit=value;
@@ -28,7 +33,7 @@ function unit(el:HTMLInputElement,value:TimeUnit|undefined){
 }
 export const vTimePrecision:ObjectDirective<HTMLInputElement,TimeUnit|undefined>={
  created(el,binding){
-  const normalize=(commit:boolean)=>{const current=states.get(el)?.unit;if(current)el.value=commit?timeText(el.value,current):limitTimeInput(el.value,current);};
+  const normalize=(commit:boolean)=>{const current=states.get(el)?.unit;if(current)setDisplay(el,commit?timeText(el.value,current):limitTimeInput(el.value,current));};
   const state:State={unit:binding.value,input:()=>normalize(false),commit:()=>normalize(true)};
   states.set(el,state);unit(el,binding.value);
   // Capture runs before v-model and existing @input/@change handlers, including paste.

@@ -2,13 +2,14 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {palettes,paletteTokens,normalizeMode,normalizePalette,contrast} from '../src/design/themes.ts';
 import {defaults,normalizeFonts} from '../src/design/fonts.ts';
-test('P19 unset and malformed preferences recover to Everforest, preserving saved choices',()=>{
- for(const value of [undefined,null,'ptb',{},42,'missing','dark;display:none']){assert.equal(normalizePalette(value),'everforest');assert.equal(normalizeMode(value),'system');}
+test('P19 unset and malformed preferences recover to Absolutely, preserving saved choices',()=>{
+ for(const value of [undefined,null,'ptb',{},42,'missing','dark;display:none']){assert.equal(normalizePalette(value),'absolutely');assert.equal(normalizeMode(value),'system');}
  assert.equal(normalizeMode('dark'),'dark');assert.equal(normalizePalette('matrix'),'matrix');
  assert(!palettes.some(p=>p.id==='ptb'));
  assert.equal(normalizePalette('everforest'),'everforest');
+ assert.equal(normalizePalette('absolutely'),'absolutely');
  assert.equal(normalizePalette('codex'),'codex');
- for(const mode of ['light','dark'] as const)assert.deepEqual(paletteTokens('ptb',mode),paletteTokens('everforest',mode));
+ for(const mode of ['light','dark'] as const)assert.deepEqual(paletteTokens('ptb',mode),paletteTokens('absolutely',mode));
 });
 test('P19 every paired UI palette has readable text, controls and status colors',()=>{
  assert.equal(new Set(palettes.map(p=>p.id)).size,palettes.length);

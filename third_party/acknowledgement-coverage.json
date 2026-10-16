@@ -1,6 +1,6 @@
 {
   "schema_version": "acknowledgement-coverage/1",
-  "checked_on": "2026-10-13",
+  "checked_on": "2026-10-15",
   "scope": "18 live modules and their displayed shared/supplementary sources; historical documents are separate",
   "modules": [
     {
@@ -134,6 +134,13 @@
     {
       "id": "M09",
       "source_ids": [
+        "WEBSITE-AOKI-SHORT-WINDOWS",
+        "MODEL-M09-REPAIR80",
+        "MODEL-M09-PARAMETERS",
+        "REF-BIGVGAN",
+        "REF-NAFNET",
+        "REF-FAST-GRIFFINLIM",
+        "PKG-BIGVGAN-BASE",
         "REF-GRIFFINLIM",
         "ASSET-DOULOS",
         "PKG-SOUNDFILE",

@@ -1,0 +1,57 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>Numeric input regression</title><style>html,body,#app{height:100%;margin:0}.paper-viewport{overflow-y:scroll!important}</style></head><body><div id="app"></div><script type="module">
+import {createApp,h,reactive,nextTick} from 'vue';
+import {host} from '../src/state/workspace.ts';
+import {defaults as analysisDefaults,generationDefaults} from '../src/modules/phonation-synthesis/state.ts';
+import {defaults as eggDefaults} from '../src/modules/egg-analysis/state.ts';
+import {defaults as parameterDefaults,eggDefaults as jointDefaults} from '../src/modules/parameter-estimation/state.ts';
+import {installPapersChannel} from '../src/platform/papers.ts';
+import '../src/design/tokens.css';
+const name=new URLSearchParams(location.search).get('view'),state=reactive({tick:0});
+const context={key:'numeric-'+name,label:'Synthetic input check',files:{kind:'preview',list:async()=>[],read:async()=>{throw Error('No media needed');},tasks:{reconstructions:async()=>[]}}};
+const paths={
+ settings:'../src/components/SettingsDrawer.vue',joint:'../src/modules/parameter-estimation/JointEggSettings.vue',background:'../src/components/BackgroundSettings.vue',
+ egg:'../src/modules/egg-analysis/EggParameters.vue',eggRange:'../src/modules/egg-analysis/EggControls.vue',
+ eggBatch:'../src/modules/egg-analysis/EggBatchPanel.vue',transport:'../src/components/AudioTransport.vue',
+ offset:'../src/modules/lip-extraction/OffsetDialog.vue',font:'../src/components/FontSettings.vue',
+ m02:'../src/modules/parameter-display/ParameterDisplayPage.vue',m04:'../src/modules/lpc-spectrum/LpcSpectrumPage.vue',m05:'../src/modules/lip-extraction/LipExtractionPage.vue',
+ m06:'../src/modules/speech-synthesis/SpeechSynthesisPage.vue',m07:'../src/modules/phonation-synthesis/PhonationSynthesisPage.vue',
+ m08:'../src/modules/pitch-manipulation/PitchManipulationPage.vue',m09:'../src/modules/spectrogram-to-audio/Spec2WavPage.vue',
+ m11:'../src/modules/mfa/MfaAlignmentPage.vue',m12:'../src/modules/annotation/AnnotationPage.vue',m15:'../src/modules/perception/PerceptionPage.vue',
+ m16:'../src/modules/recording/RecordingPage.vue',m17:'../src/modules/ipa-plus/IpaPlusPage.vue',m18:'../src/modules/paper-reading/PaperReadingPage.vue',pdf:'../src/modules/paper-reading/PdfReader.vue'
+};
+const Component=(await import(/* @vite-ignore */ paths[name])).default;
+const wave=reactive({asset:{duration:50,sampleRate:44100,channels:[new Float32Array(1)]},start:0,end:10,channel:0,parameters:[],dirty:false,error:'',loading:false,zoom:1,offset:0});
+const config=reactive({...eggDefaults(),auto_prominence:false});
+const props=paths[name].includes('/components/')||['joint','egg','eggRange','eggBatch','offset','pdf'].includes(name)?{}:{context,stateKey:'numeric-'+name,active:true};
+if(name==='settings')Object.assign(props,{draft:parameterDefaults()});
+if(name==='joint')Object.assign(props,{value:reactive({...parameterDefaults(),egg:jointDefaults(),audio_channel:0}),mono:false,selected:true,override:undefined});
+if(name==='egg'||name==='eggRange')Object.assign(props,{modelValue:config,start:0,end:10,duration:50});
+if(name==='eggBatch')Object.assign(props,{config,files:[],busy:false});
+if(name==='transport')Object.assign(props,{state:wave,active:false});
+if(name==='offset')Object.assign(props,{rows:[],waveform:null,offset:0,loading:false,error:''});
+if(name==='pdf'){
+ Object.assign(props,{paper:{id:'synthetic-pdf',title:'Synthetic',local:true},language:'original',initialPage:1});
+ const image=document.createElement('canvas');image.width=image.height=8;let ready;
+ installPapersChannel({ready:{connect:fn=>ready=fn},progress:{connect:()=>{}},cancel:()=>{},request:(id,payload)=>{
+  const {operation,args}=JSON.parse(payload),value=operation==='annotations'?{revision:0,items:[]}:{pages:3,page:args.page,image:image.toDataURL(),imageWidth:8,imageHeight:8,text:'',ratio:1,ratios:[1,1,1],lines:[]};
+  queueMicrotask(()=>ready(id,JSON.stringify({ok:true,value})));
+ }});
+}
+if(name==='m07')host.projects.write('m07.draft.numeric-m07',{
+ analysis:analysisDefaults(),generation:generationDefaults(),alignment:'normalize',count:21,kind:2,reverse:false,
+ points:{axis:Array.from({length:21},(_,i)=>i*5),source:Array(21).fill(150),target:Array(21).fill(200)},pending:true
+});
+window.qa={ready:false,state,wave,config,rerender:()=>state.tick++,readDraft:()=>host.projects.read('m07.draft.numeric-m07',null)};
+const app=createApp({render:()=>h('div',{style:'height:100%;min-height:0'},[h(Component,{...props,...(name==='transport'?{externalPlayback:!!(state.tick%2)}:{'data-probe-render':state.tick})}),h('span',{hidden:true},String(state.tick))])});app.mount('#app');
+await nextTick();
+// Test-only state injection reaches data-dependent controls without real media or services.
+const model=app._instance.subTree.children[0].component.setupState;window.qa.model=model;
+if(name==='m02'){model.wave.asset=wave.asset;model.wave.showSpectrogram=false;}
+if(name==='m12')model.lip={width:[],open:[],times:[],offset:0};
+if(name==='m16'){model.project={schema_version:'ptb-recording/1',id:'synthetic',label:'Synthetic',revision:0,tasks:[],takes:[{id:'take',started_at:'2026-10-13T00:00:00',task_snapshot:null,config:model.config,frames:1000,versions:[{id:'raw',kind:'raw',frames:1000,metadata:{},created_at:'2026-10-13T00:00:00'}],head:0,undo:[],redo:[],quality:{raw_clip:[],near_full_scale:[],peak:[],rms:[]},status:'ready',error:''}],selected:{},recoveries:[]};model.takeId='take';}
+if(name==='m18')model.settingsOpen=true;
+if(name==='m15')model.tab='参数';
+if(name==='pdf')model.ratios=[1,1,1];
+await nextTick();
+window.qa.ready=true;
+</script></body></html>

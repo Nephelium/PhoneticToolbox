@@ -64,3 +64,7 @@ from .m07_errors import ERRORS as M07_ERRORS
 ACOUSTIC_ERRORS |= M07_ERRORS
 
 ACOUSTIC_ERRORS |= {"m01_duration_limit","m01_invalid_source","m01_channel_invalid","m01_egg_filter_range","m01_frame_budget", "m01_output_budget","m01_invalid_output","m01_column_changed","m01_time_order","m01_runtime_not_admitted","m01_process_failed"}
+ACOUSTIC_ERRORS |= {'m09_vocoder_missing','m09_vocoder_invalid','m09_vocoder_failed',
+                    'm09_gpu_unavailable','m09_python_changed',
+                    'm09_vocoder_input_invalid','m09_vocoder_output_invalid',
+                    'm09_parameter_model_invalid','m09_prediction_out_of_range'}

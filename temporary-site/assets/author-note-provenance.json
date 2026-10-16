@@ -1,0 +1,25 @@
+{
+  "font": {
+    "file": "fonts/PhoneticWhisper-Regular.ttf",
+    "source": "ZCOOL KuaiLe 2.001, OFL 1.1; subset to note text, individually reshaped glyph proportions, tilt and baseline; renamed derived font",
+    "license": "licenses/ZCOOL-OFL.txt",
+    "sha256": "5cc9cb357e34a2d157910bcf2942fe63ea9cbbb6c838d96361eec8fc807c5dc9"
+  },
+  "media": [
+    {
+      "file": "author-avatar.jpg",
+      "source": "User-supplied image for this local website design",
+      "sha256": "42e8c236689c3f9cd79f73d9b3ae0e6d53124d5e0aa3c5cbdb3a1930192ee22e",
+      "modifications": "None; CSS rounded display only"
+    },
+    {
+      "file": "tiny-whisper.jpg",
+      "source": "User-supplied image for this local website design",
+      "sha256": "3b97bd9908299ba6e139b3c3f3d7eaa3fbba48163d9fbe03347dcb14b2d4d61a",
+      "modifications": "None; CSS rounded display only"
+    }
+  ],
+  "profile": "https://www.zhihu.com/people/jingshaozi",
+  "link_policy": "Avatar only; name and text are not links",
+  "license_note": "Author statement for local preview; preserves separate third-party licenses; does not modify formal project or dependency licenses. Noncommercial restriction is not an OSI-approved open-source license; closing phrase is the author sentiment."
+}

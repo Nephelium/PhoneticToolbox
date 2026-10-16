@@ -3,6 +3,298 @@
   "created_on": "2026-09-09",
   "tasks": [
     {
+      "id": "M09-NEURAL-PIPELINE",
+      "title": "语谱图内置预测、参数编辑与CPU/GPU推理",
+      "status": "verified",
+      "date": "2026-10-15",
+      "files": [
+        "packages/phonetic_core/src/phonetic_core/spec2wav/adaptive.py",
+        "packages/phonetic_core/src/phonetic_core/spec2wav/reconstruction.py",
+        "backend/src/ptb_api/spec2wav_models.py",
+        "backend/src/ptb_worker/spec2wav_child.py",
+        "backend/src/ptb_worker/spec2wav_preview.py",
+        "backend/src/ptb_worker/spec2wav_jobs.py",
+        "backend/src/ptb_worker/acoustic_executor.py",
+        "backend/src/ptb_worker/vocoder_child.py",
+        "backend/src/ptb_worker/vocoder_components.py",
+        "backend/src/ptb_worker/vocoder_catalog.py",
+        "backend/src/ptb_worker/m09_pipeline_child.py",
+        "backend/src/ptb_worker/m09_neural_models.py",
+        "backend/tests/test_m09_pipeline.py",
+        "backend/tests/test_m09_vocoder.py",
+        "tests/parity/test_spec2wav.py",
+        "scripts/build_m09_vocoder_component.py",
+        "scripts/install_m09_component.py",
+        "scripts/verify_m09_pipeline.py",
+        "frontend/src/modules/spectrogram-to-audio/Spec2WavPage.vue",
+        "frontend/src/platform/research.ts",
+        "frontend/tests/m09-vocoder.html",
+        "tests/e2e/m09-vocoder.cjs",
+        "contracts/openapi.json",
+        "contracts/generated/api.ts",
+        "contracts/versions.md",
+        "third_party/source-registry.json",
+        "frontend/src/generated/sources.json",
+        "frontend/src/modules/spectrogram-to-audio/README.md",
+        "docs/manual/spectrogram-to-audio.md",
+        "manual/chapters/m09.json",
+        "docs/plans/modules/M09-spectrogram-to-audio.md",
+        "docs/decisions/ADR-M09-neural-pipeline.md",
+        "docs/testing/m09-neural-pipeline.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json",
+        "CHANGELOG.md",
+        "packages/phonetic_core/src/phonetic_core/spec2wav/parameters.py",
+        "packages/phonetic_core/src/phonetic_core/spec2wav/data/parameters-v5.json",
+        "packages/phonetic_core/pyproject.toml",
+        "backend/src/ptb_worker/m09_parameters.py",
+        "backend/tests/test_m09_parameters.py",
+        "scripts/export_m09_parameters.py",
+        "scripts/verify_m09_parameters.py",
+        "scripts/verify_m09_parameters_qt.py",
+        "packages/phonetic_core/src/phonetic_core/spec2wav/editing.py",
+        "packages/phonetic_core/tests/test_m09_editing.py",
+        "packages/phonetic_core/ARCHITECTURE.md",
+        "backend/ARCHITECTURE.md",
+        "backend/src/ptb_worker/m09_runtime.py",
+        "backend/src/ptb_worker/m09_runtime_child.py",
+        "backend/tests/test_m09_runtime.py",
+        "desktop/src/ptb_desktop/m09_bridge.py",
+        "desktop/src/ptb_desktop/host.py",
+        "desktop/src/ptb_desktop/task_bridge.py",
+        "desktop/tests/test_m09_bridge.py",
+        "desktop/ARCHITECTURE.md",
+        "frontend/src/modules/spectrogram-to-audio/SpectralCanvas.vue",
+        "frontend/src/platform/desktop.ts",
+        "docs/modules/evidence/M09-source-map.md",
+        "scripts/verify_m09_runtime.py",
+        "third_party/references.bib",
+        "third_party/acknowledgement-coverage.json",
+        "manual/project.json",
+        "frontend/tests/source-coverage.test.ts",
+        "tests/e2e/source-citations.cjs"
+      ],
+      "verification_scope": "Windows当前模块源码、Chrome交互、可见默认GPU Qt及本机实际CPU/CUDA模型推理；不改版本、不构建成品或组件、不上传",
+      "verification": "89项Python、28组原Torch预测对照、Chrome浅深交互、真实CPU/GPU与可见Qt两路重建保存通过；标定前禁用预测、显式预测与手动覆盖、Aoki选择、256次、采样率2*fmax、同频带同尺寸PNG和1–200px画笔通过。类型/契约/UI数据/build、说明书严格验证/生成通过；自有Qt测试scratch清理完成。",
+      "remaining": [
+        "完整组件服务器尚未发布；KeSpeech及本地训练语料的权重分发范围待确认。",
+        "本轮按要求未构建主程序EXE或独立组件；跨平台与完整组件公网下载未验。",
+        "应用修复权重保持已安装第2000步，官网第6000步及不同GL配置不等同于当前应用结果。",
+        "全项目架构检查5项既有声道资源摘要不符，未改动这些资源或登记。"
+      ],
+      "evidence": [
+        "docs/testing/m09-neural-pipeline.md",
+        "docs/decisions/ADR-M09-neural-pipeline.md",
+        "output/validation/m09-parameters/numpy-99244e3ed5fc4df48bf7d90740eed99a/report.json",
+        "output/validation/m09-parameters/devices-955807580b3d44cab1c25f15849b424d/report.json",
+        "output/validation/m09-parameters/desktop-24b994be07884d9fac423c257f52891a/report.json",
+        "output/validation/m09-vocoder-ui/chrome-1792072308320/report.json",
+        "output/validation/source-citation-normalization/chrome-f46e870e82074a2b8dd472d1a02acfe7/report.json"
+      ],
+      "reference_update": "2026-10-15：补齐五篇方法论文及三项模型来源，统一全局/模块致谢、说明书与BibTeX。3项来源测试、Chrome浅深1440/900四组55篇引用复制/语谱图来源归属、严格说明书校验/生成、ui-data/build和文档检查通过。已按用户要求以公共入口启动M09，实际窗口PID102664、非零句柄且响应正常，留供试用。未打包或发布。"
+    },
+    {
+      "id": "MEDIA-SPECTROGRAM-VIDEO",
+      "title": "论文翻页片头与语谱图重建流程视频",
+      "status": "verified",
+      "files": [
+        "scripts/build_creative_video.py",
+        "docs/testing/creative-video-report.md",
+        "CHANGELOG.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json"
+      ],
+      "note": "本地交付28秒片头及94秒算法段，原PDF翻页、官网风格、字幕与合成配乐。GL之后接Mel分析、条件化NAFNet修复及BigVGAN；Aoki短时窗脉冲相位用于GL初始化。按反馈修正朝镜头翻页的外缘放大透视，固定书脊；仅底部字幕改为楷体，其余字体保持。交付位于output/creative-video-20261015。",
+      "verification_scope": "Windows：论文与研究源码连接关系、线上及本地CSS摘要、分镜与最终编码关键帧、完整解码、帧数/时长/编码、音频有限数值/峰值、动态帧差和文字边界；修订版检查翻页前后半程外缘放大、书脊固定与不裁切。",
+      "remaining": [
+        "用户审阅节奏与表现",
+        "未作完整主观视听及跨设备播放验收",
+        "未公开上传"
+      ],
+      "evidence": [
+        "docs/testing/creative-video-report.md",
+        "output/creative-video-20261015/validation.json"
+      ]
+    },
+    {
+      "id": "M18-PDF-PAPER-COLOR",
+      "title": "论文深色主题及背景图下保留原始纸张颜色",
+      "status": "verified",
+      "files": [
+        "frontend/src/design/background.css",
+        "scripts/verify_m18_paper_background.py",
+        "docs/testing/m18-paper-background-report.md",
+        "docs/project-status.md",
+        "CHANGELOG.md"
+      ],
+      "verification_scope": "Windows 当前源码及可见 Qt 默认 GPU；真实原文/译文/解读 PDF，根主题属性及主题变量与背景开关组合",
+      "verification": "13 项定向测试、typecheck、contracts/ui-data 及 build 通过；Qt 12 组白底像素/无反相、文字拖选通过，截图已核查，自有 scratch 已清理。首次测试宿主缺少独立任务库、首轮 Qt 对象释放影响收尾已修正，诊断保留。",
+      "remaining": [
+        "最终 EXE 未重建或验证，未公开发布。",
+        "设置持久化、跨平台和长期阅读本轮未扩大验证。"
+      ],
+      "current_evidence": [
+        "docs/testing/m18-paper-background-report.md"
+      ],
+      "local_evidence": "output/validation/m18/paper-background-qt-2f7c592563a24d9f96390b4ca35b8886/report.json"
+    },
+    {
+      "id": "P04-NUMERIC-INPUT",
+      "title": "全项目数值框小数输入与编辑保留",
+      "status": "verified",
+      "files": [
+        "frontend/src/design/time-precision.ts",
+        "frontend/src/design/numeric-input.ts",
+        "frontend/src/components/AudioTransport.vue",
+        "frontend/src/components/BackgroundSettings.vue",
+        "frontend/src/modules/egg-analysis/EggControls.vue",
+        "frontend/src/modules/parameter-display/ParameterDisplayPage.vue",
+        "frontend/src/modules/annotation/AnnotationPage.vue",
+        "frontend/src/modules/phonation-synthesis/PhonationSynthesisPage.vue",
+        "frontend/src/modules/phonation-synthesis/README.md",
+        "frontend/src/modules/mfa/MfaAlignmentPage.vue",
+        "frontend/src/modules/ipa-plus/IpaPlusPage.vue",
+        "frontend/src/modules/paper-reading/PdfReader.vue",
+        "frontend/src/modules/recording/RecordingPage.vue",
+        "frontend/tests/numeric-input.test.ts",
+        "frontend/tests/numeric-inputs.html",
+        "tests/e2e/numeric-inputs.cjs",
+        "docs/design/UI_SPEC.md",
+        "docs/testing/numeric-input-report.md",
+        "docs/testing/m09-decimal-input-report.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json",
+        "CHANGELOG.md"
+      ],
+      "changes": "扩展语谱图小数修复，统一所有手写 value 绑定的数字框为延迟编辑模型；F0 表保留独立文字草稿；公共播放条编辑空白不进入科研状态；提交显示仅在校正后值不同才回写，既有单位、精度、范围、空白和整数语义保持。",
+      "verification_scope": "Windows current source and isolated Chrome keyboard editing only; Qt/final EXE/IME/hardware/platform/scientific processing separate",
+      "verification": "27份Vue文件96处声明静态核查、浅深256项浏览器／原生关键帧输入检查、397项前端测试、既有时间4组与语谱图10组、typecheck、contracts:check、ui-data:check、build通过；文档2027文件／427来源／109任务无错误、定向差异检查通过；修改前EGG和F0刷新失败／播放空白异常有证据。自有scratch清理，失败保留。",
+      "evidence": "docs/testing/numeric-input-report.md",
+      "remaining": [
+        "实际Qt、最终EXE、IME组合输入、实体键盘／DPI与跨平台本轮未验，未重打包发布",
+        "本轮使用内存合成夹具，科学任务、数据库与硬件录音另验",
+        "PDF合成夹具存在ResizeObserver通知诊断，未作为本轮布局验收"
+      ]
+    },
+    {
+      "id": "P04-TAB-PERFORMANCE",
+      "title": "多标签切换与共用图窗重复计算优化",
+      "status": "verified",
+      "files": [
+        "frontend/src/app/AppShell.vue",
+        "frontend/src/components/WaveformViewport.vue",
+        "frontend/src/components/ScientificPlot.vue",
+        "frontend/ARCHITECTURE.md",
+        "frontend/tests/tab-performance.html",
+        "tests/e2e/tab-performance.cjs",
+        "scripts/verify_tab_performance_qt.py",
+        "docs/testing/tab-performance-report.md",
+        "CHANGELOG.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json"
+      ],
+      "note": "2026-10-13 用户报告打开/切换多个已加载页面偶发卡顿。保持输入、草稿与科研语义，减少隐藏零尺寸引发的预览重算和标记更新的静态路径重建。参数估计改为已打开标签保留实例，关闭才释放。",
+      "verification": "Windows源码：Chrome六图窗12次切换额外语谱图请求24→0，10次光标曲线路径重建60→0；可见Qt默认GPU浅深切换与AppShell往返三工具保留输入且不重扫通过；Chrome关闭重开、真实缩放/尺寸/科学数据变化通过。37项定向测试、类型、契约、UI数据及build通过，详见专项报告。",
+      "remaining": "最终EXE、原生科学计算与任务完整并发负载、井井原窗口/文件、长期运行及跨平台本轮未验；未重打包或发布。"
+    },
+    {
+      "id": "RELEASE-302-LOCAL",
+      "title": "3.0.2构建、服务器发行与规范打包及长路径卸载复查",
+      "status": "verified",
+      "files": [
+        "scripts/package_local.py",
+        "scripts/sync_versions.py",
+        "scripts/build_v3_local_preview.py",
+        "scripts/manual/pack_media.py",
+        "scripts/tests/test_packaging_cache.py",
+        "scripts/verify_cached_install.py",
+        "release/README.md",
+        "release/PACKAGING_RULES.md",
+        "release/version.json",
+        "CHANGELOG.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json",
+        "scripts/verify_local_package.py",
+        "scripts/cleanup_local_package.py",
+        "scripts/verify_update_handoff.py",
+        "scripts/verify_cache_settings.mjs",
+        "scripts/verify_rendering_cdp.mjs",
+        "release/notes/3.0.2.md",
+        "docs/testing/release-3.0.2-publish.md",
+        "deployment/publish_release.py",
+        "deployment/derive_release_zip.py"
+      ],
+      "note": "2026-10-13用户最终确认更新说明已编辑完成，可以上传服务器，GitHub先暂停。按同字节EXE生成正式安装／更新ZIP，五个固定下载文件先发布并回读SHA，再原子切换两频道清单。官网文件不改。",
+      "verification": "最终3.0.2 EXE SHA0d0ab31d26eb4ec4563b03d246cacb3250778f71bbcce2ad6dd7e2faa6c518b9：397前端及4缓存检查、生产阅读器通过，编排276.802秒／媒体359全命中。最终成品14阶段通过：工程外科学11任务／18帮助、227字符安装入口与350字符恢复路径真实卸载、租约拒绝／研究设置摘要、缓存中断并发／实际设置清理、两种真实helper换版、默认GPU可见168帧／像素／原生截图及M07滚动288帧。QA按归属清理且证据保留。三件同EXE成品低于500000000字节，服务器ZIP本地和远程完全一致。服务器五个固定文件及两频道完整大小／SHA回读、HTTPS清单与HEAD／Range、生产解析通过，正文逐字一致。上传自有ZIP暂存文件前缀SHA核对后删除，文档2031文件/427来源/110任务无错误。",
+      "remaining": "GitHub代码及Releases暂停，官网由其他任务维护；其他电脑／GPU／实体DPI／IME、所有科学组合及长期负载未验。",
+      "evidence": [
+        "docs/testing/release-3.0.2-publish.md",
+        "output/packaging/PhoneticToolbox-302-20261013-223959-194eb6/report.json",
+        "output/validation/local-package-64cc0329/report.json",
+        "output/validation/release-302/release-gate.json",
+        "output/validation/release-302/notes-approval.json"
+      ]
+    },
+    {
+      "id": "M10-DROPDOWN-THEME",
+      "title": "生理参数合成下拉菜单深色背景与文字可读性",
+      "status": "verified",
+      "files": [
+        "frontend/public/vocal-tract/v3.css",
+        "scripts/verify_m10_dropdown_theme.py",
+        "contracts/resource-manifest.json",
+        "resources/vocal_tract/bundle-manifest.json",
+        "docs/modules/evidence/M10-migration.json",
+        "docs/testing/m10-dropdown-theme.md",
+        "CHANGELOG.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json"
+      ],
+      "note": "2026-10-13：显式指定option/optgroup主题背景与文字、选中与禁用颜色，沿用原生菜单与参数语义。测试scratch已清理，报告/截图/失败诊断保留。",
+      "verification": "Windows当前源码typecheck、5项配色测试、build通过。默认GPU可见Qt深→浅→深3组，每组32选项对比度检查、原生popup像素/截图及方向键回车选择通过，最低8.49:1。全工程架构仍有app/index/presets/scene/floor-contact五处既有摘要差异，本次CSS/bundle登记一致。",
+      "remaining": "最终EXE、其他配色原生popup像素、其他电脑/显卡与跨平台未验；未重打包、公开发布或部署。",
+      "evidence": [
+        "docs/testing/m10-dropdown-theme.md"
+      ]
+    },
+    {
+      "id": "P04-BACKGROUND-LIBRARY",
+      "title": "背景图库保存与切换、显示模式示意和缓存默认期限",
+      "status": "verified",
+      "files": [
+        "frontend/src/state/background.ts",
+        "frontend/src/components/BackgroundSettings.vue",
+        "frontend/src/components/ThemeModeCards.vue",
+        "frontend/src/components/AppearanceSettings.vue",
+        "frontend/src/components/StorageSettings.vue",
+        "backend/src/ptb_worker/local_retention.py",
+        "backend/src/ptb_api/local_retention.py",
+        "backend/tests/test_local_retention.py",
+        "tests/e2e/background-library.cjs",
+        "tests/e2e/appearance-background.cjs",
+        "manual/chapters/settings.json",
+        "manual/project.json",
+        "docs/testing/settings-navigation-report.md",
+        "CHANGELOG.md",
+        "docs/project-status.md",
+        "frontend/src/design/themes.ts",
+        "frontend/tests/appearance.test.ts",
+        "manual/chapters/getting-started.json",
+        "docs/design/UI_SPEC.md"
+      ],
+      "note": "2026-10-13 用户要求下一版本保存／移除背景图，模式小图避免对话形态，删除默认Everforest说明，缓存默认3天／1天；用户追加确认新用户默认改为Absolutely。保留已有偏好及同期官网改动。",
+      "verification": "类型/build、10项前端、36项后端及独立Chrome图库7组／4布局、外观8组／33例通过；说明书20章／1053素材严格校验及生成、文档2011文件／427来源／105任务检查和定向差异检查通过。 追加默认配色修改后，5项外观检查及实际Chrome新配置Absolutely／已有Everforest重载保留通过。",
+      "verification_scope": "Windows 当前源码与独立Chrome；缓存浏览器展示为模拟port，真实策略用独立SQLite测试；未新增Qt/EXE/跨平台验证。",
+      "remaining": [
+        "未重建EXE或公开发布；Qt与跨平台本轮未验",
+        "说明书历史整页截图未替换，正文／表格／图注／搜索已同步"
+      ],
+      "current_evidence": [
+        "docs/testing/settings-navigation-report.md"
+      ],
+      "local_evidence": "output/validation/background-library/chrome-1791880476278/report.json; output/validation/custom-appearance/chrome-1791880128383/report.json"
+    },
+    {
       "id": "RELEASE-301-RENDERING",
       "title": "3.0.1全局绘制、侧栏及鼻音构型修复与成品替换",
       "status": "verified",
@@ -343,12 +635,26 @@
       "id": "M18-INTRO-NOTICE",
       "title": "请看这里~ 栏目置顶说明",
       "status": "verified",
-      "note": "2026-10-12已收到用户改定文案和设计要求，按原文制作一页A4说明。独立目录字段与置顶入口实施中，启动时接收说明不获取已关闭的论文订阅。",
+      "note": "2026-10-15：栏目说明接入右键/键盘删除、持久隐藏及获取往期的年月选择恢复，复用现有偏好与平台接口。批注保留，推荐论文数量独立，单份PDF大小和共享缓存保护通过。",
       "remaining": [
-        "独立实体电脑、其他平台和长期阅读未验；本轮EXE仅built/静态审计，用户要求停止后未完成成品行为验收。"
+        "本轮未重新构建或验证最终EXE，未发布应用；独立实体电脑、其他平台及长期阅读未验。"
       ],
-      "verification_scope": "Windows当前源码、定向Qt与手册；授权说明目录/HTTPS分发。用户2026-10-12改为直接运行，不以成品验收为本轮交付要求。",
-      "verification": "按用户改定文字制作一页A4，统一完整字体、去头像与紫色标签、放大圆角描边猫图、井韶子页脚、突出强调完成。目录可选notice已上线，HTTPS目录及7资产SHA通过；2科学论文不变。源码关闭自动获取仍启动接收说明、日期与列表/计数独立通过，最终EXE待验。 用户要求直接运行后，已停止后续成品验证并用Start-Research-Workbench.ps1 -Module M18启动源码，真实窗口PID23460、句柄3214752确认。R8已构建496815658字节并静态/20QtDLL核验，不标最终成品verified或published。"
+      "verification_scope": "Windows当前源码、隔离可见默认GPU Qt与生成帮助正文；本轮不涉及服务器更新或EXE构建。2026-10-12目录/HTTPS分发及R8构建保留历史证据边界。",
+      "verification": "2026-10-15：60项桌面定向、8项前端、typecheck/contracts:check/ui-data:check/build、严格说明书校验与生成通过；可见Qt浅深右键/键盘菜单与取消、删除、服务重建/页面重载、启动不重取、年月选择单份恢复、批注保留、已获取禁选/论文计数、删空无残留与更新帮助阅读通过。文档2043文件/436来源/110任务0错误，定向差异检查通过；测试scratch已清理。2026-10-12历史：已发布独立栏目说明目录，HTTPS目录及7资产SHA通过；当时R8仅构建/静态核验，用户改为源码交付后停止成品行为验收。",
+      "files": [
+        "desktop/src/ptb_desktop/papers.py",
+        "desktop/tests/test_paper_reader_updates.py",
+        "frontend/src/modules/paper-reading/PaperReadingPage.vue",
+        "frontend/src/modules/paper-reading/README.md",
+        "manual/chapters/m18.json",
+        "scripts/verify_m18_notice.py",
+        "docs/testing/m18-notice-report.md",
+        "docs/plans/task-ledger.json",
+        "docs/project-status.md",
+        "CHANGELOG.md"
+      ],
+      "evidence": "docs/testing/m18-notice-report.md",
+      "local_evidence": "output/validation/m18/notice-qt-d948c851c0b1417ba350461d5f5a52cd/report.json"
     },
     {
       "id": "M18-P2A-LAYOUT",
@@ -792,6 +1098,24 @@
     },
     {
       "id": "M13-RESULT-LAYOUT",
+      "empty_copy_update": {
+        "date": "2026-10-13",
+        "status": "verified",
+        "files": [
+          "frontend/src/modules/mandarin-ipa/MandarinIpaPage.vue",
+          "CHANGELOG.md",
+          "docs/testing/m13-result-layout-report.md",
+          "docs/project-status.md",
+          "docs/plans/task-ledger.json"
+        ],
+        "change": "删除设置栏Unt更新说明，输入占位与结果空白提示统一大字号、字体和行高。",
+        "verification": "Windows源码typecheck、18项定向转换测试、build通过；独立Chrome浅深主题×1440/900宽度×100/150%缩放8组实际字体和换行通过，输入汉字后2个转换单元正常。首轮段落行高覆盖已修复，原断言复验通过。",
+        "evidence": "output/validation/m13-empty-copy/chrome-1791891321178/report.json",
+        "cleanup": "两轮自有scratch均deleted，首轮失败诊断及最终截图保留。",
+        "remaining": [
+          "本轮未验Qt、最终EXE或跨平台，未打包发布"
+        ]
+      },
       "title": "转换排版、统一字音修复与150%DPI说明书",
       "status": "verified",
       "files": [
@@ -1284,30 +1608,34 @@
     },
     {
       "id": "GITHUB-SOURCE-SYNC",
-      "title": "当前 v3 源码同步至 GitHub",
-      "status": "verified",
+      "title": "当前 v3 源码同步至 GitHub main",
+      "status": "in_progress",
       "files": "当前已审阅工作树源码、必要资源、说明书工具、依赖目录和文档；停止跟踪两份论文 PDF 与两张无引用旧图；见本机明确文件清单",
-      "verification_scope": "Windows current source, publication-boundary review, frontend/studio/desktop checks; existing codex/v3-rebuild branch only",
-      "note": "用户明确授权 GitHub 更新及无用仓库内容清理。已 fetch 并核对起点一致，953 项受限素材无索引记录；3 处凭据扫描命中均为素材 ID。两份论文 PDF 及两张仅历史清单引用的旧图停止跟踪并保留本机，仍被回归/资源链引用的 v2 内容保留。文档和架构检查通过，前端 345、作者工具 38、桌面及源码/打包边界 363 passed/2 skipped，前端构建通过；暂存空白提示按报告保留。官网备案号已独立授权部署并回读核验。",
+      "verification_scope": "Current source publication review and focused Windows checks; origin/main only",
+      "note": "2026-10-16 用户授权当前代码上传。代理 fetch 确认 main 与 origin/main 起点一致。已审阅明确清单，排除50项网站专用素材/参数权重/本机启动器；前端397项及类型/契约/UI数据通过，Python与其他验证进行中。",
       "current_evidence": [
         "docs/testing/github-source-sync.md"
       ],
-      "local_evidence": "output/maintenance/github-sync/reviewed-files.json 及测试日志",
-      "source_commit": "795c2dc",
-      "remote_result": "已推送 origin/codex/v3-rebuild，git ls-remote 与本地提交一致；四项仓库移除对象不在提交树中且本机文件保留",
+      "local_evidence": "output/maintenance/github-sync-20261016/",
+      "remote_result": "待本轮提交与推送",
       "remaining": [
-        "完整科学/实体设备/跨平台/最终 EXE 未在本次重验"
+        "待当前提交推送及远端身份回读",
+        "完整科学/实体设备/跨平台/最终EXE未重验"
       ],
-      "current_review": {
-        "date": "2026-10-12",
-        "remote_main": "2c93da292b05272fe58b36c1d3c12b4177efd969",
-        "business_source_last_synced": "795c2dc",
-        "working_changes_at_review_start": {
-          "tracked_modified": 279,
-          "untracked_files": 263
-        },
-        "scope": "Remote-tree audit and authorized homepage-only publication verified. Yesterday business changes remain local; two root CMD files removed from public main, local originals retained. Historical verified source sync remains October 9.",
-        "main_before_homepage_update": "8cf5c5396fcab63cf431c69b2cb4712af6a12430"
+      "previous_sync": {
+        "source_commit": "795c2dc",
+        "remote_result": "已推送 origin/codex/v3-rebuild，git ls-remote 与本地提交一致；四项仓库移除对象不在提交树中且本机文件保留",
+        "current_review": {
+          "date": "2026-10-12",
+          "remote_main": "2c93da292b05272fe58b36c1d3c12b4177efd969",
+          "business_source_last_synced": "795c2dc",
+          "working_changes_at_review_start": {
+            "tracked_modified": 279,
+            "untracked_files": 263
+          },
+          "scope": "Remote-tree audit and authorized homepage-only publication verified. Yesterday business changes remain local; two root CMD files removed from public main, local originals retained. Historical verified source sync remains October 9.",
+          "main_before_homepage_update": "8cf5c5396fcab63cf431c69b2cb4712af6a12430"
+        }
       }
     },
     {
@@ -1952,8 +2280,17 @@
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
       },
       "current_evidence": [
-        "docs/testing/2026-10-03-m02-r2-report.md"
-      ]
+        "docs/testing/2026-10-03-m02-r2-report.md",
+        "docs/testing/m02-annotations-report.md"
+      ],
+      "annotation_repetition_2026_10_13": {
+        "status": "verified",
+        "scope": "Windows 当前前端源码与独立 Chrome，连续文字帧合并及时间窗边缘",
+        "files": "frontend/src/modules/parameter-display/state.ts、README.md；frontend/tests/m02.test.ts、m02-annotations.html；tests/e2e/m02-annotations.cjs；docs/testing/m02-annotations-report.md；CHANGELOG.md、docs/project-status.md",
+        "changes": "流式 tracks 与旧 rows 共用连续同名标注合并，保留空白间隔及间隔后的同名文字，剔除裁剪窗边缘零长度段；波形及参数图复用，科学值与源文件不变。",
+        "verification": "12项定向测试、typecheck、build通过；独立Chrome 12组流式及旧表／浅深主题／全长、截图同范围缩放及标签边缘通过，页面错误0；两类表SVG标签各一次、整幅PNG签名及非空字节通过。初轮合成流式夹具漏传数值统计，查看截图后补齐并增加曲线路径与轴范围断言复验；两轮scratch清理回执deleted。文档检查2020文件／427来源／107任务errors=[]，定向差异检查通过。",
+        "remaining": "实际Qt、原生SQLite、用户原文件、最终EXE、实体DPI及其他平台未验；未打包发布。"
+      }
     },
     {
       "id": "M03",
@@ -2094,10 +2431,19 @@
         "windows_scope": "Windows public and authorized natural baselines, Chrome/Qt physical capture, local tasks and exports verified within m05-report; physical sync and remaining hardware matrix pending"
       },
       "current_evidence": [
+        "docs/testing/m05-offline-batch-report.md",
         "docs/testing/2026-10-04-m05-r3-report.md"
       ],
       "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
-      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate"
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate",
+      "offline_batch_export": {
+        "status": "verified",
+        "date": "2026-10-13",
+        "scope": "Windows source / isolated Chrome / actual local worker and codecs",
+        "changes": "Toolbar offline mode, multi-file analysis and named history, default batch save with own offsets and 1080 video/animation, standalone format-only export, shared full GIF/MP4 mesh and timeline",
+        "verification": "16 frontend and 36 Python checks; 5 end-to-end groups and 12 layouts; independent codec readback; typecheck/contracts/ui-data/build and manual checks",
+        "remaining": "Qt/EXE/devices/cross-platform and native cancel timing not reverified; old jobs without source reference require reanalysis for source-video export; manual screenshots retained"
+      }
     },
     {
       "id": "M05-MANUAL-LIVE",
@@ -2209,6 +2555,261 @@
     {
       "id": "M09",
       "title": "语谱图转音频",
+      "neural_vocoder_evaluation": {
+        "status": "verified",
+        "date": "2026-10-14",
+        "scope": "Windows x64当前源码、CPU组件、独立Chrome和服务器固定组件下载；三张官网图与六组新增公开语音的本机试听。",
+        "files": [
+          "backend/src/ptb_api/m09_components.py",
+          "backend/src/ptb_api/jobs.py",
+          "backend/src/ptb_api/spec2wav_models.py",
+          "backend/src/ptb_worker/vocoder_child.py",
+          "backend/src/ptb_worker/vocoder_catalog.py",
+          "backend/src/ptb_worker/vocoder_components.py",
+          "backend/src/ptb_worker/spec2wav_child.py",
+          "backend/src/ptb_worker/spec2wav_jobs.py",
+          "backend/src/ptb_worker/acoustic_executor.py",
+          "backend/src/ptb_worker/acoustic_errors.py",
+          "backend/src/ptb_worker/mfa/components.py",
+          "backend/tests/test_m09_vocoder.py",
+          "desktop/src/ptb_desktop/task_bridge.py",
+          "desktop/src/ptb_desktop/local_service.py",
+          "desktop/src/ptb_desktop/host.py",
+          "frontend/src/platform/desktop.ts",
+          "frontend/src/platform/research.ts",
+          "frontend/src/modules/spectrogram-to-audio/Spec2WavPage.vue",
+          "frontend/src/modules/spectrogram-to-audio/README.md",
+          "frontend/tests/m09-vocoder.html",
+          "tests/e2e/m09-vocoder.cjs",
+          "scripts/evaluate_m09_vocos.py",
+          "scripts/evaluate_m09_neural_models.py",
+          "scripts/evaluate_m09_more_examples.py",
+          "scripts/build_m09_vocoder_component.py",
+          "scripts/verify_m09_vocoder.py",
+          "scripts/build_v3_local_preview.py",
+          "requirements/requirements-m09-vocoder-eval.lock",
+          "contracts/openapi.json",
+          "contracts/generated/api.ts",
+          "contracts/versions.md",
+          "frontend/src/generated/sources.json",
+          "third_party/source-registry.json",
+          "third_party/acknowledgement-coverage.json",
+          "backend/ARCHITECTURE.md",
+          "docs/manual/spectrogram-to-audio.md",
+          "manual/chapters/m09.json",
+          "manual/project.json",
+          "docs/plans/modules/M09-spectrogram-to-audio.md",
+          "docs/modules/evidence/M09-source-map.md",
+          "docs/testing/m09-neural-vocoder-evaluation.md",
+          "CHANGELOG.md",
+          "docs/project-status.md",
+          "docs/plans/task-ledger.json"
+        ],
+        "verification": "34后端、397前端、typecheck/contracts/ui-data/build、strict说明书20章1053素材与software构建通过。独立Chrome浅深、下载失败重试、默认保留、显式BigVGAN快照、宽窄与截图通过。真实最终ZIP迁移自检、三图六路有界任务与取消、六组18路有限非静音和等长输出通过；旧官网PCM基线精确一致。服务器及实际公网ComponentManager完整SHA256与296404057字节一致，真实本机GET/重复POST ready且登记不变。文档和定向差异检查另记下方；架构仍有同期M10五项资源摘要差异。",
+        "decision": "Vocos改善不明显未接入；井井选择BigVGAN但注明改善不多。GL保持默认、模型独立下载并显式选用，音频藏信息保留原始相位。新增六组更长例音有参考原声与匹配响度A/B，已知录音生成PNG的条件与论文截图分列。",
+        "evidence": "docs/testing/m09-neural-vocoder-evaluation.md",
+        "documentation": "validate_docs检查2042文件/431来源/110任务，errors为空，历史快照原有断链单列；本任务定向git diff --check通过。说明书与生成数据/契约已同步。主包构建明确排除组件runner/Torch/TorchAudio，4项现有打包缓存回归与CLI解析通过，尚未重建最终EXE。",
+        "audition": "output/validation/m09-examples/public-f4842bdda567490ba86f220c4f6908ae/comparison.html",
+        "paper_conditions": {
+          "status": "verified",
+          "date": "2026-10-14",
+          "files": [
+            "scripts/evaluate_m09_paper_conditions.py",
+            "scripts/evaluate_m09_more_examples.py",
+            "requirements/requirements-m09-vocoder-eval.lock",
+            "third_party/source-registry.json",
+            "docs/testing/m09-neural-vocoder-evaluation.md",
+            "CHANGELOG.md",
+            "docs/plans/task-ledger.json",
+            "docs/project-status.md"
+          ],
+          "scope": "后续图片默认0–5000Hz，36组长段/1秒/5、10、25ms Hann对照及12组1秒5、10ms Praat PSD/预加重/241行/JPEG80插图模拟，48组/96次实际GL与再合成。",
+          "verification": "全部输出有限非静音、0–5000Hz、native10k/hop25、30组短片段1秒且两方法等长；48组/144图/144试听元数据、筛选及1440/800/390三列Chrome通过，scratch清理。共同谱指标采用10ms Hann/20log幅度，避免直接比较两profile显示dB定义，指标不评分音质。",
+          "evidence": "output/validation/m09-examples/paper-browser-1791914716848/report.json",
+          "audition": "output/validation/m09-examples/paper-bb430824418b47c58c7d05010b32e2ee/comparison.html",
+          "user_feedback": "目前试听认为窗长增加听感较好，GL与GL后BigVGAN接近；随后要求独立原图转Mel再试听。"
+        },
+        "direct_image_mel": {
+          "external_training_project": {
+            "status": "verified",
+            "date": "2026-10-14",
+            "project": "C:\\Users\\13680\\Desktop\\project\\【个人项目】\\SpectrogramReconstruction",
+            "scope": "13 research Python files moved; existing Conda; data/models/history external; current trainers independent of application algorithms; historical evaluation scripts retain explicit application dependency",
+            "files": "See external docs/validation/migration-files.json",
+            "verification": "Existing Conda launcher and CUDA forward/backward confirmed; 13 moved files, 3 core modules byte-identical, 4 CLI help commands, both Mel checkpoints CPU/GPU FP32 parity, geometry checkpoint and deterministic photo checks passed; no new training or legacy suite rerun",
+            "remaining": [
+              "GPU training device support",
+              "KeSpeech corpus inventory and loader",
+              "Multi-architecture trials",
+              "Chunked inference",
+              "Five held-out figure auditions"
+            ]
+          },
+          "status": "verified",
+          "date": "2026-10-14",
+          "multi_architecture_training_plan": {
+            "status": "planned",
+            "date": "2026-10-14",
+            "scope": "Independent geometry and image-to-Mel architecture comparison; detailed plan delivered, no new training or GPU installation",
+            "plan": "docs/plans/2026-10-14-m09-image-mel-prototype.md",
+            "candidates": [
+              "Geometry:U2-Net segmentation plus grid head,hierarchical Transformer,pretrained document dewarper",
+              "Mel:conditional U-Net,strong CNN/NAFNet,Restormer/SwinIR,MambaIRv2"
+            ],
+            "stages": "P0 1h Mel/2000 geometry train images;P1 10h/20000;P2 50–100h/200000;proposed quotas subject to inventory",
+            "verification": "Read current64-frame crop/full-utterance inference;geometry uses whole96x144image;read first KeSpeech WAV header16k mono PCM only;GPU RTX5090Laptop24463MiB;old venv torch2.8.0+cpu; existing Conda pytorch_5090 torch2.10.0.dev20250930+cu128 verified GPU forward/backward finite,CUDA12.8,BF16 capability reported",
+            "remaining": [
+              "Archive checksum and corpus-wide metadata",
+              "Reuse verified pytorch_5090 Conda environment; add device selection to CPU-only scripts and benchmark actual models",
+              "Training outline before actual runs",
+              "Chunked inference implementation and full-vs-chunked validation",
+              "New model training and independent external figure audition"
+            ]
+          },
+          "geometry_pilot": {
+            "status": "verified",
+            "date": "2026-10-14",
+            "scope": "Windows CPU synthetic pilot execution verified; accuracy not accepted for automatic audio reconstruction; no application changes",
+            "files": [
+              "scripts/m09_photo_simulation.py",
+              "scripts/train_m09_geometry_pilot.py",
+              "scripts/prepare_m09_figure_holdouts.py",
+              "docs/decisions/2026-10-14-spectrogram-geometry-pilot.md"
+            ],
+            "data": "120 source clips:88 train44.84s/16 validation7.74s/16 test8.24s;480/96/96 photos;full/faint/no borders balanced;random ROI;disjoint speakers and hashes",
+            "external_holdouts": "Five figures: website Smith/Chappell three and Lu2025 modal0.5102s/pressed0.5236s at0–5000Hz. User-retracted calibrated.png and reconstructed.png excluded",
+            "evidence": "output/validation/m09-examples/geometry-b463b1dde9e14703ada2764e136c31f8;output/validation/m09-examples/figure-holdouts-028d8e274b0c4dc594a51f0931466c19/manifest.json",
+            "verification": "216266 parameters,873471-byte checkpoint;1500 steps25.9s,best validation700;testEPE21.392px vs39.655px mean-grid prior;full19.939/faint23.634/no-frame20.605px;no folded test cells;images/curves inspected;scratch deleted;five external holdout crops verified,latest2022x917paper screenshot replaces old inputs",
+            "remaining": [
+              "Reduce crop and grid error;validation plateau/overfit remains",
+              "Compare pretrained document models",
+              "Real-image geometry and audio validation; user holdout figures excluded from training/selection"
+            ]
+          },
+          "corpus_dual_training": {
+            "augmentation_extension": {
+              "date": "2026-10-14",
+              "status": "verified",
+              "scope": "Generation only; new augmentation not used in completed training",
+              "changes": "Independent paper spots and salt/pepper masks; 50% common windows5/10/15/20/25/30/40/50ms and50% continuous3–50ms; preview-expanded preserves original results",
+              "verification": "10000 window draws;14 Hann/Praat conditions with80/100-band finite matching shapes;determinism and unchanged geometry;clean unchanged;contact sheets inspected",
+              "evidence": "output/validation/m09-examples/corpus-dual-9e63c8116fa64dcba5489b6f8d0e3076/augmentation-preview-v2/verification.json",
+              "remaining": "No retraining;automatic unknown-photo dewarping remains proposed"
+            },
+            "status": "verified",
+            "date": "2026-10-14",
+            "scope": "Windows/CPU local training, held-out-speaker Mel evaluation,72WAV generation and synthetic-photo visualization verified; no perceptual fidelity/product integration claim",
+            "files": [
+              "scripts/train_m09_corpus_pilot.py",
+              "scripts/m09_photo_simulation.py",
+              "scripts/m09_mel_network.py",
+              "scripts/m09_image_mel.py",
+              "docs/plans/2026-10-14-m09-image-mel-prototype.md",
+              "docs/testing/m09-neural-vocoder-evaluation.md",
+              "third_party/source-registry.json",
+              "CHANGELOG.md",
+              "docs/project-status.md"
+            ],
+            "data": "2408 training recordings/1208.3455seconds/11speakers,104validation/2speakers,100test/2speakers; four tones balanced;2612 unique source hashes; private paths retained only in ignored output",
+            "conditions": "Source upper bound2–22.05kHz;90% low-band target draw and10% high-band;Hann/Praat5/10/25ms;known linear/log axis;per-image Mel support;fixed official80/100-band targets",
+            "verification": "Both3000steps completed;80-band best2750,100-band best3000;training192.5s/234.4s;test log-Mel MAE analytic1.9835→0.6238 and2.0657→0.8068;constant-bias controls1.7793/1.8533;72finite24kWAVs,95HTML media files and exact output sample counts checked;source speaker/hash splits disjoint;source-axis and frame-boundary checks passed;loss/augmentation contact sheets visually inspected;scratch cleanup deleted",
+            "evidence": "output/validation/m09-examples/corpus-dual-9e63c8116fa64dcba5489b6f8d0e3076/results.json;verification.json;cleanup.json",
+            "remaining": [
+              "Human audition and F0/formant fidelity assessment",
+              "PESQ not computed:dependency absent and isolated-environment pip attempt failed at PyPI TLS connection;no TLS verification bypass",
+              "Synthetic photos only demonstrated;no learned dewarping or photo-domain training",
+              "KeSpeech newly authorized but not read;keep corpus and future large caches on its E: drive",
+              "No GUI/EXE integration or public distribution"
+            ]
+          },
+          "paired_training_prototype": {
+            "status": "verified",
+            "date": "2026-10-14",
+            "scope": "本机小样本训练/选模型及固定BigVGAN试听完成；不代表听感或跨说话人大规模泛化验证。",
+            "files": [
+              "scripts/m09_mel_network.py",
+              "scripts/train_m09_image_mel.py",
+              "docs/plans/2026-10-14-m09-image-mel-prototype.md",
+              "third_party/source-registry.json",
+              "docs/testing/m09-neural-vocoder-evaluation.md",
+              "CHANGELOG.md",
+              "docs/project-status.md"
+            ],
+            "changes": "原图解析80带投影→窗长/窗型/灰度条件残差U-Net→标准BigVGAN log-Mel；四整录音训练23.26秒，en验证，yue完全测试；36配对，5/10/25ms Hann/Praat；1200步训练，验证选800步；checkpoint119345参数494254字节。",
+            "verification": "实际CPU脚本成功，运行内源摘要/互斥源文件划分/有限非静音/16000样本约束通过，验证Mel MAE2.021→0.616，指定粤语1秒5ms1.962→0.735；四组16路RMS匹配试听生成。按用户此前免检指令未做额外测试/UI/文档检查。",
+            "evidence": "output/validation/m09-examples/trained-mel-06063f10d3924575b45eaf1f3db83eea/results.json",
+            "remaining": [
+              "井井已反馈小模型有提升；F0/共振峰/声调保真仍待评估",
+              "多说话人和明确授权的大批量语料训练",
+              "本地训练来源及衍生模型公开分发许可未核实",
+              "模型尚未接主应用或发布"
+            ]
+          },
+          "single_yue_window_adapter": {
+            "status": "verified",
+            "scope": "仅yue-short-matched-5一条图片适配与CPU音频生成，非听感改善结论；独立检查沿用用户豁免。",
+            "files": [
+              "scripts/m09_image_mel.py",
+              "scripts/evaluate_m09_single_mel.py"
+            ],
+            "changes": "明确1秒图片跨度/401采样点→模型80×87 Mel；可选周期Hann平方功率时间汇聚与反射边界，保留旧point默认。输入无原声/GL，比较音频仅在推理结束后用于展示。",
+            "verification": "实际执行单条脚本成功，运行内有限非静音/16000样本/Parseval约束通过；未运行独立测试/UI/文档检查，效果待用户试听。",
+            "evidence": "output/validation/m09-examples/yue-grid-1b62b8c1f7d94e35bfa5c3034da111b4/results.json",
+            "remaining": "时间汇聚无法恢复短窗缺失的窄带谐波或精确跨频相位关系；主应用未改。"
+          },
+          "scope": "48张现有0–5000Hz图的本机实验与音频交付；计算约束已通过，第四列和Mel详情后续检查按用户要求豁免；产品未改为直接路线。",
+          "files": [
+            "scripts/m09_image_mel.py",
+            "scripts/evaluate_m09_direct_mel.py",
+            "scripts/evaluate_m09_paper_conditions.py",
+            "third_party/source-registry.json",
+            "docs/testing/m09-neural-vocoder-evaluation.md",
+            "CHANGELOG.md",
+            "docs/plans/task-ledger.json",
+            "docs/project-status.md"
+          ],
+          "changes": "PNG/标定→幅度或PSD→撤销已知预加重→功率时频插值/5k以上零填→图片能量Parseval RMS=.1→模型80带Mel/ln→固定BigVGAN。生成Mel时不读取原声或GL波形；展示增益在合成后单独处理。",
+          "verification": "48段直接音频有限非静音、样本数/时长通过；Parseval误差6.94e-18、纯频谱滤波/ln对照误差4.44e-16。原输入与生成音频保持，四路展示副本统一RMS及峰值预算。按最新用户指令不运行第四列浏览器/文档/差异检查，之前三列证据不扩大。",
+          "evidence": "output/validation/m09-examples/direct-ff47f50952c94a87abd157396fb81124/results.json",
+          "remaining": [
+            "直接路线的井井试听反馈",
+            "窗口转换为近似、图上已截断信息不能唯一恢复",
+            "本次第四列/Mel详情UI未测，用户明确豁免",
+            "主应用与组件仍是GL后再合成，未更换算法或重打包"
+          ]
+        },
+        "spectrogram_comparison": {
+          "status": "verified",
+          "date": "2026-10-14",
+          "scope": "现存六组本机试听页和评估脚本，未重跑模型或修改音频/输入PNG",
+          "files": [
+            "scripts/evaluate_m09_more_examples.py",
+            "docs/testing/m09-neural-vocoder-evaluation.md",
+            "CHANGELOG.md",
+            "docs/project-status.md",
+            "docs/plans/task-ledger.json"
+          ],
+          "changes": "并列输入、现有重建和BigVGAN输出的18张带时间/频率坐标语谱图，可点击大图；输出分析试听响度匹配后的PCM，共用参考原声频谱峰值及-30～0色阶；保留实际输入量化。支持--render-existing重绘，设置及图摘要记录spectrograms.json。",
+          "verification": "6输入/18音频SHA保持且绘图前重核；18输出PNG摘要通过。独立Chrome18图实际像素解码与PNG头一致、18音频等时长、1440/800/390三列/单列和无横向溢出通过，截图已核查，自有scratch已清理。文档和差异检查同批维护。",
+          "evidence": "output/validation/m09-examples/plots-1791912982230/report.json"
+        },
+        "component": {
+          "id": "bigvgan-base-windows-x64-r1",
+          "download_bytes": 296404057,
+          "installed_bytes": 848216175,
+          "sha256": "935c2774220cc168b74f75a30466ec7ff64d0cfd158d8a582541bdd5a3ea8165",
+          "published": true,
+          "local_installed": true
+        },
+        "cleanup": "评估/真实任务/Chrome自有scratch清理回执deleted；试听交付、必要模型/环境/当前组件输入保留。初版组件缓存及失败补充试听副本的额外删除被自动审批blocked by policy，未提供更多原因，文件保留，未换途径删除。",
+        "remaining": [
+          "真实Qt下载交互和最终EXE未验，主程序尚未重打包或发布",
+          "Windows ARM/macOS/Linux、实体音频设备和长时间负载未验",
+          "六组新增试听的用户效果反馈待定",
+          "架构检查同期M10五项资源hash差异，非本任务文件",
+          "旧组件缓存及失败试听副本额外清理被自动审批拦截，仍保留"
+        ]
+      },
       "dependencies": [
         "P03",
         "P04",
@@ -2220,8 +2821,29 @@
       "execution_evidence": [
         "docs/testing/m02-m09-report.md"
       ],
-      "verification_scope": "Historical Windows functionality verified within current_evidence; image inversion implementation has no test or application-build evidence",
-      "note": "已有功能保留原专项验证范围；新增图片反相已完成源码修改，按井井本次要求未运行测试或应用构建，未纳入现有 EXE。",
+      "verification_scope": "Historical Windows functionality verified within current_evidence; decimal input verified in current source and isolated Chrome, frontend build passed; image inversion has no dedicated behavior verification; Qt/final EXE decimal input unverified",
+      "note": "已有功能保留原专项验证范围；图片反相原任务按用户要求免测。小数输入已修复并完成当前源码／独立 Chrome 定向验收与前端构建，本轮未重打包 EXE。",
+      "decimal_input": {
+        "status": "verified",
+        "files": [
+          "frontend/src/design/time-precision.ts",
+          "frontend/src/modules/spectrogram-to-audio/README.md",
+          "frontend/tests/m09-decimal-input.html",
+          "tests/e2e/m09-decimal-input.cjs",
+          "docs/testing/m09-decimal-input-report.md",
+          "CHANGELOG.md",
+          "docs/project-status.md",
+          "docs/plans/task-ledger.json"
+        ],
+        "changes": "公共时间精度指令仅在显示内容变化时写 input.value，保留原生数字框未完成的小数及文字框光标；现有精度和科学参数语义保持。",
+        "verification": "Windows当前源码，修改前逐键0.1实际变成10；修改后独立Chrome浅深10组输入／编辑／数值任务快照通过，已有公共时间控件4组回归及4项单元检查通过；typecheck、contracts:check、ui-data:check、build通过；文档2022文件／427来源／107任务无错误、定向差异检查通过，新增脚本三轮scratch清理。",
+        "evidence": "docs/testing/m09-decimal-input-report.md",
+        "remaining": [
+          "本轮实际 Qt 与最终 EXE 未验，未重打包发布",
+          "IME组合输入、实体键盘／DPI及跨平台未验",
+          "本轮仅验证合成图片夹具与内存提交快照，未运行科学重建"
+        ]
+      },
       "image_inversion": {
         "status": "in_progress",
         "implementation": "complete",
@@ -2258,7 +2880,8 @@
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
       },
       "current_evidence": [
-        "docs/testing/2026-10-05-m09-r1-report.md"
+        "docs/testing/2026-10-05-m09-r1-report.md",
+        "docs/testing/m09-decimal-input-report.md"
       ]
     },
     {
@@ -2814,6 +3437,13 @@
       "files": "frontend/src/modules/ipa-plus",
       "verification_scope": "Windows implemented and bounded verification; remaining content/device/platform work is explicit",
       "note": "当前实现、已验范围和剩余任务见 docs/project-status.md。",
+      "scroll_adjustment": {
+        "id": "M17-CHART-SCROLL",
+        "status": "verified",
+        "scope": "分区按钮取消吸顶；版本与右上角输入说明随表区滚动，文本编辑框保持可见；同步模块README与滚轮回归",
+        "verification": "Windows：22项M17定向测试、typecheck和build通过；独立Chrome16组全部显示/滚轮、24组悬停布局通过，含浅深主题、1366/1024窗口、100%/150%缩放、按钮与说明同步滚出表区、编辑框位置及文本保留、末项可达、输入/撤销。页面错误0，文档检查与定向差异检查通过，scratch已清理，失败诊断保留。Qt、最终EXE、系统DPI及跨平台未验，未打包发布。",
+        "evidence": "docs/testing/m17-hover-and-all-view-report.md#2026-10-13-滚动重叠修复"
+      },
       "latest_adjustment": {
         "id": "M17-HOVER-ALL-VIEW",
         "status": "verified",
@@ -3078,8 +3708,72 @@
     },
     {
       "id": "WEBSITE-REDESIGN",
+      "trained_80_audio": {
+        "status": "verified",
+        "date": "2026-10-15",
+        "scope": "Windows本地/发布候选/最终公网Chrome154，用户明确授权静态官网同步",
+        "changes": "三段逐字节复用五图base80-repaired试听；来源/实际参数/波形/缓存摘要同步；旧GL入口保护。只发布对应首页卡片、三WAV、两来源，其余71资源保持；接下来仍仅本地。",
+        "verification": "三段完整播放与状态复位、音频HTTP摘要/时长/媒体错误、1280/390布局通过；77项公网大小/SHA一致；论文目录与反馈服务保持；导入/生成幂等，JS/差异/文档通过。",
+        "files": [
+          "scripts/build_website_spectrogram_audio.py",
+          "scripts/build_website_expansion.py",
+          "scripts/verify_website.cjs",
+          "temporary-site/index.html",
+          "temporary-site/assets/audio/spectrum-smith.wav",
+          "temporary-site/assets/audio/spectrum-levantan.wav",
+          "temporary-site/assets/audio/spectrum-observo.wav",
+          "temporary-site/assets/audio/provenance.json",
+          "temporary-site/assets/spectrogram-examples/provenance.json",
+          "temporary-site/README.md",
+          "CHANGELOG.md",
+          "docs/testing/website-redesign.md",
+          "docs/project-status.md",
+          "docs/plans/task-ledger.json"
+        ],
+        "release": "ra956dd882260d399",
+        "local_evidence": [
+          "output/validation/website/spectrum-80-20261015/scope-check.json",
+          "output/validation/website/spectrum-80-20261015/manifest.json",
+          "output/validation/website/spectrum-80-20261015/https-readback.json",
+          "output/validation/website/verify-1792033557151/report.json"
+        ],
+        "remaining": [
+          "其他浏览器及实体手机未验",
+          "主应用、Qt及最终EXE未修改或复验"
+        ]
+      },
       "title": "官网功能展示、试听小实验与支持页面",
-      "status": "in_progress",
+      "status": "verified",
+      "upcoming_preview": {
+        "status": "verified",
+        "scope": "2026-10-15 Windows源码及独立Chrome154、RTX5090生成；井井已授权官网同步，未训练/推送GitHub/改主应用",
+        "changes": "六组处理前统一10ms Hann/60dB随机相位GL，禁用脉冲；新增Lu modal/pressed及知乎例图的前后试听和Lu完整载瓦语论文引用。三段旧处理后与其他19WAV保持，新增三段处理后逐字节取v5对照页new-base80-repaired，31WAV/34播放器。",
+        "verification": "六段CUDA GL实际生成，图像/音频SHA、默认10ms/60dB/相位random/脉冲峰数0/有限非静音/无削波/长度/原22WAV保持/播放RMS对齐及环境/迁移通过。最终本地verify-1792041375314和公网verify-1792041515354通过六图12段HTTP SHA/完整播放、知乎命名/Lu完整引用、八档导航五档布局/来源/音量/无JS，错误和失败请求为空，已检查截图，scratch deleted。90项HTTPS大小/SHA一致，生成幂等及源/冻结清单一致、其他HTML保持，UI数据80参数/400显示来源及文档2041文件/436登记/110任务errors=[]。旧三例导入覆盖保护实际执行通过。",
+        "remaining": [
+          "实体手机、Safari/Firefox及长期压力未验"
+        ],
+        "local_evidence": "output/validation/website/verify-1792041375314/report.json",
+        "deployment": {
+          "status": "verified",
+          "authorized": "2026-10-15 井井明确要求推到服务器",
+          "candidate_release": "rbe930860a22563bb",
+          "previous_release": "r7067f210c837e052",
+          "scope": "90项静态文件，相对任务开始rb7d9b5f332919771为7改变/9新增/74保持；命名与完整引用相对中间r7067f210c837e052为3改变/87保持；配置不写入、不重载",
+          "evidence": "output/validation/website/six-comparisons-final-20261015/",
+          "files": 90,
+          "changed": 3,
+          "added": 0,
+          "unchanged": 87,
+          "configuration": "unchanged; no write or reload",
+          "papers_and_feedback": "preserved",
+          "release": "rbe930860a22563bb",
+          "receipt": "output/validation/website/website-989d8372c6dd43e7a0c834de6ebcc748/deployment.json",
+          "public_evidence": "output/validation/website/verify-1792041515354/report.json",
+          "overall_changed": 7,
+          "overall_added": 9,
+          "overall_unchanged": 74
+        }
+      },
       "files": [
         "temporary-site/index.html",
         "temporary-site/site.css",
@@ -3118,9 +3812,9 @@
         "scripts/verify_website_feedback.cjs",
         "scripts/build_website_spectrogram_audio.py"
       ],
-      "note": "既有官网扩展完成。本轮按用户选择改用m01/m05重建七步连续统，加入三张指定语谱图的署名引用及实际重建试听，顶栏桌面字号升至20px并恢复GitHub入口，增加阅读进度、随行目录和返回顶部。底部授权段逐字替换，两行祝愿保留原紫色和字号，字体包含新增字。官网发布及三张连续长图交付完成。 本轮三段图片重建修正为−30–0dB/10ms，默认品牌改为雾紫声波/深蓝末端，31项图标展示与提示框自动换行/边缘定位同步。 最新请求：移除深浅配色整块，在说明书展示后、小实验前新增用户原始两张自定义背景截图，DeepSeek居前错落叠放；本地与公网检查通过，rdccdfc56fbd82ee1已发布，三张新长图已交付并核对分界。 2026-10-13：新增指定3.0.1更新小记快照并按版本号排序，默认展示最新，保留3.0.0切换；更换后层首页背景截图，DeepSeek仍居前，本地定向检查通过，正在上线与更新长图。",
-      "verification_scope": "Windows独立Chrome、原生Qt截图、公网静态发布和三张长图。网页反馈使用真实FeedbackService的隔离数据库与邮件捕获器，不发送生产测试消息或真实邮件，不重建EXE。",
-      "verification": "rdccdfc56fbd82ee1的70资源HTTPS大小/SHA256一致，论文目录摘要和反馈服务保持。公网verify-1791815875900通过26图加载、17叠图逐张点击查看与键盘返回、DeepSeek在前及guide/background/lab位置、旧深浅配色块消失、20音频、阅读目录/进度/返回顶部、四宽度、无JS和减少动效，错误和失败请求为空。long-images-1791815035679三图1600×9084/8528/7961，连续边界0/9084/17612/25573，两处分界目视无截断。用户两张原图逐字节复制，原始摘要一致。HTML构建幂等、差异检查和文档检查1996文件/424来源/98任务通过。保留首次公网音频异步断言竞态失败证据，修正验证等待播放后完整复查通过。",
+      "note": "官网功能叠图、支持页面、统计/邮箱反馈、3.0.2顶端版本、双下载与默认更新小记，3.0.1及3.0.0切换、背景四图与知乎文章按钮已上线。最新按用户确认的dl_m02/dl_m05及M07九步完整导出逐字节发布，不重合成或调幅，两原声均标注SCSC。真实参数Praat/Parselmouth、40–300Hz、九步F0/发声类型双变化，原目录及其他11音频保持。r787df59793c73aca的74资源摘要和公网完整交互复查通过。用户取消长图重导。 2026-10-13另在本地第一张语谱图说明补上用户确认的Hi, this is Steve Jobs.；核对Chappell原文后两处西语词形保持。本次文字已随r9cd63448bcea7d8e部署。2026-10-13用户四张背景截图按2、1、3、4前后堆叠，更多功能三段整体紧接背景且在小实验前。 用户恢复授权后r6a934e4e286065db已上线，3.0.2三项同步完成。",
+      "verification_scope": "Windows独立Chrome、原生Qt截图、公网静态发布和三张长图。网页反馈使用真实FeedbackService的隔离数据库与邮件捕获器，不发送生产测试消息或真实邮件，不重建EXE。 本次背景/位置在Windows独立Chrome本地及公网四宽度与无JS通过，第一例句子随同部署。",
+      "verification": "r787df59793c73aca的74资源HTTPS大小/SHA一致，3.0.1两个EXE发布前核对服务器完整摘要，论文目录与反馈服务保持。用户目录step01–step09与网站phonation-1–9逐字节摘要一致，两原声摘要与导出输入记录一致，原目录全部输出/元数据和原录音不修改。22音频，其他11段SHA保持。公网verify-1791826137507通过九步按钮/比例/原样音频SHA/来源/实际Praat参数、22WAV与互斥播放、3.0.1版本/双下载、知乎文章目标、26图/17叠图原图查看、目录/进度/返回顶部、四宽度、无JS/减少动效，错误与失败请求为空。音频无削波，峰值保留导出原值，不进行旧网站0.65调幅，普通自动生成被保护阻止覆盖手工确认文件。HTML构建幂等、差异与文档验证通过，无新的长图。 第一例说明是本次唯一HTML差异，重复生成幂等，31个WAV/PNG摘要保持，独立Chrome154的1280/390宽度文字与布局通过，页面错误为空。 r9cd63448bcea7d8e的76资源HTTPS大小/SHA一致，22音频与前次清单一致，四张用户原图字节相同。verify-1791873092916本地和verify-1791873435957公网通过1600/800/390/320宽度、2/1/3/4叠层、四原图点击、更多功能在背景与小实验之间、无JS顺序，错误/失败请求为空。下载预检拒绝过期报告后只读重核服务器当前两EXE完整摘要，官网元数据同步；论文/反馈/nginx保持。",
       "remaining": [
         "Safari/Firefox、实体手机及长期压力未验",
         "本轮反馈未发送真实邮件；公网接口已核对，流程由隔离邮件捕获器验证"
@@ -3128,7 +3822,7 @@
       "current_evidence": [
         "docs/testing/website-redesign.md"
       ],
-      "local_evidence": "output/validation/website/verify-1791806969330/report.json; output/validation/website/verify-1791807264208/report.json; output/validation/website/verify-1791807727783/report.json; output/validation/website/website-77a49a510de749f384725f822f2dfd7a/deployment.json; output/validation/website/website-77a49a510de749f384725f822f2dfd7a/https-readback.json; output/validation/website/long-images-1791811178260/report.json; temporary-site/assets/spectrogram-examples/provenance.json; temporary-site/assets/audio/provenance.json; output/validation/website/feedback-web-1791804522277/report.json; output/validation/website/spectrogram-parameter-audit-20261012/verification.json; output/validation/website/verify-1791809371549/report.json; output/validation/website/verify-1791810891275/report.json; output/validation/website/capture-1791810675209/report.json; output/validation/website/website-149aa34d220b4d74b25d9f8e81974d2a/deployment.json; output/validation/website/website-149aa34d220b4d74b25d9f8e81974d2a/https-readback.json; output/validation/website/verify-1791811177900/report.json; output/validation/website/verify-1791811178074/report.json; output/validation/website/verify-1791814659343/report.json; output/validation/website/verify-1791815035675/report.json; output/validation/website/verify-1791815875900/report.json; output/validation/website/website-0f881001ad2848c997fb38ee0237d55c/deployment.json; output/validation/website/website-0f881001ad2848c997fb38ee0237d55c/https-readback.json; output/validation/website/long-images-1791815035679/report.json",
+      "local_evidence": "output/validation/website/verify-1791806969330/report.json; output/validation/website/verify-1791807264208/report.json; output/validation/website/verify-1791807727783/report.json; output/validation/website/website-77a49a510de749f384725f822f2dfd7a/deployment.json; output/validation/website/website-77a49a510de749f384725f822f2dfd7a/https-readback.json; output/validation/website/long-images-1791811178260/report.json; temporary-site/assets/spectrogram-examples/provenance.json; temporary-site/assets/audio/provenance.json; output/validation/website/feedback-web-1791804522277/report.json; output/validation/website/spectrogram-parameter-audit-20261012/verification.json; output/validation/website/verify-1791809371549/report.json; output/validation/website/verify-1791810891275/report.json; output/validation/website/capture-1791810675209/report.json; output/validation/website/website-149aa34d220b4d74b25d9f8e81974d2a/deployment.json; output/validation/website/website-149aa34d220b4d74b25d9f8e81974d2a/https-readback.json; output/validation/website/verify-1791811177900/report.json; output/validation/website/verify-1791811178074/report.json; output/validation/website/verify-1791814659343/report.json; output/validation/website/verify-1791815035675/report.json; output/validation/website/verify-1791815875900/report.json; output/validation/website/website-0f881001ad2848c997fb38ee0237d55c/deployment.json; output/validation/website/website-0f881001ad2848c997fb38ee0237d55c/https-readback.json; output/validation/website/long-images-1791815035679/report.json; output/validation/website/verify-1791821830176/report.json; output/validation/website/verify-1791822976747/report.json; output/validation/website/verify-1791823229138/report.json; output/validation/website/downloads-301-20261013/final-deployment.json; output/validation/website/downloads-301-20261013/final-https-readback.json; output/validation/website/downloads-301-20261013/downloads-readback.json; output/validation/website/phonation-reaper-20261013/verification.json; temporary-site/assets/releases/v3.0.1.json; temporary-site/assets/downloads.json; output/validation/website/verify-1791824386658/report.json; output/validation/website/verify-1791824688192/report.json; output/validation/website/m02-webedit-article-20261013/deployment.json; output/validation/website/m02-webedit-article-20261013/https-readback.json; output/validation/website/phonation-reaper-m02-webedit-20261013/verification.json; output/validation/website/verify-1791825782148/report.json; output/validation/website/verify-1791826137507/report.json; output/validation/website/manual-phonation-m02-m05-20261013/verification.json; output/validation/website/manual-export-nine-20261013/deployment.json; output/validation/website/manual-export-nine-20261013/https-readback.json; output/validation/website/spectrogram-text-20261013/verification.json; output/validation/website/spectrogram-text-20261013/browser.json; output/validation/website/background-four-order-20261013/inputs.json; output/validation/website/background-four-order-20261013/deployment.json; output/validation/website/background-four-order-20261013/https-readback.json; output/validation/website/verify-1791873092916/report.json; output/validation/website/verify-1791873435957/report.json",
       "local_changes": {
         "date": "2026-10-12",
         "topic": "连续统与变速变调两处小字标注SCSC语料来源",
@@ -3136,10 +3830,110 @@
           "temporary-site/index.html",
           "temporary-site/site.css"
         ],
-        "status": "in_progress",
+        "status": "verified",
         "verification": "独立Chrome本地1440/390 px，两个区域均13px，小字无溢出、文字及链接准确；未部署。",
         "remaining": "本轮未获新部署授权，修改仅在本地。",
         "local_evidence": "output/validation/custom-appearance/website-1791811613716/"
+      },
+      "website_302_sync": {
+        "status": "verified",
+        "user_requested_pause": false,
+        "files": [
+          "temporary-site/index.html",
+          "temporary-site/assets/downloads.json",
+          "temporary-site/assets/releases/v3.0.2.json",
+          "temporary-site/README.md",
+          "scripts/verify_website.cjs"
+        ],
+        "verification": "两EXE服务器完整SHA／公网HEAD、77资源HTTPS摘要及本地／最终公网四宽度、双下载、三版本切换、Markdown确认稿／源摘要与无JS通过；截图已目视检查。页面错误／失败请求均为空，仅三项公共文件变化。",
+        "remaining": [],
+        "deployed": true,
+        "release": "r6a934e4e286065db",
+        "evidence": [
+          "output/validation/website/verify-1791905405111/report.json",
+          "output/validation/website/verify-1791905709626/report.json",
+          "output/validation/website/version-302-20261013/deployment.json",
+          "output/validation/website/version-302-20261013/https-readback.json"
+        ],
+        "outside_verified_scope": [
+          "实体手机及其他浏览器未验",
+          "未重建或验证应用成品"
+        ]
+      },
+      "rounded_best_audio": {
+        "status": "verified",
+        "date": "2026-10-15",
+        "scope": "六例GPU重建与本地/公网Chrome专项，已公开发布 r5f2b493b78bd750e",
+        "changes": "v5参数模型、80带6000步最佳；整数窗长实际计算，更新六段处理后与参数显示",
+        "verification": "verify-1792056304506六图12段完整播放、HTTP SHA、实际窗长/音量与响应式通过；研究18段完整播放；导入/生成幂等；公网verify-1792057243525六图12段完整播放、HTTP SHA及布局通过",
+        "remaining": [
+          "整站默认验证旧截图数量断言失败28!=26，未扩改"
+        ],
+        "files": [
+          "scripts/build_website_spectrogram_audio.py",
+          "scripts/build_website_expansion.py",
+          "scripts/verify_website.cjs",
+          "temporary-site/index.html",
+          "temporary-site/assets/audio",
+          "temporary-site/assets/spectrogram-examples"
+        ],
+        "deployment_receipt": "output/validation/website/website-47a51543b8cf4f4e849931911b0b38d2/deployment.json"
+      },
+      "tutorial_section": {
+        "status": "verified",
+        "date": "2026-10-15",
+        "scope": "Windows本地最终候选与官网HTTPS，已授权并完成发布",
+        "changes": "顶栏及目录使用教程，小电视播放用户指定B站介绍，18模块禁用。移除更多功能整块、选一节文字/箭头、目录慢慢逛；九处大板块按内容搭配已确认的手绘声波、撕纸边和胶带接缝，按钮改手绘边线、自然宽度与轻微倾斜。正文使用说明与源码及目录项移除，GitHub保留顶栏并移至页脚；首页增强漂浮/悬停，其他板块适量入场/悬停与减少动态效果。",
+        "files": [
+          "scripts/build_website_expansion.py",
+          "scripts/verify_website.cjs",
+          "temporary-site/index.html",
+          "temporary-site/site.css",
+          "temporary-site/site.js",
+          "temporary-site/README.md",
+          "CHANGELOG.md",
+          "docs/project-status.md",
+          "docs/plans/task-ledger.json",
+          "docs/testing/website-redesign.md",
+          "deployment/temporary-site/publish.py",
+          "temporary-site/divider-preview.html"
+        ],
+        "verification": "最新本地Windows独立Chrome154：八档导航、五档教程布局、18模块禁用/黄色介绍、键盘/全屏/无JS通过，真实B站起播约1.90秒readyState=4；更换声波分隔后生成幂等通过。三种分隔符对照页1440/390/320布局、SVG范围与键盘跳转通过，页面错误/失败请求为空。三种分隔符已按内容用于十处：独立Chrome154在1440/390/320下布局/目录/无JS通过，主页与对照页生成幂等通过。公网教程/导航/真实B站起播与全屏、首页及小节动效/离屏暂停/四宽度/减少动态效果、九处分隔/页脚与顶栏GitHub/无JS通过；89项HTTPS完整大小/SHA一致，两EXE HEAD200/大小一致，论文目录SHA不变，反馈与nginx运行正常。本轮文档校验errors为空、JS语法及定向git diff --check通过。",
+        "local_evidence": "output/validation/website/verify-1792061776861/report.json",
+        "remaining": [
+          "多视频分集目录仅提出方案，未实现",
+          "完整视频、实体手机、其他浏览器与长期运行未验"
+        ],
+        "divider_variants": {
+          "status": "verified",
+          "scope": "用户确认三种全部采用，已按内容搭配并发布",
+          "files": [
+            "scripts/build_website_expansion.py",
+            "temporary-site/index.html",
+            "temporary-site/divider-preview.html",
+            "scripts/verify_website.cjs"
+          ],
+          "placement": "手绘声波用于教程/小实验，撕纸边用于方法与引用/常见问题/使用说明与源码，胶带接缝用于更新小记/下一步/问题反馈/联系我们/作者寄语",
+          "evidence": "output/validation/website/verify-1792062209693/report.json",
+          "remaining": "已随本轮官网发布；其他浏览器与实体设备未验"
+        },
+        "deployment": {
+          "status": "verified",
+          "authorized": "2026-10-15 用户明确要求修改后直接上线，追加首页及全页适量动效",
+          "release": "r4698051b31a01f4e",
+          "scope": "89项静态资源；3改变、86原字节保持、旧更多功能SVG不再引用；CSP仅补官方B站frame-src",
+          "receipt": "output/validation/website/website-9e7d8e1170714cafa8aeb90b021e396d/deployment.json",
+          "https_evidence": "output/validation/website/tutorial-release-20261015/https-readback.json",
+          "public_browser_evidence": [
+            "output/validation/website/verify-1792062997351/report.json",
+            "output/validation/website/verify-1792062997346/report.json",
+            "output/validation/website/verify-1792063033135/report.json"
+          ],
+          "remaining": [
+            "完整视频、实体手机、其他浏览器与长期运行未验",
+            "未修改或重建主应用"
+          ]
+        }
       }
     },
     {
@@ -3168,7 +3962,7 @@
       }
     }
   ],
-  "updated_on": "2026-10-12",
+  "updated_on": "2026-10-16",
   "current_coordination_plan": "docs/plans/2026-09-26-server-coordination.md",
   "policy_target": {
     "quota_bytes": 1000000000,

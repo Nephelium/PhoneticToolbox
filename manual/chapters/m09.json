@@ -947,6 +947,59 @@
       {
         "type": "heading",
         "attrs": {
+          "id": "m09-neural-pipeline",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "参数预测与 Mel 谱修复"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "先选择图片，填写时长、频率起止点和线性/对数轴，再点击“预测窗长与 dB 范围”。模型只预测窗长与动态范围，频率轴仍需手动选择。预测只填入一次，窗长与dB始终可编辑，重建保留当前值。两种算法均可使用内置预测。窗长取整数毫秒，帧移为四分之一窗长；Aoki短时窗初始化单独选择自动、开启脉冲或关闭使用随机相位，自动模式以15ms为界。GL默认32次，上限256。默认输出采样率为频率终点×2，重建频谱只显示所填频带，时间范围和像素长宽与输入一致。Mel 谱 → NAFNet → BigVGAN 先通过GL生成波形，再提取80带Mel谱、修复和声码器合成。参数预测模型已内置。修复与声码器需下载模型组件，安装后可离线使用。CPU组件直接下载，推理可能较慢；GPU可选择已有Python环境中的python.exe，点击检查兼容性，通过后选择GPU推理。不会自动安装或修改所选环境。参数预测与GL仍在CPU上运行，GPU用于修复与声码器。当前完整修复组件尚未公开提供服务器下载。最终整体增益将峰值限制在0.95以内。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m09-vocoder",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "可选 BigVGAN 声码器"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Windows 桌面的图片重建与图片涂鸦重建可以选择 BigVGAN 再合成。先在左栏点击下载 BigVGAN，完成校验和试运行后主动选择模型，再开始新任务。下载约 296.4 MB，安装后约占 848.2 MB。首次下载需要联网，之后可离线运行。CPU推理可能较慢，也可选择已有GPU Python环境并检查兼容性。默认仍使用现有重建方法。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "BigVGAN 从现有重建音频提取 Mel 频谱再合成，音色与噪声变化依材料而异。用相同图片与参数分别生成两种结果，再试听选择。输出采样率与样本数保持，来源 JSON 记录模型版本及增益。音频藏信息保留原始相位，不启用声码器。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
           "id": "m09-v2-more-examples",
           "level": 3
         },
@@ -2070,7 +2123,7 @@
                   },
                   {
                     "type": "text",
-                    "text": " 回到 100%。放大不增加原谱细节。画笔粗细按原网格计算，相同数值在不同图片或 FFT 下覆盖范围可能不同。"
+                    "text": " 回到 100%。放大不增加原谱细节。画笔直径按原图像素计算，可输入1–200 px，缩放不会改变实际笔宽。"
                   }
                 ]
               }
@@ -2668,7 +2721,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "整数1–128"
+                        "text": "整数1–256"
                       }
                     ]
                   }
@@ -2715,7 +2768,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "44100 Hz"
+                        "text": "自动（频率终点 × 2）"
                       }
                     ]
                   }
@@ -2743,7 +2796,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "原生为2×频率终点取整；升采样率不补回原图细节"
+                        "text": "自动输出为频率终点×2取整；提高输出采样率不补回原图细节"
                       }
                     ]
                   }
@@ -3034,7 +3087,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "1–100 / 0–100%"
+                        "text": "1–200 px / 0–100%"
                       }
                     ]
                   }
@@ -3048,7 +3101,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "粗细按原网格，低不透明度适合先试画"
+                        "text": "直径1–200 px，低不透明度适合先试画"
                       }
                     ]
                   }
@@ -3804,7 +3857,7 @@
         "content": [
           {
             "type": "text",
-            "text": "图片原图≤2500万像素，重建区域≤100万像素，像素×迭代≤3200万，FFT≤16384点。音频还受时频网格限制，30秒和最高采样率的组合可能超限。"
+            "text": "图片原图≤2500万像素，重建区域≤100万像素，像素×迭代≤2.56亿，FFT≤16384点。音频还受时频网格限制，30秒和最高采样率的组合可能超限。"
           }
         ]
       },
@@ -4213,7 +4266,7 @@
         "content": [
           {
             "type": "text",
-            "text": "下列论文说明图片重建采用的方法，具体结果请结合保存的参数解释。"
+            "text": "下列论文分别对应相位重建、短时窗初始化、Mel 谱修复与声码器合成。窗长预测和 80 带修复权重由本项目训练；BigVGAN 使用 NVIDIA 发布的预训练模型。"
           }
         ]
       },
@@ -4230,7 +4283,75 @@
                     "type": "citation",
                     "attrs": {
                       "referenceId": "REF-GRIFFINLIM",
-                      "label": "Daniel W. Griffin and Jae S. Lim 1984 Signal estimation from modified short-time Fourier transform"
+                      "label": "GRIFFIN D W, LIM J S. Signal estimation from modified short-time Fourier transform[J]. IEEE Transactions on Acoustics, Speech, and Signal Processing, 1984, 32(2): 236-243. DOI: 10.1109/TASSP.1984.1164317."
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "WEBSITE-AOKI-SHORT-WINDOWS",
+                      "label": "AOKI N. Technique of improving speech restoration from spectrograms of short windows for the Griffin–Lim algorithm[J]. Acoustical Science and Technology, 2023, 44(3): 186-188. DOI: 10.1250/ast.44.186."
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "REF-FAST-GRIFFINLIM",
+                      "label": "PERRAUDIN N, BALAZS P, SØNDERGAARD P L. A fast Griffin–Lim algorithm[C]//2013 IEEE Workshop on Applications of Signal Processing to Audio and Acoustics. IEEE, 2013: 1-4. DOI: 10.1109/WASPAA.2013.6701851."
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "REF-NAFNET",
+                      "label": "CHEN L, CHU X, ZHANG X, et al. Simple baselines for image restoration[C]//Computer Vision – ECCV 2022. Cham: Springer, 2022: 17-33. DOI: 10.1007/978-3-031-20071-7_2."
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "citation",
+                    "attrs": {
+                      "referenceId": "REF-BIGVGAN",
+                      "label": "LEE S G, PING W, GINSBURG B, et al. BigVGAN: A universal neural vocoder with large-scale training[C/OL]//The Eleventh International Conference on Learning Representations. 2023[2026-10-15]. https://openreview.net/forum?id=iTtGCMDEzS_."
                     }
                   }
                 ]

@@ -85,7 +85,90 @@ def test_notice_is_independent_of_first_date_and_paper_subscription(tmp_path):
     assert s.asset('reading-introduction', 'original')['sha256'] == catalog['notice']['pdf']['sha256']
     before = len(o.calls); s.refresh(threading.Event())
     assert o.calls[before:] == [BASE_URL + 'catalog.json']
-    with pytest.raises(PaperError): s.remove_download('reading-introduction')
+
+
+def test_removed_notice_survives_restart_and_refresh_until_selected(tmp_path):
+    catalog, body = notice_catalog()
+    o = Opener({'catalog.json': json.dumps(catalog).encode(), 'reading-introduction/note.pdf': body})
+    s = PaperService(tmp_path, opener=o, today=lambda: date(2026, 10, 12))
+    s.set_auto_receive(False); s.refresh(threading.Event())
+    asset = s.status()['notice']['original']
+    notes = s.root / ('annotations-' + asset['sha256'] + '.json')
+    notes.write_text('retained notice notes', 'utf8')
+    s.remove_download('reading-introduction')
+    assert s.status()['notice']['dismissed'] and not s._path(asset).exists()
+    restarted = PaperService(tmp_path, opener=o, today=lambda: date(2026, 10, 12))
+    before = len(o.calls)
+    restarted.refresh(threading.Event())
+    restarted.download(restarted.first_launch, threading.Event(), lambda _: None)
+    assert o.calls[before:] == [BASE_URL + 'catalog.json']
+    assert restarted.status()['notice']['dismissed'] and not restarted.status()['notice']['downloaded']
+    restarted.download('0001-01-01', threading.Event(), lambda _: None, ['reading-introduction'])
+    assert restarted.status()['notice']['downloaded'] and not restarted.status()['notice']['dismissed']
+    assert not restarted.status()['papers'][0]['downloaded']
+    assert notes.read_text('utf8') == 'retained notice notes'
+    assert restarted.first_launch == '2026-10-12'
+
+
+def test_notice_revision_does_not_override_removal(tmp_path):
+    catalog, body = notice_catalog()
+    o = Opener({'catalog.json': json.dumps(catalog).encode(), 'reading-introduction/note.pdf': body})
+    s = PaperService(tmp_path, opener=o, today=lambda: date(2026, 10, 12))
+    s.refresh(threading.Event()); s.remove_download('reading-introduction')
+    revised = body + b'revised'
+    catalog['notice']['pdf'].update(size=len(revised), sha256=hashlib.sha256(revised).hexdigest())
+    catalog['notice']['updatedAt'] = '2026-10-12'
+    o.items.update({'catalog.json': json.dumps(catalog).encode(), 'reading-introduction/note.pdf': revised})
+    before = len(o.calls); s.refresh(threading.Event())
+    assert o.calls[before:] == [BASE_URL + 'catalog.json'] and not list(s.files.iterdir())
+    s.download('0001-01-01', threading.Event(), lambda _: None, ['reading-introduction'])
+    assert s._path(catalog['notice']['pdf']).read_bytes() == revised
+
+
+@pytest.mark.parametrize('automatic', [True, False])
+def test_removing_notice_during_acquisition_wins(tmp_path, automatic):
+    catalog, body = notice_catalog()
+    o = Opener({'reading-introduction/note.pdf': body})
+    s = PaperService(tmp_path, opener=o, today=lambda: date(2026, 10, 12)); s.catalog = catalog
+    entered = threading.Event(); release = threading.Event(); original = s._read
+    def delayed(*args):
+        entered.set(); assert release.wait(5)
+        return original(*args)
+    s._read = delayed
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        future = pool.submit(s.download_notice, threading.Event()) if automatic else pool.submit(
+            s.download, '0001-01-01', threading.Event(), lambda _: None, ['reading-introduction'])
+        try:
+            assert entered.wait(5)
+            s.remove_download('reading-introduction')
+        finally:
+            release.set()
+        future.result(timeout=5)
+    assert not list(s.files.iterdir()) and s.status()['notice']['dismissed']
+
+
+@pytest.mark.parametrize('removed_id', ['sample', 'reading-introduction'])
+def test_notice_and_paper_shared_asset_is_retained(tmp_path, removed_id):
+    catalog, _ = notice_catalog(); catalog['notice']['pdf'] = copy.deepcopy(paper()['original'])
+    o = Opener({'catalog.json': json.dumps(catalog).encode(), 'sample/original.pdf': BODY})
+    s = PaperService(tmp_path, opener=o, today=lambda: date(2026, 10, 12)); s.refresh(threading.Event())
+    s.remove_download(removed_id)
+    remaining = s.status()['notice'] if removed_id == 'sample' else s.status()['papers'][0]
+    assert remaining['downloaded'] and s._path(paper()['original']).exists()
+    before = len(o.calls)
+    s.download('0001-01-01', threading.Event(), lambda _: None, [removed_id])
+    assert len(o.calls) == before and s.status()['notice']['downloaded'] and s.status()['papers'][0]['downloaded']
+
+
+def test_notice_removal_rolls_back_when_preferences_cannot_be_saved(tmp_path, monkeypatch):
+    catalog, body = notice_catalog()
+    o = Opener({'catalog.json': json.dumps(catalog).encode(), 'reading-introduction/note.pdf': body})
+    s = PaperService(tmp_path, opener=o, today=lambda: date(2026, 10, 12)); s.refresh(threading.Event())
+    def denied(*_): raise PermissionError('owned test denial')
+    monkeypatch.setattr('ptb_desktop.papers.atomic_json', denied)
+    with pytest.raises(PaperError, match='恢复原位置'): s.remove_download('reading-introduction')
+    assert s.status()['notice']['downloaded'] and not s.status()['notice']['dismissed']
+    assert not list(s.files.glob('.removed-*'))
 
 
 @pytest.mark.parametrize('change', [lambda n: n['pdf'].update(path='../private.pdf'),

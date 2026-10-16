@@ -1,8 +1,13 @@
 # M09 · 语谱图转音频迁移计划
 
+2026-10-15：按本次明确要求加入自动参数预测、15 ms 脉冲阈值、1/4 帧移、80 带修复、BigVGAN 和输出增益，迭代上限 256。完整独立 CPU 组件下载 303.7 MB、展开 856.3 MB，当前未公开，旧声码器安装继续识别。科学策略见 [ADR](../../decisions/ADR-M09-neural-pipeline.md)，验证见 [本轮报告](../../testing/m09-neural-pipeline.md)。
+
 状态：verified，限定Windows桌面与Windows托管Chrome的已列明范围。实际路径与命令由[本次实施计划](../2026-09-11-m01-m02-m09.md)、[源码映射](../../modules/evidence/M09-source-map.md)和[联合报告](../../testing/m02-m09-report.md)更新，下方保留迁移前规格；M09截图设备、多平台与发行未纳入完成声明。普通模块依 P03/P04/P06/P07；设备/原生模块另依 P01。共用 [架构](../../../ARCHITECTURE.md)、[测试规范](../../testing/verification-plan.md) 和 [UI 规范](../../design/UI_SPEC.md)。
 
 ## 现有代码与目标文件
+
+2026-10-14 可选增量：井井在 Vocos、HiFi-GAN 与 BigVGAN 试听后选择接入 BigVGAN，并要求更多例子。采用现有 Griffin–Lim 后提取 Mel 再合成，现有方法为默认，模型显式选择，原始相位音频模式不参与。Windows CPU 模型与独立运行时经服务器固定组件下载，复用 ComponentManager、现有任务与取消预算；不加入主包、不改科学核心灰度映射或数据库。当前源码/组件/独立 Chrome 与六组新增试听证据见[专项报告](../../testing/m09-neural-vocoder-evaluation.md)，真实 Qt 下载、最终 EXE 及其他平台另验。
+
 现有路径均已确认存在；目录内逐函数对应由实施第一步记录，避免把旧类名机械套给新实现。
 
 - [phonetic_toolbox/gui/widgets/spec2wav_widget.py](../../../phonetic_toolbox/gui/widgets/spec2wav_widget.py)
@@ -30,6 +35,8 @@
 | M09-F04 | 结果操作 | 播放、导出、帮助 | 底栏＋页头 | 展示这是图像重建得到的音频；不把它宣称为恢复原始录音。 |
 
 ## 状态、重用与双端差异
+2026-10-15当前增量：内置预测改为填写标定后显式按钮触发，手动编辑保持calibrated算法；Aoki选择共用、GL上限256、比较图按输入频带及尺寸、默认输出率2×频率终点、画笔1–200px，以及已有Python检查后GPU推理已实现。当前Windows源码/Chrome/可见Qt与真实CPU/GPU验证通过，具体边界见[专项报告](../../testing/m09-neural-pipeline.md)。完整组件下载发布、最终EXE与跨平台不包含在本次源码交付中。
+
 未选图、标定无效、重建中、无结果、导出失败均有对应按钮状态。
 
 科学意义说明保持简短：语谱图图像不包含原始相位；美化不能改变方法能力的边界。

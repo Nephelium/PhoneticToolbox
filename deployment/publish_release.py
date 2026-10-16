@@ -42,6 +42,7 @@ else:
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--plan',type=Path,required=True)
     ap.add_argument('--ssh-helper',type=Path,required=True);ap.add_argument('--apply',action='store_true')
+    ap.add_argument('--derive-stored-zips',action='store_true',help='Reproduce stored update ZIP from an earlier identical published EXE; exact SHA checks remain')
     args=ap.parse_args();plan=json.loads(args.plan.read_text('utf8'))
     rows=[]
     for item in plan['files']:
@@ -52,6 +53,15 @@ def main():
         assert not mutable or (relative.name=='latest.json' and file.stat().st_size<65536)
         rows.append(dict(local=str(file),relative=str(relative),size=file.stat().st_size,sha256=sha,mutable=mutable))
     receipt=args.plan.with_suffix('.receipt.json');results=[]
+    recipes={}
+    if args.derive_stored_zips:
+        from derive_release_zip import prepare_recipe
+        for row in rows:
+            if row['relative'].endswith('-portable.zip'):
+                source=next((item for item in rows if PurePosixPath(item['relative']).parent==PurePosixPath(row['relative']).parent
+                             and PurePosixPath(item['relative']).name=='PhoneticToolbox-windows-x64.exe'),None)
+                if source is None or rows.index(source)>=rows.index(row):raise ValueError('Publish the matching EXE before deriving its ZIP')
+                recipes[row['relative']]=(source['relative'],prepare_recipe(row['local'],source['local'],args.plan.resolve().parent))
     def save():receipt.write_text(json.dumps({'applied':args.apply,'files':results},indent=2)+'\n','utf8')
     if not args.apply:results.extend(rows);save();return
     sys.path.insert(0,str(args.ssh_helper.parent))
@@ -69,6 +79,11 @@ def main():
             if state['match']:
                 results.append(dict(row,success=True,reused=True));save();continue
             if state['exists'] and not row['mutable']:raise RuntimeError('Immutable target differs: '+row['relative'])
+            if row['relative'] in recipes:
+                from derive_release_zip import publish_derived
+                source,recipe=recipes[row['relative']]
+                result=publish_derived(client,row,source,recipe)
+                results.append(dict(row,**result));save();print(json.dumps(result),flush=True);continue
             stage='/home/admin/ptb-release-'+row['sha256']+'.part'
             with client.open_sftp() as sftp:
                 try:offset=sftp.stat(stage).st_size

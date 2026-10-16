@@ -31,6 +31,22 @@ def rectify(gray, corners=None):
     return gray.copy()
 
 
+def pixel_brush(mask,points,diameter):
+    """Binary round caps on pixel centers; 1 px is exactly one pixel."""
+    radius=diameter/2
+    centers=points.astype(float)+(0.5 if diameter%2 else 0.)
+    segments=list(zip(centers[:-1],centers[1:])) if len(centers)>1 else [(centers[0],centers[0])]
+    for a,b in segments:
+        low=np.maximum(0,np.floor(np.minimum(a,b)-radius).astype(int))
+        high=np.minimum([mask.shape[1],mask.shape[0]],np.ceil(np.maximum(a,b)+radius).astype(int))
+        if np.any(high<=low):continue
+        yy,xx=np.ogrid[low[1]:high[1],low[0]:high[0]]
+        dx,dy=b-a;denominator=dx*dx+dy*dy
+        t=np.clip(((xx+.5-a[0])*dx+(yy+.5-a[1])*dy)/denominator,0,1) if denominator else 0
+        hit=(xx+.5-a[0]-t*dx)**2+(yy+.5-a[1]-t*dy)**2<=radius**2
+        mask[low[1]:high[1],low[0]:high[0]] |= hit.astype(np.uint8)
+
+
 def paint(gray, strokes):
     """One alpha composite per stroke, regardless of pointer sampling density."""
     result = np.asarray(gray, dtype=np.float64).copy()
@@ -45,11 +61,14 @@ def paint(gray, strokes):
         mask = np.zeros(result.shape, np.uint8)
         points = np.rint([[p['x']*(width-1), p['y']*(height-1)] for p in stroke['points']]).astype(np.int32)
         radius = max(1, int(stroke['size']/2+.5))
+        if stroke.get('size_unit')=='px':
+            pixel_brush(mask,points,stroke['size'])
         # LINE_8 matches deterministic pixel grid; round caps include single dots.
-        for a, b in zip(points[:-1], points[1:]):
-            line(mask, tuple(a), tuple(b), 1, radius*2, LINE_8)
-        for p in (points[0], points[-1]):
-            circle(mask, tuple(p), radius, 1, -1, LINE_8)
+        else:
+            for a, b in zip(points[:-1], points[1:]):
+                line(mask, tuple(a), tuple(b), 1, radius*2, LINE_8)
+            for p in (points[0], points[-1]):
+                circle(mask, tuple(p), radius, 1, -1, LINE_8)
         hit = mask.astype(bool)
         result[hit] = result[hit]*(1-alpha)+stroke['color']*alpha
         touched |= hit

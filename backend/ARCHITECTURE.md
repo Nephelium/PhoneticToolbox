@@ -60,8 +60,12 @@ preview 接口提供受预算限制的音频、参数、TextGrid、语谱和交�
 
 process_entry 只分派固定科学模块；source_runtime 绑定当前源码。EGG/LPC、唇形及 MFA 的第三方兼容环境按模块隔离，业务代码不能从过期安装副本隐式回退。原生适配向 core 提供明确 ports，外部程序、文件系统和设备操作留在外层。
 
+M09 的可选 BigVGAN 沿用同一任务与 spec2wav_child，在 Griffin–Lim 后调用应用自有推理适配器，使用已检查的用户GPU Python或独立CPU组件Python。模型与 Python/Torch 环境经本机专用接口和共用 ComponentManager 下载、逐文件校验、自检后原子登记；仅接受内置版本身份，不接受客户端路径或下载 URL。默认任务不导入 Torch，也不启用该处理。父任务的 Windows Job Object 包含声码器子进程，取消和内存预算覆盖其后代；启用模型时预算为 3 GB。组件保存在本机 components/vocoder，主包不包含修复/声码器模型或独立环境。窗宽/动态范围小模型由 m09_parameters 在主应用内离线推理，资源为 core/spec2wav/data 的固定 float32 NumPy 数组，预览不依赖组件，重建只把预测后的实际参数发送给组件。安装和科学输出证据见[声码器验收](../docs/testing/m09-neural-vocoder-evaluation.md)。
+
 ## 外部节点与验证
 
 remote_scheduler、remote_files 和 remote/1 协议已有源码，但 [ptb_node](../packages/ptb_node/ARCHITECTURE.md)仍有未完成的绑定/准入路径。协议测试、科学任务接通和实际服务器容量须分别验收。
 
 backend/tests 负责接口、store 和模块任务边界，tests/contracts 与 tests/security 检查协议/隔离，tests/parity 检查科学一致性。修改数据库须另有授权；文档整理只核对源码，不执行迁移或实际研究任务。
+
+M09 GPU环境由原生文件选择器授予临时ID，m09_runtime只登记兼容性检查成功的解释器身份。运行前重新核对Python及模型摘要，显式CUDA选择失败不静默降级。配置保存在用户组件目录gpu-python.json，测试可用PTB_M09_PYTHON_CONFIG隔离，不接受请求中的路径。GL在主应用core计算，可选组件只提供模型与运行库。

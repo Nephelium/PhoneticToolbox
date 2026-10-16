@@ -209,7 +209,7 @@
       "target": "resources/vocal_tract/bundle-manifest.json",
       "source_sha256": "8b6296438c031b60a9e85746614d5965361d49ac96bf39ffed9405e187cee7b9",
       "migration_sha256": "8b6296438c031b60a9e85746614d5965361d49ac96bf39ffed9405e187cee7b9",
-      "current_sha256": "874e365d2ee5ae1a7418e61bf6265823d17412d47a74bbaad028971dce9fcb22"
+      "current_sha256": "76afb19bcca93e6705b58acb4929bc81943539f35e122e0df820a70d6a4d3e10"
     },
     {
       "source": "phonetic_toolbox/resources/vocal_tract/sources.lock.json",

@@ -104,6 +104,13 @@ playwright-report/
 # Local convenience launchers stay on the author's machine.
 /打开语音学论文精读.cmd
 /打开音标内容编辑器.cmd
+/打开反馈管理工具.vbs
+# Local model weights and website-only media are not public source assets.
+/packages/phonetic_core/src/phonetic_core/spec2wav/data/parameters-v5.json
+/temporary-site/assets/author-avatar.jpg
+/temporary-site/assets/tiny-whisper.jpg
+/temporary-site/assets/screens/*.png
+/temporary-site/assets/spectrogram-examples/*.png
 # Unreferenced legacy illustrations retained locally, excluded from v3 source.
 /PT.png
 /image/ARCHITECTURE/1776325135506.png

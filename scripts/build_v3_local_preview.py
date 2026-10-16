@@ -12,7 +12,7 @@ from build_artifacts import build_workspace
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def copy_runtime_frontend(source, target, audit, optimize_media=False):
+def copy_runtime_frontend(source, target, audit, optimize_media=False, media_cache=None):
     """Freeze current chapters and only the media they actually use."""
     shutil.copytree(source, target, ignore=lambda folder, names: ['manual'] if Path(folder) == source and 'manual' in names else [])
     manual = source / 'manual'
@@ -50,7 +50,7 @@ def copy_runtime_frontend(source, target, audit, optimize_media=False):
         if not path.resolve().is_relative_to(manual.resolve()) or hashlib.sha256(path.read_bytes()).hexdigest() != row['sha256']:
             raise ValueError('Manual asset identity mismatch')
         if optimize_media:
-            _, item = package_asset(row, path, selected)
+            _, item = package_asset(row, path, selected, cache_root=media_cache)
             packaging.append(item)
         else:
             destination = selected / row['path']
@@ -85,6 +85,8 @@ def main():
                         help='Reuse an owned host archive when all analyzed native inputs still match')
     parser.add_argument('--frontend-dist', type=Path,
                         help='Use a freshly generated frontend in an owned output directory')
+    parser.add_argument('--manual-media-cache', type=Path,
+                        help='Reuse compact manual derivatives only after source/encoder/content identity checks')
     options = parser.parse_args()
     # Every compact distribution uses the shared persistent launcher, even if
     # a caller omits the historical opt-in flag. Future releases inherit the
@@ -225,7 +227,8 @@ def main():
                                      for p in sorted(source.rglob('*')) if p.is_file())
                 continue
             if options.compact_onefile and relative == 'frontend/dist':
-                copy_runtime_frontend(source, target, work / 'manual-package-selection.json', optimize_media=True)
+                copy_runtime_frontend(source, target, work / 'manual-package-selection.json', optimize_media=True,
+                                      media_cache=options.manual_media_cache)
                 data.append((target, relative))
                 continue
             shutil.copytree(source, target)
@@ -295,6 +298,10 @@ def main():
                 parts = list(source.relative_to(source_root).with_suffix('').parts)
                 if any(part.endswith('.egg-info') for part in parts):
                     continue
+                # Executed as runner.py by the separately downloaded CPU
+                # component. Analyzing it here would pull Torch into the app.
+                if parts == ['ptb_worker', 'vocoder_child']:
+                    continue
                 if parts[-1] == '__init__':
                     parts.pop()
                 if parts:
@@ -307,6 +314,7 @@ def main():
         args += arguments(snapshot)
         args += ['--collect-all', '_sounddevice_data', '--collect-data', 'docx',
                  '--hidden-import', '_cffi_backend', '--hidden-import', 'xlrd', '--exclude-module', 'matplotlib',
+                 '--exclude-module', 'ptb_worker.vocoder_child', '--exclude-module', 'torch', '--exclude-module', 'torchaudio',
                  '--exclude-module', 'IPython', str(snapshot / 'scripts/v3_local_preview_entry.py')]
         env = os.environ.copy()
         env['PYTHONPATH'] = os.pathsep.join(import_paths(snapshot))

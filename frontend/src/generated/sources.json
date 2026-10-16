@@ -1,5 +1,124 @@
 [
   {
+    "id": "WEBSITE-AOKI-SHORT-WINDOWS",
+    "title": "Technique of improving speech restoration from spectrograms of short windows for the Griffin–Lim algorithm",
+    "modules": [
+      "M09"
+    ],
+    "kind": "paper",
+    "acknowledgement_group": "academic",
+    "authors": "Naofumi Aoki",
+    "version": "",
+    "license": "",
+    "urls": {
+      "paper": "https://www.jstage.jst.go.jp/article/ast/44/3/44_E2297/_article/-char/en",
+      "doi": "https://doi.org/10.1250/ast.44.186"
+    },
+    "citation": "AOKI N. Technique of improving speech restoration from spectrograms of short windows for the Griffin–Lim algorithm[J]. Acoustical Science and Technology, 2023, 44(3): 186-188. DOI: 10.1250/ast.44.186.",
+    "reference_note": "用于短时窗的脉冲相位初始化。可在两种重建算法中选择开启、关闭或按窗长自动使用。"
+  },
+  {
+    "id": "MODEL-M09-REPAIR80",
+    "title": "条件化 NAFNet Mel 谱修复模型",
+    "modules": [
+      "M09"
+    ],
+    "kind": "project-trained-model",
+    "acknowledgement_group": "software",
+    "authors": "PhoneticToolbox",
+    "version": "80 带 Mel 谱",
+    "license": "",
+    "urls": {},
+    "reference_note": "本项目基于 NAFNet 方法训练的语谱图修复模型。修复 GL 波形提取的 80 带 Mel 谱，再交给 BigVGAN 合成。"
+  },
+  {
+    "id": "MODEL-M09-PARAMETERS",
+    "title": "窗长与动态范围预测模型",
+    "modules": [
+      "M09"
+    ],
+    "kind": "project-trained-model",
+    "acknowledgement_group": "software",
+    "authors": "PhoneticToolbox",
+    "version": "v5 · 应用内置",
+    "license": "",
+    "urls": {},
+    "reference_note": "本项目训练。根据语谱图、时长及频率标定预测窗长和动态范围；内置 NumPy 推理，基础 GL 也可使用。"
+  },
+  {
+    "id": "REF-BIGVGAN",
+    "title": "BigVGAN: A Universal Neural Vocoder with Large-Scale Training",
+    "modules": [
+      "M09"
+    ],
+    "kind": "paper",
+    "acknowledgement_group": "academic",
+    "authors": "Sang-gil Lee；Wei Ping；Boris Ginsburg；Bryan Catanzaro；Sungroh Yoon",
+    "version": "",
+    "license": "",
+    "urls": {
+      "论文": "https://openreview.net/forum?id=iTtGCMDEzS_",
+      "开放版本": "https://arxiv.org/abs/2206.04658"
+    },
+    "citation": "LEE S G, PING W, GINSBURG B, et al. BigVGAN: A universal neural vocoder with large-scale training[C/OL]//The Eleventh International Conference on Learning Representations. 2023[2026-10-15]. https://openreview.net/forum?id=iTtGCMDEzS_.",
+    "reference_note": "用于将 80 带 Mel 谱合成为波形。本模块采用 NVIDIA 发布的 BigVGAN base 22.05 kHz 预训练模型。"
+  },
+  {
+    "id": "REF-NAFNET",
+    "title": "Simple Baselines for Image Restoration",
+    "modules": [
+      "M09"
+    ],
+    "kind": "paper",
+    "acknowledgement_group": "academic",
+    "authors": "Liangyu Chen；Xiaojie Chu；Xiangyu Zhang；Jian Sun",
+    "version": "",
+    "license": "",
+    "urls": {
+      "论文": "https://link.springer.com/chapter/10.1007/978-3-031-20071-7_2",
+      "开放版本": "https://arxiv.org/abs/2204.04676",
+      "作者代码": "https://github.com/megvii-research/NAFNet"
+    },
+    "citation": "CHEN L, CHU X, ZHANG X, et al. Simple baselines for image restoration[C]//Computer Vision – ECCV 2022. Cham: Springer, 2022: 17-33. DOI: 10.1007/978-3-031-20071-7_2.",
+    "reference_note": "80 带 Mel 谱修复采用 NAFNet 结构，并加入频率、覆盖范围及声学条件。本模块使用本项目训练的修复权重。"
+  },
+  {
+    "id": "REF-FAST-GRIFFINLIM",
+    "title": "A fast Griffin–Lim algorithm",
+    "modules": [
+      "M09"
+    ],
+    "kind": "paper",
+    "acknowledgement_group": "academic",
+    "authors": "Nathanaël Perraudin；Peter Balazs；Peter L. Søndergaard",
+    "version": "",
+    "license": "",
+    "urls": {
+      "作者论文": "https://perraudin.info/publications/perraudin-note-002.pdf",
+      "DOI": "https://doi.org/10.1109/WASPAA.2013.6701851"
+    },
+    "citation": "PERRAUDIN N, BALAZS P, SØNDERGAARD P L. A fast Griffin–Lim algorithm[C]//2013 IEEE Workshop on Applications of Signal Processing to Audio and Acoustics. IEEE, 2013: 1-4. DOI: 10.1109/WASPAA.2013.6701851.",
+    "reference_note": "用于带动量的 Griffin–Lim 迭代，加速幅度谱的相位估计。"
+  },
+  {
+    "id": "PKG-BIGVGAN-BASE",
+    "title": "BigVGAN base 22 kHz",
+    "modules": [
+      "M09"
+    ],
+    "kind": "optional-vocoder-component",
+    "acknowledgement_group": "software",
+    "authors": "Sang-gil Lee；Wei Ping；Boris Ginsburg；Bryan Catanzaro；Sungroh Yoon；NVIDIA Corporation",
+    "version": "预训练模型 · 22.05 kHz · 80 带",
+    "license": "NVIDIA BigVGAN code/model MIT; included alias-free Torch activation adapted under Apache-2.0; runtime dependencies separately inventoried",
+    "urls": {
+      "code": "https://github.com/NVIDIA/BigVGAN",
+      "model": "https://huggingface.co/nvidia/bigvgan_base_22khz_80band",
+      "论文": "https://openreview.net/forum?id=iTtGCMDEzS_"
+    },
+    "reference_note": "NVIDIA 发布的 80 带 Mel 声码器，用于完整修复流程或 GL 后单独再合成。支持 CPU，也可使用已通过检查的 CUDA Python 环境。"
+  },
+  {
     "id": "REF-SHUE-VOICE-SOURCE-2010",
     "title": "The Voice Source in Speech Production: Data, Analysis and Models",
     "modules": [

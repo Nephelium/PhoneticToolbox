@@ -5743,7 +5743,7 @@
             "type": "boolean"
           },
           "exported_cache_days": {
-            "default": 7,
+            "default": 1,
             "maximum": 3650.0,
             "minimum": 1.0,
             "title": "Exported Cache Days",
@@ -5830,6 +5830,15 @@
       "Spec2WavConfig": {
         "additionalProperties": false,
         "properties": {
+          "algorithm": {
+            "default": "griffin_lim",
+            "enum": [
+              "griffin_lim",
+              "neural_pipeline"
+            ],
+            "title": "Algorithm",
+            "type": "string"
+          },
           "audio_fft": {
             "default": 1024,
             "enum": [
@@ -5839,6 +5848,11 @@
             ],
             "title": "Audio Fft",
             "type": "integer"
+          },
+          "auto_parameters": {
+            "default": false,
+            "title": "Auto Parameters",
+            "type": "boolean"
           },
           "channel": {
             "default": 0,
@@ -5884,6 +5898,25 @@
             "title": "Freq Start",
             "type": "number"
           },
+          "frequency_axis": {
+            "default": "linear",
+            "enum": [
+              "linear",
+              "log"
+            ],
+            "title": "Frequency Axis",
+            "type": "string"
+          },
+          "inference_device": {
+            "default": "auto",
+            "enum": [
+              "auto",
+              "cpu",
+              "cuda"
+            ],
+            "title": "Inference Device",
+            "type": "string"
+          },
           "invert_image": {
             "default": false,
             "title": "Invert Image",
@@ -5915,10 +5948,29 @@
           },
           "n_iter": {
             "default": 32,
-            "maximum": 128.0,
+            "maximum": 256.0,
             "minimum": 1.0,
             "title": "N Iter",
             "type": "integer"
+          },
+          "phase_initialization": {
+            "default": "auto",
+            "enum": [
+              "auto",
+              "pulse",
+              "random"
+            ],
+            "title": "Phase Initialization",
+            "type": "string"
+          },
+          "reconstruction_profile": {
+            "default": "legacy",
+            "enum": [
+              "legacy",
+              "calibrated"
+            ],
+            "title": "Reconstruction Profile",
+            "type": "string"
           },
           "seed": {
             "default": 0,
@@ -5964,6 +6016,15 @@
             "minimum": 0.0,
             "title": "Time Start",
             "type": "number"
+          },
+          "vocoder": {
+            "default": "none",
+            "enum": [
+              "none",
+              "bigvgan"
+            ],
+            "title": "Vocoder",
+            "type": "string"
           },
           "win_length_ms": {
             "default": 10,
@@ -6104,6 +6165,18 @@
             ],
             "title": "N Fft"
           },
+          "prediction": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prediction"
+          },
           "reference_amplitude": {
             "anyOf": [
               {
@@ -6220,10 +6293,19 @@
           },
           "size": {
             "default": 12,
-            "maximum": 100.0,
+            "maximum": 200.0,
             "minimum": 1.0,
             "title": "Size",
             "type": "integer"
+          },
+          "size_unit": {
+            "default": "legacy",
+            "enum": [
+              "legacy",
+              "px"
+            ],
+            "title": "Size Unit",
+            "type": "string"
           }
         },
         "required": [
@@ -9812,6 +9894,44 @@
           }
         },
         "summary": "Spec2Wav Preview",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/spec2wav/vocoder": {
+      "get": {
+        "operationId": "local_vocoder_status",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Status",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/spec2wav/vocoder/download": {
+      "post": {
+        "operationId": "download_local_vocoder",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Download",
         "tags": [
           "jobs"
         ]

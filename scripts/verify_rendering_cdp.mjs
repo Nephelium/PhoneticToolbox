@@ -18,6 +18,8 @@ const report={success:false,scope:'Visible final EXE; normal/maximized native wi
 let layers=[];
 try{
  await until('!!document.querySelector("#tool-sidebar")');
+ report.initialAppearance=await p.evaluate(`({palette:document.documentElement.dataset.palette,theme:document.documentElement.dataset.theme})`);
+ if(report.initialAppearance.palette!=='absolutely')throw Error('New owned profile must use Absolutely');
  await p.evaluate(`localStorage.setItem('ptb.v3.theme','"light"');localStorage.setItem('ptb.v3.palette','"catppuccin"');localStorage.setItem('ptb.v3.buttonAppearance',JSON.stringify({mode:'auto',effects:true,material:'glass',glassOpacity:35,glassBlur:12}));localStorage.setItem('ptb.v3.fonts.v1.desktop',JSON.stringify({version:1,zh:'KaiTi',latin:'Times New Roman',bodySize:15,figure:{follow:false,zh:'SimSun',latin:'Times New Roman',size:12}}));location.reload()`);
  await sleep(900);await button('设置');await until('!!document.querySelector("input[aria-label=上传背景图]")');
  const uploadName='render-test-'+Date.now()+'.png';
@@ -62,6 +64,23 @@ try{
  // Real wheel input, including the asynchronous scrolling path.
  for(let i=0;i<48;i++)await p.call('Input.dispatchMouseEvent',{type:'mouseWheel',x:900,y:420,deltaX:0,deltaY:i%12<6?140:-140});
  await sleep(500);fs.writeFileSync(path.join(out,'wheel-final.png'),Buffer.from((await p.call('Page.captureScreenshot',{format:'png'})).data,'base64'));
+ await button('发声类型合成');await until('!!document.querySelector(".m07-workspace .workbench-center")');
+ await p.evaluate(`document.documentElement.style.setProperty('--font','"Times New Roman","KaiTi"');document.documentElement.style.setProperty('--body-size','15px')`);
+ report.m07=[];
+ for(const width of [1200,1400,1700]){
+  await p.evaluate(`document.querySelector('.m07-workspace').style.width='${width}px'`);await sleep(200);
+  const original=await p.evaluate(`document.querySelector('.m07-workspace .workbench-center').style.minHeight`);
+  const bounds=[];
+  for(const overflow of [true,false,true,false]){
+   await p.evaluate(`document.querySelector('.m07-workspace .workbench-center').style.minHeight=${overflow?'"160vh"':JSON.stringify(original)}`);
+   await sleep(250);const frames=[];
+   for(let i=0;i<24;i++){frames.push(await p.evaluate(`(()=>{const e=document.querySelector('.m07-workspace'),r=e.getBoundingClientRect();return {width:r.width,client:e.clientWidth,x:r.x,gutter:getComputedStyle(e).scrollbarGutter}})()`));await sleep(15)}
+   if(frames.some(x=>x.gutter!=='stable')||new Set(frames.map(x=>JSON.stringify(x))).size!==1)throw Error('M07 scrolling geometry unstable');bounds.push({overflow,frames});
+  }
+  report.m07.push({width,bounds});
+ }
+ await p.evaluate(`document.querySelector('.m07-workspace').style.width=''`);
+ await button('国际音标表Plus');await sleep(300);
  if(report.errors.length)throw Error(JSON.stringify(report.errors));report.success=true;
 }finally{fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));p.close()}
 console.log(JSON.stringify({success:report.success,frames:report.frames.length,layers:report.layers}));

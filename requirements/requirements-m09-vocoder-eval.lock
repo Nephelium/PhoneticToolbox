@@ -1,0 +1,2 @@
+# Historical CPU environment manifest moved to SpectrogramReconstruction/docs/historical-cpu-environment.lock.
+# Training now reuses the existing pytorch_5090 Conda environment. Do not install this pointer as a dependency list.

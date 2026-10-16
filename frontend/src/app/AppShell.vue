@@ -273,8 +273,8 @@ const modalTitle=computed(()=>({update:updateCheck.value?.candidate?'发现新�
 <span>打开帮助 →</span>
 </button>
 </div>
-<ParameterEstimationPage v-else-if="current?.id==='M01'" :key="researchContext.key" :context="researchContext" @references="refs('M01')" @help="openManual('M01')"/>
-<WorkspaceView v-else-if="current&&!['M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15','M16','M17','M18'].includes(current.id)" :key="current.id" :module="current" :state-key="previewKey(current.id)" @references="refs(current?.id)"/>
+<WorkspaceView v-else-if="current&&!['M01','M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15','M16','M17','M18'].includes(current.id)" :key="current.id" :module="current" :state-key="previewKey(current.id)" @references="refs(current?.id)"/>
+<ParameterEstimationPage v-if="tabs.includes('M01')" v-show="active==='M01'" :key="researchContext.key" :context="researchContext" @references="refs('M01')" @help="openManual('M01')"/>
 <ParameterDisplayPage v-if="tabs.includes('M02')" v-show="active==='M02'" ref="m02Page" :key="researchContext.key+':M02'" :active="active==='M02'" :context="researchContext" :state-key="previewKey('M02')" @references="refs('M02')" @help="openManual('M02')" @close="close('M02')"/>
 <AnnotationPage v-if="tabs.includes('M12')" v-show="active==='M12'" ref="m12Page" :key="researchContext.key+':M12'" :active="active==='M12'" :context="researchContext" :state-key="previewKey('M12')" @references="refs('M12')" @help="openManual('M12')" @close="close('M12')"/>
 <EggAnalysisPage v-if="tabs.includes('M03')" v-show="active==='M03'" ref="m03Page" :key="researchContext.key+':M03'" :active="active==='M03'" :context="researchContext" :state-key="previewKey('M03')" @references="refs('M03')" @close="close('M03')"/>

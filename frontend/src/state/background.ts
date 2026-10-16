@@ -5,16 +5,36 @@ import {buttonAppearance,installButtonAppearance,setButtonAppearance} from './bu
 import {openImageDatabase} from '../platform/image-storage.ts';
 import {refreshGlassWallpaper,syncGlassWallpaperFrame} from './glass-wallpaper.ts';
 export const backgroundAppearance=ref(normalizeBackground(null)),backgroundUrl=ref(''),backgroundName=ref(''),backgroundError=ref('');
+export const savedBackgrounds=ref<{id:string;name:string;url:string}[]>([]),selectedBackground=ref<string|null>(null);
+export const MAX_BACKGROUNDS=8;
 let initialized:Promise<void>|undefined,layer:HTMLDivElement;
 interface SavedImage {blob:Blob;name:string}
-async function imageStore(value?:SavedImage|null):Promise<SavedImage|undefined>{
+interface SavedBackground extends SavedImage {id:string}
+interface BackgroundLibrary {items:SavedBackground[];selected:string|null}
+let library:BackgroundLibrary={items:[],selected:null};
+let libraryLoaded=false;
+async function imageStore(value?:BackgroundLibrary):Promise<BackgroundLibrary>{
  const db=await openImageDatabase('ptb-background','image');
  try{return await new Promise((resolve,reject)=>{
   const transaction=db.transaction('image',value===undefined?'readonly':'readwrite'),store=transaction.objectStore('image');
-  const request=value===undefined?store.get('current'):value===null?store.delete('current'):store.put(value,'current');
-  transaction.oncomplete=()=>resolve(value===undefined?request.result:undefined);
+  if(value){store.put(value,'library');store.delete('current');transaction.oncomplete=()=>resolve(value);}
+  else{
+   const request=store.get('library'),legacy=store.get('current');
+   transaction.oncomplete=()=>{
+    if(request.result){resolve(request.result);return;}
+    const image=legacy.result as SavedImage|undefined;
+    resolve(image?.blob instanceof Blob?{items:[{...image,id:'legacy'}],selected:'legacy'}:{items:[],selected:null});
+   };
+  }
   transaction.onabort=()=>reject(transaction.error);transaction.onerror=()=>reject(transaction.error);
  });}finally{db.close();}
+}
+function displayLibrary(value:BackgroundLibrary){
+ const old=savedBackgrounds.value;
+ const next=value.items.map(image=>({id:image.id,name:image.name,url:URL.createObjectURL(image.blob)}));
+ library=value;libraryLoaded=true;savedBackgrounds.value=next;selectedBackground.value=value.selected;
+ show(value.items.find(image=>image.id===value.selected));
+ for(const image of old)URL.revokeObjectURL(image.url);
 }
 function apply(){
  document.documentElement.dataset.backgroundImage=backgroundUrl.value?'on':'off';
@@ -38,7 +58,7 @@ export function initializeBackground(){return initialized??=(async()=>{
  layer=document.createElement('div');layer.className='app-background-layer';layer.setAttribute('aria-hidden','true');document.body.prepend(layer);
  backgroundAppearance.value=normalizeBackground(projects.read('backgroundAppearance',null));apply();
  watch(()=>buttonAppearance.value.glassBlur,apply);
- try{const image=await imageStore();if(image?.blob instanceof Blob)show(image);}
+ try{const value=await imageStore();displayLibrary(value);}
  catch(error){backgroundError.value=error instanceof Error?error.message:'背景图未能读取，请重新选择图片。';}
 })();}
 export function setBackgroundAppearance(value:Partial<BackgroundAppearance>){
@@ -63,8 +83,33 @@ export async function prepareBackground(file:File):Promise<SavedImage>{
 }
 export async function changeBackground(file?:File){
  await initializeBackground();backgroundError.value='';
- try{const image=file?await prepareBackground(file):undefined;await imageStore(image??null);show(image);return true;}
+ try{
+  if(!libraryLoaded)displayLibrary(await imageStore());
+  if(!file){await imageStore({...library,selected:null});displayLibrary({...library,selected:null});return true;}
+  const image=await prepareBackground(file),digest=await crypto.subtle.digest('SHA-256',await image.blob.arrayBuffer());
+  const id=Array.from(new Uint8Array(digest),byte=>byte.toString(16).padStart(2,'0')).join('');
+  const existing=library.items.find(item=>item.id===id||item.id==='legacy'&&item.blob.size===image.blob.size&&item.blob.type===image.blob.type);
+  // Compare legacy bytes before treating an upload as the already saved image.
+  let match=existing;
+  if(match?.id==='legacy'){
+   const a=new Uint8Array(await match.blob.arrayBuffer()),b=new Uint8Array(await image.blob.arrayBuffer());
+   if(!a.every((byte,index)=>byte===b[index]))match=undefined;
+  }
+  if(!match&&library.items.length>=MAX_BACKGROUNDS)throw Error('最多保存 8 张背景图，请先移除一张再上传。');
+  const value={items:match?library.items:[...library.items,{...image,id}],selected:match?.id??id};
+  await imageStore(value);displayLibrary(value);return true;
+ }
  catch(error){backgroundError.value=error instanceof Error?error.message:'背景图未能保存，请重试。';return false;}
+}
+export async function selectBackground(id:string){
+ await initializeBackground();backgroundError.value='';
+ try{if(!libraryLoaded)displayLibrary(await imageStore());if(!library.items.some(image=>image.id===id))throw Error('这张背景图已移除，请选择其他图片。');const value={...library,selected:id};await imageStore(value);displayLibrary(value);return true;}
+ catch(error){backgroundError.value=error instanceof Error?error.message:'背景图未能切换，请重试。';return false;}
+}
+export async function removeBackground(id:string){
+ await initializeBackground();backgroundError.value='';
+ try{if(!libraryLoaded)displayLibrary(await imageStore());const value={items:library.items.filter(image=>image.id!==id),selected:library.selected===id?null:library.selected};await imageStore(value);displayLibrary(value);return true;}
+ catch(error){backgroundError.value=error instanceof Error?error.message:'背景图未能移除，请重试。';return false;}
 }
 /** Align the frame wallpaper and shared glass bitmap with the outer document. */
 export function syncBackgroundFrame(frame:HTMLIFrameElement){

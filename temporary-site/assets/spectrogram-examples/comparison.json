@@ -1,0 +1,407 @@
+{
+  "paper": {
+    "title": "Technique of improving speech restoration from spectrograms of short windows for the Griffin–Lim algorithm",
+    "author": "Naofumi Aoki",
+    "year": 2023,
+    "doi": "10.1250/ast.44.186",
+    "url": "https://doi.org/10.1250/ast.44.186"
+  },
+  "processing": "处理后使用当前最佳参数预测与80带修复权重，窗长四舍五入到整数毫秒后重建；处理前10ms/60dB随机GL保持。",
+  "source_report_sha256": "077b9598f0ccaa4d53eeb4336813c3cd2c37d7018864265051ca14c337eda880",
+  "pairs": [
+    {
+      "id": "smith",
+      "before": "spectrum-before-smith.wav",
+      "after": "spectrum-smith.wav",
+      "before_sha256": "155a0829d27dbe63309143278d9d9cb788ceeb9c3f8567aeaf6b80f49f6a8da6",
+      "after_sha256": "66b7d2472dbc810359e9628bda99b99bda9ec5c5eeec86211a66c82dac1cccc4",
+      "source": "Julius O. Smith III (2007). Mathematics of the Discrete Fourier Transform (DFT), 2nd ed., Fig. 8.10.",
+      "url": "https://www.dsprelated.com/freebooks/mdft/Spectrogram_Speech.html",
+      "seconds": 1.48,
+      "parameter_prediction": {
+        "window_ms": 22.09825897216797,
+        "dynamic_range_db": 61.10734558105469,
+        "normalized_db_limits": [
+          -61.10734558105469,
+          0
+        ],
+        "window_shape_predicted": false,
+        "absolute_db_predicted": false,
+        "applied_to_reconstruction": true,
+        "outside_training_parameter_range": false,
+        "image_sha256": "545d2a18dba5feb07aaa56b3ba963f2a491d98ac8da67b467194db8e60ee69ce",
+        "checkpoint_sha256": "7ac61f075259099e0c58e743818b2b61a1ec42d5a125eab6ef9fc9216182a86e",
+        "applied_window_ms": 22.0,
+        "window_rounding": "nearest integer ms, half up"
+      },
+      "applied_window_ms": 22.0,
+      "before_defaults": {
+        "window_ms": 10.0,
+        "window": "Hann",
+        "dynamic_range_db": 60,
+        "mapping": "20log10 magnitude",
+        "preemphasis": 0,
+        "conditions": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "white_threshold": 252,
+        "no_filter": true,
+        "phase_initialization": "random",
+        "iterations": 256
+      },
+      "playback_volumes": {
+        "spectrum-before-smith": 0.8808418033873839,
+        "spectrum-smith": 1.0
+      },
+      "parameter_model_sha256": "7ac61f075259099e0c58e743818b2b61a1ec42d5a125eab6ef9fc9216182a86e",
+      "display": {
+        "title": "Hi, this is Steve Jobs.",
+        "credit": "Smith (2007) · 图 8.10",
+        "image": "assets/spectrogram-examples/smith.png",
+        "image_sha256": "60dd28e5f63009dd0c9485ace82e4b6d9b90f6364412fe98af0b2c1fe3ca0cc8"
+      },
+      "input_sha256": "545d2a18dba5feb07aaa56b3ba963f2a491d98ac8da67b467194db8e60ee69ce",
+      "frequency_range": [
+        0.0,
+        4000
+      ],
+      "hop_ms": 1.5,
+      "repair_model_sha256": "a60a3587139ffdc79b69978615b2079c66a43282cb2b77ab99d276717b433ab2",
+      "repair_model_step": 6000
+    },
+    {
+      "id": "levantan",
+      "before": "spectrum-before-levantan.wav",
+      "after": "spectrum-levantan.wav",
+      "before_sha256": "b5e740e1c67f4fa5c72293d9d5e825d4529d614bfb1c53540cabf1d4aa17c34a",
+      "after_sha256": "6951aa3b214f8d4a731bbe024e91cfab2c6c62629467109f3f5f5e21e4a0f2bb",
+      "source": "Whitney Chappell (2021). /s/ weakening in Nicaragua. In E. Núñez-Méndez (ed.), Sociolinguistic Approaches to Sibilant Variation in Spanish, pp. 217–245. Fig. 7.4, p. 228.",
+      "url": "https://doi.org/10.4324/9781003153948-11",
+      "seconds": 0.9334,
+      "parameter_prediction": {
+        "window_ms": 4.538491249084473,
+        "dynamic_range_db": 49.43039321899414,
+        "normalized_db_limits": [
+          -49.43039321899414,
+          0
+        ],
+        "window_shape_predicted": false,
+        "absolute_db_predicted": false,
+        "applied_to_reconstruction": true,
+        "outside_training_parameter_range": false,
+        "image_sha256": "285eb21d87fc2da839cc74e87fab326630139f9a7b4e8cbe901834c4ac0f494a",
+        "checkpoint_sha256": "7ac61f075259099e0c58e743818b2b61a1ec42d5a125eab6ef9fc9216182a86e",
+        "applied_window_ms": 5.0,
+        "window_rounding": "nearest integer ms, half up"
+      },
+      "applied_window_ms": 5.0,
+      "before_defaults": {
+        "window_ms": 10.0,
+        "window": "Hann",
+        "dynamic_range_db": 60,
+        "mapping": "20log10 magnitude",
+        "preemphasis": 0,
+        "conditions": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "white_threshold": 252,
+        "no_filter": true,
+        "phase_initialization": "random",
+        "iterations": 256
+      },
+      "playback_volumes": {
+        "spectrum-before-levantan": 1.0,
+        "spectrum-levantan": 0.9211356360717842
+      },
+      "parameter_model_sha256": "7ac61f075259099e0c58e743818b2b61a1ec42d5a125eab6ef9fc9216182a86e",
+      "display": {
+        "title": "Levantan las olas",
+        "credit": "Chappell (2021) · 图 7.4",
+        "image": "assets/spectrogram-examples/levantan.png",
+        "image_sha256": "2339bfd55e0d9e08c42f09fd97d9819f0d5896cc192a8f2fadf71cef2efdbba7"
+      },
+      "input_sha256": "285eb21d87fc2da839cc74e87fab326630139f9a7b4e8cbe901834c4ac0f494a",
+      "frequency_range": [
+        0.0,
+        5000
+      ],
+      "hop_ms": 1.5,
+      "repair_model_sha256": "a60a3587139ffdc79b69978615b2079c66a43282cb2b77ab99d276717b433ab2",
+      "repair_model_step": 6000
+    },
+    {
+      "id": "observo",
+      "before": "spectrum-before-observo.wav",
+      "after": "spectrum-observo.wav",
+      "before_sha256": "3003bd54d37e6ff06f7708bd1bbe8e8d6c35c7ffb6d39ba6bb223bba77a1531f",
+      "after_sha256": "42ef545b4831ea177164761e05a2427226c9b29a1084dbb69ddc95ba1c5b6111",
+      "source": "Whitney Chappell (2021). /s/ weakening in Nicaragua. In E. Núñez-Méndez (ed.), Sociolinguistic Approaches to Sibilant Variation in Spanish, pp. 217–245. Fig. 7.3, p. 226.",
+      "url": "https://doi.org/10.4324/9781003153948-11",
+      "seconds": 0.7278,
+      "parameter_prediction": {
+        "window_ms": 5.361846923828125,
+        "dynamic_range_db": 56.279598236083984,
+        "normalized_db_limits": [
+          -56.279598236083984,
+          0
+        ],
+        "window_shape_predicted": false,
+        "absolute_db_predicted": false,
+        "applied_to_reconstruction": true,
+        "outside_training_parameter_range": false,
+        "image_sha256": "7135e99f37209851a6952787ee41d8f698246cb974086e00a8aed3e61f631f13",
+        "checkpoint_sha256": "7ac61f075259099e0c58e743818b2b61a1ec42d5a125eab6ef9fc9216182a86e",
+        "applied_window_ms": 5.0,
+        "window_rounding": "nearest integer ms, half up"
+      },
+      "applied_window_ms": 5.0,
+      "before_defaults": {
+        "window_ms": 10.0,
+        "window": "Hann",
+        "dynamic_range_db": 60,
+        "mapping": "20log10 magnitude",
+        "preemphasis": 0,
+        "conditions": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "white_threshold": 252,
+        "no_filter": true,
+        "phase_initialization": "random",
+        "iterations": 256
+      },
+      "playback_volumes": {
+        "spectrum-before-observo": 1.0,
+        "spectrum-observo": 0.9999992824109043
+      },
+      "parameter_model_sha256": "7ac61f075259099e0c58e743818b2b61a1ec42d5a125eab6ef9fc9216182a86e",
+      "display": {
+        "title": "observo",
+        "credit": "Chappell (2021) · 图 7.3",
+        "image": "assets/spectrogram-examples/observo.png",
+        "image_sha256": "0b39063dbc33e206eb256c0db40b8a4bd6e7e3335ea1e76673eb02fc9a5be477"
+      },
+      "input_sha256": "7135e99f37209851a6952787ee41d8f698246cb974086e00a8aed3e61f631f13",
+      "frequency_range": [
+        0.0,
+        5000
+      ],
+      "hop_ms": 1.5,
+      "repair_model_sha256": "a60a3587139ffdc79b69978615b2079c66a43282cb2b77ab99d276717b433ab2",
+      "repair_model_step": 6000
+    },
+    {
+      "id": "lu2025-modal",
+      "before": "spectrum-before-lu2025-modal.wav",
+      "after": "spectrum-lu2025-modal.wav",
+      "after_sha256": "11e0d395ce7f092c6e323d4408f38c3a7d1b164145b62329854c8c2f4a94ce2f",
+      "source": "Lu, Liang & Kong (2025), Journal of Phonetics 110,101413",
+      "url": "https://doi.org/10.1016/j.wocn.2025.101413",
+      "seconds": 0.5102,
+      "parameter_prediction": {
+        "window_ms": 4.09480094909668,
+        "dynamic_range_db": 83.423828125,
+        "normalized_db_limits": [
+          -83.423828125,
+          0
+        ],
+        "window_shape_predicted": false,
+        "absolute_db_predicted": false,
+        "applied_to_reconstruction": true,
+        "outside_training_parameter_range": false,
+        "image_sha256": "3da687b81fb699ed81515bf881301e3db58e023d74939d0bee0920a5256b1a2a",
+        "checkpoint_sha256": "7ac61f075259099e0c58e743818b2b61a1ec42d5a125eab6ef9fc9216182a86e",
+        "applied_window_ms": 4.0,
+        "window_rounding": "nearest integer ms, half up"
+      },
+      "parameter_model_sha256": "7ac61f075259099e0c58e743818b2b61a1ec42d5a125eab6ef9fc9216182a86e",
+      "applied_window_ms": 4.0,
+      "before_sha256": "6cf43c029628c61939038ba01edd6628f3406cbfb409eb3c656f7009e8b0a6f0",
+      "before_defaults": {
+        "window_ms": 10.0,
+        "window": "Hann",
+        "dynamic_range_db": 60,
+        "mapping": "20log10 magnitude",
+        "preemphasis": 0,
+        "conditions": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "white_threshold": 252,
+        "no_filter": true,
+        "phase_initialization": "random",
+        "iterations": 256
+      },
+      "display": {
+        "title": "Lu 2025 · modal",
+        "credit": "Lu, Liang & Kong (2025) · modal",
+        "image": "assets/spectrogram-examples/lu2025-modal.png",
+        "image_sha256": "3da687b81fb699ed81515bf881301e3db58e023d74939d0bee0920a5256b1a2a"
+      },
+      "input_sha256": "3da687b81fb699ed81515bf881301e3db58e023d74939d0bee0920a5256b1a2a",
+      "frequency_range": [
+        0.0,
+        5000.0
+      ],
+      "playback_volumes": {
+        "spectrum-before-lu2025-modal": 1.0,
+        "spectrum-lu2025-modal": 0.9999975567010757
+      },
+      "hop_ms": 1.5,
+      "repair_model_sha256": "a60a3587139ffdc79b69978615b2079c66a43282cb2b77ab99d276717b433ab2",
+      "repair_model_step": 6000
+    },
+    {
+      "id": "lu2025-pressed",
+      "before": "spectrum-before-lu2025-pressed.wav",
+      "after": "spectrum-lu2025-pressed.wav",
+      "after_sha256": "d543e73e0856c1738861f6b60e935aa4b485ec4866a1f8d318737004c53a25b8",
+      "source": "Lu, Liang & Kong (2025), Journal of Phonetics 110,101413",
+      "url": "https://doi.org/10.1016/j.wocn.2025.101413",
+      "seconds": 0.5236,
+      "parameter_prediction": {
+        "window_ms": 4.907186031341553,
+        "dynamic_range_db": 87.35749816894531,
+        "normalized_db_limits": [
+          -87.35749816894531,
+          0
+        ],
+        "window_shape_predicted": false,
+        "absolute_db_predicted": false,
+        "applied_to_reconstruction": true,
+        "outside_training_parameter_range": false,
+        "image_sha256": "7fbd617948e77e36e094347c34df79e55e76eb57c878b650cee0b0b48c66d4c5",
+        "checkpoint_sha256": "7ac61f075259099e0c58e743818b2b61a1ec42d5a125eab6ef9fc9216182a86e",
+        "applied_window_ms": 5.0,
+        "window_rounding": "nearest integer ms, half up"
+      },
+      "parameter_model_sha256": "7ac61f075259099e0c58e743818b2b61a1ec42d5a125eab6ef9fc9216182a86e",
+      "applied_window_ms": 5.0,
+      "before_sha256": "4248003c0683a4ce7356615e0e50ababdeb52c5371149165eb76143cbfcce94e",
+      "before_defaults": {
+        "window_ms": 10.0,
+        "window": "Hann",
+        "dynamic_range_db": 60,
+        "mapping": "20log10 magnitude",
+        "preemphasis": 0,
+        "conditions": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "white_threshold": 252,
+        "no_filter": true,
+        "phase_initialization": "random",
+        "iterations": 256
+      },
+      "display": {
+        "title": "Lu 2025 · pressed",
+        "credit": "Lu, Liang & Kong (2025) · pressed",
+        "image": "assets/spectrogram-examples/lu2025-pressed.png",
+        "image_sha256": "7fbd617948e77e36e094347c34df79e55e76eb57c878b650cee0b0b48c66d4c5"
+      },
+      "input_sha256": "7fbd617948e77e36e094347c34df79e55e76eb57c878b650cee0b0b48c66d4c5",
+      "frequency_range": [
+        0.0,
+        5000.0
+      ],
+      "playback_volumes": {
+        "spectrum-before-lu2025-pressed": 1.0,
+        "spectrum-lu2025-pressed": 0.9999990219506598
+      },
+      "hop_ms": 1.5,
+      "repair_model_sha256": "a60a3587139ffdc79b69978615b2079c66a43282cb2b77ab99d276717b433ab2",
+      "repair_model_step": 6000
+    },
+    {
+      "id": "uploaded",
+      "before": "spectrum-before-uploaded.wav",
+      "after": "spectrum-uploaded.wav",
+      "after_sha256": "543a591f8dffff8bde5040fdb21932af1d6a98373d422c247101be85a002d061",
+      "source": "用户上传图的既有裁剪与处理版本；未使用上方波形",
+      "url": null,
+      "seconds": 2,
+      "parameter_prediction": {
+        "window_ms": 5.488895416259766,
+        "dynamic_range_db": 55.03804016113281,
+        "normalized_db_limits": [
+          -55.03804016113281,
+          0
+        ],
+        "window_shape_predicted": false,
+        "absolute_db_predicted": false,
+        "applied_to_reconstruction": true,
+        "outside_training_parameter_range": false,
+        "image_sha256": "40793aeeb34b6e8f1d5e8e1880d1993634022ead969ea5214791892400232bd2",
+        "checkpoint_sha256": "7ac61f075259099e0c58e743818b2b61a1ec42d5a125eab6ef9fc9216182a86e",
+        "applied_window_ms": 5.0,
+        "window_rounding": "nearest integer ms, half up"
+      },
+      "parameter_model_sha256": "7ac61f075259099e0c58e743818b2b61a1ec42d5a125eab6ef9fc9216182a86e",
+      "applied_window_ms": 5.0,
+      "before_sha256": "7879309599443feb75589e6955a7bde28ebe5c0518d97a715b15026001df80df",
+      "before_defaults": {
+        "window_ms": 10.0,
+        "window": "Hann",
+        "dynamic_range_db": 60,
+        "mapping": "20log10 magnitude",
+        "preemphasis": 0,
+        "conditions": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "white_threshold": 252,
+        "no_filter": true,
+        "phase_initialization": "random",
+        "iterations": 256
+      },
+      "display": {
+        "title": "知乎例图 · 2 秒 / 6 kHz",
+        "credit": "知乎例图",
+        "image": "assets/spectrogram-examples/uploaded.png",
+        "image_sha256": "40793aeeb34b6e8f1d5e8e1880d1993634022ead969ea5214791892400232bd2"
+      },
+      "input_sha256": "40793aeeb34b6e8f1d5e8e1880d1993634022ead969ea5214791892400232bd2",
+      "frequency_range": [
+        0,
+        6000
+      ],
+      "playback_volumes": {
+        "spectrum-before-uploaded": 0.9999997740316993,
+        "spectrum-uploaded": 1.0
+      },
+      "hop_ms": 1.5,
+      "repair_model_sha256": "a60a3587139ffdc79b69978615b2079c66a43282cb2b77ab99d276717b433ab2",
+      "repair_model_step": 6000
+    }
+  ],
+  "after_source_report_sha256": "476405a478f482cb469511751403526b78634819c129265b5dc91bf2581a7a93",
+  "parameter_model_sha256": "7ac61f075259099e0c58e743818b2b61a1ec42d5a125eab6ef9fc9216182a86e",
+  "before_source_report_sha256": "87f2d1d13128e6322df284cbe966804d49327706c862e1fddb1a1d28bfcf67f9",
+  "additional_source_report_sha256": "400f78daecf0e3f864ad1f7a0499d926c2014ec72fc75150bfcc73896599417d"
+}

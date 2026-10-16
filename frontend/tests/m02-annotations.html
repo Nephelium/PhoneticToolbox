@@ -1,0 +1,23 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>M02 annotation regression</title><style>html,body,#app{height:100%}</style></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';
+import Page from '../src/modules/parameter-display/ParameterDisplayPage.vue';
+import {workspace} from '../src/state/workspace.ts';
+import '../src/design/tokens.css';
+// Synthetic PCM and frame labels only, no user recording or database.
+const rate=8000,duration=4.39288,n=Math.floor(rate*duration),buffer=new ArrayBuffer(44+n*2),v=new DataView(buffer);
+const text=(i,s)=>[...s].forEach((c,j)=>v.setUint8(i+j,c.charCodeAt(0)));
+text(0,'RIFF');v.setUint32(4,buffer.byteLength-8,true);text(8,'WAVEfmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,rate,true);v.setUint32(28,rate*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);text(36,'data');v.setUint32(40,n*2,true);
+for(let i=0;i<n;i++)v.setInt16(44+i*2,12000*Math.sin(2*Math.PI*i/40),true);
+const rows=Array.from({length:4393},(_,i)=>[i/1000,10+Math.sin(i/50),i<700?'shang4':i<1400?'yi1':i<1800?'':'shang4']);
+const streamed=new URLSearchParams(location.search).get('streamed')==='1';
+const table={schema_version:'m02/1',sha256:'a'.repeat(64),columns:['Time_s','H1-H2','text_words'],kinds:['number','number','text'],rows:streamed?[]:rows,...(streamed?{streamed:true,duration_s:n/rate}: {})};
+const files=[{id:'wave',name:'annotations.wav',kind:'audio',size:buffer.byteLength},{id:'table',name:'annotations.ptb.sqlite',kind:'parameter',size:10}];
+window.qa={wave:workspace('m02-annotations')};
+createApp({render:()=>h(Page,{stateKey:'m02-annotations',active:true,context:{key:'synthetic',label:'Synthetic annotations',files:{kind:'preview',list:async()=>files,read:async()=>({buffer:buffer.slice(0),sha256:'a'.repeat(64)}),parameters:async(_,view)=>{
+ if(!streamed)return structuredClone(table);
+ const selected=rows.filter(r=>r[0]>=(view?.start??0)&&r[0]<=(view?.end??n/rate));
+ const tracks=Object.fromEntries((view?.parameters??[]).map(name=>[name,selected.map(r=>[r[0],r[table.columns.indexOf(name)]])]));
+ const numbers=selected.map(r=>r[1]);
+ return {...table,tracks,stats:{'H1-H2':{count:numbers.length,mean:numbers.reduce((a,b)=>a+Math.abs(b),0)/numbers.length,min:Math.min(...numbers),max:Math.max(...numbers)}}};
+}}}})}).mount('#app');
+</script></body></html>

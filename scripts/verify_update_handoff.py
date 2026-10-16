@@ -19,7 +19,10 @@ for folder in ('desktop/src','backend/src','packages/phonetic_core/src'):
 os.environ['PYTHONPATH']=os.pathsep.join(str(ROOT/p) for p in ('desktop/src','backend/src','packages/phonetic_core/src'))
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--package',required=True,type=Path);parser.add_argument('--origin',required=True,type=Path);parser.add_argument('--output',required=True,type=Path);parser.add_argument('--kind',choices=('portable','installer'),required=True);parser.add_argument('--port',required=True,type=int);parser.add_argument('--profile',type=Path);parser.add_argument('--target-version',default='3.0.0-preview.1');parser.add_argument('--current-version',default='3.0.0-preview.0');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--package',required=True,type=Path);parser.add_argument('--origin',required=True,type=Path);parser.add_argument('--output',required=True,type=Path);parser.add_argument('--kind',choices=('portable','installer'),required=True);parser.add_argument('--port',required=True,type=int);parser.add_argument('--profile',type=Path);parser.add_argument('--target-version',default='3.0.0-preview.1');parser.add_argument('--current-version',default='3.0.0-preview.0');parser.add_argument('--frontend-dist',type=Path,default=ROOT/'frontend/dist');args=parser.parse_args()
+    frontend=args.frontend_dist.resolve()
+    if frontend != (ROOT/'frontend/dist').resolve() and not frontend.is_relative_to(ROOT/'output'):
+        raise ValueError('Frontend must be shared dist or an owned frozen input')
     out=args.output.resolve();out.mkdir(parents=True,exist_ok=False)
     if not out.is_relative_to(ROOT/'output/validation'):raise ValueError('Expected owned output')
     profile=args.profile.resolve() if args.profile else out/'profile'
@@ -36,7 +39,7 @@ def main():
     from PyQt6.QtWidgets import QApplication
     db,cache=prepare_workspace(user_data_root()/'local-preview-20260927',ROOT/'backend/migrations')
     register_scheme();app=QApplication(['PhoneticToolbox']);app.setApplicationName('PhoneticToolbox-v3')
-    w=Workbench(ROOT/'frontend/dist',jobs_path=db,local_files_root=cache,vocal_profile=out/'vocal');w.showMaximized()
+    w=Workbench(frontend,jobs_path=db,local_files_root=cache,vocal_profile=out/'vocal');w.showMaximized()
     def pause(ms=100):
         loop=QEventLoop();QTimer.singleShot(ms,loop.quit);loop.exec()
     def js(code):

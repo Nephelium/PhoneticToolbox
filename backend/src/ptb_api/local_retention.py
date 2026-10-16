@@ -8,7 +8,7 @@ class RetentionPolicy(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
     enabled: bool
     days: int = Field(ge=1, le=3650)
-    exported_cache_days: int = Field(default=7, ge=1, le=3650)
+    exported_cache_days: int = Field(default=1, ge=1, le=3650)
 
 
 class ExportReceipt(BaseModel):

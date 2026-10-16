@@ -109,7 +109,7 @@
     },
     {
       "path": "frontend/public/vocal-tract/v3.css",
-      "sha256": "ccc3f742c065c49c5fed64812573dd85daacdf190cc7eb99fb3280eca0888af6",
+      "sha256": "e195746e4369395db7b0e4f40a86db879a424461a2a8b80501c06485b18e210e",
       "source_id": "PROJECT-M10"
     },
     {
@@ -144,7 +144,7 @@
     },
     {
       "path": "resources/vocal_tract/bundle-manifest.json",
-      "sha256": "b4f49b8544083732250101469c93e03c26c405aa4cf0069a04db3c1e0af7768a",
+      "sha256": "76afb19bcca93e6705b58acb4929bc81943539f35e122e0df820a70d6a4d3e10",
       "source_id": "SRC-VTL"
     },
     {
@@ -514,6 +514,18 @@
       "path": "frontend/public/vocal-tract/default-presets.json",
       "source_id": "PROJECT-M10",
       "sha256": "ee929d3e800ff2081c540032852dde4a65364ad3b40ca2d341ad2723d3fe9d69"
+    },
+    {
+      "path": "packages/phonetic_core/src/phonetic_core/spec2wav/data/parameters-v5.npz",
+      "sha256": "e6edbf5c450fc08f4ff4c39d2828a15e24c4dd7286c619308c671ed4df7dffdc",
+      "origin": "project",
+      "description": "Built-in window/dynamic-range model v5; float32 weights only, local integration. See adjacent provenance for training checkpoint identity and redistribution boundary."
+    },
+    {
+      "path": "packages/phonetic_core/src/phonetic_core/spec2wav/data/parameters-v5.json",
+      "sha256": "bcc5384f4217ecfb8676c807957f8e11d6aa1db1b26be89a2e186aacff8c5160",
+      "origin": "project",
+      "description": "Built-in window/dynamic-range model v5; float32 weights only, local integration. See adjacent provenance for training checkpoint identity and redistribution boundary."
     }
   ],
   "generated_resources": [

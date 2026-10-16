@@ -140,7 +140,8 @@ def execute_acoustic_claim(store,claim,worker_id,stop,*,on_started=None,process_
                     from .spec2wav_drawing import expand
                     header['config']=expand(header['config'],blobs['spectral_drawing'])
                 request=scratch.create(json.dumps(header).encode()+b'\n'+source,'.json')
-                raw=collect_scientific('spec2wav',request,scratch,replace(SEGMENT_LIMITS,timeout_seconds=240),
+                raw=collect_scientific('spec2wav',request,scratch,replace(SEGMENT_LIMITS,timeout_seconds=240,
+                    process_bytes=3_000_000_000 if header['config'].get('vocoder')=='bigvgan' or header['config'].get('algorithm')=='neural_pipeline' else SEGMENT_LIMITS.process_bytes),
                     lambda:abort.is_set() or stop.is_set(),on_started)
                 bundle=unpack_bundle(raw,64_000_000)
                 if bundle.manifest['image_sha256']!=header['sha256']:raise FormatError('source_mismatch')

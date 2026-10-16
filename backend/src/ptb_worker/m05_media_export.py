@@ -271,18 +271,51 @@ def recording_bundle(source, directory, *, max_bytes=512_000_000, metadata_path=
         return info
 
 
+def result_media(directory, destination, *, options, offset=0., source_video=None, animation_name='lip-animation.mp4',base_bytes=0):
+    """Render existing measurement frames, with a shared picture for MP4/GIF."""
+    import shutil
+    import tempfile
+    from .m05_animation import export_animation
+    from .m05_video import sha256_file
+    directory,destination=Path(directory),Path(destination)
+    meta=json.loads((directory/'manifest.json').read_text('utf8'))
+    quality=options['quality'];format=options.get('format','mp4')
+    if quality not in ('high','standard','small') or format not in ('mp4','gif'):raise ValueError('动画设置不正确。')
+    started=time.monotonic()
+    def stop():
+        if time.monotonic()-started>600:raise ValueError('媒体导出超时，请缩短视频后重试。')
+        return False
+    names=[];animation=None
+    if options.get('video'):
+        if source_video is None:raise ValueError('此历史结果缺少原视频，请重新选择文件分析后保存视频。')
+        with tempfile.TemporaryDirectory(prefix='ptb-m05-video-') as scratch:
+            video=_recording_bundle(source_video,Path(scratch),write_video=True)
+            name=video['video_file']
+            with (Path(scratch)/name).open('rb') as src,(destination/name).open('xb') as dest:shutil.copyfileobj(src,dest)
+            if sha256_file(destination/name)!=sha256_file(Path(scratch)/name):raise ValueError('视频保存校验失败。')
+            names.append(name)
+    if options.get('animation'):
+        audio=directory/'audio_recording.wav'
+        animation=export_animation(directory/'frames.jsonl',destination/animation_name,meta,quality=quality,format=format,offset=offset,
+            audio_path=audio if audio.is_file() else None,fit_face=True,full_mesh=True,stop=stop)
+        names.append(animation_name)
+    if base_bytes+sum((destination/n).stat().st_size for n in names)>512_000_000:raise ValueError('结果超过 512 MB 保存预算。')
+    return dict(files=[dict(name=n,bytes=(destination/n).stat().st_size,sha256=sha256_file(destination/n)) for n in names],animation=animation)
+
+
 if __name__ == '__main__':
     root = Path(__file__).resolve().parents[3]
     sys.path[:0] = [str(root/'backend/src'), str(root/'packages/phonetic_core/src')]
     from ptb_worker.source_runtime import prepare_native_import_paths
     prepare_native_import_paths()
-    from ptb_worker.m05_media_export import recording_bundle,inspect_recording
+    from ptb_worker.m05_media_export import recording_bundle,inspect_recording,result_media
     request = Path(sys.argv[1])
     try:
         value = json.loads(request.read_text('utf8'))
         if value.get('action')=='inspect':
             with __import__('tempfile').TemporaryDirectory(prefix='ptb-m05-inspect-') as scratch:
                 output=inspect_recording(value['source'],scratch)
+        elif value.get('action')=='render_result':output=result_media(request.parent,value['destination'],options=value['options'],offset=value['offset'],source_video=value.get('source_video'),animation_name=value.get('animation_name','lip-animation.mp4'),base_bytes=value.get('base_bytes',0))
         else:output=recording_bundle(value['source'],value.get('destination',request.parent),metadata_path=request.parent/'capture.m05-preview.json')
         result = dict(ok=True, value=output)
     except Exception as error:

@@ -30,6 +30,8 @@ GitHub `Nephelium/PhoneticToolbox` 的默认分支 `main` 承载 v3。当前 v3 
 
 ## 保持体积可控
 
+当前语谱图参数预测资源 `packages/phonetic_core/src/phonetic_core/spec2wav/data/parameters-v5.json` 含训练权重，公开分发条件尚待确认，保留本机并精确忽略。GitHub 提供加载器、模型适配与导出脚本，不包含这份权重；新检出源码不能据此声称参数预测已可运行，构建前须另行提供获准资源。官网人像、截图及引用谱图只沿已核实的网站分发范围使用，不随此次源码同步上传。来源清单、生成脚本及已核对许可的字体保留。
+
 源码改动和必要文档本身很小，主要占用来自依赖、构建展开、编辑素材和验证数据。按[根清理规则](../../AGENTS.md)保留必要环境、最新成品和当前构建依赖，清理可再生测试副本；正式说明书及原始研究数据不套用临时目录策略。
 
 `output/validation/p06/local-state.sqlite3` 和 `m01/workbench-local.json` 指向的缓存仍由源码启动器读取，部分运行时暂存也参与打包。清理前先按[架构数据表](../../ARCHITECTURE.md)核对真实引用。

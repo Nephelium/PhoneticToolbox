@@ -42,6 +42,7 @@ def submit(store,owner,body,*,retry_of=None,drawing_ref=None):
         snapshot=dict(operation='spectrogram_to_audio',project_id=body.project_id,retry_of=retry_of,
             core_version=core_version,adapter_version=adapter_version,source_ids=['REF-GRIFFINLIM','M01-PY-NUMPY','M01-PY-SCIPY','PKG-OPENCV-CONTRIB-PYTHON','PKG-SOUNDFILE'],
             input_refs=refs,input_assets=sources,config=dict(inputs=[i['id'] for i in sources],analysis=analysis,max_output_bytes=96_000_000))
+        if body.config.vocoder=='bigvgan' or body.config.algorithm=='neural_pipeline':snapshot['source_ids'].append('PKG-BIGVGAN-BASE')
         job_id=str(uuid4())
         tx.execute("INSERT INTO {jobs}(id,owner_id,project_id,idempotency_key,request_hash,snapshot,state,deadline,created_at,updated_at) VALUES(?,?,?,?,?,?,'queued',?,?,?)",
             (job_id,owner,body.project_id,body.idempotency_key,sha,canonical(snapshot),now+300,now,now))

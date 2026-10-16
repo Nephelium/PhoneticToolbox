@@ -7,7 +7,7 @@ const props=withDefaults(defineProps<{title:string;x:[number,number];y:[number,n
 const emit=defineEmits<{seek:[time:number];zoom:[factor:number];pan:[delta:number]}>();const el=ref<HTMLElement>();const width=ref(500);let observer:ResizeObserver;const clip='plot-'+useId();
 const availableHeight=ref(0),legendHeight=ref(20);
 let measureFrame=0;
-function measure(){if(!el.value)return;width.value=Math.max(180,el.value.clientWidth);availableHeight.value=el.value.clientHeight;legendHeight.value=el.value.querySelector<HTMLElement>('.plot-legend')?.offsetHeight??0;}
+function measure(){if(!el.value||!el.value.clientWidth)return;width.value=Math.max(180,el.value.clientWidth);availableHeight.value=el.value.clientHeight;legendHeight.value=el.value.querySelector<HTMLElement>('.plot-legend')?.offsetHeight??0;}
 watch(()=>props.showLegend,async()=>{await nextTick();measure();const legend=el.value?.querySelector('.plot-legend');if(legend)observer?.observe(legend);});
 onMounted(()=>{observer=new ResizeObserver(()=>{cancelAnimationFrame(measureFrame);measureFrame=requestAnimationFrame(measure);});if(el.value){measure();observer.observe(el.value);const legend=el.value.querySelector('.plot-legend');if(legend)observer.observe(legend);}});onUnmounted(()=>{observer?.disconnect();cancelAnimationFrame(measureFrame);});
 const fontSize=computed(()=>fontPayload.value?.size??12);const chartHeight=computed(()=>Math.max(props.fill&&availableHeight.value?availableHeight.value-(props.showLegend?legendHeight.value:0):props.height,6*fontSize.value+40));
@@ -20,6 +20,8 @@ const label=(v:number,step?:number)=>plotTickLabel(v,step);
 function path(trace:PlotTrace){let gap=true;return trace.times.map((t,i)=>{const v=trace.values[i];if(v==null||!Number.isFinite(v)){gap=true;return '';}const command=gap?'M':'L';gap=false;return `${command}${X(t).toFixed(2)},${Y(v,trace.right).toFixed(2)}`;}).join('');}
 // Keep every scientific point; batch equal-radius circles to bound DOM nodes.
 function dots(trace:PlotTrace){return trace.times.map((t,i)=>{const v=trace.values[i];if(v==null||!Number.isFinite(v))return '';return `M${X(t)-1.6},${Y(v,trace.right)}a1.6,1.6 0 1,0 3.2,0a1.6,1.6 0 1,0 -3.2,0Z`;}).join('');}
+// Markers and highlights move independently of the scientific trace geometry.
+const tracePaths=computed(()=>props.traces.map(trace=>trace.points?(trace.times.length>3000?dots(trace):undefined):path(trace)));
 let drag:{x:number;last:number;span:number;pixels:number;id:number}|undefined;let dragged=false;
 function seek(event:MouseEvent){if(dragged){dragged=false;return;}const box=(event.currentTarget as Element).getBoundingClientRect();const x=(event.clientX-box.left)*width.value/box.width-left.value;if(x>=0&&x<=plotWidth.value)emit('seek',props.x[0]+x/plotWidth.value*(props.x[1]-props.x[0]));}
 function wheel(event:WheelEvent){if((!props.wheelZoom&&!event.ctrlKey)||!props.interactive||!event.deltaY)return;event.preventDefault();emit('zoom',event.deltaY>0?1.1:.9);}
@@ -38,7 +40,7 @@ function keys(event:KeyboardEvent){if(!props.interactive)return;const delta=(pro
 <image v-if="raster" :href="raster.url" :x="X(raster.extent[0])" :y="Y(raster.extent[3])" :width="X(raster.extent[1])-X(raster.extent[0])" :height="Y(raster.extent[2])-Y(raster.extent[3])" preserveAspectRatio="none"/>
 <line v-for="v in ticks(y)" :key="v" :x1="left" :x2="left+plotWidth" :y1="Y(v)" :y2="Y(v)" stroke="var(--border)" stroke-dasharray="2 4"/>
 <rect v-if="highlight" class="plot-highlight" :x="X(highlight[0])" :y="top" :width="Math.max(0,X(highlight[1])-X(highlight[0]))" :height="plotHeight" fill="var(--selection)" pointer-events="none"><title>微观窗口范围 {{highlight[0]}}–{{highlight[1]}} {{xUnit}}</title></rect>
-<g v-for="trace in traces" :key="trace.label" class="scientific-trace" :data-export-color="trace.exportColor" :stroke="trace.color" :fill="trace.color" :opacity="trace.opacity??1"><path v-if="trace.points&&trace.times.length>3000" :d="dots(trace)" stroke="none" class="scientific-dots"/><template v-else-if="trace.points"><circle v-for="(t,i) in trace.times" :key="i" v-show="trace.values[i]!=null" :cx="X(t)" :cy="Y(trace.values[i]??0,trace.right)" r="1.6" stroke="none"/></template><path v-else :d="path(trace)" fill="none" :stroke-width="trace.lineWidth??1.1" :stroke-dasharray="trace.dash" stroke-linecap="round"/></g>
+<g v-for="(trace,index) in traces" :key="trace.label" class="scientific-trace" :data-export-color="trace.exportColor" :stroke="trace.color" :fill="trace.color" :opacity="trace.opacity??1"><path v-if="trace.points&&trace.times.length>3000" :d="tracePaths[index]" stroke="none" class="scientific-dots"/><template v-else-if="trace.points"><circle v-for="(t,i) in trace.times" :key="i" v-show="trace.values[i]!=null" :cx="X(t)" :cy="Y(trace.values[i]??0,trace.right)" r="1.6" stroke="none"/></template><path v-else :d="tracePaths[index]" fill="none" :stroke-width="trace.lineWidth??1.1" :stroke-dasharray="trace.dash" stroke-linecap="round"/></g>
 <line v-for="(m,i) in markers" :key="i" :data-marker-label="m.label" :x1="X(m.time)" :x2="X(m.time)" :y1="top" :y2="top+plotHeight"  :stroke="m.color??'var(--success)'" :stroke-dasharray="m.dashed?'4 3':undefined" opacity=".75"><title>{{m.label}} {{m.time}}</title></line>
 </g>
 <rect :x="left" :y="top" :width="plotWidth" :height="plotHeight" fill="none" stroke="var(--border)"/>

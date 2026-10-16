@@ -38,7 +38,7 @@ def reconstruct(gray,*,time_start=0.,time_end=1.,freq_start=0.,freq_end=11025.,m
     values=(time_start,time_end,freq_start,freq_end,min_db,max_db,win_length_ms)
     if not all(np.isfinite(v) for v in values):raise ValueError('invalid_spectrogram_config')
     if not (0<=time_start<time_end and time_end-time_start<=30 and 0<=freq_start<freq_end<=48000 and -160<=min_db<max_db<=20 and 0<win_length_ms<=1000):raise ValueError('invalid_spectrogram_config')
-    if type(n_iter)!=int or not 1<=n_iter<=128 or type(seed)!=int or not 0<=seed<=4294967295 or target_sr not in (0,8000,16000,22050,24000,32000,44100,48000,96000):raise ValueError('invalid_spectrogram_config')
+    if type(n_iter)!=int or not 1<=n_iter<=256 or type(seed)!=int or not 0<=seed<=4294967295 or target_sr not in (0,8000,16000,22050,24000,32000,44100,48000,96000):raise ValueError('invalid_spectrogram_config')
     native_sr=int(2*freq_end)
     if native_sr<2:raise ValueError('invalid_spectrogram_config')
     magnitude=10**((max_db-np.flipud(gray)/255.*(max_db-min_db))/10.)*10
@@ -49,7 +49,7 @@ def reconstruct(gray,*,time_start=0.,time_end=1.,freq_start=0.,freq_end=11025.,m
         grid=np.linspace(0,freq_end,count);source=np.linspace(freq_start,freq_end,gray.shape[0])
         magnitude=np.stack([np.interp(grid,source,column,left=0.) for column in magnitude.T],axis=1)
     n_fft=2*(len(magnitude)-1)
-    if n_fft>16384 or magnitude.size*n_iter>32_000_000:raise ValueError('spectrogram_budget')
+    if n_fft>16384 or magnitude.size*n_iter>256_000_000:raise ValueError('spectrogram_budget')
     hop=max(1,int((time_end-time_start)/gray.shape[1]*native_sr))
     length=hop*(gray.shape[1]-1)
     if length>3_000_000:raise ValueError('spectrogram_budget')

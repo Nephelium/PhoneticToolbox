@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {syncNumberInput} from '../design/numeric-input.ts';
 import {vTimePrecision} from '../design/time-precision.ts';
 import {useAudioSelection} from '../state/audio-selection.ts';
 import {spacePlaybackShortcut} from '../state/audio-shortcuts.ts';
@@ -15,7 +16,9 @@ const owns=computed(()=>!props.externalPlayback&&isCurrentAudio(props.state.asse
 const playing=computed(()=>owns.value&&playback.playing),position=computed(()=>owns.value?playback.position:props.state.start);
 watch(()=>[props.state.asset,props.state.start,props.state.end],()=>scrub.value=null);
 function seekTo(event:Event){if(props.state.asset)seek(props.state.asset,Number((event.target as HTMLInputElement).value),props.state.start,props.state.end,props.state.channel);scrub.value=null;}
-function range(){select();const state=rangeState.value;[state.start,state.end]=selection(state.start,state.end,state.asset?.duration||0);stop();}
+function commitRange(endpoint:0|1,value:number|string){select();const state=rangeState.value;[state.start,state.end]=selection(endpoint===0?Number(value):state.start,endpoint===1?Number(value):state.end,state.asset?.duration||0);stop();}
+const startInput=computed({get:()=>rangeState.value.start,set:(value:number|string)=>commitRange(0,value)});
+const endInput=computed({get:()=>rangeState.value.end,set:(value:number|string)=>commitRange(1,value)});
 function toggle(){const wasPlaying=playing.value,start=position.value>=props.state.start&&position.value<props.state.end?position.value:props.state.start;select();emit('selection-play');if(wasPlaying)pause();else if(props.state.asset&&props.state.end>props.state.start)void play(props.state.asset,start,props.state.end,props.state.channel);}
 function stopPlayback(){emit('stop');stop();}
 // Explicit full-length choice for result-list actions. Keep the shared selection
@@ -35,9 +38,9 @@ onMounted(()=>window.addEventListener('keydown',key));onUnmounted(()=>window.rem
 <div ref="transport" class="transport-controls" :class="{'transport-compact':compact}">
 <div v-if="!compact" class="selection-controls">
 <strong>时间选区</strong>
-<label>起点 <input v-time-precision="'s'" v-model.number="rangeState.start" type="number" min="0" :max="rangeState.asset?.duration||0" step="0.001" :disabled="!rangeState.asset" @change="range"/> s</label>
+<label>起点 <input v-time-precision="'s'" v-model.lazy.number="startInput" type="number" min="0" :max="rangeState.asset?.duration||0" step="0.001" :disabled="!rangeState.asset" @change="syncNumberInput($event,startInput)"/> s</label>
 <span>—</span>
-<label>终点 <input v-time-precision="'s'" v-model.number="rangeState.end" type="number" min="0" :max="rangeState.asset?.duration||0" step="0.001" :disabled="!rangeState.asset" @change="range"/> s</label>
+<label>终点 <input v-time-precision="'s'" v-model.lazy.number="endInput" type="number" min="0" :max="rangeState.asset?.duration||0" step="0.001" :disabled="!rangeState.asset" @change="syncNumberInput($event,endInput)"/> s</label>
 <button data-audio-selection :disabled="!rangeState.asset" @click="select();rangeState.start=0;rangeState.end=rangeState.asset!.duration;stop()">全部</button>
 </div>
 <div class="audio-transport">

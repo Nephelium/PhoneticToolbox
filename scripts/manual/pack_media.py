@@ -5,13 +5,57 @@ The editable project and its source WAV/PNG files are never changed.
 from __future__ import annotations
 
 from io import BytesIO
+from functools import lru_cache
 import hashlib
+import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
+import uuid
 
 
-def package_asset(asset: dict, source: Path, output_root: Path) -> tuple[dict, dict]:
+@lru_cache(maxsize=4)
+def encoder_identity(kind: str) -> dict:
+    if kind == 'image':
+        import PIL
+        from PIL import features
+        return {'pillow': PIL.__version__, 'webp': features.version('webp')}
+    if kind == 'audio':
+        ffmpeg = shutil.which('ffmpeg')
+        if not ffmpeg:
+            raise RuntimeError('Compact manual media requires the existing FFmpeg executable')
+        with Path(ffmpeg).open('rb') as stream:
+            return {'ffmpegSha256': hashlib.file_digest(stream, 'sha256').hexdigest()}
+    return {}
+
+
+def cache_key(asset: dict, source: Path, original_hash: str) -> str:
+    # Changing this encoder implementation or its native codec invalidates reuse.
+    recipe = {'source': original_hash, 'kind': asset['kind'], 'extension': source.suffix.lower(),
+              'mime': asset.get('mime'), 'sampleRate': asset.get('sampleRate'),
+              'channels': asset.get('channels'), 'encoder': encoder_identity(asset['kind']),
+              'implementation': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
+    return hashlib.sha256(json.dumps(recipe, sort_keys=True).encode()).hexdigest()
+
+
+def checked_cache_root(root: Path) -> Path:
+    owned = Path(__file__).resolve().parents[2] / 'output'
+    root = Path(root).absolute()
+    if not root.resolve().is_relative_to(owned.resolve()):
+        raise ValueError('Media cache must be inside project output')
+    for path in (root, *root.parents):
+        if is_link(path):
+            raise ValueError('Media cache path is linked')
+    root.mkdir(parents=True, exist_ok=True)
+    return root
+
+
+def is_link(path: Path) -> bool:
+    return path.is_symlink() or (path.exists() and bool(getattr(path.lstat(), 'st_file_attributes', 0) & 0x400))
+
+
+def package_asset(asset: dict, source: Path, output_root: Path, cache_root: Path | None = None) -> tuple[dict, dict]:
     original = source.read_bytes()
     original_hash = hashlib.sha256(original).hexdigest()
     if asset.get('sha256') != original_hash:
@@ -20,7 +64,23 @@ def package_asset(asset: dict, source: Path, output_root: Path) -> tuple[dict, d
     packed = original
     extension = source.suffix.lower()
     mime = asset.get('mime')
-    if kind == 'image' and extension in ('.png', '.jpg', '.jpeg'):
+    cached = None
+    if cache_root is not None:
+        cache_root = checked_cache_root(cache_root)
+        key = cache_key(asset, source, original_hash)
+        record, blob = cache_root / (key + '.json'), cache_root / (key + '.bin')
+        if any(is_link(p) for p in (record, blob)):
+            raise ValueError('Media cache entry is linked')
+        if record.exists():
+            cached = json.loads(record.read_text('utf8'))
+            packed = blob.read_bytes()
+            if (cached['key'] != key or cached['sourceSha256'] != original_hash or
+                    len(packed) != cached['size'] or hashlib.sha256(packed).hexdigest() != cached['sha256']):
+                raise ValueError('Manual media cache identity mismatch')
+            extension, mime = cached['extension'], cached['mime']
+            if cached.get('audioMetadata'):
+                asset.update(cached['audioMetadata'])
+    if cached is None and kind == 'image' and extension in ('.png', '.jpg', '.jpeg'):
         from PIL import Image
         with Image.open(BytesIO(original)) as image:
             image.load()
@@ -32,7 +92,7 @@ def package_asset(asset: dict, source: Path, output_root: Path) -> tuple[dict, d
             candidate = stream.getvalue()
         if len(candidate) < len(original):
             packed, extension, mime = candidate, '.webp', 'image/webp'
-    elif kind == 'audio' and extension == '.wav':
+    elif cached is None and kind == 'audio' and extension == '.wav':
         ffmpeg = shutil.which('ffmpeg')
         if not ffmpeg:
             raise RuntimeError('Compact manual media requires the existing FFmpeg executable')
@@ -50,6 +110,15 @@ def package_asset(asset: dict, source: Path, output_root: Path) -> tuple[dict, d
             packed, extension, mime = process.stdout, '.mp3', 'audio/mpeg'
             asset['sampleRate'], asset['channels'] = sample_rate, channels
     packed_hash = hashlib.sha256(packed).hexdigest()
+    if cache_root is not None and cached is None:
+        metadata = {'key': key, 'sourceSha256': original_hash, 'size': len(packed),
+                    'sha256': packed_hash, 'extension': extension, 'mime': mime,
+                    'audioMetadata': {k: asset[k] for k in ('sampleRate', 'channels') if k in asset} if kind == 'audio' else {}}
+        # Blob first, manifest last; an interrupted first write is not a cache hit.
+        for target, content in ((blob, packed), (record, (json.dumps(metadata) + '\n').encode())):
+            temporary = target.with_name(target.name + '.' + uuid.uuid4().hex + '.tmp')
+            temporary.write_bytes(content)
+            os.replace(temporary, target)
     relative = 'assets/packed/' + hashlib.sha256((str(asset['id']) + original_hash).encode()).hexdigest()[:24] + extension
     destination = output_root / relative
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -62,4 +131,5 @@ def package_asset(asset: dict, source: Path, output_root: Path) -> tuple[dict, d
     if mime:
         asset['mime'] = mime
     return asset, {'id': asset['id'], 'sourceBytes': len(original), 'packageBytes': len(packed),
-                   'sourceSha256': original_hash, 'packageSha256': packed_hash, 'mime': mime}
+                   'sourceSha256': original_hash, 'packageSha256': packed_hash, 'mime': mime,
+                   'cacheHit': cached is not None}

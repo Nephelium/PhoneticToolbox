@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {syncNumberInput} from '../../design/numeric-input.ts';
 import {computed,nextTick,onBeforeUnmount,onMounted,ref,shallowRef,useId,watch} from 'vue';
 import ModalDialog from '../../components/ModalDialog.vue';
 import {papers,type Paper,type PaperLanguage,type PaperPage,type PaperLine,type PaperAnnotation,type PaperAnnotations} from '../../platform/papers.ts';
@@ -56,6 +57,7 @@ function scan(){
  void pump();
 }
 function jump(n:number){if(!Number.isInteger(n)||n<1||n>ratios.value.length)return;page.value=n;emit('position',n);const el=sheet(n);if(el&&viewport.value)viewport.value.scrollTop=el.offsetTop-16;schedule();}
+const pageInput=computed({get:()=>page.value,set:(value:number|string)=>jump(Number(value))});
 function anchor(clientX?:number,clientY?:number):ZoomAnchor|undefined{
  const v=viewport.value;if(!v||!ratios.value.length)return;const b=v.getBoundingClientRect(),scale=pageScale.value/100;
  const x=clientX??b.left+b.width/2,y=clientY??b.top+Math.min(b.height/2,200*scale);
@@ -116,7 +118,7 @@ onBeforeUnmount(()=>{disposed=true;controller?.abort();annotationController?.abo
 <section ref="reader" class="pdf-reader" aria-label="论文 PDF 阅读器">
  <div class="pdf-toolbar">
   <div class="pdf-controls"><button :disabled="saving" :class="{primary:language==='original'}" @click="emit('language','original')">{{paper.notice?'栏目说明':paper.local?'本地 PDF':'原文'}}</button><button v-if="!paper.local&&!paper.notice" :disabled="saving" :class="{primary:language==='translation'}" @click="emit('language','translation')">中文译文</button><button v-if="paper.analysisPdf&&paper.analysisDownloaded!==false" :class="{primary:language==='analysis'}" :disabled="saving" @click="emit('language','analysis')">论文解读</button></div>
-  <div class="pdf-controls"><button aria-label="上一页" :disabled="page<=1" @click="jump(page-1)">‹</button><label>第 <input aria-label="页码" type="number" :value="page" min="1" :max="ratios.length" @change="jump(Number(($event.target as HTMLInputElement).value))"> / {{ratios.length||'—'}} 页</label><button aria-label="下一页" :disabled="page>=ratios.length" @click="jump(page+1)">›</button></div>
+  <div class="pdf-controls"><button aria-label="上一页" :disabled="page<=1" @click="jump(page-1)">‹</button><label>第 <input aria-label="页码" type="number" v-model.lazy.number="pageInput" @change="syncNumberInput($event,pageInput)" min="1" :max="ratios.length"> / {{ratios.length||'—'}} 页</label><button aria-label="下一页" :disabled="page>=ratios.length" @click="jump(page+1)">›</button></div>
   <div class="pdf-controls"><select aria-label="阅读缩放" title="也可按住 Ctrl 在页面上滚动鼠标滚轮" :value="fit?'fit':zoom" @change="changeZoom(($event.target as HTMLSelectElement).value)"><option value="fit">适宽</option><option v-for="z in zoomOptions" :key="z" :value="z">{{z}}%</option></select><button @click="fullscreen">{{full?'退出全屏':'全屏阅读'}}</button></div>
   <div class="pdf-controls"><button :aria-expanded="sidebar" :aria-controls="notesId" title="打开批注列表，可添加本页笔记" @click="toggleNotes">批注 {{annotations.items.length}}</button><button @click="exportOpen=true">导出 PDF</button><button :aria-pressed="showText" @click="showText=!showText">本页文字</button></div>
  </div>

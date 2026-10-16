@@ -39,7 +39,7 @@ export async function desktopM05(transport:Task,choose:()=>Promise<{id:string}|n
    const value=await task<{base64:string;sha256:string}>({op:'result',job:job.id,id:preview.id}),bytes=Uint8Array.from(atob(value.base64),c=>c.charCodeAt(0));
    if(await sha256(bytes.buffer)!==preview.sha256)throw Error('预览校验失败');
    const data=JSON.parse(new TextDecoder().decode(bytes));
-   return {id:job.id,name,backend:data.backend,rows:data.rows,metadata:data.metadata,files:files.map(f=>({id:f.id,name:f.name,bytes:f.size_bytes,sha256:f.sha256}))};
+   return {id:job.id,name:data.metadata.input_name??name,backend:data.backend,rows:data.rows,metadata:data.metadata,files:files.map(f=>({id:f.id,name:f.name,bytes:f.size_bytes,sha256:f.sha256}))};
   }finally{signal.removeEventListener('abort',cancel);}
  }
  const port:LipPort={kind:'desktop',available:support.available,reason:support.available?undefined:'唇形分析暂时无法运行。可在关于页反馈此问题。',
@@ -53,9 +53,11 @@ export async function desktopM05(transport:Task,choose:()=>Promise<{id:string}|n
    }catch(error){await task({op:'m05_upload_abort',id:upload.id}).catch(()=>{});throw error;}
    return run(input,file.name,config,signal,progress);
   },
-  async save(result,offset,action){const grant=await choose();if(!grant)return false;const resultSave=await task({op:'m05_save',job:result.id,directory:grant.id,offset,action});return resultSave.saved===true;},
-  async history(){return (await task<JobView[]>({op:'m05_history'})).map(j=>({id:j.id,name:new Date(j.created_at*1000).toLocaleString()+' · '+j.id.slice(0,8)}));},
+  async save(result,offset,action){const grant=await choose();if(!grant)return false;const response=await task({op:'m05_save',job:result.id,directory:grant.id,offset,action});return response.saved===true;},
+  async saveBatch(items,action,options,onSaved){const grant=await choose();if(!grant)return false;for(const item of items){const response=await task({op:'m05_save',job:item.result.id,directory:grant.id,offset:item.offset,action,options});if(!response.saved)return false;onSaved(item.result.id);}return true;},
+  async history(){return task({op:'m05_history'});},
   async load(id){const job=await task<JobView>({op:'job',id});return run({asset_id:'',sha256:''},id.slice(0,8),{filter_enabled:true,cutoff_hz:15},new AbortController().signal,()=>{},{},job);},
+  async sourceVideo(result){const info=await task({op:'m05_source_info',job:result.id});const parts:Uint8Array<ArrayBuffer>[]=[];for(let offset=0;offset<info.size_bytes;offset+=262144){const response=await task({op:'m05_source_block',job:result.id,offset});parts.push(Uint8Array.from(atob(response.base64),c=>c.charCodeAt(0)));}const blob=new Blob(parts,{type:info.name.toLowerCase().endsWith('.webm')?'video/webm':'video/mp4'});if(blob.size!==info.size_bytes||await sha256(await blob.arrayBuffer())!==info.sha256)throw Error('历史视频校验失败');return blob;},
   replay(result,start){return task({op:'m05_replay',job:result.id,start});},
   audioPreview(result){return task({op:'m05_audio_preview',job:result.id});},
   async inspectRecording(blob){
@@ -75,8 +77,7 @@ export async function desktopM05(transport:Task,choose:()=>Promise<{id:string}|n
     throw Error('录制保存未完成');
    }catch(e){await task({op:'m05_save_abort',id:session.id}).catch(()=>{});await task({op:'m05_save_abort',id:session.metadata_id}).catch(()=>{});throw e;}
   },
-  async exportAnimation(result,format,quality,signal){const config={filter_enabled:result.metadata.config.filter_enabled,cutoff_hz:result.metadata.config.cutoff_hz,animation:format,quality,offset:result.metadata.timing?.lip_manual_offset??0};
-   const job=await task<JobView>({op:'m05_repeat',job:result.id,config});const rendered=await run({asset_id:'',sha256:''},result.name,config,signal,()=>{},{},job);return port.save(rendered,config.offset,'apply');},
+  async exportAnimation(result,format,quality,signal){if(signal.aborted)throw Error('动画导出已取消');const grant=await choose();if(!grant||signal.aborted)return false;const exportId=crypto.randomUUID();const cancel=()=>{void task({op:'m05_cancel_export',export_id:exportId}).catch(()=>{});};signal.addEventListener('abort',cancel,{once:true});try{const response=await task({op:'m05_export_animation',export_id:exportId,job:result.id,directory:grant.id,format,quality,offset:result.metadata.timing?.lip_manual_offset??0});return response.saved===true;}finally{signal.removeEventListener('abort',cancel);}},
   async saveLocal(name,blob){const grant=await choose();if(!grant)return false;const session=await task({op:'m05_save_begin',directory:grant.id,name,size:blob.size});try{for(let offset=0;offset<blob.size;offset+=262144)await task({op:'m05_save_block',id:session.id,offset,base64:encoded(await blob.slice(offset,offset+262144).arrayBuffer())});return (await task({op:'m05_save_finish',id:session.id})).saved===true;}catch(e){await task({op:'m05_save_abort',id:session.id}).catch(()=>{});throw e;}}
  };return port;
 }

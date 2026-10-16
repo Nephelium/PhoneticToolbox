@@ -296,7 +296,7 @@
         },
         {
           "id": "m05-modes",
-          "title": "选择采集模式",
+          "title": "选择模式",
           "level": 3
         },
         {
@@ -1936,6 +1936,11 @@
           "level": 4
         },
         {
+          "id": "m09-vocoder",
+          "title": "可选 BigVGAN 声码器",
+          "level": 3
+        },
+        {
           "id": "m09-v2-more-examples",
           "title": "再试三张 V2 语谱图",
           "level": 3
@@ -2032,7 +2037,7 @@
         },
         {
           "id": "m09-sources",
-          "title": "方法来源与解释边界",
+          "title": "方法来源与结果解释",
           "level": 2
         },
         {
@@ -514780,7 +514785,7 @@
       "sha256": "c050c8dfa437d57fe08bc0a015309890d23804aaa31cacdf5c5b9794142ec6f3",
       "width": 2560,
       "height": 1600,
-      "caption": "外观页默认使用 Everforest。宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
+      "caption": "外观设置。宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
       "git": false,
       "distribution": "software-only",
       "sourceType": "实际应用截图",
@@ -514904,7 +514909,7 @@
       "sha256": "3c8ce3586344891726f822f4aae16efa0e861795d61ed3e2a2bcf0278376ad7b",
       "width": 2560,
       "height": 1600,
-      "caption": "外观页默认使用 Everforest。跟随系统、浅色、深色三张预览与显示模式按钮上下对齐；宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
+      "caption": "外观设置。跟随系统、浅色、深色三张预览与显示模式按钮上下对齐；宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
       "git": false,
       "distribution": "software-only",
       "sourceType": "实际应用截图",
@@ -515028,7 +515033,7 @@
       "sha256": "25d0880cfb1a408a2754e20646b081440fd900fd9e83e5502fd4c616ba7d8073",
       "width": 2560,
       "height": 1600,
-      "caption": "外观页默认使用 Everforest。跟随系统、浅色、深色三张预览与显示模式按钮上下对齐；宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
+      "caption": "外观设置。跟随系统、浅色、深色三张预览与显示模式按钮上下对齐；宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
       "git": false,
       "distribution": "software-only",
       "sourceType": "实际应用截图",
@@ -515152,7 +515157,7 @@
       "sha256": "ce0faf07d54a17a71c0e68a13c981d45c4094e72b5b70b232047e4a4565b3d06",
       "width": 2560,
       "height": 1600,
-      "caption": "外观页默认使用 Everforest。跟随系统、浅色、深色三张预览与显示模式按钮上下对齐；宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
+      "caption": "外观设置。跟随系统、浅色、深色三张预览与显示模式按钮上下对齐；宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
       "git": false,
       "distribution": "software-only",
       "sourceType": "实际应用截图",
@@ -515276,7 +515281,7 @@
       "sha256": "f26a9638497f96f68c7019077a0b80b2403b775b1b6a72028e6beb365a961e16",
       "width": 2560,
       "height": 1600,
-      "caption": "外观页默认使用 Everforest。跟随系统、浅色、深色三张预览与显示模式按钮上下对齐；宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
+      "caption": "外观设置。跟随系统、浅色、深色三张预览与显示模式按钮上下对齐；宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
       "git": false,
       "distribution": "software-only",
       "sourceType": "实际应用截图",
@@ -515462,7 +515467,7 @@
       "sha256": "2390b25d2f6a6e28ccec24003525f357178f90f45feaf8f30e389ae288f8be36",
       "width": 2560,
       "height": 1600,
-      "caption": "外观页默认使用 Everforest。跟随系统、浅色、深色三张预览与显示模式按钮上下对齐；宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
+      "caption": "外观设置。跟随系统、浅色、深色三张预览与显示模式按钮上下对齐；宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
       "git": false,
       "distribution": "software-only",
       "sourceType": "实际应用截图",
@@ -515648,7 +515653,7 @@
       "sha256": "02e3e003442171fb65d7d4e47fb69ea7d562ef22f1a895aca8cbb0d6697a731d",
       "width": 2560,
       "height": 1600,
-      "caption": "外观页默认使用 Everforest。跟随系统、浅色、深色三张预览与显示模式按钮上下对齐；宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
+      "caption": "外观设置。跟随系统、浅色、深色三张预览与显示模式按钮上下对齐；宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
       "git": false,
       "distribution": "software-only",
       "sourceType": "实际应用截图",
@@ -515834,7 +515839,7 @@
       "sha256": "65fd9afbc5e94016972e854bb6870679f927d8139e068e83de8559225606d050",
       "width": 2560,
       "height": 1600,
-      "caption": "外观页默认使用 Everforest。跟随系统、浅色、深色三张预览与显示模式按钮上下对齐；宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
+      "caption": "外观设置。跟随系统、浅色、深色三张预览与显示模式按钮上下对齐；宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
       "git": false,
       "distribution": "software-only",
       "sourceType": "实际应用截图",
@@ -516068,7 +516073,7 @@
       "sha256": "5a0898a26fe744b1f3d8e2292eba48846c98b765c64dc3fd4b951d46eddff137",
       "width": 2560,
       "height": 1600,
-      "caption": "外观页默认使用 Everforest。跟随系统、浅色、深色三张预览与显示模式按钮上下对齐；宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
+      "caption": "外观设置。跟随系统、浅色、深色三张预览与显示模式按钮上下对齐；宽窗口中，配色与显示模式在左栏，缩放、按钮与波形颜色在右栏。",
       "git": false,
       "distribution": "software-only",
       "sourceType": "实际应用截图",
@@ -516353,7 +516358,7 @@
     {
       "id": "REF-GRIFFINLIM",
       "label": "GRIFFIN D W, LIM J S. Signal estimation from modified short-time Fourier transform[J]. IEEE Transactions on Acoustics, Speech, and Signal Processing, 1984, 32(2): 236-243. DOI: 10.1109/TASSP.1984.1164317.",
-      "url": "https://doi.org/10.1109/TASSP.1984.1164317"
+      "url": "https://ieeexplore.ieee.org/document/1164317"
     },
     {
       "id": "SRC-VTLWRAPPER",
@@ -516514,274 +516519,335 @@
       "id": "REF-M13-READING-REPAIRS-2021",
       "label": "教育部. 重編國語辭典修訂本[DB/OL]. 臺灣學術網路第6版. (2021-11)[2026-10-11]. https://dict.revised.moe.edu.tw/.\n教育部. 異體字字典[DB/OL]. 臺灣學術網路第14版（正式7版）. (2024-03)[2026-10-11]. https://dict.variants.moe.edu.tw/.",
       "url": "https://dict.revised.moe.edu.tw/"
+    },
+    {
+      "id": "WEBSITE-AOKI-SHORT-WINDOWS",
+      "label": "AOKI N. Technique of improving speech restoration from spectrograms of short windows for the Griffin–Lim algorithm[J]. Acoustical Science and Technology, 2023, 44(3): 186-188. DOI: 10.1250/ast.44.186.",
+      "url": "https://www.jstage.jst.go.jp/article/ast/44/3/44_E2297/_article/-char/en"
+    },
+    {
+      "id": "REF-FAST-GRIFFINLIM",
+      "label": "PERRAUDIN N, BALAZS P, SØNDERGAARD P L. A fast Griffin–Lim algorithm[C]//2013 IEEE Workshop on Applications of Signal Processing to Audio and Acoustics. IEEE, 2013: 1-4. DOI: 10.1109/WASPAA.2013.6701851.",
+      "url": "https://perraudin.info/publications/perraudin-note-002.pdf"
+    },
+    {
+      "id": "REF-NAFNET",
+      "label": "CHEN L, CHU X, ZHANG X, et al. Simple baselines for image restoration[C]//Computer Vision – ECCV 2022. Cham: Springer, 2022: 17-33. DOI: 10.1007/978-3-031-20071-7_2.",
+      "url": "https://link.springer.com/chapter/10.1007/978-3-031-20071-7_2"
+    },
+    {
+      "id": "REF-BIGVGAN",
+      "label": "LEE S G, PING W, GINSBURG B, et al. BigVGAN: A universal neural vocoder with large-scale training[C/OL]//The Eleventh International Conference on Learning Representations. 2023[2026-10-15]. https://openreview.net/forum?id=iTtGCMDEzS_.",
+      "url": "https://openreview.net/forum?id=iTtGCMDEzS_"
     }
   ],
   "softwareVersion": "3.0.0-preview.1",
   "searchIndex": [
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-section-01",
+      "title": "开始使用与共同操作",
       "text": "这本手册怎样使用",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-01"
     },
     {
       "chapterId": "getting-started",
+      "title": "开始使用与共同操作",
       "text": "从首页选择工具，就可以开始录音、分析、合成、标注或实验。需要读论文时，打开语音学论文精读。先按对应章节准备材料，处理后核对结果，再保存正式文件。",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-01"
     },
     {
       "chapterId": "getting-started",
+      "title": "开始使用与共同操作",
       "text": "第一次使用，先认清左侧工具导航、顶部标签和左下角的设置、使用说明。说明书左侧可以选章节、找小节和搜索操作词。",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-01"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-first-run",
+      "title": "开始使用与共同操作",
+      "text": "支持的系统与架构",
+      "targetId": "getting-started-system-architecture"
+    },
+    {
+      "chapterId": "getting-started",
+      "title": "开始使用与共同操作",
+      "text": "当前发行支持 Windows 10 1809 及以上版本和 Windows 11，使用 64 位 x64 的 Intel 或 AMD 处理器。x64 也称 AMD64 或 x86_64。暂不支持 x86 32 位、ARM64、macOS 或 Linux。",
+      "targetId": "getting-started-system-architecture"
+    },
+    {
+      "chapterId": "getting-started",
+      "title": "开始使用与共同操作",
+      "text": "打开 Windows 的“设置 → 系统 → 关于”，查看“系统类型”。确认电脑使用 64 位操作系统和基于 x64 的处理器，再下载对应的 Windows x64 程序包。",
+      "targetId": "getting-started-system-architecture"
+    },
+    {
+      "chapterId": "getting-started",
+      "title": "开始使用与共同操作",
       "text": "第一次打开工作台",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-first-run"
     },
     {
       "chapterId": "getting-started",
-      "text": "在 Windows 中启动免安装  PhoneticToolbox.exe ，或从安装后的开始菜单快捷方式打开。单文件程序首次启动可能需要等待资源展开与校验；看到“从这里开始”的首页后再选工具。 浏览首页三组工具和“最近使用”。已知名称时，在左侧“搜索工具…”输入工具名或 M01–M18 编号；若无匹配，界面会显示“没有匹配的工具”。 点击首页卡片或左侧导航里的工具。顶部出现同名标签；回到“首页”不会关闭工具。 在模块页面内点击“帮助”，先核对输入要求与保存步骤，返回模块后再导入自己的材料。",
-      "title": "开始使用与共同操作"
+      "title": "开始使用与共同操作",
+      "text": "在 Windows 中启动免安装  PhoneticToolbox-windows-x64.exe ，或从安装后的开始菜单快捷方式打开。单文件程序首次启动可能需要等待资源展开与校验；看到“从这里开始”的首页后再选工具。 浏览首页工具分类和“最近使用”。已知名称时，在左侧“搜索工具…”输入工具名；若无匹配，界面会显示“没有匹配的工具”。 点击首页卡片或左侧导航里的工具。顶部出现同名标签；回到“首页”不会关闭工具。Windows 的品牌与标签放在同一顶行，开源与学术致谢入口位于首页内容区右上角。 在模块页面内点击“帮助”，先核对输入要求与保存步骤，返回模块后再导入自己的材料。",
+      "targetId": "getting-started-first-run"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-home-figure",
-      "text": "首页的工具分类、导航与底部入口。只有讲解导航的这张图展开侧栏。",
-      "title": "开始使用与共同操作"
+      "title": "开始使用与共同操作",
+      "text": "Windows 顶边集中了品牌、标签与窗口按钮，开源与学术致谢在首页内容区右上角。首页与导航按工具分类提供入口。",
+      "targetId": "getting-started-first-run"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-section-02",
+      "title": "开始使用与共同操作",
       "text": "从工具进入帮助",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-02"
     },
     {
       "chapterId": "getting-started",
-      "text": "从首页卡片、左侧导航或“最近使用”打开目标模块。 在 模块页面内 点击“帮助”。工作台切换到“使用说明”标签并打开对应章节；生理参数合成的模型页在参数面板操作区提供入口。 在说明书左侧点章节或小节，正文滚动到目标位置并短暂高亮。也可用“搜索说明书”输入控件名或操作词；窄窗先点“目录与搜索”。 若从模块进入说明书，点击阅读区上方的“返回＋模块名”回到工具。直接点顶部原模块标签也可切回，切换本身不会提交任务或导出。 从首页横幅“第一次使用？了解工作台的基本操作”进入本章。左下角“使用说明”在当前模块打开对应章节，在首页打开本章。",
-      "title": "开始使用与共同操作"
+      "title": "开始使用与共同操作",
+      "text": "从首页卡片、左侧导航或“最近使用”打开目标模块。 在 模块页面内 点击“帮助”。工作台切换到“使用说明”标签并打开对应章节；生理参数合成的模型页在参数面板操作区提供入口。 在说明书左侧点章节或小节，正文滚动到目标位置，标题文字短暂变色；目录当前项以底色和文字颜色提示。拖动目录与正文之间的边界可调整宽度，切换标签后保留。也可用“搜索说明书”输入控件名或操作词；窄窗先点“目录与搜索”。 若从模块进入说明书，点击阅读区上方的“返回＋模块名”回到工具，也可直接点顶部原模块标签。 从首页横幅“第一次使用？了解工作台的基本操作”进入本章。左下角“使用说明”在当前模块打开对应章节，在首页打开本章。",
+      "targetId": "getting-started-section-02"
     },
     {
       "chapterId": "getting-started",
+      "title": "开始使用与共同操作",
       "text": "各模块都有页内帮助入口。章节加载失败时点重新加载，再试一次。",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-02"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-manual-figure",
-      "text": "左侧选择章节和小节，右侧阅读正文。搜索可查找工具、操作和参数。",
-      "title": "开始使用与共同操作"
+      "title": "开始使用与共同操作",
+      "text": "使用说明的目录选中项以颜色提示，正文定位标题不显示框线。目录与正文之间的边界可以左右拖动。",
+      "targetId": "getting-started-section-02"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-section-03",
+      "title": "开始使用与共同操作",
       "text": "图、音频与表格",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-03"
     },
     {
       "chapterId": "getting-started",
+      "title": "开始使用与共同操作",
       "text": "图片放在对应步骤旁，点击可放大。截图默认浅色，重点位置用局部图或红圈、红框标出。切换阅读主题后，截图仍保留拍摄时的颜色。",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-03"
     },
     {
       "chapterId": "getting-started",
+      "title": "开始使用与共同操作",
       "text": "例音只在需要比较原音和实际处理结果时出现，点击播放器才加载。播放另一段会暂停上一段；切换章节或离开说明书会停止播放。录音或采集时先结束采集，再试听例音。部分自然录音只随软件版提供，缺素材时播放器会显示提示。",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-03"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-section-04",
+      "title": "开始使用与共同操作",
       "text": "工作台的共同操作",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-04"
     },
     {
       "chapterId": "getting-started",
+      "title": "开始使用与共同操作",
       "text": "首页用于选择工具，左侧导航用于随时切换，顶部标签承载已打开页面。多数模块在页面上方提供文件与任务操作、帮助及“方法与引用”。采用分栏布局的模块通常有独立滚动的输入栏、工作区和任务记录栏。",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-04"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-section-05",
+      "title": "开始使用与共同操作",
       "text": "打开、切换与关闭标签",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-05"
     },
     {
       "chapterId": "getting-started",
-      "text": "点击工具名称打开模块；再次点击同一工具会切换到已有标签。顶部“首页”“设置”“使用说明”和模块标签可直接切换。切换时正在播放的声音会停止。 编辑后留意标签名旁的圆点，它表示当前页有未保存内容。要长期保留时，先按该页的保存或导出按钮，确认保存对象。 点击标签关闭按钮；如果有未保存编辑，按对话框选择保存、放弃或取消。取消会保留页面，保存失败也会留在页面并提示原因。录音、TextGrid、感知实验及未生成的绘图笔迹有特殊关闭保护，以当前提示为准。 重开模块后检查草稿与处理记录。关闭标签不等于删除已提交结果；尚未导出的内部结果仍受缓存保留期限约束。",
-      "title": "开始使用与共同操作"
+      "title": "开始使用与共同操作",
+      "text": "点击工具名称打开模块；再次点击同一工具会切换到已有标签。顶部“首页”“设置”“使用说明”和模块标签可直接切换。切换时正在播放的声音会停止。 编辑后留意标签名旁的圆点，它表示当前页有未保存内容。要长期保留时，先按该页的保存或导出按钮，确认保存对象。 点击标签关闭按钮；如果有未保存编辑，按对话框选择保存、放弃或取消。取消会保留页面，保存失败也会留在页面并提示原因。录音、TextGrid、感知实验及未生成的绘图笔迹有特殊关闭保护，以当前提示为准。 重开模块后可查看草稿与已提交任务的处理记录。尚未导出的内部结果受缓存保留期限约束，需要长期保留时及时导出。",
+      "targetId": "getting-started-section-05"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-section-06",
+      "title": "开始使用与共同操作",
       "text": "调整布局",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-06"
     },
     {
       "chapterId": "getting-started",
-      "text": "点击左侧搜索框旁的“收起侧栏”，可给工作区让出空间；再次点击“展开侧栏”恢复。工具导航与主区之间的分界线也可拖动。 在采用分栏布局的模块，拖动文件栏或记录栏与中央工作区的分界线调整宽度。若右栏有收起按钮，可暂时收起该模块的记录栏。 窗口较窄时在所在内容栏滚动，必要时扩大窗口或收起侧栏。栏宽偏好会记忆；可拖范围和折叠方式依模块而异。",
-      "title": "开始使用与共同操作"
+      "title": "开始使用与共同操作",
+      "text": "点击左侧搜索框旁的“收起侧栏”，可给工作区让出空间；再次点击“展开侧栏”恢复。工具导航与主区之间的分界线也可拖动，使用说明目录和语音学论文精读的论文库同样支持，各自保存宽度。 在采用分栏布局的模块，拖动文件栏或记录栏与中央工作区的分界线调整宽度。若右栏有收起按钮，可暂时收起该模块的记录栏。 窗口较窄时在所在内容栏滚动，必要时扩大窗口或收起侧栏。栏宽偏好会记忆；可拖范围和折叠方式依模块而异。",
+      "targetId": "getting-started-section-06"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-section-07",
+      "title": "开始使用与共同操作",
       "text": "选区、时间窗与试听",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-07"
     },
     {
       "chapterId": "getting-started",
+      "title": "开始使用与共同操作",
       "text": "时间窗决定图上看到哪段，选区决定本次试听或处理哪段。拖选后核对起止时间，再看按钮写的是播放选区、当前视野，还是整段。",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-07"
     },
     {
       "chapterId": "getting-started",
+      "title": "开始使用与共同操作",
       "text": "加载音频后先确认文件、时长和声道。在支持选区的波形上拖动选择片段；有起止时间输入时可用数值精确设定。 按该页的缩放、平移或适合窗口控件查看细节。不同图窗手势不完全相同，合成曲线与 EGG 图以各自章节说明为准。 点击播放或停止按钮核对声音。换文件或标签会停止旧声音。按钮被禁用时先检查输入是否载入、任务是否仍在运行、选区是否有效。",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-07"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-appearance",
+      "title": "开始使用与共同操作",
       "text": "主题、字号与字体",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-appearance"
     },
     {
       "chapterId": "getting-started",
-      "text": "点击左下角“设置”。在“配色方案”中选配色，再用“显示模式”的“跟随系统”“浅色”“深色”切换明暗；页面即时变化。 使用“页面缩放”的加减按钮以 10% 步长调整整个界面，或点“恢复 100%”。“按钮高亮”改变按钮外观，“波形线颜色”影响支持该偏好的波形。 在“字体”区域设置“中文字体”“英文与数字字体”“代码与等宽字体”“正文基础字号（px）”。看预览后点“应用字体”；所有 IPA 音标固定使用 Doulos SIL。图表与导出可跟随全局字体或单独设置。 返回模块检查表单与图窗。主题、页面缩放即时保存；字体要点击“应用字体”才生效。关闭设置时若有字体编辑，可应用、放弃或取消关闭。",
-      "title": "开始使用与共同操作"
+      "title": "开始使用与共同操作",
+      "text": "点击左下角“设置”，再点顶部“外观”。设置页顶部还有“字体”“图标”“本机存储与自动清理”三个分类按钮，宽窗口分左右栏。默认配色是 Absolutely，已有配色选择保留。在“图标”页选择内置图标或导入自己的图片，默认使用黄底、雾紫声波与深蓝末端的 W1 波形。在“配色方案”中选配色，再直接点击“显示模式”的“跟随系统”“浅色”“深色”卡片切换明暗；页面即时变化。 使用“页面缩放”的加减按钮以 10% 步长调整整个界面，或点“恢复 100%”。“按钮高亮”改变按钮外观，“波形线颜色”影响支持该偏好的波形。 外观页也可上传全局背景图并调整高斯模糊与不透明度，用色盘、吸管或 HEX 代码设定自定义色系。上传背景图后自动启用磨砂玻璃按钮，玻璃不透明度和模糊强度可分别调整。 点击设置页顶部“字体”，设置“中文字体”“英文与数字字体”“代码与等宽字体”“正文基础字号（px）”。看预览后点“应用字体”；所有 IPA 音标固定使用 Doulos SIL。图表与导出可跟随全局字体或单独设置。分类切换保留未应用的字体编辑。 返回模块检查表单与图窗。主题、页面缩放即时保存；字体要点击“应用字体”才生效。关闭设置时若有字体编辑，可应用、放弃或取消关闭。",
+      "targetId": "getting-started-appearance"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-theme-figure",
+      "title": "开始使用与共同操作",
       "text": "显示模式切换浅色和深色；页面缩放调整整个界面，恢复 100% 可回到默认比例。",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-appearance"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-section-08",
+      "title": "开始使用与共同操作",
       "text": "选择正确的工具",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-08"
     },
     {
       "chapterId": "getting-started",
-      "text": "首页三组名称用于定位。想计算参数，从“参数估计”开始；已有参数表需要对照显示时，进入“参数显示”。采集、合成、标注和实验各有对应工具。下表按研究目标列出入口，进入后再阅读对应章节的准备条件。",
-      "title": "开始使用与共同操作"
+      "title": "开始使用与共同操作",
+      "text": "首页按用途组织工具。想计算参数，从“参数估计”开始；已有参数表需要对照显示时，进入“参数显示”。下表按研究目标列出入口，进入后阅读对应章节的准备条件。",
+      "targetId": "getting-started-section-08"
     },
     {
       "chapterId": "getting-started",
-      "text": "从研究目标选择工具 研究目标 建议模块 继续阅读 录制并整理语料 录音 M16 输入设备、任务清单、工程与导出 从音视频提取唇形 唇形提取 M05 视频导入、录制与同步偏移 计算声学参数与EGG联合结果 参数估计 M01 文件、分析设置、联合 EGG 与批次 查看已有参数并排作图 参数显示 M02 曲线分配、时间轴与导图 观察EGG周期、CQ/SQ和事件 EGG信号分析 M03 声道角色、四图、批次与逆滤波 短时谱包络分析 LPC谱图 M04 选区、阶数与导出 编辑声学参数合成音频 声学参数合成 M06 Klatt参数曲线、元音及参数提取 调整生理构形并试听 生理参数合成 M10 模型页可进入；说明书正文待补 构造发声连续统 发声类型合成 M07 源/目标、处理步数与逐版本试听 操控时长和音高 变速变调 M08 手绘F0、拐点连接与批量处理 从语谱图或绘制频谱生成声音 语谱图转音频 M09 标定、原相位编辑与图片重建 输入和认识音标 国际音标表Plus M17 IPA/extIPA/VoQS及文本导出 汉字转写音标 汉字转国际音标 M13 逐字读音、标准、布局与图片 已有文本自动对齐音频 MFA自动标注 M11 模型词典、检查与TextGrid输出 编辑标注与同步唇形 TextGrid标注 M12 层、区间、边界和偏移 整理音系及合并分析 音系归纳 M14 字表、归并和三文件导出 运行听辨与反应实验 感知实验 M15 刺激、预检、被试流程与结果导出",
-      "title": "开始使用与共同操作"
+      "title": "开始使用与共同操作",
+      "text": "从研究目标选择工具 研究目标 建议模块 继续阅读 录制并整理语料 录音 输入设备、任务清单、工程与导出 从音视频提取唇形 唇形提取 视频导入、录制与同步偏移 计算声学参数与EGG联合结果 参数估计 文件、分析设置、联合 EGG 与批次 查看已有参数并排作图 参数显示 曲线分配、时间轴与导图 观察EGG周期、CQ/SQ和事件 EGG信号分析 声道角色、四图、批次与逆滤波 短时谱包络分析 LPC谱图 选区、阶数与导出 编辑声学参数合成音频 声学参数合成 Klatt参数曲线、元音及参数提取 调整生理构形并试听 生理参数合成 构形、声源、关键帧与同步视频导出 构造发声连续统 发声类型合成 源/目标、处理步数与逐版本试听 操控时长和音高 变速变调 手绘F0、拐点连接与批量处理 从语谱图或绘制频谱生成声音 语谱图转音频 标定、原相位编辑与图片重建 输入和认识音标 国际音标表Plus IPA/extIPA/VoQS及文本导出 汉字转写音标 汉字转国际音标 逐字读音、标准、布局与图片 已有文本自动对齐音频 MFA自动标注 模型词典、检查与TextGrid输出 编辑标注与同步唇形 TextGrid标注 层、区间、边界和偏移 整理音系及合并分析 音系归纳 字表、归并和三文件导出 运行听辨与反应实验 感知实验 刺激、预检、被试流程与结果导出",
+      "targetId": "getting-started-section-08"
     },
     {
       "chapterId": "getting-started",
-      "text": "M10 的模块入口可用，但本手册正文仍待编写。M15 已有感知实验章节；M05 的真人视频演示待补，文字步骤可先阅读。",
-      "title": "开始使用与共同操作"
+      "title": "开始使用与共同操作",
+      "text": "操作前查阅对应章节，确认输入材料、参数设置和保存方式。",
+      "targetId": "getting-started-section-08"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-section-09",
+      "title": "开始使用与共同操作",
       "text": "文件、保存与研究复现",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-09"
     },
     {
       "chapterId": "getting-started",
+      "title": "开始使用与共同操作",
       "text": "文件进入模块、任务生成内部结果、显式导出正式文件，是三个不同步骤。开始前准备输入副本和可写结果位置，核对模块接受的格式和声道；计算后检查处理记录与导出提示。",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-09"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-section-10",
+      "title": "开始使用与共同操作",
       "text": "桌面文件与网页项目",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-10"
     },
     {
       "chapterId": "getting-started",
-      "text": "在桌面版按模块实际显示的“打开音频目录”“导入音频”“选择图片目录”等按钮选输入。选择后查看文件列表、时长或预览；选中输入并不表示已经提交计算。 若模块有“输出位置”或“选择结果目录”，提交任务前检查位置和文件名规则。按钮不可用时，先完成文件载入、预检或参数填写。 浏览器项目按当前账号的项目资源与权限工作，文件入口和原生能力可能不同。以网页当前显示的“添加文件”“导入”等按钮及该模块网页说明为准。",
-      "title": "开始使用与共同操作"
+      "title": "开始使用与共同操作",
+      "text": "在桌面版按模块显示的“打开音频目录”“导入音频”“选择图片目录”等按钮选输入，核对文件列表、时长或预览后再提交计算。 若模块有“输出位置”或“选择结果目录”，提交任务前检查位置和文件名规则。按钮不可用时，先完成文件载入、预检或参数填写。 浏览器项目按当前账号的项目资源与权限工作，文件入口和原生能力可能不同。以网页当前显示的“添加文件”“导入”等按钮及该模块网页说明为准。",
+      "targetId": "getting-started-section-10"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-section-11",
+      "title": "开始使用与共同操作",
       "text": "草稿、任务结果和导出文件",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-11"
     },
     {
       "chapterId": "getting-started",
+      "title": "开始使用与共同操作",
       "text": "“保存草稿”保存该模块声明的编辑状态；“处理记录”保存已提交任务的状态和内部结果；“保存结果”或“导出”才产生应在目标目录核对的正式研究文件。音频与标注原文件的覆盖规则依模块而异。",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-11"
     },
     {
       "chapterId": "getting-started",
+      "title": "开始使用与共同操作",
       "text": "任务前记下输入、算法、参数与输出位置。草稿保存不会自动生成音频、图片或表格。 任务结束后在“处理记录”“历史”等对应区域核对状态、参数快照与结果。失败时保留错误文字，修正输入后按模块说明重试。 需要长期保留时显式导出并在目标目录检查文件名、格式和内容。比较研究批次时保留源录音、TextGrid、模型或词典标识、实际设置与软件版本。",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-11"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-section-12",
+      "title": "开始使用与共同操作",
       "text": "方法、引用与问题处理",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-12"
     },
     {
       "chapterId": "getting-started",
-      "text": "模块操作栏的“方法与引用”列出论文、实现和依赖来源。方法出处、具体代码来源与软件许可应分别核对。手册示例展示可观察的界面和文件结果；实际语料准确率、自然度及设备时延仍需另行评估。",
-      "title": "开始使用与共同操作"
+      "title": "开始使用与共同操作",
+      "text": "模块操作栏的“方法与引用”列出论文、实现和依赖来源。学术文献按 GB/T 7714—2015 整理，点击“复制引用”可复制完整书目信息，多份资料保留各自引用与换行。方法出处、代码来源与软件许可分别列示。研究中应结合自己的语料评估结果准确率、自然度及设备时延。",
+      "targetId": "getting-started-section-12"
     },
     {
       "chapterId": "getting-started",
+      "title": "开始使用与共同操作",
       "text": "出现问题时记下模块名、输入类型、点击按钮、参数和原样错误提示。 检查文件能否预览、所需模型或设备是否可用、输出位置是否可写，再按模块章节的恢复步骤操作。 如果已产生部分结果，先查看处理记录与导出文件，再决定是否重试。录音、唇形与感知实验的中断恢复以各自章节为准。",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-section-12"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-installed-update",
+      "title": "开始使用与共同操作",
       "text": "安装、更新与设置保留",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-installed-update"
     },
     {
       "chapterId": "getting-started",
-      "text": "本说明书对应  3.0.0-preview.1 。交付的免安装  PhoneticToolbox.exe  是单个可双击启动的应用；免安装 ZIP 内含同一应用和标识文件，解压后运行 EXE。安装版  setup.exe  将同一应用安装到当前用户目录，通常不需要管理员权限。单文件首次启动需临时展开资源，请等待首页出现。MFA 独立环境、声学模型和词典需按 M11 章节另行准备。",
-      "title": "开始使用与共同操作"
+      "title": "开始使用与共同操作",
+      "text": "本说明书对应  3.0.0 。交付的免安装  PhoneticToolbox-windows-x64.exe  是单个可双击启动的应用；免安装 ZIP 内含同一应用和标识文件，解压后运行 EXE。安装版  PhoneticToolbox-3.0.0-windows-x64-setup.exe  将同一应用安装到当前用户目录，通常不需要管理员权限。安装完成后，从开始菜单打开 PhoneticToolbox；若选择创建桌面快捷方式，也可从桌面打开。单文件首次启动需展开并校验运行文件，请等待首页出现。MFA 独立环境、声学模型和词典需按 MFA 自动标注章节另行准备。",
+      "targetId": "getting-started-installed-update"
     },
     {
       "chapterId": "getting-started",
-      "text": "两种程序包使用固定的 Windows 用户数据位置：任务与缓存位于  %LOCALAPPDATA%\\PhoneticToolbox\\v3 ，界面设置与本机草稿位于  %LOCALAPPDATA%\\PhoneticToolbox-v3\\workbench 。换版前先保存、导出工作。本机隔离测试已验证两种换版后主题、草稿和工程标记保留；另一台实体电脑上的全部环境尚未验收。",
-      "title": "开始使用与共同操作"
+      "title": "开始使用与共同操作",
+      "text": "两种程序包使用固定的 Windows 用户数据位置：任务与缓存位于  %LOCALAPPDATA%\\PhoneticToolbox\\v3 ，界面设置与本机草稿位于  %LOCALAPPDATA%\\PhoneticToolbox-v3\\workbench 。换版前先保存、导出工作，重新打开后核对设置、草稿、工程和结果。",
+      "targetId": "getting-started-installed-update"
     },
     {
       "chapterId": "getting-started",
-      "targetId": "getting-started-update-check",
+      "title": "开始使用与共同操作",
       "text": "在桌面版检查更新",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-update-check"
     },
     {
       "chapterId": "getting-started",
-      "text": "点击左下角“检查更新”。需要时设置“下载来源”（自动选择、国内服务器、GitHub）、“版本通道”（Preview 或稳定版）和“启动时检查更新”。网页端会提示在线更新仅在桌面版提供。 点击面板的“检查更新”，阅读当前版本、两个来源的状态和候选版本说明。若显示无可用发布或来源错误，稍后重试；按钮存在不表示已有新版。 只有出现适用于当前包类型的新版本时，才点击“下载更新”并确认。等待大小与 SHA-256 校验完成；下载失败可在网络恢复后重试。 仅在界面显示“退出并更新”时，先停止录音或实验、保存草稿并导出重要结果，再确认退出。若要求处理未保存标签，完成保存或取消换版。重新打开后核对版本、设置、项目和结果。",
-      "title": "开始使用与共同操作"
+      "title": "开始使用与共同操作",
+      "text": "点击左下角“检查更新”。需要时设置“下载来源”（自动选择、国内服务器、GitHub）、“版本通道”（Preview 或稳定版）和“启动时检查更新”。网页端会提示在线更新仅在桌面版提供。 点击面板的“检查更新”，阅读当前版本、两个来源的状态和候选版本说明。若显示无可用发布或来源错误，稍后重试。 只有出现适用于当前包类型的新版本时，才点击“下载更新”并确认。等待大小与 SHA-256 校验完成；下载失败可在网络恢复后重试。 仅在界面显示“退出并更新”时，先停止录音或实验、保存草稿并导出重要结果，再确认退出。若要求处理未保存标签，完成保存或取消换版。重新打开后核对版本、设置、项目和结果。",
+      "targetId": "getting-started-update-check"
     },
     {
       "chapterId": "getting-started",
-      "text": "截至本版编写时，公共  latest  与 GitHub 发行渠道尚未发布此版本，在线检查可能没有候选包。本机隔离换版验证不能推定公开渠道已有可用更新。",
-      "title": "开始使用与共同操作"
-    },
-    {
-      "chapterId": "getting-started",
-      "targetId": "getting-started-retention",
+      "title": "开始使用与共同操作",
       "text": "处理结果保留期限",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-retention"
     },
     {
       "chapterId": "getting-started",
+      "title": "开始使用与共同操作",
       "text": "桌面版“设置”中的“本机存储与自动清理”默认清理超过 30 天的未导出处理结果缓存；已导出的应用内部副本默认保留 7 天。期限按生成、最近读取或成功导出等可用记录计算；旧结果缺可靠时间时从首次登记开始。活动任务及依赖项会保留，唇形录制结果有额外保护。",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-retention"
     },
     {
       "chapterId": "getting-started",
-      "text": "点击“设置”，滚动到“本机存储与自动清理”，查看处理结果缓存的大小和数量。 按需关闭“自动清理过期的处理结果缓存”，或调整“未导出结果保留”“已导出副本的缓存保留”；两项都填写 1–3650 天整数。 点击“保存清理设置”并确认成功提示。用“刷新占用”查看最新用量；如需立刻执行到期缓存清理，可点“清理已到期缓存”并阅读结果。 长期成果应先在模块中显式导出并检查正式文件。原始输入、正式导出、录音工程、感知实验项目和 TextGrid 标注不属于自动结果缓存清理。",
-      "title": "开始使用与共同操作"
+      "title": "开始使用与共同操作",
+      "text": "点击“设置”，再点顶部“本机存储与自动清理”，查看处理结果缓存的大小和数量。 按需关闭“自动清理过期的处理结果缓存”，或调整“未导出结果保留”“已导出副本的缓存保留”；两项都填写 1–3650 天整数。 点击“保存清理设置”并确认成功提示。用“刷新占用”查看最新用量；如需立刻执行到期缓存清理，可点“清理已到期缓存”并阅读结果。 长期成果应先在模块中显式导出并检查正式文件。原始输入、正式导出、录音工程、感知实验项目和 TextGrid 标注不属于自动结果缓存清理。",
+      "targetId": "getting-started-retention"
     },
     {
       "chapterId": "getting-started",
+      "title": "开始使用与共同操作",
       "text": "查看清理设置与更新选项",
-      "title": "开始使用与共同操作"
+      "targetId": "getting-started-retention"
     },
     {
       "chapterId": "m16",
@@ -528932,242 +528998,333 @@
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-section-01",
+      "title": "设置、主题、字体与图标",
       "text": "外观设置",
-      "title": "设置、主题与字体"
+      "targetId": "settings-section-01"
     },
     {
       "chapterId": "settings",
-      "text": "在工作台左下角点击“设置”，设置会作为独立标签打开。左侧是外观，右侧是字体，下方是本机存储。配色、显示模式、页面缩放、按钮外观和波形颜色立即改变界面并写入本机；字体需单独点击应用。",
-      "title": "设置、主题与字体"
+      "title": "设置、主题、字体与图标",
+      "text": "在工作台左下角点击“设置”，设置会作为独立标签打开。顶部有“外观”“字体”“图标”“本机存储与自动清理”四个按钮，每次显示所选页面，分类按钮随页面一起滚动。点击切换，也可聚焦分类按钮后用左右方向键切换，Home、End 跳到首尾。页面足够宽时组内分为左右两栏，窄窗口自动回到单栏。外观与图标选择立即生效并保存在本机；字体需单独点击应用。切换分类或工作台标签会保留本次字体编辑和清理期限输入。",
+      "targetId": "settings-section-01"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-section-02",
+      "title": "设置、主题、字体与图标",
+      "text": "在自定义色系中，用色盘、吸管取色或 HEX 颜色代码选择一种颜色，页面即时生成同色系的浅色与深色配色。支持 #657b35 与 #abc 形式。桌面吸管打开取色窗口，点屏幕取色后选择颜色，再点使用颜色；取消会保留原色。上传背景图后，也可点从背景图取色，再点击原图中的颜色。",
+      "targetId": "settings-section-01"
+    },
+    {
+      "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
+      "text": "点击上传背景图选择 PNG、JPG、WebP，单张不超过 20 MB、4000 万像素。图片在所有页面等比例铺满，超出窗口的部分居中裁切，标签和文本框透出背景，科研图窗保留底色。高斯模糊可调 0–40 px，不透明度可调 0–100%，0% 隐藏图像。图片保存在本机，最多保存 8 张。点击缩略图即可切换，重开后继续沿用。“不使用背景图”恢复配色底色并保留图库，每张图片下的“移除”从图库移除该项；移除正在使用的图片也会恢复配色底色。原始图片保留。之前上传的背景图会继续保留。最长边超过 2560 像素时按比例缩小用于界面显示。 弹窗和展开的下拉列表保留不透明底色，遮住下面的内容。",
+      "targetId": "settings-section-01"
+    },
+    {
+      "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
+      "text": "上传背景图后自动启用磨砂玻璃按钮，重启时恢复已有背景图也会自动启用。普通按钮保留底色，磨砂玻璃透出按钮后的背景。可在按钮材质中继续调整，并设置玻璃不透明度 0–100% 与玻璃模糊强度 0–40 px，默认分别为 35% 和 12 px。不透明度越低，底色越淡。选中的按钮和标签页以底色及文字颜色区分，键盘焦点保留可见提示。材质与按钮高亮、阴影光效独立设置，并同步到生理参数合成页面。",
+      "targetId": "settings-section-01"
+    },
+    {
+      "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
       "text": "配色与深浅模式",
-      "title": "设置、主题与字体"
+      "targetId": "settings-section-02"
     },
     {
       "chapterId": "settings",
-      "text": "打开“配色方案”列表，悬停候选项或用方向键浏览文字、按钮与波形的小窗预览；选定后观察左右两张浅色、深色示意卡。初始方案是 Codex。 在“显示模式”中选择“跟随系统”“浅色”或“深色”。同一配色方案有对应的深浅版本；选“跟随系统”后，系统外观切换时工作台会响应。 检查侧栏、标签、按钮与文字的可读性。改变方案或模式只调整界面呈现；已生成的图片和研究结果不会被追溯修改。",
-      "title": "设置、主题与字体"
+      "title": "设置、主题、字体与图标",
+      "text": "打开“配色方案”列表，悬停候选项或用方向键浏览文字、按钮与波形的小窗预览；选定后观察跟随系统、浅色、深色三张示意卡。已经保存的其他配色会继续沿用。 下拉菜单下方的“关于配色”默认展开，说明主题适配、来源许可与科研曲线色义。 直接点击“显示模式”的“跟随系统”“浅色”或“深色”卡片切换。跟随系统卡片并排展示浅色和深色小窗，方向键和 Home、End 也可切换。同一配色方案有对应的深浅版本；选“跟随系统”后，系统外观切换时工作台会响应。 Windows 顶边将图标、名称、标签与窗口控制放在同一行，随菜单配色变化。标签文字与关闭按钮同色。拖动顶行空白或品牌区可移动窗口，双击可最大化或还原；窗口边缘可调整大小。开源与学术致谢位于首页内容区右上角。滚动条使用融入背景的细圆角滑块，悬停时加深；可继续用滚轮、键盘或拖动滑块滚动。其他系统保留系统标题栏。 检查侧栏、标签、按钮与文字的可读性。改变方案或模式只调整界面呈现；已生成的图片和研究结果不会被追溯修改。",
+      "targetId": "settings-section-02"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-figure-settings-r2-light",
-      "text": "最大化工作台中的浅色 Codex 设置页；配色、显示模式、页面缩放和字体设置同时可见。",
-      "title": "设置、主题与字体"
+      "title": "设置、主题、字体与图标",
+      "text": "显示模式直接点击三张卡片切换，跟随系统并排展示浅色与深色小窗；下方不再重复放置模式按钮。",
+      "targetId": "settings-section-02"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-figure-settings-v3-dark",
-      "text": "设置中的配色与字体。浅色模式通过共同主题即时应用。",
-      "title": "设置、主题与字体"
+      "title": "设置、主题、字体与图标",
+      "text": "展开“关于配色”可查看主题名称与适配说明，配色来源和许可状态可在左下角“关于”的软件与代码来源中查看。",
+      "targetId": "settings-section-02"
     },
     {
       "chapterId": "settings",
-      "text": "展开“关于配色”可查看主题名称与改写说明。配色来源和许可状态在左下角“关于”中的软件与代码来源查看；主题名称仅标明视觉参考。",
-      "title": "设置、主题与字体"
-    },
-    {
-      "chapterId": "settings",
-      "targetId": "settings-section-03",
+      "title": "设置、主题、字体与图标",
       "text": "页面、按钮和波形",
-      "title": "设置、主题与字体"
+      "targetId": "settings-section-03"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-table-appearance",
+      "title": "设置、主题、字体与图标",
       "text": "外观控件的默认值与作用 控件或参数 位置/单位 默认值 操作与影响 页面缩放 外观/% 100% 用减号或加号按10%改变，支持70–150%，恢复100%回到原比例 按钮高亮 外观/选项 按重要性高亮 可切换全部高亮或全部普通，选择状态和焦点提示仍保留 阴影与悬停光效 外观/开关 开启 单独关闭可减少视觉效果，不改变按钮功能 波形线颜色 外观/选项 跟随主题色 选择蓝色或自定义后按所选值显示；其他科研参数曲线保留其色义 自定义HEX 选自定义后/颜色 显示当前保存值 填写#加六位十六进制数字，或用色盘选择。无效内容会提示修正",
-      "title": "设置、主题与字体"
+      "targetId": "settings-section-03"
     },
     {
       "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
       "text": "调整“页面缩放”后查看正文、标签和图窗是否合适。图内 Ctrl＋滚轮是图自身的缩放操作，页面整体大小由此处的按钮控制。 按需要修改“按钮高亮”和“按钮阴影与悬停光效”。若本机保存失败，控件下方会给出提示；当前显示虽已改变，重新打开时仍需核对。 选择“波形线颜色”。选“自定义颜色”时调整色盘或输入 HEX，查看下方波形预览；音频波形采用该设置，其他科研参数曲线保留各自的颜色含义。",
-      "title": "设置、主题与字体"
+      "targetId": "settings-section-03"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-section-04",
+      "title": "设置、主题、字体与图标",
       "text": "字体设置",
-      "title": "设置、主题与字体"
+      "targetId": "settings-section-04"
     },
     {
       "chapterId": "settings",
-      "text": "右侧字体区先编辑候选值，随后预览或应用。“恢复默认”只填入默认值，仍需点击“应用字体”才生效；“取消字体编辑”恢复到最近一次应用的设置。",
-      "title": "设置、主题与字体"
+      "title": "设置、主题、字体与图标",
+      "text": "点击顶部“字体”进入字体页，先编辑候选值，随后预览或应用。“恢复默认”只填入默认值，仍需点击“应用字体”才生效；“取消字体编辑”恢复到最近一次应用的设置。切换到其他设置页面后再返回，未应用的编辑仍保留。",
+      "targetId": "settings-section-04"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-section-05",
+      "title": "设置、主题、字体与图标",
+      "text": "字体页左栏编辑字体与字号，右栏预览。切换设置分类保留编辑，应用按钮统一保存。",
+      "targetId": "settings-section-04"
+    },
+    {
+      "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
       "text": "界面字体",
-      "title": "设置、主题与字体"
+      "targetId": "settings-section-05"
     },
     {
       "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
       "text": "点击“读取本机字体列表”。桌面版列出本机字体；无法读取列表时，可在字体选择控件中填写本机已安装的字体名称。 分别选“中文字体”“英文与数字字体”“代码与等宽字体”。初始值依次为宋体、Times New Roman 和内置 JetBrains Mono；“所有 IPA 音标”固定为内置 Doulos SIL。 在“正文基础字号（px）”输入 10–24 的整数；初始为 14 px。导航、标签、正文与说明书文字会随应用后的设置调整。 点击“预览字体”，查看中文、英文与数字、IPA、代码和图表样例。预览仅反映当前编辑，随后点击“应用字体”，等待字体检查及保存反馈。 若提示字体不可用或存储失败，保留当前编辑，换用本机可用字体或检查本机存储后重试。重开时若已存字体在设备上不可用，界面会尝试可用字体并给出提示，已存选择仍保留。",
-      "title": "设置、主题与字体"
+      "targetId": "settings-section-05"
     },
     {
       "chapterId": "settings",
-      "text": "所有 IPA 音标固定使用内置 Doulos SIL，不能改为普通正文字体。界面默认中文宋体，英文与数字 Times New Roman；缺少本机字体时按实际回退规则显示。",
-      "title": "设置、主题与字体"
+      "title": "设置、主题、字体与图标",
+      "text": "所有 IPA 音标固定使用内置 Doulos SIL。界面默认中文宋体，英文与数字 Times New Roman；缺少本机字体时使用可用的兼容字体。",
+      "targetId": "settings-section-05"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-section-06",
+      "title": "设置、主题、字体与图标",
       "text": "图表与导出",
-      "title": "设置、主题与字体"
+      "targetId": "settings-section-06"
     },
     {
       "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
       "text": "“图表与导出”默认勾选“跟随全局字体”。取消勾选后，可以分别设置“图表中文字体”和“图表英文字体”。“图表基础字号（px）”独立于正文字号，范围 10–24 px，初始为 12 px。修改后仍需点击“应用字体”。",
-      "title": "设置、主题与字体"
+      "targetId": "settings-section-06"
     },
     {
       "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
       "text": "导出任务会记录实际所用字体。已经生成的历史图片保留原外观。PNG适合固定外观分享；SVG可保留文字编辑，但阅读设备仍可能需要所选字体和阅读软件支持。Doulos字体许可可在关于页的内置字体版权与许可中查看。",
-      "title": "设置、主题与字体"
+      "targetId": "settings-section-06"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-section-07",
+      "title": "设置、主题、字体与图标",
       "text": "时间与数值显示",
-      "title": "设置、主题与字体"
+      "targetId": "settings-section-07"
     },
     {
       "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
       "text": "秒数通常显示 5 位小数，毫秒显示 2 位。显示位数不会改动原始时间。输入时先把数值填完整，再执行操作。",
-      "title": "设置、主题与字体"
+      "targetId": "settings-section-07"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-section-08",
+      "title": "设置、主题、字体与图标",
       "text": "保存、取消与关闭",
-      "title": "设置、主题与字体"
+      "targetId": "settings-section-08"
     },
     {
       "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
       "text": "配色、显示模式、缩放、按钮与波形设置即时写入本机；字体由“应用字体”检查后保存。若字体尚有未应用的编辑，关闭设置标签会提示“应用字体并关闭”“放弃字体编辑并关闭”或“取消关闭”。选择取消关闭可返回编辑；应用失败时标签保持打开。本机设置与研究文件分开保存，正式成果仍需在相应模块明确保存或导出。",
-      "title": "设置、主题与字体"
+      "targetId": "settings-section-08"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-retention",
+      "title": "设置、主题、字体与图标",
+      "text": "应用图标",
+      "targetId": "settings-icons"
+    },
+    {
+      "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
+      "text": "打开顶部“图标”页，在连续网格中点击喜欢的图片。内置共 31 款，同类相邻排列：波形 7 款、语谱 1 款、口形 1 款、标注 2 款、IPA 20 款。格子只显示图片，选中后边框高亮。默认是黄色底、雾紫声波与深蓝末端的 W1。右侧可查看浅色、深色背景与小尺寸效果。",
+      "targetId": "settings-icons"
+    },
+    {
+      "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
+      "text": "点击“导入图片”，选择 PNG、JPG、WebP 或 ICO，单张不超过 10 MB、1600 万像素。先在裁剪窗口调整，默认方形 1:1，可选原图、横向 4:3、纵向 3:4 或自由比例。拖动选框移动，拖动右下角调整大小，方向键可微调。非方形裁剪等比例放入图标并保留透明留白。点击“应用裁剪”后保存并选中，取消保留当前图标。最多保存 8 张，相同图标复用已有项。",
+      "targetId": "settings-icons"
+    },
+    {
+      "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
+      "text": "勾选“移除纯色背景”，默认清除白色。可点“点击原图取色”后选中原图的背景颜色，也可用色盘或 HEX 输入颜色，调整色差容差查看预览。只清除与裁剪图边缘连通的近似底色，内部不相连的同色细节会保留。",
+      "targetId": "settings-icons"
+    },
+    {
+      "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
+      "text": "已导入图标下方可点“重新裁剪”，从保存在本机的原图重新调整，保存时替换这一张，不增加图标数量。较早导入、尚未保存原图的图标会使用现有图片，也可点“重新选择图片”找回原图。无法读取或保存时会提示原因并保留原选择。",
+      "targetId": "settings-icons"
+    },
+    {
+      "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
+      "text": "“恢复默认图标”回到黄底、雾紫声波与深蓝末端的 W1。“移除”只移除保存的自定义图标，原始图片保留；移除正在使用的图标时回到默认项。桌面版的应用内图标和窗口图标同步改变，选择在重启后保留；网页预览保存在当前浏览器。Windows 已固定的任务栏入口、桌面快捷方式和已有 EXE 的内嵌图标各自独立，已有入口不随本页选择自动改写。",
+      "targetId": "settings-icons"
+    },
+    {
+      "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
+      "text": "在图标页的“首页图标大小”中拖动滑块，可把首页左上角的图标调为默认大小的 50%–300%。调整即时生效并保存在本机，重新打开工作台后继续沿用。“恢复默认大小”回到 100%。",
+      "targetId": "settings-icons"
+    },
+    {
+      "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
+      "text": "图标先裁剪再应用，默认方形。勾选移除纯色背景后，白色边缘变透明，内部封闭的白色细节保留；颜色可点原图取样或输入 HEX。",
+      "targetId": "settings-icons"
+    },
+    {
+      "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
       "text": "本机存储与自动清理",
-      "title": "设置、主题与字体"
+      "targetId": "settings-retention"
     },
     {
       "chapterId": "settings",
-      "text": "设置页下方可查看处理结果缓存、受保护的输入副本及 MFA 临时文件占用。需要长期保存的结果，请先回到对应模块导出。",
-      "title": "设置、主题与字体"
+      "title": "设置、主题、字体与图标",
+      "text": "桌面版点击设置页顶部“本机存储与自动清理”，可查看处理结果缓存、受保护的输入副本及 MFA 临时文件占用。需要长期保存的结果，请先回到对应模块导出。网页预览中此页提示使用桌面工作台管理本机缓存。",
+      "targetId": "settings-retention"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-retention-policy",
+      "title": "设置、主题、字体与图标",
+      "text": "本机存储与自动清理页在宽窗口分为两栏，左栏编辑保留政策，右栏显示占用与操作。",
+      "targetId": "settings-retention"
+    },
+    {
+      "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
       "text": "设置保留期限",
-      "title": "设置、主题与字体"
+      "targetId": "settings-retention-policy"
     },
     {
       "chapterId": "settings",
-      "text": "MFA 诊断目录占用另行显示。仅清理已完成、任务进程已结束且所有权可验证的诊断临时目录，固定保留 7 天。活动任务、未完成或无法确认来源的目录会保留，模型、词典和科学环境不随诊断缓存清理。",
-      "title": "设置、主题与字体"
+      "title": "设置、主题、字体与图标",
+      "text": "MFA 临时文件占用单独显示，已完成任务的临时文件保留 7 天；仍在使用或暂时无法清理的文件会保留，模型、词典和科学环境保留。",
+      "targetId": "settings-retention-policy"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-table-retention",
-      "text": "本机缓存保留与清理控件 控件或参数 位置/单位 默认值 操作与影响 自动清理过期的处理结果缓存 本机存储/开关 开启 关闭后停止周期清理，已有结果继续保留。 未导出结果保留 本机存储/天 30 输入 1–3650 天整数。到期后内部结果可能删除，恢复需要重新计算。 已导出副本的缓存保留 本机存储/天 7 只清理已经确认导出成功的应用内部副本，正式导出文件保留。 保存清理设置 下方按钮 手动提交 保存开关与期限。缩短期限后，下一次清理按新期限计算。 清理已到期缓存 下方按钮 仅已开启时可用 按当前已保存策略立即清理，显示实际释放占用及仍受任务保护或暂时无法清理的数量。 刷新占用 下方按钮 就绪时可用 重新统计，保留当前已保存的期限。",
-      "title": "设置、主题与字体"
+      "title": "设置、主题、字体与图标",
+      "text": "本机缓存保留与清理控件 控件或参数 位置/单位 默认值 操作与影响 自动清理过期的处理结果缓存 本机存储/开关 开启 关闭后停止周期清理，已有结果继续保留。 未导出结果保留 本机存储/天 3 输入 1–3650 天整数。到期后内部结果可能删除，恢复需要重新计算。 已导出副本的缓存保留 本机存储/天 1 只清理已经确认导出成功的应用内部副本，正式导出文件保留。 保存清理设置 下方按钮 手动提交 保存开关与期限。缩短期限后，下一次清理按新期限计算。 清理已到期缓存 下方按钮 仅已开启时可用 按当前已保存策略立即清理，显示实际释放占用及仍受任务保护或暂时无法清理的数量。 刷新占用 下方按钮 就绪时可用 重新统计，保留当前已保存的期限。",
+      "targetId": "settings-retention-policy"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-retention-clean",
+      "title": "设置、主题、字体与图标",
       "text": "查看、保存并清理",
-      "title": "设置、主题与字体"
+      "targetId": "settings-retention-clean"
     },
     {
       "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
       "text": "先查看“处理结果缓存”的数量与占用。需要长期保留某项结果时，返回对应模块完成正式导出，并确认文件确实保存。 按研究周期填写两项保留天数，或关闭自动清理；点击“保存清理设置”并确认提示。非法天数或保存失败不会提交新策略。 需要立即执行已保存的策略时点击“清理已到期缓存”。结果会报告清理数量与释放空间；仍被任务使用或暂时无法清理的文件保留，可稍后重试。 点击“刷新占用”重新核对占用。正式导出位置不会由此按钮清理。",
-      "title": "设置、主题与字体"
+      "targetId": "settings-retention-clean"
     },
     {
       "chapterId": "settings",
-      "text": "自动清理在软件运行时检查。活动任务和仍被依赖的结果会保留，旧结果也会留出首次登记的宽限时间。",
-      "title": "设置、主题与字体"
+      "title": "设置、主题、字体与图标",
+      "text": "未保存过清理设置时，未导出结果默认保留 3 天，已导出副本默认保留 1 天；已保存的期限继续沿用。自动清理在软件运行时检查。活动任务和仍被依赖的结果会保留，旧结果也会留出首次登记的宽限时间。",
+      "targetId": "settings-retention-clean"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-startup-cache",
+      "title": "设置、主题、字体与图标",
       "text": "清除全部缓存前先保存结果",
-      "title": "设置、主题与字体"
+      "targetId": "settings-startup-cache"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-startup-cache-explain",
+      "title": "设置、主题、字体与图标",
       "text": "首次打开单文件程序，需要准备运行文件。之后会复用已校验的缓存，更新时也会尽量复用没有变化的文件。",
-      "title": "设置、主题与字体"
+      "targetId": "settings-startup-cache"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-startup-cache-steps",
+      "title": "设置、主题、字体与图标",
       "text": "需要清理时，在本机存储区点击清除全部缓存…。先导出需要的结果，再按清除全部缓存并退出；不想执行就点取消。",
-      "title": "设置、主题与字体"
+      "targetId": "settings-startup-cache"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-startup-cache-boundary",
+      "title": "设置、主题、字体与图标",
       "text": "未导出的内部处理结果清理后需要重新计算。设置、草稿、原始输入、录音、工程、论文及正式导出文件会保留。",
-      "title": "设置、主题与字体"
+      "targetId": "settings-startup-cache"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-startup-cache-reopen",
+      "title": "设置、主题、字体与图标",
       "text": "再次打开时会重新准备运行文件，需要多等一会儿。免安装版删除 EXE 前可先清理；安装版卸载也会清理运行缓存。",
-      "title": "设置、主题与字体"
+      "targetId": "settings-startup-cache"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-updates",
+      "title": "设置、主题、字体与图标",
       "text": "检查更新与下载",
-      "title": "设置、主题与字体"
+      "targetId": "settings-updates"
     },
     {
       "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
       "text": "点击左下角检查更新，分别查看国内服务器与 GitHub 的返回状态。尚无可用发布或网络失败时，可保留当前版本继续使用，稍后重试。",
-      "title": "设置、主题与字体"
+      "targetId": "settings-updates"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-updates-choice",
+      "title": "设置、主题、字体与图标",
       "text": "选择来源与版本通道",
-      "title": "设置、主题与字体"
+      "targetId": "settings-updates-choice"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-table-updates",
+      "title": "设置、主题、字体与图标",
       "text": "更新窗口的选项与可用条件 控件或参数 位置/单位 默认值 操作与影响 下载来源 更新窗口/选项 自动选择 国内网络优先服务器，其他地区优先 GitHub。识别失败有地区后备，可手动指定。相同版本和校验内容的另一来源可作为后备。 版本通道 更新窗口/选项 Preview Preview 包括预发布版，稳定版只查询正式版本。 启动时检查更新 更新窗口/开关 开启 关闭后只保留手动检查，不影响其他联网功能。 检查更新 更新窗口/按钮 空闲时可用 独立显示两个来源的查询结果，选择高于当前版本的最高可信版本。 取消 查询或下载过程中 任务进行时显示 停止当前查询或下载，未完整校验的下载不进入换版。 下载更新 存在匹配的新版本 需要确认 按当前安装方式下载，完整下载后核对大小和 SHA-256。 退出并更新 更新包完整校验后 需要再次确认 先处理未保存草稿和正在进行的工作，再关闭应用并换版。",
-      "title": "设置、主题与字体"
+      "targetId": "settings-updates-choice"
     },
     {
       "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
       "text": "当前运行方式会标为安装版或免安装版，候选版本也需提供相同类型的更新包。两个来源提供同版本但包摘要相冲突时，更新会阻止换版；仅在版本与大小、SHA-256 一致时，下载失败才可尝试另一来源。",
-      "title": "设置、主题与字体"
+      "targetId": "settings-updates-choice"
     },
     {
       "chapterId": "settings",
-      "targetId": "settings-updates-flow",
+      "title": "设置、主题、字体与图标",
       "text": "检查、下载与换版",
-      "title": "设置、主题与字体"
+      "targetId": "settings-updates-flow"
     },
     {
       "chapterId": "settings",
-      "text": "点击“检查更新”，等待两栏返回“已检查”“尚无可用发布”或具体错误。网络失败、来源缺失及检查不完整需要按提示重试，不能当作最新版确认。 若出现高于当前版本且安装方式匹配的候选，阅读版本说明，点击“下载更新”并确认。下载期间可观察来源与进度；需要中断时点击“取消”。 出现“更新包已下载并通过校验”后，先保存当前研究工作，再点击“退出并更新”并再次确认。未保存标签会逐项要求处理；取消关闭会中止此次换版。 新版本打开后核对主题、字体、草稿与工程。已验证的本机两种换版路径保留了设置、草稿和工程；跨设备与所有历史版本的迁移仍需以实际文件核对。",
-      "title": "设置、主题与字体"
+      "title": "设置、主题、字体与图标",
+      "text": "点击“检查更新”，等待两栏返回“已检查”“尚无可用发布”或具体错误。网络失败、来源缺失及检查不完整需要按提示重试，不能当作最新版确认。 若出现高于当前版本且安装方式匹配的候选，阅读版本说明，点击“下载更新”并确认。下载期间可观察来源与进度；需要中断时点击“取消”。 出现“更新包已下载并通过校验”后，先保存当前研究工作，再点击“退出并更新”并再次确认。未保存标签会逐项要求处理；取消关闭会中止此次换版。 新版本打开后核对主题、字体、草稿、工程和结果文件。",
+      "targetId": "settings-updates-flow"
     },
     {
       "chapterId": "settings",
+      "title": "设置、主题、字体与图标",
       "text": "遇到检查未完整，按提示重试或换网络。查询失败不会自动下载更新。",
-      "title": "设置、主题与字体"
+      "targetId": "settings-updates-flow"
     }
   ]
 }

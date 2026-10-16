@@ -163,7 +163,7 @@ class Bridge(QObject):
             self.taskReady.emit(request_id,json.dumps({'ok':False,'error':'请求结构或大小不正确。'}));return
         # Component transfer can take minutes. Keep catalogue/progress reads and
         # unrelated task operations responsive while serializing installations.
-        task_lock=self.m11_component_lock if decoded.get('op')=='m11_component' else self.task_lock
+        task_lock=self.m11_component_lock if decoded.get('op') in ('m11_component','m09_vocoder_download') else self.task_lock
         if not task_lock.acquire(False):
             self.taskReady.emit(request_id,json.dumps({'ok':False,'error':'任务操作正在进行，请稍候。'}));return
         def work():
@@ -243,6 +243,9 @@ class Bridge(QObject):
                     pixmap,corners=captured;buffer=QBuffer();buffer.open(QIODevice.OpenModeFlag.WriteOnly)
                     if not pixmap.save(buffer,'PNG'):raise FileAccessError('截图失败。')
                     value={**self.provider.capture(bytes(buffer.data())),'corners':corners}
+            elif op=='m09_pick_python':
+                path,_=QFileDialog.getOpenFileName(self.window,'选择已有 GPU Python 环境的 python.exe','','Python (python.exe)')
+                value=self.tasks.m09.grant(path) if path else None
             elif op=='m11_pick':
                 purpose=body.get('purpose')
                 if purpose in ('runtime','corpus'):

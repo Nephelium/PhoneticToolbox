@@ -8,6 +8,10 @@ body{padding:0 10px;background:var(--bg);color:var(--ink);grid-template-rows:min
 .studio,.analysis,.charts>section,.nasal-card,#monitorDialog,dialog{background:var(--panel);color:var(--ink);border-color:var(--line)}
 .view-toolbar,.preset-bar,.scene-foot{background:var(--bg);color:var(--muted)}
 button,input,select{background:var(--panel);color:var(--ink);border-color:var(--line)}
+/* Native popup items need opaque colours independently of the closed control. */
+select option,select optgroup{background-color:var(--panel);color:var(--ink)}
+select option:checked{background-color:var(--selected);color:var(--ink)}
+select option:disabled,select optgroup:disabled{color:var(--muted)}
 .inspector-tabs button[aria-selected=true],.analysis-tabs .selected{background:var(--selected);color:var(--accent)}
 .identity h1{font-size:1.214286rem}.identity p{display:none}.masthead{border-color:var(--line)}
 .workspace{padding-top:6px;gap:10px;grid-template-rows:minmax(0,1fr) 255px;grid-template-columns:minmax(320px,1fr) var(--panel-right,330px);min-height:0!important}.studio{min-height:0!important}#viewport{min-height:0!important}

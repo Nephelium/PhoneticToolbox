@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted,ref} from 'vue';
 import {localStoragePort,type StorageStatus} from '../platform/storage.ts';
-const state=ref<StorageStatus>(),enabled=ref(true),days=ref('30'),exportedDays=ref('7');
+const state=ref<StorageStatus>(),enabled=ref(true),days=ref('3'),exportedDays=ref('1');
 const busy=ref(false),message=ref(''),error=ref('');
 const confirmAll=ref(false);
 async function clearAll(){busy.value=true;error.value='';message.value='';try{const answer=await localStoragePort().clearAll();confirmAll.value=false;message.value=answer.started?'正在检查未保存内容，安全退出后清除缓存。其他窗口仍打开时，运行文件会等最后一个窗口退出后清理。':'退出请求未开始，请稍后重试。';}catch(e){error.value=e instanceof Error?e.message:'清理未开始，请稍后重试。';}finally{busy.value=false;}}

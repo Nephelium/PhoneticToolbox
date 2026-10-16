@@ -1,0 +1,376 @@
+{
+  "scope": "User-requested attributed figure excerpts illustrating magnitude-only reconstruction. No original recording or phase recovered. Copyright retained by the respective authors/publishers; no open redistribution license claimed.",
+  "cases": [
+    {
+      "id": "smith",
+      "crop": [
+        94,
+        388,
+        752,
+        907
+      ],
+      "display": [
+        44,
+        362,
+        758,
+        929
+      ],
+      "duration": 1.48,
+      "frequency": 4000,
+      "title": "一张图，一句问候。",
+      "source": "Julius O. Smith III (2007). Mathematics of the Discrete Fourier Transform (DFT), 2nd ed., Fig. 8.10.",
+      "url": "https://www.dsprelated.com/freebooks/mdft/Spectrogram_Speech.html",
+      "explanation": "Hi, this is Steve Jobs. 横向是一句话的时间，纵向是频率。图中深浅不同的条纹，记录着声音能量的变化。",
+      "input_sha256": "32828b811899745aa4a2f73c931f53dcfdaea4b16fba2270d330d4a19b55027c",
+      "output_sha256": "66b7d2472dbc810359e9628bda99b99bda9ec5c5eeec86211a66c82dac1cccc4",
+      "processing": {
+        "route": "参数预测 → GL → 训练后 80 带修复 → 声码器",
+        "engine": "pulse GL / NAFNet 80 / BigVGAN",
+        "parameter_prediction": {
+          "window_ms": 22.09825897216797,
+          "dynamic_range_db": 61.10734558105469,
+          "normalized_db_limits": [
+            -61.10734558105469,
+            0
+          ],
+          "window_shape_predicted": false,
+          "absolute_db_predicted": false,
+          "applied_to_reconstruction": true,
+          "outside_training_parameter_range": false,
+          "image_sha256": "545d2a18dba5feb07aaa56b3ba963f2a491d98ac8da67b467194db8e60ee69ce",
+          "checkpoint_sha256": "7ac61f075259099e0c58e743818b2b61a1ec42d5a125eab6ef9fc9216182a86e",
+          "applied_window_ms": 22.0,
+          "window_rounding": "nearest integer ms, half up"
+        },
+        "model": {
+          "sha256": "a60a3587139ffdc79b69978615b2079c66a43282cb2b77ab99d276717b433ab2",
+          "step": 6000,
+          "vocoder_sha256": "e2a93f92971e1b6750d8f9b701121597cd271e473e6c189c8072be7080047735",
+          "frontend": {
+            "sampling_rate": 22050,
+            "n_fft": 1024,
+            "win_size": 1024,
+            "hop_size": 256,
+            "num_mels": 80,
+            "fmin": 0,
+            "fmax": 8000
+          }
+        },
+        "gl": {
+          "sampling_rate": 16000,
+          "nfft": 512,
+          "hop": 24,
+          "iterations": 256,
+          "momentum": 0.99,
+          "seed": 20261015,
+          "phase_initialization": "pulse",
+          "hop_ms": 1.5,
+          "window_samples": 352,
+          "applied_window_ms": 22.0
+        },
+        "assumptions": {
+          "window": "Hann",
+          "mapping": "20log10 magnitude",
+          "preemphasis": 0,
+          "conditions": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "white_threshold": 252,
+          "no_filter": true,
+          "window_ms": 22.0,
+          "dynamic_range_db": 61.10734558105469
+        },
+        "source_report_sha256": "476405a478f482cb469511751403526b78634819c129265b5dc91bf2581a7a93",
+        "source_output_sha256": "66b7d2472dbc810359e9628bda99b99bda9ec5c5eeec86211a66c82dac1cccc4",
+        "source_export": "audio/smith-listen-base80-repaired.wav",
+        "delivery": "exact_listening_export"
+      },
+      "previous_gl_baseline": {
+        "config": {
+          "time_start": 0.0,
+          "time_end": 1.48,
+          "freq_start": 0.0,
+          "freq_end": 4000.0,
+          "min_db": -30.0,
+          "max_db": 0.0,
+          "win_length_ms": 10.0,
+          "n_iter": 64,
+          "target_sr": 16000,
+          "seed": 0
+        },
+        "metadata": {
+          "schema_version": "m09/1",
+          "seed": 0,
+          "native_sr": 8000,
+          "sample_rate": 16000,
+          "samples": 23464,
+          "duration": 1.4665,
+          "requested_duration": 1.48,
+          "time_origin": 0.0,
+          "hop_length": 28,
+          "n_fft": 512,
+          "win_length": 80,
+          "n_iter": 64,
+          "frequency_mapping": "legacy-zero-start",
+          "magnitude_mapping": "legacy-10log10-times10",
+          "resampling": "linear-interpolation",
+          "pcm16_clipped_samples": 5,
+          "warning": "Magnitude-only approximate reconstruction; original phase cannot be recovered."
+        }
+      }
+    },
+    {
+      "id": "levantan",
+      "crop": [
+        212,
+        472,
+        1059,
+        676
+      ],
+      "display": [
+        154,
+        201,
+        1100,
+        920
+      ],
+      "duration": 0.9334,
+      "frequency": 5000,
+      "title": "声音里的小停顿。",
+      "source": "Whitney Chappell (2021). /s/ weakening in Nicaragua. In E. Núñez-Méndez (ed.), Sociolinguistic Approaches to Sibilant Variation in Spanish, pp. 217–245. Fig. 7.4, p. 228.",
+      "url": "https://doi.org/10.4324/9781003153948-11",
+      "figure_url": "https://www.researchgate.net/figure/Spectrogram-and-waveform-of-a-glottal-stop-in-Levantan-las-olas-the-waves-rise-up_fig4_349935398",
+      "explanation": "Levantan las olas 这句话的原图展示了喉塞音。对照标注和语谱图，观察停顿附近能量的变化。",
+      "input_sha256": "54edfeb24e72253a7d3c1996be86088cd9220dc3d93d603687a4d5b5ea384988",
+      "output_sha256": "6951aa3b214f8d4a731bbe024e91cfab2c6c62629467109f3f5f5e21e4a0f2bb",
+      "processing": {
+        "route": "参数预测 → GL → 训练后 80 带修复 → 声码器",
+        "engine": "pulse GL / NAFNet 80 / BigVGAN",
+        "parameter_prediction": {
+          "window_ms": 4.538491249084473,
+          "dynamic_range_db": 49.43039321899414,
+          "normalized_db_limits": [
+            -49.43039321899414,
+            0
+          ],
+          "window_shape_predicted": false,
+          "absolute_db_predicted": false,
+          "applied_to_reconstruction": true,
+          "outside_training_parameter_range": false,
+          "image_sha256": "285eb21d87fc2da839cc74e87fab326630139f9a7b4e8cbe901834c4ac0f494a",
+          "checkpoint_sha256": "7ac61f075259099e0c58e743818b2b61a1ec42d5a125eab6ef9fc9216182a86e",
+          "applied_window_ms": 5.0,
+          "window_rounding": "nearest integer ms, half up"
+        },
+        "model": {
+          "sha256": "a60a3587139ffdc79b69978615b2079c66a43282cb2b77ab99d276717b433ab2",
+          "step": 6000,
+          "vocoder_sha256": "e2a93f92971e1b6750d8f9b701121597cd271e473e6c189c8072be7080047735",
+          "frontend": {
+            "sampling_rate": 22050,
+            "n_fft": 1024,
+            "win_size": 1024,
+            "hop_size": 256,
+            "num_mels": 80,
+            "fmin": 0,
+            "fmax": 8000
+          }
+        },
+        "gl": {
+          "sampling_rate": 16000,
+          "nfft": 512,
+          "hop": 24,
+          "iterations": 256,
+          "momentum": 0.99,
+          "seed": 20261015,
+          "phase_initialization": "pulse",
+          "hop_ms": 1.5,
+          "window_samples": 80,
+          "applied_window_ms": 5.0
+        },
+        "assumptions": {
+          "window": "Hann",
+          "mapping": "20log10 magnitude",
+          "preemphasis": 0,
+          "conditions": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "white_threshold": 252,
+          "no_filter": true,
+          "window_ms": 5.0,
+          "dynamic_range_db": 49.43039321899414
+        },
+        "source_report_sha256": "476405a478f482cb469511751403526b78634819c129265b5dc91bf2581a7a93",
+        "source_output_sha256": "6951aa3b214f8d4a731bbe024e91cfab2c6c62629467109f3f5f5e21e4a0f2bb",
+        "source_export": "audio/levantan-listen-base80-repaired.wav",
+        "delivery": "exact_listening_export"
+      },
+      "previous_gl_baseline": {
+        "config": {
+          "time_start": 0.0,
+          "time_end": 0.9334,
+          "freq_start": 0.0,
+          "freq_end": 5000.0,
+          "min_db": -30.0,
+          "max_db": 0.0,
+          "win_length_ms": 10.0,
+          "n_iter": 64,
+          "target_sr": 16000,
+          "seed": 0
+        },
+        "metadata": {
+          "schema_version": "m09/1",
+          "seed": 0,
+          "native_sr": 10000,
+          "sample_rate": 16000,
+          "samples": 14748,
+          "duration": 0.92175,
+          "requested_duration": 0.9334,
+          "time_origin": 0.0,
+          "hop_length": 22,
+          "n_fft": 512,
+          "win_length": 100,
+          "n_iter": 64,
+          "frequency_mapping": "legacy-zero-start",
+          "magnitude_mapping": "legacy-10log10-times10",
+          "resampling": "linear-interpolation",
+          "pcm16_clipped_samples": 14,
+          "warning": "Magnitude-only approximate reconstruction; original phase cannot be recovered."
+        }
+      }
+    },
+    {
+      "id": "observo",
+      "crop": [
+        182,
+        442,
+        1010,
+        635
+      ],
+      "display": [
+        99,
+        165,
+        1070,
+        862
+      ],
+      "duration": 0.7278,
+      "frequency": 5000,
+      "title": "把摩擦，也听出来。",
+      "source": "Whitney Chappell (2021). /s/ weakening in Nicaragua. In E. Núñez-Méndez (ed.), Sociolinguistic Approaches to Sibilant Variation in Spanish, pp. 217–245. Fig. 7.3, p. 226.",
+      "url": "https://doi.org/10.4324/9781003153948-11",
+      "figure_url": "https://www.researchgate.net/figure/Coda-sibilance-insertion-in-observo-from-Observo-un-par-de-islas-I-see-a-couple-of_fig3_349935398",
+      "explanation": "原文用 observo 的这个片段说明咝音插入。看一看高频噪声，再听图片重建后的近似声音。",
+      "input_sha256": "4995c4309bf491bcc963f1b832a8ca1f9091d590157ef8a071d4dba89280765d",
+      "output_sha256": "42ef545b4831ea177164761e05a2427226c9b29a1084dbb69ddc95ba1c5b6111",
+      "processing": {
+        "route": "参数预测 → GL → 训练后 80 带修复 → 声码器",
+        "engine": "pulse GL / NAFNet 80 / BigVGAN",
+        "parameter_prediction": {
+          "window_ms": 5.361846923828125,
+          "dynamic_range_db": 56.279598236083984,
+          "normalized_db_limits": [
+            -56.279598236083984,
+            0
+          ],
+          "window_shape_predicted": false,
+          "absolute_db_predicted": false,
+          "applied_to_reconstruction": true,
+          "outside_training_parameter_range": false,
+          "image_sha256": "7135e99f37209851a6952787ee41d8f698246cb974086e00a8aed3e61f631f13",
+          "checkpoint_sha256": "7ac61f075259099e0c58e743818b2b61a1ec42d5a125eab6ef9fc9216182a86e",
+          "applied_window_ms": 5.0,
+          "window_rounding": "nearest integer ms, half up"
+        },
+        "model": {
+          "sha256": "a60a3587139ffdc79b69978615b2079c66a43282cb2b77ab99d276717b433ab2",
+          "step": 6000,
+          "vocoder_sha256": "e2a93f92971e1b6750d8f9b701121597cd271e473e6c189c8072be7080047735",
+          "frontend": {
+            "sampling_rate": 22050,
+            "n_fft": 1024,
+            "win_size": 1024,
+            "hop_size": 256,
+            "num_mels": 80,
+            "fmin": 0,
+            "fmax": 8000
+          }
+        },
+        "gl": {
+          "sampling_rate": 16000,
+          "nfft": 512,
+          "hop": 24,
+          "iterations": 256,
+          "momentum": 0.99,
+          "seed": 20261015,
+          "phase_initialization": "pulse",
+          "hop_ms": 1.5,
+          "window_samples": 80,
+          "applied_window_ms": 5.0
+        },
+        "assumptions": {
+          "window": "Hann",
+          "mapping": "20log10 magnitude",
+          "preemphasis": 0,
+          "conditions": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "white_threshold": 252,
+          "no_filter": true,
+          "window_ms": 5.0,
+          "dynamic_range_db": 56.279598236083984
+        },
+        "source_report_sha256": "476405a478f482cb469511751403526b78634819c129265b5dc91bf2581a7a93",
+        "source_output_sha256": "42ef545b4831ea177164761e05a2427226c9b29a1084dbb69ddc95ba1c5b6111",
+        "source_export": "audio/observo-listen-base80-repaired.wav",
+        "delivery": "exact_listening_export"
+      },
+      "previous_gl_baseline": {
+        "config": {
+          "time_start": 0.0,
+          "time_end": 0.7278,
+          "freq_start": 0.0,
+          "freq_end": 5000.0,
+          "min_db": -30.0,
+          "max_db": 0.0,
+          "win_length_ms": 10.0,
+          "n_iter": 64,
+          "target_sr": 16000,
+          "seed": 0
+        },
+        "metadata": {
+          "schema_version": "m09/1",
+          "seed": 0,
+          "native_sr": 10000,
+          "sample_rate": 16000,
+          "samples": 11396,
+          "duration": 0.71225,
+          "requested_duration": 0.7278,
+          "time_origin": 0.0,
+          "hop_length": 17,
+          "n_fft": 512,
+          "win_length": 100,
+          "n_iter": 64,
+          "frequency_mapping": "legacy-zero-start",
+          "magnitude_mapping": "legacy-10log10-times10",
+          "resampling": "linear-interpolation",
+          "pcm16_clipped_samples": 8,
+          "warning": "Magnitude-only approximate reconstruction; original phase cannot be recovered."
+        }
+      }
+    }
+  ]
+}

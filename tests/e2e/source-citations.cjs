@@ -22,13 +22,18 @@ const root=path.resolve(__dirname,'../..'),[out,scratch]=process.argv.slice(2);
    for(const width of [1440,900]){
     await page.setViewportSize({width,height:width===1440?900:700});
     await page.locator('.utility-grid').getByRole('button',{name:'关于',exact:true}).click();await page.locator('dialog[open]').getByRole('button',{name:'开源与学术致谢',exact:true}).click();
-    await page.getByRole('tab',{name:/^语音学与语言学学术来源/}).click();assert.equal(await rows.count(),48);
+    await page.getByRole('tab',{name:/^语音学与语言学学术来源/}).click();assert.equal(await rows.count(),expected.length);
     for(const source of expected){
      const row=rows.filter({has:page.getByRole('heading',{name:source.title,exact:true})});assert.equal(await row.count(),1,source.id);
      assert.equal(await row.locator('.reference-citation').textContent(),source.citation,source.id);
      await row.getByRole('button',{name:'复制引用',exact:true}).click();assert.equal(await page.evaluate(()=>window.qaCopied),source.citation,source.id+' clipboard');
     }
     const geometry=await page.locator('dialog[open]').evaluate(dialog=>{const body=dialog.querySelector('.dialog-body'),rect=dialog.getBoundingClientRect();return{left:rect.left,right:rect.right,viewport:innerWidth,overflow:body.scrollWidth-body.clientWidth};});assert(geometry.left>=-1&&geometry.right<=geometry.viewport+1&&geometry.overflow<=1,JSON.stringify(geometry));
+    await page.getByRole('combobox',{name:'按模块查看致谢'}).selectOption('M09');assert.equal(await rows.count(),5);
+    for(const id of ['REF-GRIFFINLIM','WEBSITE-AOKI-SHORT-WINDOWS','REF-FAST-GRIFFINLIM','REF-NAFNET','REF-BIGVGAN'])assert.equal(await rows.filter({has:page.getByRole('heading',{name:sources.find(s=>s.id===id).title,exact:true})}).count(),1,id);
+    await page.getByRole('tab',{name:/^软件与代码来源/}).click();
+    for(const id of ['MODEL-M09-PARAMETERS','MODEL-M09-REPAIR80','PKG-BIGVGAN-BASE'])assert.equal(await rows.filter({has:page.getByRole('heading',{name:sources.find(s=>s.id===id).title,exact:true})}).count(),1,id);
+    await page.locator('dialog[open]').screenshot({path:path.join(out,'m09-models-'+mode+'-'+width+'.png')});
     await page.getByRole('combobox',{name:'按模块查看致谢'}).selectOption('M17');await page.getByRole('tab',{name:/^软件与代码来源/}).click();assert(!((await rows.allTextContents()).join(' ').includes('ipa.cin')));
     const app=sources.find(s=>s.id==='M17-IOS-IPA-PHONETICS-REFERENCE'),appRow=rows.filter({has:page.getByRole('heading',{name:app.title,exact:true})});assert.equal(await appRow.count(),1);
     await appRow.getByRole('button',{name:'复制引用',exact:true}).click();assert.equal(await page.evaluate(()=>window.qaCopied),app.citation);
@@ -36,7 +41,7 @@ const root=path.resolve(__dirname,'../..'),[out,scratch]=process.argv.slice(2);
     await page.getByRole('textbox',{name:'搜索来源'}).fill('ipa.cin');assert.equal(await rows.count(),0);await page.getByRole('textbox',{name:'搜索来源'}).fill('');await close();
     await page.locator('.nav-item').and(page.getByRole('button',{name:'国际音标表Plus',exact:true})).click();await page.locator('.ipa-plus-page').getByRole('button',{name:'方法与引用',exact:true}).click();await page.getByRole('tab',{name:/^语音学与语言学学术来源/}).click();assert.equal(await rows.count(),expected.filter(s=>s.modules.includes('M17')).length);
     await page.locator('dialog[open]').screenshot({path:path.join(out,'citations-'+mode+'-'+width+'.png')});await close();
-    report.cases.push({mode,width,academicCopies:48,privateCinHidden:true,appCopy:true,multiCitationNewlines:true,moduleAndGlobalMatch:true,geometry});
+    report.cases.push({mode,width,academicCopies:expected.length,m09Academic:5,m09Models:3,privateCinHidden:true,appCopy:true,multiCitationNewlines:true,moduleAndGlobalMatch:true,geometry});
    }
   }
   await page.setViewportSize({width:1440,height:900});

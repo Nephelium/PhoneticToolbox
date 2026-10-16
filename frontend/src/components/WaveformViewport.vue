@@ -17,7 +17,7 @@ onMounted(()=>{
   resizeFrame=requestAnimationFrame(()=>{
    resizeFrame=0;
    for(const [target,size] of pendingSizes){
-    if(target===viewport.value){
+    if(target===viewport.value&&size.width>0){
      width.value=Math.max(100,Math.min(4096,Math.round(size.width)));
      if(props.pixelAnnotations){
       const tracks=new Set<Element>(viewport.value?.querySelectorAll('.wave-track>svg'));
@@ -38,7 +38,9 @@ const duration=computed(()=>props.timelineDuration??props.state.asset?.duration?
 const minZoom=computed(()=>Math.max(1,duration.value/(props.maxWindowSeconds??Infinity)));
 const left=computed(()=>Math.min(props.state.offset,Math.max(0,duration.value-windowLength.value)));
 const indices=computed(()=>{const a=props.state.asset;if(!a)return [];const selected=Math.min(props.state.channel,a.channels.length-1);return props.state.showBoth&&a.channels.length>1?[0,selected===0?1:selected]:[selected];});
-const tracks=computed(()=>indices.value.map(index=>{const asset=props.state.asset!,start=left.value*asset.sampleRate,end=(left.value+windowLength.value)*asset.sampleRate,points=envelope(asset.channels[index],start,end,width.value,asset.peaks?.[index]),limit=props.normalizeDisplay?Math.max(1e-20,points.reduce((peak,[lo,hi])=>Math.max(peak,Math.abs(lo),Math.abs(hi)),0))*37/40.5:props.autoAmplitude?amplitudeLimit(points):1;return {index,points,limit,span:Math.max(0,Math.min(end,asset.channels[index].length)-start)/(end-start),detail:props.continuousDetail?sampleWavePath(asset.channels[index],start,end,limit,width.value):null};}));
+// Preserve the last visible geometry when a tab is hidden, and reuse its SVG
+// path for cursor/selection updates rather than rebuilding the sample envelope.
+const tracks=computed(()=>indices.value.map(index=>{const asset=props.state.asset!,start=left.value*asset.sampleRate,end=(left.value+windowLength.value)*asset.sampleRate,points=envelope(asset.channels[index],start,end,width.value,asset.peaks?.[index]),limit=props.normalizeDisplay?Math.max(1e-20,points.reduce((peak,[lo,hi])=>Math.max(peak,Math.abs(lo),Math.abs(hi)),0))*37/40.5:props.autoAmplitude?amplitudeLimit(points):1,detail=props.continuousDetail?sampleWavePath(asset.channels[index],start,end,limit,width.value):null;return {index,points,limit,span:Math.max(0,Math.min(end,asset.channels[index].length)-start)/(end-start),detail,svgPath:detail??path(points,limit)};}));
 function path(points:[number,number][],limit:number) {return points.map(([lo,hi],i)=>`M${i/Math.max(1,points.length-1)*1000},${45-hi/limit*37}V${45-lo/limit*37}`).join(' ');}
 function x(t:number){return Math.max(0,Math.min(1000,(t-left.value)/windowLength.value*1000));}
 function time(event:MouseEvent){const box=(event.currentTarget as Element).getBoundingClientRect();return left.value+Math.max(0,Math.min(1,(event.clientX-box.left)/box.width))*windowLength.value;}
@@ -102,7 +104,7 @@ function wheel(event:WheelEvent){
 <g :transform="pixelAnnotations?'scale('+waveformBox.width/1000+' '+waveformBox.height/90+')':undefined">
 <path d="M0 45H1000" class="wave-baseline"/>
 <rect :x="x(state.start)" y="0" :width="Math.max(0,x(state.end)-x(state.start))" height="90" class="wave-selection"/>
-<path :d="track.detail??path(track.points,track.limit)" :transform="track.detail?undefined:`scale(${track.span},1)`" :data-mode="track.detail?'samples':'envelope'" class="wave-line"/>
+<path :d="track.svgPath" :transform="track.detail?undefined:`scale(${track.span},1)`" :data-mode="track.detail?'samples':'envelope'" class="wave-line"/>
 <path v-if="state.asset&&isCurrentAudio(state.asset,state.channel)&&playback.position>=left&&playback.position<=left+windowLength" :d="`M${x(playback.position)} 0V90`" class="playback-cursor"/>
 </g>
 <slot name="annotations" :x="(t:number)=>x(t)*waveformBox.width/1000" :height="waveformBox.height" :start="left" :end="left+windowLength"/>

@@ -1,0 +1,73 @@
+{
+  "schema": "ptb-website-assets/1",
+  "sources": [
+    {
+      "id": "ASSET-DOULOS",
+      "file": "fonts/DoulosSIL-Regular.ttf",
+      "license": "SIL OFL 1.1",
+      "usage": "annotation text and reference geometry for independently redrawn decorative glyphs",
+      "upstream": "https://software.sil.org/doulos/",
+      "sha256": "cc89b87c047bcc8dc00246398218bb6343e0f2372b153cf560c29a77f27068ef"
+    },
+    {
+      "id": "WEBSITE-ZCOOL-KUAILE",
+      "file": "fonts/ZCOOLKuaiLe-Regular.ttf",
+      "license": "SIL OFL 1.1",
+      "authors": "Liu Bingke, Yang Kang, Wu Shaojie; ZCOOL KuaiLe Project Authors",
+      "upstream": "https://raw.githubusercontent.com/google/fonts/main/ofl/zcoolkuaile/ZCOOLKuaiLe-Regular.ttf",
+      "version": "Version 2.001",
+      "sha256": "812a6fc1fe54b6d73a419245c32dfeba8aa33104d5be90d1cf6af082007cb71d"
+    },
+    {
+      "id": "ASSET-MASCOT",
+      "file": "brand.png",
+      "source": "frontend/public/app-icons/sheets/w1-edited.png",
+      "usage": "existing approved W1 cropped per catalog and downsampled, no redraw",
+      "sha256": "95d63b584d1db76aa802664b9b19ead27009bd62c5d560e5f1cc70f12e9d5fd5"
+    }
+  ],
+  "ipa_artwork": [
+    {
+      "file": "retroflex-fricative.svg",
+      "symbol": "ʂ",
+      "codepoint": "U+0282",
+      "glyph_name": "uni0282",
+      "source_font": "Doulos SIL 7.000",
+      "reference_outline_sha256": "5d57c72e8d6964f13c63b4f3badd624a55a1e19988592b461b3b54ebe2be4310",
+      "design": "custom redrawn rounded monoline, based on reference glyph anatomy; attached retroflex hooks retained; relief gradient, shadow and custom brackets; not font typesetting",
+      "sha256": "ab1c25f158aa537c84ed7b81037ee7b157e49963f4cb2f2a66e6c88a122547aa"
+    },
+    {
+      "file": "retroflex-approximant.svg",
+      "symbol": "ɻ",
+      "codepoint": "U+027B",
+      "glyph_name": "uni027B",
+      "source_font": "Doulos SIL 7.000",
+      "reference_outline_sha256": "6ee4de64db8e1dcbec1b8799aa49959b094df39a68184624553c16815782c0b3",
+      "design": "custom redrawn rounded monoline, based on reference glyph anatomy; attached retroflex hooks retained; relief gradient, shadow and custom brackets; not font typesetting",
+      "sha256": "d2639422db56ee625772ef9338c6ebb30ff9f0ae4ddfe9ff5680eb15e2286603"
+    },
+    {
+      "file": "alveolopalatal-fricative.svg",
+      "symbol": "ɕ",
+      "codepoint": "U+0255",
+      "glyph_name": "uni0255",
+      "source_font": "Doulos SIL 7.000",
+      "reference_outline_sha256": "02c397906e1d768aca8423bc476ff1906bf6eae9905fb3162962d1a28766f05b",
+      "design": "custom redrawn rounded monoline, based on reference glyph anatomy; attached retroflex hooks retained; relief gradient, shadow and custom brackets; not font typesetting",
+      "sha256": "01934c89d9ed6fc86c39b21f170051930702befb4471d5a578167d5155ce3b2f"
+    }
+  ],
+  "spectrogram": "Deterministic procedural decorative texture, no measured-data claim",
+  "screenshots": "screens/provenance.json",
+  "hero_lettering": {
+    "file": "hero-lettering.svg",
+    "source": "Six original hand-authored Chinese stroke drawings; no typeface contours",
+    "sha256": "32f1692e5cebf6c8c99e24930d9833078e6cc2bb8705ed07043ac44f6741e3d7"
+  },
+  "more_lettering": {
+    "file": "more-lettering.svg",
+    "source": "ZCOOL KuaiLe OFL 1.1 outlines, individualized proportions, rounded expansion, bounce, rotation and custom underline; display artwork, not a new font",
+    "sha256": "adbe403c2ba54c07b50de1cba6da56b2e4bc1f0294f8959f27a140414e578ba7"
+  }
+}
