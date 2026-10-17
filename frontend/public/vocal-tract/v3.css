@@ -159,3 +159,6 @@ body,.parameter,.parameter label,.parameter input,.parameter select,.inspector-t
 #presetDialog .preset-ipa.favorite::after { content: "★"; font-size: 12px; position: absolute; top: -5px; right: -3px; bottom: auto; left: auto; width: auto; height: auto; background: none; color: var(--accent); }
 
 #presetCommon button[aria-pressed="true"]{background:var(--selected);border-color:var(--accent);color:var(--accent)}
+
+.web-sampling-note{display:block;color:var(--muted);font-size:12px;line-height:1.6;margin:4px 0 8px}.web-sampling-note a{color:var(--accent)}
+.web-disabled-action{display:inline-flex;flex:1;cursor:help}.web-disabled-action button{flex:1;pointer-events:none}

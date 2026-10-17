@@ -1,8 +1,8 @@
 import type {ManualTarget} from './types.ts';
 
 /** Stable module identifiers survive display-name changes. */
-export function moduleHelpTarget(moduleId?:string,targetId?:string):ManualTarget {
-  return {chapterId:moduleId&&/^M(?:0[1-9]|1[0-8])$/.test(moduleId)?moduleId.toLowerCase():'getting-started',...(targetId?{targetId}:{})};
+export function moduleHelpTarget(moduleId?:string,targetId?:string,introduction='getting-started'):ManualTarget {
+  return {chapterId:moduleId&&/^M(?:0[1-9]|1[0-8])$/.test(moduleId)?moduleId.toLowerCase():introduction,...(targetId?{targetId}:{})};
 }
 
 export function isModuleHelpLabel(label:string):boolean {

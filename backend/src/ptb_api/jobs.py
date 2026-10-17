@@ -15,6 +15,7 @@ from .m07_models import M07Request
 from .m11_models import M11Request
 from .m05_models import M05Request, M05Upload, M05Block, M05Config
 from .font_models import FigureFontSnapshot,FontPreflight
+from .recording_models import RecordingRequest
 from .acoustic_extended import ParameterWindowRequest
 
 
@@ -43,6 +44,46 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
     from .local_retention import retention_router
     router.include_router(retention_router(ctx.mode=='local', store, identity, mutation))
 
+    @router.get('/m16/project',operation_id='read_recording_project')
+    def read_recording_project(project_id:UUID,owner=Depends(identity)):
+        if ctx.mode!='server' or ctx.workspaces is None:raise HTTPException(404,'recording_server_unavailable')
+        ctx.project(owner,str(project_id))
+        from .recording_project import current
+        return {'asset':current(store.files.storage,owner['id'],str(project_id))}
+
+    @router.post('/m16/project',operation_id='save_recording_project')
+    def save_recording_project(body:dict,owner=Depends(mutation)):
+        from .recording_project import commit
+        if ctx.mode!='server' or ctx.workspaces is None:raise HTTPException(404,'recording_server_unavailable')
+        try:
+            project=str(UUID(body['project_id']));asset=str(UUID(body['asset_id']));expected=str(UUID(body['expected'])) if body.get('expected') else None
+        except (ValueError,KeyError,TypeError):raise HTTPException(422,'invalid_request') from None
+        ctx.project(owner,project)
+        return commit(store.files.storage,owner['id'],project,asset,expected)
+
+    @router.post('/m16/create',response_model=JobView,status_code=201,operation_id='create_recording_processing_job')
+    def create_recording(body:RecordingRequest,owner=Depends(mutation)):
+        if ctx.mode!='server' or ctx.workspaces is None:raise HTTPException(404,'recording_server_unavailable')
+        ctx.project(owner,body.project_id)
+        from ptb_worker.recording_jobs import submit
+        return submit(store,owner['id'],body)
+
+    @router.post('/m16/live-preview',operation_id='recording_live_spectrogram')
+    async def recording_live(request:Request,start:int=Query(ge=0),end:int=Query(gt=0),channel:int=Query(default=0,ge=0,le=7),owner=Depends(mutation)):
+        from starlette.concurrency import run_in_threadpool
+        from ptb_worker.spectrogram_preview import preview_slot
+        from ptb_worker.recording_preview import render
+        if ctx.mode!='server' or ctx.workspaces is None:raise HTTPException(404,'recording_server_unavailable')
+        if request.headers.get('content-type')!='application/octet-stream':raise HTTPException(415,'binary_audio_required')
+        with preview_slot():
+            data=bytearray()
+            async for block in request.stream():
+                if len(data)+len(block)>8_000_000:raise HTTPException(413,'preview_too_large')
+                data.extend(block)
+            value=await run_in_threadpool(render,bytes(data),start=start,end=end,channel=channel,width=320)
+            ctx.session(request)
+            return value
+
     @router.get('/m05/catalog', operation_id='lip_catalog')
     def m05_catalog(owner=Depends(identity)):
         from ptb_worker.m05_task import catalog
@@ -50,11 +91,14 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
 
     @router.post('/m05/create', response_model=JobView, status_code=201, operation_id='create_lip_job')
     def m05_create(body:M05Request, owner=Depends(mutation)):
+        ctx.project(owner, body.project_id)
         from ptb_worker.m05_task import submit
         return submit(store,owner['id'],body)
 
     @router.post('/m05/{key}/repeat', response_model=JobView, status_code=201, operation_id='render_lip_animation')
     def m05_repeat(key:UUID, body:M05Config, owner=Depends(mutation)):
+        if ctx.workspaces is not None:
+            ctx.workspaces.authorize(owner['id'], owner['_session_hash'], job=str(key))
         from ptb_worker.m05_task import repeat
         return repeat(store,owner['id'],str(key),body)
 
@@ -89,26 +133,32 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
 
     @router.post('/m11/create',response_model=JobView,status_code=201,operation_id='create_mfa_alignment_job')
     def m11_create(body:M11Request,owner=Depends(mutation)):
+        if ctx.mode != 'local':
+            raise HTTPException(403, 'm11_web_disabled')
         from ptb_worker.m11_task import submit
         return submit(store,owner['id'],body)
 
     @router.post('/m07/create',response_model=JobView,status_code=201,operation_id='create_phonation_synthesis_job')
     def create_m07(body:M07Request,owner=Depends(mutation)):
+        ctx.project(owner, body.project_id)
         from ptb_worker.m07_task import submit
         return submit(store,owner['id'],body)
 
     @router.post('/m06/create',response_model=JobView,status_code=201,operation_id='create_speech_synthesis_job')
     def create_m06(body:M06Request,owner=Depends(mutation)):
+        ctx.project(owner, body.project_id)
         from ptb_worker.m06_task import submit
         return submit(store,owner['id'],body)
 
     @router.post('/m14/create',response_model=JobView,status_code=201,operation_id='create_phonology_job')
     def create_m14(body:M14Request,owner=Depends(mutation)):
+        ctx.project(owner, body.project_id)
         from ptb_worker.m14_task import submit
         return submit(store,owner['id'],body)
 
     @router.post('',response_model=JobView,status_code=201,operation_id='create_job')
     def create(body: JobInput | FileJobInput, owner=Depends(mutation)):
+        ctx.project(owner, body.project_id)
         return store.submit(owner['id'],body)
 
     @router.get('',response_model=JobList,operation_id='list_jobs')
@@ -138,6 +188,7 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
 
     @router.post('/batches/create',response_model=BatchView,status_code=201,operation_id='create_acoustic_batch')
     def create_batch(body:BatchRequest,owner=Depends(mutation)):
+        ctx.project(owner, body.project_id)
         return batches().submit(owner['id'],body)
 
     @router.get('/batches/list',response_model=BatchList,operation_id='list_acoustic_batches')
@@ -154,16 +205,19 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
 
     @router.post('/spec2wav/preview',response_model=Spec2WavPreview,operation_id='preview_spec2wav_source')
     def spec2wav_preview(body:Spec2WavRequest,owner=Depends(mutation)):
+        ctx.project(owner, body.project_id)
         from ptb_worker.spec2wav_preview import preview_source
         return preview_source(store,owner['id'],body)
 
     @router.post('/spec2wav/create',response_model=JobView,status_code=201,operation_id='create_spec2wav_job')
     def reconstruct(body:Spec2WavRequest,owner=Depends(mutation)):
+        ctx.project(owner, body.project_id)
         from ptb_worker.spec2wav_jobs import submit
         return submit(store,owner['id'],body)
 
     @router.post('/m08/create',response_model=JobView,status_code=201,operation_id='create_m08_job')
     def m08(body:M08Request,owner=Depends(mutation)):
+        ctx.project(owner, body.project_id)
         from ptb_worker.m08_task import submit
         return submit(store,owner['id'],body)
 
@@ -174,6 +228,7 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
 
     @router.post('/m08/history',operation_id='m08_history')
     def m08_history(body:M08Source,owner=Depends(mutation)):
+        ctx.project(owner, body.project_id)
         from ptb_worker.m08_results import listing
         # Every completed synthesis has a durable PCM result and re-extracted F0.
         # External export is independent of membership in the comparison history.
@@ -181,21 +236,25 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
 
     @router.post('/m08/save',response_model=JobView,operation_id='save_m08_result')
     def m08_save(body:M08Manage,owner=Depends(mutation)):
+        ctx.project(owner, body.project_id)
         from ptb_worker.m08_results import save_copy
         return save_copy(store,owner['id'],body)
 
     @router.post('/m08/remove',operation_id='remove_m08_results')
     def m08_remove(body:M08Manage,owner=Depends(mutation)):
+        ctx.project(owner, body.project_id)
         from ptb_worker.m08_results import manage
         return manage(store,owner['id'],body,'remove')
 
     @router.post('/m08/rename',operation_id='rename_m08_results')
     def m08_rename(body:M08Manage,owner=Depends(mutation)):
+        ctx.project(owner, body.project_id)
         from ptb_worker.m08_results import manage
         return manage(store,owner['id'],body,'rename')
 
     @router.post('/lpc/create',response_model=JobView,status_code=201,operation_id='create_lpc_job')
     def lpc(body:LpcRequest,owner=Depends(mutation)):
+        ctx.project(owner, body.project_id)
         from ptb_worker.lpc_jobs import submit
         return submit(store,owner['id'],body)
 
@@ -206,6 +265,7 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
 
     @router.post('/egg/create',response_model=JobView,status_code=201,operation_id='create_egg_job')
     def egg(body:EggRequest,owner=Depends(mutation)):
+        ctx.project(owner, body.project_id)
         from ptb_worker.egg_jobs import submit
         return submit(store,owner['id'],body)
 
@@ -247,8 +307,8 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
         return await run_in_threadpool(store.files.import_input,bytes(raw),name,role)
 
     @router.get('/parents/latest',operation_id='find_acoustic_parent')
-    def parent(project_id:UUID,sha256:str=Query(pattern=r'^[0-9a-f]{64}$'),owner=Depends(identity)):
-        return batches().parent_result(owner['id'],str(project_id),sha256)
+    def parent(project_id:UUID,sha256:str=Query(pattern=r'^[0-9a-f]{64}$'),table:bool=False,owner=Depends(identity)):
+        return batches().parent_result(owner['id'],str(project_id),sha256,table=table)
 
     @router.post('/local-lip-conversion',operation_id='convert_local_legacy_lip')
     async def convert_lip(request:Request,owner=Depends(mutation)):

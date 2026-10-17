@@ -13,6 +13,7 @@ parser=argparse.ArgumentParser()
 parser.add_argument('--sections',type=int,choices=[129,257,513],default=257)
 parser.add_argument('--output-dir',type=Path,default=ROOT/'output/validation/m10/native-build')
 parser.add_argument('--no-install',action='store_true')
+parser.add_argument('--prepare-only',action='store_true',help='Prepare the same patched sources without compiling or installing')
 options=parser.parse_args()
 OUT=options.output_dir.resolve()
 OUT.mkdir(parents=True,exist_ok=True)
@@ -55,6 +56,9 @@ h,s=runpy.run_path(str(ROOT/'resources/vocal_tract/sources/m10_r17_patch.py'))['
 h,s=runpy.run_path(str(ROOT/'resources/vocal_tract/sources/m10_r18_patch.py'))['apply'](h,s)
 header.write_text(h,encoding='utf-8')
 source.write_text(s,encoding='utf-8')
+if options.prepare_only:
+    print(json.dumps({'source':str(SRC),'sections':options.sections}))
+    raise SystemExit(0)
 vswhere=Path(os.environ['ProgramFiles(x86)'])/'Microsoft Visual Studio/Installer/vswhere.exe'
 vs=subprocess.check_output([str(vswhere),'-latest','-products','*','-requires','Microsoft.VisualStudio.Component.VC.Tools.x86.x64','-property','installationPath'],text=True).strip()
 vcvars=Path(vs)/'VC/Auxiliary/Build/vcvars64.bat'

@@ -40,7 +40,7 @@ function invoke<T>(operation:string,args:Record<string,unknown>={},signal?:Abort
     try{current.request(id,JSON.stringify({operation,args}));}catch{stop('无法提交论文请求。');}
   });
 }
-export const papers={
+export function createPapers(invoke:<T>(operation:string,args?:Record<string,unknown>,signal?:AbortSignal,onProgress?:(p:PaperProgress)=>void)=>Promise<T>){return {
   status:()=>invoke<PaperStatus>('status'),
   refresh:(signal?:AbortSignal)=>invoke<PaperStatus>('refresh',{},signal),
   download:(since:string,signal?:AbortSignal,onProgress?:(p:PaperProgress)=>void)=>invoke<PaperStatus>('download',{since},signal,onProgress),
@@ -62,7 +62,9 @@ export const papers={
   annotations:(id:string,language:PaperLanguage,signal?:AbortSignal)=>invoke<PaperAnnotations>('annotations',{id,language},signal),
   saveAnnotation:(id:string,language:PaperLanguage,revision:number,item:PaperAnnotation,remove=false)=>invoke<PaperAnnotations>('saveAnnotation',{id,language,revision,item,remove}),
   export:(id:string,language:PaperLanguage,annotated:boolean)=>invoke<{cancelled:boolean;name?:string}>('export',{id,language,annotated}),
-};
+};}
+export type PapersClient=ReturnType<typeof createPapers>&{web?:boolean;onStatus?:(listener:(value:PaperStatus)=>void)=>()=>void;maintain?:()=>()=>void;trash?:()=>Promise<{id:string;title:string}[]>;restoreLocal?:(id:string)=>Promise<LocalLibrary>};
+export const papers=createPapers(invoke);
 export function eligible(papers:Paper[],since:string,today:string){return papers.filter(p=>p.publishedAt<=today&&(!p.updatedAt||p.updatedAt<=today)&&(p.publishedAt>=since||(p.updatedAt??'')>=since||p.acquired));}
 export function missing(papers:Paper[],since:string,today:string){return eligible(papers,since,today).filter(p=>!p.downloaded&&!p.dismissed);}
 export function bytesLabel(n:number){return n<1_000_000?`${(n/1000).toFixed(0)} KB`:`${(n/1_000_000).toFixed(1)} MB`;}

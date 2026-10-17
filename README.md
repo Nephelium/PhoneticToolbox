@@ -1,4 +1,4 @@
-<h1 align="center">PhoneticToolbox 3.0.1 正式版</h1>
+<h1 align="center">PhoneticToolbox 3.0.3</h1>
 
 <p align="center"><strong>语音学工具箱</strong><br>把录音、分析、标注、合成与感知实验放进同一个工作台。</p>
 
@@ -8,15 +8,15 @@
 
 <p align="center"><a href="#下载与开始使用">下载与开始使用</a> · <a href="#全部模块">全部模块</a> · <a href="#文档与开发">开发文档</a> · <a href="#来源许可与历史版本">来源与许可</a></p>
 
-**Windows 10 1809+ / Windows 11 · x64（Intel / AMD）· 18 个工具**
+**Windows x64 正式版 · macOS Apple Silicon 测试版 · 18 个工具**
 
 PhoneticToolbox 是韶子为语言学、实验语音学研究与教学制作的一只语音学工具箱。希望把准备材料、分析信号、制作刺激和整理结果这些日常工作放到一起，让大家在不同工具之间切换时，少花些找窗口和搬文件的力气。
 
 到了 v3，十八个工具共用侧栏、标签页、设置和使用说明。从一段录音出发，可以查看波形与语谱图、提取参数、整理标注，再继续做语音合成、音系分析或感知实验。也可以打开音标表、设计实验，或切到论文阅读页读几页文献。
 
-下面先介绍下载与使用，再逐个展示工具和实际示例。想了解 v3 的具体升级，也可以看看[这一版的发行说明](https://github.com/Nephelium/PhoneticToolbox/releases/tag/v3.0.1)。
+下面先介绍下载与使用，再逐个展示工具和实际示例。3.0.3 减少了绘图、阅读和预览时的重复计算，语谱图转音频新增离线窗长与动态范围预测，并默认采用动量加速的 Griffin–Lim 重建。完整变化见[这一版的发行说明](https://github.com/Nephelium/PhoneticToolbox/releases/tag/v3.0.3)。
 
-![PhoneticToolbox 3.0.1 的工作台首页，按分析与采集、合成与操控、标注与实验、文献与学习组织十八个工具](docs/assets/readme/absolutely-home.png)
+![PhoneticToolbox 的 Windows 工作台首页，按分析与采集、合成与操控、标注与实验、文献与学习组织十八个工具](docs/assets/readme/absolutely-home.png)
 
 ## 下载与开始使用
 
@@ -27,13 +27,19 @@ PhoneticToolbox 是韶子为语言学、实验语音学研究与教学制作的�
 | 版本 | 文件名 | 使用方式 |
 | --- | --- | --- |
 | 免安装版 | `PhoneticToolbox-windows-x64.exe` | 双击启动，无需运行安装向导 |
-| 安装版 | `PhoneticToolbox-3.0.1-windows-x64-setup.exe` | 按当前用户安装，默认不要求管理员权限，创建应用入口 |
+| 安装版 | `PhoneticToolbox-3.0.3-windows-x64-setup.exe` | 按当前用户安装，默认不要求管理员权限，创建应用入口 |
 
-系统要求为 **Windows 10 1809 及以上或 Windows 11、64 位 x64 系统**。可在 Windows **设置 → 系统 → 关于 → 系统类型**中核对。当前尚未提供 x86、ARM64、macOS 或 Linux 发行包。
+Windows 版本要求 **Windows 10 1809 及以上或 Windows 11、64 位 x64 系统**。可在 Windows **设置 → 系统 → 关于 → 系统类型**中核对。
 
 安装版默认放在 `%LOCALAPPDATA%\Programs\PhoneticToolbox`。安装完成后，从开始菜单或已创建的桌面快捷方式启动应用。主程序下载包小于 500 MB，第一次打开会准备本机运行文件，展开后的磁盘占用更大。**MFA 运行环境、声学模型和发音词典独立下载，主包不包含这些组件。**
 
-也可以从 [GitHub Releases](https://github.com/Nephelium/PhoneticToolbox/releases)下载，旧版本仍然保留，查阅或对照时都能找到。下载前请核对版本号，当前 Windows 成品的实际检查范围见[发行说明](docs/testing/release-3.0.1-publish.md)。
+也可以从 [GitHub Releases](https://github.com/Nephelium/PhoneticToolbox/releases/tag/v3.0.3)下载 Windows 版，旧版本仍然保留，查阅或对照时都能找到。当前成品的实际检查范围见[3.0.3 发行验收](docs/testing/package-trimming.md)与[同版本更新验收](docs/testing/release-3.0.3-replacement.md)。
+
+### macOS 测试版
+
+[官方网站](https://www.phonetictoolbox.com/#macos-download)已提供 **3.0.3 r6 测试版**，适用于 **Apple Silicon（M 系列芯片）、macOS 14 及以上**。下载文件为 `PhoneticToolbox-3.0.3-macos14-arm64-preview-r6.zip`，解压后将 `PhoneticToolbox.app` 拖入“应用程序”，再双击打开。
+
+测试包尚未经过 Apple 公证，首次打开请参照官网 Mac 下载按钮内的安装说明。Windows 与 Mac 的下载入口均在官网，按自己的系统选择即可。
 
 ### 第一次使用
 
@@ -81,7 +87,7 @@ PhoneticToolbox 是韶子为语言学、实验语音学研究与教学制作的�
 | 标注与实验 | [感知实验](frontend/src/modules/perception/README.md) | 实验设计、配置与运行 |
 | 文献与学习 | [语音学论文精读](frontend/src/modules/paper-reading/README.md) | 论文库、PDF 阅读、译读对照与批注 |
 
-为了便于比较，下面的配图统一采用 **Absolutely 日间配色**。日常使用时可以换成自己喜欢的主题。点击图片可查看完整尺寸，示例与采集来源见[配图说明](docs/assets/readme/README.md)。
+为了便于比较，下面的配图统一采用 **Windows 工作台的 Absolutely 日间配色**。日常使用时可以换成自己喜欢的主题。点击图片可查看完整尺寸，示例与采集来源见[配图说明](docs/assets/readme/README.md)。
 
 ### 分析与采集
 
@@ -151,7 +157,7 @@ PhoneticToolbox 是韶子为语言学、实验语音学研究与教学制作的�
 
 #### 语谱图转音频
 
-一张语谱图能重建出怎样的声音？可以导入图片进行重建，也可以在图片或音频频谱上绘制信息，再观察生成的声音与频谱。
+可以导入图片重建声音，也可以在图片或音频频谱上绘制信息，再观察生成的声音与频谱。填写时长、频率范围和坐标类型后，可离线预测窗长与动态范围，预测值也能手动调整。新任务默认使用 0.99 动量加速的 Griffin–Lim，迭代次数默认为 32 次。
 
 ![语谱图转音频工作台，Absolutely 浅色配色](docs/assets/readme/absolutely-spectrogram-to-audio.png)
 
@@ -221,7 +227,7 @@ PhoneticToolbox 是韶子为语言学、实验语音学研究与教学制作的�
 
 第一次使用 MFA，可以在模块里点**下载并安装组件**，按进度提示完成安装。已经准备好组件 ZIP 或解压后的文件夹，也可以直接选择导入，应用会校验并检查是否可运行。
 
-当前组件为 **MFA 3.3.8-r1 / Windows x64 / CPU**，包含默认普通话声学模型和发音词典。组件通过应用内入口从官网独立下载，也支持同版 ZIP 离线安装。其他语言可从模块内的官方资源按钮取得匹配的模型和词典，再导入检查。
+Windows 独立组件为 **MFA 3.3.8-r1 / Windows x64 / CPU**，包含默认普通话声学模型和发音词典。组件通过应用内入口从官网独立下载，也支持同版 ZIP 离线安装。其他语言可从模块内的官方资源按钮取得匹配的模型和词典，再导入检查。
 
 组件下载约 813 MB，安装后约 2.81 GB，解压过程中还需要临时空间。
 
@@ -249,7 +255,9 @@ MFA 根据已有文本寻找音频中的对齐位置。请准备同名 WAV 与 L
 | 构建 Windows 发行包 | [发行工程](release/README.md)、[打包要求](release/PACKAGING_RULES.md) |
 | 查看进展与验证 | [当前状态](docs/project-status.md)、[验证策略](docs/testing/verification-plan.md) |
 
-界面使用 Vue 3，桌面宿主使用 PyQt6 / Qt WebEngine。科学计算与文件格式位于 `packages/phonetic_core`，本机任务由 `backend` 管理。开发环境需要 Python、Node.js、各科学模块环境及相应原生组件，按[统一源码入口](docs/development/source-entry.md)配置后，在工程根目录启动：
+界面使用 Vue 3，桌面宿主使用 PyQt6 / Qt WebEngine。科学计算与文件格式位于 `packages/phonetic_core`，本机任务由 `backend` 管理；浏览器适配与受限服务器计算共用这些核心。网页版目前处于私测阶段，进展见[当前状态](docs/project-status.md)。
+
+Windows 开发环境需要 Python、Node.js、各科学模块环境及相应原生组件，按[统一源码入口](docs/development/source-entry.md)配置后，在工程根目录启动：
 
 ```powershell
 .\scripts\Start-Research-Workbench.ps1 -CheckOnly
@@ -268,6 +276,8 @@ npm run build
 ```
 
 如果准备参与开发，建议先阅读对应模块的 README，再按改动范围运行验证。报告会记录实际检查的平台、设备与范围，科学准确率、实体音视频设备、长期运行和其他系统分别核验。
+
+源码仓库保留加载器、算法适配和构建脚本。运行环境、MFA 组件及语谱图预测模型等资源按[依赖清单](requirements/README.md)与[来源登记](third_party/README.md)另行准备。
 
 ## 来源、许可与历史版本
 

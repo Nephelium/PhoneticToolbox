@@ -1,8 +1,9 @@
 """Local static assets shared by desktop windows, without research imports."""
 import mimetypes
 from pathlib import Path
+import threading
 from urllib.parse import urlsplit,unquote
-from PyQt6.QtCore import QBuffer,QIODevice
+from PyQt6.QtCore import QBuffer,QIODevice,QObject,QRunnable,QThreadPool,Qt,pyqtSignal,pyqtSlot
 from PyQt6.QtWebEngineCore import QWebEngineUrlRequestJob,QWebEngineUrlScheme,QWebEngineUrlSchemeHandler,QWebEngineUrlRequestInterceptor
 
 
@@ -19,23 +20,97 @@ def permitted_url(url,service_url):
         part.scheme=='http' and part.netloc==urlsplit(service_url).netloc and part.path.startswith('/api/v1/'))
 
 
+def _read_asset(root,name):
+    """Resolve, validate and read without touching a request or any Qt device."""
+    path=(root/name).resolve()
+    if not path.is_relative_to(root) or not path.is_file():raise ValueError()
+    raw=path.read_bytes()
+    if name in ('index.html','feedback-manager.html'):
+        raw=raw.replace(b'<head>',b'<head><script src="qrc:///qtwebchannel/qwebchannel.js"></script>')
+    mime={'.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.svg':'image/svg+xml'}.get(path.suffix,mimetypes.guess_type(path.name)[0] or 'application/octet-stream')
+    return mime.encode('ascii'),raw
+
+
+class _AssetReplies(QObject):
+    completed=pyqtSignal(int,object)
+
+
+class _AssetRead(QRunnable):
+    def __init__(self,root,name,key,replies,cancelled):
+        super().__init__()
+        self.root,self.name,self.key=root,name,key
+        self.replies,self.cancelled=replies,cancelled
+
+    def run(self):
+        if self.cancelled.is_set():return
+        try:
+            result=_read_asset(self.root,self.name)
+        except (OSError,ValueError):
+            result=QWebEngineUrlRequestJob.Error.UrlNotFound
+        except Exception:
+            # An exception must not escape a Qt worker's virtual run method.
+            result=QWebEngineUrlRequestJob.Error.RequestFailed
+        if self.cancelled.is_set():return
+        try:
+            self.replies.completed.emit(self.key,result)
+        except RuntimeError:
+            # The owning profile may have destroyed the receiver while reading.
+            pass
+
+
+_asset_reads=None
+
+
+def _read_pool():
+    global _asset_reads
+    if _asset_reads is None:
+        # Shared by this module's handlers. A profile's destruction must not
+        # destroy a pool and synchronously wait for its outstanding disk reads.
+        _asset_reads=QThreadPool()
+        _asset_reads.setMaxThreadCount(4)
+    return _asset_reads
+
+
 class Assets(QWebEngineUrlSchemeHandler):
-    def __init__(self,root,parent):super().__init__(parent);self.root=root.resolve()
+    def __init__(self,root,parent):
+        super().__init__(parent);self.root=root.resolve()
+        self._pending={};self._sequence=0
+        self._replies=_AssetReplies(self)
+        self._replies.completed.connect(self._finish,Qt.ConnectionType.QueuedConnection)
+        pending=self._pending
+        def discard_all():
+            for _,cancelled in pending.values():cancelled.set()
+            pending.clear()
+        self.destroyed.connect(discard_all)
+
     def requestStarted(self,job):
         if job.requestUrl().host()!='app' or bytes(job.requestMethod())!=b'GET':
             job.fail(QWebEngineUrlRequestJob.Error.RequestDenied);return
+        name=unquote(job.requestUrl().path()).lstrip('/') or 'index.html'
+        if '\\' in name or ':' in name or '..' in Path(name).parts:
+            job.fail(QWebEngineUrlRequestJob.Error.UrlNotFound);return
+        self._sequence+=1;key=self._sequence;cancelled=threading.Event()
+        self._pending[key]=(job,cancelled)
+        pending=self._pending
+        def discard():
+            cancelled.set();pending.pop(key,None)
+        job.destroyed.connect(discard)
+        _read_pool().start(_AssetRead(self.root,name,key,self._replies,cancelled))
+
+    @pyqtSlot(int,object)
+    def _finish(self,key,result):
+        entry=self._pending.pop(key,None)
+        if entry is None:return
+        job,cancelled=entry
+        if cancelled.is_set():return
         try:
-            name=unquote(job.requestUrl().path()).lstrip('/') or 'index.html'
-            if '\\' in name or ':' in name or '..' in Path(name).parts:raise ValueError()
-            path=(self.root/name).resolve()
-            if not path.is_relative_to(self.root) or not path.is_file():raise ValueError()
-            raw=path.read_bytes()
-            if name in ('index.html','feedback-manager.html'):
-                raw=raw.replace(b'<head>',b'<head><script src="qrc:///qtwebchannel/qwebchannel.js"></script>')
+            if not isinstance(result,tuple):job.fail(result);return
+            mime,raw=result
             buffer=QBuffer(job);buffer.setData(raw);buffer.open(QIODevice.OpenModeFlag.ReadOnly)
-            mime={'.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.svg':'image/svg+xml'}.get(path.suffix,mimetypes.guess_type(path.name)[0] or 'application/octet-stream')
-            job.reply(mime.encode('ascii'),buffer)
-        except (OSError,ValueError):job.fail(QWebEngineUrlRequestJob.Error.UrlNotFound)
+            job.reply(mime,buffer)
+        except RuntimeError:
+            # WebEngine owns the job and can cancel it before this queued reply.
+            pass
 
 
 class LocalOnly(QWebEngineUrlRequestInterceptor):

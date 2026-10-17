@@ -3,7 +3,6 @@ import io
 from pathlib import PurePath
 import re
 from zipfile import ZipFile, BadZipFile
-import pandas as pd
 from phonetic_core.transcription.phonology import PhonologyRules
 
 MAX_INPUT = 2_000_000
@@ -38,6 +37,7 @@ def load(raw: bytes, name: str, skip_first_row: bool = True):
                     if entry.filename.startswith('xl/worksheets/') and entry.filename.endswith('.xml'):
                         if re.search(rb'<(?:\w+:)?f(?:\s|>)',archive.read(entry)):raise ValueError('m14_formula_input')
         if suffix in ('.xlsx','.xls','.csv'):
+            import pandas as pd
             stream=io.BytesIO(raw)
             if suffix=='.csv': frame=pd.read_csv(stream,header=None,dtype=str,encoding='utf-8-sig',nrows=MAX_ROWS+2)
             else:frame=pd.read_excel(stream,header=None,dtype=str,nrows=MAX_ROWS+2,engine='xlrd' if suffix=='.xls' else 'openpyxl')

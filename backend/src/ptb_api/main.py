@@ -28,41 +28,95 @@ from .job_models import ResultManifestEnvelope
 
 def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: AccountStore | None = None,
                auth_settings: AuthSettings | None = None, job_store: JobStore | None = None,
-               local_token: str | None = None, local_origin: str | None = None, storage=None, feedback_service=None) -> FastAPI:
+               local_token: str | None = None, local_origin: str | None = None, storage=None, feedback_service=None,
+               registration_service=None, workspace_service=None, web_admin_key=None, vocal_resources=None, web_feedback_gateway=None) -> FastAPI:
     if mode not in ('local', 'server'):
         raise ValueError('Unsupported service mode')
+    if registration_service is not None and mode != 'server':
+        raise ValueError('Public registration is server-only')
+    if workspace_service is not None and (mode != 'server' or workspace_service.storage is not storage):
+        raise ValueError('Web workspaces require the server storage instance')
+    if workspace_service is not None and storage.workspaces is not workspace_service:
+        raise ValueError('Activate the reviewed workspace schema before serving requests')
+    if registration_service is not None and (auth_settings is None or registration_service.origin != auth_settings.origin):
+        raise ValueError('Registration origin must match the account origin')
     from contextlib import asynccontextmanager
     from ptb_worker.egg_interactive import InteractivePreview
     egg_preview = InteractivePreview(memory_bytes=3_000_000_000 if mode == 'local' else 1_000_000_000,
         reaper_binary=getattr(getattr(job_store,'files',None),'reaper_binary',None))
     from ptb_worker.spectrogram_session import SpectrogramSession
     spectrogram_session = SpectrogramSession() if mode == 'local' else None
+    vocal_service=None
+    if vocal_resources is not None:
+        if mode!='server' or account_store is None or auth_settings is None:raise ValueError('VTL web sessions require configured server accounts')
+        from ptb_worker.vocal_sessions import VocalSessions
+        def vocal_identity_valid(identity):
+            owner,session_hash,project=identity
+            current=account_store.session(session_hash)
+            if not current or str(current['id'])!=owner:return False
+            if workspace_service is not None:
+                try:workspace_service.authorize(owner,session_hash,project=project)
+                except StorageError as error:
+                    if error.status in (401,404,409,410):return False
+                    raise
+            return account_store.get_project(owner,project) is not None
+        vocal_service=VocalSessions(vocal_resources,valid=vocal_identity_valid)
     @asynccontextmanager
     async def lifespan(app):
         feedback_task = None
+        preview_task = None
+        if workspace_service is not None:
+            import asyncio
+            async def maintain_preview():
+                while True:
+                    await asyncio.sleep(1)
+                    try:await asyncio.to_thread(workspace_service.release_expired_preview,egg_preview)
+                    except (psycopg.Error,OSError,StorageError):pass
+            preview_task=asyncio.create_task(maintain_preview())
         if feedback_service is not None:
             import asyncio
             from .feedback import maintain_feedback
             feedback_task = asyncio.create_task(maintain_feedback(feedback_service))
         try: yield
         finally:
+            if preview_task:
+                preview_task.cancel()
+                try:await preview_task
+                except asyncio.CancelledError:pass
             if feedback_task:
                 feedback_task.cancel()
                 import asyncio
                 try: await feedback_task
                 except asyncio.CancelledError: pass
             egg_preview.close()
+            if vocal_service is not None:vocal_service.close()
             if spectrogram_session is not None:spectrogram_session.close()
     app = FastAPI(title='PhoneticToolbox API', version=API_VERSION, lifespan=lifespan,
                   description='Shared API; accounts require configured PostgreSQL. M01 batches require an explicitly configured durable worker and resource store.')
-    ctx = AccountContext(account_store, auth_settings, mode)
+    ctx = AccountContext(account_store, auth_settings, mode, workspace_service)
+    from .vocal import create_vocal_router
+    app.include_router(create_vocal_router(ctx,vocal_service))
     app.include_router(create_account_router(ctx))
+    from .preferences import create_preferences_router
+    app.include_router(create_preferences_router(ctx))
+    from .web_feedback import create_web_feedback_router
+    app.include_router(create_web_feedback_router(ctx,web_feedback_gateway))
+    from .registration import create_registration_router
+    app.include_router(create_registration_router(ctx, registration_service))
+    from .workspaces import create_workspace_router
+    app.include_router(create_workspace_router(ctx, workspace_service, job_store))
     app.include_router(create_project_router(ctx))
     app.include_router(create_job_router(ctx,job_store,local_token=local_token,local_origin=local_origin))
     app.include_router(create_storage_router(ctx, storage, egg_preview=egg_preview))
+    from .papers import create_papers_router
+    app.include_router(create_papers_router(ctx, storage))
     app.include_router(create_preview_router(mode,local_token,local_origin,egg_preview=egg_preview,spectrogram_session=spectrogram_session))
     from .feedback import configure_feedback
     configure_feedback(app,feedback_service)
+    if web_admin_key is not None:
+        if workspace_service is None:raise ValueError('Operations require web workspaces')
+        from .web_admin import WebOperations,create_web_admin_router
+        app.include_router(create_web_admin_router(WebOperations(workspace_service,job_store),web_admin_key))
 
     @app.exception_handler(PreviewError)
     async def preview_error(request: Request,exc):
@@ -78,7 +132,8 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
 
     @app.exception_handler(JobError)
     async def job_error(request: Request, exc):
-        return JSONResponse({'detail':exc.code},status_code=exc.status)
+        return JSONResponse({'detail':exc.code},status_code=exc.status,
+            headers={'Retry-After':'5'} if exc.status==429 else None)
 
     @app.exception_handler(sqlite3.Error)
     async def local_storage_unavailable(request: Request, exc):
@@ -91,6 +146,8 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
 
     @app.exception_handler(psycopg.Error)
     async def database_unavailable(request: Request, exc):
+        if getattr(getattr(exc,'diag',None),'message_primary',None)=='workspace_expired':
+            return JSONResponse({'detail':'workspace_expired'},status_code=410)
         path = request.url.path
         code = ('storage_service_unavailable' if path.startswith(('/api/v1/storage', '/api/v1/assets', '/api/v1/uploads'))
                 else 'task_service_unavailable' if path.startswith('/api/v1/jobs') else 'account_service_unavailable')
@@ -99,7 +156,7 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
     @app.middleware('http')
     async def private_responses(request: Request, call_next):
         response = await call_next(request)
-        if request.url.path.startswith(('/api/v1/auth/', '/api/v1/projects', '/api/v1/jobs', '/api/v1/storage', '/api/v1/assets', '/api/v1/uploads','/api/v1/preview')):
+        if request.url.path.startswith(('/api/v1/web-feedback', '/api/v1/auth/', '/api/v1/preferences', '/api/v1/workspaces/', '/api/v1/projects', '/api/v1/jobs', '/api/v1/storage', '/api/v1/assets', '/api/v1/uploads','/api/v1/preview','/api/v1/papers/','/api/v1/vocal/')):
             response.headers['Cache-Control'] = 'no-store'
             response.headers['Pragma'] = 'no-cache'
             response.headers['X-Content-Type-Options'] = 'nosniff'
@@ -133,11 +190,11 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
         if windows_capability(job_store):
             science_operations.append('pitch_manipulation'); algorithms.append('M08')
         from ptb_worker.m14_task import capability as m14_capability
-        if m14_capability() and job_store is not None and getattr(job_store,'files',None) is not None:
+        if m14_capability(job_store) and job_store is not None and getattr(job_store,'files',None) is not None:
             science_operations.append('phonology_induction'); algorithms.append('M14')
         if platform_name() == 'linux':
             science_operations, reasons = linux_capabilities(job_store)
-            algorithms = [module for op,module in [('lpc_analysis','M04'),('egg_analysis','M03'),('acoustic_analysis','M01')] if op in science_operations]
+            algorithms = [module for op,module in [('lpc_analysis','M04'),('egg_analysis','M03'),('acoustic_analysis','M01'),('recording_audio','M16'),('spectrogram_to_audio','M09'),('speech_synthesis','M06'),('pitch_manipulation','M08'),('phonation_synthesis','M07'),('phonology_induction','M14')] if op in science_operations]
             acoustic_reason = reasons[0] if reasons else None
         from ptb_worker.resource_profiles import selected_profile
         from ptb_worker.io.limits import FormatError
@@ -176,5 +233,8 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
         return schema
 
     app.add_middleware(AccountBoundary, origin=auth_settings.origin if auth_settings else None)
+    if workspace_service is not None:
+        from .web_admission import WebAdmission
+        app.add_middleware(WebAdmission)
     app.openapi = openapi
     return app

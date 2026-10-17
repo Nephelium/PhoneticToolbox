@@ -2,7 +2,7 @@
 
 本页按当前源码说明系统怎样运行，详细实现分别维护在组件架构页。平台能力是否经过验收，查[任务台账](docs/plans/task-ledger.json)和对应报告。本页不保存逐次交付流水，也不把接口存在等同于生产部署完成。
 
-网页版已更新为自助注册、临时工作区与浏览器优先计算的目标，详见[专题决策](docs/decisions/ADR-web-ephemeral-client-first.md)。当前源码仍使用既有账号/存储策略；30分钟断线清理、MFA网页禁用和新增浏览器适配尚待实施，下文数据流记录已有实现。
+网页版复用现有前端和科学核心。适合的交互计算通过同源、按需加载的Worker/Pyodide及原版Praat/WASM运行，长任务与原生操作经同源HTTPS API和有界服务器执行器处理。账号、临时工作区、文件额度/期限与结果存储仍由服务器负责。MFA网页推理保持禁用，Windows/Linux外接节点仅预留接口。计算分工见[专题决策](docs/decisions/ADR-web-ephemeral-client-first.md)，实际开放情况和验证范围见[私测验收](docs/testing/web-private-repair.md)。
 
 ## 系统与进程
 
@@ -12,13 +12,17 @@ PhoneticToolbox 使用一套 Vue 工作台，Windows 桌面由 Qt WebEngine 承�
 flowchart TD
     Entry["源码启动器 / 冻结 EXE"] --> Qt["Qt 宿主 host.py"]
     Qt --> View["Qt WebEngine：共用 Vue 工作台"]
-    Browser["普通浏览器：同一前端"] --> WebAPI["服务模式 API / 账号与存储"]
+    Browser["普通浏览器：同一前端"] --> BrowserWorker["有界科学 Worker"]
+    BrowserWorker --> BrowserCore["原 core / Pyodide 与 Praat / WASM"]
+    Browser --> WebAPI["服务模式 API / 账号与存储"]
     View --> Channel["QWebChannel：files / updates / papers"]
     Channel --> Local["自有回环 API：LocalService"]
     Local --> Worker["任务 worker"]
     WebAPI --> ServerWorker["服务模式 worker"]
     Worker --> Science["受控科学子进程 / phonetic_core"]
     ServerWorker --> Science
+    WebAPI --> VocalWeb["有界声道会话 / 独立原生进程"]
+    VocalWeb --> Science
     Channel --> Native["M10 原生声道 / M16 设备与工程"]
     Channel --> Content["更新与论文服务"]
     View --> Client["纯客户端状态 / M15 IndexedDB"]
@@ -78,7 +82,7 @@ research_entry 在导入 GUI 前处理固定的 --ptb-worker、--local-service�
 | M07 发声类型合成 | 源信号、F0 与发声类型合成 | M07 port → phonation_synthesis → 科学子进程 |
 | M08 变速变调 | 音高/时长变换及批量导出 | M08 port → pitch_manipulation → core |
 | M09 语谱图转音频 | 图片重建、原音语谱编辑和涂鸦 | 预览适配及 spectrogram_to_audio → core |
-| M10 生理参数合成 | 声道几何、合成、关键帧与录制 | vocalRequest → VocalTractClient → 专用原生进程 |
+| M10 生理参数合成 | 声道几何、合成、关键帧与录制 | 桌面 vocalRequest / 网页同源 vocal 会话 → 专用原生进程 → 共用 core/session 状态机 |
 | M11 MFA 自动标注 | 模型/词典检查、对齐与 TextGrid | M11 port → mfa_alignment → 登记的外部组件环境 |
 | M12 TextGrid 标注 | 区间/点层编辑、关联和保存 | 页面编辑状态 → AnnotationPort → 本机授权文件或服务资源 |
 | M13 汉字转国际音标 | 字表规则转换、排版和图片导出 | 客户端规则/资源，桌面字体能力补充 |
@@ -112,6 +116,7 @@ M15 刺激解码、预检、调度和计时留在客户端，网络往返不参�
 
 | 位置 | 实际用途 | 清理边界 |
 | --- | --- | --- |
+| 服务端 ptb_accounts.module_preferences | 随账号保存的18模块与工作台设置，登录时恢复 | 独立于临时工作区，退出及上传/生成内容到期清理均保留 |
 | output/validation/p06/local-state.sqlite3 | 当前源码启动器读取的开发任务库 | 不能随验证目录整删，先确认当前入口和保留需求 |
 | output/validation/m01/workbench-local.json 及所指 workbench-cache-* | 源码入口的本机文件/任务缓存位置 | 先查配置和活动任务，再清理可再生内容 |
 | output/validation/m03-runtime 等 | 部分发行准备仍引用的运行时暂存 | 查 release/prepare_runtimes.py 的实际输入 |

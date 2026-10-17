@@ -54,6 +54,7 @@ class AcousticBatches:
             elif owner!='local' or body.project_id!=LOCAL_PROJECT:raise JobError('project_not_found',404)
             try:check_capacity(self.jobs.capacity_used(tx,owner),0,len(inputs))
             except ValueError:raise JobError('job_limit_reached',409) from None
+            self.jobs.check_web_queue(tx, owner, len(inputs))
             now=tx.now()
             # Admission validates all sources; creation and every use revalidate them.
             common['audio_names']=[]
@@ -129,17 +130,24 @@ class AcousticBatches:
             row=self._row(tx,batch_id,owner);self._advance_one(tx,row,now)
             return self._view(tx,self._row(tx,batch_id,owner))
 
-    def parent_result(self,owner,project,sha):
+    def parent_result(self,owner,project,sha,*,table=False):
+        if table and not self.jobs.postgres:return None
         with self.resources.batch_transaction() as tx:
-            rows=tx.execute("SELECT snapshot,result_manifest FROM {jobs} WHERE owner_id=? AND project_id=? AND state='succeeded' ORDER BY created_at DESC,id DESC LIMIT 1000",(owner,project))
+            matches="snapshot::jsonb->>'operation'='acoustic_analysis' AND snapshot::jsonb->'input_refs'->'audio'->>'sha256'=?" if self.jobs.postgres else "json_extract(snapshot,'$.operation')='acoustic_analysis' AND json_extract(snapshot,'$.input_refs.audio.sha256')=?"
+            rows=tx.execute("SELECT snapshot,result_manifest FROM {jobs} WHERE owner_id=? AND project_id=? AND state='succeeded' AND "+matches+" ORDER BY created_at DESC,id DESC LIMIT 1000",(owner,project,sha))
             for row in rows:
                 snap=json.loads(row['snapshot'])
                 if snap['operation']!='acoustic_analysis' or snap['input_refs']['audio']['sha256']!=sha:continue
-                file=next(f for f in json.loads(row['result_manifest'])['files'] if f['name'].endswith('.ptb.json'))
+                outputs=json.loads(row['result_manifest'])['files']
+                suffixes=('.ptb.sqlite','.ptb.sqlite3','.xlsx') if table else ('.ptb.json',)
+                file=next((f for suffix in suffixes for f in outputs if f['name'].lower().endswith(suffix)),None)
+                if file is None:continue
                 reference=dict(asset_id=file['id'],sha256=file['sha256'])
-                try:self.resources.validate_batch_input(tx,owner,project,{'parent_result':reference},tx.now())
+                try:
+                    if table:self.resources.read_parameter_reference(tx,owner,project,reference)
+                    else:self.resources.validate_batch_input(tx,owner,project,{'parent_result':reference},tx.now())
                 except JobError:continue
-                return reference
+                return dict(reference,name=file['name']) if table else reference
         return None
 
     def retry(self,owner,job_id,key):

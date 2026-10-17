@@ -5,7 +5,7 @@ const props=defineProps<{config:Config;name:string;start:number;end:number}>();
 const emit=defineEmits<{change:[];range:[start:number,end:number];error:[message:string]}>();
 const clipId="m06-curve-"+useId();const svg=ref<SVGSVGElement>();let anchor:number|null=null,panX=0,panStart=0,mode='';
 const width=ref(1000),height=ref(280),right=computed(()=>width.value-24),bottom=computed(()=>height.value-40),plotWidth=computed(()=>width.value-96),plotHeight=computed(()=>height.value-70);let observer:ResizeObserver;
-onMounted(()=>{observer=new ResizeObserver(e=>{width.value=Math.max(100,e[0].contentRect.width);height.value=Math.max(100,e[0].contentRect.height)});if(svg.value)observer.observe(svg.value)});onUnmounted(()=>observer?.disconnect());
+onMounted(()=>{observer=new ResizeObserver(e=>{if(e[0].contentRect.width<=0||e[0].contentRect.height<=0)return;width.value=Math.max(100,e[0].contentRect.width);height.value=Math.max(100,e[0].contentRect.height)});if(svg.value)observer.observe(svg.value)});onUnmounted(()=>observer?.disconnect());
 const factor=computed(()=>props.name==='Shimmer'?100:1),limits=computed(()=>props.name==='F0'?props.config.f0_range:parameters[props.name].slice(1,3) as number[]);
 const curve=computed(()=>props.config.curves[props.name]);
 const points=computed(()=>curve.value.override===null?curve.value.points:[[0,curve.value.override],[props.config.duration,curve.value.override]]);

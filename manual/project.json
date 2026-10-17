@@ -3,8 +3,41 @@
   "id": "phonetic-toolbox-v3",
   "title": "PhoneticToolbox 3.0 使用说明",
   "language": "zh-CN",
-  "version": "2026.10.12-manual.2",
+  "version": "2026.10.16-manual.1",
   "chapters": [
+    {
+      "id": "web-introduction",
+      "title": "网页版使用入门",
+      "path": "chapters/web-introduction.json",
+      "status": "reviewed",
+      "sections": [
+        {
+          "id": "web-introduction-account",
+          "title": "注册与登录",
+          "level": 2
+        },
+        {
+          "id": "web-introduction-files-jobs",
+          "title": "文件与任务",
+          "level": 2
+        },
+        {
+          "id": "web-introduction-workspace-retention",
+          "title": "保存结果与结束工作区",
+          "level": 2
+        },
+        {
+          "id": "web-introduction-capacity",
+          "title": "容量与扩容",
+          "level": 2
+        },
+        {
+          "id": "web-introduction-settings-manual",
+          "title": "设置与后续章节",
+          "level": 2
+        }
+      ]
+    },
     {
       "id": "getting-started",
       "title": "开始使用与共同操作",
@@ -516311,6 +516344,174 @@
         "report": "output/validation/icon-crop-popups/qt-57d7995031ca47148c45bad67886e046/report.json",
         "dpr": 1.5,
         "pageZoom": 1
+      }
+    },
+    {
+      "id": "web-introduction-login-light",
+      "path": "assets/software-only/web-introduction/web-introduction-login-light.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "c65829cef06acc4634b8b31da2b7342209836369712d8465c536ed016ed4b6e0",
+      "width": 2560,
+      "height": 1600,
+      "caption": "在登录页输入登录名和密码。首次使用可注册账号，忘记密码时从这里找回。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows当前源码独立Chrome网页，浅色Absolutely，DPR 1.5、页面100%；隔离演示账号和空文件/任务列表。",
+      "capture": {
+        "report": "output/validation/web-manual/browser-8974befc3f0d41908c4de420c7985495/captures.json",
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "rawImage": [
+          2561,
+          1601
+        ],
+        "image": [
+          2560,
+          1600
+        ],
+        "crop": "Only right/bottom rounding pixels; no resampling"
+      }
+    },
+    {
+      "id": "web-introduction-register-light",
+      "path": "assets/software-only/web-introduction/web-introduction-register-light.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "ffa0271518e3e6dc23746bf12d6b52f2948694a8a46f11aa41556b5c657cdd70",
+      "width": 2560,
+      "height": 1600,
+      "caption": "填写登录名、邮箱和密码后发送验证邮件，完成邮箱验证再返回登录。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows当前源码独立Chrome网页，浅色Absolutely，DPR 1.5、页面100%；隔离演示账号和空文件/任务列表。",
+      "capture": {
+        "report": "output/validation/web-manual/browser-8974befc3f0d41908c4de420c7985495/captures.json",
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "rawImage": [
+          2561,
+          1601
+        ],
+        "image": [
+          2560,
+          1600
+        ],
+        "crop": "Only right/bottom rounding pixels; no resampling"
+      }
+    },
+    {
+      "id": "web-introduction-files-light",
+      "path": "assets/software-only/web-introduction/web-introduction-files-light.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "42406df6531b1a5e56cc193d1ee85560620520e868fbcb6a3ff8efe8ba161312",
+      "width": 2560,
+      "height": 1600,
+      "caption": "文件与空间集中管理上传材料和生成结果，也可查看用量、下载文件或退出登录。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows当前源码独立Chrome网页，浅色Absolutely，DPR 1.5、页面100%；隔离演示账号和空文件/任务列表。",
+      "capture": {
+        "report": "output/validation/web-manual/browser-8974befc3f0d41908c4de420c7985495/captures.json",
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "rawImage": [
+          2561,
+          1601
+        ],
+        "image": [
+          2560,
+          1600
+        ],
+        "crop": "Only right/bottom rounding pixels; no resampling"
+      }
+    },
+    {
+      "id": "web-introduction-tasks-light",
+      "path": "assets/software-only/web-introduction/web-introduction-tasks-light.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "6de44826dd16e09e5287eaf82c2d901451153ea4ca3bcfee5819630bd2985027",
+      "width": 2560,
+      "height": 1600,
+      "caption": "任务记录按当前项目显示处理进度与任务记录，新项目的列表为空。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows当前源码独立Chrome网页，浅色Absolutely，DPR 1.5、页面100%；隔离演示账号和空文件/任务列表。",
+      "capture": {
+        "report": "output/validation/web-manual/browser-8974befc3f0d41908c4de420c7985495/captures.json",
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "rawImage": [
+          2561,
+          1601
+        ],
+        "image": [
+          2560,
+          1600
+        ],
+        "crop": "Only right/bottom rounding pixels; no resampling"
+      }
+    },
+    {
+      "id": "web-introduction-capacity-light",
+      "path": "assets/software-only/web-introduction/web-introduction-capacity-light.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "3142a2c9a83fc100da8dc04591a36c89a7470a24d765810ccf059931c5feb2be",
+      "width": 2560,
+      "height": 1600,
+      "caption": "查看个人可用空间，填写申请总额度、期限和用途，提交后等待管理员审核。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows当前源码独立Chrome网页，浅色Absolutely，DPR 1.5、页面100%；隔离演示账号和空文件/任务列表。",
+      "capture": {
+        "report": "output/validation/web-manual/browser-8974befc3f0d41908c4de420c7985495/captures.json",
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "rawImage": [
+          2561,
+          1601
+        ],
+        "image": [
+          2560,
+          1600
+        ],
+        "crop": "Only right/bottom rounding pixels; no resampling"
+      }
+    },
+    {
+      "id": "web-introduction-settings-light",
+      "path": "assets/software-only/web-introduction/web-introduction-settings-light.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "8e4d1e30243da36237e3a7b23ae5e4af026392a7ddb3fb778cb7b90f70f6c488",
+      "width": 2560,
+      "height": 1600,
+      "caption": "从左下角设置打开外观页，调整配色、浅深模式与页面缩放，当前选择即时生效。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows当前源码独立Chrome网页，浅色Absolutely，DPR 1.5、页面100%；隔离演示账号和空文件/任务列表。",
+      "capture": {
+        "report": "output/validation/web-manual/browser-8974befc3f0d41908c4de420c7985495/captures.json",
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "rawImage": [
+          2561,
+          1601
+        ],
+        "image": [
+          2560,
+          1600
+        ],
+        "crop": "Only right/bottom rounding pixels; no resampling"
       }
     }
   ],

@@ -1,3 +1,4 @@
+import {waitForTaskPoll} from './task-poll.ts';
 import {exportParams} from '../modules/speech-synthesis/state.ts';
 import type {JobView,ResearchFile} from './research.ts';
 import {sha256} from './research.ts';
@@ -15,7 +16,7 @@ export function m06Port(t:M06Transport):M06Port {
   const deadline=Date.now()+180000;
   while(['queued','running','cancel_requested'].includes(job.state)){
    if(signal.aborted||Date.now()>deadline){await t.cancel(job.id);throw Error(signal.aborted?'操作已取消':'等待超时，已请求取消');}
-   await new Promise(resolve=>setTimeout(resolve,120));job=await t.job(job.id);progress(job);
+   await waitForTaskPoll(job.state,signal);if(signal.aborted)continue;job=await t.job(job.id);progress(job);
   }
   if(signal.aborted)throw Error('操作已取消');
   if(job.state!=='succeeded')throw Error(m06Error(job.error_code));

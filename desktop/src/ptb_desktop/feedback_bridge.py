@@ -11,12 +11,13 @@ class FeedbackBridge(QObject):
     ready = pyqtSignal(str,str)
     notification = pyqtSignal(str)
     windowAction = pyqtSignal(str)
+    inboxState = pyqtSignal(int,int)
 
-    def __init__(self, root, parent=None, *, admin=False, client=None):
+    def __init__(self, root, parent=None, *, admin=False, client=None, client_info=None):
         super().__init__(parent)
         self.error = None
         try:
-            self.client = client or FeedbackClient(root,admin=admin)
+            self.client = client or FeedbackClient(root,admin=admin,client_info=client_info)
         except FeedbackClientError as exc:
             self.client = None
             self.error = str(exc)
@@ -24,9 +25,65 @@ class FeedbackBridge(QObject):
         self.pool = ThreadPoolExecutor(max_workers=1,thread_name_prefix='ptb-feedback')
         self.pending = set()
         self.lock = threading.Lock()
+        self.event_batch = []
+        self.event_scheduled = False
         self.closed = False
         if admin and self.client:
-            self.client.subscribe(lambda event:self.notification.emit(json.dumps(event,ensure_ascii=False)) if not self.closed else None)
+            self.client.subscribe(self.receive_event)
+
+    def update_inbox(self, value):
+        rows = [row for row in value['conversations'] if not row.get('trashed')]
+        self.inboxState.emit(sum(row['unread'] for row in rows),sum(row['unread']>0 for row in rows))
+        return rows
+
+    def receive_event(self, event):
+        if self.closed:
+            return
+        if event.get('kind') in ('daily_feedback','new_feedback','conversation_changed','conversation_trashed','conversation_restored','conversation_deleted'):
+            with self.lock:
+                self.event_batch.append(event)
+                if self.event_scheduled:
+                    return
+                self.event_scheduled = True
+            try:
+                self.pool.submit(self.publish_pending_events)
+            except RuntimeError:
+                pass  # The owning window has closed its worker.
+        else:
+            self.notification.emit(json.dumps(event,ensure_ascii=False))
+
+    def publish_pending_events(self):
+        with self.lock:
+            events,self.event_batch = self.event_batch,[]
+        try:
+            rows = self.update_inbox(self.client.request('conversations',{})) if not self.closed else None
+        except Exception:
+            rows = None
+        for event in events:
+            self.publish_event(event,rows,refresh=False)
+        with self.lock:
+            self.event_scheduled = False
+            if self.event_batch and not self.closed:
+                self.event_scheduled = True
+                self.pool.submit(self.publish_pending_events)
+
+    def publish_event(self, event, rows=None, *, refresh=True):
+        if self.closed:
+            return
+        value = dict(event)
+        try:
+            if refresh:
+                rows = self.update_inbox(self.client.request('conversations',{}))
+            if rows is None:
+                raise FeedbackClientError('反馈状态暂不可用。')
+            if value.get('kind') in ('daily_feedback','new_feedback'):
+                relevant = [row for row in rows if not value.get('owner') or row['id']==value['owner']]
+                value.update(count=sum(row['unread'] for row in relevant),conversations=sum(row['unread']>0 for row in relevant))
+        except Exception:
+            # Historical event counts cannot establish current unread state.
+            value['count'] = 0
+        if not self.closed:
+            self.notification.emit(json.dumps(value,ensure_ascii=False))
 
     @pyqtSlot(str,str)
     def request(self, request_id, payload):
@@ -51,6 +108,7 @@ class FeedbackBridge(QObject):
                        'connect':{'baseUrl','token'},'conversations':set(),'messages':{'after'},
                        'send':{'text','images','requestId'},'read':{'through'},'resolve':{'owner','status'},
                        'retryMail':{'id'},'resetIdentity':set(),'setMailNotifications':{'mailNotifications'},'createPairing':set(),'listDevices':set(),'revokeDevice':{'deviceId'},'windowAction':{'action'}}
+            if self.admin:allowed.update(trashConversation={'owner','through'},restoreConversation={'owner'},webStatus=set(),webRequests={'state','before'},webDecision={'request_id','granted_bytes','duration','note'},webQuota={'quota_bytes','owner_id'})
             expected = allowed.get(op)
             if self.admin and op in ('messages','send','read'):
                 expected = expected | {'owner'}
@@ -61,6 +119,8 @@ class FeedbackBridge(QObject):
                 self.windowAction.emit('quit')
             else:
                 value = self.client.request(op,args)
+                if self.admin and op in ('conversations','connect'):
+                    self.update_inbox(value)
             result = {'ok':True,'value':value}
         except FeedbackClientError as exc:
             result = {'ok':False,'error':str(exc)}

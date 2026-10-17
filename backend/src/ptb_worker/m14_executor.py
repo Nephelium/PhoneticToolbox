@@ -1,8 +1,4 @@
-"""Module handler using the existing P11 Windows pipe/Job Object implementation.
-
-No resource/process implementation is duplicated or changed. Linux stays closed
-until P11 registers the fixed child and proves its resource gate.
-"""
+"""Fenced M14 handler using the registered Windows or bounded Linux child."""
 import hashlib
 import json
 import struct
@@ -47,7 +43,7 @@ def execute_claim(store,claim,worker_id,stop,*,on_started=None,evidence=None):
             done.wait(min(.5,store.lease_seconds/3))
     thread=threading.Thread(target=pulse,daemon=True)
     try:
-        if sys.platform!='win32':raise ValueError('m14_runtime_unavailable')
+        if sys.platform not in ('win32','linux'):raise ValueError('m14_runtime_unavailable')
         thread.start();item=snapshot['input_assets'][0]
         raw=b''.join(files.read_input(identity,item['id'],offset,min(CHUNK_BYTES,item['size_bytes']-offset)) for offset in range(0,item['size_bytes'],CHUNK_BYTES))
         sha=hashlib.sha256(raw).hexdigest()
@@ -55,11 +51,15 @@ def execute_claim(store,claim,worker_id,stop,*,on_started=None,evidence=None):
         with ManagedScratch(files,identity) as scratch:
             header=dict(config=snapshot['config']['analysis'],name=item['name'],sha256=sha)
             request=scratch.create(json.dumps(header).encode()+b'\n'+raw,'.json')
-            from .native.windows import InputPipe
-            from .native.reaper import collect_pipe
-            from .process_entry import command
-            pipe=InputPipe()
-            bundle,_=collect_pipe(command('ptb_worker.m14_child',str(request),pipe.name),pipe,scratch.root,LIMITS,lambda:abort.is_set() or stop.is_set(),on_started,None,evidence)
+            if sys.platform=='linux':
+                from .native.linux_runtime import run
+                bundle=run('m14',request,scratch.root,LIMITS,stop=lambda:abort.is_set() or stop.is_set(),on_started=on_started,evidence=evidence)
+            else:
+                from .native.windows import InputPipe
+                from .native.reaper import collect_pipe
+                from .process_entry import command
+                pipe=InputPipe()
+                bundle,_=collect_pipe(command('ptb_worker.m14_child',str(request),pipe.name),pipe,scratch.root,LIMITS,lambda:abort.is_set() or stop.is_set(),on_started,None,evidence)
             values=unpack(bundle,sha,header['config']['action'])
         for name,value in values:
             if abort.is_set() or stop.is_set():raise Cancelled('cancelled')

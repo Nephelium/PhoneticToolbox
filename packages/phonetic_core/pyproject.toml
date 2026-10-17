@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phonetic-core"
-version = "3.0.2"
+version = "3.0.3"
 description = "PhoneticToolbox scientific core; M01 array algorithms and explicit backend ports"
 requires-python = ">=3.11,<3.12"
 dependencies = []

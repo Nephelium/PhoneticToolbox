@@ -22,7 +22,7 @@ function forward(){if(props.disabled||current)return;const s=redo.value.pop();if
 function scale(value:number){zoom.value=Math.max(1,Math.min(8,value));}
 function wheel(e:WheelEvent){if(!e.ctrlKey)return;e.preventDefault();scale(zoom.value*(e.deltaY<0?1.25:.8));}
 function key(e:KeyboardEvent){if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();e.shiftKey?forward():undo();}}
-onMounted(()=>{observer=new ResizeObserver(()=>{displayWidth.value=Math.max(240,(viewport.value?.clientWidth??640)-4);displayHeight.value=Math.max(220,(viewport.value?.clientHeight??360)-4);});observer.observe(viewport.value!);void load();});
+onMounted(()=>{observer=new ResizeObserver(entries=>{if(entries[0].contentRect.width<=0||entries[0].contentRect.height<=0)return;displayWidth.value=Math.max(240,(viewport.value?.clientWidth??640)-4);displayHeight.value=Math.max(220,(viewport.value?.clientHeight??360)-4);});observer.observe(viewport.value!);void load();});
 onUnmounted(()=>{disposed=true;observer?.disconnect();});
 </script>
 <template><section class="spectral-editor" aria-label="频谱绘图编辑器" @keydown="key">

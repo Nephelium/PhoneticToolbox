@@ -3,6 +3,7 @@ import runpy
 import sys
 
 MODULES = frozenset({
+    'ptb_worker.vocal_child',
     'ptb_worker.acoustic_stream_child', 'ptb_worker.parameter_bundle_child',
     'ptb_worker.m06_child',
     'ptb_worker.m07_child',

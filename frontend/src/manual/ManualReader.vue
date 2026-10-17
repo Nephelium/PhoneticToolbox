@@ -14,6 +14,7 @@ const root=ref<HTMLElement>(),navigation=ref<HTMLElement>(),scroll=ref<HTMLEleme
 const chapter=shallowRef<ManualChapter>(),cacheRevision=ref(0);
 const expandedChapter=ref<string>(),outlineClick=shallowRef<ManualTarget>();
 let request=0,abort:AbortController|undefined,observer:ResizeObserver|undefined,frame:number|undefined,jumpTop:number|undefined;
+let locationTimer:ReturnType<typeof setTimeout>|undefined,pendingLocation:ManualLocation|undefined,lastLocation:ManualLocation|undefined;
 let repository=new ManualChapterRepository((descriptor,signal)=>props.chapterLoader?props.chapterLoader(descriptor,signal):fetchChapter(props.assetBaseUrl,descriptor,signal));
 const positions=new Map<string,number>();
 const currentIndex=computed(()=>props.project.chapters.findIndex(item=>item.id===currentId.value));
@@ -38,7 +39,22 @@ const index=computed(()=>{
 });
 const hits=computed(()=>searchManual(index.value,query.value));
 const searching=computed(()=>!!query.value.trim());
-function remember(){if(scroll.value&&currentId.value){positions.set(currentId.value,scroll.value.scrollTop);emit('location',{chapterId:currentId.value,targetId:targetId.value,scrollTop:scroll.value.scrollTop});}}
+function flushLocation(){
+  clearTimeout(locationTimer);locationTimer=undefined;
+  const location=pendingLocation;pendingLocation=undefined;
+  if(!location||lastLocation&&location.chapterId===lastLocation.chapterId&&location.targetId===lastLocation.targetId&&location.scrollTop===lastLocation.scrollTop)return;
+  lastLocation=location;emit('location',location);
+}
+function remember(immediate=false){
+  if(scroll.value&&currentId.value&&!loading.value&&chapter.value?.id===currentId.value){
+    positions.set(currentId.value,scroll.value.scrollTop);
+    pendingLocation={chapterId:currentId.value,targetId:targetId.value,scrollTop:scroll.value.scrollTop};
+  }
+  if(immediate)flushLocation();
+  else if(pendingLocation&&locationTimer===undefined)locationTimer=setTimeout(flushLocation,250);
+}
+function pageHidden(){if(props.active)remember(true);else flushLocation();}
+function visibilityChanged(){if(document.visibilityState==='hidden')pageHidden();}
 function targetNode(id:string){return scroll.value?.querySelector<HTMLElement>('[id="'+manualAnchor(currentId.value,id)+'"]');}
 function headingInView(){
   const container=scroll.value;
@@ -77,15 +93,24 @@ async function locate(target:ManualTarget,restore=false,generation=request){
   else if(node){container.scrollTop+=node.getBoundingClientRect().top-container.getBoundingClientRect().top-20;targetId.value=target.targetId;node.classList.add('manual-target-highlight');setTimeout(()=>node.classList.remove('manual-target-highlight'),1600);}
   else {container.scrollTop=0;targetId.value=undefined;}
   if(!restore)jumpTop=container.scrollTop;
-  observe();remember();
+  observe();remember(true);
 }
 async function navigate(target:ManualTarget,notify=true,restore=false,fromOutline=false){
   const descriptor=props.project.chapters.find(item=>item.id===target.chapterId);
   if(!descriptor){notice.value='此章节尚未收录，请从目录选择已有章节。';return;}
   outlineClick.value=fromOutline?target:undefined;
   if(!fromOutline){if(target.targetId)expandedChapter.value=target.chapterId;else if(expandedChapter.value!==target.chapterId)expandedChapter.value=undefined;}
-  remember();manualPlayback.pause();abort?.abort();abort=new AbortController();const generation=++request;
-  loading.value=true;error.value='';notice.value='';drawer.value=false;stopTracking();jumpTop=undefined;
+  // Reuse the mounted chapter for outline/search/link jumps. A cleared repository
+  // means the project changed and must still load its current chapter content.
+  const sameChapter=!loading.value&&!error.value&&chapter.value?.id===descriptor.id&&repository.get(descriptor.id)===chapter.value;
+  remember(true);manualPlayback.pause();abort?.abort();abort=new AbortController();const generation=++request;
+  error.value='';notice.value='';drawer.value=false;stopTracking();jumpTop=undefined;
+  if(sameChapter){
+    targetId.value=target.targetId;
+    if(notify)emit('navigate',target);
+    await locate(target,restore,generation);return;
+  }
+  loading.value=true;
   try{
     const loaded=await repository.load(descriptor,abort.signal);
     if(generation!==request)return;
@@ -102,11 +127,11 @@ function previous(){const item=props.project.chapters[currentIndex.value-1];if(i
 function next(){const item=props.project.chapters[currentIndex.value+1];if(item)void navigate({chapterId:item.id});}
 watch(()=>[props.target?.chapterId,props.target?.targetId,props.requestKey] as const,()=>{if(props.target)void navigate(props.target,false);});
 watch(()=>[currentId.value,readingPath.value.sectionId,readingPath.value.subsectionId,outlineSelection.value,expandedChapter.value,searching.value,drawer.value],()=>{void revealCurrent();});
-watch(()=>props.active,active=>{if(!active){manualPlayback.pause();remember();stopTracking();}else if(chapter.value)void locate({chapterId:currentId.value},true);});
+watch(()=>props.active,active=>{if(!active){manualPlayback.pause();remember(true);stopTracking();}else if(chapter.value)void locate({chapterId:currentId.value},true);});
 watch(()=>[props.project.id,props.project.version,props.project.chapters.map(item=>item.id+':'+item.path).join('|')] as const,()=>{repository.clear();const target=props.target??{chapterId:props.project.chapters[0]?.id};if(target.chapterId)void navigate(target,false);});
-onMounted(()=>{const location=props.initialLocation;if(location)positions.set(location.chapterId,location.scrollTop);const target=props.target??location??{chapterId:props.project.chapters[0]?.id};if(target.chapterId)void navigate(target,false,!!location&&!props.target);});
-onBeforeUnmount(()=>{remember();request++;abort?.abort();stopTracking();manualPlayback.pause();});
-onDeactivated(()=>{remember();stopTracking();manualPlayback.pause();});
+onMounted(()=>{window.addEventListener('pagehide',pageHidden);document.addEventListener('visibilitychange',visibilityChanged);const location=props.initialLocation;if(location)positions.set(location.chapterId,location.scrollTop);const target=props.target??location??{chapterId:props.project.chapters[0]?.id};if(target.chapterId)void navigate(target,false,!!location&&!props.target);});
+onBeforeUnmount(()=>{remember(true);request++;abort?.abort();stopTracking();manualPlayback.pause();window.removeEventListener('pagehide',pageHidden);document.removeEventListener('visibilitychange',visibilityChanged);});
+onDeactivated(()=>{remember(true);stopTracking();manualPlayback.pause();});
 defineExpose({navigate,pause:()=>manualPlayback.pause()});
 </script>
 <template>

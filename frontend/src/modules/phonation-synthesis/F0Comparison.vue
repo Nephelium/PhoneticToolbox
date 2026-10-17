@@ -9,7 +9,7 @@ import type {F0Track} from './f0.ts';
 const props=defineProps<{points:Points;alignment:'normalize'|'onset';tracks?:F0Track[];note?:string;minimum?:number;maximum?:number|null;activeStep?:string}>();
 const svg=ref<SVGSVGElement>(),surface=ref<HTMLDivElement>(),width=ref(600),height=ref(260);let observer:ResizeObserver|undefined;
 const clipId='m07-f0-'+useId();
-watch(surface,el=>{observer?.disconnect();if(el){observer=new ResizeObserver(entries=>{width.value=Math.max(180,entries[0].contentRect.width);height.value=Math.max(140,entries[0].contentRect.height);});observer.observe(el);}});
+watch(surface,el=>{observer?.disconnect();if(el){observer=new ResizeObserver(entries=>{if(entries[0].contentRect.width<=0||entries[0].contentRect.height<=0)return;width.value=Math.max(180,entries[0].contentRect.width);height.value=Math.max(140,entries[0].contentRect.height);});observer.observe(el);}});
 onUnmounted(()=>observer?.disconnect());
 const curves=computed(()=>[
  {name:'源 F0',axis:props.points.axis,values:props.points.source,color:'var(--accent)',dash:'',role:'source'},
@@ -24,6 +24,7 @@ const orderedCurves=computed(()=>[...curves.value].sort((a,b)=>Number(a.name===p
 function path(curve:{axis:number[];values:number[]}){
  let pen=false;return curve.values.map((value,i)=>{if(!Number.isFinite(value)||value<=0||!Number.isFinite(curve.axis[i])){pen=false;return '';}const command=pen?'L':'M';pen=true;return `${command}${64+curve.axis[i]/end.value*(width.value-86)},${height.value-44-(value-minimum.value)/(maximum.value-minimum.value)*(height.value-76)}`;}).join(' ');
 }
+const curvePaths=computed(()=>new Map(curves.value.map(curve=>[curve.name,path(curve)])));
 async function png(){
  if(!svg.value||!hasData.value)throw Error('请先提取 F0 或选择合成组');
  // Capture the live range and paths before any asynchronous font/raster work.
@@ -66,7 +67,7 @@ defineExpose({png});
     <text x="57" :y="height-39-(tick-1)*(height-76)/4" text-anchor="end">{{plotTickLabel(minimum+(tick-1)*(maximum-minimum)/4)}}</text>
     <text :x="64+(tick-1)*(width-86)/4" :y="height-24" text-anchor="middle">{{plotTickLabel((tick-1)*end/4)}}</text>
    </g>
-   <g :clip-path="`url(#${clipId})`"><path v-for="curve in orderedCurves" :key="curve.name" :d="path(curve)" :data-curve="curve.role" :data-name="curve.name" :data-axis-end="curve.axis.at(-1)" :data-active="curve.name===activeStep" :style="{stroke:curve.color,strokeDasharray:curve.dash,strokeWidth:curve.name===activeStep?4:2,opacity:activeStep&&curve.role==='synthesis'&&curve.name!==activeStep ? 0.55 : 1}" class="f0-line"><title>{{curve.name}}</title></path></g>
+   <g :clip-path="`url(#${clipId})`"><path v-for="curve in orderedCurves" :key="curve.name" :d="curvePaths.get(curve.name)" :data-curve="curve.role" :data-name="curve.name" :data-axis-end="curve.axis.at(-1)" :data-active="curve.name===activeStep" :style="{stroke:curve.color,strokeDasharray:curve.dash,strokeWidth:curve.name===activeStep?4:2,opacity:activeStep&&curve.role==='synthesis'&&curve.name!==activeStep ? 0.55 : 1}" class="f0-line"><title>{{curve.name}}</title></path></g>
    </template>
    <template v-else><text v-for="i in 5" :key="i" :x="64+(i-1)*(width-64)/4" :y="height-5" text-anchor="middle" class="empty-label">—</text></template>
   </svg><div v-if="!hasData" class="f0-empty"><p>提取 F0 后显示源与目标基频曲线</p></div></div>

@@ -18,6 +18,8 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'scripts'))
+from release_content_policy import DEPENDENCY_POLICY, dependency_exclusion
 M05_PACKAGES = {
     'av', 'av.libs', 'numpy', 'numpy.libs', 'cv2', 'mediapipe', 'absl',
     'attr', 'attrs', 'google', 'flatbuffers', 'matplotlib', 'mpl_toolkits',
@@ -61,14 +63,16 @@ def select(runtime, relative, selected_metadata):
     # Text of installed notices survives even when stored under a test folder.
     if is_notice(relative):
         return True, 'license-or-notice'
+    reason = dependency_exclusion(relative)
+    if reason:
+        return False, reason
     if '__pycache__' in parts or relative.suffix.lower() in {'.pyc', '.pyo'}:
         return False, 'bytecode-cache'
     if relative.suffix.lower() in DEVELOPMENT_SUFFIXES:
         return False, 'development-header-or-linker-debug-file'
     if parts[:3] == ('Lib', 'site-packages', 'numpy'):
-        # NumPy 2.2.6 imports _core.tests._natype from its public testing API,
-        # which SciPy's runtime array compatibility import requests. Keep its
-        # complete support package, including the referenced test resources.
+        # The central policy omits only reviewed upstream tests, preserving
+        # public numpy.testing, _natype and native compatibility helpers.
         return True, 'numpy-runtime-including-testing-support'
     if any(p in IGNORED_DIRECTORIES for p in parts):
         return False, 'upstream-test-or-benchmark'
@@ -130,6 +134,9 @@ def decode_bundle(payload):
 report={'success':False,'runtime':kind,'prefix':str(prefix),'tests':[],'signatures':{}}
 try:
     import numpy as np
+    import numpy.testing as npt
+    npt.assert_allclose(np.linalg.solve(np.eye(2), np.ones(2)), np.ones(2))
+    report['tests'].append('public-numpy-testing-and-native-linalg')
     if kind=='egg':
         from scipy.io import wavfile
         from ptb_worker.egg_runtime import fingerprint
@@ -305,6 +312,7 @@ def prepare(options):
     if not all((runtime_root / name / 'python.exe').is_file() for name in ('egg', 'm05')):
         raise ValueError('An existing verified flattened runtime bundle is required')
     stage.mkdir(parents=True)
+    validation = getattr(options, 'validation_root', None) or stage / 'validation'
     selections = []
     for runtime in ('egg', 'm05'):
         source, target = runtime_root / runtime, stage / runtime
@@ -349,31 +357,36 @@ def prepare(options):
                              sha256=sha(notice_manifest),reason='generated-conda-cache-notice-evidence'))
     selections[0]['supplemental_notices']=notice_files
     selections[0]['supplemental_notice_bytes']=sum(item['size'] for item in notice_files)
-    selections[0]['selected_bytes']+=selections[0]['supplemental_notice_bytes']
+    # A restored compact source already contains these notices. Count each
+    # destination once when exact-cache evidence is refreshed at the same path.
+    selections[0]['selected_bytes']=sum({row['path']:row['size'] for row in
+        selections[0]['selected'] + notice_files}.values())
     write_json(stage/'selection-manifest.json',dict(schema='ptb-lean-runtime-selection/1',
         source_bundle=str(bundle),created_at=datetime.now(timezone.utc).isoformat(),runtimes=selections,
-        policy='No MFA. EGG original MKL dispatcher retained. M05 current classic FaceMesh/media entrypoints only; no GenAI/JAX. Original environments untouched.'))
+        dependency_policy=DEPENDENCY_POLICY,
+        policy='No MFA. Original MKL/native variants, public NumPy testing support and notices retained. Omit unused Haar data, IDLE, help topics and upstream NumPy tests. Original environments untouched.'))
     # The exact frozen scientific/source snapshot is used for comparisons.
-    snapshot=stage/'validation/snapshot'
+    snapshot=validation/'snapshot'
     for relative in ('backend/src','packages/phonetic_core/src'):
         shutil.copytree(bundle/'_internal'/relative,snapshot/relative,
                         ignore=shutil.ignore_patterns('__pycache__','*.pyc'))
-    for relative in ('resources/m05/legacy-runtime.json','resources/research/reaper.exe',
+    shutil.copytree(bundle/'_internal/resources/m05', snapshot/'resources/m05')
+    for relative in ('resources/research/reaper.exe',
                      'preview-fixtures/EGG-SYN-PCM16.npz'):
         destination=snapshot/relative;destination.parent.mkdir(parents=True,exist_ok=True)
         shutil.copyfile(bundle/'_internal'/relative,destination)
-    write_json(stage/'validation/snapshot-sha256.json',{p.relative_to(snapshot).as_posix():sha(p)
+    write_json(validation/'snapshot-sha256.json',{p.relative_to(snapshot).as_posix():sha(p)
         for p in sorted(snapshot.rglob('*')) if p.is_file()})
-    probe=stage/'validation/probe.py';probe.write_text(PROBE,'utf8')
+    probe=validation/'probe.py';probe.write_text(PROBE,'utf8')
     environment={k:v for k,v in os.environ.items() if k not in
         {'PYTHONHOME','PYTHONPATH','PTB_EGG_PYTHON','PTB_M05_PYTHON','PTB_M11_COMPONENT_ROOT'}}
     environment['PATH']=os.pathsep.join([os.environ['SystemRoot']+'/System32',os.environ['SystemRoot']])
     environment['PYTHONDONTWRITEBYTECODE']='1'
     def run(runtime, original):
         prefix=runtime_root/runtime if original else stage/runtime
-        output=stage/'validation'/((runtime+'-reference') if original else (runtime+'-subset'))
+        output=validation/((runtime+'-reference') if original else (runtime+'-subset'))
         result=subprocess.run([str(prefix/'python.exe'),'-I','-B',str(probe),runtime,str(snapshot),str(output)],
-            cwd=stage/'validation',env=environment,capture_output=True,text=True,encoding='utf8',errors='replace',
+            cwd=validation,env=environment,capture_output=True,text=True,encoding='utf8',errors='replace',
             timeout=240,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
         (output.parent/(output.name+'.stdout.log')).write_text(result.stdout,'utf8')
         (output.parent/(output.name+'.stderr.log')).write_text(result.stderr,'utf8')
@@ -382,7 +395,7 @@ def prepare(options):
     with ThreadPoolExecutor(max_workers=2) as pool:
         futures=[pool.submit(run,runtime,original) for runtime in ('egg','m05') for original in (True,False)]
         results=[f.result() for f in futures]
-    report=dict(schema='ptb-runtime-stage/1',profile='non-mfa-minimum-tested/1',success=False,
+    report=dict(schema='ptb-runtime-stage/1',profile=DEPENDENCY_POLICY,success=False,
                 runtimes={},comparisons={},scope='Isolated interpreter and actual synthetic scientific/media entrypoints, not physical devices or final EXE validation.')
     for runtime,original,code,result in results:
         print(json.dumps(dict(runtime=runtime,reference=original,returncode=code,success=result.get('success'))),flush=True)

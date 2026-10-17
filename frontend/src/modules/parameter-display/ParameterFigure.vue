@@ -30,6 +30,7 @@ const x=(t:number)=>plotLeft.value+(t-start.value)/span.value*plotWidth.value;
 const scale=(curve:OverlayCurve)=>chart.value[curve.axis];
 const y=(curve:OverlayCurve,value:number)=>plotBottom.value-(value-scale(curve).min)/(scale(curve).max-scale(curve).min)*plotHeight.value;
 function path(curve:OverlayCurve){let pen=false;return curve.points.map(point=>{if(point.value===null){pen=false;return '';}const command=pen?'L':'M';pen=true;return command+x(point.time).toFixed(3)+' '+y(curve,point.value).toFixed(3);}).join(' ');}
+const curvePaths=computed(()=>new Map(chart.value.curves.map(curve=>[curve.name,path(curve)])));
 function label(name:string){const max=Math.max(12,Math.floor((legendWidth.value-55)/(7*fontScale.value)));return name.length>max?name.slice(0,max-1)+'…':name;}
 const printable=(text:string)=>text&&!['sil','<sil>','eps','nan'].includes(text.toLowerCase());
 let drag:{x:number;offset:number;time:number;select:boolean;id:number}|null=null;
@@ -70,7 +71,7 @@ async function saveWhole(){
 <path :d="'M'+plotLeft+' '+plotTop+'V'+plotBottom+'H'+plotRight+(chart.dual?'V'+plotTop:'')" stroke="var(--muted)" fill="none"/>
 <text :x="plotLeft" :y="plotTop-9" fill="var(--muted)" font-size="12">{{chart.dual?'左轴 · 原数值':'原数值'}}</text>
 <text v-if="chart.dual" :x="plotRight" :y="plotTop-9" text-anchor="end" fill="var(--muted)" font-size="12">右轴 · 原数值</text>
-<path v-for="curve in chart.curves" :key="curve.name" class="parameter-curve" :data-parameter="curve.name" :data-axis="curve.axis" :data-scale-min="scale(curve).min" :data-scale-max="scale(curve).max" :d="path(curve)" :stroke="styleFor(curve.name).color" :stroke-dasharray="curve.axis==='right'?'7 3':styleFor(curve.name).dash" stroke-width="1.8" fill="none"><title>{{curve.name}} · {{curve.axis==='left'?'左轴':'右轴'}}</title></path>
+<path v-for="curve in chart.curves" :key="curve.name" class="parameter-curve" :data-parameter="curve.name" :data-axis="curve.axis" :data-scale-min="scale(curve).min" :data-scale-max="scale(curve).max" :d="curvePaths.get(curve.name)" :stroke="styleFor(curve.name).color" :stroke-dasharray="curve.axis==='right'?'7 3':styleFor(curve.name).dash" stroke-width="1.8" fill="none"><title>{{curve.name}} · {{curve.axis==='left'?'左轴':'右轴'}}</title></path>
 <g v-for="(tier,index) in annotations" :key="tier.name"><g v-for="run in tier.runs" :key="run.start"><path :d="'M'+x(run.start)+' '+((index*23+5)*fontScale)+'V'+plotBottom" :stroke="styleFor(tier.name).color" stroke-dasharray="2 4" opacity=".65"/><text class="ipa-text" v-if="printable(run.text)" :x="x((run.start+run.end)/2)" :y="(index*23+16)*fontScale" text-anchor="middle" font-size="13" fill="var(--text)"><title>{{tier.name}}</title>{{run.text}}</text></g></g>
 </g>
 <text :x="plotLeft+plotWidth/2" :y="plotBottom+44*fontScale" text-anchor="middle" fill="var(--text)" font-size="14">时间（秒）</text>

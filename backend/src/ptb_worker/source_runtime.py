@@ -74,3 +74,19 @@ def use_matching_core_source(bootstrap):
     if not (core/'phonetic_core/__init__.py').is_file():
         raise RuntimeError('Matching core source is missing from the application snapshot')
     sys.path.insert(0,str(core))
+
+
+def bound_core_version(bootstrap, installed_version, application_version):
+    """Report the sibling source used by a reviewed source/snapshot bootstrap.
+
+    The compatibility environment's old core wheel is deliberately superseded
+    by use_matching_core_source. Its dist-info describes that unused wheel.
+    Ordinary installed wheels must still match their own installed metadata.
+    """
+    import phonetic_core
+    worker=Path(bootstrap).resolve().parent
+    if worker.name=='ptb_worker' and worker.parent.name=='src' and worker.parent.parent.name=='backend':
+        sibling=worker.parents[2]/'packages/phonetic_core/src/phonetic_core/__init__.py'
+        if sibling.is_file() and Path(phonetic_core.__file__).resolve()==sibling.resolve():
+            return application_version
+    return installed_version

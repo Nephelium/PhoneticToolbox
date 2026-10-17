@@ -38,15 +38,21 @@ export function setupVideo({post,viewer,getFrames,getCurve,prepare,lock,ready}){
   $('videoClose').onclick=()=>{if(running){cancel=true;status('正在取消…');post('animation/stop').catch(()=>{});if(activeSession?.id)post('video/cancel',{id:activeSession.id}).catch(()=>{});}else dialog.close();};
   dialog.addEventListener('cancel',e=>{if(running){e.preventDefault();$('videoClose').click();}});
   $('videoStart').onclick=async()=>{
-    if(running||!ready())return;
-    running=true;cancel=false;lock(true);$('motionHud').hidden=true;$('videoStart').disabled=true;$('videoViews').disabled=true;$('videoClose').textContent='取消导出';
+    if(running)return;
+    running=true;cancel=false;$('motionHud').hidden=true;$('videoStart').disabled=true;$('videoViews').disabled=true;$('videoClose').textContent='取消导出';
     let session=null,exportViewer=null,encoder=null,audioEncoder=null;let releaseFonts=()=>{};
     try{
+      for(let attempt=0;!ready();attempt++){
+        if(cancel)throw Error('已取消导出');
+        if(attempt>=300)throw Error('构形仍在更新，请稍后重试');
+        status('正在等待构形更新…');await new Promise(resolve=>setTimeout(resolve,50));
+      }
+      if(cancel)throw Error('已取消导出');lock(true);
       releaseFonts=await freezeFonts();
       const six=$('videoViews').value==='six',width=six?1920:1280,height=six?1080:720,fps=30;
       const videoConfig={codec:'vp8',width,height,bitrate:six?8000000:4000000,framerate:fps,latencyMode:'quality'};
       const audioConfig={codec:'opus',sampleRate:48000,numberOfChannels:1,bitrate:96000};
-      if(!window.VideoEncoder||!window.AudioEncoder||!(await VideoEncoder.isConfigSupported(videoConfig)).supported||!(await AudioEncoder.isConfigSupported(audioConfig)).supported)throw Error('当前桌面运行时不支持视频编码，请使用新版 Windows 应用');
+      if(!window.VideoEncoder||!window.AudioEncoder||!(await VideoEncoder.isConfigSupported(videoConfig)).supported||!(await AudioEncoder.isConfigSupported(audioConfig)).supported)throw Error('当前浏览器不支持视频编码，请使用最新版 Chrome 或桌面版');
       const duration=Math.round(getFrames().reduce((s,f)=>s+f.duration,0)*48000)/48000;
       if(cancel)throw Error('已取消导出');
       session=await(await post('video/begin',{width,height,fps,duration})).json();activeSession=session;if(session.cancelled)return;

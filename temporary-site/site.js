@@ -98,6 +98,35 @@
     try{await navigator.clipboard.writeText(button.dataset.copy);status.textContent='群号已复制：'+button.dataset.copy+'，去 QQ 搜索就好啦。';}
     catch{status.textContent='QQ 群号：'+button.dataset.copy+'。可以长按或选中文字复制。';}
   }));
+  // Mac download help shares one panel across mouse, keyboard and touch.
+  const macGroup=document.getElementById('macos-download');
+  if(macGroup){
+    const help=macGroup.querySelector('.macos-help'),button=macGroup.querySelector('.download.macos');
+    if(help&&button){
+      const panel=help.querySelector('.macos-install-popover'),summary=help.querySelector('summary');
+      let pinned=false,hovering=false,closing=false,closeTimer;
+      function positionHelp(){
+        if(!help.open)return;
+        const box=macGroup.getBoundingClientRect(),anchor=button.getBoundingClientRect();
+        const above=anchor.top-20,below=innerHeight-anchor.bottom-20,up=above>=300||above>below;
+        panel.style.maxHeight=Math.max(80,Math.min(480,up?above:below))+'px';
+        const width=panel.getBoundingClientRect().width,left=Math.max(16,Math.min(box.right-width,innerWidth-width-16));
+        panel.style.right='auto';panel.style.left=(left-box.left)+'px';
+        panel.style.bottom='auto';panel.style.top=(up?-panel.getBoundingClientRect().height-12:anchor.bottom-box.top+12)+'px';
+      }
+      function showHelp(open){help.open=open;if(open)positionHelp();}
+      macGroup.addEventListener('pointerenter',event=>{if(event.pointerType==='mouse'){clearTimeout(closeTimer);hovering=true;showHelp(true);}});
+      macGroup.addEventListener('pointerleave',event=>{if(event.pointerType==='mouse'){hovering=false;closeTimer=setTimeout(()=>{if(!hovering&&!pinned&&!macGroup.contains(document.activeElement))showHelp(false);},150);}});
+      macGroup.addEventListener('focusin',()=>{if(!closing)showHelp(true);});
+      macGroup.addEventListener('focusout',()=>setTimeout(()=>{if(!pinned&&!hovering&&!macGroup.contains(document.activeElement))showHelp(false);},0));
+      summary.addEventListener('click',event=>{event.preventDefault();pinned=!pinned;showHelp(pinned||hovering);});
+      document.addEventListener('keydown',event=>{if(event.key==='Escape'&&help.open){event.preventDefault();pinned=false;hovering=false;closing=true;showHelp(false);summary.focus({preventScroll:true});closing=false;}});
+      addEventListener('resize',positionHelp,{passive:true});addEventListener('scroll',positionHelp,{passive:true});
+      document.fonts?.ready.then(positionHelp);
+      function linkedHelp(){if(location.hash==='#macos-download'){pinned=true;showHelp(true);}}
+      addEventListener('hashchange',linkedHelp);linkedHelp();
+    }
+  }
 })();
 // Same-origin client for the existing, email-verified feedback service.
 (() => {
@@ -126,6 +155,7 @@
     try{
       const headers={Accept:'application/json'};if(body!==undefined)headers['Content-Type']='application/json';
       if(authenticated&&identity)headers.Authorization='Bearer '+identity.token;
+      if(route==='messages'&&body!==undefined)headers['X-PTB-Feedback-Source']='web';
       const response=await fetch('/api/v1/feedback/'+route,{method:body===undefined?'GET':'POST',headers,body:body===undefined?undefined:JSON.stringify(body),credentials:'omit',cache:'no-store',redirect:'error',signal:abort.signal});
       const data=await response.json();
       if(!response.ok){if(response.status===401)forget();throw Error(errors[data.detail]||(response.status===429?'操作有点频繁，请稍后重试。':'反馈服务暂时没连上，请保留内容，稍后重试。'));}
@@ -193,25 +223,83 @@
   $('history').addEventListener('toggle',()=>{if($('history').open&&identity&&cursor&&!busy)run(()=>api('read',{through:cursor}));});
   render();if(identity)run(async()=>{await refresh(true);status('已恢复当前标签页的反馈会话。');});
 })();
-// Anonymous aggregate counters, refreshed by the server once a minute.
-// An unavailable response stays unavailable; never substitute invented zeros.
+// Anonymous server aggregates. Never substitute invented totals or past samples.
 (() => {
-  const panel = document.querySelector('.site-stats');
-  if (!panel) return;
-  fetch('/site-stats.json', {cache: 'no-store', credentials: 'omit'})
-    .then(response => {if (!response.ok) throw new Error('Statistics unavailable'); return response.json();})
-    .then(data => {
-      const counts = [data.pageViews, data.downloads?.total, data.downloads?.portable, data.downloads?.installer];
-      const start = new Date(data.startedAt);
-      if (data.schema !== 1 || counts.some(n => !Number.isSafeInteger(n) || n < 0) || Number.isNaN(start.getTime()) || counts[1] !== counts[2] + counts[3]) throw new Error('Invalid statistics');
-      const number = n => n.toLocaleString('zh-CN');
-      panel.querySelector('[data-stat="views"]').textContent = number(counts[0]);
-      panel.querySelector('[data-stat="downloads"]').textContent = number(counts[1]);
-      const parts=Object.fromEntries(new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(start).map(p=>[p.type,p.value]));
-      panel.querySelector('[data-stats-since]').textContent = `自 ${parts.month} 月 ${parts.day} 日北京时间 ${parts.hour}:${parts.minute}:${parts.second} 起计数 · 每分钟更新`;
-      panel.querySelector('[data-stats-breakdown]').textContent = '免安装版 ' + number(counts[2]) + ' 次 · 安装版 ' + number(counts[3]) + ' 次';
-    })
-    .catch(() => { panel.querySelector('[data-stats-since]').textContent = '统计暂时休息一下，稍后再来看看。'; });
+  const panel=document.querySelector('.site-stats');if(!panel)return;
+  const keys=['views','downloads','web','stars'],number=n=>n.toLocaleString('zh-CN');
+  const valid=n=>Number.isSafeInteger(n)&&n>=0;
+  const date=t=>new Date(t*1000).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
+  let history=[],fetching=false,lastUpdate=0;
+  const selectedTimes=new Map();
+  function charts(){
+    const range=panel.querySelector('[data-stats-range]').value,cutoff=range==='all'?0:Date.now()/1000-Number(range)*86400;
+    panel.querySelectorAll('[data-chart]').forEach((card,index)=>{
+      const columns=index===1?[{column:2,name:'Windows',platform:'windows'},{column:5,name:'macOS',platform:'macos'}]:[{column:index+1,name:'',platform:''}];
+      const values=history.filter(p=>p[0]>=cutoff&&columns.some(s=>valid(p[s.column])));
+      const series=columns.map(s=>({...s,values:values.filter(p=>valid(p[s.column]))}));
+      const svg=card.querySelector('svg'),empty=card.querySelector('.chart-empty'),slider=card.querySelector('input'),output=card.querySelector('output'),labels=card.querySelectorAll('.chart-dates span');
+      svg.replaceChildren();empty.hidden=!!values.length;slider.disabled=values.length<2;
+      labels[0].textContent=values.length?date(values[0][0]):'';labels[1].textContent=values.length?date(values.at(-1)[0]):'';
+      slider.oninput=null;slider.onkeydown=null;
+      if(!values.length){slider.min='0';slider.max='1';slider.value='0';slider.removeAttribute('aria-valuetext');output.textContent='暂无记录';return;}
+      const max=Math.max(1,...series.flatMap(s=>s.values.map(p=>p[s.column]))),start=values[0][0],end=values.at(-1)[0],span=Math.max(1,end-start);
+      slider.min=String(start);slider.max=String(start+span);slider.step='1';
+      const xy=(p,column)=>[38+(p[0]-start)/span*426,153-p[column]/max*125];
+      const node=(tag,attrs)=>{const e=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,String(v));svg.append(e);return e;};
+      for(const v of [...new Set([0,Math.round(max/2),max])]){const y=153-v/max*125;node('path',{d:`M38 ${y}H464`,class:'chart-grid'});node('text',{x:31,y:y+4,'text-anchor':'end',class:'chart-axis'}).textContent=number(Math.round(v));}
+      for(const s of series){
+        if(!s.values.length)continue;
+        let d='',previous;
+        for(const p of s.values){const [x,y]=xy(p,s.column);const age=Date.now()/1000-p[0],gap=age<2*86400?1800:age<90*86400?10800:3*86400;d+=!previous||p[0]-previous[0]>gap?`M${x},${y}`:`H${x}V${y}`;previous=p;}
+        node('path',{d,class:'chart-line','data-platform':s.platform});
+        s.marker=node('circle',{cx:0,cy:0,r:3.5,class:'chart-dot','data-platform':s.platform});
+      }
+      function nearest(stamp){
+        let low=0,high=values.length-1;
+        while(low<high){const mid=Math.floor((low+high)/2);if(values[mid][0]<stamp)low=mid+1;else high=mid;}
+        return low>0&&stamp-values[low-1][0]<=values[low][0]-stamp?low-1:low;
+      }
+      function select(position,remember=false){
+        const p=values[position];slider.value=String(p[0]);const labels=[];
+        for(const s of series){
+          let low=0,high=s.values.length;
+          while(low<high){const mid=Math.floor((low+high)/2);if(s.values[mid][0]<=p[0])low=mid+1;else high=mid;}
+          const sample=s.values[low-1];
+          if(s.marker){s.marker.style.display=sample?'':'none';if(sample){const [x,y]=xy(sample,s.column);s.marker.setAttribute('cx',String(x));s.marker.setAttribute('cy',String(y));}}
+          labels.push((s.name?s.name+' ':'')+(sample?number(sample[s.column])+(index===3?' 个':' 次'):'暂无记录'));
+        }
+        output.textContent=date(p[0])+' · '+labels.join(' · ');slider.setAttribute('aria-valuetext',output.textContent);
+        if(remember)selectedTimes.set(index,p[0]===end?null:p[0]);
+      }
+      slider.oninput=()=>select(nearest(Number(slider.value)),true);
+      slider.onkeydown=event=>{
+        const offsets={ArrowLeft:-1,ArrowDown:-1,ArrowRight:1,ArrowUp:1,PageDown:-10,PageUp:10};
+        if(!(event.key in offsets)&&event.key!=='Home'&&event.key!=='End')return;
+        event.preventDefault();const current=nearest(Number(slider.value));
+        select(event.key==='Home'?0:event.key==='End'?values.length-1:Math.max(0,Math.min(values.length-1,current+offsets[event.key])),true);
+      };
+      const selected=selectedTimes.get(index);select(selected==null?values.length-1:nearest(selected));
+      node('title',{}).textContent=card.querySelector('h3').textContent+'，共'+values.length+'个真实采样点。可拖动下方时间轴查看数值。';
+    });
+  }
+  async function update(){
+    if(fetching||document.hidden)return;fetching=true;
+    try{
+      const r=await fetch('/site-stats.json',{cache:'no-store',credentials:'omit'});if(!r.ok)throw Error();const data=await r.json();
+      const macos=data.downloads?.macos;
+      if(data.schema!==1||![data.pageViews,data.downloads?.total,data.downloads?.portable,data.downloads?.installer].every(valid)||(macos!=null&&!valid(macos))||data.downloads.total!==data.downloads.portable+data.downloads.installer+(macos??0))throw Error();
+      const counts=[data.pageViews,data.downloads.total,data.webUses,data.github?.count];keys.forEach((key,i)=>panel.querySelector('[data-stat="'+key+'"]').textContent=valid(counts[i])?number(counts[i]):'—');
+      lastUpdate=Date.parse(data.updatedAt);panel.querySelector('[data-stats-since]').textContent='从 '+new Date(data.startedAt).toLocaleDateString('zh-CN',{timeZone:'Asia/Shanghai'})+' 开始记录';
+      panel.querySelector('[data-stats-updated]').textContent='统计更新 '+date(lastUpdate/1000)+(Date.now()-lastUpdate>180000?' · 数据暂未更新':'')+(data.github?.updatedAt?' · Star采样 '+date(Date.parse(data.github.updatedAt)/1000):' · Star尚无采样');
+      const h=await fetch('/site-stats-history.json',{cache:'no-store',credentials:'omit'});if(!h.ok)throw Error();const series=await h.json();
+      if(series.schema!==1||!Array.isArray(series.points))throw Error();
+      history=series.points.filter(p=>Array.isArray(p)&&(p.length===5||p.length===6)&&valid(p[0])&&p.slice(1).every(v=>v===null||valid(v))).sort((a,b)=>a[0]-b[0]);charts();
+    }catch{panel.querySelector('[data-stats-updated]').textContent=lastUpdate?'暂时无法更新，显示 '+date(lastUpdate/1000)+' 的记录。':'统计暂时无法读取，请稍后再看。';}
+    finally{fetching=false;}
+  }
+  panel.querySelector('[data-stats-range]').addEventListener('change',charts);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)void update();});
+  void update();setInterval(update,60000);
 })();
 
 // Accessible reading bookmark: ordinary anchors remain usable without JavaScript.
@@ -231,27 +319,84 @@
   addEventListener('scroll',queue,{passive:true});addEventListener('resize',queue,{passive:true});update();
 })();
 
-// Load the official Bilibili player only when the introduction is selected.
+// Load a single official player on selection; changing channels stops the old video.
 (() => {
-  const intro = document.getElementById('tutorial-intro');
-  if (!intro) return;
+  const channels = [...document.querySelectorAll('[data-tutorial]')];
+  if (!channels.length) return;
   const screen = document.getElementById('tutorial-screen');
   const fullscreen = document.getElementById('tutorial-fullscreen');
   const status = document.getElementById('tutorial-status');
-  intro.addEventListener('click', () => {
-    if (screen.querySelector('iframe')) return;
+  const episodes = document.getElementById('tutorial-episodes');
+  const external = document.querySelector('.tutorial-actions a');
+  const videos = {
+    intro: {bvid:'BV1WWpr67EkX', title:'PhoneticToolbox 介绍'},
+    spectrogram: {bvid:'BV1RuJm6gEWE', title:'语谱图转音频 · 第一集'},
+  };
+  let selected = '';
+  function play(key) {
+    const video = videos[key];
+    if (!video || selected === key) return;
+    selected = key;
     const player = document.createElement('iframe');
-    player.title = 'PhoneticToolbox 介绍 · B 站视频';
-    player.src = 'https://player.bilibili.com/player.html?bvid=BV1WWpr67EkX&page=1&autoplay=0';
+    player.title = video.title + ' · B 站视频';
+    player.src = 'https://player.bilibili.com/player.html?bvid='+video.bvid+'&page=1&autoplay=0';
     player.allow = 'fullscreen; autoplay; encrypted-media; picture-in-picture';
     player.allowFullscreen = true;
     player.referrerPolicy = 'strict-origin-when-cross-origin';
     screen.replaceChildren(player);
-    intro.setAttribute('aria-pressed', 'true');
+    channels.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.tutorial === key)));
+    episodes.hidden = key !== 'spectrogram';
+    episodes.querySelector('[data-tutorial-episode]').setAttribute('aria-pressed', String(key === 'spectrogram'));
+    external.href = 'https://www.bilibili.com/video/'+video.bvid+'/';
+    external.setAttribute('aria-label', '去 B 站播放'+video.title);
+    status.textContent = video.title;
     if (document.fullscreenEnabled && screen.requestFullscreen) fullscreen.hidden = false;
-  });
+  }
+  channels.forEach(button => button.addEventListener('click', () => play(button.dataset.tutorial)));
+  episodes.querySelectorAll('[data-tutorial-episode]').forEach(button => button.addEventListener('click', () => play(button.dataset.tutorialEpisode)));
   fullscreen.addEventListener('click', async () => {
     try { await screen.requestFullscreen(); status.textContent = ''; }
     catch { status.textContent = '可使用视频内的全屏按钮，或前往 B 站观看。'; }
+  });
+})();
+
+// The full bibliography is static HTML, so it remains available without JavaScript.
+(() => {
+  document.querySelectorAll('.reference-catalog').forEach(catalog => {
+    const query = catalog.querySelector('.reference-query');
+    const module = catalog.querySelector('.reference-module');
+    const status = catalog.querySelector('.reference-count');
+    const results = catalog.querySelector('.reference-results');
+    const rows = [...catalog.querySelectorAll('.reference-source')].map(element => ({
+      element, text:element.textContent.toLowerCase(), modules:element.dataset.modules.split(' '),
+    }));
+    catalog.querySelector('.reference-filters').hidden = false;
+    function filter() {
+      const term = query.value.trim().toLowerCase();
+      let count = 0;
+      rows.forEach(row => {
+        row.element.hidden = !(row.text.includes(term) && (!module.value || row.modules.includes(module.value)));
+        if (!row.element.hidden) count++;
+      });
+      status.textContent = count ? '显示 '+count+' 条来源' : '没有匹配的来源，可调整搜索词或查看范围。';
+      results.scrollTop = 0;
+    }
+    query.addEventListener('input', filter);
+    module.addEventListener('change', filter);
+    catalog.addEventListener('toggle', () => {
+      catalog.querySelector(':scope > summary span').textContent = catalog.open ? '收起列表' : '展开查看';
+    });
+    catalog.querySelectorAll('.reference-copy').forEach(button => {
+      button.hidden = false;
+      button.addEventListener('click', async () => {
+        const citation = button.closest('.reference-source').querySelector('.reference-citation');
+        try { await navigator.clipboard.writeText(citation.textContent); status.textContent = '引用已复制'; }
+        catch {
+          const range = document.createRange(); range.selectNodeContents(citation);
+          const selection = getSelection(); selection.removeAllRanges(); selection.addRange(range);
+          status.textContent = '引用文字已选中，请复制。';
+        }
+      });
+    });
   });
 })();

@@ -4,7 +4,9 @@
 
 ## 专题决策
 
-- [网页临时工作区与浏览器优先计算](ADR-web-ephemeral-client-first.md)
+- [论文语谱图重建与随文播放（提议）](ADR-paper-spectrogram-audio.md)
+
+- [网页临时工作区与首期服务器计算](ADR-web-ephemeral-client-first.md)
 
 - [邮箱反馈会话与独立管理员通知](ADR-feedback.md)
 - [相同依赖只保存一份，原路径恢复](ADR-cross-archive-dedup.md)

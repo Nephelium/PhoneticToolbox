@@ -3,6 +3,631 @@
   "created_on": "2026-09-09",
   "tasks": [
     {
+      "id": "WEB-LIVE-ACCEPTANCE",
+      "title": "当前私测网页版真实账号、容量与跨浏览器补验",
+      "date": "2026-10-17",
+      "status": "in_progress",
+      "files": "本机忽略的output/validation/web-release-acceptance-20261017验证脚本、报告与截图；web-private-repair.md、project-status.md、task-ledger.json和CHANGELOG.md",
+      "verification_scope": "Current production-hosted private HTTPS, real nephelium account and actual PG/storage; concurrent clients explicitly share one identity; Windows Chrome/Edge/WebKit and authorized remote Mac Safari kept separate",
+      "verification": "真实账号上传、浏览器及Linux LPC、受管结果/下载SHA、刷新、多标签、Range、退出和重新登录/设置保持通过。10/25/50/100并发轮询已测，全部入口200，API p95目标未达，100客户端一次503待查。共享池实际0.652核，未称满载。Edge/Windows WebKit语谱图回退警告仍在定位。Tailscale Mac已连接，Safari远程自动化设置未开启。",
+      "remaining": [
+        "定位压力503及API延迟，补恢复、取消与真实科研并发边界",
+        "定位Edge/WebKit语谱图回退，继续实际Safari与低配置边界",
+        "只有nephelium有效，不以同账号100客户端外推100个独立用户或长期稳定性"
+      ],
+      "current_evidence": [
+        "docs/testing/web-private-repair.md",
+        "output/validation/web-release-acceptance-20261017"
+      ]
+    },
+    {
+      "id": "MACOS-LOCAL-CLEANUP",
+      "title": "本机Mac交付材料去重与旧包清理",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "外置 macos-deliveries/20261017-382b0b82/maintenance 清单、去重历史归档及回执；CHANGELOG、当前状态和 docs/testing/macos-local-cleanup.md",
+      "verification_scope": "Only local Mac delivery files; source/environment recovery archive identities, exact retained packages and no active references; no runtime, hardware or public-service changes",
+      "verification": "176个目标/5562文件实际删除，逻辑3,193,506,352字节；D盘实测可用空间增加3,204,882,432字节。37项保护文件SHA保持、35项原恢复索引完整，8份必需归档仍可重建3462份源码，502份当前变更视图摘要匹配。292份独有旧内容合并为38,311,097字节历史归档并回读验证；进程引用、祖先/联接、文件清单/摘要及独占读取核对，零遗留。只验证文件与恢复来源，未重跑应用/设备或服务验收。",
+      "remaining": [],
+      "current_evidence": [
+        "docs/testing/macos-local-cleanup.md",
+        "本机独立交付目录 maintenance/cleanup-plan.json、preservation-receipt.json、cleanup-report.json"
+      ]
+    },
+    {
+      "id": "MACOS-SERVER-DOWNLOAD",
+      "title": "已有macOS r6测试包上传服务器并开放官网入口",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "scripts/build_website_expansion.py、verify_website.cjs；temporary-site/site.css/site.js、assets/downloads.json及生成首页；公开旧安装URL转向/校验元数据；docs/testing/macos-public-download.md、CHANGELOG/状态/台账",
+      "note": "井井已明确确认公开安装说明拟稿并授权上传服务器、开放Mac下载及展示完成网页。原开发回执保持；该轮未上传GitHub、未重建Mac。 追加要求安装说明改为Mac按钮悬停浮窗，移除独立安装链接；沿用确认正文，不改应用成品。",
+      "verification_scope": "Current Mac archive SHA/CRC plus identity-bound existing Mac receipts; actual server/HTTPS files and Windows Chrome155 public website/guide; no new Mac/device/Safari runtime test",
+      "verification": "476461931字节r6完整SHA/6771项CRC与同字节Mac回执一致；服务器正式ZIP完整SHA、HTTPS HEAD/Range及三小文件HTTPS保持。安装说明已改为Mac按钮同一浮窗，旧安装URL转回官网。最新r4840ddd775cdf7c2仅3文件105101B、134资产复用，服务器137 SHA与三项公网资源/根首页完整字节一致；Nginx/论文目录/反馈PID保持。实际公网Chrome155七宽度整张卡片命中、1440/1024/825三组向下实际跨功能带及原下载/HEAD/统计/鼠标/键盘/触摸/无JS通过，截图已查看。遮挡/越界及无实际交叠的夹具失败均保留。公网冷字体完整读32.65秒，导航显式120秒后重验，默认30秒/断言保持。生成幂等、语法/diff/文档通过；自有scratch清理回读确认，包与原开发回执/私有回退保留，未推送或重建Mac。",
+      "remaining": [
+        "既有Mac设备/系统/Safari未验范围保持，本轮只变更官网交互与说明入口"
+      ],
+      "current_evidence": [
+        "docs/testing/macos-public-download.md",
+        "output/validation/macos-server-release-20261017-r1/package-audit.json",
+        "output/validation/macos-server-release-20261017-r1/publication-hold.json",
+        "output/validation/macos-hover-help-20261017-r1",
+        "output/validation/macos-hover-layer-20261017-r1"
+      ]
+    },
+    {
+      "id": "WEB-BROWSER-COMPUTE",
+      "title": "同值浏览器计算迁移",
+      "date": "2026-10-17",
+      "status": "verified",
+      "plan": "docs/plans/2026-10-17-browser-compute.md",
+      "files": "原browser适配/构建/平台端口；新增browser-m14/browser-m06和测试、泛化BrowserJobs/LPC接线、M14旧读取器与core DataFrame/平滑的Pandas延迟导入、LPC runtime_check、运行库/字体/许可/来源、LPC浏览器状态、架构/计划/验收/状态/台账/CHANGELOG",
+      "note": "已列浏览器路径及追加音系归纳/LPC/短时Klatt为私测verified；复用原算法，允许微小浮点差异，不称全部模块均已迁移。仅nephelium有效，入口/注册/找回关闭，CPU隔离和c2回退保持。 追加轮本地6份/服务器2份合成原始响应与重复日志已清；9份测试配置清理被自动审批以blocked by policy拒绝，保留且未重试。",
+      "verification_scope": "Actual server-hosted HTTPS browser computation versus fixed Linux scientific baselines; source and license/runtime verification",
+      "verification": "当前c3-r2：1888项发布/762项运行库SHA，九类Linux科学/交互/半秒VTL、真实HTTPS字节/服务/账号/CSP通过。新增31组实际HTTPS科学对照含4组独立首次启动，文档除生成时间外全部内容和格式相等，PCM精确相等，LPC最大谱差9.31e-12。完整前端音系/合成/LPC恢复与既有EGG/表/录音/GL回归通过，合成账号/存储夹具未读取真实用户数据。479前端、204后端/安全/契约、168当前核心/音系/LPC、类型/生成数据/构建/架构通过。旧v2合成14失败在修改前导入复现同一14项，原断言未改且不计通过。首次音系科学资源响应体17,948,991字节，不加载NumPy/Pandas；其余按需加载。 深浅主题完整HTTPS页面通过；公共库条件请求304。",
+      "remaining": [
+        "原生Praat提取/REAPER、参数批量估计、EGG完整批次、发声型/变速变调/生理合成及长时合成等仍用原服务器端口，未称全部操作已浏览器化",
+        "真实用户项目端到端、物理设备、Safari/Edge/macOS与长期多用户容量待共同测试，原满载失败边界保留",
+        "历史v2合成14项旧基准未迁移到当前已修正的Klatt/2，未放宽其断言",
+        "未重新构建最终EXE；旧轮测试配置清理被自动审批拒绝的目录保持，不重试"
+      ],
+      "current_evidence": [
+        "docs/plans/2026-10-17-browser-compute.md",
+        "docs/testing/web-private-repair.md",
+        "output/validation/browser-compute-20261017",
+        "output/validation/browser-compute2-20261017"
+      ],
+      "cleanup_20261017": {
+        "status": "verified",
+        "scope": "Confirmed retired local profiles/build copies and remote old release/transfer cleanup; active and fallback preserved",
+        "report": "docs/testing/test-temporaries-cleanup.md",
+        "evidence": "output/maintenance/private-cleanup-summary.json",
+        "screenshot_nine_profiles_deleted": true
+      }
+    },
+    {
+      "id": "WEB-INTERACTION-PERFORMANCE",
+      "title": "共用预览缓存、录音更新、任务查询和声道监测优化",
+      "date": "2026-10-17",
+      "status": "verified",
+      "plan": "docs/plans/2026-10-17-web-interaction-performance.md",
+      "files": "backend API assets、四类worker预览、新preview_cache及定向测试；core vocal_tract/session.py；frontend task-poll、M06/M07/M08/M14/research、录音与声道监测及测试；资源摘要、Linux专项脚本、CHANGELOG/状态/验收/台账",
+      "note": "按井井全部优化授权实施六类既有问题，不改变算法/精度/资源限制。缓存只存成功结果且有界，HTTP每次保留访问校验。私测限制保持，仅nephelium。",
+      "verification_scope": "Windows source API/scientific children and shared unit tests; real Linux fixed-profile worker/cache/scientific regressions; actual server assets Chrome synthetic UI fixtures, not user sessions or final EXE",
+      "verification": "155项后端/安全/契约、457项前端与类型/契约/UI数据/构建、架构通过。实际Linux perf1四组旧JSON SHA一致，缓存命中约75/77/118/106ms，owner/声道失效和监测代次通过；Windows源码3路径首次0.536/0.388/1.194s，缓存命中0.000154/0.000055/0.000051s。perf1九类Linux科学/交互/VTL回归、1642发布/759运行库摘要和实际HTTPS通过并激活私测，仅nephelium有效。实际服务器前端合成UI监测六组、录音四组通过，慢谱时停止47ms、双时间轴截图已查看。",
+      "remaining": [
+        "首次或新输入仍有科学库启动成本；缓存TTL60s/32MB/24项限制",
+        "真实麦克风/摄像头/听感及其他浏览器未验；本轮未再次满载压测，旧压力数据不外推perf1",
+        "本任务未重打EXE，成品以独立打包验收为准；新增浏览器科学计算下放仅评估，尚未实施",
+        "自动审批以blocked by policy拒绝清理本轮monitor-profile/recording-profile，两目录保留并记录回执，不绕过"
+      ],
+      "current_evidence": [
+        "docs/testing/web-private-repair.md",
+        "output/validation/web-module-performance-audit-20261017"
+      ]
+    },
+    {
+      "id": "RELEASE-303-PERFORMANCE-REPLACEMENT",
+      "title": "3.0.3桌面优化重新打包及服务器/GitHub同版本替换",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "本轮独立构建/封装/验收与发布计划；CHANGELOG.md、docs/testing/release-3.0.3-replacement.md、docs/project-status.md、docs/plans/task-ledger.json；必要分发与大小/SHA/来源清单",
+      "note": "井井明确授权打包替换旧3.0.3并上传服务器/GitHub，随后指定直接替换EXE、不写文案。保留现有Release正文、notes、标签与源码分支；为同字节自动更新同步必要ZIP和校验清单，不部署网页服务。",
+      "verification_scope": "New frozen Windows x64 final bytes with local owned QA; exact same-version server/GitHub replacement, full artifact hashes/digests, bounded public HTTPS and cleanup",
+      "verification": "独立冻结25f561，457前端/类型/UI数据/构建及静态封装通过。免安装495186511B/安装497102829B/ZIP495187077B，同字节EXE；科学/Qt及既有裁剪保持。最终15阶段QA全通过：11科学任务/18帮助、350字符恢复长路径OwnedQA安装卸载与租约、缓存异常/并发/设置、两类换版重启、可见默认GPU168帧/288临界宽度及像素/原生截图、PDF/说明书不重复重建。补充冻结语谱接口重复4.30–4.82ms、完整响应SHA与源码一致，scratch及拥有的QA运行副本清理完成。现有字体增量按井井最新要求保留，排除试改撤回，服务器9路径完整SHA、GitHub7附件大小/digest、6项实际HTTPS及冻结更新解析器通过，3.0.3正文/notes/标签保持，未推送源码或部署网页服务。网络中断按当前SHA续做，保留失败回执。7个不同内容的服务器传输文件及GitHub传输scratch已清，旧服务器回退保留。 收尾定向diff及2227文件/445来源/150任务文档检查零错误，历史快照断链单列。",
+      "remaining": [
+        "实体设备、第二台干净Windows、其他显卡/平台与长期负载未验，不扩大结论",
+        "同版本替换保留现有字体增量；未实施额外资源拆分"
+      ],
+      "current_evidence": [
+        "docs/testing/release-3.0.3-replacement.md",
+        "output/validation/release-303-replacement-20261017-r1",
+        "output/packaging/PhoneticToolbox-303-20261017-163326-25f561/report.json",
+        "output/validation/local-package-0f4ab890/report.json"
+      ]
+    },
+    {
+      "id": "DESKTOP-PREVIEW-PERFORMANCE",
+      "title": "桌面相同预览复用与在途只读请求合并",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "backend/src/ptb_worker/spectrogram_session.py；desktop/src/ptb_desktop/recording/service.py；frontend/src/platform/desktop.ts、coalesced-requests.ts；task-poll.ts仅补泛型；定向Python/TS测试；scripts/verify_desktop_preview_performance.py、verify_desktop_preview_qt.py；组件架构、实施计划、现有性能报告/状态/CHANGELOG/本台账",
+      "note": "仅当前Windows源码优化。保留已存在的桌面持久科学进程，缓存最近视图与录后窗口，合并尚未完成的相同只读请求；不变更科研算法、精度、默认值、格式或现存库。工作树同期网页修改保留，旧冻结EXE未修改。 本项已纳入25f561冻结，3.0.3同版本替换及最终EXE验收见RELEASE-303-PERFORMANCE-REPLACEMENT；源码微基准与成品接口耗时继续分别记录。",
+      "verification_scope": "Windows source actual owned scientific process and recording service with synthetic stereo input; real desktop.ts adapter with controlled native callbacks; visible default-GPU Qt Workbench/QWebChannel/LocalService in both themes; no final EXE or physical device acceptance",
+      "verification": "共用语谱图相同视图7.38–7.53→0.21–0.28ms；录后相同窗口20.34–24.05→3.10–4.51ms，首次29.79ms，完整JSON摘要一致，四次IPC4→0、录音扫描/Praat各4→1。10次同时语谱/参数读各只发1次原生请求，返回独立，完成/失败重试与写屏障通过。30项Python、457项前端、typecheck/contracts/UI数据/build通过。实际Qt浅深各两次完整预览数据/像素一致，重复本机接口3.33/3.74/3.53ms，截图已查看。JSON缓存收益不足已替换数值数组；首次源码绑定/测试隔离、伪存储生命周期与Qt选择器夹具错误保留并修正，原断言保持。合成/Qt/最终pytest scratch已清，早期pytest-1100清理被自动审批blocked by policy拒绝并保留。文档2223文件/445来源/147任务零错误，全仓架构两项同期声道脚本摘要不符单列。",
+      "remaining": [
+        "现有免安装/安装EXE未重建，最终冻结EXE点击到绘制耗时未验证",
+        "实体音视频设备、多小时负载、其他系统及所有18模块完整性能矩阵未验证",
+        "全仓架构检查仍有同期声道app.js/monitor.js两项资源摘要差异；本任务未修改这两个文件",
+        "早期pytest-1100临时测试目录清理被自动审批blocked by policy拒绝，保留且不重试"
+      ],
+      "current_evidence": [
+        "docs/plans/2026-10-17-desktop-preview-performance.md",
+        "docs/testing/redundant-work-report.md",
+        "output/validation/desktop-preview-performance/before-823784a8793044a999069d8642924533",
+        "output/validation/desktop-preview-performance/after-arrays-208da5045a2a4b0fa5cc4d6547863785",
+        "output/validation/desktop-preview-performance/tests-1f2c0bed757444c3af1d9d3c844e2f72",
+        "output/validation/desktop-preview-performance/qt-79a1f536585e4232a5665a22c8254495"
+      ]
+    },
+    {
+      "id": "WEB-MODULE-PERFORMANCE-AUDIT",
+      "title": "其他网页版模块只读性能排查",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "docs/testing/web-private-repair.md、docs/project-status.md、CHANGELOG.md、docs/plans/task-ledger.json；忽略目录output/validation/web-module-performance-audit-20261017中的合成诊断脚本/报告",
+      "note": "只读排查与建议，不表示优化已实施。维持fixed9和仅nephelium访问，不读取用户会话/原始录音；合成输入仅驻RAM，无磁盘WAV/SQLite夹具。",
+      "verification_scope": "Actual Linux production-selected bounded entry points with synthetic inputs; warm direct implementation diagnostics; source inspection of shared Windows/browser adapters",
+      "verification": "四路径各首次/相同输入重复与两核心诊断成功，JSON SHA逐字节相等；追加四类核心预热后三次测量，两个语谱图完整响应SHA与受限入口一致。共用语谱图1.820/1.792秒、录音2.420/2.438秒、三行参数表1.375/1.213秒、预测2.979/2.989秒。纯预热语谱图约8–17毫秒，属于诊断，不作为未来端到端承诺。源码确认任务120/150ms查询、重复项目job列表及声道未变化监测分析。活动发布前后描述一致，文档2210文件/445来源/146任务零错误，历史快照断链单列，定向差异检查通过。",
+      "remaining": [
+        "性能优化尚未实施，建议先共用语谱图/录音预览，再合并轮询与相同输入缓存",
+        "EXE共用路径仅源码检查；18模块未逐一完整压测，不承诺算法耗时或多人容量"
+      ],
+      "current_evidence": [
+        "docs/testing/web-private-repair.md",
+        "output/validation/web-module-performance-audit-20261017"
+      ]
+    },
+    {
+      "id": "WEB-STATUS-EGG-PERFORMANCE",
+      "title": "服务器状态按需刷新、EGG交互优化及EXE路径复核",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "backend状态/工作区/资产API、EGG会话/内存缓存/Linux入口/运行库缓存及Windows源码绑定；frontend状态/EGG端口；生成契约、定向测试、Linux专项脚本；CHANGELOG、状态与私测修复验收；contracts/resource-manifest.json补齐现有字体资源登记",
+      "note": "保持仅nephelium进入。匿名RAM及同UID摘要缓存保留会话/科学参数失效、文件身份、受限进程和共享单槽，不修改算法。Windows已有持久进程缓存，另修复相邻源码与旧环境core元数据的版本绑定误拒绝。",
+      "verification_scope": "Windows source/canonical scientific child; read-only frozen EXE code audit; actual Linux server bounded scientific tasks/readonly aggregate PG; independent Chrome actual HTTPS assets with explicit synthetic account fixtures",
+      "verification": "160项后端/安全/契约、10项状态/科学缓存、450项前端及类型/契约/UI数据/构建通过。服务器77.249秒输入缩放7.81–8.24秒降至3.80–4.14秒，热更新完整音频0字节，RAM恢复数值相等、损坏回退、关闭释放及同大小恢复mtime的失效通过。Windows源码连续缩放约15–16毫秒。最终fixed9九类Linux科学/交互/VTL通过，1641项发布/758项运行库及实际HTTPS与报告回执一致，已私测激活。独立Chrome实际服务器前端配合显式合成账号/API，六组轮询/迟到响应/卸载取消通过，未读取用户会话。7项科学缓存/源码绑定补验通过，资源两项补登记后架构/文档零错误。",
+      "remaining": [
+        "科学库启动仍使服务器热更新约4秒，未达到桌面交互速度",
+        "当前EXE仅做内嵌代码/元数据核查，版本绑定修复未重打成品；最终EXE Qt交互、其他浏览器及真实设备未验",
+        "自动审批以blocked by policy拒绝本地5个临时测试目录清理，已保留并记录；服务器5个中间候选/6个传输包已核对引用与当前摘要后清理，fixed9及fixed3回退保持。"
+      ],
+      "current_evidence": [
+        "docs/testing/web-private-repair.md",
+        "output/validation/web-status-egg-20261017"
+      ],
+      "cleanup_20261017": {
+        "status": "verified",
+        "scope": "Confirmed retired local profiles/build copies and remote old release/transfer cleanup; active and fallback preserved",
+        "report": "docs/testing/test-temporaries-cleanup.md",
+        "evidence": "output/maintenance/private-cleanup-summary.json",
+        "screenshot_nine_profiles_deleted": true
+      }
+    },
+    {
+      "id": "WEB-ACCOUNT-USAGE-NOTE",
+      "title": "登录与注册页左侧展示定稿使用说明及可爱字体",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "frontend/src/account/ServerPage.vue/account-web.css；frontend/src/assets/ZCOOLKuaiLe-Regular.ttf；frontend/public/licenses/ZCOOL-OFL.txt；third_party/source-registry.json；CHANGELOG.md、docs/project-status.md、docs/testing/web-launch-foundation.md",
+      "note": "原样采用井井最终三段文案，保留两处加粗、括号和波浪号。左侧原简介/插画替换为站酷快乐体说明，登录/注册共用，手机完整排在表单前。未改全局字体、账号/API或线上开关。",
+      "verification_scope": "Windows source/type/build plus actual public HTTPS independent Chrome155 login, browser-only registration preview; no account submission; frontend atomic publication",
+      "verification": "typecheck/ui-data:check/独立build通过，账号边界及偏好11项通过；登录/注册浅色五宽度和深色两宽度共14组通过，全文/strong/实际字体/桌面左侧与手机上方/无横溢出/完整许可/零写请求。字体与OFL逐字节复用，定稿所有非空字符均在字体cmap。文档2206文件/445来源/144任务零错误，历史快照断链单列，定向diff通过。夹具静态前缀404已修复，原失败保留；两轮scratch清理成功，最终截图已查看。 按井井本轮明确授权已公开部署。冻结构建与线上基线逐文件核对，规范化构建引用后仅ServerPage的JS/CSS内容改变，另加原始字体及完整OFL。只上传16文件1837003压缩字节，原子切换1265项前端资源，完整发布清单1636项一致。755项科学运行库、后端文件及科研回执原字节保持，官网首页、Nginx配置、论文目录和服务PID保持，无需重启服务。公网Chrome155实际登录/字体和独立浏览器GET选项预览注册表单，浅深色五宽度14组全文/加粗/字体/位置/无横溢出/OFL/零写请求通过，16项更新资源HTTP字节及SHA回读一致。注册/找回仍关闭，未读取用户会话、提交账号或发送邮件。最终截图已查看，scratch已清理；未推送或重打EXE，实体手机及其他浏览器未验。",
+      "current_evidence": [
+        "docs/testing/web-launch-foundation.md"
+      ],
+      "local_evidence": "output/validation/web-launch/account-note-68141cd45f1c4916b6f5257a6f935a19/report.json；output/validation/web-launch/account-note-20261017/capture.cjs及frontend候选",
+      "remaining": [
+        "注册/找回仍关闭；未推送或重打EXE，实体手机及其他浏览器未验。",
+        "UI验证不扩展为服务器容量或全部重计算能力验证。"
+      ],
+      "publication": {
+        "operation": "account-note-51ad41a55fae4a959cfcb2d05ef5f8a7",
+        "uploaded_files": 16,
+        "upload_bytes": 1837003,
+        "static_files": 1265,
+        "manifest_files": 1636,
+        "runtime_files_unchanged": 755,
+        "service_restart": false,
+        "evidence": "output/validation/web-launch/account-note-20261017/deployment.json",
+        "public_evidence": "output/validation/web-launch/account-note-public-d5c2a12a63964de9b033e509c6236b07/report.json"
+      }
+    },
+    {
+      "id": "WEB-DESKTOP-COPY",
+      "title": "网页版桌面引导去除Windows限定",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "7处frontend源组件/提示、manual/chapters/m05/m09/m10/m16及生成阅读资源；CHANGELOG、状态/台账与web-private-repair验收",
+      "note": "网页版统一使用桌面版称呼，生理参数合成首次提示、MFA的DESKTOP标记/备用下载/旧macOS未提供说明、录音/发声类型/分段分析备用提示及4章说明书均已检查修订。",
+      "verification": "类型检查、前端构建、说明书21章/1059资产严格校验及资源生成、架构检查通过。服务器原子替换1263项前端资源，清单仍1634项，755项科学运行时及九类验证回执不变，无需重启服务。实际HTTPS的MFA和生理提示、4章说明书核对通过，UI账号/API用明示合成替身，未读取用户会话。官网入口关闭，注册/找回关闭、仅nephelium有效及136项其他官网资产保持已复核。 初次线上文案检查发现删词后残留空格并修正，测试选择器因侧栏与首页同名按钮而调整为首个已知目标，随后完整专项通过。此次仅文案修改，不作为macOS成品/功能验收，未修改后台算法、账号、数据库或公开入口，未推送或打包。 清理本次旧前端构建与已停止浏览器配置，保留frontend-r2/脚本/报告/最终截图；服务器移除已核对摘要的中间前端副本1263件、468197534字节，原修改前回退保留。",
+      "verification_scope": "Actual HTTPS static UI with synthetic account/API fixtures, four real HTTPS manual JSON responses, source/type/build/architecture checks; copy-only frontend swap, existing scientific receipts unchanged.",
+      "current_evidence": [
+        "docs/testing/web-private-repair.md"
+      ],
+      "local_evidence": "output/validation/web-desktop-copy-20261017/",
+      "remaining": [
+        "macOS成品发布与功能验收属于另行任务；本次不开放公网入口。"
+      ]
+    },
+    {
+      "id": "DESKTOP-UI-HANG-DIAGNOSIS",
+      "title": "说明书与音标表挂起诊断及桌面资源异步读取修复",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "desktop/src/ptb_desktop/web_assets.py、desktop/tests/test_web_assets.py、scripts/verify_asset_reads_qt.py、desktop/ARCHITECTURE.md；docs/testing/manual-performance-report.md、docs/project-status.md、CHANGELOG.md；忽略目录中的初轮诊断脚本与证据",
+      "note": "先按井井要求诊断，再获明确授权修复已确认的资源阻塞路径。四线程池处理资源校验/读取，GUI仅回复，取消和关闭丢弃结果。verified只指本机源码修复及受控机制回归，用户3.0.3实际挂起根因仍未确定；没有重打EXE、改服务器或系统配置。",
+      "verification_scope": "Windows 11 26300, visible source Qt, isolated profiles, default GPU and 150 percent DPI; asynchronous-read fix and real request/profile destruction verified. Frozen 3.0.3 EXE remains the pre-fix baseline; original user hang, other devices and platforms are unverified.",
+      "verification": "初轮旧成品七场景/100次切换/42次跨章及345次窗口探测未自然复现；原资源处理位于GUI，人为6秒等待造成6021.242ms GUI间隔和26次窗口超时。修复后48项定向通过，真实Workbench/FeedbackManager中87次读取均在后台，6秒等待下GUI最大间隔56.704ms、64次消息探测零超时，三体系切换169.09ms且读取仍未结束；另一慢读期间关闭窗口366.545ms，管理器继续响应，迟到结果安全丢弃，可见图片解码/两帧截图通过。原Qt11项复验通过，同章身份/0新请求及保存/焦点保持。夹具失败证据保留，临时数据按回执清理。",
+      "current_evidence": [
+        "docs/testing/manual-performance-report.md"
+      ],
+      "local_evidence": "output/validation/manual-performance/qt-d32e03f2de474d26b7bd3f16b6ac8192/、qt-ad2d68473d9d4a1fbf9eda53a0bbd1c9/；output/validation/ui-hang/exe-4ca5752569264ad8ad2a4335a2da3a40/、resource-9c93c90449e04494a39b0342ccb41fe5/；output/validation/desktop-assets/unit-78909b46caac48fc81dac0fe9aefcc46/、qt-eb5345cfdcb841768d353011e8de40ad/",
+      "remaining": [
+        "用户机器上的持续挂起根因未定位；没有实际慢读取或驱动等待证据，不能据受控实验归因。",
+        "尚未重打EXE或公开发布；已发布3.0.3不包含后台读取修复，本机挂起线程自动日志未新增。",
+        "未验其他显卡、第二台机器、跨平台和长期运行。"
+      ]
+    },
+    {
+      "id": "WEB-PRIVATE-TEST-GATE",
+      "title": "关闭网页版公开入口并仅保留本人私测",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "scripts/build_website_expansion.py、verify_website.cjs、temporary-site/index.html；服务器专用配置和账号状态；CHANGELOG、状态、台账、网页验收",
+      "note": "井井明确要求立即关闭，私测账号确认为nephelium；停止本轮继续上线修复，睡醒后继续。",
+      "verification": "实际HTTPS首页禁用button且无/app入口链接；136项其他官网资产逐字节不变。专用实例关闭注册，auth/options registration/password_recovery=false，注册POST为503，未登录auth/me为401。数据库仅nephelium为active，停用1个本任务QA账号，用户两条既有登录会话保持，未删除数据或改密码。",
+      "verification_scope": "Actual server account gate, public HTTPS homepage and authentication endpoints; static login page remains reachable but workspace requires the sole active account.",
+      "current_evidence": [
+        "docs/testing/web-launch-foundation.md"
+      ],
+      "local_evidence": "output/validation/web-m09-public-20261017/verify_private.result.json；服务器/var/lib/ptb-web/reports/private-test-gate.json",
+      "remaining": [
+        "继续保持仅nephelium可访问；本轮修复见WEB-M09-PUBLIC-FIX，用户未授权恢复公开入口。"
+      ],
+      "cleanup_20261017": {
+        "status": "verified",
+        "scope": "Confirmed retired local profiles/build copies and remote old release/transfer cleanup; active and fallback preserved",
+        "report": "docs/testing/test-temporaries-cleanup.md",
+        "evidence": "output/maintenance/private-cleanup-summary.json",
+        "screenshot_nine_profiles_deleted": true
+      }
+    },
+    {
+      "id": "P04-WEBSITE-303-SYNC",
+      "title": "官网3.0.3版本、下载与更新小记同步",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "temporary-site/assets/downloads.json、assets/releases/v3.0.3.json、index.html、README.md；scripts/verify_website.cjs；CHANGELOG、官网验收、状态及台账",
+      "note": "用户截图指出官网仍为3.0.2并要求检查修复，按本轮明确授权同步线上发行字段。保留并行未发布样式和其它线上内容。",
+      "verification": "服务器两成品完整SHA与实际报告一致；标准生成幂等，rf077ec7d8e36d930发布3文件/71108压缩字节，134项资产原字节复用。独立Chrome候选/公网四宽度、链接/附件名/HEAD/体积、四版全文/键盘/无JS通过，新增稳定频道版本/安装器身份/正文一致性检查通过，errors/requests为空，截图已查看。",
+      "verification_scope": "Windows Chrome155, actual public HTTPS and exact server artifacts; scoped website release fields only.",
+      "current_evidence": [
+        "docs/testing/website-redesign.md"
+      ],
+      "local_evidence": "output/validation/release-303/website/；output/validation/website/release-303-3240ef8902284ca59521a3614c92db50/；verify-1792179336029-49184/",
+      "remaining": [
+        "实体手机及其他浏览器未验。未重打包EXE、修改正式网页版/配置或推送同期源码。"
+      ],
+      "obsolete_package_cleanup": {
+        "date": "2026-10-17",
+        "status": "verified",
+        "report": "docs/testing/test-temporaries-cleanup.md",
+        "evidence": "output/maintenance/obsolete-versions-summary.json",
+        "current_release_bytes_unchanged": true
+      }
+    },
+    {
+      "id": "WEB-M09-PUBLIC-FIX",
+      "title": "修复网页版平台入口、预览、反馈与首次发声提示",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "Linux固定入口/科学准入与M06/M07/M08/M09/M14执行；EGG交互、参数表预览/来源关联；账号邮箱反馈桥与安全边界；MFA/反馈弹层、M10首次提示及0.5秒测试发声；来源/资源摘要、生成契约和验证/部署回执；Linux摘要缓存与回归、受控负载脚本、旧验证副本和新候选过时静态文件清理回执；4个服务器临时上传脚本摘要核对后清理",
+      "note": "2026-10-17井井睡醒后明确继续修复，保持仅nephelium访问；追加要求检查全部模块Windows入口残留、反馈复用已验证账号邮箱、MFA等高按钮、M10首次提示及0.5秒测试发声。 追加要求在真实服务器检查负载，最终fixed3已私测部署，白名单不变。",
+      "verification_scope": "Actual Ubuntu 2-core server, nine hash-bound Linux operations and production shared lane with bounded load; public HTTPS/anonymous Chrome155; account UI fixtures and Windows regression reported separately. Real logged-in projects and devices remain joint acceptance.",
+      "verification": "原80+37+2项定向后端、138项安全/契约及450项前端/类型/契约/UI数据/构建通过，2项原Linux用例在Windows按原条件跳过。最终fixed3九类Linux科学、EGG/参数预览、0.5秒VTL重验并绑定当前profile，1634项清单/755项运行时及HTTPS能力/首页/声道字节一致。追加缓存/固定入口18项、架构60项和架构/文档零错误。真实PG JSON记录集通过1100无关结果前的来源筛选。真实2核服务器CPU峰值100%，负载阶段普通接口p50 0.276秒、最长2.866秒，58次持续HTTPS监测零错误（连续监测最长2.008秒）。四路实际预测共用生产计算槽，全部完成，最长45.848秒含34.970秒排队；空闲约6.034秒，满载首个约13.333秒。排队取消、0.4秒计算超时、64 MiB限额子进程真实OOM后，后续预测6.097秒成功，负载进程与队列均已回收。最低整机可用内存2403.1 MiB，未模拟耗尽整机内存，不据此承诺最大在线人数或长期容量。 实际公网Chrome唇形模型/空白帧与登录页、注册关闭通过。首次压力脚本在旧版能力查询基线超时即停止，额外CPU负载尚未启动；首次修复后满载功能检查通过，但测试脚本把已自动结束的限时负载单元视作停止失败。两次失败均保留原记录，修正精确单元状态/cgroup检查后完整压力复跑通过，未放宽产品断言。",
+      "remaining": [
+        "与井井共同测试真实账号文件的完整浏览器往返、反馈/实际邮件、摄像头/声卡/EGG设备及听感。",
+        "未验证整机内存耗尽、长期并发、最大在线人数及其他浏览器/平台。保持仅nephelium可进，不恢复公开入口，未推送或重打EXE。"
+      ],
+      "current_evidence": [
+        "docs/testing/web-private-repair.md"
+      ],
+      "local_evidence": "output/validation/web-m09-public-20261017/及cleanup-owned.json；服务器science-fixed3-*、verified-fixed3-live.json、pressure-fixed3-r2/report.json、static-clean-fixed3.json；upload-cleanup-fixed3.json"
+    },
+    {
+      "id": "P04-RELEASE-303-PUBLICATION",
+      "title": "3.0.3服务器与GitHub上传及更新小记审阅",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "release/notes/3.0.3.md；frontend/tests/updates-browser.mjs；third_party/source-registry.json、本机参数模型元数据、docs/development/repository-hygiene.md；CHANGELOG、台账及状态/验收",
+      "note": "用户明确授权成品完成后上传服务器/GitHub，更新小记使用韶子技能并先交审。特定询问后用户明确允许内置参数模型公开分发，绑定权重/EXE摘要，原始语料和独立神经组件不扩权。",
+      "verification": "最终Windows x64同字节15阶段通过。用户编辑并指定3.0.3.md，SHA 85f400df…逐字用于GitHub正文/两类清单，实际弹窗7组通过。服务器3成品/4元数据/两频道共9路径全量SHA、3清单HTTPS、3种HEAD/Range通过。GitHub v3.0.3正式Latest、7附件大小/digest通过。冻结更新解析器分别从服务器/GitHub发现3.0.3，notes及包大小/SHA相同；未实际下载更新。 追加确认仅补齐末条结尾**，严格字节差异仅+2；实际弹窗7组、服务器5份元数据CAS、GitHub正文/3份小附件与冻结两来源发现复核通过，成品SHA/附件ID保持，未重打包。",
+      "verification_scope": "同一最终Windows x64成品、服务器/GitHub发行准备与文案。正式GitHub Release及自动更新notes须用户确认该版完整文案。",
+      "current_evidence": [
+        "docs/testing/package-trimming.md",
+        "release/notes/3.0.3.md"
+      ],
+      "local_evidence": "output/validation/release-303/completion.json、notes-approval.json、server-published.json、github-published.json、https-published.json；output/validation/updates-ui/check-cf98898b-a1de-4de7-b0e1-e2cd086668cd/；output/validation/local-package-0684fd47/；output/validation/release-303/notes-format-r1/verification.json；output/validation/updates-ui/check-d5ffecd0-b3b8-420c-88b0-137643db356e/",
+      "remaining": [
+        "实体设备、第二台干净电脑及跨平台未验。同期源码未整体push，标签基线与冻结快照差异见公开build-provenance.json；官网发行信息已按后续截图反馈同步，见P04-WEBSITE-303-SYNC。"
+      ],
+      "obsolete_package_cleanup": {
+        "date": "2026-10-17",
+        "status": "verified",
+        "report": "docs/testing/test-temporaries-cleanup.md",
+        "evidence": "output/maintenance/obsolete-versions-summary.json",
+        "current_release_bytes_unchanged": true
+      }
+    },
+    {
+      "id": "WEB-PUBLIC-TEST",
+      "title": "网页版同域名公开测试部署",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "共用API HTTPS入口与worker领取、部署模板/持久单元、新专用库/存储、声道音频缓冲/电平、录音设置与立即停止、资源来源、官网入口生成及公网验收/计划/架构/状态/台账",
+      "note": "井井明确授权准备并公开上线供本人测试。使用新专用库与存储，私有实例保留；保留现有官网、下载与反馈。首期白名单与MFA禁用保持。",
+      "verification_scope": "Current Windows source checks, frozen Linux release, dedicated PostgreSQL and same-origin public HTTPS. No claim of macOS, physical devices or broad production capacity.",
+      "verification": "446前端、类型/契约/UI数据/构建，23基础后端及5修复定向通过；最终Linux三类科学及录音六组通过，四项实际报告准入绑定。真实公网主流程8组、声道15组零欠载、录音14组、扩容审批1.5GB/7天、官网入口宽窄/两下载HEAD通过。1628发布文件/578运行时摘要匹配，四服务active；八个QA账号停用，工作区/资产及used/reserved为0。 本次旧构建/传输包按授权清理完成，保留字节/服务PID/HTTP核验通过，详见cleanup字段。",
+      "remaining": [
+        "真实注册/找回邮件收件待井井实际确认；实体声卡/EGG/长录音、Edge/Safari/macOS、满额及长期并发/容量未验，既有10档p95 2.084秒未达2秒事实保留。"
+      ],
+      "current_evidence": [
+        "docs/testing/web-launch-foundation.md",
+        "docs/deployment/p15-staging-runbook.md"
+      ],
+      "local_evidence": "output/validation/web-public-20261017/；output/validation/web-public/browser-c8a9c81cc8154f6584b30369fd741735/；vocal-4c2331e5c577488c951c7886b38add7e/；recording-a23816726bc74101bf03b23d72af5c53/",
+      "cleanup": {
+        "date": "2026-10-17",
+        "status": "verified",
+        "scope": "Only superseded task-owned local frontend builds and completed local/remote transport archives",
+        "summary": {
+          "success": true,
+          "local": {
+            "targets": 12,
+            "files": 6322,
+            "logical_bytes": 2729539189,
+            "observed_free_increase": 2743341056,
+            "all_targets_absent": true,
+            "protected_files_sha256_unchanged": 1267
+          },
+          "remote": {
+            "archives": 7,
+            "logical_bytes": 153648175,
+            "observed_free_increase": 153661440,
+            "all_targets_absent": true,
+            "active_manifest_files_verified": 1628,
+            "active_release_runtime_receipt_unchanged": true,
+            "service_status_and_pids_unchanged": true,
+            "http": {
+              "/": 200,
+              "/app/": 200,
+              "/api/v1/auth/me": 401,
+              "/api/v1/_ops/status": 404
+            }
+          }
+        },
+        "local_evidence": "output/validation/web-public-20261017/cleanup-versions-summary.json；cleanup-versions-local-plan.json；cleanup-versions-local-results.json；cleanup-versions-preflight.result.json；cleanup-versions-remote.result.json",
+        "remaining": [],
+        "documentation_verification": "文档检查2190文件/443来源/138任务零错误，历史快照断链单列；定向diff检查通过。"
+      }
+    },
+    {
+      "id": "P04-PACKAGE-DEPENDENCY-TRIM",
+      "title": "精确裁剪非必需依赖并重新打包3.0.3",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "scripts/release_content_policy.py、prepare_trimmed_runtimes.py、package_local.py、build_v3_local_preview.py、audit_release_contents.py；release/prepare_lean_runtimes.py、compact_payload.py、compact_host.py、PACKAGING_RULES.md；tests/test_package_dependency_policy.py、test_compact_host_selection.py；CHANGELOG、状态/台账及验收报告",
+      "note": "用户明确授权落实裁剪、写成规范、重新打包，并追加保留其它语言。全部现有Qt翻译保持。只在新stage排除非必需NumPy测试、Haar XML、IDLE与交互帮助主题，原环境不修改。公共testing/_natype、原生辅助、MKL/科学默认值及许可保留。",
+      "verification_scope": "Windows新科学stage原环境/裁剪环境同源码对照，最终同字节3.0.3免安装/安装包及启动/升级验收；无公开发布或设备普适性声明。",
+      "verification": "32项边界、442项冻结前端及科学/媒体双侧输出通过。排除1179文件/26008692展开字节，其余字节保持，157份Qt语言原字节保留。最终EXE494149024、安装496063939、ZIP494149590字节，版本均3.0.3。最终15阶段、可见GPU168帧/临界288帧、自有窗口人工检查、长路径安装/卸载、两种换版、73文件复制回退、交替冷启动及三组件复用通过；scratch清理完成。",
+      "current_evidence": [
+        "release/PACKAGING_RULES.md",
+        "docs/testing/package-trimming.md"
+      ],
+      "remaining": [
+        "实体设备、其它显卡、第二台干净电脑、长期完整负载和跨平台未验。公开上传独立记录于P04-RELEASE-303-PUBLICATION。",
+        "首轮被替代失败stage的清理被自动审批blocked by policy拒绝，目录与诊断保留，未重试；成功stage/成品保持。"
+      ],
+      "local_evidence": "output/validation/package-trim/runtime-0b8329e7576c4e059eb7285b5baa3783/；runtime-diff.json；scientific-code-closure.json；source-preview-32bd94743a324d7698f4db52c56c8319/；output/validation/local-package-0684fd47/；startup-342a9139d1ac4324a6754a922af97012/；copy-fallback-4919fd60218d42b99c80e4048f1cf4ca/"
+    },
+    {
+      "id": "P04-PACKAGE-DEPENDENCY-AUDIT",
+      "title": "3.0.3冻结包可选依赖与附带文件只读审查",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "docs/testing/redundant-work-report.md、docs/project-status.md、CHANGELOG.md、docs/plans/task-ledger.json；本机忽略目录中的冻结清单统计及模拟缺包探针",
+      "note": "按用户顺便检查要求，只读核对当前冻结3.0.3，不裁剪或重建交付字节。列出精确路径候选，保留来源许可、科学二进制/CPU分支、NumPy公共testing API和_natype辅助模块。",
+      "verification_scope": "Frozen EXE 4b09fb99… manifests, source callers, existing package policies, actual bundled EGG/M05 Python import-blocker feasibility with synthetic arrays/black image and in-memory exports; no physical file or native DLL removal.",
+      "verification": "5类候选合计35177798逻辑字节/27803226唯一内容字节：Haar XML、中英文外Qt qm、保留必需辅助后的NumPy测试、IDLE、Python help主题。整删NumPy tests按预期失败，保留_natype后EGG线性方程/SciPy重采样/Praat/pandas/Agg和M05/OpenCV/FaceMesh/PyAV探针通过，scratch deleted。已确认两份相同OpenCV原生库由host-files/2共享，MKL指纹和既有MFA/Torch/JAX/QML等排除不重复计算收益。",
+      "current_evidence": [
+        "docs/testing/redundant-work-report.md"
+      ],
+      "local_evidence": "output/validation/redundant-work/dependency-candidates-303.json；output/validation/package-dependencies/probe-f99e12aa08334b088d56211dbe495efb/",
+      "remaining": [
+        "裁剪规则和成品字节未改；下载体积实际减幅与裁剪后完整科学输出/GUI/设备/安装回归尚未执行。"
+      ]
+    },
+    {
+      "id": "WEB-ENTRY-MOTION-PREVIEW",
+      "title": "网页入口轻微漂浮与本地预览白屏修复",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "temporary-site/site.css、README.md；scripts/verify_website.cjs、Start-Web-Local-Preview.ps1；frontend/vite.config.ts；docs/development.md、testing/website-redesign.md、project-status.md；CHANGELOG.md",
+      "note": "用户要求官网进入网页版按钮微微漂浮，并修复本地无法访问/空白。动效0到-4px、6秒，沿用禁用状态、离屏/后台暂停和减少动态效果。Chrome实际复现markdown-it旧依赖504与AppShell导入失败，新增可选缓存路径并以本地启动器隔离测试缓存。只结束上轮本任务旧Vite PID33856，不操作其他进程。未重试先前被拒的账号代理操作。",
+      "verification_scope": "Windows本机源码、独立Chrome155官网动效及实际Chrome人工预览。无生产部署、最终EXE或真实账号/计算验收。",
+      "verification": "WEBSITE_MOTION_ONLY专项通过，入口实际位移采样1.2624px、禁用/无href/离屏暂停/减少动画/四宽度/无JS通过，errors/requests为空；typecheck/build通过。Chrome实际显示18工具/21章与6图前置章。动效测试scratch deleted，人工预览服务与标签按用户要求保持运行。",
+      "current_evidence": [
+        "docs/testing/website-redesign.md"
+      ],
+      "local_evidence": "output/validation/website/verify-1792167217659-85728/；output/validation/web-preview-repair-20261017/；output/local-web-preview/vite-cache/",
+      "remaining": [
+        "官网动效尚未公开部署，最终EXE/其他浏览器与长期并发开发未验；5173为界面预览，账号和计算沿用现有隔离服务。"
+      ]
+    },
+    {
+      "id": "P04-REDUNDANT-WORK-AUDIT",
+      "title": "桌面与网页版隐藏页面、静态图线和科学谱重复计算治理",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "frontend/AppShell及参数显示/估计、EGG、LPC、录音、变调、声学合成、发声、语谱图与PDF阅读器相关图窗/轮询；vocal-tract/monitor.js及三处资源清单；backend/egg_preview.py与定向测试；版本元数据及windows_version_resource/build_v3_local_preview、release/cached_launcher.py/installer.iss；重复工作/原生窗口/像素/最终成品验收工具与PACKAGING_RULES；前后端架构；本报告、状态、CHANGELOG",
+      "note": "先测量后修复，保留原科研计算/灰度输出和真实失效边界；暂停隐藏空闲自动查询，保留实际任务及工作区心跳。补齐既有M18来源覆盖表中的PyQt6-SIP。实际EXE复查后再去掉PDF初始默认宽度提前渲染。井井追加要求完成修复/验证后统一打3.0.3免安装与安装版，统一冻结版本及Windows文件属性。同期改动保留，不进行公开部署、发布或push。",
+      "verification_scope": "Windows current source/independent Chrome; final 3.0.3 EXE visible/default GPU with isolated profile and same-byte formal installer/OwnedQA installation and update; EGG against frozen worker. Current web source retested after concurrent edits; no web deployment.",
+      "current_evidence": [
+        "docs/testing/redundant-work-report.md"
+      ],
+      "local_evidence": "output/validation/redundant-work/（源/科学/原EXE及最终exe-7ac1fa4d5feb4baf8158d9d5c0e8e682、after-1792170674079）；output/validation/local-package-d01891aa/；output/packaging/PhoneticToolbox-303-20261017-003332-f437be/",
+      "verification": "冻结434前端/类型/契约/UI数据/build、EGG真实科学与parity21项通过，旧冻结代码两组数据/PNG字节一致，科学谱/CQ各2→1。源码PDF切换12→0、静态图线12/24→0、选区路径20→0；隐藏空闲/完成查询归零，运行任务继续。3.0.3 EXE497341875字节/SHA4b09fb99…，安装器499257209字节/SHAe58d5cef…，版本属性均3.0.3。15类最终成品门槛通过，原EXE PDF额外30→最终0，首页仅实际宽度一次，浅深同章重建0/焦点无框。168字体帧/288尺寸采样、长路径安装卸载及两种换版通过；像素负坐标误判保留后完整重跑，原生图按自有PID/标题PrintWindow补验通过，正常退出0。冻结后两份同期网页修改另跑当前442前端/类型与Chrome回归通过。主QA与所有本次探针scratch已清，误截图阻塞单列。",
+      "remaining": [
+        "3.0.3为本地交付，网页修复未部署，无公开发布/push；冻结后同期录音/AppShell网页修改未打入成品，当前源码另验通过",
+        "全仓架构5项既有声道资源摘要与2项同期网页资源未登记，另列",
+        "反馈机器持续挂起、实体设备/DPI、长时负载及跨平台未验",
+        "误截native-visible.png已排除证据，删除被自动审批以blocked by policy拒绝，仍保留本机；有效原生证据为同SHA补验native-owned.png"
+      ]
+    },
+    {
+      "id": "WEB-MANUAL-INTRODUCTION",
+      "title": "网页版前置入门说明与桌面共用正文",
+      "status": "verified",
+      "date": "2026-10-16",
+      "files": "manual/chapters/web-introduction.json、project.json、assets/software-only/web-introduction/、README.md；frontend/src/app/manual-project.ts、HelpPage.vue、AppShell.vue；frontend/src/manual/help-navigation.ts、README.md；frontend/tests/manual-platform.test.ts；scripts/verify_web_manual.py；docs/testing/web-manual.md；docs/project-status.md；CHANGELOG.md",
+      "note": "按用户要求在网页版最前面补充账号、文件与临时空间、容量和设置说明，其余正文与EXE版同源，全部18个模块章节保留。桌面入口仅隐藏网页版前置章及对应搜索结果，作者工程和生成流程仍为一份。保留同期网页与说明书阅读性能等改动。",
+      "verification_scope": "Windows本机源码、说明书结构及生成资源、前端检查与独立Chrome界面。生产部署和最终EXE不在本次范围。",
+      "current_evidence": [
+        "docs/testing/web-manual.md"
+      ],
+      "verification": "最终严格说明书21章/1059素材校验零错误零警告并完成资源生成；17项前端定向、typecheck/contracts/ui-data/build通过。Windows独立可见Chrome155的前置首章/全18模块/搜索/共享章/MFA章/重复帮助及6图解码6组检查通过，正式图与阅读器浅深已看，页面错误为空。6张图浅色Absolutely，AppliedDPI144/DPR1.5、页面100%，2561×1601仅裁右/底各1像素至2560×1600，未缩放。原20章源SHA保持，public/dist清单及21章字节一致，6图源/public/dist摘要一致。文档2170文件/132任务零错误。新增测试首轮作者空锚点格式和首次采图关闭按钮定位已修正。自有scratch已清理。",
+      "local_evidence": "output/validation/web-manual/；output/validation/web-manual/browser-e48ed30d486c40e4a03a571cce71bd78/captures.json；output/validation/web-manual/browser-3c1bee0b32d6447b9579a1e81e658d2d/",
+      "remaining": [
+        "生产部署、最终EXE/实际Qt与其他浏览器未验，本轮未公开部署或重打包。账号/邮件/真实数据库和到期清理沿用各自验收，不属于本文界面验证。"
+      ]
+    },
+    {
+      "id": "WEB-SETTINGS-RETENTION",
+      "title": "网页18模块设置随账号持久保存在服务器",
+      "status": "in_progress",
+      "date": "2026-10-17",
+      "files": "backend preferences.py、011_account_preferences.sql、auth/main/account_boundary；frontend account-preferences/browser/web-settings、ServerPage/AppShell/background、RecordingPage/VocalTractPage与M10 app.js；生成契约/字段表及M10当前资源摘要；前后端/真实PG与Chrome/Edge验证；说明书正文与6图、架构/ADR/规格/计划/状态/CHANGELOG和验收",
+      "note": "已纠正此前仅浏览器保存的不足实现，18模块与工作台偏好进入独立账号设置表，无工作区关联与TTL。登录先恢复，退出先确认保存，清理只回收内容。并发按实际改动合并，网络失败可见并重试。源码和隔离服务实现已验证，现有库迁移及实例更新等待对应明确授权。",
+      "verification": "442项前端、154项后端/协议/安全及17项设置定向通过；typecheck/contracts/UI-data与隔离构建通过。真实全新PostgreSQL覆盖APP+18模块、并发/隔离/请求边界及退出/到期清上传/结果留设置；独立可见Chrome/Edge及第三空配置验证同账号恢复、清本地数据重登、另一账号、连续嵌套编辑和断网重试，pageerror为空。说明书21章/1059素材严格校验零错误/警告，新正文与6图重新生成并在Chrome阅读器检查；自有进程及scratch均回收。证据docs/testing/web-settings-retention.md与server-browser-6fa98210bd18455ea13f559d2a04e036。 最终M10父页修订后17项设置定向、typecheck及独立构建通过并清理。文档2182文件/442来源/135任务零错误，36处既有归档失效链接；全仓架构4项既有摘要失配及2项未登记未通过，具体见报告，本任务资源摘要一致。",
+      "verification_scope": "Verified Windows source + newly owned PostgreSQL/real loopback HTTP + independent visible Chrome and Edge profiles; existing instance has not received migration 011 or updated application.",
+      "execution_evidence": [
+        "docs/testing/web-settings-retention.md"
+      ],
+      "remaining": [
+        "需对应授权后对现有私有内测库显式执行011并更新实例，再验实际服务；本轮未部署",
+        "实体第二设备、macOS/Safari、18模块逐控件/科研设备与M10完整原生设置往返未验"
+      ]
+    },
+    {
+      "id": "FEEDBACK-TRASH",
+      "title": "反馈回收站、30天恢复、服务能力兼容与未读提醒",
+      "status": "verified",
+      "date": "2026-10-16",
+      "files": "backend反馈服务/定向测试/契约快照；desktop反馈客户端、桥、管理宿主/测试；frontend收件箱、聊天组件、草稿存储及契约；tools/feedback-manager Android桥、构建、最终验收、说明；CHANGELOG/计划/状态/验收",
+      "note": "用户明确要求允许删除会话，并补充回收站查看、30天内恢复、超时永久清除。新增事件保存回收站状态，无schema迁移；排队邮件取消、用户新留言自动恢复、确认期间新消息拒绝旧删除。另按用户截图核实并修复旧标题只写不清导致的历史3条提醒残留。初轮仅本地实施/1.1.2包，未删除真实会话。 后续1.1.3修复客户端早于正式服务上线仍允许点击删除的问题，按健康能力停用未启用功能并精确映射404/405。已准备仅feedback.py的生产升级候选，剔除未上线web_ops依赖；井井随后明确授权，已备份并原子替换正式反馈实现一件、重启原服务，schema/私有配置保持，未在真实会话试删除或发测试消息。",
+      "verification_scope": "51 targeted Python feedback/device/desktop checks passed; final backend stale-reply guard reran 27 affected feedback checks. 401 frontend tests/typecheck/UI-data/contracts/full build passed. Final Windows 1.1.2 EXE visible default GPU outside checkout: source labels, text/image replies, drafts/theme, SSE, pairing/tray/single-instance, four sizes, cancel/trash preview/restore/30-day purge, live title count and historical event revalidation passed. Signed APK assembleRelease/lintRelease 0 errors/2 existing warnings; both packages credential/license audit and all 10 frozen web assets byte-identical. Production GET found 5 conversations/0 unread; current empty window traced to a separate web-launch isolated client; real 1.1.2 window opened and actual DOM verified 5 conversations/0 unread without selecting/changing records. Follow-up 1.1.3: 56 Python checks, 402 frontend tests/typecheck/contracts/UI-data/build; final Windows EXE old-health feature gating/no trash POST and capability-upgrade detection plus full existing matrix passed; signed APK release/lint 0 errors/2 existing warnings and all 10 frozen assets identical. Production read-only route 404 with 5 conversations/0 unread. Exact single-file production candidate passed 31 feedback/device checks and real Ubuntu existing-runtime isolated temporary-database tests; no production code/config/data changed. Authorized production single-file deployment completed: live SHA matches reviewed LF candidate; same systemd service active; original schema/5 identities/16 messages/2 image BLOBs/6 sessions and 5 conversations identical, private config and paired-device/mail-preference hashes unchanged. Public HTTPS health advertises trash/30 days; existing manager authentication and 5 conversations/0 unread verified, GET trash/restore=405 without POST. Formal web status/requests remain 404 and webOperations config absent; isolated test metrics must not be presented as production. Deployment closeout: documentation validation 2108 files/127 tasks, errors empty (historical snapshot links separate); UTF-8/JSON/deployment Python syntax and git diff --check passed.",
+      "current_evidence": [
+        "docs/plans/2026-10-11-feedback-manager.md",
+        "docs/testing/feedback-manager-report.md",
+        "tools/feedback-manager/使用说明.md"
+      ],
+      "remaining": [
+        "正式运维桥接未启用：status/requests 404且无webOperations配置；网页版仅隔离内测，不能接入测试数据充当正式数据",
+        "当前旧1.1.2需在设置正常退出后打开1.1.3，未结束不属于原启动PID的托盘实例",
+        "Android/HyperOS实机、长期后台与跨电脑未验；内部scratch已清理，工程外QA副本仍保留"
+      ],
+      "local_evidence": "output/validation/feedback-manager/windows-final-05d1d8e446164e088869035df85d54f5；output/validation/feedback-manager/production-capabilities-before.json；output/build-feedback-manager/production-upgrade-1.1.3；output/feedback-manager/1.1.3"
+    },
+    {
+      "id": "MANUAL-READER-PERFORMANCE",
+      "title": "使用说明同章定位、阅读位置保存与目录无框焦点",
+      "date": "2026-10-16",
+      "status": "verified",
+      "files": "frontend/src/manual/ManualReader.vue、manual.css、README.md；frontend/src/design/buttons.css；frontend/tests/fixtures/manual-navigation.ts；tests/e2e/manual-outline.cjs；scripts/verify_manual_performance_qt.py；docs/testing/manual-performance-report.md；docs/project-status.md；CHANGELOG.md",
+      "note": "用户授权修复只读排查确认的问题，并重申选中章节无框。保留同章正文/媒体；位置通知合并及生命周期补存；新工程修订仍使缓存失效，晚到请求不覆盖新目标。全局按钮焦点为目录保留例外，改用文字下划线。保留同期反馈和网页任务改动。",
+      "verification_scope": "Original Windows source/Chrome/visible Qt6.11 workbench evidence; follow-up final local 3.0.3 same-chapter document/media identity and no-box keyboard focus verified by P04-REDUNDANT-WORK-AUDIT. No production deployment, real user profile or physical devices.",
+      "current_evidence": [
+        "docs/testing/manual-performance-report.md"
+      ],
+      "local_evidence": "output/validation/manual-outline/navigation-1792149156467；output/validation/manual-performance/qt-98bbb9671b654a62b61573ca85f3f574",
+      "verification": "401项全量前端测试（含28定向）、typecheck/contracts/ui-data/build通过；Chrome18模块图标、7组交互、6组主题字号/宽窄布局、6种按钮样式材质键盘无框及5项导航/工程修订/取消/保存边界通过。Qt实际同章定位正文保留，资源13/20→0且本轮无long task，12次滚动写入12→2；浅深原生Enter键焦点无框、隐藏恢复/关闭补存、M17三体系浅深与12次标签切换通过。文档校验2105文件/126任务零错误、diff检查通过。最新两轮scratch deleted。",
+      "remaining": [
+        "2026-10-17截图已确认3.0.3，持续无响应未自然复现；后台资源读取修复及其源码验证见DESKTOP-UI-HANG-DIAGNOSIS，首次打开大章节仍整章渲染",
+        "最终3.0.3同章保留/无框焦点由跟进成品验收通过，长时间负载、实体DPI/设备与跨平台未验；未推送/公开发布",
+        "首次失败Qt测试的空scratch因进程引用保护暂留，报告与cleanup回执保留"
+      ]
+    },
+    {
+      "id": "FEEDBACK-PROVENANCE",
+      "title": "反馈收件箱显示来源、主程序版本和安装形式",
+      "status": "verified",
+      "date": "2026-10-16",
+      "files": "backend反馈服务/测试；desktop反馈客户端、桥、host/测试；frontend共用反馈类型、收件箱、聊天组件/测试；temporary-site/site.js；网页夹具/验收；tools/feedback-manager构建、最终验收与说明；CHANGELOG、计划、状态、验收",
+      "note": "本地实现及收件箱1.1.1交付。版本来自主程序更新器、安装形式来自既有安装标记；每条留言的client存入现有events JSON，同事务幂等保存。旧记录不猜测回填。HTTP头兼容旧服务；schema 2保持，未迁移现存库。保留同期网页上线等既有改动。 来源接收随后随FEEDBACK-TRASH已获授权部署正式反馈服务，既有数据摘要保持。",
+      "verification_scope": "Windows 11 current source: 38 targeted Python feedback/device/desktop checks; frontend full tests/typecheck/contracts/ui-data/build; actual isolated Chrome website message provenance, lost-receipt retry, identity and narrow layouts. Final Windows 1.1.1 EXE SHA be80fc4447596d3beba4702c81e77a99036a40fc8d6384569afd509537d33105 visible default GPU outside checkout: provenance, reply/images/draft/theme/SSE/pairing/tray/sizes passed. Signed APK build/lint 0 errors, 2 existing warnings; EXE/APK private-file/credential/license audit passed. No actual Android device attached.",
+      "current_evidence": [
+        "docs/testing/feedback-manager-report.md",
+        "docs/plans/2026-10-11-feedback-manager.md",
+        "tools/feedback-manager/使用说明.md"
+      ],
+      "remaining": [
+        "正式反馈接收已部署；官网来源头尚未部署，主程序最终EXE未重建，完整版本/安装形式随新版主程序启用",
+        "Android/HyperOS实际设备与长期后台未验；旧记录没有版本无法自动补齐；本次工程外测试副本清理被自动审批策略拒绝，保留blocked"
+      ],
+      "local_evidence": "output/validation/feedback-manager/windows-final-d2730f5a82484e24b70e978f69a434b4；output/validation/website/feedback-web-1792149000231；output/feedback-manager/1.1.1"
+    },
+    {
+      "id": "PAPER-SPECTROGRAM-AUDIO",
+      "title": "论文语谱图自动识别、可编辑重建与随文播放",
+      "status": "planned",
+      "date": "2026-10-16",
+      "files": [
+        "docs/plans/2026-10-16-paper-spectrogram-audio.md",
+        "docs/decisions/ADR-paper-spectrogram-audio.md",
+        "docs/decisions/ADR.md",
+        "docs/README.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json",
+        "CHANGELOG.md"
+      ],
+      "acceptance": "本地查找整篇论文中的语谱图，逐图核对四角、时间/频率、窗长及重建设置，批量生成并在图旁播放，支持位置调整、持久保存和继续编辑；基础流程以CPU离线和小模型随应用分发为目标。",
+      "verification_scope": "Planning documents only; current source and existing research records inspected, no new application implementation or model training.",
+      "verification": "详细规划与提议ADR已编写，包含六阶段、代码位置、数据契约、模型实验、持久保存、依赖失效、验收目标及工作量预算。Windows既有m14环境执行scripts/validate_docs.py零错误，7份本次文档UTF-8无BOM、台账JSON与定向差异检查通过；历史归档断链仍由原检查单列。功能、训练、Qt和最终成品未验。",
+      "current_evidence": [
+        "docs/plans/2026-10-16-paper-spectrogram-audio.md",
+        "docs/decisions/ADR-paper-spectrogram-audio.md"
+      ],
+      "milestones": [
+        {
+          "id": "PAPER-AUDIO-BASELINE",
+          "status": "planned",
+          "scope": "授权样本清单、标注规范、人工基准和版本化数据契约"
+        },
+        {
+          "id": "PAPER-AUDIO-MANUAL",
+          "status": "planned",
+          "scope": "手动框选、共用标定、现有重建、图旁播放及持久编辑恢复"
+        },
+        {
+          "id": "PAPER-AUDIO-DETECTION",
+          "status": "planned",
+          "scope": "独立研究项目训练检测器，应用接候选列表、误检排除和漏检补选"
+        },
+        {
+          "id": "PAPER-AUDIO-CALIBRATION",
+          "status": "planned",
+          "scope": "PDF文字/OCR、坐标轴拟合、证据来源、几何精裁与人工覆盖"
+        },
+        {
+          "id": "PAPER-AUDIO-BATCH",
+          "status": "planned",
+          "scope": "逐图失败隔离、取消重试、重启恢复与受影响结果重算"
+        },
+        {
+          "id": "PAPER-AUDIO-DISTRIBUTION",
+          "status": "planned",
+          "scope": "模型来源与CPU推理、500MB包体、普通电脑及最终EXE离线验收"
+        }
+      ],
+      "remaining": [
+        "后续实施启动及真实论文材料范围确定",
+        "全部应用实现、数据标注与模型训练",
+        "普通CPU性能、独立浏览器/Qt/最终EXE及跨平台验证",
+        "完整神经组件及公开分发另按对应授权和来源证据推进"
+      ],
+      "note": "本次仅请求详细规划。文档交付不代表功能实现；不更改现有算法默认值、数据库、训练进程或发布范围。"
+    },
+    {
       "id": "M09-NEURAL-PIPELINE",
       "title": "语谱图内置预测、参数编辑与CPU/GPU推理",
       "status": "verified",
@@ -91,7 +716,13 @@
         "output/validation/m09-vocoder-ui/chrome-1792072308320/report.json",
         "output/validation/source-citation-normalization/chrome-f46e870e82074a2b8dd472d1a02acfe7/report.json"
       ],
-      "reference_update": "2026-10-15：补齐五篇方法论文及三项模型来源，统一全局/模块致谢、说明书与BibTeX。3项来源测试、Chrome浅深1440/900四组55篇引用复制/语谱图来源归属、严格说明书校验/生成、ui-data/build和文档检查通过。已按用户要求以公共入口启动M09，实际窗口PID102664、非零句柄且响应正常，留供试用。未打包或发布。"
+      "reference_update": "2026-10-15：补齐五篇方法论文及三项模型来源，统一全局/模块致谢、说明书与BibTeX。3项来源测试、Chrome浅深1440/900四组55篇引用复制/语谱图来源归属、严格说明书校验/生成、ui-data/build和文档检查通过。已按用户要求以公共入口启动M09，实际窗口PID102664、非零句柄且响应正常，留供试用。未打包或发布。",
+      "momentum_candidate_20261016": {
+        "status": "verified",
+        "scope": "新任务0.99动量默认明确显示，历史legacy保留；论文沿用REF-FAST-GRIFFINLIM；源码与新本地EXE，无公开上传",
+        "verification": "49项M09源码及406项前端/严格手册生成通过；最终包内科学运行时确认random/pulse均0.99动量、legacy保持；最终EXE分发/安装卸载/长路径/缓存/两种换版/默认GPU168帧与原生截图通过，正常退出及QA清理成功；本机Windows范围，未公开上传EXE",
+        "evidence": "output/validation/local-package-72ed53fa/report.json"
+      }
     },
     {
       "id": "MEDIA-SPECTROGRAM-VIDEO",
@@ -1609,19 +2240,18 @@
     {
       "id": "GITHUB-SOURCE-SYNC",
       "title": "当前 v3 源码同步至 GitHub main",
-      "status": "verified",
-      "files": "243 reviewed source, tooling, resource and documentation files; see explicit local allowlist",
-      "verification_scope": "Current source publication review and focused Windows checks; origin/main only",
-      "note": "本轮源码同步完成，243文件。50项权重/官网专用媒体/本机启动器排除，1053项受限说明书素材不在清单。397前端与114 Python定向检查、类型/契约/UI数据/build和文档检查通过；架构5项既有声道摘要不匹配保留。",
+      "status": "in_progress",
+      "files": "Current reviewed v3 source, contracts, resources, tests, tooling and public documentation; explicit SHA allowlist in output/maintenance/github-sync-20261017/reviewed-files.json",
+      "verification_scope": "Current source publication review, focused Windows checks and public homepage metadata; origin/main only",
+      "note": "当前候选逐文件核查，README同步3.0.3与官网Mac r6。1059项受限说明书素材、权重/专用媒体/环境/原始材料/数据库/成品不进入清单；合成测试凭据逐项确认。479前端与215 Python定向通过、18条件跳过，类型/契约/UI数据/build、文档和架构通过。",
       "current_evidence": [
         "docs/testing/github-source-sync.md"
       ],
-      "local_evidence": "output/maintenance/github-sync-20261016/",
-      "remote_result": "2026-10-16 pushed origin/main through the current user proxy; git ls-remote matches the source commit.",
+      "local_evidence": "output/maintenance/github-sync-20261017/",
+      "remote_result": "Prepared; remote push and actual GitHub readback pending.",
       "remaining": [
-        "5项既有声道静态资源摘要不一致",
-        "模型权重公开分发未确认，新检出源码需另行提供获准资源",
-        "完整科学/Qt/实体设备/跨平台/最终EXE未重验"
+        "推送origin/main并核对远端树与实际GitHub主页",
+        "完整科研/Qt/实体设备/跨平台/最终EXE未重验，模型权重等资源按既有规则另行取得"
       ],
       "previous_sync": {
         "source_commit": "795c2dc",
@@ -1638,7 +2268,10 @@
           "main_before_homepage_update": "8cf5c5396fcab63cf431c69b2cb4712af6a12430"
         }
       },
-      "source_commit": "37b4d4842514e8abc90aa3181d2dc2a89bdd67f7"
+      "source_commit": null,
+      "date": "2026-10-17",
+      "previous_source_commit": "37b4d4842514e8abc90aa3181d2dc2a89bdd67f7",
+      "baseline_commit": "b596c3da"
     },
     {
       "id": "P15-ICP-FOOTER",
@@ -2075,14 +2708,14 @@
       "dependencies": "ENV 可先行；Linux/性能随模块开展；联合收口依赖各开放模块及相关来源门",
       "files": "tests/security/；tests/performance/；tests/e2e/；docs/testing/load-report.md",
       "status": "in_progress",
-      "note": "环境、三模块 Linux 任务与限定负载已验证；全模块、账号/PG/生产和完整跨平台证据尚未闭合。",
+      "note": "环境、三模块 Linux 任务与限定负载已验证；全模块、账号/PG/生产和完整跨平台证据尚未闭合。 首期按服务器独立计算收口，不依赖浏览器算法迁移或外接节点。",
       "steps": [
         "只读核实授权服务器或专用 WSL 环境，未经批准不修改系统/现存库",
         "抽取 Windows/Linux 受限进程适配与实际 capability",
         "Windows 后逐模块执行 Linux 数值/文件/字体/接口验证",
         "以10人交互为基线，按25/50/100阶梯和单计算槽混合负载找容量边界，非预先承载承诺",
         "记录系统可用资源、进程树峰值、等待/计算/传输时间及故障恢复",
-        "依实測定义服务器与远程节点准入，不因预算改变科学结果"
+        "依实测定义服务器准入，不因预算改变科学结果；外接节点仅未来启用时单独验证"
       ],
       "acceptance": "以实际机器确定并发/排队/输出/磁盘预算，轻API与交互p95等有测量；临时工作区、全局水位与公平性适用门通过",
       "execution_evidence": [],
@@ -2156,10 +2789,10 @@
     {
       "id": "P15",
       "title": "正式部署与分平台发布准备",
-      "dependencies": "WEB-REGISTRATION,P07-POLICY,WEB-ACCOUNT-BOUNDARIES,WEB-MFA-DESKTOP,WEB-CLIENT-COMPUTE,WEB-CAPACITY；实际开放操作的Linux/来源门",
+      "dependencies": "WEB-REGISTRATION,P07-POLICY,WEB-ACCOUNT-BOUNDARIES,WEB-MFA-DESKTOP,WEB-BROWSER-ADAPTER,WEB-SERVER-COMPUTE,WEB-CAPACITY,P11；实际开放操作的Linux/来源门",
       "files": "docs/deployment/production-runbook.md；docs/deployment/rollback.md；docs/releases/3.0.0.md",
       "status": "planned",
-      "note": "2026-10-16更新首期为开放自助注册、临时工作区30分钟、MFA桌面推理及浏览器优先。已有部署模板/历史证据保留，新增策略、最终HTTPS/PG/Linux/跨平台与容量未验。生产部署未执行。",
+      "note": "2026-10-16按最新要求改为首期服务器独立计算、共用网页工作台，浏览器算法迁移放到后续，Windows/Linux外接节点仅保留接口。自助注册、退出清理/断线30分钟和MFA网页禁用不变。已有模板与历史证据保留，新增策略和最终HTTPS/PG/Linux/跨平台/容量未验，未部署生产。",
       "steps": [
         "审查各平台验收状态，区分完成/未测/阻断，不夸大覆盖",
         "核实已购阿里云轻量 Ubuntu 服务器与域名，按 P11 实测制定容量/部署/回滚方案，不新增购买",
@@ -2172,7 +2805,15 @@
       "execution_evidence": [],
       "dependency_groups": {
         "web": [
-          "P11"
+          "WEB-REGISTRATION",
+          "P07-POLICY",
+          "WEB-ACCOUNT-BOUNDARIES",
+          "WEB-MFA-DESKTOP",
+          "WEB-BROWSER-ADAPTER",
+          "WEB-SERVER-COMPUTE",
+          "WEB-CAPACITY",
+          "P11",
+          "P15-STAGING"
         ],
         "windows": [
           "P12"
@@ -2187,7 +2828,8 @@
       "plan": "docs/plans/2026-10-16-web-launch.md",
       "remaining": [
         "注册/邮件恢复与工作区新策略实施",
-        "首期操作白名单、当前服务器容量和浏览器兼容实测",
+        "服务器任务链与共用网页文件/设备/宿主桥适配",
+        "首期操作白名单、当前单机容量和Windows/macOS浏览器实测",
         "目标数据库迁移、生产部署与恢复回退另行授权"
       ]
     },
@@ -3197,18 +3839,21 @@
       "current_evidence": [
         "docs/testing/linux-environment.md"
       ],
-      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates",
+      "remaining": [
+        "历史环境证据保持原范围；WEB-SERVER-COMPUTE阶段A需刷新当前目标服务器CPU/内存/磁盘/依赖和既有服务占用"
+      ]
     },
     {
       "id": "P07-POLICY",
       "title": "网页临时工作区、30分钟断线保留与存量兼容",
       "dependencies": "实施前审阅具体增量迁移",
-      "files": "backend storage/auth/jobs/worker cleanup；frontend account/platform；contracts；新版本迁移提案；当前阶段只更新相关文档",
-      "status": "planned",
-      "note": "原1 GB/3天代码与隔离验证作为历史基线保留。新需求已确认，工作区/标签租约/关闭及重启清理/任务fencing/新协议尚待实施；本轮未变更现存库。",
+      "files": "backend/migrations/009_web_workspaces.sql；ptb_api/workspaces/auth/projects/assets/storage/main；ptb_worker/files；frontend/account；contracts；web PG/browser tests；docs",
+      "status": "in_progress",
+      "note": "隔离PG实现并验证1800秒心跳、退出关闭、项目绑定、读写/发布检查、任务/批次取消、物理删除重试和启动恢复。旧策略兼容，新workspace_policy_version=1显式启用，现存库未迁移。",
       "plan": "docs/plans/2026-10-16-web-launch.md",
       "steps": [
-        "审阅工作区、标签租约、邮箱验证及资源绑定的增量schema/协议方案",
+        "008/009增量schema已在获准的新隔离测试库实施；目标现存库另行审阅",
         "实现主动退出立即封锁与清理；直接关页/断网/崩溃统一1800秒保留，刷新/多标签不提前删除",
         "原子封锁到期工作区、取消任务，清除文件/历史/派生缓存，物理删除失败重试且不提前释放账本",
         "验证旧3天/7天manifest与存量数据兼容、重启/迟到结果/备份恢复",
@@ -3217,14 +3862,17 @@
       "acceptance": "Q01–Q35适用项及Windows/macOS浏览器、真实PG/Linux证据分别通过；直接关页与断网同为1800秒，主动退出独立立即清理；文档不作为上线证据",
       "execution_evidence": [],
       "current_evidence": [
-        "docs/testing/p07-policy-closeout-report.md"
+        "docs/testing/p07-policy-closeout-report.md",
+        "docs/testing/web-launch-foundation.md"
       ],
-      "verification_scope": "Historical policy-v2 evidence retained; new ephemeral requirements documented only",
+      "verification_scope": "Windows source, fresh synthetic PostgreSQL and independent visible Chrome; no production, real SMTP, Linux/macOS or final EXE validation",
       "requirement_status": "confirmed",
       "remaining": [
-        "全部新工作区行为尚未实施",
-        "目标库迁移及生产验证待具体授权"
-      ]
+        "真实Linux/HTTPS全链路、负载下60秒清理目标、系统掉电和备份恢复",
+        "目标库增量迁移及生产验证待具体授权"
+      ],
+      "date": "2026-10-16",
+      "verification": "230项Python（含真实隔离PG）、400项前端、typecheck/生成契约/UI数据/build、独立可见Chrome九组通过，文档2081文件零错误。原始证据output/validation/web-launch。新测试scratch已清理，旧入口4组已停止测试库删除被自动审批拒绝，保留且删除0字节。"
     },
     {
       "id": "P11-LINUX",
@@ -3273,25 +3921,32 @@
     },
     {
       "id": "P06-REMOTE",
-      "title": "可信计算节点主动领取与回传",
+      "title": "可选Windows/Linux可信计算节点扩展",
       "dependencies": "P11-ENV,P07-POLICY；协同 P11-LINUX/P11-PERF",
-      "files": "backend/src/ptb_agent/（待新建）；worker 专用 API/认证（待新建）；contracts/；ptb_worker/store.py,policy.py,files.py",
+      "files": "packages/ptb_node/；backend/src/ptb_api/remote.py,remote_models.py；backend/src/ptb_worker/remote_scheduler.py,remote_files.py；contracts/remote-v1.json",
       "status": "in_progress",
-      "note": "可信节点控制、传输/租约组件已实现并有 WSL 合成验证；CLI 协议/binding 门关闭，未接通真实科学任务。",
-      "plan": "docs/plans/2026-09-26-server-coordination.md",
+      "note": "已有控制、传输/租约组件与WSL合成验证保留，CLI协议/binding门仍关闭，真实科学任务未接通。最新方向仅预留执行接口，Windows/Linux外接设备尚未确定；后续可选扩展，不阻塞首期服务器独立计算。",
+      "plan": "docs/plans/2026-10-16-web-launch.md",
       "steps": [
         "阅读对应任务卡并核对文件归属",
         "建立行为/失败证据",
         "最小实施与定向验证",
         "提交分平台报告与未测项"
       ],
-      "acceptance": "两节点竞争/旧租约/取消/断线/隔离/配额及实际科学产物对照",
+      "acceptance": "未来启用时分别验Windows/Linux节点能力、两节点竞争/旧租约/取消/断线/隔离/配额、工作区到期副本与实际科学产物；首期无节点不触发此门",
       "execution_evidence": [],
       "current_evidence": [
         "docs/testing/p06-node-report.md",
         "docs/testing/p06-remote-report.md"
       ],
-      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates"
+      "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates",
+      "phase": "post_launch_optional",
+      "launch_blocker": false,
+      "external_hardware_confirmed": false,
+      "remaining": [
+        "本轮仅保留契约设计，设备与平台运行时未确定",
+        "未来取得设备且决定启用后接通真实科学领取/回传，并补退出/1800秒副本清理、离线、取消与唯一发布"
+      ]
     },
     {
       "id": "P04-SELECTION-SPACE",
@@ -3388,27 +4043,29 @@
     {
       "id": "P15-STAGING",
       "title": "真实域名与服务器联合验收准备",
-      "dependencies": "WEB-REGISTRATION,P07-POLICY,WEB-ACCOUNT-BOUNDARIES,WEB-MFA-DESKTOP,WEB-CLIENT-COMPUTE,WEB-CAPACITY；实际开放操作的Linux/来源门",
+      "dependencies": "WEB-REGISTRATION,P07-POLICY,WEB-ACCOUNT-BOUNDARIES,WEB-MFA-DESKTOP,WEB-BROWSER-ADAPTER,WEB-SERVER-COMPUTE,WEB-CAPACITY,P11；实际开放操作的Linux/来源门",
       "files": "docs/deployment/production-runbook.md（待新建）；rollback.md（待新建）；正式服务入口与配置提案",
       "status": "in_progress",
-      "note": "2026-10-16更新首期为开放自助注册、临时工作区30分钟、MFA桌面推理及浏览器优先。已有部署模板/历史证据保留，新增策略、最终HTTPS/PG/Linux/跨平台与容量未验。生产部署未执行。",
+      "note": "2026-10-16按最新要求改为首期服务器独立计算、共用网页工作台，浏览器算法迁移放到后续，Windows/Linux外接节点仅保留接口。自助注册、退出清理/断线30分钟和MFA网页禁用不变。已有模板与历史证据保留，新增策略和最终HTTPS/PG/Linux/跨平台/容量未验，未部署生产。 2026-10-16宿主新增注册/临时工作区显式开关，源码配置门通过，未部署。",
       "plan": "docs/plans/2026-10-16-web-launch.md",
       "steps": [
-        "阅读对应任务卡并核对文件归属",
-        "建立行为/失败证据",
-        "最小实施与定向验证",
-        "提交分平台报告与未测项"
+        "刷新目标服务器资源和部署配置提案，冻结实际开放操作与预算",
+        "在隔离staging复验注册/邮件、工作区清理和服务器科学任务链",
+        "Windows/macOS浏览器验共用工作台与账号/文件/设备能力",
+        "演练重启、故障、容量和恢复回退，形成具体生产部署方案"
       ],
-      "acceptance": "目标主机+域名HTTPS+权限/上传下载+节点离线+恢复；生产写操作遵守授权",
+      "acceptance": "目标主机与域名HTTPS、真实账号/PG上传/计算/进度/取消/下载、退出及1800秒清理、恢复回退；无外接节点仍完整通过，生产写操作遵守授权",
       "execution_evidence": [],
       "current_evidence": [
         "docs/testing/p15-staging-report.md",
-        "docs/testing/desktop-web-readiness.md"
+        "docs/testing/desktop-web-readiness.md",
+        "docs/testing/web-launch-foundation.md"
       ],
       "verification_scope": "Bounded scope recorded in current_evidence; see docs/project-status.md for remaining gates",
       "remaining": [
         "注册/邮件恢复与工作区新策略实施",
-        "首期操作白名单、当前服务器容量和浏览器兼容实测",
+        "服务器任务链与共用网页文件/设备/宿主桥适配",
+        "首期操作白名单、当前单机容量和Windows/macOS浏览器实测",
         "目标数据库迁移、生产部署与恢复回退另行授权"
       ]
     },
@@ -3512,21 +4169,195 @@
       "title": "当前状态、文档与测试/打包产物整理",
       "status": "verified",
       "files": "scripts/prepare_test_cleanup.py、cleanup_test_temporaries.ps1、cleanup_workspace.ps1；tests/test_test_cleanup.py；docs/development/artifact-lifecycle.md、testing/test-temporaries-cleanup.md、README.md、project-status.md；本机忽略的 output/maintenance 与已核实测试对象",
-      "note": "限定当前 Windows 项目整理及清理机制。清单生成器仅接纳已审阅测试对象和 ready 且摘要一致的 scratch，实际执行复核保护父子路径、Git 跟踪/忽略及大小写别名、联接、文件/保留证据 SHA 与进程引用。27 个目标、45934 文件、16087103776 字节已删除，最新盘点约 58.32→42.26 GB 逻辑长度；已删路径均不存在，21 份必要证据及 R7 免安装/安装/更新三件套摘要不变。正式说明书、用户原件、实际环境/构建、同期发行验收与未确认混合数据保留。清单/回执原位维护，9 个此前策略拒删的小文件存在与 SHA 已复核并集中列出，无新增拒删项。此前文档/说明书副本及架构整理证据按各专项范围保留。",
-      "verification_scope": "Windows 已确认测试临时对象、清理脚本及相关文档；未重打或复跑完整 EXE/科研/GUI/设备/跨平台验证；未提交或上传",
-      "verification": "7 项新单元测试、6 项既有生命周期回归通过；6 项原生边界预检符合预期；2 份 PowerShell 脚本语法零错误，批量入口独立空清单预检通过。全仓库文档检查 1952 文件零错误，历史快照旧链接独立登记。实际删除回执与删除后路径/证据/成品摘要核验通过，最新目录盘点零读取错误，相关本机清单均被 Git 忽略。",
+      "note": "历史27项清理证据保留。本次明确授权后重新核实此前拒删对象，删除工具箱40项及训练旧缓存9项，共176909文件、122471111902逻辑字节；D/F可用空间增加9886416896/104430481408字节，合计106.47 GiB。保护权重/清单/日志/指标/当前成品；9条测试联接先非递归删除并确认目标保持。两处旧空缓存现已填充且正式实例运行，保留，4处旧目标已经不存在。",
+      "verification_scope": "Windows本机删除/文件保护/文档核验；未重打EXE或执行产品功能、GUI、设备及跨平台验收；未提交或上传",
+      "verification": "49项删除后不存在；旧数据集保留文件大小/mtime与选定权重/清单/结果及当前成品SHA不变；当前数据集124854条引用零缺失。Git边界与进程/联接核验通过。首次路径前缀表示差异预检中止，零删除，核实后完成；失败回执保留。文档检查2184文件/442来源/136任务零错误，历史失效链接单列，定向diff检查通过。",
       "current_evidence": [
         "docs/project-status.md",
         "docs/development/artifact-lifecycle.md",
         "docs/testing/test-temporaries-cleanup.md"
       ],
-      "local_evidence": "output/maintenance/README.md；test-temporaries-list.md、rules.json、plan.json、review.json、results.json、verification.json、audio-recipes.json（均 test-temporaries- 前缀）；test-temporaries-engine-check.json、wrapper-review.json、tests.txt、lifecycle-tests.txt、docs.json；inventory.json；manual-delete.md/.txt/.json；前次 cleanup-results.json、manual-cleanup-results.json 与 verification.json",
+      "local_evidence": "output/maintenance/README.md；test-temporaries-list.md、rules.json、plan.json、review.json、results.json、verification.json、audio-recipes.json（均 test-temporaries- 前缀）；test-temporaries-engine-check.json、wrapper-review.json、tests.txt、lifecycle-tests.txt、docs.json；inventory.json；manual-delete.md/.txt/.json；前次 cleanup-results.json、manual-cleanup-results.json 与 verification.json；retry-blocked-summary.json、retry-blocked-verification.json、retry-blocked-plan.json/results.json、retry-blocked-extras.json/results.json、retry-blocked-r3-users.json/results.json",
       "remaining": [
         "历史验证入口复用时接入 scratch 生命周期",
         "旧环境及混合验证目录逐项闭合依赖/原件/证据，尤其替换 m08-wiring 的硬编码输入后再退役",
         "同期发行验收与构建由对应任务核对收尾，本轮不接管清理",
-        "手动清单 9 个此前自动审批拒删测试文件，共 729447 字节，未绕过拒绝"
-      ]
+        "两处用户缓存现有内容且正式实例运行，保留；历史用途不明及非本次拒删范围继续逐项审阅"
+      ],
+      "date": "2026-10-17",
+      "public_web_versions_cleanup": {
+        "date": "2026-10-17",
+        "status": "verified",
+        "task": "WEB-PUBLIC-TEST",
+        "local_targets": 12,
+        "remote_archives": 7,
+        "local_free_increase": 2743341056,
+        "remote_free_increase": 153661440,
+        "evidence": "output/validation/web-public-20261017/cleanup-versions-summary.json"
+      },
+      "obsolete_versions_cleanup": {
+        "date": "2026-10-17",
+        "status": "verified",
+        "summary": {
+          "success": true,
+          "local": {
+            "success": true,
+            "targets": 21,
+            "files": 22313,
+            "logical_bytes": 7064231636,
+            "free_before": 22019940352,
+            "free_after": 29122334720,
+            "observed_free_increase": 7102394368,
+            "all_targets_absent": true,
+            "protected_files_sha256_unchanged": 8588,
+            "diagnostic_root_files_retained": 23
+          },
+          "remote": {
+            "targets": 50,
+            "files": 4010,
+            "old_windows_packages": 3,
+            "superseded_site_versions": 47,
+            "logical_bytes": 2527675318,
+            "observed_free_increase": 2423615488,
+            "all_targets_absent": true,
+            "protected_files_sha256_unchanged": 289,
+            "kept_site_versions": [
+              "r208f040f9772b085",
+              "r4840ddd775cdf7c2"
+            ],
+            "service_status_and_pids_unchanged": true,
+            "http": {
+              "/": 200,
+              "/app/": 200,
+              "/api/v1/auth/me": 401,
+              "/api/v1/_ops/status": 404,
+              "/releases/windows-x64/3.0.3/PhoneticToolbox-windows-x64.exe": 200,
+              "/releases/windows-x64/3.0.3/PhoneticToolbox-3.0.3-windows-x64-setup.exe": 200,
+              "/releases/windows-x64/3.0.3/PhoneticToolbox-3.0.3-windows-x64-portable.zip": 200
+            }
+          }
+        },
+        "evidence": "output/maintenance/obsolete-versions-summary.json；obsolete-versions-local-plan.json；obsolete-versions-local-results.json；obsolete-versions-local-verification.json；obsolete-versions-remote-plan.result.json；obsolete-versions-remote-remove.result.json",
+        "scope": "Reviewed retired build payloads and superseded MFA archives; Windows 3.0.2 server packages; old immutable site snapshots outside current/previous reference closure",
+        "remaining": [
+          "Shared scientific runtime/model components and latest build/stage retained",
+          "Private web candidate services/releases/transport archives with ongoing development or unclosed references retained",
+          "No GitHub historical Release, user recordings/settings/research data or v2 tree cleanup"
+        ],
+        "documentation_verification": "文档检查2244文件/446来源/152任务零错误，历史快照失效链接单列，定向diff检查通过。"
+      },
+      "private_test_retirement_cleanup": {
+        "date": "2026-10-17",
+        "status": "verified",
+        "summary": {
+          "success": true,
+          "local": {
+            "success": true,
+            "targets": 49,
+            "files": 25557,
+            "logical_bytes": 9152329417,
+            "observed_free_increase": 9212768256,
+            "all_targets_absent": true,
+            "screenshot_profiles_deleted": 9,
+            "protected_files_sha256_unchanged": 1778,
+            "final_other_protected_files_sha256_unchanged": 1774,
+            "controlled_receipt_updates": 4,
+            "initial_refusals_preserved_in_previous_attempt": true,
+            "retained_scientific_tooling": [
+              "browser-science",
+              "praat-build",
+              "praat_parselmouth-0.4.7",
+              "tools"
+            ]
+          },
+          "remote": {
+            "targets": 39,
+            "files": 26985,
+            "retired_releases": 13,
+            "transport_archives": 26,
+            "logical_bytes": 9035673938,
+            "observed_free_increase": 8632639488,
+            "all_targets_absent": true,
+            "protected_files_sha256_unchanged": 4167,
+            "kept_roots": [
+              "vocal-candidate-20261016-f251d214f69a",
+              "web-integration-20261016",
+              "web-private-20261017-c2",
+              "web-private-20261017-c3"
+            ],
+            "saved_evidence_files": 32,
+            "services_and_pids_unchanged": true,
+            "http": {
+              "/": 200,
+              "/app/": 200,
+              "/api/v1/auth/me": 401,
+              "/api/v1/_ops/status": 404
+            }
+          },
+          "documentation_verification": "文档检查2244文件/446来源/152任务零错误，历史快照断链单列；定向diff检查通过。"
+        },
+        "scope": "Only confirmed inactive test/browser/build copies, obsolete release trees and completed transfers; active and immediate fallback/runtime dependency closure protected",
+        "evidence": "output/maintenance/private-cleanup-summary.json；private-cleanup-local-plan.json；private-cleanup-local-results.json；private-cleanup-local-verification.json；private-cleanup-remote-inspect.result.json；private-cleanup-remote-plan.result.json；private-cleanup-remote-remove.result.json",
+        "remaining": [
+          "Current c3, fallback c2, scientific Python environment and vocal native component retained",
+          "Local scientific build tooling/upstream source and current comparison frontend retained",
+          "No product scientific, GUI/device or long-run acceptance rerun"
+        ],
+        "documentation_verification": "文档检查2244文件/446来源/152任务零错误，历史快照断链单列；定向diff检查通过。"
+      },
+      "large_redundancy_audit": {
+        "date": "2026-10-17",
+        "status": "verified",
+        "summary": {
+          "success": true,
+          "local": {
+            "success": true,
+            "targets": 62,
+            "files": 31268,
+            "logical_bytes": 12914521444,
+            "observed_free_increase": 12980211712,
+            "all_targets_absent": true,
+            "protected_files_sha256_unchanged": 3110,
+            "groups": {
+              "old_web_build": 4,
+              "owned_manager_qa": 18,
+              "old_packaging": 14,
+              "old_site_copy": 20,
+              "transport": 3,
+              "old_standalone_frontend": 3
+            },
+            "retained": [],
+            "main_pass_targets": 59,
+            "extra_standalone_frontend_targets": 3
+          },
+          "remote": {
+            "targets": 4,
+            "files": 4,
+            "logical_bytes": 1987172000,
+            "observed_free_increase": 1987186688,
+            "all_targets_absent": true,
+            "protected_files_sha256_unchanged": 29,
+            "services_and_pids_unchanged": true,
+            "http": {
+              "/": 200,
+              "/app/": 200,
+              "/api/v1/auth/me": 401,
+              "/api/v1/_ops/status": 404
+            }
+          }
+        },
+        "workspace_logical_bytes_after": 50076041626,
+        "inventory_errors": 0,
+        "documentation_verification": "文档检查2244文件/446来源/153任务零错误，历史快照断链单列；定向diff检查通过。",
+        "scope": "Reviewed project/owned-QA generated copies and old server 3.0.1 package backups; environments/models/research data excluded",
+        "evidence": "output/maintenance/large-audit-summary.json；large-audit-local-plan.json；large-audit-local-results.json；large-audit-extra-plan.json；large-audit-extra-results.json；large-audit-remote-remove.result.json；inventory.json；large-audit-space-final.json",
+        "remaining": [
+          "Scientific environments, model/source/component packages and current build caches retained",
+          "Mixed manual/capture/research verification directories and hard-coded fixture dependencies retained",
+          "Recent Windows 3.0.3 rollback backup and active/rollback service versions retained",
+          "No product scientific/GUI/device/long-run validation rerun"
+        ]
+      }
     },
     {
       "id": "MANUAL-OUTLINE-TYPOGRAPHY",
@@ -3603,32 +4434,35 @@
         "docs/testing/desktop-web-readiness.md"
       ],
       "remaining": [
-        "新工作区策略、自助注册/MFA禁用/浏览器适配未实施",
+        "新工作区策略、自助注册/MFA禁用、网页适配及服务器科学任务链待实施验证",
         "Windows/macOS浏览器与真实HTTPS/PG/Linux容量待验",
         "历史桌面/EXE范围未扩大"
       ],
       "current_review": {
         "date": "2026-10-16",
-        "scope": "Source-only 18-module capability inventory and updated requirements; no new browser or production validation",
+        "scope": "Source-only capability review and server-first plan update; browser algorithm migration and optional Windows/Linux nodes deferred. No new runtime or production validation.",
         "evidence": "docs/plans/2026-10-16-web-launch.md"
       }
     },
     {
       "id": "WEB-ACCOUNT-BOUNDARIES",
       "title": "网页登录数据归属与模块平台能力收口",
-      "status": "planned",
+      "status": "in_progress",
       "files": "frontend/src/modules/perception；frontend/src/modules/ipa-plus；frontend/src/app/AppShell.vue；frontend/src/account；frontend/src/platform",
-      "note": "保留已发现M15公共IndexedDB与M17固定草稿键缺口。新网页以owner/workspace/generation隔离，退出撤销旧回调、对象URL与内存引用；显式本地持久项目独立于服务器TTL，不自动上传/认领旧记录。",
+      "note": "M15数据库/会话锁和M17草稿按网页owner/project隔离，项目绑定工作区；桌面原键保持。关闭后LocalStore拒绝迟到重开，Chrome两项目/两个IndexedDB隔离通过。",
       "acceptance": "同浏览器 A/B 切换、多标签、会话到期、迟到响应、未保存保护、旧无主记录显式导入；页面实际能力与后端准入一致，保留桌面行为。",
       "current_evidence": [
-        "docs/testing/desktop-web-readiness.md"
+        "docs/testing/desktop-web-readiness.md",
+        "docs/testing/web-launch-foundation.md"
       ],
       "remaining": [
-        "本地文件适配与账号/工作区命名空间实施",
-        "多标签/跨设备/A退出B登录/迟到回调及到期后的浏览器恢复验证",
-        "不支持能力提示与后端准入一致，Mac/Windows分别验证"
+        "完整A/B账号切换、多标签竞态、设备权限与macOS组合",
+        "其余宿主专用接口逐模块适配或明确限制"
       ],
-      "plan": "docs/plans/2026-10-16-web-launch.md"
+      "plan": "docs/plans/2026-10-16-web-launch.md",
+      "date": "2026-10-16",
+      "verification_scope": "Windows source, fresh synthetic PostgreSQL and independent visible Chrome; no production, real SMTP, Linux/macOS or final EXE validation",
+      "verification": "230项Python（含真实隔离PG）、400项前端、typecheck/生成契约/UI数据/build、独立可见Chrome九组通过，文档2081文件零错误。原始证据output/validation/web-launch。新测试scratch已清理，旧入口4组已停止测试库删除被自动审批拒绝，保留且删除0字节。"
     },
     {
       "id": "M10-R15",
@@ -3690,11 +4524,13 @@
     {
       "id": "DOCS-GITHUB-HOMEPAGE",
       "title": "GitHub 图文主页与模块文档入口",
-      "status": "verified",
-      "files": "README.md; .gitignore; docs/assets/readme; docs/manual/ipa-content-authoring.md; docs/testing/github-readme.md; docs/testing/github-source-sync.md; third_party/source-registry.json; docs/project-status.md; docs/plans/task-ledger.json; two root CMD index exclusions",
-      "note": "六张细化示例和Release文案均已公开验证。按用户最新要求，README采用自然温和、稍正式的井韶子语气，34e1825已上传并通过实际GitHub1200/390检查；20张配图、既有链接和技术信息保留。",
-      "verification_scope": "Windows实际Qt源码工作台18模块、首页及设置的20张Absolutely/light未编辑截图；正式说明书原音频摘要不变；实际声学、LPC、EGG、F0与公开字表结果；截图字节摘要一致；论文实际全屏无本机路径；1200/390独立Chrome本地GFM渲染、21图解码、18模块链接、56本地引用、有效锚点且无横向溢出；文档验证1953文件、415来源、88任务零错误；七轮scratch退出后按归属清理成功。 GitHub实际公开页1200/390宽度HTTP 200，21图解码与4个导航锚点点击通过，无折叠块或README横向溢出；远端文件身份一致，其他539项工作文件摘要保持一致。 本轮6例：指定5453记录字表全部导入/3文件生成；12试次ABX保存；春江花月夜252汉字全文；实际变调合成与图片重建；普通PDF阅读完整首页；九轮scratch均已清。 README文风调整后既有66项链接目标保留；本地和实际GitHub1200/390宽度、21图解码、锚点点击及无横向溢出通过。",
-      "remaining": [],
+      "status": "in_progress",
+      "files": "README.md; docs/testing/github-readme.md; docs/testing/github-source-sync.md; CHANGELOG.md; docs/project-status.md; docs/plans/task-ledger.json",
+      "note": "README更新3.0.3、Windows下载和Mac Apple Silicon r6/14+安装入口、离线预测/动量GL及源码资源；20张Windows截图原件保留。",
+      "verification_scope": "Current README text and actual release/website metadata; independent local Chrome1200/390, 21 image decodes, 18 module links, 60 local targets and anchors with no overflow; no new screenshot collection or application/platform acceptance",
+      "remaining": [
+        "推送并检查实际GitHub宽窄布局、图片及导航"
+      ],
       "outside_verified_scope": [
         "未重新构建应用；截图不代表科研准确率、物理设备或跨平台验收"
       ],
@@ -3702,23 +4538,14 @@
         "docs/testing/github-readme.md",
         "docs/assets/readme/provenance.json",
         "docs/testing/github-source-sync.md",
-        "output/playwright/readme-absolutely/render-report.json",
-        "output/maintenance/readme-absolutely-update/reviewed-files.json",
-        "output/playwright/readme-absolutely/github-live-report.json",
-        "output/maintenance/readme-absolutely-update/published-tree.json"
+        "output/maintenance/github-sync-20261017/render-report.json",
+        "output/maintenance/github-sync-20261017/public-metadata.json"
       ],
       "remote_result": {
-        "homepage_commit": "4a5cd82e2fcc8537db02509f1e228e19b4828a42",
-        "changed_pngs": 6,
-        "total_pngs": 20,
-        "remote_blobs_verified": 15,
-        "live_widths": [
-          1200,
-          390
-        ],
-        "protected_working_files": 539,
-        "readme_voice_commit": "34e182512fc5ca233e81132cb6cdd767be3099df"
-      }
+        "status": "pending",
+        "baseline_homepage_checks": "Historical 2026-10-12 details remain in docs/testing/github-readme.md"
+      },
+      "date": "2026-10-17"
     },
     {
       "id": "GIT-V3-MAIN",
@@ -3735,6 +4562,147 @@
     },
     {
       "id": "WEBSITE-REDESIGN",
+      "platform_downloads": {
+        "status": "verified",
+        "date": "2026-10-17",
+        "scope": "官网按Windows/macOS区分下载入口与统计，网页版灰测提示；已按本轮明确授权公开部署re51d6c9a7c14facb",
+        "changes": "Windows两按钮在左，短竖线右侧macOS灰色disabled且无href；Windows版本/链接/体积保持。网页版改为灰测中，即将开放。下载图显示Windows原聚合曲线和所选数值，macOS灰色注明尚未上线，移除底部安装包次数；不改采集器与历史数据。",
+        "files": [
+          "scripts/build_website_expansion.py",
+          "scripts/verify_website.cjs",
+          "temporary-site/index.html",
+          "temporary-site/site.css",
+          "temporary-site/site.js",
+          "temporary-site/README.md",
+          "docs/testing/website-redesign.md",
+          "docs/project-status.md",
+          "CHANGELOG.md"
+        ],
+        "verification": "生成幂等与JS语法；独立Windows Chrome155七宽度1920/1440/1280/1024/800/390/320，Windows下载附件路由、禁用/分隔/按钮文字及图标边界、平台聚合/键盘/无JS通过。原不等间隔时间轴、刷新保持/跟随、空及单点历史通过；失败夹具测量和窄屏拥挤已修复，证据保留，scratch清理成功。最终图例对齐与清焦点截图复验通过，页面错误及失败请求均为空；生成器连续两次逐字节幂等，JS语法/定向diff通过，文档2206文件/445来源/142任务零错误，历史快照断链单列。 已按井井本轮上线授权发布re51d6c9a7c14facb，仅上传首页/CSS/JS三文件103594压缩字节，134项资产复用原字节。冻结候选及公网Chrome155七宽度、两Windows下载HEAD/附件路由、macOS与网页版禁用、平台图例/真实统计、滑块及无JS通过，页面错误/失败请求为空。137项公网资源大小/SHA与首页SHA回读一致，论文目录、Nginx配置及反馈服务PID保持，未重启服务。最终桌面/手机截图已查看，scratch回执deleted。未改正式/app/、统计采集器或安装包，未推送；实体手机及其他浏览器未验。 发布后文档检查2206文件/445来源/143任务零错误，历史快照断链单列，定向diff通过。",
+        "evidence": [
+          "output/validation/website/verify-1792219142516-49184/report.json",
+          "output/validation/website/verify-1792219065481-98728/report.json",
+          "docs/testing/website-redesign.md",
+          "output/validation/website/platform-publication-b9d2ccf926084b21950e6b6cb409c693/completion.json",
+          "output/validation/website/platform-publication-b9d2ccf926084b21950e6b6cb409c693/deployment.json",
+          "output/validation/website/verify-1792219578779-55164/report.json"
+        ],
+        "remaining": [
+          "实体手机和其他浏览器未验；未推送或重打EXE。",
+          "macOS尚未上线，图中不生成macOS历史；上线时需接入真实macOS统计。"
+        ],
+        "publication": {
+          "release": "re51d6c9a7c14facb",
+          "uploaded_files": 3,
+          "reused_assets": 134,
+          "upload_bytes": 103594,
+          "public_assets_verified": 137,
+          "source_and_live_unrelated_changes_preserved": true,
+          "configs_catalog_feedback_pid_unchanged": true
+        }
+      },
+      "basic_gl_baseline_lock": {
+        "status": "verified",
+        "scope": "2026-10-16 用户要求先核查/固定基础GL、补齐青木文案再上线，保留已确认的首屏图标与行内代码",
+        "changes": "线上六段与10月15日一致且为随机相位，旧momentum=.99；本轮关闭动量按10ms/60dB重算六段，其余25WAV保持。新增官网当地规则/锁定清单/构建导入发布强校验，补齐Aoki相位初始化说明。",
+        "files": [
+          "scripts/website_audio_baseline.py",
+          "scripts/verify_website_audio_baseline.py",
+          "scripts/build_website_expansion.py",
+          "scripts/build_website_spectrogram_audio.py",
+          "scripts/verify_website.cjs",
+          "deployment/temporary-site/publish.py",
+          "temporary-site/AGENTS.md",
+          "temporary-site/README.md",
+          "temporary-site/assets/spectrogram-examples/basic-gl-baseline.json",
+          "temporary-site/assets/spectrogram-examples/comparison.json",
+          "temporary-site/assets/audio/provenance.json",
+          "temporary-site/assets/audio/spectrum-before-*.wav"
+        ],
+        "verification": "公网历史SHA/参数核对，RTX5090基础GL生成，六段锁定/四类参数漂移及覆盖/重算拒绝通过。冻结NEXT十二段完整播放/摘要/八档导航五档内容、首屏七档DPR3及Release通过。 公网rb07973adb4ab0b99已切换，92资源全量大小/SHA、两下载HEAD与三项浏览器专项通过。",
+        "evidence": [
+          "output/validation/website/basic-gl-audit-20261016/before-audit.json",
+          "output/validation/website/verify-1792154903427-67656/report.json",
+          "output/validation/website/verify-1792155011889-68188/report.json",
+          "output/validation/website/verify-1792155011888-7620/report.json",
+          "output/validation/website/ribbon-basic-gl-final-20261016/https-readback.json",
+          "output/validation/website/verify-1792155175464-71204/report.json"
+        ],
+        "candidate_release": "rb07973adb4ab0b99",
+        "remaining": [
+          "其他浏览器与实体设备未验"
+        ]
+      },
+      "compact_feature_ribbon": {
+        "status": "verified",
+        "scope": "2026-10-16 Windows独立Chrome155本地及公网rb07973adb4ab0b99，已部署",
+        "changes": "功能带主体140→104px，首版反馈后再下移约40px；内置imagegen按主页材质生成六个立体图标，新增论文阅读/国际音标。1536×1024透明PNG原样复制、CSS分格、无滤镜/旋转。更新小记行内代码底色/细边框/等宽/不换行，长代码自身滚动。",
+        "files": [
+          "scripts/build_website_expansion.py",
+          "scripts/verify_website.cjs",
+          "temporary-site/index.html",
+          "temporary-site/site.css",
+          "CHANGELOG.md",
+          "docs/project-status.md",
+          "docs/testing/website-redesign.md",
+          "docs/plans/task-ledger.json",
+          "temporary-site/assets/feature-icons-3d-v1.png",
+          "temporary-site/assets/feature-icons.provenance.json"
+        ],
+        "verification": "WEBSITE_RIBBON_ONLY=1通过七档布局、四档桌面首屏完整功能带、源图HTTP字节/SHA、无滤镜/旋转、手机两列无横溢、真实0.1行内样式及无JS。DPR3报告确认高清截图；目视边缘清楚，DPR1放大预览的锯齿不作原图缺陷。errors/requests为空，scratch已清理；生成幂等通过。WEBSITE_RELEASE_ONLY=1验证原文/摘要/三个版本鼠标键盘切换、下载路由及四档排版通过。",
+        "evidence": "output/validation/website/verify-1792153914793-35252/report.json",
+        "remaining": [
+          "其他浏览器与实体手机未验"
+        ],
+        "release_evidence": "output/validation/website/verify-1792153929723-61768/report.json",
+        "public_evidence": "output/validation/website/verify-1792155175483-67884/report.json"
+      },
+      "references_and_tutorial_episode": {
+        "status": "verified",
+        "date": "2026-10-16",
+        "scope": "Windows本地静态站与最终官网HTTPS、独立Chrome155；2026-10-16用户明确授权并完成部署",
+        "changes": "保持导航和原教程按钮字号；四张方法卡片直接展示，完整406条桌面公开引用按学术引用55条、软件与代码库引用351条分成两组，各自默认折叠并独立搜索/按模块筛选/复制，删除用户指定提示句。语谱图教程第一集接BV1RuJm6gEWE，第二集待更新，单播放器双向切换及外链同步。",
+        "files": [
+          "scripts/build_website_expansion.py",
+          "scripts/verify_website.cjs",
+          "temporary-site/index.html",
+          "temporary-site/site.css",
+          "temporary-site/site.js",
+          "temporary-site/README.md",
+          "docs/testing/website-redesign.md",
+          "docs/project-status.md",
+          "docs/plans/task-ledger.json",
+          "CHANGELOG.md"
+        ],
+        "verification": "406条标题/引用/链接/模块/署名/许可逐项匹配桌面来源；原生折叠与键盘、搜索/模块/空结果/复制、四档引用布局及无JS通过。八档导航与五档教程、第一集/禁用第二集、切换与重复选择、全屏及无JS链接通过。实际新视频播放至1.95秒readyState4。页面错误与失败请求为空，scratch已删除，HTML幂等/JS语法/UI数据/定向差异通过；文档2078文件零错误，10文件UTF-8无BOM及台账JSON有效。 最终公网引用/教程同项检查通过，新视频实际播放1.91秒readyState4；89项HTTPS大小/SHA一致、两下载HEAD200/大小一致，论文目录及Nginx配置摘要保持、反馈/nginx运行正常。 分类拆分：本地及最终公网两组归属/完整正文逐项比对、独立过滤/空结果恢复/复制、折叠键盘、四宽度/无JS通过，页面错误/失败请求为空，scratch已清理；生成幂等、JS语法与差异检查通过。",
+        "evidence": [
+          "docs/testing/website-redesign.md",
+          "output/validation/website/verify-1792129423562-38124/report.json",
+          "output/validation/website/verify-1792129377468/report.json",
+          "output/validation/website/verify-1792129969578-20524/report.json",
+          "output/validation/website/verify-1792130022882-25796/report.json"
+        ],
+        "remaining": [
+          "第二集尚无视频链接",
+          "完整视频、其他浏览器与实体手机未验"
+        ],
+        "deployment": {
+          "status": "verified",
+          "authorized": "2026-10-16 井井明确要求分类拆分后直接上线",
+          "release": "rb2b3aaafb66dd89a",
+          "changed": [
+            "index.html",
+            "site.js"
+          ],
+          "assets_unchanged": 87,
+          "receipt": "output/validation/website/website-610cb244b31d433d811680562ff7a3c7/deployment.json",
+          "evidence": "output/validation/website/references-split-release-20261016/https-readback.json",
+          "public_browser_evidence": [
+            "output/validation/website/verify-1792130022882-25796/report.json"
+          ],
+          "previous_release": "r8402429e5829aa4c"
+        }
+      },
       "trained_80_audio": {
         "status": "verified",
         "date": "2026-10-15",
@@ -3961,6 +4929,219 @@
             "未修改或重建主应用"
           ]
         }
+      },
+      "matched_three_way": {
+        "status": "verified",
+        "scope": "2026-10-16用户确认同参数三路、网页上线、本地EXE供检查；不上传EXE/push/发GitHub Release",
+        "plan": "2026-10-16-gl-three-way-comparison.md",
+        "changes": "基础GL原字节保持；新增0.99动量GL及同一PCM接第6000步NAFNet/BigVGAN12段，固定10ms/60dB/随机相位/256次，无Aoki/预测。动量论文与文案、应用说明书同步，删除首页日期。 井井后续明确将对照改为32次，新增18段32i并保留原43段；行内代码基线恢复且字号92%，以iterations32条目为当前设置。",
+        "verification": "旧31WAV保持、18段锁定及反向拒绝，GPU生成；49项M09/406项前端及手册严格校验、冻结Chrome三专项通过；本地496333905字节EXE构建封装审计通过，实际运行验收中。 官网原子切换、105资源全量摘要与公网NEXT/RIBBON/Methods/Release通过；实际展开core及包内科学Python确认random/pulse均momentum0.99且legacy保持。 最终EXE工程外分发与11计算、中文长路径安装卸载/活动租约/资料保持、缓存进程与设置、两种实际换版重启、默认GPU可见168帧绘制通过。 本轮verify_local_package整体成功，所有阶段退出码0，168帧像素/原生截图目视完整，正常退出0；12个QA目标清理成功，最终EXE大小/SHA再核对一致。",
+        "files": [
+          "scripts/build_website_gl_comparison.py",
+          "scripts/website_audio_baseline.py",
+          "scripts/verify_website_audio_baseline.py",
+          "scripts/build_website_expansion.py",
+          "scripts/verify_website.cjs",
+          "deployment/temporary-site/publish.py",
+          "temporary-site/AGENTS.md",
+          "temporary-site/site.css",
+          "temporary-site/index.html",
+          "temporary-site/assets/spectrogram-examples/comparison.json",
+          "temporary-site/assets/spectrogram-examples/three-way-baseline.json",
+          "temporary-site/assets/audio/provenance.json",
+          "packages/phonetic_core/src/phonetic_core/spec2wav/adaptive.py",
+          "backend/src/ptb_worker/m09_pipeline_child.py",
+          "frontend/src/modules/spectrogram-to-audio/Spec2WavPage.vue",
+          "frontend/src/modules/spectrogram-to-audio/README.md",
+          "frontend/src/generated/sources.json",
+          "manual/chapters/m09.json",
+          "third_party/source-registry.json",
+          "CHANGELOG.md",
+          "docs/project-status.md",
+          "docs/testing/website-redesign.md",
+          "docs/plans/task-ledger.json"
+        ],
+        "candidate_release": "r0618fc40d775c978",
+        "exe_sha256": "f281ad61e374820edfb2336b44fab46a3d94acc6ed4387763b9c2eaa9478448d",
+        "evidence": [
+          "output/validation/website/gl-three-way-final-20261016/scope.json",
+          "output/validation/website/verify-1792156407887-51660/report.json",
+          "output/packaging/PhoneticToolbox-302-20261016-210632-d8764d/report.json",
+          "output/validation/local-package-72ed53fa/report.json",
+          "output/validation/website/gl-three-way-final-20261016/https-readback.json",
+          "output/validation/website/verify-1792156631455-70296/report.json",
+          "output/validation/local-package-72ed53fa/m09-final-runtime.json",
+          "output/validation/website/gl-author-pdf-link-20261016/https-readback.json",
+          "output/validation/website/verify-1792157323503-77976/report.json",
+          "output/validation/local-package-72ed53fa/cleanup.json",
+          "output/validation/local-package-72ed53fa/cache-footprint.json"
+        ],
+        "remaining": [
+          "其他电脑/实体设备和其他浏览器未验，不影响当前Windows本机与Chrome官网验收范围"
+        ],
+        "website_status": "verified",
+        "published_release": "r7fe41882f19f5f84",
+        "auditory_difference_check": {
+          "scope": "256次版本当时的公网六对原始/动量GL，文件摘要与PCM核对，无主观质量评分；当前32次另见iterations32",
+          "result": "六对均不同；256次同幅值谱误差相对降低1.03%～6.20%，不等同于听感提升百分比，未更换音频",
+          "evidence": "output/validation/website/gl-three-way-final-20261016/audible-difference-audit.json"
+        },
+        "paper_link_repair": {
+          "status": "verified",
+          "scope": "IEEE入口418；网页动量卡片主链接换作者PDF，DOI书目及应用已有作者链接保留；仅首页变化，音频不变",
+          "candidate_release": "re75d238c3d229817",
+          "verification": "PDF HTTP200/416417字节/签名摘要与标题作者核对，冻结NEXT18段播放与五宽度/无JS通过 原子切换、105资源全量回读及公网NEXT新作者链接/18段/五档/无JS通过。",
+          "evidence": "output/validation/website/gl-author-pdf-link-20261016/author-pdf-check.json",
+          "published_release": "re75d238c3d229817"
+        },
+        "local_exe": "dist/PhoneticToolbox-302-20261016-210632-d8764d/PhoneticToolbox-windows-x64.exe",
+        "approved_copy": {
+          "status": "verified",
+          "scope": "按用户提供的最终三段逐字替换官网upcoming-copy，0.99保留行内样式，仅首页正文；音频/样式/下载/EXE保持",
+          "candidate_release": "rad6fb1720de5ff49",
+          "verification": "三段逐字/生成幂等/105资源范围核对、冻结Chrome八档导航/五档内容/18段完整播放/无JS通过。已原子切换，105资源大小SHA/两下载HEAD/公网正文逐字及服务配置目录保持通过，公网NEXT八档导航/五档内容/18段完整播放/无JS通过，errors/requests为空，scratch清理成功。",
+          "evidence": [
+            "output/validation/website/approved-copy-20261016/copy-check.json",
+            "output/validation/website/approved-copy-20261016/scope.json",
+            "output/validation/website/approved-copy-20261016/https-readback.json",
+            "output/validation/website/verify-1792158093070-76872/report.json",
+            "output/validation/website/verify-1792158240436-66500/report.json"
+          ],
+          "published_release": "rad6fb1720de5ff49"
+        },
+        "iterations32": {
+          "status": "verified",
+          "scope": "井井明确将256改为32次并修正行内代码基线；官网上线，不重建EXE",
+          "changes": "显式一次性迁移，新增18段32i，43段旧WAV保持；同10ms/60dB/随机相位/网格/模型，第三路读取新动量PCM。两锁/元数据/说明同步32。upcoming-section code取消不需要的overflow:auto，基线−5.15625px变0。 井井随后要求字号稍大，code从正文82%增至92%，基线仍为0。",
+          "files": [
+            "scripts/build_website_gl_comparison.py",
+            "scripts/website_audio_baseline.py",
+            "scripts/verify_website_audio_baseline.py",
+            "scripts/build_website_expansion.py",
+            "scripts/verify_website.cjs",
+            "temporary-site/AGENTS.md",
+            "temporary-site/README.md",
+            "temporary-site/site.css",
+            "temporary-site/index.html",
+            "temporary-site/assets/audio/provenance.json",
+            "temporary-site/assets/spectrogram-examples/basic-gl-baseline.json",
+            "temporary-site/assets/spectrogram-examples/three-way-baseline.json",
+            "temporary-site/assets/spectrogram-examples/comparison.json",
+            "docs/plans/2026-10-16-gl-three-way-comparison.md",
+            "CHANGELOG.md",
+            "docs/project-status.md",
+            "docs/testing/website-redesign.md",
+            "docs/plans/task-ledger.json"
+          ],
+          "verification": "RTX5090生成18段，43旧音频保持，32参数/同PCM/锁定及漂移拒绝通过。最终冻结NEXT八档导航/五布局/18段完整播放/无JS通过。原子发布r7fe41882f19f5f84后123资源大小SHA、两下载HEAD与服务配置保持通过；公网CODE三宽度92%字号/基线0/DPR3通过。公网NEXT正常JS模式18段SHA/完整播放、互斥、五布局/目录/字体通过，随后无JS冷加载超过30秒，29个资源请求未完成。另一次键盘跳转超时原因未确认，未放宽超时/断言。文档及定向差异检查通过。verified限定为已列通过范围，公网完整回归未通过。",
+          "candidate_release": "r7fe41882f19f5f84",
+          "evidence": [
+            "output/validation/website/iterations32-inline-code-20261016/scope.json",
+            "output/validation/website/iterations32-inline-code-20261016/generation-checks.json",
+            "output/validation/website/verify-1792159614936-50140/report.json",
+            "output/validation/website/verify-1792160019199-77612/report.json",
+            "output/validation/website/iterations32-inline-code-final-20261016/scope.json",
+            "output/validation/website/verify-1792160205510-63440/report.json",
+            "output/validation/website/verify-1792160205510-72012/report.json",
+            "output/validation/website/iterations32-inline-code-final-20261016/https-readback.json",
+            "output/validation/website/verify-1792160459360-81956/report.json",
+            "output/validation/website/verify-1792160459364-65404/report.json",
+            "output/validation/website/verify-1792160689647-79604/report.json",
+            "output/validation/website/verify-1792160925797-54756/report.json"
+          ],
+          "published_release": "r7fe41882f19f5f84",
+          "cleanup": {
+            "status": "blocked_by_automatic_review",
+            "target": "D:\\PhoneticToolbox\\PhoneticToolbox_v3\\output\\validation\\website\\iterations32-inline-code-20261016\\site",
+            "reason": "blocked by policy; no more specific reason returned",
+            "command_launched": false,
+            "deleted_files": 0,
+            "retained": true,
+            "scope": "Superseded owned validation copy; current source/frozen site/model/user data untouched"
+          },
+          "remaining": [
+            "公网无JavaScript全页冷加载30秒门槛未通过，正常JS与本地冻结无JS已通过；失败现场与29个待请求保留。",
+            "旧验证副本清理遭自动审批拒绝，未启动命令或删除文件，保留目录。"
+          ]
+        }
+      },
+      "four_way": {
+        "status": "verified",
+        "scope": "井井最新四路/四按钮无波形/32次，恢复参数模型，官网上线；不重建EXE",
+        "plan": "2026-10-16-gl-three-way-comparison.md",
+        "candidate_release": "rfe3d62f0a65cb82c",
+        "changes": "原始与固定动量GL沿用；stream-v5预测窗宽/dB、整数ms，新增预测动量GL及同PCM接NAFNet/BigVGAN共12段，61旧WAV保持。前文/四阶段流程/设置与四按钮同步，92%行内代码保持。",
+        "files": [
+          "scripts/build_website_four_comparison.py",
+          "scripts/build_website_gl_comparison.py",
+          "scripts/website_audio_baseline.py",
+          "scripts/verify_website_audio_baseline.py",
+          "scripts/build_website_expansion.py",
+          "scripts/verify_website.cjs",
+          "deployment/temporary-site/publish.py",
+          "temporary-site/AGENTS.md",
+          "temporary-site/README.md",
+          "temporary-site/site.css",
+          "temporary-site/index.html",
+          "temporary-site/assets/audio/provenance.json",
+          "temporary-site/assets/spectrogram-examples/comparison.json",
+          "temporary-site/assets/spectrogram-examples/four-way-baseline.json",
+          "docs/plans/2026-10-16-gl-three-way-comparison.md",
+          "docs/project-status.md",
+          "docs/testing/website-redesign.md",
+          "CHANGELOG.md",
+          "docs/plans/task-ledger.json"
+        ],
+        "verification": "RTX5090生成12段，61旧WAV保持。预测值与历史同权重核对、原始/固定动量GL原字节、预测参数/32次/随机相位/模型/同PCM/覆盖与重复生成拒绝、生成幂等通过。Windows Chrome155源码/最终冻结/公网各24段完整播放/HTTP SHA、四按钮无波形、八导航五内容布局、字体/互斥/键盘/无JS通过。冻结CODE三宽度92%基线0/DPR3通过。136资源公网大小SHA、两下载HEAD、CSP与配置/目录/反馈PID/timer/nginx保持通过。文档及定向差异检查通过。",
+        "evidence": [
+          "output/validation/website/four-route-32i-20261016/scope.json",
+          "output/validation/website/four-route-32i-20261016/generation-checks.json",
+          "output/validation/website/verify-1792163266802-42580/report.json",
+          "output/validation/website/verify-1792163391832-40912/report.json",
+          "output/validation/website/verify-1792163391832-56836/report.json",
+          "output/validation/website/verify-1792163565824-80376/report.json",
+          "output/validation/website/four-route-32i-20261016/https-readback.json",
+          "output/validation/website/website-0a24e38bb6d640ad9215c5ccba62c384/deployment.json"
+        ],
+        "remaining": [
+          "其他浏览器与实体手机未验；本轮未更改或重建桌面EXE。"
+        ],
+        "published_release": "rfe3d62f0a65cb82c"
+      },
+      "stats_time_axis": {
+        "status": "verified",
+        "scope": "修复官网统计滑条/曲线错位与四色，同步上线；不改统计采集器/计数/历史/音频",
+        "candidate_release": "r0d81c4bf11f66d66",
+        "files": [
+          "temporary-site/site.js",
+          "temporary-site/site.css",
+          "temporary-site/index.html",
+          "temporary-site/README.md",
+          "scripts/verify_website.cjs",
+          "CHANGELOG.md",
+          "docs/project-status.md",
+          "docs/testing/website-redesign.md",
+          "docs/plans/task-ledger.json"
+        ],
+        "changes": "timestamp范围吸附最近真实记录，所选点/值/aria同步，相邻记录键盘，刷新保留历史/跟随最新，空单点处理；紫/珊瑚橙/绿/暖黄四卡曲线点滑条同色。",
+        "verification": "旧索引轴错位复现；冻结不等间隔/243平台/时间与点/相邻记录键盘/刷新/空单点、完整统计四色七宽度/四时段/Star下降/失败恢复/无JS通过。公网同项统计通过，实际22:25的243次记录滑条与点和真实时间公式一致，errors/requests为空。136资源完整大小SHA、两下载HEAD、配置/目录/反馈PID/统计timer/nginx保持通过，计数/历史/音频不变。JS语法/生成幂等/文档与差异检查通过。",
+        "evidence": [
+          "output/validation/website/stats-time-axis-20261016/diagnosis.json",
+          "output/validation/website/stats-time-axis-20261016/scope.json",
+          "output/validation/website/verify-1792163872221-69796/report.json",
+          "output/validation/website/verify-1792163903730-74668/report.json",
+          "output/validation/website/verify-1792163924080-81568/report.json",
+          "output/validation/website/verify-1792164162963-27560/report.json",
+          "output/validation/website/verify-1792164162984-84888/report.json",
+          "output/validation/website/verify-1792164333189-80812/report.json",
+          "output/validation/website/stats-time-axis-20261016/https-readback.json",
+          "output/validation/website/website-511c560c33e5450183e09ffaeb46e930/deployment.json",
+          "output/validation/website/verify-1792163903730-74668/cleanup.json"
+        ],
+        "remaining": [
+          "Windows Chrome155已验；其他浏览器及实体手机未验。"
+        ],
+        "published_release": "r0d81c4bf11f66d66"
       }
     },
     {
@@ -3990,18 +5171,20 @@
     },
     {
       "id": "WEB-LAUNCH-PLAN",
-      "title": "网页版上线需求与浏览器计算分工",
+      "title": "网页版首期服务器计算需求与上线计划",
       "status": "verified",
-      "verification_scope": "Requirements, source inspection and documentation only; implementation planned",
-      "note": "用户确认开放自助注册，主动退出立即启动清理，直接关页/断网/崩溃统一最后心跳后30分钟。完成18模块源码能力清单、临时工作区/MFA/跨平台与负载验收方案，更新原任务目标。",
+      "verification_scope": "Requirements and plan verified; implementation tracked separately with local foundation evidence",
+      "note": "已按用户最新确认重写为服务器独立计算，复用现有Vue工作台和科学核心，浏览器科学计算后续优化，Windows/Linux外接电脑仅预留接口、不依赖设备可用性。自助注册、主动退出清理、最后心跳后30分钟与MFA网页禁用不变。18模块接入、阶段任务、单机容量与验收条件同步更新。 已确定www.phonetictoolbox.com/app/与沿用反馈邮箱，模板已备，生产未启用。",
       "remaining": [
-        "按阶段实施并获得实际平台证据"
+        "基础实施已进入隔离验收；继续最终服务器/账号/PG及Windows/macOS浏览器验收",
+        "外接计算节点与新增浏览器科学算法仅在后续有条件时独立推进"
       ],
       "date": "2026-10-16",
       "plan": "docs/plans/2026-10-16-web-launch.md",
       "current_evidence": [
         "docs/plans/2026-10-16-web-launch.md",
-        "docs/decisions/ADR-web-ephemeral-client-first.md"
+        "docs/decisions/ADR-web-ephemeral-client-first.md",
+        "docs/testing/web-launch-foundation.md"
       ],
       "files": [
         "docs/requirements.md",
@@ -4024,72 +5207,335 @@
         "docs/specs/remote-compute.md",
         "CHANGELOG.md"
       ],
-      "verification": "18模块源码接点与官方浏览器生命周期文档复核；requirements/spec/plan/ADR/当前状态/旧计划替代说明/台账一致性及UTF-8/链接/JSON检查；未执行新网页功能。"
+      "verification": "本次validate_docs检查2067文件、441来源、119任务，零错误；退出/1800秒需求R09、ADR会话段、账号规格清理段、policy_target及P07-POLICY与修改前一致。首期依赖已移除浏览器算法迁移/外接节点，UTF-8无BOM、JSON与git diff --check通过。未执行新网页功能或生产验证，历史归档36处失效链接维持原记录。"
     },
     {
       "id": "WEB-REGISTRATION",
       "title": "开放注册、邮箱验证和密码恢复",
-      "status": "planned",
+      "status": "in_progress",
       "dependencies": "P05",
-      "files": "backend auth/users/mail challenge；frontend account；增量迁移提案",
+      "files": "backend/migrations/008_web_identity.sql；ptb_api/registration*.py/auth.py/server.py；frontend/account/PublicAccountForm.vue/public-account.ts/ServerPage.vue；tests",
       "acceptance": "邮箱验证后准入；一次性令牌/过期/重放/账号枚举/注册找回限流与真实邮件验证；重置撤销旧会话",
       "date": "2026-10-16",
       "plan": "docs/plans/2026-10-16-web-launch.md",
       "current_evidence": [
         "docs/plans/2026-10-16-web-launch.md",
-        "docs/decisions/ADR-web-ephemeral-client-first.md"
+        "docs/decisions/ADR-web-ephemeral-client-first.md",
+        "docs/testing/web-launch-foundation.md"
       ],
-      "verification_scope": "Planned only; no new implementation or runtime validation"
+      "verification_scope": "Windows source, fresh synthetic PostgreSQL and independent visible Chrome; no production, real SMTP, Linux/macOS or final EXE validation",
+      "note": "注册、验证邮箱、重发与找回密码已接通；复用账号/Argon2id/CSRF/SMTP，令牌只存摘要、一次性、过期、邮箱/IP限流、统一响应及重置撤销旧会话。真实隔离PG与合成邮件通过。",
+      "remaining": [
+        "真实SMTP投递、域名配置与滥用负载",
+        "目标库008增量迁移与上线部署"
+      ],
+      "verification": "230项Python（含真实隔离PG）、400项前端、typecheck/生成契约/UI数据/build、独立可见Chrome九组通过，文档2081文件零错误。原始证据output/validation/web-launch。新测试scratch已清理，旧入口4组已停止测试库删除被自动审批拒绝，保留且删除0字节。"
     },
     {
       "id": "WEB-MFA-DESKTOP",
       "title": "MFA网页限制与桌面引导",
-      "status": "planned",
+      "status": "in_progress",
       "files": "frontend MFA page/platform；backend capabilities/job admission",
       "acceptance": "网页清楚说明服务器性能限制，下载链接准确标明平台；直调/恢复/预览等所有MFA推理请求后端拒绝，不影响本地TextGrid编辑",
       "date": "2026-10-16",
       "plan": "docs/plans/2026-10-16-web-launch.md",
       "current_evidence": [
         "docs/plans/2026-10-16-web-launch.md",
-        "docs/decisions/ADR-web-ephemeral-client-first.md"
+        "docs/decisions/ADR-web-ephemeral-client-first.md",
+        "docs/testing/web-launch-foundation.md"
       ],
-      "verification_scope": "Planned only; no new implementation or runtime validation"
+      "verification_scope": "Current source and isolated Linux UI via independent Windows Chrome; prior synthetic PostgreSQL checks retain their scope. No public deployment, macOS or final EXE validation.",
+      "note": "共用工作台server上下文使用MFA桌面引导，Windows下载标记明确；后端catalog不读本地注册表，提交/重试拒绝网页MFA。源码与Chrome通过，本地MFA入口和测试保持。 页面现保留完整桌面设置，presentation-only跳过宿主请求，以当前主题半透明inert遮罩提示服务器性能限制与Windows入口。",
+      "remaining": [
+        "最终部署环境直调拒绝与真实桌面下载链接验收",
+        "macOS浏览器文案与真实桌面EXE复验"
+      ],
+      "verification": "230项Python（含真实隔离PG）、400项前端、typecheck/生成契约/UI数据/build、独立可见Chrome九组通过，文档2081文件零错误。原始证据output/validation/web-launch。新测试scratch已清理，旧入口4组已停止测试库删除被自动审批拒绝，保留且删除0字节。 本轮最终私有Linux服务器页面在独立Chrome浅深/窄屏检查真实设置与遮罩，pageerror为空；后端限制未改。"
+    },
+    {
+      "status": "in_progress",
+      "date": "2026-10-16",
+      "plan": "docs/plans/2026-10-16-web-launch.md",
+      "current_evidence": [
+        "docs/plans/2026-10-16-web-launch.md",
+        "docs/decisions/ADR-web-ephemeral-client-first.md",
+        "docs/testing/web-launch-foundation.md"
+      ],
+      "verification_scope": "Current private Ubuntu PG/science/loopback TLS feedback; Windows Chrome/Edge and native FeedbackClient through SSH; source Qt window responsive. No public deployment, final EXE/APK rebuild, real email delivery or physical-device acceptance.",
+      "phase": "first_release",
+      "launch_blocker": true,
+      "id": "WEB-SERVER-COMPUTE",
+      "title": "首期服务器科学任务接入与操作准入",
+      "dependencies": "P11-ENV,P07-POLICY,WEB-REGISTRATION；与P11逐操作科学验证协同",
+      "files": "backend API/worker/资源策略；contracts；既有phonetic_core执行器；定向任务与Linux验证；scripts/prepare_web_isolated.py、Start-Web-Isolated-Test.ps1、verify_web_isolated.cjs、verify_web_isolated_bridge.py；tools/feedback-manager/launch_isolated.py；scripts/build_m10_linux.py、build_m10_geometry.py的prepare-only、verify_m10_native_candidate.py",
+      "note": "首批LPC/EGG/参数估计已在Windows真实浏览器和目标Ubuntu隔离HTTP/PG/原生计算验证，科学资源硬限与失败回收通过。无公网部署，未接其他原生操作或外接计算节点。 M10网页未接入vocalRequest，现有原生资源为Windows DLL，Linux原生候选已编译并通过a/i/u几何及音频smoke，网页任务尚未接入；提示已修正，不能宣称网页生理合成可用。",
+      "steps": [
+        "刷新实际服务器资源/依赖/服务占用及操作能力清单",
+        "接入真实账号/PG受管输入、幂等提交、有界队列和受限执行器",
+        "校验进度、取消、超时、输出配额、工作区及执行代数，拒绝迟到发布",
+        "先复验三个已有Linux证据的候选，再逐操作冻结科学/资源白名单"
+      ],
+      "acceptance": "无外接节点时，上传/排队/计算/进度/取消/下载/断线恢复/到期清理完整通过；Linux科学与文件语义一致，硬资源预算有效，未验能力拒绝准入",
+      "remaining": [
+        "生产HTTPS与真实邮件投递",
+        "首期其他操作适配及科学准入",
+        "Linux集中交互延迟门优化、macOS实际设备",
+        "M10 Linux VTL完整科学/资源验证、每用户原生状态隔离、HTTP预览/任务/取消/导出后再开放；合理浮点容差按方法评估"
+      ],
+      "verification": "Linux三类科学/故障/进程回收与真实HTTP注册-上传-计算-下载-退出通过；10档80/80成功p95=1.464s，25档157/200成功、43次503、p95=5.010s，停止增压，50/100未执行。100工作区回收p95=0.083s，最终jobs/assets为0。Windows真实PG额度5项、工作区/队列8项、桌面兼容28项及Chrome/Edge两项真实计算/审批回显通过。400前端、typecheck、独立构建及Chrome/Edge各11组账号页面检查通过。证据docs/testing/web-launch-foundation.md及output/validation/web-launch/linux-server。 本轮私有实例已重新启动：Linux科学三类/故障与HTTP流程通过；10档80/80、p95 2.084秒超过2秒门，停止25/50/100；100工作区回收p95 0.0868秒。Chrome/Edge各6组真实上传/LPC/下载/恢复/退出、原生TLS桥审批改1.5GB/7天/中文留言及实时指标通过。17桌面、41后台、类型和独立构建通过。源码Qt隔离窗口响应正常；原服务文件/配置摘要及PID保持。SMTP认证通过但未验真实收件；当前状态优先于上述历史停止/清理与旧Linux记录。",
+      "native_candidate": {
+        "date": "2026-10-16",
+        "status": "in_progress",
+        "verification": "Dedicated Linux candidate, CPUQuota 50%/MemoryMax 640MB; compiled API/analysis/geometry .so, finite nonzero 9600-sample a/i/u output. Compared canonical Windows Engine: tube area/length max abs diff 0, returned resonances equal, RMS relative differences approximately 0.107/0.246/0.062 percent. Smoke only, source of audio differences not isolated. No API installation or production change.",
+        "evidence": "output/validation/web-launch/native-candidate/linux-build-report.json; linux-smoke.json; windows-smoke.json; comparison.json",
+        "remaining": "HTTP/account isolation/operation admission, complete scientific and export validation; do not require byte-identical cross-platform PCM"
+      }
+    },
+    {
+      "status": "in_progress",
+      "date": "2026-10-16",
+      "plan": "docs/plans/2026-10-16-web-launch.md",
+      "current_evidence": [
+        "docs/plans/2026-10-16-web-launch.md",
+        "docs/decisions/ADR-web-ephemeral-client-first.md",
+        "docs/testing/web-launch-foundation.md"
+      ],
+      "verification_scope": "Windows source/fresh PostgreSQL and independent Chrome/Edge; authorized isolated Ubuntu HTTP/PG/native science with systemd limits; no public deployment, real SMTP, macOS or final EXE acceptance.",
+      "phase": "first_release",
+      "launch_blocker": true,
+      "id": "WEB-BROWSER-ADAPTER",
+      "title": "共用网页工作台与文件设备适配",
+      "dependencies": "WEB-ACCOUNT-BOUNDARIES,WEB-REGISTRATION；与WEB-SERVER-COMPUTE并行接入",
+      "files": "frontend AppShell/account/platform/各模块；同源文件与任务接口；浏览器定向验证；ResearchUpload.vue、research-upload.test.ts、verify_web_module_uploads.cjs；WebModuleSeal.vue、browser-recording.ts、recording-wav.ts、recording-capture.js、共用RecordingPage/RecordingWave、MFA/M18/M10展示与verify_web_recording.cjs",
+      "note": "共用AppShell与科研语义。登录直达默认项目工作台，文件与空间为可选紧凑弹窗；上传/分组折叠，文件/任务分开显示，保持草稿保护。桌面入口保持。 本轮九模块直接上传接入共享ResearchUpload；文件管理复用工作台配色并突出入口，加载状态不再显示旧保留期限。 录音复用桌面同一页面接入浏览器设备，停止后上传、失败重试/下载；未接通的编辑、MFA/M18/M10保留真实设置并用当前主题半透明遮罩禁用。",
+      "steps": [
+        "补注册登录、排队/进度、连接与临时保存状态",
+        "受管上传/下载替代桌面目录访问，录音/摄像头/PDF宿主桥逐项适配或明确限制",
+        "保持已有客户端材料不自动上传、科学实验计时与账号切换隔离",
+        "对实际开放操作分别完成Windows Chrome/Edge与macOS Safari/Chrome验证"
+      ],
+      "acceptance": "网页布局与本地版保持一致，真实账号文件/任务操作可用，刷新/多标签/重连不误删；浏览器权限与能力提示准确，MFA禁用，未实现的桌面能力不误报可用",
+      "remaining": [
+        "macOS Safari/Chrome实际设备",
+        "真实HTTPS/邮件",
+        "录音已接通操作和剩余验收详见WEB-M16-COMPLETE，PDF及其他原生操作由对应任务继续",
+        "本轮新增模块上传的Edge/macOS实际流程复验，上传完成不替代各模块科学准入",
+        "网页录音实体设备/长采集/Edge/Safari；已保存历史和任务可刷新恢复，未上传片段仍需下载，工作区期限不变"
+      ],
+      "verification": "Linux三类科学/故障/进程回收与真实HTTP注册-上传-计算-下载-退出通过；10档80/80成功p95=1.464s，25档157/200成功、43次503、p95=5.010s，停止增压，50/100未执行。100工作区回收p95=0.083s，最终jobs/assets为0。Windows真实PG额度5项、工作区/队列8项、桌面兼容28项及Chrome/Edge两项真实计算/审批回显通过。400前端、typecheck、独立构建及Chrome/Edge各11组账号页面检查通过。证据docs/testing/web-launch-foundation.md及output/validation/web-launch/linux-server。 最新直接进入/文件管理/状态展示合成HTTP检查Chrome/Edge各12组通过；默认项目并发及汇总真实PG证据见验收。 最终取消修复后真实Chrome/Edge各8组流程（含科学结果回读、断线恢复、退出数据库/额度清空）及托管入口共3项通过，scratch清理deleted；400前端、类型/构建/生成数据及文档2091文件/122任务零错误，详见direct-entry-final系列日志。 本轮404前端、typecheck/独立build通过；独立Chrome真实Linux九模块上传ready、1000默认、M10提示、深浅/390px加载完成后文件列表与容量通过，无pageerror/横向溢出。只更新私有实例静态UI，人工账号/生产/EXE保持。",
+      "recording_and_seals": {
+        "date": "2026-10-16",
+        "status": "in_progress",
+        "implemented": "同一RecordingPage的采集/Praat、服务器剪辑/版本/降噪/增益、工程导入/完整备份、恢复片段与格式/范围导出，详见WEB-M16-COMPLETE；其他模块按各自能力控制",
+        "verification": "431 frontend tests, 65 desktop/core, 11 backend, typecheck/contracts/UI-data/build; isolated Linux/Chrome science and file flows, 119 private static hashes with production/config/PID guards. Immediate theme switch background verified.",
+        "evidence": "docs/testing/web-launch-foundation.md#2026-10-16-完整录音迁移与主题切换",
+        "remaining": "Export/quota/foreign-owner matrix, physical devices, Edge/Safari/macOS, long capture, Qt/final EXE; final recovery evidence in WEB-M16-COMPLETE"
+      }
     },
     {
       "id": "WEB-CLIENT-COMPUTE",
-      "title": "浏览器优先处理与逐模块适配",
+      "title": "浏览器科学计算后续优化",
       "status": "planned",
       "files": "frontend platform/Workers/各模块及必要WASM适配；科学基准",
-      "acceptance": "先复用音标转换/音标表/感知实验，再本地文件/标注/绘图/录音；按18模块清单实测网络与结果语义，Win/Mac浏览器分别验证，WebGPU非硬依赖",
+      "acceptance": "每个新增本地计算操作独立验证科学语义、内存/性能、依赖及模型许可、Windows/macOS浏览器和实际网络行为；WebGPU非硬依赖，不静默上传回退",
       "date": "2026-10-16",
       "plan": "docs/plans/2026-10-16-web-launch.md",
       "current_evidence": [
         "docs/plans/2026-10-16-web-launch.md",
         "docs/decisions/ADR-web-ephemeral-client-first.md"
       ],
-      "verification_scope": "Planned only; no new implementation or runtime validation"
+      "verification_scope": "Planned only; no new implementation or runtime validation",
+      "phase": "post_launch",
+      "launch_blocker": false,
+      "note": "从首期依赖移出；上线后按真实耗时、上传量和服务器负载评估收益。已有客户端播放/编辑/绘图/音标/感知实验由网页适配任务保持，无需先移植新科学算法。",
+      "dependencies": "首期上线后的真实负载与逐操作收益评估"
     },
     {
       "id": "WEB-CAPACITY",
       "title": "公开网页版容量与资源准入",
-      "status": "planned",
-      "dependencies": "P11,P07-POLICY,WEB-REGISTRATION；首期操作白名单",
-      "files": "tests/performance；staging admission；部署预算提案",
-      "acceptance": "当前目标资源盘点、10/25/50/100阶梯边界、单槽混合负载、内存/全局磁盘/队列/上传限制、取消清理与公平性；据实决定准入，未测人数不承诺",
+      "status": "in_progress",
+      "dependencies": "WEB-SERVER-COMPUTE,P11,P07-POLICY,WEB-REGISTRATION；首期操作白名单",
+      "files": "backend/migrations/010_web_capacity.sql；web_capacity/workspaces/storage；frontend/src/account/WebCapacityStatus.vue；scripts/web_capacity_admin.py；scripts/verify_web_linux.py；真实PG与浏览器测试；backend/src/ptb_api/web_status.py；backend/tests/test_web_status.py；scripts/prepare_web_isolated.py、Start-Web-Isolated-Test.ps1、verify_web_isolated.cjs、verify_web_isolated_bridge.py；tools/feedback-manager/launch_isolated.py",
+      "acceptance": "刷新目标资源与既有服务占用，10/25/50/100交互阶梯找边界，合计单科学/预览/重导出槽与有界队列、每账号公平性、内存/磁盘/上传限制；心跳/取消/清理在大任务下仍可用；据实决定准入，未测人数不承诺",
       "date": "2026-10-16",
       "plan": "docs/plans/2026-10-16-web-launch.md",
       "current_evidence": [
         "docs/plans/2026-10-16-web-launch.md",
-        "docs/decisions/ADR-web-ephemeral-client-first.md"
+        "docs/decisions/ADR-web-ephemeral-client-first.md",
+        "docs/testing/web-launch-foundation.md"
       ],
-      "verification_scope": "Planned only; no new implementation or runtime validation"
+      "verification_scope": "Current private Ubuntu PG/science/loopback TLS feedback; Windows Chrome/Edge and native FeedbackClient through SSH; source Qt window responsive. No public deployment, final EXE/APK rebuild, real email delivery or physical-device acceptance.",
+      "note": "默认1GB/单输入100MB及限时留言审批保持；真实Linux实时CPU/内存/磁盘/在线/任务监控和浏览器回显已接通。普通8/24、恢复4/16，科学单槽；10档请求全部成功但p95超2秒门，不能据此宣称支持10人同时集中操作。 扩容申请总额度输入默认按用户要求改为1000 MB。",
+      "remaining": [
+        "Linux10档p95 2.084秒超门，需继续优化后确定公开准入",
+        "生产HTTPS/邮件及macOS验收",
+        "管理端生产桥接与实际Android验收"
+      ],
+      "verification": "Linux三类科学/故障/进程回收与真实HTTP注册-上传-计算-下载-退出通过；10档80/80成功p95=1.464s，25档157/200成功、43次503、p95=5.010s，停止增压，50/100未执行。100工作区回收p95=0.083s，最终jobs/assets为0。Windows真实PG额度5项、工作区/队列8项、桌面兼容28项及Chrome/Edge两项真实计算/审批回显通过。400前端、typecheck、独立构建及Chrome/Edge各11组账号页面检查通过。证据docs/testing/web-launch-foundation.md及output/validation/web-launch/linux-server。 测试API/worker/PG停止并清理合成库/资产/科学WAV，保留独立运行时；本机5件传输归档700156476字节与服务器4件传输归档已清。文档2089文件/122任务零错误，36处既有归档失效链接保持。 最新状态/容量/默认项目9项通过，CPU/内存为Linux格式夹具验证，指标页为Windows浏览器验证；新监控代码未在真实Linux或公网部署验证。 最终取消修复后真实Chrome/Edge各8组流程（含科学结果回读、断线恢复、退出数据库/额度清空）及托管入口共3项通过，scratch清理deleted；400前端、类型/构建/生成数据及文档2091文件/122任务零错误，详见direct-entry-final系列日志。 最新有界HTTP普通8/24、恢复4/16、1.5秒等待检查通过；Windows10档80/80 p95 1.608秒，25档182/200及18次429 p95 2.745秒，停止50/100。 本轮私有实例已重新启动：Linux科学三类/故障与HTTP流程通过；10档80/80、p95 2.084秒超过2秒门，停止25/50/100；100工作区回收p95 0.0868秒。Chrome/Edge各6组真实上传/LPC/下载/恢复/退出、原生TLS桥审批改1.5GB/7天/中文留言及实时指标通过。17桌面、41后台、类型和独立构建通过。源码Qt隔离窗口响应正常；原服务文件/配置摘要及PID保持。SMTP认证通过但未验真实收件；当前状态优先于上述历史停止/清理与旧Linux记录。 本轮Chrome真实隔离实例确认输入默认1000，实际扩容仍要求高于当前额度；只改UI默认值，未改常规额度或审批事务。"
+    },
+    {
+      "id": "WEB-ADMIN-OPS",
+      "title": "管理EXE/APK扩容审批与服务器监控",
+      "status": "in_progress",
+      "date": "2026-10-16",
+      "dependencies": "WEB-SERVER-COMPUTE,WEB-CAPACITY；按用户要求后实施",
+      "files": "tools/feedback-manager；frontend/src/feedback-admin；管理员API；scripts/prepare_web_isolated.py、Start-Web-Isolated-Test.ps1、verify_web_isolated.cjs、verify_web_isolated_bridge.py；tools/feedback-manager/launch_isolated.py",
+      "acceptance": "审批可改额度与当日/7/30天期限、留言回复；CPU/内存/磁盘/在线/队列监控，现有反馈/通知兼容，管理员权限与最终EXE/APK分别验证",
+      "plan": "docs/plans/2026-10-11-feedback-manager.md",
+      "remaining": [
+        "生产管理员桥接与真实SMTP/HTTPS",
+        "当前APK实际Android/HyperOS与长期后台",
+        "本轮独立源码窗口文案修复和私有连接已验，最终发行包另按其冻结字节验收"
+      ],
+      "verification": "29项反馈/审批、9项桌面、13项真实回环/工作区通过；400前端、类型/契约通过。最终Windows1.1.0可见默认GPU文字/图片/草稿/配对/托盘/审批/浅深四尺寸通过。新APK release/lint及两包内容审计通过。 本轮私有实例已重新启动：Linux科学三类/故障与HTTP流程通过；10档80/80、p95 2.084秒超过2秒门，停止25/50/100；100工作区回收p95 0.0868秒。Chrome/Edge各6组真实上传/LPC/下载/恢复/退出、原生TLS桥审批改1.5GB/7天/中文留言及实时指标通过。17桌面、41后台、类型和独立构建通过。源码Qt隔离窗口响应正常；原服务文件/配置摘要及PID保持。SMTP认证通过但未验真实收件；当前状态优先于上述历史停止/清理与旧Linux记录。 收尾文档2106文件/127任务零错误，语法/diff通过；2件本轮合成WAV共299996字节清理，活动实例/配置/报告/日志保留。 服务器5件本轮科学WAV共155522字节按确切路径/UID清理，远端摘要回执保留，活动assets/库未清。",
+      "verification_scope": "Current private Ubuntu PG/science/loopback TLS feedback; Windows Chrome/Edge and native FeedbackClient through SSH; source Qt window responsive. No public deployment, final EXE/APK rebuild, real email delivery or physical-device acceptance.",
+      "current_evidence": [
+        "docs/testing/web-launch-foundation.md",
+        "docs/testing/feedback-manager-report.md"
+      ]
+    },
+    {
+      "id": "SERVER-OLD-PACKAGES-20261016",
+      "title": "服务器旧安装包清理保留当前版本",
+      "status": "verified",
+      "date": "2026-10-16",
+      "files": "服务器明确清单9件；docs/testing/web-launch-foundation.md",
+      "acceptance": "核对当前下载清单和打开文件后只删除旧成品与孤立上传残片，保留当前3.0.2三件成品和组件，记录实际释放量及既有服务状态",
+      "verification": "9件删除，statvfs可用空间增加4,474,179,584字节；当前三件SHA保持，官网/当前下载HTTP200，Nginx和反馈PID未变。",
+      "remaining": [
+        "后续环境安装会改变即时可用容量，不把清理后40.18 GB作为长期数值"
+      ]
+    },
+    {
+      "id": "WEB-ACCOUNT-DESIGN",
+      "title": "网页登录直达工作台与紧凑文件空间",
+      "status": "verified",
+      "date": "2026-10-16",
+      "files": "frontend/src/account/ServerPage.vue,account-web.css,WebCapacityStatus.vue,ProjectStorage.vue；AppShell.vue；ModalDialog.vue；tests/e2e/web-launch.cjs；scripts/verify_web_launch_ui.py；backend/src/ptb_api/workspaces.py,web_status.py；ProjectJobs.vue；LpcSpectrumPage.vue；真实PG/计算流程测试",
+      "verification_scope": "Windows built Vue UI, independent Chrome/Edge synthetic HTTP and fresh-PG default-project tests; real science regression recorded in docs/testing/web-launch-foundation.md; no new Linux/public deployment, Qt/final EXE/macOS acceptance",
+      "acceptance": "登录直接使用默认项目进入工作台；文件与空间为可选紧凑入口，下载/删除/余量前置，上传与项目分组折叠；默认项目并发幂等，保留草稿保护和退出/30分钟策略",
+      "verification": "400前端测试、typecheck/build通过；独立Chrome/Edge各12组检查、零页面错误，1440/390宽度及800px视口、浅深文件管理可一屏显示；状态/容量/默认项目9项检查通过。真实整链路发现并修复LPC提交后刷新列表期间取消遗漏，最终回归结果见docs/testing/web-launch-foundation.md。 最终取消修复后真实Chrome/Edge各8组流程（含科学结果回读、断线恢复、退出数据库/额度清空）及托管入口共3项通过，scratch清理deleted；400前端、类型/构建/生成数据及文档2091文件/122任务零错误，详见direct-entry-final系列日志。",
+      "current_evidence": [
+        "docs/testing/web-launch-foundation.md"
+      ],
+      "remaining": [
+        "原瞬时长条提示的具体触发未能确认；已检查并修正应用内保存/删除/容量弹窗",
+        "macOS与最终EXE不在本轮UI验收范围"
+      ],
+      "note": "保留用户认可的临时文件管理功能，登录不再经过项目页。默认项目为内部归组，管理窗口打开/关闭不销毁工作台。"
+    },
+    {
+      "id": "WEBSITE-PUBLIC-HISTORY",
+      "title": "官网四项公开统计和历史曲线",
+      "status": "verified",
+      "date": "2026-10-16",
+      "files": "scripts/build_website_expansion.py；temporary-site/index.html/site.js/site.css；deployment/temporary-site统计；workspaces计数头；scripts/verify_website.cjs；scripts/inventory_web_stats_copies.py",
+      "acceptance": "页面浏览、下载、网页使用与Star四图，真实历史、采样时间、缺失与刷新、公开匿名聚合",
+      "verification": "5项统计检查、Chrome155四宽度/四时段/滑块/刷新/错误/无JS通过；370点真实服务器日志，Star33为当前采样。 只读清单脚本运行：六件281171字节，五件保护文件摘要可读，未删除；清单在output/maintenance/web-stats-copy-review.json/.md。 本轮5项统计测试通过；最终公网89资源GET大小/SHA、两下载HEAD、反馈健康与PID、论文目录/站点配置摘要、nginx -t与timer通过。独立Chrome七宽度1920/1440/1280/1024/800/390/320检查大入口禁用且同宽、桌面菜单同排、无横向溢出、四图/时段/滑块/刷新/异常保留/无JS，通过且无页面错误和请求失败。375个真实历史点为最后采样，timer时间持续前进；公网/app/404，未开放工作台。",
+      "verification_scope": "Public statistics collector and static homepage only; isolated web workbench remains private. Existing site content/assets and feedback service preserved.",
+      "current_evidence": [
+        "docs/testing/website-redesign.md"
+      ],
+      "remaining": [
+        "真实公开工作区使用增长随工作台后续正式开放再验证，目前公开0次且不混入私有测试",
+        "旧统计日志副本只列清单，等待用户核验后处理"
+      ],
+      "note": "按本轮明确授权单独发布官网统计、匿名计数采集器和禁用入口，工作台继续私有内测。用户追加主页排版后，大号网页版入口置于双下载上方；桌面导航1024px起单排，手机换行。最终r196722d9534d7cb4。",
+      "macos_downloads": {
+        "status": "verified",
+        "date": "2026-10-17",
+        "plan": "docs/plans/2026-10-17-macos-download-statistics.md",
+        "scope": "Mac ZIP匿名采集、可确认日志回填、平台累计及双色历史图已上线；保留Windows原计数和历史",
+        "verification": "7项采集回归、JS/Python语法、生成幂等、源码/冻结/公网Chrome155七宽度、真实与夹具统计/旧接口/缺失与零/滑条/错误/无JS、原三下载及安装浮窗通过。实际Linux隔离Nginx验证首段/续传/HEAD/测试及爬虫排除通过，137资产服务器SHA与3变化文件/首页HTTPS一致，统计timer持续刷新，论文目录/反馈PID和非统计配置保持。旧下载断言首次失败保留，修正两平台公式后通过。",
+        "remaining": [
+          "其他浏览器、实体手机及Mac/Safari未验"
+        ],
+        "published_release": "r969968f235407e69",
+        "downloads": {
+          "windows": 274,
+          "macos": 2,
+          "total": 276
+        },
+        "backfill": {
+          "imported": 2,
+          "skippedUnverifiableRanges": 1
+        },
+        "evidence": [
+          "docs/testing/website-redesign.md",
+          "output/validation/website/macos-statistics-20261017/completion.json",
+          "D:\\PhoneticToolbox\\PhoneticToolbox_v3\\output\\validation\\website\\macos-statistics-381eab7c42f049dca7d89005feda264c"
+        ],
+        "cleanup": "7份本轮源码/冻结/公网及失败候选scratch回执均deleted，报告/截图/回退保留"
+      }
+    },
+    {
+      "id": "WEB-M16-COMPLETE",
+      "title": "录音模块完整迁移网页版",
+      "status": "in_progress",
+      "date": "2026-10-16",
+      "plan": "docs/plans/2026-10-16-web-launch.md",
+      "files": "frontend录音共用页面、browser-recording/project/server、WAV与共享ZIP；backend recording_models/project/child/jobs/preview、既有任务/文件/运行时；定向科学/浏览器验证",
+      "note": "本任务仅继续M16，M10/M18由井井交给其他任务。服务器处理、实时/录后Praat、不可变版本与CAS工程、桌面导入/完整备份及恢复片段已实现并更新私有实例，无schema变更；官网/反馈配置与主PID保持，EXE不替换。补主题切换时暂停按钮底色过渡，保留日常悬停效果。",
+      "acceptance": "设备/检测/任务/自由采集、Praat语谱、全部剪辑/导航、噪声/增益/差分、全部导出模式与格式、工程保存恢复/导入/备份/中断、额度/取消/退出及30分钟边界按清单验收",
+      "verification": "11项后端、65项桌面/核心定向、432项标准前端、vue-tsc/构建/契约/UI数据通过；Linux6组录音有界科学及原三类科学/故障回收重验通过。Chrome真实API已验采集/Praat、EGG逐样本保留、增益解析值、keep/undo/redo/paste、噪声/降噪/差分、PCM24 ZIP清单、刷新五版本、桌面读取全部备份与文件夹导入。最终候选5组恢复/真实取消/CAS/摘要/异项目边界通过，恢复选中条目/图面与WAV帧数一致。候选原字节119件私有静态摘要一致，实际私有页四次即时配色通过。前端完整导出范围矩阵通过；未宣称最终EXE或实体设备完成。",
+      "remaining": [
+        "Linux全部导出范围/格式组合、满额时录音专属资源峰值及真实异账号恶意引用，现有前端矩阵和通用边界不替代这些证据",
+        "实体设备/长采集和Edge/macOS",
+        "公开准入/正式HTTPS与最终EXE保持独立验收"
+      ],
+      "current_evidence": [
+        "docs/testing/web-launch-foundation.md",
+        "output/validation/web-launch/recording-complete",
+        "/var/lib/ptb-staging/reports/recording-native-1/report.json"
+      ]
+    },
+    {
+      "id": "WEB-M10-COMPLETE",
+      "title": "生理参数合成完整迁移网页版",
+      "status": "verified",
+      "date": "2026-10-16",
+      "plan": "docs/plans/2026-10-16-web-launch.md",
+      "files": "共用core vocal_tract/session/envelope/document；backend vocal API与有界会话/浏览器PCM/视频；VocalTractPage与vocal平台端口、原生33截面组件、定向验证及文档",
+      "note": "私有Linux独立18779候选已按井井最终要求验收。网页版默认33/可选65，129/257置灰；只允许当前构形发声1秒，生成/播放全程锁定构形，持续发声置灰并提示下载桌面版。关键帧播放与视频导出保留，单次最多5秒，服务器同步校验。桌面维持原策略。未公开部署或迁移现存库。",
+      "acceptance": "构型/截面/三维与全部参数、预置/常用/配置、声源/试听、关键帧/基频曲线、生成/播放/停止、文档与音视频导出，科学/资源及用户隔离全部通过后逐操作开放",
+      "verification": "历史67项Python主回归；最终7项网页后端、16项前端、类型/契约/UI数据和独立构建通过。实际Linux Python真实VTL的1秒/5秒/取消/预算/回收通过，真实PG/HTTP隔离/容量/超限/退出/计算槽通过。最终Chrome锁姿势/超限禁播导出/MP4/刷新/主题主流程通过，试听与短动画欠载0。原生ABI六组对照及core wheel通过。文档和全仓架构结果见专项报告。",
+      "remaining": [
+        "实体音频设备、Edge/macOS、最终EXE及长期/更大并发另验；本任务未替代全站容量门"
+      ],
+      "current_evidence": [
+        "docs/testing/web-vocal-report.md",
+        "output/validation/web-m10/linux-browser-16b1110b8a9f46869edf6241f3f2219a/browser.json",
+        "output/validation/web-m10/linux-browser-eda7ee3d77414e77950c7279729a5297/boundaries.json",
+        "output/validation/web-m10/server-reports/bounded-native.json",
+        "output/validation/web-m10/server-reports/post-audit.json"
+      ],
+      "verification_scope": "Windows source and isolated Chrome against dedicated private Linux VTL/PG service; server-only fixed one-second audition and five-second sequences. No public production, final EXE, physical device or macOS/Edge claim."
+    },
+    {
+      "id": "WEB-M18-COMPLETE",
+      "title": "语音学论文精读完整迁移网页版",
+      "status": "verified",
+      "date": "2026-10-16",
+      "plan": "docs/plans/2026-10-16-web-paper-reading.md",
+      "files": "desktop/src/ptb_documents共享实现与桌面兼容入口；backend论文受管快照/有界请求及固定Linux入口；frontend论文端口与共用阅读器；项目内Qt/PDF/GL运行时、来源许可、测试、架构、模块说明和验收",
+      "note": "当前源码及既有Linux私有内测实例已接通同一界面的推荐/往期/栏目、个人导入/收藏夹/移动/回收恢复、三PDF阅读、批注冲突和标准注释导出。网页复用桌面实现，无新PDF引擎或数据库迁移。verified范围为Windows源码和独立Chrome、Linux私有实例真实HTTP/Qt/SSH浏览器，不含公开部署或最终EXE。",
+      "acceptance": "推荐/往期/栏目、收藏/导入/移动/删除恢复、原译文/解读、连续PDF/缩放/选字、笔记/荧光笔/批注冲突及原件/带批注导出和引用/设置全部迁移；临时数据按账号及工作区隔离",
+      "verification": "65项桌面/源码入口、431项前端全套、14项独立PG/真实Qt/HTTP/Chrome/推荐服务器与生命周期检查、87项协议及新增2项Linux命令测试通过；类型、contracts/ui-data漂移、独立build和wheel隔离导入通过。Linux三类科学/故障、真实论文HTTP及独立Chrome六组流程/浅深/下载回读、127文件及564运行时摘要核对通过。到期夹具修正后边界补验通过，首次失败单列；五合成账号资产/配额与请求临时目录归零，文档零错误。",
+      "remaining": [
+        "论文功能在Edge/macOS、负载、长期运行及最终EXE本轮未验",
+        "公开入口仍按整体验收与单独发布授权接续；本任务仅更新现有私有实例"
+      ],
+      "current_evidence": [
+        "docs/testing/web-paper-reading.md",
+        "output/validation/web-paper-reading"
+      ]
     }
   ],
-  "updated_on": "2026-10-16",
+  "updated_on": "2026-10-17",
   "current_coordination_plan": "docs/plans/2026-10-16-web-launch.md",
   "policy_target": {
     "quota_bytes": 1000000000,
-    "quota_status": "Existing cap retained provisionally; global disk and per-operation admission to be measured.",
+    "quota_status": "Default 1 GB, manually configurable global default and per-account grants; no preallocation or automatic destructive shrink.",
     "mode": "ephemeral-workspace",
     "disconnect_grace_seconds": 1800,
     "explicit_exit": "Revoke workspace and cancel jobs immediately, then delete owned data with durable retry.",
@@ -4106,5 +5552,22 @@
     "existing_data_strategy": "No automatic deletion or migration of existing data; review a versioned workspace migration before applying to a named target."
   },
   "current_status_document": "docs/project-status.md",
-  "status_convention": "status refers to the task acceptance scope; current Windows functionality, platform gaps and retained artifacts are maintained in docs/project-status.md. Historical reports describe their own snapshots."
+  "status_convention": "status refers to the task acceptance scope; current Windows functionality, platform gaps and retained artifacts are maintained in docs/project-status.md. Historical reports describe their own snapshots.",
+  "web_execution_target": {
+    "confirmed_on": "2026-10-16",
+    "first_release": "server-science-compute",
+    "ui": "reuse-existing-vue-workbench",
+    "existing_client_features": "preserve",
+    "new_browser_scientific_compute": "post-launch-optimization",
+    "external_nodes": {
+      "platforms": [
+        "Windows",
+        "Linux"
+      ],
+      "scope": "interface-reservation-only",
+      "hardware_confirmed": false,
+      "required_for_launch": false
+    },
+    "implementation_status": "planned"
+  }
 }

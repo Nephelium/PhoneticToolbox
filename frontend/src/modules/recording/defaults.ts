@@ -1,5 +1,6 @@
 import type {Config,Device} from './types.ts';
 export function recordingDefaults():Config{return {device:'',sample_rate:48000,channels:2,roles:['microphone','microphone'],gain_db:0};}
+export function recordingSettings(config:Config){const {device,sample_rate,channels,roles,gain_db}=config;return {device,sample_rate,channels,roles,gain_db};}
 export function bindInput(config:Config,device:Device):{config:Config;message:string}{
  const channels=Math.min(2,device.inputs);
  if(channels<1)throw Error('该设备没有音频输入');

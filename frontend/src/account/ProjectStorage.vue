@@ -6,7 +6,7 @@ import ModalDialog from '../components/ModalDialog.vue';
 type Asset = components['schemas']['AssetView'];
 // Additive response fields until the shared M08/P07 contract generation gate.
 type Usage = components['schemas']['StorageUsage'] & { policy_version?: 1 | 2; retention_seconds?: number; over_quota?: boolean };
-const props = defineProps<{ projectId: string; ownerId: string; csrfToken: string }>();
+const props = defineProps<{ projectId: string; ownerId: string; csrfToken: string; compact?:boolean }>();
 const emit = defineEmits<{ sessionInvalid: [] }>();
 const usage = ref<Usage | null>(null), assets = ref<Asset[]>([]), notice = ref('');
 const policyReady = computed(() => usage.value?.policy_version === 2);
@@ -22,11 +22,12 @@ const abort = new AbortController();
 let disposed = false, timer: ReturnType<typeof setInterval> | undefined, loading = false;
 const errors: Record<string, string> = {
   quota_exceeded: '空间不足。可以先下载或直接删除不再需要的文件，再继续上传。',
+  upload_size_limit: '文件超过单文件上传上限，请缩短材料或使用桌面应用。',
   disk_space_low: '服务器磁盘空间不足，现有文件仍可下载和清理。',
   storage_service_unavailable: '文件服务尚未启用或暂时无法连接。',
   storage_recovery_required: '文件服务正在核对存储，请稍后再试。',
   storage_policy_migration_required: '当前暂时无法上传文件。现有有效文件仍可下载或删除。',
-  storage_busy: '文件服务正在处理其他请求，请稍后重试。',
+  web_server_busy: '服务器繁忙，请稍等5秒后重试。', storage_busy: '文件服务正在处理其他请求，请稍后重试。',
   upload_closed: '这次上传已关闭或到期，请重新选择文件。',
   asset_expired: '文件已到期，不能继续下载。',
   asset_limit_reached: '文件记录数量已达上限，请联系管理员。',
@@ -68,6 +69,9 @@ async function refresh() {
 }
 function choose(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0];
+  if (file && usage.value && file.size > Math.min(usage.value.available_bytes,usage.value.upload_limit_bytes??Infinity)) {
+    pending.value=null;notice.value=file.size>(usage.value.upload_limit_bytes??Infinity)?errors.upload_size_limit:errors.quota_exceeded;return;
+  }
   if (file) { pending.value = { file, key: crypto.randomUUID() }; progress.value = 0; notice.value = ''; }
 }
 async function upload() {
@@ -90,7 +94,7 @@ async function upload() {
     if (disposed) return;
     // The server computes SHA-256 incrementally; keep browser memory bounded.
     await request<Asset>(`uploads/${asset.id}/finalize`, 'POST', {});
-    pending.value = null; progress.value = 1; notice.value = '上传完成。新文件最多保留 3 天，下载不会延长到期时间。';
+    pending.value = null; progress.value = 1; notice.value = usage.value?.workspace_policy_version===1 ? '上传完成。退出或断线超过 30 分钟后清理，请下载需要保留的文件。' : '上传完成。新文件最多保留 3 天，下载不会延长到期时间。';
     if (fileInput.value) fileInput.value.value = '';
     await refresh();
   } catch (error) { if (!disposed) notice.value = message(error); }
@@ -155,7 +159,9 @@ onUnmounted(() => { disposed = true; abort.abort(); clearInterval(timer); pendin
 <template>
   <section class="project-storage" aria-labelledby="storage-heading">
     <div class="storage-heading"><h3 id="storage-heading">项目文件</h3><button :disabled="busy" @click="refresh">刷新空间</button></div>
-    <p class="muted">新政策：每账号 1 GB（1,000,000,000 字节），新数据最多保留 3 天（259,200 秒）。下载和访问不续期，可直接删除。</p>
+    <p v-if="!compact && usage?.workspace_policy_version===1" class="muted">每账号临时空间 {{bytes(usage.quota_bytes)}}。退出登录后清空，关闭网页或断线超过 30 分钟后清空。请下载需要保留的文件和结果。</p>
+    <p v-else-if="!compact && usage" class="muted">新政策：每账号 1 GB（1,000,000,000 字节），新数据最多保留 3 天（259,200 秒）。下载和访问不续期，可直接删除。</p>
+    <p v-if="!usage && !notice" role="status" class="muted">正在读取文件与容量…</p>
     <div v-if="usage" class="storage-meter">
       <div><strong>{{ bytes(usage.used_bytes) }}</strong> 已占用 · {{ bytes(usage.reserved_bytes) }} 已预留</div>
       <progress :value="usage.used_bytes + usage.reserved_bytes" :max="usage.quota_bytes" aria-label="账号文件空间" />
@@ -165,12 +171,17 @@ onUnmounted(() => { disposed = true; abort.abort(); clearInterval(timer); pendin
       <p v-if="usage.frozen || !usage.ready" class="hint">新增写入暂不可用，正在等待存储核对。</p>
     </div>
     <p v-if="notice" role="status" class="storage-notice">{{ notice }}</p>
+    <component :is="compact?'details':'div'" class="storage-import">
+    <summary v-if="compact">补充上传文件</summary>
     <div class="storage-upload">
       <label>选择上传文件<input ref="fileInput" type="file" :disabled="busy || !canWrite" @change="choose" /></label>
       <button class="primary" :disabled="busy || !pending || !canWrite" @click="upload">{{ busy ? '正在处理…' : pending?.assetId ? '继续上传' : '上传文件' }}</button>
       <progress v-if="busy && pending" :value="progress" :max="1" aria-label="上传进度" />
     </div>
-    <p class="hint">旧文件按列表原到期时间保留。新上传从最终确认起、新科学结果从完成起计时，ZIP 与副本不晚于输入到期。未完成上传最多保留 24 小时。上传 WAV 和关联的 TextGrid 后可进入研究工作台；关闭页面不会删除电脑上的原文件。</p>
+    <p v-if="usage?.upload_limit_bytes" class="hint">单文件上传上限 {{bytes(usage.upload_limit_bytes)}}。分析还需要预留结果和临时空间，各工具另有时长、格式及处理限制。</p>
+    <p v-if="usage?.workspace_policy_version===1" class="hint">保持网页连接时，到期时间随心跳更新。下载和后台计算不续期。清理只涉及服务器中的临时数据，电脑上的原文件和已下载结果仍然保留。</p>
+    <p v-else-if="usage" class="hint">旧文件按列表原到期时间保留。新上传从最终确认起、新科学结果从完成起计时，ZIP 与副本不晚于输入到期。未完成上传最多保留 24 小时。上传 WAV 和关联的 TextGrid 后可进入研究工作台；关闭页面不会删除电脑上的原文件。</p>
+    </component>
     <div v-if="fileJobs" class="file-job-controls">
       <label>本批输出上限（MB）<input v-model.number="outputMegabytes" type="number" min="1" :max="usage ? usage.quota_bytes / 1_000_000 : undefined" :disabled="busy || !canWrite" /></label>
       <div class="file-actions"><button :disabled="busy || !canWrite || !selectedIds.length || selectedIds.length > 16" @click="fileTask('archive_zip', [...selectedIds])">打包所选文件（{{ selectedIds.length }}）</button><button :disabled="busy || !canWrite" @click="fileTask('storage_check')">运行存储流程检查</button></div>
@@ -185,7 +196,7 @@ onUnmounted(() => { disposed = true; abort.abort(); clearInterval(timer); pendin
         <div class="file-actions"><a v-if="readable(item)" :href="`/api/v1/assets/${item.id}/content?expected_account=${ownerId}`" download>下载</a><button v-if="fileJobs && readable(item) && item.name.toLowerCase().endsWith('.zip')" :disabled="busy || !canWrite" @click="fileTask('extract_zip', [item.id])">展开 ZIP</button><button :disabled="busy" @click="confirmRemoval(item)">{{ item.state === 'delete_failed' ? '重试删除' : '删除' }}</button></div>
       </li>
     </ul>
-    <ModalDialog v-if="removal" title="删除这个文件？" @close="removal = null">
+    <ModalDialog v-if="removal" :variant="usage?.workspace_policy_version===1?'confirm':undefined" title="删除这个文件？" @close="removal = null">
       <p class="remove-name">{{ removal.name }}</p><p>将删除 1 个资源，已写入 {{ bytes(removal.size_bytes) }}。当前关联 {{ activeReferences.length }} 个活动任务；删除会请求停止这些任务。</p>
       <p class="hint">已经成功的其他结果保留各自期限。确认期间新引用此资源的任务，也会在删除时停止。</p>
       <p>删除后不能再下载。无需先下载；如果需要留存，请先保存到自己的电脑。</p>

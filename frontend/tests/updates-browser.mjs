@@ -8,6 +8,9 @@ import {spawnSync} from 'node:child_process';
 import {createServer} from 'vite';
 const frontend=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),repo=path.dirname(frontend);
 const preview=process.argv.includes('--preview');
+const notesOption=process.argv.indexOf('--notes-file');
+const actualNotes=notesOption<0?null:await fs.readFile(path.resolve(process.argv[notesOption+1]),'utf8');
+const notesIdentity=actualNotes===null?null:{path:path.resolve(process.argv[notesOption+1]),sha256:createHash('sha256').update(actualNotes).digest('hex')};
 const folder=path.join(repo,'output','validation','updates-ui',`${preview?'preview':'check'}-${randomUUID()}`),scratch=path.join(folder,'scratch');
 for(let cursor=folder;;cursor=path.dirname(cursor)){
   const stat=await fs.lstat(cursor).catch(error=>{if(error.code!=='ENOENT')throw error;});
@@ -70,7 +73,31 @@ try{
  assert.equal(await dialog.getByRole('button',{name:'退出并更新',exact:true}).count(),0);
  assert.equal(await page.evaluate(()=>window.fixture.requests.filter(r=>r.operation==='download').length),0);
  checks.push({name:'actual AppShell opens the shared update dialog with version comparison, eight list items and eight bold topics; startup never downloads'});
- if(preview){
+ if(actualNotes!==null){
+   await page.evaluate(notes=>{window.fixture.release.notes=notes;window.fixture.release.version='3.0.3';},actualNotes);
+   await dialog.locator('summary').click();await dialog.getByRole('button',{name:'检查更新',exact:true}).click();
+   await dialog.locator('.release-markdown strong').getByText('PhoneticToolbox 3.0.3 更新啦！',{exact:true}).waitFor();
+   await dialog.locator('summary').click();
+   // Expected structure comes from the author's current Markdown, including
+   // revisions made during release review; do not bind a writer to old counts.
+   assert.equal(await dialog.locator('.release-markdown h2').count(),actualNotes.match(/^## /gm)?.length??0);
+   assert.equal(await dialog.locator('.release-markdown li').count(),actualNotes.match(/^- /gm)?.length??0);
+   assert.equal(await dialog.locator('.release-markdown script,.release-markdown iframe,.release-markdown img').count(),0);
+   for(const link of await dialog.locator('.release-markdown a').all())assert.equal(await link.getAttribute('rel'),'noopener noreferrer');
+   for(const theme of ['light','dark'])for(const [width,height,scale,font] of [[1440,900,100,14],[1280,800,150,18],[560,760,100,18]]){
+     await page.setViewportSize({width,height});await page.evaluate(async({theme,scale,font})=>{const {setPageScale}=await import('/src/state/pageZoom.ts');setPageScale(scale);document.documentElement.dataset.theme=theme;document.documentElement.style.fontSize=font+'px';},{theme,scale,font});
+     await page.evaluate(()=>document.fonts.ready);
+     const layout=await dialog.evaluate(el=>{const notes=el.querySelector('.release-notes'),action=el.querySelector('.update-footer .primary'),box=el.getBoundingClientRect(),button=action.getBoundingClientRect();return{overflow:el.scrollWidth>el.clientWidth+1,notesScroll:notes.scrollHeight>notes.clientHeight,buttonVisible:button.top>=0&&button.bottom<=innerHeight,dialogVisible:box.top>=0&&box.bottom<=innerHeight};});
+     assert.equal(layout.overflow,false);assert.equal(layout.notesScroll,true);assert.equal(layout.buttonVisible,true);assert.equal(layout.dialogVisible,true);
+     await dialog.screenshot({path:path.join(folder,`notes-${theme}-${width}-${scale}.png`)});
+     await dialog.locator('.release-notes').evaluate(el=>el.scrollTop=el.scrollHeight);
+     await dialog.screenshot({path:path.join(folder,`notes-end-${theme}-${width}-${scale}.png`)});
+     await dialog.locator('.release-notes').evaluate(el=>el.scrollTop=0);
+     checks.push({name:'actual 3.0.3 notes render safely with headings, lists, link, scroll and visible actions',theme,width,height,scale,font,layout});
+   }
+   assert.equal(await page.evaluate(()=>window.fixture.requests.filter(r=>r.operation==='download'||r.operation==='apply').length),0);
+   assert.deepEqual(errors,[]);success=true;
+ }else if(preview){
    await dialog.screenshot({path:path.join(folder,'preview.png')});await write('preview.json',{url,browser:context.browser().version(),fixture:'synthetic 3.0.1; not a published version; no real downloads or application updates',owner_pid:process.pid});
    console.log(JSON.stringify({preview:true,url,output:folder,owner_pid:process.pid}));success=true;
    await new Promise(resolve=>context.once('close',resolve));
@@ -113,7 +140,7 @@ try{
  }
 }catch(error){await page?.screenshot({path:path.join(folder,'failure.png')}).catch(()=>{});await write('failure.json',{error:error.stack,checks,errors});throw error;}
 finally{
- await context?.close();await server?.close();await write('report.json',{success,checks,errors,fixture:'native updater protocol stand-in; no actual release download, checksum calculation or installer executed'});
+ await context?.close();await server?.close();await write('report.json',{success,checks,errors,notesIdentity,fixture:'native updater protocol stand-in; no actual release download, checksum calculation or installer executed'});
  const files=[],removedByBrowser=[];
  async function visit(directory){
    for(const entry of await fs.readdir(directory,{withFileTypes:true})){

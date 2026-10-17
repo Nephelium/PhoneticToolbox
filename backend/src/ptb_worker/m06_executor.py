@@ -60,7 +60,12 @@ def execute_claim(store,claim,worker_id,stop,*,on_started=None,evidence=None):
                     from pathlib import Path
                     from .native.reaper import REAPER_SHA256
                     binary=Path(getattr(files,'reaper_binary',None) or '')
-                    if not binary.is_file() or binary.stat().st_size>16_000_000 or hashlib.sha256(binary.read_bytes()).hexdigest()!=REAPER_SHA256:
+                    expected=REAPER_SHA256
+                    if __import__('sys').platform=='linux':
+                        from .native.linux_runtime import load_profile
+                        _,profile=load_profile()
+                        expected=profile['hashes'].get(str(binary)) if str(binary)==profile.get('reaper_binary') else None
+                    if not expected or not binary.is_file() or binary.stat().st_size>16_000_000 or hashlib.sha256(binary.read_bytes()).hexdigest()!=expected:
                         raise ValueError('m06_reaper_unavailable')
                     native=files.output(identity,'m06-native.wav','temporary',400_000)
                     header.update(native_scratch=str(files.scratch_path(identity,native['id'])),reaper_binary=str(binary))

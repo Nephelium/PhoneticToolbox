@@ -74,6 +74,7 @@ public final class MainActivity extends Activity {
             Map<String,String> allowed=new HashMap<>();
             for(String key:new String[]{"status","health","conversations","listDevices","createPairing","receivingStatus"})allowed.put(key,"");
             allowed.put("pair","code,name");allowed.put("revokeDevice","deviceId");allowed.put("messages","owner,after");allowed.put("send","owner,text,images,requestId");allowed.put("read","owner,through");allowed.put("resolve","owner,status");allowed.put("retryMail","id");allowed.put("setReceiving","enabled");allowed.put("openSettings","kind");
+            allowed.put("trashConversation","owner,through");allowed.put("restoreConversation","owner");allowed.put("webStatus","");allowed.put("webRequests","state,before");allowed.put("webDecision","request_id,granted_bytes,duration,note");allowed.put("webQuota","quota_bytes,owner_id");
             if(!allowed.containsKey(op))throw new Exception();Set<String> expected=new HashSet<>();if(!allowed.get(op).isEmpty())Collections.addAll(expected,allowed.get(op).split(","));Set<String> actual=new HashSet<>();args.keys().forEachRemaining(actual::add);if(!actual.equals(expected))throw new Exception();
             JSONObject result;
             if(op.equals("receivingStatus"))result=receiving();
@@ -83,7 +84,7 @@ public final class MainActivity extends Activity {
             }else if(op.equals("openSettings")){String kind=args.getString("kind");if(!Arrays.asList("notifications","battery","autostart","app").contains(kind))throw new Exception();runOnUiThread(()->openSettings(kind));result=new JSONObject().put("ok",true);}
             else {result=FeedbackApi.request(this,op,args);if(op.equals("pair"))runOnUiThread(()->{if(Build.VERSION.SDK_INT>=33&&checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},3);else try{FeedbackApi.store(this).update(new JSONObject().put("receiving",true));ReceivingService.start(this);}catch(Exception ignored){}});}
             reply(id,new JSONObject().put("ok",true).put("value",result));
-        }catch(Exception e){String m=e.getMessage();String message="无法完成请求，请检查网络后重试。未发送内容仍保留。";if(m!=null&&(m.startsWith("配对码")||m.startsWith("请输入")||m.startsWith("这台设备")||m.startsWith("发送过于")||m.startsWith("服务器暂时")))message=m;error(id,message);try{if(FeedbackApi.store(this).read().optString("token").isEmpty())notification(new JSONObject().put("kind","identity_lost").toString());}catch(Exception ignored){}}
+        }catch(Exception e){String m=e.getMessage();String message="无法完成请求，请检查网络后重试。未发送内容仍保留。";if(m!=null&&(m.startsWith("配对码")||m.startsWith("请输入")||m.startsWith("这台设备")||m.startsWith("发送过于")||m.startsWith("服务器暂时")||m.startsWith("网页版管理")||m.startsWith("这条申请")||m.startsWith("批准额度")||m.startsWith("服务器可用")||m.startsWith("服务器繁忙")))message=m;error(id,message);try{if(FeedbackApi.store(this).read().optString("token").isEmpty())notification(new JSONObject().put("kind","identity_lost").toString());}catch(Exception ignored){}}
     }
     @Override protected void onResume(){super.onResume();resumed=true;if(!registered){
         // The signature permission also protects releases before the exported flag.

@@ -2,6 +2,7 @@
 from pathlib import Path
 from uuid import uuid4
 import hashlib
+import json
 import pytest
 from fastapi.testclient import TestClient
 from ptb_api.main import create_app
@@ -12,6 +13,12 @@ from m01_preview_double import PreviewStorage
 
 ROOT=Path(__file__).resolve().parents[2]
 WAV=(ROOT/'frontend/src/assets/SYN-EGG-44100.wav').read_bytes()
+
+
+@pytest.fixture(autouse=True)
+def isolated_preview_cache():
+    from ptb_worker.preview_cache import preview_scope
+    with preview_scope(('spectrogram-test',uuid4().hex)):yield
 
 
 def test_actual_child_returns_bounded_pixels_and_timeout_reaps_owned_process(monkeypatch):
@@ -43,10 +50,13 @@ def test_local_preview_requires_session_and_returns_actual_audio_hash():
         assert c.post(path,content=b'bad',headers=headers).status_code==422
 
 
-def test_server_preview_owner_and_expiry_are_rechecked_after_computation(monkeypatch):
+def test_server_preview_owner_and_expiry_are_rechecked_after_computation(monkeypatch,tmp_path):
     import ptb_worker.spectrogram_preview as preview
     accounts=MemoryAccountStore();accounts.create_user('alice','test-only');owner=accounts.users['alice']['id']
     store=PreviewStorage();key=store.add(owner,str(uuid4()),'sound.wav',WAV)
+    # The assembled app also starts the paper scratch lifecycle on this store.
+    store.root=tmp_path/'storage';store.root.mkdir()
+    (store.root/'.ptb-storage.json').write_text(json.dumps({'instance_id':uuid4().hex}),encoding='utf-8')
     foreign=store.add(str(uuid4()),str(uuid4()),'private.wav',WAV)
     origin='https://preview.test';app=create_app(account_store=accounts,auth_settings=AuthSettings(origin=origin,signing_key='test-only'*8),storage=store)
     suffix='/spectrogram?channel=0&start=0&end=0.8&width=300'

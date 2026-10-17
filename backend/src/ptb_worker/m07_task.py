@@ -7,6 +7,9 @@ from .store import JobError,LOCAL_PROJECT,canonical,core_version,adapter_version
 from ptb_api.m07_models import M07Request
 
 def capability(store):
+    if sys.platform=='linux':
+        from .native.capabilities import linux_capabilities
+        return 'phonation_synthesis' in linux_capabilities(store)[0]
     from importlib.metadata import version,PackageNotFoundError
     if sys.platform!='win32' or getattr(store,'files',None) is None:return False
     try:return all(version(k)==v for k,v in {'numpy':'2.2.6','scipy':'1.16.3','praat-parselmouth':'0.4.7'}.items())
@@ -19,7 +22,12 @@ def submit(store,owner,body,*,retry_of=None):
         from pathlib import Path
         from .native.reaper import REAPER_SHA256
         binary=Path(getattr(store.files,'reaper_binary',None) or '')
-        if not binary.is_file() or binary.stat().st_size>16_000_000 or hashlib.sha256(binary.read_bytes()).hexdigest()!=REAPER_SHA256:raise JobError('m07_reaper_unavailable',503)
+        expected=REAPER_SHA256
+        if sys.platform=='linux':
+            from .native.linux_runtime import load_profile
+            _,profile=load_profile()
+            expected=profile['hashes'].get(str(binary)) if str(binary)==profile.get('reaper_binary') else None
+        if not expected or not binary.is_file() or binary.stat().st_size>16_000_000 or hashlib.sha256(binary.read_bytes()).hexdigest()!=expected:raise JobError('m07_reaper_unavailable',503)
     request=body.model_dump(exclude={'idempotency_key'})|{'retry_of':retry_of}
     digest=hashlib.sha256(canonical(request).encode()).hexdigest()
     with store.files.batch_transaction() as tx:

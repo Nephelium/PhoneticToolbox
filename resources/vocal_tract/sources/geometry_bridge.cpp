@@ -90,10 +90,11 @@ API int p6_floor_rib(){return VocalTract::M10_FLOOR_RIB;}
 API double p6_side_rib(int region){return tract && region>=0 && region<3 ? tract->m10SideRibs[region] : 0.0;}
 API int p4_section_count(){return tract ? tract->m10SectionCount : 0;}
 API int p5_section_capacity(){return VocalTract::NUM_CENTERLINE_POINTS;}
+API int p9_web_sections(){return 1;}
 API int p5_sections(int count){
-    if(!tract || (count!=65 && count!=129 && count!=257) || count>VocalTract::NUM_CENTERLINE_POINTS) return 2;
+    if(!tract || (count!=33 && count!=65 && count!=129 && count!=257) || count>VocalTract::NUM_CENTERLINE_POINTS) return 2;
     tract->m10SectionCount=count;
-    tract->m10SectionExponent=count==65 ? 6 : count==129 ? 7 : 8;
+    tract->m10SectionExponent=count==33 ? 5 : count==65 ? 6 : count==129 ? 7 : 8;
     return 0;
 }
 API int p0_open(const char* file) {

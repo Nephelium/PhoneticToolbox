@@ -11,17 +11,36 @@ import {setupKeyframes} from './keyframes.js';
 import {moveControl,PoseHistory,ORGAN_PARAMS} from './controls.mjs';
 
 const $=id=>document.getElementById(id);
+const accountSettingsKey=new URLSearchParams(location.search).get('settings');
+const preferenceKey=accountSettingsKey&&/^web-settings\.v1\.[^:]+\.M10$/.test(accountSettingsKey)?'ptb.v3.'+accountSettingsKey+'.frame':null;
+let retainedSettings={};
+const preferencesReady=preferenceKey?new Promise((resolve,reject)=>{
+ const timer=setTimeout(()=>{window.removeEventListener('message',receive);reject(Error('账号设置读取超时，请重新打开此模块。'));},15000);
+ function receive(event){if(event.source!==parent||event.origin!==location.origin||event.data?.type!=='m10-settings-value'||event.data.key!==accountSettingsKey)return;clearTimeout(timer);window.removeEventListener('message',receive);retainedSettings=event.data.value??{};resolve();}
+ window.addEventListener('message',receive);parent.postMessage({type:'m10-settings-read'},location.origin);
+}):Promise.resolve();
+function retainSettings(values){if(!preferenceKey)return;retainedSettings={...retainedSettings,...values};parent.postMessage({type:'m10-settings-write',body:retainedSettings},location.origin);}
 let sourceSettings,manualRoot=false,presetLibrary,larynxHeight=0,tongueShape=[0,0,0,0];
 let meta,params,snapshot,token,revision=0,dirty=false,inFlight=false,live=false,closed=false;
 let toastTimer,selectedPreset='a',rendering=false,lipWidth=1,motionBusy=false;
+let keyframeBusy=false,vowelBusy=false;
+function applyPoseLock(){
+  const wasBusy=motionBusy;motionBusy=keyframeBusy||vowelBusy;viewer.playing=motionBusy;
+  document.body.classList.toggle('motion-busy',motionBusy);document.body.dataset.vowelBusy=String(vowelBusy);
+  document.querySelectorAll('#parameterGroups input,.lip-width-panel input,.source-panel button,.source-panel input,.source-panel select,.edit-panel button,#presets button,#portRange,#portToggle,#keepVowel,#sliceRange,#sectionCount,#customPreset,#savePreset,#manualRoot').forEach(e=>e.disabled=motionBusy);
+  if(meta?.host==='web')document.querySelectorAll('#oneSecondButton,#testToneButton,#volumeRange,#outputDevice,#gainSelect').forEach(e=>e.disabled=motionBusy||!!meta.audio_locked);
+  $('liveButton').disabled=motionBusy||!!meta?.audio_locked||meta?.host==='web';
+  updateControls();updateHistory();if(wasBusy&&!motionBusy){dirty=true;queuePose();}
+}
+function setVowelBusy(value){if(vowelBusy!==value){vowelBusy=value;applyPoseLock();}}
 const inputs=new Map();
 const history=new PoseHistory();let selectedSide=2,lastOpenArea=.7;
 const currentEdit=()=>({params:[...params],preset:selectedPreset,name:presetLibrary?.getName(selectedPreset)||'',manual_root:manualRoot,larynx_height:larynxHeight,tongue_shape:[...tongueShape],lip_width:lipWidth,f0:+$('f0Range').value,source:{...sourceSettings}});
 function beginEdit(){if(params)history.begin(currentEdit());}
 function endEdit(){if(params)history.commit(currentEdit());updateHistory();}
-function updateHistory(){$('undoButton').disabled=!history.past.length;$('redoButton').disabled=!history.future.length;}
+function updateHistory(){$('undoButton').disabled=motionBusy||!history.past.length;$('redoButton').disabled=motionBusy||!history.future.length;}
 function restoreEdit(state){if(!state)return;manualRoot=state.manual_root??false;larynxHeight=state.larynx_height??0;tongueShape=[...(state.tongue_shape??[0,0,0,0])];params=[...state.params];sourceSettings={...(state.source||meta.source_presets.voiced)};selectedPreset=state.preset||'';lipWidth=state.lip_width??1;$('f0Range').value=state.f0??150;$('f0Output').textContent=$('f0Range').value+' Hz';updateControls();dirty=true;queuePose();updateHistory();}
-function saveView(){try{localStorage.setItem('vtl-view-v2',JSON.stringify({mode:viewer.mode,teeth:viewer.showTeeth,head:viewer.showHead,nose:viewer.showNose,labels:viewer.labels,fullModel:viewer.fullModel}));}catch{}}
+function saveView(){const view={mode:viewer.mode,teeth:viewer.showTeeth,head:viewer.showHead,nose:viewer.showNose,labels:viewer.labels,fullModel:viewer.fullModel};if(preferenceKey){retainSettings({view});return;}try{localStorage.setItem('vtl-view-v2',JSON.stringify(view));}catch{}}
 function selectInspector(organ){
   const labels={tongue:'舌头',lips:'唇与下颌',velum:'软腭与咽部'};
   document.querySelectorAll('[data-select-organ]').forEach(b=>{b.classList.toggle('selected',b.dataset.selectOrgan===organ);b.setAttribute('aria-pressed',b.dataset.selectOrgan===organ);});
@@ -34,14 +53,17 @@ function selectInspector(organ){
 function toast(message){$('toast').textContent=message;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),4500);}
 async function post(path,body={}){
   const r=await response(path,body);
-  if(!r.ok){const e=await r.json();if(r.status===409)revision=Math.max(revision,e.revision);throw Error(e.error||r.statusText);}return r;
+  if(!r.ok){const e=await r.json();if(r.status===409)revision=Math.max(revision,e.revision);throw Error(e.error||r.statusText);}
+  if(path==='audio/settings')retainSettings({audio:{...retainedSettings.audio,...body}});
+  if(path==='pose')retainSettings({sectionCount:body.section_count,f0:body.f0,source:body.source,keepVowel:body.keep_vowel,pose:{params:body.params,manualRoot:body.manual_root,larynxHeight:body.larynx_height,tongueShape:body.tongue_shape,lipWidth:body.lip_width}});
+  return r;
 }
 function markChanged(){dirty=true;selectedPreset='';updateControls();queuePose();}
 async function queuePose(){
   if(inFlight||!dirty||closed||!params||motionBusy)return;
   inFlight=true;document.body.dataset.posePending='true';dirty=false;const rev=++revision;
   try{const r=await post('pose',{params:[...params],manual_root:manualRoot,larynx_height:larynxHeight,tongue_shape:[...tongueShape],revision:rev,section_count:+$('sectionCount').value,section:+$('sliceRange').value,f0:+$('f0Range').value,lip_width:lipWidth,source:{...sourceSettings},keep_vowel:$('keepVowel').checked});
-    const state=await r.json();if(state.revision===rev){snapshot=state;try{localStorage.setItem('m10-section-count-r19',String(state.section_count));}catch{}if(!dirty){params=[...state.params];lipWidth=state.lip_width;larynxHeight=state.larynx_height??0;tongueShape=[...(state.tongue_shape??[0,0,0,0])];if(!manualRoot)for(const key of ['TRX','TRY']){const i=meta.parameters.findIndex(p=>p.name===key);params[i]=state.limited[i];}updateControls();}updateModel(state);drawCharts();$('sceneMetrics').textContent=state.uvula_contact_lift>1e-5?'小舌已接触舌面':'软腭 · 同一三维模型截面';document.body.dataset.computeMs=String(Math.round(state.compute_ms));const limited=state.nasal_constraint;$('portConstraint').classList.toggle('limited',!!limited);$('portConstraint').textContent=limited?`该舌位下开口已限制为 ${limited.accepted_area.toFixed(2)} cm²，避免新产生口腔闭塞。`:'软腭下降开放，抬起关闭。';if(meta.parameters.some((p,i)=>ORGAN_PARAMS[viewer.selected].includes(p.name)&&Math.abs(state.params[i]-state.limited[i])>.04))$('editHint').textContent='已达到器官约束，显示的是引擎允许的构形。';}
+    const state=await r.json();if(state.revision===rev){snapshot=state;try{localStorage.setItem(meta.host==='web'?'m10-web-section-count':'m10-section-count-r19',String(state.section_count));}catch{}if(!dirty){params=[...state.params];lipWidth=state.lip_width;larynxHeight=state.larynx_height??0;tongueShape=[...(state.tongue_shape??[0,0,0,0])];if(!manualRoot)for(const key of ['TRX','TRY']){const i=meta.parameters.findIndex(p=>p.name===key);params[i]=state.limited[i];}updateControls();}updateModel(state);drawCharts();$('sceneMetrics').textContent=state.uvula_contact_lift>1e-5?'小舌已接触舌面':'软腭 · 同一三维模型截面';document.body.dataset.computeMs=String(Math.round(state.compute_ms));const limited=state.nasal_constraint;$('portConstraint').classList.toggle('limited',!!limited);$('portConstraint').textContent=limited?`该舌位下开口已限制为 ${limited.accepted_area.toFixed(2)} cm²，避免新产生口腔闭塞。`:'软腭下降开放，抬起关闭。';if(meta.parameters.some((p,i)=>ORGAN_PARAMS[viewer.selected].includes(p.name)&&Math.abs(state.params[i]-state.limited[i])>.04))$('editHint').textContent='已达到器官约束，显示的是引擎允许的构形。';}
   }catch(e){toast(e.message);}finally{inFlight=false;document.body.dataset.poseRevision=String(rev);document.body.dataset.posePending=String(dirty);if(dirty)setTimeout(queuePose,0);}
 }
 $('sectionCount').onchange=()=>{const old=snapshot?.centerline.length??129,count=+$('sectionCount').value;$('sliceRange').value=Math.round(+$('sliceRange').value*(count-1)/(old-1));dirty=true;queuePose();};
@@ -68,12 +90,16 @@ function updateSourceControls(){
 }
 function setupControls(){
   sourceSettings={...meta.source_presets.voiced};
+  const pose=preferenceKey?retainedSettings.pose:null;
+  if(pose&&Array.isArray(pose.params)&&pose.params.length===meta.parameters.length&&pose.params.every(Number.isFinite)){params=[...pose.params];manualRoot=pose.manualRoot===true;if(Number.isFinite(pose.larynxHeight))larynxHeight=pose.larynxHeight;if(Array.isArray(pose.tongueShape)&&pose.tongueShape.length===4&&pose.tongueShape.every(Number.isFinite))tongueShape=[...pose.tongueShape];if(Number.isFinite(pose.lipWidth))lipWidth=pose.lipWidth;}
+  if(preferenceKey){for(const key of Object.keys(sourceSettings))if(typeof retainedSettings.source?.[key]===typeof sourceSettings[key])sourceSettings[key]=retainedSettings.source[key];if(Number.isFinite(retainedSettings.f0))$('f0Range').value=retainedSettings.f0;if(typeof retainedSettings.keepVowel==='boolean')$('keepVowel').checked=retainedSettings.keepVowel;}
   $('sourceMode').onchange=()=>{if(!$('sourceMode').value||$('sourceMode').value==='transition')return;beginEdit();sourceSettings={...meta.source_presets[$('sourceMode').value],pressure_pa:sourceSettings.pressure_pa};dirty=true;updateSourceControls();queuePose();endEdit();};
   for(const [id,key] of [['pressureRange','pressure_pa'],['openingRange','opening_mm'],['chinkRange','posterior_gap_mm2']]){
     $(id).onpointerdown=beginEdit;$(id).onkeydown=beginEdit;$(id).onchange=endEdit;
     $(id).oninput=()=>{beginEdit();sourceSettings[key]=+$(id).value;dirty=true;updateSourceControls();queuePose();};
   }
-  $('oneSecondButton').onclick=()=>preview(false,1);
+  $('oneSecondButton').textContent=meta.host==='web'?'▶ 测试发声':'▶ 发声 1 秒';
+  $('oneSecondButton').onclick=()=>preview(false,meta.host==='web'?.5:1);
   $('gainSelect').value=meta.audio_settings.gain_db||0;
   $('gainSelect').onchange=async()=>{try{updateAudio(await(await post('audio/settings',{gain_db:+$('gainSelect').value})).json());}catch(e){toast(e.message);}};
 
@@ -106,7 +132,11 @@ function setupControls(){
   document.addEventListener('keydown',e=>{if(motionBusy||e.target.matches('input,select,textarea'))return;if((e.ctrlKey||e.metaKey)&&['z','y'].includes(e.key.toLowerCase())){e.preventDefault();restoreEdit((e.key.toLowerCase()==='y'||e.shiftKey)?history.redo(currentEdit()):history.undo(currentEdit()));}});
   $('f0Range').oninput=()=>{$('f0Output').textContent=$('f0Range').value+' Hz';dirty=true;queuePose();};
   $('sliceRange').oninput=()=>{dirty=true;queuePose();};
-  $('liveButton').onclick=async()=>{try{if(!live&&(dirty||inFlight)){toast('正在更新构形，请稍后开始发声');return;}const s=await(await post('live',{active:!live})).json();updateAudio(s);}catch(e){toast(e.message);}};
+  $('liveButton').onclick=async()=>{if(meta.host==='web')return;try{if(!live&&(dirty||inFlight)){toast('正在更新构形，请稍后开始发声');return;}const s=await(await post('live',{active:!live})).json();updateAudio(s);}catch(e){toast(e.message);}};
+  if(meta.host==='web'){
+    const button=$('liveButton'),hint='由于服务器性能限制，网页版暂不支持持续发声，请下载桌面版。';
+    button.disabled=true;button.title=hint;const wrapper=document.createElement('span');wrapper.className='web-disabled-action';wrapper.tabIndex=0;wrapper.title=hint;wrapper.setAttribute('aria-label',hint);button.before(wrapper);wrapper.append(button);
+  }
   for(const d of meta.output_devices){const option=document.createElement('option');option.value=d.id;option.textContent=d.name;$('outputDevice').append(option);}
   $('outputDevice').value=meta.audio_settings.device;$('volumeRange').value=Math.round(meta.audio_settings.volume*100);$('volumeOutput').textContent=$('volumeRange').value+'%';
   $('outputDevice').onchange=async()=>{try{updateAudio(await(await post('audio/settings',{device:$('outputDevice').value})).json());toast('输出设备已切换');}catch(e){toast(e.message);}};
@@ -115,20 +145,21 @@ function setupControls(){
   $('aboutButton').onclick=()=>$('aboutDialog').showModal();$('sharedReferences').onclick=()=>parent.postMessage({type:'m10-references'},'*');$('sharedHelp').onclick=()=>parent.postMessage({type:'m10-help'},'*');$('closeAbout').onclick=()=>$('aboutDialog').close();
   $('sourceState').textContent=meta.audio_locked?'静音测试':'手动播放';
   if(meta.audio_locked){document.body.classList.add('audio-locked');document.querySelectorAll('#oneSecondButton,#liveButton,#testToneButton,#volumeRange,#outputDevice,#gainSelect').forEach(e=>e.disabled=true);$('audioStatus').textContent='静音建模已锁定，后端不允许音频输出。';}
-  setupKeyframes({initialFrames:meta.saved_frames,initialCurve:meta.saved_curve,getPose:currentEdit,applyPose:(state,animated=false)=>{if(animated){manualRoot=state.manual_root??false;larynxHeight=state.larynx_height??0;tongueShape=[...(state.tongue_shape??[0,0,0,0])];params=[...state.params];sourceSettings={...(state.source||meta.source_presets.voiced)};lipWidth=state.lip_width;selectedPreset='';snapshot=state;$('f0Range').value=state.f0;$('f0Output').textContent=Math.round(state.f0)+' Hz';updateControls();updateModel(state);drawCharts();}else{beginEdit();restoreEdit(state);endEdit();}},post,setBusy:value=>{motionBusy=value;viewer.playing=value;document.body.classList.toggle('motion-busy',value);document.querySelectorAll('#parameterGroups input,.lip-width-panel input,.source-panel button,.source-panel input,.source-panel select,.edit-panel button,#presets button,#portRange,#portToggle,#keepVowel,#sliceRange,#sectionCount,#customPreset,#savePreset').forEach(e=>e.disabled=value||(meta.audio_locked&&e.matches('#oneSecondButton,#liveButton,#testToneButton,#volumeRange,#outputDevice,#gainSelect')));if(!value){updateHistory();dirty=true;queuePose();}},isReady:()=>!dirty&&!inFlight&&!rendering,isSilent:meta.audio_locked,keepVowel:()=>$('keepVowel').checked,viewer});
+  setupKeyframes({initialFrames:meta.saved_frames,initialCurve:meta.saved_curve,getPose:currentEdit,applyPose:(state,animated=false)=>{if(animated){manualRoot=state.manual_root??false;larynxHeight=state.larynx_height??0;tongueShape=[...(state.tongue_shape??[0,0,0,0])];params=[...state.params];sourceSettings={...(state.source||meta.source_presets.voiced)};lipWidth=state.lip_width;selectedPreset='';snapshot=state;$('f0Range').value=state.f0;$('f0Output').textContent=Math.round(state.f0)+' Hz';updateControls();updateModel(state);drawCharts();}else{beginEdit();restoreEdit(state);endEdit();}},post,setBusy:value=>{keyframeBusy=value;applyPoseLock();},maxDuration:meta.host==='web'?(meta.max_animation_duration??5):12,isReady:()=>!motionBusy&&!dirty&&!inFlight&&!rendering,isSilent:meta.audio_locked,keepVowel:()=>$('keepVowel').checked,viewer});
   updateControls();updateHistory();
 }
-function setLive(value){live=value;const b=$('liveButton');b.classList.toggle('active',live);b.lastElementChild.textContent=live?'停止播放':'持续发声';b.firstElementChild.textContent=live?'■':'▶';}
-function updateAudio(s){if(s.audio_locked){$('audioStatus').textContent='静音建模已锁定，后端不允许音频输出。';return;}setLive(s.active);const db=20*Math.log10(Math.max(s.audio.rms||0,1e-5));$('levelFill').style.width=Math.max(0,Math.min(100,(db+60)/60*100))+'%';$('levelText').textContent=s.active?db.toFixed(0)+' dBFS':'静音';$('levelMeter').dataset.rms=s.audio.rms||0;
-  if(s.audio_error){$('audioStatus').textContent='音频未启动：'+s.audio_error;return;}
+function setLive(value){live=value;const b=$('liveButton'),active=live&&meta?.host!=='web';b.classList.toggle('active',active);b.lastElementChild.textContent=active?'停止播放':'持续发声';b.firstElementChild.textContent=active?'■':'▶';}
+function updateAudio(s){document.dispatchEvent(new CustomEvent('m10-output-state',{detail:{active:s.active,generation:s.playback_generation}}));if(s.audio_locked){$('audioStatus').textContent='静音建模已锁定，后端不允许音频输出。';return;}setLive(s.active);const db=20*Math.log10(Math.max(s.audio.rms||0,1e-5));$('levelFill').style.width=Math.max(0,Math.min(100,(db+60)/60*100))+'%';$('levelText').textContent=s.active?db.toFixed(0)+' dBFS':'静音';$('levelMeter').dataset.rms=s.audio.rms||0;
+  if(vowelBusy&&!rendering&&!s.active)setVowelBusy(false);
+  if(s.audio_error){setVowelBusy(false);void post('deactivate').catch(()=>{});$('audioStatus').textContent='音频未启动：'+s.audio_error;return;}
   if(s.active)$('audioStatus').textContent=`${s.mode==='live'?'持续发声':s.mode==='test'?'测试音':s.mode==='animation'?'关键帧播放':'元音试听'} · ${s.audio.device}${s.audio.underflows?' · 欠载 '+s.audio.underflows:''}`;
   else if(!rendering)$('audioStatus').textContent='声音将从上方选定的设备播放。';
 }
 async function preview(glide,duration=1.2){
   if(dirty||inFlight||motionBusy){toast('请等待构形更新完成');return;}
-  rendering=true;const buttons=[$('oneSecondButton'),$('liveButton')];buttons.forEach(b=>b.disabled=true);$('audioStatus').textContent='正在合成…';
+  rendering=true;if(meta.host==='web')setVowelBusy(true);const buttons=[$('oneSecondButton'),$('liveButton')];buttons.forEach(b=>b.disabled=true);$('audioStatus').textContent='正在合成…';
   try{const r=await post('preview',{params:[...params],lip_width:lipWidth,larynx_height:larynxHeight,tongue_shape:[...tongueShape],duration:glide?2.4:duration,sequence:glide?'a-i-u':null});updateAudio(await r.json());}
-  catch(e){toast(e.message);$('audioStatus').textContent='试听失败：'+e.message;}finally{rendering=false;buttons.forEach(b=>b.disabled=!!meta.audio_locked);}
+  catch(e){setVowelBusy(false);void post('deactivate').catch(()=>{});toast(e.message);$('audioStatus').textContent='试听失败：'+e.message;}finally{rendering=false;if(meta.host==='web'){if(!live)setVowelBusy(false);applyPoseLock();}else buttons.forEach(b=>b.disabled=!!meta.audio_locked);}
 }
 
 const viewport=$('viewport');
@@ -209,9 +240,29 @@ $('areaChart').onpointermove=e=>{if(areaDrag)selectArea(e);};
 for(const event of ['pointerup','pointercancel','lostpointercapture'])$('areaChart').addEventListener(event,()=>areaDrag=false);
 $('areaChart').onkeydown=e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();selectSection(e.key==='Home'?0:e.key==='End'?snapshot.centerline.length-1:+$('sliceRange').value+(e.key==='ArrowRight'?1:-1));}};
 new ResizeObserver(()=>drawCharts()).observe(document.querySelector('.charts'));
+async function presentation(){
+  const response=await fetch('presentation-metadata.json');if(!response.ok)throw Error('设置预览无法读取');
+  meta=await response.json();const defaults=await(await fetch('default-presets.json')).json();
+  meta.default_poses=defaults.presets;for(const name of defaults.excluded)delete meta.presets[name];
+  Object.assign(meta,{custom_presets:[],favorites:[],ipa_chart:await ipaChart,saved_frames:[],saved_curve:[],output_devices:[],audio_settings:{device:'',volume:Number($('volumeRange').value)/100,gain_db:0},audio_locked:false});
+  params=[...meta.presets.a];viewer.metadata=meta;setupControls();selectInspector('tongue');
+  $('loadIndicator').hidden=true;$('audioStatus').textContent='网页版暂未接通';
+  document.body.inert=true;document.body.dataset.engineState='presentation';
+}
 async function boot(){try{
-  meta=await request('meta');const defaultResponse=await fetch('default-presets.json');if(!defaultResponse.ok)throw Error('默认构形无法读取');const defaults=await defaultResponse.json();meta.default_poses=defaults.presets;for(const name of defaults.excluded)delete meta.presets[name];revision=(await request('status')).revision;params=[...meta.presets.a];viewer.metadata=meta;let count=65;try{const current=localStorage.getItem('m10-section-count-r19'),saved=Number(current??localStorage.getItem('m10-section-count'));if(meta.section_options.includes(saved)&&(current!==null||saved!==129))count=saved;}catch{}$('sectionCount').value=count;$('sliceRange').value=Math.floor(count/2);const savedResponse=await response('keyframes/load');if(!savedResponse.ok)throw Error('关键帧配置无法读取，请检查用户目录中的 keyframes.json');const sequence=await savedResponse.json();meta.custom_presets=await request('presets/load');meta.favorites=await request('favorites/load');meta.ipa_chart=await ipaChart;meta.saved_frames=sequence.frames;meta.saved_curve=sequence.pitch_curve||[];setupControls();setupMonitor(post,()=>closed);await viewer.load();let saved={};try{saved=JSON.parse(localStorage.getItem('vtl-view-v2')||'{}');}catch{}for(const [id,key] of [['headToggle','head'],['noseToggle','nose'],['labelsToggle','labels'],['teethToggle','teeth'],['fullModelToggle','fullModel']]){if(typeof saved[key]==='boolean')$(id).checked=saved[key];viewer.setOptions({[key]:$(id).checked});}setMode(['organs','airway','overlay'].includes(saved.mode)?saved.mode:'organs');dirty=true;await queuePose();selectInspector('tongue');document.body.dataset.engineState='ready';
-  setInterval(async()=>{if(closed)return;try{const s=await(await post('heartbeat')).json();updateAudio(s);document.body.dataset.engineState='ready';}catch(e){setLive(false);document.body.dataset.engineState='offline';if(!$('loadIndicator').hidden)$('loadIndicator').textContent='服务已离线，请重新打开生理参数合成';}},250);
+  await preferencesReady;
+  if(new URLSearchParams(location.search).get('presentation')==='1'){await presentation();return;}
+
+  meta=await request('meta');const defaultResponse=await fetch('default-presets.json');if(!defaultResponse.ok)throw Error('默认构形无法读取');const defaults=await defaultResponse.json();meta.default_poses=defaults.presets;for(const name of defaults.excluded)delete meta.presets[name];revision=(await request('status')).revision;params=[...meta.presets.a];viewer.metadata=meta;
+  const web=meta.host==='web';
+  if(web){
+    $('videoStart').textContent='生成并下载';
+    $('sectionCount').replaceChildren(...[33,65,129,257].map(n=>{const o=document.createElement('option');o.value=n;o.textContent=n+' 截面'+(n===33?' · 默认':n>65?' · 桌面版':'');o.disabled=n>65;return o;}));
+    const note=document.createElement('small');note.className='web-sampling-note';note.append('129、257 截面请使用 ');const link=document.createElement('a');link.href='https://www.phonetictoolbox.com/';link.target='_blank';link.rel='noopener noreferrer';link.textContent='下载桌面版';note.append(link);$('sectionCount').closest('section').querySelector('.sampling-control').after(note);
+  }
+  if(preferenceKey&&retainedSettings.audio){const audio={};for(const k of ['volume','gain_db'])if(Number.isFinite(retainedSettings.audio[k]))audio[k]=retainedSettings.audio[k];if(typeof retainedSettings.audio.device==='string')audio.device=retainedSettings.audio.device;meta.audio_settings={...meta.audio_settings,...audio};await post('audio/settings',audio);}
+  let count=web?33:65;if(preferenceKey&&meta.section_options.includes(retainedSettings.sectionCount))count=retainedSettings.sectionCount;try{const current=preferenceKey?null:localStorage.getItem(web?'m10-web-section-count':'m10-section-count-r19'),saved=Number(current??(!web&&!preferenceKey?localStorage.getItem('m10-section-count'):null));if(meta.section_options.includes(saved)&&(web||current!==null||saved!==129))count=saved;}catch{}$('sectionCount').value=count;$('sliceRange').value=Math.floor(count/2);const savedResponse=await response('keyframes/load');if(!savedResponse.ok)throw Error('关键帧配置无法读取，请重新打开工作区');const sequence=await savedResponse.json();meta.custom_presets=await request('presets/load');meta.favorites=await request('favorites/load');meta.ipa_chart=await ipaChart;meta.saved_frames=sequence.frames;meta.saved_curve=sequence.pitch_curve||[];setupControls();setupMonitor(post,()=>closed);await viewer.load();let saved=preferenceKey?(retainedSettings.view??{}):{};try{if(!preferenceKey)saved=JSON.parse(localStorage.getItem('vtl-view-v2')||'{}');}catch{}for(const [id,key] of [['headToggle','head'],['noseToggle','nose'],['labelsToggle','labels'],['teethToggle','teeth'],['fullModelToggle','fullModel']]){if(typeof saved[key]==='boolean')$(id).checked=saved[key];viewer.setOptions({[key]:$(id).checked});}setMode(['organs','airway','overlay'].includes(saved.mode)?saved.mode:'organs');dirty=true;await queuePose();selectInspector('tongue');document.body.dataset.engineState='ready';
+  let heartbeatPending=false;setInterval(async()=>{if(closed||heartbeatPending)return;heartbeatPending=true;try{const s=await(await post('heartbeat')).json();updateAudio(s);document.body.dataset.engineState='ready';}catch(e){setLive(false);document.body.dataset.engineState='offline';if(!$('loadIndicator').hidden)$('loadIndicator').textContent='服务已离线，请重新打开生理参数合成';}finally{heartbeatPending=false;}},meta.host==='web'?500:250);
   window.addEventListener('pagehide',()=>{request('deactivate').catch(()=>{});});
 }catch(e){$('loadIndicator').textContent='载入失败：'+e.message;document.body.dataset.engineState='failed';console.error(e);}}
 boot();

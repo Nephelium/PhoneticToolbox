@@ -383,7 +383,8 @@ class Workbench(QMainWindow):
         self.channel.registerObject('papers',self.papers_bridge)
         from .feedback_bridge import FeedbackBridge
         feedback_root=updates_root/'feedback-qa' if test else user_data_root()/'feedback'
-        self.feedback_bridge=FeedbackBridge(feedback_root,self)
+        self.feedback_bridge=FeedbackBridge(feedback_root,self,client_info={
+            'source':'desktop','version':update_version,'packageKind':kind if frozen else 'source'})
         self.channel.registerObject('feedback',self.feedback_bridge)
         if not test:self.papers_bridge.start_maintenance()
         self.page.setWebChannel(self.channel)

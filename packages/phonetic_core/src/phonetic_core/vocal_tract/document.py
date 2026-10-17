@@ -28,6 +28,11 @@ def sequence_document(engine, obj):
             'pitch_curve': validate_pitch_curve(obj.get('pitch_curve', []))}
     if method:result['geometry_method']=method
     if obj['version']<5:result['geometry_notice']='旧文件参数已保留，按当前 R18 几何重新计算，声音及面积可能与旧版不同。'
+    if 'section_count' in obj:
+        count=obj['section_count']
+        if type(count) is not int or count not in (33,65,129,257):raise ValueError('关键帧文件的截面数无效')
+        result['section_count']=count
+        if count!=engine.section_count:result['geometry_notice']=(result.get('geometry_notice','')+f' 文件记录 {count} 截面，当前使用 {engine.section_count} 截面重新计算。').strip()
     return result
 
 
@@ -35,5 +40,5 @@ def make_document(engine, frames, curve):
     # New readers explicitly identify the changed geometry. Older readers
     # reject version 5 instead of silently producing their old geometry.
     return sequence_document(engine, {'format': FORMAT, 'version': 5,
-        'model': 'VTL-2.4-JD2-M10-R18', 'geometry_method':'m10/r18','parameters': engine.names,
+        'model': 'VTL-2.4-JD2-M10-R18', 'geometry_method':'m10/r18','parameters': engine.names,'section_count':engine.section_count,
         'frames': frames, 'pitch_curve': curve})

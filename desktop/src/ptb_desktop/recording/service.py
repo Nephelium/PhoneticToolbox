@@ -11,16 +11,46 @@ import numpy as np
 from phonetic_core.recording import meter
 from phonetic_core.recording.praat_display import PraatDisplaySpectrum as DisplaySpectrum
 from phonetic_core.recording.edits import frames,select,remove,insert
-from .storage import Project,uid,now,read_range,iter_audio,atomic_json,read_json,safe_name
+from .storage import Project,uid,now,read_range,iter_audio,atomic_json,read_json,safe_name,safe_path,validate_span
 from .capture import Capture
 from .devices import devices,validate_config,Playback,PlaybackStartError
 from .jobs import process_audio,export_audio
+
+MAX_PREVIEW_CACHE_BYTES=4_000_000
+
+def pack_preview(value):
+    """Keep bounded numeric arrays, without a costly JSON encode/decode cycle."""
+    packed={**value,'wave':np.asarray(value['wave'],dtype=np.float64)}
+    size=packed['wave'].nbytes
+    if value['spectrum'] is not None:
+        packed['spectrum']={k:np.asarray(v,dtype=np.uint8 if k=='pixels' else np.float64) if isinstance(v,list) else v
+                            for k,v in value['spectrum'].items()}
+        size+=sum(v.nbytes for v in packed['spectrum'].values() if isinstance(v,np.ndarray))
+    return packed,size
+
+
+def unpack_preview(packed):
+    value={**packed,'wave':packed['wave'].tolist()}
+    if packed['spectrum'] is not None:
+        value['spectrum']={k:v.tolist() if isinstance(v,np.ndarray) else v for k,v in packed['spectrum'].items()}
+    return value
 
 
 class RecordingService:
     def __init__(self,*,backend=None):
         self.backend=backend;self.project=None;self.capture=None;self.player=None;self.job=None;self.clipboard=None;self.grants={};self.noise=None
         self.lock=threading.RLock()
+        self.preview_cache=None
+
+    def preview_identity(self,spans):
+        """Recheck append-only PCM paths and metadata even on a cached view."""
+        identities=[]
+        for span in spans:
+            validate_span(self.project.root,span)
+            path=safe_path(self.project.root,span['file']);stat=path.stat()
+            identities.append((str(path),span['start'],span['end'],span['frames'],span['channels'],span['sha256'],
+                               stat.st_dev,stat.st_ino,stat.st_size,stat.st_mtime_ns,stat.st_ctime_ns))
+        return tuple(identities)
 
     @property
     def recording(self):return bool(self.capture and not self.capture.probe)
@@ -130,10 +160,16 @@ class RecordingService:
         if op=='preview':
             take=self.take(b['id']);v=take['versions'][int(b.get('version',take['head']))];n=frames(v['spans']);start=max(0,int(b.get('start',0)));end=min(n,int(b.get('end',n)));width=min(1600,max(32,int(b.get('width',900))))
             if not 0<=start<end<=n:raise ValueError('预览范围为空或越界')
+            spans=select(v['spans'],start,end);channel=int(b.get('channel',0));spectrum=bool(b.get('spectrum'))
+            identity=self.preview_identity(spans)
+            key=(str(self.project.root),self.project.data['id'],take['id'],v['id'],n,start,end,width,channel,spectrum,
+                 take['config']['sample_rate'],take['config']['channels'],identity)
+            if self.preview_cache is not None and self.preview_cache[0]==key:return unpack_preview(self.preview_cache[1])
+            self.preview_cache=None
             # Stream decimation for arbitrarily long takes. No whole-take RAM read.
             channels=take['config']['channels'];bins=min(width,end-start);edges=np.linspace(start,end,bins+1,dtype=np.int64);lo=np.full((bins,channels),np.inf);hi=np.full((bins,channels),-np.inf);offset=start
-            display=DisplaySpectrum(end-start,take['config']['sample_rate'],int(b.get('channel',0)),width) if b.get('spectrum') else None
-            for block in iter_audio(self.project.root,select(v['spans'],start,end)):
+            display=DisplaySpectrum(end-start,take['config']['sample_rate'],channel,width) if spectrum else None
+            for block in iter_audio(self.project.root,spans):
                 if display is not None:display.add(block)
                 stop=offset+len(block);first=max(0,int(np.searchsorted(edges,offset,side='right')-1));last=min(bins,int(np.searchsorted(edges,stop,side='left'))+1)
                 for index in range(first,last):
@@ -143,6 +179,8 @@ class RecordingService:
             out={'wave':[np.stack((lo[:,c],hi[:,c]),axis=1).tolist() for c in range(channels)],'window_frames':end-start,'frames':n,'start_frame':start,'sample_rate':take['config']['sample_rate'],'spectrum':None}
             if display is not None:
                 out['spectrum']=display.result();out['spectrum_window_frames']=end-start
+            packed,size=pack_preview(out)
+            if size<=MAX_PREVIEW_CACHE_BYTES and self.preview_identity(spans)==identity:self.preview_cache=(key,packed,size)
             return out
         if op in ('edit','undo','redo','restore','version'):
             self.require(idle=True);self.stop_play();take=self.take(b['id']);spans=take['versions'][take['head']]['spans']
@@ -281,6 +319,7 @@ class RecordingService:
 
     def close(self):
         with self.lock:
+            self.preview_cache=None
             try:
                 self.stop_play()
                 if self.capture:

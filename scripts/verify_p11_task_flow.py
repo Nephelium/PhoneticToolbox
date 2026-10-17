@@ -188,10 +188,10 @@ def main():
                     fault_path=out/'fault-runtime.json';fault_path.write_text(json.dumps(fault_profile),encoding='utf-8')
                     os.environ['PTB_LINUX_RUNTIME_PROFILE']=str(fault_path);files.reaper_binary=str(fake)
                     try:
-                        job,claim=submit();done=execute(job,claim)
+                        job,claim=submit({'backend_policy':{'reaper':'native_required'}});done=execute(job,claim)
                     finally:
                         os.environ['PTB_LINUX_RUNTIME_PROFILE']=prior;files.reaper_binary=saved
-                    assert done['state']=='failed' and done['error_code']=='reaper_runtime_failed' and not done['result_manifest'],done
+                    assert done['state']=='failed' and done['error_code']=='analysis_reaper_failed' and not done['result_manifest'],done
                     report['faults'].append('registered native exit failure cannot publish missing rF0')
                 if args.phase=='lpc':
                     from ptb_worker.native import linux_runtime

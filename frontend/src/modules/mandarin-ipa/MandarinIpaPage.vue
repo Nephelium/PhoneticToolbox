@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {useWebSettings,settingsFields} from '../../state/web-settings.ts';
 import AppIcon from '../../components/AppIcon.vue';
 import {vResizablePanels} from '../../layout/resizablePanels.ts';
 import {computed,nextTick,onBeforeUnmount,onMounted,reactive,ref,watch} from 'vue';
@@ -128,6 +129,7 @@ async function exportImage(){
   finally{exporting.value=false;}
 }
 defineExpose({save});
+useWebSettings(props.stateKey,settingsFields(draft,['standard','display','layout','hanziSize','ipaSize','ipaSizeUserSet','gap','lineHeight','bold','italic','underline','showTone','ipaColor','hanziColor','hanziFont','equalWidth']));
 </script>
 
 <template>

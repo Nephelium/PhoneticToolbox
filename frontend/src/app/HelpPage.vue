@@ -5,6 +5,7 @@ import {parseManualProject} from '../manual/content.ts';
 import type {ManualProject,ManualTarget,ManualLocation} from '../manual/types.ts';
 import {host} from '../state/workspace.ts';
 import {modules} from './registry.ts';
+import {manualForHost} from './manual-project.ts';
 const chapterIcons=Object.fromEntries(modules.map(item=>[item.id.toLowerCase(),item.icon]));
 withDefaults(defineProps<{active?:boolean;target?:ManualTarget;requestKey?:number;playbackAllowed?:boolean;returnLabel?:string}>(),{active:true,playbackAllowed:true});
 const emit=defineEmits<{returnTool:[]}>();
@@ -15,7 +16,7 @@ const saved=host.projects.read<ManualLocation|undefined>('manual-location',undef
 const initialLocation=saved&&typeof saved.chapterId==='string'&&Number.isFinite(saved.scrollTop)?saved:undefined;
 async function load(){
   loading.value=true;error.value='';
-  try{const response=await fetch(assetBaseUrl+'project.json',{signal:abort.signal,credentials:'same-origin'});if(!response.ok)throw Error('missing');project.value=parseManualProject(await response.json());}
+  try{const response=await fetch(assetBaseUrl+'project.json',{signal:abort.signal,credentials:'same-origin'});if(!response.ok)throw Error('missing');project.value=manualForHost(parseManualProject(await response.json()),host.kind);}
   catch(reason){if(!abort.signal.aborted)error.value='使用说明资源未能加载，请检查软件资源是否完整，或重新打开此标签。';}
   finally{loading.value=false;}
 }

@@ -34,9 +34,12 @@ def fingerprint():
     blas = config['Build Dependencies']['blas']
     versions = {k:metadata.version(k) for k in ('phonetic-core','numpy','scipy','praat-parselmouth','matplotlib','pandas')}
     from ptb_api.protocol_version import CORE_VERSION
+    from .source_runtime import bound_core_version
+    installed_core_version=versions['phonetic-core']
+    versions['phonetic-core']=bound_core_version(__file__,installed_core_version,CORE_VERSION)
     expected = dict(zip(versions,[CORE_VERSION,'2.2.6','1.16.3','0.4.7','3.10.8','2.3.3']))
     required = ['libblas-3.11.0-4_hf2e6a31_mkl','liblapack-3.11.0-4_hf9ab0e9_mkl','mkl-2025.3.0-hac47afa_454']
     if versions != expected or record.get('build') != 'py311hf127856_1' or blas['name'] != 'blas' or not all((lock.parent/(name+'.json')).is_file() for name in required):
         raise AcousticFailure('egg_runtime_mismatch')
-    return dict(versions=versions,scipy_build=record['build'],blas='MKL 2025.3.0',conda_builds=required,
+    return dict(versions=versions,installed_core_version=installed_core_version,scipy_build=record['build'],blas='MKL 2025.3.0',conda_builds=required,
                 numpy_blas=np.__config__.CONFIG['Build Dependencies']['blas']['name'])

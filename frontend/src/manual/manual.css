@@ -37,6 +37,7 @@ h5.manual-heading,h6.manual-heading{font-size:1em;line-height:1.5;font-weight:65
 .manual-toc-toggle{width:1em;height:1em;flex:none;margin-top:.25em;transition:transform .15s}
 .manual-toc-toggle.expanded{transform:rotate(90deg)}
 .manual-toc button.active{color:var(--accent);background:var(--selected);box-shadow:none}
+.manual-toc button:focus-visible{outline:none;text-decoration:underline;text-underline-offset:3px}
 .manual-toc ol{margin:2px 0 10px 12px}
 .manual-toc ol button{font-size:1rem;color:var(--muted);font-weight:400}
 .manual-toc button[data-manual-section]{display:flex;align-items:start;gap:4px}

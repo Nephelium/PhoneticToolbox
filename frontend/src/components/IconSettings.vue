@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import {ref} from 'vue';
-import {applicationIcon,builtinIcons,iconPreferences,iconBusy,iconError,changeIcon,prepareIconSource,homeIconScale,setHomeIconScale} from '../state/app-icon.ts';
+import {ref,watch} from 'vue';
+import {applicationIcon,builtinIcons,iconPreferences,iconBusy,iconError,changeIcon,prepareIconSource,homeIconScale,setHomeIconScale,loadBuiltinIcons} from '../state/app-icon.ts';
 import {nativeIcons} from '../platform/icons.ts';
 import type {CustomIcon} from '../platform/icons.ts';
 import {saveIconSource,removeIconSource,originalIconSource} from '../platform/icon-sources.ts';
 import IconCropDialog from './IconCropDialog.vue';
 import {onUnmounted} from 'vue';
+const props=withDefaults(defineProps<{active?:boolean}>(),{active:true});
+watch(()=>props.active,active=>{if(active)void loadBuiltinIcons();},{immediate:true});
 const input=ref<HTMLInputElement>(),loading=ref(false),message=ref(''),importError=ref('');
 const draft=ref<{url:string;name:string;source:Blob;id?:string}>();
 function closeCrop(){if(loading.value||iconBusy.value)return;if(draft.value)URL.revokeObjectURL(draft.value.url);draft.value=undefined;importError.value='';iconError.value='';}

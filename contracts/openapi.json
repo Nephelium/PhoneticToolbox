@@ -1,6 +1,41 @@
 {
   "components": {
     "schemas": {
+      "AccountFeedbackInput": {
+        "additionalProperties": false,
+        "properties": {
+          "args": {
+            "additionalProperties": true,
+            "maxProperties": 12,
+            "title": "Args",
+            "type": "object"
+          },
+          "email": {
+            "maxLength": 254,
+            "title": "Email",
+            "type": "string"
+          },
+          "operation": {
+            "enum": [
+              "status",
+              "health",
+              "unread",
+              "messages",
+              "send",
+              "read",
+              "setMailNotifications"
+            ],
+            "title": "Operation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "operation"
+        ],
+        "title": "AccountFeedbackInput",
+        "type": "object"
+      },
       "AcousticAssetRef": {
         "additionalProperties": false,
         "properties": {
@@ -1842,6 +1877,134 @@
         "title": "Capabilities",
         "type": "object"
       },
+      "CapacityRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "duration": {
+            "default": "today",
+            "enum": [
+              "today",
+              "7d",
+              "30d"
+            ],
+            "title": "Duration",
+            "type": "string"
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          },
+          "requested_bytes": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 10000000000.0,
+            "title": "Requested Bytes",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "requested_bytes",
+          "reason"
+        ],
+        "title": "CapacityRequest",
+        "type": "object"
+      },
+      "CapacityRequestView": {
+        "additionalProperties": false,
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "decision_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decision Note"
+          },
+          "duration": {
+            "enum": [
+              "today",
+              "7d",
+              "30d"
+            ],
+            "title": "Duration",
+            "type": "string"
+          },
+          "expires_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          },
+          "granted_bytes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Granted Bytes"
+          },
+          "granted_duration": {
+            "anyOf": [
+              {
+                "enum": [
+                  "today",
+                  "7d",
+                  "30d"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Granted Duration"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "requested_bytes": {
+            "title": "Requested Bytes",
+            "type": "integer"
+          },
+          "state": {
+            "enum": [
+              "pending",
+              "approved",
+              "declined"
+            ],
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "requested_bytes",
+          "state",
+          "created_at",
+          "duration"
+        ],
+        "title": "CapacityRequestView",
+        "type": "object"
+      },
       "Challenge": {
         "additionalProperties": false,
         "properties": {
@@ -1854,6 +2017,50 @@
           "csrf_token"
         ],
         "title": "Challenge",
+        "type": "object"
+      },
+      "Decision": {
+        "additionalProperties": false,
+        "properties": {
+          "duration": {
+            "default": "today",
+            "enum": [
+              "today",
+              "7d",
+              "30d"
+            ],
+            "title": "Duration",
+            "type": "string"
+          },
+          "granted_bytes": {
+            "anyOf": [
+              {
+                "maximum": 10000000000.0,
+                "minimum": 100000000.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Granted Bytes"
+          },
+          "note": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Note",
+            "type": "string"
+          },
+          "request_id": {
+            "format": "uuid",
+            "title": "Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id"
+        ],
+        "title": "Decision",
         "type": "object"
       },
       "DeleteImpact": {
@@ -2792,6 +2999,34 @@
         "title": "EggTaskConfig",
         "type": "object"
       },
+      "EmailAccepted": {
+        "additionalProperties": false,
+        "properties": {
+          "accepted": {
+            "default": true,
+            "title": "Accepted",
+            "type": "boolean"
+          }
+        },
+        "title": "EmailAccepted",
+        "type": "object"
+      },
+      "EmailInput": {
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "maxLength": 254,
+            "minLength": 3,
+            "title": "Email",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "title": "EmailInput",
+        "type": "object"
+      },
       "ExportReceipt": {
         "additionalProperties": false,
         "properties": {
@@ -3357,7 +3592,8 @@
               "speech_synthesis",
               "phonation_synthesis",
               "mfa_alignment",
-              "lip_analysis"
+              "lip_analysis",
+              "recording_audio"
             ],
             "title": "Operation",
             "type": "string"
@@ -3570,6 +3806,7 @@
         "title": "JointEggSettings",
         "type": "object"
       },
+      "JsonValue": {},
       "LocalM11ComponentRequest": {
         "additionalProperties": false,
         "properties": {
@@ -5339,6 +5576,26 @@
         "title": "MessageInput",
         "type": "object"
       },
+      "PaperRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "args": {
+            "additionalProperties": true,
+            "title": "Args",
+            "type": "object"
+          },
+          "operation": {
+            "maxLength": 40,
+            "title": "Operation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "operation"
+        ],
+        "title": "PaperRequest",
+        "type": "object"
+      },
       "ParameterTable": {
         "additionalProperties": false,
         "properties": {
@@ -5469,6 +5726,146 @@
         "title": "ParameterWindowRequest",
         "type": "object"
       },
+      "PreferencePatch": {
+        "additionalProperties": false,
+        "properties": {
+          "changes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "title": "Changes",
+            "type": "object"
+          },
+          "expected_revision": {
+            "maximum": 9007199254740991.0,
+            "minimum": 0.0,
+            "title": "Expected Revision",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "expected_revision",
+          "changes"
+        ],
+        "title": "PreferencePatch",
+        "type": "object"
+      },
+      "PreferenceView": {
+        "additionalProperties": false,
+        "properties": {
+          "module": {
+            "enum": [
+              "APP",
+              "M01",
+              "M02",
+              "M03",
+              "M04",
+              "M05",
+              "M06",
+              "M07",
+              "M08",
+              "M09",
+              "M10",
+              "M11",
+              "M12",
+              "M13",
+              "M14",
+              "M15",
+              "M16",
+              "M17",
+              "M18"
+            ],
+            "title": "Module",
+            "type": "string"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          },
+          "values": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            },
+            "title": "Values",
+            "type": "object"
+          }
+        },
+        "required": [
+          "module",
+          "revision",
+          "values",
+          "updated_at"
+        ],
+        "title": "PreferenceView",
+        "type": "object"
+      },
+      "PreferencesView": {
+        "additionalProperties": false,
+        "properties": {
+          "allowed_fields": {
+            "additionalProperties": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "title": "Allowed Fields",
+            "type": "object"
+          },
+          "modules": {
+            "items": {
+              "$ref": "#/components/schemas/PreferenceView"
+            },
+            "title": "Modules",
+            "type": "array"
+          }
+        },
+        "required": [
+          "modules",
+          "allowed_fields"
+        ],
+        "title": "PreferencesView",
+        "type": "object"
+      },
+      "PresenceView": {
+        "additionalProperties": false,
+        "properties": {
+          "measured_at": {
+            "title": "Measured At",
+            "type": "number"
+          },
+          "online_accounts": {
+            "title": "Online Accounts",
+            "type": "integer"
+          },
+          "server": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ServerLoadView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "window_seconds": {
+            "default": 90,
+            "title": "Window Seconds",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "online_accounts",
+          "measured_at"
+        ],
+        "title": "PresenceView",
+        "type": "object"
+      },
       "PreviewInterval": {
         "additionalProperties": false,
         "properties": {
@@ -5595,6 +5992,58 @@
         "title": "ProjectView",
         "type": "object"
       },
+      "PublicAccountOptions": {
+        "additionalProperties": false,
+        "properties": {
+          "ephemeral_workspaces": {
+            "default": false,
+            "title": "Ephemeral Workspaces",
+            "type": "boolean"
+          },
+          "password_recovery": {
+            "title": "Password Recovery",
+            "type": "boolean"
+          },
+          "registration": {
+            "title": "Registration",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "registration",
+          "password_recovery"
+        ],
+        "title": "PublicAccountOptions",
+        "type": "object"
+      },
+      "QuotaChange": {
+        "additionalProperties": false,
+        "properties": {
+          "owner_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner Id"
+          },
+          "quota_bytes": {
+            "maximum": 10000000000.0,
+            "minimum": 100000000.0,
+            "title": "Quota Bytes",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "quota_bytes"
+        ],
+        "title": "QuotaChange",
+        "type": "object"
+      },
       "ReadInput": {
         "additionalProperties": false,
         "properties": {
@@ -5608,6 +6057,251 @@
           "through"
         ],
         "title": "ReadInput",
+        "type": "object"
+      },
+      "RecordingConfig": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "enum": [
+              "noise",
+              "denoise",
+              "gain",
+              "keep",
+              "delete",
+              "cut",
+              "paste",
+              "export"
+            ],
+            "title": "Action",
+            "type": "string"
+          },
+          "channel": {
+            "default": 0,
+            "maximum": 7.0,
+            "minimum": 0.0,
+            "title": "Channel",
+            "type": "integer"
+          },
+          "channels": {
+            "items": {
+              "type": "integer"
+            },
+            "maxItems": 8,
+            "title": "Channels",
+            "type": "array"
+          },
+          "end": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End"
+          },
+          "gain_db": {
+            "default": 0.0,
+            "maximum": 24.0,
+            "minimum": -60.0,
+            "title": "Gain Db",
+            "type": "number"
+          },
+          "hashes": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Hashes",
+            "type": "object"
+          },
+          "inputs": {
+            "items": {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+              "type": "string"
+            },
+            "maxItems": 2,
+            "minItems": 1,
+            "title": "Inputs",
+            "type": "array"
+          },
+          "max_output_bytes": {
+            "default": 310000000,
+            "maximum": 310000000.0,
+            "minimum": 1.0,
+            "title": "Max Output Bytes",
+            "type": "integer"
+          },
+          "reference_end": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reference End"
+          },
+          "reference_roles": {
+            "anyOf": [
+              {
+                "items": {
+                  "enum": [
+                    "microphone",
+                    "egg",
+                    "other"
+                  ],
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reference Roles"
+          },
+          "reference_start": {
+            "default": 0,
+            "minimum": 0.0,
+            "title": "Reference Start",
+            "type": "integer"
+          },
+          "roles": {
+            "items": {
+              "enum": [
+                "microphone",
+                "egg",
+                "other"
+              ],
+              "type": "string"
+            },
+            "maxItems": 8,
+            "minItems": 1,
+            "title": "Roles",
+            "type": "array"
+          },
+          "start": {
+            "default": 0,
+            "minimum": 0.0,
+            "title": "Start",
+            "type": "integer"
+          },
+          "strength": {
+            "default": 1.0,
+            "maximum": 2.0,
+            "minimum": 0.1,
+            "title": "Strength",
+            "type": "number"
+          },
+          "subtype": {
+            "default": "FLOAT",
+            "enum": [
+              "FLOAT",
+              "PCM_24",
+              "PCM_16"
+            ],
+            "title": "Subtype",
+            "type": "string"
+          }
+        },
+        "required": [
+          "inputs",
+          "hashes",
+          "action",
+          "roles"
+        ],
+        "title": "RecordingConfig",
+        "type": "object"
+      },
+      "RecordingRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "config": {
+            "$ref": "#/components/schemas/RecordingConfig"
+          },
+          "idempotency_key": {
+            "pattern": "^[A-Za-z0-9_-]{8,80}$",
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "operation": {
+            "const": "recording_audio",
+            "default": "recording_audio",
+            "title": "Operation",
+            "type": "string"
+          },
+          "project_id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Project Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id",
+          "idempotency_key",
+          "config"
+        ],
+        "title": "RecordingRequest",
+        "type": "object"
+      },
+      "RegisterInput": {
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "maxLength": 254,
+            "minLength": 3,
+            "title": "Email",
+            "type": "string"
+          },
+          "password": {
+            "maxLength": 128,
+            "minLength": 12,
+            "title": "Password",
+            "type": "string"
+          },
+          "username": {
+            "maxLength": 64,
+            "minLength": 3,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{2,63}$",
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "username",
+          "password"
+        ],
+        "title": "RegisterInput",
+        "type": "object"
+      },
+      "ResetPasswordInput": {
+        "additionalProperties": false,
+        "properties": {
+          "password": {
+            "maxLength": 128,
+            "minLength": 12,
+            "title": "Password",
+            "type": "string"
+          },
+          "token": {
+            "maxLength": 43,
+            "minLength": 43,
+            "pattern": "^[A-Za-z0-9_-]{43}$",
+            "title": "Token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "token",
+          "password"
+        ],
+        "title": "ResetPasswordInput",
         "type": "object"
       },
       "ResultFile": {
@@ -5801,6 +6495,57 @@
           "sample_rate_hz"
         ],
         "title": "Selection",
+        "type": "object"
+      },
+      "ServerLoadView": {
+        "additionalProperties": false,
+        "properties": {
+          "cpu_percent": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cpu Percent"
+          },
+          "measured_at": {
+            "title": "Measured At",
+            "type": "number"
+          },
+          "memory_percent": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Memory Percent"
+          },
+          "running_tasks": {
+            "title": "Running Tasks",
+            "type": "integer"
+          },
+          "task_slots": {
+            "title": "Task Slots",
+            "type": "integer"
+          },
+          "waiting_tasks": {
+            "title": "Waiting Tasks",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "running_tasks",
+          "waiting_tasks",
+          "task_slots",
+          "measured_at"
+        ],
+        "title": "ServerLoadView",
         "type": "object"
       },
       "SessionView": {
@@ -6475,9 +7220,43 @@
             "title": "Retention Seconds",
             "type": "integer"
           },
+          "server_space_low": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Server Space Low"
+          },
+          "upload_limit_bytes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Upload Limit Bytes"
+          },
           "used_bytes": {
             "title": "Used Bytes",
             "type": "integer"
+          },
+          "workspace_policy_version": {
+            "anyOf": [
+              {
+                "const": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workspace Policy Version"
           }
         },
         "required": [
@@ -6619,6 +7398,21 @@
         "title": "Track",
         "type": "object"
       },
+      "TrashInput": {
+        "additionalProperties": false,
+        "properties": {
+          "through": {
+            "minimum": 1.0,
+            "title": "Through",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "through"
+        ],
+        "title": "TrashInput",
+        "type": "object"
+      },
       "UploadInput": {
         "additionalProperties": false,
         "properties": {
@@ -6721,6 +7515,23 @@
         "title": "ValidationError",
         "type": "object"
       },
+      "VerifyEmailInput": {
+        "additionalProperties": false,
+        "properties": {
+          "token": {
+            "maxLength": 43,
+            "minLength": 43,
+            "pattern": "^[A-Za-z0-9_-]{43}$",
+            "title": "Token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ],
+        "title": "VerifyEmailInput",
+        "type": "object"
+      },
       "VerifyFinish": {
         "additionalProperties": false,
         "properties": {
@@ -6781,6 +7592,142 @@
           "tracks"
         ],
         "title": "Viewport",
+        "type": "object"
+      },
+      "VocalCall": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "additionalProperties": true,
+            "title": "Body",
+            "type": "object"
+          },
+          "op": {
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Op",
+            "type": "string"
+          }
+        },
+        "required": [
+          "op"
+        ],
+        "title": "VocalCall",
+        "type": "object"
+      },
+      "VocalSessionView": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "idle_seconds": {
+            "title": "Idle Seconds",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "idle_seconds"
+        ],
+        "title": "VocalSessionView",
+        "type": "object"
+      },
+      "WebFeedbackRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "args": {
+            "additionalProperties": true,
+            "maxProperties": 12,
+            "title": "Args",
+            "type": "object"
+          },
+          "operation": {
+            "enum": [
+              "status",
+              "health",
+              "unread",
+              "messages",
+              "send",
+              "read",
+              "setMailNotifications"
+            ],
+            "title": "Operation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "operation"
+        ],
+        "title": "WebFeedbackRequest",
+        "type": "object"
+      },
+      "WorkspaceHeartbeat": {
+        "additionalProperties": false,
+        "properties": {
+          "generation": {
+            "minimum": 1.0,
+            "title": "Generation",
+            "type": "integer"
+          },
+          "id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "title": "Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "generation"
+        ],
+        "title": "WorkspaceHeartbeat",
+        "type": "object"
+      },
+      "WorkspaceOpen": {
+        "additionalProperties": false,
+        "properties": {
+          "fresh": {
+            "default": false,
+            "title": "Fresh",
+            "type": "boolean"
+          }
+        },
+        "title": "WorkspaceOpen",
+        "type": "object"
+      },
+      "WorkspaceView": {
+        "additionalProperties": false,
+        "properties": {
+          "expires_at": {
+            "title": "Expires At",
+            "type": "number"
+          },
+          "generation": {
+            "title": "Generation",
+            "type": "integer"
+          },
+          "grace_seconds": {
+            "default": 1800,
+            "title": "Grace Seconds",
+            "type": "integer"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "last_seen": {
+            "title": "Last Seen",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "generation",
+          "last_seen",
+          "expires_at"
+        ],
+        "title": "WorkspaceView",
         "type": "object"
       }
     }
@@ -7154,6 +8101,26 @@
               "title": "Session Id",
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "auto_db",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Auto Db",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "need_audio",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Need Audio",
+              "type": "boolean"
+            }
           }
         ],
         "requestBody": {
@@ -7232,6 +8199,91 @@
           }
         },
         "summary": "Parameters",
+        "tags": [
+          "storage"
+        ]
+      }
+    },
+    "/api/v1/assets/{asset_id}/recording-preview": {
+      "get": {
+        "operationId": "recording_spectrogram_preview",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "asset_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Asset Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "title": "Start",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "required": true,
+            "schema": {
+              "exclusiveMinimum": 0,
+              "title": "End",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "channel",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "maximum": 7,
+              "minimum": 0,
+              "title": "Channel",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "width",
+            "required": false,
+            "schema": {
+              "default": 640,
+              "maximum": 640,
+              "minimum": 32,
+              "title": "Width",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Recording Spectrum",
         "tags": [
           "storage"
         ]
@@ -7387,6 +8439,47 @@
         ]
       }
     },
+    "/api/v1/auth/forgot-password": {
+      "post": {
+        "operationId": "request_password_recovery",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailAccepted"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Forgot",
+        "tags": [
+          "accounts"
+        ]
+      }
+    },
     "/api/v1/auth/login": {
       "post": {
         "operationId": "login_account",
@@ -7463,6 +8556,136 @@
         ]
       }
     },
+    "/api/v1/auth/options": {
+      "get": {
+        "operationId": "public_account_options",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicAccountOptions"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Options",
+        "tags": [
+          "accounts"
+        ]
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "operationId": "request_registration",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailAccepted"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Register",
+        "tags": [
+          "accounts"
+        ]
+      }
+    },
+    "/api/v1/auth/reset-password": {
+      "post": {
+        "operationId": "reset_password",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reset",
+        "tags": [
+          "accounts"
+        ]
+      }
+    },
+    "/api/v1/auth/verify-email": {
+      "post": {
+        "operationId": "verify_registration",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyEmailInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Verify",
+        "tags": [
+          "accounts"
+        ]
+      }
+    },
     "/api/v1/capabilities": {
       "get": {
         "operationId": "get_capabilities",
@@ -7484,6 +8707,18 @@
     "/api/v1/feedback/admin/conversations": {
       "get": {
         "operationId": "admin_conversations_api_v1_feedback_admin_conversations_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "includeTrash",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Includetrash",
+              "type": "boolean"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {
@@ -7492,6 +8727,16 @@
               }
             },
             "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
         "summary": "Admin Conversations",
@@ -7650,6 +8895,46 @@
         ]
       }
     },
+    "/api/v1/feedback/admin/conversations/{owner}/restore": {
+      "post": {
+        "operationId": "restore_api_v1_feedback_admin_conversations__owner__restore_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "owner",
+            "required": true,
+            "schema": {
+              "title": "Owner",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Restore",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
     "/api/v1/feedback/admin/conversations/{owner}/status": {
       "post": {
         "operationId": "status_api_v1_feedback_admin_conversations__owner__status_post",
@@ -7695,6 +8980,56 @@
           }
         },
         "summary": "Status",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/admin/conversations/{owner}/trash": {
+      "post": {
+        "operationId": "trash_api_v1_feedback_admin_conversations__owner__trash_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "owner",
+            "required": true,
+            "schema": {
+              "title": "Owner",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrashInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Trash",
         "tags": [
           "feedback"
         ]
@@ -7898,6 +9233,166 @@
         ]
       }
     },
+    "/api/v1/feedback/admin/web/decision": {
+      "post": {
+        "operationId": "web_decision_api_v1_feedback_admin_web_decision_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Web Decision",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/admin/web/quota": {
+      "post": {
+        "operationId": "web_quota_api_v1_feedback_admin_web_quota_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuotaChange"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Web Quota",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/admin/web/requests": {
+      "get": {
+        "operationId": "web_requests_api_v1_feedback_admin_web_requests_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "state",
+            "required": false,
+            "schema": {
+              "default": "pending",
+              "enum": [
+                "pending",
+                "approved",
+                "declined"
+              ],
+              "title": "State",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "before",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Before"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Web Requests",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/admin/web/status": {
+      "get": {
+        "operationId": "web_status_api_v1_feedback_admin_web_status_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Web Status",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
     "/api/v1/feedback/conversation": {
       "get": {
         "operationId": "conversation_api_v1_feedback_conversation_get",
@@ -7992,6 +9487,45 @@
           }
         },
         "summary": "Device Start",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/feedback/internal/web-operation": {
+      "post": {
+        "operationId": "account_feedback_api_v1_feedback_internal_web_operation_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountFeedbackInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Account Feedback",
         "tags": [
           "feedback"
         ]
@@ -9766,6 +11300,190 @@
         ]
       }
     },
+    "/api/v1/jobs/m16/create": {
+      "post": {
+        "operationId": "create_recording_processing_job",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordingRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Recording",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m16/live-preview": {
+      "post": {
+        "operationId": "recording_live_spectrogram",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "start",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "title": "Start",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "required": true,
+            "schema": {
+              "exclusiveMinimum": 0,
+              "title": "End",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "channel",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "maximum": 7,
+              "minimum": 0,
+              "title": "Channel",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Recording Live",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/m16/project": {
+      "get": {
+        "operationId": "read_recording_project",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read Recording Project",
+        "tags": [
+          "jobs"
+        ]
+      },
+      "post": {
+        "operationId": "save_recording_project",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Save Recording Project",
+        "tags": [
+          "jobs"
+        ]
+      }
+    },
     "/api/v1/jobs/parents/latest": {
       "get": {
         "operationId": "find_acoustic_parent",
@@ -9788,6 +11506,16 @@
               "pattern": "^[0-9a-f]{64}$",
               "title": "Sha256",
               "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "table",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Table",
+              "type": "boolean"
             }
           }
         ],
@@ -10128,6 +11856,151 @@
         "summary": "Retry",
         "tags": [
           "jobs"
+        ]
+      }
+    },
+    "/api/v1/papers/{project_id}/request": {
+      "post": {
+        "operationId": "paper_request",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaperRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Request Paper",
+        "tags": [
+          "papers"
+        ]
+      }
+    },
+    "/api/v1/preferences": {
+      "get": {
+        "operationId": "get_account_preferences",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreferencesView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Listing",
+        "tags": [
+          "accounts"
+        ]
+      }
+    },
+    "/api/v1/preferences/{module}": {
+      "patch": {
+        "operationId": "patch_account_preferences",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "module",
+            "required": true,
+            "schema": {
+              "enum": [
+                "APP",
+                "M01",
+                "M02",
+                "M03",
+                "M04",
+                "M05",
+                "M06",
+                "M07",
+                "M08",
+                "M09",
+                "M10",
+                "M11",
+                "M12",
+                "M13",
+                "M14",
+                "M15",
+                "M16",
+                "M17",
+                "M18"
+              ],
+              "title": "Module",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreferencePatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreferenceView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Patch",
+        "tags": [
+          "accounts"
         ]
       }
     },
@@ -10693,6 +12566,455 @@
         "summary": "Finalize",
         "tags": [
           "storage"
+        ]
+      }
+    },
+    "/api/v1/vocal/sessions": {
+      "post": {
+        "operationId": "open_vocal_session",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VocalSessionView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Open Session",
+        "tags": [
+          "vocal-tract"
+        ]
+      }
+    },
+    "/api/v1/vocal/sessions/{session_id}": {
+      "delete": {
+        "operationId": "close_vocal_session",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Session Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Close",
+        "tags": [
+          "vocal-tract"
+        ]
+      },
+      "post": {
+        "operationId": "invoke_vocal_session",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Session Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VocalCall"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Invoke",
+        "tags": [
+          "vocal-tract"
+        ]
+      }
+    },
+    "/api/v1/web-feedback": {
+      "post": {
+        "operationId": "account_feedback_operation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebFeedbackRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Operation",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/v1/workspaces/capacity-request": {
+      "get": {
+        "operationId": "get_web_capacity_request",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/CapacityRequestView"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Get Web Capacity Request"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Capacity Status",
+        "tags": [
+          "workspaces"
+        ]
+      },
+      "post": {
+        "operationId": "request_web_capacity",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CapacityRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CapacityRequestView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Capacity",
+        "tags": [
+          "workspaces"
+        ]
+      }
+    },
+    "/api/v1/workspaces/default-project": {
+      "post": {
+        "operationId": "open_default_web_project",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Default Project",
+        "tags": [
+          "workspaces"
+        ]
+      }
+    },
+    "/api/v1/workspaces/heartbeat": {
+      "post": {
+        "operationId": "heartbeat_web_workspace",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkspaceHeartbeat"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Heartbeat",
+        "tags": [
+          "workspaces"
+        ]
+      }
+    },
+    "/api/v1/workspaces/open": {
+      "post": {
+        "operationId": "open_web_workspace",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkspaceOpen"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Open Workspace",
+        "tags": [
+          "workspaces"
+        ]
+      }
+    },
+    "/api/v1/workspaces/presence": {
+      "get": {
+        "operationId": "get_web_presence",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "include_load",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Include Load",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PresenceView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Online",
+        "tags": [
+          "workspaces"
+        ]
+      }
+    },
+    "/api/v1/workspaces/server-load": {
+      "get": {
+        "operationId": "get_web_server_load",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "details",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Details",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerLoadView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Server Load",
+        "tags": [
+          "workspaces"
         ]
       }
     }

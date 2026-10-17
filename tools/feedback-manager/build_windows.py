@@ -6,7 +6,9 @@ import sys
 
 ROOT=Path(__file__).resolve().parents[2]
 if __name__=='__main__':
-    web=ROOT/'output/build-feedback-manager/web'
+    web=Path(os.environ.get('PTB_FEEDBACK_WEB_ROOT',ROOT/'output/build-feedback-manager/web')).resolve()
+    if not web.is_relative_to(ROOT/'output/build-feedback-manager'):
+        raise ValueError('Feedback web assets must stay inside the owned build directory')
     if not (web/'feedback-manager.html').is_file():raise SystemExit('Build the shared inbox frontend first')
     # Foreign ICU libraries on the caller's PATH can override Windows' ICU API.
     # Qt imports unversioned ICU exports supplied by supported Windows systems.
@@ -14,7 +16,7 @@ if __name__=='__main__':
     subprocess.run([sys.executable,'-m','PyInstaller','--noconfirm','--onefile','--windowed','--name','反馈收件箱',
         '--copy-metadata','ptb-desktop','--paths',str(ROOT/'desktop/src'),'--add-data',str(web)+';frontend',
         '--icon',str(web/'favicon.ico'),
-        '--distpath',str(ROOT/'output/feedback-manager/1.0.1'),
+        '--distpath',str(ROOT/'output/feedback-manager/1.1.3'),
         '--workpath',str(ROOT/'output/build-feedback-manager/pyinstaller-windows'),
         '--specpath',str(ROOT/'output/build-feedback-manager'),
         str(ROOT/'tools/feedback-manager/windows/entry.py')],check=True,cwd=ROOT,env=env)

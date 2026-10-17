@@ -13,6 +13,17 @@ def digest(path):
         return hashlib.file_digest(stream, 'sha256').hexdigest()
 
 
+def same_payload_inputs(previous, current):
+    """Bindings can change without changing one byte stored in the host tar.
+
+    All file identities, sharing paths, schema and unknown future fields must
+    still match. The caller must separately verify archive and manifest hashes.
+    """
+    bindings = {'runtimeArchiveSha256', 'runtimeManifestSha256'}
+    return ({k:v for k,v in previous.items() if k not in bindings} ==
+            {k:v for k,v in current.items() if k not in bindings})
+
+
 def shared_manifest(records, runtime_archive):
     """Match contents only; bind the mapping to the exact scientific archive."""
     if runtime_archive is None:
@@ -90,8 +101,9 @@ def pack(analysis, output, runtime_archive=None, application_native=False):
     if reuse:
         previous = json.loads(manifest.read_text('utf8'))
         metadata = json.loads(descriptor.read_text('utf8'))
-        if (previous != contents or metadata.get('schema') != schema or archive.stat().st_size != metadata['size'] or
-                digest(archive) != metadata['sha256'] or digest(manifest) != metadata['manifestSha256']):
+        intact = (metadata.get('schema') == schema and archive.stat().st_size == metadata['size'] and
+                  digest(archive) == metadata['sha256'] and digest(manifest) == metadata['manifestSha256'])
+        if not intact or not same_payload_inputs(previous, contents):
             # Keep the rejected copy for diagnosis and compress the current inputs.
             # Do this in the same analysis pass, without accepting mismatched bytes.
             rejected = output.with_name(output.name + '-cache-rejected-' + datetime.now().strftime('%Y%m%d-%H%M%S-%f'))
@@ -99,6 +111,19 @@ def pack(analysis, output, runtime_archive=None, application_native=False):
             output.mkdir(parents=True, exist_ok=False)
             print('Host archive cache changed; rebuilding from current native inputs.', flush=True)
         else:
+            if previous != contents:
+                # shared_manifest already checked the new scientific archive
+                # and matched each shared file by exact size/hash. The actual
+                # tar members are identical; rebind rather than recompress.
+                manifest.write_text(json.dumps(contents, indent=2) + '\n', 'utf8')
+                metadata['manifestSha256'] = digest(manifest)
+                descriptor.write_text(json.dumps(metadata, indent=2) + '\n', 'utf8')
+                (output / 'host-cache-rebinding.json').write_text(json.dumps(dict(
+                    schema='ptb-host-cache-rebinding/1', payloadSha256=metadata['sha256'],
+                    previousRuntime=previous.get('runtimeArchiveSha256'),
+                    currentRuntime=contents.get('runtimeArchiveSha256'),
+                    reason='Exact host file identities and shared paths unchanged; intact archive reused'), indent=2) + '\n', 'utf8')
+                print('Host archive bytes unchanged; verified cache rebound to the current scientific manifest.', flush=True)
             analysis.datas = retained_data + [(path.name, str(path), 'DATA') for path in (archive, manifest, descriptor)]
             return
     with tarfile.open(archive, 'w:xz', preset=9) as stream:

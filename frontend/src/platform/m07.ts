@@ -1,3 +1,4 @@
+import {waitForTaskPoll} from './task-poll.ts';
 import {m07Archive} from './m07Archive.ts';
 import type {components} from '../../../contracts/generated/api';
 import type {ResearchFile,JobView} from './research.ts';
@@ -20,7 +21,7 @@ export function m07Port(t:M07Transport):M07Port{
   const deadline=Date.now()+300000;
   while(['queued','running','cancel_requested'].includes(job.state)){
    if(signal.aborted||Date.now()>deadline){await t.cancel(job.id);throw Error('操作已取消，已完成组保留');}
-   await new Promise(resolve=>setTimeout(resolve,150));job=await t.job(job.id);progress(job);
+   await waitForTaskPoll(job.state,signal);if(signal.aborted)continue;job=await t.job(job.id);progress(job);
   }
   if(signal.aborted)throw Error('操作已取消，已完成组保留');return result(job);
  }};

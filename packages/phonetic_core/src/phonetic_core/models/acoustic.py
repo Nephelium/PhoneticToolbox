@@ -1,8 +1,9 @@
 # M01-B source_ids: SRC-PRAAT, SRC-VOICESAUCE; migration evidence: docs/modules/evidence/M01-core-migration.json
 from dataclasses import dataclass, field
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, TYPE_CHECKING
 import numpy as np
-import pandas as pd
+if TYPE_CHECKING:
+    import pandas as pd
 
 @dataclass(frozen=True)
 class AcousticConfig:
@@ -98,8 +99,9 @@ class AnalysisResult:
     config_snapshot: dict = field(default_factory=dict)
     computation_revision: str = 'acoustic/2'
 
-    def to_dataframe(self) -> pd.DataFrame:
+    def to_dataframe(self) -> 'pd.DataFrame':
         """Convert result to pandas DataFrame"""
+        import pandas as pd
         data = {
             "Time_s": self.time_axis
         }

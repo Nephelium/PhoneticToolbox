@@ -7,7 +7,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from release_content_policy import exclusion
+from release_content_policy import DEPENDENCY_POLICY, dependency_exclusion, assert_dependency_policy, exclusion
 
 
 def sha(path):
@@ -26,6 +26,7 @@ def audit(exe):
     host_manifest = json.loads(archive.extract('host-files.json'))
     host = host_manifest['files']
     science = json.loads(archive.extract('runtime-files.json'))['files']
+    assert_dependency_policy(science)
     groups = defaultdict(lambda: dict(files=0, compressed_bytes=0, expanded_bytes=0))
     omissions = []
     for name, row in members.items():
@@ -51,6 +52,7 @@ def audit(exe):
     shared = [dict(size=size, sha256=digest, host=hg[(size,digest)], science=sg[(size,digest)])
               for size,digest in sorted(hg.keys() & sg.keys(), reverse=True)]
     all_names = list(members) + list(host) + list(science)
+    dependency_omissions = [dict(path=name, reason=dependency_exclusion(name)) for name in all_names if dependency_exclusion(name)]
     mfa_payload = [name for name in all_names if name.startswith('runtimes/mfa/') or any(
         marker in name.lower() for marker in ('/montreal_forced_aligner/', '/kalpy/', '/kaldi/'))]
     obsolete_project_code = [name for name in science if '/site-packages/' in name and any(
@@ -61,6 +63,7 @@ def audit(exe):
                 science=dict(files=len(science), expanded_bytes=sum(v['size'] for v in science.values())),
                 projected_expanded_files_bytes=sum(v['expanded_bytes'] for v in members.values()) +
                     sum(v['size'] for v in host.values()) + sum(v['size'] for v in science.values()),
+                dependency_policy=dict(profile=DEPENDENCY_POLICY, violations=dependency_omissions),
                 exclusions=dict(status=('excluded candidates remain in this EXE' if omissions else 'no excluded development resources in this EXE'),files=omissions,
                     compressed_bytes=sum(v['compressed_bytes'] for v in omissions),
                     expanded_bytes=sum(v['expanded_bytes'] for v in omissions)),
@@ -84,6 +87,9 @@ def main():
         json.dump(report, stream, ensure_ascii=False, indent=2)
         stream.write('\n')
     print(json.dumps({key:report[key] for key in ('bytes','sha256','host','science')}, ensure_ascii=False))
+    assert_dependency_policy(report['members'])
+    if report['dependency_policy']['violations'] or report['exclusions']['files']:
+        raise ValueError('Excluded packaging contents remain; see audit report')
     return 0
 
 

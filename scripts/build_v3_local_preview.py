@@ -71,6 +71,7 @@ def main():
     parser.add_argument('--name', default='PhoneticToolbox-v3-LocalPreview-20260927')
     parser.add_argument('--lean-qt', action='store_true',
                         help='Widgets/WebEngine build without unused QML plugins, debug resources or extra WebEngine locales')
+    parser.add_argument('--defer-cleanup', action='store_true', help='Keep the comparison build until final-byte startup/acceptance checks finish')
     parser.add_argument('--runtime-stage',type=Path,
                         help='Build a distributable onedir package with inventoried independent runtimes')
     parser.add_argument('--compact-onefile', action='store_true',
@@ -132,6 +133,8 @@ def main():
                     set(cached_manifest['runtimes']) != {'PTB_EGG_PYTHON', 'PTB_M05_PYTHON'} or cached_manifest.get('mfa')):
                 raise ValueError('Expected a completed compact snapshot without MFA')
             cached_archive=bundle_cache / 'runtime-archive'
+            from release_content_policy import assert_dependency_policy
+            assert_dependency_policy(json.loads((cached_archive / 'runtime-files.json').read_text('utf8'))['files'])
             descriptor=cached_manifest['runtimeArchive']
             for filename, expected in (('runtime-payload.tar.xz', descriptor['sha256']),
                                        ('runtime-files.json', descriptor['manifestSha256'])):
@@ -148,8 +151,10 @@ def main():
             if not runtime_stage.is_relative_to(ROOT/'output/release-staging') or not (runtime_stage/'stage-report.json').is_file():
                 raise ValueError('Expected an inventoried owned runtime stage')
             stage_report=json.loads((runtime_stage/'stage-report.json').read_text('utf8'))
-            if any(stage_report['runtimes'][key].get('import_returncode')!=0 for key in ('egg','m05')):
-                raise ValueError('Runtime stage did not pass isolated imports')
+            if not stage_report.get('success') or any(
+                    stage_report['runtimes'][key].get('import_returncode') != 0 or
+                    not stage_report['runtimes'][key].get('functional_comparison_passed') for key in ('egg','m05')):
+                raise ValueError('Runtime stage did not pass exact scientific/media comparisons')
         # Analysis and real-file workers must consume exactly the same code.
         from source_snapshot import freeze, import_paths, validate
         freeze(ROOT, snapshot)
@@ -267,6 +272,8 @@ def main():
         icon_target = snapshot / 'PhoneticToolbox-v3.ico'
         icon_module.write_windows_icon(icon_source, icon_target)
         args += ['--icon', str(icon_target)]
+        from windows_version_resource import write_version_resource
+        args += ['--version-file', str(write_version_resource(snapshot))]
         data += [(snapshot / ('desktop-bundle.json' if distributable else 'local-preview.json'), '.'),
                  (snapshot / 'source-snapshot.json', '.'),
                  (snapshot/'release/version.json','release'),
@@ -396,9 +403,10 @@ def main():
                                   sha256=hashlib.sha256(exe.read_bytes()).hexdigest())
         (destination / 'build-info.json').write_text(json.dumps(metadata, indent=2), encoding='utf-8')
         print(json.dumps(metadata), flush=True)
-        subprocess.run(['powershell.exe', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File',
-                        str(ROOT / 'release/cleanup_old_builds.ps1'), '-KeepBuild', str(destination)],
-                       cwd=ROOT, check=True)
+        if not options.defer_cleanup:
+            subprocess.run(['powershell.exe', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File',
+                            str(ROOT / 'release/cleanup_old_builds.ps1'), '-KeepBuild', str(destination)],
+                           cwd=ROOT, check=True)
 
 if __name__ == '__main__':
     main()

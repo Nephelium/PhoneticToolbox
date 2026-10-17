@@ -1,0 +1,259 @@
+{
+  "schema": "ptb-basic-gl-baseline/2",
+  "established_on": "2026-10-16",
+  "settings": {
+    "window_ms": 10,
+    "window": "Hann",
+    "dynamic_range_db": 60,
+    "phase_initialization": "random",
+    "momentum": 0,
+    "iterations": 32,
+    "sampling_rate": 16000,
+    "nfft": 512,
+    "hop": 24,
+    "seed": 20261015
+  },
+  "mapping": "20log10 magnitude; -60 to 0 dB; gray >=252 zero; DC zero; linear calibrated time/frequency grid",
+  "output": {
+    "sampling_rate": 24000,
+    "format": "PCM16",
+    "gain": "presentation only: fixed RMS 0.08 target with 0.95 peak cap"
+  },
+  "forbidden": [
+    "Aoki/pulse initialization",
+    "momentum acceleration",
+    "parameter prediction",
+    "Mel repair",
+    "vocoder",
+    "denoise or filtering",
+    "automatic quality tuning or reselection"
+  ],
+  "regeneration": "Frozen files are reused byte for byte. A new user request is required for changes.",
+  "implementation": {
+    "aoki_phase_reconstruction.py": "fac239fac7be8b297ae6e83e0e7935f2345e6d635603ad5b3f01bd9172c95bfa",
+    "compare_five_pulse_vocoders.py": "e4266954936c27ea1e5fd23cd4501beccb8b543611b6d4e7914ec77081812095",
+    "diagnose_aoki_image.py": "dda7c50b293b93d42740517d0008bc84bcba1bd0305a6972e1daa2f8c47768c9"
+  },
+  "cases": {
+    "smith": {
+      "file": "spectrum-before-32i-smith.wav",
+      "sha256": "ec9e14b220afff12241b384d7aff75bc02e7889af3fb4f8bcc37f72b86813888",
+      "input_file": "assets/spectrogram-examples/smith-input.png",
+      "input_sha256": "545d2a18dba5feb07aaa56b3ba963f2a491d98ac8da67b467194db8e60ee69ce",
+      "previous_sha256": "5f27a36cd1e0dc7a412858b44edd01bba9d31afb2a648c4171e8598b7fdbb710",
+      "convergence": [
+        {
+          "iteration": 32,
+          "relative_magnitude_error": [
+            0.41332557797431946
+          ]
+        }
+      ]
+    },
+    "levantan": {
+      "file": "spectrum-before-32i-levantan.wav",
+      "sha256": "6c6d5404c6da97c0550423812f07963f67cbfc51962929e23609e3ace08015f0",
+      "input_file": "assets/spectrogram-examples/levantan-input.png",
+      "input_sha256": "285eb21d87fc2da839cc74e87fab326630139f9a7b4e8cbe901834c4ac0f494a",
+      "previous_sha256": "d8c6e1e57c34ecb5a06869e877bc86494c8e706d85dfde162005105bf87b21c6",
+      "convergence": [
+        {
+          "iteration": 32,
+          "relative_magnitude_error": [
+            0.1701597422361374
+          ]
+        }
+      ]
+    },
+    "observo": {
+      "file": "spectrum-before-32i-observo.wav",
+      "sha256": "e5b0ffeb488a2e75b2818d312db619096a437f48b9f3f2555b5fa6e378660152",
+      "input_file": "assets/spectrogram-examples/observo-input.png",
+      "input_sha256": "7135e99f37209851a6952787ee41d8f698246cb974086e00a8aed3e61f631f13",
+      "previous_sha256": "472a62773e1c61e9aa1d261d160c46123dfcc0c6160b660f65be7caa86d71ceb",
+      "convergence": [
+        {
+          "iteration": 32,
+          "relative_magnitude_error": [
+            0.24855273962020874
+          ]
+        }
+      ]
+    },
+    "lu2025-modal": {
+      "file": "spectrum-before-32i-lu2025-modal.wav",
+      "sha256": "de748fdf69c5dabaee12d1d29647da2e8d3c3420c6837cfb0b606f9985088c86",
+      "input_file": "assets/spectrogram-examples/lu2025-modal.png",
+      "input_sha256": "3da687b81fb699ed81515bf881301e3db58e023d74939d0bee0920a5256b1a2a",
+      "previous_sha256": "a2a12b26033056de08e983a16e021e57751fcd0e2e2b5adf36db44e4ad6c3ffd",
+      "convergence": [
+        {
+          "iteration": 32,
+          "relative_magnitude_error": [
+            0.2053609937429428
+          ]
+        }
+      ]
+    },
+    "lu2025-pressed": {
+      "file": "spectrum-before-32i-lu2025-pressed.wav",
+      "sha256": "dd9308a90b63905c3be0b6c81fb66c52e02768c9f44ab7f0e74f7318b78719d9",
+      "input_file": "assets/spectrogram-examples/lu2025-pressed.png",
+      "input_sha256": "7fbd617948e77e36e094347c34df79e55e76eb57c878b650cee0b0b48c66d4c5",
+      "previous_sha256": "c7e0676998dd2bdea22f7d7308b7f2b692fa60978cb77f941d1e508232f010c3",
+      "convergence": [
+        {
+          "iteration": 32,
+          "relative_magnitude_error": [
+            0.2068507820367813
+          ]
+        }
+      ]
+    },
+    "uploaded": {
+      "file": "spectrum-before-32i-uploaded.wav",
+      "sha256": "14200f0eb74d160ff41b86906aee780ee984bfdc09cb87f3c01026bee9c1aad2",
+      "input_file": "assets/spectrogram-examples/uploaded.png",
+      "input_sha256": "40793aeeb34b6e8f1d5e8e1880d1993634022ead969ea5214791892400232bd2",
+      "previous_sha256": "b08775c7eae89633ae15b68a2c8e4a32896679b93c0be565938036c0847e09be",
+      "convergence": [
+        {
+          "iteration": 32,
+          "relative_magnitude_error": [
+            0.22738932073116302
+          ]
+        }
+      ]
+    }
+  },
+  "previous_baseline": {
+    "schema": "ptb-basic-gl-baseline/1",
+    "established_on": "2026-10-16",
+    "settings": {
+      "window_ms": 10,
+      "window": "Hann",
+      "dynamic_range_db": 60,
+      "phase_initialization": "random",
+      "momentum": 0,
+      "iterations": 256,
+      "sampling_rate": 16000,
+      "nfft": 512,
+      "hop": 24,
+      "seed": 20261015
+    },
+    "mapping": "20log10 magnitude; -60 to 0 dB; gray >=252 zero; DC zero; linear calibrated time/frequency grid",
+    "output": {
+      "sampling_rate": 24000,
+      "format": "PCM16",
+      "gain": "presentation only: fixed RMS 0.08 target with 0.95 peak cap"
+    },
+    "forbidden": [
+      "Aoki/pulse initialization",
+      "momentum acceleration",
+      "parameter prediction",
+      "Mel repair",
+      "vocoder",
+      "denoise or filtering",
+      "automatic quality tuning or reselection"
+    ],
+    "regeneration": "Frozen files are reused byte for byte. A new user request is required for changes.",
+    "implementation": {
+      "aoki_phase_reconstruction.py": "fac239fac7be8b297ae6e83e0e7935f2345e6d635603ad5b3f01bd9172c95bfa",
+      "compare_five_pulse_vocoders.py": "e4266954936c27ea1e5fd23cd4501beccb8b543611b6d4e7914ec77081812095",
+      "diagnose_aoki_image.py": "dda7c50b293b93d42740517d0008bc84bcba1bd0305a6972e1daa2f8c47768c9"
+    },
+    "cases": {
+      "smith": {
+        "file": "spectrum-before-smith.wav",
+        "sha256": "5f27a36cd1e0dc7a412858b44edd01bba9d31afb2a648c4171e8598b7fdbb710",
+        "input_file": "assets/spectrogram-examples/smith-input.png",
+        "input_sha256": "545d2a18dba5feb07aaa56b3ba963f2a491d98ac8da67b467194db8e60ee69ce",
+        "previous_sha256": "155a0829d27dbe63309143278d9d9cb788ceeb9c3f8567aeaf6b80f49f6a8da6",
+        "convergence": [
+          {
+            "iteration": 256,
+            "relative_magnitude_error": [
+              0.39700114727020264
+            ]
+          }
+        ]
+      },
+      "levantan": {
+        "file": "spectrum-before-levantan.wav",
+        "sha256": "d8c6e1e57c34ecb5a06869e877bc86494c8e706d85dfde162005105bf87b21c6",
+        "input_file": "assets/spectrogram-examples/levantan-input.png",
+        "input_sha256": "285eb21d87fc2da839cc74e87fab326630139f9a7b4e8cbe901834c4ac0f494a",
+        "previous_sha256": "b5e740e1c67f4fa5c72293d9d5e825d4529d614bfb1c53540cabf1d4aa17c34a",
+        "convergence": [
+          {
+            "iteration": 256,
+            "relative_magnitude_error": [
+              0.15711241960525513
+            ]
+          }
+        ]
+      },
+      "observo": {
+        "file": "spectrum-before-observo.wav",
+        "sha256": "472a62773e1c61e9aa1d261d160c46123dfcc0c6160b660f65be7caa86d71ceb",
+        "input_file": "assets/spectrogram-examples/observo-input.png",
+        "input_sha256": "7135e99f37209851a6952787ee41d8f698246cb974086e00a8aed3e61f631f13",
+        "previous_sha256": "3003bd54d37e6ff06f7708bd1bbe8e8d6c35c7ffb6d39ba6bb223bba77a1531f",
+        "convergence": [
+          {
+            "iteration": 256,
+            "relative_magnitude_error": [
+              0.22577360272407532
+            ]
+          }
+        ]
+      },
+      "lu2025-modal": {
+        "file": "spectrum-before-lu2025-modal.wav",
+        "sha256": "a2a12b26033056de08e983a16e021e57751fcd0e2e2b5adf36db44e4ad6c3ffd",
+        "input_file": "assets/spectrogram-examples/lu2025-modal.png",
+        "input_sha256": "3da687b81fb699ed81515bf881301e3db58e023d74939d0bee0920a5256b1a2a",
+        "previous_sha256": "6cf43c029628c61939038ba01edd6628f3406cbfb409eb3c656f7009e8b0a6f0",
+        "convergence": [
+          {
+            "iteration": 256,
+            "relative_magnitude_error": [
+              0.17752784490585327
+            ]
+          }
+        ]
+      },
+      "lu2025-pressed": {
+        "file": "spectrum-before-lu2025-pressed.wav",
+        "sha256": "c7e0676998dd2bdea22f7d7308b7f2b692fa60978cb77f941d1e508232f010c3",
+        "input_file": "assets/spectrogram-examples/lu2025-pressed.png",
+        "input_sha256": "7fbd617948e77e36e094347c34df79e55e76eb57c878b650cee0b0b48c66d4c5",
+        "previous_sha256": "4248003c0683a4ce7356615e0e50ababdeb52c5371149165eb76143cbfcce94e",
+        "convergence": [
+          {
+            "iteration": 256,
+            "relative_magnitude_error": [
+              0.18095390498638153
+            ]
+          }
+        ]
+      },
+      "uploaded": {
+        "file": "spectrum-before-uploaded.wav",
+        "sha256": "b08775c7eae89633ae15b68a2c8e4a32896679b93c0be565938036c0847e09be",
+        "input_file": "assets/spectrogram-examples/uploaded.png",
+        "input_sha256": "40793aeeb34b6e8f1d5e8e1880d1993634022ead969ea5214791892400232bd2",
+        "previous_sha256": "7879309599443feb75589e6955a7bde28ebe5c0518d97a715b15026001df80df",
+        "convergence": [
+          {
+            "iteration": 256,
+            "relative_magnitude_error": [
+              0.1964332014322281
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "authorization": "2026-10-16 user explicitly requested 32 iterations instead of 256"
+}

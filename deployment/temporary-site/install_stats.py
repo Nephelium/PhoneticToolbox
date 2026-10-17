@@ -20,7 +20,7 @@ PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
 ReadWritePaths=/var/lib/phonetictoolbox-website-stats /var/www/phonetictoolbox-coming-soon
-RestrictAddressFamilies=AF_UNIX
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
 '''
 TIMER = '''[Unit]
 Description=Refresh PhoneticToolbox website counters every minute

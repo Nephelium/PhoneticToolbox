@@ -47,6 +47,9 @@ class AssetList(BaseModel):
 
 
 class StorageUsage(BaseModel):
+    server_space_low: bool | None = None
+    upload_limit_bytes: int | None = None
+    workspace_policy_version: Literal[1] | None = None
     policy_version: PolicyVersion = LEGACY_POLICY_VERSION
     retention_seconds: int = LEGACY_RETENTION_SECONDS
     over_quota: bool = False

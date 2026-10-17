@@ -31,7 +31,8 @@ def main():
             attachments=db.execute('SELECT COUNT(*) FROM attachments').fetchone()[0]
             owner=db.execute('SELECT id FROM identities').fetchone()
         result=service.messages(owner[0]) if owner else {}
-        return {'userMessages':users,'attachments':attachments,'mailNotifications':result.get('mailNotifications')}
+        return {'userMessages':users,'attachments':attachments,'mailNotifications':result.get('mailNotifications'),
+                'clients':[m['client'] for m in result.get('messages',[]) if m['role']=='user']}
     @app.get('/site-stats.json')
     def stats():return {'schema':1,'startedAt':'2026-10-12T00:00:00Z','pageViews':1,'downloads':{'total':0,'portable':0,'installer':0}}
     app.mount('/',StaticFiles(directory=ROOT/'temporary-site',html=True))

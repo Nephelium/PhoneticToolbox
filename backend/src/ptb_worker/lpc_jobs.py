@@ -20,6 +20,7 @@ def submit(store, owner, body, *, retry_of=None):
                 raise JobError('project_not_found',404)
         elif owner!='local' or body.project_id!=LOCAL_PROJECT: raise JobError('project_not_found',404)
         if store.capacity_used(tx,owner)>=1000: raise JobError('job_limit_reached')
+        store.check_web_queue(tx, owner)
         now = tx.now(); refs = {'audio':body.audio.model_dump(), 'textgrid':body.textgrid.model_dump() if body.textgrid else None}
         sources = store.files.validate_batch_input(tx,owner,body.project_id,refs,now)
         snapshot = dict(operation='lpc_analysis',schema_version='m04/1',project_id=body.project_id,retry_of=retry_of,

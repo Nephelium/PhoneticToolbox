@@ -29,3 +29,8 @@ def sequence_envelope(count, sample_rate, silent_intervals):
                 envelope[end - release:end] *= .5 + .5 * np.cos(np.linspace(0, np.pi, release))
         start = max(start, pause_end)
     return envelope
+
+
+def audition_samples(samples,volume,gain_db,envelope=None):
+    output=np.tanh(samples*4*volume*10**(gain_db/20))*.9
+    return output if envelope is None else output*envelope

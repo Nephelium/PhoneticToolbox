@@ -10,6 +10,9 @@ sys.path.insert(0,str(ROOT/'desktop/src'))
 from ptb_desktop.feedback import protected
 
 def main():
+    web=Path(os.environ.get('PTB_FEEDBACK_WEB_ROOT',ROOT/'output/build-feedback-manager/web')).resolve()
+    if not web.is_relative_to(ROOT/'output/build-feedback-manager') or not (web/'feedback-manager.html').is_file():
+        raise ValueError('Build the shared inbox frontend inside the owned build directory first')
     jdk=Path(r'D:\Android Studio\jbr')
     sdk=Path(os.environ['LOCALAPPDATA'])/'Android/Sdk'
     gradles=list((Path.home()/'.gradle/wrapper/dists/gradle-8.14.3-all').glob('*/gradle-8.14.3/bin/gradle.bat'))
@@ -23,13 +26,13 @@ def main():
     else:
         password=secrets.token_urlsafe(36)
         password_file.write_bytes(protected(password.encode()))
-    env={**os.environ,'JAVA_HOME':str(jdk),'ANDROID_HOME':str(sdk),'PTB_FEEDBACK_KEYSTORE':str(keystore),'PTB_FEEDBACK_STORE_PASSWORD':password}
+    env={**os.environ,'JAVA_HOME':str(jdk),'ANDROID_HOME':str(sdk),'PTB_FEEDBACK_WEB_ROOT':str(web),'PTB_FEEDBACK_KEYSTORE':str(keystore),'PTB_FEEDBACK_STORE_PASSWORD':password}
     if not keystore.exists():
         subprocess.run([str(jdk/'bin/keytool.exe'),'-genkeypair','-keystore',str(keystore),'-storepass:env','PTB_FEEDBACK_STORE_PASSWORD','-keypass:env','PTB_FEEDBACK_STORE_PASSWORD','-alias','feedback','-keyalg','RSA','-keysize','3072','-validity','10000','-dname','CN=PhoneticToolbox Feedback Inbox'],env=env,check=True)
     tasks=['assembleRelease']+(['lintRelease'] if '--lint' in sys.argv else [])
     subprocess.run([str(gradles[0]),'--offline','--no-daemon','--console=plain',*tasks],env=env,cwd=ROOT/'tools/feedback-manager/android',check=True)
     apk=ROOT/'output/build-feedback-manager/android-app/outputs/apk/release/app-release.apk'
-    destination=ROOT/'output/feedback-manager/1.0.1/反馈收件箱.apk'
+    destination=ROOT/'output/feedback-manager/1.1.3/反馈收件箱.apk'
     destination.parent.mkdir(parents=True,exist_ok=True)
     shutil.copyfile(apk,destination)
     print('Android release APK created')

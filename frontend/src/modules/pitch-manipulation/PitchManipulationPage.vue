@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {useWebSettings,settingsFields} from '../../state/web-settings.ts';
+import ResearchUpload from '../../components/ResearchUpload.vue';
 import AppIcon from '../../components/AppIcon.vue';
 import {vTimePrecision} from '../../design/time-precision.ts';
 import PlotPlaceholder from '../../components/PlotPlaceholder.vue';
@@ -32,7 +34,7 @@ const currentBatch=computed(()=>history.value.filter(r=>r.source_id===source.val
 const chosen=computed(()=>manageResults.value.filter(r=>selectedResults.value.includes(r.id)));
 watch(range,()=>cancelPlayback());watch(config,()=>wave.dirty=true,{deep:true});
 watch(numericInput,dirty,{deep:true});
-watch(()=>props.active,active=>{if(!active)cancelPlayback();});
+watch(()=>props.active,active=>{if(!active)cancelPlayback();else void poll();});
 function dirty(){wave.dirty=true;}
 function cancelPlayback(){++resultEpoch;directPlayback.value=false;stop();}
 function selectPlayback(isResult:boolean){cancelPlayback();playResult.value=isResult;}
@@ -171,10 +173,11 @@ async function manageFiles(){
  });
 }
 async function exportPng(){await attempt(async()=>{const blob=await historyPlot.value!.png(),url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='comparison_plot.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notice.value='已导出实际历史 F0 对比图';});}
-onMounted(()=>{void attempt(refresh);void poll();timer=setInterval(()=>void poll(),1000);});onUnmounted(()=>{disposed=true;++epoch;++resultEpoch;previewAbort?.abort();clearInterval(timer);stop();});
+onMounted(()=>{void attempt(refresh);void poll();timer=setInterval(()=>{if(props.active!==false||jobs.value.some(j=>['queued','running','cancel_requested'].includes(j.state)))void poll();},1000);});onUnmounted(()=>{disposed=true;++epoch;++resultEpoch;previewAbort?.abort();clearInterval(timer);stop();});
+useWebSettings(props.stateKey,{...settingsFields(config,['speed','pitch_ratio','pitch_hz','offset']),...settingsFields(numericInput,['speed','pitch_ratio','pitch_hz']),minInput,maxInput,ymin,ymax,refInput,refs,directPlayback});
 </script>
 <template><ModuleFrame unified fit label="变速变调工作区" class="m08-page" :aria-busy="busy||loading">
-<template #toolbar><ModuleToolbar><button class="primary" v-if="context.files.choose" :disabled="busy" @click="choose"><AppIcon name="folder"/>打开音频目录</button><button class="primary" v-if="context.files.add" :disabled="busy" @click="picker?.click()">导入音频</button><button class="primary" v-if="context.files.add" :disabled="busy" @click="folderPicker?.click()">导入文件夹</button><input ref="picker" hidden type="file" multiple accept=".wav,.mp3,.flac" @change="add"/><input ref="folderPicker" hidden type="file" multiple webkitdirectory @change="add"/><button :disabled="busy" @click="attempt(refresh)">刷新文件</button><button :aria-pressed="tab==='single'" @click="tab='single'">单文件与基频</button><button :aria-pressed="tab==='batch'" @click="tab='batch'">批量变速变调</button><template #actions><button :disabled="!source||loading" @click="save">保存编辑草稿</button><button @click="help=true">帮助</button><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button></template></ModuleToolbar></template>
+<template #toolbar><ModuleToolbar><ResearchUpload :files="context.files" accept=".wav,.mp3,.flac" @uploaded="refresh" folders/><button class="primary" v-if="context.files.choose" :disabled="busy" @click="choose"><AppIcon name="folder"/>打开音频目录</button><button class="primary" v-if="context.files.add" :disabled="busy" @click="picker?.click()">导入音频</button><button class="primary" v-if="context.files.add" :disabled="busy" @click="folderPicker?.click()">导入文件夹</button><input ref="picker" hidden type="file" multiple accept=".wav,.mp3,.flac" @change="add"/><input ref="folderPicker" hidden type="file" multiple webkitdirectory @change="add"/><button :disabled="busy" @click="attempt(refresh)">刷新文件</button><button :aria-pressed="tab==='single'" @click="tab='single'">单文件与基频</button><button :aria-pressed="tab==='batch'" @click="tab='batch'">批量变速变调</button><template #actions><button :disabled="!source||loading" @click="save">保存编辑草稿</button><button @click="help=true">帮助</button><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button></template></ModuleToolbar></template>
 
 <ModuleWorkbench unified :state-key="stateKey" left-label="音频与参数" center-label="音频与基频图" right-label="任务与历史"><template #left><ModuleSection label="音频与参数"><div class="row"><label>音频<select aria-label="变速变调音频" :value="source?.id??''" :disabled="busy" @change="selectSource"><option value="">选择音频</option><option v-for="file in audioFiles" :key="file.id" :value="file.id">{{file.name}}</option></select></label><label>语速倍率<input v-model="numericInput.speed" aria-label="语速倍率" type="text" inputmode="decimal" class="numeric-input"/></label><span>{{wave.dirty?'有未保存编辑':'编辑已保存'}}</span></div></ModuleSection>
 <ModuleSection label="曲线与试听"><div class="row"><label>F0 下限 Hz<input v-model="minInput" aria-label="F0 下限" type="text" inputmode="decimal" class="numeric-input"/></label><label>上限 Hz<input v-model="maxInput" aria-label="F0 上限" type="text" inputmode="decimal" class="numeric-input"/></label><button @click="applyAxis">应用范围</button><label>参考线 Hz<input v-model="refInput" aria-label="参考线 Hz" type="text" inputmode="decimal" class="numeric-input"/></label><button @click="attempt(()=>{refs.push(finite(refInput,'参考线'));dirty()})">添加参考线</button><button @click="refs=[];dirty()">清除参考线</button><button :disabled="!times.length" @click="importing=true">导入基频序列</button></div>

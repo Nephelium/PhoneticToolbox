@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {useWebSettings,settingsFields} from '../../state/web-settings.ts';
 import AppIcon from '../../components/AppIcon.vue';
 import ModuleWorkbench from '../../components/ModuleWorkbench.vue';
 import {computed,onMounted,onUnmounted,ref,shallowRef,watch,nextTick,markRaw} from 'vue';
@@ -145,6 +146,7 @@ function beforeUnload(event:BeforeUnloadEvent){if(dirty.value){event.preventDefa
 function hidden(){if(document.hidden)capture?.hidden();}
 onMounted(()=>{capture=new LipCapture(video.value!,update);canvasObserver=new ResizeObserver(()=>draw());if(canvas.value)canvasObserver.observe(canvas.value);void refresh();void refreshHistory();window.addEventListener('beforeunload',beforeUnload);document.addEventListener('visibilitychange',hidden);});
 onUnmounted(()=>{disposed=true;canvasObserver?.disconnect();saveDecision?.(false);clearRecordingUrl();Object.values(sourceUrls.value).forEach(URL.revokeObjectURL);abort?.abort();stopReplay();capture?.dispose();window.removeEventListener('beforeunload',beforeUnload);document.removeEventListener('visibilitychange',hidden);});
+useWebSettings(props.stateKey,{camera,microphone,filter,cutoff,fps,delegate,mirror,quality,saveAll,saveVideo,saveAnimation});
 </script>
 <template>
 <ModuleFrame unified fit label="唇形提取工作区" class="lip-page" :aria-busy="busy">

@@ -8,11 +8,11 @@ import sys
 
 
 class Session:
-    def __init__(self, raw=None, *, source_path=None, reaper=None, native_header=None):
+    def __init__(self, raw=None, *, source_path=None, reaper=None, native_header=None, runtime_check=None):
         from scipy.io import wavfile
         from .egg_runtime import fingerprint
         from .spectrogram_preview import PreviewError
-        fingerprint()
+        (fingerprint if runtime_check is None else runtime_check)()
         self.recording = None
         if source_path:
             from .egg_recording import Recording
@@ -149,3 +149,32 @@ def run():
         if len(payload) > 64_000_000: raise SystemExit(2)
         sys.stdout.buffer.write(str(len(payload)).encode()+b'\n'+payload)
         sys.stdout.buffer.flush()
+
+
+def once():
+    try:
+        header=json.loads(sys.stdin.buffer.readline(32768));size=header['size']
+        if type(size)!=int or not 0<size<=64_000_000:raise ValueError('egg_input_budget')
+        if header.get('source_memory'):
+            from .egg_memory_cache import source_bytes
+            raw=source_bytes(header['source_memory'],size)
+        else:raw=sys.stdin.buffer.read(size)
+        if len(raw)!=size:raise ValueError('egg_input_budget')
+        session=Session(raw,native_header=header)
+        from .egg_memory_cache import restore,save
+        restore(session,header.get('checkpoint'))
+        if header.get('config') is not None:
+            session.audio_key=bool(header['config'].get('flip_channels',False)) if header.get('audio_ready') is True else None
+        value=session.update(header['config']) if header.get('config') is not None else dict(sha256=session.sha)
+        suggested=value.get('preview',{}).get('suggested_db_range')
+        if header.get('auto_db') is True and suggested:
+            first_audio=value.get('audio_base64')
+            value=session.update({**header['config'],'spec_vmin':suggested[0],'spec_vmax':suggested[1]})
+            value['audio_base64']=first_audio
+        save(session,header.get('checkpoint'))
+    except Exception as exc:
+        code=getattr(exc,'code','') or str(exc)
+        value=dict(error=code if code.startswith('egg_') and len(code)<80 else 'egg_preview_failed')
+    payload=json.dumps(value,allow_nan=False).encode()
+    if len(payload)>64_000_000:raise SystemExit(2)
+    sys.stdout.buffer.write(payload);sys.stdout.buffer.flush()

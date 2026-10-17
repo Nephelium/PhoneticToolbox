@@ -6,12 +6,8 @@ import numpy as np
 import sounddevice as sd
 from pathlib import Path
 from phonetic_core.vocal_tract.monitor import OutputHistory
-from phonetic_core.vocal_tract.envelope import attack_envelope
+from phonetic_core.vocal_tract.envelope import attack_envelope, audition_samples
 
-
-def audition_samples(samples,volume,gain_db,envelope=None):
-    output=np.tanh(samples*4*volume*10**(gain_db/20))*.9
-    return output if envelope is None else output*envelope
 
 def output_devices():
     hosts=sd.query_hostapis(); devices=sd.query_devices()

@@ -29,7 +29,7 @@ async function main(){
   await page.locator('#feedback-submit').click();await page.waitForFunction(()=>document.querySelector('#feedback-status').classList.contains('is-error'));
   assert.match(await page.locator('#feedback-text').inputValue(),/隔离测试/);assert.equal(await page.locator('#feedback-previews img').count(),1);
   await page.locator('#feedback-submit').click();await page.waitForFunction(()=>document.querySelector('#feedback-status').textContent.includes('便签已寄到'));
-  let state=await (await page.request.get(origin+'/__fixture/state')).json();assert.equal(state.userMessages,1);assert.equal(state.attachments,1);
+  let state=await (await page.request.get(origin+'/__fixture/state')).json();assert.equal(state.userMessages,1);assert.equal(state.attachments,1);assert.deepEqual(state.clients,[{source:'web'}]);
   assert.equal(await page.locator('#feedback-text').inputValue(),'');assert.equal(await page.locator('#feedback-previews img').count(),0);assert.match(await page.locator('#feedback-messages').innerText(),/<script>/);assert.equal(await page.locator('#feedback-messages script').count(),0);
   report.checks.push('Real message + validated attachment stored; lost receipt retains draft; retry produces one message; content rendered as text');
   await page.locator('#feedback-mail').uncheck();await page.waitForFunction(()=>document.querySelector('#feedback-status').textContent.includes('已关闭'));
@@ -52,7 +52,9 @@ async function main(){
   });
   await page.goto(origin+'/?version-fixture');await page.locator('[data-release-tab="fixture-release"]').click();
   assert(await page.locator('#fixture-release').isVisible());assert(await page.locator('#release-panel-0').isHidden());
-  await page.keyboard.press('ArrowLeft');assert(await page.locator('#release-panel-0').isVisible());assert(await page.locator('#fixture-release').isHidden());
+  const previousPanel=await page.locator('[data-release-tab="fixture-release"]').evaluate(e=>{const tabs=[...document.querySelectorAll('[data-release-tab]')];return tabs[(tabs.indexOf(e)-1+tabs.length)%tabs.length].dataset.releaseTab;});
+  await page.keyboard.press('ArrowLeft');assert(await page.locator('#'+previousPanel).isVisible());assert(await page.locator('#fixture-release').isHidden());
+  await page.keyboard.press('Home');assert(await page.locator('#release-panel-0').isVisible());
   report.checks.push('Version tabs switch one body at a time by mouse and keyboard, using a test-only second snapshot');
   await page.goto(origin+'/#feedback');
   for(const width of [1440,390,320]){

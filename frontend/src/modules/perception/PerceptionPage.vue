@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {useWebSettings,settingsFields} from '../../state/web-settings.ts';
 import AppIcon from '../../components/AppIcon.vue';
 import {vTimePrecision} from '../../design/time-precision.ts';
 import {ref,shallowRef,triggerRef,computed,watch,onMounted,onBeforeUnmount,nextTick} from 'vue';
@@ -10,9 +11,9 @@ import {droppedFiles} from './drop.ts';
 import {LocalStore,lockSession} from './storage.ts';import {MediaBank,importFiles,type Prepared} from './media.ts';import {Runner} from './runner.ts';
 import {parseProject,projectJSON,readSequence,sequenceRows,resourceRows,workbook,resultsBlob,download,safeMarkup} from './formats.ts';
 import ResultExport from './ResultExport.vue';
-const props=withDefaults(defineProps<{active?:boolean}>(),{active:true});const emit=defineEmits<{dirty:[boolean];focus:[boolean];references:[]}>();
+const props=withDefaults(defineProps<{active?:boolean;storageScope?:string}>(),{active:true});const emit=defineEmits<{dirty:[boolean];focus:[boolean];references:[]}>();
 const project=ref<Project>(defaults()),tab=ref('素材'),error=ref(''),info=ref(''),busy=ref(false),edited=ref(false),checked=ref(false),heard=ref(false),quiet=ref(false),help=ref(false),prefix=ref(''),seed=ref(20260927),projects=ref<Project[]>([]),sessions=ref<Session[]>([]),answers=ref<Answers>({}),stage=ref<'design'|'questionnaire'|'run'>('design');
-const store=new LocalStore(),bank=shallowRef<MediaBank|null>(null),runner=shallowRef<Runner|null>(null),revision=ref(0),preview=shallowRef<Prepared|null>(null);const previewAudio=ref<HTMLAudioElement>();let previewUrl:string|null=null;let disposed=false;let monitor:ReturnType<typeof setInterval>|null=null;let lastTick=0,full=false;const runRoot=ref<HTMLElement>();
+const store=new LocalStore(props.storageScope),bank=shallowRef<MediaBank|null>(null),runner=shallowRef<Runner|null>(null),revision=ref(0),preview=shallowRef<Prepared|null>(null);const previewAudio=ref<HTMLAudioElement>();let previewUrl:string|null=null;let disposed=false;let monitor:ReturnType<typeof setInterval>|null=null;let lastTick=0,full=false;const runRoot=ref<HTMLElement>();
 const savedResult=shallowRef<Session|null>(null),resultFormat=ref<'json'|'csv'|'xlsx'>('json');
 const projectInput=ref<HTMLInputElement>();
 const phase=computed(()=>{revision.value;return runner.value?.phase??'intro';}),session=computed(()=>{revision.value;return runner.value?{...runner.value.session}:undefined;}),result=computed(()=>session.value??savedResult.value),focus=computed(()=>stage.value==='run'&&!!runner.value&&runner.value.focused),dirty=computed(()=>edited.value||!!result.value&&(result.value.exportConfirmedRevision!==result.value.revision));
@@ -60,7 +61,7 @@ async function resume(id:string){await action(async()=>{
 async function recheckRun(){await action(async()=>{checked.value=false;heard.value=false;const r=runner.value;if(!r)return;await r.bank.unlock();await r.bank.preflight(r.session.project,s=>info.value=s);await r.bank.tone();checked.value=true;info.value='复核通过，请确认试音后继续。';});}
 async function withResult(fn:(r:Runner)=>Promise<void>){
  if(runner.value){await fn(runner.value);return;}if(!savedResult.value)return;
- const release=await lockSession(savedResult.value.id);
+ const release=await lockSession(savedResult.value.id,props.storageScope);
  try{const s=await store.session(savedResult.value.id);const r=new Runner(s,bank.value!,store,()=>{});r.phase=['completed','ended'].includes(s.status)?'completed':'paused';try{await fn(r);}finally{savedResult.value=copy(r.session);}}finally{await release();}
 }
 async function exportResult(format=resultFormat.value){await action(()=>withResult(async r=>{if(r.focused)await r.interrupt('partial-export','为导出已暂停。重新呈现须明确继续。');download(resultsBlob(r.session,format),`m15-${r.session.id}.${format}`);if(!await r.exportRequested())throw Error(r.message);changed();info.value='下载请求已发出，尚未确认文件已保存。请回读文件后点击确认。';}));}
@@ -80,7 +81,8 @@ const freeze=()=>interrupted('page-freeze'),resumeEvent=()=>interrupted('page-re
 function beforeUnload(e:BeforeUnloadEvent){if(dirty.value){e.preventDefault();e.returnValue='';}}
 watch(bank,b=>{if(b)b.context.onstatechange=()=>{if(b.context.state!=='running')interrupted('audio-context-'+b.context.state);};});
 onMounted(async()=>{await action(async()=>{await store.open();await refresh();});window.addEventListener('keydown',down,true);window.addEventListener('keyup',up,true);window.addEventListener('blur',blur);window.addEventListener('pagehide',pagehide);window.addEventListener('beforeunload',beforeUnload);document.addEventListener('visibilitychange',visibility);document.addEventListener('fullscreenchange',fullscreen);document.addEventListener('freeze',freeze);document.addEventListener('resume',resumeEvent);navigator.mediaDevices?.addEventListener('devicechange',device);lastTick=performance.now();monitor=setInterval(()=>{const now=performance.now();if(now-lastTick>2000)interrupted('scheduler-gap');lastTick=now;},500);});
-onBeforeUnmount(()=>{disposed=true;stopPreview();void runner.value?.dispose(true);bank.value?.dispose();if(monitor)clearInterval(monitor);window.removeEventListener('keydown',down,true);window.removeEventListener('keyup',up,true);window.removeEventListener('blur',blur);window.removeEventListener('pagehide',pagehide);window.removeEventListener('beforeunload',beforeUnload);document.removeEventListener('visibilitychange',visibility);document.removeEventListener('fullscreenchange',fullscreen);document.removeEventListener('freeze',freeze);document.removeEventListener('resume',resumeEvent);navigator.mediaDevices?.removeEventListener('devicechange',device);emit('focus',false);});
+onBeforeUnmount(()=>{disposed=true;stopPreview();void (runner.value?.dispose(true)??Promise.resolve()).finally(()=>store.close());bank.value?.dispose();if(monitor)clearInterval(monitor);window.removeEventListener('keydown',down,true);window.removeEventListener('keyup',up,true);window.removeEventListener('blur',blur);window.removeEventListener('pagehide',pagehide);window.removeEventListener('beforeunload',beforeUnload);document.removeEventListener('visibilitychange',visibility);document.removeEventListener('fullscreenchange',fullscreen);document.removeEventListener('freeze',freeze);document.removeEventListener('resume',resumeEvent);navigator.mediaDevices?.removeEventListener('devicechange',device);emit('focus',false);});
+useWebSettings(props.storageScope,{...settingsFields(project,['paradigm']),...settingsFields(computed(()=>project.value.config),['title','introText','interTrialText','introLargeText','showInterTrialText','largeText','advanceMode','autoPlay','showFilename','interTrialInterval','isi','useBeep','validKeys']),seed,resultFormat});
 </script>
 <template>
 <ModuleFrame unified fit label="感知实验工作区" class="perception-page" :aria-busy="busy">

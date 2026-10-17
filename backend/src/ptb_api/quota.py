@@ -11,10 +11,10 @@ class StorageError(Exception):
         super().__init__(code)
 
 
-def reserve(used, reserved, amount):
-    if any(type(v) is not int or v < 0 for v in (used, reserved, amount)):
+def reserve(used, reserved, amount, limit=QUOTA_BYTES):
+    if any(type(v) is not int or v < 0 for v in (used, reserved, amount, limit)) or limit == 0:
         raise StorageError('invalid_budget', 422)
-    if used + reserved + amount > QUOTA_BYTES:
+    if used + reserved + amount > limit:
         raise StorageError('quota_exceeded', 413)
     return reserved + amount
 

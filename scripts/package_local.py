@@ -56,6 +56,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--version', required=True, help='Requested local app/core/frontend version, e.g. 3.0.2')
     parser.add_argument('--plan', action='store_true', help='Show paths and cache candidate without writing anything')
+    parser.add_argument('--runtime-stage', type=Path, help='New fully compared scientific stage; otherwise reuse a policy-compliant cache')
+    parser.add_argument('--defer-cleanup', action='store_true', help='Retain old build for required old/new startup comparison; clean after acceptance')
     args = parser.parse_args()
     if not re.fullmatch(r'\d+\.\d+\.\d+(?:-[A-Za-z0-9.]+)?', args.version):
         parser.error('Use a semantic release version')
@@ -65,6 +67,7 @@ def main():
     package = ROOT / 'dist' / name
     work = ROOT / 'output' / ('build-' + name)
     plan = {'version': args.version, 'name': name, 'runtimeCache': str(cache / 'snapshot'),
+            'runtimeStage': str(args.runtime_stage.resolve()) if args.runtime_stage else None,
             'hostCache': str(cache / 'host-archive'), 'mediaCache': str(ROOT / 'output/cache/manual-media'),
             'evidence': str(run), 'package': str(package), 'upload': False}
     if args.plan:
@@ -130,9 +133,12 @@ def main():
               cwd=ROOT / 'frontend', env=env)
         if frontend_inputs() != inputs:
             raise RuntimeError('Frontend/manual source changed while generating; start a fresh build')
+        runtime_args = (['--runtime-stage', plan['runtimeStage']] if args.runtime_stage else
+                        ['--runtime-bundle-cache', str(cache / 'snapshot')])
         phase('exe-build', python + ['scripts/build_v3_local_preview.py', '--name', name, '--lean-qt', '--compact-onefile',
-              '--persistent-cache', '--frontend-dist', str(run / 'frontend-dist'), '--runtime-bundle-cache', str(cache / 'snapshot'),
-              '--host-archive-cache', str(cache / 'host-archive'), '--manual-media-cache', plan['mediaCache']])
+              '--persistent-cache', '--frontend-dist', str(run / 'frontend-dist'), *runtime_args,
+              '--host-archive-cache', str(cache / 'host-archive'), '--manual-media-cache', plan['mediaCache']] +
+              (['--defer-cleanup'] if args.defer_cleanup else []))
         phase('finalize', python + ['release/finalize_compact.py', '--package', str(package), '--work', str(work)])
         phase('package-audit', python + ['scripts/audit_release_contents.py', str(package / 'PhoneticToolbox-windows-x64.exe'),
               '--output', str(run / 'package-audit.json')])
@@ -141,8 +147,11 @@ def main():
         first_cleanup = package / 'cleanup-report.json'
         if first_cleanup.exists():
             shutil.copyfile(first_cleanup, run / 'builder-cleanup-report.json')
-        phase('cleanup', ['powershell.exe', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File',
-              str(ROOT / 'release/cleanup_old_builds.ps1'), '-KeepBuild', str(package)])
+        if not args.defer_cleanup:
+            phase('cleanup', ['powershell.exe', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File',
+                  str(ROOT / 'release/cleanup_old_builds.ps1'), '-KeepBuild', str(package)])
+        else:
+            report['cleanup'] = 'Deferred until old/new final-byte startup comparison and acceptance finish'
         report['artifact'] = json.loads((package / 'build-info.json').read_text('utf8'))
         media = json.loads((work / 'manual-package-selection.json').read_text('utf8'))
         report['media'] = {'included': media['included'], 'cacheHits': sum(row.get('cacheHit', False) for row in media['media'])}

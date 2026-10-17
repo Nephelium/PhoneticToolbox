@@ -10,6 +10,9 @@ from scipy.signal import find_peaks, resample_poly
 from scipy.signal.windows import hann
 from .reconstruction import window_pad
 
+# Perraudin, Balazs & Søndergaard (2013), independently of Aoki initialization.
+GL_MOMENTUM = 0.99
+
 
 def auto_gain(audio):
     audio = np.asarray(audio, dtype=np.float64)
@@ -96,7 +99,7 @@ def reconstruct_calibrated(gray, *, time_start=0., time_end=1., freq_start=0., f
     old=np.zeros_like(phase)
     for _ in range(n_iter):
         rebuilt=forward(inverse(magnitude*phase))
-        accelerated=rebuilt-(.99/1.99)*old
+        accelerated=rebuilt-(GL_MOMENTUM/(1+GL_MOMENTUM))*old
         phase=accelerated/np.maximum(np.abs(accelerated),1e-10);old=rebuilt
     native=inverse(magnitude*phase)
     output_sr=target_sr or math.ceil(2*freq_end)
@@ -111,7 +114,7 @@ def reconstruct_calibrated(gray, *, time_start=0., time_end=1., freq_start=0., f
         time_origin=time_start,native_sr=sr,n_fft=nfft,win_length=win,window_ms=milliseconds,hop_length=hop,
         hop_ms=milliseconds/4,n_iter=n_iter,seed=seed,phase_initialization='pulse' if pulse else 'random',
         pulse_count=count,pulse_threshold_ms=15,requested_phase_initialization=phase_initialization,
-        threshold_basis='applied_integer_window_ms' if phase_initialization=='auto' else 'user_choice',momentum=.99,
+        threshold_basis='applied_integer_window_ms' if phase_initialization=='auto' else 'user_choice',momentum=GL_MOMENTUM,
         frequency_axis=frequency_axis,magnitude_mapping='20log10-relative-amplitude',
         phase_method='griffin-lim',pcm16_clipped_samples=0,**gain))
 

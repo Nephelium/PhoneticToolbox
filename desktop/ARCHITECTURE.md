@@ -15,6 +15,8 @@
 
 Assets、LocalOnly、URL校验与scheme注册共用 [web_assets.py](src/ptb_desktop/web_assets.py)，主宿主保留导入名称兼容。工作台另注册 feedback 原生桥。独立 [feedback_manager.py](src/ptb_desktop/feedback_manager.py)只装配管理静态页、反馈桥、DPAPI与托盘，不导入工作台或科学运行时；同一用户的数据目录对应一个本机实例，再次启动唤起已有窗口。文字、私有图片、设备配对及SSE请求均由原生网络层核验HTTPS。关闭隐藏到托盘，退出关闭本工具的连接与线程。最终EXE有独立入口及工程外验证，见[工具说明](../tools/feedback-manager/README.md)。
 
+静态资源的路径解析、根目录归属校验、文件读取和MIME判断由本模块共享的四线程池处理；请求对象、QBuffer及reply/fail留在GUI线程。缓冲区以请求为父对象，保持至请求结束。请求或宿主销毁会取消待处理结果，排队后已取消的请求不再读取文件，正在读取的任务完成后丢弃结果；关闭profile不销毁线程池或等待磁盘读取。该适配器仅用于桌面主程序和独立反馈管理器，网页版继续使用HTTP静态资源服务。
+
 [window_chrome.py](src/ptb_desktop/window_chrome.py) 在 Windows 将标签与单一品牌区放入窗口顶边，由前端绘制主题一致的控制按钮。宿主保留 Windows 缩放/贴边样式，以原生边缘命中测试调整大小，最大化使用屏幕工作区。无边框客户区计算交给 Qt 的 WM_NCCALCSIZE 路径，避免宿主提前消费消息导致原生框架边距缓存失配；Windows 原生恢复保留最大化状态和页面，不重载编辑内容。files.windowAction 仅分派移动、最小化、最大化/还原和既有关闭协商，不扩大文件访问能力。状态信号同步还原图标，关闭仍经过未保存编辑保护。其他平台保留系统装饰；兼容的 files.setCaptionColors 仍只接受两个不透明六位十六进制颜色，不修改系统设置。
 
 ## 本地服务及工作进程
@@ -30,10 +32,10 @@ Assets、LocalOnly、URL校验与scheme注册共用 [web_assets.py](src/ptb_desk
 | 代码位置 | 责任 |
 | --- | --- |
 | file_provider.py、task_bridge.py、各 mXX_bridge.py | 目录 grant、受控导入/导出、研究任务路由及模块文件协议 |
-| vocal_tract/client.py、worker.py、runtime.py | M10 专用进程、原生引擎、状态隔离和明确资源位置 |
+| vocal_tract/client.py、worker.py、runtime.py | M10 专用进程、原生引擎、状态隔离和明确资源位置；runtime注入本机音频/ProfileStore到共用core状态机 |
 | vocal_tract/audio_output.py | 声道模块的本机音频输出 |
 | recording/、m16_bridge.py | M16 设备枚举/租约、采集、工程、编辑/处理、后台保存与导出 |
-| papers.py、papers_bridge.py、paper_library.py | 推荐目录/选择下载、启动及可调周期检查、个人文件夹库、离线读取、批注与导出 |
+| papers.py、papers_bridge.py、paper_library.py | 原桌面入口与调度；目录/个人库/PDF实现位于同一Python发行包的 `src/ptb_documents`，供桌面及网页受限文档子进程共用 |
 | updates_bridge.py、update_coordinator.py、update_apply.py | 更新检查/下载、关闭协商、独立换版助手 |
 | startup_cache.py、compact_runtime.py、bundle_manifest.py | 持久缓存、压缩运行时展开、依赖身份与运行绑定 |
 | startup_*.py、presentation.py | 准备进度、启动显示和窗口呈现 |
@@ -41,6 +43,8 @@ Assets、LocalOnly、URL校验与scheme注册共用 [web_assets.py](src/ptb_desk
 | app_icon.py、icon_preferences.py | 共享图标目录、窗口/打包图标与原子保存的个人图标选择 |
 
 M10 的可变原生引擎与 M16 的采集工程各有独立生命周期。M16 使用 recording(request_id, JSON)/recordingReady，长处理先启动后台再轮询；停止检测、停止录音、取消处理和取消导出不能互相混同。协议见[recording/1](../contracts/recording/README.md)。
+
+M16录后预览仅保留最近一个窗口的数值数组，数组预算4 MB，不保留整段音频。命中前仍核对工程/版本、片段路径与文件身份、大小及mtime/ctime；声道、范围、宽度、频谱开关或源文件变化重新扫描。结果回转为独立列表，关闭工程释放缓存。采集中状态、电平和原始音频写入沿用原链路。
 
 M09 的已有Python入口由 `m09_bridge.py` 管理：原生文件选择产生绑定解释器身份的grant，前端仅传grant请求兼容性检查，不能提交任意路径。检查在后台任务队列运行，验证依赖、实际CUDA运算及可用组件模型，成功后由worker原子保存解释器身份；运行前复核文件摘要，不安装或修改用户环境。状态查询与研究任务共用串行队列，组件下载沿用独立队列。
 
@@ -59,3 +63,5 @@ platform_paths 以操作系统用户数据目录为基础，Windows 主数据位
 release/ 决定资源收集、运行时共享、安装包装和大小限制；宿主按构建清单运行，不依赖开发机 PATH。缓存先验证身份、文件和活动租约，再决定复用、修复或清理。
 
 源码测试、实际 Qt、冻结进程、工程外启动、安装换版和实体设备是不同证据。定向测试在 desktop/tests，交互验证入口位于 scripts/ 与 tests/e2e；保留各自报告的具体范围，不把合成设备当成实体录音验收。
+
+声道视频封装与MP4实现位于backend ptb_worker/vocal_video、vocal_mp4，桌面video/mp4保留兼容导入入口。通过同一冻结源码快照提供真实helper脚本，不复制编码实现。

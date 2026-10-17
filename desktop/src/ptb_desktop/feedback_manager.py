@@ -60,6 +60,7 @@ class FeedbackManager(QMainWindow):
             self.tray.messageClicked.connect(self.show_window)
             self.tray.show()
         self.bridge.notification.connect(self.notify)
+        self.bridge.inboxState.connect(self.update_inbox_title,Qt.ConnectionType.QueuedConnection)
         self.bridge.windowAction.connect(self.window_action,Qt.ConnectionType.QueuedConnection)
         self.view.load(QUrl('ptbapp://app/feedback-manager.html'))
 
@@ -73,12 +74,20 @@ class FeedbackManager(QMainWindow):
         if action=='quit':
             QTimer.singleShot(100,self.quit)
 
+    @pyqtSlot(int,int)
+    def update_inbox_title(self, count, conversations):
+        title = 'PhoneticToolbox 反馈管理'
+        if count > 0:
+            title += f' · {conversations} 个会话有 {count} 条未读留言'
+        self.setWindowTitle(title)
+        if self.tray:
+            self.tray.setToolTip(title)
+
     def notify(self,payload):
         try:
             event = json.loads(payload)
-            if event.get('kind') in ('daily_feedback','new_feedback'):
+            if event.get('kind') in ('daily_feedback','new_feedback') and event.get('count',0)>0:
                 text = f"{event['conversations']} 个会话有 {event['count']} 条新留言"
-                self.setWindowTitle('PhoneticToolbox 反馈管理 · '+text)
                 if self.tray:
                     self.tray.showMessage('新的用户反馈',text,QSystemTrayIcon.MessageIcon.Information,10000)
         except (ValueError,KeyError,TypeError):

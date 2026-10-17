@@ -1,6 +1,6 @@
 import {computed,ref} from 'vue';
 import defaultLogo from '../assets/k2.png';
-import {emptyIcons,iconRequest,type IconRequest} from '../platform/icons.ts';
+import {emptyIcons,iconRequest,nativeIcons,type IconRequest} from '../platform/icons.ts';
 import {iconCatalog} from '../platform/icon-catalog.ts';
 import {projects} from '../platform/browser.ts';
 export const homeIconScale=ref(100);
@@ -19,15 +19,21 @@ function favicon(){let link=document.querySelector<HTMLLinkElement>('link[rel="i
 export async function changeIcon(request:IconRequest){
  if(iconBusy.value)return false;
  iconBusy.value=true;iconError.value='';
- try{iconPreferences.value=await iconRequest(request);favicon();return true;}
+ try{
+  if(request.action==='select'&&request.id)await loadBuiltinIcon(request.id);
+  iconPreferences.value=await iconRequest(request);favicon();
+  const selected=iconPreferences.value.selected;
+  void loadBuiltinIcon(selected).then(()=>{if(iconPreferences.value.selected===selected)favicon();}).catch(error=>{iconError.value=error instanceof Error?error.message:'内置图标加载失败。';});
+  return true;
+ }
  catch(error){iconError.value=error instanceof Error?error.message:'图标更新失败，原选择保留。';return false;}
  finally{iconBusy.value=false;}
 }
-export function initializeIcons(){return initialized??=(async()=>{
- const saved=projects.read<unknown>('homeIconScale',100);
- homeIconScale.value=typeof saved==='number'&&Number.isFinite(saved)?Math.max(50,Math.min(300,Math.round(saved))):100;
- const sheets=new Map<string,Promise<HTMLImageElement>>();
- const rendered=await Promise.all(iconCatalog.icons.map(async item=>{
+const sheets=new Map<string,Promise<HTMLImageElement>>(),rendering=new Map<string,Promise<void>>();
+function loadBuiltinIcon(id:string):Promise<void>{
+ const item=builtinIcons.value.find(item=>item.id===id);if(!item||item.url)return Promise.resolve();
+ const previous=rendering.get(id);if(previous)return previous;
+ const pending=(async()=>{
   let promise=sheets.get(item.sheet);
   if(!promise){const image=new Image();image.src=import.meta.env.BASE_URL+'app-icons/sheets/'+item.sheet;promise=image.decode().then(()=>image);sheets.set(item.sheet,promise);}
   const image=await promise,[x,y,w,h]=item.rect as [number,number,number,number];
@@ -37,9 +43,19 @@ export function initializeIcons(){return initialized??=(async()=>{
   const scale=256/Math.max(w,h),width=w*scale,height=h*scale,dx=(256-width)/2,dy=(256-height)/2;
   context.beginPath();context.roundRect(dx,dy,width,height,Math.min(width,height)*item.radius);context.clip();
   context.drawImage(image,x,y,w,h,dx,dy,width,height);
-  return {...item,url:canvas.toDataURL('image/png')};
- }));
- builtinIcons.value=rendered;
+  item.url=canvas.toDataURL('image/png');
+ })().catch(error=>{sheets.delete(item.sheet);throw error;}).finally(()=>rendering.delete(id));rendering.set(id,pending);return pending;
+}
+let catalogLoading:Promise<void>|undefined;
+export function loadBuiltinIcons(){return catalogLoading??=(async()=>{
+ let next=0;await Promise.all(Array.from({length:2},async()=>{while(next<builtinIcons.value.length)await loadBuiltinIcon(builtinIcons.value[next++]!.id);}));
+})().catch(error=>{catalogLoading=undefined;iconError.value=error instanceof Error?error.message:'内置图标加载失败。';});}
+export function initializeIcons(){return initialized??=(async()=>{
+ const saved=projects.read<unknown>('homeIconScale',100);
+ homeIconScale.value=typeof saved==='number'&&Number.isFinite(saved)?Math.max(50,Math.min(300,Math.round(saved))):100;
+ // Browser startup needs the current icon only. The catalog is loaded when its
+ // settings tab opens. Keep the existing native startup behavior unchanged.
+ if(nativeIcons())await loadBuiltinIcons();
  await changeIcon({action:'status'});
 })().catch(error=>{iconError.value=error instanceof Error?error.message:'内置图标加载失败。';});}
 

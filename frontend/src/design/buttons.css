@@ -50,8 +50,8 @@ html:root[data-button-style][data-button-style] button:where(:not(.nav-item)):is
  background-color:var(--button-selected-background)!important;color:var(--text,var(--ink))!important;border-color:transparent!important;outline:none!important;font-weight:600;
 }
 html:root[data-button-style] .tab-wrap.active{background-color:var(--button-selected-background)!important;border-color:transparent!important;outline:none!important;box-shadow:none!important;color:var(--text)!important}
-html:root[data-button-style][data-button-style] button:where(:not(.nav-item)):is([aria-pressed=true],[aria-selected=true],[aria-checked=true],.selected,.active,.m17-selected):not(.tab-wrap>button):not(.window-controls button):focus-visible{outline:2px solid var(--accent)!important;outline-offset:3px!important}
-html:root[data-button-style] :is(.nav-item,.tab-wrap>button):focus-visible{outline:none!important;text-decoration:underline;text-underline-offset:3px}
+html:root[data-button-style][data-button-style] button:where(:not(.nav-item)):is([aria-pressed=true],[aria-selected=true],[aria-checked=true],.selected,.active,.m17-selected):not(.tab-wrap>button):not(.window-controls button):not(.manual-toc button):focus-visible{outline:2px solid var(--accent)!important;outline-offset:3px!important}
+html:root[data-button-style] :is(.nav-item,.tab-wrap>button,.manual-toc button):focus-visible{outline:none!important;text-decoration:underline;text-underline-offset:3px}
 /* Mode cards are palette previews as well as controls; material/highlight must not recolour them. */
 html:root[data-button-style][data-button-material] button:where(:not(.nav-item)).theme-mode-card.theme-mode-card:is(:enabled,:disabled){
  background-color:var(--mode-card-bg,var(--panel))!important;color:var(--mode-card-text,var(--text))!important;border:2px solid transparent!important;box-shadow:none!important;backdrop-filter:none!important;filter:none!important;outline:none!important;

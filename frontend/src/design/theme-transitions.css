@@ -1,0 +1,5 @@
+/* Preserve hover effects while avoiding light buttons during a theme change. */
+html:root[data-theme-switching] *,
+html:root[data-theme-switching][data-theme][data-palette][data-button-style][data-button-effects] :is(button,input,select,textarea){
+ transition:none!important;
+}

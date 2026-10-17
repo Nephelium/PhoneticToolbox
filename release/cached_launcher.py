@@ -97,6 +97,7 @@ def build(application, destination, work, snapshot, host_archive, *, env):
         subprocess.run([sys.executable,'-m','PyInstaller','--noconfirm','--onefile','--windowed',
             '--name','PhoneticToolboxBootstrap','--distpath',str(pack/'dist'),'--workpath',str(pack/'build'),
             '--specpath',str(pack),'--paths',str(snapshot/'desktop/src'),
+            '--version-file',str(snapshot/'PhoneticToolbox-version.txt'),
             '--icon',str(snapshot/'PhoneticToolbox-v3.ico'),'--add-data',str(descriptor)+';.',
             '--add-data',str(startup_icons)+';startup-icons',
             '--exclude-module','PyQt6','--exclude-module','numpy',str(snapshot/'scripts/cache_launcher_entry.py')],

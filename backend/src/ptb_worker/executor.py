@@ -19,6 +19,10 @@ def stop_child(child):
 
 def execute_claim(store, claim, worker_id, stop, *, step_delay=0):
     snapshot=json.loads(claim['snapshot'])
+    if snapshot['operation']=='recording_audio':
+        from .recording_jobs import execute
+        execute(store,claim,worker_id,stop)
+        return
     if snapshot['operation']=='lip_analysis':
         from .m05_executor import execute_claim as execute_m05
         execute_m05(store,claim,worker_id,stop)
@@ -95,7 +99,14 @@ def execute_claim(store, claim, worker_id, stop, *, step_delay=0):
 
 
 def run_worker(store, stop, worker_id, *, step_delay=0):
+    from ptb_api.quota import StorageError
     while not stop.is_set():
-        claim=store.claim(worker_id)
+        try:claim=store.claim(worker_id)
+        except StorageError as exc:
+            if exc.code != 'storage_busy':raise
+            # Upload, cleanup and claim share the same store lock. Contention
+            # must leave the worker available for the next queue poll.
+            stop.wait(0.1)
+            continue
         if claim is None:stop.wait(0.1);continue
         execute_claim(store,claim,worker_id,stop,step_delay=step_delay)

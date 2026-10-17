@@ -2,7 +2,8 @@ import {canvasFont} from './fonts.js';
 import {tint} from './theme.js';
 import {zoomMonitor,monitorRange,monitorTimeLabel,waveformLimit} from './monitor-view.mjs';
 export function setupMonitor(post,isClosed){
-  const $=id=>document.getElementById(id);let latest=null,pending=false,visible=false,lastKey='';
+  const $=id=>document.getElementById(id);let latest=null,pending=false,visible=false,lastKey='',active=true,outputGeneration,requestKey='';
+  document.addEventListener('m10-output-state',event=>{if(active&&!event.detail.active)requestKey='';active=event.detail.active;outputGeneration=event.detail.generation;});
   const panel=$('monitorPanel'),home=$('monitorHome'),dialog=$('monitorDialog');
   let view={span:+$('monitorSeconds').value,lag:0};
   function resetZoom(){view={span:+$('monitorSeconds').value,lag:0};lastKey='';draw();poll();}
@@ -27,7 +28,7 @@ export function setupMonitor(post,isClosed){
   for(const id of ['monitorWindow','monitorHop'])$(id).onchange=()=>{lastKey='';poll();};
   function context(id){const canvas=$(id),w=canvas.clientWidth,h=canvas.clientHeight,d=Math.min(devicePixelRatio,2);canvas.width=w*d;canvas.height=h*d;const c=canvas.getContext('2d');c.scale(d,d);c.font=canvasFont(9);return {c,w,h};}
   function draw(){
-    if(!visible)return;
+    if(!visible||panel.clientWidth<=0||panel.clientHeight<=0)return;
     const wave=context('waveCanvas'),spec=context('spectrogramCanvas');if(!wave.w)return;
     const {seconds,start,end}=monitorRange(view,latest?.end||0);
     $('waveLabel').textContent='波形 · 振幅 · '+(seconds<1?(seconds*1000).toFixed(seconds<.01?1:0)+' ms':seconds.toFixed(2)+' s');
@@ -63,10 +64,13 @@ export function setupMonitor(post,isClosed){
       s.c.save();s.c.beginPath();s.c.rect(36,8,s.w-46,plotHeight);s.c.clip();s.c.imageSmoothingEnabled=false;s.c.drawImage(buffer,x,8+plotHeight*(1-topFrequency/6000),cols*latest.hop_seconds/seconds*(s.w-46),plotHeight*topFrequency/6000);s.c.restore();
     }else{s.c.fillStyle=tint('#839080');s.c.fillText('点击发声后显示实际输出音频',45,s.h/2);}
   }
-  async function poll(){if(pending||!visible||isClosed()||document.hidden)return;pending=true;
+  async function poll(){if(pending||!visible||isClosed()||document.hidden||panel.clientWidth<=0||panel.clientHeight<=0)return;pending=true;
     try{const requested={...view},width=Math.max(64,Math.min(2048,Math.ceil($('waveCanvas').clientWidth-46)));
+      const keyBefore=[requested.span,requested.lag,width,$('monitorWindow').value,outputGeneration].join(':');
+      if(!active&&latest&&requestKey===keyBefore&&lastKey)return;
       const s=await(await post('audio/monitor',{seconds:Math.max(1,Math.min(12,requested.span+requested.lag)),window_ms:+$('monitorWindow').value,hop_ms:+$('monitorHop').value,view_seconds:requested.span,view_lag:requested.lag,waveform_width:width})).json();
       if(requested.span!==view.span||requested.lag!==view.lag)return;
+      requestKey=keyBefore;
       const key=[s.generation,s.end,s.seconds,s.window_ms,s.hop_seconds,requested.span,requested.lag,width].join(':');latest=s;
       $('monitorStatus').textContent=`48 kHz 输出 · 分析窗 ${s.window_ms} ms（1/T ≈ ${Math.round(s.resolution_hz)} Hz）· 实际步长 ${(s.hop_seconds*1000).toFixed(1)} ms · 90 dB`;
       if(key!==lastKey){lastKey=key;draw();}

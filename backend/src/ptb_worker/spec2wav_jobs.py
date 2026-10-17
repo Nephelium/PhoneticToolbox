@@ -1,5 +1,6 @@
 """Generic P06 job admission using P07 input links, no batch DDL."""
 import hashlib
+import sys
 from uuid import uuid4
 from .store import JobError,LOCAL_PROJECT,canonical,core_version,adapter_version,public
 from ptb_api.spec2wav_models import Spec2WavRequest
@@ -8,6 +9,10 @@ from ptb_api.spec2wav_models import Spec2WavRequest
 def submit(store,owner,body,*,retry_of=None,drawing_ref=None):
     body=Spec2WavRequest.model_validate(body)
     if store.files is None:raise JobError('task_service_unavailable',503)
+    if sys.platform=='linux':
+        from .native.capabilities import linux_capabilities
+        if 'spectrogram_to_audio' not in linux_capabilities(store)[0]:raise JobError('m09_runtime_unavailable',503)
+        if body.config.algorithm=='neural_pipeline' or body.config.vocoder!='none':raise JobError('m09_vocoder_missing',503)
     request=body.model_dump(exclude={'idempotency_key'})|{'retry_of':retry_of}
     request['config']=body.config.snapshot()
     if drawing_ref:request['drawing_ref']=drawing_ref

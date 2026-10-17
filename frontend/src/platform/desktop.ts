@@ -4,6 +4,7 @@ import {installFeedbackChannel,type FeedbackChannel} from './feedback.ts';
 import { browser } from './browser.ts';
 import {installClipboardWriter} from './clipboard.ts';
 import {serialRequests} from './serial-requests.ts';
+import {coalescedRequests,desktopReadKey} from './coalesced-requests.ts';
 import {m07Port} from './m07.ts';
 import {m06Port} from './m06.ts';
 import {m08Port} from './m08.ts';
@@ -86,7 +87,11 @@ export async function initializePlatform(){
     const timer=op==='local_storage_cleanup'?undefined:setTimeout(()=>{taskPending.delete(id);reject(Error('任务操作超时，刷新批次可核对实际状态。'));},op==='m11_component'||op==='m09_vocoder_download'?7230000:op==='m05_save_finish'?650000:op==='parameters'?350000:300000);
     taskPending.set(id,{resolve,reject,timer});bridge.task(id,JSON.stringify(body));
   });
-  const task=serialRequests(nativeTask);
+  const task=coalescedRequests(serialRequests(nativeTask),desktopReadKey);
+  const preview=coalescedRequests(<T>(body:unknown):Promise<T>=>new Promise<Spectrogram>((resolve,reject)=>{
+    const id=crypto.randomUUID();const timer=setTimeout(()=>{pending.delete(id);reject(Error('preview_timeout'));},35000);
+    pending.set(id,{resolve,reject,timer});bridge.preview(id,JSON.stringify(body));
+  }).then(value=>value as T),body=>JSON.stringify(body));
   const tasks:ResearchTasks={parent:file=>task({op:'parent',id:file.id}),submit:(operation,inputs,config,layer,key)=>task({op:'submit',operation,inputs:inputs.map(item=>Object.fromEntries(Object.entries(item).filter(([,v])=>v!=null).map(([role,file])=>[role,role==='parent_result'?file:(file as {id:string}).id]))),config,layer,idempotency_key:key}),
     vocoderStatus:()=>task({op:'m09_vocoder_status'}),downloadVocoder:()=>nativeTask({op:'m09_vocoder_download'}),
     chooseInferencePython:()=>call('m09_pick_python'),checkInferencePython:grant=>task({op:'m09_check_python',grant}),
@@ -107,7 +112,7 @@ export async function initializePlatform(){
     async previewAudio(file){const v=await task<{base64:string;sha256:string;sourceDuration:number;previewNote:string}>({op:'research_audio',id:file.id});const text=atob(v.base64),bytes=new Uint8Array(text.length);for(let i=0;i<text.length;i++)bytes[i]=text.charCodeAt(i);return {buffer:bytes.buffer,sha256:v.sha256,sourceDuration:v.sourceDuration,previewNote:v.previewNote};},
     async read(file){const v=await call<{base64:string;sha256:string}>('read',{id:file.id});const text=atob(v.base64),bytes=new Uint8Array(text.length);for(let i=0;i<text.length;i++)bytes[i]=text.charCodeAt(i);return {buffer:bytes.buffer,sha256:v.sha256};},
     textgrid:file=>call('textgrid',{id:file.id}),
-    spectrogram:(file,view)=>new Promise((resolve,reject)=>{const id=crypto.randomUUID();const timer=setTimeout(()=>{pending.delete(id);reject(Error('preview_timeout'));},35000);pending.set(id,{resolve,reject,timer});bridge.preview(id,JSON.stringify({id:file.id,...view}));}),dispose(){}};
+    spectrogram:(file,view)=>preview({id:file.id,...view}),dispose(){}};
   if(hello.tasks){let outputDirectory:string|undefined;
     installStoragePort({status:()=>task({op:'local_storage_status'}),configure:policy=>task({op:'local_storage_policy',policy}),clean:()=>task({op:'local_storage_cleanup'}),clearAll:()=>call('clear_all_caches',{purpose:'confirmed'})});
     desktopFiles.m07=m07Port({f0:job=>task({op:'m07_f0',job}),project:'00000000-0000-4000-8000-000000000001',source:file=>task({op:'m07_source',id:file.id,sha256:file.sha256}),create:body=>task({op:'m07_create',body}),job:tasks.job,read:tasks.result!,cancel:tasks.cancelJob!,retry:tasks.retry,list:()=>task({op:'m07_list'}),save:(job,directory)=>task({op:'m07_save',job,directory})});

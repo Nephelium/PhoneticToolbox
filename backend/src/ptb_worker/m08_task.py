@@ -22,10 +22,11 @@ def submit(store, owner, body, *, retry_of=None):
     body = M08Request.model_validate(body)
     if store.files is None: raise JobError('task_service_unavailable',503)
     import sys
-    # No Linux receipt has passed M08's unchanged cross-platform scientific gate.
-    # Reject direct API submissions as well as hiding the advertised capability.
-    if sys.platform!='win32':raise JobError('m08_platform_unverified',503)
-    if not windows_capability(store):raise JobError('m08_runtime_unavailable',503)
+    if sys.platform=='linux':
+        from .native.capabilities import linux_capabilities
+        if 'pitch_manipulation' not in linux_capabilities(store)[0]:raise JobError('m08_runtime_unavailable',503)
+    elif sys.platform!='win32':raise JobError('m08_platform_unverified',503)
+    elif not windows_capability(store):raise JobError('m08_runtime_unavailable',503)
     request = body.model_dump(exclude={'idempotency_key'}) | {'retry_of':retry_of}
     sha = hashlib.sha256(canonical(request).encode()).hexdigest()
     with store.files.batch_transaction() as tx:

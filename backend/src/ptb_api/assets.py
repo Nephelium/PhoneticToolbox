@@ -42,6 +42,7 @@ class PrivateDownload(Response):
 
 
 def create_storage_router(ctx, store, *, egg_preview=None):
+    from ptb_worker.preview_cache import preview_scope
     router = APIRouter(prefix='/api/v1', tags=['storage'])
 
     def available():
@@ -80,10 +81,13 @@ def create_storage_router(ctx, store, *, egg_preview=None):
         return value
 
     @router.post('/assets/{asset_id}/egg-preview/{session_id}',response_model=EggInteractiveResult,operation_id='update_asset_egg_preview')
-    def egg_update(asset_id:UUID,session_id:UUID,body:EggTaskConfig,request:Request,owner=Depends(mutation)):
+    def egg_update(asset_id:UUID,session_id:UUID,body:EggTaskConfig,request:Request,auto_db:bool=False,need_audio:bool=False,owner=Depends(mutation)):
         if egg_preview is None: raise HTTPException(503,'egg_runtime_unavailable')
         store.metadata(owner['id'],asset_id)
-        value=egg_preview.update((str(owner['id']),str(asset_id)),session_id,body.model_dump())
+        options={}
+        if auto_db:options['auto_db']=True
+        if need_audio:options['need_audio']=True
+        value=egg_preview.update((str(owner['id']),str(asset_id)),session_id,body.model_dump(),**options)
         store.metadata(owner['id'],asset_id)
         if ctx.session(request)['id']!=owner['id']: raise HTTPException(409,'account_changed')
         import json
@@ -96,7 +100,10 @@ def create_storage_router(ctx, store, *, egg_preview=None):
 
     @router.get('/storage/usage', response_model=StorageUsage, operation_id='get_storage_usage')
     def usage(owner=Depends(identity)):
-        return store.usage(owner['id'])
+        result=store.usage(owner['id'])
+        if ctx.workspaces is not None:
+            result.update(workspace_policy_version=1,retention_seconds=1800,upload_limit_bytes=ctx.workspaces.UPLOAD_LIMIT)
+        return result
 
     @router.get('/assets', response_model=AssetList, operation_id='list_assets')
     def listing(project_id: UUID, order: Literal['expires', 'size', 'created'] = 'expires', owner=Depends(identity)):
@@ -104,6 +111,7 @@ def create_storage_router(ctx, store, *, egg_preview=None):
 
     @router.post('/uploads', response_model=AssetView, status_code=201, operation_id='create_upload')
     def create(body: UploadInput, owner=Depends(mutation)):
+        ctx.project(owner,body.project_id)
         return store.create(owner['id'], body)
 
     @router.put('/uploads/{asset_id}/blocks', response_model=AssetView, operation_id='append_upload_block',
@@ -148,12 +156,34 @@ def create_storage_router(ctx, store, *, egg_preview=None):
 
     from .preview_models import SpectrogramPreview
 
+    @router.get('/assets/{asset_id}/recording-preview',operation_id='recording_spectrogram_preview')
+    def recording_spectrum(asset_id:UUID,request:Request,start:int=Query(ge=0),end:int=Query(gt=0),channel:int=Query(default=0,ge=0,le=7),width:int=Query(default=640,ge=32,le=640),owner=Depends(identity)):
+        import hashlib
+        from ptb_worker.spectrogram_preview import preview_slot
+        from ptb_worker.recording_preview import render
+        if ctx.workspaces is None:raise HTTPException(404,'recording_server_unavailable')
+        with preview_scope((str(owner['id']),str(asset_id))),preview_slot():
+            asset=store.metadata(owner['id'],asset_id)
+            if not asset['name'].lower().endswith('.wav') or asset['size_bytes']>100_000_000:raise HTTPException(422,'unsupported_preview_audio')
+            data=bytearray()
+            while len(data)<asset['size_bytes']:
+                if ctx.session(request)['id']!=owner['id']:raise HTTPException(409,'account_changed')
+                block=store.read_block(owner['id'],asset_id,len(data),min(CHUNK_BYTES,asset['size_bytes']-len(data)))
+                if not block:raise HTTPException(503,'storage_read_failed')
+                data.extend(block)
+            raw=bytes(data);sha=hashlib.sha256(raw).hexdigest()
+            if sha!=asset['sha256']:raise HTTPException(409,'asset_changed')
+            value=render(raw,start=start,end=end,channel=channel,width=width)
+            store.metadata(owner['id'],asset_id)
+            if ctx.session(request)['id']!=owner['id']:raise HTTPException(409,'account_changed')
+            return dict(sha256=sha,**value)
+
     @router.get('/assets/{asset_id}/spectrogram',response_model=SpectrogramPreview,operation_id='asset_spectrogram_preview')
     def spectrogram(asset_id:UUID,request:Request,channel:int=Query(ge=0,le=31),start:float=Query(ge=0),
                     end:float=Query(gt=0),width:int=Query(default=800,ge=100,le=1000),owner=Depends(identity)):
         import hashlib
         from ptb_worker.spectrogram_preview import render,preview_slot,MAX_BYTES
-        with preview_slot():
+        with preview_scope((str(owner['id']),str(asset_id))),preview_slot():
             asset=store.metadata(owner['id'],asset_id)
             if not asset['name'].lower().endswith('.wav') or asset['size_bytes']>MAX_BYTES:raise HTTPException(422,'unsupported_preview_audio')
             data=bytearray()
@@ -176,7 +206,7 @@ def create_storage_router(ctx, store, *, egg_preview=None):
         import hashlib
         from ptb_worker.parameter_preview import render,MAX_BYTES
         from ptb_worker.spectrogram_preview import preview_slot
-        with preview_slot():
+        with preview_scope((str(owner['id']),str(asset_id))),preview_slot():
             asset=store.metadata(owner['id'],asset_id)
             if asset['size_bytes']>MAX_BYTES or not asset['name'].lower().endswith(('.xlsx','.ptb.sqlite','.ptb.sqlite3')):
                 raise HTTPException(422,'unsupported_parameter_table')

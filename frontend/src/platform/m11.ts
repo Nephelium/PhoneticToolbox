@@ -20,6 +20,7 @@ const messages:Record<string,string>={
  m11_oov_words:'转写中有词典未收录的词。请核对汉字 / 拼音与声调格式，并在下方 MFA 日志查看具体词；任务未发布完整结果。',
  m11_model_mismatch:'声学模型与词典音素集不匹配。',m11_dictionary_mismatch:'词典格式或内容不适用于当前模型。',
  m11_waiting_verified_node:'正在等待可用的计算服务。',
+ m11_web_disabled:'网页版暂不支持MFA在线对齐，请下载桌面应用。',
  m11_download_not_published:'组件暂时无法在线下载，可导入离线组件包。',
  m11_timeout:'对齐达到 180 秒期限，已停止本任务进程树。本机部分输出与诊断保留，未作为完整结果发布。',
  m11_component_not_registered:'所选组件或模型尚未登记，请先检查运行环境与模型。',

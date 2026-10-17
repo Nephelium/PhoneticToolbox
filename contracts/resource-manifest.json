@@ -29,7 +29,7 @@
     },
     {
       "path": "frontend/public/vocal-tract/app.js",
-      "sha256": "5e4934074ac2fdec1b8f0b7771cdf8ce0cadbed9de15160c191026806b7d7509",
+      "sha256": "efb90fb58e3e942f5061e1dfea95efd80f007fbeccfa5f16439cc013e260ab23",
       "source_id": "PROJECT-M10"
     },
     {
@@ -59,12 +59,12 @@
     },
     {
       "path": "frontend/public/vocal-tract/index.html",
-      "sha256": "7f626e18969c7ecd5cdc55f3a9063a57806afc76f6f57b8b3dc3bee532f9f38c",
+      "sha256": "c3a01897b2a019e391b4956d08acebed267b5e199870bc396dfd55f5470563c3",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/keyframes.js",
-      "sha256": "8e79c1b9880521b82ee782741a4a9417aa7cea73c6183c0b16be7ea35ed5d821",
+      "sha256": "666d4c5de5573a30ff29b97f419105d9873bf962530737f9644e22f519c54147",
       "source_id": "PROJECT-M10"
     },
     {
@@ -74,7 +74,7 @@
     },
     {
       "path": "frontend/public/vocal-tract/monitor.js",
-      "sha256": "a75469742e1d2fb77a8dca552762d538a4eea961adcf60c280879e7f1b8cfa3a",
+      "sha256": "fe758e391fb36ce414a8e61d820e43f72462e1a185080188ab3a6d8675002248",
       "source_id": "PROJECT-M10"
     },
     {
@@ -89,12 +89,12 @@
     },
     {
       "path": "frontend/public/vocal-tract/presets.js",
-      "sha256": "b239db0044a3c4b5a5baa06e09fa4efb4379f32e9692846870eeca2c88283a3b",
+      "sha256": "0d4d12bfa000a124e091905586ac12170ae1d1a3710f99d5696baf8cf2fad53d",
       "source_id": "PROJECT-M10"
     },
     {
       "path": "frontend/public/vocal-tract/scene.js",
-      "sha256": "f6ca621a2a6d9efde40cad24525a43d56f62985d22664660397752907e77eb5b",
+      "sha256": "e94180edfc8e1e9a8096565d40707052d46b50e3646cb65f5946760051061575",
       "source_id": "PROJECT-M10"
     },
     {
@@ -109,7 +109,7 @@
     },
     {
       "path": "frontend/public/vocal-tract/v3.css",
-      "sha256": "e195746e4369395db7b0e4f40a86db879a424461a2a8b80501c06485b18e210e",
+      "sha256": "e78190a3383c2abea393d5da603203e4e497fd2e8adc24cde25035c6f392f473",
       "source_id": "PROJECT-M10"
     },
     {
@@ -134,7 +134,7 @@
     },
     {
       "path": "frontend/public/vocal-tract/video.js",
-      "sha256": "ea4b765e6f9546e4cdece2ace573fc90c1919759b23bc7160120dddfced0ed89",
+      "sha256": "4b207573882a402c831c1ee9b8d5ad421e80e6478000eeb0a0245d0f89bed699",
       "source_id": "PROJECT-M10"
     },
     {
@@ -144,7 +144,7 @@
     },
     {
       "path": "resources/vocal_tract/bundle-manifest.json",
-      "sha256": "76afb19bcca93e6705b58acb4929bc81943539f35e122e0df820a70d6a4d3e10",
+      "sha256": "30e1b5f02d347257761505d06f95caf10cd143c7e970cf5af1a76bb6bc905101",
       "source_id": "SRC-VTL"
     },
     {
@@ -184,7 +184,7 @@
     },
     {
       "path": "resources/vocal_tract/sources/geometry_bridge.cpp",
-      "sha256": "3fee2d2bcd9ed70f108dfd96d193d8c7ff8c911a807dc0549566a84a162506bf",
+      "sha256": "075475c365c62eafa1a89c436aebff548e0fda023733f84040bfc6185c963802",
       "source_id": "SRC-VTL"
     },
     {
@@ -503,7 +503,7 @@
     {
       "path": "frontend/public/vocal-tract/floor-contact.mjs",
       "source_id": "PROJECT-M10",
-      "sha256": "0040502299b747a69d9f0acf94b6f2adf208eaed8d5b8f2465494c65c75df082"
+      "sha256": "f087c28ca7bba80df04d1858cf1cb404c7731ceca5e161a60e7520877c8ade24"
     },
     {
       "path": "resources/vocal_tract/sources/m10_r18_patch.py",
@@ -523,9 +523,29 @@
     },
     {
       "path": "packages/phonetic_core/src/phonetic_core/spec2wav/data/parameters-v5.json",
-      "sha256": "bcc5384f4217ecfb8676c807957f8e11d6aa1db1b26be89a2e186aacff8c5160",
+      "sha256": "0daeb5527cba127f66230e667b5ae48c4c18a3fa378bff2721d3fa0efa20e8f9",
       "origin": "project",
       "description": "Built-in window/dynamic-range model v5; float32 weights only, local integration. See adjacent provenance for training checkpoint identity and redistribution boundary."
+    },
+    {
+      "path": "frontend/public/recording-capture.js",
+      "sha256": "d1db49736c04d6fb87a50566a9a7043f3c40bd0cd8328a59a89f32796fde70dd",
+      "source_id": "PROJECT-M16"
+    },
+    {
+      "path": "frontend/public/vocal-tract/presentation-metadata.json",
+      "sha256": "17c57ecacfc37dfe3886921e53496a4b2321e68b00813ca945344aa8a4a26a92",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/src/assets/ZCOOLKuaiLe-Regular.ttf",
+      "sha256": "812a6fc1fe54b6d73a419245c32dfeba8aa33104d5be90d1cf6af082007cb71d",
+      "source_id": "WEBSITE-ZCOOL-KUAILE"
+    },
+    {
+      "path": "frontend/public/licenses/ZCOOL-OFL.txt",
+      "sha256": "538078469839b4a2e7ad22bef4ebe41681a4e53749bb2a072144024f1d6d703d",
+      "source_id": "WEBSITE-ZCOOL-KUAILE"
     }
   ],
   "generated_resources": [

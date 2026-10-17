@@ -1,6 +1,5 @@
 # M01-B source_ids: SRC-VOICESAUCE; migration evidence: docs/modules/evidence/M01-core-migration.json
 import numpy as np
-import pandas as pd
 
 def align_track_to_grid(
     source_times: np.ndarray,
@@ -49,6 +48,7 @@ def smooth_preserving_gaps(
     window_size: int,
 ) -> np.ndarray:
     """Apply a centred rolling mean within each finite segment."""
+    import pandas as pd
     data = np.asarray(values, dtype=float)
     if data.size == 0 or window_size <= 1:
         return data.copy()

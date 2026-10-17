@@ -5,6 +5,7 @@ the method; full source pages and their surrounding text are not republished.
 """
 from pathlib import Path
 import argparse,hashlib,json,sys
+from website_audio_baseline import protect_pending
 import numpy as np
 from PIL import Image
 from scipy.io import wavfile
@@ -69,6 +70,7 @@ def import_pulse_study(study):
                    rms=float(np.sqrt(np.mean(values**2))),sha256=digest,
                    waveform=[round(float(np.max(np.abs(c))),4) for c in np.array_split(values,72)])
         pending.append((audio/name,payload))
+    protect_pending(pending)
     for destination,payload in pending:
         destination.write_bytes(payload)
     (audio/'provenance.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n','utf-8')
@@ -139,6 +141,7 @@ def import_comparison(study,before_only=False):
             after_rms=rows[after_name]['rms'];target=min(row['rms'],after_rms)
             pair['playback_volumes']={name.removesuffix('.wav'):target/row['rms'],after_name.removesuffix('.wav'):target/after_rms}
         pairs.append(pair)
+    protect_pending(pending)
     for path,payload in pending:path.write_bytes(payload)
     (audio/'provenance.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n','utf-8')
     comparison=dict(paper=dict(title='Technique of improving speech restoration from spectrograms of short windows for the Griffin–Lim algorithm',
@@ -219,6 +222,7 @@ def import_six_comparisons(defaults, additional):
     comparison.update(pairs=result,processing='六组对比：处理前统一10ms Hann/60dB随机相位GL；处理后为各图既有预测参数/80带NAFNet/BigVGAN输出，播放时仅衰减较响侧。',
                       before_source_report_sha256=hashlib.sha256((defaults/'auditions.json').read_bytes()).hexdigest(),
                       additional_source_report_sha256=hashlib.sha256((additional/'auditions.json').read_bytes()).hexdigest())
+    protect_pending(pending)
     for destination,payload in pending:destination.write_bytes(payload)
     manifest['files']=list(rows.values())
     (audio/'provenance.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n','utf-8')
@@ -268,6 +272,7 @@ def import_six_best(study):
                     parameter_model_sha256=report['parameter_model_sha256'],
                     playback_volumes={pair['before'][:-4]:target/before['rms'],pair['after'][:-4]:target/level})
         pending.append((audio/pair['after'],payload))
+    protect_pending(pending)
     for destination,payload in pending:destination.write_bytes(payload)
     comparison.update(parameter_model_sha256=report['parameter_model_sha256'],after_source_report_sha256=hashlib.sha256(report_path.read_bytes()).hexdigest(),
                       processing='处理后使用当前最佳参数预测与80带修复权重，窗长四舍五入到整数毫秒后重建；处理前10ms/60dB随机GL保持。')

@@ -9,9 +9,9 @@ const emit=defineEmits<{sessionInvalid:[]}>();
 const jobs=ref<Job[]>([]), events=ref<Event[]>([]), message=ref(''), enabled=ref(false), busy=ref(false);
 const abort=new AbortController(); let timer:ReturnType<typeof setTimeout>|undefined, disposed=false;
 const pending=new Map<string,string>();
-const titles:Record<string,string>={pipeline_check:'流程检查',storage_check:'存储流程检查',archive_zip:'ZIP 打包',extract_zip:'ZIP 展开'};
+const titles:Record<string,string>={pipeline_check:'流程检查',storage_check:'存储流程检查',archive_zip:'ZIP 打包',extract_zip:'ZIP 展开',lpc_analysis:'LPC 分析',egg_analysis:'EGG 分析',acoustic_analysis:'参数估计',textgrid_segment:'标注切分'};
 const jobErrors:Record<string,string>={worker_interrupted:'执行中断，可重新运行。',quota_exceeded:'账号空间不足；未完成文件会清理，原文件保留。',output_budget_exceeded:'超出本批输出上限；可调整上限后重新创建任务。',archive_rejected:'ZIP 超出支持范围或内容校验失败，请检查条目、格式和展开大小。',input_unavailable:'输入已到期或不可用，请重新上传。',resource_removed:'相关文件已删除，任务已请求停止。',cancelled:'任务已取消。'};
-const tasks=computed(()=>jobs.value.map(j=>({id:j.id,title:titles[j.operation]+' · '+j.id.slice(0,8),status:j.state,progress:j.progress,
+const tasks=computed(()=>jobs.value.map(j=>({id:j.id,title:titles[j.operation]||'处理任务',status:j.state,progress:j.progress,
   error:j.error_code ? (jobErrors[j.error_code] || '任务未完成，可查看记录后重试。'):undefined,
   canCancel:['queued','running'].includes(j.state),canRetry:['failed','interrupted','cancelled'].includes(j.state)})));
 async function request<T>(path:string,method='GET',body?:unknown):Promise<T> {
@@ -50,7 +50,7 @@ async function showEvents(id:string) {
   catch {if(!disposed)message.value='暂时无法读取任务记录。';}
 }
 const states:Record<string,string>={queued:'排队',running:'运行',cancel_requested:'请求取消',cancelled:'取消',failed:'失败',interrupted:'中断',succeeded:'完成'};
-onMounted(async()=>{try {const caps=await request<components['schemas']['Capabilities']>('capabilities');if(disposed)return;enabled.value=caps.task_operations.includes('pipeline_check');if(enabled.value)void refresh();}catch {if(!disposed)message.value='任务服务尚未就绪。';}});
+onMounted(async()=>{try {const caps=await request<components['schemas']['Capabilities']>('capabilities');if(disposed)return;enabled.value=caps.task_operations.length>0;void refresh();}catch {if(!disposed)message.value='任务服务尚未就绪。';}});
 onUnmounted(()=>{disposed=true;abort.abort();clearTimeout(timer);pending.clear();});
 </script>
 <template>

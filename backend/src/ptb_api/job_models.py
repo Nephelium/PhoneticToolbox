@@ -88,7 +88,7 @@ from .m05_models import M05Manifest
 class JobView(WireModel):
     id: str
     project_id: str
-    operation: Literal['pipeline_check','storage_check','archive_zip','extract_zip','acoustic_analysis','textgrid_segment','spectrogram_to_audio','egg_analysis','lpc_analysis','pitch_manipulation','phonology_induction','speech_synthesis','phonation_synthesis','mfa_alignment','lip_analysis'] = 'pipeline_check'
+    operation: Literal['pipeline_check','storage_check','archive_zip','extract_zip','acoustic_analysis','textgrid_segment','spectrogram_to_audio','egg_analysis','lpc_analysis','pitch_manipulation','phonology_induction','speech_synthesis','phonation_synthesis','mfa_alignment','lip_analysis','recording_audio'] = 'pipeline_check'
     state: State
     progress: Annotated[float, Field(ge=0,le=1)]
     generation: int

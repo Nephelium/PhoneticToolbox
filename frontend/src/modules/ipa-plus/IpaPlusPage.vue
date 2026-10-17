@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {useWebSettings,settingsFields} from '../../state/web-settings.ts';
 import {syncNumberInput} from '../../design/numeric-input.ts';
 import AppIcon from '../../components/AppIcon.vue';
 import {computed,nextTick,onBeforeUnmount,onMounted,reactive,ref,watch} from 'vue';
@@ -130,6 +131,7 @@ onMounted(async()=>{
 });
 onBeforeUnmount(()=>{disposed=true;clearTimeout(saveTimer);clearTimeout(hoverTimer);window.removeEventListener('beforeunload',beforeUnload);window.removeEventListener('resize',clearHover);});
 defineExpose({save});
+useWebSettings(props.stateKey,{...settingsFields(draft,['system','introductions','textSize','textSizeVersion','editorHeight']),playOnClick},()=>loaded.value);
 </script>
 <template>
  <ModuleFrame label="国际音标表Plus 工作区" class="ipa-plus-page" :style="{'--m17-font-size':draft.textSize+'px'}" fit>

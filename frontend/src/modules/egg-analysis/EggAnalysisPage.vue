@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {useWebSettings,settingsFields} from '../../state/web-settings.ts';
+import ResearchUpload from '../../components/ResearchUpload.vue';
 import ModuleFrame from '../../components/ModuleFrame.vue';
 import ModuleWorkbench from '../../components/ModuleWorkbench.vue';
 import {displayConfig} from './display.ts';
@@ -66,7 +68,7 @@ watch(autoDbEnabled,()=>{wave.dirty=true;if(!host.projects.write('egg.auto-db.'+
 watch(order,()=>{wave.dirty=true;});
 watch(()=>[wave.start,wave.end],([start,end])=>{if(longSource.value&&end-start>60){wave.end=Math.min(duration.value,start+60);return;}if(longSource.value){const visible=Math.min(60,duration.value/wave.zoom);if(start<wave.offset||end>wave.offset+visible)wave.offset=Math.max(0,Math.min(duration.value-visible,start-Math.max(0,visible-(end-start))/2));}if(start!==config.value.roi_start||end!==config.value.roi_end){config.value.roi_start=start;config.value.roi_end=end;config.value.micro_center=(start+end)/2;stop();}});
 watch(()=>config.value.flip_channels,flip=>{if(wave.asset)wave.channel=wave.asset.channels.length===1?0:flip?0:1;});
-watch(()=>props.active,active=>{if(!active)stop();else if(updateQueued.value)requestPreview();});
+watch(()=>props.active,active=>{if(!active)stop();else{void poll();if(updateQueued.value)requestPreview();}});
 function setRange(start:number,end:number){config.value.roi_start=start;config.value.roi_end=end;config.value.micro_center=(start+end)/2;wave.start=start;wave.end=end;}
 async function refresh(){try{const list=await props.context.files.list(directory.value||undefined);if(!disposed)files.value=list.filter(f=>f.kind==='audio');}catch(e){error.value=String(e);}}
 async function choose(){try{const grant=await props.context.files.choose?.('input');if(grant){directory.value=grant.id;await refresh();}}catch(e){error.value=String(e);}}
@@ -136,8 +138,8 @@ async function refreshPreview(){
     validate(frozen,duration.value,sourceRate.value);
     if(!session){const opened=await port.open(file);if(disposed||ticket!==epoch){void port.close(file,opened.session_id).catch(()=>{});return;}if(opened.sha256!==sourceHash.value){void port.close(file,opened.session_id).catch(()=>{});throw Error('音频已变化，请重新选择。');}session={id:opened.session_id,file};}
     let meta:components['schemas']['EggInteractiveResult'];
-    try{meta=await port.update(file,session.id,frozen);}
-    catch(e){if(resultMessage(e)==='egg_preview_expired'){session=undefined;const opened=await port.open(file);if(disposed||ticket!==epoch){void port.close(file,opened.session_id).catch(()=>{});return;}session={id:opened.session_id,file};meta=await port.update(file,session.id,frozen);}else throw e;}
+    try{meta=await port.update(file,session.id,frozen,{autoDb:automatic,needAudio:!analysisAudio.value});}
+    catch(e){if(resultMessage(e)==='egg_preview_expired'){session=undefined;const opened=await port.open(file);if(disposed||ticket!==epoch){void port.close(file,opened.session_id).catch(()=>{});return;}session={id:opened.session_id,file};meta=await port.update(file,session.id,frozen,{autoDb:automatic,needAudio:!analysisAudio.value});}else throw e;}
     if(disposed||ticket!==epoch)return;
     if(meta.input_sha256!==sourceHash.value)throw Error('音频已变化，请重新选择。');
     // A superseded viewport can still provide the one-time normalized audio.
@@ -148,7 +150,7 @@ async function refreshPreview(){
     // range before accepting the snapshot, with the same stale-response fence
     // across both calls. No estimator settings or series are changed.
     if(range&&(frozen.spec_vmin!==range[0]||frozen.spec_vmax!==range[1])){
-      meta=await port.update(file,session.id,{...frozen,spec_vmin:range[0],spec_vmax:range[1]});
+      if(meta.config.spec_vmin!==range[0]||meta.config.spec_vmax!==range[1])meta=await port.update(file,session.id,{...frozen,spec_vmin:range[0],spec_vmax:range[1]});
       if(!stillCurrent())return;
       if(meta.input_sha256!==sourceHash.value)throw Error('音频已变化，请重新选择。');
       adoptingDb=true;
@@ -274,11 +276,12 @@ async function download(id:string,name:string){
   try{await tasks.value?.download?.(id,resultNames.value[name]??name);}
   catch(e){if(currentResult(ticket,jobId))resultError.value=resultMessage(e);}
 }
-onMounted(()=>{if(props.context.files.kind!=='desktop')void refresh();void poll();});let lastPoll=0;const timer=setInterval(()=>{if(pending.value||inversePending||Date.now()-lastPoll>=1500){lastPoll=Date.now();void poll();}},250);
+onMounted(()=>{if(props.context.files.kind!=='desktop')void refresh();void poll();});let lastPoll=0;const timer=setInterval(()=>{if((props.active!==false||pending.value||inversePending||jobs.value.some(j=>['queued','running','cancel_requested'].includes(j.state)))&&(pending.value||inversePending||Date.now()-lastPoll>=1500)){lastPoll=Date.now();void poll();}},250);
 onUnmounted(()=>{disposed=true;closeSession();clearTimeout(gestureTimer);epoch++;viewEpoch++;batchEpoch++;clearInterval(timer);stop();for(const url of urls)URL.revokeObjectURL(url);});
+useWebSettings(props.stateKey,{autoDbEnabled,order,...settingsFields(config,['signal_mode','flip_channels','micro_width_ms','gci_method','goi_method','peak_prominence','valley_prominence','auto_prominence','highpass_cutoff','lowpass_cutoff','spec_window_ms','spec_vmin','spec_vmax','keep_praat_f0','keep_gci_f0','keep_reaper_f0','f0_min_hz','f0_max_hz','silence_threshold','generate_images']),batchConfig,...settingsFields(wave,['showBoth','showSpectrogram'])});
 </script>
 <template><ModuleFrame unified fit label="EGG 信号分析 工作区" class="egg-page">
-<template #toolbar><ModuleToolbar><button class="primary" v-if="context.files.choose" @click="choose" :disabled="loading"><AppIcon name="folder"/>打开音频目录</button><template v-if="context.files.add"><input ref="picker" type="file" accept=".wav" hidden multiple @change="addFiles"/><button class="primary" @click="picker?.click()">导入 WAV</button></template><button @click="refresh" :disabled="!directory&&context.files.kind==='desktop'">刷新文件</button><button @click="batchError='';batchOpen=true" :disabled="!files.length||!tasks?.egg||batchBusy">批量分析</button><button @click="config.flip_channels=!config.flip_channels" :disabled="!source">交换声道</button><span class="egg-export-controls"><button class="primary" :disabled="!displayed||stale||!source||submitting||!!pending" @click="submit('single')">保存 CSV / 三图</button><button v-if="longSource" class="primary" :disabled="!displayed||stale||!source||submitting" @click="submit('single',true)">保存完整录音 CSV / 三图</button><label :title="wave.asset?'V2 自动阶数 = floor(fs/1000)+6，当前 '+(Math.floor(sourceRate/1000)+6)+' 阶。手动阶数须低于固定 3 ms 窗的样本数。':'V2 自动阶数 = floor(fs/1000)+6'"><span>LP 阶数</span><input v-model.number="order" aria-label="EGG LP 阶数" type="number" min="1" max="256" :placeholder="wave.asset?'自动 '+(Math.floor(sourceRate/1000)+6):'自动'"/></label><button class="primary" :disabled="!displayed||stale||!source||submitting||!!pending" @click="submit('inverse')">逆滤波 IF</button></span><template #actions><button @click="save">保存参数草稿</button><button @click="help=true">帮助</button><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button></template></ModuleToolbar></template>
+<template #toolbar><ModuleToolbar><ResearchUpload :files="context.files" accept=".wav" @uploaded="refresh"/><button class="primary" v-if="context.files.choose" @click="choose" :disabled="loading"><AppIcon name="folder"/>打开音频目录</button><template v-if="context.files.add"><input ref="picker" type="file" accept=".wav" hidden multiple @change="addFiles"/><button class="primary" @click="picker?.click()">导入 WAV</button></template><button @click="refresh" :disabled="!directory&&context.files.kind==='desktop'">刷新文件</button><button @click="batchError='';batchOpen=true" :disabled="!files.length||!tasks?.egg||batchBusy">批量分析</button><button @click="config.flip_channels=!config.flip_channels" :disabled="!source">交换声道</button><span class="egg-export-controls"><button class="primary" :disabled="!displayed||stale||!source||submitting||!!pending" @click="submit('single')">保存 CSV / 三图</button><button v-if="longSource" class="primary" :disabled="!displayed||stale||!source||submitting" @click="submit('single',true)">保存完整录音 CSV / 三图</button><label :title="wave.asset?'V2 自动阶数 = floor(fs/1000)+6，当前 '+(Math.floor(sourceRate/1000)+6)+' 阶。手动阶数须低于固定 3 ms 窗的样本数。':'V2 自动阶数 = floor(fs/1000)+6'"><span>LP 阶数</span><input v-model.number="order" aria-label="EGG LP 阶数" type="number" min="1" max="256" :placeholder="wave.asset?'自动 '+(Math.floor(sourceRate/1000)+6):'自动'"/></label><button class="primary" :disabled="!displayed||stale||!source||submitting||!!pending" @click="submit('inverse')">逆滤波 IF</button></span><template #actions><button @click="save">保存参数草稿</button><button @click="help=true">帮助</button><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button></template></ModuleToolbar></template>
 <ModuleWorkbench unified :state-key="stateKey" :legacy-state-key="context.key" left-label="参数与任务" right-label="任务与记录" :left-width-alias="'--panel-right'"><div class="egg-current"><div class="egg-source"><span>{{config.flip_channels?'左：音频 · 右：EGG':'左：EGG · 右：音频'}}</span><small v-if="wave.asset">{{sourceRate}} Hz · {{duration.toFixed(3)}} s<span v-if="longSource"> · 轻量总览，原采样率选区试听 · 视野最多 60 s</span></small><span class="egg-live-status" role="status">{{loading?'正在读取音频…':fontChecking?'正在检查导出字体…':submitting?'正在提交任务…':previewBusy||updateQueued?'更新中…':displayed?'实时预览':''}}</span><span v-if="notice" role="status">{{notice}}</span></div>
 <ModuleStatus v-if="error" kind="error" :message="error"/><button v-if="error&&source" @click="updateNow" :disabled="previewBusy">重试预览</button><p v-if="!tasks?.egg" class="notice">当前入口仅支持文件预览。EGG 计算请使用已配置任务服务的桌面工作台或网页项目。</p>
 </div><EggSignalPlots :data="displayed" :psd="psd" :config="displayedConfig" @seek="seek" @gesture="gesture"/>

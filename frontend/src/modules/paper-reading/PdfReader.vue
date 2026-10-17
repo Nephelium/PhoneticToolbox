@@ -1,12 +1,14 @@
 <script setup lang="ts">
+import {useWebSettings} from '../../state/web-settings.ts';
 import {syncNumberInput} from '../../design/numeric-input.ts';
 import {computed,nextTick,onBeforeUnmount,onMounted,ref,shallowRef,useId,watch} from 'vue';
 import ModalDialog from '../../components/ModalDialog.vue';
-import {papers,type Paper,type PaperLanguage,type PaperPage,type PaperLine,type PaperAnnotation,type PaperAnnotations} from '../../platform/papers.ts';
+import {papers as desktopPapers,type PapersClient,type Paper,type PaperLanguage,type PaperPage,type PaperLine,type PaperAnnotation,type PaperAnnotations} from '../../platform/papers.ts';
 import {copyText} from '../../platform/clipboard.ts';
 import {pageScale} from '../../state/pageZoom.ts';
 import {rasterWidth,wheelZoom,MIN_PDF_ZOOM,MAX_PDF_ZOOM} from './pdf-view.ts';
-const props=defineProps<{paper:Paper;language:PaperLanguage;initialPage:number;active?:boolean}>();
+const props=defineProps<{paper:Paper;language:PaperLanguage;initialPage:number;active?:boolean;port?:PapersClient;settingsScope?:string}>();
+const papers:PapersClient=props.port??desktopPapers;
 const emit=defineEmits<{language:[PaperLanguage];position:[number];fullscreen:[boolean]}>();
 const reader=ref<HTMLElement>(),viewport=ref<HTMLElement>();
 const notesId=useId(),notesPanel=ref<HTMLElement>();
@@ -32,9 +34,10 @@ const wanted=new Set<number>();
 const canvas=document.createElement('canvas'),measure=canvas.getContext('2d')!;
 function textStyle(line:PaperLine,ratio:number){const key=`${pageWidth.value}:${ratio}:${line.x}:${line.y}:${line.w}:${line.h}:${line.text}`;const previous=lineStyles.get(key);if(previous)return previous;const height=line.h*pageWidth.value*ratio;measure.font=`${height*1.12}px "Times New Roman", "SimSun", serif`;const natural=measure.measureText(line.text).width||1;const style={left:`${line.x*100}%`,top:`${line.y*100}%`,fontSize:`${height*1.12}px`,height:`${height}px`,transform:`scaleX(${line.w*pageWidth.value/natural})`};if(lineStyles.size>10000)lineStyles.clear();lineStyles.set(key,style);return style;}
 function sheet(n:number){return viewport.value?.querySelector<HTMLElement>(`[data-page="${n}"]`);}
+const readerActive=()=>props.active!==false;
 async function pump(){
- if(pumping||disposed)return;pumping=true;
- try{while(wanted.size&&!disposed){const n=[...wanted].sort((a,b)=>Math.abs(a-page.value)-Math.abs(b-page.value))[0];wanted.delete(n);const pixels=renderWidth.value;if(cache.value[n]?.renderWidth===pixels)continue;
+ if(pumping||disposed||!readerActive())return;pumping=true;
+ try{while(wanted.size&&!disposed&&readerActive()){const n=[...wanted].sort((a,b)=>Math.abs(a-page.value)-Math.abs(b-page.value))[0];wanted.delete(n);const pixels=renderWidth.value;if(cache.value[n]?.renderWidth===pixels)continue;
   controller=new AbortController();loading.value=n;const token=rasterEpoch;
   try{const result=await papers.render(props.paper.id,props.language,n,pixels,controller.signal);if(disposed)return;
    if(token!==rasterEpoch)continue;const next={...cache.value,[n]:{...result,renderWidth:pixels}};for(const key of Object.keys(next).map(Number))if(Math.abs(key-page.value)>4)delete next[key];
@@ -46,7 +49,7 @@ async function pump(){
 }
 function schedule(){if(frame)return;frame=requestAnimationFrame(()=>{frame=0;scan();});}
 function scan(){
- if(!viewport.value||!ratios.value.length)return;
+ if(props.active===false||!viewport.value||!ratios.value.length)return;
  const y=viewport.value.scrollTop+32,top=offsets.value;let low=0,high=top.length-1;
  while(low<high){const middle=Math.ceil((low+high)/2);if(top[middle]<=y)low=middle;else high=middle-1;}
  const closest=low+1;if(page.value!==closest){page.value=closest;emit('position',closest);}wanted.clear();
@@ -71,7 +74,7 @@ function wheel(event:WheelEvent){
  event.preventDefault();if(!event.deltaY)return;
  const next=wheelZoom(pageWidth.value/816*100,event.deltaY,event.deltaMode,viewport.value?.clientHeight??800);if(!fit.value&&next===zoom.value)return;zoomAnchor=anchor(event.clientX,event.clientY);fit.value=false;zoom.value=next;
 }
-function refreshRaster(){rasterEpoch++;controller?.abort();wanted.clear();clearTimeout(renderTimer);renderTimer=setTimeout(()=>{renderTimer=undefined;if(!ratios.value.length){wanted.add(1);void pump();}else schedule();},140);}
+function refreshRaster(){rasterEpoch++;controller?.abort();wanted.clear();clearTimeout(renderTimer);renderTimer=undefined;if(props.active===false)return;renderTimer=setTimeout(()=>{renderTimer=undefined;if(!ratios.value.length){wanted.add(1);void pump();}else schedule();},140);}
 function densityChanged(){deviceRatio.value=window.devicePixelRatio||1;}
 function key(event:KeyboardEvent){if(props.active===false||event.defaultPrevented||event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||document.querySelector('dialog[open]')||(event.target as HTMLElement)?.closest('input,textarea,select,[contenteditable=true]'))return;
  if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();jump(page.value+(event.key==='ArrowLeft'?-1:1));}
@@ -80,6 +83,7 @@ function key(event:KeyboardEvent){if(props.active===false||event.defaultPrevente
 async function fullscreen(){try{if(document.fullscreenElement)await document.exitFullscreen();else await reader.value?.requestFullscreen();}catch(e){notice.value='无法进入全屏：'+(e as Error).message;}}
 function fullscreenChanged(){full.value=document.fullscreenElement===reader.value;emit('fullscreen',full.value);nextTick(schedule);}
 function selectText(){
+ if(props.active===false)return;
  const s=window.getSelection();if(!s||s.isCollapsed||!s.rangeCount){selection.value=[];return;}const range=s.getRangeAt(0);
  if(!viewport.value?.contains(range.commonAncestorContainer)){selection.value=[];return;}
  const groups:typeof selection.value=[];
@@ -98,7 +102,7 @@ function selectText(){
 function selectionChanged(){if(!selectionFrame)selectionFrame=requestAnimationFrame(()=>{selectionFrame=0;selectText();});}
 async function copySelection(){try{await copyText(selection.value.map(x=>x.quote).join('\n\n'));notice.value='已复制所选文字。';}catch(e){notice.value=(e as Error).message;}}
 async function reloadAnnotations(){annotationController?.abort();const request=new AbortController();annotationController=request;const token=epoch;try{const value=await papers.annotations(props.paper.id,props.language,request.signal);if(token!==epoch||disposed||request.signal.aborted)return;annotations.value=value;annotationError.value='';annotationsReady.value=true;}catch(e){if(token!==epoch||disposed||request.signal.aborted)return;annotationError.value=(e as Error).message;annotationsReady.value=false;}}
-async function save(item:PaperAnnotation,remove=false){saving.value=true;annotationError.value='';try{annotations.value=await papers.saveAnnotation(props.paper.id,props.language,annotations.value.revision,item,remove);notice.value=remove?'批注已删除。':'批注已保存到本机。';return true;}catch(e){annotationError.value=(e as Error).message;return false;}finally{saving.value=false;}}
+async function save(item:PaperAnnotation,remove=false){saving.value=true;annotationError.value='';try{annotations.value=await papers.saveAnnotation(props.paper.id,props.language,annotations.value.revision,item,remove);notice.value=remove?'批注已删除。':(papers.web?'批注已保存。':'批注已保存到本机。');return true;}catch(e){annotationError.value=(e as Error).message;return false;}finally{saving.value=false;}}
 function make(group:typeof selection.value[number],kind:PaperAnnotation['kind']):PaperAnnotation{return {id:crypto.randomUUID(),page:group.page,kind,color:color.value,text:'',quote:group.quote.slice(0,5000),rects:group.rects};}
 async function highlight(){if(!selection.value.length)return;for(const group of selection.value)if(!await save(make(group,'highlight')))return;selection.value=[];window.getSelection()?.removeAllRanges();}
 function note(){if(!selection.value.length)return;if(selection.value.length>1){notice.value='文字批注请在一页内选择，跨页内容可分别标注。';return;}editing.value=make(selection.value[0],'note');draft.value='';}
@@ -109,10 +113,11 @@ async function saveNote(){if(!editing.value)return;const ok=await save({...editi
 async function exportPdf(){exporting.value=true;try{const result=await papers.export(props.paper.id,exportLanguage.value,exportAnnotated.value);notice.value=result.cancelled?'已取消导出。':`已导出 ${result.name}`;if(!result.cancelled)exportOpen.value=false;}catch(e){notice.value=(e as Error).message;}finally{exporting.value=false;}}
 watch(pageWidth,()=>{const a=zoomAnchor??anchor();zoomAnchor=undefined;lineStyles.clear();nextTick(()=>{restoreAnchor(a);schedule();});});
 watch(renderWidth,refreshRaster);
-watch(()=>props.language,()=>{epoch++;rasterEpoch++;controller?.abort();clearTimeout(renderTimer);renderTimer=undefined;cache.value={};ratios.value=[];page.value=props.initialPage;selection.value=[];annotations.value={revision:0,items:[]};annotationsReady.value=false;failure.value='';notice.value='';wanted.clear();wanted.add(1);void pump();void reloadAnnotations();exportLanguage.value=props.language;});
-watch(()=>props.active,active=>{if(!active&&full.value)void document.exitFullscreen();});
-onMounted(()=>{document.addEventListener('keydown',key);document.addEventListener('fullscreenchange',fullscreenChanged);document.addEventListener('selectionchange',selectionChanged);window.addEventListener('resize',densityChanged);resize=new ResizeObserver(entries=>{width.value=entries[0].contentRect.width;densityChanged();schedule();});if(viewport.value){resize.observe(viewport.value);viewport.value.addEventListener('wheel',wheel,{passive:false});}wanted.add(1);void pump();void reloadAnnotations();});
+watch(()=>props.language,()=>{epoch++;cache.value={};ratios.value=[];page.value=props.initialPage;selection.value=[];annotations.value={revision:0,items:[]};annotationsReady.value=false;failure.value='';notice.value='';refreshRaster();void reloadAnnotations();exportLanguage.value=props.language;});
+watch(()=>props.active,active=>{if(active===false){if(full.value)void document.exitFullscreen();clearTimeout(renderTimer);renderTimer=undefined;wanted.clear();cancelAnimationFrame(frame);frame=0;cancelAnimationFrame(selectionFrame);selectionFrame=0;}else if(!ratios.value.length){if(!pumping)refreshRaster();}else schedule();});
+onMounted(()=>{document.addEventListener('keydown',key);document.addEventListener('fullscreenchange',fullscreenChanged);document.addEventListener('selectionchange',selectionChanged);window.addEventListener('resize',densityChanged);resize=new ResizeObserver(entries=>{const next=entries[0].contentRect.width;if(next<=0)return;width.value=next;densityChanged();schedule();});if(viewport.value){resize.observe(viewport.value);viewport.value.addEventListener('wheel',wheel,{passive:false});}refreshRaster();void reloadAnnotations();});
 onBeforeUnmount(()=>{disposed=true;controller?.abort();annotationController?.abort();resize?.disconnect();clearTimeout(renderTimer);cancelAnimationFrame(frame);cancelAnimationFrame(selectionFrame);document.removeEventListener('keydown',key);document.removeEventListener('fullscreenchange',fullscreenChanged);document.removeEventListener('selectionchange',selectionChanged);window.removeEventListener('resize',densityChanged);viewport.value?.removeEventListener('wheel',wheel);if(full.value)void document.exitFullscreen();});
+useWebSettings(props.settingsScope,{readerZoom:zoom,readerFit:fit,readerText:showText,readerSidebar:sidebar,annotationColor:color,exportLanguage,exportAnnotated});
 </script>
 <template>
 <section ref="reader" class="pdf-reader" aria-label="论文 PDF 阅读器">
@@ -138,10 +143,10 @@ onBeforeUnmount(()=>{disposed=true;controller?.abort();annotationController?.abo
     <button v-for="item in annotations.items.filter(a=>a.page===index+1&&a.kind==='note')" :key="item.id" class="pdf-note-pin" :style="{left:Math.min(.96,item.rects[0][0]+item.rects[0][2])*100+'%',top:item.rects[0][1]*100+'%'}" :title="item.text" aria-label="编辑此处批注" @click="edit(item)">✎</button>
    </div>
   </div>
-  <aside v-if="sidebar" :id="notesId" ref="notesPanel" class="pdf-notes" aria-label="本机批注" tabindex="-1"><strong>本机批注 · {{languageTitle}}</strong><button :disabled="saving||!annotationsReady||!ratios.length" @click="pageNote">添加本页笔记</button><p class="hint">可为整页写笔记，也可拖选文字后添加批注。不同文档分别保存。</p><p v-if="!annotations.items.length" class="hint">还没有批注，先记下一个想法吧。</p><div v-for="item in annotations.items" :key="item.id" class="pdf-note-card"><button @click="jump(item.page)">第 {{item.page}} 页 · {{item.kind==='highlight'?'荧光笔':item.quote?'批注':'本页笔记'}}</button><blockquote v-if="item.quote">{{item.quote}}</blockquote><p>{{item.text}}</p><div class="pdf-controls"><button :disabled="saving" @click="edit(item)">编辑</button><button :disabled="saving" @click="confirmDelete===item.id?(save(item,true),confirmDelete=''):confirmDelete=item.id">{{confirmDelete===item.id?'确认删除':'删除'}}</button></div></div></aside>
+  <aside v-if="sidebar" :id="notesId" ref="notesPanel" class="pdf-notes" :aria-label="papers.web?'个人批注':'本机批注'" tabindex="-1"><strong>{{papers.web?'个人批注':'本机批注'}} · {{languageTitle}}</strong><button :disabled="saving||!annotationsReady||!ratios.length" @click="pageNote">添加本页笔记</button><p class="hint">可为整页写笔记，也可拖选文字后添加批注。不同文档分别保存。</p><p v-if="!annotations.items.length" class="hint">还没有批注，先记下一个想法吧。</p><div v-for="item in annotations.items" :key="item.id" class="pdf-note-card"><button @click="jump(item.page)">第 {{item.page}} 页 · {{item.kind==='highlight'?'荧光笔':item.quote?'批注':'本页笔记'}}</button><blockquote v-if="item.quote">{{item.quote}}</blockquote><p>{{item.text}}</p><div class="pdf-controls"><button :disabled="saving" @click="edit(item)">编辑</button><button :disabled="saving" @click="confirmDelete===item.id?(save(item,true),confirmDelete=''):confirmDelete=item.id">{{confirmDelete===item.id?'确认删除':'删除'}}</button></div></div></aside>
  </div>
  <ModalDialog v-if="editing" :title="editing.quote?'编辑批注':`第 ${editing.page} 页笔记`" :close-disabled="saving" @close="editing=undefined"><blockquote v-if="editing.quote">{{editing.quote}}</blockquote><label class="note-label">批注内容<textarea v-model="draft" aria-label="批注内容" rows="6" maxlength="5000" placeholder="记下疑问、解释或想法…"/></label><p v-if="annotationError" role="alert">{{annotationError}}<button @click="reloadAnnotations">重新载入批注</button></p><template #footer><button :disabled="saving" @click="editing=undefined">取消</button><button class="primary" :disabled="saving||!draft.trim()" @click="saveNote">保存批注</button></template></ModalDialog>
- <ModalDialog v-if="exportOpen" title="导出论文 PDF" :close-disabled="exporting" @close="exportOpen=false"><label class="note-label">文档<select v-model="exportLanguage"><option value="original">{{paper.notice?'栏目说明':paper.local?'本地 PDF':'原文'}}</option><option v-if="!paper.local&&!paper.notice" value="translation">中文译文</option><option v-if="paper.analysisPdf&&paper.analysisDownloaded!==false" value="analysis">论文解读</option></select></label><label class="export-check"><input type="checkbox" v-model="exportAnnotated">包含此文档的本机批注与荧光笔</label><p class="hint">未勾选时导出原文件，勾选时生成含标准 PDF 批注的副本。注释显示方式取决于外部阅读器。</p><p role="status">{{notice}}</p><template #footer><button :disabled="exporting" @click="exportOpen=false">取消</button><button class="primary" :disabled="exporting||saving" @click="exportPdf">{{exporting?'正在导出…':'选择位置并导出'}}</button></template></ModalDialog>
+ <ModalDialog v-if="exportOpen" title="导出论文 PDF" :close-disabled="exporting" @close="exportOpen=false"><label class="note-label">文档<select v-model="exportLanguage"><option value="original">{{paper.notice?'栏目说明':paper.local?'本地 PDF':'原文'}}</option><option v-if="!paper.local&&!paper.notice" value="translation">中文译文</option><option v-if="paper.analysisPdf&&paper.analysisDownloaded!==false" value="analysis">论文解读</option></select></label><label class="export-check"><input type="checkbox" v-model="exportAnnotated">包含此文档的{{papers.web?'个人批注':'本机批注'}}与荧光笔</label><p class="hint">未勾选时导出原文件，勾选时生成含标准 PDF 批注的副本。注释显示方式取决于外部阅读器。</p><p role="status">{{notice}}</p><template #footer><button :disabled="exporting" @click="exportOpen=false">取消</button><button class="primary" :disabled="exporting||saving" @click="exportPdf">{{exporting?'正在导出…':'选择位置并导出'}}</button></template></ModalDialog>
 </section>
 </template>
 <style scoped>

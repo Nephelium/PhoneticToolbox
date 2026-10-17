@@ -8,7 +8,7 @@ import hashlib
 from test_p07_policy_postgres import cluster,legacy,migrate
 
 
-def test_mfa_web_owned_inputs_wait_without_local_fallback(legacy,tmp_path,monkeypatch):
+def test_mfa_web_rejects_alignment_without_queue_or_local_fallback(legacy,tmp_path,monkeypatch):
     from argon2 import PasswordHasher
     from fastapi.testclient import TestClient
     from ptb_api.account_store import PostgresAccountStore
@@ -39,18 +39,16 @@ def test_mfa_web_owned_inputs_wait_without_local_fallback(legacy,tmp_path,monkey
             return dict(asset_id=asset['id'],sha256=ready.json()['sha256'])
         audio=upload('公开.wav',b'public routing fixture');text=upload('公开.lab',b'a')
         body=dict(project_id=e.project,idempotency_key=uuid4().hex,runtime_id='test-mfa338',model_id='test-model',corpus=[dict(name='公开.wav',audio=audio,transcript=text)])
-        denied=other.post('/api/v1/jobs/m11/create',headers=other_headers,json=body);assert denied.status_code==404,denied.text
-        result=client.post('/api/v1/jobs/m11/create',headers=headers,json=body);assert result.status_code==201,result.text
-        job=result.json();assert job['state']=='queued' and job['waiting_reason']=='m11_waiting_verified_node'
-        assert client.post('/api/v1/jobs/m11/create',headers=headers,json=body).json()['id']==job['id']
+        for current,auth in ((client,headers),(other,other_headers)):
+            denied=current.post('/api/v1/jobs/m11/create',headers=auth,json=body)
+            assert denied.status_code==403 and denied.json()['detail']=='m11_web_disabled'
+        assert jobs.list(e.owner,e.project)==[]
         assert jobs.claim('local-worker-must-not-run-mfa') is None
-        restored=PostgresJobStore(e.dsn);AcousticFiles(restored,e.storage)
-        assert restored.get(e.owner,job['id'])['state']=='queued'
-        assert other.get('/api/v1/jobs/'+job['id'],headers=other_headers).status_code==404
         assert other.get('/api/v1/assets/'+audio['asset_id']+'/content',headers=other_headers).status_code==404
         usage=client.get('/api/v1/storage/usage',headers=headers).json()
         assert usage['quota_bytes']==1_000_000_000 and usage['retention_seconds']==259200
         assert usage['used_bytes']==len(b'public routing fixture')+1
         assert client.get('/api/v1/jobs/m11/catalog',headers=headers).json()['execution_available'] is False
         assert client.post('/api/v1/jobs/m11/component',headers=headers,json=dict(action='check',runtime='forbidden',model='forbidden',dictionary='forbidden')).status_code==404
-        assert client.post('/api/v1/jobs/'+job['id']+'/cancel',headers=headers).json()['state']=='cancelled'
+        catalog=client.get('/api/v1/jobs/m11/catalog',headers=headers).json()
+        assert catalog['waiting_reason']=='m11_web_disabled' and catalog['models']==catalog['runtimes']==[]

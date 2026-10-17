@@ -54,9 +54,10 @@ function show(image?:SavedImage){
  }
  if(old)URL.revokeObjectURL(old);
 }
+export function installBackgroundAppearance(){backgroundAppearance.value=normalizeBackground(projects.read('backgroundAppearance',null));apply();}
 export function initializeBackground(){return initialized??=(async()=>{
  layer=document.createElement('div');layer.className='app-background-layer';layer.setAttribute('aria-hidden','true');document.body.prepend(layer);
- backgroundAppearance.value=normalizeBackground(projects.read('backgroundAppearance',null));apply();
+ installBackgroundAppearance();
  watch(()=>buttonAppearance.value.glassBlur,apply);
  try{const value=await imageStore();displayLibrary(value);}
  catch(error){backgroundError.value=error instanceof Error?error.message:'背景图未能读取，请重新选择图片。';}
@@ -113,7 +114,7 @@ export async function removeBackground(id:string){
 }
 /** Align the frame wallpaper and shared glass bitmap with the outer document. */
 export function syncBackgroundFrame(frame:HTMLIFrameElement){
- const doc=frame.contentDocument;if(!doc||!layer)return;
+ const doc=frame.contentDocument;if(!doc?.body||!layer)return;
  let image=doc.querySelector<HTMLDivElement>('.app-background-layer');
  if(!image){image=doc.createElement('div');image.className='app-background-layer';image.setAttribute('aria-hidden','true');doc.body.prepend(image);}
  image.style.cssText=layer.style.cssText;

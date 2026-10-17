@@ -72,6 +72,27 @@ class JobStore:
                 ON b.id=i.batch_id WHERE b.owner_id=? AND b.closed_at IS NULL AND NOT b.cancel_requested AND i.child_job_id IS NULL''',(owner,)).fetchone()['n']
         return used
 
+    def check_web_queue(self, tx, owner, count=1):
+        """Bound hosted work, including batch children not created yet.
+
+        Call under the existing scheduling transaction, after idempotent lookup.
+        Desktop and legacy hosted retention keep their existing policy.
+        """
+        storage = getattr(self.files, 'storage', None)
+        if not self.postgres or getattr(storage, 'workspaces', None) is None:
+            return
+        pending = tx.execute('''SELECT owner_id, count(*) AS n FROM (
+            SELECT owner_id FROM {jobs} WHERE state IN ('queued','running','cancel_requested')
+            UNION ALL
+            SELECT i.owner_id FROM ptb_jobs.acoustic_batch_items i
+            JOIN ptb_jobs.acoustic_batches b ON b.id=i.batch_id
+            WHERE b.closed_at IS NULL AND NOT b.cancel_requested AND i.child_job_id IS NULL
+        ) pending GROUP BY owner_id''').fetchall()
+        if sum(row['n'] for row in pending if str(row['owner_id']) == str(owner)) + count > 8:
+            raise JobError('account_queue_full', 429)
+        if sum(row['n'] for row in pending) + count > 128:
+            raise JobError('server_queue_full', 429)
+
     def check_schema(self):
         with self.transaction(write=False) as tx:
             table='ptb_jobs.schema_version' if self.postgres else 'schema_version'
@@ -118,6 +139,7 @@ class JobStore:
                 return public(dict(old))
             if self.capacity_used(tx,owner) >= 1000:
                 raise JobError('job_limit_reached')
+            self.check_web_queue(tx, owner)
             if self.postgres and not tx.conn.execute('SELECT 1 FROM ptb_accounts.projects p JOIN ptb_accounts.users u ON p.owner_id=u.id WHERE p.id=%s AND p.owner_id=%s AND u.active',(body.project_id,owner)).fetchone():
                 raise JobError('project_not_found',404)
             if not self.postgres and (owner!='local' or body.project_id != LOCAL_PROJECT):
@@ -166,6 +188,9 @@ class JobStore:
         if snapshot['operation']=='lip_analysis':
             from .m05_task import submit
             return submit(self,owner,dict({k:v for k,v in snapshot['request'].items() if k!='retry_of'},idempotency_key=key),retry_of=job_id)
+        if snapshot['operation']=='recording_audio':
+            from .recording_jobs import submit
+            return submit(self,owner,dict(project_id=str(row['project_id']),idempotency_key=key,config=snapshot['config']),retry_of=job_id)
         if snapshot['operation']=='mfa_alignment':
             from .m11_task import submit
             return submit(self,owner,dict({k:v for k,v in snapshot['request'].items() if k!='retry_of'},idempotency_key=key),retry_of=job_id)

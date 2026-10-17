@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {useWebSettings,settingsFields} from '../../state/web-settings.ts';
+import ResearchUpload from '../../components/ResearchUpload.vue';
 import AppIcon from '../../components/AppIcon.vue';
 import PlotPlaceholder from '../../components/PlotPlaceholder.vue';
 import {vTimePrecision} from '../../design/time-precision.ts';
@@ -82,11 +84,13 @@ function exportCurrent(){void attempt(()=>{requireApplied();downloadBytes(export
 async function importFile(event:Event){await attempt(async()=>{const target=event.target as HTMLInputElement,file=target.files?.[0];target.value='';if(!file)return;if(file.size>8_000_000)throw Error('参数文件超过 8 MB');const c=importParams(await file.text());confirm('导入参数将覆盖当前完整配置',()=>replace(c));});}
 onMounted(()=>{const draft=host.projects.read<Config|null>('m06.draft.'+props.stateKey,null);if(draft){try{replace(draft);wave.dirty=false;}catch(e){error.value=(e instanceof Error?e.message:'旧草稿无效')+' 已保留存储内容并使用默认参数。';}}void attempt(refresh);});
 onUnmounted(()=>{loadEpoch++;loadAbort?.abort();sourceWave.asset=null;disposed=true;epoch++;abort?.abort();stop();});
+useWebSettings(props.stateKey,{...settingsFields(config,['duration','sample_rate','fade_in','fade_out','smooth','f0_range','f0_method','f0_transform']),selectedPreset,windowMs,curveOverrides:computed({get:()=>Object.fromEntries(Object.entries(config.curves).map(([k,c])=>[k,c.override])),set:values=>{for(const [key,value] of Object.entries(values))if(config.curves[key])config.curves[key]!.override=value;}})});
+onMounted(()=>{if(props.stateKey.startsWith('server:'))syncInputs();});
 </script>
 <template>
 <ModuleFrame unified fit label="声学参数合成工作区" class="m06-page" :aria-busy="busy">
- <template #toolbar><ModuleToolbar>
-  <button class="primary" v-if="context.files.choose" @click="choose"><AppIcon name="folder"/>打开音频目录</button><button class="primary" v-else @click="audioPicker?.click()">加载音频</button><button @click="attempt(refresh)">刷新文件</button>
+ <template #toolbar><ModuleToolbar><ResearchUpload :files="context.files" accept=".wav,.mp3,.flac" @uploaded="refresh"/>
+  <button class="primary" v-if="context.files.choose" @click="choose"><AppIcon name="folder"/>打开音频目录</button><button class="primary" v-else-if="context.files.add" @click="audioPicker?.click()">加载音频</button><button @click="attempt(refresh)">刷新文件</button>
   <input ref="audioPicker" hidden type="file" accept=".wav" @change="addAudio"/>
   <label class="preset-picker">F0 算法 <select v-model="config.f0_method" aria-label="F0 提取算法" title="用于下一次提取；范围使用左侧已应用的 F0 上下限"><option v-for="(label,key) in f0Methods" :key="key" :value="key">{{label}}</option></select></label>
   <button class="primary" :disabled="busy||sourceLoading||!source||!port" @click="run('extract')">提取参数</button><button @click="paramPicker?.click()">导入参数</button>

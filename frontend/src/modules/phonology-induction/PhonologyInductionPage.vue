@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {useWebSettings,settingsFields} from '../../state/web-settings.ts';
 import AppIcon from '../../components/AppIcon.vue';
 import {ref,computed,watch,onUnmounted} from 'vue';
 import ModuleFrame from '../../components/ModuleFrame.vue';
@@ -56,6 +57,7 @@ async function generate(){if(!port.value||!source.value||!preview.value||!settin
 async function saveResults(){if(result.value)await operation(async()=>{message.value=await port.value!.save(result.value!)?'三份结果已保存。':'已取消保存，结果仍可重新保存。';});}
 async function download(id:string){if(result.value)await operation(async()=>{await port.value!.download(result.value!,id);message.value='文件已交给浏览器下载。';});}
 const names=['导入','调类与调值','声韵排序归并','结果'],descriptions=['选择列与开始行','编辑调类与顺序','排序、归并与核对','预览、搜索与保存'];
+useWebSettings(props.stateKey,{options});
 </script>
 <template>
 <ModuleFrame unified fit class="phonology-page" label="音系归纳工作区" :aria-busy="busy">

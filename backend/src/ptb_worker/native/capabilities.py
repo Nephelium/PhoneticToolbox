@@ -72,7 +72,7 @@ def linux_capabilities(store):
         if _show('ptb-p11-capability-probe.service').get('LoadState') != 'not-found':
             return [], ['linux_process_boundary_unavailable']
         ready=[]
-        for operation, phase in [('lpc_analysis','lpc'),('egg_analysis','egg'),('acoustic_analysis','acoustic')]:
+        for operation, phase in [('lpc_analysis','lpc'),('egg_analysis','egg'),('acoustic_analysis','acoustic'),('recording_audio','recording'),('spectrogram_to_audio','spec2wav'),('speech_synthesis','m06'),('pitch_manipulation','m08'),('phonation_synthesis','m07'),('phonology_induction','m14')]:
             entry=receipt.get('operations',{}).get(operation)
             if not entry:continue
             report_path=Path(entry['report'])

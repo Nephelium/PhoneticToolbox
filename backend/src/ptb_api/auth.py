@@ -43,8 +43,9 @@ class AuthSettings:
         return '__Host-ptb-login' if self.secure else 'ptb-dev-login'
 
 class AccountContext:
-    def __init__(self, store: AccountStore | None, settings: AuthSettings | None, mode: str):
+    def __init__(self, store: AccountStore | None, settings: AuthSettings | None, mode: str, workspaces=None):
         self.store, self.settings, self.mode = store, settings, mode
+        self.workspaces = workspaces
 
     def available(self):
         if self.mode != 'server':
@@ -70,7 +71,21 @@ class AccountContext:
         expected = request.headers.get('x-ptb-account')
         if expected is not None and expected != session['id']:
             raise HTTPException(409, 'account_changed')
+        if self.workspaces is not None:
+            session = dict(session, _session_hash=hash_token(raw))
+            account_preferences = request.url.path == '/api/v1/web-feedback' or request.url.path == '/api/v1/preferences' or request.url.path.startswith('/api/v1/preferences/')
+            if not account_preferences and not request.url.path.startswith(('/api/v1/auth/', '/api/v1/workspaces/')):
+                from uuid import UUID
+                values = dict(project=request.path_params.get('project_id') or request.query_params.get('project_id'),
+                    asset=request.path_params.get('asset_id'),job=request.path_params.get('job_id'),batch=request.path_params.get('batch_id'))
+                try: values={key:str(UUID(str(value))) for key,value in values.items() if value is not None}
+                except ValueError:raise HTTPException(422,'invalid_request') from None
+                self.workspaces.authorize(session['id'],session['_session_hash'],**values)
         return session
+
+    def project(self, session, project_id):
+        if self.workspaces is not None:
+            self.workspaces.authorize(session['id'],session['_session_hash'],project=project_id)
 
     def mutation(self, request: Request):
         self.origin(request)
@@ -79,6 +94,18 @@ class AccountContext:
         if not hmac.compare_digest(header.encode('utf-8'), session['csrf_token'].encode('utf-8')):
             raise HTTPException(403, 'csrf_rejected')
         return session
+
+    def challenge(self, request: Request):
+        """Shared unauthenticated form protection for login and public identity."""
+        self.available()
+        token = request.headers.get('x-csrf-token', '')
+        cookie = request.cookies.get(self.settings.challenge_cookie, '')
+        if not token or len(token)>512 or not hmac.compare_digest(token.encode('utf-8'), cookie.encode('utf-8')):
+            raise HTTPException(403, 'csrf_rejected')
+        try:
+            URLSafeTimedSerializer(self.settings.signing_key, salt='ptb-login-csrf').loads(token, max_age=600)
+        except BadSignature:
+            raise HTTPException(403, 'csrf_rejected') from None
 
     def view(self, session):
         return SessionView(user=UserView(id=str(session['id']),username=session['username']),
@@ -98,14 +125,7 @@ def create_account_router(ctx: AccountContext):
 
     @router.post('/login', response_model=SessionView, operation_id='login_account', dependencies=[Depends(ctx.origin)])
     def login(body: LoginInput, request: Request, response: Response):
-        token = request.headers.get('x-csrf-token','')
-        cookie = request.cookies.get(ctx.settings.challenge_cookie,'')
-        if not token or len(token) > 512 or not hmac.compare_digest(token.encode('utf-8'),cookie.encode('utf-8')):
-            raise HTTPException(403, 'csrf_rejected')
-        try:
-            URLSafeTimedSerializer(ctx.settings.signing_key, salt='ptb-login-csrf').loads(token,max_age=600)
-        except BadSignature:
-            raise HTTPException(403, 'csrf_rejected') from None
+        ctx.challenge(request)
         username = body.username.lower()
         ip = request.client.host if request.client else 'unknown'
         if not ctx.store.allow_login(username,ip):
@@ -132,6 +152,8 @@ def create_account_router(ctx: AccountContext):
 
     @router.post('/logout', status_code=204, operation_id='logout_account')
     def logout(request: Request, response: Response, session=Depends(ctx.mutation)):
+        if ctx.workspaces is not None:
+            ctx.workspaces.close(session['id'],session['_session_hash'])
         ctx.store.revoke(hash_token(request.cookies.get(ctx.settings.cookie,'')))
         response.delete_cookie(ctx.settings.cookie,path='/',secure=ctx.settings.secure,httponly=True,samesite='strict')
         response.status_code=204

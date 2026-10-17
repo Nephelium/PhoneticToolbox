@@ -4,7 +4,7 @@ The SSH helper is supplied from outside the repository and uses the existing
 Windows credential vault. No credential is accepted as an argument or logged.
 """
 from pathlib import Path
-import argparse, hashlib, importlib.util, io, json, re, tarfile, uuid
+import argparse, hashlib, importlib.util, io, json, re, sys, tarfile, uuid
 
 ROOT = Path(__file__).resolve().parents[2]
 SITE = ROOT / 'temporary-site'
@@ -15,6 +15,12 @@ def digest(data):
 
 
 def build():
+    baseline_spec = importlib.util.spec_from_file_location('website_audio_baseline', ROOT / 'scripts/website_audio_baseline.py')
+    baseline = importlib.util.module_from_spec(baseline_spec); baseline_spec.loader.exec_module(baseline)
+    baseline.verify(SITE)
+    sys.path.insert(0, str(ROOT/'scripts'))
+    from build_website_gl_comparison import verify as verify_three_way
+    verify_three_way(SITE)
     files = {'site.css': (SITE / 'site.css').read_bytes(), 'site.js': (SITE / 'site.js').read_bytes()}
     html = (SITE / 'index.html').read_text('utf-8')
     names = set(re.findall(r'(?:src|href)="(assets/[^"?#]+)', html))
@@ -22,6 +28,12 @@ def build():
     names.update('assets/licenses/' + x for x in ['index.html', 'Doulos-OFL.txt', 'ZCOOL-OFL.txt'])
     names.update(['assets/audio/provenance.json', 'assets/spectrogram-examples/provenance.json', 'assets/release.json', 'assets/downloads.json'])
     names.add('assets/spectrogram-examples/comparison.json')
+    names.update(['assets/spectrogram-examples/basic-gl-baseline.json', 'assets/feature-icons.provenance.json'])
+    names.add('assets/spectrogram-examples/three-way-baseline.json')
+    if (SITE/'assets/spectrogram-examples/four-way-baseline.json').is_file():
+        names.add('assets/spectrogram-examples/four-way-baseline.json')
+    # Retain all established listening assets, including older standalone examples.
+    names.update('assets/audio/'+row['file'] for row in json.loads((SITE/'assets/audio/provenance.json').read_text('utf-8'))['files'])
     names.update(str(p.relative_to(SITE)).replace('\\','/') for p in (SITE/'assets/releases').glob('*.json'))
     for name in sorted(names):
         path = SITE / name

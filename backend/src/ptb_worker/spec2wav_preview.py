@@ -5,12 +5,15 @@ import queue
 import subprocess
 import sys
 import threading
+from .preview_cache import memoized_preview,preview_scope
 from .spectrogram_preview import PreviewError
 from .process_entry import command
 
 
+@memoized_preview('spec2wav')
 def render(payload, config, timeout=40):
     if not 0 < len(payload) <= 64_000_000:raise PreviewError('spectrogram_budget')
+    if sys.platform=='linux':return _render_linux(payload,config,timeout)
     if os.name != 'nt':raise PreviewError('preview_platform_unverified',503)
     from .native import windows as win
     process=None;job=None
@@ -46,13 +49,34 @@ def render(payload, config, timeout=40):
             process.stdin.close();process.stdout.close()
 
 
+def _render_linux(payload,config,timeout):
+    from pathlib import Path
+    from .native.linux_runtime import command,load_profile
+    from .native.posix import run_bounded
+    from .io.limits import Limits,LimitError,FormatError
+    header=json.dumps(dict(size=len(payload),config=config)).encode()+b'\n'
+    if len(header)>1_000_000:raise PreviewError('spectrogram_budget')
+    try:
+        _,profile=load_profile()
+        output=run_bounded(command('spec2wav_preview','--preview'),header+payload,Path(profile['cache']),
+            Limits(input_bytes=65_000_000,output_bytes=12_000_064,process_bytes=1_000_000_000,timeout_seconds=timeout))
+        pid,separator,encoded=output.partition(b'\n')
+        if not separator or not pid.isdigit() or len(pid)>20:raise ValueError('Invalid child protocol')
+        result=json.loads(encoded)
+        if 'error' in result:raise PreviewError(result['error'])
+        return result
+    except PreviewError:raise
+    except LimitError as exc:raise PreviewError('preview_timeout' if str(exc)=='native_timeout' else 'preview_resource_failed',503) from None
+    except (OSError,ValueError,FormatError):raise PreviewError('preview_resource_failed',503) from None
+
+
 def preview_source(store,owner,body):
     from .store import JobError
     from .segmentation import digest
     from .spectrogram_preview import preview_slot
     role='audio' if body.config.mode=='audio_draw' else 'image'
     if store.files is None:raise JobError('task_service_unavailable',503)
-    with preview_slot():
+    with preview_scope((str(owner),str(body.project_id),str(body.image.asset_id))),preview_slot():
         with store.files.batch_transaction() as tx:
             assets=store.files.validate_batch_input(tx,owner,body.project_id,{role:body.image.model_dump()},tx.now())
         source=assets[0]

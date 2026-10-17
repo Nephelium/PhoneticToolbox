@@ -9,7 +9,8 @@
 | 当前结构与依赖 | [总架构](../ARCHITECTURE.md)，子目录架构定位代码 |
 | 启动、修改、检查 | [开发说明](development.md)、[源码入口](development/source-entry.md) |
 | 用户要求 | [需求](requirements.md) |
-| 网页版上线 | [当前计划与逐模块计算分工](plans/2026-10-16-web-launch.md)、[临时工作区决策](decisions/ADR-web-ephemeral-client-first.md) |
+| 论文语谱图自动重建与播放 | [分阶段实施规划](plans/2026-10-16-paper-spectrogram-audio.md)、[设计取舍提议](decisions/ADR-paper-spectrogram-audio.md)；当前为规划，尚未实施 |
+| 网页版上线 | [首期服务器计算计划与逐模块安排](plans/2026-10-16-web-launch.md)、[临时工作区与计算部署决策](decisions/ADR-web-ephemeral-client-first.md) |
 | 模块入口及迁移基线 | [模块导航](modules/module-migration.md) |
 | 当前任务状态与证据 | [当前实现与后续任务](project-status.md)；[任务台账](plans/task-ledger.json)按任务 ID 检索 |
 | 每次修改与版本更新内容 | [更新记录](../CHANGELOG.md)累积未发布修改；正式版本说明位于 [release/notes](../release/notes/) |

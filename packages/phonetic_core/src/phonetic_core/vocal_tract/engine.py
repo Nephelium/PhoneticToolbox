@@ -122,9 +122,16 @@ class Engine:
 
     def set_section_count(self,count):
         if type(count) is not int or count not in self.section_options:
-            raise ValueError('声道采样截面数应为 65、129 或 257')
+            raise ValueError('声道采样截面数应为 '+ '、'.join(map(str,self.section_options)))
         with self.geometry_lock:
             check(self.geom.p5_sections(count));self.section_count=count
+
+    def enable_web_sections(self):
+        """Explicit web policy; desktop defaults and options stay unchanged."""
+        if not hasattr(self.geom,'p9_web_sections') or self.geom.p9_web_sections()!=1:
+            raise RuntimeError('网页版 33 截面原生组件尚未准备')
+        self.section_options=[33,65]
+        self.set_section_count(33)
 
     def set_manual_root(self,manual=False):
         if type(manual) is not bool:raise ValueError('Invalid tongue root mode')

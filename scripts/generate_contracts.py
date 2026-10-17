@@ -15,6 +15,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def snapshots():
     result = {'contracts/openapi.json': create_app().openapi()}
+    from ptb_api.preferences import FIELDS
+    result['contracts/module-preference-fields.json'] = FIELDS
     for model in (Audio, Selection, Track, Viewport,*ACOUSTIC_SCHEMAS,ResultManifestEnvelope,EggRequest,EggTaskConfig,EggManifest,EggPreviewData,EggInverseData,LpcRequest,LpcTaskConfig,LpcManifest,LpcSpectrumData):
         schema = model.model_json_schema()
         schema['$schema'] = 'https://json-schema.org/draft/2020-12/schema'

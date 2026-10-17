@@ -76,9 +76,9 @@ hr{border:0;border-top:1px solid var(--border);margin:22px 0}
 .tab-close svg{width:13px;height:13px}
 .tab-wrap svg{width:15px;height:15px}
 .host-badge{font-size:0.857143rem;color:var(--muted);padding-bottom:8px;white-space:nowrap}
-.topbar>.project-return{flex:none;display:block;max-width:320px;min-height:30px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;align-self:center;margin-bottom:6px;padding:4px 8px;font-size:0.857143rem;border-radius:var(--radius)}
+.topbar>.project-return{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;max-width:320px;min-height:38px;white-space:nowrap;align-self:center;margin:0 8px 6px 12px;padding:7px 14px;font-size:.93rem;font-weight:600;border:1px solid var(--accent);border-radius:10px}.topbar>.project-return .app-icon{width:19px;height:19px;flex:none}
 @media(max-width:900px){.topbar>.project-return{max-width:180px}}
-@media(max-width:600px){.topbar>.project-return{max-width:120px}}
+@media(max-width:600px){.topbar>.project-return{max-width:140px;padding:6px 9px;margin-left:6px;gap:5px;font-size:.85rem}}
 main{overflow:auto;flex:1;min-height:0;background:var(--panel);scrollbar-width:thin}
 .statusbar{border-top:1px solid var(--border);background:var(--app);display:flex;justify-content:space-between;gap:12px;padding:7px 20px;font-size:0.857143rem;color:var(--muted)}
 .statusbar .status-dot{margin-right:7px}

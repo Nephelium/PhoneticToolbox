@@ -3,6 +3,10 @@ import hashlib
 import json
 from pathlib import Path
 import tarfile
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
+from release_content_policy import assert_dependency_policy
 
 
 def digest(path):
@@ -26,6 +30,18 @@ def prepare(stage, destination, cache=None):
             sources[relative] = path
     if not files or len(files) > 20000 or sum(row['size'] for row in files.values()) > 2 * 1024**3:
         raise ValueError('Scientific runtime payload exceeds its reviewed budget')
+    assert_dependency_policy(files)
+    selection_path = stage / 'selection-manifest.json'
+    if selection_path.is_file():
+        selection = json.loads(selection_path.read_text('utf8'))
+        compared = {}
+        for runtime in selection['runtimes']:
+            for row in runtime['selected'] + runtime.get('supplemental_notices', []):
+                compared['runtimes/' + runtime['runtime'] + '/' + row['path']] = dict(size=row['size'], sha256=row['sha256'])
+        if files != compared:
+            raise ValueError('Runtime stage changed after its scientific/media comparison')
+    else:
+        raise ValueError('Runtime stage requires an exact compared selection manifest')
     manifest = destination / 'runtime-files.json'
     manifest.write_text(json.dumps(dict(schema='ptb-runtime-files/1', files=files), indent=2) + '\n', 'utf8')
     archive = destination / 'runtime-payload.tar.xz'

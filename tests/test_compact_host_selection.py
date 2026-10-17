@@ -40,3 +40,16 @@ def test_changed_science_payload_is_rejected(tmp_path,filename):
     with (archive/filename).open('ab') as output:output.write(b'changed')
     with pytest.raises(ValueError,match='identity changed'):
         PACK.shared_manifest({'same-name.dll':row(b'same')},archive)
+
+
+def test_science_rebinding_does_not_recompress_identical_host_payload():
+    before = dict(schema='ptb-host-files/2', files={'a.dll':row(b'original')},
+                  sharedFiles={'a.dll':'runtimes/egg/a.dll'}, runtimeArchiveSha256='old', runtimeManifestSha256='old-manifest')
+    after = before | dict(runtimeArchiveSha256='new', runtimeManifestSha256='new-manifest')
+    assert PACK.same_payload_inputs(before, after)
+    for change in (
+            dict(files={'a.dll':row(b'changed')}),
+            dict(files={'different.dll':row(b'original')}),
+            dict(sharedFiles={'a.dll':'runtimes/m05/a.dll'}),
+            dict(sharedFiles={}), dict(schema='future'), dict(new_policy='changed')):
+        assert not PACK.same_payload_inputs(before, after | change)

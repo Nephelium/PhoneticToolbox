@@ -4,15 +4,16 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ptb-api"
-version = "3.0.2"
+version = "3.0.3"
 description = "Shared local and server API scaffold for PhoneticToolbox"
 requires-python = ">=3.11,<3.12"
-dependencies = ["phonetic-core==3.0.2", "fastapi==0.141.1", "pydantic==2.13.5", "uvicorn==0.52.4", "argon2-cffi==25.1.0", "psycopg[binary]==3.3.3", "itsdangerous==2.2.0"]
+dependencies = ["phonetic-core==3.0.3", "fastapi==0.141.1", "pydantic==2.13.5", "uvicorn==0.52.4", "argon2-cffi==25.1.0", "psycopg[binary]==3.3.3", "itsdangerous==2.2.0"]
 
 [project.optional-dependencies]
+papers = ["ptb-desktop[papers]==3.0.2"]
 feedback = ["Pillow==12.3.0"]
-synthesis-io = ["phonetic-core[synthesis]==3.0.2", "soundfile==0.13.1"]
-acoustic-io = ["phonetic-core[acoustic]==3.0.2", "openpyxl==3.1.5", "et-xmlfile==2.0.0"]
+synthesis-io = ["phonetic-core[synthesis]==3.0.3", "soundfile==0.13.1"]
+acoustic-io = ["phonetic-core[acoustic]==3.0.3", "openpyxl==3.1.5", "et-xmlfile==2.0.0"]
 
 [project.scripts]
 ptb-api = "ptb_api.cli:main"

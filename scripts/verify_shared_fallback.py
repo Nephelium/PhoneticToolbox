@@ -6,6 +6,7 @@ from pathlib import Path
 import shutil
 import sys
 import time
+from verification_artifacts import verification_run
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'desktop/src'))
@@ -16,11 +17,20 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--work',required=True,type=Path)
     parser.add_argument('--output',required=True,type=Path)
+    parser.add_argument('--managed',action='store_true',help='Put expanded payloads in disposable scratch and retain evidence')
     args=parser.parse_args()
     work,out=args.work.resolve(),args.output.resolve()
     if not work.is_relative_to(ROOT/'output') or not out.is_relative_to(ROOT/'output/validation'):
         raise ValueError('Expected owned build and validation directories')
+    if args.managed:
+        with verification_run('package-trim', 'copy-fallback', dict(command=sys.argv)) as (evidence, scratch):
+            verify(work, scratch, evidence)
+        return
     out.mkdir(parents=True,exist_ok=False)
+    verify(work, out, out)
+
+
+def verify(work, out, evidence):
     root=out/'payload';root.mkdir()
     shutil.copyfile(work/'snapshot/desktop-bundle.json',root/'desktop-bundle.json')
     for name in ('runtime-files.json','runtime-payload.tar.xz'):
@@ -45,8 +55,8 @@ def main():
     compact_host.expand(root)
     report=dict(success=True,hostFiles=len(value['files']),seconds=time.monotonic()-started,
                 restoration=receipt['restoration'],scope='Real archives; forced hard-link unsupported error; all original host file hashes checked; no separate volume or machine')
-    (out/'report.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf8')
-    print(json.dumps(report),flush=True)
+    (evidence/'report.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf8')
+    print(json.dumps(report | dict(evidence=str(evidence))),flush=True)
 
 
 if __name__=='__main__':main()

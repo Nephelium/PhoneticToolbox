@@ -8,6 +8,9 @@ from ptb_api.m06_models import M06Request
 
 
 def capability(store):
+    if sys.platform=='linux':
+        from .native.capabilities import linux_capabilities
+        return 'speech_synthesis' in linux_capabilities(store)[0]
     from importlib.metadata import version,PackageNotFoundError
     from importlib.util import find_spec
     if sys.platform!='win32' or getattr(store,'files',None) is None:return False

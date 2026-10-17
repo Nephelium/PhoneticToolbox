@@ -2,7 +2,7 @@
 
 操作说明见[使用说明](使用说明.md)。共用 Vue 管理页面、FeedbackThread 与 HTTPS API，Windows 宿主为 PyQt6，Android 宿主为 Java/WebView。工具不导入科学模块，不启动科研后台或单独页面服务器。
 
-构建使用已安装的项目 Python、Node、Android Studio JBR/SDK 与缓存 Gradle，无需全局安装。顺序为管理页面 Vite 构建、资源许可准备、两平台打包：
+构建使用已安装的项目 Python、Node、Android Studio JBR/SDK 与缓存 Gradle，无需全局安装。顺序为管理页面 Vite 构建、资源许可准备、两平台打包。本轮使用独立web-1.1.3目录，避免同期构建覆盖页面输入；在每个构建PowerShell会话先设置 `$env:PTB_FEEDBACK_WEB_ROOT = 'D:/PhoneticToolbox/PhoneticToolbox_v3/output/build-feedback-manager/web-1.1.3'`。Vite命令加 `--outDir $env:PTB_FEEDBACK_WEB_ROOT`，资源准备与两平台脚本读取同一进程环境变量，不修改系统设置：
 
 ```powershell
 & 'C:/Program Files/nodejs/node.exe' 'node_modules/vite/bin/vite.js' build --config vite.feedback.config.ts
@@ -12,7 +12,7 @@
 & '.venv/m14/Scripts/python.exe' -B 'tools/feedback-manager/verify_windows.py'
 ```
 
-第一条在 `frontend` 目录执行，其他命令在工程根执行。新版产物位于 `output/feedback-manager/1.0.1`；运行中的旧 EXE 保留，先在旧工具设置中退出，再打开新版。Android 签名及其 DPAPI 密码保存在工程外 Windows 用户目录，不能加入源码或分发；后续更新沿用同一签名。EXE 构建主动限定 DLL 搜索 PATH，避免第三方 ICU 覆盖 Windows 的同名接口。
+第一条在 `frontend` 目录执行，其他命令在工程根执行。新版产物位于 `output/feedback-manager/1.1.3`；运行中的旧 EXE 保留，先在旧工具设置中退出，再打开新版。Android 签名及其 DPAPI 密码保存在工程外 Windows 用户目录，不能加入源码或分发；后续更新沿用同一签名。EXE 构建主动限定 DLL 搜索 PATH，避免第三方 ICU 覆盖 Windows 的同名接口。
 
 Windows 采用 DPAPI 与本机持久 WebEngine 数据目录。Android 随机设备凭据只进入 Keystore 加密存储，原生桥和 JS 返回值不包含凭据；禁用云备份和设备迁移。原生层只允许固定 HTTPS API、本地资源和明确操作，拒绝外部页面、重定向和任意脚本访问。后台通知使用 remoteMessaging 前台服务，可手动关闭；用户配对、退出及电脑撤销彼此独立。
 

@@ -1,0 +1,27 @@
+{
+  "schema": "ptb-website-feature-art/1",
+  "generated_on": "2026-10-16",
+  "file": "feature-icons-3d-v1.png",
+  "source": "OpenAI built-in imagegen",
+  "reference": "Existing PhoneticToolbox website hero artwork; user-provided screenshot",
+  "sha256": "3d911e4447e691f6522261d4d9d65cc3cebacd8f9c4124e29fe1bc2f6549fb30",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "layout": {
+    "columns": 3,
+    "rows": 2,
+    "cell_pixels": 512,
+    "labels": [
+      "声学分析",
+      "语音合成",
+      "语音标注",
+      "感知实验",
+      "论文阅读",
+      "国际音标"
+    ]
+  },
+  "processing": "Copied original RGBA PNG without image editing; CSS selects sprite cells. No blur filter or CSS rotation.",
+  "prompt": "Reference the existing hero lavender/coral/yellow keycaps. Six cohesive 3D miniatures with softly beveled matte polymer, raised cream/aubergine symbols, upper-left highlights, crisp silhouettes; no flat vector/emoji style. 3x2 transparent sheet: analyzer, waveform keycap, annotation tag, headphones, open book, yellow [ə] keycap."
+}

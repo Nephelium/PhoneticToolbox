@@ -1,0 +1,284 @@
+{
+  "schemaVersion": "ptb-manual-chapter/1",
+  "id": "web-introduction",
+  "title": "网页版使用入门",
+  "body": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "web-introduction-account",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "注册与登录"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "web-introduction-figure-login-light",
+          "assetId": "web-introduction-login-light",
+          "caption": "在登录页输入登录名和密码。首次使用可注册账号，忘记密码时从这里找回。",
+          "alt": "在登录页输入登录名和密码。首次使用可注册账号，忘记密码时从这里找回。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "orderedList",
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在登录页点击注册账号，填写登录名、邮箱和密码，再点击发送邮件。登录名为3–64个英文字母、数字、点、下划线或连字符，以字母或数字开头；密码为12–128个字符。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "打开邮件中的验证链接，点击确认验证。看到验证成功提示后，返回登录页，使用登录名和密码登录。未收到邮件时，先检查垃圾邮件，再稍后重新提交。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "忘记密码时，点击忘记密码，填写注册邮箱。收到重设邮件后打开链接，设置并保存新密码，再重新登录。注册与找回入口以当前登录页显示为准。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "web-introduction-figure-register-light",
+          "assetId": "web-introduction-register-light",
+          "caption": "填写登录名、邮箱和密码后发送验证邮件，完成邮箱验证再返回登录。",
+          "alt": "填写登录名、邮箱和密码后发送验证邮件，完成邮箱验证再返回登录。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "web-introduction-files-jobs",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "文件与任务"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "登录后进入工作台，选择工具并上传所需材料。点击文件与空间，在文件管理中查看上传文件和生成结果，按大小或到期时间排序，下载需要保留的内容。删除前确认文件名，删除成功后才会释放空间。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "web-introduction-figure-files-light",
+          "assetId": "web-introduction-files-light",
+          "caption": "文件与空间集中管理上传材料和生成结果，也可查看用量、下载文件或退出登录。",
+          "alt": "文件与空间集中管理上传材料和生成结果，也可查看用量、下载文件或退出登录。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "任务记录显示当前项目的处理进度与记录，可按界面提供的操作取消或重试。任务排队时保持网页连接，无需重复提交。日常使用默认项目即可；需要分组时，在高级管理中新建、命名或切换项目。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "web-introduction-figure-tasks-light",
+          "assetId": "web-introduction-tasks-light",
+          "caption": "任务记录按当前项目显示处理进度与任务记录，新项目的列表为空。",
+          "alt": "任务记录按当前项目显示处理进度与任务记录，新项目的列表为空。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "web-introduction-workspace-retention",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "保存结果与结束工作区"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "需要长期保留的结果请及时下载到电脑。在文件与空间中点击退出登录，会立即清空本次服务器工作区。直接关闭网页或连接中断时，服务器内容保留至最后一次成功连接后30分钟；下载和后台计算不延长保留时间。电脑上的原文件和已下载结果继续保留。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "出现临时工作区已结束提示后，点击开始新的工作区，再重新上传材料。连接暂时中断时，按页面提示恢复连接，并及时下载已有结果。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "web-introduction-capacity",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "容量与扩容"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "顶部显示可用容量、总额度、已用空间与任务预留。额度包含上传、结果和临时文件；空间不足时，先下载并清理不再使用的文件。单文件上限及各工具的格式、时长限制以页面提示为准。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "需要更多空间时，点击容量与扩容，填写申请总额度、期限和用途后提交，等待管理员审核。可在同处查看审批结果和到期时间。扩容不延长工作区保留时间；额度到期后若仍超额，需清理文件后再新增内容。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "web-introduction-figure-capacity-light",
+          "assetId": "web-introduction-capacity-light",
+          "caption": "查看个人可用空间，填写申请总额度、期限和用途，提交后等待管理员审核。",
+          "alt": "查看个人可用空间，填写申请总额度、期限和用途，提交后等待管理员审核。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "web-introduction-settings-manual",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "设置与后续章节"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "各模块的操作参数、显示和导出选项会自动保存在服务器，跟随登录账号。换浏览器或换设备登录后，工作台会先恢复已保存的设置；退出登录、工作区到期或清除浏览器站点数据都不会删除服务器中的设置。保存遇到网络问题时，页面会提示重试，恢复连接后继续同步。上传材料、分析结果和编辑内容仍按临时工作区规则清理，需要保留的内容请及时保存或导出。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "web-introduction-figure-settings-light",
+          "assetId": "web-introduction-settings-light",
+          "caption": "从左下角设置打开外观页，调整配色、浅深模式与页面缩放，当前选择即时生效。",
+          "alt": "从左下角设置打开外观页，调整配色、浅深模式与页面缩放，当前选择即时生效。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "录音或采集视频时，按实际需要允许麦克风、摄像头权限。曾经拒绝时，可在浏览器的本站权限设置中调整，再返回工具重试。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "后续沿用桌面版完整说明书，保留网页当前未开放的工具章节。各工具的可用操作以网页界面提示为准；涉及桌面安装、本机组件或系统路径的步骤，可在桌面版中完成。"
+          }
+        ]
+      },
+      {
+        "type": "crossReference",
+        "attrs": {
+          "chapterId": "getting-started",
+          "label": "继续阅读开始使用与共同操作"
+        }
+      },
+      {
+        "type": "crossReference",
+        "attrs": {
+          "chapterId": "settings",
+          "label": "查看设置说明"
+        }
+      }
+    ]
+  },
+  "status": "reviewed"
+}

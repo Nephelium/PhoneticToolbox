@@ -10,10 +10,14 @@ def create_project_router(ctx: AccountContext):
 
     @router.get('',response_model=ProjectList,operation_id='list_projects')
     def listing(session=Depends(ctx.session)):
+        if ctx.workspaces is not None:
+            return ProjectList(projects=ctx.workspaces.projects(session['id'],session['_session_hash']))
         return ProjectList(projects=ctx.store.list_projects(session['id']))
 
     @router.post('',response_model=ProjectView,status_code=201,operation_id='create_project')
     def create(body: ProjectInput, session=Depends(ctx.mutation)):
+        if ctx.workspaces is not None:
+            return ctx.workspaces.projects(session['id'],session['_session_hash'],body.name)
         result=ctx.store.create_project(session['id'],body.name)
         if result is None:
             raise HTTPException(409,'project_limit_reached')

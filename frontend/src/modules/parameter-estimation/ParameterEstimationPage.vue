@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {useWebSettings,settingsFields} from '../../state/web-settings.ts';
+import ResearchUpload from '../../components/ResearchUpload.vue';
 import ModuleFrame from '../../components/ModuleFrame.vue';
 import ModuleToolbar from '../../components/ModuleToolbar.vue';
 import ModuleStatus from '../../components/ModuleStatus.vue';
@@ -6,7 +8,7 @@ import {computed,ref,onMounted,onUnmounted,watch,markRaw} from 'vue';
 import type {ResearchContext,ResearchFile,DirectoryGrant,SpectrogramView,BatchView,JobView,BatchSelection,BatchConfig} from '../../platform/research.ts';
 import {researchAudio} from '../../platform/research.ts';
 import {m01State,saveM01} from './store.ts';
-import {association,matchAssociation,associateLips,isLipFile,directoryResources,resetAssociations,reconcile,applyParameters,applySettings,dirty,effectiveOutput,type Settings} from './state.ts';
+import {association,matchAssociation,associateLips,isLipFile,directoryResources,resetAssociations,reconcile,applyParameters,applySettings,dirty,effectiveOutput,eggDefaults,type Settings} from './state.ts';
 import {stop} from '../../state/audio.ts';
 import WaveformViewport from '../../components/WaveformViewport.vue';
 import TextGridTimeline from '../../components/TextGridTimeline.vue';
@@ -16,7 +18,7 @@ import SettingsDrawer from '../../components/SettingsDrawer.vue';
 import AppIcon from '../../components/AppIcon.vue';
 import BatchResults from './BatchResults.vue';
 import JointEggSettings from './JointEggSettings.vue';
-const props=defineProps<{context:ResearchContext}>();const emit=defineEmits<{references:[];help:[]}>();
+const props=defineProps<{context:ResearchContext;active?:boolean}>();const emit=defineEmits<{references:[];help:[]}>();
 const state=m01State(props.context.key),picker=ref<HTMLInputElement>(),busy=ref(false),notice=ref('');
 const previewNote=ref('');
 const audioFiles=computed(()=>state.files.filter(f=>f.kind==='audio'));
@@ -34,7 +36,7 @@ const parameterSource=ref<'recent'|'legacy'>('recent');
 const lipFiles=computed(()=>state.files.filter(isLipFile));
 const associationError=computed(()=>[linked.value.error,linked.value.lipError].filter(Boolean).join(' '));
 let autoSaveBatch:{id:string;directory:string;besideSources:boolean}|null=null;
-function scheduleBatch(){clearTimeout(taskTimer);if(!disposed&&tasks.value)taskTimer=setTimeout(()=>void loadBatch(),activeBatch.value&&!activeBatch.value.summary.closed?1500:6000);}
+function scheduleBatch(){clearTimeout(taskTimer);if(!disposed&&tasks.value&&(props.active!==false||taskBusy.value||activeBatch.value&&!activeBatch.value.summary.closed))taskTimer=setTimeout(()=>void loadBatch(),activeBatch.value&&!activeBatch.value.summary.closed?1500:6000);}
 async function loadBatch(id?:string){
  if(!tasks.value||disposed)return;if(id)pendingBatchId=id;
  if(taskBusy.value){scheduleBatch();return;}if(loadingBatch)return;
@@ -148,18 +150,20 @@ function parameters(keys:string[]){try{applyParameters(state,keys);}catch(e){not
 function settings(value:Settings){applySettings(state,value);}
 function save(){notice.value=saveM01(props.context.key)?'参数与设置已保存。文件、目录权限和账号凭据不会写入草稿。':'草稿保存失败，请检查本机存储权限。';}
 function intervalSelect(xmin:number,xmax:number){stop();if(!state.wave.asset)return;state.wave.start=Math.max(0,Math.min(xmin,state.wave.asset.duration));state.wave.end=Math.max(state.wave.start,Math.min(xmax,state.wave.asset.duration));}
+watch(()=>props.active,active=>{if(active!==false)void loadBatch();else scheduleBatch();});
 onMounted(()=>{if(props.context.files.kind!=='desktop'||state.input)void refresh();if(tasks.value)void loadBatch();});
 onUnmounted(()=>{disposed=true;clearTimeout(taskTimer);previewAbort.abort();state.loadVersion++;state.listVersion++;state.wave.loading=false;stop();});
+useWebSettings(props.context.key,{...settingsFields(state,['settings','sameDirectory','recursive']),...settingsFields(state.wave,['parameters','showBoth','showSpectrogram']),...settingsFields(state.extended,['max_duration_s','audio_channel']),egg:computed({get:()=>({enabled:state.extended.egg!==null,values:state.extended.egg??eggDefaults()}),set:value=>{state.extended.egg=value.enabled?value.values:null;}})});
 </script>
 <template>
 <ModuleFrame unified fit label="参数估计 工作区" class="workspace-page m01-page">
 
-<template #toolbar><ModuleToolbar label="参数估计操作"><div class="m01-directory-bar">
+<template #toolbar><ModuleToolbar label="参数估计操作"><ResearchUpload :files="context.files" accept=".wav,.TextGrid,.lip.json,.xlsx,.ptb.sqlite,.ptb.sqlite3" @uploaded="refresh"/><div class="m01-directory-bar">
 <template v-if="context.files.kind==='desktop'"><button class="primary" :disabled="busy" @click="choose('input')"><AppIcon name="folder"/>打开音频目录</button><span class="directory-label" :title="state.input?.label">{{state.input?.label??'尚未选择目录'}}</span>
 <div class="m01-directory-choice"><button :disabled="busy" @click="chooseAssociation('textgrid')">选择TextGrid目录</button><span class="directory-label" :title="state.associationDirectory?.label??state.input?.label">{{state.associationDirectory?.label??'同音频目录'}}</span><button v-if="state.associationDirectory" class="directory-reset" :disabled="busy" aria-label="TextGrid使用音频目录" title="恢复跟随音频目录" @click="chooseAssociation('textgrid',true)">重置</button></div>
 <div class="m01-directory-choice"><button :disabled="busy" @click="chooseAssociation('lip')">选择唇形目录</button><span class="directory-label" :title="state.lipDirectory?.label??state.input?.label">{{state.lipDirectory?.label??'同音频目录'}}</span><button v-if="state.lipDirectory" class="directory-reset" :disabled="busy" aria-label="唇形使用音频目录" title="恢复跟随音频目录" @click="chooseAssociation('lip',true)">重置</button></div></template>
 <template v-else-if="context.files.kind==='preview'"><input ref="picker" class="visually-hidden" type="file" accept=".wav" multiple aria-label="选择音频列表" @change="add"/><button class="primary" @click="picker?.click()">添加WAV到列表</button><span class="hint">本机预览 · 不上传</span></template>
-<template v-else><span>项目资源 · {{context.label}}</span><small class="muted">在项目文件管理中上传 WAV、TextGrid、.lip.json 或历史 XLSX/SQLite，再刷新。</small></template>
+<template v-else><span>项目资源 · {{context.label}}</span><small class="muted">可直接上传 WAV、TextGrid、唇形文件及参数表。</small></template>
 <label v-if="context.files.kind==='desktop'" class="recursive-option"><input v-model="state.recursive" type="checkbox" :disabled="busy" @change="refresh"/>包含子文件夹</label>
 <button :disabled="busy||!audioFiles.length" title="按当前唇形目录重新匹配全部音频" @click="linkAllLips">关联唇形</button>
 <button :disabled="busy||(context.files.kind==='desktop'&&!state.input)" @click="refresh">{{busy?'正在读取…':'刷新列表'}}</button>

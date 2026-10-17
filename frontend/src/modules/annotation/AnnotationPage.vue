@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {useWebSettings,settingsFields} from '../../state/web-settings.ts';
+import ResearchUpload from '../../components/ResearchUpload.vue';
 import {syncNumberInput} from '../../design/numeric-input.ts';
 import AppIcon from '../../components/AppIcon.vue';
 import {vTimePrecision} from '../../design/time-precision.ts';
@@ -276,10 +278,11 @@ watch(()=>props.active,active=>{if(!active)stopRepeat();});
 onMounted(()=>{window.addEventListener('keydown',key);window.addEventListener('blur',stopRepeat);timer=setInterval(()=>{if(props.context.files.kind!=='preview'&&!busy.value&&!saving.value&&!dialog.value&&!composing.value&&(s.dirty||lipDirty.value||labelDirty.value))void savePending();},60000);if(props.context.files.kind==='server')void scan();});
 onUnmounted(()=>{alive=false;++ticket;reading?.abort();clearInterval(timer);stopRepeat();window.removeEventListener('keydown',key);window.removeEventListener('blur',stopRepeat);});
 defineExpose({save:savePending});
+useWebSettings(props.stateKey,{suffix,showOpen,showWidth,sidebar,settingsOpen,phoneSplit,durationInput,nudgeStep,...settingsFields(wave,['showBoth','showSpectrogram'])});
 </script>
 <template>
 <ModuleFrame unified fit label="TextGrid标注 工作区" class="annotation-page" :data-revision="revision" :aria-busy="busy||saving">
-<template #toolbar><ModuleToolbar><button class="primary" v-if="context.files.choose" :disabled="busy||saving" @click="scan(true)"><AppIcon name="folder"/>打开音频目录</button><button class="primary" v-else-if="context.files.add" :disabled="busy||saving" @click="picker?.click()">打开语料文件</button><button :disabled="busy||saving" @click="scan()">扫描</button><template #actions><button :aria-pressed="settingsOpen" @click="settingsOpen=!settingsOpen">标注设置</button><button :aria-pressed="sidebar" @click="sidebar=!sidebar">文件列表</button><button :disabled="!hasLayers||busy||saving" class="primary" @click="saveGrid()">{{saving?'正在保存…':'保存 TextGrid'}}{{s.dirty?' *':''}}</button><button type="button" @click="emit('help')">帮助</button><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button></template></ModuleToolbar></template>
+<template #toolbar><ModuleToolbar><ResearchUpload :files="context.files" accept=".wav,.mp3,.flac,.TextGrid" @uploaded="scan()"/><button class="primary" v-if="context.files.choose" :disabled="busy||saving" @click="scan(true)"><AppIcon name="folder"/>打开音频目录</button><button class="primary" v-else-if="context.files.add" :disabled="busy||saving" @click="picker?.click()">打开语料文件</button><button :disabled="busy||saving" @click="scan()">扫描</button><template #actions><button :aria-pressed="settingsOpen" @click="settingsOpen=!settingsOpen">标注设置</button><button :aria-pressed="sidebar" @click="sidebar=!sidebar">文件列表</button><button :disabled="!hasLayers||busy||saving" class="primary" @click="saveGrid()">{{saving?'正在保存…':'保存 TextGrid'}}{{s.dirty?' *':''}}</button><button type="button" @click="emit('help')">帮助</button><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button></template></ModuleToolbar></template>
  <ModuleStatus v-if="error" kind="error" :message="error"/><ModuleStatus v-if="notice&&busy" kind="loading" :message="notice"/>
  <div v-resizable-panels="{key:stateKey,center:'.annotation-editor',centerMin:350,panels:[{selector:'.annotation-files',side:'left',label:'标注文件',initial:300,min:180,max:520},{selector:'.annotation-settings',side:'right',label:'标注设置',initial:300,min:210,max:560}]}" class="annotation-layout" :class="{collapsed:!sidebar,'settings-collapsed':!settingsOpen}">
  <aside v-show="sidebar" class="annotation-files annotation-card">

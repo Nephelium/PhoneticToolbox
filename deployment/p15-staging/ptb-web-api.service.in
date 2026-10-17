@@ -1,0 +1,24 @@
+[Unit]
+Description=PhoneticToolbox public web test
+Requires=ptb-web-postgres.service
+After=ptb-web-postgres.service
+
+[Service]
+Type=simple
+WorkingDirectory=REPLACE_RELEASE_ROOT
+EnvironmentFile=/var/lib/ptb-web/runtime.env
+ExecStart=REPLACE_PYTHON -B -m ptb_api.server --port 18775 --frontend REPLACE_RELEASE_ROOT/frontend/dist --config /var/lib/ptb-web/private.json
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=50
+KillMode=control-group
+MemoryMax=1024M
+CPUQuota=100%
+TasksMax=128
+LimitCORE=0
+UMask=0077
+StandardOutput=null
+StandardError=journal
+
+[Install]
+WantedBy=default.target

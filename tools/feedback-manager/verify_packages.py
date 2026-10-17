@@ -15,8 +15,8 @@ def main():
     admin=native.FeedbackClient(Path(os.environ['LOCALAPPDATA'])/'PhoneticToolbox/v3/feedback-manager',admin=True)
     token=admin.state.get('token','').encode()
     assert len(token)>=32,'A configured private admin profile is needed for the audit'
-    exe=ROOT/'output/feedback-manager/1.0.1/反馈收件箱.exe'
-    apk=ROOT/'output/feedback-manager/1.0.1/反馈收件箱.apk'
+    exe=ROOT/'output/feedback-manager/1.1.3/反馈收件箱.exe'
+    apk=ROOT/'output/feedback-manager/1.1.3/反馈收件箱.apk'
     reader=CArchiveReader(str(exe))
     names=list(reader.toc)
     assert not any(name.lower().endswith('icuuc.dll') for name in names)

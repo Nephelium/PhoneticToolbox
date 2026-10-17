@@ -16,6 +16,7 @@ class SpectrogramSession:
         self.lock=threading.RLock()
         self.process=self.job=self.timer=None
         self.digest=None
+        self.cached=None
         self.touched=0
         self.idle_seconds=idle_seconds
         atexit.register(self.close)
@@ -46,8 +47,14 @@ class SpectrogramSession:
         if os.name!='nt':return render(payload,channel=channel,start=start,end=end,width=width,timeout=timeout)
         with self.lock:
             try:
+                if self.process is not None and self.process.poll() is not None:self.close()
                 if self.process is None:self._start()
                 digest=hashlib.sha256(payload).digest()
+                key=(digest,channel,start,end,width)
+                if self.cached is not None and self.cached[0]==key:
+                    self.touched=time.monotonic()
+                    return json.loads(self.cached[1])
+                self.cached=None
                 raw=payload if digest!=self.digest else b''
                 header=dict(size=len(raw),channel=channel,start=start,end=end,width=width)
                 process=self.process
@@ -68,6 +75,8 @@ class SpectrogramSession:
                 except queue.Empty:raise PreviewError('preview_timeout',503) from None
                 if 'error' in value:raise PreviewError(value['error'])
                 self.digest=digest
+                encoded=json.dumps(value,allow_nan=False,separators=(',',':'))
+                if len(encoded)<=512_000:self.cached=(key,encoded)
                 self.touched=time.monotonic()
                 return value
             except Exception as exc:
@@ -99,3 +108,4 @@ class SpectrogramSession:
                 process.wait(timeout=5)
                 process.stdin.close();process.stdout.close()
             self.digest=None
+            self.cached=None

@@ -76,7 +76,7 @@
           },
           {
             "type": "text",
-            "text": "Windows 桌面应用",
+            "text": "桌面应用",
             "marks": [
               {
                 "type": "bold"

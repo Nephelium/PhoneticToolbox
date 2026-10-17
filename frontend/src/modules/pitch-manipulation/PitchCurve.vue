@@ -7,7 +7,7 @@ const emit=defineEmits<{edit:[number[]];pan:[number];zoom:[number,number]}>();
 const svg=ref<SVGSVGElement>();let gesture:'draw'|'restore'|'pan'|null=null,last:{index:number;value:number}|undefined,anchor=0;
 const height=ref(250),bottom=computed(()=>height.value-40),plotHeight=computed(()=>height.value-60);
 const width=ref(650),right=computed(()=>width.value-20),plotWidth=computed(()=>width.value-80);let observer:ResizeObserver;
-onMounted(()=>{observer=new ResizeObserver(e=>{width.value=Math.max(240,e[0].contentRect.width);height.value=Math.max(160,e[0].contentRect.height)});if(svg.value)observer.observe(svg.value);});onUnmounted(()=>observer?.disconnect());
+onMounted(()=>{observer=new ResizeObserver(e=>{if(e[0].contentRect.width<=0||e[0].contentRect.height<=0)return;width.value=Math.max(240,e[0].contentRect.width);height.value=Math.max(160,e[0].contentRect.height)});if(svg.value)observer.observe(svg.value);});onUnmounted(()=>observer?.disconnect());
 const clip='m08-clip-'+getCurrentInstance()!.uid;
 const x=(t:number)=>60+(t-props.start)/(props.end-props.start)*plotWidth.value;
 const y=(f:number)=>bottom.value-(f-props.min)/(props.max-props.min)*plotHeight.value;

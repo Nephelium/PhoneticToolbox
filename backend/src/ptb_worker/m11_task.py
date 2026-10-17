@@ -10,6 +10,10 @@ from ptb_api.m11_models import M11Request
 
 
 def catalog(*,local):
+    if not local:
+        return dict(schema_version='m11/1', download_available=False,
+            download_reason='m11_web_disabled', component_status=None,
+            execution_available=False, waiting_reason='m11_web_disabled', runtimes=[], models=[])
     from .mfa.release_catalog import RELEASE
     from .mfa.delivery import status
     data=load_registry()
@@ -22,6 +26,8 @@ def catalog(*,local):
 
 
 def submit(store,owner,body,*,retry_of=None):
+    if store.postgres:
+        raise JobError('m11_web_disabled', 403)
     body=M11Request.model_validate(body)
     if store.files is None:raise JobError('task_service_unavailable',503)
     # Model/runtime IDs are host allowlisted. No web-supplied model executable/path.

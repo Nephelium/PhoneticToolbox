@@ -44,6 +44,14 @@ class AcousticFiles(FilePipeline):
         except StorageError:raise JobError('input_unavailable',409) from None
         return result
 
+    def read_parameter_reference(self,tx,owner,project,reference):
+        """A display lookup needs a readable table, without a compute TTL reserve."""
+        try:
+            item=self.storage._readable(tx.conn,owner,reference['asset_id'])
+            if str(item['project_id'])!=project or item['sha256']!=reference['sha256'] or item['size_bytes']>16_000_000 or not item['name'].lower().endswith(('.xlsx','.ptb.sqlite','.ptb.sqlite3')):
+                raise JobError('input_unavailable',409)
+        except (StorageError,OSError):raise JobError('input_unavailable',409) from None
+
     def link_batch_inputs(self,tx,job_id,batch,inputs,now):
         for item in inputs:
             tx.execute('''INSERT INTO ptb_storage.job_assets(job_id,asset_id,owner_id,project_id,role,generation,

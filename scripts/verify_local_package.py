@@ -50,12 +50,20 @@ def main():
             raise ValueError('Cannot reuse a report for different final bytes or an already successful run')
         shutil.copyfile(args.resume, out / ('failed-report-' + uuid.uuid4().hex[:8] + '.json'))
         report['phases'] = previous['phases']
+        # These gates require the same live window. Preserve earlier captures,
+        # then rerun the complete affected visible scope in a fresh owned profile.
+        preserved = out / ('before-resume-' + uuid.uuid4().hex[:8])
+        preserved.mkdir()
+        for label in ('visible', 'redundant-work'):
+            if (out / label).exists():
+                shutil.copytree(out / label, preserved / label)
+        report['resumeEvidence'] = previous.get('resumeEvidence', []) + [str(preserved)]
     python = [sys.executable, '-B', '-X', 'utf8']
     node = shutil.which('node')
     def save():
         (out / 'report.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', 'utf8')
     def phase(label, command, env=None):
-        if args.resume and any(p['phase'] == label and p['returncode'] == 0 for p in report['phases']):
+        if args.resume and label not in {'visible-rendering','redundant-work','rendered-pixels'} and any(p['phase'] == label and p['returncode'] == 0 for p in report['phases']):
             print('Preserving passed gate for identical EXE: ' + label, flush=True)
             return
         print('Checking ' + label, flush=True)
@@ -128,7 +136,7 @@ def main():
                   ROOT / 'output' / ('build-' + package.name) / 'snapshot/frontend/dist'])
             phase(kind + '-relaunch', [node, ROOT / 'scripts/verify_update_relaunch.mjs', evidence / 'handoff.json'])
         # Launch the EXE alone outside the source tree, with normal Windows GPU.
-        visible = external / 'visible'
+        visible = external / ('visible-retry-' + uuid.uuid4().hex[:8] if args.resume else 'visible')
         visible.mkdir()
         app = visible / exe.name
         shutil.copyfile(exe, app)
@@ -137,6 +145,18 @@ def main():
         updates = profile / 'PhoneticToolbox/v3/updates'
         updates.mkdir(parents=True)
         (updates / 'state.json').write_text('{"autoCheck":false}', 'utf8')
+        # This owned PDF exercises cache reuse in the actual final application.
+        from pypdf import PdfWriter
+        library = visible / 'library'
+        library.mkdir()
+        pdf = PdfWriter()
+        for _ in range(4):
+            pdf.add_blank_page(width=612, height=792)
+        with (library / 'Owned performance fixture.pdf').open('wb') as stream:
+            pdf.write(stream)
+        papers = profile / 'PhoneticToolbox/v3/papers'
+        papers.mkdir(parents=True)
+        (papers / 'preferences.json').write_text(json.dumps(dict(autoReceive=False, libraryRoot=str(library), checkIntervalHours=6)), 'utf8')
         env = {k: v for k, v in os.environ.items() if not k.startswith(('PTB_', 'PYTHON', 'CONDA', '_PYI', 'QT_')) and k != 'VIRTUAL_ENV'}
         debug_port = port()
         env.update(LOCALAPPDATA=str(profile), TEMP=str(temp), TMP=str(temp),
@@ -150,40 +170,13 @@ def main():
             try:
                 report['visibleLaunch'] = {'pid': process.pid, 'command': [str(app)], 'flags': env['QTWEBENGINE_CHROMIUM_FLAGS']}
                 phase('visible-rendering', [node, ROOT / 'scripts/verify_rendering_cdp.mjs', str(debug_port), out / 'visible'])
+                phase('redundant-work', [node, ROOT / 'scripts/verify_redundant_work_cdp.mjs', str(debug_port), out / 'redundant-work', 'clean', '--keep-open'])
                 phase('rendered-pixels', python + ['scripts/verify_rendering_pixels.py', out / 'visible'])
                 from ctypes import wintypes
-                from PIL import ImageGrab
-                ctypes.windll.user32.SetProcessDPIAware()
-                ctypes.windll.user32.GetWindowThreadProcessId.argtypes = [wintypes.HWND, ctypes.POINTER(wintypes.DWORD)]
-                ctypes.windll.user32.GetWindowRect.argtypes = [wintypes.HWND, ctypes.POINTER(wintypes.RECT)]
-                ctypes.windll.user32.SetForegroundWindow.argtypes = [wintypes.HWND]
+                from owned_window_capture import capture_owned_window
+                report['nativeCapture'] = capture_owned_window(process.pid, out / 'native-owned.png')
                 ctypes.windll.user32.PostMessageW.argtypes = [wintypes.HWND, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM]
-                processes = json.loads(subprocess.check_output(['powershell.exe', '-NoProfile', '-Command',
-                    '[Console]::OutputEncoding=[Text.UTF8Encoding]::new($false); Get-CimInstance Win32_Process | Select-Object ProcessId,ParentProcessId | ConvertTo-Json -Compress'], encoding='utf8'))
-                pids = {process.pid}
-                while True:
-                    children = {p['ProcessId'] for p in processes if p['ParentProcessId'] in pids}
-                    if children <= pids:
-                        break
-                    pids.update(children)
-                windows = []
-                def collect(handle, _):
-                    pid = wintypes.DWORD()
-                    ctypes.windll.user32.GetWindowThreadProcessId(handle, ctypes.byref(pid))
-                    if pid.value in pids and ctypes.windll.user32.IsWindowVisible(handle):
-                        rect = wintypes.RECT(); ctypes.windll.user32.GetWindowRect(handle, ctypes.byref(rect))
-                        if rect.right - rect.left > 800 and rect.bottom - rect.top > 500:
-                            windows.append((handle, rect))
-                    return True
-                callback = ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)(collect)
-                ctypes.windll.user32.EnumWindows(callback, 0)
-                if not windows:
-                    raise RuntimeError('Owned native window not visible')
-                handle, rect = windows[0]
-                ctypes.windll.user32.SetForegroundWindow(handle)
-                time.sleep(.5)
-                ImageGrab.grab(bbox=(rect.left, rect.top, rect.right, rect.bottom), all_screens=True).save(out / 'native-visible.png')
-                ctypes.windll.user32.PostMessageW(handle, 0x0010, 0, 0)
+                ctypes.windll.user32.PostMessageW(report['nativeCapture']['hwnd'], 0x0010, 0, 0)
                 report['visibleExitCode'] = process.wait(timeout=60)
                 if report['visibleExitCode'] != 0 or list(temp.glob('_MEI*')):
                     raise RuntimeError('Visible window failed normal exit/temp cleanup')

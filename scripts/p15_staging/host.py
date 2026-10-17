@@ -29,11 +29,16 @@ KEYS = {'schema','origin','bind','port','unix_user','release_root','frontend',
         'release_manifest','control_file','min_free_bytes','max_running',
         'lease_seconds','resource_profile','allowed_operations','remote_enabled'}
 OPERATIONS = {'acoustic_analysis','egg_analysis','lpc_analysis'}
+WEB_FLAGS = {'enable_registration','enable_web_workspaces'}
 
 
 def validate_config(c):
-    if not isinstance(c,dict) or set(c) != KEYS or c['schema'] != 'p15-staging/1':
+    if not isinstance(c,dict) or not KEYS.issubset(c) or set(c)-KEYS-WEB_FLAGS or c['schema'] != 'p15-staging/1':
         raise GateError('config_schema_invalid')
+    if any(type(c[k]) is not bool for k in WEB_FLAGS if k in c):
+        raise GateError('web_flags_invalid')
+    if c.get('enable_registration') and not c.get('enable_web_workspaces'):
+        raise GateError('public_registration_requires_ephemeral_workspaces')
     u=urlsplit(c['origin'])
     if (u.scheme!='https' or not u.hostname or u.username or u.password or
         u.path or u.query or u.fragment or not re.fullmatch(r'[a-z0-9.-]+',u.hostname) or
@@ -120,7 +125,7 @@ class SiteBoundary:
                            'ptb.storage_readonly':mode!='open'})
         path, method=scope['path'],scope['method']
         if mode=='blocked': return await reject('staging_control_unavailable',503)
-        auth=path in ('/api/v1/auth/login','/api/v1/auth/logout')
+        auth=path in ('/api/v1/auth/login','/api/v1/auth/logout','/api/v1/workspaces/heartbeat')
         cancel=path.startswith('/api/v1/jobs/') and path.endswith('/cancel')
         if method not in ('GET','HEAD','OPTIONS') and not auth:
             if mode=='maintenance' or mode=='drain' and not cancel:
@@ -173,7 +178,7 @@ def read_private(path):
     if os.name=='posix' and (info.st_uid!=os.getuid() or stat.S_IMODE(info.st_mode)&0o077):
         raise GateError('private_config_permissions')
     c=json.loads(p.read_text('utf-8'))
-    if set(c)!= {'dsn','signing_key','storage_instance_id'}:
+    if not {'dsn','signing_key','storage_instance_id'}.issubset(c) or set(c)-{'dsn','signing_key','storage_instance_id','smtp','web_admin_key'}:
         raise GateError('private_config_keys')
     from psycopg.conninfo import conninfo_to_dict
     dsn=conninfo_to_dict(c['dsn'])
@@ -184,7 +189,7 @@ def read_private(path):
     return c
 
 
-def database_state(dsn,expected_instance):
+def database_state(dsn,expected_instance,*,web_workspaces=False):
     import psycopg
     from psycopg.rows import dict_row
     with psycopg.connect(dsn,row_factory=dict_row,connect_timeout=5) as conn:
@@ -195,7 +200,10 @@ def database_state(dsn,expected_instance):
             raise GateError('storage_instance_mismatch')
         if state.get('policy_version',1)!=2:
             raise GateError('storage_policy_migration_required')
-        accounts=conn.execute('SELECT count(*) FILTER(WHERE quota_bytes<>1000000000) AS invalid_quota, '
+        quota_condition='quota_bytes<=0' if web_workspaces else 'quota_bytes<>1000000000'
+        if web_workspaces and conn.execute('SELECT version FROM ptb_web.capacity_policy').fetchall()!=[{'version':1}]:
+            raise GateError('web_capacity_migration_required')
+        accounts=conn.execute('SELECT count(*) FILTER(WHERE '+quota_condition+') AS invalid_quota, '
             'count(*) FILTER(WHERE used_bytes+reserved_bytes>quota_bytes) AS over_quota FROM ptb_storage.quota_accounts').fetchone()
         if accounts['invalid_quota']: raise GateError('database_quota_mismatch')
         return {'policy_version':2,'over_quota_accounts':accounts['over_quota'],'frozen':state['frozen']}
@@ -240,10 +248,13 @@ def services(c,private):
     from ptb_worker.store import PostgresJobStore
     from ptb_worker.acoustic_files import AcousticFiles
     from ptb_worker.acoustic_batches import AcousticBatches
-    database_state(private['dsn'],private['storage_instance_id'])
+    database_state(private['dsn'],private['storage_instance_id'],web_workspaces=c.get('enable_web_workspaces',False))
     accounts=PostgresAccountStore(private['dsn']); accounts.check_schema()
     jobs=PostgresJobStore(private['dsn'],max_running=1,lease_seconds=10); jobs.check_schema()
     storage=Storage(private['dsn'],c['storage_root'],min_free_bytes=c['min_free_bytes'])
+    if c.get('enable_web_workspaces'):
+        from ptb_api.workspaces import WorkspaceService
+        WorkspaceService(storage).activate()
     files=AcousticFiles(jobs,storage); AcousticBatches(jobs,files)
     if c['allowed_operations']:
         from ptb_worker.native.linux_runtime import load_profile
@@ -275,14 +286,22 @@ def main():
         from starlette.staticfiles import StaticFiles
         from ptb_api.main import create_app
         from ptb_api.auth import AuthSettings
+        registration=None
+        if c.get('enable_registration'):
+            from ptb_api.registration_store import PostgresRegistrationStore
+            from ptb_api.registration import RegistrationService
+            from ptb_api.feedback_mail import SMTPMailer
+            identity=PostgresRegistrationStore(private['dsn']);identity.check_schema()
+            registration=RegistrationService(identity,SMTPMailer(private['smtp']),c['origin'],entry_path='/app/')
         app=create_app('server',account_store=accounts,
             auth_settings=AuthSettings(origin=c['origin'],signing_key=private['signing_key']),
-            job_store=jobs,storage=storage)
-        app.mount('/server',StaticFiles(directory=c['frontend'],html=True))
+            job_store=jobs,storage=storage,workspace_service=storage.workspaces,registration_service=registration,
+            web_admin_key=private.get('web_admin_key'))
+        app.mount('/app',StaticFiles(directory=c['frontend'],html=True))
         boundary=SiteBoundary(app,urlsplit(c['origin']).netloc,c['control_file'],c['allowed_operations'])
         uvicorn.run(boundary,host='127.0.0.1',port=c['port'],workers=1,access_log=False,
             log_level='critical',proxy_headers=True,forwarded_allow_ips='127.0.0.1',
-            limit_concurrency=24,timeout_keep_alive=5,timeout_graceful_shutdown=330)
+            limit_concurrency=128,timeout_keep_alive=5,timeout_graceful_shutdown=330)
     elif args.role=='worker':
         from ptb_worker.executor import execute_claim
         worker_id=str(uuid4())

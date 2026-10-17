@@ -17,6 +17,16 @@ import uuid
 
 BASE_URL = 'https://www.phonetictoolbox.com/api/v1/feedback'
 ERRORS = {
+    'conversation_changed':'会话有新消息，请刷新后重新确认。',
+    'conversation_trashed':'会话已移入回收站，请恢复后再回复。',
+    'conversation_mail_busy':'此会话正在发送邮件，请稍后再移入回收站。',
+    'conversation_unavailable':'会话已不存在，请刷新会话列表。',
+    'feedback_trash_unavailable':'回收站尚未在此服务器启用，请先更新反馈服务。',
+    'web_operations_unavailable':'网页版管理暂未连接，反馈功能仍可使用。',
+    'capacity_request_closed':'这条申请已处理，请刷新查看结果。',
+    'capacity_not_increase':'批准额度应高于用户当前额度。',
+    'disk_space_low':'服务器可用空间不足，请先清理或降低批准额度。',
+    'web_server_busy':'服务器繁忙，请稍后重试。',
     "mail_notifications_disabled":"用户已关闭邮件提醒，请在应用会话中回复。",
     'invalid_email':'请输入有效邮箱地址。',
     'mail_not_configured':'服务器的邮件服务尚未配置，请稍后再试。',
@@ -78,10 +88,11 @@ def valid_base(value, *, test=False):
 
 
 class FeedbackClient:
-    def __init__(self, root, *, admin=False, base_url=BASE_URL, test=False):
+    def __init__(self, root, *, admin=False, base_url=BASE_URL, test=False, client_info=None):
         self.root = Path(root)
         self.root.mkdir(parents=True,exist_ok=True)
         self.admin, self.test = admin,test
+        self.client_info = dict(client_info or {'source':'desktop'})
         self.base_url = valid_base(base_url,test=test)
         self.state = {'email':'','token':'','cursor':0}
         self.path = self.root / ('manager-identity.bin' if admin else 'identity.bin')
@@ -113,6 +124,10 @@ class FeedbackClient:
         if data and len(data)>14_000_000:
             raise FeedbackClientError('本次图片总大小超过限制。')
         headers = {'Accept':'application/json','Content-Type':'application/json','User-Agent':'PhoneticToolbox-Feedback/1'}
+        if path == '/messages' and not self.admin:
+            for key, name in [('source','Source'),('version','Version'),('packageKind','Package')]:
+                if self.client_info.get(key):
+                    headers['X-PTB-Feedback-'+name] = self.client_info[key]
         if authenticate:
             headers['Authorization'] = 'Bearer '+self.state.get('token','')
         request = Request(self.base_url+path,data=data,headers=headers)
@@ -127,10 +142,16 @@ class FeedbackClient:
                 code = json.loads(exc.read(4096)).get('detail','')
             except Exception:
                 code = ''
+            if exc.code in (404,405) and path.startswith('/admin/conversations/') and path.endswith(('/trash','/restore')) and code in ('','Not Found','Method Not Allowed'):
+                code = 'feedback_trash_unavailable'
+            if path.startswith('/admin/web/') and exc.code in (404,502,503,504):
+                code='web_operations_unavailable'
             raise FeedbackClientError(ERRORS.get(code,'反馈服务暂时不可用，请稍后再试。')) from None
         except FeedbackClientError:
             raise
         except Exception:
+            if path.startswith('/admin/web/'):
+                raise FeedbackClientError('无法读取网页管理数据，请检查连接后刷新。反馈会话可单独使用。') from None
             raise FeedbackClientError('无法连接反馈服务器，请检查网络。未发送内容仍保留在此设备。') from None
 
     def request(self, op, args):
@@ -176,7 +197,15 @@ class FeedbackClient:
                     raise
                 return result
             if op == 'conversations' and self.admin:
-                return self.call('/admin/conversations')
+                return self.call('/admin/conversations?includeTrash=true')
+            if self.admin and op in ('webStatus','webRequests','webDecision','webQuota'):
+                if op=='webStatus':return self.call('/admin/web/status')
+                if op=='webRequests':
+                    state=args.get('state','pending');before=args.get('before')
+                    if state not in ('pending','approved','declined'):raise FeedbackClientError('申请筛选无效。')
+                    if before is not None:before=str(uuid.UUID(before))
+                    return self.call('/admin/web/requests?state='+state+('&before='+before if before else ''))
+                return self.call('/admin/web/'+('decision' if op=='webDecision' else 'quota'),args)
             if op == 'createPairing' and self.admin:
                 return self.call('/admin/devices/pairing',{})
             if op == 'listDevices' and self.admin:
@@ -190,7 +219,7 @@ class FeedbackClient:
             if owner and not re.fullmatch(r'[A-Za-z0-9_-]{8,80}',owner):
                 raise FeedbackClientError('会话身份无效。')
             prefix = '/admin/conversations/'+owner if self.admin else ''
-            if self.admin and op in ('messages','send','read','resolve') and not owner:
+            if self.admin and op in ('messages','send','read','resolve','trashConversation','restoreConversation') and not owner:
                 raise FeedbackClientError('请选择用户会话。')
             if op == 'messages':
                 after = args.get('after',0)
@@ -206,6 +235,12 @@ class FeedbackClient:
                 return self.call(prefix+'/read' if self.admin else '/read',{'through':args['through']})
             if op == 'resolve' and self.admin:
                 return self.call(prefix+'/status',{'status':args['status']})
+            if op == 'trashConversation' and self.admin:
+                if type(args.get('through')) is not int or args['through'] < 1:
+                    raise FeedbackClientError('会话位置无效。')
+                return self.call(prefix+'/trash',{'through':args['through']})
+            if op == 'restoreConversation' and self.admin:
+                return self.call(prefix+'/restore',{})
             if op == 'retryMail' and self.admin and type(args['id']) is int and args['id']>0:
                 return self.call('/admin/mail/'+str(args['id'])+'/retry',{})
             if op == 'resetIdentity' and not self.admin:

@@ -1,6 +1,8 @@
 """Assemble the static, accessible listening lab and source-backed support sections."""
 from pathlib import Path
 import html,json,re,hashlib
+from website_audio_baseline import verify as verify_basic_gl
+from build_website_gl_comparison import verify as verify_three_way
 ROOT=Path(__file__).resolve().parents[1];SITE=ROOT/'temporary-site'
 def esc(s):return html.escape(str(s),quote=True)
 
@@ -19,7 +21,10 @@ def tutorials():
     modules = ['录音', '唇形提取', '参数估计', '参数显示', 'EGG 信号分析', 'LPC 谱图',
                '声学参数合成', '生理参数合成', '发声类型合成', '变速变调', '语谱图转音频',
                '国际音标表Plus', '汉字转国际音标', 'MFA 自动标注', 'TextGrid 标注', '音系归纳', '感知实验', '语音学论文精读']
-    buttons = ''.join(f'<button type="button" class="tutorial-channel" disabled>{esc(name)}</button>' for name in modules)
+    buttons = ''.join(
+        f'<button type="button" class="tutorial-channel tutorial-available" id="tutorial-spectrogram" data-tutorial="spectrogram" aria-controls="tutorial-screen tutorial-episodes" aria-pressed="false">{esc(name)}</button>'
+        if name == '语谱图转音频' else f'<button type="button" class="tutorial-channel" disabled>{esc(name)}</button>'
+        for name in modules)
     return '''<section class="content-section tutorial-section" id="tutorials" aria-labelledby="tutorials-heading">
       <div class="tutorial-heading reveal"><div><span class="eyebrow">A LITTLE WATCH &amp; LEARN</span><h2 id="tutorials-heading">使用教程</h2></div><span class="tutorial-construction">正在施工中 <span aria-hidden="true">✦</span></span></div>
       <div class="tutorial-layout">
@@ -32,38 +37,86 @@ def tutorials():
           </div>
           <div class="tutorial-actions"><button type="button" id="tutorial-fullscreen" hidden>全屏观看 ↗</button><a href="https://www.bilibili.com/video/BV1WWpr67EkX/" target="_blank" rel="noopener noreferrer">去 B 站播放 ↗</a></div>
           <p id="tutorial-status" class="tutorial-status" role="status" aria-live="polite"></p>
-          <noscript><p>可通过上方链接前往 B 站观看介绍。</p></noscript>
+          <div class="tutorial-episodes" id="tutorial-episodes" hidden role="group" aria-label="语谱图转音频分集">
+            <span>语谱图转音频</span><div><button type="button" data-tutorial-episode="spectrogram" aria-controls="tutorial-screen" aria-pressed="false">第一集</button><button type="button" disabled>第二集 · 待更新</button></div>
+          </div>
+          <noscript><p>前往 B 站观看：<a href="https://www.bilibili.com/video/BV1WWpr67EkX/" target="_blank" rel="noopener noreferrer">工具箱介绍 ↗</a> · <a href="https://www.bilibili.com/video/BV1RuJm6gEWE/" target="_blank" rel="noopener noreferrer">语谱图转音频 · 第一集 ↗</a></p></noscript>
         </div>
         <div class="tutorial-channels reveal" role="group" aria-label="教程节目">
-          <div class="tutorial-channel-grid"><button type="button" class="tutorial-channel tutorial-intro" id="tutorial-intro" aria-controls="tutorial-screen" aria-pressed="false">介绍 <span aria-hidden="true">▶</span></button>''' + buttons + '''</div>
-          <p class="tutorial-coming">各模块教程正在准备中。</p>
+          <div class="tutorial-channel-grid"><button type="button" class="tutorial-channel tutorial-intro" id="tutorial-intro" data-tutorial="intro" aria-controls="tutorial-screen tutorial-episodes" aria-pressed="false">介绍 <span aria-hidden="true">▶</span></button>''' + buttons + '''</div>
+          <p class="tutorial-coming">更多教程正在准备中。</p>
         </div>
       </div>
     </section>'''
+def reference_catalog():
+    # Use the same public projection as the desktop component, never the raw registry.
+    sources = json.loads((ROOT/'frontend/src/generated/sources.json').read_text('utf-8'))
+    registry = (ROOT/'frontend/src/app/registry.ts').read_text('utf-8')
+    modules = dict(re.findall(r"\{id:'([^']+)',title:'([^']+)'", registry))
+    assert len(modules) == 18
+    groups = [('academic', '学术引用'), ('software', '软件与代码库引用')]
+    result = ''
+    options = ''.join(f'<option value="{esc(key)}">{esc(name)}</option>' for key, name in modules.items())
+    for group, title in groups:
+        rows = [s for s in sources if s['acknowledgement_group'] == group]
+        result += f'<details class="reference-catalog" data-reference-group="{group}"><summary>{title} · {len(rows)} 条<span>展开查看</span></summary><div class="reference-catalog-body">'
+        result += f'<div class="reference-filters" hidden><label>搜索来源<input type="search" class="reference-query" id="reference-query-{group}" placeholder="搜索论文、项目、作者或模块"></label><label>查看范围<select class="reference-module" id="reference-module-{group}"><option value="">全部模块与公共组件</option>'+options+'</select></label></div>'
+        result += f'<p class="reference-count" role="status" aria-live="polite">共 {len(rows)} 条来源</p><div class="reference-results" tabindex="0" role="region" aria-label="{title}列表">'
+        for row in rows:
+            names = '、'.join(name for key, name in modules.items() if key in row['modules']) or '公共组件'
+            citation = row.get('citation') or ' · '.join(filter(None, [row['authors'], row['title']]))
+            result += f'<article class="reference-source" data-source-id="{esc(row["id"])}" data-modules="{esc(" ".join(row["modules"]))}"><h4>{esc(row["title"])}</h4><small>用于：{esc(names)}</small><p class="reference-citation">{esc(citation)}</p>'
+            if row.get('reference_note'):
+                result += f'<p>{esc(row["reference_note"])}</p>'
+            for key, prefix in [('version', '版本：'), ('license', '')]:
+                if row.get(key): result += f'<small>{prefix}{esc(row[key])}</small>'
+            if row.get('attribution'):
+                date = f'（{row["permission_date"]} 作者邮件许可）' if row.get('permission_date') else ''
+                result += f'<p>{esc(row["attribution"]+date)}</p>'
+            if row.get('adaptation_note'):
+                result += '<details class="reference-adaptation"><summary>改写说明</summary><p>'+esc(row['adaptation_note'])+'</p>'
+                if row.get('adaptation_caution'): result += '<p>'+esc(row['adaptation_caution'])+'</p>'
+                result += '</details>'
+            result += '<div class="reference-source-links">'
+            for label, url in row['urls'].items():
+                assert url.startswith('https://'), f'Unexpected source URL: {row["id"]}'
+                result += f'<a href="{esc(url)}" target="_blank" rel="noopener noreferrer">{esc(label)} ↗</a>'
+            result += '<button type="button" class="reference-copy" hidden>复制引用</button></div></article>'
+        result += '</div></div></details>'
+    return result
+
 def upcoming(player,audio,examples):
     body='''<section class="content-section upcoming-section" id="next" aria-labelledby="next-heading">
   <div class="upcoming-paper reveal"><span class="upcoming-tab">下一步…</span>
     <div class="upcoming-intro"><div><span class="eyebrow">THE NEXT LITTLE STEP</span><h2 id="next-heading">短时窗里的声音，<br><em>还想听得更清楚。</em></h2></div><span class="upcoming-stamp">语谱图转音频<br><small>模型训练进行中</small><i aria-hidden="true">✦</i></span></div>
-    <div class="upcoming-copy"><p>韶子正在参考 Aoki 关于短时窗语谱图重建的研究，训练条件化 NAFNet，再接上 BigVGAN 声码器，希望让短时窗语谱图合成出的声音更清楚、更自然。</p><p>现在，从语谱图出发，先用一个小模型自动预测窗长与动态范围，再进行 Griffin–Lim 重建、Mel 谱修复，最后交给声码器合成音频。</p></div>
-    <a class="upcoming-reference" href="https://doi.org/10.1250/ast.44.186" target="_blank" rel="noopener noreferrer"><span>从这篇论文出发 ↗</span><cite>Technique of improving speech restoration from spectrograms of short windows for the Griffin–Lim algorithm</cite><small>Naofumi Aoki · 2023 · Acoustical Science and Technology, 44(3), 186–188</small></a>
+    <div class="upcoming-copy"><p>唔……最近在试着让语谱图转音频的效果更好一些。韶子还训练了一个小模型，让它结合图片和时间、频率标定，估计生成这张语谱图时可能使用的 STFT 窗宽与动态范围。有了这两个估计值，就可以先调整重建参数，再试着把声音找回来啦。</p><p>相位重建这一步，韶子参考了青木（Naofumi Aoki）关于短时窗语谱图重建的研究，先沿频率方向求和，从得到的时间投影里提取峰值脉冲，构造激励信号，再用它的相位初始化 Griffin–Lim。这样，迭代就有了一个可以参考的起点。迭代过程中，还借用了 Perraudin 等人的动量加速方法，把相邻两次迭代的变化也利用起来，帮助相位估计更快接近目标。工具箱目前采用 <code>0.99</code> 的动量系数，收敛通常能快一些。</p><p>有了初步重建的声音之后呢，接下来就是 Mel 谱修复啦。先把声音转成 Mel 谱，再训练一个条件化 NAFNet，让它以目标 Mel 谱为参照，学习修补重建过程中出现的频谱偏差，希望能把模糊、失真的频谱结构整理得更接近自然声音。修复后的 Mel 谱再交给 BigVGAN 声码器，由它生成最终的音频波形。这一步沿用预训练的 BigVGAN，让声码器利用已经学到的语音规律，把修复后的频谱合成为声音（其实和降噪、回声消除之类的算法差不多）。</p><p>目前还在继续折腾，希望能成功hhh 下面把原始 GL、动量加速、参数预测和 Mel 谱修复分成四路，一步一步听听变化叭。</p></div>
+    <a class="upcoming-reference" href="https://doi.org/10.1250/ast.44.186" target="_blank" rel="noopener noreferrer"><span>相位起点：青木的短时窗重建研究 ↗</span><cite>Technique of improving speech restoration from spectrograms of short windows for the Griffin–Lim algorithm</cite><small>Naofumi Aoki · 2023 · Acoustical Science and Technology, 44(3), 186–188</small></a>
+    <a class="upcoming-reference" href="https://perraudin.info/publications/perraudin-note-002.pdf" target="_blank" rel="noopener noreferrer"><span>迭代过程：动量加速 Griffin–Lim · 作者全文 ↗</span><cite>A fast Griffin–Lim algorithm</cite><small>Nathanaël Perraudin, Peter Balazs &amp; Peter L. Søndergaard · 2013 · WASPAA, 1–4</small></a>
     <ol class="upcoming-pipeline" aria-label="短时窗语谱图重建流程">
-      <li><span class="upcoming-step">01 / 先读一读图片</span><h3>自动预测参数</h3><span class="upcoming-model">参数预测小模型</span><p>从语谱图中预估窗长与动态范围，为后面的重建提供参数。</p><span class="upcoming-arrow" aria-hidden="true">→</span></li>
-      <li><span class="upcoming-step">02 / 找到声音的起点</span><h3>相位初始化与重建</h3><span class="upcoming-model">Griffin–Lim</span><p>按预估参数，参考论文的脉冲初始化思路，重建初步声音。</p><span class="upcoming-arrow" aria-hidden="true">→</span></li>
-      <li><span class="upcoming-step">03 / 把频谱修一修</span><h3>Mel 谱修复</h3><span class="upcoming-model">条件化 NAFNet</span><p>修复重建声音的 Mel 谱，补好通向声码器的这一步。</p><span class="upcoming-arrow" aria-hidden="true">→</span></li>
-      <li><span class="upcoming-step">04 / 再交给耳朵听</span><h3>合成音频</h3><span class="upcoming-model">BigVGAN</span><p>把修复后的 Mel 谱送入声码器，继续优化合成的声音。</p></li>
+      <li><span class="upcoming-step">01 / 先读一读图片</span><h3>估计 STFT 参数</h3><span class="upcoming-model">窗宽与动态范围预测模型</span><p>结合语谱图与时间、频率标定，预测窗宽和动态范围，窗宽取整到毫秒。</p><span class="upcoming-arrow" aria-hidden="true">→</span></li>
+      <li><span class="upcoming-step">02 / 再把声音找回来</span><h3>动量加速重建</h3><span class="upcoming-model">Griffin–Lim · 动量 0.99</span><p>按预测参数，从固定的随机相位起点出发，迭代 32 次，重建初步声音。</p><span class="upcoming-arrow" aria-hidden="true">→</span></li>
+      <li><span class="upcoming-step">03 / 把频谱修一修</span><h3>Mel 谱修复</h3><span class="upcoming-model">条件化 NAFNet</span><p>把同一段预测参数动量 GL 的声音转成 Mel 谱，用训练好的模型修补频谱偏差。</p><span class="upcoming-arrow" aria-hidden="true">→</span></li>
+      <li><span class="upcoming-step">04 / 再交给耳朵听</span><h3>合成音频</h3><span class="upcoming-model">BigVGAN</span><p>沿用预训练声码器，把修复后的 Mel 谱合成为最终的音频波形。</p></li>
     </ol>
-    <div class="next-comparison-heading"><h3>同一张图，前后听一听。</h3><p>六张语谱图，各放一组处理前后的声音。处理前统一用 10 ms、60 dB，点一下，交替比较。</p></div><div class="upcoming-comparisons">'''
+    <div class="next-comparison-heading"><h3>同一张图，四种方式听一听。</h3><p>先听原始 GL，再听动量加速，接着让小模型估计窗宽和动态范围，最后把这段重建声音交给 <strong>NAFNet</strong> 修复 Mel 谱，再由 <strong>BigVGAN</strong> 合成。前两路固定 <code>10 ms</code> 窗宽和 <code>60 dB</code> 动态范围，后两路使用每张图各自的预测参数，Griffin–Lim 都迭代 <code>32</code> 次。</p></div><div class="upcoming-comparisons">'''
     pairs=json.loads((SITE/'assets/spectrogram-examples/comparison.json').read_text('utf-8'))['pairs']
     for pair in pairs:
-        key=pair['id'];before=pair['before'].removesuffix('.wav');after=pair['after'].removesuffix('.wav')
-        assert audio[pair['before']]['sha256']==pair['before_sha256'] and audio[pair['after']]['sha256']==pair['after_sha256']
+        key=pair['id'];before=pair['before'].removesuffix('.wav');fast=pair['accelerated'].removesuffix('.wav');predicted=pair['predicted'].removesuffix('.wav');after=pair['after'].removesuffix('.wav')
+        assert all(audio[pair[k]]['sha256']==pair[k+'_sha256'] for k in ['before','accelerated','predicted','after'])
         display=pair['display'];image=esc(display['image']);credit=esc(display['credit'])
         attribution=(f'<a href="{esc(pair["url"])}" target="_blank" rel="noopener noreferrer">{credit} ↗</a>' if pair.get('url') else credit)
         body+=f'<article class="next-example" data-case="{key}"><h4>{esc(display["title"])}</h4><figure><a href="{image}" target="_blank" rel="noopener noreferrer" aria-label="查看{credit}完整图像节选"><img src="{image}" width="720" height="580" loading="lazy" alt="{esc(pair["source"])} 语谱图原图节选"></a><figcaption>{attribution}</figcaption></figure>'
         prediction=pair['parameter_prediction']
-        body+=f'<p class="next-parameters">自动预估：窗长 {prediction["window_ms"]:.2f} ms → 计算采用 {pair["applied_window_ms"]:g} ms<br>动态范围 {prediction["dynamic_range_db"]:.2f} dB · 规范化上限 0 dB</p>'
-        body+=player('next',[(before,'处理前 · Griffin–Lim',f'{audio[pair["before"]]["duration"]:.2f} s · 统一默认 10 ms / 60 dB'),(after,'处理后 · NAFNet + BigVGAN',f'{audio[pair["after"]]["duration"]:.2f} s · 按预估参数重新合成')],'next-sounds',instance='next-',volumes=pair['playback_volumes'])+'</article>'
-    return body+'''</div><p class="next-figure-reference" id="next-lu-reference">Lu 两例图源：Lu, Y., Liang, C., &amp; Kong, J. (2025). <cite>Contribution of F0 and phonation to tone perception in the Zaiwa language.</cite> <i>Journal of Phonetics, 110</i>, 101413. <a href="https://doi.org/10.1016/j.wocn.2025.101413" target="_blank" rel="noopener noreferrer">查看论文 ↗</a></p><p class="audio-status" role="status" aria-live="polite">先听处理前，再听处理后。</p><details class="next-comparison-settings"><summary>这组对比怎样生成？</summary><p>处理前使用参数未知时的统一默认设置：10 ms Hann 窗、60 dB 动态范围（−60～0 dB），直接进行随机相位初始化 Griffin–Lim，不使用参数预测模型、Mel 修复或声码器。处理后使用当前最佳参数预测模型和 80 带修复权重重新生成：预测窗长四舍五入到整数毫秒后，经脉冲初始化 GL、条件化 NAFNet 与 BigVGAN 合成。GL 帧移保持 1.5 ms。可以交替播放，比较两种方式的声音。</p><p>模型预测的是窗长和动态范围宽度 D，灰度按峰值 0 dB、下限 −D dB 映射。Hann 窗型和 256 次 GL 迭代保持固定。图片原始参数没有真值，这里展示当前预估下的近似重建。</p></details><p class="upcoming-signoff">模型还在继续训练，先把这几组声音放在这里。<span aria-hidden="true">✧</span></p></div></section>'''
+        body+=f'<p class="next-parameters">前两路：<code>10 ms</code> Hann 窗 · <code>60 dB</code><br>模型估计：<code>{prediction["window_ms"]:.2f} ms</code> → 用 <code>{pair["applied_window_ms"]:g} ms</code><br>预测动态范围：<code>{prediction["dynamic_range_db"]:.2f} dB</code><br>随机相位起点 · <code>32</code> 次迭代</p>'
+        body+=player('next',[(before,'原始 GL',f'{audio[pair["before"]]["duration"]:.2f} s · 动量 0'),(fast,'动量加速 GL',f'{audio[pair["accelerated"]]["duration"]:.2f} s · 动量 0.99'),(predicted,'预测参数 + 动量 GL',f'{audio[pair["predicted"]]["duration"]:.2f} s · 预测窗宽与动态范围'),(after,'预测参数 + 动量 GL + NAFNet + BigVGAN',f'{audio[pair["after"]]["duration"]:.2f} s · 接续第三路的同一段声音')],'next-sounds',instance='next-',volumes=pair['playback_volumes'],show_waveform=False)+'</article>'
+    return body+'''</div><p class="next-figure-reference" id="next-lu-reference">Lu 两例图源：Lu, Y., Liang, C., &amp; Kong, J. (2025). <cite>Contribution of F0 and phonation to tone perception in the Zaiwa language.</cite> <i>Journal of Phonetics, 110</i>, 101413. <a href="https://doi.org/10.1016/j.wocn.2025.101413" target="_blank" rel="noopener noreferrer">查看论文 ↗</a></p><p class="audio-status" role="status" aria-live="polite">点一下，按顺序听听四种方式。</p><details class="next-comparison-settings"><summary>这组对比怎样生成？</summary><p>四路使用相同的图片、时间频率标定、Hann 窗、固定种子的随机相位、1.5 ms 帧移和 32 次迭代。前两路固定 10 ms 窗宽和 60 dB 动态范围，原始 GL 的动量为 0，第二路只把动量改为 0.99。第三路保持动量 0.99，改用小模型预测的窗宽与动态范围，窗宽四舍五入到整数毫秒。第四路直接读取第三路导出的同一段音频，接上 80 带 NAFNet 的 Mel 谱修复与 BigVGAN 声码器。</p><p>这组试听不使用青木脉冲初始化，方便分别比较动量、参数预测，以及 Mel 修复与声码器带来的变化。前两路沿用已固定的音频，播放时将四路衰减到相同均方根电平。窗宽和动态范围是模型的估计值，重建结果可以按顺序交替听听。</p></details><p class="upcoming-signoff">模型还在继续训练，先把这几组声音放在这里。<span aria-hidden="true">✧</span></p></div></section>'''
+
+def feature_ribbon():
+    # High-resolution 3D artwork is displayed as six cells of one transparent sheet.
+    names = ['声学分析', '语音合成', '语音标注', '感知实验', '论文阅读', '国际音标']
+    return '<div class="feature-ribbon" aria-label="主要功能">' + ''.join(
+        f'<div><span class="ribbon-icon ribbon-icon-{i}" aria-hidden="true"></span><span>{name}</span></div>'
+        for i, name in enumerate(names)) + '</div>'
 
 def inline(s):
     s=esc(s)
@@ -91,7 +144,13 @@ def showcase(id,title,copy,module,file,palette,mode,reverse=False):
     color='coral' if mode=='浅色' else 'violet'
     return f'''<section class="showcase split-showcase {'reverse-showcase' if reverse else ''}" id="{id}" aria-labelledby="{id}-heading"><div class="showcase-copy reveal"><span class="eyebrow">{id.upper()}</span><h2 id="{id}-heading">{title}</h2><p>{copy}</p><span class="section-label">{module}</span></div><figure class="screen-stage reveal" style="--tilt:4deg;--turn:{-7 if reverse else 7}deg"><span class="stage-backdrop {color}-backdrop"></span><a class="screen-link" href="assets/screens/{file}.png" data-screen data-caption="{module} · {palette} {mode}" aria-label="查看{module}完整截图"><img src="assets/screens/{file}.png" width="2560" height="1440" loading="lazy" alt="{module}的实际中文界面，{palette} {mode}配色"></a><figcaption><span class="palette-dot {'rose' if reverse else 'green'}"></span>{palette} <span>{mode}</span></figcaption></figure></section>'''
 def main():
+    verify_basic_gl()
+    verify_three_way()
     p=SITE/'index.html';text=p.read_text('utf-8')
+    text=re.sub(r'\s*<p class="web-release">[\s\S]*?</p>', '', text)
+    text=text.replace('网页版预计于 2026 年 10 月 31 日发布。','')
+    text,count=re.subn(r'<div class="feature-ribbon"[\s\S]*?</div>\s*</div>',lambda _:feature_ribbon(),text,count=1)
+    assert count == 1, 'One generated feature ribbon'
     text=re.sub(r'<section class="more-features\b[\s\S]*?</section>', '', text)
     text=re.sub(r'<div class="chapter-divider"[\s\S]*?</div>\s*', '', text)
     nav=[('tutorials','使用教程','打开小电视，一起上手工具箱'),('lab','小实验','点一点，听听声音的变化'),('methods','方法与引用','找到方法背后的来源'),('faq','常见问题','下载、安装与使用的小疑问'),('updates','更新小记','这一版，添了哪些新东西'),('next','下一步…','短时窗语谱图重建，继续往前走'),('feedback','问题反馈','把遇到的问题告诉韶子'),('contact','联系我们','邮箱与 QQ 交流群')]
@@ -112,6 +171,24 @@ def main():
         size=f'{download["files"][name]["size"]/1_000_000:.1f}'
         text=re.sub(r'(<span class="download-tooltip" id="download-tip-'+kind+r'"[\s\S]*?约 )[0-9.]+ MB',lambda m:m[1]+size+' MB',text,count=1)
     text=re.sub(r'(<p class="download-note" id="download-state">[\s\S]*?<span>)[^<]+',lambda m:m[1]+download['version'],text,count=1)
+    text=re.sub(r'\s*<(button|a)\b[^>]*class="web-entry"[\s\S]*?</\1>', '', text)
+    web_entry='<button class="web-entry" type="button" disabled aria-label="网页版，灰测中，即将开放"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18M7 6.5h.01M10 6.5h.01"/></svg><span>网页版</span><small>灰测中，即将开放</small></button>'
+    text=text.replace('<div class="download-actions"',web_entry+'\n   <div class="download-actions"',1)
+    windows_links=''.join(re.search(r'<a class="download '+klass+r'"[\s\S]*?</a>',text)[0] for klass in ['primary','secondary'])
+    windows_links=windows_links.replace('>下载免安装版<','>免安装版<').replace('>下载安装版<','>安装版<')
+    mac=download.get('macos')
+    if mac:
+        assert mac['platform']=='macos-arm64' and mac['channel']=='preview'
+        mac_button='<a class="download macos" href="'+esc(mac['url'])+'" download="'+esc(mac['name'])+'" aria-label="下载 macOS 测试版" aria-describedby="download-tip-macos">macOS<svg aria-hidden="true"><use href="#i-download"/></svg></a>'
+        mac_note='macOS 14+<br>Apple 芯片 · 测试版'
+        mac_help='<details class="macos-help"><summary>安装说明</summary><div class="macos-install-popover" id="download-tip-macos" role="region" aria-label="macOS 安装说明"><strong>PhoneticToolbox '+esc(mac['version'])+' macOS 测试版</strong><p>适用于 Apple 芯片（M 系列）、macOS 14 及以上。</p><ol><li>下载并解压 ZIP 文件。</li><li>将 <code>PhoneticToolbox.app</code> 拖入“应用程序”文件夹。</li><li>双击打开。</li></ol><p>当前测试版尚未通过 Apple 公证。首次打开若提示无法验证开发者，确认安装包来自本官网后，可进入 <b>系统设置 → 隐私与安全性 → 仍要打开</b>。</p><a href="https://support.apple.com/zh-cn/102445" target="_blank" rel="noopener">Apple 官方说明 ↗</a><footer>文件大小：'+f'{mac["size"]/1_000_000:.2f}'+' MB<br>SHA256：<code>'+esc(mac['sha256'])+'</code></footer></div></details>'
+    else:
+        mac_button='<button class="download macos" type="button" disabled aria-label="下载 macOS，尚未上线">macOS<svg aria-hidden="true"><use href="#i-download"/></svg></button>'
+        mac_note='即将上线'
+        mac_help=''
+    download_actions='<div class="download-actions"><div class="platform-windows" role="group" aria-label="Windows 下载"><div class="platform-buttons">'+windows_links+'</div><p class="download-note" id="download-state">Windows 10 / 11 · x64 <span>'+download['version']+'</span></p></div><span class="download-divider" aria-hidden="true"></span><div class="platform-macos" id="macos-download" role="group" aria-label="macOS 下载">'+mac_button+'<p class="download-note">'+mac_note+'</p>'+mac_help+'</div></div>'
+    text,count=re.subn(r'<div class="download-actions"[\s\S]*?(?=\n  </div>\n  <div class="hero-art")',lambda _:download_actions,text,count=1)
+    assert count==1, 'One platform download group'
     if 'id="phonation"' not in text:
         appearance=re.search(r' <section class="showcase appearance-showcase"[\s\S]*?</section>',text).group()
         text=text.replace(appearance,showcase('phonation','一点点变化，<br><em>慢慢听出来。</em>','在两个声音之间制作连续统，分别控制发声类型与基频。','发声类型合成','phonation-gruvbox-dark','Gruvbox','深色'))
@@ -174,13 +251,14 @@ def main():
     analysis=audio['phonation-1.wav']['parameters']['analysis']
     backend_name={'parselmouth':'Praat / Parselmouth','reaper':'REAPER'}[analysis['f0_backend']]
     phonation_recipe=f'这组{step_word}步使用应用导出的音频，同时改变发声类型与基频。基频分析采用 {backend_name}，范围 {analysis["min_f0_hz"]:g}–{analysis["max_f0_hz"]:g} Hz，开启周期能量与输出幅度匹配。两段原声中位 F0 分别约为 {endpoint_f0[0]} Hz 和 {endpoint_f0[1]} Hz，处理后各步中位 F0 依次约为 {"、".join(str(f) for f in step_f0)} Hz。'
-    def player(prefix,choices,klass,instance='',volumes=None):
+    def player(prefix,choices,klass,instance='',volumes=None,show_waveform=True):
         result='<div class="sound-choices '+klass+'"'+(f' style="--continuum-steps:{step_count}"' if klass=='continuum' else '')+'>'
         for name,label,detail in choices:
             row=audio[name+'.wav'];bars=''.join(f'<i style="--bar:{max(8,round(v/max(row["waveform"])*100))}%"></i>' for v in row['waveform'][::2])
             level=f' data-playback-volume="{volumes[name]:.8f}"' if volumes else ''
             if volumes:assert 0<volumes[name]<=1
-            result+=f'<div class="sound-option"><button type="button" class="sound-play" data-audio="audio-{instance}{name}" aria-label="播放{label}" aria-pressed="false"><span class="sound-symbol" aria-hidden="true">▶</span><span>{label}</span></button><span class="sound-detail">{detail}</span><div class="mini-wave" aria-hidden="true">{bars}</div><audio id="audio-{instance}{name}" src="assets/audio/{name}.wav{("?v="+row["sha256"][:12]) if name.startswith("spectrum-") else ""}" preload="none" controls aria-label="{label}"{level}></audio></div>'
+            waveform=f'<div class="mini-wave" aria-hidden="true">{bars}</div>' if show_waveform else ''
+            result+=f'<div class="sound-option"><button type="button" class="sound-play" data-audio="audio-{instance}{name}" aria-label="播放{label}" aria-pressed="false"><span class="sound-symbol" aria-hidden="true">▶</span><span>{label}</span></button><span class="sound-detail">{detail}</span>{waveform}<audio id="audio-{instance}{name}" src="assets/audio/{name}.wav{("?v="+row["sha256"][:12]) if name.startswith("spectrum-") else ""}" preload="none" controls aria-label="{label}"{level}></audio></div>'
         return result+'</div>'
     lab='''<section class="content-section listening-lab" id="lab" aria-labelledby="lab-heading"><div class="section-heading reveal"><span class="eyebrow">A LITTLE SOUND PLAYGROUND</span><h2 id="lab-heading">先别急着走，<br><em>听几个小实验。</em></h2><p>把抽象的参数，交给耳朵感受。选一个声音，点一下播放。</p></div><div class="lab-grid">
     <article class="lab-card continuum-card reveal"><span class="paper-tab">01 / 从这里，到那里</span><div class="lab-title"><h3>声音，也有渐变色。</h3><span class="lab-doodle" aria-hidden="true">〰</span></div><p>同一个元音，一段 SCSC 录音和一段自有音频，基频不同。先听两个原声，再听由它们制作的七步发声类型与基频连续统。</p><div class="original-pair"><span class="original-caption">先听听，<br>两个原声。</span>'''+player('endpoints',[('phonation-endpoint-1','原声 A',f'中位 F0 ≈ {endpoint_f0[0]} Hz'),('phonation-endpoint-2','原声 B',f'中位 F0 ≈ {endpoint_f0[1]} Hz')],'endpoint-choices')+'''</div><p class="audio-origin">原声 A：SCSC 录音 · 原声 B：自有音频</p><div class="continuum-labels"><span>发声类型与基频更接近 A</span><span>一点点靠近 →</span><span>发声类型与基频更接近 B</span></div>'''+player('phonation',[(f'phonation-{i}',f'第 {i} 步',f'{(i-1)/(step_count-1)*100:g}% · {step_f0[i-1]} Hz') for i in range(1,step_count+1)],'continuum')+'''<details class="lab-recipe"><summary>这组声音是怎样做的？</summary><p>'''+phonation_recipe+'''</p><p>七步表示处理比例，听觉上的差别未必等距。第 1、7 步也是处理结果，可以与上面的两段原声对照。</p></details></article>
@@ -206,7 +284,7 @@ def main():
         spectrogram+=f'<section class="reconstruction-example" aria-labelledby="reconstruction-{key}"><span class="example-index">0{i+1}</span><h4 id="reconstruction-{key}">{esc(example["title"])}</h4><figure><a href="assets/spectrogram-examples/{key}.png" target="_blank" rel="noopener noreferrer" aria-label="查看{credit}完整图像节选"><img src="assets/spectrogram-examples/{key}.png" width="720" height="580" loading="lazy" alt="{source} 语谱图节选，保留坐标用于校正"></a><figcaption>原图节选 · 0–{example["duration"]} s / 0–{example["frequency"]//1000} kHz</figcaption></figure><a class="example-credit" href="{esc(example["url"])}" target="_blank" rel="noopener noreferrer">{credit} ↗</a><p>{esc(example["explanation"])}</p>'+player('spectrum',[(f'spectrum-{key}','听听重建结果',f'{audio[f"spectrum-{key}.wav"]["duration"]:.2f} s · 图片重建')],'reconstruction-player')+f'<details class="example-source"><summary>图源与重建设置 ↗</summary><p>{source}</p><a href="{esc(example["url"])}" target="_blank" rel="noopener noreferrer">查看原文 ↗</a><p>{esc(settings)}</p></details></section>'
     spectrogram+='</div><p class="lab-footnote">图片记录了能量分布，原始相位已经丢失。这里演示近似重建，声音会受截图分辨率、灰度映射与迭代设置影响，不能代替原始录音作语音测量。图像版权归原作者及出版方，出处见各例下方。</p></article>'
     lab=lab.replace('</div><p class="audio-status"',spectrogram+'</div><p class="audio-status"')
-    faq=[('下载免安装版，还是安装版？','两者提供相同工具。免安装版下载后直接运行，安装版会引导安装并创建快捷方式。当前提供 Windows 10 1809 及以上版本、Windows 11 的 x64 版本。'),('网页版什么时候可以用？','网页版预计于 2026 年 10 月 31 日发布。现在的网页可以浏览功能、试听小实验和下载 Windows 应用。'),('录音和研究材料会自动上传吗？','桌面版在本机处理材料，不会自动上传本地文件。发送问题反馈、下载组件或访问论文资源时会使用网络；分享附件前，可以先检查其中的个人信息。'),('MFA 自动标注为什么还要下载组件？','MFA 的运行环境、声学模型和发音词典是独立组件。首次使用时，在 MFA 自动标注中打开“组件安装与环境检查”，按提示下载安装，或选择已下载的组件包。'),('自动标注后，还需要人工检查吗？','需要。MFA 将声音与已有文本对齐，自动边界仍需核对。可以在 TextGrid 标注中对照波形与语谱图继续调整。'),('在哪里查看每个工具的操作和参数？','应用左下角有完整使用说明，每个工具右上角也有“帮助”和“方法与引用”。先找对应章节，再按自己的材料设置参数。')]
+    faq=[('下载免安装版，还是安装版？','两者提供相同工具。免安装版下载后直接运行，安装版会引导安装并创建快捷方式。当前提供 Windows 10 1809 及以上版本、Windows 11 的 x64 版本。'),('网页版什么时候可以用？','网页版正在内测。现在可以浏览功能、试听小实验和下载 Windows 应用。'),('录音和研究材料会自动上传吗？','桌面版在本机处理材料，不会自动上传本地文件。发送问题反馈、下载组件或访问论文资源时会使用网络；分享附件前，可以先检查其中的个人信息。'),('MFA 自动标注为什么还要下载组件？','MFA 的运行环境、声学模型和发音词典是独立组件。首次使用时，在 MFA 自动标注中打开“组件安装与环境检查”，按提示下载安装，或选择已下载的组件包。'),('自动标注后，还需要人工检查吗？','需要。MFA 将声音与已有文本对齐，自动边界仍需核对。可以在 TextGrid 标注中对照波形与语谱图继续调整。'),('在哪里查看每个工具的操作和参数？','应用左下角有完整使用说明，每个工具右上角也有“帮助”和“方法与引用”。先找对应章节，再按自己的材料设置参数。')]
     support='<section class="content-section faq-section" id="faq" aria-labelledby="faq-heading"><div class="support-heading reveal"><span class="eyebrow">A FEW SMALL QUESTIONS</span><h2 id="faq-heading">有些小疑问，<br><em>先在这里碰个头。</em></h2><div class="question-doodle" aria-hidden="true">?</div></div><div class="faq-list reveal">'+''.join(f'<details><summary><span class="question-number">0{i}</span>{q}<span class="faq-plus" aria-hidden="true">+</span></summary><p>{a}</p></details>' for i,(q,a) in enumerate(faq,1))+'</div></section>'
     # Version snapshots are curated here; there is no automatic release fetching.
     releases=[json.loads((SITE/'assets/release.json').read_text('utf-8'))]
@@ -223,11 +301,11 @@ def main():
 
     sources=json.loads((ROOT/'third_party/source-registry.json').read_text('utf-8'))['sources'];sources={s['id']:s for s in sources}
     methods=[('SRC-PRAAT','分析与操控','Praat / Parselmouth','基频分析与语音操控等功能使用 Praat 及其 Python 接口。'),('REF-ZAIWA','发声类型合成','F0 与发声类型连续统','连续统方法参考 Lu、Liang 与 Kong 的研究，代码改写另获作者许可。'),('REF-MFA','自动标注','Montreal Forced Aligner','将已有转写与音频对齐，再在 TextGrid 工具中人工复核。')]
-    support+='<section class="content-section methods-section" id="methods" aria-labelledby="methods-heading"><div class="section-heading reveal"><span class="eyebrow">FOLLOW THE IDEAS</span><h2 id="methods-heading">每一种方法，<br><em>都有来处。</em></h2><p>这里列出几条线索。完整参考文献与软件来源，在应用的“方法与引用”中查看。</p></div><div class="reference-grid">'
+    support+='<section class="content-section methods-section" id="methods" aria-labelledby="methods-heading"><div class="section-heading reveal"><span class="eyebrow">FOLLOW THE IDEAS</span><h2 id="methods-heading">每一种方法，<br><em>都有来处。</em></h2><p>从几种常用方法开始，也可以展开下方列表查看全部论文与代码来源。</p></div><div class="reference-grid">'
     for i,(id,tag,title,desc) in enumerate(methods):
         row=sources[id];citation=row.get('citation',title);url=row['urls'].get('doi',row['urls'].get('paper',row['urls'].get('homepage')))
         support+=f'<article class="reference-card reveal"><span class="section-label">{tag}</span><h3>{title}</h3><p>{desc}</p><details><summary>查看引用</summary><p class="citation">{esc(citation)}</p></details><a class="text-link" href="{url}" target="_blank" rel="noopener noreferrer">查看来源 ↗</a></article>'
-    support+='''<article class="reference-card reveal"><span class="section-label">生理参数合成</span><h3>VocalTractLab</h3><p>基于声道几何与声源控制生成声音。示例采用 JD2 模型与应用中的声道预设。</p><a class="text-link" href="https://www.vocaltractlab.de/download-vocaltractlab/VTL2.4-manual.pdf" target="_blank" rel="noopener noreferrer">查看官方手册 ↗</a></article></div><p class="methods-note">写进论文时，记得同时记录工具版本、所选算法与参数。引用某篇论文，与遵守软件、代码和素材的许可，是各自需要完成的事。</p></section>
+    support+='''<article class="reference-card reveal"><span class="section-label">生理参数合成</span><h3>VocalTractLab</h3><p>基于声道几何与声源控制生成声音。示例采用 JD2 模型与应用中的声道预设。</p><a class="text-link" href="https://www.vocaltractlab.de/download-vocaltractlab/VTL2.4-manual.pdf" target="_blank" rel="noopener noreferrer">查看官方手册 ↗</a></article></div>'''+reference_catalog()+'''</section>
     <section class="content-section feedback-section" id="feedback" aria-labelledby="feedback-heading">
       <div class="support-heading reveal"><span class="eyebrow">LEAVE A LITTLE NOTE</span><h2 id="feedback-heading">哪里卡住了？<br><em>一起把它理顺。</em></h2><p>问题、建议，或者一个新想法，都可以。留下邮箱，把这张便签直接寄给韶子。</p><div class="feedback-route"><span>01　验证邮箱</span><span>02　写下问题</span><span>03　等一封回信</span></div><p class="feedback-small">无需注册。网页和应用共用反馈会话，回复也可以在这里查看。</p><span class="feedback-doodle" aria-hidden="true">✎</span></div>
       <div class="feedback-paper reveal" id="feedback-paper">
@@ -268,7 +346,11 @@ def main():
             pattern = r'(<section class="preview-option" id="'+style+r'"[\s\S]*?<div class="chapter-divider"[^>]*>).*?(</div>)'
             preview = re.sub(pattern, lambda m: m[1]+svg+m[2], preview)
         preview_path.write_text(preview, 'utf-8')
-    stats = '<section class="site-stats" aria-label="网站统计"><span class="stats-spark" aria-hidden="true">✦</span><div class="stat-number"><span>页面浏览</span><strong data-stat="views">—</strong><small>次</small></div><div class="stat-number"><span>下载发起</span><strong data-stat="downloads">—</strong><small>次</small></div><div class="stats-caption"><p data-stats-since>统计正在读取中…</p><p data-stats-breakdown>免安装版与安装版，分别记录。</p><details><summary>数字的小注脚</summary><p>浏览次数按服务器收到的页面请求统计。下载按整文件或首个分块请求统计，后续续传分块不再计入。重新发起下载仍会计数，数字不代表安装人数。每分钟更新，排除可识别的常见爬虫。</p></details><noscript>启用 JavaScript 后可查看最新统计。</noscript></div></section>'
+    cards = ''.join(f'<article class="stats-chart" data-chart="{key}"><div class="stats-chart-heading"><h3>{title}</h3><span>{unit}</span></div><svg viewBox="0 0 480 180" role="img" aria-label="{title}历史曲线"></svg><p class="chart-empty">等待真实统计记录</p><div class="chart-dates"><span></span><span></span></div><label class="chart-scrub">查看记录<input type="range" min="0" max="0" value="0" aria-label="{title}采样时间"><output>暂无记录</output></label></article>' for key,title,unit in [('views','页面浏览','累计 / 次'),('downloads','下载发起','累计 / 次'),('web','网页版使用','累计 / 次'),('stars','GitHub Star','数量')])
+    cards=cards.replace('aria-label="下载发起历史曲线"','aria-label="Windows 与 macOS 下载发起历史曲线"')
+    mac_legend='<span class="legend-macos">macOS</span>'
+    cards=cards.replace('<h3>下载发起</h3><span>累计 / 次</span></div>','<h3>下载发起</h3><span>累计 / 次</span></div><div class="download-platform-legend" aria-label="下载平台"><span class="legend-windows">Windows</span>'+mac_legend+'</div>')
+    stats = '<section class="site-stats" aria-label="网站统计"><div class="stats-totals"><span class="stats-spark" aria-hidden="true">✦</span><div class="stat-number"><span>页面浏览</span><strong data-stat="views">—</strong><small>次</small></div><div class="stat-number"><span>下载发起</span><strong data-stat="downloads">—</strong><small>次</small></div><div class="stat-number"><span>网页版使用</span><strong data-stat="web">—</strong><small>次</small></div><div class="stat-number"><span>GitHub Star</span><strong data-stat="stars">—</strong><small>个</small></div></div><div class="stats-history-heading"><div><span class="eyebrow">LITTLE BY LITTLE</span><h2>工具箱的日常</h2><p data-stats-since>统计正在读取中…</p></div><label>查看时段<select data-stats-range aria-label="统计曲线时段"><option value="1">最近24小时</option><option value="7">最近7天</option><option value="30" selected>最近30天</option><option value="all">全部记录</option></select></label></div><div class="stats-charts">'+cards+'</div><div class="stats-caption"><p data-stats-updated>等待更新</p><details><summary>数字的小注脚</summary><p>页面浏览按服务器收到的页面请求统计，排除可识别的常见爬虫。下载总数为 Windows 与 macOS 合计，曲线分别展示两平台。整文件或首个分块请求计数，续传分块不重复，重新发起仍计数，数字不代表安装人数。网页版使用按成功新建临时工作区计数，同一工作区刷新或多开标签不重复。前三项每分钟更新，GitHub Star约每5分钟采样，可能增加或减少。历史使用服务器日志和实际采样，缺失时段保留空缺。</p></details><noscript>启用 JavaScript 后可查看最新统计与历史曲线。</noscript></div></section>'
     text = re.sub(r'<section class="site-stats"[\s\S]*?</section>', '', text)
     text = text.replace('<footer class="site-footer">', stats+'\n<footer class="site-footer">')
     # Retain the top GitHub entry and keep the second entry in the footer only.

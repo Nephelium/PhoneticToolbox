@@ -15,6 +15,11 @@
 #ifndef AppExecutable
   #define AppExecutable "PhoneticToolbox.exe"
 #endif
+#if Pos("-", Version) > 0
+  #define NumericVersion Copy(Version, 1, Pos("-", Version) - 1)
+#else
+  #define NumericVersion Version
+#endif
 
 [Setup]
 AppId={#AppIdentity}
@@ -50,7 +55,7 @@ DisableProgramGroupPage=yes
 DisableWelcomePage=no
 ChangesAssociations=no
 ChangesEnvironment=no
-VersionInfoVersion=3.0.0.0
+VersionInfoVersion={#NumericVersion}
 VersionInfoProductName=PhoneticToolbox
 
 [Languages]

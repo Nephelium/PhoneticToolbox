@@ -55,6 +55,11 @@ class PostgresAccountStore:
         with self.connection() as c:
             return c.execute('SELECT id,username,password_hash,active FROM ptb_accounts.users WHERE username=%s', (username,)).fetchone()
 
+    def verified_email(self,owner):
+        with self.connection() as c:
+            row=c.execute('SELECT e.email FROM ptb_web.emails e JOIN ptb_accounts.users u ON e.user_id=u.id WHERE u.id=%s AND u.active',(owner,)).fetchone()
+            return row['email'] if row else None
+
     def allow_login(self, username, ip):
         # Fixed-window attempt reservation is atomic across connections/processes.
         limits = [(hash_token('account:'+username), 10), (hash_token('ip:'+ip), 50)]

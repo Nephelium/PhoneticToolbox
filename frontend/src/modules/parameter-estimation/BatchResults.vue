@@ -10,7 +10,7 @@ const labels:Record<string,string>={not_started:'未开始',queued:'排队',runn
 const errors:Record<string,string>={input_unavailable:'输入已变化、删除或到期',worker_interrupted:'计算进程已中断，可重试',execution_failed:'处理失败，请检查音频与关联文件',deadline_exceeded:'处理时间超过上限',output_budget_exceeded:'结果超过当前大小上限',disk_space_low:'可用磁盘空间不足',quota_exceeded:'项目空间不足',cancelled:'已取消'};
 Object.assign(errors,{
  m01_egg_filter_range:'EGG低通频率必须低于音频采样率的一半，请调整 EGG 计算设置。',
- m01_duration_limit:'最长支持 30 分钟，请先切分音频。',m01_invalid_source:'音频格式或采样率不受支持。',m01_channel_invalid:'分析声道不存在或音频与 EGG 选择了同一声道。',m01_frame_budget:'帧移过小，超过 200 万帧预算。',m01_output_budget:'输出超过当前磁盘预算，请减少参数或加大帧移。',m01_runtime_not_admitted:'该分段计算功能目前仅在 Windows 本机研究工作台开放。',m01_process_failed:'计算子进程未完成，请检查本机任务记录。',
+ m01_duration_limit:'最长支持 30 分钟，请先切分音频。',m01_invalid_source:'音频格式或采样率不受支持。',m01_channel_invalid:'分析声道不存在或音频与 EGG 选择了同一声道。',m01_frame_budget:'帧移过小，超过 200 万帧预算。',m01_output_budget:'输出超过当前磁盘预算，请减少参数或加大帧移。',m01_runtime_not_admitted:'该分段计算功能目前仅在本机研究工作台开放。',m01_process_failed:'计算子进程未完成，请检查本机任务记录。',
  analysis_energy_failed:'强度计算失败，本文件未生成结果。',
  analysis_formants_failed:'共振峰计算失败，本文件未生成结果。',
  analysis_praat_pitch_failed:'Praat 基频计算失败，本文件未生成结果。',

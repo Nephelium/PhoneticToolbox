@@ -76,23 +76,38 @@ def main():
         cert.write_bytes(certificate.public_bytes(serialization.Encoding.PEM));private.write_bytes(key.private_bytes(serialization.Encoding.PEM,serialization.PrivateFormat.PKCS8,serialization.NoEncryption()))
         master='owned-fixture-master-key-12345678901234567890'
         service=FeedbackService(scratch/'feedback.sqlite',secret='owned-fixture-hmac-key-12345678901234567890',admin_token=master,allow_unverified=True)
+        clock_offset=[0]
+        service.clock=lambda:time.time()+clock_offset[0]
+        from ops_fixture import OperationsFixture
+        service.web_operations=OperationsFixture()
         identity=service.open_device('fixture@example.org',secrets.token_urlsafe(32))
         from PIL import Image
         png=scratch/'fixture.png';Image.new('RGB',(100,60),(0,120,126)).save(png)
         image={'data':base64.b64encode(png.read_bytes()).decode()}
-        service.send(identity['owner'],'user','Windows fixture feedback',[image],'windows-initial-fixture')
+        service.send(identity['owner'],'user','Windows fixture feedback',[image],'windows-initial-fixture',{'source':'desktop','version':'3.0.1','packageKind':'installer'})
+        service.send(identity['owner'],'user','Upgraded portable feedback',[],'windows-portable-fixture',{'source':'desktop','version':'3.0.2','packageKind':'portable'})
+        service.send(identity['owner'],'user','Website feedback',[],'windows-web-fixture',{'source':'web'})
+        service.send(identity['owner'],'user','Historical feedback',[],'windows-legacy-fixture')
         api_port,debug_port=port(),port()
         base=f'https://127.0.0.1:{api_port}/api/v1/feedback'
-        api=uvicorn.Server(uvicorn.Config(create_feedback_app(service),host='127.0.0.1',port=api_port,ssl_certfile=str(cert),ssl_keyfile=str(private),access_log=False,log_level='critical',timeout_graceful_shutdown=1))
+        app=create_feedback_app(service);legacy_health=[False];trash_requests=[0]
+        @app.middleware('http')
+        async def capability_fixture(request,call_next):
+            if request.method=='POST' and request.url.path.endswith('/trash'):trash_requests[0]+=1
+            if legacy_health[0] and request.url.path=='/api/v1/feedback/health':
+                from starlette.responses import JSONResponse
+                return JSONResponse({'schema':'ptb-feedback/2','instantNotifications':True})
+            return await call_next(request)
+        api=uvicorn.Server(uvicorn.Config(app,host='127.0.0.1',port=api_port,ssl_certfile=str(cert),ssl_keyfile=str(private),access_log=False,log_level='critical',timeout_graceful_shutdown=1))
         thread=threading.Thread(target=api.run,daemon=True);thread.start()
         destination=Path('D:/PTB-Feedback-Manager-QA')/uuid.uuid4().hex;destination.mkdir(parents=True,exist_ok=False)
         write_json(destination/'owner.json',{'scope':'Owned final manager EXE acceptance','state':'active'})
-        executable=destination/'反馈收件箱.exe';source=ROOT/'output/feedback-manager/1.0.1/反馈收件箱.exe';shutil.copyfile(source,executable)
+        executable=destination/'反馈收件箱.exe';source=ROOT/'output/feedback-manager/1.1.3/反馈收件箱.exe';shutil.copyfile(source,executable)
         profile=destination/'profile';temp=destination/'temp';profile.mkdir();temp.mkdir()
         client=FeedbackClient(profile/'PhoneticToolbox/v3/feedback-manager',admin=True,base_url=base)
         client.state={'token':master,'email':'','cursor':0};client.save()
         env={k:v for k,v in os.environ.items() if not k.startswith(('PTB_','PYTHON','CONDA','_PYI')) and k not in ['VIRTUAL_ENV','QT_PLUGIN_PATH','QT_QPA_PLATFORM_PLUGIN_PATH','QTWEBENGINEPROCESS_PATH','QTWEBENGINE_RESOURCES_PATH','QTWEBENGINE_LOCALES_PATH']}
-        env.update(LOCALAPPDATA=str(profile),TEMP=str(temp),TMP=str(temp),PATH=os.pathsep.join([os.environ['SystemRoot']+'/System32',os.environ['SystemRoot']]),QTWEBENGINE_REMOTE_DEBUGGING=str(debug_port),QTWEBENGINE_CHROMIUM_FLAGS='--disable-gpu --mute-audio',SSL_CERT_FILE=str(cert),PTB_OWNED_BOOTSTRAP_LOG=str(out/'bootstrap-error.log'))
+        env.update(LOCALAPPDATA=str(profile),TEMP=str(temp),TMP=str(temp),PATH=os.pathsep.join([os.environ['SystemRoot']+'/System32',os.environ['SystemRoot']]),QTWEBENGINE_REMOTE_DEBUGGING=str(debug_port),QTWEBENGINE_CHROMIUM_FLAGS='--mute-audio',SSL_CERT_FILE=str(cert),PTB_OWNED_BOOTSTRAP_LOG=str(out/'bootstrap-error.log'))
         process=None;controller=None
         try:
             end=time.monotonic()+15
@@ -108,7 +123,19 @@ def main():
                         if self.path=='/received':
                             last=service.messages(identity['owner'])['messages'][-1];value={'text':last['text'],'images':len(last['images'])}
                         elif self.path=='/new-feedback':
-                            service.send(identity['owner'],'user','Immediate server event',[],'windows-immediate-fixture');value={'ok':True}
+                            service.send(identity['owner'],'user','Immediate server event',[],'windows-immediate-fixture-'+uuid.uuid4().hex);value={'ok':True}
+                        elif self.path=='/window-title':
+                            user,hwnd=owned_window(process.pid);title=ctypes.create_unicode_buffer(512);user.GetWindowTextW(hwnd,title,512);value={'title':title.value}
+                        elif self.path=='/old-event':
+                            with service.db() as db:db.execute('INSERT INTO events(payload,created) VALUES(?,?)',(json.dumps({'kind':'new_feedback','owner':identity['owner'],'count':3,'conversations':1}),service.clock()))
+                            value={'ok':True}
+                        elif self.path=='/legacy-health':
+                            legacy_health[0]=bool(body['enabled']);value={'trashRequests':trash_requests[0]}
+                        elif self.path=='/trash-state':
+                            rows=service.conversations(True);messages=service.messages(identity['owner'])['messages']
+                            value={'active':sum(not row['trashed'] for row in rows),'trashed':sum(row['trashed'] for row in rows),'messages':len(messages),'images':sum(len(message['images']) for message in messages)}
+                        elif self.path=='/expire-trash':
+                            clock_offset[0]+=30*86400;service.purge_trash();value={'ok':True}
                         elif self.path=='/pair':
                             device=service.admin_devices.complete_pairing(body['code'],'fixture phone');service.authenticate(device['token'],True);service.admin_devices.revoke(device['deviceId']);value={'paired':True}
                         elif self.path=='/window-lifecycle':

@@ -2,20 +2,23 @@
 import {computed,ref,watch,nextTick,onMounted,onBeforeUnmount} from 'vue';
 import type {Preview,Role} from './types.ts';
 import {channelName} from './state.ts';
-const props=defineProps<{preview:Preview|null;selection:[number,number];roles:Role[];spectrum:boolean;disabled:boolean;scale:number;channel?:number;allChannels?:boolean}>();
+const props=defineProps<{preview:Preview|null;selection:[number,number];roles:Role[];spectrum:boolean;disabled:boolean;scale:number;channel?:number;allChannels?:boolean;browser?:boolean}>();
 const emit=defineEmits<{selection:[value:[number,number]];focus:[value:boolean]}>();
 const host=ref<HTMLElement>(),canvas=ref<HTMLCanvasElement>();let anchor:number|null=null,observer:ResizeObserver|undefined,drawFrame=0;
-const wave=computed(()=>props.allChannels?props.preview?.wave??[]:(props.preview?.wave??[]).slice(0,1)),start=computed(()=>props.preview?.start_frame??0),length=computed(()=>props.preview?.window_frames??0),rate=computed(()=>props.preview?.sample_rate??48000);
+const wave=computed(()=>props.allChannels?props.preview?.wave??[]:(props.preview?.wave??[]).slice(props.browser?(props.channel??0):0,props.browser?(props.channel??0)+1:1)),start=computed(()=>props.preview?.start_frame??0),length=computed(()=>props.preview?.window_frames??0),rate=computed(()=>props.preview?.sample_rate??48000);
 function points(bins:number[][]){if(!bins.length)return '';return bins.flatMap((pair,i)=>{const x=bins.length===1?500:i/(bins.length-1)*1000;return [`${x},${50-Math.max(-1,Math.min(1,pair[0]*props.scale))*43}`,`${x},${50-Math.max(-1,Math.min(1,pair[1]*props.scale))*43}`];}).join(' ');}
+const wavePaths=computed(()=>wave.value.map(points));
 function frame(event:PointerEvent){const box=host.value!.querySelector('.m16-wave-lanes')!.getBoundingClientRect();return Math.round(start.value+Math.max(0,Math.min(1,(event.clientX-box.left)/box.width))*length.value);}
 function down(event:PointerEvent){if(props.disabled||!length.value||event.button!==0)return;host.value?.focus();anchor=frame(event);(event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);emit('selection',[anchor,anchor]);}
 function move(event:PointerEvent){if(anchor===null)return;const at=frame(event);emit('selection',[Math.min(anchor,at),Math.max(anchor,at)]);}
 function up(){anchor=null;}
 const selectionStyle=computed(()=>{const a=Math.max(0,Math.min(length.value,props.selection[0]-start.value)),b=Math.max(a,Math.min(length.value,props.selection[1]-start.value));return {left:`${a/Math.max(1,length.value)*100}%`,width:`${(b-a)/Math.max(1,length.value)*100}%`};});
 const maxFrequency=computed(()=>Math.min(5000,rate.value/2));
+const spectrumStart=computed(()=>props.preview?.spectrum_start_frame??start.value),spectrumLength=computed(()=>props.preview?.spectrum_window_frames??length.value);
 function draw(){
  const el=canvas.value;if(!el)return;
- const rect=el.getBoundingClientRect(),ratio=window.devicePixelRatio||1,width=Math.max(1,Math.round(rect.width*ratio)),height=Math.max(1,Math.round(rect.height*ratio));
+ const rect=el.getBoundingClientRect();if(rect.width<=0||rect.height<=0)return;
+ const ratio=window.devicePixelRatio||1,width=Math.max(1,Math.round(rect.width*ratio)),height=Math.max(1,Math.round(rect.height*ratio));
  if(el.width!==width)el.width=width;if(el.height!==height)el.height=height;
  const ctx=el.getContext('2d');if(!ctx)return;ctx.clearRect(0,0,width,height);
  const spec=props.preview?.spectrum;if(!spec?.rows.length)return;
@@ -27,23 +30,24 @@ function draw(){
  }
  const buffer=document.createElement('canvas');buffer.width=image.width;buffer.height=image.height;buffer.getContext('2d')!.putImageData(image,0,0);ctx.imageSmoothingEnabled=false;
  const first=spec.times[0]??0,last=spec.times.at(-1)??first,step=spec.times.length>1?(last-first)/(spec.times.length-1):256/rate.value;
- const left=Math.max(0,spec.time_edges?.[0]??first-step/2)*rate.value/Math.max(1,length.value),right=Math.min(length.value/rate.value,spec.time_edges?.at(-1)??last+step/2)*rate.value/Math.max(1,length.value);
+ const left=Math.max(0,spec.time_edges?.[0]??first-step/2)*rate.value/Math.max(1,spectrumLength.value),right=Math.min(spectrumLength.value/rate.value,spec.time_edges?.at(-1)??last+step/2)*rate.value/Math.max(1,spectrumLength.value);
  // Frequency cells are positioned by actual FFT bin spacing, then cropped to 5 kHz.
  const df=spec.frequency_step??(spec.frequencies[1]-spec.frequencies[0]||rate.value/1024),top=(1-(spec.frequencies[count-1]+df/2)/maxFrequency.value)*height;
  ctx.drawImage(buffer,width*left,top,width*Math.max(0,right-left),count*df/maxFrequency.value*height);
 }
-watch(()=>[props.preview,props.spectrum],()=>nextTick(draw),{deep:false});onMounted(()=>{observer=new ResizeObserver(()=>{cancelAnimationFrame(drawFrame);drawFrame=requestAnimationFrame(draw);});if(host.value)observer.observe(host.value);draw();});onBeforeUnmount(()=>{observer?.disconnect();cancelAnimationFrame(drawFrame);});
+watch(()=>[props.preview,props.spectrum],()=>nextTick(draw),{deep:false});onMounted(()=>{observer=new ResizeObserver(entries=>{if(entries[0].contentRect.width<=0||entries[0].contentRect.height<=0)return;cancelAnimationFrame(drawFrame);drawFrame=requestAnimationFrame(draw);});if(host.value)observer.observe(host.value);draw();});onBeforeUnmount(()=>{observer?.disconnect();cancelAnimationFrame(drawFrame);});
 </script>
 <template>
  <div ref="host" class="m16-wave" :class="{'has-spectrum':spectrum}" tabindex="0" role="group" aria-label="录音波形选区编辑" @focus="emit('focus',true)" @blur="emit('focus',false)">
   <div class="m16-wave-lanes" data-background-surface title="拖动选择时间范围，各声道选区同步" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="up">
-   <div v-if="!wave.length" class="empty-wave">新建工程，选择设备后即可自由录音<br><small>原始采样保留在本地工程，空格只控制试听</small></div>
+   <div v-if="!wave.length" class="empty-wave">新建工程，选择设备后即可自由录音<br><small>{{browser?'停止后上传当前项目，空格控制试听':'原始采样保留在本地工程，空格只控制试听'}}</small></div>
    <div v-for="(bins,index) in wave" :key="index" class="wave-lane">
-    <span class="lane-label">{{channelName(index,roles)}}</span>
-    <svg viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" x2="1000" y1="50" y2="50" class="zero"/><polyline :points="points(bins)" class="wave-line"/></svg>
+    <span class="lane-label">{{channelName(browser&&!allChannels?(channel??0):index,roles)}}</span>
+    <svg viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" x2="1000" y1="50" y2="50" class="zero"/><polyline :points="wavePaths[index]" class="wave-line"/></svg>
    </div>
    <div v-if="selection[1]>selection[0]&&wave.length" class="selection" :style="selectionStyle"/>
   </div>
+  <div v-if="spectrum&&preview?.spectrum_start_frame!==undefined" class="m16-time-axis"><span>{{(start/rate).toFixed(3)}} s</span><span>波形</span><span>{{((start+length)/rate).toFixed(3)}} s</span></div>
   <div v-if="spectrum" class="m16-spectrum" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="up">
    <canvas ref="canvas" aria-label="语谱图 0–5000 Hz"/>
    <span class="spectrum-label" title="Praat Gaussian 5 ms · 50 dB 相对灰度 · 6 dB/oct 显示预加重。长窗口按时间抽样显示，可放大选区查看细节。">{{channelName(channel??0,roles)}} · Praat 语谱图</span>
@@ -51,7 +55,7 @@ watch(()=>[props.preview,props.spectrum],()=>nextTick(draw),{deep:false});onMoun
    <div v-if="selection[1]>selection[0]&&wave.length" class="selection" :style="selectionStyle"/>
    <small v-if="preview?.spectrum?.time_sampled" class="spectrum-hint">全段预览 · 放大选区查看细节</small>
   </div>
-  <div class="m16-time-axis"><span>{{(start/rate).toFixed(3)}} s</span><span>{{((start+length/2)/rate).toFixed(3)}} s</span><span>{{((start+length)/rate).toFixed(3)}} s</span></div>
+  <div class="m16-time-axis"><template v-if="spectrum&&preview?.spectrum_start_frame!==undefined"><span>{{(spectrumStart/rate).toFixed(3)}} s</span><span>最近完成的语谱图</span><span>{{((spectrumStart+spectrumLength)/rate).toFixed(3)}} s</span></template><template v-else><span>{{(start/rate).toFixed(3)}} s</span><span>{{((start+length/2)/rate).toFixed(3)}} s</span><span>{{((start+length)/rate).toFixed(3)}} s</span></template></div>
  </div>
 </template>
 <style scoped>

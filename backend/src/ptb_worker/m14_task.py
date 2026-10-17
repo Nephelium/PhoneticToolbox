@@ -6,7 +6,10 @@ from .store import JobError,LOCAL_PROJECT,canonical,core_version,adapter_version
 from ptb_api.m14_models import M14Request
 
 
-def capability():
+def capability(store=None):
+    if sys.platform=='linux':
+        from .native.capabilities import linux_capabilities
+        return 'phonology_induction' in linux_capabilities(store)[0]
     from importlib.metadata import version,PackageNotFoundError
     if sys.platform!='win32':return False
     try:return all(version(k)==v for k,v in {'pandas':'2.3.3','openpyxl':'3.1.5','python-docx':'1.2.0','xlrd':'2.0.2'}.items())
@@ -15,7 +18,7 @@ def capability():
 
 def submit(store,owner,body):
     body=M14Request.model_validate(body)
-    if not capability():raise JobError('m14_runtime_unavailable',503)
+    if not capability(store):raise JobError('m14_runtime_unavailable',503)
     if store.files is None:raise JobError('task_service_unavailable',503)
     request=body.model_dump(exclude={'idempotency_key'});sha=hashlib.sha256(canonical(request).encode()).hexdigest()
     with store.files.batch_transaction() as tx:

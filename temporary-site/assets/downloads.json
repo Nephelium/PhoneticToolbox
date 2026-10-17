@@ -1,14 +1,30 @@
 {
-  "version": "3.0.2",
+  "version": "3.0.3",
   "files": {
     "PhoneticToolbox-windows-x64.exe": {
-      "size": 495855100,
-      "sha256": "0d0ab31d26eb4ec4563b03d246cacb3250778f71bbcce2ad6dd7e2faa6c518b9"
+      "size": 495186511,
+      "sha256": "897d059381325d4aa4b84d305ee6410636d69a25e9dc35d1b84f0b214f3e3051"
     },
-    "PhoneticToolbox-3.0.2-windows-x64-setup.exe": {
-      "size": 497771194,
-      "sha256": "19c55057d074c217a9d502ccd01d704dd72a1aa20c67e02a8570bd451c46e95e"
+    "PhoneticToolbox-3.0.3-windows-x64-setup.exe": {
+      "size": 497102829,
+      "sha256": "055bb0d1de1fa12eafc37f506f7544817f0f0d9441fafc8d3fac0420146623d4"
     }
   },
-  "source": "https://www.phonetictoolbox.com/releases/windows-x64/3.0.2/ptb-release.json"
+  "source": "https://www.phonetictoolbox.com/releases/windows-x64/3.0.3/ptb-release.json",
+  "macos": {
+    "schema": "ptb-macos-download/1",
+    "version": "3.0.3",
+    "channel": "preview",
+    "revision": "r6",
+    "platform": "macos-arm64",
+    "minimumMacOS": "14.0",
+    "testedMacOS": "26.7.1",
+    "name": "PhoneticToolbox-3.0.3-macos14-arm64-preview-r6.zip",
+    "url": "/releases/macos-arm64/3.0.3/PhoneticToolbox-3.0.3-macos14-arm64-preview-r6.zip",
+    "size": 476461931,
+    "sha256": "fc44db9ea9f29723c18393029fe97e11719a29ac9edfcdaeb464d64bcf9596a1",
+    "signing": "ad-hoc",
+    "notarized": false,
+    "instructions": "/#macos-download"
+  }
 }

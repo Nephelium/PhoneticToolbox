@@ -15,6 +15,7 @@ PACKAGES = {
     'ptb_api': 'backend/src/ptb_api',
     'ptb_worker': 'backend/src/ptb_worker',
     'ptb_desktop': 'desktop/src/ptb_desktop',
+    'ptb_documents': 'desktop/src/ptb_documents',
 }
 RUNTIMES = {
     'PTB_EGG_PYTHON': '.venv/m03-compatible/python.exe',

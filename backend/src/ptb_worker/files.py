@@ -41,6 +41,7 @@ class FilePipeline:
         digest = hashlib.sha256(canonical(request).encode('utf-8')).hexdigest()
         with self.storage._locked() as conn, self.tx(conn) as tx:
             self.storage._writable(conn)
+            self.storage.project_deadline(conn, owner, body.project_id)
             old = tx.execute('SELECT * FROM {jobs} WHERE owner_id=? AND idempotency_key=?', (owner,body.idempotency_key)).fetchone()
             if old:
                 if old['request_hash'] != digest: raise JobError('idempotency_conflict')
@@ -49,8 +50,9 @@ class FilePipeline:
                 raise JobError('project_not_found',404)
             if self.jobs.capacity_used(tx,owner) >= 1000:
                 raise JobError('job_limit_reached')
-            quota=conn.execute('SELECT used_bytes,reserved_bytes FROM ptb_storage.quota_accounts WHERE owner_id=%s',(owner,)).fetchone()
-            if quota and quota['used_bytes']+quota['reserved_bytes']>=QUOTA_BYTES:
+            self.jobs.check_web_queue(tx, owner)
+            quota=conn.execute('SELECT used_bytes,reserved_bytes,quota_bytes FROM ptb_storage.quota_accounts WHERE owner_id=%s',(owner,)).fetchone()
+            if quota and quota['used_bytes']+quota['reserved_bytes']>=quota['quota_bytes']:
                 raise StorageError('quota_exceeded',413)
             now = tx.now()
             inputs = []
@@ -58,12 +60,14 @@ class FilePipeline:
                 item = self.storage._readable(conn,owner,asset_id)
                 if str(item['project_id']) != body.project_id:
                     raise StorageError('asset_not_found',404)
+                if body.operation=='recording_audio' and (item['sha256']!=body.config.hashes[asset_id] or not item['name'].lower().endswith('.wav') or item['size_bytes']>100_000_000):
+                    raise StorageError('input_unavailable',410)
                 # Conservative upper runtime bound; never promise input renewal.
                 if item['expires_at'] <= now+300:
                     raise StorageError('input_lifetime_too_short',409)
                 inputs.append(item)
             snapshot = request | {'core_version':core_version,'adapter_version':adapter_version,
-                'source_ids':['P07-PYTHON-ZIP'],
+                'source_ids':(['METHOD-M16-SPECTRAL-SUBTRACTION','SRC-PRAAT'] if body.operation=='recording_audio' else ['P07-PYTHON-ZIP']),
                 'input_assets':[{'id':str(a['id']),'sha256':a['sha256'],'expires_at':a['expires_at']} for a in inputs]}
             job_id = str(uuid4())
             tx.execute("INSERT INTO {jobs}(id,owner_id,project_id,idempotency_key,request_hash,snapshot,state,deadline,created_at,updated_at) VALUES(?,?,?,?,?,?,'queued',?,?,?)",
@@ -84,6 +88,7 @@ class FilePipeline:
                 raise StorageError('stale_worker',409)
             if row['state'] != 'running':
                 raise StorageError('cancelled',409)
+            self.storage.project_deadline(conn, row['owner_id'], row['project_id'])
             inputs = conn.execute("SELECT a.*,l.input_sha256,l.input_expires_at FROM ptb_storage.job_assets l JOIN ptb_storage.assets a ON a.id=l.asset_id WHERE l.job_id=%s AND l.role='input'",(row['id'],)).fetchall()
             for item in inputs:
                 if item['state']!='ready' or min(item['expires_at'],item['input_expires_at']) <= now or item['sha256']!=item['input_sha256']:
@@ -96,6 +101,8 @@ class FilePipeline:
             return row, inputs
 
     def claim(self, worker_id):
+        if self.storage.workspaces is not None:
+            self.storage.workspaces.cleanup()
         with self.storage._locked() as conn, self.tx(conn) as tx:
             self.storage._writable(conn)
             invalid = conn.execute("SELECT DISTINCT j.* FROM ptb_jobs.jobs j JOIN ptb_storage.job_assets l ON l.job_id=j.id JOIN ptb_storage.assets a ON a.id=l.asset_id WHERE j.state='queued' AND l.role='input' AND (a.state!='ready' OR a.expires_at<=j.deadline OR l.input_expires_at<=j.deadline OR a.sha256!=l.input_sha256)").fetchall()
@@ -196,7 +203,7 @@ class FilePipeline:
             snapshot = json.loads(job['snapshot'])
             operation = snapshot['operation']
             input_deadlines = [] if self.independent_expiry(snapshot) else [min(a['expires_at'],a['input_expires_at']) for a in inputs]
-            deadline = expiry(now, input_deadlines)
+            deadline = self.storage.project_deadline(conn, job['owner_id'], job['project_id'], expiry(now, input_deadlines))
             files = []
             for item in outputs:
                 if self.storage._path(item['id']).stat().st_size != item['size_bytes']:
@@ -209,7 +216,7 @@ class FilePipeline:
             # batch, including all ready flags and released reservations.
             self._fence(conn,identity)
             now=tx.now()
-            deadline=expiry(now,input_deadlines)
+            deadline=self.storage.project_deadline(conn, job['owner_id'], job['project_id'], expiry(now,input_deadlines))
             conn.execute('UPDATE ptb_storage.assets SET expires_at=%s,policy_version=%s WHERE id=ANY(%s)',(deadline,POLICY_VERSION,[a['id'] for a in outputs]))
             for item in files: item['expires_at']=deadline
             manifest = self.manifest(operation,files)
@@ -221,7 +228,7 @@ class FilePipeline:
     def fail(self, identity, code):
         safe = {'cancelled','input_unavailable','quota_exceeded','output_budget_exceeded','archive_rejected',
                 'disk_space_low','storage_write_failed','output_count_exceeded','stale_worker',
-                'server_export_unavailable'}
+                'server_export_unavailable','recording_invalid_input'}
         if code not in safe | self.additional_error_codes: code='execution_failed'
         with self.storage._locked() as conn:
             with self.tx(conn) as tx:

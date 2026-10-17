@@ -67,7 +67,7 @@ def test_direct_linux_submission_is_closed(runtime,monkeypatch):
     import sys
     with monkeypatch.context() as context:
         context.setattr(sys,'platform','linux')
-        with pytest.raises(JobError,match='m08_platform_unverified'):
+        with pytest.raises(JobError,match='m08_runtime_unavailable'):
             task(runtime)
 
 

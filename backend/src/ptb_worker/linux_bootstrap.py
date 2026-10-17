@@ -16,7 +16,7 @@ def main():
     os.environ['MPLBACKEND'] = 'Agg'
     from ptb_worker.native.linux_runtime import ENTRIES, fingerprint
     fingerprint()
-    if profile.get('fonts'):
+    if profile.get('fonts') and entry not in ('egg_interactive','parameter_preview','spec2wav_preview','recording_preview'):
         from matplotlib import font_manager
         for font in profile['fonts']:
             if font not in profile['hashes']:
@@ -33,8 +33,12 @@ def main():
         from ptb_api.font_models import FigureFontSnapshot
         result = check_fonts(FigureFontSnapshot.model_validate_json(sys.stdin.buffer.readline(8192)))
         sys.stdout.buffer.write(json.dumps(result, ensure_ascii=False).encode())
-    elif entry == 'spectrogram':
-        from ptb_worker.spectrogram_preview import child
+    elif entry in ('spectrogram','recording_preview','spec2wav_preview','egg_interactive','parameter_preview'):
+        if entry=='spectrogram':from ptb_worker.spectrogram_preview import child
+        elif entry=='recording_preview':from ptb_worker.recording_preview import child
+        elif entry=='spec2wav_preview':from ptb_worker.spec2wav_preview import main as child
+        elif entry=='egg_interactive':from ptb_worker.egg_interactive_child import once as child
+        else:from ptb_worker.parameter_preview import child
         child()
     else:
         sys.stdout = sys.stderr

@@ -1,9 +1,12 @@
 """Include the existing UI icon and complete bundled component notices."""
 from pathlib import Path
+import os
 import shutil
 ROOT=Path(__file__).resolve().parents[2]
 def prepare():
-    web=ROOT/'output/build-feedback-manager/web'
+    web=Path(os.environ.get('PTB_FEEDBACK_WEB_ROOT',ROOT/'output/build-feedback-manager/web')).resolve()
+    if not web.is_relative_to(ROOT/'output/build-feedback-manager'):
+        raise ValueError('Feedback web assets must stay inside the owned build directory')
     for source,name in [(ROOT/'frontend/src/assets/Doulos-OFL.txt','Doulos-OFL.txt'),(ROOT/'frontend/node_modules/vue/LICENSE','Vue-LICENSE.txt'),(ROOT/'third_party/licenses/p01/PYQT6-LICENSE.txt','PyQt6-LICENSE.txt'),(ROOT/'third_party/licenses/p01/PYQT6-WEBENGINE-LICENSE.txt','PyQt6-WebEngine-LICENSE.txt')]:
         if not source.is_file():raise RuntimeError('Missing component notice or icon: '+str(source))
         shutil.copyfile(source,web/name)

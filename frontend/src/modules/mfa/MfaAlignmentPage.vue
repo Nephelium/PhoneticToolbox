@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {useWebSettings,settingsFields} from '../../state/web-settings.ts';
 import {syncNumberInput} from '../../design/numeric-input.ts';
 import AppIcon from '../../components/AppIcon.vue';
 import {computed,onMounted,onUnmounted,ref,watch} from 'vue';
@@ -13,9 +14,9 @@ import {projects} from '../../platform/browser.ts';
 import {m11Message} from '../../platform/m11.ts';
 import {defaults,beamChanged,validate,type TranscriptSource} from './state.ts';
 import type {Catalog,CorpusItem,Grant} from './port.ts';
-const props=defineProps<{context:ResearchContext;stateKey:string;active?:boolean}>();
+const props=defineProps<{context:ResearchContext;stateKey:string;active?:boolean;presentationOnly?:boolean}>();
 const emit=defineEmits<{references:[];dirty:[boolean]}>();
-const port=computed(()=>props.context.files.m11);
+const port=computed(()=>props.presentationOnly?undefined:props.context.files.m11);
 const key='m11:'+props.stateKey;
 const saved=projects.read<{beam:number;retry_beam:number;runtime:string;model:string;transcriptSource?:TranscriptSource}>(key,{...defaults(),runtime:'',model:''});
 const config=ref({beam:saved.beam,retry_beam:saved.retry_beam}),runtime=ref(saved.runtime),model=ref(saved.model);
@@ -67,7 +68,7 @@ async function refresh(){
 }
 watch(runtime,()=>{if(catalog.value&&!models.value.some(m=>m.id===model.value))model.value=models.value[0]?.id??'';});
 
-onMounted(()=>{void refresh();timer=setInterval(()=>{if(installing.value||(!busy.value&&props.active!==false))void refresh();},1000);});
+onMounted(()=>{if(props.presentationOnly)return;void refresh();timer=setInterval(()=>{if(installing.value||(!busy.value&&props.active!==false))void refresh();},1000);});
 onUnmounted(()=>{alive=false;controller.abort();if(timer)clearInterval(timer);});
 const beamInput=computed({get:()=>config.value.beam,set:(value:number|string)=>{try{config.value=beamChanged(config.value,Number(value));error.value='';}catch(e){error.value=(e as Error).message;}}});
 async function imported(event:Event){const input=event.target as HTMLInputElement,files=Array.from(input.files??[]);input.value='';if(!files.length||!port.value)return;await operation(async()=>{corpus.value=await port.value!.import(files,controller.signal,transcriptSource.value);loadedSource.value=transcriptSource.value;dirty.value=true;message.value=`已导入 ${corpus.value.length} 组音频与已有转写。`;});}
@@ -85,12 +86,13 @@ async function start(){await operation(async()=>{if(pendingResources.value)throw
 async function cancel(){if(selected.value)await operation(async()=>{await port.value!.cancel(selected.value!.id);await refresh();});}
 async function show(job:JobView){selected.value=job;events.value=[];log.value={text:'',truncated:false};await refresh();}
 async function saveResults(){await operation(async()=>{if(!output.value)output.value=(await port.value!.chooseOutput!())??undefined;if(!output.value)return;const result=await port.value!.save!(selected.value!,output.value);message.value=`已保存 ${result.count} 个文件到 ${output.value.label}/${result.directory}。`;});}
+useWebSettings(props.stateKey,{config,transcriptSource});
 </script>
 
 <template>
 <ModuleFrame unified fit class="mfa-page" label="MFA 自动标注工作区" :aria-busy="busy">
  <template #toolbar><ModuleToolbar>
-  <button class="primary" v-if="port?.local" :disabled="busy" @click="chooseCorpus"><AppIcon name="folder"/>打开音频目录</button>
+  <button class="primary" v-if="presentationOnly||port?.local" :disabled="busy" @click="chooseCorpus"><AppIcon name="folder"/>打开音频目录</button>
   <button class="primary" :disabled="busy||!port" @click="fileInput?.click()">导入音频与转写</button>
   <input ref="fileInput" hidden type="file" multiple accept=".wav,.lab,.txt,.TextGrid" @change="imported"/>
 
@@ -100,7 +102,7 @@ async function saveResults(){await operation(async()=>{if(!output.value)output.v
  <ModuleWorkbench unified :state-key="stateKey" left-label="组件与模型" right-label="任务与记录">
  <template #left>   <ModuleSection label="运行组件与模型" title="运行组件与模型">
     <div class="mfa-form"><label>运行环境<select v-model="runtime" :disabled="busy||running"><option value="">选择已检查组件</option><option v-for="r in catalog?.runtimes" :key="r.id" :value="r.id">MFA {{r.version}} · {{r.platform}} / {{r.arch}}</option></select></label>
-     <label>声学模型<select :value="acousticSelection" :disabled="busy||running" @change="chooseAcoustic"><option value="">选择声学模型</option><option v-for="m in acousticModels" :key="m.id" :value="m.id">{{m.name}}</option><option v-if="grants.model" value="pending-model">{{grants.model.label}} · 待检查</option><option v-if="port?.local&&port.pick" value="import">导入其他声学模型…</option></select></label>
+     <label>声学模型<select :value="acousticSelection" :disabled="busy||running" @change="chooseAcoustic"><option value="">选择声学模型</option><option v-for="m in acousticModels" :key="m.id" :value="m.id">{{m.name}}</option><option v-if="grants.model" value="pending-model">{{grants.model.label}} · 待检查</option><option v-if="presentationOnly||(port?.local&&port.pick)" value="import">导入其他声学模型…</option></select></label>
      <label>发音词典<select :value="dictionarySelection" :disabled="busy||!port||running" @change="chooseDictionary"><option v-if="!model" value="">选择发音词典</option><option v-for="m in registeredDictionaries" :key="m.id" :value="m.id">{{m.dictionary_name||'模型登记词典'}}</option><option v-for="d in importedDictionaries" :key="d.id" :value="d.id">{{d.name}} · {{grants.dictionary?.id===d.grant?.id&&d.grant?'待检查':'已导入'}}</option><option value="import">导入其他词典…</option></select></label>
      <input ref="dictInput" hidden type="file" accept=".dict,.txt" @change="importDictionary"/>
        <div class="official-resources"><a class="button" href="https://mfa-models.readthedocs.io/en/latest/acoustic/index.html" target="_blank" rel="noopener noreferrer">下载声学模型（官方）</a><a class="button" href="https://mfa-models.readthedocs.io/en/latest/dictionary/index.html" target="_blank" rel="noopener noreferrer">下载发音词典（官方）</a></div>
@@ -111,8 +113,8 @@ async function saveResults(){await operation(async()=>{if(!output.value)output.v
     <div v-if="pendingResources" class="actions resource-actions"><button class="primary" :disabled="busy||running||!canCheck" @click="check('check')">检查并应用所选资源</button><button :disabled="busy||running" @click="discardResources">取消待检查选择</button></div>
     <details v-if="runtimeInfo" class="component-details"><summary>组件、资源与校验信息</summary><p>来源：{{runtimeInfo.source||'登记清单'}}</p><p>下载量：{{runtimeInfo.download_bytes?.toLocaleString()??'未测量 / 已有环境'}} B · 安装文件：{{runtimeInfo.installed_bytes?.toLocaleString()??'待测'}} B</p><p>模型：{{modelInfo?.model_bytes?.toLocaleString()??'待测'}} B · 登记词典：{{modelInfo?.dictionary_bytes?.toLocaleString()??'待测'}} B</p><p>任务临时空间监测预算 512,000,000 B，失败诊断保留后仍占本机空间。</p><dl><template v-for="(v,k) in runtimeInfo.versions" :key="k"><dt>{{k}}</dt><dd>{{v}}</dd></template></dl><p class="digest">运行时内容摘要：{{runtimeInfo.fingerprint}}</p><p class="digest">已应用声学模型 SHA-256：{{modelInfo?.model_sha256}}</p><p class="digest">已应用词典 SHA-256：{{pendingResources?modelInfo?.dictionary_sha256:dictionary?.sha256??modelInfo?.dictionary_sha256}}</p><p v-if="runtimeInfo.archive_sha256" class="digest">组件包 SHA-256：{{runtimeInfo.archive_sha256}}</p></details>
     <ModuleStatus v-if="catalog?.waiting_reason" kind="info" :message="m11Message(catalog.waiting_reason)"/>
-    <button v-if="port?.local" class="component-toggle" :aria-expanded="componentOpen" @click="componentOpen=!componentOpen">{{componentOpen?'收起组件管理':'组件安装与环境检查'}}</button>
-    <div v-if="componentOpen&&port?.local" class="component-manager">
+    <button v-if="presentationOnly||port?.local" class="component-toggle" :aria-expanded="componentOpen" @click="componentOpen=!componentOpen">{{componentOpen?'收起组件管理':'组件安装与环境检查'}}</button>
+    <div v-if="componentOpen&&(presentationOnly||port?.local)" class="component-manager">
      <p class="muted">首次使用需安装 MFA 组件，内含运行环境及配套普通话模型、词典。安装后可离线标注。</p>
      <button class="primary" :disabled="busy||running||!catalog?.download_available" @click="installComponent('download')">下载并安装组件</button>
      <div v-if="installing" class="component-progress" aria-live="polite"><p>{{componentProgress}}</p><progress :value="catalog?.component_status?.total?catalog.component_status.completed:undefined" :max="catalog?.component_status?.total||1" aria-label="组件安装进度"/><p v-if="catalog?.component_status?.stage==='downloading'" class="download-metrics"><span>{{bytesLabel(catalog.component_status.completed)}} / {{bytesLabel(catalog.component_status.total)}}</span><span>{{bytesLabel(catalog.component_status.bytes_per_second||0)}}/s</span></p></div>

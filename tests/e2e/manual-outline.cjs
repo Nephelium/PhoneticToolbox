@@ -25,11 +25,37 @@ async function main(){
   const glyph=locator=>locator.evaluate(e=>({tag:e.tagName.toLowerCase(),shape:e.querySelector('path')?.getAttribute('d')??e.textContent.trim()}));
   for(const item of modules){const descriptor=project.chapters.find(c=>c.moduleId===item.id||c.id===item.id.toLowerCase());assert(descriptor);await openChapter(descriptor.id);const icon=await glyph(chapterButton(descriptor.id).locator('.manual-toc-chapter-icon')),sidebar=await glyph(page.locator('#tool-sidebar').getByRole('button',{name:item.title,exact:true}).locator('svg,.ipa-icon').first());assert.deepEqual(icon,sidebar,item.id);assert.equal(await toc.locator('button[data-manual-section] svg,button[data-manual-section] .ipa-icon').count(),0);assert.equal(await chapterButton(descriptor.id).getAttribute('aria-expanded'),'true');assert.equal(await toc.locator('button[data-manual-chapter][aria-expanded="true"]').count(),1);report.icons.push({module:item.id,chapter:descriptor.id,glyph:icon});}
   report.checks.push('All 18 module chapters reuse the exact sidebar SVG/IPA symbol in level-one entries; level-two entries have no icons and only the expanded chapter exposes its sections');
-  await openChapter(chapter.id);await sectionButton(parent.id).click();await childButton(child.id).waitFor();await onlySelected('data-manual-section',parent.id);await childButton(child.id).click();await onlySelected('data-manual-subsection',child.id);
+  await openChapter(chapter.id);
+  await page.evaluate(()=>{window.manualRetained={document:document.querySelector('.manual-document'),media:[...document.querySelectorAll('.manual-document img,.manual-document audio,.manual-document video')]};});
+  async function sameChapterMounted(){assert(await page.evaluate(()=>window.manualRetained.document===document.querySelector('.manual-document')&&window.manualRetained.media.every(e=>e.isConnected)),'same-chapter navigation retains the document and all media elements');}
+  await sectionButton(parent.id).click();await childButton(child.id).waitFor();await onlySelected('data-manual-section',parent.id);await sameChapterMounted();await childButton(child.id).click();await onlySelected('data-manual-subsection',child.id);await sameChapterMounted();
   await scrollTo(second.id);await onlySelected('data-manual-subsection',second.id);assert.equal(await chapterButton(chapter.id).getAttribute('aria-current'),null);assert.equal(await sectionButton(parent.id).getAttribute('aria-current'),null);
   await sectionButton(parent.id).click();await onlySelected('data-manual-section',parent.id);await scrollTo(child.id);await onlySelected('data-manual-subsection',child.id);
   report.checks.push('Clicking level two marks only that entry; clicking level three and real reading scroll mark only the current level-three entry, clearing both ancestor markers');
-  await page.getByRole('searchbox',{name:'搜索说明书',exact:true}).fill(child.title);await page.locator('.manual-search-results button').filter({hasText:child.title}).first().click();await page.getByRole('searchbox',{name:'搜索说明书',exact:true}).fill('');await childButton(child.id).waitFor();await onlySelected('data-manual-subsection',child.id);report.checks.push('Full-book search opens the needed chapter/section and marks the target level-three entry');
+  await page.getByRole('searchbox',{name:'搜索说明书',exact:true}).fill(child.title);await page.locator('.manual-search-results button').filter({hasText:child.title}).first().click();await page.getByRole('searchbox',{name:'搜索说明书',exact:true}).fill('');await childButton(child.id).waitFor();await onlySelected('data-manual-subsection',child.id);await sameChapterMounted();report.checks.push('Full-book search opens the needed chapter/section and marks the target level-three entry; same-chapter outline and search keep the document and media mounted');
+  await childButton(child.id).press('Enter');await sameChapterMounted();
+  const focusStyles=await childButton(child.id).evaluate(button=>{
+   const root=document.documentElement,style=root.getAttribute('data-button-style'),material=root.getAttribute('data-button-material'),rows=[];
+   try{for(const mode of ['auto','all','plain'])for(const surface of ['solid','glass']){root.dataset.buttonStyle=mode;root.dataset.buttonMaterial=surface;const css=getComputedStyle(button);rows.push({mode,surface,focused:button.matches(':focus-visible'),outline:css.outlineStyle,shadow:css.boxShadow,decoration:css.textDecorationLine});}}
+   finally{if(style===null)root.removeAttribute('data-button-style');else root.setAttribute('data-button-style',style);if(material===null)root.removeAttribute('data-button-material');else root.setAttribute('data-button-material',material);}
+   return rows;
+  });
+  for(const row of focusStyles){assert(row.focused);assert.equal(row.outline,'none');assert.equal(row.shadow,'none');assert(row.decoration.includes('underline'));}report.focusStyles=focusStyles;
+  report.checks.push('Keyboard-selected manual entries use underline with no outline or shadow in all six button style/material combinations');
+  const persistence=await page.evaluate(async()=>{
+   const original=Storage.prototype.setItem,writes=[];Storage.prototype.setItem=function(key,value){if(key==='ptb.v3.manual-location')writes.push(JSON.parse(value));return original.call(this,key,value);};
+   const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+   try{
+    await wait(300);writes.length=0;const sc=document.querySelector('.manual-reading-scroll');sc.scrollTop=0;await wait(300);writes.length=0;
+    for(let i=0;i<20;i++){sc.scrollTop+=23;await wait(25);}
+    const during=writes.length;await wait(300);const after=writes.length,position=sc.scrollTop,saved=JSON.parse(localStorage.getItem('ptb.v3.manual-location'));
+    sc.scrollTop+=47;await new Promise(requestAnimationFrame);window.dispatchEvent(new Event('pagehide'));
+    const flushed=JSON.parse(localStorage.getItem('ptb.v3.manual-location'));
+    return {during,after,position,saved,hiddenPosition:sc.scrollTop,flushed};
+   }finally{Storage.prototype.setItem=original;}
+  });
+  assert(persistence.after>0&&persistence.after<=4,JSON.stringify(persistence));assert.equal(persistence.saved.scrollTop,persistence.position);assert.equal(persistence.flushed.scrollTop,persistence.hiddenPosition);report.persistence=persistence;
+  report.checks.push('Twenty scroll updates coalesce into at most four storage writes, retain the latest position and flush immediately on pagehide');
   for(const body of [14,18,24])for(const theme of ['浅色','深色']){
    await page.setViewportSize({width:1440,height:900});await page.locator('#tool-sidebar').getByRole('button',{name:'设置',exact:true}).click();await page.getByRole('tab',{name:'外观',exact:true}).click();await page.getByRole('button',{name:theme,exact:true}).click();await page.getByRole('tab',{name:'字体',exact:true}).click();await page.getByRole('spinbutton',{name:'正文基础字号',exact:true}).fill(String(body));await page.getByRole('button',{name:'应用字体',exact:true}).click();await page.waitForFunction(size=>Math.abs(parseFloat(getComputedStyle(document.documentElement).fontSize)-size)<.01,body);
    await page.locator('#tool-sidebar').getByRole('button',{name:'使用说明',exact:true}).click();await page.locator('.manual-document').waitFor();await openChapter(chapter.id);await sectionButton(parent.id).click();await openDirectory();await childButton(child.id).click();await onlySelected('data-manual-subsection',child.id);if(body===24)await page.setViewportSize({width:960,height:760});await openDirectory();
@@ -39,7 +65,9 @@ async function main(){
    const headings=await page.locator('.manual-document').evaluate(e=>{const a=getComputedStyle(e.querySelector('.manual-chapter-header h1')),b=getComputedStyle(e.querySelector('h2.manual-heading'));return {chapter:a.fontSize,section:b.fontSize,weight:a.fontWeight};});assert.equal(headings.chapter,headings.section);assert.equal(headings.weight,'700');
    report.cases.push({body,theme,viewport:page.viewportSize(),rows,nav});await chapterButton(chapter.id).scrollIntoViewIfNeeded();await page.screenshot({path:path.join(out,body+'-'+theme+'.png')});
   }
-  report.checks.push('Six theme/font cases preserve 14/14/12 typography, compact 1.3-line/3px-padding third-level rows, sole colour selection without an outline and no sidebar overflow, including the narrow drawer');assert.deepEqual(report.errors,[]);report.success=true;
+  report.checks.push('Six theme/font cases preserve 14/14/12 typography, compact 1.3-line/3px-padding third-level rows, sole colour selection without an outline and no sidebar overflow, including the narrow drawer');
+  report.navigationFixture=await page.evaluate(async()=>{const {verifyManualNavigation}=await import('/tests/fixtures/manual-navigation.ts');return verifyManualNavigation();});
+  assert.equal(report.navigationFixture.length,5);assert.deepEqual(report.errors,[]);report.success=true;
  }catch(e){report.failure=String(e);if(page)await page.screenshot({path:path.join(out,'failure.png')}).catch(()=>{});throw e;}
  finally{
   await browser?.close();await server?.close();await write('report.json',report);const files=[];async function inventory(dir){for(const entry of await fs.readdir(dir,{withFileTypes:true})){assert(!entry.isSymbolicLink());const file=path.join(dir,entry.name);if(entry.isDirectory())await inventory(file);else{const bytes=await fs.readFile(file);files.push({path:path.relative(scratch,file),bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')});}}}await inventory(scratch);await write('scratch-manifest.json',{schema:'ptb-test-scratch-files/1',files});await write('run.json',{...marker,state:'ready',test_outcome:report.success?'completed':'failed'});

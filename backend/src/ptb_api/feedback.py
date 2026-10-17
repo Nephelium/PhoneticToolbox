@@ -18,12 +18,16 @@ import warnings
 
 from fastapi import APIRouter, FastAPI, Request
 from fastapi.exceptions import RequestValidationError
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
+from typing import Literal
+from uuid import UUID
+from .web_ops_models import Decision,QuotaChange
 from starlette.responses import JSONResponse, StreamingResponse
 
 MAX_IMAGE = 2_000_000
 MAX_REQUEST = 14_000_000
 SHANGHAI = timezone(timedelta(hours=8))
+TRASH_RETENTION = 30 * 86400
 
 
 class FeedbackError(Exception):
@@ -220,7 +224,8 @@ class FeedbackService:
             raise FeedbackError('feedback_unauthorized', 401)
         return row['owner']
 
-    def send(self, owner, role, text, images, request_id):
+    def send(self, owner, role, text, images, request_id, client=None):
+        self.purge_trash(owner)
         text = text.strip()
         if len(text) > 12000 or not text and not images or len(images) > 4 or not re.fullmatch(r'[A-Za-z0-9_-]{8,96}', request_id):
             raise FeedbackError('invalid_message')
@@ -233,12 +238,20 @@ class FeedbackService:
             identity = db.execute('SELECT * FROM identities WHERE id=?', (owner,)).fetchone()
             if identity is None:
                 raise FeedbackError('conversation_unavailable',404)
+            trashed = self.trash_states(db, owner).get(owner)
+            if trashed and role == 'admin':
+                raise FeedbackError('conversation_trashed',409)
+            if role == 'admin' and not db.execute('SELECT 1 FROM messages WHERE owner=?',(owner,)).fetchone() and db.execute("SELECT 1 FROM events WHERE json_extract(payload,'$.kind')='conversation_deleted' AND json_extract(payload,'$.owner')=?",(owner,)).fetchone():
+                raise FeedbackError('conversation_unavailable',404)
             existing = db.execute('SELECT id,text FROM messages WHERE owner=? AND role=? AND request_id=?', (owner,role,request_id)).fetchone()
             if existing:
                 old = db.execute('SELECT mime,data FROM attachments WHERE message=? ORDER BY id', (existing['id'],)).fetchall()
                 if existing['text'] != text or sorted((r['mime'],bytes(r['data'])) for r in old) != sorted(converted):
                     raise FeedbackError('message_key_conflict',409)
                 return {'id':existing['id'],'duplicate':True}
+            if trashed:
+                db.execute('INSERT INTO events(payload,created) VALUES(?,?)',
+                    (json.dumps({'kind':'conversation_restored','owner':owner}),now))
             recent = db.execute('SELECT COUNT(*) FROM messages WHERE owner=? AND role=? AND created>?', (owner,role,now-60)).fetchone()[0]
             used = db.execute('SELECT COALESCE(SUM(length(a.data)),0) FROM attachments a JOIN messages m ON m.id=a.message WHERE m.owner=?', (owner,)).fetchone()[0]
             text_used = db.execute('SELECT COALESCE(SUM(length(CAST(text AS BLOB))),0) FROM messages WHERE owner=?',(owner,)).fetchone()[0]
@@ -254,33 +267,116 @@ class FeedbackService:
                 body = f'您的 PhoneticToolbox 反馈收到回复：\n\n{text or "（图片回复）"}\n\n'+('本次回复的图片附在邮件中，也可在应用的关于 → 问题反馈中查看。\n\n' if converted else '')+'打开 PhoneticToolbox → 关于 → 问题反馈，可查看完整会话并继续交流。\n本邮件用于反馈通知，直接回复邮箱暂不自动进入应用会话。'
                 db.execute('INSERT INTO outbox(key,recipient,subject,body,next_at,message) VALUES(?,?,?,?,?,?)', ('reply-'+owner+'-'+str(mid),identity['email'],'PhoneticToolbox：您的反馈收到回复',body,now,mid))
             event = {'kind': 'new_feedback' if role == 'user' else 'conversation_changed', 'owner': owner, 'messageId': mid, 'count': 1, 'conversations': 1}
+            if role == 'user' and client is not None:
+                event['client'] = FeedbackClientInfo.model_validate(client).model_dump(exclude_none=True)
             db.execute('INSERT INTO events(payload,created) VALUES(?,?)', (json.dumps(event,separators=(',',':')),now))
         return {'id':mid,'duplicate':False}
 
+    @staticmethod
+    def message_clients(db, ids):
+        # Message provenance shares the durable message event transaction. Keep
+        # schema v2 and existing databases unchanged; retries retain first send.
+        result = {}
+        for offset in range(0, len(ids), 100):
+            batch = ids[offset:offset+100]
+            rows = db.execute("SELECT payload FROM events WHERE json_extract(payload,'$.kind')='new_feedback' AND json_extract(payload,'$.messageId') IN ("+','.join('?' for _ in batch)+')', batch)
+            for row in rows:
+                event = json.loads(row['payload'])
+                if 'client' in event:
+                    result[event['messageId']] = event['client']
+        return result
+
     def messages(self, owner, after=0):
+        self.purge_trash(owner)
         with self.admin_devices.transaction() as preferences, self.db() as db:
             notifications = self.mail_notifications(preferences, owner)
             identity = db.execute('SELECT * FROM identities WHERE id=?', (owner,)).fetchone()
             if identity is None:
                 raise FeedbackError('conversation_unavailable',404)
             rows = db.execute('SELECT * FROM messages WHERE owner=? AND id>? ORDER BY id LIMIT 100', (owner,after)).fetchall()
+            trash = self.trash_states(db, owner).get(owner, {})
+            clients = self.message_clients(db, [row['id'] for row in rows if row['role'] == 'user'])
             result = []
             for row in rows:
                 delivery = db.execute('SELECT state,error FROM outbox WHERE message=?', (row['id'],)).fetchone()
                 images = [dict(id=a['id'],mime=a['mime'],data=base64.b64encode(a['data']).decode()) for a in db.execute('SELECT * FROM attachments WHERE message=? ORDER BY id', (row['id'],))]
-                result.append(dict(id=row['id'],role=row['role'],text=row['text'],created=row['created'],images=images,
+                result.append(dict(id=row['id'],role=row['role'],text=row['text'],created=row['created'],images=images,client=clients.get(row['id']),
                                    mailState=delivery['state'] if delivery else ('manual' if notifications else 'disabled') if row['role']=='admin' else None,mailError=delivery['error'] if delivery else None))
                 if sum(len(i['data']) for m in result for i in m['images']) > 9_000_000:
                     break
-        return dict(owner=owner,email=identity['email'],emailVerified=bool(identity['email_verified']),mailConfigured=self.mailer is not None,mailNotifications=notifications,status=identity['status'],messages=result,
+        return dict(owner=owner,email=identity['email'],emailVerified=bool(identity['email_verified']),mailConfigured=self.mailer is not None,mailNotifications=notifications,status=identity['status'],messages=result,trashed=bool(trash),deletedAt=trash.get('deletedAt'),purgeAt=trash.get('purgeAt'),
                     cursor=result[-1]['id'] if result else after,hasMore=bool(rows and rows[-1]['id']> (result[-1]['id'] if result else after)) or len(rows)==100)
 
-    def conversations(self):
+    def conversations(self, include_trash=False):
+        self.purge_trash()
         with self.db() as db:
-            rows = db.execute('''SELECT i.*,MAX(m.id) lastId,MAX(m.created) updated,
+            rows = db.execute('''SELECT i.*,MAX(m.id) lastId,MAX(m.created) updated,MAX(CASE WHEN m.role='user' THEN m.id END) lastUserId,
                 SUM(CASE WHEN m.role='user' AND m.seen=0 THEN 1 ELSE 0 END) unread
                 FROM identities i JOIN messages m ON m.owner=i.id GROUP BY i.id ORDER BY lastId DESC LIMIT 1000''').fetchall()
-            return [dict(row) for row in rows]
+            clients = self.message_clients(db, [row['lastUserId'] for row in rows if row['lastUserId'] is not None])
+            trash = self.trash_states(db)
+            return [dict(row,client=clients.get(row['lastUserId']),trashed=row['id'] in trash,
+                         deletedAt=trash.get(row['id'],{}).get('deletedAt'),purgeAt=trash.get(row['id'],{}).get('purgeAt'))
+                    for row in rows if include_trash or row['id'] not in trash]
+
+    @staticmethod
+    def trash_states(db, owner=None):
+        query = "SELECT payload FROM events WHERE json_extract(payload,'$.kind') IN ('conversation_trashed','conversation_restored')"
+        if owner is not None:
+            query += " AND json_extract(payload,'$.owner')=?"
+        states = {}
+        for row in db.execute(query+' ORDER BY id', (owner,) if owner is not None else ()):
+            event = json.loads(row['payload'])
+            if event['kind'] == 'conversation_trashed':
+                states[event['owner']] = event
+            else:
+                states.pop(event['owner'], None)
+        return states
+
+    def trash_conversation(self, owner, through):
+        self.purge_trash(owner)
+        now = self.clock()
+        with self.db() as db:
+            db.execute('BEGIN IMMEDIATE')
+            latest = db.execute('SELECT MAX(id) FROM messages WHERE owner=?',(owner,)).fetchone()[0]
+            if latest is None:
+                raise FeedbackError('conversation_unavailable',404)
+            if latest > through:
+                raise FeedbackError('conversation_changed',409)
+            existing = self.trash_states(db, owner).get(owner)
+            if existing:
+                return {'trashed':True,'deletedAt':existing['deletedAt'],'purgeAt':existing['purgeAt']}
+            if db.execute("SELECT 1 FROM outbox WHERE message IN (SELECT id FROM messages WHERE owner=?) AND state='sending' AND lease_until>?",(owner,now)).fetchone():
+                raise FeedbackError('conversation_mail_busy',409)
+            db.execute("UPDATE outbox SET state='skipped',body='',error='conversation_trashed',lease_until=0 WHERE message IN (SELECT id FROM messages WHERE owner=?) AND state IN ('pending','failed','sending')",(owner,))
+            event = {'kind':'conversation_trashed','owner':owner,'deletedAt':now,'purgeAt':now+TRASH_RETENTION}
+            db.execute('INSERT INTO events(payload,created) VALUES(?,?)',(json.dumps(event),now))
+        return {'trashed':True,'deletedAt':now,'purgeAt':now+TRASH_RETENTION}
+
+    def restore_conversation(self, owner):
+        self.purge_trash(owner)
+        with self.db() as db:
+            db.execute('BEGIN IMMEDIATE')
+            if not db.execute('SELECT 1 FROM messages WHERE owner=?',(owner,)).fetchone():
+                raise FeedbackError('conversation_unavailable',404)
+            if self.trash_states(db, owner).get(owner):
+                db.execute('INSERT INTO events(payload,created) VALUES(?,?)',
+                    (json.dumps({'kind':'conversation_restored','owner':owner}),self.clock()))
+        return {'trashed':False}
+
+    def purge_trash(self, owner=None):
+        now = self.clock()
+        with self.db() as db:
+            db.execute('BEGIN IMMEDIATE')
+            expired = [key for key,value in self.trash_states(db,owner).items() if value['purgeAt'] <= now]
+            for key in expired:
+                db.execute('DELETE FROM outbox WHERE message IN (SELECT id FROM messages WHERE owner=?)',(key,))
+                db.execute('DELETE FROM attachments WHERE message IN (SELECT id FROM messages WHERE owner=?)',(key,))
+                db.execute('DELETE FROM messages WHERE owner=?',(key,))
+                db.execute("DELETE FROM events WHERE json_extract(payload,'$.owner')=?",(key,))
+                db.execute('INSERT INTO events(payload,created) VALUES(?,?)',
+                    (json.dumps({'kind':'conversation_deleted','owner':key}),now))
+        return {'purged':len(expired)}
 
     @staticmethod
     def mail_notifications(state, owner):
@@ -305,7 +401,10 @@ class FeedbackService:
 
     def mark_read(self, owner, role, through):
         with self.db() as db:
-            db.execute('UPDATE messages SET seen=1 WHERE owner=? AND role=? AND id<=?', (owner,role,through))
+            changed = db.execute('UPDATE messages SET seen=1 WHERE owner=? AND role=? AND id<=? AND seen=0', (owner,role,through)).rowcount
+            if changed:
+                db.execute('INSERT INTO events(payload,created) VALUES(?,?)',
+                    (json.dumps({'kind':'conversation_changed','owner':owner}),self.clock()))
         return {'ok':True}
 
     def unread(self, owner):
@@ -317,6 +416,9 @@ class FeedbackService:
         if status not in ('open','resolved'):
             raise FeedbackError('invalid_status')
         with self.db() as db:
+            db.execute('BEGIN IMMEDIATE')
+            if self.trash_states(db, owner).get(owner):
+                raise FeedbackError('conversation_trashed',409)
             changed = db.execute('UPDATE identities SET status=? WHERE id=?', (status,owner)).rowcount
             if not changed:
                 raise FeedbackError('conversation_unavailable',404)
@@ -334,7 +436,8 @@ class FeedbackService:
                 return None
             last = db.execute('SELECT COALESCE(MAX(highwater),0) FROM checks').fetchone()[0]
             high = db.execute("SELECT COALESCE(MAX(id),0) FROM messages WHERE role='user'").fetchone()[0]
-            rows = db.execute("SELECT owner,COUNT(*) count FROM messages WHERE role='user' AND seen=0 AND id>? AND id<=? GROUP BY owner", (last,high)).fetchall()
+            trashed = self.trash_states(db)
+            rows = [row for row in db.execute("SELECT owner,COUNT(*) count FROM messages WHERE role='user' AND seen=0 AND id>? AND id<=? GROUP BY owner", (last,high)) if row['owner'] not in trashed]
             db.execute('INSERT INTO checks VALUES(?,?)', (day,high))
             if not rows:
                 return None
@@ -376,6 +479,8 @@ class FeedbackService:
     def retry_mail(self, mid):
         with self.admin_devices.transaction() as preferences, self.db() as db:
             message = db.execute('SELECT owner FROM messages WHERE id=?', (mid,)).fetchone()
+            if message and self.trash_states(db,message['owner']).get(message['owner']):
+                raise FeedbackError('conversation_trashed',409)
             if message and not self.mail_notifications(preferences, message['owner']):
                 raise FeedbackError('mail_notifications_disabled',409)
             changed = db.execute("UPDATE outbox SET state='pending',attempts=0,next_at=?,error=NULL WHERE message=? AND state='failed'", (self.clock(),mid)).rowcount
@@ -407,6 +512,12 @@ class ImageInput(Input):
     data: str = Field(max_length=2_666_668)
 
 
+class FeedbackClientInfo(Input):
+    source: Literal['web','desktop']
+    version: str | None = Field(default=None, max_length=64, pattern=r'^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$')
+    packageKind: Literal['installer','portable','source'] | None = None
+
+
 class MessageInput(Input):
     text: str = Field(default='',max_length=12000)
     images: list[ImageInput] = Field(default_factory=list,max_length=4)
@@ -421,9 +532,18 @@ class StatusInput(Input):
     status: str = Field(pattern=r'^(open|resolved)$')
 
 
+class TrashInput(Input):
+    through: int = Field(ge=1)
+
+
 class ManagerPairing(Input):
     code: str = Field(pattern=r'^[0-9]{8}$')
     name: str = Field(default='安卓管理端',max_length=40)
+
+class AccountFeedbackInput(Input):
+    email:str=Field(max_length=254)
+    operation:Literal['status','health','unread','messages','send','read','setMailNotifications']
+    args:dict=Field(default_factory=dict,max_length=12)
 
 
 def create_feedback_router(service):
@@ -445,9 +565,59 @@ def create_feedback_router(service):
             raise FeedbackError('admin_unauthorized' if admin else 'feedback_unauthorized',401)
         return service.authenticate(header[7:],admin)
 
+    def operations(request):
+        auth(request,True)
+        operations=getattr(service,'web_operations',None)
+        if operations is None or not callable(getattr(operations,'snapshot',None)):
+            raise FeedbackError('web_operations_unavailable',503)
+        return operations
+
+    @router.get('/admin/web/status')
+    def web_status(request:Request):return operations(request).snapshot()
+
+    @router.get('/admin/web/requests')
+    def web_requests(request:Request,state:Literal['pending','approved','declined']='pending',before:UUID|None=None):
+        return operations(request).requests(state,str(before) if before else None)
+
+    @router.post('/admin/web/decision')
+    def web_decision(request:Request,body:Decision):return operations(request).decision(body)
+
+    @router.post('/admin/web/quota')
+    def web_quota(request:Request,body:QuotaChange):return operations(request).quota(body)
+
     @router.get('/health')
     def health():
-        return dict(schema='ptb-feedback/2',mailConfigured=service.mailer is not None,allowUnverified=service.allow_unverified,dailyHour=service.daily_hour,timezone='Asia/Shanghai',instantNotifications=True,adminPairing=True)
+        return dict(schema='ptb-feedback/2',mailConfigured=service.mailer is not None,allowUnverified=service.allow_unverified,dailyHour=service.daily_hour,timezone='Asia/Shanghai',instantNotifications=True,adminPairing=True,conversationTrash=True,trashRetentionDays=30)
+
+    @router.post('/internal/web-operation')
+    def account_feedback(body:AccountFeedbackInput,request:Request):
+        gateway=getattr(service,'web_operations',None)
+        expected=getattr(gateway,'key',None)
+        if request.client is None or request.client.host not in ('127.0.0.1','::1') or not expected or not hmac.compare_digest(request.headers.get('authorization','').encode(),('Bearer '+expected).encode()):
+            raise FeedbackError('feedback_unauthorized',401)
+        if body.operation=='health':return health()
+        email=email_address(body.email)
+        with service.db() as db:
+            db.execute('BEGIN IMMEDIATE')
+            row=db.execute('SELECT id FROM identities WHERE email=? AND email_verified=1',(email,)).fetchone()
+            if row is None and body.operation=='unread':return {'unread':0}
+            owner=row['id'] if row else secrets.token_urlsafe(18)
+            if row is None:db.execute('INSERT INTO identities(id,email,email_verified,created) VALUES(?,?,1,?)',(owner,email,service.clock()))
+        if body.operation=='status':return dict(connected=True,verified=True,owner=owner,email=email,baseUrl='/api/v1/web-feedback',admin=False,platform='web')
+        if body.operation=='unread':return service.unread(owner)
+        if body.operation=='messages':
+            after=body.args.get('after',0)
+            if type(after)!=int or after<0:raise FeedbackError('invalid_request')
+            return service.messages(owner,after)
+        def parsed(model):
+            try:return model.model_validate(body.args)
+            except ValidationError:raise FeedbackError('invalid_message' if body.operation=='send' else 'invalid_request',422) from None
+        if body.operation=='send':
+            message=parsed(MessageInput)
+            return service.send(owner,'user',message.text,[x.model_dump() for x in message.images],message.requestId,{'source':'web'})
+        if body.operation=='read':return service.mark_read(owner,'admin',parsed(ReadInput).through)
+        if body.operation=='setMailNotifications':return service.set_mail_notifications(owner,parsed(MailPreferences).mailNotifications)
+        raise FeedbackError('invalid_request')
 
     @router.post('/identity')
     def device_start(body: DeviceStart):
@@ -476,16 +646,30 @@ def create_feedback_router(service):
 
     @router.post('/messages')
     def send(request: Request, body: MessageInput):
-        return service.send(auth(request),'user',body.text,[x.model_dump() for x in body.images],body.requestId)
+        client = None
+        source = request.headers.get('x-ptb-feedback-source')
+        if source is not None:
+            try:
+                client = FeedbackClientInfo(source=source,
+                    version=request.headers.get('x-ptb-feedback-version'),
+                    packageKind=request.headers.get('x-ptb-feedback-package')).model_dump(exclude_none=True)
+            except ValidationError:
+                raise FeedbackError('invalid_client') from None
+        if client is None:
+            if request.headers.get('user-agent','').startswith('PhoneticToolbox-Feedback/'):
+                client = {'source':'desktop'}
+            elif request.headers.get('origin'):
+                client = {'source':'web'}
+        return service.send(auth(request),'user',body.text,[x.model_dump() for x in body.images],body.requestId,client)
 
     @router.post('/read')
     def read(request: Request, body: ReadInput):
         return service.mark_read(auth(request),'admin',body.through)
 
     @router.get('/admin/conversations')
-    def admin_conversations(request: Request):
+    def admin_conversations(request: Request, includeTrash: bool = False):
         auth(request,True)
-        return {'conversations':service.conversations()}
+        return {'conversations':service.conversations(includeTrash)}
 
     @router.post('/admin/devices/pairing')
     def pairing(request: Request):
@@ -527,6 +711,16 @@ def create_feedback_router(service):
     def status(owner: str,request: Request,body: StatusInput):
         auth(request,True)
         return service.set_status(owner,body.status)
+
+    @router.post('/admin/conversations/{owner}/trash')
+    def trash(owner: str,request: Request,body: TrashInput):
+        auth(request,True)
+        return service.trash_conversation(owner,body.through)
+
+    @router.post('/admin/conversations/{owner}/restore')
+    def restore(owner: str,request: Request):
+        auth(request,True)
+        return service.restore_conversation(owner)
 
     @router.post('/admin/mail/{mid}/retry')
     def retry(mid: int,request: Request):
@@ -591,8 +785,12 @@ def configure_feedback(app, service=None):
 
 
 async def maintain_feedback(service):
+    last_purge = None
     while True:
         try:
+            if last_purge is None or time.monotonic() - last_purge >= 60:
+                await asyncio.to_thread(service.purge_trash)
+                last_purge = time.monotonic()
             await asyncio.to_thread(service.daily_check)
             await asyncio.to_thread(service.deliver_one)
         except Exception:

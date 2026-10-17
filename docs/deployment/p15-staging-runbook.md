@@ -1,6 +1,18 @@
 # P15-STAGING 部署、排空与回滚手册
 
-2026-10-16：本手册对应已有部署工具，其1 GB/3天探针仍属历史策略。上线前须按[当前计划](../plans/2026-10-16-web-launch.md)补齐注册、工作区30分钟、MFA关闭及浏览器能力验收；本轮未执行部署、DDL或运行恢复清理。
+## 2026-10-17 公开测试入口
+
+井井本轮已明确授权准备并上线供本人测试。当前/app/使用统一`ptb_api.server`和独立`ptb-web-api.service`，API回环18775；专用PostgreSQL使用`ptb-web-postgres.service`、Unix socket与18777，新库`ptb_web_public`和私有状态根`/var/lib/ptb-web`。新库显式应用001–006、008–011，未迁移原私有内测库，007不启用。下文旧P15域名占位、三天策略和部署未执行记录保留其历史范围，不能当作当前公开实例配置。
+
+API与PG为既有专用用户的持久user服务，依赖现有linger。公开源为`https://www.phonetictoolbox.com`，Cookie使用Secure/HttpOnly，Host/Origin与CSRF继续检查。代理只加入现有HTTPS站点，反馈18766继续独立；公网`/api/v1/_ops/`返回404，管理器通过既有管理员认证后的反馈桥转发回环API。声道iframe允许同源嵌套，内联importmap仅按实际内容SHA-256授权，不放开任意内联脚本。
+
+科学准入回执必须同时绑定LPC、EGG、参数估计及录音四项真实通过报告。原生检查通过后仍须将报告路径与SHA写入对应operation，不能仅保留报告或修改success；本轮曾漏接录音项，已按真实六组报告补齐并另行检查公网增益通路。
+
+当前发布身份、逐文件清单、运行时及科学回执由`/var/lib/ptb-web/reports/active-release.json`定位。原官网配置保存在`reports/routes-before.conf`，开启大入口前的首页保存在`reports/website-index-before.html`，反馈程序/私有配置及一致性SQLite备份在`reports/feedback-bridge-before/`。这些目录为私有恢复材料，不进入Git或静态网站。
+
+需要撤下时，先核对当前配置/首页与本轮回执，关闭新增/app/与API路由并恢复入口，再停止本轮API服务。保留研究库、账号设置及存储，不能用旧数据库快照覆盖新写入。恢复配置后先`nginx -t`再reload，核对首页、下载和反馈健康；若同期站点内容已变化，按差异撤下入口，不整份覆盖。数据删除需按井井届时指定的范围执行。详细本轮结果见[公开测试验收](../testing/web-launch-foundation.md#2026-10-17-公开测试部署)。
+
+2026-10-16：本手册对应已有部署工具，其1 GB/3天探针仍属历史策略。上线前须按[当前计划](../plans/2026-10-16-web-launch.md)补齐注册、工作区30分钟、MFA关闭、共用网页适配及服务器独立科学任务验收；浏览器算法迁移与外接Windows/Linux节点不作为首期依赖。本轮没有生产部署或现存库变更；新的008/009脚本仅在批准的新隔离测试库执行，详见[首批验收](../testing/web-launch-foundation.md)。
 
 2026-09-27。**可审阅准备件，未上线。** [专项计划](../plans/2026-09-27-p15-staging.md) · [验收/阻断](../testing/p15-staging-report.md) · [宿主决策](../decisions/p15-staging-host.md) · [开放候选](p15-capabilities.md)。
 
@@ -14,7 +26,7 @@
 | 域名 | 待指定 staging 域名，`REPLACE_DOMAIN` 不可直接启动；DNS 当前值与所有权待只读核对 |
 | 专用 Unix 用户 | 建议 `ptb-staging`，home `/var/lib/ptb-staging/home`，三服务同 UID，同一 user bus/cgroup/挂载命名空间；创建账号、linger 和资源委托需要目标授权 |
 | 应用目录 | `/srv/ptb-staging/releases/<release-id>`，固定绝对路径，旧发行目录保留；应用源码/venv/assets 版本同清单，不复制 Windows venv |
-| 配置 | `/etc/ptb-staging/config.json` 公共配置；`private.json` 仅 dsn/signing_key/storage_instance_id，专用用户所有、0600，父目录限制遍历；不进 Git/argv/日志 |
+| 配置 | `/etc/ptb-staging/config.json` 公共配置；`private.json` 包含 dsn/signing_key/storage_instance_id，启用注册时另含 smtp，专用用户所有、0600，父目录限制遍历；不进 Git/argv/日志 |
 | 控制文件 | `/var/lib/ptb-staging/control.json`，初始 maintenance，原子替换 open/drain/maintenance。必须 root 或任务专用用户可写，路径不在资产根 |
 | 内部监听 | API `127.0.0.1:18765`，先查端口占用；PostgreSQL 使用已有回环或 Unix socket，不开放公网 5432，不把 node 接到 DB |
 | 目标数据库 | 建议新专用 `ptb_staging_20260927`、专用最小运行角色，实例/PGDATA/端口及现有库清单待核实；建库/角色/DDL 均未执行 |
@@ -24,6 +36,8 @@
 | 字体/原生 | 中文 Noto Sans SC、拉丁 DejaVu Sans、IPA Doulos SIL 的文件 hash；M01 Linux REAPER 固定构建与 hash。字体预检针对执行环境。未配置 MFA/视觉/声道模型时能力关闭 |
 
 现有恢复能力只确认：本机 Git 与历史发行/测试证据保留，P07 事务在 COMMIT 前可回滚，运行库能恢复有效预留和任务租约。**没有确认云端自动快照、PITR、WAL 归档或可恢复的配套存储副本，源码/Git/元数据 hash 不是数据备份。** 先只读列出目标既有策略、保留期和最近恢复演练。确需新增时提出一次性 DB＋对应资产的范围/空间/一致性窗口/加密/3 天政策处理，待单独确认；本任务不创建全量备份。
+
+新版可在公共配置中显式加入 `enable_web_workspaces: true` 和 `enable_registration: true`。公开注册要求同时启用临时工作区，API/worker/cleaner读取同一配置；启动只检查schema，不自动执行008/009。SMTP配置由已有独立适配器读取，仅放私有文件；本轮未创建或修改真实凭据。旧探针的3天断言不能用于验收新工作区，部署前须补新策略的真实站点检查。
 
 ## 2. 准备件与本地命令
 
@@ -125,3 +139,9 @@ systemctl --user status ptb-staging@api.service ptb-staging@worker.service ptb-s
 最小后续方案：由 C/P11 先完成 B 的 binding 和受限 adapter；在独立具有 systemd user manager/cgroup 委托的已授权 Linux 环境验证，或另审对 NInfer 的精确系统改动及仅该发行版的维护窗口。本任务没有执行此变更。Windows 原生只在有额外验证价值时单列，当前未建第二套客户端。
 
 实验室机器将使用独立注册、自己的凭据、资源/版本/字体证据；不复制个人节点身份。仅出站 HTTPS，服务器不反向连实验室、不暴露 DB。断网注入用本任务客户端的 transport hook/专用 TLS relay，不能改主机网络；断进程只用所持 Popen/精确 PID。四轴报告分别为个人 WSL、个人 Windows、云端回退、实验室 Linux，最后一项当前待验。
+
+## 2核私测主机的网页CPU保护
+
+2026-10-17明确授权。只在核实可用CPU为0、1后安装本目录对应的ptbscience.slice、ptb-p11-.service.d/50-web-reserve.conf和ptb-web-api.service.d/50-web-priority.conf到部署用户的systemd目录。所有P11服务共享CPUQuota=100%并绑定CPU 1，API权重500、CPUQuota=200%。API配额包含自身声道子进程，声道子进程另以PTB_WEB_COMPUTE_CPUS=1在原生线程启动前绑定CPU 1。不要用API两核配额推断物理合成可用两核。
+
+配置只调整调度，不改模型、算法、采样率、默认值或队列一槽。核对实际cgroup cpu.max、transient服务Slice和/proc线程亲和性，持久文件与systemctl运行属性都要验证；CPU总量是两核200%，100%配额相当于一核。其他核数须重新制定CPU集合，不盲用CPU 1。保留旧配置回执，在无活动用户任务时切换，旧冻结服务/运行库与回退保留。

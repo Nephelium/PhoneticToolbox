@@ -27,8 +27,12 @@ def main():
         return
     service=FeedbackService(config['database'],secret=config['secret'],admin_token=config['adminToken'],
                             mailer=mailer,daily_hour=config.get('dailyHour',9),allow_unverified=config.get('allowUnverified',False))
+    if config.get('webOperations'):
+        from ptb_api.feedback_web_ops import WebOpsGateway
+        service.web_operations=WebOpsGateway(config['webOperations'])
     import uvicorn
-    uvicorn.run(create_feedback_app(service),host='127.0.0.1',port=config.get('port',18766),access_log=False,log_level='warning',proxy_headers=False)
+    uvicorn.run(create_feedback_app(service),host='127.0.0.1',port=config.get('port',18766),access_log=False,log_level='warning',proxy_headers=False,
+                ssl_certfile=config.get('tls_certfile'),ssl_keyfile=config.get('tls_keyfile'))
 
 
 if __name__=='__main__':

@@ -1,3 +1,4 @@
+import {waitForTaskPoll} from './task-poll.ts';
 import type {ResearchFile,JobView} from './research.ts';
 import type {M08Port,Result,Job,Config,ExportReport} from '../modules/pitch-manipulation/port.ts';
 import {m08Archive} from './m08Archive.ts';
@@ -26,7 +27,7 @@ export function m08Port(transport:M08Transport):M08Port {
   while(['queued','running','cancel_requested'].includes(job.state)){
    if(signal?.aborted){await transport.cancel(job.id);throw new DOMException('操作已取消','AbortError');}
    if(Date.now()>until)throw Error('任务仍在处理，可在任务列表查询或取消。');
-   await new Promise(resolve=>setTimeout(resolve,150));job=await transport.job(job.id);
+   await waitForTaskPoll(job.state,signal);if(signal?.aborted)continue;job=await transport.job(job.id);
   }
   if(job.state!=='succeeded')throw Error(job.error_code??'变速变调任务未完成');return job;
  }

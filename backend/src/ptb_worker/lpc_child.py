@@ -13,9 +13,9 @@ OUTPUT_BYTES=8_000_000
 def digest(raw):return hashlib.sha256(raw).hexdigest()
 
 
-def prepare(raw, config, input_name='audio.wav', textgrid=None):
+def prepare(raw, config, input_name='audio.wav', textgrid=None,*,runtime_check=None):
     from .lpc_runtime import fingerprint
-    runtime=fingerprint()
+    runtime=(runtime_check or fingerprint)()
     import numpy as np
     from scipy.io import wavfile
     from phonetic_core.lpc import LPCConfig, MAX_ROI_SAMPLES, compute_spectrum, mono_samples, extract_label

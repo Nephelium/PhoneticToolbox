@@ -8,7 +8,7 @@ export function framePitch(frames,seconds){
   let u=a===b?0:Math.max(0,Math.min(1,(seconds-a.start)/(b.start-a.start)));u=u*u*(3-2*u);
   return left.silent?left.f0:left.f0*(1-u)+(right.silent?left.f0:right.f0)*u;
 }
-export function setupKeyframes({initialFrames=[],initialCurve=[],getPose,applyPose,post,setBusy,isReady,isSilent,keepVowel,viewer}){
+export function setupKeyframes({initialFrames=[],initialCurve=[],getPose,applyPose,post,setBusy,isReady,isSilent,keepVowel,viewer,maxDuration=12}){
   const $=id=>document.getElementById(id);let frames=initialFrames,busy=false,generation=0,selected=-1,editing=-1,saveQueue=Promise.resolve(),saveVersion=0,savedVersion=0;
   let clearedSnapshot=null,dragIndex=-1,dropIndex=-1,dragY=0,dragScroll=0,suppressClick=false;
   const list=$('keyframeList');
@@ -94,14 +94,14 @@ export function setupKeyframes({initialFrames=[],initialCurve=[],getPose,applyPo
     });
     const total=Math.round(frames.reduce((s,f)=>s+f.duration,0)*48000)/48000;
     $('frameCount').textContent=frames.length;$('transportStatus').textContent=frames.length?`${frames.length} 个姿势 · ${total.toFixed(2)} 秒`:'保存姿势后播放';
-    $('captureFrame').disabled=busy||editing>=0;$('captureSilence').disabled=busy||editing>=0;$('captureAspiration').disabled=busy||editing>=0;$('playFrames').disabled=busy||editing>=0||isSilent||!frames.some(f=>!f.aspiration)||total>12;$('stopFrames').disabled=!busy;
+    $('captureFrame').disabled=busy||editing>=0;$('captureSilence').disabled=busy||editing>=0;$('captureAspiration').disabled=busy||editing>=0;$('playFrames').disabled=busy||editing>=0||isSilent||!frames.some(f=>!f.aspiration)||total>maxDuration;$('stopFrames').disabled=!busy;
     for(const id of ['importFrames','exportFrames'])$(id).disabled=busy||editing>=0;
     $('clearFrames').disabled=busy||editing>=0||!frames.length;
     $('undoClearFrames').hidden=!clearedSnapshot;$('undoClearFrames').disabled=busy||editing>=0;
-    $('exportVideo').disabled=busy||editing>=0||!frames.some(f=>!f.aspiration)||total>12;
+    $('exportVideo').disabled=busy||editing>=0||!frames.some(f=>!f.aspiration)||total>maxDuration;
     $('keyframeList').scrollTop=scroll;
     pitch.draw();
-    if(!busy)text(editing>=0?'正在编辑 '+frameName(frames[editing])+' · 调整后点击此卡片的保存':frames.length?`${frames.length} 个姿势 · ${total.toFixed(2)} 秒${total>12?'，请缩短到 12 秒以内':''}`:'先摆出姿势，再保存；一个关键帧即可播放或保存视频。');
+    if(!busy)text(editing>=0?'正在编辑 '+frameName(frames[editing])+' · 调整后点击此卡片的保存':frames.length?`${frames.length} 个姿势 · ${total.toFixed(2)} 秒${total>maxDuration?`，请缩短到 ${maxDuration} 秒以内`:''}`:'先摆出姿势，再保存；一个关键帧即可播放或保存视频。');
   }
   function lock(value){busy=value;setBusy(value);$('motionHud').hidden=!value;render();}
   function capture(silent=false){if(!isReady()){text('正在更新构形，稍后再保存。');return;}const pose=getPose();frames.push({...pose,params:[...pose.params],duration:.2,...(silent?{silent:true,name:'静音'}:{})});selected=frames.length-1;save();render();$('keyframeList').lastElementChild?.scrollIntoView({block:'nearest'});}
@@ -164,6 +164,7 @@ export function setupKeyframes({initialFrames=[],initialCurve=[],getPose,applyPo
       };await tick();
     }catch(e){if(run===generation){lock(false);text('生成失败：'+e.message);}}
   };
+  if(maxDuration!==12){const help=$('keyframeList').parentElement.querySelector('p.minor');if(help)help.textContent=help.textContent.replace('单次播放总计不超过 12 秒',`单次播放和视频导出总计不超过 ${maxDuration} 秒`);}
   document.addEventListener('pitch-layout',render);
   render();return {isBusy:()=>busy};
 }

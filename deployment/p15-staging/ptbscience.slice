@@ -1,0 +1,7 @@
+[Unit]
+Description=PhoneticToolbox shared scientific CPU budget
+
+[Slice]
+CPUAccounting=yes
+CPUQuota=100%
+CPUWeight=25

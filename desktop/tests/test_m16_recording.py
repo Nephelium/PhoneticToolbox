@@ -33,6 +33,49 @@ def test_raw_gain_not_baked_and_cross_segments(tmp_path):
     p.close()
 
 
+def test_preview_cache_rechecks_versions_files_and_view(tmp_path,monkeypatch):
+    import os
+    import ptb_desktop.recording.service as module
+    p,c,x,r=recorded(tmp_path)
+    service=RecordingService();service.project=p;service.commit_capture(copy.deepcopy(r))
+    original=module.iter_audio;calls=[]
+    def scanned(*args,**kwargs):calls.append(1);return original(*args,**kwargs)
+    monkeypatch.setattr(module,'iter_audio',scanned)
+    body=dict(op='preview',id=r['id'],width=300,spectrum=True,channel=0)
+    try:
+        expected=service.dispatch(body);assert len(calls)==1
+        actual=service.dispatch(body);assert actual==expected and len(calls)==1
+        actual['wave'][0][0][0]=999
+        assert service.dispatch(body)==expected
+        assert service.preview_cache[2]<=4_000_000
+        for change in ({'channel':1},{'width':320},{'end':5000},{'spectrum':False}):
+            previous=len(calls);service.dispatch({**body,**change});assert len(calls)==previous+1
+        service.dispatch(body);before=len(calls)
+        span=r['spans'][0];path=p.root/span['file'];stat=path.stat()
+        with path.open('r+b') as stream:stream.write(np.full((1,2),.9,dtype='<f4').tobytes())
+        os.utime(path,ns=(stat.st_atime_ns,stat.st_mtime_ns+1_000_000_000))
+        assert service.dispatch(body)!=expected and len(calls)==before+1
+        service.dispatch(dict(op='edit',id=r['id'],action='keep',start=100,end=9000))
+        assert service.dispatch(body)['frames']==8900
+        path.write_bytes(b'bad')
+        with pytest.raises(ValueError,match='大小'):service.dispatch(body)
+    finally:service.close()
+    assert service.preview_cache is None
+
+
+def test_preview_over_cache_budget_keeps_streaming_result(tmp_path,monkeypatch):
+    import ptb_desktop.recording.service as module
+    p,c,x,r=recorded(tmp_path);service=RecordingService();service.project=p;service.commit_capture(copy.deepcopy(r))
+    body=dict(op='preview',id=r['id'],width=300,spectrum=True,channel=0)
+    try:
+        expected=service.dispatch(body)
+        monkeypatch.setattr(module,'MAX_PREVIEW_CACHE_BYTES',1)
+        service.preview_cache=None
+        assert service.dispatch(body)==expected and service.preview_cache is None
+        assert service.dispatch(body)==expected and service.preview_cache is None
+    finally:service.close()
+
+
 def test_queue_overflow_cannot_report_success(tmp_path):
     p=Project(tmp_path/'p',True);c=Capture(p.root,config(),queue_blocks=1)
     c.submit(signal(100));c.submit(signal(100));assert c.error and '满' in c.error

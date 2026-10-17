@@ -50,6 +50,13 @@ class Storage:
         self.min_free_bytes = min_free_bytes
         self.ready = False
         self.files = None
+        self.workspaces = None
+
+    def project_deadline(self, conn, owner, project, deadline=None):
+        if self.workspaces is None:
+            return deadline
+        lease = self.workspaces.project_deadline(conn, owner, project)
+        return min(deadline, lease) if deadline is not None else lease
 
     def _path(self, asset_id):
         # No user filename, extension, directory, storage URL or shell input.
@@ -91,6 +98,8 @@ class Storage:
                     state = conn.execute('SELECT * FROM ptb_storage.state WHERE singleton').fetchone()
                     if not state or state['version'] != 1 or str(state['instance_id']) != instance:
                         raise StorageError('storage_instance_mismatch', 503)
+                    if self.workspaces is not None:
+                        self.workspaces.expire_quota(conn)
                     yield conn
             finally:
                 if os.name == 'nt':
@@ -154,11 +163,15 @@ class Storage:
             used, reserved = (row['used_bytes'], row['reserved_bytes']) if row else (0, 0)
             state = conn.execute('SELECT * FROM ptb_storage.state').fetchone()
             version = state.get('policy_version', LEGACY_POLICY_VERSION)
-            quota = row['quota_bytes'] if row else (QUOTA_BYTES if version == POLICY_VERSION else LEGACY_QUOTA_BYTES)
+            quota = row['quota_bytes'] if row else (self.workspaces.default_quota(conn) if self.workspaces else QUOTA_BYTES if version == POLICY_VERSION else LEGACY_QUOTA_BYTES)
+            web_status = {}
+            if self.workspaces is not None:
+                total_reserved = conn.execute('SELECT coalesce(sum(reserved_bytes),0) AS n FROM ptb_storage.quota_accounts').fetchone()['n']
+                web_status['server_space_low'] = shutil.disk_usage(self.root).free-total_reserved < self.min_free_bytes+1_000_000_000
             return dict(quota_bytes=quota, used_bytes=used, reserved_bytes=reserved,
                         available_bytes=max(0, quota-used-reserved), frozen=state['frozen'], ready=self.ready,
                         policy_version=version, retention_seconds=retention_seconds(version),
-                        over_quota=used+reserved>quota)
+                        over_quota=used+reserved>quota, **web_status)
 
     def list(self, owner, project_id, order='expires'):
         column = {'expires': 'expires_at,id', 'size': 'size_bytes DESC,id', 'created': 'created_at DESC,id'}[order]
@@ -172,6 +185,7 @@ class Storage:
             return self._create(conn, owner, body)
 
     def _create(self, conn, owner, body, *, kind="input", deadline=None, on_created=None):
+        deadline = self.project_deadline(conn, owner, body.project_id, deadline)
         payload = body.model_dump(mode='json', exclude={'idempotency_key'})
         if kind != 'input':
             payload['kind'] = kind
@@ -189,12 +203,15 @@ class Storage:
         if conn.execute('SELECT count(*) AS n FROM ptb_storage.assets WHERE owner_id=%s', (owner,)).fetchone()['n'] >= 10000:
             raise StorageError('asset_limit_reached')
         budget = body.expected_bytes or 0
+        if self.workspaces is not None and kind == 'input' and budget > self.workspaces.UPLOAD_LIMIT:
+            raise StorageError('upload_size_limit', 413)
         self._disk_budget(conn, budget)
         now, asset_id = self._now(conn), uuid4()
         with conn.transaction():
-            conn.execute('INSERT INTO ptb_storage.quota_accounts(owner_id) VALUES(%s) ON CONFLICT DO NOTHING', (owner,))
+            conn.execute('INSERT INTO ptb_storage.quota_accounts(owner_id,quota_bytes) VALUES(%s,%s) ON CONFLICT DO NOTHING',
+                         (owner, self.workspaces.default_quota(conn) if self.workspaces else QUOTA_BYTES))
             q = conn.execute('SELECT * FROM ptb_storage.quota_accounts WHERE owner_id=%s FOR UPDATE', (owner,)).fetchone()
-            reserve(q['used_bytes'], q['reserved_bytes'], budget)
+            reserve(q['used_bytes'], q['reserved_bytes'], budget, q['quota_bytes'])
             conn.execute('UPDATE ptb_storage.quota_accounts SET reserved_bytes=reserved_bytes+%s WHERE owner_id=%s', (budget, owner))
             conn.execute("INSERT INTO ptb_storage.assets(id,owner_id,project_id,name,state,idempotency_key,request_hash,expected_bytes,reserved_bytes,created_at,expires_at) VALUES(%s,%s,%s,%s,'uploading',%s,%s,%s,%s,%s,%s)",
                          (asset_id, owner, body.project_id, body.name, body.idempotency_key, digest, body.expected_bytes, budget, now, min(now+TEMP_SECONDS, deadline) if deadline else now+TEMP_SECONDS))
@@ -218,6 +235,7 @@ class Storage:
         if not 0 < len(data) <= CHUNK_BYTES or type(offset) is not int or offset < 0:
             raise StorageError('invalid_chunk', 422)
         self._writable(conn)
+        self.project_deadline(conn, owner, self._row(conn, owner, asset_id)['project_id'])
         row = self._sync(conn, self._row(conn, owner, asset_id))
         if row['state'] != 'uploading' or row['expires_at'] <= self._now(conn):
             raise StorageError('upload_closed', 410)
@@ -230,13 +248,17 @@ class Storage:
             raise StorageError('chunk_conflict')
         if offset != row['size_bytes']:
             raise StorageError('offset_conflict')
+        if self.workspaces is not None and row['kind'] == 'input' and offset+len(data) > self.workspaces.UPLOAD_LIMIT:
+            raise StorageError('upload_size_limit', 413)
         if row['expected_bytes'] is not None and offset+len(data) > row['expected_bytes']:
             raise StorageError('declared_size_exceeded', 413)
         extra = max(0, len(data)-row['reserved_bytes'])
         self._disk_budget(conn, extra)
         with conn.transaction():
             q = conn.execute('SELECT * FROM ptb_storage.quota_accounts WHERE owner_id=%s FOR UPDATE', (owner,)).fetchone()
-            reserve(q['used_bytes'], q['reserved_bytes'], extra)
+            # Already accepted reservations may settle after an administrator
+            # lowers a limit; additional bytes always require fresh capacity.
+            if extra:reserve(q['used_bytes'], q['reserved_bytes'], extra, q['quota_bytes'])
             conn.execute('UPDATE ptb_storage.assets SET reserved_bytes=reserved_bytes+%s WHERE id=%s', (extra, asset_id))
             conn.execute('UPDATE ptb_storage.quota_accounts SET reserved_bytes=reserved_bytes+%s WHERE owner_id=%s', (extra, owner))
         try:
@@ -257,6 +279,7 @@ class Storage:
             if self._row(conn, owner, asset_id)["kind"] != "input":
                 raise StorageError("worker_owned_asset", 403)
             self._writable(conn)
+            self.project_deadline(conn, owner, self._row(conn, owner, asset_id)['project_id'])
             row = self._sync(conn, self._row(conn, owner, asset_id))
             if row['state'] == 'ready':
                 if expected_hash is not None and row['sha256'] != expected_hash:
@@ -281,13 +304,14 @@ class Storage:
             with conn.transaction():
                 conn.execute('UPDATE ptb_storage.quota_accounts SET reserved_bytes=reserved_bytes-%s WHERE owner_id=%s', (row['reserved_bytes'], owner))
                 conn.execute("UPDATE ptb_storage.assets SET state='ready',reserved_bytes=0,sha256=%s,expires_at=%s,policy_version=%s WHERE id=%s",
-                             (computed_hash, expiry(now), POLICY_VERSION, asset_id))
+                             (computed_hash, self.project_deadline(conn, owner, row['project_id'], expiry(now)), POLICY_VERSION, asset_id))
             return public_asset(self._row(conn, owner, asset_id))
 
     def _readable(self, conn, owner, asset_id):
         if not self.ready:
             raise StorageError('storage_recovery_required', 503)
         row = self._row(conn, owner, asset_id)
+        self.project_deadline(conn, owner, row['project_id'])
         if row['state'] != 'ready' or row['expires_at'] <= self._now(conn):
             raise StorageError('asset_expired' if row['expires_at'] <= self._now(conn) else 'asset_unavailable', 410)
         path = self._path(asset_id)
@@ -346,6 +370,8 @@ class Storage:
     def recover(self):
         """Called before downloads; unknown files freeze writes instead of disappearing."""
         self.ready = False
+        if self.workspaces is not None:
+            self.workspaces.cleanup()
         with self._locked() as conn:
             conn.execute("UPDATE ptb_storage.state SET frozen=true,reason='recovering'")
             if self.files is not None:
@@ -372,6 +398,8 @@ class Storage:
             self.ready = True
 
     def cleanup(self):
+        if self.workspaces is not None:
+            self.workspaces.cleanup()
         with self._locked() as conn:
             if self.files is not None:
                 self.files.reconcile(conn)

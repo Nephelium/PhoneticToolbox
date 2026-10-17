@@ -1,0 +1,20 @@
+[Unit]
+Description=PhoneticToolbox dedicated web PostgreSQL
+
+[Service]
+Type=simple
+ExecStart=/usr/lib/postgresql/16/bin/postgres -D /var/lib/ptb-web/pgdata -k /var/lib/ptb-web/pgsocket -p 18777 -c listen_addresses= -c unix_socket_permissions=0700 -c shared_buffers=64MB -c max_connections=48
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=60
+KillSignal=SIGINT
+MemoryMax=384M
+CPUQuota=50%
+TasksMax=64
+LimitCORE=0
+UMask=0077
+StandardOutput=null
+StandardError=journal
+
+[Install]
+WantedBy=default.target

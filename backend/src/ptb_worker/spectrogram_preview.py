@@ -12,6 +12,7 @@ import queue
 import subprocess
 import sys
 import threading
+from .preview_cache import memoized_preview
 
 MAX_BYTES=64_000_000
 _slot=threading.BoundedSemaphore(1)
@@ -28,6 +29,7 @@ def preview_slot():
     finally:_slot.release()
 
 
+@memoized_preview('spectrogram')
 def render(payload,*,channel,start,end,width=800,timeout=20):
     if len(payload)>MAX_BYTES:raise PreviewError('preview_too_large',413)
     if sys.platform=='linux':

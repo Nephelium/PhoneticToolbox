@@ -2,6 +2,8 @@
 
 phonetic_core 是桌面与服务端共享的科学包。输入为明确模型、数组和配置，输出为科学结果及必要元数据，外部能力通过 ports 注入。约束见 [AGENTS.md](AGENTS.md)，跨进程关系见[总架构](../../ARCHITECTURE.md)。
 
+原音系读取/归纳/文档渲染、LPC与Klatt生成/合成也由浏览器运行原代码。Pandas只在旧表格读取、DataFrame生成或对应平滑真正调用时导入，类型注解使用前向引用，数组计算与缺失值语义保持；纯生成/合成不因导入分析模型而加载整套Pandas。浏览器绑定、输入预算与字体由外层固定执行器负责。
+
 ## 源码分工
 
 | src/phonetic_core 下的位置 | 责任 |
@@ -15,6 +17,7 @@ phonetic_core 是桌面与服务端共享的科学包。输入为明确模型、
 | vocal_tract/ | 声道模型、数据与原生能力边界 |
 | annotation/、textgrid.py | 标注及 TextGrid 解析/变换 |
 | transcription/ | 转写/音系相关规则与数据处理 |
+| browser/、../../browser/ | 原版Praat WASM的内存适配与C++构建绑定，科学函数仍由原实现计算 |
 | recording/ | 录音数据的显示、编辑和处理计算，设备采集在桌面层 |
 
 Python 科学核心并不囊括所有客户端算法。M13 的浏览器转换与 M15 的实验调度各自有前端实现边界，不能为了目录统一复制到 Python 或声称它们已经走 worker。
@@ -29,6 +32,8 @@ M09 的 OpenCV 使用范围限定为数组计算：LINE_8、circle、line、getP
 
 新涂鸦以 `size_unit=px` 显式标记1–200像素直径，在校正图像网格上使用圆端点与线段距离栅格化，旧快照省略该字段时保留OpenCV画笔语义。显示缩放不参与实际笔迹计算。
 
+浏览器通过同源Worker在Pyodide执行本包，Praat来自Parselmouth 0.4.7原始源码内的6.1.38。适配只传递Float64数组和原时间网格，不复制算法。NumPy/SciPy等WASM依赖的微小浮点差异由独立跨平台对照报告记录，整数窗长、形状、采样率、声道、掩码和算法语义保持；旧原生回归不放宽。固定版本与构建摘要见resources/manifests/browser-science-runtime.json，执行/数据持久化位于平台与worker外层。
+
 ## 科学结果约定
 
 - 使用真实采样率、声道角色、每道帧数与整数半开选区；返回轨迹保留真实时间网格。
@@ -42,3 +47,5 @@ M09 的 OpenCV 使用范围限定为数组计算：LINE_8、circle、line、getP
 来源/版本在 third_party/source-registry.json 和模块映射中维护。论文、代码授权、许可文件和数值一致性分别举证。变更科学行为需独立说明，与纯 import/I/O 重构分开。
 
 使用模块对应的既有科学环境运行本包 tests 和根 tests/parity。包结构变化另验独立 wheel 安装；预期值来自独立基准，不把当前函数输出回填为通过值。合成输入覆盖算法边界，自然语料准确率、实体采集和听辨需各自证据。
+
+vocal_tract/session.Runtime是桌面与网页共用的声道状态机，注入engine、profile、live和设备目录端口，不自行打开设备、HTTP或账号存储。envelope.audition_samples统一播放/导出增益，document记录实际截面数并提示异采样重算。Engine.enable_web_sections显式启用33/65策略；桌面原选项保持。

@@ -32,6 +32,14 @@ def test_closed_config_valid():
     assert validate_config(config())['allowed_operations'] == []
 
 
+def test_web_registration_requires_workspaces_without_changing_legacy_config():
+    assert validate_config(config() | {'enable_registration':True,'enable_web_workspaces':True})['enable_registration']
+    with pytest.raises(GateError,match='ephemeral'):
+        validate_config(config() | {'enable_registration':True})
+    with pytest.raises(GateError,match='web_flags'):
+        validate_config(config() | {'enable_web_workspaces':1})
+
+
 @pytest.mark.parametrize('mode,allowed,expected',[
     ('open',[],[]),('open',['lpc_analysis'],['lpc_analysis']),
     ('maintenance',['lpc_analysis'],[]),('drain',['lpc_analysis'],[]),

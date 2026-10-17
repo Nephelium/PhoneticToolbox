@@ -60,7 +60,7 @@ def test_removal_during_download_does_not_restore_bytes(tmp_path):
 def test_preferences_write_failure_rolls_back_removal(tmp_path, monkeypatch):
     s, _ = setup(tmp_path); s.download(s.first_launch, threading.Event(), lambda _: None)
     def denied(*_): raise PermissionError('owned test denial')
-    monkeypatch.setattr('ptb_desktop.papers.atomic_json', denied)
+    monkeypatch.setattr('ptb_documents.papers.atomic_json', denied)
     with pytest.raises(PaperError, match='恢复原位置'): s.remove_download('sample')
     assert s.status()['papers'][0]['downloaded'] and not s.status()['papers'][0]['dismissed']
     assert not list(s.files.glob('.removed-*'))
@@ -165,7 +165,7 @@ def test_notice_removal_rolls_back_when_preferences_cannot_be_saved(tmp_path, mo
     o = Opener({'catalog.json': json.dumps(catalog).encode(), 'reading-introduction/note.pdf': body})
     s = PaperService(tmp_path, opener=o, today=lambda: date(2026, 10, 12)); s.refresh(threading.Event())
     def denied(*_): raise PermissionError('owned test denial')
-    monkeypatch.setattr('ptb_desktop.papers.atomic_json', denied)
+    monkeypatch.setattr('ptb_documents.papers.atomic_json', denied)
     with pytest.raises(PaperError, match='恢复原位置'): s.remove_download('reading-introduction')
     assert s.status()['notice']['downloaded'] and not s.status()['notice']['dismissed']
     assert not list(s.files.glob('.removed-*'))

@@ -1,0 +1,157 @@
+{
+  "schema": "ptb-three-way-comparison/1",
+  "established_on": "2026-10-16",
+  "settings": {
+    "window_ms": 10,
+    "window": "Hann",
+    "dynamic_range_db": 60,
+    "phase_initialization": "random",
+    "momentum": 0.99,
+    "iterations": 32,
+    "sampling_rate": 16000,
+    "nfft": 512,
+    "hop": 24,
+    "seed": 20261015
+  },
+  "preserved_audio": {
+    "vowel-a.wav": "2dc0bc0e565e4c8301e3cbef971af3dc9109426796608026f7256e4934f571ac",
+    "vowel-i.wav": "28996c3d331a25020cbcc3f7078d5f2a6dfb303e8a6f73f064e5a569c1269c65",
+    "vowel-u.wav": "4f877ee340d751a07ed675f82cd6ae16f7ff6c4b2613d02e9418711c8e693880",
+    "pitch-original.wav": "aff74b24d8184e9a7442057353c28e11ed9df9db6d79da27edb1d0146f203ce2",
+    "pitch-lower.wav": "373dfe2935e5dad10c3819d94b88b7c917dfd30e90442c0c428cf5a179b2fb86",
+    "pitch-higher.wav": "5cb038ddcd0f3a4b3294d3283f5a9d5eaec5856027f7e9b0934bafcb29336be0",
+    "pitch-slower.wav": "b34cc19b8d1ffc0d2a2b5abbc023a9504ea5b28f68fb57ac90c5f7be8f3be70a",
+    "pitch-faster.wav": "d5f0126ab31d3e7cfbfd0fe514387175b3a69e3d553c9badc85238667575e791",
+    "spectrum-smith.wav": "66b7d2472dbc810359e9628bda99b99bda9ec5c5eeec86211a66c82dac1cccc4",
+    "spectrum-levantan.wav": "6951aa3b214f8d4a731bbe024e91cfab2c6c62629467109f3f5f5e21e4a0f2bb",
+    "spectrum-observo.wav": "42ef545b4831ea177164761e05a2427226c9b29a1084dbb69ddc95ba1c5b6111",
+    "phonation-1.wav": "7d90bd9af8c59ba2778a9c44bf8bc5a43b2f6c2fed3644349d98dc6ac2a91fee",
+    "phonation-2.wav": "5d06e787fa8975304a36dc5cd6fee42f9591849717db8315d9b14e13ed41028f",
+    "phonation-3.wav": "0de910b97a4d24b10d0cce745fff2c6c395ee8fdb642ccb531e2c991a8b1b7d7",
+    "phonation-4.wav": "c79fb385d857467b7e24331175bf07a8766e4809ff0db702c213bdfb564a9cdc",
+    "phonation-5.wav": "ec545d1f59dd501b64709d0ddc702a2fd824e4c0af0d572197728df1a8186d2d",
+    "phonation-6.wav": "100f002876bf4e17c27e803d4d10c2d3cc6f0666b6f8d76133d4416d83b59ce7",
+    "phonation-7.wav": "f936e3df771112b379c471ff18c3b9f73f00cbdf12b3dcb606b1958941dae117",
+    "phonation-8.wav": "4da8ed97ce599d72ff68b4c05fb15d794d402dff6e3c317631391d1ce235d6e7",
+    "phonation-9.wav": "42849aebd9af9783f81371d026e57535e510d593b8cd98833b0c34bf9b6a7bc2",
+    "phonation-endpoint-1.wav": "01025125b6cc0c0df6da015b3529953c59ddc31e95d5e416560530d0ab6a90dc",
+    "phonation-endpoint-2.wav": "ebbbdb54a5036f8222145644c877a4929c7754ad6c057d8545e9e1ca82474f05",
+    "spectrum-before-smith.wav": "5f27a36cd1e0dc7a412858b44edd01bba9d31afb2a648c4171e8598b7fdbb710",
+    "spectrum-before-levantan.wav": "d8c6e1e57c34ecb5a06869e877bc86494c8e706d85dfde162005105bf87b21c6",
+    "spectrum-before-observo.wav": "472a62773e1c61e9aa1d261d160c46123dfcc0c6160b660f65be7caa86d71ceb",
+    "spectrum-lu2025-modal.wav": "11e0d395ce7f092c6e323d4408f38c3a7d1b164145b62329854c8c2f4a94ce2f",
+    "spectrum-before-lu2025-modal.wav": "a2a12b26033056de08e983a16e021e57751fcd0e2e2b5adf36db44e4ad6c3ffd",
+    "spectrum-lu2025-pressed.wav": "d543e73e0856c1738861f6b60e935aa4b485ec4866a1f8d318737004c53a25b8",
+    "spectrum-before-lu2025-pressed.wav": "c7e0676998dd2bdea22f7d7308b7f2b692fa60978cb77f941d1e508232f010c3",
+    "spectrum-uploaded.wav": "543a591f8dffff8bde5040fdb21932af1d6a98373d422c247101be85a002d061",
+    "spectrum-before-uploaded.wav": "b08775c7eae89633ae15b68a2c8e4a32896679b93c0be565938036c0847e09be",
+    "spectrum-fast-smith.wav": "3967a6c4416bb70b3c251e797e5b2cad5c94dbce4a8cb267e120a56fe0c817bd",
+    "spectrum-vocoder-comparison-smith.wav": "c3548a7cb184522f451d0d0920b10c967cf0176c1f49e2d371785816f0813291",
+    "spectrum-fast-levantan.wav": "7cafa127c6196e7bf72b2f060e435c75596e01283c8ce1a7f3cf71ea9a1b549d",
+    "spectrum-vocoder-comparison-levantan.wav": "439691bf76495dccbec7da5896f77a92273373c4fc889e316e0531d0ee4e1c18",
+    "spectrum-fast-observo.wav": "f737560d92cbbaddf18a4ba950cfc59e6a6c5cfe92e2eb8d20b6bcb8db79948a",
+    "spectrum-vocoder-comparison-observo.wav": "d141202ed13caa3bb7b682b8cc841e4fb5617421eb7975d756a25f710cbfc6fe",
+    "spectrum-fast-lu2025-modal.wav": "0cc463d75281eb5020077ae1b09401d322e059a496dd2f0558d7b3dafdd25de6",
+    "spectrum-vocoder-comparison-lu2025-modal.wav": "0cfdc59f5679c6b6f2f8a4a921b7c24cbb091c3bb64ef0e0066c58bc934a1da6",
+    "spectrum-fast-lu2025-pressed.wav": "b2aa93d71188e38722d939afc09fc9c52938bdd9706658416fa4eb9f8ddd6aab",
+    "spectrum-vocoder-comparison-lu2025-pressed.wav": "9cd230bf9766283cdca75502ca877ac8a636c21e2eda95dc23114cb11daa28d9",
+    "spectrum-fast-uploaded.wav": "d82bf282f87971b8ef92a2a3028e861577daa22de56600cc4d6d141bb6cf40a7",
+    "spectrum-vocoder-comparison-uploaded.wav": "3c94f7edc99fe0009712423c40d08fc9ee319d3c865bda615d3abaa0c7887aaf"
+  },
+  "repair": {
+    "sha256": "a60a3587139ffdc79b69978615b2079c66a43282cb2b77ab99d276717b433ab2",
+    "step": 6000
+  },
+  "vocoder": {
+    "sha256": "e2a93f92971e1b6750d8f9b701121597cd271e473e6c189c8072be7080047735"
+  },
+  "device": "NVIDIA GeForce RTX 5090 Laptop GPU",
+  "implementation": {
+    "aoki_phase_reconstruction.py": "fac239fac7be8b297ae6e83e0e7935f2345e6d635603ad5b3f01bd9172c95bfa",
+    "compare_five_pulse_vocoders.py": "e4266954936c27ea1e5fd23cd4501beccb8b543611b6d4e7914ec77081812095",
+    "diagnose_aoki_image.py": "dda7c50b293b93d42740517d0008bc84bcba1bd0305a6972e1daa2f8c47768c9",
+    "m09_pipeline_child.py": "cde2f0b2df7d649188853adb8eaa3fb33af8dc389ad3c6f6a1f2f475aa56e3d7",
+    "vocoder_child.py": "fb5e4a38f95b76e010f9a12bba1477355f120e28aac049cce2db03cd9aae8608",
+    "m09_neural_models.py": "68f3b2ced6b36af4456db3cc01c22fd0686aea5e4bdd92497ef432878266e60c"
+  },
+  "cases": {
+    "smith": {
+      "input_sha256": "545d2a18dba5feb07aaa56b3ba963f2a491d98ac8da67b467194db8e60ee69ce",
+      "magnitude_sha256": "b8d1b56aca8ad0934250c6332a362a130c786277b483047391203b3179a33c2b",
+      "accelerated": {
+        "file": "spectrum-fast-32i-smith.wav",
+        "sha256": "ca19efc258e05e7813b4fd156b7825cb02a4d8b39bbc0a5942503175acba8f15"
+      },
+      "after": {
+        "file": "spectrum-vocoder-comparison-32i-smith.wav",
+        "sha256": "ef2330a2063acfb7ef8478d6e6684ed0b8fd548c3c9e2db3eaf6e3e7c8c8bdfc"
+      }
+    },
+    "levantan": {
+      "input_sha256": "285eb21d87fc2da839cc74e87fab326630139f9a7b4e8cbe901834c4ac0f494a",
+      "magnitude_sha256": "55d6ce189fe9c4c4787ba80e3c2adf7eeab2a346fce188c7e98ee841645ec29d",
+      "accelerated": {
+        "file": "spectrum-fast-32i-levantan.wav",
+        "sha256": "517701b29cfd7c38c4380b0b923aaa758b10098088efc1b2acf6580c21f89156"
+      },
+      "after": {
+        "file": "spectrum-vocoder-comparison-32i-levantan.wav",
+        "sha256": "3df9c4d602b7f0d091f1c6a3830d9558843b1f123aac82d921b7c6c8d4b157b7"
+      }
+    },
+    "observo": {
+      "input_sha256": "7135e99f37209851a6952787ee41d8f698246cb974086e00a8aed3e61f631f13",
+      "magnitude_sha256": "584dfff2c32ad559bb23c9af8a0f154256faf8b3917b7defb9b4b5bf579e6f1d",
+      "accelerated": {
+        "file": "spectrum-fast-32i-observo.wav",
+        "sha256": "c39bd60efd03e1509e0ec32aece3bdb66cd4e8c67d98520200d4012fa765acd2"
+      },
+      "after": {
+        "file": "spectrum-vocoder-comparison-32i-observo.wav",
+        "sha256": "cada7d11c799a3e8e15e8805d5550456086cb0b09fc9b42a388440ba1abcafe0"
+      }
+    },
+    "lu2025-modal": {
+      "input_sha256": "3da687b81fb699ed81515bf881301e3db58e023d74939d0bee0920a5256b1a2a",
+      "magnitude_sha256": "1ae61a9965be02e42514f1614efe6c680714b7b65ad41117c4483004b1f36cee",
+      "accelerated": {
+        "file": "spectrum-fast-32i-lu2025-modal.wav",
+        "sha256": "ab8174475192c4ab4590f8dd8e8a611c77c18e39047bbbee9bc52b772096f4bf"
+      },
+      "after": {
+        "file": "spectrum-vocoder-comparison-32i-lu2025-modal.wav",
+        "sha256": "abec19eb0b6e0a6520177537bae5ca95d1a2feaaeaf5ac3300cbd343a9177511"
+      }
+    },
+    "lu2025-pressed": {
+      "input_sha256": "7fbd617948e77e36e094347c34df79e55e76eb57c878b650cee0b0b48c66d4c5",
+      "magnitude_sha256": "931b2df6b927a2d9e3065ea54b5e02cc2b8f8b1be407b16ace115c227c512f03",
+      "accelerated": {
+        "file": "spectrum-fast-32i-lu2025-pressed.wav",
+        "sha256": "27e8a59247605ea965d7489920f5409f2c01abc71cb69ceb4c111fbb72c26e9c"
+      },
+      "after": {
+        "file": "spectrum-vocoder-comparison-32i-lu2025-pressed.wav",
+        "sha256": "a3eefe0f9c7e311953edc07678bbfc4936a8c6b94785fed0f9c15afd02fd8006"
+      }
+    },
+    "uploaded": {
+      "input_sha256": "40793aeeb34b6e8f1d5e8e1880d1993634022ead969ea5214791892400232bd2",
+      "magnitude_sha256": "27a21e3393101776e349b5f63e774e081cedf130480ff292a5c52898b49897df",
+      "accelerated": {
+        "file": "spectrum-fast-32i-uploaded.wav",
+        "sha256": "a6e4da0884db861fbc6dcfe71c59e7aee75587290e5106fefb5fd7705bff62d0"
+      },
+      "after": {
+        "file": "spectrum-vocoder-comparison-32i-uploaded.wav",
+        "sha256": "cfe778f64e6600207a51d5f37f28f6cf82561ea857357bd07602a35052cb29d9"
+      }
+    }
+  },
+  "migration": {
+    "from_iterations": 256,
+    "to_iterations": 32,
+    "previous_lock_sha256": "88c598d5979c83dcd4546e6bc32717a71a6ae18999cd69db389e2abcfa15f1ca",
+    "authorization": "User requested 32-iteration matched three-way comparison; previous WAVs retained unchanged"
+  }
+}

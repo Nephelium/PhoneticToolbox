@@ -1,5 +1,6 @@
 import type { AudioAsset,PeakIndex } from './types.ts';
-export function parseWav(buffer:ArrayBuffer, name:string):AudioAsset {
+export function parseWav(buffer:ArrayBuffer, name:string, maxBytes=64_000_000):AudioAsset {
+  if(![64_000_000,100_000_000].includes(maxBytes))throw Error('音频预览预算无效。');
   const v = new DataView(buffer);
   const str=(offset:number,n:number)=>Array.from({length:n},(_,i)=>String.fromCharCode(v.getUint8(offset+i))).join('');
   if (v.byteLength<44 || str(0,4)!=='RIFF' || str(8,4)!=='WAVE') throw Error('文件不是有效的 RIFF WAV，请重新选择 WAV 音频。');
@@ -18,7 +19,7 @@ export function parseWav(buffer:ArrayBuffer, name:string):AudioAsset {
   if(count<1 || count>32 || sampleRate<1 || block!==count*bits/8 || length%block) throw Error('WAV 音频头或帧长度不受支持。');
   if(!((format===1 && [8,16,24,32].includes(bits)) || (format===3 && [32,64].includes(bits)))) throw Error('目前支持 PCM 8/16/24/32 位和 FLOAT 32/64 位 WAV。');
   const frames=length/block;
-  if(buffer.byteLength>64_000_000||frames*count>32_000_000)throw Error('音频超过预览内存预算（64 MB文件、3200万个采样值），请先截取较短音频。');
+  if(buffer.byteLength>maxBytes||frames*count>32_000_000)throw Error(`音频超过预览内存预算（${maxBytes/1_000_000} MB文件、3200万个采样值），请先截取较短音频。`);
   const channels=Array.from({length:count},()=>new Float32Array(frames));
   for(let i=0;i<frames;i++) for(let c=0;c<count;c++) {
     const p=data+i*block+c*bits/8;

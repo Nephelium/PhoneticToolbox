@@ -9,6 +9,27 @@ from phonetic_core.egg.export_series import spectral_series
 from ptb_api.egg_models import EggPreviewData, EggSeries
 from .acoustic_errors import AcousticFailure
 
+SPECTRAL_CACHE_BYTES = 16_000_000
+
+
+def spectral_view(result, config, first, last):
+    bounded = result.method_version == 'egg-bounded/2'
+    power, freq, _ = spectral_series(result.audio_signal[first:last], result.fs, config.spec_window_ms,
+        **(dict(max_columns=2048, max_frequency=5000) if bounded else {}))
+    cell = (freq[-1]-freq[0])/len(freq)
+    rows = min(len(freq), int(np.ceil(5000/cell))+2)
+    visible = power[:rows].copy()
+    with np.errstate(divide='ignore'):
+        np.log10(visible, out=visible)
+    visible *= 10
+    finite = visible[(freq[:rows] <= 5000) & (freq[:rows] >= 0)]
+    finite = finite[np.isfinite(finite)]
+    suggested = None
+    if finite.size:
+        upper = float(np.clip(np.ceil(finite.max()), -110, 20))
+        suggested = (upper-50., upper)
+    return visible, cell, rows, suggested
+
 
 def preview_files(result, config, settings, first, last, *, cache=None, include_audio=True):
     start, end = first/result.fs, last/result.fs
@@ -24,8 +45,9 @@ def preview_files(result, config, settings, first, last, *, cache=None, include_
     # A session retains just one main viewport. Moving the micro cursor does
     # not recompute CQ/SQ or the PSD. The default export path stays identical.
     key = (first, last, tuple((k, str(v)) for k, v in settings.model_dump().items()
-           if k not in ('micro_center', 'micro_width_ms')))
+           if k not in ('micro_center', 'micro_width_ms', 'spec_vmin', 'spec_vmax')))
     main = cache.get(key) if cache is not None else None
+    visible = None
     micro_t, audio, egg = micro_waveforms(result, config, center, settings.micro_width_ms, raw=raw)
     # V2 EGGWidget._get_downsampling_step, display only after full filtering.
     stride, count = 1, len(micro_t)
@@ -37,41 +59,34 @@ def preview_files(result, config, settings, first, last, *, cache=None, include_
     gci, goi, _ = events_segment(result, lo, hi, config, use_raw_signal=raw)
     if main is None:
         t, cq, sq = cq_segment(result, start, end, config, use_raw_signal=raw)
-        bounded = result.method_version == 'egg-bounded/2'
-        power, freq, _ = spectral_series(result.audio_signal[first:last], result.fs, config.spec_window_ms,
-            **(dict(max_columns=2048,max_frequency=5000) if bounded else {}))
-        cell = (freq[-1]-freq[0])/len(freq)
-        rows = min(len(freq), int(np.ceil(5000/cell))+2)
-        visible = power[:rows].copy(); del power
-        shape = visible.shape
-        with np.errstate(divide='ignore'): np.log10(visible, out=visible)
-        visible *= 10
-        # Same PSD, same visible frequency band. This is a one-shot display
-        # suggestion, not a change to the scientific spectrum or its units.
-        finite = visible[(freq[:rows] <= 5000) & (freq[:rows] >= 0)]
-        finite = finite[np.isfinite(finite)]
-        suggested = None
-        if finite.size:
-            upper = float(np.clip(np.ceil(finite.max()), -110, 20))
-            suggested = (upper-50., upper)
-        gray = (255*(1-np.clip((visible-settings.spec_vmin)/(settings.spec_vmax-settings.spec_vmin),0,1))).astype(np.uint8)
-        raster = Image.fromarray(np.flipud(gray))
-        raster.thumbnail((1024,512), Image.Resampling.BILINEAR)
-        stream = io.BytesIO(); raster.save(stream, format='PNG')
+        visible, cell, rows, suggested = spectral_view(result, config, first, last)
         main = dict(cq=series(t,cq), sq=series(t,sq),
             praat=series(result.audio_f0_times,result.audio_f0_values),
             gci_f0=series(result.gci_f0_times,result.gci_f0_values) if settings.keep_gci_f0 else series([],[]),
             reaper=series(result.reaper_f0_times,result.reaper_f0_values) if settings.keep_reaper_f0 else None,
-            spectral_extent=(start,end,0.,rows*cell), spectral_shape=shape,
-            raster_shape=(raster.height,raster.width), suggested_db_range=suggested, png=stream.getvalue())
-        if cache is not None:
-            cache.clear(); cache[key] = main
+            spectral_extent=(start,end,0.,rows*cell), spectral_shape=visible.shape,
+            suggested_db_range=suggested,
+            _spectral_db=visible if cache is not None and visible.nbytes <= SPECTRAL_CACHE_BYTES else None)
+    display_range = (settings.spec_vmin, settings.spec_vmax)
+    if main.get('_display_range') != display_range:
+        if visible is None:
+            visible = main['_spectral_db']
+        if visible is None:
+            visible, _, _, _ = spectral_view(result, config, first, last)
+        # Only the grayscale mapping changes with the display dB limits.
+        gray = (255*(1-np.clip((visible-settings.spec_vmin)/(settings.spec_vmax-settings.spec_vmin),0,1))).astype(np.uint8)
+        raster = Image.fromarray(np.flipud(gray))
+        raster.thumbnail((1024,512), Image.Resampling.BILINEAR)
+        stream = io.BytesIO(); raster.save(stream, format='PNG')
+        main.update(raster_shape=(raster.height,raster.width), png=stream.getvalue(), _display_range=display_range)
+    if cache is not None:
+        cache.clear(); cache[key] = main
     blobs = {'egg_PSD.png':main['png']}
     if include_audio:
         values = result.audio_signal[first:last] if result.method_version == 'egg-bounded/2' else result.audio_signal
         wav = io.BytesIO(); wavfile.write(wav, result.fs, values.astype(np.float32))
         blobs['egg_AUDIO.wav'] = wav.getvalue()
-    data = EggPreviewData(**{k:v for k,v in main.items() if k != 'png'},
+    data = EggPreviewData(**{k:v for k,v in main.items() if k != 'png' and not k.startswith('_')},
         audio=series(micro_t[::stride],audio[::stride],False), egg=series(micro_t[::stride],egg[::stride],False),
         gci=[v for v in gci if lo <= v < hi], goi=[v for v in goi if lo <= v < hi],
         movement=[(t,v) for t,v in result.glottal_movement_events if start <= t < end],

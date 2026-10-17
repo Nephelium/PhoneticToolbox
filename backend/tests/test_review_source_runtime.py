@@ -20,3 +20,16 @@ def test_missing_matching_source_is_explicit_and_wheel_uses_its_environment(tmp_
         use_matching_core_source(tmp_path/'backend/src/ptb_worker/lpc_bootstrap.py')
     use_matching_core_source(tmp_path/'site-packages/ptb_worker/lpc_bootstrap.py')
     assert sys.path==['installed-environment']
+
+
+def test_core_version_is_from_snapshot_only_when_that_sibling_is_loaded(tmp_path,monkeypatch):
+    from types import SimpleNamespace
+    from ptb_worker.source_runtime import bound_core_version
+    sibling=tmp_path/'packages/phonetic_core/src/phonetic_core/__init__.py'
+    sibling.parent.mkdir(parents=True);sibling.write_text('',encoding='utf8')
+    bootstrap=tmp_path/'backend/src/ptb_worker/egg_runtime.py'
+    monkeypatch.setitem(sys.modules,'phonetic_core',SimpleNamespace(__file__=str(sibling)))
+    assert bound_core_version(bootstrap,'3.0.0a1','3.0.3')=='3.0.3'
+    assert bound_core_version(tmp_path/'site-packages/ptb_worker/egg_runtime.py','3.0.0a1','3.0.3')=='3.0.0a1'
+    monkeypatch.setitem(sys.modules,'phonetic_core',SimpleNamespace(__file__=str(tmp_path/'unrelated/phonetic_core/__init__.py')))
+    assert bound_core_version(bootstrap,'3.0.0a1','3.0.3')=='3.0.0a1'

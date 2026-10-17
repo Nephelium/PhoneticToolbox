@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import {webSettingsError,retryWebSettings} from '../state/web-settings.ts';
+import {installBackgroundAppearance} from '../state/background.ts';
 import { ref,computed,watch,onMounted,onUnmounted,nextTick } from 'vue';import { groups,modules } from './registry.ts';import { host,workspace,states,saveDraft } from '../state/workspace.ts';import { stop } from '../state/audio.ts';
 import ModuleFrame from '../components/ModuleFrame.vue';
+import WebModuleSeal from '../components/WebModuleSeal.vue';
 import HelpPage from './HelpPage.vue';
 import StorageSettings from '../components/StorageSettings.vue';
 import IconSettings from '../components/IconSettings.vue';
@@ -14,6 +17,7 @@ import UpdateNotice from '../components/UpdateNotice.vue';
 import {onUpdatePrepareClose,onUpdateCloseCancelled,replyUpdateClose,type UpdateCheck} from '../platform/updates.ts';
 import {captureOwner} from '../platform/capture-lease.ts';
 import {moduleHelpTarget,isModuleHelpLabel} from '../manual/help-navigation.ts';
+import {manualIntroduction} from './manual-project.ts';
 import type {ManualTarget} from '../manual/types.ts';
 import FontLicenses from '../components/FontLicenses.vue';
 import '../design/buttons.css';
@@ -56,6 +60,7 @@ import {m01State,saveM01,forgetM01} from '../modules/parameter-estimation/store.
 import {dirty} from '../modules/parameter-estimation/state.ts';
 import {previewFiles,type ResearchContext} from '../platform/research.ts';
 import {desktopFiles} from '../platform/desktop.ts';
+import {installWebFeedback} from '../platform/feedback-web.ts';
 import FontSettings from '../components/FontSettings.vue';
 import {selectFontOwner} from '../state/fonts.ts';
 import {installPageZoom} from '../state/pageZoom.ts';
@@ -65,9 +70,14 @@ installPalettes();
 installButtonAppearance();
 installWaveformAppearance();
 installPageZoom();
+installBackgroundAppearance();
+{const scale=host.projects.read<unknown>('homeIconScale',100);homeIconScale.value=typeof scale==='number'&&Number.isFinite(scale)?Math.max(50,Math.min(300,Math.round(scale))):100;}
 const props=defineProps<{research?:ResearchContext}>();const emit=defineEmits<{leaveProject:[]}>();
 const defaultContext:ResearchContext={key:'local:M01',label:desktopFiles?'本机目录':'本机预览',files:desktopFiles??previewFiles()};
 const researchContext=computed(()=>props.research??defaultContext);
+let releaseWebFeedback:(()=>void)|undefined;
+watch(()=>researchContext.value.ownerId,owner=>{releaseWebFeedback?.();releaseWebFeedback=researchContext.value.files.kind==='server'&&owner?installWebFeedback(owner,()=>props.research?.files.feedbackCsrf?.()??''):undefined;},{immediate:true});
+onUnmounted(()=>releaseWebFeedback?.());
 watch(()=>props.research?.ownerId,owner=>{void selectFontOwner(owner);},{immediate:true});
 const previewKey=(id:string)=>props.research?researchContext.value.key.replace(/:M01$/,':'+id):id;
 const m01=computed(()=>m01State(researchContext.value.key));
@@ -109,7 +119,7 @@ system.addEventListener('change',applyTheme);onUnmounted(()=>system.removeEventL
 const storedRecent=host.projects.read<unknown>('recent',[]);const recent=ref((Array.isArray(storedRecent)?storedRecent:[]).filter(id=>modules.some(m=>m.id===id)).slice(0,5));
 const current=computed(()=>modules.find(m=>m.id===active.value));const visible=computed(()=>modules.filter(m=>(m.title+' '+m.description+' '+m.id).toLowerCase().includes(query.value.trim().toLowerCase())));
 const manualTarget=ref<ManualTarget>(),manualRequest=ref(0),manualOrigin=ref<string>();
-function openManual(moduleId?:string,targetId?:string){if(m15Focus.value)return;manualOrigin.value=moduleId&&modules.some(m=>m.id===moduleId)?moduleId:undefined;manualTarget.value=moduleHelpTarget(moduleId,targetId);manualRequest.value++;open('help');}
+function openManual(moduleId?:string,targetId?:string){if(m15Focus.value)return;manualOrigin.value=moduleId&&modules.some(m=>m.id===moduleId)?moduleId:undefined;manualTarget.value=moduleHelpTarget(moduleId,targetId,manualIntroduction(host.kind));manualRequest.value++;open('help');}
 function contextualHelp(event:MouseEvent){const button=event.target instanceof Element?event.target.closest('button'):null;if(current.value&&button&&!button.disabled&&isModuleHelpLabel(button.textContent??'')){event.preventDefault();event.stopPropagation();openManual(current.value.id);}}
 function returnFromManual(){if(manualOrigin.value)open(manualOrigin.value);}
 const modal=ref(''),closing=ref(''),notice=ref(''),closingBusy=ref(false);const referencesId=ref<string|undefined>();
@@ -155,6 +165,7 @@ onMounted(()=>window.addEventListener('beforeunload',beforeUnload));onUnmounted(
 const modalTitle=computed(()=>({update:updateCheck.value?.candidate?'发现新版本':'检查更新',about:'关于 PhoneticToolbox',feedback:'问题反馈',references:'开源与学术致谢','font-license':'内置字体版权与许可'}[modal.value]||''));
 </script>
 <template>
+<p v-if="webSettingsError" role="alert" class="web-settings-error">{{webSettingsError}} <button @click="retryWebSettings().catch(()=>{})">重试保存</button></p>
 <a href="#main-content" class="skip-link">跳到工作区</a>
 <div class="app-shell" :class="{collapsed,'integrated-titlebar':integratedTitlebar}" :inert="updateReady" v-resizable-panels="{key:research?.ownerId?'server:'+research.ownerId+':navigation':'navigation',center:'.main-shell',centerMin:540,disabled:collapsed,panels:[{selector:'.sidebar',side:'left',label:'工具导航',initial:224,min:184,max:360}]}">
 <aside id="tool-sidebar" class="sidebar" aria-label="工具导航">
@@ -207,7 +218,7 @@ const modalTitle=computed(()=>({update:updateCheck.value?.candidate?'发现新�
 </button>
 </div>
 </div>
-<button v-if="research" class="project-return" :title="'返回项目与文件管理 · '+research.label" :disabled="closingBusy" @click="leaveProject">← 返回项目与文件管理 · {{research.label}}</button>
+<button v-if="research" class="project-return primary" :title="'下载结果、清理文件与管理空间 · '+research.label" :disabled="closingBusy" @click="leaveProject"><AppIcon name="folder"/><span>文件与空间</span></button>
 <button v-if="m16Recording" class="host-badge recording-indicator" aria-label="录音进行中，返回录音" @click="open('M16')">● 录音进行中</button>
 <span v-if="!research" class="host-badge">{{host.kind==='desktop'?'本地桌面':'浏览器预览'}}</span>
 <div v-if="integratedTitlebar" class="window-controls" aria-label="窗口操作">
@@ -274,7 +285,7 @@ const modalTitle=computed(()=>({update:updateCheck.value?.candidate?'发现新�
 </button>
 </div>
 <WorkspaceView v-else-if="current&&!['M01','M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15','M16','M17','M18'].includes(current.id)" :key="current.id" :module="current" :state-key="previewKey(current.id)" @references="refs(current?.id)"/>
-<ParameterEstimationPage v-if="tabs.includes('M01')" v-show="active==='M01'" :key="researchContext.key" :context="researchContext" @references="refs('M01')" @help="openManual('M01')"/>
+<ParameterEstimationPage v-if="tabs.includes('M01')" v-show="active==='M01'" :key="researchContext.key" :context="researchContext" :active="active==='M01'" @references="refs('M01')" @help="openManual('M01')"/>
 <ParameterDisplayPage v-if="tabs.includes('M02')" v-show="active==='M02'" ref="m02Page" :key="researchContext.key+':M02'" :active="active==='M02'" :context="researchContext" :state-key="previewKey('M02')" @references="refs('M02')" @help="openManual('M02')" @close="close('M02')"/>
 <AnnotationPage v-if="tabs.includes('M12')" v-show="active==='M12'" ref="m12Page" :key="researchContext.key+':M12'" :active="active==='M12'" :context="researchContext" :state-key="previewKey('M12')" @references="refs('M12')" @help="openManual('M12')" @close="close('M12')"/>
 <EggAnalysisPage v-if="tabs.includes('M03')" v-show="active==='M03'" ref="m03Page" :key="researchContext.key+':M03'" :active="active==='M03'" :context="researchContext" :state-key="previewKey('M03')" @references="refs('M03')" @close="close('M03')"/>
@@ -282,23 +293,24 @@ const modalTitle=computed(()=>({update:updateCheck.value?.candidate?'发现新�
 <SpeechSynthesisPage v-if="tabs.includes('M06')" v-show="active==='M06'" ref="m06Page" :key="researchContext.key+':M06'" :active="active==='M06'" :context="researchContext" :state-key="previewKey('M06')" @references="refs('M06')"/>
 <PitchManipulationPage v-if="tabs.includes('M08')" v-show="active==='M08'" ref="m08Page" :key="researchContext.key+':M08'" :active="active==='M08'" :context="researchContext" :state-key="previewKey('M08')" @references="refs('M08')"/>
 <LpcSpectrumPage v-if="tabs.includes('M04')" v-show="active==='M04'" ref="m04Page" :key="researchContext.key+':M04'" :active="active==='M04'" :context="researchContext" :state-key="previewKey('M04')" @references="refs('M04')" @help="openManual('M04')" @close="close('M04')"/>
-<Spec2WavPage ref="m09Page" v-if="tabs.includes('M09')" v-show="active==='M09'" :key="researchContext.key+':M09'" :context="researchContext" :state-key="previewKey('M09')" @references="refs('M09')" @help="openManual('M09')" @close="close('M09')"/>
+<Spec2WavPage ref="m09Page" v-if="tabs.includes('M09')" v-show="active==='M09'" :key="researchContext.key+':M09'" :context="researchContext" :active="active==='M09'" :state-key="previewKey('M09')" @references="refs('M09')" @help="openManual('M09')" @close="close('M09')"/>
 <LipExtractionPage v-if="tabs.includes('M05')" v-show="active==='M05'" ref="m05Page" :key="researchContext.key+':M05'" :state-key="previewKey('M05')" :port="researchContext.files?.m05" :active="active==='M05'" @references="refs('M05')" @dirty="m05Dirty=$event"/>
-<MfaAlignmentPage v-if="tabs.includes('M11')" v-show="active==='M11'" ref="m11Page" :key="researchContext.key+':M11'" :state-key="previewKey('M11')" :context="researchContext" :active="active==='M11'" @references="refs('M11')" @dirty="m11Dirty=$event"/>
+<WebModuleSeal v-if="tabs.includes('M11') && researchContext.files.kind==='server'" v-show="active==='M11'" sealed title="MFA 自动标注" reason="由于服务器性能限制，网页版暂不开放在线对齐。已有 TextGrid 可在标注工具中编辑。" @help="openManual('M11')"><MfaAlignmentPage :context="researchContext" :state-key="previewKey('M11')" :active="false" presentation-only/></WebModuleSeal>
+<MfaAlignmentPage v-if="tabs.includes('M11') && researchContext.files.kind!=='server'" v-show="active==='M11'" ref="m11Page" :key="researchContext.key+':M11'" :state-key="previewKey('M11')" :context="researchContext" :active="active==='M11'" @references="refs('M11')" @dirty="m11Dirty=$event"/>
 <PhonologyInductionPage v-if="tabs.includes('M14')" v-show="active==='M14'" ref="m14Page" :key="researchContext.key+':M14'" :state-key="previewKey('M14')" :context="researchContext" :active="active==='M14'" @references="refs('M14')" @dirty="m14Dirty=$event"/>
 <MandarinIpaPage v-if="tabs.includes('M13')" v-show="active==='M13'" ref="m13Page" :key="researchContext.key+':M13'" :state-key="previewKey('M13')" @references="refs('M13')" @help="openManual('M13')" @dirty="m13Dirty=$event"/>
-<RecordingPage v-if="tabs.includes('M16')" v-show="active==='M16'" ref="m16Page" :state-key="'local:M16'" :active="active==='M16'" @dirty="m16Dirty=$event" @recording="recordingChanged" @references="refs('M16')" @help="openManual('M16')"/>
-<PaperReadingPage v-if="tabs.includes('M18')" v-show="active==='M18'" :active="active==='M18'" @help="openManual('M18')"/>
-<IpaPlusPage v-if="tabs.includes('M17')" v-show="active==='M17'" ref="m17Page" :state-key="'local:M17'" :active="active==='M17'" @dirty="m17Dirty=$event" @references="refs('M17')"/>
-<PerceptionPage v-if="tabs.includes('M15')" v-show="active==='M15'" ref="m15Page" :active="active==='M15'" @dirty="m15Dirty=$event" @focus="m15Focus=$event" @references="refs('M15')"/>
-<VocalTractPage :state-key="previewKey('M10')" v-if="tabs.includes('M10')" v-show="active==='M10'" :active="active==='M10'" @references="refs('M10')" @help="openManual('M10')" @close="close('M10')" @dirty="m10Dirty=$event"/>
+<RecordingPage v-if="tabs.includes('M16')" v-show="active==='M16'" ref="m16Page" :key="researchContext.key" :context="researchContext" :state-key="research ? previewKey('M16') : 'local:M16'" :active="active==='M16'" @dirty="m16Dirty=$event" @recording="recordingChanged" @references="refs('M16')" @help="openManual('M16')"/>
+<PaperReadingPage v-if="tabs.includes('M18')" v-show="active==='M18'" :state-key="previewKey('M18')" :port="researchContext.files.papers" :active="active==='M18'" @help="openManual('M18')"/>
+<IpaPlusPage v-if="tabs.includes('M17')" v-show="active==='M17'" ref="m17Page" :key="previewKey('M17')" :state-key="research ? previewKey('M17') : 'local:M17'" :active="active==='M17'" @dirty="m17Dirty=$event" @references="refs('M17')"/>
+<PerceptionPage v-if="tabs.includes('M15')" v-show="active==='M15'" ref="m15Page" :key="previewKey('M15')" :storage-scope="research ? previewKey('M15') : undefined" :active="active==='M15'" @dirty="m15Dirty=$event" @focus="m15Focus=$event" @references="refs('M15')"/>
+<VocalTractPage :context="researchContext" :state-key="previewKey('M10')" v-if="tabs.includes('M10')" v-show="active==='M10'" :active="active==='M10'" @references="refs('M10')" @help="openManual('M10')" @close="close('M10')" @dirty="m10Dirty=$event"/>
 <ModuleFrame v-if="tabs.includes('settings')" v-show="active==='settings'" label="工作台设置" class="settings-page">
 <div class="settings-navigation" role="tablist" aria-label="设置分类">
 <button v-for="(section,index) in settingsSections" :id="'settings-tab-'+section.id" :key="section.id" type="button" role="tab" :aria-selected="settingsSection===section.id" :aria-controls="'settings-panel-'+section.id" :tabindex="settingsSection===section.id?0:-1" @click="settingsSection=section.id" @keydown="navigateSettings($event,index)">{{section.label}}</button>
 </div>
 <div id="settings-panel-appearance" v-show="settingsSection==='appearance'" class="settings-panel" role="tabpanel" aria-labelledby="settings-tab-appearance" tabindex="0"><AppearanceSettings v-model:mode="theme" v-model:palette="palette"/></div>
 <div id="settings-panel-fonts" v-show="settingsSection==='fonts'" class="settings-panel" role="tabpanel" aria-labelledby="settings-tab-fonts" tabindex="0"><FontSettings ref="settingsPage" @dirty="settingsDirty=$event"/></div>
-<div id="settings-panel-icons" v-show="settingsSection==='icons'" class="settings-panel" role="tabpanel" aria-labelledby="settings-tab-icons" tabindex="0"><IconSettings/></div>
+<div id="settings-panel-icons" v-show="settingsSection==='icons'" class="settings-panel" role="tabpanel" aria-labelledby="settings-tab-icons" tabindex="0"><IconSettings :active="settingsSection==='icons'"/></div>
 <div id="settings-panel-storage" v-show="settingsSection==='storage'" class="settings-panel" role="tabpanel" aria-labelledby="settings-tab-storage" tabindex="0"><StorageSettings v-if="storageAvailable"/><p v-else class="settings-card muted" role="status">本机存储与自动清理在桌面版中提供。请打开桌面工作台管理本机缓存。</p></div>
 </ModuleFrame>
 <HelpPage v-if="tabs.includes('help')" v-show="active==='help'" :active="active==='help'" :target="manualTarget" :request-key="manualRequest" :playback-allowed="!m16Recording&&!m15Focus" :return-label="manualOrigin?'返回 '+tabTitle(manualOrigin):undefined" @return-tool="returnFromManual"/>
@@ -308,12 +320,12 @@ const modalTitle=computed(()=>({update:updateCheck.value?.candidate?'发现新�
 </div>
 <div class="statusbar">
 <span>
-<span class="status-dot"/>{{current?.id==='M18'?'语音学论文精读 · 服务器分发与本地阅读':current?.id==='M16'?'录音 · 本机采集与可恢复编辑':current?.id==='M17'?'国际音标表Plus · 本地输入与固定字体':current?.id==='M05'?'唇形提取 · 实时预览与视频分析':current?.id==='M11'?'MFA · 音频与已有文本强制对齐':current?.id==='M15'?'感知实验 · 客户端运行与本地恢复':current?.id==='M01'?'参数估计 · 文件、试听与任务':current?.id==='M02'?'参数显示 · 原帧与多图窗':current?.id==='M03'?'EGG · 接触商与声门事件':current?.id==='M07'?'发声类型合成 · LPC 残差连续统':current?.id==='M06'?'声学参数合成 · 参数曲线与音频合成':current?.id==='M08'?'变速变调 · 基频编辑与音频合成':current?.id==='M04'?'LPC · 线性预测谱包络':current?.id==='M09'?'语谱图转音频 · 图片重建与频谱绘制':current?.id==='M10'?'生理参数合成 · VTL 2.4':current?.id==='M12'?'标注对齐 · TextGrid 与唇偏独立保存':current?.id==='M14'?'音系归纳 · 字表、归并与三文件导出':current?.id==='M13'?'汉字转国际音标 · 本地逐字映射与离线导出':current?'就绪 · 选择文件开始':'就绪 · 选择工具开始'}}</span>
-<span>{{research&&!['M16','M17','M18'].includes(active)?'当前账号的项目资源':'本机文件 · 无自动上传'}}</span>
+<span class="status-dot"/>{{current?.id==='M18'?'语音学论文精读 · 服务器分发与本地阅读':current?.id==='M16'?(researchContext.files.kind==='server'?'录音 · 浏览器采集与项目上传':'录音 · 本机采集与可恢复编辑'):current?.id==='M17'?'国际音标表Plus · 本地输入与固定字体':current?.id==='M05'?'唇形提取 · 实时预览与视频分析':current?.id==='M11'?'MFA · 音频与已有文本强制对齐':current?.id==='M15'?'感知实验 · 客户端运行与本地恢复':current?.id==='M01'?'参数估计 · 文件、试听与任务':current?.id==='M02'?'参数显示 · 原帧与多图窗':current?.id==='M03'?'EGG · 接触商与声门事件':current?.id==='M07'?'发声类型合成 · LPC 残差连续统':current?.id==='M06'?'声学参数合成 · 参数曲线与音频合成':current?.id==='M08'?'变速变调 · 基频编辑与音频合成':current?.id==='M04'?'LPC · 线性预测谱包络':current?.id==='M09'?'语谱图转音频 · 图片重建与频谱绘制':current?.id==='M10'?'生理参数合成 · VTL 2.4':current?.id==='M12'?'标注对齐 · TextGrid 与唇偏独立保存':current?.id==='M14'?'音系归纳 · 字表、归并与三文件导出':current?.id==='M13'?'汉字转国际音标 · 本地逐字映射与离线导出':current?'就绪 · 选择文件开始':'就绪 · 选择工具开始'}}</span>
+<span>{{research&&active==='M18'?'论文与批注随当前工作区保存':research&&active!=='M17'?'当前账号的项目资源':'本机文件 · 无自动上传'}}</span>
 </div>
 </div>
 </div>
-<ModalDialog v-if="closing" :title="closing==='M09'?'笔迹尚未生成音频':closing==='M16'?'保存录音工程并关闭？':closing==='M17'?'保存音标草稿？':closing==='settings'?'应用字体设置？':closing==='M15'?'保存实验与导出结果？':closing==='M12'?'保存标注修改？':closing==='M13'?'保存转换草稿？':'保存参数草稿？'" :close-disabled="closingBusy" @close="cancelClose">
+<ModalDialog v-if="closing" :variant="research?'confirm':undefined" :title="closing==='M09'?'笔迹尚未生成音频':closing==='M16'?'保存录音工程并关闭？':closing==='M17'?'保存音标草稿？':closing==='settings'?'应用字体设置？':closing==='M15'?'保存实验与导出结果？':closing==='M12'?'保存标注修改？':closing==='M13'?'保存转换草稿？':'保存参数草稿？'" :close-disabled="closingBusy" @close="cancelClose">
 <p v-if="closing==='M09'">当前笔迹尚未提交生成。返回绘图并生成音频后，完整笔迹会保存在任务快照中，也可以放弃笔迹并关闭。</p>
 <p v-else-if="closing==='M16'">关闭前会停止录音并保存工程。原始录音与已有版本保留；保存失败时继续留在本页。</p>
 <p v-else-if="closing==='M17'">音标文本或布局尚未保存到本机草稿。保存失败时保留当前编辑，可返回页面复制文本。</p>
@@ -332,7 +344,7 @@ const modalTitle=computed(()=>({update:updateCheck.value?.candidate?'发现新�
 </ModalDialog>
 <UpdateNotice v-if="!m15Focus&&!m16Recording" @checked="updateCheck=$event" @open="modal='update'"/>
 <FeedbackNotice v-if="!m15Focus&&!m16Recording" @open="modal='feedback'"/>
-<ModalDialog v-if="modal" :title="modalTitle" :wide="modal==='references'||modal==='update'||modal==='feedback'" :variant="modal==='update'?'update':undefined" @close="modal=''">
+<ModalDialog v-if="modal" :title="modalTitle" :wide="modal==='references'||modal==='update'||modal==='feedback'" :variant="modal==='update'?'update':modal==='feedback'?'feedback':undefined" @close="modal=''">
 <template v-if="modal==='update'">
 <UpdatePanel :initial-result="updateCheck" @checked="updateCheck=$event"/>
 </template>
@@ -350,12 +362,13 @@ const modalTitle=computed(()=>({update:updateCheck.value?.candidate?'发现新�
 <button class="primary" @click="modal='font-license'">内置字体版权与许可</button>
 </div>
 </template>
-<FeedbackPanel v-else-if="modal==='feedback'"/>
+<FeedbackPanel v-else-if="modal==='feedback'" :account-linked="researchContext.files.kind==='server'"/>
 <FontLicenses v-else-if="modal==='font-license'"/>
 <MethodReferences v-else-if="modal==='references'" :module-id="referencesId"/>
 </ModalDialog>
 </template>
 <style scoped>
+.web-settings-error{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:1200;max-width:calc(100vw - 32px);padding:10px 16px;border:1px solid var(--danger);border-radius:6px;background:var(--panel);color:var(--text);box-shadow:var(--shadow);}
 .about-website.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .about-website.primary:hover{background:var(--accent);color:var(--on-accent);filter:brightness(.94)}
 :global(html[data-button-style=plain]) .about-website.primary{background:var(--panel);color:var(--text);border-color:var(--border);filter:none}

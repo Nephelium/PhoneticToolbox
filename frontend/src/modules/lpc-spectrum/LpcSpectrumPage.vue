@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {useWebSettings,settingsFields} from '../../state/web-settings.ts';
+import ResearchUpload from '../../components/ResearchUpload.vue';
 import AppIcon from '../../components/AppIcon.vue';
 import ModuleWorkbench from '../../components/ModuleWorkbench.vue';
 import ModuleFrame from '../../components/ModuleFrame.vue';
@@ -26,6 +28,7 @@ const jobs=ref<JobView[]>([]),current=ref<JobView>(),resultJob=ref<JobView>(),re
 const tasks=computed(()=>props.context.files.tasks),audioFiles=computed(()=>files.value.filter(f=>f.kind==='audio')),grids=computed(()=>files.value.filter(f=>f.kind==='textgrid'));
 const spectrogramLoader=computed(()=>{const file=source.value;return file&&props.context.files.spectrogram?(view:SpectrogramView)=>props.context.files.spectrogram!(file,view):undefined;});
 let disposed=false,fileEpoch=0,gridEpoch=0,resultEpoch=0,listEpoch=0,submitEpoch=0,abort:AbortController|undefined,polling=false;
+let submittedJobId:string|undefined;
 watch(draft,()=>wave.dirty=true,{deep:true});
 function save(){error.value='';try{parameters(draft.value);if(!host.projects.write('lpc.config.'+props.stateKey,{...draft.value}))throw Error('参数草稿保存失败，请检查本机存储权限。');wave.dirty=false;notice.value='LPC 参数草稿已保存。';return true;}catch(e){error.value=message(e);return false;}}
 defineExpose({save});
@@ -38,7 +41,7 @@ const gridRange=computed(()=>wave.asset?gridRangeStatus(tiers.value,wave.asset.d
 const validation=computed(()=>{try{if(!wave.asset||!source.value)return {error:'请先选择 WAV 音频。'};if(gridLoading.value)return {error:'正在读取 TextGrid。'};if(grid.value&&!tier.value)return {error:'请选择有效的 TextGrid 层级。'};if(gridRange.value==='mismatch')return {error:jobError('lpc_textgrid_range')};return {config:configuration(draft.value,start.value,end.value,wave.asset.sampleRate,wave.asset.frames,grid.value?tier.value:null,exportFontSnapshot()),error:''};}catch(e){return {error:message(e)};}});
 const stale=computed(()=>!!result.value&&(!validation.value.config||!sameAnalysis(result.value,validation.value.config,source.value?.sha256??'',grid.value?.sha256??null)));
 const liveJob=computed(()=>current.value&&['queued','running','cancel_requested'].includes(current.value.state));
-const taskViews=computed(()=>jobs.value.map(j=>({id:j.id,title:`LPC · ${new Date(j.created_at*1000).toLocaleTimeString()} · ${j.id.slice(0,8)}`,status:j.state,error:j.error_code?jobError(j.error_code):undefined,canCancel:true,canRetry:true})));
+const taskViews=computed(()=>jobs.value.map(j=>({id:j.id,title:`LPC · ${new Date(j.created_at*1000).toLocaleTimeString()} · ${j.execution==='browser'?'浏览器 · ':''}${j.id.slice(0,8)}`,status:j.state,error:j.error_code?jobError(j.error_code):undefined,canCancel:true,canRetry:true})));
 const display=computed(()=>{if(!result.value)return;try{return {y:axisLimits(result.value,draft.value.dynamic_y,draft.value.amp_min_db,draft.value.amp_max_db),error:''};}catch(e){return {y:[result.value.spectrum.amp_min_db,result.value.spectrum.amp_max_db] as [number,number],error:message(e)};}});
 function message(e:unknown){return e instanceof Error?jobError(e.message):String(e);}
 function clearResult(){++resultEpoch;reading.value=false;result.value=undefined;resultJob.value=undefined;resultWave.asset=null;current.value=undefined;mode.value='wave';stop();}
@@ -73,12 +76,12 @@ async function poll(){if(polling||disposed||!tasks.value?.lpcJobs)return;polling
 async function submit(){if(!source.value||!tasks.value?.lpc||submitting.value)return;const frozen=validation.value.config;if(!frozen){error.value=validation.value.error;return;}const ticket=++submitEpoch,fileTicket=fileEpoch,file={...source.value},textgrid=grid.value?{...grid.value}:null;submitting.value=true;cancelPending.value=false;error.value='';notice.value='';
   try{if(!tasks.value.lpcFonts)throw Error('当前入口尚不能检查 LPC 导出字体，请重新启动工作台。');const fonts=await tasks.value.lpcFonts(frozen.font!);if(disposed||ticket!==submitEpoch||cancelPending.value||fileTicket!==fileEpoch)return;
     if(!fonts.available)throw Error('导出环境缺少字体：'+fonts.fonts.filter(f=>!f.available).map(f=>f.requested).join('、')+'。请在设置中调整图表字体。');
-    const job=await tasks.value.lpc(file,textgrid,frozen,crypto.randomUUID());
+    const job=await tasks.value.lpc(file,textgrid,frozen,crypto.randomUUID());submittedJobId=job.id;
     if(disposed||ticket!==submitEpoch||cancelPending.value){if(tasks.value.cancelJob)await tasks.value.cancelJob(job.id);return;}
     if(fileTicket!==fileEpoch)return;current.value=job;if(job.state==='succeeded')await show(job);await poll();
-  }catch(e){if(!disposed&&ticket===submitEpoch&&fileTicket===fileEpoch)error.value=message(e);}finally{if(ticket===submitEpoch){submitting.value=false;cancelPending.value=false;}}}
-async function cancel(id?:string){if(submitting.value&&!id){cancelPending.value=true;notice.value='已请求取消，提交完成后会同步取消后台任务。';return;}const target=id??current.value?.id;if(!target)return;try{await tasks.value?.cancelJob?.(target);await poll();}catch(e){if(!disposed)error.value=message(e);}}
-async function retry(id:string){if(submitting.value)return;const ticket=++submitEpoch,fileTicket=fileEpoch;submitting.value=true;cancelPending.value=false;try{const job=await tasks.value!.retry(id,crypto.randomUUID());if(disposed||cancelPending.value){await tasks.value?.cancelJob?.(job.id);return;}if(fileTicket===fileEpoch){current.value=job;if(job.state==='succeeded')await show(job);}await poll();}catch(e){if(!disposed&&ticket===submitEpoch&&fileTicket===fileEpoch)error.value=message(e);}finally{if(ticket===submitEpoch){submitting.value=false;cancelPending.value=false;}}}
+  }catch(e){if(!disposed&&ticket===submitEpoch&&fileTicket===fileEpoch)error.value=message(e);}finally{if(ticket===submitEpoch){submitting.value=false;cancelPending.value=false;submittedJobId=undefined;}}}
+async function cancel(id?:string){if(submitting.value&&!id&&!submittedJobId){cancelPending.value=true;notice.value='已请求取消，提交完成后会同步取消后台任务。';return;}const target=id??(submitting.value?submittedJobId:current.value?.id);if(!target)return;try{await tasks.value?.cancelJob?.(target);await poll();}catch(e){if(!disposed)error.value=message(e);}}
+async function retry(id:string){if(submitting.value)return;const ticket=++submitEpoch,fileTicket=fileEpoch;submitting.value=true;cancelPending.value=false;try{const job=await tasks.value!.retry(id,crypto.randomUUID());submittedJobId=job.id;if(disposed||cancelPending.value){await tasks.value?.cancelJob?.(job.id);return;}if(fileTicket===fileEpoch){current.value=job;if(job.state==='succeeded')await show(job);}await poll();}catch(e){if(!disposed&&ticket===submitEpoch&&fileTicket===fileEpoch)error.value=message(e);}finally{if(ticket===submitEpoch){submitting.value=false;cancelPending.value=false;submittedJobId=undefined;}}}
 async function saveResult(){const job=resultJob.value,ticket=resultEpoch;if(!job||saving.value)return;saving.value=true;error.value='';notice.value='';try{const grant=await props.context.files.choose?.('output');if(!grant||disposed||ticket!==resultEpoch)return;const saved=await tasks.value!.saveJob!(job.id,grant.id);if(!disposed&&ticket===resultEpoch)notice.value=`已保存 ${saved.count} 个结果文件；同名不同内容保留原文件。`;}catch(e){if(!disposed&&ticket===resultEpoch)error.value=message(e);}finally{saving.value=false;}}
 async function saveImage(){
  const job=resultJob.value,data=result.value,ticket=resultEpoch;if(!job||!data||savingImage.value)return;
@@ -94,13 +97,14 @@ async function saveImage(){
  }catch(e){if(!disposed&&ticket===resultEpoch)error.value=message(e);}finally{savingImage.value=false;}
 }
 async function download(id:string,name:string){if(name.toLowerCase().endsWith('.png'))return saveImage();const ticket=resultEpoch;try{await tasks.value?.download?.(id,name);if(!disposed&&ticket===resultEpoch)notice.value='已交给浏览器下载：'+name;}catch(e){if(!disposed&&ticket===resultEpoch)error.value=message(e);}}
-watch(()=>props.active,active=>{if(!active)stop();});watch(mode,()=>stop());
-onMounted(()=>{if(props.context.files.kind!=='desktop')void refresh();void poll();});const timer=setInterval(()=>void poll(),1500);
+watch(()=>props.active,active=>{if(!active)stop();else void poll();});watch(mode,()=>stop());
+onMounted(()=>{if(props.context.files.kind!=='desktop')void refresh();void poll();});const timer=setInterval(()=>{if(props.active!==false||submitting.value||jobs.value.some(j=>['queued','running','cancel_requested'].includes(j.state)))void poll();},1500);
 onUnmounted(()=>{disposed=true;++fileEpoch;++gridEpoch;++resultEpoch;++listEpoch;abort?.abort();clearInterval(timer);stop();});
+useWebSettings(props.stateKey,{draft,...settingsFields(wave,['showBoth','showSpectrogram'])},undefined,()=>wave.dirty=false);
 </script>
 
 <template><ModuleFrame unified fit label="LPC 谱图 工作区" class="workspace-page lpc-page">
-<template #toolbar><ModuleToolbar><button class="primary" v-if="context.files.choose" @click="choose"><AppIcon name="folder"/>打开音频目录</button><template v-if="context.files.add"><input ref="picker" type="file" accept=".wav,.TextGrid" multiple hidden @change="addFiles"/><button class="primary" @click="picker?.click()">导入文件</button></template><button @click="refresh">刷新文件</button><template #actions><button @click="save">保存参数草稿</button><button type="button" @click="emit('help')">帮助</button><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button></template></ModuleToolbar></template>
+<template #toolbar><ModuleToolbar><ResearchUpload :files="context.files" accept=".wav,.TextGrid" @uploaded="refresh"/><button class="primary" v-if="context.files.choose" @click="choose"><AppIcon name="folder"/>打开音频目录</button><template v-if="context.files.add"><input ref="picker" type="file" accept=".wav,.TextGrid" multiple hidden @change="addFiles"/><button class="primary" @click="picker?.click()">导入文件</button></template><button @click="refresh">刷新文件</button><template #actions><button @click="save">保存参数草稿</button><button type="button" @click="emit('help')">帮助</button><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button></template></ModuleToolbar></template>
 <ModuleWorkbench unified :state-key="stateKey" left-label="文件与试听" right-label="任务与记录"><template #left><div class="lpc-files workbench-card">
 
 <label class="field">音频文件<select aria-label="LPC 音频文件" :value="source?.id??''" @change="load(($event.target as HTMLSelectElement).value)"><option disabled value="">选择 WAV</option><option v-for="file in audioFiles" :key="file.id" :value="file.id">{{file.name}}</option></select></label>

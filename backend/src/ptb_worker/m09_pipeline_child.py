@@ -8,13 +8,13 @@ ROOT=Path(__file__).resolve().parent
 sys.path.insert(0,str(ROOT))
 
 
-def repair(features, config, model_config):
+def repair(features, config, model_config, checkpoint=None):
     import numpy as np
     import torch
     from librosa.filters import mel
     from m09_neural_models import VisibleMelNAFNet
     net=VisibleMelNAFNet(80).eval().to(features.device)
-    net.load_state_dict(torch.load(ROOT/'models/repair80.pt',map_location='cpu',weights_only=True)['model'],strict=True)
+    net.load_state_dict(torch.load(checkpoint or ROOT/'models/repair80.pt',map_location='cpu',weights_only=True)['model'],strict=True)
     h=model_config
     fb=mel(sr=h.sampling_rate,n_fft=h.n_fft,n_mels=h.num_mels,fmin=h.fmin,fmax=h.fmax)
     freq=np.arange(h.n_fft//2+1)*h.sampling_rate/h.n_fft
