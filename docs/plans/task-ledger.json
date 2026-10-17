@@ -2240,7 +2240,7 @@
     {
       "id": "GITHUB-SOURCE-SYNC",
       "title": "当前 v3 源码同步至 GitHub main",
-      "status": "in_progress",
+      "status": "verified",
       "files": "Current reviewed v3 source, contracts, resources, tests, tooling and public documentation; explicit SHA allowlist in output/maintenance/github-sync-20261017/reviewed-files.json",
       "verification_scope": "Current source publication review, focused Windows checks and public homepage metadata; origin/main only",
       "note": "当前候选逐文件核查，README同步3.0.3与官网Mac r6。1059项受限说明书素材、权重/专用媒体/环境/原始材料/数据库/成品不进入清单；合成测试凭据逐项确认。479前端与215 Python定向通过、18条件跳过，类型/契约/UI数据/build、文档和架构通过。",
@@ -2248,9 +2248,8 @@
         "docs/testing/github-source-sync.md"
       ],
       "local_evidence": "output/maintenance/github-sync-20261017/",
-      "remote_result": "Prepared; remote push and actual GitHub readback pending.",
+      "remote_result": "483 reviewed files pushed to origin/main; all remote Git objects and README bytes match; default main and v2 unchanged. Actual GitHub1200/390, 21 images and four navigation clicks pass.",
       "remaining": [
-        "推送origin/main并核对远端树与实际GitHub主页",
         "完整科研/Qt/实体设备/跨平台/最终EXE未重验，模型权重等资源按既有规则另行取得"
       ],
       "previous_sync": {
@@ -2268,10 +2267,11 @@
           "main_before_homepage_update": "8cf5c5396fcab63cf431c69b2cb4712af6a12430"
         }
       },
-      "source_commit": null,
+      "source_commit": "ebf22c65e2dcb01beb642f6aad88a53898cc38f2",
       "date": "2026-10-17",
       "previous_source_commit": "37b4d4842514e8abc90aa3181d2dc2a89bdd67f7",
-      "baseline_commit": "b596c3da"
+      "baseline_commit": "b596c3da",
+      "verification": "479项前端及215项Python定向通过、18条件跳过；类型/契约/UI数据/build、文档2244文件/446来源/153任务和架构通过。214个Python/29个JSON语法通过，15处合成测试凭据逐项核实。当前远端3650文件树及483候选对象/API字节一致；GitHub实际1200/390布局和导航通过。原始上游许可空格保留，其余diff检查通过。"
     },
     {
       "id": "P15-ICP-FOOTER",
@@ -4524,13 +4524,11 @@
     {
       "id": "DOCS-GITHUB-HOMEPAGE",
       "title": "GitHub 图文主页与模块文档入口",
-      "status": "in_progress",
+      "status": "verified",
       "files": "README.md; docs/testing/github-readme.md; docs/testing/github-source-sync.md; CHANGELOG.md; docs/project-status.md; docs/plans/task-ledger.json",
       "note": "README更新3.0.3、Windows下载和Mac Apple Silicon r6/14+安装入口、离线预测/动量GL及源码资源；20张Windows截图原件保留。",
       "verification_scope": "Current README text and actual release/website metadata; independent local Chrome1200/390, 21 image decodes, 18 module links, 60 local targets and anchors with no overflow; no new screenshot collection or application/platform acceptance",
-      "remaining": [
-        "推送并检查实际GitHub宽窄布局、图片及导航"
-      ],
+      "remaining": [],
       "outside_verified_scope": [
         "未重新构建应用；截图不代表科研准确率、物理设备或跨平台验收"
       ],
@@ -4539,13 +4537,24 @@
         "docs/assets/readme/provenance.json",
         "docs/testing/github-source-sync.md",
         "output/maintenance/github-sync-20261017/render-report.json",
-        "output/maintenance/github-sync-20261017/public-metadata.json"
+        "output/maintenance/github-sync-20261017/public-metadata.json",
+        "output/maintenance/github-sync-20261017/github-live-report.json",
+        "output/maintenance/github-sync-20261017/remote-source-report.json"
       ],
       "remote_result": {
-        "status": "pending",
-        "baseline_homepage_checks": "Historical 2026-10-12 details remain in docs/testing/github-readme.md"
+        "status": "verified",
+        "source_commit": "ebf22c65e2dcb01beb642f6aad88a53898cc38f2",
+        "readme_sha256": "2a787da899c9d07f7bb145ee712ea8c8f9e46a4b6ca410473ff6d0795e8c65fc",
+        "live_widths": [
+          1200,
+          390
+        ],
+        "decoded_images": 21,
+        "navigation_clicks_per_width": 4,
+        "overflow": false
       },
-      "date": "2026-10-17"
+      "date": "2026-10-17",
+      "verification": "GitHub实际公开页与本地1200/390均通过21图、18模块、四导航及锚点/无溢出；60个本地引用有效。API核对3.0.3，官网版本/Mac元数据与HEAD200，README远端字节一致；原Windows截图保持。"
     },
     {
       "id": "GIT-V3-MAIN",

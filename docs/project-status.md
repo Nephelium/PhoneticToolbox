@@ -1,6 +1,6 @@
 # 当前实现与后续任务
 
-当前GitHub源码与主页同步正在收口：README已更新3.0.3、官网Mac r6测试版及源码资源说明，保留现有Windows功能配图。前端479项、Python定向215项与文档/架构、本地独立Chrome宽窄布局通过，18项条件检查跳过；公开推送及实际GitHub回读待完成，见[同步记录](testing/github-source-sync.md)与[主页检查](testing/github-readme.md)。
+GitHub当前源码及主页已同步至`main`，源码提交`ebf22c65`包含483项审阅文件。README更新3.0.3、官网Mac r6测试版及源码资源说明，保留Windows功能配图。479项前端、215项Python定向与文档/架构通过，18项条件检查跳过；远端Git对象/README字节一致，实际GitHub桌面及窄屏21图/四导航/锚点与无溢出通过。完整应用/设备/跨平台及最终成品未重验，见[同步记录](testing/github-source-sync.md)与[主页检查](testing/github-readme.md)。
 
 本机 Mac 开发材料已整理：清除旧包、差分缓存及重复副本，保留 r6、r5 回退包和完整开发恢复链，独有旧脚本/诊断集中归档。保护文件与完整源码重建摘要通过，下次开发恢复所需材料保持；Windows/Web 环境、公开服务和租赁 Mac 未变更。范围见 MACOS-LOCAL-CLEANUP 和 [整理验收](testing/macos-local-cleanup.md)。
 
