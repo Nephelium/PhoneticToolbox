@@ -10,7 +10,7 @@
 - 三张连续长图：`node scripts/export_website_long_images.cjs`。从公网首页截图，在区块留白处分界，报告与PNG保存到 `output/validation/website/long-images-*`。
 - 资源来源、许可、主题及截图身份见 `assets/provenance.json` 和 `assets/licenses/`。
 
-顶端版本及两个Windows下载按钮统一为3.0.3，链接经服务器完整摘要核对的免安装版与安装版，提示文件大小同步。assets/downloads.json保留实际字节数、摘要与来源，构建不会退回旧链接。Windows两按钮在左，短竖线右侧为灰色禁用的macOS按钮，注明即将上线。网页版入口显示灰测中，即将开放。静态发布不重新上传安装包。
+顶端版本及两个Windows下载按钮统一为3.0.4，链接经服务器完整摘要核对的免安装版与安装版，提示文件大小同步。assets/downloads.json保留实际字节数、摘要与来源，构建不会退回旧链接。Windows两按钮在左，短竖线右侧为灰色禁用的macOS按钮，注明即将上线。网页版入口显示灰测中，即将开放。静态发布不重新上传安装包。
 
 滚动使用原生页面滚动、IntersectionObserver 和 requestAnimationFrame，没有滚轮劫持。减少动态效果时取消漂浮、视差及入场变形；无 JavaScript 时正文、截图与导航保持可见。点击截图可查看完整原图。
 
@@ -33,7 +33,7 @@ IPA 装饰参考 Doulos SIL 的字形结构，重新绘制圆润的单线条、�
 获明确部署授权后使用 `deployment/temporary-site/publish.py --ssh-helper <仓库外既有连接脚本> --apply`。发布页面引用的静态资产、既有音频来源清单登记的WAV及字体许可，版本化目录先写入，最后原子切换首页。既有论文目录和反馈服务保持不变，旧首页和站点配置在服务器私有备份目录保留。安装包不在发布清单。
 
 
-新增内容由 `scripts/build_website_expansion.py` 生成。八项导航顺序见下方顶栏说明。工具巡游后直接进入使用教程；原更多功能与省略号提示已移除。背景区采用四张用户截图错落叠放，从前到后为第2、1、3、4张，分别是首页、外观设置、国际音标表Plus、感知实验，每张都可点击查看原图。`assets/release.json` 保留 GitHub v3.0.0 原文。更新小记默认全文展开，版本按钮切换对应正文。当前收录v3.0.3、v3.0.2、v3.0.1与v3.0.0，按版本号从新到旧排序，默认显示最新。v3.0.3、v3.0.2与v3.0.1分别逐字导入release/notes/3.0.3.md、release/notes/3.0.2.md与release/notes/3.0.1.md，来源摘要保留，不自动同步GitHub；后续将版本快照加入assets/releases目录，构建时生成版本列表。反馈直接调用同源/api/v1/feedback/，首次验证邮箱，可发送文字/图片、查看回复、切换邮箱与控制邮件提醒。会话凭据只存当前标签页sessionStorage，邮件通过既有反馈服务处理，不跳转GitHub。
+新增内容由 `scripts/build_website_expansion.py` 生成。八项导航顺序见下方顶栏说明。工具巡游后直接进入使用教程；原更多功能与省略号提示已移除。背景区采用四张用户截图错落叠放，从前到后为第2、1、3、4张，分别是首页、外观设置、国际音标表Plus、感知实验，每张都可点击查看原图。`assets/release.json` 保留 GitHub v3.0.0 原文。更新小记默认全文展开，版本按钮切换对应正文。当前收录v3.0.4、v3.0.3、v3.0.2、v3.0.1与v3.0.0，按版本号从新到旧排序，默认显示最新。v3.0.3、v3.0.2与v3.0.1分别逐字导入release/notes/3.0.3.md、release/notes/3.0.2.md与release/notes/3.0.1.md，来源摘要保留，不自动同步GitHub；后续将版本快照加入assets/releases目录，构建时生成版本列表。反馈直接调用同源/api/v1/feedback/，首次验证邮箱，可发送文字/图片、查看回复、切换邮箱与控制邮件提醒。会话凭据只存当前标签页sessionStorage，邮件通过既有反馈服务处理，不跳转GitHub。
 
 试听使用用户确认的M07完整导出：`build_website_experiments.py --phonation-export <导出目录>`核对m07.ptb.json输入与输出摘要，按step01–step09原样复制，不重合成或调幅。原声为dl_m02_0558_ma.wav与dl_m05_0558_ma.wav，均属SCSC，逐字节复制。九步同时改变基频和发声类型，导出分析为Praat/Parselmouth、40–300Hz、1ms，页面基频以相同设置复测原声和最终WAV。处理后中位F0约127/122/118/112/106/102/100/97/94Hz。小实验原有22段音频保持；下一步展示六组三路对比，三路均按32次重建，新增18段32i音频，旧43段保持原字节；资源保留61个WAV，来源/参数/摘要见assets/audio/provenance.json。已确认的手工导出会阻止普通自动生成命令覆盖，后续用新的明确导出更新。
 
@@ -75,3 +75,5 @@ IPA 装饰参考 Doulos SIL 的字形结构，重新绘制圆润的单线条、�
 下载平台布局定向检查：`WEBSITE_PLATFORM_ONLY=1 node scripts/verify_website.cjs`，覆盖七宽度、Windows/Mac下载路由及安装说明、网页版禁用、平台图例、聚合统计/键盘与无JS。本轮已随re51d6c9a7c14facb上线，冻结及公网七宽度/两下载HEAD/平台布局/真实统计/无JS通过，137项资源大小与SHA回读一致；仅三文件上传，134资产原字节复用。
 
 macOS统计定向验收：`WEBSITE_MACOS_STATS_ONLY=1 node scripts/verify_website.cjs`。公开真实数据另设`WEBSITE_ORIGIN=https://www.phonetictoolbox.com/`与`WEBSITE_MACOS_STATS_LIVE=1`。采集检查：`python -B deployment/temporary-site/test_stats.py`；Linux实际Nginx隔离检查：`python -B deployment/temporary-site/test_nginx_stats.py`。升级脚本`upgrade_macos_stats.py`默认仅预演，`--apply`只替换采集器及统计map，保存私有回退并保留现有计数与服务配置。
+
+2026-10-19随Windows 3.0.4同步下载版本、两入口/体积与作者确认的更新小记，全文来自`release/notes/3.0.4.md`。仅原子替换版本相关3文件，复用原线上资源，配置/反馈进程保持；其他工作区官网改动保留。验收见[Windows发行报告](../docs/testing/release-3.0.4-publish.md)。

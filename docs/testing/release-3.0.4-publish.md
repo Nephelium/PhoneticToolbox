@@ -1,6 +1,6 @@
 # Windows 3.0.4 发行验收
 
-日期：2026-10-19。状态：`verified，发布待完成`。本轮为Windows x64最终字节验收，实体设备、第二台干净Windows/虚拟机、Windows 10实机和其他操作系统未验。
+日期：2026-10-19。状态：`published / verified`。本轮为Windows x64最终字节验收，实体设备、第二台干净Windows/虚拟机、Windows 10实机和其他操作系统未验。
 
 ## 冻结范围与文案
 
@@ -30,12 +30,12 @@
 
 首轮构建557/559前端通过后停止：旧喉位撤销夹具遗漏新增默认唇形，来源覆盖漏列已登记浏览器科学运行库与Pink Trombone。补齐完整期望/原输入未变断言和来源覆盖，不改科研实现或数值门槛。随后559项旧候选构建成功，因井井新增生理合成修复作废其最终验收身份并重新构建561项最终包。首轮/旧候选日志保留在`output/packaging/`。
 
-缓存原生选择验证首次跨进程使用WM_USER指针导致测试进程失败，随后编辑框文字未改变树选择而选中默认目录。配方改为仅向自有测试进程分配选择字符串，读取选择显示并核对最终配置的完整路径，再释放字符串。产品实现保持，最终两流程真实运行通过。误选生成的`C:/Users/13680/PhoneticToolbox-cache`删除在执行前被自动审批以`blocked by policy`拒绝，保留目录与`chooser-default-cache-cleanup.json`回执，未通过替代命令重试。
+缓存原生选择验证首次跨进程使用WM_USER指针导致测试进程失败，随后编辑框文字未改变树选择而选中默认目录。配方改为仅向自有测试进程分配选择字符串，读取选择显示并核对最终配置的完整路径，再释放字符串。产品实现保持，最终两流程真实运行通过。误选生成的`%USERPROFILE%/PhoneticToolbox-cache`删除在执行前被自动审批以`blocked by policy`拒绝，保留目录与`chooser-default-cache-cleanup.json`回执，未通过替代命令重试。
 
 最终封装沿用`cleanup_old_builds.ps1`清理5处已识别旧成品/构建/安装输出，保留当前成品和必要缓存；4处历史不完整构建按脚本保留。回执`dist/PhoneticToolbox-304-20261019-042107-9c1e34/cleanup-report.json`。QA自有scratch与生成录音按既有生命周期清理并保留报告，不触及用户原录音/研究数据/设置/说明书正式素材。
 
 ## 发布
 
-最终本地验收与三种分发封装通过。服务器/GitHub上传和频道切换尚未执行，源码将按已审阅清单直接推送main。
+服务器三件套及校验、来源许可、构建证明、固定清单共7文件完整SHA核对通过，stable/preview两频道均切换至3.0.4。公网3份清单完整GET摘要及三件套HEAD/首1024字节Range通过。GitHub Release公开发布，7附件大小/服务端SHA-256与本机一致，正文和两处更新清单notes使用作者确认的同一文案。源码提交 `ff0bc8d1050bb075f948cb18f560ad276770b66f` 已在origin/main，GitHub Release绑定该提交。证据 `output/validation/release-304/published-verification.json`，上传回执为server-plan.receipt.json和channels-plan.receipt.json。未重复完整HTTP下载大文件。官网只更新3份版本文件并复用原线上资源，原目录/配置和反馈进程保持，4宽度真实公网浏览器及5版本切换通过，记录`output/validation/release-304/website/`。
 
 [GitHub Release](https://github.com/Nephelium/PhoneticToolbox/releases/tag/v3.0.4) · [服务器安装包](https://www.phonetictoolbox.com/releases/windows-x64/3.0.4/PhoneticToolbox-3.0.4-windows-x64-setup.exe)

@@ -23,19 +23,20 @@
       "id": "RELEASE-3.0.4",
       "title": "Windows 3.0.4打包与服务器及GitHub发布",
       "date": "2026-10-19",
-      "status": "in_progress",
-      "files": "版本元数据、M10撤销测试、来源覆盖清单、启动计时配方、release/notes/3.0.4.md、发行/当前成品验收、CHANGELOG与状态台账",
+      "status": "verified",
+      "files": "版本元数据、M10撤销测试、来源覆盖清单、启动计时配方、release/notes/3.0.4.md、官网版本元数据及首页版本区域、发行/当前成品验收、CHANGELOG与状态台账",
       "verification_scope": "Windows x64本机工程外最终字节、默认GPU可见窗口、服务器与GitHub发行；无实体设备/第二台干净电脑/跨平台验证",
-      "verification": "561项前端、说明书/类型/UI数据/构建/包审计、873源文件冻结闭合通过；最终QA 15阶段、3轮新旧冷启动及3轮温启动、原生缓存选择通过。三种分发同一应用且各<500MB。等待服务器/GitHub上传与公开核对。",
+      "verification": "561项前端、说明书/类型/UI数据/构建/包审计、873源文件冻结闭合通过；最终QA 15阶段、3轮新旧冷启动及3轮温启动、原生缓存选择通过。三种分发同一应用且各<500MB。服务器9文件SHA、GitHub7附件digest及公网HTTPS通过，main源码已推送，文案一致。",
       "remaining": [
-        "服务器/GitHub上传与公开核对、源码推送",
-        "全部完成后按授权关机"
+        "实体设备、第二台干净Windows和跨平台未验",
+        "测试误选的用户目录缓存因自动审批拒绝删除而保留"
       ],
       "evidence": [
         "docs/testing/release-3.0.4-publish.md",
         "release/notes/3.0.4.md",
         "output/validation/local-package-cfa25fd3/report.json",
-        "output/validation/package-trim/startup-4156671e333d4f8f8119ef6cecc8545b/report.json"
+        "output/validation/package-trim/startup-4156671e333d4f8f8119ef6cecc8545b/report.json",
+        "output/validation/release-304/published-verification.json"
       ]
     },
     {
