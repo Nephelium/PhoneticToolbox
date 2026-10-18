@@ -83,3 +83,5 @@ python scripts/manual/validate.py --project manual --strict
 说明书截图入口为 [capture_m17_states.py](../../../../scripts/manual/capture_m17_states.py)，使用隔离任务库、缓存和 Qt profile，核对输入/选区、撤销、缺媒体提示及 TXT 回读。复制适配器检查与实际系统剪贴板检查分别记录，截图遵循当前作者规范。取证留在本机 `output/manual-work/chapter-audit-m17.json`，结束清理测试副本。
 
 [R3 报告](../../../../docs/testing/2026-10-05-m17-r3-report.md)限定 Windows 源码、Chrome、隐藏 Qt、静态发行前端媒体解码与独立维护保存。报告只证明其列出的对象与范围。实体扬声器听辨、真实录制、精确音视频同步、任意编码兼容、具体声道动画、实体 DPI/DWM、近期 EXE 和跨平台 GUI 均需独立验收。介绍是转写说明，VoQS 标签不对应统一声学阈值或病理诊断；多字符圈围 `⟅…⟆` 为显式文本替代。外部软件需要 Unicode/字体塑形支持，浏览器关闭后的离线冷启动无 PWA 保证。
+
+手机和平板点击符号只更新正文和选区，不自动聚焦编辑框。点击文本框可唤起键盘并手动编辑，撤销/重做与电脑连续键入保持。

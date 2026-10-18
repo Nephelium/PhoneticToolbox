@@ -1,7 +1,7 @@
 {
-  "app_version": "3.0.3",
-  "core_version": "3.0.3",
-  "frontend_version": "3.0.3",
+  "app_version": "3.0.4",
+  "core_version": "3.0.4",
+  "frontend_version": "3.0.4",
   "api_version": "1.1.0",
   "stage": "Stable"
 }

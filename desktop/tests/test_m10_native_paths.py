@@ -43,7 +43,7 @@ try:
         assert Path(library._name).samefile(original/name)
         assert str(library._name).isascii() and len(str(library._name))<160
     metadata=runtime.invoke('meta')
-    assert metadata['geometry_method']=='m10/r16'
+    assert metadata['geometry_method']=='m10/r21'
     assert metadata['audio_locked'] and metadata['output_devices']==[]
     assert metadata['speaker_sha256']==hashlib.sha256((original/'JD2.speaker').read_bytes()).hexdigest()
     snapshot=runtime.engine.snapshot(runtime.engine.params)

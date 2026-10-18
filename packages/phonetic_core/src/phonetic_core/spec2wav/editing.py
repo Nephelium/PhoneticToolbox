@@ -58,8 +58,14 @@ def paint(gray, strokes):
         alpha = stroke['opacity']
         if alpha == 0:
             continue
-        mask = np.zeros(result.shape, np.uint8)
-        points = np.rint([[p['x']*(width-1), p['y']*(height-1)] for p in stroke['points']]).astype(np.int32)
+        canvas_width = width if stroke.get('canvas_width') is None else stroke['canvas_width']
+        canvas_height = height if stroke.get('canvas_height') is None else stroke['canvas_height']
+        fraction = 1. if stroke.get('frequency_fraction') is None else stroke['frequency_fraction']
+        if (not 2 <= canvas_width <= 32768 or not 2 <= canvas_height <= 32768
+                or canvas_width*canvas_height > 6_000_000 or not 0 < fraction <= 1):
+            raise ValueError('spectrogram_budget')
+        mask = np.zeros((canvas_height, canvas_width), np.uint8)
+        points = np.rint([[p['x']*(canvas_width-1), p['y']*(canvas_height-1)] for p in stroke['points']]).astype(np.int32)
         radius = max(1, int(stroke['size']/2+.5))
         if stroke.get('size_unit')=='px':
             pixel_brush(mask,points,stroke['size'])
@@ -69,8 +75,28 @@ def paint(gray, strokes):
                 line(mask, tuple(a), tuple(b), 1, radius*2, LINE_8)
             for p in (points[0], points[-1]):
                 circle(mask, tuple(p), radius, 1, -1, LINE_8)
-        hit = mask.astype(bool)
-        result[hit] = result[hit]*(1-alpha)+stroke['color']*alpha
+        if canvas_width != width:
+            # Average covered drawing pixels in each original time cell. The
+            # STFT grid/phase stay unchanged; unpainted cells retain their value.
+            edges = np.linspace(0, canvas_width, width+1)
+            indices = np.floor(edges).astype(int)
+            prefix = np.pad(np.cumsum(mask, axis=1, dtype=np.float64), ((0, 0), (1, 0)))
+            integral = prefix[:, indices] + mask[:, np.minimum(indices, canvas_width-1)]*(edges-indices)
+            coverage = np.diff(integral, axis=1)/(canvas_width/width)
+        else:
+            coverage = mask
+        if canvas_height != height or fraction != 1:
+            # The visible band occupies the lower fraction of the full image.
+            # Integrate clipped row coverage, leaving all other bins untouched.
+            step = canvas_height/(height*fraction)
+            edges = np.clip((np.arange(height+1)-height*(1-fraction))*step, 0, canvas_height)
+            indices = np.floor(edges).astype(int)
+            prefix = np.pad(np.cumsum(coverage, axis=0, dtype=np.float64), ((1, 0), (0, 0)))
+            integral = prefix[indices] + coverage[np.minimum(indices, canvas_height-1)]*(edges-indices)[:, None]
+            coverage = np.clip(np.diff(integral, axis=0)/step, 0, 1)
+        hit = coverage > 0
+        amount = alpha*coverage[hit]
+        result[hit] = result[hit]*(1-amount)+stroke['color']*amount
         touched |= hit
     return result, touched
 

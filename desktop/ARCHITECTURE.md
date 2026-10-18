@@ -39,12 +39,14 @@ Assets、LocalOnly、URL校验与scheme注册共用 [web_assets.py](src/ptb_desk
 | updates_bridge.py、update_coordinator.py、update_apply.py | 更新检查/下载、关闭协商、独立换版助手 |
 | startup_cache.py、compact_runtime.py、bundle_manifest.py | 持久缓存、压缩运行时展开、依赖身份与运行绑定 |
 | startup_*.py、presentation.py | 准备进度、启动显示和窗口呈现 |
-| platform_paths.py、cache_cleanup.py | 用户目录身份及受控缓存清理 |
+| platform_paths.py、cache_location.py、cache_location_dialog.py、legacy_cache.py、cache_cleanup.py | 用户目录身份、免安装缓存位置与轻量原生选择、旧缓存检查及受控清理 |
 | app_icon.py、icon_preferences.py | 共享图标目录、窗口/打包图标与原子保存的个人图标选择 |
 
 M10 的可变原生引擎与 M16 的采集工程各有独立生命周期。M16 使用 recording(request_id, JSON)/recordingReady，长处理先启动后台再轮询；停止检测、停止录音、取消处理和取消导出不能互相混同。协议见[recording/1](../contracts/recording/README.md)。
 
 M16录后预览仅保留最近一个窗口的数值数组，数组预算4 MB，不保留整段音频。命中前仍核对工程/版本、片段路径与文件身份、大小及mtime/ctime；声道、范围、宽度、频谱开关或源文件变化重新扫描。结果回转为独立列表，关闭工程释放缓存。采集中状态、电平和原始音频写入沿用原链路。
+
+M16的五种导出范围由`recording/jobs.export_items`在启动后台任务前解析，原始/当前及全部历史的版本选择明确分开，选区越界拒绝。清单和处理进度仍原子替换，Windows错误5/32/33采用有界重试，保持旧完整JSON直至成功；永久失败继续报错并保留候选文件。任务ID不存在时拒绝录音，不降级为自由录音。Windows与macOS使用同一桌面源码，前端任务选择、布局及时间轴与网页版共用。
 
 M09 的已有Python入口由 `m09_bridge.py` 管理：原生文件选择产生绑定解释器身份的grant，前端仅传grant请求兼容性检查，不能提交任意路径。检查在后台任务队列运行，验证依赖、实际CUDA运算及可用组件模型，成功后由worker原子保存解释器身份；运行前复核文件摘要，不安装或修改用户环境。状态查询与研究任务共用串行队列，组件下载沿用独立队列。
 
@@ -58,6 +60,8 @@ platform_paths 以操作系统用户数据目录为基础，Windows 主数据位
 
 用户选择的正式录音、导出和工程由用户管理。startup-cache 是可再生运行缓存，papers 含推荐论文、偏好及按内容摘要绑定的批注，updates 含更新状态，不能因同在用户目录而一并删除。个人 PDF 另存用户选定的根文件夹，收藏夹为真实子文件夹，导入保留来源；papers 只记录库根路径和批注。网络与 Qt PDF 操作分开排队，文档对象始终归阅读线程。
 
+Windows 免安装启动器在展开大组件前选择父目录并创建专用 `PhoneticToolbox-cache`，位置记录存于既有用户数据目录的 `portable-cache.json`，不绑定 EXE 名称、位置或版本。三个子目录 `startup-cache`、`updates`、`browser-cache` 分别存运行文件、下载/换版辅助文件、普通 WebEngine 缓存。更新服务的 `state_root` 单独保持原用户目录，Qt persistentStoragePath 保持草稿/偏好身份，任务数据库和录音不迁入可删除缓存。Qt 绑定持久目录的 GPU/Dawn 图形缓存按井井追加确认保留，设置单列路径；每个持久 profile 持有独立使用租约，确认后的图形缓存清理只在未保存/录音收尾通过且最后一个使用窗口释放后执行，失败保留请求重试。启动器将已验证位置传给自有进程，取消选择即退出，错误不回落；系统临时引导文件仍按既有进程生命周期回收。安装器在准备缓存前写安装方式标识，安装版忽略免安装位置偏好。旧缓存检查限定已知默认位置及最多16个已记录专用目录，在后台有界盘点；前端只提交候选身份和确认，清理时重新确认归属/活动实例，禁止递归删除用户数据根、Qt profile或任意前端路径。
+
 ## 打包与测试边界
 
 release/ 决定资源收集、运行时共享、安装包装和大小限制；宿主按构建清单运行，不依赖开发机 PATH。缓存先验证身份、文件和活动租约，再决定复用、修复或清理。
@@ -65,3 +69,5 @@ release/ 决定资源收集、运行时共享、安装包装和大小限制；�
 源码测试、实际 Qt、冻结进程、工程外启动、安装换版和实体设备是不同证据。定向测试在 desktop/tests，交互验证入口位于 scripts/ 与 tests/e2e；保留各自报告的具体范围，不把合成设备当成实体录音验收。
 
 声道视频封装与MP4实现位于backend ptb_worker/vocal_video、vocal_mp4，桌面video/mp4保留兼容导入入口。通过同一冻结源码快照提供真实helper脚本，不复制编码实现。
+
+M10 ProfileStore继承核心LibraryProfile，只提供原始文件读写及旧目录接续。preset-libraries.json按说话人目录原子保存，含当前套装ID、各套装构型和常用栏；当前文件优先于legacy，读取不迁移或改写旧文件。

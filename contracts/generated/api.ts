@@ -3652,6 +3652,8 @@ export interface components {
              * @default -5
              */
             amp_min_db: number;
+            /** Analysis Channel */
+            analysis_channel?: number | null;
             /**
              * Dynamic Y
              * @default false
@@ -4932,12 +4934,18 @@ export interface components {
         };
         /** SpectralStroke */
         SpectralStroke: {
+            /** Canvas Height */
+            canvas_height?: number | null;
+            /** Canvas Width */
+            canvas_width?: number | null;
             /**
              * Color
              * @default 0
              * @enum {integer}
              */
             color: 0 | 255;
+            /** Frequency Fraction */
+            frequency_fraction?: number | null;
             /**
              * Opacity
              * @default 1

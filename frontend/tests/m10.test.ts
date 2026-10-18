@@ -24,8 +24,10 @@ test('M10-R11 preserves lateral air at midline contact and reports complete clos
 test('M10-R11 undo/redo records an independent larynx edit without mutating hyoid parameters',()=>{
   const h=new PoseHistory(),before={params:[.13,-3.9],larynx_height:0},after={...before,larynx_height:.65};
   h.begin(before);h.commit(after);
-  assert.deepEqual(h.undo(after),before);assert.deepEqual(h.redo(before),after);
+  assert.deepEqual(h.undo(after),{...before,lip_shape:[0,0,0,0]});
+  assert.deepEqual(h.redo(before),{...after,lip_shape:[0,0,0,0]});
   assert.deepEqual(before.params,[.13,-3.9]);
+  assert.equal('lip_shape' in before,false);
 });
 
 test('M10-R9 includes the entire Plus matrix, literal examples and the original 107 symbols',()=>{

@@ -55,5 +55,21 @@ class MediaPermissionTest(unittest.TestCase):
             self.permission.requested(request)
         request.valid=False;self.permission.arm();self.assertEqual(request.resets,0)
 
+    def test_device_discovery_only_grants_audio_and_explains_temporary_use(self):
+        self.permission.arm('devices');request=Request(kind='MediaAudioCapture')
+        with patch.object(QMessageBox,'question',return_value=QMessageBox.StandardButton.Yes) as prompt:
+            self.permission.requested(request)
+        self.assertEqual(request.decision,'granted')
+        self.assertEqual(prompt.call_args.args[1],'音频设备权限')
+        self.assertIn('读取后立即释放',prompt.call_args.args[2])
+        for kind in ('MediaVideoCapture','MediaAudioVideoCapture'):
+            self.permission.arm('devices');request=Request(kind=kind)
+            with patch.object(QMessageBox,'question') as prompt:self.permission.requested(request)
+            prompt.assert_not_called();self.assertEqual(request.decision,'denied')
+
+    def test_unknown_purpose_cannot_arm_permissions(self):
+        with self.assertRaises(ValueError):self.permission.arm('unexpected')
+        self.assertEqual(self.permission.until,0.)
+
 
 if __name__=='__main__':unittest.main()

@@ -17,6 +17,10 @@ def main():
     if arguments == ['--ptb-remove-managed-mfa']:
         from ptb_desktop.mfa_uninstall import remove_managed_mfa
         return 0 if remove_managed_mfa()['complete'] else 21
+    from ptb_desktop.cache_location import configure_launcher
+    from ptb_desktop.cache_location_dialog import choose_directory
+    if not configure_launcher(sys.executable, arguments, choose_directory):
+        return 0
     uninstall = arguments == ['--ptb-clear-all-caches']
     if uninstall and cache_root().exists():
         with maintenance(cache_root()):
@@ -86,6 +90,8 @@ def main():
         if ready:ready.close()
         if live: live.close()
         if application_entry:application_entry.close()
+        from ptb_desktop.graphics_cache import cleanup_requested
+        cleanup_requested()
         from ptb_desktop.cache_cleanup import disposable_caches
         clear_if_idle(requested_only=True,extra_cleanup=disposable_caches)
 
@@ -94,7 +100,8 @@ if __name__ == '__main__':
     try: raise SystemExit(main())
     except Exception as error:
         log = os.environ.get('PTB_OWNED_BOOTSTRAP_LOG')
-        path = Path(log) if log else cache_root().parent / 'startup-error.log'
+        from ptb_desktop.platform_paths import user_data_root
+        path = Path(log) if log else user_data_root() / 'startup-error.log'
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(traceback.format_exc(), 'utf8')
         if not log:

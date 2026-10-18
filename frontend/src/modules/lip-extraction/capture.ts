@@ -1,5 +1,6 @@
 import {LipInference,type Detection} from './inference.ts';
 import {LandmarkStabilizer} from './stabilizer.ts';
+import {LiveFrameClock} from './live-frame-clock.ts';
 import {lipMetrics,type Point} from './metrics.ts';
 import {emptyInputLevel,InputMeter,preferredMicrophone,type InputLevel} from './audio-input.ts';
 import {newStats,MAX_LOCAL_RECORDING_BYTES,MAX_LOCAL_RESULT_BYTES,MAX_RECORDING_SECONDS,verifyLocalBudget,type CaptureMode,type CapturePhase,type CaptureStats} from './state.ts';
@@ -26,7 +27,7 @@ export class LipCapture {
   private encodingComplete=true;
   private settings:CaptureSettings|null=null;
   private firstMedia:number|null=null;
-  private previousMedia=-Infinity;
+  private frameClock=new LiveFrameClock();
   private previousPresented:number|null=null;
   private resultBytes=0;
   private stopPromise:Promise<void>|null=null;
@@ -48,7 +49,7 @@ export class LipCapture {
     if(!Number.isFinite(settings.requestedFps)||settings.requestedFps<1||settings.requestedFps>240)throw Error('请求帧率须为 1–240 fps');
     this.settings={...settings};this.generation++;const generation=this.generation;
     this.previewFrame?.close();this.previewFrame=null;
-    this.frames=[];this.chunks=[];this.chunkTimes=[];this.resultBytes=0;this.firstMedia=null;this.previousMedia=-Infinity;this.previousPresented=null;this.finalized=false;this.encodingComplete=true;this.inFlight=false;
+    this.frames=[];this.chunks=[];this.chunkTimes=[];this.resultBytes=0;this.firstMedia=null;this.frameClock=new LiveFrameClock();this.previousPresented=null;this.finalized=false;this.encodingComplete=true;this.inFlight=false;
     this.stopPromise=null;this.resolveStop=null;
     Object.assign(this.state,{phase:'opening',error:'',stats:newStats(),latest:null,dirty:false,analysisTruncated:false,support:null,trackSettings:null,audio:emptyInputLevel()});this.publish();
     let stage='检查本地存储';
@@ -121,8 +122,9 @@ export class LipCapture {
   }
   private schedule(generation:number){this.callback=this.video.requestVideoFrameCallback((now,metadata)=>{if(generation!==this.generation||!['previewing','recording'].includes(this.state.phase))return;this.schedule(generation);void this.frame(now,metadata,generation);});}
   private async frame(now:number,meta:VideoFrameCallbackMetadata,generation:number){
-    if(meta.mediaTime<=this.previousMedia)return;
-    this.previousMedia=meta.mediaTime;this.firstMedia??=meta.mediaTime;
+    const time=this.frameClock.next(now,meta.mediaTime,meta.presentedFrames);
+    if(time===null)return;
+    this.firstMedia??=time;
     this.state.stats.presented++;const callbackIndex=this.state.stats.presented;this.state.stats.firstPresentedMs??=now;this.state.stats.lastPresentedMs=now;
     if(this.previousPresented!==null)this.state.stats.observedPresentationGaps+=Math.max(0,meta.presentedFrames-this.previousPresented-1);
     this.previousPresented=meta.presentedFrames;
@@ -136,10 +138,10 @@ export class LipCapture {
       // Overlay is rendered over the exact submitted image, never a newer
       // live video frame. Encoding continues independently from this display.
       try{display=await createImageBitmap(image);}catch(error){image.close();throw error;}
-      const result=await this.engine.detect(image,meta.mediaTime*1000);
+      const result=await this.engine.detect(image,time*1000);
       if(generation!==this.generation||!['recording','previewing'].includes(this.state.phase))return;
-      const points=result.points&&this.filter?this.filter.filter(result.points,meta.mediaTime):result.points;
-      const row:CapturedFrame={index:this.state.stats.processed,time_s:meta.mediaTime-this.firstMedia,media_time_s:meta.mediaTime,presentation_time_ms:now,
+      const points=result.points&&this.filter?this.filter.filter(result.points,time):result.points;
+      const row:CapturedFrame={index:this.state.stats.processed,time_s:time-this.firstMedia,media_time_s:meta.mediaTime,presentation_time_ms:now,
         capture_time_ms:('captureTime' in meta&&typeof meta.captureTime==='number')?meta.captureTime:null,detected:!!points,points,metrics:points?lipMetrics(points):null,inference_ms:result.inference_ms,input_resolution:[result.width,result.height],video_presentation_number:meta.presentedFrames,callback_index:callbackIndex};
       this.state.stats.processed++;this.state.stats.detected+=points?1:0;this.state.stats.inferenceMs+=result.inference_ms;this.state.latest=row;
       this.previewFrame?.close();this.previewFrame=display;display=null;this.state.stats.firstOverlayMs??=performance.now();this.state.stats.lastOverlayMs=performance.now();
@@ -175,7 +177,7 @@ export class LipCapture {
   blob(){if(!['ready','failed'].includes(this.state.phase))throw Error('录制尚未收尾');if(!this.chunks.length)throw Error('没有已编码录制');return new Blob(this.chunks,{type:this.chunks[0].type});}
   metadata(){return {schema:'m05-capture/1',backend:['preview','realtime'].includes(this.settings?.mode??'')?'mediapipe-web/0.10.14/float16-1/candidate':'capture-only/1',inference_requested:['preview','realtime'].includes(this.settings?.mode??''),settings:this.settings,support:this.state.support,track_settings:this.state.trackSettings,audio_input:{...this.state.audio},
     model_smoothing:['preview','realtime'].includes(this.settings?.mode??'')?'VIDEO numFaces=1 internal smoothing':null,post_filter:['preview','realtime'].includes(this.settings?.mode??'')?(this.settings?.filter??false):null,stats:this.state.stats,chunk_times:this.chunkTimes,
-    clock_mapping:{video:'requestVideoFrameCallback.mediaTime',video_origin_s:this.firstMedia,candidate_time_base:'recording_start_estimate',origin_observation:'video.currentTime at MediaRecorder.start; asynchronous encoder origin is not exposed',origin_uncertainty_s:null,physical_sync_verified:false,presentation:'performance.now',audio:'encoded container PTS; inspect after recording',audio_video_drift_s:null},
+    clock_mapping:{video:this.frameClock.estimated?'requestVideoFrameCallback callback observation (estimate)':'requestVideoFrameCallback.mediaTime',video_clock_estimated:this.frameClock.estimated,original_video_pts:'frames[].media_time_s',video_origin_s:this.firstMedia,candidate_time_base:'recording_start_estimate',origin_observation:'video.currentTime at MediaRecorder.start; asynchronous encoder origin is not exposed',origin_uncertainty_s:null,physical_sync_verified:false,presentation:'performance.now',audio:'encoded container PTS; inspect after recording',audio_video_drift_s:null},
     limits:{media_bytes:MAX_LOCAL_RECORDING_BYTES,result_bytes:MAX_LOCAL_RESULT_BYTES},analysis_truncated:this.state.analysisTruncated,
     display_strategy:'candidate overlay uses exact submitted frame; source callback count is separate',
     overlay_display_fps:this.state.stats.processed>1&&this.state.stats.lastOverlayMs!>this.state.stats.firstOverlayMs!?(this.state.stats.processed-1)*1000/(this.state.stats.lastOverlayMs!-this.state.stats.firstOverlayMs!):null,

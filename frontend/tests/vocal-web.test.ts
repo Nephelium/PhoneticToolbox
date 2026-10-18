@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {VocalPlayback,webVocalPort} from '../src/platform/vocal.ts';
+import {VocalPlayback,webVocalPort as makeVocalPort} from '../src/platform/vocal.ts';
+import {LocalAssets,MemoryAssetDatabase} from '../src/platform/local-assets.ts';
+import {vocalProfileStore} from '../src/platform/vocal-profile.ts';
+const webVocalPort=(...args:Parameters<typeof makeVocalPort>)=>makeVocalPort(args[0],args[1],args[2],args[3],vocalProfileStore(new LocalAssets('test',args[1],new MemoryAssetDatabase())));
 
 test('prepared audio buffers before playback across slow HTTPS pulls without changing PCM',async()=>{
  const pending:((packet:any)=>void)[]=[],starts:number[]=[],copied:Float32Array[]=[];
@@ -43,4 +46,38 @@ test('closing while a preview is being calculated cannot restart audio',async()=
   await new Promise(resolve=>setTimeout(resolve,0));await port.close();resolvePreview({active:true});await check;
   assert.equal(released,1);assert.equal(closed,1);
  }finally{Object.assign(globalThis,original);}
+});
+
+test('a second preview never acknowledges the previous clip as the new clip while audio resumes',async()=>{
+ const original={AudioContext:globalThis.AudioContext,window:globalThis.window,sessionStorage:globalThis.sessionStorage};
+ let audio:any,resumes=0,release:()=>void=()=>{},generation=0,second:Promise<any>|undefined;const acknowledgements:any[]=[],operations:string[]=[];
+ class Audio {
+  state='running';currentTime=0;destination={};
+  constructor(){audio=this;}
+  async resume(){if(++resumes===4)await new Promise<void>(resolve=>release=resolve);}
+  async close(){}
+  createBuffer(_channels:number,n:number,rate:number){return {duration:n/rate,copyToChannel(){}};}
+  createBufferSource(){return {buffer:null,onended:null,connect(){},disconnect(){},start(){},stop(){}};}
+ }
+ Object.assign(globalThis,{AudioContext:Audio,window:{addEventListener(){},removeEventListener(){}},sessionStorage:{getItem:()=>null,setItem(){},removeItem(){}}});
+ const tick=(ms=0)=>new Promise(resolve=>setTimeout(resolve,ms));
+ const pcm=new Float32Array(24000).fill(.25);
+ const port=webVocalPort(async(method,path,body:any)=>{
+  if(method==='DELETE')return {};
+  if(path.startsWith('vocal/sessions?'))return {id:'owned'};
+  operations.push(body.op);
+  if(body.op==='preview')return {active:true,playback_generation:++generation};
+  if(body.op==='audio/pull')return {samples:24000,sample_rate:48000,base64:Buffer.from(pcm.buffer).toString('base64'),eof:true};
+  if(body.op==='heartbeat'){acknowledgements.push(body.body);return {active:false,playback_generation:generation};}
+  return {};
+ },'project','server:owned:project:M10');
+ try{
+  await port.request('preview');await tick();audio.currentTime=1;await tick(30);await port.request('pose');
+  assert.deepEqual(operations.slice(-2),['heartbeat','pose']);
+  await port.request('heartbeat');
+  assert.equal(acknowledgements.at(-1).completed,true);
+  second=port.request('preview');await tick();assert.equal(resumes,4);await port.request('heartbeat');
+  assert.deepEqual(acknowledgements.at(-1),{position:0,completed:false,playback_generation:2});
+  release();await second;
+ }finally{release();await second?.catch(()=>{});await port.close();Object.assign(globalThis,original);}
 });

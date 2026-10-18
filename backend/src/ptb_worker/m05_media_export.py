@@ -315,6 +315,9 @@ if __name__ == '__main__':
         if value.get('action')=='inspect':
             with __import__('tempfile').TemporaryDirectory(prefix='ptb-m05-inspect-') as scratch:
                 output=inspect_recording(value['source'],scratch)
+        elif value.get('action')=='playback':
+            from ptb_worker.m05_playback import playback_bundle
+            output=playback_bundle(value['source'],request.parent)
         elif value.get('action')=='render_result':output=result_media(request.parent,value['destination'],options=value['options'],offset=value['offset'],source_video=value.get('source_video'),animation_name=value.get('animation_name','lip-animation.mp4'),base_bytes=value.get('base_bytes',0))
         else:output=recording_bundle(value['source'],value.get('destination',request.parent),metadata_path=request.parent/'capture.m05-preview.json')
         result = dict(ok=True, value=output)

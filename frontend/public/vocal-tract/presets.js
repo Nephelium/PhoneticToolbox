@@ -1,3 +1,5 @@
+import {setupPresetPack} from './preset-pack.js';
+
 export function presetSymbol(name,symbols){
   const key=(name||'').trim().replace(/^[/\[]|[/\]]$/g,'');
   return symbols.has(key)?key:null;
@@ -10,17 +12,41 @@ export function presetInputName(value,symbols){
   return presetSymbol(name,symbols)||name;
 }
 
-export function setupPresets({initial,builtins=[],favorites:initialFavorites=[],chooseBuiltin,chart,getPose,apply,post,isReady,onSaved,notify}){
+export function setupPresets({initial,initialLibrary,builtins=[],favorites:initialFavorites=[],chooseBuiltin,chart,getPose,apply,post,isReady,onSaved,notify}){
   const $=id=>document.getElementById(id),dialog=$('presetDialog');
   const entries=new Map(chart.entries.map(entry=>[entry.id,entry]));
   const symbols=new Set(chart.entries.map(entry=>entry.insertText));
   let presets=initial,favorites=[...initialFavorites],working=false,mode='load',selected='',common=false;
+  let library=initialLibrary;
   const status=message=>$('presetStatus').textContent=message;
-  const key=name=>presetSymbol(name,symbols)||(name||'').trim();
+  const key=name=>(presetSymbol(name,symbols)||(name||'').trim()).normalize('NFC');
   const customStored=symbol=>presets.findLast(p=>key(p.name)===symbol);
   const stored=symbol=>customStored(symbol)||builtins.find(p=>key(p.name)===symbol);
   const commonPanel=document.createElement('div');commonPanel.id='presetCommon';commonPanel.hidden=true;
   $('presetChart').before(commonPanel);
+  const sets=document.createElement('div');sets.className='preset-libraries';
+  sets.innerHTML='<label>构型套装 <select id="presetSet" aria-label="构型套装"></select></label><label>套装名称 <input id="presetSetName" maxlength="120" placeholder="例如：张老师的构型"></label><div><button id="presetSetCreate" type="button">新建空套装</button><button id="presetSetCopy" type="button">复制当前套装</button><button id="presetSetRename" type="button">重命名</button></div><p class="minor">切换套装后，保存构型和 IPA 合成使用所选套装，已有关键帧保留。</p><details><summary>管理已存名称</summary><div id="presetNames"></div></details>';
+  $('presetChart').before(sets);
+  function adopt(value){library=value;const current=library.sets.find(s=>s.id===library.active);presets=current.presets;favorites=[...current.favorites];selected='';render();}
+  async function editSet(action){
+    if(working||!isReady())return;const edit={action,name:$('presetSetName').value,id:$('presetSet').value};working=true;render();
+    try{adopt(await(await post('library/edit',edit)).json());status('当前套装：'+library.sets.find(s=>s.id===library.active).name);$('presetSetName').value='';}
+    catch(e){status(e.message);}finally{working=false;render();}
+  }
+  $('presetSet').onchange=()=>editSet('select');
+  for(const [id,action] of [['presetSetCreate','create'],['presetSetCopy','copy'],['presetSetRename','rename']])$(id).onclick=()=>editSet(action);
+  function renderSets(){
+    const select=$('presetSet');select.replaceChildren();
+    for(const set of library.sets){const o=document.createElement('option');o.value=set.id;o.textContent=set.name+' · '+set.presets.length+' 个';select.append(o);}select.value=library.active;
+    for(const e of sets.querySelectorAll('input,select,button'))e.disabled=working;
+    $('presetNames').replaceChildren();
+    for(const p of presets){
+      const row=document.createElement('div'),input=document.createElement('input'),button=document.createElement('button');row.className='preset-name-row';input.value=p.name;input.maxLength=80;input.setAttribute('aria-label','构型名称 '+p.name);button.type='button';button.textContent='保存名称';button.disabled=input.disabled=working;
+      button.onclick=async()=>{if(working)return;const next=presets.map(item=>item.id===p.id?{...item,name:input.value}:item);working=true;render();try{presets=await(await post('presets/save',{presets:next})).json();adopt(await(await post('library/load')).json());status('构型名称已保存。');}catch(e){status(e.message);}finally{working=false;render();}};
+      row.append(input,button);$('presetNames').append(row);
+    }
+  }
+
   function symbolButton(id){
     const entry=entries.get(id),button=document.createElement('button');
     button.type='button';button.className='preset-ipa';button.textContent=entry.display;
@@ -54,6 +80,7 @@ export function setupPresets({initial,builtins=[],favorites:initialFavorites=[],
   const empty=document.createElement('p');empty.id='customPresetEmpty';empty.className='minor';empty.textContent='点击右上角输入音标，添加表中没有的音标或组合。';custom.append(empty);
   extras.append(custom);lower.append(extras);$('presetChart').append(lower);
   function render(){
+    renderSets();
     $('presetChart').hidden=common;commonPanel.hidden=!common;commonPanel.replaceChildren();
     if(common)for(const [title,items] of [['内置构形',builtins],['已存构型',presets]]){
       if(!items.length)continue;const group=section(title),buttons=document.createElement('div');buttons.className='preset-symbol-flow';
@@ -113,12 +140,15 @@ export function setupPresets({initial,builtins=[],favorites:initialFavorites=[],
     const previous=customStored(symbol),p={...getPose(),name:symbol,id:previous?.id||crypto.randomUUID(),duration:.6};
     const next=previous?presets.map(item=>item.id===previous.id?p:item):[...presets,p];
     working=true;status(`正在保存 /${symbol}/…`);render();
-    try{const saved=await(await post('presets/save',{presets:next})).json();presets=saved;selected=p.id;onSaved(p);dialog.close();notify(`已保存 /${symbol}/ 构形与声源设置`);}
+    try{const saved=await(await post('presets/save',{presets:next})).json();presets=saved;library=await(await post('library/load')).json();selected=p.id;onSaved(p);dialog.close();notify(`已保存 /${symbol}/ 构形与声源设置`);}
     catch(error){status('保存失败：'+error.message);}
     finally{working=false;render();}
   }
   $('customPreset').onclick=()=>open('load');$('savePreset').onclick=()=>open('save');
   $('presetCancel').onclick=()=>{if(!working)dialog.close();};
+  const pack=setupPresetPack({getLibrary:()=>structuredClone(library),setLibrary:adopt,getPresets:()=>structuredClone(presets),getBuiltins:()=>structuredClone(builtins),setPresets:value=>{presets=value;render();},post,isReady,notify,onClose:()=>{render();dialog.showModal();}});
+  const share=document.createElement('button');share.id='presetShare';share.textContent='导入 / 分享';share.type='button';share.onclick=()=>{if(!working){dialog.close();pack.open();}};
+  $('presetCancel').before(share);
   dialog.addEventListener('cancel',event=>{if(working)event.preventDefault();});
-  render();return {getName:id=>[...presets,...builtins].find(p=>p.id===id)?.name||'',select:id=>{selected=id;}};
+  render();return {getCustom:()=>structuredClone(presets),getName:id=>[...presets,...builtins].find(p=>p.id===id)?.name||'',select:id=>{selected=id;}};
 }

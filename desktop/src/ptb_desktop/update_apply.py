@@ -113,14 +113,11 @@ def release_layout(app_root, version, *, require_runtime=True):
 
 
 def package_kind(executable=None):
-    exe = Path(executable or external_executable())
-    marker = exe.parent / '.ptb-installed.json'
-    if not marker.exists():
-        return 'portable'
-    value = read_json(plain_path(marker, exe.parent))
-    if value.get('schema') != 'ptb-install/1' or value.get('kind') != 'installer':
+    from .cache_location import distribution_kind
+    try:
+        return distribution_kind(executable or external_executable())
+    except (OSError, ValueError):
         fail('APPLY_LAYOUT', '安装方式标识无效，请重新安装此应用。')
-    return 'installer'
 
 
 def archive_members(archive):
@@ -358,7 +355,8 @@ def launch_handoff(request, plan):
 
 def run_handoff(request, token, handle, *, root=None, executable=None, wait=wait_parent, launch=subprocess.Popen):
     """Adapters are Python test boundaries; no environment/CLI dry-run bypass."""
-    root = Path(root or user_data_root() / 'updates').absolute()
+    from .cache_location import update_directory
+    root = Path(root or update_directory()).absolute()
     plain_path(root, root)
     request = plain_path(request, root / 'apply')
     if request.name != 'request.json' or not re.fullmatch('[0-9a-f]{32}', request.parent.name) or request.parent.parent != root / 'apply':

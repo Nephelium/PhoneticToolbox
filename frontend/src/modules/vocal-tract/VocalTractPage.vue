@@ -19,8 +19,8 @@ const invoke=vocalRequest??webPort?.request;
 const frame=ref<HTMLIFrameElement>();const ready=!!invoke;
 const settingsKey=webSettingsKey(props.stateKey);
 let frameSettings:Record<string,unknown>={};
-const webNotice=ref(false);
-watch(()=>props.active,active=>{if(active&&props.context?.files.kind==='server'&&readWebSettings(props.stateKey).webNoticeSeen!==true)webNotice.value=true;},{immediate:true});
+const webNotice=ref(false);let serverFallback=false;
+watch(()=>props.active,active=>{if(active&&serverFallback&&readWebSettings(props.stateKey).webNoticeSeen!==true)webNotice.value=true;});
 function acknowledgeWebNotice(){writeWebSettings(props.stateKey,{webNoticeSeen:true});webNotice.value=false;}
 const frameUrl='./vocal-tract/index.html?'+new URLSearchParams({...(!ready?{presentation:'1'}:{}),...(settingsKey?{settings:settingsKey}:{})});
 let columns:ReturnType<typeof resizePanels>|undefined;
@@ -33,6 +33,10 @@ watch(fontRevision,theme);
 async function message(event:MessageEvent){
   if(event.source!==frame.value?.contentWindow||!event.data||typeof event.data!=='object')return;
   const {type,id,op,body}=event.data;
+  if(event.origin===location.origin&&type==='m10-capabilities'){
+    serverFallback=!vocalRequest&&props.context?.files.kind==='server'&&event.data.execution!=='browser-wasm';
+    webNotice.value=!!(props.active&&serverFallback&&props.context?.files.kind==='server'&&readWebSettings(props.stateKey).webNoticeSeen!==true);return;
+  }
   if(settingsKey&&event.origin===location.origin&&type==='m10-settings-read'){frameSettings=JSON.parse(JSON.stringify(readWebSettings(props.stateKey).frame??{}));event.source?.postMessage({type:'m10-settings-value',key:settingsKey,value:frameSettings},{targetOrigin:event.origin});return;}
   if(settingsKey&&event.origin===location.origin&&type==='m10-settings-write'&&body&&typeof body==='object'){const changes=preferenceChanges(frameSettings,body);if(writeWebSettings(props.stateKey,{frame:changes}))frameSettings=JSON.parse(JSON.stringify(body));return;}
   if(type==='m10-ready'){theme();chart();return;}
@@ -50,18 +54,21 @@ watch(()=>props.active,active=>{if(!active)void invoke?.('deactivate').catch(()=
 onUnmounted(()=>{columns?.destroy();observer?.disconnect();frameSize?.disconnect();window.removeEventListener('message',message);void invoke?.('shutdown').catch(()=>{});});
 </script>
 <template>
+<div class="vocal-host">
 <WebModuleSeal :sealed="!ready" title="生理参数合成" reason="服务器的 VTL 引擎与会话接口仍在适配中，网页版暂未接通。" @help="emit('help')">
 <section class="vocal-page" aria-label="声道工作区">
 <iframe ref="frame" :src="frameUrl" title="生理参数合成" @load="loaded"/>
 </section>
 </WebModuleSeal>
-<ModalDialog v-if="webNotice" title="生理参数合成 · 网页版" variant="confirm" @close="acknowledgeWebNotice">
+<ModalDialog v-if="webNotice&&active" title="生理参数合成 · 网页版" variant="confirm" @close="acknowledgeWebNotice">
 <p>由于服务器性能限制，请先调整并固定调音姿态，再点击测试发声试听 0.5 秒。</p>
 <p>网页版暂不支持边调整姿态边实时合成语音。需要实时合成时，请使用桌面版。</p>
 <template #footer><button class="primary" @click="acknowledgeWebNotice">知道了</button></template>
 </ModalDialog>
+</div>
 </template>
 <style scoped>
+.vocal-host{height:100%;min-height:0;min-width:0;display:flex;flex:1}
 .vocal-page{height:100%;min-height:0;width:100%;display:flex;flex:1}.vocal-page iframe{border:0;width:100%;height:100%;min-height:0;background:var(--app)}.vocal-unavailable{padding:30px;line-height:2}
 .vocal-help-actions{display:flex;align-items:center;gap:var(--control-gap);margin-top:var(--control-gap)}.vocal-help-actions button{min-height:var(--control-height);font-size:var(--control-size)}
 </style>

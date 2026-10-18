@@ -94,6 +94,8 @@ research_entry 在导入 GUI 前处理固定的 --ptb-worker、--local-service�
 
 同一模块在不同平台可能暴露不同能力。没有桌面桥的浏览器可使用本地预览和已实现的纯客户端流程；账号项目通过 serverFiles 接后端。不能因菜单可见就认定原生设备或服务器计算可用。
 
+浏览器研究文件由 `frontend/src/platform/local-assets.ts` 按账号/本机项目保存 IndexedDB Blob 与恢复指针，跨模块共用。导入和本机输出不上传，服务器计算通过 `local-asset-transport.ts` 按需准备引用输入，结果首次读取后保存本机副本。默认临时项目使用稳定本机分组，刷新与重登可恢复，账号设置仍走独立的 `module_preferences`。本机文件不随工作区TTL清理，浏览器站点数据由用户管理。
+
 ## 三条典型数据流
 
 ### 科学批任务
@@ -123,6 +125,7 @@ M15 刺激解码、预检、调度和计时留在客户端，网络往返不参�
 | %LOCALAPPDATA%/PhoneticToolbox/v3/local-preview-20260927 | 当前冻结入口默认的任务/文件工作区 | 名称保留兼容性，不按日期认定过期 |
 | %LOCALAPPDATA%/PhoneticToolbox-v3/workbench | Qt 网页持久存储、偏好与客户端草稿/数据库 | 与普通下载缓存区分，升级保持固定身份 |
 | %LOCALAPPDATA%/PhoneticToolbox/v3/startup-cache | 经内容校验的运行时/应用启动缓存 | 通过应用缓存管理和活动租约处理 |
+| 用户选择的 PhoneticToolbox-cache | Windows 免安装版的 startup-cache、updates、browser-cache | 首次明确选择；portable-cache.json 保持位置；替换 EXE 沿用，设置支持查看/打开；设置及研究资料在原位置 |
 | %LOCALAPPDATA%/PhoneticToolbox/v3/updates、papers | 更新状态/下载；推荐论文、首次日期、偏好、个人库路径和批注 | 不随启动缓存清理或源码测试清理删除 |
 | 用户在 M18 选择的论文根文件夹 | 个人 PDF 与真实收藏子文件夹 | 导入保留来源，整理移动库内文件，不上传服务器 |
 | 用户选择的录音、工程和导出目录 | 原始研究数据和正式结果 | 由用户管理，测试清理授权不涵盖 |

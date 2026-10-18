@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import {computed,ref,watch} from 'vue';import type {LpcResult} from './state.ts';
 import ScientificPlot from '../../components/ScientificPlot.vue';
-const props=defineProps<{result:LpcResult;y:[number,number];dynamic:boolean}>();
+import {referenceTrace} from './display.ts';
+const props=defineProps<{result:LpcResult;y:[number,number];dynamic:boolean;showSpectrum?:boolean}>();
 const emit=defineEmits<{'axis-mode':[dynamic:boolean]}>();
 const zoom=ref(1),offset=ref(0);
 watch(()=>props.result,()=>{zoom.value=1;offset.value=0;});
 const maximum=computed(()=>props.result.config.freq_max_hz),length=computed(()=>maximum.value/zoom.value),left=computed(()=>Math.min(offset.value,maximum.value-length.value));
-const trace=computed(()=>[{label:'LPC 谱包络',times:props.result.spectrum.frequencies_hz,values:props.result.spectrum.magnitude_db,color:'var(--wave)'}]);
+const trace=computed(()=>{const fft=props.showSpectrum?referenceTrace(props.result):undefined;return [...(fft?[{label:'FFT 频谱（峰值对齐）',times:fft.frequencies_hz,values:fft.magnitude_db,color:'var(--muted)',opacity:.65,lineWidth:.8}]:[]),{label:'LPC 谱包络',times:props.result.spectrum.frequencies_hz,values:props.result.spectrum.magnitude_db,color:'var(--wave)',lineWidth:1.5}];});
 function scale(value:number){const center=left.value+length.value/2;zoom.value=Math.max(1,Math.min(64,value));offset.value=Math.max(0,Math.min(center-length.value/2,maximum.value-length.value));}
 function pan(delta:number){offset.value=Math.max(0,Math.min(left.value-delta,maximum.value-length.value));}
 function reset(){zoom.value=1;offset.value=0;}

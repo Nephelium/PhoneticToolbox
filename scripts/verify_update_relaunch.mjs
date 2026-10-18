@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 const file=path.resolve(process.argv[2]),plan=JSON.parse(await fs.readFile(file,'utf8'));
 const cachePreparations=[];
 async function observeCache(){
- try{const row=JSON.parse(await fs.readFile(path.join(plan.profile,'PhoneticToolbox/v3/startup-cache/last-launch.json'),'utf8'));if(!cachePreparations.some(v=>JSON.stringify(v)===JSON.stringify(row)))cachePreparations.push(row);}catch{}
+ try{let directory=path.join(plan.profile,'PhoneticToolbox/v3');if(plan.kind==='portable'){const config=JSON.parse(await fs.readFile(path.join(plan.profile,'PhoneticToolbox/v3/portable-cache.json'),'utf8'));directory=config.directory;}const row=JSON.parse(await fs.readFile(path.join(directory,'startup-cache/last-launch.json'),'utf8'));if(!cachePreparations.some(v=>JSON.stringify(v)===JSON.stringify(row)))cachePreparations.push(row);}catch{}
 }
 let status;const deadline=Date.now()+600000;
 while(Date.now()<deadline){

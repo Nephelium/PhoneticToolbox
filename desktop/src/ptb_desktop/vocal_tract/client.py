@@ -60,7 +60,7 @@ class VocalTractClient:
                 self.start();p=self.process
                 with self.pending_lock:self.pending[request_id]=(p,q)
                 with self.write_lock:p.stdin.write(data+'\n');p.stdin.flush()
-            result=q.get(timeout=150)
+            result=q.get(timeout=630 if op in ('animation/prepare','preview') else 150)
             if not result.get('ok'):raise RuntimeError(result.get('error','声道请求失败'))
             return result['value']
         finally:

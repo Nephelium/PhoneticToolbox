@@ -34,8 +34,10 @@ def resolve_libraries(root, *, platform=None, arch=None):
         'win32':('VocalTractLabApi.dll','VocalTractLabAnalysis.dll','geometry_p2.dll'),
         'darwin':('libVocalTractLabApi.dylib','libVocalTractLabAnalysis.dylib','libgeometry_p2.dylib'),
         'linux':('libVocalTractLabApi.so','libVocalTractLabAnalysis.so','libgeometry_p2.so'),
+        'emscripten':('libVocalTractLabApi.so','libVocalTractLabAnalysis.so','libgeometry_p2.so'),
     }
-    if platform not in names or arch not in ('x86_64','arm64'):
+    supported = ('wasm32',) if platform=='emscripten' else ('x86_64','arm64')
+    if platform not in names or arch not in supported:
         raise RuntimeError('native_platform_unavailable')
     root=Path(root)
     directory=root/f'{platform}-{arch}'

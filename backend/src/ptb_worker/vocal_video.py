@@ -14,6 +14,7 @@ import time
 import uuid
 import sys
 from pathlib import Path
+from phonetic_core.vocal_tract.trajectory import MAX_SEQUENCE_SECONDS
 
 
 def uint(n):
@@ -79,7 +80,7 @@ class VideoSession:
         width=config.get('width');height=config.get('height');duration=config.get('duration');fps=config.get('fps')
         if type(width) is not int or type(height) is not int or not 64<=width<=1920 or not 64<=height<=1080 or fps!=30:
             raise ValueError('不支持的视频尺寸或帧率')
-        if type(duration) not in (int,float) or not math.isfinite(duration) or not .05<=duration<=12:raise ValueError('视频时长应为 0.05–12 秒')
+        if type(duration) not in (int,float) or not math.isfinite(duration) or not .05<=duration<=MAX_SEQUENCE_SECONDS:raise ValueError(f'视频时长应为 0.05–{MAX_SEQUENCE_SECONDS:g} 秒')
         self.id=uuid.uuid4().hex;self.target=Path(target);self.width=width;self.height=height;self.fps=fps;self.duration=round(duration*48000)/48000
         self.packets=[];self.size=0;self.opus=None;self.closed=False
         self.cancelled=threading.Event()
@@ -95,11 +96,11 @@ class VideoSession:
         added=[];size=0
         for p in packets:
             track=p.get('track');timestamp=p.get('timestamp');duration=p.get('duration',0)
-            if track not in (1,2) or type(timestamp) is not int or not -50000<=timestamp<=12050000 or type(duration) is not int or not 0<=duration<=100000:raise ValueError('无效的编码时间戳')
+            if track not in (1,2) or type(timestamp) is not int or not -50000<=timestamp<=round(self.duration*1_000_000)+50000 or type(duration) is not int or not 0<=duration<=100000:raise ValueError('无效的编码时间戳')
             raw=base64.b64decode(p['data'],validate=True)
             if not raw or len(raw)>2_000_000:raise ValueError('编码帧超过容量')
             size+=len(raw);added.append(dict(track=track,timestamp=timestamp,duration=duration,key=bool(p.get('key')),data=raw))
-        if self.size+size>64_000_000 or len(self.packets)+len(added)>1200:raise ValueError('视频超过导出容量')
+        if self.size+size>64_000_000 or len(self.packets)+len(added)>math.ceil(self.duration*(self.fps+50))+10:raise ValueError('视频超过导出容量')
         if obj.get('opus'):
             opus=base64.b64decode(obj['opus'],validate=True)
             if len(opus)>64 or not opus.startswith(b'OpusHead'):raise ValueError('无效的音频编码描述')

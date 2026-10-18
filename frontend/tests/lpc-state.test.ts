@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {defaults,parameters,restoreDraft,configuration,visibleRange,sameAnalysis,audioSelection,gridRangeStatus,type LpcResult} from '../src/modules/lpc-spectrum/state.ts';
+import {defaults,parameters,restoreDraft,configuration,visibleRange,sameAnalysis,parseResult,audioSelection,gridRangeStatus,type LpcResult} from '../src/modules/lpc-spectrum/state.ts';
 const font={schema_version:'font/1' as const,zh:'Microsoft YaHei',latin:'Segoe UI',ipa:'Doulos SIL' as const,size_px:14};
 test('M04 R1 annotation selection intersects the WAV without inventing out-of-range samples',()=>{
  assert.deepEqual(audioSelection(1.8,9,3.85),[1.8,3.85]);
@@ -30,4 +30,19 @@ test('M04 A15 changed parameter, source or tier marks previous results stale',()
  const config=configuration(defaults(),.1,.2,48000,96000,'phones',font);
  const r={config,input_sha256:'audio',textgrid_sha256:'grid'} as LpcResult;
  assert(sameAnalysis(r,config,'audio','grid'));assert(!sameAnalysis(r,{...config,order:40},'audio','grid'));assert(!sameAnalysis(r,config,'new','grid'));assert(!sameAnalysis(r,config,'audio',null));
+});
+
+test('M04 old drafts retain mean analysis; explicit channels persist and reject invalid indices',()=>{
+ const old={...defaults()};delete old.analysis_channel;
+ assert.equal(restoreDraft(old).analysis_channel,'mean');assert.equal(parameters(restoreDraft(old)).analysis_channel,undefined);
+ assert.equal(parameters({...defaults(),analysis_channel:'1'}).analysis_channel,1);
+ assert.equal(restoreDraft({...defaults(),analysis_channel:'0'}).analysis_channel,'0');
+ for(const analysis_channel of ['-1','8','1.2',''])assert.throws(()=>parameters({...defaults(),analysis_channel}));
+});
+
+test('M04 old results remain readable; malformed optional FFT arrays are rejected',()=>{
+ const r={schema_version:'m04/1',config:{},input_name:'old.wav',input_sha256:'old',selection:{start_sample:0,end_sample:100,interval:'half-open'},spectrum:{frequencies_hz:Array.from({length:1024},(_,i)=>i),magnitude_db:Array(1024).fill(0),amp_min_db:-5,amp_max_db:35}};
+ const raw=(value:unknown)=>new TextEncoder().encode(JSON.stringify(value)).buffer;
+ assert.equal(parseResult(raw(r)).reference_spectrum,undefined);
+ assert.throws(()=>parseResult(raw({...r,reference_spectrum:{frequencies_hz:[0,1],magnitude_db:[0]}})),/FFT/);
 });

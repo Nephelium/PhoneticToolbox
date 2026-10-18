@@ -58,6 +58,16 @@ export async function desktopM05(transport:Task,choose:()=>Promise<{id:string}|n
   async history(){return task({op:'m05_history'});},
   async load(id){const job=await task<JobView>({op:'job',id});return run({asset_id:'',sha256:''},id.slice(0,8),{filter_enabled:true,cutoff_hz:15},new AbortController().signal,()=>{},{},job);},
   async sourceVideo(result){const info=await task({op:'m05_source_info',job:result.id});const parts:Uint8Array<ArrayBuffer>[]=[];for(let offset=0;offset<info.size_bytes;offset+=262144){const response=await task({op:'m05_source_block',job:result.id,offset});parts.push(Uint8Array.from(atob(response.base64),c=>c.charCodeAt(0)));}const blob=new Blob(parts,{type:info.name.toLowerCase().endsWith('.webm')?'video/webm':'video/mp4'});if(blob.size!==info.size_bytes||await sha256(await blob.arrayBuffer())!==info.sha256)throw Error('历史视频校验失败');return blob;},
+  async playbackVideo(result){
+   const info=await task({op:'m05_playback_info',job:result.id});
+   try{
+    if(!Number.isSafeInteger(info.size_bytes)||info.size_bytes<=0||info.size_bytes>128_000_000||!Number.isFinite(info.origin_s))throw Error('回放视频信息无效');
+    const parts:Uint8Array<ArrayBuffer>[]=[];
+    for(let offset=0;offset<info.size_bytes;offset+=262144){const response=await task({op:'m05_playback_block',token:info.token,offset});const part=Uint8Array.from(atob(response.base64),c=>c.charCodeAt(0));if(part.length!==Math.min(262144,info.size_bytes-offset))throw Error('回放视频读取不完整');parts.push(part);}
+    const blob=new Blob(parts,{type:'video/webm'});if(await sha256(await blob.arrayBuffer())!==info.sha256)throw Error('回放视频校验失败');
+    return {blob,origin_s:info.origin_s};
+   }finally{await task({op:'m05_playback_release',token:info.token});}
+  },
   replay(result,start){return task({op:'m05_replay',job:result.id,start});},
   audioPreview(result){return task({op:'m05_audio_preview',job:result.id});},
   async inspectRecording(blob){

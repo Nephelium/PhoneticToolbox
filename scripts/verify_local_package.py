@@ -142,8 +142,10 @@ def main():
         shutil.copyfile(exe, app)
         profile, temp = visible / 'profile', visible / 'temp'
         profile.mkdir(); temp.mkdir()
+        from portable_cache_qa import seed_portable_profile
+        seed_portable_profile(profile)
         updates = profile / 'PhoneticToolbox/v3/updates'
-        updates.mkdir(parents=True)
+        updates.mkdir(parents=True,exist_ok=True)
         (updates / 'state.json').write_text('{"autoCheck":false}', 'utf8')
         # This owned PDF exercises cache reuse in the actual final application.
         from pypdf import PdfWriter

@@ -1,6 +1,6 @@
 {
   "name": "phonetic-toolbox-frontend",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,6 +11,7 @@
     "ui-data": "node scripts/generate-ui-data.mjs",
     "ui-data:check": "node scripts/generate-ui-data.mjs --check",
     "build": "vite build",
+    "build:workbench": "vite build --emptyOutDir false",
     "dev": "vite --host 127.0.0.1"
   },
   "dependencies": {

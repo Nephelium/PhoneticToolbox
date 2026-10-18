@@ -27,8 +27,8 @@ HEX = re.compile('[0-9a-f]{64}')
 
 def cache_root():
     # Owned QA redirects LOCALAPPDATA, just as normal application data does.
-    from .platform_paths import user_data_root
-    return user_data_root() / 'startup-cache'
+    from .cache_location import startup_directory
+    return startup_directory()
 
 
 def plain(path, root):

@@ -1,5 +1,6 @@
 """M10-R17 waveform zoom: analytical PCM fixtures, no audio device."""
 from types import SimpleNamespace
+import threading
 import numpy as np
 import pytest
 from phonetic_core.vocal_tract.monitor import OutputHistory, analyze_output
@@ -59,6 +60,7 @@ def test_runtime_route_keeps_wraparound_pcm_and_zoom_coordinates():
     samples=(.007*np.sin(2*np.pi*200*t)).astype(np.float32)
     history.append(samples)
     runtime=Runtime.__new__(Runtime)
+    runtime.monitor_lock=threading.Lock();runtime.monitor_cache=None
     runtime.engine=SimpleNamespace(sr=48000)
     runtime.live=SimpleNamespace(output_history=history)
     result=runtime.invoke('audio/monitor',{'seconds':2,'view_seconds':.01,'view_lag':1,'waveform_width':500})

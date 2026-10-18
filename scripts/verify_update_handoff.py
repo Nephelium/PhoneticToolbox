@@ -31,6 +31,12 @@ def main():
         if not profile.is_relative_to(temp) or not profile.name.startswith('PTB-Preview1-'):
             raise ValueError('Expected an owned Preview QA profile under the current user Temp directory')
     profile.mkdir();os.environ['LOCALAPPDATA']=str(profile)
+    from portable_cache_qa import seed_portable_profile
+    if args.kind=='portable':
+        os.environ['PTB_CACHE_DIRECTORY']=str(seed_portable_profile(profile))
+        os.environ['PTB_CACHE_MODE']='portable'
+    else:
+        os.environ.pop('PTB_CACHE_DIRECTORY',None);os.environ['PTB_CACHE_MODE']='installer'
     os.environ['QT_QPA_PLATFORM']='offscreen';os.environ['QTWEBENGINE_CHROMIUM_FLAGS']='--mute-audio --disable-gpu --autoplay-policy=no-user-gesture-required'
     from ptb_desktop.platform_paths import user_data_root,windows_workbench_storage
     from ptb_worker.local_workspace import prepare_workspace
@@ -64,7 +70,8 @@ def main():
     preferences=js('Object.fromEntries(Object.keys(localStorage).filter(k=>k.startsWith("ptb.v3.")).map(k=>[k,localStorage.getItem(k)]))')
     marker=user_data_root()/'project-do-not-remove.json';marker.write_text('{"fixture":"owned research project"}','utf8');marker_hash=hashlib.sha256(marker.read_bytes()).hexdigest()
     w.closing=True;w.close();pause(1000);w.page.deleteLater();app.processEvents()
-    updates=user_data_root()/'updates';download=updates/'downloads'/uuid4().hex/args.package.name;download.parent.mkdir(parents=True);shutil.copyfile(args.package,download)
+    from ptb_desktop.cache_location import update_directory
+    updates=update_directory();download=updates/'downloads'/uuid4().hex/args.package.name;download.parent.mkdir(parents=True);shutil.copyfile(args.package,download)
     with download.open('rb') as stream:
         digest=hashlib.file_digest(stream,'sha256').hexdigest()
     from ptb_desktop.update_apply import prepare_handoff,launch_handoff
@@ -74,6 +81,8 @@ def main():
     for name in list(os.environ):
         if name.startswith(('PTB_', 'PYTHON', 'CONDA', '_PYI')) or name == 'VIRTUAL_ENV':
             os.environ.pop(name)
+    os.environ['PTB_CACHE_MODE']=args.kind
+    if args.kind=='portable':os.environ['PTB_CACHE_DIRECTORY']=str(seed_portable_profile(profile))
     temporary = out / 'temp'; temporary.mkdir()
     os.environ.update(TEMP=str(temporary), TMP=str(temporary),
                       PTB_OWNED_BOOTSTRAP_LOG=str(out/'bootstrap-error.log'),

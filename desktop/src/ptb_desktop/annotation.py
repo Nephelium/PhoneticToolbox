@@ -64,7 +64,10 @@ class AnnotationFiles:
             self.provider.directory(grant)
             for item in self.provider.list(grant):
                 if item['kind'] in ('audio', 'textgrid', 'lip', 'lip_pickle', 'lab'):
-                    result.append({**item, 'name': (path/item['name']).relative_to(root.path).as_posix()})
+                    value = {**item, 'name': (path/item['name']).relative_to(root.path).as_posix()}
+                    if item['kind'] == 'audio':
+                        value['annotationKey'] = hashlib.sha256(os.path.normcase(str(path/item['name'])).encode('utf-8')).hexdigest()
+                    result.append(value)
             if len(result) > 10000:
                 raise FileAccessError('语料文件超过 10000，请缩小目录。')
             with os.scandir(path) as entries:

@@ -87,6 +87,25 @@ def mono_samples(samples):
     return y
 
 
+def fft_reference_spectrum(audio_segment, fs):
+    """Same 0.97 pre-emphasis/Hamming input as LPC, one-sided FFT amplitude.
+
+    The reference is independent from the unchanged unit-numerator LPC values.
+    A viewer may explicitly align its peak for comparing spectral shapes.
+    """
+    validate_rate(fs)
+    audio = numeric_array(audio_segment, (1,))
+    finite_audio(audio)
+    if not 3 <= audio.size <= MAX_ROI_SAMPLES:
+        raise LPCError('invalid_audio', '频谱参考需要 3–48000 个样本。')
+    emphasized = np.append(audio[0], audio[1:] - .97 * audio[:-1])
+    window = np.hamming(audio.size)
+    size = 1 << (audio.size - 1).bit_length()
+    amplitude = np.abs(np.fft.rfft(emphasized * window, n=size)) / window.sum()
+    amplitude[1:-1] *= 2
+    return np.fft.rfftfreq(size, 1 / fs), 20 * np.log10(amplitude + 1e-10)
+
+
 def select_segment(mono, fs, start_sec, end_sec):
     """Copy the explicit ROI using V2 int(t*fs) half-open sample indexing."""
     validate_rate(fs)

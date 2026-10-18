@@ -47,7 +47,7 @@ const m16Dirty=ref(false),m16Recording=ref(false),m17Dirty=ref(false);
 function recordingChanged(value:boolean){m16Recording.value=value;if(value)stop();}
 const PhonologyInductionPage=defineAsyncComponent(()=>import('../modules/phonology-induction/PhonologyInductionPage.vue'));
 const m14Page=ref<{save:()=>boolean}>();const m14Dirty=ref(false);
-const LipExtractionPage=defineAsyncComponent(()=>import('../modules/lip-extraction/LipExtractionPage.vue'));
+const LipExtractionPage=defineAsyncComponent({loader:()=>import('../modules/lip-extraction/LipExtractionPage.vue'),loadingComponent:{setup:()=>()=>h(ModuleStatus,{kind:'loading',message:'正在载入唇形提取…'})},errorComponent:{setup:()=>()=>h(ModuleStatus,{kind:'error',message:'唇形提取页面载入失败，请重启工作台后再打开。'})}});
 const m05Page=ref<{save:()=>Promise<boolean>}>();const m05Dirty=ref(false);
 const MfaAlignmentPage=defineAsyncComponent(()=>import('../modules/mfa/MfaAlignmentPage.vue'));
 const m11Page=ref<{save:()=>boolean}>();const m11Dirty=ref(false);
@@ -64,6 +64,7 @@ import {installWebFeedback} from '../platform/feedback-web.ts';
 import FontSettings from '../components/FontSettings.vue';
 import {selectFontOwner} from '../state/fonts.ts';
 import {installPageZoom} from '../state/pageZoom.ts';
+import {installDesktopViewport} from '../state/desktop-viewport.ts';
 import AppearanceSettings from '../components/AppearanceSettings.vue';
 import {installPalettes,normalizePalette,normalizeMode,type ThemeMode} from '../state/appearance.ts';
 installPalettes();
@@ -75,6 +76,9 @@ installBackgroundAppearance();
 const props=defineProps<{research?:ResearchContext}>();const emit=defineEmits<{leaveProject:[]}>();
 const defaultContext:ResearchContext={key:'local:M01',label:desktopFiles?'本机目录':'本机预览',files:desktopFiles??previewFiles()};
 const researchContext=computed(()=>props.research??defaultContext);
+let releaseDesktopViewport:(()=>void)|undefined;
+onMounted(()=>{if(researchContext.value.files.kind==='server')releaseDesktopViewport=installDesktopViewport();});
+onUnmounted(()=>releaseDesktopViewport?.());
 let releaseWebFeedback:(()=>void)|undefined;
 watch(()=>researchContext.value.ownerId,owner=>{releaseWebFeedback?.();releaseWebFeedback=researchContext.value.files.kind==='server'&&owner?installWebFeedback(owner,()=>props.research?.files.feedbackCsrf?.()??''):undefined;},{immediate:true});
 onUnmounted(()=>releaseWebFeedback?.());
@@ -333,7 +337,7 @@ const modalTitle=computed(()=>({update:updateCheck.value?.candidate?'发现新�
 <p v-else-if="closing==='M12'">标注或唇形偏移尚未保存。标注写入 _自动保存，唇偏单独保存；任一失败将保留当前编辑。</p>
 <p v-else-if="closing==='M13'">文本、多音选择或排版尚未保存。保存草稿会将这些内容留在本机，导出图片请在模块中操作。</p>
 <p v-else-if="closing==='M15'">配置、刺激与结果保存在当前浏览器设备中；请显式导出结果文件并确认保存，再关闭标签。</p>
-<p v-else>“{{modules.find(m=>m.id===closing)?.title}}”有尚未保存的参数或设置。保存会将参数草稿留在本机；音频不会保存到浏览器存储。</p>
+<p v-else>“{{modules.find(m=>m.id===closing)?.title}}”有尚未保存的参数或设置。保存会保留当前参数草稿。</p>
 <p v-if="closing==='M15'">实验结果需要显式导出文件。保存失败或未确认导出时不会关闭；放弃仅关闭标签，本机已提交记录可在资源与恢复中读取。</p>
 <p v-if="notice" role="alert">{{notice}}</p>
 <template #footer>

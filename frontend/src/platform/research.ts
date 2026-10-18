@@ -1,8 +1,12 @@
+import {LocalAssets,LocalStorageError,type AssetDatabase} from './local-assets.ts';
+import {LocalAssetTransport} from './local-asset-transport.ts';
+import {decodeText,parseGrid} from '../modules/annotation/format.ts';
 import {sharedJobReads,waitForTaskPoll} from './task-poll.ts';
 import {BrowserScience} from './browser-science.ts';
 import {BrowserJobs} from './browser-jobs.ts';
 import {serverPapers} from './papers-server.ts';
 import {webVocalPort,type VocalPort} from './vocal.ts';
+import {vocalProfileStore} from './vocal-profile.ts';
 import type {PapersClient} from './papers.ts';
 import type { components } from '../../../contracts/generated/api';
 import { decodeWav } from './decode.ts';
@@ -33,7 +37,7 @@ export type EggPreviewData=components['schemas']['EggPreviewData'];
 export type FigureFontSnapshot=components['schemas']['FigureFontSnapshot'];
 export type FontPreflight=components['schemas']['FontPreflight'];
 export interface SpectrogramView {channel:number;start:number;end:number;width:number}
-export interface ResearchFile { id:string; name:string; kind:'audio'|'textgrid'|'lip'|'lip_pickle'|'parameter'|'image'|'lab'; size:number; sha256?:string; expiresAt?:number }
+export interface ResearchFile { id:string; name:string; kind:'audio'|'textgrid'|'lip'|'lip_pickle'|'parameter'|'image'|'lab'; size:number; sha256?:string; expiresAt?:number; annotationKey?:string }
 export interface DirectoryGrant { id:string; label:string; purpose:'input'|'output'|'association' }
 export type BatchView=components['schemas']['BatchView'];
 export type JobView=components['schemas']['JobView'] & {execution?:'browser'};
@@ -64,6 +68,8 @@ export interface ResearchTasks {
   result?(job:string,id:string,sha256:string):Promise<ArrayBuffer>;
 }
 export interface ResearchFiles {
+  annotationScope?:string;
+  localFiles?:boolean;
   feedbackCsrf?:()=>string;
   associatedParameters?(file:ResearchFile):Promise<ResearchFile|null>;
   vocal?:(key:string)=>VocalPort;
@@ -121,7 +127,7 @@ export function previewFiles():ResearchFiles {
     async textgrid(){throw Error('TextGrid关联预览请使用桌面版或登录项目。当前页面仅提供本地WAV预览。');},dispose(){files.clear();}};
 }
 
-export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?:()=>string):ResearchFiles {
+export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?:()=>string,database?:AssetDatabase,localProject=project):ResearchFiles {
   const science=new BrowserScience(),batchScience=new BrowserScience(),browserSources=new Map<string,ArrayBuffer>();
   const browserFailures=new Map<string,number>();
   const browserEggs=new Map<string,{remote?:string}>();
@@ -135,7 +141,7 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
       if(current.state!=='ready'){
         for(let offset=current.size_bytes;offset<buffer.byteLength;offset+=262144){
           if(disposed)throw Error('项目会话已关闭。');
-          const response=await fetch('/api/v1/uploads/'+id+'/blocks?offset='+offset,{method:'PUT',credentials:'same-origin',signal:abort.signal,headers:{'X-PTB-Account':owner,'X-CSRF-Token':csrf!(),'Content-Type':'application/octet-stream'},body:buffer.slice(offset,offset+262144)});
+          const response=await assetFetch('uploads/'+id+'/blocks?offset='+offset,{method:'PUT',credentials:'same-origin',signal:abort.signal,headers:{'X-PTB-Account':owner,'X-CSRF-Token':csrf!(),'Content-Type':'application/octet-stream'},body:buffer.slice(offset,offset+262144)});
           if(!response.ok){if(response.status===401)onInvalid();throw Error(label+'上传失败，编辑仍保留。请检查登录和剩余空间后重试。');}
         }
       }
@@ -143,29 +149,32 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
       if(asset.sha256!==hash)throw Error(label+'保存校验失败。');
       return {id:asset.id,name:asset.name,kind:fileKind(asset.name)!,size:asset.size_bytes,sha256:hash,expiresAt:asset.expires_at,policyVersion:asset.policy_version};
     }
-  const localJobs=new BrowserJobs(owner,project,{
+  const localJobs=new BrowserJobs(owner,localProject,{
     list:async()=>((await(await request('assets?project_id='+encodeURIComponent(project)+'&order=created')).json()).assets),
     read:async asset=>{const value=await readManaged({id:asset.id,name:asset.name,kind:'parameter',size:asset.size_bytes,sha256:asset.sha256},undefined,32000);return value.buffer;},
     upload:async(name,raw)=>upload(name,raw,'browser-'+(await sha256(new TextEncoder().encode(name).buffer)).slice(0,32),'浏览器重建'),
-    compute:async(file,config,signal)=>{try{await verify(file);const result=await batchScience.run<{files:{name:string;data:string}[]}>('reconstruction',await browserRaw(file,16_000_000),config,AbortSignal.any([abort.signal,signal]));await verify(file);return result;}catch(error){if(!signal.aborted)browserFailures.set('reconstruction',Date.now());throw error;}}
-  });
+    compute:async(file,config,signal)=>{try{await verify(file);const result=await batchScience.run<{files:{name:string;data:string}[]}>('reconstruction',await browserRaw(file,16_000_000),config,AbortSignal.any([abort.signal,signal]));await verify(file);return result;}catch(error){if(!signal.aborted&&!(error instanceof LocalStorageError))browserFailures.set('reconstruction',Date.now());throw error;}}
+  },undefined,project);
   const encodeBase64=(raw:ArrayBuffer)=>{const bytes=new Uint8Array(raw);let value='';for(let i=0;i<bytes.length;i+=8192)value+=String.fromCharCode(...bytes.subarray(i,i+8192));return btoa(value);};
-  const localLpcJobs=new BrowserJobs<{analysis:LpcTaskConfig;textgrid:ResearchFile|null}>(owner,project,{
+  const localLpcJobs=new BrowserJobs<{analysis:LpcTaskConfig;textgrid:ResearchFile|null}>(owner,localProject,{
     list:async()=>((await(await request('assets?project_id='+encodeURIComponent(project)+'&order=created')).json()).assets),
     read:async asset=>(await readManaged({id:asset.id,name:asset.name,kind:'parameter',size:asset.size_bytes,sha256:asset.sha256},undefined,32000)).buffer,
     upload:async(name,raw)=>upload(name,raw,'browser-'+(await sha256(new TextEncoder().encode(name).buffer)).slice(0,32),'浏览器LPC'),
-    compute:async(file,config,signal)=>{try{const grid=config.textgrid;await verify(file);if(grid)await verify(grid);const args={name:file.name,config:config.analysis,textgrid:grid?encodeBase64(await browserRaw(grid,2_000_000)):null};const output=await batchScience.run<any>('lpc',await browserRaw(file),args,AbortSignal.any([abort.signal,signal]));await verify(file);if(grid)await verify(grid);return output;}catch(error){if(!signal.aborted)browserFailures.set('lpc',Date.now());throw error;}}
-  },{prefix:'LPC任务-',operation:'lpc_analysis',kind:'managed_lpc_files',names:['lpc.ptb.json','lpc_SPECTRUM.png','lpc_AUDIO.wav']});
+    compute:async(file,config,signal)=>{try{const grid=config.textgrid;await verify(file);if(grid)await verify(grid);const args={name:file.name,config:config.analysis,textgrid:grid?encodeBase64(await browserRaw(grid,2_000_000)):null};const output=await batchScience.run<any>('lpc',await browserRaw(file),args,AbortSignal.any([abort.signal,signal]));await verify(file);if(grid)await verify(grid);return output;}catch(error){if(!signal.aborted&&!(error instanceof LocalStorageError))browserFailures.set('lpc',Date.now());throw error;}}
+  },{prefix:'LPC任务-',operation:'lpc_analysis',kind:'managed_lpc_files',names:['lpc.ptb.json','lpc_SPECTRUM.png','lpc_AUDIO.wav']},project);
   async function browserTry<T>(operation:string,work:()=>Promise<T>,fallback:()=>Promise<T>):Promise<T>{
     if(typeof Worker==='undefined'||Date.now()-(browserFailures.get(operation)??0)<30000)return fallback();
-    try{return await work();}catch(error){if(disposed||abort.signal.aborted||error instanceof DOMException&&error.name==='AbortError')throw error;browserFailures.set(operation,Date.now());console.warn('Browser compute unavailable; using server:',operation);return fallback();}
+    try{return await work();}catch(error){if(error instanceof LocalStorageError||disposed||abort.signal.aborted||error instanceof DOMException&&error.name==='AbortError')throw error;browserFailures.set(operation,Date.now());console.warn('Browser compute unavailable; using server:',operation);return fallback();}
   }
   const vocalPorts=new Set<VocalPort>();
   const abort=new AbortController();let disposed=false,listedAtCapacity=false;
+  const local=new LocalAssets(owner,localProject,database);
+  const transport=new LocalAssetTransport(local,async(path,init)=>{const r=await fetch('/api/v1/'+path,{...init,credentials:'same-origin',cache:'no-store',headers:{'X-PTB-Account':owner,...(init?.body?{'Content-Type':'application/json'}:{}),...(init?.method&&init.method!=='GET'?{'X-CSRF-Token':csrf?.()??''}:{}),...init?.headers}});if(r.status===401||r.status===409&&(await r.clone().json().catch(()=>({}))).detail==='account_changed')onInvalid();return r;},abort.signal,project);
+  const assetFetch=transport.fetch.bind(transport);
   async function request(path:string,signal?:AbortSignal,method='GET',body?:unknown,binary=false) {
     if(disposed)throw Error('项目会话已关闭。');
     const jobMutation=method!=='GET'&&path.startsWith('jobs/');if(jobMutation){jobLists.clear();jobDetails.clear();}
-    const r=await fetch('/api/v1/'+path,{method,body:body?(binary?body as Blob:JSON.stringify(body)):undefined,credentials:'same-origin',cache:'no-store',signal:signal?AbortSignal.any([abort.signal,signal]):abort.signal,headers:{'X-PTB-Account':owner,...(body?{'Content-Type':binary?'application/octet-stream':'application/json'}:{}),...(method!=='GET'?{'X-CSRF-Token':csrf?.()??''}:{})}});
+    const r=await assetFetch(path,{method,body:body?(binary?body as Blob:JSON.stringify(body)):undefined,credentials:'same-origin',cache:'no-store',signal:signal?AbortSignal.any([abort.signal,signal]):abort.signal,headers:{'X-PTB-Account':owner,...(body?{'Content-Type':binary?'application/octet-stream':'application/json'}:{}),...(method!=='GET'?{'X-CSRF-Token':csrf?.()??''}:{})}});
     if(!r.ok){const error=await r.json().catch(()=>({}));if(r.status===401||error.detail==='account_changed')onInvalid();if(r.status===422&&path==='jobs/spec2wav/create')throw Error('标定参数无效：请核对时间、频率、dB范围及迭代次数。');if(typeof error.detail==='string'&&(error.detail.startsWith('egg_')||error.detail.startsWith('m09_')||error.detail.startsWith('m08_')||error.detail.startsWith('m06_')||error.detail.startsWith('preview_')||error.detail.startsWith('m07_')||['invalid_spectrogram_input','invalid_spectrogram_config','invalid_spectrogram_image','invalid_image_corners','spectrogram_budget'].includes(error.detail)))throw Error(({m06_platform_unverified:'服务器上的声学参数合成暂不可用，请稍后重试。',m08_platform_unverified:'服务器上的变速变调暂不可用，请稍后重试。',m06_runtime_unavailable:'服务器合成服务暂不可用，请稍后重试。',m08_runtime_unavailable:'服务器变调服务暂不可用，请稍后重试。'} as Record<string,string>)[error.detail]??error.detail);throw Error(({m06_platform_unverified:'服务器上的声学参数合成暂不可用，请稍后重试。',m08_platform_unverified:'服务器上的变速变调暂不可用，请稍后重试。',upload_size_limit:'文件超过单文件上传上限。',disk_space_low:'服务器空间不足，请清理文件或稍后重试。',upload_closed:'上传已关闭，请重新选择文件。',storage_busy:'文件服务忙，请稍后重试。',web_server_busy:'服务器繁忙，请稍等5秒后重试。',account_queue_full:'你的待处理任务已达上限（8 个），请等待完成或取消部分任务后重试。',server_queue_full:'服务器排队已满，请稍后重试。',workspace_expired:'本次工作区已到期，请返回项目页面开始新的工作。',input_unavailable:'源文件已失效或临近到期，请重新上传。',quota_exceeded:'文件空间不足，请清理不需要的文件后重试。',invalid_parameter_table:'参数表包含不支持的内容、公式或损坏结构。原文件未修改。',parameter_read_failed:'参数表超过读取预算或读取失败。',parameter_read_timeout:'参数表读取超时，请缩小数据。',asset_expired:'文件已到期，请重新上传。',invalid_textgrid:'TextGrid格式不受支持或不完整。',unsupported_textgrid:'TextGrid超过2 MB或类型不正确。'} as Record<string,string>)[error.detail]||(r.status>=500?'服务器暂时无法完成请求，请稍后重试。':'请求未完成，请刷新后重试。'));}
     if(jobMutation){jobLists.clear();jobDetails.clear();}
     return r;
@@ -190,14 +199,14 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
     async get(id){return (await request('jobs/batches/'+encodeURIComponent(id))).json();},
     async cancel(id){return (await request('jobs/batches/'+encodeURIComponent(id)+'/cancel',undefined,'POST')).json();},
     async job(id){return localJobs.get(id)??localLpcJobs.get(id)??jobDetails.read(id);},
-    async retry(id,key){const lpc=localLpcJobs.source(id);if(lpc){if(localLpcJobs.get(id)?.state!=='failed')return tasks.lpc!(lpc.file,lpc.config.textgrid,lpc.config.analysis,key);await verify(lpc.file);if(lpc.config.textgrid)await verify(lpc.config.textgrid);return(await request('jobs/lpc/create',undefined,'POST',{project_id:project,idempotency_key:key,audio:{asset_id:lpc.file.id,sha256:lpc.file.sha256},textgrid:lpc.config.textgrid?{asset_id:lpc.config.textgrid.id,sha256:lpc.config.textgrid.sha256}:null,config:lpc.config.analysis})).json();}const source=localJobs.source(id);if(source){if(localJobs.get(id)?.state!=='failed')return tasks.reconstruct!(source.file,source.config,key);await verify(source.file);return(await request('jobs/spec2wav/create',undefined,'POST',{project_id:project,idempotency_key:key,image:{asset_id:source.file.id,sha256:source.file.sha256},config:source.config})).json();}return (await request('jobs/'+encodeURIComponent(id)+'/retry',undefined,'POST',{idempotency_key:key})).json();},
+    async retry(id,key){const lpc=localLpcJobs.source(id);if(lpc){if(localLpcJobs.get(id)?.state!=='failed'||!localLpcJobs.serverRetry(id))return tasks.lpc!(lpc.file,lpc.config.textgrid,lpc.config.analysis,key);await verify(lpc.file);if(lpc.config.textgrid)await verify(lpc.config.textgrid);return(await request('jobs/lpc/create',undefined,'POST',{project_id:project,idempotency_key:key,audio:{asset_id:lpc.file.id,sha256:lpc.file.sha256},textgrid:lpc.config.textgrid?{asset_id:lpc.config.textgrid.id,sha256:lpc.config.textgrid.sha256}:null,config:lpc.config.analysis})).json();}const source=localJobs.source(id);if(source){if(localJobs.get(id)?.state!=='failed'||!localJobs.serverRetry(id))return tasks.reconstruct!(source.file,source.config,key);await verify(source.file);return(await request('jobs/spec2wav/create',undefined,'POST',{project_id:project,idempotency_key:key,image:{asset_id:source.file.id,sha256:source.file.sha256},config:source.config})).json();}return (await request('jobs/'+encodeURIComponent(id)+'/retry',undefined,'POST',{idempotency_key:key})).json();},
     async download(id,name){const response=await request('assets/'+encodeURIComponent(id)+'/content');const blob=await response.blob();if(disposed)return;const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}};
   async function browserRaw(file:ResearchFile,limit=64_000_000){
     await verify(file);const key=file.id+':'+file.sha256;let raw=browserSources.get(key);
     if(!raw){raw=(await readManaged(file,undefined,limit)).buffer;for(const id of browserSources.keys()){if([...browserSources.values()].reduce((n,b)=>n+b.byteLength,0)+raw.byteLength<=64_000_000)break;browserSources.delete(id);}if(raw.byteLength<=64_000_000)browserSources.set(key,raw);}
     if(raw.byteLength>limit)throw Error('文件超过当前预览上限。');return raw.slice(0);
   }
-  const adapter:ResearchFiles={kind:'server',feedbackCsrf:csrf,tasks:csrf?tasks:undefined,async list(){const data:components['schemas']['AssetList']=await(await request('assets?project_id='+encodeURIComponent(project)+'&order=created')).json();listedAtCapacity=data.assets.length>=1000;return data.assets.filter(a=>a.project_id===project&&a.state==='ready'&&fileKind(a.name)).sort((a,b)=>b.created_at-a.created_at).map(a=>({id:a.id,name:a.name,kind:fileKind(a.name)!,size:a.size_bytes,sha256:a.sha256??undefined,expiresAt:a.expires_at}));},
+  const adapter:ResearchFiles={kind:'server',localFiles:true,annotationScope:localProject,feedbackCsrf:csrf,tasks:csrf?tasks:undefined,async list(){const shadows=new Set((await local.list()).filter(f=>f.server?.project===project&&f.server.id!==f.id).map(f=>f.server!.id));const data:components['schemas']['AssetList']=await(await request('assets?project_id='+encodeURIComponent(project)+'&order=created')).json();listedAtCapacity=data.assets.length>=1000;return data.assets.filter(a=>!shadows.has(a.id)&&a.project_id===project&&a.state==='ready'&&fileKind(a.name)).sort((a,b)=>b.created_at-a.created_at).map(a=>({id:a.id,name:a.name,kind:fileKind(a.name)!,size:a.size_bytes,sha256:a.sha256??undefined,expiresAt:a.expires_at}));},
     async associatedParameters(file){
       if(!file.sha256)return null;
       const table:{asset_id:string;name:string;sha256:string}|null=await(await request('jobs/parents/latest?'+new URLSearchParams({project_id:project,sha256:file.sha256,table:'true'}))).json();
@@ -206,7 +215,7 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
       const asset=await verify(associated);associated.size=asset.size_bytes;associated.expiresAt=asset.expires_at;return associated;
     },
     async read(file,signal){if(signal?.aborted)throw new DOMException('Cancelled','AbortError');if(['audio','image','parameter'].includes(file.kind)){const buffer=await browserRaw(file,file.kind==='audio'?64_000_000:16_000_000);if(signal?.aborted)throw new DOMException('Cancelled','AbortError');return {buffer,sha256:file.sha256!};}return readManaged(file,signal,2_000_000);},
-    async textgrid(file){await verify(file);const data:components['schemas']['TextGridPreview']=await(await request('assets/'+encodeURIComponent(file.id)+'/textgrid')).json();if(data.sha256!==file.sha256)throw Error('关联文件已变化，请刷新。');return data;},
+    async textgrid(file){const raw=await readManaged(file,undefined,2_000_000),grid=parseGrid(decodeText(raw.buffer));return {sha256:raw.sha256,tiers:grid.tiers.filter(t=>t.intervals).map(t=>({name:t.name,intervals:t.intervals!}))};},
     async spectrogram(file,view){await verify(file);const data:Spectrogram=await browserTry('spectrogram',()=>browserRaw(file).then(raw=>science.run<Spectrogram>('spectrogram',raw,view,abort.signal)),async()=>{const query=new URLSearchParams(Object.entries(view).map(([k,v])=>[k,String(v)]));return(await request('assets/'+encodeURIComponent(file.id)+'/spectrogram?'+query)).json();});await verify(file);if(data.sha256!==file.sha256)throw Error('音频已变化，请刷新。');return data;},
     async parameters(file){await verify(file);const data:ParameterTable=await browserTry('parameters',()=>browserRaw(file,16_000_000).then(raw=>science.run<ParameterTable>('parameters',raw,{name:file.name},abort.signal)),async()=>(await request('assets/'+encodeURIComponent(file.id)+'/parameters')).json());await verify(file);if(data.sha256!==file.sha256)throw Error('参数文件已变化，请刷新。');return data;},
     eggPreview:{
@@ -226,7 +235,7 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
         const r=await fetch('/api/v1/'+path,{method,credentials:'same-origin',cache:'no-store',headers:{'X-PTB-Account':owner,'X-CSRF-Token':csrf(),'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined,keepalive:method==='DELETE'});
         if(!r.ok){const e=await r.json().catch(()=>({})),code=e.detail;if(r.status===401||code==='account_changed')onInvalid();throw Error(({vocal_unavailable:'服务器声道引擎尚未启动，请稍后重试。',vocal_capacity_full:'声道计算席位正在使用，请稍后重新打开。',vocal_busy:'服务器正在计算，请稍后重试。',vocal_cancelled:'生成已取消。',vocal_session_expired:'声道会话已结束，请重新打开生理参数合成。',vocal_session_not_found:'声道会话已结束，请重新打开生理参数合成。',vocal_timeout:'声道计算超时，请重新打开并缩短动作序列。',vocal_runtime_unavailable:'声道计算进程已退出，请重新打开。',workspace_expired:'本次工作区已到期，请返回项目页面。'} as Record<string,string>)[code]||code||'声道请求失败。');}
         return r.json();
-      },project,key);vocalPorts.add(port);return port;
+      },project,key,undefined,vocalProfileStore(local));vocalPorts.add(port);return port;
     };
     let recordingSave:{raw:string;asset:any;expected:string|null}|undefined;
     const recordingAsset=(a:any):RecordingAsset=>({id:a.id,name:a.name,kind:'audio',size:a.size_bytes??a.size,sha256:a.sha256,expiresAt:a.expires_at??a.expiresAt});
@@ -277,21 +286,21 @@ export function serverFiles(owner:string,project:string,onInvalid:()=>void,csrf?
         completed+=file.size;progress(completed/total);
       }
     };
-    adapter.m07=m07Port({project,async source(file){await verify(file);return {asset_id:file.id,sha256:file.sha256!};},async create(body){return (await request('jobs/m07/create',undefined,'POST',body)).json();},job:tasks.job,read:tasks.result!,cancel:tasks.cancelJob!,retry:tasks.retry,async list(){return (await jobLists.read('project')).filter(j=>j.operation==='phonation_synthesis');}});
+    adapter.m07=m07Port({project,async source(file){await verify(file);const saved=await local.get(file.id);return {asset_id:saved?await transport.server(saved):file.id,sha256:file.sha256!};},async create(body){return (await request('jobs/m07/create',undefined,'POST',body)).json();},job:tasks.job,read:tasks.result!,cancel:tasks.cancelJob!,retry:tasks.retry,async list(){return (await jobLists.read('project')).filter(j=>j.operation==='phonation_synthesis');}});
     const saveBrowserOutput=async(name:string,raw:ArrayBuffer,signal:AbortSignal)=>{signal.throwIfAborted();const asset=await upload(name,raw,'browser-'+(await sha256(new TextEncoder().encode(name).buffer)).slice(0,32),'浏览器结果');signal.throwIfAborted();return {id:asset.id,sha256:asset.sha256,size_bytes:asset.size};};
     adapter.m06=browserM06(m06Port({project,async parameters(text,signal){const a=await upload('m06-parameters.csv',new TextEncoder().encode(text).buffer,'m06-'+crypto.randomUUID(),'合成参数');if(signal.aborted)throw Error('操作已取消');return {asset_id:a.id,sha256:a.sha256!};},async source(file){await verify(file);return {asset_id:file.id,sha256:file.sha256!};},
       async create(body){return (await request('jobs/m06/create',undefined,'POST',body)).json();},job:tasks.job,read:tasks.result!,cancel:tasks.cancelJob!}),{project,
       compute:(args,signal)=>browserTry('speech_synthesis',()=>batchScience.run<any>('speech_synthesis',new ArrayBuffer(0),args,AbortSignal.any([abort.signal,signal])),async()=>null),save:saveBrowserOutput});
-    adapter.papers=serverPapers(owner,project,csrf!,onInvalid,abort.signal);
-    adapter.m11=serverM11(owner,project,csrf,onInvalid,abort.signal);
+    adapter.papers=serverPapers(owner,project,csrf!,onInvalid,abort.signal,assetFetch);
+    adapter.m11=serverM11(owner,project,csrf,onInvalid,abort.signal,assetFetch);
     const phonologyFile=(source:{asset_id:string;sha256:string;name:string}):ResearchFile=>({id:source.asset_id,sha256:source.sha256,name:source.name,kind:'parameter',size:0});
-    adapter.m14=browserM14(serverM14(owner,project,csrf,onInvalid,abort.signal),{
+    adapter.m14=browserM14(serverM14(owner,project,csrf,onInvalid,abort.signal,assetFetch),{
       async upload(file,signal){signal.throwIfAborted();const asset=await upload(file.name,await file.arrayBuffer(),'m14-browser-'+crypto.randomUUID(),'调查字表');signal.throwIfAborted();return {asset_id:asset.id,sha256:asset.sha256,name:file.name};},
       async read(source,signal){signal.throwIfAborted();const asset=await verify(phonologyFile(source));const raw=await browserRaw({...phonologyFile(source),size:asset.size_bytes},2_000_000);signal.throwIfAborted();return raw;},
       async verify(source,signal){signal.throwIfAborted();await verify(phonologyFile(source));signal.throwIfAborted();},
       compute:(raw,args,signal)=>browserTry('phonology',()=>batchScience.run<any>('phonology',raw,args,AbortSignal.any([abort.signal,signal])),async()=>null),save:saveBrowserOutput
     });
-    adapter.m08=m08Port({project,async source(file){await verify(file);return {asset_id:file.id,sha256:file.sha256!};},
+    adapter.m08=m08Port({project,async source(file){await verify(file);const saved=await local.get(file.id);return {asset_id:saved?await transport.server(saved):file.id,sha256:file.sha256!};},
       async request(action,body){return (await request('jobs/m08/'+(action==='list'?'list/'+encodeURIComponent(project):action),undefined,action==='list'?'GET':'POST',body)).json();},
       job:tasks.job,read:tasks.result!,cancel:tasks.cancelJob!});
 

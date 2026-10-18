@@ -3,17 +3,314 @@
   "created_on": "2026-09-09",
   "tasks": [
     {
-      "id": "WEB-LIVE-ACCEPTANCE",
-      "title": "当前私测网页版真实账号、容量与跨浏览器补验",
-      "date": "2026-10-17",
-      "status": "in_progress",
-      "files": "本机忽略的output/validation/web-release-acceptance-20261017验证脚本、报告与截图；web-private-repair.md、project-status.md、task-ledger.json和CHANGELOG.md",
-      "verification_scope": "Current production-hosted private HTTPS, real nephelium account and actual PG/storage; concurrent clients explicitly share one identity; Windows Chrome/Edge/WebKit and authorized remote Mac Safari kept separate",
-      "verification": "真实账号上传、浏览器及Linux LPC、受管结果/下载SHA、刷新、多标签、Range、退出和重新登录/设置保持通过。10/25/50/100并发轮询已测，全部入口200，API p95目标未达，100客户端一次503待查。共享池实际0.652核，未称满载。Edge/Windows WebKit语谱图回退警告仍在定位。Tailscale Mac已连接，Safari远程自动化设置未开启。",
+      "id": "M10-SIGNED-VOT",
+      "title": "爆破时序前浊与正负VOT联动修复",
+      "date": "2026-10-19",
+      "status": "verified",
+      "files": "共享stop-editor/keyframes/index、核心stop_timing/trajectory/animation/sequence_controls/document/preset_pack、Wasm锁、定向测试与Qt/Chrome脚本、ADR/说明/验收/CHANGELOG/状态/台账、说明折叠样式与术语",
+      "verification_scope": "Windows源码原生/Qt及本机独立Chrome真实Wasm，Mac仅源码",
+      "verification": "Windows定向169项、前端22项、实际Qt5组和Chrome真实Wasm5组通过；负VOT原生周期前浊、精确总长、时序联动、旧文件兼容、默认折叠与浊音起始术语通过。类型/契约/UI数据/构建通过，最终截图已复核，自有scratch已清。资源72项幂等，架构和文档零错误，定向diff通过。",
       "remaining": [
-        "定位压力503及API延迟，补恢复、取消与真实科研并发边界",
-        "定位Edge/WebKit语谱图回退，继续实际Safari与低配置边界",
-        "只有nephelium有效，不以同账号100客户端外推100个独立用户或长期稳定性"
+        "Mac原生R21构建与实机未验",
+        "本轮未重打最终EXE/Mac应用，未公开部署；实体音频设备与Safari未新增验证"
+      ],
+      "evidence": [
+        "docs/decisions/ADR-M10-stop-timing.md",
+        "docs/testing/m10-stop-timing.md"
+      ]
+    },
+    {
+      "id": "RELEASE-3.0.4",
+      "title": "Windows 3.0.4打包与服务器及GitHub发布",
+      "date": "2026-10-19",
+      "status": "in_progress",
+      "files": "版本元数据、M10撤销测试、来源覆盖清单、启动计时配方、release/notes/3.0.4.md、发行/当前成品验收、CHANGELOG与状态台账",
+      "verification_scope": "Windows x64本机工程外最终字节、默认GPU可见窗口、服务器与GitHub发行；无实体设备/第二台干净电脑/跨平台验证",
+      "verification": "561项前端、说明书/类型/UI数据/构建/包审计、873源文件冻结闭合通过；最终QA 15阶段、3轮新旧冷启动及3轮温启动、原生缓存选择通过。三种分发同一应用且各<500MB。等待服务器/GitHub上传与公开核对。",
+      "remaining": [
+        "服务器/GitHub上传与公开核对、源码推送",
+        "全部完成后按授权关机"
+      ],
+      "evidence": [
+        "docs/testing/release-3.0.4-publish.md",
+        "release/notes/3.0.4.md",
+        "output/validation/local-package-cfa25fd3/report.json",
+        "output/validation/package-trim/startup-4156671e333d4f8f8119ef6cecc8545b/report.json"
+      ]
+    },
+    {
+      "id": "M10-PRESET-LIBRARIES",
+      "title": "多套构型与持久保存审查整改",
+      "date": "2026-10-19",
+      "status": "verified",
+      "files": "共享前端构型/分享/持久存储、核心preset_library/preset_pack/session、桌面ProfileStore、网页MemoryProfile及Wasm检查点、验证脚本/测试、ADR/架构/使用说明/验收/CHANGELOG/状态",
+      "verification_scope": "同一源码Windows原生/Qt与本机独立Chrome真实Wasm；Mac仅同步源码",
+      "verification": "Windows157项，加检查点和多组旧重名逐项修复后23项定向复验通过，共159个不同测试；前端20项，实际Qt4组、Chrome真实Wasm套装4组与共享控制19组通过。真实IndexedDB关标签重新登录恢复4套/当前选择/序列。类型/契约/UI数据/保留资源构建、72资源幂等、架构零错误、文档2327文件/447来源/166任务零错误。测试面板折叠、登录与包锁未重建的失败已定位修正，失败证据保留，最终自有scratch已清。",
+      "remaining": [
+        "Mac原生R21待构建，最终EXE/Mac应用及公开网站未更新",
+        "完整几何参数空间、自适应采样及性能剖析为后续建议，Safari与实体音频未验",
+        "当前用户源码窗口未重启"
+      ],
+      "evidence": [
+        "docs/decisions/ADR-M10-preset-libraries.md",
+        "docs/testing/m10-preset-libraries.md",
+        "output/validation/m10-shared-20261018/qt-65c19f5f8b3b47ac96316277ee28e5cb/report.json",
+        "output/validation/m10-wasm-20261018/browser-374cdb2b89fe4d0aa8d5bc683a1f6913/libraries.json",
+        "output/validation/m10-wasm-20261018/browser-6b4d2ffa4f4340b3820cdf0b76aa4003/shared-controls.json"
+      ]
+    },
+    {
+      "id": "M10-SMOOTH-SHARE",
+      "title": "舌部连接平滑、构型分享选择及jitter/shimmer超音段",
+      "date": "2026-10-18",
+      "status": "verified",
+      "files": "共享前端/核心、R21原生补丁、Windows/Wasm/Mac构建入口、Windows DLL与Wasm资源锁、资源登记、定向回归/Qt/Chrome脚本及README/核心架构/ADR/审查/CHANGELOG/状态",
+      "verification_scope": "共享源码、Windows原生/真实Qt、本机独立Chrome真实Wasm；用户确认本轮Mac仅交付源码",
+      "verification": "Windows151项、Qt3组、Chrome19组、前端14项、类型/契约/UI数据/保留资源构建通过。手动组合最大转角102.47降至82.55度；微扰区段前PCM不变、区段内波形改变、同种子复现及取消恢复；分享完整目录、全选/全不选/自存刷新和子集文件通过。测试曾因Playwright隔离环境重复导入通信模块造成请求编号冲突，已修正并完整复验。 最终状态文案与真实设置入口浅深主题复核后19组再次通过，scratch已清；72资源幂等、架构和文档零错误。 后续五项审查整改见M10-PRESET-LIBRARIES。",
+      "remaining": [
+        "Mac原生R21待构建，当前Mac库仍为R20",
+        "最终EXE/Mac应用及公开网站未更新；当前用户源码窗口未重启",
+        "完整参数空间、实体设备听辨与Safari未验"
+      ],
+      "evidence": [
+        "docs/testing/m10-smoothing-review.md",
+        "output/validation/m10-smoothing-20261018/windows-tests.json",
+        "output/validation/m10-shared-20261018/qt-4e1ebbcaa18147d9829634103e5314ba/report.json",
+        "output/validation/m10-wasm-20261018/browser-282449ce896a471c9732f197c5dc6a79/shared-controls.json"
+      ]
+    },
+    {
+      "id": "M04-CHANNEL-REFERENCE",
+      "title": "LPC分析声道核查与FFT参考频谱",
+      "date": "2026-10-18",
+      "status": "in_progress",
+      "plan": "2026-10-18-lpc-reference.md",
+      "files": "LPC共享前端/state/display/导出、科学核心FFT、worker/配置/幂等/设置/契约、浏览器包候选、模块/操作/正式说明书及生成阅读资源、定向测试/Qt/Chrome脚本和验收/状态/CHANGELOG",
+      "verification_scope": "Windows当前源码/实际Qt/本机独立Chrome真实Wasm；三端共用源码，未公开部署或更新成品",
+      "verification": "指定自然WAV的4279样本、均值与两个独立声道均与哈希锁定旧LPC逐字节一致，原WAV SHA不变，复现图1的DC/动态轴。修改后98科学/导出、12接口、12前端及类型/契约/UI数据/构建/说明书严格通过。实际Qt开关/声道/任务/原生PNG与三件套、四布局通过，Chrome真实Worker九组功能/六布局、PNG及零上传通过。严格Windows/Wasm均值LPC1/1024近零点约1.52e-10 dB未过原门槛，保留非零失败；FFT和声道1比较通过。 最终科学包六个受影响源码SHA匹配锁定清单，说明书源/public/dist章SHA一致，文档2321文件/447来源/164任务及架构零错误；全部自有scratch清理为deleted。 用户要求直接重启、不再保存余下草稿。确认原工作台已退出后，由统一入口启动至M04。",
+      "evidence": [
+        "docs/testing/m04-channel-reference.md",
+        "output/validation/m04-reference/qt-634eefa10243455083a2b8aa121635f0/qt-report.json",
+        "output/validation/m04-reference/qt-634eefa10243455083a2b8aa121635f0/natural-audio.json",
+        "output/validation/m04-reference/chrome-1792324294449/report.json",
+        "output/validation/m04-reference/restart.json"
+      ],
+      "remaining": [
+        "用户确认租用Mac已到期且未续租，本轮设备不可用，Mac Qt/Safari未验证",
+        "跨运行时严格单点浮点差异待进一步定位，未放宽容差或改变旧LPC公式",
+        "最终EXE、Mac应用和生产网页未更新，正式说明书旧配图未重采"
+      ]
+    },
+    {
+      "id": "SOURCE-BUILD-RETENTION",
+      "title": "源码调试构建保留运行中窗口按需资源",
+      "date": "2026-10-18",
+      "status": "verified",
+      "files": "frontend/package.json、AppShell.vue、docs/development/source-entry.md及CHANGELOG/状态/台账",
+      "verification_scope": "当前Windows源码工作台及前端生成物，不含最终成品或公开部署",
+      "verification": "当前Windows源码日志确认旧CSS哈希被随后干净构建移除；正常重启恢复。build:workbench后119份原资源保留且SHA不变，最终类型/工作台构建通过。实际Qt正常M05控件呈现，以及隔离拦截LipExtractionPage CSS后显示重启恢复提示均通过；自有scratch已清。 文档2307文件/447来源/163任务和架构零错误，定向diff通过；最终前端及说明书生成后已正常重启自有窗口。",
+      "evidence": [
+        "output/validation/source-build-retention/report.json",
+        "output/validation/m16/manual-reader-a1c733ae104f46818d2e778711cac6d9/report.json",
+        "docs/development/source-entry.md"
+      ],
+      "remaining": [
+        "最终EXE/Mac应用及公开网页未更新，其他平台和长期运行未新增验收"
+      ]
+    },
+    {
+      "id": "WEB-LOCAL-FILES",
+      "title": "浏览器文件与结果本机保存及服务器按需上传",
+      "date": "2026-10-18",
+      "status": "verified",
+      "files": "本机文件库/按需传输、ResearchFiles/独立模块端口、BrowserJobs/录音/标注、导入/管理/容量/关闭说明；定向测试、架构/ADR索引/验收/状态/CHANGELOG",
+      "verification_scope": "Windows Chrome155独立候选与公网HTTPS、实际账号/设置/服务器计算；本机按账号项目隔离、刷新与跨模块、默认分组重登；其他平台/长期保留另验",
+      "verification": "35项定向、类型/契约/UI数据/隔离构建通过，两轮还原对应修改的控制构建各50活动块匹配各自现网。候选与最终公网13项流程零本机上传、LPC/音系文档/录音CAS与任务历史、账号设置、刷新/跨模块/默认分组重登及旧项目历史接续、本机ZIP通过；Linux回退只上传1份引用WAV，数值符合原契约。首轮17文件821705字节，最终兼容补丁browser-local-files-35b14cf229d24569880ae6b780be4164为14文件759257字节，2021发布/765运行库/14项HTTPS及原配置/首页/目录/API进程保持，无重启、两轮回退保留。完整前端509/511，两项同期M10来源归属与喉部撤销重做失败及18项声道资源差异未扩改。12个QA身份停用，两轮22559份可重建scratch已清，精确发布增量、证据及线上回退保留。 最终文档全检另有2处同期M10待建报告链接，本项链接无新增错误；公网索引再次读取仍匹配最终SHA。",
+      "remaining": [
+        "实体iPad/Safari、其他浏览器配额和长期存储/驱逐未验",
+        "最终EXE/macOS成品未重建，本轮仅网页前端",
+        "同期M10来源/撤销重做、资源摘要登记及待建报告链接问题由对应任务处理"
+      ],
+      "evidence": [
+        "docs/decisions/ADR-browser-local-research-files.md",
+        "docs/testing/web-local-files.md",
+        "output/validation/web-local-files-20261018/public/report.json",
+        "output/validation/web-local-files-20261018/public-readback.json",
+        "output/validation/web-local-files-20261018/deployment.json",
+        "output/validation/web-local-files-20261018/history-compat/public/report.json",
+        "output/validation/web-local-files-20261018/history-compat/deployment.json",
+        "output/validation/web-local-files-20261018/completion.json"
+      ]
+    },
+    {
+      "id": "PORTABLE-CACHE-LOCATION",
+      "title": "免安装版手动选择缓存目录与设置路径入口",
+      "date": "2026-10-18",
+      "status": "verified",
+      "files": "启动器、cache_location/dialog、legacy_cache、graphics_cache、桌面更新/清理/退出与原生桥、设置组件/端口、定向验证和成品QA显式偏好输入；README、说明书、架构、计划/验收、CHANGELOG及状态",
+      "verification_scope": "Windows当前源码、真实Win32选择器及Qt6.11默认GPU；最终EXE及真实覆盖更新另验",
+      "verification": "Python167项及26份AST解析、Node语法通过。首次选择/取消、跨版本位置保持、中文空格/不可写/联接、跨进程选择、租约/更新偏好/缓存删除重建、图形缓存安全退出及真实localStorage草稿重开通过。前端4项/类型/契约/UI数据/构建、说明书21章1059资产严格校验/生成与文档检查通过。Qt浅深/1280及760宽度、打开请求及亲自核对确认流程通过，自有scratch已清，统一源码入口已启动。全仓架构观察到8项同期M10资源登记差异，最终成品未重建，未发布。",
+      "remaining": [
+        "最终EXE重建、冻结首次选择及工程外/覆盖换版/安装卸载验收",
+        "其他平台、低空间/断电及长期运行未验",
+        "同期M10资源登记差异由对应任务处理"
+      ],
+      "evidence": [
+        "docs/plans/2026-10-18-portable-cache-location.md",
+        "docs/testing/portable-cache-location.md",
+        "output/validation/portable-cache-location/qt-f3a847199681434dbfd6f49ff1682eec/report.json"
+      ]
+    },
+    {
+      "id": "M10-SHARED-SYNTHESIS",
+      "title": "三端共用生理合成：模型、IPA与分享、唇舌、时序和区段特征",
+      "date": "2026-10-18",
+      "status": "verified",
+      "files": "共用vocal-tract前端/核心/文档与构型包、浏览器/桌面状态及文件、后端参数/视频限制、R19/R20原生补丁与Windows/Wasm/Mac构建、资源/来源登记、测试、ADR/README/验收/CHANGELOG/状态/台账",
+      "verification_scope": "当前共享源码、Windows x64原生/真实Qt、独立Chrome Wasm、macOS ARM64原生候选；不代替最终EXE/Mac应用或公开站点",
+      "verification": "Windows 146项、Mac原生19项、Chrome Wasm17组、Qt文件/主题3组通过；独立上下唇、闭塞/释放/正负VOT、区段叠加、分享导入即IPA、120/200Hz、双曲线与60秒/取消恢复。固定姿态120到300Hz播放差0.31dB；一次早期直接预览全局值断言未复现，保留回执。原生候选已更新，完整说明见本轮验收。 前端类型/14项/契约/UI数据/514模块构建、架构/文档和71项资源幂等核对通过；统一入口已启动并确认实际加载R20，浏览器/Qt/Mac pytest scratch已清。",
+      "remaining": [
+        "最终EXE/Mac应用与公开站点尚未构建/更新",
+        "Mac Qt/Safari、实体设备听辨、完整参数空间与长期负载未验",
+        "60秒视频完整转码未验；已验证时长/包数边界"
+      ],
+      "evidence": [
+        "docs/decisions/ADR-M10-shared-synthesis-controls.md",
+        "docs/testing/m10-shared-controls.md",
+        "output/validation/m10-shared-20261018/windows-final-tests.json",
+        "output/validation/m10-shared-20261018/macos-r20-tests.log",
+        "output/validation/m10-wasm-20261018/browser-dd61e352cf2e4470be12f0106524a17d/shared-controls.json",
+        "output/validation/m10-shared-20261018/qt-21077358a1d341f58d330b4afbf4c396/report.json",
+        "output/validation/m10-shared-20261018/source-workbench.json"
+      ]
+    },
+    {
+      "id": "WEBSITE-HOME-TITLES-SHARED-AXIS",
+      "title": "官网均匀时间轴、全历史降采样、首页动效与童趣手写标题",
+      "date": "2026-10-18",
+      "status": "verified",
+      "files": "temporary-site/site.js/site.css/index.html及hero-lettering.svg/原PNG/配方/来源；scripts/build_website_expansion.py、build_website_assets.py、build_website_title.py、verify_website.cjs、preview_website_titles.py；CHANGELOG、project-status、website-redesign与字体素材核查",
+      "verification_scope": "本地及公网独立Windows Chrome155：共享线性时间域、空值/刷新/键盘、全历史降采样与其他时段全量绘图、滑轨像素对齐；七宽度统计/下载、四宽度动效；井井选定手写I及起伏/粗细变化的黄色手绘线，候选与公网七宽度原图身份/按钮几何样式/无溢出；3.0.3身份只读核对",
+      "verification": "160001点全历史绘510点，1/7/30天完整绘240/1680/7200点，峰值/真实缺口/原始查询和时间比例保持；三宽度像素误差<0.03px。获准后统计/动效上线r5aaf8028a426a3a7，原137资产验证通过。选定标题及手绘波浪线最终上线rc57cf2fda18a63c6，仅2文件，178资产原字节复用，完整180文件服务器SHA、变化文件/首页HTTPS及候选/公网各七宽度通过。原PNG未改、波浪线覆盖98.1%，当前线上其他正文/CSS/JS/按钮样式/配置/论文目录/反馈PID保持，自有scratch已清。安装包身份一致；最新文档全检2268文件/447来源/159任务零错误，历史快照断链单列。",
+      "remaining": [
+        "其他浏览器与实体设备未验"
+      ],
+      "evidence": [
+        "docs/testing/website-redesign.md",
+        "output/validation/website/shared-axis-20261018/verification.json",
+        "output/validation/website/shared-axis-publication-20261018/completion.json",
+        "output/design/website-titles/comparison.png",
+        "output/validation/website/selected-title-20261018/completion.json",
+        "temporary-site/assets/hero-lettering-source.json"
+      ]
+    },
+    {
+      "id": "WEB-M10-BROWSER-CONTROLS",
+      "title": "浏览器声道部署、持续发声、驱动气压与可复现源微扰优化",
+      "date": "2026-10-18",
+      "status": "verified",
+      "files": "BrowserVocalRuntime/端口/iframe能力、共用核心气压曲线/存储/文档、双曲线编辑器、运行包/清单与服务器候选；计划、ADR/验收、状态/台账/CHANGELOG；source/update、源微扰补丁/独立原生构建、jitter/shimmer/seed与音频优先队列；真实账号preferences白名单、服务器恢复提示及四项HTTPS E2E",
+      "verification_scope": "Current source, isolated native reference and actual hosted HTTPS Windows Chrome155; touch emulation separately identified, physical iPad/Safari and released EXE not verified",
+      "verification": "47项Python、14项前端与类型/契约/UI来源/JS语法/架构通过，另31项资源/中文路径/控制含重叠项。独立原生四组微扰同种子复现、Wasm科学对照和几何缓存前后PCM/科学状态一致；固定12秒14.9→11.1s。已发布c5 recovery，1979文件/765运行库/九类准入与权限通过；实际HTTPS重复/连续PCM零欠载、真实账号设置、双曲线/6版/种子、129/257截面、12秒MP4独立解码、取消0.6ms恢复和实际旧源回退通过，12秒动作准备14.4s。触屏模拟模型双指/设置/音频通过。冻结1289对应文件核对，6账号停用，本机4388文件/1405407384逻辑字节清理并留回执。",
+      "remaining": [
+        "实体iPad/Safari、弱设备与长期持续发声未验",
+        "MP4继续服务器有界转码，长动作仍需预计算",
+        "本轮未重打或验证发布版EXE"
+      ],
+      "current_evidence": [
+        "docs/plans/2026-10-18-vocal-browser-controls.md",
+        "docs/decisions/ADR-M10-pressure-perturbation.md",
+        "docs/testing/web-vocal-browser-controls.md",
+        "output/validation/web-vocal-browser-20261018"
+      ]
+    },
+    {
+      "id": "WEB-M10-WASM",
+      "title": "生理参数合成原算法 WebAssembly 浏览器计算与结果性能验证",
+      "date": "2026-10-18",
+      "status": "verified",
+      "plan": "docs/plans/2026-10-18-vocal-wasm.md",
+      "files": "build_m10_wasm.py/verify_m10_wasm.py/compare_m10_wasm.py；browser_vocal.py、native_resources.py；browser-vocal.ts/vocal.worker.ts/vocal.ts；运行锁、来源和生成UI数据；资源/前端/E2E/科学recipe；计划/ADR、架构、M10 README、验收、project-status、CHANGELOG及台账",
+      "verification_scope": "Local Wasm build and independent browser versus current native core; production deployment, final EXE and physical devices require separate evidence",
+      "verification": "VTL2.4/m10-r18三份Wasm装载及隔离、最终Chrome155完整18组功能和独立原生对照通过。373862几何/时间轴值最大差1.13e-12，0.001dB微差获井井接受，零抖动诊断PCM16差0LSB；正式随机抖动保持。无服务器科学请求，MP4仍原转码。冷启动5.67s、0.5s发声235–260ms、5s动作5.97s、取消0.5ms，Worker线性内存约275MiB。实际缺失Wasm资源后的服务器24000样本播放通过。24Python/9前端、类型/契约/UI数据/构建、文档2260文件/446来源/157任务与架构零错误通过，历史快照断链单列；临时产物收尾见验收。",
+      "remaining": [
+        "本条仅记录初轮编译/本机验收，后续c5部署及浏览器能力扩展见WEB-M10-BROWSER-CONTROLS",
+        "MP4转码仍服务器执行，实体设备/弱设备/长期占用另验",
+        "初轮33/65与5秒限制已由后续浏览器接入扩展，服务器科学回退限制保持"
+      ],
+      "current_evidence": [
+        "docs/plans/2026-10-18-vocal-wasm.md",
+        "docs/decisions/ADR-M10-browser-wasm.md",
+        "docs/testing/m10-wasm-report.md",
+        "resources/manifests/vocal-wasm-runtime.json",
+        "output/validation/m10-wasm-20261018"
+      ]
+    },
+    {
+      "id": "WEB-IPAD-SETTINGS-IPA",
+      "title": "修复声道标签隐藏、iPad音标键盘及双指缩放",
+      "date": "2026-10-18",
+      "status": "verified",
+      "files": "VocalTractPage.vue、IpaPlusPage.vue、SymbolButton.vue、desktop-viewport.ts、scene.js、model-pinch.mjs、v3.css、m10-model-pinch测试及资源注册；定向交互验收、CHANGELOG、状态与台账",
+      "verification_scope": "Server HTTPS host navigation and editor focus; tablet simulations do not establish physical software-keyboard behavior",
+      "verification": "58项定向、类型/契约/UI数据/架构和隔离构建通过；旧120输出与原线上一致。候选Chrome/WebKit四组导航/编辑/焦点与浅深检查，真实HTTPS/PG/native VTL的Chrome桌面/触摸两组候选与部署后通过。头部视野按1.4倍缩放、页面倍率保持1、pose请求1→1，非头部画布pinch-zoom策略通过。18项前端原子发布r5，1929文件/762运行时/九类准入与服务/权限/CSP通过，运行时和官网/注册保持，无服务重启。9个自有QA账号全部停用，两传输别名与333份60665724字节编译scratch已按摘要/路径/联接核对清理，报告/锁定补丁/源快照/回退保留。",
+      "remaining": [
+        "实体iPad键盘与网页原生捏合待用户复测；Windows Chrome空白对照也不能以合成手势触发页面缩放，该失败不记通过；Windows WebKit缺AudioContext，未算作真实声道完整验收",
+        "未重打EXE或发布GitHub；同期WASM本地候选由新授权单独接入"
+      ],
+      "current_evidence": [
+        "output/validation/web-ipad-settings-20261017",
+        "docs/testing/web-private-repair.md"
+      ]
+    },
+    {
+      "id": "WEB-M10-MOBILE-DESKTOP",
+      "title": "网页声道重复发声、右栏背景及手机平板桌面布局",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "AppShell.vue、state/desktop-viewport.ts、platform/vocal.ts、vocal-tract/app.js/v3.css、vocal-web/desktop-viewport测试；显示方案、M10 README、web-private-repair、project-status、CHANGELOG及台账；17项线上前端资产",
+      "verification_scope": "Real server HTTPS/PG/native VTL and five complete WebAudio playbacks; Chrome/WebKit mobile/tablet simulations with account/storage fixtures; no physical device or subjective hearing certification",
+      "verification": "39项定向/类型/隔离构建通过，旧完成状态竞态由回归测试复现。真实独立账号正式登录/声道路径五次各24000样本/0.5秒、节点结束、无冲突提示；所有自有QA账号最终停用，凭据仅内存。四组模拟均桌面1440、七模块入口/六网格无交叠、退出恢复；1914发布文件/762运行库/九科学回执和HTTPS/服务/权限/CSP通过，原运行时和官网/注册保持，无服务重启。 文档2249文件/446来源/155任务零错误，线上实际CSS四组浅深/背景开关通过。5个自有QA账号全停用，服务器两份传输别名及本机268编译中间文件按路径/摘要或联接/引用核对清理，保留必要回执与当前补丁。",
+      "remaining": [
+        "实体iPad/手机的缩放手势与井井电脑实际听感仍需共同复测",
+        "服务器单次首声仍约2.8–3.4秒准备/拉取等待，不承诺即时合成；本轮未扩容或改科学算法",
+        "保持公开测试及原容量限制；未重打EXE或发布GitHub"
+      ],
+      "current_evidence": [
+        "docs/testing/web-private-repair.md",
+        "docs/plans/2026-10-17-web-desktop-layout.md",
+        "output/validation/web-m10-mobile-20261017"
+      ]
+    },
+    {
+      "id": "WEB-M05-LIVE-CLOCK",
+      "title": "修复iPad直播唇形特征点首帧停住",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "frontend/src/modules/lip-extraction/capture.ts、live-frame-clock.ts、README.md；frontend/tests/m05-live-clock.test.ts；web-private-repair、project-status、CHANGELOG及台账；线上13项前端资产",
+      "verification_scope": "Source and hosted HTTPS actual MediaPipe model; simulated zero live PTS, synthetic stream and account/storage fixture; physical iPad pending",
+      "verification": "23项定向/类型/构建通过。原代码零PTS仅1帧，补丁连续149呈现/147推理；正常PTS相同。线上触摸视窗网格变化/停止释放/浅深图通过。独立修复前构建120项与现网一致，原子发布13项、1900文件与HTTPS字节保持，原运行时不变，无服务重启。 最终762运行库/九类准入/服务/CSP复核及文档2246文件/446来源/154任务零错误；自有两编译中间目录1386文件清理，报告/脚本/截图/清单/变更传输包/线上回退保留。",
+      "remaining": [
+        "实体iPad待用户刷新后确认，触摸上下文与Chrome模拟不等同实体Safari验收",
+        "观察时间估计只用于实时候选，原始PTS保留，不扩大为物理音画同步或正式离线科学结果"
+      ],
+      "current_evidence": [
+        "docs/testing/web-private-repair.md",
+        "output/validation/m05-ipad-20261017"
+      ]
+    },
+    {
+      "id": "WEB-LIVE-ACCEPTANCE",
+      "title": "网页版真实账号及跨平台补验与恢复小规模公测",
+      "date": "2026-10-17",
+      "status": "verified",
+      "files": "本机忽略的web-release-acceptance-20261017脚本/报告；官网生成源/检查脚本/生成首页；web-private-repair、project-status、p15-staging-runbook、browser-compute计划、台账与CHANGELOG；服务器首页及enable_registration开关",
+      "verification_scope": "Actual hosted HTTPS, real account and physical Mac Safari UI; explicitly limited small public beta, no independent-account capacity certification",
+      "verification": "真实Chrome账号及PG/存储流程通过；实体Mac Safari归纳/文档下载、LPC原生回退/JSON及刷新恢复通过。公开入口1440/390/无JS及登录/注册/找回表单通过；1888发布文件/762运行库/九科学回执、HTTPS字节、服务与权限通过。已授权恢复公开入口/注册/找回，仅重启API，当前c3-r2不变。官网既有平台专项通过，严格兼容性/全套官网/高并发未全通过，原失败保留。 Mac两份自有合成输入按清单/SHA清理，保留独有结果、脚本和回执；文档2244文件/446来源/153任务零错误、幂等/音频锁定/三包HEAD通过。",
+      "remaining": [
+        "小规模公测容量边界由用户接受：25同会话客户端开始429，100档一次503及500ms API目标未达；不称独立多用户容量通过",
+        "后续追查空视野预览警告及候选入口偶发空白超时，补实体弱设备/Safari浏览器冷启动和长期多账号",
+        "保留c2与配置/首页回退；本轮未发GitHub Release、重打EXE、迁移现存库或改科研算法"
       ],
       "current_evidence": [
         "docs/testing/web-private-repair.md",
@@ -195,22 +492,47 @@
     },
     {
       "id": "WEB-ACCOUNT-USAGE-NOTE",
-      "title": "登录与注册页左侧展示定稿使用说明及可爱字体",
+      "title": "登录与注册页左侧定稿使用说明与可爱字体",
       "date": "2026-10-17",
       "status": "verified",
       "files": "frontend/src/account/ServerPage.vue/account-web.css；frontend/src/assets/ZCOOLKuaiLe-Regular.ttf；frontend/public/licenses/ZCOOL-OFL.txt；third_party/source-registry.json；CHANGELOG.md、docs/project-status.md、docs/testing/web-launch-foundation.md",
-      "note": "原样采用井井最终三段文案，保留两处加粗、括号和波浪号。左侧原简介/插画替换为站酷快乐体说明，登录/注册共用，手机完整排在表单前。未改全局字体、账号/API或线上开关。",
+      "note": "当前采用井井2026-10-18两段定稿，保留原字体/排版及括号、波浪号。登录/注册共用，手机完整位于表单前；已按本次明确授权同步线上，仅文案变化。",
       "verification_scope": "Windows source/type/build plus actual public HTTPS independent Chrome155 login, browser-only registration preview; no account submission; frontend atomic publication",
-      "verification": "typecheck/ui-data:check/独立build通过，账号边界及偏好11项通过；登录/注册浅色五宽度和深色两宽度共14组通过，全文/strong/实际字体/桌面左侧与手机上方/无横溢出/完整许可/零写请求。字体与OFL逐字节复用，定稿所有非空字符均在字体cmap。文档2206文件/445来源/144任务零错误，历史快照断链单列，定向diff通过。夹具静态前缀404已修复，原失败保留；两轮scratch清理成功，最终截图已查看。 按井井本轮明确授权已公开部署。冻结构建与线上基线逐文件核对，规范化构建引用后仅ServerPage的JS/CSS内容改变，另加原始字体及完整OFL。只上传16文件1837003压缩字节，原子切换1265项前端资源，完整发布清单1636项一致。755项科学运行库、后端文件及科研回执原字节保持，官网首页、Nginx配置、论文目录和服务PID保持，无需重启服务。公网Chrome155实际登录/字体和独立浏览器GET选项预览注册表单，浅深色五宽度14组全文/加粗/字体/位置/无横溢出/OFL/零写请求通过，16项更新资源HTTP字节及SHA回读一致。注册/找回仍关闭，未读取用户会话、提交账号或发送邮件。最终截图已查看，scratch已清理；未推送或重打EXE，实体手机及其他浏览器未验。",
+      "verification": "类型检查、隔离build通过。Windows Chrome155源码/最小候选/公网登录与注册浅深色五宽度各14组逐字/实际字体/位置/无横溢出/OFL/零写请求通过，最终截图已查看。原子发布14文件728445压缩字节，1608前端/1992清单及765运行库保持验证通过；仅编译后的两段文字、Vue生成scope ID和不可变资源引用变化，原全部旧静态资产保留，后端/科学回执/首页/配置/目录/PID保持，无重启。14资源公网字节SHA一致，注册/找回公开选项前后一致。文档2284文件/447来源/161任务零错误，历史快照断链单列，定向diff通过。临时构建/活动快照/浏览器scratch已清，回退及报告/截图保留；其他浏览器和实体手机未验。",
       "current_evidence": [
         "docs/testing/web-launch-foundation.md"
       ],
       "local_evidence": "output/validation/web-launch/account-note-68141cd45f1c4916b6f5257a6f935a19/report.json；output/validation/web-launch/account-note-20261017/capture.cjs及frontend候选",
       "remaining": [
-        "注册/找回仍关闭；未推送或重打EXE，实体手机及其他浏览器未验。",
-        "UI验证不扩展为服务器容量或全部重计算能力验证。"
+        "其他浏览器与实体手机未验，未推送或重建EXE。",
+        "本次UI核查不代表服务器容量或全部重计算能力验证。"
       ],
-      "publication": {
+      "copy_revision_20261018": {
+        "status": "verified",
+        "scope": "井井两段定稿与已明确授权的线上登录页同步",
+        "files": [
+          "frontend/src/account/ServerPage.vue",
+          "CHANGELOG.md",
+          "docs/project-status.md",
+          "docs/plans/task-ledger.json",
+          "docs/testing/web-launch-foundation.md"
+        ],
+        "verification": "类型检查、隔离build通过。Windows Chrome155源码/最小候选/公网登录与注册浅深色五宽度各14组逐字/实际字体/位置/无横溢出/OFL/零写请求通过，最终截图已查看。原子发布14文件728445压缩字节，1608前端/1992清单及765运行库保持验证通过；仅编译后的两段文字、Vue生成scope ID和不可变资源引用变化，原全部旧静态资产保留，后端/科学回执/首页/配置/目录/PID保持，无重启。14资源公网字节SHA一致，注册/找回公开选项前后一致。文档2284文件/447来源/161任务零错误，历史快照断链单列，定向diff通过。临时构建/活动快照/浏览器scratch已清，回退及报告/截图保留；其他浏览器和实体手机未验。",
+        "evidence": [
+          "output/validation/web-launch/account-note-20261018/source-report.json",
+          "output/validation/web-launch/account-note-20261018/candidate-report.json",
+          "output/validation/web-launch/account-note-20261018/public-report.json",
+          "output/validation/web-launch/account-note-20261018/publication-scope.json",
+          "output/validation/web-launch/account-note-20261018/public-readback.json",
+          "output/validation/web-launch/account-note-20261018/deployment.json",
+          "output/validation/web-launch/account-note-20261018/cleanup.json"
+        ],
+        "remaining": [
+          "其他浏览器和实体手机未验，未推送或重建EXE"
+        ]
+      },
+      "initial_verification_20261017": "typecheck/ui-data:check/独立build通过，账号边界及偏好11项通过；登录/注册浅色五宽度和深色两宽度共14组通过，全文/strong/实际字体/桌面左侧与手机上方/无横溢出/完整许可/零写请求。字体与OFL逐字节复用，定稿所有非空字符均在字体cmap。文档2206文件/445来源/144任务零错误，历史快照断链单列，定向diff通过。夹具静态前缀404已修复，原失败保留；两轮scratch清理成功，最终截图已查看。 按井井本轮明确授权已公开部署。冻结构建与线上基线逐文件核对，规范化构建引用后仅ServerPage的JS/CSS内容改变，另加原始字体及完整OFL。只上传16文件1837003压缩字节，原子切换1265项前端资源，完整发布清单1636项一致。755项科学运行库、后端文件及科研回执原字节保持，官网首页、Nginx配置、论文目录和服务PID保持，无需重启服务。公网Chrome155实际登录/字体和独立浏览器GET选项预览注册表单，浅深色五宽度14组全文/加粗/字体/位置/无横溢出/OFL/零写请求通过，16项更新资源HTTP字节及SHA回读一致。注册/找回仍关闭，未读取用户会话、提交账号或发送邮件。最终截图已查看，scratch已清理；未推送或重打EXE，实体手机及其他浏览器未验。",
+      "publication_20261017": {
         "operation": "account-note-51ad41a55fae4a959cfcb2d05ef5f8a7",
         "uploaded_files": 16,
         "upload_bytes": 1837003,
@@ -220,7 +542,22 @@
         "service_restart": false,
         "evidence": "output/validation/web-launch/account-note-20261017/deployment.json",
         "public_evidence": "output/validation/web-launch/account-note-public-d5c2a12a63964de9b033e509c6236b07/report.json"
-      }
+      },
+      "publication": {
+        "operation": "account-copy-ac65ae4c742144a48a29cd8cdeb9d4c7",
+        "uploaded_files": 14,
+        "upload_bytes": 728445,
+        "static_files": 1608,
+        "manifest_files": 1992,
+        "runtime_files_unchanged": 765,
+        "service_restart": false,
+        "evidence": "output/validation/web-launch/account-note-20261018/deployment.json",
+        "public_evidence": "output/validation/web-launch/account-note-20261018/public-report.json"
+      },
+      "remaining_20261017": [
+        "注册/找回仍关闭；未推送或重打EXE，实体手机及其他浏览器未验。",
+        "UI验证不扩展为服务器容量或全部重计算能力验证。"
+      ]
     },
     {
       "id": "WEB-DESKTOP-COPY",
@@ -2942,6 +3279,40 @@
         "changes": "流式 tracks 与旧 rows 共用连续同名标注合并，保留空白间隔及间隔后的同名文字，剔除裁剪窗边缘零长度段；波形及参数图复用，科学值与源文件不变。",
         "verification": "12项定向测试、typecheck、build通过；独立Chrome 12组流式及旧表／浅深主题／全长、截图同范围缩放及标签边缘通过，页面错误0；两类表SVG标签各一次、整幅PNG签名及非空字节通过。初轮合成流式夹具漏传数值统计，查看截图后补齐并增加曲线路径与轴范围断言复验；两轮scratch清理回执deleted。文档检查2020文件／427来源／107任务errors=[]，定向差异检查通过。",
         "remaining": "实际Qt、原生SQLite、用户原文件、最终EXE、实体DPI及其他平台未验；未打包发布。"
+      },
+      "live_selection_2026_10_18": {
+        "status": "verified",
+        "scope": "Windows/macOS/Web共用Vue源码；Windows独立Chrome与实际Qt，合成输入",
+        "changes": "当前图窗即时勾选/取消、新窗空选择、独立窗口、唯一清空操作、放大保留侧栏；紧凑避让图例、完整名称、浅深配色与打印导出；正式说明书及16图更新",
+        "files": "frontend/src/modules/parameter-display/{ParameterDisplayPage.vue,ParameterFigure.vue,state.ts,export.ts,README.md}、frontend/ARCHITECTURE.md、frontend/tests/m02.test.ts、tests/e2e/{m02-r2,m02-annotations}.cjs、scripts/manual/{capture_m02_current,register_m02_current}.py、manual/chapters/m02.json、manual/project.json、CHANGELOG.md、docs/project-status.md、scripts/manual/verify_m02_current.py、docs/testing/2026-10-03-m02-r2-report.md",
+        "verification": "14项定向、类型/保留旧资源构建/契约/UI数据通过；独立Chrome10类交互布局及12组标注回归通过；实际Windows Qt合成SQLite/XLSX、当前图窗/新窗/合并/清空/刷新恢复、真实Praat与浅深PNG/SVG/整幅图通过，最终标题/浅深色值实际下载复验；说明书21章1087资产strict/生成、13项阅读器测试及实际Qt浅深各16图加载/放大、三份SHA/章节一致/PNG逐块CRC及300dpi通过。自有scratch最终deleted，文档与架构零错误，详见R2报告本轮章节。",
+        "remaining": "最终EXE/Mac应用未更新；Mac Qt/Safari、实体DPI/显示器/听感未重验。公网证据限合成文件和本轮M02操作，其他模块不扩大验收。",
+        "evidence": "docs/testing/2026-10-03-m02-r2-report.md#2026-10-18--当前图窗即时勾选与论文式图例",
+        "web_deployment": {
+          "status": "verified",
+          "revision": "m02-live-plots-ce0b41d089be42249a21f1d043c23e3e",
+          "scope": "Only M02 source/style and chapter/index/16 images for 17 positions; current production 50-chunk control matched",
+          "files": 36,
+          "upload_bytes": 7453993,
+          "manifest_files": 2053,
+          "runtime_files_unchanged": 765,
+          "verification": "Candidate and public each 8 checks on actual HTTPS/account/Linux XLSX reader, local import, live selection/windows/filter clear, account settings and refresh, light/dark SVG/300dpiPNG and current manual; all 36 HTTPS bytes and full manifest; two QA identities disabled",
+          "protected": "Backend, scientific runtime/receipt, homepage/catalog/config and API/service identities unchanged; no service restart; rollback retained",
+          "evidence": "docs/testing/2026-10-03-m02-r2-report.md#网页同步上线与源码工作台重启",
+          "cleanup": {
+            "status": "deleted",
+            "files": 6444,
+            "logical_bytes": 2678749686,
+            "scope": "Only this task scratch; retained minimal delta/reports/screenshots/server rollback"
+          }
+        },
+        "workbench_restart": {
+          "status": "verified",
+          "entry": "scripts/Start-Research-Workbench.ps1 -Module M02",
+          "previous_groups_saved": true,
+          "normal_close": true,
+          "visible_updated_page": true
+        }
       }
     },
     {
@@ -3095,6 +3466,36 @@
         "changes": "Toolbar offline mode, multi-file analysis and named history, default batch save with own offsets and 1080 video/animation, standalone format-only export, shared full GIF/MP4 mesh and timeline",
         "verification": "16 frontend and 36 Python checks; 5 end-to-end groups and 12 layouts; independent codec readback; typecheck/contracts/ui-data/build and manual checks",
         "remaining": "Qt/EXE/devices/cross-platform and native cancel timing not reverified; old jobs without source reference require reanalysis for source-video export; manual screenshots retained"
+      },
+      "playback_repair_2026_10_18": {
+        "status": "verified",
+        "date": "2026-10-18",
+        "scope": "Windows current source, actual Qt and synthetic public media; final EXE/devices/cross-platform separate",
+        "changes": "Automatic bounded VP8/Opus temporary replay, source-clock origin preserved, partial codec failures, MP4 save and common input formats, four mode names and retained left capture/independent offline stats, manual and records",
+        "files": "frontend lip-extraction page/port/README and platform/m05.ts; desktop m05_bridge.py; worker m05_playback.py and m05_media_export.py; frontend/Python tests and verify_m05_playback_qt.py; manual m05 and generated resources; docs/manual and existing report/status/changelog",
+        "verification": "39 Python media/analysis, 24 frontend, 4 desktop permission, typecheck/contracts/ui-data/build, strict manual 21 chapters/1059 assets passed; actual Qt 6 groups: MP4/MKV/AVI picture and nonzero decoded audio, playback/seek, 125ms offset -> .425s, AVI saves MP4, 6 light/dark layouts, retained media-capture stats; docs/architecture zero errors; all owned Qt scratch deleted after exit",
+        "evidence": "docs/testing/m05-offline-batch-report.md#2026-10-18离线同步回放与统计; output/validation/m05-playback/qt-57ab1db4183e408ebabc8d2e61958ee0/report.json",
+        "remaining": "Final EXE, physical speaker/camera/microphone sync, live model, long video and other platforms not reverified. Extra offscreen live-model probe lacked WebGL activeTexture; media-only synthetic capture verifies stats independently. Current static screenshots refreshed in manual_images_2026_10_18; original author video retained."
+      },
+      "device_selection_2026_10_18": {
+        "status": "verified",
+        "date": "2026-10-18",
+        "scope": "Windows/macOS/browser shared source; Windows actual isolated Qt and independent Chrome, real permissions and Chromium virtual hardware plus five-input fixture; no physical capture",
+        "changes": "Preview preselection plus explicit audio-only device authorisation when labels hidden, enumerate with live temporary audio then stop every track, Qt devices-purpose gate and denial/retry messages; exact selected IDs retained across modes and normal refresh, device lock/lease and camera-only preview preserved; manual flow and 9 screenshots refreshed",
+        "files": "frontend lip-extraction page/devices/port/README, platform/desktop.ts; desktop host.py and m05_permissions.py; frontend/device permission tests; docs/manual/lip-extraction.md; manual m05/project/software-only images and generated reader; scripts/verify_m05_device_selection_qt.py, verify_m05_device_permissions.py, manual/register_m05_current.py; existing report/status/changelog/ledger",
+        "verification": "29 frontend M05 and 6 desktop permission tests, typecheck/contracts/ui-data/build:workbench passed. Actual Qt six fixture groups verify hidden labels, refusal/retry, five inputs, exact mode constraints and light/dark layouts. Qt and independent Chrome real permission/virtual-device flows verify names, denied retry, ended temporary tracks and no reopening on normal refresh. Strict manual 21 chapters/1095 assets/software generation; 9 actual current images visually reviewed, source/public/dist hashes and chapter equal; actual Qt light/dark 9 load+zoom each passed. Docs/architecture zero errors; all owned scratch deleted after owning processes exited.",
+        "evidence": "docs/testing/m05-offline-batch-report.md#同日补充未授权音频设备列表与三端流程; output/validation/m05-devices/qt-91da56afc1074d91a75df7ab9ca67f2b/report.json; output/validation/m05-devices/qt-permissions-0799a3c95d6642628caacc06f9660d8e/report.json; output/validation/m05-devices/chrome-permissions-0c91550b453b490d874eaba884f9daec/report.json; output/validation/m05-manual/reader-20261018-7c4b55736a344fef9b7d1ac77b761c5e/report.json",
+        "remaining": "Physical sound card, macOS Qt/Safari and final EXE/Mac apps not verified; no public deployment. Prior source window restart verified initial selection unlock only; this authorisation supplement requires reopening the existing user window and has not restarted it. Failed test assumptions retained in reports."
+      },
+      "manual_images_2026_10_18": {
+        "status": "verified",
+        "date": "2026-10-18",
+        "scope": "Current Windows Qt screenshots and common manual source/generated resources; no EXE/Mac/public deployment",
+        "changes": "Replace 6 static images and add 3 offline entry/replay/statistics images; recapture all 9 after audio device authorisation fix, update captions and search; retain stable figure IDs and original author video",
+        "files": "manual/chapters/m05.json; manual/project.json; manual/assets/software-only/m05-current-20261018; scripts/manual/capture_m05_current.py, register_m05_current.py, verify_m05_current.py; existing M05 report, changelog, status and ledger; generated manual/public/dist",
+        "verification": "Latest 9 Qt captures visually checked; full images 2560x1600 from 2561x1601 one-pixel trim, DPR1.5/page100/maximized/light/collapsed navigation; strict manual 21 chapters/1095 assets, software generation/frontend build passed; all 9 byte digests source/public/dist and chapter JSON equal; actual Qt light/dark 9 load+zoom each, no errors/overflow; final snapshots visually checked; owned scratch deleted after exit; docs/architecture zero errors; original author video retained",
+        "remaining": "Final packaged applications and public site not updated; original author video retained with current mode-name mapping; no physical devices or other platforms reverified",
+        "evidence": "docs/testing/m05-offline-batch-report.md#同日补充说明书当前界面配图; docs/testing/m05-offline-batch-report.md#同日补充未授权音频设备列表与三端流程; output/validation/m05-manual/screenshots-20261018-87e278e7f4d549378b8454a04048c52c/report.json; output/validation/m05-manual/reader-20261018-7c4b55736a344fef9b7d1ac77b761c5e/report.json"
       }
     },
     {
@@ -3207,6 +3608,42 @@
     {
       "id": "M09",
       "title": "语谱图转音频",
+      "audio_canvas": {
+        "status": "verified",
+        "date": "2026-10-18",
+        "scope": "Windows当前源码Qt、独立Chrome候选/真实Pyodide本机计算；Windows/macOS/网页共用页面和Python核心已同步修改",
+        "files": [
+          "frontend/src/modules/spectrogram-to-audio/Spec2WavPage.vue",
+          "frontend/src/modules/spectrogram-to-audio/SpectralCanvas.vue",
+          "frontend/src/modules/spectrogram-to-audio/pixel-stroke.ts",
+          "frontend/src/modules/spectrogram-to-audio/README.md",
+          "backend/src/ptb_api/spec2wav_models.py",
+          "backend/src/ptb_api/preferences.py",
+          "packages/phonetic_core/src/phonetic_core/spec2wav/editing.py",
+          "packages/phonetic_core/ARCHITECTURE.md",
+          "packages/phonetic_core/tests/test_m09_editing.py",
+          "backend/tests/test_m09_r1.py",
+          "frontend/tests/m09.test.ts",
+          "frontend/tests/m09-canvas.html",
+          "scripts/verify_m09_canvas_qt.py",
+          "tests/e2e/m09-canvas.cjs",
+          "contracts/openapi.json",
+          "contracts/generated/api.ts",
+          "contracts/module-preference-fields.json",
+          "contracts/versions.md",
+          "resources/manifests/browser-science-runtime.json",
+          "docs/decisions/ADR-M09-audio-drawing-grid.md",
+          "docs/decisions/ADR.md",
+          "docs/testing/m09-canvas.md",
+          "CHANGELOG.md",
+          "docs/project-status.md",
+          "docs/plans/task-ledger.json"
+        ],
+        "changes": "音频自动显示普通横向语谱图；默认320px图高可输入/拖动180–800，FFT/源尺寸不改变选定高度；频率上限默认5000Hz并按Nyquist有界自选，改视图保留笔迹；两类画笔与核心统一像素距离，音频按画布宽高/频带面积覆盖映射回原STFT，旧快照摘要/原相位/未编辑声道保持；账号显示设置及网页运行库候选同步",
+        "verification": "54项Python含旧重建parity、24项前端、类型/契约双向/UI数据/build:workbench通过；最终Qt10组/4布局、DPR1.5与Chrome155实际Wasm11组通过，精确1/12/22/200px、原生拖动/频率/FFT/连续粗笔、四产物与另一声道逐样本核验；浏览器三项改源与ZIP/清单字节一致。Qt/Chrome最终scratch均deleted。文档检查2318文件/447来源/163任务零错误，架构检查零错误；定向diff/JSON/JS语法检查通过，历史快照断链另列。",
+        "evidence": "docs/testing/m09-canvas.md",
+        "remaining": "Mac Qt/Safari、服务器账号设置端到端、线上直接下载/回退及最终EXE/Mac应用未重验，未打包、部署或推送；Chrome测试ZIP直连204，使用自有HTTP服务原响应传输到实际Worker，计算与SHA校验保持。"
+      },
       "neural_vocoder_evaluation": {
         "status": "verified",
         "date": "2026-10-14",
@@ -3696,9 +4133,32 @@
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
       },
       "current_scope_note": "2026-09-19 R6 Windows/Chrome/冻结基础链路限定 verified，见 docs/testing/m12-r6-report.md；旧 note 是 2026-09-14 历史，Linux/UI 新门均未完成。",
+      "file_marker_theme_2026_10_18": {
+        "status": "verified",
+        "scope": "Windows 共用前端源码及独立 Chrome 合成文件页面样式；恢复 TextGrid 状态并跟随主题色，保持关联与保存语义",
+        "files": "frontend/src/modules/annotation/AnnotationPage.vue、README.md；docs/testing/p17/M12-report.md；docs/project-status.md；CHANGELOG.md；docs/plans/task-ledger.json",
+        "verification": "50项annotation测试、typecheck、contracts:check、ui-data:check、build:workbench通过；Chrome 72组主题/按钮/背景设置、同名/无标注/自动保存/多候选、加载选中、悬停与筛选通过；output/validation/m12-theme-marker/report.json及浅深截图",
+        "remaining": "未重验Qt原生目录链、最终EXE、macOS或公开网站；已打开源码窗口需重启载入"
+      },
+      "reference_overlap_endpoints_2026_10_19": {
+        "status": "verified",
+        "scope": "共用源码：同名参考层按时间交集复用并保留未覆盖内容；音频首尾双击定界，普通与词表模式，处理微秒舍入差异",
+        "files": "frontend/src/modules/annotation/{editor.mjs,sequence.ts,AnnotationTracks.vue,AnnotationPage.vue,README.md}；frontend/src/components/WaveformViewport.vue；frontend/src/platform/waveform.ts；frontend/tests/annotation-overlap-endpoints.test.ts；tests/e2e/m12-overlap-endpoints.cjs；docs/decisions/ADR-M12-reference-overlap.md及索引、M12报告、CHANGELOG.md、docs/project-status.md、本台账",
+        "verification": "65项annotation测试、typecheck、contracts:check、ui-data:check、build:workbench通过；独立Chrome12组实际事件/保存/参考导入复用及浅深截图通过，文档/架构零错误，见output/validation/m12-overlap-endpoints/report.json",
+        "remaining": "Qt原生目录链、最终EXE、macOS和公网未更新或重验，已打开源码窗口需重开载入"
+      },
       "current_evidence": [
         "docs/testing/p17/M12-report.md"
-      ]
+      ],
+      "edit_history_2026_10_19": {
+        "status": "verified",
+        "scope": "共用源码、Windows Chrome/Qt 原生写盘、公开网页定向部署；用户源码工作台重启",
+        "files": "annotation Page/editor/history/README、ResearchFiles稳定scope、desktop annotation身份及测试、前端history测试、e2e和Qt脚本、frontend架构、ADR与索引、报告/状态/本台账/CHANGELOG",
+        "verification": "73前端、15桌面、Chrome18、Qt4通过；typecheck/contracts/ui-data/build通过。控制构建50块与线上归一化一致；候选/公网账号各5组通过，零研究上传；2067清单/765运行文件/15HTTPS核对通过。公开版本 m12-edit-history-43a5390df3c044e098e43088738c3050；统一入口重启并实际窗口确认。 文档/架构零错误，定向diff --check通过。",
+        "remaining": "最终EXE/Mac包未重打，Mac实机/Safari、自然语料完整手势与真实IME未验；历史本机保留，清站点数据会清历史",
+        "evidence": "docs/testing/p17/M12-report.md；output/validation/m12-web-20261019/public-readback.json",
+        "cleanup": "6份Qt scratch及公开验收6497份自有临时文件已核对归属/联接/进程后清理，保留报告/截图/最小发布增量/冻结证据/服务器回退；两个成功及首轮脚本失败QA身份均停用。"
+      }
     },
     {
       "id": "M13",
@@ -4098,6 +4558,27 @@
       "files": "frontend/src/modules/recording; desktop/src/ptb_desktop",
       "verification_scope": "Windows implemented and bounded verification; remaining content/device/platform work is explicit",
       "note": "当前实现、已验范围和剩余任务见 docs/project-status.md。",
+      "example_download": {
+        "id": "M16-XLSX-EXAMPLE",
+        "status": "verified",
+        "scope": "2026-10-18：三端共用导入任务页面下载真实XLSX示例，中文列名/两行内容/数值次数及列宽；保留CSV/TSV/JSON导入。涉及task-import、RecordingPage、README、M16-R3单测及历史/当前E2E下载断言。",
+        "verification": "Windows25项前端定向、typecheck/build、Chrome真实下载与XLSX回读/导入展开三任务通过；当前五组Chrome回归通过、页面错误0、scratch已清。文档2301文件/447来源/162任务零错误，脚本语法/JSON及定向diff通过。Qt原生保存对话框、Excel实体应用、Mac/Safari与最终成品未重验，未部署。",
+        "evidence": "docs/testing/2026-10-04-m16-r4-report.md#2026-10-18-xlsx任务示例"
+      },
+      "workflow_adjustment": {
+        "id": "M16-WORKFLOW-REPAIR",
+        "status": "verified",
+        "scope": "2026-10-18：三端共用录音页设备电平横排、Ctrl滚轮时间轴、新任务录音身份；桌面/浏览器五种导出范围统一与空任务批量导出；Windows进度JSON短暂替换争用。保留上一轮准备提示，未修改用户录音或已有工程。",
+        "verification": "Windows Python49项、前端29项、typecheck/contracts/UI-data/build通过。最终实际Qt八组、Chrome真实AudioWorklet/假麦克风四组及浅深布局通过；T004→T005、Ctrl滚轮、旧噪声处理、空任务批量导出及真实Windows读取争用覆盖。文档2299文件/447来源/162任务零错误、JSON/脚本语法和定向diff通过。两轮Chrome夹具通道不符失败已记录，最终使用实际双声道；各轮scratch已清。三端适用共用源码已更新，EXE/Mac应用/线上未更新，Mac Qt/Safari与实体设备未验。",
+        "evidence": "docs/testing/2026-10-04-m16-r4-report.md#2026-10-18-任务归属导出缩放及文件争用"
+      },
+      "preparation_guidance": {
+        "id": "M16-PREPARATION-GUIDANCE",
+        "status": "verified",
+        "scope": "2026-10-18：共用录音页在无工程时点击自由录音/开始录音/设备与录前检测弹出准备引导；有工程但无输入设备时拦截录音/检测，保留运行中锁定。涉及RecordingPage、模块README、R4 E2E断言及独立Qt验证脚本。",
+        "verification": "Windows当前源码：typecheck、23项录音定向测试、contracts/UI-data、build和R4 E2E语法通过。实际Qt浅深三入口、无设备拦截、合成输入检测/自由录音/停止保存及运行中锁定通过，未准备的点击不创建工程或启动采集。首轮截图未等待绘制及Qt销毁前清理不足已修正，最终截图核对且两轮scratch已清。文档2297文件/447来源/162任务零错误，台账JSON与定向diff通过。实体设备、完整R4 E2E、最终EXE及跨平台未重验，未发布。",
+        "evidence": "docs/testing/2026-10-04-m16-r4-report.md#2026-10-18-录音前准备提示"
+      },
       "steps": [
         "维护当前实现",
         "按证据补齐剩余范围"
@@ -4105,7 +4586,23 @@
       "acceptance": "完成对应模块功能及明确列出的内容、设备与平台验收",
       "current_evidence": [
         "docs/testing/2026-10-04-m16-r4-report.md"
-      ]
+      ],
+      "manual_update": {
+        "id": "M16-MANUAL-CURRENT",
+        "status": "verified",
+        "date": "2026-10-18",
+        "scope": "正式说明书m16正文、素材索引及软件专用截图，采图/Qt阅读验证脚本；准备提示、XLSX、设备布局、任务归属、时间缩放、五范围及功率谱减算法/保存方式。更新8图、补3图，既有稳定ID和两例音保留。",
+        "verification": "21章1071资产严格校验/生成、17项阅读器测试、类型与build:workbench通过。实际Windows Qt浅深各11图加载/放大，source/public/dist SHA及章节一致，两例音元数据有效且保持暂停；正式配图和阅读排版核查，自有scratch已清。文档2307文件/447来源/163任务和架构零错误，历史快照36处断链单列，定向diff通过。已正常重启源码窗口载入最终阅读资源。",
+        "evidence": [
+          "docs/testing/2026-10-04-m16-r4-report.md#2026-10-18-正式录音说明书同步",
+          "output/validation/m16/manual-update-6ff36813f2ad4559831bf1ac0c1d4ead/report.json",
+          "output/validation/m16/manual-reader-a1c733ae104f46818d2e778711cac6d9/report.json"
+        ],
+        "remaining": [
+          "实体设备/听感与Mac Qt/Safari未新增验收",
+          "最终EXE/Mac应用和公开网站未更新"
+        ]
+      }
     },
     {
       "id": "M17",
@@ -4571,6 +5068,39 @@
     },
     {
       "id": "WEBSITE-REDESIGN",
+      "tutorial_mobile_player": {
+        "status": "verified",
+        "date": "2026-10-18",
+        "scope": "按本轮修复授权更新官网服务器CSP；Windows Chrome155电脑及Android UA/触摸模拟，未扩大到实体手机验收",
+        "changes": "官方外链播放器在手机UA下跳到www.bilibili.com/blackboard/webplayer/mbplayer.html，原frame-src未放行。维护源与服务器仅增加官方手机播放器的具体路径，保留其余策略，新增必须使用实际HTTPS/CSP和手机UA的两段播放器专项。",
+        "files": [
+          "deployment/temporary-site/publish.py",
+          "scripts/verify_website.cjs",
+          "CHANGELOG.md",
+          "docs/project-status.md",
+          "docs/testing/website-redesign.md",
+          "docs/plans/task-ledger.json"
+        ],
+        "verification": "四种CSP输入/幂等/其他指令保持、Python远程代码与JS语法通过。候选响应头预览及无拦截的最终公网各四组：电脑/Android的介绍与语谱图转音频第一集均readyState4、无video错误、实际播放时间推进且未暂停、切换单播放器/外链及零CSP违规。两域名HTTPS回读/首页SHA通过，截图已查看，两轮scratch已清。服务器配置备份、摘要并发保护、nginx -t/reload及服务活跃通过，182项活动文件/首页/论文目录摘要及反馈PID保持。文档2296文件/447来源/162任务零错误，历史快照断链另列；定向diff通过。",
+        "evidence": [
+          "docs/testing/website-redesign.md",
+          "output/validation/website/verify-1792294666907-49748/report.json",
+          "output/validation/website/verify-1792294728491-92012/report.json",
+          "output/validation/website/mobile-player-20261018/deployment.json",
+          "output/validation/website/mobile-player-20261018/https-readback.json"
+        ],
+        "publication": {
+          "operation": "mobile-player-f4394d645c224d40a9d56963b0d6ae40",
+          "release_unchanged": "rc57cf2fda18a63c6",
+          "uploaded_website_files": 0,
+          "unchanged_files": 182,
+          "new_config_sha256": "1fafe049c9d47d781c7a712622ff0cdb4b6ec74d5ed30b6e3d82244799dfe865"
+        },
+        "remaining": [
+          "实体手机、Safari及完整时长播放未验。",
+          "未推送Git或重打EXE。"
+        ]
+      },
       "platform_downloads": {
         "status": "verified",
         "date": "2026-10-17",
@@ -5151,6 +5681,53 @@
           "Windows Chrome155已验；其他浏览器及实体手机未验。"
         ],
         "published_release": "r0d81c4bf11f66d66"
+      },
+      "five_way": {
+        "status": "verified",
+        "date": "2026-10-18",
+        "scope": "五路试听与每按钮五图浮窗，重新上传官网；前三路及原模型不变",
+        "changes": "新增第四路青木初始化动量GL，第五路同PCM接80带NAFNet/BigVGAN；新增12WAV和30真实输出语谱图，原73段保持；说明默认展开高亮、去掉按钮小字。",
+        "files": [
+          "scripts/build_website_five_comparison.py",
+          "scripts/build_website_four_comparison.py",
+          "scripts/build_website_gl_comparison.py",
+          "scripts/website_audio_baseline.py",
+          "scripts/verify_website_audio_baseline.py",
+          "scripts/build_website_expansion.py",
+          "scripts/verify_website.cjs",
+          "temporary-site/site.js",
+          "temporary-site/site.css",
+          "temporary-site/index.html",
+          "temporary-site/AGENTS.md",
+          "temporary-site/README.md",
+          "temporary-site/assets/audio/provenance.json",
+          "temporary-site/assets/spectrogram-examples/comparison.json",
+          "temporary-site/assets/spectrogram-examples/five-way-baseline.json",
+          "deployment/temporary-site/publish.py",
+          "docs/plans/2026-10-16-gl-three-way-comparison.md",
+          "docs/testing/website-redesign.md",
+          "docs/project-status.md",
+          "CHANGELOG.md",
+          "docs/plans/task-ledger.json"
+        ],
+        "verification": "RTX5090已有pytorch_5090完成12WAV/30图；73旧段/前三路摘要、模型/预测/整数窗宽/青木/同PCM与漂移拒绝通过。生成器幂等、Python/JS语法通过。Windows Chrome155源码/最终冻结/公网均通过30段HTTP SHA/完整播放、30按钮五图与对应高亮、无按钮下方小字、默认展开/mark、八档导航/五内容宽度/实际字体/键盘/Esc/互斥/无JS。rbca3d6f3f94fcbd3原子发布，180资产大小SHA、两下载HEAD、CSP/站点与统计配置/论文目录/反馈PID/timer/nginx保持。3轮浏览器scratch及183文件31230271字节冻结副本已清。文档检查仍报同期来源447与total_records446不一致，未改该登记，无本轮新链接错误。",
+        "evidence": [
+          "output/validation/website/five-route-aoki-20261018",
+          "output/validation/website/five-route-aoki-20261018/scope.json",
+          "output/validation/website/five-route-aoki-20261018/generation-checks.json",
+          "output/validation/website/verify-1792260019721-137584/report.json",
+          "output/validation/website/verify-1792260192591-109032/report.json",
+          "output/validation/website/website-ba1c5cacf3ad422d86f749f57c731702/deployment.json",
+          "output/validation/website/five-route-aoki-20261018/https-readback.json",
+          "output/validation/website/verify-1792260368786-142484/report.json",
+          "output/validation/website/five-route-aoki-20261018/cleanup.json"
+        ],
+        "remaining": [
+          "全项目文档检查来源计数不一致为同期已有问题，未修改来源登记",
+          "其他浏览器与实体设备未验；未重建EXE"
+        ],
+        "candidate_release": "rbca3d6f3f94fcbd3",
+        "published_release": "rbca3d6f3f94fcbd3"
       }
     },
     {

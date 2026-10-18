@@ -39,3 +39,15 @@ test('export scopes select task takes/history and exact frame ranges without cha
  for(const s of scenarios){calls.length=0;await m.export({mode:s.mode,start:2,end:7,subtype:'PCM_16'},p.takes[0]);for(let i=0;i<100&&m.exportState?.state==='running';i++)await new Promise(r=>setTimeout(r,0));assert.equal(m.exportState?.state,'complete');assert.deepEqual(calls.map(c=>c.inputs[0]),s.ids);for(const c of calls){assert.equal(c.start,s.mode==='selection'?2:0);assert.equal(c.end,s.mode==='selection'?7:10);assert.equal(c.subtype,'PCM_16');}const bytes=new Uint8Array(await downloads.at(-1)!.arrayBuffer()),view=new DataView(bytes.buffer),entries=new Map<string,Uint8Array>();let at=0;while(view.getUint32(at,true)===0x04034b50){const size=view.getUint32(at+18,true),n=view.getUint16(at+26,true),extra=view.getUint16(at+28,true),name=new TextDecoder().decode(bytes.slice(at+30,at+30+n)),start=at+30+n+extra;entries.set(name,bytes.slice(start,start+size));at=start+size;}const manifest=JSON.parse(new TextDecoder().decode(entries.get('manifest.json')));assert.equal(manifest.items.length,s.ids.length);assert.equal(manifest.task_summary[1].skipped,true);assert(new TextDecoder().decode(entries.get('manifest.csv')).includes("'=1+1"));}
  assert.deepEqual(p,before);
 });
+
+test('batch export needs no current take, raw and history options retain exact identities',async()=>{
+ const p=project(),t=take();t.versions.push({id:'gain',kind:'gain',frames:20,created_at:'now',metadata:{parent:'raw'}});t.head=1;p.takes=[t];
+ const calls:any[]=[];let source:any;const server={async create(config:any){source=config;calls.push(config);return {id:'job',state:'succeeded'};},async result(){return {asset,metadata:{frames:source.end-source.start}};},async read(){return new ArrayBuffer(44);}} as unknown as RecordingServer;
+ const m=new BrowserRecordingProject(p,server);m.assets={raw:{...asset,id:'raw'},gain:{...asset,id:'gain'}};m.download=()=>{};
+ const done=async()=>{for(let i=0;i<100&&m.exportState?.state==='running';i++)await new Promise(r=>setTimeout(r,0));};
+ await m.export({mode:'all',raw:true,subtype:'FLOAT'});await done();assert.equal(m.exportState?.state,'complete');assert.deepEqual(calls.map(c=>c.inputs[0]),['raw']);
+ calls.length=0;await m.export({mode:'versions',raw:true,subtype:'FLOAT'});await done();assert.deepEqual(calls.map(c=>c.inputs[0]),['raw','gain']);
+ calls.length=0;await m.export({mode:'selection',raw:true,start:5,end:15},t);await done();assert.equal(m.exportState?.state,'failed');assert.match(m.exportState?.error??'',/选区/);assert.equal(calls.length,0);
+ await m.export({mode:'current'});await done();assert.equal(m.exportState?.state,'failed');assert.match(m.exportState?.error??'',/选择/);
+ await m.export({mode:'invalid'},t);await done();assert.equal(m.exportState?.state,'failed');assert.match(m.exportState?.error??'',/范围/);
+});

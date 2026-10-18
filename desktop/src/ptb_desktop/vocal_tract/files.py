@@ -13,16 +13,16 @@ class VocalFiles:
         if op=='video/cancel' and self.video and self.video.id==body.get('id'):
             self.video.cancelled.set()
         with self.lock:
-            if op in ('document/open','document/save','video/begin') and not path:return {'cancelled':True}
-            if op=='document/open':
+            if op in ('document/open','document/save','preset-pack/open','preset-pack/save','video/begin') and not path:return {'cancelled':True}
+            if op in ('document/open','preset-pack/open'):
                 with Path(path).open('rb') as f:raw=f.read(8_000_001)
-                if len(raw)>8_000_000:raise ValueError('关键帧文件超过 8 MB')
-                document=client.invoke('document/validate',json.loads(raw.decode('utf-8-sig')))
+                if len(raw)>8_000_000:raise ValueError('声道文件超过 8 MB')
+                document=client.invoke('preset-pack/validate' if op.startswith('preset-pack/') else 'document/validate',json.loads(raw.decode('utf-8-sig')))
                 return {'document':document,'name':Path(path).name}
-            if op=='document/save':
-                document=client.invoke('document/create',body)
+            if op in ('document/save','preset-pack/save'):
+                document=client.invoke('preset-pack/create' if op.startswith('preset-pack/') else 'document/create',body)
                 raw=json.dumps(document,ensure_ascii=False,allow_nan=False,indent=2).encode('utf-8')
-                if len(raw)>8_000_000:raise ValueError('关键帧文件超过 8 MB')
+                if len(raw)>8_000_000:raise ValueError('声道文件超过 8 MB')
                 target=Path(path);temp=target.with_name('.'+target.name+'.'+uuid.uuid4().hex+'.tmp')
                 try:
                     with temp.open('xb') as f:f.write(raw)

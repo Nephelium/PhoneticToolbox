@@ -40,20 +40,30 @@
       "sha256": "718d40f1c015dd25ec724cc8fc4e2325d6a45a92ae225121ff6953f224a16f72",
       "bytes": 18597
     },
-    "annotated_types-0.7.0-py3-none-any.whl": {
-      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/annotated_types-0.7.0-py3-none-any.whl",
-      "sha256": "107c6d0a31af3ce347cad1990976cca76373de2ef51dfbffff84fe10cb7b2c19",
-      "bytes": 11963
-    },
     "pyodide.asm.js": {
       "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pyodide.asm.js",
       "sha256": "1263f02b5b26099b96112378156f242dd98b39a8201ba7765e5fe3d455c5ce91",
       "bytes": 1074322
     },
+    "annotated_types-0.7.0-py3-none-any.whl": {
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/annotated_types-0.7.0-py3-none-any.whl",
+      "sha256": "107c6d0a31af3ce347cad1990976cca76373de2ef51dfbffff84fe10cb7b2c19",
+      "bytes": 11963
+    },
     "cffi-1.17.1-cp313-cp313-pyodide_2025_0_wasm32.whl": {
       "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/cffi-1.17.1-cp313-cp313-pyodide_2025_0_wasm32.whl",
       "sha256": "a91747e5e4d982e7e7b2f158f2d06302c4205198ccec688e34b9c310e4417da7",
       "bytes": 152401
+    },
+    "python_stdlib.zip": {
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/python_stdlib.zip",
+      "sha256": "4298b6ee445cb724c3973437da47789752b9e6ff4e26619026b283ec801fc46b",
+      "bytes": 2423989
+    },
+    "pyodide.asm.wasm": {
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pyodide.asm.wasm",
+      "sha256": "e2f4ee75b325e35eb31bfb8c613d4dd5098f5502c156a97847686875b5025480",
+      "bytes": 8647684
     },
     "contourpy-1.3.1-cp313-cp313-pyodide_2025_0_wasm32.whl": {
       "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/contourpy-1.3.1-cp313-cp313-pyodide_2025_0_wasm32.whl",
@@ -65,60 +75,60 @@
       "sha256": "a140384709bfc674001fbd3b1e32a3bf8b531c0413d02f98badbd2d8ecc924c1",
       "bytes": 8321
     },
-    "kiwisolver-1.4.8-cp313-cp313-pyodide_2025_0_wasm32.whl": {
-      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/kiwisolver-1.4.8-cp313-cp313-pyodide_2025_0_wasm32.whl",
-      "sha256": "74fef16f229c3280f386ace367f36ac5ad8597ebabef45c6cf8bc2fa8aa3be70",
-      "bytes": 36920
-    },
-    "python_stdlib.zip": {
-      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/python_stdlib.zip",
-      "sha256": "4298b6ee445cb724c3973437da47789752b9e6ff4e26619026b283ec801fc46b",
-      "bytes": 2423989
-    },
     "fonttools-4.56.0-py3-none-any.whl": {
       "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/fonttools-4.56.0-py3-none-any.whl",
       "sha256": "9d6518c8ad4d88019bc72045108eca154301014215222408aa047cf4955c726d",
       "bytes": 1089800
     },
-    "lxml-6.0.2-cp313-cp313-pyodide_2025_0_wasm32.whl": {
-      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/lxml-6.0.2-cp313-cp313-pyodide_2025_0_wasm32.whl",
-      "sha256": "99b959a55eaeb41a2997fa022859892880c2b708af01ff336c34c7b125c80916",
-      "bytes": 1777696
+    "kiwisolver-1.4.8-cp313-cp313-pyodide_2025_0_wasm32.whl": {
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/kiwisolver-1.4.8-cp313-cp313-pyodide_2025_0_wasm32.whl",
+      "sha256": "74fef16f229c3280f386ace367f36ac5ad8597ebabef45c6cf8bc2fa8aa3be70",
+      "bytes": 36920
     },
     "libopenblas-0.3.26.zip": {
       "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/libopenblas-0.3.26.zip",
       "sha256": "f8f5db65c9367ed7f057d0ee853d94ddb3c007968aa8138253461dad42537fa2",
       "bytes": 2119540
     },
-    "pyodide.asm.wasm": {
-      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pyodide.asm.wasm",
-      "sha256": "e2f4ee75b325e35eb31bfb8c613d4dd5098f5502c156a97847686875b5025480",
-      "bytes": 8647684
-    },
-    "numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl": {
-      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl",
-      "sha256": "6eaab6a7bb658d71ebe702911a3deab715323642462eb41b65565ca6a7cc23f1",
-      "bytes": 3103966
-    },
-    "packaging-24.2-py3-none-any.whl": {
-      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/packaging-24.2-py3-none-any.whl",
-      "sha256": "c18cde5592cc3d1823e9cc3a9a4fb436b02c15e3f8d7f5f69962f77b1b109da1",
-      "bytes": 71930
+    "lxml-6.0.2-cp313-cp313-pyodide_2025_0_wasm32.whl": {
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/lxml-6.0.2-cp313-cp313-pyodide_2025_0_wasm32.whl",
+      "sha256": "99b959a55eaeb41a2997fa022859892880c2b708af01ff336c34c7b125c80916",
+      "bytes": 1777696
     },
     "matplotlib-3.8.4-cp313-cp313-pyodide_2025_0_wasm32.whl": {
       "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/matplotlib-3.8.4-cp313-cp313-pyodide_2025_0_wasm32.whl",
       "sha256": "65f657efbb717a6aa7ccd10c0729a0e6993c1da757bd68601d97a2905362e8d4",
       "bytes": 6724331
     },
-    "pillow-11.3.0-cp313-cp313-pyodide_2025_0_wasm32.whl": {
-      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pillow-11.3.0-cp313-cp313-pyodide_2025_0_wasm32.whl",
-      "sha256": "7e1168616481f685f277d7fad1d197f3a625540542a2cd292cdc8958ab083d6e",
-      "bytes": 1058393
+    "packaging-24.2-py3-none-any.whl": {
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/packaging-24.2-py3-none-any.whl",
+      "sha256": "c18cde5592cc3d1823e9cc3a9a4fb436b02c15e3f8d7f5f69962f77b1b109da1",
+      "bytes": 71930
+    },
+    "numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl": {
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/numpy-2.2.5-cp313-cp313-pyodide_2025_0_wasm32.whl",
+      "sha256": "6eaab6a7bb658d71ebe702911a3deab715323642462eb41b65565ca6a7cc23f1",
+      "bytes": 3103966
     },
     "pycparser-2.22-py3-none-any.whl": {
       "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pycparser-2.22-py3-none-any.whl",
       "sha256": "778a41679914eee8499ce3d37a8d15d808d8972e70aa02eef13ac59649559aaa",
       "bytes": 117552
+    },
+    "pillow-11.3.0-cp313-cp313-pyodide_2025_0_wasm32.whl": {
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pillow-11.3.0-cp313-cp313-pyodide_2025_0_wasm32.whl",
+      "sha256": "7e1168616481f685f277d7fad1d197f3a625540542a2cd292cdc8958ab083d6e",
+      "bytes": 1058393
+    },
+    "opencv_python-4.11.0.86-cp313-cp313-pyodide_2025_0_wasm32.whl": {
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/opencv_python-4.11.0.86-cp313-cp313-pyodide_2025_0_wasm32.whl",
+      "sha256": "a8b116def8c74b3ccf389b856b3ccb5cec5a2efc295ec17a15ea9cda1f88aa1e",
+      "bytes": 11700429
+    },
+    "pandas-2.3.3-cp313-cp313-pyodide_2025_0_wasm32.whl": {
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pandas-2.3.3-cp313-cp313-pyodide_2025_0_wasm32.whl",
+      "sha256": "5b1c0acfc8555be16057e8609e9eb7f279037c2469032bcc23e2a691380a50ae",
+      "bytes": 4493384
     },
     "pydantic-2.12.5-py3-none-any.whl": {
       "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pydantic-2.12.5-py3-none-any.whl",
@@ -130,50 +140,45 @@
       "sha256": "8f314b856e7e87cb3a426ce4db341308199157f6a757256e215e4d418e216d86",
       "bytes": 107717
     },
-    "python_dateutil-2.9.0.post0-py2.py3-none-any.whl": {
-      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/python_dateutil-2.9.0.post0-py2.py3-none-any.whl",
-      "sha256": "ddca13fc1046572701872b9517622b57f847c77eea4bf9fdc995256e6c82beaf",
-      "bytes": 229892
-    },
     "pydantic_core-2.41.5-cp313-cp313-pyodide_2025_0_wasm32.whl": {
       "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pydantic_core-2.41.5-cp313-cp313-pyodide_2025_0_wasm32.whl",
       "sha256": "dd259177c9159a866334e2ac040aca973b8205cc884b3297cb5b2dc6bef8d629",
       "bytes": 1424987
     },
-    "pandas-2.3.3-cp313-cp313-pyodide_2025_0_wasm32.whl": {
-      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pandas-2.3.3-cp313-cp313-pyodide_2025_0_wasm32.whl",
-      "sha256": "5b1c0acfc8555be16057e8609e9eb7f279037c2469032bcc23e2a691380a50ae",
-      "bytes": 4493384
-    },
-    "pytz-2025.2-py2.py3-none-any.whl": {
-      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pytz-2025.2-py2.py3-none-any.whl",
-      "sha256": "5a9c9286f6c03a4d16ee4ced15d511097568e1e41329d3499b597ecd7f1d317e",
-      "bytes": 509225
+    "python_dateutil-2.9.0.post0-py2.py3-none-any.whl": {
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/python_dateutil-2.9.0.post0-py2.py3-none-any.whl",
+      "sha256": "ddca13fc1046572701872b9517622b57f847c77eea4bf9fdc995256e6c82beaf",
+      "bytes": 229892
     },
     "six-1.17.0-py2.py3-none-any.whl": {
       "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/six-1.17.0-py2.py3-none-any.whl",
       "sha256": "1f715fc699e802b31e53290ead6c16a4d6a8da462a225d2e06097fce45ab70b9",
       "bytes": 11050
     },
+    "pytz-2025.2-py2.py3-none-any.whl": {
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pytz-2025.2-py2.py3-none-any.whl",
+      "sha256": "5a9c9286f6c03a4d16ee4ced15d511097568e1e41329d3499b597ecd7f1d317e",
+      "bytes": 509225
+    },
     "soundfile-0.12.1-cp313-cp313-pyodide_2025_0_wasm32.whl": {
       "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/soundfile-0.12.1-cp313-cp313-pyodide_2025_0_wasm32.whl",
       "sha256": "abe68fea5610c352dc5fb635f5f1af379f9a6c15bb7c0ede5dfe9c1313c65764",
       "bytes": 705348
     },
-    "sqlite3-1.0.0-cp313-cp313-pyodide_2025_0_wasm32.whl": {
-      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/sqlite3-1.0.0-cp313-cp313-pyodide_2025_0_wasm32.whl",
-      "sha256": "aab7214b987a3803fca283a8221e4b9d3274abc05d0cf506ea1a2ae7e09e3bf0",
-      "bytes": 566301
+    "typing_inspection-0.4.2-py3-none-any.whl": {
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/typing_inspection-0.4.2-py3-none-any.whl",
+      "sha256": "5c4d0bade04cec6ac0d03c227c8bdb7c59218e4c6d759b5ac0cea5c34f6a72aa",
+      "bytes": 14610
     },
     "typing_extensions-4.15.0-py3-none-any.whl": {
       "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/typing_extensions-4.15.0-py3-none-any.whl",
       "sha256": "b57583f623dd3df72e6ace8a4061c3e4f0683755165ef73b4cd44ac3df92ddb9",
       "bytes": 44613
     },
-    "typing_inspection-0.4.2-py3-none-any.whl": {
-      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/typing_inspection-0.4.2-py3-none-any.whl",
-      "sha256": "5c4d0bade04cec6ac0d03c227c8bdb7c59218e4c6d759b5ac0cea5c34f6a72aa",
-      "bytes": 14610
+    "sqlite3-1.0.0-cp313-cp313-pyodide_2025_0_wasm32.whl": {
+      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/sqlite3-1.0.0-cp313-cp313-pyodide_2025_0_wasm32.whl",
+      "sha256": "aab7214b987a3803fca283a8221e4b9d3274abc05d0cf506ea1a2ae7e09e3bf0",
+      "bytes": 566301
     },
     "et_xmlfile-2.0.0-py3-none-any.whl": {
       "url": "https://files.pythonhosted.org/packages/c1/8b/5fe2cc11fee489817272089c4203e679c63b570a5aaeb18d852ae3cbba6a/et_xmlfile-2.0.0-py3-none-any.whl",
@@ -185,20 +190,15 @@
       "sha256": "5282c12b107bffeef825f4617dc029afaf41d0ea60823bbb665ef3079dc79de2",
       "bytes": 250910
     },
-    "python_docx-1.2.0-py3-none-any.whl": {
-      "url": "https://files.pythonhosted.org/packages/d0/00/1e03a4989fa5795da308cd774f05b704ace555a70f9bf9d3be057b680bcf/python_docx-1.2.0-py3-none-any.whl",
-      "sha256": "3fd478f3250fbbbfd3b94fe1e985955737c145627498896a8a6bf81f4baf66c7",
-      "bytes": 252987
-    },
     "xlrd-2.0.2-py2.py3-none-any.whl": {
       "url": "https://files.pythonhosted.org/packages/1a/62/c8d562e7766786ba6587d09c5a8ba9f718ed3fa8af7f4553e8f91c36f302/xlrd-2.0.2-py2.py3-none-any.whl",
       "sha256": "ea762c3d29f4cca48d82df517b6d89fbce4db3107f9d78713e48cd321d5c9aa9",
       "bytes": 96555
     },
-    "opencv_python-4.11.0.86-cp313-cp313-pyodide_2025_0_wasm32.whl": {
-      "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/opencv_python-4.11.0.86-cp313-cp313-pyodide_2025_0_wasm32.whl",
-      "sha256": "a8b116def8c74b3ccf389b856b3ccb5cec5a2efc295ec17a15ea9cda1f88aa1e",
-      "bytes": 11700429
+    "python_docx-1.2.0-py3-none-any.whl": {
+      "url": "https://files.pythonhosted.org/packages/d0/00/1e03a4989fa5795da308cd774f05b704ace555a70f9bf9d3be057b680bcf/python_docx-1.2.0-py3-none-any.whl",
+      "sha256": "3fd478f3250fbbbfd3b94fe1e985955737c145627498896a8a6bf81f4baf66c7",
+      "bytes": 252987
     },
     "scipy-1.14.1-cp313-cp313-pyodide_2025_0_wasm32.whl": {
       "url": "https://cdn.jsdelivr.net/pyodide/v0.29.3/full/scipy-1.14.1-cp313-cp313-pyodide_2025_0_wasm32.whl",
@@ -229,7 +229,7 @@
     "ptb_api/job_models.py": "758eb9fa1a7a19317cd5130c1118ab2103df15095ac99c4e938f218cab3f90fc",
     "ptb_api/jobs.py": "a33fc48eb1628fb8cfdecec9bb3732d7529ed51c65b85c95789d0a02f0ce1521",
     "ptb_api/local_retention.py": "e8c676f71404c7527b502d5e99aa517a682da6fd65673a579f3e8158cdbd01fa",
-    "ptb_api/lpc_models.py": "a2350597f084966166921a5dbb320a4332afe5e53fd3a4fbaf0400c573b1e545",
+    "ptb_api/lpc_models.py": "54ef9506cdb9856ec1c3fab37f15940643f3a7d90563d8e4452fc1a308541bf3",
     "ptb_api/m05_models.py": "dfd6926737fe63b61096ebae4c1df83f3d377c01380191a44ab12bca746624c2",
     "ptb_api/m06_models.py": "c79865e105f3bfb53cb5bd25d486a7ba3edb221a3a1f3535b6ab6d702310f835",
     "ptb_api/m07_models.py": "62438d4815e1144cdb5e399148e49d3b36e5b370d8061b47124c49535a0eae28",
@@ -241,7 +241,7 @@
     "ptb_api/main.py": "21ec50feed853c4d8804c3f15d9f48a6b096f73403f43206d6756221837b2850",
     "ptb_api/models.py": "a73febfb9d41fd038ffa9e57452c8b6525c515c1ee9e3e2334b0c8221ec64917",
     "ptb_api/papers.py": "6afc85a01be44f0a7b7e96284b442f9ed8df462a51cdf0c3cc7341128af64ed3",
-    "ptb_api/preferences.py": "eb946ebfdce6da265875e3fa4e352e1a46380bcf6c4c3eb0644e70d93400e853",
+    "ptb_api/preferences.py": "6f8c17925768de72caa9e64393e0d83c738a0ee5c80b41571049d535ba3a9f39",
     "ptb_api/preview.py": "a73622c007a6f5efc984403d9a603f57531528c86d1ed812335a24a371b41872",
     "ptb_api/preview_models.py": "9964141e2bf122c654f6a70ce03631e41eb023ef02edbe721592372ce1ee2a55",
     "ptb_api/projects.py": "0fcfcef0667bc9210dbfd8251c6d8b9d94dfe0e68b6657fd1cbf95f5e5b2669d",
@@ -255,7 +255,7 @@
     "ptb_api/remote.py": "e16f63f82315107b2ef562bf48fa7bbaf599e50d0e42240d0b13761929218a19",
     "ptb_api/remote_models.py": "7e138f1e8f3612660e00ffbc4fa04101af91732b876ce794695c07fb8eb6bba0",
     "ptb_api/server.py": "05046406d1a2e0f4f8ac3fd71ddf78f7120823a5af45f8ec996c1463869269c6",
-    "ptb_api/spec2wav_models.py": "9de4eb48816af0c5182d6dfda27d584e3fd8182541c98b5227bdb3fd09d6370b",
+    "ptb_api/spec2wav_models.py": "949341231b893196d8c1e1eef127c47ed3452f6919b024580221e3352feb0fa2",
     "ptb_api/storage.py": "44eeee63758fd3732f818317bffa33317489abcf61f9d8ac17fe6ea2449a810b",
     "ptb_api/storage_models.py": "e9a54ac0e673d3961ff7d25bed9b67bc969b29017f6494d26563528d3799c1b9",
     "ptb_api/storage_policy.py": "47741a28a34c85bcaa90720c26f03bf7ee10fabe27291b7b17571d66c21435cd",
@@ -269,7 +269,7 @@
     "ptb_api/workspaces.py": "fa7ecaed31468121e1013ad7ef6aac0b31877fe8d69f03605dca1f6f7fa94255",
     "ptb_worker/__init__.py": "4f97c64a012328261042128c3efa2abd86687f8969ca0e403300a38327104ac4",
     "ptb_worker/acoustic_batches.py": "c400c6bd50c027769241f2c7649cc1a36edcd9adebe7c2d9e77216c777db4942",
-    "ptb_worker/acoustic_errors.py": "2cecb8a21be6229bae4a5f35b085352ca825372f815ebb2c7ac4224b64c917a6",
+    "ptb_worker/acoustic_errors.py": "a0167f9b0cf50c2c2cdb71081dc2bc6e2d4bc34f7e5abb5814a8705a7890d491",
     "ptb_worker/acoustic_executor.py": "a1554bb440b9c09406c5cee94c0e3c9efbad65be0f4179d37329ee38400ad1d5",
     "ptb_worker/acoustic_files.py": "daf707e1cd90fbf80f7c681d1a98021a81a992701505c29ae9a91b58035e7a41",
     "ptb_worker/acoustic_result.py": "0e334ec1580032852b85b6280f9a80a75fdff18fa06d3b58f2e38224cc396234",
@@ -279,6 +279,7 @@
     "ptb_worker/archives.py": "2b63f879cd0c0f79fece162df0afb91fcc8587cb0cc6f6f462ba70afa2ec35d6",
     "ptb_worker/batch_policy.py": "dfddd3a8191918cf00809703a2c103efce26920a77545a161d44fa9cd4ecbc7f",
     "ptb_worker/browser_compute.py": "bb029618ef5b6ad0fe8c255fd6a5a1ca060917b621d97c20a3b4064c1e762611",
+    "ptb_worker/browser_vocal.py": "5f311f501a1d1882dd9b178312b51e02f25d35bc8d9757610f52c74f9221400b",
     "ptb_worker/cleanup.py": "23402d57e4dd04e5b762a124fe06845908d8999ec879beb697c2cca2caeca72d",
     "ptb_worker/cli.py": "11729f493eb7553335e82c9ef5adf4d3962d49fa270cbd38fe0f129398ce9063",
     "ptb_worker/core_child.py": "8fa9a5926187360f583459fd188eb3ec07913f180646be527f4f7ffc6b868e1e",
@@ -318,9 +319,9 @@
     "ptb_worker/local_retention.py": "df47776592ecc3d9c5db9d18d583843c31b9b3a9c589b64714a13e0b39291c5f",
     "ptb_worker/local_workspace.py": "f72c4c0337ccac1f72820eb731e78ac9615235a9a9fcc69c0038879c21447e7e",
     "ptb_worker/lpc_bootstrap.py": "39a3020912af03ef1340c8df03af447e217f86f889a40f41fae4d261153e0847",
-    "ptb_worker/lpc_child.py": "93a690a240095d647916dcb1c0755827ec991aef8085342caf7df2da638c185f",
+    "ptb_worker/lpc_child.py": "cfbb692c012ca66226df8697141432b5a9c8259b80f1b35376969cd368580dcd",
     "ptb_worker/lpc_exports.py": "5572c402ddc3c6e28694aa5ea986c139e26abaab6bd5a5358234bc88cae4ec9f",
-    "ptb_worker/lpc_jobs.py": "ca8efc34705438b3dbcd8bb53f58d34b5150713b39cc598dd93cd2b7a47cb958",
+    "ptb_worker/lpc_jobs.py": "d2e1e86316cd9170d17dd8c21c71f55c3142dd0cf20bbe618309a9085ecdedf7",
     "ptb_worker/lpc_runtime.py": "fb634702df4e83be3e7bc587d73899dba365f76395c4a416a22ea75d565f13e4",
     "ptb_worker/m05_alignment.py": "61eeae7429f95cc0c5896033ced598cc794ab5ce2a4d47c64e1f7bd6f3a8c8c6",
     "ptb_worker/m05_animation.py": "3f7624c63c88fa0a8e5a03cd0126d2c4f9ee2c12dd594a1f36fc187b6e54756e",
@@ -329,7 +330,8 @@
     "ptb_worker/m05_errors.py": "d3b9c255c7c8ac064abed30345e05754789f385fc314d86d9d05db89a65368fa",
     "ptb_worker/m05_executor.py": "6c9a6087bd95be00b4e5a8303533f5a3e5047026c42e30ee0d647c871222b988",
     "ptb_worker/m05_inputs.py": "8552b0be331d39f2416c7796960378c8622ecf088c03937a0a8ebd5b87346999",
-    "ptb_worker/m05_media_export.py": "12ed751f59a1c897c29314d543035b4c38d8cba109436ffdf2d60e50b50824c9",
+    "ptb_worker/m05_media_export.py": "31e2951b321db5c2a12972aaf0d728dabfb2e7243655b7f1de23f29782d83281",
+    "ptb_worker/m05_playback.py": "4cb0521515befdf7ac7bbbbdba0fc14c8b0314911e48bffd10b083a403a14101",
     "ptb_worker/m05_results.py": "ad45681c8aebbd810f9d49165dbae71c0bab21ffcd77e009211c4ba1901a3418",
     "ptb_worker/m05_task.py": "895cab92ffb4d5d320e7a1e3d6a61a02226c7f5a669e74e00b23d70d7e6e1010",
     "ptb_worker/m05_video.py": "3b92014941fdd39fa036f1024859fc517ee85da0a385eefe913428caf6f56f30",
@@ -411,9 +413,9 @@
     "ptb_worker/store.py": "e2fb661ab8344ba99caa601cd98a378d4d0ff895de2b514befb7ea9b7b19c818",
     "ptb_worker/vocal_child.py": "00751799db25bc47b5f4d1218969b8379bfc9b7b20eca922360cb114c88bbcf6",
     "ptb_worker/vocal_mp4.py": "dac8e11ee052c7db6faf02dccf0380bad1636e415d25641b282a49cc48e10f1b",
-    "ptb_worker/vocal_sessions.py": "802e8b7c442f6de40614339661f569150f3df6cdef7e0b405796f6b5876f789c",
-    "ptb_worker/vocal_video.py": "dc04e6b5202186b66ac399dfc1fbdda172b05f216357d96502ad46eada4e829b",
-    "ptb_worker/vocal_web.py": "97b861ce7ba14bf1b0688a76bd051ef197a2cd99848ccee7a31f5ad735c9c927",
+    "ptb_worker/vocal_sessions.py": "5437ad8f35d7c2c3700b6761b922484cff77885c77040d9ee915f2f3b5eb626a",
+    "ptb_worker/vocal_video.py": "65474ea701a5fe14797e85cc72e4b44d1036df9c592e1274034f924c8ed2b398",
+    "ptb_worker/vocal_web.py": "24bef807470674985359745f727a2dd5bc3e12469bdbaaaa3b4da1c4daf78539",
     "ptb_worker/vocoder_catalog.py": "47f84f6fdfc2d07fd997b63422ba612f54ef0df494f3c638e73029efe75d835c",
     "ptb_worker/vocoder_child.py": "fb5e4a38f95b76e010f9a12bba1477355f120e28aac049cce2db03cd9aae8608",
     "ptb_worker/vocoder_components.py": "143f6bd6e20385d2c576fc7bae964ec72707e7a6d81968b4dbcc250a44f6bd5b",
@@ -468,7 +470,7 @@
     "phonetic_core/lpc/__init__.py": "51a1b6d08e293f6fb050733cfb81b059fa4cb7709a35478cdb577e9a5acf3eb2",
     "phonetic_core/lpc/_legacy.py": "c6e1902e5527c6c1ec7d6d675c0bb4b3825bed161bdfd074323b4fc54c87c199",
     "phonetic_core/lpc/errors.py": "a5ba0a8a082ff9a6dc788403bb4a6c04c063e0a8f78e6d6ebb4f187eefb0a1bc",
-    "phonetic_core/lpc/spectrum.py": "c5c788cbd30ce01fd6ac232b995132b363602ca830ebb743e3efd3afad18d427",
+    "phonetic_core/lpc/spectrum.py": "78faf0a63e51537d06aecadc02c86fdf1ef11d3724aa9115fa13613d32597acb",
     "phonetic_core/manipulation/m07_api.py": "9db925bb030710a5bfd2fb0e47fb640ffaf1d497fbcfdece2bf881f82ef047ad",
     "phonetic_core/manipulation/m07_display.py": "6256db0813f5100fa4d435b5b540d744f4953c9372f2743973d9d030e6b0e66d",
     "phonetic_core/manipulation/m07_grid.py": "f5687fb7db5b1a2048797ecb3c1331aa2ce4939132d4a8fad973c00e95408261",
@@ -497,7 +499,7 @@
     "phonetic_core/services/acoustic_stream.py": "e3cc6d31c0f22ab8f837011c64b0a3b0b93d866eec137debb1ed59c6521ef86b",
     "phonetic_core/spec2wav/__init__.py": "00c58f0b9809499567b54cc67b1e9b43e3596fa09a72d61df2a7e8877b19a8d7",
     "phonetic_core/spec2wav/adaptive.py": "70ff09865246db2c97b1f4201675b5e3d0fc873e43f9e6e0cdcfd89f0ed07684",
-    "phonetic_core/spec2wav/editing.py": "2b3879c4bc1204dadc7f883a81e1a219ccc32a605147604ecf74f8bf3d44925d",
+    "phonetic_core/spec2wav/editing.py": "690c3043227925b54303c140dccb1b0b3a657bd3f64327229381ec99d6b5ac5a",
     "phonetic_core/spec2wav/parameters.py": "069dc11c7e7ad8fe5f5b4e3741202d047adbad20b6d6bf9f627273d2f7feb15e",
     "phonetic_core/spec2wav/reconstruction.py": "03fad30fc578429e324995ebccc0516a8a91ade3cbd1e677fe7f057ea038ea23",
     "phonetic_core/spectrogram.py": "e52265003c0e5512e0651b124340f034da1b5940619ece6ba5413c22ebb68495",
@@ -522,23 +524,30 @@
     "phonetic_core/transcription/phonology/render.py": "ebce4079f5695e2e4c5df58b389ff095ab3194ee5798d0db695bd0ed1611f7ea",
     "phonetic_core/transcription/phonology/rules.py": "0e4b33e8efe480398f85da88a6427bc269bca9c6ac5676d676cb44bc48e77ea6",
     "phonetic_core/vocal_tract/__init__.py": "50c0e9d2360a0a1f20381c752597d825d2dc4a33dc318f97a1715f56d86cd5bd",
-    "phonetic_core/vocal_tract/animation.py": "cdc670f21237d4c5f3dc41ac848ab5fcb8d409aab37612b50dcd948258eb85ab",
-    "phonetic_core/vocal_tract/document.py": "a4ca06f7f587d80738f4fc6771721bd628a3872739a1b4e7830d3a2d92657b2f",
-    "phonetic_core/vocal_tract/engine.py": "1efe521172abd5602e922381452dc3c2d2df287d04dfc794403a7ea6051c1f67",
+    "phonetic_core/vocal_tract/animation.py": "58510c5362066063a1a6179b6f53b2dfeba3cc989d31b766120b53c3df9816e1",
+    "phonetic_core/vocal_tract/document.py": "af91d537522d56cd1676b4c462028f4451768c2012184dbbf89a1b204478e041",
+    "phonetic_core/vocal_tract/engine.py": "e72c9ec9e8e1c193c235ee1d2ab7af7904d25691962b83ad9cd2f0ba69687c96",
     "phonetic_core/vocal_tract/envelope.py": "f1112d91f53224713b4066417e914f95c1d85afc251bc6f660d4f0d9777d130d",
+    "phonetic_core/vocal_tract/lips.py": "e50dcc7dcf29675279cf22058749c30fef786a1ec851668cdf3d99a859856769",
     "phonetic_core/vocal_tract/monitor.py": "3dc6611a66676eef066d40bd64ee188b835268c1ea090694e55e9d455bb21949",
-    "phonetic_core/vocal_tract/native_resources.py": "566a0b495436e4179b0e9dda63ff490406f8e63b3553f66c5de6574de3f71070",
-    "phonetic_core/vocal_tract/session.py": "8fcf53c248db690ad5062abb906c25a945d23de69cf55fa9b005135bae8f8162",
-    "phonetic_core/vocal_tract/shape.py": "10043e2fd97d51ce7603069582209ae514787a933486062ad159e59956dc8e95",
-    "phonetic_core/vocal_tract/source.py": "91d7700e7858ac46313a21c084405bdd32d3afa05395964f10c3a99247d54a7a",
+    "phonetic_core/vocal_tract/native_pair.py": "acb483ef7634ba6fd130cc39062ef4d33aa286408457883b547c76a0269a43f4",
+    "phonetic_core/vocal_tract/native_resources.py": "06cec88e5e0cada221b12424bd9ab741d71347bb04c5ba5de9925fdb82cf743e",
+    "phonetic_core/vocal_tract/perturbation.py": "cacb958ad971bfd1c250613e38e9da878ff8e9f076dcc75afc17c435ba5bb9b5",
+    "phonetic_core/vocal_tract/preset_pack.py": "ef48a7676800c6bc31ce7e928c7508c8f6fa09de69836c276be739ceb5d39d0e",
+    "phonetic_core/vocal_tract/sequence_controls.py": "1d3853b260ba7f45597d3929f92f7e9b223c540f48d489fb851cfe6396dda7c7",
+    "phonetic_core/vocal_tract/session.py": "252baa33912c929ac03b52355c344010f19fdb4027e042b19325dc1a388d01e6",
+    "phonetic_core/vocal_tract/shape.py": "d630b9058632e42826538bfa3ec81df08746cd2d04e139016af1b40e8eabed9f",
+    "phonetic_core/vocal_tract/source.py": "9f43f681a85b9245f79c422a39828898c4d75e748719ff57daff5a90811a8a78",
     "phonetic_core/vocal_tract/source_models.py": "30834f9f0e184535acac0ea28fe968e1d4ce5d729a812032c03f9d15cc7bf6f0",
-    "phonetic_core/vocal_tract/trajectory.py": "1e787c3f220e9a16a487a40d6fe03ed688ea14e78a34fba96f744e01da732577",
+    "phonetic_core/vocal_tract/stop_timing.py": "f19926360837705f5d1e504ba5b97d70bdd1b28abcb8e4319f8615c7808635f6",
+    "phonetic_core/vocal_tract/suprasegmentals.py": "74d9313413fd657f3d84f8c775299141ea9cc55981793aaeb5567c3e18d96128",
+    "phonetic_core/vocal_tract/trajectory.py": "59f822c9a384e595442e30b13450ad786cef030bdf940ac968b028c564ae82d7",
     "phonetic_core/spec2wav/data/parameters-v5.npz": "e6edbf5c450fc08f4ff4c39d2828a15e24c4dd7286c619308c671ed4df7dffdc",
     "phonetic_core/spec2wav/data/parameters-v5.json": "0daeb5527cba127f66230e667b5ae48c4c18a3fa378bff2721d3fa0efa20e8f9",
     "ptb_worker/assets/DoulosSIL-Regular.ttf": "cc89b87c047bcc8dc00246398218bb6343e0f2372b153cf560c29a77f27068ef",
     "ptb_worker/assets/Doulos-OFL.txt": "dadf7f382cfd1fccf4b485b12fc16a08a2a20e8095b960d840b243f979f6082f"
   },
-  "archive_sha256": "b03fc34eea9fb83ee6784ee0ea11fa38a016683d751421747af01b6461c43905",
+  "archive_sha256": "e424462fab73d240bf31a75e19d6838790e7485a1111d271a3fdba03ba5f74af",
   "native_praat": {
     "ptb_praat.js": {
       "bytes": 86657,

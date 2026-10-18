@@ -13,7 +13,8 @@ def main():
     out.mkdir(parents=True,exist_ok=False);profile=out/'profile';profile.mkdir();temp=out/'temp';temp.mkdir()
     env={k:v for k,v in os.environ.items() if not k.startswith(('PTB_','PYTHON','CONDA','_PYI')) and k!='VIRTUAL_ENV'}
     env.update(LOCALAPPDATA=str(profile),TEMP=str(temp),TMP=str(temp),PATH=os.pathsep.join((os.environ['SystemRoot']+'/System32',os.environ['SystemRoot'])),PTB_OWNED_BOOTSTRAP_LOG=str(out/'bootstrap-error.log'))
-    cache=profile/'PhoneticToolbox/v3/startup-cache';children=[]
+    from portable_cache_qa import seed_portable_profile
+    cache=seed_portable_profile(profile)/'startup-cache';children=[]
     def launch(flag='--ptb-prepare-cache'):
         child=subprocess.Popen([str(exe),flag],env=env,cwd=out,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,creationflags=subprocess.CREATE_NO_WINDOW);children.append(child);return child
     report={'success':False,'scope':'Actual final frozen EXE; intentionally killed owned first preparation; two fresh launcher processes share one private cache'}

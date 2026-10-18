@@ -18,9 +18,11 @@ import {clearWorkspaceOwner} from '../state/workspace.ts';
 import {openAccountPreferences,closeAccountPreferences} from '../platform/account-preferences.ts';
 import {flushWebSettings} from '../state/web-settings.ts';
 const research=shallowRef<ResearchContext|null>(null);
+const defaultProject=ref('');
+const localProject=(id:string)=>publicOptions.value.ephemeral_workspaces&&id===defaultProject.value?'default':id;
 const managing=ref(false),filesTab=ref<'files'|'tasks'>('files');
 function leaveResearch(){managing.value=false;stop();research.value?.files.dispose();research.value=null;}
-function enterResearch(){if(!session.value||!selected.value)return;leaveResearch();const owner=session.value.user.id,project=selected.value;research.value={key:'server:'+owner+':'+project.id+':M01',ownerId:owner,label:project.name,files:serverFiles(owner,project.id,clearAccount,()=>session.value?.csrf_token??'')};}
+function enterResearch(){if(!session.value||!selected.value)return;leaveResearch();const owner=session.value.user.id,project=selected.value;research.value={key:'server:'+owner+':'+project.id+':M01',ownerId:owner,label:project.name,files:serverFiles(owner,project.id,clearAccount,()=>session.value?.csrf_token??'',undefined,localProject(project.id))};}
 
 type Session = components['schemas']['SessionView'];
 type Project = components['schemas']['ProjectView'];
@@ -97,6 +99,7 @@ async function loadProjects(current: Session, version: number, enter=false) {
       ?await api<Project>('workspaces/default-project','POST',{},current.csrf_token,current.user.id)
       :result.projects[0]??await api<Project>('projects','POST',{name:'默认项目'},current.csrf_token,current.user.id);
     if(version!==generation)return;
+    defaultProject.value=project.id;
     if(!projects.value.some(p=>p.id===project.id))projects.value.push(project);
     choose(project);enterResearch();
   }
@@ -186,9 +189,8 @@ onUnmounted(() => {clearInterval(heartbeatTimer);window.removeEventListener('onl
         <p class="eyebrow">PHONETIC TOOLBOX · ONLINE</p>
         <h1>从一段声音，<br/>开始一次<span>探索。</span></h1>
         <div class="entry-note" aria-label="网页版使用说明">
-         <p>那个……先和大家说一声，因为<strong>语音学工具箱完全开源、免费，网站运行的各项费用，目前全部由韶子个人承担。</strong> 受预算限制，暂时还租不起性能很强的服务器，所以……遇上高并发或者计算量很大的任务，这台小服务器就有些吃力了（挠头</p>
-         <p>因此，网页版更适合国际音标表 Plus、汉字转国际音标、音系归纳、感知实验这类计算量较小的模块。较重的计算任务在网页上可能会跑得很慢，人多时还需要排队等待。（但是绝对是可以跑的！）</p>
-         <p><strong>如果要处理较多材料，或者运行计算量较大的任务，还是更推荐大家下载桌面版，让自己的电脑来干活叭。</strong> 网页版方便大家在决定是否下载之前，先来里面逛逛~或者随手查查、临时用用、应个急什么的，正式做研究时，大家就在本地运行叭~</p>
+         <p>抱歉大家，受预算限制，暂时还租不起性能很强的服务器，所以……遇上高并发或者计算量很大的任务，这台小服务器就有些吃力了（挠头</p>
+         <p>网页版主要是方便大家在决定是否下载之前，先来里面逛逛~或者随手查查、临时用用、应个急什么的，正式做研究时，大家就在本地运行叭~</p>
         </div>
         <div class="entry-links"><a href="https://www.phonetictoolbox.com/" target="_blank" rel="noopener">了解 PhoneticToolbox ↗</a><span>本机推理与完整工具，请使用桌面版</span></div>
        </aside>
@@ -213,13 +215,13 @@ onUnmounted(() => {clearInterval(heartbeatTimer);window.removeEventListener('onl
   </div>
   <ModalDialog v-if="managing && session && selected && research" class="web-files-dialog" title="文件与空间" wide @close="managing=false">
    <div class="files-toolbar"><span>当前文件组 · <strong>{{selected.name}}</strong></span><button :disabled="busy" @click="logout">退出登录</button></div>
-   <p class="files-retention">模块设置随账号保存在服务器，换浏览器或设备登录也会恢复。上传和生成的内容在退出登录后清空，关页或断线保留30分钟。需要留存的结果请下载到电脑。</p>
+   <p class="files-retention">模块设置随账号保存，换浏览器或设备登录也会恢复。文件与本机结果保存在当前浏览器，刷新和重新登录可继续使用。服务器计算所用的临时副本在退出后清理，关页或断线保留30分钟。</p>
    <p v-if="message" role="status">{{message}}</p>
    <div class="files-tabs" role="group" aria-label="文件与任务">
     <button :aria-pressed="filesTab==='files'" @click="filesTab='files'">文件管理</button>
     <button :aria-pressed="filesTab==='tasks'" @click="filesTab='tasks'">任务记录</button>
    </div>
-   <ProjectStorage v-if="filesTab==='files'" :key="'storage-'+session.user.id+selected.id" compact :project-id="selected.id" :owner-id="session.user.id" :csrf-token="session.csrf_token" @session-invalid="clearAccount"/>
+   <ProjectStorage v-if="filesTab==='files'" :key="'storage-'+session.user.id+selected.id" compact :project-id="selected.id" :local-project="localProject(selected.id)" :owner-id="session.user.id" :csrf-token="session.csrf_token" @session-invalid="clearAccount"/>
    <ProjectJobs v-else :key="session.user.id+selected.id" :project-id="selected.id" :owner-id="session.user.id" :csrf-token="session.csrf_token" @session-invalid="clearAccount"/>
    <details class="files-advanced"><summary>高级管理 · 分组整理不同研究</summary>
     <p class="hint">文件、任务和草稿按项目分组。日常使用默认项目即可。</p>

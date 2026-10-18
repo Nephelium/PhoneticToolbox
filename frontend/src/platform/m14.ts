@@ -1,3 +1,4 @@
+import type {AssetFetch} from './local-asset-transport.ts';
 import {waitForTaskPoll} from './task-poll.ts';
 import {zipStore} from './zip-store.ts';
 import type {M14Port,Source,Preview,Result,Options,Inspection} from '../modules/phonology-induction/port.ts';
@@ -34,8 +35,8 @@ export function m14Port(t:Transport):M14Port {
   async download(result,id){const f=result.files.find(f=>f.id===id)!;download(await read(result,id),f.name);}
  };
 }
-export function serverM14(owner:string,project:string,csrf:()=>string,onInvalid:()=>void,signal:AbortSignal):M14Port {
- async function request(path:string,method='GET',body?:unknown,raw?:ArrayBuffer){const r=await fetch('/api/v1/'+path,{method,signal,credentials:'same-origin',cache:'no-store',headers:{'X-PTB-Account':owner,...(method!=='GET'?{'X-CSRF-Token':csrf()}:{}),...(raw?{'Content-Type':'application/octet-stream'}:body?{'Content-Type':'application/json'}:{})},body:raw??(body?JSON.stringify(body):undefined)});if(!r.ok){if(r.status===401)onInvalid();const e=await r.json().catch(()=>({}));throw Error(m14Error(typeof e.detail==='string'?e.detail:'请求失败，请检查输入及项目状态。'));}return r;}
+export function serverM14(owner:string,project:string,csrf:()=>string,onInvalid:()=>void,signal:AbortSignal,assetFetch:AssetFetch=(path,init)=>fetch('/api/v1/'+path,init)):M14Port {
+ async function request(path:string,method='GET',body?:unknown,raw?:ArrayBuffer){const r=await assetFetch(path,{method,signal,credentials:'same-origin',cache:'no-store',headers:{'X-PTB-Account':owner,...(method!=='GET'?{'X-CSRF-Token':csrf()}:{}),...(raw?{'Content-Type':'application/octet-stream'}:body?{'Content-Type':'application/json'}:{})},body:raw??(body?JSON.stringify(body):undefined)});if(!r.ok){if(r.status===401)onInvalid();const e=await r.json().catch(()=>({}));throw Error(m14Error(typeof e.detail==='string'?e.detail:'请求失败，请检查输入及项目状态。'));}return r;}
  return m14Port({project,
   async upload(file,abort){const bytes=await file.arrayBuffer(),hash=await sha256(bytes),a=await(await request('uploads','POST',{project_id:project,name:file.name,expected_bytes:bytes.byteLength,idempotency_key:'m14-'+crypto.randomUUID()})).json();for(let offset=0;offset<bytes.byteLength;offset+=262144){if(abort.aborted)throw Error(m14Error('cancelled'));await request(`uploads/${a.id}/blocks?offset=${offset}`,'PUT',undefined,bytes.slice(offset,offset+262144));}const ready=await(await request('uploads/'+a.id+'/finalize','POST',{sha256:hash})).json();return {asset_id:ready.id,sha256:ready.sha256,name:file.name};},
   async create(body){return(await request('jobs/m14/create','POST',body)).json();},async job(id){return(await request('jobs/'+id)).json();},async cancel(id){return(await request('jobs/'+id+'/cancel','POST')).json();},async read(_job,id){return(await request('assets/'+id+'/content')).arrayBuffer();}

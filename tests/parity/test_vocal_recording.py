@@ -31,7 +31,7 @@ def frames(r):return [{'params':r.engine.presets[n],'name':'/'+n+'/','duration':
 def test_default_f0_and_explicit_old_pitch(runtime):
     f=validate_frames(runtime.engine,frames(runtime));assert all(p['f0']==150 for p in f)
     f[0]['f0']=125;assert validate_frames(runtime.engine,f)[0]['f0']==125
-    assert runtime.live.f0==150
+    assert runtime.live.f0==120
     assert validate_frames(runtime.engine,[{'params':runtime.engine.presets['a']}],for_storage=True)[0]['duration']==.2
 
 

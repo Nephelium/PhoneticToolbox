@@ -153,6 +153,19 @@ def test_handoff_waits_then_extracts_and_launches(tmp_path):
     assert json.loads((request.parent/'status.json').read_text('utf-8'))['state']=='started'
 
 
+def test_handoff_uses_selected_portable_cache_without_default_root(tmp_path,monkeypatch):
+    from ptb_desktop import cache_location as location
+    monkeypatch.setenv('LOCALAPPDATA',str(tmp_path/'profile'))
+    monkeypatch.delenv(location.ENVIRONMENT,raising=False)
+    monkeypatch.delenv(location.MODE_ENVIRONMENT,raising=False)
+    assert location.configure_launcher(tmp_path/'app.exe',[],lambda reason:tmp_path)
+    root,request,token,helper,package,origin=plan_fixture(location.portable_directory())
+    assert root==location.update_directory()
+    assert apply.run_handoff(request,token,42,executable=helper,wait=lambda *args:None,
+                             launch=lambda *args,**kwargs:type('Child',(),{'pid':999})())==0
+    assert origin.read_bytes()==b'MZold-fixture' and package.exists()
+
+
 @pytest.mark.parametrize('change',['token','closed','package','helper','manifest','parent-wait','launch'])
 def test_handoff_failure_keeps_original_and_never_claims_complete(tmp_path,change):
     root,request,token,helper,package,origin=plan_fixture(tmp_path)

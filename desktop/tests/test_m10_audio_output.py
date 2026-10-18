@@ -13,7 +13,7 @@ from ptb_desktop.vocal_tract import audio_output as audio
 ])
 @pytest.mark.parametrize('mode', ['test', 'preview', 'animation'])
 def test_buffer_playback_preserves_samples_and_clock(monkeypatch, host, rate, channels, mode):
-    engine=SimpleNamespace(sr=48000,params=np.zeros(19),glottis=lambda *a,**k:None)
+    engine=SimpleNamespace(sr=48000,default_f0=120.,params=np.zeros(19),glottis=lambda *a,**k:None)
     device={'id':host+'|test','index':7,'name':'test','channels':channels}
     monkeypatch.setattr(audio,'output_devices',lambda:[device])
     monkeypatch.setattr(audio.sd,'WasapiSettings',lambda **kw:SimpleNamespace(**kw))
@@ -51,7 +51,7 @@ def test_output_start_failure_is_visible_and_thread_stops(monkeypatch):
     monkeypatch.setattr(audio.sd,'WasapiSettings',lambda **kw:None)
     def fail(**kw):raise RuntimeError('device disconnected during opening')
     monkeypatch.setattr(audio.sd,'OutputStream',fail)
-    engine=SimpleNamespace(sr=48000,params=np.zeros(19),glottis=lambda *a,**k:None)
+    engine=SimpleNamespace(sr=48000,default_f0=120.,params=np.zeros(19),glottis=lambda *a,**k:None)
     player=audio.LiveAudio(engine,playback_allowed=True)
     player.start(np.zeros(960));player.thread.join(2)
     assert not player.active and not player.completed

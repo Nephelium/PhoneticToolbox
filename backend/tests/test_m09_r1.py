@@ -10,6 +10,21 @@ from ptb_worker.spec2wav_child import prepare,preview
 from ptb_worker.segmentation import unpack_bundle
 
 
+def test_drawing_canvas_optional_fields_preserve_old_snapshot_and_new_band():
+    old=dict(color=0,size=12,size_unit='px',opacity=1,points=[dict(x=.5,y=.5)])
+    config=Spec2WavConfig(mode='audio_draw',strokes=[old])
+    assert config.snapshot()['strokes']==[old]
+    new={**old,'canvas_width':1000,'canvas_height':320,'frequency_fraction':.625}
+    assert Spec2WavConfig(mode='audio_draw',strokes=[new]).snapshot()['strokes']==[new]
+    with pytest.raises(ValueError):Spec2WavConfig(mode='audio_draw',strokes=[{**new,'frequency_fraction':1.01}])
+
+
+def test_audio_plot_preferences_use_existing_settings_contract():
+    from ptb_api.preferences import validate_values
+    values=dict(audioFrequencyMax=6000,audioCanvasHeight=420)
+    assert validate_values('M09',values)==values
+
+
 def test_audio_preview_and_result_share_real_grid_and_float_wav():
     audio=np.random.default_rng(4).normal(0,.05,(8001,2));raw=io.BytesIO();sf.write(raw,audio,16000,format='WAV',subtype='FLOAT')
     config=dict(mode='audio_draw');view=preview(raw.getvalue(),config)

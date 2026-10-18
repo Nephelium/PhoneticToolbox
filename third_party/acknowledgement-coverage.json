@@ -1,6 +1,6 @@
 {
   "schema_version": "acknowledgement-coverage/1",
-  "checked_on": "2026-10-17",
+  "checked_on": "2026-10-19",
   "scope": "18 live modules and their displayed shared/supplementary sources; historical documents are separate",
   "modules": [
     {
@@ -158,6 +158,7 @@
     {
       "id": "M10",
       "source_ids": [
+        "PTB-BROWSER-SCIENCE-RUNTIME",
         "SRC-VTL",
         "DOC-VTL24",
         "DOC-VTL23",
@@ -178,7 +179,8 @@
         "REF-M10-OLIVEIRA-2012-MRI",
         "PKG-PYAV",
         "REF-M10-MILLS-2019",
-        "REF-M10-MILLS-2020"
+        "REF-M10-MILLS-2020",
+        "SRC-PINK-TROMBONE"
       ]
     },
     {

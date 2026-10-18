@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -38,6 +39,9 @@ def main():
                        'QTWEBENGINE_RESOURCES_PATH', 'QTWEBENGINE_LOCALES_PATH')}
     profile, temp = output / 'profile', output / 'temp'
     profile.mkdir(); temp.mkdir()
+    sys.path.insert(0,str(ROOT/'scripts'))
+    from portable_cache_qa import seed_portable_profile
+    seed_portable_profile(profile)
     environment.update(LOCALAPPDATA=str(profile), TEMP=str(temp), TMP=str(temp),
                        PTB_OWNED_BOOTSTRAP_LOG=str(output/'bootstrap-error.log'),
                        PATH=os.pathsep.join((os.environ['SystemRoot'] + '/System32', os.environ['SystemRoot'])),

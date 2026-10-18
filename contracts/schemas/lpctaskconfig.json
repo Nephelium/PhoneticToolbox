@@ -69,6 +69,20 @@
       "title": "Amp Min Db",
       "type": "number"
     },
+    "analysis_channel": {
+      "anyOf": [
+        {
+          "maximum": 7,
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Analysis Channel"
+    },
     "dynamic_y": {
       "default": false,
       "title": "Dynamic Y",

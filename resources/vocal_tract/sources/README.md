@@ -1,13 +1,22 @@
 # 原生资源重建
 
-当前 R18 默认构建容量为 257、启动使用 129 纵向截面的 DLL，可在同一个实例中切换 65、129、257。构建按顺序应用 R11–R18 补丁，横向仍为 96 点。`--sections` 是编译容量选项，日常采样数量通过工作台选择，无须另编 DLL。修改含义见 `M10-build.md`。
+当前几何方法为 `m10/r21`，数组布局为 `m10/3`。默认构建容量 257、界面启动使用 65 纵向截面，浏览器另支持 33，横向仍为 96 点。工程保留同一套 VTL 2.4 源码压缩包、R11–R21 几何补丁及可选声源微扰补丁，原 JD2/M01/W02 speaker 字节不改。
 
-历史 R13/R14 几何报告按需查项目 `docs/testing/2026-10-07-m10-r13-report.md`、`2026-10-07-m10-r14-report.md`，对应阶段的命令与数值边界不作为当前采样默认值。
+在工程根目录、既有项目 Python 和编译工具链中构建：
 
-1. 解压本目录 `VTL2.4-API-source.zip`，得到 `Developer/Sources` 及 Visual Studio 工程。VocalTractLabApi.dll 可由原版工程的 x64 Release 配置重建；已有分发 DLL 的 SHA-256 见上级清单。
-2. M10/3 桥接需要对原版 VocalTract.h/cpp 应用几何读数补丁、`m10_r11_patch.py` 至 `m10_r18_patch.py` 及 `refreshM10Geometry` 头文件声明。在 v3 项目根运行 `.venv/m14/Scripts/python.exe scripts/build_m10_geometry.py --sections 257 --output-dir output/validation/m10-r18/native-build`，脚本逐项检查并完成这些修改，使用已有 MSVC x64 工具链，不安装或修改全局环境。编译采用 C++14、`/LD /O2 /EHsc /DWIN32 /D_USE_MATH_DEFINES /MD`，include 设置为已应用补丁的源目录。
-3. 同时编译该目录内 `Geometry Surface VocalTract Tube Splines XmlNode XmlHelper Dsp Signal IirFilter Constants TlModel Matrix2x2` 这些同名 `.cpp`，输出名 `geometry_p2.dll`。`build_geometry_prototype.py` 仅保留历史来源，不能直接重建当前 M10/3。
-4. 将同一个原版 API DLL 分别复制为 `VocalTractLabApi.dll` 和 `VocalTractLabAnalysis.dll`。不要在运行时向 EXE 资源目录复制 DLL。
-5. 当前定向检查为 `tests/parity/test_vocal_r15.py`、`test_vocal_tract.py`、`test_vocal_process.py`、`test_vocal_recording.py`、`desktop/tests/test_m10_worker_startup.py` 与 `scripts/verify_m10_r17.py`、`scripts/verify_m10_r17_qt.py`，精确命令和范围见项目 `docs/testing/2026-10-12-m10-r17-report.md`。以 `scripts/register_m10_r12_resources.py r18` 更新来源/资源摘要，再生成并检查公共界面数据。冻结 EXE 需另行构建与验收。M10 使用应用拥有的私有进程，不新建 HTTP 服务。不要用重建后的文件冒充先前校验过的二进制哈希。
+```powershell
+.venv/m14/Scripts/python.exe scripts/build_m10_geometry.py --sections 257 --output-dir output/validation/m10-shared-20261018/geometry-r21
+.venv/m14/Scripts/python.exe scripts/build_m10_source.py --output-dir output/validation/m10-shared-20261018/source-build
+```
 
-R18 的局部偏移与文件验证见 `tests/parity/test_vocal_r18.py`、`scripts/verify_m10_r18.py` 和 `scripts/verify_m10_r17_qt.py --r18`，当前证据见 `docs/testing/2026-10-12-m10-r18-report.md`。
+第一条用既有 MSVC 构建几何 DLL，第二条构建具有 jitter/shimmer 接口的合成库，并复制成独立分析库。运行时不得写入应用资源目录。替换本地资源前须关闭本任务持有的库，保留用户窗口。
+
+浏览器使用 `scripts/build_m10_wasm.py --output-dir <候选目录> --sdk <既有Emscripten4.0.9目录> --write-lock resources/manifests/vocal-wasm-runtime.json`。运行包包含共用 Python 核心和 Wasm 库，另外生成对应源码 ZIP；更新 Python 后可加 `--refresh-runtime-only`。先更新锁定清单，再构建前端。
+
+macOS 在 Mac 上使用 `scripts/build_m10_macos.py --output-dir <候选目录>`，当前实测 ARM64、最低 macOS 14.0。两份声学库分别使用独立 install_name 和签名，按 `native-pair.json` 核对共同源码与二进制身份，不能要求两个 Mach-O 文件字节一致。x86_64 及最终应用需单独构建验收。
+
+完成平台验证后运行 `scripts/register_m10_resources.py` 更新资源身份，再运行前端 `npm run ui-data`。注册器保留历史来源关系，不覆盖上游署名。当前二进制摘要以 `../bundle-manifest.json` 与 Wasm 锁定清单为准，测试入口见项目 `docs/testing/m10-shared-controls.md`。历史 R11–R18 的测试和构建说明保留为对应阶段证据，不能替代当前默认值。
+
+VTL、几何桥接及派生补丁采用 GPL-3.0-or-later。公开再分发时须保留对应源码、许可和修改声明；本地构建不等同于发布 EXE、Mac 应用或网站。
+
+R21 Windows/Wasm 已重建，Mac构建入口使用相同补丁，但当前保留的Mac原生文件仍为R20，须重建后配合新核心运行。实际验收见 `docs/testing/m10-smoothing-review.md`。

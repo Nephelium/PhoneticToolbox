@@ -1,0 +1,20 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>LPC reference regression</title><style>html,body,#app{height:100%;margin:0}</style></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';
+import Page from '../src/modules/lpc-spectrum/LpcSpectrumPage.vue';
+import {BrowserScience} from '../src/platform/browser-science.ts';
+import '../src/design/tokens.css';
+const science=new BrowserScience(),rate=16000,frames=3200;
+const wav=new ArrayBuffer(44+frames*2*8),v=new DataView(wav),text=(offset,value)=>[...value].forEach((c,i)=>v.setUint8(offset+i,c.charCodeAt(0)));
+text(0,'RIFF');v.setUint32(4,wav.byteLength-8,true);text(8,'WAVE');text(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,3,true);v.setUint16(22,2,true);v.setUint32(24,rate,true);v.setUint32(28,rate*16,true);v.setUint16(32,16,true);v.setUint16(34,64,true);text(36,'data');v.setUint32(40,frames*16,true);
+for(let i=0;i<frames;i++){const noise=.01*(((i*1103515245+12345)%2147483648)/2147483648-.5);v.setFloat64(44+i*16,.2*Math.sin(2*Math.PI*440*i/rate)+.1*Math.sin(2*Math.PI*1200*i/rate)+noise,true);v.setFloat64(52+i*16,.4+.2*Math.sin(2*Math.PI*3200*i/rate)+noise*.3,true);}
+const sha=async raw=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',raw)),x=>x.toString(16).padStart(2,'0')).join('');
+const audio={id:'stereo',name:'stereo.wav',kind:'audio',size:wav.byteLength,sha256:await sha(wav)},jobs=[],requests=[],results=new Map();
+const context={key:'lpc-reference',label:'Owned browser science',files:{kind:'preview',list:async()=>[audio],read:async()=>({buffer:wav.slice(0),sha256:audio.sha256}),tasks:{
+ lpcFonts:font=>science.run('lpc_fonts',new ArrayBuffer(0),font),lpcJobs:async()=>structuredClone(jobs),result:async(_,id)=>results.get(id).slice(0),
+ lpc:async(file,_grid,config)=>{const frozen=JSON.parse(JSON.stringify(config));requests.push(frozen);const job={id:crypto.randomUUID(),state:'queued',created_at:Date.now()/1000};jobs.unshift(job);
+  void science.run('lpc',wav.slice(0),{name:file.name,config:frozen}).then(async output=>{const files=[];for(const f of output.files){const bytes=Uint8Array.from(atob(f.data),c=>c.charCodeAt(0)),id=job.id+'-'+f.name;results.set(id,bytes.buffer);files.push({id,name:f.name,sha256:await sha(bytes),size_bytes:bytes.length});if(f.name.endsWith('.json'))window.qa.metadata=JSON.parse(new TextDecoder().decode(bytes));}job.result_manifest={kind:'managed_lpc_files',files};job.state='succeeded';}).catch(e=>{job.state='failed';window.qa.failure=String(e);});return structuredClone(job);}
+}}};
+window.qa={jobs,requests,context,raw:wav};
+createApp({render:()=>h(Page,{stateKey:'lpc-reference',context,active:true})}).mount('#app');
+window.addEventListener('pagehide',()=>science.close(),{once:true});
+</script></body></html>

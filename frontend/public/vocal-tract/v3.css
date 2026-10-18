@@ -33,6 +33,14 @@ select option:disabled,select optgroup:disabled{color:var(--muted)}
 :root[data-theme=dark] button,:root[data-theme=dark] input,:root[data-theme=dark] select,:root[data-theme=dark] .keyframe-panel,:root[data-theme=dark] .source-panel,:root[data-theme=dark] .analysis,:root[data-theme=dark] .studio,:root[data-theme=dark] .nasal-card{background:var(--panel);color:var(--ink);border-color:var(--line)}
 :root[data-theme=dark] .selected,:root[data-theme=dark] [aria-selected=true]{background:var(--selected)!important;color:var(--ink)!important}:root[data-theme=dark] .minor{color:var(--muted)}:root[data-theme=dark] .pose-name{color:var(--ink)}
 /* Scientific plots and reconstructed tissues share the host theme. */
+.inspector{border:1px solid var(--line);border-radius:8px;padding:8px}
+/* The head owns model pinch; other editors keep one-finger input and let the
+   browser handle two-finger page zoom. */
+#areaChart,#sectionHandles,#lipFront{touch-action:pinch-zoom}
+#pitchEmpty{padding:12px;border:1px dashed var(--line);border-radius:6px}#pitchEmpty button{display:block;margin-top:8px}#pitchCanvas[data-empty="true"]{display:none}
+.panel-resize-handle{touch-action:pinch-zoom!important}
+.inspector .source-panel{border:1px solid var(--line);border-radius:8px;padding:10px!important;background:var(--panel)}
+html[data-background-image=on] .inspector :is(details,summary){background-color:transparent!important;background-image:none!important}
 .charts canvas{border-radius:4px}
 /* Canvas backing-store pixels must not feed back into grid/flex sizing. */
 .analysis canvas{contain:size}
@@ -162,3 +170,31 @@ body,.parameter,.parameter label,.parameter input,.parameter select,.inspector-t
 
 .web-sampling-note{display:block;color:var(--muted);font-size:12px;line-height:1.6;margin:4px 0 8px}.web-sampling-note a{color:var(--accent)}
 .web-disabled-action{display:inline-flex;flex:1;cursor:help}.web-disabled-action button{flex:1;pointer-events:none}
+/* Distinct source controls and timelines retain their scientific units. */
+.curve-modes{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.curve-modes button:first-child{color:#225db6}.curve-modes button:last-child{color:#ac5319}.curve-modes button[aria-pressed=true]{box-shadow:inset 0 -2px currentColor}html[data-theme=dark] .curve-modes button:first-child{color:#8db9ff}html[data-theme=dark] .curve-modes button:last-child{color:#f4b077}.perturbation-controls{min-width:0;border:1px solid var(--line);border-radius:8px;padding:10px;margin:10px 0}.perturbation-controls legend{padding:0 5px}.perturbation-controls .parameter{margin-bottom:8px}.perturbation-seed{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.perturbation-seed input{width:110px;min-width:0}.perturbation-seed button{font-size:12px}
+
+
+/* Sequence tools share one inspector; advanced articulation stays collapsed. */
+.speaker-choice{display:flex;align-items:center;gap:5px;white-space:nowrap;font-size:.86rem}.speaker-choice select{max-width:82px}
+#sequenceControls details{border:1px solid var(--line);border-radius:8px;padding:8px;margin-bottom:9px;background:var(--panel)}
+#sequenceControls summary{font-weight:600;cursor:pointer;margin-bottom:6px}#sequenceControls label{font-size:.86rem}#sequenceControls textarea{box-sizing:border-box;width:100%;resize:vertical;min-height:58px;padding:7px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);font-family:var(--ipa-font,inherit);font-size:1.15rem}
+.ipa-sequence-actions,.global-add{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.ipa-sequence-actions input{width:64px}.global-add select{flex:1;min-width:100px}.global-row{display:grid;grid-template-columns:minmax(70px,1fr) 84px 65px 25px 26px;gap:4px;align-items:center;margin-top:8px}.global-row input{width:100%;min-width:0;box-sizing:border-box}.global-row button{padding:3px;min-width:0}.global-row label{grid-column:1 / -1}.global-row select{grid-column:1 / 3}.global-row span{font-size:.75rem}#resetGlobalControls{margin-top:9px}.global-articulation summary span{font-weight:400;color:var(--muted)}
+@media(max-width:700px){.view-toolbar{flex-wrap:wrap}.speaker-choice{order:-1}}
+.pack-toolbar,.pack-select,.pack-title{display:flex;gap:10px;align-items:center;margin:12px 0;flex-wrap:wrap}
+#presetPackDialog{width:min(660px,92vw);max-height:85vh;overflow:auto}
+.pack-title input{flex:1;min-width:150px}
+.pack-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;max-height:40vh;overflow:auto;margin:14px 0}
+.pack-items label{display:flex;align-items:center;gap:8px;padding:9px;border:1px solid var(--line);border-radius:8px}
+.pack-items input{width:auto}
+.preset-dialog-actions{flex-wrap:wrap}
+
+/* Shared compact gesture and regional-feature authoring. */
+.lip-independent{padding:8px 0}.lip-independent summary,.stop-timing summary{cursor:pointer}.feature-heading{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}.feature-row{display:grid;grid-template-columns:minmax(140px,1fr) auto auto;gap:6px;padding:8px 0;border-bottom:1px solid var(--line)}.feature-row label{grid-column:1/-1}.feature-row small{overflow-wrap:anywhere}.feature-row input[type=checkbox],.ipa-stop-option input{width:auto}.feature-row button{padding:4px 8px}#featureDialog{width:min(580px,92vw);max-height:85vh;overflow:auto;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:16px}#featureForm>label{display:flex;gap:12px;align-items:center;margin:12px 0}#featureForm select{max-width:100%}.feature-values,#featureTime{display:flex;gap:8px;flex-wrap:wrap}.feature-values input,#featureTime input{width:100px}#featureFrames{max-height:28vh}.stop-timing{grid-column:1/-1;font-size:var(--m10-text-min);padding:5px 0}.stop-timing>label{display:inline-flex;align-items:center;gap:5px;margin:6px 10px 3px 0}.stop-timing input[type=number]{width:74px}.stop-timing input[type=checkbox]{width:auto}.stop-timing p{margin:5px 0}.ipa-stop-option{display:flex;gap:7px;align-items:center;margin:7px 0}
+
+.preset-libraries{display:grid;gap:8px;margin:12px 0;padding:12px;border:1px solid var(--line);border-radius:8px}.preset-libraries>label{display:flex;gap:8px;align-items:center}.preset-libraries select,.preset-libraries input{min-width:0;flex:1}.preset-libraries>div{display:flex;gap:8px;flex-wrap:wrap}.preset-name-row{display:flex;gap:8px;margin:6px 0}.preset-libraries #presetNames{max-height:180px;overflow:auto}
+
+.sequence-help,.stop-help{font-size:var(--m10-text-min);margin:6px 0;padding:4px 0;border:0;color:var(--muted)}
+.sequence-help>summary,.stop-help>summary{cursor:pointer}
+
+.stop-timing .stop-help>summary:after{content:"+"}
+.stop-timing .stop-help[open]>summary:after{content:"−"}

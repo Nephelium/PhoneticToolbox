@@ -15,7 +15,7 @@ from .file_provider import FileAccessError,checked_path
 class M05Bridge:
     def __init__(self,bridge):
         from .m05_replay import ReplayReader
-        self.bridge=bridge;self.writes={};self.replay=ReplayReader();self.recordings={};self.exports={};self.metadata={}
+        self.bridge=bridge;self.writes={};self.replay=ReplayReader();self.recordings={};self.exports={};self.metadata={};self.playbacks={}
     def invoke(self,body):
         from urllib.error import HTTPError
         try:return self._invoke(body)
@@ -71,6 +71,28 @@ class M05Bridge:
                 except (FileAccessError,HTTPError):continue
                 history.append(dict(id=job['id'],name=name))
             return history
+        if op=='m05_playback_info':
+            job=self.checked_job(body['job']);source=self.result_metadata(job).get('input_asset')
+            if not source:raise FileAccessError('此历史结果缺少原视频，请重新选择文件分析。')
+            if len(self.playbacks)>=2:raise FileAccessError('正在准备其他回放，请稍后重试。')
+            if shutil.disk_usage(tempfile.gettempdir()).free<650_000_000:raise FileAccessError('回放转换磁盘空间不足。')
+            scratch=tempfile.TemporaryDirectory(prefix='ptb-m05-playback-')
+            try:
+                path=Path(scratch.name)/'source.media';self.download_file(source,path)
+                info=self.export_recording(path,action='playback')
+                key=uuid4().hex;self.playbacks[key]=dict(scratch=scratch,path=path.parent/info['name'],info=info)
+                return dict(token=key,**info)
+            except Exception:
+                scratch.cleanup();raise
+        if op=='m05_playback_release':
+            item=self.playbacks.pop(body.get('token'),None)
+            if item:item['scratch'].cleanup()
+            return dict(released=item is not None)
+        if op=='m05_playback_block':
+            item=self.playbacks.get(body.get('token'));offset=body.get('offset')
+            if not item or type(offset) is not int or not 0<=offset<item['info']['size_bytes']:raise FileAccessError('回放视频读取范围不正确。')
+            with item['path'].open('rb') as stream:stream.seek(offset);raw=stream.read(min(262144,item['info']['size_bytes']-offset))
+            return dict(base64=base64.b64encode(raw).decode())
         if op in ('m05_source_info','m05_source_block'):
             job=self.checked_job(body['job']);source=self.result_metadata(job).get('input_asset')
             if not source:raise FileAccessError('此历史结果缺少原视频，请重新选择文件分析。')
@@ -260,10 +282,10 @@ class M05Bridge:
             process=OwnedProcess([runtime,'-I','-B',str(Path(m05_media_export.__file__)),str(request)],root,1_073_741_824)
             while process.poll() is None:
                 if cancel is not None and cancel.is_set():raise FileAccessError('动画导出已取消，分析结果保留。')
-                if time.monotonic()-started>620:raise FileAccessError('MP4 保存超时，原录制仍保留。')
+                if time.monotonic()-started>620:raise FileAccessError('音视频回放转换超时，请重试。' if action=='playback' else 'MP4 保存超时，原录制仍保留。')
                 time.sleep(.05)
             response=root/'export-response.json'
-            if process.poll()!=0 or not response.is_file():raise FileAccessError('MP4 编码未完成，原录制仍保留。')
+            if process.poll()!=0 or not response.is_file():raise FileAccessError('音视频回放转换未完成，请重试。' if action=='playback' else 'MP4 编码未完成，原录制仍保留。')
             value=json.loads(response.read_text('utf8'))
             if not value.get('ok'):raise FileAccessError(value.get('error','MP4 保存失败。'))
             # Source is a uniquely created scratch file owned by this save operation.

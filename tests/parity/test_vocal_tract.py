@@ -88,7 +88,7 @@ def test_unpaged_frames_names_and_legacy(engine):
     legacy=validate_frames(engine,[frame(engine)],for_storage=True)
     assert legacy[0]['manual_root'] is False and legacy[0]['name']==''
     with pytest.raises(ValueError):validate_frames(engine,[frame(engine,name='x\ny')],for_storage=True)
-    with pytest.raises(ValueError):validate_frames(engine,[frame(engine)]*70)
+    with pytest.raises(ValueError):validate_frames(engine,[frame(engine)]*301)
 
 def test_animation_cancelled_before_rendering(engine):
     cancel=threading.Event();cancel.set()

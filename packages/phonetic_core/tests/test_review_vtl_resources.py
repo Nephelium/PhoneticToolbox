@@ -6,6 +6,7 @@ from phonetic_core.vocal_tract.native_resources import resolve_libraries
     ('win32','AMD64',('VocalTractLabApi.dll','VocalTractLabAnalysis.dll','geometry_p2.dll')),
     ('darwin','arm64',('libVocalTractLabApi.dylib','libVocalTractLabAnalysis.dylib','libgeometry_p2.dylib')),
     ('linux','x86_64',('libVocalTractLabApi.so','libVocalTractLabAnalysis.so','libgeometry_p2.so')),
+    ('emscripten','wasm32',('libVocalTractLabApi.so','libVocalTractLabAnalysis.so','libgeometry_p2.so')),
 ])
 def test_native_selection_is_explicitly_platform_and_arch_scoped(tmp_path,platform,arch,names):
     normalized='x86_64' if arch=='AMD64' else arch
@@ -20,6 +21,12 @@ def test_macos_cannot_fall_back_to_windows_dlls(tmp_path):
     for name in ('VocalTractLabApi.dll','VocalTractLabAnalysis.dll','geometry_p2.dll'):(tmp_path/name).write_bytes(b'windows')
     with pytest.raises(RuntimeError,match='native_resource_unavailable'):
         resolve_libraries(tmp_path,platform='darwin',arch='arm64')
+
+
+def test_wasm_rejects_native_architectures_and_native_platform_rejects_wasm(tmp_path):
+    for platform, arch in [('emscripten', 'x86_64'), ('linux', 'wasm32'), ('win32', 'wasm32')]:
+        with pytest.raises(RuntimeError, match='native_platform_unavailable'):
+            resolve_libraries(tmp_path, platform=platform, arch=arch)
 
 
 def test_windows_missing_machine_uses_native_api_only_when_not_explicit(monkeypatch,tmp_path):

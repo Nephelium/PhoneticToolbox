@@ -1,8 +1,9 @@
 // M02-R2: owned headless Chrome, synthetic data, real browser pointer gestures and exports.
 const fs=require('node:fs/promises'),path=require('node:path'),assert=require('node:assert/strict');
+const {createHash}=require('node:crypto'),{spawnSync}=require('node:child_process');
 const {pathToFileURL}=require('node:url');const root=path.resolve(__dirname,'../..');
 async function main(){
- const out=path.join(root,'output/validation/m02-r2','chrome-'+Date.now());await fs.mkdir(out,{recursive:true});
+ const out=path.join(root,'output/validation/m02-r2','chrome-'+Date.now());await fs.mkdir(out,{recursive:true});const scratch=path.join(out,'scratch');await fs.mkdir(scratch);const write=(name,data)=>fs.writeFile(path.join(out,name),JSON.stringify(data,null,2));const marker={schema:'ptb-test-run/1',owner_pid:process.pid,state:'active',recipe:'Synthetic four-second PCM, parameter rows and grayscale spectrogram; real Chrome live-selection, layout, gestures and exports'};await write('run.json',marker);
  const {createServer}=await import(pathToFileURL(path.join(root,'frontend/node_modules/vite/dist/node/index.js')));
  const server=await createServer({root:path.join(root,'frontend'),server:{host:'127.0.0.1',port:0},optimizeDeps:{entries:['tests/m02-r2.html']}});await server.listen();
  const {chromium}=require(path.join(process.env.USERPROFILE,'.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright'));
@@ -10,6 +11,18 @@ async function main(){
  const page=await browser.newPage({viewport:{width:1920,height:1080},acceptDownloads:true});const report={success:false,checks:[],layouts:[],errors:[]};page.on('pageerror',e=>report.errors.push(e.message));
  try{
   await page.goto(server.resolvedUrls.local[0]+'tests/m02-r2.html');await page.getByRole('button',{name:'display.wav',exact:true}).click();await page.locator('.m02-parameters input').first().waitFor();
+  const checked=()=>page.locator('.m02-parameters input:checked').evaluateAll(es=>es.map(e=>e.value));
+  const curves=index=>page.locator('.parameter-figure').nth(index).locator('.parameter-curve').evaluateAll(es=>es.map(e=>e.dataset.parameter));
+  assert.deepEqual(await checked(),[]);
+  assert.equal(await page.getByRole('button',{name:/分配到图窗|从图中移除|清空选定图窗/}).count(),0);
+  await page.getByLabel('Intensity',{exact:true}).check();assert.deepEqual(await curves(0),['Intensity']);
+  await page.getByRole('button',{name:'新建图窗',exact:true}).click();assert.deepEqual(await checked(),[]);assert.equal(await page.getByLabel('当前图窗',{exact:true}).inputValue(),'2');
+  await page.getByLabel('Intensity',{exact:true}).check();await page.getByLabel('small',{exact:true}).check();assert.deepEqual(await curves(0),['Intensity']);assert.deepEqual(await curves(1),['Intensity','small']);
+  await page.getByRole('button',{name:'选择图窗 1',exact:true}).click();assert.deepEqual(await checked(),['Intensity']);await page.getByLabel('Intensity',{exact:true}).uncheck();assert.deepEqual(await curves(0),[]);assert.deepEqual(await curves(1),['Intensity','small']);
+  await page.getByLabel('当前图窗',{exact:true}).selectOption('2');assert.deepEqual(await checked(),['Intensity','small']);
+  await page.getByLabel('参数搜索',{exact:true}).fill('small');await page.getByRole('button',{name:'清空勾选',exact:true}).click();assert.deepEqual(await curves(1),[]);await page.getByLabel('参数搜索',{exact:true}).fill('');
+  await page.locator('.parameter-figure').nth(1).getByRole('button',{name:'删除图窗',exact:true}).click();await page.getByRole('button',{name:'选择图窗 1',exact:true}).click();
+  report.checks.push('live check/uncheck; clicked/dropdown window selection; independent duplicate parameters; new empty window; clear includes filtered-out items; active deletion fallback; removed assignment controls');
   const handle=page.getByRole('separator',{name:'图窗与导出宽度',exact:true});
   for(const [width,columns] of [[240,2],[400,3],[560,4]]){
    await handle.focus();await page.keyboard.press('Home');for(let i=240;i<width;i+=40)await page.keyboard.press('Shift+ArrowLeft');await page.waitForTimeout(200);
@@ -17,8 +30,8 @@ async function main(){
    assert.equal(geometry.columns,columns);assert(geometry.height<=280&&geometry.scrollHeight>geometry.height);assert(!geometry.overflow&&geometry.aligned);assert(geometry.gap>=0&&geometry.gap<=10);report.layouts.push({width,...geometry});
   }
   report.checks.push('2/3/4 fixed columns; checkbox/text baseline; bounded scroll; compact button gap');
-  for(const name of ['F0 - REAPER','Intensity','TextGrid words','TextGrid phones'])await page.getByLabel(name,{exact:true}).check();await page.getByRole('button',{name:'将 4 项分配到图窗',exact:true}).click();
-  await page.getByRole('button',{name:'新建图窗',exact:true}).click();await page.getByRole('button',{name:'清空勾选',exact:true}).click();for(const name of ['small','F0 - REAPER'])await page.getByLabel(name,{exact:true}).check();await page.getByRole('button',{name:'将 2 项分配到图窗',exact:true}).click();assert.equal(await page.locator('.parameter-figure').nth(1).locator('.right-tick').count(),5);await page.getByLabel('显示语谱图（Praat）',{exact:true}).check();await page.locator('.spectrogram-canvas canvas').waitFor();
+  for(const name of ['F0 - REAPER','Intensity','TextGrid words','TextGrid phones'])await page.getByLabel(name,{exact:true}).check();assert.equal(await page.locator('.parameter-curve').count(),2);assert.equal(await page.locator('.m02-wave-annotations .ipa-text').count(),4);
+  await page.getByRole('button',{name:'新建图窗',exact:true}).click();assert(await page.getByRole('button',{name:'清空勾选',exact:true}).isDisabled());for(const name of ['small','F0 - REAPER'])await page.getByLabel(name,{exact:true}).check();assert.equal(await page.locator('.parameter-figure').first().locator('.parameter-curve').count(),2);assert.equal(await page.locator('.parameter-figure').nth(1).locator('.right-tick').count(),5);await page.getByLabel('显示语谱图（Praat）',{exact:true}).check();await page.locator('.spectrogram-canvas canvas').waitFor();
   const inspect=()=>page.evaluate(()=>{const wave=document.querySelector('.wave-track>svg'),r=wave.getBoundingClientRect(),spec=document.querySelector('canvas').getBoundingClientRect(),text=wave.querySelector('.ipa-text'),m=text.getScreenCTM();return {wave:[r.left,r.right],spec:[spec.left,spec.right],figures:[...document.querySelectorAll('.parameter-chart')].map(e=>{const rect=e.getBoundingClientRect(),v=e.viewBox.baseVal,w=rect.width/v.width;return [rect.left+Number(e.dataset.plotLeft)*w,rect.left+Number(e.dataset.plotRight)*w];}),glyphScale:[Math.hypot(m.a,m.b),Math.hypot(m.c,m.d)]};});
   for(const mode of ['light','dark'])for(const size of [12,24]){
    await page.evaluate(async({mode,size})=>{document.documentElement.dataset.theme=mode;await window.qa.fonts(size);},{mode,size});await page.waitForTimeout(240);const g=await inspect();for(const pair of [g.spec,...g.figures])for(let i=0;i<2;i++)assert(Math.abs(g.wave[i]-pair[i])<1.5,JSON.stringify(g));assert(Math.abs(g.glyphScale[0]-g.glyphScale[1])<.01);report.layouts.push({mode,size,...g});
@@ -36,10 +49,35 @@ async function main(){
   const chart=page.locator('.parameter-chart').first();await chart.scrollIntoViewIfNeeded();const cb=await chart.boundingBox();await page.mouse.move(cb.x+cb.width*.5,cb.y+cb.height*.5);await page.keyboard.down('Control');await page.mouse.wheel(0,-100);await page.keyboard.up('Control');await page.waitForTimeout(200);const z=await page.evaluate(()=>({zoom:window.qa.wave.zoom,offset:window.qa.wave.offset}));assert(z.zoom>1);
   await page.keyboard.down('Shift');await page.mouse.down();await page.mouse.move(cb.x+cb.width*.4,cb.y+cb.height*.5,{steps:5});await page.mouse.up();await page.keyboard.up('Shift');assert((await page.evaluate(()=>window.qa.wave.offset))>z.offset);await chart.dblclick();assert.equal(await page.evaluate(()=>window.qa.wave.zoom),1);report.checks.push('Ctrl wheel zoom; Shift drag pan; double click restores full duration');
   await page.waitForFunction(()=>document.querySelector('.spectrogram-canvas canvas')&&!document.querySelector('.spectrogram-view [role=status],[role=alert]'));
-  const wait=page.waitForEvent('download');await page.locator('.parameter-figure').first().getByRole('button',{name:'保存整幅 PNG',exact:true}).click();const file=await wait;await file.saveAs(path.join(out,'whole.png'));assert((await fs.readFile(path.join(out,'whole.png'))).subarray(1,4).toString()==='PNG');report.checks.push('aligned annotated waveform/spectrogram/parameter figure whole PNG download');
+  const wait=page.waitForEvent('download');await page.locator('.parameter-figure').first().getByRole('button',{name:'保存整幅 PNG',exact:true}).click();const file=await wait;await file.saveAs(path.join(scratch,'whole.png'));assert((await fs.readFile(path.join(scratch,'whole.png'))).subarray(1,4).toString()==='PNG');report.checks.push('aligned annotated waveform/spectrogram/parameter figure whole PNG download');
+  // Every legend label stays complete, clear of its neighbours and inside the SVG.
+  for(const size of [12,24])for(const width of [1440,600]){
+   await page.setViewportSize({width,height:1000});await page.evaluate(async size=>window.qa.fonts(size),size);await page.waitForTimeout(180);
+   const geometry=await page.locator('.plot-legend').evaluateAll(es=>es.map(e=>{const b=e.getBBox(),s=e.ownerSVGElement.viewBox.baseVal,r=e.getBoundingClientRect(),svg=e.ownerSVGElement.getBoundingClientRect(),texts=[...e.querySelectorAll('text')];return {placement:e.dataset.placement,box:[r.left-svg.left,r.top-svg.top,r.right-svg.left,r.bottom-svg.top],canvas:[svg.width,svg.height],overlaps:texts.some((t,i)=>texts.slice(i+1).some(u=>{const a=t.getBoundingClientRect(),b=u.getBoundingClientRect();return Math.min(a.right,b.right)>Math.max(a.left,b.left)+.1&&Math.min(a.bottom,b.bottom)>Math.max(a.top,b.top)+.1;})),labels:[...e.querySelectorAll('.curve-legend')].map(g=>({name:g.dataset.parameter,text:[...g.querySelectorAll('text')].map(t=>t.textContent).join('')}))};}));
+   for(const g of geometry){assert(!g.overlaps,JSON.stringify(g));assert(g.box[0]>=0&&g.box[1]>=0&&g.box[2]<=g.canvas[0]+1&&g.box[3]<=g.canvas[1]+1,JSON.stringify(g));for(const l of g.labels)assert(l.text.startsWith(l.name),JSON.stringify(l));}
+   report.layouts.push({legend:true,width,size,geometry});
+  }
+  await page.evaluate(async()=>window.qa.fonts(12));await page.setViewportSize({width:1440,height:1000});await page.waitForTimeout(200);
+  await page.locator('.parameter-figure').first().getByRole('button',{name:'放大图窗',exact:true}).click();assert(await page.getByLabel('当前图窗',{exact:true}).isVisible());await page.getByLabel('当前图窗',{exact:true}).selectOption('2');assert.equal(await page.locator('.parameter-figure:visible').count(),1);await page.locator('.parameter-figure').nth(1).getByRole('button',{name:'还原图窗',exact:true}).click();
+  await page.getByRole('button',{name:'保存绘图配置',exact:true}).click();await page.reload();await page.getByRole('button',{name:'display.wav',exact:true}).click();await page.locator('.parameter-chart').first().waitFor();assert.deepEqual(await checked(),['F0 - REAPER','Intensity','TextGrid words','TextGrid phones']);
+  report.checks.push('compact frameless legend within canvas with complete labels and no text collisions at 12/24px and 1440/600px; enlarged window keeps sidebar usable; saved groups restore matching checks');
+  await page.getByRole('button',{name:'清空勾选',exact:true}).click();
+  const longName='H0-A3 (pF0) very long parameter';await page.getByLabel(longName,{exact:true}).check();
+  const legendLabel=await page.locator('.parameter-figure').first().locator('.curve-legend text').allTextContents();assert.equal(legendLabel.join(''),longName);
+  await page.locator('.parameter-figure').first().getByLabel('图窗 1图片格式',{exact:true}).selectOption('svg');
+  let dl=page.waitForEvent('download');await page.locator('.parameter-figure').first().getByRole('button',{name:'保存当前图',exact:true}).click();const svgFile=await dl;await svgFile.saveAs(path.join(scratch,'long-legend.svg'));const xml=await fs.readFile(path.join(scratch,'long-legend.svg'),'utf8');assert(xml.includes('plot-legend')&&!xml.includes('…'));
+  await page.evaluate(()=>{window.qa.paintedLabels=[];const original=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(text,...args){window.qa.paintedLabels.push(text);return original.call(this,text,...args);};});
+  dl=page.waitForEvent('download');await page.locator('.parameter-figure').first().getByLabel('图窗 1图片格式',{exact:true}).selectOption('png');await page.locator('.parameter-figure').first().getByRole('button',{name:'保存当前图',exact:true}).click();const pngFile=await dl;await pngFile.saveAs(path.join(scratch,'long-legend.png'));assert((await fs.readFile(path.join(scratch,'long-legend.png'))).length>1000);assert((await page.evaluate(()=>window.qa.paintedLabels)).includes('图窗 1'));assert(!(await page.evaluate(()=>window.qa.paintedLabels)).some(t=>t.includes('当前')));
+  await page.getByRole('button',{name:'清空勾选',exact:true}).click();for(const name of ['F0 - REAPER','Intensity'])await page.getByLabel(name,{exact:true}).check();
+  report.checks.push('long legend full-name SVG/PNG downloads without ellipsis');
+  const firstCurve=page.locator('.parameter-figure').first().locator('.parameter-curve').first();
+  await page.evaluate(()=>document.documentElement.dataset.theme='light');assert.equal(await firstCurve.evaluate(e=>getComputedStyle(e).stroke),'rgb(53, 103, 168)');
+  await page.evaluate(()=>document.documentElement.dataset.theme='dark');assert.equal(await firstCurve.evaluate(e=>getComputedStyle(e).stroke),'rgb(134, 175, 228)');
+  report.checks.push('light/dark actual curve colors use the intended contrasting palette');
+
   await page.screenshot({path:path.join(out,'dark.png'),fullPage:true});await page.evaluate(()=>document.documentElement.dataset.theme='light');await page.screenshot({path:path.join(out,'light.png'),fullPage:true});
   await page.setViewportSize({width:600,height:800});await page.waitForTimeout(200);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=601));await page.screenshot({path:path.join(out,'narrow.png'),fullPage:true});assert.deepEqual(report.errors,[]);report.success=true;
  }catch(e){report.error=String(e);await page.screenshot({path:path.join(out,'failed.png'),fullPage:true});throw e;}
- finally{await fs.writeFile(path.join(out,'report.json'),JSON.stringify(report,null,2));console.log(out);await browser.close();await server.close();}
+ finally{await browser.close();await server.close();await write('report.json',report);const files=[];for(const name of await fs.readdir(scratch)){const raw=await fs.readFile(path.join(scratch,name));files.push({path:name,bytes:raw.length,sha256:createHash('sha256').update(raw).digest('hex')});}await write('scratch-manifest.json',{schema:'ptb-test-scratch-files/1',files});await write('run.json',{...marker,state:'ready',test_outcome:report.success?'completed':'failed'});const cleanup=spawnSync('powershell.exe',['-NoProfile','-ExecutionPolicy','Bypass','-File',path.join(root,'scripts/cleanup_test_scratch.ps1'),'-RunDirectory',out],{windowsHide:true,encoding:'utf8'});if(cleanup.status!==0)await write('cleanup.json',{status:'retained',reason:cleanup.stderr||cleanup.stdout});console.log(JSON.stringify({out,success:report.success,checks:report.checks.length,error:report.error}));}
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

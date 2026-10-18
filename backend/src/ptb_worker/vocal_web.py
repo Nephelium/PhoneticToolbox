@@ -5,19 +5,23 @@ import math
 import time
 import threading
 from functools import wraps
+import copy
+from phonetic_core.vocal_tract.preset_library import LibraryProfile, active_set
 import numpy as np
 from phonetic_core.vocal_tract.envelope import audition_samples, attack_envelope
 from phonetic_core.vocal_tract.monitor import OutputHistory
-from phonetic_core.vocal_tract.trajectory import validate_frames, validate_pitch_curve
+from phonetic_core.vocal_tract.trajectory import validate_frames, validate_pitch_curve, validate_pressure_curve, MAX_SEQUENCE_SECONDS
+from phonetic_core.vocal_tract.perturbation import validate_perturbation
 
 WEB_SEQUENCE_SECONDS=5.
+WEB_VIDEO_SECONDS=MAX_SEQUENCE_SECONDS
 
 
 def validate_web_operation(runtime,op,body):
     """Server policy for bounded browser audition; desktop keeps its own policy."""
     if op=='live' and body.get('active'):
         raise ValueError('由于服务器性能限制，网页版暂不支持持续发声，请下载桌面版。')
-    if runtime.live.active and runtime.live.mode=='preview' and op in ('pose','preview','audio/test','audio/settings','animation/prepare','animation/play'):
+    if runtime.live.active and runtime.live.mode=='preview' and op in ('pose','source/update','preview','audio/test','audio/settings','animation/prepare','animation/play'):
         raise ValueError('请等待测试发声结束后再更改构形或开始合成。')
     if op=='preview' and (type(body.get('duration')) not in (int,float) or body['duration']!=.5 or body.get('sequence') is not None):
         raise ValueError('网页版仅支持当前构形的 0.5 秒测试发声。')
@@ -25,35 +29,39 @@ def validate_web_operation(runtime,op,body):
         frames=validate_frames(runtime.engine,body.get('frames'))
         if round(sum(f['duration'] for f in frames),9)>WEB_SEQUENCE_SECONDS:
             raise ValueError('网页版单次关键帧播放和视频导出最多 5 秒，请缩短序列或下载桌面版。')
-    if op=='video/begin' and float(body.get('duration',0))>WEB_SEQUENCE_SECONDS:
-        raise ValueError('网页版单次视频导出最多 5 秒，请缩短序列或下载桌面版。')
+    if op=='video/begin' and float(body.get('duration',0))>WEB_VIDEO_SECONDS:
+        raise ValueError(f'单次视频导出最多 {WEB_VIDEO_SECONDS:g} 秒，请缩短序列。')
 
 
-class MemoryProfile:
+class MemoryProfile(LibraryProfile):
     def __init__(self):
         self.sequence={'frames':[], 'pitch_curve':[]};self.presets=[]
         self.favorites=['a','i','u','e','o','E','y','2','l','n','t']
+        self.speaker='JD2';self.models={};self.library=None
+
+    def set_speaker(self,speaker):
+        if speaker not in ('JD2','W02'):raise ValueError('无效的声道模型')
+        if speaker==self.speaker:return
+        self.models[self.speaker]={'sequence':self.sequence,'presets':self.presets,'favorites':self.favorites,'library':self.library}
+        state=self.models.get(speaker,{'sequence':{'frames':[],'pitch_curve':[]},'presets':[],
+                                      'favorites':['a','i','u','e','o','E','y','2','l','n','t']})
+        self.sequence=state['sequence'];self.presets=state['presets'];self.favorites=state['favorites'];self.speaker=speaker;self.library=state.get('library')
 
     def load_sequence(self,engine):return self.sequence
-    def save_frames(self,frames,pitch_curve):self.sequence={'frames':frames,'pitch_curve':validate_pitch_curve(pitch_curve)}
-    def load_presets(self,engine):return self.presets
-    def save_presets(self,engine,presets):
-        if not isinstance(presets,list):raise ValueError('无效的构形库')
-        result=[];ids=set()
-        for item in presets:
-            if not isinstance(item,dict):raise ValueError('无效的构形')
-            key=item.get('id')
-            if not isinstance(key,str) or not 1<=len(key)<=64 or key in ids or key in engine.presets:raise ValueError('构形标识重复或无效')
-            pose=validate_frames(engine,[item],for_storage=True)[0]
-            if pose.get('aspiration') or not pose['name'].strip():raise ValueError('请保存有名称的构形')
-            ids.add(key);result.append({**pose,'id':key})
-        if len(json.dumps(result,ensure_ascii=False).encode())>8_000_000:raise ValueError('构形库超过容量')
-        self.presets=result;return result
-    def load_favorites(self):return self.favorites
-    def save_favorites(self,engine,ids):
-        available=set(engine.presets)|{p['id'] for p in self.presets}
-        if not isinstance(ids,list) or len(ids)>500 or any(not isinstance(k,str) or k not in available for k in ids) or len(set(ids))!=len(ids):raise ValueError('无效的常用构形设置')
-        self.favorites=list(ids);return self.favorites
+    def save_frames(self,frames,pitch_curve,pressure_curve=None,perturbation=None,global_controls=None,features=None):
+        self.sequence={'frames':frames,'pitch_curve':validate_pitch_curve(pitch_curve)}
+        pressure=validate_pressure_curve(pressure_curve or [])
+        if pressure:self.sequence['pressure_curve']=pressure
+        perturbation=validate_perturbation(perturbation)
+        if perturbation is not None:self.sequence['perturbation']=perturbation
+        if global_controls:self.sequence['global_controls']=global_controls
+        if features:self.sequence['features']=features
+    def _legacy_presets(self,engine):return copy.deepcopy(self.presets)
+    def _legacy_favorites(self):return list(self.favorites)
+    def _read_library(self):return copy.deepcopy(self.library)
+    def _write_library(self,value):
+        self.library=copy.deepcopy(value);current=active_set(self.library)
+        self.presets=copy.deepcopy(current['presets']);self.favorites=list(current['favorites'])
 
 
 def locked(method):
@@ -72,8 +80,8 @@ class BrowserAudio:
     def __init__(self,engine):
         self.guard=threading.RLock()
         self.engine=engine;self.playback_allowed=True;self.params=engine.params.copy()
-        self.f0=150.;self.volume=.8;self.gain_db=0.;self.lip_width=1.;self.larynx_height=0.;self.tongue_shape=[0.]*4;self.source=None
-        self.device_key='browser';self.active=False;self.mode='idle';self.error=None;self.completed=False;self.heartbeat=time.monotonic()
+        self.f0=engine.default_f0;self.volume=.8;self.gain_db=0.;self.lip_width=1.;self.larynx_height=0.;self.tongue_shape=[0.]*4;self.lip_shape=[0.]*4;self.source=None
+        self.device_key='browser';self.active=False;self.mode='idle';self.error=None;self.completed=False;self.heartbeat=time.monotonic();self.pitch_gain=1.
         self.buffer=None;self.envelope=None;self.tube=None;self.position_seconds=0.;self.offset=0;self.committed=0
         self.pending=np.empty(0,dtype=np.float32);self.output_history=OutputHistory(engine.sr)
         self.stats={'blocks':0,'underflows':0,'generated_samples':0,'compute_ms':0.,'device_latency_ms':None,'rms':0.,'peak':0.,'device':'浏览器音频输出'}
@@ -93,7 +101,9 @@ class BrowserAudio:
         self.buffer=buffer;self.envelope=envelope;self.offset=self.committed=0;self.position_seconds=0.
         self.pending=np.empty(0,dtype=np.float32);self.output_history.reset();self.stats.update(blocks=0,generated_samples=0,rms=0.,peak=0.)
         if buffer is None:
-            self.tube=self.engine.prepare_tube(self.params,self.lip_width,self.larynx_height,self.tongue_shape)
+            self.tube=self.engine.prepare_tube(self.params,self.lip_width,self.larynx_height,self.tongue_shape,self.lip_shape)
+            self.pitch_gain=self.engine.pitch_level_gain(self.tube,self.f0,self.source)
+            self.current_pitch_gain=self.pitch_gain
             self.current_tube=self.tube;self.engine.reset_tube(self.tube,self.engine.glottis(self.f0,source=self.source))
 
     @locked
@@ -129,7 +139,8 @@ class BrowserAudio:
             if self.buffer is None:
                 target=self.tube;g=self.engine.glottis(self.f0,source=self.source)
                 self.current_tube={k:(target[k] if k=='articulators' else v+.4*(target[k]-v)) for k,v in self.current_tube.items()}
-                block=self.engine.block_tube(self.current_tube,g,n)*10**((self.source or {}).get('audition_gain_db',0)/20)
+                block=self.engine.block_tube(self.current_tube,g,n)*np.linspace(self.current_pitch_gain,self.pitch_gain,n)*10**((self.source or {}).get('audition_gain_db',0)/20)
+                self.current_pitch_gain=self.pitch_gain
                 envelope=attack_envelope(self.offset,n,self.engine.sr)
             else:
                 block=self.buffer[self.offset:self.offset+n]

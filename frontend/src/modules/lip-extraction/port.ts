@@ -6,8 +6,8 @@ export interface LipSaveItem {result:LipResult;offset:number;}
 export interface LipPort {
  kind:'desktop'|'browser';
  available:boolean;
- prepareCapture?():Promise<void>;
- captureError?(message:string):Promise<string>;
+ prepareCapture?(purpose?:'capture'|'devices'):Promise<void>;
+ captureError?(message:string,purpose?:'capture'|'devices'):Promise<string>;
  history?():Promise<{id:string;name:string}[]>;
  load?(id:string):Promise<LipResult>;
  replay?(result:LipResult,start:number):Promise<{rows:LipRow[];complete:boolean}>;
@@ -20,6 +20,7 @@ export interface LipPort {
  save(result:LipResult,offset:number,action:'apply'|'save_without_offset'):Promise<boolean>;
  saveBatch?(items:LipSaveItem[],action:'apply'|'save_without_offset',options:LipSaveOptions,onSaved:(id:string)=>void):Promise<boolean>;
  sourceVideo?(result:LipResult):Promise<Blob>;
+ playbackVideo?(result:LipResult):Promise<{blob:Blob;origin_s:number}>;
  exportAnimation?(result:LipResult,format:'mp4'|'gif',quality:'high'|'standard'|'small',signal:AbortSignal):Promise<boolean>;
  saveLocal?(name:string,blob:Blob):Promise<boolean>;
 }

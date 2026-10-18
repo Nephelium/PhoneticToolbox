@@ -371,7 +371,7 @@ function deleteSelectedBoundary() {
   if (!tier) return;
   const rightIndex=tier.intervals.findIndex((item,i)=>i>0&&item.xmin===sb.time&&tier.intervals[i-1].xmax===sb.time);
   const leftIndex=rightIndex-1;
-  if(rightIndex<1)return;
+  if(rightIndex<1)throw Error('音频起点和终点需要保留；请选择内部边界，或选择区间后删除标注。');
   const left = tier.intervals[leftIndex];
   const right = tier.intervals[rightIndex];
   const merged = {
@@ -379,8 +379,11 @@ function deleteSelectedBoundary() {
     xmax: right.xmax,
     text: (left.text || right.text) ? [left.text, right.text].filter(Boolean).join(" ") : "",
   };
+  saveUndoState();
   tier.intervals.splice(Math.min(leftIndex, rightIndex), 2, merged);
-  tier.intervals = fillGaps(tier.intervals, duration());
+  // Word edges have a corresponding phone edge; remove that edge together.
+  const phones=sb.tier===wordTierName()?phoneTier():null;
+  if(phones){const at=phones.intervals.findIndex((item,i)=>i>0&&item.xmin===sb.time&&phones.intervals[i-1].xmax===sb.time);if(at>0){const a=phones.intervals[at-1],b=phones.intervals[at];phones.intervals.splice(at-1,2,{xmin:a.xmin,xmax:b.xmax,text:[a.text,b.text].filter(Boolean).join(' ')});}}
   const mergedIndex = tier.intervals.findIndex((item) => item.xmin===merged.xmin&&item.xmax===merged.xmax);
   state.selected = mergedIndex >= 0 ? { tier: sb.tier, index: mergedIndex } : null;
   state.selectedIndices = [];
@@ -1022,29 +1025,30 @@ function complementWindows(windows, xmax) {
 
 function spliceTier(currentTier, referenceTier, windows, xmax) {
   if (!referenceTier) return currentTier;
-  if (!!currentTier.intervals !== !!referenceTier.intervals) throw Error('参考文件同名层的类型不一致。');
   const low=currentTier.xmin??0,high=currentTier.xmax??xmax;
-  if((referenceTier.xmin??0)!==low || (referenceTier.xmax??xmax)!==high)throw Error('参考文件同名层的时间范围不一致。');
+  const start=Math.max(low,referenceTier.xmin??0),end=Math.min(high,referenceTier.xmax??xmax,xmax);
+  const overlap=windows.map(([a,b])=>[Math.max(a,start),Math.min(b,end)]).filter(([a,b])=>b>a);
+  if(!overlap.length)return currentTier;
+  if (!!currentTier.intervals !== !!referenceTier.intervals) throw Error(`参考文件的 ${currentTier.name} 层类型不同，请选择同类型的标注层。`);
   if (currentTier.points) {
-    const inside = time => windows.some(([start,end]) => start <= time && time <= end);
+    const inside = time => overlap.some(([start,end]) => start <= time && time <= end);
     return {...currentTier, points:[...currentTier.points.filter(p=>!inside(p.number)),...referenceTier.points.filter(p=>inside(p.number))].map(p=>({...p})).sort((a,b)=>a.number-b.number)};
   }
   const intervals = [];
-  complementWindows(windows, xmax).forEach(([start, end]) => {
+  complementWindows(overlap, high).forEach(([start, end]) => {
     intervals.push(...clipIntervals(currentTier.intervals, start, end));
   });
-  windows.forEach(([start, end]) => {
+  overlap.forEach(([start, end]) => {
     intervals.push(...clipIntervals(referenceTier.intervals, start, end));
   });
-  const filled=fillGaps(intervals,xmax).flatMap(i=>{const a=Math.max(low,i.xmin),b=Math.min(high,i.xmax);return b>a?[{...i,xmin:a,xmax:b}]:[];});
+  const filled=fillGaps(intervals,high).flatMap(i=>{const a=Math.max(low,i.xmin),b=Math.min(high,i.xmax);return b>a?[{...i,xmin:a,xmax:b}]:[];});
   return { ...currentTier, intervals: filled };
 }
 
 async function applyReferenceSplice() {
   if (!state.textgrid || !state.referenceTextGrid) return;
-  saveUndoState();
   const mode = els.spliceMode.value;
-  const xmax = duration();
+  const xmax = state.textgrid.xmax;
   let start = Number(els.spliceStart.value);
   let end = Number(els.spliceEnd.value);
   if (!Number.isFinite(start)) start = state.visibleStart;
@@ -1057,12 +1061,16 @@ async function applyReferenceSplice() {
   }
   els.spliceStart.value = start.toFixed(3);
   els.spliceEnd.value = end.toFixed(3);
-  const refByName = new Map(state.referenceTextGrid.tiers.map((tier) => [tier.name, tier]));
+  const reference=state.referenceTextGrid;
+  const refByName = new Map(reference.tiers.map(tier=>[tier.name,{...tier,xmin:tier.xmin??reference.xmin,xmax:tier.xmax??reference.xmax}]));
   if (!state.textgrid.tiers.some(t=>refByName.has(t.name))) throw Error('参考文件中没有同名层。');
   const windows = replacementWindows(mode, start, end, xmax);
-  state.textgrid.tiers = state.textgrid.tiers.map((tier) => {
+  const tiers = state.textgrid.tiers.map((tier) => {
     return spliceTier(tier, refByName.get(tier.name), windows, xmax);
   });
+  if(tiers.every((tier,index)=>tier===state.textgrid.tiers[index]))throw Error('所选时间段与参考同名层没有重叠，请调整范围。');
+  saveUndoState();
+  state.textgrid.tiers=tiers;
   markDirty();
   setStatus(`已复用参考标注（${mode}）`);
   drawAll();
@@ -1096,14 +1104,14 @@ async function applyReferenceSplice() {
     state.copiedWord=item.text;state.copiedLabIndex=sel.tier===wordTierName()?labIndexForWordSelection(sel.index):null;
     setStatus(`已复制：${item.text}；下次粘贴：${nextCopiedWordText()}`);
   }
-  function captureSelected(){
+  function captureSelected(includePhones=true){
     const sel=state.selected,tier=sel&&tierByName(sel.tier);if(!tier)throw Error('请先选中一个标注。');
     const role=sel.tier===wordTierName()?'word':'phone';
-    return captureAnnotation(tier.intervals,role==='word'?phoneTier()?.intervals:null,role==='word'&&state.selectedIndices.length?state.selectedIndices:[sel.index],role);
+    return captureAnnotation(tier.intervals,includePhones&&role==='word'?phoneTier()?.intervals:null,role==='word'&&state.selectedIndices.length?state.selectedIndices:[sel.index],role);
   }
   function deleteAnnotation(){
-    const clip=captureSelected(),tier=tierByName(state.selected.tier);
-    const next=eraseWindows(tier.intervals,clip.windows),phones=clip.phones?eraseWindows(phoneTier().intervals,clip.windows):null;
+    const clip=captureSelected(false),tier=tierByName(state.selected.tier);
+    const next=eraseWindows(tier.intervals,clip.windows),phones=clip.role==='word'&&phoneTier()?eraseWindows(phoneTier().intervals,clip.windows):null;
     saveUndoState();tier.intervals=next;if(phones)phoneTier().intervals=phones;
     state.selected=null;state.selectedIndices=[];state.selectedBoundary=null;state.searchResults=[];state.searchIndex=-1;
     markDirty();drawAll();setStatus('已删除所选标注，原位置留空；Ctrl＋Z 可撤销。');

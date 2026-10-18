@@ -32,6 +32,8 @@ capabilities 根据实际配置、资源、运行时及 store 能力计算。HTT
 
 ## 本机模式和服务模式
 
+`ptb_worker/browser_vocal.py`是M10本地浏览器Worker的固定分派，直接复用原Engine/Runtime与vocal_web中的设备无关音频/构形库端口，不增加HTTP科学接口。恢复快照按已成功操作增量返回，输入校验错误保持原用户提示，内部异常留在Worker日志。VTL Wasm按独立来源锁装载，原服务器会话和MP4编码路径继续可用；当前只有本机候选验收，见[报告](../docs/testing/m10-wasm-report.md)。
+
 本机 [ptb_api/cli.py](src/ptb_api/cli.py)由 Qt 所有者启动，绑定回环临时端口，校验 Host、Origin 和每次会话 token。SQLiteJobStore 读取指定既有任务库；LocalAcousticFiles 持有本机受管输入/结果，AcousticBatches 提供批次规则。CLI 启动一个自己拥有的 worker，父 stdin 结束即启动收尾。
 
 卸载的专用缓存清理服务沿用相同回环身份和结果清理协议，只开放健康检查与清空受管结果，不启动计算worker。冻结入口跳过此模式不需要的科学运行时联接，保留Windows RedirectionGuard；正常任务服务仍初始化科学运行时并启动worker。
@@ -109,7 +111,7 @@ WebOperations复用容量事务及聚合状态，不增加研究库schema。内�
 
 ## 声道交互会话
 
-vocal API将身份/CSRF/Origin/项目/工作区检查与科学执行分开；VocalSessions以账号、登录会话、项目和不透明ID隔离原生状态。固定vocal_child进程注入BrowserAudio/MemoryProfile，调用唯一core vocal_tract/session；不导入桌面或设备库。最多两个会话、一个计算槽、每进程1 GiB；1800秒空闲、撤销、超时及关闭均回收自有进程和scratch。停止可在生成中生效，排队生成携带取消代数。网页只接受33/65截面，禁用持续发声，仅0.5秒固定构形试听且播放期间拒绝改姿势，关键帧/视频最多5秒；原生33能力与桌面菜单策略分开。共享vocal_video/vocal_mp4保留桌面兼容入口，服务器视频只写会话临时目录并返回下载，客户端不提供路径。配置及验收见[网页版声道报告](../docs/testing/web-vocal-report.md)，本轮独立私有Linux/PG及宿主预算已定向验证，公开生产与长期容量另验。
+vocal API将身份/CSRF/Origin/项目/工作区检查与科学执行分开；VocalSessions以账号、登录会话、项目和不透明ID隔离原生状态。固定vocal_child进程注入BrowserAudio/MemoryProfile，调用唯一core vocal_tract/session；不导入桌面或设备库。最多两个会话、一个计算槽、每进程1 GiB；1800秒空闲、撤销、超时及关闭均回收自有进程和scratch。停止可在生成中生效，排队生成携带取消代数。服务器科学回退只接受33/65截面，禁用持续发声，仅0.5秒固定构形试听且播放期间拒绝改姿势，科学序列最多5秒；浏览器Wasm默认65、支持33/65/129/257、持续发声与12秒序列，视频编码单独允许12秒。自定义微扰遇旧服务器时保留文档并要求显式恢复默认再合成，不能静默改变声源。原生33能力与桌面菜单策略分开，当前证据见[浏览器能力验收](../docs/testing/web-vocal-browser-controls.md)。共享vocal_video/vocal_mp4保留桌面兼容入口，服务器视频只写会话临时目录并返回下载，客户端不提供路径。配置及验收见[网页版声道报告](../docs/testing/web-vocal-report.md)，本轮独立私有Linux/PG及宿主预算已定向验证，公开生产与长期容量另验。
 
 ## 论文文档适配
 
@@ -124,3 +126,5 @@ Linux科学入口由native/linux_runtime.py固定登记，并由当前运行时�
 运行库摘要只在文件身份或元数据改变后重算，进程内锁合并并发首次读取。每次准入仍逐文件检查设备、inode、大小、mtime、ctime和模式，并把缓存摘要与本次profile预期值比较；Linux同大小且恢复mtime的修改仍由ctime触发完整重验，原子替换由inode触发。摘要流式读取且缓存最多4096项，避免能力查询反复读取大型原生库。
 
 web_feedback.py仅接受当前账号Cookie/CSRF和允许的反馈操作，服务器从已验证邮箱表读取联系邮箱；反馈侧只在已配置共享密钥的回环内部接口接受身份，复用已验证会话，绝不按相同邮箱认领未验证会话的内容。浏览器不持有反馈token；无新增schema或邮箱验证流程。独立反馈服务及API可分别恢复，内部入口在Nginx为404。
+
+M10 MemoryProfile复用核心LibraryProfile，library操作加入现有会话白名单。BrowserVocalRuntime检查点携带全部套装及模型状态，重建先恢复library，旧检查点才使用presets/favorites字段；网页耐久保存由浏览器宿主负责，不新建服务器表。

@@ -15,12 +15,12 @@ FIELDS = {
  'M01': 'settings sameDirectory recursive parameters showBoth showSpectrogram max_duration_s audio_channel egg panelWidths',
  'M02': 'groups reaper correction recursive showBoth showSpectrogram panelWidths',
  'M03': 'autoDbEnabled order signal_mode flip_channels micro_width_ms gci_method goi_method peak_prominence valley_prominence auto_prominence highpass_cutoff lowpass_cutoff spec_window_ms spec_vmin spec_vmax keep_praat_f0 keep_gci_f0 keep_reaper_f0 f0_min_hz f0_max_hz silence_threshold generate_images batchConfig showBoth showSpectrogram panelWidths',
- 'M04': 'draft showBoth showSpectrogram panelWidths',
+ 'M04': 'draft showSpectrum showBoth showSpectrogram panelWidths',
  'M05': 'camera microphone filter cutoff fps delegate mirror quality saveAll saveVideo saveAnimation panelWidths',
  'M06': 'duration sample_rate fade_in fade_out smooth f0_range f0_method f0_transform selectedPreset windowMs curveOverrides panelWidths',
  'M07': 'target_sample_rate f0_backend min_f0_hz max_f0_hz f0_frame_interval_ms frame_length frame_shift lpc_order preemphasis window_name negative_peak_threshold pulse_inner_periods pulse_outer_periods trim_silence silence_threshold_db silence_padding_ms voiced_margin_ms step_count energy_match normalize_to_source output_peak_limit alignment count kind reverse axisRange panelWidths',
  'M08': 'speed pitch_ratio pitch_hz offset minInput maxInput ymin ymax refInput refs directPlayback panelWidths',
- 'M09': 'invert_image vocoder algorithm reconstruction_profile inference_device phase_initialization frequency_axis auto_parameters dynamic_range min_db max_db win_length_ms n_iter target_sr seed durationInput freqStartInput freqEndInput audioFft channel panelWidths',
+ 'M09': 'invert_image vocoder algorithm reconstruction_profile inference_device phase_initialization frequency_axis auto_parameters dynamic_range min_db max_db win_length_ms n_iter target_sr seed durationInput freqStartInput freqEndInput audioFft channel audioFrequencyMax audioCanvasHeight panelWidths',
  'M10': 'frame panelWidths webNoticeSeen',
  'M11': 'config transcriptSource panelWidths',
  'M12': 'suffix showOpen showWidth sidebar settingsOpen phoneSplit durationInput nudgeStep showBoth showSpectrogram panelWidths',
@@ -38,13 +38,14 @@ NESTED = {
  ('M01','egg.values'): 'egg_channel storage smooth_ms max_gap_ms derived highpass_cutoff lowpass_cutoff gci_method goi_method auto_prominence peak_prominence valley_prominence silence_threshold',
  ('M02','groups[]'): 'id title parameters',
  ('M03','batchConfig'): 'mode signal_mode flip_channels roi_start roi_end micro_center micro_width_ms gci_method goi_method peak_prominence valley_prominence auto_prominence highpass_cutoff lowpass_cutoff spec_window_ms spec_vmin spec_vmax keep_praat_f0 keep_gci_f0 keep_reaper_f0 f0_policy f0_min_hz f0_max_hz glottal_movement silence_threshold generate_images lp_order export_policy',
- ('M04','draft'): 'order freq_max_hz amp_min_db amp_max_db dynamic_y',
+ ('M04','draft'): 'order freq_max_hz amp_min_db amp_max_db dynamic_y analysis_channel',
  ('M06','f0_transform'): 'preset offset_hz',
  ('M07','axisRange'): 'minimum maximum',
- ('M10','frame'): 'view audio sectionCount f0 source keepVowel pose',
+ ('M10','frame'): 'view audio sectionCount f0 source keepVowel pose perturbation speaker models',
+ ('M10','frame.perturbation'): 'jitter shimmer seed',
  ('M10','frame.view'): 'mode teeth head nose labels fullModel',
  ('M10','frame.audio'): 'device volume gain_db',
- ('M10','frame.pose'): 'params manualRoot larynxHeight tongueShape lipWidth',
+ ('M10','frame.pose'): 'params manualRoot larynxHeight tongueShape lipShape lipWidth',
  ('M11','config'): 'beam retry_beam',
  ('M14','options'): 'skip_first_row consonant_only_as_zero_initial computation_revision character_column ipa_column note_column start_row table_index encoding delimiter',
  ('M15','validKeys[]'): 'key label',
@@ -52,8 +53,16 @@ NESTED = {
  ('APP','fonts'): 'version zh latin mono ipa bodySize figure',
  ('APP','fonts.figure'): 'follow zh latin size',
 }
+NESTED[('M10','frame.models')]='JD2 W02'
+for _speaker in ('JD2','W02'):
+    _prefix='frame.models.'+_speaker
+    NESTED[('M10',_prefix)]='f0 source keepVowel pose perturbation'
+    NESTED[('M10',_prefix+'.pose')]=NESTED[('M10','frame.pose')]
+    NESTED[('M10',_prefix+'.perturbation')]=NESTED[('M10','frame.perturbation')]
+
 # Appearance normalizers own their exact schemas; keep bounded primitive fields.
 PRIMITIVE_MAPS = {'curveOverrides','panelWidths','frame.source','buttonAppearance','waveformAppearance','backgroundAppearance'}
+PRIMITIVE_MAPS.update('frame.models.'+speaker+'.source' for speaker in ('JD2','W02'))
 NESTED = {key:text.split() for key,text in NESTED.items()}
 
 def validate_values(module, values):
@@ -75,6 +84,14 @@ def validate_values(module, values):
         elif value is not None and not isinstance(value,(bool,int,float)): raise ValueError('invalid_settings_field')
         elif isinstance(value,float) and not math.isfinite(value): raise ValueError('invalid_settings_field')
     walk(values)
+    if module=='M10' and isinstance(values.get('frame'),dict) and 'perturbation' in values['frame']:
+        from phonetic_core.vocal_tract.perturbation import validate_perturbation
+        validate_perturbation(values['frame']['perturbation'])
+    if module=='M10' and isinstance(values.get('frame'),dict) and 'speaker' in values['frame'] and values['frame']['speaker'] not in ('JD2','W02'):raise ValueError('invalid_settings_field')
+    if module=='M10' and isinstance(values.get('frame'),dict):
+        from phonetic_core.vocal_tract.perturbation import validate_perturbation
+        for model in (values['frame'].get('models') or {}).values():
+            if isinstance(model,dict) and 'perturbation' in model:validate_perturbation(model['perturbation'])
     if len(json.dumps(values,ensure_ascii=False).encode('utf-8'))>120000: raise ValueError('settings_too_large')
     return values
 

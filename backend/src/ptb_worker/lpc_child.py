@@ -19,6 +19,7 @@ def prepare(raw, config, input_name='audio.wav', textgrid=None,*,runtime_check=N
     import numpy as np
     from scipy.io import wavfile
     from phonetic_core.lpc import LPCConfig, MAX_ROI_SAMPLES, compute_spectrum, mono_samples, extract_label
+    from phonetic_core.lpc.spectrum import fft_reference_spectrum
     from ptb_api.lpc_models import LpcTaskConfig, LpcSpectrumData, LPC_NAMES
     from .acoustic_errors import AcousticFailure
     from .fonts import resolve_fonts
@@ -34,7 +35,12 @@ def prepare(raw, config, input_name='audio.wav', textgrid=None,*,runtime_check=N
     if not 0<=first<last<=len(samples) or settings.roi_end>len(samples)/fs:raise AcousticFailure('lpc_invalid_roi')
     if last-first>MAX_ROI_SAMPLES:raise AcousticFailure('lpc_roi_budget')
     if not np.isfinite(samples).all():raise AcousticFailure('invalid_audio')
-    audio=mono_samples(samples[first:last])
+    channels=1 if samples.ndim==1 else samples.shape[1]
+    channel=settings.analysis_channel
+    if channel is not None and channel>=channels:raise AcousticFailure('lpc_invalid_channel')
+    selected=samples[first:last]
+    if channel is not None and selected.ndim==2:selected=selected[:,channel]
+    audio=mono_samples(selected)
     label='';tier_name=None
     if textgrid is not None:
         from .io.annotations import decode_textgrid
@@ -55,6 +61,7 @@ def prepare(raw, config, input_name='audio.wav', textgrid=None,*,runtime_check=N
     fonts=resolve_fonts(settings.font)
     numeric=LPCConfig(**{k:v for k,v in settings.model_dump().items() if k in LPCConfig.__dataclass_fields__})
     result=compute_spectrum(audio,int(fs),numeric)
+    fft_frequency,fft_magnitude=fft_reference_spectrum(audio,int(fs))
     spectrum=LpcSpectrumData(frequencies_hz=result.frequencies_hz.tolist(),magnitude_db=result.magnitude_db.tolist(),
                             amp_min_db=result.amp_min_db,amp_max_db=result.amp_max_db)
     stream=io.BytesIO();wavfile.write(stream,int(fs),audio.astype(np.float64))
@@ -62,9 +69,11 @@ def prepare(raw, config, input_name='audio.wav', textgrid=None,*,runtime_check=N
         config=settings.model_dump(),input_name=input_name,input_sha256=digest(raw),
         textgrid_sha256=digest(textgrid) if textgrid is not None else None,
         sample_rate_hz=int(fs),sample_count=len(samples),channels=1 if samples.ndim==1 else samples.shape[1],
-        channel_policy='arithmetic-mean; pcm-normalization; no-peak-normalization',
+        channel_policy=('arithmetic-mean' if channel is None else f'channel-{channel+1}')+'; pcm-normalization; no-peak-normalization',
         selection=dict(start_sample=first,end_sample=last,start_s=first/fs,end_s=last/fs,interval='half-open'),
         label=label,tier_name=tier_name,spectrum=spectrum.model_dump(),runtime=runtime,render_fonts=fonts,
+        reference_spectrum=dict(frequencies_hz=fft_frequency.tolist(),magnitude_db=fft_magnitude.tolist(),
+            pre_emphasis=.97,window='hamming',normalization='one-sided amplitude / window sum; not calibrated SPL'),
         source_ids=['REF-MAKHOUL-1975-LPC','M04-PY-NUMPY','M04-PY-SCIPY'],
         gain_policy='unit numerator; no prediction-error gain; not calibrated SPL',
         export_names=export_names(input_name,label,settings.roi_start,settings.roi_end))

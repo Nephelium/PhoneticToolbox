@@ -15,6 +15,9 @@ class SpectralStroke(WireModel):
     color:Literal[0,255]=0
     size:int=Field(default=12,ge=1,le=200)
     size_unit:Literal['legacy','px']='legacy'
+    canvas_width:int|None=Field(default=None,ge=2,le=32768)
+    canvas_height:int|None=Field(default=None,ge=2,le=32768)
+    frequency_fraction:float|None=Field(default=None,gt=0,le=1)
     opacity:float=Field(default=1,ge=0,le=1)
     points:list[ImagePoint]=Field(min_length=1,max_length=4096)
 
@@ -83,6 +86,8 @@ class Spec2WavConfig(WireModel):
         result=self.model_dump(exclude=excluded)
         for stroke in result.get('strokes',[]):
             if stroke.get('size_unit')=='legacy':stroke.pop('size_unit',None)
+            for field in ('canvas_width','canvas_height','frequency_fraction'):
+                if stroke.get(field) is None:stroke.pop(field,None)
         return result
 
 

@@ -16,6 +16,19 @@ def test_complete_manifest():
     with pytest.raises(ValidationError):LpcManifest(core_version='3.0.0a1',files=[])
 
 
+def test_channel_extension_preserves_legacy_request_hash_input_and_account_settings():
+    from ptb_api.lpc_models import LpcTaskConfig
+    from ptb_api.preferences import validate_values
+    old = LpcTaskConfig(roi_end=.1)
+    assert old.analysis_snapshot() == {key: value for key, value in old.model_dump().items() if key != 'analysis_channel'}
+    assert LpcTaskConfig(roi_end=.1, analysis_channel=None).analysis_snapshot() == old.analysis_snapshot()
+    assert LpcTaskConfig(roi_end=.1, analysis_channel=0).analysis_snapshot()['analysis_channel'] == 0
+    for value in (-1, 8, True, .5):
+        with pytest.raises(ValidationError): LpcTaskConfig(roi_end=.1, analysis_channel=value)
+    values = dict(showSpectrum=True, draft=dict(analysis_channel='0'))
+    assert validate_values('M04', values) == values
+
+
 def test_reference_and_identity_boundary():
     from fastapi.testclient import TestClient
     from ptb_api.main import create_app

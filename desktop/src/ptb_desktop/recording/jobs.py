@@ -14,6 +14,33 @@ from phonetic_core.recording.edits import frames, select
 from .storage import read_range, iter_audio, save_pcm, atomic_json, safe_name, uid, validate_span
 
 
+def export_items(project, body):
+    """Resolve the five UI scopes without changing heads, tasks or selections."""
+    mode=body.get('mode','current')
+    if mode not in ('current','selection','selected','all','versions'):raise ValueError('导出范围无效')
+    takes=project['takes']
+    if mode in ('current','selection'):
+        takes=[t for t in takes if t['id']==body.get('id')]
+        if not takes:raise ValueError('请先选择一段录音')
+    elif mode=='selected':
+        chosen={project['selected'].get(t['id']) for t in project['tasks'] if t.get('enabled',True) and not t.get('skipped')}
+        takes=[t for t in takes if t['id'] in chosen]
+    items=[]
+    for take in takes:
+        versions=take['versions'] if mode=='versions' else [take['versions'][0 if body.get('raw') else take['head']]]
+        for source in versions:
+            version=copy.deepcopy(source)
+            if mode=='selection':
+                start,end=body.get('start'),body.get('end')
+                if not isinstance(start,int) or not isinstance(end,int) or not 0<=start<end<=frames(version['spans']):raise ValueError('导出选区超出所选版本或为空')
+                version['spans']=select(version['spans'],start,end)
+            if not frames(version['spans']):continue
+            task=take.get('task_snapshot') or {}
+            items.append({**copy.deepcopy(take),'version':version,'name':task.get('filename_stem') or task.get('title') or '自由录音'})
+    if not items:raise ValueError('没有可导出的录音或选区')
+    return items
+
+
 def process_audio(root,request,result_path,cancel_path):
     """Only this subprocess computes denoise; parent publishes after verification."""
     try:

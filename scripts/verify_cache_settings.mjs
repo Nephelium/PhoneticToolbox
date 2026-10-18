@@ -4,10 +4,11 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import net from 'node:net';
 import assert from 'node:assert/strict';
+import {seedPortableProfile} from './portable-cache-qa.mjs';
 const [exeArg,outArg,profileArg]=process.argv.slice(2);
 const exe=path.resolve(exeArg),out=path.resolve(outArg),profile=path.resolve(profileArg??path.join(out,'profile'));
 await fs.mkdir(out,{recursive:false});await fs.mkdir(profile,{recursive:true});
-const cache=path.join(profile,'PhoneticToolbox/v3/startup-cache');
+const cacheDirectory=await seedPortableProfile(profile),cache=path.join(cacheDirectory,'startup-cache');
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function exists(p){try{await fs.access(p);return true;}catch{return false;}}
 async function launch(label){
@@ -38,7 +39,7 @@ try{
  current=await launch('controls');const {js,until,button,screenshot}=current;
  await until('!!document.querySelector(".home-page")');
  const marker=path.join(profile,'PhoneticToolbox/v3/research-marker.wav');await fs.writeFile(marker,'PRESERVE RESEARCH');
- const download=path.join(profile,'PhoneticToolbox/v3/updates/downloads/'+'d'.repeat(32));await fs.mkdir(download,{recursive:true});await fs.writeFile(path.join(download,'package.zip'),'OWNED UNUSED DOWNLOAD');
+ const download=path.join(cacheDirectory,'updates/downloads/'+'d'.repeat(32));await fs.mkdir(download,{recursive:true});await fs.writeFile(path.join(download,'package.zip'),'OWNED UNUSED DOWNLOAD');
  await button('设置');await button('外观');
  await button('浅色');await button('本机存储与自动清理');await until('!!document.querySelector(".all-caches")');await js('document.querySelector(".all-caches").scrollIntoView({block:"center"})');await sleep(300);await screenshot('cache-settings-light');
  await button('外观');await button('深色');await button('本机存储与自动清理');await js('document.querySelector(".all-caches").scrollIntoView({block:"center"})');await sleep(300);await screenshot('cache-settings-dark');

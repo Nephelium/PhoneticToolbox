@@ -10,7 +10,8 @@
       "M06",
       "M09",
       "M14",
-      "M16"
+      "M16",
+      "M10"
     ],
     "kind": "software-runtime",
     "acknowledgement_group": "software",
@@ -509,7 +510,7 @@
     "kind": "bundled-native-code",
     "acknowledgement_group": "software",
     "authors": "Peter Birkholz and VocalTractLab contributors",
-    "version": "2.4 (Windows native bundle)",
+    "version": "2.4 API with seeded source extension and m10/r20 geometry; Windows x64, macOS arm64 and Emscripten 4.0.9 Wasm",
     "license": "GPL-3.0-or-later",
     "urls": {
       "homepage": "https://www.vocaltractlab.de/",
@@ -6535,6 +6536,21 @@
     "license": "BSD",
     "urls": {
       "release_metadata": "https://pypi.org/pypi/xlrd/2.0.2/json"
+    }
+  },
+  {
+    "id": "SRC-PINK-TROMBONE",
+    "title": "Pink Trombone",
+    "modules": [
+      "M10"
+    ],
+    "kind": "design-reference",
+    "acknowledgement_group": "software",
+    "authors": "Neil Thapen",
+    "version": "No code included; inspected version 1.1, March 2017",
+    "license": "MIT",
+    "urls": {
+      "homepage": "https://dood.al/pinktrombone/"
     }
   }
 ]

@@ -4,6 +4,11 @@
 
 ## 专题决策
 
+- [M12：切换保存与标注历史](ADR-M12-edit-history.md)
+- [M12：参考标注按时间交集复用与音频首尾定界](ADR-M12-reference-overlap.md)
+
+- [浏览器研究文件本机保存](ADR-browser-local-research-files.md)
+
 - [论文语谱图重建与随文播放（提议）](ADR-paper-spectrogram-audio.md)
 
 - [网页临时工作区与首期服务器计算](ADR-web-ephemeral-client-first.md)
@@ -29,6 +34,7 @@
 - [ADR-M07-R1 结果组、直接试听与 F0 显示归属](ADR-M07-R1.md)
 - [ADR-M08-R1：合成历史与外部保存分离](ADR-M08-R1.md)
 - [ADR-M09-R1：基于原始相位的音频频谱绘制](ADR-M09-R1.md)
+- [M09音频编辑图窗与笔迹坐标](ADR-M09-audio-drawing-grid.md)
 - [ADR-M10-R11：生理参数扩展与共享几何](ADR-M10-R11.md)
 - [M10-R12 舌位自由度与刚性牙齿接触](ADR-M10-R12.md)
 - [M10-R13 圆弧与组织连接](ADR-M10-R13.md)

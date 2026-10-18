@@ -1,8 +1,9 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {serverFiles,sha256} from '../src/platform/research.ts';
 import {serializeGrid} from '../src/modules/annotation/format.ts';
+import {LocalAssets,MemoryAssetDatabase} from '../src/platform/local-assets.ts';
 
-test('M12 server save resumes partial uploads and retries a lost finalize response without duplicate versions',async()=>{
+test('M12 local save retries a lost storage receipt without uploading or duplicating versions',async()=>{
  const original=serializeGrid({xmin:0,xmax:2,tiers:[{name:'words',intervals:[{xmin:0,xmax:2,text:'原始'}]}]}),sourceBytes=new TextEncoder().encode(original).buffer;
  const source={id:'source',project_id:'project',name:'a.TextGrid',state:'ready',size_bytes:sourceBytes.byteLength,sha256:await sha256(sourceBytes),created_at:0,expires_at:9999999999};
  const uploads=new Map<string,any>();let metadataWhileUploading=0,failFinalize=true,blocks=0;
@@ -23,11 +24,13 @@ test('M12 server save resumes partial uploads and retries a lost finalize respon
   if(url.endsWith('assets/saved')){metadataWhileUploading++;return json({detail:'asset_unavailable'},410);}
   throw Error('Unexpected request '+url);
  };
- const files=serverFiles('owner','project',()=>assert.fail('unexpected account change'),()=> 'csrf');
+ class LostReceipt extends MemoryAssetDatabase {drop=true;override async put(bucket:any,value:any){await super.put(bucket,value);if(this.drop&&bucket==='files'&&value.name.includes('_自动保存')){this.drop=false;throw Error('injected lost response');}}}
+ const database=new LostReceipt(),local=new LocalAssets('owner','project',database);
+ const files=serverFiles('owner','project',()=>assert.fail('unexpected account change'),()=> 'csrf',database);
  try{
   const port=files.annotation!,target=await port.target({id:'wave',name:'a.wav',size:1,kind:'audio'},'textgrid');
   const body={target:target.id,source:{id:source.id,sha256:source.sha256},text:original.replace('原始','网页 æ')};
   await assert.rejects(port.save(body),/lost response/);const result=await port.save(body);
-  assert.equal(uploads.size,1);assert.equal(metadataWhileUploading,0);assert.equal(blocks,1);assert.equal(result.sha256,await sha256(new TextEncoder().encode(body.text).buffer));
+  assert.equal(uploads.size,0);assert.equal(metadataWhileUploading,0);assert.equal(blocks,0);assert.equal((await local.list()).filter(f=>f.name.includes('_自动保存')).length,1);assert.equal(result.sha256,await sha256(new TextEncoder().encode(body.text).buffer));
  }finally{files.dispose();globalThis.fetch=previous;}
 });

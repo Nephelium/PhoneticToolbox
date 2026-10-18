@@ -6,9 +6,9 @@ import {localStoragePort} from '../src/platform/storage.ts';
 
 async function connect(t:TestContext){
   let ready:(id:string,raw:string)=>void=()=>{};
-  const requests:{id:string;op:string}[]=[];
+  const requests:{id:string;op:string}[]=[],nativeRequests:Record<string,string>[]=[];
   const bridge={
-    invoke(_raw:string,callback:(raw:string)=>void){callback(JSON.stringify({ok:true,value:{kind:'desktop',session:'test',api_version:'1.1.0',tasks:true}}));},
+    invoke(raw:string,callback:(raw:string)=>void){const body=JSON.parse(raw);nativeRequests.push(body);const value=body.op==='cache_location'?{path:'D:/工具 缓存/PhoneticToolbox-cache',custom:true,legacy_path:null}:body.op==='open_cache_directory'?{opened:true}:{kind:'desktop',session:'test',api_version:'1.1.0',tasks:true};callback(JSON.stringify({ok:true,value}));},
     previewReady:{connect(){}},
     taskReady:{connect(callback:typeof ready){ready=callback;}},
     task(id:string,raw:string){const {op}=JSON.parse(raw);if(op==='m05_catalog')ready(id,JSON.stringify({ok:true,value:{available:false}}));else requests.push({id,op});},
@@ -17,8 +17,16 @@ async function connect(t:TestContext){
   Object.defineProperty(globalThis,'window',{configurable:true,value:{qt:{webChannelTransport:{}},QWebChannel:class{constructor(_transport:unknown,callback:(value:unknown)=>void){callback({objects:{files:bridge}});}}}});
   t.after(()=>{if(previous)Object.defineProperty(globalThis,'window',previous);else Reflect.deleteProperty(globalThis,'window');});
   await initializePlatform();
-  return {requests,reply:(id:string,value:unknown)=>ready(id,JSON.stringify({ok:true,value})),fail:(id:string)=>ready(id,JSON.stringify({ok:false,error:'清理服务已断开。'}))};
+  return {requests,nativeRequests,reply:(id:string,value:unknown)=>ready(id,JSON.stringify({ok:true,value})),fail:(id:string)=>ready(id,JSON.stringify({ok:false,error:'清理服务已断开。'}))};
 }
+
+test('cache location and open use native-owned directories without sending a filesystem path',async t=>{
+  const channel=await connect(t),port=localStoragePort();
+  assert.equal((await port.cacheLocation!()).path,'D:/工具 缓存/PhoneticToolbox-cache');
+  assert.deepEqual(await port.openCacheDirectory!(),{opened:true});
+  await port.openCacheDirectory!(true);
+  assert.deepEqual(channel.nativeRequests.slice(-3),[{op:'cache_location'},{op:'open_cache_directory',purpose:'current'},{op:'open_cache_directory',purpose:'legacy'}]);
+});
 
 test('cleanup waits beyond five minutes and serializes refresh until native completion',async t=>{
   t.mock.timers.enable({apis:['setTimeout']});

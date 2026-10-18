@@ -17,6 +17,7 @@ class LpcTaskConfig(WireModel):
     amp_min_db: float = Field(default=-5., ge=-200, le=100)
     amp_max_db: float = Field(default=35., ge=-200, le=100)
     dynamic_y: bool = False
+    analysis_channel: int | None = Field(default=None, ge=0, le=7)
     tier_name: str | None = Field(default=None, min_length=1, max_length=180)
     font: FigureFontSnapshot = Field(default_factory=FigureFontSnapshot)
 
@@ -25,6 +26,13 @@ class LpcTaskConfig(WireModel):
         if self.roi_start >= self.roi_end or self.amp_min_db >= self.amp_max_db:
             raise ValueError('ROI and display bounds must increase')
         return self
+
+    def analysis_snapshot(self):
+        """Keep pre-channel requests byte-compatible for idempotency hashes."""
+        values = self.model_dump()
+        if self.analysis_channel is None:
+            values.pop('analysis_channel')
+        return values
 
 
 class LpcRequest(WireModel):

@@ -41,7 +41,8 @@ def main():
             payload=external/'payload';payload.mkdir();shutil.copyfile(executable,payload/executable.name)
             assert digest(executable)==digest(payload/executable.name);executable=payload/executable.name
         distribution=DistributionReader(executable)
-        cache=profile/'PhoneticToolbox/v3/startup-cache'
+        from portable_cache_qa import seed_portable_profile
+        cache=seed_portable_profile(profile)/'startup-cache'
         native_paths=[str(cache/family/value['id'][:32]/name) for family,value in distribution.cache['components'].items() for name in value['files'] if name.endswith(('.pyd','.dll'))]
         assert max(map(len,native_paths))<260, 'QA profile is too deep for native DLL loading'
         # The environment owns both application data and restoration cache.

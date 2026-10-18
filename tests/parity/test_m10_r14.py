@@ -8,7 +8,10 @@ from phonetic_core.vocal_tract.engine import Engine
 def test_dense_sections_and_blade_material_station():
     e=Engine(resource_dir=Path(__file__).resolve().parents[2]/'resources/vocal_tract/native')
     try:
+        e.set_section_count(257)
         p=e.presets['a'].copy();p[9]=-2.1;p[10]=1.5;p[11]=.25;p[12]=2.25;p[13]=-1.3
+        # Begin above the current support contact so +/- 0.16 cm are feasible.
+        p[13]=e.snapshot(p)['limited'][13]+.3
         s=e.snapshot(p)
         assert len(s['centerline'])==len(s['airway_sections'])==257
         assert s['section']==128
@@ -23,7 +26,8 @@ def test_dense_sections_and_blade_material_station():
             q=p.copy();q[idx]+=.16*direction;t=e.snapshot(q);delta=anchor(t)-base
             assert .07<direction*delta[idx-12]<.15
             np.testing.assert_array_equal(s['meshes'][3]['vertices'],t['meshes'][3]['vertices'])
-        tip=np.asarray(s['contours']['tongue'][:33])
+        p[13]=-1.3  # Original curled-cap fixture, separate from free blade motion.
+        tip=np.asarray(e.snapshot(p)['contours']['tongue'][:33])
         # A model-thickness acceptance bound, not an anatomical population claim.
         y=p[11];hits=[]
         for a,b in zip(tip,tip[1:]):

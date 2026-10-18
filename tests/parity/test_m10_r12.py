@@ -19,16 +19,25 @@ def dental(s):
 
 
 def test_blade_depresses_continuously_without_moving_teeth(engine):
-    e=engine;p=e.presets['a'].copy();base=e.snapshot(p);last=None
+    e=engine;p=e.presets['a'].copy();base=e.snapshot(p);last=None;last_y=p[13];contact=None
     for y in np.linspace(p[13],-2.5,21):
         p[13]=float(y);s=e.snapshot(p)
-        assert s['limited'][13]==pytest.approx(y,abs=1e-8)
+        actual=s['limited'][13]
+        # R17 introduced a floor/support contact. R19 widens its free range;
+        # requests past the anatomical boundary must saturate, not penetrate it.
+        assert y-1e-8<=actual<=last_y+1e-8
+        if actual>y+1e-8:
+            if contact is None:contact=actual
+            assert actual==pytest.approx(contact,abs=1e-8)
+        else:assert actual==pytest.approx(y,abs=1e-8)
+        last_y=actual
         np.testing.assert_array_equal(dental(s),dental(base))
         assert s['limited'][8:12]==pytest.approx(base['limited'][8:12],abs=1e-8)
         tongue=np.array(s['contours']['tongue'][:34])
         if last is not None:assert np.max(np.linalg.norm(tongue-last,axis=1))<.12
         last=tongue
     assert not np.allclose(s['tube_areas'],base['tube_areas'])
+    assert base['limited'][13]-last_y>.6 and contact is not None
     tube=e.prepare_tube(p)
     np.testing.assert_allclose(tube['areas'],s['tube_areas'],atol=5.1e-7,rtol=0)
     assert np.isfinite(s['transfer_db']).all()

@@ -65,6 +65,13 @@ class TaskBridge:
 
     def invoke(self,body):
         op=body.get('op')
+        if op in ('cache_candidates','clean_cache_candidate'):
+            from .legacy_cache import inspect_candidates, clean_candidate
+            try:
+                if op=='cache_candidates':return inspect_candidates()
+                if set(body)-{'op','id','confirmed'}:raise ValueError('不支持的缓存清理请求。')
+                return clean_candidate(body.get('id'),body.get('confirmed'))
+            except (OSError,ValueError) as exc:raise FileAccessError(str(exc)) from None
         if op=='m09_check_python':return self.m09.check(body.get('grant'))
         if op=='m09_vocoder_status':return self.service.get('/api/v1/jobs/spec2wav/vocoder')
         if op=='m09_vocoder_download':

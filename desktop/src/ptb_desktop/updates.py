@@ -188,14 +188,16 @@ class Release:
 
 
 class UpdateService:
-    def __init__(self, *, current_version=None, data_root=None, transport=None,
+    def __init__(self, *, current_version=None, data_root=None, state_root=None, transport=None,
                  clock=time.time, monotonic=time.monotonic, system_country=_system_country,
                  check_interval=CHECK_INTERVAL, package_kind='portable', apply_handler=None):
         if current_version is None:
             from . import __version__
             current_version = __version__
         self.current = SemVer(current_version)
-        self.root = Path(data_root) if data_root is not None else user_data_root() / 'updates'
+        from .cache_location import update_directory
+        self.root = Path(data_root) if data_root is not None else update_directory()
+        self.state_root = Path(state_root) if state_root is not None else (self.root if data_root is not None else user_data_root() / 'updates')
         self.transport = transport or HttpsTransport()
         self.clock, self.monotonic, self.system_country = clock, monotonic, system_country
         self.check_interval = check_interval
@@ -213,7 +215,7 @@ class UpdateService:
         self._maintenance_stop = threading.Event()
         self._maintenance_thread = None
         try:
-            state = json.loads((self.root / 'state.json').read_text(encoding='utf-8'))
+            state = json.loads((self.state_root / 'state.json').read_text(encoding='utf-8'))
             self.state = state if isinstance(state, dict) else {}
         except (OSError, ValueError):
             self.state = {}
@@ -263,7 +265,7 @@ class UpdateService:
             raise UpdateError('REQUEST_INVALID', '更新设置无效。')
         with self._lock:
             self.state.update(value)
-            _atomic_json(self.root / 'state.json', self.state)
+            _atomic_json(self.state_root / 'state.json', self.state)
         return self.preferences()
 
     def _read(self, url, *, purpose, limit=2 * 1024 ** 2, timeout=8, cancel=None):
@@ -482,7 +484,7 @@ class UpdateService:
                 should_prompt = bool(candidate and (manual or type(prompted) not in (int, float) or now - prompted < 0 or now - prompted >= PROMPT_INTERVAL))
                 self.state['lastCheck'] = {'key': key, 'time': now}
                 self._startup_checked.add(key)
-                _atomic_json(self.root / 'state.json', self.state)
+                _atomic_json(self.state_root / 'state.json', self.state)
             result = {'status': status, 'currentVersion': self.current.value, 'channel': channel,
                       'checkedAt': now, 'region': region, 'preferredSource': preferred,
                       'sources': results, 'candidate': candidate, 'shouldPrompt': should_prompt,
@@ -501,7 +503,7 @@ class UpdateService:
             if not isinstance(self.state.get('prompts'), dict):
                 self.state['prompts'] = {}
             self.state['prompts'][release[0].version.value] = self.clock()
-            _atomic_json(self.root / 'state.json', self.state)
+            _atomic_json(self.state_root / 'state.json', self.state)
         return {'acknowledged': True}
 
     def download(self, release_id, *, package_kind=None, confirmed=False, cancel=None, progress=None):

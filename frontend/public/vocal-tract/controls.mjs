@@ -17,7 +17,7 @@ export function moveControl(meta,baseline,name,dx,dy){
   // controls. Compensate that gain when dragging the surface attachment.
   if(name==='blade'){dx*=1.6;dy*=1.6;}
   for(const [handle,x,y] of [['tongue','TCX','TCY'],['tip','TTX','TTY'],['blade','TBX','TBY'],['root','TRX','TRY'],['hyoid','HX','HY']])if(name===handle){set(x,get(x)+dx);set(y,get(y)+dy);}
-  if(name.includes('lip')){set('LP',get('LP')+dx*.65);set('LD',get('LD')+dy*(name==='upper_lip'?2:-2));}
+  if(name.includes('lip')){const shape=[...(baseline.lip_shape??[0,0,0,0])],start=name==='upper_lip'?0:2;for(const [k,d] of [[start,dx],[start+1,dy]]){const [lo,hi]=meta.lip_shape_limits[k],v=shape[k]+d;shape[k]=Math.max(lo,Math.min(hi,v));limited ||= shape[k]!==v;}return {params:next,lip_shape:shape,limited};}
   if(name==='velum'){set('VO',get('VO')-dy*.6);set('VS',get('VS')+dx*.2);}
   if(name.startsWith('side')&&dy!==0){
     const key='TS'+name.slice(-1);
@@ -36,8 +36,8 @@ export function moveControl(meta,baseline,name,dx,dy){
   }
   return {params:next,limited};
 }
-const equal=(a,b)=>JSON.stringify(a.tongue_shape??[0,0,0,0])===JSON.stringify(b.tongue_shape??[0,0,0,0])&&(a.larynx_height??0)===(b.larynx_height??0)&&(a.manual_root??false)===(b.manual_root??false)&&a.preset===b.preset&&(a.lip_width??1)===(b.lip_width??1)&&(a.f0??150)===(b.f0??150)&&JSON.stringify(a.source||null)===JSON.stringify(b.source||null)&&a.params.every((v,i)=>Math.abs(v-b.params[i])<1e-8);
-const copy=s=>({...s,params:[...s.params],...(s.tongue_shape?{tongue_shape:[...s.tongue_shape]}:{}),...(s.source?{source:{...s.source}}:{})});
+const equal=(a,b)=>JSON.stringify(a.lip_shape??[0,0,0,0])===JSON.stringify(b.lip_shape??[0,0,0,0])&&JSON.stringify(a.tongue_shape??[0,0,0,0])===JSON.stringify(b.tongue_shape??[0,0,0,0])&&(a.larynx_height??0)===(b.larynx_height??0)&&(a.manual_root??false)===(b.manual_root??false)&&a.preset===b.preset&&(a.lip_width??1)===(b.lip_width??1)&&(a.f0??150)===(b.f0??150)&&JSON.stringify(a.source||null)===JSON.stringify(b.source||null)&&a.params.every((v,i)=>Math.abs(v-b.params[i])<1e-8);
+const copy=s=>({...s,params:[...s.params],lip_shape:[...(s.lip_shape??[0,0,0,0])],...(s.tongue_shape?{tongue_shape:[...s.tongue_shape]}:{}),...(s.source?{source:{...s.source}}:{})});
 export class PoseHistory{
   constructor(limit=80){this.limit=limit;this.past=[];this.future=[];this.start=null;}
   begin(state){if(!this.start)this.start=copy(state);}

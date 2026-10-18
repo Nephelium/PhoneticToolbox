@@ -110,3 +110,28 @@ def test_nonblank_grid_outside_audio_still_rejected():
     raw=wav(np.random.default_rng(42).normal(size=8000))
     with pytest.raises(AcousticFailure,match='lpc_textgrid_range'):
         prepare(raw,{'roi_start':.05,'roi_end':.15},textgrid=extended_grid('越界标签'))
+
+
+@pytest.mark.parametrize('channel', [None, 0, 1])
+def test_explicit_analysis_channel_and_reference_share_exact_roi(channel):
+    from phonetic_core.lpc import LPCConfig, compute_spectrum, mono_samples
+    source = np.random.default_rng(44).integers(-9000, 9000, size=(3200, 2), dtype=np.int16)
+    source[:, 1] += 12000
+    config = dict(roi_start=.01001, roi_end=.08001, analysis_channel=channel)
+    bundle = unpack_bundle(prepare(wav(source), config), 8_000_000)
+    files = dict(zip([f['name'] for f in bundle.manifest['files']], bundle.payloads))
+    metadata = json.loads(files['lpc.ptb.json'])
+    selected = source[160:1280]
+    expected = mono_samples(selected if channel is None else selected[:, channel])
+    _, actual = wavfile.read(io.BytesIO(files['lpc_AUDIO.wav']))
+    np.testing.assert_array_equal(actual, expected)
+    np.testing.assert_array_equal(metadata['spectrum']['magnitude_db'], compute_spectrum(expected, 16000, LPCConfig()).magnitude_db)
+    fft = metadata['reference_spectrum']
+    assert len(fft['frequencies_hz']) == 1025 and fft['frequencies_hz'][-1] == 8000
+    assert fft['pre_emphasis'] == .97 and fft['window'] == 'hamming'
+    assert metadata['config']['analysis_channel'] == channel
+
+
+def test_missing_analysis_channel_is_rejected():
+    with pytest.raises(AcousticFailure, match='lpc_invalid_channel'):
+        prepare(wav(np.ones((1600, 2))), dict(roi_end=.1, analysis_channel=2))

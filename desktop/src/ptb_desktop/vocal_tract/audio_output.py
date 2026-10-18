@@ -19,8 +19,8 @@ class LiveAudio:
     def __init__(self,engine,*,playback_allowed=False,config_path=None):
         # Tests can explicitly prohibit all physical-device access.
         self.playback_allowed=playback_allowed
-        self.engine=engine;self.params=engine.params.copy();self.f0=150.;self.volume=.8;self.lip_width=1.;self.larynx_height=0.;self.tongue_shape=[0.]*4;self.tube=None
-        self.source=None;self.gain_db=0.
+        self.engine=engine;self.params=engine.params.copy();self.f0=engine.default_f0;self.volume=.8;self.lip_width=1.;self.larynx_height=0.;self.tongue_shape=[0.]*4;self.lip_shape=[0.]*4;self.tube=None
+        self.source=None;self.gain_db=0.;self.pitch_gain=1.
         self.output_history=OutputHistory(engine.sr)
         devices=output_devices() if playback_allowed else []
         # User explicitly chose the built-in speakers on 2026-09-08.
@@ -66,7 +66,9 @@ class LiveAudio:
             if self.device_key not in [d['id'] for d in output_devices()]:raise ValueError('输出设备已断开，请选择其他设备')
             self.buffer=buffer;self.envelope=envelope;self.mode=mode;self.active=True;self.error=None;self.heartbeat=time.monotonic();self._reset_stats();self.clock_start=None;self.completed=False;self.last_position=0.
             self.output_history.reset()
-            if buffer is None:self.tube=self.engine.prepare_tube(self.params,self.lip_width,self.larynx_height,self.tongue_shape)
+            if buffer is None:
+                self.tube=self.engine.prepare_tube(self.params,self.lip_width,self.larynx_height,self.tongue_shape,self.lip_shape)
+                self.pitch_gain=self.engine.pitch_level_gain(self.tube,self.f0,self.source)
             self.thread=threading.Thread(target=self._run,daemon=True);self.thread.start()
 
     def stop(self):
@@ -81,7 +83,7 @@ class LiveAudio:
             if not self.playback_allowed:raise PermissionError('Audio output is locked')
             device=next(d for d in output_devices() if d['id']==self.device_key)
             glottis=lambda:self.engine.glottis(self.f0,source=self.source) if self.source is not None else self.engine.glottis(self.f0)
-            n=960;offset=0;g=glottis();tube=self.tube
+            n=960;offset=0;g=glottis();tube=self.tube;pitch_gain=self.pitch_gain
             if self.buffer is None:
                 with self.engine.lock:self.engine.reset_tube(tube,g)
             # VTL produces 48 kHz PCM. A shared WASAPI endpoint may run at
@@ -97,7 +99,9 @@ class LiveAudio:
                         target=self.tube;g=glottis()
                         tube={k:(target[k] if k=='articulators' else v+.4*(target[k]-v)) for k,v in tube.items()}
                         with self.engine.lock:block=self.engine.block_tube(tube,g,n)
-                        block=block*10**((self.source or {}).get('audition_gain_db',0)/20)
+                        target_gain=self.pitch_gain
+                        block=block*np.linspace(pitch_gain,target_gain,n)*10**((self.source or {}).get('audition_gain_db',0)/20)
+                        pitch_gain=target_gain
                         envelope=attack_envelope(self.stats['generated_samples'],n,self.engine.sr)
                     else:
                         if offset>=len(self.buffer):ended=True;break

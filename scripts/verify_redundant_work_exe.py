@@ -25,6 +25,8 @@ def main():
         profile, temp, library = scratch/'profile', scratch/'temp', scratch/'library'
         for folder in (profile, temp, library):
             folder.mkdir()
+        from portable_cache_qa import seed_portable_profile
+        seed_portable_profile(profile)
         writer = PdfWriter()
         for _ in range(4):
             writer.add_blank_page(width=612, height=792)
@@ -32,7 +34,7 @@ def main():
             writer.write(stream)
         data = profile/'PhoneticToolbox/v3'
         for folder in ('papers', 'updates'):
-            (data/folder).mkdir(parents=True)
+            (data/folder).mkdir(parents=True,exist_ok=True)
         write_json(data/'papers/preferences.json', dict(autoReceive=False, libraryRoot=str(library), checkIntervalHours=6))
         write_json(data/'updates/state.json', dict(autoCheck=False))
         with socket.socket() as available:

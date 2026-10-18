@@ -5,6 +5,7 @@ import {planeSegments,stitch,oralMesh,connectedAirway,nasalOutlet,sectionPaths,a
 import {registerNose,velumModel} from './anatomy.mjs';
 import {subtractTeeth} from './rigid-contact.mjs';
 import {bladeSurfacePoint,surfacePoint} from './controls.mjs';
+import {installModelPinch} from './model-pinch.mjs';
 const NS='http://www.w3.org/2000/svg';
 const el=(name,attrs={})=>{const e=document.createElementNS(NS,name);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);return e;};
 const colors={upper_cover:'#c6a28e',lower_cover:'#c6a28e',upper_teeth:'#f5edda',lower_teeth:'#f5edda',upper_lip:'#bf757b',lower_lip:'#bf757b',tongue:'#c58b8c',uvula:'#b07783',epiglottis:'#b98b80'};
@@ -26,6 +27,11 @@ export class VocalTractViewer{
     this.floorAnchor=new THREE.Mesh(new THREE.BoxGeometry(.10,.10,.10),new THREE.MeshBasicMaterial({color:0x327d6d,depthTest:false}));this.floorAnchor.renderOrder=12;this.scene.add(this.floorAnchor);
     this.floorLabel=document.createElement('span');this.floorLabel.textContent='口底附着';this.controlLabels.append(this.floorLabel);
     this.valve=new THREE.Mesh(new THREE.CircleGeometry(1,40),new THREE.MeshStandardMaterial({color:0xc1868b,side:THREE.DoubleSide,roughness:.7}));this.valve.rotation.x=Math.PI/2;this.valve.userData.organ='velum';this.scene.add(this.valve);
+    installModelPinch(this.svg,{
+      begin:center=>{this.panning=null;this.svg.classList.remove('panning');if(this.dragging){this.dragging=null;this.onEnd();}this.pinchStart={zoom:this.zoom,anchor:this.svgPoint(center)};},
+      move:center=>{const d=this.pinchStart;if(!d)return;this.zoom=Math.max(.65,Math.min(2.8,d.zoom*center.scale));this.draw2D();const after=this.svgPoint(center);this.pan=[this.pan[0]+d.anchor[0]-after[0],this.pan[1]+d.anchor[1]-after[1]];this.draw2D();},
+      end:()=>{this.pinchStart=null;}
+    });
     this.svg.addEventListener('pointerdown',e=>{
       if(!this.state)return;
       const h=e.target.closest('[data-handle]');
@@ -40,6 +46,13 @@ export class VocalTractViewer{
     });
     for(const event of ['pointerup','pointercancel','lostpointercapture'])this.svg.addEventListener(event,()=>{this.panning=null;this.svg.classList.remove('panning');if(this.dragging){this.dragging=null;this.onEnd();}});
     this.svg.addEventListener('wheel',e=>{e.preventDefault();const before=this.svgPoint(e);this.zoom=Math.max(.65,Math.min(2.8,this.zoom*(e.deltaY<0?1.08:.925)));this.draw2D();const after=this.svgPoint(e);this.pan=[this.pan[0]+before[0]-after[0],this.pan[1]+before[1]-after[1]];this.draw2D();},{passive:false});
+    installModelPinch(this.renderer.domElement,{
+      begin:()=>{if(this.dragging3D){this.dragging3D=null;this.onEnd();}this.orbit.enabled=false;this.pinch3D={target:this.orbit.target.clone(),offset:this.camera.position.clone().sub(this.orbit.target)};},
+      move:point=>{const d=this.pinch3D;if(!d)return;this.camera.position.copy(d.offset).setLength(Math.max(this.orbit.minDistance,Math.min(this.orbit.maxDistance,d.offset.length()/Math.max(.01,point.scale)))).add(d.target);this.orbit.update();this.needsRender=true;},
+      // OrbitControls may own the first pointer. Let its end event clear that
+      // pointer while the pinch handler prevents any further parameter edits.
+      propagateEnd:true,end:()=>{this.pinch3D=null;this.orbit.enabled=true;}
+    });
     const ray=e=>{const r=this.renderer.domElement.getBoundingClientRect();this.raycaster.setFromCamera(new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1),this.camera);};
     this.renderer.domElement.addEventListener('pointerdown',e=>{if(!this.state||this.playing)return;ray(e);
       // Pick in screen space so targets remain usable at every zoom level.
@@ -70,7 +83,7 @@ export class VocalTractViewer{
   reset(){this.zoom=1;this.pan=[0,0];this.orbit.target.set(1,this.focused?-.1:4,0);this.camera.position.set(...(this.focused?[12,4.3,25.5]:[25,15,40]));this.orbit.update();this.draw2D();}
   resize(){const w=this.el.clientWidth,h=this.el.clientHeight;if(!w||!h)return;if(this.width!==w||this.height!==h){this.width=w;this.height=h;this.renderer.setSize(w,h,false);this.camera.aspect=w/h;this.camera.updateProjectionMatrix();this.needsRender=true;}this.svg.style.display=this.sagittal?'block':'none';this.renderer.domElement.style.display=this.sagittal?'none':'block';this.controlLabels.hidden=this.sagittal;this.draw2D();}
   svgPoint(e){const p=this.svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(this.svg.getScreenCTM().inverse());return [q.x,-q.y];}
-  dragBaseline(name){const p=[...this.state.params];p.larynx_height=this.state.larynx_height??0;p.tongue_shape=[...(this.state.tongue_shape??[0,0,0,0])];const keys={tongue:['TCX','TCY'],tip:['TTX','TTY'],blade:['TBX','TBY'],root:['TRX','TRY']}[name]||[];for(const key of keys){const i=this.metadata.parameters.findIndex(m=>m.name===key);p[i]=this.state.limited[i];}return p;}
+  dragBaseline(name){const p=[...this.state.params];p.larynx_height=this.state.larynx_height??0;p.tongue_shape=[...(this.state.tongue_shape??[0,0,0,0])];p.lip_shape=[...(this.state.lip_shape??[0,0,0,0])];const keys={tongue:['TCX','TCY'],tip:['TTX','TTY'],blade:['TBX','TBY'],root:['TRX','TRY']}[name]||[];for(const key of keys){const i=this.metadata.parameters.findIndex(m=>m.name===key);p[i]=this.state.limited[i];}return p;}
   handles(){
     const s=this.state,idx=n=>this.metadata.parameters.findIndex(p=>p.name===n),xy=(x,y)=>[s.limited[idx(x)],s.limited[idx(y)],.06];
     const items=[{name:'surface',label:'舌面',p:[...surfacePoint(s),.06],organ:'tongue',shapeIndex:0},{name:'belly',label:'舌底',p:[...s.tongueBelly,.06],organ:'tongue',shapeIndex:2},{name:'tongue',label:'舌背',p:xy('TCX','TCY'),key:'TCX',organ:'tongue'},{name:'blade',label:'舌叶',p:[...bladeSurfacePoint(s),.06],key:'TBX',organ:'tongue'},{name:'root',label:'舌根',p:xy('TRX','TRY'),key:'TRX',organ:'tongue'},{name:'hyoid',label:'舌骨',p:[...s.contours.lower_cover[4],.06],key:'HY',organ:'tongue'},{name:'tip',label:'舌尖',p:xy('TTX','TTY'),key:'TTX',organ:'tongue'},
@@ -127,7 +140,7 @@ export class VocalTractViewer{
       layer.append(el('path',{d:airD,fill:'none',stroke:'#72a394','stroke-width':.035,'stroke-dasharray':'.09 .06','clip-path':'url(#nasalReferenceClip)',mask:'url(#sectionOutsideTissue)','data-role':'nasal-reference','data-registration':'nasal/3','data-section-transition':'oral 0 mm to nasal +5 mm'}));
     }
     for(const pts of [c.upper_cover.slice(0,8),c.upper_cover.slice(13),c.lower_cover])this.add(layer,pts,{fill:'none',stroke:'#c9a593','stroke-width':.14,opacity:tissueOpacity});
-    this.add(layer,s.tongueOutline,{fill:air?'#e9ded0':'url(#tongueFill)',stroke:this.selected==='tongue'?'#93595f':'#b98587','stroke-width':this.selected==='tongue'?.065:.035,'data-organ':'tongue','data-role':'tongue-section',mask:'url(#tongueOutsideTeeth)',cursor:'pointer'},true);
+    this.add(layer,s.tongueOutline,{fill:air?'#e9ded0':'url(#tongueFill)',stroke:this.selected==='tongue'?'#93595f':'#b98587','stroke-width':this.selected==='tongue'?.065:.035,'data-organ':'tongue','data-role':'tongue-section','stroke-linejoin':'round',mask:'url(#tongueOutsideTeeth)',cursor:'pointer'},true);
     if(this.selected==='tongue'){
       const anchor=c.lower_cover[s.tongue_floor_rib??12];
       layer.append(el('rect',{x:anchor[0]-px*3,y:-anchor[1]-px*3,width:px*6,height:px*6,fill:'#fffdf5',stroke:'#327d6d','stroke-width':px*1.2,'data-role':'tongue-floor-anchor'}));
@@ -165,8 +178,8 @@ export class VocalTractViewer{
     if(this.labels)for(const [label,p,offset] of [['硬腭',c.upper_cover[17],[.1,1]],['软腭 / 小舌',this.palate.tip,[-2.6,1.4]],['会厌',c.epiglottis.at(-1),[-2.2,-.5]],...(this.showTeeth?[['门齿截面',c.upper_teeth[2],[2.8,1.4]]]:[]),...(this.showNose?[['鼻腔参考 · 偏离中线 5 mm',[2,4.7],[1,1.4]]]:[])])this.annotation(layer,label,p,offset,px);
     const offsets={surface:[-.8,-.5],belly:[.6,1.0],tongue:[.25,.8],blade:[-.2,-.65],root:[-1.5,.1],hyoid:[-1.2,.5],tip:[.4,.7],upper_lip:[.6,-.35],lower_lip:[.6,.75],velum:[-2,.9],larynx:[.6,.1]};
     for(const item of this.handles().filter(p=>!p.side)){
-      const {name,label,p,key}=item,index=this.metadata.parameters.findIndex(m=>m.name===key),param=name==='larynx'?{min:-1,max:1}:item.shapeIndex!==undefined?{min:this.metadata.tongue_shape_limits[item.shapeIndex][0],max:this.metadata.tongue_shape_limits[item.shapeIndex][1]}:this.metadata.parameters[index];
-      const g=el('g',{'data-handle':name,role:'slider','aria-label':'拖动'+label,'aria-valuemin':param.min,'aria-valuemax':param.max,'aria-valuenow':name==='larynx'?s.larynx_height:item.shapeIndex!==undefined?s.tongue_shape[item.shapeIndex]:s.params[index],tabindex:0,class:'organ-handle',transform:'translate('+p[0]+' '+(-p[1])+')'});
+      const {name,label,p,key}=item,index=this.metadata.parameters.findIndex(m=>m.name===key),lipIndex=name==='upper_lip'?1:name==='lower_lip'?3:null,param=lipIndex!==null?{min:this.metadata.lip_shape_limits[lipIndex][0],max:this.metadata.lip_shape_limits[lipIndex][1]}:name==='larynx'?{min:-1,max:1}:item.shapeIndex!==undefined?{min:this.metadata.tongue_shape_limits[item.shapeIndex][0],max:this.metadata.tongue_shape_limits[item.shapeIndex][1]}:this.metadata.parameters[index];
+      const g=el('g',{'data-handle':name,role:'slider','aria-label':'拖动'+label,'aria-valuemin':param.min,'aria-valuemax':param.max,'aria-valuenow':lipIndex!==null?s.lip_shape[lipIndex]:name==='larynx'?s.larynx_height:item.shapeIndex!==undefined?s.tongue_shape[item.shapeIndex]:s.params[index],tabindex:0,class:'organ-handle',transform:'translate('+p[0]+' '+(-p[1])+')'});
       g.append(el('circle',{r:px*16,fill:'transparent'}),el('circle',{r:px*6,fill:'#fffdf5',stroke:'#327d6d','stroke-width':px*1.6}),el('circle',{r:px*2.5,fill:'#327d6d'}));
       if(this.labels){const [x,y]=offsets[name],text=el('text',{x,y,'font-size':px*11,fill:'#356f61','paint-order':'stroke',stroke:'#fffdf6','stroke-width':px*2});text.textContent=label;g.append(text);}layer.append(g);
       g.addEventListener('keydown',e=>{if(this.playing||!e.key.startsWith('Arrow'))return;e.preventDefault();this.onStart();const d=e.shiftKey?.2:.04;this.onDrag(name,e.key==='ArrowLeft'?-d:e.key==='ArrowRight'?d:0,e.key==='ArrowUp'?d:e.key==='ArrowDown'?-d:0,this.dragBaseline(name));this.onEnd();});

@@ -139,7 +139,10 @@ export function tongueEnvelope(state,{surface=true}={}){
     // turning back to the floor, also for a raised uncurled blade.
     const cx=a[0]+.14,dx=Math.max(b[0]+.12,front+.2);
     const c=[cx+curl*(a[0]+.38*(a[0]-prev[0])/length-cx),a[1]-.36+curl*(.36+.38*(a[1]-prev[1])/length),a[2]],d=[dx+curl*(Math.max(dx,front+.45)-dx),b[1]+.08,b[2]];
-    const point=[0,1,2].map(k=>u*u*u*a[k]+3*u*u*t*c[k]+3*u*t*t*d[k]+t*t*t*b[k]);
+    // Offset the visible resting boundary, not a hidden point below the floor.
+    // Otherwise several millimetres of input disappear before the belly moves.
+    const raw=[0,1,2].map(k=>u*u*u*a[k]+3*u*u*t*c[k]+3*u*t*t*d[k]+t*t*t*b[k]);
+    const point=constrainVentralLine([raw],floorMesh,state.meshes.find(m=>m.name==='lower_teeth'))[0];
     if(shape[2]||shape[3]){
       const weight=16*t*t*u*u,baseY=point[1];point[0]+=weight*shape[2];point[1]+=weight*shape[3];
       // Keep the adjustable underside below the actual dorsal meridian at

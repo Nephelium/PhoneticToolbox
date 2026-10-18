@@ -23,211 +23,6 @@
       "source_id": "PROJECT-SYNTHETIC-WAV"
     },
     {
-      "path": "frontend/public/vocal-tract/anatomy.mjs",
-      "sha256": "d0159cf0137e36ac5934b604f0f5b0c532663f27f47fec7bd8641dcbe1f715e5",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "frontend/public/vocal-tract/app.js",
-      "sha256": "efb90fb58e3e942f5061e1dfea95efd80f007fbeccfa5f16439cc013e260ab23",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "frontend/public/vocal-tract/assets/head.json",
-      "sha256": "7bc2cb61c9abdb043d62a4438aa11a18033b9426d704b5ac854f5498adfb11dd",
-      "source_id": "ASSET-HEAD"
-    },
-    {
-      "path": "frontend/public/vocal-tract/assets/nasal.json",
-      "sha256": "b256b400f7c2d6c77397f4d4f3b34e4b45e41dbd04c8df578cbb42a5ec8b57d9",
-      "source_id": "ASSET-NASAL"
-    },
-    {
-      "path": "frontend/public/vocal-tract/controls.mjs",
-      "sha256": "b1405240a664e622b8aa4aa6f71d0ac334e1322a5a67459434d65c306b102754",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "frontend/public/vocal-tract/desktop.css",
-      "sha256": "7e43a6284d1c0ad97b3bb5c0407f9051b417a14047718ec7f24061ce737fcb34",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "frontend/public/vocal-tract/geometry.mjs",
-      "sha256": "4fa29f3ff76dda0cbdf419a19580acbd7c83f828c41f9fb26d51304c914e1ef4",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "frontend/public/vocal-tract/index.html",
-      "sha256": "c3a01897b2a019e391b4956d08acebed267b5e199870bc396dfd55f5470563c3",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "frontend/public/vocal-tract/keyframes.js",
-      "sha256": "666d4c5de5573a30ff29b97f419105d9873bf962530737f9644e22f519c54147",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "frontend/public/vocal-tract/layout.js",
-      "sha256": "343c6949a3931b8e2d2f48f59c75a412e9bfd05ac04813efe29176bbb0e12e82",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "frontend/public/vocal-tract/monitor.js",
-      "sha256": "fe758e391fb36ce414a8e61d820e43f72462e1a185080188ab3a6d8675002248",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "frontend/public/vocal-tract/pitch.js",
-      "sha256": "c866cd4184c291e256dfc3a037d0aec42c00583415efa5e3f6a0d3abcb8336b1",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "frontend/public/vocal-tract/platform.js",
-      "sha256": "75e30a05751af8b103a2c8bb17113e072ea0ce6cd140e7f5261d24acd4fb0f33",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "frontend/public/vocal-tract/presets.js",
-      "sha256": "0d4d12bfa000a124e091905586ac12170ae1d1a3710f99d5696baf8cf2fad53d",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "frontend/public/vocal-tract/scene.js",
-      "sha256": "e94180edfc8e1e9a8096565d40707052d46b50e3646cb65f5946760051061575",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "frontend/public/vocal-tract/styles.css",
-      "sha256": "c29897860c0edb277b5629b6664713fda16a4abae933fd17e234b20e5bc20d87",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "frontend/public/vocal-tract/theme.js",
-      "sha256": "f0c024902e11d51309147f61b27b93f227c8874e29279a60f61b7b2e080bf879",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "frontend/public/vocal-tract/v3.css",
-      "sha256": "e78190a3383c2abea393d5da603203e4e497fd2e8adc24cde25035c6f392f473",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "frontend/public/vocal-tract/vendor/OrbitControls.js",
-      "sha256": "b97879c748170baadeb3fb84cea1ffdf4674e283dc06042f34e2acb95a76042c",
-      "source_id": "SRC-THREE"
-    },
-    {
-      "path": "frontend/public/vocal-tract/vendor/THREE-LICENSE.txt",
-      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601",
-      "source_id": "SRC-THREE"
-    },
-    {
-      "path": "frontend/public/vocal-tract/vendor/three.core.js",
-      "sha256": "eb077d2417f61d3e6d9264c317cabc4ea35769ed6b0ab533067292a550784c20",
-      "source_id": "SRC-THREE"
-    },
-    {
-      "path": "frontend/public/vocal-tract/vendor/three.module.js",
-      "sha256": "c8211c69345d2e9949dc7a8ac969380497aa0600a5a8ac6a459c8cd02dd9cb8a",
-      "source_id": "SRC-THREE"
-    },
-    {
-      "path": "frontend/public/vocal-tract/video.js",
-      "sha256": "4b207573882a402c831c1ee9b8d5ad421e80e6478000eeb0a0245d0f89bed699",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "frontend/public/vocal-tract/viewer.js",
-      "sha256": "e50b83cc2d8dd3fbf1a7c848eb740cf04e1bccf34c55b64e5affa255bc410af6",
-      "source_id": "PROJECT-M10"
-    },
-    {
-      "path": "resources/vocal_tract/bundle-manifest.json",
-      "sha256": "30e1b5f02d347257761505d06f95caf10cd143c7e970cf5af1a76bb6bc905101",
-      "source_id": "SRC-VTL"
-    },
-    {
-      "path": "resources/vocal_tract/native/geometry_p2.dll",
-      "sha256": "61d6ecf8f5dc15462a8c3b486f00902d702297dca56ed756537d76ba2e67131b",
-      "source_id": "SRC-VTL"
-    },
-    {
-      "path": "resources/vocal_tract/native/JD2.speaker",
-      "sha256": "fc118b8150e65eca4aa636800128c343df13d3724044ca54ed3682ca3be222ec",
-      "source_id": "SRC-VTL"
-    },
-    {
-      "path": "resources/vocal_tract/native/M01.speaker",
-      "sha256": "438ef8970384444464ddc0ccb82e349323583ab8f87eea70ba227144c8d665c8",
-      "source_id": "SRC-VTL"
-    },
-    {
-      "path": "resources/vocal_tract/native/VocalTractLabAnalysis.dll",
-      "sha256": "caaab296b4c2362ada1a5d94aaffe6c1804b3ed8279c04427bcca1ac348e2407",
-      "source_id": "SRC-VTL"
-    },
-    {
-      "path": "resources/vocal_tract/native/VocalTractLabApi.dll",
-      "sha256": "caaab296b4c2362ada1a5d94aaffe6c1804b3ed8279c04427bcca1ac348e2407",
-      "source_id": "SRC-VTL"
-    },
-    {
-      "path": "resources/vocal_tract/native/W02.speaker",
-      "sha256": "c4b6c1e7d147c9187ef3d246a9ca5f6a232d477ad2c7aec16466f6fdb9243f04",
-      "source_id": "SRC-VTL"
-    },
-    {
-      "path": "resources/vocal_tract/sources/build_geometry_prototype.py",
-      "sha256": "5410b30a2c03dbab6a6ac0132f77c38cc909a29e6160b2e226c2a2ba82b1b2a8",
-      "source_id": "SRC-VTL"
-    },
-    {
-      "path": "resources/vocal_tract/sources/geometry_bridge.cpp",
-      "sha256": "075475c365c62eafa1a89c436aebff548e0fda023733f84040bfc6185c963802",
-      "source_id": "SRC-VTL"
-    },
-    {
-      "path": "resources/vocal_tract/sources/M10-build.md",
-      "sha256": "b2a30fa415ee42000bca942d841c82ee44b9a1230d33aabece829917a1469c1e",
-      "source_id": "SRC-VTL"
-    },
-    {
-      "path": "resources/vocal_tract/sources/M10-geometric-readout.patch",
-      "sha256": "59ba89e071709285d1741c63ea8a7ecc7abdeb9ad1b85028e7fabd7b4231a911",
-      "source_id": "SRC-VTL"
-    },
-    {
-      "path": "resources/vocal_tract/sources/README.md",
-      "sha256": "56418e21990ae7046bb34dcaf4dbd5c7992f0425d861df33ee6740093bf3c48f",
-      "source_id": "SRC-VTL"
-    },
-    {
-      "path": "resources/vocal_tract/sources/VTL2.4-API-source.zip",
-      "sha256": "aa696bf4cf5c44cbd433304943aebb241e5ea3064b949daf5ea09f96567cff9b",
-      "source_id": "SRC-VTL"
-    },
-    {
-      "path": "resources/vocal_tract/sources.lock.json",
-      "sha256": "ff8069ddb910f4803d9cece4566b6f02098dadec9cbaf8dab5199642800b3743",
-      "source_id": "SRC-VTL"
-    },
-    {
-      "path": "resources/vocal_tract/THIRD_PARTY_NOTICES.md",
-      "sha256": "8340398bd81e248279c640c229f753ae9acfea626000bf2b2e4342a11d78c95e",
-      "source_id": "SRC-VTL"
-    },
-    {
-      "path": "resources/vocal_tract/VTL-LICENSE.txt",
-      "sha256": "230184f60bae2feaf244f10a8bac053c8ff33a183bcc365b4d8b876d2b7f4809",
-      "source_id": "SRC-VTL"
-    },
-    {
-      "path": "frontend/public/vocal-tract/fonts.js",
-      "source_id": "PROJECT-M10",
-      "sha256": "f2db3d10ce895c1d92cb287f97089d317202067bc5eedf66512001ebc04aa7a3"
-    },
-    {
       "path": "backend/src/ptb_worker/assets/DoulosSIL-Regular.ttf",
       "source_id": "ASSET-DOULOS",
       "sha256": "cc89b87c047bcc8dc00246398218bb6343e0f2372b153cf560c29a77f27068ef"
@@ -286,46 +81,6 @@
       "path": "frontend/public/m05/worker.js",
       "sha256": "bb3181c23f97f7c6ff87bfef21e720dca049b82fbb6ba348bc9401f5c4d852fc",
       "source_id": "PROJECT-M05"
-    },
-    {
-      "path": "frontend/public/vocal-tract/area-view.mjs",
-      "source_id": "PROJECT-M10",
-      "sha256": "6363051e3733b2bbb020049ca68c2be62ebb2dafb6692e74f41b4efe4d1520e8"
-    },
-    {
-      "path": "frontend/public/vocal-tract/section-view.mjs",
-      "source_id": "PROJECT-M10",
-      "sha256": "caf9692eb9e5a1a98cc8a1e8fe0f34bf40a308cbfcd5f2abc032281727b9d284"
-    },
-    {
-      "path": "resources/vocal_tract/sources/m10_r11_patch.py",
-      "source_id": "SRC-VTL",
-      "sha256": "7747724e1b71fd31268783dd1565bd83f54c9cf98678f5e7cbda3e5b2066efc0"
-    },
-    {
-      "path": "frontend/public/vocal-tract/surface-contact.mjs",
-      "source_id": "PROJECT-M10",
-      "sha256": "88f47a9e2cc8f3ff93e6326bf33c07809b4c6a41f30ae2bb4f7f2f77b7dff0ff"
-    },
-    {
-      "path": "frontend/public/vocal-tract/rigid-contact.mjs",
-      "source_id": "PROJECT-M10",
-      "sha256": "a07402e12410138093c2fe462625b83acc67ecad287b3e24e796caca97a2e86b"
-    },
-    {
-      "path": "resources/vocal_tract/sources/m10_r12_patch.py",
-      "source_id": "SRC-VTL",
-      "sha256": "6ab7dd630db53e873bf9dd8d9ccf19bc728b030e68c66a98503536a54c4d3739"
-    },
-    {
-      "path": "resources/vocal_tract/sources/m10_r13_patch.py",
-      "source_id": "SRC-VTL",
-      "sha256": "65e60dbfeb0ca41cdddd4c159f788c0c1458b9add400a97bbfd281b6c5e328e9"
-    },
-    {
-      "path": "resources/vocal_tract/sources/m10_r14_patch.py",
-      "source_id": "SRC-VTL",
-      "sha256": "db65aeca97cc36428ca1a5e468c6825d5c3606bdf77d7733b65087299cb1128d"
     },
     {
       "path": "frontend/public/manual/assets/software-only/m18-r2-20261008/m18-r2-reader-annotations-20261008.png",
@@ -393,21 +148,6 @@
       "sha256": "1e28e794f69875ecffb24b8a4c8d0d287bc731d6a08df218b3ae73582fca4e38",
       "origin": "project",
       "description": "Project-owned control/text selection behavior shared by the workbench and vocal-tract document."
-    },
-    {
-      "path": "resources/vocal_tract/sources/m10_r15_patch.py",
-      "source_id": "SRC-VTL",
-      "sha256": "2dad780dccea0b4f7ed1e0f2289927020c212d71aba9435d7d4652f3e42895ea"
-    },
-    {
-      "path": "frontend/public/vocal-tract/airway-mesh.mjs",
-      "source_id": "PROJECT-M10",
-      "sha256": "b8b2103d26833cc78f92f1360535dee6b7ee7a23fc7339b320290f20a1315edb"
-    },
-    {
-      "path": "resources/vocal_tract/sources/m10_r16_patch.py",
-      "source_id": "SRC-VTL",
-      "sha256": "413fb2847791afb5d3e22556cb1755e9770f7ff01317dc904970862b7f2b3a51"
     },
     {
       "path": "frontend/public/app-icons/catalog.json",
@@ -491,31 +231,6 @@
       "source_id": "WEBSITE-AUTHOR-NOTE"
     },
     {
-      "path": "frontend/public/vocal-tract/monitor-view.mjs",
-      "source_id": "PROJECT-M10",
-      "sha256": "b23528a43bd4ed13755f50226bee8c52d730415b901fbd00e7626a07f841e98b"
-    },
-    {
-      "path": "resources/vocal_tract/sources/m10_r17_patch.py",
-      "source_id": "SRC-VTL",
-      "sha256": "dc3f7f36581b1098cc5c2d986ade45e2a384aaa2e2211b3248ad12dcbbf1d473"
-    },
-    {
-      "path": "frontend/public/vocal-tract/floor-contact.mjs",
-      "source_id": "PROJECT-M10",
-      "sha256": "f087c28ca7bba80df04d1858cf1cb404c7731ceca5e161a60e7520877c8ade24"
-    },
-    {
-      "path": "resources/vocal_tract/sources/m10_r18_patch.py",
-      "source_id": "SRC-VTL",
-      "sha256": "832608c8fcc465eef681346f39d3928b0b68b7e0bf0f1242fbf954124132e5ee"
-    },
-    {
-      "path": "frontend/public/vocal-tract/default-presets.json",
-      "source_id": "PROJECT-M10",
-      "sha256": "ee929d3e800ff2081c540032852dde4a65364ad3b40ca2d341ad2723d3fe9d69"
-    },
-    {
       "path": "packages/phonetic_core/src/phonetic_core/spec2wav/data/parameters-v5.npz",
       "sha256": "e6edbf5c450fc08f4ff4c39d2828a15e24c4dd7286c619308c671ed4df7dffdc",
       "origin": "project",
@@ -533,11 +248,6 @@
       "source_id": "PROJECT-M16"
     },
     {
-      "path": "frontend/public/vocal-tract/presentation-metadata.json",
-      "sha256": "17c57ecacfc37dfe3886921e53496a4b2321e68b00813ca945344aa8a4a26a92",
-      "source_id": "PROJECT-M10"
-    },
-    {
       "path": "frontend/src/assets/ZCOOLKuaiLe-Regular.ttf",
       "sha256": "812a6fc1fe54b6d73a419245c32dfeba8aa33104d5be90d1cf6af082007cb71d",
       "source_id": "WEBSITE-ZCOOL-KUAILE"
@@ -546,6 +256,366 @@
       "path": "frontend/public/licenses/ZCOOL-OFL.txt",
       "sha256": "538078469839b4a2e7ad22bef4ebe41681a4e53749bb2a072144024f1d6d703d",
       "source_id": "WEBSITE-ZCOOL-KUAILE"
+    },
+    {
+      "path": "frontend/public/vocal-tract/airway-mesh.mjs",
+      "sha256": "b8b2103d26833cc78f92f1360535dee6b7ee7a23fc7339b320290f20a1315edb",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/anatomy.mjs",
+      "sha256": "d32c3df68a785d7d4225dd8a86593ae5f2f53f3bb338fa8ec69ac8345468b716",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/app.js",
+      "sha256": "2294ac37ec9900fdf444ab12b0517e4e4b453bc8ea90e16989b311b7720d8f6e",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/area-view.mjs",
+      "sha256": "6363051e3733b2bbb020049ca68c2be62ebb2dafb6692e74f41b4efe4d1520e8",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/articulation.mjs",
+      "sha256": "23a6194647190791ab57ab10ddb2226401caa0ef19435fabfbc19607097e00b6",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/assets/head.json",
+      "sha256": "7bc2cb61c9abdb043d62a4438aa11a18033b9426d704b5ac854f5498adfb11dd",
+      "source_id": "ASSET-HEAD"
+    },
+    {
+      "path": "frontend/public/vocal-tract/assets/nasal.json",
+      "sha256": "b256b400f7c2d6c77397f4d4f3b34e4b45e41dbd04c8df578cbb42a5ec8b57d9",
+      "source_id": "ASSET-NASAL"
+    },
+    {
+      "path": "frontend/public/vocal-tract/controls.mjs",
+      "sha256": "e821a3efb3d9ef5e65915faad933e5fa3cada4b1962427a18ad71cf8ee120617",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/default-presets.json",
+      "sha256": "ee929d3e800ff2081c540032852dde4a65364ad3b40ca2d341ad2723d3fe9d69",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/desktop.css",
+      "sha256": "7e43a6284d1c0ad97b3bb5c0407f9051b417a14047718ec7f24061ce737fcb34",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/features.js",
+      "sha256": "12b1ade963801ca97e52981ca301886c13b2da652f8073a4f07f0bd77c8981b9",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/floor-contact.mjs",
+      "sha256": "f087c28ca7bba80df04d1858cf1cb404c7731ceca5e161a60e7520877c8ade24",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/fonts.js",
+      "sha256": "f2db3d10ce895c1d92cb287f97089d317202067bc5eedf66512001ebc04aa7a3",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/geometry.mjs",
+      "sha256": "4fa29f3ff76dda0cbdf419a19580acbd7c83f828c41f9fb26d51304c914e1ef4",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/index.html",
+      "sha256": "02c4d02d828705c5eb4c5445908178e66a3621a8e874a9c3439de315683eb021",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/keyframes.js",
+      "sha256": "e9f46e26233c3d5a54bd8a19740d9e7a03088c17329b337e59b8fcb4b64c326e",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/layout.js",
+      "sha256": "343c6949a3931b8e2d2f48f59c75a412e9bfd05ac04813efe29176bbb0e12e82",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/model-pinch.mjs",
+      "sha256": "a08bdf2bc3148a3b4798ae358043f53450485dd37e3f8c2a0eb0d010c253f3d2",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/monitor-view.mjs",
+      "sha256": "b23528a43bd4ed13755f50226bee8c52d730415b901fbd00e7626a07f841e98b",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/monitor.js",
+      "sha256": "fe758e391fb36ce414a8e61d820e43f72462e1a185080188ab3a6d8675002248",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/pitch.js",
+      "sha256": "149e6bf43c90b8ff7a95edf246cddfe5a778995bbe627c5fc76eb2a7ddaf0d18",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/platform.js",
+      "sha256": "bfd6b12a1dff6185acf9ffac2e7a3551fa430ede5fdbdf990a5615ea179a3a60",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/presentation-metadata.json",
+      "sha256": "17c57ecacfc37dfe3886921e53496a4b2321e68b00813ca945344aa8a4a26a92",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/preset-pack.js",
+      "sha256": "0568f8fba673d9b6ac4a3dbd40e1fd13fcd9fa944bf3c7dc21db9fe85e6d8c12",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/presets.js",
+      "sha256": "95eda0b2e3a212c4f1b7ee1653fabc62375f6bc825af9031e32e588908b7a002",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/rigid-contact.mjs",
+      "sha256": "a07402e12410138093c2fe462625b83acc67ecad287b3e24e796caca97a2e86b",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/scene.js",
+      "sha256": "ad1c8e559f298fdb9e12a81e2fdde4c630d29d24766ffb41dc4d5731002717e9",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/section-view.mjs",
+      "sha256": "caf9692eb9e5a1a98cc8a1e8fe0f34bf40a308cbfcd5f2abc032281727b9d284",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/sequence-controls.js",
+      "sha256": "c53d7f5b8d0c576ce1044000926463510a502320556aa019dc30e8fbc99a9702",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/stop-editor.js",
+      "sha256": "d001259fa0b719a415f6887b9acd456dae54b94118e792a2f2194d2eef68d11d",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/styles.css",
+      "sha256": "c29897860c0edb277b5629b6664713fda16a4abae933fd17e234b20e5bc20d87",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/surface-contact.mjs",
+      "sha256": "88f47a9e2cc8f3ff93e6326bf33c07809b4c6a41f30ae2bb4f7f2f77b7dff0ff",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/theme.js",
+      "sha256": "f0c024902e11d51309147f61b27b93f227c8874e29279a60f61b7b2e080bf879",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/v3.css",
+      "sha256": "f34130892703b8afb1fd96d8adcf5cf5f8a5f8d1787c6d2c3e36be19fbec32d2",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/vendor/OrbitControls.js",
+      "sha256": "b97879c748170baadeb3fb84cea1ffdf4674e283dc06042f34e2acb95a76042c",
+      "source_id": "SRC-THREE"
+    },
+    {
+      "path": "frontend/public/vocal-tract/vendor/THREE-LICENSE.txt",
+      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601",
+      "source_id": "SRC-THREE"
+    },
+    {
+      "path": "frontend/public/vocal-tract/vendor/three.core.js",
+      "sha256": "eb077d2417f61d3e6d9264c317cabc4ea35769ed6b0ab533067292a550784c20",
+      "source_id": "SRC-THREE"
+    },
+    {
+      "path": "frontend/public/vocal-tract/vendor/three.module.js",
+      "sha256": "c8211c69345d2e9949dc7a8ac969380497aa0600a5a8ac6a459c8cd02dd9cb8a",
+      "source_id": "SRC-THREE"
+    },
+    {
+      "path": "frontend/public/vocal-tract/video.js",
+      "sha256": "4b207573882a402c831c1ee9b8d5ad421e80e6478000eeb0a0245d0f89bed699",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "frontend/public/vocal-tract/viewer.js",
+      "sha256": "e50b83cc2d8dd3fbf1a7c848eb740cf04e1bccf34c55b64e5affa255bc410af6",
+      "source_id": "PROJECT-M10"
+    },
+    {
+      "path": "resources/vocal_tract/bundle-manifest.json",
+      "sha256": "0ac0b7cf5153958c9db0116616724f611e62c39ff1f2497070894e771f9bb531",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/native/darwin-arm64/libgeometry_p2.dylib",
+      "sha256": "c446192c6bc57903ccdb4b98a8dec92d7fac3e5f8d6f819b9339ab0ab2672b92",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/native/darwin-arm64/libVocalTractLabAnalysis.dylib",
+      "sha256": "734493e0135f166c83a10decaf7132528b41452154572dcbc611d2ec6cf6b85f",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/native/darwin-arm64/libVocalTractLabApi.dylib",
+      "sha256": "c3c1d1b77d123e4ccdda64d66d69ca4e274a13ebf691a1cc7cc7c2892ab3dfaa",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/native/darwin-arm64/native-pair.json",
+      "sha256": "5e39c5839d76a84124fbc9ce7da0836bec13c0cec5b42afbaa4237ff9a8ed3b4",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/native/geometry_p2.dll",
+      "sha256": "3154c6a0673e33a2632cc11d9943c80268df6743fbcf930b8ae8115b5411689e",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/native/JD2.speaker",
+      "sha256": "fc118b8150e65eca4aa636800128c343df13d3724044ca54ed3682ca3be222ec",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/native/M01.speaker",
+      "sha256": "438ef8970384444464ddc0ccb82e349323583ab8f87eea70ba227144c8d665c8",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/native/VocalTractLabAnalysis.dll",
+      "sha256": "2d3f928b8fa33cb7dba4a577071c3a65e6219450805656ebba6fe623a89ba489",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/native/VocalTractLabApi.dll",
+      "sha256": "2d3f928b8fa33cb7dba4a577071c3a65e6219450805656ebba6fe623a89ba489",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/native/W02.speaker",
+      "sha256": "c4b6c1e7d147c9187ef3d246a9ca5f6a232d477ad2c7aec16466f6fdb9243f04",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/build_geometry_prototype.py",
+      "sha256": "5410b30a2c03dbab6a6ac0132f77c38cc909a29e6160b2e226c2a2ba82b1b2a8",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/geometry_bridge.cpp",
+      "sha256": "62757245394d6aac1999504bbe9bd88b765436ceff2624490b081bc38c2bacb1",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/M10-build.md",
+      "sha256": "0835cc1187f1a5ac74075093c63b0f6142d4ad169ba61fda4838bab72ef6ba61",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/M10-geometric-readout.patch",
+      "sha256": "59ba89e071709285d1741c63ea8a7ecc7abdeb9ad1b85028e7fabd7b4231a911",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r11_patch.py",
+      "sha256": "7747724e1b71fd31268783dd1565bd83f54c9cf98678f5e7cbda3e5b2066efc0",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r12_patch.py",
+      "sha256": "6ab7dd630db53e873bf9dd8d9ccf19bc728b030e68c66a98503536a54c4d3739",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r13_patch.py",
+      "sha256": "65e60dbfeb0ca41cdddd4c159f788c0c1458b9add400a97bbfd281b6c5e328e9",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r14_patch.py",
+      "sha256": "db65aeca97cc36428ca1a5e468c6825d5c3606bdf77d7733b65087299cb1128d",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r15_patch.py",
+      "sha256": "2dad780dccea0b4f7ed1e0f2289927020c212d71aba9435d7d4652f3e42895ea",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r16_patch.py",
+      "sha256": "413fb2847791afb5d3e22556cb1755e9770f7ff01317dc904970862b7f2b3a51",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r17_patch.py",
+      "sha256": "dc3f7f36581b1098cc5c2d986ade45e2a384aaa2e2211b3248ad12dcbbf1d473",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r18_patch.py",
+      "sha256": "832608c8fcc465eef681346f39d3928b0b68b7e0bf0f1242fbf954124132e5ee",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r19_patch.py",
+      "sha256": "85c0644da490b0bb0c2cf23f5cd3e3ed8573de6852a024fd5208b396940905f9",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r20_patch.py",
+      "sha256": "8bdaefbe3123f7ae71b536b09ad6777cc1ca3f8f00daee9e8f48eb5e13e55d8c",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_r21_patch.py",
+      "sha256": "cfbddebd24fc2a2fccdbce57180111eda95f25676cdfc3cad1768e5800a70dec",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/m10_source_perturbation.py",
+      "sha256": "473f52c69b87c94d2475f1045862d6acb8492043bc2329e704031a2fa3b126b4",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/README.md",
+      "sha256": "473afa7e97623a8ed5be4d4eb99b4659e091dbe3f58a5912a18bd0ce090a53f0",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources/VTL2.4-API-source.zip",
+      "sha256": "aa696bf4cf5c44cbd433304943aebb241e5ea3064b949daf5ea09f96567cff9b",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/sources.lock.json",
+      "sha256": "ff8069ddb910f4803d9cece4566b6f02098dadec9cbaf8dab5199642800b3743",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/THIRD_PARTY_NOTICES.md",
+      "sha256": "a7be21c67a784816b1650c0e17acc4c2b32a95486182979a17a702f9f7458c1f",
+      "source_id": "SRC-VTL"
+    },
+    {
+      "path": "resources/vocal_tract/VTL-LICENSE.txt",
+      "sha256": "230184f60bae2feaf244f10a8bac053c8ff33a183bcc365b4d8b876d2b7f4809",
+      "source_id": "SRC-VTL"
     }
   ],
   "generated_resources": [

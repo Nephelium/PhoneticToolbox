@@ -22,4 +22,4 @@ def interpolate_source(a,b,t):
     if t<=0:return a
     if t>=1:return b
     return {'mode':a['mode'] if a['mode']==b['mode'] else 'transition',
-            **{k:a[k]*(1-t)+b[k]*t for k in SOURCE_LIMITS}}
+            **{k:min(max(a[k],b[k]),max(min(a[k],b[k]),a[k]+(b[k]-a[k])*t)) for k in SOURCE_LIMITS}}

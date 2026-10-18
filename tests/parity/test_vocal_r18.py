@@ -36,7 +36,7 @@ def test_native_shape_changes_mesh_and_acoustics_without_state_leak(engine):
     assert engine.snapshot(p)['meshes']==before['meshes']
     assert np.allclose(engine.prepare_tube(p)['areas'],before['tube_areas'],atol=5e-7,rtol=0)
 
-@pytest.mark.parametrize('bad',[[0]*3,[0,0,0,float('nan')],[0,0,0,.41],[0,-.31,0,0],True])
+@pytest.mark.parametrize('bad',[[0]*3,[0,0,0,float('nan')],[0,0,0,.41],[0,-.81,0,0],True])
 def test_shape_bounds(bad):
     with pytest.raises(ValueError):validate_tongue_shape(bad)
 
@@ -86,13 +86,13 @@ def test_native_10ms_aspiration_is_bounded_at_exact_samples(engine):
 def test_file_v5_and_legacy_loading(engine):
     frames=[frame(engine,tongue_shape=[.1,.2,-.1,-.2]),{'aspiration':True,'duration':.01,'name':'ʰ（短）'},frame(engine,'i')]
     doc=make_document(engine,frames,[])
-    assert doc['version']==5 and doc['geometry_method']=='m10/r18'
+    assert doc['version']==8 and doc['geometry_method']=='m10/r21'
     assert sequence_document(engine,doc)==doc
     assert doc['frames'][1]['name']=='ʰ（短）'
     with pytest.raises(ValueError,match='名称'):validate_frames(engine,[frame(engine),{'aspiration':True,'duration':.01,'name':'bad\nname'}])
     for version,model,method in [(1,'VTL-2.4-JD2',None),(2,'VTL-2.4-JD2-M10-3',None),(3,'VTL-2.4-JD2-M10-R16','m10/r16'),(4,'VTL-2.4-JD2-M10-R17','m10/r17')]:
         old={**doc,'version':version,'model':model,'geometry_method':method,'frames':[frame(engine)]}
-        read=sequence_document(engine,old);assert 'R18' in read['geometry_notice']
+        read=sequence_document(engine,old);assert 'R21' in read['geometry_notice']
         assert read['frames'][0]['params']==old['frames'][0]['params']
         with pytest.raises(ValueError,match='版本 5'):sequence_document(engine,{**old,'frames':frames})
 

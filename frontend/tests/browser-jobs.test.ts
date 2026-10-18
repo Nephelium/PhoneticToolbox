@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {BrowserJobs} from '../src/platform/browser-jobs.ts';
+import {LocalStorageError} from '../src/platform/local-assets.ts';
 import type {ResearchFile,ReconstructionConfig} from '../src/platform/research.ts';
 const source={id:'input',name:'image.png',kind:'image',size:100,sha256:'a'.repeat(64)} as ResearchFile;
 const config={mode:'image'} as ReconstructionConfig;
@@ -18,7 +19,7 @@ test('cancel terminates computation and never publishes late outputs',async()=>{
  const f=fixture();let finish:(value:any)=>void=()=>{};f.ports.compute=()=>new Promise(resolve=>finish=resolve);const jobs=new BrowserJobs('owner','project',f.ports),job=await jobs.start(source,config);await jobs.cancel(job.id);finish({files:[]});await new Promise(r=>setTimeout(r,0));assert.equal(jobs.get(job.id)?.state,'cancelled');assert(f.assets.every(a=>a.name.endsWith('.ptb-browser.json')));jobs.close();
 });
 test('other-account records and malformed user files do not enter browser task history',async()=>{
- const f=fixture(),a=new BrowserJobs('owner','project',f.ports);const job=await a.start(source,config);await terminal(a,job.id);await new Promise(r=>setTimeout(r,0));a.close();await f.ports.upload('重建任务-malformed.ptb-browser.json',encode('null'));const b=new BrowserJobs('other','project',f.ports);assert.deepEqual(await b.list(),[]);b.close();
+ const f=fixture(),a=new BrowserJobs('owner','project',f.ports);const job=await a.start(source,config);await terminal(a,job.id);await new Promise(r=>setTimeout(r,0));a.close();await f.ports.upload('重建任务-malformed.ptb-browser.json',encode('null'));const missing=JSON.parse(new TextDecoder().decode(f.raws.get(f.assets[0].id)!));delete missing.project;delete missing.job.project_id;missing.job.id='missing-project';await f.ports.upload('重建任务-missing-project.ptb-browser.json',encode(JSON.stringify(missing)));const own=new BrowserJobs('owner','project',f.ports);assert.equal((await own.list()).length,1);own.close();const b=new BrowserJobs('other','project',f.ports);assert.deepEqual(await b.list(),[]);b.close();
 });
 test('failure to persist admission does not leave a phantom running job',async()=>{
  const f=fixture(),original=f.ports.upload;let fail=true;f.ports.upload=async(...args)=>{if(fail)throw Error('quota');return original(...args);};const jobs=new BrowserJobs('owner','project',f.ports);await assert.rejects(jobs.start(source,config),/quota/);fail=false;const job=await jobs.start(source,config);assert.equal((await terminal(jobs,job.id)).state,'succeeded');jobs.close();
@@ -44,4 +45,16 @@ test('LPC shares managed history lifecycle while keeping its three-file contract
  const spec={prefix:'LPC任务-',operation:'lpc_analysis' as const,kind:'managed_lpc_files' as const,names:['lpc.ptb.json','lpc_SPECTRUM.png','lpc_AUDIO.wav']};
  const a=new BrowserJobs('owner','project',f.ports,spec),job=await a.start(source,config),done=await terminal(a,job.id);assert.equal(done.result_manifest?.kind,'managed_lpc_files');assert.equal(done.result_manifest?.core_version,'3.0.3');assert.equal(done.result_manifest?.files?.length,3);await new Promise(r=>setTimeout(r,0));a.close();
  const b=new BrowserJobs('owner','project',f.ports,spec);assert.equal((await b.list())[0].operation,'lpc_analysis');b.close();const unrelated=new BrowserJobs('owner','project',f.ports);assert.deepEqual(await unrelated.list(),[]);unrelated.close();
+});
+
+test('local output quota failure stays a local recovery case after history reload',async()=>{
+ const f=fixture(),save=f.ports.upload;f.ports.upload=async(name,raw)=>{if(!name.endsWith('.ptb-browser.json'))throw new LocalStorageError('本机空间不足');return save(name,raw);};
+ const a=new BrowserJobs('owner','project',f.ports),job=await a.start(source,config);await terminal(a,job.id);await new Promise(r=>setTimeout(r,0));assert.equal(a.serverRetry(job.id),false);assert.match(a.get(job.id)!.error_code!,/本机空间不足/);a.close();const b=new BrowserJobs('owner','project',f.ports);await b.list();assert.equal(b.serverRetry(job.id),false);b.close();
+});
+
+test('existing server-scoped browser history is adopted locally and survives a renewed workspace',async()=>{
+ const f=fixture(),old=new BrowserJobs('owner','old-workspace',f.ports),job=await old.start(source,config);await terminal(old,job.id);await new Promise(r=>setTimeout(r,0));old.close();
+ const current=new BrowserJobs('owner','default',f.ports,undefined,'old-workspace');assert.equal((await current.list())[0].id,job.id);assert.equal(current.get(job.id)!.project_id,'default');current.close();
+ const next=new BrowserJobs('owner','default',f.ports,undefined,'new-workspace');assert.equal((await next.list())[0].id,job.id);next.close();
+ const foreign=new BrowserJobs('other','default',f.ports,undefined,'old-workspace');assert.deepEqual(await foreign.list(),[]);foreign.close();
 });

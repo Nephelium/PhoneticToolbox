@@ -3,7 +3,17 @@ import type {Task} from './types.ts';
 export const fields=['task_id','title','prompt','filename_stem','repeat_count','group','note','enabled'] as const;
 export type Field=typeof fields[number];
 export const fieldLabels:Record<Field,string>={task_id:'任务编号',title:'任务名称',prompt:'录音内容',filename_stem:'导出文件名（不含扩展名）',repeat_count:'重复次数',group:'分组',note:'备注',enabled:'启用'};
-export const exampleCSV='\uFEFF任务编号,任务名称,录音内容,文件名,次数,分组,备注,启用\r\nT001,示例一,请读：春天来了,example-001,1,练习,,是\r\nT002,示例二,请读：今天是晴天,example-002,2,练习,自然语速,是\r\n';
+export function exampleWorkbook():ArrayBuffer{
+ const sheet=XLSX.utils.aoa_to_sheet([
+  ['任务编号','任务名称','录音内容','文件名','次数','分组','备注','启用'],
+  ['T001','示例一','请读：春天来了','example-001',1,'练习','','是'],
+  ['T002','示例二','请读：今天是晴天','example-002',2,'练习','自然语速','是']
+ ]);
+ sheet['!cols']=[14,14,30,20,10,14,24,10].map(wch=>({wch}));
+ sheet['!autofilter']={ref:'A1:H3'};
+ const workbook=XLSX.utils.book_new();XLSX.utils.book_append_sheet(workbook,sheet,'录音任务');
+ return XLSX.write(workbook,{type:'array',bookType:'xlsx',compression:true});
+}
 export type Table={sheets:{name:string;rows:string[][]}[];template?:Task[]};
 const aliases:Record<Field,string[]>={task_id:['task_id','任务编号','id'],title:['title','任务名称','名称'],prompt:['prompt','文本','录音内容','内容'],filename_stem:['filename_stem','文件名'],repeat_count:['repeat_count','次数'],group:['group','分组'],note:['note','备注'],enabled:['enabled','启用']};
 export function csvRows(text:string,delimiter=','):string[][]{

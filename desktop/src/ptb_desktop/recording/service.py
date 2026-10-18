@@ -14,7 +14,7 @@ from phonetic_core.recording.edits import frames,select,remove,insert
 from .storage import Project,uid,now,read_range,iter_audio,atomic_json,read_json,safe_name,safe_path,validate_span
 from .capture import Capture
 from .devices import devices,validate_config,Playback,PlaybackStartError
-from .jobs import process_audio,export_audio
+from .jobs import process_audio,export_audio,export_items
 
 MAX_PREVIEW_CACHE_BYTES=4_000_000
 
@@ -133,6 +133,7 @@ class RecordingService:
             if sys.platform!='win32' and self.backend is None:raise ValueError('当前平台尚未开放原生录音能力')
             p=self.require(idle=True);self.stop_play();config=validate_config(b['config'],self.backend)
             task=next((t for t in p.data['tasks'] if t['id']==b.get('task_id')),None)
+            if b.get('task_id') and task is None:raise ValueError('所选录音任务不存在，请重新选择任务')
             if task and not task.get('enabled',True):raise ValueError('当前任务未启用')
             capture=Capture(p.root,config,task,probe=op=='probe_start',backend=self.backend)
             self.capture=capture
@@ -267,22 +268,7 @@ class RecordingService:
     def start_export(self,b):
         p=self.require(idle=True);self.stop_play();target=self.granted(b['grant'],('export',))
         if target==p.root or target.is_relative_to(p.root):raise ValueError('请将导出保存到工程之外的目录，保护原始数据')
-        mode=b.get('mode','current');items=[]
-        takes=p.data['takes'] if mode in ('all','versions') else [self.take(b['id'])] if mode in ('current','selection') else [t for t in p.data['takes'] if t['id'] in p.data['selected'].values() and not next((task.get('skipped',False) or not task.get('enabled',True) for task in p.data['tasks'] if task['id']==(t.get('task_snapshot') or {}).get('id')),False)]
-        if mode=='selected':
-            chosen={p.data['selected'].get(t['id']) for t in p.data['tasks'] if t.get('enabled',True) and not t.get('skipped')}
-            takes=[t for t in takes if t['id'] in chosen]
-        for take in takes:
-            if mode=='versions':
-                task=take.get('task_snapshot') or {}
-                for version in take['versions']:
-                    if frames(version['spans']):items.append({**copy.deepcopy(take),'version':copy.deepcopy(version),'name':task.get('filename_stem') or task.get('title') or '自由录音'})
-                continue
-            version=copy.deepcopy(take['versions'][0 if b.get('raw') else take['head']])
-            if mode=='selection':version['spans']=select(version['spans'],int(b['start']),int(b['end']))
-            if not frames(version['spans']):continue
-            task=take.get('task_snapshot') or {};items.append({**copy.deepcopy(take),'version':version,'name':task.get('filename_stem') or task.get('title') or '自由录音'})
-        if not items:raise ValueError('没有可导出的录音或选区')
+        items=export_items(p.data,b)
         folder=p.root/'recovery'/uid();folder.mkdir(parents=True);result=folder/'export.json';cancel=folder/'cancel'
         summary=[{'id':t['id'],'prompt':t.get('prompt',''),'status':'disabled' if not t.get('enabled',True) else 'skipped' if t.get('skipped') else 'selected' if t['id'] in p.data['selected'] else 'missing'} for t in p.data['tasks']]
         worker=threading.Thread(target=export_audio,args=(p.root,items,target,b.get('subtype','FLOAT'),result,cancel),kwargs={'task_summary':summary},daemon=True,name='ptb-m16-export');worker.start()

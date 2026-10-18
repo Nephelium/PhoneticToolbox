@@ -17,6 +17,7 @@ import {createDraft,loadDraft,persistDraft,restoreDraft} from './storage.ts';
 import type {Draft,EditorSnapshot,SymbolEntry} from './types.ts';
 import './fonts.css';
 import {copyText} from '../../platform/clipboard.ts';
+import {isHandheldBrowser} from '../../state/desktop-viewport.ts';
 import fontLicense from '../../assets/ipa-plus/OFL-PTBIPAPlus.txt?raw';
 import notoLicense from '../../assets/ipa-plus/OFL-Noto.txt?raw';
 
@@ -51,7 +52,12 @@ watch(query,clearHover);
 const textSizeInput=computed({get:()=>draft.textSize,set:(input:number|string)=>{const value=Number(input);draft.textSize=Number.isFinite(value)&&String(input).trim()?Math.max(18,Math.min(54,Math.round(value))):26;}});
 function captureSelection(){if(!editor.value||composing)return;draft.start=editor.value.selectionStart;draft.end=editor.value.selectionEnd;history.select(draft.start,draft.end);}
 function snapshot():EditorSnapshot{return {text:draft.text,start:draft.start,end:draft.end};}
-async function showSelection(focus=true){await nextTick();if(!editor.value)return;if(focus)editor.value.focus({preventScroll:true});editor.value.setSelectionRange(draft.start,draft.end);}
+async function showSelection(focus=true){await nextTick();if(!editor.value)return;
+  // Updating a selection does not need focus. On handhelds, only a direct tap
+  // in the editor should request the software keyboard; desktop typing resumes.
+  if(focus&&!isHandheldBrowser())editor.value.focus({preventScroll:true});
+  editor.value.setSelectionRange(draft.start,draft.end);
+}
 function commit(value:EditorSnapshot){history.commit(value);Object.assign(draft,value);historyTick.value++;changed();void showSelection();}
 function input(){const el=editor.value!;draft.text=el.value;draft.start=el.selectionStart;draft.end=el.selectionEnd;if(!composing){history.commit(snapshot());historyTick.value++;changed();}}
 function compositionStart(){captureSelection();composing=true;}

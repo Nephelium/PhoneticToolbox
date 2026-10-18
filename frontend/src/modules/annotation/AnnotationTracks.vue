@@ -4,6 +4,7 @@ import type {Editor} from './editor.mjs';import type {Workspace} from '../../sta
 import {playback,isCurrentAudio} from '../../state/audio.ts';import {spectrum} from './spectrum.ts';
 import {lipCurve} from './display.ts';
 import {selection} from '../../platform/wav.ts';
+import {endpointClickTime} from '../../platform/waveform.ts';
 const props=defineProps<{editor:Editor;revision:number;wave:Workspace;lip:LipTrack|null;offset:number;showOpen:boolean;showWidth:boolean;active:boolean;disabled?:boolean;sequenceEditing?:boolean;rangeSelect?:boolean}>();
 const emit=defineEmits<{changed:[];'time-double-click':[time:number,ctrl:boolean];'phone-double-click':[time:number];'selection-end':[start:number,end:number];'range-selected':[]}>();
 const timeWindow=computed(()=>(props.wave.asset?.duration??1)/props.wave.zoom);
@@ -61,6 +62,7 @@ function up(event:PointerEvent){if(props.editor.state.drag){props.editor.onGridM
 function double(event:MouseEvent){
  if(props.disabled)return;
  const hit=props.editor.hitTest(event);if(!hit)return;
+ hit.time=endpointTime(hit.time,event);
  const sequenceEndpoint=props.editor.state.sequenceStart!==null||!props.editor.wordTier()?.intervals.some(w=>w.text.trim()&&hit.time>=w.xmin&&hit.time<w.xmax)||(props.sequenceEditing&&event.ctrlKey);
  if(sequenceEndpoint){emit('time-double-click',hit.time,event.ctrlKey);return;}
  if(hit.tier===props.editor.state.phoneTierName){emit('phone-double-click',hit.time);return;}
@@ -69,6 +71,7 @@ function double(event:MouseEvent){
 }
 let spectrumAnchor:number|null=null;
 function spectrumTime(event:MouseEvent){const box=(event.currentTarget as HTMLElement).getBoundingClientRect();return props.wave.offset+Math.max(0,Math.min(1,(event.clientX-box.left)/box.width))*(props.wave.asset!.duration/props.wave.zoom);}
+function endpointTime(time:number,event:MouseEvent){return endpointClickTime(time,props.wave.offset,timeWindow.value,props.wave.asset!.duration,(event.currentTarget as HTMLElement).getBoundingClientRect().width);}
 function spectrumDown(event:PointerEvent){if(event.button!==0||!props.wave.asset||props.disabled)return;const canvas=event.currentTarget as HTMLCanvasElement;canvas.focus({preventScroll:true});canvas.setPointerCapture(event.pointerId);spectrumAnchor=spectrumTime(event);props.wave.start=props.wave.end=spectrumAnchor;emit('selection-end',spectrumAnchor,spectrumAnchor);}
 function spectrumMove(event:PointerEvent){if(spectrumAnchor===null||!props.wave.asset)return;[props.wave.start,props.wave.end]=selection(spectrumAnchor,spectrumTime(event),props.wave.asset.duration);}
 function spectrumUp(event:PointerEvent){if(spectrumAnchor===null)return;spectrumMove(event);spectrumAnchor=null;emit('selection-end',props.wave.start,props.wave.end);}
@@ -80,7 +83,7 @@ onUnmounted(()=>{observer?.disconnect();themeObserver?.disconnect();cancelAnimat
 <template>
 <div ref="container" class="annotation-tracks" :data-start="wave.offset" :data-end="wave.offset+(wave.asset?.duration??1)/wave.zoom" @wheel="wheel">
  <div class="track-caption"><strong>语谱图</strong><span>0–{{Math.min(5000,(wave.asset?.sampleRate??10000)/2)}} Hz · Hann · 相对幅度</span><label>窗长 <select v-model.number="windowMs" aria-label="语谱窗长"><option v-for="ms in [5,10,20,50,100]" :key="ms" :value="ms">{{ms}} ms</option><option :value="0">1024 点（兼容）</option></select></label><span class="intensity-key">强度</span><span v-if="lip&&showOpen" class="open-key">唇开</span><span v-if="lip&&showWidth" class="width-key">唇宽</span></div>
- <div class="spectrum-row"><div class="frequency-labels"><span>{{Math.min(5000,(wave.asset?.sampleRate??10000)/2)}} Hz</span><span>0</span></div><div class="spectrum-wrap aligned-track"><canvas ref="spec" tabindex="0" aria-label="标注语谱图与唇形曲线" @pointerdown="spectrumDown" @pointermove="spectrumMove" @pointerup="spectrumUp" @pointercancel="spectrumUp" @dblclick="!disabled&&emit('time-double-click',spectrumTime($event),$event.ctrlKey)"/><div v-if="wave.end>wave.start" class="linked-selection" aria-label="语谱图选区" :data-start="wave.start" :data-end="wave.end" :style="selectionStyle"/><div v-if="wave.asset&&isCurrentAudio(wave.asset,wave.channel)&&playback.position>=wave.offset&&playback.position<=wave.offset+(wave.asset.duration/wave.zoom)" class="annotation-cursor" :style="{left:((playback.position-wave.offset)/(wave.asset.duration/wave.zoom)*100)+'%'}"/></div></div>
+ <div class="spectrum-row"><div class="frequency-labels"><span>{{Math.min(5000,(wave.asset?.sampleRate??10000)/2)}} Hz</span><span>0</span></div><div class="spectrum-wrap aligned-track"><canvas ref="spec" tabindex="0" aria-label="标注语谱图与唇形曲线" @pointerdown="spectrumDown" @pointermove="spectrumMove" @pointerup="spectrumUp" @pointercancel="spectrumUp" @dblclick="!disabled&&emit('time-double-click',endpointTime(spectrumTime($event),$event),$event.ctrlKey)"/><div v-if="wave.end>wave.start" class="linked-selection" aria-label="语谱图选区" :data-start="wave.start" :data-end="wave.end" :style="selectionStyle"/><div v-if="wave.asset&&isCurrentAudio(wave.asset,wave.channel)&&playback.position>=wave.offset&&playback.position<=wave.offset+(wave.asset.duration/wave.zoom)" class="annotation-cursor" :style="{left:((playback.position-wave.offset)/(wave.asset.duration/wave.zoom)*100)+'%'}"/></div></div>
  <div class="track-caption"><strong>标注层</strong><span>{{editor.state.wordTierName}} / {{editor.state.phoneTierName}}</span><small>{{sequenceEditing?'双击定起止点 · 音节内双击分声母/韵母 · Ctrl＋双击连续标注':'单击编辑 · 拖动边界/词 · Ctrl 多选 · 双击填充/插点'}}</small></div>
  <div class="grid-wrap aligned-track"><canvas ref="grid" class="annotation-grid" tabindex="0" aria-label="词层与音素层编辑器" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="up" @dblclick="double"/><div v-if="wave.end>wave.start" class="linked-selection grid-selection" aria-label="标注层选区" :data-start="wave.start" :data-end="wave.end" :style="selectionStyle"/></div>
  <div v-if="wave.end>=wave.start" class="selection-times aligned-track" aria-label="当前标注选区" :data-start="wave.start" :data-end="wave.end">

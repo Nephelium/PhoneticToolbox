@@ -13,7 +13,7 @@ async function main(){
   browser=await chromium.launchPersistentContext(path.join(scratch,'profile'),{executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,viewport:{width:1440,height:1000},acceptDownloads:true,args:['--mute-audio']});report.browser=browser.browser().version();page=await browser.newPage();page.on('pageerror',e=>report.errors.push(e.message));
   for(const streamed of [false,true]){
    await page.goto(server.resolvedUrls.local[0]+'tests/m02-annotations.html?streamed='+Number(streamed));await page.getByRole('button',{name:'annotations.wav',exact:true}).click();
-   for(const name of ['H1-H2','text_words'])await page.getByLabel(name,{exact:true}).check();await page.getByRole('button',{name:'将 2 项分配到图窗',exact:true}).click();
+   for(const name of ['H1-H2','text_words'])await page.getByLabel(name,{exact:true}).check();
    const inspect=()=>page.evaluate(()=>{const groups=[document.querySelector('.m02-wave-annotations'),document.querySelector('.shared-plot-area')];return groups.map(g=>({labels:[...g.querySelectorAll('.ipa-text')].map(t=>[...t.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent).join('')),boundaries:[...g.querySelectorAll('path[stroke-dasharray]')].filter(p=>!p.classList.contains('parameter-curve')&&p.getAttribute('d').includes('V')).map(p=>p.getAttribute('d'))}));});
    for(const mode of ['light','dark'])for(const view of ['full','zoom','boundary']){
     await page.evaluate(({mode,view})=>{document.documentElement.dataset.theme=mode;window.qa.wave.zoom=view==='full'?1:window.qa.wave.asset.duration/(view==='zoom'?.05065:.1);window.qa.wave.offset=view==='full'?0:view==='zoom'?.64947:.7;},{mode,view});

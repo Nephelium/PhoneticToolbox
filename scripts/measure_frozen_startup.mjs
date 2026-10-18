@@ -4,6 +4,7 @@ import {spawn} from 'node:child_process';
 import {mkdir,readFile,writeFile,readdir} from 'node:fs/promises';
 import path from 'node:path';
 import net from 'node:net';
+import {seedPortableProfile} from './portable-cache-qa.mjs';
 
 const [exeArg,outputArg,countArg='3',reuseProfile]=process.argv.slice(2);
 if(!exeArg||!outputArg)throw new Error('Usage: node measure_frozen_startup.mjs <exe> <new-output> [count]');
@@ -25,6 +26,7 @@ for(let i=0;i<count;i++){
   const run=path.join(out,`run-${i+1}`);await mkdir(run);await mkdir(path.join(run,'temp'));await mkdir(path.join(run,'profile'));
   const debugPort=await port();
   const profile=sharedProfile??path.join(run,'profile');
+  const selectedCache=await seedPortableProfile(profile);
   const env={...process.env,LOCALAPPDATA:profile,TEMP:path.join(run,'temp'),TMP:path.join(run,'temp'),
     PATH:`${process.env.SystemRoot}\\System32;${process.env.SystemRoot}`,QT_QPA_PLATFORM:'offscreen',
     QTWEBENGINE_REMOTE_DEBUGGING:`127.0.0.1:${debugPort}`,QTWEBENGINE_CHROMIUM_FLAGS:'--mute-audio --disable-gpu --remote-allow-origins=*'};
@@ -68,8 +70,12 @@ for(let i=0;i<count;i++){
     if(!finished)throw new Error('Owned application did not exit');
     await sleep(250);
     let persistentCache=null;
-    try{persistentCache=JSON.parse(await readFile(path.join(profile,'PhoneticToolbox/v3/startup-cache/last-launch.json'),'utf8'));}catch{}
-    rows.push({iteration:i+1,readyMs,debugMs,exit:finished,moduleReady,restoration,persistentCache,
+    let cacheDirectory=null;
+    for(const candidate of [path.join(selectedCache,'startup-cache'),path.join(profile,'PhoneticToolbox/v3/startup-cache')]){
+      try{persistentCache=JSON.parse(await readFile(path.join(candidate,'last-launch.json'),'utf8'));cacheDirectory=candidate;break;}catch(error){if(error.code!=='ENOENT')throw error;}
+    }
+    if(!persistentCache)throw new Error('No actual startup cache report');
+    rows.push({iteration:i+1,readyMs,debugMs,exit:finished,moduleReady,restoration,persistentCache,cacheDirectory,
       remainingTemp:await readdir(path.join(run,'temp')),bundle});
     await writeFile(path.join(run,'process.log'),Buffer.concat(logs));
     await writeFile(path.join(out,'results.json'),JSON.stringify({exe,sharedProfile,scope:'ordinary no-argument launch; new process every run; explicit shared profile for persistent warm tests, otherwise new profile; Qt offscreen with software rendering; OS cache not cleared; not visible-window latency',rows},null,2));

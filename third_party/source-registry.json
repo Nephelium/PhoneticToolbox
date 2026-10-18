@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
   "checked_on": "2026-10-05",
-  "total_records": 446,
+  "total_records": 447,
   "sources": [
     {
       "id": "PTB-BROWSER-SCIENCE-RUNTIME",
@@ -16,7 +16,8 @@
         "M06",
         "M09",
         "M14",
-        "M16"
+        "M16",
+        "M10"
       ],
       "authors": "Pyodide contributors; Python Software Foundation; NumPy/SciPy/Matplotlib/Pillow/Pydantic/OpenPyXL contributors; Paul Boersma and David Weenink; Yannick Jadoul",
       "urls": {
@@ -28,7 +29,9 @@
       "used_at": [
         "frontend/src/platform/science.worker.ts",
         "packages/phonetic_core/browser",
-        "scripts/prepare_browser_science.py"
+        "scripts/prepare_browser_science.py",
+        "frontend/src/platform/vocal.worker.ts",
+        "backend/src/ptb_worker/browser_vocal.py"
       ],
       "relationship": "original numerical code executed in same-origin browser Worker; new Praat C bindings only",
       "license": "Mixed upstream licenses; GPL-3.0-or-later for Parselmouth/Praat binding; MPL-2.0 for Pyodide; PSF-2.0 for CPython; wheel license texts preserved",
@@ -36,7 +39,7 @@
       "verification_date": "2026-10-17",
       "distribution_status": "private-web-candidate; original runtime/wheels plus notices and corresponding Praat source archive; no desktop or GitHub publication",
       "modifications": "No upstream numerical formulas changed; new bounded C bridge, browser adapter and task-local build",
-      "notes": "Actual wheel SHA256 verified against upstream lock/PyPI. Browser floating point differences explicitly permitted by user on 2026-10-17, discrete scientific semantics preserved. Build tools excluded from distribution. Original table readers/rules/DOCX/XLSX and Klatt/LPC computation reused. Noto font is identical to the private server render resource and distributed under SIL OFL 1.1. Browser source pins and font notices retained.",
+      "notes": "Actual wheel SHA256 verified against upstream lock/PyPI. Browser floating point differences explicitly permitted by user on 2026-10-17, discrete scientific semantics preserved. Build tools excluded from distribution. Original table readers/rules/DOCX/XLSX and Klatt/LPC computation reused. Noto font is identical to the private server render resource and distributed under SIL OFL 1.1. Browser source pins and font notices retained. M10 browser candidate reuses the same pinned Pyodide/NumPy/SciPy runtime; VTL Wasm sources/license are separately recorded under SRC-VTL. Local-only verification: docs/testing/m10-wasm-report.md.",
       "acknowledgement_group": "software"
     },
     {
@@ -1760,9 +1763,9 @@
       },
       "evidence": "resources/vocal_tract/ 源码 ZIP、GPL 文本、sources.lock.json、native DLL 和 bridge 源码；已核验官方 2.4 下载页面。",
       "license": "GPL-3.0-or-later",
-      "notes": "VTL 与本地 bridge/adapter 的版权/修改声明随包；VocalTractLabAnalysis.dll 同字节副本用于状态隔离，非独立自研引擎。",
-      "verification_date": "2026-09-09",
-      "actual_included_version": "2.4 (Windows native bundle)",
+      "notes": "VTL 与本地 bridge/adapter 的版权及修改声明随包。Windows/Wasm 分别加载同字节的合成与分析库隔离状态；macOS 两库来自相同源码，因 install_name 与签名不同使用 native-pair 收据核验。原 JD2/W02 speaker 解剖文件保持原字节。R20 改动和当前平台证据见 docs/testing/m10-shared-controls.md。",
+      "verification_date": "2026-10-18",
+      "actual_included_version": "2.4 API with seeded source extension and m10/r20 geometry; Windows x64, macOS arm64 and Emscripten 4.0.9 Wasm",
       "observed_upstream_commit": null,
       "distribution_status": "review-required",
       "authors": "Peter Birkholz and VocalTractLab contributors",
@@ -1778,7 +1781,14 @@
         "resources/vocal_tract/sources/m10_r15_patch.py",
         "resources/vocal_tract/sources/m10_r16_patch.py",
         "resources/vocal_tract/sources/m10_r17_patch.py",
-        "resources/vocal_tract/sources/m10_r18_patch.py"
+        "resources/vocal_tract/sources/m10_r18_patch.py",
+        "scripts/build_m10_wasm.py",
+        "resources/manifests/vocal-wasm-runtime.json",
+        "resources/vocal_tract/sources/m10_source_perturbation.py",
+        "scripts/build_m10_source.py",
+        "resources/vocal_tract/sources/m10_r19_patch.py",
+        "resources/vocal_tract/sources/m10_r20_patch.py",
+        "scripts/build_m10_macos.py"
       ],
       "m10_migration_evidence": "docs/modules/evidence/M10-migration.json",
       "m10_verification_date": "2026-09-11",
@@ -1806,7 +1816,26 @@
       "m10_r17_evidence": "docs/testing/2026-10-12-m10-r17-report.md",
       "m10_r18_modifications": "M10-R18: compact arc-length local dorsal offsets before native hard-tissue contact; material handle station exported; zero offsets preserve R17 geometry digests in six reference poses. Method m10/r18, layout m10/3. Original synthesis DLLs and speakers retained; GPL-3.0-or-later.",
       "m10_r18_verification_date": "2026-10-12",
-      "m10_r18_evidence": "docs/testing/2026-10-12-m10-r18-report.md"
+      "m10_r18_evidence": "docs/testing/2026-10-12-m10-r18-report.md",
+      "m10_wasm": {
+        "date": "2026-10-18",
+        "status": "browser-validated-integration-candidate",
+        "version": "VTL 2.4 API with m10/r20 geometry; Emscripten 4.0.9 pyodide_2025_0 side modules",
+        "adaptations": "Explicit C exports and hidden state retain library isolation. Optional source extension is recorded separately in m10_source_perturbation. Original speakers, geometry and the unconfigured upstream source branch are preserved.",
+        "source_archive_sha256": "aa696bf4cf5c44cbd433304943aebb241e5ea3064b949daf5ea09f96567cff9b",
+        "evidence": "docs/testing/m10-shared-controls.md",
+        "distribution": "Original VTL/GPL, pinned archive, reviewed patches and exact build inputs accompany the Web runtime as corresponding-source.zip. Current shared source also rebuilds Windows DLL and macOS arm64 dylib candidates; installed releases are separate."
+      },
+      "m10_source_perturbation": {
+        "date": "2026-10-18",
+        "status": "Windows-Wasm-macOS-arm64-candidate-verified",
+        "source": "resources/vocal_tract/sources/m10_source_perturbation.py",
+        "license": "GPL-3.0-or-later",
+        "adaptations": "Opt-in seeded jitter uses the original Schoentgen phase-noise formula; separate seeded, cycle-smoothed vibration amplitude shimmer is project-authored. Unconfigured upstream rand/amplitude path and original speakers are retained. Strengths are controls, not measured acoustic percentages.",
+        "distribution": "Exact original archive, modifications and build sources accompany the candidate as vocal-wasm/corresponding-source.zip.",
+        "evidence": "docs/decisions/ADR-M10-pressure-perturbation.md"
+      },
+      "m10_r20_modifications": "Shared Windows x64/Wasm/macOS arm64 source: R19 material-station tongue smoothing and depression; R20 independent upper/lower lip offsets, native contact and radiation/area refresh. VTL source solver retained for closure/release; no recorded burst added. GPL-3.0-or-later; corresponding sources and reproducible build scripts included. See docs/testing/m10-shared-controls.md for tested scope."
     },
     {
       "id": "DOC-VTL24",
@@ -9742,7 +9771,10 @@
         "packages/phonetic_core/src/phonetic_core/vocal_tract/session.py",
         "backend/src/ptb_worker/vocal_sessions.py",
         "backend/src/ptb_worker/vocal_web.py",
-        "frontend/src/platform/vocal.ts"
+        "frontend/src/platform/vocal.ts",
+        "frontend/src/platform/browser-vocal.ts",
+        "frontend/src/platform/vocal.worker.ts",
+        "backend/src/ptb_worker/browser_vocal.py"
       ],
       "m10_r13_modifications": "M10-R13: dorsal velum attachment reaches the anterior velopharyngeal port through two tangent-matched segments, removing the false pocket above the uvula. Same 3-D tissue drives the sagittal mask. Original nasal mesh and nasal acoustic parameters preserved.",
       "m10_r13_verification_date": "2026-10-07",
@@ -9763,7 +9795,8 @@
       "m10_r18_verification_date": "2026-10-12",
       "m10_r18_evidence": "docs/testing/2026-10-12-m10-r18-report.md",
       "m10_web_modifications": "2026-10-16: one injected core state machine for desktop/web, server-owned bounded VTL workers and browser PCM/files; explicit native 33/65 web sampling, disabled 129/257 desktop-only menu; shared audition and MP4 adapters. Existing VTL synthesis/source licenses unchanged. Local validation only, no public release.",
-      "m10_web_evidence": "docs/testing/web-vocal-report.md"
+      "m10_web_evidence": "docs/testing/web-vocal-report.md",
+      "m10_wasm": "Local browser candidate keeps existing Engine/Runtime, source/trajectory/monitor/document algorithms and web controls. Worker cancellation restores only acknowledged edits. Browser-file/audio adapters unchanged; MP4 transcoding retains the original native server encoder. See docs/testing/m10-wasm-report.md."
     },
     {
       "id": "REF-WEBCODECS",
@@ -15687,6 +15720,28 @@
         "metadata_url": "https://pypi.org/pypi/xlrd/2.0.2/json",
         "license_notices": "Original installed wheel notices preserved in /var/lib/ptb-web/m14-deps"
       }
+    },
+    {
+      "id": "SRC-PINK-TROMBONE",
+      "title": "Pink Trombone",
+      "kind": "design-reference",
+      "modules": [
+        "M10"
+      ],
+      "authors": "Neil Thapen",
+      "actual_included_version": "No code included; inspected version 1.1, March 2017",
+      "verification_date": "2026-10-18",
+      "urls": {
+        "homepage": "https://dood.al/pinktrombone/"
+      },
+      "license": "MIT",
+      "acknowledgement_group": "software",
+      "distribution_status": "reference-only",
+      "used_at": [
+        "docs/decisions/ADR-M10-pressure-perturbation.md"
+      ],
+      "evidence": "Official page embeds full source and permission notice. AudioSystem uses 512-sample callbacks; Glottis combines vibrato/noise modulation; rendering uses requestAnimationFrame.",
+      "notes": "Architecture reference for audio/render separation, streaming, reuse and smoothing. No source copied, no replacement of VTL acoustics; its slower pitch wobble is distinct from cycle perturbation."
     }
   ]
 }

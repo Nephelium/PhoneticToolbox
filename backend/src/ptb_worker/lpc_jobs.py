@@ -9,6 +9,7 @@ def submit(store, owner, body, *, retry_of=None):
     body = LpcRequest.model_validate(body)
     if store.files is None: raise JobError('task_service_unavailable',503)
     request = body.model_dump(exclude={'idempotency_key'}) | {'retry_of':retry_of}
+    request['config'] = body.config.analysis_snapshot()
     sha = hashlib.sha256(canonical(request).encode()).hexdigest()
     with store.files.batch_transaction() as tx:
         old = tx.execute('SELECT * FROM {jobs} WHERE owner_id=? AND idempotency_key=?',(owner,body.idempotency_key)).fetchone()
@@ -26,7 +27,7 @@ def submit(store, owner, body, *, retry_of=None):
         snapshot = dict(operation='lpc_analysis',schema_version='m04/1',project_id=body.project_id,retry_of=retry_of,
             core_version=core_version,adapter_version=adapter_version,source_ids=['PENDING-LPC','SRC-PRAAT'],
             input_refs=refs,input_assets=sources,config=dict(inputs=[i['id'] for i in sources],
-                analysis=body.config.model_dump(),max_output_bytes=80_000_000))
+                analysis=body.config.analysis_snapshot(),max_output_bytes=80_000_000))
         job_id = str(uuid4())
         tx.execute("INSERT INTO {jobs}(id,owner_id,project_id,idempotency_key,request_hash,snapshot,state,deadline,created_at,updated_at) VALUES(?,?,?,?,?,?,'queued',?,?,?)",
             (job_id,owner,body.project_id,body.idempotency_key,sha,canonical(snapshot),now+300,now,now))

@@ -339,12 +339,12 @@
         },
         {
           "id": "m05-quick-realtime",
-          "title": "预览后开始实时录制",
+          "title": "预览后开始实时计算",
           "level": 3
         },
         {
           "id": "m05-advanced",
-          "title": "高帧率先录后算",
+          "title": "视频录制",
           "level": 3
         },
         {
@@ -374,7 +374,7 @@
         },
         {
           "id": "m05-video-demo",
-          "title": "实时预览演示",
+          "title": "预览演示",
           "level": 3
         },
         {
@@ -821,7 +821,7 @@
         },
         {
           "id": "m02-methods-interpretation",
-          "title": "比较时记住这些边界",
+          "title": "比较参数时的核对要点",
           "level": 3
         },
         {
@@ -82885,36 +82885,23 @@
     },
     {
       "id": "m16-import-detail-r4-light-scaled-r20261007",
-      "path": "assets/software-only/rich-20261007/m16-import-detail-r4-light-scaled-r20261007.png",
+      "path": "assets/software-only/m16-20261018/m16-import-help.png",
       "kind": "image",
       "mime": "image/png",
-      "sha256": "11b6cb694c7984d3ae359a8e9f37de6f93ff9a0547fc80374a62885abb37a370",
+      "sha256": "7688fc1431d20c363169f9ce0b0863c2f315b95df2b2f58a030b8baadf8b0abe",
       "width": 2560,
       "height": 1600,
-      "caption": "导入任务前的表格说明：示例列、重复次数，以及 CSV 示例与选择文件入口。",
+      "caption": "导入任务前的表格说明：示例列、重复次数，以及下载 XLSX 示例和选择表格文件入口。",
       "git": false,
       "distribution": "software-only",
       "sourceType": "实际应用截图",
-      "source": "当前 V3 实际 Windows Qt，浅色最大化，2560×1600 屏幕布局及 150% 有效缩放；仅裁去 Qt 像素取整的最外沿。",
-      "originalSha256": "4b171f771762bbc825544bd0be5d0f8794cc5bd4db438a13047c2b1307e5bf9e",
+      "source": "当前Windows Qt，示例合成输入；浅色、2560×1600、DPR 1.5、页面100%、收起侧栏的独立最大化窗口。",
+      "originalSha256": "7688fc1431d20c363169f9ce0b0863c2f315b95df2b2f58a030b8baadf8b0abe",
       "capture": {
-        "report": "output/validation/m08-wiring/b96803cde1ad40ccb3755c63200d8586/manual-captures/report.json",
-        "originalId": "m16-import-detail-r4-light",
-        "theme": "light",
-        "renderSize": [
-          2560,
-          1600
-        ],
-        "nativeSize": [
-          2561,
-          1601
-        ],
-        "devicePixelRatio": 1.5,
-        "logicalViewport": [
-          1707,
-          1067
-        ],
-        "navigationCollapsed": true,
+        "report": "output/validation/m16/manual-update-6ff36813f2ad4559831bf1ac0c1d4ead/report.json",
+        "name": "m16-import-help",
+        "dpr": 1.5,
+        "pageScale": 1,
         "maximized": true
       },
       "regions": {
@@ -360322,36 +360309,23 @@
     },
     {
       "id": "m16-import-preview-scaled-r20261007",
-      "path": "assets/software-only/rich-20261007/m16-import-preview-scaled-r20261007.png",
+      "path": "assets/software-only/m16-20261018/m16-import-preview.png",
       "kind": "image",
       "mime": "image/png",
-      "sha256": "7e1d4420a3ba8c5ebcf44739c0c5f40f216fdf4f280dfd76b92ea2dce33b7099",
+      "sha256": "19f18e6bfe97f88cba24eb04acdd896be9b7a937a79caa6e7650369fdd6e89c4",
       "width": 2560,
       "height": 1600,
-      "caption": "示例：CSV 导入预览自动映射八列，第二行按次数展开，确认导入前可核对三条任务。",
+      "caption": "XLSX 示例的导入预览：中文列名自动映射，第二行按次数展开，确认导入前核对三条任务。",
       "git": false,
       "distribution": "software-only",
       "sourceType": "实际应用截图",
-      "source": "当前 V3 实际 Windows Qt，浅色最大化，2560×1600 屏幕布局及 150% 有效缩放；仅裁去 Qt 像素取整的最外沿。",
-      "originalSha256": "958d291e25e9412c91b65c6193fae42bd628fa9c578a7be54b1076052f6daf57",
+      "source": "当前Windows Qt，示例合成输入；浅色、2560×1600、DPR 1.5、页面100%、收起侧栏的独立最大化窗口。",
+      "originalSha256": "19f18e6bfe97f88cba24eb04acdd896be9b7a937a79caa6e7650369fdd6e89c4",
       "capture": {
-        "report": "output/manual-work/m16-captures/404fcc4292e64c3f824295a970c4f251/report.json",
-        "originalId": "m16-import-preview",
-        "theme": "light",
-        "renderSize": [
-          2560,
-          1600
-        ],
-        "nativeSize": [
-          2561,
-          1601
-        ],
-        "devicePixelRatio": 1.5,
-        "logicalViewport": [
-          1707,
-          1067
-        ],
-        "navigationCollapsed": true,
+        "report": "output/validation/m16/manual-update-6ff36813f2ad4559831bf1ac0c1d4ead/report.json",
+        "name": "m16-import-preview",
+        "dpr": 1.5,
+        "pageScale": 1,
         "maximized": true
       },
       "regions": {
@@ -363042,36 +363016,23 @@
     },
     {
       "id": "m16-single-channel-scaled-r20261007",
-      "path": "assets/software-only/rich-20261007/m16-single-channel-scaled-r20261007.png",
+      "path": "assets/software-only/m16-20261018/m16-single-channel.png",
       "kind": "image",
       "mime": "image/png",
-      "sha256": "72e352fc7dad62b3ccdd0ad698cdf1ddf5770a94165e085146f6f12d76a52392",
+      "sha256": "e47cb182a6fc23ccaf5404c45639823986aac7ac090fb6861eb46b657b2b69c8",
       "width": 2560,
       "height": 1600,
-      "caption": "示例：选择只有一个输入的合成设备后自动回退单声道，输入和独立试听输出分别设置。",
+      "caption": "选择单输入设备后回退单声道，输入和试听输出分别设置；下排显示播放音量、检测增益预览及输入电平。",
       "git": false,
       "distribution": "software-only",
       "sourceType": "实际应用截图",
-      "source": "当前 V3 实际 Windows Qt，浅色最大化，2560×1600 屏幕布局及 150% 有效缩放；仅裁去 Qt 像素取整的最外沿。",
-      "originalSha256": "9c91138d8d05deeb2cfd84fdf19ada45d54055cb485956b00a41e8234a0f3bb4",
+      "source": "当前Windows Qt，示例合成输入；浅色、2560×1600、DPR 1.5、页面100%、收起侧栏的独立最大化窗口。",
+      "originalSha256": "e47cb182a6fc23ccaf5404c45639823986aac7ac090fb6861eb46b657b2b69c8",
       "capture": {
-        "report": "output/manual-work/m16-captures/404fcc4292e64c3f824295a970c4f251/report.json",
-        "originalId": "m16-single-channel",
-        "theme": "light",
-        "renderSize": [
-          2560,
-          1600
-        ],
-        "nativeSize": [
-          2561,
-          1601
-        ],
-        "devicePixelRatio": 1.5,
-        "logicalViewport": [
-          1707,
-          1067
-        ],
-        "navigationCollapsed": true,
+        "report": "output/validation/m16/manual-update-6ff36813f2ad4559831bf1ac0c1d4ead/report.json",
+        "name": "m16-single-channel",
+        "dpr": 1.5,
+        "pageScale": 1,
         "maximized": true
       },
       "regions": {
@@ -364498,36 +364459,23 @@
     },
     {
       "id": "m16-preflight-scaled-r20261007",
-      "path": "assets/software-only/rich-20261007/m16-preflight-scaled-r20261007.png",
+      "path": "assets/software-only/m16-20261018/m16-preflight.png",
       "kind": "image",
       "mime": "image/png",
-      "sha256": "b0b3abf50d5bd1b0815f70c8147c1f33e75271ffa9bc19368152659eaab1e881",
+      "sha256": "8af69ed28ab7696530b69e5dc25ccf8608ab41d5a4dbf624383bdad62d19c071",
       "width": 2560,
       "height": 1600,
-      "caption": "示例使用正弦信号演示双通道检测，第二道指定为 EGG 角色；检测不创建录音。",
+      "caption": "录前检测中，各路电平位于播放音量与检测增益预览右侧，开始录前检测和停止检测按钮并排。示例第二道仅演示 EGG 角色。",
       "git": false,
       "distribution": "software-only",
       "sourceType": "实际应用截图",
-      "source": "当前 V3 实际 Windows Qt，浅色最大化，2560×1600 屏幕布局及 150% 有效缩放；仅裁去 Qt 像素取整的最外沿。",
-      "originalSha256": "6ec33a58e4059bd7067aba982b25e786ee60cbfbf62f2452ebaeb0b1c7f5e8d9",
+      "source": "当前Windows Qt，示例合成输入；浅色、2560×1600、DPR 1.5、页面100%、收起侧栏的独立最大化窗口。",
+      "originalSha256": "8af69ed28ab7696530b69e5dc25ccf8608ab41d5a4dbf624383bdad62d19c071",
       "capture": {
-        "report": "output/manual-work/m16-captures/404fcc4292e64c3f824295a970c4f251/report.json",
-        "originalId": "m16-preflight",
-        "theme": "light",
-        "renderSize": [
-          2560,
-          1600
-        ],
-        "nativeSize": [
-          2561,
-          1601
-        ],
-        "devicePixelRatio": 1.5,
-        "logicalViewport": [
-          1707,
-          1067
-        ],
-        "navigationCollapsed": true,
+        "report": "output/validation/m16/manual-update-6ff36813f2ad4559831bf1ac0c1d4ead/report.json",
+        "name": "m16-preflight",
+        "dpr": 1.5,
+        "pageScale": 1,
         "maximized": true
       },
       "regions": {
@@ -372814,36 +372762,23 @@
     },
     {
       "id": "m16-noise-sample-scaled-r20261007",
-      "path": "assets/software-only/rich-20261007/m16-noise-sample-scaled-r20261007.png",
+      "path": "assets/software-only/m16-20261018/m16-noise-sample.png",
       "kind": "image",
       "mime": "image/png",
-      "sha256": "b7bb63deb842a864a30b97da0aeb2affe3100b0a31170ee7fbc273ae4deecbe8",
+      "sha256": "e9a14d73e7e18f2aa0cb9a98337c62bf9a8ad38f64801de483a860e02a242904",
       "width": 2560,
       "height": 1600,
       "caption": "示例：取合成输入开始处的噪声作为样本，画面记录来源版本、通道及帧范围，EGG 角色默认不参与处理。",
       "git": false,
       "distribution": "software-only",
       "sourceType": "实际应用截图",
-      "source": "当前 V3 实际 Windows Qt，浅色最大化，2560×1600 屏幕布局及 150% 有效缩放；仅裁去 Qt 像素取整的最外沿。",
-      "originalSha256": "7a23179e33c50bfcd47b91b8ebbd721ea2f228b5ca4e2e9a5e9cc913a8c5c9a4",
+      "source": "当前Windows Qt，示例合成输入；浅色、2560×1600、DPR 1.5、页面100%、收起侧栏的独立最大化窗口。",
+      "originalSha256": "e9a14d73e7e18f2aa0cb9a98337c62bf9a8ad38f64801de483a860e02a242904",
       "capture": {
-        "report": "output/manual-work/m16-captures/404fcc4292e64c3f824295a970c4f251/report.json",
-        "originalId": "m16-noise-sample",
-        "theme": "light",
-        "renderSize": [
-          2560,
-          1600
-        ],
-        "nativeSize": [
-          2561,
-          1601
-        ],
-        "devicePixelRatio": 1.5,
-        "logicalViewport": [
-          1707,
-          1067
-        ],
-        "navigationCollapsed": true,
+        "report": "output/validation/m16/manual-update-6ff36813f2ad4559831bf1ac0c1d4ead/report.json",
+        "name": "m16-noise-sample",
+        "dpr": 1.5,
+        "pageScale": 1,
         "maximized": true
       },
       "regions": {
@@ -374186,36 +374121,23 @@
     },
     {
       "id": "m16-denoised-version-scaled-r20261007",
-      "path": "assets/software-only/rich-20261007/m16-denoised-version-scaled-r20261007.png",
+      "path": "assets/software-only/m16-20261018/m16-denoised-version.png",
       "kind": "image",
       "mime": "image/png",
-      "sha256": "376425e3f0921c42c90ab69d51442050d7a7f0c87b644743e980cfb5fe297784",
+      "sha256": "ce318739d5c771880d3dc9743426a30822d0810dbacb0160832eb9ca5b7d8af0",
       "width": 2560,
       "height": 1600,
       "caption": "示例：谱减处理完成后新增降噪版本，噪声样本记录仍可见；仅勾选的音频道改变，EGG 角色合成通道保持原采样。",
       "git": false,
       "distribution": "software-only",
       "sourceType": "实际应用截图",
-      "source": "当前 V3 实际 Windows Qt，浅色最大化，2560×1600 屏幕布局及 150% 有效缩放；仅裁去 Qt 像素取整的最外沿。",
-      "originalSha256": "35e6cd886a9b4d8114ce8607d5f7c8bd77a0f7c89de6c275122f125a7c7653ad",
+      "source": "当前Windows Qt，示例合成输入；浅色、2560×1600、DPR 1.5、页面100%、收起侧栏的独立最大化窗口。",
+      "originalSha256": "ce318739d5c771880d3dc9743426a30822d0810dbacb0160832eb9ca5b7d8af0",
       "capture": {
-        "report": "output/manual-work/m16-captures/404fcc4292e64c3f824295a970c4f251/report.json",
-        "originalId": "m16-denoised-version",
-        "theme": "light",
-        "renderSize": [
-          2560,
-          1600
-        ],
-        "nativeSize": [
-          2561,
-          1601
-        ],
-        "devicePixelRatio": 1.5,
-        "logicalViewport": [
-          1707,
-          1067
-        ],
-        "navigationCollapsed": true,
+        "report": "output/validation/m16/manual-update-6ff36813f2ad4559831bf1ac0c1d4ead/report.json",
+        "name": "m16-denoised-version",
+        "dpr": 1.5,
+        "pageScale": 1,
         "maximized": true
       },
       "regions": {
@@ -375558,36 +375480,23 @@
     },
     {
       "id": "m16-export-options-scaled-r20261007",
-      "path": "assets/software-only/rich-20261007/m16-export-options-scaled-r20261007.png",
+      "path": "assets/software-only/m16-20261018/m16-export-options.png",
       "kind": "image",
       "mime": "image/png",
-      "sha256": "a6bf86ff6e8f31a4fb94cc5fc021c22418986abc66e42c5fb8aadc70eb2670db",
+      "sha256": "e6acefa61d0dcd2cd51d1ccb48ca3c424af5706eba8369d980dafcc52164ae6c",
       "width": 2560,
       "height": 1600,
-      "caption": "示例：导出对话框选择未跳过任务的选用录音与 24-bit PCM，缺录任务不会生成空 WAV，导出另建结果目录。",
+      "caption": "导出范围与版本分别选择。当前录音、选区和批量所选版本可选当前编辑／处理版本或原始采样版本，并核对任务统计和 WAV 格式。",
       "git": false,
       "distribution": "software-only",
       "sourceType": "实际应用截图",
-      "source": "当前 V3 实际 Windows Qt，浅色最大化，2560×1600 屏幕布局及 150% 有效缩放；仅裁去 Qt 像素取整的最外沿。",
-      "originalSha256": "1a86630b5d889e46eb77f425fe1138417ba1df7bc52e32925cbe1c6b656d2dee",
+      "source": "当前Windows Qt，示例合成输入；浅色、2560×1600、DPR 1.5、页面100%、收起侧栏的独立最大化窗口。",
+      "originalSha256": "e6acefa61d0dcd2cd51d1ccb48ca3c424af5706eba8369d980dafcc52164ae6c",
       "capture": {
-        "report": "output/manual-work/m16-captures/404fcc4292e64c3f824295a970c4f251/report.json",
-        "originalId": "m16-export-options",
-        "theme": "light",
-        "renderSize": [
-          2560,
-          1600
-        ],
-        "nativeSize": [
-          2561,
-          1601
-        ],
-        "devicePixelRatio": 1.5,
-        "logicalViewport": [
-          1707,
-          1067
-        ],
-        "navigationCollapsed": true,
+        "report": "output/validation/m16/manual-update-6ff36813f2ad4559831bf1ac0c1d4ead/report.json",
+        "name": "m16-export-options",
+        "dpr": 1.5,
+        "pageScale": 1,
         "maximized": true
       },
       "regions": {
@@ -487207,25 +487116,18 @@
     },
     {
       "id": "m16-export-options-focused-detail-scaled-r20261007",
-      "path": "assets/software-only/rich-20261007/m16-export-options-focused-detail-scaled-r20261007.png",
+      "path": "assets/software-only/m16-20261018/m16-export-options-detail.png",
       "kind": "image",
       "mime": "image/png",
-      "sha256": "fdce7bb4343b5b65380e7953fb96c6da17ce196090e1769859d54a1b642c265f",
-      "width": 788,
-      "height": 577,
-      "caption": "先核对导出范围、录音版本和 WAV 格式，再选择保存目录。",
+      "sha256": "3cb94be51de02085f9968e9da432cc69254b6eceef1f105c611eb5366847074b",
+      "width": 780,
+      "height": 630,
+      "caption": "导出设置局部：核对导出范围、版本和 WAV 格式。全部历史范围会包含原始及所有编辑、处理版本，并禁用单一版本选择。",
       "git": false,
       "distribution": "software-only",
-      "sourceType": "实际应用截图局部标注",
-      "source": "从浅色 2560×1600、150% 实际应用原图裁切，仅加入红色定位标注。",
-      "originalAssetId": "m16-export-options-scaled-r20261007",
-      "originalSha256": "a6bf86ff6e8f31a4fb94cc5fc021c22418986abc66e42c5fb8aadc70eb2670db",
-      "crop": [
-        887,
-        502,
-        1675,
-        1079
-      ],
+      "sourceType": "实际应用截图局部",
+      "source": "当前Windows Qt，示例合成输入；浅色、2560×1600、DPR 1.5、页面100%、收起侧栏的独立最大化窗口。",
+      "originalSha256": "3cb94be51de02085f9968e9da432cc69254b6eceef1f105c611eb5366847074b",
       "annotations": [
         {
           "type": "roundedRectangle",
@@ -487263,7 +487165,14 @@
             322
           ]
         }
-      ]
+      ],
+      "capture": {
+        "report": "output/validation/m16/manual-update-6ff36813f2ad4559831bf1ac0c1d4ead/report.json",
+        "name": "m16-export-options-detail",
+        "dpr": 1.5,
+        "pageScale": 1,
+        "maximized": true
+      }
     },
     {
       "id": "m17-tie-combination-r2-light-focused-detail-scaled-r20261007",
@@ -516513,6 +516422,1198 @@
         ],
         "crop": "Only right/bottom rounding pixels; no resampling"
       }
+    },
+    {
+      "id": "m05-preview-ready-20261018-b285264a",
+      "path": "assets/software-only/m05-current-20261018/m05-preview-ready-20261018-b285264a.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "b285264a49169e8032223b4174bf5bdfac07d72fc5c98e5b4a6cf50315e4c756",
+      "width": 2560,
+      "height": 1600,
+      "caption": "预览模式的准备界面。左侧设置设备与参数，中央显示网格和曲线，右侧查看画面与历史。图中尚未开始采集。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；浅色、最大化、原生DPR 1.5、页面100%。结果使用既有公开NASA测试图生成的合成视频，采集状态使用合成媒体输入，未使用实体摄像头或麦克风。",
+      "capture": {
+        "report": "output/validation/m05-manual/screenshots-20261018-c52dbd37958540819ce1f4f1480a3332/report.json",
+        "name": "m05-preview-ready",
+        "image": [
+          2560,
+          1600
+        ],
+        "raw_image": [
+          2561,
+          1601
+        ],
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "theme": "light",
+        "navigationCollapsed": true,
+        "sha256": "b285264a49169e8032223b4174bf5bdfac07d72fc5c98e5b4a6cf50315e4c756"
+      }
+    },
+    {
+      "id": "m05-realtime-ready-20261018-22c90800",
+      "path": "assets/software-only/m05-current-20261018/m05-realtime-ready-20261018-22c90800.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "22c908007c5507125d519700d723b327b19f4ec4d0f18f7c51784632bbc4ed6e",
+      "width": 2560,
+      "height": 1600,
+      "caption": "实时计算模式的准备界面。开始录制后同时采集音视频并计算候选唇形，另存时可选择视频与动画。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；浅色、最大化、原生DPR 1.5、页面100%。结果使用既有公开NASA测试图生成的合成视频，采集状态使用合成媒体输入，未使用实体摄像头或麦克风。",
+      "capture": {
+        "report": "output/validation/m05-manual/screenshots-20261018-c52dbd37958540819ce1f4f1480a3332/report.json",
+        "name": "m05-realtime-ready",
+        "image": [
+          2560,
+          1600
+        ],
+        "raw_image": [
+          2561,
+          1601
+        ],
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "theme": "light",
+        "navigationCollapsed": true,
+        "sha256": "22c908007c5507125d519700d723b327b19f4ec4d0f18f7c51784632bbc4ed6e"
+      }
+    },
+    {
+      "id": "m05-video-recording-ready-20261018-5c829bfd",
+      "path": "assets/software-only/m05-current-20261018/m05-video-recording-ready-20261018-5c829bfd.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "5c829bfd4a01bda298e7b3e9df542718d10a693b543b24787a8094a4b7bb4805",
+      "width": 2560,
+      "height": 1600,
+      "caption": "视频录制模式的准备界面。示例请求120 fps，录制只保存音视频，唇形稍后通过离线分析计算。请求值与实际设备帧率分别核对。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；浅色、最大化、原生DPR 1.5、页面100%。结果使用既有公开NASA测试图生成的合成视频，采集状态使用合成媒体输入，未使用实体摄像头或麦克风。",
+      "capture": {
+        "report": "output/validation/m05-manual/screenshots-20261018-c52dbd37958540819ce1f4f1480a3332/report.json",
+        "name": "m05-video-recording-ready",
+        "image": [
+          2560,
+          1600
+        ],
+        "raw_image": [
+          2561,
+          1601
+        ],
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "theme": "light",
+        "navigationCollapsed": true,
+        "sha256": "5c829bfd4a01bda298e7b3e9df542718d10a693b543b24787a8094a4b7bb4805"
+      }
+    },
+    {
+      "id": "m05-filter-off-ready-20261018-7263d968",
+      "path": "assets/software-only/m05-current-20261018/m05-filter-off-ready-20261018-7263d968.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "7263d9681e0c0041dba49dbfc3c818e16e2b538f75878ca12d00b24e4b3d2243",
+      "width": 2560,
+      "height": 1600,
+      "caption": "预览模式关闭特征点防抖。截止频率保留15 Hz并禁用，麦克风在预览模式也不可设置。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；浅色、最大化、原生DPR 1.5、页面100%。结果使用既有公开NASA测试图生成的合成视频，采集状态使用合成媒体输入，未使用实体摄像头或麦克风。",
+      "capture": {
+        "report": "output/validation/m05-manual/screenshots-20261018-c52dbd37958540819ce1f4f1480a3332/report.json",
+        "name": "m05-filter-off-ready",
+        "image": [
+          2560,
+          1600
+        ],
+        "raw_image": [
+          2561,
+          1601
+        ],
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "theme": "light",
+        "navigationCollapsed": true,
+        "sha256": "7263d9681e0c0041dba49dbfc3c818e16e2b538f75878ca12d00b24e4b3d2243"
+      }
+    },
+    {
+      "id": "m05-filter-detail-20261018-e79dc29e",
+      "path": "assets/software-only/m05-current-20261018/m05-filter-detail-20261018-e79dc29e.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "e79dc29e48ca1f9f37bd755353809f790497bd92cca4789ac6b6d777c057cbc1",
+      "width": 415,
+      "height": 126,
+      "caption": "关闭特征点防抖后，截止频率输入禁用。重新勾选防抖后可修改截止频率。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图局部标注",
+      "source": "Windows 当前源码 Qt；浅色、最大化、原生DPR 1.5、页面100%。结果使用既有公开NASA测试图生成的合成视频，采集状态使用合成媒体输入，未使用实体摄像头或麦克风。",
+      "capture": {
+        "report": "output/validation/m05-manual/screenshots-20261018-c52dbd37958540819ce1f4f1480a3332/report.json",
+        "name": "m05-filter-detail",
+        "image": [
+          415,
+          126
+        ],
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "theme": "light",
+        "navigationCollapsed": true,
+        "sha256": "e79dc29e48ca1f9f37bd755353809f790497bd92cca4789ac6b6d777c057cbc1",
+        "original": "m05-filter-off-ready",
+        "crop": [
+          122,
+          480,
+          537,
+          606
+        ],
+        "annotations": [
+          {
+            "type": "roundedRectangle",
+            "box": [
+              15,
+              15,
+              400,
+              54
+            ]
+          },
+          {
+            "type": "roundedRectangle",
+            "box": [
+              15,
+              60,
+              400,
+              111
+            ]
+          }
+        ]
+      },
+      "originalAssetId": "m05-filter-off-ready-20261018-7263d968",
+      "originalSha256": "7263d9681e0c0041dba49dbfc3c818e16e2b538f75878ca12d00b24e4b3d2243",
+      "crop": [
+        122,
+        480,
+        537,
+        606
+      ],
+      "annotations": [
+        {
+          "type": "roundedRectangle",
+          "box": [
+            15,
+            15,
+            400,
+            54
+          ]
+        },
+        {
+          "type": "roundedRectangle",
+          "box": [
+            15,
+            60,
+            400,
+            111
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m05-methods-software-20261018-db2d68bc",
+      "path": "assets/software-only/m05-current-20261018/m05-methods-software-20261018-db2d68bc.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "db2d68bc5f8b6ed7ce0d9b5ed56ec3292368648ecd9687f0cea0c9722a082617",
+      "width": 2560,
+      "height": 1600,
+      "caption": "方法与引用窗口的软件与代码来源页，可查看依赖版本、许可和引用。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；浅色、最大化、原生DPR 1.5、页面100%。结果使用既有公开NASA测试图生成的合成视频，采集状态使用合成媒体输入，未使用实体摄像头或麦克风。",
+      "capture": {
+        "report": "output/validation/m05-manual/screenshots-20261018-c52dbd37958540819ce1f4f1480a3332/report.json",
+        "name": "m05-methods-software",
+        "image": [
+          2560,
+          1600
+        ],
+        "raw_image": [
+          2561,
+          1601
+        ],
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "theme": "light",
+        "navigationCollapsed": true,
+        "sha256": "db2d68bc5f8b6ed7ce0d9b5ed56ec3292368648ecd9687f0cea0c9722a082617"
+      }
+    },
+    {
+      "id": "m05-offline-ready-20261018-5320a3ee",
+      "path": "assets/software-only/m05-current-20261018/m05-offline-ready-20261018-5320a3ee.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "5320a3ee0431b3f2722a18e906775585235171b2adf94b451e273cbe13d2a4b9",
+      "width": 2560,
+      "height": 1600,
+      "caption": "离线分析入口位于顶部模式菜单。点击选择文件后，再点击分析所选文件。左侧显示输入文件，右侧保留回放与历史入口。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；浅色、最大化、原生DPR 1.5、页面100%。结果使用既有公开NASA测试图生成的合成视频，采集状态使用合成媒体输入，未使用实体摄像头或麦克风。",
+      "capture": {
+        "report": "output/validation/m05-manual/screenshots-20261018-c52dbd37958540819ce1f4f1480a3332/report.json",
+        "name": "m05-offline-ready",
+        "image": [
+          2560,
+          1600
+        ],
+        "raw_image": [
+          2561,
+          1601
+        ],
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "theme": "light",
+        "navigationCollapsed": true,
+        "sha256": "5320a3ee0431b3f2722a18e906775585235171b2adf94b451e273cbe13d2a4b9"
+      }
+    },
+    {
+      "id": "m05-offline-replay-20261018-1e0acd9b",
+      "path": "assets/software-only/m05-current-20261018/m05-offline-replay-20261018-1e0acd9b.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "1e0acd9b30ee2ea039314f27347db05e4321ec53515a4efe6df2cbcf2624223e",
+      "width": 2560,
+      "height": 1600,
+      "caption": "合成示例视频完成逐帧分析后的回放界面。左侧显示解码、推理与检出帧数，中央显示唇形网格，右侧显示原画面与同步回放控件。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；浅色、最大化、原生DPR 1.5、页面100%。结果使用既有公开NASA测试图生成的合成视频，采集状态使用合成媒体输入，未使用实体摄像头或麦克风。",
+      "capture": {
+        "report": "output/validation/m05-manual/screenshots-20261018-c52dbd37958540819ce1f4f1480a3332/report.json",
+        "name": "m05-offline-replay",
+        "image": [
+          2560,
+          1600
+        ],
+        "raw_image": [
+          2561,
+          1601
+        ],
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "theme": "light",
+        "navigationCollapsed": true,
+        "sha256": "1e0acd9b30ee2ea039314f27347db05e4321ec53515a4efe6df2cbcf2624223e"
+      }
+    },
+    {
+      "id": "m05-capture-statistics-20261018-903aa87c",
+      "path": "assets/software-only/m05-current-20261018/m05-capture-statistics-20261018-903aa87c.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "903aa87c9ea3645192d49206b0fd7671fae1d397cc280334367af9119f55a73b",
+      "width": 2560,
+      "height": 1600,
+      "caption": "视频录制结束后切到离线分析，左下角继续保留本页采集统计。展开统计含义可查看五个计数的口径。本例只录制媒体，已推理和检出均为0。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；浅色、最大化、原生DPR 1.5、页面100%。结果使用既有公开NASA测试图生成的合成视频，采集状态使用合成媒体输入，未使用实体摄像头或麦克风。",
+      "capture": {
+        "report": "output/validation/m05-manual/screenshots-20261018-c52dbd37958540819ce1f4f1480a3332/report.json",
+        "name": "m05-capture-statistics",
+        "image": [
+          2560,
+          1600
+        ],
+        "raw_image": [
+          2561,
+          1601
+        ],
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "theme": "light",
+        "navigationCollapsed": true,
+        "sha256": "903aa87c9ea3645192d49206b0fd7671fae1d397cc280334367af9119f55a73b"
+      }
+    },
+    {
+      "id": "m16-preparation-required-current-20261018",
+      "path": "assets/software-only/m16-20261018/m16-preparation-required.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "47f96446eaedb54ee6fa156b101e68a6e9588bb5aabd6e6147e1c7b9181f86eb",
+      "width": 2560,
+      "height": 1600,
+      "caption": "尚未建立工程时，开始录音会提示先新建工程，再选择设备并完成录前检测。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "当前Windows Qt，示例合成输入；浅色、2560×1600、DPR 1.5、页面100%、收起侧栏的独立最大化窗口。",
+      "originalSha256": "47f96446eaedb54ee6fa156b101e68a6e9588bb5aabd6e6147e1c7b9181f86eb",
+      "capture": {
+        "report": "output/validation/m16/manual-update-6ff36813f2ad4559831bf1ac0c1d4ead/report.json",
+        "name": "m16-preparation-required",
+        "dpr": 1.5,
+        "pageScale": 1,
+        "maximized": true
+      }
+    },
+    {
+      "id": "m16-time-zoom-current-20261018",
+      "path": "assets/software-only/m16-20261018/m16-time-zoom.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "0597b0224f1b585c3af2078adb6d6e3283811d661b5ee08202fdcda286f07bb8",
+      "width": 2560,
+      "height": 1600,
+      "caption": "把指针停在目标时间附近，按住Ctrl滚动滚轮，波形与语谱图显示同一缩放时间窗。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "当前Windows Qt，示例合成输入；浅色、2560×1600、DPR 1.5、页面100%、收起侧栏的独立最大化窗口。",
+      "originalSha256": "0597b0224f1b585c3af2078adb6d6e3283811d661b5ee08202fdcda286f07bb8",
+      "capture": {
+        "report": "output/validation/m16/manual-update-6ff36813f2ad4559831bf1ac0c1d4ead/report.json",
+        "name": "m16-time-zoom",
+        "dpr": 1.5,
+        "pageScale": 1,
+        "maximized": true
+      }
+    },
+    {
+      "id": "m16-export-history-current-20261018",
+      "path": "assets/software-only/m16-20261018/m16-export-history.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "8815814246dc67d570b69ef3f1e595b5c9056225200b55c6a7b5b4239beafc21",
+      "width": 2560,
+      "height": 1600,
+      "caption": "选择全部录音的全部历史版本时，单一版本下拉不可用，导出包含原始及所有编辑、处理版本。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "当前Windows Qt，示例合成输入；浅色、2560×1600、DPR 1.5、页面100%、收起侧栏的独立最大化窗口。",
+      "originalSha256": "8815814246dc67d570b69ef3f1e595b5c9056225200b55c6a7b5b4239beafc21",
+      "capture": {
+        "report": "output/validation/m16/manual-update-6ff36813f2ad4559831bf1ac0c1d4ead/report.json",
+        "name": "m16-export-history",
+        "dpr": 1.5,
+        "pageScale": 1,
+        "maximized": true
+      }
+    },
+    {
+      "id": "m02-current-overview-20261018-05d4f061",
+      "path": "assets/software-only/m02-current-20261018/m02-current-overview-20261018-05d4f061.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "05d4f06106ae848ad71318d34de8d170ec302d0b2667621c5f252e02e2c5f327",
+      "width": 2561,
+      "height": 1601,
+      "caption": "打开合成示例 WAV 与同名 SQLite 后，图窗和右侧勾选均为空。新建图窗也从空选择开始。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；合成4秒音频和参数，未使用研究材料。最大化、DPR1.5、页面100%，局部截图见capture。",
+      "capture": {
+        "report": "output/validation/m02/current-qt-333476632f4543b5bc3ee724eae36f5e/report.json",
+        "name": "overview",
+        "anchor": "m02-figure-m02-overview-r2-light",
+        "caption": "打开合成示例 WAV 与同名 SQLite 后，图窗和右侧勾选均为空。新建图窗也从空选择开始。",
+        "image": [
+          2561,
+          1601
+        ],
+        "sha256": "05d4f06106ae848ad71318d34de8d170ec302d0b2667621c5f252e02e2c5f327",
+        "theme": "light",
+        "dpr": 1.5,
+        "pageZoom": 1.0,
+        "maximized": true,
+        "cropped": false
+      }
+    },
+    {
+      "id": "m02-current-association-20261018-675c2da9",
+      "path": "assets/software-only/m02-current-20261018/m02-current-association-20261018-675c2da9.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "675c2da9fc8c64740890aaa2f60b0d8d63c4d62fc26d5d9230019034cf7e7c49",
+      "width": 2561,
+      "height": 1601,
+      "caption": "关联 XLSX 后搜索并勾选两项 F0，曲线立即显示，无需分配。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；合成4秒音频和参数，未使用研究材料。最大化、DPR1.5、页面100%，局部截图见capture。",
+      "capture": {
+        "report": "output/validation/m02/current-qt-333476632f4543b5bc3ee724eae36f5e/report.json",
+        "name": "association",
+        "anchor": "m02-figure-association-checks-light",
+        "caption": "关联 XLSX 后搜索并勾选两项 F0，曲线立即显示，无需分配。",
+        "image": [
+          2561,
+          1601
+        ],
+        "sha256": "675c2da9fc8c64740890aaa2f60b0d8d63c4d62fc26d5d9230019034cf7e7c49",
+        "theme": "light",
+        "dpr": 1.5,
+        "pageZoom": 1.0,
+        "maximized": true,
+        "cropped": false
+      }
+    },
+    {
+      "id": "m02-current-selection-detail-20261018-11f78b21",
+      "path": "assets/software-only/m02-current-20261018/m02-current-selection-detail-20261018-11f78b21.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "11f78b217535dbb86a0c8af9b6c68f6c2814d7fbc901920ca20f237b8c9da0fe",
+      "width": 411,
+      "height": 618,
+      "caption": "当前图窗的勾选即对应已绘制参数。取消勾选移除该曲线，清空勾选清空当前图窗。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；合成4秒音频和参数，未使用研究材料。最大化、DPR1.5、页面100%，局部截图见capture。",
+      "capture": {
+        "report": "output/validation/m02/current-qt-333476632f4543b5bc3ee724eae36f5e/report.json",
+        "name": "selection-detail",
+        "anchor": "m02-association-checks-light-detail-figure",
+        "caption": "当前图窗的勾选即对应已绘制参数。取消勾选移除该曲线，清空勾选清空当前图窗。",
+        "image": [
+          411,
+          618
+        ],
+        "sha256": "11f78b217535dbb86a0c8af9b6c68f6c2814d7fbc901920ca20f237b8c9da0fe",
+        "theme": "light",
+        "dpr": 1.5,
+        "pageZoom": 1.0,
+        "maximized": true,
+        "cropped": true
+      }
+    },
+    {
+      "id": "m02-current-first-curves-20261018-675c2da9",
+      "path": "assets/software-only/m02-current-20261018/m02-current-first-curves-20261018-675c2da9.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "675c2da9fc8c64740890aaa2f60b0d8d63c4d62fc26d5d9230019034cf7e7c49",
+      "width": 2561,
+      "height": 1601,
+      "caption": "两项 F0 即时叠加，紧凑图例标出名称和线色。示例曲线含保留的缺口。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；合成4秒音频和参数，未使用研究材料。最大化、DPR1.5、页面100%，局部截图见capture。",
+      "capture": {
+        "report": "output/validation/m02/current-qt-333476632f4543b5bc3ee724eae36f5e/report.json",
+        "name": "first-curves",
+        "anchor": "m02-figure-first-curves-light",
+        "caption": "两项 F0 即时叠加，紧凑图例标出名称和线色。示例曲线含保留的缺口。",
+        "image": [
+          2561,
+          1601
+        ],
+        "sha256": "675c2da9fc8c64740890aaa2f60b0d8d63c4d62fc26d5d9230019034cf7e7c49",
+        "theme": "light",
+        "dpr": 1.5,
+        "pageZoom": 1.0,
+        "maximized": true,
+        "cropped": false
+      }
+    },
+    {
+      "id": "m02-current-unmatched-20261018-c8124fd9",
+      "path": "assets/software-only/m02-current-20261018/m02-current-unmatched-20261018-c8124fd9.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "c8124fd9918309a3c6294eba78228ba46efde77b8bd454d1797b89320d1fa67d",
+      "width": 2561,
+      "height": 1601,
+      "caption": "未关联参数的合成示例仍可查看波形及试听，需手动关联正确结果。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；合成4秒音频和参数，未使用研究材料。最大化、DPR1.5、页面100%，局部截图见capture。",
+      "capture": {
+        "report": "output/validation/m02/current-qt-333476632f4543b5bc3ee724eae36f5e/report.json",
+        "name": "unmatched",
+        "anchor": "m02-figure-unmatched-result-light",
+        "caption": "未关联参数的合成示例仍可查看波形及试听，需手动关联正确结果。",
+        "image": [
+          2561,
+          1601
+        ],
+        "sha256": "c8124fd9918309a3c6294eba78228ba46efde77b8bd454d1797b89320d1fa67d",
+        "theme": "light",
+        "dpr": 1.5,
+        "pageZoom": 1.0,
+        "maximized": true,
+        "cropped": false
+      }
+    },
+    {
+      "id": "m02-current-dual-axis-20261018-8eb900b2",
+      "path": "assets/software-only/m02-current-20261018/m02-current-dual-axis-20261018-8eb900b2.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "8eb900b2bcc324b61446ed33c9b800fa8cb8dbe8bad915f418c6a23f72a012dc",
+      "width": 2561,
+      "height": 1601,
+      "caption": "F1 与 SHR 保留原数值自动双轴，图例完整显示轴归属，右轴曲线使用虚线。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；合成4秒音频和参数，未使用研究材料。最大化、DPR1.5、页面100%，局部截图见capture。",
+      "capture": {
+        "report": "output/validation/m02/current-qt-333476632f4543b5bc3ee724eae36f5e/report.json",
+        "name": "dual-axis",
+        "anchor": "m02-figure-dual-axis-light",
+        "caption": "F1 与 SHR 保留原数值自动双轴，图例完整显示轴归属，右轴曲线使用虚线。",
+        "image": [
+          2561,
+          1601
+        ],
+        "sha256": "8eb900b2bcc324b61446ed33c9b800fa8cb8dbe8bad915f418c6a23f72a012dc",
+        "theme": "light",
+        "dpr": 1.5,
+        "pageZoom": 1.0,
+        "maximized": true,
+        "cropped": false
+      }
+    },
+    {
+      "id": "m02-current-second-window-20261018-b677a52b",
+      "path": "assets/software-only/m02-current-20261018/m02-current-second-window-20261018-b677a52b.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "b677a52bdb76e6d1c0196496e4be4a6b03e388d326cbee4a4dc95c731cd3de8f",
+      "width": 2561,
+      "height": 1601,
+      "caption": "新窗从空选择开始。勾选 F2、F3 后在图窗 2 显示，图窗 1 的 F1、SHR 保持。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；合成4秒音频和参数，未使用研究材料。最大化、DPR1.5、页面100%，局部截图见capture。",
+      "capture": {
+        "report": "output/validation/m02/current-qt-333476632f4543b5bc3ee724eae36f5e/report.json",
+        "name": "second-window",
+        "anchor": "m02-figure-second-plot-light",
+        "caption": "新窗从空选择开始。勾选 F2、F3 后在图窗 2 显示，图窗 1 的 F1、SHR 保持。",
+        "image": [
+          2561,
+          1601
+        ],
+        "sha256": "b677a52bdb76e6d1c0196496e4be4a6b03e388d326cbee4a4dc95c731cd3de8f",
+        "theme": "light",
+        "dpr": 1.5,
+        "pageZoom": 1.0,
+        "maximized": true,
+        "cropped": false
+      }
+    },
+    {
+      "id": "m02-current-zoom-selection-20261018-440333ad",
+      "path": "assets/software-only/m02-current-20261018/m02-current-zoom-selection-20261018-440333ad.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "440333adf30c16288d28b2d6a80858d171f1a754af97ed7f4e0e9bc8a2ac3f10",
+      "width": 2561,
+      "height": 1601,
+      "caption": "时间窗显示约 0.8 至 2.6 秒，波形与当前参数图共享时间位置。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；合成4秒音频和参数，未使用研究材料。最大化、DPR1.5、页面100%，局部截图见capture。",
+      "capture": {
+        "report": "output/validation/m02/current-qt-333476632f4543b5bc3ee724eae36f5e/report.json",
+        "name": "zoom-selection",
+        "anchor": "m02-figure-zoom-selection-light",
+        "caption": "时间窗显示约 0.8 至 2.6 秒，波形与当前参数图共享时间位置。",
+        "image": [
+          2561,
+          1601
+        ],
+        "sha256": "440333adf30c16288d28b2d6a80858d171f1a754af97ed7f4e0e9bc8a2ac3f10",
+        "theme": "light",
+        "dpr": 1.5,
+        "pageZoom": 1.0,
+        "maximized": true,
+        "cropped": false
+      }
+    },
+    {
+      "id": "m02-current-spectrogram-20261018-9fefcc05",
+      "path": "assets/software-only/m02-current-20261018/m02-current-spectrogram-20261018-9fefcc05.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "9fefcc05fee596a9938152a22e2a0de448da47f03c01709215cf6ebcef1eb676",
+      "width": 2561,
+      "height": 1601,
+      "caption": "同一合成示例的本机 Praat 语谱图已读取，与波形和参数图共用查看时间窗。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；合成4秒音频和参数，未使用研究材料。最大化、DPR1.5、页面100%，局部截图见capture。",
+      "capture": {
+        "report": "output/validation/m02/current-qt-333476632f4543b5bc3ee724eae36f5e/report.json",
+        "name": "spectrogram",
+        "anchor": "m02-figure-spectrogram-ready-light",
+        "caption": "同一合成示例的本机 Praat 语谱图已读取，与波形和参数图共用查看时间窗。",
+        "image": [
+          2561,
+          1601
+        ],
+        "sha256": "9fefcc05fee596a9938152a22e2a0de448da47f03c01709215cf6ebcef1eb676",
+        "theme": "light",
+        "dpr": 1.5,
+        "pageZoom": 1.0,
+        "maximized": true,
+        "cropped": false
+      }
+    },
+    {
+      "id": "m02-current-text-layers-20261018-8fd4b248",
+      "path": "assets/software-only/m02-current-20261018/m02-current-text-layers-20261018-8fd4b248.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "8fd4b248c4a194255dbfc371a3717de45bf89298f3778a45276b49271582d953",
+      "width": 2561,
+      "height": 1601,
+      "caption": "勾选表内文字列后，文字和区间边界立即显示在波形及参数图中。标签与参数均为合成示例。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；合成4秒音频和参数，未使用研究材料。最大化、DPR1.5、页面100%，局部截图见capture。",
+      "capture": {
+        "report": "output/validation/m02/current-qt-333476632f4543b5bc3ee724eae36f5e/report.json",
+        "name": "text-layers",
+        "anchor": "m02-figure-table-text-layer-light",
+        "caption": "勾选表内文字列后，文字和区间边界立即显示在波形及参数图中。标签与参数均为合成示例。",
+        "image": [
+          2561,
+          1601
+        ],
+        "sha256": "8fd4b248c4a194255dbfc371a3717de45bf89298f3778a45276b49271582d953",
+        "theme": "light",
+        "dpr": 1.5,
+        "pageZoom": 1.0,
+        "maximized": true,
+        "cropped": false
+      }
+    },
+    {
+      "id": "m02-current-svg-export-20261018-1f304754",
+      "path": "assets/software-only/m02-current-20261018/m02-current-svg-export-20261018-1f304754.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "1f304754df504ab2871070ecff9f8883645e8f9db69ee23deb137015f39ec949",
+      "width": 2561,
+      "height": 1601,
+      "caption": "选择 SVG 保存当前图。图例优先放在绘图区空白位置，空间不足时移至上方，长名称完整换行。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；合成4秒音频和参数，未使用研究材料。最大化、DPR1.5、页面100%，局部截图见capture。",
+      "capture": {
+        "report": "output/validation/m02/current-qt-333476632f4543b5bc3ee724eae36f5e/report.json",
+        "name": "svg-export",
+        "anchor": "m02-figure-svg-current-export-light",
+        "caption": "选择 SVG 保存当前图。图例优先放在绘图区空白位置，空间不足时移至上方，长名称完整换行。",
+        "image": [
+          2561,
+          1601
+        ],
+        "sha256": "1f304754df504ab2871070ecff9f8883645e8f9db69ee23deb137015f39ec949",
+        "theme": "light",
+        "dpr": 1.5,
+        "pageZoom": 1.0,
+        "maximized": true,
+        "cropped": false
+      }
+    },
+    {
+      "id": "m02-current-export-detail-20261018-c1d0046e",
+      "path": "assets/software-only/m02-current-20261018/m02-current-export-detail-20261018-c1d0046e.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "c1d0046e9dd44caf0b92abc4eecd49e6b80ec54e5535b8f93bf3bc08a6d50f43",
+      "width": 1187,
+      "height": 70,
+      "caption": "当前图可选 PNG 或 SVG；整幅 PNG 还包含波形及已开启的语谱图。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；合成4秒音频和参数，未使用研究材料。最大化、DPR1.5、页面100%，局部截图见capture。",
+      "capture": {
+        "report": "output/validation/m02/current-qt-333476632f4543b5bc3ee724eae36f5e/report.json",
+        "name": "export-detail",
+        "anchor": "m02-svg-current-export-light-detail-figure",
+        "caption": "当前图可选 PNG 或 SVG；整幅 PNG 还包含波形及已开启的语谱图。",
+        "image": [
+          1187,
+          70
+        ],
+        "sha256": "c1d0046e9dd44caf0b92abc4eecd49e6b80ec54e5535b8f93bf3bc08a6d50f43",
+        "theme": "light",
+        "dpr": 1.5,
+        "pageZoom": 1.0,
+        "maximized": true,
+        "cropped": true
+      }
+    },
+    {
+      "id": "m02-current-whole-figure-20261018-a8740db3",
+      "path": "assets/software-only/m02-current-20261018/m02-current-whole-figure-20261018-a8740db3.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "a8740db3b6a7d19e34e863565d8d08798fa53fdc1c98dfddb44bde7c853d7174",
+      "width": 2472,
+      "height": 2891,
+      "caption": "当前应用实际导出的白底 300 dpi 整幅 PNG，包含合成示例的波形、Praat 语谱及双轴参数图，紧凑图例随图保存。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用导出",
+      "source": "Windows 当前源码 Qt；合成4秒音频和参数，未使用研究材料。最大化、DPR1.5、页面100%，局部截图见capture。",
+      "capture": {
+        "report": "output/validation/m02/current-qt-333476632f4543b5bc3ee724eae36f5e/report.json",
+        "name": "whole-figure",
+        "anchor": "m02-figure-export-whole-plot",
+        "caption": "当前应用实际导出的白底 300 dpi 整幅 PNG，包含合成示例的波形、Praat 语谱及双轴参数图，紧凑图例随图保存。",
+        "image": [
+          2472,
+          2891
+        ],
+        "sha256": "a8740db3b6a7d19e34e863565d8d08798fa53fdc1c98dfddb44bde7c853d7174",
+        "theme": "light",
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "cropped": false
+      }
+    },
+    {
+      "id": "m02-current-restored-20261018-06be3f36",
+      "path": "assets/software-only/m02-current-20261018/m02-current-restored-20261018-06be3f36.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "06be3f36db6486664d7e9ef2ac498a0153e2ef5cb39c540d4566814ae7a512c8",
+      "width": 2561,
+      "height": 1601,
+      "caption": "刷新并恢复已保存配置后，F1、SHR 曲线与右侧勾选一致，查看时间窗回到全长。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；合成4秒音频和参数，未使用研究材料。最大化、DPR1.5、页面100%，局部截图见capture。",
+      "capture": {
+        "report": "output/validation/m02/current-qt-333476632f4543b5bc3ee724eae36f5e/report.json",
+        "name": "restored",
+        "anchor": "m02-figure-config-restored-light",
+        "caption": "刷新并恢复已保存配置后，F1、SHR 曲线与右侧勾选一致，查看时间窗回到全长。",
+        "image": [
+          2561,
+          1601
+        ],
+        "sha256": "06be3f36db6486664d7e9ef2ac498a0153e2ef5cb39c540d4566814ae7a512c8",
+        "theme": "light",
+        "dpr": 1.5,
+        "pageZoom": 1.0,
+        "maximized": true,
+        "cropped": false
+      }
+    },
+    {
+      "id": "m02-current-no-candidates-20261018-7a3a1e30",
+      "path": "assets/software-only/m02-current-20261018/m02-current-no-candidates-20261018-7a3a1e30.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "7a3a1e30ab2c4ad99e5f53953713c7e52644959edbd88d5423147cca74c6bcc3",
+      "width": 2561,
+      "height": 1601,
+      "caption": "搜索无匹配时图窗曲线和已选参数保留；清空勾选仍会移除当前窗全部参数。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；合成4秒音频和参数，未使用研究材料。最大化、DPR1.5、页面100%，局部截图见capture。",
+      "capture": {
+        "report": "output/validation/m02/current-qt-333476632f4543b5bc3ee724eae36f5e/report.json",
+        "name": "no-candidates",
+        "anchor": "m02-figure-no-matching-candidate-light",
+        "caption": "搜索无匹配时图窗曲线和已选参数保留；清空勾选仍会移除当前窗全部参数。",
+        "image": [
+          2561,
+          1601
+        ],
+        "sha256": "7a3a1e30ab2c4ad99e5f53953713c7e52644959edbd88d5423147cca74c6bcc3",
+        "theme": "light",
+        "dpr": 1.5,
+        "pageZoom": 1.0,
+        "maximized": true,
+        "cropped": false
+      }
+    },
+    {
+      "id": "m02-current-invalid-table-20261018-4171dda7",
+      "path": "assets/software-only/m02-current-20261018/m02-current-invalid-table-20261018-4171dda7.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "4171dda7e4eb7b07a81b79d094e877b5f2beba5bdf5ec194b70cf4cbee070dad",
+      "width": 2561,
+      "height": 1601,
+      "caption": "损坏的合成 XLSX 无法读取，顶部显示错误，原音波形仍保留。重新选择有效结果可恢复。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；合成4秒音频和参数，未使用研究材料。最大化、DPR1.5、页面100%，局部截图见capture。",
+      "capture": {
+        "report": "output/validation/m02/current-qt-333476632f4543b5bc3ee724eae36f5e/report.json",
+        "name": "invalid-table",
+        "anchor": "m02-figure-invalid-table-error-light",
+        "caption": "损坏的合成 XLSX 无法读取，顶部显示错误，原音波形仍保留。重新选择有效结果可恢复。",
+        "image": [
+          2561,
+          1601
+        ],
+        "sha256": "4171dda7e4eb7b07a81b79d094e877b5f2beba5bdf5ec194b70cf4cbee070dad",
+        "theme": "light",
+        "dpr": 1.5,
+        "pageZoom": 1.0,
+        "maximized": true,
+        "cropped": false
+      }
+    },
+    {
+      "id": "m05-preview-ready-20261018-285ac5ff",
+      "path": "assets/software-only/m05-current-20261018/m05-preview-ready-20261018-285ac5ff.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "285ac5ff6285d43a6ae7cfc0d6c1cbfe80ee31bcdcbed82a9cca166e3018b7c8",
+      "width": 2560,
+      "height": 1600,
+      "caption": "预览模式的准备界面。左侧设置设备与参数，音频列表尚未开放时可点击授权并刷新设备。中央显示网格和曲线，右侧查看画面与历史。图中尚未开始采集。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；浅色、最大化、原生DPR 1.5、页面100%。结果使用既有公开NASA测试图生成的合成视频，采集状态使用合成媒体输入，未使用实体摄像头或麦克风。",
+      "capture": {
+        "report": "output/validation/m05-manual/screenshots-20261018-87e278e7f4d549378b8454a04048c52c/report.json",
+        "name": "m05-preview-ready",
+        "image": [
+          2560,
+          1600
+        ],
+        "raw_image": [
+          2561,
+          1601
+        ],
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "theme": "light",
+        "navigationCollapsed": true,
+        "sha256": "285ac5ff6285d43a6ae7cfc0d6c1cbfe80ee31bcdcbed82a9cca166e3018b7c8"
+      }
+    },
+    {
+      "id": "m05-realtime-ready-20261018-09dcafa1",
+      "path": "assets/software-only/m05-current-20261018/m05-realtime-ready-20261018-09dcafa1.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "09dcafa1ade0daf08aefdf610a7f2f24efb7c333d4e39fb2d43aad46316455bc",
+      "width": 2560,
+      "height": 1600,
+      "caption": "实时计算模式的准备界面。开始录制后同时采集音视频并计算候选唇形，另存时可选择视频与动画。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；浅色、最大化、原生DPR 1.5、页面100%。结果使用既有公开NASA测试图生成的合成视频，采集状态使用合成媒体输入，未使用实体摄像头或麦克风。",
+      "capture": {
+        "report": "output/validation/m05-manual/screenshots-20261018-87e278e7f4d549378b8454a04048c52c/report.json",
+        "name": "m05-realtime-ready",
+        "image": [
+          2560,
+          1600
+        ],
+        "raw_image": [
+          2561,
+          1601
+        ],
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "theme": "light",
+        "navigationCollapsed": true,
+        "sha256": "09dcafa1ade0daf08aefdf610a7f2f24efb7c333d4e39fb2d43aad46316455bc"
+      }
+    },
+    {
+      "id": "m05-video-recording-ready-20261018-f3707c17",
+      "path": "assets/software-only/m05-current-20261018/m05-video-recording-ready-20261018-f3707c17.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "f3707c17e3a05cf1679cb74a0a8a691d3f9612abfa521cb3bf169889430f5d24",
+      "width": 2560,
+      "height": 1600,
+      "caption": "视频录制模式的准备界面。示例请求120 fps，录制只保存音视频，唇形稍后通过离线分析计算。请求值与实际设备帧率分别核对。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；浅色、最大化、原生DPR 1.5、页面100%。结果使用既有公开NASA测试图生成的合成视频，采集状态使用合成媒体输入，未使用实体摄像头或麦克风。",
+      "capture": {
+        "report": "output/validation/m05-manual/screenshots-20261018-87e278e7f4d549378b8454a04048c52c/report.json",
+        "name": "m05-video-recording-ready",
+        "image": [
+          2560,
+          1600
+        ],
+        "raw_image": [
+          2561,
+          1601
+        ],
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "theme": "light",
+        "navigationCollapsed": true,
+        "sha256": "f3707c17e3a05cf1679cb74a0a8a691d3f9612abfa521cb3bf169889430f5d24"
+      }
+    },
+    {
+      "id": "m05-filter-off-ready-20261018-eebb7fb7",
+      "path": "assets/software-only/m05-current-20261018/m05-filter-off-ready-20261018-eebb7fb7.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "eebb7fb763b6cf05765737ce7740c419be371f6f34f79b7cac8fe84d92174592",
+      "width": 2560,
+      "height": 1600,
+      "caption": "预览模式关闭特征点防抖。截止频率保留15 Hz并禁用，麦克风可在预览前授权并预选。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；浅色、最大化、原生DPR 1.5、页面100%。结果使用既有公开NASA测试图生成的合成视频，采集状态使用合成媒体输入，未使用实体摄像头或麦克风。",
+      "capture": {
+        "report": "output/validation/m05-manual/screenshots-20261018-87e278e7f4d549378b8454a04048c52c/report.json",
+        "name": "m05-filter-off-ready",
+        "image": [
+          2560,
+          1600
+        ],
+        "raw_image": [
+          2561,
+          1601
+        ],
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "theme": "light",
+        "navigationCollapsed": true,
+        "sha256": "eebb7fb763b6cf05765737ce7740c419be371f6f34f79b7cac8fe84d92174592"
+      }
+    },
+    {
+      "id": "m05-filter-detail-20261018-f688dfba",
+      "path": "assets/software-only/m05-current-20261018/m05-filter-detail-20261018-f688dfba.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "f688dfba665b01f63d94540024834d7c6329c022399407a228defd67370344f3",
+      "width": 415,
+      "height": 126,
+      "caption": "关闭特征点防抖后，截止频率输入禁用。重新勾选防抖后可修改截止频率。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图局部标注",
+      "source": "Windows 当前源码 Qt；浅色、最大化、原生DPR 1.5、页面100%。结果使用既有公开NASA测试图生成的合成视频，采集状态使用合成媒体输入，未使用实体摄像头或麦克风。",
+      "capture": {
+        "report": "output/validation/m05-manual/screenshots-20261018-87e278e7f4d549378b8454a04048c52c/report.json",
+        "name": "m05-filter-detail",
+        "image": [
+          415,
+          126
+        ],
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "theme": "light",
+        "navigationCollapsed": true,
+        "sha256": "f688dfba665b01f63d94540024834d7c6329c022399407a228defd67370344f3",
+        "original": "m05-filter-off-ready",
+        "crop": [
+          122,
+          561,
+          537,
+          687
+        ],
+        "annotations": [
+          {
+            "type": "roundedRectangle",
+            "box": [
+              15,
+              15,
+              400,
+              54
+            ]
+          },
+          {
+            "type": "roundedRectangle",
+            "box": [
+              15,
+              60,
+              400,
+              111
+            ]
+          }
+        ]
+      },
+      "originalAssetId": "m05-filter-off-ready-20261018-eebb7fb7",
+      "originalSha256": "eebb7fb763b6cf05765737ce7740c419be371f6f34f79b7cac8fe84d92174592",
+      "crop": [
+        122,
+        561,
+        537,
+        687
+      ],
+      "annotations": [
+        {
+          "type": "roundedRectangle",
+          "box": [
+            15,
+            15,
+            400,
+            54
+          ]
+        },
+        {
+          "type": "roundedRectangle",
+          "box": [
+            15,
+            60,
+            400,
+            111
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m05-methods-software-20261018-07bf7d1d",
+      "path": "assets/software-only/m05-current-20261018/m05-methods-software-20261018-07bf7d1d.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "07bf7d1daba779332c1c707a32ded9006efa020706081fea7b45407992514a63",
+      "width": 2560,
+      "height": 1600,
+      "caption": "方法与引用窗口的软件与代码来源页，可查看依赖版本、许可和引用。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；浅色、最大化、原生DPR 1.5、页面100%。结果使用既有公开NASA测试图生成的合成视频，采集状态使用合成媒体输入，未使用实体摄像头或麦克风。",
+      "capture": {
+        "report": "output/validation/m05-manual/screenshots-20261018-87e278e7f4d549378b8454a04048c52c/report.json",
+        "name": "m05-methods-software",
+        "image": [
+          2560,
+          1600
+        ],
+        "raw_image": [
+          2561,
+          1601
+        ],
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "theme": "light",
+        "navigationCollapsed": true,
+        "sha256": "07bf7d1daba779332c1c707a32ded9006efa020706081fea7b45407992514a63"
+      }
+    },
+    {
+      "id": "m05-offline-ready-20261018-536e0647",
+      "path": "assets/software-only/m05-current-20261018/m05-offline-ready-20261018-536e0647.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "536e06471f76e8fd04016f302561c908ce0f7b9358e37731f043f813c4ba959a",
+      "width": 2560,
+      "height": 1600,
+      "caption": "离线分析入口位于顶部模式菜单。点击选择文件后，再点击分析所选文件。左侧显示输入文件，右侧保留回放与历史入口。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；浅色、最大化、原生DPR 1.5、页面100%。结果使用既有公开NASA测试图生成的合成视频，采集状态使用合成媒体输入，未使用实体摄像头或麦克风。",
+      "capture": {
+        "report": "output/validation/m05-manual/screenshots-20261018-87e278e7f4d549378b8454a04048c52c/report.json",
+        "name": "m05-offline-ready",
+        "image": [
+          2560,
+          1600
+        ],
+        "raw_image": [
+          2561,
+          1601
+        ],
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "theme": "light",
+        "navigationCollapsed": true,
+        "sha256": "536e06471f76e8fd04016f302561c908ce0f7b9358e37731f043f813c4ba959a"
+      }
+    },
+    {
+      "id": "m05-offline-replay-20261018-36c31b87",
+      "path": "assets/software-only/m05-current-20261018/m05-offline-replay-20261018-36c31b87.png",
+      "kind": "image",
+      "mime": "image/png",
+      "sha256": "36c31b87bbc79342a5f8e586f23b1e64b1dd3705e73f1d784a0e65076d6cc3f2",
+      "width": 2560,
+      "height": 1600,
+      "caption": "合成示例视频完成逐帧分析后的回放界面。左侧显示解码、推理与检出帧数，中央显示唇形网格，右侧显示原画面与同步回放控件。",
+      "git": false,
+      "distribution": "software-only",
+      "sourceType": "实际应用截图",
+      "source": "Windows 当前源码 Qt；浅色、最大化、原生DPR 1.5、页面100%。结果使用既有公开NASA测试图生成的合成视频，采集状态使用合成媒体输入，未使用实体摄像头或麦克风。",
+      "capture": {
+        "report": "output/validation/m05-manual/screenshots-20261018-87e278e7f4d549378b8454a04048c52c/report.json",
+        "name": "m05-offline-replay",
+        "image": [
+          2560,
+          1600
+        ],
+        "raw_image": [
+          2561,
+          1601
+        ],
+        "dpr": 1.5,
+        "pageZoom": 1,
+        "maximized": true,
+        "theme": "light",
+        "navigationCollapsed": true,
+        "sha256": "36c31b87bbc79342a5f8e586f23b1e64b1dd3705e73f1d784a0e65076d6cc3f2"
+      }
     }
   ],
   "references": [
@@ -517850,536 +518951,591 @@
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-purpose",
+      "title": "唇形提取",
       "text": "从视频中提取唇形",
-      "title": "唇形提取"
+      "targetId": "m05-purpose"
     },
     {
       "chapterId": "m05",
+      "title": "唇形提取",
       "text": "先检查设备和画面，再录制或导入已有视频。本模块显示面部网格、唇形曲线和逐帧参数，可同步回放，并把音视频与数据保存到本机。",
-      "title": "唇形提取"
+      "targetId": "m05-purpose"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-candidate-note",
-      "text": "实时预览和实时录制的唇形标记为候选（candidate）。正式离线分析使用另一套冻结模型，两类结果请分别使用。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "四个模式依次为预览、实时计算、视频录制和离线分析。实时计算边录制边计算候选唇形，视频录制仅保存音视频后再离线计算。",
+      "targetId": "m05-purpose"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-layout",
+      "title": "唇形提取",
+      "text": "预览和实时计算的唇形标记为候选（candidate）。视频文件分析使用 Face Mesh 模型，两类结果请分别使用。",
+      "targetId": "m05-purpose"
+    },
+    {
+      "chapterId": "m05",
+      "title": "唇形提取",
       "text": "先认清工作区",
-      "title": "唇形提取"
+      "targetId": "m05-layout"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-figure-m05-overview-r2-light",
-      "text": "实时预览的准备界面。顶部开始操作，左侧选择设备与参数，中央显示网格和曲线，右侧查看视频与历史。尚未开始采集。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "预览模式的准备界面。左侧设置设备与参数，音频列表尚未开放时可点击授权并刷新设备。中央显示网格和曲线，右侧查看画面与历史。图中尚未开始采集。",
+      "targetId": "m05-layout"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-layout-table",
-      "text": "位置 可以做什么 顶部 选择模式，开始或结束采集，另存录制、放弃未保存内容、检查偏移量。 左栏 选摄像头和麦克风，设置帧率与防抖，查看电平、阶段和帧数。 中央 查看面部网格、九项数值及四条唇形曲线。空白或 — 表示没有有效测量。 右栏 播放视频，提交离线分析，恢复历史，选择结果并保存或导出动画。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "位置 可以做什么 顶部 选择实时采集或离线分析，选择文件并开始分析，另存录制、放弃未保存内容、检查偏移量。 左栏 选摄像头和麦克风，设置帧率与防抖，查看电平、阶段和帧数。 中央 查看面部网格、九项数值及四条唇形曲线。空白或 — 表示没有有效测量。 右栏 保存结果、播放视频、恢复历史，或单独导出动画。离线分析入口位于顶部模式菜单。",
+      "targetId": "m05-layout"
     },
     {
       "chapterId": "m05",
+      "title": "唇形提取",
       "text": "右栏收起后仍会继续采集。 录制时保持页面可见 ，后台或切换标签可能影响处理。顶部提示会显示进度、错误或保存结果。",
-      "title": "唇形提取"
+      "targetId": "m05-layout"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-input",
+      "title": "唇形提取",
       "text": "准备设备或已有视频",
-      "title": "唇形提取"
+      "targetId": "m05-input"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-input-camera",
+      "title": "唇形提取",
       "text": "采集前检查",
-      "title": "唇形提取"
+      "targetId": "m05-input-camera"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-preflight-checks",
-      "text": "固定机位，保持面部正对摄像头、嘴唇清楚可见，使用均匀照明。先检查网格是否稳定，避免遮挡和大幅转头。 在左栏选择摄像头。录制时还要选择目标麦克风并允许相机、麦克风权限。名称暂时显示未授权时，授权后再核对。 先预览，再录一小段：检查 实际输入 名称、电平和画面，结束后试听。电平变化只表示有信号，仍需确认录到了目标人声。 接入新设备后，停止采集再点 刷新设备 。所选设备消失时需重新选择。避免与录音模块同时占用设备。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "固定机位，保持面部正对摄像头、嘴唇清楚可见，使用均匀照明。先检查网格是否稳定，避免遮挡和大幅转头。 在左栏选择摄像头。若麦克风只有自动选择，点击授权并刷新设备并允许麦克风访问。读取时短暂启用音频输入，列出设备后立即释放，不录音，也不打开摄像头。随后可选择麦克风、外接声卡或线路输入。预览仅使用摄像头，切到实时计算或视频录制时沿用所选麦克风；采集和设备读取期间锁定选择。Windows、macOS和网页操作相同，网页需通过HTTPS或localhost打开。 先预览，再录一小段：检查 实际输入 名称、电平和画面，结束后试听。电平变化只表示有信号，仍需确认录到了目标人声。 接入新设备后，停止采集再点 刷新设备 。普通刷新保留选择，不重新打开麦克风。未授权时按钮显示授权并刷新设备，拒绝后可再次点击并选择允许；仍被拒绝时检查系统与浏览器麦克风权限。所选设备消失时需重新选择。避免与录音模块同时占用设备。",
+      "targetId": "m05-input-camera"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-input-video",
+      "title": "唇形提取",
       "text": "已有视频的要求",
-      "title": "唇形提取"
+      "targetId": "m05-input-video"
     },
     {
       "chapterId": "m05",
+      "title": "唇形提取",
       "text": "可多选  .mp4 、 .mov 、 .avi 、 .mkv 、 .wmv 、 .m4v 、 .webm 。 每文件不超过 128 MB，每批最多 100 个，本页最多保留 100 项结果 。画面像素总数上限为 1920×1080。较大材料先分段，并记录各段起点。",
-      "title": "唇形提取"
+      "targetId": "m05-input-video"
     },
     {
       "chapterId": "m05",
-      "text": "无音轨的视频也能分析唇形，但无法导出原音频或用声音校对偏移。编码和逐帧时间戳须可解码；时间戳缺失或倒退时会拒绝正式结果。正式分析与完整目录保存请使用支持 M05 的 Windows 桌面工作台。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "无音轨的视频也能分析唇形，但无法导出原音频或用声音校对偏移。编码和逐帧时间戳须可解码；时间戳缺失或倒退时会拒绝正式结果。正式分析与完整目录保存请使用桌面工作台。",
+      "targetId": "m05-input-video"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-quick-start",
+      "title": "唇形提取",
       "text": "使用摄像头采集",
-      "title": "唇形提取"
+      "targetId": "m05-quick-start"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-modes",
-      "text": "选择采集模式",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "选择模式",
+      "targetId": "m05-modes"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-modes-table",
-      "text": "模式 采集内容 接下来做什么 实时预览 摄像头画面与候选网格，不录音视频。 检查构图后结束，换录制模式。 实时录制 视频、音频和实时候选唇形。 结束、回放、按需校对，再另存。 高帧率先录后算 只录视频与音频，不运行唇形模型。 另存后，在右栏选择所存视频做离线分析。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "模式 采集内容 接下来做什么 离线分析 按完整视频帧计算唇形，可一次选择多个文件。 选择文件，再点分析所选文件，完成后检查并保存结果。 预览 摄像头画面与候选网格，不录音视频。 检查构图后结束，换录制模式。 实时计算 视频、音频和实时候选唇形。 结束、回放、按需校对，再另存。 视频录制 只录视频与音频，不运行唇形模型。 另存后，在顶部选择离线分析，再选择所存视频计算唇形。",
+      "targetId": "m05-modes"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-controls-capture",
+      "title": "唇形提取",
       "text": "设置设备与参数",
-      "title": "唇形提取"
+      "targetId": "m05-controls-capture"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-controls-table",
-      "text": "设置 新页面默认值 怎样使用 摄像头／麦克风 系统默认／自动选择麦克风 预览只用摄像头。录人声时明确选择实际麦克风，勿误选立体声混音或系统回放。 请求帧率 30 fps 范围 1–240 fps。请求值、设备协商值和实际文件帧率分别查看。 特征点防抖／截止频率 开启／15 Hz 截止频率范围 1–240 Hz。关闭防抖后输入禁用；较低值更平滑，也可能削弱快速动作。 推理设备 CPU 可选 GPU，只用于实时模型。已有视频正式分析不由此切换 CPU/GPU。 镜像预览 开启 只改变预览方向，原媒体和测量坐标不镜像。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "设置 新页面默认值 怎样使用 摄像头／麦克风 系统默认／自动选择麦克风 列表未开放时先点击授权并刷新设备，允许麦克风访问后显示音频输入名称。预览前可预选麦克风或声卡，切换录制模式时沿用。预览只用摄像头，采集中锁定设备。录人声时选择对应麦克风或线路输入，勿误选系统回放。 请求帧率 30 fps 范围 1–240 fps。请求值、设备协商值和实际文件帧率分别查看。 特征点防抖／截止频率 开启／15 Hz 截止频率范围 1–240 Hz。关闭防抖后输入禁用；较低值更平滑，也可能削弱快速动作。 推理设备 CPU 可选 GPU，只用于实时模型。已有视频正式分析不由此切换 CPU/GPU。 镜像预览 开启 只改变预览方向，原媒体和测量坐标不镜像。",
+      "targetId": "m05-controls-capture"
     },
     {
       "chapterId": "m05",
+      "title": "唇形提取",
       "text": "采集或分析运行时，大部分设置会锁定。先结束并等待收尾，再改设备、模式或参数。",
-      "title": "唇形提取"
+      "targetId": "m05-controls-capture"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-quick-realtime",
-      "text": "预览后开始实时录制",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "预览后开始实时计算",
+      "targetId": "m05-quick-realtime"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-preview-steps",
-      "text": "顶部模式选 实时预览 ，左栏选摄像头，点 打开预览 并允许权限。 阶段变为预览中后，右栏显示摄像头画面，中央显示候选网格、九项数值和下方四条曲线。保持正对摄像头，缓慢张口、闭口，检查网格与参数是否随动作变化。未检出面部时网格留空、数值显示 —，先改善光线、机位或遮挡。 点 结束录制 退出预览。临时帧会清除，预览没有可保存的录音、视频或唇形记录。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "顶部模式选 预览 ，左栏选摄像头，点 打开预览 并允许权限。 阶段变为预览中后，右栏显示摄像头画面，中央显示候选网格、九项数值和下方四条曲线。保持正对摄像头，缓慢张口、闭口，检查网格与参数是否随动作变化。未检出面部时网格留空、数值显示 —，先改善光线、机位或遮挡。 点 结束录制 退出预览。临时帧会清除，预览没有可保存的录音、视频或唇形记录。",
+      "targetId": "m05-quick-realtime"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-figure-m05-realtime-idle-current-light",
-      "text": "实时录制的准备界面。麦克风可选择，左栏提示音频与唇形数据始终保存。阶段仍为未开始。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "实时计算模式的准备界面。开始录制后同时采集音视频并计算候选唇形，另存时可选择视频与动画。",
+      "targetId": "m05-quick-realtime"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-recording-steps",
-      "text": "模式改为 实时录制 ，选好摄像头与麦克风，点 开始录制 。先核对实际输入、电平和网格，再读正式材料。 点 结束录制 ，等到编码和音频时间轴检查收尾。 在右栏播放视频或点 同步回放 。需要检查声音与唇形时间时，使用顶部 检查偏移量 。 点 另存录制 ，选择所需视频、动画，再选目录保存。具体组合见下一节。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "模式改为 实时计算 ，选好摄像头与麦克风，点 开始录制 。先核对实际输入、电平和网格，再读正式材料。 点 结束录制 ，等到编码和音频时间轴检查收尾。 在右栏播放视频或点 同步回放 。需要检查声音与唇形时间时，使用顶部 检查偏移量 。 点 另存录制 ，选择所需视频、动画，再选目录保存。具体组合见下一节。",
+      "targetId": "m05-quick-realtime"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-stop-save-note",
+      "title": "唇形提取",
       "text": "结束录制只停止采集。请完成另存并看到保存成功提示，再开始下一次或关闭页面。",
-      "title": "唇形提取"
+      "targetId": "m05-quick-realtime"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-advanced",
-      "text": "高帧率先录后算",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "视频录制",
+      "targetId": "m05-advanced"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-figure-m05-record-then-analyze-idle-current-light",
-      "text": "高帧率先录后算的准备界面。120 fps 是示例请求值，实际设备和文件帧率尚未测得。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "视频录制模式的准备界面。示例请求120 fps，录制只保存音视频，唇形稍后通过离线分析计算。请求值与实际设备帧率分别核对。",
+      "targetId": "m05-advanced"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-high-framerate-steps",
-      "text": "模式选 高帧率先录后算 ，选设备和请求帧率，点 开始录制 。检查右栏画面、输入名称与电平。中央提示唇形稍后计算。 点 结束录制 并等待收尾，再点 另存录制 选择目录。此模式保存视频、WAV和回执，不生成唇形或动画。 在右栏 离线分析 重新选择保存的视频，点 分析所选 1 个视频 。按正式分析流程检查并保存结果。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "模式选 视频录制 ，选设备和请求帧率，点 开始录制 。检查右栏画面、输入名称与电平。中央提示唇形稍后计算。 点 结束录制 并等待收尾，再点 另存录制 选择目录。此模式保存视频、WAV和回执，不生成唇形或动画。 在顶部模式菜单选择 离线分析 重新选择保存的视频，点 分析所选文件 。按正式分析流程检查并保存结果。",
+      "targetId": "m05-advanced"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-fps-note",
-      "text": "请求高帧率不会保证设备按该数值录制。保存后核对实际文件帧率，勿把示例120 fps当作已测值。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "设备会协商实际帧率，保存后请核对文件的实际帧率。示例请求值为 120 fps。",
+      "targetId": "m05-advanced"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-filter",
+      "title": "唇形提取",
       "text": "选择防抖条件",
-      "title": "唇形提取"
+      "targetId": "m05-filter"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-filter-note",
+      "title": "唇形提取",
       "text": "在左栏勾选或取消 特征点防抖 。开启时可编辑截止频率，关闭后保留数值但禁用输入。同一实验尽量保持设置一致，关注快速运动时请同时保留原视频。",
-      "title": "唇形提取"
+      "targetId": "m05-filter"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-figure-m05-filter-off-idle-current-light",
-      "text": "实时预览准备界面中的防抖关闭状态。截止频率15 Hz保留显示并禁用，麦克风也因预览模式禁用。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "预览模式关闭特征点防抖。截止频率保留15 Hz并禁用，麦克风可在预览前授权并预选。",
+      "targetId": "m05-filter"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-filter-detail-figure",
-      "text": "取消特征点防抖后，截止频率输入禁用。想修改截止频率时，先重新勾选防抖。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "关闭特征点防抖后，截止频率输入禁用。重新勾选防抖后可修改截止频率。",
+      "targetId": "m05-filter"
     },
     {
       "chapterId": "m05",
+      "title": "唇形提取",
       "text": "这里关闭的是额外关键点防抖，实时模型仍可能有内部平滑。已有结果回放使用当时保存的设置，不按页面新值重新滤波。",
-      "title": "唇形提取"
+      "targetId": "m05-filter"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-output",
+      "title": "唇形提取",
       "text": "结束后保存录制",
-      "title": "唇形提取"
+      "targetId": "m05-output"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-recording-save",
+      "title": "唇形提取",
       "text": "选择要保存的画面",
-      "title": "唇形提取"
+      "targetId": "m05-recording-save"
     },
     {
       "chapterId": "m05",
-      "text": "实时录制另存时， 音频、完整已测唇形和时间信息始终保存 ，视频与动画可自由组合。动画是面部网格画面。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "实时计算另存时， 音频、完整已测唇形和时间信息始终保存 ，视频与动画可自由组合。动画是面部网格画面。",
+      "targetId": "m05-recording-save"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-save-matrix",
+      "title": "唇形提取",
       "text": "视频 动画 同时保存的画面 勾选 勾选 原视频＋面部动画，默认组合。 勾选 取消 只保留原视频。 取消 勾选 只保留面部动画。 取消 取消 不保存画面，仍保存音频与唇形。",
-      "title": "唇形提取"
+      "targetId": "m05-recording-save"
     },
     {
       "chapterId": "m05",
-      "text": "高帧率先录后算直接保存视频、音频和回执，不出现这组勾选项。实时录制没有有效面部点时，取消动画后可尝试保留音频及已有记录。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "视频录制直接保存视频、音频和回执，不出现这组勾选项。实时计算没有有效面部点时，取消动画后可尝试保留音频及已有记录。",
+      "targetId": "m05-recording-save"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-controls-save-dialog",
+      "title": "唇形提取",
       "text": "选目录并确认保存",
-      "title": "唇形提取"
+      "targetId": "m05-controls-save-dialog"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-save-recording-steps",
-      "text": "点 另存录制 。实时录制先确认视频、动画选项，点 选择目录并保存 ；高帧率模式直接进入目录选择。 选择输出目录，等待成功提示。程序会新建  M05-recording-*  子目录，检查其中的  recording-export.json  和实际文件。 取消目录选择或保存失败时，当前录制仍保留，可调整选项、空间或目录后重试。开始下一次时，如有未保存内容，会先要求保存。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "点 另存录制 。实时计算先确认视频、动画选项，点 选择目录并保存 ；高帧率模式直接进入目录选择。 选择输出目录，等待成功提示。程序会新建  录制结果  子目录，检查其中的  recording-export.json  和实际文件。 取消目录选择或保存失败时，当前录制仍保留，可调整选项、空间或目录后重试。开始下一次时，如有未保存内容，会先要求保存。",
+      "targetId": "m05-controls-save-dialog"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-save-dialog-controls-table",
+      "title": "唇形提取",
       "text": "操作 结果 取消／关闭保存弹窗 退出本次保存，当前录制保留。保存中请等待完成。 放弃未保存内容 → 取消 返回当前内容。 放弃未保存内容 → 放弃 清除本页尚未保存的录制和结果，磁盘原文件不变。",
-      "title": "唇形提取"
+      "targetId": "m05-controls-save-dialog"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-recording-files",
+      "title": "唇形提取",
       "text": "录制目录里有什么",
-      "title": "唇形提取"
+      "targetId": "m05-recording-files"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-recording-files-table",
-      "text": "文件 内容与条件 raw_recording.mp4 勾选视频时保存原画面的派生MP4。异常时间戳时可能保留原编码容器并提示，文件名以回执为准。 face_animation.mp4 实时录制勾选动画且有有效点时保存，使用已有测量，未重新识别。 audio_recording.wav 解码PCM16音频，采样率和声道数以实际文件为准。 capture.m05-preview.json 实时录制的全部已测候选帧、关键点、参数和设置，含缺失或截断说明。 candidate.lip.json ／ audio_recording.lip.json 预算内的四轨交换文件。自动同名关联还需音轨和至少两帧有效open，条件不足时不生成。 recording-export.json 本次文件名、大小、哈希、音轨、帧率、选项与时间来源的保存回执。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "文件 内容与条件 raw_recording.mp4 勾选视频时保存原画面的派生MP4。异常时间戳时可能保留原编码容器并提示，文件名以回执为准。 face_animation.mp4 实时计算勾选动画且有有效点时保存，使用已有测量，未重新识别。 audio_recording.wav 解码PCM16音频，采样率和声道数以实际文件为准。 capture.m05-preview.json 实时计算的全部已测候选帧、关键点、参数和设置，含缺失或截断说明。 candidate.lip.json ／ audio_recording.lip.json 预算内的四轨交换文件。自动同名关联还需音轨和至少两帧有效open，条件不足时不生成。 recording-export.json 本次文件名、大小、哈希、音轨、帧率、选项与时间来源的保存回执。",
+      "targetId": "m05-recording-files"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-video-demo",
-      "text": "实时预览演示",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "预览演示",
+      "targetId": "m05-video-demo"
     },
     {
       "chapterId": "m05",
-      "text": "以下屏幕录制完整展示权限确认和真人实时预览，可点击播放或拖动进度条查看。预览模式不录制音视频，也不保存唇形数据；本例视频通过屏幕录制取得。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "以下屏幕录制完整展示权限确认和真人预览，可点击播放或拖动进度条查看。预览模式不录制音视频，也不保存唇形数据；本例视频通过屏幕录制取得。录屏中的实时预览对应当前的预览模式。",
+      "targetId": "m05-video-demo"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-live-preview-video",
+      "title": "唇形提取",
       "text": "真人实时预览：右栏显示摄像头画面，中央候选网格、参数和下方曲线随唇部动作变化。",
-      "title": "唇形提取"
+      "targetId": "m05-video-demo"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-quick-offline",
+      "title": "唇形提取",
       "text": "分析已有视频",
-      "title": "唇形提取"
+      "targetId": "m05-quick-offline"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-offline-steps",
-      "text": "右栏 离线分析 选择一个或多个视频，核对文件名和大小。左栏防抖及截止频率用于本次正式分析，请先设置好。 点 分析所选 N 个视频 ，观察顶部进度。文件逐项处理，当前项失败或取消时停止后续处理，已完成结果保留。 完成后在 结果保存 选择对应文件，检查完整帧数、缺失、曲线与回放。有音轨时可用 检查偏移量 校对。 点 应用偏移并保存 使用当前偏移，或点 保存但不应用偏移 以零人工偏移导出。选择目录，等待完整结果写入成功。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "顶部模式菜单选择 离线分析 选择一个或多个视频，核对文件名和大小。左栏防抖及截止频率用于本次正式分析，请先设置好。 点 分析所选文件 ，观察顶部进度。文件逐项处理，单项失败时继续分析其余文件；取消时停止后续处理，已完成结果保留并加入历史。 完成后在右栏最上方的 结果保存 选择对应文件，检查完整帧数、缺失、曲线与回放。有音轨时可用 检查偏移量 校对。 点 保存（应用偏移） 使用当前偏移，或点 保存（不应用偏移） 以零人工偏移导出。默认保存本批全部已完成结果，且勾选视频和动画。选择一次目录，逐个保存完整数据及所选媒体；取消批量勾选可只保存当前结果。",
+      "targetId": "m05-quick-offline"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-controls-analysis",
+      "title": "唇形提取",
+      "text": "离线分析入口位于顶部模式菜单。点击选择文件后，再点击分析所选文件。左侧显示输入文件，右侧保留回放与历史入口。",
+      "targetId": "m05-quick-offline"
+    },
+    {
+      "chapterId": "m05",
+      "title": "唇形提取",
       "text": "运行中取消与导出动画",
-      "title": "唇形提取"
+      "targetId": "m05-controls-analysis"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-analysis-controls-table",
-      "text": "操作 用法 取消本次任务 仅运行时显示，停止当前分析或动画任务；已完成结果保留。 选择唇形结果 切换文件、完整帧和该结果的偏移，逐项检查并保存。 动画导出质量 默认标准720，也可选高清1080、小体积540。只影响导出画面。 导出动画MP4／导出GIF 选好质量后点击，等待计算再选保存目录。正式结果会重新读取源输入生成动画。MP4可有音轨，GIF无声音。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "操作 用法 取消本次任务 仅运行时显示，停止当前分析或动画任务；已完成结果保留。 选择唇形结果 切换文件、完整帧和该结果的偏移，逐项检查。本批多文件默认一起保存，各结果使用各自的偏移。 动画导出质量 默认高清1080，也可选标准720、小体积540。只影响导出画面。 导出动画MP4／导出GIF 选好质量后点击并选择保存目录，使用已有完整测量绘制动画。每个按钮只保存所选格式的动画，MP4可有音轨，GIF保留相同网格和时间范围且无声音。",
+      "targetId": "m05-controls-analysis"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-offline-files",
+      "title": "唇形提取",
       "text": "保存完整数据",
-      "title": "唇形提取"
+      "targetId": "m05-offline-files"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-offline-saving-note",
-      "text": "正式结果另存到新的  M05-*  子目录，不覆盖原视频。查看  saved-manifest.json  确认本次实际写入的文件。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "正式结果另存到新的  分析结果  子目录，不覆盖原视频。查看  saved-manifest.json  确认本次实际写入的文件。",
+      "targetId": "m05-offline-files"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-offline-files-table",
-      "text": "文件 用途与注意 measurements.csv 完整逐帧参数及detected标记，检测缺失保留为空。统计分析优先从此表开始。 legacy-compatibility.csv 旧兼容表，缺失可能由首值或前值补齐，imputed标记补值；不算新检测。 frames.jsonl 完整逐帧时间、关键点和指标，用于复核与回放。 manifest.json ／ preview.json 处理设置与来源／曲线显示预览。预览点不能替代完整数据。 audio_recording.wav ／ audio-timing.jsonl 有可处理音轨时输出音频与音频时间记录。 audio_recording.lip.json 同名四轨交换文件，正式结果不超过6000帧且文件不超过2 MB时生成。长结果仍保留完整表和帧。 unaligned.lip.json ／ aligned.lip.json ／ alignment.json 存在交换文件时，另留未调整和所选偏移版本，并记录偏移。原始逐帧数据不改。 saved-manifest.json 另存清单与哈希。部分文件存在不能替代整组保存成功。 lip-animation.mp4 ／ lip-animation.gif 单独导出的可视化动画，重采样不增加测量帧。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "文件 用途与注意 measurements.csv 完整逐帧参数及detected标记，检测缺失保留为空。统计分析优先从此表开始。 legacy-compatibility.csv 旧兼容表，缺失可能由首值或前值补齐，imputed标记补值；不算新检测。 frames.jsonl 完整逐帧时间、关键点和指标，用于复核与回放。 manifest.json ／ preview.json 处理设置与来源／曲线显示预览。预览点不能替代完整数据。 audio_recording.wav ／ audio-timing.jsonl 有可处理音轨时输出音频与音频时间记录。 audio_recording.lip.json 同名四轨交换文件，正式结果不超过6000帧且文件不超过2 MB时生成。长结果仍保留完整表和帧。 unaligned.lip.json ／ aligned.lip.json ／ alignment.json 存在交换文件时，另留未调整和所选偏移版本，并记录偏移。原始逐帧数据不改。 saved-manifest.json 另存清单与哈希。部分文件存在不能替代整组保存成功。 raw_recording.mp4／lip-animation.mp4 默认随完整结果保存原画面视频和完整面部网格动画，均为MP4。可分别取消视频或动画选项。 lip-animation.mp4 ／ lip-animation.gif 单独导出的可视化动画，重采样不增加测量帧。",
+      "targetId": "m05-offline-files"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-read-csv",
+      "title": "唇形提取",
       "text": "import pandas as pd\nmeasurements = pd.read_csv(\"结果目录/measurements.csv\")\nobserved = measurements.loc[measurements[\"detected\"].eq(True)]",
-      "title": "唇形提取"
+      "targetId": "m05-offline-files"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-history",
+      "title": "唇形提取",
       "text": "恢复历史并用于标注",
-      "title": "唇形提取"
+      "targetId": "m05-history"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-history-steps",
-      "text": "重开工作台后，右栏点 刷新本地历史任务 ，选择任务，再点 读取历史结果 。已完成分析可恢复，不必重算。 尚未另存的录制存在页面内存中，不能从分析历史恢复。仅采集的视频需重新选择所存文件，再提交分析。 在参数估计、参数显示或TextGrid标注中选择对应WAV，按该模块的唇形关联流程读取同目录、同名的  audio_recording.lip.json 。请保持每次录制的音频和唇形文件成组存放。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "完成的视频自动加入右栏历史结果，显示各自文件名。重开工作台后选择任务，点击读取历史结果即可恢复测量，新结果还可恢复原视频。刷新本地历史任务可重新读取列表。 尚未另存的录制存在页面内存中，不能从分析历史恢复。仅采集的视频需重新选择所存文件，再提交分析。 在参数估计、参数显示或TextGrid标注中选择对应WAV，按该模块的唇形关联流程读取同目录、同名的  audio_recording.lip.json 。请保持每次录制的音频和唇形文件成组存放。",
+      "targetId": "m05-history"
     },
     {
       "chapterId": "m05",
+      "title": "唇形提取",
       "text": "下游操作参见  参数估计 、 参数显示 和  TextGrid 标注 。旧PKL仅使用已有桌面受控读取或转换入口，网页不直接读取。请保留旧原文件。",
-      "title": "唇形提取"
+      "targetId": "m05-history"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-controls",
+      "title": "唇形提取",
       "text": "查看结果与同步回放",
-      "title": "唇形提取"
+      "targetId": "m05-controls"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-controls-status",
+      "title": "唇形提取",
+      "text": "离线分析支持 MP4、AVI、MKV、MOV、WMV、M4V 和 WebM。保存视频使用 MP4。原编码无法在桌面播放器中解码时，会自动在本机准备兼容回放，保留音视频相对起点并同步唇形；临时回放文件不进入保存结果。转换失败可点击重试音视频回放。",
+      "targetId": "m05-controls"
+    },
+    {
+      "chapterId": "m05",
+      "title": "唇形提取",
       "text": "看懂采集状态",
-      "title": "唇形提取"
+      "targetId": "m05-controls-status"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-status-table",
-      "text": "显示项 含义 阶段 准备中、预览中、录制中、正在结束、正在收尾、已结束或采集失败。未开始时没有有效采集。预览中仅使用摄像头，编码大小为0.0 MB属于正常状态。 呈现／已推理／检出 显示帧、提交推理帧、检出面部帧，数值可以不同。 跳过推理／呈现缺口 处理忙碌跳过帧／观察到显示间断，不直接等同文件丢帧。 编码／设备／文件／实时 媒体暂存大小／设备协商参数／保存文件统计／实时处理统计。请分别核对。 已保存 本次实际写入的文件列表，须结合成功提示和回执查看。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "显示项 含义 阶段 准备中、预览中、录制中、正在结束、正在收尾、已结束或采集失败。未开始时没有有效采集。预览中仅使用摄像头，编码大小为0.0 MB属于正常状态。 呈现／已推理／检出 呈现为页面通过视频帧回调观察到的新画面数；已推理为完成模型计算的画面数，包含未检出面部的画面；检出为其中成功找到面部特征点的数量。 跳过推理／呈现缺口 跳过推理为前一帧仍在计算、当前画面未送入模型的次数；呈现缺口为浏览器呈现帧编号的跳号累计值。录制文件是否缺帧需另行解码核对。 编码／设备／文件／实时 媒体暂存大小／设备协商参数／保存文件统计／实时处理统计。请分别核对。 已保存 本次实际写入的文件列表，须结合成功提示和回执查看。",
+      "targetId": "m05-controls-status"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-replay",
+      "title": "唇形提取",
+      "text": "切换到离线分析后，本页上次采集的统计继续保留在左下角。当前离线结果另列解码、已推理、检出和未检出帧数；正式分析逐帧计算，跳过推理为0。文件本身不能还原采集时的呈现次数或呈现缺口。",
+      "targetId": "m05-controls-status"
+    },
+    {
+      "chapterId": "m05",
+      "title": "唇形提取",
+      "text": "视频录制结束后切到离线分析，左下角继续保留本页采集统计。展开统计含义可查看五个计数的口径。本例只录制媒体，已推理和检出均为0。",
+      "targetId": "m05-controls-status"
+    },
+    {
+      "chapterId": "m05",
+      "title": "唇形提取",
       "text": "按帧检查画面与缺失",
-      "title": "唇形提取"
+      "targetId": "m05-replay"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-replay-steps",
-      "text": "实时录制结束后可直接回放本次录制。离线分析完成后，先选定对应结果，再比较 完整帧数 与 曲线预览点数 。正式曲线最多约241个展示点，按帧回放读取完整数据。 播放右栏视频，查看中央网格与数值。缺失帧会留空，回看原画面确认遮挡、转头或其他原因。 读取历史后若没有可播放源视频，仍可按测量时间回放网格。核对声音或原画面时，使用已另存的媒体。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "实时计算结束后可直接回放本次录制。离线分析完成后，先选定对应结果，再比较 完整帧数 与 曲线预览点数 。正式曲线最多约241个展示点，按帧回放读取完整数据。 播放右栏视频，查看中央网格与数值。缺失帧会留空，回看原画面确认遮挡、转头或其他原因。 读取历史后若没有可播放源视频，仍可按测量时间回放网格。核对声音或原画面时，使用已另存的媒体。",
+      "targetId": "m05-replay"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-high-framerate-replay-note",
-      "text": "高帧率先录后算结束时可回放刚录下的媒体，唇形网格须另存视频并完成离线分析后查看。实时预览结束会清除临时测量，没有录制回放或另存结果。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "合成示例视频完成逐帧分析后的回放界面。左侧显示解码、推理与检出帧数，中央显示唇形网格，右侧显示原画面与同步回放控件。",
+      "targetId": "m05-replay"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-playback-controls-table",
-      "text": "控件 操作 源视频播放器 播放、暂停或拖动进度，同步查看中央面部。 同步回放／暂停回放 有视频时随视频播放，无视频时按测量时间播放网格。 回放帧滑条 拖动后停止连续播放并查看所选帧。实时录制查看已测候选帧，正式结果读取完整解码帧，覆盖范围须分别核对。 四条曲线 area、outer_width、open、circularity。横轴为实际时间，各轨独立纵轴，勿直接比较画面高度。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "视频录制结束时可回放刚录下的媒体，唇形网格须另存视频并完成离线分析后查看。预览结束会清除临时测量，没有录制回放或另存结果。",
+      "targetId": "m05-replay"
     },
     {
       "chapterId": "m05",
+      "title": "唇形提取",
+      "text": "控件 操作 源视频播放器 播放、暂停或拖动进度，同步查看中央面部。 同步回放／暂停回放 有视频时随视频播放，无视频时按测量时间播放网格。 回放帧滑条 拖动后停止连续播放并查看所选帧。实时计算查看已测候选帧，正式结果读取完整解码帧，覆盖范围须分别核对。 四条曲线 area、outer_width、open、circularity。横轴为实际时间，各轨独立纵轴，勿直接比较画面高度。",
+      "targetId": "m05-replay"
+    },
+    {
+      "chapterId": "m05",
+      "title": "唇形提取",
       "text": "实时推理忙碌时会跳帧，实时完整记录指本次全部已测帧。需要逐帧补算时使用原视频做正式离线分析。",
-      "title": "唇形提取"
+      "targetId": "m05-replay"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-metrics",
+      "title": "唇形提取",
       "text": "这些参数表示什么",
-      "title": "唇形提取"
+      "targetId": "m05-metrics"
     },
     {
       "chapterId": "m05",
-      "text": "参数来自二维关键点。除面宽、面高等像素量外，以下指标多为归一化比值， 不能直接换算成毫米或真实生理面积 。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "参数来自二维关键点。面宽、面高等量以像素表示，以下指标多为归一化比值。 换算毫米或实际面积需另行标定 。",
+      "targetId": "m05-metrics"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-metrics-table",
-      "text": "键名 含义 area 外唇与内唇轮廓的面积差除以面轮廓面积。 height 外唇纵向跨度除以面高，与内唇开口度open分开看。 outer_width 外唇水平跨度除以面宽。 inner_width 内唇水平跨度除以面宽。数值为零不能单独证明闭唇或某个音类。 total_width 外唇与内唇水平跨度之和除以面宽。 open 关键点14与13的纵向差除以面高。微小负值先核对画面，缺失不记为零。 circularity 以轮廓面积差和外唇周长计算的形状指标，不能单独判定圆唇程度。 face_width ／ face_height 面部左右x、上下y投影差，单位像素，是归一化基准。 *_px ／ length 正式表中的像素跨度、开口或外唇周长。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "键名 含义 area 外唇与内唇轮廓的面积差除以面轮廓面积。 height 外唇纵向跨度除以面高，与内唇开口度open分开看。 outer_width 外唇水平跨度除以面宽。 inner_width 内唇水平跨度除以面宽。数值为零时请结合原视频核对唇部状态。 total_width 外唇与内唇水平跨度之和除以面宽。 open 关键点14与13的纵向差除以面高。微小负值先核对画面，缺失不记为零。 circularity 以轮廓面积差和外唇周长计算的形状指标，解释圆唇程度时需结合原画面。 face_width ／ face_height 面部左右x、上下y投影差，单位像素，是归一化基准。 *_px ／ length 正式表中的像素跨度、开口或外唇周长。",
+      "targetId": "m05-metrics"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-metric-formulas",
+      "title": "唇形提取",
       "text": "指标关系： area=(外唇面积−内唇面积)/面面积；open=(y14−y13)/面高；circularity=4π×(外唇面积−内唇面积)/外唇周长²",
-      "title": "唇形提取"
+      "targetId": "m05-metrics"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-timing",
+      "title": "唇形提取",
       "text": "检查唇形与声音的时间对齐",
-      "title": "唇形提取"
+      "targetId": "m05-timing"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-timing-steps",
+      "title": "唇形提取",
       "text": "使用检查偏移量",
-      "title": "唇形提取"
+      "targetId": "m05-timing-steps"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-offset-steps",
+      "title": "唇形提取",
       "text": "结束录制或选定有音轨的结果，点 检查偏移量 ，等音频波形读取完成。 先看默认勾选的open，需要时勾选其他参数。放大多个清楚事件，结合原画面和声音判断。 编辑偏移并观察效果。 正值向右移唇形，负值向左移 。上图拖动平移视窗，下图拖动修改偏移。 点 应用偏移量 更新回放，再另存录制或保存结果才写入文件。点 取消 恢复打开弹窗前的偏移。",
-      "title": "唇形提取"
+      "targetId": "m05-timing-steps"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-offset-caution",
-      "text": "默认0 ms只表示未加人工偏移。声音振幅和唇开度并非一一对应，请核对多个事件，勿只对齐一个峰值。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "默认0 ms只表示未加人工偏移。声音振幅与唇开度反映不同事件，请在多个清楚片段中核对时间关系。",
+      "targetId": "m05-timing-steps"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-offset-rule",
+      "title": "唇形提取",
       "text": "唇形时间 = audio_relative_time_s + lip_manual_offset 。界面编辑毫秒，文件保存秒，只应用一次，原视频和WAV不平移。",
-      "title": "唇形提取"
+      "targetId": "m05-timing-steps"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-controls-offset",
+      "title": "唇形提取",
       "text": "偏移弹窗的操作",
-      "title": "唇形提取"
+      "targetId": "m05-controls-offset"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-offset-controls-table",
+      "title": "唇形提取",
       "text": "控件 操作 唇形偏移量 范围−2000至2000 ms；直接输入整数毫秒。 ← 1 ms／1 ms → 单击微调，也可按左右键，长按连续调整。 归零 将当前预览改为0，仍需应用并保存。 放大时间轴／缩小时间轴／全段 上下图共用视窗，全段恢复全部范围；滚轮也可缩放。 音频波形 拖动平移视窗。多声道只显示声道1，需要时另行检查其他声道。 参数勾选／唇形参数对齐 可选九项参数，默认open。各轨仅在此归一化显示，原始数值不变；拖动下图改偏移。 应用偏移量／取消 应用保留编辑，取消撤销本次编辑。音频读取失败或未结束时不能应用。",
-      "title": "唇形提取"
+      "targetId": "m05-controls-offset"
     },
     {
       "chapterId": "m05",
-      "text": "当前录制和各个离线结果分别保留偏移。 保存但不应用偏移 以0导出，本页回放的编辑值不会被强制归零。历史自动建议不会在此自动应用。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "当前录制和各个离线结果分别保留偏移。 保存（不应用偏移） 以0导出，本页回放的编辑值不会被强制归零。历史自动建议不会在此自动应用。",
+      "targetId": "m05-controls-offset"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-timing-clocks",
+      "title": "唇形提取",
       "text": "正式实验前做同步检查",
-      "title": "唇形提取"
+      "targetId": "m05-timing-clocks"
     },
     {
       "chapterId": "m05",
+      "title": "唇形提取",
       "text": "1 ms是编辑步长，设备时间精度需另行验证。用相同设备、分辨率和帧率录制可同时看见与听见的校准事件，在开头、中段、结尾检查固定偏差与漂移。模型、防抖响应和构音起声差异也需分别考虑。",
-      "title": "唇形提取"
+      "targetId": "m05-timing-clocks"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-recovery",
+      "title": "唇形提取",
       "text": "遇到问题时",
-      "title": "唇形提取"
+      "targetId": "m05-recovery"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-recovery-table",
-      "text": "现象 处理办法 无法打开设备或权限被拒绝 检查应用与系统媒体权限，再次开始。设备被占用时先结束占用它的采集。 设备消失、静音、低信号或录到电脑声音 先结束，刷新并明确重选设备。录一小段，核对输入名称、电平和试听。 网格空白、参数—或动画保存失败 检查光线、遮挡和构图。实时另存可取消动画，保留音频与已有记录。 音频波形读取失败 保留录制，核对音轨和编码，再开检查偏移量重试；可先保存原始内容。 无有效媒体片段或收尾失败 等待收尾。有片段先尝试另存，重新录制时确认编码大小增加。错误片段需单独核对完整性。 取消目录选择、空间不足或保存失败 当前录制保留。换目录、释放空间或调整选项后重试，成功提示与回执齐全才算整组保存。 媒体达到128 MB或30分钟 自动结束并收尾，尽早保存和检查完整性；下一次分段录制并记起点。 候选参数达到32 MB 停止测量但媒体继续录制。结束并保存原视频，再做正式离线分析补算。 离线分析时间戳、编码或资源超限 核对源文件，必要时分段或更换可解码材料。已完成结果仍保留，勿用标称帧率替代实际时间戳。 录制视频时间戳异常 保存可能保留原编码容器，音频和唇形分别保存。该视频后续正式分析仍需通过时间戳检查。 浏览器无法播放视频 保存后用本机播放器检查编码，仍可查看可用测量或WAV。 离线分析或完整保存不可用 按页面提示使用支持M05的桌面工作台。当前录制保留，不把部分下载当完整保存。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "现象 处理办法 无法打开设备或权限被拒绝 检查应用与系统媒体权限，再次开始。设备被占用时先结束占用它的采集。 设备消失、静音、低信号或录到电脑声音 先结束，刷新并明确重选设备。录一小段，核对输入名称、电平和试听。 网格空白、参数—或动画保存失败 检查光线、遮挡和构图。实时另存可取消动画，保留音频与已有记录。 音频波形读取失败 保留录制，核对音轨和编码，再开检查偏移量重试；可先保存原始内容。 无有效媒体片段或收尾失败 等待收尾。有片段先尝试另存，重新录制时确认编码大小增加。错误片段需单独核对完整性。 取消目录选择、空间不足或保存失败 当前录制保留。换目录、释放空间或调整选项后重试，成功提示与回执齐全才算整组保存。 媒体达到128 MB或30分钟 自动结束并收尾，尽早保存和检查完整性；下一次分段录制并记起点。 候选参数达到32 MB 停止测量但媒体继续录制。结束并保存原视频，再做正式离线分析补算。 离线分析时间戳、编码或资源超限 核对源文件，必要时分段或更换可解码材料。已完成结果仍保留，勿用标称帧率替代实际时间戳。 录制视频时间戳异常 保存可能保留原编码容器，音频和唇形分别保存。该视频后续正式分析仍需通过时间戳检查。 浏览器无法播放视频 保存后用本机播放器检查编码，仍可查看可用测量或WAV。",
+      "targetId": "m05-recovery"
     },
     {
       "chapterId": "m05",
+      "title": "唇形提取",
       "text": "本机目录导出总预算512 MB，单份动画128 MB。采集时出现设备断开、后台节流或截断提示，请停止后查看原媒体和回执。",
-      "title": "唇形提取"
+      "targetId": "m05-recovery"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-unsaved-caution",
+      "title": "唇形提取",
       "text": "未保存录制可能因强制关闭进程而丢失。离开提示中取消可保留当前内容；确认放弃会清除页面内存记录。",
-      "title": "唇形提取"
+      "targetId": "m05-recovery"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-sources",
+      "title": "唇形提取",
       "text": "方法与引用",
-      "title": "唇形提取"
+      "targetId": "m05-sources"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-source-models",
+      "title": "唇形提取",
       "text": "查看模型与软件来源",
-      "title": "唇形提取"
+      "targetId": "m05-source-models"
     },
     {
       "chapterId": "m05",
+      "title": "唇形提取",
       "text": "点工具栏 方法与引用 ，打开来源窗口。在 软件与代码来源 中查看作者、版本、许可和链接，点 复制引用 取得对应文字。",
-      "title": "唇形提取"
+      "targetId": "m05-source-models"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-figure-m05-methods-software-current-light",
-      "text": "方法与引用的来源窗口，可查看MediaPipe、FFmpeg等记录并复制引用。测试素材登记不代表本章已录制演示视频。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "方法与引用窗口的软件与代码来源页，可查看依赖版本、许可和引用。",
+      "targetId": "m05-source-models"
     },
     {
       "chapterId": "m05",
-      "text": "正式模型为MediaPipe legacy Face Mesh 0.10.14，实时为Face Landmarker 0.10.14／float16-1。详情见  Face Landmarker说明 和  冻结Face Mesh文档 。比较结果时保留模型与滤波条件，具体许可以来源登记为准。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "正式模型为MediaPipe legacy Face Mesh 0.10.14，实时为Face Landmarker 0.10.14／float16-1。详情见  Face Landmarker说明 和  Face Mesh 文档 。比较结果时保留模型与滤波条件，具体许可以来源登记为准。",
+      "targetId": "m05-source-models"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-source-timing",
+      "title": "唇形提取",
       "text": "时间记录参考",
-      "title": "唇形提取"
+      "targetId": "m05-source-timing"
     },
     {
       "chapterId": "m05",
-      "text": "帧呈现和媒体录制接口的说明见  逐帧回调规范 和  媒体录制规范 。帧呈现时间不能直接当作相机曝光时间。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "帧呈现与媒体录制的时间记录见  逐帧回调规范 和  媒体录制规范 。帧呈现时间记录显示事件；相机曝光时间需使用设备记录核对。",
+      "targetId": "m05-source-timing"
     },
     {
       "chapterId": "m05",
-      "targetId": "m05-scientific-boundary",
+      "title": "唇形提取",
       "text": "使用结果时记住",
-      "title": "唇形提取"
+      "targetId": "m05-scientific-boundary"
     },
     {
       "chapterId": "m05",
-      "text": "归一化仍受头姿、透视、遮挡与关键点误差影响。跨被试或机位比较前先检查可比性。 网格放大、镜像和动画重采样只影响显示。检测缺失与兼容补值分别处理，单个指标不能独立判定发音类别。 正式研究先用目标设备和材料做预测试，保存原始媒体、设置及完整结果。",
-      "title": "唇形提取"
+      "title": "唇形提取",
+      "text": "归一化仍受头姿、透视、遮挡与关键点误差影响。跨被试或机位比较前先检查可比性。 网格放大、镜像和动画重采样只影响显示。检测缺失与兼容补值分别处理，发音类别请结合音频、画面及多个指标判断。 正式研究先用目标设备和材料做预测试，保存原始媒体、设置及完整结果。",
+      "targetId": "m05-scientific-boundary"
     },
     {
       "chapterId": "m01",
@@ -519340,859 +520496,867 @@
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-section-01",
+      "title": "参数显示",
       "text": "准备音频和结果文件",
-      "title": "参数显示"
+      "targetId": "m02-section-01"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-a59919cd-2d98-400a-adc1-05c532c128b6",
+      "title": "参数显示",
       "text": "想把几种参数放在一起看，或对照波形、文字和语谱图？先打开已有结果，再选择要显示的列。本页保留原数值，需要重算参数时请返回参数估计。",
-      "title": "参数显示"
+      "targetId": "m02-section-01"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-773b3967-ec05-498b-873e-e938fefabb4d",
+      "title": "参数显示",
       "text": "参数估计：生成与保存可供本页读取的结果",
-      "title": "参数显示"
+      "targetId": "m02-section-01"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-input-pair",
+      "title": "参数显示",
       "text": "音频和参数怎样配对",
-      "title": "参数显示"
+      "targetId": "m02-input-pair"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-aabd2e5c-0f5a-4647-a73d-ccef8256263a",
+      "title": "参数显示",
       "text": "准备 WAV 及同一次分析的 XLSX、.ptb.sqlite 或 .ptb.sqlite3。通常放在同一目录最方便；分开放时，含子文件夹的两边要保持相同相对路径。没有结果也能看波形、试听。",
-      "title": "参数显示"
+      "targetId": "m02-input-pair"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-73b8c226-a651-47cd-a80e-b235bb57f1c1",
+      "title": "参数显示",
       "text": "例如，音频与参数分开放时可这样对应。sample 只是示例文件名。",
-      "title": "参数显示"
+      "targetId": "m02-input-pair"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-directory-example",
+      "title": "参数显示",
       "text": "音频根目录/\n  speaker-a/sample.wav\n参数根目录/\n  speaker-a/sample.ptb.sqlite\n  speaker-a/sample.xlsx\n\n或同目录：\n  sample.wav\n  sample.ptb.sqlite\n  sample.xlsx",
-      "title": "参数显示"
+      "targetId": "m02-input-pair"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-8f460682-0404-41ca-a268-74aa049a214a",
+      "title": "参数显示",
       "text": "同名文件依次优先关联 .ptb.sqlite、.ptb.sqlite3、.xlsx、.lip.json、V2 数值 .pkl，名称匹配忽略大小写。同一优先级有重名候选时，请手动选择。优先关联的文件不一定最新，旧结果要留意。",
-      "title": "参数显示"
+      "targetId": "m02-input-pair"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-311d9d2a-e39c-4500-9d3d-da28367c782e",
+      "title": "参数显示",
       "text": "关联后先核对： 结果确实来自这段 WAV ，时长、起点及分析设置正确。文件改名或剪裁后尤其要检查。",
-      "title": "参数显示"
+      "targetId": "m02-input-pair"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-input-formats",
+      "title": "参数显示",
       "text": "支持哪些结果",
-      "title": "参数显示"
+      "targetId": "m02-input-formats"
     },
     {
       "chapterId": "m02",
-      "text": "普通参数表：XLSX 或约定的 SQLite params 表。需有数值时间列 Time_s，列名不重复，时间按顺序排列。 M01 长结果：本机支持 m01-bundle/2 的 XLSX、SQLite，可直接选择 CQ、SQ、F0 - GCI 等 EGG 列。网页暂只支持旧单表。 文字标注：来自表内 text_层名、TextGrid、TextGrid_层名等文字列。只有独立 TextGrid 时，先在参数估计中生成带文字列的结果。 唇形记录：.lip.json；桌面还可读 V2 数值 .pkl 及配套时间戳文件。关联后会出现 LipArea、LipWidth、LipOpen、LipCirc。 CSV 不能直接从本页导入。请使用参数估计保存的受支持结果，不要只改扩展名。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "普通参数表：XLSX 或约定的 SQLite params 表。需有数值时间列 Time_s，列名不重复，时间按顺序排列。 参数估计 长结果：本机支持 m01-bundle/2 的 XLSX、SQLite，可直接选择 CQ、SQ、F0 - GCI 等 EGG 列。网页暂只支持旧单表。 文字标注：来自表内 text_层名、TextGrid、TextGrid_层名等文字列。只有独立 TextGrid 时，先在参数估计中生成带文字列的结果。 唇形记录：.lip.json；桌面还可读 V2 数值 .pkl 及配套时间戳文件。关联后会出现 LipArea、LipWidth、LipOpen、LipCirc。 CSV 不能直接从本页导入。请使用参数估计保存的受支持结果，不要只改扩展名。",
+      "targetId": "m02-input-formats"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-a8367a2e-8def-4cb3-b9fe-98c4e59cfe67",
+      "title": "参数显示",
       "text": "唇形提取：指标定义、时间偏移和唇形结果来源",
-      "title": "参数显示"
+      "targetId": "m02-input-formats"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-section-02",
+      "title": "参数显示",
       "text": "画出第一组曲线",
-      "title": "参数显示"
+      "targetId": "m02-section-02"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-0a9e12d2-74f3-4576-850e-5c2395a675cd",
+      "title": "参数显示",
       "text": "左侧选音频，中间看波形与曲线，右侧选参数，底部试听。拖动侧栏与中间图面的边界可调宽度；栏宽会记住。窄窗或大字号下，中间图面可一起横向滚动。",
-      "title": "参数显示"
+      "targetId": "m02-section-02"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-figure-m02-overview-r2-light",
-      "text": "已打开单音节 WAV 并关联同名 SQLite 参数表：中间显示波形和空的图窗 1，右栏勾选了三项参数。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "打开合成示例 WAV 与同名 SQLite 后，图窗和右侧勾选均为空。新建图窗也从空选择开始。",
+      "targetId": "m02-section-02"
     },
     {
       "chapterId": "m02",
-      "text": "顶部：选择目录、 刷新文件 、 保存绘图配置 ，以及帮助和 方法与引用 。 左侧：音频搜索和文件列表。文件多时在列表内滚动；子目录显示相对路径。 中间上方： 参数表关联 、波形、可选语谱图，以及时间窗控件。 中间下方：曲线图窗、图例、文字层和导出按钮。 右侧：搜索、筛选、勾选参数，选择 目标图窗 后分配。 底部：选区起止、全部、播放/暂停、停止、播放定位和音量。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "顶部：选择目录、 刷新文件 、 保存绘图配置 ，以及帮助和 方法与引用 。 左侧：音频搜索和文件列表。文件多时在列表内滚动；子目录显示相对路径。 中间上方： 参数表关联 、波形、可选语谱图，以及时间窗控件。 中间下方：曲线图窗、图例、文字层和导出按钮。 右侧：选择当前图窗，搜索、筛选并勾选参数。勾选立即绘制，取消立即移除。 底部：选区起止、全部、播放/暂停、停止、播放定位和音量。",
+      "targetId": "m02-section-02"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-59a3b435-33c9-41df-9dc7-23bcc9c7210d",
-      "text": "第一次打开有一个空图窗。保存过绘图配置时，会恢复原分配，包括空图窗或零图窗；仍需重新打开源文件。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "第一次打开有一个空图窗。保存过绘图配置时，会恢复原选择，包括空图窗或零图窗；仍需重新打开源文件。",
+      "targetId": "m02-section-02"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-workflow",
+      "title": "参数显示",
       "text": "按这几步开始",
-      "title": "参数显示"
+      "targetId": "m02-workflow"
     },
     {
       "chapterId": "m02",
-      "targetId": "orderedList-c293a831-e8e8-4831-a802-bf7f74f71ecb",
+      "title": "参数显示",
       "text": "点击 打开音频目录 。结果分开放时再选参数目录。网页先在项目上传 WAV 和受支持结果，再 刷新文件 。 有子目录时勾选 包含子文件夹 。点击左侧音频，检查 参数表关联 ；必要时手动选择正确结果。 在右侧搜索 F0，勾选要比较的列。找不到时 清除筛选 ，检查原结果是否含该列。",
-      "title": "参数显示"
+      "targetId": "m02-workflow"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-17bd5b32-9cbe-4d66-b6e8-6720c7acdfc7",
-      "text": "下图已选 XLSX 并勾选两项 F0，图窗仍为空。勾选后还差一步：分配。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "下图已关联 XLSX 并勾选两项 F0，两条轨迹立即显示在当前图窗。右侧勾选始终对应当前图窗的内容。",
+      "targetId": "m02-workflow"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-figure-association-checks-light",
-      "text": "手动关联 XLSX 并搜索 F0 - 后，两项 F0 已勾选；尚未点击分配，图窗仍显示待分配参数。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "关联 XLSX 后搜索并勾选两项 F0，曲线立即显示，无需分配。",
+      "targetId": "m02-workflow"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-association-checks-light-detail-figure",
-      "text": "先搜索并勾选参数，再按分配按钮把曲线放入目标图窗。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "当前图窗的勾选即对应已绘制参数。取消勾选移除该曲线，清空勾选清空当前图窗。",
+      "targetId": "m02-workflow"
     },
     {
       "chapterId": "m02",
-      "targetId": "orderedList-4bb40a8a-d9ec-466d-a922-7df75a85a8ff",
-      "text": "选 目标图窗  1，点击 将 N 项分配到图窗 。曲线和图例出现，才完成显示。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "确认当前图窗为图窗 1，勾选后即出现曲线和图例。取消任一勾选，对应曲线立即移除。",
+      "targetId": "m02-workflow"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-figure-first-curves-light",
-      "text": "点击将 2 项分配到图窗后，图窗 1 出现 Praat 与 REAPER 的 F0 轨迹，时间轴与上方波形对应。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "两项 F0 即时叠加，紧凑图例标出名称和线色。示例曲线含保留的缺口。",
+      "targetId": "m02-workflow"
     },
     {
       "chapterId": "m02",
-      "targetId": "orderedList-9355fb30-70db-4d98-8e67-d0789e5644f4",
-      "text": "需要文字时，清空搜索，勾选文字列再分配。标签会出现在该图及上方波形。 左键拖出试听选区； Ctrl＋滚轮 看局部。参数图可用  Shift＋拖动 平移，也可输入 时间窗起点 和长度。 需要语谱时勾选 显示语谱图（Praat） 并等待。点击底部 播放选区 试听，停止结束；全部可选整段。 读取完成后 保存当前图 ，或 保存整幅 PNG 。打开输出文件，核对范围、文字和坐标轴。 最后 保存绘图配置 ，并另行保留原 WAV、参数表和分析设置。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "需要文字时，清空搜索并勾选文字列，标签立即出现在当前图及上方波形。 左键拖出试听选区； Ctrl＋滚轮 看局部。参数图可用  Shift＋拖动 平移，也可输入 时间窗起点 和长度。 需要语谱时勾选 显示语谱图（Praat） 并等待。点击底部 播放选区 试听，停止结束；全部可选整段。 读取完成后 保存当前图 ，或 保存整幅 PNG 。打开输出文件，核对范围、文字和坐标轴。 最后 保存绘图配置 ，并另行保留原 WAV、参数表和分析设置。",
+      "targetId": "m02-workflow"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-controls-files",
+      "title": "参数显示",
       "text": "目录与关联按钮速查",
-      "title": "参数显示"
+      "targetId": "m02-controls-files"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-table-files",
-      "text": "目录、列表与关联控件 控件或参数 位置/单位 默认值 操作与影响 打开音频目录 公共工具栏／目录 未选择 选含 WAV 的目录。确认新目录后，参数回到同目录查找；取消不改变当前内容。 选择参数目录 公共工具栏／目录 同音频目录 结果分开放时选择其目录。重新 打开音频目录 后，需再选一次独立参数目录。 包含子文件夹 公共工具栏／开关 关闭 同时扫描两边的子文件夹，按相对路径匹配。最多 10000 条目、512 个目录。 刷新文件 公共工具栏／动作 可用，读取中禁用 文件新增或替换后刷新。当前音频会重读，视野与试听选区回到全长。 添加文件 预览文件环境／文件选择 无文件 在提供此按钮的环境中，可同时选 WAV、XLSX、SQLite、.lip.json；读表还需该环境支持。 音频搜索 左栏／文字 空 输入文件名或相对路径的一部分，忽略大小写；只筛列表，不停止已载入音频。 音频名称 左栏／动作 未选择 点击读取并尝试同名关联。此前试听停止，视野和选区回全长，试听第 1 声道。 参数表关联 中间上部／文件下拉框 自动同名关联，缺失时未关联参数表 选择正确结果或未关联参数表。重读会 清空勾选 ，仅保留新表中仍存在的曲线分配。 保存绘图配置 公共工具栏／本机存储 未保存 保存图窗和参数分配。若提示失败，保留页面并重试。 方法与引用 公共工具栏／动作 关闭 查看和复制当前模块的来源、许可与论文链接。 帮助 公共工具栏／动作 关闭 打开本章，阅读后可返回模块。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "目录、列表与关联控件 控件或参数 位置/单位 默认值 操作与影响 打开音频目录 公共工具栏／目录 未选择 选含 WAV 的目录。确认新目录后，参数回到同目录查找；取消不改变当前内容。 选择参数目录 公共工具栏／目录 同音频目录 结果分开放时选择其目录。重新 打开音频目录 后，需再选一次独立参数目录。 包含子文件夹 公共工具栏／开关 关闭 同时扫描两边的子文件夹，按相对路径匹配。最多 10000 条目、512 个目录。 刷新文件 公共工具栏／动作 可用，读取中禁用 文件新增或替换后刷新。当前音频会重读，视野与试听选区回到全长。 添加文件 预览文件环境／文件选择 无文件 在提供此按钮的环境中，可同时选 WAV、XLSX、SQLite、.lip.json；读表还需该环境支持。 音频搜索 左栏／文字 空 输入文件名或相对路径的一部分，忽略大小写；只筛列表，不停止已载入音频。 音频名称 左栏／动作 未选择 点击读取并尝试同名关联。此前试听停止，视野和选区回全长，试听第 1 声道。 参数表关联 中间上部／文件下拉框 自动同名关联，缺失时未关联参数表 选择正确结果或未关联参数表。重新读表后，保留新表中存在的参数，图窗与右侧勾选保持一致。 保存绘图配置 公共工具栏／本机存储 未保存 保存图窗和参数选择。若提示失败，保留页面并重试。 方法与引用 公共工具栏／动作 关闭 查看和复制当前模块的来源、许可与论文链接。 帮助 公共工具栏／动作 关闭 打开本章，阅读后可返回模块。",
+      "targetId": "m02-controls-files"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-540ecc1a-f866-4615-991c-74656b8e44d4",
+      "title": "参数显示",
       "text": "下图没有同名结果。波形和试听仍可用；确认另一份表来自该 WAV 后，再手动关联。",
-      "title": "参数显示"
+      "targetId": "m02-controls-files"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-figure-unmatched-result-light",
-      "text": "没有同名参数表时，波形仍可查看，关联下拉框显示未关联参数表，并给出手动关联提示。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "未关联参数的合成示例仍可查看波形及试听，需手动关联正确结果。",
+      "targetId": "m02-controls-files"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-section-03",
+      "title": "参数显示",
       "text": "选择参数与安排图窗",
-      "title": "参数显示"
+      "targetId": "m02-section-03"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-382db52e-7c9c-4f2c-890b-f6a318e6301e",
-      "text": "下面列出常用按钮。默认状态指第一次打开；已存配置会恢复图窗分配。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "下面列出常用按钮。默认状态指第一次打开；已存配置会恢复图窗选择。",
+      "targetId": "m02-section-03"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-controls-parameters",
+      "title": "参数显示",
       "text": "参数栏按钮速查",
-      "title": "参数显示"
+      "targetId": "m02-controls-parameters"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-table-parameters",
-      "text": "参数筛选、勾选与图窗管理控件 控件或参数 位置/单位 默认值 操作与影响 参数搜索 右栏／文字 空 输入列名的一部分，忽略大小写和首尾空格。 reaper 右栏／开关 勾选 取消可隐藏含 rF0 的候选列。F0 - REAPER 不含 rF0，仍会显示。 correction 右栏／开关 不勾选 勾选可显示带 * 的候选列，不会重新校正参数。 参数复选框 右栏候选区／开关 全不勾选 选择下一次操作的列。取消勾选不删曲线；长名称悬停查看。 全选可见参数 右栏／动作 无候选时禁用 追加当前可见列，以前勾选但被隐藏的列仍保留。 清空勾选 右栏／动作 空勾选集合 清掉全部勾选，包括隐藏项；已绘曲线保留。 清除筛选 无匹配参数提示旁／动作 仅无可见候选且已读表时出现 清空搜索，勾选 reaper 和 correction；不清掉勾选或曲线。 目标图窗 右栏／图窗下拉框 图窗 1 决定分配、清空和删除所作用的图窗。没有图窗时需先新建。 新建图窗 右栏／动作 首次已有一个空图窗 新增空图窗并将它设为目标。最后一窗删掉后也可重建。 清空选定图窗 右栏／动作 空 目标图窗 时禁用 清掉目标窗内曲线与文字，保留图窗。 删除选定图窗 右栏／动作 有有效目标时可用 删除目标窗及其分配，不转移曲线。最后一窗也可删除。 将 N 项分配到图窗 右栏／动作 没有勾选或有效目标时禁用 把所有勾选列移到 目标图窗 ，含被筛选隐藏的勾选；原勾号保留。 从图中移除勾选项 右栏／动作 未勾选时禁用 从所有图窗移除勾选列，保留图窗、复选框和源文件。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "参数筛选、勾选与图窗管理控件 控件或参数 位置/单位 默认值 操作与影响 参数搜索 右栏／文字 空 输入列名的一部分，忽略大小写和首尾空格。 reaper 右栏／开关 勾选 取消可隐藏含 rF0 的候选列。F0 - REAPER 不含 rF0，仍会显示。 correction 右栏／开关 不勾选 勾选可显示带 * 的候选列，不会重新校正参数。 参数复选框 右栏候选区／开关 新窗全不勾选 勾选即在当前图窗绘制，取消即移除。切换图窗恢复对应勾选，长名称悬停查看。 全选可见参数 右栏／动作 无候选时禁用 追加当前可见列，以前勾选但被隐藏的列仍保留。 清空勾选 右栏／动作 当前窗为空时禁用 清掉当前图窗全部参数，包括筛选隐藏项，曲线和文字一起移除，图窗保留。 清除筛选 无匹配参数提示旁／动作 仅无可见候选且已读表时出现 清空搜索，勾选 reaper 和 correction；不清掉勾选或曲线。 当前图窗 右栏／图窗下拉框 第一个已保存图窗，首次为图窗 1 切换当前编辑图窗并恢复它的勾选。也可点击图窗标题或图面。 新建图窗 右栏／动作 首次已有一个空图窗 新增空图窗并立即选中，右侧默认空选择，原图窗保持。最后一窗删除后也可重建。 删除图窗 右栏及图窗内／动作 有图窗时可用 删除对应图窗及其参数选择，不转移曲线。当前窗删除后切回第一个保留图窗。",
+      "targetId": "m02-controls-parameters"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-selection-assignment",
+      "title": "参数显示",
       "text": "勾选后怎样显示或移除",
-      "title": "参数显示"
+      "targetId": "m02-selection-assignment"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-828f9913-fef9-4ef9-ba33-86fa33294e0d",
-      "text": "数值列画曲线，文字列显示标签。Time_s、Source_Time_s 用于时间，不在候选中。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "数值列画曲线，文字列显示标签。Time_s、Source_Time_s 用于时间，不在候选中。点击图窗标题或图面，右侧会切换到该图窗的参数选择。",
+      "targetId": "m02-selection-assignment"
     },
     {
       "chapterId": "m02",
-      "targetId": "orderedList-57c08600-af2b-4511-8a8d-8dd3a91e8d3e",
-      "text": "搜索并勾选一组，例如 F0。此时只选好了操作对象。 选择目标，再点击 将 N 项分配到图窗 。选中列会从其他图窗移到这里。 筛选只改变候选列表，勾选和曲线保留。 全选可见参数 会追加勾选。 操作下一组前 先清空勾选 ，再搜索。核对按钮的 N，避免一并移动隐藏项。 要删曲线，勾选后点击 从图中移除勾选项 。 清空勾选 仅去掉勾号。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "点击要编辑的图窗，或从右侧当前图窗下拉框选择。被选中的窗显示当前标记，右栏恢复它已有的勾选。 搜索并勾选参数，曲线或文字立即显示；取消勾选立即移除。 搜索和筛选只改变候选列表。全选可见参数追加当前可见列，已选隐藏项仍保留。 清空勾选移除当前图窗全部数值曲线和文字层，保留空窗。其他图窗不受影响。 各图窗分别保留自己的选择，同一参数可以在多个图窗中对照。",
+      "targetId": "m02-selection-assignment"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-bf751281-85dd-4895-8bd8-5911d872e730",
-      "text": "右栏按宽度显示两至四列。在候选区内滚动找更多项；筛选后可用 清空勾选 去掉隐藏勾选。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "右栏按宽度显示两至四列，可在候选区内滚动。搜索和筛选保留当前图窗已有的勾选；清空勾选会移除该窗的全部参数，包括暂时隐藏的项。",
+      "targetId": "m02-selection-assignment"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-axis-rule",
+      "title": "参数显示",
       "text": "读懂单纵轴和双纵轴",
-      "title": "参数显示"
+      "targetId": "m02-axis-rule"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-90c343cd-d1d3-4a39-9d27-abc3edbb97a3",
+      "title": "参数显示",
       "text": "曲线叠加时保留原数值，通常共用纵轴。当前时间窗各列平均绝对值都大于 0，且最大/最小比超过 50 时，平均绝对值大于 100 的列使用右轴。请看图例的 [左]、[右]。",
-      "title": "参数显示"
+      "targetId": "m02-axis-rule"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-2854a7b8-d177-49cc-a22b-90bc8a1c68d7",
+      "title": "参数显示",
       "text": "自动分轴依据数值量级，不按单位分类。",
-      "title": "参数显示"
+      "targetId": "m02-axis-rule"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-axis-rule-example",
+      "title": "参数显示",
       "text": "例如 F1 和 SHR 同图时可能分到左右两轴；两种 F0 通常共用一轴。",
-      "title": "参数显示"
+      "targetId": "m02-axis-rule"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-d47e3bac-8789-499a-a0d6-5f09168bc03c",
+      "title": "参数显示",
       "text": "轴范围随可见数据自动留边。缩放或平移后，刻度及轴归属可能变化，比较前再看一眼图例。",
-      "title": "参数显示"
+      "targetId": "m02-axis-rule"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-32321205-57c2-4599-83bf-e3095bf9bc73",
-      "text": "本页不能手动设轴范围或左右归属。需要分开不同单位时，可放进不同图窗。双轴曲线的交点、视觉高度不能直接比较数值。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "轴范围和左右归属自动确定。需要分开不同单位时，可放进不同图窗；比较双轴曲线时分别读取各自刻度。",
+      "targetId": "m02-axis-rule"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-2091dfb7-a24f-43e0-8290-46a872148a58",
+      "title": "参数显示",
       "text": "下图 F1 - Praat 使用右轴，SHR (pF0) 使用左轴。线色相近时结合轴归属和刻度辨认。",
-      "title": "参数显示"
+      "targetId": "m02-axis-rule"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-figure-dual-axis-light",
-      "text": "放大的图窗中，F1 - Praat 使用右轴，SHR (pF0) 使用左轴；原数值刻度和带轴归属的图例完整显示。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "F1 与 SHR 保留原数值自动双轴，图例完整显示轴归属，右轴曲线使用虚线。",
+      "targetId": "m02-axis-rule"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-multi-window",
+      "title": "参数显示",
       "text": "拆分、合并和删除",
-      "title": "参数显示"
+      "targetId": "m02-multi-window"
     },
     {
       "chapterId": "m02",
-      "targetId": "orderedList-2b5b53ec-c775-45e7-86a2-e45e4d808841",
-      "text": "先把同类参数放进图窗 1，例如两种 F0。 清空勾选 ，点击 新建图窗 ，确认目标变成新窗。 勾选另一组再分配。各窗共用时间窗和选区，纵轴独立。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "在图窗 1 勾选同类参数，例如两种 F0。 点击新建图窗，当前窗立即切到新窗，右侧默认没有勾选。 直接勾选另一组参数，各窗共用时间窗和选区，纵轴独立。点击原图窗可继续编辑原来的参数。",
+      "targetId": "m02-multi-window"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-86aaf399-964d-4708-bc10-d8afa8401444",
+      "title": "参数显示",
       "text": "向下滚动查看其他图窗。示例把 F2、F3 放进图窗 2，图窗 1 原有曲线保留。",
-      "title": "参数显示"
+      "targetId": "m02-multi-window"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-figure-second-plot-light",
-      "text": "向下滚动后，完整查看图窗 2 的 F2、F3 共轴轨迹；首图下部仍可见，右侧目标指向图窗 2。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "新窗从空选择开始。勾选 F2、F3 后在图窗 2 显示，图窗 1 的 F1、SHR 保持。",
+      "targetId": "m02-multi-window"
     },
     {
       "chapterId": "m02",
-      "targetId": "orderedList-9f33c76f-4967-4dfe-9d3a-f835ae9475c2",
-      "text": "移动一列：勾选它，换目标，再分配。每列只放在一个图窗。 减少图窗并保留曲线：点击该窗的 合并回首图 ，随后核对纵轴。 留下空窗用 清空选定图窗 ；连窗一起去掉用删除。零图窗时可重新新建。 布局满意后 保存绘图配置 ，关闭前留意未保存提示。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "要在另一窗显示同一参数，切到该窗后直接勾选。原窗的曲线保持。 合并并保留参数：在后续图窗点击合并回首图，所有参数并入第一窗，同名项只保留一次。随后核对纵轴。 留下空窗用清空勾选；连窗一起去掉用删除图窗。最后一窗也可删除，再点新建图窗重新开始。 布局满意后保存绘图配置，关闭前留意未保存提示。",
+      "targetId": "m02-multi-window"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-c7e79177-f406-4236-8d39-a20e8b882224",
-      "text": "放大图窗 会扩大面板，不会放大时间细节。看局部还需缩短时间窗；面板宽度也会影响导出尺寸。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "放大图窗会扩大当前面板并隐藏其他参数窗，右侧参数仍可操作。切换当前图窗可直接查看另一窗，点击还原图窗恢复多窗。查看时间细节请缩短时间窗。",
+      "targetId": "m02-multi-window"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-controls-figure",
+      "title": "参数显示",
       "text": "图窗内按钮速查",
-      "title": "参数显示"
+      "targetId": "m02-controls-figure"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-table-figure",
-      "text": "图窗显示与导出控件 控件或参数 位置/单位 默认值 操作与影响 放大图窗  /  还原图窗 图窗顶栏／动作 普通面板尺寸 放大当前面板，再点还原恢复布局；时间和数据不变。 合并回首图 图窗顶栏／动作 仅多个图窗时出现 把当前窗的分配并入剩余首窗，重复列只保留一次。 删除图窗 图窗顶栏／动作 图窗存在即显示 删除当前窗及分配。需恢复时重新新建、分配，没有删除撤销。 图片格式 PNG / SVG 图窗顶栏／格式下拉框 PNG 仅决定 保存当前图 的格式；整幅 PNG 始终为 PNG。格式不随配置保存。 保存当前图 图窗顶栏／导出 PNG；无分配、读取中或导出中禁用 只导出该参数图。PNG 白底 300 dpi，SVG 保留当前配色和可编辑文字。 保存整幅 PNG 图窗顶栏／导出 白底 300 dpi；无分配、读取中或导出中禁用 组合可见声道波形、文字、已就绪语谱及该参数图；不含其他图窗。 曲线图例与悬停提示 参数图下方／列名与轴 来自当前已分配数值列 看颜色、线型和图例；双轴附 [左]/[右]。长名称悬停查看。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "图窗显示与导出控件 控件或参数 位置/单位 默认值 操作与影响 放大图窗  /  还原图窗 图窗顶栏／动作 普通面板尺寸 放大当前面板，再点还原恢复布局；时间和数据不变。 合并回首图 图窗顶栏／动作 仅后续图窗且多个图窗时出现 把当前窗的选择并入剩余首窗，重复列只保留一次。 删除图窗 图窗顶栏／动作 图窗存在即显示 删除当前窗及选择。需恢复时重新新建、选择，没有删除撤销。 图片格式 PNG / SVG 图窗顶栏／格式下拉框 PNG 仅决定 保存当前图 的格式；整幅 PNG 始终为 PNG。格式不随配置保存。 保存当前图 图窗顶栏／导出 PNG；无选择、读取中或导出中禁用 只导出该参数图。PNG 白底 300 dpi，SVG 保留当前配色和可编辑文字。 保存整幅 PNG 图窗顶栏／导出 白底 300 dpi；无选择、读取中或导出中禁用 组合可见声道波形、文字、已就绪语谱及该参数图；不含其他图窗。 曲线图例与悬停提示 绘图区空白角落或图上方／列名与轴 来自当前已选择数值列 结合颜色、线型和图例读取；双轴附 [左]/[右]。图例避让曲线，长名称完整换行。",
+      "targetId": "m02-controls-figure"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-figure-m02-plots-flow-r3-light",
-      "text": "参数显示：读取刚刚保存的同源参数表，将三条参数曲线分配到同一图窗。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "点击图窗 2 后，右侧对应勾选 F2、F3。图窗 1 原有曲线保留，勾选操作直接作用于当前窗。",
+      "targetId": "m02-controls-figure"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-advanced",
+      "title": "参数显示",
       "text": "对照波形、语谱和文字",
-      "title": "参数显示"
+      "targetId": "m02-advanced"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-controls-wave",
+      "title": "参数显示",
       "text": "查看波形和时间窗",
-      "title": "参数显示"
+      "targetId": "m02-controls-wave"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-table-wave",
+      "title": "参数显示",
       "text": "波形与查看时间窗控件 控件或参数 位置/单位 默认值 操作与影响 显示两个声道 波形下方音频总览／开关 关闭；仅多声道时出现 显示第 1、2 声道波形，试听仍为第 1 声道。 − / + 音频总览／倍率 1× 按约 2 倍缩放查看时间窗，参数图和语谱同步。 适合窗口 音频总览／动作 全长视野 恢复全长视野，保留原试听选区。 时间窗起点 滑条 波形下方／秒 全长时不显示；放大后从 0 开始 放大后拖动查看其他时间位置，选区不变。 显示语谱图（Praat） 中间时间窗控件／开关 关闭；需当前环境支持语谱能力 计算当前时间窗、第 1 声道语谱。等待完成再保存整幅图。 时间窗起点 （秒） 中间工具行／s 0 输入视野左端，按 Enter 或离开字段提交；自动限制在音频内。 时间窗长度 （秒） 中间工具行／s 当前音频全长 输入要看的时长，最短 0.01 秒，最长全长。 全长与选区时长 中间工具行／s 全长与全长选区 分别显示音频总时长和试听选区时长。",
-      "title": "参数显示"
+      "targetId": "m02-controls-wave"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-time-gestures",
+      "title": "参数显示",
       "text": "拖选、缩放与平移",
-      "title": "参数显示"
+      "targetId": "m02-time-gestures"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-47e188ad-08ef-40fa-bbcf-e6a8e130dc18",
-      "text": "时间窗决定看哪一段及导图范围，选区决定听哪一段。 拖出选区后，导图不会自动裁到选区。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "时间窗决定看哪一段及导图范围，选区决定听哪一段。 导图范围以时间窗为准。",
+      "targetId": "m02-time-gestures"
     },
     {
       "chapterId": "m02",
+      "title": "参数显示",
       "text": "左键拖动波形、语谱或参数绘图区，正反方向都能选区。轴刻度区域不能拖选。零长度选区需重新拖出范围或点全部。 Ctrl＋滚轮 在鼠标附近缩放：波形/语谱约 2 倍，参数图约 1.25 倍，时间范围同步。 Shift＋拖动 仅在参数图中平移。其他图面用 时间窗起点 字段或滑条平移。 普通滚轮滚动页面或列表。 双击图面或点 适合窗口 恢复全长视野。要试听全段，另点底部全部。 各图按同一时间对齐。窄窗时共同横向滚动，按横轴刻度读时间。",
-      "title": "参数显示"
+      "targetId": "m02-time-gestures"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-e4fc8ab6-6947-4f93-9384-564bfeeb3df6",
+      "title": "参数显示",
       "text": "只导出选中的一段：将选区起点填到 时间窗起点 ，将终点减起点填到 时间窗长度 ，再核对横轴。最短窗长 0.01 秒。",
-      "title": "参数显示"
+      "targetId": "m02-time-gestures"
     },
     {
       "chapterId": "m02",
-      "targetId": "orderedList-dbd56154-6018-4dcf-ae1c-1ee7c2a1dc57",
+      "title": "参数显示",
       "text": "试试看：把 时间窗长度 填为 0.25 秒，提交后各图同步缩短。 在参数图区按 Ctrl 向上滚一格，窗长会变成约 0.20 秒。 按 Shift 向左拖，查看较晚的时间；松开后拖出试听选区。 核对时间窗与底部选区。下图视野长 0.20 秒，试听选区约 0.076 秒。",
-      "title": "参数显示"
+      "targetId": "m02-time-gestures"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-figure-zoom-selection-light",
-      "text": "时间窗约为 0.095–0.295 秒，长 0.20 秒；拖选的试听范围约为 0.155–0.231 秒，波形与参数图同步高亮。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "时间窗显示约 0.8 至 2.6 秒，波形与当前参数图共享时间位置。",
+      "targetId": "m02-time-gestures"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-spectrogram",
+      "title": "参数显示",
       "text": "开启语谱图",
-      "title": "参数显示"
+      "targetId": "m02-spectrogram"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-6a1eab85-9dca-4ced-93e7-40c5d7b8bd5c",
-      "text": "语谱由 Praat/Parselmouth 生成，用来对照频率结构。灰度表示相对强弱，不代表标定声压；轻量预览的频率细节受带宽限制。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "语谱由 Praat/Parselmouth 生成，用来对照频率结构。灰度表示相对强弱，声压比较需另行标定；轻量预览的频率细节受带宽限制。",
+      "targetId": "m02-spectrogram"
     },
     {
       "chapterId": "m02",
-      "targetId": "orderedList-6d12461a-838a-43b1-8406-892ceea8116b",
+      "title": "参数显示",
       "text": "勾选 显示语谱图（Praat） ，等读取提示消失、灰度图出现。 改变时间窗后等新图完成。保存整幅图前也要确认目标参数图已就绪。",
-      "title": "参数显示"
+      "targetId": "m02-spectrogram"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-figure-spectrogram-ready-light",
-      "text": "Praat 语谱图就绪后，波形与灰度语谱按同一全长时间轴排列，原试听选区仍保持。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "同一合成示例的本机 Praat 语谱图已读取，与波形和参数图共用查看时间窗。",
+      "targetId": "m02-spectrogram"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-ecfc7bd1-6632-4ad6-811a-e583f305b231",
-      "text": "波形会随当前视野自动调幅。比较录音强弱要看刻度和原信号，不能只看画得多高。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "波形会随当前视野自动调幅。比较录音强弱时，请查看刻度和原信号。",
+      "targetId": "m02-spectrogram"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-textgrid-labels",
+      "title": "参数显示",
       "text": "显示表内文字层",
-      "title": "参数显示"
+      "targetId": "m02-textgrid-labels"
     },
     {
       "chapterId": "m02",
-      "targetId": "orderedList-66e2521b-9578-4810-8d9f-2b02e82ef12e",
-      "text": "清空搜索，找到所需文字列。独立 TextGrid 需先生成带文字列的参数表。 勾选一层或多层文字，选目标并分配。图上方出现文字及区间边界。 波形汇总所有已分配文字层。把该列从所有图窗移除后，波形标签也消失。 放大到词或音节附近检查。空字符串和 sil、<sil>、eps、nan 不显示正文。 要编辑标签或查精确边界，进入 TextGrid 标注。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "清空搜索，找到所需文字列。独立 TextGrid 需先生成带文字列的参数表。 选择当前图窗并勾选一层或多层文字，图上方立即出现文字及区间边界。 波形汇总所有已选择文字层。把该列从所有图窗移除后，波形标签也消失。 放大到词或音节附近检查。空字符串和 sil、<sil>、eps、nan 不显示正文。 要编辑标签或查精确边界，进入 TextGrid 标注。",
+      "targetId": "m02-textgrid-labels"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-ae921bb2-fe77-4bf1-9a78-71dc5510b1ae",
-      "text": "下图用示例表演示英文和 IPA 标签，文字及数值仅供说明显示方式。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "下图用示例表展示英文和 IPA 标签的显示方式。",
+      "targetId": "m02-textgrid-labels"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-figure-table-text-layer-light",
-      "text": "示例表的 TextGrid 文字列已分配：英文和 IPA 区间同时显示在波形与参数图上，标签来自表内时间点。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "勾选表内文字列后，文字和区间边界立即显示在波形及参数图中。标签与参数均为合成示例。",
+      "targetId": "m02-textgrid-labels"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-2d8f9c1e-0c24-4afb-a6d8-d7b63b7dbb03",
+      "title": "参数显示",
       "text": "表内标签映射到分析帧，边界可能受帧移和显示抽样影响。密集标注要放大；精确边界以原 TextGrid 为准。",
-      "title": "参数显示"
+      "targetId": "m02-textgrid-labels"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-a7ce58a9-7d3f-4353-8bf5-312bf19ecf9a",
+      "title": "参数显示",
       "text": "TextGrid 标注：核查原始层级与精确边界",
-      "title": "参数显示"
+      "targetId": "m02-textgrid-labels"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-long-data",
+      "title": "参数显示",
       "text": "查看长结果、EGG与唇形轨迹",
-      "title": "参数显示"
+      "targetId": "m02-long-data"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-dced39af-39d9-49b8-8eaa-167f9d3f7378",
-      "text": "长表分配或缩放后会显示正在读取当前时间窗…。请 等提示消失、导出按钮恢复 ，再判断曲线或保存。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "长表勾选或缩放后会显示正在读取当前时间窗…。请 等提示消失、导出按钮恢复 ，再判断曲线或保存。",
+      "targetId": "m02-long-data"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-6a4dd4a2-b05e-4d49-9680-020fb4c1cc38",
+      "title": "参数显示",
       "text": "全长图按像素简化显示，原表不变。短事件和密集标签请放大核查；缺失或无穷值断线，不补零。",
-      "title": "参数显示"
+      "targetId": "m02-long-data"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-14b67bc9-718e-492e-9738-06cdd8ff92bf",
-      "text": "M01 插值模式显示已插值/平滑的 CQ、SQ、F0 - GCI；原始周期模式按周期自己的时间显示。改变模式或平滑需回 M01 重算。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "参数估计 插值模式显示已插值/平滑的 CQ、SQ、F0 - GCI；原始周期模式按周期自己的时间显示。改变模式或平滑需回 参数估计 重算。",
+      "targetId": "m02-long-data"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-c31e1390-1317-43e9-a27e-983e05d3c7eb",
+      "title": "参数显示",
       "text": "(pF0)、(rF0)、(gF0) 表示不同 F0 来源或派生路径，解释时查生成设置。",
-      "title": "参数显示"
+      "targetId": "m02-long-data"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-5c610620-c7cf-4ab4-ae40-21a704bb13a6",
-      "text": "唇形沿用记录时间、缺口及偏移，本页不能调偏移或重检唇部。不同步时回提取/标注模块核查来源和时间。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "唇形沿用记录时间、缺口及偏移，需要调整偏移或重新测量时，回到唇形提取或标注页面核查来源和时间。",
+      "targetId": "m02-long-data"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-0625abef-1b57-4b32-95b7-4d267bb933af",
+      "title": "参数显示",
       "text": "本页试听固定第 1 声道。若它是 EGG，请另用音频声道文件；显示两个声道仅增加波形。",
-      "title": "参数显示"
+      "targetId": "m02-long-data"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-controls-playback",
+      "title": "参数显示",
       "text": "试听当前音频",
-      "title": "参数显示"
+      "targetId": "m02-controls-playback"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-table-playback",
+      "title": "参数显示",
       "text": "时间选区与公共试听控件 控件或参数 位置/单位 默认值 操作与影响 时间选区起点 / 终点 底部／s 读入音频后 0 至全长 输入精确试听区间，提交后按时间顺序限制到音频内；选区改变会停止播放。 全部 底部／动作 可用音频后可用 恢复全长选区并停止此前试听，不改变查看时间窗。 播放选区  / 暂停 底部／动作 停止 播放第 1 声道选区；可暂停后继续。零长度选区时不可播放。 停止 底部／动作 无音频时禁用 结束播放；换音频也会停止。 播放进度（当前选区） 底部／选区内定位滑条 选区起点 在当前选区内定位，不改变查看时间窗。 播放音量 底部／0–100% 70% 按 5% 调试听音量，不改变原录音或参数。 空格键 工作区快捷键／动作 当前有效选区 普通工作区内切换播放/停止；输入框、按钮、下拉框或对话框内不接管空格。",
-      "title": "参数显示"
+      "targetId": "m02-controls-playback"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-output",
+      "title": "参数显示",
       "text": "保存图片和绘图配置",
-      "title": "参数显示"
+      "targetId": "m02-output"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-output-current",
+      "title": "参数显示",
       "text": "保存当前参数图",
-      "title": "参数显示"
+      "targetId": "m02-output-current"
     },
     {
       "chapterId": "m02",
-      "targetId": "orderedList-9bb52987-8d76-4986-a828-ed24ba2bcb57",
+      "title": "参数显示",
       "text": "先核对曲线、文字、时间窗及图例。空图窗不能导出，仅文字层也可保存。 调好图窗宽度与公共图表字体，等待字体加载。 选择 PNG 或 SVG，点击 保存当前图 。桌面在保存框选择位置，网页查看浏览器下载。 默认名为图窗 N.png 或图窗 N.svg。多段录音请加上音频名，便于区分。 打开文件检查范围、标签和曲线。 本页不另存数值表 ，统计请用原 XLSX/SQLite。",
-      "title": "参数显示"
+      "targetId": "m02-output-current"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-677289ef-7909-4c85-8065-89c04c314592",
+      "title": "参数显示",
       "text": "PNG 为白底 300 dpi，SVG 保留当前样式。这里仅保存参数图，波形和语谱请用整幅 PNG。",
-      "title": "参数显示"
+      "targetId": "m02-output-current"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-4930ba15-9375-409b-8756-b15f3137cd76",
+      "title": "参数显示",
       "text": "下图已选择 SVG。点击保存后，到实际保存位置核查文件；页面没有额外成功横幅。",
-      "title": "参数显示"
+      "targetId": "m02-output-current"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-figure-svg-current-export-light",
-      "text": "图片格式已选 SVG，当前图保留完整双轴轨迹、时间轴、轴归属图例和部分试听选区高亮。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "选择 SVG 保存当前图。图例优先放在绘图区空白位置，空间不足时移至上方，长名称完整换行。",
+      "targetId": "m02-output-current"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-svg-current-export-light-detail-figure",
-      "text": "选择图片格式后保存当前图，整幅 PNG 使用另一入口。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "当前图可选 PNG 或 SVG；整幅 PNG 还包含波形及已开启的语谱图。",
+      "targetId": "m02-output-current"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-output-whole",
+      "title": "参数显示",
       "text": "保存包含波形的整幅 PNG",
-      "title": "参数显示"
+      "targetId": "m02-output-whole"
     },
     {
       "chapterId": "m02",
-      "targetId": "orderedList-34ed82b2-5236-4cf2-9584-912200c26d30",
+      "title": "参数显示",
       "text": "决定显示一条还是两条声道波形。需要语谱时开启并等它完成。 选要放进整幅图的参数窗，核对范围；其他参数窗不自动并入。 等当前时间窗读完，点击该窗的 保存整幅 PNG 。 语谱未就绪时等待或重试；不需要它时关闭后再导出。 检查各图横轴对齐。默认名为音频名-图窗 N.png。",
-      "title": "参数显示"
+      "targetId": "m02-output-whole"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-ac564521-7d57-4be3-a404-6bfe8941cdb2",
+      "title": "参数显示",
       "text": "整幅图固定白底 300 dpi，保留选区高亮，省去播放光标和操作控件。原录音和表都不会被覆盖。",
-      "title": "参数显示"
+      "targetId": "m02-output-whole"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-figure-export-whole-plot",
-      "text": "实际保存的白底 300 dpi 整幅 PNG：依次包含声道 1 波形、Praat 语谱图和当前双轴参数图，时间轴对应，试听选区高亮保留。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "当前应用实际导出的白底 300 dpi 整幅 PNG，包含合成示例的波形、Praat 语谱及双轴参数图，紧凑图例随图保存。",
+      "targetId": "m02-output-whole"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-output-fonts",
+      "title": "参数显示",
       "text": "尺寸、字体和分享",
-      "title": "参数显示"
+      "targetId": "m02-output-fonts"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-1b8b3d28-6e9e-4a0d-a583-35d876b06507",
+      "title": "参数显示",
       "text": "PNG 按显示尺寸生成 300 dpi 图片。上限为单边 16384 像素、总计 3200 万像素，超过时缩小面板或分图保存。",
-      "title": "参数显示"
+      "targetId": "m02-output-fonts"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-5a671e69-cba9-4ed7-80ff-a6d317b23b99",
+      "title": "参数显示",
       "text": "先调图窗宽度，导出后在论文中等比例缩放。刻度和图例用公共图表字体，IPA 固定 Doulos SIL。提高 dpi 不会增加原表的时间细节。",
-      "title": "参数显示"
+      "targetId": "m02-output-fonts"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-f4231ed3-1d54-4984-9b74-63e0d20a244f",
+      "title": "参数显示",
       "text": "设置：图表字体、字号与时间显示精度",
-      "title": "参数显示"
+      "targetId": "m02-output-fonts"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-151446c6-eb22-4ced-976d-eac54f889a4e",
+      "title": "参数显示",
       "text": "PNG 默认使用打印配色。波形可沿用设置中的主题/自定义线色，曲线由图例辨认。",
-      "title": "参数显示"
+      "targetId": "m02-output-fonts"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-8c634113-1f69-4dbf-a8cd-00447979058d",
-      "text": "SVG 保留矢量曲线和可编辑文字，内嵌 Doulos SIL 及 OFL；其他字体需对方设备支持。长图例可能省略，导出前检查。想固定外观，分享 PNG 更方便。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "SVG 保留矢量曲线和可编辑文字，内嵌 Doulos SIL 及 OFL；其他字体需对方设备支持。图例紧凑排列，优先放在绘图区空白位置，空间不足时移到图上方。长参数名称完整换行，双轴标明所属纵轴。分享固定外观可选 PNG。",
+      "targetId": "m02-output-fonts"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-output-config",
+      "title": "参数显示",
       "text": "保存与恢复绘图配置",
-      "title": "参数显示"
+      "targetId": "m02-output-config"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-0ce25282-5dea-4cb2-9f29-0118f7113727",
-      "text": "保存绘图配置 只记住图窗、标题和参数分配 ，存于本机。文件、目录权限、时间窗、选区、搜索/筛选、勾选、放大状态和图片格式不会随它保存。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "保存绘图配置记住图窗、标题和各窗的参数选择。重新载入源文件后，曲线与当前窗勾选一起恢复。文件、目录权限、时间窗、选区、搜索、放大状态和图片格式不随本机绘图配置保存；网页版设置随账号保留。",
+      "targetId": "m02-output-config"
     },
     {
       "chapterId": "m02",
-      "targetId": "orderedList-32603c48-76f2-4b52-9d5d-d3c9ae10bfdc",
-      "text": "完成分配后，点击 保存绘图配置 。失败时保留页面，检查本机存储后重试。 重新打开同一工作区，再选择源目录、音频及参数表。 新表没有的列会移除；保存过的空窗或零图窗照常恢复。 重新设时间窗、选区和其他显示选项，核对图例。 保留原 WAV、参数表、生成设置和版本，并记录导出范围、图窗分配、字体及文件名。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "选好参数后，点击 保存绘图配置 。失败时保留页面，检查本机存储后重试。 重新打开同一工作区，再选择源目录、音频及参数表。 新表没有的列会移除；保存过的空窗或零图窗照常恢复。 重新设时间窗、选区和其他显示选项，核对图例。 保留原 WAV、参数表、生成设置和版本，并记录导出范围、图窗选择、字体及文件名。",
+      "targetId": "m02-output-config"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-82268abd-2b26-4334-b7ed-1ffe937142b9",
-      "text": "恢复后可能已画曲线，右栏却没有勾号，这是正常的。下图恢复了 F1、SHR 分配，视野和选区回全长；未保存的显示选项需重新检查。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "下图恢复了 F1、SHR，图窗曲线与右侧勾选一致。视野和选区回到全长，其他未保存显示选项需重新核对。",
+      "targetId": "m02-output-config"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-figure-config-restored-light",
-      "text": "重新打开源目录并选择原音频后，已保存的 F1、SHR 图窗分配恢复；候选勾选为空，视野与选区回到全长。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "刷新并恢复已保存配置后，F1、SHR 曲线与右侧勾选一致，查看时间窗回到全长。",
+      "targetId": "m02-output-config"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-ac4423a0-bd43-42e9-8525-99a1acd1bdaa",
+      "title": "参数显示",
       "text": "切换已开标签通常保留当前页面。关闭后需重新载入源文件；重新计算或查询任务历史请到参数估计。",
-      "title": "参数显示"
+      "targetId": "m02-output-config"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-recovery",
+      "title": "参数显示",
       "text": "按提示排查与恢复",
-      "title": "参数显示"
+      "targetId": "m02-recovery"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-recovery-empty",
+      "title": "参数显示",
       "text": "没有文件、没有候选或没有曲线",
-      "title": "参数显示"
+      "targetId": "m02-recovery-empty"
     },
     {
       "chapterId": "m02",
-      "text": "列表为空：清空音频搜索，检查目录和 WAV。子目录需勾选 包含子文件夹 ，再刷新；扫描超限时选较小目录。 没有同名结果：检查参数目录、相对路径和名称，再手动关联。没有表可先试听，需要参数时到 M01 计算。 无匹配参数：清除搜索和筛选；仍缺少时查原表是否输出该列。 勾选后无曲线：先分配，确认目标有效、当前窗有有效数值。文字列只显示标签。 暂无图窗： 新建图窗 ，再勾选、分配。已存零图窗配置也会恢复为空。 换表后缺曲线：新表可能没有该列。重选正确结果，再检查分配。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "列表为空：清空音频搜索，检查目录和 WAV。子目录需勾选 包含子文件夹 ，再刷新；扫描超限时选较小目录。 没有同名结果：检查参数目录、相对路径和名称，再手动关联。没有表可先试听，需要参数时到 参数估计 计算。 无匹配参数：清除搜索和筛选；仍缺少时查原表是否输出该列。 勾选后无曲线：确认当前图窗正确、表已读完，当前时间窗有有效数值。文字列只显示标签。 暂无图窗： 新建图窗 ，再直接勾选参数。已存零图窗配置也会恢复为空。 换表后缺曲线：新表可能没有该列。重选正确结果，再检查选择。",
+      "targetId": "m02-recovery-empty"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-60273fb4-15b9-4ade-95a7-75e9848cb38d",
-      "text": "清除筛选 会清空搜索，并勾选 reaper、correction；曲线和原勾选保留。接着操作新组时别忘了 清空勾选 。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "清除筛选会清空搜索，并勾选 reaper、correction，曲线和原勾选保留。点击新建图窗会直接切换到空选择，无需先清空上一窗。",
+      "targetId": "m02-recovery-empty"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-figure-no-matching-candidate-light",
-      "text": "参数搜索无匹配时，候选区显示无匹配参数与清除筛选，已分配的曲线仍保留。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "搜索无匹配时图窗曲线和已选参数保留；清空勾选仍会移除当前窗全部参数。",
+      "targetId": "m02-recovery-empty"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-recovery-read",
+      "title": "参数显示",
       "text": "读取失败、超时与视野等待",
-      "title": "参数显示"
+      "targetId": "m02-recovery-read"
     },
     {
       "chapterId": "m02",
-      "text": "结构不受支持或包含公式：保留原表，重选正确导出。提示涵盖多种原因，不能仅凭它认定文件含公式。 超限或首次索引超时：若同源结果有 SQLite，改选它；否则在参数估计生成较小结果。缩短视野不能跳过首次 XLSX 索引。 一直读取：暂停连续缩放，等当前读取结束；仍失败则重选结果或刷新，检查本机服务。 已分配列超过 128：从图中移除不需要的列。 清空勾选 或隐藏候选不会减少分配。 文件变化或不可访问：刷新或重新选目录。网页检查账号、项目及文件是否仍有效。 长 WAV 预览超限：打开较短片段。使用轻量预览时，精细测量仍需原音。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "结构不受支持或包含公式：保留原表，重选正确导出。按提示核查文件结构、公式及损坏情况。 超限或首次索引超时：若同源结果有 SQLite，改选它；否则在参数估计生成较小结果。缩短视野不能跳过首次 XLSX 索引。 一直读取：暂停连续缩放，等当前读取结束；仍失败则重选结果或刷新后重试。 已选列超过 128：切到对应图窗取消不需要的勾选，或清空该窗。 清空勾选 会清空当前图窗，隐藏候选则保留曲线。 文件变化或不可访问：刷新或重新选目录。网页检查账号、项目及文件是否仍有效。 长 WAV 预览超限：打开较短片段。使用轻量预览时，精细测量仍需原音。",
+      "targetId": "m02-recovery-read"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-2f81ce7a-bd2a-49f6-9751-88a80c5b4a17",
+      "title": "参数显示",
       "text": "下图关联了损坏的示例 XLSX，波形保留。重新选择有效 SQLite 后可恢复，无需改原 WAV。",
-      "title": "参数显示"
+      "targetId": "m02-recovery-read"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-figure-invalid-table-error-light",
-      "text": "关联损坏的示例 XLSX 后，顶部提示参数文件结构不受支持或包含公式，原音波形仍保留。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "损坏的合成 XLSX 无法读取，顶部显示错误，原音波形仍保留。重新选择有效结果可恢复。",
+      "targetId": "m02-recovery-read"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-308fab50-4d40-4d60-8c29-3c7c305cbb12",
-      "text": "新视野读取失败时， 图上可能暂留旧轨迹 。等新视野完成后再解释和导图；重选表会 清空勾选 ，刷新或换音频则回全长。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "新视野读取失败时，图上可能暂留旧轨迹。等新视野完成后再解释和导图。重选表后保留新表中存在的参数，右栏与当前图窗一致；刷新或换音频回到全长。",
+      "targetId": "m02-recovery-read"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-input-limits",
+      "title": "参数显示",
       "text": "文件较大时的限制",
-      "title": "参数显示"
+      "targetId": "m02-input-limits"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-db71a484-53c3-4504-8102-4629bf288504",
-      "text": "旧单表上限为 16 MB、20 万单元格、256 列。新本机多表上限为 4 GB、每表 200 万行、总计 1.8 亿单元格、30 分钟；每次读取最多 128 个不同的已分配列。大小在限额内仍需满足文件结构和读取预算。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "旧单表上限为 16 MB、20 万单元格、256 列。新本机多表上限为 4 GB、每表 200 万行、总计 1.8 亿单元格、30 分钟；每次读取最多 128 个不同的已选择列。大小在限额内仍需满足文件结构和读取预算。",
+      "targetId": "m02-input-limits"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-15ec7a4f-4e5b-4375-aa1d-2b34ea6c4f18",
+      "title": "参数显示",
       "text": "大 XLSX 首次打开会建立本机索引，稍等一下，后续缩放会复用。原表不变。读取受 300 秒、1 GiB 限制，损坏结构、公式或外链会被拒绝。",
-      "title": "参数显示"
+      "targetId": "m02-input-limits"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-853294ee-2c78-4845-915d-a62c9779f7d1",
+      "title": "参数显示",
       "text": "桌面 WAV 支持非空、8–96 kHz、最多 8 声道、2 GB。较大录音会生成全长轻量预览，界面注明原格式和预览格式；试听、语谱使用预览。若仍超限，请分段打开。精细测量保留原录音。",
-      "title": "参数显示"
+      "targetId": "m02-input-limits"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-recovery-save",
+      "title": "参数显示",
       "text": "语谱图、图像与配置保存失败",
-      "title": "参数显示"
+      "targetId": "m02-recovery-save"
     },
     {
       "chapterId": "m02",
-      "text": "语谱失败：点击语谱区重试。只需波形和曲线时，关闭语谱再导出；保存当前参数图不依赖语谱。 保存按钮灰色：检查是否已分配，是否正在读表或生成图片，完成后重试。 图片超尺寸：还原 放大图窗 、缩小面板，或减少参数/文字层后分图。仅缩短时间窗不一定减小像素尺寸。 字体或编码失败：保留当前图，选择可用字体，等资源加载后重试。 取消保存框或下载受阻：检查目标文件及下载记录，再保存一次。 配置保存失败：保留页面，检查本机存储后重试， 未成功前不要关闭 。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "语谱失败：点击语谱区重试。只需波形和曲线时，关闭语谱再导出；保存当前参数图不依赖语谱。 保存按钮灰色：检查是否已勾选参数，是否正在读表或生成图片，完成后重试。 图片超尺寸：还原 放大图窗 、缩小面板，或减少参数/文字层后分图。仅缩短时间窗不一定减小像素尺寸。 字体或编码失败：保留当前图，选择可用字体，等资源加载后重试。 取消保存框或下载受阻：检查目标文件及下载记录，再保存一次。 配置保存失败：保留页面，检查本机存储后重试， 未成功前不要关闭 。",
+      "targetId": "m02-recovery-save"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-0f28fe7a-671e-4395-83c6-e17494c1c0f5",
+      "title": "参数显示",
       "text": "关闭有改动的标签时，按提示保存或放弃，取消可回到页面。图窗操作没有独立撤销；清空或删除图窗不会删除源文件。",
-      "title": "参数显示"
+      "targetId": "m02-recovery-save"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-methods",
+      "title": "参数显示",
       "text": "查看方法与引用",
-      "title": "参数显示"
+      "targetId": "m02-methods"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-methods-provenance",
+      "title": "参数显示",
       "text": "保留结果的来源记录",
-      "title": "参数显示"
+      "targetId": "m02-methods-provenance"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-ab615416-540d-4996-bdbe-34d8a7d530d5",
-      "text": "参数方法随原结果来源。M02 负责读取和显示，语谱预览另由 Praat/Parselmouth 生成。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "参数方法随原结果来源。参数显示 负责读取和显示，语谱预览另由 Praat/Parselmouth 生成。",
+      "targetId": "m02-methods-provenance"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-97ed1bf0-d2a2-4bb0-b110-5c0c43016fd5",
-      "text": "M01 新多表含生成设置、音频身份、版本等记录；旧表可能只有列名和数值。请随结果保留这些记录。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "参数估计 新多表含生成设置、音频身份、版本等记录；旧表可能只有列名和数值。请随结果保留这些记录。",
+      "targetId": "m02-methods-provenance"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-9f730929-ed88-4381-903f-31bb1ac66f78",
-      "text": "能画出曲线不能代替来源核查。引用时填写实际生成工具和设置，缺失信息如实记录。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "引用时填写实际生成工具和设置，缺失信息如实记录。",
+      "targetId": "m02-methods-provenance"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-methods-interpretation",
-      "text": "比较时记住这些边界",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "比较参数时的核对要点",
+      "targetId": "m02-methods-interpretation"
     },
     {
       "chapterId": "m02",
-      "text": "不同参数时间相同，分析窗和时间误差仍可能不同。 断线表示无有效值，不能直接解释成零或无声。 * 的含义查原参数说明，筛选开关不做校正。 双轴比较先看各自刻度，相关性和幅度比较需用原表。 短事件需放大并核查完整数据。 轻量预览服务于浏览，精细声学测量用原记录。 CQ、SQ 等 EGG 指标按生成模块定义解释。 新多表目前限本机，网页使用旧单表。",
-      "title": "参数显示"
+      "title": "参数显示",
+      "text": "不同参数时间相同，分析窗和时间误差仍可能不同。 断线表示缺少有效值，请结合原始信号判断该处状态。 * 的含义查原参数说明，筛选开关不做校正。 双轴比较先看各自刻度，相关性和幅度比较需用原表。 短事件需放大并核查完整数据。 轻量预览服务于浏览，精细声学测量用原记录。 CQ、SQ 等 EGG 指标按生成模块定义解释。 新多表目前限本机，网页使用旧单表。",
+      "targetId": "m02-methods-interpretation"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-2c81c0ce-b0de-458a-a7ef-c41560133e25",
+      "title": "参数显示",
       "text": "EGG 分析：周期事件、接触商与相关指标的解释",
-      "title": "参数显示"
+      "targetId": "m02-methods-interpretation"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-methods-references",
+      "title": "参数显示",
       "text": "方法资料入口",
-      "title": "参数显示"
+      "targetId": "m02-methods-references"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-30dbace6-5f76-4d79-a1be-98fea31c3f32",
+      "title": "参数显示",
       "text": "点击顶部 方法与引用 查看完整作者、版本和许可。以下链接便于查阅。",
-      "title": "参数显示"
+      "targetId": "m02-methods-references"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-545222b3-5287-4ec0-bd7a-d00e5d86cba2",
+      "title": "参数显示",
       "text": "Praat / Parselmouth： 接口论文",
-      "title": "参数显示"
+      "targetId": "m02-methods-references"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-a1f93574-c490-4417-8bb3-edeb68ab5067",
+      "title": "参数显示",
       "text": "语谱图设置： Praat 官方手册",
-      "title": "参数显示"
+      "targetId": "m02-methods-references"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-5642e8d9-e4cb-4a39-9b9e-91642f3743c9",
+      "title": "参数显示",
       "text": "REAPER： 官方仓库",
-      "title": "参数显示"
+      "targetId": "m02-methods-references"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-c750f17e-178e-40bc-838a-77b08086fb71",
+      "title": "参数显示",
       "text": "VoiceSauce： Shue 等（2011）论文",
-      "title": "参数显示"
+      "targetId": "m02-methods-references"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-a63a3275-879a-4e1f-95db-b59468a7e2b7",
+      "title": "参数显示",
       "text": "XLSX 读取： openpyxl 3.1.5",
-      "title": "参数显示"
+      "targetId": "m02-methods-references"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-e76e7be7-99bc-4245-93b3-1ce000ab7b05",
+      "title": "参数显示",
       "text": "SQLite 格式： 官方资料",
-      "title": "参数显示"
+      "targetId": "m02-methods-references"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-0be1f430-7b24-4974-ae75-4f8575896537",
+      "title": "参数显示",
       "text": "PNG 格式： W3C 规范",
-      "title": "参数显示"
+      "targetId": "m02-methods-references"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-8b1a8969-7f4e-461e-90f8-074900676b9d",
+      "title": "参数显示",
       "text": "IPA 字体： Doulos SIL 与许可",
-      "title": "参数显示"
+      "targetId": "m02-methods-references"
     },
     {
       "chapterId": "m02",
-      "targetId": "m02-references",
+      "title": "参数显示",
       "text": "参考资料",
-      "title": "参数显示"
+      "targetId": "m02-references"
     },
     {
       "chapterId": "m02",
-      "targetId": "paragraph-b839e3c5-6633-4419-bf88-0637fd343e2a",
+      "title": "参数显示",
       "text": "引用时结合实际生成设置和版本。",
-      "title": "参数显示"
+      "targetId": "m02-references"
     },
     {
       "chapterId": "m02",
+      "title": "参数显示",
       "text": "Yannick Jadoul and Bill Thompson and Bart de Boer 2018 Introducing Parselmouth: A Python Interface to Praat",
-      "title": "参数显示"
+      "targetId": "m02-references"
     },
     {
       "chapterId": "m03",
@@ -521073,545 +522237,567 @@
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-purpose",
+      "title": "LPC 谱图",
       "text": "打开 WAV，准备短片段",
-      "title": "LPC 谱图"
+      "targetId": "m04-purpose"
     },
     {
       "chapterId": "m04",
+      "title": "LPC 谱图",
       "text": "LPC 谱图用于观察短片段的谱包络，例如擦音的宽带峰形或元音的谱形变化。常用流程是  打开 WAV → 选区试听 → 设置参数 → 开始分析 → 保存图与数据 。",
-      "title": "LPC 谱图"
+      "targetId": "m04-purpose"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-preparation",
+      "title": "LPC 谱图",
       "text": "加载音频与标注",
-      "title": "LPC 谱图"
+      "targetId": "m04-preparation"
     },
     {
       "chapterId": "m04",
+      "title": "LPC 谱图",
       "text": "准备 WAV，需要按标注定位时再配同名 TextGrid。目录可包含多个文件，当前每次分析一个文件的一段选区。",
-      "title": "LPC 谱图"
+      "targetId": "m04-preparation"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-load-steps",
+      "title": "LPC 谱图",
       "text": "点击顶部  打开音频目录 ，选择含 WAV 的文件夹。显示  导入文件  的入口可一次添加 WAV 和 TextGrid；外部增改文件后点击  刷新文件 。 在左栏  音频文件  中选择 WAV，等待读取完成。核对文件名、采样率、声道数与时长，中区应出现波形。 需要标注时，检查  关联 TextGrid  和  标注层 。唯一同名文件会自动关联；可手动改选，也可选  不关联 。没有标注也能分析。",
-      "title": "LPC 谱图"
+      "targetId": "m04-preparation"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-figure-loaded-current",
+      "title": "LPC 谱图",
       "text": "加载完成的波形工作区，左栏可见 16000 Hz、单声道和约 0.672 s。示例 TextGrid 已关联，底部为全长范围。",
-      "title": "LPC 谱图"
+      "targetId": "m04-preparation"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-input-example",
+      "title": "LPC 谱图",
       "text": "speech.wav\nspeech.TextGrid",
-      "title": "LPC 谱图"
+      "targetId": "m04-preparation"
     },
     {
       "chapterId": "m04",
+      "title": "LPC 谱图",
       "text": "输入 WAV 限  64,000,000 字节、800 万帧、8 声道、8–96 kHz ；预览另限各声道合计 3200 万采样值。 单次 LPC 选区最多 48,000 样本 ，48 kHz 下约 1 s，默认 50 阶至少需 52 样本。",
-      "title": "LPC 谱图"
+      "targetId": "m04-preparation"
     },
     {
       "chapterId": "m04",
-      "text": "多声道 LPC 使用各声道均值 ，导出的分析 WAV 为单声道。 试听声道  只改变播放、波形和语谱预览，不能指定某个声道独立计算。",
-      "title": "LPC 谱图"
+      "title": "LPC 谱图",
+      "text": "分析声道默认使用各声道均值，也可选择单个声道 ，导出的分析 WAV 为单声道。 试听声道  只改变播放、波形和语谱预览。需要指定计算输入时，使用分析声道选择。",
+      "targetId": "m04-preparation"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-interface",
+      "title": "LPC 谱图",
       "text": "工作区各部分做什么",
-      "title": "LPC 谱图"
+      "targetId": "m04-interface"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-interface-areas",
-      "text": "左栏 ：选择文件、标注层和试听声道，下方设置阶数、频率上限与固定 dB 范围。 中区 ：在  波形  与  LPC 频谱  间切换，查看选区、语谱图和谱包络。 右栏 ：开始或取消分析，查看任务状态、参数快照与历史，保存结果。 底部 ：输入起点、终点，选择全部，播放、暂停或停止，调整进度与音量。",
-      "title": "LPC 谱图"
+      "title": "LPC 谱图",
+      "text": "左栏 ：选择文件、标注层、分析声道与试听声道，下方设置阶数、频率上限与固定 dB 范围。 中区 ：在  波形  与  LPC 频谱  间切换，查看选区、语谱图和谱包络。 右栏 ：开始或取消分析，查看任务状态、参数快照与历史，保存结果。 底部 ：输入起点、终点，选择全部，播放、暂停或停止，调整进度与音量。",
+      "targetId": "m04-interface"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-file-controls",
+      "title": "LPC 谱图",
       "text": "标注、声道与常用工具",
-      "title": "LPC 谱图"
+      "targetId": "m04-file-controls"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-controls-table",
+      "title": "LPC 谱图",
       "text": "文件与常用工具 控件 用法 标注层 / 下一层 选择当前层；两层以上可用下一层循环切换。标签轨随之更新。 试听声道 多声道文件可选单个原始声道试听；切换会停止播放。 保存参数草稿 保存阶数、频率上限和纵轴设置，供下次沿用。有效草稿可能覆盖初始默认值；不保存音频和结果。 帮助 / 方法与引用 帮助打开本章，点击返回 LPC 谱图继续原工作区；方法与引用可查来源和许可。",
-      "title": "LPC 谱图"
+      "targetId": "m04-file-controls"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-controls",
+      "title": "LPC 谱图",
       "text": "定位并试听分析片段",
-      "title": "LPC 谱图"
+      "targetId": "m04-controls"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-time-view",
+      "title": "LPC 谱图",
       "text": "选短片段，核对起止时间",
-      "title": "LPC 谱图"
+      "targetId": "m04-time-view"
     },
     {
       "chapterId": "m04",
+      "title": "LPC 谱图",
       "text": "每次分析前以底部起点、终点为准 。尚未明确选区时，范围跟随可见窗；一旦拖选、点击标注、编辑时间或点全部，随后缩放只改变观察范围。",
-      "title": "LPC 谱图"
+      "targetId": "m04-time-view"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-time-steps",
+      "title": "LPC 谱图",
       "text": "在波形上按  Ctrl＋滚轮 ，或点图下  ＋  放大。放大后拖动  时间窗起点  滑条寻找目标声音；双击波形或点  适合窗口  返回全长。 用 左键拖动 选出片段，不必按 Shift。也可点击 TextGrid 标签区间，再在底部  起点 / 终点  中输入准确秒数。反向拖选同样有效。 点击  播放选区  确认声音。点击  暂停  保留位置，再次播放可继续； 停止  结束播放。 全部  选中完整音频，分析前仍须检查样本上限。",
-      "title": "LPC 谱图"
+      "targetId": "m04-time-view"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-example-single-original",
+      "title": "LPC 谱图",
       "text": "示例采用 16000 Hz 单音节 WAV：在底部输入  0.1–0.4 s ，选区为 4800 个样本。图中的示例标注只演示定位操作；试听使用底部播放栏。",
-      "title": "LPC 谱图"
+      "targetId": "m04-time-view"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-figure-selection-current",
+      "title": "LPC 谱图",
       "text": "底部输入 0.1–0.4 s 后，波形和标签轨高亮对应范围。阶数为 50，尚未开始分析。",
-      "title": "LPC 谱图"
+      "targetId": "m04-time-view"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-textgrid-labels",
+      "title": "LPC 谱图",
       "text": "按 TextGrid 定位与切层",
-      "title": "LPC 谱图"
+      "targetId": "m04-textgrid-labels"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-textgrid-steps",
+      "title": "LPC 谱图",
       "text": "在  关联 TextGrid  选择匹配文件，等待层名出现。检查波形下方标签轨；读取失败时改选可解析的文件。 选择  标注层  或点  下一层 。示例由定位示例切到对照层，标签轨随之改变。切层影响结果标签，需要新图时重新分析。",
-      "title": "LPC 谱图"
+      "targetId": "m04-textgrid-labels"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-tier-zoom-feedback",
+      "title": "LPC 谱图",
       "text": "示例已明确选定  0.1–0.4 s ，再放大到 2× 时可见窗约为 0–0.336 s。选区终点暂在图外，底部起止值仍保持原范围。",
-      "title": "LPC 谱图"
+      "targetId": "m04-textgrid-labels"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-figure-tier-zoom-round2",
+      "title": "LPC 谱图",
       "text": "切到对照层并放大到 2×，标签轨更新，可见窗缩短。底部明确选区仍为 0.1–0.4 s。",
-      "title": "LPC 谱图"
+      "targetId": "m04-textgrid-labels"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-textgrid-selection-steps",
+      "title": "LPC 谱图",
       "text": "点击目标标签区间后，底部时间变为该区间与音频的交集。可继续缩短到目标声音的稳定部分，再核对层名与秒数。 出现非空标签越界提示时，检查录音和标注是否来自同一裁剪版本。改选匹配文件；确实不使用标注时选择  不关联  再分析。",
-      "title": "LPC 谱图"
+      "targetId": "m04-textgrid-labels"
     },
     {
       "chapterId": "m04",
+      "title": "LPC 谱图",
       "text": "关联 TextGrid 的 全部层 都会检查。任一非空标签超出音频范围会阻止分析；空白末端可裁到音频边界，原标注保持不变。",
-      "title": "LPC 谱图"
+      "targetId": "m04-textgrid-labels"
     },
     {
       "chapterId": "m04",
-      "text": "结果标签取当前层的非空文字，去重后用  ＋  拼接。只在选区末端相交且未包含起点的区间会被排除，不能单靠标签判断全部分析范围。",
-      "title": "LPC 谱图"
+      "title": "LPC 谱图",
+      "text": "结果标签取当前层的非空文字，去重后用  ＋  拼接。只在选区末端相交且未包含起点的区间会被排除，完整分析范围以底部起止时间和结果 JSON 为准。",
+      "targetId": "m04-textgrid-labels"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-label-example",
+      "title": "LPC 谱图",
       "text": "标注：a 0.00–0.10 s，b 0.10–0.20 s，c 0.20–0.30 s\n选区：0.05–0.25 s → 结果标签 a+b\nc 仅在选区末端重叠，按当前规则排除。",
-      "title": "LPC 谱图"
+      "targetId": "m04-textgrid-labels"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-praat-preview",
+      "title": "LPC 谱图",
       "text": "用语谱图辅助定位",
-      "title": "LPC 谱图"
+      "targetId": "m04-praat-preview"
     },
     {
       "chapterId": "m04",
-      "text": "语谱预览固定为 Gaussian 5 ms 窗、50 dB 相对灰度、6 dB/oct 显示预加重，最高频率为 5000 Hz 与采样率一半中的较小值。它帮助定位，不替代 LPC 结果。",
-      "title": "LPC 谱图"
+      "title": "LPC 谱图",
+      "text": "语谱预览固定为 Gaussian 5 ms 窗、50 dB 相对灰度、6 dB/oct 显示预加重，最高频率为 5000 Hz 与采样率一半中的较小值。它用于定位，谱包络请查看 LPC 结果。",
+      "targetId": "m04-praat-preview"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-praat-steps",
+      "title": "LPC 谱图",
       "text": "在波形视图勾选  显示语谱图（Praat） ，等待灰度图出现。它与波形共用时间轴，可直接左键拖选。 放大、平移或切换试听声道后，等待当前窗预览刷新。只改选区且可见窗未变时，无须重算预览。 忙碌时稍等，失败时点击提示中的  重试 。可见窗不足 10 ms 时放宽，超时时缩小；暂不需要预览时可关闭它继续 LPC 分析。",
-      "title": "LPC 谱图"
+      "targetId": "m04-praat-preview"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-figure-praat-current",
+      "title": "LPC 谱图",
       "text": "勾选显示语谱图后，波形与 Praat 灰度图共用 0.1–0.4 s 选区。",
-      "title": "LPC 谱图"
+      "targetId": "m04-praat-preview"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-analysis-controls",
+      "title": "LPC 谱图",
       "text": "设置参数并开始分析",
-      "title": "LPC 谱图"
+      "targetId": "m04-analysis-controls"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-analysis-table",
-      "text": "LPC 计算与显示参数 参数 初始值 / 范围 操作要点 阶数 50 / 整数 1–200 改变谱包络的模型复杂程度。修改后重新分析；阶数更高不保证更准确。 频率上限 Hz 8000 / 100–48000 Hz 设置结果图的频率范围。修改后重新分析；高于采样率一半的区域没有数据。 dB 下限 / 上限 −5 / 35；各值 −200–100 dB 固定纵轴时立即应用已有谱值。 下限须小于上限 ；动态纵轴时暂不可编辑。 时间选区 底部起点、终点，单位 s 整段选区参与一次计算。单次最多 48,000 样本，至少为阶数＋2。",
-      "title": "LPC 谱图"
+      "title": "LPC 谱图",
+      "text": "LPC 计算与显示参数 参数 初始值 / 范围 操作要点 阶数 50 / 整数 1–200 改变谱包络的模型复杂程度。修改后重新分析，并结合选区检查谱包络。 频率上限 Hz 8000 / 100–48000 Hz 设置结果图的频率范围。修改后重新分析；高于采样率一半的区域没有数据。 dB 下限 / 上限 −5 / 35；各值 −200–100 dB 固定纵轴时立即应用已有谱值。 下限须小于上限 ；动态纵轴时暂不可编辑。 时间选区 底部起点、终点，单位 s 整段选区参与一次计算。单次最多 48,000 样本，至少为阶数＋2。",
+      "targetId": "m04-analysis-controls"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-workflow",
+      "title": "LPC 谱图",
       "text": "提交并核对结果",
-      "title": "LPC 谱图"
+      "targetId": "m04-workflow"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-workflow-steps",
+      "title": "LPC 谱图",
       "text": "核对 WAV、标注层和底部选区，试听确认片段。在左栏设置阶数、频率上限及所需图轴。 点击右栏  开始分析 。如有输入提示，先修正再提交；运行期间可查看状态或  取消分析 ，无需重复点击。 完成后自动打开  LPC 频谱 。 先核对图下文件名、实际时间、样本数和阶数 ，再展开  查看此结果的参数快照 。 修改选区、阶数、频率上限、音频或标注层后，旧图会显示提示。需要对应的新结果时再次  开始分析 。",
-      "title": "LPC 谱图"
+      "targetId": "m04-workflow"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-figure-m04-overview-r2-light",
+      "title": "LPC 谱图",
       "text": "0.1–0.4 s、4800 样本、50 阶分析完成。当前固定纵轴为 −5 至 35 dB，右栏出现保存与任务记录。",
-      "title": "LPC 谱图"
+      "targetId": "m04-workflow"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-figure-parameters-current",
+      "title": "LPC 谱图",
       "text": "展开结果参数快照，核对本次时间、50 阶、8000 Hz 和原任务纵轴。",
-      "title": "LPC 谱图"
+      "targetId": "m04-workflow"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-parameters-current-light-focused-detail-figure",
+      "title": "LPC 谱图",
       "text": "阶数、频率上限和幅度范围分开填写。修改后重新分析，结果才会采用新参数。",
-      "title": "LPC 谱图"
+      "targetId": "m04-workflow"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-task-controls",
+      "title": "LPC 谱图",
       "text": "查看任务与参数",
-      "title": "LPC 谱图"
+      "targetId": "m04-task-controls"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-task-table",
+      "title": "LPC 谱图",
       "text": "任务记录常用操作 控件 作用 查看此结果的参数快照 查看创建该任务时的选区、阶数、频率上限、图轴、层名和字体。 分析任务与历史结果 / 查看结果 按时间与短 ID 找到任务，打开已完成结果。读取失败可再次查看。 取消分析 / 取消此任务 请求停止提交、排队或运行中的任务，继续观察最终状态。 重试此任务 失败、中断或取消后按原输入、原配置重试。需要修改参数时另行开始分析。",
-      "title": "LPC 谱图"
+      "targetId": "m04-task-controls"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-advanced",
+      "title": "LPC 谱图",
       "text": "读图、试听与比较",
-      "title": "LPC 谱图"
+      "targetId": "m04-advanced"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-frequency-view",
+      "title": "LPC 谱图",
       "text": "放大谱图与调整纵轴",
-      "title": "LPC 谱图"
+      "targetId": "m04-frequency-view"
     },
     {
       "chapterId": "m04",
+      "title": "LPC 谱图",
+      "text": "点击显示频谱图，在LPC曲线上叠加同一片段的FFT。参考频谱采用相同0.97预加重与Hamming窗，FFT峰值对齐LPC，仅比较频谱形状。开关不重新分析，也不改变原谱值；保存当前PNG时包含已显示的FFT灰线。旧历史没有FFT时可重新分析后显示。",
+      "targetId": "m04-frequency-view"
+    },
+    {
+      "chapterId": "m04",
+      "title": "LPC 谱图",
       "text": "低于固定轴下限的曲线会被裁切，可切换动态轴或降低下限。频率超过采样率一半的空白区域没有额外数据。",
-      "title": "LPC 谱图"
+      "targetId": "m04-frequency-view"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-axis-steps",
+      "title": "LPC 谱图",
       "text": "打开已完成结果，核对图下信息。谱图横轴为  Hz ，纵轴为  dB ；当前只显示一条 LPC 谱包络。 点击  动态纵轴  先看整体谱形。它在任务频率范围内的最小、最大谱值外各留 5 dB，横向放大不会重新改变纵轴。",
-      "title": "LPC 谱图"
+      "targetId": "m04-frequency-view"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-figure-m04-overview-light",
+      "title": "LPC 谱图",
       "text": "同一结果切换为动态纵轴，较低幅度部分显示，左栏 dB 输入暂不可编辑。",
-      "title": "LPC 谱图"
+      "targetId": "m04-frequency-view"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-fixed-axis-steps",
+      "title": "LPC 谱图",
       "text": "点击  固定纵轴 ，在左栏编辑 dB 范围。示例把下限改为  −30 、上限保持  35 ，较低部分立即显示，任务数量不增加。 右栏快照仍是原  −5 至 35 dB 。当前改轴只影响显示与单独 PNG，完整任务结果保留原设置。 若上下限无效，页面提示错误并禁用 PNG 保存。恢复有效范围即可继续，无须为改轴另建任务。",
-      "title": "LPC 谱图"
+      "targetId": "m04-frequency-view"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-figure-fixed-edited-round2",
+      "title": "LPC 谱图",
       "text": "当前固定下限改为 −30 dB 后立即应用，右栏原任务快照仍为 −5 至 35 dB。",
-      "title": "LPC 谱图"
+      "targetId": "m04-frequency-view"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-axis-finish-steps",
+      "title": "LPC 谱图",
       "text": "用  Ctrl＋滚轮 、图下  − / ＋  或键盘加减键放大，拖动或左右方向键平移。 适合频率范围 、双击或 Home 恢复完整频率范围。 比较多个结果时采用相同固定轴。 横向放大只帮助读图，保存 PNG 仍覆盖任务完整频率范围 。",
-      "title": "LPC 谱图"
+      "targetId": "m04-frequency-view"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-view-controls",
+      "title": "LPC 谱图",
       "text": "图窗与播放操作速查",
-      "title": "LPC 谱图"
+      "targetId": "m04-view-controls"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-view-table",
+      "title": "LPC 谱图",
       "text": "图窗与播放操作 操作 结果 波形 / LPC 频谱 完成分析后可切换；保留时间选区，不重新计算。 显示两个声道 多声道时可同时看声道 1 与所选声道；选中声道 1 时另一条为声道 2。只改变波形显示。 适合窗口 / 全部 前者恢复全长视窗；后者明确选满音频。两者作用不同，仍以底部时间为准。 播放进度 / 播放音量 在选区内跳转播放位置，或调节试听音量。均不修改分析范围、谱值和导出 WAV。 空格 图区可播放或停止。编辑输入框时保留正常输入；切换文件、视图或模块会停止播放。",
-      "title": "LPC 谱图"
+      "targetId": "m04-view-controls"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-history-playback",
+      "title": "LPC 谱图",
       "text": "打开历史结果并试听",
-      "title": "LPC 谱图"
+      "targetId": "m04-history-playback"
     },
     {
       "chapterId": "m04",
+      "title": "LPC 谱图",
       "text": "原 WAV 已加载时，打开历史谱图不会换掉正在试听的原音频 。先核对图下文件名；需要对应原片段时加载匹配 WAV 并选回原始范围。",
-      "title": "LPC 谱图"
+      "targetId": "m04-history-playback"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-history-current-limit",
+      "title": "LPC 谱图",
       "text": "历史片段读取后会自动选满，底部为  0–片段时长 ，播放按钮可用。打开结果不会自动播放；之后缩短过试听范围时，可用  全部  再次选满。",
-      "title": "LPC 谱图"
+      "targetId": "m04-history-playback"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-history-range-steps",
+      "title": "LPC 谱图",
       "text": "在  分析任务与历史结果  中点击目标任务的  查看结果 ，等待谱线和图下文件信息出现。 未加载原 WAV 时，示例原选区  0.1–0.4 s  恢复为一段  0.3 s  的单声道分析音频，底部自动为  0–0.3 s 。 点  播放选区 、 暂停  或  停止  试听。片段内 0.1 s 对应原音频约 0.2 s；需要新分析时，先加载原 WAV，再按原始时间选区。",
-      "title": "LPC 谱图"
+      "targetId": "m04-history-playback"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-figure-history-fragment-round2",
+      "title": "LPC 谱图",
       "text": "未加载原 WAV，历史结果的试听范围为片段内 0–0.3 s。图下仍为原录音 0.1–0.4 s，开始分析不可用。",
-      "title": "LPC 谱图"
+      "targetId": "m04-history-playback"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-multiple-analyses",
+      "title": "LPC 谱图",
       "text": "逐个比较文件或片段",
-      "title": "LPC 谱图"
+      "targetId": "m04-multiple-analyses"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-multiple-steps",
-      "text": "先选一个短片段确定比较设置，分析并保存结果。记下原文件、标注层、选区与阶数。 同文件的下一片段：返回  波形  重新选区。另一文件：在  音频文件  中切换，重新检查关联标注，然后开始分析。 从历史记录逐个打开结果，以相同固定轴单独保存 PNG，并保留各任务 WAV 和 JSON。当前没有全目录批处理或批量下载，导入多文件需逐个处理。",
-      "title": "LPC 谱图"
+      "title": "LPC 谱图",
+      "text": "先选一个短片段确定比较设置，分析并保存结果。记下原文件、标注层、选区与阶数。 同文件的下一片段：返回  波形  重新选区。另一文件：在  音频文件  中切换，重新检查关联标注，然后开始分析。 从历史记录逐个打开结果，以相同固定轴单独保存 PNG，并保留各任务 WAV 和 JSON。导入多文件后逐个分析并保存结果。",
+      "targetId": "m04-multiple-analyses"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-output",
+      "title": "LPC 谱图",
       "text": "保存图片与数据",
-      "title": "LPC 谱图"
+      "targetId": "m04-output"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-output-files",
+      "title": "LPC 谱图",
       "text": "三份结果各保存什么",
-      "title": "LPC 谱图"
+      "targetId": "m04-output-files"
     },
     {
       "chapterId": "m04",
+      "title": "LPC 谱图",
       "text": "成功任务有三份结果： PNG  是谱图， WAV  是保持原采样率的 FLOAT64 单声道分析片段， JSON  保存参数、谱值、源文件校验信息和实际边界。",
-      "title": "LPC 谱图"
+      "targetId": "m04-output-files"
     },
     {
       "chapterId": "m04",
+      "title": "LPC 谱图",
       "text": "建议文件名含源文件主名、标签与时间，如下例。特殊字符或过长部分会调整，准确来源仍以 JSON 为准。",
-      "title": "LPC 谱图"
+      "targetId": "m04-output-files"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-export-example",
+      "title": "LPC 谱图",
       "text": "LPC_speech_a_0.100000-0.200000s_SPECTRUM.png\nLPC_speech_a_0.100000-0.200000s_AUDIO.wav\nLPC_speech_a_0.100000-0.200000s.ptb.json",
-      "title": "LPC 谱图"
+      "targetId": "m04-output-files"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-current-png",
+      "title": "LPC 谱图",
       "text": "保存当前显示的 PNG",
-      "title": "LPC 谱图"
+      "targetId": "m04-current-png"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-png-steps",
-      "text": "打开目标结果并核对来源。选择  动态纵轴  或  固定纵轴 ；固定模式下确认 dB 范围有效。 点击  保存 PNG 图片 ，选择位置和文件名后确认。网页则由浏览器下载。 看到保存窗口或下载提示后，还需确认实际文件已保存 。 打开图片检查曲线与标签。图片固定为  2400×1350 像素、300 dpi、白底黑线 ，不随窗口大小、主题和横向缩放改变。 导出沿用该任务的图表字体。希望改用新的设置字体时，重新分析后再保存。",
-      "title": "LPC 谱图"
+      "title": "LPC 谱图",
+      "text": "打开目标结果并核对来源。选择  动态纵轴  或  固定纵轴 ；固定模式下确认 dB 范围有效。 点击  保存 PNG 图片 ，选择位置和文件名后确认。网页则由浏览器下载。 看到保存窗口或下载提示后，还需确认实际文件已保存 。 打开图片检查曲线与标签。图片固定为  2400×1350 像素、300 dpi、白底LPC黑线，可叠加FFT灰线 ，不随窗口大小、主题和横向缩放改变。 导出沿用该任务的图表字体。希望改用新的设置字体时，重新分析后再保存。",
+      "targetId": "m04-current-png"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-figure-current-export",
+      "title": "LPC 谱图",
       "text": "实际独立 PNG：固定 −5 至 35 dB，完整 0–8000 Hz，2400×1350 像素、300 dpi。此任务未关联 TextGrid。",
-      "title": "LPC 谱图"
+      "targetId": "m04-current-png"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-png-axis-comparison-steps",
+      "title": "LPC 谱图",
       "text": "保留默认  −5 至 35 dB  的 PNG，再把同一结果改为  −30 至 35 dB ，换一个文件名保存，比较低幅度部分。 再保存完整三份结果，原任务 PNG 和 JSON 中的纵轴仍为  −5 至 35 dB 。两份单独 PNG 使用同一谱值，显示范围不同。",
-      "title": "LPC 谱图"
+      "targetId": "m04-current-png"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-figure-expanded-export-round2",
+      "title": "LPC 谱图",
       "text": "同一谱值以 −30 至 35 dB 另存的 PNG，低幅度部分显示，频率仍为完整 0–8000 Hz。",
-      "title": "LPC 谱图"
+      "targetId": "m04-current-png"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-complete-save",
+      "title": "LPC 谱图",
       "text": "保存完整任务结果",
-      "title": "LPC 谱图"
+      "targetId": "m04-complete-save"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-complete-steps",
-      "text": "点击右栏  选择目录保存完整结果 ，选择可写目录。此入口保存任务最初生成的  PNG、WAV 和 JSON ，不采用后来编辑的显示轴。 核对保存反馈与目录中的三份文件。同名不同内容会另名保留，已有相同内容可复用；取消窗口不表示已保存。 网页入口用  下载选区 WAV 、 下载参数与谱值 JSON  逐份保存。PNG 下载使用当前纵轴，另记所用范围。 长期保留原 WAV、原 TextGrid 与完整结果。 只留图片会丢失准确边界、参数和谱值 。",
-      "title": "LPC 谱图"
+      "title": "LPC 谱图",
+      "text": "点击右栏  选择目录保存完整结果 ，选择可写目录。此入口保存任务最初生成的  PNG、WAV 和 JSON ，不采用后来编辑的显示轴。 核对保存反馈与目录中的三份文件。同名不同内容会另名保留，已有相同内容可复用；取消窗口时保留待保存结果。 网页入口用  下载选区 WAV 、 下载参数与谱值 JSON  逐份保存。PNG 下载使用当前纵轴，另记所用范围。 长期保留原 WAV、原 TextGrid 与完整结果。 只留图片会丢失准确边界、参数和谱值 。",
+      "targetId": "m04-complete-save"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-figure-complete-save-current",
+      "title": "LPC 谱图",
       "text": "完整结果保存后，右栏确认已保存 3 个文件。单独 PNG 与完整结果保存入口并列。",
-      "title": "LPC 谱图"
+      "targetId": "m04-complete-save"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-json-reading",
+      "title": "LPC 谱图",
       "text": "复核实际分析边界",
-      "title": "LPC 谱图"
+      "targetId": "m04-json-reading"
     },
     {
       "chapterId": "m04",
+      "title": "LPC 谱图",
       "text": "实际选区包含起点样本，不包含终点样本。以下为 JSON 字段节选：选区样本数＝end_sample−start_sample；sample_count 是原文件帧数。JSON 用于复核，页面没有导入它重新配置的入口。",
-      "title": "LPC 谱图"
+      "targetId": "m04-json-reading"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-json-example",
+      "title": "LPC 谱图",
       "text": "{\n  \"sample_rate_hz\": 48000,\n  \"selection\": {\n    \"start_sample\": 4800,\n    \"end_sample\": 9600,\n    \"start_s\": 0.1,\n    \"end_s\": 0.2,\n    \"interval\": \"half-open\"\n  }\n}",
-      "title": "LPC 谱图"
+      "targetId": "m04-json-reading"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-recovery",
+      "title": "LPC 谱图",
       "text": "遇到提示时怎样恢复",
-      "title": "LPC 谱图"
+      "targetId": "m04-recovery"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-input-recovery",
+      "title": "LPC 谱图",
       "text": "文件、选区与计算提示",
-      "title": "LPC 谱图"
+      "targetId": "m04-input-recovery"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-errors",
+      "title": "LPC 谱图",
       "text": "超过 48,000 样本 ：缩短底部选区。降低频率上限不能减少样本数，程序不会自动截短。 选区过短 ：至少需阶数＋2 个样本。扩大有效片段，或按分析目的降低阶数；达到门槛仍需检查谱形。 时间、阶数或 dB 无效 ：完成数值输入，确认终点大于起点、阶数为整数、dB 下限小于上限。 静音、无法求解或音频无效 ：检查波形与试听，换有效片段。失败不会生成可用的零幅度谱。 文件或预览超限 ：另行准备符合输入限制的 WAV。只缩放视窗不能减少整个文件的读取量。 标注越界、无有效层或标签过长 ：核对 WAV 裁剪版本、全部标注层与选区。合并标签最多 200 字符；不需要标注时选不关联。 源文件失效或内容变化 ：刷新并重新选择或上传。原任务重试仍需访问原输入。 超时、环境或空间提示 ：缩短选区后重新分析；环境不可用时重启工作台，空间不足时先检查项目可用空间。",
-      "title": "LPC 谱图"
+      "targetId": "m04-input-recovery"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-short-selection-example",
+      "title": "LPC 谱图",
       "text": "示例：选区过短后继续",
-      "title": "LPC 谱图"
+      "targetId": "m04-short-selection-example"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-short-selection-steps",
+      "title": "LPC 谱图",
       "text": "16000 Hz WAV、50 阶下，填写  0.1–0.1001 s  并点击  开始分析 。该范围仅一个样本，页面提示至少需要  52 个样本 。 波形和输入保留，任务数量仍为 0，尚未生成结果。",
-      "title": "LPC 谱图"
+      "targetId": "m04-short-selection-example"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-figure-short-error-round2",
+      "title": "LPC 谱图",
       "text": "50 阶下填写 0.1–0.1001 s，页面提示至少需 52 样本。WAV 和输入保留，任务数量为 0。",
-      "title": "LPC 谱图"
+      "targetId": "m04-short-selection-example"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-short-selection-recovery-steps",
+      "title": "LPC 谱图",
       "text": "把终点改为  0.4 s ，核对起点仍为 0.1 s，再点  开始分析 。选区变为 4800 样本，完成后出现频谱与已完成任务。",
-      "title": "LPC 谱图"
+      "targetId": "m04-short-selection-example"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-preview-recovery",
+      "title": "LPC 谱图",
       "text": "预览、旧图与试听问题",
-      "title": "LPC 谱图"
+      "targetId": "m04-preview-recovery"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-display-errors",
-      "text": "语谱图忙碌或失败 ：等候或点击重试，按提示调整可见窗，也可关闭预览继续分析。 旧图仍显示 ：核对图下文件与时间。输入已改变时重新开始分析；纵轴调整只改变显示。 历史图与试听不对应 ：原 WAV 已加载时，播放仍用当前原音频；未加载时用历史单声道片段。核对文件名和两种时间。 开始分析不可用 ：先加载原 WAV。仅预览入口需切换到具备任务服务的工作台或登录网页项目。 试听无声 ：检查音量、所选声道和实际播放设备，再点击播放；无声试听不能据此判断计算失败。",
-      "title": "LPC 谱图"
+      "title": "LPC 谱图",
+      "text": "语谱图忙碌或失败 ：等候或点击重试，按提示调整可见窗，也可关闭预览继续分析。 旧图仍显示 ：核对图下文件与时间。输入已改变时重新开始分析；纵轴调整只改变显示。 历史图与试听不对应 ：原 WAV 已加载时，播放仍用当前原音频；未加载时用历史单声道片段。核对文件名和两种时间。 开始分析不可用 ：先加载原 WAV。 试听无声 ：检查音量、所选声道和实际播放设备，再点击播放；计算状态请查看任务提示。",
+      "targetId": "m04-preview-recovery"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-task-recovery",
+      "title": "LPC 谱图",
       "text": "取消、重试与保存失败",
-      "title": "LPC 谱图"
+      "targetId": "m04-task-recovery"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-retry-steps",
+      "title": "LPC 谱图",
       "text": "用  取消分析  或  取消此任务  请求停止，等待最终状态。正在取消时无需重复提交。 失败、中断或取消后，先处理具体错误。原设置仍适用时点  重试此任务 ；需改选区、参数、文件或字体时回到输入并  开始分析 。 结果读取失败可再次  查看结果 。字体缺失时到工作台设置检查图表字体，重新分析。 保存取消或失败后，当前结果可继续保留。重选可写目录或重新保存 PNG，检查空间、权限和下载状态，直到文件可打开。",
-      "title": "LPC 谱图"
+      "targetId": "m04-task-recovery"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-sources",
-      "text": "使用范围与方法来源",
-      "title": "LPC 谱图"
+      "title": "LPC 谱图",
+      "text": "分析设置与方法来源",
+      "targetId": "m04-sources"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-method",
+      "title": "LPC 谱图",
       "text": "本页固定的分析设置",
-      "title": "LPC 谱图"
+      "targetId": "m04-method"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-algorithm",
-      "text": "固定预加重系数为  0.97 ，整段选区采用  Hamming 窗 ，输出  1024 点 LPC 谱包络 。本页没有可调窗长、窗函数、预加重或 FFT 点数。",
-      "title": "LPC 谱图"
+      "title": "LPC 谱图",
+      "text": "固定预加重系数为  0.97 ，整段选区采用  Hamming 窗 ，输出  1024 点 LPC 谱包络 。上述设置在本页固定使用。",
+      "targetId": "m04-method"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-reference-boundary",
+      "title": "LPC 谱图",
       "text": "解释结果时注意什么",
-      "title": "LPC 谱图"
+      "targetId": "m04-reference-boundary"
     },
     {
       "chapterId": "m04",
+      "title": "LPC 谱图",
       "text": "LPC 计算来自项目 V2。Praat / Parselmouth 在本页负责语谱预览。默认参数是本项目设置；方法论文、代码来源及分发许可可在  方法与引用  分别查阅。",
-      "title": "LPC 谱图"
+      "targetId": "m04-reference-boundary"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-interpretation",
-      "text": "谱峰不自动代表经过核验的 F1、F2 等真实共振峰 。当前没有峰表或共振峰追踪，谱值可随 JSON 保存。 纵轴 dB 未经声压校准。录音条件、选区与阶数会影响谱形；跨材料比较时记录这些条件，统一图轴只帮助观察。 多声道均值可能因相位相反而抵消。先检查原始声道；试听声道和音量不会改变 LPC 分析值。",
-      "title": "LPC 谱图"
+      "title": "LPC 谱图",
+      "text": "谱峰用于观察 LPC 包络，F1、F2 等共振峰需结合其他分析核验 。谱值可随 JSON 保存。 纵轴 dB 未经声压校准。录音条件、选区与阶数会影响谱形；跨材料比较时记录这些条件，统一图轴只帮助观察。 多声道均值可能混入其他用途信号、直流分量或因相位相反而抵消。先检查原始声道，在分析声道中选择需要的输入后重新分析；试听声道和音量独立于分析选择。",
+      "targetId": "m04-reference-boundary"
     },
     {
       "chapterId": "m04",
-      "targetId": "m04-references",
+      "title": "LPC 谱图",
       "text": "进一步阅读",
-      "title": "LPC 谱图"
+      "targetId": "m04-references"
     },
     {
       "chapterId": "m04",
+      "title": "LPC 谱图",
       "text": "方法背景见以下资料。具体分析以保存的音频、选区和参数为准。",
-      "title": "LPC 谱图"
+      "targetId": "m04-references"
     },
     {
       "chapterId": "m04",
+      "title": "LPC 谱图",
       "text": "Yannick Jadoul and Bill Thompson and Bart de Boer 2018 Introducing Parselmouth: A Python Interface to Praat John Makhoul 1975",
-      "title": "LPC 谱图"
+      "targetId": "m04-references"
     },
     {
       "chapterId": "m06",

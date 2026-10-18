@@ -31,3 +31,6 @@ R17 继续采用上述许可，加入 `sources/m10_r17_patch.py`，将口底参�
 
 
 R18 加入 `sources/m10_r18_patch.py`，在原生接触约束前施加平滑局部舌面偏移并导出材料站位，沿用 GPL-3.0-or-later。方法为 `m10/r18`，交换文件版本 5，数组布局保持 `m10/3`。工程参数范围不作为解剖测量，未新增外部素材、模型或依赖。
+
+
+2026-10-18 当前几何更新为 R20。`m10_r19_patch.py` 与 `m10_r20_patch.py` 分别实现舌部材料站位/连接修正和上下唇独立偏移，`geometry_bridge.cpp` 在原生计算中处理唇齿接触和截面积。`m10_source_perturbation.py` 为声源加入可选种子化 jitter/shimmer，Windows、Wasm 与 Mac 使用相同源码。JD2/W02 原始解剖文件不变，界面新姿态 F0 按用户要求为 120/200 Hz。以上派生代码继续采用 GPL-3.0-or-later；Wasm 候选同时携带对应源码包。当前 Windows 两份 API DLL 字节一致，macOS 因独立 install_name/签名使用 native-pair 收据。可重建步骤与平台验收见 `sources/README.md` 和工程 `docs/testing/m10-shared-controls.md`。

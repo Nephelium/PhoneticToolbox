@@ -16,7 +16,7 @@ export function recordingMeter(blocks:Float32Array[][],gain:number,all=false):Me
 /** Browser device adapter for the same RecordingPage. No native file grants. */
 export function browserRecordingPort(research:ResearchContext):RecordingPort {
  const project:Project={schema_version:'ptb-recording/1',id:crypto.randomUUID(),revision:0,label:research.label,tasks:[],takes:[],selected:{},recoveries:[]};
- if(!research.files.recording)throw Error('录音服务器接口不可用，请重新登录。');
+ if(!research.files.recording)throw Error('录音文件接口不可用，请重新登录。');
  const manager=new BrowserRecordingProject(project,research.files.recording);
  let importFiles:Map<string,File>|undefined;
  let disposed=false,stream:MediaStream|undefined,audio:AudioContext|undefined,node:AudioWorkletNode|undefined,input:MediaStreamAudioSourceNode|undefined;
@@ -61,7 +61,7 @@ export function browserRecordingPort(research:ResearchContext):RecordingPort {
   if(!Number.isInteger(requested.channels)||requested.channels<1||requested.channels>8||requested.roles.length!==requested.channels)throw Error('请设置1–8个通道及对应角色。');
   for(const id of manager.cache.keys())if(!manager.pending.has(id))manager.cache.delete(id);
   const used=[...manager.cache.values()].reduce((n,s)=>n+s.file.size,0),remaining=100_000_000-used;
-  if(remaining<requested.sample_rate*requested.channels*4)throw Error('本页录音已达 100 MB。请先上传或下载，再关闭并重新打开录音页。');
+  if(remaining<requested.sample_rate*requested.channels*4)throw Error('本页录音已达 100 MB。请先保存或导出，再关闭并重新打开录音页。');
   stopPlay();problem='';ended=false;
   try{
    stream=await navigator.mediaDevices.getUserMedia({audio:{deviceId:requested.device==='default'?undefined:{exact:requested.device},channelCount:{exact:requested.channels},echoCancellation:false,noiseSuppression:false,autoGainControl:false},video:false});
@@ -92,7 +92,7 @@ export function browserRecordingPort(research:ResearchContext):RecordingPort {
    const name=(task?.filename_stem||'录音').replace(/[\\/:*?"<>|]/g,'_')+'-'+id.slice(0,8)+'.wav';
    const m=meter(0,true),take:Take={id,started_at:now,config:clone(config),task_snapshot:clone(task),versions:[{id:crypto.randomUUID(),kind:'raw',frames,created_at:now,metadata:{sample_rate_origin:'AudioContext; hardware resampling may occur',browser_input:browserInput}}],head:0,undo:[],redo:[],status:problem?'interrupted':'complete',error:problem,quality:{raw_clip:m.raw_clip,near_full_scale:m.near_full_scale,peak:m.peak,rms:m.rms},frames};
    manager.add(take,new File([bytes],name,{type:'audio/wav'}),blocks);
-   try{await upload();}catch(e){error='上传未完成，录音仍保留在本页。可重试上传或下载 WAV。'+(e instanceof Error?e.message:'');}
+   try{await upload();}catch(e){error='保存未完成，录音仍保留在本页。可重试保存或导出 WAV。'+(e instanceof Error?e.message:'');}
   }
   if(!probe&&!frames){error=error||'未采集到有效音频，未创建空录音条目。';delete manager.captures[captureId];}
   blocks=[];problem='';return {project:clone(project),probe,error,frames};
@@ -105,7 +105,7 @@ export function browserRecordingPort(research:ResearchContext):RecordingPort {
   if(op==='open'){if(importFiles){await manager.import(importFiles);importFiles=undefined;}return clone(project);}
   if(op==='backup'){await manager.backup();return {};}
   if(op==='tasks'){project.tasks=clone(body.tasks as Task[]);project.revision++;await manager.save();return clone(project);}
-  if(op==='start'||op==='probe_start'){await start(body);return {config:clone(config)};}
+  if(op==='start'||op==='probe_start'){if(body.task_id&&!project.tasks.some(t=>t.id===body.task_id))throw Error('所选录音任务不存在，请重新选择任务。');await start(body);return {config:clone(config)};}
   if(op==='stop')return stop();
   if(op==='save'){await upload();return clone(project);}
   if(op==='select_take'){const take=project.takes.find(t=>t.id===body.id);if(!take)throw Error('录音不存在。');project.selected[take.task_snapshot?.id||'__free__']=take.id;await manager.save();return clone(project);}
@@ -124,12 +124,12 @@ export function browserRecordingPort(research:ResearchContext):RecordingPort {
   }
   if(op==='play_stop'){stopPlay();return {};}
   const take=project.takes.find(t=>t.id===body.id);
+  if(op==='export_start')return manager.export(body,take);
   if(!take)throw Error('请先选择一段录音。');
   if(['undo','redo','restore','version'].includes(String(op))){stopPlay();await manager.navigate(take,String(op),Number(body.index));return clone(project);}
   if(op==='edit'){stopPlay();await manager.edit(take,String(body.action),Number(body.start),Number(body.end));return clone(project);}
   if(op==='noise')return manager.setNoise(take,Number(body.start),Number(body.end),Number(body.channel));
   if(op==='process_start'){stopPlay();return manager.process(take,String(body.kind),body);}
-  if(op==='export_start')return manager.export(body,take);
   const index=body.version===undefined?take.head:Number(body.version),value=await manager.data(take,index),currentFrames=take.versions[index].frames;
   if(op==='preview'){const start=Number(body.start)||0,end=Number(body.end)||currentFrames,channel=Number(body.channel)||0,view=preview(value.blocks,take.config.sample_rate,channel,start,end,Number(body.width)||900);const asset=manager.assets[take.versions[index].id];if(body.spectrum&&asset)view.spectrum=await research.files.recording!.spectrum(asset,start,end,channel);return view;}
   if(op==='download'){download(value.file);return {};}

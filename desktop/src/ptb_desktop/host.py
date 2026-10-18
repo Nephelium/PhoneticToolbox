@@ -128,20 +128,21 @@ class Bridge(QObject):
             self.vocalReady.emit(request_id,json.dumps({'ok':False,'error':'声道请求繁忙，请稍候。'}));return
         try:
             body=json.loads(raw);op=body['op'];selected=None
-            if op in ('document/open','document/save','video/begin'):
+            if op in ('document/open','document/save','preset-pack/open','preset-pack/save','video/begin'):
                 if self.test_dialog and hasattr(self,'test_vocal_picker'):
                     selected=self.test_vocal_picker(op)
-                elif op=='document/open':
-                    selected=QFileDialog.getOpenFileName(self.window,'导入声道关键帧','','声道关键帧 (*.ptb-vocal.json *.json)')[0]
+                elif op in ('document/open','preset-pack/open'):
+                    pack=op.startswith('preset-pack/')
+                    selected=QFileDialog.getOpenFileName(self.window,'导入声道构型包' if pack else '导入声道关键帧','','声道构型包 (*.ptb-poses.json *.json)' if pack else '声道关键帧 (*.ptb-vocal.json *.json)')[0]
                 else:
-                    video=op=='video/begin'
-                    selected=QFileDialog.getSaveFileName(self.window,'保存动作视频' if video else '导出声道关键帧','声道动作.mp4' if video else '声道关键帧.ptb-vocal.json','MP4 视频 (*.mp4)' if video else '声道关键帧 (*.ptb-vocal.json)')[0]
+                    video=op=='video/begin';pack=op.startswith('preset-pack/')
+                    selected=QFileDialog.getSaveFileName(self.window,'保存动作视频' if video else '导出声道构型包' if pack else '导出声道关键帧','声道动作.mp4' if video else '声道构型包.ptb-poses.json' if pack else '声道关键帧.ptb-vocal.json','MP4 视频 (*.mp4)' if video else '声道构型包 (*.ptb-poses.json)' if pack else '声道关键帧 (*.ptb-vocal.json)')[0]
                     if video and selected and not Path(selected).suffix:selected+='.mp4'
         except Exception as exc:
             self.vocal_slots.release();self.vocalReady.emit(request_id,json.dumps({'ok':False,'error':str(exc)}));return
         def work():
             try:
-                if op in ('document/open','document/save') or op.startswith('video/'):
+                if op in ('document/open','document/save','preset-pack/open','preset-pack/save') or op.startswith('video/'):
                     value=self.vocal_files.invoke(op,body.get('body',{}),self.window.vocal,selected)
                 else:
                     if op=='shutdown':self.vocal_files.close()
@@ -222,10 +223,29 @@ class Bridge(QObject):
                 from .updates import UpdateError
                 try:value=self.window.update_coordinator.clear_caches()
                 except UpdateError as exc:raise FileAccessError(str(exc)) from None
+            elif op=='cache_location':
+                from .cache_location import location_status
+                try:value=location_status()
+                except (OSError,ValueError) as exc:raise FileAccessError(str(exc)) from None
+            elif op=='open_cache_directory':
+                if body.get('purpose') not in ('current','legacy'):raise FileAccessError('不支持的缓存目录。')
+                from .cache_location import open_directory
+                try:value=open_directory(legacy=body['purpose']=='legacy')
+                except (OSError,ValueError) as exc:raise FileAccessError(str(exc)) from None
+            elif op=='open_cache_candidate':
+                from .legacy_cache import open_candidate
+                try:value=open_candidate(body.get('id'))
+                except (OSError,ValueError) as exc:raise FileAccessError(str(exc)) from None
+            elif op=='clear_graphics_cache':
+                if body.get('purpose')!='confirmed':raise FileAccessError('请先亲自核对目录，再确认清理。')
+                if not isinstance(body.get('id'),str):raise FileAccessError('请选择需要核对的图形缓存目录。')
+                from .updates import UpdateError
+                try:value=self.window.update_coordinator.clear_caches(graphics_key=body.get('id'))
+                except (OSError,ValueError,UpdateError) as exc:raise FileAccessError(str(exc)) from None
             elif op=='m05_media':
                 if self._recording_bridge is not None and self._recording_bridge.capturing:
                     raise FileAccessError('录音模块正在使用输入设备，请先停止录音或录前检测。')
-                value=self.window.m05_media.arm()
+                value=self.window.m05_media.arm(body.get('purpose','capture'))
             elif op=='m05_media_status':
                 value=self.window.m05_media.status()
             elif op=='m16_choose':
@@ -319,7 +339,13 @@ class Workbench(QMainWindow):
         legacy=Path(os.environ.get('LOCALAPPDATA',Path.home()))/'PhoneticToolbox/vocal_tract'
         self.vocal=VocalTractClient(vocal_resources or dist.parent.parent/'resources/vocal_tract/native',
             vocal_profile or data/'vocal-tract',legacy_profile=None if test else legacy)
+        if not test and sys.platform=='win32':
+            from .graphics_cache import cleanup_requested, profile_lease
+            cleanup_requested()
+            self._browser_cache_lease=profile_lease()
         self.profile=QWebEngineProfile(self) if test else QWebEngineProfile('ptb-v3-workbench',self)
+        if hasattr(self,'_browser_cache_lease'):
+            self.profile.destroyed.connect(self._browser_cache_lease.close)
         # Local resource filenames may be stable between EXE revisions.
         self.profile.setHttpCacheType(QWebEngineProfile.HttpCacheType.NoCache)
         if not test:
@@ -329,7 +355,8 @@ class Workbench(QMainWindow):
                 storage=windows_workbench_storage()
             else:storage=Path(data)/'workbench'
             self.profile.setPersistentStoragePath(str(storage))
-            self.profile.setCachePath(str(storage/'http-cache'))
+            from .cache_location import browser_directory
+            self.profile.setCachePath(str(browser_directory() if sys.platform=='win32' else storage/'http-cache'))
         self.assets=Assets(dist,self.profile);self.interceptor=LocalOnly(self.service.url,self.profile)
         self.profile.installUrlSchemeHandler(b'ptbapp',self.assets);self.profile.setUrlRequestInterceptor(self.interceptor)
         self.view=QWebEngineView(self);self.page=Page(self.profile,self.view);self.view.setPage(self.page)
@@ -354,11 +381,14 @@ class Workbench(QMainWindow):
         version_file=dist.parent.parent/'release/version.json'
         from . import __version__
         update_version=json.loads(version_file.read_text('utf8'))['frontend_version'] if version_file.is_file() else __version__
-        updates_root=user_data_root()/'updates'
+        from .cache_location import update_directory
+        updates_root=update_directory()
+        updates_state_root=user_data_root()/'updates'
         if test:
             import tempfile
             self._updates_test_directory=tempfile.TemporaryDirectory(prefix='ptb-updates-qa-')
             updates_root=Path(self._updates_test_directory.name)
+            updates_state_root=updates_root
         from .icon_preferences import IconPreferences
         icon_root = updates_root / 'icons-qa' if test else user_data_root() / 'icons'
         self.icon_preferences = IconPreferences(icon_root, self.windowIcon(), self, dist)
@@ -371,7 +401,7 @@ class Workbench(QMainWindow):
         self.update_coordinator=UpdateCoordinator(self)
         frozen=sys.platform=='win32' and getattr(sys,'frozen',False)
         kind=package_kind() if frozen else 'portable'
-        self.updates_bridge=UpdatesBridge(self,current_version=update_version,data_root=updates_root,
+        self.updates_bridge=UpdatesBridge(self,current_version=update_version,data_root=updates_root,state_root=updates_state_root,
             package_kind=kind,apply_handler=self.update_coordinator.apply if frozen and not test else None)
         self.updates_bridge.close_reply=self.update_coordinator.reply
         if test:self.updates_bridge.service.set_preferences({'autoCheck':False})
@@ -560,8 +590,12 @@ def run(dist,**options):
     app.aboutToQuit.connect(window.vocal.close)
     app.aboutToQuit.connect(window.bridge.close_recording)
     window.show();code=app.exec();window.page.deleteLater();app.processEvents()
+    window.profile.deleteLater();app.sendPostedEvents(None,QEvent.Type.DeferredDelete);app.processEvents()
     if not getattr(sys,'frozen',False):
         from .startup_cache import clear_if_idle
         from .cache_cleanup import disposable_caches
         clear_if_idle(requested_only=True,extra_cleanup=disposable_caches)
+        if sys.platform=='win32':
+            from .graphics_cache import cleanup_requested
+            cleanup_requested()
     return code

@@ -1,4 +1,11 @@
 // Display range only. Samples and playback gain are never modified.
+// Only double-click annotation uses this screen-space target around visible file ends.
+export function endpointClickTime(time:number,start:number,length:number,duration:number,width:number):number {
+ const clamped=Math.max(0,Math.min(duration,time));
+ if(width<=0||length<=0)return clamped;
+ const candidates=[0,duration].filter(edge=>edge>=start-1e-9&&edge<=start+length+1e-9&&Math.abs(time-edge)*width/length<=6);
+ return candidates.sort((a,b)=>Math.abs(a-time)-Math.abs(b-time))[0]??clamped;
+}
 export function amplitudeLimit(points:readonly (readonly [number,number])[]):number {
  let peak=0;for(const pair of points)for(const value of pair)if(Number.isFinite(value))peak=Math.max(peak,Math.abs(value));
  return peak>0?peak:1;

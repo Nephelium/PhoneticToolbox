@@ -78,12 +78,47 @@ static void resolveUvulaContact(){
       }
     }
 }
+// Keep a moving lip outside the opposing teeth/lip. Both render and acoustic
+// surfaces use the same vertical triangle envelope in the native coordinates.
+static void lipContact(Surface& lip,const Surface& obstacle,bool below){
+    for(int i=0;i<lip.numVertices;i++){
+      auto p=lip.vertex[i].coord;double bound=below ? 1e30 : -1e30;bool found=false;
+      for(int j=0;j<obstacle.numTriangles;j++){
+        Point3D triangle[3];for(int k=0;k<3;k++)triangle[k]=obstacle.vertex[obstacle.triangle[j].vertex[k]].coord;
+        double height;if(heightInTriangle(p,triangle,height)){
+          bound=below ? std::min(bound,height) : std::max(bound,height);found=true;
+        }
+      }
+      if(found){p.y=below ? std::min(p.y,bound) : std::max(p.y,bound);lip.vertex[i].coord=p;}
+    }
+}
+static void resolveLipContact(){
+    const auto* v=tract->m10LipShape;
+    const bool upper=std::abs(v[0])+std::abs(v[1])>1e-12,lower=std::abs(v[2])+std::abs(v[3])>1e-12;
+    if(!upper&&!lower)return;
+    for(int side=0;side<2;side++){
+      auto& u=tract->surfaces[side?VocalTract::UPPER_LIP_TWOSIDE:VocalTract::UPPER_LIP];
+      auto& l=tract->surfaces[side?VocalTract::LOWER_LIP_TWOSIDE:VocalTract::LOWER_LIP];
+      if(upper)lipContact(u,tract->surfaces[VocalTract::LOWER_TEETH_TWOSIDE],false);
+      if(lower)lipContact(l,tract->surfaces[VocalTract::UPPER_TEETH_TWOSIDE],true);
+      // A one-lip edit leaves the opposite lip untouched.
+      if(lower)lipContact(l,u,true);
+      else if(upper)lipContact(u,l,false);
+    }
+}
 API double p4_uvula_contact(){return uvulaContactLift;}
 API double p4_blade_rib(){return tract ? tract->m10BladeRib : 0.0;}
-API int p6_geometry_revision(){return 18;}
+API int p6_geometry_revision(){return 21;}
+API int p10_lip_shape(double ux,double uy,double lx,double ly){
+    if(!tract)return 1;
+    const double values[]={ux,uy,lx,ly};
+    for(double v:values)if(!std::isfinite(v)||v<-.8||v>.8)return 2;
+    for(int i=0;i<4;i++)tract->m10LipShape[i]=values[i];
+    return 0;
+}
 API double p8_surface_rib(){return tract ? tract->m10SurfaceRib : 0.0;}
 API int p8_tongue_shape(double x,double y){
-    if(!tract || !std::isfinite(x) || !std::isfinite(y) || x<-.5 || x>.5 || y<-.3 || y>.8)return 2;
+    if(!tract || !std::isfinite(x) || !std::isfinite(y) || x<-.5 || x>.5 || y<-.8 || y>.8)return 2;
     tract->m10SurfaceX=x;tract->m10SurfaceY=y;return 0;
 }
 API int p6_floor_rib(){return VocalTract::M10_FLOOR_RIB;}
@@ -175,7 +210,7 @@ API int p2_update(double* params,double width,double* limited) {
         auto p=s.getVertex(r,j);p.y+=lateral*front*(0.08*contact-0.6*side*side);s.setVertex(r,j,p);
       }
     }
-    resolveUvulaContact();
+    resolveUvulaContact();resolveLipContact();
     tract->refreshM10Geometry();tract->calcCenterLine();tract->calcCrossSections();
     // An empirical area correction must not reopen a completely sealed native
     // cross-section. Preserve real lateral passages and the solver's own floor.

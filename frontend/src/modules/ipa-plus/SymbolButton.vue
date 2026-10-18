@@ -4,9 +4,10 @@ import type {HoverTarget} from './hover-position.ts';
 const props=defineProps<{entry:SymbolEntry;selected?:boolean;named?:boolean;playOnClick?:boolean}>();
 const emit=defineEmits<{insert:[entry:SymbolEntry];inspect:[entry:SymbolEntry];hover:[value:HoverTarget|null]}>();
 function hover(event:MouseEvent|FocusEvent){const target=event.currentTarget as HTMLElement,rect=target.getBoundingClientRect();emit('hover',{entry:props.entry,target,pointer:event instanceof MouseEvent?{x:event.clientX,y:event.clientY}:{x:(rect.left+rect.right)/2,y:(rect.top+rect.bottom)/2}});}
+function pointerDown(event:PointerEvent){if(event.pointerType==='mouse')event.preventDefault();}
 </script>
 <template>
-  <button type="button" class="m17-symbol" :class="{'m17-example':entry.isExample,'m17-selected':selected,'m17-named':named}" :data-symbol-id="entry.id" :aria-label="`${entry.nameZh}：${entry.display}，点击${playOnClick?'播放':'输入'}；Alt＋Enter 查看介绍`" @pointerdown.prevent @click="emit('insert',entry)" @mouseenter="hover" @mousemove="hover" @mouseleave="emit('hover',null)" @focus="hover" @blur="emit('hover',null)" @keydown.alt.enter.prevent.stop="emit('inspect',entry)" @contextmenu.prevent="emit('inspect',entry)">
+  <button type="button" class="m17-symbol" :class="{'m17-example':entry.isExample,'m17-selected':selected,'m17-named':named}" :data-symbol-id="entry.id" :aria-label="`${entry.nameZh}：${entry.display}，点击${playOnClick?'播放':'输入'}；Alt＋Enter 查看介绍`" @pointerdown="pointerDown" @click="emit('insert',entry)" @mouseenter="hover" @mousemove="hover" @mouseleave="emit('hover',null)" @focus="hover" @blur="emit('hover',null)" @keydown.alt.enter.prevent.stop="emit('inspect',entry)" @contextmenu.prevent="emit('inspect',entry)">
     <span class="m17-ipa">{{entry.display}}</span><span v-if="named" class="m17-symbol-name">{{entry.nameZh}}</span>
     <span v-if="entry.isExample" class="visually-hidden">完整示例</span>
   </button>

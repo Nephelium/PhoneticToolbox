@@ -1,0 +1,23 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>M09 canvas regression</title><style>html,body,#app{height:100%;margin:0}</style></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';
+import Page from '../src/modules/spectrogram-to-audio/Spec2WavPage.vue';
+import {BrowserScience} from '../src/platform/browser-science.ts';
+import '../src/design/tokens.css';
+const science=new BrowserScience(),rate=16000,frames=9217;
+const wav=new ArrayBuffer(44+frames*2*4),v=new DataView(wav),text=(offset,value)=>[...value].forEach((c,i)=>v.setUint8(offset+i,c.charCodeAt(0)));
+text(0,'RIFF');v.setUint32(4,wav.byteLength-8,true);text(8,'WAVE');text(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,3,true);v.setUint16(22,2,true);v.setUint32(24,rate,true);v.setUint32(28,rate*8,true);v.setUint16(32,8,true);v.setUint16(34,32,true);text(36,'data');v.setUint32(40,frames*8,true);
+for(let i=0;i<frames;i++){v.setFloat32(44+i*8,.15*Math.sin(2*Math.PI*400*i/rate)+.08*Math.sin(2*Math.PI*1600*i/rate),true);v.setFloat32(48+i*8,.12*Math.sin(2*Math.PI*1700*i/rate),true);}
+const bitmap=document.createElement('canvas');bitmap.width=bitmap.height=401;const g=bitmap.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,401,401);
+const png=await (await new Promise(resolve=>bitmap.toBlob(resolve))).arrayBuffer();
+const audio={id:'audio',name:'short-stereo.wav',kind:'audio',size:wav.byteLength},image={id:'image',name:'white.png',kind:'image',size:png.byteLength};
+const raw=file=>file.id==='audio'?wav:png,requests=[],jobs=[],results=new Map();
+const context={key:'m09-canvas',label:'Owned browser science',files:{kind:'preview',list:async()=>[audio,image],read:async file=>({buffer:raw(file).slice(0)}),tasks:{
+ reconstructionPreview:async(file,config)=>{const frozen=JSON.parse(JSON.stringify(config));requests.push(frozen);return science.run('prediction',raw(file).slice(0),frozen);},
+ reconstructions:async()=>structuredClone(jobs),result:async(_,id)=>results.get(id).slice(0),
+ reconstruct:async(file,config)=>{const frozen=JSON.parse(JSON.stringify(config)),job={id:'job-'+jobs.length,state:'queued',created_at:Date.now()/1000};jobs.push(job);
+  void science.run('reconstruction',raw(file).slice(0),frozen).then(async output=>{window.qa.output=output;const files=[];for(const f of output.files){const bytes=Uint8Array.from(atob(f.data),c=>c.charCodeAt(0)),id=job.id+'-'+f.name;results.set(id,bytes.buffer);files.push({id,name:f.name,sha256:'fixture',size_bytes:bytes.length});}job.result_manifest={kind:'managed_spec2wav_files',files};job.state='succeeded';}).catch(e=>{job.state='failed';window.qa.failure=String(e);});return structuredClone(job);}
+}}};
+window.qa={requests,context,jobs,raw:wav};
+createApp({render:()=>h(Page,{stateKey:'m09-canvas',context})}).mount('#app');
+window.addEventListener('pagehide',()=>science.close(),{once:true});
+</script></body></html>

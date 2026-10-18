@@ -1,7 +1,7 @@
 """Local tongue offsets in cm; zero follows the original articulator model."""
 import numpy as np
 
-TONGUE_SHAPE_LIMITS=((-0.5,0.5),(-0.3,0.8),(-0.5,0.5),(-0.4,0.4))
+TONGUE_SHAPE_LIMITS=((-0.5,0.5),(-0.8,0.8),(-0.5,0.5),(-0.4,0.4))
 
 
 def validate_tongue_shape(value=None):

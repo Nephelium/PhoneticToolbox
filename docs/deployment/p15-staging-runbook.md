@@ -1,5 +1,11 @@
 # P15-STAGING 部署、排空与回滚手册
 
+## 2026-10-17 补验后恢复小规模公测
+
+井井接受已记录的容量边界后明确要求上线。当前官网入口、注册与找回已恢复，应用c3-r2、九类科学准入及单任务/CPU隔离保持。服务器`reports/public-beta-reopened.json`记录官网r334eb64d7dd604a0、本轮配置仅enable_registration=true及API单服务重启，`verified-public-beta-live.json`记录最终摘要/服务/HTTPS和权限检查。
+
+回退首页为`reports/public-beta-20261017-index-before.html`，回退配置为权限600的`reports/public-beta-20261017-config-before.json`。如需重新关闭，先确认当前首页和配置仍与本轮回执一致，再只撤入口并将注册开关改回false、重启API，保留新增账号/设置/数据，不能覆盖已产生的新状态或用旧库恢复。完整范围和待验边界见[补充验收](../testing/web-private-repair.md#2026-10-17--当前线上版本补充上线验收)。下文是首次公开部署及更早P15历史记录。
+
 ## 2026-10-17 公开测试入口
 
 井井本轮已明确授权准备并上线供本人测试。当前/app/使用统一`ptb_api.server`和独立`ptb-web-api.service`，API回环18775；专用PostgreSQL使用`ptb-web-postgres.service`、Unix socket与18777，新库`ptb_web_public`和私有状态根`/var/lib/ptb-web`。新库显式应用001–006、008–011，未迁移原私有内测库，007不启用。下文旧P15域名占位、三天策略和部署未执行记录保留其历史范围，不能当作当前公开实例配置。

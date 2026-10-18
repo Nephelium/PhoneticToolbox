@@ -1,0 +1,29 @@
+import {articulationParameters} from './articulation.mjs';
+export function setupFeatures({metadata,initial=[],getFrames,onChange,isBusy}){
+ const root=document.createElement('section');root.id='featuresPanel';root.innerHTML='<div class="feature-heading"><h3>超音段特征</h3><button id="addFeature">＋ 添加超音段特征</button></div><div id="featureRows"></div>';
+ document.getElementById('sequenceControls').after(root);
+ const dialog=document.createElement('dialog');dialog.id='featureDialog';dialog.innerHTML='<form id="featureForm"><div class="preset-dialog-heading"><strong>区段超音段特征</strong><button type="button" id="featureCancel">取消</button></div><label>特征 <select id="featureParameter"></select></label><div class="feature-values"><select id="featureMode" aria-label="调整方式"><option value="offset">相对偏移</option><option value="fixed">固定为</option></select><input id="featureValue" aria-label="特征值" type="number" step="0.01" required><span id="featureUnit"></span></div><label>应用范围 <select id="featureScope"><option value="frames">选择关键帧</option><option value="time">起止时间</option></select></label><div id="featureFrames" class="pack-items"></div><div id="featureTime"><label>起点 <input id="featureStart" type="number" min="0" max="86400" step="0.001"> 秒</label><label>终点 <input id="featureEnd" type="number" min="0" max="86400" step="0.001"> 秒</label></div><p class="minor">重叠的偏移相加；固定值冲突时采用后添加的一项，再叠加偏移并限幅。按帧范围跟随排序，按时间范围保持秒数。</p><p id="featureSourceHint" class="minor" hidden></p><p id="featureError" role="status"></p><button type="submit" class="primary">保存特征</button></form>';
+ document.body.append(dialog);const $=id=>document.getElementById(id),parameters=articulationParameters(metadata);
+ let features=structuredClone(initial),editing=null;
+ for(const p of parameters){const o=document.createElement('option');o.value=p.name;o.textContent=p.label;$('featureParameter').append(o);}
+ function range(){const p=parameters.find(p=>p.name===$('featureParameter').value),fixed=$('featureMode').value==='fixed';$('featureValue').min=fixed?p.min:p.min-p.max;$('featureValue').max=fixed?p.max:p.max-p.min;$('featureUnit').textContent=p.unit;$('featureSourceHint').hidden=!p.hint;$('featureSourceHint').textContent=p.hint||'';}
+ function scope(){const frames=$('featureScope').value==='frames';$('featureFrames').hidden=!frames;$('featureTime').hidden=frames;for(const id of ['featureStart','featureEnd'])$(id).required=!frames;}
+ function open(id=null){
+  if(isBusy())return;editing=id;const f=features.find(f=>f.id===id),frames=getFrames();$('featureParameter').value=f?.parameter??'larynx_height';$('featureMode').value=f?.mode??'offset';$('featureValue').value=f?.value??0;range();$('featureScope').value=f?.selection.kind??'frames';$('featureStart').value=f?.selection.start??0;$('featureEnd').value=f?.selection.end??Number(frames.reduce((s,f)=>s+f.duration,0).toFixed(5));$('featureFrames').replaceChildren();
+  for(const [i,frame] of frames.entries()){const label=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.value=frame.frame_id;input.checked=!f||f.selection.kind!=='frames'||f.selection.ids.includes(frame.frame_id);label.append(input,document.createTextNode(`${i+1} · ${frame.name||frame.preset||(frame.aspiration?'ʰ':'姿势')}`));$('featureFrames').append(label);}
+  $('featureError').textContent='';scope();dialog.showModal();
+ }
+ function render(){
+  $('featureRows').replaceChildren();const frames=getFrames();
+  for(const f of features){const p=parameters.find(p=>p.name===f.parameter);if(!p)continue;const row=document.createElement('div');row.className='feature-row';const label=document.createElement('label'),enabled=document.createElement('input');enabled.type='checkbox';enabled.checked=f.enabled;enabled.disabled=isBusy();enabled.onchange=()=>{f.enabled=enabled.checked;onChange();};label.append(enabled,document.createTextNode(`${p.label} ${f.mode==='fixed'?'固定为':'偏移'} ${f.value} ${p.unit}`));
+   const area=document.createElement('small');if(f.selection.kind==='time')area.textContent=`${f.selection.start}–${f.selection.end} 秒`;else{const indices=frames.flatMap((frame,i)=>f.selection.ids.includes(frame.frame_id)?[i+1]:[]);area.textContent=indices.length?'帧 '+indices.join('、'):'所选帧已移除';}
+   const edit=document.createElement('button');edit.textContent='编辑';edit.disabled=isBusy();edit.onclick=()=>open(f.id);const remove=document.createElement('button');remove.textContent='移除';remove.disabled=isBusy();remove.onclick=()=>{features=features.filter(p=>p!==f);onChange();render();};row.append(label,area,edit,remove);$('featureRows').append(row);
+  }$('addFeature').disabled=isBusy()||!frames.length||features.length>=200;
+ }
+ $('addFeature').onclick=()=>open();$('featureParameter').onchange=()=>{range();$('featureValue').value=0;};$('featureMode').onchange=()=>{range();$('featureValue').value=Math.max(+$('featureValue').min,Math.min(+$('featureValue').max,+$('featureValue').value));};$('featureScope').onchange=scope;$('featureCancel').onclick=()=>dialog.close();
+ $('featureForm').onsubmit=e=>{
+  e.preventDefault();let selection;if($('featureScope').value==='frames'){const ids=[...$('featureFrames').querySelectorAll('input:checked')].map(e=>e.value);if(!ids.length){$('featureError').textContent='请选择至少一个关键帧';return;}selection={kind:'frames',ids};}else{const start=+$('featureStart').value,end=+$('featureEnd').value;if(start>=end){$('featureError').textContent='终点须晚于起点';return;}selection={kind:'time',start,end};}
+  const old=features.find(f=>f.id===editing),value={id:old?.id??crypto.randomUUID(),enabled:old?.enabled??true,parameter:$('featureParameter').value,mode:$('featureMode').value,value:+$('featureValue').value,selection};if(old)Object.assign(old,value);else features.push(value);dialog.close();onChange();render();
+ };
+ render();return {get:()=>structuredClone(features),set:value=>{features=structuredClone(value??[]);render();},refresh:render};
+}

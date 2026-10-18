@@ -9,6 +9,26 @@ from ptb_desktop.annotation import AnnotationFiles
 from ptb_worker.io.annotation import update_lip_offset, lip_preview
 from phonetic_core.annotation import parse_document
 
+
+def test_annotation_identity_survives_new_window_and_distinguishes_directories(tmp_path):
+    first = tmp_path / 'first'
+    second = tmp_path / 'second'
+    first.mkdir()
+    second.mkdir()
+    for directory in (first, second):
+        (directory / 'same.wav').write_bytes(b'same content')
+
+    def scan(directory):
+        provider = FileProvider()
+        grant = provider.choose('input', lambda: directory)
+        return AnnotationFiles(provider).scan(grant['id'])[0]
+
+    a, reopened, other = scan(first), scan(first), scan(second)
+    assert a['id'] != reopened['id']
+    assert a['annotationKey'] == reopened['annotationKey']
+    assert a['annotationKey'] != other['annotationKey']
+    assert len(a['annotationKey']) == 64
+
 GRID = 'File type = "ooTextFile short"\n"TextGrid"\n0\n2\n<exists>\n2\n"IntervalTier"\n"words"\n0\n2\n1\n0\n2\n"井井 æ"\n"TextTier"\n"events"\n0\n2\n1\n1\n"ʔ"\n'
 
 

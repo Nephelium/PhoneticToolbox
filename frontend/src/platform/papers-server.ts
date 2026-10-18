@@ -1,3 +1,4 @@
+import type {AssetFetch} from './local-asset-transport.ts';
 import {createPapers,type PapersClient,type PaperProgress,type PaperStatus} from './papers.ts';
 import {readWebSettings,writeWebSettings} from '../state/web-settings.ts';
 
@@ -9,7 +10,7 @@ const messages:Record<string,string>={
  paper_duplicate_name:'所选文件夹内有重复文件，请检查文件名。',paper_input_invalid:'请选择当前项目内的有效 PDF。',invalid_request:'论文操作参数无效，请刷新后重试。',
 };
 type Imported={asset_id:string;relative:string};
-export function serverPapers(owner:string,project:string,csrf:()=>string,onInvalid:()=>void,lifetime:AbortSignal):PapersClient{
+export function serverPapers(owner:string,project:string,csrf:()=>string,onInvalid:()=>void,lifetime:AbortSignal,assetFetch:AssetFetch=(path,init)=>fetch('/api/v1/'+path,init)):PapersClient{
  const settingsScope='server:'+owner+':'+project+':M18';let preferencesApplied=false;
  const listeners=new Set<(s:PaperStatus)=>void>();let queue:Promise<unknown>=Promise.resolve();
  let scheduleSettings:((s:PaperStatus)=>void)|undefined,automatic:AbortController|undefined;
@@ -18,7 +19,7 @@ export function serverPapers(owner:string,project:string,csrf:()=>string,onInval
   const combined=signal?AbortSignal.any([lifetime,signal]):lifetime;
   let response:Response;
   for(let attempt=0;;attempt++){
-  response=await fetch('/api/v1/'+path,{method,credentials:'same-origin',cache:'no-store',signal:combined,
+  response=await assetFetch(path,{method,credentials:'same-origin',cache:'no-store',signal:combined,
    headers:{'X-PTB-Account':owner,...(method!=='GET'?{'X-CSRF-Token':csrf()}:{}),...(body?{'Content-Type':binary?'application/octet-stream':'application/json'}:{})},body});
   if(response.status!==429||!path.startsWith('papers/')||attempt>=3)break;
   await response.body?.cancel();await new Promise<void>((resolve,reject)=>{if(combined.aborted){reject(Error('操作已取消。'));return;}const abort=()=>{clearTimeout(timer);reject(Error('操作已取消。'));};const timer=setTimeout(()=>{combined.removeEventListener('abort',abort);resolve();},250*(attempt+1));combined.addEventListener('abort',abort,{once:true});});

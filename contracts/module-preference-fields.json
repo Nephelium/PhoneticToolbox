@@ -63,6 +63,7 @@
   ],
   "M04": [
     "draft",
+    "showSpectrum",
     "showBoth",
     "showSpectrogram",
     "panelWidths"
@@ -159,6 +160,8 @@
     "freqEndInput",
     "audioFft",
     "channel",
+    "audioFrequencyMax",
+    "audioCanvasHeight",
     "panelWidths"
   ],
   "M10": [

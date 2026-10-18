@@ -43,7 +43,7 @@ onUnmounted(()=>{disposed=true;abort.abort();clearInterval(timer);clearInterval(
 <template>
  <aside class="web-capacity" aria-label="在线人数与个人容量">
   <span :title="'按最近90秒有心跳的账号去重，每30秒更新'">{{presence?`当前在线 ${presence.online_accounts} 人`:'在线人数暂不可用'}}</span>
-  <span v-if="usage">剩余 {{mb(usage.available_bytes)}} / {{mb(usage.quota_bytes)}} <small>已用 {{mb(usage.used_bytes)}} · 任务预留 {{mb(usage.reserved_bytes)}}</small></span>
+  <span v-if="usage">服务器剩余 {{mb(usage.available_bytes)}} / {{mb(usage.quota_bytes)}} <small>已用 {{mb(usage.used_bytes)}} · 任务预留 {{mb(usage.reserved_bytes)}}</small></span>
   <button @click="expanded=true">容量与扩容</button>
   <button @click="loadExpanded=true">{{server?`计算 ${server.running_tasks} / ${server.task_slots} · 等待 ${server.waiting_tasks}`:'服务器状态'}}</button>
   <span v-if="server && (server.waiting_tasks>0 || loadExpanded && ((server.cpu_percent??0)>=85 || (server.memory_percent??0)>=85))" role="status">服务器繁忙，已提交的任务请等待，无需重复提交。</span>
@@ -61,8 +61,8 @@ onUnmounted(()=>{disposed=true;abort.abort();clearInterval(timer);clearInterval(
  <ModalDialog v-if="expanded" class="capacity-dialog" title="个人容量" @close="expanded=false">
   <p v-if="usage" class="capacity-total">{{mb(usage.available_bytes)}} <small>可用 / 总额度 {{mb(usage.quota_bytes)}}</small></p>
   <p>服务器存储空间有限，请及时下载需要保留的结果，清理不再使用的文件。</p>
-  <p>可在项目文件中按大小排序，选择删除。退出登录清空本次工作区，直接关页或断线保留30分钟。</p>
-  <p class="capacity-hint">额度包含上传、结果、临时文件和任务预留。扩容由管理员审核，单文件限制与保留时间保持不变。</p>
+  <p>服务器临时文件可在项目文件中清理。退出登录后清理服务器副本，关页或断线保留30分钟。本机文件继续保留。</p>
+  <p class="capacity-hint">额度仅计算服务器上的输入、结果、临时文件和任务预留。本机文件使用浏览器存储。扩容由管理员审核，单文件限制与保留时间保持不变。</p>
   <p v-if="application">最近申请：{{mb(application.requested_bytes)}} · {{durations[application.duration]}} · {{application.expires_at && Date.parse(application.expires_at)<=Date.now()?'已到期':({pending:'待审核',approved:'已批准',declined:'未批准'})[application.state]}}<span v-if="application.granted_bytes">，批准额度 {{mb(application.granted_bytes)}}</span><span v-if="application.granted_duration">，批准期限 {{durations[application.granted_duration]}}</span><span v-if="application.expires_at">，{{new Date(application.expires_at).toLocaleString('zh-CN')}} 到期</span><span v-if="application.decision_note"> · 管理员回复：{{application.decision_note}}</span></p>
   <form v-if="application?.state!=='pending'" @submit.prevent="submit">
    <label>申请总额度（MB）<input v-model.number="amount" type="number" :min="usage?Math.floor(usage.quota_bytes/1_000_000)+1:1" max="10000" required /></label>

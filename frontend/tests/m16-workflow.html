@@ -1,0 +1,26 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><base href="/"><title>M16 browser workflow QA</title></head><body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';
+import Recording from '/src/modules/recording/RecordingPage.vue';
+import {installPageZoom} from '/src/state/pageZoom.ts';
+import {installPalettes} from '/src/state/appearance.ts';
+import {floatWave} from '/src/platform/recording-wav.ts';
+import {recordingHash} from '/src/platform/recording-project-files.ts';
+import {decodeWav} from '/src/platform/decode.ts';
+import '/src/design/tokens.css';
+// Real browser capture/controller/export, explicit in-memory storage and export
+// conversion double. Chromium fake-device flags supply all microphone samples.
+const assets=new Map(),requests=[];let snapshot=null;
+const server={
+ async load(){return null;},
+ async save(value){snapshot=structuredClone(value);return crypto.randomUUID();},
+ async upload(file){const raw=await file.arrayBuffer(),asset={id:crypto.randomUUID(),name:file.name,kind:'audio',size:raw.byteLength,sha256:await recordingHash(raw)};assets.set(asset.id,raw);return asset;},
+ async read(asset){return assets.get(asset.id).slice(0);},
+ async remove(asset){assets.delete(asset.id);},
+ async spectrum(){return null;},async live(){return null;},
+ async compute(body){requests.push(structuredClone(body));if(body.action!=='export')throw Error('Only export conversion is doubled in this fixture');const source=await decodeWav(assets.get(body.inputs[0]).slice(0),'source.wav');const channels=source.channels.map(c=>c.slice(body.start,body.end));const file=new File([floatWave([channels],source.sampleRate,channels.length)],'export.wav',{type:'audio/wav'});return {asset:await server.upload(file),metadata:{frames:body.end-body.start}};}
+};
+window.__recordingQA={get snapshot(){return snapshot;},requests};
+installPageZoom();installPalettes();document.documentElement.dataset.palette='absolutely';document.documentElement.dataset.theme='light';
+const context={key:'m16-isolated-qa',label:'Synthetic browser recording',files:{kind:'server',recording:server}};
+createApp({render:()=>h(Recording,{active:true,stateKey:'m16-isolated-qa',context})}).mount('#app');
+</script></body></html>

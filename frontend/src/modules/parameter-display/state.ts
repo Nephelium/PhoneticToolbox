@@ -1,7 +1,17 @@
 import type { ParameterTable, ResearchFile } from '../../platform/research.ts';
 
 export interface PlotGroup { id:number; title:string; parameters:string[] }
-export function clearGroup(groups:PlotGroup[],id:number):PlotGroup[]{return groups.map(g=>g.id===id?{...g,parameters:[]}:g);}
+// Each window owns its selection. Editing one must not remove another's curves.
+export function setGroupParameters(groups:PlotGroup[],id:number,parameters:string[]):PlotGroup[]{
+  return groups.map(group=>group.id===id?{...group,parameters:[...new Set(parameters)]}:group);
+}
+export function formatPlotTick(value:number,step:number):string{
+  if(value===0)return '0';
+  if(Math.abs(value)>=1e7||Math.abs(value)<1e-4)return value.toExponential(2).replace(/\.?(0+)(?=e)/,'');
+  const digits=Math.max(0,Math.min(8,1-Math.floor(Math.log10(Math.abs(step)||1))));
+  const text=value.toFixed(digits).replace(/(\.\d*?[1-9])0+$|\.0+$/,'$1');
+  return text==='-0'?'0':text;
+}
 export function deleteGroup(groups:PlotGroup[],id:number):PlotGroup[]{return groups.filter(g=>g.id!==id);}
 export function matchingTable(audio:ResearchFile,files:ResearchFile[]):ResearchFile|undefined {
   const stem=audio.name.replace(/\.wav$/i,'').toLowerCase();
@@ -17,11 +27,6 @@ export function matchingTable(audio:ResearchFile,files:ResearchFile[]):ResearchF
 }
 export function visibleParameters(names:string[],query:string,reaper:boolean,correction:boolean) {
   return names.filter(name=>name.toLowerCase().includes(query.trim().toLowerCase())&&(reaper||!name.toLowerCase().includes('rf0'))&&(correction||!name.includes('*')));
-}
-export function assignParameters(groups:PlotGroup[],selected:string[],target:number):PlotGroup[] {
-  if(!groups.some(group=>group.id===target))throw Error('图窗不存在。');
-  const unique=[...new Set(selected)];
-  return groups.map(group=>({...group,parameters:[...group.parameters.filter(name=>!unique.includes(name)),...(group.id===target?unique:[])]}));
 }
 export function removeGroup(groups:PlotGroup[],id:number):PlotGroup[] {
   if(groups.length===1)return groups;

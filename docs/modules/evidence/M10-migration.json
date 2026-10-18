@@ -6,28 +6,28 @@
       "target": "packages/phonetic_core/src/phonetic_core/vocal_tract/engine.py",
       "source_sha256": "e29aa003a6d715e3136ae6c3b93f744817757d8a6efb85a22418fdf577d70506",
       "migration_sha256": "60636b86bd228264521ce75c6950640e2bb7dc0302b7c37801166aa4e6d21747",
-      "current_sha256": "3dfe220fd6cc55fcbd8898a9cfa7cce11a7c48244890891998b1cd3cf75b9bf2"
+      "current_sha256": "a432a4e727948c232dbf0e0f5c6a2ceba324c1da33fba28bbd61bce9b4ef27b2"
     },
     {
       "source": "phonetic_toolbox/core/vocal_tract/monitor.py",
       "target": "packages/phonetic_core/src/phonetic_core/vocal_tract/monitor.py",
       "source_sha256": "11a9e1f1a36b82006967fc1b53595746ef4bb3dd32a4b4c7fb4c9f1502253542",
       "migration_sha256": "11a9e1f1a36b82006967fc1b53595746ef4bb3dd32a4b4c7fb4c9f1502253542",
-      "current_sha256": "11a9e1f1a36b82006967fc1b53595746ef4bb3dd32a4b4c7fb4c9f1502253542"
+      "current_sha256": "3dc6611a66676eef066d40bd64ee188b835268c1ea090694e55e9d455bb21949"
     },
     {
       "source": "phonetic_toolbox/core/vocal_tract/source.py",
       "target": "packages/phonetic_core/src/phonetic_core/vocal_tract/source.py",
       "source_sha256": "93c71f4ceed030e8a1923ba30396351a28208d6b2ec03639b46e09bcef37c151",
       "migration_sha256": "91d7700e7858ac46313a21c084405bdd32d3afa05395964f10c3a99247d54a7a",
-      "current_sha256": "91d7700e7858ac46313a21c084405bdd32d3afa05395964f10c3a99247d54a7a"
+      "current_sha256": "9f43f681a85b9245f79c422a39828898c4d75e748719ff57daff5a90811a8a78"
     },
     {
       "source": "phonetic_toolbox/core/vocal_tract/trajectory.py",
       "target": "packages/phonetic_core/src/phonetic_core/vocal_tract/trajectory.py",
       "source_sha256": "3dda971316110832411e866717bcc467cbd8a634bf758bc328aba5700bb18f1c",
       "migration_sha256": "3dda971316110832411e866717bcc467cbd8a634bf758bc328aba5700bb18f1c",
-      "current_sha256": "5dc0cc7134c7c387abb75f933d5dfa4d74b81cdb41f89fa9e564138a4bb92bb2"
+      "current_sha256": "190f875c405aa35125e8c2373fa15989c3c42e0af4bbf8321f1f8796cd317fa7"
     },
     {
       "source": "phonetic_toolbox/core/vocal_tract/__init__.py",
@@ -48,21 +48,21 @@
       "target": "packages/phonetic_core/src/phonetic_core/vocal_tract/animation.py",
       "source_sha256": "ae254cb77cd4af51eb89ad529f6b8f09b401424244ab3e29ecd8746e2b3c0d37",
       "migration_sha256": "4fda61c3d2ef9fa99afd0693dcd8ddbaccaeb5f310c0a6b389172e0b4f3bfa86",
-      "current_sha256": "c0f7730c620269c81fcb62a26a756003448036464774bc82da04945dd519feca"
+      "current_sha256": "0570c29c21a742e8dde9a288210c049377bdf7197f04f5349c5ad14c70d0cbdc"
     },
     {
       "source": "phonetic_toolbox/services/vocal_tract/audio_output.py",
       "target": "desktop/src/ptb_desktop/vocal_tract/audio_output.py",
       "source_sha256": "b3dba8228465b5b9111d6300b7516a2da021fa65c90e8fadaa887841b5525bee",
       "migration_sha256": "f270f6661e1590e788e54cf4379888885a5b7c32ce4d97cd74e94b4d37d450c6",
-      "current_sha256": "d9844fd0e0cb87c9d9f9a8a77892ea49fd7d4614069b434df2884408d4bd532d"
+      "current_sha256": "bf0eb9f9b6e640fca44c3d32926d8488f72ccfe4302a8cc719031c8b9073a88a"
     },
     {
       "source": "phonetic_toolbox/services/vocal_tract/profile.py",
       "target": "desktop/src/ptb_desktop/vocal_tract/profile.py",
       "source_sha256": "159057e886714d80eb233ab8b8516c93269e40290848f1c4aa337f6843a96f84",
       "migration_sha256": "30175d58c38356030c8681eb227fbfaf1bafcbea8ec8dd2c83a338aeda8f757c",
-      "current_sha256": "efebbf239028611c4fa36fe9a4aedebfd144e76621fe54ea9fc0e0bbecd6774a"
+      "current_sha256": "6465eb0b6e6ed7d54038bfe3a7ca433ce30200e57c786cdb7e415cb44bf5f3f1"
     },
     {
       "source": "phonetic_toolbox/services/vocal_tract/process_guard.py",
@@ -76,84 +76,84 @@
       "target": "frontend/public/vocal-tract/anatomy.mjs",
       "source_sha256": "fd7687f898de264df6164a2822229c7f9fc9b4c9b4745a7dff8a8db6526a09ed",
       "migration_sha256": "fd7687f898de264df6164a2822229c7f9fc9b4c9b4745a7dff8a8db6526a09ed",
-      "current_sha256": "725b86d4616309bdf76ac02cdb6a23ac239bfaf1859d6c5e17f7a7ee7f739486"
+      "current_sha256": "d32c3df68a785d7d4225dd8a86593ae5f2f53f3bb338fa8ec69ac8345468b716"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/app.js",
       "target": "frontend/public/vocal-tract/app.js",
       "source_sha256": "4068a0de83984149304fc20cb34fb28526ccd973e4894baa79830c6838ee8300",
       "migration_sha256": "4068a0de83984149304fc20cb34fb28526ccd973e4894baa79830c6838ee8300",
-      "current_sha256": "99d1f81483f3de93d4fbc12ded6277e98bbd0d4970ac2fffa5acc95aa030992d"
+      "current_sha256": "2294ac37ec9900fdf444ab12b0517e4e4b453bc8ea90e16989b311b7720d8f6e"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/controls.mjs",
       "target": "frontend/public/vocal-tract/controls.mjs",
       "source_sha256": "0a9c53845ed459f0e8e7b61a75363dc57a8eaabea578dd82540dacbdd0216403",
       "migration_sha256": "0a9c53845ed459f0e8e7b61a75363dc57a8eaabea578dd82540dacbdd0216403",
-      "current_sha256": "ea6debe95b511aee48d427c1661bb91972a6dc0c5781b08d7bbd86db4d73fe03"
+      "current_sha256": "e821a3efb3d9ef5e65915faad933e5fa3cada4b1962427a18ad71cf8ee120617"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/desktop.css",
       "target": "frontend/public/vocal-tract/desktop.css",
       "source_sha256": "ab8803993d67bc7be1181467f52dcf40878411772bfccca7b4666286fa67b1e2",
       "migration_sha256": "ab8803993d67bc7be1181467f52dcf40878411772bfccca7b4666286fa67b1e2",
-      "current_sha256": "ab8803993d67bc7be1181467f52dcf40878411772bfccca7b4666286fa67b1e2"
+      "current_sha256": "7e43a6284d1c0ad97b3bb5c0407f9051b417a14047718ec7f24061ce737fcb34"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/geometry.mjs",
       "target": "frontend/public/vocal-tract/geometry.mjs",
       "source_sha256": "dd1b08ca9813e6a0b46a160594ad51419236de0b01dd67bf5ff52648c83f91ed",
       "migration_sha256": "dd1b08ca9813e6a0b46a160594ad51419236de0b01dd67bf5ff52648c83f91ed",
-      "current_sha256": "6063894e4cda75c8d9e924f10e084c20ff7fba664e79ac922e4f3ba08bcdb7ff"
+      "current_sha256": "4fa29f3ff76dda0cbdf419a19580acbd7c83f828c41f9fb26d51304c914e1ef4"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/index.html",
       "target": "frontend/public/vocal-tract/index.html",
       "source_sha256": "bcd5d4cdb43df745c50f5b99e674ec5479f2da1373a71242a900651c973ca658",
       "migration_sha256": "bcd5d4cdb43df745c50f5b99e674ec5479f2da1373a71242a900651c973ca658",
-      "current_sha256": "c3a01897b2a019e391b4956d08acebed267b5e199870bc396dfd55f5470563c3"
+      "current_sha256": "02c4d02d828705c5eb4c5445908178e66a3621a8e874a9c3439de315683eb021"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/keyframes.js",
       "target": "frontend/public/vocal-tract/keyframes.js",
       "source_sha256": "0a6521d8995d7c46ba735bf3887d537afb958e318f7cde9bafbc15d83bf49ff6",
       "migration_sha256": "0a6521d8995d7c46ba735bf3887d537afb958e318f7cde9bafbc15d83bf49ff6",
-      "current_sha256": "8683a15e5727f6698ecc1446d29c14248a2f00489245f214a4b6d48e3b3205d5"
+      "current_sha256": "e9f46e26233c3d5a54bd8a19740d9e7a03088c17329b337e59b8fcb4b64c326e"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/layout.js",
       "target": "frontend/public/vocal-tract/layout.js",
       "source_sha256": "790387ecc5043fd2d0e8ad6c45c8d7804882309dbf063c96ef1fc9b499455893",
       "migration_sha256": "790387ecc5043fd2d0e8ad6c45c8d7804882309dbf063c96ef1fc9b499455893",
-      "current_sha256": "04182fb97df89f9d86aa76570a92944b0eeb040f63da4d17f5ebbb3f8e871514"
+      "current_sha256": "343c6949a3931b8e2d2f48f59c75a412e9bfd05ac04813efe29176bbb0e12e82"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/monitor.js",
       "target": "frontend/public/vocal-tract/monitor.js",
       "source_sha256": "f88dcf8438bda63d583d881b5c27e55b96de6d552ff78ed1e7784f32249768d4",
       "migration_sha256": "f88dcf8438bda63d583d881b5c27e55b96de6d552ff78ed1e7784f32249768d4",
-      "current_sha256": "14dba917f693a4cf46744d61c6b502c5603058d19e5d95a9f35df3bcb4e6f606"
+      "current_sha256": "fe758e391fb36ce414a8e61d820e43f72462e1a185080188ab3a6d8675002248"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/pitch.js",
       "target": "frontend/public/vocal-tract/pitch.js",
       "source_sha256": "6446152cb323fa921bc4ed7ebf9e47f45f6152ed9516e20fa52d63344629a197",
       "migration_sha256": "6446152cb323fa921bc4ed7ebf9e47f45f6152ed9516e20fa52d63344629a197",
-      "current_sha256": "70195668e2b94c9efe7256910aa098d2e4608d5e9810b2cc9c1f993509e7a5b6"
+      "current_sha256": "149e6bf43c90b8ff7a95edf246cddfe5a778995bbe627c5fc76eb2a7ddaf0d18"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/scene.js",
       "target": "frontend/public/vocal-tract/scene.js",
       "source_sha256": "ceedff892e9071680753a0fe01d14e87401365648a8d3e726eac682a426fea53",
       "migration_sha256": "ceedff892e9071680753a0fe01d14e87401365648a8d3e726eac682a426fea53",
-      "current_sha256": "e94180edfc8e1e9a8096565d40707052d46b50e3646cb65f5946760051061575"
+      "current_sha256": "ad1c8e559f298fdb9e12a81e2fdde4c630d29d24766ffb41dc4d5731002717e9"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/styles.css",
       "target": "frontend/public/vocal-tract/styles.css",
       "source_sha256": "7feba9d8248a083c6da42667c11752529f5fbca72b6d4cee354a7c50b041751a",
       "migration_sha256": "7feba9d8248a083c6da42667c11752529f5fbca72b6d4cee354a7c50b041751a",
-      "current_sha256": "8242a942be946da16f3ef1de79c1d6f0a08af8c0bd9a60c9dbf6ca5f12de03df"
+      "current_sha256": "c29897860c0edb277b5629b6664713fda16a4abae933fd17e234b20e5bc20d87"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/viewer.js",
@@ -209,7 +209,7 @@
       "target": "resources/vocal_tract/bundle-manifest.json",
       "source_sha256": "8b6296438c031b60a9e85746614d5965361d49ac96bf39ffed9405e187cee7b9",
       "migration_sha256": "8b6296438c031b60a9e85746614d5965361d49ac96bf39ffed9405e187cee7b9",
-      "current_sha256": "76afb19bcca93e6705b58acb4929bc81943539f35e122e0df820a70d6a4d3e10"
+      "current_sha256": "0ac0b7cf5153958c9db0116616724f611e62c39ff1f2497070894e771f9bb531"
     },
     {
       "source": "phonetic_toolbox/resources/vocal_tract/sources.lock.json",
@@ -223,7 +223,7 @@
       "target": "resources/vocal_tract/THIRD_PARTY_NOTICES.md",
       "source_sha256": "d3f50c64bb635452cc81a4e298e44b6cf6c6313d43bd63f719bc01f6a5293729",
       "migration_sha256": "d3f50c64bb635452cc81a4e298e44b6cf6c6313d43bd63f719bc01f6a5293729",
-      "current_sha256": "87c51bccb1f5b94cf612dbb41e573189b3ab84dc7a41b88c1ad9100e52495af2"
+      "current_sha256": "a7be21c67a784816b1650c0e17acc4c2b32a95486182979a17a702f9f7458c1f"
     },
     {
       "source": "phonetic_toolbox/resources/vocal_tract/VTL-LICENSE.txt",
@@ -237,7 +237,7 @@
       "target": "resources/vocal_tract/native/geometry_p2.dll",
       "source_sha256": "7bb1fff1a91e058df632666a3e5635060e44ac694713fa1612990a93a039bb78",
       "migration_sha256": "7bb1fff1a91e058df632666a3e5635060e44ac694713fa1612990a93a039bb78",
-      "current_sha256": "3a3bb343af6671cd786b46de67d499f3d8c72264ff2320f1a4877af5760406b2"
+      "current_sha256": "3154c6a0673e33a2632cc11d9943c80268df6743fbcf930b8ae8115b5411689e"
     },
     {
       "source": "phonetic_toolbox/resources/vocal_tract/native/JD2.speaker",
@@ -258,14 +258,14 @@
       "target": "resources/vocal_tract/native/VocalTractLabAnalysis.dll",
       "source_sha256": "caaab296b4c2362ada1a5d94aaffe6c1804b3ed8279c04427bcca1ac348e2407",
       "migration_sha256": "caaab296b4c2362ada1a5d94aaffe6c1804b3ed8279c04427bcca1ac348e2407",
-      "current_sha256": "caaab296b4c2362ada1a5d94aaffe6c1804b3ed8279c04427bcca1ac348e2407"
+      "current_sha256": "2d3f928b8fa33cb7dba4a577071c3a65e6219450805656ebba6fe623a89ba489"
     },
     {
       "source": "phonetic_toolbox/resources/vocal_tract/native/VocalTractLabApi.dll",
       "target": "resources/vocal_tract/native/VocalTractLabApi.dll",
       "source_sha256": "caaab296b4c2362ada1a5d94aaffe6c1804b3ed8279c04427bcca1ac348e2407",
       "migration_sha256": "caaab296b4c2362ada1a5d94aaffe6c1804b3ed8279c04427bcca1ac348e2407",
-      "current_sha256": "caaab296b4c2362ada1a5d94aaffe6c1804b3ed8279c04427bcca1ac348e2407"
+      "current_sha256": "2d3f928b8fa33cb7dba4a577071c3a65e6219450805656ebba6fe623a89ba489"
     },
     {
       "source": "phonetic_toolbox/resources/vocal_tract/native/W02.speaker",
@@ -286,14 +286,14 @@
       "target": "resources/vocal_tract/sources/geometry_bridge.cpp",
       "source_sha256": "c8ebf514a499da24dbefa349d4315e0fd2557494db196d33bb268b131b2e8532",
       "migration_sha256": "c8ebf514a499da24dbefa349d4315e0fd2557494db196d33bb268b131b2e8532",
-      "current_sha256": "0f8f5b3dcb4bd8b7fc3f855e87159b4f9d50746e2f19d03ce8ad55865ae01f81"
+      "current_sha256": "62757245394d6aac1999504bbe9bd88b765436ceff2624490b081bc38c2bacb1"
     },
     {
       "source": "phonetic_toolbox/resources/vocal_tract/sources/README.md",
       "target": "resources/vocal_tract/sources/README.md",
       "source_sha256": "3291a36437d45e88765911ef6ed0ee1221527c088fabb7beb03bbeb4b0dad937",
       "migration_sha256": "3291a36437d45e88765911ef6ed0ee1221527c088fabb7beb03bbeb4b0dad937",
-      "current_sha256": "98bd2d9dfb69ac9bbc0b2c8151a7bb3eca551de6f3b850e21d95d0333e618cac"
+      "current_sha256": "473afa7e97623a8ed5be4d4eb99b4659e091dbe3f58a5912a18bd0ce090a53f0"
     },
     {
       "source": "phonetic_toolbox/resources/vocal_tract/sources/VTL2.4-API-source.zip",
@@ -303,6 +303,6 @@
       "current_sha256": "aa696bf4cf5c44cbd433304943aebb241e5ea3064b949daf5ea09f96567cff9b"
     }
   ],
-  "behavior_revision": "R5 / native m10/2; built without verification by user request; docs/plans/2026-09-11-m10-onset.md",
+  "behavior_revision": "R21 smoothing and source features; Windows/Wasm rebuilt, Mac R21 build pending; see docs/testing/m10-smoothing-review.md",
   "presentation_revision": "P04-FONT: docs/testing/p04-fonts-report.md; font-only development checks do not validate other R5 behavior"
 }

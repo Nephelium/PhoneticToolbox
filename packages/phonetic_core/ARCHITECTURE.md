@@ -32,9 +32,13 @@ M09 的 OpenCV 使用范围限定为数组计算：LINE_8、circle、line、getP
 
 新涂鸦以 `size_unit=px` 显式标记1–200像素直径，在校正图像网格上使用圆端点与线段距离栅格化，旧快照省略该字段时保留OpenCV画笔语义。显示缩放不参与实际笔迹计算。
 
+音频编辑图窗保持用户选定高度，以独立画布显示当前频带。新笔迹可带 `canvas_width`、`canvas_height`、`frequency_fraction`，核心按二维像素覆盖面积投到原STFT网格后混合灰度，保持未覆盖单元、原相位和另一声道；旧快照缺字段时沿用原网格。改变图高和显示频率上限仅重新投影笔迹，独立于FFT分析和最终样本数。
+
 浏览器通过同源Worker在Pyodide执行本包，Praat来自Parselmouth 0.4.7原始源码内的6.1.38。适配只传递Float64数组和原时间网格，不复制算法。NumPy/SciPy等WASM依赖的微小浮点差异由独立跨平台对照报告记录，整数窗长、形状、采样率、声道、掩码和算法语义保持；旧原生回归不放宽。固定版本与构建摘要见resources/manifests/browser-science-runtime.json，执行/数据持久化位于平台与worker外层。
 
 ## 科学结果约定
+
+声道原生资源选择显式支持 emscripten/wasm32，仍与Windows/Linux/macOS目录隔离。浏览器通过相同ctypes ABI调用VTL动态库，复用Engine/Runtime与m10/r21几何。授权扩展的pressure_curve只覆盖声源Pa，新增微扰为可选m10/source-1，空设置保留上游声源路径；当前文档写8版，旧1–8版继续读取，旧几何导入明确提示重算。相邻完全一致姿态复用几何，声源独立更新不重算几何。纯设备、音频排程与取消恢复在外层，算法/存储决策见[ADR](../../docs/decisions/ADR-M10-pressure-perturbation.md)，初轮Wasm隔离和对照见[报告](../../docs/testing/m10-wasm-report.md)。
 
 - 使用真实采样率、声道角色、每道帧数与整数半开选区；返回轨迹保留真实时间网格。
 - 单位、默认值、缺失值、无声区及异常范围属于结果语义，不在重构或界面缩放中改变。
@@ -49,3 +53,9 @@ M09 的 OpenCV 使用范围限定为数组计算：LINE_8、circle、line、getP
 使用模块对应的既有科学环境运行本包 tests 和根 tests/parity。包结构变化另验独立 wheel 安装；预期值来自独立基准，不把当前函数输出回填为通过值。合成输入覆盖算法边界，自然语料准确率、实体采集和听辨需各自证据。
 
 vocal_tract/session.Runtime是桌面与网页共用的声道状态机，注入engine、profile、live和设备目录端口，不自行打开设备、HTTP或账号存储。envelope.audition_samples统一播放/导出增益，document记录实际截面数并提示异采样重算。Engine.enable_web_sections显式启用33/65策略；桌面原选项保持。
+
+R21在原生接触计算前平滑局部舌曲线，跨平台由同一补丁构建。jitter/shimmer使用既有声源ABI并接入全局/区段控制，按区段边界更新且保留随机序列，计算退出时恢复原设置。Mac本轮仅同步源码与构建入口，原生R21待编译，边界与审查见[报告](../../docs/testing/m10-smoothing-review.md)。
+
+M10 preset_library集中名称、套装和构型校验，Runtime负责新建/复制/切换/命名及原子导入策略。旧同名记录允许读取和逐项更名，新保存拒绝规范化重名。preset_pack写v3并读v1/v2/v3，R18–R20只有模型摘要和参数顺序一致且明确确认重算才允许导入。切换套装不改动已有关键帧或科研默认值。
+
+M10 stop-timing/2以帧内释放开始为VOT零点。负VOT浊音起始前声门内收，避免开放声门提前充压；声道闭塞保持，浊音起始2ms过渡可跨普通后续帧。animation在时序帧起止边界切块，使用左极限终点与零长度边界声源更新，避免相邻动作提前混入。显示、音频及导出共用轨迹。旧method/1保留数值并提示按新方法重算，未知方法拒绝。

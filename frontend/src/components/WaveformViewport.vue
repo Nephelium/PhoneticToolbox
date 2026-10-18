@@ -3,7 +3,7 @@ import { computed,ref,onMounted,onUnmounted } from 'vue';import type { Workspace
 import SpectrogramViewport from './SpectrogramViewport.vue';import type {Spectrogram,SpectrogramView} from '../platform/research.ts';
 import {useAudioSelection} from '../state/audio-selection.ts';
 import {stop} from '../state/audio.ts';
-import {playback,isCurrentAudio} from '../state/audio.ts';import {amplitudeLimit,amplitudeLabel,sampleWavePath} from '../platform/waveform.ts';
+import {playback,isCurrentAudio} from '../state/audio.ts';import {amplitudeLimit,amplitudeLabel,sampleWavePath,endpointClickTime} from '../platform/waveform.ts';
 const props=withDefaults(defineProps<{state:Workspace;emptyMessage?:string;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;spectrogramSelectable?:boolean;maxWindowSeconds?:number;compactOverview?:boolean;overviewTop?:boolean;hideOverviewControls?:boolean;autoAmplitude?:boolean;normalizeDisplay?:boolean;clickMovesSelection?:boolean;selectionRequiresShift?:boolean;doubleClickAction?:'zoom'|'annotation';shiftWheelPan?:boolean;continuousDetail?:boolean;trackHeight?:number;hideTimeAxis?:boolean;timelineDuration?:number;pixelAnnotations?:boolean;timeAxisInsets?:{left:number;right:number}}>(),{autoAmplitude:true,continuousDetail:true,emptyMessage:'选择音频后显示实际波形。'});let anchor:number|null=null,anchorX=0,selectionLength=0,dragged=false,boundaryDrag=false;
 const emit=defineEmits<{'selection-end':[start:number,end:number];'time-double-click':[time:number,ctrl:boolean];'boundary-start':[event:PointerEvent,time:number,tolerance:number];'boundary-move':[event:PointerEvent,time:number];'boundary-end':[]}>();
 const selectionGroup=useAudioSelection();const unregister=selectionGroup?.register(()=>props.state);onUnmounted(()=>unregister?.());
@@ -44,7 +44,7 @@ const tracks=computed(()=>indices.value.map(index=>{const asset=props.state.asse
 function path(points:[number,number][],limit:number) {return points.map(([lo,hi],i)=>`M${i/Math.max(1,points.length-1)*1000},${45-hi/limit*37}V${45-lo/limit*37}`).join(' ');}
 function x(t:number){return Math.max(0,Math.min(1000,(t-left.value)/windowLength.value*1000));}
 function time(event:MouseEvent){const box=(event.currentTarget as Element).getBoundingClientRect();return left.value+Math.max(0,Math.min(1,(event.clientX-box.left)/box.width))*windowLength.value;}
-function double(event:MouseEvent){if(props.doubleClickAction==='annotation'){emit('time-double-click',time(event),event.ctrlKey);return;}zoom(1);props.state.offset=0;}
+function double(event:MouseEvent){if(props.doubleClickAction==='annotation'){emit('time-double-click',endpointClickTime(time(event),left.value,windowLength.value,duration.value,(event.currentTarget as Element).getBoundingClientRect().width),event.ctrlKey);return;}zoom(1);props.state.offset=0;}
 function down(event:PointerEvent){
   if(event.button!==0||(props.selectionRequiresShift&&!event.shiftKey))return;
   emit('boundary-start',event,time(event),windowLength.value*6/(event.currentTarget as Element).getBoundingClientRect().width);

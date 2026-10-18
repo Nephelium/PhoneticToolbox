@@ -17,6 +17,7 @@ import WaveformViewport from '../../components/WaveformViewport.vue';import Moda
 import AnnotationTracks from './AnnotationTracks.vue';import {createEditor,type Grid} from './editor.mjs';import {parseGrid,serializeGrid,decodeText,loadEditingGrid,validateEditingAudio,preferredGrid,selectedInterval} from './format.ts';import dictionary from './default.dict?raw';
 import {sequenceDoubleClick,manualDoubleClick,resetSequence,sequenceParts,hasUnsplitPhones,splitInitialPhones,type PhoneSplitMode} from './sequence.ts';
 import {editableTier,editingNames,newIntervalTiers,editorSelection} from './layers.ts';
+import {AnnotationHistory,type AnnotationHistorySession,type AnnotationView,type HistoryKind} from './history.ts';
 const props=defineProps<{context:ResearchContext;stateKey:string;active:boolean}>();const emit=defineEmits<{references:[];help:[];close:[]}>();
 const wave=workspace(props.stateKey),revision=ref(0),error=ref(''),notice=ref(''),busy=ref(false),saving=ref(false),files=ref<ResearchFile[]>([]),directory=ref(''),directoryLabel=ref('');
 const source=shallowRef<ResearchFile|null>(null),gridFile=shallowRef<ResearchFile|null>(null),gridSha=ref(''),lipFile=shallowRef<ResearchFile|null>(null),lipSha=ref(''),lip=shallowRef<LipTrack|null>(null),lipOffset=ref(0),savedLipOffset=ref(0),savedGrid=ref('');
@@ -30,6 +31,15 @@ const port=props.context.files.annotation??portableAnnotation(props.context.file
 let ticket=0,alive=true,timer:ReturnType<typeof setInterval>,repeat:ReturnType<typeof setTimeout>|undefined;
 let reading:AbortController|undefined,saveFlight:Promise<boolean>|undefined;
 const previewNote=ref('');
+const historyStore=new AnnotationHistory(props.context.ownerId??'local',props.context.files.annotationScope??props.context.key);
+const historySession=shallowRef<AnnotationHistorySession|null>(null),historyRevision=ref(0),historyChoice=ref('');
+const historyVersions=computed(()=>{historyRevision.value;return [...(historySession.value?.value.versions??[])].reverse();});
+const historyKinds:Record<HistoryKind,string>={original:'原始标注',recovered:'已有自动保存',auto:'自动保存',manual:'手动保存',restored:'恢复版本'};
+function historyView():AnnotationView{return {offset:wave.offset,zoom:wave.zoom,channel:wave.channel,word:wordName.value,phone:phoneName.value,lab:[...s.labSequence],labName:labName.value,sequence:sequenceEnabled.value,index:s.sequenceIndex};}
+async function checkpoint(kind:HistoryKind='auto'){
+ if(!historySession.value||!s.textgrid)return;
+ await historyStore.save(historySession.value,serializeGrid(s.textgrid),kind,historyView(),gridFile.value?.name);historyRevision.value++;historyChoice.value=historySession.value.value.head;
+}
 const targets=new Map<string,AnnotationTarget>();
 const editor=createEditor({changed:changed,message:m=>{notice.value=m;}}),s=editor.state;
 const controls=reactive(editor.controls);
@@ -109,7 +119,8 @@ function createLayers(){
   s.selected=null;s.selectedIndices=[];s.selectedBoundary=null;resetSequence(editor);persist();dialog.value='';error.value='';notice.value='已创建：'+tiers.map(t=>t.name).join('、')+'。可开始标注，保存后写入 TextGrid。';changed();
  }catch(e){error.value=(e as Error).message;}
 }
-function chooseAudio(audio:ResearchFile){try{void open(audio,preferredGrid(audio,files.value));}catch{associationAudio.value=audio;associationId.value='';dialog.value='association';}}
+function workingGrid(audio:ResearchFile){const auto=files.value.filter(f=>f.kind==='textgrid'&&f.name.toLowerCase()===audio.name.replace(/\.wav$/i,'_自动保存.TextGrid').toLowerCase());if(auto.length>1)throw Error('存在多个自动保存稿，请明确选择。');return auto[0]??preferredGrid(audio,files.value);}
+function chooseAudio(audio:ResearchFile){void open(audio);}
 function applyAssociation(){const audio=associationAudio.value,file=files.value.find(f=>f.id===associationId.value);if(audio&&file){dialog.value='';void open(audio,file);}}
 async function prepare(role:'textgrid'|'lip',file:ResearchFile,suff='_自动保存'){
  const key=role+':'+file.id+':'+suff;let target=targets.get(key);if(!target){target=await port.target(file,role,suff);targets.set(key,target);}return target;
@@ -119,7 +130,7 @@ function updateSaved(file:ResearchFile,original:ResearchFile){
  const named={...file,name:file.name.includes('/')?file.name:parent+file.name};
  files.value=files.value.filter(f=>f.id!==named.id&&f.name.toLowerCase()!==named.name.toLowerCase()).concat(named);return named;
 }
-async function saveGrid(auto=false,confirmed=false):Promise<boolean>{
+async function saveGrid(auto=false,confirmed=false,kind:HistoryKind=auto?'auto':'manual'):Promise<boolean>{
  if(!finishInput())return false;
  if(!s.textgrid||!source.value)return true;
  if(!s.textgrid.tiers.length){if(auto)return true;error.value='请先创建标注层。';return false;}
@@ -128,7 +139,7 @@ async function saveGrid(auto=false,confirmed=false):Promise<boolean>{
  const generation=ticket,document=s.textgrid,original=gridFile.value??source.value,audio=source.value,sourceHash=gridFile.value?gridSha.value:source.value.sha256!,suff=auto?'_自动保存':suffix.value;
  saving.value=true;error.value='';
  try{
-  const text=serializeGrid(document),target=await prepare('textgrid',audio,suff);
+  const text=serializeGrid(document);await checkpoint(kind);const target=await prepare('textgrid',audio,suff);
   const result=await port.save({target:target.id,source:{id:original.id,sha256:sourceHash},text});
   if(alive&&generation===ticket&&s.textgrid===document){
    gridFile.value=updateSaved(result.file,original);gridSha.value=result.sha256;savedGrid.value=text;s.dirty=serializeGrid(document)!==text;wave.dirty=s.dirty||lipDirty.value;notice.value=(props.context.files.kind==='server'?'已保存项目版本：':'已保存：')+result.name;revision.value++;
@@ -146,7 +157,14 @@ async function saveLip():Promise<boolean>{
 }
 function savePending():Promise<boolean>{
  if(saveFlight)return saveFlight;
- saveFlight=(async()=>{if(!finishInput())return false;if(s.dirty&&!await saveGrid(true))return false;if(lipDirty.value&&!await saveLip())return false;if(s.dirty||lipDirty.value||labelDirty.value||composing.value){error.value='保存期间有新的编辑，请再次保存后切换。';return false;}return true;})().finally(()=>{saveFlight=undefined;});return saveFlight;
+ saveFlight=(async()=>{try{if(!finishInput())return false;if(s.dirty&&!await saveGrid(true))return false;if(lipDirty.value&&!await saveLip())return false;if(s.dirty||lipDirty.value||labelDirty.value||composing.value){error.value='保存期间有新的编辑，请再次保存后切换。';return false;}await checkpoint();return true;}catch(e){error.value=(e as Error).message;return false;}})().finally(()=>{saveFlight=undefined;});return saveFlight;
+}
+async function restoreVersion(){
+ const version=historySession.value?.value.versions.find(v=>v.id===historyChoice.value);if(!version||busy.value||saving.value||!finishInput())return;
+ if(!await savePending())return;
+ editor.saveUndoState();s.textgrid=parseGrid(version.text,true);const roles=editingNames(s.textgrid,{word:wordName.value,phone:phoneName.value});wordName.value=s.wordTierName=roles.word;phoneName.value=s.phoneTierName=roles.phone;
+ s.selected=null;s.selectedIndices=[];s.selectedBoundary=null;resetSequence(editor);s.dirty=true;changed();
+ if(await saveGrid(true,false,'restored'))notice.value='已恢复历史版本，并保存为新的当前版本。';
 }
 function download(role:'textgrid'|'lip'){
  if(!finishInput())return;
@@ -170,30 +188,39 @@ async function scan(choose=false){
 }
 async function addFiles(event:Event){const element=event.target as HTMLInputElement;props.context.files.add?.(Array.from(element.files??[]));element.value='';await scan();}
 async function open(audio:ResearchFile,explicitGrid?:ResearchFile){
- if(busy.value||saving.value)return;if(!await savePending())return;
- const own=++ticket;reading?.abort();reading=new AbortController();busy.value=true;error.value='';notice.value='正在读取音频与标注…';stop();
+ if(busy.value||saving.value)return;busy.value=true;let own=ticket;
  try{
-  const grid=explicitGrid??preferredGrid(audio,files.value);
+  if(!await savePending())return;
+  own=++ticket;reading?.abort();reading=new AbortController();error.value='';notice.value='正在读取音频与标注…';stop();
+  let grid:ResearchFile|undefined;try{grid=explicitGrid??workingGrid(audio);}catch{associationAudio.value=audio;associationId.value='';dialog.value='association';return;}
   const [decoded,read]=await Promise.all([annotationAudio(props.context.files,audio,reading.signal),grid?props.context.files.read(grid,reading.signal):Promise.resolve(undefined)]);
-  validateEditingAudio(decoded.asset);const {grid:document,created}=loadEditingGrid(read?decodeText(read.buffer):undefined,decoded.asset.duration);
+  validateEditingAudio(decoded.asset);const loaded=loadEditingGrid(read?decodeText(read.buffer):undefined,decoded.asset.duration),diskText=serializeGrid(loaded.grid);
+  const original=files.value.find(f=>f.kind==='textgrid'&&f.name.toLowerCase()===audio.name.replace(/\.wav$/i,'.TextGrid').toLowerCase());
+  const baseline=original&&original.id!==grid?.id?serializeGrid(loadEditingGrid(decodeText((await props.context.files.read(original,reading.signal)).buffer),decoded.asset.duration).grid):diskText;
+  const session=await historyStore.open(audio.annotationKey??audio.id,decoded.sha256,baseline,diskText);
+  const current=historyStore.head(session),document=!explicitGrid?loadEditingGrid(current.text,decoded.asset.duration).grid:loaded.grid,created=!document.tiers.length;
   if(!alive||own!==ticket)return;
   previewNote.value=decoded.previewNote;
   source.value={...audio,sha256:decoded.sha256};gridFile.value=grid??null;gridSha.value=read?.sha256??'';wave.asset=markRaw(decoded.asset);wave.channel=0;wave.offset=0;wave.zoom=Math.max(1,decoded.asset.duration/3.2);wave.start=0;wave.end=0;pausedSelection='';
   s.textgrid=document;s.audioBuffer={duration:decoded.asset.duration,sampleRate:decoded.asset.sampleRate,getChannelData:index=>decoded.asset.channels[index]};s.visibleStart=0;s.visibleDuration=decoded.asset.duration/wave.zoom;
   const roles=editingNames(document,{word:wordName.value||prefs.word,phone:phoneName.value||prefs.phone});wordName.value=s.wordTierName=roles.word;phoneName.value=s.phoneTierName=roles.phone;
-  s.selected=null;s.selectedBoundary=null;s.selectedIndices=[];s.undoStack=[];s.drag=null;s.dirty=false;s.copiedWord='';s.copiedLabIndex=null;s.searchResults=[];s.searchIndex=-1;query.value='';s.sequenceIndex=0;s.sequenceStart=null;
-  savedGrid.value=serializeGrid(document);lip.value=null;lipFile.value=null;lipOffset.value=0;savedLipOffset.value=0;s.labSequence=[];s.labWords=new Set();labName.value='';
+  s.selected=null;s.selectedBoundary=null;s.selectedIndices=[];s.undoStack=[];s.drag=null;s.dirty=serializeGrid(document)!==diskText;s.copiedWord='';s.copiedLabIndex=null;s.searchResults=[];s.searchIndex=-1;query.value='';s.sequenceIndex=0;s.sequenceStart=null;
+  savedGrid.value=diskText;historySession.value=session;historyRevision.value++;historyChoice.value=explicitGrid?'':session.value.head;lip.value=null;lipFile.value=null;lipOffset.value=0;savedLipOffset.value=0;s.labSequence=[];s.labWords=new Set();labName.value='';
   controls.fitStart.value='0';controls.fitEnd.value='0';controls.spliceStart.value='0';controls.spliceEnd.value=decoded.asset.duration.toFixed(3);targets.clear();
   await prepare('textgrid',source.value,'_自动保存');
   const lab=files.value.find(f=>f.kind==='lab'&&f.name.toLowerCase()===audio.name.replace(/\.wav$/i,'.lab').toLowerCase());
   if(lab){const bytes=await props.context.files.read(lab);if(own!==ticket||!alive)return;setLab(decodeText(bytes.buffer),lab.name);}
+  const view=!explicitGrid?session.value.view:undefined;
+  if(view){wave.zoom=Math.max(1,view.zoom);wave.offset=Math.max(0,Math.min(decoded.asset.duration-decoded.asset.duration/wave.zoom,view.offset));wave.channel=Math.max(0,Math.min(decoded.asset.channels.length-1,view.channel));
+   const roles=editingNames(document,{word:view.word,phone:view.phone});wordName.value=s.wordTierName=roles.word;phoneName.value=s.phoneTierName=roles.phone;
+   s.labSequence=[...view.lab];s.labWords=new Set(view.lab.map(w=>w.toLowerCase()));labName.value=view.labName;sequenceEnabled.value=view.sequence;s.sequenceIndex=Math.max(0,Math.min(view.lab.length,view.index));}
   const stem=audio.name.replace(/\.wav$/i,''),parent=audio.name.includes('/')?audio.name.slice(0,audio.name.lastIndexOf('/')+1):'';
   const preferred=[stem+'.lip.json',stem+'.pkl',parent+'audio_recording.lip.json',parent+'audio_recording.pkl'];
   const candidates=preferred.map(name=>files.value.find(f=>f.name.toLowerCase()===name.toLowerCase())).filter(Boolean) as ResearchFile[];
   // Fallback only in a single-recording directory, so unrelated WAVs never share a PKL silently.
   const candidate=candidates.find(f=>f.name.toLowerCase().startsWith(stem.toLowerCase()+'.'))??(files.value.filter(f=>f.kind==='audio'&&(f.name.includes('/')?f.name.slice(0,f.name.lastIndexOf('/')+1):'')===parent).length===1?candidates[0]:undefined);
   if(candidate)try{await loadLip(candidate,own);}catch(e){error.value='标注已加载；唇形读取失败：'+(e as Error).message;}
-  if(own===ticket&&alive){notice.value=created?'音频已加载。请点击“创建标注层”，输入音节与音素层名后开始标注。':'已加载：'+grid!.name;syncView();changed();}
+  if(own===ticket&&alive){notice.value=created?'音频已加载。请点击“创建标注层”，输入音节与音素层名后开始标注。':!explicitGrid&&session.raw?'已恢复最近编辑：'+audio.name:'已加载：'+(grid?.name??audio.name);syncView();changed();}
  }catch(e){if(alive&&own===ticket){error.value=(e as Error).message;notice.value='读取未完成，请检查文件；已有编辑保留。';}}finally{if(alive&&own===ticket)busy.value=false;}
 }
 async function loadLip(file:ResearchFile,own=ticket){
@@ -244,11 +271,13 @@ function stopRepeat(){if(repeat)clearTimeout(repeat);repeat=undefined;}
 function startRepeat(ms:number){stopRepeat();nudge(ms);repeat=setTimeout(function tick(){nudge(ms);repeat=setTimeout(tick,40);},150);}
 const lipOffsetInput=computed({get:()=>lipOffset.value*1000,set:(value:number|string)=>{if(!String(value).trim()||!Number.isFinite(Number(value))||Math.abs(Number(value))>3_600_000){error.value='唇偏毫秒数无效。';return;}lipOffset.value=Number(value)/1000;error.value='';}});
 function search(){controls.searchInput.value=query.value;editor.doSearch(query.value);changed();}
+function deleteCurrent(){if(busy.value||saving.value||!finishInput())return;try{if(s.selectedBoundary)editor.deleteSelectedBoundary();else editor.deleteAnnotation();error.value='';changed();}catch(e){error.value=(e as Error).message;}}
 async function action(name:'fit'|'splice'|'phones'|'delete'){
  error.value='';try{
   if(!s.textgrid)throw Error('请先选择音频和标注。');
   if(name==='splice'){if(!s.referenceTextGrid)throw Error('请先选择参考 TextGrid。');await editor.applyReferenceSplice();}
-  else{if(!editor.wordTier())throw Error('找不到词层，请检查层名。');if(name==='fit'){if(!fitRangeInput())return;editor.fitIntensityRange();controls.fitStart.value=String(wave.start);controls.fitEnd.value=String(wave.end);}else if(name==='phones')editor.autoPhonesForSelection();else{editor.saveUndoState();editor.deleteSelectedBoundary();}}
+  else if(name==='delete')editor.deleteSelectedBoundary();
+  else{if(!editor.wordTier())throw Error('找不到词层，请检查层名。');if(name==='fit'){if(!fitRangeInput())return;editor.fitIntensityRange();controls.fitStart.value=String(wave.start);controls.fitEnd.value=String(wave.end);}else if(name==='phones')editor.autoPhonesForSelection();}
   changed();
  }catch(e){error.value=(e as Error).message;}
 }
@@ -259,14 +288,14 @@ function key(event:KeyboardEvent){
  if(command==='save'){event.preventDefault();void saveGrid();return;}
  const element=event.target as HTMLElement;if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(element.tagName)||element.isContentEditable)return;
  const k=event.key.toLowerCase();
- const clipboardAction=command&&['copy','cut','paste'].includes(command),remove=event.key==='Backspace'&&!s.selectedBoundary;
+ const deletion=['Backspace','Delete'].includes(event.key),clipboardAction=command&&['copy','cut','paste'].includes(command),remove=deletion&&!s.selectedBoundary;
  if(clipboardAction||remove){
   event.preventDefault();if(!finishInput())return;
   try{if(remove)editor.deleteAnnotation();else if(k==='v')editor.pasteAnnotation();else editor.copyAnnotation(k==='x');error.value='';changed();}
   catch(e){error.value=(e as Error).message;}return;
  }
  if(event.altKey&&['ArrowLeft','ArrowRight'].includes(event.key)){nudge((event.key==='ArrowLeft'?-1:1)*(event.shiftKey?10:1));}
- else if(event.key==='Backspace'&&s.selectedBoundary){void action('delete');}
+ else if(deletion&&s.selectedBoundary){void action('delete');}
  else if(event.key==='Escape'&&s.sequenceStart!==null){cancelStart();}
  else if(['ArrowLeft','ArrowRight'].includes(event.key)&&!event.ctrlKey&&!event.metaKey&&!event.altKey){moveAnnotation(event.key==='ArrowLeft'?-1:1);}
  else if(command==='undo'){undo();}
@@ -289,7 +318,7 @@ useWebSettings(props.stateKey,{suffix,showOpen,showWidth,sidebar,settingsOpen,ph
   <h2>语料文件</h2>
   <input ref="picker" hidden type="file" multiple accept=".wav,.TextGrid,.textgrid,.lab,.json" @change="addFiles"/><small>{{directoryLabel||context.label}} · {{pairs.length}} 份录音</small>
   <input v-model="filter" aria-label="筛选标注文件" placeholder="筛选文件…"/>
-  <small class="file-legend"><span class="has-grid">绿色：有 TextGrid</span><span>普通色：无 TextGrid</span></small>
+  <small class="file-legend"><span class="has-grid">主题色标记：有 TextGrid</span><span>无标记：无 TextGrid</span></small>
   <div class="annotation-file-list"><button v-for="pair in visibleFiles" :key="pair.audio.id" :class="{selected:source?.id===pair.audio.id,'has-grid':!!pair.grid||!!associatedGrids(pair.audio).length}" :disabled="busy||saving" :title="pair.audio.name" @click="chooseAudio(pair.audio)"><span>{{pair.audio.name}}</span></button><p v-if="!visibleFiles.length" class="hint">选择包含 WAV 的目录后，从这里打开录音。</p></div>
  </aside>
  <div class="annotation-editor">
@@ -299,7 +328,7 @@ useWebSettings(props.stateKey,{suffix,showOpen,showWidth,sidebar,settingsOpen,ph
    <div v-if="!editingReady" class="layer-prompt"><span>{{hasLayers?'请选择音节与音素的编辑层，或创建所需层。':'当前还没有标注层。输入自己的层名后开始标注。'}}</span><button class="primary" :disabled="busy||saving" @click="layerDialog('both')">创建标注层</button></div>
    <WaveformViewport :state="wave" :compact-overview="true" :hide-overview-controls="true" :overview-top="true" :auto-amplitude="true" :shift-wheel-pan="true" :continuous-detail="true" :hide-time-axis="true" double-click-action="annotation" @time-double-click="doubleTime" @selection-end="waveformSelection" @boundary-start="boundaryStart" @boundary-move="boundaryMove" @boundary-end="boundaryEnd"><template #annotations="{x,start,end}"><template v-for="boundary in boundaries" :key="boundary.time"><path v-if="boundary.time>start&&boundary.time<end" :d="`M${x(boundary.time)} 0V90`" class="annotation-boundary" :class="[boundary.kind,{chosen:s.selectedBoundary?.time===boundary.time}]"/></template><path v-if="s.sequenceStart!==null&&s.sequenceStart>=start&&s.sequenceStart<=end" :d="`M${x(s.sequenceStart)} 0V90`" class="sequence-pending"/></template></WaveformViewport>
    <AnnotationTracks :disabled="busy||saving||composing" :editor="editor" :revision="revision" :wave="wave" :lip="lip" :offset="lipOffset" :show-open="showOpen" :show-width="showWidth" :active="active" :sequence-editing="sequenceEnabled" @time-double-click="doubleTime" @phone-double-click="doublePhone" @selection-end="waveformSelection" @changed="changed"/>
-   <div class="label-editor"><label>选中区间文本 <input v-model="label" aria-label="编辑选中标注文本" :disabled="!selected" @compositionstart="composing=true" @compositionend="composing=false;finishInput()" @change="finishInput()" @keydown.enter="!$event.isComposing&&finishInput()"/></label><small>Backspace 删除标注或边界 · Ctrl＋X 剪切 · Ctrl＋V 粘贴</small></div>
+   <div class="label-editor"><label>选中区间文本 <input v-model="label" aria-label="编辑选中标注文本" :disabled="!selected" @compositionstart="composing=true" @compositionend="composing=false;finishInput()" @change="finishInput()" @keydown.enter="!$event.isComposing&&finishInput()"/></label><button :disabled="busy||saving||(!selected&&!s.selectedBoundary)" @click="deleteCurrent">{{s.selectedBoundary?'删除边界':'删除标注'}}</button><small>Backspace / Delete 删除标注或边界 · Ctrl＋X 剪切 · Ctrl＋V 粘贴</small></div>
    <p class="hint">Ctrl＋滚轮缩放 · Shift＋滚轮平移标注视图 · Ctrl＋Z 撤销 · Ctrl＋拖动拉开边界 · Backspace 合并选中边界。输入框支持中文输入法。</p>
   </template>
   <ModuleStatus v-else kind="empty" message="打开一组录音与标注"><p>选择语料目录后，从左侧列表开始编辑。音频、TextGrid 和唇形共用秒时间轴。</p></ModuleStatus>
@@ -322,10 +351,11 @@ useWebSettings(props.stateKey,{suffix,showOpen,showWidth,sidebar,settingsOpen,ph
   <label>当前 TextGrid<select :value="gridFile?.id??''" aria-label="当前 TextGrid" :disabled="!source||busy||saving" @change="open(source!,files.find(f=>f.id===($event.target as HTMLSelectElement).value))"><option v-if="source&&!gridFile" value="" disabled>新建空白标注（尚未保存）</option><option v-for="f in gridChoices" :key="f.id" :value="f.id">{{f.name}}</option></select></label>
   <label>保存后缀<input v-model="suffix" aria-label="TextGrid 保存后缀"/></label><p class="target-preview">目标：{{targetName}}</p><p v-if="suffix===''" class="overwrite-note">{{context.files.kind==='desktop'?'留空将覆盖 WAV 同名原始 TextGrid，保存时确认。':'网页将保存同名的新版本，原资源保留。'}}</p>
   <small>编辑后，切换文件前及每分钟自动保存到 _自动保存。TextGrid 与唇偏分别保存。</small><button :disabled="!hasLayers" @click="download('textgrid')">下载当前 TextGrid</button><button v-if="lip" @click="download('lip')">下载安全唇形 JSON</button>
+  <label>历史版本<select v-model="historyChoice" aria-label="标注历史版本" :disabled="busy||saving||!historyVersions.length"><option v-for="version in historyVersions" :key="version.id" :value="version.id">{{historyKinds[version.kind]}} · {{new Date(version.time).toLocaleString()}}</option></select></label><button :disabled="busy||saving||!historyChoice" @click="restoreVersion">恢复此版本</button><small>原始标注与最近 50 次保存保留在本机。切换录音前自动保存，恢复历史会另存为新的当前版本。</small>
   <hr/><h2>参考标注复用</h2><div class="actions"><button @click="refPicker?.click()">选择参考 TextGrid</button><button v-if="referenceName" @click="s.referenceTextGrid=null;referenceName=''">清除参考</button></div><input ref="refPicker" hidden type="file" accept=".TextGrid,.textgrid" @change="resource($event,'reference')"/><small>{{referenceName||'未选择参考文件'}}</small>
   <label>复用模式<select v-model="controls.spliceMode.value" aria-label="参考复用模式"><option value="outside">区间之外</option><option value="inside">区间之内</option><option value="before">起点之前</option><option value="after">起点之后</option></select></label>
   <label>起点（秒）<input v-time-precision="'s'" v-model="controls.spliceStart.value" aria-label="参考起点" type="number" step=".001"/></label><label>终点（秒）<input v-time-precision="'s'" v-model="controls.spliceEnd.value" aria-label="参考终点" type="number" step=".001" :disabled="['before','after'].includes(controls.spliceMode.value)"/></label>
-  <button :disabled="!source||busy" @click="action('splice')">复用参考标注</button><small>对所有同名层应用所选范围，可撤销。起点之后从起点延伸到文件末尾。</small>
+  <button :disabled="!source||busy" @click="action('splice')">复用参考标注</button><small>按原时间位置复用同名层在所选范围内的标注，跨界区间截取；参考未覆盖处保留当前标注。可撤销。</small>
   <hr/><h2>唇形对齐</h2><label>唇形记录<select :value="lipFile?.id??''" aria-label="唇形记录" :disabled="!source||busy||saving" @change="chooseLip(($event.target as HTMLSelectElement).value)"><option value="">不关联</option><option v-for="f in lipChoices" :key="f.id" :value="f.id">{{f.name}}</option></select></label>
   <template v-if="lip"><div class="actions"><label><input v-model="showOpen" type="checkbox"/>唇开</label><label><input v-model="showWidth" type="checkbox" :disabled="!lip.width.length"/>唇宽</label></div><label>共同时间偏移（ms）<input v-time-precision="'ms'" v-model.lazy.number="lipOffsetInput" @change="syncNumberInput($event,lipOffsetInput)" aria-label="唇形共同偏移毫秒" type="number" step="1"/></label><div class="actions"><button aria-label="唇形左移" @pointerdown="startRepeat($event.shiftKey?-10:-1)" @pointerup="stopRepeat" @pointerleave="stopRepeat" @pointercancel="stopRepeat" @keydown.enter.prevent="nudge(-1)">← 1 ms</button><button aria-label="唇形右移" @pointerdown="startRepeat($event.shiftKey?10:1)" @pointerup="stopRepeat" @pointerleave="stopRepeat" @pointercancel="stopRepeat" @keydown.enter.prevent="nudge(1)">1 ms →</button></div><button class="primary" :disabled="!lipDirty||saving||busy" @click="saveLip">保存唇偏{{lipDirty?' *':''}}</button><small>正值向更晚平移。按住连续微调，Shift 为 10 ms；Alt＋方向键同效。两条曲线只有一个偏移。</small></template>
   <p v-else class="hint">找到同名唇形记录时自动关联，也可明确选择。网页使用 .lip.json。</p>
@@ -344,7 +374,13 @@ useWebSettings(props.stateKey,{suffix,showOpen,showWidth,sidebar,settingsOpen,ph
 .plot-actions{margin-bottom:10px}
 .annotation-page{--wave-axis-width:max(64px,calc(var(--figure-size,14px) * 4.8))}
 .annotation-file-list button span{max-width:100%}
-.file-legend{display:flex;flex-wrap:wrap;gap:3px 10px;font-size:0.785714rem}.has-grid{color:var(--success)}.annotation-file-list button{flex:0 0 auto;min-height:36px;display:block;line-height:1.45}.annotation-file-list button span{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.annotation-file-list button.has-grid{color:var(--success);border-left:3px solid var(--success)}.annotation-file-list button.selected{box-shadow:inset 0 0 0 1px var(--accent)}
+.file-legend{display:flex;flex-wrap:wrap;gap:3px 10px;font-size:0.785714rem}.file-legend .has-grid{color:var(--accent)}.annotation-file-list button{flex:0 0 auto;min-height:36px;display:block;line-height:1.45;position:relative;--annotation-file-mark:var(--accent)}.annotation-file-list button span{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+/* File status must survive the shared button material, selection and border rules. */
+.annotation-page .annotation-file-list button.has-grid:not(.selected)>span{color:var(--annotation-file-mark)!important}
+.annotation-file-list button.has-grid::after{content:'';position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:2px;background:var(--annotation-file-mark);box-shadow:0 0 0 1px var(--panel);pointer-events:none}
+:global(html[data-button-style=all][data-button-material=solid] .annotation-file-list button.has-grid:not(.selected)),
+:global(html[data-button-style=all][data-button-material=solid][data-background-image=on] .annotation-file-list button.has-grid){--annotation-file-mark:var(--on-accent)}
+.annotation-file-list button.selected{box-shadow:inset 0 0 0 1px var(--accent)}
 .resource-controls label{display:flex;align-items:center;gap:5px;font-size:0.857143rem}.resource-controls .sequence-toggle{white-space:nowrap}.resource-controls input[type=checkbox]{width:16px;height:16px}.resource-controls small{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sequence-next select{max-width:160px}.resource-help{font-size:0.785714rem;color:var(--muted)}
 .new-layer-field{display:flex;flex-direction:column;gap:5px;margin:12px 0}.layer-prompt{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:8px 0;background:var(--teal-bg);padding:8px;border-radius:4px;font-size:0.857143rem}.selection-readout{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:0.857143rem;color:var(--muted);margin:4px 0 8px}.selection-readout>span:first-child{font-family:var(--font-mono)}
 .annotation-boundary{stroke:var(--teal);stroke-width:1;opacity:.45;vector-effect:non-scaling-stroke;pointer-events:none}.annotation-boundary.word{opacity:.9;stroke-width:1.2}.annotation-boundary.chosen{stroke:var(--danger);opacity:1;stroke-width:2}.annotation-volume{margin-left:auto}.annotation-volume input[type=range]{width:90px}.view-controls strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

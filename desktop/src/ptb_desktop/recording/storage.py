@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 import re
+import time
 import uuid
 from pathlib import Path
 from datetime import datetime, timezone
@@ -28,7 +29,15 @@ def atomic_json(path, value):
     if len(raw)>MAX_MANIFEST:raise ValueError('工程清单超过 32 MiB 安全预算')
     with tmp.open('xb') as handle:
         handle.write(raw);handle.flush();os.fsync(handle.fileno())
-    os.replace(tmp,path)
+    # Windows readers and virus scanners can briefly deny delete sharing while
+    # polling progress. Keep the old complete JSON until replacement succeeds.
+    for attempt in range(9):
+        try:
+            os.replace(tmp,path)
+            break
+        except PermissionError as exc:
+            if getattr(exc,'winerror',None) not in (5,32,33) or attempt==8:raise
+            time.sleep(min(.01*2**attempt,.2))
 
 
 def read_json(path):

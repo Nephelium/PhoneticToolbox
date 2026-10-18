@@ -6,6 +6,7 @@ import {waveformExportColor} from '../../design/waveform-color.ts';
 const ns='http://www.w3.org/2000/svg';
 // Detached print palette: never switch the live page's theme during export.
 const palette:Record<string,string>={'--text':'#182332','--muted':'#475569','--border':'#cbd5e1','--panel':'#ffffff','--selection':'#e9eff6','--accent':'#245ab5','--warning':'#946000','--teal':'#007a79','--danger':'#c93445','--violet':'#7649a8','--success':'#26713f'};
+Object.assign(palette,{'--m02-curve-1':'#3567a8','--m02-curve-2':'#b86b32','--m02-curve-3':'#26877f','--m02-curve-4':'#8965aa','--m02-curve-5':'#b65576','--m02-curve-6':'#73833e','--m02-curve-7':'#64748b','--m02-curve-8':'#357e96'});
 function node<K extends keyof SVGElementTagNameMap>(tag:K,attributes:Record<string,string|number>={},text?:string){
   const element=document.createElementNS(ns,tag);
   for(const [key,value] of Object.entries(attributes))element.setAttribute(key,String(value));
@@ -91,8 +92,7 @@ export async function wholeFigurePng(input:WholeFigure){
   }finally{canvas.width=canvas.height=1;}
 }
 
-export async function currentFigurePng(chart:SVGSVGElement){
-  const title=chart.closest('.parameter-figure')?.querySelector('h3')?.textContent??'参数图';
+export async function currentFigurePng(chart:SVGSVGElement,title=chart.closest('.parameter-figure')?.querySelector('h3')?.textContent??'参数图'){
   const {root,width,height}=withFigureTitle(printed(chart),title,parseFloat(getComputedStyle(chart).fontSize)||12);
   const text=new XMLSerializer().serializeToString(root),size=exportSize(width,height);
   const canvas=document.createElement('canvas');canvas.width=size.width;canvas.height=size.height;

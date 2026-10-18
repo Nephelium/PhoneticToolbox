@@ -27,13 +27,24 @@ def disposable_caches():
     root=user_data_root();removed=[];failures=[]
     # Never remove the WebEngine profile itself: IndexedDB and localStorage
     # hold drafts, experimental sessions and user settings.
-    browser=windows_workbench_storage()
-    for name in ('GPUCache','DawnGraphiteCache','DawnWebGPUCache','ShaderCache','GrShaderCache','Cache','Code Cache','http-cache'):
+    from .cache_location import portable_directory, update_directory
+    directory=portable_directory()
+    browser=directory if directory else windows_workbench_storage()
+    names=('browser-cache',) if directory else ('Cache','http-cache')
+    for name in names:
         try:
             target=plain(browser/name,browser)
             if target.is_dir():remove_owned(target,browser);removed.append(name)
         except (OSError,ValueError):failures.append(name)
-    updates=plain(root/'updates',root)
+    from .graphics_cache import NAMES, request_clear, cleanup_requested
+    try:
+        for name in NAMES:
+            if (windows_workbench_storage()/name).exists():request_clear(name)
+        graphics=cleanup_requested()
+        if not graphics['complete']:failures.append('graphics')
+    except (OSError,ValueError):failures.append('graphics')
+    updates=update_directory()
+    updates=plain(updates,directory if directory else root)
     summary=None
     if updates.is_dir():
         from .update_cache import clean_update_cache

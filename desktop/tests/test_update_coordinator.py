@@ -58,6 +58,25 @@ def test_clear_cache_waits_for_actual_close_and_cancellation_preserves_everythin
     assert coordinator.closed() and calls[-2:]==['results','runtime']
 
 
+def test_graphics_only_cleanup_waits_for_close_and_never_clears_results(app,tmp_path,monkeypatch):
+    from ptb_desktop import graphics_cache,legacy_cache,cache_location
+    monkeypatch.setenv('LOCALAPPDATA',str(tmp_path/'profile'))
+    monkeypatch.delenv(cache_location.ENVIRONMENT,raising=False)
+    directory=cache_location.windows_workbench_storage()/'GPUCache'
+    directory.mkdir(parents=True);(directory/'cache').write_bytes(b'graphics')
+    window,coordinator,calls,replies,_=fixture(app,tmp_path)
+    def forbidden(*args):raise AssertionError('Graphics-only cleanup must preserve research results')
+    window.service.request=forbidden
+    candidate=next(row for row in legacy_cache.inspect_candidates()['candidates'] if row['kind']=='graphics')
+    assert coordinator.clear_caches(graphics_key=candidate['id'])['started']
+    coordinator.reply(replies[-1][0],True,'');coordinator.cancel('cancel')
+    assert not coordinator.closed() and not (cache_location.user_data_root()/'graphics-cache-clear.json').exists()
+    coordinator.clear_caches(graphics_key=candidate['id']);coordinator.reply(replies[-1][0],True,'')
+    assert coordinator.closed() and (directory/'cache').exists()
+    assert graphics_cache.cleanup_requested()['complete']
+    assert not directory.exists()
+
+
 @pytest.mark.parametrize('allow',[True,False])
 def test_worker_queues_gui_guard_and_helper_waits_for_real_close(app,tmp_path,allow):
     window,coordinator,calls,replies,path=fixture(app,tmp_path)

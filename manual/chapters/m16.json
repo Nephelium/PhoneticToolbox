@@ -72,20 +72,7 @@
         "content": [
           {
             "type": "text",
-            "text": "工程用于继续编辑，WAV 用于分析或分享，任务模板用于复用清单。录音需要 "
-          },
-          {
-            "type": "text",
-            "text": "桌面应用",
-            "marks": [
-              {
-                "type": "bold"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "。"
+            "text": "桌面应用与网页版共用录音页，可以按任务录制、剪辑、处理和导出。工程用于继续编辑，WAV 用于后续分析，任务模板用于复用朗读清单。"
           }
         ]
       },
@@ -361,7 +348,7 @@
                   },
                   {
                     "type": "text",
-                    "text": " 选可写空目录；继续旧录音用 "
+                    "text": "。桌面端选择可写空目录，网页版使用当前临时项目；继续已有录音可用 "
                   },
                   {
                     "type": "text",
@@ -647,11 +634,47 @@
                   },
                   {
                     "type": "text",
-                    "text": " 选范围、版本和格式，导出到工程外目录；备份另留完整工程。"
+                    "text": "，选范围、版本和格式。桌面端导出到工程外目录，网页版点 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "生成下载包",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": " 保存 ZIP；继续编辑所需的完整工程另行备份。"
                   }
                 ]
               }
             ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": null,
+          "id": "m16-browser-device-check",
+          "caption": null,
+          "note": null,
+          "color": null,
+          "colorDark": null,
+          "backgroundColorDark": null,
+          "lineHeight": null,
+          "marginTop": null,
+          "marginBottom": null,
+          "indent": 0,
+          "backgroundColor": null
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "网页版首次检测或录音时，按浏览器提示允许麦克风访问。实际采样率、输入通道数和输出选择能力受系统、浏览器与声卡共同影响，正式采集前用实际设备试录并回听，多声道与 EGG 接线逐道核对。"
           }
         ]
       },
@@ -698,7 +721,7 @@
         "content": [
           {
             "type": "text",
-            "text": "准备可写空目录及工程外的导出位置，检查空间与供电。同一工程只开一个写入窗口。"
+            "text": "桌面端准备可写空目录及工程外的导出位置，检查空间与供电，同一工程只开一个写入窗口。网页版需允许麦克风权限，并在退出前将录音或工程备份下载到电脑。"
           }
         ]
       },
@@ -815,7 +838,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "，选可写空文件夹。取消不创建；已有工程请用 "
+                    "text": "，桌面端选择可写空文件夹，取消不会创建。网页版使用当前临时项目；导入已有桌面工程时，点 "
                   },
                   {
                     "type": "text",
@@ -828,7 +851,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "。"
+                    "text": " 并选择完整工程文件夹。"
                   }
                 ]
               }
@@ -856,13 +879,101 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "左栏出现工程名和本地录音工程已建立。接着准备任务或设备；未选输入时不能开始录音。"
+                    "text": "左栏显示工程名和保存提示。接着准备任务或设备，录音前核对当前任务与输入设备。"
                   }
                 ]
               }
             ]
           }
         ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": null,
+          "id": "m16-preparation-hint",
+          "caption": null,
+          "note": null,
+          "color": null,
+          "colorDark": null,
+          "backgroundColorDark": null,
+          "lineHeight": null,
+          "marginTop": null,
+          "marginBottom": null,
+          "indent": 0,
+          "backgroundColor": null
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "尚未建工程时点击 "
+          },
+          {
+            "type": "text",
+            "text": "自由录音",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "、"
+          },
+          {
+            "type": "text",
+            "text": "开始录音",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 或 "
+          },
+          {
+            "type": "text",
+            "text": "设备与录前检测",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，会打开录音前准备提示。点 "
+          },
+          {
+            "type": "text",
+            "text": "知道了",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 返回后先新建工程，再选择设备并检测。已有工程但未选输入时，录音和检测入口会提示先准备设备。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m16-figure-m16-preparation-required-20261018",
+          "assetId": "m16-preparation-required-current-20261018",
+          "caption": "尚未建立工程时，开始录音会提示先新建工程，再选择设备并完成录前检测。",
+          "alt": "录音前准备对话框，显示新建工程与设备检测的操作顺序",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
+        }
       },
       {
         "type": "image",
@@ -1269,7 +1380,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "选可写空目录；取消不创建。切换前尝试保存草稿。"
+                        "text": "桌面端选可写空目录；网页版使用当前临时项目。切换前尝试保存任务草稿。"
                       }
                     ]
                   }
@@ -1463,7 +1574,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "选完整工程目录；只允许一窗口写入，换工程清空噪声样本和剪贴板。"
+                        "text": "选择完整工程文件夹；网页版导入当前临时项目，源文件保留。换工程清空噪声样本和剪贴板。"
                       }
                     ]
                   }
@@ -2193,7 +2304,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "有录音且空闲时可用"
+                        "text": "有工程且空闲时可用"
                       }
                     ]
                   }
@@ -2239,7 +2350,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "打开 WAV 导出窗，已有工程保存另行保留。"
+                        "text": "打开 WAV 导出窗。当前任务尚未录音时也可选批量范围；当前录音或选区需先选一条录音。"
                       }
                     ]
                   }
@@ -4885,7 +4996,7 @@
                   },
                   {
                     "type": "text",
-                    "text": " 填写下表字段，点 "
+                    "text": " 填写下表字段，再点 "
                   },
                   {
                     "type": "text",
@@ -4898,7 +5009,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "，再点 "
+                    "text": " 返回朗读卡。可点 "
                   },
                   {
                     "type": "text",
@@ -4911,25 +5022,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "。"
-                  },
-                  {
-                    "type": "text",
-                    "text": "看到任务清单已存入本地工程后再录音。",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      },
-                      {
-                        "type": "textStyle",
-                        "attrs": {
-                          "color": "#3b2f00",
-                          "colorDark": "#fff0bb",
-                          "backgroundColor": "#fff1c2",
-                          "backgroundColorDark": "#514218"
-                        }
-                      }
-                    ]
+                    "text": " 主动保存，开始录音前也会自动保存清单。"
                   }
                 ]
               }
@@ -7885,7 +7978,7 @@
           },
           {
             "type": "text",
-            "text": "下载 CSV 示例",
+            "text": "下载 XLSX 示例",
             "marks": [
               {
                 "type": "bold"
@@ -7916,8 +8009,8 @@
         "attrs": {
           "id": "m16-figure-m16-import-detail-r4-light",
           "assetId": "m16-import-detail-r4-light-scaled-r20261007",
-          "caption": "导入任务前的表格说明：示例列、重复次数，以及 CSV 示例与选择文件入口。",
-          "alt": "导入录音任务说明对话框，展示示例表格和下载示例、选择文件按钮",
+          "caption": "导入任务前的表格说明：示例列、重复次数，以及下载 XLSX 示例和选择表格文件入口。",
+          "alt": "导入录音任务说明对话框，展示中文示例表格、下载 XLSX 示例与选择表格文件按钮",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -8173,7 +8266,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "下载 CSV 示例",
+                        "text": "下载 XLSX 示例",
                         "marks": [
                           {
                             "type": "bold"
@@ -8316,7 +8409,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "下载录音任务表格示例.csv。"
+                        "text": "下载录音任务表格示例.xlsx，含中文列名、两行示例和数值次数。"
                       }
                     ]
                   }
@@ -11085,7 +11178,56 @@
         "content": [
           {
             "type": "text",
-            "text": "表格首行列名，每行一任务，至少有名称或内容。CSV 用逗号，含逗号／换行的文字加双引号，文字内双引号写成两个；TSV 用制表符。编码须 UTF-8。"
+            "text": "先用 "
+          },
+          {
+            "type": "text",
+            "text": "下载 XLSX 示例",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 获取 "
+          },
+          {
+            "type": "text",
+            "text": "录音任务表格示例.xlsx",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，在 Excel 等表格软件中填写。首行为列名，每行一任务，至少有名称或内容。也可继续导入 UTF-8 CSV／TSV 或此前保存的 JSON 任务模板。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": null,
+          "id": "m16-task-text-formats",
+          "caption": null,
+          "note": null,
+          "color": null,
+          "colorDark": null,
+          "backgroundColorDark": null,
+          "lineHeight": null,
+          "marginTop": null,
+          "marginBottom": null,
+          "indent": 0,
+          "backgroundColor": null
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "使用 CSV 时以逗号分列，含逗号或换行的文字加双引号，文字内的双引号写成两个。TSV 以制表符分列，两种文本均使用 UTF-8 编码。下例可保存为 CSV，作为另一种导入方式。"
           }
         ]
       },
@@ -11132,7 +11274,7 @@
         "content": [
           {
             "type": "text",
-            "text": "上例生成 T001、T002_1、T002_2，文件名对应 example-001、example-002_1、example-002_2。每条手动开始和停止。"
+            "text": "下载的 XLSX 与上面的 CSV 文本采用相同示例数据，展开后生成 T001、T002_1、T002_2，文件名对应 example-001、example-002_1、example-002_2。每条任务手动开始和停止。"
           }
         ]
       },
@@ -11261,8 +11403,8 @@
         "attrs": {
           "id": "m16-figure-m16-import-preview",
           "assetId": "m16-import-preview-scaled-r20261007",
-          "caption": "示例：CSV 导入预览自动映射八列，第二行按次数展开，确认导入前可核对三条任务。",
-          "alt": "示例 CSV 列映射与三条展开任务，确认导入按钮可用",
+          "caption": "XLSX 示例的导入预览：中文列名自动映射，第二行按次数展开，确认导入前核对三条任务。",
+          "alt": "XLSX 示例的工作表、八列映射与三条展开任务，确认导入按钮可用",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -11607,8 +11749,8 @@
         "attrs": {
           "id": "m16-figure-m16-single-channel",
           "assetId": "m16-single-channel-scaled-r20261007",
-          "caption": "示例：选择只有一个输入的合成设备后自动回退单声道，输入和独立试听输出分别设置。",
-          "alt": "示例的单通道合成设备、一个物理输入角色、采样率和独立输出选择",
+          "caption": "选择单输入设备后回退单声道，输入和试听输出分别设置；下排显示播放音量、检测增益预览及输入电平。",
+          "alt": "单通道设备、物理输入角色、独立输出及横排音量与电平控件",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -13467,7 +13609,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "设备面板 / 线性比例"
+                        "text": "设备面板下排 / 线性比例"
                       }
                     ]
                   }
@@ -13661,7 +13803,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "设备面板 / dB"
+                        "text": "播放音量右侧 / dB"
                       }
                     ]
                   }
@@ -13855,7 +13997,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "设备面板 / dBFS"
+                        "text": "播放音量与增益预览右侧 / dBFS"
                       }
                     ]
                   }
@@ -14631,7 +14773,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "设备面板"
+                        "text": "设备面板下方，与停止检测并排"
                       }
                     ]
                   }
@@ -14825,7 +14967,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "设备面板 / 朗读卡"
+                        "text": "开始录前检测右侧；朗读卡也可停止"
                       }
                     ]
                   }
@@ -15040,7 +15182,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "，按正式音量发声，看电平和提醒。检测不会增加录音。"
+                    "text": "，按正式音量发声。各路输入电平位于播放音量、检测数字增益预览的右侧，可同时核对峰值、RMS 和提醒。检测不会增加录音。"
                   }
                 ]
               }
@@ -15094,8 +15236,8 @@
         "attrs": {
           "id": "m16-figure-m16-preflight",
           "assetId": "m16-preflight-scaled-r20261007",
-          "caption": "示例使用正弦信号演示双通道检测，第二道指定为 EGG 角色；检测不创建录音。",
-          "alt": "示例录前检测，两条合成通道电平和停止检测按钮，第二道仅演示 EGG 角色",
+          "caption": "录前检测中，各路电平位于播放音量与检测增益预览右侧，开始录前检测和停止检测按钮并排。示例第二道仅演示 EGG 角色。",
+          "alt": "双通道合成输入的录前检测，电平横排显示，开始和停止检测按钮并排",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -15132,7 +15274,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "点 "
+                    "text": "点开始按钮旁的 "
                   },
                   {
                     "type": "text",
@@ -15145,7 +15287,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "，等录前检测已停止。收起面板只隐藏控件。"
+                    "text": "，等录前检测已停止。收起面板只隐藏控件，检测仍需明确停止。"
                   }
                 ]
               }
@@ -15252,7 +15394,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "开始录音／重新录音",
+                    "text": "开始录音 / 重新录音",
                     "marks": [
                       {
                         "type": "bold"
@@ -15261,7 +15403,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "。草稿会先尝试保存，失败需先处理。"
+                    "text": "。若任务有未保存修改，会先自动保存；新录音仍归属开始时所选任务。保存失败时按提示处理，再开始录音。"
                   }
                 ]
               }
@@ -15366,7 +15508,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "。看到已存入本地工程，尚未导出后，新条目进入历史并显示原始版本；不完整录音先检查再决定重录。"
+                    "text": "。桌面端等已存入本地工程，尚未导出，网页版等已上传当前项目。新条目进入历史并显示原始版本；不完整录音先检查再决定重录。"
                   }
                 ]
               }
@@ -15919,7 +16061,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "先保存草稿并停止软件播放；重录追加条目。"
+                        "text": "先自动保存任务草稿并停止软件播放，保留所选任务；每次重录追加条目。"
                       }
                     ]
                   }
@@ -21617,7 +21759,7 @@
         "content": [
           {
             "type": "text",
-            "text": "波形默认第一道，其他道用 "
+            "text": "波形默认显示第一道，其他道用 "
           },
           {
             "type": "text",
@@ -21630,7 +21772,7 @@
           },
           {
             "type": "text",
-            "text": "。时间轴是秒，选区是帧；倍率只放大画面，截顶需核对原始电平。"
+            "text": " 展开；网页版未展开时显示所选试听声道。时间轴以秒显示，选区用整数帧。显示倍率只放大幅度，Ctrl＋滚轮调整可见时间范围，二者均不改变音频。"
           }
         ]
       },
@@ -21676,7 +21818,7 @@
         "content": [
           {
             "type": "text",
-            "text": "实时显示最近约 5 秒。长视窗可能漏短事件，选关键片段点 "
+            "text": "实时显示最近约 5 秒。长视窗可能漏短事件，可选关键片段点 "
           },
           {
             "type": "text",
@@ -21689,9 +21831,71 @@
           },
           {
             "type": "text",
-            "text": "。视窗改变可影响相对灰度，音频保持。"
+            "text": "，或把指针停在波形、语谱图的目标时间附近，按住 "
+          },
+          {
+            "type": "text",
+            "text": "Ctrl",
+            "marks": [
+              {
+                "type": "code"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 滚动滚轮，以指针位置为中心缩放时间轴。普通滚轮用于滚动页面，点 "
+          },
+          {
+            "type": "text",
+            "text": "整段总览",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 恢复完整时间范围。"
           }
         ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": null,
+          "id": "m16-zoom-view-note",
+          "caption": null,
+          "note": null,
+          "color": null,
+          "colorDark": null,
+          "backgroundColorDark": null,
+          "lineHeight": null,
+          "marginTop": null,
+          "marginBottom": null,
+          "indent": 0,
+          "backgroundColor": null
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "波形与语谱图共用时间视窗和选区。缩放不裁剪采样，视窗改变可能影响语谱图的相对灰度；查看同一细节时先核对起止时间。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m16-figure-m16-time-zoom-20261018",
+          "assetId": "m16-time-zoom-current-20261018",
+          "caption": "把指针停在目标时间附近，按住Ctrl滚动滚轮，波形与语谱图显示同一缩放时间窗。",
+          "alt": "Ctrl滚轮缩放后的波形、语谱图和秒数时间轴",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
+        }
       },
       {
         "type": "paragraph",
@@ -24165,7 +24369,7 @@
         "content": [
           {
             "type": "text",
-            "text": "降噪可能改变气声、擦音及 HNR／CPP，强度大未必自然。科研保留原始 WAV 和处理记录，噪声提示需人工试听确认。"
+            "text": "功率谱减法适合较稳定的背景底噪。噪声随时间明显变化，或样本中混入语音时，先重新选择有代表性的背景片段。处理可能改变气声、擦音及 HNR／CPP，强度增大还可能出现失真或颗粒感；科研分析保留原始 WAV、噪声来源与处理设置，并试听语音和差分。"
           }
         ]
       },
@@ -24300,7 +24504,7 @@
         "content": [
           {
             "type": "text",
-            "text": "工程目录内：project.json 是入口，takes/ 存原始 .f32 块，derived/ 存处理块，manifests/ 存修订，recovery/ 存恢复记录，.m16-writer.lock 防止并写。块文件不能改后缀当 WAV。"
+            "text": "桌面工程目录内，project.json 是入口，takes/ 存原始 .f32 块，derived/ 存处理块，manifests/ 存修订，recovery/ 存恢复记录，.m16-writer.lock 防止并写。块文件不能改后缀当 WAV。"
           }
         ]
       },
@@ -24323,7 +24527,7 @@
         "content": [
           {
             "type": "text",
-            "text": "停止采集并等保存、后台完成，再备份完整工程。用 "
+            "text": "桌面端停止采集并等保存、后台完成，再备份完整工程。用 "
           },
           {
             "type": "text",
@@ -24336,7 +24540,7 @@
           },
           {
             "type": "text",
-            "text": " 续编；模板和 WAV 不含完整编辑历史。录音与历史不会自动清理，设置中的 "
+            "text": " 续编；任务模板和 WAV 不含完整编辑历史。录音工程及正式导出由用户保留，设置中的 "
           },
           {
             "type": "text",
@@ -24349,7 +24553,30 @@
           },
           {
             "type": "text",
-            "text": " 也保留工程和正式导出。请勿单独删音频块、清单或锁。"
+            "text": " 也会保留它们。请勿单独删除工程中的音频块、清单或锁文件。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": null,
+          "id": "m16-browser-project-storage",
+          "caption": null,
+          "note": null,
+          "color": null,
+          "colorDark": null,
+          "backgroundColorDark": null,
+          "lineHeight": null,
+          "marginTop": null,
+          "marginBottom": null,
+          "indent": 0,
+          "backgroundColor": null
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "网页版的任务、录音、版本和恢复片段保存在当前浏览器的本机文件库，按账号与项目分别管理。服务器处理按需准备所引用的材料，服务器临时副本到期清理时，已确认保存的本机内容仍可保留。需要在其他设备继续编辑时，用备份工程下载完整工程 ZIP，解压后可由桌面端打开；仅下载 WAV 或任务模板无法保留完整历史。本机保存失败时先按提示重试，或下载本页采样后再关闭。"
           }
         ]
       },
@@ -24769,7 +24996,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "当前／选区／任务选用／全部当前／全部历史。"
+                        "text": "当前录音／当前选区／未跳过任务的选用录音／全部录音的所选版本／全部录音的全部历史版本。"
                       }
                     ]
                   }
@@ -24963,7 +25190,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "可选原始；全部历史忽略此项。"
+                        "text": "可选原始采样版本；全部历史包含原始及所有编辑、处理版本，此时下拉禁用。"
                       }
                     ]
                   }
@@ -25402,7 +25629,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "选择目录并导出",
+                        "text": "选择目录并导出 / 生成下载包",
                         "marks": [
                           {
                             "type": "bold"
@@ -25499,7 +25726,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "等待目录"
+                        "text": "范围有效且空闲时可用"
                       }
                     ]
                   }
@@ -25545,7 +25772,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "工程外目录另建录音导出-*；空选区禁用选区范围。"
+                        "text": "桌面端在工程外目录另建结果文件夹；网页版下载 ZIP。当前录音／选区范围需选条目，选区空或越界时按提示重选。"
                       }
                     ]
                   }
@@ -25844,7 +26071,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "：指定帧范围。选原始版本时使用原始帧轴，剪辑后需重新核对位置。"
+                    "text": "：导出所选版本的指定整数帧范围。选择原始采样版本时使用原始帧轴，剪辑后需重新核对位置。空选区或超出所选版本长度的范围会被拒绝，调整选区或版本后重试。"
                   }
                 ]
               }
@@ -25909,7 +26136,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "全部录音的当前版本",
+                    "text": "全部录音的所选版本",
                     "marks": [
                       {
                         "type": "bold"
@@ -25918,7 +26145,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "：包含自由、重录及移出任务的条目；版本可统一改为原始。"
+                    "text": "：包含自由录音、重录及移出任务的条目，每条统一导出当前编辑／处理版本或原始采样版本。"
                   }
                 ]
               }
@@ -25955,7 +26182,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "：逐条导出全部版本，忽略原始／当前下拉。"
+                    "text": "：逐条导出原始及所有编辑、处理版本，此时版本下拉不可用。"
                   }
                 ]
               }
@@ -26006,7 +26233,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "，核对启用、跳过和选用，再选条目、版本及选区。"
+                    "text": "，核对启用、跳过和选用。导出当前录音或当前选区时，先在历史选择条目；当前任务尚无录音时，仍可打开导出窗，选择后三种批量范围。"
                   }
                 ]
               }
@@ -26060,8 +26287,8 @@
         "attrs": {
           "id": "m16-figure-m16-export-options",
           "assetId": "m16-export-options-scaled-r20261007",
-          "caption": "示例：导出对话框选择未跳过任务的选用录音与 24-bit PCM，缺录任务不会生成空 WAV，导出另建结果目录。",
-          "alt": "示例 WAV 导出范围、当前处理版本、24-bit PCM 格式和缺录统计",
+          "caption": "导出范围与版本分别选择。当前录音、选区和批量所选版本可选当前编辑／处理版本或原始采样版本，并核对任务统计和 WAV 格式。",
+          "alt": "WAV 导出设置，显示五种范围、原始或当前版本选择和任务统计",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -26073,10 +26300,23 @@
         "attrs": {
           "id": "m16-export-options-focused-detail-figure",
           "assetId": "m16-export-options-focused-detail-scaled-r20261007",
-          "caption": "先核对导出范围、录音版本和 WAV 格式，再选择保存目录。",
-          "alt": "先核对导出范围、录音版本和 WAV 格式，再选择保存目录。",
+          "caption": "导出设置局部：核对导出范围、版本和 WAV 格式。全部历史范围会包含原始及所有编辑、处理版本，并禁用单一版本选择。",
+          "alt": "导出范围、版本和 WAV 格式控件局部，说明全部历史与版本选择的关系",
           "width": "70%",
           "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m16-figure-m16-export-history-20261018",
+          "assetId": "m16-export-history-current-20261018",
+          "caption": "选择全部录音的全部历史版本时，单一版本下拉不可用，导出包含原始及所有编辑、处理版本。",
+          "alt": "全部历史版本导出对话框，原始或当前版本下拉已禁用",
+          "width": "100%",
+          "align": "center",
+          "crop": null,
+          "title": ""
         }
       },
       {
@@ -26109,7 +26349,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "点 "
+                    "text": "桌面端点 "
                   },
                   {
                     "type": "text",
@@ -26122,7 +26362,20 @@
                   },
                   {
                     "type": "text",
-                    "text": "，选工程之外的位置。工程及其子目录会拒绝；进度出现后等完成，取消也需等确认。"
+                    "text": "，选择工程之外的位置，工程及其子目录会被拒绝。网页版点 "
+                  },
+                  {
+                    "type": "text",
+                    "text": "生成下载包",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "。进度出现后等完成，取消也需等确认。"
                   }
                 ]
               }
@@ -26150,20 +26403,20 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "按左栏目录名，到所选位置的 "
+                    "text": "桌面端按左栏目录名，到所选位置的 "
                   },
                   {
                     "type": "text",
-                    "text": "录音导出-* 子文件夹",
+                    "text": "录音导出-*",
                     "marks": [
                       {
-                        "type": "bold"
+                        "type": "code"
                       }
                     ]
                   },
                   {
                     "type": "text",
-                    "text": " 找 WAV 和清单。"
+                    "text": " 子文件夹查找 WAV 和清单。网页版保存下载的 ZIP，解压后查找 WAV、JSON／CSV 清单。"
                   }
                 ]
               }
@@ -26277,27 +26530,7 @@
         "content": [
           {
             "type": "text",
-            "text": "每次另建子目录，缺录、停用、跳过只写清单。失败／取消保留成功项；"
-          },
-          {
-            "type": "text",
-            "text": ".wav.partial 未完成，不作交付。",
-            "marks": [
-              {
-                "type": "bold"
-              },
-              {
-                "type": "textStyle",
-                "attrs": {
-                  "color": "#b42318",
-                  "colorDark": "#ffb4ab"
-                }
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "CSV 可能加单引号，精确文字看 JSON。"
+            "text": "每次桌面导出另建子目录。任务选用范围内，缺录、停用或跳过任务只记在清单中，不生成空 WAV。失败或取消后核对已完成项目，.wav.partial 是未完成文件。CSV 可能为文字加单引号，精确文字看 JSON。"
           }
         ]
       },
@@ -26744,16 +26977,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "导出失败",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "：查工程外目录、空间和 PCM 超幅，按逐项错误重导，别交付 partial 文件。"
+                    "text": "导出失败：当前录音和选区范围先选历史条目，越界选区重新选择范围或版本。桌面端检查工程外目录与空间，网页版检查下载与项目额度；PCM 超幅时降低增益或改 FLOAT，逐项核对清单后重导。"
                   }
                 ]
               }
@@ -27258,7 +27482,7 @@
         "content": [
           {
             "type": "text",
-            "text": "采集／试听用 sounddevice／PortAudio，Windows 显示启用且格式检查通过的 WASAPI 设备。任务与工程由本项目实现。"
+            "text": "桌面采集与试听使用 sounddevice／PortAudio，Windows 列出启用且格式检查通过的 WASAPI 设备。网页版由浏览器申请麦克风权限并采集，实际通道和采样率受设备与浏览器影响。"
           }
         ]
       },
@@ -27374,7 +27598,66 @@
         "content": [
           {
             "type": "text",
-            "text": "降噪用噪声功率谱减法，Hann 1024 帧、步长 256；数字增益缩放所选音频声道。均需主动应用并保存新版本。"
+            "text": "降噪先对所选背景噪声片段分帧，计算各频点的平均功率谱，作为噪声估计。处理录音时使用周期 Hann 窗，窗长 1024 帧、步长 256 帧；在 48000 Hz 下分别约为 21.3 ms 和 5.3 ms。此处的窗长与步长独立于语谱图显示参数。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": null,
+          "id": "m16-spectral-subtraction-gain",
+          "caption": null,
+          "note": null,
+          "color": null,
+          "colorDark": null,
+          "backgroundColorDark": null,
+          "lineHeight": null,
+          "marginTop": null,
+          "marginBottom": null,
+          "indent": 0,
+          "backgroundColor": null
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "每个时频点的功率减去降噪强度乘以噪声均值功率，非负剩余功率与原功率之比开平方后得到幅度增益。"
+          },
+          {
+            "type": "text",
+            "text": "降噪强度",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " 为 0.1–2.0，默认 1.0。幅度增益下限为 0.15，再沿频率方向用相邻 3 个频点平滑；将增益施加到原复数频谱，保留原相位并重建音频。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": null,
+          "id": "m16-processing-version-preservation",
+          "caption": null,
+          "note": null,
+          "color": null,
+          "colorDark": null,
+          "backgroundColorDark": null,
+          "lineHeight": null,
+          "marginTop": null,
+          "marginBottom": null,
+          "indent": 0,
+          "backgroundColor": null
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "谱减和数字增益只处理勾选的音频角色声道。原始录音、EGG、其他角色及未勾选声道保留，结果保存为新版本，可与原始或直接来源分别试听。"
           }
         ]
       },
@@ -27457,7 +27740,7 @@
         "content": [
           {
             "type": "text",
-            "text": "正式采集前完成录前检测，并按计划时长试录。"
+            "text": "正式采集前完成录前检测，并按计划时长试录。Windows、macOS 与不同浏览器的设备行为需分别检查，通道数选项不能代替实体声卡与 EGG 的逐道实测。"
           }
         ]
       },

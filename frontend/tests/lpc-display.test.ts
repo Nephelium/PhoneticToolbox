@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {axisLimits} from '../src/modules/lpc-spectrum/display.ts';
+import {axisLimits,referenceTrace} from '../src/modules/lpc-spectrum/display.ts';
 import {spectrumSvg} from '../src/modules/lpc-spectrum/export-scene.ts';
 import {sameAnalysis,type LpcResult} from '../src/modules/lpc-spectrum/state.ts';
 
@@ -23,4 +23,15 @@ test('M04 R2 export keeps full frequency range, selected bounds, IPA label and i
  assert.equal(fixed.width,768);assert.equal(fixed.height,432);
  for(const s of [fixed.text,dynamic.text]){assert(s.includes('8000'));assert(s.includes('ɑ̃&lt;&amp;'));assert(s.includes('stroke="black"'));assert(s.includes('fill="white"'));assert(s.includes('PTB-Doulos'));}
  assert(fixed.text.includes('y-axis -5 to 35 dB'));assert(dynamic.text.includes('y-axis -17 to 56 dB'));assert.notEqual(fixed.text,dynamic.text);assert.equal(JSON.stringify(r),before);
+});
+
+test('M04 FFT explicitly aligns peaks within the full task frequency range and exports the displayed overlay',()=>{
+ const r=fixture();r.reference_spectrum={frequencies_hz:[0,2000,8000,9000],magnitude_db:[-60,-20,-40,100]};
+ const before=JSON.stringify(r),fft=referenceTrace(r)!;
+ assert.equal(fft.offset_db,71);assert.deepEqual(fft.magnitude_db,[11,51,31,171]);
+ const plain=spectrumSvg(r,[-5,35]),overlay=spectrumSvg(r,[-5,35],true);
+ assert(!plain.text.includes('stroke="#888"'));assert(overlay.text.includes('stroke="#888"'));assert(overlay.text.includes('峰值对齐'));
+ assert.equal(JSON.stringify(r),before);assert.equal(referenceTrace({...r,reference_spectrum:undefined}),undefined);
+ assert(sameAnalysis(r,{...r.config,analysis_channel:null},'audio','grid'));
+ assert(!sameAnalysis(r,{...r.config,analysis_channel:0},'audio','grid'));
 });

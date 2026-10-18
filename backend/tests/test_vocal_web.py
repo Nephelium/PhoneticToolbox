@@ -11,7 +11,7 @@ from ptb_worker.vocal_sessions import VocalSessions,VocalError
 from account_double import MemoryAccountStore
 
 ROOT=Path(__file__).resolve().parents[2]
-RESOURCES=ROOT/'output/validation/web-m10/native'
+RESOURCES=ROOT/'resources/vocal_tract/native'
 ORIGIN='https://vocal.test'
 
 
@@ -90,7 +90,9 @@ def test_web_bounded_audition_pose_lock_and_five_second_limit(service):
     assert call('animation/prepare',{'frames':frames})['duration']==5
     frames[-1]['duration']=1.26
     with pytest.raises(VocalError,match='最多 5 秒'):call('animation/prepare',{'frames':frames})
-    with pytest.raises(VocalError,match='最多 5 秒'):call('video/begin',dict(width=1280,height=720,fps=30,duration=5.01))
+    video=call('video/begin',dict(width=1280,height=720,fps=30,duration=60))
+    assert call('video/cancel',{'id':video['id']})['cancelled']
+    with pytest.raises(VocalError,match='最多 60 秒'):call('video/begin',dict(width=1280,height=720,fps=30,duration=60.01))
 
 
 def test_http_account_project_csrf_origin_and_disabled_service():

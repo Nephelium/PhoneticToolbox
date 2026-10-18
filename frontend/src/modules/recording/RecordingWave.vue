@@ -3,7 +3,7 @@ import {computed,ref,watch,nextTick,onMounted,onBeforeUnmount} from 'vue';
 import type {Preview,Role} from './types.ts';
 import {channelName} from './state.ts';
 const props=defineProps<{preview:Preview|null;selection:[number,number];roles:Role[];spectrum:boolean;disabled:boolean;scale:number;channel?:number;allChannels?:boolean;browser?:boolean}>();
-const emit=defineEmits<{selection:[value:[number,number]];focus:[value:boolean]}>();
+const emit=defineEmits<{selection:[value:[number,number]];focus:[value:boolean];zoom:[ratio:number,delta:number]}>();
 const host=ref<HTMLElement>(),canvas=ref<HTMLCanvasElement>();let anchor:number|null=null,observer:ResizeObserver|undefined,drawFrame=0;
 const wave=computed(()=>props.allChannels?props.preview?.wave??[]:(props.preview?.wave??[]).slice(props.browser?(props.channel??0):0,props.browser?(props.channel??0)+1:1)),start=computed(()=>props.preview?.start_frame??0),length=computed(()=>props.preview?.window_frames??0),rate=computed(()=>props.preview?.sample_rate??48000);
 function points(bins:number[][]){if(!bins.length)return '';return bins.flatMap((pair,i)=>{const x=bins.length===1?500:i/(bins.length-1)*1000;return [`${x},${50-Math.max(-1,Math.min(1,pair[0]*props.scale))*43}`,`${x},${50-Math.max(-1,Math.min(1,pair[1]*props.scale))*43}`];}).join(' ');}
@@ -12,6 +12,7 @@ function frame(event:PointerEvent){const box=host.value!.querySelector('.m16-wav
 function down(event:PointerEvent){if(props.disabled||!length.value||event.button!==0)return;host.value?.focus();anchor=frame(event);(event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);emit('selection',[anchor,anchor]);}
 function move(event:PointerEvent){if(anchor===null)return;const at=frame(event);emit('selection',[Math.min(anchor,at),Math.max(anchor,at)]);}
 function up(){anchor=null;}
+function wheel(event:WheelEvent){if(!event.ctrlKey||props.disabled||!length.value||!event.deltaY)return;event.preventDefault();event.stopPropagation();const box=host.value!.querySelector('.m16-wave-lanes')!.getBoundingClientRect();emit('zoom',Math.max(0,Math.min(1,(event.clientX-box.left)/box.width)),event.deltaY);}
 const selectionStyle=computed(()=>{const a=Math.max(0,Math.min(length.value,props.selection[0]-start.value)),b=Math.max(a,Math.min(length.value,props.selection[1]-start.value));return {left:`${a/Math.max(1,length.value)*100}%`,width:`${(b-a)/Math.max(1,length.value)*100}%`};});
 const maxFrequency=computed(()=>Math.min(5000,rate.value/2));
 const spectrumStart=computed(()=>props.preview?.spectrum_start_frame??start.value),spectrumLength=computed(()=>props.preview?.spectrum_window_frames??length.value);
@@ -38,8 +39,8 @@ function draw(){
 watch(()=>[props.preview,props.spectrum],()=>nextTick(draw),{deep:false});onMounted(()=>{observer=new ResizeObserver(entries=>{if(entries[0].contentRect.width<=0||entries[0].contentRect.height<=0)return;cancelAnimationFrame(drawFrame);drawFrame=requestAnimationFrame(draw);});if(host.value)observer.observe(host.value);draw();});onBeforeUnmount(()=>{observer?.disconnect();cancelAnimationFrame(drawFrame);});
 </script>
 <template>
- <div ref="host" class="m16-wave" :class="{'has-spectrum':spectrum}" tabindex="0" role="group" aria-label="录音波形选区编辑" @focus="emit('focus',true)" @blur="emit('focus',false)">
-  <div class="m16-wave-lanes" data-background-surface title="拖动选择时间范围，各声道选区同步" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="up">
+ <div ref="host" class="m16-wave" :class="{'has-spectrum':spectrum}" tabindex="0" role="group" aria-label="录音波形选区编辑" @focus="emit('focus',true)" @blur="emit('focus',false)" @wheel="wheel">
+  <div class="m16-wave-lanes" data-background-surface title="拖动选择时间范围，Ctrl＋滚轮缩放时间轴，各声道同步" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="up">
    <div v-if="!wave.length" class="empty-wave">新建工程，选择设备后即可自由录音<br><small>{{browser?'停止后上传当前项目，空格控制试听':'原始采样保留在本地工程，空格只控制试听'}}</small></div>
    <div v-for="(bins,index) in wave" :key="index" class="wave-lane">
     <span class="lane-label">{{channelName(browser&&!allChannels?(channel??0):index,roles)}}</span>

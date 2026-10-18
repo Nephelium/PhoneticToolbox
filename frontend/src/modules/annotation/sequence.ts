@@ -42,10 +42,17 @@ function insertEmpty(intervals:Interval[],start:number,end:number,label:string):
  return [...kept,{xmin:start,xmax:end,text:label}].sort((a,b)=>a.xmin-b.xmin);
 }
 // Ordinary editing also works after loading an existing grid, without a word list.
+function editingTime(grid:{xmin:number;xmax:number},rawTime:number,audioDuration?:number):number {
+ if(!Number.isFinite(rawTime)||rawTime<grid.xmin-1e-6||rawTime>grid.xmax+1e-6)throw Error('点击时间超出录音范围。');
+ if(rawTime===audioDuration&&Math.abs(rawTime-grid.xmax)<=1e-6)return grid.xmax;
+ if(rawTime<=grid.xmin)return grid.xmin;
+ if(rawTime>=grid.xmax)return grid.xmax;
+ return Math.max(grid.xmin,Math.min(grid.xmax,Number(rawTime.toFixed(6))));
+}
 export function manualDoubleClick(editor:Editor,rawTime:number):string {
  const s=editor.state,grid=s.textgrid,words=editor.wordTier(),phones=editor.phoneTier();
  if(!grid||!words)throw Error('请先选择或创建音节层。');
- const time=Number(rawTime.toFixed(6));if(!Number.isFinite(time)||time<grid.xmin||time>grid.xmax)throw Error('点击时间超出录音范围。');
+ const time=editingTime(grid,rawTime,s.audioBuffer?.duration);
  if(s.sequenceStart===null){
   if(time>=grid.xmax||words.intervals.some(w=>w.text.trim()&&w.xmin<=time&&time<w.xmax))throw Error('请在空白音节区双击确认新标注起点。');
   s.sequenceStart=time;s.selected=null;s.selectedIndices=[];s.selectedBoundary=null;
@@ -60,8 +67,7 @@ export function manualDoubleClick(editor:Editor,rawTime:number):string {
 export function sequenceDoubleClick(editor:Editor,rawTime:number,continuePrevious=false,splitMode:PhoneSplitMode='cursor'):string{
  const s=editor.state,grid=s.textgrid,words=editor.wordTier(),phones=editor.phoneTier();
  if(!grid||!words||!phones)throw Error('需要覆盖录音全时域的音节层和音素层，请检查层名。');
- if(!Number.isFinite(rawTime)||rawTime<grid.xmin||rawTime>grid.xmax+1e-6)throw Error('点击时间超出录音范围。');
- const time=Math.min(grid.xmax,Number(rawTime.toFixed(6)));
+ const time=editingTime(grid,rawTime,s.audioBuffer?.duration);
  // An internal click edits an existing syllable and never consumes the list.
  const word=words.intervals.find(i=>i.text.trim()&&time>i.xmin&&time<i.xmax);
  if(!continuePrevious&&s.sequenceStart===null&&word){

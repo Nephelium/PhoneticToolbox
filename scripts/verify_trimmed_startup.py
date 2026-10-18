@@ -20,6 +20,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--before', type=Path, required=True)
     parser.add_argument('--after', type=Path, required=True)
+    parser.add_argument('--expect-portable-cache-selection', action='store_true',
+                        help='Verify the old implicit cache is retained when a new explicit cache is selected')
     args = parser.parse_args()
     from source_snapshot import identity
     recipe = dict(command=sys.argv, before=identity(args.before), after=identity(args.after),
@@ -55,7 +57,19 @@ def main():
         for row in warm['rows']:
             if set(row['persistentCache']['reused']) != {'science', 'host', 'apps'}:
                 raise RuntimeError('Warm launch did not reuse all verified components')
-        if 'host' not in cross['rows'][0]['persistentCache']['reused']:
+        previous = next(r['result'] for r in rows if r['variant'] == 'before' and r['iteration'] == 3)
+        current = cross['rows'][0]
+        if args.expect_portable_cache_selection:
+            old_root, new_root = Path(previous['cacheDirectory']), Path(current['cacheDirectory'])
+            profile = scratch / 'before-3/run-1/profile'
+            if old_root != profile / 'PhoneticToolbox/v3/startup-cache' or new_root != profile / 'PhoneticToolbox-cache/startup-cache':
+                raise RuntimeError('Unexpected portable cache transition')
+            if json.loads((old_root / 'last-launch.json').read_text('utf8')) != previous['persistentCache']:
+                raise RuntimeError('Legacy cache was modified by the new application')
+            if current['persistentCache']['reused']:
+                raise RuntimeError('New empty selected directory unexpectedly reused legacy content')
+            cross['scope'] = 'Old implicit cache retained; explicit new cache prepared. No automatic cross-directory reuse; same-directory update reuse is checked by the final-package handoff gates.'
+        elif 'host' not in current['persistentCache']['reused']:
             raise RuntimeError('Cross-build launch did not reuse unchanged host bytes')
         medians = {v: statistics.median(r['result']['readyMs'] for r in rows if r['variant'] == v) for v in ('before', 'after')}
         threshold = max(1000, medians['before'] * .05)

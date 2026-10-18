@@ -7,6 +7,7 @@ from pathlib import Path
 import shutil
 import socket
 import subprocess
+import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -32,7 +33,10 @@ def main():
     shutil.copyfile(source / executable.name, executable)
     profile, temp = output / 'profile', output / 'temp'
     profile.mkdir(); temp.mkdir()
-    updates = profile / 'PhoneticToolbox/v3/updates'; updates.mkdir(parents=True)
+    sys.path.insert(0,str(ROOT/'scripts'))
+    from portable_cache_qa import seed_portable_profile
+    seed_portable_profile(profile)
+    updates = profile / 'PhoneticToolbox/v3/updates'; updates.mkdir(parents=True,exist_ok=True)
     (updates / 'state.json').write_text('{"autoCheck":false}', 'utf8')
     marker = profile / 'PhoneticToolbox/v3/project-do-not-remove.json'
     marker.write_text('{"fixture":"owned direct launch project"}', 'utf8')

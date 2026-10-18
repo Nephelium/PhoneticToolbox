@@ -1,9 +1,18 @@
 <script setup lang="ts">
 import {onMounted,ref} from 'vue';
-import {localStoragePort,type StorageStatus} from '../platform/storage.ts';
+import {localStoragePort,type StorageStatus,type CacheLocation,type CacheCandidate} from '../platform/storage.ts';
 const state=ref<StorageStatus>(),enabled=ref(true),days=ref('3'),exportedDays=ref('1');
 const busy=ref(false),message=ref(''),error=ref('');
 const confirmAll=ref(false);
+const location=ref<CacheLocation>(),locationError=ref('');
+const candidates=ref<CacheCandidate[]>([]),scanning=ref(false),scanDone=ref(false),scanError=ref(''),candidateMessage=ref('');
+const pendingCandidate=ref(''),checkedCandidate=ref(false);
+async function loadLocation(){const read=localStoragePort().cacheLocation;if(!read)return;try{location.value=await read();locationError.value='';}catch(e){locationError.value=e instanceof Error?e.message:'读取缓存位置失败。';}}
+async function openCache(legacy=false){try{const open=localStoragePort().openCacheDirectory;if(!open)return;await open(legacy);locationError.value='';}catch(e){locationError.value=e instanceof Error?e.message:'缓存目录未能打开，请复制路径后打开。';}}
+async function scanCandidates(){const scan=localStoragePort().cacheCandidates;if(!scan)return;scanning.value=true;scanError.value='';try{candidates.value=(await scan()).candidates;scanDone.value=true;}catch(e){scanError.value=e instanceof Error?e.message:'旧缓存检查未完成，请稍后重试。';}finally{scanning.value=false;}}
+async function openCandidate(id:string){try{await localStoragePort().openCacheCandidate?.(id);scanError.value='';}catch(e){scanError.value=e instanceof Error?e.message:'目录未能打开，请复制路径后核对。';}}
+function askClean(id:string){pendingCandidate.value=id;checkedCandidate.value=false;candidateMessage.value='';}
+async function cleanCandidate(id:string){if(pendingCandidate.value!==id||!checkedCandidate.value)return;const port=localStoragePort(),item=candidates.value.find(item=>item.id===id);busy.value=true;scanError.value='';try{if(item?.clean_on_exit){const answer=await port.cleanGraphicsCandidate?.(id);candidateMessage.value=answer?.started?'正在检查未保存内容，安全退出后清理所选图形缓存。其他窗口仍在使用时，等最后一个窗口退出后再清理。':'退出请求未开始，请稍后重试。';}else{if(!port.cleanCacheCandidate)return;candidateMessage.value=(await port.cleanCacheCandidate(id)).message;pendingCandidate.value='';checkedCandidate.value=false;await scanCandidates();}}catch(e){scanError.value=e instanceof Error?e.message:'缓存清理未完成，原文件保留。';}finally{busy.value=false;}}
 async function clearAll(){busy.value=true;error.value='';message.value='';try{const answer=await localStoragePort().clearAll();confirmAll.value=false;message.value=answer.started?'正在检查未保存内容，安全退出后清除缓存。其他窗口仍打开时，运行文件会等最后一个窗口退出后清理。':'退出请求未开始，请稍后重试。';}catch(e){error.value=e instanceof Error?e.message:'清理未开始，请稍后重试。';}finally{busy.value=false;}}
 function size(bytes:number){return bytes>=1024**3?`${(bytes/1024**3).toFixed(2)} GB`:`${(bytes/1024**2).toFixed(1)} MB`;}
 function assign(value:StorageStatus){state.value=value;enabled.value=value.enabled;days.value=String(value.days);exportedDays.value=String(value.exported_cache_days);}
@@ -19,11 +28,24 @@ async function clean(){busy.value=true;error.value='';message.value='';
   try{const answer=await localStoragePort().clean();assign(await localStoragePort().status());message.value=answer.skipped?'自动清理已关闭，文件均保留。':`本次清理 ${answer.count} 个缓存文件，释放 ${size(answer.bytes)}。${answer.protected_count?`另有 ${answer.protected_count} 个文件仍被任务使用，已保留。`:''}${answer.failed_count?`另有 ${answer.failed_count} 个文件暂时无法清理，已保留，可稍后重试。`:''}`;}
   catch(e){error.value=e instanceof Error?e.message:'清理失败，未确认可清理的文件保留。';}finally{busy.value=false;}
 }
-onMounted(load);
+onMounted(()=>{void load();void loadLocation();void scanCandidates();});
 </script>
 <template><section class="storage-settings" aria-labelledby="storage-title">
   <h2 id="storage-title">本机存储与自动清理</h2>
   <p>程序更新后会继续读取原有设置。录音工程、实验项目、TextGrid 标注和正式导出文件由你管理。</p>
+  <div v-if="location" class="cache-location"><h3>缓存目录</h3>
+    <div class="cache-path"><code>{{location.path}}</code><button :disabled="busy" @click="openCache()">打开缓存目录</button></div>
+    <p v-if="location.custom" class="hint">此目录存放程序运行文件、更新下载及普通浏览器缓存。替换 EXE 更新后继续使用；停止使用时，关闭所有窗口后可将它与 EXE 一起删除。设置、草稿和研究资料保留在原位置；少量图形缓存的实际位置在下方列出。</p>
+  </div><p v-if="locationError" class="error-banner" role="alert">{{locationError}}</p>
+  <div v-if="location" class="old-caches"><div class="old-caches-title"><h3>旧缓存与图形缓存</h3><button :disabled="busy||scanning" @click="scanCandidates">{{scanning?'正在检查…':'重新检查缓存位置'}}</button></div>
+    <p class="hint">检查应用已知的历史位置，并列出单独存放的图形缓存。标为旧缓存的目录可能留有之前版本未清理的文件，请打开目录亲自确认后再清理。设置、草稿及研究资料目录不在清理范围内。</p>
+    <p v-if="scanDone&&!candidates.length&&!scanning" role="status">已检查已知位置，未发现需要提示的缓存。</p>
+    <div v-for="item in candidates" :key="item.id" :data-kind="item.kind" class="old-cache-item"><strong>{{item.label}}</strong><span class="hint"> · 文件大小合计{{item.size_complete?'':'至少'}} {{size(item.bytes)}}</span>
+      <div class="cache-path"><code>{{item.path}}</code><button :disabled="busy" @click="openCandidate(item.id)">打开目录核对</button><button :disabled="busy||scanning||!item.can_clean" @click="askClean(item.id)">{{item.clean_on_exit?'核对后退出并清理…':'清理这处缓存…'}}</button></div>
+      <p v-if="item.reason" class="hint">{{item.reason}}</p>
+      <div v-if="pendingCandidate===item.id" role="alertdialog" aria-label="确认清理缓存" class="cache-confirm"><p>请先打开上方目录，亲自确认这里是应用缓存，且没有需要保留的资料。清理时会再次检查目录归属和使用状态。</p><p v-if="item.clean_on_exit">确认后会检查未保存内容，安全退出并只清理这处图形缓存，保留设置、草稿及研究结果。</p><label><input v-model="checkedCandidate" type="checkbox" :disabled="busy"/>已亲自核对该目录，可以清理其中的应用缓存</label><div class="storage-actions"><button :disabled="busy||!checkedCandidate" @click="cleanCandidate(item.id)">{{item.clean_on_exit?'确认并退出清理':'确认清理此处缓存'}}</button><button :disabled="busy" @click="pendingCandidate='';checkedCandidate=false">取消</button></div></div>
+    </div><p v-if="candidateMessage" role="status">{{candidateMessage}}</p><p v-if="scanError" class="error-banner" role="alert">{{scanError}}</p>
+  </div>
   <div class="settings-columns"><div class="settings-column">
   <label><input v-model="enabled" type="checkbox" :disabled="busy"/>自动清理过期的处理结果缓存</label>
   <div class="storage-fields"><label>未导出结果保留 <input v-model="days" type="number" min="1" max="3650" step="1" :disabled="busy"/> 天</label>
@@ -43,5 +65,7 @@ onMounted(load);
 <style scoped>
 .storage-settings{margin-top:1.5rem;padding:1.25rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--panel)}
 .all-caches{margin-top:.5rem;border-top:1px solid var(--border);padding-top:.8rem}.all-caches h3{font-size:1rem;margin:.2rem 0}
+.cache-location{padding:.7rem 0 1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}.cache-location h3{font-size:1rem;margin:.2rem 0 .6rem}.cache-path{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}.cache-path code{flex:1 1 230px;min-width:0;overflow-wrap:anywhere;user-select:text}.cache-path button{flex:0 0 auto}.legacy-cache{margin-top:.5rem}
+.old-caches{padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--border)}.old-caches-title{display:flex;align-items:center;justify-content:space-between;gap:.6rem;flex-wrap:wrap}.old-caches h3{font-size:1rem;margin:.2rem 0}.old-cache-item{padding:.7rem 0}.old-cache-item+.old-cache-item{border-top:1px solid var(--border)}.cache-confirm{margin-top:.7rem;padding:.7rem;border:1px solid var(--border);border-radius:var(--radius)}.cache-confirm p{margin-top:0}
 h2{font-size:1.15rem;margin:0 0 .8rem}p{line-height:1.75}.storage-fields{display:flex;flex-wrap:wrap;gap:1rem;margin:.9rem 0}.storage-fields input{width:5.5rem;margin:0 .25rem}.storage-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:.8rem}dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin:0}dt{color:var(--muted)}dd{margin:.4rem 0}.hint{color:var(--muted)}
 </style>

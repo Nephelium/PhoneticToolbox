@@ -1,18 +1,31 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {matchingTable,visibleParameters,assignParameters,removeGroup,clearGroup,deleteGroup,series,annotationRuns,overlayPlot} from '../src/modules/parameter-display/state.ts';
+import {matchingTable,visibleParameters,setGroupParameters,formatPlotTick,removeGroup,deleteGroup,series,annotationRuns,overlayPlot} from '../src/modules/parameter-display/state.ts';
 import type {ParameterTable,ResearchFile} from '../src/platform/research.ts';
 const audio:ResearchFile={id:'a',name:'阴平.wav',kind:'audio',size:12};
+test('M02 live selection replaces only the current window, including unchecked and hidden items',()=>{
+ const original=[{id:1,title:'图窗 1',parameters:['pF0','hidden']},{id:2,title:'图窗 2',parameters:['pF0','SHR']}];
+ const checked=setGroupParameters(original,1,['pF0','Intensity','pF0']);
+ assert.deepEqual(checked.map(g=>g.parameters),[['pF0','Intensity'],['pF0','SHR']]);
+ assert.deepEqual(setGroupParameters(checked,1,[]).map(g=>g.parameters),[[],['pF0','SHR']]);
+ assert.deepEqual(setGroupParameters(checked,99,['x']),checked);
+ assert.deepEqual(original[0].parameters,['pF0','hidden']);
+});
+test('M02 readable axis labels retain small values and remove padding and negative zero',()=>{
+ assert.equal(formatPlotTick(100,25),'100');assert.equal(formatPlotTick(1.25,.25),'1.25');
+ assert.equal(formatPlotTick(-.00000001,.1),'-1e-8');assert.equal(formatPlotTick(-.0001,1),'0');
+ assert.equal(formatPlotTick(1.2e8,1e7),'1.2e+8');
+});
 test('M02 clear and delete affect only the selected plot and preserve source configuration',()=>{
  const initial=[{id:1,title:'图窗 1',parameters:['pF0']},{id:2,title:'图窗 2',parameters:['rF0']}];
- assert.deepEqual(clearGroup(initial,2).map(g=>g.parameters),[['pF0'],[]]);
+ assert.deepEqual(setGroupParameters(initial,2,[]).map(g=>g.parameters),[['pF0'],[]]);
  assert.deepEqual(deleteGroup(initial,1),[initial[1]]);
  assert.deepEqual(deleteGroup([initial[0]],1),[]);
  assert.deepEqual(initial.map(g=>g.parameters),[['pF0'],['rF0']]);
 });
 test('M02 paired legacy formats prefer SQLite without guessing duplicates',()=>{const files:ResearchFile[]=[{id:'x',name:'阴平.xlsx',kind:'parameter',size:1},{id:'s',name:'阴平.ptb.sqlite',kind:'parameter',size:1}];assert.equal(matchingTable(audio,files)?.id,'s');assert.equal(matchingTable(audio,[...files,{...files[1],id:'duplicate'}]),undefined);});
 test('M02 independent reaper/correction filters do not mutate selection',()=>{const names=['pF0','rF0','H1*-H2*','H1-H2'];assert.deepEqual(visibleParameters(names,'',false,false),['pF0','H1-H2']);assert.deepEqual(visibleParameters(names,'',false,true),['pF0','H1*-H2*','H1-H2']);assert.equal(names.length,4);});
-test('M02 bulk assignment and merge preserve every parameter exactly once',()=>{const initial=[{id:1,title:'图1',parameters:['F0','Intensity','TextGrid']},{id:2,title:'图2',parameters:[]}];const groups=assignParameters(initial,['F0','TextGrid','F0'],2);assert.deepEqual(groups.map(g=>g.parameters),[['Intensity'],['F0','TextGrid']]);assert.deepEqual(initial[0].parameters,['F0','Intensity','TextGrid']);assert.deepEqual(removeGroup(groups,1)[0].parameters,['F0','TextGrid','Intensity']);assert.throws(()=>assignParameters(groups,['F0'],3));});
+test('M02 independent selections merge into the first window without duplicate curves',()=>{const initial=[{id:1,title:'图1',parameters:['F0','Intensity','TextGrid']},{id:2,title:'图2',parameters:[]}];const groups=setGroupParameters(initial,2,['F0','TextGrid','F0']);assert.deepEqual(groups.map(g=>g.parameters),[['F0','Intensity','TextGrid'],['F0','TextGrid']]);assert.deepEqual(initial[0].parameters,['F0','Intensity','TextGrid']);assert.deepEqual(removeGroup(groups,2)[0].parameters,['F0','Intensity','TextGrid']);});
 const table:ParameterTable={schema_version:'m02/1',sha256:'a'.repeat(64),columns:['Time_s','pF0','TextGrid'],kinds:['number','number','text'],rows:[[0,100,'a'],[.01,110,'a'],[.02,null,'b'],[.03,120,'b'],[.04,'Infinity','']]};
 test('M02 original time and missing values remain explicit gaps',()=>{assert.deepEqual(series(table,'pF0',0,.05,1),[{time:0,value:100},{time:.01,value:110},{time:.02,value:null},{time:.03,value:120},{time:.04,value:null}]);assert.deepEqual(annotationRuns(table,'TextGrid',.005,.035),[{start:.005,end:.02,text:'a'},{start:.02,end:.035,text:'b'}]);});
 test('M02 streamed annotations merge adjacent equal frames and retain blank separators',()=>{

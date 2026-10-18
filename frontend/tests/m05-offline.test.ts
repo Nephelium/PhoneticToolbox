@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {desktopM05} from '../src/platform/m05.ts';
 import type {LipResult} from '../src/modules/lip-extraction/port.ts';
+import {sha256} from '../src/platform/research.ts';
 const result=(id:string):LipResult=>({id,name:id+'.mp4',backend:'test',rows:[],metadata:{timing:{lip_manual_offset:.12}},files:[]});
 
 test('M05 batch chooses one directory and acknowledges each completed result, with distinct offsets',async()=>{
@@ -24,4 +25,19 @@ test('M05 standalone GIF/MP4 exports use existing results, without submitting an
  const calls:any[]=[];const port=await desktopM05(async body=>{calls.push(body);return {available:true,saved:true} as any;},async()=>({id:'output'}));
  for(const format of ['gif','mp4'] as const)assert(await port.exportAnimation!(result('a'),format,'high',new AbortController().signal));
  assert(calls.slice(1).every(c=>typeof c.export_id==='string'));assert.deepEqual(calls.slice(1).map(({export_id,...body})=>body),['gif','mp4'].map(format=>({op:'m05_export_animation',job:'a',directory:'output',format,quality:'high',offset:.12})));
+});
+
+test('M05 compatible replay validates bytes and retains the source clock, releasing native scratch on failure too',async()=>{
+ const data=new TextEncoder().encode('owned compatible media'),digest=await sha256(data.buffer),calls:any[]=[];
+ let corrupt=false;
+ const port=await desktopM05(async(body:any)=>{
+  calls.push(body);
+  if(body.op==='m05_playback_info')return {token:'owned',size_bytes:data.length,origin_s:.125,sha256:digest} as any;
+  if(body.op==='m05_playback_block')return {base64:btoa(corrupt?'x'.repeat(data.length):new TextDecoder().decode(data))} as any;
+  return {available:true} as any;
+ },async()=>null);
+ const media=await port.playbackVideo!(result('a'));
+ assert.equal(media.blob.type,'video/webm');assert.equal(media.origin_s,.125);assert.equal(await media.blob.text(),'owned compatible media');
+ assert.equal(calls.at(-1).op,'m05_playback_release');corrupt=true;
+ await assert.rejects(port.playbackVideo!(result('a')),/校验失败/);assert.equal(calls.at(-1).op,'m05_playback_release');
 });

@@ -4076,6 +4076,19 @@
             "title": "Amp Min Db",
             "type": "number"
           },
+          "analysis_channel": {
+            "anyOf": [
+              {
+                "maximum": 7.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analysis Channel"
+          },
           "dynamic_y": {
             "default": false,
             "title": "Dynamic Y",
@@ -7011,6 +7024,32 @@
       "SpectralStroke": {
         "additionalProperties": false,
         "properties": {
+          "canvas_height": {
+            "anyOf": [
+              {
+                "maximum": 32768.0,
+                "minimum": 2.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Canvas Height"
+          },
+          "canvas_width": {
+            "anyOf": [
+              {
+                "maximum": 32768.0,
+                "minimum": 2.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Canvas Width"
+          },
           "color": {
             "default": 0,
             "enum": [
@@ -7019,6 +7058,19 @@
             ],
             "title": "Color",
             "type": "integer"
+          },
+          "frequency_fraction": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "maximum": 1.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Frequency Fraction"
           },
           "opacity": {
             "default": 1,

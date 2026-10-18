@@ -4,14 +4,18 @@ SPDX-License-Identifier: GPL-3.0-or-later
 """
 import ctypes as C
 import hashlib
+import sys
 from pathlib import Path
 import threading
 import time
 import xml.etree.ElementTree as ET
+from collections import OrderedDict
 
 import numpy as np
 from scipy.signal import find_peaks
 from .source import validate_source
+from .perturbation import validate_perturbation
+from .lips import validate_lip_shape, LIP_LIMITS
 from .shape import validate_tongue_shape, TONGUE_SHAPE_LIMITS
 from .native_resources import resolve_libraries
 from phonetic_core.vocal_tract.source_models import SOURCE_PRESETS, SOURCE_LIMITS
@@ -30,11 +34,15 @@ LABELS={'HX':'舌骨前后','HY':'舌骨高低','JX':'下颌前后','JA':'下颌
 class Engine:
     def __init__(self,speaker='JD2',*,resource_dir):
         resource_dir=Path(resource_dir)
+        self.resource_dir=resource_dir
         if speaker not in ('JD2','M01','W02'): raise ValueError('Unknown speaker')
         self.speaker=speaker
         self.speaker_path=resource_dir/f'{speaker}.speaker'
         synthesis_path,analysis_path,geometry_path=resolve_libraries(resource_dir)
-        if hashlib.sha256(analysis_path.read_bytes()).digest()!=hashlib.sha256(synthesis_path.read_bytes()).digest():
+        if sys.platform=='darwin':
+            from .native_pair import validate_pair
+            validate_pair(synthesis_path,analysis_path)
+        elif hashlib.sha256(analysis_path.read_bytes()).digest()!=hashlib.sha256(synthesis_path.read_bytes()).digest():
             raise RuntimeError('Analysis library does not match pinned synthesis library')
         self.lib=C.CDLL(str(synthesis_path))
         signatures={
@@ -67,15 +75,25 @@ class Engine:
         self.maximum[self.names.index('TTX')]=7.5
         self.maximum[self.names.index('TBX')]=6.5
         anatomy=ET.parse(self.speaker_path).getroot().find('vocal_tract_model/anatomy')
+        self.default_f0=200. if speaker=='W02' else 120.
         pharynx=anatomy.find('pharynx');body=anatomy.find('tongue/body')
         angle=np.deg2rad(float(pharynx.get('rotation_angle_deg')))
         self.posterior={'x':float(pharynx.get('fulcrum_x')),'y':float(pharynx.get('fulcrum_y')),
             'slope':float(np.cos(angle)/np.sin(angle)),'rx':float(body.get('radius_x')),'ry':float(body.get('radius_y'))}
         self.gnames,self.gmin,self.gmax,self.gneutral=self._info('Glottis',self.nglottis)
+        self.perturbation=None
+        if hasattr(self.lib,'vtlSetSourcePerturbation'):
+            self.lib.vtlSetSourcePerturbation.argtypes=[C.c_int,C.c_double,C.c_double,C.c_uint,C.c_int]
+            self.lib.vtlSetSourcePerturbation.restype=C.c_int
         self.params=self.preset('a')
         self.lock=threading.RLock()
         self.geometry_lock=threading.RLock()
         self.analysis_lock=threading.Lock()
+        self.pitch_level_cache=OrderedDict()
+        if hasattr(self.analysis,'vtlSetSourcePerturbation'):
+            self.analysis.vtlSetSourcePerturbation.argtypes=self.lib.vtlSetSourcePerturbation.argtypes
+            self.analysis.vtlSetSourcePerturbation.restype=C.c_int
+            check(self.analysis.vtlSetSourcePerturbation(1,0.,0.,1,1))
         self.geom=C.CDLL(str(geometry_path))
         for name,args in {'p0_open':[C.c_char_p],'p0_update':[D,D],'p0_mesh':[C.c_int,D,I,I],'p0_sections':[D,D,D],'p0_profile':[C.c_int,D,D],'p1_contour':[C.c_int,D],'p1_nasal':[D,D,D]}.items():
             getattr(self.geom,name).argtypes=args; getattr(self.geom,name).restype=C.c_int
@@ -93,7 +111,8 @@ class Engine:
         self.geom.p6_floor_rib.argtypes=[];self.geom.p6_floor_rib.restype=C.c_int
         self.geom.p6_side_rib.argtypes=[C.c_int];self.geom.p6_side_rib.restype=C.c_double
         self.geometry_method='m10/r'+str(self.geom.p6_geometry_revision())
-        if self.geometry_method!='m10/r18':raise RuntimeError('声道几何方法版本与当前源码不匹配')
+        if self.geometry_method!='m10/r21':raise RuntimeError('声道几何方法版本与当前源码不匹配')
+        self.geom.p10_lip_shape.argtypes=[C.c_double]*4;self.geom.p10_lip_shape.restype=C.c_int
         self.geom.p8_tongue_shape.argtypes=[C.c_double,C.c_double];self.geom.p8_tongue_shape.restype=C.c_int
         self.geom.p8_surface_rib.argtypes=[];self.geom.p8_surface_rib.restype=C.c_double
         self.geom.p4_section_count.argtypes=[];self.geom.p4_section_count.restype=C.c_int
@@ -175,6 +194,7 @@ class Engine:
         return np.clip(g,self.gmin,self.gmax)
 
     def reset(self,p,g):
+        self.restart_perturbation()
         check(self.lib.vtlResetTractSynthesis())
         z=np.zeros(1); check(self.lib.vtlSynthesisAddTract(0,dp(z),dp(p),dp(g)))
 
@@ -212,13 +232,13 @@ class Engine:
         if not np.isfinite(value) or not -1.<=value<=1.:raise ValueError('声门高低范围为 -1 至 1 cm')
         return value
 
-    def prepare_tube(self,p,lip_width=1.,larynx_height=0.,tongue_shape=None):
+    def prepare_tube(self,p,lip_width=1.,larynx_height=0.,tongue_shape=None,lip_shape=None):
         p=self.validated(p)
-        shape=validate_tongue_shape(tongue_shape)
+        shape=validate_tongue_shape(tongue_shape);lip=validate_lip_shape(lip_shape)
         larynx_height=self.validated_larynx(larynx_height)
         if not np.isfinite(lip_width) or not .55<=lip_width<=1.6:raise ValueError('Invalid lip width')
         with self.geometry_lock:
-            check(self.geom.p8_tongue_shape(*shape[:2]))
+            check(self.geom.p8_tongue_shape(*shape[:2]));check(self.geom.p10_lip_shape(*lip))
             check(self.geom.p4_larynx(larynx_height))
             limited=np.empty(self.ntract);check(self.geom.p2_update(dp(p),lip_width,dp(limited)))
             return self._current_tube()
@@ -229,41 +249,90 @@ class Engine:
         return {'lengths':lengths,'areas':areas,'articulators':arts,'extras':extras}
 
     def reset_tube(self,tube,g):
+        self.restart_perturbation()
         check(self.lib.vtlResetTractSynthesis());self.block_tube(tube,g,0)
+
+    def pitch_level_gain(self,tube,f0,source=None):
+        """Audition-only F0 compensation, calibrated without touching live PCM.
+
+        Compare the same tube at the model's reference F0 and requested F0,
+        using fixed pressure and no perturbation. Actual pressure, closure,
+        source amplitude and shimmer are never measured or normalized away.
+        """
+        settings=validate_source(source)
+        if settings['vibration']==0 or abs(f0-self.default_f0)<1e-9:return 1.
+        g=self.glottis(f0,source={**settings,'pressure_pa':800.,'vibration':1.})
+        def level(frequency):
+            g[0]=frequency
+            key=(tuple(np.asarray(tube[k]).tobytes() for k in ('lengths','areas','articulators','extras')),g.tobytes())
+            if key in self.pitch_level_cache:
+                self.pitch_level_cache.move_to_end(key)
+                return self.pitch_level_cache[key]
+            # Whole periods avoid RMS bias at different F0. Discard eight
+            # cycles for settling, then measure twelve unperturbed cycles.
+            warm=round(8*self.sr/frequency);n=warm+round(12*self.sr/frequency)
+            out=np.empty(n);zero=np.zeros(1)
+            check(self.analysis.vtlResetTractSynthesis())
+            check(self.analysis.vtlSetSourcePerturbation(1,0.,0.,1,1))
+            args=(dp(tube['lengths']),dp(tube['areas']),ip(tube['articulators']),*tube['extras'],dp(g))
+            check(self.analysis.vtlSynthesisAddTube(0,dp(zero),*args))
+            check(self.analysis.vtlSynthesisAddTube(n,dp(out),*args))
+            value=float(np.sqrt(np.mean(out[warm:]**2)))
+            if not np.isfinite(value):raise RuntimeError('Nonfinite pitch-level reference')
+            self.pitch_level_cache[key]=value
+            if len(self.pitch_level_cache)>512:self.pitch_level_cache.popitem(last=False)
+            return value
+        with self.analysis_lock:
+            reference=level(self.default_f0);target=level(float(f0))
+        return float(np.clip(reference/target,1/16,16.)) if min(reference,target)>1e-8 else 1.
+
+    def configure_perturbation(self,value=None,*,restart=False):
+        value=validate_perturbation(value)
+        if not hasattr(self.lib,'vtlSetSourcePerturbation'):
+            if value is not None:raise ValueError('当前声源组件不支持自定义抖动，请使用支持新版声源的浏览器计算。')
+            return
+        with self.lock:
+            if value is not None or self.perturbation is not None:
+                settings=value or {'jitter':10.,'shimmer':0.,'seed':1}
+                check(self.lib.vtlSetSourcePerturbation(int(value is not None),settings['jitter'],settings['shimmer'],settings['seed'],int(restart)))
+            self.perturbation=value
+
+    def restart_perturbation(self):
+        if self.perturbation is not None:self.configure_perturbation(self.perturbation,restart=True)
 
     def block_tube(self,tube,g,n=960):
         out=np.empty(max(1,n));check(self.lib.vtlSynthesisAddTube(n,dp(out),dp(tube['lengths']),dp(tube['areas']),ip(tube['articulators']),*tube['extras'],dp(g)))
         if not np.isfinite(out[:n]).all():raise RuntimeError('Nonfinite synthesis')
         return out[:n]
 
-    def constrain_nasal_opening(self,p,lip_width=1.,larynx_height=0.,tongue_shape=None):
+    def constrain_nasal_opening(self,p,lip_width=1.,larynx_height=0.,tongue_shape=None,lip_shape=None):
         p=self.validated(p);index=self.names.index('VO');requested=max(0.,p[index]);base=p.copy();base[index]=0
         if requested<=0:return p,None
         with self.geometry_lock:
-            baseline=float(self.prepare_tube(base,lip_width,larynx_height,tongue_shape)['areas'][16:].min())
+            baseline=float(self.prepare_tube(base,lip_width,larynx_height,tongue_shape,lip_shape)['areas'][16:].min())
             threshold=min(.08,baseline*.5)
-            if baseline<.01 or self.prepare_tube(p,lip_width,larynx_height,tongue_shape)['areas'][16:].min()>=threshold:return p,None
+            if baseline<.01 or self.prepare_tube(p,lip_width,larynx_height,tongue_shape,lip_shape)['areas'][16:].min()>=threshold:return p,None
             # Find the first unsafe interval, then bisect. Do not assume the
             # entire native response is monotonic over arbitrarily large VO.
             low=0.;high=requested
             for value in np.linspace(0,requested,13)[1:]:
                 q=p.copy();q[index]=value
-                if self.prepare_tube(q,lip_width,larynx_height,tongue_shape)['areas'][16:].min()<threshold:high=value;break
+                if self.prepare_tube(q,lip_width,larynx_height,tongue_shape,lip_shape)['areas'][16:].min()<threshold:high=value;break
                 low=value
             for _ in range(9):
                 mid=(low+high)/2;q=p.copy();q[index]=mid
-                if self.prepare_tube(q,lip_width,larynx_height,tongue_shape)['areas'][16:].min()>=threshold:low=mid
+                if self.prepare_tube(q,lip_width,larynx_height,tongue_shape,lip_shape)['areas'][16:].min()>=threshold:low=mid
                 else:high=mid
             p[index]=max(0.,np.floor(low*100)/100)
         return p,{'requested_area':requested,'accepted_area':float(p[index]),'minimum_oral_area':threshold}
 
-    def snapshot(self,p,section=None,lip_width=1.,larynx_height=0.,tongue_shape=None):
+    def snapshot(self,p,section=None,lip_width=1.,larynx_height=0.,tongue_shape=None,lip_shape=None):
         p=self.validated(p); section=int(np.clip(self.section_count//2 if section is None else section,0,self.section_count-1)); started=time.perf_counter()
-        shape=validate_tongue_shape(tongue_shape)
+        shape=validate_tongue_shape(tongue_shape);lip=validate_lip_shape(lip_shape)
         larynx_height=self.validated_larynx(larynx_height)
         if not np.isfinite(lip_width) or not .55<=lip_width<=1.6:raise ValueError('Invalid lip width')
         with self.geometry_lock:
-            check(self.geom.p8_tongue_shape(*shape[:2]))
+            check(self.geom.p8_tongue_shape(*shape[:2]));check(self.geom.p10_lip_shape(*lip))
             check(self.geom.p4_larynx(larynx_height))
             limited=np.zeros(self.ntract); check(self.geom.p2_update(dp(p),float(lip_width),dp(limited)))
             meshes=[]
@@ -289,6 +358,7 @@ class Engine:
                 airway_sections.append({'index':i,'area':float(np.sum((gap[:-1]+gap[1:])*.5)*(7/96)),
                     'upper':[round(float(v),5) if flag else None for v,flag in zip(up,ok)],'lower':[round(float(v),5) if flag else None for v,flag in zip(lo,ok)]})
             acoustic=self._current_tube();lengths=acoustic['lengths'];tube_api=acoustic['areas']
+            self.snapshot_tube=acoustic
             mag=np.empty(4096); phase=np.empty(4096)
             check(self.geom.p2_transfer(4096,dp(mag),dp(phase)))
             uvula_contact_lift=float(self.geom.p4_uvula_contact())
@@ -300,7 +370,7 @@ class Engine:
         peaks,_=find_peaks(db[:513],prominence=3,distance=8)
         peaks=peaks[freq[peaks]>100][:4]
         valid=(np.abs(upper)<100)&(np.abs(lower)<100)&(upper>=lower)
-        return {'params':p.tolist(),'section_count':self.section_count,'geometry_version':'m10/3','geometry_method':self.geometry_method,'tongue_floor_rib':self.geom.p6_floor_rib(),'tongue_side_ribs':tongue_side_ribs,'tongue_blade_rib':tongue_blade_rib,'tongue_surface_rib':tongue_surface_rib,'tongue_shape':shape,'uvula_contact_lift':uvula_contact_lift,'larynx_height':larynx_height,'manual_root':self.manual_root,'lip_width':float(lip_width),'limited':limited.tolist(),'meshes':meshes,'contours':contours,'airway_sections':airway_sections,
+        return {'params':p.tolist(),'section_count':self.section_count,'geometry_version':'m10/3','geometry_method':self.geometry_method,'tongue_floor_rib':self.geom.p6_floor_rib(),'tongue_side_ribs':tongue_side_ribs,'tongue_blade_rib':tongue_blade_rib,'tongue_surface_rib':tongue_surface_rib,'tongue_shape':shape,'lip_shape':lip,'uvula_contact_lift':uvula_contact_lift,'larynx_height':larynx_height,'manual_root':self.manual_root,'lip_width':float(lip_width),'limited':limited.tolist(),'meshes':meshes,'contours':contours,'airway_sections':airway_sections,
             'nasal':{'lengths':nasal_lengths.round(5).tolist(),'areas':nasal_areas.round(5).tolist(),'port_position':float(nasal_port[0]),'port_area':float(nasal_port[1])},
             'centerline':center.round(5).tolist(),'raw_areas':areas.round(6).tolist(),
             'tube_areas':tube_api.round(6).tolist(),'tube_lengths':lengths.round(6).tolist(),
@@ -312,7 +382,7 @@ class Engine:
             'resonances':freq[peaks].round(1).tolist(),'compute_ms':(time.perf_counter()-started)*1000}
 
     def metadata(self):
-        return {'version':self.version,'geometry_version':'m10/3','geometry_method':self.geometry_method,'section_count':self.section_count,'section_options':self.section_options,'larynx_limits':[-1.,1.],'tongue_shape_limits':TONGUE_SHAPE_LIMITS,'posterior_limits':self.posterior,'speaker':self.speaker,'sample_rate':self.sr,'num_tube_sections':self.ntube,'source_presets':SOURCE_PRESETS,'source_limits':SOURCE_LIMITS,
+        return {'version':self.version,'geometry_version':'m10/3','geometry_method':self.geometry_method,'section_count':self.section_count,'section_options':self.section_options,'source_perturbation':hasattr(self.lib,'vtlSetSourcePerturbation'),'larynx_limits':[-1.,1.],'tongue_shape_limits':TONGUE_SHAPE_LIMITS,'lip_shape_limits':LIP_LIMITS,'posterior_limits':self.posterior,'speaker':self.speaker,'sample_rate':self.sr,'num_tube_sections':self.ntube,'source_presets':SOURCE_PRESETS,'source_limits':SOURCE_LIMITS,
             'parameters':[{'name':n,'label':LABELS[n],'min':float(lo),'max':float(hi),'neutral':float(ne)} for n,lo,hi,ne in zip(self.names,self.minimum,self.maximum,self.neutral)],
             'presets':self.presets,'consonants':self.consonants,'glottis_names':self.gnames,'glottis_neutral':self.gneutral.tolist(),
             'speaker_sha256':hashlib.sha256(self.speaker_path.read_bytes()).hexdigest()}

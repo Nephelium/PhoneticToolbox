@@ -91,14 +91,15 @@ var ResultCode: Integer;
 begin
   if CurStep = ssPostInstall then
   begin
+    { Identify the installation before its shared launcher prepares the cache. }
+    if not SaveStringToFile(ExpandConstant('{app}\.ptb-installed.json'),
+      '{"schema":"ptb-install/1","kind":"installer","version":"{#Version}"}', False) then
+      RaiseException('无法保存本机安装信息，请检查安装目录权限。');
 #ifdef PersistentCache
     WizardForm.StatusLabel.Caption := '正在准备运行文件，首次安装需要一些时间，请耐心等待…';
     if not Exec(ExpandConstant('{app}\PhoneticToolbox.exe'), '--ptb-prepare-cache', ExpandConstant('{app}'), SW_HIDE, ewWaitUntilTerminated, ResultCode) or (ResultCode <> 0) then
       RaiseException('运行文件准备失败，请检查磁盘空间或目录权限后重新安装。');
 #endif
-    if not SaveStringToFile(ExpandConstant('{app}\.ptb-installed.json'),
-      '{"schema":"ptb-install/1","kind":"installer","version":"{#Version}"}', False) then
-      RaiseException('无法保存本机安装信息，请检查安装目录权限。');
   end;
 end;
 

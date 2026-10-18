@@ -1,16 +1,16 @@
 {
-  "version": "3.0.3",
+  "version": "3.0.4",
   "files": {
     "PhoneticToolbox-windows-x64.exe": {
-      "size": 495186511,
-      "sha256": "897d059381325d4aa4b84d305ee6410636d69a25e9dc35d1b84f0b214f3e3051"
+      "size": 496270906,
+      "sha256": "f2818b137d20f6f6f9540ff1066e1d326d0cfbeccd50c130e312bd45aacd6af7"
     },
-    "PhoneticToolbox-3.0.3-windows-x64-setup.exe": {
-      "size": 497102829,
-      "sha256": "055bb0d1de1fa12eafc37f506f7544817f0f0d9441fafc8d3fac0420146623d4"
+    "PhoneticToolbox-3.0.4-windows-x64-setup.exe": {
+      "size": 498186108,
+      "sha256": "7934caf23dc3fa2cb6f1168600940002d05cbfd7b44d13944dff3b35ca32e1c2"
     }
   },
-  "source": "https://www.phonetictoolbox.com/releases/windows-x64/3.0.3/ptb-release.json",
+  "source": "https://www.phonetictoolbox.com/releases/windows-x64/3.0.4/ptb-release.json",
   "macos": {
     "schema": "ptb-macos-download/1",
     "version": "3.0.3",

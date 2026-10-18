@@ -488,9 +488,9 @@
         "type": "image",
         "attrs": {
           "id": "m02-figure-m02-overview-r2-light",
-          "assetId": "m02-overview-light-scaled-r20261007",
-          "caption": "已打开单音节 WAV 并关联同名 SQLite 参数表：中间显示波形和空的图窗 1，右栏勾选了三项参数。",
-          "alt": "最大化的参数显示窗口。左侧列出两段 WAV，中间显示已选音频波形与空图窗 1，右侧勾选 F0 - Praat、F0 - REAPER、F1 - Praat，顶部工具栏可见帮助按钮。",
+          "assetId": "m02-current-overview-20261018-05d4f061",
+          "caption": "打开合成示例 WAV 与同名 SQLite 后，图窗和右侧勾选均为空。新建图窗也从空选择开始。",
+          "alt": "打开合成示例 WAV 与同名 SQLite 后，图窗和右侧勾选均为空。新建图窗也从空选择开始。",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -686,20 +686,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "右侧：搜索、筛选、勾选参数，选择"
-                  },
-                  {
-                    "type": "text",
-                    "text": "目标图窗",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "后分配。"
+                    "text": "右侧：选择当前图窗，搜索、筛选并勾选参数。勾选立即绘制，取消立即移除。"
                   }
                 ]
               }
@@ -754,7 +741,7 @@
         "content": [
           {
             "type": "text",
-            "text": "第一次打开有一个空图窗。保存过绘图配置时，会恢复原分配，包括空图窗或零图窗；仍需重新打开源文件。"
+            "text": "第一次打开有一个空图窗。保存过绘图配置时，会恢复原选择，包括空图窗或零图窗；仍需重新打开源文件。"
           }
         ]
       },
@@ -960,7 +947,7 @@
         "content": [
           {
             "type": "text",
-            "text": "下图已选 XLSX 并勾选两项 F0，图窗仍为空。勾选后还差一步：分配。"
+            "text": "下图已关联 XLSX 并勾选两项 F0，两条轨迹立即显示在当前图窗。右侧勾选始终对应当前图窗的内容。"
           }
         ]
       },
@@ -968,9 +955,9 @@
         "type": "image",
         "attrs": {
           "id": "m02-figure-association-checks-light",
-          "assetId": "m02-association-checks-light-scaled-r20261007",
-          "caption": "手动关联 XLSX 并搜索 F0 - 后，两项 F0 已勾选；尚未点击分配，图窗仍显示待分配参数。",
-          "alt": "最大化参数显示窗口的关联框为 single-syllable.xlsx，参数搜索框为 F0 -，F0 - Praat 和 F0 - REAPER 两个复选框有勾号。图窗 1 仍为空，右侧将 2 项分配到图窗按钮可用。",
+          "assetId": "m02-current-association-20261018-675c2da9",
+          "caption": "关联 XLSX 后搜索并勾选两项 F0，曲线立即显示，无需分配。",
+          "alt": "关联 XLSX 后搜索并勾选两项 F0，曲线立即显示，无需分配。",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -981,9 +968,9 @@
         "type": "image",
         "attrs": {
           "id": "m02-association-checks-light-detail-figure",
-          "assetId": "m02-association-checks-light-detail-scaled-r20261007",
-          "caption": "先搜索并勾选参数，再按分配按钮把曲线放入目标图窗。",
-          "alt": "先搜索并勾选参数，再按分配按钮把曲线放入目标图窗。",
+          "assetId": "m02-current-selection-detail-20261018-11f78b21",
+          "caption": "当前图窗的勾选即对应已绘制参数。取消勾选移除该曲线，清空勾选清空当前图窗。",
+          "alt": "当前图窗的勾选即对应已绘制参数。取消勾选移除该曲线，清空勾选清空当前图窗。",
           "width": "70%",
           "align": "center"
         }
@@ -1018,42 +1005,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "选"
-                  },
-                  {
-                    "type": "text",
-                    "text": "目标图窗",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": " 1，点击"
-                  },
-                  {
-                    "type": "text",
-                    "text": "将 N 项分配到图窗",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      },
-                      {
-                        "type": "textStyle",
-                        "attrs": {
-                          "color": "#3b2f00",
-                          "colorDark": "#fff0bb",
-                          "backgroundColor": "#fff1c2",
-                          "backgroundColorDark": "#514218"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "。曲线和图例出现，才完成显示。"
+                    "text": "确认当前图窗为图窗 1，勾选后即出现曲线和图例。取消任一勾选，对应曲线立即移除。"
                   }
                 ]
               }
@@ -1065,9 +1017,9 @@
         "type": "image",
         "attrs": {
           "id": "m02-figure-first-curves-light",
-          "assetId": "m02-first-curves-light-scaled-r20261007",
-          "caption": "点击将 2 项分配到图窗后，图窗 1 出现 Praat 与 REAPER 的 F0 轨迹，时间轴与上方波形对应。",
-          "alt": "实际音节波形下方显示图窗 1 的两条完整 F0 轨迹、原数值纵轴、时间横轴和 Praat、REAPER 图例。右栏仍勾选这两项，目标为图窗 1。",
+          "assetId": "m02-current-first-curves-20261018-675c2da9",
+          "caption": "两项 F0 即时叠加，紧凑图例标出名称和线色。示例曲线含保留的缺口。",
+          "alt": "两项 F0 即时叠加，紧凑图例标出名称和线色。示例曲线含保留的缺口。",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -1104,7 +1056,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "需要文字时，清空搜索，勾选文字列再分配。标签会出现在该图及上方波形。"
+                    "text": "需要文字时，清空搜索并勾选文字列，标签立即出现在当前图及上方波形。"
                   }
                 ]
               }
@@ -3100,20 +3052,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "选择正确结果或未关联参数表。重读会"
-                      },
-                      {
-                        "type": "text",
-                        "text": "清空勾选",
-                        "marks": [
-                          {
-                            "type": "bold"
-                          }
-                        ]
-                      },
-                      {
-                        "type": "text",
-                        "text": "，仅保留新表中仍存在的曲线分配。"
+                        "text": "选择正确结果或未关联参数表。重新读表后，保留新表中存在的参数，图窗与右侧勾选保持一致。"
                       }
                     ]
                   }
@@ -3307,7 +3246,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "保存图窗和参数分配。若提示失败，保留页面并重试。"
+                        "text": "保存图窗和参数选择。若提示失败，保留页面并重试。"
                       }
                     ]
                   }
@@ -3727,9 +3666,9 @@
         "type": "image",
         "attrs": {
           "id": "m02-figure-unmatched-result-light",
-          "assetId": "m02-unmatched-result-light-scaled-r20261007",
-          "caption": "没有同名参数表时，波形仍可查看，关联下拉框显示未关联参数表，并给出手动关联提示。",
-          "alt": "参数显示已载入 target-syllable.wav。中间显示实际波形和未找到同名参数结果提示，关联框为未关联参数表，右侧参数候选为空，底部仍显示有效试听范围。",
+          "assetId": "m02-current-unmatched-20261018-c8124fd9",
+          "caption": "未关联参数的合成示例仍可查看波形及试听，需手动关联正确结果。",
+          "alt": "未关联参数的合成示例仍可查看波形及试听，需手动关联正确结果。",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -3779,7 +3718,7 @@
         "content": [
           {
             "type": "text",
-            "text": "下面列出常用按钮。默认状态指第一次打开；已存配置会恢复图窗分配。"
+            "text": "下面列出常用按钮。默认状态指第一次打开；已存配置会恢复图窗选择。"
           }
         ]
       },
@@ -4715,7 +4654,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "全不勾选"
+                        "text": "新窗全不勾选"
                       }
                     ]
                   }
@@ -4761,7 +4700,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "选择下一次操作的列。取消勾选不删曲线；长名称悬停查看。"
+                        "text": "勾选即在当前图窗绘制，取消即移除。切换图窗恢复对应勾选，长名称悬停查看。"
                       }
                     ]
                   }
@@ -5006,12 +4945,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "清空勾选",
-                        "marks": [
-                          {
-                            "type": "bold"
-                          }
-                        ]
+                        "text": "清空勾选"
                       }
                     ]
                   }
@@ -5103,7 +5037,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "空勾选集合"
+                        "text": "当前窗为空时禁用"
                       }
                     ]
                   }
@@ -5149,7 +5083,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "清掉全部勾选，包括隐藏项；已绘曲线保留。"
+                        "text": "清掉当前图窗全部参数，包括筛选隐藏项，曲线和文字一起移除，图窗保留。"
                       }
                     ]
                   }
@@ -5394,12 +5328,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "目标图窗",
-                        "marks": [
-                          {
-                            "type": "bold"
-                          }
-                        ]
+                        "text": "当前图窗"
                       }
                     ]
                   }
@@ -5491,7 +5420,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "图窗 1"
+                        "text": "第一个已保存图窗，首次为图窗 1"
                       }
                     ]
                   }
@@ -5537,7 +5466,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "决定分配、清空和删除所作用的图窗。没有图窗时需先新建。"
+                        "text": "切换当前编辑图窗并恢复它的勾选。也可点击图窗标题或图面。"
                       }
                     ]
                   }
@@ -5588,12 +5517,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "新建图窗",
-                        "marks": [
-                          {
-                            "type": "bold"
-                          }
-                        ]
+                        "text": "新建图窗"
                       }
                     ]
                   }
@@ -5731,214 +5655,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "新增空图窗并将它设为目标。最后一窗删掉后也可重建。"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "tableRow",
-            "content": [
-              {
-                "type": "tableCell",
-                "attrs": {
-                  "id": "tableCell-dee8b0dd-ebee-4bb1-99ac-72b0ba595d73",
-                  "caption": null,
-                  "note": null,
-                  "color": null,
-                  "textAlign": null,
-                  "colorDark": null,
-                  "backgroundColorDark": null,
-                  "lineHeight": null,
-                  "marginTop": null,
-                  "marginBottom": null,
-                  "indent": 0,
-                  "backgroundColor": null,
-                  "colspan": 1,
-                  "rowspan": 1,
-                  "colwidth": null,
-                  "align": null
-                },
-                "content": [
-                  {
-                    "type": "paragraph",
-                    "attrs": {
-                      "textAlign": null,
-                      "id": "paragraph-6ac2153e-e914-42d1-b068-c9308c9d2b90",
-                      "caption": null,
-                      "note": null,
-                      "color": null,
-                      "colorDark": null,
-                      "backgroundColorDark": null,
-                      "lineHeight": null,
-                      "marginTop": null,
-                      "marginBottom": null,
-                      "indent": 0,
-                      "backgroundColor": null
-                    },
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": "清空选定图窗",
-                        "marks": [
-                          {
-                            "type": "bold"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "tableCell",
-                "attrs": {
-                  "id": "tableCell-47e1e7bf-bf68-4063-96b4-da8703bb79f3",
-                  "caption": null,
-                  "note": null,
-                  "color": null,
-                  "textAlign": null,
-                  "colorDark": null,
-                  "backgroundColorDark": null,
-                  "lineHeight": null,
-                  "marginTop": null,
-                  "marginBottom": null,
-                  "indent": 0,
-                  "backgroundColor": null,
-                  "colspan": 1,
-                  "rowspan": 1,
-                  "colwidth": null,
-                  "align": null
-                },
-                "content": [
-                  {
-                    "type": "paragraph",
-                    "attrs": {
-                      "textAlign": null,
-                      "id": "paragraph-cca4f493-35c6-44c6-be0f-639384bb5e56",
-                      "caption": null,
-                      "note": null,
-                      "color": null,
-                      "colorDark": null,
-                      "backgroundColorDark": null,
-                      "lineHeight": null,
-                      "marginTop": null,
-                      "marginBottom": null,
-                      "indent": 0,
-                      "backgroundColor": null
-                    },
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": "右栏／动作"
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "tableCell",
-                "attrs": {
-                  "id": "tableCell-26519ca1-4fa6-4988-adb0-969aa97d7754",
-                  "caption": null,
-                  "note": null,
-                  "color": null,
-                  "textAlign": null,
-                  "colorDark": null,
-                  "backgroundColorDark": null,
-                  "lineHeight": null,
-                  "marginTop": null,
-                  "marginBottom": null,
-                  "indent": 0,
-                  "backgroundColor": null,
-                  "colspan": 1,
-                  "rowspan": 1,
-                  "colwidth": null,
-                  "align": null
-                },
-                "content": [
-                  {
-                    "type": "paragraph",
-                    "attrs": {
-                      "textAlign": null,
-                      "id": "paragraph-62f9ce6a-060b-4f34-9620-fe597b662185",
-                      "caption": null,
-                      "note": null,
-                      "color": null,
-                      "colorDark": null,
-                      "backgroundColorDark": null,
-                      "lineHeight": null,
-                      "marginTop": null,
-                      "marginBottom": null,
-                      "indent": 0,
-                      "backgroundColor": null
-                    },
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": "空"
-                      },
-                      {
-                        "type": "text",
-                        "text": "目标图窗",
-                        "marks": [
-                          {
-                            "type": "bold"
-                          }
-                        ]
-                      },
-                      {
-                        "type": "text",
-                        "text": "时禁用"
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "tableCell",
-                "attrs": {
-                  "id": "tableCell-f69ea9af-1c6b-41ab-bd0c-3d1babf01bae",
-                  "caption": null,
-                  "note": null,
-                  "color": null,
-                  "textAlign": null,
-                  "colorDark": null,
-                  "backgroundColorDark": null,
-                  "lineHeight": null,
-                  "marginTop": null,
-                  "marginBottom": null,
-                  "indent": 0,
-                  "backgroundColor": null,
-                  "colspan": 1,
-                  "rowspan": 1,
-                  "colwidth": null,
-                  "align": null
-                },
-                "content": [
-                  {
-                    "type": "paragraph",
-                    "attrs": {
-                      "textAlign": null,
-                      "id": "paragraph-f88ef57b-e555-4137-946f-5db7404367fd",
-                      "caption": null,
-                      "note": null,
-                      "color": null,
-                      "colorDark": null,
-                      "backgroundColorDark": null,
-                      "lineHeight": null,
-                      "marginTop": null,
-                      "marginBottom": null,
-                      "indent": 0,
-                      "backgroundColor": null
-                    },
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": "清掉目标窗内曲线与文字，保留图窗。"
+                        "text": "新增空图窗并立即选中，右侧默认空选择，原图窗保持。最后一窗删除后也可重建。"
                       }
                     ]
                   }
@@ -5989,12 +5706,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "删除选定图窗",
-                        "marks": [
-                          {
-                            "type": "bold"
-                          }
-                        ]
+                        "text": "删除图窗"
                       }
                     ]
                   }
@@ -6040,7 +5752,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "右栏／动作"
+                        "text": "右栏及图窗内／动作"
                       }
                     ]
                   }
@@ -6086,7 +5798,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "有有效目标时可用"
+                        "text": "有图窗时可用"
                       }
                     ]
                   }
@@ -6132,408 +5844,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "删除目标窗及其分配，不转移曲线。最后一窗也可删除。"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "tableRow",
-            "content": [
-              {
-                "type": "tableCell",
-                "attrs": {
-                  "id": "tableCell-20b89767-3427-4091-a40d-0fea2707e0c4",
-                  "caption": null,
-                  "note": null,
-                  "color": null,
-                  "textAlign": null,
-                  "colorDark": null,
-                  "backgroundColorDark": null,
-                  "lineHeight": null,
-                  "marginTop": null,
-                  "marginBottom": null,
-                  "indent": 0,
-                  "backgroundColor": null,
-                  "colspan": 1,
-                  "rowspan": 1,
-                  "colwidth": null,
-                  "align": null
-                },
-                "content": [
-                  {
-                    "type": "paragraph",
-                    "attrs": {
-                      "textAlign": null,
-                      "id": "paragraph-006a8a2f-44ed-4a21-80ab-aaf526cafcb7",
-                      "caption": null,
-                      "note": null,
-                      "color": null,
-                      "colorDark": null,
-                      "backgroundColorDark": null,
-                      "lineHeight": null,
-                      "marginTop": null,
-                      "marginBottom": null,
-                      "indent": 0,
-                      "backgroundColor": null
-                    },
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": "将 N 项分配到图窗",
-                        "marks": [
-                          {
-                            "type": "bold"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "tableCell",
-                "attrs": {
-                  "id": "tableCell-5c21c0b0-6c92-4682-91dc-bc6fc9b6d131",
-                  "caption": null,
-                  "note": null,
-                  "color": null,
-                  "textAlign": null,
-                  "colorDark": null,
-                  "backgroundColorDark": null,
-                  "lineHeight": null,
-                  "marginTop": null,
-                  "marginBottom": null,
-                  "indent": 0,
-                  "backgroundColor": null,
-                  "colspan": 1,
-                  "rowspan": 1,
-                  "colwidth": null,
-                  "align": null
-                },
-                "content": [
-                  {
-                    "type": "paragraph",
-                    "attrs": {
-                      "textAlign": null,
-                      "id": "paragraph-770635dd-513c-4bff-b6cb-ded78991064e",
-                      "caption": null,
-                      "note": null,
-                      "color": null,
-                      "colorDark": null,
-                      "backgroundColorDark": null,
-                      "lineHeight": null,
-                      "marginTop": null,
-                      "marginBottom": null,
-                      "indent": 0,
-                      "backgroundColor": null
-                    },
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": "右栏／动作"
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "tableCell",
-                "attrs": {
-                  "id": "tableCell-25cdc16a-211c-417c-be4c-7eb93e54571d",
-                  "caption": null,
-                  "note": null,
-                  "color": null,
-                  "textAlign": null,
-                  "colorDark": null,
-                  "backgroundColorDark": null,
-                  "lineHeight": null,
-                  "marginTop": null,
-                  "marginBottom": null,
-                  "indent": 0,
-                  "backgroundColor": null,
-                  "colspan": 1,
-                  "rowspan": 1,
-                  "colwidth": null,
-                  "align": null
-                },
-                "content": [
-                  {
-                    "type": "paragraph",
-                    "attrs": {
-                      "textAlign": null,
-                      "id": "paragraph-e433a21f-e0de-4a7c-b607-417bdee6e1f2",
-                      "caption": null,
-                      "note": null,
-                      "color": null,
-                      "colorDark": null,
-                      "backgroundColorDark": null,
-                      "lineHeight": null,
-                      "marginTop": null,
-                      "marginBottom": null,
-                      "indent": 0,
-                      "backgroundColor": null
-                    },
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": "没有勾选或有效目标时禁用"
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "tableCell",
-                "attrs": {
-                  "id": "tableCell-9a9bcf43-3b25-456f-b711-05023744b77a",
-                  "caption": null,
-                  "note": null,
-                  "color": null,
-                  "textAlign": null,
-                  "colorDark": null,
-                  "backgroundColorDark": null,
-                  "lineHeight": null,
-                  "marginTop": null,
-                  "marginBottom": null,
-                  "indent": 0,
-                  "backgroundColor": null,
-                  "colspan": 1,
-                  "rowspan": 1,
-                  "colwidth": null,
-                  "align": null
-                },
-                "content": [
-                  {
-                    "type": "paragraph",
-                    "attrs": {
-                      "textAlign": null,
-                      "id": "paragraph-c5cc42bc-fe44-4629-bcbc-21f1d4c68ba1",
-                      "caption": null,
-                      "note": null,
-                      "color": null,
-                      "colorDark": null,
-                      "backgroundColorDark": null,
-                      "lineHeight": null,
-                      "marginTop": null,
-                      "marginBottom": null,
-                      "indent": 0,
-                      "backgroundColor": null
-                    },
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": "把所有勾选列移到"
-                      },
-                      {
-                        "type": "text",
-                        "text": "目标图窗",
-                        "marks": [
-                          {
-                            "type": "bold"
-                          }
-                        ]
-                      },
-                      {
-                        "type": "text",
-                        "text": "，含被筛选隐藏的勾选；原勾号保留。"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "type": "tableRow",
-            "content": [
-              {
-                "type": "tableCell",
-                "attrs": {
-                  "id": "tableCell-6ff7a735-4e17-47e2-8a7c-163ed7174b21",
-                  "caption": null,
-                  "note": null,
-                  "color": null,
-                  "textAlign": null,
-                  "colorDark": null,
-                  "backgroundColorDark": null,
-                  "lineHeight": null,
-                  "marginTop": null,
-                  "marginBottom": null,
-                  "indent": 0,
-                  "backgroundColor": null,
-                  "colspan": 1,
-                  "rowspan": 1,
-                  "colwidth": null,
-                  "align": null
-                },
-                "content": [
-                  {
-                    "type": "paragraph",
-                    "attrs": {
-                      "textAlign": null,
-                      "id": "paragraph-f50c04d9-3f16-49bb-8ea6-fd0d7dfdfa4e",
-                      "caption": null,
-                      "note": null,
-                      "color": null,
-                      "colorDark": null,
-                      "backgroundColorDark": null,
-                      "lineHeight": null,
-                      "marginTop": null,
-                      "marginBottom": null,
-                      "indent": 0,
-                      "backgroundColor": null
-                    },
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": "从图中移除勾选项",
-                        "marks": [
-                          {
-                            "type": "bold"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "tableCell",
-                "attrs": {
-                  "id": "tableCell-3f35ef58-9dc9-4676-8376-89df8449fb34",
-                  "caption": null,
-                  "note": null,
-                  "color": null,
-                  "textAlign": null,
-                  "colorDark": null,
-                  "backgroundColorDark": null,
-                  "lineHeight": null,
-                  "marginTop": null,
-                  "marginBottom": null,
-                  "indent": 0,
-                  "backgroundColor": null,
-                  "colspan": 1,
-                  "rowspan": 1,
-                  "colwidth": null,
-                  "align": null
-                },
-                "content": [
-                  {
-                    "type": "paragraph",
-                    "attrs": {
-                      "textAlign": null,
-                      "id": "paragraph-66c8b404-ac80-407d-b5aa-94d24a011a9f",
-                      "caption": null,
-                      "note": null,
-                      "color": null,
-                      "colorDark": null,
-                      "backgroundColorDark": null,
-                      "lineHeight": null,
-                      "marginTop": null,
-                      "marginBottom": null,
-                      "indent": 0,
-                      "backgroundColor": null
-                    },
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": "右栏／动作"
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "tableCell",
-                "attrs": {
-                  "id": "tableCell-3387f04c-cc27-4ec1-a890-8a3b2f6b2f61",
-                  "caption": null,
-                  "note": null,
-                  "color": null,
-                  "textAlign": null,
-                  "colorDark": null,
-                  "backgroundColorDark": null,
-                  "lineHeight": null,
-                  "marginTop": null,
-                  "marginBottom": null,
-                  "indent": 0,
-                  "backgroundColor": null,
-                  "colspan": 1,
-                  "rowspan": 1,
-                  "colwidth": null,
-                  "align": null
-                },
-                "content": [
-                  {
-                    "type": "paragraph",
-                    "attrs": {
-                      "textAlign": null,
-                      "id": "paragraph-efc30afc-8b98-4bd2-bbde-dff34045c5f9",
-                      "caption": null,
-                      "note": null,
-                      "color": null,
-                      "colorDark": null,
-                      "backgroundColorDark": null,
-                      "lineHeight": null,
-                      "marginTop": null,
-                      "marginBottom": null,
-                      "indent": 0,
-                      "backgroundColor": null
-                    },
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": "未勾选时禁用"
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "tableCell",
-                "attrs": {
-                  "id": "tableCell-d5e614ee-f905-4adc-8b29-c8652e3f7484",
-                  "caption": null,
-                  "note": null,
-                  "color": null,
-                  "textAlign": null,
-                  "colorDark": null,
-                  "backgroundColorDark": null,
-                  "lineHeight": null,
-                  "marginTop": null,
-                  "marginBottom": null,
-                  "indent": 0,
-                  "backgroundColor": null,
-                  "colspan": 1,
-                  "rowspan": 1,
-                  "colwidth": null,
-                  "align": null
-                },
-                "content": [
-                  {
-                    "type": "paragraph",
-                    "attrs": {
-                      "textAlign": null,
-                      "id": "paragraph-93bd86bb-1320-4d75-b685-dbaf591bc104",
-                      "caption": null,
-                      "note": null,
-                      "color": null,
-                      "colorDark": null,
-                      "backgroundColorDark": null,
-                      "lineHeight": null,
-                      "marginTop": null,
-                      "marginBottom": null,
-                      "indent": 0,
-                      "backgroundColor": null
-                    },
-                    "content": [
-                      {
-                        "type": "text",
-                        "text": "从所有图窗移除勾选列，保留图窗、复选框和源文件。"
+                        "text": "删除对应图窗及其参数选择，不转移曲线。当前窗删除后切回第一个保留图窗。"
                       }
                     ]
                   }
@@ -6586,7 +5897,7 @@
         "content": [
           {
             "type": "text",
-            "text": "数值列画曲线，文字列显示标签。Time_s、Source_Time_s 用于时间，不在候选中。"
+            "text": "数值列画曲线，文字列显示标签。Time_s、Source_Time_s 用于时间，不在候选中。点击图窗标题或图面，右侧会切换到该图窗的参数选择。"
           }
         ]
       },
@@ -6620,7 +5931,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "搜索并勾选一组，例如 F0。此时只选好了操作对象。"
+                    "text": "点击要编辑的图窗，或从右侧当前图窗下拉框选择。被选中的窗显示当前标记，右栏恢复它已有的勾选。"
                   }
                 ]
               }
@@ -6648,20 +5959,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "选择目标，再点击"
-                  },
-                  {
-                    "type": "text",
-                    "text": "将 N 项分配到图窗",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "。选中列会从其他图窗移到这里。"
+                    "text": "搜索并勾选参数，曲线或文字立即显示；取消勾选立即移除。"
                   }
                 ]
               }
@@ -6689,20 +5987,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "筛选只改变候选列表，勾选和曲线保留。"
-                  },
-                  {
-                    "type": "text",
-                    "text": "全选可见参数",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "会追加勾选。"
+                    "text": "搜索和筛选只改变候选列表。全选可见参数追加当前可见列，已选隐藏项仍保留。"
                   }
                 ]
               }
@@ -6730,29 +6015,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "操作下一组前"
-                  },
-                  {
-                    "type": "text",
-                    "text": "先清空勾选",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      },
-                      {
-                        "type": "textStyle",
-                        "attrs": {
-                          "color": "#3b2f00",
-                          "colorDark": "#fff0bb",
-                          "backgroundColor": "#fff1c2",
-                          "backgroundColorDark": "#514218"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "，再搜索。核对按钮的 N，避免一并移动隐藏项。"
+                    "text": "清空勾选移除当前图窗全部数值曲线和文字层，保留空窗。其他图窗不受影响。"
                   }
                 ]
               }
@@ -6780,33 +6043,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "要删曲线，勾选后点击"
-                  },
-                  {
-                    "type": "text",
-                    "text": "从图中移除勾选项",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "。"
-                  },
-                  {
-                    "type": "text",
-                    "text": "清空勾选",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "仅去掉勾号。"
+                    "text": "各图窗分别保留自己的选择，同一参数可以在多个图窗中对照。"
                   }
                 ]
               }
@@ -6833,20 +6070,7 @@
         "content": [
           {
             "type": "text",
-            "text": "右栏按宽度显示两至四列。在候选区内滚动找更多项；筛选后可用"
-          },
-          {
-            "type": "text",
-            "text": "清空勾选",
-            "marks": [
-              {
-                "type": "bold"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "去掉隐藏勾选。"
+            "text": "右栏按宽度显示两至四列，可在候选区内滚动。搜索和筛选保留当前图窗已有的勾选；清空勾选会移除该窗的全部参数，包括暂时隐藏的项。"
           }
         ]
       },
@@ -7005,9 +6229,9 @@
         "type": "image",
         "attrs": {
           "id": "m02-figure-dual-axis-light",
-          "assetId": "m02-dual-axis-light-scaled-r20261007",
-          "caption": "放大的图窗中，F1 - Praat 使用右轴，SHR (pF0) 使用左轴；原数值刻度和带轴归属的图例完整显示。",
-          "alt": "放大图窗 1 内显示两条真实表中轨迹。左轴刻度约为 -0.015 至 0.315，右轴刻度约为 618 至 1109。下方图例分别注明 F1 - Praat [右] 与 SHR (pF0) [左]，顶部可见还原和导出按钮。",
+          "assetId": "m02-current-dual-axis-20261018-8eb900b2",
+          "caption": "F1 与 SHR 保留原数值自动双轴，图例完整显示轴归属，右轴曲线使用虚线。",
+          "alt": "F1 与 SHR 保留原数值自动双轴，图例完整显示轴归属，右轴曲线使用虚线。",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -7068,7 +6292,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "先把同类参数放进图窗 1，例如两种 F0。"
+                    "text": "在图窗 1 勾选同类参数，例如两种 F0。"
                   }
                 ]
               }
@@ -7096,29 +6320,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "清空勾选",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "，点击"
-                  },
-                  {
-                    "type": "text",
-                    "text": "新建图窗",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "，确认目标变成新窗。"
+                    "text": "点击新建图窗，当前窗立即切到新窗，右侧默认没有勾选。"
                   }
                 ]
               }
@@ -7146,7 +6348,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "勾选另一组再分配。各窗共用时间窗和选区，纵轴独立。"
+                    "text": "直接勾选另一组参数，各窗共用时间窗和选区，纵轴独立。点击原图窗可继续编辑原来的参数。"
                   }
                 ]
               }
@@ -7181,9 +6383,9 @@
         "type": "image",
         "attrs": {
           "id": "m02-figure-second-plot-light",
-          "assetId": "m02-second-plot-light-scaled-r20261007",
-          "caption": "向下滚动后，完整查看图窗 2 的 F2、F3 共轴轨迹；首图下部仍可见，右侧目标指向图窗 2。",
-          "alt": "中间工作区上部可见图窗 1 的下部和 F1、SHR 图例，下部完整显示图窗 2 的 F2 - Praat 红线、F3 - Praat 紫线、共用原数值轴与时间轴。右栏勾选 F2 和 F3，目标为图窗 2，分配和图窗管理按钮可见。",
+          "assetId": "m02-current-second-window-20261018-b677a52b",
+          "caption": "新窗从空选择开始。勾选 F2、F3 后在图窗 2 显示，图窗 1 的 F1、SHR 保持。",
+          "alt": "新窗从空选择开始。勾选 F2、F3 后在图窗 2 显示，图窗 1 的 F1、SHR 保持。",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -7220,7 +6422,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "移动一列：勾选它，换目标，再分配。每列只放在一个图窗。"
+                    "text": "要在另一窗显示同一参数，切到该窗后直接勾选。原窗的曲线保持。"
                   }
                 ]
               }
@@ -7248,20 +6450,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "减少图窗并保留曲线：点击该窗的"
-                  },
-                  {
-                    "type": "text",
-                    "text": "合并回首图",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "，随后核对纵轴。"
+                    "text": "合并并保留参数：在后续图窗点击合并回首图，所有参数并入第一窗，同名项只保留一次。随后核对纵轴。"
                   }
                 ]
               }
@@ -7289,20 +6478,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "留下空窗用"
-                  },
-                  {
-                    "type": "text",
-                    "text": "清空选定图窗",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "；连窗一起去掉用删除。零图窗时可重新新建。"
+                    "text": "留下空窗用清空勾选；连窗一起去掉用删除图窗。最后一窗也可删除，再点新建图窗重新开始。"
                   }
                 ]
               }
@@ -7330,20 +6506,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "布局满意后"
-                  },
-                  {
-                    "type": "text",
-                    "text": "保存绘图配置",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "，关闭前留意未保存提示。"
+                    "text": "布局满意后保存绘图配置，关闭前留意未保存提示。"
                   }
                 ]
               }
@@ -7370,16 +6533,7 @@
         "content": [
           {
             "type": "text",
-            "text": "放大图窗",
-            "marks": [
-              {
-                "type": "bold"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "用于扩大面板；查看时间细节请缩短时间窗。面板宽度也会影响导出尺寸。"
+            "text": "放大图窗会扩大当前面板并隐藏其他参数窗，右侧参数仍可操作。切换当前图窗可直接查看另一窗，点击还原图窗恢复多窗。查看时间细节请缩短时间窗。"
           }
         ]
       },
@@ -7960,7 +7114,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "仅多个图窗时出现"
+                        "text": "仅后续图窗且多个图窗时出现"
                       }
                     ]
                   }
@@ -8006,7 +7160,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "把当前窗的分配并入剩余首窗，重复列只保留一次。"
+                        "text": "把当前窗的选择并入剩余首窗，重复列只保留一次。"
                       }
                     ]
                   }
@@ -8195,7 +7349,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "删除当前窗及分配。需恢复时重新新建、分配，没有删除撤销。"
+                        "text": "删除当前窗及选择。需恢复时重新新建、选择，没有删除撤销。"
                       }
                     ]
                   }
@@ -8545,7 +7699,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "PNG；无分配、读取中或导出中禁用"
+                        "text": "PNG；无选择、读取中或导出中禁用"
                       }
                     ]
                   }
@@ -8739,7 +7893,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "白底 300 dpi；无分配、读取中或导出中禁用"
+                        "text": "白底 300 dpi；无选择、读取中或导出中禁用"
                       }
                     ]
                   }
@@ -8882,7 +8036,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "参数图下方／列名与轴"
+                        "text": "绘图区空白角落或图上方／列名与轴"
                       }
                     ]
                   }
@@ -8928,7 +8082,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "来自当前已分配数值列"
+                        "text": "来自当前已选择数值列"
                       }
                     ]
                   }
@@ -8974,7 +8128,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "看颜色、线型和图例；双轴附 [左]/[右]。长名称悬停查看。"
+                        "text": "结合颜色、线型和图例读取；双轴附 [左]/[右]。图例避让曲线，长名称完整换行。"
                       }
                     ]
                   }
@@ -8988,9 +8142,9 @@
         "type": "image",
         "attrs": {
           "id": "m02-figure-m02-plots-flow-r3-light",
-          "assetId": "m02-plots-flow-r3-light-scaled-r20261007",
-          "caption": "参数显示：读取刚刚保存的同源参数表，将三条参数曲线分配到同一图窗。",
-          "alt": "参数显示：读取刚刚保存的同源参数表，将三条参数曲线分配到同一图窗。",
+          "assetId": "m02-current-second-window-20261018-b677a52b",
+          "caption": "点击图窗 2 后，右侧对应勾选 F2、F3。图窗 1 原有曲线保留，勾选操作直接作用于当前窗。",
+          "alt": "当前双图窗界面，图窗 2 高亮，右侧勾选与该窗曲线一致，分配及单独移除按钮已取消。",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -11272,9 +10426,9 @@
         "type": "image",
         "attrs": {
           "id": "m02-figure-zoom-selection-light",
-          "assetId": "m02-zoom-selection-light-scaled-r20261007",
-          "caption": "时间窗约为 0.095–0.295 秒，长 0.20 秒；拖选的试听范围约为 0.155–0.231 秒，波形与参数图同步高亮。",
-          "alt": "放大后波形和参数图都显示约 0.095 至 0.295 秒，时间窗长度字段为 0.2。蓝色选区只占图面的一部分，中间显示选区 0.076 秒，底部起点为 0.15473、终点为 0.23068，参数图保留双轴刻度。",
+          "assetId": "m02-current-zoom-selection-20261018-440333ad",
+          "caption": "时间窗显示约 0.8 至 2.6 秒，波形与当前参数图共享时间位置。",
+          "alt": "时间窗显示约 0.8 至 2.6 秒，波形与当前参数图共享时间位置。",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -11411,9 +10565,9 @@
         "type": "image",
         "attrs": {
           "id": "m02-figure-spectrogram-ready-light",
-          "assetId": "m02-spectrogram-ready-light-scaled-r20261007",
-          "caption": "Praat 语谱图就绪后，波形与灰度语谱按同一全长时间轴排列，原试听选区仍保持。",
-          "alt": "实际音节波形下方显示完整灰度语谱图，顶部注明 Praat、Gaussian 5 ms、50 dB，频率刻度为 0、2500 和 5000 Hz。显示语谱图复选框已勾选，波形和语谱都保留同一蓝色选区，下方可见已分配双轴图窗的导出按钮。",
+          "assetId": "m02-current-spectrogram-20261018-9fefcc05",
+          "caption": "同一合成示例的本机 Praat 语谱图已读取，与波形和参数图共用查看时间窗。",
+          "alt": "同一合成示例的本机 Praat 语谱图已读取，与波形和参数图共用查看时间窗。",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -11525,7 +10679,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "勾选一层或多层文字，选目标并分配。图上方出现文字及区间边界。"
+                    "text": "选择当前图窗并勾选一层或多层文字，图上方立即出现文字及区间边界。"
                   }
                 ]
               }
@@ -11553,7 +10707,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "波形汇总所有已分配文字层。把该列从所有图窗移除后，波形标签也消失。"
+                    "text": "波形汇总所有已选择文字层。把该列从所有图窗移除后，波形标签也消失。"
                   }
                 ]
               }
@@ -11644,9 +10798,9 @@
         "type": "image",
         "attrs": {
           "id": "m02-figure-table-text-layer-light",
-          "assetId": "m02-table-text-layer-light-scaled-r20261007",
-          "caption": "示例表的 TextGrid 文字列已分配：英文和 IPA 区间同时显示在波形与参数图上，标签来自表内时间点。",
-          "alt": "示例 display.wav 与 display.xlsx 已关联。波形上方显示 The photographer 和 ɑ̃˥ 两个标签及约 2 秒处的区间边界，参数图区也显示相同标签和边界，下方有两条示例数值轨迹。此图仅演示表内文字层的呈现。",
+          "assetId": "m02-current-text-layers-20261018-8fd4b248",
+          "caption": "勾选表内文字列后，文字和区间边界立即显示在波形及参数图中。标签与参数均为合成示例。",
+          "alt": "勾选表内文字列后，文字和区间边界立即显示在波形及参数图中。标签与参数均为合成示例。",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -11747,7 +10901,7 @@
         "content": [
           {
             "type": "text",
-            "text": "长表分配或缩放后会显示正在读取当前时间窗…。请"
+            "text": "长表勾选或缩放后会显示正在读取当前时间窗…。请"
           },
           {
             "type": "text",
@@ -13733,9 +12887,9 @@
         "type": "image",
         "attrs": {
           "id": "m02-figure-svg-current-export-light",
-          "assetId": "m02-svg-current-export-light-scaled-r20261007",
-          "caption": "图片格式已选 SVG，当前图保留完整双轴轨迹、时间轴、轴归属图例和部分试听选区高亮。",
-          "alt": "放大图窗 1 的格式下拉框为 SVG，旁边是保存当前图和保存整幅 PNG。图中显示 F1 - Praat 右轴轨迹与 SHR (pF0) 左轴轨迹，原数值刻度、时间轴、两项图例和局部蓝色选区完整可见。",
+          "assetId": "m02-current-svg-export-20261018-1f304754",
+          "caption": "选择 SVG 保存当前图。图例优先放在绘图区空白位置，空间不足时移至上方，长名称完整换行。",
+          "alt": "选择 SVG 保存当前图。图例优先放在绘图区空白位置，空间不足时移至上方，长名称完整换行。",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -13746,9 +12900,9 @@
         "type": "image",
         "attrs": {
           "id": "m02-svg-current-export-light-detail-figure",
-          "assetId": "m02-svg-current-export-light-detail-scaled-r20261007",
-          "caption": "选择图片格式后保存当前图，整幅 PNG 使用另一入口。",
-          "alt": "选择图片格式后保存当前图，整幅 PNG 使用另一入口。",
+          "assetId": "m02-current-export-detail-20261018-c1d0046e",
+          "caption": "当前图可选 PNG 或 SVG；整幅 PNG 还包含波形及已开启的语谱图。",
+          "alt": "当前图可选 PNG 或 SVG；整幅 PNG 还包含波形及已开启的语谱图。",
           "width": "70%",
           "align": "center"
         }
@@ -13967,9 +13121,9 @@
         "type": "image",
         "attrs": {
           "id": "m02-figure-export-whole-plot",
-          "assetId": "m02-export-whole-plot",
-          "caption": "实际保存的白底 300 dpi 整幅 PNG：依次包含声道 1 波形、Praat 语谱图和当前双轴参数图，时间轴对应，试听选区高亮保留。",
-          "alt": "应用实际导出的纵向 PNG 上部是音节波形，中部是 0 至 5000 Hz 的灰度语谱，下部是 F1 - Praat 右轴与 SHR (pF0) 左轴曲线及图例。三个图面横轴均为约 0 至 0.672 秒，局部浅蓝色选区贯穿图面，不包含侧栏和操作按钮。",
+          "assetId": "m02-current-whole-figure-20261018-a8740db3",
+          "caption": "当前应用实际导出的白底 300 dpi 整幅 PNG，包含合成示例的波形、Praat 语谱及双轴参数图，紧凑图例随图保存。",
+          "alt": "当前应用实际导出的白底 300 dpi 整幅 PNG，包含合成示例的波形、Praat 语谱及双轴参数图，紧凑图例随图保存。",
           "width": "80%",
           "align": "center",
           "crop": null,
@@ -14116,7 +13270,7 @@
         "content": [
           {
             "type": "text",
-            "text": "SVG 保留矢量曲线和可编辑文字，内嵌 Doulos SIL 及 OFL；其他字体需对方设备支持。长图例可能省略，导出前检查。想固定外观，分享 PNG 更方便。"
+            "text": "SVG 保留矢量曲线和可编辑文字，内嵌 Doulos SIL 及 OFL；其他字体需对方设备支持。图例紧凑排列，优先放在绘图区空白位置，空间不足时移到图上方。长参数名称完整换行，双轴标明所属纵轴。分享固定外观可选 PNG。"
           }
         ]
       },
@@ -14163,34 +13317,7 @@
         "content": [
           {
             "type": "text",
-            "text": "保存绘图配置",
-            "marks": [
-              {
-                "type": "bold"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "只记住图窗、标题和参数分配",
-            "marks": [
-              {
-                "type": "bold"
-              },
-              {
-                "type": "textStyle",
-                "attrs": {
-                  "color": "#3b2f00",
-                  "colorDark": "#fff0bb",
-                  "backgroundColor": "#fff1c2",
-                  "backgroundColorDark": "#514218"
-                }
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "，存于本机。文件、目录权限、时间窗、选区、搜索/筛选、勾选、放大状态和图片格式不会随它保存。"
+            "text": "保存绘图配置记住图窗、标题和各窗的参数选择。重新载入源文件后，曲线与当前窗勾选一起恢复。文件、目录权限、时间窗、选区、搜索、放大状态和图片格式不随本机绘图配置保存；网页版设置随账号保留。"
           }
         ]
       },
@@ -14224,7 +13351,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "完成分配后，点击"
+                    "text": "选好参数后，点击"
                   },
                   {
                     "type": "text",
@@ -14349,7 +13476,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "保留原 WAV、参数表、生成设置和版本，并记录导出范围、图窗分配、字体及文件名。"
+                    "text": "保留原 WAV、参数表、生成设置和版本，并记录导出范围、图窗选择、字体及文件名。"
                   }
                 ]
               }
@@ -14376,7 +13503,7 @@
         "content": [
           {
             "type": "text",
-            "text": "恢复后可能已画曲线，右栏却没有勾号，这是正常的。下图恢复了 F1、SHR 分配，视野和选区回全长；未保存的显示选项需重新检查。"
+            "text": "下图恢复了 F1、SHR，图窗曲线与右侧勾选一致。视野和选区回到全长，其他未保存显示选项需重新核对。"
           }
         ]
       },
@@ -14384,9 +13511,9 @@
         "type": "image",
         "attrs": {
           "id": "m02-figure-config-restored-light",
-          "assetId": "m02-config-restored-light-scaled-r20261007",
-          "caption": "重新打开源目录并选择原音频后，已保存的 F1、SHR 图窗分配恢复；候选勾选为空，视野与选区回到全长。",
-          "alt": "重新载入后的参数显示界面关联 single-syllable.ptb.sqlite，波形与双轴参数图显示全长约 0.672 秒。图例为 F1 - Praat [右]、SHR (pF0) [左]，右栏没有勾选参数，correction 未勾选，分配按钮显示将 0 项分配到图窗。",
+          "assetId": "m02-current-restored-20261018-06be3f36",
+          "caption": "刷新并恢复已保存配置后，F1、SHR 曲线与右侧勾选一致，查看时间窗回到全长。",
+          "alt": "刷新并恢复已保存配置后，F1、SHR 曲线与右侧勾选一致，查看时间窗回到全长。",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -14586,7 +13713,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "勾选后无曲线：先分配，确认目标有效、当前窗有有效数值。文字列只显示标签。"
+                    "text": "勾选后无曲线：确认当前图窗正确、表已读完，当前时间窗有有效数值。文字列只显示标签。"
                   }
                 ]
               }
@@ -14627,7 +13754,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "，再勾选、分配。已存零图窗配置也会恢复为空。"
+                    "text": "，再直接勾选参数。已存零图窗配置也会恢复为空。"
                   }
                 ]
               }
@@ -14655,7 +13782,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "换表后缺曲线：新表可能没有该列。重选正确结果，再检查分配。"
+                    "text": "换表后缺曲线：新表可能没有该列。重选正确结果，再检查选择。"
                   }
                 ]
               }
@@ -14682,29 +13809,7 @@
         "content": [
           {
             "type": "text",
-            "text": "清除筛选",
-            "marks": [
-              {
-                "type": "bold"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "会清空搜索，并勾选 reaper、correction；曲线和原勾选保留。接着操作新组时别忘了"
-          },
-          {
-            "type": "text",
-            "text": "清空勾选",
-            "marks": [
-              {
-                "type": "bold"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "。"
+            "text": "清除筛选会清空搜索，并勾选 reaper、correction，曲线和原勾选保留。点击新建图窗会直接切换到空选择，无需先清空上一窗。"
           }
         ]
       },
@@ -14712,9 +13817,9 @@
         "type": "image",
         "attrs": {
           "id": "m02-figure-no-matching-candidate-light",
-          "assetId": "m02-no-matching-candidate-light-scaled-r20261007",
-          "caption": "参数搜索无匹配时，候选区显示无匹配参数与清除筛选，已分配的曲线仍保留。",
-          "alt": "右侧搜索框填入不存在的参数，候选区为空并显示无匹配参数和清除筛选按钮。中间波形与双轴曲线仍有数据，短时间窗和蓝色试听选区保持，目标图窗仍为图窗 1。",
+          "assetId": "m02-current-no-candidates-20261018-7a3a1e30",
+          "caption": "搜索无匹配时图窗曲线和已选参数保留；清空勾选仍会移除当前窗全部参数。",
+          "alt": "搜索无匹配时图窗曲线和已选参数保留；清空勾选仍会移除当前窗全部参数。",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -14854,7 +13959,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "已分配列超过 128：从图中移除不需要的列。"
+                    "text": "已选列超过 128：切到对应图窗取消不需要的勾选，或清空该窗。"
                   },
                   {
                     "type": "text",
@@ -14867,7 +13972,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "或隐藏候选不会减少分配。"
+                    "text": "会清空当前图窗，隐藏候选则保留曲线。"
                   }
                 ]
               }
@@ -14958,9 +14063,9 @@
         "type": "image",
         "attrs": {
           "id": "m02-figure-invalid-table-error-light",
-          "assetId": "m02-invalid-table-error-light-scaled-r20261007",
-          "caption": "关联损坏的示例 XLSX 后，顶部提示参数文件结构不受支持或包含公式，原音波形仍保留。",
-          "alt": "参数表关联框选中 invalid-example.xlsx。页面上方红框显示参数文件结构不受支持或包含公式，中间仍显示原音波形和时间控件，右侧候选为空，没有参数曲线。",
+          "assetId": "m02-current-invalid-table-20261018-4171dda7",
+          "caption": "损坏的合成 XLSX 无法读取，顶部显示错误，原音波形仍保留。重新选择有效结果可恢复。",
+          "alt": "损坏的合成 XLSX 无法读取，顶部显示错误，原音波形仍保留。重新选择有效结果可恢复。",
           "width": "100%",
           "align": "center",
           "crop": null,
@@ -14986,40 +14091,7 @@
         "content": [
           {
             "type": "text",
-            "text": "新视野读取失败时，"
-          },
-          {
-            "type": "text",
-            "text": "图上可能暂留旧轨迹",
-            "marks": [
-              {
-                "type": "bold"
-              },
-              {
-                "type": "textStyle",
-                "attrs": {
-                  "color": "#b42318",
-                  "colorDark": "#ffb4ab"
-                }
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "。等新视野完成后再解释和导图；重选表会"
-          },
-          {
-            "type": "text",
-            "text": "清空勾选",
-            "marks": [
-              {
-                "type": "bold"
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "，刷新或换音频则回全长。"
+            "text": "新视野读取失败时，图上可能暂留旧轨迹。等新视野完成后再解释和导图。重选表后保留新表中存在的参数，右栏与当前图窗一致；刷新或换音频回到全长。"
           }
         ]
       },
@@ -15066,7 +14138,7 @@
         "content": [
           {
             "type": "text",
-            "text": "旧单表上限为 16 MB、20 万单元格、256 列。新本机多表上限为 4 GB、每表 200 万行、总计 1.8 亿单元格、30 分钟；每次读取最多 128 个不同的已分配列。大小在限额内仍需满足文件结构和读取预算。"
+            "text": "旧单表上限为 16 MB、20 万单元格、256 列。新本机多表上限为 4 GB、每表 200 万行、总计 1.8 亿单元格、30 分钟；每次读取最多 128 个不同的已选择列。大小在限额内仍需满足文件结构和读取预算。"
           }
         ]
       },
@@ -15193,7 +14265,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "保存按钮灰色：检查是否已分配，是否正在读表或生成图片，完成后重试。"
+                    "text": "保存按钮灰色：检查是否已勾选参数，是否正在读表或生成图片，完成后重试。"
                   }
                 ]
               }

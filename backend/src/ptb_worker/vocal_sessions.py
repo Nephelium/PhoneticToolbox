@@ -10,7 +10,7 @@ import time
 import tempfile
 from uuid import uuid4
 
-OPS=frozenset(('meta','status','heartbeat','pose','live','preview','deactivate','audio/settings','audio/test',
+OPS=frozenset(('library/load','library/save','library/edit','library/import','preset-pack/create','preset-pack/validate','speaker/select','sequence/ipa','source/update','source/perturbation','meta','status','heartbeat','pose','live','preview','deactivate','audio/settings','audio/test',
     'audio/pull','audio/monitor','keyframes/load','keyframes','presets/load','presets/save','favorites/load','favorites/save',
     'document/validate','document/create','animation/prepare','animation/stop','animation/play','animation/frame','animation/audio','animation/picture',
     'video/begin','video/chunks','video/finish','video/cancel'))

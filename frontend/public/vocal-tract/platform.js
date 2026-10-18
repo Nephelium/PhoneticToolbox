@@ -5,7 +5,7 @@ let resolveChart;
 export const ipaChart=new Promise(resolve=>{resolveChart=resolve;});
 export function request(op,body={}){
   return new Promise((resolve,reject)=>{
-    const id=String(++sequence),timer=setTimeout(()=>{pending.delete(id);reject(Error('声道引擎请求超时'));},160000);
+    const id=String(++sequence),timer=setTimeout(()=>{pending.delete(id);reject(Error('声道引擎请求超时'));},['animation/prepare','preview'].includes(op)?660000:160000);
     pending.set(id,{resolve,reject,timer});parent.postMessage({type:'m10-request',id,op,body},'*');
   });
 }

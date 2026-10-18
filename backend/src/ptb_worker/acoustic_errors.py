@@ -18,7 +18,7 @@ ACOUSTIC_ERRORS=M11_ERRORS | M14_ERRORS | frozenset(f'analysis_{stage}_failed' f
     'font_unavailable',
     'lpc_runtime_unavailable','lpc_runtime_mismatch','lpc_input_budget','lpc_sample_rate',
     'lpc_invalid_roi','lpc_roi_budget','lpc_solver_failed','lpc_segment_too_short',
-    'lpc_textgrid_range','lpc_label_budget',
+    'lpc_textgrid_range','lpc_label_budget','lpc_invalid_channel',
     'egg_runtime_unavailable','egg_runtime_mismatch','egg_input_budget','egg_stereo_required',
     'egg_sample_rate','egg_invalid_roi','egg_inverse_budget','egg_incomplete_export',
     'egg_filter_failed','egg_inverse_unavailable','egg_pitch_failed','egg_reaper_unavailable','egg_reaper_failed',

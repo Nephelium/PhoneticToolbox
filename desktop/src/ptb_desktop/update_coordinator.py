@@ -62,18 +62,22 @@ class UpdateCoordinator(QObject):
         finally:
             self._lock.release()
 
-    def clear_caches(self):
+    def clear_caches(self, *, graphics_key=None):
         if self.pending or self._lock.locked():
             raise UpdateError('APPLY_BUSY', '请先处理当前退出请求。')
         reason=self.native_busy()
         if reason:raise UpdateError('APPLY_BUSY',reason.replace('更新','清理缓存'))
-        entry={'action':'clear-caches','plan':{'token':uuid.uuid4().hex},'done':threading.Event(),'allowed':False,'message':''}
+        if graphics_key is not None:
+            from .legacy_cache import _candidate
+            row=_candidate(graphics_key)
+            if row['kind']!='graphics':raise UpdateError('CACHE_PATH','不支持的图形缓存目录。')
+        entry={'action':'clear-graphics-caches' if graphics_key is not None else 'clear-caches','graphics_key':graphics_key,'plan':{'token':uuid.uuid4().hex},'done':threading.Event(),'allowed':False,'message':''}
         self._on_requested(entry)
         return {'started':self.pending is entry}
 
     @staticmethod
     def _status(entry, value):
-        if entry.get('action') != 'clear-caches':
+        if entry.get('action') not in ('clear-caches','clear-graphics-caches'):
             _atomic_json(entry['request'].parent/'status.json',value)
 
     @pyqtSlot(object)
@@ -113,6 +117,14 @@ class UpdateCoordinator(QObject):
         reason = self.native_busy(jobs=False)
         if reason:
             raise UpdateError('APPLY_BUSY', reason)
+        if entry.get('action') == 'clear-graphics-caches':
+            from .legacy_cache import _candidate
+            from .graphics_cache import request_clear
+            row=_candidate(entry['graphics_key'])
+            if row['kind']!='graphics':raise UpdateError('CACHE_PATH','缓存位置已变化，请重新检查。')
+            request_clear(row['path'].name)
+            self.pending=None
+            return True
         if entry.get('action') == 'clear-caches':
             # The page's save/close guards and recording finalization have now
             # accepted exit. No deletion is requested before this point.
