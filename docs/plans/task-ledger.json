@@ -6,7 +6,7 @@
       "id": "RELEASE-3.1.0",
       "title": "3.1.0三端同源构建及发布后检查",
       "date": "2026-10-24",
-      "status": "in_progress",
+      "status": "verified",
       "scope": "继承已审3.0.5产品，按井井选择升3.1.0并加入远程公告，Windows/Mac/web同源重建及独立验证。井井已确认输入法上线，完成最终QA及3.1文案复核后统一发布。",
       "files": [
         "release/version.json",
@@ -21,8 +21,8 @@
         "release/notes/3.1.0.md",
         "docs/testing/audio-automatic-gain.md"
       ],
-      "verification": "统一冻结757e4f：944 runtime源码清单d4f1c6df4a8a51f65f15e9f6c31f0f76881bff0748454146118eadd56ec39cae，478前端/author输入清单ca2602a595eab5bb001e4c8ce06fe42370d27f2d5a8050c9a24602cb0c754213。768前端/架构/typecheck/版本30项与strict手册通过，新科学archive/wheels3.1和未变资源逐SHA闭合。公告Chrome19/Qt10及私有发布工具验证通过，三端最终构建/验收进行，不复用旧版成品结论。 新私有Web p757e4f的9项Linux科学/interactive/VTL及Chrome地图17、下载5、读本8、公告built3通过。944运行源与478前端author当前身份仍等于冻结；生产与旧候选保持。 Git只读复核519候选/64排除闭合，无真实凭据或输入漂移，公开测试文档仅移除个人临时路径前缀，私有原回执保留；未暂存/提交/push。 Mac3.1最终审计95a62a9f通过，ZIP491904611B/SHA821ae524，fresh26+26+231、成品UI/M19/公告/搬移/strict签名退出0，221证据回收。Windows完整16与所有UI/公告已通过，最后冷暖启动收口。用户亲改说明已读取，规范行尾不改正文，5747B SHA389a4c29，待确稿。",
-      "remaining": "官网/频道、四包、Web、资料/公告已上线并后验；GitHub源码、Release发布与最终公开UI后验收口。",
+      "verification": "统一冻结757e4f：944 runtime源码清单d4f1c6df4a8a51f65f15e9f6c31f0f76881bff0748454146118eadd56ec39cae，478前端/author输入清单ca2602a595eab5bb001e4c8ce06fe42370d27f2d5a8050c9a24602cb0c754213。768前端/架构/typecheck/版本30项与strict手册通过，新科学archive/wheels3.1和未变资源逐SHA闭合。公告Chrome19/Qt10及私有发布工具验证通过，三端最终构建/验收进行，不复用旧版成品结论。 新私有Web p757e4f的9项Linux科学/interactive/VTL及Chrome地图17、下载5、读本8、公告built3通过。944运行源与478前端author当前身份仍等于冻结；生产与旧候选保持。 Git只读复核519候选/64排除闭合，无真实凭据或输入漂移，公开测试文档仅移除个人临时路径前缀，私有原回执保留；未暂存/提交/push。 Mac3.1最终审计95a62a9f通过，ZIP491904611B/SHA821ae524，fresh26+26+231、成品UI/M19/公告/搬移/strict签名退出0，221证据回收。Windows完整16与所有UI/公告已通过，最后冷暖启动收口。用户亲改说明已读取，规范行尾不改正文，5747B SHA389a4c29，待确稿。 2026-10-25四包公完整SHA、Web激活、地图/公告routes、官网与两个频道均通过；main/source2604903与v3.1.0已发布，公开无认证API/4asset HEAD+digest/正文389通过，实际公网/app只读UI载入930点/8图/公告及auto可见边界对照通过。",
+      "remaining": "本次发布与后验完成。实体音视频设备、干净Windows、macOS14/Intel/Safari与长期稳定性未扩大声明。",
       "evidence": [
         "output/validation/release-310-20261024/version-sync.json",
         "output/validation/release-305-20261024/approved-artifact-publish-stopped.json",
@@ -40,12 +40,14 @@
         "output/validation/release-310-20261024/publish/public-download-check/report.json",
         "output/validation/release-310-20261024/publish/web-activation/apply.json",
         "output/validation/release-310-20261024/publish/static-routes/receipt.json",
-        "output/validation/release-310-20261024/publish/website-channels/completion.json"
+        "output/validation/release-310-20261024/publish/website-channels/completion.json",
+        "output/validation/release-310-20261024/publish/github-public-verified.json",
+        "output/validation/release-public/web-ui-310-a99eda8a56f74533be72ff3d554cb457/report.json"
       ],
       "publication_hold": {
         "requested_by_user": false,
         "inputMethodLaunchConfirmedByUser": true,
-        "reason": "None; final notes approved, publication proceeding",
+        "reason": "None; release published and verified",
         "publicly_activated": true,
         "notesApproved": true
       },
@@ -58,7 +60,9 @@
         "mac": "verified-final-zip-757e4f",
         "web": "published-verified-p757e4f",
         "publiclyActivated": true
-      }
+      },
+      "source_commit": "2604903becb85e268233f5269724d0d44f7c97b9",
+      "release_url": "https://github.com/Nephelium/PhoneticToolbox/releases/tag/v3.1.0"
     },
     {
       "id": "APP-ANNOUNCEMENTS",
