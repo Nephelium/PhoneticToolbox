@@ -13,8 +13,8 @@
     },
     {
       "path": "frontend/public/vocal-tract/app.js",
-      "bytes": 50298,
-      "sha256": "2294ac37ec9900fdf444ab12b0517e4e4b453bc8ea90e16989b311b7720d8f6e"
+      "bytes": 49848,
+      "sha256": "8c913acb9fb59e7cfbe9c1ed4328c3b48dce82b9245522c7e169952d3a20b4e0"
     },
     {
       "path": "frontend/public/vocal-tract/area-view.mjs",
@@ -78,8 +78,8 @@
     },
     {
       "path": "frontend/public/vocal-tract/keyframes.js",
-      "bytes": 18900,
-      "sha256": "e9f46e26233c3d5a54bd8a19740d9e7a03088c17329b337e59b8fcb4b64c326e"
+      "bytes": 19300,
+      "sha256": "419d0e5508dcbcd1daa95db18d9f4e31e3281ce89a8764d23a346a672b72af66"
     },
     {
       "path": "frontend/public/vocal-tract/layout.js",
@@ -123,8 +123,8 @@
     },
     {
       "path": "frontend/public/vocal-tract/presets.js",
-      "bytes": 13918,
-      "sha256": "95eda0b2e3a212c4f1b7ee1653fabc62375f6bc825af9031e32e588908b7a002"
+      "bytes": 16817,
+      "sha256": "aeded4e6cc67cdcaf87989a262878ad7395090fc924eea797f85d5dae4ea1a27"
     },
     {
       "path": "frontend/public/vocal-tract/rigid-contact.mjs",
@@ -147,9 +147,14 @@
       "sha256": "c53d7f5b8d0c576ce1044000926463510a502320556aa019dc30e8fbc99a9702"
     },
     {
+      "path": "frontend/public/vocal-tract/sequence-import.mjs",
+      "bytes": 664,
+      "sha256": "2611630a0520c79af171ed8b697bf80c0c7bdce48d85504df086cc5f9b243819"
+    },
+    {
       "path": "frontend/public/vocal-tract/stop-editor.js",
-      "bytes": 4438,
-      "sha256": "d001259fa0b719a415f6887b9acd456dae54b94118e792a2f2194d2eef68d11d"
+      "bytes": 4442,
+      "sha256": "d229eb965f24a0266a00862b1dc958482f690cf3c00d93b7e539afee16b70cc3"
     },
     {
       "path": "frontend/public/vocal-tract/styles.css",
@@ -168,8 +173,8 @@
     },
     {
       "path": "frontend/public/vocal-tract/v3.css",
-      "bytes": 29082,
-      "sha256": "f34130892703b8afb1fd96d8adcf5cf5f8a5f8d1787c6d2c3e36be19fbec32d2"
+      "bytes": 32207,
+      "sha256": "fd5a2374b0d8a1b5aa10d58d766de7afcb32f143d9d710b3cc8c4179e2732776"
     },
     {
       "path": "frontend/public/vocal-tract/vendor/OrbitControls.js",
@@ -192,9 +197,14 @@
       "sha256": "c8211c69345d2e9949dc7a8ac969380497aa0600a5a8ac6a459c8cd02dd9cb8a"
     },
     {
+      "path": "frontend/public/vocal-tract/video-timeline.mjs",
+      "bytes": 498,
+      "sha256": "e74f208eb4cede8ee754303acd870c5959b8b9c03cba5f667fc481811c143485"
+    },
+    {
       "path": "frontend/public/vocal-tract/video.js",
-      "bytes": 11447,
-      "sha256": "4b207573882a402c831c1ee9b8d5ad421e80e6478000eeb0a0245d0f89bed699"
+      "bytes": 11326,
+      "sha256": "71f535ecf3f9bf519747d63d45cfa1d042c9d3410e36427ad3f961ebd74e93bc"
     },
     {
       "path": "frontend/public/vocal-tract/viewer.js",
@@ -203,23 +213,23 @@
     },
     {
       "path": "resources/vocal_tract/native/darwin-arm64/libgeometry_p2.dylib",
-      "bytes": 382832,
-      "sha256": "c446192c6bc57903ccdb4b98a8dec92d7fac3e5f8d6f819b9339ab0ab2672b92"
+      "bytes": 382944,
+      "sha256": "76c400afb9239ada90a9ea08707dbf486c2c886125e6740030bdd00ed5e845c9"
     },
     {
       "path": "resources/vocal_tract/native/darwin-arm64/libVocalTractLabAnalysis.dylib",
       "bytes": 680784,
-      "sha256": "734493e0135f166c83a10decaf7132528b41452154572dcbc611d2ec6cf6b85f"
+      "sha256": "b98d5e233c54126d2f31a70172a7b7967754aab83414af6f7cbc0b82ced2c1dd"
     },
     {
       "path": "resources/vocal_tract/native/darwin-arm64/libVocalTractLabApi.dylib",
       "bytes": 680768,
-      "sha256": "c3c1d1b77d123e4ccdda64d66d69ca4e274a13ebf691a1cc7cc7c2892ab3dfaa"
+      "sha256": "99df458ea0687b32e8fd3a9afe8a23a98aeeb0d21000bd71a05aefb5b266549d"
     },
     {
       "path": "resources/vocal_tract/native/darwin-arm64/native-pair.json",
       "bytes": 503,
-      "sha256": "5e39c5839d76a84124fbc9ce7da0836bec13c0cec5b42afbaa4237ff9a8ed3b4"
+      "sha256": "0e2a51017ddb33de006967fed4409d0f557efec941f5fd622d11993eaf1045be"
     },
     {
       "path": "resources/vocal_tract/native/geometry_p2.dll",

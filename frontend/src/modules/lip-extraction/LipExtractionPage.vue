@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {useMediaAudition} from '../../state/media-audition.ts';
 import {useWebSettings,settingsFields} from '../../state/web-settings.ts';
 import AppIcon from '../../components/AppIcon.vue';
 import ModuleWorkbench from '../../components/ModuleWorkbench.vue';
@@ -36,8 +37,9 @@ const recordingUrl=ref('');
 function clearRecordingUrl(){if(recordingUrl.value)URL.revokeObjectURL(recordingUrl.value);recordingUrl.value='';}
 const mediaFailure=ref(false),offsets=ref<Record<string,number>>({});let restoringOffset=false;
 const replayVideo=ref<HTMLVideoElement|null>(null),sourceUrls=ref<Record<string,string>>({});const unsaved=new Set<string>();
+const replayGainMessage=useMediaAudition(replayVideo);
 const sourceOrigins=ref<Record<string,number>>({}),mediaPreparing=ref(false),mediaMessage=ref('');
-const compatibleSources=new Set<string>();let mediaGeneration=0,resumeMedia=false,pendingMediaTime:number|null=null;
+const compatibleSources=new Set<string>();let mediaGeneration=0,playGeneration=0,resumeMedia=false,pendingMediaTime:number|null=null;
 let capture:LipCapture|undefined,abort:AbortController|undefined,replayTimer=0,replayFrameCallback=0,replayRequest=0;
 let replayStore:LipReplay|undefined,disposed=false,historySourceId='';
 const replayRow=shallowRef<LipRow>(),exportInfo=ref<Record<string,any>>();
@@ -126,26 +128,26 @@ async function save(){if(recording.value||busy.value){error.value='采集或分�
 defineExpose({save,dispose:()=>capture?.dispose()});
 function discard(){stopReplay();clearRecordingUrl();capture?.discard();results.value=[];batchIds.value=[];unsaved.clear();Object.values(sourceUrls.value).forEach(URL.revokeObjectURL);sourceUrls.value={};resultDirty.value=false;confirmDiscard.value=false;inspection.value=undefined;waveform.value=null;exportInfo.value=undefined;replayRow.value=undefined;replayStore=undefined;notice.value='已放弃本页未保存内容，磁盘原文件未改动。';}
 function cancelReplayClock(){if(replayTimer)cancelAnimationFrame(replayTimer);if(replayFrameCallback)replayVideo.value?.cancelVideoFrameCallback(replayFrameCallback);replayTimer=replayFrameCallback=0;}
-function stopReplay(){replaying.value=false;cancelReplayClock();replayVideo.value?.pause();replayRequest++;}
+function stopReplay(cancelIntent=true){if(cancelIntent){playGeneration++;resumeMedia=false;}replaying.value=false;cancelReplayClock();replayVideo.value?.pause();replayRequest++;}
 function replayOrigin(){return selected.value?(sourceOrigins.value[selected.value.id]??0)-(selected.value.metadata.timing?.anchor_s??0):-(inspection.value?.audio?.first_decoded_pts_s??0);}
 async function preparePlayback(){
  const result=selected.value;if(!result||!port.value.playbackVideo||mediaPreparing.value)return;
  const generation=++mediaGeneration,position=(replayVideo.value?.currentTime??0)+replayOrigin();
- mediaPreparing.value=true;mediaMessage.value='正在准备音视频回放…';stopReplay();
+ mediaPreparing.value=true;mediaMessage.value='正在准备音视频回放…';stopReplay(false);
  try{const media=await port.value.playbackVideo(result);if(disposed||generation!==mediaGeneration||selected.value?.id!==result.id)return;
   const previous=sourceUrls.value[result.id];sourceOrigins.value[result.id]=media.origin_s;pendingMediaTime=Math.max(0,position-replayOrigin());compatibleSources.add(result.id);mediaFailure.value=false;mediaMessage.value='';sourceUrls.value[result.id]=URL.createObjectURL(media.blob);if(previous)URL.revokeObjectURL(previous);
  }catch(e){if(generation===mediaGeneration){mediaFailure.value=true;mediaMessage.value='音视频回放准备失败：'+(e as Error).message;resumeMedia=false;}}
  finally{if(generation===mediaGeneration)mediaPreparing.value=false;}
 }
 function mediaError(){
- mediaFailure.value=true;stopReplay();
+ mediaFailure.value=true;stopReplay(false);
  if(selected.value&&port.value.playbackVideo&&!compatibleSources.has(selected.value.id)){void preparePlayback();return;}
  mediaMessage.value='此视频暂时无法播放，可重试准备音视频回放。';
 }
 function mediaLoaded(){
  if(replayVideo.value&&!replayVideo.value.videoWidth){mediaError();return;}
  if(pendingMediaTime!==null&&replayVideo.value){replayVideo.value.currentTime=pendingMediaTime;pendingMediaTime=null;}
- if(resumeMedia){resumeMedia=false;void play();}
+ if(resumeMedia){resumeMedia=false;if(!disposed&&props.active!==false)void play();}
 }
 function missingAudio(time:number){
  const media=replayVideo.value as (HTMLVideoElement&{webkitAudioDecodedByteCount?:number})|null;
@@ -159,12 +161,13 @@ async function showTime(t:number){
  const store=replayStore,request=++replayRequest;if(!store)return;
  try{const row=await store.time(t);if(disposed||request!==replayRequest||store!==replayStore||!row)return;replayRow.value=t<(rows.value[0]?.time_s??0)||t>(rows.value.at(-1)?.time_s??0)+.15?{...row,detected:false,points:null,metrics:null}:row;replayIndex.value=row.index;store.prefetch(row.index);}catch(e){if(request===replayRequest){stopReplay();error.value=(e as Error).message;}}
 }
-async function play(){if(!rows.value.length)return;if(mediaPreparing.value){resumeMedia=true;return;}if(mediaFailure.value&&playbackUrl.value){resumeMedia=true;await preparePlayback();return;}if(replayIndex.value>=frameCount.value-1)await seekFrame(0);const media=replayVideo.value;
+function replayAllowed(){return !disposed&&props.active!==false;}
+async function play(){if(!replayAllowed()||!rows.value.length)return;const ticket=++playGeneration;if(mediaPreparing.value){resumeMedia=true;return;}if(mediaFailure.value&&playbackUrl.value){resumeMedia=true;await preparePlayback();return;}if(replayIndex.value>=frameCount.value-1)await seekFrame(0);if(!replayAllowed()||ticket!==playGeneration)return;const media=replayVideo.value;
  if(!mediaFailure.value&&playbackUrl.value&&media){try{await media.play();}catch(e){error.value=(e as Error).message;stopReplay();}return;}
  replaying.value=true;const first=performance.now(),origin=replayRow.value?.time_s??rows.value[0].time_s;
  const tick=()=>{if(!replaying.value)return;const now=origin+(performance.now()-first)/1000;void showTime(now);if(now>=(rows.value.at(-1)?.time_s??0)){replaying.value=false;return;}replayTimer=requestAnimationFrame(tick);};tick();
 }
-function mediaPlaying(){cancelReplayClock();replaying.value=true;const media=replayVideo.value;if(!media)return;
+function mediaPlaying(){if(disposed||props.active===false){stopReplay();return;}cancelReplayClock();replaying.value=true;const media=replayVideo.value;if(!media)return;
  const tick=(_now:number,meta:VideoFrameCallbackMetadata)=>{if(media!==replayVideo.value||media.paused)return;if(missingAudio(meta.mediaTime)){resumeMedia=true;mediaError();return;}void showTime(meta.mediaTime+replayOrigin()-effectiveOffset.value);replayFrameCallback=media.requestVideoFrameCallback(tick);};
  if(media.requestVideoFrameCallback)replayFrameCallback=media.requestVideoFrameCallback(tick);
  else{const fallback=()=>{if(media.paused)return;if(missingAudio(media.currentTime)){resumeMedia=true;mediaError();return;}syncReplay();replayTimer=requestAnimationFrame(fallback);};fallback();}
@@ -250,7 +253,7 @@ useWebSettings(props.stateKey,{camera,microphone,filter,cutoff,fps,delegate,mirr
  <ModuleSection class="lip-media-section" label="视频回放" title="视频与同步回放">
   <video ref="video" class="lip-live-video" playsinline muted :class="{mirrored:mirror}" v-show="!playbackUrl" aria-label="摄像头实时画面"/>
   <video v-if="playbackUrl" ref="replayVideo" class="lip-recording-preview" :src="playbackUrl" controls preload="metadata" aria-label="视频与动画同步回放" @error="mediaError" @loadedmetadata="mediaLoaded" @play="mediaPlaying" @pause="mediaPaused" @seeked="syncReplay" @ended="mediaPaused"/>
-  <p v-if="mediaMessage" class="lip-save-note" role="status">{{mediaMessage}}</p><button v-if="mediaFailure&&!mediaPreparing&&selected&&port.playbackVideo" @click="preparePlayback">重试音视频回放</button>
+  <p v-if="replayGainMessage" role="status">{{replayGainMessage}}</p><p v-if="mediaMessage" class="lip-save-note" role="status">{{mediaMessage}}</p><button v-if="mediaFailure&&!mediaPreparing&&selected&&port.playbackVideo" @click="preparePlayback">重试音视频回放</button>
   <div v-if="rows.length&&!recording" class="lip-replay-controls"><button :disabled="mediaPreparing" @click="replaying?stopReplay():play()">{{replaying?'暂停回放':'同步回放'}}</button><span>{{(replayRow?.time_s??0).toFixed(3)}} s</span><input v-model.number="replayIndex" type="range" min="0" :max="Math.max(0,frameCount-1)" aria-label="回放帧" @input="stopReplay();seekFrame(replayIndex)"/></div>
  </ModuleSection>
  <div v-if="help" class="lip-help">实时唇形使用 Face Landmarker，与 V2 FaceMesh 尚未通过等价验证。镜像和面部放大只改变显示。高帧率是设备请求值，以实际文件为准。录制暂存上限 128 MB，实时参数上限 32 MB。编码起点估计、设备延迟和滤波滞后均可能造成偏移，请结合已知同步事件检查。偏移调整只平移唇形，不改音频或原视频。</div>

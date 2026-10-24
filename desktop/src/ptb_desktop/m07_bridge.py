@@ -35,10 +35,18 @@ class M07Bridge:
             if job['operation']!='phonation_synthesis' or job['state']!='succeeded':raise FileAccessError('本组尚未完整成功')
             directory=self.bridge.provider.directory(body['directory'])
             if directory.purpose!='output':raise FileAccessError('请选择输出位置')
+            name=body.get('name')
+            if not isinstance(name,str) or not name or len(name)>120 or name[-1] in ' .' or any(ord(c)<32 or c in '/\\:<>"|?*' for c in name):
+                raise FileAccessError('结果组名称不正确，请重新选择本组保存')
             with pin_directory(directory.path):
                 self.bridge.provider.directory(body['directory'])
-                destination=directory.path/('M07-'+job_id)
-                destination.mkdir(exist_ok=True);checked_path(destination)
+                for number in range(1,10001):
+                    destination=directory.path/(name if number==1 else f'{name}（{number}）')
+                    try:destination.mkdir()
+                    except FileExistsError:continue
+                    checked_path(destination)
+                    break
+                else:raise FileAccessError('同名结果过多，请选择新的输出位置')
                 grant=self.bridge.provider.choose('output',lambda:str(destination))
                 return self.bridge.save(job_id,grant['id'],single=True)
         raise FileAccessError('发声类型合成操作不可用')

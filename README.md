@@ -1,4 +1,4 @@
-<h1 align="center">PhoneticToolbox 3.0.3</h1>
+<h1 align="center">PhoneticToolbox 3.1.0</h1>
 
 <p align="center"><strong>语音学工具箱</strong><br>把录音、分析、标注、合成与感知实验放进同一个工作台。</p>
 
@@ -8,36 +8,36 @@
 
 <p align="center"><a href="#下载与开始使用">下载与开始使用</a> · <a href="#全部模块">全部模块</a> · <a href="#文档与开发">开发文档</a> · <a href="#来源许可与历史版本">来源与许可</a></p>
 
-**Windows x64 正式版 · macOS Apple Silicon 测试版 · 18 个工具**
+**Windows x64 正式版 · macOS Apple Silicon 测试版 · 19 个工具**
 
 PhoneticToolbox 是韶子为语言学、实验语音学研究与教学制作的一只语音学工具箱。希望把准备材料、分析信号、制作刺激和整理结果这些日常工作放到一起，让大家在不同工具之间切换时，少花些找窗口和搬文件的力气。
 
-到了 v3，十八个工具共用侧栏、标签页、设置和使用说明。从一段录音出发，可以查看波形与语谱图、提取参数、整理标注，再继续做语音合成、音系分析或感知实验。也可以打开音标表、设计实验，或切到论文阅读页读几页文献。
+到了 v3，十九个工具共用侧栏、标签页、设置和使用说明。从一段录音出发，可以查看波形与语谱图、提取参数、整理标注，再继续做语音合成、音系分析或感知实验。也可以打开音标表、设计实验、读几页论文，或在地图上比较各地的语言现象。
 
-下面先介绍下载与使用，再逐个展示工具和实际示例。3.0.3 减少了绘图、阅读和预览时的重复计算，语谱图转音频新增离线窗长与动态范围预测，并默认采用动量加速的 Griffin–Lim 重建。完整变化见[这一版的发行说明](https://github.com/Nephelium/PhoneticToolbox/releases/tag/v3.0.3)。
+下面先介绍下载与使用，再逐个展示工具和实际示例。本页对应 **3.1.0 源码**，新增语言地图，可按中国省、市、县浏览方言分布与语言现象，比较两地记录，并制作自己的研究地图。已发布的安装包与版本信息以[官网](https://www.phonetictoolbox.com/)为准。
 
-![PhoneticToolbox 的 Windows 工作台首页，按分析与采集、合成与操控、标注与实验、文献与学习组织十八个工具](docs/assets/readme/absolutely-home.png)
+![旧版 Windows 工作台首页，按分析与采集、合成与操控、标注与实验、文献与学习组织原有十八个工具](docs/assets/readme/absolutely-home.png)
 
 ## 下载与开始使用
 
 ### 选择 Windows 版本
 
-可以在[官方网站](https://www.phonetictoolbox.com/)获取当前 Windows 版本。日常使用选安装版即可；想放在自己的目录里直接运行，可以选免安装版。两类应用提供相同的工具，按自己的使用习惯选择就好。
+可以在[官方网站](https://www.phonetictoolbox.com/)获取已发布的 Windows 版本。日常使用选安装版即可；想放在自己的目录里直接运行，可以选免安装版。两类应用提供相同的工具，按自己的使用习惯选择就好。下表列出 3.1.0 的构建文件名。
 
 | 版本 | 文件名 | 使用方式 |
 | --- | --- | --- |
 | 免安装版 | `PhoneticToolbox-windows-x64.exe` | 双击启动，无需运行安装向导 |
-| 安装版 | `PhoneticToolbox-3.0.3-windows-x64-setup.exe` | 按当前用户安装，默认不要求管理员权限，创建应用入口 |
+| 安装版 | `PhoneticToolbox-3.1.0-windows-x64-setup.exe` | 按当前用户安装，默认不要求管理员权限，创建应用入口 |
 
 Windows 版本要求 **Windows 10 1809 及以上或 Windows 11、64 位 x64 系统**。可在 Windows **设置 → 系统 → 关于 → 系统类型**中核对。
 
 安装版默认放在 `%LOCALAPPDATA%\Programs\PhoneticToolbox`。安装完成后，从开始菜单或已创建的桌面快捷方式启动应用。主程序下载包小于 500 MB，第一次打开会准备本机运行文件，展开后的磁盘占用更大。**MFA 运行环境、声学模型和发音词典独立下载，主包不包含这些组件。**
 
-也可以从 [GitHub Releases](https://github.com/Nephelium/PhoneticToolbox/releases/tag/v3.0.3)下载 Windows 版，旧版本仍然保留，查阅或对照时都能找到。当前成品的实际检查范围见[3.0.3 发行验收](docs/testing/package-trimming.md)与[同版本更新验收](docs/testing/release-3.0.3-replacement.md)。
+也可以从 [GitHub Releases](https://github.com/Nephelium/PhoneticToolbox/releases)选择已发布的 Windows 版，旧版本仍然保留，查阅或对照时都能找到。本次三端构建及实际检查范围见[3.1.0发行验收](docs/testing/release-3.1.0.md)。
 
 ### macOS 测试版
 
-[官方网站](https://www.phonetictoolbox.com/#macos-download)已提供 **3.0.3 r6 测试版**，适用于 **Apple Silicon（M 系列芯片）、macOS 14 及以上**。下载文件为 `PhoneticToolbox-3.0.3-macos14-arm64-preview-r6.zip`，解压后将 `PhoneticToolbox.app` 拖入“应用程序”，再双击打开。
+[官方网站](https://www.phonetictoolbox.com/#macos-download)已提供 **3.1.0 Apple Silicon（M 系列芯片）测试版**。下载文件为 `PhoneticToolbox-3.1.0-macos14-arm64-preview.zip`，最低系统目标为 macOS 14，本轮实际验证平台为 macOS 26.6.2。解压后将 `PhoneticToolbox.app` 拖入“应用程序”，再双击打开。
 
 测试包尚未经过 Apple 公证，首次打开请参照官网 Mac 下载按钮内的安装说明。Windows 与 Mac 的下载入口均在官网，按自己的系统选择即可。
 
@@ -59,6 +59,7 @@ Windows 版本要求 **Windows 10 1809 及以上或 Windows 11、64 位 x64 系�
 | 标注与音系整理 | 导入 TextGrid，编辑标注边界和标签，或用已有转写进行 MFA 对齐 | TextGrid、调查字表、同音字表 |
 | 语音操控与合成 | 编辑基频和时长，调整声学参数、发声类型或声道构形 | 合成音频、参数工程、动作视频 |
 | 教学与感知研究 | 查询音标、转换汉字读音，设计感知实验，阅读和批注语音学论文 | 音标文本与图片、实验配置和记录、阅读批注 |
+| 方言与语言地理 | 在中国地图上浏览方言与语言现象，比较调查点，编辑自己的研究地图 | 对照表、地图、研究工程 |
 
 波形、语谱图、参数轨迹与 TextGrid 在相应工具中共享时间位置。找到需要观察的一小段语音后，就可以围着这一段核对信号、标签和数值。MFA 得到的自动对齐结果，也可以接着在 TextGrid 标注工具里人工复核。
 
@@ -86,6 +87,7 @@ Windows 版本要求 **Windows 10 1809 及以上或 Windows 11、64 位 x64 系�
 | 标注与实验 | [音系归纳](frontend/src/modules/phonology-induction/README.md) | 调查字表、音系分析与同音字表 |
 | 标注与实验 | [感知实验](frontend/src/modules/perception/README.md) | 实验设计、配置与运行 |
 | 文献与学习 | [语音学论文精读](frontend/src/modules/paper-reading/README.md) | 论文库、PDF 阅读、译读对照与批注 |
+| 文献与学习 | [语言地图](frontend/src/modules/geolinguistics/README.md) | 中国省市县方言分布、语言现象、两地比较与研究地图 |
 
 为了便于比较，下面的配图统一采用 **Windows 工作台的 Absolutely 日间配色**。日常使用时可以换成自己喜欢的主题。点击图片可查看完整尺寸，示例与采集来源见[配图说明](docs/assets/readme/README.md)。
 
@@ -217,6 +219,12 @@ Windows 版本要求 **Windows 10 1809 及以上或 Windows 11、64 位 x64 系�
 
 示例在普通工作台内以 50% 缩放阅读协同发音论文，完整显示首页，可切换原文、中文译文与论文解读。
 
+#### 语言地图
+
+在中国地图上按省、市、县筛选方言分布，浏览语音、词汇和语法现象。可以把两幅或四幅地图并排比较，也可以选两地对照调查记录。加入自己的调查点和标记后，保存研究工程，或导出表格与 SVG、PNG 地图。
+
+地图资料单独下载，也可选择完整资料夹导入。载入后保存在本机，重新打开可离线使用，研究工程可以另外保存和导出。
+
 ### 工作台设置
 
 看得舒服也很重要。外观、字体、图标、本机存储与自动清理都放在设置中，支持浅色、深色和跟随系统。页面缩放、正文与图表字体、按钮高亮和波形颜色，可以按屏幕和使用习惯调整。
@@ -246,6 +254,8 @@ Windows 免安装版首次启动时需要选择缓存保存位置，程序会在
 应用通过**检查更新**获取新版信息，当前更新下载完整新版应用包。也可以关闭应用后，在原目录安装或替换新版。设置、草稿、研究文件及已安装的 MFA 组件沿用原存储位置。卸载安装版时，可选择删除应用管理的 MFA 组件，默认保留；自行指定的外部环境保留。
 
 ## 文档与开发
+
+设置 → 音频提供默认开启的**音频音量自动增益**，用于提高偏小的试听音量，可随时关闭。原始音频和导出文件保持原样。感知实验的正式刺激由实验者在参数页单独设置**实验播放音量**，默认 100%，独立于试听自动增益。
 
 | 想做什么 | 从这里开始 |
 | --- | --- |

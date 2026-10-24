@@ -10,7 +10,7 @@ import type {ResearchContext,ResearchFile,JobView} from '../../platform/research
 import {workspace,host} from '../../state/workspace.ts';import {stop} from '../../state/audio.ts';import {decodeWav} from '../../platform/decode.ts';
 import ModuleFrame from '../../components/ModuleFrame.vue';import ModuleToolbar from '../../components/ModuleToolbar.vue';import ModuleSection from '../../components/ModuleSection.vue';import ModuleStatus from '../../components/ModuleStatus.vue';import ModalDialog from '../../components/ModalDialog.vue';import WaveformViewport from '../../components/WaveformViewport.vue';import AudioTransport from '../../components/AudioTransport.vue';import TaskPanel from '../../components/TaskPanel.vue';
 import CurveEditor from './CurveEditor.vue';import SynthesisSpectrum from './SynthesisSpectrum.vue';
-import {defaults,parameters,vowels,presets,f0Methods,clone,valid,number,ipa,override,resize,f0Range,preset,exportParams,importParams,isCurrent,type Config} from './state.ts';
+import {defaults,parameters,vowels,presets,f0Methods,clone,valid,number,ipa,override,resize,f0Range,preset,exportParams,importParams,isCurrent,configPreferences,restorePreferences,preferenceKeys,unavailableParameters,type Config} from './state.ts';
 import {copyText} from '../../platform/clipboard.ts';
 import type {Action,Result,Raster} from './port.ts';import {downloadBytes} from '../../platform/m06.ts';
 const props=defineProps<{context:ResearchContext;stateKey:string;active:boolean}>();const emit=defineEmits<{references:[]}>();
@@ -24,8 +24,12 @@ const previewWave=computed(()=>previewTarget.value==='source'?sourceWave:wave),s
 const port=computed(()=>props.context.files.m06),stale=computed(()=>!!result.value&&resultRevision.value!==revision.value);
 const timelineDuration=computed(()=>previewTarget.value==='source'&&sourceWave.asset?sourceWave.asset.duration:config.duration);
 const activeRange=computed<[number,number]>(()=>{const p=previewWave.value,length=timelineDuration.value/p.zoom,start=Math.max(0,Math.min(p.offset,timelineDuration.value-length));return [start,start+length];});
+const preferences=reactive(configPreferences(config));
+const retryContext=ref<{id:string;revision:number;action:Action;input?:ResearchFile}>();
+const canRetrySave=computed(()=>!!job.value&&!!port.value?.canRetrySave?.(job.value.id));
 const tasks=computed(()=>job.value?[{id:job.value.id,title:'声学参数合成 · '+job.value.id.slice(0,8),status:job.value.state,progress:job.value.progress,error:job.value.error_code??undefined,canCancel:true}]:[]);
 watch(config,()=>{revision.value++;wave.dirty=true;stop();},{deep:true,flush:'sync'});
+watch(config,()=>Object.assign(preferences,configPreferences(config)),{deep:true,flush:'sync'});
 watch(()=>props.active,v=>{if(!v)stop();});
 watch(name,()=>syncOverride());
 watch(source,()=>editPending(),{flush:'sync'});
@@ -33,8 +37,9 @@ function editPending(){revision.value++;wave.dirty=true;stop();}
 function requireApplied(){if(Number(durationText.value)!==config.duration||Number(low.value)!==config.f0_range[0]||Number(high.value)!==config.f0_range[1])throw Error('请先应用时长或 F0 范围');const v=config.curves[name.value].override;const expected=v===null?'':String(v*(name.value==='Shimmer'?100:1));if(overrideText.value!==expected)throw Error('请先应用曲线覆盖');}
 const copyNotice=ref(''),copyError=ref(''),copyValue=ref('');
 async function copySymbol(s:string){copyValue.value=s;copyNotice.value='';copyError.value='';try{await copyText(s);copyNotice.value='已复制 '+s;}catch{copyError.value='复制失败，请选中音标后按 Ctrl+C。';}}
-function syncOverride(){const v=config.curves[name.value].override;overrideText.value=v===null?'':String(v*(name.value==='Shimmer'?100:1));}
-function selectParameter(next:string){void attempt(()=>{override(config,name.value,overrideText.value);name.value=next;syncOverride();});}
+function appliedOverride(){const v=config.curves[name.value].override;return v===null?'':String(v*(name.value==='Shimmer'?100:1));}
+function syncOverride(){overrideText.value=appliedOverride();}
+function selectParameter(next:string){void attempt(()=>{if(overrideText.value!==appliedOverride())override(config,name.value,overrideText.value);name.value=next;syncOverride();});}
 function syncInputs(){syncOverride();durationText.value=String(config.duration);low.value=String(config.f0_range[0]);high.value=String(config.f0_range[1]);}
 function attempt(work:()=>void|Promise<void>){error.value='';return Promise.resolve().then(work).catch(e=>{if(!disposed)error.value=e instanceof Error?e.message:String(e);});}
 function replace(c:Config){Object.assign(config,valid(c));syncInputs();resetRange();}
@@ -47,8 +52,10 @@ function confirm(label:string,work:()=>void){pendingLabel.value=label;pending.va
 function commitPending(){const work=pending.value;pending.value=null;if(work)void attempt(work);}
 function clear(){confirm('恢复全部参数，清除曲线覆盖与静音区间',()=>{const c=defaults();resize(c,config.duration);c.sample_rate=config.sample_rate;c.sequence=config.sequence;c.fade_in=config.fade_in;c.fade_out=config.fade_out;c.smooth=config.smooth;replace(c);});}
 function applyPreset(){confirm('应用“'+selectedPreset.value+'”声源参数，保留 F0 曲线形状；假声和嘎裂只作整体平移',()=>{requireApplied();preset(config,selectedPreset.value);syncInputs();const shift=config.f0_transform.offset_hz;notice.value=shift===0?'发声预设已应用，F0 使用基础曲线':'发声预设已应用，F0 整体'+(shift>0?'上移 ':'下移 ')+Math.abs(shift).toFixed(1)+' Hz，可继续编辑';});}
-function save(){try{valid(config);if(Number(durationText.value)!==config.duration||Number(low.value)!==config.f0_range[0]||Number(high.value)!==config.f0_range[1])throw Error('请先应用时长或 F0 范围');const c=clone(config);override(c,name.value,overrideText.value);valid(c);if(!host.projects.write('m06.draft.'+props.stateKey,c))throw Error('草稿保存失败');if(JSON.stringify(c)!==JSON.stringify(config))replace(c);wave.dirty=false;notice.value='完整参数草稿已保存';return true;}catch(e){error.value=String(e);return false;}}
-defineExpose({save});
+ async function save(){try{if(busy.value)throw Error('请等待当前任务完成或取消');if(canRetrySave.value){await retrySave();if(canRetrySave.value)return false;}valid(config);if(Number(durationText.value)!==config.duration||Number(low.value)!==config.f0_range[0]||Number(high.value)!==config.f0_range[1])throw Error('请先应用时长或 F0 范围');const c=clone(config);if(overrideText.value!==appliedOverride())override(c,name.value,overrideText.value);valid(c);if(!host.projects.write('m06.draft.'+props.stateKey,c))throw Error('草稿保存失败');if(JSON.stringify(c)!==JSON.stringify(config))replace(c);wave.dirty=false;notice.value='完整参数草稿已保存';return true;}catch(e){error.value=String(e);return false;}}
+function restorePendingSave(){const saved=port.value?.pendingSave?.();if(!saved)return;job.value=saved.job;retryContext.value={id:saved.job.id,revision:JSON.stringify(saved.config)===JSON.stringify(config)?revision.value:-1,action:saved.action};wave.dirty=true;notice.value='上次合成结果尚未保存，可以重试保存，无须重新计算。';}
+function discardPendingSave(){if(busy.value)throw Error('请先取消当前任务，再放弃待保存结果。');if(job.value)port.value?.discardSave?.(job.value.id);retryContext.value=undefined;}
+defineExpose({save,hasPendingSave:()=>canRetrySave.value,discardPendingSave});
 async function refresh(){const next=(await props.context.files.list(directory.value||undefined)).filter(f=>/\.wav$/i.test(f.name));files.value=next;if(sourceId.value&&!next.some(f=>f.id===sourceId.value&&(!source.value||f.sha256===source.value.sha256)))await selectSource('');}
 async function choose(){await attempt(async()=>{const grant=await props.context.files.choose?.('input');if(grant){directory.value=grant.id;await refresh();}});}
 async function addAudio(event:Event){await attempt(async()=>{const target=event.target as HTMLInputElement;props.context.files.add?.([...target.files??[]]);target.value='';await refresh();});}
@@ -67,16 +74,27 @@ async function selectSource(id:string){
 }
 async function run(action:Action){await attempt(async()=>{
  if(!port.value)throw Error('当前环境无法进行声学参数合成，请使用桌面版');if(busy.value)throw Error('请等待当前任务完成或取消');
+ if(canRetrySave.value)throw Error('还有待保存的合成结果，请先重试保存或确认放弃后关闭标签。');
  requireApplied();const submitted=clone(valid(config));if(action==='generate')ipa(submitted.sequence);if(action==='extract'&&(!source.value||sourceLoading.value))throw Error('请先加载 WAV 音频');
  if(submitted.duration>10||submitted.duration*submitted.sample_rate>480000)throw Error('当前已验证任务预算为 10 秒且 480,000 样本，请缩短输入');
- const input=source.value;const rev=revision.value,ticket=++epoch;abort=new AbortController();busy.value=true;notice.value='';
+ const input=source.value;const rev=revision.value,ticket=++epoch;abort=new AbortController();busy.value=true;notice.value='';retryContext.value=undefined;
  try{const completed=await port.value.run(action,submitted,input,abort.signal,j=>{if(!disposed&&ticket===epoch)job.value=j;});
+  await applyCompleted(action,completed,input,rev,ticket);
+ }finally{if(ticket===epoch){busy.value=false;if(job.value&&port.value?.canRetrySave?.(job.value.id))retryContext.value={id:job.value.id,revision:rev,action,input};}}
+ });}
+async function applyCompleted(action:Action,completed:Result,input:ResearchFile|undefined,rev:number,ticket:number){
+  abort?.signal.throwIfAborted();
   if(disposed||!isCurrent(rev,revision.value,ticket,epoch)){notice.value='任务完成期间配置已改变，迟到结果未应用。原结果保留。';return;}
   if(action==='synthesize'){
-   const asset=await decodeWav(completed.wav!,'合成结果.wav');if(disposed||!isCurrent(rev,revision.value,ticket,epoch))return;
+   const asset=await decodeWav(completed.wav!,'合成结果.wav',abort?.signal);if(disposed||!isCurrent(rev,revision.value,ticket,epoch))return;
    previewTarget.value='result';result.value=completed;resultRevision.value=rev;wave.asset=markRaw(asset);wave.start=0;wave.end=asset.duration;wave.channel=0;resetRange();notice.value='合成完成，试听与导出绑定本次参数快照'+((completed.metadata.diagnostics?.output_gain??1)<1?'；输出超过安全幅度，已整体衰减 '+(-20*Math.log10(completed.metadata.diagnostics!.output_gain!)).toFixed(1)+' dB':'')+(completed.metadata.diagnostics?.voiced_frames===0?'；所选算法未检出有声帧，请试听核查，必要时切换算法或调整 F0 范围。':'');
-  }else{if(action==='extract'&&input){const raw=await props.context.files.read(input,abort.signal);if(raw.sha256!==completed.metadata.input_sha256)throw Error('源音频在提取后已变化，未应用参数');const asset=await decodeWav(raw.buffer,input.name);if(disposed||!isCurrent(rev,revision.value,ticket,epoch))return;sourceWave.asset=markRaw(asset);sourceWave.start=0;sourceWave.end=asset.duration;sourceWave.channel=0;sourceSpectra.value=completed.metadata.spectrograms;previewTarget.value='source';}replace(completed.metadata.config);notice.value=action==='generate'?'元音曲线已生成，请点击合成音频':'参数提取完成（'+f0Methods[completed.metadata.config.f0_method]+'）。AV 按相对能量初始化，AH 为 0，请按需要调整声源后合成'+(completed.metadata.diagnostics?.voiced_mask?.some(Boolean)===false?'。未检出有声帧，AV 全为 0；可调整 F0 范围或切换算法后重新提取':'');}
- }finally{if(ticket===epoch)busy.value=false;}
+  }else{if(action==='extract'&&input){const raw=await props.context.files.read(input,abort?.signal);if(raw.sha256!==completed.metadata.input_sha256)throw Error('源音频在提取后已变化，未应用参数');const asset=await decodeWav(raw.buffer,input.name,abort?.signal);if(disposed||!isCurrent(rev,revision.value,ticket,epoch))return;sourceWave.asset=markRaw(asset);sourceWave.start=0;sourceWave.end=asset.duration;sourceWave.channel=0;sourceSpectra.value=completed.metadata.spectrograms;previewTarget.value='source';}replace(completed.metadata.config);notice.value=action==='generate'?'元音曲线已生成，请点击合成音频':'参数提取完成（'+f0Methods[completed.metadata.config.f0_method]+'）。AV 按相对能量初始化，AH 为 0，请按需要调整声源后合成'+(completed.metadata.diagnostics?.voiced_mask?.some(Boolean)===false?'。未检出有声帧，AV 全为 0；可调整 F0 范围或切换算法后重新提取':'');}
+}
+async function retrySave(){await attempt(async()=>{
+ const retry=retryContext.value;if(!retry||!port.value?.retrySave||busy.value)throw Error('没有待保存的合成结果');
+ const ticket=++epoch;abort=new AbortController();busy.value=true;notice.value='正在重试保存结果，不会重新计算。';
+ try{const completed=await port.value.retrySave(retry.id,abort.signal,j=>{if(!disposed&&ticket===epoch)job.value=j;});await applyCompleted(retry.action,completed,retry.input,retry.revision,ticket);}
+ finally{if(ticket===epoch){busy.value=false;if(!port.value?.canRetrySave?.(retry.id))retryContext.value=undefined;}}
  });}
 async function cancel(){abort?.abort();if(job.value&&port.value)await attempt(async()=>{await port.value!.cancel(job.value!.id);});}
 async function exportAudio(){await attempt(async()=>{if(!result.value)throw Error('暂无合成结果');await port.value!.download(result.value,'synthesis.wav');notice.value=stale.value?'已导出旧结果及其实际合成快照':'已导出合成结果';});}
@@ -84,8 +102,8 @@ function exportCurrent(){void attempt(()=>{requireApplied();downloadBytes(export
 async function importFile(event:Event){await attempt(async()=>{const target=event.target as HTMLInputElement,file=target.files?.[0];target.value='';if(!file)return;if(file.size>8_000_000)throw Error('参数文件超过 8 MB');const c=importParams(await file.text());confirm('导入参数将覆盖当前完整配置',()=>replace(c));});}
 onMounted(()=>{const draft=host.projects.read<Config|null>('m06.draft.'+props.stateKey,null);if(draft){try{replace(draft);wave.dirty=false;}catch(e){error.value=(e instanceof Error?e.message:'旧草稿无效')+' 已保留存储内容并使用默认参数。';}}void attempt(refresh);});
 onUnmounted(()=>{loadEpoch++;loadAbort?.abort();sourceWave.asset=null;disposed=true;epoch++;abort?.abort();stop();});
-useWebSettings(props.stateKey,{...settingsFields(config,['duration','sample_rate','fade_in','fade_out','smooth','f0_range','f0_method','f0_transform']),selectedPreset,windowMs,curveOverrides:computed({get:()=>Object.fromEntries(Object.entries(config.curves).map(([k,c])=>[k,c.override])),set:values=>{for(const [key,value] of Object.entries(values))if(config.curves[key])config.curves[key]!.override=value;}})});
-onMounted(()=>{if(props.stateKey.startsWith('server:'))syncInputs();});
+useWebSettings(props.stateKey,{...settingsFields(preferences,[...preferenceKeys,'curveOverrides']),selectedPreset,windowMs});
+onMounted(()=>{if(props.stateKey.startsWith('server:')){try{replace(restorePreferences(config,preferences));wave.dirty=false;}catch(e){Object.assign(preferences,configPreferences(config));syncInputs();error.value='设置未能恢复，当前参数保留：'+(e instanceof Error?e.message:String(e));}}restorePendingSave();});
 </script>
 <template>
 <ModuleFrame unified fit label="声学参数合成工作区" class="m06-page" :aria-busy="busy">
@@ -107,11 +125,12 @@ onMounted(()=>{if(props.stateKey.startsWith('server:'))syncInputs();});
     <label>平滑点数<input v-model.number="config.smooth" type="number" min="1" max="50"/></label>
     <label>F0 下限 (Hz)<input v-model="low" aria-label="F0 下限" @input="editPending"/></label><label>F0 上限 (Hz)<input v-model="high" aria-label="F0 上限" @input="editPending"/></label><button @click="applyRange">应用 F0 范围</button>
    </div></ModuleSection>
-   <ModuleSection label="参数列表" class="parameters-section"><div class="parameter-list"><button v-for="(definition,key) in parameters" :key="key" :aria-pressed="name===key" @click="selectParameter(String(key))">{{key}} <small>{{definition[3]}}</small></button></div></ModuleSection>
+   <ModuleSection label="参数列表" class="parameters-section"><div class="parameter-list"><button v-for="(definition,key) in parameters" :key="key" :disabled="unavailableParameters.has(String(key))" :title="unavailableParameters.has(String(key))?'当前串联合成不使用此参数，导入文件中的数值仍保留':undefined" :aria-pressed="name===key" @click="selectParameter(String(key))">{{key}} <small>{{unavailableParameters.has(String(key))?'未启用':definition[3]}}</small></button></div></ModuleSection>
   </template>
   <ModuleSection label="参数曲线" class="curve-section">
    <div class="controls curve-controls"><label>曲线覆盖<input v-model="overrideText" aria-label="曲线覆盖" placeholder="输入数值或分段序列" title="单个数值固定全段；逗号连接渐变值，分号分隔等长区段" @input="editPending"/></label><button @click="applyOverride">应用覆盖</button><button @click="overrideText='';applyOverride()">清除覆盖</button><button @click="resetRange">重置范围</button><button @click="clear">清空参数</button></div>
-   <CurveEditor :config="config" :name="name" :start="activeRange[0]" :end="activeRange[1]" @range="setRange" @error="error=$event"/>
+    <p v-if="name==='HNR'" class="parameter-hint">HNR 有效编辑范围为 0–60 dB。旧文件中大于 60 的值仍保留，合成效果与 60 相同。</p>
+    <CurveEditor :config="config" :name="name" :start="activeRange[0]" :end="activeRange[1]" @range="setRange" @error="error=$event"/>
   </ModuleSection>
   <ModuleSection label="音频预览" class="preview-section">
    <div class="controls preview-controls"><button :aria-pressed="previewTarget==='result'" @click="previewTarget='result';stop()">合成结果</button><button v-if="sourceWave.asset" :aria-pressed="previewTarget==='source'" @click="previewTarget='source';stop()">源音频</button><button :aria-pressed="view==='wave'" @click="view='wave'">波形</button><button :aria-pressed="view==='spectrum'" @click="view='spectrum'">语谱图</button><label v-if="view==='spectrum'">窗长<select v-model.number="windowMs" aria-label="语谱窗长"><option v-for="ms in [5,10,20,40]" :key="ms" :value="ms">{{ms}} ms</option></select></label></div>
@@ -125,10 +144,10 @@ onMounted(()=>{if(props.stateKey.startsWith('server:'))syncInputs();});
    <ModuleSection label="合成操作"><div class="controls synthesis-actions">
     <label class="ipa-input">IPA 元音序列<input v-model="config.sequence" class="ipa-text" aria-label="IPA 元音序列" placeholder="a-i/- ///u+/e++o/-"/></label>
     <button @click="rules=true">元音规则</button><button class="primary" :disabled="busy||!port" @click="run('generate')">生成元音</button>
-    <button class="primary" :disabled="busy||!port" @click="run('synthesize')">合成音频</button><button class="primary" :disabled="!result" @click="exportAudio">导出音频</button><button v-if="busy" @click="cancel">取消任务</button>
+    <button class="primary" :disabled="busy||!port" @click="run('synthesize')">合成音频</button><button class="primary" :disabled="!result" @click="exportAudio">导出音频</button><button v-if="canRetrySave" :disabled="busy" @click="retrySave">重试保存结果</button><button v-if="busy" @click="cancel">取消任务</button>
    </div></ModuleSection>
    <ModuleStatus v-if="error" kind="error" :message="error"/><ModuleStatus v-if="stale" kind="info" message="参数已修改，需重新合成。试听和音频导出仍对应旧结果。"/><ModuleStatus v-if="notice" kind="info" :message="notice"/><ModuleStatus v-if="!port" kind="info" message="当前支持参数编辑，音频合成请使用桌面版。"/>
-   <details :open="busy" class="task-details"><summary>合成任务状态</summary><span v-if="result">结果 {{result.job.slice(0,8)}} · 随机种子 {{result.metadata.seed}}</span><TaskPanel :tasks="tasks" empty-title="尚未提交合成任务" empty-text="参数编辑不会自动触发音频合成" @cancel="cancel"/></details>
+    <details :open="busy||canRetrySave" class="task-details"><summary>合成任务状态</summary><span v-if="result">结果 {{result.job.slice(0,8)}} · 随机种子 {{result.metadata.seed}}</span><TaskPanel :tasks="tasks" empty-title="尚未提交合成任务" empty-text="参数编辑不会自动触发音频合成" @cancel="cancel"/></details>
   </template>
  </ModuleWorkbench>
  <div class="m06-transport global-transport"><AudioTransport :state="previewWave" :active="active"/></div>

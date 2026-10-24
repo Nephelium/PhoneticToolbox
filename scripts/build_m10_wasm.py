@@ -99,7 +99,7 @@ def prepare_runtime(output):
     records = {}
     with zipfile.ZipFile(target / 'vocal-runtime.zip', 'w', zipfile.ZIP_DEFLATED) as bundle:
         core = ROOT / 'packages/phonetic_core/src'
-        sources = [core / 'phonetic_core/__init__.py', *(core / 'phonetic_core/vocal_tract').glob('*.py')]
+        sources = [core / 'phonetic_core/__init__.py', core / 'phonetic_core/playback_gain.py', *(core / 'phonetic_core/vocal_tract').glob('*.py')]
         worker = ROOT / 'backend/src'
         sources += [worker / 'ptb_worker' / name for name in ('__init__.py', 'vocal_web.py', 'browser_vocal.py')]
         for source in sources:
@@ -119,7 +119,7 @@ def prepare_runtime(output):
     source_files=[ROOT/'scripts/build_m10_wasm.py',ROOT/'scripts/build_m10_geometry.py',
         ROOT/'resources/vocal_tract/VTL-LICENSE.txt',ROOT/'frontend/package.json']
     source_files += [p for p in (ROOT/'resources/vocal_tract/sources').iterdir() if p.is_file()]
-    source_files += [core/'phonetic_core/__init__.py',*(core/'phonetic_core/vocal_tract').glob('*.py')]
+    source_files += [core/'phonetic_core/__init__.py',core/'phonetic_core/playback_gain.py',*(core/'phonetic_core/vocal_tract').glob('*.py')]
     source_files += [worker/'ptb_worker'/name for name in ('__init__.py','browser_vocal.py','vocal_web.py')]
     source_files += [ROOT/'frontend/src/platform'/name for name in ('browser-vocal.ts','vocal.worker.ts','vocal.ts')]
     with zipfile.ZipFile(target/'corresponding-source.zip','w',zipfile.ZIP_DEFLATED) as source_bundle:

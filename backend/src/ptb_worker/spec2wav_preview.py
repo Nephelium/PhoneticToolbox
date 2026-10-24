@@ -13,6 +13,9 @@ from .process_entry import command
 @memoized_preview('spec2wav')
 def render(payload, config, timeout=40):
     if not 0 < len(payload) <= 64_000_000:raise PreviewError('spectrogram_budget')
+    if sys.platform=='darwin':
+        from .native.darwin import preview
+        return preview('spec2wav_preview',dict(size=len(payload),config=config),payload,timeout=timeout,output_bytes=12000064)
     if sys.platform=='linux':return _render_linux(payload,config,timeout)
     if os.name != 'nt':raise PreviewError('preview_platform_unverified',503)
     from .native import windows as win

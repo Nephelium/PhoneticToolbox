@@ -5,7 +5,7 @@ import {amplitudeLimit,amplitudeLabel} from '../src/platform/waveform.ts';
 import {createEditor} from '../src/modules/annotation/editor.mjs';
 test('M12-R2 empty input waits for explicit names; creation preserves other tiers and validates names',()=>{
  for(const text of [undefined,' \n','"ooTextFile short" "TextGrid" 0 2 <exists> 0']){
-  const {grid}=loadEditingGrid(text,2);assert.deepEqual(grid.tiers,[]);assert.deepEqual(editingNames(grid),{word:'',phone:''});
+  const {grid}=loadEditingGrid(text,2);assert.deepEqual(grid.tiers,[]);assert.deepEqual(editingNames(grid),{word:'',phone:'',extra:''});
   grid.tiers.push(...newIntervalTiers(grid,['音节','音素']));assert.deepEqual(parseGrid(serializeGrid(grid)).tiers.map(t=>t.name),['音节','音素']);
   for(const names of [[''],['same','same'],['音节'],['bad\nname']])assert.throws(()=>newIntervalTiers(grid,names));
  }
@@ -13,10 +13,10 @@ test('M12-R2 empty input waits for explicit names; creation preserves other tier
 });
 test('M12-R2 roles select actual names and never substitute a remembered absent words layer',()=>{
  const grid={xmin:0,xmax:2,tiers:[{name:'events',points:[]},...newIntervalTiers({xmin:0,xmax:2,tiers:[]},['syllables','phones'])]};
- assert.deepEqual(editingNames(grid,{word:'words',phone:'phones'}),{word:'syllables',phone:'phones'});
- grid.tiers[1].name='自定义甲';grid.tiers[2].name='自定义乙';assert.deepEqual(editingNames(grid),{word:'自定义甲',phone:'自定义乙'});
- assert.deepEqual(editingNames({...grid,tiers:[grid.tiers[0]]}),{word:'',phone:''});
- assert.deepEqual(editingNames({...grid,tiers:[grid.tiers[2]]}),{word:'自定义乙',phone:''});
+ assert.deepEqual(editingNames(grid,{word:'words',phone:'phones'}),{word:'syllables',phone:'phones',extra:''});
+ grid.tiers[1].name='自定义甲';grid.tiers[2].name='自定义乙';assert.deepEqual(editingNames(grid),{word:'自定义甲',phone:'自定义乙',extra:''});
+ assert.deepEqual(editingNames({...grid,tiers:[grid.tiers[0]]}),{word:'',phone:'',extra:''});
+ assert.deepEqual(editingNames({...grid,tiers:[grid.tiers[2]]}),{word:'自定义乙',phone:'',extra:''});
 });
 test('M12-R2 selection covers a group or an individual phone without changing boundaries',()=>{
  const e=createEditor();e.state.textgrid={xmin:0,xmax:2,tiers:[{name:'words',intervals:[{xmin:0,xmax:.2,text:''},{xmin:.2,xmax:.7,text:'a'},{xmin:.7,xmax:1.1,text:'b'}]},{name:'phones',intervals:[{xmin:.2,xmax:.35,text:'a'}]}]};

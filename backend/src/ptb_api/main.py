@@ -41,7 +41,11 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
     if registration_service is not None and (auth_settings is None or registration_service.origin != auth_settings.origin):
         raise ValueError('Registration origin must match the account origin')
     from contextlib import asynccontextmanager
-    from ptb_worker.egg_interactive import InteractivePreview
+    import sys
+    if sys.platform=='darwin':
+        from ptb_worker.native.darwin_egg import InteractivePreview
+    else:
+        from ptb_worker.egg_interactive import InteractivePreview
     egg_preview = InteractivePreview(memory_bytes=3_000_000_000 if mode == 'local' else 1_000_000_000,
         reaper_binary=getattr(getattr(job_store,'files',None),'reaper_binary',None))
     from ptb_worker.spectrogram_session import SpectrogramSession
@@ -196,6 +200,11 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
             science_operations, reasons = linux_capabilities(job_store)
             algorithms = [module for op,module in [('lpc_analysis','M04'),('egg_analysis','M03'),('acoustic_analysis','M01'),('recording_audio','M16'),('spectrogram_to_audio','M09'),('speech_synthesis','M06'),('pitch_manipulation','M08'),('phonation_synthesis','M07'),('phonology_induction','M14')] if op in science_operations]
             acoustic_reason = reasons[0] if reasons else None
+        if platform_name() == 'darwin':
+            from ptb_worker.native.darwin import capability as mac_capability
+            pairs=[('acoustic_analysis','M01'),('textgrid_segment','M01'),('lpc_analysis','M04'),('egg_analysis','M03'),('spectrogram_to_audio','M09'),('speech_synthesis','M06'),('pitch_manipulation','M08'),('phonation_synthesis','M07'),('phonology_induction','M14'),('lip_analysis','M05')]
+            science_operations=[op for op,module in pairs if job_store is not None and mac_capability(op)]
+            algorithms=list(dict.fromkeys(module for op,module in pairs if op in science_operations))
         from ptb_worker.resource_profiles import selected_profile
         from ptb_worker.io.limits import FormatError
         try: archive_ready = not selected_profile().shared_admission

@@ -10,14 +10,17 @@ from .stop_timing import timing_events
 from .perturbation import DEFAULT_PERTURBATION
 
 def prepare_animation(engine,frames,section=None,*,pictures_enabled=True,pitch_curve=None,pressure_curve=None,global_controls=None,features=None,cancel=None):
-    baseline=engine.perturbation
+    baseline=engine.perturbation;manual_root=engine.manual_root
     try:
         return _prepare_animation(engine,frames,section,pictures_enabled=pictures_enabled,pitch_curve=pitch_curve,
             pressure_curve=pressure_curve,global_controls=global_controls,features=features,cancel=cancel)
     finally:
         # A regional effect must not become the next live-preview setting,
         # including when rendering fails or is cancelled.
-        if engine.perturbation!=baseline:engine.configure_perturbation(baseline)
+        try:
+            if engine.perturbation!=baseline:engine.configure_perturbation(baseline)
+        finally:
+            engine.set_manual_root(manual_root)
 
 
 def _prepare_animation(engine,frames,section=None,*,pictures_enabled=True,pitch_curve=None,pressure_curve=None,global_controls=None,features=None,cancel=None):
@@ -25,8 +28,12 @@ def _prepare_animation(engine,frames,section=None,*,pictures_enabled=True,pitch_
     pressure=validate_pressure_curve(pressure_curve or [])
     controls=validate_global_controls(engine,global_controls)
     frames=validate_frames(engine,frames)
-    compiled=compile_features(validate_features(engine,features),frames)
-    total=sum(f['duration'] for f in frames)
+    # Authoring remains in seconds; rendering shares the existing nearest-sample
+    # convention with silence/stop boundaries, including non-grid-aligned edits.
+    compiled=[(f,[(round(a*engine.sr)/engine.sr,round(b*engine.sr)/engine.sr) for a,b in intervals])
+              for f,intervals in compile_features(validate_features(engine,features),frames)]
+    n=round(sum(f['duration'] for f in frames)*engine.sr);duration=n/engine.sr;block=960
+    total=duration
     regional_source=any(k in controls for k in ('jitter','shimmer')) or any(f['parameter'] in ('jitter','shimmer') for f,_ in compiled)
     if regional_source and not hasattr(engine.lib,'vtlSetSourcePerturbation'):
         raise ValueError('当前声源组件不支持 jitter/shimmer 超音段特征，请更新声源组件后重试。')
@@ -48,7 +55,6 @@ def _prepare_animation(engine,frames,section=None,*,pictures_enabled=True,pitch_
                 for key in ('TRX','TRY'):
                     i=engine.names.index(key);f['params'][i]=actual[i]
                 f['manual_root']=True
-    n=round(sum(f['duration'] for f in frames)*engine.sr);duration=n/engine.sr;block=960
     silent_intervals=[];source_intervals=[];stop_boundaries=set();elapsed=0.
     for f in frames:
         start=round(elapsed*engine.sr);elapsed+=f['duration']
@@ -57,7 +63,9 @@ def _prepare_animation(engine,frames,section=None,*,pictures_enabled=True,pitch_
         if f.get('stop_timing'):stop_boundaries.update((start,round(elapsed*engine.sr)))
     events,fine=timing_events(frames)
     fine=[(round(a*engine.sr),round(b*engine.sr)) for a,b in fine]
-    events.update(t for f,intervals in compiled for interval in intervals for t in interval if 0<=t<=duration)
+    feature_events={t for f,intervals in compiled for interval in intervals for t in interval if 0<=t<=duration}
+    feature_boundaries={round(t*engine.sr) for t in feature_events}
+    events.update(feature_events)
     event_samples={round(t*engine.sr) for t in events if 0<=t<=duration}
     cuts=sorted({edge for interval in silent_intervals+source_intervals for edge in interval}|event_samples|{n})
     chunks=[];gains=[];pictures=[];times=[];first=sample_frame(frames,0)
@@ -70,6 +78,9 @@ def _prepare_animation(engine,frames,section=None,*,pictures_enabled=True,pitch_
     # pitch increments. This keeps interactive synthesis bounded; it never
     # follows actual shimmer or the pressure envelope.
     anchors={0.,duration}|{t for t in events if 0<=t<=duration};elapsed=0.
+    # The reference gain must obey the same discontinuities as the source and
+    # tract. Otherwise gain interpolation alone anticipates a regional F0 edit.
+    anchors.update(float(np.nextafter(t,-np.inf)) for t in feature_events if t>0)
     for index,f in enumerate(frames):
         start=elapsed;elapsed+=f['duration'];anchors.add(elapsed)
         if index+1<len(frames) and not f.get('aspiration'):
@@ -107,7 +118,9 @@ def _prepare_animation(engine,frames,section=None,*,pictures_enabled=True,pitch_
             # Half-open intervals: the last sample of a voiced block belongs to
             # that block, even when its endpoint is the next silence boundary.
             endpoint=offset+size
-            pose=sample_frame(frames,(endpoint-(.25 if silent_intervals or source_intervals or endpoint in stop_boundaries else 0))/engine.sr)
+            end_time=(endpoint-(.25 if silent_intervals or source_intervals or endpoint in stop_boundaries else 0))/engine.sr
+            if endpoint in feature_boundaries:end_time=float(np.nextafter(endpoint/engine.sr,-np.inf))
+            pose=sample_frame(frames,end_time)
             engine.set_manual_root(pose.get('manual_root',False))
             key=geometry_key(pose)
             if key!=previous_key:
@@ -115,7 +128,7 @@ def _prepare_animation(engine,frames,section=None,*,pictures_enabled=True,pitch_
             tube=previous_tube
             # Zero-length native update switches excitation at the exact boundary
             # without resetting the resonator state or smearing a 10 ms interval.
-            if offset in stop_boundaries or offset in {edge for interval in source_intervals for edge in interval}:
+            if offset in stop_boundaries or offset in feature_boundaries or offset in {edge for interval in source_intervals for edge in interval}:
                 boundary=sample_frame(frames,offset/engine.sr)
                 engine.set_manual_root(boundary.get('manual_root',False))
                 boundary_tube=engine.prepare_tube(boundary['params'],boundary['lip_width'],boundary.get('larynx_height',0.),boundary.get('tongue_shape'),boundary.get('lip_shape'))
@@ -147,6 +160,21 @@ def _prepare_animation(engine,frames,section=None,*,pictures_enabled=True,pitch_
                 if shown.get('aspiration'):state['aspiration']=True
                 if shown.get('stop_phase'):state['stop_phase']=shown['stop_phase']
                 pictures.append(zlib.compress(json.dumps(state,separators=(',',':')).encode(),1));times.append(time)
+    # Scalar final controls share the exact sampler used for audio/pictures.
+    # Include both sides of discontinuities so video never draws an invented
+    # pitch ramp across a fixed feature, a silence or an unvoiced interval.
+    knots={0.,duration,*np.linspace(0,duration,401),*events,*times};elapsed=0.
+    for frame in frames:
+        elapsed+=frame['duration'];knots.add(min(duration,elapsed))
+    knots.update(p[0]*duration for p in curve)
+    knots={float(t) for t in knots if 0<=t<=duration}
+    knots.update(float(np.nextafter(t,-np.inf)) for t in list(knots) if t>0)
+    timeline=[]
+    for t in sorted(knots):
+        if cancel is not None and cancel.is_set():raise ValueError('已取消生成')
+        state=sample_frame(frames,t)
+        voiced=not state.get('silent') and not state.get('aspiration') and (state.get('source') or {}).get('vibration',1)>0
+        timeline.append({'time':t,'f0':state['f0'] if voiced else None})
     audio=np.concatenate(chunks);fade=min(480,len(audio)//4);audio[:fade]*=np.linspace(0,1,fade);audio[-fade:]*=np.linspace(1,0,fade)
     # Explicit timeline silence is an editing operation, distinct from a
     # physically occluded tract. Do not leave resonator tails in a silent frame.
@@ -158,4 +186,4 @@ def _prepare_animation(engine,frames,section=None,*,pictures_enabled=True,pitch_
     # Apply the audition envelope after output gain/limiting, so high audition
     # gain cannot squash the attack back into an abrupt, full-volume onset.
     return {'frames':frames,'duration':duration,'audio':audio,'audition_audio':audio*np.concatenate(gains),
-            'envelope':sequence_envelope(n,engine.sr,silent_intervals),'pictures':pictures,'times':times}
+            'envelope':sequence_envelope(n,engine.sr,silent_intervals),'pictures':pictures,'times':times,'timeline':timeline}

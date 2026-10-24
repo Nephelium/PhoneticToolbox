@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ptb-desktop"
-version = "3.0.4"
+version = "3.1.0"
 description = "PhoneticToolbox shared Qt workbench and owned local service launcher"
 requires-python = ">=3.11,<3.12"
-dependencies = ["phonetic-core==3.0.4"]
+dependencies = ["phonetic-core==3.1.0"]
 
 [project.optional-dependencies]
 papers = ["PyQt6==6.11.0", "PyQt6-Qt6==6.11.2", "pypdf==6.19.0"]

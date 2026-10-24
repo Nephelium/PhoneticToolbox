@@ -1,0 +1,233 @@
+{
+  "schema": "ptb-osm-administrative-correspondence/1",
+  "snapshot": "2026-10-22T20:21:33Z",
+  "reviewedAt": "2026-10-24",
+  "scope": "Reviewed identities and explicit version-pinned polygon unions. Unmodified source geometry is retained in acquisition stages. Geometry consistency issues remain audited separately.",
+  "entries": [
+    {
+      "osmId": 2752810,
+      "osmVersion": 17,
+      "sourceName": "乌拉特中旗 ᠤᠷᠠᠳ ᠤᠨ ᠳᠤᠮᠳᠠᠳᠤ ᠬᠣᠰᠢᠭᠤ",
+      "officialName": "乌拉特中旗",
+      "officialCode": "150824",
+      "nativeCode": {
+        "key": "division_code",
+        "value": "150824"
+      },
+      "evidence": "Exact Chinese component of the frozen bilingual name and matching explicit division_code; official MCA live tree 2026-10-24."
+    },
+    {
+      "osmId": 2752811,
+      "osmVersion": 17,
+      "sourceName": "乌拉特后旗 ᠤᠷᠠᠳ ᠤᠨ ᠬᠣᠶᠢᠲᠤ ᠬᠣᠰᠢᠭᠤ",
+      "officialName": "乌拉特后旗",
+      "officialCode": "150825",
+      "nativeCode": {
+        "key": "division_code",
+        "value": "150825"
+      },
+      "evidence": "Exact Chinese component of the frozen bilingual name and matching explicit division_code; official MCA live tree 2026-10-24."
+    },
+    {
+      "osmId": 2753024,
+      "osmVersion": 18,
+      "sourceName": "苏尼特左旗 ᠰᠥᠨᠡᠳ ᠵᠡᠭᠦᠨ ᠬᠣᠰᠢᠭᠤ",
+      "officialName": "苏尼特左旗",
+      "officialCode": "152523",
+      "nativeCode": {
+        "key": "division_code",
+        "value": "152523"
+      },
+      "evidence": "Exact Chinese component of the frozen bilingual name and matching explicit division_code; official MCA live tree 2026-10-24."
+    },
+    {
+      "osmId": 2753025,
+      "osmVersion": 21,
+      "sourceName": "苏尼特右旗 ᠰᠥᠨᠡᠳ ᠪᠠᠷᠠᠭᠤᠨ ᠬᠣᠰᠢᠭᠤ",
+      "officialName": "苏尼特右旗",
+      "officialCode": "152524",
+      "nativeCode": {
+        "key": "division_code",
+        "value": "152524"
+      },
+      "evidence": "Exact Chinese component of the frozen bilingual name and matching explicit division_code; official MCA live tree 2026-10-24."
+    },
+    {
+      "osmId": 2753018,
+      "osmVersion": 14,
+      "sourceName": "镶黄旗 ᠬᠥᠪᠡᠭᠡᠲᠦ ᠰᠢᠷ᠎ᠠ ᠬᠣᠰᠢᠭᠤ",
+      "officialName": "镶黄旗",
+      "officialCode": "152528",
+      "nativeCode": {
+        "key": "division_code",
+        "value": "152528"
+      },
+      "evidence": "Exact Chinese component of the frozen bilingual name and matching explicit division_code; official MCA live tree 2026-10-24."
+    },
+    {
+      "osmId": 3230499,
+      "osmVersion": 35,
+      "sourceName": "云州区",
+      "officialName": "云州区",
+      "officialCode": "140215",
+      "legacyCodes": [
+        "140227"
+      ],
+      "nativeCode": {
+        "key": "ref:admin:CN",
+        "value": "140227"
+      },
+      "evidence": "Frozen OSM relation already carries current exact name but an obsolete former Datong County code. Government confirms the 2018 county-to-district change; current name/code verified against MCA live tree. Geometry is not certified by this identity correction.",
+      "urls": [
+        "https://www.yunzhou.gov.cn/yzqrmzfz/sqglzrhj/202007/219308969a1746d2a965f5fc927b4542.shtml",
+        "https://dmfw.mca.gov.cn/"
+      ]
+    },
+    {
+      "osmId": 3441292,
+      "osmVersion": 10,
+      "sourceName": "太谷区",
+      "officialName": "太谷区",
+      "officialCode": "140703",
+      "legacyCodes": [
+        "140726"
+      ],
+      "nativeCode": {
+        "key": "ref:admin:CN",
+        "value": "140726"
+      },
+      "evidence": "Frozen OSM relation already carries current exact name but an obsolete former Taigu County code. The Shanxi provincial legislature decision says the former county territory becomes Taigu District; current code verified against MCA live tree.",
+      "urls": [
+        "https://liuyan.people.com.cn/n1/2020/0402/c58278-31658509.html",
+        "https://dmfw.mca.gov.cn/"
+      ]
+    }
+  ],
+  "geometryDerivations": [
+    {
+      "officialCode": "420113",
+      "officialName": "汉南区",
+      "target": {
+        "osmId": 3076294,
+        "osmVersion": 25,
+        "sourceName": "武汉经济技术开发区（汉南区）"
+      },
+      "officialNameCorrection": true,
+      "components": [
+        {
+          "osmId": 17345599,
+          "osmVersion": 3,
+          "sourceName": "纱帽街道"
+        },
+        {
+          "osmId": 17345598,
+          "osmVersion": 4,
+          "sourceName": "邓南街道"
+        },
+        {
+          "osmId": 17345597,
+          "osmVersion": 5,
+          "sourceName": "东荆街道"
+        },
+        {
+          "osmId": 8667530,
+          "osmVersion": 5,
+          "sourceName": "湘口街道"
+        }
+      ],
+      "evidence": "Official Hannan spatial plan identifies these four streets. Frozen OSM township name/code prefixes corroborate the grouping. The economic development zone relation additionally includes entrusted areas of Caidian and Hanyang; the union excludes those areas.",
+      "urls": [
+        "https://www.whkfq.gov.cn/xxgk/zc/qtzdgk/gwhqzf/202511/P020251113618626318406.pdf",
+        "https://www.whkfq.gov.cn/xxgk/dfhbmptlj/jdbsc/"
+      ]
+    },
+    {
+      "officialCode": "420114",
+      "officialName": "蔡甸区",
+      "target": {
+        "osmId": 3076292,
+        "osmVersion": 41,
+        "sourceName": "蔡甸区"
+      },
+      "components": [
+        {
+          "osmId": 3076292,
+          "osmVersion": 41,
+          "sourceName": "蔡甸区"
+        },
+        {
+          "osmId": 3117661,
+          "osmVersion": 10,
+          "sourceName": "军山街道"
+        },
+        {
+          "osmId": 3117662,
+          "osmVersion": 8,
+          "sourceName": "沌口街道"
+        },
+        {
+          "osmId": 17438343,
+          "osmVersion": 8,
+          "sourceName": "沌阳街道"
+        }
+      ],
+      "evidence": "These three source townships carry 420114 code prefixes and are entrusted to the economic development zone. Restore them to the Caidian county display scope while retaining their source polygons and entrusted-management provenance.",
+      "urls": [
+        "https://www.whkfq.gov.cn/xxgk/fdzdgk/shgysy/hjbh/202010/P020201023583616534422.pdf",
+        "https://czj.wuhan.gov.cn/FBJD/XXGKML/QTZDGKNR/JYTABL/202004/t20200422_1069572.html"
+      ]
+    },
+    {
+      "officialCode": "420105",
+      "officialName": "汉阳区",
+      "target": {
+        "osmId": 3076295,
+        "osmVersion": 36,
+        "sourceName": "汉阳区"
+      },
+      "components": [
+        {
+          "osmId": 3076295,
+          "osmVersion": 36,
+          "sourceName": "汉阳区"
+        },
+        {
+          "osmId": 19093600,
+          "osmVersion": 4,
+          "sourceName": "汉阳经济开发区"
+        }
+      ],
+      "evidence": "Wuhan Finance Bureau explains that the jointly developed Hanyang area was entrusted to the economic development zone in 2010 without adjusting administrative divisions. The frozen additional source polygon is 10.50 km2; it does not overlap another existing county polygon. Restore it to Hanyang county scope without altering its source geometry.",
+      "urls": [
+        "https://czj.wuhan.gov.cn/FBJD/XXGKML/QTZDGKNR/JYTABL/202004/t20200422_1069572.html",
+        "https://www.whkfq.gov.cn/xxgk/fdzdgk/shgysy/hjbh/202010/P020201023583616534422.pdf"
+      ]
+    },
+    {
+      "officialCode": "460302",
+      "officialName": "西沙区",
+      "target": {
+        "osmId": 6753150,
+        "osmVersion": 107,
+        "sourceName": "西沙区"
+      },
+      "components": [
+        {
+          "osmId": 6753150,
+          "osmVersion": 107,
+          "sourceName": "西沙区"
+        },
+        {
+          "osmId": 6753119,
+          "osmVersion": 55,
+          "sourceName": "中沙群岛的岛礁及其海域"
+        }
+      ],
+      "evidence": "The 2020 Ministry of Civil Affairs announcement says Xisha District administers Xisha and is entrusted with Zhongsha. Retain Zhongsha source relation and former code in lineage, union it into the current Xisha display scope, and do not present it as a separate current official county.",
+      "urls": [
+        "https://www.mod.gov.cn/gfbw/qwfb/4863771.html?big=fan",
+        "https://api.openstreetmap.org/api/0.6/relation/6753119.json"
+      ]
+    }
+  ]
+}

@@ -14,12 +14,12 @@ async function main(){
   await page.goto(server.resolvedUrls.local[0]);await page.locator('#tool-sidebar').getByRole('button',{name:'设置',exact:true}).click();
   const tabs=page.getByRole('tablist',{name:'设置分类'}),tab=name=>tabs.getByRole('tab',{name,exact:true});
   async function selected(id){await page.locator('#settings-panel-'+id).waitFor();assert.equal(await page.locator('.settings-panel:visible').count(),1);assert.equal(await tabs.locator('[aria-selected=true]').count(),1);assert.equal(await tabs.locator('[tabindex="0"]').count(),1);assert.equal(await page.locator('#settings-tab-'+id).getAttribute('aria-selected'),'true');}
-  await selected('appearance');assert.equal(await tabs.getByRole('tab').count(),4);
+  await selected('appearance');assert.equal(await tabs.getByRole('tab').count(),5);
   assert.equal(await page.evaluate(()=>document.documentElement.dataset.palette),'everforest');
   await tab('外观').focus();await tab('外观').press('ArrowRight');await selected('fonts');await tab('字体').press('End');await selected('storage');await tab('本机存储与自动清理').press('ArrowRight');await selected('appearance');await tab('外观').press('ArrowLeft');await selected('storage');await tab('本机存储与自动清理').press('Home');await selected('appearance');
   await tab('本机存储与自动清理').click();assert.match(await page.locator('#settings-panel-storage').innerText(),/桌面版/);
-  await tab('字体').focus();await tab('字体').press('ArrowRight');await selected('icons');await tab('图标').press('ArrowRight');await selected('storage');
-  report.checks.push('Four exclusive panels, keyboard ArrowLeft/Right wrap and Home/End, roving focus and web storage explanation; fresh default Everforest');
+  await tab('字体').focus();await tab('字体').press('ArrowRight');await selected('icons');await tab('图标').press('ArrowRight');await selected('audio');assert(await page.getByRole('checkbox',{name:'音频音量自动增益'}).isChecked());await tab('音频').press('ArrowRight');await selected('storage');
+  report.checks.push('Five exclusive panels, keyboard ArrowLeft/Right wrap and Home/End, roving focus and web storage explanation; fresh default Everforest');
   await tab('图标').click();
   const iconSize=page.locator('#home-icon-size'),sidebar=page.locator('#tool-sidebar');
   const resizeIcon=async value=>iconSize.evaluate((e,v)=>{e.value=String(v);e.dispatchEvent(new Event('input',{bubbles:true}));},value);

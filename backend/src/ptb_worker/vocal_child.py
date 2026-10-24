@@ -70,7 +70,7 @@ def main():
                         finally:video_scratch.cleanup();video=None;video_scratch=None
                 elif op=='audio/pull':value=runtime.live.pull(body)
                 else:
-                    if op in ('animation/frame','audio/monitor') and 'position' in body:runtime.live.acknowledge(body)
+                    if op in ('animation/frame','audio/monitor','animation/stop','deactivate','live') and 'position' in body:runtime.live.acknowledge(body)
                     if op in ('heartbeat','status') and body.get('completed') is True:
                         # No new PCM is produced after EOF; completing here is safe
                         # and lets lightweight heartbeats bypass a long render.

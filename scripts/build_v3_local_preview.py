@@ -14,7 +14,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def copy_runtime_frontend(source, target, audit, optimize_media=False, media_cache=None):
     """Freeze current chapters and only the media they actually use."""
-    shutil.copytree(source, target, ignore=lambda folder, names: ['manual'] if Path(folder) == source and 'manual' in names else [])
+    from release_content_policy import external_frontend_data
+    shutil.copytree(source, target, ignore=lambda folder, names: [n for n in names if n=='manual' or external_frontend_data(n)] if Path(folder) == source else [])
     manual = source / 'manual'
     project = json.loads((manual / 'project.json').read_text('utf8'))
     used = set()
@@ -178,7 +179,7 @@ def main():
             runtimes['PTB_M11_COMPONENT_ROOT'] = str(mfa_root)
         config = dict(kind='distributable-preview' if distributable else 'local-only-preview', source_commit=subprocess.check_output(
             ['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(), runtimes=runtimes,
-            portable=distributable, modules='M01-M18; per-module validation remains separate',
+            portable=distributable, modules='M01-M19; per-module validation remains separate',
             bundle_profile='widgets-webengine-zh-en/1' if options.lean_qt else 'full/1')
         if distributable:
             bindings=(cached_manifest['runtimes'] if bundle_cache else

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
-  "checked_on": "2026-10-05",
-  "total_records": 447,
+  "checked_on": "2026-10-24",
+  "total_records": 461,
   "sources": [
     {
       "id": "PTB-BROWSER-SCIENCE-RUNTIME",
@@ -2322,7 +2322,29 @@
       ],
       "m10_r15_use": "Existing PyAV FFmpeg libraries encode H.264/AAC offline; system ffmpeg/ffprobe executables are independent QA tools only. Existing exact-binary/license review boundary remains.",
       "show_license_in_acknowledgements": false,
-      "acknowledgement_license_note": "许可核验状态保留内部登记，界面不把待核验或阶段实施说明当作许可证名称。已核实的具体依赖许可在对应条目与随包通知保留，不据此宣称未核实组件获得授权。"
+      "acknowledgement_license_note": "许可核验状态保留内部登记，界面不把待核验或阶段实施说明当作许可证名称。已核实的具体依赖许可在对应条目与随包通知保留，不据此宣称未核实组件获得授权。",
+      "macos_media_build": {
+        "date": "2026-10-17",
+        "ffmpeg_version": "8.0",
+        "pyav_version": "16.1.0",
+        "wheel_build": "1ptbmacos",
+        "source_archive_sha256": "b2751fccb6cc4c77708113cd78b561059b6fa904b24162fa0be2d60273d27b8e",
+        "modifications": "Only rebuild libavdevice with PTBPyAV8 private Objective-C class prefix; original codec/format/filter binaries unchanged",
+        "license_scope": "New libavdevice compiled LGPL-3.0-or-later with --enable-version3 and no GPL components; original bundled codec terms remain separately build-dependent",
+        "provenance": "resources/macos-media-provenance.json",
+        "recipe": [
+          "scripts/build_macos_media.py",
+          "scripts/package_macos_media_wheel.py"
+        ],
+        "patch": "third_party/patches/ffmpeg-8.0-macos-avfoundation-namespace.patch",
+        "license_directory": "third_party/licenses/ffmpeg-macos",
+        "public_release": "The recorded media build is reused in the task-local 3.0.5 candidate; no new 3.0.5 public release performed.",
+        "candidate_validation": {
+          "date": "2026-10-24",
+          "scope": "Darwin arm64 task environment and frozen diagnostic app runtime; final 3.0.5 app pending",
+          "reference": "docs/testing/m19-geolinguistics.md"
+        }
+      }
     },
     {
       "id": "SRC-MFA",
@@ -2462,7 +2484,8 @@
         "M03",
         "M09",
         "M10",
-        "M17"
+        "M17",
+        "M12"
       ],
       "urls": {
         "homepage": "https://software.sil.org/doulos/",
@@ -2495,7 +2518,8 @@
         "artwork": "Reference anatomy only for redesigned [ʂ] [ɻ] [ɕ]: separately drawn curves, diagnostic hooks, variable weight between symbols and layered highlights.",
         "evidence": "temporary-site/assets/provenance.json"
       },
-      "acknowledgement_version": "7.000"
+      "acknowledgement_version": "7.000",
+      "m12_usage": "Shared compact floating IPA/extIPA/VoQS keyboard projection of the M17 catalog; exact symbol code points, insertion modes, chart placement and existing font; no explanatory text, audio, original charts or PDFs copied."
     },
     {
       "id": "PENDING-EGG",
@@ -2838,7 +2862,8 @@
       "kind": "bundled-client-library",
       "modules": [
         "M15",
-        "M16"
+        "M16",
+        "M13"
       ],
       "urls": {
         "repository": "https://git.sheetjs.com/sheetjs/sheetjs",
@@ -2868,7 +2893,8 @@
         ],
         "basis": "Official license page names rights holder",
         "scope": "Author/team attribution only; no included-version or redistribution-license conclusion"
-      }
+      },
+      "m13_usage": "frontend/src/modules/mandarin-ipa/table-file.ts imports the existing locked CE 0.20.3 for local custom-table XLSX reading; no library upgrade, copy or network import."
     },
     {
       "id": "SRC-LUCIDE",
@@ -10312,7 +10338,8 @@
       "kind": "reference-chart",
       "modules": [
         "M17",
-        "M10"
+        "M10",
+        "M12"
       ],
       "urls": {
         "homepage": "https://www.internationalphoneticassociation.org/content/ipa-chart",
@@ -10368,14 +10395,16 @@
         ],
         "unresolved": [],
         "scope": "书目字段核查，不替代算法、历史字表对应或再分发许可验收"
-      }
+      },
+      "m12_usage": "Shared compact floating IPA/extIPA/VoQS keyboard projection of the M17 catalog; exact symbol code points, insertion modes, chart placement and existing font; no explanatory text, audio, original charts or PDFs copied."
     },
     {
       "id": "M17-EXTIPA-2025",
       "title": "ExtIPA symbols for disordered speech",
       "kind": "reference-chart",
       "modules": [
-        "M17"
+        "M17",
+        "M12"
       ],
       "urls": {
         "homepage": "https://www.icpla.org.uk/resources",
@@ -10428,14 +10457,16 @@
         ],
         "unresolved": [],
         "scope": "书目字段核查，不替代算法、历史字表对应或再分发许可验收"
-      }
+      },
+      "m12_usage": "Shared compact floating IPA/extIPA/VoQS keyboard projection of the M17 catalog; exact symbol code points, insertion modes, chart placement and existing font; no explanatory text, audio, original charts or PDFs copied."
     },
     {
       "id": "M17-VOQS-BALL-2018",
       "title": "Revisions to the VoQS system for the transcription of voice quality",
       "kind": "academic-reference",
       "modules": [
-        "M17"
+        "M17",
+        "M12"
       ],
       "urls": {
         "paper": "https://doi.org/10.1017/S0025100317000159",
@@ -10516,7 +10547,8 @@
         ],
         "unresolved": [],
         "scope": "书目字段核查，不替代算法、历史字表对应或再分发许可验收"
-      }
+      },
+      "m12_usage": "Shared compact floating IPA/extIPA/VoQS keyboard projection of the M17 catalog; exact symbol code points, insertion modes, chart placement and existing font; no explanatory text, audio, original charts or PDFs copied."
     },
     {
       "id": "M17-VOQS-ZH-UNTPHESOCA",
@@ -10622,7 +10654,8 @@
       "title": "PTB IPA Plus 1.000 — module font derived from Doulos SIL 7.000",
       "kind": "bundled-font",
       "modules": [
-        "M17"
+        "M17",
+        "M12"
       ],
       "urls": {
         "upstream": "https://software.sil.org/doulos/",
@@ -10644,14 +10677,16 @@
         "frontend/src/assets/ipa-plus/OFL-PTBIPAPlus.txt",
         "frontend/src/assets/ipa-plus/OFL-Noto.txt",
         "scripts/verify_m17_fonts.py"
-      ]
+      ],
+      "m12_usage": "Shared compact floating IPA/extIPA/VoQS keyboard projection of the M17 catalog; exact symbol code points, insertion modes, chart placement and existing font; no explanatory text, audio, original charts or PDFs copied."
     },
     {
       "id": "M17-UNICODE-PHONETIC-ENCODING",
       "title": "Unicode 音标与附加符号编码资料",
       "kind": "encoding-reference",
       "modules": [
-        "M17"
+        "M17",
+        "M12"
       ],
       "urls": {
         "chapter7": "https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-7/",
@@ -10765,7 +10800,8 @@
         ],
         "unresolved": [],
         "scope": "书目字段核查，不替代算法、历史字表对应或再分发许可验收"
-      }
+      },
+      "m12_usage": "Shared compact floating IPA/extIPA/VoQS keyboard projection of the M17 catalog; exact symbol code points, insertion modes, chart placement and existing font; no explanatory text, audio, original charts or PDFs copied."
     },
     {
       "id": "M17-CIN-REFERENCE",
@@ -10960,7 +10996,8 @@
       "kind": "academic-reference",
       "modules": [
         "M17",
-        "M10"
+        "M10",
+        "M12"
       ],
       "authors": "Phonetic Association of China（中国语言学会语音学分会）",
       "urls": {
@@ -11038,7 +11075,8 @@
         ],
         "unresolved": [],
         "scope": "书目字段核查，不替代算法、历史字表对应或再分发许可验收"
-      }
+      },
+      "m12_usage": "Shared compact floating IPA/extIPA/VoQS keyboard projection of the M17 catalog; exact symbol code points, insertion modes, chart placement and existing font; no explanatory text, audio, original charts or PDFs copied."
     },
     {
       "id": "M17-IPA-HANDBOOK-JIANG-2008",
@@ -11046,7 +11084,8 @@
       "kind": "academic-reference",
       "modules": [
         "M17",
-        "M10"
+        "M10",
+        "M12"
       ],
       "authors": "国际语音学会，编著；江荻，译",
       "urls": {
@@ -11104,7 +11143,8 @@
         ],
         "unresolved": [],
         "scope": "书目字段核查，不替代算法、历史字表对应或再分发许可验收"
-      }
+      },
+      "m12_usage": "Shared compact floating IPA/extIPA/VoQS keyboard projection of the M17 catalog; exact symbol code points, insertion modes, chart placement and existing font; no explanatory text, audio, original charts or PDFs copied."
     },
     {
       "id": "M17-VOICE-QUALITY-ESLING-2019",
@@ -11193,7 +11233,8 @@
       "title": "Revisions to the extIPA chart",
       "kind": "academic-reference",
       "modules": [
-        "M17"
+        "M17",
+        "M12"
       ],
       "authors": "Martin J. Ball；Sara J. Howard；Kirk Miller",
       "urls": {
@@ -11273,14 +11314,16 @@
         ],
         "unresolved": [],
         "scope": "书目字段核查，不替代算法、历史字表对应或再分发许可验收"
-      }
+      },
+      "m12_usage": "Shared compact floating IPA/extIPA/VoQS keyboard projection of the M17 catalog; exact symbol code points, insertion modes, chart placement and existing font; no explanatory text, audio, original charts or PDFs copied."
     },
     {
       "id": "M17-EXTIPA-BALL-2024",
       "title": "Changes to certain extIPA diacritics",
       "kind": "academic-reference",
       "modules": [
-        "M17"
+        "M17",
+        "M12"
       ],
       "authors": "Martin J. Ball",
       "urls": {
@@ -11348,14 +11391,16 @@
         ],
         "unresolved": [],
         "scope": "书目字段核查，不替代算法、历史字表对应或再分发许可验收"
-      }
+      },
+      "m12_usage": "Shared compact floating IPA/extIPA/VoQS keyboard projection of the M17 catalog; exact symbol code points, insertion modes, chart placement and existing font; no explanatory text, audio, original charts or PDFs copied."
     },
     {
       "id": "M17-EXTIPA-BALL-2025-REPLY",
       "title": "Reply to letter concerning the revisions to some diacritics of the extensions to the IPA (extIPA), Ball (2024)",
       "kind": "academic-reference",
       "modules": [
-        "M17"
+        "M17",
+        "M12"
       ],
       "authors": "Martin J. Ball",
       "urls": {
@@ -11427,7 +11472,8 @@
         ],
         "unresolved": [],
         "scope": "书目字段核查，不替代算法、历史字表对应或再分发许可验收"
-      }
+      },
+      "m12_usage": "Shared compact floating IPA/extIPA/VoQS keyboard projection of the M17 catalog; exact symbol code points, insertion modes, chart placement and existing font; no explanatory text, audio, original charts or PDFs copied."
     },
     {
       "id": "SRC-JETBRAINS-MONO",
@@ -14475,7 +14521,29 @@
       "used_at": [
         "backend/src/ptb_worker/m05_media_export.py",
         "desktop/src/ptb_desktop/vocal_tract/mp4.py"
-      ]
+      ],
+      "macos_media_build": {
+        "date": "2026-10-17",
+        "ffmpeg_version": "8.0",
+        "pyav_version": "16.1.0",
+        "wheel_build": "1ptbmacos",
+        "source_archive_sha256": "b2751fccb6cc4c77708113cd78b561059b6fa904b24162fa0be2d60273d27b8e",
+        "modifications": "Only rebuild libavdevice with PTBPyAV8 private Objective-C class prefix; original codec/format/filter binaries unchanged",
+        "license_scope": "New libavdevice compiled LGPL-3.0-or-later with --enable-version3 and no GPL components; original bundled codec terms remain separately build-dependent",
+        "provenance": "resources/macos-media-provenance.json",
+        "recipe": [
+          "scripts/build_macos_media.py",
+          "scripts/package_macos_media_wheel.py"
+        ],
+        "patch": "third_party/patches/ffmpeg-8.0-macos-avfoundation-namespace.patch",
+        "license_directory": "third_party/licenses/ffmpeg-macos",
+        "public_release": "The recorded media build is reused in the task-local 3.0.5 candidate; no new 3.0.5 public release performed.",
+        "candidate_validation": {
+          "date": "2026-10-24",
+          "scope": "Darwin arm64 task environment and frozen diagnostic app runtime; final 3.0.5 app pending",
+          "reference": "docs/testing/m19-geolinguistics.md"
+        }
+      }
     },
     {
       "kind": "academic-reference",
@@ -15742,6 +15810,416 @@
       ],
       "evidence": "Official page embeds full source and permission notice. AudioSystem uses 512-sample callbacks; Glottis combines vibrato/noise modulation; rendering uses requestAnimationFrame.",
       "notes": "Architecture reference for audio/render separation, streaming, reuse and smoothing. No source copied, no replacement of VTL acoustics; its slower pitch wobble is distinct from cycle perturbation."
+    },
+    {
+      "id": "REF-M15-R-QUANTILE-TYPE7",
+      "title": "Sample Quantiles: quantile {stats}",
+      "kind": "method-reference",
+      "modules": [
+        "M15"
+      ],
+      "authors": "R Core Team",
+      "actual_included_version": null,
+      "acknowledgement_version": "",
+      "relationship": "mathematical definition reference; independent TypeScript implementation",
+      "urls": {
+        "documentation": "https://stat.ethz.ch/R-manual/R-devel/library/stats/html/quantile.html"
+      },
+      "used_at": [
+        "frontend/src/modules/perception/analysis.ts",
+        "manual/chapters/m15.json"
+      ],
+      "acknowledgement_group": "academic",
+      "distribution_status": "reference-only",
+      "license": "Not applicable to mathematical definition; no R code or documentation redistributed",
+      "show_license_in_acknowledgements": false,
+      "verification_date": "2026-10-20",
+      "evidence": "Official R stats quantile documentation inspected: type 7 default, knots (k-1)/(n-1), linear interpolation. Checked R documentation stats 4.6.0; no R runtime or source included.",
+      "reference_note": "反应时四分位数采用 type 7 线性插值。",
+      "modifications": "Independent TypeScript formula; no upstream source copied",
+      "open_items": [],
+      "citation_format": "GB/T 7714-2015",
+      "citation": "R Core Team. Sample Quantiles: quantile {stats}[EB/OL]. [2026-10-20]. https://stat.ethz.ch/R-manual/R-devel/library/stats/html/quantile.html."
+    },
+    {
+      "id": "M19-OPENLAYERS",
+      "title": "OpenLayers and runtime dependencies",
+      "kind": "software",
+      "modules": [
+        "M19"
+      ],
+      "authors": "OpenLayers contributors",
+      "urls": {
+        "source": "https://openlayers.org/"
+      },
+      "actual_included_version": "10.11.0",
+      "used_at": [
+        "frontend/src/modules/geolinguistics/GeoMap.vue"
+      ],
+      "relationship": "local data preparation and interactive presentation",
+      "license": "BSD-2-Clause; transitive licenses preserved",
+      "verification_date": "2026-10-22",
+      "modifications": "Installed project-local; exact dependency versions: {\"ol\": \"10.11.0\", \"zarrita\": \"0.7.5\", \"@zarrita/storage\": \"0.2.0\", \"unzipit\": \"2.0.0\", \"reference-spec-reader\": \"0.2.0\", \"numcodecs\": \"0.3.2\", \"fflate\": \"0.8.3\", \"rbush\": \"4.0.1\", \"quickselect\": \"3.0.0\", \"pbf\": \"5.1.2\", \"resolve-protobuf-schema\": \"2.1.0\", \"protocol-buffers-schema\": \"3.6.1\", \"geotiff\": \"3.1.0-beta.0\", \"zstddec\": \"0.2.0\", \"xml-utils\": \"1.10.2\", \"web-worker\": \"1.5.0\", \"quick-lru\": \"6.1.2\", \"parse-headers\": \"2.0.6\", \"pako\": \"2.2.0\", \"lerc\": \"3.0.0\", \"@petamoriken/float16\": \"3.9.3\", \"earcut\": \"3.2.4\", \"@types/rbush\": \"4.0.0\"}",
+      "notes": "Installed project-local; exact dependency versions: {\"ol\": \"10.11.0\", \"zarrita\": \"0.7.5\", \"@zarrita/storage\": \"0.2.0\", \"unzipit\": \"2.0.0\", \"reference-spec-reader\": \"0.2.0\", \"numcodecs\": \"0.3.2\", \"fflate\": \"0.8.3\", \"rbush\": \"4.0.1\", \"quickselect\": \"3.0.0\", \"pbf\": \"5.1.2\", \"resolve-protobuf-schema\": \"2.1.0\", \"protocol-buffers-schema\": \"3.6.1\", \"geotiff\": \"3.1.0-beta.0\", \"zstddec\": \"0.2.0\", \"xml-utils\": \"1.10.2\", \"web-worker\": \"1.5.0\", \"quick-lru\": \"6.1.2\", \"parse-headers\": \"2.0.6\", \"pako\": \"2.2.0\", \"lerc\": \"3.0.0\", \"@petamoriken/float16\": \"3.9.3\", \"earcut\": \"3.2.4\", \"@types/rbush\": \"4.0.0\"}",
+      "acknowledgement_group": "software",
+      "distribution_status": "Shared Windows/macOS/web implementation with user-selected local data; no public deployment in this task",
+      "license_file": "third_party/licenses/openlayers-10.11.0-dependencies.txt"
+    },
+    {
+      "id": "M19-ZENODO",
+      "title": "Supplementary Materials for the article entitles 'Geographic Structure of Chinese Dialects: A Computational Dialectometric Approach' (published in Linguistics)",
+      "kind": "dataset",
+      "modules": [
+        "M19"
+      ],
+      "authors": "He Huang; Jack Grieve; Frank Jiao",
+      "urls": {
+        "source": "https://zenodo.org/records/10697975",
+        "DOI": "https://doi.org/10.5281/zenodo.10697975"
+      },
+      "actual_included_version": "v1, 2024-02-23",
+      "used_at": [
+        "scripts/prepare_geolinguistics.py"
+      ],
+      "relationship": "local data preparation and interactive presentation",
+      "license": "CC BY 4.0",
+      "verification_date": "2026-10-23",
+      "modifications": "User-provided local files; full upstream archive byte identity remains unverified. 930 sites and 510 features. Ordered variants and original values retained.",
+      "notes": "User-provided local files; full upstream archive byte identity remains unverified. 930 sites and 510 features. Ordered variants and original values retained.",
+      "acknowledgement_group": "academic",
+      "distribution_status": "Shared Windows/macOS/web implementation with user-selected local data; no public deployment in this task",
+      "citation": "HUANG H, GRIEVE J, JIAO F. Supplementary Materials for the article entitles 'Geographic Structure of Chinese Dialects: A Computational Dialectometric Approach' (published in Linguistics)[DS/OL]. v1. Zenodo, 2024. DOI:10.5281/zenodo.10697975.",
+      "citation_format": "GB/T 7714-2015",
+      "acknowledgement_version": "v1（2024-02-23）",
+      "publication_date": "2024-02-23",
+      "reference_note": "提供 930 个调查点、510 项语言特征，以及 MDS、聚类和五份距离矩阵。引用数据时同时注明本条数据集和对应论文；作者署名按 Zenodo 原记录保留。",
+      "bibliographic_status": "verified against Zenodo record 10697975 and its REST metadata",
+      "metadata_verified_at": "2026-10-23"
+    },
+    {
+      "id": "M19-PAPER",
+      "title": "Geographic structure of Chinese dialects: a computational dialectometric approach",
+      "kind": "paper",
+      "modules": [
+        "M19"
+      ],
+      "authors": "He Huang; Jack Grieve; Lei Jiao; Zhuo Cai",
+      "urls": {
+        "source": "https://doi.org/10.1515/ling-2021-0138",
+        "publisher_archive": "https://research.birmingham.ac.uk/en/publications/geographic-structure-of-chinese-dialects-a-computational-dialecto/"
+      },
+      "actual_included_version": "Linguistics 62(4), 937–976, 2024",
+      "used_at": [
+        "frontend/src/modules/geolinguistics/GeolinguisticsPage.vue"
+      ],
+      "relationship": "local data preparation and interactive presentation",
+      "license": "CC BY 4.0",
+      "verification_date": "2026-10-23",
+      "modifications": "MDS, clustering and five distance matrices retain original values. Section 2.2 defines capital-letter types, numeric subtypes and the exceptional lower-case mini-types in grammar maps 36/37. Each displayed broad meaning is independently checked against the atlas; no fixed alphabet-to-color order assumed.",
+      "notes": "MDS, clustering and five distance matrices retain original values. Section 2.2 defines capital-letter types, numeric subtypes and the exceptional lower-case mini-types in grammar maps 36/37. Each displayed broad meaning is independently checked against the atlas; no fixed alphabet-to-color order assumed.",
+      "acknowledgement_group": "academic",
+      "distribution_status": "Shared Windows/macOS/web implementation with user-selected local data; no public deployment in this task",
+      "citation": "HUANG H, GRIEVE J, JIAO L, et al. Geographic structure of Chinese dialects: a computational dialectometric approach[J]. Linguistics, 2024, 62(4): 937-976. DOI:10.1515/ling-2021-0138.",
+      "citation_format": "GB/T 7714-2015",
+      "acknowledgement_version": "2024 · Linguistics 62(4): 937–976",
+      "publication_date": "2024-07-26",
+      "reference_note": "方言相似性图层与距离方案的研究依据。论文第 2.2 节说明类型、子类型和并用记录的编码方式，原始结果由配套 Zenodo 数据提供。",
+      "bibliographic_status": "verified against the University of Birmingham publication record and DOI",
+      "metadata_verified_at": "2026-10-23"
+    },
+    {
+      "id": "M19-SHAOZI",
+      "title": "《中国语言地图集(第2版)汉语方言卷》县级行政单位方言数据集",
+      "kind": "dataset",
+      "modules": [
+        "M19"
+      ],
+      "authors": "井韶子（Jing, Liwen，数据整理）",
+      "urls": {
+        "source": "https://zenodo.org/records/15897647",
+        "DOI": "https://doi.org/10.5281/zenodo.15897647"
+      },
+      "actual_included_version": "v1, 2025-07-15; supplied XLSX and CSV match Zenodo MD5 exactly",
+      "used_at": [
+        "scripts/prepare_geolinguistics.py"
+      ],
+      "relationship": "local data preparation and interactive presentation",
+      "license": "CC BY 4.0",
+      "verification_date": "2026-10-23",
+      "modifications": "Curator credited in the interface as 井韶子. Supplied XLSX MD5 46a3b56948a7a469a3c57307a092272b and CSV MD5 2e952829c4325797f5ed9209edfab320 match the publication. Source sheets stay independent: 3666 combined, 3281 area and 356 island rows; original workbook row provenance retained.",
+      "notes": "Curator credited in the interface as 井韶子. Supplied XLSX MD5 46a3b56948a7a469a3c57307a092272b and CSV MD5 2e952829c4325797f5ed9209edfab320 match the publication. Source sheets stay independent: 3666 combined, 3281 area and 356 island rows; original workbook row provenance retained.",
+      "acknowledgement_group": "academic",
+      "distribution_status": "Shared Windows/macOS/web implementation with user-selected local data; no public deployment in this task",
+      "citation": "JING L. 《中国语言地图集(第2版)汉语方言卷》县级行政单位方言数据集[DS/OL]. v1. Zenodo, 2025. DOI:10.5281/zenodo.15897647.",
+      "citation_format": "GB/T 7714-2015",
+      "acknowledgement_version": "v1（2025-07-15）",
+      "publication_date": "2025-07-15",
+      "reference_note": "方言分布所用的县级行政单位整理数据。保留方言区、方言岛及合并表的原始行，按该数据集正式署名 Jing, Liwen 引用，并注明所依据的《中国语言地图集》第 2 版。",
+      "bibliographic_status": "verified against Zenodo record 15897647 and its REST metadata",
+      "metadata_verified_at": "2026-10-23"
+    },
+    {
+      "id": "M19-ATLAS",
+      "title": "《汉语方言地图集》语音、词汇、语法卷",
+      "kind": "book",
+      "modules": [
+        "M19"
+      ],
+      "authors": "曹志耘（主编）",
+      "urls": {
+        "source": "https://www.cp.com.cn/book/bd70844f-a.html",
+        "语音卷": "https://www.cp.com.cn/book/6187bddd-8.html",
+        "词汇卷": "https://www.cp.com.cn/book/6187bddd-1.html",
+        "语法卷": "https://www.cp.com.cn/book/6187bddd-2.html"
+      },
+      "actual_included_version": "2008; user-provided 541-page scanned PDF",
+      "used_at": [
+        "scripts/prepare_geolinguistics_labels.py",
+        "scripts/prepare_geolinguistics_groups.py"
+      ],
+      "relationship": "local data preparation and interactive presentation",
+      "license": "User-provided local reading copy; redistribution unknown",
+      "verification_date": "2026-10-23",
+      "modifications": "510 titles are reviewed. Broad groups use source headings or explicitly recorded summaries, with code membership and PDF-page evidence reviewed separately from fine labels. Source scans remain private review material and are not included in any runtime data folder.",
+      "notes": "510 titles are reviewed. Broad groups use source headings or explicitly recorded summaries, with code membership and PDF-page evidence reviewed separately from fine labels. Source scans remain private review material and are not included in any runtime data folder.",
+      "acknowledgement_group": "academic",
+      "distribution_status": "Shared Windows/macOS/web implementation with user-selected local data; no public deployment in this task",
+      "citation": "曹志耘, 主编. 汉语方言地图集：语音卷、词汇卷、语法卷[M]. 北京：商务印书馆, 2008.",
+      "citation_format": "GB/T 7714-2015",
+      "acknowledgement_version": "2008（语音卷、词汇卷、语法卷）",
+      "reference_note": "语言现象的原始图册依据。语音卷 205 图、词汇卷 203 图、语法卷 102 图，共 510 图；图名和类别释义据各图图例核对。",
+      "show_license_in_acknowledgements": false,
+      "bibliographic_status": "verified against Commercial Press series and all three volume records",
+      "metadata_verified_at": "2026-10-23",
+      "isbns": {
+        "语音卷": "978-7-100-05774-5",
+        "词汇卷": "978-7-100-05784-4",
+        "语法卷": "978-7-100-05785-1"
+      }
+    },
+    {
+      "id": "M19-GARY-MAP",
+      "title": "ChinaAdminDivisonSHP",
+      "kind": "dataset",
+      "modules": [
+        "M19"
+      ],
+      "authors": "GaryBikini; upstream AMap data",
+      "urls": {
+        "source": "https://github.com/GaryBikini/ChinaAdminDivisonSHP"
+      },
+      "actual_included_version": "ae72417fee2a63f453e6b2717e40655e87e26887 / v24.02.06",
+      "used_at": [
+        "scripts/prepare_geolinguistics.py"
+      ],
+      "relationship": "local data preparation and interactive presentation",
+      "license": "MIT repository; upstream map redistribution unknown",
+      "verification_date": "2026-10-22",
+      "modifications": "GCJ-02 declared as WGS84 upstream; display geometry inverse-transformed iteratively. Taiwan aggregate removed from city/district layers and supplemented from NLSC. Public publication not cleared.",
+      "notes": "GCJ-02 declared as WGS84 upstream; display geometry inverse-transformed iteratively. Taiwan aggregate removed from city/district layers and supplemented from NLSC. Public publication not cleared.",
+      "acknowledgement_group": "software",
+      "distribution_status": "Legacy user-selected local data only; excluded from the licensed public-boundary candidate. Original data remains unchanged."
+    },
+    {
+      "id": "M19-NLSC",
+      "title": "直辖市县市及乡镇市区界线",
+      "kind": "dataset",
+      "modules": [
+        "M19"
+      ],
+      "authors": "内政部国土测绘中心",
+      "urls": {
+        "source": "https://maps.nlsc.gov.tw/pro/download.jsp",
+        "county": "https://data.gov.tw/dataset/7442",
+        "township": "https://data.gov.tw/dataset/7441",
+        "license": "https://data.gov.tw/license"
+      },
+      "actual_included_version": "COUNTY_MOI_1090820; TOWN_MOI_1120317",
+      "used_at": [
+        "scripts/prepare_geolinguistics.py",
+        "scripts/prepare_geolinguistics_open_maps.py",
+        "scripts/prepare_geolinguistics_datav_runtime.py"
+      ],
+      "relationship": "local data preparation and interactive presentation",
+      "license": "政府资料开放授权条款第1版",
+      "verification_date": "2026-10-24",
+      "modifications": "EPSG:3824 to EPSG:4326; 22 county/city and 368 township entities; Town_Majia_Sanhe supplemental polygon merged only into exact TOWNCODE 10013280 / 瑪家鄉, with area difference recorded. Source county and township geometries have different dates; containment discrepancies stay audited.",
+      "notes": "Original verified 2026-10-22 ZIPs reused without TLS bypass. County ZIP SHA256 0c6fca34a92b92ef3e9a41957e403cb89e814bb64942ca7c7e51c746f913d49d; town ZIP SHA256 e028e5a750eee48cf7913330655e5e5c5bb1f176868fbd0afdfc661fca60557c. New GeoAtlas candidate uses only the exact Taiping physical-island component from TOWN_MOI_1120317, preserving existing WGS84 values; old wider regional derivations remain separately documented as legacy inputs.",
+      "acknowledgement_group": "software",
+      "distribution_status": "Licensed official boundary input; isolated candidate coverage and associations under review; no public upload in this task.",
+      "license_file": "third_party/licenses/geolinguistics/Open-Government-Data-License-1.0.txt"
+    },
+    {
+      "id": "M19-NATURAL-EARTH",
+      "title": "Natural Earth land: 1:110m display and 1:10m independent coastal audit",
+      "kind": "dataset",
+      "modules": [
+        "M19"
+      ],
+      "authors": "Natural Earth contributors",
+      "urls": {
+        "source": "https://www.naturalearthdata.com/about/terms-of-use/",
+        "audit_land": "https://naciscdn.org/naturalearth/10m/physical/ne_10m_land.zip"
+      },
+      "actual_included_version": "1:110m runtime land downloaded 2026-10-22; independent 1:10m land 5.1.1 audit reference downloaded 2026-10-24",
+      "used_at": [
+        "scripts/prepare_geolinguistics.py",
+        "scripts/audit_geolinguistics_overlap_coast.py"
+      ],
+      "relationship": "local data preparation and interactive presentation",
+      "license": "Public domain",
+      "verification_date": "2026-10-24",
+      "modifications": "World land background only; no country sovereignty labels introduced.",
+      "notes": "Runtime world land remains the existing 1:110m layer. The independent 1:10m land 5.1.1 reference is used only to classify candidate administrative overlap as coastal/marine or inland; no administrative clipping or source-boundary replacement. Audit ZIP SHA-256 e547d749445eaa0964aba76738090ec88f5e63c4585122170f98c67a7ea922dc, 3,269,070 bytes.",
+      "acknowledgement_group": "software",
+      "distribution_status": "Shared Windows/macOS/web implementation with user-selected local data; no public deployment in this task"
+    },
+    {
+      "id": "M19-LANGUAGE-ATLAS",
+      "title": "中国语言地图集（第2版）：汉语方言卷",
+      "kind": "book",
+      "modules": [
+        "M19"
+      ],
+      "authors": "中国社会科学院语言研究所；中国社会科学院民族学与人类学研究所；香港城市大学语言资讯科学研究中心",
+      "urls": {
+        "source": "https://www.cp.com.cn/book/8094abe4-a.html"
+      },
+      "actual_included_version": "2012, ISBN 978-7-100-07054-6; book not bundled",
+      "used_at": [
+        "scripts/prepare_geolinguistics.py"
+      ],
+      "relationship": "classification framework underlying the author-curated county dataset",
+      "license": "Bibliographic reference; original book redistribution not granted",
+      "verification_date": "2026-10-23",
+      "modifications": "The application uses the separately published author-curated table; original book pages are not included.",
+      "notes": "Distinct from Cao (2008), which supplies the 510 feature maps.",
+      "acknowledgement_group": "academic",
+      "distribution_status": "Shared Windows/macOS/web implementation with user-selected local data; no public deployment in this task",
+      "citation": "中国社会科学院语言研究所, 中国社会科学院民族学与人类学研究所, 香港城市大学语言资讯科学研究中心. 中国语言地图集：汉语方言卷[M]. 2版. 北京：商务印书馆, 2012.",
+      "citation_format": "GB/T 7714-2015",
+      "acknowledgement_version": "第 2 版（2012）· ISBN 978-7-100-07054-6",
+      "reference_note": "县级方言分区的图册依据，由中国社会科学院两研究所和香港城市大学语言资讯科学研究中心合作编制。模块使用井韶子据此整理、单独发表于 Zenodo 的县级数据。",
+      "show_license_in_acknowledgements": false,
+      "bibliographic_status": "verified against Commercial Press book record 8094abe4-a",
+      "metadata_verified_at": "2026-10-23"
+    },
+    {
+      "id": "M19-OSM",
+      "title": "OpenStreetMap administrative boundaries",
+      "kind": "dataset",
+      "modules": [
+        "M19"
+      ],
+      "authors": "OpenStreetMap contributors; Geofabrik extract",
+      "urls": {
+        "source": "https://download.geofabrik.de/asia/china.html",
+        "snapshot": "https://download.geofabrik.de/asia/china-261022.osm.pbf",
+        "license": "https://opendatacommons.org/licenses/odbl/1-0/",
+        "copyright": "https://www.openstreetmap.org/copyright"
+      },
+      "actual_included_version": "2026-10-22T20:21:33Z; china-261022.osm.pbf",
+      "acknowledgement_version": "2026-10-22 snapshot",
+      "used_at": [
+        "scripts/extract_geolinguistics_osm.py",
+        "scripts/complete_geolinguistics_osm.py",
+        "scripts/prepare_geolinguistics_open_maps.py",
+        "frontend/src/modules/geolinguistics/attribution.ts"
+      ],
+      "relationship": "Licensed source for mainland and Macau administrative boundary candidate; independent from linguistic observations",
+      "license": "ODbL 1.0",
+      "license_file": "third_party/licenses/geolinguistics/ODbL-1.0.txt",
+      "verification_date": "2026-10-24",
+      "modifications": "Extract administrative relations; complete missing clipped ways/nodes at the same snapshot; match official identities only with auditable evidence; simplify display copies while point association uses unsimplified geometry. No nearest-centre assignment or topology repair.",
+      "notes": "Original PBF 1613578208 bytes, SHA256 80416c8783cea743acba76401fbecb502dd1d3071339bb8b67d7df73712dbe6c. OSM attribution is displayed near maps and in exported images. Machine-readable ODbL derivative download and modification provenance must accompany public distribution.",
+      "acknowledgement_group": "software",
+      "distribution_status": "Fixed input obtained; isolated candidate completeness and associations under review. Not a completed or published national boundary release."
+    },
+    {
+      "id": "M19-HK-HAD",
+      "title": "Hong Kong administrative boundaries: 18 districts",
+      "kind": "dataset",
+      "modules": [
+        "M19"
+      ],
+      "authors": "Government of the Hong Kong Special Administrative Region; Home Affairs Department; DATA.GOV.HK",
+      "urls": {
+        "source": "https://data.gov.hk/en-data/dataset/hk-had-json1-hong-kong-administrative-boundaries",
+        "data": "https://www.had.gov.hk/psi/hong-kong-administrative-boundaries/hksar_18_district_boundary.json",
+        "license": "https://data.gov.hk/en/terms-and-conditions"
+      },
+      "actual_included_version": "JSON Last-Modified 2026-09-11T08:00:01Z; downloaded 2026-10-24",
+      "acknowledgement_version": "2026-09-11 data",
+      "used_at": [
+        "scripts/prepare_geolinguistics_open_maps.py",
+        "frontend/src/modules/geolinguistics/attribution.ts"
+      ],
+      "relationship": "Official Hong Kong district boundary candidate; explicit 18-name to display-code crosswalk",
+      "license": "DATA.GOV.HK Terms of Use 1.2 (2025-05-26)",
+      "license_file": "third_party/licenses/geolinguistics/DATA-GOV-HK-terms-1.2.txt",
+      "verification_date": "2026-10-24",
+      "modifications": "Retain official Chinese district name and number; map to existing local display IDs; union the 18 districts into labelled province/city display aggregates. No claim that local software IDs are official administrative codes.",
+      "notes": "SHA256 ab2123b5a48c2e39e29ce594a0c51590cf6081922ab2c5c14ff78338b788f760; 796586 bytes. Government ownership and HAD / DATA.GOV.HK attribution retained. Terms expressly cover commercial and non-commercial redistribution; no CC BY or public-domain claim.",
+      "acknowledgement_group": "software",
+      "distribution_status": "All 18 named official districts acquired and converted in an isolated candidate; whole-package association checks pending."
+    },
+    {
+      "id": "M19-MCA",
+      "title": "全国行政区划信息查询平台：县级以上名称与代码",
+      "kind": "dataset",
+      "modules": [
+        "M19"
+      ],
+      "authors": "中华人民共和国民政部",
+      "urls": {
+        "source": "https://dmfw.mca.gov.cn/",
+        "data": "https://dmfw.mca.gov.cn/xzqh/getList?code=0&trimCode=true&maxLevel=3"
+      },
+      "actual_included_version": "Live tree retrieved 2026-10-24; effective code year not declared by response",
+      "used_at": [
+        "scripts/fetch_geolinguistics_open_maps.py",
+        "scripts/prepare_geolinguistics_open_maps.py"
+      ],
+      "relationship": "Factual name/code/hierarchy lookup used to audit OSM identities; no boundary geometry supplied",
+      "license": "Original API response redistribution not established; retained only as local audit input",
+      "verification_date": "2026-10-24",
+      "modifications": "Flatten code tree; distinguish current retrieved tree from the fixed 2025-12-31 catalogue. Preserve raw source codes and parent codes in local audit.",
+      "notes": "Live tree SHA256 9908f56c5ae53136caade2d0aae79742f0872146b46be4b9c0d06c460706cf94. Counts do not certify geometry completeness. Raw API payload is not bundled in the runtime or public derivative.",
+      "acknowledgement_group": "software",
+      "distribution_status": "Local identity audit input; no geometry or original API payload included in public runtime files.",
+      "show_license_in_acknowledgements": false,
+      "acknowledgement_version": "2026-10-24 核对",
+      "reference_note": "提供县级以上行政区划的名称、代码和上级关系，供地图区域对应核对。"
+    },
+    {
+      "id": "M19-DATAV",
+      "title": "DataV GeoAtlas 中国行政区划与边界显示数据",
+      "kind": "dataset",
+      "modules": [
+        "M19"
+      ],
+      "authors": "阿里云DataV；高德开放平台",
+      "urls": {
+        "source": "https://datav.aliyun.com/portal/school/atlas/area_selector",
+        "documentation": "https://help.aliyun.com/zh/datav/datav-7-0/user-guide/datav-geoatlas-widgets/"
+      },
+      "actual_included_version": "areas_v3; source page time label 2021.5; acquired2026-10-24",
+      "acknowledgement_version": "areas_v3（页面标注2021.5）",
+      "used_at": [
+        "scripts/prepare_geolinguistics_datav.py",
+        "scripts/normalize_geolinguistics_datav.py",
+        "scripts/prepare_geolinguistics_datav_runtime.py",
+        "frontend/src/modules/geolinguistics/attribution.ts"
+      ],
+      "relationship": "Study-use boundary candidate and display derivation; independent of original linguistic research values",
+      "license": "DataV GeoAtlas学习交流用途告知",
+      "license_file": "third_party/licenses/geolinguistics/DataV-GeoAtlas-use-notice.txt",
+      "verification_date": "2026-10-24",
+      "modifications": "Preserve immutable65-file source set; per-Polygon structure repair with full differences; retain actual source parent/level; infer common display inverse once with original CRS84 conflict retained; apply separately approved island/shoal source components; keep ten boundary symbols separate from administrative counts, area and site association.",
+      "notes": "Official documentation says data originate from Amap, only learning/exchange use, and China-only selection. Source page label2021.5 is not an independently certified administrative effective year. No MIT or unrestricted commercial license claim. User explicitly selected study-use integration. Research coordinates, observations, classifications and precomputed matrices remain unchanged; coordinate inference is not provider datum certification.",
+      "acknowledgement_group": "software",
+      "show_in_acknowledgements": true,
+      "distribution_status": "Independent study-use data review passed; adopted into isolated frozen trial for real UI, manual and three-platform validation. Public activation and final release-note approval pending."
     }
   ]
 }

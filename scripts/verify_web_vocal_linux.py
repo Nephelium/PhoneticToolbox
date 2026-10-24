@@ -19,8 +19,8 @@ def main():
             if packet['eof']:break
         pcm=np.concatenate(parts);assert len(pcm)==24000 and np.isfinite(pcm).all() and np.max(np.abs(pcm))>0
         assert not call('heartbeat',dict(position=.5,completed=True))['active'];call('pose',dict(params=meta['presets']['i'],revision=2));checks.append('24000_samples_pose_unlock')
-        video=call('video/begin',{'duration':12,'width':1280,'height':720,'fps':30});call('video/cancel',{'id':video['id']});checks.append('video_twelve_seconds_accepted')
-        for op,body in [('preview',{'duration':1}),('live',{'active':True}),('video/begin',{'duration':12.01,'width':1280,'height':720,'fps':30})]:
+        video=call('video/begin',{'duration':60,'width':1280,'height':720,'fps':30});call('video/cancel',{'id':video['id']});checks.append('video_sixty_seconds_accepted')
+        for op,body in [('preview',{'duration':1}),('live',{'active':True}),('video/begin',{'duration':60.01,'width':1280,'height':720,'fps':30})]:
             try:call(op,body);raise AssertionError('web policy bypass')
             except VocalError:pass
         checks.append('web_duration_live_video_limits')

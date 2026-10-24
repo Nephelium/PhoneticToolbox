@@ -50,7 +50,7 @@ function editingTime(grid:{xmin:number;xmax:number},rawTime:number,audioDuration
  return Math.max(grid.xmin,Math.min(grid.xmax,Number(rawTime.toFixed(6))));
 }
 export function manualDoubleClick(editor:Editor,rawTime:number):string {
- const s=editor.state,grid=s.textgrid,words=editor.wordTier(),phones=editor.phoneTier();
+ const s=editor.state,grid=s.textgrid,words=editor.wordTier(),phones=editor.tiersLinked(s.wordTierName,s.phoneTierName)?editor.phoneTier():null;
  if(!grid||!words)throw Error('请先选择或创建音节层。');
  const time=editingTime(grid,rawTime,s.audioBuffer?.duration);
  if(s.sequenceStart===null){
@@ -65,12 +65,13 @@ export function manualDoubleClick(editor:Editor,rawTime:number):string {
  return '已新增空白标注，可直接输入文字，或在下方文本框编辑。';
 }
 export function sequenceDoubleClick(editor:Editor,rawTime:number,continuePrevious=false,splitMode:PhoneSplitMode='cursor'):string{
- const s=editor.state,grid=s.textgrid,words=editor.wordTier(),phones=editor.phoneTier();
- if(!grid||!words||!phones)throw Error('需要覆盖录音全时域的音节层和音素层，请检查层名。');
+ const s=editor.state,grid=s.textgrid,words=editor.wordTier(),phones=editor.tiersLinked(s.wordTierName,s.phoneTierName)?editor.phoneTier():null;
+ if(!grid||!words)throw Error('需要覆盖录音全时域的音节层，请检查层名。');
  const time=editingTime(grid,rawTime,s.audioBuffer?.duration);
  // An internal click edits an existing syllable and never consumes the list.
  const word=words.intervals.find(i=>i.text.trim()&&time>i.xmin&&time<i.xmax);
  if(!continuePrevious&&s.sequenceStart===null&&word){
+  if(!phones)throw Error('音节与音素未关联，请在音素层独立添加边界。');
   const labels=sequenceParts(editor,word.text);
   if(labels.length<2)throw Error('该音节没有可拆分的声母，音素层保留一段。');
   return splitInitialPhones(editor,word,time,splitMode,labels);
@@ -90,9 +91,9 @@ export function sequenceDoubleClick(editor:Editor,rawTime:number,continuePreviou
  if(time-start<1e-6)throw Error('终点必须晚于起点；按 Esc 可取消起点后重选。');
  const label=s.labSequence[s.sequenceIndex];
  // Prepare both tiers before mutation, including overlap validation.
- const nextWords=insertEmpty(words.intervals,start,time,label),nextPhones=insertEmpty(phones.intervals,start,time,label);
- editor.saveUndoState();words.intervals=nextWords;phones.intervals=nextPhones;
+ const nextWords=insertEmpty(words.intervals,start,time,label),nextPhones=phones?insertEmpty(phones.intervals,start,time,label):null;
+ editor.saveUndoState();words.intervals=nextWords;if(phones&&nextPhones)phones.intervals=nextPhones;
  s.sequenceIndex++;s.sequenceStart=null;s.selected={tier:s.wordTierName,index:nextWords.findIndex(i=>i.xmin===start&&i.xmax===time)};
  s.selectedIndices=[];s.selectedBoundary=null;s.dirty=true;
- return `已新增 ${label}：${start.toFixed(6)}–${time.toFixed(6)} s，音素层边界已同步。`;
+ return `已新增 ${label}：${start.toFixed(6)}–${time.toFixed(6)} s${phones?'，音素层边界已同步。':'。'}`;
 }

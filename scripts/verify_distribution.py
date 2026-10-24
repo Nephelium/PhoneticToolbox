@@ -164,6 +164,11 @@ def verify(bundle, output):
                 # M18 currently uses the shell's contextual manual entry.
                 # Keep the same chapter identity and return checks below.
                 until('(()=>{const entries=[...document.querySelectorAll("button[title=使用说明]")].filter(e=>e.offsetParent);if(entries.length!==1||entries[0].disabled)return false;entries[0].click();return true})()')
+            elif mid == 'M19':
+                # M19 opens quick usage first, then the full chapter. Verify
+                # this same entry even before companion data is selected.
+                until('(()=>{const entries=[...document.querySelectorAll(".language-atlas button")].filter(e=>e.offsetParent&&e.textContent.trim()==="使用方法");if(entries.length!==1||entries[0].disabled)return false;entries[0].click();return true})()')
+                until('(()=>{const entries=[...document.querySelectorAll("dialog .help-text button")].filter(e=>e.offsetParent&&e.textContent.trim()==="打开完整使用说明");if(entries.length!==1||entries[0].disabled)return false;entries[0].click();return true})()')
             else:
                 until('(()=>{const entries=[...document.querySelectorAll("main button")].filter(e=>e.offsetParent&&e.textContent.trim()==="帮助");if(entries.length!==1||entries[0].disabled)return false;entries[0].click();return true})()')
             until('document.querySelector(".manual-document")?.dataset.manualChapter==='+json.dumps(descriptor['id']))

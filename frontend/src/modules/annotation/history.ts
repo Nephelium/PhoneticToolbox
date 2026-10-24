@@ -2,7 +2,7 @@ import {LocalAssets,type AssetDatabase} from '../../platform/local-assets.ts';
 import {parseGrid} from './format.ts';
 
 export type HistoryKind='original'|'recovered'|'auto'|'manual'|'restored';
-export interface AnnotationView {offset:number;zoom:number;channel:number;word:string;phone:string;lab:string[];labName:string;sequence:boolean;index:number}
+export interface AnnotationView {offset:number;zoom:number;channel:number;word:string;phone:string;extra?:string;lab:string[];labName:string;sequence:boolean;index:number}
 export interface AnnotationVersion {id:string;time:number;kind:HistoryKind;text:string;fileName?:string}
 interface Journal {schema:1;audioSha:string;versions:AnnotationVersion[];head:string;view?:AnnotationView}
 export interface AnnotationHistorySession {key:string;raw:string|null;value:Journal}

@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import runpy
 import shutil
 import subprocess
 import sys
@@ -23,6 +24,7 @@ with zipfile.ZipFile(archive) as z:
         p=Path(name)
         if p.parent.as_posix()=='Developer/Sources' and p.suffix in ('.cpp','.h'):
             (original/p.name).write_bytes(z.read(name))
+runpy.run_path(str(ROOT/'resources/vocal_tract/sources/m10_source_perturbation.py'))['apply'](original)
 native=out/'native';binary=native/'linux-x86_64';binary.mkdir(parents=True,exist_ok=True)
 commands=[]
 def compile(name,sources,include,extra=()):

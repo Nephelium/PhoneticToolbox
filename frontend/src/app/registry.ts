@@ -20,4 +20,5 @@ export const modules:Module[] = [
   {id:'M14',title:'音系归纳',description:'调查字表与同音字表',icon:'nodes',group:2},
   {id:'M15',title:'感知实验',description:'实验设计、配置与运行',icon:'headphones',group:2},
   {id:'M18',title:'语音学论文精读',description:'按日期获取论文、原文与中文译文对照阅读',icon:'book',group:3},
+  {id:'M19',title:'语言地图',description:'语言特征、县级方言分布与可编辑研究地图',icon:'map',group:3},
 ];

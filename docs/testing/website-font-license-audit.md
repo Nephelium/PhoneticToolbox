@@ -1,13 +1,14 @@
 # 官网字体许可核查
 
-核查日期：2026-10-11。范围为 temporary-site 实际 CSS 字体、SVG 文字资产和软件截图。
+核查日期：2026-10-11，首页标题来源于2026-10-18更新。范围为 temporary-site 实际 CSS 字体、SVG 文字资产和软件截图。
 
 | 用途 | 字体或图形 | 许可与处理 |
 | --- | --- | --- |
 | 中央元音标注 | Doulos SIL 7.000 | OFL 1.1，原始字体不改动，SIL Global 版权与完整 OFL 保留 |
 | 作者寄语与昵称 | Phonetic Whisper | 基于 ZCOOL KuaiLe 2.001 的修改版，字符子集、比例、轻微倾斜和基线调整，重新命名，继承 OFL 1.1 |
 | 更多功能提示 | SVG 轮廓文字 | 使用 ZCOOL KuaiLe 轮廓重新编排，图形作品与字体软件分开记录 |
-| 首页六字与外侧 IPA | 自绘 SVG | 首页逐笔绘制；IPA 参考 Doulos 字形结构重新绘制 |
+| 首页六字 | 井井选定的生成手写稿I与原生SVG手绘线 | 选定PNG原字节嵌入SVG，手绘黄色波浪线由配方生成，无字体软件嵌入；原图、SHA与来源见assets/hero-lettering-source.json和assets/provenance.json |
+| 外侧 IPA | 自绘 SVG | 参考 Doulos 字形结构重新绘制 |
 | 页面正文 | Microsoft YaHei、PingFang SC、Trebuchet MS、Arial、通用字体 | 仅 CSS 引用访客系统字体，未上传或分发专有字体文件 |
 | 应用截图文字 | 应用实际渲染像素 | 不随截图分发字体软件，截图字体与网页嵌入字体区别核对 |
 

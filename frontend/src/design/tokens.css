@@ -84,7 +84,8 @@ main{overflow:auto;flex:1;min-height:0;background:var(--panel);scrollbar-width:t
 .statusbar .status-dot{margin-right:7px}
 .collapsed{grid-template-columns:64px minmax(0,1fr)}
 .collapsed .sidebar{padding-left:8px;padding-right:8px}
-.collapsed .brand{justify-content:center;flex-wrap:wrap;gap:4px;padding-bottom:10px}
+.collapsed .brand{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:4px;padding:0 0 10px}
+.collapsed .sidebar nav{scrollbar-gutter:stable both-edges}
 .collapsed .brand>span,.collapsed .nav-item>span:not(.ipa-icon),.collapsed .nav-group h2,.collapsed .utility-grid span{display:none}
 .collapsed .nav-item{justify-content:center;padding:7px}
 .collapsed .nav-group{margin-top:12px}

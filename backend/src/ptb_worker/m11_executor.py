@@ -16,6 +16,18 @@ from ptb_api.quota import CHUNK_BYTES
 from phonetic_core.transcription.mfa_name_codec import encode_fs_name,decode_fs_name
 
 
+def textgrid_names(corpus):
+    """Keep audio basenames; disambiguate only colliding flat exports."""
+    names=[Path(item['name']).with_suffix('.TextGrid').name for item in corpus]
+    reserved={name.casefold() for name in names};used=set();result=[]
+    for name in names:
+        candidate=name;number=2
+        while candidate.casefold() in used or (candidate!=name and candidate.casefold() in reserved):
+            candidate=f'{Path(name).stem}_{number}.TextGrid';number+=1
+        used.add(candidate.casefold());result.append(candidate)
+    return result
+
+
 def execute_claim(store,claim,worker_id,stop,*,evidence=None):
     files=store.files;identity=(claim['id'],worker_id,claim['generation'])
     snapshot=json.loads(claim['snapshot']);request=snapshot['request']
@@ -53,13 +65,12 @@ def execute_claim(store,claim,worker_id,stop,*,evidence=None):
                     output.write(chunk);h.update(chunk);count+=len(chunk)
             if h.hexdigest()!=item['sha256'] or count!=item['size_bytes']:raise ValueError('m11_input_changed')
         expected={}
-        for index,item in enumerate(request['corpus']):
+        for item,output_name in zip(request['corpus'],textgrid_names(request['corpus'])):
             name=str(safe_name(item['name']));relative=Path(name)
             encoded=Path(*(encode_fs_name(p) for p in relative.parts))
             copy_asset(item['audio']['asset_id'],corpus/encoded)
             copy_asset(item['transcript']['asset_id'],(corpus/encoded).with_suffix(item['transcript_format']))
-            # Explicit index preserves duplicate basenames across speaker folders.
-            expected[encoded.with_suffix('.TextGrid').as_posix()]=f'{index+1:03d}_{relative.stem}.TextGrid'
+            expected[encoded.with_suffix('.TextGrid').as_posix()]=output_name
         model_path=root/'model.zip';dictionary=root/'dictionary.dict'
         shutil.copyfile(model['model'],model_path)
         if request.get('dictionary'):copy_asset(request['dictionary']['asset_id'],dictionary)

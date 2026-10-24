@@ -1,8 +1,9 @@
 // M18: explicit native capability; paper bytes are never application assets.
 export interface PaperAsset{path:string;size:number;sha256:string}
-export interface Paper{id:string;title:string;titleZh:string;authors:string;version:string;sourceUrl:string;publishedAt:string;submittedAt:string;updatedAt?:string;acquired?:boolean;analysisDownloaded?:boolean;dismissed?:boolean;license:{id:string;url:string};translationNote:string;guide:string;abstract?:string;abstractZh?:string;analysis?:string;analysisPdf?:PaperAsset;original:PaperAsset;translation:PaperAsset;downloaded:boolean;local?:boolean;notice?:boolean}
+export interface PaperJournal{title:string;publishedAt:string;doi:string;volume?:string;issue?:string;pages?:string;articleNumber?:string}
+export interface Paper{id:string;title:string;titleZh:string;authors:string;version:string;sourceUrl:string;journal?:PaperJournal;publishedAt:string;submittedAt:string;updatedAt?:string;acquired?:boolean;analysisDownloaded?:boolean;dismissed?:boolean;license:{id:string;url:string};translationNote:string;guide:string;abstract?:string;abstractZh?:string;analysis?:string;analysisPdf?:PaperAsset;original:PaperAsset;translation:PaperAsset;downloaded:boolean;local?:boolean;notice?:boolean}
 export interface PaperStatus{firstLaunch:string;warning:string;papers:Paper[];notice?:Paper|null;autoReceive?:boolean;checkIntervalHours?:number;folders?:string[];collections?:Record<string,string>}
-export interface LocalDocument{id:string;title:string;titleZh:string;relative:string;folder:string;size:number;publishedAt:string}
+export interface LocalDocument{id:string;title:string;titleZh:string;relative:string;folder:string;size:number;publishedAt:string;contentVersion?:string}
 export interface LocalLibrary{root:string;folders:string[];documents:LocalDocument[];selected?:string;relocated?:Record<string,string>;imported?:string[];failures?:string[];cancelled?:boolean}
 export type PaperLanguage='original'|'translation'|'analysis';
 export interface PaperLine{text:string;x:number;y:number;w:number;h:number}

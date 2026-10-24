@@ -16,9 +16,10 @@ export class MediaBank {
  private store:LocalStore;
  constructor(store:LocalStore){this.store=store;this.context=new AudioContext();}
  async unlock(){assertPlaybackAllowed();await this.context.resume();if(this.context.state!=='running')throw Error('音频未解锁，请点击预检与试音');}
- async tone(){await this.unlock();const osc=this.context.createOscillator(),g=this.context.createGain(),t=this.context.currentTime+.02;osc.frequency.value=600;g.gain.setValueAtTime(.08,t);g.gain.exponentialRampToValueAtTime(.00001,t+.15);osc.connect(g).connect(this.context.destination);osc.start(t);osc.stop(t+.15);osc.onended=()=>{osc.disconnect();g.disconnect();};}
+ async tone(volume=1){await this.unlock();const osc=this.context.createOscillator(),g=this.context.createGain(),t=this.context.currentTime+.02;osc.frequency.value=600;g.gain.setValueAtTime(.08*volume,t);g.gain.exponentialRampToValueAtTime(.00001,t+.15);osc.connect(g).connect(this.context.destination);osc.start(t);osc.stop(t+.15);osc.onended=()=>{osc.disconnect();g.disconnect();};}
  private clear(){for(const p of this.cache.values())if(p.url)URL.revokeObjectURL(p.url);this.cache.clear();this.used=0;}
  async preview(a:Asset){this.clear();return this.prepare(a);}
+ discardPreview(prepared:Prepared){if(this.cache.get(prepared.asset.hash)===prepared){this.cache.delete(prepared.asset.hash);this.used=Math.max(0,this.used-prepared.bytes);}if(prepared.url)URL.revokeObjectURL(prepared.url);}
  async prepare(a:Asset):Promise<Prepared>{const cached=this.cache.get(a.hash);if(cached){if(cached.buffer)Object.assign(a,{decodedSampleRate:cached.buffer.sampleRate,channels:cached.buffer.numberOfChannels,duration:cached.buffer.duration,decodedBytes:cached.bytes});return {...cached,asset:a};}const blob=await this.store.blob(a.hash);if(await hashBlob(blob)!==a.hash)throw Error(`刺激 hash 不一致：${a.name}`);let result:Prepared={asset:a,bytes:0};
  if(a.kind==='audio'){
   const bytes=await blob.arrayBuffer(),wav=wavInfo(bytes);

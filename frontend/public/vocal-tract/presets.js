@@ -1,5 +1,12 @@
 import {setupPresetPack} from './preset-pack.js';
 
+export function builtinPose(metadata,name){
+  const pose={params:metadata.presets[name],lip_width:1,f0:metadata.default_f0??120,
+    manual_root:false,larynx_height:0,tongue_shape:[0,0,0,0],lip_shape:[0,0,0,0],
+    source:metadata.source_presets.voiced,...metadata.consonants?.[name],...metadata.default_poses?.[name],preset:name};
+  return structuredClone(pose);
+}
+
 export function presetSymbol(name,symbols){
   const key=(name||'').trim().replace(/^[/\[]|[/\]]$/g,'');
   return symbols.has(key)?key:null;
@@ -12,12 +19,12 @@ export function presetInputName(value,symbols){
   return presetSymbol(name,symbols)||name;
 }
 
-export function setupPresets({initial,initialLibrary,builtins=[],favorites:initialFavorites=[],chooseBuiltin,chart,getPose,apply,post,isReady,onSaved,notify}){
+export function setupPresets({initial,initialLibrary,builtins=[],favorites:initialFavorites=[],chooseBuiltin,chart,getPose,apply,post,isReady,onSaved,onDeleted,notify}){
   const $=id=>document.getElementById(id),dialog=$('presetDialog');
   const entries=new Map(chart.entries.map(entry=>[entry.id,entry]));
   const symbols=new Set(chart.entries.map(entry=>entry.insertText));
   let presets=initial,favorites=[...initialFavorites],working=false,mode='load',selected='',common=false;
-  let library=initialLibrary;
+  let library=initialLibrary,pendingDelete='';
   const status=message=>$('presetStatus').textContent=message;
   const key=name=>(presetSymbol(name,symbols)||(name||'').trim()).normalize('NFC');
   const customStored=symbol=>presets.findLast(p=>key(p.name)===symbol);
@@ -25,9 +32,27 @@ export function setupPresets({initial,initialLibrary,builtins=[],favorites:initi
   const commonPanel=document.createElement('div');commonPanel.id='presetCommon';commonPanel.hidden=true;
   $('presetChart').before(commonPanel);
   const sets=document.createElement('div');sets.className='preset-libraries';
-  sets.innerHTML='<label>构型套装 <select id="presetSet" aria-label="构型套装"></select></label><label>套装名称 <input id="presetSetName" maxlength="120" placeholder="例如：张老师的构型"></label><div><button id="presetSetCreate" type="button">新建空套装</button><button id="presetSetCopy" type="button">复制当前套装</button><button id="presetSetRename" type="button">重命名</button></div><p class="minor">切换套装后，保存构型和 IPA 合成使用所选套装，已有关键帧保留。</p><details><summary>管理已存名称</summary><div id="presetNames"></div></details>';
+  sets.innerHTML=`<div class="preset-library-toolbar">
+    <label>构型套装<select id="presetSet" aria-label="构型套装"></select></label>
+    <label>套装名称<input id="presetSetName" maxlength="120" placeholder="输入套装名称"></label>
+    <div class="preset-set-actions"><button id="presetSetCreate" type="button">新建空套装</button><button id="presetSetCopy" type="button">复制当前套装</button><button id="presetSetRename" type="button">重命名</button></div>
+    </div><p class="minor preset-library-hint">切换套装后，保存构型和 IPA 合成使用所选套装，已有关键帧保留。</p>
+    <details class="preset-manager"><summary><span>管理已存构型</span><span id="presetCount"></span></summary><div id="presetNames"></div></details>`;
   $('presetChart').before(sets);
-  function adopt(value){library=value;const current=library.sets.find(s=>s.id===library.active);presets=current.presets;favorites=[...current.favorites];selected='';render();}
+  function adopt(value){library=value;const current=library.sets.find(s=>s.id===library.active);presets=current.presets;favorites=[...current.favorites];selected='';pendingDelete='';render();}
+  async function deletePreset(p){
+    if(working||pendingDelete!==p.id)return;
+    const next=structuredClone(library),current=next.sets.find(s=>s.id===next.active);
+    // Favorites and presets can be newer than the last loaded library snapshot.
+    current.presets=presets.filter(item=>item.id!==p.id);
+    current.favorites=favorites.filter(id=>id!==p.id);
+    working=true;status(`正在删除 /${p.name}/…`);render();
+    try{
+      adopt(await(await post('library/save',next)).json());onDeleted?.(p.id);
+      status(`已删除 /${p.name}/。`);
+    }catch(error){status('删除失败：'+error.message);}
+    finally{working=false;render();(sets.querySelector('[data-confirm-delete]')||sets.querySelector('summary')).focus();}
+  }
   async function editSet(action){
     if(working||!isReady())return;const edit={action,name:$('presetSetName').value,id:$('presetSet').value};working=true;render();
     try{adopt(await(await post('library/edit',edit)).json());status('当前套装：'+library.sets.find(s=>s.id===library.active).name);$('presetSetName').value='';}
@@ -40,10 +65,22 @@ export function setupPresets({initial,initialLibrary,builtins=[],favorites:initi
     for(const set of library.sets){const o=document.createElement('option');o.value=set.id;o.textContent=set.name+' · '+set.presets.length+' 个';select.append(o);}select.value=library.active;
     for(const e of sets.querySelectorAll('input,select,button'))e.disabled=working;
     $('presetNames').replaceChildren();
+    $('presetCount').textContent=presets.length+' 个';
+    if(!presets.length){const empty=document.createElement('p');empty.className='minor';empty.textContent='当前套装尚未保存构型。';$('presetNames').append(empty);}
     for(const p of presets){
-      const row=document.createElement('div'),input=document.createElement('input'),button=document.createElement('button');row.className='preset-name-row';input.value=p.name;input.maxLength=80;input.setAttribute('aria-label','构型名称 '+p.name);button.type='button';button.textContent='保存名称';button.disabled=input.disabled=working;
+      const row=document.createElement('div'),input=document.createElement('input'),button=document.createElement('button'),remove=document.createElement('button');row.className='preset-name-row';row.dataset.presetId=p.id;row.dataset.confirming=String(pendingDelete===p.id);input.value=p.name;input.maxLength=80;input.setAttribute('aria-label','构型名称 '+p.name);button.type='button';button.textContent='保存名称';button.disabled=input.disabled=working||pendingDelete===p.id;
       button.onclick=async()=>{if(working)return;const next=presets.map(item=>item.id===p.id?{...item,name:input.value}:item);working=true;render();try{presets=await(await post('presets/save',{presets:next})).json();adopt(await(await post('library/load')).json());status('构型名称已保存。');}catch(e){status(e.message);}finally{working=false;render();}};
-      row.append(input,button);$('presetNames').append(row);
+      remove.type='button';remove.className='preset-delete';remove.textContent='删除';remove.setAttribute('aria-label','删除构型 '+p.name);remove.disabled=working||pendingDelete===p.id;
+      remove.onclick=()=>{if(working)return;pendingDelete=p.id;render();sets.querySelector('[data-confirm-delete]').focus();};
+      row.append(input,button,remove);
+      if(pendingDelete===p.id){
+        const confirmation=document.createElement('div'),message=document.createElement('span'),confirm=document.createElement('button'),cancel=document.createElement('button');
+        confirmation.className='preset-delete-confirmation';message.textContent=`删除 /${p.name}/？`;confirm.textContent='确认删除';confirm.dataset.confirmDelete=p.id;cancel.textContent='取消';
+        confirm.type=cancel.type='button';confirm.disabled=cancel.disabled=working;
+        confirm.onclick=()=>deletePreset(p);cancel.onclick=()=>{if(working)return;pendingDelete='';render();[...sets.querySelectorAll('.preset-name-row')].find(e=>e.dataset.presetId===p.id)?.querySelector('button:last-child')?.focus();};
+        confirmation.append(message,confirm,cancel);row.append(confirmation);
+      }
+      $('presetNames').append(row);
     }
   }
 
@@ -110,7 +147,7 @@ export function setupPresets({initial,initialLibrary,builtins=[],favorites:initi
     $('presetFavorites').hidden=mode!=='load';$('presetFavorites').disabled=working;$('presetFavorites').setAttribute('aria-pressed',common);$('presetFavorites').textContent=common?'完成常用设置':'设置常用 ★';renderShortcuts();
   }
   function open(nextMode){
-    if(working)return;common=false;mode=nextMode;$('presetTitle').textContent=mode==='save'?'保存构形 · 选择音标':'已存构型 · 选择音标';
+    if(working)return;common=false;pendingDelete='';mode=nextMode;$('presetTitle').textContent=mode==='save'?'保存构形 · 选择音标':'已存构型 · 选择音标';
     $('presetInputRow').hidden=true;$('presetInput').value='';
     status(mode==='save'?'点击音标保存当前构形与声源设置；已有音标将更新。':'点击点亮的音标载入；设置常用可把构形放到底部。');
     render();dialog.showModal();

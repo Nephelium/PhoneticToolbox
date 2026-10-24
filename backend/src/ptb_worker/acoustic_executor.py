@@ -13,6 +13,9 @@ from ptb_api.quota import StorageError,CHUNK_BYTES
 
 def collect_scientific(entry, request, scratch, limits, stop, on_started=None, evidence=None, on_chunk=None):
     """Trusted fixed entry -> legacy bundle bytes, with platform-owned cleanup."""
+    if sys.platform == 'darwin':
+        from .native.darwin import run
+        return run(entry, request, scratch.root, limits, stop=stop, on_started=on_started, evidence=evidence, on_chunk=on_chunk)
     if sys.platform == 'linux':
         from .native.linux_runtime import run
         return run(entry, request, scratch.root, limits, stop=stop,

@@ -21,7 +21,7 @@ RUNTIMES = {
     'PTB_EGG_PYTHON': '.venv/m03-compatible/python.exe',
     'PTB_M05_PYTHON': '.venv/m05/Scripts/python.exe',
 }
-MODULES = tuple(f'M{i:02d}' for i in range(1, 19))
+MODULES = tuple(f'M{i:02d}' for i in range(1, 20))
 
 
 def bind_sources(root=ROOT):

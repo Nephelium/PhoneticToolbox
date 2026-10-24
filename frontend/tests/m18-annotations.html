@@ -1,0 +1,26 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><title>M18 selection regression</title><style>html,body,#app{height:100%;margin:0}#app{display:flex}</style></head><body><div id="app"></div><script type="module">
+import {createApp,h,ref} from 'vue';
+import Reader from '/src/modules/paper-reading/PdfReader.vue';
+import {createPapers} from '/src/platform/papers.ts';
+import '/src/design/tokens.css';import '/src/design/buttons.css';
+// Synthetic page geometry and storage only; native PDF persistence is tested separately.
+const asset={path:'fixture.pdf',size:100,sha256:'a'.repeat(64)};
+const paper={id:'selection-fixture',title:'Selection fixture',local:false,original:asset,translation:asset,analysisPdf:asset};
+const store={original:{revision:0,items:[]},translation:{revision:0,items:[]},analysis:{revision:0,items:[]}};
+window.m18Fixture={store,calls:[],failSave:false};
+const port=createPapers(async(operation,args)=>{
+ args=JSON.parse(JSON.stringify(args));window.m18Fixture.calls.push({operation,args});
+ if(operation==='render')return {page:args.page,pages:2,ratio:1,ratios:[1,1],image:'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="816" height="816"><rect width="816" height="816" fill="white"/></svg>'),text:'Selection remains available for annotations.',lines:[{text:'Selection remains available for annotations.',x:.12,y:.12,w:.7,h:.025},{text:'第二行文字用于验证重新选择与跨行荧光笔。',x:.12,y:.17,w:.7,h:.025}]};
+ if(operation==='annotations')return structuredClone(store[args.language]);
+ if(operation==='saveAnnotation'){
+  await new Promise(r=>setTimeout(r,30));
+  if(window.m18Fixture.failSave)throw Error('保存失败，请重试。');
+  if(window.m18Fixture.failPage2&&args.item.page===2)throw Error('第二页保存失败，请重试。');
+  const state=store[args.language];if(state.revision!==args.revision)throw Error('批注已变化，请重新载入。');
+  state.items=state.items.filter(x=>x.id!==args.item.id);if(!args.remove)state.items.push(structuredClone(args.item));state.revision++;
+  return structuredClone(state);
+ }
+ throw Error('Unexpected operation '+operation);
+});
+createApp({setup(){const language=ref('original');return()=>h(Reader,{paper,language:language.value,initialPage:1,port,active:true,onLanguage:value=>language.value=value});}}).mount('#app');
+</script></body></html>

@@ -23,6 +23,8 @@ def digest(path):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--package', type=Path, required=True)
+    parser.add_argument('--defer-cleanup', action='store_true',
+                        help='Keep existing builds and staging directories after packaging')
     parser.add_argument('--output', type=Path,
                         default=ROOT / 'output/release-staging' / ('installer-' + datetime.now().strftime('%Y%m%d-%H%M%S')))
     options = parser.parse_args()
@@ -69,9 +71,10 @@ def main():
                 raise RuntimeError('Update archive failed its CRC/layout check')
         (output / 'package-report.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', 'utf8')
         print(json.dumps(report), flush=True)
-        subprocess.run(['powershell.exe', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File',
-                        str(ROOT / 'release/cleanup_old_builds.ps1'), '-KeepBuild', str(source),
-                        '-KeepStage', str(output)], cwd=ROOT, check=True)
+        if not options.defer_cleanup:
+            subprocess.run(['powershell.exe', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File',
+                            str(ROOT / 'release/cleanup_old_builds.ps1'), '-KeepBuild', str(source),
+                            '-KeepStage', str(output)], cwd=ROOT, check=True)
 
 if __name__ == '__main__':
     main()

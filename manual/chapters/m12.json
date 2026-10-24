@@ -3,10 +3,38 @@
   "id": "m12",
   "title": "TextGrid标注",
   "moduleId": "M12",
-  "summary": "打开录音与 TextGrid，选层或新建层，人工和词表顺序标注，试听校正边界，分别保存标注与唇形偏移。",
+  "summary": "打开录音与TextGrid，编辑最多三层，自选层间吸附与关联，用浮动音标键盘输入，试听校正并保存标注与唇形偏移。",
   "body": {
     "type": "doc",
     "content": [
+      {
+        "type": "paragraph",
+        "attrs": {
+          "id": "m12-video-tutorial"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "视频教程："
+          },
+          {
+            "type": "text",
+            "text": "观看本章视频",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://www.phonetictoolbox.com/#tutorial-annotation"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ]
+      },
       {
         "type": "heading",
         "attrs": {
@@ -47,7 +75,7 @@
         "content": [
           {
             "type": "text",
-            "text": "中央编辑两层：上行为音节 / 词，下行为音素。层名可自定，两层须不同，且覆盖整段录音。"
+            "text": "中央最多编辑三层：第一层为音节 / 词，第二层为音素，第三层可自定义。右侧选择或新建第三层，也可不显示。三个层名须不同，并覆盖整段录音。"
           },
           {
             "type": "text",
@@ -291,11 +319,11 @@
         "type": "image",
         "attrs": {
           "id": "m12-figure-m12-overview-r2-light",
-          "assetId": "m12-overview-light-scaled-r20261007",
-          "caption": "打开录音和原始同名 TextGrid 后的工作区：左侧选中 WAV，中央波形、语谱图和词/音素两层共用时间轴，右侧显示当前标注与另存目标。",
+          "assetId": "m12-current-overview-bffe3f68",
+          "caption": "当前三层工作区。顶部提供吸附与关联、强度贴合、搜索替换和音标键盘，关闭工具弹窗后图下不保留参数行。图中音频为合成立体声演示。",
           "width": "100%",
           "align": "center",
-          "alt": "当前 V3 最大化浅色窗口，已载入 speech-sentence.wav 与 speech-sentence.TextGrid；中央显示蓝色波形、灰度语谱、绿色相对强度、word 和 phone 双层区间，右侧目标为 speech-sentence_自动保存.TextGrid，顶部有帮助。"
+          "alt": "当前三层工作区。顶部提供吸附与关联、强度贴合、搜索替换和音标键盘，关闭工具弹窗后图下不保留参数行。图中音频为合成立体声演示。"
         }
       },
       {
@@ -341,7 +369,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "：波形、语谱图、标注层共用时间轴，下面有选中区间文本、强度贴合、词典词表及搜索替换。向下滚动可查看后续操作。"
+                    "text": "：波形、语谱图、标注层共用时间轴。图下保留选中文字、词典和词表；吸附与关联、强度贴合、搜索替换以及音标键盘均从最上方按钮打开。关闭弹窗后不占图下空间。"
                   }
                 ]
               }
@@ -1097,9 +1125,9 @@
         "type": "image",
         "attrs": {
           "id": "m12-figure-association-current-light",
-          "assetId": "m12-association-current-light-scaled-r20261007",
-          "caption": "多个候选时明确选择本次使用的 TextGrid，再点击打开标注。",
-          "alt": "最大化 V3 Qt 浅色窗口中，association-demo.wav 的候选弹窗选中 association-demo_B.TextGrid，取消和打开标注按钮可见。",
+          "assetId": "m12-current-association-222e88d7",
+          "caption": "多个候选时，明确选择本次使用的TextGrid，再点击打开标注。",
+          "alt": "多个候选时，明确选择本次使用的TextGrid，再点击打开标注。",
           "width": "100%",
           "align": "center"
         }
@@ -1108,9 +1136,9 @@
         "type": "image",
         "attrs": {
           "id": "m12-association-current-light-detail-figure",
-          "assetId": "m12-association-current-light-detail-scaled-r20261007",
-          "caption": "先选正确标注文件，再按打开标注。",
-          "alt": "先选正确标注文件，再按打开标注。",
+          "assetId": "m12-current-association-detail-95dbf155",
+          "caption": "关联弹窗局部：先选正确标注文件，再点击打开标注。",
+          "alt": "关联弹窗局部：先选正确标注文件，再点击打开标注。",
           "width": "100%",
           "align": "center"
         }
@@ -1162,7 +1190,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "准备两层",
+                    "text": "准备标注层",
                     "marks": [
                       {
                         "type": "bold"
@@ -1989,6 +2017,250 @@
                 ]
               }
             ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "吸附与关联"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "打开层间控制弹窗"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "可切换吸附与各层关联"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "关闭后参数继续生效"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "强度贴合"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "打开范围与声道弹窗"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "明确选择声道后执行"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "检查选区、内收与声道"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "搜索替换"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "打开词层搜索与替换"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "需已加载标注层"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "全部替换另行确认"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "tableRow",
+            "content": [
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "音标键盘"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "打开浮动IPA/extIPA/VoQS表"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "选中区间后插入"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableCell",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "支持移动与调整大小"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -2042,20 +2314,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "展开"
-                  },
-                  {
-                    "type": "text",
-                    "text": "标注设置",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "，在音节 / 词层和音素层选择两个不同的全域区间层。中央两行随角色选择更新，层本身内容保留。"
+                    "text": "展开标注设置，在音节 / 词层、音素层和可选第三层选择不同的全域区间层。中央最多三行随角色选择更新，层本身内容保留。"
                   }
                 ]
               }
@@ -2174,9 +2433,9 @@
         "type": "image",
         "attrs": {
           "id": "m12-figure-create-layers-current-light",
-          "assetId": "m12-create-layers-current-light-scaled-r20261007",
-          "caption": "录音没有 TextGrid 时，自行输入两个不同的层名。创建后每层覆盖整段录音，已有层保留。",
-          "alt": "最大化 V3 Qt 浅色窗口中，practice.wav 已载入，创建标注层弹窗分别填写音节和音素，后方显示尚未保存的空白标注。",
+          "assetId": "m12-current-create-layers-c3a2ca80",
+          "caption": "创建标注层时可同时填写音节、音素和声调三个不同名称，第三层可留空。已有层保留。",
+          "alt": "创建标注层时可同时填写音节、音素和声调三个不同名称，第三层可留空。已有层保留。",
           "width": "100%",
           "align": "center"
         }
@@ -2185,9 +2444,9 @@
         "type": "image",
         "attrs": {
           "id": "m12-create-layers-current-light-detail-figure",
-          "assetId": "m12-create-layers-current-light-detail-scaled-r20261007",
-          "caption": "新建两层时先填写音节层和音素层名称。",
-          "alt": "新建两层时先填写音节层和音素层名称。",
+          "assetId": "m12-current-create-layers-detail-6508afbc",
+          "caption": "创建层弹窗局部：两个主要编辑层和一个可选第三层。",
+          "alt": "创建层弹窗局部：两个主要编辑层和一个可选第三层。",
           "width": "100%",
           "align": "center"
         }
@@ -2303,7 +2562,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "普通模式下双击已有文字的词区间，按词典均分音素，再逐段拖动边界和试听。未命中时使用拼音回退，非拼音标签按单段保留。"
+                    "text": "词层与音素层关联时，普通模式下双击已有文字的词区间，按词典均分音素，再逐段拖动边界和试听。未命中时使用拼音回退，非拼音标签按单段保留。取消关联后音素层独立编辑。"
                   }
                 ]
               }
@@ -2641,9 +2900,9 @@
         "type": "image",
         "attrs": {
           "id": "m12-figure-dictionary-wordlist-current-light",
-          "assetId": "m12-dictionary-wordlist-current-light-scaled-r20261007",
-          "caption": "词典、已应用词表、顺序开关、首次切分方式及下一音节集中在图窗下方。词典提供标签对应，词表提供标注顺序。",
-          "alt": "最大化 V3 Qt 浅色窗口中，中央向下滚动显示 demonstration.dict、粘贴词表、已勾选的自动生成音节和音素、双击位置切分以及下一音节 1/3 zhe4。",
+          "assetId": "m12-current-dictionary-wordlist-628f0ee7",
+          "caption": "词典、词表、顺序开关、首次音素切分和下一音节仍位于图窗下方；本例已粘贴四个演示条目并开启顺序标注。",
+          "alt": "词典、词表、顺序开关、首次音素切分和下一音节仍位于图窗下方；本例已粘贴四个演示条目并开启顺序标注。",
           "width": "100%",
           "align": "center"
         }
@@ -2687,9 +2946,9 @@
         "type": "image",
         "attrs": {
           "id": "m12-figure-sequence-start-current-light",
-          "assetId": "m12-sequence-start-current-light-scaled-r20261007",
-          "caption": "第一次双击后显示待定起点，等待终点建立当前条目。标注时结合原录音定位边界。",
-          "alt": "最大化 V3 Qt 浅色窗口中，practice.wav 的波形出现红色起点虚线，两标注层仍为空，右栏提示再双击终点生成 zhe4。",
+          "assetId": "m12-current-sequence-start-a2958cf4",
+          "caption": "双击后显示待定起点，等待终点建立当前条目。图中使用合成演示音频，真实标注需结合录音定位。",
+          "alt": "双击后显示待定起点，等待终点建立当前条目。图中使用合成演示音频，真实标注需结合录音定位。",
           "width": "100%",
           "align": "center"
         }
@@ -2731,7 +2990,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "。可跨波形、语谱图或标注层操作。成功后两层建立同起止段并填入条目，下一音节向后推进。"
+                    "text": "。可跨波形、语谱图或第一层操作。成功后第一层填入条目，词与音素关联时第二层建立同起止段；下一音节向后推进。"
                   }
                 ]
               }
@@ -2808,9 +3067,9 @@
         "type": "image",
         "attrs": {
           "id": "m12-figure-sequence-phones-current-light",
-          "assetId": "m12-sequence-phones-current-light-scaled-r20261007",
-          "caption": "建立 zhe4 后在内部双击，形成 zh / e4 两段，右栏反馈首个边界位置。结合录音检查切分位置。",
-          "alt": "最大化 V3 Qt 浅色窗口中，音节层选中 zhe4，下方音素层出现 zh 和 e4，红色内部边界及共享选区可见，右栏显示按双击位置切分的成功反馈。",
+          "assetId": "m12-current-sequence-phones-558bb8e1",
+          "caption": "建立zhe4后在音素层内部双击，形成zh/e4两个区间。图中为合成演示，实际切分需试听检查。",
+          "alt": "建立zhe4后在音素层内部双击，形成zh/e4两个区间。图中为合成演示，实际切分需试听检查。",
           "width": "100%",
           "align": "center"
         }
@@ -3934,20 +4193,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "在波形或标注层边界"
-                  },
-                  {
-                    "type": "text",
-                    "text": "左键拖动",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "，调整两侧区间。准确重合的音节与音素边界会联动，邻近独立边界不会自动吸附。不能跨过相邻内部边界。"
+                    "text": "在波形或标注层边界左键拖动，调整两侧区间。已关联层准确重合的边界会联动，取消关联后只调整当前层。层间边界吸附开关决定是否对齐邻近边界。移动不能跨过相邻内部边界。"
                   }
                 ]
               }
@@ -3979,16 +4225,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "Ctrl＋拖动共用边界",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "可拉出空白：向左缩短左段，向右缩短右段，另一侧保留原时间。对应重合音素外边界跟随，完成后检查两侧标签。"
+                    "text": "Ctrl＋拖动共用边界可拉出空白：向左缩短左段，向右缩短右段，另一侧保留原时间。在第一层操作时，关联下层的对应重合边界跟随，独立层保留原位。完成后检查两侧标签。"
                   }
                 ]
               }
@@ -4020,20 +4257,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "选中有文字的音节后拖动，或按"
-                  },
-                  {
-                    "type": "text",
-                    "text": "左右方向键",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "，整体移动音节与对应音素。微调步长在右侧设置，默认 1 ms。"
+                    "text": "选中有文字的音节后拖动，或按左右方向键，整体移动音节及关联层中对应的标注，独立层保留原位。音素和第三层也可独立移动各自区间。微调步长在右侧设置，默认 1 ms。"
                   }
                 ]
               }
@@ -4101,16 +4325,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "Backspace",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "：选中区间时删除标注并在原时段留空，词层对应音素一并处理；选中内部边界时合并两侧区间，非空文字以空格连接。"
+                    "text": "Backspace / Delete：选中区间时删除标注并在原时段留空，词层关联的下层选区一并处理，独立层保留。选中内部边界时合并两侧区间，关联层的重合边界一起合并，非空文字以空格连接。"
                   }
                 ]
               }
@@ -4675,6 +4890,15 @@
         ]
       },
       {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "点击最上方的搜索替换按钮打开弹窗。关闭或按Esc后不占图下空间，查询和替换文字保留。重新打开时会按当前标注重新计算匹配，适用于编辑或撤销后继续查找。"
+          }
+        ]
+      },
+      {
         "type": "heading",
         "attrs": {
           "id": "m12-search-locate",
@@ -4731,6 +4955,17 @@
             ]
           }
         ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m12-current-search-figure",
+          "assetId": "m12-current-search-9adc60f7",
+          "caption": "搜索替换弹窗显示当前位置与匹配数，支持上下项和Enter/Shift＋Enter定位，搜索内容在关闭后保留。",
+          "width": "100%",
+          "align": "center",
+          "alt": "搜索替换弹窗显示当前位置与匹配数，支持上下项和Enter/Shift＋Enter定位，搜索内容在关闭后保留。"
+        }
       },
       {
         "type": "heading",
@@ -4822,23 +5057,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "替换更改整个区间标签，并重新填充音素",
-                    "marks": [
-                      {
-                        "type": "bold"
-                      },
-                      {
-                        "type": "textStyle",
-                        "attrs": {
-                          "color": "#b42318",
-                          "colorDark": "#ffb4ab"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "text",
-                    "text": "。操作后检查音素边界，不合适时回到图面 Ctrl＋Z 撤销，或取消弹窗后逐项修改。"
+                    "text": "替换更改整个区间标签，词与音素关联时重新填充音素，取消关联后只替换词层。操作后检查相关边界，不合适时回到图面 Ctrl＋Z 撤销，或取消弹窗后逐项修改。"
                   }
                 ]
               }
@@ -4854,6 +5073,17 @@
             "text": "例如搜索 sh 会同时找到 shi4 与 shang4，替换时两者整段标签都受影响。空替换文字会清空词标签，仍需核对音素层。"
           }
         ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m12-current-replace-confirm-figure",
+          "assetId": "m12-current-replace-confirm-9ca89841",
+          "caption": "全部替换前核对匹配数量和替换文字；取消会返回原搜索弹窗，保留查询与替换内容。",
+          "width": "100%",
+          "align": "center",
+          "alt": "全部替换前核对匹配数量和替换文字；取消会返回原搜索弹窗，保留查询与替换内容。"
+        }
       },
       {
         "type": "heading",
@@ -5325,9 +5555,9 @@
         "type": "image",
         "attrs": {
           "id": "m12-figure-reference-unpaired-lip-current-light",
-          "assetId": "m12-reference-unpaired-lip-current-light-scaled-r20261007",
-          "caption": "选择同一时间域参考，在 0.5–1 秒区间之内复用。右栏同时显示唇形记录不关联，此例没有配套唇形曲线。",
-          "alt": "最大化 V3 Qt 浅色窗口中，speech-sentence.wav 的自然标注和语谱可见，右栏选择 reference.TextGrid、区间之内、起点 0.5 与终点 1，唇形记录下拉为不关联。",
+          "assetId": "m12-current-reference-unpaired-lip-659cf6e3",
+          "caption": "选择同一时间域的参考示例，在0.5–1秒区间之内复用。此例未关联唇形曲线。",
+          "alt": "选择同一时间域的参考示例，在0.5–1秒区间之内复用。此例未关联唇形曲线。",
           "width": "100%",
           "align": "center"
         }
@@ -5407,7 +5637,7 @@
           },
           {
             "type": "text",
-            "text": "默认 20 ms，可选 5、10、20、50、100 ms 或 1024 点（兼容）。长窗便于看频率结构，短窗便于看时间变化。使用第一声道，频率上限为 5000 Hz 与预览采样率一半的较小值。"
+            "text": "默认 20 ms，可选 5、10、20、50、100 ms 或 1024 点（兼容）。长窗便于看频率结构，短窗便于看时间变化。显示当前所选声道，在强度贴合弹窗选择声道后同步切换，频率上限为 5000 Hz 与预览采样率一半的较小值。"
           }
         ]
       },
@@ -5455,7 +5685,7 @@
         "content": [
           {
             "type": "text",
-            "text": "选范围后执行强度贴合"
+            "text": "选范围后打开强度贴合弹窗"
           }
         ]
       },
@@ -5470,7 +5700,7 @@
                 "content": [
                   {
                     "type": "text",
-                    "text": "拖选波形 / 语谱或填写起终点，让目标音节落在"
+                    "text": "先拖选波形 / 语谱，再点击顶部强度贴合按钮。先从声道列表选择要计算的声道，不会自动选择第一声道。波形、语谱、相对强度和试听随之切换。弹窗自动带入选区，也可填写起终点，让目标音节落在"
                   },
                   {
                     "type": "text",
@@ -5514,7 +5744,7 @@
                   },
                   {
                     "type": "text",
-                    "text": "强度贴合",
+                    "text": "执行贴合",
                     "marks": [
                       {
                         "type": "bold"
@@ -5553,6 +5783,17 @@
             "text": "没有变化时先检查范围、标签和强度变化。弱音、噪声或短片段可能没有可靠候选，保留人工边界即可。"
           }
         ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m12-current-intensity-figure",
+          "assetId": "m12-current-intensity-6f36b000",
+          "caption": "从顶部打开强度贴合，明确选择声道后设置范围和内收/外扩。本例选择第2声道，未选声道时不能执行。",
+          "width": "100%",
+          "align": "center",
+          "alt": "从顶部打开强度贴合，明确选择声道后设置范围和内收/外扩。本例选择第2声道，未选声道时不能执行。"
+        }
       },
       {
         "type": "heading",
@@ -5846,7 +6087,7 @@
         "type": "table",
         "attrs": {
           "id": "m12-plot-controls-table",
-          "caption": "图窗、文字与强度参数"
+          "caption": "图窗、文字与强度参数。当前强度参数从顶部强度贴合按钮打开弹窗。"
         },
         "content": [
           {
@@ -6525,6 +6766,117 @@
       {
         "type": "heading",
         "attrs": {
+          "id": "m12-three-tier-linking",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "选择三层与层间关联"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "在右侧层级与保存中选择音节 / 词层、音素层及可选第三层，或点击新建第三层输入名称。新建整组标注时，第三层名可留空。第三层双击插入边界，单击区间后编辑文字，拖动区间可移动标注。隐藏第三层只改变显示，TextGrid 中的原有层仍保留。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "顶部点击吸附与关联，在弹窗中切换层间边界吸附和各层关联。关闭弹窗后参数仍生效，控件不占用图下空间。层间边界吸附默认关闭。勾选后，拖动或插入的边界靠近其他可见层六个显示像素内时自动对齐。取消勾选即可按实际位置定界。吸附只对齐当前操作的边界。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "第一层 ↔ 第二层默认勾选，第三层的两个关联默认关闭。按需要选择三个层对，关联层的重合边界双向一起移动和删除，内部边界不同的位置各自保留。第一层经第二层关联第三层时，三层形成同一关联组。所有关联层共同限制可移动范围，防止越过邻接边界。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "取消相关关联后，各层独立编辑。第一层改字、定起终点、词表顺序生成、整体移动、强度贴合或删除不会改变独立层。第一层整体移动、删除和剪贴会携带关联层选区内的标注，内部时间差保持；音素及第三层的区间内容操作各自独立。取消吸附和取消关联是两个独立选择。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m12-current-links-figure",
+          "assetId": "m12-current-links-dd82007f",
+          "caption": "吸附与关联弹窗分别控制边界吸附和三个层对的关联，关闭后设置继续生效。",
+          "width": "100%",
+          "align": "center",
+          "alt": "吸附与关联弹窗分别控制边界吸附和三个层对的关联，关闭后设置继续生效。"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "m12-ipa-keyboard",
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "用浮动国际音标键盘输入"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "先单击需要填写的区间，在选中区间文本中放好光标，点击最上方的音标键盘按钮。默认显示紧凑 IPA 表，可切换 extIPA 或 VoQS。点符号插在光标处，有文字选区时替换选区。附加符号、连线和成对记号沿用国际音标表Plus的插入方式，原有码位保持。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "拖动键盘标题栏可移动面板，拖动右下角可调整宽高；− / ＋按10%调整音标字号，范围60–180%。小窗口可以滚动表格。标题拖动按钮与右下角按钮获得键盘焦点后，也可用方向键移动或调整大小。按Esc或点击×关闭，切换到其他工具时键盘隐藏。在文本框内按Ctrl＋Z可撤销最近的音标键盘插入，Mac可用Command＋Z。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "尚未选择区间、正在保存或输入法仍在组字时，符号按键暂停输入。完成组字或选择区间后继续；TextGrid仍通过保存TextGrid保存。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m12-current-keyboard-figure",
+          "assetId": "m12-current-keyboard-e4e956aa",
+          "caption": "从顶部音标键盘按钮打开紧凑IPA表。选中标注后可插入符号，标题拖动位置，右下角调整大小。",
+          "width": "100%",
+          "align": "center",
+          "alt": "从顶部音标键盘按钮打开紧凑IPA表。选中标注后可插入符号，标题拖动位置，右下角调整大小。"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
           "id": "m12-output",
           "level": 2
         },
@@ -6689,9 +7041,9 @@
         "type": "image",
         "attrs": {
           "id": "m12-figure-save-success-current-light",
-          "assetId": "m12-save-success-current-light-scaled-r20261007",
-          "caption": "以 _手册示例 后缀保存成功后，右栏反馈、当前 TextGrid 和目标名一致。选中字段保留中文与 IPA 保存示例文字。",
-          "alt": "最大化 V3 Qt 浅色窗口中，已保存 speech-sentence_手册示例.TextGrid，顶部保存按钮无星号，右栏当前文件与目标一致，下方文本框显示标注保存示例 æ。",
+          "assetId": "m12-current-save-success-dd197508",
+          "caption": "以_手册示例后缀保存成功，当前TextGrid和目标名一致，中文与IPA文字已写入示例文件。",
+          "alt": "以_手册示例后缀保存成功，当前TextGrid和目标名一致，中文与IPA文字已写入示例文件。",
           "width": "100%",
           "align": "center"
         }
@@ -7092,7 +7444,7 @@
                     "content": [
                       {
                         "type": "text",
-                        "text": "两层不同，覆盖全录音"
+                        "text": "编辑层名称不同，覆盖全录音"
                       }
                     ]
                   }
@@ -8241,9 +8593,9 @@
         "type": "image",
         "attrs": {
           "id": "m12-figure-save-error-current-light",
-          "assetId": "m12-save-error-current-light-scaled-r20261007",
-          "caption": "后缀包含路径分隔符时，顶部显示文件后缀无效，编辑页和目标预览仍保留。改为有效文件后缀后重试。",
-          "alt": "最大化 V3 Qt 浅色窗口中，保存后缀填为 bad/目标，目标预览含同一分隔符，顶部红色提示文件后缀无效，录音和两层标注仍显示。",
+          "assetId": "m12-current-save-error-e644bcdd",
+          "caption": "后缀包含路径分隔符时显示文件后缀无效，当前编辑仍保留。改为有效后缀后可重试。",
+          "alt": "后缀包含路径分隔符时显示文件后缀无效，当前编辑仍保留。改为有效后缀后可重试。",
           "width": "100%",
           "align": "center"
         }
@@ -8349,9 +8701,9 @@
         "type": "image",
         "attrs": {
           "id": "m12-figure-close-protection-current-light",
-          "assetId": "m12-close-protection-current-light-scaled-r20261007",
-          "caption": "关闭带未保存修改的标签时，先选择取消、放弃或保存后关闭。保存保护采用 _自动保存，唇偏独立处理。",
-          "alt": "最大化 V3 Qt 浅色窗口中，保存标注修改弹窗说明标注与唇偏独立保存，底部提供取消关闭、放弃修改并关闭、保存修改并关闭三个按钮。",
+          "assetId": "m12-current-close-protection-05a4409c",
+          "caption": "关闭带未保存修改的标签时，选择取消、放弃或保存后关闭；保存失败时保留编辑。",
+          "alt": "关闭带未保存修改的标签时，选择取消、放弃或保存后关闭；保存失败时保留编辑。",
           "width": "100%",
           "align": "center"
         }
@@ -8720,5 +9072,6 @@
         ]
       }
     ]
-  }
+  },
+  "status": "reviewed"
 }

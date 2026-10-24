@@ -19,12 +19,12 @@ test('M12 V2 fill gaps / all four reference modes / Unicode dictionary fallback'
 test('M12 original RMS envelope and inward/outward boundary estimates are exact',()=>{
   const a=old(),b=createEditor(),samples=Float32Array.from({length:32000},(_,i)=>i>=6000&&i<17000?.35*Math.sin(i*.091):0);
   const audio={duration:2,sampleRate:16000,getChannelData:()=>samples};a.state.audioBuffer=audio;b.state.audioBuffer=audio;
-  assert.deepEqual(b.localIntensityEnvelope(.2,1.3),clean(a.localIntensityEnvelope(.2,1.3)));
+  assert.deepEqual(b.localIntensityEnvelope(.2,1.3,0),clean(a.localIntensityEnvelope(.2,1.3)));
   // Compare the complete fit result through the V2 envelope-derived boundary path.
   for(const trim of [-.05,-.01,0,.01,.08]){
     const word={xmin:.35,xmax:1.12,text:'ba1'};
     const expected=a.detectIntensityBoundsForWord(word,0,2,trim);
-    const actual=(b as any).detectIntensityBoundsForWord(word,0,2,trim);
+    const actual=(b as any).detectIntensityBoundsForWord(word,0,2,trim,0);
     assert.deepEqual(actual,clean(expected));assert.ok(actual);
   }
 });

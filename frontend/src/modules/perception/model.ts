@@ -4,12 +4,12 @@ export type Role='A'|'B'|'X';
 export type MediaKind='audio'|'image'|'text';
 export interface Asset {id:string;hash:string;name:string;path:string;group:Role;kind:MediaKind;size:number;mime:string;originalSampleRate:number|null;decodedSampleRate?:number;channels?:number;duration?:number;decodedBytes?:number}
 export interface Stimulus {id:string|null;name:string;hash:string|null}
-export interface Trial {id:string;stimuli:Partial<Record<Role,Stimulus>>;instruction:string}
+export interface Trial {id:string;stimuli:Partial<Record<Role,Stimulus>>;instruction:string;correctKey?:string}
 export interface Key {key:string;label:string}
 export interface Range {start:number;end:number}
 export interface KeyRange extends Range {id:string;keys:Key[];notice:string}
 export interface Question {id:string;type:'text'|'radio'|'checkbox';label:string;required:boolean;options?:string[]}
-export interface Config {title:string;introText:string;introLargeText:boolean;interTrialText:string;showInterTrialText:boolean;largeText:boolean;advanceMode:'auto'|'manual';autoPlay:boolean;showFilename:boolean;interTrialInterval:number;isi:number;useBeep:boolean;validKeys:Key[];keyRanges:KeyRange[];shuffleRanges:Range[]}
+export interface Config {title:string;introText:string;introLargeText:boolean;interTrialText:string;showInterTrialText:boolean;responsePrompt?:string;showResponsePrompt?:boolean;largeText:boolean;advanceMode:'auto'|'manual';autoPlay:boolean;showFilename:boolean;interTrialInterval:number;isi:number;playbackVolume?:number;useBeep:boolean;validKeys:Key[];keyRanges:KeyRange[];shuffleRanges:Range[]}
 export interface Randomization {algorithm:'mulberry32-v1';seed:number;ranges:Range[];before:string[];after:string[]}
 export interface Project {schema:'ptb-m15-project/1';id:string;paradigm:Paradigm;config:Config;assets:Asset[];trials:Trial[];questionnaire:Question[];randomizations:Randomization[]}
 export type Answers=Record<string,string|string[]>;
@@ -19,13 +19,14 @@ export interface Session {schema:'ptb-m15-session/1';id:string;participantId:str
 export const LIMITS={files:2000,trials:10000,fileBytes:64*1024*1024,totalBytes:512*1024*1024,decodedBytes:128*1024*1024,textBytes:1024*1024,projectBytes:16*1024*1024};
 export const uid=()=>crypto.randomUUID();
 export const copy=<T>(v:T):T=>JSON.parse(JSON.stringify(v));
-export function defaults():Project {return {schema:'ptb-m15-project/1',id:uid(),paradigm:'X',assets:[],trials:[],randomizations:[],config:{title:'听觉感知实验',introText:'接下来您将听到一组音频，请仔细聆听并根据直觉做出判断。',introLargeText:true,interTrialText:'请您判断xxx',showInterTrialText:false,largeText:true,advanceMode:'auto',autoPlay:true,showFilename:false,interTrialInterval:1000,isi:500,useBeep:true,validKeys:[{key:'f',label:'错误 (F)'},{key:'j',label:'正确 (J)'}],keyRanges:[],shuffleRanges:[]},questionnaire:[{id:'q1',type:'text',label:'姓名/编号',required:true},{id:'q2',type:'radio',label:'性别',options:['男','女'],required:true}]};}
+export function defaults():Project {return {schema:'ptb-m15-project/1',id:uid(),paradigm:'X',assets:[],trials:[],randomizations:[],config:{title:'听觉感知实验',introText:'接下来您将听到一组音频，请仔细聆听并根据直觉做出判断。',introLargeText:true,interTrialText:'请您判断xxx',showInterTrialText:false,responsePrompt:'',showResponsePrompt:false,largeText:true,advanceMode:'auto',autoPlay:true,showFilename:false,interTrialInterval:1000,isi:500,playbackVolume:1,useBeep:true,validKeys:[{key:'f',label:'错误 (F)'},{key:'j',label:'正确 (J)'}],keyRanges:[],shuffleRanges:[]},questionnaire:[{id:'q1',type:'text',label:'姓名/编号',required:true},{id:'q2',type:'radio',label:'性别',options:['男','女'],required:true}]};}
 export function roles(p:Paradigm):Role[]{return ({X:['X'],AX:['A','X'],ABX:['A','B','X'],AXB:['A','X','B']} as Record<Paradigm,Role[]>)[p];}
 export function keyRange(p:Project,index:number){return p.config.keyRanges.find(r=>index>=r.start-1&&index<=r.end-1);}
 export function keys(p:Project,index:number){const r=keyRange(p,index);return r?.keys.some(k=>k.key)?r.keys:p.config.validKeys;}
 export function validRange(r:Range,length:number){return Number.isInteger(r.start)&&Number.isInteger(r.end)&&r.start>=1&&r.end>=r.start&&r.end<=length;}
 export function validate(p:Project,requireAssets=true):string[]{
  const errors:string[]=[];
+ if(p.config.playbackVolume!==undefined&&(!Number.isFinite(p.config.playbackVolume)||p.config.playbackVolume<0||p.config.playbackVolume>1))errors.push('实验播放音量须为 0–100%');
  if(p.schema!=='ptb-m15-project/1'||!roles(p.paradigm))return ['项目版本或范式无效'];
  if(!p.trials.length||p.trials.length>LIMITS.trials)errors.push('试次数须为 1–10000');
  for(const key of ['isi','interTrialInterval'] as const)if(!Number.isFinite(p.config[key])||p.config[key]<0||p.config[key]>3600000)errors.push(`${key} 须为 0–3600000 毫秒`);
@@ -35,14 +36,15 @@ export function validate(p:Project,requireAssets=true):string[]{
  p.config.shuffleRanges.forEach((r,i)=>{if(!validRange(r,p.trials.length))errors.push(`洗牌范围 ${i+1} 非法或越界`);});
  if(p.assets.length>LIMITS.files||p.assets.reduce((n,a)=>n+a.size,0)>LIMITS.totalBytes)errors.push('素材数量或总容量超预算');
  if(new Set(p.assets.map(a=>a.id)).size!==p.assets.length||new Set(p.trials.map(t=>t.id)).size!==p.trials.length)errors.push('素材或试次 ID 重复');
- p.questionnaire.forEach(q=>{if(!q.label.trim()||!['text','radio','checkbox'].includes(q.type))errors.push('问卷题目无效');if(q.type!=='text'&&(!q.options?.length||new Set(q.options).size!==q.options.length))errors.push(`问卷 ${q.label} 选项为空或重复`);});
+ p.questionnaire.forEach(q=>{if(!q.label.trim()||!['text','radio','checkbox'].includes(q.type))errors.push('问卷题目无效');if(q.type!=='text'&&(!q.options?.length||q.options.some(o=>!o.trim())||new Set(q.options.map(o=>o.trim())).size!==q.options.length))errors.push(`问卷 ${q.label} 选项为空或重复`);});
+ p.trials.forEach((t,i)=>{if(t.correctKey!==undefined&&t.correctKey!==''&&!keys(p,i).some(k=>k.key.toLowerCase()===t.correctKey?.toLowerCase()))errors.push(`试次 ${i+1} 标准答案须为该试次的有效反应键`);});
  if(new Set(p.questionnaire.map(q=>q.id)).size!==p.questionnaire.length)errors.push('问卷 ID 重复');
  p.trials.forEach((t,i)=>roles(p.paradigm).forEach(r=>{const ref=t.stimuli[r],a=p.assets.find(a=>a.id===ref?.id);if(requireAssets&&(!a||!ref?.hash||a.hash!==ref.hash))errors.push(`试次 ${i+1} ${r} 缺素材或未明确关联`);if(a&&p.paradigm!=='X'&&a.kind!=='audio')errors.push(`试次 ${i+1} ${r}：复杂范式仅支持音频`);}));
  return errors;
 }
 export function validateAnswers(p:Project,a:Answers){for(const q of p.questionnaire){const v=a[q.id];if(q.required&&(!v||(Array.isArray(v)?v.length===0:!v.trim())))throw Error(`请填写：${q.label}`);if(v&&q.type!=='text'){const values=Array.isArray(v)?v:[v];if(values.some(x=>!q.options?.includes(x))||(q.type==='radio'&&Array.isArray(v)))throw Error(`问卷答案无效：${q.label}`);}}}
 export function refFor(a:Asset):Stimulus{return {id:a.id,name:a.name,hash:a.hash};}
-export function generate(p:Project):Trial[]{const groups={A:p.assets.filter(a=>a.group==='A'),B:p.assets.filter(a=>a.group==='B'),X:p.assets.filter(a=>a.group==='X')};return groups.X.map((x,i)=>{const old=p.trials.find(t=>t.stimuli.X?.id===x.id);return {id:old?.id??uid(),instruction:old?.instruction??'',stimuli:Object.fromEntries(roles(p.paradigm).map(r=>[r,groups[r][i]?refFor(groups[r][i]):{id:null,name:'',hash:null}]))};});}
+export function generate(p:Project):Trial[]{const groups={A:p.assets.filter(a=>a.group==='A'),B:p.assets.filter(a=>a.group==='B'),X:p.assets.filter(a=>a.group==='X')};return groups.X.map((x,i)=>{const old=p.trials.find(t=>t.stimuli.X?.id===x.id);return {id:old?.id??uid(),instruction:old?.instruction??'',...(old?.correctKey!==undefined?{correctKey:old.correctKey}:{}),stimuli:Object.fromEntries(roles(p.paradigm).map(r=>[r,groups[r][i]?refFor(groups[r][i]):{id:null,name:'',hash:null}]))};});}
 export function shuffle(p:Project,seed:number,ranges:Range[]=p.config.shuffleRanges):Project {
  if(!Number.isInteger(seed)||seed<0||seed>0xffffffff)throw Error('种子须为 0–4294967295 的整数');
  if(ranges.some(r=>!validRange(r,p.trials.length)))throw Error('洗牌范围非法或越界');
@@ -52,6 +54,7 @@ export function shuffle(p:Project,seed:number,ranges:Range[]=p.config.shuffleRan
  out.randomizations.push({algorithm:'mulberry32-v1',seed,ranges:copy(ranges),before,after:out.trials.map(t=>t.id)});return out;
 }
 export function isCleanKey(e:Pick<KeyboardEvent,'repeat'|'isComposing'|'ctrlKey'|'altKey'|'metaKey'|'shiftKey'|'key'>){return !e.repeat&&!e.isComposing&&!e.ctrlKey&&!e.altKey&&!e.metaKey&&!e.shiftKey&&e.key!=='Process'&&e.key!=='Dead'&&!['Control','Alt','Shift','Meta'].includes(e.key);}
+export function isContinueKey(e:Pick<KeyboardEvent,'key'>){return e.key===' '||e.key==='Enter';}
 export function kindFor(file:{name:string;type:string}):MediaKind {const ext=file.name.toLowerCase().split('.').pop();if(ext==='txt'||file.type==='text/plain')return 'text';if(['jpg','jpeg','png','gif','bmp','webp','svg'].includes(ext??'')||file.type.startsWith('image/'))return 'image';if(['mp3','wav','ogg','m4a','flac','aac','wma','mp4'].includes(ext??'')||file.type.startsWith('audio/'))return 'audio';throw Error(`不支持的素材类型：${file.name}`);}
 export function relink(p:Project){for(const t of p.trials)for(const r of roles(p.paradigm)){const ref=t.stimuli[r];if(!ref)continue;const local=p.assets.filter(a=>a.group===r),exact=local.find(a=>a.id===ref.id&&a.hash===ref.hash);if(exact){t.stimuli[r]=refFor(exact);continue;}const matches=ref.hash?local.filter(a=>a.hash===ref.hash):[];if(matches.length===1)t.stimuli[r]=refFor(matches[0]);}return p;}
 export function newSession(project:Project,answers:Answers):Session {validateAnswers(project,answers);const errors=validate(project);if(errors.length)throw Error(errors.join('\n'));return {schema:'ptb-m15-session/1',id:uid(),participantId:uid(),project:copy(project),answers:copy(answers),createdAt:new Date().toISOString(),revision:0,nextIndex:0,status:'ready',attempts:[],events:[],environment:{userAgent:navigator.userAgent,timeOrigin:performance.timeOrigin,method:'m15-client/1',rtClock:'performance.now',physicalTimingMeasured:false},exportRequestedRevision:null,exportConfirmedRevision:null};}

@@ -123,6 +123,8 @@ def synthesize_with_info(config, *, cancelled=lambda:False):
     if cancelled():raise InterruptedError('m06_cancelled')
     if audio.size!=round(c['duration']*c['sample_rate']) or not np.isfinite(audio).all():raise ValueError('m06_invalid_output')
     return audio, dict(computation_revision='klatt/2', internal_rate_hz=20000,
+                       silence_render_revision='m06-silence/2',
+                       silence_sample_intervals=[[round(a*c['sample_rate']),round(b*c['sample_rate'])] for a,b in engine._merge_silence_intervals()],
                        source_reference_db=60., source_reference_rms=.01,
                        fixed_output_gain=64., output_gain=engine.output_gain)
 

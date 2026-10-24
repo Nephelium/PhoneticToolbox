@@ -4,6 +4,7 @@ import type {Config,Project,Take,Task,Device,Preview,Meter,Spectrum} from '../mo
 import {floatWave} from './recording-wav.ts';
 import {serialRequests} from './serial-requests.ts';
 import {BrowserRecordingProject} from './browser-recording-project.ts';
+import {bufferPeak,peakGain} from './playback-gain.ts';
 
 const clone=<T>(value:T):T=>JSON.parse(JSON.stringify(value));
 /** Device meters only; processing still uses the shared scientific worker. */
@@ -138,7 +139,7 @@ export function browserRecordingPort(research:ResearchContext):RecordingPort {
    try{const version=take.versions[index],source=body.variant==='raw'?await manager.data(take,0):value,selected=Math.max(0,Math.min(take.config.channels-1,Number(body.channel)||0)),count=source.blocks.reduce((n,b)=>n+b[0].length,0),buffer=playback.createBuffer(1,count,take.config.sample_rate);let at=0;for(const b of source.blocks){buffer.getChannelData(0).set(b[selected],at);at+=b[selected].length;}
     if(body.variant==='residual'){const parent=take.versions.findIndex(v=>v.id===version.metadata.parent);if(!['denoised','gain'].includes(version.kind)||parent<0||take.versions[parent].frames!==version.frames)throw Error('差分试听仅支持等帧长的降噪/增益版本与其直接来源。');const reference=await manager.data(take,parent);let at=0;for(const b of reference.blocks){for(let i=0;i<b[selected].length;i++)buffer.getChannelData(0)[at+i]=b[selected][i]-buffer.getChannelData(0)[at+i];at+=b[selected].length;}}
     if(body.device&&body.device!=='default'){const setSink=(playback as AudioContext&{setSinkId?:(id:string)=>Promise<void>}).setSinkId;if(!setSink)throw Error('当前浏览器不支持切换输出设备，请选系统默认输出。');await setSink.call(playback,String(body.device));}
-    await playback.resume();player=playback.createBufferSource();player.buffer=buffer;const gain=playback.createGain();gain.gain.value=Number(body.volume);player.connect(gain);gain.connect(playback.destination);playStart=playback.currentTime;playOffset=Math.min(Number(body.start)||0,count);playRate=take.config.sample_rate;const active=player;player.onended=()=>{if(player===active){player=undefined;void playback?.close();playback=undefined;}};player.start(0,playOffset/playRate,(Math.min(Number(body.end)||count,count)-playOffset)/playRate);return {};
+    await playback.resume();player=playback.createBufferSource();player.buffer=buffer;const gain=playback.createGain();gain.gain.value=Number(body.volume)*peakGain(bufferPeak(buffer),body.auto_gain!==false);player.connect(gain);gain.connect(playback.destination);playStart=playback.currentTime;playOffset=Math.min(Number(body.start)||0,count);playRate=take.config.sample_rate;const active=player;player.onended=()=>{if(player===active){player=undefined;void playback?.close();playback=undefined;}};player.start(0,playOffset/playRate,(Math.min(Number(body.end)||count,count)-playOffset)/playRate);return {};
    }catch(e){stopPlay();throw e;}
   }
   throw Error('此操作的网页接口暂未接通，请使用桌面版。');

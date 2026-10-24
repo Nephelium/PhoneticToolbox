@@ -2,6 +2,8 @@
 
 2026-09-27。状态：Windows 开发功能及 A/C 定向验证已完成，完整跨平台条目保持 in_progress。软件验收与未测平台分别见 [报告](../../testing/m15-report.md) 和 [统筹摘要](../../testing/m15-coordination-summary.md)。本轮明确授权已覆盖纯客户端实现，并追加确认文本/图片两帧门与 AppShell/Qt 最小接线。旧 Python core/API、服务器 manifest、P06/P07 存储步骤为通用模板，现已 Superseded，不再作为 M15 依赖。
 
+2026-10-19增量：逐项问卷、键盘流程、作答提示、标准答案及被试分析见[当前计划](../2026-10-19-m15-keyboard-analysis.md)与[验收](../../testing/2026-10-19-m15-keyboard-analysis.md)。旧迁移范围与当时证据保留。
+
 ## 依据与退出门
 
 [源功能映射](../../modules/evidence/M15-source-map.md)覆盖说明书 6.1–6.2 与原 HTML。Python 原服务只打开 HTML，不迁入后端。

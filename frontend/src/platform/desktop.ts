@@ -115,7 +115,7 @@ export async function initializePlatform(){
     spectrogram:(file,view)=>preview({id:file.id,...view}),dispose(){}};
   if(hello.tasks){let outputDirectory:string|undefined;
     installStoragePort({status:()=>task({op:'local_storage_status'}),configure:policy=>task({op:'local_storage_policy',policy}),clean:()=>task({op:'local_storage_cleanup'}),clearAll:()=>call('clear_all_caches',{purpose:'confirmed'}),cacheLocation:()=>call('cache_location'),openCacheDirectory:(legacy=false)=>call('open_cache_directory',{purpose:legacy?'legacy':'current'}),cacheCandidates:()=>task({op:'cache_candidates'}),openCacheCandidate:id=>call('open_cache_candidate',{id}),cleanCacheCandidate:id=>task({op:'clean_cache_candidate',id,confirmed:true}),cleanGraphicsCandidate:id=>call('clear_graphics_cache',{id,purpose:'confirmed'})});
-    desktopFiles.m07=m07Port({f0:job=>task({op:'m07_f0',job}),project:'00000000-0000-4000-8000-000000000001',source:file=>task({op:'m07_source',id:file.id,sha256:file.sha256}),create:body=>task({op:'m07_create',body}),job:tasks.job,read:tasks.result!,cancel:tasks.cancelJob!,retry:tasks.retry,list:()=>task({op:'m07_list'}),save:(job,directory)=>task({op:'m07_save',job,directory})});
+    desktopFiles.m07=m07Port({f0:job=>task({op:'m07_f0',job}),project:'00000000-0000-4000-8000-000000000001',source:file=>task({op:'m07_source',id:file.id,sha256:file.sha256}),create:body=>task({op:'m07_create',body}),job:tasks.job,read:tasks.result!,cancel:tasks.cancelJob!,retry:tasks.retry,list:()=>task({op:'m07_list'}),save:(job,directory,name)=>task({op:'m07_save',job,directory,name})});
     desktopFiles.m06=m06Port({parameters:text=>task({op:'m06_parameters',text}),project:'00000000-0000-4000-8000-000000000001',source:file=>task({op:'m06_source',id:file.id,sha256:file.sha256}),create:body=>task({op:'m06_create',body}),job:tasks.job,read:tasks.result!,cancel:tasks.cancelJob!,async save(job){const grant=await call<DirectoryGrant|null>('choose',{purpose:'output'});if(!grant)return false;await task({op:'save_job',id:job,directory:grant.id});return true;}});
     desktopFiles.m05=await desktopM05(task,()=>call<DirectoryGrant|null>('choose',{purpose:'output'}));
       desktopFiles.m05.prepareCapture=async purpose=>{await call('m05_media',{purpose:purpose??'capture'});};
@@ -138,7 +138,7 @@ export async function initializePlatform(){
         const saved:{id:string;name:string}[]=[],failed:{id:string;error:string}[]=[];let directory:string|undefined;
         if(!grant)return {saved,failed,cancelled:true};
         for(const result of results){try{
-          const value=await task<{name:string;directory?:string}>({op:'m08_export',job:result.job_id,id:result.id,directory:grant.id,direct:true});
+          const value=await task<{name:string;directory?:string}>({op:'m08_export',job:result.job_id,id:result.id,directory:grant.id,direct:true,name:result.name});
           directory=value.directory??directory;
           saved.push({id:result.id,name:value.name});
         }catch(e){failed.push({id:result.id,error:e instanceof Error?e.message:String(e)});}}

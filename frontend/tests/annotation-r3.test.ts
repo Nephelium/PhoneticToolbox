@@ -8,9 +8,9 @@ test('M12-R3 word/phone boundaries can move to 0.1ms apart and serialize without
  const e=setup();e.state.selectedBoundary={tier:'words',time:.5};e.moveBoundary({tier:'words',index:0,edge:'end',time:.5},.5019);
  assert.equal(e.state.selectedBoundary.time,.5019,'keyboard boundary selection follows the actual drag');
  assert.equal(e.wordTier()!.intervals[1].xmin,.5019);assert.equal(e.phoneTier()!.intervals[1].xmin,.5019);
- e.moveBoundary({tier:'phones',index:0,edge:'end',time:.5019},.5018);assert.equal(e.phoneTier()!.intervals[1].xmin,.5018);assert.equal(e.wordTier()!.intervals[1].xmin,.5019);
+ e.state.linkWordPhone=false;e.moveBoundary({tier:'phones',index:0,edge:'end',time:.5019},.5018);assert.equal(e.phoneTier()!.intervals[1].xmin,.5018);assert.equal(e.wordTier()!.intervals[1].xmin,.5019);
  assert.equal(parseGrid(serializeGrid(e.state.textgrid!)).tiers[1].intervals![1].xmax,.502);
- e.moveBoundary({tier:'words',index:0,edge:'end',time:.5019},.5017);assert.equal(e.phoneTier()!.intervals[1].xmin,.5018,'nearby but distinct phone must stay independent');
+ e.state.linkWordPhone=true;e.moveBoundary({tier:'words',index:0,edge:'end',time:.5019},.5017);assert.equal(e.phoneTier()!.intervals[1].xmin,.5018,'nearby but distinct phone must stay independent');
 });
 test('M12-R3 close phone split and exact boundary deletion preserve neighbouring tiny intervals',()=>{
  const e=setup();e.splitPhoneAt(.501);assert.equal(e.phoneTier()!.intervals.length,4);

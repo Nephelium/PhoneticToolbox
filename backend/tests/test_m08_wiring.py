@@ -1,4 +1,4 @@
-"""M08 formal adapters on new synthetic assets and a copied existing schema."""
+"""M08 formal adapters on synthetic assets and a fresh disposable test database."""
 import hashlib
 import json
 from pathlib import Path
@@ -20,8 +20,9 @@ ROOT=Path(__file__).resolve().parents[2]
 @pytest.fixture
 def runtime(tmp_path):
     db=tmp_path/'tasks.sqlite3'
-    with sqlite3.connect((ROOT/'output/validation/p06/local-state.sqlite3').as_uri()+'?mode=ro',uri=True) as source,sqlite3.connect(db) as destination:
-        source.backup(destination)
+    with sqlite3.connect(db) as destination:
+        for migration in ('002_jobs_sqlite.sql','005_acoustic_batches_sqlite.sql'):
+            destination.executescript((ROOT/'backend/migrations'/migration).read_text(encoding='utf8'))
     store=SQLiteJobStore(db);cache=tmp_path/'cache';cache.mkdir();initialize_local_files(cache)
     files=LocalAcousticFiles(store,cache)
     raw=(ROOT/'output/validation/m08-wiring/input.wav').read_bytes()
@@ -137,6 +138,9 @@ def test_serial_linear_outputs_are_actual_pcm(runtime):
 def test_explicit_ids_name_preflight_and_numbering(runtime):
     store,files,ref=runtime;job=task(runtime);result,_,_=run(runtime,job)
     r=listing(store,'local',LOCAL_PROJECT)[0]['results'][0]
+    entry=listing(store,'local',LOCAL_PROJECT)[0]
+    assert entry['source_name']=='synthetic.wav' and entry['source_sha256']==ref['sha256']
+    assert entry['config']['action']=='transform'
     scope=M08Manage(project_id=LOCAL_PROJECT,source=ref,ids=[r['id']])
     # Reserve two names before either copy runs; queued snapshots prevent races.
     a=save_copy(store,'local',scope);b=save_copy(store,'local',scope)

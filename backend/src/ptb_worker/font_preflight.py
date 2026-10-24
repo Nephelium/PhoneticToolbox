@@ -15,6 +15,9 @@ def inspect_fonts(snapshot, *, timeout=20):
     from .egg_runtime import command
     from .acoustic_errors import AcousticFailure
     snapshot=FigureFontSnapshot.model_validate(snapshot)
+    if sys.platform == 'darwin':
+        from .native.darwin import preview
+        return FontPreflight.model_validate(preview('fonts',snapshot.model_dump(),b'',timeout=timeout,output_bytes=32000)).model_dump()
     if sys.platform == 'linux':
         return _inspect_linux(snapshot, timeout)
     if os.name!='nt':raise PreviewError('font_preflight_platform_unverified',503)

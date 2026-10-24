@@ -14,10 +14,33 @@ def register_scheme():
     QWebEngineUrlScheme.registerScheme(scheme)
 
 
-def permitted_url(url,service_url):
+def permitted_url(url,service_url,method='GET'):
     part=urlsplit(url)
     return (part.scheme=='ptbapp' and part.netloc=='app') or url=='qrc:///qtwebchannel/qwebchannel.js' or part.scheme in ('data','blob') or (
-        part.scheme=='http' and part.netloc==urlsplit(service_url).netloc and part.path.startswith('/api/v1/'))
+        part.scheme=='http' and part.netloc==urlsplit(service_url).netloc and part.path.startswith('/api/v1/')) or (
+        method=='GET' and part.scheme=='https' and part.netloc=='www.phonetictoolbox.com' and not part.query and not part.fragment and
+        part.path.removeprefix('/app/geolinguistics/') in GEO_RUNTIME_FILES and part.path.startswith('/app/geolinguistics/')) or (
+        method=='GET' and url=='https://www.phonetictoolbox.com/announcements/v1.json')
+
+
+GEO_RUNTIME_FILES=frozenset((
+    'data-manifest.json','catalog.json','sites.json','observations.json',
+    'classification.json','map-index.json','paper.json','main.f64',
+    'type-0-0.f64','type-0-1.f64','type-1-0.f64','type-1-1.f64',
+    'maps/world.json','maps/territory.json','maps/province.json',
+    'maps/city.json','maps/district.json'))
+
+
+def geolinguistics_directory(dist,executable,*,frozen):
+    """Resolve development data or a sibling of the outer .app/Windows EXE."""
+    dist,executable=Path(dist),Path(executable)
+    candidates=[dist/'geolinguistics']
+    if not frozen:candidates.insert(0,dist.parent.parent/'local-data/geolinguistics')
+    # A macOS executable lives inside Foo.app/Contents/MacOS; documents stay
+    # beside the outer bundle so signing and updates do not modify user data.
+    app=next((p for p in executable.parents if p.suffix=='.app' and executable.is_relative_to(p/'Contents/MacOS')),None)
+    candidates.append((app.parent if app else executable.parent)/'geolinguistics-data')
+    return next((p for p in candidates if p.is_dir()),None)
 
 
 def _read_asset(root,name):
@@ -72,8 +95,9 @@ def _read_pool():
 
 
 class Assets(QWebEngineUrlSchemeHandler):
-    def __init__(self,root,parent):
+    def __init__(self,root,parent,*,geolinguistics_root=None):
         super().__init__(parent);self.root=root.resolve()
+        self.geolinguistics_root=Path(geolinguistics_root).resolve() if geolinguistics_root else None
         self._pending={};self._sequence=0
         self._replies=_AssetReplies(self)
         self._replies.completed.connect(self._finish,Qt.ConnectionType.QueuedConnection)
@@ -95,7 +119,13 @@ class Assets(QWebEngineUrlSchemeHandler):
         def discard():
             cancelled.set();pending.pop(key,None)
         job.destroyed.connect(discard)
-        _read_pool().start(_AssetRead(self.root,name,key,self._replies,cancelled))
+        root=self.root
+        if name.startswith('geolinguistics/') and self.geolinguistics_root is not None:
+            name=name.removeprefix('geolinguistics/')
+            if name not in GEO_RUNTIME_FILES:
+                self._pending.pop(key,None);job.fail(QWebEngineUrlRequestJob.Error.RequestDenied);return
+            root=self.geolinguistics_root
+        _read_pool().start(_AssetRead(root,name,key,self._replies,cancelled))
 
     @pyqtSlot(int,object)
     def _finish(self,key,result):
@@ -116,4 +146,4 @@ class Assets(QWebEngineUrlSchemeHandler):
 class LocalOnly(QWebEngineUrlRequestInterceptor):
     def __init__(self,url,parent):super().__init__(parent);self.url=url
     def interceptRequest(self,info):
-        if not permitted_url(info.requestUrl().toString(),self.url):info.block(True)
+        if not permitted_url(info.requestUrl().toString(),self.url,bytes(info.requestMethod()).decode('ascii','replace')):info.block(True)

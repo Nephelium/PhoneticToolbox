@@ -67,6 +67,8 @@ async function main(){
   }
   report.checks.push('Six theme/font cases preserve 14/14/12 typography, compact 1.3-line/3px-padding third-level rows, sole colour selection without an outline and no sidebar overflow, including the narrow drawer');
   report.navigationFixture=await page.evaluate(async()=>{const {verifyManualNavigation}=await import('/tests/fixtures/manual-navigation.ts');return verifyManualNavigation();});
+  report.playbackContextFixture=await page.evaluate(async()=>{const {verifyManualPlaybackContext}=await import('/tests/fixtures/manual-navigation.ts');return verifyManualPlaybackContext();});
+  assert.equal(report.playbackContextFixture.length,2);
   assert.equal(report.navigationFixture.length,5);assert.deepEqual(report.errors,[]);report.success=true;
  }catch(e){report.failure=String(e);if(page)await page.screenshot({path:path.join(out,'failure.png')}).catch(()=>{});throw e;}
  finally{

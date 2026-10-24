@@ -23,6 +23,7 @@ def main():
         package_version=core_version if package=='packages/phonetic_core' else version['app_version']
         content = re.sub(r'(?m)^version = ".*"$', f'version = "{package_version}"', content)
         content = re.sub(r'(phonetic-core(?:\[[^\]]+\])?==)[^"\s]+', lambda m: m[1] + core_version, content)
+        content = re.sub(r'(ptb-desktop(?:\[[^\]]+\])?==)[^"\s]+', lambda m: m[1] + version['app_version'], content)
         outputs[path] = content
     frontend = ROOT / 'frontend/package.json'
     value = json.loads(frontend.read_text('utf-8'))

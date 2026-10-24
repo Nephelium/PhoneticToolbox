@@ -9,6 +9,9 @@ def windows_capability(store):
     import sys
     from importlib.metadata import version, PackageNotFoundError
     from importlib.util import find_spec
+    if sys.platform=='darwin':
+        from .native.darwin import capability
+        return bool(getattr(store,'files',None)) and capability('pitch_manipulation')
     if sys.platform!='win32' or not getattr(store,'files',None):return False
     if not all(callable(getattr(store.files,name,None)) for name in ('output','write','seal','complete','read_input','release_scratch')):return False
     try:
@@ -25,7 +28,7 @@ def submit(store, owner, body, *, retry_of=None):
     if sys.platform=='linux':
         from .native.capabilities import linux_capabilities
         if 'pitch_manipulation' not in linux_capabilities(store)[0]:raise JobError('m08_runtime_unavailable',503)
-    elif sys.platform!='win32':raise JobError('m08_platform_unverified',503)
+    elif sys.platform not in ('win32','darwin'):raise JobError('m08_platform_unverified',503)
     elif not windows_capability(store):raise JobError('m08_runtime_unavailable',503)
     request = body.model_dump(exclude={'idempotency_key'}) | {'retry_of':retry_of}
     sha = hashlib.sha256(canonical(request).encode()).hexdigest()

@@ -6,11 +6,12 @@ import type {AudioAsset} from '../src/platform/types.ts';
 Object.assign(globalThis,{BroadcastChannel:undefined,requestAnimationFrame:()=>1,cancelAnimationFrame:()=>{}});
 const pending:{resolve:()=>void;reject:(error:Error)=>void}[]=[];
 const sources:{stopped:boolean;starts:number[][];onended:(()=>void)|null}[]=[];
+const gains:{gain:{value:number};connect:()=>void;disconnect:()=>void}[]=[];
 class Device {
   state='running';currentTime=0;
   resume(){return new Promise<void>((resolve,reject)=>pending.push({resolve,reject}));}
   createBuffer(){return {copyToChannel:()=>{}};}
-  createGain(){return {gain:{value:0},connect:()=>{},disconnect:()=>{}};}
+  createGain(){const node={gain:{value:0},connect:()=>{},disconnect:()=>{}};gains.push(node);return node;}
   createBufferSource(){const s={buffer:null,onended:null,stopped:false,starts:[] as number[][],connect:(gain:unknown)=>gain,disconnect:()=>{},stop(){this.stopped=true;},start(...v:number[]){this.starts.push(v);}};sources.push(s);return s;}
 }
 Object.assign(globalThis,{AudioContext:Device});
@@ -47,3 +48,5 @@ test('pending switch displays its own start instead of the old playhead',async()
   const next=audio.play(b,.1,.7,0);assert(audio.isCurrentAudio(b,0));assert.equal(audio.playback.position,.1);assert.equal(audio.playback.playing,false);
   audio.stop();pending.at(-1)!.resolve();await next;
 });
+
+test('quiet shared playback uses output gain, keeps source immutable and immediately follows the switch/slider',async()=>{const {automaticAudioGain}=await import('../src/state/audition.ts');const a=asset('quiet');a.channels[0].fill(.1);const original=a.channels[0].slice();automaticAudioGain.value=true;audio.volume(.5);const work=audio.play(a,0,.8,0);pending.at(-1)!.resolve();await work;assert(Math.abs(gains.at(-1)!.gain.value-4.4562546)<1e-5);automaticAudioGain.value=false;assert.equal(gains.at(-1)!.gain.value,.5);automaticAudioGain.value=true;audio.volume(.25);assert(Math.abs(gains.at(-1)!.gain.value-2.2281273)<1e-5);assert.deepEqual(a.channels[0],original);audio.stop();audio.volume(.7);});

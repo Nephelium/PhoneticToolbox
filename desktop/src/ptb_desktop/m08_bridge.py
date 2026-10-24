@@ -35,7 +35,7 @@ class M08Bridge:
                 for result_id,record in selected:
                     name=value['names'][ids.index(result_id)]
                     if not name or any(c in name for c in '/\\:<>"|?*') or len(name)>180:raise FileAccessError('无效文件名。')
-                    destination=record['path'].parent/name
+                    destination=record['path'].parent/(record.get('sequence_prefix','')+name)
                     if destination!=record['path'] and destination.exists():raise FileAccessError('文件名冲突，原文件保留。')
             answer=self.service.request('/api/v1/jobs/m08/'+action,'POST',value)
             if action in ('remove','rename'):
@@ -45,9 +45,9 @@ class M08Bridge:
                         if action=='remove' and result_id in answer['removed']:
                             record['path'].unlink();self.exports[result_id].remove(record)
                         elif action=='rename':
-                            destination=record['path'].parent/value['names'][ids.index(result_id)]
+                            destination=record['path'].parent/(record.get('sequence_prefix','')+value['names'][ids.index(result_id)])
                             if destination!=record['path']:os.rename(record['path'],destination)
-                            record['path']=destination
+                            record['path']=destination;record['requested_name']=destination.name
                     except OSError as exc:
                         raise FileAccessError('受管结果已更新，但本地导出副本操作失败，请核对输出目录。') from exc
             return answer
@@ -68,12 +68,20 @@ class M08Bridge:
         if not item or item['id'] in job['result_manifest'].get('deleted',[]):raise FileAccessError('结果不可用。')
         direct=body.get('direct') is True
         name=job['result_manifest'].get('aliases',{}).get(item['id'],item['name'])
-        if not name or any(ord(c)<32 or c in '/\\:<>"|?*' for c in name):raise FileAccessError('无效结果名。')
+        sequence_prefix=''
+        if direct and 'name' in body:
+            requested=body['name']
+            if requested!=name:
+                match=re.fullmatch(r'([1-9]\d{0,2})_'+re.escape(name),requested) if isinstance(requested,str) else None
+                if not match or int(match[1])>256:raise FileAccessError('无效结果名。')
+                sequence_prefix=match[1]+'_'
+            name=requested
+        if not isinstance(name,str) or not name.lower().endswith('.wav') or len(name)>184 or any(ord(c)<32 or c in '/\\:<>"|?*' for c in name):raise FileAccessError('无效结果名。')
         verified=self.bridge.invoke(dict(op='result',job=job['id'],id=item['id']))
         raw=base64.b64decode(verified['base64']);root=directory.path
         if direct:
             for record in self.exports.get(item['id'],[]):
-                if record['path'].parent==root:
+                if record['path'].parent==root and record.get('requested_name',record['path'].name)==name:
                     self._verify(record)
                     self.bridge.record_export([item['id']])
                     return dict(name=record['path'].name,id=item['id'],directory=str(root))
@@ -102,7 +110,7 @@ class M08Bridge:
                     if created and path.exists() and identity(path.stat())==created:path.unlink()
                     raise
             else:raise FileAccessError('无法分配结果编号。')
-            self.exports.setdefault(item['id'],[]).append(dict(path=path,directory=body['directory'],identity=identity(path.stat()),sha256=item['sha256']))
+            self.exports.setdefault(item['id'],[]).append(dict(path=path,requested_name=base_name,sequence_prefix=sequence_prefix,directory=body['directory'],identity=identity(path.stat()),sha256=item['sha256']))
             answer=dict(name=name,id=item['id'],directory=str(root))
             warning=self.bridge.record_export([item['id']])
             if warning:answer['retention_warning']=warning

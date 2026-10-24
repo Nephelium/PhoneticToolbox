@@ -98,7 +98,7 @@ class RecordingService:
     def _dispatch(self,b):
         op=b.get('op')
         if op=='capabilities':
-            if sys.platform!='win32' and self.backend is None:return {'available':False,'schema':'ptb-recording/1','devices':[],'device_error':'当前平台尚未通过原生录音准入，Windows 桌面为首版开发目标','project':self.view(),'local_only':True}
+            if sys.platform not in ('win32','darwin') and self.backend is None:return {'available':False,'schema':'ptb-recording/1','devices':[],'device_error':'当前平台尚未通过原生录音准入，Windows 桌面为首版开发目标','project':self.view(),'local_only':True}
             try:found=devices(self.backend);reason=''
             except Exception as exc:found=[];reason='原生设备库不可用：'+str(exc)
             return {'available':True,'schema':'ptb-recording/1','devices':found,'device_error':reason,'project':self.view(),'local_only':True}
@@ -130,7 +130,7 @@ class RecordingService:
                 if not isinstance(task.get('enabled',True),bool) or not isinstance(task.get('skipped',False),bool):raise ValueError('任务状态无效')
             data=copy.deepcopy(p.data);data['tasks']=copy.deepcopy(tasks);p.commit(data);return self.view()
         if op in ('start','probe_start'):
-            if sys.platform!='win32' and self.backend is None:raise ValueError('当前平台尚未开放原生录音能力')
+            if sys.platform not in ('win32','darwin') and self.backend is None:raise ValueError('当前平台尚未开放原生录音能力')
             p=self.require(idle=True);self.stop_play();config=validate_config(b['config'],self.backend)
             task=next((t for t in p.data['tasks'] if t['id']==b.get('task_id')),None)
             if b.get('task_id') and task is None:raise ValueError('所选录音任务不存在，请重新选择任务')
@@ -240,7 +240,7 @@ class RecordingService:
                 parent=next((v for v in take['versions'] if v['id']==version.get('parent')),None)
                 if version['kind'] not in ('denoised','gain') or not parent or frames(parent['spans'])!=total:raise ValueError('差分预听仅支持帧长一致的降噪或增益版本及其直接来源')
                 reference=select(parent['spans'],start,end)
-            try:self.player=Playback(self.project.root,select(spans,start,end),take['config'],b['device'],int(b.get('channel',0)),float(b.get('volume',.7)),self.backend,reference_spans=reference)
+            try:self.player=Playback(self.project.root,select(spans,start,end),take['config'],b['device'],int(b.get('channel',0)),float(b.get('volume',.7)),self.backend,reference_spans=reference,auto_gain=b.get("auto_gain",True))
             except PlaybackStartError as exc:self.player=exc.player;raise
             return {'playing':True}
         if op=='play_stop':self.stop_play();return {'playing':False}

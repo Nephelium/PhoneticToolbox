@@ -1,7 +1,8 @@
 import {builtinIconIds} from './icon-catalog.ts';
 export interface CustomIcon {id:string;name:string;dataUrl:string}
-export interface IconPreferences {version:1;selected:string;custom:CustomIcon[]}
-export type IconRequest={action:'status'|'select'|'import'|'replace'|'remove';id?:string;name?:string;dataUrl?:string};
+export interface DockIconSize {value:number;default:number;min:60;max:100}
+export interface IconPreferences {version:1;selected:string;custom:CustomIcon[];dockSize?:DockIconSize}
+export type IconRequest={action:'status'|'select'|'import'|'replace'|'remove'|'resize';id?:string;name?:string;dataUrl?:string;size?:number};
 export type IconPort=(request:IconRequest)=>Promise<IconPreferences>;
 const key='ptb-application-icons-v1';
 export const emptyIcons=():IconPreferences=>({version:1,selected:'default',custom:[]});
@@ -16,6 +17,7 @@ export function validateIcons(value:unknown):IconPreferences{
   ids.add(icon.id);
  }
  if(!ids.has(state.selected))throw Error('所选图标不存在。');
+ if(state.dockSize){const s=state.dockSize;if(s.min!==60||s.max!==100||![s.value,s.default].every(v=>Number.isInteger(v)&&v>=60&&v<=100))throw Error('Dock 图标大小无法读取。');}
  return state;
 }
 let native:IconPort|undefined;
@@ -23,6 +25,7 @@ export function installIconPort(port:IconPort){native=port;}
 export function nativeIcons(){return !!native;}
 export async function iconRequest(request:IconRequest):Promise<IconPreferences>{
  if(native)return validateIcons(await native(request));
+ if(request.action==='resize')throw Error('Dock 图标大小仅适用于 macOS 桌面版。');
  const raw=localStorage.getItem(key),state=raw?validateIcons(JSON.parse(raw)):emptyIcons();
  if(request.action==='status')return state;
  if(request.action==='import'||request.action==='replace'){

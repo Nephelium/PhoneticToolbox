@@ -9,6 +9,7 @@ import copy
 from phonetic_core.vocal_tract.preset_library import LibraryProfile, active_set
 import numpy as np
 from phonetic_core.vocal_tract.envelope import audition_samples, attack_envelope
+from phonetic_core.playback_gain import peak_gain,sample_peak
 from phonetic_core.vocal_tract.monitor import OutputHistory
 from phonetic_core.vocal_tract.trajectory import validate_frames, validate_pitch_curve, validate_pressure_curve, MAX_SEQUENCE_SECONDS
 from phonetic_core.vocal_tract.perturbation import validate_perturbation
@@ -82,7 +83,7 @@ class BrowserAudio:
         self.engine=engine;self.playback_allowed=True;self.params=engine.params.copy()
         self.f0=engine.default_f0;self.volume=.8;self.gain_db=0.;self.lip_width=1.;self.larynx_height=0.;self.tongue_shape=[0.]*4;self.lip_shape=[0.]*4;self.source=None
         self.device_key='browser';self.active=False;self.mode='idle';self.error=None;self.completed=False;self.heartbeat=time.monotonic();self.pitch_gain=1.
-        self.buffer=None;self.envelope=None;self.tube=None;self.position_seconds=0.;self.offset=0;self.committed=0
+        self.buffer=None;self.envelope=None;self.tube=None;self.position_seconds=0.;self.offset=0;self.committed=0;self.auto_gain=True;self.audition_peak=0.
         self.pending=np.empty(0,dtype=np.float32);self.output_history=OutputHistory(engine.sr)
         self.stats={'blocks':0,'underflows':0,'generated_samples':0,'compute_ms':0.,'device_latency_ms':None,'rms':0.,'peak':0.,'device':'浏览器音频输出'}
 
@@ -99,6 +100,7 @@ class BrowserAudio:
     def start(self,buffer=None,mode='live',envelope=None):
         self.stop();self.active=True;self.mode=mode;self.completed=False;self.error=None
         self.buffer=buffer;self.envelope=envelope;self.offset=self.committed=0;self.position_seconds=0.
+        self.audition_peak=sample_peak(audition_samples(buffer,1,self.gain_db)) if buffer is not None and self.auto_gain else 0.
         self.pending=np.empty(0,dtype=np.float32);self.output_history.reset();self.stats.update(blocks=0,generated_samples=0,rms=0.,peak=0.)
         if buffer is None:
             self.tube=self.engine.prepare_tube(self.params,self.lip_width,self.larynx_height,self.tongue_shape,self.lip_shape)
@@ -146,7 +148,8 @@ class BrowserAudio:
                 block=self.buffer[self.offset:self.offset+n]
                 if not len(block):break
                 if self.envelope is not None:envelope=self.envelope[self.offset:self.offset+len(block)]
-            block=audition_samples(block,self.volume,self.gain_db,envelope).astype('<f4')
+            if self.buffer is None and self.auto_gain:self.audition_peak=max(self.audition_peak,sample_peak(audition_samples(block,1,self.gain_db)))
+            block=(audition_samples(block,self.volume,self.gain_db,envelope)*peak_gain(self.audition_peak,self.auto_gain)).astype('<f4')
             parts.append(block);self.offset+=len(block);self.stats['blocks']+=1
         audio=np.concatenate(parts) if parts else np.empty(0,dtype='<f4')
         self.pending=np.concatenate([self.pending,audio]);self.stats['generated_samples']=self.offset;self.stats['compute_ms']=(time.perf_counter()-begin)*1000

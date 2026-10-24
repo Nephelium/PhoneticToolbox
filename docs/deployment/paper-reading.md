@@ -2,15 +2,21 @@
 
 公共目录入口：<https://www.phonetictoolbox.com/papers/catalog.json>。服务器目录 `/var/www/phonetictoolbox-coming-soon/papers`，现有首页保持原文件。客户端读取目录中的栏目发布日期、作者、版本、许可、导读与 PDF 校验信息。
 
+2026-10-21 当前目录含3篇科学论文的9份 PDF，另有1份栏目说明。新增 CC BY 4.0 的 [TAPA期刊论文](https://doi.org/10.3758/s13428-026-03174-y)，原文15页、同页双栏译文15页、图文解读11页，旧两篇及说明保持，全部10资产经HTTPS大小/SHA回读核验。期刊内容供已支持DOI扩展的网页和阅读器获取，旧EXE继续读取原两篇，更新阅读器后取得期刊论文。验收见[TAPA记录](../testing/2026-10-21-m18-tapa-reader.md)。
+
 新增论文需准备原文 PDF、中文译文 PDF 和元信息 JSON，可另附独立解读 PDF，再发布完整目录。单独把 PDF 放进服务器目录不会自动上架，以免缺少许可和署名。应用不在用户电脑上自动翻译论文。
 
 ## 内容准备
 
-先核对具体版本允许共享与翻译，并检查其中另有声明的第三方材料。当前目录协议接受 CC BY 4.0、CC BY-SA 4.0、CC0 1.0 的 arXiv 固定版本，其他授权形式需扩展审核规则。
+先核对具体版本允许共享与翻译，并检查其中另有声明的第三方材料。当前目录协议接受 CC BY 4.0、CC BY-SA 4.0、CC0 1.0 的 arXiv 固定版本及具有规范 DOI 链接的期刊版本，其他授权形式需扩展审核规则。
 
 元信息使用 `id`、`title`、`titleZh`、`authors`、`version`、`sourceUrl`、`submittedAt`、`publishedAt`、`license: {id,url}`、`translationNote`、`guide`。`publishedAt` 为栏目发布日期，格式 YYYY-MM-DD；`submittedAt` 为原稿投稿日期。稳定 `id` 可包含字母、数字、连字符和下划线。译文须注明改编者、许可、修改和是否经原作者审校。
 
 可选字段 `abstract`、`abstractZh` 供往期窗口显示双语摘要，`analysis` 为独立分析正文，`analysisPdf` 为可离线阅读的解读文件。为已有论文补充内容时保留稳定 ID 与 `publishedAt`，填写 `updatedAt`，使较晚首次启动的用户也能获取更新。下载跳过已核验资产，原文与译文已获取时仍可独立阅读。
+
+期刊论文另填 `journal: {title,publishedAt,doi}`，可选 `volume/issue/pages/articleNumber`。`journal.publishedAt` 是正式发表日期，顶层 `publishedAt` 仍是栏目推送日期，两者分别用于引用和自动获取。`sourceUrl` 必须是 `https://doi.org/<doi>`，与 `journal.doi` 一致，拒绝额外查询参数、片段及无效日期。五种引用格式使用期刊名和正式发表年，BibTeX 使用 `@article`，文章编号写入 `eid`。
+
+目录沿用原 schema，固定 arXiv 条目保留在 `papers`，期刊条目放在可选 `journalPapers`。新客户端统一校验和读取两组，稳定 ID 全局唯一。旧客户端忽略扩展组，仍可检查和阅读原有论文，不会因 DOI 拒绝整个目录；旧 EXE 需要更新阅读器才能取得期刊论文。原目录分组保持落盘，避免降级后把期刊条目误当 arXiv 校验。方案见[分发决策](../decisions/ADR-M18-paper-distribution.md)。
 
 首篇内容制作项目在本机 `output/paper-reading/2610.00735v1`，包括原文、TeX/图表来源、174 个翻译单元、逐单元来源映射、译文和页面校验图。发布包在 `output/paper-reading/publish`。这些目录均不属于应用打包输入。
 
@@ -20,22 +26,24 @@ Invoke-WebRequest 'https://www.phonetictoolbox.com/papers/catalog.json' -OutFile
 .\.venv\m14\Scripts\python.exe scripts/prepare_paper_release.py `
   --metadata new-paper.json --original original.pdf --translation translation.pdf --analysis analysis.pdf `
   --catalog current-catalog.json --output output/paper-reading/next-publication
-scp -r output/paper-reading/next-publication/. admin@8.134.196.183:/home/admin/papers-upload/
-scp deployment/papers/publish.py admin@8.134.196.183:/home/admin/papers-upload/publish.py
-ssh admin@8.134.196.183 'python3 /home/admin/papers-upload/publish.py /home/admin/papers-upload'
+# 默认只读核对，获准发布后追加 --apply。
+python deployment/papers/publish_addition.py `
+  --stage output/paper-reading/next-publication --baseline current-catalog.json `
+  --paper-id new-paper-id --ssh-helper <本机SSH辅助脚本> `
+  --report output/paper-reading/next-publication/publication-receipt.json
 ```
 
-发布脚本先核对所有 PDF 大小和 SHA-256，写入以摘要命名的文件，最后原子替换目录。现有 PDF 不会被同名覆盖。目录更新后用 HTTPS 回读目录和全部资产，核对本地发布包摘要。未变的旧文件可以留在服务器，客户端跳过已校验内容。没有独立解读时省略 `--analysis`。
+新增脚本只允许增加指定的一篇，逐字段保留旧论文、分组、顺序、栏目说明及其他目录字段。先核对服务器目录基线、首页及全部旧资产 SHA，再将新文件写到私有暂存目录。Linux 发布器持独占锁并重新核对完整目录 SHA，逐份验证 PDF 大小和摘要，最后原子替换目录。已存在的匹配资产复用，校验失败立即停止。目录更新后用 HTTPS 回读目录和全部资产，核对本地发布包摘要。没有独立解读时省略 `--analysis`。本机 SSH 连接辅助文件不进入仓库或发布包。
 
 客户端启用自动获取后每次启动检查一次，持续运行默认每 6 小时检查，可设置 0.25–720 小时或关闭。定时器由 Qt 宿主持有，切换模块不重复检查。个人 PDF 仅保存在用户选定的本地文件夹，收藏夹是实际子文件夹，不上传分发服务。
 
-栏目说明使用目录独立的可选 `notice` 字段，包含 `id/title/authors/publishedAt/updatedAt/pdf`，不混入科学论文 `papers`。`pdf` 同样包含安全相对路径、大小和 SHA。支持该能力的客户端在启动时取得说明，即使论文自动获取关闭或首次日期更晚；关闭时不下载科学论文。旧版程序忽略说明字段，须更新程序才能显示置顶入口。目录现为两篇科学论文的六份资产，另有一份栏目说明。
+栏目说明使用目录独立的可选 `notice` 字段，包含 `id/title/authors/publishedAt/updatedAt/pdf`，不混入科学论文。`pdf` 同样包含安全相对路径、大小和 SHA。支持该能力的客户端在启动时取得说明，即使论文自动获取关闭或首次日期更晚；关闭时不下载科学论文。旧版程序忽略说明字段，须更新程序才能显示置顶入口。
 
 发布栏目说明可使用 `publish_revision.py --notice`，其余参数沿用基线、发布目录、仓库外 SSH 辅助文件和回执。只允许变更 `notice`，现有论文和其他目录字段逐项保持；与译文修订共用完整资产核验及目录最后发布流程。作者批准的制作项目、图片与回执留在本机忽略目录，不进入应用包或 GitHub。
 
 2026-10-10 已在授权范围内补充 CC BY 4.0 的 2610.00735v1 独立解读，保留原文、译文和栏目日期，全部资产经 HTTPS 回读校验。其余三篇的 arXiv nonexclusive 许可尚无共享译文的明确授权，未上架。服务器凭据仅使用仓库外的本机加密存储，不进入代码、目录包或 Git。应用未公开发布，最新本地免安装EXE验证另见[R4报告](../testing/2026-10-10-m18-r4-report.md)。系统、SSH、HTTPS证书与nginx配置保留。
 
-目录现另收录 CC BY 4.0 的 [2408.05641v1](https://arxiv.org/abs/2408.05641v1)：原稿为 2024-08-10，栏目日期为 2026-10-10，原文 5 页、全文中文译文现为 5 页双栏及独立解读 6 页。译文于2026-10-12按原稿格式修订，原文、解读与稳定ID保持。完整译读与核验来源位于本机 `output/paper-reading/2408.05641v1`，当前排版与发布配方在其 `layout-20261012/`，不作为应用资产。目录两篇及六个PDF均经HTTPS大小/SHA核验。内容更新不要求更换支持当前目录协议的EXE，收藏夹删除等应用功能修改须在更新EXE后使用。
+目录现另收录 CC BY 4.0 的 [2408.05641v1](https://arxiv.org/abs/2408.05641v1)：原稿为 2024-08-10，栏目日期为 2026-10-10，原文 5 页、全文中文译文现为 5 页双栏及独立解读 6 页。译文于2026-10-12按原稿格式修订，原文、解读与稳定ID保持。完整译读与核验来源位于本机 `output/paper-reading/2408.05641v1`，当前排版与发布配方在其 `layout-20261012/`，不作为应用资产。该次目录的两篇及六个PDF均经HTTPS大小/SHA核验。内容更新不要求更换支持当前目录协议的EXE，收藏夹删除等应用功能修改须在更新EXE后使用。
 
 ## 修订已有译文
 

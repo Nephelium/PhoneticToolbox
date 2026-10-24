@@ -1,12 +1,13 @@
 import {canvasFont,freezeFonts,svgFontFamily} from './fonts.js';
 import {VocalTractViewer} from './scene.js';
-import {frameIntervals,silentAt,framePitch} from './keyframes.js';
+import {frameIntervals} from './keyframes.js';
+import {timelinePitch} from './video-timeline.mjs';
 import {dark} from './theme.js';
 
 const b64=bytes=>{let s='';for(let i=0;i<bytes.length;i+=8192)s+=String.fromCharCode(...bytes.subarray(i,i+8192));return btoa(s);};
 const un64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 
-function timeline(c,width,height,time,frames,curve){
+function timeline(c,width,height,time,frames,points,state){
   const intervals=frameIntervals(frames),total=intervals.at(-1).end;
   const panel=dark()?'#182432':'#ffffff',ink=dark()?'#e9f0f9':'#132a49',line=dark()?'#304154':'#dce5f0',green=dark()?'#7cdad4':'#00787e';
   const top=height-156,left=60,right=width-24,at=t=>left+t/total*(right-left),fy=f=>top+54+(350-f)/290*72;
@@ -16,17 +17,13 @@ function timeline(c,width,height,time,frames,curve){
   c.font=canvasFont(16,true);c.fillText(current.name,16,top+23);const nameWidth=c.measureText(current.name).width;
   c.font=canvasFont(16);c.fillText(`  ·  ${current.start.toFixed(2)}–${current.end.toFixed(2)} s`,16+nameWidth,top+23);
   c.textAlign='right';c.fillText(`${time.toFixed(2)} / ${total.toFixed(2)} s  ·  PhoneticToolbox / VTL 2.4`,width-20,top+23);
-  function value(t){
-    if(curve.length){let i=1;while(i<curve.length-1&&curve[i][0]<t/total)i++;const a=curve[i-1],b=curve[i],u=(t/total-a[0])/(b[0]-a[0]);return a[1]+u*(b[1]-a[1]);}
-    return framePitch(frames,t);
-  }
   c.font=canvasFont(11);c.textAlign='right';
   for(const f of [60,150,250,350]){c.strokeStyle=line;c.beginPath();c.moveTo(left,fy(f));c.lineTo(right,fy(f));c.stroke();c.fillStyle=ink;c.fillText(String(f),left-8,fy(f)+4);}
   c.textAlign='center';
   for(const f of intervals){const x=at(f.start),end=at(f.end);c.fillStyle=f.index===current.index?green+'20':line+'35';c.fillRect(x,top+32,end-x,103);c.strokeStyle=line;c.beginPath();c.moveTo(x,top+32);c.lineTo(x,top+135);c.stroke();c.save();c.beginPath();c.rect(x+2,top+32,Math.max(0,end-x-4),20);c.clip();c.fillStyle=ink;c.font=canvasFont(11,true);c.fillText(f.name,(x+end)/2,top+46);c.restore();}
-  c.strokeStyle=green;c.lineWidth=2;c.beginPath();let pen=false;for(let i=0;i<=400;i++){if(silentAt(frames,i/400)){pen=false;continue;}const x=at(total*i/400),y=fy(value(total*i/400));pen?c.lineTo(x,y):c.moveTo(x,y);pen=true;}c.stroke();
+  c.strokeStyle=green;c.lineWidth=2;c.beginPath();let pen=false;for(const point of points||[]){if(point.f0===null){pen=false;continue;}const x=at(point.time),y=fy(point.f0);pen?c.lineTo(x,y):c.moveTo(x,y);pen=true;}c.stroke();
   c.strokeStyle=dark()?'#ffca8c':'#ac5825';c.beginPath();c.moveTo(at(time),top+31);c.lineTo(at(time),top+135);c.stroke();
-  c.textAlign='left';c.fillStyle=ink;const voiced=(frames[current.index].source?.vibration??1)>0;c.fillText(current.aspiration?'送气 · 无基频':current.silent?'静音 · 无基频':voiced?`F0 ${Math.round(value(time))} Hz`:'无周期基频（耳语 / 清声）',16,top+150);
+  c.textAlign='left';c.fillStyle=ink;const f0=state?(state.silent||state.aspiration||(state.source?.vibration??1)===0?null:state.f0):timelinePitch(points,time);c.fillText(state?.aspiration?'送气 · 无基频':state?.silent?'静音 · 无基频':f0!==null?`F0 ${Math.round(f0)} Hz`:'无周期基频（耳语 / 清声）',16,top+150);
   c.textAlign='center';for(let i=1;i<=4;i++)c.fillText((total*i/4).toFixed(2)+' s',at(total*i/4),top+150);
 }
 
@@ -96,7 +93,7 @@ export function setupVideo({post,viewer,getFrames,getCurve,prepare,lock,ready}){
           }
           c.fillStyle=dark()?'#d5e8ef':'#274957';c.font=canvasFont(16);c.textAlign='left';c.fillText(`${sagittal?'正中矢状面':'三维'} · ${modes[mode]}`,x+14,y+25);c.strokeStyle=dark()?'#304154':'#dce5f0';c.lineWidth=1;c.strokeRect(x,y,tileW,tileH);
         }
-        timeline(c,width,height,time,prepared.frames,getCurve());
+        timeline(c,width,height,time,prepared.frames,prepared.timeline,picture.state);
         const frame=new VideoFrame(canvas,{timestamp:Math.round(i*1e6/fps),duration:Math.round(Math.min(1/fps,prepared.duration-time)*1e6)});encoder.encode(frame,{keyFrame:i%fps===0});frame.close();
         if(i%6===0){await encoder.flush();await flush();}
         $('videoProgress').value=(i+1)/frameCount;status(`正在导出 ${i+1} / ${frameCount} 帧${prepared.cached?' · 复用已有动作与音频':''}`);

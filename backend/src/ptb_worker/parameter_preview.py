@@ -17,6 +17,10 @@ MAX_BYTES = 16_000_000
 def render(raw, name, timeout=20):
     if not 0 < len(raw) <= MAX_BYTES:
         raise PreviewError('parameter_input_budget', 413)
+    if sys.platform == 'darwin':
+        from .native.darwin import preview
+        from ptb_api.display_models import ParameterTable
+        return ParameterTable.model_validate(preview('parameter_preview',dict(size=len(raw),name=name),raw,timeout=timeout,output_bytes=MAX_BYTES)).model_dump()
     if sys.platform == 'linux':
         return _render_linux(raw, name, timeout)
     if os.name != 'nt':

@@ -21,9 +21,15 @@
 .\.venv\m14\Scripts\python.exe -B -X utf8 scripts/verify_local_package.py --package dist/<本轮唯一构建名>
 ```
 
+验收临时副本默认放在 `D:/PTB-Compact-QA-20261006`。D 盘空间不足时，可显式加 `--qa-root F:/PTB-Compact-QA-20261024` 使用预留的 F 盘测试目录；报告记录实际根目录，清理仍核对本轮归属和联接，原目录白名单保留。续跑须使用报告中的同一根目录。
+
 此入口串联现有成品分发、缓存并发／中断、设置清理、两种真实换版和默认GPU可见绘制检查。只为验收临时编译专用OwnedQA安装器，不登记产品、不创建正式快捷方式；同字节应用执行中文深安装目录和超260字符缓存路径的真实安装／预热／卸载，并检查活动租约、已完成结果及研究设置摘要。`output/validation/local-package-*/report.json` 保留命令、阶段耗时和最终SHA，各测试回执绑定本轮成品。运行结束后按产物生命周期核对自有进程／联接再清测试副本，保留报告和截图。历史故障的适用性及原生截图仍需结合本次实际改动检查，其他电脑和实体设备不能由自动流程冒充验收。
 
 免安装版改用用户明确选择的缓存目录后，自动 QA 在独立 profile 写入真实 `portable-cache.json` 偏好并使用对应目录，不向产品增加跳过选择的标记。设置清理、并发恢复、可见启动及两类换版入口均沿用此输入；安装版仍按安装标识使用默认目录。首次原生选择的取消、确定和失败恢复必须另验，[当前源码配方](../scripts/verify_portable_cache_qt.py)不替代最终 EXE 的同项验证。
+
+需要保留旧成品或仍在进行成品验收时，封装命令 `release/package_compact.py --package dist/<构建名> --defer-cleanup` 只生成同字节安装包与更新 ZIP，暂不清理旧构建和包装目录。未指定该参数时沿用原有清理流程。
+
+安装器使用 LZMA2 ultra64 压缩同一个应用 EXE，不改变安装后的字节。按 [Inno Setup 压缩说明](https://jrsoftware.org/ishelp/topic_setup_compression.htm)，其解压字典为64 MB；科学运行时、字体与说明书图片不因此裁减。三个分发文件仍分别执行500,000,000字节上限检查，不能只验免安装EXE后推断安装包也合格。
 
 | 任务 | 入口 |
 | --- | --- |
@@ -37,7 +43,7 @@
 | 整理版本更新说明 | [更新记录](../CHANGELOG.md)中的实际纳入改动，归档并整理到 [notes/](notes/) 下的版本文档 |
 
 - 免安装应用：`dist/<构建名>/PhoneticToolbox-windows-x64.exe`。安装版与更新 ZIP：`output/release-staging/<包装名>/artifacts/`，文件名也带 `windows-x64`。构建名唯一，按实际需要生成分发类型，不重复复制。
-- 当前发行支持 Windows 10 1809 及以上、Windows 11 的 x64 系统，暂不支持 x86、ARM64、macOS 和 Linux。安装器使用 `x64os` 与最低系统版本限制。下载文件名和 `build-info.json.exe` 标示架构，安装后及更新 ZIP 内继续使用 `PhoneticToolbox.exe`；`application.json` 描述此固定布局，三者 EXE 字节相同。安装完成后从开始菜单或已选择创建的桌面快捷方式打开应用，不从安装器进程直接启动工作台。
+- 本页Windows发行支持 Windows 10 1809 及以上、Windows 11 的 x64 系统，暂不支持 Windows x86/ARM64。macOS Apple Silicon使用独立构建入口 `scripts/build_macos.py`，各平台实际验收见[3.0.5三端记录](../docs/testing/release-3.0.5.md)。安装器使用 `x64os` 与最低系统版本限制。下载文件名和 `build-info.json.exe` 标示架构，安装后及更新 ZIP 内继续使用 `PhoneticToolbox.exe`；`application.json` 描述此固定布局，三者 EXE 字节相同。安装完成后从开始菜单或已选择创建的桌面快捷方式打开应用，不从安装器进程直接启动工作台。
 - 先生成本轮前端与说明书，再冻结源码。构建使用既有 `.venv/m14`，EGG/LPC 和唇形保留指定科学环境；缓存路径须来自实际盘点，不能照抄历史时间戳目录。
 - 同期仍有前端开发时，可把本轮前端生成到新的 `output/` 子目录，用构建入口的 `--frontend-dist <本轮目录>` 冻结这批资源，避免读取随后被重建的共享 `frontend/dist`。未指定时沿用原入口。
 - 持久缓存按内容校验复用，安装预热、设置清理、卸载保护和真实进度均属于公共实现。首次准备与后续启动分别测量，详见[缓存决定](../docs/decisions/ADR-persistent-startup-cache.md)。

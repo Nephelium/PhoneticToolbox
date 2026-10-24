@@ -20,6 +20,38 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'scripts'))
 from verification_artifacts import verification_run,write_json
 
 
+@pytest.mark.parametrize('url,method,expected',[
+ ('https://www.phonetictoolbox.com/app/geolinguistics/data-manifest.json','GET',True),
+ ('https://www.phonetictoolbox.com/app/geolinguistics/maps/province.json','GET',True),
+ ('https://www.phonetictoolbox.com/app/geolinguistics/main.f64','POST',False),
+ ('https://www.phonetictoolbox.com/app/geolinguistics/../private.json','GET',False),
+ ('https://www.phonetictoolbox.com/app/geolinguistics/%2e%2e/private.json','GET',False),
+ ('https://www.phonetictoolbox.com/app/geolinguistics/catalog.json?research=private','GET',False),
+ ('https://www.phonetictoolbox.com.evil.test/app/geolinguistics/catalog.json','GET',False),
+ ('http://www.phonetictoolbox.com/app/geolinguistics/catalog.json','GET',False),
+ ('https://www.phonetictoolbox.com/app/geolinguistics/book.pdf','GET',False),
+])
+def test_only_official_read_only_map_download_urls_are_allowed(url,method,expected):
+    assert web_assets.permitted_url(url,'http://127.0.0.1:1234',method) is expected
+
+
+@pytest.mark.parametrize('url,method,expected',[
+ ('https://www.phonetictoolbox.com/announcements/v1.json','GET',True),
+ ('https://www.phonetictoolbox.com/announcements/v1.json','POST',False),
+ ('https://www.phonetictoolbox.com/announcements/v1.json','HEAD',False),
+ ('https://www.phonetictoolbox.com/announcements/v1.json?user=private','GET',False),
+ ('https://www.phonetictoolbox.com/announcements/v1.json#notice','GET',False),
+ ('https://www.phonetictoolbox.com:443/announcements/v1.json','GET',False),
+ ('https://user@www.phonetictoolbox.com/announcements/v1.json','GET',False),
+ ('http://www.phonetictoolbox.com/announcements/v1.json','GET',False),
+ ('https://www.phonetictoolbox.com.evil.test/announcements/v1.json','GET',False),
+ ('https://www.phonetictoolbox.com/announcements/private.json','GET',False),
+ ('https://www.phonetictoolbox.com/announcements/%76%31.json','GET',False),
+])
+def test_only_exact_official_read_only_announcement_url_is_allowed(url,method,expected):
+    assert web_assets.permitted_url(url,'http://127.0.0.1:1234',method) is expected
+
+
 @pytest.fixture(scope='module')
 def app():
     return QApplication.instance() or QApplication(['owned-static-asset-tests'])
@@ -86,6 +118,32 @@ def test_both_html_entries_keep_native_channel_bootstrap(app,root,name):
     handler=web_assets.Assets(root,None);job=Job('/'+name)
     handler.requestStarted(job);spin(app,lambda:job.replies or job.errors)
     assert job.replies==[(b'text/html',b'<html><head><script src="qrc:///qtwebchannel/qwebchannel.js"></script><title>Owned</title></head></html>')]
+
+
+def test_geolinguistics_sidecar_data_mount_and_path_boundary(app,root):
+    dist=root/'dist';dist.mkdir()
+    data=root/'geolinguistics-data';data.mkdir()
+    (data/'catalog.json').write_bytes(b'{"sites":930}')
+    (data/'injected.js').write_bytes(b'alert(1)')
+    handler=web_assets.Assets(dist,None,geolinguistics_root=data)
+    good=Job('/geolinguistics/catalog.json');handler.requestStarted(good)
+    spin(app,lambda:good.replies or good.errors)
+    assert good.replies==[(b'application/json',b'{"sites":930}')]
+    for path in ['/geolinguistics/injected.js','/geolinguistics/book/not-a-feature.jpg','/geolinguistics/book/F1_P.jpg','/geolinguistics/book-pages-manifest.json','/geolinguistics/build-audit.json','/geolinguistics/maps/../../../catalog.json']:
+        job=Job(path);handler.requestStarted(job)
+        spin(app,lambda:job.replies or job.errors)
+        assert job.errors and not job.replies
+
+
+def test_geolinguistics_data_next_to_outer_app_and_source_precedence(root):
+    dist=root/'source/frontend/dist';dist.mkdir(parents=True)
+    source=root/'source/local-data/geolinguistics';source.mkdir(parents=True)
+    sidecar=root/'deliveries/geolinguistics-data';sidecar.mkdir(parents=True)
+    executable=root/'deliveries/PhoneticToolbox.app/Contents/MacOS/PhoneticToolbox'
+    assert web_assets.geolinguistics_directory(dist,executable,frozen=False)==source
+    assert web_assets.geolinguistics_directory(dist,executable,frozen=True)==sidecar
+    assert web_assets.geolinguistics_directory(dist,root/'deliveries/PhoneticToolbox.exe',frozen=True)==sidecar
+    assert web_assets.geolinguistics_directory(dist,root/'missing/app',frozen=True) is None
 
 
 def test_slow_read_leaves_gui_and_another_resource_responsive(app,root,monkeypatch):

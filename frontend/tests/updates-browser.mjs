@@ -10,6 +10,8 @@ const frontend=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),r
 const preview=process.argv.includes('--preview');
 const notesOption=process.argv.indexOf('--notes-file');
 const actualNotes=notesOption<0?null:await fs.readFile(path.resolve(process.argv[notesOption+1]),'utf8');
+const actualTitle=actualNotes?.split(/\r?\n/).find(line=>line.trim())?.trim().replace(/^#{1,6}\s+/,'').replace(/^\*\*|\*\*$/g,'');
+const actualVersion=actualTitle?.match(/\d+\.\d+\.\d+/)?.[0];
 const notesIdentity=actualNotes===null?null:{path:path.resolve(process.argv[notesOption+1]),sha256:createHash('sha256').update(actualNotes).digest('hex')};
 const folder=path.join(repo,'output','validation','updates-ui',`${preview?'preview':'check'}-${randomUUID()}`),scratch=path.join(folder,'scratch');
 for(let cursor=folder;;cursor=path.dirname(cursor)){
@@ -74,9 +76,10 @@ try{
  assert.equal(await page.evaluate(()=>window.fixture.requests.filter(r=>r.operation==='download').length),0);
  checks.push({name:'actual AppShell opens the shared update dialog with version comparison, eight list items and eight bold topics; startup never downloads'});
  if(actualNotes!==null){
-   await page.evaluate(notes=>{window.fixture.release.notes=notes;window.fixture.release.version='3.0.3';},actualNotes);
+   assert(actualTitle&&actualVersion,'Release notes must identify their actual version');
+   await page.evaluate(({notes,version})=>{window.fixture.release.notes=notes;window.fixture.release.version=version;},{notes:actualNotes,version:actualVersion});
    await dialog.locator('summary').click();await dialog.getByRole('button',{name:'检查更新',exact:true}).click();
-   await dialog.locator('.release-markdown strong').getByText('PhoneticToolbox 3.0.3 更新啦！',{exact:true}).waitFor();
+   await dialog.locator('.release-markdown strong').getByText(actualTitle,{exact:true}).waitFor();
    await dialog.locator('summary').click();
    // Expected structure comes from the author's current Markdown, including
    // revisions made during release review; do not bind a writer to old counts.
@@ -93,7 +96,7 @@ try{
      await dialog.locator('.release-notes').evaluate(el=>el.scrollTop=el.scrollHeight);
      await dialog.screenshot({path:path.join(folder,`notes-end-${theme}-${width}-${scale}.png`)});
      await dialog.locator('.release-notes').evaluate(el=>el.scrollTop=0);
-     checks.push({name:'actual 3.0.3 notes render safely with headings, lists, link, scroll and visible actions',theme,width,height,scale,font,layout});
+     checks.push({name:`actual ${actualVersion} notes render safely with headings, lists, link, scroll and visible actions`,theme,width,height,scale,font,layout});
    }
    assert.equal(await page.evaluate(()=>window.fixture.requests.filter(r=>r.operation==='download'||r.operation==='apply').length),0);
    assert.deepEqual(errors,[]);success=true;

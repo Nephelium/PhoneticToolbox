@@ -6,7 +6,7 @@ import {request,response,ipaChart} from './platform.js';
 import {VocalTractViewer} from './viewer.js';
 import {setupMonitor} from './monitor.js';
 import {nearestSection} from './geometry.mjs';
-import {setupPresets} from './presets.js';
+import {setupPresets,builtinPose} from './presets.js';
 import {setupKeyframes} from './keyframes.js';
 import {moveControl,PoseHistory,ORGAN_PARAMS} from './controls.mjs';
 
@@ -92,7 +92,7 @@ function updateControls(){
   $('lipWidthRange').value=Math.round(lipWidth*100);$('lipWidthValue').textContent=Math.round(lipWidth*100)+'%';
   $('portRange').value=area;$('portValue').textContent=area.toFixed(2)+' cm²';$('portToggle').setAttribute('aria-checked',area>0);$('portToggle').textContent=area>0?'已开放':'已关闭';
 }
-function choosePreset(name){beginEdit();const pose=meta.default_poses[name]||(meta.consonants?.[name]?{...meta.consonants[name],lip_width:1,f0:meta.default_f0??120}:null);if(pose)restoreEdit({...pose,preset:name});else{manualRoot=false;larynxHeight=0;tongueShape=[0,0,0,0];lipShape=[0,0,0,0];params=[...meta.presets[name]];lipWidth=1;selectedPreset=name;updateControls();dirty=true;queuePose();}endEdit();}
+function choosePreset(name){beginEdit();restoreEdit(builtinPose(meta,name));endEdit();}
 function updateSourceControls(){
   if(!sourceSettings)return;
   $('sourceMode').value=sourceSettings.mode;
@@ -118,7 +118,7 @@ function setupControls(){
   $('gainSelect').onchange=async()=>{try{updateAudio(await(await post('audio/settings',{gain_db:+$('gainSelect').value})).json());}catch(e){toast(e.message);}};
 
   const symbols={E:'ɛ','2':'ø'};
-  presetLibrary=setupPresets({initial:meta.custom_presets,initialLibrary:meta.preset_library,builtins:Object.keys(meta.presets).map(id=>({params:[...meta.presets[id]],lip_width:1,f0:meta.default_f0??120,duration:.2,source:{...meta.source_presets.voiced},...meta.consonants?.[id],...meta.default_poses[id],id,name:symbols[id]||id,builtin:true})),favorites:meta.favorites,chooseBuiltin:choosePreset,chart:meta.ipa_chart,getPose:currentEdit,post,isReady:()=>!motionBusy&&!dirty&&!inFlight,onSaved:p=>{selectedPreset=p.id;updateControls();},notify:toast,apply:p=>{beginEdit();restoreEdit({...p,preset:p.id,source:p.source||sourceSettings});endEdit();}});
+  presetLibrary=setupPresets({initial:meta.custom_presets,initialLibrary:meta.preset_library,builtins:Object.keys(meta.presets).map(id=>({...builtinPose(meta,id),duration:.2,id,name:symbols[id]||id,builtin:true})),favorites:meta.favorites,chooseBuiltin:choosePreset,chart:meta.ipa_chart,getPose:currentEdit,post,isReady:()=>!motionBusy&&!dirty&&!inFlight,onSaved:p=>{selectedPreset=p.id;updateControls();},onDeleted:id=>{if(selectedPreset===id)selectedPreset='';updateControls();},notify:toast,apply:p=>{beginEdit();restoreEdit({...p,preset:p.id,source:p.source||sourceSettings});endEdit();}});
   const groups=[['嘴唇与下颌',['JA','LP','LD'],false,'lips'],['舌头',['TCX','TCY','TBX','TBY','TTX','TTY'],true,'tongue'],['舌根',['TRX','TRY'],true,'tongue'],['舌骨',['HX','HY'],true,'tongue'],['软腭',['VS'],false,'velum'],['舌侧缘',['TS1','TS2','TS3'],true,'tongue']];
   for(const [label,names,open,organ] of groups){const details=document.createElement('section');details.className='parameter-group';details.dataset.organ=organ;const summary=document.createElement('h3');summary.className='group-title';summary.textContent=label;details.append(summary);
     for(const name of names){const index=meta.parameters.findIndex(x=>x.name===name),p=meta.parameters[index],row=document.createElement('div');row.className='parameter';
@@ -162,7 +162,7 @@ $('sliceRange').oninput=()=>selectSection(+$('sliceRange').value);
   $('aboutButton').onclick=()=>$('aboutDialog').showModal();$('sharedReferences').onclick=()=>parent.postMessage({type:'m10-references'},'*');$('sharedHelp').onclick=()=>parent.postMessage({type:'m10-help'},'*');$('closeAbout').onclick=()=>$('aboutDialog').close();
   $('sourceState').textContent=meta.audio_locked?'静音测试':'手动播放';
   if(meta.audio_locked){document.body.classList.add('audio-locked');document.querySelectorAll('#oneSecondButton,#liveButton,#testToneButton,#volumeRange,#outputDevice,#gainSelect').forEach(e=>e.disabled=true);$('audioStatus').textContent='静音建模已锁定，后端不允许音频输出。';}
-  keyframeEditor=setupKeyframes({metadata:meta,getCatalog:()=>[...Object.entries(meta.presets).map(([id,p])=>({params:[...p],lip_width:1,f0:meta.default_f0??120,duration:.2,source:{...meta.source_presets.voiced},...meta.consonants?.[id],...meta.default_poses[id],name:({E:'ɛ','2':'ø'}[id]||id)})),...presetLibrary.getCustom()],initialGlobals:meta.saved_globals,initialFeatures:meta.saved_features,initialFrames:meta.saved_frames,initialCurve:meta.saved_curve,initialPressureCurve:meta.saved_pressure,getPerturbation:()=>perturbation,setPerturbation,canSynthesize:()=>!unsupportedPerturbation,getPose:currentEdit,applyPose:(state,animated=false)=>{if(animated){manualRoot=state.manual_root??false;larynxHeight=state.larynx_height??0;tongueShape=[...(state.tongue_shape??[0,0,0,0])];lipShape=[...(state.lip_shape??[0,0,0,0])];params=[...state.params];sourceSettings={...(state.source||meta.source_presets.voiced)};lipWidth=state.lip_width;selectedPreset='';snapshot=state;$('f0Range').value=state.f0;$('f0Output').textContent=Math.round(state.f0)+' Hz';updateControls();updateModel(state);drawCharts();}else{beginEdit();restoreEdit(state);endEdit();}},post,setBusy:value=>{keyframeBusy=value;applyPoseLock();},maxDuration:meta.max_animation_duration??60,isReady:()=>!motionBusy&&!dirty&&!inFlight&&!rendering,isSilent:meta.audio_locked,keepVowel:()=>$('keepVowel').checked,viewer});
+  keyframeEditor=setupKeyframes({metadata:meta,getCatalog:()=>[...Object.entries(meta.presets).map(([id,p])=>({...builtinPose(meta,id),duration:.2,name:({E:'ɛ','2':'ø'}[id]||id)})),...presetLibrary.getCustom()],initialGlobals:meta.saved_globals,initialFeatures:meta.saved_features,initialFrames:meta.saved_frames,initialCurve:meta.saved_curve,initialPressureCurve:meta.saved_pressure,getPerturbation:()=>perturbation,setPerturbation,canSynthesize:()=>!unsupportedPerturbation,getPose:currentEdit,applyPose:(state,animated=false)=>{if(animated){manualRoot=state.manual_root??false;larynxHeight=state.larynx_height??0;tongueShape=[...(state.tongue_shape??[0,0,0,0])];lipShape=[...(state.lip_shape??[0,0,0,0])];params=[...state.params];sourceSettings={...(state.source||meta.source_presets.voiced)};lipWidth=state.lip_width;selectedPreset='';snapshot=state;$('f0Range').value=state.f0;$('f0Output').textContent=Math.round(state.f0)+' Hz';updateControls();updateModel(state);drawCharts();}else{beginEdit();restoreEdit(state);endEdit();}},post,setBusy:value=>{keyframeBusy=value;applyPoseLock();},maxDuration:meta.max_animation_duration??60,isReady:()=>!motionBusy&&!dirty&&!inFlight&&!rendering,isSilent:meta.audio_locked,keepVowel:()=>$('keepVowel').checked,viewer});
   updateControls();updateHistory();
 }
 async function setPerturbation(value){
@@ -233,7 +233,7 @@ let sideDrag=null,sectionScale=1;
 $('sectionHandles').addEventListener('pointerdown',e=>{const t=e.target.closest('[data-side]');if(!t||motionBusy)return;beginEdit();const svg=$('sectionHandles'),sample=+t.dataset.sample,index=meta.parameters.findIndex(p=>p.name==='TS'+selectedSide),height=snapshot.lower[sample];sideDrag={start:e.clientY,params:[...params],index,sample,origin:height,height,parameter:params[index],gain:[1.2,.36,.3][selectedSide-1],scale:sectionScale*svg.getBoundingClientRect().height/svg.viewBox.baseVal.height};svg.setPointerCapture(e.pointerId);e.preventDefault();});
 $('sectionHandles').addEventListener('pointermove',e=>{if(!sideDrag)return;const d=sideDrag,error=d.origin+(d.start-e.clientY)/d.scale-d.height,p=meta.parameters[d.index];params=[...d.params];let base=d.parameter;if(selectedSide<3)base=error<0?Math.min(.3,base):Math.max(-.15,base);params[d.index]=Math.max(p.min,Math.min(p.max,base+error*d.gain));markChanged();});
 for(const event of ['pointerup','pointercancel','lostpointercapture'])$('sectionHandles').addEventListener(event,()=>{if(sideDrag){sideDrag=null;endEdit();}});
-document.querySelectorAll('[data-side-region]').forEach(b=>b.onclick=()=>{selectedSide=+b.dataset.sideRegion;document.querySelectorAll('[data-side-region]').forEach(t=>t.classList.toggle('selected',t===b));if(snapshot){const target=viewer.handles().find(h=>h.name==='side'+selectedSide).p;let best=3;for(let i=4;i<snapshot.centerline.length-3;i++)if(Math.hypot(snapshot.centerline[i][0]-target[0],snapshot.centerline[i][1]-target[1])<Math.hypot(snapshot.centerline[best][0]-target[0],snapshot.centerline[best][1]-target[1]))best=i;$('sliceRange').value=best;dirty=true;queuePose();}});
+document.querySelectorAll('[data-side-region]').forEach(b=>b.onclick=()=>{selectedSide=+b.dataset.sideRegion;document.querySelectorAll('[data-side-region]').forEach(t=>t.classList.toggle('selected',t===b));if(snapshot){const target=viewer.handles().find(h=>h.name==='side'+selectedSide).p;let best=3;for(let i=4;i<snapshot.centerline.length-3;i++)if(Math.hypot(snapshot.centerline[i][0]-target[0],snapshot.centerline[i][1]-target[1])<Math.hypot(snapshot.centerline[best][0]-target[0],snapshot.centerline[best][1]-target[1]))best=i;selectSection(best);}});
 function drawSideHandles(s,w,h,x,y,scale){
   sectionScale=scale;const svg=$('sectionHandles'),focus=svg.contains(document.activeElement);svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.replaceChildren();svg.hidden=viewer.selected!=='tongue';if(svg.hidden)return;
   const valid=s.lower.map((v,i)=>v===null?null:i).filter(i=>i!==null);if(valid.length<2)return;
@@ -275,7 +275,7 @@ function selectSection(index){
   if(!snapshot)return;
   index=Math.max(0,Math.min(snapshot.centerline.length-1,index));$('sliceRange').value=index;snapshot.section=index;
   snapshot.upper=snapshot.airway_sections[index].upper;snapshot.lower=snapshot.airway_sections[index].lower;
-  viewer.state.section=index;viewer.draw2D();$('slicePosition').textContent=snapshot.centerline[index][2].toFixed(1)+' cm';drawCharts();
+  Object.assign(viewer.state,{section:index,upper:snapshot.upper,lower:snapshot.lower});viewer.draw2D();$('slicePosition').textContent=snapshot.centerline[index][2].toFixed(1)+' cm';drawCharts();
 }
 function selectArea(e){if(!snapshot)return;const r=$('areaChart').getBoundingClientRect(),total=snapshot.tube_lengths.reduce((a,b)=>a+b,0);selectSection(nearestSection(snapshot,Math.max(0,Math.min(1,(e.clientX-r.left-27)/(r.width-34)))*total));}
 let areaDrag=false;

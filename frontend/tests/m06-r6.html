@@ -1,0 +1,26 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>M06 isolated browser acceptance</title><link rel="icon" href="data:,"><style>html,body,#app{height:100%;}#app{display:flex;}#app>.module-frame{flex:1;}</style><body><div id="app"></div><script type="module">
+import {createApp,h,nextTick} from 'vue';
+import SpeechSynthesisPage from '/src/modules/speech-synthesis/SpeechSynthesisPage.vue';
+import {BrowserScience} from '/src/platform/browser-science.ts';
+import {browserM06} from '/src/platform/browser-m06.ts';
+import {LocalAssets,LocalStorageError} from '/src/platform/local-assets.ts';
+import {writeWebSettings} from '/src/state/web-settings.ts';
+import {states} from '/src/state/workspace.ts';
+import '/src/design/tokens.css';
+const scope='server:m06-r6:isolated:M06',science=new BrowserScience(()=>new Worker('/__m06_built_science.js')),assets=new LocalAssets('m06-r6','isolated');
+let app,blocked=false,computes=0,remoteCalls=0;const diagnostics=[];
+const compute=async(action,parameters,seed,signal)=>{try{return await science.run('speech_synthesis',new ArrayBuffer(0),{action,parameters,seed},signal);}catch(error){diagnostics.push({stage:'compute',message:String(error),stack:error?.stack,name:error?.name});throw error;}};
+const remote={async run(){remoteCalls++;throw Error('Unexpected server fallback');},async cancel(){remoteCalls++;throw Error('Unexpected server cancellation');},async download(result,name){await assets.download(result.files.find(f=>f.name===name).id,name);}};
+const port=browserM06(remote,{project:'isolated',async compute(args,signal){computes++;return compute(args.action,args.parameters,args.seed,signal);},async save(name,raw,signal){signal.throwIfAborted();if(blocked)throw new LocalStorageError('本机存储空间不足（受控验证）');const file=await assets.save(name,new Blob([raw]));return {id:file.id,sha256:file.sha256,size_bytes:file.blob.size};}});
+const files={kind:'server',m06:port,async list(){return [];},async read(file){const value=await assets.get(file.id);return {buffer:await value.blob.arrayBuffer(),sha256:value.sha256};},dispose(){science.close();}};
+async function mount(preferences={}){
+ if(app){app.unmount();await nextTick();}
+ delete states[scope];delete states[scope+'.m06-source'];
+ localStorage.removeItem('ptb.v3.m06.draft.'+scope);
+ localStorage.removeItem('ptb.v3.web-settings.v1.m06-r6.M06');
+ writeWebSettings(scope,preferences);
+ app=createApp({render:()=>h(SpeechSynthesisPage,{context:{key:'server:m06-r6:isolated',label:'独立验证',files},stateKey:scope,active:true})});app.mount('#app');await nextTick();
+}
+window.qa={mount,compute,block(value){blocked=value;},stats:()=>({computes,remoteCalls}),diagnostics,async metadata(){const all=await assets.list(),item=all.find(f=>f.name.endsWith('m06.ptb.json'));return item?JSON.parse(await item.blob.text()):null;},async dispose(){app.unmount();science.close();for(const file of await assets.list())await assets.remove(file.id);}};
+await mount();window.qaReady=true;
+</script></body></html>

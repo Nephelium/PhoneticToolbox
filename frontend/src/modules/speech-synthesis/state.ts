@@ -6,6 +6,26 @@ export const parameters:Record<string,[number,number,number,string]>=Object.from
 export const vowels=catalog.vowels;export const presets=catalog.presets as Record<string,Record<string,number>>;
 export const defaults=():Config=>JSON.parse(JSON.stringify(catalog.defaults));
 export const clone=(c:Config)=>JSON.parse(JSON.stringify(c)) as Config;
+export const unavailableParameters=new Set(['A1','A2','A3','A4','A5']);
+export const preferenceKeys=['duration','sample_rate','fade_in','fade_out','smooth','f0_range','f0_method','f0_transform'] as const;
+export function configPreferences(c:Config){return JSON.parse(JSON.stringify({...Object.fromEntries(preferenceKeys.map(k=>[k,c[k]])),curveOverrides:Object.fromEntries(Object.entries(c.curves).map(([k,v])=>[k,v.override]))})) as Pick<Config,typeof preferenceKeys[number]>&{curveOverrides:Record<string,number|null>};}
+/** Hydrate preferences transactionally; curve-dependent metadata is rebuilt. */
+export function restorePreferences(current:Config,settings:ReturnType<typeof configPreferences>):Config{
+ const next=clone(valid(clone(current)));
+ resize(next,settings.duration);
+ for(const key of ['sample_rate','fade_in','fade_out','smooth','f0_method'] as const)Object.assign(next,{[key]:settings[key]});
+ const transform=settings.f0_transform;
+ if(!transform||![null,'假声','嘎裂'].includes(transform.preset))throw Error('F0 平移设置无效');
+ const sourceCurves=clone(next).curves;
+ preset(next,transform.preset??'常态浊声');
+ for(const key of Object.keys(next.curves))if(key!=='F0')next.curves[key]=sourceCurves[key];
+ f0Range(next,...settings.f0_range);
+ for(const [key,value] of Object.entries(settings.curveOverrides))if(next.curves[key])next.curves[key].override=value;
+ return valid(next);
+}
+function editable(name:string){if(unavailableParameters.has(name))throw Error(name+' 在当前串联合成中不可编辑');}
+function editValue(name:string,value:number){if(name==='HNR'&&(value<0||value>60))throw Error('HNR 的有效编辑范围为 0–60 dB');return value;}
+export function editLimits(c:Config,name:string):number[]{return name==='F0'?c.f0_range:name==='HNR'?[0,60]:parameters[name].slice(1,3) as number[];}
 export function number(value:unknown,label:string){if(value===''||value===null||!Number.isFinite(Number(value)))throw Error(label+'需要有限数值');return Number(value);}
 export function valid(c:Config):Config {
  if((c.schema_version as string)==='m06/1')throw Error('此文件使用旧版 AV 标尺，无法直接换算。原文件保留，请使用新版参数。');
@@ -36,12 +56,13 @@ export function valid(c:Config):Config {
 }
 export function ipa(text:string){if(!text.trim())throw Error('请输入元音序列');let prev=false;for(const [i,ch] of [...text].entries()){if(ch.toLowerCase() in vowels||ch===' ')prev=true;else if('+-*/'.includes(ch)&&prev)continue;else throw Error(`IPA 第 ${i+1} 个字符无效：${ch}`);}}
 export function override(c:Config,name:string,text:string){
+ editable(name);
  const curve=c.curves[name];if(!text.trim()){curve.override=null;return;}
  const factor=name==='Shimmer'?100:1,scalar=Number(text);
- if(Number.isFinite(scalar)){const next=clone(c);next.curves[name].override=scalar/factor;valid(next);curve.override=scalar/factor;return;}
+ if(Number.isFinite(scalar)){const next=clone(c);next.curves[name].override=editValue(name,scalar/factor);valid(next);curve.override=scalar/factor;return;}
  const parts=text.replaceAll('，',',').replaceAll('；',';').split(';'),points:[number,number][]=[];
  for(const [i,part] of parts.entries()){
-  const values=part.trim().split(/[,\s]+/).map(x=>number(x,name)/factor),a=i*c.duration/parts.length,b=(i+1)*c.duration/parts.length;
+  const values=part.trim().split(/[,\s]+/).map(x=>editValue(name,number(x,name)/factor)),a=i*c.duration/parts.length,b=(i+1)*c.duration/parts.length;
   if(values.length===1)points.push([a,values[0]],[b,values[0]]);
   else values.forEach((v,j)=>points.push([a+j/(values.length-1)*(b-a),v]));
  }
@@ -72,7 +93,7 @@ export function preset(c:Config,name:string){
  for(const [key,value] of Object.entries(presets[name]))next.curves[key].override=value;
  valid(next);Object.assign(c,next);
 }
-export function draw(c:Config,name:string,a:number,b:number,value:number,reset=false){const curve=c.curves[name];if(curve.override!==null)throw Error('请先清除覆盖，再编辑曲线');const lo=Math.max(0,Math.min(c.duration,a,b)),hi=Math.max(0,Math.min(c.duration,Math.max(a,b))),range=name==='F0'?c.f0_range:parameters[name].slice(1,3) as number[];const lower=name==='F0'?Math.max(range[0],1+c.f0_transform.offset_hz):range[0],upper=name==='F0'?Math.min(range[1],3000+c.f0_transform.offset_hz):range[1];const v=Math.min(upper,Math.max(lower,reset?parameters[name][0]+(name==='F0'?c.f0_transform.offset_hz:0):value));curve.points=[...curve.points.filter(([t])=>t<lo||t>hi),[lo,v] as [number,number],[hi,v] as [number,number]].sort((a,b)=>a[0]-b[0]);}
+export function draw(c:Config,name:string,a:number,b:number,value:number,reset=false){editable(name);const curve=c.curves[name];if(curve.override!==null)throw Error('请先清除覆盖，再编辑曲线');const lo=Math.max(0,Math.min(c.duration,a,b)),hi=Math.max(0,Math.min(c.duration,Math.max(a,b))),range=editLimits(c,name);const lower=name==='F0'?Math.max(range[0],1+c.f0_transform.offset_hz):range[0],upper=name==='F0'?Math.min(range[1],3000+c.f0_transform.offset_hz):range[1];const v=Math.min(upper,Math.max(lower,reset?parameters[name][0]+(name==='F0'?c.f0_transform.offset_hz:0):value));curve.points=[...curve.points.filter(([t])=>t<lo||t>hi),[lo,v] as [number,number],[hi,v] as [number,number]].sort((a,b)=>a[0]-b[0]);}
 function csvCell(v:unknown){return '"'+String(v).replaceAll('"','""')+'"';}
 export function exportParams(c:Config){valid(c);const rows:unknown[][]=[['Parameter','Time','Value','Global'],['__DURATION__',c.duration,0,false],['__VOWEL_INPUT__',0,c.sequence,false],['__PTB_CONFIG__',0,JSON.stringify(c),false]];for(const [n,curve] of Object.entries(c.curves)){if(curve.override!==null)rows.push([n,0,curve.override,true]);else for(const [t,v] of curve.points)rows.push([n,t,v,false]);}return rows.map(r=>r.map(csvCell).join(',')).join('\r\n');}
 function csv(text:string){const rows:string[][]=[];let row:string[]=[],cell='',quoted=false;for(let i=0;i<text.length;i++){const ch=text[i];if(ch==='"'){if(quoted&&text[i+1]==='"'){cell+='"';i++;}else quoted=!quoted;}else if(!quoted&&ch===','){row.push(cell);cell='';}else if(!quoted&&(ch==='\n'||ch==='\r')){if(ch==='\r'&&text[i+1]==='\n')i++;row.push(cell);rows.push(row);row=[];cell='';}else cell+=ch;}if(quoted)throw Error('CSV 引号未闭合');if(cell||row.length){row.push(cell);rows.push(row);}return rows;}

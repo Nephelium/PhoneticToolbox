@@ -8,8 +8,12 @@ from .spectrogram_preview import PreviewError
 
 
 def render(files,asset_id,view):
-    if os.name!='nt':raise PreviewError('preview_platform_unverified',503)
-    from .native.windows import OwnedProcess
+    import sys
+    if os.name!='nt' and sys.platform!='darwin':raise PreviewError('preview_platform_unverified',503)
+    if sys.platform=='darwin':
+        from .native.darwin import OwnedProcess
+    else:
+        from .native.windows import OwnedProcess
     from .process_entry import command
     from .io.scratch import no_links
     with files.locked():

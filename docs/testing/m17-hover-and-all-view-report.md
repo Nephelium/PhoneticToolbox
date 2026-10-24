@@ -43,3 +43,12 @@ Windows 源码已执行 `node --test tests/m17-ipa-plus.test.ts tests/m17-r2-sou
 滚轮用例记录滚动前后按钮、说明和编辑框的实际矩形，要求按钮与说明移动距离等于实际滚动量乘页面比例，并滚出表区上沿，编辑框保持位置。VoQS仅在内容溢出时验滚轮，否则核对说明归属滚动容器。初次VoQS在宽屏全部可见，测试错误要求必须滚动已修正；后续旧脚本直接设置DOM缩放未保持应用缩放状态，改用 `setPageScale`，原布局断言保留。旧来源断言同步现行 GB/T 格式与2026-10-11访问日期，不修改来源数据。失败报告保留。
 
 本轮未验原生Qt、最终EXE、系统DPI及跨平台，未打包或发布。
+
+
+## 2026-10-23 元音图透明背景
+
+- 原因：`frontend/src/design/background.css` 将 `.m17-vowels>svg` 列入背景图片模式下的强制 `var(--panel)` 铺底范围。移除该选择器后 SVG 使用默认透明背景，其他图像/科学绘图的底色规则保持。
+- Windows 独立 Chrome 浅/深主题实际背景图验证通过，元音 SVG 背景 rgba(0, 0, 0, 0)、路径无填充、28 个按钮保留且点击输入 i 正确，页面错误 0；typecheck、22 项 M17 测试、contracts:check、ui-data:check、build:workbench 通过。
+- 执行命令：`npm run typecheck`、`node --test tests/m17-ipa-plus.test.ts tests/m17-r2-sources.test.ts tests/m17-r3.test.ts`、`npm run contracts:check`、`npm run ui-data:check`、`npm run build:workbench`。构建仅有大分块与插件耗时提示。
+- 浏览器通过一次性 Node/Playwright 探针启动独立 Chrome 与项目 Vite，使用 `changeBackground` 导入内存生成的条纹 PNG，分别检查浅深主题计算样式、28 个按钮及输入结果，截图已目检。未使用用户设置/草稿；自有浏览器与服务已关闭，临时浏览器配置由 Playwright 管理。报告及两张截图保存在 `output/playwright/m17-vowel-transparent-20261023/`。
+- Qt、最终 EXE/Mac 包与公开网页未更新或新增验证，已打开的源码窗口需重开载入。

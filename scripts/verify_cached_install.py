@@ -11,16 +11,20 @@ import time
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'desktop/src'))
 from ptb_desktop.startup_cache import lease
+from owned_qa_paths import DEFAULT_QA_ROOT, qa_output
 
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--setup',type=Path,required=True)
     parser.add_argument('--exe',type=Path,required=True)
     parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--qa-root', type=Path, default=DEFAULT_QA_ROOT)
+    parser.add_argument('--blocked-cache-failure', action='store_true',
+                        help='Verify actual installer reports preparation failure with a file blocking its cache directory')
     parser.add_argument('--with-workspace',action='store_true',help='Exercise the frozen cleanup service with an owned completed result')
     parser.add_argument('--long-paths',action='store_true',help='Use deep Chinese install/user paths and confirm restored cache paths exceed 260 characters')
-    args=parser.parse_args();out=args.output.resolve();setup=args.setup.resolve()
-    if not out.is_relative_to(Path('D:/PTB-Compact-QA-20261006')) or not setup.is_relative_to(ROOT/'output/validation'):
+    args=parser.parse_args();out=qa_output(args.output,args.qa_root);setup=args.setup.resolve()
+    if not setup.is_relative_to(ROOT/'output/validation'):
         raise ValueError('Only a dedicated OwnedQA setup and new external QA directory are allowed')
     out.mkdir(parents=True,exist_ok=False)
     profile=out/'profile';temp=out/'temp';installed=out/'installed'
@@ -40,11 +44,28 @@ def main():
             code=subprocess.run([str(x) for x in command],cwd=out,env=env,stdout=log,stderr=subprocess.STDOUT,creationflags=subprocess.CREATE_NO_WINDOW,timeout=600).returncode
         return {'exitCode':code,'seconds':time.monotonic()-start}
     cache=profile/'PhoneticToolbox/v3/startup-cache'
+    if args.blocked_cache_failure:
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        cache.write_bytes(b'Owned fixture blocks cache directory creation')
     report={'success':False,'scope':'Real OwnedQA installer/uninstaller, no product registration or shortcuts; Windows-only PATH and private profile'}
     report['paths']={'longPathScenario':args.long_paths,'installedExeCharacters':len(str(installed/'PhoneticToolbox.exe')),
                      'localAppDataCharacters':len(str(profile)),'tempCharacters':len(str(temp))}
     try:
         report['install']=run([setup,'/CURRENTUSER','/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/SP-','/DIR='+str(installed),'/LOG='+str(out/'install.log')],'install')
+        if args.blocked_cache_failure:
+            report['scenario']='real preparation failure caused by blocked owned cache path'
+            assert report['install']['exitCode']==31,'Preparation failure must return custom nonzero exit code 31'
+            assert cache.is_file(),'The intentional blocking fixture must remain intact'
+            assert not (cache/'last-launch.json').exists()
+            report['bootstrapError']=(out/'bootstrap-error.log').read_text('utf8')
+            assert 'Error' in report['bootstrapError']
+            with (installed/'PhoneticToolbox.exe').open('rb') as stream:
+                report['exeSha256']=hashlib.file_digest(stream,'sha256').hexdigest()
+            with args.exe.open('rb') as stream:
+                assert report['exeSha256']==hashlib.file_digest(stream,'sha256').hexdigest()
+            report['success']=True
+            print(json.dumps(report),flush=True)
+            return
         assert report['install']['exitCode']==0
         app=installed/'PhoneticToolbox.exe'
         def digest(file):

@@ -48,9 +48,9 @@ def verify(window, output, report):
         fill('待转换汉字文本', '女略')
         until('document.querySelectorAll(".m13-mapped").length===2')
         assert js('[...document.querySelectorAll(".m13-mapped")].every(e=>e.dataset.value.length>0)')
-        selector = '.mandarin-ipa-page .module-toolbar-primary>button'
-        js('document.querySelector('+json.dumps(selector)+').click()')
-        until('document.querySelector(".mandarin-ipa-page").innerText.length>0')
+        click('保存为 PNG')
+        until('!!document.querySelector(".png-preview img")&&!document.querySelector("dialog .primary").disabled')
+        click('导出 PNG')
         deadline = time.monotonic() + 30
         while not any(p.exists() and p.suffix == '.png' for p in exports) and time.monotonic() < deadline: pause()
         assert any(p.exists() and p.suffix == '.png' for p in exports)

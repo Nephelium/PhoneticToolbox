@@ -88,7 +88,7 @@ def main():
             click('等宽排版');input_text('春江花月夜\n银行行走');select('Standard Chinese (Beijing)严');range_value('汉字字号',32);range_value('音标字号',22);range_value('字音间距',4);range_value('行距',22)
             js('(()=>{const e=document.querySelector("input[value=stacked]");e.checked=true;e.dispatchEvent(new Event("change",{bubbles:true}));})()');pause(180)
             js('(()=>{const e=document.querySelector(".font-family-select select");e.value="KaiTi";e.dispatchEvent(new Event("change",{bubbles:true}));const b=[...document.querySelectorAll("button")].find(b=>b.textContent.trim()==="B 粗体");b?.click();for(const [label,color] of [["音标颜色","#2345ab"],["汉字颜色","#ab4523"]]){const c=document.querySelector("input[aria-label="+label+"]");c.value=color;c.dispatchEvent(new Event("input",{bubbles:true}));}})()');pause(250);capture('m13-layout-current-20261011')
-            js('window.qaPngPaint=[];(()=>{const original=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(text,...args){window.qaPngPaint.push(text);return original.call(this,text,...args);};})()');click('保存为 PNG')
+            js('window.qaPngPaint=[];(()=>{const original=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(text,...args){window.qaPngPaint.push(text);return original.call(this,text,...args);};})()');click('保存为 PNG');until('!!document.querySelector(".png-preview img")&&!document.querySelector("dialog .primary").disabled');click('导出 PNG')
             deadline=time.monotonic()+30
             while not export_file.is_file() and time.monotonic()<deadline:pause()
             assert export_file.is_file(),js('document.body.innerText.slice(-1000)')
@@ -100,7 +100,7 @@ def main():
             click('恢复本机草稿');input_text('春江花月夜\n银行行走！');click('关闭 汉字转国际音标');capture('m13-unsaved-close-dialog-r2-light-scaled-r20261007');click('取消关闭')
             input_text('春江花月夜\n银行行走')
             js('(()=>{const e=document.querySelector(".font-family-select select");e.value="__custom__";e.dispatchEvent(new Event("change",{bubbles:true}));})()');pause(180)
-            js('(()=>{const e=document.querySelector(".font-family-select input");e.value="M13-Missing-Font-QA";e.dispatchEvent(new Event("input",{bubbles:true}));})()');pause(180);click('保存为 PNG');until('(()=>{const s=document.querySelector(".mandarin-ipa-page .module-status");return s?.textContent.includes("M13-Missing-Font-QA")&&s.textContent.includes("不可用");})()');capture('m13-unavailable-font-error-r2-light-scaled-r20261007')
+            js('(()=>{const e=document.querySelector(".font-family-select input");e.value="M13-Missing-Font-QA";e.dispatchEvent(new Event("input",{bubbles:true}));})()');pause(180);click('保存为 PNG');until('(()=>{const s=document.querySelector("dialog [role=alert]");return s?.textContent.includes("M13-Missing-Font-QA")&&s.textContent.includes("不可用");})()');capture('m13-unavailable-font-error-r2-light-scaled-r20261007')
             report['checks']=['equal width in actual Qt','row spacing changes real row location','character count in heading and aligned input/result bottom','hidden Qt DPR1.5 page100 maximized','all M13 screenshots refreshed including draft and error states'];report['success']=True
         except Exception:report['errors'].append(traceback.format_exc());raise
         finally:

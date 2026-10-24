@@ -357,7 +357,12 @@ class Workbench(QMainWindow):
             self.profile.setPersistentStoragePath(str(storage))
             from .cache_location import browser_directory
             self.profile.setCachePath(str(browser_directory() if sys.platform=='win32' else storage/'http-cache'))
-        self.assets=Assets(dist,self.profile);self.interceptor=LocalOnly(self.service.url,self.profile)
+        # Local research data stays beside the portable EXE, independently of its
+        # verified runtime cache. This narrowly scoped mount serves data only.
+        from .startup_cache import external_executable
+        from .web_assets import geolinguistics_directory
+        geo_data=geolinguistics_directory(dist,external_executable(),frozen=getattr(sys,'frozen',False))
+        self.assets=Assets(dist,self.profile,geolinguistics_root=geo_data);self.interceptor=LocalOnly(self.service.url,self.profile)
         self.profile.installUrlSchemeHandler(b'ptbapp',self.assets);self.profile.setUrlRequestInterceptor(self.interceptor)
         self.view=QWebEngineView(self);self.page=Page(self.profile,self.view);self.view.setPage(self.page)
         from .presentation import FirstMaximizePresentation
@@ -372,11 +377,17 @@ class Workbench(QMainWindow):
         self.page.permissionRequested.connect(self.m05_media.requested)
         self.page.settings().setAttribute(QWebEngineSettings.WebAttribute.PlaybackRequiresUserGesture,True)
         self.page.settings().setAttribute(QWebEngineSettings.WebAttribute.JavascriptCanOpenWindows,False)
+        # LocalOnly is installed before this page and still blocks every URL
+        # except the exact read-only public feeds and existing local resources.
+        self.page.settings().setAttribute(QWebEngineSettings.WebAttribute.LocalContentCanAccessRemoteUrls,True)
         self.page.settings().setAttribute(QWebEngineSettings.WebAttribute.FullScreenSupportEnabled,True)
         self.page.fullScreenRequested.connect(self.reader_fullscreen)
         self.channel=QWebChannel(self.page);self.bridge=Bridge(self.provider,self.service,self,test_dialog=test)
         self.channel.registerObject('files',self.bridge)
-        from .updates_bridge import UpdatesBridge
+        if sys.platform=='darwin':
+            from .macos_updates import MacUpdatesBridge as UpdatesBridge
+        else:
+            from .updates_bridge import UpdatesBridge
         from .platform_paths import user_data_root
         version_file=dist.parent.parent/'release/version.json'
         from . import __version__
@@ -424,7 +435,7 @@ class Workbench(QMainWindow):
         if os.environ.get('PTB_STARTUP_READY_EVENT'):
             from .startup_presentation import StartupPresentation
             self._startup_presentation=StartupPresentation(self.view)
-        self.view.load(QUrl('ptbapp://app/index.html'+('#'+start_module if start_module in {f'M{i:02d}' for i in range(1,19)} else '')))
+        self.view.load(QUrl('ptbapp://app/index.html'+('#'+start_module if start_module in {f'M{i:02d}' for i in range(1,20)} else '')))
 
     def set_surface_color(self,color):
         self.page.setBackgroundColor(color)
@@ -574,7 +585,7 @@ class Workbench(QMainWindow):
             self.closing=False;event.ignore();self.update_coordinator.cancel('退出操作未完成，窗口保留。')
             QMessageBox.warning(self,'退出操作未完成','更新或缓存清理未能完成。窗口保留，请检查占用后重试。')
             return
-        self._first_maximize.finish()
+        self._first_maximize.dispose()
         if self._startup_presentation:self._startup_presentation.cancel()
         if hasattr(self,'updates_bridge'):self.updates_bridge.close()
         self.papers_bridge.close()

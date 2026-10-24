@@ -75,7 +75,7 @@ const root=path.resolve(__dirname,'../..'),[out,scratch]=process.argv.slice(2);
     await page.getByRole('button',{name:'恢复本机草稿',exact:true}).click();assert.equal(await input.inputValue(),'😀花儿女儿门儿\n儿子 花 儿');assert.equal(await groups.count(),2);
     await page.setViewportSize({width:1440,height:900});
     await page.evaluate(()=>{window.qaPaint=[];const original=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(text,...args){window.qaPaint.push(text);return original.call(this,text,...args);};});
-    await browser.setOffline(true);const downloadWait=page.waitForEvent('download');await page.getByRole('button',{name:'保存为 PNG',exact:true}).click();const download=await downloadWait;
+    await browser.setOffline(true);const downloadWait=page.waitForEvent('download');await page.getByRole('button',{name:'保存为 PNG',exact:true}).click();await page.getByRole('dialog',{name:'PNG 导出设置',exact:true}).getByRole('button',{name:'导出 PNG',exact:true}).click();const download=await downloadWait;
     const pngPath=path.join(out,'erhua-export.png');await download.saveAs(pngPath);const bytes=await fs.readFile(pngPath);assert.equal(bytes.subarray(1,4).toString(),'PNG');
     const paint=await page.evaluate(()=>window.qaPaint);assert(paint.includes('花儿'));assert(paint.includes('x̞ʷwɐɻ˕˥'));assert(paint.includes('女'));assert(paint.includes('儿'));
     report.png={bytes:bytes.length,width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20),joinedAndSplitTextVerified:true};await browser.setOffline(false);

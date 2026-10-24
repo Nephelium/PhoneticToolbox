@@ -1,3 +1,100 @@
+发布结果：输入法浮窗资源 `ipa-popover-011-2d49e4dc9211` 已上线，线上十一组、四包完整下载、GitHub公开链接与双更新清单一致通过。Windows链接使用r2。
+
+## 2026-10-24 · 国际音标输入法下载区
+
+官网在原工具箱下载组下增加独立输入法四平台下载入口，安装包与 GitHub 对齐。首版十组线上响应式/无 JS 通过，四包全量 HTTP 下载 SHA-256 与本地一致。随后按井井反馈改为默认隐藏的浮窗，悬停预览、点击固定、移开/再次点击/空白/Esc 关闭，触屏点击，无 JS 点击。浮窗本地及线上各五宽度开关 JS 共十组加触屏一组通过，不改变 hero 高度。仅发布线上首页的下载区与独立样式/脚本，不带入其他未发布内容。
+
+## 教程06与11至16接入（2026-10-20）
+
+状态：`verified`，七期接入首版为 `r940c0b4de70df6e4`，同日分集调整已上线 `rfd524881c628735c`。查找新发布的七期教程并接入对应按钮。B站官方视频接口核对全部作者为井韶子（mid 15511376）、标题对应、公开状态为0，时长与成片一致。
+
+| 模块 | BVID | 时长 |
+| --- | --- | --- |
+| LPC谱图 | `BV17mnc6QExx` | 228秒 |
+| 语谱图转音频 | `BV17mnc6QEYY` | 420秒 |
+| 国际音标表Plus | `BV17mnc6QEYL` | 182秒 |
+| TextGrid标注 | `BV17mnc6QEJN` | 398秒 |
+| 音系归纳 | `BV17mnc6QEJf` | 273秒 |
+| 感知实验 | `BV1Bmnc6QEjn` | 273秒 |
+| 语音学论文精读 | `BV1Bmnc6QELa` | 209秒 |
+
+新11期为语谱图转音频按钮的默认视频，原 `BV1RuJm6gEWE` 保留为专题。按井井后续截图要求，分集仅保留专题、本期教程并按此排序，第二集按钮已移除。共13个可用频道、6个未发布模块按钮及14条无JS直达链接。切换专题时父频道保持选中，分集选中状态与唯一播放器、标题和外链一致，重复选择不重载。
+
+生成幂等、JS/Python语法和来源核对通过。以活动 `r192fbd47a2437145` 冻结候选 `r940c0b4de70df6e4`，只替换教程HTML和播放器事件块。候选及公网Chrome155五宽度的按钮/BVID/标题/外链、键盘/鼠标、分集选中/重复选择、唯一播放器、实际全屏及14条无JS链接通过；桌面和Android UA/触摸模拟最终覆盖14视频共28组readyState4和播放推进。页面错误及失败HTTP请求为空，桌面/320手机尺寸截图已核对。
+
+初次Android的国际音标表就绪等待超时，定向复查通过后又在音系归纳出现同类超时，抓取到的媒体已readyState4、networkState1、时长有效且无媒体或网络错误。手机点击下方频道后iframe位于视口外，默认rAF轮询可能暂停。验证脚本改用100ms定时轮询，继续要求readyState至少3、有效时长及播放推进，45秒超时门槛保持；增加选择待复查频道和UA、去查询参数的网络错误记录与超时媒体状态。两个失败报告保留，补齐定向实测后合并的28组证据在 `public-players-combined.json`，没有将超时轮次标为通过。 补充把手机播放器滚入视口后检查57帧实际视频解码并留存可见播放截图，报告 `output/validation/website/verify-1792487083592-133620/report.json` 通过；原先整块长截图的画面层未绘出与视口外合成状态相符，播放器在可见视口正常显示。
+
+仅首页/JS两文件88958压缩字节上传，182项原资源复用，184项服务器大小/SHA及两个变化资源/根首页HTTPS完整字节核对一致。其他网页内容、CSS、配置、论文目录及反馈PID保持。原子切换前两次活动首页摘要防并发核对，私有回退首页保留，自有浏览器与候选scratch均已清。
+
+来源及操作配方：`output/validation/website/tutorials-06-16-20261020/`。候选、发布、HTTPS和保护对象回读：`output/validation/website/tutorials-06-16-public-f36361ca270d4ef990d779bff2e0b108/`。实体手机、其他浏览器及完整视频时长未验，未推送Git或重建应用。
+
+同日分集后续调整已发布 `rfd524881c628735c`。生成源、播放器标题和无JS专题文案同步更新，按钮精确为专题、本期教程两个可用入口，默认仍为本期教程。候选及公网独立Chrome155五宽度、顺序/数量、键盘与鼠标切换、父频道/分集选中、标题/BVID/外链、重复选择、全屏及14条无JS链接通过。两视频在电脑和Android UA/触摸模拟共4组加载、播放推进与实际视频解码通过，已目视320宽度分集截图。
+
+文档检查2356文件、448来源、170任务零错误，历史快照断链单列。本次只改变首页/JS两文件，上传88902压缩字节，182资源原字节复用，184项服务器摘要及变化资源/根首页HTTPS逐字节回读一致，保护对象保持，回退首页保留，scratch清理回执齐全。配方和文档检查：`output/validation/website/tutorial-episode-order-20261020/`；发布/公网/HTTPS证据：`output/validation/website/tutorial-episode-order-public-4314ee627e3c40358738d78a5b89b2e2/`；播放器报告：`output/validation/website/verify-1792488836946-70748/report.json`。实体设备、其他浏览器及完整时长未验。
+
+## 声道演示视频替换元音试听（2026-10-19）
+
+状态：`verified`，已按井井指定的截图位置上线 `r192fbd47a2437145`。第3张绿色小实验卡片改为声道动起来，原三元音按钮/波形和160Hz、三构形、JD2、每段1.20秒的说明移除，放入《春江花月夜》片段及声道动态说明。播放器保持16:9、原生controls/playsinline、preload=none、无autoplay，带封面与原视频fallback链接。原音频文件保留，网页旧音频和该视频互斥播放，原音频按钮状态、后台暂停及本地更新小记的版本切换暂停继续适用。
+
+井井指定的桌面原MP4与工程已有副本均662593字节、SHA `c0f19521fdde5e2c34162588280e57b906975bb640744e405f0f4d827a7766ae`，FFprobe确认H.264/AAC、1280×720、2.36秒，无转码、重采样或重合成。复用既有0.4秒JPEG封面并更新来源用途，未再次导出。维护范围及流程见[计划](../plans/2026-10-19-website-vocal-video.md)。
+
+- `WEBSITE_VOCAL_VIDEO_ONLY=1 node scripts/verify_website.cjs`：本地 `verify-1792423132500-30168`、最终候选 `verify-1792423310248-89576`、公网 `verify-1792423322303-38072` 均通过1600/800/390/320四宽度、三元音播放元素移除、无旧科学参数文案、视频/封面本地与HTTP SHA、原三WAV摘要保持、原生键盘播放/暂停、1秒跳转、播放结束、实际音视频解码、音频→视频/视频→音频及重建试听互斥、无JS原生控制与fallback。错误和失败请求均为空，公网解码83帧、45349音频解码字节、无媒体错误。已目视公网手机尺寸及播放完成画面。
+- 从当前活动 `r29eed14bdf8c6e67` 冻结候选，只替换第3卡、媒体事件块并追加3条视频样式。既有更新小记HTML和其他公开内容经比较保持，本地更新小记播放器位置未随本次上线。新增MP4/JPEG/视频来源3资源，仅首页/CSS/JS3主文件改变，178资源保持，全部旧音频字节保持。
+- 六文件837056压缩字节上传并原子切换，184项服务器大小/SHA、六个变化资源和根首页HTTPS完整字节核对通过。配置、论文目录、反馈PID保持，无服务重载或统计变更。回退首页私有保留，全部自有浏览器及冻结副本scratch的cleanup回执为deleted。完整证据 `output/validation/website/vocal-lab-public-8fd5190e0c724ef5b5b9515f283c582f/`，配方及幂等记录 `output/validation/website/vocal-lab-video-20261019/`。
+- 生成幂等、基础GL6项锁与漂移拒绝、JS语法及定向差异检查通过。原重建试听互斥断言改为与新视频互斥；默认音频按钮验证的退役元音目标改用现存变调目标，未声称旧默认整站流程全部通过。文档检查2356文件/448来源/170任务零错误，原历史快照断链单列，日志 `vocal-lab-video-20261019/docs-validation.log`。
+
+本轮未推送Git、修改科研算法或重建应用。实体手机、其他浏览器和主观听辨未验。解码与播放状态的验证不扩展为声音质量结论。
+
+## 数字与趋势合一卡片（2026-10-19）
+
+状态：`verified`，最新已公开上线 `r29eed14bdf8c6e67`，首版为 `r9a001debb7201074`。按井井确认的方案，把四项最新数字放进对应四色趋势卡片，移除重复总量栏与常驻粗滑杆，下载卡直接显示 Windows/macOS 次数，起止日期共用一行。沿用真实时间轴、阶梯路径、缺失留空与全部记录绘图降采样。悬停、触摸点按和原生 range 键盘共用一个选中时间，四图同步更新游标/读数，最新总量保持显示；底部独立查看状态及回到最新按钮已按井井截图删除，刷新保留历史或跟随最新。
+
+维护源为 `scripts/build_website_expansion.py` 与 `temporary-site/site.css/site.js`，首页由生成器写入。实施范围见[计划](../plans/2026-10-19-website-stats-cards.md)。验证均在本机独立 Windows Chrome155，使用自有回环服务器与独立配置，未操作用户浏览器或生产计数。
+
+同日按井井最新截图移除底部整行正在查看时间和回到最新按钮，删除其HTML、样式与事件绑定，曲线内历史读数及四图同步、End/Escape返回最新保持。已上线 `r29eed14bdf8c6e67`，候选四专项及公网卡片七宽度/历史选择后整行不存在/鼠标/键盘/触摸模拟/刷新/失败/无JS、时间轴检查通过，页面错误与失败请求为空。仅三文件112737压缩字节改变，178资源及其他线上内容保持，181项服务器大小/SHA及变化资源与根首页HTTPS通过，配置/目录/反馈PID保持，自有scratch已清。公网报告 `verify-1792421394318-41896` 与 `verify-1792421394313-125812`，完整证据 `output/validation/website/stats-cards-public-2cd82c31fea04b28ad06510bbf10a24c/`，生成幂等见 `stats-cards-20261019/controls-removed-generation.json`。
+
+同日按井井截图追加：曲线纵向从底线延伸到大数字所在高度，取消独立110/100px底部绘图区。图层覆盖卡片数字行至底部，窗口变化时按实际数字位置对齐，数值/图例局部底色保护文字，历史读数移到下方。SVG原始时间/计数坐标及阶梯路径保持，视口与原生选时区域同步扩展，端点按实际宽高保持圆形。旧版先在 `verify-1792420330033-63092` 复现绘图区/最大值未到数字行的失败，未放宽检查。
+
+纵向扩展最终候选的卡片/时间轴/双平台/长历史四专项分别为 `verify-1792420812049-126924`、`verify-1792420812049-87740`、`verify-1792420817793-140312`、`verify-1792420823010-107880`，全部通过。公网卡片 `verify-1792420829326-27532` 七宽度检查绘图区及最大值达到数字高度、数字实际命中未被遮挡、控件几何、鼠标/键盘/触摸模拟、刷新/失败/无JS，公网时间轴 `verify-1792420829328-116732` 通过原有数值及三宽度边界。页面错误/失败请求为空，公网1440/390真实统计截图已目视核对。仅三文件112903压缩字节改变，178资源保持，181项服务器大小/SHA及变化资源和根首页HTTPS一致，配置/目录/反馈PID保持，回退保留，自有scratch已清。完整证据 `output/validation/website/stats-cards-public-4231d37a21c24fa2bd02f372c0423d03/`，生成幂等见 `stats-cards-20261019/vertical-generation.json`。
+
+- `WEBSITE_STATS_CARDS_ONLY=1 node scripts/verify_website.cjs`：最终 `output/validation/website/verify-1792418785599-40420/report.json` 通过七宽度1920/1440/1280/1024/800/390/320、数字与平台数入卡、双列/单列、默认隐藏粗滑杆、共同日期、四图同步悬停/键盘/触摸、回到最新、刷新跟随、失败保留旧值/首次失败与无JS。报告错误及失败请求为空。补充只读公开匿名快照2831条记录，在本地捕获并目视桌面1440和手机390截图，22:05快照总量为1881/389/52/37，不作为公网新布局上线证据。
+- `WEBSITE_STATS_AXIS_ONLY=1 node scripts/verify_website.cjs`：`verify-1792418635615-38448` 通过真实秒数、不规则间隔、缺失前缀、243平台、邻近记录键盘操作、刷新保留/跟随、四时段、单点/空历史、三宽度，以及不可见原生控件与曲线/点的物理像素对齐。
+- `WEBSITE_STATS_SAMPLING_ONLY=1 node scripts/verify_website.cjs`：`verify-1792418661142-47308` 通过160001条不规则记录、全部历史510个绘图点、端点/孤立峰/真实缺口保留与原始记录查询。最近1/7/30天的240/1680/7200点仍全部绘制，全部记录切换约75ms。
+- `WEBSITE_MACOS_STATS_ONLY=1 node scripts/verify_website.cjs`：`verify-1792419075247-86184` 通过双平台总数/独立曲线颜色、七宽度、聚焦显示读数、未知与0区分、稀疏平台事件、旧五列格式、无效总数保留旧值和无JS。
+- 两次重复生成逐字节幂等，`output/validation/website/stats-cards-20261019/generation.json` 保留首页摘要。基础GL音频锁6项及漂移拒绝、JS/Python语法和定向差异检查通过。所有本轮浏览器运行的 `cleanup.json` 均为 `deleted`。
+
+失败与修复：旧页面先在 `verify-1792418458891-104576` 正确复现重复总量栏。`verify-1792418635610-129768` 发现触摸抬手触发pointerleave后读数消失，改为仅鼠标离开收起并重验通过。`verify-1792419006871-79228` 是旧平台专项测量默认可见output，与按需显示的新交互冲突，增加实际聚焦后测量，没有删除边界检查。一次变量误写为 `WEBSITE_MAC_STATS_ONLY` 导致 `verify-1792418785612-55792` 误入默认整站流程，在已有 `.github-button` 选择器处超时，未改无关页面或绕过默认断言。
+
+按后续明确授权，从活动公网 `rdbdad5513312c950` 冻结 `r9a001debb7201074`，仅替换统计HTML、统计JS模块和77条统计CSS规则（含原媒体条件）。其他线上HTML、CSS和JS经范围投影比较保持，181项资源中178项原字节复用，未混入本地标题、更新小记视频或其他同期修改。仅上传3文件112651压缩字节，原首页保留私有回退，发布前及原子切换前检查活动首页摘要。181项服务器文件大小/SHA、三个变化资源及根首页HTTPS完整字节均核对通过；nginx配置、论文目录和反馈PID保持，无配置写入或服务重载，未修改统计采集器、计数和历史。
+
+最终冻结候选四专项分别为卡片 `verify-1792419513921-45308`、时间轴 `verify-1792419513921-38732`、双平台 `verify-1792419520773-139520`、长历史 `verify-1792419526624-71000`，全部通过。公网卡片 `verify-1792419533395-88696` 通过七宽度、实际统计读取与鼠标/键盘/触摸模拟、刷新/失败/无JS，公网时间轴 `verify-1792419533395-105208` 通过三宽度及相关边界，页面错误和失败请求均为空。公网真实统计截图1440/390已目视核对。发布配方位于 `output/validation/website/stats-cards-20261019/publish.py`，完整范围、部署、HTTPS回读和完成证据位于 `output/validation/website/stats-cards-public-dad9d5721c524e498d6eb0e01acd5c63/`。所有六轮浏览器及冻结候选scratch均已按归属清理，回执为deleted。
+
+`python -B -X utf8 scripts/validate_docs.py` 检查2355文件、448来源、170任务零错误，未修改的历史快照断链另列。未推送Git或重建EXE。其他浏览器、实体设备、Qt和最终成品未验。
+
+## 教程01至05接入（2026-10-19）
+
+状态：`verified`，按井井本轮明确授权已公开上线 `rdbdad5513312c950`。对应关系为录音 `BV1xsnJ6nES2`、唇形提取 `BV1NsnJ6nE2Z`、参数估计 `BV1NcJd6UEZv`、参数显示 `BV11cJd6UESc`、EGG 信号分析 `BV1KFJd6JEvg`。介绍及语谱图转音频第一集沿用，七个入口可用，其余12个模块继续禁用。新增五段按键盘或点击切换唯一iframe，同步标题、外链和选中状态，重复选择保留播放器；无JS时提供全部七个视频直达链接。
+
+维护生成器和播放器映射，扩展已有教程/真实播放器验证。生成两次首页SHA一致，JS语法通过。从当前活动公网 `r42de50b4c3c837fa` 冻结候选 `rdbdad5513312c950`，仅 `index.html` 和 `site.js` 变化，179项资源复用。首页的活动字节与归档目录旧首页不同，初次冻结在摘要检查处停止且未部署，随后明确按活动首页自身SHA核验；不放松其他资产摘要或发布并发保护。本地更新小记短视频及其余未发布内容未混入候选。
+
+`WEBSITE_TUTORIAL_ONLY=1 node scripts/verify_website.cjs` 在冻结候选与实际公网分别通过，五宽度1600/1280/800/390/320检查18模块名称、七启用/12禁用、导航、布局无溢出、每段准确BVID/iframe标题/外链、键盘和鼠标切换、唯一播放器、重复选择保留、语谱图分集显示/返回、实际全屏与七条无JS链接。候选报告 `output/validation/website/verify-1792411163649-41152/report.json`，公网报告 `output/validation/website/verify-1792411196577-24088/report.json`。
+
+`WEBSITE_PLAYER_ONLY=1` 配合实际官网HTTPS完成独立Chrome155电脑UA与Android UA/触摸模拟，每端七段共14组均readyState4、video无错误、实际播放进度约2.1秒且未暂停、切换后单播放器和外链正确，CSP违规/页面错误/失败请求均为空。新五段手机播放器时长分别485.157732/430.497959/646.907937/164.977778/472.502857秒，与已剪辑成片对应；电脑播放器按整秒呈现。报告 `output/validation/website/verify-1792411247861-101244/report.json`，公网桌面/窄屏及EGG播放截图已目视核对。实体手机、其他浏览器及完整视频时长未验。
+
+仅上传首页和JS共87658压缩字节，179项原字节资源在服务器复用，181项活动文件大小/SHA全部一致，两个变化资源及根首页HTTPS完整字节回读一致。发布前再次核对活动首页，原首页保留私有回退，nginx配置/论文目录/反馈PID保持，不重启服务。Python AST、JS语法、定向diff通过；文档全检2354文件/448来源/170任务，零错误，既有历史快照断链单列，回执保留在入口的 `docs-validation.log`。失败冻结、最终候选与三轮独立浏览器scratch均按归属清理并留下 `deleted` 回执。
+
+脚本和证据入口为 `output/validation/website/tutorials-01-05-20261019/`，完整冻结/部署/HTTPS回读与完成记录位于 `output/validation/website/tutorials-01-05-public-047616462a68466eb35d16657a3c21b9/`。初次失败冻结为 `tutorials-01-05-public-adc07fa5e9c64add9091248284dbaa62/`。本轮未推送Git、发布应用版本或重建EXE。
+
+## 手机端教程播放器被屏蔽（2026-10-18）
+
+用户截图中的错误已用Chrome155/Android UA及触摸模拟复现。B站官方`player.bilibili.com/player.html`按手机UA跳转到`https://www.bilibili.com/blackboard/webplayer/mbplayer.html`，官网原CSP只允许前一个域名，控制台明确记录`frame-src`违规。桌面播放器正常加载，问题定位在手机跳转后的来源限制。
+
+`deployment/temporary-site/publish.py`只增加官方手机播放器的具体路径，保留已有来源及其余全部指令。四种策略输入覆盖已有frame-src、none、缺省及已含手机路径，幂等和其他指令保持通过，Python远程程序与JS语法通过。在`verify_website.cjs`加入`WEBSITE_PLAYER_ONLY=1`专项，必须使用实际HTTPS响应头和真实手机UA，不能只缩小视窗；两端分别检查介绍与语谱图转音频第一集的官方地址、video就绪、播放时间推进、单播放器/外链切换及零CSP违规。
+
+Windows Chrome155候选验证在PowerShell设置`$env:WEBSITE_ORIGIN='https://www.phonetictoolbox.com/'`、`$env:WEBSITE_PLAYER_ONLY='1'`及`$env:WEBSITE_PLAYER_POLICY_PREVIEW='1'`后运行`node scripts/verify_website.cjs`，仅在测试浏览器替换首页响应头，四组加载/实际播放均通过，报告`output/validation/website/verify-1792294666907-49748/report.json`。井井授权修复后，忽略目录中的`output/validation/website/mobile-player-20261018/repair.py`复用维护源的策略变换，以已审阅配置/活动文件摘要作并发保护，仅原子替换服务器CSP，执行`nginx -t`与reload并保留配置备份及失败回滚。回执`deployment.json`记录操作`mobile-player-f4394d645c224d40a9d56963b0d6ae40`，活动release仍为`rc57cf2fda18a63c6`，182项活动文件/首页/论文目录摘要和反馈PID保持，未上传页面或其他同期修改。
+
+公网复验关闭响应头预览，运行同一专项，电脑/Android模拟两段均为readyState4、无video错误，播放时间分别推进至1.83/2.15/2.13/2.13秒且未暂停，零CSP违规。报告`output/validation/website/verify-1792294728491-92012/report.json`；手机介绍与桌面第一集截图已查看。裸域名及www域名HTTPS响应均含新策略、首页SHA保持，证据`output/validation/website/mobile-player-20261018/https-readback.json`。两轮scratch回执均为deleted。`python -B -X utf8 scripts/validate_docs.py`检查2296文件/447来源/162任务零错误，历史快照断链另列；定向`git diff --check`通过。实体手机、Safari和完整时长播放未验。
+
 ## 下载平台区分与灰测提示（2026-10-17）
 
 首页下载区保持与网页版入口同宽，左侧两个Windows按钮，短竖线分隔后为灰色macOS按钮，原生disabled且没有href。Windows版本/体积和两个3.0.3链接保持，按钮文字精简为免安装版、安装版。网页版仍禁用，文案改为灰测中，即将开放。下载发起图显示Windows曲线与Windows所选次数，灰色macOS图例注明尚未上线，不伪造macOS历史；底部安装包分类次数已移除，统计采集和原数据格式保持。
@@ -38,6 +135,18 @@
 - 旧实现专项verify-1792163872221-69796失败：滑条min为0，曲线实际起点为时间戳。修复后verify-1792163924080-81568通过不等间隔、点/滑条位置、243平台、相邻键盘、刷新保留/跟随、三宽度、单点/空历史。第一次空历史夹具遗漏totals空数组处理，进程异常，verify-1792163903730-74668保存失败并确认所有子进程退出，scratch按项目入口清理成功；未修改产品断言。
 - 最终四色冻结：轴专项verify-1792164162963-27560通过；完整统计verify-1792164162984-84888通过四条历史曲线、四个独立颜色且curve/marker/slider一致、七宽度1920至320、四时段/键盘、Star下降、失败时保留旧值/初次无数据和无JS说明。已目视statistics-1440.png。生成幂等通过。
 - stats-time-axis-20261016冻结r0d81c4bf11f66d66，136资源仅index缓存键/site.js统计IIFE/site.css新增四色改变，133保持，新增/删除0。统计采集器、服务器计数/历史及配置不变，当前四路24音频及全部来源/锁不变。源JS中同期反馈改动未纳入，阶段脚本只替换当前服务器统计块。一次直接CSS写入OSError，原文件未变化，核对后定向补丁成功。已原子发布r0d81c4bf11f66d66，receipt website-511c560c33e5450183e09ffaeb46e930/deployment.json。公网verify-1792164333189-80812通过同项统计七宽度/四时段/四色/Star下降/错误恢复/无JS；另外实测真实时间轴选择22:25的243次记录，selectedTime=1792160726、markerX=459.75080841749167，与当前真实时间跨度公式完全一致。errors/requests为空。136资源完整大小/SHA、两下载HEAD、CSP及统计配置/采集器服务/论文目录/反馈PID/统计timer/nginx保持通过，回执stats-time-axis-20261016/https-readback.json。JS语法/生成幂等、文档及定向差异检查通过。其他浏览器与实体手机未验。
+
+## 五路试听与悬浮语谱图（2026-10-18）
+
+按最新要求保留前三路，第四路预测参数/整数ms/0.99动量加青木初始化，第五路读取第四路实际24k PCM16接80带NAFNet与BigVGAN。六例新增12WAV及30张实际输出语谱图，原73段与旧锁保持。模型仍stream-v5 7ac61f07、修复第6000步a60a3587与BigVGAN e2a93f92。RTX5090/已有pytorch_5090生成；首次指向同名训练6000检查点，其摘要dcbf357d与冻结模型不符，在写入前拒绝，改用既有repair-step6000副本a60a3587。生成末尾校验首次误把基础GL与accelerated_settings的元数据形状当作同一结构失败，核实原结构后修正校验字段，没有修改科学值或覆盖音频。修正后30轨/输入/预测/取整/相位/动量/模型/同PCM/73旧段及漂移/覆盖/重复生成拒绝通过。
+
+输出显示统一24k/10ms Hann/1.5ms帧移/1024 FFT/60dB，同例共享频率和幅度参考，按实际等RMS播放电平作图。卡片五按钮无波形/下方小字，五路说明默认展开并突出重点。悬停/聚焦显示全部五图，当前行加粗、边框、当前标记，允许移入、Esc、窄屏避让/滚动。
+
+- 生成器幂等、Python/JS语法、website_audio_baseline与verify_website_audio_baseline通过。文档检查2267文件/447来源/159任务，仍报同期来源计数447与total_records446不一致，未改动该登记；没有本轮新增链接错误，旧历史断链保持。
+- Windows Chrome155源码verify-1792260019721-137584与最终冻结verify-1792260192591-109032均通过：30段HTTP SHA/完整播放、每按钮五图与对应高亮、无按钮下方小字、默认展开/mark、八档导航、五内容宽度/浮窗边界、键盘聚焦/Esc、互斥播放、实际快乐字体与无JS30原生播放器。errors/requests均为空；已目视检查1280/390浮窗截图。
+- 从公网当前r5aaf8028a426a3a7冻结rbca3d6f3f94fcbd3，共180资产，5改变/43新增/132保持/0删除。仅下一步、本功能CSS/JS前置模块、两元数据变化，新增12WAV/30PNG/五路锁；旧73WAV、前三路、其他页面/原JS/下载/统计保持。scope.json与generation-checks.json在output/validation/website/five-route-aoki-20261018。
+- 已原子发布rbca3d6f3f94fcbd3，回执website-ba1c5cacf3ad422d86f749f57c731702/deployment.json。公网verify-1792260368786-142484通过上述全部30轨/五图/默认展开/无小字/布局/键盘/互斥/字体/无JS检查，errors/requests为空。https-readback.json确认180资产完整大小/SHA、两正式下载HEAD、CSP/站点及统计配置/论文目录/反馈PID/统计timer/nginx保持，无配置写入/服务重载。
+- 三轮浏览器scratch由各自finalizer清理；本轮冻结候选scratch在全部回读/播放后清理，183文件31230271字节，保留配方/清单/报告/截图/原子发布回执及正式网站资产。cleanup.json为deleted。未重建EXE，其他浏览器/实体设备未验。
 
 ## 四路32次试听与参数预测恢复（2026-10-16）
 
@@ -185,7 +294,7 @@ Windows独立Chrome154本地 `verify-1792033359617`、发布候选 `verify-17920
 
 ## 页面与素材
 
-采用奶油色、黄色与紫色设计。首页六字逐笔绘制 SVG，修正具字的三条内部横画和底部结构；外侧 [ʂ] [ɻ] [ɕ] 参考 Doulos 结构重新绘制。中央标注使用 Doulos，右侧语谱纹理为装饰。正文无研究教学副标题，网页版日期为 2026 年 10 月 31 日。导航为小实验、常见问题、更新小记、方法与引用、问题反馈、联系我们，删除首页浏览功能提示。首页左侧文字、日期和按钮小幅分层鼠标跟随，按钮移动不超过 3px。减少动态效果与触屏不启用该跟随。
+采用奶油色、黄色与紫色设计。首页六字于2026-10-18改为井井选定的童趣手写稿I，原PNG嵌入SVG，语音学下方加入贯穿三字、起伏与粗细变化的黄色手绘线，来源与配方见下方本次验收；外侧 [ʂ] [ɻ] [ɕ] 参考 Doulos 结构重新绘制。中央标注使用 Doulos，右侧语谱纹理为装饰。正文无研究教学副标题，网页版日期为 2026 年 10 月 31 日。导航为小实验、常见问题、更新小记、方法与引用、问题反馈、联系我们，删除首页浏览功能提示。首页左侧文字、日期和按钮小幅分层鼠标跟随，按钮移动不超过 3px。减少动态效果与触屏不启用该跟随。
 
 功能展示共十六组二十五张中文截图，依次浅/深交替，保留主题名称和色点。音标叠三图、转写叠两图、EGG叠两图、语谱重建叠三图、变速变调叠两图、音系归纳叠三图，角度错落且露出可点区域，每张打开自身原图。原图提示仅第一组保留。十五个短波浪/星点分隔穿插其间。
 
@@ -413,3 +522,48 @@ Nginx为Mac ZIP新增macos匿名类型，整文件及首个bytes=0范围计数�
 冻结候选统计与原下载/安装浮窗通过；公网统计专项及原下载区七宽度、三下载名称/路由/HEAD、Mac浮窗整卡命中与三组真实交叠、鼠标/键盘/触摸/无JS通过。旧PLATFORM验收首次仍用total=Windows公式，失败原件保留在verify-1792240792057-106924；修改为total=Windows+Mac并分别验证Windows字段后，verify-1792240816223-107572完整通过，没有删断言或放宽数值。公网实际图截图已查看，Mac曲线与零基线接近符合当前数量。
 
 最终回执：`output/validation/website/macos-statistics-20261017/completion.json`；冻结范围、页面发布、采集发布、服务器摘要和截图位于`output/validation/website/macos-statistics-381eab7c42f049dca7d89005feda264c/`；公网统计`verify-1792240781333-75396/`、原下载区`verify-1792240816223-107572/`。7份本轮独立浏览器/候选（含失败）scratch的cleanup.json均为deleted。其他浏览器、实体手机和Mac/Safari仍未验。
+## 统一时间轴与首页标题排版（2026-10-18）
+
+状态`verified`，范围为本地及公网Windows Chrome155。四图按同一历史首尾的真实秒数等比例映射，点序号与降采样不参与横轴计算。1848条只读快照从北京时间10/12 18:55开始，未知前缀留白，不补零。日期、滑块中心端点和绘图区1440/390/320宽度误差小于0.03px。查询吸附真实记录，键盘按相邻原始记录移动。
+
+仅全部记录且单序列超过2048点时，在共同时间域的256个等时长桶内保留首/末/最小/最大点，并额外保留真实缺口两侧。先按原始间隔判定断线，避免抽样造成假缺口；值域、时间范围及滑条查询保持全量。最近24小时/7天/30天始终绘制全部有效点。最大值逐项归约避免参数展开溢出，大计数轴用万/亿避免裁切，读数保持完整。160001条不等间隔、跨约671天夹具：全历史页面浏览绘510点，本机切换约60ms；24小时/7天/30天分别全绘240/1680/7200点，首尾、孤立峰值、4天缺口和原始查询通过。计时只代表该夹具/本机。
+
+首页标题约放大6%，四入口/黄色功能带下移，矮屏保留首屏完整功能带。网页版6px循环和3px悬停上浮实际通过，测得范围5.979px，离屏暂停/动态减少动画/无JS正常。发布前核对发现线上缺少本地已有动画，本轮随新要求一并补齐。下方按钮正常样式、HTML、下载路由及排列保持。按手写和质朴童趣反馈生成E–H、I/J/K标题概念稿，不重绘按钮。井井最终选定I，并要求黄线贯穿语音学三字，随后明确改为生动的曲线。当前采用有起伏、粗细变化与圆润收笔的原生SVG黄色波浪线，保持选定PNG原字节。来源/SHA见temporary-site/assets/hero-lettering-source.json及assets/provenance.json，源PNG SHA256为8120f6c0eefb53f71c20270fd5aaa66f739eefec1ebedfe95c63eeeeb5be48f9。专用build_website_title.py接入原资产生成器，--check核对确定性产物与来源，无字体软件嵌入。
+
+本地WEBSITE_HOME_ONLY、STATS_ONLY、STATS_AXIS_ONLY、STATS_SAMPLING_ONLY、MACOS_STATS_ONLY、PLATFORM_ONLY、MOTION_ONLY、TITLES_ONLY均通过，包括七宽度统计/下载、未知/零值、刷新/故障保留、键盘、单点/空历史、原Mac浮窗与四宽度动画。音频基线、生成器幂等、JS/Python语法和定向diff通过。早期validate_docs.py曾报同期来源447项/声明446不一致，本轮未改该登记；最新全检2268文件/447来源/159任务零错误，历史快照断链单列，完整日志output/validation/website/selected-title-20261018/docs-validation-final.log。早期CSS查询串匹配、矮屏/窄屏、动画稳定等待和原生滑块伪元素读取失败留有报告，修正夹具或实际排版后复验，未降低断言。
+
+获井井明确上线授权后发布r5aaf8028a426a3a7，只上传index.html/site.css/site.js三文件、106339压缩传输字节，复用134资产。冻结阶段在实时公网页面上只替换统计段、受影响CSS和统计IIFE，保留原反馈处理与其他正文。候选采样/下载/动效3组、实际公网统计/下载/动效3组通过，七宽度下载和四宽度动效截图已查看，页面错误/失败请求均空。服务器137文件完整SHA、3变化文件与根首页HTTPS完整字节一致，切换前两次核对首页SHA，原首页留私有回退，Nginx配置/论文目录/反馈PID保持，不重启服务。候选和六组浏览器自有scratch全部清理并留下deleted回执。证据output/validation/website/shared-axis-publication-20261018/completion.json及其out指向完整审计目录。
+
+标题最终发布rc57cf2fda18a63c6。以当时实际线上内容冻结候选，只替换assets/hero-lettering.svg与index.html资源前缀，178资产原字节复用，完整180文件服务器大小/SHA、两变化文件和根首页HTTPS字节通过，压缩上传1113719字节。其他正文、CSS/JS、音频/语谱素材和统计保持，配置/目录/反馈PID不变。候选verify-1792261144979-109540及公网verify-1792261162716-115644分别验证1920/1440/1280/1024/800/390/320宽度：原PNG身份、可解码、六字无障碍文本、无溢出，四按钮位置/尺寸/文字/路由/背景/边框/阴影/字体前后一致。波浪线覆盖标题整行98.1%，原始坐标高度35.1px，实际桌面/窄屏截图已查看。页面错误/失败请求为空；专用生成器检查、Python/JS语法与定向diff通过。完整回执output/validation/website/selected-title-20261018/completion.json及其out指向审计目录，候选/浏览器scratch均deleted。
+
+本机安装版output/release-staging/local-replace-303-20261017-163326-25f561/artifacts/PhoneticToolbox-3.0.3-windows-x64-setup.exe，产品3.0.3、497102829字节、SHA256 055bb0d1de1fa12eafc37f506f7544817f0f0d9441fafc8d3fac0420146623d4，与包报告一致。本轮未运行安装器、重建应用、推送或改写统计数据。实体设备、其他浏览器未验。统一汇总output/validation/website/shared-axis-20261018/verification.json保留各阶段报告与清理回执。
+
+
+## 更新小记生理参数合成视频（2026-10-19）
+
+状态：本地 verified，公网未部署。视频来自井井指定的桌面《春江花月夜.mp4》，逐字节复制为 `temporary-site/assets/videos/v3.0.4-vocal-tract-chunjiang.mp4`，SHA256 `c0f19521fdde5e2c34162588280e57b906975bb640744e405f0f4d827a7766ae`。FFprobe 核对 H.264 High / yuv420p、1280×720、AAC 48 kHz 单声道，时长 2.36 秒、662593 字节。封面由 FFmpeg 提取 0.4 秒画面，来源清单保留各自摘要。
+
+生成器只在 v3.0.4 生理参数合成文字末尾插入 video/figure，不改变发行正文及 JSON 快照；controls、playsinline、preload=none，切换版本暂停，16:9 自适应。发布包支持 MP4 与 poster 引用收集/版本前缀，来源清单随包。生成两次 HTML SHA 一致，本地内存打包清单和路径核对通过，回执 `output/validation/website/release-vocal-video-20261019/package-check.json`。
+
+首两次浏览器验证通过位置、宽窄布局和开始播放，但进度跳转超时。验证服务原来没有分段请求与文件总长度，已补 MP4 Content-Length / Accept-Ranges / 206 与无效范围 416，使本地验证对应静态服务器的视频行为；保持进度跳转断言并重验。早期失败和清理回执分别保留在 `output/validation/website/verify-1792383425623-142048/` 与 `output/validation/website/verify-1792383487260-79212/`。
+
+第三次实际视频验证已通过，但旧无 JS 断言把版本号和更新二字硬编码为相邻，未匹配当前含 Windows 版的首段。已改为完整核对当前快照实际首段，未改变发行文字。最终 `WEBSITE_RELEASE_ONLY=1 node scripts/verify_website.cjs` 通过：独立 Chrome155 原生空格播放、进度跳至 1 秒、版本切换暂停、实际结束、52 帧解码和 28688 音频解码字节；1600/800/390/320 宽度的比例与边界、来源摘要、5版鼠标/键盘切换、无 JS 正文/控件/入口通过，页面错误和失败请求为空。宽窄截图已目视核对。报告 `output/validation/website/verify-1792383658438-84444/report.json`，清理回执为 deleted。
+
+`python -B -X utf8 scripts/validate_docs.py` 检查 2338 文件、447 来源、168 任务，零错误，既有历史快照失效链接另列；Python/JS 语法与定向 git diff --check 通过。其他浏览器、实体设备和公网未验，本轮未公开上传。
+
+## 方法示例紧凑四列（2026-10-23）
+
+- 修改 `temporary-site/site.css` 与昼夜预览 `design.css`，桌面≥1024px四列、560–1023px两列、<560px单列。内边距18px、标题21px，引用自然展开。
+- `WEBSITE_METHODS_ONLY=1 node scripts/verify_website.cjs`：Windows Chrome155通过，完整来源/引用、独立搜索筛选、复制、键盘、四宽度及无JS，页面错误与失败请求均为空。回执：`output/validation/website/verify-1792757362390-173064/report.json`。
+- 独立Chrome以1600/1280/1024/800/390/320px检查首页与昼夜预览，共12组列数和无横向溢出通过，引用展开与夜间截图通过。首次800px昼夜仍受旧单列覆盖，修正后全部复查通过。几何与截图：`output/validation/website/method-cards-20261023/`。
+- `python -B -X utf8 scripts/build_website_day_night.py`更新派生样式，文本/控件/媒体与当前首页保持一致。本次无公开部署，实体手机/Safari未验。
+
+同日等高修订：Grid拉伸同一行卡片，纵向Flex将来源链接置于底部，取消第二/三张卡片旋转。首页和昼夜预览六宽度共12组同行高度/链接底线差小于1px，展开引用后整行高度一致，夜间截图通过，见 `output/validation/website/method-cards-20261023/equal-heights.json`。METHODS专项再次通过，回执 `output/validation/website/verify-1792757512742-179460/report.json`。文档校验无错误（保留历史快照既有失效链接提示），生成幂等与定向差异检查通过。
+
+## 下载按钮下方安装说明残留（2026-10-24）
+
+隐藏 `.macos-help summary`，安装提示保留下载按钮悬停与聚焦入口，Escape关闭时恢复下载按钮焦点。同步昼夜派生样式。`WEBSITE_PLATFORM_ONLY=1 node scripts/verify_website.cjs`在Windows Chrome155七宽度通过，下载路由、提示布局/交互、无JS下载及统计回归通过，页面错误/失败请求为空。首轮旧验证在Escape已回到下载按钮后再次focus，因无新focusin失败；新增焦点归属断言并移出/重新聚焦后通过。
+
+回执 `output/validation/website/verify-1792846614094-252160/report.json`；首页/昼夜预览1280与390px四组无残留文字、提示聚焦/Escape、焦点归属通过，截图及回执在 `output/validation/website/macos-help-label-20261024/`。未公开部署，未验实体设备，昼夜全站测试未重跑。
+
+本轮获得井井明确上线授权后，发布 `r550b51d09593c980`。从实时线上 `rfd524881c628735c` 的活动 `site-ime-013.css/js` 构造候选，仅替换 `.macos-help summary` 显示规则和Escape焦点，保留输入法及所有其他线上内容。首页仅换资源版本前缀。候选与公网独立Chrome155在1600/1280/1024/800/390/360/320px共14组确认无残留文字、无横向溢出、下载链接保持、hover/focus/Escape有效，页面错误为空。3文件上传、183文件复用，186文件服务器大小/SHA与变化3文件和根首页HTTPS回读一致。发布前及原子切换前核对首页摘要，Nginx配置/论文目录/反馈PID保持，无服务重启；私有回退保留。完整配方、差异、回执和截图见 `output/validation/website/macos-help-public-20261024/`，完成回执 `completion.json`。其他本地未发布改动未混入，实体设备未验。

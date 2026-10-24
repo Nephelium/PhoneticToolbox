@@ -6,6 +6,34 @@
     "type": "doc",
     "content": [
       {
+        "type": "paragraph",
+        "attrs": {
+          "id": "m03-video-tutorial"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "视频教程："
+          },
+          {
+            "type": "text",
+            "text": "观看本章视频",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://www.phonetictoolbox.com/#tutorial-egg"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ]
+      },
+      {
         "type": "heading",
         "attrs": {
           "textAlign": null,

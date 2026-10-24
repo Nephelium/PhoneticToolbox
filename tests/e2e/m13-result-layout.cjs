@@ -64,7 +64,7 @@ const root=path.resolve(__dirname,'../..'),[out,scratch]=process.argv.slice(2);
     await page.evaluate(()=>{window.qaPaint=[];const original=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(text,x,y,...args){window.qaPaint.push({text,x,y,font:this.font});return original.call(this,text,x,y,...args);};});
     await browser.setOffline(true);
     for(const spacing of [8,30]){
-      await range('行距',spacing);await page.evaluate(()=>window.qaPaint=[]);const downloadReady=page.waitForEvent('download');await page.getByRole('button',{name:'保存为 PNG',exact:true}).click();const download=await downloadReady;
+      await range('行距',spacing);await page.evaluate(()=>window.qaPaint=[]);const downloadReady=page.waitForEvent('download');await page.getByRole('button',{name:'保存为 PNG',exact:true}).click();await page.getByRole('dialog',{name:'PNG 导出设置',exact:true}).getByRole('button',{name:'导出 PNG',exact:true}).click();const download=await downloadReady;
       const file=path.join(out,'equal-'+spacing+'.png');await download.saveAs(file);const bytes=await fs.readFile(file);assert.equal(bytes.subarray(1,4).toString(),'PNG');
       const paint=await page.evaluate(()=>window.qaPaint);assert(!paint.some(p=>p.text==='▼'));assert(paint.some(p=>p.text==='行'));
       const chars=paint.filter(p=>p.font.startsWith('26px ')||p.font.includes('26px '));const firstRow=chars.filter(p=>p.y===chars[0].y);assert(firstRow.length>=3);

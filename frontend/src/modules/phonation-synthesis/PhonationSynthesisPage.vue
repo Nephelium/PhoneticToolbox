@@ -60,7 +60,7 @@ async function exportF0(){
 }
 const inputEpoch={source:0,target:0};
 let restoredDraft:{sourceHash?:string;targetHash?:string;analysisHash?:string;points:Points;alignment:string;count:number}|undefined;
-let epoch=0,selectionEpoch=0,disposed=false,abort:AbortController|undefined,currentJob:string|undefined;
+let epoch=0,selectionEpoch=0,auditionEpoch=0,disposed=false,abort:AbortController|undefined,currentJob:string|undefined;
 const port=computed(()=>props.context.files.m07);
 const identity=computed(()=>JSON.stringify([source.value?.id,source.value?.sha256,target.value?.id,target.value?.sha256,analysis]));
 const stale=computed(()=>!!applied.value&&analysisIdentity.value!==identity.value);
@@ -70,7 +70,7 @@ watch(analysis,()=>{wave.dirty=true;stop();},{deep:true,flush:'sync'});
 watch(generation,()=>{wave.dirty=true;stop();},{deep:true,flush:'sync'});
 watch([alignment,count],()=>{wave.dirty=true;pending.value=true;stop();void attempt(()=>rebuild());});
 watch([kind,reverse],()=>{wave.dirty=true;stop();});
-watch(()=>props.active,v=>{if(!v)stop();});
+watch(()=>props.active,v=>{if(!v){auditionEpoch++;stop();}});
 function report(e:unknown){error.value=e instanceof Error?(messages[e.message]??e.message):String(e);}
 async function attempt(work:()=>unknown|Promise<unknown>,valid=()=>true){error.value='';try{await work();}catch(e){if(!disposed&&valid())report(e);}}
 function updateJob(job:JobView,snapshot?:TaskSnapshot){if(snapshot)taskSnapshots[job.id]=clone(snapshot);const i=jobs.value.findIndex(j=>j.id===job.id);if(i>=0)jobs.value[i]=job;else jobs.value.unshift(job);currentJob=job.id;}
@@ -137,14 +137,14 @@ async function selectTask(id:string){
  selectionEpoch++;stop();selected.value=undefined;playName.value='';wave.asset=null;f0Tracks.value=[];f0Note.value='';
 }
 async function play(result:M07Result,name:string,autoplay=true){
- const ticket=++selectionEpoch;selectedJob.value=result.job;selected.value=result;playName.value=name;wave.asset=null;f0Tracks.value=[];f0Note.value='';stop();
+ const ticket=++selectionEpoch,audition=++auditionEpoch;selectedJob.value=result.job;selected.value=result;playName.value=name;wave.asset=null;f0Tracks.value=[];f0Note.value='';stop();
  await attempt(async()=>{
   if(!port.value)throw Error('当前环境无法读取合成结果，请使用桌面版');
   const raw=await port.value.read(result,name);const asset=await decodeWav(raw,name);
   if(disposed||ticket!==selectionEpoch)return;
   wave.asset=markRaw(asset);wave.start=0;wave.end=0;wave.zoom=1;wave.offset=0;wave.channel=0;
   await nextTick();if(disposed||ticket!==selectionEpoch)return;
-  await resultTransport.value?.selectAll(autoplay);
+  await resultTransport.value?.selectAll(autoplay&&props.active&&audition===auditionEpoch);
   if(disposed||ticket!==selectionEpoch)return;
   notice.value='';
   void showF0(result,name,ticket);

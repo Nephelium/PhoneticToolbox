@@ -160,7 +160,7 @@ class Engine:
         klatt_fs = INTERNAL_RATE
         kp = KlattParam1980(
             FS=klatt_fs,
-            DUR=duration,
+            DUR=max(duration, 1. / klatt_fs),
             F0=float(effective_f0[0]) if len(effective_f0) else float(self.params["F0"].default_value),
             Jitter=0,
             Shimmer=0,
@@ -280,21 +280,21 @@ class Engine:
             "F1": np.zeros(n_grid, dtype=float),
             "F2": np.zeros(n_grid, dtype=float),
             "F3": np.zeros(n_grid, dtype=float),
-            "AV": np.zeros(n_grid, dtype=float),
         }
         self.silence_intervals = []
         self.vowel_boundaries = [float(x) for x in boundaries]
-        # Vowel generation preserves the current source controls/preset.
-        av_values = self.params['AV'].get_array(self.duration, 100)
+        # AV is an independent source control, including points below an
+        # override. Sequence silence is applied by synthesize, never baked into
+        # AV: otherwise regenerating without a pause retains its old zeroes.
         for idx, seg in enumerate(segments):
             start = 0.0 if idx == 0 else float(boundaries[idx - 1])
             end = self.duration if idx == len(segments) - 1 else float(boundaries[idx])
+            if seg.type == "silence":
+                self.silence_intervals.append((start, end))
             mask = (t_grid >= start) & (t_grid <= end)
             if not np.any(mask):
                 continue
             if seg.type == "silence":
-                self.silence_intervals.append((start, end))
-                grids["AV"][mask] = 0.0
                 prev_f = self._get_neighbor_vowel_formants(segments, idx, -1)
                 next_f = self._get_neighbor_vowel_formants(segments, idx, 1)
                 local = np.where(mask)[0]
@@ -306,12 +306,11 @@ class Engine:
                 grids["F1"][mask] = formants[0]
                 grids["F2"][mask] = formants[1]
                 grids["F3"][mask] = formants[2]
-                grids["AV"][mask] = np.interp(t_grid[mask], np.linspace(0., self.duration, len(av_values)), av_values)
         smooth_size = self.smooth
         for key in ["F1", "F2", "F3"]:
             grids[key] = uniform_filter1d(grids[key], size=max(1, smooth_size), mode="nearest")
             grids[key] = uniform_filter1d(grids[key], size=max(1, smooth_size), mode="nearest")
-        for key in ["F1", "F2", "F3", "AV"]:
+        for key in ["F1", "F2", "F3"]:
             points = [(float(t), float(v)) for t, v in zip(t_grid, grids[key])]
             self.params[key].set_points(points)
         for key in ["F4", "F5"]:
@@ -328,32 +327,19 @@ class Engine:
         effective_f0[:len(mask)][mask] *= 2.0
         intervals = self._merge_silence_intervals()
         if intervals:
-            pieces: list[np.ndarray] = []
-            cursor = 0.0
-            reference_rms: Optional[float] = None
-            for start, end in intervals:
-                if start > cursor:
-                    seg_arrays = {name: self._slice_array_by_time(arr, cursor, start) for name, arr in arrays.items()}
-                    seg_f0 = self._slice_array_by_time(effective_f0, cursor, start)
-                    seg_audio = self._synthesize_single_segment(seg_arrays, seg_f0, start - cursor)
-                    seg_audio = self._apply_fade(seg_audio, fade_in_ms, fade_out_ms)
-                    seg_rms = self._compute_rms(seg_audio)
-                    if reference_rms is None and seg_rms > 1e-10:
-                        reference_rms = seg_rms
-                    pieces.append(seg_audio)
-                silence_len = int(round((end - start) * self.fs))
-                if silence_len > 0:
-                    pieces.append(np.zeros(silence_len, dtype=float))
-                cursor = end
-            if cursor < self.duration:
-                seg_arrays = {name: self._slice_array_by_time(arr, cursor, self.duration) for name, arr in arrays.items()}
-                seg_f0 = self._slice_array_by_time(effective_f0, cursor, self.duration)
-                seg_audio = self._synthesize_single_segment(seg_arrays, seg_f0, self.duration - cursor)
-                seg_audio = self._apply_fade(seg_audio, fade_in_ms, fade_out_ms)
-                pieces.append(seg_audio)
-            if not pieces:
-                raise ValueError('Synthesis produced empty output')
-            audio = np.concatenate(pieces)
+            # Absolute half-open sample boundaries prevent accumulated rounding
+            # from stretching the final waveform and moving a short pause.
+            total = int(round(self.duration * self.fs))
+            audio = np.zeros(total, dtype=float)
+            cursor = 0
+            for start, end in [*intervals, (self.duration, self.duration)]:
+                i0, i1 = round(start * self.fs), round(end * self.fs)
+                if i0 > cursor:
+                    seg_arrays = {name: arr[cursor:i0].copy() for name, arr in arrays.items()}
+                    seg_f0 = effective_f0[cursor:i0].copy()
+                    seg_audio = self._synthesize_single_segment(seg_arrays, seg_f0, (i0 - cursor) / self.fs)
+                    audio[cursor:i0] = self._apply_fade(seg_audio, fade_in_ms, fade_out_ms)
+                cursor = i1
         else:
             audio = self._synthesize_single_segment(arrays, effective_f0, self.duration)
             audio = self._apply_fade(audio, fade_in_ms, fade_out_ms)

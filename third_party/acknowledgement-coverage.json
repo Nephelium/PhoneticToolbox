@@ -1,7 +1,7 @@
 {
   "schema_version": "acknowledgement-coverage/1",
-  "checked_on": "2026-10-19",
-  "scope": "18 live modules and their displayed shared/supplementary sources; historical documents are separate",
+  "checked_on": "2026-10-24",
+  "scope": "19 registered modules and their displayed shared/supplementary sources; shared language-map implementation",
   "modules": [
     {
       "id": "M01",
@@ -194,14 +194,26 @@
       "id": "M12",
       "source_ids": [
         "SRC-PRAAT",
+        "ASSET-DOULOS",
         "PKG-SOUNDFILE",
-        "M01-PY-SCIPY"
+        "M01-PY-SCIPY",
+        "M17-IPA-CHART",
+        "M17-EXTIPA-2025",
+        "M17-VOQS-BALL-2018",
+        "M17-PTB-IPA-PLUS-FONT",
+        "M17-UNICODE-PHONETIC-ENCODING",
+        "M17-IPA-CHART-ZH-2007",
+        "M17-IPA-HANDBOOK-JIANG-2008",
+        "M17-EXTIPA-BALL-2018",
+        "M17-EXTIPA-BALL-2024",
+        "M17-EXTIPA-BALL-2025-REPLY"
       ]
     },
     {
       "id": "M13",
       "source_ids": [
         "ASSET-DOULOS",
+        "SRC-SHEETJS",
         "REF-M13-LEE-ZEE-2003",
         "REF-M13-HU-1995",
         "REF-M13-HUANG-LIAO-2012",
@@ -226,7 +238,8 @@
       "id": "M15",
       "source_ids": [
         "SRC-SHEETJS",
-        "P02-NPM-VUE-3-5-42"
+        "P02-NPM-VUE-3-5-42",
+        "REF-M15-R-QUANTILE-TYPE7"
       ]
     },
     {
@@ -271,6 +284,24 @@
         "SRC-M18-ARTICULATORY-TTS-2610",
         "SRC-M18-COARTICULATION-2408",
         "SRC-M18-PYPDF"
+      ]
+    },
+    {
+      "id": "M19",
+      "source_ids": [
+        "M19-OPENLAYERS",
+        "M19-ZENODO",
+        "M19-PAPER",
+        "M19-SHAOZI",
+        "M19-ATLAS",
+        "M19-GARY-MAP",
+        "M19-NLSC",
+        "M19-NATURAL-EARTH",
+        "M19-LANGUAGE-ATLAS",
+        "M19-OSM",
+        "M19-HK-HAD",
+        "M19-MCA",
+        "M19-DATAV"
       ]
     }
   ],

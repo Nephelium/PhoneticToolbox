@@ -1,0 +1,8 @@
+# macOS arm64 host; preserve existing scientific/UI versions.
+-r requirements-m09-ui.in
+-r requirements-m14.in
+pypdf==6.19.0
+Pillow==12.3.0
+matplotlib==3.10.8
+av==16.1.0
+psutil==7.0.0

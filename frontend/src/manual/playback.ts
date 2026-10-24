@@ -1,7 +1,11 @@
-import {watch} from 'vue';
+import {watch,type InjectionKey,type Ref} from 'vue';
 import {pause,playback} from '../state/audio.ts';
 import {assertPlaybackAllowed,captureOwner} from '../platform/capture-lease.ts';
 import {ManualMediaCoordinator} from './media.ts';
+
+// Only media consumes this changing state. Passing it through every text node
+// needlessly updates the complete chapter whenever the reader tab is hidden.
+export const manualPlaybackAllowed:InjectionKey<Readonly<Ref<boolean>>>=Symbol('manual-playback-allowed');
 
 let channel:BroadcastChannel|null=null;
 export const manualPlayback=new ManualMediaCoordinator({

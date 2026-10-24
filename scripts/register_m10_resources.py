@@ -31,7 +31,7 @@ def main(check=False):
     for item in evidence['files']:
         target=ROOT/item['target']
         if target.is_file():item['current_sha256']=hashlib.sha256(updates[item['target']].encode()).hexdigest() if item['target'] in updates else digest(target)
-    evidence['behavior_revision']='R21 smoothing and source features; Windows/Wasm rebuilt, Mac R21 build pending; see docs/testing/m10-smoothing-review.md'
+    evidence['behavior_revision']='R21 smoothing and source features; Windows/Wasm rebuilt; Darwin arm64 R21 rebuilt from current shared sources on 2026-10-24, native/runtime checks passed and final app checks pending; see docs/testing/m10-smoothing-review.md and docs/testing/m19-geolinguistics.md'
     updates['docs/modules/evidence/M10-migration.json']=encode(evidence)
     changed=[]
     for name,content in updates.items():

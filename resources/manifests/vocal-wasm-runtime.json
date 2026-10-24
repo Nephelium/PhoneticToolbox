@@ -6,12 +6,13 @@
   "source_archive_sha256": "aa696bf4cf5c44cbd433304943aebb241e5ea3064b949daf5ea09f96567cff9b",
   "archive": {
     "name": "vocal-runtime.zip",
-    "sha256": "582be53f333b54e0387081cf92179e0defc4f0a1f7257f66c6c1ac1f00f54493",
-    "bytes": 418369
+    "sha256": "e81c6156a36c5b3d1c7442909c7735e1fc8e1148b8cf7bff24e09cd092dee254",
+    "bytes": 419902
   },
   "sources": {
     "phonetic_core/__init__.py": "f745d298ed32e2a7364390e602d97c1817276fe6c520b3ae21b5414ffddc5ea6",
-    "phonetic_core/vocal_tract/animation.py": "0570c29c21a742e8dde9a288210c049377bdf7197f04f5349c5ad14c70d0cbdc",
+    "phonetic_core/playback_gain.py": "65d4e0211a00488fd180105e5c1a2195ff06b2d940bcb99f551df093750e8975",
+    "phonetic_core/vocal_tract/animation.py": "8f337f7c064702927e079ec78db520d49fdf8b65aa7a626c1fb7c95d887aaa22",
     "phonetic_core/vocal_tract/document.py": "a669295ac436e9032d022da27be1a8ad36dfb111de57e14491c4cc03b39f2733",
     "phonetic_core/vocal_tract/engine.py": "a432a4e727948c232dbf0e0f5c6a2ceba324c1da33fba28bbd61bce9b4ef27b2",
     "phonetic_core/vocal_tract/envelope.py": "f1112d91f53224713b4066417e914f95c1d85afc251bc6f660d4f0d9777d130d",
@@ -23,17 +24,17 @@
     "phonetic_core/vocal_tract/preset_library.py": "b1bc09d06c81a607345fe83c77b751ecb2abb9ee8defd60ce93ef72577c190ff",
     "phonetic_core/vocal_tract/preset_pack.py": "9114099da74e104f1ca275246929c423d136f478db2e8b31e135b4f9f6f5f4f4",
     "phonetic_core/vocal_tract/sequence_controls.py": "862780da605b8fa86f718782f1ca94f9ccadddac0d536af70d8e98a75a4f248f",
-    "phonetic_core/vocal_tract/session.py": "1acfef84ab4a610a97cc89154209705dc08aee35411598b8fda1ba0837520cdd",
+    "phonetic_core/vocal_tract/session.py": "bfce36c256cc12d1eaf19f62f2b15cefd3a2412dc9d652512c7d86e27d91fcae",
     "phonetic_core/vocal_tract/shape.py": "d630b9058632e42826538bfa3ec81df08746cd2d04e139016af1b40e8eabed9f",
     "phonetic_core/vocal_tract/source.py": "9f43f681a85b9245f79c422a39828898c4d75e748719ff57daff5a90811a8a78",
     "phonetic_core/vocal_tract/source_models.py": "30834f9f0e184535acac0ea28fe968e1d4ce5d729a812032c03f9d15cc7bf6f0",
-    "phonetic_core/vocal_tract/stop_timing.py": "305d82c14d5aed856b0c7ecf3126eff72e66683efae9d9997b86e767a38ded0c",
+    "phonetic_core/vocal_tract/stop_timing.py": "cc1cf33a97ad5ada617966a8305be73e58a3c7394fe6af65db971f1c1cd00135",
     "phonetic_core/vocal_tract/suprasegmentals.py": "d0455ef4e2ebdc2ef164d4ccdd38cd03e03b1a8838d91877c59df14745aedae2",
     "phonetic_core/vocal_tract/trajectory.py": "190f875c405aa35125e8c2373fa15989c3c42e0af4bbf8321f1f8796cd317fa7",
     "phonetic_core/vocal_tract/__init__.py": "50c0e9d2360a0a1f20381c752597d825d2dc4a33dc318f97a1715f56d86cd5bd",
     "ptb_worker/__init__.py": "4f97c64a012328261042128c3efa2abd86687f8969ca0e403300a38327104ac4",
-    "ptb_worker/vocal_web.py": "5addd8a58089fa0893ef532ff769712f7e13c576e44685f9c4544eeb9c82d0d0",
-    "ptb_worker/browser_vocal.py": "110076642fc48b1d5cf5344e518fba844470165c59e9c543c25085f90f78dadc",
+    "ptb_worker/vocal_web.py": "01ad088f59f731f285e18dd81238ba88a6e18f1efb5c46c723af51cf2af70be0",
+    "ptb_worker/browser_vocal.py": "d29cab67f0ca0f7517f074365d85df2d945934deaefca5355322e8a0d5b9b5c8",
     "vocal-native/JD2.speaker": "fc118b8150e65eca4aa636800128c343df13d3724044ca54ed3682ca3be222ec",
     "vocal-native/M01.speaker": "438ef8970384444464ddc0ccb82e349323583ab8f87eea70ba227144c8d665c8",
     "vocal-native/VTL-LICENSE.txt": "230184f60bae2feaf244f10a8bac053c8ff33a183bcc365b4d8b876d2b7f4809",
@@ -44,7 +45,7 @@
   },
   "corresponding_source": {
     "name": "corresponding-source.zip",
-    "sha256": "068774c82da22fd9d574fe8675e459b8ceeaa4337bba85596feefc77fc33f800",
-    "bytes": 402254
+    "sha256": "536aec9abad66c1bc1b2d6c3d147fcff6669caae4832db982050e724950d5dd4",
+    "bytes": 403868
   }
 }

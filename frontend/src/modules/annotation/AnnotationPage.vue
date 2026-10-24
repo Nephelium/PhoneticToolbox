@@ -9,12 +9,15 @@ import {annotationShortcut} from './shortcuts.ts';
 import ModuleToolbar from '../../components/ModuleToolbar.vue';
 import ModuleFrame from '../../components/ModuleFrame.vue';
 import ModuleStatus from '../../components/ModuleStatus.vue';
-import {ref,shallowRef,computed,watch,reactive,onMounted,onUnmounted,markRaw,nextTick} from 'vue';
+import {ref,shallowRef,computed,watch,reactive,onMounted,onUnmounted,markRaw,nextTick,defineAsyncComponent} from 'vue';
 import type {ResearchContext,ResearchFile} from '../../platform/research.ts';import {annotationAudio} from '../../platform/annotation.ts';
 import {portableAnnotation,lipTrack,type LipTrack,type AnnotationTarget} from '../../platform/annotation.ts';
 import {host,workspace} from '../../state/workspace.ts';import {stop,play,pause,playback,volume,isCurrentAudio} from '../../state/audio.ts';
 import WaveformViewport from '../../components/WaveformViewport.vue';import ModalDialog from '../../components/ModalDialog.vue';
 import AnnotationTracks from './AnnotationTracks.vue';import {createEditor,type Grid} from './editor.mjs';import {parseGrid,serializeGrid,decodeText,loadEditingGrid,validateEditingAudio,preferredGrid,selectedInterval} from './format.ts';import dictionary from './default.dict?raw';
+import type {KeyboardSymbol} from './IpaKeyboardChart.vue';
+import {insertSymbol} from '../ipa-plus/editor.ts';
+const IpaKeyboard=defineAsyncComponent(()=>import('./IpaKeyboard.vue'));
 import {sequenceDoubleClick,manualDoubleClick,resetSequence,sequenceParts,hasUnsplitPhones,splitInitialPhones,type PhoneSplitMode} from './sequence.ts';
 import {editableTier,editingNames,newIntervalTiers,editorSelection} from './layers.ts';
 import {AnnotationHistory,type AnnotationHistorySession,type AnnotationView,type HistoryKind} from './history.ts';
@@ -24,8 +27,10 @@ const source=shallowRef<ResearchFile|null>(null),gridFile=shallowRef<ResearchFil
 const filter=ref(''),suffix=ref('_自动保存'),showOpen=ref(true),showWidth=ref(true),sidebar=ref(true),referenceName=ref(''),dictName=ref('内置词典'),labName=ref(''),label=ref(''),replace=ref(''),query=ref(''),durationInput=ref('3.2');
 const settingsOpen=ref(host.projects.read('m12-settings-open:'+props.stateKey,true));
 watch(settingsOpen,value=>host.projects.write('m12-settings-open:'+props.stateKey,value));
-const dialog=ref<'replace'|'overwrite'|'words'|'layers'|'association'|''>(''),composing=ref(false),picker=ref<HTMLInputElement>(),dictPicker=ref<HTMLInputElement>(),labPicker=ref<HTMLInputElement>(),refPicker=ref<HTMLInputElement>();
-const newWord=ref(''),newPhone=ref(''),layerRole=ref<'both'|'word'|'phone'>('both'),associationAudio=shallowRef<ResearchFile|null>(null),associationId=ref('');
+const dialog=ref<'replace'|'overwrite'|'words'|'layers'|'association'|'links'|'intensity'|'search'|''>(''),composing=ref(false),picker=ref<HTMLInputElement>(),dictPicker=ref<HTMLInputElement>(),labPicker=ref<HTMLInputElement>(),refPicker=ref<HTMLInputElement>();
+const newWord=ref(''),newPhone=ref(''),newExtra=ref(''),layerRole=ref<'both'|'word'|'phone'|'extra'>('both'),associationAudio=shallowRef<ResearchFile|null>(null),associationId=ref('');
+const fitChannel=ref('');
+const keyboardOpen=ref(false),labelInput=ref<HTMLInputElement>();
 const sequenceEnabled=ref(false),sequenceText=ref(''),nudgeStep=ref('1');
 const port=props.context.files.annotation??portableAnnotation(props.context.files);
 let ticket=0,alive=true,timer:ReturnType<typeof setInterval>,repeat:ReturnType<typeof setTimeout>|undefined;
@@ -35,7 +40,7 @@ const historyStore=new AnnotationHistory(props.context.ownerId??'local',props.co
 const historySession=shallowRef<AnnotationHistorySession|null>(null),historyRevision=ref(0),historyChoice=ref('');
 const historyVersions=computed(()=>{historyRevision.value;return [...(historySession.value?.value.versions??[])].reverse();});
 const historyKinds:Record<HistoryKind,string>={original:'原始标注',recovered:'已有自动保存',auto:'自动保存',manual:'手动保存',restored:'恢复版本'};
-function historyView():AnnotationView{return {offset:wave.offset,zoom:wave.zoom,channel:wave.channel,word:wordName.value,phone:phoneName.value,lab:[...s.labSequence],labName:labName.value,sequence:sequenceEnabled.value,index:s.sequenceIndex};}
+function historyView():AnnotationView{return {offset:wave.offset,zoom:wave.zoom,channel:wave.channel,word:wordName.value,phone:phoneName.value,extra:extraName.value,lab:[...s.labSequence],labName:labName.value,sequence:sequenceEnabled.value,index:s.sequenceIndex};}
 async function checkpoint(kind:HistoryKind='auto'){
  if(!historySession.value||!s.textgrid)return;
  await historyStore.save(historySession.value,serializeGrid(s.textgrid),kind,historyView(),gridFile.value?.name);historyRevision.value++;historyChoice.value=historySession.value.value.head;
@@ -44,13 +49,16 @@ const targets=new Map<string,AnnotationTarget>();
 const editor=createEditor({changed:changed,message:m=>{notice.value=m;}}),s=editor.state;
 const controls=reactive(editor.controls);
 editor.state.phoneDict=editor.parseDictText(dictionary);
-const prefs=host.projects.read<{word?:string;phone?:string;suffix?:string;phoneSplit?:PhoneSplitMode}>('annotation.'+props.stateKey,{});
+const prefs=host.projects.read<{word?:string;phone?:string;extra?:string;suffix?:string;phoneSplit?:PhoneSplitMode;snapEnabled?:boolean;linkWordPhone?:boolean;linkWordExtra?:boolean;linkPhoneExtra?:boolean}>('annotation.'+props.stateKey,{});
+const snapEnabled=ref(prefs.snapEnabled===true),linkWordPhone=ref(prefs.linkWordPhone!==false),linkWordExtra=ref(prefs.linkWordExtra===true),linkPhoneExtra=ref(prefs.linkPhoneExtra===true);
+function syncLinks(){Object.assign(s,{snapEnabled:snapEnabled.value,linkWordPhone:linkWordPhone.value,linkWordExtra:linkWordExtra.value,linkPhoneExtra:linkPhoneExtra.value});}
+syncLinks();watch([snapEnabled,linkWordPhone,linkWordExtra,linkPhoneExtra],()=>{syncLinks();persist();revision.value++;},{flush:'sync'});
 const phoneSplit=ref<PhoneSplitMode>(prefs.phoneSplit==='equal'?'equal':'cursor');
-const wordName=ref(''),phoneName=ref('');suffix.value=!prefs.suffix||prefs.suffix==='_webedit'?(prefs.suffix===''?'':'_自动保存'):prefs.suffix;s.wordTierName='';s.phoneTierName='';
+const wordName=ref(''),phoneName=ref(''),extraName=ref('');suffix.value=!prefs.suffix||prefs.suffix==='_webedit'?(prefs.suffix===''?'':'_自动保存'):prefs.suffix;s.wordTierName='';s.phoneTierName='';
 const tierChoices=computed(()=>{revision.value;return s.textgrid?.tiers.map(t=>({name:t.name,editable:editableTier(s.textgrid!,t),kind:t.points?'点层':'非全域区间层'}))??[];});
 const hasLayers=computed(()=>{revision.value;return !!s.textgrid?.tiers.length;});
 const editingReady=computed(()=>{revision.value;return !!editor.wordTier()&&!!editor.phoneTier();});
-const boundaries=computed(()=>{revision.value;const times=new Map<number,string>();for(const [tier,kind] of [[editor.phoneTier(),'phone'],[editor.wordTier(),'word']] as const)for(const item of tier?.intervals??[])for(const t of [item.xmin,item.xmax])times.set(t,kind);return [...times].map(([time,kind])=>({time,kind}));});
+const boundaries=computed(()=>{revision.value;const times=new Map<number,string>();for(const [tier,kind] of [[editor.tierByName(s.extraTierName),'extra'],[editor.phoneTier(),'phone'],[editor.wordTier(),'word']] as const)for(const item of tier?.intervals??[])for(const t of [item.xmin,item.xmax])times.set(t,kind);return [...times].map(([time,kind])=>({time,kind}));});
 const lipDirty=computed(()=>!!lip.value&&lipOffset.value!==savedLipOffset.value);
 const pairs=computed(()=>files.value.filter(f=>f.kind==='audio').map(audio=>{try{return {audio,grid:preferredGrid(audio,files.value)};}catch{return {audio,grid:undefined};}}));
 function associatedGrids(audio:ResearchFile){const stem=audio.name.replace(/\.wav$/i,'').toLowerCase();return files.value.filter(f=>f.kind==='textgrid'&&(f.name.toLowerCase()===stem+'.textgrid'||f.name.toLowerCase().startsWith(stem+'_')));}
@@ -62,6 +70,7 @@ const selected=computed(()=>{revision.value;return selectedInterval(s.textgrid,s
 // The migrated document is deliberately raw. Text changes retain object identity.
 const labelDirty=computed(()=>{revision.value;return !!selected.value&&label.value!==selected.value.text;});
 const matchCount=computed(()=>{revision.value;return s.searchResults.length;});
+const matchPosition=computed(()=>{revision.value;return s.searchResults.length?s.searchIndex+1:0;});
 function changed(){
  if(!alive)return;revision.value++;wave.dirty=s.dirty||lipDirty.value;
  label.value=selectedInterval(s.textgrid,s.selected)?.text??'';
@@ -98,24 +107,47 @@ function syncView(){s.visibleStart=wave.offset;s.visibleDuration=(wave.asset?.du
 watch(()=>[wave.offset,wave.zoom],syncView);
 watch([lipDirty,labelDirty,composing],()=>{wave.dirty=s.dirty||lipDirty.value||labelDirty.value||composing.value;});
 function editLabel(text:string){editor.editText(text,sequenceEnabled.value?sequenceParts(editor,text):undefined);}
+// Qt can collapse an input selection when a distant floating key scrolls into
+// view, without moving focus. Keep the last deliberate edit/caret interaction.
+let labelSelection:{text:string;start:number;end:number;tier:string;index:number;item:object}|undefined;
+// Weak identities avoid retaining a second set of large TextGrid snapshots.
+const symbolUndoIds=new WeakMap<object,number>();let symbolRevision=0;
+const symbolEdits:{undo:number;selection:{tier:string;index:number};start:number;end:number}[]=[];
+function rememberLabelSelection(allowCollapse=true){
+ const input=labelInput.value,selection=s.selected;if(!input||!selection)return;
+ const start=input.selectionStart??input.value.length,end=input.selectionEnd??start;
+ if(!allowCollapse&&start===end&&labelSelection?.start!==labelSelection?.end)return;
+ labelSelection={text:input.value,start,end,...selection,item:selected.value!};
+}
+async function insertIpa(entry:KeyboardSymbol){
+ const input=labelInput.value;if(!input||!selected.value||busy.value||saving.value||composing.value)return;
+ const saved=labelSelection&&labelSelection.item===selected.value&&labelSelection.text===label.value&&labelSelection.tier===s.selected?.tier&&labelSelection.index===s.selected?.index?labelSelection:undefined;
+ const start=saved?.start??input.selectionStart??label.value.length,end=saved?.end??input.selectionEnd??start;
+ try{const before=s.undoStack.at(-1),selection={...s.selected!},next=insertSymbol({text:label.value,start,end},entry);label.value=next.text;editLabel(next.text);changed();
+ const snapshot=s.undoStack.at(-1);if(snapshot&&snapshot!==before){symbolUndoIds.set(snapshot,++symbolRevision);symbolEdits.push({undo:symbolRevision,selection,start,end});if(symbolEdits.length>50)symbolEdits.shift();}
+ await nextTick();input.focus({preventScroll:true});input.setSelectionRange(next.start,next.end);rememberLabelSelection();error.value='';}catch(e){error.value=(e as Error).message;}
+}
 function finishInput(){if(composing.value){error.value='请先完成输入法组字，再保存或切换。';return false;}if(labelDirty.value){editLabel(label.value);changed();}return true;}
 watch([suffix,phoneSplit],()=>{persist();});
-function persist(){return host.projects.write('annotation.'+props.stateKey,{word:wordName.value,phone:phoneName.value,suffix:suffix.value,phoneSplit:phoneSplit.value});}
+function persist(){return host.projects.write('annotation.'+props.stateKey,{word:wordName.value,phone:phoneName.value,extra:extraName.value,suffix:suffix.value,phoneSplit:phoneSplit.value,snapEnabled:snapEnabled.value,linkWordPhone:linkWordPhone.value,linkWordExtra:linkWordExtra.value,linkPhoneExtra:linkPhoneExtra.value});}
+function applyRoles(grid:Grid,preferred:{word?:string;phone?:string;extra?:string}){const roles=editingNames(grid,preferred);wordName.value=s.wordTierName=roles.word;phoneName.value=s.phoneTierName=roles.phone;extraName.value=s.extraTierName=roles.extra;}
 function names(){
- if(!finishInput()){wordName.value=s.wordTierName;phoneName.value=s.phoneTierName;return;}
- const w=wordName.value,p=phoneName.value;
- if(w&&w===p){wordName.value=s.wordTierName;phoneName.value=s.phoneTierName;error.value='音节与音素请选择不同的层。';return;}
- wordName.value=w;phoneName.value=p;s.wordTierName=w;s.phoneTierName=p;s.selected=null;s.selectedBoundary=null;s.selectedIndices=[];
+ const restore=()=>{wordName.value=s.wordTierName;phoneName.value=s.phoneTierName;extraName.value=s.extraTierName;};
+ if(!finishInput()){restore();return;}
+ const w=wordName.value,p=phoneName.value,e=extraName.value,names=[w,p,e].filter(Boolean);
+ if(new Set(names).size!==names.length){restore();error.value='三个编辑层请选择不同的层。';return;}
+ s.wordTierName=w;s.phoneTierName=p;s.extraTierName=e;s.selected=null;s.selectedBoundary=null;s.selectedIndices=[];
  s.searchResults=[];s.searchIndex=-1;query.value='';s.sequenceStart=null;resetSequence(editor);
  if(!persist())error.value='层名偏好保存失败，当前编辑仍保留。';else error.value='';changed();
 }
-function layerDialog(role:'both'|'word'|'phone'){if(!finishInput())return;layerRole.value=role;newWord.value='';newPhone.value='';error.value='';dialog.value='layers';}
+function layerDialog(role:'both'|'word'|'phone'|'extra'){if(!finishInput())return;layerRole.value=role;newWord.value='';newPhone.value='';newExtra.value='';error.value='';dialog.value='layers';}
 function createLayers(){
  if(!s.textgrid)return;
- try{const names=layerRole.value==='both'?[newWord.value,newPhone.value]:[layerRole.value==='word'?newWord.value:newPhone.value],tiers=newIntervalTiers(s.textgrid,names);
+ try{const names=layerRole.value==='both'?[newWord.value,newPhone.value,...(newExtra.value.trim()?[newExtra.value]:[])]:[layerRole.value==='word'?newWord.value:layerRole.value==='phone'?newPhone.value:newExtra.value],tiers=newIntervalTiers(s.textgrid,names);
   editor.saveUndoState();s.textgrid.tiers.push(...tiers);s.dirty=true;
-  if(layerRole.value!=='phone')wordName.value=s.wordTierName=tiers[0].name;
-  if(layerRole.value!=='word')phoneName.value=s.phoneTierName=tiers.at(-1)!.name;
+  if(['both','word'].includes(layerRole.value))wordName.value=s.wordTierName=tiers[0].name;
+  if(['both','phone'].includes(layerRole.value))phoneName.value=s.phoneTierName=tiers[layerRole.value==='both'?1:0].name;
+  if(layerRole.value==='extra'||layerRole.value==='both'&&tiers.length===3)extraName.value=s.extraTierName=tiers.at(-1)!.name;
   s.selected=null;s.selectedIndices=[];s.selectedBoundary=null;resetSequence(editor);persist();dialog.value='';error.value='';notice.value='已创建：'+tiers.map(t=>t.name).join('、')+'。可开始标注，保存后写入 TextGrid。';changed();
  }catch(e){error.value=(e as Error).message;}
 }
@@ -162,7 +194,7 @@ function savePending():Promise<boolean>{
 async function restoreVersion(){
  const version=historySession.value?.value.versions.find(v=>v.id===historyChoice.value);if(!version||busy.value||saving.value||!finishInput())return;
  if(!await savePending())return;
- editor.saveUndoState();s.textgrid=parseGrid(version.text,true);const roles=editingNames(s.textgrid,{word:wordName.value,phone:phoneName.value});wordName.value=s.wordTierName=roles.word;phoneName.value=s.phoneTierName=roles.phone;
+ editor.saveUndoState();s.textgrid=parseGrid(version.text,true);applyRoles(s.textgrid,{word:wordName.value,phone:phoneName.value,extra:extraName.value});
  s.selected=null;s.selectedIndices=[];s.selectedBoundary=null;resetSequence(editor);s.dirty=true;changed();
  if(await saveGrid(true,false,'restored'))notice.value='已恢复历史版本，并保存为新的当前版本。';
 }
@@ -202,17 +234,17 @@ async function open(audio:ResearchFile,explicitGrid?:ResearchFile){
   if(!alive||own!==ticket)return;
   previewNote.value=decoded.previewNote;
   source.value={...audio,sha256:decoded.sha256};gridFile.value=grid??null;gridSha.value=read?.sha256??'';wave.asset=markRaw(decoded.asset);wave.channel=0;wave.offset=0;wave.zoom=Math.max(1,decoded.asset.duration/3.2);wave.start=0;wave.end=0;pausedSelection='';
-  s.textgrid=document;s.audioBuffer={duration:decoded.asset.duration,sampleRate:decoded.asset.sampleRate,getChannelData:index=>decoded.asset.channels[index]};s.visibleStart=0;s.visibleDuration=decoded.asset.duration/wave.zoom;
-  const roles=editingNames(document,{word:wordName.value||prefs.word,phone:phoneName.value||prefs.phone});wordName.value=s.wordTierName=roles.word;phoneName.value=s.phoneTierName=roles.phone;
+  s.textgrid=document;s.audioBuffer={duration:decoded.asset.duration,sampleRate:decoded.asset.sampleRate,numberOfChannels:decoded.asset.channels.length,getChannelData:index=>decoded.asset.channels[index]};s.visibleStart=0;s.visibleDuration=decoded.asset.duration/wave.zoom;
+  applyRoles(document,{word:wordName.value||prefs.word,phone:phoneName.value||prefs.phone,extra:extraName.value||prefs.extra});
   s.selected=null;s.selectedBoundary=null;s.selectedIndices=[];s.undoStack=[];s.drag=null;s.dirty=serializeGrid(document)!==diskText;s.copiedWord='';s.copiedLabIndex=null;s.searchResults=[];s.searchIndex=-1;query.value='';s.sequenceIndex=0;s.sequenceStart=null;
   savedGrid.value=diskText;historySession.value=session;historyRevision.value++;historyChoice.value=explicitGrid?'':session.value.head;lip.value=null;lipFile.value=null;lipOffset.value=0;savedLipOffset.value=0;s.labSequence=[];s.labWords=new Set();labName.value='';
-  controls.fitStart.value='0';controls.fitEnd.value='0';controls.spliceStart.value='0';controls.spliceEnd.value=decoded.asset.duration.toFixed(3);targets.clear();
+  fitChannel.value='';controls.fitStart.value='0';controls.fitEnd.value='0';controls.spliceStart.value='0';controls.spliceEnd.value=decoded.asset.duration.toFixed(3);targets.clear();
   await prepare('textgrid',source.value,'_自动保存');
   const lab=files.value.find(f=>f.kind==='lab'&&f.name.toLowerCase()===audio.name.replace(/\.wav$/i,'.lab').toLowerCase());
   if(lab){const bytes=await props.context.files.read(lab);if(own!==ticket||!alive)return;setLab(decodeText(bytes.buffer),lab.name);}
   const view=!explicitGrid?session.value.view:undefined;
   if(view){wave.zoom=Math.max(1,view.zoom);wave.offset=Math.max(0,Math.min(decoded.asset.duration-decoded.asset.duration/wave.zoom,view.offset));wave.channel=Math.max(0,Math.min(decoded.asset.channels.length-1,view.channel));
-   const roles=editingNames(document,{word:view.word,phone:view.phone});wordName.value=s.wordTierName=roles.word;phoneName.value=s.phoneTierName=roles.phone;
+   applyRoles(document,{word:view.word,phone:view.phone,extra:view.extra});
    s.labSequence=[...view.lab];s.labWords=new Set(view.lab.map(w=>w.toLowerCase()));labName.value=view.labName;sequenceEnabled.value=view.sequence;s.sequenceIndex=Math.max(0,Math.min(view.lab.length,view.index));}
   const stem=audio.name.replace(/\.wav$/i,''),parent=audio.name.includes('/')?audio.name.slice(0,audio.name.lastIndexOf('/')+1):'';
   const preferred=[stem+'.lip.json',stem+'.pkl',parent+'audio_recording.lip.json',parent+'audio_recording.pkl'];
@@ -239,7 +271,7 @@ function doubleTime(time:number,ctrl=false){
 function doublePhone(time:number){
  if(busy.value||saving.value||!finishInput())return;
  try{
-  const word=editor.wordTier()?.intervals.find(w=>w.text.trim()&&time>w.xmin&&time<w.xmax);
+  const word=editor.tiersLinked(s.wordTierName,s.phoneTierName)?editor.wordTier()?.intervals.find(w=>w.text.trim()&&time>w.xmin&&time<w.xmax):undefined;
   const labels=word?(sequenceEnabled.value?sequenceParts(editor,word.text):editor.pinyinToPhones(word.text)):[];
   if(word&&labels.length>1&&hasUnsplitPhones(editor,word)){
    notice.value=splitInitialPhones(editor,word,time,phoneSplit.value,labels);
@@ -249,10 +281,10 @@ function doublePhone(time:number){
  }catch(e){error.value=(e as Error).message;}
 }
 function cancelStart(){s.sequenceStart=null;notice.value='已取消待定起点。';changed();}
-function undo(){if(s.sequenceStart!==null){cancelStart();return;}editor.undo();if(s.textgrid){const roles=editingNames(s.textgrid,{word:wordName.value,phone:phoneName.value});wordName.value=s.wordTierName=roles.word;phoneName.value=s.phoneTierName=roles.phone;s.dirty=serializeGrid(s.textgrid)!==savedGrid.value;}changed();}
+function undo(){if(s.sequenceStart!==null){cancelStart();return;}editor.undo();if(s.textgrid){applyRoles(s.textgrid,{word:wordName.value,phone:phoneName.value,extra:extraName.value});s.dirty=serializeGrid(s.textgrid)!==savedGrid.value;}changed();}
 function moveAnnotation(direction:number){
  if(busy.value||saving.value||!finishInput())return;
- try{const ms=Number(nudgeStep.value);if(!String(nudgeStep.value).trim()||!Number.isFinite(ms)||ms<.01||ms>1000)throw Error('微调步长需在 0.01–1000 ms 之间。');editor.moveSelected(direction*ms/1000);error.value='';notice.value=`选中音节及对应音素已${direction<0?'左':'右'}移 ${ms} ms。`;changed();}
+ try{const ms=Number(nudgeStep.value);if(!String(nudgeStep.value).trim()||!Number.isFinite(ms)||ms<.01||ms>1000)throw Error('微调步长需在 0.01–1000 ms 之间。');editor.moveSelected(direction*ms/1000);error.value='';notice.value=`选中标注已${direction<0?'左':'右'}移 ${ms} ms。`;changed();}
  catch(e){error.value=(e as Error).message;}
 }
 function nextSequence(event:Event){s.sequenceIndex=Number((event.target as HTMLSelectElement).value);s.sequenceStart=null;changed();}
@@ -272,21 +304,29 @@ function startRepeat(ms:number){stopRepeat();nudge(ms);repeat=setTimeout(functio
 const lipOffsetInput=computed({get:()=>lipOffset.value*1000,set:(value:number|string)=>{if(!String(value).trim()||!Number.isFinite(Number(value))||Math.abs(Number(value))>3_600_000){error.value='唇偏毫秒数无效。';return;}lipOffset.value=Number(value)/1000;error.value='';}});
 function search(){controls.searchInput.value=query.value;editor.doSearch(query.value);changed();}
 function deleteCurrent(){if(busy.value||saving.value||!finishInput())return;try{if(s.selectedBoundary)editor.deleteSelectedBoundary();else editor.deleteAnnotation();error.value='';changed();}catch(e){error.value=(e as Error).message;}}
+function selectFitChannel(){if(wave.asset&&isCurrentAudio(wave.asset,wave.channel)&&playback.playing)pause();wave.channel=Number(fitChannel.value);}
+function openTool(name:'links'|'intensity'|'search'){if(busy.value||saving.value||!finishInput())return;error.value='';notice.value='';dialog.value=name;if(name==='search')search();}
 async function action(name:'fit'|'splice'|'phones'|'delete'){
  error.value='';try{
   if(!s.textgrid)throw Error('请先选择音频和标注。');
   if(name==='splice'){if(!s.referenceTextGrid)throw Error('请先选择参考 TextGrid。');await editor.applyReferenceSplice();}
   else if(name==='delete')editor.deleteSelectedBoundary();
-  else{if(!editor.wordTier())throw Error('找不到词层，请检查层名。');if(name==='fit'){if(!fitRangeInput())return;editor.fitIntensityRange();controls.fitStart.value=String(wave.start);controls.fitEnd.value=String(wave.end);}else if(name==='phones')editor.autoPhonesForSelection();}
+  else{if(!editor.wordTier())throw Error('找不到词层，请检查层名。');if(name==='fit'){if(fitChannel.value==='')throw Error('请先选择强度贴合的声道。');if(!fitRangeInput())return;editor.fitIntensityRange(Number(fitChannel.value));controls.fitStart.value=String(wave.start);controls.fitEnd.value=String(wave.end);}else if(name==='phones')editor.autoPhonesForSelection();}
   changed();
  }catch(e){error.value=(e as Error).message;}
 }
 function key(event:KeyboardEvent){
  if(!props.active||!s.textgrid||dialog.value||busy.value||saving.value||event.isComposing)return;
+ if(event.key==='Escape'&&keyboardOpen.value){event.preventDefault();keyboardOpen.value=false;return;}
  const command=annotationShortcut(event);
  // Save commits the label field too; editing shortcuts retain native input behavior.
  if(command==='save'){event.preventDefault();void saveGrid();return;}
- const element=event.target as HTMLElement;if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(element.tagName)||element.isContentEditable)return;
+ const element=event.target as HTMLElement,symbol=symbolEdits.at(-1),snapshot=s.undoStack.at(-1);
+ if(command==='undo'&&element===labelInput.value&&symbol&&!labelDirty.value&&snapshot&&symbolUndoIds.get(snapshot)===symbol.undo&&s.selected?.tier===symbol.selection.tier&&s.selected.index===symbol.selection.index){
+  event.preventDefault();editor.undo();s.selected={...symbol.selection};symbolEdits.pop();s.dirty=serializeGrid(s.textgrid)!==savedGrid.value;changed();
+  void nextTick(()=>{labelInput.value?.focus({preventScroll:true});labelInput.value?.setSelectionRange(symbol.start,symbol.end);rememberLabelSelection();});return;
+ }
+ if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(element.tagName)||element.isContentEditable)return;
  const k=event.key.toLowerCase();
  const deletion=['Backspace','Delete'].includes(event.key),clipboardAction=command&&['copy','cut','paste'].includes(command),remove=deletion&&!s.selectedBoundary;
  if(clipboardAction||remove){
@@ -307,11 +347,11 @@ watch(()=>props.active,active=>{if(!active)stopRepeat();});
 onMounted(()=>{window.addEventListener('keydown',key);window.addEventListener('blur',stopRepeat);timer=setInterval(()=>{if(props.context.files.kind!=='preview'&&!busy.value&&!saving.value&&!dialog.value&&!composing.value&&(s.dirty||lipDirty.value||labelDirty.value))void savePending();},60000);if(props.context.files.kind==='server')void scan();});
 onUnmounted(()=>{alive=false;++ticket;reading?.abort();clearInterval(timer);stopRepeat();window.removeEventListener('keydown',key);window.removeEventListener('blur',stopRepeat);});
 defineExpose({save:savePending});
-useWebSettings(props.stateKey,{suffix,showOpen,showWidth,sidebar,settingsOpen,phoneSplit,durationInput,nudgeStep,...settingsFields(wave,['showBoth','showSpectrogram'])});
+useWebSettings(props.stateKey,{suffix,showOpen,showWidth,sidebar,settingsOpen,phoneSplit,durationInput,nudgeStep,snapEnabled,linkWordPhone,linkWordExtra,linkPhoneExtra,...settingsFields(wave,['showBoth','showSpectrogram'])});
 </script>
 <template>
 <ModuleFrame unified fit label="TextGrid标注 工作区" class="annotation-page" :data-revision="revision" :aria-busy="busy||saving">
-<template #toolbar><ModuleToolbar><ResearchUpload :files="context.files" accept=".wav,.mp3,.flac,.TextGrid" @uploaded="scan()"/><button class="primary" v-if="context.files.choose" :disabled="busy||saving" @click="scan(true)"><AppIcon name="folder"/>打开音频目录</button><button class="primary" v-else-if="context.files.add" :disabled="busy||saving" @click="picker?.click()">打开语料文件</button><button :disabled="busy||saving" @click="scan()">扫描</button><template #actions><button :aria-pressed="settingsOpen" @click="settingsOpen=!settingsOpen">标注设置</button><button :aria-pressed="sidebar" @click="sidebar=!sidebar">文件列表</button><button :disabled="!hasLayers||busy||saving" class="primary" @click="saveGrid()">{{saving?'正在保存…':'保存 TextGrid'}}{{s.dirty?' *':''}}</button><button type="button" @click="emit('help')">帮助</button><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button></template></ModuleToolbar></template>
+<template #toolbar><ModuleToolbar><ResearchUpload :files="context.files" accept=".wav,.mp3,.flac,.TextGrid" @uploaded="scan()"/><button class="primary" v-if="context.files.choose" :disabled="busy||saving" @click="scan(true)"><AppIcon name="folder"/>打开音频目录</button><button class="primary" v-else-if="context.files.add" :disabled="busy||saving" @click="picker?.click()">打开语料文件</button><button :disabled="busy||saving" @click="scan()">扫描</button><button aria-haspopup="dialog" :disabled="busy||saving" @click="openTool('links')">吸附与关联</button><button aria-haspopup="dialog" :disabled="!hasLayers||busy||saving" @click="openTool('intensity')">强度贴合</button><button aria-haspopup="dialog" :disabled="!hasLayers||busy||saving" @click="openTool('search')">搜索替换</button><button :aria-pressed="keyboardOpen" :disabled="busy||saving" @click="keyboardOpen=!keyboardOpen">音标键盘</button><template #actions><button :aria-pressed="settingsOpen" @click="settingsOpen=!settingsOpen">标注设置</button><button :aria-pressed="sidebar" @click="sidebar=!sidebar">文件列表</button><button :disabled="!hasLayers||busy||saving" class="primary" @click="saveGrid()">{{saving?'正在保存…':'保存 TextGrid'}}{{s.dirty?' *':''}}</button><button type="button" @click="emit('help')">帮助</button><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button></template></ModuleToolbar></template>
  <ModuleStatus v-if="error" kind="error" :message="error"/><ModuleStatus v-if="notice&&busy" kind="loading" :message="notice"/>
  <div v-resizable-panels="{key:stateKey,center:'.annotation-editor',centerMin:350,panels:[{selector:'.annotation-files',side:'left',label:'标注文件',initial:300,min:180,max:520},{selector:'.annotation-settings',side:'right',label:'标注设置',initial:300,min:210,max:560}]}" class="annotation-layout" :class="{collapsed:!sidebar,'settings-collapsed':!settingsOpen}">
  <aside v-show="sidebar" class="annotation-files annotation-card">
@@ -328,13 +368,10 @@ useWebSettings(props.stateKey,{suffix,showOpen,showWidth,sidebar,settingsOpen,ph
    <div v-if="!editingReady" class="layer-prompt"><span>{{hasLayers?'请选择音节与音素的编辑层，或创建所需层。':'当前还没有标注层。输入自己的层名后开始标注。'}}</span><button class="primary" :disabled="busy||saving" @click="layerDialog('both')">创建标注层</button></div>
    <WaveformViewport :state="wave" :compact-overview="true" :hide-overview-controls="true" :overview-top="true" :auto-amplitude="true" :shift-wheel-pan="true" :continuous-detail="true" :hide-time-axis="true" double-click-action="annotation" @time-double-click="doubleTime" @selection-end="waveformSelection" @boundary-start="boundaryStart" @boundary-move="boundaryMove" @boundary-end="boundaryEnd"><template #annotations="{x,start,end}"><template v-for="boundary in boundaries" :key="boundary.time"><path v-if="boundary.time>start&&boundary.time<end" :d="`M${x(boundary.time)} 0V90`" class="annotation-boundary" :class="[boundary.kind,{chosen:s.selectedBoundary?.time===boundary.time}]"/></template><path v-if="s.sequenceStart!==null&&s.sequenceStart>=start&&s.sequenceStart<=end" :d="`M${x(s.sequenceStart)} 0V90`" class="sequence-pending"/></template></WaveformViewport>
    <AnnotationTracks :disabled="busy||saving||composing" :editor="editor" :revision="revision" :wave="wave" :lip="lip" :offset="lipOffset" :show-open="showOpen" :show-width="showWidth" :active="active" :sequence-editing="sequenceEnabled" @time-double-click="doubleTime" @phone-double-click="doublePhone" @selection-end="waveformSelection" @changed="changed"/>
-   <div class="label-editor"><label>选中区间文本 <input v-model="label" aria-label="编辑选中标注文本" :disabled="!selected" @compositionstart="composing=true" @compositionend="composing=false;finishInput()" @change="finishInput()" @keydown.enter="!$event.isComposing&&finishInput()"/></label><button :disabled="busy||saving||(!selected&&!s.selectedBoundary)" @click="deleteCurrent">{{s.selectedBoundary?'删除边界':'删除标注'}}</button><small>Backspace / Delete 删除标注或边界 · Ctrl＋X 剪切 · Ctrl＋V 粘贴</small></div>
+   <div class="label-editor"><label>选中区间文本 <input ref="labelInput" v-model="label" aria-label="编辑选中标注文本" :disabled="!selected||busy||saving" @input="rememberLabelSelection()" @keyup="rememberLabelSelection()" @pointerup="rememberLabelSelection()" @select="rememberLabelSelection(false)" @compositionstart="composing=true" @compositionend="composing=false;finishInput();rememberLabelSelection()" @change="finishInput()" @keydown.enter="!$event.isComposing&&finishInput()"/></label><button :disabled="busy||saving||(!selected&&!s.selectedBoundary)" @click="deleteCurrent">{{s.selectedBoundary?'删除边界':'删除标注'}}</button><small>Backspace / Delete 删除标注或边界 · Ctrl＋X 剪切 · Ctrl＋V 粘贴</small></div>
    <p class="hint">Ctrl＋滚轮缩放 · Shift＋滚轮平移标注视图 · Ctrl＋Z 撤销 · Ctrl＋拖动拉开边界 · Backspace 合并选中边界。输入框支持中文输入法。</p>
   </template>
   <ModuleStatus v-else kind="empty" message="打开一组录音与标注"><p>选择语料目录后，从左侧列表开始编辑。音频、TextGrid 和唇形共用秒时间轴。</p></ModuleStatus>
-  </div>
-  <div class="annotation-card search-tools intensity-tools">
-   <div class="actions"><strong>强度贴合</strong><label>起点 <input v-time-precision="'s'" v-model="controls.fitStart.value" aria-label="强度起点" type="number" step=".00001" @change="fitRangeInput"/> s</label><label>终点 <input v-time-precision="'s'" v-model="controls.fitEnd.value" aria-label="强度终点" type="number" step=".00001" @change="fitRangeInput"/> s</label><label>内收/外扩 <input v-time-precision="'ms'" v-model="controls.fitTrimMs.value" aria-label="强度内收毫秒" type="number" min="-50" max="80"/> ms</label><button :disabled="!source||busy" @click="action('fit')">强度贴合</button><small>正数内收，负数外扩 · 第一声道</small></div>
   </div>
   <div class="annotation-card edit-toolbar">
    <div class="actions resource-controls"><button title="词典：标签到音素的对应，每行一个标签及其音素" @click="dictPicker?.click()">上传词典</button><small :title="dictName">{{dictName}}</small><button title="词表：按顺序等待标注的拼音条目，以空格或换行分隔" @click="labPicker?.click()">上传词表</button><button @click="sequenceText=s.labSequence.join(' ');dialog='words'">粘贴词表</button><button v-if="labName" @click="clearLab">清除词表</button><small v-if="labName" :title="labName">{{labName}}</small><label class="sequence-toggle"><input v-model="sequenceEnabled" type="checkbox" :disabled="!editingReady||busy||saving"/>自动生成音节和音素</label><label class="sequence-next">首次音素切分<select v-model="phoneSplit" aria-label="音素首个切分点"><option value="cursor">首个边界用双击位置</option><option value="equal">按音素数等分</option></select></label><label v-if="sequenceEnabled&&s.labSequence.length" class="sequence-next">下一音节<select aria-label="下一音节" :value="s.sequenceIndex" :disabled="busy||saving" @change="nextSequence"><option v-for="(token,index) in s.labSequence" :key="index" :value="index">{{index+1}} / {{s.labSequence.length}} · {{token}}</option><option :value="s.labSequence.length">词表已标完</option></select></label></div>
@@ -342,12 +379,11 @@ useWebSettings(props.stateKey,{suffix,showOpen,showWidth,sidebar,settingsOpen,ph
    <p v-if="sequenceEnabled||s.sequenceStart!==null" class="hint sequence-hint"><span v-if="sequenceEnabled">普通双击：起点 → 终点。Ctrl＋双击：沿用上一音节终点。音节内部双击：分声母、完整韵母。</span><span v-else>普通双击：空白标注起点 → 终点，然后输入文字。</span><strong v-if="s.sequenceStart!==null">待定起点 {{s.sequenceStart.toFixed(6)}} s，等待终点。</strong><button v-if="s.sequenceStart!==null" @click="cancelStart">取消起点（Esc）</button></p>
    <input ref="dictPicker" hidden type="file" accept=".dict,.txt" @change="resource($event,'dict')"/><input ref="labPicker" hidden type="file" accept=".lab,.txt" @change="resource($event,'lab')"/>
   </div>
-  <div class="annotation-card search-tools"><div class="actions"><input v-model="query" aria-label="搜索词层文本" placeholder="搜索词层文本" @input="search" @keydown.enter.prevent="$event.shiftKey?editor.findPrev():editor.findNext();changed()"/><span class="mono">{{matchCount?s.searchIndex+1:0}} / {{matchCount}}</span><button :disabled="!matchCount" @click="editor.findPrev();changed()">上一个</button><button :disabled="!matchCount" @click="editor.findNext();changed()">下一个</button><input v-model="replace" aria-label="替换文本" placeholder="替换为…"/><button :disabled="!matchCount" @click="editor.replaceCurrent(replace);changed()">替换</button><button :disabled="!matchCount" @click="dialog='replace'">全部替换</button></div>
-  </div>
  </div>
  <aside v-show="settingsOpen" class="annotation-settings annotation-card">
  <ModuleStatus v-if="notice&&!busy" kind="info" :message="notice"/>
-  <h2>层级与保存</h2><label>标注微调步长（ms）<input v-time-precision="'ms'" v-model="nudgeStep" aria-label="标注微调步长毫秒" type="number" min=".01" max="1000" step=".1"/></label><small>左右键微调音节 · Shift＋拖动框选</small><label>音节 / 词层<select v-model="wordName" aria-label="词层名" :disabled="!source||busy||saving" @change="names"><option value="">请选择音节或词层</option><option v-for="t in tierChoices" :key="t.name" :value="t.name" :disabled="!t.editable||t.name===phoneName">{{t.name}}{{t.editable?'':'（'+t.kind+'，保留）'}}</option></select></label><button :disabled="!source||busy||saving" @click="layerDialog('word')">新建音节 / 词层</button><label>音素层<select v-model="phoneName" aria-label="音素层名" :disabled="!source||busy||saving" @change="names"><option value="">请选择音素层</option><option v-for="t in tierChoices" :key="t.name" :value="t.name" :disabled="!t.editable||t.name===wordName">{{t.name}}{{t.editable?'':'（'+t.kind+'，保留）'}}</option></select></label><button :disabled="!source||busy||saving" @click="layerDialog('phone')">新建音素层</button>
+  <h2>层级与保存</h2><label>标注微调步长（ms）<input v-time-precision="'ms'" v-model="nudgeStep" aria-label="标注微调步长毫秒" type="number" min=".01" max="1000" step=".1"/></label><small>左右键微调选中标注 · Shift＋拖动框选</small><label>音节 / 词层<select v-model="wordName" aria-label="词层名" :disabled="!source||busy||saving" @change="names"><option value="">请选择音节或词层</option><option v-for="t in tierChoices" :key="t.name" :value="t.name" :disabled="!t.editable||t.name===phoneName||t.name===extraName">{{t.name}}{{t.editable?'':'（'+t.kind+'，保留）'}}</option></select></label><button :disabled="!source||busy||saving" @click="layerDialog('word')">新建音节 / 词层</button><label>音素层<select v-model="phoneName" aria-label="音素层名" :disabled="!source||busy||saving" @change="names"><option value="">请选择音素层</option><option v-for="t in tierChoices" :key="t.name" :value="t.name" :disabled="!t.editable||t.name===wordName||t.name===extraName">{{t.name}}{{t.editable?'':'（'+t.kind+'，保留）'}}</option></select></label><button :disabled="!source||busy||saving" @click="layerDialog('phone')">新建音素层</button>
+  <label>第三层（可选）<select v-model="extraName" aria-label="第三层名" :disabled="!source||busy||saving" @change="names"><option value="">不显示第三层</option><option v-for="t in tierChoices" :key="t.name" :value="t.name" :disabled="!t.editable||t.name===wordName||t.name===phoneName">{{t.name}}{{t.editable?'':'（'+t.kind+'，保留）'}}</option></select></label><button :disabled="!source||busy||saving" @click="layerDialog('extra')">新建第三层</button>
   <label>当前 TextGrid<select :value="gridFile?.id??''" aria-label="当前 TextGrid" :disabled="!source||busy||saving" @change="open(source!,files.find(f=>f.id===($event.target as HTMLSelectElement).value))"><option v-if="source&&!gridFile" value="" disabled>新建空白标注（尚未保存）</option><option v-for="f in gridChoices" :key="f.id" :value="f.id">{{f.name}}</option></select></label>
   <label>保存后缀<input v-model="suffix" aria-label="TextGrid 保存后缀"/></label><p class="target-preview">目标：{{targetName}}</p><p v-if="suffix===''" class="overwrite-note">{{context.files.kind==='desktop'?'留空将覆盖 WAV 同名原始 TextGrid，保存时确认。':'网页将保存同名的新版本，原资源保留。'}}</p>
   <small>编辑后，切换文件前及每分钟自动保存到 _自动保存。TextGrid 与唇偏分别保存。</small><button :disabled="!hasLayers" @click="download('textgrid')">下载当前 TextGrid</button><button v-if="lip" @click="download('lip')">下载安全唇形 JSON</button>
@@ -361,17 +397,49 @@ useWebSettings(props.stateKey,{suffix,showOpen,showWidth,sidebar,settingsOpen,ph
   <p v-else class="hint">找到同名唇形记录时自动关联，也可明确选择。网页使用 .lip.json。</p>
  </aside>
  </div>
- <ModalDialog v-if="dialog" :title="dialog==='layers'?'创建标注层':dialog==='association'?'选择关联 TextGrid':dialog==='words'?'粘贴拼音词表':dialog==='replace'?'确认全部替换':'确认覆盖原始标注'" :close-disabled="saving" @close="dialog=''">
-  <template v-if="dialog==='layers'"><p>输入新的区间层名称。每层初始覆盖整段音频，已有层保留。</p><label v-if="layerRole!=='phone'" class="new-layer-field">音节 / 词层名<input v-model="newWord" aria-label="新建音节层名" maxlength="200" placeholder="例如：音节"/></label><label v-if="layerRole!=='word'" class="new-layer-field">音素层名<input v-model="newPhone" aria-label="新建音素层名" maxlength="200" placeholder="例如：音素"/></label></template>
+ <ModalDialog v-if="dialog==='search'" title="搜索替换" @close="dialog=''">
+  <div class="annotation-search-fields">
+   <label>搜索词层文本<input v-model="query" autofocus aria-label="搜索词层文本" placeholder="输入要查找的词层文字" @input="search" @keydown.enter.prevent="$event.shiftKey?editor.findPrev():editor.findNext();changed()"/></label>
+   <div class="actions"><span class="mono" role="status" aria-label="搜索匹配位置">{{matchPosition}} / {{matchCount}}</span><button :disabled="!matchCount" @click="editor.findPrev();changed()">上一个</button><button :disabled="!matchCount" @click="editor.findNext();changed()">下一个</button></div>
+   <label>替换为<input v-model="replace" aria-label="替换文本" placeholder="输入替换后的文字"/></label>
+   <div class="actions"><button :disabled="!matchCount" @click="editor.replaceCurrent(replace);changed()">替换</button><button :disabled="!matchCount" @click="dialog='replace'">全部替换</button></div>
+   <ModuleStatus v-if="notice" kind="info" :message="notice"/>
+  </div>
+  <template #footer><button @click="dialog=''">关闭</button></template>
+ </ModalDialog>
+ <ModalDialog v-if="dialog==='links'||dialog==='intensity'" :title="dialog==='links'?'吸附与关联':'强度贴合'" :close-disabled="saving" @close="dialog=''">
+  <template v-if="dialog==='links'">
+   <div class="tier-link-controls" aria-label="层间吸附与关联">
+    <label><input v-model="snapEnabled" type="checkbox" :disabled="busy||saving"/>层间边界吸附</label>
+    <label><input v-model="linkWordPhone" type="checkbox" :disabled="!wordName||!phoneName||busy||saving"/>第一层 ↔ 第二层</label>
+    <label v-if="extraName"><input v-model="linkWordExtra" type="checkbox" :disabled="!wordName||busy||saving"/>第一层 ↔ 第三层</label>
+    <label v-if="extraName"><input v-model="linkPhoneExtra" type="checkbox" :disabled="!phoneName||busy||saving"/>第二层 ↔ 第三层</label>
+    <small>关联层的重合边界一起移动；取消关联后独立编辑。</small>
+   </div>
+  </template>
+  <template v-else>
+   <label class="fit-channel-field">声道<select v-model="fitChannel" aria-label="强度贴合声道" @change="selectFitChannel"><option value="" disabled>请选择声道</option><option v-for="(_,index) in wave.asset?.channels??[]" :key="index" :value="String(index)">第 {{index+1}} 声道</option></select></label>
+   <div class="intensity-fields"><label>起点（s）<input v-time-precision="'s'" v-model="controls.fitStart.value" aria-label="强度起点" type="number" step=".00001" @change="fitRangeInput"/></label><label>终点（s）<input v-time-precision="'s'" v-model="controls.fitEnd.value" aria-label="强度终点" type="number" step=".00001" @change="fitRangeInput"/></label><label>内收/外扩（ms）<input v-time-precision="'ms'" v-model="controls.fitTrimMs.value" aria-label="强度内收毫秒" type="number" min="-50" max="80"/></label></div>
+   <p class="hint">正数内收，负数外扩</p>
+   <ModuleStatus v-if="notice" kind="info" :message="notice"/>
+  </template>
+  <p v-if="error" role="alert" class="error-text">{{error}}</p>
+  <template #footer><button @click="dialog=''">{{dialog==='links'?'完成':'关闭'}}</button><button v-if="dialog==='intensity'" class="primary" :disabled="!source||busy||saving||fitChannel===''" @click="action('fit')">执行贴合</button></template>
+ </ModalDialog>
+ <ModalDialog v-if="dialog&&dialog!=='links'&&dialog!=='intensity'&&dialog!=='search'" :title="dialog==='layers'?'创建标注层':dialog==='association'?'选择关联 TextGrid':dialog==='words'?'粘贴拼音词表':dialog==='replace'?'确认全部替换':'确认覆盖原始标注'" :close-disabled="saving" @close="dialog=dialog==='replace'?'search':''">
+  <template v-if="dialog==='layers'"><p>输入新的区间层名称。最多同时编辑三层，每层初始覆盖整段音频，已有层保留。</p><label v-if="['both','word'].includes(layerRole)" class="new-layer-field">音节 / 词层名<input v-model="newWord" aria-label="新建音节层名" maxlength="200" placeholder="例如：音节"/></label><label v-if="['both','phone'].includes(layerRole)" class="new-layer-field">音素层名<input v-model="newPhone" aria-label="新建音素层名" maxlength="200" placeholder="例如：音素"/></label><label v-if="['both','extra'].includes(layerRole)" class="new-layer-field">第三层名{{layerRole==='both'?'（可留空）':''}}<input v-model="newExtra" aria-label="新建第三层名" maxlength="200" placeholder="例如：声调"/></label></template>
   <template v-else-if="dialog==='association'"><p>{{associationAudio?.name}} 有多个可能的标注文件，请选择本次使用的文件。</p><select v-model="associationId" aria-label="选择关联标注文件"><option value="" disabled>请选择 TextGrid</option><option v-for="file in associationAudio?associatedGrids(associationAudio):[]" :key="file.id" :value="file.id">{{file.name}}</option></select></template>
   <template v-else-if="dialog==='words'"><p>按标注顺序粘贴拼音，用空格或换行分隔。每完成一个音节的起终点，就使用下一个条目。</p><textarea v-model="sequenceText" aria-label="拼音词表" rows="6" maxlength="2000000" placeholder="zhe4 shi4 shang4 yi1 ding4 …"/></template>
-  <p v-else-if="dialog==='replace'">将当前文件词层的 {{matchCount}} 个匹配区间替换为 {{replace||'空文本'}}，同时按词典重新填充音素。可用撤销恢复。</p><p v-else>保存目标：{{targetName}}。已有同名文件会在版本核对后被覆盖，唇偏保持独立保存。</p><p v-if="error" role="alert" class="error-text">{{error}}</p>
-  <template #footer><button :disabled="saving" @click="dialog=''">取消</button><button class="primary" :disabled="saving||(dialog==='association'&&!associationId)" @click="dialog==='layers'?createLayers():dialog==='association'?applyAssociation():dialog==='words'?applySequenceText():dialog==='replace'?(editor.replaceAll(replace),changed(),dialog=''):saveGrid(false,true).then(ok=>{if(ok)dialog=''})">{{dialog==='layers'?'创建层':dialog==='association'?'打开标注':dialog==='words'?'应用词表':dialog==='replace'?'替换全部':'确认保存'}}</button></template>
+  <p v-else-if="dialog==='replace'">将当前文件词层的 {{matchCount}} 个匹配区间替换为 {{replace||'空文本'}}，关联的音素层会按词典重新填充。可用撤销恢复。</p><p v-else>保存目标：{{targetName}}。已有同名文件会在版本核对后被覆盖，唇偏保持独立保存。</p><p v-if="error" role="alert" class="error-text">{{error}}</p>
+  <template #footer><button :disabled="saving" @click="dialog=dialog==='replace'?'search':''">取消</button><button class="primary" :disabled="saving||(dialog==='association'&&!associationId)" @click="dialog==='layers'?createLayers():dialog==='association'?applyAssociation():dialog==='words'?applySequenceText():dialog==='replace'?(editor.replaceAll(replace),changed(),dialog='search'):saveGrid(false,true).then(ok=>{if(ok)dialog=''})">{{dialog==='layers'?'创建层':dialog==='association'?'打开标注':dialog==='words'?'应用词表':dialog==='replace'?'替换全部':'确认保存'}}</button></template>
  </ModalDialog>
+ <IpaKeyboard v-if="keyboardOpen" :active="active" :disabled="!selected||busy||saving||composing" @insert="insertIpa" @close="keyboardOpen=false"/>
 </ModuleFrame>
 </template>
 <style scoped>
 .plot-actions{margin-bottom:10px}
+.annotation-search-fields{display:flex;flex-direction:column;gap:12px}.annotation-search-fields>label{display:flex;flex-direction:column;gap:6px}.annotation-search-fields input{width:100%;min-width:0;box-sizing:border-box}
+.tier-link-controls{display:flex;flex-direction:column;gap:12px}.fit-channel-field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}.intensity-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.intensity-fields label{display:flex;flex-direction:column;gap:6px}.intensity-fields input{width:100%;min-width:0;box-sizing:border-box}@media(max-width:550px){.intensity-fields{grid-template-columns:1fr}}.tier-link-controls label{display:flex;align-items:center;gap:5px;font-size:.857143rem}.tier-link-controls small{color:var(--muted)}
 .annotation-page{--wave-axis-width:max(64px,calc(var(--figure-size,14px) * 4.8))}
 .annotation-file-list button span{max-width:100%}
 .file-legend{display:flex;flex-wrap:wrap;gap:3px 10px;font-size:0.785714rem}.file-legend .has-grid{color:var(--accent)}.annotation-file-list button{flex:0 0 auto;min-height:36px;display:block;line-height:1.45;position:relative;--annotation-file-mark:var(--accent)}.annotation-file-list button span{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}

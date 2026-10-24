@@ -52,7 +52,9 @@ class PersonalPaperLibrary:
                 stat = path.stat(); relative = path.relative_to(self.root).as_posix()
                 documents.append({'id': self.identity(relative), 'title': path.stem, 'titleZh': path.stem,
                                   'folder': '' if folder == '.' else folder, 'relative': relative,
-                                  'size': stat.st_size, 'publishedAt': datetime.fromtimestamp(stat.st_mtime).date().isoformat()})
+                                  'size': stat.st_size, 'publishedAt': datetime.fromtimestamp(stat.st_mtime).date().isoformat(),
+                                  'contentVersion': ':'.join(str(value) for value in
+                                      (stat.st_size, stat.st_mtime_ns, stat.st_ctime_ns, stat.st_ino, stat.st_dev))})
         self.index = {p['id']: p for p in documents}
         return {'root': str(self.root), 'folders': folders, 'documents': documents}
 

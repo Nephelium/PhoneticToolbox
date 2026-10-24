@@ -22,8 +22,10 @@ def validate_stop_timing(value,duration):
     if not isinstance(value,dict) or set(value)!=keys or any(type(v) not in (int,float) or not math.isfinite(v) for v in value.values()):
         raise ValueError('无效的爆破音时序')
     c,r,a,v=(float(value[k]) for k in ('closure','release','aspiration','vot'))
-    if not .01<=c<=2. or not .001<=r<=.05 or not 0<=a<=1. or not -c<=v<=r+a or abs(c+r+a-duration)>1e-8:
-        raise ValueError('闭塞 10–2000 ms、释放 1–50 ms、送气 0–1000 ms；三者之和须等于帧时长，浊音起始须位于该帧内')
+    # A negative-VOT stop has no aspiration: its closure must accommodate the
+    # existing 3 s frame limit while reserving at least 1 ms for release.
+    if not .01<=c<=2.999 or not .001<=r<=.05 or not 0<=a<=1. or not -c<=v<=r+a or c+r+a>3. or abs(c+r+a-duration)>1e-8:
+        raise ValueError('闭塞 10–2999 ms、释放 1–50 ms、送气 0–1000 ms；三者之和须等于帧时长且不超过 3 秒，浊音起始须位于该帧内')
     return dict(closure=c,release=r,aspiration=a,vot=v)
 
 

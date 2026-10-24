@@ -28,6 +28,11 @@ def paper_asset(paper, language):
     return paper['analysisPdf' if language == 'analysis' else language]
 
 
+def catalog_papers(catalog):
+    """Present both sources without rewriting the legacy on-disk list."""
+    return catalog['papers'] + catalog.get('journalPapers', [])
+
+
 class PaperError(ValueError):
     pass
 
@@ -59,8 +64,11 @@ def atomic_json(path, value):
 def validate_catalog(value):
     if not isinstance(value, dict) or value.get('schema') != 'ptb-papers/1' or not isinstance(value.get('papers'), list) or len(value['papers']) > 10000:
         raise PaperError('论文目录版本或大小无效。')
+    journals = value.get('journalPapers', [])
+    if not isinstance(journals, list) or len(value['papers']) + len(journals) > 10000:
+        raise PaperError('论文目录版本或大小无效。')
     ids = set()
-    for p in value['papers']:
+    for index, p in enumerate(catalog_papers(value)):
         if not isinstance(p, dict) or not re.fullmatch(r'[a-zA-Z0-9_-]{1,80}', p.get('id', '')) or p['id'] in ids:
             raise PaperError('论文编号重复或无效。')
         ids.add(p['id'])
@@ -69,8 +77,27 @@ def validate_catalog(value):
                 raise PaperError('论文署名或说明不完整。')
         iso_date(p.get('publishedAt')); iso_date(p.get('submittedAt'))
         if 'updatedAt' in p: iso_date(p['updatedAt'])
-        if not re.fullmatch(r'https://arxiv\.org/abs/\d{4}\.\d{4,5}v\d+', p.get('sourceUrl', '')):
+        is_journal = index >= len(value['papers'])
+        source = p.get('sourceUrl', '')
+        pattern = (r'https://doi\.org/10\.\d{4,9}/[a-zA-Z0-9][a-zA-Z0-9._;()/:-]*' if is_journal
+                   else r'https://arxiv\.org/abs/\d{4}\.\d{4,5}v\d+')
+        if not isinstance(source, str) or len(source) > 2048 or not re.fullmatch(pattern, source):
             raise PaperError('原文版本链接无效。')
+        if is_journal:
+            journal = p.get('journal')
+            if not isinstance(journal, dict) or not {'title', 'publishedAt', 'doi'} <= journal.keys() or set(journal) - {'title', 'publishedAt', 'doi', 'volume', 'issue', 'pages', 'articleNumber'}:
+                raise PaperError('期刊出处不完整。')
+            for key, text in journal.items():
+                if not isinstance(text, str) or not 1 <= len(text) <= 1000 or any(ord(c) < 32 for c in text):
+                    raise PaperError('期刊出处无效。')
+            try:
+                iso_date(journal['publishedAt'])
+            except ValueError as exc:
+                raise PaperError('期刊发表日期无效。') from exc
+            if source != 'https://doi.org/' + journal['doi']:
+                raise PaperError('期刊DOI与原文链接不一致。')
+        elif 'journal' in p:
+            raise PaperError('期刊论文应放在期刊目录中。')
         lic = p.get('license', {})
         if not isinstance(lic, dict) or lic.get('id') not in LICENSES or lic.get('url') != LICENSES[lic['id']]:
             raise PaperError('论文缺少可共享、可改编的已审核许可。')
@@ -169,7 +196,7 @@ class PaperService:
                 'papers': [dict(p, dismissed=p['id'] in pref.get('removedRecommendations', []), acquired=p['id'] not in pref.get('removedRecommendations', []) and all(self._verified(p[k]) for k in ('original','translation')),
                                analysisDownloaded='analysisPdf' not in p or self._verified(p['analysisPdf']),
                                downloaded=p['id'] not in pref.get('removedRecommendations', []) and all(self._verified(paper_asset(p,k)) for k in asset_kinds(p)))
-                           for p in self.catalog['papers']]}
+                           for p in catalog_papers(self.catalog)]}
 
     def notice(self):
         n = self.catalog.get('notice')
@@ -232,7 +259,7 @@ class PaperService:
         and a simultaneous download from restoring a just-removed paper.
         Other recommendations sharing a content hash retain their asset.
         """
-        paper = next((p for p in self.catalog['papers'] if p['id'] == paper_id), None)
+        paper = next((p for p in catalog_papers(self.catalog) if p['id'] == paper_id), None)
         n = self.notice()
         if paper is None and n and n['id'] == paper_id: paper = n
         if paper is None: raise PaperError('推荐论文不存在，请刷新目录。')
@@ -240,7 +267,7 @@ class PaperService:
         with self._settings_lock:
             value = self.preferences()
             removed = set(value.get('removedRecommendations', []))
-            shared = {paper_asset(p, k)['sha256'] for p in self.catalog['papers']
+            shared = {paper_asset(p, k)['sha256'] for p in catalog_papers(self.catalog)
                       if p['id'] != paper_id and p['id'] not in removed for k in asset_kinds(p)}
             if n and n['id'] != paper_id and n['id'] not in removed: shared.add(n['original']['sha256'])
             paths = {self._path(paper_asset(paper, k)) for k in asset_kinds(paper)
@@ -282,7 +309,7 @@ class PaperService:
     def collect_recommendation(self, paper_id, folder):
         with self._settings_lock:
             value = self.preferences()
-            if folder not in ['', *value.get('recommendationFolders', [])] or paper_id not in {p['id'] for p in self.catalog['papers']}:
+            if folder not in ['', *value.get('recommendationFolders', [])] or paper_id not in {p['id'] for p in catalog_papers(self.catalog)}:
                 raise PaperError('论文或收藏夹不存在。')
             value.setdefault('recommendationAssignments', {})[paper_id] = folder
             atomic_json(self.root / 'preferences.json', value)
@@ -348,7 +375,7 @@ class PaperService:
     def download(self, since, cancel, progress, ids=None):
         since = iso_date(since)
         today = self.today().isoformat()
-        candidates = list(self.catalog['papers'])
+        candidates = catalog_papers(self.catalog)
         n = self.notice()
         if ids is not None and n: candidates.append(n)
         papers = [p for p in candidates if p['publishedAt'] <= today and p.get('updatedAt', p['publishedAt']) <= today and
@@ -404,7 +431,7 @@ class PaperService:
                 if len(self._local_hashes) > 1000: self._local_hashes.clear()
                 self._local_hashes[key] = digest
             return {'sha256': digest, 'size': stat.st_size, '_localPath': path.relative_to(library.root).as_posix()}
-        paper = next((p for p in self.catalog['papers'] if p['id'] == paper_id), None)
+        paper = next((p for p in catalog_papers(self.catalog) if p['id'] == paper_id), None)
         if paper is None:
             n = self.notice()
             if n and n['id'] == paper_id: paper = n

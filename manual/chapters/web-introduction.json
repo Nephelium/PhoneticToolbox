@@ -6,6 +6,34 @@
     "type": "doc",
     "content": [
       {
+        "type": "paragraph",
+        "attrs": {
+          "id": "web-introduction-video-tutorial"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "工具箱介绍："
+          },
+          {
+            "type": "text",
+            "text": "观看介绍视频",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://www.phonetictoolbox.com/#tutorial-intro"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ]
+      },
+      {
         "type": "heading",
         "attrs": {
           "id": "web-introduction-account",

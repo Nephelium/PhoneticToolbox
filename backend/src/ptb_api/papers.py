@@ -44,6 +44,16 @@ class PaperRequest(BaseModel):
     args: dict = Field(default_factory=dict)
 
 
+def library_content_versions(value, identity_hashes):
+    """Use managed asset identity, independent of per-request hard-link stats."""
+    library_root = Path(value['root']) if value.get('root') else None
+    for document in value.get('documents', []):
+        if library_root is None: continue
+        document_stat = (library_root / relative(document['relative'])).stat()
+        digest = identity_hashes.get((document_stat.st_dev, document_stat.st_ino))
+        if digest: document['contentVersion'] = 'sha256:' + digest
+
+
 def relative(value):
     if not isinstance(value, str) or not value or '\\' in value or ':' in value or any(ord(c) < 32 for c in value):
         raise StorageError('invalid_request', 422)
@@ -136,7 +146,7 @@ class WebPapers:
                 if operation == 'export': budget += 200_000_000
                 if operation in ('download', 'downloadSelected'):
                     catalog = snapshot['json'].get('cache/catalog.json', {})
-                    entries = list(catalog.get('papers', []))
+                    entries = list(catalog.get('papers', [])) + list(catalog.get('journalPapers', []))
                     if catalog.get('notice'): entries.append({'id': catalog['notice']['id'], 'original': catalog['notice']['pdf']})
                     assets = {}
                     for paper in entries:
@@ -163,7 +173,7 @@ class WebPapers:
                     if name == 'cache/preferences.json' and value.get('libraryRoot'):
                         value = dict(value, libraryRoot=str(root / relative(value['libraryRoot'])))
                     path.write_text(json.dumps(value, ensure_ascii=False), encoding='utf8')
-                identities = {}; hashes = {}
+                identities = {}; hashes = {}; identity_hashes = {}
                 for name, asset_id in snapshot['files'].items():
                     path = root / relative(name); path.parent.mkdir(parents=True, exist_ok=True)
                     with self.storage._locked() as conn:
@@ -171,6 +181,7 @@ class WebPapers:
                         if str(row['project_id']) != project: raise StorageError('project_not_found', 404)
                         os.link(self.storage._path(asset_id), path)
                         identities[(path.stat().st_dev, path.stat().st_ino)] = asset_id
+                        identity_hashes[(path.stat().st_dev, path.stat().st_ino)] = row['sha256']
                         hashes[row['sha256']] = asset_id
                 native_args = dict(args)
                 if operation in ('chooseLibrary', 'importLocal'):
@@ -190,6 +201,8 @@ class WebPapers:
                         names.add(name)
                         target = imports / staging; target.mkdir()
                         os.link(self.storage._path(asset['id']), target / filename)
+                        linked = (target / filename).stat()
+                        identity_hashes[(linked.st_dev, linked.st_ino)] = asset['sha256']
                         hashes[asset['sha256']] = asset['id']
                         item['name'] = staging + '/' + filename
                     if operation == 'chooseLibrary':
@@ -247,6 +260,9 @@ class WebPapers:
                             for asset_id in removed: self.storage._delete(conn, self.storage._row(conn, owner, asset_id))
                         created.clear()
                 if isinstance(value, dict) and 'root' in value:
+                    # Temporary hard links have changing ctime; managed assets
+                    # already carry immutable content hashes, without reading PDFs.
+                    library_content_versions(value, identity_hashes)
                     value['root'] = Path(value['root']).name if value['root'] else ''
                 check()
                 return response

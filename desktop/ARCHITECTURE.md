@@ -6,7 +6,7 @@
 
 [src/ptb_desktop/host.py](src/ptb_desktop/host.py)装配 Workbench、QWebEngineProfile、QWebEngineView、Page 和 QWebChannel：
 - 静态前端经 ptbapp://app/ 读取，Assets 校验主机、方法、路径穿越和根目录归属。
-- LocalOnly 允许应用资源、指定回环 API、WebChannel 脚本及 data/blob，页面不能任意请求公网。
+- LocalOnly 允许应用资源、指定回环 API、WebChannel 脚本及 data/blob，公网仅允许固定官网地图运行文件与 `/announcements/v1.json` 的精确GET。方法、地址、路径、查询及片段受限，页面不能任意请求公网。
 - QWebChannel 注册 files、updates、papers 三个对象。files 内部分派预览、研究任务、录音、声道、文件选择等请求。
 - 原生选择、剪贴板写入、全屏、下载保存、关闭及首次最大化呈现由宿主管理；网页不能直接获得任意文件系统访问。
 - 非测试 profile 保持稳定持久目录，HTTP 缓存关闭以避免升级后仍读取旧静态文件。
@@ -18,6 +18,8 @@ Assets、LocalOnly、URL校验与scheme注册共用 [web_assets.py](src/ptb_desk
 静态资源的路径解析、根目录归属校验、文件读取和MIME判断由本模块共享的四线程池处理；请求对象、QBuffer及reply/fail留在GUI线程。缓冲区以请求为父对象，保持至请求结束。请求或宿主销毁会取消待处理结果，排队后已取消的请求不再读取文件，正在读取的任务完成后丢弃结果；关闭profile不销毁线程池或等待磁盘读取。该适配器仅用于桌面主程序和独立反馈管理器，网页版继续使用HTTP静态资源服务。
 
 [window_chrome.py](src/ptb_desktop/window_chrome.py) 在 Windows 将标签与单一品牌区放入窗口顶边，由前端绘制主题一致的控制按钮。宿主保留 Windows 缩放/贴边样式，以原生边缘命中测试调整大小，最大化使用屏幕工作区。无边框客户区计算交给 Qt 的 WM_NCCALCSIZE 路径，避免宿主提前消费消息导致原生框架边距缓存失配；Windows 原生恢复保留最大化状态和页面，不重载编辑内容。files.windowAction 仅分派移动、最小化、最大化/还原和既有关闭协商，不扩大文件访问能力。状态信号同步还原图标，关闭仍经过未保存编辑保护。其他平台保留系统装饰；兼容的 files.setCaptionColors 仍只接受两个不透明六位十六进制颜色，不修改系统设置。
+
+首次最大化保护在 `presentation.py` 中发现 WebEngine 直接拥有的 Quick 绘制控件。仍存活且归属当前视图的控件直接复用，删除或更换后重新发现；同一轮子控件增删只排一次发现任务，不递归遍历 Quick 内部对象树。最大化前保留正常窗口画面、当前尺寸的文档检查和连续两张有效帧验证继续保留，绘制仍使用默认 GPU。
 
 ## 本地服务及工作进程
 

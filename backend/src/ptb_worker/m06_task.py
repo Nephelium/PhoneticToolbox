@@ -8,6 +8,9 @@ from ptb_api.m06_models import M06Request
 
 
 def capability(store):
+    if sys.platform=='darwin':
+        from .native.darwin import capability as mac_capability
+        return bool(getattr(store,'files',None)) and mac_capability('speech_synthesis')
     if sys.platform=='linux':
         from .native.capabilities import linux_capabilities
         return 'speech_synthesis' in linux_capabilities(store)[0]

@@ -11,7 +11,11 @@ from .acoustic_stream_child import atomic
 from .io.scratch import no_links
 
 def execute_claim(store,claim,worker_id,stop,*,evidence=None,on_started=None):
-    from .native.windows import OwnedProcess
+    import sys
+    if sys.platform=='darwin':
+        from .native.darwin import OwnedProcess
+    else:
+        from .native.windows import OwnedProcess
     from .process_entry import command
     files=store.files;identity=(claim['id'],worker_id,claim['generation']);snapshot=json.loads(claim['snapshot'])
     # Keep native REAPER's input paths under its legacy Windows path bound.
@@ -33,7 +37,7 @@ def execute_claim(store,claim,worker_id,stop,*,evidence=None,on_started=None):
             from .io.limits import Cancelled
             raise Cancelled('cancelled')
     try:
-        if store.postgres or os.name!='nt':raise ValueError('m01_runtime_not_admitted')
+        if store.postgres or (os.name!='nt' and sys.platform!='darwin'):raise ValueError('m01_runtime_not_admitted')
         if shutil.disk_usage(root).free<sum(a['size_bytes'] for a in snapshot['input_assets'])+1_000_000_000:
             from ptb_api.quota import StorageError
             raise StorageError('disk_space_low',507)

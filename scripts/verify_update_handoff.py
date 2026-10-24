@@ -14,17 +14,19 @@ import time
 from uuid import uuid4
 
 ROOT=Path(__file__).resolve().parents[1]
+from owned_qa_paths import DEFAULT_QA_ROOT, qa_output
 for folder in ('desktop/src','backend/src','packages/phonetic_core/src'):
     sys.path.insert(0,str(ROOT/folder))
 os.environ['PYTHONPATH']=os.pathsep.join(str(ROOT/p) for p in ('desktop/src','backend/src','packages/phonetic_core/src'))
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--package',required=True,type=Path);parser.add_argument('--origin',required=True,type=Path);parser.add_argument('--output',required=True,type=Path);parser.add_argument('--kind',choices=('portable','installer'),required=True);parser.add_argument('--port',required=True,type=int);parser.add_argument('--profile',type=Path);parser.add_argument('--target-version',default='3.0.0-preview.1');parser.add_argument('--current-version',default='3.0.0-preview.0');parser.add_argument('--frontend-dist',type=Path,default=ROOT/'frontend/dist');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--package',required=True,type=Path);parser.add_argument('--origin',required=True,type=Path);parser.add_argument('--output',required=True,type=Path);parser.add_argument('--kind',choices=('portable','installer'),required=True);parser.add_argument('--port',required=True,type=int);parser.add_argument('--profile',type=Path);parser.add_argument('--target-version',default='3.0.0-preview.1');parser.add_argument('--current-version',default='3.0.0-preview.0');parser.add_argument('--frontend-dist',type=Path,default=ROOT/'frontend/dist');parser.add_argument('--qa-root',type=Path,default=DEFAULT_QA_ROOT);args=parser.parse_args()
     frontend=args.frontend_dist.resolve()
     if frontend != (ROOT/'frontend/dist').resolve() and not frontend.is_relative_to(ROOT/'output'):
         raise ValueError('Frontend must be shared dist or an owned frozen input')
-    out=args.output.resolve();out.mkdir(parents=True,exist_ok=False)
-    if not out.is_relative_to(ROOT/'output/validation'):raise ValueError('Expected owned output')
+    out=args.output.resolve()
+    if not out.is_relative_to(ROOT/'output/validation'):out=qa_output(out,args.qa_root)
+    out.mkdir(parents=True,exist_ok=False)
     profile=args.profile.resolve() if args.profile else out/'profile'
     if args.profile:
         temp=Path(os.environ['TEMP']).resolve()

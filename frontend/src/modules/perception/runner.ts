@@ -1,4 +1,4 @@
-import {copy,uid,roles,keys,keyRange,isCleanKey,type Session,type Attempt,type Role} from './model.ts';
+import {copy,uid,roles,keys,keyRange,isCleanKey,isContinueKey,type Session,type Attempt,type Role} from './model.ts';
 import {MediaBank,timing,type Prepared} from './media.ts';
 import {LocalStore,lockSession} from './storage.ts';
 export type Phase='intro'|'notice'|'interstitial'|'ready'|'preparing'|'playing'|'responding'|'saving'|'paused'|'saving-error'|'completed';
@@ -6,11 +6,12 @@ export class Runner {
  phase:Phase='intro';message='';visual:Prepared|null=null;activeRole:Role|null=null;session:Session;
  private release:(()=>Promise<void>)|null=null;private epoch=0;private timer:ReturnType<typeof setTimeout>|null=null;private nodes:AudioScheduledSourceNode[]=[];private current:Attempt|null=null;private held=new Set<string>();private pending=false;private saveQueue:Promise<boolean>=Promise.resolve(true);private ending:Promise<boolean>|null=null;
  readonly bank:MediaBank;readonly store:LocalStore;private changed:()=>void;
+ private outputGains:GainNode[]=[];
  constructor(session:Session,bank:MediaBank,store:LocalStore,changed:()=>void){this.session=copy(session);this.bank=bank;this.store=store;this.changed=changed;}
  async acquire(){this.release=await lockSession(this.session.id);}
  get focused(){return !['paused','saving-error','completed','intro'].includes(this.phase);}
  private set(p:Phase){this.phase=p;this.changed();}
- private stop(){this.epoch++;if(this.timer)clearTimeout(this.timer);for(const n of this.nodes)try{n.stop();n.disconnect();}catch{}this.nodes=[];this.activeRole=null;}
+ private stop(){this.epoch++;if(this.timer)clearTimeout(this.timer);for(const n of this.nodes)try{n.stop();n.disconnect();}catch{}this.nodes=[];for(const gain of this.outputGains)gain.disconnect();this.outputGains=[];this.activeRole=null;}
  event(kind:string,detail=''){this.session.events.push({kind,detail,at:new Date().toISOString(),perfMs:performance.now(),timeOrigin:performance.timeOrigin});}
  get terminal(){return this.session.status==='completed'||this.session.status==='ended';}
  get canConfirmExport(){return this.session.exportRequestedRevision===this.session.revision&&this.session.exportConfirmedRevision!==this.session.revision;}
@@ -32,17 +33,18 @@ export class Runner {
  try{if(this.bank.context.state!=='running')throw Error('音频 context 未运行');const prepared=await this.bank.trial(p,i);if(epoch!==this.epoch)return;
  a.timing=timing(this.bank.context);for(const {role,media} of prepared)a.roles[role]=copy(media.asset);
  const ctx=this.bank.context;let cursor=ctx.currentTime+.05;
- if(p.config.useBeep){const osc=ctx.createOscillator(),gain=ctx.createGain();osc.frequency.value=600;gain.gain.setValueAtTime(1,cursor);gain.gain.exponentialRampToValueAtTime(.00001,cursor+.15);osc.connect(gain).connect(ctx.destination);osc.start(cursor);osc.stop(cursor+.15);osc.onended=()=>{osc.disconnect();gain.disconnect();};this.nodes.push(osc);cursor+=.5;}
+ if(p.config.useBeep){const osc=ctx.createOscillator(),gain=ctx.createGain();osc.frequency.value=600;gain.gain.setValueAtTime(p.config.playbackVolume??1,cursor);gain.gain.exponentialRampToValueAtTime(.00001,cursor+.15);osc.connect(gain).connect(ctx.destination);osc.start(cursor);osc.stop(cursor+.15);osc.onended=()=>{osc.disconnect();gain.disconnect();};this.nodes.push(osc);cursor+=.5;}
  this.set('playing');
- if(prepared[0].media.buffer){for(const [n,{role,media}] of prepared.entries()){if(!media.buffer)throw Error('混合媒体序列不兼容');if(n)cursor+=p.config.isi/1000;const node=ctx.createBufferSource();node.buffer=media.buffer;node.connect(ctx.destination);const stamp=a.timing.outputTimestamp;a.timing.planned.push({role,startAudioSeconds:cursor,endAudioSeconds:cursor+media.buffer.duration,scheduledAtAudioSeconds:ctx.currentTime,scheduledAtPerfMs:performance.now(),scheduleLateByMs:Math.max(0,(ctx.currentTime-cursor)*1000),outputStartEstimatePerfMs:stamp?stamp.performanceTime+(cursor-stamp.contextTime)*1000:null});node.onended=()=>{a.timing?.observedEnded.push({role,performanceMs:performance.now(),audioSeconds:ctx.currentTime});node.disconnect();};node.start(cursor);this.nodes.push(node);cursor+=media.buffer.duration;}
+ if(prepared[0].media.buffer){for(const [n,{role,media}] of prepared.entries()){if(!media.buffer)throw Error('混合媒体序列不兼容');if(n)cursor+=p.config.isi/1000;const node=ctx.createBufferSource();node.buffer=media.buffer;const gain=ctx.createGain();gain.gain.value=p.config.playbackVolume??1;node.connect(gain);gain.connect(ctx.destination);this.outputGains.push(gain);const stamp=a.timing.outputTimestamp;a.timing.planned.push({role,startAudioSeconds:cursor,endAudioSeconds:cursor+media.buffer.duration,scheduledAtAudioSeconds:ctx.currentTime,scheduledAtPerfMs:performance.now(),scheduleLateByMs:Math.max(0,(ctx.currentTime-cursor)*1000),outputStartEstimatePerfMs:stamp?stamp.performanceTime+(cursor-stamp.contextTime)*1000:null});node.onended=()=>{a.timing?.observedEnded.push({role,performanceMs:performance.now(),audioSeconds:ctx.currentTime});node.disconnect();gain.disconnect();};node.start(cursor);this.nodes.push(node);cursor+=media.buffer.duration;}
   const poll=()=>{if(epoch!==this.epoch)return;const now=ctx.currentTime;this.activeRole=a.timing!.planned.find(x=>now>=x.startAudioSeconds&&now<x.endAudioSeconds)?.role??null;if(now>=cursor){a.timing!.endDetectedPerfMs=performance.now();const m=a.timing!.audioMapping;this.openResponse();a.timing!.responseDelayFromMappedEndMs=a.timing!.responseOpenPerfMs!-(m.performanceMs+(cursor-m.audioSeconds)*1000);}else{this.changed();this.timer=setTimeout(poll,8);}};poll();
  }else{const show=()=>{if(epoch!==this.epoch)return;if(ctx.currentTime<cursor){this.timer=setTimeout(show,8);return;}this.visual=prepared[0].media;this.changed();requestAnimationFrame(t=>{if(epoch!==this.epoch)return;a.timing!.visualFramePerfMs=t;requestAnimationFrame(()=>{if(epoch===this.epoch)this.openResponse();});});};show();}
  }catch(e){if(epoch===this.epoch)await this.interrupt('playback-or-decode-failure',String(e),'invalid');}
  }
  private openResponse(){if(!this.current?.timing)return;this.current.timing.responseOpenPerfMs=performance.now();this.activeRole=null;this.set('responding');}
  keyup(e:KeyboardEvent){this.held.delete(e.code||e.key.toLowerCase());}
- keydown(e:KeyboardEvent){const code=e.code||e.key.toLowerCase(),held=this.held.has(code);this.held.add(code);if(held||!isCleanKey(e))return;
- if(['notice','interstitial','ready'].includes(this.phase)){this.continue();return;}if(this.phase!=='responding'||!this.current?.timing)return;
+ keydown(e:KeyboardEvent,start?:()=>void){const code=e.code||e.key.toLowerCase(),held=this.held.has(code);this.held.add(code);if(held||!isCleanKey(e))return;
+ if(this.phase==='intro'){if(isContinueKey(e)){if(start)start();else void this.start();}return;}
+ if(['notice','interstitial','ready'].includes(this.phase)){if(isContinueKey(e))this.continue();return;}if(this.phase!=='responding'||!this.current?.timing)return;
  const choice=keys(this.session.project,this.session.nextIndex).find(k=>k.key.toLowerCase()===e.key.toLowerCase());if(!choice)return;const now=performance.now(),a=this.current;
  // Reject events queued before the response window opened. Epoch-based timestamps are recorded as unavailable.
  const eventTime=Number.isFinite(e.timeStamp)&&e.timeStamp>=0&&e.timeStamp<now+1000?e.timeStamp:null;if(eventTime!==null&&eventTime<a.timing!.responseOpenPerfMs!)return;

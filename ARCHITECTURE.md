@@ -85,7 +85,7 @@ research_entry 在导入 GUI 前处理固定的 --ptb-worker、--local-service�
 | M10 生理参数合成 | 声道几何、合成、关键帧与录制 | 桌面 vocalRequest / 网页同源 vocal 会话 → 专用原生进程 → 共用 core/session 状态机 |
 | M11 MFA 自动标注 | 模型/词典检查、对齐与 TextGrid | M11 port → mfa_alignment → 登记的外部组件环境 |
 | M12 TextGrid 标注 | 区间/点层编辑、关联和保存 | 页面编辑状态 → AnnotationPort → 本机授权文件或服务资源 |
-| M13 汉字转国际音标 | 字表规则转换、排版和图片导出 | 客户端规则/资源，桌面字体能力补充 |
+| M13 汉字转国际音标 | 内置/命名字表转换、排版和图片导出 | 共用客户端规则/资源与本机字表库，桌面字体能力补充 |
 | M14 音系归纳 | 字表导入、符号归类、审阅和文档生成 | M14 port → phonology_induction → core 与文档 I/O |
 | M15 感知实验 | 设计、刺激、计时、问卷及结果 | 纯客户端运行器、IndexedDB、导出，无 Python 科学任务 |
 | M16 录音 | 同设备多道采集、处理、版本和导出 | recording 通道 → 本机设备/工程服务，独立后台处理 |

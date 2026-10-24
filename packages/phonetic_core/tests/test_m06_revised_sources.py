@@ -96,7 +96,9 @@ def test_vowel_generation_preserves_preset_sources_and_f0():
     c['curves']['F0']['points']=[[0,300],[.3,350]];c['f0_transform']=dict(preset='假声',offset_hz=180.)
     generated=generate(c)
     assert generated['curves']['F0']==c['curves']['F0'] and generated['f0_transform']==c['f0_transform']
-    assert not any(v for t,v in generated['curves']['AV']['points'])
+    # AV remains independent of sequence silence, including its hidden points.
+    assert generated['curves']['AV']==c['curves']['AV']
+    assert generated['curves']['AV']['override']==0
     assert generated['curves']['AH']['override']==40
 
 

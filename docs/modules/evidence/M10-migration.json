@@ -48,14 +48,14 @@
       "target": "packages/phonetic_core/src/phonetic_core/vocal_tract/animation.py",
       "source_sha256": "ae254cb77cd4af51eb89ad529f6b8f09b401424244ab3e29ecd8746e2b3c0d37",
       "migration_sha256": "4fda61c3d2ef9fa99afd0693dcd8ddbaccaeb5f310c0a6b389172e0b4f3bfa86",
-      "current_sha256": "0570c29c21a742e8dde9a288210c049377bdf7197f04f5349c5ad14c70d0cbdc"
+      "current_sha256": "8f337f7c064702927e079ec78db520d49fdf8b65aa7a626c1fb7c95d887aaa22"
     },
     {
       "source": "phonetic_toolbox/services/vocal_tract/audio_output.py",
       "target": "desktop/src/ptb_desktop/vocal_tract/audio_output.py",
       "source_sha256": "b3dba8228465b5b9111d6300b7516a2da021fa65c90e8fadaa887841b5525bee",
       "migration_sha256": "f270f6661e1590e788e54cf4379888885a5b7c32ce4d97cd74e94b4d37d450c6",
-      "current_sha256": "bf0eb9f9b6e640fca44c3d32926d8488f72ccfe4302a8cc719031c8b9073a88a"
+      "current_sha256": "87f284537c5141b352eaac4fd32a589acc6d4e917f83a4bb39c99724f9aee4a3"
     },
     {
       "source": "phonetic_toolbox/services/vocal_tract/profile.py",
@@ -83,7 +83,7 @@
       "target": "frontend/public/vocal-tract/app.js",
       "source_sha256": "4068a0de83984149304fc20cb34fb28526ccd973e4894baa79830c6838ee8300",
       "migration_sha256": "4068a0de83984149304fc20cb34fb28526ccd973e4894baa79830c6838ee8300",
-      "current_sha256": "2294ac37ec9900fdf444ab12b0517e4e4b453bc8ea90e16989b311b7720d8f6e"
+      "current_sha256": "8c913acb9fb59e7cfbe9c1ed4328c3b48dce82b9245522c7e169952d3a20b4e0"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/controls.mjs",
@@ -118,7 +118,7 @@
       "target": "frontend/public/vocal-tract/keyframes.js",
       "source_sha256": "0a6521d8995d7c46ba735bf3887d537afb958e318f7cde9bafbc15d83bf49ff6",
       "migration_sha256": "0a6521d8995d7c46ba735bf3887d537afb958e318f7cde9bafbc15d83bf49ff6",
-      "current_sha256": "e9f46e26233c3d5a54bd8a19740d9e7a03088c17329b337e59b8fcb4b64c326e"
+      "current_sha256": "419d0e5508dcbcd1daa95db18d9f4e31e3281ce89a8764d23a346a672b72af66"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/layout.js",
@@ -209,7 +209,7 @@
       "target": "resources/vocal_tract/bundle-manifest.json",
       "source_sha256": "8b6296438c031b60a9e85746614d5965361d49ac96bf39ffed9405e187cee7b9",
       "migration_sha256": "8b6296438c031b60a9e85746614d5965361d49ac96bf39ffed9405e187cee7b9",
-      "current_sha256": "0ac0b7cf5153958c9db0116616724f611e62c39ff1f2497070894e771f9bb531"
+      "current_sha256": "066f8cc006283a38190423dd8814ea2e86b8af44a09f640e595c2a0887838dd2"
     },
     {
       "source": "phonetic_toolbox/resources/vocal_tract/sources.lock.json",
@@ -303,6 +303,6 @@
       "current_sha256": "aa696bf4cf5c44cbd433304943aebb241e5ea3064b949daf5ea09f96567cff9b"
     }
   ],
-  "behavior_revision": "R21 smoothing and source features; Windows/Wasm rebuilt, Mac R21 build pending; see docs/testing/m10-smoothing-review.md",
+  "behavior_revision": "R21 smoothing and source features; Windows/Wasm rebuilt; Darwin arm64 R21 rebuilt from current shared sources on 2026-10-24, native/runtime checks passed and final app checks pending; see docs/testing/m10-smoothing-review.md and docs/testing/m19-geolinguistics.md",
   "presentation_revision": "P04-FONT: docs/testing/p04-fonts-report.md; font-only development checks do not validate other R5 behavior"
 }

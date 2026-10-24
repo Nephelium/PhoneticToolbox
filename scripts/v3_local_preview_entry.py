@@ -80,6 +80,11 @@ def main():
         restore_worker_pipes()
         from verify_m13_package import verify
         return verify(bundle, Path(sys.argv[2]).absolute())
+    if len(sys.argv) == 3 and sys.argv[1] == '--verify-m19-preview':
+        from m10_recording_entry import restore_worker_pipes
+        restore_worker_pipes()
+        from verify_geolinguistics_qt import verify
+        return verify(bundle, Path(sys.argv[2]).absolute())
     if len(sys.argv) == 3 and sys.argv[1] == '--verify-m11-preview':
         from m10_recording_entry import restore_worker_pipes
         restore_worker_pipes()

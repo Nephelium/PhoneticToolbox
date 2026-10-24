@@ -1,6 +1,25 @@
 import type {Config,Mode,Point} from './port.ts';
 export const modes:{value:Mode;label:string}[]=[{value:'full',label:'全连接'},{value:'order',label:'顺序'},{value:'reverse',label:'逆序'},{value:'constant',label:'常量'}];
 export const defaults=():Config=>({action:'synthesize',start:0,end:null,speed:1,pitch_ratio:1,pitch_hz:0,modified_f0:null,points:[],offset:false});
+export type PitchMode='ratio'|'hz';
+export interface VariantInput {speed:string;pitch_ratio:string;pitch_hz:string}
+export function variantValues(text:string,label:string,positive=false){
+ const parts=text.trim().split(/[,，;；\s]+/).filter(Boolean);
+ if(!parts.length)throw Error(label+'列表不能为空');
+ const values=[...new Set(parts.map(x=>finite(x,label)))];
+ if(positive&&values.some(x=>x<=0))throw Error(label+'必须大于 0');
+ return values;
+}
+export function variants(input:VariantInput,mode:PitchMode){
+ const speeds=variantValues(input.speed,'语速倍率',true);
+ const pitches=variantValues(mode==='ratio'?input.pitch_ratio:input.pitch_hz,mode==='ratio'?'音高倍率':'音高偏移',mode==='ratio');
+ if(speeds.length*pitches.length>256)throw Error('每个音频最多生成 256 个版本，请减少参数值');
+ return speeds.flatMap(speed=>pitches.map(pitch=>({speed,pitch_ratio:mode==='ratio'?pitch:1,pitch_hz:mode==='hz'?pitch:0})));
+}
+export function shiftedF0(curve:number[],ratio:number,hz:number,range?:{times:number[];start:number;end:number}){
+ return curve.map((f,i)=>{if(f<=0||range&&(range.times[i]<range.start||range.times[i]>range.end))return f;const value=f*ratio+hz;if(!Number.isFinite(value)||value<=0)throw Error('音高偏移后有声帧须大于 0 Hz，请减小向下偏移');return value;});
+}
+export function variantLabel(config:Pick<Config,'speed'|'pitch_ratio'|'pitch_hz'>){return `语速 ${config.speed} × · ${config.pitch_hz!==0?`音高 ${config.pitch_hz>0?'+':''}${config.pitch_hz} Hz`:`音高 ${config.pitch_ratio} ×`}`;}
 export function finite(value:unknown,label:string){if(value===null||value===undefined||!String(value).trim()||!Number.isFinite(Number(value)))throw Error(label+'必须为有限数字');return Number(value);}
 export function frequencies(text:string){const values=text.trim().split(/[,，;；\s]+/).filter(Boolean).map(x=>finite(x,'频率'));if(!values.length)throw Error('频率列表不能为空');return values;}
 export function validate(points:Point[],start:number,end:number){

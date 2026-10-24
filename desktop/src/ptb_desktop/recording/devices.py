@@ -5,6 +5,7 @@ import threading
 from queue import Queue,Empty,Full
 import numpy as np
 from .storage import iter_audio,read_range
+from phonetic_core.playback_gain import peak_gain,sample_peak
 
 
 def devices(backend=None):
@@ -48,7 +49,7 @@ class PlaybackStartError(RuntimeError):
 
 
 class Playback:
-    def __init__(self,root,spans,config,device_id,channel=0,volume=.7,backend=None,reference_spans=None):
+    def __init__(self,root,spans,config,device_id,channel=0,volume=.7,backend=None,reference_spans=None,auto_gain=True):
         if backend is None:
             import sounddevice as backend
         found=next((d for d in devices(backend) if d['id']==device_id and d['outputs']>0),None)
@@ -56,6 +57,8 @@ class Playback:
         if not 0<=channel<config['channels'] or not 0<=volume<=1:raise ValueError('试听通道或音量无效')
         backend.check_output_settings(device=found['index'],channels=1,dtype='float32',samplerate=config['sample_rate'])
         self.backend=backend;self.root=root;self.spans=spans;self.reference_spans=reference_spans;self.channel=channel;self.volume=volume;self.queue=Queue(16)
+        if type(auto_gain) is not bool:raise ValueError('试听自动增益须为开关值')
+        self.auto_gain=auto_gain
         self.done=threading.Event();self.finished=threading.Event();self.error='';self.position=0;self.stream=None;self.current=np.empty(0,np.float32);self.offset=0
         self.worker=threading.Thread(target=self._read,daemon=True,name='ptb-m16-play-reader');self.worker.start()
         try:
@@ -71,12 +74,20 @@ class Playback:
 
     def _read(self):
         try:
+            peak=0.;fixed=sum(s['end']-s['start'] for s in self.spans)<=8_000_000
+            if self.auto_gain and fixed:
+                offset=0
+                for block in iter_audio(self.root,self.spans,8192):
+                    if self.done.is_set():return
+                    if self.reference_spans is not None:block=read_range(self.root,self.reference_spans,offset,offset+len(block))-block
+                    offset+=len(block);peak=max(peak,sample_peak(block[:,self.channel]))
             offset=0
             for block in iter_audio(self.root,self.spans,8192):
                 if self.reference_spans is not None:block=read_range(self.root,self.reference_spans,offset,offset+len(block))-block
                 offset+=len(block)
                 while not self.done.is_set():
-                    try:self.queue.put((block[:,self.channel]*self.volume).copy(),timeout=.1);break
+                    if self.auto_gain and not fixed:peak=max(peak,sample_peak(block[:,self.channel]))
+                    try:self.queue.put((block[:,self.channel]*self.volume*peak_gain(peak,self.auto_gain)).copy(),timeout=.1);break
                     except Full:pass
                 if self.done.is_set():break
         except BaseException as exc:self.error=str(exc)

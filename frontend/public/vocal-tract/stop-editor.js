@@ -11,7 +11,7 @@ export function editStopTiming(previous,key,milliseconds){
  if(key==='aspiration')t.vot=t.release+t.aspiration;
  else t.aspiration=Math.max(0,t.vot-t.release);
  const duration=t.closure+t.release+t.aspiration;
- if(t.closure<.01||t.closure>2||t.release<.001||t.release>.05||t.aspiration<0||t.aspiration>1||duration>3)throw Error('闭塞 10–2000 ms，释放 1–50 ms，送气 0–1000 ms，总时长不超过 3 秒。');
+ if(t.closure<.01||t.closure>2.999||t.release<.001||t.release>.05||t.aspiration<0||t.aspiration>1||duration>3)throw Error('闭塞 10–2999 ms，释放 1–50 ms，送气 0–1000 ms，总时长不超过 3 秒。');
  if(t.vot < -t.closure)throw Error('前浊不能早于闭塞开始，请增加闭塞时长或缩短负 VOT。');
  return t;
 }
@@ -26,7 +26,7 @@ export function stopEditor({frame,index,frames,busy,onChange}){
  const error=document.createElement('p');error.setAttribute('role','status');error.className='stop-error';details.append(error);
  toggle.onchange=()=>{if(toggle.checked){let duration=frame.duration,count=0;while(frames[index+1+count]?.aspiration){duration+=frames[index+1+count].duration;count++;}if(duration>3){toggle.checked=false;error.textContent='合并后超过单帧 3 秒，请先缩短旧送气段。';return;}frames.splice(index+1,count);frame.duration=duration;frame.stop_timing=initialStopTiming(duration);}else{if(frame.duration<.05){toggle.checked=true;error.textContent='普通帧至少 50 ms，请先增加闭塞时长再关闭时序。';return;}delete frame.stop_timing;}commit();};
  if(!frame.stop_timing){details.append(timingHelp('后续构型作为释放目标；启用时合并紧随其后的旧送气帧，原声源设置保留。'));return details;}
- for(const [key,title,min,max] of [['closure','闭塞',10,2000],['release','释放',1,50],['aspiration','送气',0,1000],['vot','VOT',-2000,1050]]){
+ for(const [key,title,min,max] of [['closure','闭塞',10,2999],['release','释放',1,50],['aspiration','送气',0,1000],['vot','VOT',-2999,1050]]){
   const row=document.createElement('label');row.textContent=title;const input=document.createElement('input');Object.assign(input,{type:'number',step:'any',min,max,value:ms(frame.stop_timing[key]),disabled:busy});input.setAttribute('aria-label',`${title}毫秒，姿势 ${index+1}`);row.append(input,document.createTextNode('ms'));details.append(row);
   input.onchange=()=>{try{const t=editStopTiming(frame.stop_timing,key,input.value);frame.stop_timing=t;frame.duration=t.closure+t.release+t.aspiration;commit();}catch(e){error.textContent=e.message;input.value=ms(frame.stop_timing[key]);}};
  }

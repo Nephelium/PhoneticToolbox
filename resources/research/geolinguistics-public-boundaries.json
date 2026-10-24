@@ -1,0 +1,218 @@
+{
+  "schema": "ptb-geolinguistics-boundary-provenance/1",
+  "version": "datav-areas-v3-inferred-gcj-wgs84-f2452dc864a9b45c",
+  "status": "independent-data-reviewed-study-use-display",
+  "coordinateSystem": "EPSG:4326 display derived via inferred-GCJ-to-WGS84",
+  "coordinateInferenceOfficiallyConfirmed": false,
+  "originalBoundaryCrsDeclaration": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "bindings": {
+    "sites.json": {
+      "bytes": 118329,
+      "sha256": "e5873df28c562e28a3784b17ddcbfefa585763354f0ccf21a97e0f8c09d37843"
+    },
+    "classification.json": {
+      "bytes": 2704616,
+      "sha256": "4f8189ac49ff0f24f28e141fad7c04ee509133a25c8da6aa901e25275eff704f"
+    },
+    "map-index.json": {
+      "bytes": 1962520,
+      "sha256": "43a55fa8e2df3b9a440381c695f14af2c9cd68a735a47f93ae00f17408b80bd6"
+    },
+    "maps/world.json": {
+      "bytes": 138159,
+      "sha256": "74e32d31a1f9531a8531d9f5d7bf1b29c4ec94f87a006639e998e01be14f9156"
+    },
+    "maps/territory.json": {
+      "bytes": 1568315,
+      "sha256": "163b0bab7242858e7d48612ad4495d3d2cd358bba27331f5589f1b9ce6b5afb7"
+    },
+    "maps/province.json": {
+      "bytes": 1027943,
+      "sha256": "b070cbcb6ec2afe4d0a8d7a873a6fe32c11923b958e9e88803bb9dccaf2527f5"
+    },
+    "maps/city.json": {
+      "bytes": 5751627,
+      "sha256": "9c4d0ce900fa22749252674bcfd1530801d2b7cde48eb0390469c611ab802acb"
+    },
+    "maps/district.json": {
+      "bytes": 40363972,
+      "sha256": "a7c40275d6042bd90b7adfa2d098fc31ac61e6f6f58d5f95be327ddf3e4e5680"
+    }
+  },
+  "bindingsSha256": "f2452dc864a9b45c841cc3a206150412c3e9dfa90a620c6868868d6e868b7a60",
+  "normalizedManifestSha256": "7ef8ff6f97ff56e1d45c25b88347c9e0fd3031af968f4b6280b844e5d4921cf9",
+  "rawSourceSetSha256": "7f3a4f219c48dceba6742f757e15de742eef2cd6138c85c7d2c4898768a4c00b",
+  "sources": [
+    {
+      "id": "datav-areas-v3-inferred-gcj-wgs84",
+      "sourceId": "M19-DATAV",
+      "attribution": "DataV GeoAtlas / 高德开放平台",
+      "sourceUrl": "https://datav.aliyun.com/portal/school/atlas/area_selector",
+      "sourceVersion": "areas_v3",
+      "pageVersionTime": "2021.5",
+      "license": "仅供学习和交流使用",
+      "licenseUrl": "https://help.aliyun.com/zh/datav/datav-7-0/user-guide/datav-geoatlas-widgets/",
+      "dataIsProjectMIT": false,
+      "licenseFile": "third_party/licenses/geolinguistics/DataV-GeoAtlas-use-notice.txt"
+    },
+    {
+      "id": "natural-earth-background",
+      "sourceUrl": "https://www.naturalearthdata.com/",
+      "license": "Public domain",
+      "runtimePath": "maps/world.json",
+      "sha256": "74e32d31a1f9531a8531d9f5d7bf1b29c4ec94f87a006639e998e01be14f9156"
+    },
+    {
+      "id": "nlsc-taiping",
+      "sourceId": "M19-NLSC",
+      "attribution": "内政部国土测绘中心；太平岛实际岛面",
+      "sourceUrl": "https://data.gov.tw/dataset/7441",
+      "sourceVersion": "TOWN_MOI_1120317; exact island component5",
+      "sourceSha256": "e4d1a728308e3f811ef1c092d15bf65defcccd3406150d2858120be6b635905a",
+      "license": "政府资料开放授权条款第1版",
+      "licenseUrl": "https://data.gov.tw/license",
+      "licenseFile": "third_party/licenses/geolinguistics/Open-Government-Data-License-1.0.txt",
+      "modifications": "One physical island component with all1352 WGS84 exterior positions retained; original Qijin parent only in lineage, independent Nansha/Sansha/Hainan display association based on official statements. No DataV inverse applied.",
+      "sourceArtifact": "derived-nlsc-official-geojson",
+      "sourceFeatureIndex": 342,
+      "sourceComponentIndex": 5,
+      "originalTownZipSha256": "e028e5a750eee48cf7913330655e5e5c5bb1f176868fbd0afdfc661fca60557c"
+    }
+  ],
+  "supplementReviewSha256": "7efbf8ebc608931cfa7c55636917de6e607f8618325efa2e656844929f38c0c1",
+  "decisionManifestSha256": "9fcbaf41438bb22c4b3f439af99fb4c775fa0bf0411862a62634d71e2267f9f8",
+  "supplementReviews": [
+    {
+      "reviewSha256": "7efbf8ebc608931cfa7c55636917de6e607f8618325efa2e656844929f38c0c1",
+      "decisionsSha256": "9fcbaf41438bb22c4b3f439af99fb4c775fa0bf0411862a62634d71e2267f9f8",
+      "approvedIds": [
+        "dongsha",
+        "yongxing",
+        "taiping"
+      ]
+    },
+    {
+      "reviewSha256": "0ccaea626cc81d184a80a48836b47f38d9939823786123733bab11ad908d9966",
+      "decisionsSha256": "d702ac3ebe4e6ec07116cc145a4b7f446bcfdda4fd7049118d221a79ce8e1063",
+      "approvedIds": [
+        "zengmu"
+      ]
+    }
+  ],
+  "approvedSupplementIds": [
+    "dongsha",
+    "yongxing",
+    "taiping",
+    "zengmu"
+  ],
+  "supplementSources": [
+    {
+      "id": "datav-reviewed-dongsha",
+      "reviewId": "dongsha",
+      "sourceSha256": "0d0c181a8f5d8f02f8dcc0c1dfd669b190cf7e2f65c5f16fa15b57903bc2ae66",
+      "datum": "datav-native-inferred",
+      "license": "DataV-learning-exchange-notice",
+      "targetCodes": [
+        440000
+      ],
+      "displayRole": null,
+      "dryLandMask": null,
+      "meaning": "Independent display association only, not adoption of the source parent jurisdiction or an invented legal maritime administrative boundary",
+      "reviewManifestSha256": "7efbf8ebc608931cfa7c55636917de6e607f8618325efa2e656844929f38c0c1",
+      "decisionManifestSha256": "9fcbaf41438bb22c4b3f439af99fb4c775fa0bf0411862a62634d71e2267f9f8"
+    },
+    {
+      "id": "datav-reviewed-yongxing",
+      "reviewId": "yongxing",
+      "sourceSha256": "204ca301b1622e1433aa01ee3e2e32a75c13c4214d65f0d349df175b58985709",
+      "datum": "datav-native-inferred",
+      "license": "DataV-learning-exchange-notice",
+      "targetCodes": [
+        460000,
+        460300,
+        460301
+      ],
+      "displayRole": null,
+      "dryLandMask": null,
+      "meaning": "Independent display association only, not adoption of the source parent jurisdiction or an invented legal maritime administrative boundary",
+      "reviewManifestSha256": "7efbf8ebc608931cfa7c55636917de6e607f8618325efa2e656844929f38c0c1",
+      "decisionManifestSha256": "9fcbaf41438bb22c4b3f439af99fb4c775fa0bf0411862a62634d71e2267f9f8"
+    },
+    {
+      "id": "nlsc-taiping",
+      "reviewId": "taiping",
+      "sourceSha256": "e4d1a728308e3f811ef1c092d15bf65defcccd3406150d2858120be6b635905a",
+      "datum": "EPSG:4326",
+      "license": "Open-Government-Data-License-1.0",
+      "targetCodes": [
+        460000,
+        460300,
+        460302
+      ],
+      "displayRole": null,
+      "dryLandMask": null,
+      "meaning": "Independent display association only, not adoption of the source parent jurisdiction or an invented legal maritime administrative boundary",
+      "reviewManifestSha256": "7efbf8ebc608931cfa7c55636917de6e607f8618325efa2e656844929f38c0c1",
+      "decisionManifestSha256": "9fcbaf41438bb22c4b3f439af99fb4c775fa0bf0411862a62634d71e2267f9f8",
+      "sourceArtifact": "derived-nlsc-official-geojson",
+      "sourceFeatureIndex": 342,
+      "sourceComponentIndex": 5,
+      "originalTownZipSha256": "e028e5a750eee48cf7913330655e5e5c5bb1f176868fbd0afdfc661fca60557c"
+    },
+    {
+      "id": "datav-reviewed-zengmu",
+      "reviewId": "zengmu",
+      "sourceSha256": "99adfeded5223848bbe37a0a12f8023e11ee12161c7800521c27db42fdeac275",
+      "datum": "datav-native-inferred",
+      "license": "DataV-learning-exchange-notice",
+      "targetCodes": [
+        460300,
+        460302
+      ],
+      "displayRole": "submerged-shoal-display-area",
+      "dryLandMask": false,
+      "meaning": "Only a source administrative display range / submerged-shoal symbol supplement; does not assert exposed land, surveyed shoal boundary, measured national land area or legal maritime boundary",
+      "reviewManifestSha256": "0ccaea626cc81d184a80a48836b47f38d9939823786123733bab11ad908d9966",
+      "decisionManifestSha256": "d702ac3ebe4e6ec07116cc145a4b7f446bcfdda4fd7049118d221a79ce8e1063"
+    }
+  ],
+  "audit": {
+    "association-audit.json": "addc1e84eb094415192bca304f42b9dd1715a7e1738d01253d5a2d19734660b9",
+    "derivation-audit.json": "8a0eaca442437cb89988ddc848f019caf35028a7becc2b7134f46ade226654fe"
+  },
+  "coverage": {
+    "province": 34,
+    "sourceCityLayer": 363,
+    "district": 2840,
+    "drawingFeatures": {
+      "province": 34,
+      "city": 370,
+      "district": 2875
+    },
+    "realTerminalFallbacks": 42,
+    "syntheticAdministrativeEntities": 0,
+    "scope": "Exact acquired source tree, not a certified2026 administrative effective-year tree; Taiwan province only"
+  },
+  "researchData": {
+    "sites": 930,
+    "uniqueSpatialMatches": 928,
+    "ambiguousSites": 1,
+    "unmatchedSites": 1,
+    "coordinateChanges": 0,
+    "originalClassificationValueChanges": 0,
+    "features": 510,
+    "observationAndMatrixByteChanges": 0
+  },
+  "displayMeaning": "Administrative display ranges, not a dry-land mask, legal maritime delimitation or national land-area measurement; ten source boundary symbols excluded from administrative counts, area and site association.",
+  "independentReview": {
+    "nativeAndRuntime3ReportSha256": "82652fe60c0544d4cf61290ecda02f7a4b966d15d3bb4bf7cdd37532852a8b99",
+    "runtime3DifferenceReportSha256": "7d7502a7cb3339a41c11ad6e85e61378c3df48ad78b9cf2a4de98d0e26e791c2",
+    "sourceAuxiliaryDegenerateLineRetained": true,
+    "officialMapReviewClaim": false
+  }
+}

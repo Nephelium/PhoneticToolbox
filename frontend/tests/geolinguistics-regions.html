@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>Owned M19 region fixture</title>
+<style>html,body,#app{height:100%;margin:0}body{background:var(--bg);color:var(--text)}*{box-sizing:border-box}</style></head>
+<body><div id="app"></div><script type="module">
+import {createApp,h} from 'vue';
+import Page from '../src/modules/geolinguistics/GeolinguisticsPage.vue';
+import '../src/design/tokens.css';
+import '../src/design/buttons.css';
+document.documentElement.dataset.theme='light';
+document.documentElement.dataset.buttonStyle='plain';
+window.__regionExports=[];
+createApp({render:()=>h(Page,{active:true,stateKey:'owned-geolinguistics-regions'})}).mount('#app');
+</script></body></html>

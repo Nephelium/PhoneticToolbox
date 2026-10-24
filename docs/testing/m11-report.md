@@ -4,6 +4,15 @@
 
 入口：[功能映射](../modules/evidence/M11-source-map.md)、[用户说明](../manual/mfa.md)、[运行适配决策](../decisions/ADR-M11-001.md)、[远程接线要求](../specs/m11-remote-handoff.md)、[依赖许可审计](../references/m11-runtime-audit.md)。
 
+## 2026-10-21 结果文件名与原音频匹配
+
+- 原因：`m11_executor.execute_claim` 曾将每份结果写成 `001_基本名.TextGrid`，原生保存和逐文件下载沿用该名称。M12 的 `preferredGrid` 按原 WAV 基本名查找，新增前置序号使匹配失败。
+- 修改：新生成结果使用 `基本名.TextGrid`，原音频自带的数字、中文、空格与多重扩展名保持。扁平导出出现重名时，从第二份起追加 `_2`、`_3` 等后缀，避开本批所有原名。Windows/macOS 共用同一 worker 和原生保存代码；不改已有任务清单或磁盘文件。
+- 验证：项目 `.venv/m14/Scripts/python.exe -B -X utf8 -m pytest -c tests/pytest.ini` 定向执行 `backend/tests/test_m11_output_names.py`、`test_m11.py`、`test_m11_r2_probe.py`、`test_mfa_retention.py` 及 `desktop/tests/test_m11_r1.py`，67 项通过。只替换 MFA 资源选择与执行，使用真实隔离 SQLite、本地资产发布、目录授权、原生写盘和 SHA 校验，连续保存两次，原有 TextGrid 字节保持。另以 Node 直接调用 M12 `preferredGrid`，复现旧前缀无法匹配，并验证保存后的 6 份结果全部匹配原 WAV。
+- 证据：`output/validation/m11-output-names/checks-39b25c59fab74c50a3b7ddbc8a18e33a/` 的 `pytest.log`、`m12-roundtrip.log`、`summary.json`、`scratch-manifest.json` 与 `cleanup.json`。前三次检查发现并修正测试夹具缺少项目 ID、缺少输入授权列表及错误假定清单排序；失败诊断与清理回执保留，四个测试 scratch 均为 `deleted`。
+- 文档与差异检查：`scripts/validate_docs.py` 检查 2387 文件、448 来源和 173 任务，`errors=[]`；未修改历史快照中的既有失效链接。相关文件 `git diff --check` 通过。
+- 本轮未执行完整 MFA 原生对齐、实际 Qt 窗口、Mac 实机或最终 EXE/Mac 包验证，未重打包或发布。下列早期平台与完整功能验收范围保持原记录。
+
 ## 正式实现
 
 - 主进程不导入 MFA／Kaldi；页面、协议、组件检查／管理与任务编排留在主程序，重计算仅运行固定外部 child。

@@ -2,6 +2,7 @@ import {setupFeatures} from './features.js';
 import {stopEditor} from './stop-editor.js';
 import {setupSequenceControls} from './sequence-controls.js';
 import {setupPitch} from './pitch.js';
+import {commitSequenceImport} from './sequence-import.mjs';
 export const frameName=f=>f.name|| (f.aspiration?'ʰ':f.silent?'静音':f.preset?'/'+({E:'ɛ','2':'ø'}[f.preset]||f.preset)+'/':'自定义姿势');
 export function frameIntervals(frames){let time=0;return frames.map((f,index)=>{const start=time;time+=f.duration;return {index,name:frameName(f),start,end:time,silent:!!f.silent,aspiration:!!f.aspiration};});}
 export function silentAt(frames,x,includeAspiration=true){const intervals=frameIntervals(frames),time=x*(intervals.at(-1)?.end||0),f=intervals.find(f=>time<f.end)||intervals.at(-1);return !!(f?.silent||(includeAspiration&&f?.aspiration));}
@@ -128,7 +129,7 @@ export function setupKeyframes({metadata,getCatalog,initialGlobals={},initialFea
     const previous=clearedSnapshot;frames=previous.frames;features.set(previous.features);selected=previous.selected;pitch.setCurve(previous.curve);pitch.setPressureCurve(previous.pressure);
     save();render();text('已恢复清空前的关键帧和手绘基频。');
   };
-  $('stopFrames').onclick=async()=>{++generation;try{await post('animation/stop');}catch{}lock(false);text('已停止，保留当前姿势。');};
+  $('stopFrames').onclick=async()=>{++generation;try{const stopped=await(await post('animation/stop')).json();if(stopped.pose)applyPose(stopped.pose,true);lock(false);text('已停止，保留当前姿势。');}catch(e){lock(false);text('停止失败：'+e.message);}};
   $('stopMotionOverlay').onclick=()=>$('stopFrames').click();
   async function prepare(){
     if(!canSynthesize())throw Error('请先重试浏览器声源，或恢复模型默认后发声。');
@@ -140,7 +141,8 @@ export function setupKeyframes({metadata,getCatalog,initialGlobals={},initialFea
   function lockFiles(){lock(true);$('motionHud').hidden=true;$('stopFrames').disabled=true;}
   $('exportFrames').onclick=async()=>{
     if(busy||editing>=0)return;lockFiles();let message='';
-    try{await saveQueue;const result=await(await post('document/save',{features:features.get(),frames,pitch_curve:pitch.getCurve(),pressure_curve:pitch.getPressureCurve(),perturbation:getPerturbation(),global_controls:sequenceControls.get()})).json();if(result.saved)message='已导出 '+result.name;}
+    // Export the current draft even if autosave failed; keep its dirty state.
+    try{await saveQueue.catch(()=>{});const result=await(await post('document/save',{features:features.get(),frames,pitch_curve:pitch.getCurve(),pressure_curve:pitch.getPressureCurve(),perturbation:getPerturbation(),global_controls:sequenceControls.get()})).json();if(result.saved)message='已导出 '+result.name;}
     catch(e){message='导出失败：'+e.message;}
     finally{lock(false);if(message)text(message);}
   };
@@ -148,9 +150,10 @@ export function setupKeyframes({metadata,getCatalog,initialGlobals={},initialFea
     if(busy||editing>=0)return;lockFiles();let message='';
     try{
       await saveQueue;const result=await(await post('document/open')).json();if(result.cancelled)return;
-      const incoming=result.document;await setPerturbation(incoming.perturbation??null);await post('keyframes',{features:incoming.features||[],frames:incoming.frames,pitch_curve:incoming.pitch_curve,pressure_curve:incoming.pressure_curve||[],perturbation:incoming.perturbation??null,global_controls:incoming.global_controls||{}});
+      const incoming=result.document,previous=await(await post('keyframes/load')).json();
+      await commitSequenceImport(post,{features:incoming.features||[],frames:incoming.frames,pitch_curve:incoming.pitch_curve,pressure_curve:incoming.pressure_curve||[],perturbation:incoming.perturbation??null,global_controls:incoming.global_controls||{}},previous,setPerturbation,getPerturbation());
       frames=incoming.frames;ensureIds();features.set(incoming.features);sequenceControls.set(incoming.global_controls);clearedSnapshot=null;pitch.setCurve(incoming.pitch_curve);pitch.setPressureCurve(incoming.pressure_curve);selected=-1;message='已导入 '+result.name+' · '+frames.length+' 个姿势'+(incoming.geometry_notice?' · '+incoming.geometry_notice:'');
-    }catch(e){message='导入失败，当前序列保留：'+e.message;}
+    }catch(e){message=(e.sequenceRestored===false?'导入失败：':'导入失败，当前序列和抖动设置保留：')+e.message;}
     finally{lock(false);if(message)text(message);}
   };
   import('./video.js').then(({setupVideo})=>setupVideo({post,viewer,getFrames:()=>frames,getCurve:pitch.getCurve,prepare,lock,ready:()=>!busy&&editing<0&&isReady()})).catch(e=>text('视频组件载入失败：'+e.message));

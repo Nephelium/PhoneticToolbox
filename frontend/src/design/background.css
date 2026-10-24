@@ -7,7 +7,7 @@ html[data-background-image=on] :where(:is(body,#app,div,section,article,main,asi
  background-color:transparent!important;background-image:none!important;
 }
 /* PDF rasters retain original ink and may have a transparent paper background. */
-html[data-background-image=on] :is(canvas,video,svg[role=img],svg[tabindex],.wave-track>svg,.lip-curves svg,.m16-wave-lanes,.m17-vowels>svg,.history-plot,.spectrum-svg,.parameter-figure,.paint-viewport,.image-viewport,.image-frame>img,.manual-document img,[data-background-surface]){background-color:var(--panel)!important}
+html[data-background-image=on] :is(canvas,video,svg[role=img],svg[tabindex],.wave-track>svg,.lip-curves svg,.m16-wave-lanes,.history-plot,.spectrum-svg,.parameter-figure,.paint-viewport,.image-viewport,.image-frame>img,.manual-document img,[data-background-surface]){background-color:var(--panel)!important}
 html:root[data-background-image=on][data-button-style][data-button-material=solid] button:is(:enabled,:disabled):where(:not(.nav-item)):where(:not([role=tab]):not(.tab-close):not(.window-controls button)){background-color:var(--panel)!important}
 html:root[data-background-image=on][data-button-material=solid][data-button-style=auto] button.primary:where(:not(.nav-item)),
 html:root[data-background-image=on][data-button-material=solid][data-button-style=all] button:is(:enabled,:disabled):where(:not(.nav-item)):where(:not([role=tab]):not(.tab-close):not(.window-controls button)){background-color:var(--accent)!important}

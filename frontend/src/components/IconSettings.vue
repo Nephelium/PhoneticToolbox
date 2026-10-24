@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref,watch} from 'vue';
+import {computed,ref,watch} from 'vue';
 import {applicationIcon,builtinIcons,iconPreferences,iconBusy,iconError,changeIcon,prepareIconSource,homeIconScale,setHomeIconScale,loadBuiltinIcons} from '../state/app-icon.ts';
 import {nativeIcons} from '../platform/icons.ts';
 import type {CustomIcon} from '../platform/icons.ts';
@@ -10,6 +10,10 @@ const props=withDefaults(defineProps<{active?:boolean}>(),{active:true});
 watch(()=>props.active,active=>{if(active)void loadBuiltinIcons();},{immediate:true});
 const input=ref<HTMLInputElement>(),loading=ref(false),message=ref(''),importError=ref('');
 const draft=ref<{url:string;name:string;source:Blob;id?:string}>();
+const dockDraft=ref(100);
+watch(()=>[iconPreferences.value.selected,iconPreferences.value.dockSize?.value],()=>{dockDraft.value=iconPreferences.value.dockSize?.value??100;},{immediate:true});
+const dockPreviewStyle=computed(()=>nativeIcons()&&iconPreferences.value.dockSize?{transform:`scale(${dockDraft.value/100})`}:undefined);
+async function resizeDock(size:number){message.value='';const ok=await changeIcon({action:'resize',id:iconPreferences.value.selected,size});if(ok)message.value='Dock 图标大小已保存。';else dockDraft.value=iconPreferences.value.dockSize?.value??100;}
 function closeCrop(){if(loading.value||iconBusy.value)return;if(draft.value)URL.revokeObjectURL(draft.value.url);draft.value=undefined;importError.value='';iconError.value='';}
 onUnmounted(()=>{if(draft.value)URL.revokeObjectURL(draft.value.url);});
 async function upload(event:Event){
@@ -42,11 +46,12 @@ async function remove(id:string){message.value='';if(await changeIcon({action:'r
   </div>
   <div class="settings-column icon-preview-column">
    <h4>效果预览</h4>
+   <div v-if="nativeIcons()&&iconPreferences.dockSize" class="dock-icon-size-setting"><label for="dock-icon-size">Dock 图标大小 <output>{{dockDraft}}%</output></label><input id="dock-icon-size" v-model.number="dockDraft" type="range" min="60" max="100" step="1" :disabled="iconBusy||loading" @change="resizeDock(dockDraft)"/><button :disabled="iconBusy||loading||dockDraft===iconPreferences.dockSize.default" @click="resizeDock(iconPreferences.dockSize.default)">恢复默认大小</button><p class="settings-note">松开后应用到 Dock，每张图标的大小分别保存在本机。</p></div>
    <div class="home-icon-size-setting"><label for="home-icon-size">首页图标大小 <output>{{homeIconScale}}%</output></label><input id="home-icon-size" type="range" min="50" max="300" step="5" :value="homeIconScale" @input="setHomeIconScale(Number(($event.target as HTMLInputElement).value))"/><button :disabled="homeIconScale===100" @click="setHomeIconScale(100)">恢复默认大小</button><p class="settings-note">调整首页左上角的图标，拖动后即时生效。</p></div>
-   <div class="icon-preview-pair"><div class="icon-stage stage-light"><img :src="applicationIcon" alt="浅色背景图标预览"/><span>浅色背景</span></div><div class="icon-stage stage-dark"><img :src="applicationIcon" alt="深色背景图标预览"/><span>深色背景</span></div></div>
+   <div class="icon-preview-pair"><div class="icon-stage stage-light"><img :src="applicationIcon" :style="dockPreviewStyle" alt="浅色背景图标预览"/><span>浅色背景</span></div><div class="icon-stage stage-dark"><img :src="applicationIcon" :style="dockPreviewStyle" alt="深色背景图标预览"/><span>深色背景</span></div></div>
    <div class="icon-size-preview"><img v-for="size in [16,24,32,48]" :key="size" :src="applicationIcon" :width="size" :height="size" :alt="size+' 像素图标'"/></div>
    <p class="settings-note">{{nativeIcons()?'应用内与窗口图标同步更新，选择保存在本机，升级后继续保留。':'图标用于当前浏览器中的工作台，选择保存在此浏览器。'}}</p>
-   <p v-if="nativeIcons()" class="settings-note">Windows 已固定的任务栏入口与桌面快捷方式使用独立图标。</p>
+   <p v-if="nativeIcons()&&!iconPreferences.dockSize" class="settings-note">Windows 已固定的任务栏入口与桌面快捷方式使用独立图标。</p>
    <button class="icon-reset" :disabled="iconBusy||loading||iconPreferences.selected==='default'" @click="choose('default')">恢复默认图标</button>
   </div>
  </div>
@@ -61,4 +66,5 @@ async function remove(id:string){message.value='';if(await changeIcon({action:'r
 @container module (min-width:960px){.icon-settings>.settings-columns{grid-template-columns:1.6fr 1fr}}
 @container module (max-width:959px){.icon-preview-column{position:static}}
 .home-icon-size-setting{display:grid;gap:8px}.home-icon-size-setting label{display:flex;align-items:center;justify-content:space-between;gap:12px}.home-icon-size-setting input{width:100%;min-width:0;accent-color:var(--accent)}.home-icon-size-setting>button{justify-self:start}.home-icon-size-setting p{margin:0}
+.dock-icon-size-setting{display:grid;gap:8px;margin-bottom:18px}.dock-icon-size-setting label{display:flex;align-items:center;justify-content:space-between;gap:12px}.dock-icon-size-setting input{width:100%;min-width:0;accent-color:var(--accent)}.dock-icon-size-setting>button{justify-self:start}.dock-icon-size-setting p{margin:0}
 </style>

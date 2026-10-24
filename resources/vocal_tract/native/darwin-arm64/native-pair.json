@@ -4,8 +4,8 @@
   "architecture": "arm64",
   "same_source_sha256": "aa696bf4cf5c44cbd433304943aebb241e5ea3064b949daf5ea09f96567cff9b",
   "files": {
-    "libVocalTractLabAnalysis.dylib": "734493e0135f166c83a10decaf7132528b41452154572dcbc611d2ec6cf6b85f",
-    "libgeometry_p2.dylib": "c446192c6bc57903ccdb4b98a8dec92d7fac3e5f8d6f819b9339ab0ab2672b92",
-    "libVocalTractLabApi.dylib": "c3c1d1b77d123e4ccdda64d66d69ca4e274a13ebf691a1cc7cc7c2892ab3dfaa"
+    "libVocalTractLabAnalysis.dylib": "b98d5e233c54126d2f31a70172a7b7967754aab83414af6f7cbc0b82ced2c1dd",
+    "libgeometry_p2.dylib": "76c400afb9239ada90a9ea08707dbf486c2c886125e6740030bdd00ed5e845c9",
+    "libVocalTractLabApi.dylib": "99df458ea0687b32e8fd3a9afe8a23a98aeeb0d21000bd71a05aefb5b266549d"
   }
 }

@@ -1,0 +1,56 @@
+--- a/libavdevice/avfoundation.m
++++ b/libavdevice/avfoundation.m
+@@ -152,7 +152,7 @@
+ 
+ /** FrameReceiver class - delegate for AVCaptureSession
+  */
+-@interface AVFFrameReceiver : NSObject
++@interface PTBPyAV8AVFFrameReceiver : NSObject
+ {
+     AVFContext* _context;
+ }
+@@ -165,7 +165,7 @@
+ 
+ @end
+ 
+-@implementation AVFFrameReceiver
++@implementation PTBPyAV8AVFFrameReceiver
+ 
+ - (id)initWithContext:(AVFContext*)context
+ {
+@@ -244,7 +244,7 @@
+ 
+ /** AudioReceiver class - delegate for AVCaptureSession
+  */
+-@interface AVFAudioReceiver : NSObject
++@interface PTBPyAV8AVFAudioReceiver : NSObject
+ {
+     AVFContext* _context;
+ }
+@@ -257,7 +257,7 @@
+ 
+ @end
+ 
+-@implementation AVFAudioReceiver
++@implementation PTBPyAV8AVFAudioReceiver
+ 
+ - (id)initWithContext:(AVFContext*)context
+ {
+@@ -568,7 +568,7 @@
+     }
+ #endif
+ 
+-    ctx->avf_delegate = [[AVFFrameReceiver alloc] initWithContext:ctx];
++    ctx->avf_delegate = [[PTBPyAV8AVFFrameReceiver alloc] initWithContext:ctx];
+ 
+     queue = dispatch_queue_create("avf_queue", NULL);
+     [ctx->video_output setSampleBufferDelegate:ctx->avf_delegate queue:queue];
+@@ -612,7 +612,7 @@
+         return 1;
+     }
+ 
+-    ctx->avf_audio_delegate = [[AVFAudioReceiver alloc] initWithContext:ctx];
++    ctx->avf_audio_delegate = [[PTBPyAV8AVFAudioReceiver alloc] initWithContext:ctx];
+ 
+     queue = dispatch_queue_create("avf_audio_queue", NULL);
+     [ctx->audio_output setSampleBufferDelegate:ctx->avf_audio_delegate queue:queue];

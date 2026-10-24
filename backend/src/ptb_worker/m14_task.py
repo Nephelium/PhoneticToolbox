@@ -7,6 +7,9 @@ from ptb_api.m14_models import M14Request
 
 
 def capability(store=None):
+    if sys.platform=='darwin':
+        from .native.darwin import capability as mac_capability
+        return bool(getattr(store,'files',None)) and mac_capability('phonology_induction')
     if sys.platform=='linux':
         from .native.capabilities import linux_capabilities
         return 'phonology_induction' in linux_capabilities(store)[0]

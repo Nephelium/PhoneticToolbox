@@ -9,11 +9,26 @@ import time
 from uuid import uuid4
 from .io.scratch import no_links
 
+def sampled_disk_bytes(root):
+    # Progress publication atomically replaces status.next while this sampler runs.
+    import stat
+    total=0
+    for path in root.rglob('*'):
+        try:info=path.stat()
+        except FileNotFoundError:continue
+        if stat.S_ISREG(info.st_mode):total+=info.st_size
+    return total
+
+
 def run_child(root,request,stop,progress,evidence):
-    from .native.windows import OwnedProcess
+    import sys
+    if sys.platform=='darwin':
+        from .native.darwin import OwnedProcess
+    else:
+        from .native.windows import OwnedProcess
     from .m05_child import atomic
     from .native_runtime import checked_runtime
-    runtime=checked_runtime(os.environ['PTB_M05_PYTHON'])
+    runtime=sys.executable if sys.platform=='darwin' else checked_runtime(os.environ['PTB_M05_PYTHON'])
     atomic(root/'request.json',request)
     process=None;started=time.monotonic();peak_disk=0
     try:
@@ -22,7 +37,7 @@ def run_child(root,request,stop,progress,evidence):
         while True:
             if stop():raise ValueError('cancelled')
             if time.monotonic()-started>1800:raise ValueError('m05_timeout')
-            size=sum(p.stat().st_size for p in root.rglob('*') if p.is_file());peak_disk=max(size,peak_disk)
+            size=sampled_disk_bytes(root);peak_disk=max(size,peak_disk)
             if size>700_000_000:raise ValueError('m05_disk_budget')
             status=root/'status.json'
             if status.exists():progress(json.loads(status.read_text('utf-8')))
@@ -60,7 +75,8 @@ def execute_claim(store,claim,worker_id,stop,*,evidence=None):
             done.wait(min(.5,store.lease_seconds/3))
     heartbeat=threading.Thread(target=pulse,daemon=True)
     try:
-        if store.postgres or os.name!='nt':raise ValueError('m05_runtime_not_admitted')
+        import sys
+        if store.postgres or (os.name!='nt' and sys.platform!='darwin'):raise ValueError('m05_runtime_not_admitted')
         no_links(root);root.mkdir(parents=True)
         if shutil.disk_usage(root).free<1_500_000_000:raise ValueError('m05_disk_space')
         heartbeat.start();source=snapshot['input_assets'][0];input_name='input'+Path(source['name']).suffix

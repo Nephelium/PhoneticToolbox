@@ -14,6 +14,16 @@ from phonetic_core.manipulation.m08_batch import generate_batch_linear
 from phonetic_core.manipulation.m08_rules import track, validate_range, validate_controls, next_name
 
 
+def variant_name(name, config):
+    """Label changed settings without changing historical default/linear names."""
+    if config.speed == 1 and config.pitch_ratio == 1 and config.pitch_hz == 0:
+        return name
+    pitch = (f'pitch-{config.pitch_hz:+.15g}Hz' if config.pitch_hz != 0
+             else f'pitch-{config.pitch_ratio:.15g}x')
+    suffix = f'_speed-{config.speed:.15g}_{pitch}.wav'
+    return Path(name).stem[:180-len(suffix)] + suffix
+
+
 def execute(sound, config, stem, *, cancelled=lambda: False, emit=None):
     try:
         return _execute(sound,config,stem,cancelled=cancelled,emit=emit)
@@ -71,7 +81,7 @@ def _execute(sound, config, stem, *, cancelled=lambda: False, emit=None):
         if output.n_samples > 32_000_000: raise ValueError('m08_output_budget')
         metadata = dict(info, output_frames=output.n_samples, output_start_s=output.xmin,
                         output_end_s=output.xmax, controls=list(controls))
-        reference = emit(name,output,metadata)
+        reference = emit(variant_name(name,config) if config.action in ('synthesize','transform') else name,output,metadata)
         results.append(reference)
         check()
     return dict(info, outputs=results)

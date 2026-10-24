@@ -2,7 +2,7 @@
 import {plotTickLabel} from '../../platform/plotTicks.ts';
 import {computed,ref,getCurrentInstance,onMounted,onUnmounted} from 'vue';
 import {editCurve} from './state.ts';
-const props=defineProps<{times:number[];original:number[];modified:number[];start:number;end:number;min:number;max:number;references:number[];editable?:boolean;label?:string}>();
+const props=defineProps<{times:number[];original:number[];modified:number[];start:number;end:number;min:number;max:number;references:number[];timeReferences?:number[];editable?:boolean;label?:string}>();
 const emit=defineEmits<{edit:[number[]];pan:[number];zoom:[number,number]}>();
 const svg=ref<SVGSVGElement>();let gesture:'draw'|'restore'|'pan'|null=null,last:{index:number;value:number}|undefined,anchor=0;
 const height=ref(250),bottom=computed(()=>height.value-40),plotHeight=computed(()=>height.value-60);
@@ -24,6 +24,6 @@ function key(e:KeyboardEvent){if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.pr
 <defs><clipPath :id="clip"><rect x="60" y="20" :width="plotWidth" :height="plotHeight"/></clipPath></defs>
 <g class="grid"><path :d="`M60,20V${bottom}H${right}`"/><template v-for="n in 5" :key="n"><path :d="`M60,${20+(n-1)*plotHeight/4}H${right}`"/><text x="53" :y="25+(n-1)*plotHeight/4" text-anchor="end">{{plotTickLabel(max-(n-1)*(max-min)/4)}}</text><text :x="60+(n-1)*plotWidth/4" :y="height-18" text-anchor="middle">{{(start+(n-1)*(end-start)/4).toFixed(3)}}</text></template></g>
 <text x="60" y="14">F0 (Hz)</text><text :x="right" :y="height-2" text-anchor="end">Time (s)</text>
-<g :clip-path="`url(#${clip})`"><path :d="originalPath" class="original"/><path :d="modifiedPath" class="modified"/><g v-for="(f,i) in references" :key="i"><path :d="`M60,${y(f)}H${right}`" class="reference"/><text x="65" :y="y(f)-3">{{f}} Hz</text></g></g>
+<g :clip-path="`url(#${clip})`"><path :d="originalPath" class="original"/><path :d="modifiedPath" class="modified"/><g v-for="(f,i) in references" :key="'hz-'+i"><path :d="`M60,${y(f)}H${right}`" class="reference"/><text x="65" :y="y(f)-3">{{f}} Hz</text></g><g v-for="(t,i) in timeReferences??[]" v-show="t>=start&&t<=end" :key="'time-'+i"><path :d="`M${x(t)},20V${bottom}`" class="reference time-reference"/><text :x="x(t)+(x(t)>right-65?-5:5)" y="34" :text-anchor="x(t)>right-65?'end':'start'">{{t}} s</text></g></g>
 </svg></template>
 <style scoped>.m08-curve{display:block;width:100%;min-height:190px;touch-action:none;font-family:var(--font-figure);font-size:var(--figure-size);color:var(--text);fill:currentColor}.m08-curve path{fill:none;vector-effect:non-scaling-stroke}.grid path{stroke:var(--border)}.original{stroke:var(--wave);stroke-dasharray:3 4;stroke-width:1.3}.modified{stroke:var(--danger);stroke-width:1.5}.reference{stroke:var(--muted);stroke-dasharray:6 4}.m08-curve:focus-visible{outline:2px solid var(--accent)}</style>

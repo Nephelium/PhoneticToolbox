@@ -138,7 +138,13 @@ def run():
                 session = Session(raw,native_header=header)
                 value = dict(sha256=session.sha)
             elif session is not None:
+                if header.get('need_audio') is True:session.audio_key=None
                 value = session.update(header['config'])
+                suggested=value.get('preview',{}).get('suggested_db_range')
+                if header.get('auto_db') is True and suggested:
+                    first_audio=value.get('audio_base64')
+                    value=session.update({**header['config'],'spec_vmin':suggested[0],'spec_vmax':suggested[1]})
+                    value['audio_base64']=first_audio
             else: raise ValueError()
         except Exception as exc:
             code = getattr(exc, 'code', '')

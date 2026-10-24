@@ -10,6 +10,10 @@ from ptb_api.m05_models import M05Request
 def catalog(local):
     runtime=os.environ.get('PTB_M05_PYTHON','')
     available=local and os.name=='nt' and bool(runtime) and Path(runtime).is_file()
+    import sys
+    if sys.platform=='darwin':
+        from .native.darwin import capability
+        available=local and capability('lip_analysis')
     return dict(schema_version='m05/1',available=available,backend='legacy-facemesh/0.10.14',
                 reason=None if available else 'm05_runtime_not_admitted',remote_available=False,
                 input_bytes=128_000_000,output_bytes=512_000_000,process_bytes=2_147_483_648)

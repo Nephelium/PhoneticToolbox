@@ -7,6 +7,7 @@ import sounddevice as sd
 from pathlib import Path
 from phonetic_core.vocal_tract.monitor import OutputHistory
 from phonetic_core.vocal_tract.envelope import attack_envelope, audition_samples
+from phonetic_core.playback_gain import peak_gain,sample_peak
 
 
 def output_devices():
@@ -20,7 +21,7 @@ class LiveAudio:
         # Tests can explicitly prohibit all physical-device access.
         self.playback_allowed=playback_allowed
         self.engine=engine;self.params=engine.params.copy();self.f0=engine.default_f0;self.volume=.8;self.lip_width=1.;self.larynx_height=0.;self.tongue_shape=[0.]*4;self.lip_shape=[0.]*4;self.tube=None
-        self.source=None;self.gain_db=0.;self.pitch_gain=1.
+        self.source=None;self.gain_db=0.;self.pitch_gain=1.;self.auto_gain=True
         self.output_history=OutputHistory(engine.sr)
         devices=output_devices() if playback_allowed else []
         # User explicitly chose the built-in speakers on 2026-09-08.
@@ -84,6 +85,8 @@ class LiveAudio:
             device=next(d for d in output_devices() if d['id']==self.device_key)
             glottis=lambda:self.engine.glottis(self.f0,source=self.source) if self.source is not None else self.engine.glottis(self.f0)
             n=960;offset=0;g=glottis();tube=self.tube;pitch_gain=self.pitch_gain
+            # Estimate before the volume slider and envelope so both stay effective.
+            audition_peak=sample_peak(audition_samples(self.buffer,1,self.gain_db)) if self.buffer is not None and self.auto_gain else 0.
             if self.buffer is None:
                 with self.engine.lock:self.engine.reset_tube(tube,g)
             # VTL produces 48 kHz PCM. A shared WASAPI endpoint may run at
@@ -112,7 +115,8 @@ class LiveAudio:
                         if len(block)<n:block=np.pad(block,(0,n-len(block)))
                     self.stats['compute_ms']=(time.perf_counter()-t)*1000
                     # The same fixed audition gain is used on every route.
-                    block=audition_samples(block,self.volume,self.gain_db,envelope)
+                    if self.buffer is None and self.auto_gain:audition_peak=max(audition_peak,sample_peak(audition_samples(block,1,self.gain_db)))
+                    block=audition_samples(block,self.volume,self.gain_db,envelope)*peak_gain(audition_peak,self.auto_gain)
                     self.stats['rms']=float(np.sqrt(np.mean(block*block)));self.stats['peak']=float(np.max(np.abs(block)))
                     stereo=np.repeat(block.astype(np.float32)[:,None],device['channels'],axis=1)
                     if self.clock_start is None:self.clock_start=time.monotonic()

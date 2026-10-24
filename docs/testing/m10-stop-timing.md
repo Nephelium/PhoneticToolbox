@@ -1,5 +1,7 @@
 # 生理参数合成：爆破时序与正负 VOT 验收
 
+2026-10-20追加：本页共享实现已同步公开网页，相关操作在实际HTTPS Chrome155重新验证，Linux声道回退为R21。当前网页部署以[同步验收](2026-10-20-web-module-sync.md)为准。以下保留原本机/各平台验收范围，最终Windows/macOS成品与实体设备边界不扩大。
+
 2026-10-19。范围：三端共用源码，Windows 原生/Qt与本机独立 Chrome 真实 Wasm。决策见 [ADR](../decisions/ADR-M10-stop-timing.md)。
 
 ## 修复与审阅结论

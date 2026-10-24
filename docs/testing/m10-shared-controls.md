@@ -1,5 +1,7 @@
 # 三端共享生理参数合成验收
 
+2026-10-20追加：本页共享实现已同步公开网页，相关操作在实际HTTPS Chrome155重新验证，Linux声道回退为R21。当前网页部署以[同步验收](2026-10-20-web-module-sync.md)为准。以下保留原本机/各平台验收范围，最终Windows/macOS成品与实体设备边界不扩大。
+
 日期：2026-10-18。任务：M10-SHARED-SYNTHESIS。语义与授权见 [ADR](../decisions/ADR-M10-shared-synthesis-controls.md)。当前结论为共享源码、Windows 原生/Qt、独立 Chrome Wasm、macOS ARM64 原生通过定向验收。最终 EXE、Mac 应用、公开网站未更新，不能引用本报告代替发行验收。
 
 ## 交付行为

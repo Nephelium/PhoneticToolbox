@@ -93,6 +93,8 @@ playwright-report/
 !/tests/fixtures/m04/arrays.npz
 # Generated local reading edition may include software-only recording assets.
 /frontend/public/manual/
+# User-provided atlas excerpts and locally derived linguistic data; local trial only.
+/frontend/public/geolinguistics/
 # Author avatar is authorized for application/website distribution only.
 /frontend/src/assets/feedback-avatar.jpg
 

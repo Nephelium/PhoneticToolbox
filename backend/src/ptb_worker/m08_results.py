@@ -83,7 +83,9 @@ def listing(store,owner,project,source=None):
             try:results=descriptors(store,tx,owner,row)
             except (StorageError,JobError,OSError):results=[]
             ref=snapshot.get('source_ref',snapshot['input_refs']['audio'])
-            out.append(dict(id=row['id'],source_id=ref['asset_id'],state=row['state'],results=results,error=row['error_code']))
+            source_name=next((v.get('name',v.get('original_name')) for v in snapshot.get('input_assets',[]) if v['id']==ref['asset_id']),None)
+            out.append(dict(id=row['id'],source_id=ref['asset_id'],source_sha256=ref['sha256'],source_name=source_name,
+                            config=snapshot['config']['analysis'],state=row['state'],results=results,error=row['error_code']))
         return out
 
 

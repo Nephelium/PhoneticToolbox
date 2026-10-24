@@ -11,8 +11,9 @@ from ptb_desktop.vocal_tract import audio_output as audio
     ('Windows WASAPI', 44100, 2), ('Windows WASAPI', 48000, 1),
     ('ALSA', 48000, 2),
 ])
+@pytest.mark.parametrize('enabled', [True,False])
 @pytest.mark.parametrize('mode', ['test', 'preview', 'animation'])
-def test_buffer_playback_preserves_samples_and_clock(monkeypatch, host, rate, channels, mode):
+def test_buffer_playback_preserves_samples_and_clock(monkeypatch, host, rate, channels, mode, enabled):
     engine=SimpleNamespace(sr=48000,default_f0=120.,params=np.zeros(19),glottis=lambda *a,**k:None)
     device={'id':host+'|test','index':7,'name':'test','channels':channels}
     monkeypatch.setattr(audio,'output_devices',lambda:[device])
@@ -33,13 +34,14 @@ def test_buffer_playback_preserves_samples_and_clock(monkeypatch, host, rate, ch
         def write(self,block):writes.append(block.copy());return False
     monkeypatch.setattr(audio.sd,'OutputStream',Stream)
     player=audio.LiveAudio(engine,playback_allowed=True)
+    player.auto_gain=enabled
     samples=np.linspace(-.05,.05,1440)
     player.start(samples,mode=mode)
     player.thread.join(2)
     assert not player.thread.is_alive() and player.completed and player.error is None
     assert player.position()==pytest.approx(.03)
     actual=np.concatenate(writes)
-    expected=audio.audition_samples(np.pad(samples,(0,480)),.8,0).astype(np.float32)
+    expected=(audio.audition_samples(np.pad(samples,(0,480)),.8,0)*(min(32,10**(-1/20)/max(abs(audio.audition_samples(samples,1,0)))) if enabled else 1)).astype(np.float32)
     assert actual.shape==(1920,channels)
     for ch in range(channels):np.testing.assert_array_equal(actual[:,ch],expected)
     assert engine.sr==48000

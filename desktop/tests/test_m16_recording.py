@@ -221,7 +221,8 @@ def test_native_device_defaults_two_audio_and_single_input_fallback():
     backend=Backend();device=devices(backend)[0]['id'];cfg=validate_config({'device':device},backend);assert cfg['roles']==['microphone','microphone'];backend.channels=1;device=devices(backend)[0]['id'];cfg=validate_config({'device':device},backend);assert cfg['roles']==['microphone']
 
 
-def test_residual_playback_is_source_minus_processed_on_same_frames(tmp_path):
+@pytest.mark.parametrize('enabled',[True,False])
+def test_residual_playback_is_source_minus_processed_on_same_frames(tmp_path,enabled):
     from ptb_desktop.recording.devices import Playback,devices
     class Stream:
         def start(self):pass
@@ -233,7 +234,7 @@ def test_residual_playback_is_source_minus_processed_on_same_frames(tmp_path):
         def check_output_settings(self,**kwargs):pass
         def OutputStream(self,**kwargs):return Stream()
     p=Project(tmp_path/'p',True);x=signal(1000);source=save_pcm(p.root,'takes/a/raw/0.f32',x);derived=save_pcm(p.root,'derived/a/0.f32',x*.5);backend=Backend()
-    player=Playback(p.root,[derived],config(),devices(backend)[0]['id'],0,1,backend,reference_spans=[source]);assert np.array_equal(player.current,x[:,0]*.5);player.stop();p.close()
+    player=Playback(p.root,[derived],config(),devices(backend)[0]['id'],0,1,backend,reference_spans=[source],auto_gain=enabled);expected=x[:,0]*.5;expected=expected*(min(32,10**(-1/20)/float(max(abs(expected)))) if enabled else 1);assert np.array_equal(player.current,expected);player.stop();p.close()
 
 
 @pytest.mark.parametrize('fail_at',['construct','start'])

@@ -1,6 +1,8 @@
 import rawData from './ipa-data.json' with {type:'json'};
 import {validFamily} from '../../design/fonts.ts';
 import {isUnt,untReading,untTranscription} from './unt.ts';
+import {syllableKey,type CustomTable,type TableLibrary} from './custom-tables.ts';
+import {transcribeTone} from './tones.ts';
 
 export const mappingStandards=[
   'Standard Chinese (Beijing)',
@@ -16,7 +18,7 @@ export const mappingStandards=[
 ] as const;
 export const standards=[...mappingStandards,'汉语拼音'] as const;
 export type MappingStandard=typeof mappingStandards[number];
-export type IpaStandard=typeof standards[number];
+export type IpaStandard=typeof standards[number]|CustomTable['id'];
 export type DisplayMode='paired'|'ipa-only';
 export type PageLayout='side-by-side'|'stacked';
 
@@ -26,7 +28,7 @@ interface RawData {
   unique_character_count:number;duplicate_character_count:number;max_variants:number;
   columns:string[];rows:CompactRow[];
 }
-export interface IpaEntry {tone:number;pinyin:string;values:readonly (string|null)[]}
+export interface IpaEntry {tone:number;pinyin:string;values:readonly (string|null)[];customValue?:string;customBareValue?:string}
 export interface MappedToken {kind:'mapped';index:number;char:string;value:string;entry:IpaEntry;variants:readonly IpaEntry[];selectedVariant:number;erhua?:boolean;baseChar?:string;canCombine?:boolean}
 export interface LiteralToken {kind:'literal';index:number;char:string;newline:boolean}
 export type ConversionToken=MappedToken|LiteralToken;
@@ -36,6 +38,7 @@ export interface MandarinIpaDraft {
   hanziSize:number;ipaSize:number;ipaSizeUserSet:boolean;gap:number;lineHeight:number;
   bold:boolean;italic:boolean;underline:boolean;selectedVariants:Record<string,number>;
   showTone:boolean;ipaColor:string;hanziColor:string;hanziFont:string;erhuaPairs:Record<string,boolean>;equalWidth:boolean;
+  tableRevision?:number;
 }
 
 const data=rawData as RawData;
@@ -69,14 +72,29 @@ export function addToneMark(pinyin:string,tone:number){
 }
 
 export function displayEntry(entry:IpaEntry,standard:IpaStandard,showTone=true){
+  if(standard.startsWith('custom:')){const value=entry.customValue??'?';return showTone?value:entry.customBareValue??value.replace(/[˥˦˧˨˩]+$/u,'');}
   if(standard==='汉语拼音'){const pinyin=entry.pinyin.replace(/v/g,'ü');return showTone&&entry.tone!==0?addToneMark(pinyin,entry.tone):pinyin;}
-  const value=entry.values[standardColumn.get(standard)!]||'?';return showTone?value:value.replace(/[˥˦˧˨˩]+$/u,'');
+  const value=entry.values[standardColumn.get(standard as MappingStandard)!]||'?';return showTone?value:value.replace(/[˥˦˧˨˩]+$/u,'');
+}
+const customIndexes=new WeakMap<CustomTable,Map<string,IpaEntry[]>>();
+function customIndex(table:CustomTable){
+  const cached=customIndexes.get(table);if(cached)return cached;
+  const lookup=new Map<string,string[]>();for(const [key,value] of table.rows){const values=lookup.get(key)??[];values.push(value);lookup.set(key,values);}
+  const converted=new Map<string,IpaEntry[]>();
+  const transcription=(value:string)=>({customValue:transcribeTone(value,table.tones),customBareValue:transcribeTone(value,table.tones,false)});
+  if(table.kind==='hanzi')for(const [char,values] of lookup)converted.set(char,values.map(value=>({tone:0,pinyin:'',values:[],...transcription(value)})));
+  else for(const [char,entries] of index)converted.set(char,entries.flatMap(entry=>{
+    const base=syllableKey(entry.pinyin),values=lookup.get(base+entry.tone)||lookup.get(base)||['?'];
+    return values.map(value=>({...entry,...transcription(value)}));
+  }));
+  customIndexes.set(table,converted);return converted;
 }
 export const variantKey=(char:string,position:number)=>`${char}_${position}`;
-export function convertText(text:string,standard:IpaStandard,selectedVariants:Readonly<Record<string,number>>={},showTone=true,erhuaPairs:Readonly<Record<string,boolean>>={}):ConversionToken[]{
+export function convertText(text:string,standard:IpaStandard,selectedVariants:Readonly<Record<string,number>>={},showTone=true,erhuaPairs:Readonly<Record<string,boolean>>={},table?:CustomTable):ConversionToken[]{
   const result:ConversionToken[]=[];
+  const custom=standard.startsWith('custom:'),lookup=custom&&table?.id===standard?customIndex(table):custom?new Map<string,IpaEntry[]>():index;
   [...text].forEach((char,position)=>{
-    const variants=index.get(char);
+    const variants=lookup.get(char)??(custom&&/^\p{Script=Han}$/u.test(char)?[{tone:0,pinyin:'',values:[],customValue:'?'}]:undefined);
     if(!variants?.length){result.push({kind:'literal',index:position,char,newline:char==='\n'});return;}
     const requested=selectedVariants[variantKey(char,position)],selected=Number.isInteger(requested)&&requested>=0&&requested<variants.length?requested:0;
     const entry=variants[selected];result.push({kind:'mapped',index:position,char,value:displayEntry(entry,standard,showTone),entry,variants,selectedVariant:selected});
@@ -130,7 +148,7 @@ export function plainOutput(tokens:readonly ConversionToken[]){return tokens.map
 export function effectiveIpaSize(draft:Pick<MandarinIpaDraft,'display'|'ipaSize'|'ipaSizeUserSet'>){return draft.display==='ipa-only'&&!draft.ipaSizeUserSet?28:draft.ipaSize;}
 
 export function createDraft():MandarinIpaDraft{return {version:1,text:'',standard:'Standard Chinese (Beijing)',display:'paired',layout:'side-by-side',hanziSize:24,ipaSize:16,ipaSizeUserSet:false,gap:0,lineHeight:1.8,bold:false,italic:false,underline:false,selectedVariants:{},showTone:true,ipaColor:'',hanziColor:'',hanziFont:'',erhuaPairs:{},equalWidth:false};}
-export function createPageDraft(saved:unknown):MandarinIpaDraft{return {...restoreDraft(saved),text:'',standard:createDraft().standard,selectedVariants:{},erhuaPairs:{}};}
+export function createPageDraft(saved:unknown):MandarinIpaDraft{const draft={...restoreDraft(saved),text:'',standard:createDraft().standard,selectedVariants:{},erhuaPairs:{}};delete draft.tableRevision;return draft;}
 // Keep choices attached to unchanged Unicode characters before/after an edit.
 export function moveVariantChoices(previous:string,next:string,choices:Readonly<Record<string,number>>){
   const before=[...previous],after=[...next];let prefix=0,suffix=0;
@@ -149,7 +167,8 @@ const number=(value:unknown,fallback:number,min:number,max:number)=>typeof value
 export function restoreDraft(value:unknown):MandarinIpaDraft{
   const draft=createDraft();if(!value||typeof value!=='object'||Array.isArray(value))return draft;const saved=value as Record<string,unknown>;if(saved.version!==1)return draft;
   if(typeof saved.text==='string')draft.text=saved.text;
-  if(typeof saved.standard==='string'&&standards.includes(saved.standard as IpaStandard))draft.standard=saved.standard as IpaStandard;
+  if(typeof saved.standard==='string'&&(standards.some(s=>s===saved.standard)||/^custom:[\w-]+$/.test(saved.standard)))draft.standard=saved.standard as IpaStandard;
+  if(Number.isSafeInteger(saved.tableRevision)&&Number(saved.tableRevision)>=1)draft.tableRevision=Number(saved.tableRevision);
   if(saved.display==='paired'||saved.display==='ipa-only')draft.display=saved.display;
   if(saved.layout==='side-by-side'||saved.layout==='stacked')draft.layout=saved.layout;
   draft.hanziSize=number(saved.hanziSize,draft.hanziSize,16,72);draft.ipaSize=number(saved.ipaSize,draft.ipaSize,12,48);
@@ -157,7 +176,7 @@ export function restoreDraft(value:unknown):MandarinIpaDraft{
   for(const key of ['ipaSizeUserSet','bold','italic','underline','showTone','equalWidth'] as const)if(typeof saved[key]==='boolean')draft[key]=saved[key];
   for(const key of ['ipaColor','hanziColor'] as const)if(typeof saved[key]==='string'&&/^#[\da-f]{6}$/i.test(saved[key]))draft[key]=saved[key];
   if(validFamily(saved.hanziFont))draft.hanziFont=saved.hanziFont.trim();
-  if(saved.selectedVariants&&typeof saved.selectedVariants==='object'&&!Array.isArray(saved.selectedVariants))for(const [key,entry] of Object.entries(saved.selectedVariants))if(/^._\d+$/u.test(key)&&Number.isInteger(entry)&&Number(entry)>=0&&Number(entry)<=6)draft.selectedVariants[key]=Number(entry);
+  if(saved.selectedVariants&&typeof saved.selectedVariants==='object'&&!Array.isArray(saved.selectedVariants))for(const [key,entry] of Object.entries(saved.selectedVariants))if(/^._\d+$/u.test(key)&&Number.isInteger(entry)&&Number(entry)>=0&&Number(entry)<50000)draft.selectedVariants[key]=Number(entry);
   if(saved.erhuaPairs&&typeof saved.erhuaPairs==='object'&&!Array.isArray(saved.erhuaPairs)){
     const chars=[...draft.text];
     for(const [key,enabled] of Object.entries(saved.erhuaPairs)){
@@ -167,4 +186,20 @@ export function restoreDraft(value:unknown):MandarinIpaDraft{
     }
   }
   return draft;
+}
+export function restoreTableDraft(value:unknown,library:TableLibrary,fallback:IpaStandard=createDraft().standard){
+  const draft=restoreDraft(value);let notice='';
+  if(draft.standard.startsWith('custom:')){
+    const table=library.tables.find(t=>t.id===draft.standard);
+    if(!table){
+      draft.standard=standards.some(s=>s===fallback)||library.tables.some(t=>t.id===fallback)?fallback:createDraft().standard;
+      draft.selectedVariants={};draft.erhuaPairs={};delete draft.tableRevision;
+      const current=library.tables.find(t=>t.id===draft.standard);if(current)draft.tableRevision=current.revision??1;
+      notice='草稿使用的字表已删除或不可用，文本和排版已恢复，请重新选择字表并核对读音。';
+    }else{
+      if((draft.tableRevision??1)!==(table.revision??1)){draft.selectedVariants={};draft.erhuaPairs={};notice='字表已替换，草稿文本和排版已恢复，请重新核对多音字读音。';}
+      draft.tableRevision=table.revision??1;
+    }
+  }
+  return {draft,notice};
 }

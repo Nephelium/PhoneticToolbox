@@ -43,6 +43,10 @@ class Runtime:
     def invoke(self,path,obj=None,*,generation=None):
         obj={} if obj is None else obj
         if not isinstance(obj,dict):raise ValueError('无效的模块请求')
+        if 'audition_auto_gain' in obj:
+            if type(obj['audition_auto_gain']) is not bool:raise ValueError('试听自动增益须为开关值')
+            self.live.auto_gain=obj['audition_auto_gain']
+            obj={key:value for key,value in obj.items() if key!='audition_auto_gain'}
         self.live.heartbeat=time.monotonic()
         if path=='meta':
             return {**self.engine.metadata(),'api_version':'m10/1','source_updates':True,'audio_locked':not self.live.playback_allowed,
@@ -127,7 +131,7 @@ class Runtime:
             f0=float(obj.get('f0',self.live.f0));self.engine.glottis(f0)
             source=validate_source(obj.get('source',self.live.source))
             if source['vibration']==0:self.live.pitch_gain=1.
-            elif (f0!=self.live.f0 or (self.live.source or {}).get('vibration')==0) and self.live.tube is not None:
+            elif self.live.tube is not None:
                 self.live.pitch_gain=self.engine.pitch_level_gain(self.live.tube,f0,source)
             self.live.f0=f0;self.live.source=source;self.revision=rev
             return {'revision':rev,'f0':f0,'source':source}
@@ -153,7 +157,7 @@ class Runtime:
             state.update(nasal_constraint=notice,source=source,revision=rev,manual_root=manual)
             self.live.tube=self.engine.snapshot_tube
             if source['vibration']==0:self.live.pitch_gain=1.
-            elif f0!=self.live.f0 or (self.live.source or {}).get('vibration')==0:self.live.pitch_gain=self.engine.pitch_level_gain(self.live.tube,f0,source)
+            else:self.live.pitch_gain=self.engine.pitch_level_gain(self.live.tube,f0,source)
             self.revision=rev;self.section=state['section'];self.manual_root=manual
             self.live.params=p;self.live.f0=f0;self.live.lip_width=width;self.live.source=source
             self.live.larynx_height=larynx;self.live.tongue_shape=shape;self.live.lip_shape=lip
@@ -161,9 +165,16 @@ class Runtime:
         if path in ('animation/stop','deactivate') or (path=='live' and not obj.get('active')):
             with self.render_lock:
                 self.cancel_generation+=1;self.cancel.set()
-            self.live.stop();self.animation_playing=False
-            return self.state()
-        if path=='live':self.live.start();return self.state()
+            self.live.stop()
+            pose=None
+            if self.animation_playing and self.animation is not None:
+                _,_,pose=self.animation_frame()
+                self.adopt_animation_pose(pose)
+            self.animation_playing=False
+            return {**self.state(),**({'pose':pose} if pose is not None else {})}
+        if path=='live':
+            self.engine.set_manual_root(self.manual_root)
+            self.live.start();return self.state()
         if path=='preview':
             self.begin_render(generation);self.live.stop()
             p=self.engine.validated(obj.get('params',self.live.params));duration=float(obj.get('duration',1.2))
@@ -175,7 +186,47 @@ class Runtime:
             if self.cancel.is_set():raise ValueError('已取消生成')
             self.live.start(prepared['audition_audio'],mode='preview',envelope=prepared['envelope']);return self.state()
         if path=='animation/prepare':
-            self.begin_render(generation);self.live.stop();self.animation_playing=False
+            return self.prepare_sequence(obj,generation)
+        if path in ('animation/audio','animation/picture'):
+            if self.animation is None or obj.get('id')!=self.animation_id:raise ValueError('动作序列已失效')
+            if path=='animation/picture':
+                index=obj.get('index')
+                if type(index) is not int or not 0<=index<len(self.animation['pictures']):raise ValueError('无效的动作画面索引')
+                return {'time':self.animation['times'][index],'state':json.loads(zlib.decompress(self.animation['pictures'][index]))}
+            # Same audition transform as live playback; no device access during export.
+            audio=audition_samples(self.animation['audition_audio'],self.live.volume,self.live.gain_db,self.animation['envelope']).astype('<f4')
+            return {'sample_rate':self.engine.sr,'samples':len(audio),'base64':base64.b64encode(audio.tobytes()).decode('ascii')}
+        if path in ('animation/play','animation/frame'):
+            if self.animation is None or obj.get('id')!=self.animation_id:raise ValueError('动作序列已失效，请重新生成')
+            if path=='animation/play':
+                if self.cancel.is_set():raise ValueError('动作已取消')
+                self.animation_playing=True;self.live.start(self.animation['audition_audio'],mode='animation',envelope=self.animation['envelope']);return self.state()
+            index,seconds,state=self.animation_frame()
+            if self.animation_playing and not self.live.active:
+                self.adopt_animation_pose(state);self.animation_playing=False
+            return {'index':index,'time':seconds,'duration':self.animation['duration'],'active':self.live.active,
+                'completed':self.live.completed,'audio_error':self.live.error,'state':state}
+        raise ValueError('不支持的声道操作')
+
+    def animation_frame(self):
+        seconds=min(self.animation['duration'],self.live.position())
+        index=max(0,bisect.bisect_right(self.animation['times'],seconds)-1)
+        return index,seconds,json.loads(zlib.decompress(self.animation['pictures'][index]))
+
+    def adopt_animation_pose(self,state):
+        self.live.params=self.engine.validated(state['params'])
+        self.manual_root=state.get('manual_root',False)
+        self.engine.set_manual_root(self.manual_root)
+        self.live.lip_width=state['lip_width'];self.live.f0=state['f0'];self.live.source=state.get('source')
+        self.live.larynx_height=state.get('larynx_height',0.)
+        self.live.tongue_shape=list(state.get('tongue_shape',[0.]*4));self.live.lip_shape=list(state.get('lip_shape',[0.]*4))
+        self.live.tube=self.engine.prepare_tube(self.live.params,self.live.lip_width,self.live.larynx_height,self.live.tongue_shape,self.live.lip_shape)
+        self.live.pitch_gain=self.engine.pitch_level_gain(self.live.tube,self.live.f0,self.live.source)
+
+    def prepare_sequence(self,obj,generation=None):
+        self.begin_render(generation);self.live.stop();self.animation_playing=False
+        original_manual=self.engine.manual_root
+        try:
             if 'perturbation' in obj:
                 value=validate_perturbation(obj['perturbation'])
                 self.engine.configure_perturbation(value);self.perturbation=value
@@ -193,37 +244,12 @@ class Runtime:
             prepared=prepare_animation(self.engine,frames,self.section,pitch_curve=curve,pressure_curve=pressure,global_controls=controls,features=features,cancel=self.cancel)
             if self.cancel.is_set():raise ValueError('已取消生成')
             self.animation=prepared
-            self.animation['pitch_curve']=curve
-            self.animation['pressure_curve']=pressure
+            self.animation['pitch_curve']=curve;self.animation['pressure_curve']=pressure
             self.animation_keys={key,self.animation_key(prepared['frames'],curve,bool(obj.get('keep_vowel')),pressure,controls,features)}
-            self.prepare_count+=1
-            self.animation_id+=1
+            self.prepare_count+=1;self.animation_id+=1
             return self.animation_info(False)
-        if path in ('animation/audio','animation/picture'):
-            if self.animation is None or obj.get('id')!=self.animation_id:raise ValueError('动作序列已失效')
-            if path=='animation/picture':
-                index=obj.get('index')
-                if type(index) is not int or not 0<=index<len(self.animation['pictures']):raise ValueError('无效的动作画面索引')
-                return {'time':self.animation['times'][index],'state':json.loads(zlib.decompress(self.animation['pictures'][index]))}
-            # Same audition transform as live playback; no device access during export.
-            audio=audition_samples(self.animation['audition_audio'],self.live.volume,self.live.gain_db,self.animation['envelope']).astype('<f4')
-            return {'sample_rate':self.engine.sr,'samples':len(audio),'base64':base64.b64encode(audio.tobytes()).decode('ascii')}
-        if path in ('animation/play','animation/frame'):
-            if self.animation is None or obj.get('id')!=self.animation_id:raise ValueError('动作序列已失效，请重新生成')
-            if path=='animation/play':
-                if self.cancel.is_set():raise ValueError('动作已取消')
-                self.animation_playing=True;self.live.start(self.animation['audition_audio'],mode='animation',envelope=self.animation['envelope']);return self.state()
-            seconds=min(self.animation['duration'],self.live.position())
-            index=max(0,bisect.bisect_right(self.animation['times'],seconds)-1)
-            state=json.loads(zlib.decompress(self.animation['pictures'][index]))
-            if self.animation_playing and not self.live.active:
-                self.animation_playing=False;self.live.params=self.engine.validated(state['params'])
-                self.live.lip_width=state['lip_width'];self.live.f0=state['f0'];self.live.source=state.get('source')
-                self.live.larynx_height=state.get('larynx_height',0.);self.live.tongue_shape=state.get('tongue_shape',[0.]*4)
-                self.live.lip_shape=state.get('lip_shape',[0.]*4)
-            return {'index':index,'time':seconds,'duration':self.animation['duration'],'active':self.live.active,
-                'completed':self.live.completed,'audio_error':self.live.error,'state':state}
-        raise ValueError('不支持的声道操作')
+        finally:
+            self.engine.set_manual_root(original_manual)
 
     def animation_key(self,frames,curve,keep,pressure_curve=None,global_controls=None,features=None):
         obj={'features':features or [],'frames':frames,'curve':curve,'pressure_curve':pressure_curve or [],'global_controls':global_controls or {},'speaker':getattr(self.engine,'speaker','JD2'),'perturbation':self.perturbation,'keep':keep,'section':self.section,'section_count':self.engine.section_count,'version':'m10-r15-continuous','geometry_method':self.engine.geometry_method}
@@ -257,7 +283,7 @@ class Runtime:
     def animation_info(self,cached):
         a=self.animation
         return {'id':self.animation_id,'duration':a['duration'],'count':len(a['pictures']),
-                'frames':a['frames'],'times':a['times'],'cached':cached,'prepare_count':self.prepare_count}
+                'frames':a['frames'],'times':a['times'],'timeline':a['timeline'],'cached':cached,'prepare_count':self.prepare_count}
 
     def begin_render(self,generation):
         with self.render_lock:

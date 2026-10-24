@@ -100,6 +100,36 @@ def test_copy_move_restart_and_original_preserved(tmp_path):
     assert (selected / '方言' / original.name).read_bytes() == initial
 
 
+def test_local_content_identity_refresh_and_root_switch_preserve_annotations(tmp_path):
+    first = tmp_path / 'library-a'; second = tmp_path / 'library-b'
+    first.mkdir(); second.mkdir()
+    first_pdf = pdf(first / 'same.pdf'); original = first_pdf.read_bytes()
+    writer = PdfWriter(); writer.add_blank_page(width=600, height=800); writer.add_blank_page(width=600, height=800)
+    with (second / 'same.pdf').open('wb') as stream: writer.write(stream)
+    service = PaperService(tmp_path / 'preferences')
+    service.set_library_root(first)
+    initial = service.library_status()['documents'][0]
+    assert initial['contentVersion'] == service.library_status()['documents'][0]['contentVersion']
+    item = {'id': 'keep', 'page': 1, 'kind': 'note', 'color': 'yellow', 'text': '原文件批注', 'quote': '', 'rects': [[.1, .1, .2, .1]]}
+    service.save_annotation(initial['id'], 'original', 0, item, False)
+    digest = service.asset(initial['id'], 'original')['sha256']
+    service.set_library_root(second)
+    other = service.library_status()['documents'][0]
+    assert other['id'] == initial['id'] and other['size'] != initial['size']
+    assert other['contentVersion'] != initial['contentVersion']
+    assert service.asset(other['id'], 'original')['sha256'] != digest
+    assert service.annotations(other['id'], 'original')['items'] == []
+    service.set_library_root(first)
+    assert service.asset(initial['id'], 'original')['sha256'] == digest
+    assert service.annotations(initial['id'], 'original')['items'][0]['text'] == '原文件批注'
+    first_pdf.write_bytes((second / 'same.pdf').read_bytes())
+    changed = service.library_status()['documents'][0]
+    assert changed['contentVersion'] != initial['contentVersion']
+    assert service.annotations(initial['id'], 'original')['items'] == []
+    first_pdf.write_bytes(original)
+    assert service.annotations(initial['id'], 'original')['items'][0]['text'] == '原文件批注'
+
+
 def test_move_refuses_collision_and_traversal(tmp_path):
     library = PersonalPaperLibrary(tmp_path); library.create_folder('收藏')
     pdf(tmp_path / 'one.pdf'); pdf(tmp_path / '收藏' / 'one.pdf')

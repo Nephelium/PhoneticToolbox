@@ -4,6 +4,12 @@ from pathlib import PurePosixPath
 DEPENDENCY_POLICY = 'non-mfa-runtime-trim/2-multilingual'
 
 
+def external_frontend_data(name):
+    # The user's atlas extracts and curated tables are a separately delivered,
+    # local research data pack. Never fold these into a public application EXE.
+    return name == 'geolinguistics'
+
+
 def dependency_exclusion(relative):
     """Exact omissions from scientific prefixes; Qt languages remain intact.
 

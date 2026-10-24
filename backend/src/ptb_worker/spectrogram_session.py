@@ -17,6 +17,7 @@ class SpectrogramSession:
         self.process=self.job=self.timer=None
         self.digest=None
         self.cached=None
+        self._darwin=None
         self.touched=0
         self.idle_seconds=idle_seconds
         atexit.register(self.close)
@@ -44,6 +45,13 @@ class SpectrogramSession:
 
     def render(self,payload,*,channel,start,end,width=800,timeout=20):
         if not 0<len(payload)<=MAX_BYTES:raise PreviewError('preview_too_large',413)
+        import sys
+        if sys.platform=='darwin':
+            with self.lock:
+                if self._darwin is None:
+                    from .native.darwin_spectrogram import SpectrogramSession as DarwinSession
+                    self._darwin=DarwinSession(self.idle_seconds)
+                return self._darwin.render(payload,channel=channel,start=start,end=end,width=width,timeout=timeout)
         if os.name!='nt':return render(payload,channel=channel,start=start,end=end,width=width,timeout=timeout)
         with self.lock:
             try:
@@ -98,6 +106,7 @@ class SpectrogramSession:
 
     def close(self):
         with self.lock:
+            if self._darwin:self._darwin.close()
             if self.timer:self.timer.cancel();self.timer=None
             if self.job:
                 from .native import windows as win

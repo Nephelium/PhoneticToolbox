@@ -174,7 +174,7 @@ export function webVocalPort(transport:Transport,project:string,storageKey:strin
    const name=pack?'声道构型包.ptb-poses.json':'声道关键帧.ptb-vocal.json';download(raw,name,'application/json');return {saved:true,name};
   }
    if(op==='shutdown'){await close();return {closed:true};}
-  if(op==='animation/stop'||op==='deactivate'||op==='live'&&!body.active){++playGeneration;player.stop();return remote(op,body);}
+  if(op==='animation/stop'||op==='deactivate'||op==='live'&&!body.active){++playGeneration;player.stop();return remote(op,{...body,...playbackBody()});}
   if(['preview','animation/prepare','audio/settings'].includes(op))player.stop();
   if(op==='audio/settings'&&body.device){
    await player.unlock();let id=body.device;

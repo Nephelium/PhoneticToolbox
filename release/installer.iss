@@ -38,7 +38,7 @@ ArchitecturesInstallIn64BitMode=x64os
 MinVersion=10.0.17763
 OutputDir={#ReleaseDir}
 OutputBaseFilename=PhoneticToolbox-{#Version}-windows-x64-setup
-Compression=lzma2/fast
+Compression=lzma2/ultra64
 SolidCompression=yes
 DiskSpanning=no
 SetupLogging=yes
@@ -86,11 +86,29 @@ Name: "{userdesktop}\PhoneticToolbox"; Filename: "{app}\PhoneticToolbox.exe"; Wo
 #endif
 
 [Code]
+var RuntimePreparationFailed: Boolean;
+
+function GetCustomSetupExitCode(): Integer;
+begin
+  { ssPostInstall exceptions alone do not change Inno's successful exit code. }
+  if RuntimePreparationFailed then Result := 31 else Result := 0;
+end;
+
+procedure CurPageChanged(CurPageID: Integer);
+begin
+  if (CurPageID = wpFinished) and RuntimePreparationFailed then
+  begin
+    WizardForm.FinishedHeadingLabel.Caption := '运行文件尚未准备完成';
+    WizardForm.FinishedLabel.Caption := '请检查磁盘空间或目录权限后重新安装。';
+  end;
+end;
+
 procedure CurStepChanged(CurStep: TSetupStep);
 var ResultCode: Integer;
 begin
   if CurStep = ssPostInstall then
   begin
+    RuntimePreparationFailed := True;
     { Identify the installation before its shared launcher prepares the cache. }
     if not SaveStringToFile(ExpandConstant('{app}\.ptb-installed.json'),
       '{"schema":"ptb-install/1","kind":"installer","version":"{#Version}"}', False) then
@@ -100,6 +118,7 @@ begin
     if not Exec(ExpandConstant('{app}\PhoneticToolbox.exe'), '--ptb-prepare-cache', ExpandConstant('{app}'), SW_HIDE, ewWaitUntilTerminated, ResultCode) or (ResultCode <> 0) then
       RaiseException('运行文件准备失败，请检查磁盘空间或目录权限后重新安装。');
 #endif
+    RuntimePreparationFailed := False;
   end;
 end;
 

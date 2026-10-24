@@ -2,27 +2,82 @@
 import {useWebSettings,settingsFields} from '../../state/web-settings.ts';
 import AppIcon from '../../components/AppIcon.vue';
 import {vResizablePanels} from '../../layout/resizablePanels.ts';
-import {computed,nextTick,onBeforeUnmount,onMounted,reactive,ref,watch} from 'vue';
+import {computed,nextTick,onBeforeUnmount,onMounted,reactive,ref,shallowRef,watch} from 'vue';
 import ModuleFrame from '../../components/ModuleFrame.vue';
 import ModuleSection from '../../components/ModuleSection.vue';
 import ModuleStatus from '../../components/ModuleStatus.vue';
 import ModuleToolbar from '../../components/ModuleToolbar.vue';
 import FontFamilySelect from '../../components/FontFamilySelect.vue';
+import ModalDialog from '../../components/ModalDialog.vue';
 import {candidates,quoteFamily,validFamily} from '../../design/fonts.ts';
 import {desktopFontFamilies} from '../../platform/desktop.ts';
 import {host} from '../../state/workspace.ts';
-import {downloadMandarinIpa,renderMandarinIpaPng} from './export.ts';
-import {autoErhuaPairs,convertText,createPageDraft,effectiveIpaSize,moveErhuaPairs,moveVariantChoices,restoreDraft,snapshotDraft,standards,variantKey,variantsFor,type MappedToken} from './state.ts';
+import type {MandarinIpaExportSnapshot} from './export.ts';
+import PngExportDialog from './PngExportDialog.vue';
+import {autoErhuaPairs,convertText,createPageDraft,effectiveIpaSize,moveErhuaPairs,moveVariantChoices,restoreDraft,restoreTableDraft,snapshotDraft,standards,variantKey,variantsFor,type MappedToken} from './state.ts';
 import {isUnt} from './unt.ts';
 import {resultMetrics} from './layout.ts';
+import CustomTableImport from './CustomTableImport.vue';
+import TableToneDialog from './TableToneDialog.vue';
+import type {ToneSettings} from './tones.ts';
+import {addTable,replaceTable,removeTable,CustomTableStore,emptyLibrary,type CustomTable} from './custom-tables.ts';
 import type {ConversionToken} from './state.ts';
 
 const props=withDefaults(defineProps<{stateKey?:string}>(),{stateKey:'M13'});
+const pngSnapshot=shallowRef<MandarinIpaExportSnapshot>();
 const emit=defineEmits<{references:[];help:[];dirty:[value:boolean]}>();
 const draftKey=computed(()=>'mandarin-ipa.v1.'+props.stateKey);
 const saved=ref(host.projects.read<unknown>(draftKey.value,null)),draft=reactive(createPageDraft(saved.value));
 const canRestore=computed(()=>!!restoreDraft(saved.value).text.trim());
 const installedFonts=ref<string[]>([]);
+const tableStore=new CustomTableStore(props.stateKey),library=ref(emptyLibrary()),tablesReady=ref(false),tableBusy=ref(false),importOpen=ref(false),tableError=ref(''),importError=ref('');
+const replaceTarget=ref<CustomTable>(),deleteTarget=ref<CustomTable>(),deleteError=ref(''),tableNotice=ref('');
+const toneTarget=ref<CustomTable>(),toneError=ref('');
+const customTable=computed(()=>library.value.tables.find(table=>table.id===draft.standard));
+const standardName=computed(()=>customTable.value?.name??draft.standard);
+let restoringTableSelection=false;
+async function loadTables(){
+  tableBusy.value=true;tableError.value='';
+  try{
+    const previous=draft.standard,revision=draft.tableRevision;library.value=await tableStore.load();tablesReady.value=true;restoringTableSelection=true;
+    if(library.value.selected)draft.standard=library.value.selected;
+    const table=library.value.tables.find(t=>t.id===draft.standard);
+    if(table){draft.tableRevision=table.revision??1;if(previous===table.id&&(revision??1)!==draft.tableRevision){draft.selectedVariants={};if(draft.text)dirty.value=true;tableNotice.value='字表已在另一窗口替换，请重新核对读音。';}}
+    else if(draft.standard.startsWith('custom:')){draft.standard='Standard Chinese (Beijing)';draft.selectedVariants={};draft.erhuaPairs={};delete draft.tableRevision;if(draft.text)dirty.value=true;tableNotice.value='当前字表已移除，已切回内置标准。';}
+  }
+  catch(cause){tableError.value=(cause as Error).message;}
+  finally{restoringTableSelection=false;tableBusy.value=false;}
+}
+onMounted(loadTables);
+async function selectStandard(value:string){
+  if(tableBusy.value)return;
+  // Built-in conversion remains available when this device cannot open its table library.
+  if((!tablesReady.value||!library.value.selected)&&standards.some(standard=>standard===value)){draft.standard=value as typeof draft.standard;delete draft.tableRevision;tableNotice.value='';return;}
+  tableBusy.value=true;tableError.value='';
+  const next={...library.value,selected:library.value.tables.find(table=>table.id===value)?.id??null};
+  try{await tableStore.save(next);const custom=draft.standard.startsWith('custom:')||value.startsWith('custom:');library.value=next;draft.standard=value as typeof draft.standard;const table=next.tables.find(t=>t.id===value);if(table)draft.tableRevision=table.revision??1;else delete draft.tableRevision;if(custom){draft.selectedVariants={};draft.erhuaPairs={};}tableNotice.value='';}
+  catch(cause){tableError.value=(cause as Error).message;}
+  finally{tableBusy.value=false;}
+}
+async function saveTable(table:Pick<CustomTable,'name'|'kind'|'rows'|'tones'>){
+  tableBusy.value=true;importError.value='';
+  try{const next=replaceTarget.value?replaceTable(library.value,replaceTarget.value.id,table):addTable(library.value,{...table,id:`custom:${crypto.randomUUID()}`});await tableStore.save(next);library.value=next;draft.standard=next.selected!;draft.tableRevision=next.tables.find(t=>t.id===next.selected)!.revision??1;draft.selectedVariants={};draft.erhuaPairs={};importOpen.value=false;tableError.value='';tableNotice.value=replaceTarget.value?'字表已替换，请重新核对多音字读音。':'';}
+  catch(cause){importError.value=(cause as Error).message;if(/保存失败|已不存在/.test(importError.value))tableError.value=importError.value;}
+  finally{tableBusy.value=false;}
+}
+function openImport(table?:CustomTable){replaceTarget.value=table;importError.value='';importOpen.value=true;}
+async function saveTones(tones:ToneSettings){
+  const target=toneTarget.value;if(!target||tableBusy.value)return;tableBusy.value=true;toneError.value='';
+  try{const next=replaceTable(library.value,target.id,{...target,tones});await tableStore.save(next);library.value=next;draft.tableRevision=next.tables.find(t=>t.id===target.id)!.revision;draft.selectedVariants={};toneTarget.value=undefined;tableError.value='';tableNotice.value='声调映射已保存，请核对转换结果。';}
+  catch(cause){toneError.value=(cause as Error).message;tableError.value=toneError.value;}
+  finally{tableBusy.value=false;}
+}
+async function deleteTable(){
+  const target=deleteTarget.value;if(!target||tableBusy.value)return;tableBusy.value=true;deleteError.value='';
+  try{const next=removeTable(library.value,target.id);await tableStore.save(next);library.value=next;if(draft.standard===target.id){draft.standard='Standard Chinese (Beijing)';draft.selectedVariants={};draft.erhuaPairs={};delete draft.tableRevision;}deleteTarget.value=undefined;tableError.value='';tableNotice.value='字表已删除，当前文本保留。';}
+  catch(cause){deleteError.value=(cause as Error).message;tableError.value=deleteError.value;}
+  finally{tableBusy.value=false;}
+}
 const themeColors=ref({ipa:'#a44e2f',hanzi:'#182332'});
 let themeObserver:MutationObserver|undefined;
 function readThemeColors(){const style=getComputedStyle(document.documentElement);themeColors.value={ipa:style.getPropertyValue('--accent').trim(),hanzi:style.getPropertyValue('--text').trim()};}
@@ -30,7 +85,7 @@ const fontNames=computed(()=>installedFonts.value.length?installedFonts.value:ca
 const fontLabels={SimSun:'宋体',KaiTi:'楷体',FangSong:'仿宋','Microsoft YaHei':'微软雅黑'};
 onMounted(async()=>{readThemeColors();themeObserver=new MutationObserver(()=>{readThemeColors();scheduleCellMeasure();});themeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','data-palette','style']});if(desktopFontFamilies)try{installedFonts.value=[...new Set((await desktopFontFamilies()).map(name=>name.trim()).filter(name=>name&&validFamily(name)))];}catch{/* Common names and custom input remain available. */}});
 const dirty=ref(false),error=ref(''),exporting=ref(false),outputArea=ref<HTMLElement>(),activeVariant=ref<{char:string;index:number}|null>(null);
-const tokens=computed(()=>convertText(draft.text,draft.standard,draft.selectedVariants,draft.showTone,draft.erhuaPairs));
+const tokens=computed(()=>convertText(draft.text,draft.standard,draft.selectedVariants,draft.showTone,draft.erhuaPairs,customTable.value));
 const paragraphs=computed(()=>{
   const rows:ConversionToken[][]=[[]];
   for(const token of tokens.value){if(token.kind==='literal'&&token.newline)rows.push([]);else rows.at(-1)!.push(token);}
@@ -64,7 +119,7 @@ const options=computed(()=>selectedToken.value?variantsFor(selectedToken.value,d
 const outputStyle=computed(()=>({'--m13-hanzi-size':draft.hanziSize+'px','--m13-ipa-size':effectiveIpaSize(draft)+'px','--m13-gap':draft.gap+'px','--m13-row-gap':metrics.value.rowGap+'px','--m13-unit-height':metrics.value.unitHeight+'px','--m13-cell-width':draft.equalWidth&&cellWidth.value?cellWidth.value+'px':'auto','--m13-ipa-color':draft.ipaColor||'var(--accent)','--m13-hanzi-color':draft.hanziColor||'var(--text)','--m13-hanzi-font':draft.hanziFont&&validFamily(draft.hanziFont)?quoteFamily(draft.hanziFont)+', var(--font)':'var(--font)'}));
 const hanziStyle=computed(()=>({fontSize:draft.hanziSize+'px',fontWeight:draft.bold?'700':'400',fontStyle:draft.italic?'italic':'normal',textDecoration:draft.underline?'underline':'none'}));
 
-watch(draft,()=>{dirty.value=true;error.value='';},{deep:true});
+watch(draft,()=>{if(!restoringTableSelection)dirty.value=true;error.value='';},{deep:true,flush:'sync'});
 watch(dirty,value=>emit('dirty',value),{immediate:true});
 watch(()=>draft.text,(next,previous)=>{draft.selectedVariants=moveVariantChoices(previous,next,draft.selectedVariants);draft.erhuaPairs=moveErhuaPairs(previous,next,draft.erhuaPairs);},{flush:'sync'});
 const variantPanel=ref<HTMLElement>(),variantPosition=ref({left:'0px',top:'0px',visibility:'hidden' as 'hidden'|'visible'});
@@ -117,19 +172,18 @@ function splitAllErhua(){draft.erhuaPairs={};closeVariants();}
 watch(()=>[draft.text,draft.layout,draft.display,draft.standard],()=>closeVariants());
 onBeforeUnmount(()=>{closeVariants();themeObserver?.disconnect();outputResize?.disconnect();cancelAnimationFrame(measureFrame);document.fonts.removeEventListener('loadingdone',scheduleCellMeasure);});
 function save(){const snapshot=snapshotDraft(draft),ok=host.projects.write(draftKey.value,snapshot);if(ok){saved.value=snapshot;dirty.value=false;error.value='';}else error.value='草稿保存失败，当前文本和排版仍保留在页面中。';return ok;}
-async function loadSaved(){if(dirty.value||!canRestore.value)return;Object.assign(draft,restoreDraft(saved.value));await nextTick();dirty.value=false;error.value='';}
-async function exportImage(){
-  if(exporting.value)return;exporting.value=true;error.value='';closeVariants();
-  try{
-    const element=outputArea.value,style=element?getComputedStyle(element):getComputedStyle(document.documentElement);
-    measureCells();
-    const blob=await renderMandarinIpaPng({tokens:tokens.value,draft:snapshotDraft(draft),width:element?.clientWidth??900,cellWidth:draft.equalWidth?cellWidth.value:undefined,uiFont:style.getPropertyValue('--font').trim()||style.fontFamily,ipaColor:style.getPropertyValue('--m13-ipa-color').trim()});
-    downloadMandarinIpa(blob);
-  }catch(cause){error.value=cause instanceof Error?cause.message:'图片导出失败，当前转换结果仍已保留。';}
-  finally{exporting.value=false;}
+async function loadSaved(){if(dirty.value||!canRestore.value)return;const restored=restoreTableDraft(saved.value,library.value,draft.standard);delete draft.tableRevision;Object.assign(draft,restored.draft);await nextTick();dirty.value=!!restored.notice;tableNotice.value=restored.notice;error.value='';}
+function exportImage(){
+  if(exporting.value)return;error.value='';closeVariants();
+  const element=outputArea.value,style=element?getComputedStyle(element):getComputedStyle(document.documentElement);measureCells();
+  pngSnapshot.value={tokens:tokens.value,draft:snapshotDraft(draft),standardName:standardName.value,width:element?.clientWidth??900,cellWidth:draft.equalWidth?cellWidth.value:undefined,uiFont:style.getPropertyValue('--font').trim()||style.fontFamily,ipaColor:style.getPropertyValue('--m13-ipa-color').trim()};
 }
 defineExpose({save});
-useWebSettings(props.stateKey,settingsFields(draft,['standard','display','layout','hanziSize','ipaSize','ipaSizeUserSet','gap','lineHeight','bold','italic','underline','showTone','ipaColor','hanziColor','hanziFont','equalWidth']));
+// Custom table identity belongs to this device's library; account settings keep built-in choices.
+const builtinStandard=ref(draft.standard);
+watch(()=>draft.standard,value=>{if(!value.startsWith('custom:'))builtinStandard.value=value;},{flush:'sync'});
+const accountStandard=computed({get:()=>builtinStandard.value,set:(value:string)=>{if(standards.some(s=>s===value)){builtinStandard.value=value as typeof draft.standard;if(!draft.standard.startsWith('custom:'))draft.standard=value as typeof draft.standard;}}});
+useWebSettings(props.stateKey,{standard:accountStandard,...settingsFields(draft,['display','layout','hanziSize','ipaSize','ipaSizeUserSet','gap','lineHeight','bold','italic','underline','showTone','ipaColor','hanziColor','hanziFont','equalWidth'])});
 </script>
 
 <template>
@@ -149,7 +203,10 @@ useWebSettings(props.stateKey,settingsFields(draft,['standard','display','layout
 
       <p class="m13-local-note">本地转换 · 文本不上传</p><p class="m13-mapping-note">多音字需人工选读音，不处理语流变调。</p>
 
-      <label>转换标准<select v-model="draft.standard" aria-label="转换标准"><option v-for="standard in standards" :key="standard" :value="standard">{{standard}}</option></select></label>
+      <label>转换标准<select :value="draft.standard" aria-label="转换标准" :disabled="tableBusy" @change="selectStandard(($event.target as HTMLSelectElement).value)"><option v-for="standard in standards" :key="standard" :value="standard">{{standard}}</option><optgroup v-if="library.tables.length" label="自定义字表"><option v-for="table in library.tables" :key="table.id" :value="table.id">{{table.name}}</option></optgroup></select></label>
+      <div class="m13-table-actions"><button :disabled="!tablesReady||tableBusy" @click="openImport()">导入自定义字表</button><template v-if="customTable"><button :disabled="tableBusy" @click="toneError='';toneTarget=customTable">声调映射</button><button :disabled="tableBusy" @click="openImport(customTable)">替换字表</button><button :disabled="tableBusy" @click="deleteError='';deleteTarget=customTable">删除字表</button><span>{{customTable.kind==='hanzi'?'汉字表':'音节表'}} · {{customTable.rows.length.toLocaleString()}} 条</span></template></div>
+      <ModuleStatus v-if="tableError" kind="error" :message="tableError"><button :disabled="tableBusy" @click="loadTables">重新载入已存字表</button></ModuleStatus>
+      <ModuleStatus v-if="tableNotice" kind="info" :message="tableNotice"/>
       <fieldset v-if="untEnabled" class="m13-erhua"><legend>儿化组合</legend><button :disabled="!canAutoErhua" @click="combineErhua">自动组合儿化</button><button :disabled="!erhuaCount" @click="splitAllErhua">全部拆分</button>
         <p>已组合 {{erhuaCount}} 处。点击字＋儿可手动组合或拆分；自动组合后请核对独立的儿字。</p>
       </fieldset>
@@ -193,7 +250,7 @@ useWebSettings(props.stateKey,settingsFields(draft,['standard','display','layout
         <div><strong>选择读音：{{selectedToken.char}}</strong><button aria-label="关闭读音选择" @click="closeVariants(true)">×</button></div>
         <button v-if="untEnabled&&(selectedToken.erhua||selectedToken.canCombine)" class="m13-erhua-action" @click="toggleErhua(selectedToken)">{{selectedToken.erhua?'拆分儿化':'组合儿化'}}</button>
         <button v-for="option in options" :key="option.index" :aria-pressed="selectedToken.selectedVariant===option.index" @click="chooseVariant(selectedToken,option.index)">
-          <span>{{option.pinyin}}{{option.toneLabel==='轻声'?'（轻声）':option.toneLabel}}</span><span class="ipa-text">{{option.value}}</span>
+          <span>{{option.pinyin?option.pinyin+(option.toneLabel==='轻声'?'（轻声）':option.toneLabel):'读音 '+(option.index+1)}}</span><span class="ipa-text">{{option.value}}</span>
         </button>
       </div>
       </Teleport>
@@ -201,6 +258,15 @@ useWebSettings(props.stateKey,settingsFields(draft,['standard','display','layout
 
 
   </div>
+  <CustomTableImport v-if="importOpen" :saving="tableBusy" :save-error="importError" :replace-target="replaceTarget" @close="importOpen=false" @save="saveTable"/>
+  <PngExportDialog v-if="pngSnapshot" :snapshot="pngSnapshot" @close="pngSnapshot=undefined" @busy="exporting=$event"/>
+  <TableToneDialog v-if="toneTarget" :table="toneTarget" :saving="tableBusy" :save-error="toneError" @close="toneTarget=undefined" @save="saveTones"/>
+  <ModalDialog v-if="deleteTarget" title="删除自定义字表" variant="confirm" :close-disabled="tableBusy" @close="deleteTarget=undefined">
+    <p>确定删除字表 <strong>{{deleteTarget.name}}</strong>？</p>
+    <p>删除后会从转换标准中移除。当前文本保留，使用该字表的草稿需重新选择字表。</p>
+    <ModuleStatus v-if="deleteError" kind="error" :message="deleteError"/>
+    <template #footer><button :disabled="tableBusy" @click="deleteTarget=undefined">取消</button><button class="danger" :disabled="tableBusy" @click="deleteTable">{{tableBusy?'正在删除…':'删除字表'}}</button></template>
+  </ModalDialog>
 </ModuleFrame>
 </template>
 
@@ -235,6 +301,7 @@ useWebSettings(props.stateKey,settingsFields(draft,['standard','display','layout
 .m13-erhua p{flex-basis:100%;margin:2px 0;color:var(--muted);font-size:var(--support-size);line-height:1.5}
 .m13-erhua-group{box-shadow:inset 0 -2px var(--accent)}
 .m13-settings-section .m13-tone-toggle{margin-left:auto}
+.m13-table-actions{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-bottom:6px}.m13-table-actions button,.m13-table-actions span{font-size:var(--support-size)}.m13-table-actions span{color:var(--muted)}
 .m13-settings-section .m13-colors{gap:5px 8px}
 .m13-colors input[type=color]{width:26px;height:26px;min-height:26px;padding:2px;border-radius:4px;cursor:pointer}
 .m13-colors button{margin-left:auto}

@@ -712,7 +712,8 @@
       "M03",
       "M09",
       "M10",
-      "M17"
+      "M17",
+      "M12"
     ],
     "kind": "font",
     "acknowledgement_group": "software",
@@ -742,7 +743,8 @@
     "title": "SheetJS",
     "modules": [
       "M15",
-      "M16"
+      "M16",
+      "M13"
     ],
     "kind": "bundled-client-library",
     "acknowledgement_group": "software",
@@ -5226,7 +5228,8 @@
     "title": "The International Phonetic Alphabet",
     "modules": [
       "M17",
-      "M10"
+      "M10",
+      "M12"
     ],
     "kind": "reference-chart",
     "acknowledgement_group": "academic",
@@ -5243,7 +5246,8 @@
     "id": "M17-EXTIPA-2025",
     "title": "ExtIPA symbols for disordered speech",
     "modules": [
-      "M17"
+      "M17",
+      "M12"
     ],
     "kind": "reference-chart",
     "acknowledgement_group": "academic",
@@ -5260,7 +5264,8 @@
     "id": "M17-VOQS-BALL-2018",
     "title": "Revisions to the VoQS system for the transcription of voice quality",
     "modules": [
-      "M17"
+      "M17",
+      "M12"
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
@@ -5297,7 +5302,8 @@
     "id": "M17-PTB-IPA-PLUS-FONT",
     "title": "PTB IPA Plus 1.000 — module font derived from Doulos SIL 7.000",
     "modules": [
-      "M17"
+      "M17",
+      "M12"
     ],
     "kind": "bundled-font",
     "acknowledgement_group": "software",
@@ -5315,7 +5321,8 @@
     "id": "M17-UNICODE-PHONETIC-ENCODING",
     "title": "Unicode 音标与附加符号编码资料",
     "modules": [
-      "M17"
+      "M17",
+      "M12"
     ],
     "kind": "encoding-reference",
     "acknowledgement_group": "academic",
@@ -5389,7 +5396,8 @@
     "title": "The chart of the International Phonetic Alphabet in Chinese (2007)",
     "modules": [
       "M17",
-      "M10"
+      "M10",
+      "M12"
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
@@ -5408,7 +5416,8 @@
     "title": "国际语音学会手册：国际音标使用指南",
     "modules": [
       "M17",
-      "M10"
+      "M10",
+      "M12"
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
@@ -5443,7 +5452,8 @@
     "id": "M17-EXTIPA-BALL-2018",
     "title": "Revisions to the extIPA chart",
     "modules": [
-      "M17"
+      "M17",
+      "M12"
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
@@ -5461,7 +5471,8 @@
     "id": "M17-EXTIPA-BALL-2024",
     "title": "Changes to certain extIPA diacritics",
     "modules": [
-      "M17"
+      "M17",
+      "M12"
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
@@ -5478,7 +5489,8 @@
     "id": "M17-EXTIPA-BALL-2025-REPLY",
     "title": "Reply to letter concerning the revisions to some diacritics of the extensions to the IPA (extIPA), Ball (2024)",
     "modules": [
-      "M17"
+      "M17",
+      "M12"
     ],
     "kind": "academic-reference",
     "acknowledgement_group": "academic",
@@ -6551,6 +6563,246 @@
     "license": "MIT",
     "urls": {
       "homepage": "https://dood.al/pinktrombone/"
+    }
+  },
+  {
+    "id": "REF-M15-R-QUANTILE-TYPE7",
+    "title": "Sample Quantiles: quantile {stats}",
+    "modules": [
+      "M15"
+    ],
+    "kind": "method-reference",
+    "acknowledgement_group": "academic",
+    "authors": "R Core Team",
+    "version": "",
+    "license": "",
+    "urls": {
+      "documentation": "https://stat.ethz.ch/R-manual/R-devel/library/stats/html/quantile.html"
+    },
+    "citation": "R Core Team. Sample Quantiles: quantile {stats}[EB/OL]. [2026-10-20]. https://stat.ethz.ch/R-manual/R-devel/library/stats/html/quantile.html.",
+    "reference_note": "反应时四分位数采用 type 7 线性插值。"
+  },
+  {
+    "id": "M19-OPENLAYERS",
+    "title": "OpenLayers and runtime dependencies",
+    "modules": [
+      "M19"
+    ],
+    "kind": "software",
+    "acknowledgement_group": "software",
+    "authors": "OpenLayers contributors",
+    "version": "10.11.0",
+    "license": "BSD-2-Clause; transitive licenses preserved",
+    "urls": {
+      "source": "https://openlayers.org/"
+    }
+  },
+  {
+    "id": "M19-ZENODO",
+    "title": "Supplementary Materials for the article entitles 'Geographic Structure of Chinese Dialects: A Computational Dialectometric Approach' (published in Linguistics)",
+    "modules": [
+      "M19"
+    ],
+    "kind": "dataset",
+    "acknowledgement_group": "academic",
+    "authors": "He Huang；Jack Grieve；Frank Jiao",
+    "version": "v1（2024-02-23）",
+    "license": "CC BY 4.0",
+    "urls": {
+      "source": "https://zenodo.org/records/10697975",
+      "DOI": "https://doi.org/10.5281/zenodo.10697975"
+    },
+    "citation": "HUANG H, GRIEVE J, JIAO F. Supplementary Materials for the article entitles 'Geographic Structure of Chinese Dialects: A Computational Dialectometric Approach' (published in Linguistics)[DS/OL]. v1. Zenodo, 2024. DOI:10.5281/zenodo.10697975.",
+    "reference_note": "提供 930 个调查点、510 项语言特征，以及 MDS、聚类和五份距离矩阵。引用数据时同时注明本条数据集和对应论文；作者署名按 Zenodo 原记录保留。"
+  },
+  {
+    "id": "M19-PAPER",
+    "title": "Geographic structure of Chinese dialects: a computational dialectometric approach",
+    "modules": [
+      "M19"
+    ],
+    "kind": "paper",
+    "acknowledgement_group": "academic",
+    "authors": "He Huang；Jack Grieve；Lei Jiao；Zhuo Cai",
+    "version": "2024 · Linguistics 62(4): 937–976",
+    "license": "CC BY 4.0",
+    "urls": {
+      "source": "https://doi.org/10.1515/ling-2021-0138",
+      "publisher_archive": "https://research.birmingham.ac.uk/en/publications/geographic-structure-of-chinese-dialects-a-computational-dialecto/"
+    },
+    "citation": "HUANG H, GRIEVE J, JIAO L, et al. Geographic structure of Chinese dialects: a computational dialectometric approach[J]. Linguistics, 2024, 62(4): 937-976. DOI:10.1515/ling-2021-0138.",
+    "reference_note": "方言相似性图层与距离方案的研究依据。论文第 2.2 节说明类型、子类型和并用记录的编码方式，原始结果由配套 Zenodo 数据提供。"
+  },
+  {
+    "id": "M19-SHAOZI",
+    "title": "《中国语言地图集(第2版)汉语方言卷》县级行政单位方言数据集",
+    "modules": [
+      "M19"
+    ],
+    "kind": "dataset",
+    "acknowledgement_group": "academic",
+    "authors": "井韶子（Jing, Liwen，数据整理）",
+    "version": "v1（2025-07-15）",
+    "license": "CC BY 4.0",
+    "urls": {
+      "source": "https://zenodo.org/records/15897647",
+      "DOI": "https://doi.org/10.5281/zenodo.15897647"
+    },
+    "citation": "JING L. 《中国语言地图集(第2版)汉语方言卷》县级行政单位方言数据集[DS/OL]. v1. Zenodo, 2025. DOI:10.5281/zenodo.15897647.",
+    "reference_note": "方言分布所用的县级行政单位整理数据。保留方言区、方言岛及合并表的原始行，按该数据集正式署名 Jing, Liwen 引用，并注明所依据的《中国语言地图集》第 2 版。"
+  },
+  {
+    "id": "M19-ATLAS",
+    "title": "《汉语方言地图集》语音、词汇、语法卷",
+    "modules": [
+      "M19"
+    ],
+    "kind": "book",
+    "acknowledgement_group": "academic",
+    "authors": "曹志耘（主编）",
+    "version": "2008（语音卷、词汇卷、语法卷）",
+    "license": "",
+    "urls": {
+      "source": "https://www.cp.com.cn/book/bd70844f-a.html",
+      "语音卷": "https://www.cp.com.cn/book/6187bddd-8.html",
+      "词汇卷": "https://www.cp.com.cn/book/6187bddd-1.html",
+      "语法卷": "https://www.cp.com.cn/book/6187bddd-2.html"
+    },
+    "citation": "曹志耘, 主编. 汉语方言地图集：语音卷、词汇卷、语法卷[M]. 北京：商务印书馆, 2008.",
+    "reference_note": "语言现象的原始图册依据。语音卷 205 图、词汇卷 203 图、语法卷 102 图，共 510 图；图名和类别释义据各图图例核对。"
+  },
+  {
+    "id": "M19-GARY-MAP",
+    "title": "ChinaAdminDivisonSHP",
+    "modules": [
+      "M19"
+    ],
+    "kind": "dataset",
+    "acknowledgement_group": "software",
+    "authors": "GaryBikini；upstream AMap data",
+    "version": "ae72417fee2a63f453e6b2717e40655e87e26887 / v24.02.06",
+    "license": "",
+    "urls": {
+      "source": "https://github.com/GaryBikini/ChinaAdminDivisonSHP"
+    }
+  },
+  {
+    "id": "M19-NLSC",
+    "title": "直辖市县市及乡镇市区界线",
+    "modules": [
+      "M19"
+    ],
+    "kind": "dataset",
+    "acknowledgement_group": "software",
+    "authors": "内政部国土测绘中心",
+    "version": "COUNTY_MOI_1090820; TOWN_MOI_1120317",
+    "license": "政府资料开放授权条款第1版",
+    "urls": {
+      "source": "https://maps.nlsc.gov.tw/pro/download.jsp",
+      "county": "https://data.gov.tw/dataset/7442",
+      "township": "https://data.gov.tw/dataset/7441",
+      "license": "https://data.gov.tw/license"
+    }
+  },
+  {
+    "id": "M19-NATURAL-EARTH",
+    "title": "Natural Earth land: 1:110m display and 1:10m independent coastal audit",
+    "modules": [
+      "M19"
+    ],
+    "kind": "dataset",
+    "acknowledgement_group": "software",
+    "authors": "Natural Earth contributors",
+    "version": "1:110m runtime land downloaded 2026-10-22; independent 1:10m land 5.1.1 audit reference downloaded 2026-10-24",
+    "license": "Public domain",
+    "urls": {
+      "source": "https://www.naturalearthdata.com/about/terms-of-use/",
+      "audit_land": "https://naciscdn.org/naturalearth/10m/physical/ne_10m_land.zip"
+    }
+  },
+  {
+    "id": "M19-LANGUAGE-ATLAS",
+    "title": "中国语言地图集（第2版）：汉语方言卷",
+    "modules": [
+      "M19"
+    ],
+    "kind": "book",
+    "acknowledgement_group": "academic",
+    "authors": "中国社会科学院语言研究所；中国社会科学院民族学与人类学研究所；香港城市大学语言资讯科学研究中心",
+    "version": "第 2 版（2012）· ISBN 978-7-100-07054-6",
+    "license": "",
+    "urls": {
+      "source": "https://www.cp.com.cn/book/8094abe4-a.html"
+    },
+    "citation": "中国社会科学院语言研究所, 中国社会科学院民族学与人类学研究所, 香港城市大学语言资讯科学研究中心. 中国语言地图集：汉语方言卷[M]. 2版. 北京：商务印书馆, 2012.",
+    "reference_note": "县级方言分区的图册依据，由中国社会科学院两研究所和香港城市大学语言资讯科学研究中心合作编制。模块使用井韶子据此整理、单独发表于 Zenodo 的县级数据。"
+  },
+  {
+    "id": "M19-OSM",
+    "title": "OpenStreetMap administrative boundaries",
+    "modules": [
+      "M19"
+    ],
+    "kind": "dataset",
+    "acknowledgement_group": "software",
+    "authors": "OpenStreetMap contributors；Geofabrik extract",
+    "version": "2026-10-22 snapshot",
+    "license": "ODbL 1.0",
+    "urls": {
+      "source": "https://download.geofabrik.de/asia/china.html",
+      "snapshot": "https://download.geofabrik.de/asia/china-261022.osm.pbf",
+      "license": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "copyright": "https://www.openstreetmap.org/copyright"
+    }
+  },
+  {
+    "id": "M19-HK-HAD",
+    "title": "Hong Kong administrative boundaries: 18 districts",
+    "modules": [
+      "M19"
+    ],
+    "kind": "dataset",
+    "acknowledgement_group": "software",
+    "authors": "Government of the Hong Kong Special Administrative Region；Home Affairs Department；DATA.GOV.HK",
+    "version": "2026-09-11 data",
+    "license": "DATA.GOV.HK Terms of Use 1.2 (2025-05-26)",
+    "urls": {
+      "source": "https://data.gov.hk/en-data/dataset/hk-had-json1-hong-kong-administrative-boundaries",
+      "data": "https://www.had.gov.hk/psi/hong-kong-administrative-boundaries/hksar_18_district_boundary.json",
+      "license": "https://data.gov.hk/en/terms-and-conditions"
+    }
+  },
+  {
+    "id": "M19-MCA",
+    "title": "全国行政区划信息查询平台：县级以上名称与代码",
+    "modules": [
+      "M19"
+    ],
+    "kind": "dataset",
+    "acknowledgement_group": "software",
+    "authors": "中华人民共和国民政部",
+    "version": "2026-10-24 核对",
+    "license": "",
+    "urls": {
+      "source": "https://dmfw.mca.gov.cn/",
+      "data": "https://dmfw.mca.gov.cn/xzqh/getList?code=0&trimCode=true&maxLevel=3"
+    },
+    "reference_note": "提供县级以上行政区划的名称、代码和上级关系，供地图区域对应核对。"
+  },
+  {
+    "id": "M19-DATAV",
+    "title": "DataV GeoAtlas 中国行政区划与边界显示数据",
+    "modules": [
+      "M19"
+    ],
+    "kind": "dataset",
+    "acknowledgement_group": "software",
+    "authors": "阿里云DataV；高德开放平台",
+    "version": "areas_v3（页面标注2021.5）",
+    "license": "DataV GeoAtlas学习交流用途告知",
+    "urls": {
+      "source": "https://datav.aliyun.com/portal/school/atlas/area_selector",
+      "documentation": "https://help.aliyun.com/zh/datav/datav-7-0/user-guide/datav-geoatlas-widgets/"
     }
   }
 ]

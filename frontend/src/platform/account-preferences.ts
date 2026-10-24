@@ -91,6 +91,6 @@ export function accountPreferenceTarget(key:string){
  const layout=/^layout\.panels\.server:([^:]+):([^:]+)$/.exec(key);
  if(layout&&layout[1]===active.owner)return {session:active,module:/^M\d{2}$/.test(layout[2]!)?layout[2]!:'APP',field:'panelWidths'};
  if(key==='fonts.v1.owner.'+encodeURIComponent(active.owner))return {session:active,module:'APP',field:'fonts'};
- if(['theme','palette','collapsed','buttonAppearance','waveformAppearance','pageScale','backgroundAppearance','customPaletteColor','homeIconScale'].includes(key))return {session:active,module:'APP',field:key};
+ if(['theme','palette','collapsed','buttonAppearance','waveformAppearance','pageScale','backgroundAppearance','customPaletteColor','homeIconScale','automaticAudioGain'].includes(key))return {session:active,module:'APP',field:key};
  return null;
 }

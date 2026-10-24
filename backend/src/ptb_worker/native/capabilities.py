@@ -20,6 +20,10 @@ def platform_name():
 def m01_capability(store):
     if not getattr(store, 'batches', None):
         return False, 'acoustic_batches_not_configured'
+    if platform_name() == 'darwin':
+        from .darwin import capability
+        ready=bool(getattr(store,'files',None)) and capability('acoustic_analysis')
+        return ready, None if ready else 'macos_scientific_runtime_unverified'
     if platform_name() == 'linux':
         ready, reasons = linux_capabilities(store)
         return ('acoustic_analysis' in ready, None if 'acoustic_analysis' in ready else (reasons[0] if reasons else 'linux_acoustic_runtime_unverified'))

@@ -1,0 +1,725 @@
+{
+  "schemaVersion": "ptb-manual-chapter/1",
+  "id": "m19",
+  "moduleId": "M19",
+  "title": "语言地图",
+  "status": "reviewed",
+  "summary": "载入语言地理资料，按大类或细类浏览地图，比较地点，编辑并导出研究工程。",
+  "body": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "paragraph",
+        "attrs": {
+          "id": "m19-video-tutorial"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "视频教程："
+          },
+          {
+            "type": "text",
+            "text": "观看本章视频",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://www.phonetictoolbox.com/#tutorial-geolinguistics"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m19-start"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "载入资料与打开工程"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "从侧栏打开语言地图。上方提供方言分布、方言相似性、语言现象、我的研究地图四个入口，地图与表格随选择更新。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "首次使用点击下载资料，下载并校验后会自动显示地图。下载时可查看进度或取消，重新打开会复用本机资料，支持离线使用。载入后可点击顶部的更新资料重新下载。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "已有资料时，点击选择资料夹，选择含 data-manifest.json 的完整资料目录。Windows 免安装版可把 geolinguistics-data 放在 EXE 旁自动读取。Windows、macOS 与网页共用同一份资料，地图与编辑在本机处理。若提示文件缺失或校验不符，请重新下载，或重新选择完整资料夹。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "资料夹保存调查数据和底图；研究工程保存筛选、个人校订、自建点和绘图。导出工程生成 .ptb-map.json，换电脑时同时保留资料夹，再通过打开工程恢复。工程不会包含原书扫描页。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m19-current-data-download-figure",
+          "assetId": "m19-current-data-download-2fbc8590",
+          "caption": "首次打开语言地图，点击下载资料取得地图资料。已有完整资料时可选择资料夹；完成载入后，资料保存在本机，重新打开可离线使用。",
+          "alt": "首次打开语言地图，点击下载资料取得地图资料。已有完整资料时可选择资料夹；完成载入后，资料保存在本机，重新打开可离线使用。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m19-groups"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "按大类浏览语言现象"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "新工程进入语言现象时，显示层级默认为大类；已有旧工程保留原来的细类筛选。浏览范围默认列出已有大类释义的项目，先选择语音、词汇或语法，再按标题、例字、音标或图号搜索。切到全部特征 · 编码探索可查看全部 510 项。收藏本图后可勾选仅看收藏，快速回到常看的现象。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "每张图的大类都独立对应到原书的类型。论文数据用大写字母区分大类，数字区分细类；相同字母在不同图中不代表相同含义或固定颜色。大类名称采用原书标题，或概括已核实的共同特征。词汇图例中，字右上角的等号是原书的同音字记写标记；界面用同音字记写说明，保留这层含义。右侧显示已对应的大类数。展开图号与释义可查看原始编码覆盖数；地点记录与原图的差异单独标记。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "点击图例只保留相应地点，再点一次或选择全部类别恢复。大类视图只列大类含义，原始编码可在调查点记录中展开查看，或切换到细类。大类图例统计地点数：某地点有两个属于同一大类的编码，只计一次；兼有两个大类时分别计入两类，所以各类地点数之和可能超过调查点总数。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "图例只列已建立对应关系的大类。尚待核对的地点保留为空心点；同点已有部分大类、还有部分记录待对应时，用虚线边框提示。点击查看待核地点可筛选这些记录，逐点查看原值和原书页码。图表有差异的记录标明原图对应待核。待核地点不合并成一个语言类别，已确认的大类仍按地点正常计数。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "切到细类可查看已核实的具体释义及音标。细类有自己的核对进度，不会因为大类已确定就自动填入。个人填写的类别释义只用于对应细类，不会改变已经核实的大类对应。"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "练习筛选：点击语言现象，显示层级选择大类，再点击语音。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "在检索框输入阳声韵尾，选择阳声韵尾的演变，右侧会显示这一现象的大类图例。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击有[-m]，地图与表格只显示这一类地点。点击全部类别恢复完整分布。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m19-current-phonology-broad-filter-figure",
+          "assetId": "m19-current-phonology-broad-filter-485894f8",
+          "caption": "阳声韵尾的演变按大类显示。点击图例中的有[-m]，地图和表格只保留这一类地点，再点全部类别恢复。",
+          "alt": "阳声韵尾的演变按大类显示。点击图例中的有[-m]，地图和表格只保留这一类地点，再点全部类别恢复。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m19-maps"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "缩放、筛选与多图比较"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "点击中国回到全国总览，使用省、市、县选择器定位和筛选；在省级地区选择全国也可复位。滚轮缩放，拖动平移；Shift 拖动可框选调查点。勾选地名后才显示地图及导出图上的地点文字。选中点保持原有大小并加细边，地点详情在右侧查看。边界可随缩放自动切换，也可固定到省、市或县。地图边界用于定位，调查点坐标保留数据中的原值。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "直接缩放只改变视野。勾选当前视野后，表格和图例跟随当前范围。地点搜索、所选地点和图例筛选可以组合使用；导出前核对当前范围。双图或四图对照共享视野，可为各幅图选择不同项目，输出时各自保留图例。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "可以先打开调类的数目，在图窗上方的对照中选择双图，再将第二幅图设为阳声韵尾的演变。切到四图后，在各幅图的标题栏分别选择撮口呼韵母、阳声韵尾的演变和太阳的说法。拖动或缩放任一幅图，其余图会同步移动，便于在同一地理范围内比较。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m19-current-two-maps-figure",
+          "assetId": "m19-current-two-maps-397a4241",
+          "caption": "双图比较调类的数目与阳声韵尾的演变。两幅图共享视野，第二幅图从标题栏选择项目。",
+          "alt": "双图比较调类的数目与阳声韵尾的演变。两幅图共享视野，第二幅图从标题栏选择项目。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m19-current-four-maps-figure",
+          "assetId": "m19-current-four-maps-5d520a8c",
+          "caption": "四图同时比较调类的数目、撮口呼韵母、阳声韵尾的演变与太阳的说法。每幅图可独立选择项目，拖动和缩放时保持同一视野。",
+          "alt": "四图同时比较调类的数目、撮口呼韵母、阳声韵尾的演变与太阳的说法。每幅图可独立选择项目，拖动和缩放时保持同一视野。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m19-classification"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "查看井韶子整理的方言分布"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "在方言分布选择原始工作表，再按方言大区、区、片、小片逐层筛选。表格保留原始行号，点击记录可查看完整分类、定位或做个人校订。同一县兼有多类时以兼有标记显示。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "方言区与方言岛的工作表分别保留。分类数量按完整父级路径计数，不能把同名小片在不同父级下直接合并，也不能将几个工作表的行数直接相加。查看计入的分类可以展开实际分类清单，比较各省分类数量可查看同一统计层级的结果。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "例如，在省级地区选择广东，可同时查看广东的地图与整理记录。点击表格中的一条记录，右侧会显示它的完整方言分类和原始行号。需要进一步缩小时，再选择市县或左侧的方言分类；回到全国可清除地域筛选。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m19-current-dialect-distribution-figure",
+          "assetId": "m19-current-dialect-distribution-b7bad4de",
+          "caption": "在省级地区选择广东后，点击潮安区的整理记录，地图定位到当地，右侧显示完整方言分类和原始行号。",
+          "alt": "在省级地区选择广东后，点击潮安区的整理记录，地图定位到当地，右侧显示完整方言分类和原始行号。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m19-similarity"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "比较地点与论文结果"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "方言相似性直接展示论文已有的 MDS、聚类及五套距离矩阵。选择图层和聚类数后地图随之变化。选择调查点可查看它的原始结果与相近地点，点击对比打开地点对照。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "地点对照可更换调查点，按语音、词汇、语法筛选记录相同、不同或含缺值的项目。结果每页显示60项，导出对照表包含当前筛选范围的全部记录。相同与不同按完整原始编码记录比较，保留多变体顺序；它与大类名称相同、论文距离为零并非同一个判断。点击某项可跳回其特征地图。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "这些资料反映图集所依据的调查与论文分析。地点分布不均，图例地点数不代表说话人口。地图上的颜色是当前图层的显示方式，使用结果时同时报告资料来源、项目和筛选范围。"
+          }
+        ]
+      },
+      {
+        "type": "orderedList",
+        "attrs": {
+          "start": 1
+        },
+        "content": [
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "练习两地比较：点击方言相似性，在调查点检索框输入北京，勾选表格首列的北京；再检索广州并勾选。清空检索文字后，右侧保留这两个选点。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击比较2–8个地点，在弹窗中将项目范围设为语音，记录关系设为记录不同。可以逐项查看两地记录，也可以改为记录相同或含缺值。"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "listItem",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "点击导出对照表保存当前筛选范围的全部记录。点击某个项目名称可回到它的分布地图。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m19-current-two-place-comparison-figure",
+          "assetId": "m19-current-two-place-comparison-bfd6f0e2",
+          "caption": "北京与广州的地点对照。项目范围选择语音，记录关系选择记录不同；导出对照表会保存当前筛选范围的全部记录。",
+          "alt": "北京与广州的地点对照。项目范围选择语音，记录关系选择记录不同；导出对照表会保存当前筛选范围的全部记录。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m19-edit-export"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "编辑与导出研究成果"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "我的研究地图可输入地点坐标、类别或 IPA、备注，也可导入地点表并选择对应列。支持在地图上添加地点、画区域与标注线。编辑会自动保存在本机，Ctrl+S 可重试保存，Ctrl+Z 撤销，Ctrl+Shift+Z 重做；macOS 可使用 Command 对应快捷键。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "先给工程起一个便于辨认的名称，再点击输入地点坐标，填写地点、WGS84经纬度、类别或IPA与备注，点击保存地点。表格出现新地点后，可以继续添加、编辑，或按地图上的位置绘制研究区域。下图的地点和IPA只用于演示填写方式，实际研究请使用自己的调查资料。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "语言现象中的编辑当前特征保存个人覆盖值，多个变体使用 # 分隔，恢复原值可撤销该地点的个人覆盖。填写类别释义保存个人细类文字和 IPA。原始调查表保持不变。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "SVG 与 PNG 按当前显示层级输出地图、可读图例、地点数、卷、图号和 PDF 页码。SVG 保留矢量图与随图嵌入的音标字体，PNG 是位图。CSV 同时保留编码、显示含义、原始值和来源，便于复核；大类汇总不会把底层细类编码改写。双图与四图导出使用各自的图例。"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m19-current-custom-point-editor-figure",
+          "assetId": "m19-current-custom-point-editor-da6ae173",
+          "caption": "输入地点名称、WGS84经纬度、类别或IPA与备注，再保存地点。图中珠海示例点及aː˧仅演示填写方式，研究时请替换为实测资料。",
+          "alt": "输入地点名称、WGS84经纬度、类别或IPA与备注，再保存地点。图中珠海示例点及aː˧仅演示填写方式，研究时请替换为实测资料。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "image",
+        "attrs": {
+          "id": "m19-current-custom-map-export-figure",
+          "assetId": "m19-current-custom-map-export-827444eb",
+          "caption": "自建的珠海、广州示例点保存在当前工程中。可导出工程继续编辑，或用SVG、PNG和导出表格保存研究成果；两点IPA为填写演示。",
+          "alt": "自建的珠海、广州示例点保存在当前工程中。可导出工程继续编辑，或用SVG、PNG和导出表格保存研究成果；两点IPA为填写演示。",
+          "width": "100%",
+          "align": "center"
+        }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2,
+          "id": "m19-sources"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "学术引用与资料来源"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "attrs": {
+          "id": "m19-screenshot-attribution"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "本章操作图由当前应用生成，语言数据来自 "
+          },
+          {
+            "type": "text",
+            "text": "Huang、Grieve 与 Jiao（2024）",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://zenodo.org/records/10697975"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "及"
+          },
+          {
+            "type": "text",
+            "text": "井韶子整理数据",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://zenodo.org/records/15897647"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "，两份数据均按 "
+          },
+          {
+            "type": "text",
+            "text": "CC BY 4.0",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://creativecommons.org/licenses/by/4.0/"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "使用。图中显示方式、筛选结果和自建演示地点由本应用生成。底图："
+          },
+          {
+            "type": "text",
+            "text": "DataV GeoAtlas／高德开放平台",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://help.aliyun.com/zh/datav/datav-7-0/user-guide/datav-geoatlas-widgets/"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "（areas_v3，页面标注2021.5，仅供学习和交流）；"
+          },
+          {
+            "type": "text",
+            "text": "内政部国土测绘中心",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://data.gov.tw/dataset/7441"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "（TOWN_MOI_1120317，"
+          },
+          {
+            "type": "text",
+            "text": "政府资料开放授权条款第1版",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://data.gov.tw/license"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "）；"
+          },
+          {
+            "type": "text",
+            "text": "Natural Earth",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://www.naturalearthdata.com/about/terms-of-use/"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "（公共领域）。各来源分别适用其用途告知或许可。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "语言特征及论文结果引用 Huang 等（2024）的论文与 Zenodo 数据集，同时注明曹志耘主编的《汉语方言地图集》。大类与细类的编码方法见论文第 2.2 节；具体释义按各图原书图例核对。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "县级方言分布引用井韶子整理的数据集（Zenodo 15897647），并注明其所依据的《中国语言地图集（第2版）：汉语方言卷》。它与提供 510 项特征的《汉语方言地图集》是不同来源。点击工具上方来源可复制学术引用，并查看底图与软件的署名、版本和许可。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "citation",
+            "attrs": {
+              "id": "m19-cite-m19-paper",
+              "referenceId": "M19-PAPER",
+              "label": "HUANG H, GRIEVE J, JIAO L, et al. Geographic structure of Chinese dialects: a computational dialectometric approach[J]. Linguistics, 2024, 62(4): 937-976. DOI:10.1515/ling-2021-0138."
+            }
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "citation",
+            "attrs": {
+              "id": "m19-cite-m19-zenodo",
+              "referenceId": "M19-ZENODO",
+              "label": "HUANG H, GRIEVE J, JIAO F. Supplementary Materials for the article entitles 'Geographic Structure of Chinese Dialects: A Computational Dialectometric Approach' (published in Linguistics)[DS/OL]. v1. Zenodo, 2024. DOI:10.5281/zenodo.10697975."
+            }
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "citation",
+            "attrs": {
+              "id": "m19-cite-m19-atlas",
+              "referenceId": "M19-ATLAS",
+              "label": "曹志耘, 主编. 汉语方言地图集：语音卷、词汇卷、语法卷[M]. 北京：商务印书馆, 2008."
+            }
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "citation",
+            "attrs": {
+              "id": "m19-cite-m19-shaozi",
+              "referenceId": "M19-SHAOZI",
+              "label": "JING L. 《中国语言地图集(第2版)汉语方言卷》县级行政单位方言数据集[DS/OL]. v1. Zenodo, 2025. DOI:10.5281/zenodo.15897647."
+            }
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "citation",
+            "attrs": {
+              "id": "m19-cite-m19-language-atlas",
+              "referenceId": "M19-LANGUAGE-ATLAS",
+              "label": "中国社会科学院语言研究所, 中国社会科学院民族学与人类学研究所, 香港城市大学语言资讯科学研究中心. 中国语言地图集：汉语方言卷[M]. 2版. 北京：商务印书馆, 2012."
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

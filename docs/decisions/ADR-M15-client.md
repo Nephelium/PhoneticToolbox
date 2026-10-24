@@ -10,6 +10,16 @@
 
 恢复的 MediaBank 默认按试次分块，复核后按实测预算选择全量/分块。预检、复核和预览在开始时撤销旧试音确认。同内容素材的关联限定 A/B/X 对应组，已有有效 ID 优先，避免跨组歧义。文件协议与 m15-client/1、RT 定义不变。当前计划见 [M15-R1](../plans/2026-10-05-m15-r1-lifecycle.md)，实测证据见 [报告](../testing/2026-10-05-m15-r1-report.md)。
 
+## 2026-10-19 键盘流程与描述性成绩
+
+按本轮明确要求，推进键统一为空格/回车，覆盖指导语、分段提示、手动进入与播放；每阶段显示提示。保留输入控件的原生 Tab/方向键/空格/回车行为，推进键的 held 状态跨阶段保持，作答起点与时钟不变。此前任意非组合键推进的规则由本条替代。
+
+问卷改逐项编辑；作答提示正文/开关及 Trial.correctKey 是原项目格式的可选增量。缺字段的旧项目继续运行，标准答案缺省未计分，不做 IndexedDB/schema 迁移。生成、复制、洗牌与项目/序列表格保留答案。
+
+分析完全在客户端，每试次最后一次 completed 作答参与汇总，RT 仅用有限非负数，不剔除离群值。四分位数按 [R type 7](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/quantile.html) 线性插值，样本SD用 n−1。准确率只对有标准答案且完成的试次计分，另列未计分和未完成；零样本保持 null。当前设计重评分需显式选择并核对项目、范式、试次 ID、角色摘要和原反应键，不回写会话。XLSX 同时导出汇总与逐次评分依据，旧结果列仅末尾追加正确性字段。
+
+Windows/macOS/网页共用同一实现。账号偏好只新增作答提示正文/开关，研究数据仍留客户端。最新范围见[实施计划](../plans/2026-10-19-m15-keyboard-analysis.md)与[验收](../testing/2026-10-19-m15-keyboard-analysis.md)。
+
 ## 架构
 
 M15 使用现有 Vue 3.5.42 工作台与按需加载的本地模块，Web Audio、File/Blob、IndexedDB 负责呈现与数据。没有 Python core、服务端 API、任务 manifest、账号/数据库/远程 worker。用户选择的文件不上传，不计入服务器额度/有效期。旧 React、Babel、Tailwind、lucide-react CDN 不进入新版运行资源。SheetJS CE 0.20.3 官方 ESM 原件随模块构建，Apache-2.0 许可保留，无运行时 CDN。

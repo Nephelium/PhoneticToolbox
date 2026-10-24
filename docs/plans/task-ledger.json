@@ -3,20 +3,802 @@
   "created_on": "2026-09-09",
   "tasks": [
     {
+      "id": "RELEASE-3.1.0",
+      "title": "3.1.0三端同源构建及发布后检查",
+      "date": "2026-10-24",
+      "status": "in_progress",
+      "scope": "继承已审3.0.5产品，按井井选择升3.1.0并加入远程公告，Windows/Mac/web同源重建及独立验证。井井已确认输入法上线，完成最终QA及3.1文案复核后统一发布。",
+      "files": [
+        "release/version.json",
+        "scripts/sync_versions.py",
+        "packages/phonetic_core/pyproject.toml",
+        "backend/pyproject.toml",
+        "desktop/pyproject.toml",
+        "frontend/package.json",
+        "frontend/package-lock.json",
+        "frontend/src/version.json",
+        "backend/src/ptb_api/protocol_version.py",
+        "release/notes/3.1.0.md",
+        "docs/testing/audio-automatic-gain.md"
+      ],
+      "verification": "统一冻结757e4f：944 runtime源码清单d4f1c6df4a8a51f65f15e9f6c31f0f76881bff0748454146118eadd56ec39cae，478前端/author输入清单ca2602a595eab5bb001e4c8ce06fe42370d27f2d5a8050c9a24602cb0c754213。768前端/架构/typecheck/版本30项与strict手册通过，新科学archive/wheels3.1和未变资源逐SHA闭合。公告Chrome19/Qt10及私有发布工具验证通过，三端最终构建/验收进行，不复用旧版成品结论。 新私有Web p757e4f的9项Linux科学/interactive/VTL及Chrome地图17、下载5、读本8、公告built3通过。944运行源与478前端author当前身份仍等于冻结；生产与旧候选保持。 Git只读复核519候选/64排除闭合，无真实凭据或输入漂移，公开测试文档仅移除个人临时路径前缀，私有原回执保留；未暂存/提交/push。 Mac3.1最终审计95a62a9f通过，ZIP491904611B/SHA821ae524，fresh26+26+231、成品UI/M19/公告/搬移/strict签名退出0，221证据回收。Windows完整16与所有UI/公告已通过，最后冷暖启动收口。用户亲改说明已读取，规范行尾不改正文，5747B SHA389a4c29，待确稿。",
+      "remaining": "官网/频道、四包、Web、资料/公告已上线并后验；GitHub源码、Release发布与最终公开UI后验收口。",
+      "evidence": [
+        "output/validation/release-310-20261024/version-sync.json",
+        "output/validation/release-305-20261024/approved-artifact-publish-stopped.json",
+        "output/validation/release-310-20261024/freeze-linkage.json",
+        "output/validation/release-310-20261024/science-inputs.json",
+        "output/validation/announcements/receipt.json",
+        "output/validation/updates-ui/check-bf548ff5-8dc3-4785-a896-e6873995ef1a/report.json",
+        "output/validation/release-310-20261024/web/private-ready.json",
+        "output/validation/release-310-20261024/current-freeze-identity.json",
+        "output/validation/release-310-20261024/git-scope-review/review.json",
+        "output/validation/mac-final-757e4f/final-audit.json",
+        "output/validation/release-310-20261024/publish/notes-user-edit.json",
+        "output/validation/release-310-20261024/publish/notes-approval.json",
+        "output/validation/release-310-20261024/windows-757e4f-final/receipt.json",
+        "output/validation/release-310-20261024/publish/public-download-check/report.json",
+        "output/validation/release-310-20261024/publish/web-activation/apply.json",
+        "output/validation/release-310-20261024/publish/static-routes/receipt.json",
+        "output/validation/release-310-20261024/publish/website-channels/completion.json"
+      ],
+      "publication_hold": {
+        "requested_by_user": false,
+        "inputMethodLaunchConfirmedByUser": true,
+        "reason": "None; final notes approved, publication proceeding",
+        "publicly_activated": true,
+        "notesApproved": true
+      },
+      "final_freeze": {
+        "name": "PhoneticToolbox-310-20261024-224507-757e4f",
+        "sourceSnapshotSha256": "d4f1c6df4a8a51f65f15e9f6c31f0f76881bff0748454146118eadd56ec39cae",
+        "frontendInputsSha256": "ca2602a595eab5bb001e4c8ce06fe42370d27f2d5a8050c9a24602cb0c754213",
+        "productAndAuthorLocked": true,
+        "windows": "verified-final-757e4f",
+        "mac": "verified-final-zip-757e4f",
+        "web": "published-verified-p757e4f",
+        "publiclyActivated": true
+      }
+    },
+    {
+      "id": "APP-ANNOUNCEMENTS",
+      "title": "跨平台远程公告与输入法一次性通知",
+      "date": "2026-10-24",
+      "status": "verified",
+      "plan": "docs/plans/2026-10-24-announcements.md",
+      "files": [
+        "desktop/src/ptb_desktop/web_assets.py",
+        "desktop/tests/test_web_assets.py",
+        "deployment/announcements/publish.py",
+        "deployment/announcements/public.json",
+        "deployment/announcements/first-announcement.example.json",
+        "deployment/announcements/README.md",
+        "deployment/announcements/announcements.nginx.conf",
+        "tests/test_announcements_publication.py",
+        "frontend/src/platform/announcements.ts",
+        "frontend/src/components/AnnouncementsPanel.vue",
+        "frontend/src/app/AppShell.vue",
+        "desktop/src/ptb_desktop/host.py",
+        "manual/chapters/getting-started.json",
+        "manual/project.json",
+        "scripts/manual/assemble.py"
+      ],
+      "verification": "共享公告已完成并经根增量审查修复。768前端/typecheck/独立构建、Chrome19组及Qt10组通过。空feed/读完/模块页无常驻公告DOM观察或轮询；存储不可写不自动弹但中心可读；同ID修正/新ID/真实持久profile重开/窄BFCache事件/弹层与受控采集及M15避让通过。native固定GET+CORS真实通过，5类非允许fetch真实拒绝；20项URL单测通过。发布工具13项及私有服务器实际CAS/独立nginx路由通过，生产未变。发布工具日期/版本进一步限ASCII数字，与前端一致，13项复核通过，REMOTE程序与nginx片段逐字节等于私有QA输入。 新私有Web最终前端empty/valid/once三组通过；既有19组逐SHA绑定同源，正式feed空且未启用。 官网fresh已核实际输入法为0.1.5，四正式主域HEAD与服务器SHA/GitHub asset digest一致；首条ID与正文按0.1.5更新，13项通过。 Mac最终正常入口12+实际重开2、Windows最终普通EXE12+重开2通过，5实际拒绝及固定GET CORS、撤回后离线不复活通过；均未声称真实OS浏览器启动或正式feed已上线。 3.1.0最终Windows/Mac/Web及正式发布通过，实际范围与回执见docs/testing/release-3.1.0.md。",
+      "remaining": "公开功能已生效，物理设备/长期稳定性未扩大声明。",
+      "evidence": [
+        "output/validation/announcements/receipt.json",
+        "output/validation/release-310-20261024/announcements-private/notices-qa-310-a14a9ed2c31e4fea9f2a260240fe7c80/report.json",
+        "output/validation/release-310-20261024/freeze-linkage.json",
+        "output/validation/release-310-20261024/announcements-publisher-identity.json",
+        "output/validation/release-310-20261024/announcement-launch-preview.json"
+      ],
+      "privacy": "Only public feed is fetched. No research/user data or read receipts sent.",
+      "publication_hold": false,
+      "input_method_launch_confirmed": true
+    },
+    {
+      "id": "WEBSITE-MACOS-HELP-LABEL-20261024",
+      "title": "移除macOS按钮下方残留安装说明入口",
+      "date": "2026-10-24",
+      "status": "verified",
+      "files": [
+        "temporary-site/site.css",
+        "temporary-site/site.js",
+        "temporary-site/design-preview/base-themed.css",
+        "temporary-site/day-night-preview.html",
+        "temporary-site/design-preview/content-parity.json",
+        "scripts/verify_website.cjs",
+        "tests/e2e/website-day-night.cjs",
+        "CHANGELOG.md",
+        "docs/project-status.md",
+        "docs/testing/website-redesign.md",
+        "docs/plans/task-ledger.json"
+      ],
+      "verification": "Windows Chrome155平台专项七宽度、下载路由/无JS下载/悬停与聚焦提示通过；首页和昼夜预览1280/390px无残留文字，Escape关闭及焦点归属通过。首轮测试沿用旧summary焦点假设失败，按新焦点行为修订后通过。 本轮明确授权后，以实时线上site-ime-013样式/脚本冻结局部候选，发布r550b51d09593c980。候选/公网七宽度无残留文字、hover/focus/Escape通过；186文件服务器大小/SHA及变化3文件/根首页HTTPS完整字节回读一致，配置/论文目录/反馈PID保持，私有回退保留。",
+      "remaining": "实体设备未验；本轮只发布残留安装说明与Escape焦点，其他本地未发布修改保持原状态。",
+      "evidence": [
+        "output/validation/website/verify-1792846614094-252160/report.json",
+        "output/validation/website/macos-help-label-20261024/report.json",
+        "output/validation/website/macos-help-public-20261024/completion.json"
+      ]
+    },
+    {
+      "id": "WEBSITE-IPA-IME-DOWNLOADS-20261024",
+      "title": "国际音标输入法四平台下载浮窗",
+      "date": "2026-10-24",
+      "status": "verified",
+      "scope": "在既有工具箱下载组下增加四平台输入法下载入口，默认隐藏，悬停/点击浮窗，保留线上其他内容。更新 Windows r2 链接。",
+      "files": [
+        "scripts/build_website_expansion.py",
+        "temporary-site/ime-downloads.css",
+        "temporary-site/ime-downloads.js",
+        "temporary-site/index.html",
+        "docs/testing/website-redesign.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json",
+        "CHANGELOG.md"
+      ],
+      "verification": "首版四包 HTTP 全量校验、GitHub digest、十组线上响应式与无 JS 已通过。浮窗本地十一组通过，含布局高度、悬停离开、固定/关闭与触屏。基础 GL 锁与生成幂等通过。 浮窗线上11组通过，r2完整下载摘要、双清单一致、所有公开GitHub链接200通过。",
+      "remaining": "本次输入法源码和发布物另在本地完整备份；Windows安装由井井实测，实体手机与其他浏览器未新增验证。",
+      "evidence": [
+        "国际音标输入法/output/publish-20261023/popover-live-check.json",
+        "国际音标输入法/output/publish-20261023/popover-deployment.json",
+        "国际音标输入法/output/publish-20261023/public-download-check.json"
+      ]
+    },
+    {
+      "id": "DESKTOP-NAVIGATION-PERFORMANCE-20261024",
+      "title": "国际音标扩展表与说明书导航性能",
+      "date": "2026-10-24",
+      "status": "verified",
+      "scope": "Shared desktop presentation guard, manual media permission and actual M17/manual/map navigation; preserve GPU and research semantics.",
+      "files": [
+        "desktop/src/ptb_desktop/presentation.py",
+        "frontend/src/manual/ManualDocument.vue",
+        "frontend/src/manual/ManualMedia.vue",
+        "frontend/src/manual/playback.ts",
+        "docs/testing/desktop-navigation-performance.md"
+      ],
+      "verification": "说明书媒体许可改为仅媒体订阅，Chrome同一玻璃场景主线程CPU由1.898s至0.487s，约减少74%。桌面控件发现改为存活缓存及直接子控件扫描，实际Qt默认GPU179场景与11组稳定补验通过，重复导航/静置资源请求0；三字体七字号、浅深、普通/最大化及原生双向滚轮覆盖。35项前端与14项桌面定向通过。大章节仍有约80–138ms短任务，不宣称全部平台零卡顿，最终EXE/Mac另验。 生命周期250项前端、M18三项native/元数据及一项真实Web/Qt/隔离PG全链通过，音频生命周期6项真实SFC及相关38项、共享关闭17项通过，统一typecheck通过。Mac原79e678退出两次崩溃，定位cached cast.parentWidget悬空；原始QWidget lifetime/destroyed失效和关闭dispose修复后，源码热点与M19严格退出均0且cleanup完成。Windows新生命周期矩阵继续，最终三端须重新冻结验收。 3.1.0最终Windows/Mac/Web及正式发布通过，实际范围与回执见docs/testing/release-3.1.0.md。",
+      "remaining": "公开功能已生效，物理设备/长期稳定性未扩大声明。",
+      "evidence": [
+        "docs/testing/desktop-navigation-performance.md",
+        "output/validation/m17-manual-performance-20261024/source-identity.json"
+      ]
+    },
+    {
+      "id": "RELEASE-3.0.5",
+      "title": "3.0.5三端同步构建与审阅后发行",
+      "date": "2026-10-24",
+      "status": "superseded",
+      "scope": "按井井最新要求审阅完整19工具及共享生命周期，修复后同源Windows/macOS/web构建，完整文案确认后发布。",
+      "files": "Shared AppShell and 19-module review; M05/06/07/13/15/16/18 lifecycle fixes; native PDF identity, desktop presentation/host teardown, real web metadata/runtime manifest, Windows packaging/QA, manual/reference/public data and release documentation. 22章教程首段、官网video/hash/灰色M19按钮、M05自建temp规范化及真实平台测试。",
+      "verification": "19工具及共享生命周期审查修复已进入ae7604最终同源产品。 Windows最终16阶段整包、首次缓存/同配置复用、地图/默认GPU读者矩阵及启动/实际内嵌缓存完整性通过。Mac最终26runtime/20入口/14热点/M19/重定位和正常入口8+4独立会话通过，未公证。网页私有9科学/17地图/5下载/7读本通过，22章8图，独立nginx loopback通过。实际范围及报告SHA见final-review.json，真实公网和实体设备未扩大验证。",
+      "remaining": "井井选择3.1.0，旧版公开发行取消。保留本地最终验收、私人草稿、已发EXE与安装器断点，不再上传或切旧版频道。",
+      "evidence": [
+        "output/packaging/PhoneticToolbox-305-20261023-204825-9a75ba/report.json",
+        "output/validation/local-package-cb95dfac/report.json",
+        "output/validation/release-305-20261024/web/server-before.json",
+        "docs/testing/m19-geolinguistics.md",
+        "docs/testing/release-3.0.5.md",
+        "output/validation/release-lifecycle/final-53dd28adcc504d32acb30ff4891fe774/review.json",
+        "output/validation/release-305-20261024/web/private-final-browser-lock.json",
+        "output/validation/manual-tutorial-links-20261024/manual-validation.json",
+        "output/validation/release-305-20261024/web/private-r2-validation.json",
+        "output/validation/china-map-completeness-20261024/review.md",
+        "output/validation/release-305-20261024/web/private-china-validation.json",
+        "output/validation/release-305-20261024/web/private-map-attribution-validation.json",
+        "output/validation/m19-manual/registration-display-20261024/final.json",
+        "output/validation/geolinguistics-renderer/chrome-e0c0b9e41f524011a0038113fa5a0d21/report.json",
+        "output/validation/geolinguistics/qt-a7a58ec6d8f14efb8ce58da9d5d53f20/report.json",
+        "output/validation/release-305-20261024/web/private-final-input-freeze.json",
+        "output/validation/release-305-20261024/web/private-final-stage-result.json",
+        "output/validation/release-305-20261024/web/private-final-science-result.json",
+        "output/validation/release-305-20261024/web/private-final-after-science.json",
+        "output/validation/geolinguistics-browser/chrome-dccc953b65b341a7ba2aeda6a435a4df/report.json",
+        "output/validation/geolinguistics-browser/chrome-d1f1c7d339a6454596bdb6bca90aa265/report.json",
+        "output/validation/release-305-20261024/web/private-final-manual-browser/result.json",
+        "output/validation/release-305-20261024/website-references-refresh.json",
+        "output/validation/website-305-candidate/focused-3ca5004e5ed84d3280794486e064912c/report.json",
+        "output/validation/updates-ui/check-40f993a2-e020-44f2-9a54-c53b0b835ad3/report.json",
+        "output/validation/local-package-f4756fd7/report.json",
+        "output/validation/release-305-20261024/windows-ae7604-final/receipt.json",
+        "output/validation/mac-final-ae7604/final-audit.json",
+        "output/validation/release-305-20261024/web/private-final-public8-after-science.json",
+        "output/validation/release-305-20261024/web/datav-download-2/private-nginx-probe.json",
+        "output/validation/portable-cache-location/final-exe-91ff4ecd20c149a8909ff35bb665da6b/report.json",
+        "output/validation/geolinguistics/package-f2bc92ad77df427fb4c53d386d28e774/report.json",
+        "output/validation/geolinguistics/final-renderer-f2758ad129d546edb92343bed495ff10/launch-report.json",
+        "output/validation/geolinguistics/final-renderer-f2758ad129d546edb92343bed495ff10/manual-matrix/report.json",
+        "output/validation/release-305-20261024/windows-ae7604-final/startup-ce239909/report.json",
+        "output/validation/release-305-20261024/windows-ae7604-final/payload-binding.json",
+        "output/validation/release-305-20261024/windows-ae7604-final/frozen-source-final.json",
+        "output/validation/release-305-20261024/windows-ae7604-final/frontend-source-final.json",
+        "output/validation/release-305-20261024/manual-public-referenced-20261024-210749-bcabe708/receipt.json",
+        "output/validation/release-305-20261024/web/private-final-public8-stage.json",
+        "output/validation/release-305-20261024/web/private-final-public8-input-freeze.json",
+        "output/validation/release-305-20261024/web/private-final-public8-manual-browser/result.json",
+        "output/validation/website-305-candidate/version-download-e512ce8defcc45839bca104a25a04f57/report.json",
+        "output/validation/mac-final-ae7604/transfer-cleanup.json",
+        "output/validation/release-305-20261024/final-review.json",
+        "output/validation/release-305-20261024/completion-checks.json",
+        "output/validation/release-305-20261024/approved-artifact-publish-stopped.json"
+      ],
+      "geoatlas_review": {
+        "status": "display-and-final-local-acceptance-verified",
+        "scope": "Use frozen DataV trial2 as requested; stop further geographic content audit. Shared zoom-specific administrative boundary display and projection lifecycle optimization.",
+        "rawFiles": 65,
+        "rawBytes": 32103303,
+        "officialObjects": {
+          "province": 34,
+          "city": 363,
+          "district": 2840
+        },
+        "candidateRuntimeBytes": 91460548,
+        "researchChanges": {
+          "siteCoordinates": 0,
+          "originalClassificationValues": 0,
+          "observationAndMatrixBytes": 0
+        },
+        "verification": "27采集/规范化/转换定向；native独立环填充76585点及源树核对；地区80项/Chrome6组；绘制31项/浅深双四图12面板108路径与PNG像素通过。源码架构检查在正式重建说明书后errors=[]。 完整真实资料Chrome18组/Qt22组与后续Chrome6组/Qt3组通过且正常退出。投影缓存实际Chrome首县层1次68.8ms，重复0次；4→1引用仅1且GC释放28.49MB。最终隐藏固定省界96项M19/typecheck通过，UI补验进行。候选2下载42SHA/21gzip/固定17URL及真实下载通过。",
+        "evidence": [
+          "output/validation/release-305-20261024/web/private-datav-acquisition.json",
+          "output/validation/release-305-20261024/web/private-datav-normalization.json",
+          "output/validation/china-map-completeness-20261024/datav/independent-review/review.md",
+          "output/validation/geolinguistics-regions/acceptance-summary.json",
+          "output/validation/geolinguistics-paint/acceptance-summary.json",
+          "output/validation/release-305-20261024/web/private-datav-runtime-validation-3.json",
+          "output/validation/china-map-completeness-20261024/datav/independent-review/source-metadata-review.json",
+          "output/validation/release-305-20261024/web/private-datav-download-integrity.json",
+          "output/validation/geolinguistics-datav-trial-1/acceptance-current.json",
+          "output/validation/geolinguistics-performance/projected-cache-20261024/report.json",
+          "output/validation/release-305-20261024/web/datav-download-2/private-datav-download-integrity.json"
+        ],
+        "remaining": "完整更新文案待井井明确确认；官网按实时基线局部合并，获准后公开资料/三端版本激活、真实HTTPS及更新后验、精确Git候选审阅与main/GitHub发行。未公开上传或push。",
+        "cleanup": "旧地区/绘制拒删对象在另次明确授权后已清并保留previous_attempt。本轮Mac传输分块删除被自动审批blocked by policy拒绝，保留未重试，491931868字节；其他自有清理见各收据。",
+        "manifestSha256": "e86ed70dfcb9f61eb61d601575db45a80bbc9a9b745746bd54db8a3c2fc5d7bd",
+        "publicDownloadGzipBytes": 27629245,
+        "sources": "M19-DATAV启用；461登记/424可见，软件/学术分组与动态实际地图来源一致；私有绝对路径扫描通过。",
+        "userScope": "2026-10-24井井要求不再核对阿里底图，保留现有trial2，未采用34份细化轮廓。"
+      },
+      "final_freeze": {
+        "name": "PhoneticToolbox-305-20261024-203117-ae7604",
+        "sourceSnapshotSha256": "71924b54e23c018758f337a7ee1c9f44faa330d34b5f652ce7cd9ba20333fede",
+        "sources": 944,
+        "portableExeSha256": "5f5edcee8d84d5b72a63921ae70931e770a22020df97260c44053fa2432776f6",
+        "windowsAcceptance": "verified-final-byte-local",
+        "webProfileSha256": "89a8ac95d604719969acd2981f89f4be14fa4f10f7e456c0a99a9ace00e03b14",
+        "webScience": "verified-nine-operations",
+        "macAcceptance": "verified-private-local-delivery",
+        "publiclyActivated": false,
+        "notesApproved": false,
+        "webAcceptance": "verified-private-public8",
+        "webManifestFiles": 1344,
+        "localAcceptanceComplete": true,
+        "publicReaderAssets": 8,
+        "notesSha256": "d5fe895d51475023ae9d45bf4cbeb75945474f14f641d681a5255e247d4a3309"
+      },
+      "verification_scope": "Final Windows x64 on this computer, actual arm64 Mac26.6.2 app, same-source private web candidate and independent Chrome; public activation/HTTPS and untested physical devices remain separate.",
+      "cleanup": "Final local acceptance scratch cleaned with receipts; earlier refused paths untouched. Mac transfer chunks at mac-transfer-ae7604 retained after automatic approval rejection (blocked by policy); app/ZIP unaffected.",
+      "completion_checks": {
+        "report": "output/validation/release-305-20261024/completion-checks.json",
+        "files": 2526,
+        "sources": 461,
+        "tasks": 184,
+        "errors": [],
+        "targetedDiffExitCode": 0
+      },
+      "superseded_by": "RELEASE-3.1.0"
+    },
+    {
+      "id": "WEBSITE-METHOD-CARDS-20261023",
+      "title": "官网方法示例卡片紧凑四列",
+      "date": "2026-10-23",
+      "status": "verified",
+      "files": [
+        "temporary-site/site.css",
+        "temporary-site/design-preview/design.css",
+        "temporary-site/design-preview/base-themed.css",
+        "temporary-site/day-night-preview.html",
+        "temporary-site/design-preview/content-parity.json",
+        "docs/testing/website-redesign.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json",
+        "CHANGELOG.md"
+      ],
+      "scope": "本地官网首页与昼夜预览的方法示例卡片布局，1024px起四列、560px起两列、更窄单列",
+      "verification": "Chrome155 METHODS专项通过；两页面六宽度12组列数/无溢出、引用展开、夜间截图通过。首次昼夜800px旧单列覆盖已修正并复查。 同日12组同行等高与来源链接对齐、展开后等高通过，METHODS专项复查通过；生成幂等、文档校验及定向diff检查通过。",
+      "evidence": [
+        "output/validation/website/verify-1792757362390-173064/report.json",
+        "output/validation/website/method-cards-20261023/layout.json",
+        "output/validation/website/method-cards-20261023/equal-heights.json",
+        "output/validation/website/verify-1792757512742-179460/report.json"
+      ],
+      "remaining": "未公开部署；实体手机与Safari未验。"
+    },
+    {
+      "id": "AUDIO-AUTOMATIC-GAIN-20261022",
+      "title": "试听自动增益与感知实验独立音量",
+      "date": "2026-10-22",
+      "status": "verified",
+      "plan": "docs/plans/2026-10-22-audio-automatic-gain.md",
+      "scope": "Windows/macOS/网页共用试听增益开关与播放链；感知实验正式刺激独立音量、旧工程兼容与会话记录",
+      "files": "前端 audio/audition/media-audition/playback-gain、音频设置与AppShell、APP/M15偏好服务、M15配置/调度/结果、M16浏览器/设备输出、M10共享会话/双端输出与Wasm打包及资源锁、tokens折叠侧栏、相关前端/Python/Chrome/Qt/Wasm测试、README/架构/计划/验收/状态/CHANGELOG",
+      "verification": "654项前端、63项Python及7项偏好通过，后续33项M15与64项音频/M15/阅读器定向通过；typecheck/contracts/ui-data/build通过，架构零错误；Chrome七组/Qt实际AudioContext与开关/浅深和折叠图标居中通过，70/100/150%逐图标偏差小于1px；M10实际Wasm三组播放增益/音量与导出PCM不变通过。详见docs/testing/audio-automatic-gain.md",
+      "remaining": "最终EXE/Mac包和公开网页未更新，Mac实机/Safari/实体声卡与媒体编码组合未新增验证；媒体附加解码64MB/600秒预算以外保留原电平并显示提示；当前已打开窗口需重开",
+      "cleanup": "受生命周期管理的本轮浏览器/Qt/Python/Wasm scratch已清；首轮pytest-1173清理被自动审批拒绝(blocked by policy)，约9.08MB/180文件保留，未重试"
+    },
+    {
+      "id": "WEBSITE-DAY-NIGHT-20261022",
+      "title": "官网完整内容昼夜换肤与连续绘本背景细化",
+      "date": "2026-10-23",
+      "status": "verified",
+      "plan": "docs/plans/2026-10-22-website-day-night.md",
+      "files": [
+        "scripts/build_website_day_night.py",
+        "temporary-site/day-night-preview.html",
+        "temporary-site/design-preview/",
+        "scripts/verify_website_day_night.py",
+        "tests/e2e/website-day-night.cjs",
+        "docs/plans/2026-10-22-website-day-night.md",
+        "docs/testing/website-day-night.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json",
+        "CHANGELOG.md"
+      ],
+      "verification_scope": "Windows 独立 Chrome 本地静态完整官网换肤；4240 文本、1319 控件、129 媒体及原顺序一致；不替换正式官网",
+      "verification": "10月23日整页细化：单幅不重复背景覆盖至页脚，取消镜像铺接和雾状渐变，以实色干笔触边缘与纸底连接，日夜背景和首屏插画连续切换。构建4240文本/1319控件/129媒体逐项一致；12组宽度/主题无横向溢出及内容裁切；主题记忆与系统偏好、双转盘、原生滚动、背景覆盖、代表性音视频/截图/FAQ/版本/安装说明通过。侧边书签和GitHub/暂停标签可读，主要按钮文字对比度至少4.5；1280×720视频内容488×274，16:9误差不超过1px。16份生成文件构建幂等及六段GL冻结基线通过。",
+      "remaining": [
+        "正式首页替换和公开部署未执行",
+        "反馈后端、统计服务、实体手机与 Safari 未新增验证"
+      ],
+      "evidence": [
+        "docs/testing/website-day-night.md",
+        "temporary-site/design-preview/content-parity.json",
+        "output/validation/website-day-night/chrome-74e1b3e1d1e64b0fa6482eaa6c6506a7/report.json",
+        "output/validation/website-day-night/final-checks-20261023.json"
+      ]
+    },
+    {
+      "id": "M19-GEOLINGUISTICS",
+      "title": "语言地图、Zenodo 特征与井韶子整理数据交互展示",
+      "date": "2026-10-24",
+      "status": "verified",
+      "plan": "docs/plans/2026-10-22-m19-geolinguistics.md",
+      "files": "Shared M19 groups/model/UI, instance-scoped local-directory adapter, AppShell/help navigation, reviewed broad-group pipeline, source registry/generated sources, M19 manual chapter/project, domain/Python/Qt/browser tests and current documentation; comparison pagination, place-name toggle and ordinary-radius selection on canvas/SVG",
+      "verification_scope": "Final Windows x64 on this computer, actual arm64 Mac26.6.2 app, same-source private web candidate and independent Chrome; public activation/HTTPS and untested physical devices remain separate.",
+      "verification": "本轮大类505完整/2部分/3无完整对应，2465组、15281/15323原子，缺页/冲突原值保留，细类暂缓。 Windows最终16阶段整包、首次缓存/同配置复用、地图/默认GPU读者矩阵及启动/实际内嵌缓存完整性通过。Mac最终26runtime/20入口/14热点/M19/重定位和正常入口8+4独立会话通过，未公证。网页私有9科学/17地图/5下载/7读本通过，22章8图，独立nginx loopback通过。实际范围及报告SHA见final-review.json，真实公网和实体设备未扩大验证。 3.1.0最终Windows/Mac/Web及正式发布通过，实际范围与回执见docs/testing/release-3.1.0.md。",
+      "remaining": "实体设备与长期稳定性等未验边界见3.1.0验收；细类仍按已核实范围，未继续核查地理内容。",
+      "evidence": [
+        "docs/plans/2026-10-22-m19-geolinguistics.md",
+        "output/validation/geolinguistics-plan-20261022/source-audit.json",
+        "output/validation/geolinguistics-plan-20261022/feature-page-index.json",
+        "output/validation/geolinguistics-plan-20261022/audit_sources.py",
+        "output/validation/geolinguistics-plan-20261022/classification-crosscheck.json",
+        "docs/testing/m19-geolinguistics.md",
+        "output/validation/geolinguistics/package-9314a646bb3b48ab8a8f65dbaac03e91/report.json",
+        "output/validation/local-package-3eb5230e/report.json",
+        "output/validation/package-trim/startup-5472dc6fb6594d69acba9b688b324815/report.json",
+        "output/validation/geolinguistics-codebook-20261022/review-report.json",
+        "output/validation/geolinguistics/qt-710200084e7c482b885065ba5a282dff/report.json",
+        "output/validation/geolinguistics-codebook-20261022/a8-user-confirmation.json",
+        "output/validation/geolinguistics/qt-a181f9501bfa42038c118409a252dc4a/report.json",
+        "output/validation/geolinguistics/data-only-27773dd676ab4380b2e3643771ae4351/report.json",
+        "output/validation/geolinguistics/qt-5ab4153d243c4c9b9737895f861a3dab/report.json",
+        "output/validation/geolinguistics/package-d3cdd1b5d9844ebdb77e9b11e093dd37/report.json",
+        "output/validation/local-package-1b33be23/report.json",
+        "output/validation/geolinguistics-broad-20261023/data-integration.json",
+        "output/validation/geolinguistics-broad-20261023/f35-followup.json",
+        "output/validation/geolinguistics-broad-20261023/frontend-tests.log",
+        "output/validation/geolinguistics-browser/chrome-60c5eb59fee24bce9beaef45561e126d/report.json",
+        "output/validation/geolinguistics/qt-91ce6c9077ea4cccbab7d5627777bdbd/report.json",
+        "output/validation/geolinguistics-broad-20261023/phonology/second-pass/final-audit.json",
+        "output/validation/geolinguistics/qt-e8fba83d39304ce4869cfcd80fb2a3fb/report.json",
+        "output/validation/geolinguistics-browser/chrome-e68ae4e5d0b445b6a20f0374212f7579/report.json",
+        "output/packaging/PhoneticToolbox-304-20261023-185200-ab1a73/report.json",
+        "output/validation/geolinguistics-broad-20261023/grammar/ui-review-fixed.json",
+        "output/validation/geolinguistics-review-20261023/references/report.json",
+        "output/validation/geolinguistics-broad-20261023/macos-review/selection-review.md",
+        "output/validation/geolinguistics-broad-20261023/grammar/multimap-layout-review.json",
+        "output/validation/geolinguistics/package-826834e5b8b649c3b11a20d88ab29e49/report.json",
+        "output/validation/geolinguistics-incremental-review-20261024-performance-sol/port-after.json",
+        "output/validation/m19-manual/public-media-review/m19-closure.json",
+        "output/validation/china-map-completeness-20261024/review.md",
+        "output/validation/release-305-20261024/web/private-china-validation.json",
+        "output/validation/release-305-20261024/web/private-map-attribution-validation.json",
+        "output/validation/m19-manual/registration-display-20261024/final.json",
+        "output/validation/geolinguistics-renderer/chrome-e0c0b9e41f524011a0038113fa5a0d21/report.json",
+        "output/validation/geolinguistics/qt-a7a58ec6d8f14efb8ce58da9d5d53f20/report.json",
+        "output/validation/release-305-20261024/web/private-final-input-freeze.json",
+        "output/validation/release-305-20261024/web/private-final-stage-result.json",
+        "output/validation/release-305-20261024/web/private-final-science-result.json",
+        "output/validation/release-305-20261024/web/private-final-after-science.json",
+        "output/validation/geolinguistics-browser/chrome-dccc953b65b341a7ba2aeda6a435a4df/report.json",
+        "output/validation/geolinguistics-browser/chrome-d1f1c7d339a6454596bdb6bca90aa265/report.json",
+        "output/validation/release-305-20261024/web/private-final-manual-browser/result.json",
+        "output/validation/release-305-20261024/website-references-refresh.json",
+        "output/validation/website-305-candidate/focused-3ca5004e5ed84d3280794486e064912c/report.json",
+        "output/validation/updates-ui/check-40f993a2-e020-44f2-9a54-c53b0b835ad3/report.json",
+        "output/validation/local-package-f4756fd7/report.json",
+        "output/validation/release-305-20261024/windows-ae7604-final/receipt.json",
+        "output/validation/mac-final-ae7604/final-audit.json",
+        "output/validation/release-305-20261024/web/private-final-public8-after-science.json",
+        "output/validation/release-305-20261024/web/datav-download-2/private-nginx-probe.json",
+        "output/validation/portable-cache-location/final-exe-91ff4ecd20c149a8909ff35bb665da6b/report.json",
+        "output/validation/geolinguistics/package-f2bc92ad77df427fb4c53d386d28e774/report.json",
+        "output/validation/geolinguistics/final-renderer-f2758ad129d546edb92343bed495ff10/launch-report.json",
+        "output/validation/geolinguistics/final-renderer-f2758ad129d546edb92343bed495ff10/manual-matrix/report.json",
+        "output/validation/release-305-20261024/windows-ae7604-final/startup-ce239909/report.json",
+        "output/validation/release-305-20261024/windows-ae7604-final/payload-binding.json",
+        "output/validation/release-305-20261024/windows-ae7604-final/frozen-source-final.json",
+        "output/validation/release-305-20261024/windows-ae7604-final/frontend-source-final.json",
+        "output/validation/release-305-20261024/manual-public-referenced-20261024-210749-bcabe708/receipt.json",
+        "output/validation/release-305-20261024/web/private-final-public8-stage.json",
+        "output/validation/release-305-20261024/web/private-final-public8-input-freeze.json",
+        "output/validation/release-305-20261024/web/private-final-public8-manual-browser/result.json",
+        "output/validation/website-305-candidate/version-download-e512ce8defcc45839bca104a25a04f57/report.json",
+        "output/validation/mac-final-ae7604/transfer-cleanup.json",
+        "output/validation/release-305-20261024/final-review.json",
+        "output/validation/release-305-20261024/completion-checks.json"
+      ],
+      "cleanup": "Final local acceptance scratch cleaned with receipts; earlier refused paths untouched. Mac transfer chunks at mac-transfer-ae7604 retained after automatic approval rejection (blocked by policy); app/ZIP unaffected.",
+      "geoatlas_review": {
+        "status": "display-and-final-local-acceptance-verified",
+        "scope": "Use frozen DataV trial2 as requested; stop further geographic content audit. Shared zoom-specific administrative boundary display and projection lifecycle optimization.",
+        "rawFiles": 65,
+        "rawBytes": 32103303,
+        "officialObjects": {
+          "province": 34,
+          "city": 363,
+          "district": 2840
+        },
+        "candidateRuntimeBytes": 91460548,
+        "researchChanges": {
+          "siteCoordinates": 0,
+          "originalClassificationValues": 0,
+          "observationAndMatrixBytes": 0
+        },
+        "verification": "27采集/规范化/转换定向；native独立环填充76585点及源树核对；地区80项/Chrome6组；绘制31项/浅深双四图12面板108路径与PNG像素通过。源码架构检查在正式重建说明书后errors=[]。 完整真实资料Chrome18组/Qt22组与后续Chrome6组/Qt3组通过且正常退出。投影缓存实际Chrome首县层1次68.8ms，重复0次；4→1引用仅1且GC释放28.49MB。最终隐藏固定省界96项M19/typecheck通过，UI补验进行。候选2下载42SHA/21gzip/固定17URL及真实下载通过。",
+        "evidence": [
+          "output/validation/release-305-20261024/web/private-datav-acquisition.json",
+          "output/validation/release-305-20261024/web/private-datav-normalization.json",
+          "output/validation/china-map-completeness-20261024/datav/independent-review/review.md",
+          "output/validation/geolinguistics-regions/acceptance-summary.json",
+          "output/validation/geolinguistics-paint/acceptance-summary.json",
+          "output/validation/release-305-20261024/web/private-datav-runtime-validation-3.json",
+          "output/validation/china-map-completeness-20261024/datav/independent-review/source-metadata-review.json",
+          "output/validation/release-305-20261024/web/private-datav-download-integrity.json",
+          "output/validation/geolinguistics-datav-trial-1/acceptance-current.json",
+          "output/validation/geolinguistics-performance/projected-cache-20261024/report.json",
+          "output/validation/release-305-20261024/web/datav-download-2/private-datav-download-integrity.json"
+        ],
+        "remaining": "完整更新文案待井井明确确认；官网按实时基线局部合并，获准后公开资料/三端版本激活、真实HTTPS及更新后验、精确Git候选审阅与main/GitHub发行。未公开上传或push。",
+        "cleanup": "旧地区/绘制拒删对象在另次明确授权后已清并保留previous_attempt。本轮Mac传输分块删除被自动审批blocked by policy拒绝，保留未重试，491931868字节；其他自有清理见各收据。",
+        "manifestSha256": "e86ed70dfcb9f61eb61d601575db45a80bbc9a9b745746bd54db8a3c2fc5d7bd",
+        "publicDownloadGzipBytes": 27629245,
+        "sources": "M19-DATAV启用；461登记/424可见，软件/学术分组与动态实际地图来源一致；私有绝对路径扫描通过。",
+        "userScope": "2026-10-24井井要求不再核对阿里底图，保留现有trial2，未采用34份细化轮廓。"
+      },
+      "blocked_test_cleanup_followup": {
+        "date": "2026-10-24",
+        "status": "verified",
+        "deleted_targets": 7,
+        "files": 1008,
+        "logical_bytes": 100606333,
+        "protected_data_files": 16,
+        "prior_blocked_receipts_retained": true,
+        "evidence": "output/maintenance/map-blocked-summary.json",
+        "scope": "Stopped regions/paint generated copies and synthetic PDF scratch only; current data/build/research retained"
+      },
+      "final_freeze": {
+        "name": "PhoneticToolbox-305-20261024-203117-ae7604",
+        "sourceSnapshotSha256": "71924b54e23c018758f337a7ee1c9f44faa330d34b5f652ce7cd9ba20333fede",
+        "sources": 944,
+        "portableExeSha256": "5f5edcee8d84d5b72a63921ae70931e770a22020df97260c44053fa2432776f6",
+        "windowsAcceptance": "verified-final-byte-local",
+        "webProfileSha256": "89a8ac95d604719969acd2981f89f4be14fa4f10f7e456c0a99a9ace00e03b14",
+        "webScience": "verified-nine-operations",
+        "macAcceptance": "verified-private-local-delivery",
+        "publiclyActivated": false,
+        "notesApproved": false,
+        "webAcceptance": "verified-private-public8",
+        "webManifestFiles": 1344,
+        "localAcceptanceComplete": true,
+        "publicReaderAssets": 8,
+        "notesSha256": "d5fe895d51475023ae9d45bf4cbeb75945474f14f641d681a5255e247d4a3309"
+      },
+      "completion_checks": {
+        "report": "output/validation/release-305-20261024/completion-checks.json",
+        "files": 2526,
+        "sources": 461,
+        "tasks": 184,
+        "errors": [],
+        "targetedDiffExitCode": 0
+      },
+      "release_target": "3.1.0"
+    },
+    {
+      "id": "M10-REVIEW-FIXES-20261022",
+      "title": "生理参数合成审查修复与三端回归",
+      "date": "2026-10-22",
+      "status": "verified",
+      "plan": "docs/plans/2026-10-22-m10-review-fixes.md",
+      "files": "共享animation/session、app/presets/keyframes/video、sequence-import/video-timeline、Web播放端口/browser_vocal/vocal_child、Wasm锁与74项M10资源登记、双模型原生/服务器/前端回归、Qt/Chrome和独立视频解码脚本、模块README/核心架构/计划/验收/修改记录/状态/台账；第三轮stop_timing/stop-editor、app截面、keyframes草稿导出、vocal-review-followup双端测试及实际Qt/Chrome新增用例",
+      "verification_scope": "Windows当前源码原生/Qt、独立Chrome真实Wasm及WSL R21原生核心；macOS共用源码和构建输入，实机及最终包单列",
+      "verification": "三轮问题已修复。最新完整M10 parity/backend/desktop 271项（含新增43项）、前端65项（含新增5项）、Qt11组、Chrome真实Wasm16组及WSL当前源码/R21新增43项通过。保存失败仍导出完整内存草稿且持久化字节保持；声源快捷更新后截面、上下轮廓和查看器同步；长浊塞音6秒ba为288000采样且负VOT/零送气保持。类型/协议/UI数据/工作台构建通过，同源Python包与资源登记刷新，截图已查看。平台边界和各轮静态/清理证据见验收。 最后65项前端回归、资源幂等/架构/文档/源码入口/差异/语法和运行包逐字节核验通过，11份自有scratch回执为deleted。",
+      "remaining": [
+        "macOS原生R21构建及Mac实机/Safari、实体音频设备未新增验证",
+        "最终EXE/macOS应用未重建，未公开部署或push；未重启用户已有源码窗口"
+      ],
+      "evidence": [
+        "docs/testing/m10-review-fixes.md",
+        "output/validation/m10-review-20261022/third-all-native-76003d5aad9d4235b7261b3bcde91a9c/pytest.log",
+        "output/validation/m10-review-20261022/third-frontend-35f8951a8e9e4fcd96007a1c1c3ecb91/node.log",
+        "output/validation/m10-shared-20261018/qt-96daaa8a24b249bb9f95fe3582cf964d/report.json",
+        "output/validation/m10-wasm-20261018/browser-07a99128cdd14a509cf7dc8643cdfaff/review-fixes.json",
+        "output/validation/m10-review-20261022/third-linux-fc5037c269fe4808b906ab9eb076f876/linux.log",
+        "output/validation/m10-review-20261022/third-final-940b23b9b1dd4d0d8bd1457d027ed689/report.json"
+      ]
+    },
+    {
+      "id": "M13-PNG-BACKGROUND",
+      "title": "汉字转国际音标PNG背景与模糊导出",
+      "date": "2026-10-21",
+      "status": "verified",
+      "plan": "docs/plans/2026-10-21-m13-png-background.md",
+      "files": [
+        "frontend/src/modules/mandarin-ipa/export-background.ts",
+        "frontend/src/modules/mandarin-ipa/export.ts",
+        "frontend/src/modules/mandarin-ipa/PngExportDialog.vue",
+        "frontend/src/modules/mandarin-ipa/MandarinIpaPage.vue",
+        "frontend/tests/m13-export-background.test.ts",
+        "manual/chapters/m13.json",
+        "manual/project.json",
+        "docs/manual/mandarin-ipa.md",
+        "frontend/src/modules/mandarin-ipa/README.md",
+        "frontend/ARCHITECTURE.md",
+        "CHANGELOG.md",
+        "docs/project-status.md",
+        "tests/e2e/m13-png-background.cjs",
+        "scripts/verify_m13_png_background.py",
+        "scripts/verify_m13_custom_tables_qt.py",
+        "tests/e2e/m13-custom-tables.cjs",
+        "tests/e2e/m13-result-layout.cjs",
+        "tests/e2e/m13-r2.cjs",
+        "tests/e2e/m13-unt.cjs",
+        "tests/e2e/p17-m13-full.cjs",
+        "scripts/manual/capture_m13_result_layout.py",
+        "docs/testing/m13-png-background.md"
+      ],
+      "verification_scope": "三端共用源码，本地生产Chrome/隐藏Windows Qt和候选/实际HTTPS分别验证，网页版已发布；Mac实机/Safari及最终桌面包未验",
+      "verification": [
+        "背景配置、预览及Canvas合成已实现，typecheck通过，既有30项M13/Unt/自定义字表测试通过。背景裁切初轮精确坐标断言发现浮点缩放尾数误差，改为直接使用主导边长，原断言保持。",
+        "36项定向/来源、类型/协议/UI数据及工作台构建通过，说明书21章/1113素材严格检查生成通过；PNG Chrome7组、字表Chrome10组、隐藏Qt8组与原排版8组通过；候选/实际HTTPS各7组、真实账号外观控制与说明书通过。",
+        "网页已发布`m13-png-background-51b3793873714b8ab718dbd9859fc456`，候选及实际HTTPS各7组通过，8份PNG预览/下载字节与像素检查通过。17变化HTTPS/2311发布/774运行/1876回退核对一致，后端、科学回执、官网/论文目录、配置及服务PID保持，无服务重启；3个任务QA身份停用，活动数0，scratch清理为deleted。文档2402文件/448来源/175任务、架构与受影响差异零错误。"
+      ],
+      "evidence": [
+        "docs/testing/m13-png-background.md",
+        "output/validation/m13-png-background/chrome-6055ba114c454a1c81fe1316633e1181/report.json",
+        "output/validation/m13-png-web-20261021/candidate/report.json",
+        "output/validation/m13-custom-tables/qt-110b0df1b40e4c18abf71e0f29997027/report.json",
+        "output/validation/m13-png-web-20261021/live-final/report.json",
+        "output/validation/m13-png-web-20261021/public-readback.json",
+        "output/validation/m13-png-web-20261021/cleanup.json"
+      ],
+      "remaining": [
+        "macOS/Safari及其他实体设备未运行",
+        "最终Windows EXE/macOS包未重建，未push",
+        "用户禁止桌面操控，保留当前源码工作台窗口，本轮未重启"
+      ]
+    },
+    {
+      "id": "M07-SAVE-NAMES",
+      "title": "发声类型合成按方向、变化类型和步数命名保存组",
+      "date": "2026-10-21",
+      "status": "verified",
+      "files": [
+        "frontend/src/platform/m07.ts",
+        "frontend/src/platform/desktop.ts",
+        "desktop/src/ptb_desktop/m07_bridge.py",
+        "frontend/src/modules/phonation-synthesis/README.md",
+        "scripts/verify_m07_save_names.py",
+        "tests/e2e/m07-save-names.cjs",
+        "docs/testing/m07-save-names.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json",
+        "CHANGELOG.md"
+      ],
+      "note": "按当前用户要求，Windows/macOS结果文件夹与网页ZIP共用生成快照的可读描述；历史组不采用当前编辑参数。桌面新建独立组并追加中文数字序号，保留已有结果及步骤文件格式。未修改科学算法或已有导出目录。",
+      "verification": "9项M07前端定向、typecheck、contracts/ui-data及保留活动资源构建通过。独立Chrome经生产desktop.ts与真实FileProvider/TaskBridge/LocalService/Praat完成六组九步导出；当前设置改为4步后历史组仍按9步命名。同名第2组保留已修改文件，六个浏览器ZIP文件名、完整目录与每份结果SHA回读通过，无页面错误。",
+      "verification_scope": "Windows source, independent Chrome, actual native file export bridge and real synthetic M07 outputs; shared Windows/macOS/web source paths. No native Qt/macOS/Safari/final-package or deployed-web verification.",
+      "remaining": "Mac实机、Qt窗口及最终安装包未新增验证；网页源码已同步，未公开部署。三轮测试scratch均已通过受保护入口清理，报告/截图/摘要保留。",
+      "current_evidence": [
+        "docs/testing/m07-save-names.md"
+      ],
+      "local_evidence": "output/validation/m07-save-names/chrome-ba6088d19bf947dab581534e4c31f600/report.json; exports.json; saved-light.png; saved-dark.png; cleanup.json; chrome-b812e5b8722049c18d13afcd7118637d/及chrome-a0aebe713c964040aa4802bd10d5c968/的cleanup.json"
+    },
+    {
+      "id": "M18-TAPA-READER",
+      "title": "TAPA期刊论文译读、DOI兼容与服务器分发",
+      "date": "2026-10-21",
+      "status": "verified",
+      "plan": "docs/deployment/paper-reading.md",
+      "files": [
+        "desktop/src/ptb_documents/papers.py",
+        "backend/src/ptb_api/papers.py",
+        "frontend/src/platform/papers.ts",
+        "frontend/src/modules/paper-reading/citations.ts",
+        "frontend/src/modules/paper-reading/PaperReadingPage.vue",
+        "scripts/prepare_paper_release.py",
+        "deployment/papers/publish.py",
+        "deployment/papers/publish_addition.py",
+        "desktop/tests/test_paper_journals.py",
+        "backend/tests/test_papers_web.py",
+        "frontend/tests/paper-citations.test.ts",
+        "scripts/verify_m18_journal_distribution.py",
+        "docs/decisions/ADR-M18-paper-distribution.md",
+        "docs/deployment/paper-reading.md",
+        "frontend/src/modules/paper-reading/README.md",
+        "docs/testing/2026-10-21-m18-tapa-reader.md",
+        "docs/project-status.md",
+        "docs/plans/task-ledger.json",
+        "CHANGELOG.md"
+      ],
+      "verification_scope": "Windows内容/QtPdf、共享源码/前后端定向测试、实际Linux运行时与公开HTTPS网页和论文分发；最终EXE/macOS/Safari/实体设备未验",
+      "verification": [
+        "15/15/11页审阅材料，四表118数字token、IPA、原图/几何、全文来源与数学严格检查通过，26页成稿全部渲染核对",
+        "83项桌面、13项真实隔离PostgreSQL后端、14项前端测试及typecheck/contracts/ui-data/build:workbench通过",
+        "真实Windows QtPdf候选及live同缓存升级/降级：旧2篇/新3篇，只新增3资产，重复0下载，旧文件/批注/收藏保持",
+        "Linux实际host受限PDF子进程六张首尾页及九类科学/交互/VTL通过，最终774项运行时绑定清单；修复首轮host bootstrap登记遗漏后重跑",
+        "服务器仅两份论文Python及14静态更新；HTTPS全部10 PDF和目录摘要一致，原两篇/说明与旧7资产/首页保持，凭据/系统配置未改",
+        "独立实际HTTPS Chrome五组交互通过：启动获取、五种引用、15/15/11页及原字节导出、旧原文批注/收藏重启刷新保留，37份完整成功结果、五组流程完成且无页面错误；工程文档2383/448/173零错误，定向diff通过",
+        "原生PNG透明区域的聊天黑底显示经alpha诊断与同PDF白底/实际网页核对，正式PDF字节不变；服务器仅本次载荷/合成WAV/发布暂存按SHA清理，回滚保留",
+        "实际900×700深色窄窗等待11页解读图像加载后截图核对通过；本机scratch项目入口清理deleted、服务器定向清理回执及6账号禁用回执齐全，冻结来源小型归档与回滚保留"
+      ],
+      "remaining": [
+        "旧EXE需更新阅读器才取得期刊论文；本轮不发布新EXE/Release，macOS/Safari/实体设备未验"
+      ],
+      "note": "井井审阅后明确授权DOI兼容、服务器上传和模块推送。原两篇及说明保持；内容与验收在既有output忽略目录，不随应用包或GitHub发布。目录SHA 2875ac27f65b2d97868d076b9cf68d909fadcac142bbb1d02a69a7c8a283bbf1。"
+    },
+    {
+      "id": "M13-CUSTOM-TABLES",
+      "title": "汉字转国际音标自定义汉字与拼音音节表",
+      "date": "2026-10-21",
+      "status": "verified",
+      "plan": "docs/plans/2026-10-21-m13-custom-tables.md",
+      "files": [
+        "frontend/src/modules/mandarin-ipa/CustomTableImport.vue",
+        "frontend/src/modules/mandarin-ipa/custom-tables.ts",
+        "frontend/src/modules/mandarin-ipa/table-file.ts",
+        "frontend/src/modules/mandarin-ipa/MandarinIpaPage.vue",
+        "frontend/src/modules/mandarin-ipa/state.ts",
+        "frontend/src/modules/mandarin-ipa/export.ts",
+        "frontend/src/modules/mandarin-ipa/README.md",
+        "frontend/tests/m13-custom-tables.test.ts",
+        "tests/e2e/m13-custom-tables.cjs",
+        "scripts/verify_m13_custom_tables.py",
+        "scripts/verify_m13_custom_tables_qt.py",
+        "manual/chapters/m13.json",
+        "manual/project.json",
+        "docs/manual/mandarin-ipa.md",
+        "third_party/source-registry.json",
+        "third_party/acknowledgement-coverage.json",
+        "frontend/src/generated/sources.json",
+        "ARCHITECTURE.md",
+        "frontend/ARCHITECTURE.md",
+        "docs/project-status.md",
+        "CHANGELOG.md",
+        "frontend/src/modules/mandarin-ipa/tones.ts",
+        "frontend/src/modules/mandarin-ipa/ToneMapping.vue",
+        "frontend/src/modules/mandarin-ipa/TableToneDialog.vue",
+        "docs/plans/2026-10-21-m13-custom-tables.md",
+        "docs/testing/m13-custom-tables.md"
+      ],
+      "verification_scope": "Windows/macOS/Web共用源码；本轮选列/声调映射实测本地Chrome10组、Windows Qt7组及候选/实际HTTPS各9组并已发布，macOS/Safari与最终包未验",
+      "verification": [
+        "26项M13/来源测试、typecheck、contracts:check、ui-data:check、保留活动窗口资源的build:workbench通过",
+        "说明书21章/1095素材严格校验与software阅读资源构建零错误、零警告",
+        "独立Chrome生产AppShell六组通过：CSV/TSV/XLSX多工作表、命名多读音、完整浏览器重启恢复、PNG与帮助、浅深/窄窗、存储拒绝时内置转换可用，无上传请求或页面错误",
+        "真实Windows Qt四组通过：原生QTest文件选择与保存、XLSX读取、刷新持久库与独立草稿、原生PNG及帮助，截图已查看；scratch清理回执为deleted",
+        "原有排版独立Chrome八组/实际PNG回归通过；文档2375文件/448来源/172任务与架构零错误，历史快照断链单列，所有本轮scratch回执为deleted",
+        "同日按授权发布m12-m13-20261021-77b3ae2db3cc，候选M13五组/公网M13五组，整批候选14/公网15与Linux九类通过；2203发布/773运行/38变化HTTPS核对，旧2171文件保持，源码M12前台响应通过，6个QA身份停用及远端11项/scratch已清",
+        "替换/删除追加：28项定向/来源、类型/协议/UI数据与生产构建通过；说明书21章/1112素材严格校验/生成通过。Chrome八组、实际Qt五组通过，含取消/错误/改名保ID、内容版本、完整浏览器重启/Qt刷新、删表旧草稿文本恢复和实际未保存确认；追加失败与最终scratch已清。 收尾文档2380文件/448来源/172任务、架构与差异检查零错误。",
+        "本轮选列/声调：33项M13/Unt/来源、typecheck、contracts:check、ui-data:check通过；说明书21章/1112素材严格校验/生成与共享工作台构建通过。Chrome10组/实际Windows Qt7组通过，原生确认、完整浏览器重启/Qt刷新与声调恢复通过，截图已查看，所有测试scratch为deleted。",
+        "网页版选列/声调已发布 m13-import-tones-354e493fce3344888cb8aa7fdb4ecb5c，54可达控制分块与当前M18 DOI线上基线规范化一致，仅9个M13源码覆盖和M13章节；候选/公网各9组，零研究上传/页面异常。17变化HTTPS、2298发布、774运行和1863回退摘要一致，后端/官网/论文目录/服务/配置与科学回执保持，无服务重启。2个任务QA身份停用，活动数0，scratch为deleted。 收尾文档2386文件/448来源/173任务与架构检查零错误，受影响文件diff检查通过。",
+        "前轮替换/删除随后按授权发布m13-table-manage-f59a0326cb7f44648054f569f2d5b4f2，候选/公网各7组通过，自有QA身份停用及scratch已清。统一入口M13源码进程/窗口响应已确认；本轮新构建后用户明确要求停止桌面操控，未继续重启。 后续按用户新要求，仅通过统一启动脚本以-Module home重新打开源码工作台，未打开汉字转国际音标；实际源码进程59384、窗口句柄1512276、PhoneticToolbox 3.0及Responding=True已由只读进程信息确认，未使用桌面操控。启动前旧源码进程已退出。"
+      ],
+      "evidence": [
+        "docs/testing/m13-custom-tables.md",
+        "output/validation/m13-custom-tables/chrome-1cfb4b02a24240378bc0859f1912f359/report.json",
+        "output/validation/m13-custom-tables/qt-0078a754a10442489ba249624e168155/report.json",
+        "output/validation/m13-result-layout/chrome-d397b2e0b8cd4e80881757712c30ea68/report.json",
+        "output/validation/m13-custom-tables/chrome-ccf7ecda60ba4d18a4d9f8337569c3e0/report.json",
+        "output/validation/m13-custom-tables/qt-ff6ba64537c94082bb828fbd16c1b5ad/report.json",
+        "output/validation/m13-custom-tables/chrome-83090aff76e94805a34a60bb2afa39dd/report.json",
+        "output/validation/m13-custom-tables/qt-d23368fa74eb40eaa5ece6958fa97750/report.json",
+        "output/validation/m13-import-tones-web-20261021/public-readback.json",
+        "output/validation/m13-import-tones-web-20261021/live/report.json",
+        "output/validation/m13-import-tones-web-20261021/cleanup.json",
+        "output/validation/m13-manage-web-20261021/source-window.json",
+        "output/validation/m13-import-tones-web-20261021/source-home.json"
+      ],
+      "remaining": [
+        "macOS/Safari及其他实体设备未实测",
+        "最终Windows EXE/macOS包未重建，未push",
+        "字表按当前设备/账号本机保存，更换设备需重新导入原表"
+      ]
+    },
+    {
+      "id": "WEB-MODULE-SYNC-20261020",
+      "title": "网页工作台近期模块修改同步上线",
+      "date": "2026-10-20",
+      "status": "verified",
+      "plan": "docs/plans/2026-10-20-web-module-sync.md",
+      "files": "当前共享前端/说明书、M15偏好、M10核心/浏览器R21与Linux回退；来源覆盖登记与Linux验证入口；发布/状态/修改记录",
+      "verification_scope": "当前共享源码、Windows独立Chrome155、实际HTTPS和Linux R21服务；最终成品与实体设备分开",
+      "verification": "前端576项、核心/后端161项、LPC/语谱92项、M05独立环境39项、类型/协议/UI来源/冻结构建通过；Linux九类科学与交互准入通过；候选31组、公开HTTPS34组通过，2171发布/773运行与90变化资源及Windows6项摘要一致，原发布完整保持。21个QA身份停用，远端20项传输/科学副本与本轮10655项scratch已清。文档/架构与最终差异检查见日志。",
+      "remaining": [
+        "最终Windows EXE/macOS包未更新，Safari、实体设备和长期容量未新增验证",
+        "M18原始无响应及Qt全屏重复拖选的旧边界仍见原报告；通用pytest临时根未额外接管"
+      ],
+      "evidence": [
+        "docs/testing/2026-10-20-web-module-sync.md"
+      ]
+    },
+    {
+      "id": "M18-ANNOTATION-EDITING",
+      "title": "论文标注撤销重做、荧光笔选择删除及便签",
+      "date": "2026-10-19",
+      "status": "verified",
+      "plan": "docs/plans/2026-10-19-m18-annotation-editing.md",
+      "files": "共享PdfReader、annotation-history、AnnotationNoteDialog、历史单测/M18浏览器夹具/E2E与Qt脚本、M18说明书/README和CHANGELOG/验收/状态/台账",
+      "note": "当前文档最近100步会话历史，新增/编辑/删除和跨页荧光笔分组；实际回执后记录，部分失败按成功部分保留历史与未完成选文。Ctrl+Z/Ctrl+Shift+Z及Mac Command共用，编辑框原生撤销保留。纸面点击选择荧光笔后按钮/Delete/Backspace删除；便签隐藏原文展示但保留原格式/锚点与导出。三端共用源码，无数据迁移。",
+      "verification_scope": "Windows源码Qt默认GPU与独立Chrome155，Mac仅共享源码；2026-10-20当前共享网页已发布并在真实HTTPS Chrome155复验，Linux声道为R21",
+      "verification": "17项前端与10项桌面批注测试、类型/保留资源构建、说明书strict校验生成通过；Chrome10组覆盖快捷键/便签/选择删除/失败重试/部分成功/跨页分组/隔离，最终构建Qt8组含真实快捷键、删除、写盘、浅深便签、文档重开、标准PDF导出及更新帮助。初次焦点拦截和CSS作用域问题修复后通过。文档2354文件/448来源/170任务及架构零错误，定向diff/语法和M18三份资源内容一致性通过，自有scratch已清。 2026-10-20网页同步及本条相关交互已通过，公开范围见WEB-MODULE-SYNC-20261020。",
+      "remaining": [
+        "最终Windows EXE/Mac包未更新，Mac实机/Safari未验",
+        "旧窗口仍需重开才能载入新前端；Qt全屏原生重复拖选的旧问题见选文报告"
+      ],
+      "evidence": [
+        "docs/testing/m18-annotation-editing.md",
+        "docs/testing/2026-10-20-web-module-sync.md"
+      ]
+    },
+    {
+      "id": "M18-ANNOTATION-SELECTION",
+      "title": "论文精读工具栏选文保留与荧光笔批注修复",
+      "date": "2026-10-19",
+      "status": "verified",
+      "files": "共享PdfReader.vue、模块README、m18-annotations前端夹具/E2E、verify_m18_annotations浏览器/Qt脚本、manual/chapters/m18.json及验收/状态/CHANGELOG/台账",
+      "verification_scope": "三端共享源码；Windows独立Chrome及源码Qt默认GPU，模拟焦点失去Range与真实PDF写盘/导出分开；2026-10-20当前共享网页已发布并在真实HTTPS Chrome155复验，Linux声道为R21",
+      "note": "井井更正为Windows普通阅读失效。普通基本操作修复前可通过，原截图故障尚未原样复现；已修复可证实的原生选区丢失时清空选文快照问题，故障注入修复前失败、修复后通过。工具栏换色/焦点和弹窗取消保留选文，明确新选择/导航/切换/离开时清除，三端共用一份实现。",
+      "verification": "12项论文前端测试、typecheck、build:workbench、说明书strict校验与software生成通过。独立Chrome真实拖选和故障注入覆盖换色、全屏弹窗、失败重试、取消重开、旧选文清理及原译文/解读隔离；真实Qt默认GPU普通阅读荧光笔/选文批注在Range清空后可保存，全屏本页笔记、重开回读与标准PDF注释导出通过。文档/架构零错误，定向diff通过。 2026-10-20网页同步及本条相关交互已通过，公开范围见WEB-MODULE-SYNC-20261020。",
+      "remaining": [
+        "井井原始窗口中的无响应未原样复现，当前修复针对已验证的选区失焦问题",
+        "Qt全屏后的重复拖选曾未形成Range，原因未定，记录在报告；普通阅读鼠标流程已通过",
+        "Mac实机/Safari、最终Windows EXE/Mac包本轮未更新或验收"
+      ],
+      "evidence": [
+        "docs/testing/m18-annotation-selection.md",
+        "docs/testing/2026-10-20-web-module-sync.md"
+      ]
+    },
+    {
       "id": "M10-SIGNED-VOT",
       "title": "爆破时序前浊与正负VOT联动修复",
       "date": "2026-10-19",
       "status": "verified",
       "files": "共享stop-editor/keyframes/index、核心stop_timing/trajectory/animation/sequence_controls/document/preset_pack、Wasm锁、定向测试与Qt/Chrome脚本、ADR/说明/验收/CHANGELOG/状态/台账、说明折叠样式与术语",
-      "verification_scope": "Windows源码原生/Qt及本机独立Chrome真实Wasm，Mac仅源码",
-      "verification": "Windows定向169项、前端22项、实际Qt5组和Chrome真实Wasm5组通过；负VOT原生周期前浊、精确总长、时序联动、旧文件兼容、默认折叠与浊音起始术语通过。类型/契约/UI数据/构建通过，最终截图已复核，自有scratch已清。资源72项幂等，架构和文档零错误，定向diff通过。",
+      "verification_scope": "Windows源码原生/Qt及本机独立Chrome真实Wasm，Mac仅源码；2026-10-20当前共享网页已发布并在真实HTTPS Chrome155复验，Linux声道为R21",
+      "verification": "Windows定向169项、前端22项、实际Qt5组和Chrome真实Wasm5组通过；负VOT原生周期前浊、精确总长、时序联动、旧文件兼容、默认折叠与浊音起始术语通过。类型/契约/UI数据/构建通过，最终截图已复核，自有scratch已清。资源72项幂等，架构和文档零错误，定向diff通过。 2026-10-20网页同步及本条相关交互已通过，公开范围见WEB-MODULE-SYNC-20261020。",
       "remaining": [
         "Mac原生R21构建与实机未验",
-        "本轮未重打最终EXE/Mac应用，未公开部署；实体音频设备与Safari未新增验证"
+        "本轮未重打最终EXE/Mac应用；实体音频设备与Safari未新增验证"
       ],
       "evidence": [
         "docs/decisions/ADR-M10-stop-timing.md",
-        "docs/testing/m10-stop-timing.md"
+        "docs/testing/m10-stop-timing.md",
+        "docs/testing/2026-10-20-web-module-sync.md"
       ]
     },
     {
@@ -41,24 +823,33 @@
     },
     {
       "id": "M10-PRESET-LIBRARIES",
-      "title": "多套构型与持久保存审查整改",
-      "date": "2026-10-19",
+      "title": "多套构型、持久保存与删除管理",
+      "date": "2026-10-22",
       "status": "verified",
-      "files": "共享前端构型/分享/持久存储、核心preset_library/preset_pack/session、桌面ProfileStore、网页MemoryProfile及Wasm检查点、验证脚本/测试、ADR/架构/使用说明/验收/CHANGELOG/状态",
-      "verification_scope": "同一源码Windows原生/Qt与本机独立Chrome真实Wasm；Mac仅同步源码",
-      "verification": "Windows157项，加检查点和多组旧重名逐项修复后23项定向复验通过，共159个不同测试；前端20项，实际Qt4组、Chrome真实Wasm套装4组与共享控制19组通过。真实IndexedDB关标签重新登录恢复4套/当前选择/序列。类型/契约/UI数据/保留资源构建、72资源幂等、架构零错误、文档2327文件/447来源/166任务零错误。测试面板折叠、登录与包锁未重建的失败已定位修正，失败证据保留，最终自有scratch已清。",
+      "files": "共享前端构型/分享/持久存储、核心preset_library/preset_pack/session、桌面ProfileStore、网页MemoryProfile及Wasm检查点、验证脚本/测试、ADR/架构/使用说明/验收/CHANGELOG/状态；2026-10-22共用presets.js/app.js/v3.css删除管理、构型库/持久存储单测及原Qt/Chrome套装验证脚本",
+      "verification_scope": "共用源码Windows原生/Qt与本机独立Chrome真实Wasm/IndexedDB；Mac仅同步源码。2026-10-20旧功能已上线，本次2026-10-22删除功能未公开部署或生成最终成品。",
+      "verification": "Windows157项，加检查点和多组旧重名逐项修复后23项定向复验通过，共159个不同测试；前端20项，实际Qt4组、Chrome真实Wasm套装4组与共享控制19组通过。真实IndexedDB关标签重新登录恢复4套/当前选择/序列。类型/契约/UI数据/保留资源构建、72资源幂等、架构零错误、文档2327文件/447来源/166任务零错误。测试面板折叠、登录与包锁未重建的失败已定位修正，失败证据保留，最终自有scratch已清。 2026-10-20网页同步及本条相关交互已通过，公开范围见WEB-MODULE-SYNC-20261020。 2026-10-22新增删除：原生构型库13项、前端19项、实际Qt12组及最终构建Chrome真实Wasm8组通过。取消、磁盘/IndexedDB失败重试、常用栏、末项空库、内置回退、套装/模型/编辑/序列隔离与重开恢复通过；浅深截图已复核，类型/契约/UI数据/构建通过，74项资源更新，合成scratch已清。 根据截图反馈美化套装工具栏、构型双列/单列与删除确认，浅深六组窗口及键盘焦点无回归，确认按钮/标签实测对比度达到4.5。同期M19模板暂时阻塞构建，隔离快照验证后完整构建恢复，M10受验源码与最终静态产物一致。",
       "remaining": [
-        "Mac原生R21待构建，最终EXE/Mac应用及公开网站未更新",
+        "Mac原生R21待构建，最终EXE/Mac应用未更新",
         "完整几何参数空间、自适应采样及性能剖析为后续建议，Safari与实体音频未验",
-        "当前用户源码窗口未重启"
+        "当前用户源码窗口未重启",
+        "2026-10-22删除功能仅交付源码与本地构建，公开网页未部署"
       ],
       "evidence": [
         "docs/decisions/ADR-M10-preset-libraries.md",
         "docs/testing/m10-preset-libraries.md",
         "output/validation/m10-shared-20261018/qt-65c19f5f8b3b47ac96316277ee28e5cb/report.json",
         "output/validation/m10-wasm-20261018/browser-374cdb2b89fe4d0aa8d5bc683a1f6913/libraries.json",
-        "output/validation/m10-wasm-20261018/browser-6b4d2ffa4f4340b3820cdf0b76aa4003/shared-controls.json"
-      ]
+        "output/validation/m10-wasm-20261018/browser-6b4d2ffa4f4340b3820cdf0b76aa4003/shared-controls.json",
+        "docs/testing/2026-10-20-web-module-sync.md",
+        "output/validation/m10-preset-delete-20261022/unit-8b8584b15dcc40a3bde70d653aa7cfcd/pytest.log",
+        "output/validation/m10-shared-20261018/qt-f7e804f5bac04ce68a55ee694d598fb2/report.json",
+        "output/validation/m10-wasm-20261018/browser-474c063de7bf449e842290bd5239ddc7/libraries.json",
+        "output/validation/m10-shared-20261018/qt-af321116473340309f14f4d8a799e2fd/report.json",
+        "output/validation/m10-wasm-20261018/browser-40f8fd5251f44755af101462f17a9581/libraries.json",
+        "output/validation/m10-preset-delete-20261022/layout-51453105c2944d0cbd6ddd52a4fa172a/report.json"
+      ],
+      "plan": "docs/plans/2026-10-04-m10-ipa-presets.md"
     },
     {
       "id": "M10-SMOOTH-SHARE",
@@ -66,18 +857,19 @@
       "date": "2026-10-18",
       "status": "verified",
       "files": "共享前端/核心、R21原生补丁、Windows/Wasm/Mac构建入口、Windows DLL与Wasm资源锁、资源登记、定向回归/Qt/Chrome脚本及README/核心架构/ADR/审查/CHANGELOG/状态",
-      "verification_scope": "共享源码、Windows原生/真实Qt、本机独立Chrome真实Wasm；用户确认本轮Mac仅交付源码",
-      "verification": "Windows151项、Qt3组、Chrome19组、前端14项、类型/契约/UI数据/保留资源构建通过。手动组合最大转角102.47降至82.55度；微扰区段前PCM不变、区段内波形改变、同种子复现及取消恢复；分享完整目录、全选/全不选/自存刷新和子集文件通过。测试曾因Playwright隔离环境重复导入通信模块造成请求编号冲突，已修正并完整复验。 最终状态文案与真实设置入口浅深主题复核后19组再次通过，scratch已清；72资源幂等、架构和文档零错误。 后续五项审查整改见M10-PRESET-LIBRARIES。",
+      "verification_scope": "共享源码、Windows原生/真实Qt、本机独立Chrome真实Wasm；用户确认本轮Mac仅交付源码；2026-10-20当前共享网页已发布并在真实HTTPS Chrome155复验，Linux声道为R21",
+      "verification": "Windows151项、Qt3组、Chrome19组、前端14项、类型/契约/UI数据/保留资源构建通过。手动组合最大转角102.47降至82.55度；微扰区段前PCM不变、区段内波形改变、同种子复现及取消恢复；分享完整目录、全选/全不选/自存刷新和子集文件通过。测试曾因Playwright隔离环境重复导入通信模块造成请求编号冲突，已修正并完整复验。 最终状态文案与真实设置入口浅深主题复核后19组再次通过，scratch已清；72资源幂等、架构和文档零错误。 后续五项审查整改见M10-PRESET-LIBRARIES。 2026-10-20网页同步及本条相关交互已通过，公开范围见WEB-MODULE-SYNC-20261020。",
       "remaining": [
         "Mac原生R21待构建，当前Mac库仍为R20",
-        "最终EXE/Mac应用及公开网站未更新；当前用户源码窗口未重启",
+        "最终EXE/Mac应用未更新；当前用户源码窗口未重启",
         "完整参数空间、实体设备听辨与Safari未验"
       ],
       "evidence": [
         "docs/testing/m10-smoothing-review.md",
         "output/validation/m10-smoothing-20261018/windows-tests.json",
         "output/validation/m10-shared-20261018/qt-4e1ebbcaa18147d9829634103e5314ba/report.json",
-        "output/validation/m10-wasm-20261018/browser-282449ce896a471c9732f197c5dc6a79/shared-controls.json"
+        "output/validation/m10-wasm-20261018/browser-282449ce896a471c9732f197c5dc6a79/shared-controls.json",
+        "docs/testing/2026-10-20-web-module-sync.md"
       ]
     },
     {
@@ -168,8 +960,8 @@
       "date": "2026-10-18",
       "status": "verified",
       "files": "共用vocal-tract前端/核心/文档与构型包、浏览器/桌面状态及文件、后端参数/视频限制、R19/R20原生补丁与Windows/Wasm/Mac构建、资源/来源登记、测试、ADR/README/验收/CHANGELOG/状态/台账",
-      "verification_scope": "当前共享源码、Windows x64原生/真实Qt、独立Chrome Wasm、macOS ARM64原生候选；不代替最终EXE/Mac应用或公开站点",
-      "verification": "Windows 146项、Mac原生19项、Chrome Wasm17组、Qt文件/主题3组通过；独立上下唇、闭塞/释放/正负VOT、区段叠加、分享导入即IPA、120/200Hz、双曲线与60秒/取消恢复。固定姿态120到300Hz播放差0.31dB；一次早期直接预览全局值断言未复现，保留回执。原生候选已更新，完整说明见本轮验收。 前端类型/14项/契约/UI数据/514模块构建、架构/文档和71项资源幂等核对通过；统一入口已启动并确认实际加载R20，浏览器/Qt/Mac pytest scratch已清。",
+      "verification_scope": "当前共享源码、Windows x64原生/真实Qt、独立Chrome Wasm、macOS ARM64原生候选；不代替最终EXE/Mac应用或公开站点；2026-10-20当前共享网页已发布并在真实HTTPS Chrome155复验，Linux声道为R21",
+      "verification": "Windows 146项、Mac原生19项、Chrome Wasm17组、Qt文件/主题3组通过；独立上下唇、闭塞/释放/正负VOT、区段叠加、分享导入即IPA、120/200Hz、双曲线与60秒/取消恢复。固定姿态120到300Hz播放差0.31dB；一次早期直接预览全局值断言未复现，保留回执。原生候选已更新，完整说明见本轮验收。 前端类型/14项/契约/UI数据/514模块构建、架构/文档和71项资源幂等核对通过；统一入口已启动并确认实际加载R20，浏览器/Qt/Mac pytest scratch已清。 2026-10-20网页同步及本条相关交互已通过，公开范围见WEB-MODULE-SYNC-20261020。",
       "remaining": [
         "最终EXE/Mac应用与公开站点尚未构建/更新",
         "Mac Qt/Safari、实体设备听辨、完整参数空间与长期负载未验",
@@ -182,7 +974,8 @@
         "output/validation/m10-shared-20261018/macos-r20-tests.log",
         "output/validation/m10-wasm-20261018/browser-dd61e352cf2e4470be12f0106524a17d/shared-controls.json",
         "output/validation/m10-shared-20261018/qt-21077358a1d341f58d330b4afbf4c396/report.json",
-        "output/validation/m10-shared-20261018/source-workbench.json"
+        "output/validation/m10-shared-20261018/source-workbench.json",
+        "docs/testing/2026-10-20-web-module-sync.md"
       ]
     },
     {
@@ -3549,10 +4342,21 @@
       },
       "current_evidence": [
         "docs/testing/2026-10-04-m06-r5-report.md",
-        "docs/testing/m06-manual-report.md"
+        "docs/testing/m06-manual-report.md",
+        "docs/testing/m06-r6-review-fixes.md"
       ],
       "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
-      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate"
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate",
+      "review_fixes_2026_10_21": {
+        "status": "verified",
+        "date": "2026-10-21",
+        "scope": "Shared Windows/macOS/web source; actual Windows Qt/Chrome and Pyodide, WSL pure core; no Mac device or production/package evidence",
+        "files": "shared speech-synthesis state/page/curve/port, browser-m06; Klatt engine/api and regression tests; browser source preparation/manifest; isolated Chrome/Qt scripts; M06 manual/readme and records",
+        "changes": "transactional preferences, independent AV and exact short-pause sample placement, inactive A1-A5 controls, HNR effective range with legacy compatibility, browser terminal states and retry-saving without recomputation",
+        "verification": "42 frontend, 33 core on Windows and WSL plus 17 real Windows worker tests (50 unique Windows Python); Qt 4 and Chrome 5 groups; two cross-runtime WAV outputs exact PCM; typecheck/contracts/ui-data/catalog/build:workbench/manual strict+generation/architecture/docs passed. All 10 owned scratch receipts deleted; current browser engine/api and source/public/dist manual content hashes agree.",
+        "evidence": "docs/testing/m06-r6-review-fixes.md; output/validation/m06-r6/completion.json",
+        "remaining": "macOS Qt/Safari, physical audio/naturalness, final EXE/Mac packages and public deployment not verified or performed. Historical explicit AV zeros retained. Browser local-loopback ZIP response interference isolated through test-only alias; no global settings changed."
+      }
     },
     {
       "id": "M07",
@@ -3601,10 +4405,30 @@
         "windows_scope": "historical evidence unchanged; see current module reports and root AGENTS.md"
       },
       "current_evidence": [
+        "docs/testing/m08-multi-variants.md",
         "docs/testing/2026-10-05-m08-r2-report.md"
       ],
       "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
-      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate"
+      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate",
+      "multi_variants_2026_10_21": {
+        "status": "verified",
+        "date": "2026-10-21",
+        "scope": "Windows源码/本机真实Praat/独立Chrome/实际Qt；Windows/macOS/网页共用源码同步，非发布结论",
+        "files": "frontend pitch-manipulation页面/VariantSettings/state/port、platform/m08；backend m08_jobs/m08_results/preferences；定向测试/Chrome/Qt脚本；M08说明书/截图/索引/README、架构、计划/验收/当前状态/CHANGELOG",
+        "verification": "27项前端（含M08 16项）；75项Python通过，旧fixture污染已修复并保留原断言重验；Chrome11组跨原音八版本/目录保存/取消和失败重试/刷新定位/网页ZIP/实际说明书，Qt4组；类型/契约/UI数据/保留资源构建，说明书21章1113素材严格校验及阅读资源生成",
+        "remaining": "Mac实机/Safari、Linux服务器/真实网页账号、自然语料试听及最终EXE/Mac包未新增验证；未部署/push",
+        "plan": "docs/plans/2026-10-21-m08-multi-variants.md",
+        "evidence": "docs/testing/m08-multi-variants.md"
+      },
+      "reference_export_options_2026_10_22": {
+        "status": "verified",
+        "date": "2026-10-22",
+        "scope": "Windows源码/独立Chrome/实际Qt；Windows/macOS/网页共享源码同步",
+        "files": "PitchManipulationPage/PitchCurve/port、platform/m08/desktop、desktop m08_bridge、backend preferences、相关测试与Chrome/Qt脚本、说明书/README、计划/验收/状态/CHANGELOG",
+        "verification": "17项前端、15项Python；Chrome13组、Qt6组真实Praat/WAV回读；横竖参考线/草稿恢复/默认不编号/编号与失败重试；typecheck/契约/UI数据/保留资源构建和说明书strict通过；测试scratch清理deleted；说明书重建和实际阅读通过，文档/架构/定向差异检查通过",
+        "remaining": "Mac实机/Safari、线上账号与Linux服务、最终EXE/Mac包未验；未部署/push",
+        "evidence": "docs/testing/m08-multi-variants.md"
+      }
     },
     {
       "id": "M09",
@@ -4021,6 +4845,16 @@
     },
     {
       "id": "M11",
+      "output_filenames": {
+        "status": "verified",
+        "scope": "2026-10-21 Windows/macOS shared worker source: new TextGrids keep audio basenames without added numeric prefixes; colliding flat outputs receive suffixes avoiding existing originals. Existing task manifests/files unchanged.",
+        "files": "backend/src/ptb_worker/m11_executor.py; backend/tests/test_m11_output_names.py; frontend/src/modules/mfa/README.md; docs/manual/mfa.md; docs/testing/m11-report.md; docs/project-status.md; CHANGELOG.md",
+        "verification": "67 Python checks passed, including real local SQLite publication and native save twice without overwrites. M12 preferredGrid reproduced the old prefix mismatch and matched all 6 saved files to their original WAV names. Docs validation: 2387 files, 448 sources, 173 tasks, zero errors; targeted diff check passed.",
+        "evidence": "output/validation/m11-output-names/checks-39b25c59fab74c50a3b7ddbc8a18e33a/summary.json",
+        "report": "docs/testing/m11-report.md#2026-10-21-结果文件名与原音频匹配",
+        "cleanup": "All four owned regression scratch roots deleted; logs, recipes, initial fixture diagnostics and cleanup receipts retained.",
+        "remaining": "MFA execution synthetic in these checks; full native alignment, actual Qt UI, macOS device and final EXE/Mac packages not rerun or rebuilt."
+      },
       "model_resource_inspection": {
         "status": "verified",
         "scope": "Local English MFA 3.1.0 official download and Mandarin MFA 2.0.0a copy from existing component; model ZIP metadata and paired dictionary phones only",
@@ -4149,7 +4983,8 @@
         "remaining": "Qt原生目录链、最终EXE、macOS和公网未更新或重验，已打开源码窗口需重开载入"
       },
       "current_evidence": [
-        "docs/testing/p17/M12-report.md"
+        "docs/testing/p17/M12-report.md",
+        "docs/testing/m12-three-tiers-keyboard.md"
       ],
       "edit_history_2026_10_19": {
         "status": "verified",
@@ -4159,6 +4994,41 @@
         "remaining": "最终EXE/Mac包未重打，Mac实机/Safari、自然语料完整手势与真实IME未验；历史本机保留，清站点数据会清历史",
         "evidence": "docs/testing/p17/M12-report.md；output/validation/m12-web-20261019/public-readback.json",
         "cleanup": "6份Qt scratch及公开验收6497份自有临时文件已核对归属/联接/进程后清理，保留报告/截图/最小发布增量/冻结证据/服务器回退；两个成功及首轮脚本失败QA身份均停用。"
+      },
+      "three_tiers_keyboard_2026_10_21": {
+        "status": "verified",
+        "scope": "Windows/macOS/网页共用三层区间编辑、可选吸附/关联和精简浮动IPA/extIPA/VoQS键盘，说明书与README；同日公开网页实际HTTPS与Linux服务，当前源码M12前台窗口",
+        "plan": "docs/plans/2026-10-21-m12-three-tiers-keyboard.md",
+        "verification": "126项前端、20项原生/偏好、Chrome12组、Qt5组，typecheck/contracts/ui-data/build及说明书strict/生成通过；Chrome120步拖动/缩放主图绘制0、351键文字变更0；Qt原生选区替换/输入框撤销/写盘重开/三层创建/帮助通过；文档2377文件/448来源/172任务与架构零错误，历史快照断链单列，定向diff检查通过；网页发布m12-m13-20261021-77b3ae2db3cc，候选14/公网15组及Linux九类科学通过，2203发布/773运行/38变化HTTPS和旧2171文件一致；统一入口实际源码窗口响应及前台通过",
+        "remaining": "Mac实机/Safari、实体IME/触摸、长期负载与最终EXE/Mac包未新增验证；未push",
+        "files": "annotation Page/Tracks/editor/types/layers/sequence/history/README/IpaKeyboard/Chart；Plus keyboard.json及生成器；backend preferences及测试；前端annotation/Plus/设置/来源测试、Chrome/Qt脚本；manual/chapters/m12.json；来源/致谢及生成数据；frontend架构、CHANGELOG、计划/验收/状态/台账",
+        "evidence": "docs/testing/m12-three-tiers-keyboard.md",
+        "cleanup": "本轮所有浏览器/Qt自有scratch已按摘要/归属/联接/进程检查清理，失败诊断、报告、日志及截图保留；网页6个QA身份停用、远端11项临时文件与本轮scratch已清",
+        "keyboard_layout_zoom_2026_10_22": {
+          "status": "verified",
+          "scope": "共用源码：IPA/extIPA/VoQS 默认文字与音标同为19px，60%–180%同步调整字号、内容尺寸、表格列宽和窗宽；屏幕限制后可恢复目标宽度，手动调整大小后继续按比例缩放",
+          "files": "frontend/src/modules/annotation/{IpaKeyboard.vue,IpaKeyboardChart.vue,README.md}；tests/e2e/m12-three-tiers.cjs；scripts/verify_m12_three_tiers_qt.py；CHANGELOG、M12验收、当前状态与本台账",
+          "verification": "typecheck、93项标注测试、contracts/ui-data和build:workbench通过；Windows Chrome17组、offscreen Qt7组通过，浅深主题三套表60/100/180%字号一致与窗宽/列宽联动、窄窗恢复、插入/撤销/保存回归通过。Chrome拖动/缩放主图绘制与按键文字重建均为0。证据见docs/testing/m12-three-tiers-keyboard.md",
+          "remaining": "最终EXE/Mac包及公开网页未更新，Mac实机/Safari与实体显卡未新增验证；已打开源码窗口需重开载入"
+        },
+        "toolbar_modals_and_channel_2026_10_21": {
+          "status": "verified",
+          "scope": "共用源码、Windows Chrome/Qt、实际HTTPS；两个工具收进顶部弹窗、声道明确选择后执行，波形/语谱/试听同步",
+          "files": "AnnotationPage/Tracks/editor及声明/README；annotation-channel与原数值/三层测试；Chrome/Qt脚本；manual M12/project源索引与生成索引；计划/验收/状态/CHANGELOG/本台账",
+          "verification": "93项标注、typecheck/contracts/ui-data/build及说明书21章1095素材通过；Chrome15组/Qt6组，最终候选12组/实际HTTPS13组、17变化HTTPS/2229发布/773运行和1794回退文件核对；m12-intensity-channel-40b03d401c4743eeae32e31819236eef；文档与架构见最终检查日志；文档2378文件/448来源/172任务、架构零错误，历史快照断链另列，定向diff检查通过；正式M12目录及159条搜索记录同步",
+          "remaining": "Mac实机/Safari、最终EXE/Mac包、实体IME/触摸与长期负载未新增验证；长文件单声道轻量预览仍按原策略，仅列实际可用声道；旧源码窗口需重载",
+          "cleanup": "两次网页共5个QA账号停用；传输包、两次网页与本机各次Chrome/Qt scratch已清，保留报告、冻结输入与回退",
+          "evidence": "docs/testing/m12-three-tiers-keyboard.md；output/validation/m12-channel-web-20261021/public-readback.json"
+        },
+        "search_keyboard_manual_2026_10_21": {
+          "status": "verified",
+          "scope": "共用源码、Windows Chrome/Qt及公开HTTPS：搜索替换顶部弹窗、音标键盘顶部入口、17张当前手册截图及正文/索引",
+          "files": "AnnotationPage.vue与README；tests/e2e/m12-three-tiers.cjs；scripts/manual/capture_m12_current.py与register_m12_current.py；manual/chapters/m12.json与project.json及17张software-only素材；计划/验收/状态/CHANGELOG/本台账",
+          "verification": "93项标注、typecheck/contracts/ui-data/build通过；Chrome16组，Qt原生DPR1.5/页面100%浅色最大化截图17张及操作检查；说明书21章1112素材strict/生成无警告错误。冻结源码只覆盖AnnotationPage，54控制块与原线上归一化一致；m12-search-keyboard-b733d0e814124be2ab576dfb7a6c575e候选14组/公网15组与帮助17图通过，零研究上传/页面异常；34变化HTTPS/2259发布/773运行/1807回退文件核对，原科学回执/后端/各服务保持无重启；文档2380文件/448来源/172任务及架构零错误，历史快照断链另列，定向diff与新脚本语法通过",
+          "remaining": "Mac实机/Safari、最终EXE/Mac包、实体IME/触摸与长期负载未新增验证；用户首页源码窗口未强制刷新，未push",
+          "cleanup": "三个任务QA身份已停用，传输包已清；本轮网页scratch5211文件/逻辑1416009630字节已按摘要/归属/联接/进程核对删除，六次Qt截图及本机Chrome各次scratch均deleted；报告/诊断/截图/冻结输入/增量/脚本、旧正式手册媒体和服务器回退保留",
+          "evidence": "docs/testing/m12-three-tiers-keyboard.md；output/validation/m12-search-web-20261021/public-readback.json"
+        }
       }
     },
     {
@@ -4261,8 +5131,8 @@
       ],
       "status": "in_progress",
       "plan": "modules/M15-perception.md",
-      "verification_scope": "Windows functionality verified within current_evidence; full input/device/platform acceptance is separate",
-      "note": "已实现 Windows 工作台功能并有专项验证；完成范围与未验项按 current_evidence 和 docs/project-status.md 核对，不使用早期迁移状态代表当前功能。",
+      "verification_scope": "Current shared source; Windows Chrome155/Edge155 production-AppShell synthetic WAV and native Qt TXT keyboard/analysis/export; 40 M15 + 18 account settings + 6 backend preference checks. macOS/Safari, physical timing, final installers and public deployment excluded.；2026-10-20当前共享网页已发布并在真实HTTPS Chrome155复验，Linux声道为R21",
+      "note": "2026-10-19逐项问卷、空格/回车全程推进、可开关作答提示、标准答案及被试RT/准确率分析/导出已实现。40项M15、18项设置与6项后端偏好检查通过；独立Chrome155/Edge155实际WAV键盘/多人/导出回读/浅深宽窄/说明书及Windows原生Qt通过。说明书21章/1095素材严格校验、类型/契约/UI数据/构建、架构/文档与定向diff通过。测试scratch已清，旧数据未迁移、成品/生产未更新。",
       "execution_evidence": [
         "docs/testing/m15-report.md",
         "docs/testing/m15-coordination-summary.md",
@@ -4278,7 +5148,16 @@
         "windows_scope": "docs/testing/m15-report.md; no hardware timing or packaged EXE claim"
       },
       "current_evidence": [
+        "docs/testing/2026-10-19-m15-keyboard-analysis.md",
         "docs/testing/2026-10-05-m15-r1-report.md"
+      ],
+      "files": "frontend/src/modules/perception/{PerceptionPage.vue,model.ts,runner.ts,formats.ts,analysis.ts,AnalysisPanel.vue}；backend/src/ptb_api/preferences.py；定向测试；manual/chapters/m15.json；相关说明、ADR、计划及验收；third_party/source-registry.json与frontend/src/generated/sources.json方法登记；manual/project.json引用",
+      "remaining": [
+        "macOS/Safari实际运行与实体端到端时延待验；最终EXE未更新。"
+      ],
+      "verification": " 2026-10-20网页同步及本条相关交互已通过，公开范围见WEB-MODULE-SYNC-20261020。",
+      "evidence": [
+        "docs/testing/2026-10-20-web-module-sync.md"
       ]
     },
     {
@@ -4607,6 +5486,14 @@
     },
     {
       "id": "M17",
+      "vowel_background_adjustment": {
+        "id": "M17-VOWEL-TRANSPARENT-20261023",
+        "status": "verified",
+        "scope": "frontend/src/design/background.css 移除元音 SVG 强制底色；同步修改记录、当前状态和验收",
+        "verification": "Windows 独立 Chrome 浅/深主题实际背景图验证通过，元音 SVG 背景 rgba(0, 0, 0, 0)、路径无填充、28 个按钮保留且点击输入 i 正确，页面错误 0；typecheck、22 项 M17 测试、contracts:check、ui-data:check、build:workbench 通过。",
+        "remaining": "Qt、最终 EXE/Mac 包与公开网页未更新或新增验证，已打开的源码窗口需重开载入。",
+        "evidence": "docs/testing/m17-hover-and-all-view-report.md#2026-10-23-元音图透明背景"
+      },
       "title": "国际音标表Plus",
       "status": "in_progress",
       "dependencies": "公共工作台及对应本机能力",
@@ -4667,9 +5554,9 @@
       "title": "当前状态、文档与测试/打包产物整理",
       "status": "verified",
       "files": "scripts/prepare_test_cleanup.py、cleanup_test_temporaries.ps1、cleanup_workspace.ps1；tests/test_test_cleanup.py；docs/development/artifact-lifecycle.md、testing/test-temporaries-cleanup.md、README.md、project-status.md；本机忽略的 output/maintenance 与已核实测试对象",
-      "note": "历史27项清理证据保留。本次明确授权后重新核实此前拒删对象，删除工具箱40项及训练旧缓存9项，共176909文件、122471111902逻辑字节；D/F可用空间增加9886416896/104430481408字节，合计106.47 GiB。保护权重/清单/日志/指标/当前成品；9条测试联接先非递归删除并确认目标保持。两处旧空缓存现已填充且正式实例运行，保留，4处旧目标已经不存在。",
-      "verification_scope": "Windows本机删除/文件保护/文档核验；未重打EXE或执行产品功能、GUI、设备及跨平台验收；未提交或上传",
-      "verification": "49项删除后不存在；旧数据集保留文件大小/mtime与选定权重/清单/结果及当前成品SHA不变；当前数据集124854条引用零缺失。Git边界与进程/联接核验通过。首次路径前缀表示差异预检中止，零删除，核实后完成；失败回执保留。文档检查2184文件/442来源/136任务零错误，历史失效链接单列，定向diff检查通过。",
+      "note": "续清4轮旧3.0.5诊断EXE、8份打包前端/读本生成副本、12份构建生成子目录、5轮旧或失败安装器目录、2份过时专用测试安装包及3份空scratch，共34处、21281文件、15110763719逻辑字节，所有目标删除后不存在。",
+      "verification_scope": "D盘固定旧打包输入/安装器/测试副本清理，当前3.1.0和对照3.0.5输入及所有科研运行时保护；无服务器和产品验收操作",
+      "verification": "固定路径、归属、Git忽略、无联接、活动进程、完整文件列表与SHA删除前复核；删除后10845份保护文件及6份测试收尾证据SHA保持。D盘清理时段可用空间净变化15085191168字节，逻辑长度与实测变化分别记录。当前3.1.0、对照最终3.0.5及上一正式3.0.4安装/更新包、全部运行时快照/归档、环境、模型、研究与正式地图资料、说明书原件、报告/截图/配方均保留。",
       "current_evidence": [
         "docs/project-status.md",
         "docs/development/artifact-lifecycle.md",
@@ -4682,7 +5569,7 @@
         "同期发行验收与构建由对应任务核对收尾，本轮不接管清理",
         "两处用户缓存现有内容且正式实例运行，保留；历史用途不明及非本次拒删范围继续逐项审阅"
       ],
-      "date": "2026-10-17",
+      "date": "2026-10-25",
       "public_web_versions_cleanup": {
         "date": "2026-10-17",
         "status": "verified",
@@ -4854,6 +5741,194 @@
           "Mixed manual/capture/research verification directories and hard-coded fixture dependencies retained",
           "Recent Windows 3.0.3 rollback backup and active/rollback service versions retained",
           "No product scientific/GUI/device/long-run validation rerun"
+        ]
+      },
+      "postpackage_cleanup": {
+        "date": "2026-10-19",
+        "status": "verified",
+        "summary": {
+          "success": true,
+          "date": "2026-10-19",
+          "targets": 12,
+          "files": 33494,
+          "logical_bytes": 8736983519,
+          "protected_files_sha256_unchanged": 9267,
+          "all_targets_absent": true,
+          "actual_free_increase_bytes": {
+            "C": 1827663872,
+            "D": 4895186944
+          },
+          "groups": {
+            "owned_chooser_cache": 1,
+            "old_validation_frontend": 5,
+            "old_packaging": 5,
+            "test_browser_profile": 1
+          },
+          "current_304_artifacts_match_published": true,
+          "remote_cleanup_performed": false,
+          "remote_channels": {
+            "stable": "3.0.4",
+            "preview": "3.0.4"
+          },
+          "remote_large_unused_transfers": 0,
+          "retained": [
+            "Current 3.0.4 three artifacts and build inputs/cache",
+            "Source frontend/dist and workbench storage",
+            "All necessary environments/models/research data and manual source/assets",
+            "All ownership, logs, reports, scripts, final screenshots and manifests"
+          ],
+          "scientific_gui_device_tests_rerun": false
+        },
+        "workspace_logical_bytes_after": 50944057014,
+        "inventory_errors": 0,
+        "scope": "Fixed generated residue allowlist only; required environments/models/research data and current artifacts/build caches/source workbench preserved",
+        "evidence": "output/maintenance/postpackage-plan.json；postpackage-project-results.json；postpackage-cache-results.json；postpackage-current-artifacts.json；postpackage-summary.json；postpackage-space-final.json；postpackage-remote-inspect.result.json；inventory.json",
+        "remaining": [
+          "Mixed research/runtime directories preserved",
+          "No server deletion/service operation",
+          "No product scientific/GUI/device/cross-platform acceptance rerun"
+        ],
+        "documentation_verification": "文档检查2338文件/447来源/168任务零错误，历史快照失效链接单列，定向diff检查通过"
+      },
+      "d_drive_repack_cleanup_20261024": {
+        "date": "2026-10-24",
+        "status": "verified",
+        "summary": {
+          "success": true,
+          "date": "2026-10-24",
+          "targets": 57,
+          "files": 199833,
+          "logical_bytes": 49841896315,
+          "all_targets_absent": true,
+          "observed_available_increase_bytes": 32914264064,
+          "protected_files_sha256_unchanged": 913,
+          "junction_entries_removed": 14,
+          "junction_targets_unchanged_immediately_after_unlink": true,
+          "current_305_exe_identity_unchanged": true,
+          "groups": {
+            "old_packaging": {
+              "targets": 20,
+              "logical_bytes": 9617654653
+            },
+            "old_build_payload": {
+              "targets": 10,
+              "logical_bytes": 2662959370
+            },
+            "old_test_package": {
+              "targets": 5,
+              "logical_bytes": 2488344564
+            },
+            "old_external_qa": {
+              "targets": 18,
+              "logical_bytes": 25340420819
+            },
+            "old_handoff_cache": {
+              "targets": 4,
+              "logical_bytes": 9732516909
+            }
+          },
+          "retained": [
+            "Active 3.0.5 installer verification on F: and all current input paths",
+            "Previous successful 3.0.4 installer and current/prior build cache; old EXEs concurrently removed before this cleanup are not counted",
+            "Environments, models, research data, manual originals, all necessary diagnostics and screenshots",
+            "Current M19 research resources and mixed-purpose validation directories; unrelated D-drive files"
+          ],
+          "scope": "D-drive confirmed generated package/test residues only; no environment/model/research source/server deletion",
+          "scientific_gui_device_tests_rerun": false,
+          "concurrent_old_exe_absence_count_not_counted": 2
+        },
+        "workspace_logical_bytes_after": 63322612225,
+        "inventory_errors": 0,
+        "evidence": "output/maintenance/repack-20261024-plan.json；repack-20261024-packaging-plan.json；repack-20261024-*-results.json；repack-20261024-summary.json；repack-20261024-space-final.json；repack-20261024-preflight-change.json；inventory.json",
+        "remaining": [
+          "Active 3.0.5 QA and all current inputs retained",
+          "Environments/models/research data/mixed validation retained",
+          "No server cleanup or product scientific/GUI/device/cross-platform rerun",
+          "Documentation full check: concurrent source-registry total_records 457 versus 460 actual unique sources; source registry not changed by this cleanup"
+        ],
+        "documentation_verification": "文档检查2497文件/460来源/182任务：本轮UTF8/本地链接及定向diff检查通过；全检1项未通过，同期来源登记total_records=457、实际460条且ID唯一。清理前全检来源457条零错误，本轮未修改来源登记；差异单列并保留回执。"
+      },
+      "map_blocked_cleanup": {
+        "date": "2026-10-24",
+        "status": "verified",
+        "summary": {
+          "success": true,
+          "date": "2026-10-24",
+          "targets": 7,
+          "files": 1008,
+          "logical_bytes": 100606333,
+          "all_targets_absent": true,
+          "protected_sha_verified_before_receipt_update": 52,
+          "unchanged_protected_files": 49,
+          "controlled_cleanup_receipt_updates": [
+            {
+              "path": "output/validation/geolinguistics-regions/cleanup.json",
+              "before_sha256": "f3238c66f939866340c9440feeaa3ecb465f74fc5f40685c220de6815b3f00d4",
+              "after_sha256": "e97c566058bebe3b709d44e72858963aca85fe856f27b37b74f8e5f93ac4fe61"
+            },
+            {
+              "path": "output/validation/geolinguistics-paint/cleanup.json",
+              "before_sha256": "02a66fec974fdbf936885c83f83c600d15a672250bd89c197b36395b169edc61",
+              "after_sha256": "d0cb83b44dd35e3a3560a45b042820df12a5b90dc09129bd4e00864782b3a94d"
+            },
+            {
+              "path": "output/validation/geolinguistics-broad-20261023/phonology-code-review/cleanup.json",
+              "before_sha256": "7483ad8f6b13fcf038c5958b68b57b400c6be8f41772492560fa7a322e45c614",
+              "after_sha256": "cd62c09bb370de77de22c9372cdf9a9858e55148cb448310350798d0879f1871"
+            }
+          ],
+          "frozen_map_runtime_files_unchanged": 16,
+          "observed_available_increase_bytes": -193089536,
+          "retained": [
+            "All reports/screenshots/SVG/recipes and prior blocked receipts in previous_attempt",
+            "Frozen official/candidate map data, research observations/matrices, source, environments and models"
+          ],
+          "scope": "Only six stopped province/city/county and paint QA residues plus one synthetic PDF reproduction scratch",
+          "scientific_gui_device_tests_rerun": false
+        },
+        "evidence": "output/maintenance/map-blocked-plan.json；map-blocked-preflight.json；map-blocked-results.json；map-blocked-protected.json；map-blocked-summary.json；map-blocked-space.json",
+        "scope": "Seven fixed stopped map QA payloads only; current map/research/source/environment/model paths protected",
+        "documentation_verification": "文档检查2524文件/461来源/183任务零错误，历史快照断链单列；定向diff检查通过。",
+        "remaining": [
+          "No product scientific/GUI/device/cross-platform acceptance rerun"
+        ]
+      },
+      "continued_packaging_cleanup_20261025": {
+        "status": "verified",
+        "summary": {
+          "success": true,
+          "date": "2026-10-25",
+          "targets": 34,
+          "files": 21281,
+          "logical_bytes": 15110763719,
+          "all_targets_absent": true,
+          "protected_sha256_unchanged": 10845,
+          "retained_test_evidence_sha256_unchanged": 6,
+          "observed_d_available_change": 15085191168,
+          "free_after_delete": 24549175296,
+          "started": "2026-10-24T23:58:19.8870713+08:00",
+          "finished": "2026-10-25T00:01:16.1575563+08:00",
+          "groups": {
+            "retired_build_generated": 12,
+            "retired_executable": 4,
+            "retired_installer": 5,
+            "retired_packaging": 8,
+            "retired_test_installer": 2
+          },
+          "empty_completed_scratch": 3,
+          "retained": [
+            "Current 3.1.0 and compared final 3.0.5 EXE/setup/ZIP/build inputs",
+            "Previous formal 3.0.4 setup/update and all runtime snapshots/archives",
+            "All environments/models/research/formal map data/manual originals",
+            "All original reports/logs/recipes/screenshots and retired build metadata"
+          ],
+          "scope": "D-drive fixed retired packaging payloads only; no remote operation or product acceptance rerun"
+        },
+        "evidence": "output/maintenance/continue-summary.json；continue-packaging-plan.json、continue-packaging-preflight.json、continue-packaging-results.json、continue-test-plan.json、continue-test-preflight.json、continue-test-results.json；inventory.json",
+        "documentation_verification": "文档检查2536文件/461来源/186任务零错误，历史快照断链单列；定向diff检查通过。",
+        "remaining": [
+          "Current/compared builds and all runtime snapshots retained",
+          "No product scientific/GUI/device/cross-platform rerun or server operation"
         ]
       }
     },
@@ -5069,6 +6144,86 @@
     },
     {
       "id": "WEBSITE-REDESIGN",
+      "tutorials_06_16": {
+        "status": "verified",
+        "date": "2026-10-20",
+        "scope": "按本轮明确授权查找并接入06及11至16七期B站教程，更新官网对应按钮并直接上线",
+        "changes": "六个原禁用模块启用，语谱图转音频默认播放新11期并保留专题，分集仅显示专题、本期教程并按此排序，第二集按钮移除；共13个可用频道和14条无JS视频外链。",
+        "files": [
+          "scripts/build_website_expansion.py",
+          "scripts/verify_website.cjs",
+          "temporary-site/index.html",
+          "temporary-site/site.js",
+          "temporary-site/README.md",
+          "CHANGELOG.md",
+          "docs/project-status.md",
+          "docs/testing/website-redesign.md",
+          "docs/plans/task-ledger.json"
+        ],
+        "verification": "生成幂等、Python/JS语法、七段官方元数据核对通过。候选及公网独立Chrome155五宽度的按钮、12期教程BVID/标题/外链、键盘/鼠标、单播放器/重复选择、专题切换、全屏和14条无JS链接通过。电脑及Android UA/触摸模拟最终覆盖28组真实加载及播放推进；页面错误和失败HTTP为空。已发布r940c0b4de70df6e4，仅首页和JS两文件88958压缩字节，182项资源复用，184项服务器大小/SHA及两变化资源/根首页HTTPS一致。配置/论文目录/反馈PID保持，自有scratch已清。初次手机就绪等待超时捕获媒体readyState4，验证轮询改为100ms定时，原就绪条件与45秒门槛保持，针对性复查补齐全部覆盖。 手机播放器滚入可见视口后的57帧解码及播放截图通过。",
+        "verification_scope": "Windows / 独立Chrome155 / 冻结候选及公网 / 电脑与Android UA和触摸模拟",
+        "evidence": [
+          "docs/testing/website-redesign.md",
+          "output/validation/website/tutorials-06-16-20261020/bilibili-metadata.json",
+          "output/validation/website/tutorials-06-16-20261020/completion.json",
+          "output/validation/website/tutorials-06-16-20261020/docs-validation.log",
+          "output/validation/website/tutorials-06-16-public-f36361ca270d4ef990d779bff2e0b108/public-players-combined.json",
+          "output/validation/website/tutorials-06-16-public-f36361ca270d4ef990d779bff2e0b108/https-readback.json",
+          "output/validation/website/verify-1792487083592-133620/report.json"
+        ],
+        "remaining": [
+          "实体手机、其他浏览器及完整视频时长未验"
+        ],
+        "published_release": "rfd524881c628735c",
+        "episode_selector": {
+          "status": "verified",
+          "date": "2026-10-20",
+          "changes": "仅保留专题、本期教程，专题在前，本期教程在后；第二集按钮移除，播放器及无JS专题标题同步；默认本期教程保持。",
+          "verification": "生成幂等和Python/JS语法通过；候选及公网Chrome155五宽度精确顺序/数量、键盘/鼠标切换、选中/标题/外链/重复选择/全屏及14条无JS链接通过。两视频电脑及Android UA/触摸模拟4组起播、进度和视频解码通过。184项服务器摘要和变化资源/根首页HTTPS一致，182资源保持，配置/目录/反馈PID保持，自有scratch已清。文档检查2356文件、448来源、170任务零错误，历史快照断链单列。",
+          "published_release": "rfd524881c628735c",
+          "evidence": [
+            "output/validation/website/tutorial-episode-order-20261020/completion.json",
+            "output/validation/website/tutorial-episode-order-20261020/docs-validation.log",
+            "output/validation/website/tutorial-episode-order-public-4314ee627e3c40358738d78a5b89b2e2/public.json",
+            "output/validation/website/tutorial-episode-order-public-4314ee627e3c40358738d78a5b89b2e2/public-players.json",
+            "output/validation/website/tutorial-episode-order-public-4314ee627e3c40358738d78a5b89b2e2/https-readback.json"
+          ],
+          "remaining": [
+            "实体设备、其他浏览器与完整视频时长未验"
+          ]
+        }
+      },
+      "tutorials_01_05": {
+        "status": "verified",
+        "date": "2026-10-19",
+        "scope": "按本轮明确授权把五段指定B站教程接到官网对应按钮并直接上线；只发布活动公网页面的教程差量",
+        "changes": "新增录音、唇形提取、参数估计、参数显示、EGG信号分析五段，保留介绍/语谱图转音频分集、单播放器/外链/全屏与重复选择保持；无JS七个外链，其他12模块禁用。",
+        "files": [
+          "scripts/build_website_expansion.py",
+          "scripts/verify_website.cjs",
+          "temporary-site/index.html",
+          "temporary-site/site.js",
+          "temporary-site/README.md",
+          "CHANGELOG.md",
+          "docs/project-status.md",
+          "docs/testing/website-redesign.md",
+          "docs/plans/task-ledger.json"
+        ],
+        "verification": "生成幂等、Python/JS语法和定向diff通过。候选/公网独立Chrome155五宽度：五段BVID/标题/外链、键盘/鼠标、唯一播放器/重复选择保留、分集/全屏和七条无JS外链通过。实际HTTPS/CSP电脑与Android UA/触摸模拟14组加载readyState4、播放推进通过，错误/失败请求为空。rdbdad5513312c950仅首页/JS两文件87658压缩字节，179资产复用，181项服务器SHA/两变化资源及根首页HTTPS一致；配置/目录/反馈PID保持，本地未发布内容排除，全部自有scratch已清。文档2354文件/448来源/170任务零错误，历史快照断链单列。",
+        "published_release": "rdbdad5513312c950",
+        "verification_scope": "Windows / 独立Chrome155 / 冻结候选与公网 / 电脑及Android UA和触摸模拟",
+        "evidence": [
+          "docs/testing/website-redesign.md",
+          "output/validation/website/tutorials-01-05-20261019/completion.json",
+          "output/validation/website/tutorials-01-05-20261019/docs-validation.log",
+          "output/validation/website/verify-1792411163649-41152/report.json",
+          "output/validation/website/verify-1792411196577-24088/report.json",
+          "output/validation/website/verify-1792411247861-101244/report.json"
+        ],
+        "remaining": [
+          "实体手机、其他浏览器和完整视频时长未验"
+        ]
+      },
       "tutorial_mobile_player": {
         "status": "verified",
         "date": "2026-10-18",
@@ -5729,6 +6884,69 @@
         ],
         "candidate_release": "rbca3d6f3f94fcbd3",
         "published_release": "rbca3d6f3f94fcbd3"
+      },
+      "release_vocal_video": {
+        "status": "verified",
+        "scope": "本地官网v3.0.4更新小记生理参数合成嵌入用户视频",
+        "files": [
+          "scripts/build_website_expansion.py",
+          "scripts/verify_website.cjs",
+          "temporary-site/index.html",
+          "temporary-site/site.css",
+          "temporary-site/site.js",
+          "temporary-site/assets/videos/",
+          "deployment/temporary-site/publish.py"
+        ],
+        "verification": [
+          "FFprobe: H.264/AAC、1280×720、2.36秒、662593字节",
+          "源视频与网站副本SHA256一致",
+          "HTML生成两次字节一致",
+          "本地发布包包含视频/封面/来源清单且资源前缀正确",
+          "独立Chrome155：原生键盘播放、进度跳转、版本切换暂停、音视频解码及播放结束通过，52帧/28688解码音频字节",
+          "1600/800/390/320宽度16:9无溢出、无JS原生控件与入口通过",
+          "文档检查2338文件零错误、Python/JS语法与定向diff通过",
+          "自有浏览器scratch清理deleted"
+        ],
+        "remaining": [
+          "公网未部署，须井井明确授权",
+          "Safari/Firefox和实体设备未验"
+        ],
+        "verification_scope": "Windows / 独立Chrome155 / 本地静态官网",
+        "evidence": [
+          "output/validation/website/verify-1792383658438-84444/report.json",
+          "output/validation/website/verify-1792383658438-84444/cleanup.json",
+          "output/validation/website/release-vocal-video-20261019/package-check.json"
+        ]
+      },
+      "vocal_lab_video": {
+        "date": "2026-10-19",
+        "status": "verified",
+        "scope": "用指定春江花月夜视频替换第3卡三段元音试听，不更改其他页面或旧音频字节",
+        "files": [
+          "scripts/build_website_expansion.py",
+          "temporary-site/index.html",
+          "temporary-site/site.css",
+          "temporary-site/site.js",
+          "temporary-site/assets/videos/provenance.json",
+          "scripts/verify_website.cjs",
+          "docs/plans/2026-10-19-website-vocal-video.md",
+          "temporary-site/README.md"
+        ],
+        "verification": "Windows Chrome155本地/候选/公网四宽度、视频/封面HTTP SHA、3按钮移除、原WAV保持、键盘播放暂停/跳转/结束、音视频解码、双向互斥及无JS通过。184资源服务器及六变化资源/根首页HTTPS核对、配置/目录/反馈PID保持；生成幂等/GL锁/JS语法通过，所有scratch已清。 文档2356文件/448来源/170任务零错误，旧历史断链单列，定向差异检查通过。",
+        "remaining": [
+          "实体设备/其他浏览器与主观听辨未验；本地更新小记位置未发布。"
+        ],
+        "published_release": "r192fbd47a2437145",
+        "deployed": true,
+        "current_evidence": [
+          "docs/testing/website-redesign.md#声道演示视频替换元音试听2026-10-19"
+        ],
+        "local_evidence": [
+          "output/validation/website/verify-1792423132500-30168/report.json",
+          "output/validation/website/verify-1792423310248-89576/report.json",
+          "output/validation/website/verify-1792423322303-38072/report.json",
+          "output/validation/website/vocal-lab-public-8fd5190e0c724ef5b5b9515f283c582f/completion.json"
+        ]
       }
     },
     {
@@ -6053,6 +7271,59 @@
           "D:\\PhoneticToolbox\\PhoneticToolbox_v3\\output\\validation\\website\\macos-statistics-381eab7c42f049dca7d89005feda264c"
         ],
         "cleanup": "7份本轮源码/冻结/公网及失败候选scratch回执均deleted，报告/截图/回退保留"
+      },
+      "compact_cards": {
+        "date": "2026-10-19",
+        "status": "verified",
+        "scope": "本地及公网统计卡片，曲线达到数字高度，底部独立查看状态/回到最新整行已移除；其他线上内容/资源/统计数据保持",
+        "files": [
+          "scripts/build_website_expansion.py",
+          "temporary-site/index.html",
+          "temporary-site/site.css",
+          "temporary-site/site.js",
+          "scripts/verify_website.cjs",
+          "docs/plans/2026-10-19-website-stats-cards.md",
+          "temporary-site/README.md"
+        ],
+        "verification": "Windows Chrome155候选四专项及公网卡片七宽度/鼠标/触摸模拟/键盘/刷新/失败/无JS、时间轴三宽度通过；181项服务器大小/SHA与三个变化资源/根首页HTTPS通过；178项原字节复用，配置/目录/反馈PID保持，全部自有scratch已清。生成幂等、GL音频锁、JS/Python语法及差异、文档检查通过。",
+        "remaining": [
+          "实体手机和其他浏览器、Qt及最终EXE未验，未推送Git。"
+        ],
+        "current_evidence": [
+          "docs/testing/website-redesign.md#数字与趋势合一卡片2026-10-19"
+        ],
+        "local_evidence": [
+          "output/validation/website/verify-1792418785599-40420/report.json",
+          "output/validation/website/verify-1792418635615-38448/report.json",
+          "output/validation/website/verify-1792418661142-47308/report.json",
+          "output/validation/website/verify-1792419075247-86184/report.json",
+          "output/validation/website/stats-cards-20261019/generation.json",
+          "output/validation/website/stats-cards-public-dad9d5721c524e498d6eb0e01acd5c63/completion.json",
+          "output/validation/website/verify-1792419533395-88696/report.json",
+          "output/validation/website/verify-1792419533395-105208/report.json",
+          "output/validation/website/stats-cards-public-4231d37a21c24fa2bd02f372c0423d03/completion.json",
+          "output/validation/website/verify-1792420829326-27532/report.json",
+          "output/validation/website/verify-1792420829328-116732/report.json",
+          "output/validation/website/stats-cards-public-2cd82c31fea04b28ad06510bbf10a24c/completion.json",
+          "output/validation/website/verify-1792421394318-41896/report.json",
+          "output/validation/website/verify-1792421394313-125812/report.json"
+        ],
+        "published_release": "r29eed14bdf8c6e67",
+        "deployed": true,
+        "vertical_layout": {
+          "status": "verified",
+          "date": "2026-10-19",
+          "changes": "绘图区纵向覆盖大数字行到卡片底部，文本前景保护，历史读数下移，选时/圆点按实际尺寸对齐；保留原始数值与时间坐标。",
+          "verification": "Chrome155候选四专项及公网七宽度/几何/数字无遮挡/鼠标/触摸模拟/键盘/时间轴通过；181资源服务器/变化资源及根首页HTTPS一致，178资源保持；配置/目录/反馈PID保持，scratch已清。",
+          "publication_evidence": "output/validation/website/stats-cards-public-4231d37a21c24fa2bd02f372c0423d03/completion.json"
+        },
+        "history_status_removed": {
+          "date": "2026-10-19",
+          "status": "verified",
+          "changes": "删除底部查看时间、回到最新按钮及相关HTML/CSS/事件，保留曲线内读数、四图同步及End/Escape。",
+          "verification": "候选四专项及公网卡片七宽度/时间轴通过，历史选择后确认整行不存在；181项服务器/变化资源及根首页HTTPS一致，178资源保持，配置/目录/反馈PID保持，scratch已清。",
+          "evidence": "output/validation/website/stats-cards-public-2cd82c31fea04b28ad06510bbf10a24c/completion.json"
+        }
       }
     },
     {
@@ -6118,7 +7389,7 @@
       ]
     }
   ],
-  "updated_on": "2026-10-17",
+  "updated_on": "2026-10-21",
   "current_coordination_plan": "docs/plans/2026-10-16-web-launch.md",
   "policy_target": {
     "quota_bytes": 1000000000,

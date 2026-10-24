@@ -59,3 +59,15 @@ def test_range_curve_budget(config,code):
 def test_input_hash(tmp_path):
     f=tmp_path/'public.wav';sound().save(str(f),'WAV')
     with pytest.raises(ValueError,match='changed'):read_authorized(f,'0'*64)
+
+
+@pytest.mark.parametrize('speed,ratio,hz,tag',[(.8,1.2,0,'speed-0.8_pitch-1.2x'),(1.2,1,-20,'speed-1.2_pitch--20Hz')])
+def test_variant_filename_and_actual_duration_f0(speed,ratio,hz,tag):
+    outputs=[]
+    execute(sound(),dict(action='transform',speed=speed,pitch_ratio=ratio,pitch_hz=hz),'public',emit=lambda n,s,m:outputs.append((n,s,m)))
+    name,result,meta=outputs[0]
+    assert tag in name and len(name)<=180
+    assert abs(result.duration-1/speed)<.001
+    f0=result.to_pitch().selected_array['frequency']
+    assert abs(np.median(f0[f0>0])-(150*ratio+hz))<1
+    assert meta['config']['speed']==speed

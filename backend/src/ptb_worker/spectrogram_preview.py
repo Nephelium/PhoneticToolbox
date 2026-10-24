@@ -32,6 +32,9 @@ def preview_slot():
 @memoized_preview('spectrogram')
 def render(payload,*,channel,start,end,width=800,timeout=20):
     if len(payload)>MAX_BYTES:raise PreviewError('preview_too_large',413)
+    if sys.platform=='darwin':
+        from .native.darwin import preview
+        return preview('spectrogram',dict(size=len(payload),channel=channel,start=start,end=end,width=width),payload,timeout=timeout,output_bytes=512064)
     if sys.platform=='linux':
         return _render_linux(payload,channel=channel,start=start,end=end,width=width,timeout=timeout)
     if os.name!='nt':raise PreviewError('preview_platform_unverified',503)

@@ -4,12 +4,14 @@ export function editableTier(grid:Grid,tier:AnnotationTier):boolean {
  return !!tier.intervals&&(tier.xmin??grid.xmin)===0&&Math.abs((tier.xmax??grid.xmax)-grid.xmax)<=1e-6;
 }
 // Preferences only select names that actually exist in this document.
-export function editingNames(grid:Grid,preferred:{word?:string;phone?:string}={}) {
+export function editingNames(grid:Grid,preferred:{word?:string;phone?:string;extra?:string}={}) {
  const tiers=grid.tiers.filter(t=>editableTier(grid,t)),names=tiers.map(t=>t.name);
  const match=(list:string[])=>names.find(n=>list.includes(n.toLowerCase()));
  const phone=names.includes(preferred.phone??'')?preferred.phone!:match(['phones','phonemes','音素']);
  const word=names.includes(preferred.word??'')&&preferred.word!==phone?preferred.word!:match(['syllables','words','音节','词'])??names.find(n=>n!==phone)??'';
- return {word,phone:phone&&phone!==word?phone:names.find(n=>n!==word)??''};
+ const second=phone&&phone!==word?phone:names.find(n=>n!==word)??'';
+ const extra=preferred.extra===''?'':names.includes(preferred.extra??'')&&preferred.extra!==word&&preferred.extra!==second?preferred.extra!:names.find(n=>n!==word&&n!==second)??'';
+ return {word,phone:second,extra};
 }
 export function newIntervalTiers(grid:Grid,names:string[]):AnnotationTier[] {
  const clean=names.map(n=>n.trim());

@@ -7,6 +7,9 @@ from .store import JobError,LOCAL_PROJECT,canonical,core_version,adapter_version
 from ptb_api.m07_models import M07Request
 
 def capability(store):
+    if sys.platform=='darwin':
+        from .native.darwin import capability as mac_capability
+        return bool(getattr(store,'files',None)) and mac_capability('phonation_synthesis')
     if sys.platform=='linux':
         from .native.capabilities import linux_capabilities
         return 'phonation_synthesis' in linux_capabilities(store)[0]
@@ -23,8 +26,9 @@ def submit(store,owner,body,*,retry_of=None):
         from .native.reaper import REAPER_SHA256
         binary=Path(getattr(store.files,'reaper_binary',None) or '')
         expected=REAPER_SHA256
-        if sys.platform=='linux':
-            from .native.linux_runtime import load_profile
+        if sys.platform in ('linux','darwin'):
+            if __import__('sys').platform=='darwin': from .native.darwin import load_profile
+            else: from .native.linux_runtime import load_profile
             _,profile=load_profile()
             expected=profile['hashes'].get(str(binary)) if str(binary)==profile.get('reaper_binary') else None
         if not expected or not binary.is_file() or binary.stat().st_size>16_000_000 or hashlib.sha256(binary.read_bytes()).hexdigest()!=expected:raise JobError('m07_reaper_unavailable',503)

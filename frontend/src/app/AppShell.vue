@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import {webSettingsError,retryWebSettings} from '../state/web-settings.ts';
 import {installBackgroundAppearance} from '../state/background.ts';
-import { ref,computed,watch,onMounted,onUnmounted,nextTick } from 'vue';import { groups,modules } from './registry.ts';import { host,workspace,states,saveDraft } from '../state/workspace.ts';import { stop } from '../state/audio.ts';
+import { ref,computed,watch,onMounted,onUnmounted,nextTick } from 'vue';import { groups,modules as registeredModules } from './registry.ts';import { host,workspace,states,saveDraft } from '../state/workspace.ts';import { stop } from '../state/audio.ts';
 import ModuleFrame from '../components/ModuleFrame.vue';
 import WebModuleSeal from '../components/WebModuleSeal.vue';
 import HelpPage from './HelpPage.vue';
 import StorageSettings from '../components/StorageSettings.vue';
 import IconSettings from '../components/IconSettings.vue';
+import AudioSettings from '../components/AudioSettings.vue';
+import AnnouncementsPanel from '../components/AnnouncementsPanel.vue';
+import {announcements,announcementPlatform,type Announcement} from '../platform/announcements.ts';
+import {loadAuditionSettings} from '../state/audition.ts';
 import {applicationIcon as logo,homeIconScale} from '../state/app-icon.ts';
 import {storageAvailable} from '../platform/storage.ts';
 import UpdatePanel from '../components/UpdatePanel.vue';
@@ -39,6 +43,9 @@ import ModuleStatus from '../components/ModuleStatus.vue';
 const PerceptionPage=defineAsyncComponent({loader:()=>import('../modules/perception/PerceptionPage.vue'),loadingComponent:{setup:()=>()=>h(ModuleStatus,{kind:'loading',message:'正在载入感知实验…'})},errorComponent:{setup:()=>()=>h(ModuleStatus,{kind:'error',message:'感知实验资源载入失败，请检查连接后重开标签。'})}});
 const m15Page=ref<{save:()=>Promise<boolean>;updateBlocked:()=>boolean}>();const m15Dirty=ref(false),m15Focus=ref(false);
 const RecordingPage=defineAsyncComponent({loader:()=>import('../modules/recording/RecordingPage.vue'),loadingComponent:{setup:()=>()=>h(ModuleStatus,{kind:'loading',message:'正在载入录音工作台…'})},errorComponent:{setup:()=>()=>h(ModuleStatus,{kind:'error',message:'录音工作台载入失败，请重新打开标签。'})}});
+const GeolinguisticsPage=defineAsyncComponent(()=>import('../modules/geolinguistics/GeolinguisticsPage.vue'));
+const m19Page=ref<InstanceType<typeof GeolinguisticsPage>>(),m19Dirty=ref(false);
+const modules=registeredModules;
 const PaperReadingPage=defineAsyncComponent(()=>import('../modules/paper-reading/PaperReadingPage.vue'));
 const IpaPlusPage=defineAsyncComponent({loader:()=>import('../modules/ipa-plus/IpaPlusPage.vue'),loadingComponent:{setup:()=>()=>h(ModuleStatus,{kind:'loading',message:'正在载入国际音标表…'})},errorComponent:{setup:()=>()=>h(ModuleStatus,{kind:'error',message:'音标与字体资源载入失败，请重新打开标签。'})}});
 const m16Page=ref<{save:()=>Promise<boolean>;beforeClose:()=>Promise<boolean>;isRecording:()=>boolean}>();
@@ -82,12 +89,12 @@ onUnmounted(()=>releaseDesktopViewport?.());
 let releaseWebFeedback:(()=>void)|undefined;
 watch(()=>researchContext.value.ownerId,owner=>{releaseWebFeedback?.();releaseWebFeedback=researchContext.value.files.kind==='server'&&owner?installWebFeedback(owner,()=>props.research?.files.feedbackCsrf?.()??''):undefined;},{immediate:true});
 onUnmounted(()=>releaseWebFeedback?.());
-watch(()=>props.research?.ownerId,owner=>{void selectFontOwner(owner);},{immediate:true});
+watch(()=>props.research?.ownerId,owner=>{loadAuditionSettings();void selectFontOwner(owner);},{immediate:true});
 const previewKey=(id:string)=>props.research?researchContext.value.key.replace(/:M01$/,':'+id):id;
 const m01=computed(()=>m01State(researchContext.value.key));
 const m10Dirty=ref(false);
 const settingsPage=ref<{save:()=>Promise<boolean>}>(),settingsDirty=ref(false);
-const settingsSections=[{id:'appearance',label:'外观'},{id:'fonts',label:'字体'},{id:'icons',label:'图标'},{id:'storage',label:'本机存储与自动清理'}] as const;
+const settingsSections=[{id:'appearance',label:'外观'},{id:'fonts',label:'字体'},{id:'icons',label:'图标'},{id:'audio',label:'音频'},{id:'storage',label:'本机存储与自动清理'}] as const;
 const settingsSection=ref<(typeof settingsSections)[number]['id']>('appearance');
 function navigateSettings(event:KeyboardEvent,index:number){
  const offset=event.key==='ArrowRight'?1:event.key==='ArrowLeft'?-1:0;
@@ -102,7 +109,7 @@ const m03Page=ref<{save:()=>boolean}>();
 const SpeechSynthesisPage=defineAsyncComponent(()=>import('../modules/speech-synthesis/SpeechSynthesisPage.vue'));
 const PhonationSynthesisPage=defineAsyncComponent(()=>import('../modules/phonation-synthesis/PhonationSynthesisPage.vue'));
 const m07Page=ref<{save:()=>boolean}>();
-const m06Page=ref<{save:()=>boolean}>();
+const m06Page=ref<{save:()=>Promise<boolean>;hasPendingSave:()=>boolean;discardPendingSave:()=>void}>();
 const m08Page=ref<{save:()=>boolean}>();
 const m09Page=ref<{save:()=>boolean}>();
 const m04Page=ref<{save:()=>boolean}>();
@@ -110,7 +117,7 @@ const m12Page=ref<{save:()=>Promise<boolean>}>();
 const m02Page=ref<{save:()=>boolean}>();
 const m13Page=ref<{save:()=>boolean}>();
 const m13Dirty=ref(false);
-const moduleDirty=(id:string)=>id==='settings'?settingsDirty.value:id==='M16'?m16Dirty.value||m16Recording.value:id==='M17'?m17Dirty.value:id==='M05'?m05Dirty.value:id==='M11'?m11Dirty.value:id==='M15'?m15Dirty.value:id==='M14'?m14Dirty.value:id==='M13'?m13Dirty.value:id==='M10'?m10Dirty.value:id==='M01'?dirty(m01.value):!!states[previewKey(id)]?.dirty;
+const moduleDirty=(id:string)=>id==='settings'?settingsDirty.value:id==='M16'?m16Dirty.value||m16Recording.value:id==='M19'?m19Dirty.value:id==='M17'?m17Dirty.value:id==='M05'?m05Dirty.value:id==='M11'?m11Dirty.value:id==='M15'?m15Dirty.value:id==='M14'?m14Dirty.value:id==='M13'?m13Dirty.value:id==='M10'?m10Dirty.value:id==='M01'?dirty(m01.value):id==='M06'?!!states[previewKey(id)]?.dirty||!!m06Page.value?.hasPendingSave():!!states[previewKey(id)]?.dirty;
 const initialModule=modules.find(m=>location.hash==='#'+m.id)?.id;
 const active=ref(initialModule??'home'),tabs=ref<string[]>(initialModule?['home',initialModule]:['home']),query=ref('');const collapsed=ref(host.projects.read('collapsed',false));
 const theme=ref<ThemeMode>(normalizeMode(host.projects.read('theme','system')));
@@ -127,6 +134,40 @@ function openManual(moduleId?:string,targetId?:string){if(m15Focus.value)return;
 function contextualHelp(event:MouseEvent){const button=event.target instanceof Element?event.target.closest('button'):null;if(current.value&&button&&!button.disabled&&isModuleHelpLabel(button.textContent??'')){event.preventDefault();event.stopPropagation();openManual(current.value.id);}}
 function returnFromManual(){if(manualOrigin.value)open(manualOrigin.value);}
 const modal=ref(''),closing=ref(''),notice=ref(''),closingBusy=ref(false);const referencesId=ref<string|undefined>();
+const announcementService=announcements(version.app_version,announcementPlatform(host.kind==='desktop',navigator.userAgent));
+const announcementItems=ref<Announcement[]>([]),automaticAnnouncement=ref<Announcement>(),announcementCenter=ref(false),announcementsReady=ref(false),announcementRevision=ref(0);
+const unreadAnnouncementIds=computed(()=>{void announcementRevision.value;return announcementItems.value.filter(item=>!announcementService.isRead(item.id)).map(item=>item.id);});
+let announcementClaiming=false,announcementMounted=false,announcementTimer:ReturnType<typeof setTimeout>|undefined,announcementObserver:MutationObserver|undefined,unsubscribeAnnouncements:(()=>void)|undefined;
+function announcementTaskSafe(){return active.value==='home'&&!modal.value&&!closing.value&&!closingBusy.value&&!updateClosing.value&&!m16Recording.value&&!m15Focus.value&&!captureOwner()&&!m15Page.value?.updateBlocked()&&!document.hidden;}
+function stopAnnouncementWaiters(){announcementObserver?.disconnect();clearTimeout(announcementTimer);announcementTimer=undefined;}
+function announcementCandidate(){return announcementMounted&&active.value==='home'&&!document.hidden&&!automaticAnnouncement.value&&!announcementCenter.value&&announcementsReady.value&&unreadAnnouncementIds.value.length>0&&announcementService.automaticAvailable;}
+function waitForAnnouncementSafety(){
+ if(!announcementCandidate())return;
+ if(document.querySelector('dialog[open],[aria-modal="true"]')){announcementObserver??=new MutationObserver(()=>void checkAnnouncements());announcementObserver.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['open','aria-modal']});}
+ if(captureOwner()||m15Page.value?.updateBlocked())announcementTimer=setTimeout(()=>void checkAnnouncements(),750);
+}
+async function checkAnnouncements(){
+ if(!announcementMounted)return;
+ stopAnnouncementWaiters();
+ if(automaticAnnouncement.value&&!announcementTaskSafe()){automaticAnnouncement.value=undefined;announcementService.release();}
+ if(announcementClaiming||!announcementCandidate())return;
+ if(!announcementTaskSafe()||document.querySelector('dialog[open],[aria-modal="true"]')){waitForAnnouncementSafety();return;}
+ announcementClaiming=true;
+ try{const item=await announcementService.claimNext();if(!item)return;if(!announcementMounted||!announcementTaskSafe()||announcementCenter.value||document.querySelector('dialog[open],[aria-modal="true"]')){announcementService.release();return;}automaticAnnouncement.value=item;}
+ finally{announcementClaiming=false;waitForAnnouncementSafety();}
+}
+function refreshAnnouncements(){announcementItems.value=announcementService.items;announcementsReady.value=announcementService.ready;announcementRevision.value++;void checkAnnouncements();}
+function closeAnnouncements(){const ids=automaticAnnouncement.value?[automaticAnnouncement.value.id]:announcementItems.value.map(item=>item.id);automaticAnnouncement.value=undefined;announcementCenter.value=false;announcementService.acknowledge(ids);}
+function announcementAction(id:string){announcementService.acknowledge([id]);if(automaticAnnouncement.value?.id===id)automaticAnnouncement.value=undefined;}
+function openAnnouncements(){if(m15Focus.value)return;announcementCenter.value=true;stopAnnouncementWaiters();refreshAnnouncements();}
+function announcementPageHidden(){automaticAnnouncement.value=undefined;announcementService.release();stopAnnouncementWaiters();}
+function announcementStorageChanged(event:StorageEvent){if(event.key?.startsWith('ptb.v3.announcements.'))refreshAnnouncements();}
+onMounted(()=>{
+ announcementMounted=true;unsubscribeAnnouncements=announcementService.subscribe(refreshAnnouncements);refreshAnnouncements();void announcementService.load();
+ window.addEventListener('storage',announcementStorageChanged);window.addEventListener('pagehide',announcementPageHidden);window.addEventListener('pageshow',refreshAnnouncements);document.addEventListener('visibilitychange',refreshAnnouncements);
+});
+watch([active,modal,closing,closingBusy,m16Recording,m15Focus],()=>void checkAnnouncements(),{flush:'post'});
+onUnmounted(()=>{announcementMounted=false;unsubscribeAnnouncements?.();stopAnnouncementWaiters();window.removeEventListener('storage',announcementStorageChanged);window.removeEventListener('pagehide',announcementPageHidden);window.removeEventListener('pageshow',refreshAnnouncements);document.removeEventListener('visibilitychange',refreshAnnouncements);announcementService.release();});
 const updateCheck=ref<UpdateCheck>();
 const updateClosing=ref(''),updateReady=ref(false);
 function cancelClose(){closing.value='';if(updateClosing.value){replyUpdateClose(updateClosing.value,false);updateClosing.value='';updateReady.value=false;}}
@@ -146,8 +187,8 @@ const stopUpdateClose=onUpdatePrepareClose(token=>{
 const stopUpdateCancel=onUpdateCloseCancelled(token=>{if(updateClosing.value===token){updateClosing.value='';updateReady.value=false;closing.value='';}});
 watch([closing,closingBusy],()=>{if(updateClosing.value&&!closing.value&&!closingBusy.value)void nextTick(continueUpdateClose);});
 onUnmounted(()=>{if(updateClosing.value)replyUpdateClose(updateClosing.value,false);stopUpdateClose();stopUpdateCancel();});
-function open(id:string){if(m15Focus.value)return;stop();if(!tabs.value.includes(id))tabs.value.push(id);active.value=id;void nextTick(()=>document.getElementById('tab-'+id)?.scrollIntoView({block:'nearest',inline:'nearest'}));if(modules.some(m=>m.id===id)){if(!['M01','M16','M17','M18'].includes(id))workspace(previewKey(id));recent.value=[id,...recent.value.filter(x=>x!==id)].slice(0,5);host.projects.write('recent',recent.value);}}
-function remove(id:string){stop();if(id==='M16'){m16Dirty.value=false;m16Recording.value=false;}if(id==='M17')m17Dirty.value=false;if(id==='settings')settingsDirty.value=false;if(id==='M05')m05Dirty.value=false;if(id==='M11')m11Dirty.value=false;if(id==='M15'){m15Dirty.value=false;m15Focus.value=false;}if(id==='M14')m14Dirty.value=false;if(id==='M13')m13Dirty.value=false;if(id==='M10')m10Dirty.value=false;const index=tabs.value.indexOf(id);tabs.value=tabs.value.filter(x=>x!==id);if(id==='M01')forgetM01(researchContext.value.key);else if(modules.some(m=>m.id===id))delete states[previewKey(id)];if(active.value===id)active.value=tabs.value[Math.max(0,index-1)];closing.value='';void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
+function open(id:string){if(m15Focus.value)return;stop();if(!tabs.value.includes(id))tabs.value.push(id);active.value=id;void nextTick(()=>document.getElementById('tab-'+id)?.scrollIntoView({block:'nearest',inline:'nearest'}));if(modules.some(m=>m.id===id)){if(!['M01','M16','M17','M18','M19'].includes(id))workspace(previewKey(id));recent.value=[id,...recent.value.filter(x=>x!==id)].slice(0,5);host.projects.write('recent',recent.value);}}
+function remove(id:string){stop();if(id==='M16'){m16Dirty.value=false;m16Recording.value=false;}if(id==='M17')m17Dirty.value=false;if(id==='M19')m19Dirty.value=false;if(id==='settings')settingsDirty.value=false;if(id==='M05')m05Dirty.value=false;if(id==='M11')m11Dirty.value=false;if(id==='M15'){m15Dirty.value=false;m15Focus.value=false;}if(id==='M14')m14Dirty.value=false;if(id==='M13')m13Dirty.value=false;if(id==='M10')m10Dirty.value=false;const index=tabs.value.indexOf(id);tabs.value=tabs.value.filter(x=>x!==id);if(id==='M01')forgetM01(researchContext.value.key);else if(modules.some(m=>m.id===id))delete states[previewKey(id)];if(active.value===id)active.value=tabs.value[Math.max(0,index-1)];closing.value='';void nextTick(()=>document.getElementById('tab-'+active.value)?.focus());}
 async function finishRecordingClose(){
  if(closingBusy.value)return;
  closingBusy.value=true;notice.value='';
@@ -156,10 +197,10 @@ async function finishRecordingClose(){
  finally{closingBusy.value=false;}
 }
 function close(id:string){notice.value='';if(id==='M16'){closing.value=id;if(!moduleDirty(id))void finishRecordingClose();return;}if(moduleDirty(id))closing.value=id;else remove(id);}
-async function discardClose(){if(closing.value==='M16'){await finishRecordingClose();return;}remove(closing.value);}
+async function discardClose(){if(closing.value==='M16'){await finishRecordingClose();return;}if(closing.value==='M06'){try{m06Page.value?.discardPendingSave();}catch(error){notice.value=error instanceof Error?error.message:'待保存结果仍保留，请返回模块处理。';return;}}remove(closing.value);}
 
-async function saveClose(){if(closing.value==='M09'){cancelClose();return;}if(closing.value==='M16'){await finishRecordingClose();return;}if(closing.value==='M17'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m17Page.value?.save())remove('M17');else notice.value='音标草稿保存失败，文本仍保留。';}catch(error){notice.value=error instanceof Error?error.message:'音标草稿保存失败。';}finally{closingBusy.value=false;}return;}if(closing.value==='settings'){if(closingBusy.value)return;closingBusy.value=true;try{if(await settingsPage.value?.save())remove('settings');else notice.value='字体未能应用，设置和编辑已保留。请检查字体设置后重试。';}finally{closingBusy.value=false;}return;}if(closing.value==='M07'){if(m07Page.value?.save())remove('M07');else notice.value='发声连续统草稿未保存，请完成或取消当前操作。';return;}if(closing.value==='M05'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m05Page.value?.save())remove('M05');else notice.value='录制或结果尚未保存，请返回唇形模块处理。';}finally{closingBusy.value=false;}return;}if(closing.value==='M11'){if(m11Page.value?.save())remove('M11');else notice.value='MFA 参数未保存，请等待当前操作完成。';return;}if(closing.value==='M15'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m15Page.value?.save())remove('M15');else notice.value='请先暂停实验、保存项目，并导出结果后确认文件已保存。';}finally{closingBusy.value=false;}return;}if(closing.value==='M06'){if(m06Page.value?.save())remove('M06');else notice.value='声学参数合成参数未保存，标签和编辑仍保留。';return;}if(closing.value==='M14'){if(m14Page.value?.save())remove('M14');else notice.value='音系归纳草稿保存失败，请完成当前操作或检查本机存储。';return;}if(closing.value==='M08'){if(m08Page.value?.save())remove('M08');else notice.value='变速变调草稿保存失败，标签和编辑仍保留。';return;}if(closing.value==='M13'){if(m13Page.value?.save())remove('M13');else notice.value='汉字转国际音标 草稿保存失败，当前文本和排版仍保留。请检查本机存储后重试。';return;}if(closing.value==='M12'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m12Page.value?.save())remove('M12');else notice.value='标注或唇偏保存失败，编辑仍保留。请返回模块检查错误。';}finally{closingBusy.value=false;}return;}if(closing.value==='M04'){if(m04Page.value?.save())remove('M04');else notice.value='LPC 参数草稿无效或保存失败，请返回模块检查。';return;}if(closing.value==='M03'){if(m03Page.value?.save())remove('M03');else notice.value='参数草稿保存失败，标签和编辑仍保留。请检查本机存储后重试。';return;}if(closing.value==='M02'){if(m02Page.value?.save())remove('M02');return;}if(closing.value==='M10'){notice.value='请返回关键帧，保存或取消正在编辑的姿势后再关闭。';return;}if(closing.value==='M01'&&m01.value.drawer){notice.value='请先应用或取消参数/设置对话框中的编辑，再保存关闭。';return;}if(closing.value==='M01'?saveM01(researchContext.value.key):saveDraft(previewKey(closing.value)))remove(closing.value);else notice.value='本机草稿保存失败，标签仍保留。请检查浏览器存储权限。';}
-async function leaveProject(){if(closingBusy.value||m15Focus.value)return;closingBusy.value=true;try{if(m16Page.value&&!await m16Page.value.beforeClose())return;if(moduleDirty('M17')&&!await m17Page.value?.save())return;if(settingsDirty.value&&!await settingsPage.value?.save())return;if(moduleDirty('M07')&&!m07Page.value?.save())return;if(moduleDirty('M05')&&!await m05Page.value?.save())return;if(moduleDirty('M11')&&!m11Page.value?.save())return;if(moduleDirty('M15')&&!await m15Page.value?.save())return;if(moduleDirty('M06')&&!m06Page.value?.save())return;if(moduleDirty('M14')&&!m14Page.value?.save())return;if(moduleDirty('M08')&&!m08Page.value?.save())return;if(moduleDirty('M09')&&!m09Page.value?.save())return;if(m12Page.value&&!await m12Page.value.save())return;emit('leaveProject');}finally{closingBusy.value=false;}}
+async function saveClose(){if(closing.value==='M19'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m19Page.value?.save())remove('M19');else notice.value='地图工程尚未保存，请重试或导出工程。';}finally{closingBusy.value=false;}return;}if(closing.value==='M09'){cancelClose();return;}if(closing.value==='M16'){await finishRecordingClose();return;}if(closing.value==='M17'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m17Page.value?.save())remove('M17');else notice.value='音标草稿保存失败，文本仍保留。';}catch(error){notice.value=error instanceof Error?error.message:'音标草稿保存失败。';}finally{closingBusy.value=false;}return;}if(closing.value==='settings'){if(closingBusy.value)return;closingBusy.value=true;try{if(await settingsPage.value?.save())remove('settings');else notice.value='字体未能应用，设置和编辑已保留。请检查字体设置后重试。';}finally{closingBusy.value=false;}return;}if(closing.value==='M07'){if(m07Page.value?.save())remove('M07');else notice.value='发声连续统草稿未保存，请完成或取消当前操作。';return;}if(closing.value==='M05'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m05Page.value?.save())remove('M05');else notice.value='录制或结果尚未保存，请返回唇形模块处理。';}finally{closingBusy.value=false;}return;}if(closing.value==='M11'){if(m11Page.value?.save())remove('M11');else notice.value='MFA 参数未保存，请等待当前操作完成。';return;}if(closing.value==='M15'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m15Page.value?.save())remove('M15');else notice.value='请先暂停实验、保存项目，并导出结果后确认文件已保存。';}finally{closingBusy.value=false;}return;}if(closing.value==='M06'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m06Page.value?.save())remove('M06');else notice.value='声学参数或合成结果未保存，标签和编辑仍保留。';}finally{closingBusy.value=false;}return;}if(closing.value==='M14'){if(m14Page.value?.save())remove('M14');else notice.value='音系归纳草稿保存失败，请完成当前操作或检查本机存储。';return;}if(closing.value==='M08'){if(m08Page.value?.save())remove('M08');else notice.value='变速变调草稿保存失败，标签和编辑仍保留。';return;}if(closing.value==='M13'){if(m13Page.value?.save())remove('M13');else notice.value='汉字转国际音标 草稿保存失败，当前文本和排版仍保留。请检查本机存储后重试。';return;}if(closing.value==='M12'){if(closingBusy.value)return;closingBusy.value=true;try{if(await m12Page.value?.save())remove('M12');else notice.value='标注或唇偏保存失败，编辑仍保留。请返回模块检查错误。';}finally{closingBusy.value=false;}return;}if(closing.value==='M04'){if(m04Page.value?.save())remove('M04');else notice.value='LPC 参数草稿无效或保存失败，请返回模块检查。';return;}if(closing.value==='M03'){if(m03Page.value?.save())remove('M03');else notice.value='参数草稿保存失败，标签和编辑仍保留。请检查本机存储后重试。';return;}if(closing.value==='M02'){if(m02Page.value?.save())remove('M02');return;}if(closing.value==='M10'){notice.value='请返回关键帧，保存或取消正在编辑的姿势后再关闭。';return;}if(closing.value==='M01'&&m01.value.drawer){notice.value='请先应用或取消参数/设置对话框中的编辑，再保存关闭。';return;}if(closing.value==='M01'?saveM01(researchContext.value.key):saveDraft(previewKey(closing.value)))remove(closing.value);else notice.value='本机草稿保存失败，标签仍保留。请检查浏览器存储权限。';}
+async function leaveProject(){if(closingBusy.value||m15Focus.value)return;closingBusy.value=true;try{if(m16Page.value&&!await m16Page.value.beforeClose())return;if(moduleDirty('M17')&&!await m17Page.value?.save())return;if(settingsDirty.value&&!await settingsPage.value?.save())return;if(moduleDirty('M07')&&!m07Page.value?.save())return;if(moduleDirty('M05')&&!await m05Page.value?.save())return;if(moduleDirty('M11')&&!m11Page.value?.save())return;if(moduleDirty('M15')&&!await m15Page.value?.save())return;if(moduleDirty('M06')&&!await m06Page.value?.save())return;if(moduleDirty('M14')&&!m14Page.value?.save())return;if(moduleDirty('M08')&&!m08Page.value?.save())return;if(moduleDirty('M13')&&!m13Page.value?.save())return;if(moduleDirty('M09')&&!m09Page.value?.save())return;if(m12Page.value&&!await m12Page.value.save())return;emit('leaveProject');}finally{closingBusy.value=false;}}
 function refs(id?:string){referencesId.value=id;modal.value='references';}
 function titleDrag(event:PointerEvent){if(event.button===0&&!(event.target as HTMLElement).closest('button,input,a,[role=separator]'))desktopWindowAction('move');}
 function titleDoubleClick(event:MouseEvent){if(!(event.target as HTMLElement).closest('button,input,a'))desktopWindowAction('maximize');}
@@ -202,6 +243,7 @@ const modalTitle=computed(()=>({update:updateCheck.value?.candidate?'发现新�
 <p v-if="!visible.length" class="empty-small">没有匹配的工具</p>
 </nav>
 <div class="sidebar-bottom">
+<button type="button" class="announcement-entry" title="公告" @click="openAnnouncements"><AppIcon name="info"/><span>公告</span><small v-if="unreadAnnouncementIds.length" aria-label="有未读公告">{{unreadAnnouncementIds.length}}</small></button>
 <div class="utility-grid">
 <button v-for="[key,label,icon] in [['settings','设置','settings'],['help','使用说明','book'],['about','关于','info'],['update','检查更新','update']]" :key="key" :title="label" @click="key==='help'?openManual(current?.id):key==='settings'?open(key):modal=key">
 <AppIcon :name="icon"/>
@@ -231,7 +273,7 @@ const modalTitle=computed(()=>({update:updateCheck.value?.candidate?'发现新�
 <button class="window-close" aria-label="关闭窗口" @click="desktopWindowAction('close')"><AppIcon name="close"/></button>
 </div>
 </header>
-<main id="main-content" :class="{'pane-home':active==='home','pane-manual':active==='help','pane-workspace':['M01','M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15','M16','M17','M18'].includes(active)}" tabindex="-1" role="tabpanel" :aria-labelledby="'tab-'+active" @click.capture="contextualHelp">
+<main id="main-content" :class="{'pane-home':active==='home','pane-manual':active==='help','pane-workspace':['M01','M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15','M16','M17','M18','M19'].includes(active)}" tabindex="-1" role="tabpanel" :aria-labelledby="'tab-'+active" @click.capture="contextualHelp">
 <div v-if="active==='home'" class="home-page">
 <header class="welcome">
 <div class="welcome-copy">
@@ -288,7 +330,7 @@ const modalTitle=computed(()=>({update:updateCheck.value?.candidate?'发现新�
 <span>打开帮助 →</span>
 </button>
 </div>
-<WorkspaceView v-else-if="current&&!['M01','M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15','M16','M17','M18'].includes(current.id)" :key="current.id" :module="current" :state-key="previewKey(current.id)" @references="refs(current?.id)"/>
+<WorkspaceView v-else-if="current&&!['M01','M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15','M16','M17','M18','M19'].includes(current.id)" :key="current.id" :module="current" :state-key="previewKey(current.id)" @references="refs(current?.id)"/>
 <ParameterEstimationPage v-if="tabs.includes('M01')" v-show="active==='M01'" :key="researchContext.key" :context="researchContext" :active="active==='M01'" @references="refs('M01')" @help="openManual('M01')"/>
 <ParameterDisplayPage v-if="tabs.includes('M02')" v-show="active==='M02'" ref="m02Page" :key="researchContext.key+':M02'" :active="active==='M02'" :context="researchContext" :state-key="previewKey('M02')" @references="refs('M02')" @help="openManual('M02')" @close="close('M02')"/>
 <AnnotationPage v-if="tabs.includes('M12')" v-show="active==='M12'" ref="m12Page" :key="researchContext.key+':M12'" :active="active==='M12'" :context="researchContext" :state-key="previewKey('M12')" @references="refs('M12')" @help="openManual('M12')" @close="close('M12')"/>
@@ -304,7 +346,8 @@ const modalTitle=computed(()=>({update:updateCheck.value?.candidate?'发现新�
 <PhonologyInductionPage v-if="tabs.includes('M14')" v-show="active==='M14'" ref="m14Page" :key="researchContext.key+':M14'" :state-key="previewKey('M14')" :context="researchContext" :active="active==='M14'" @references="refs('M14')" @dirty="m14Dirty=$event"/>
 <MandarinIpaPage v-if="tabs.includes('M13')" v-show="active==='M13'" ref="m13Page" :key="researchContext.key+':M13'" :state-key="previewKey('M13')" @references="refs('M13')" @help="openManual('M13')" @dirty="m13Dirty=$event"/>
 <RecordingPage v-if="tabs.includes('M16')" v-show="active==='M16'" ref="m16Page" :key="researchContext.key" :context="researchContext" :state-key="research ? previewKey('M16') : 'local:M16'" :active="active==='M16'" @dirty="m16Dirty=$event" @recording="recordingChanged" @references="refs('M16')" @help="openManual('M16')"/>
-<PaperReadingPage v-if="tabs.includes('M18')" v-show="active==='M18'" :state-key="previewKey('M18')" :port="researchContext.files.papers" :active="active==='M18'" @help="openManual('M18')"/>
+<GeolinguisticsPage v-if="tabs.includes('M19')" v-show="active==='M19'" ref="m19Page" :key="researchContext.key+':M19'" :state-key="previewKey('M19')" :active="active==='M19'" @dirty="m19Dirty=$event" @references="refs('M19')" @help="openManual('M19')"/>
+<PaperReadingPage v-if="tabs.includes('M18')" v-show="active==='M18'" :key="researchContext.key+':M18'" :state-key="previewKey('M18')" :port="researchContext.files.papers" :active="active==='M18'" @help="openManual('M18')"/>
 <IpaPlusPage v-if="tabs.includes('M17')" v-show="active==='M17'" ref="m17Page" :key="previewKey('M17')" :state-key="research ? previewKey('M17') : 'local:M17'" :active="active==='M17'" @dirty="m17Dirty=$event" @references="refs('M17')"/>
 <PerceptionPage v-if="tabs.includes('M15')" v-show="active==='M15'" ref="m15Page" :key="previewKey('M15')" :storage-scope="research ? previewKey('M15') : undefined" :active="active==='M15'" @dirty="m15Dirty=$event" @focus="m15Focus=$event" @references="refs('M15')"/>
 <VocalTractPage :context="researchContext" :state-key="previewKey('M10')" v-if="tabs.includes('M10')" v-show="active==='M10'" :active="active==='M10'" @references="refs('M10')" @help="openManual('M10')" @close="close('M10')" @dirty="m10Dirty=$event"/>
@@ -315,16 +358,17 @@ const modalTitle=computed(()=>({update:updateCheck.value?.candidate?'发现新�
 <div id="settings-panel-appearance" v-show="settingsSection==='appearance'" class="settings-panel" role="tabpanel" aria-labelledby="settings-tab-appearance" tabindex="0"><AppearanceSettings v-model:mode="theme" v-model:palette="palette"/></div>
 <div id="settings-panel-fonts" v-show="settingsSection==='fonts'" class="settings-panel" role="tabpanel" aria-labelledby="settings-tab-fonts" tabindex="0"><FontSettings ref="settingsPage" @dirty="settingsDirty=$event"/></div>
 <div id="settings-panel-icons" v-show="settingsSection==='icons'" class="settings-panel" role="tabpanel" aria-labelledby="settings-tab-icons" tabindex="0"><IconSettings :active="settingsSection==='icons'"/></div>
+<div id="settings-panel-audio" v-show="settingsSection==='audio'" class="settings-panel" role="tabpanel" aria-labelledby="settings-tab-audio" tabindex="0"><AudioSettings/></div>
 <div id="settings-panel-storage" v-show="settingsSection==='storage'" class="settings-panel" role="tabpanel" aria-labelledby="settings-tab-storage" tabindex="0"><StorageSettings v-if="storageAvailable"/><p v-else class="settings-card muted" role="status">本机存储与自动清理在桌面版中提供。请打开桌面工作台管理本机缓存。</p></div>
 </ModuleFrame>
 <HelpPage v-if="tabs.includes('help')" v-show="active==='help'" :active="active==='help'" :target="manualTarget" :request-key="manualRequest" :playback-allowed="!m16Recording&&!m15Focus" :return-label="manualOrigin?'返回 '+tabTitle(manualOrigin):undefined" @return-tool="returnFromManual"/>
 </main>
-<div v-if="current&&!['M03','M04','M05','M06','M07','M08','M10','M11','M12','M13','M14','M15','M16','M17','M18'].includes(current.id)" class="global-transport">
+<div v-if="current&&!['M03','M04','M05','M06','M07','M08','M10','M11','M12','M13','M14','M15','M16','M17','M18','M19'].includes(current.id)" class="global-transport">
 <AudioTransport :state="current.id==='M01'?m01.wave:workspace(previewKey(current.id))" :active="true"/>
 </div>
 <div class="statusbar">
 <span>
-<span class="status-dot"/>{{current?.id==='M18'?'语音学论文精读 · 服务器分发与本地阅读':current?.id==='M16'?(researchContext.files.kind==='server'?'录音 · 浏览器采集与项目上传':'录音 · 本机采集与可恢复编辑'):current?.id==='M17'?'国际音标表Plus · 本地输入与固定字体':current?.id==='M05'?'唇形提取 · 实时预览与视频分析':current?.id==='M11'?'MFA · 音频与已有文本强制对齐':current?.id==='M15'?'感知实验 · 客户端运行与本地恢复':current?.id==='M01'?'参数估计 · 文件、试听与任务':current?.id==='M02'?'参数显示 · 原帧与多图窗':current?.id==='M03'?'EGG · 接触商与声门事件':current?.id==='M07'?'发声类型合成 · LPC 残差连续统':current?.id==='M06'?'声学参数合成 · 参数曲线与音频合成':current?.id==='M08'?'变速变调 · 基频编辑与音频合成':current?.id==='M04'?'LPC · 线性预测谱包络':current?.id==='M09'?'语谱图转音频 · 图片重建与频谱绘制':current?.id==='M10'?'生理参数合成 · VTL 2.4':current?.id==='M12'?'标注对齐 · TextGrid 与唇偏独立保存':current?.id==='M14'?'音系归纳 · 字表、归并与三文件导出':current?.id==='M13'?'汉字转国际音标 · 本地逐字映射与离线导出':current?'就绪 · 选择文件开始':'就绪 · 选择工具开始'}}</span>
+<span class="status-dot"/>{{current?.id==='M19'?'语言地图 · 特征分布与本机研究工程':current?.id==='M18'?'语音学论文精读 · 服务器分发与本地阅读':current?.id==='M16'?(researchContext.files.kind==='server'?'录音 · 浏览器采集与项目上传':'录音 · 本机采集与可恢复编辑'):current?.id==='M17'?'国际音标表Plus · 本地输入与固定字体':current?.id==='M05'?'唇形提取 · 实时预览与视频分析':current?.id==='M11'?'MFA · 音频与已有文本强制对齐':current?.id==='M15'?'感知实验 · 客户端运行与本地恢复':current?.id==='M01'?'参数估计 · 文件、试听与任务':current?.id==='M02'?'参数显示 · 原帧与多图窗':current?.id==='M03'?'EGG · 接触商与声门事件':current?.id==='M07'?'发声类型合成 · LPC 残差连续统':current?.id==='M06'?'声学参数合成 · 参数曲线与音频合成':current?.id==='M08'?'变速变调 · 基频编辑与音频合成':current?.id==='M04'?'LPC · 线性预测谱包络':current?.id==='M09'?'语谱图转音频 · 图片重建与频谱绘制':current?.id==='M10'?'生理参数合成 · VTL 2.4':current?.id==='M12'?'标注对齐 · TextGrid 与唇偏独立保存':current?.id==='M14'?'音系归纳 · 字表、归并与三文件导出':current?.id==='M13'?'汉字转国际音标 · 本地逐字映射与离线导出':current?'就绪 · 选择文件开始':'就绪 · 选择工具开始'}}</span>
 <span>{{research&&active==='M18'?'论文与批注随当前工作区保存':research&&active!=='M17'?'当前账号的项目资源':'本机文件 · 无自动上传'}}</span>
 </div>
 </div>
@@ -336,16 +380,18 @@ const modalTitle=computed(()=>({update:updateCheck.value?.candidate?'发现新�
 <p v-else-if="closing==='settings'">字体编辑尚未应用。可以应用并关闭，或放弃本次字体编辑。主题和页面缩放已即时保存。</p>
 <p v-else-if="closing==='M12'">标注或唇形偏移尚未保存。标注写入 _自动保存，唇偏单独保存；任一失败将保留当前编辑。</p>
 <p v-else-if="closing==='M13'">文本、多音选择或排版尚未保存。保存草稿会将这些内容留在本机，导出图片请在模块中操作。</p>
+<p v-else-if="closing==='M06'&&m06Page?.hasPendingSave()">合成结果尚未保存。保存会先重试写入结果，再保存参数草稿；放弃会释放待保存结果。</p>
 <p v-else-if="closing==='M15'">配置、刺激与结果保存在当前浏览器设备中；请显式导出结果文件并确认保存，再关闭标签。</p>
 <p v-else>“{{modules.find(m=>m.id===closing)?.title}}”有尚未保存的参数或设置。保存会保留当前参数草稿。</p>
 <p v-if="closing==='M15'">实验结果需要显式导出文件。保存失败或未确认导出时不会关闭；放弃仅关闭标签，本机已提交记录可在资源与恢复中读取。</p>
 <p v-if="notice" role="alert">{{notice}}</p>
 <template #footer>
 <button :disabled="closingBusy" @click="cancelClose">取消关闭</button>
-<button v-if="closing!=='M16'" :disabled="closingBusy" @click="discardClose">{{closing==='M09'?'放弃笔迹并关闭':closing==='settings'?'放弃字体编辑并关闭':closing==='M12'?'放弃修改并关闭':'放弃草稿并关闭'}}</button>
-<button class="primary" :disabled="closingBusy" @click="saveClose">{{closingBusy?'正在保存…':closing==='M09'?'返回绘图':closing==='M16'?'停止并保存工程后关闭':closing==='settings'?'应用字体并关闭':closing==='M12'?'保存修改并关闭':'保存草稿并关闭'}}</button>
+<button v-if="closing!=='M16'" :disabled="closingBusy" @click="discardClose">{{closing==='M09'?'放弃笔迹并关闭':closing==='settings'?'放弃字体编辑并关闭':closing==='M12'?'放弃修改并关闭':closing==='M06'&&m06Page?.hasPendingSave()?'放弃结果与草稿并关闭':'放弃草稿并关闭'}}</button>
+<button class="primary" :disabled="closingBusy" @click="saveClose">{{closingBusy?'正在保存…':closing==='M09'?'返回绘图':closing==='M16'?'停止并保存工程后关闭':closing==='settings'?'应用字体并关闭':closing==='M12'?'保存修改并关闭':closing==='M06'&&m06Page?.hasPendingSave()?'保存结果与草稿并关闭':'保存草稿并关闭'}}</button>
 </template>
 </ModalDialog>
+<AnnouncementsPanel v-if="automaticAnnouncement||announcementCenter" :items="automaticAnnouncement?[automaticAnnouncement]:announcementItems" :automatic="!!automaticAnnouncement" :loading="!announcementsReady" :unread-ids="unreadAnnouncementIds" @close="closeAnnouncements" @action="announcementAction"/>
 <UpdateNotice v-if="!m15Focus&&!m16Recording" @checked="updateCheck=$event" @open="modal='update'"/>
 <FeedbackNotice v-if="!m15Focus&&!m16Recording" @open="modal='feedback'"/>
 <ModalDialog v-if="modal" :title="modalTitle" :wide="modal==='references'||modal==='update'||modal==='feedback'" :variant="modal==='update'?'update':modal==='feedback'?'feedback':undefined" @close="modal=''">
@@ -372,6 +418,8 @@ const modalTitle=computed(()=>({update:updateCheck.value?.candidate?'发现新�
 </ModalDialog>
 </template>
 <style scoped>
+.announcement-entry{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;margin-bottom:8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--panel);color:var(--text);text-align:left}.announcement-entry svg{width:18px;height:18px;flex:none}.announcement-entry small{margin-left:auto;min-width:20px;text-align:center;border-radius:12px;background:var(--selected);color:var(--accent)}.app-shell.collapsed .announcement-entry span,.app-shell.collapsed .announcement-entry small{display:none}
+@media(max-width:720px){.announcement-entry{justify-content:center;padding:7px}.announcement-entry span,.announcement-entry small{display:none}}
 .web-settings-error{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:1200;max-width:calc(100vw - 32px);padding:10px 16px;border:1px solid var(--danger);border-radius:6px;background:var(--panel);color:var(--text);box-shadow:var(--shadow);}
 .about-website.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .about-website.primary:hover{background:var(--accent);color:var(--on-accent);filter:brightness(.94)}

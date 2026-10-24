@@ -1,0 +1,16 @@
+{
+  "schema": "ptb-announcements/1",
+  "items": [
+    {
+      "id": "ipa-ime-0-1-5-launched",
+      "title": "国际音标输入法上线啦",
+      "body": "国际音标输入法 0.1.5 现已上线，支持 Windows、macOS、iOS 和 Android。\n打开官网下载页查看各平台的安装方式与使用说明。",
+      "publishedAt": "2026-10-24T15:30:45Z",
+      "minVersion": "3.1.0",
+      "action": {
+        "label": "去官网下载",
+        "url": "https://www.phonetictoolbox.com/#ipa-ime-download"
+      }
+    }
+  ]
+}

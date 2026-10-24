@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import QApplication
 
 
 ICON_SIZES = (16, 24, 32, 48, 64, 128, 256)
+MACOS_BUILTIN_PERCENT = 82
 
 
 def builtin_catalog(dist: Path) -> dict:
@@ -89,13 +90,41 @@ def icon_images(source: Path | QImage) -> list[QImage]:
     return result
 
 
+def macos_icon_images(source: Path | QImage, percent=MACOS_BUILTIN_PERCENT, *, builtin=True) -> list[QImage]:
+    """Add the Mac canvas gutter; keep custom PNG transparency and aspect ratio."""
+    if type(percent) is not int or not 60 <= percent <= 100:
+        raise ValueError('Dock 图标大小应为 60%–100%。')
+    if builtin:
+        normalized = icon_images(source)
+        if not normalized:
+            return []
+        image = normalized[-1]
+    else:
+        image = source if isinstance(source, QImage) else QImage(str(source))
+    if image.isNull():
+        return []
+    result = []
+    for size in ICON_SIZES:
+        span = max(1, round(size * percent / 100))
+        scaled = image.scaled(span, span, Qt.AspectRatioMode.KeepAspectRatio,
+                              Qt.TransformationMode.SmoothTransformation)
+        target = QImage(size, size, QImage.Format.Format_ARGB32_Premultiplied)
+        target.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(target)
+        painter.drawImage((size - scaled.width()) // 2, (size - scaled.height()) // 2, scaled)
+        painter.end()
+        result.append(target)
+    return result
+
+
 def configure_app_icon(dist: Path) -> QIcon:
     # Vite emits this imported asset with a content hash in both source and EXE builds.
     candidates = sorted((dist / 'assets').glob('k2-*.png'))
     icon = QIcon()
     source = builtin_image(dist) if builtin_catalog(dist) else candidates[0] if candidates else None
     if source is not None:
-        for image in icon_images(source):
+        renderer = macos_icon_images if sys.platform == 'darwin' else icon_images
+        for image in renderer(source):
             icon.addPixmap(QPixmap.fromImage(image))
     app = QApplication.instance()
     if app is not None and not icon.isNull():

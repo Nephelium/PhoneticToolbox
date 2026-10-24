@@ -49,6 +49,8 @@ def test_complete_pdf_library_notes_export_and_recycle(web):
     source = upload(e, project)
     library = call(client, project, 'importLocal', folder='', files=[{'asset_id': source['id'], 'relative': source['name']}])
     assert library['failures'] == [] and len(library['documents']) == 1
+    assert library['documents'][0]['contentVersion'] == 'sha256:' + source['sha256']
+    assert call(client, project, 'library')['documents'][0]['contentVersion'] == library['documents'][0]['contentVersion']
     selected = library['documents'][0]['id']
     page = call(client, project, 'render', id=selected, language='original', page=1, width=1020)
     assert page['pages'] == 2 and 'Paper reading fixture' in page['text'] and page['lines']
@@ -221,3 +223,29 @@ def test_partial_cancel_expiry_and_orphan_scratch_lifecycle(web):
     with pytest.raises(StorageError,match='workspace_expired'):
         service.call(e.owner,project,'interval',{'hours':2},threading.Event(),lambda _:None,lambda:e.workspaces.current(e.owner,key))
     assert not list(e.root.parent.glob('ptb-papers-*'))
+
+
+def test_journal_download_budget_reserves_all_three_new_files(web):
+    """Exercise real quota publication; only the network/PDF child is replaced."""
+    import hashlib
+    e=web;_,_,_,project=device(e)
+    bodies=[b'%PDF-1.7\n'+bytes([65+i])*20_000 for i in range(3)]
+    assets=[dict(path=f'tapa/{i}.pdf',size=len(raw),sha256=hashlib.sha256(raw).hexdigest()) for i,raw in enumerate(bodies)]
+    paper=dict(id='tapa',original=assets[0],translation=assets[1],analysisPdf=assets[2])
+    def child(root,operation,args,stop,progress):
+        cache=root/'cache';cache.mkdir(exist_ok=True)
+        if operation=='refresh':
+            (cache/'catalog.json').write_text(json.dumps(dict(schema='ptb-papers/1',papers=[],journalPapers=[paper])))
+        elif operation=='downloadSelected':
+            assert args['ids']==['tapa']
+            files=cache/'files';files.mkdir(exist_ok=True)
+            for raw,asset in zip(bodies,assets):(files/(asset['sha256']+'.pdf')).write_bytes(raw)
+        return dict(ok=True,value={})
+    service=WebPapers(e.storage,runner=child)
+    try:
+        service.call(e.owner,project,'refresh',{},threading.Event(),lambda _:None,lambda:None)
+        assert service.call(e.owner,project,'downloadSelected',{'ids':['tapa']},threading.Event(),lambda _:None,lambda:None)['ok']
+        snapshot=service.read(e.owner,service.current(e.owner,project))
+        assert len(snapshot['files'])==3
+        assert {e.storage.metadata(e.owner,aid)['sha256'] for aid in snapshot['files'].values()}=={a['sha256'] for a in assets}
+    finally:service.pool.shutdown(wait=True)

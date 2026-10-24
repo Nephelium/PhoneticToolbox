@@ -51,8 +51,9 @@ class Reaper:
         if not isinstance(scratch,Scratch):raise TypeError('Host-owned Scratch capability required')
         self.binary=Path(binary).absolute();no_links(self.binary)
         self.sha256=REAPER_SHA256
-        if sys.platform=='linux':
-            from .linux_runtime import load_profile
+        if sys.platform in ('linux','darwin'):
+            if __import__('sys').platform=='darwin': from .darwin import load_profile
+            else: from .linux_runtime import load_profile
             _,profile=load_profile()
             if str(self.binary)!=profile.get('reaper_binary'):
                 raise ValueError('Unregistered native binary')
@@ -80,7 +81,7 @@ class Reaper:
         path=self.scratch.create(stream.getvalue(),'.wav')
         pipe=None
         try:
-            if sys.platform!='linux':
+            if sys.platform not in ('linux','darwin'):
                 from .windows import InputPipe
                 pipe=InputPipe()
             # Scratch owns this ASCII filename; the native Windows CRT reads it
@@ -90,7 +91,10 @@ class Reaper:
                   '-m',str(float(min_f0)),'-x',str(float(max_f0))]
             if hilbert:argv.append('-t')
             if no_highpass:argv.append('-s')
-            if sys.platform=='linux':
+            if sys.platform=='darwin':
+                from .darwin_reaper import collect
+                payload,self.last_pid=collect(argv,self.scratch.root,self.limits,self.stop,self.on_started)
+            elif sys.platform=='linux':
                 from .linux_reaper import collect
                 payload,self.last_pid=collect(argv,self.scratch.root,self.limits,self.stop,self.on_started)
             else:

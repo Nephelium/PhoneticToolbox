@@ -1,6 +1,7 @@
 <script setup lang="ts">
 defineProps<{name?:string}>();
 const paths:Record<string,string>={
+ map:'M3 5l6-2 6 2 6-2v16l-6 2-6-2-6 2ZM9 3v16M15 5v16',
  home:'M3 10 12 3l9 7M5 9v12h5v-7h4v7h5V9', search:'M16 16l5 5M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0',
  sliders:'M3 6h7m4 0h7M3 12h12m4 0h2M3 18h3m4 0h11M10 3v6m5 0v6M6 15v6',
  chart:'M3 3v18h18M6 14l4-5 4 7 6-11',wave:'M2 12h4l3-8 5 16 3-8h5',bars:'M3 13v5M7 7v11M12 3v15M17 7v11M21 13v5',

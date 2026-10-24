@@ -22,6 +22,8 @@ def main():
     parser.add_argument('--shared-controls', action='store_true')
     parser.add_argument('--libraries', action='store_true')
     parser.add_argument('--stop-timing', action='store_true')
+    parser.add_argument('--review-fixes', action='store_true')
+    parser.add_argument('--audio-gain', action='store_true')
     parser.add_argument('--vocal-runtime', type=Path)
     args = parser.parse_args()
     work, science = args.work.resolve(), args.science.resolve()
@@ -59,15 +61,15 @@ def main():
                 raise RuntimeError('Owned HTTP server did not start')
             from ptb_api.preferences import FIELDS
             write_json(scratch / 'preference-fields.json', FIELDS)
-            if not args.fallback_only and not args.shared_controls and not args.libraries and not args.stop_timing:
+            if not args.fallback_only and not args.shared_controls and not args.libraries and not args.stop_timing and not args.review_fixes and not args.audio_gain:
                 from vocal_wasm_cases import run as native_oracle
                 write_json(scratch / 'native.json', native_oracle(work / 'native'))
             env = {**os.environ, 'PTB_VOCAL_WASM': '1', 'PTB_VOCAL_QA_FIELDS': str(scratch / 'preference-fields.json')}
-            script = 'vocal-stop-timing.cjs' if args.stop_timing else 'vocal-libraries.cjs' if args.libraries else 'vocal-shared-controls.cjs' if args.shared_controls else 'vocal-wasm-fallback.cjs' if args.fallback_only else 'vocal-browser-controls.cjs' if args.controls else 'web-vocal.cjs'
+            script = 'vocal-audio-gain.cjs' if args.audio_gain else 'vocal-review-fixes.cjs' if args.review_fixes else 'vocal-stop-timing.cjs' if args.stop_timing else 'vocal-libraries.cjs' if args.libraries else 'vocal-shared-controls.cjs' if args.shared_controls else 'vocal-wasm-fallback.cjs' if args.fallback_only else 'vocal-browser-controls.cjs' if args.controls else 'web-vocal.cjs'
             result = subprocess.run(['node', str(ROOT / 'tests/e2e' / script), origin, str(out), str(scratch)], cwd=ROOT, env=env)
             if result.returncode:
                 raise RuntimeError('Browser Wasm acceptance failed; see retained report')
-            if not args.fallback_only and not args.shared_controls and not args.libraries and not args.stop_timing:
+            if not args.fallback_only and not args.shared_controls and not args.libraries and not args.stop_timing and not args.review_fixes and not args.audio_gain:
                 from compare_m10_wasm import compare
                 import json
                 comparison = compare(

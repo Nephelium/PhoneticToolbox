@@ -10,6 +10,11 @@ PORTABLE_FONTS = {
 
 def find_face(font_manager, requested, role, portable):
     candidates=(requested,)+PORTABLE_FONTS.get(role,()) if portable else (requested,)
+    import sys
+    if portable and role=='zh' and sys.platform=='darwin':
+        # Matplotlib exposes the first PingFang TTC face as PingFang HK on
+        # macOS 26. Songti SC is an installed, readable Simplified Chinese face.
+        candidates+=('Songti SC','Hiragino Sans GB','Heiti TC')
     for family in dict.fromkeys(candidates):
         try:return Path(font_manager.findfont(font_manager.FontProperties(family=[family]),fallback_to_default=False))
         except ValueError:continue

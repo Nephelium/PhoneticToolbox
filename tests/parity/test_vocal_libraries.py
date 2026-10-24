@@ -126,3 +126,47 @@ def test_failed_atomic_write_keeps_last_library_and_retry_succeeds(engine,tmp_pa
     assert (tmp_path/'preset-libraries.json').read_bytes()==before
     monkeypatch.setattr(profile,'_write_library',write);profile.save_presets(engine,[pose(engine,f0=220)])
     assert profile.load_presets(engine)[0]['f0']==220
+
+
+@pytest.mark.parametrize('disk',[False,True])
+@pytest.mark.parametrize('speaker',['JD2','W02'])
+def test_delete_saved_pose_keeps_other_sets_models_frames_and_builtins(engine,tmp_path,disk,speaker):
+    profile=ProfileStore(tmp_path) if disk else MemoryProfile()
+    r=Runtime(engine,profile,BrowserAudio(engine));r.invoke('speaker/select',{'speaker':speaker})
+    a=pose(engine);other={**pose(engine,'i'),'id':'own-i'}
+    r.invoke('presets/save',{'presets':[a,other]});r.invoke('favorites/save',{'ids':['a','own-a','own-i']})
+    r.invoke('keyframes',{'frames':[a]});sequence=r.invoke('keyframes/load')
+    first=r.invoke('library/load')['active'];r.invoke('library/edit',{'action':'copy','name':'独立副本'})
+    before=r.invoke('library/load');next_value=copy.deepcopy(before);current=next_value['sets'][-1]
+    current['presets']=[p for p in current['presets'] if p['id']!='own-a']
+    current['favorites']=[key for key in current['favorites'] if key!='own-a']
+    assert r.invoke('library/save',next_value)==next_value
+    assert r.invoke('favorites/load')==['a','own-i'] and r.invoke('presets/load')[0]['id']=='own-i'
+    assert r.invoke('keyframes/load')==sequence and 'a' in engine.presets
+    assert r.invoke('library/load')['sets'][0]==before['sets'][0]
+    # Removing the last saved pose leaves builtins and an empty usable set.
+    current['presets']=[];current['favorites']=['a'];r.invoke('library/save',next_value)
+    assert r.invoke('presets/load')==[] and r.invoke('favorites/load')==['a']
+    if disk:
+        reopened=ProfileStore(tmp_path);reopened.set_speaker(speaker)
+        assert reopened.load_library(engine)==next_value
+    other_speaker='W02' if speaker=='JD2' else 'JD2'
+    r.invoke('speaker/select',{'speaker':other_speaker});assert r.invoke('presets/load')==[]
+    r.invoke('presets/save',{'presets':[pose(engine,f0=210)]});other_model=r.invoke('library/load')
+    r.invoke('speaker/select',{'speaker':speaker});assert r.invoke('library/load')==next_value
+    r.invoke('library/edit',{'action':'select','id':first});assert len(r.invoke('presets/load'))==2
+    r.invoke('speaker/select',{'speaker':other_speaker});assert r.invoke('library/load')==other_model
+
+
+def test_delete_snapshot_failure_keeps_disk_and_legacy_duplicate_names_can_be_retained(engine,tmp_path,monkeypatch):
+    profile=ProfileStore(tmp_path);library=profile.load_library(engine)
+    current=library['sets'][0];current['presets']=[pose(engine),{**pose(engine),'id':'old-a'},{**pose(engine,'u'),'id':'own-u'}]
+    current['favorites']=['own-u','a'];profile.save_library(engine,library)
+    before=(tmp_path/'preset-libraries.json').read_bytes();write=profile._write_library
+    next_value=copy.deepcopy(library);next_value['sets'][0]['presets'].pop();next_value['sets'][0]['favorites']=['a']
+    monkeypatch.setattr(profile,'_write_library',lambda value:(_ for _ in ()).throw(OSError('disk full')))
+    with pytest.raises(OSError):profile.save_library(engine,next_value)
+    assert (tmp_path/'preset-libraries.json').read_bytes()==before
+    monkeypatch.setattr(profile,'_write_library',write);profile.save_library(engine,next_value)
+    assert [p['id'] for p in profile.load_presets(engine)]==['own-a','old-a']
+    assert profile.load_favorites()==['a']

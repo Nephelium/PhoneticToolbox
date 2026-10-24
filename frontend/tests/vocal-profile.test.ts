@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {webVocalPort} from '../src/platform/vocal.ts';
 import {LocalAssets,MemoryAssetDatabase} from '../src/platform/local-assets.ts';
 import {vocalProfileStore,type VocalProfileStore} from '../src/platform/vocal-profile.ts';
+import {commitSequenceImport} from '../public/vocal-tract/sequence-import.mjs';
 
 const originals=new Map(['window','AudioContext','sessionStorage'].map(k=>[k,Object.getOwnPropertyDescriptor(globalThis,k)]));
 let legacy:string|null=null;
@@ -16,7 +17,7 @@ const fresh=()=>({version:1,active:'default',sets:[{id:'default',name:'默认构
 // Storage/queue fixture only. Real core validation and synthesis are covered in
 // parity and owned Chrome/Qt acceptance, not inferred from this fake executor.
 class Runtime {
- speaker='JD2';models:any={};audio:any={volume:.8,gain_db:0,device:'browser'};
+ speaker='JD2';models:any={};audio:any={volume:.8,gain_db:0,device:'browser'};perturbation:any=null;
  get model(){return this.models[this.speaker]??=( {library:fresh(),sequence:{frames:[],pitch_curve:[]}} );}
  async request(op:string,b:any={}){
   if(op==='meta')return {speaker:this.speaker,speaker_options:['JD2','W02'],audio_settings:{...this.audio}};
@@ -28,6 +29,7 @@ class Runtime {
   if(op==='keyframes/load')return structuredClone(this.model.sequence);
   if(op==='keyframes'){this.model.sequence=structuredClone(b);return {saved:b.frames.length};}
   if(op==='audio/settings'){this.audio={...this.audio,...b};return this.audio;}
+  if(op==='source/perturbation'){this.perturbation=structuredClone(b.perturbation);return b;}
   return {};
  }
  close(){}
@@ -40,6 +42,31 @@ test('saved libraries survive disposal and a new workspace; account/project scop
  const a=port(store);await a.port.request('library/save',changed('甲'));await a.port.close(true);
  const b=port(store);await b.port.request('meta');assert.equal((await b.port.request('library/load')).sets[0].name,'甲');await b.port.close();
  for(const [owner,project] of [['other','project'],['owner','other']])assert.equal(await vocalProfileStore(new LocalAssets(owner!,project!,db)).read(),undefined);
+});
+test('preset deletion commits with favorites, rolls back on quota failure and survives reopening',async()=>{
+ const base=vocalProfileStore(new LocalAssets('delete-owner','project',new MemoryAssetDatabase()));let fail=false;
+ const store={read:()=>base.read(),write:async(e:any,v:any)=>{if(fail)throw Error('quota');await base.write(e,v);}};
+ const a=port(store),original=fresh();original.sets[0]!.presets=[{id:'own-a',name:'a'},{id:'own-i',name:'i'}];original.sets[0]!.favorites=['a','own-a','own-i'];
+ original.sets.push({...structuredClone(original.sets[0]!),id:'copy',name:'副本'});
+ await a.port.request('library/save',original);await a.port.request('keyframes',{frames:[{name:'a',f0:120}]});
+ const before=await base.read(),next=structuredClone(original);next.sets[0]!.presets.splice(0,1);next.sets[0]!.favorites=['a','own-i'];fail=true;
+ await assert.rejects(a.port.request('library/save',next),/quota/);
+ assert.equal(await base.read(),before);assert.deepEqual(await a.port.request('library/load'),original);
+ fail=false;assert.deepEqual(await a.port.request('library/save',next),next);
+ await a.port.close();const reopened=port(store);await reopened.port.request('meta');assert.deepEqual(await reopened.port.request('library/load'),next);
+ assert.deepEqual(await reopened.port.request('keyframes/load'),{frames:[{name:'a',f0:120}]});await reopened.port.close();
+});
+test('document import quota failure leaves the live source, durable sequence and display unchanged; retry commits together',async()=>{
+ const base=vocalProfileStore(new LocalAssets('import-owner','project',new MemoryAssetDatabase()));let fail=false;
+ const a=port({read:()=>base.read(),write:async(e,v)=>{if(fail)throw Error('quota');await base.write(e,v);}});
+ const old={frames:[{f0:120}],pitch_curve:[],perturbation:{jitter:0,shimmer:0,seed:1}},incoming={frames:[{f0:240}],pitch_curve:[],perturbation:{jitter:80,shimmer:70,seed:2}};
+ let displayed=old.perturbation;
+ const set=async p=>{await a.port.request('source/perturbation',{perturbation:p});displayed=p;};
+ await a.port.request('keyframes',old);await set(old.perturbation);const before=await base.read();fail=true;
+ await assert.rejects(commitSequenceImport(a.port.request,incoming,old,set,old.perturbation),/quota/);
+ assert.equal(await base.read(),before);assert.deepEqual(a.runtime.model.sequence,old);assert.deepEqual(a.runtime.perturbation,old.perturbation);assert.deepEqual(displayed,old.perturbation);
+ fail=false;await commitSequenceImport(a.port.request,incoming,old,set,old.perturbation);
+ assert.deepEqual(a.runtime.model.sequence,incoming);assert.deepEqual(a.runtime.perturbation,incoming.perturbation);assert.deepEqual(JSON.parse((await base.read())!).models.JD2.sequence,incoming);await a.port.close();
 });
 test('quota failure rolls back native state and the following queued write still succeeds',async()=>{
  const base=vocalProfileStore(new LocalAssets('owner','project',new MemoryAssetDatabase()));let writes=0;

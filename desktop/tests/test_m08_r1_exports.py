@@ -95,3 +95,27 @@ def test_failed_write_has_no_success_record_and_retry_works(native,monkeypatch):
         with pytest.raises(OSError,match='disk full'):bridge.export(body)
     assert not list(directory.iterdir()) and not bridge.exports
     saved=bridge.export(body);assert (directory/saved['name']).read_bytes()==raw
+
+
+def test_optional_sequence_exports_are_separate_retryable_snapshots(native):
+    bridge,body,directory,raw,calls=native
+    plain=bridge.export(body)
+    numbered=bridge.export(dict(body,name='1_合成_modified_1.wav'))
+    assert plain['name']=='合成_modified_1.wav' and numbered['name']=='1_合成_modified_1.wav'
+    assert bridge.export(body)==plain
+    assert bridge.export(dict(body,name='1_合成_modified_1.wav'))==numbered
+    assert len(list(directory.iterdir()))==2
+    assert all(p.read_bytes()==raw for p in directory.iterdir())
+    assert not calls
+    scope=dict(project_id=PROJECT,ids=[body['id']],names=['新名.wav'])
+    bridge.invoke(dict(op='m08_call',action='rename',body=scope))
+    assert sorted(p.name for p in directory.iterdir())==['1_新名.wav','新名.wav']
+    bridge.invoke(dict(op='m08_call',action='remove',body=scope))
+    assert not list(directory.iterdir())
+
+
+@pytest.mark.parametrize('name',['../bad.wav','1_other.wav','0_合成_modified_1.wav','257_合成_modified_1.wav',None])
+def test_sequence_cannot_supply_arbitrary_names(native,name):
+    bridge,body,directory,_,_=native
+    with pytest.raises(FileAccessError):bridge.export(dict(body,name=name))
+    assert not list(directory.iterdir())

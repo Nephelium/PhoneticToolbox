@@ -61,8 +61,9 @@ def execute_claim(store,claim,worker_id,stop,*,on_started=None,evidence=None):
                     from .native.reaper import REAPER_SHA256
                     binary=Path(getattr(files,'reaper_binary',None) or '')
                     expected=REAPER_SHA256
-                    if __import__('sys').platform=='linux':
-                        from .native.linux_runtime import load_profile
+                    if __import__('sys').platform in ('linux','darwin'):
+                        if __import__('sys').platform=='darwin': from .native.darwin import load_profile
+                        else: from .native.linux_runtime import load_profile
                         _,profile=load_profile()
                         expected=profile['hashes'].get(str(binary)) if str(binary)==profile.get('reaper_binary') else None
                     if not expected or not binary.is_file() or binary.stat().st_size>16_000_000 or hashlib.sha256(binary.read_bytes()).hexdigest()!=expected:

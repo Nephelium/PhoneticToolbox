@@ -18,6 +18,10 @@ class FirstMaximizePresentation(QObject):
         self.generation = 0
         self.waiting = False
         self.quick = None
+        self.quick_owner = None
+        self.quick_generation = 0
+        self.disposed = False
+        self.attach_queued = False
         self.cover = QLabel(view)
         self.cover.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.cover.setScaledContents(True)
@@ -38,20 +42,64 @@ class FirstMaximizePresentation(QObject):
     def attach(self):
         # WebEngine creates its Quick child lazily. Use its public Quick API;
         # never request a native winId for this offscreen rendering widget.
-        for child in self.view.findChildren(QWidget):
+        if self.disposed or sip.isdeleted(self.view):
+            return
+        if self.quick is not None:
+            # Keep the original QWidget wrapper as the lifetime authority.
+            # A cast Quick wrapper can outlive native WebEngine teardown.
+            if self.quick_owner is not None and not sip.isdeleted(self.quick_owner):
+                return
+            self.clear_quick()
+        # QWebEngineView owns this widget directly. A recursive traversal also
+        # visits its private Quick scene and can block the GUI for many seconds.
+        for child in self.view.findChildren(QWidget, options=Qt.FindChildOption.FindDirectChildrenOnly):
             if not child.inherits('QQuickWidget'):
                 continue
             quick = sip.cast(child, QQuickWidget)
             if self.quick is quick:
                 return
             self.quick = quick
+            self.quick_owner = child
+            self.quick_generation += 1
+            token = self.quick_generation
+            child.destroyed.connect(lambda _=None, token=token: self.quick_destroyed(token))
             if self.active:
                 self.cover.raise_()
                 quick.update()
             return
 
+    def queue_attach(self):
+        if self.disposed or self.attach_queued:
+            return
+        self.attach_queued = True
+        QTimer.singleShot(0, self.attach_pending)
+
+    def attach_pending(self):
+        self.attach_queued = False
+        self.attach()
+
+    def clear_quick(self):
+        self.quick = None
+        self.quick_owner = None
+        self.quick_generation += 1
+
+    def quick_destroyed(self, token):
+        if token == self.quick_generation:
+            self.clear_quick()
+
+    def dispose(self):
+        """Stop discovery before WebEngine starts deleting its private children."""
+        if self.disposed:
+            return
+        self.disposed = True
+        self.attach_queued = False
+        self.finish()
+        self.clear_quick()
+        if not sip.isdeleted(self.view):
+            self.view.removeEventFilter(self)
+
     def prepare(self, *, capture=True):
-        if self.used:
+        if self.disposed or self.used:
             return
         self.used = True
         # Called before Windows changes the client size. Grabbing after Resize
@@ -72,6 +120,8 @@ class FirstMaximizePresentation(QObject):
         self.cover.repaint()
 
     def begin(self):
+        if self.disposed:
+            return
         if not self.used:
             # Programmatic/non-Windows paths may arrive after Resize. Never
             # capture that surface; an opaque themed cover is safe at this point.
@@ -179,8 +229,12 @@ class FirstMaximizePresentation(QObject):
         self.used = False
 
     def eventFilter(self, watched, event):
-        if event.type() == QEvent.Type.ChildAdded:
-            QTimer.singleShot(0, self.attach)
+        if self.disposed:
+            return False
+        if event.type() in (QEvent.Type.ChildAdded, QEvent.Type.ChildRemoved):
+            if event.type() == QEvent.Type.ChildRemoved:
+                self.clear_quick()
+            self.queue_attach()
         elif event.type() == QEvent.Type.Resize and self.active:
             self.frames = 0
             self.cover.setGeometry(self.view.rect())

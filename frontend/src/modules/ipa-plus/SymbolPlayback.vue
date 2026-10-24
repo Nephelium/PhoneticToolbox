@@ -3,9 +3,11 @@ import {computed,nextTick,onBeforeUnmount,onMounted,ref} from 'vue';
 import type {SymbolEntry} from './types.ts';
 import {contentFor,mediaUrl} from './content.ts';
 import {symbolAnimation} from './playback.ts';
+import {useMediaAudition} from '../../state/media-audition.ts';
 const props=defineProps<{entry:SymbolEntry;request:number}>();
 const content=computed(()=>contentFor(props.entry)),media=computed(()=>content.value.media);
 const audio=ref<HTMLAudioElement>(),video=ref<HTMLVideoElement>(),animation=ref<HTMLElement>(),message=ref('');
+const audioGainMessage=useMediaAudition(audio),videoGainMessage=useMediaAudition(video);
 const abort=new AbortController();let stop:(()=>void)|undefined;
 function failure(){message.value='演示素材无法播放，请检查素材文件。';}
 onMounted(async()=>{
@@ -30,6 +32,7 @@ onBeforeUnmount(()=>{abort.abort();audio.value?.pause();video.value?.pause();sto
   <audio v-if="media?.audio" ref="audio" :src="mediaUrl(media.audio)" controls preload="none" @error="failure"/>
   <div v-if="media?.animation" ref="animation" class="m17-animation" aria-label="实时发音演示"></div>
   <p v-if="message" role="status">{{message}}</p>
+  <p v-if="audioGainMessage||videoGainMessage" role="status">{{audioGainMessage||videoGainMessage}}</p>
  </div>
 </template>
 <style scoped>

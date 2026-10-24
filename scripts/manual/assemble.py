@@ -77,7 +77,7 @@ def main():
         for n in body:
             target=n.get('attrs',{}).get('id');text=node_text(n)
             if text:index.append(dict(chapterId=cid,**({'targetId':target} if target else {}),text=text,title=descriptor['title']))
-    project['searchIndex']=index;project['softwareVersion']='3.0.0-preview.1'
+    project['searchIndex']=index;project['softwareVersion']=read_json(ROOT/'release/version.json')['app_version']
     (MANUAL/'project.json').write_bytes(dump(project))
     print(json.dumps(dict(registered=registered,assets=len(assets),searchEntries=len(index)),ensure_ascii=False))
 

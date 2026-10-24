@@ -10,16 +10,19 @@ import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'scripts'))
+from owned_qa_paths import DEFAULT_QA_ROOT, qa_output
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--package', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--qa-root', type=Path, default=DEFAULT_QA_ROOT)
     parser.add_argument('--scenario', choices=('distribution', 'textgrid'), default='distribution')
     options = parser.parse_args()
-    source, output = options.package.resolve(), options.output.resolve()
-    if not source.is_relative_to(ROOT / 'dist') or not output.is_relative_to(Path('D:/PTB-Compact-QA-20261006')):
+    source, output = options.package.resolve(), qa_output(options.output, options.qa_root)
+    if not source.is_relative_to(ROOT / 'dist'):
         raise ValueError('Expected owned build and new D-drive QA directory')
     output.mkdir(parents=True, exist_ok=False)
     executable = output / 'PhoneticToolbox.exe'

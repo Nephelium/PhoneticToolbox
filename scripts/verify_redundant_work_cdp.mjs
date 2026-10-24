@@ -8,7 +8,7 @@ const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 let socket;const pending=new Map();let sequence=0;
 const report={success:false,mode,scope:'Actual final EXE; isolated user data/generated PDF; visible default GPU; passive native QWebChannel render counter'};
 async function call(method,params={}){const id=++sequence;return new Promise((resolve,reject)=>{const timer=setTimeout(()=>{pending.delete(id);reject(Error(method+' timed out'));},30000);pending.set(id,{resolve,reject,timer});socket.send(JSON.stringify({id,method,params}));});}
-async function evaluate(expression){const value=await call('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true,userGesture:true});if(value.exceptionDetails)throw Error(JSON.stringify(value.exceptionDetails));return value.result.value;}
+async function evaluate(expression){report.lastEvaluation=expression;const value=await call('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true,userGesture:true});if(value.exceptionDetails)throw Error(JSON.stringify(value.exceptionDetails));return value.result.value;}
 async function until(code){for(let i=0;i<180;i++){if(await evaluate(code))return;await wait(150);}throw Error(code);}
 async function click(selector){await until(`!!document.querySelector(${JSON.stringify(selector)})`);await evaluate(`document.querySelector(${JSON.stringify(selector)}).click()`);}
 try{

@@ -38,21 +38,43 @@ def test_web_sections_real_geometry_and_server_rejection(service):
     with pytest.raises(VocalError):service.get(sid,('bob','lease','project'))
 
 
-def test_browser_stream_matches_desktop_test_tone_and_monitor(service):
+@pytest.mark.parametrize('enabled',[True,False])
+def test_browser_stream_matches_desktop_test_tone_and_monitor(service,enabled):
     ident=('alice','lease','project');sid=service.open(ident)['id'];call=lambda op,body={}:service.invoke(sid,ident,op,body)
-    started=call('audio/test');parts=[];position=0
+    started=call('audio/test',{'audition_auto_gain':enabled});parts=[];position=0
     stale=call('audio/pull',dict(position=99,completed=True,playback_generation=started['playback_generation']-1))
     assert stale['samples']==0 and stale['eof']
     while True:
         packet=call('audio/pull',{'position':position});audio=np.frombuffer(base64.b64decode(packet['base64']),'<f4');parts.append(audio);position+=len(audio)/48000
         if packet['eof']:break
     actual=np.concatenate(parts);t=np.arange(24000)/48000
-    expected=(np.tanh(.035*np.sin(2*np.pi*440*t)*np.minimum(1,t/.02)*np.minimum(1,(.5-t)/.02)*4*.8)*.9).astype('<f4')
+    signal=.035*np.sin(2*np.pi*440*t)*np.minimum(1,t/.02)*np.minimum(1,(.5-t)/.02)
+    gain=min(32,10**(-1/20)/max(abs(np.tanh(signal*4)*.9))) if enabled else 1
+    expected=(np.tanh(signal*4*.8)*.9*gain).astype('<f4')
     np.testing.assert_array_equal(actual,expected)
     state=call('heartbeat',dict(position=.5,completed=True));assert not state['active']
     monitor=call('audio/monitor',dict(seconds=1,position=.5,completed=True))
     assert monitor['end']==.5 and monitor['sample_rate']==48000
     assert max(abs(v) for row in monitor['waveform'] for v in row)>0
+
+
+@pytest.mark.parametrize('operation',['animation/stop','deactivate','live'])
+def test_native_server_stop_acknowledges_final_browser_clock_and_adopts_pose(service,operation):
+    ident=('alice','stop-clock','project');sid=service.open(ident)['id']
+    call=lambda op,body={}:service.invoke(sid,ident,op,body)
+    meta=call('meta')
+    call('pose',dict(params=meta['presets']['a'],revision=1,f0=120.))
+    frames=[dict(params=meta['presets'][name],f0=f0,lip_width=1.,duration=.3,manual_root=True)
+            for name,f0 in [('i',200.),('u',240.)]]
+    clip=call('animation/prepare',dict(frames=frames,keep_vowel=True))
+    playback=call('animation/play',dict(id=clip['id']))
+    call('audio/pull',dict(position=0,playback_generation=playback['playback_generation']))
+    expected=call('animation/picture',dict(id=clip['id'],index=3))['state']
+    stopped=call(operation,dict(active=False,position=.1,playback_generation=playback['playback_generation']))
+    assert not stopped['active'] and stopped['pose']==expected
+    held=call('animation/frame',dict(id=clip['id']))
+    assert held['time']==.1 and held['state']==expected
+    assert expected['f0']>200. and expected['manual_root'] is True
 
 
 def test_profiles_document_frames_audio_and_cleanup(service):

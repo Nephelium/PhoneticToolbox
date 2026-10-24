@@ -43,7 +43,7 @@ def execute_claim(store,claim,worker_id,stop,*,on_started=None,evidence=None):
             done.wait(min(.5,store.lease_seconds/3))
     thread=threading.Thread(target=pulse,daemon=True)
     try:
-        if sys.platform not in ('win32','linux'):raise ValueError('m14_runtime_unavailable')
+        if sys.platform not in ('win32','linux','darwin'):raise ValueError('m14_runtime_unavailable')
         thread.start();item=snapshot['input_assets'][0]
         raw=b''.join(files.read_input(identity,item['id'],offset,min(CHUNK_BYTES,item['size_bytes']-offset)) for offset in range(0,item['size_bytes'],CHUNK_BYTES))
         sha=hashlib.sha256(raw).hexdigest()
@@ -51,7 +51,10 @@ def execute_claim(store,claim,worker_id,stop,*,on_started=None,evidence=None):
         with ManagedScratch(files,identity) as scratch:
             header=dict(config=snapshot['config']['analysis'],name=item['name'],sha256=sha)
             request=scratch.create(json.dumps(header).encode()+b'\n'+raw,'.json')
-            if sys.platform=='linux':
+            if sys.platform=='darwin':
+                from .native.darwin import run
+                bundle=run('m14',request,scratch.root,LIMITS,stop=lambda:abort.is_set() or stop.is_set(),on_started=on_started,evidence=evidence)
+            elif sys.platform=='linux':
                 from .native.linux_runtime import run
                 bundle=run('m14',request,scratch.root,LIMITS,stop=lambda:abort.is_set() or stop.is_set(),on_started=on_started,evidence=evidence)
             else:

@@ -2,12 +2,13 @@
 import base64
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 from PyQt6.QtCore import QBuffer, QIODevice, QSaveFile
 from PyQt6.QtGui import QIcon, QImage, QImageReader, QPixmap
 from PyQt6.QtWidgets import QApplication
-from .app_icon import builtin_catalog, builtin_image, icon_images
+from .app_icon import builtin_catalog, builtin_image, icon_images, macos_icon_images, MACOS_BUILTIN_PERCENT
 
 MAX_ICONS = 8
 MAX_PNG_BYTES = 400_000
@@ -51,7 +52,7 @@ class IconPreferences:
 
     def read(self):
         if not self.path.exists():
-            return {'version': 1, 'selected': 'default', 'custom': []}
+            return self.expose({'version': 1, 'selected': 'default', 'custom': []})
         if self.path.stat().st_size > 4_400_000:
             raise ValueError('图标设置文件过大，当前使用默认图标。')
         try:
@@ -73,7 +74,13 @@ class IconPreferences:
                 ids.add(identity)
             if state['selected'] not in ids:
                 raise ValueError()
-            return state
+            sizes = state.get('macosSizes', {})
+            if not isinstance(sizes, dict) or len(sizes) > 128 or any(
+                not isinstance(k, str) or len(k) > 80 or type(v) is not int or not 60 <= v <= 100
+                for k, v in sizes.items()
+            ):
+                raise ValueError()
+            return self.expose(state)
         except (KeyError, TypeError, ValueError):
             raise ValueError('图标设置无法读取，原文件已保留。') from None
 
@@ -82,20 +89,37 @@ class IconPreferences:
         file = QSaveFile(str(self.path))
         if not file.open(QIODevice.OpenModeFlag.WriteOnly):
             raise OSError('图标设置无法保存，原选择保留。')
-        payload = (json.dumps(state, ensure_ascii=False, separators=(',', ':')) + '\n').encode('utf-8')
+        saved = {k: v for k, v in state.items() if k != 'dockSize'}
+        payload = (json.dumps(saved, ensure_ascii=False, separators=(',', ':')) + '\n').encode('utf-8')
         if file.write(payload) != len(payload) or not file.commit():
             raise OSError('图标设置无法保存，原选择保留。')
+
+    def expose(self, state):
+        value = dict(state)
+        value.pop('dockSize', None)
+        if sys.platform == 'darwin':
+            default = MACOS_BUILTIN_PERCENT if state['selected'] in self.builtin_ids else 100
+            value['dockSize'] = dict(value=state.get('macosSizes', {}).get(state['selected'], default),
+                                     default=default, min=60, max=100)
+        return value
 
     def icon_for(self, state):
         icon = self.default_icon
         if state['selected'] in self.builtin:
             icon = QIcon()
-            for image in icon_images(builtin_image(self.dist, state['selected'])):
+            source = builtin_image(self.dist, state['selected'])
+            images = macos_icon_images(source, self.expose(state)['dockSize']['value']) if sys.platform == 'darwin' else icon_images(source)
+            for image in images:
                 icon.addPixmap(QPixmap.fromImage(image))
         elif state['selected'] != 'default':
             item = next(entry for entry in state['custom'] if entry['id'] == state['selected'])
             _, image = decode_icon(item['dataUrl'])
-            icon = QIcon(QPixmap.fromImage(image))
+            if sys.platform == 'darwin':
+                icon = QIcon()
+                for rendered in macos_icon_images(image, self.expose(state)['dockSize']['value'], builtin=False):
+                    icon.addPixmap(QPixmap.fromImage(rendered))
+            else:
+                icon = QIcon(QPixmap.fromImage(image))
         return icon
 
     def apply(self, state, icon=None):
@@ -109,15 +133,24 @@ class IconPreferences:
             self.window.setWindowIcon(icon)
 
     def request(self, body):
-        if not isinstance(body, dict) or set(body) - {'action', 'id', 'name', 'dataUrl'}:
+        if not isinstance(body, dict) or set(body) - {'action', 'id', 'name', 'dataUrl', 'size'}:
             raise ValueError('不支持的图标请求。')
         action = body.get('action')
-        if action not in ('status', 'select', 'import', 'replace', 'remove'):
+        if action not in ('status', 'select', 'import', 'replace', 'remove', 'resize'):
             raise ValueError('不支持的图标操作。')
         state = self.read()
         if action == 'status':
             return state
-        if action in ('import', 'replace'):
+        if action == 'resize':
+            if sys.platform != 'darwin':
+                raise ValueError('Dock 图标大小仅适用于 macOS 桌面版。')
+            size = body.get('size')
+            if type(size) is not int or not 60 <= size <= 100:
+                raise ValueError('Dock 图标大小应为 60%–100%。')
+            if body.get('id') != state['selected']:
+                raise ValueError('图标已切换，请调整当前图标的大小。')
+            state.setdefault('macosSizes', {})[state['selected']] = size
+        elif action in ('import', 'replace'):
             previous = next((entry for entry in state['custom'] if entry['id'] == body.get('id')), None) if action == 'replace' else None
             if action == 'replace' and previous is None:
                 raise ValueError('待裁剪的自定义图标不存在。')
@@ -140,6 +173,10 @@ class IconPreferences:
                     raise ValueError('最多保留 8 张自定义图标，请先移除不需要的图标。')
                 state['custom'].append(replacement)
             state['selected'] = identity
+            if previous and previous['id'] != identity and 'macosSizes' in state:
+                old_size = state['macosSizes'].pop(previous['id'], None)
+                if old_size is not None:
+                    state['macosSizes'].setdefault(identity, old_size)
         else:
             identity = body.get('id')
             if identity not in [*self.builtin_ids, *(entry['id'] for entry in state['custom'])]:
@@ -150,9 +187,10 @@ class IconPreferences:
                 if identity in self.builtin_ids:
                     raise ValueError('内置图标不能移除。')
                 state['custom'] = [entry for entry in state['custom'] if entry['id'] != identity]
+                state.get('macosSizes', {}).pop(identity, None)
                 if state['selected'] == identity:
                     state['selected'] = 'default'
         icon = self.icon_for(state)
         self.write(state)
         self.apply(state, icon)
-        return state
+        return self.expose(state)

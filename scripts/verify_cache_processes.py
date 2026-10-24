@@ -5,11 +5,12 @@ import os
 from pathlib import Path
 import subprocess
 import time
+from owned_qa_paths import DEFAULT_QA_ROOT, qa_output
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--exe',type=Path,required=True);parser.add_argument('--output',type=Path,required=True)
-    args=parser.parse_args();out=args.output.resolve();exe=args.exe.resolve()
-    if not out.is_relative_to(Path('D:/PTB-Compact-QA-20261006')):raise ValueError('Expected a new owned QA output')
+    parser.add_argument('--qa-root', type=Path, default=DEFAULT_QA_ROOT)
+    args=parser.parse_args();out=qa_output(args.output,args.qa_root);exe=args.exe.resolve()
     out.mkdir(parents=True,exist_ok=False);profile=out/'profile';profile.mkdir();temp=out/'temp';temp.mkdir()
     env={k:v for k,v in os.environ.items() if not k.startswith(('PTB_','PYTHON','CONDA','_PYI')) and k!='VIRTUAL_ENV'}
     env.update(LOCALAPPDATA=str(profile),TEMP=str(temp),TMP=str(temp),PATH=os.pathsep.join((os.environ['SystemRoot']+'/System32',os.environ['SystemRoot'])),PTB_OWNED_BOOTSTRAP_LOG=str(out/'bootstrap-error.log'))

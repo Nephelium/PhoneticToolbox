@@ -18,6 +18,9 @@ def command(request, pipe):
 
 def fingerprint():
     import sys
+    if sys.platform == 'darwin':
+        from .native.darwin import fingerprint as mac_fingerprint
+        return mac_fingerprint()
     if sys.platform == 'linux':
         from .native.linux_runtime import fingerprint as linux_fingerprint
         return linux_fingerprint()

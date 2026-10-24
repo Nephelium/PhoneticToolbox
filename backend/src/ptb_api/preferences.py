@@ -11,7 +11,7 @@ from .models import WireModel
 
 ModuleId = Literal['APP','M01','M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15','M16','M17','M18']
 FIELDS = {
- 'APP': 'theme palette collapsed buttonAppearance waveformAppearance pageScale backgroundAppearance customPaletteColor homeIconScale fonts panelWidths',
+ 'APP': 'theme palette collapsed buttonAppearance waveformAppearance pageScale backgroundAppearance customPaletteColor homeIconScale fonts panelWidths automaticAudioGain',
  'M01': 'settings sameDirectory recursive parameters showBoth showSpectrogram max_duration_s audio_channel egg panelWidths',
  'M02': 'groups reaper correction recursive showBoth showSpectrogram panelWidths',
  'M03': 'autoDbEnabled order signal_mode flip_channels micro_width_ms gci_method goi_method peak_prominence valley_prominence auto_prominence highpass_cutoff lowpass_cutoff spec_window_ms spec_vmin spec_vmax keep_praat_f0 keep_gci_f0 keep_reaper_f0 f0_min_hz f0_max_hz silence_threshold generate_images batchConfig showBoth showSpectrogram panelWidths',
@@ -19,14 +19,14 @@ FIELDS = {
  'M05': 'camera microphone filter cutoff fps delegate mirror quality saveAll saveVideo saveAnimation panelWidths',
  'M06': 'duration sample_rate fade_in fade_out smooth f0_range f0_method f0_transform selectedPreset windowMs curveOverrides panelWidths',
  'M07': 'target_sample_rate f0_backend min_f0_hz max_f0_hz f0_frame_interval_ms frame_length frame_shift lpc_order preemphasis window_name negative_peak_threshold pulse_inner_periods pulse_outer_periods trim_silence silence_threshold_db silence_padding_ms voiced_margin_ms step_count energy_match normalize_to_source output_peak_limit alignment count kind reverse axisRange panelWidths',
- 'M08': 'speed pitch_ratio pitch_hz offset minInput maxInput ymin ymax refInput refs directPlayback panelWidths',
+ 'M08': 'speed pitch_ratio pitch_hz pitchMode offset minInput maxInput ymin ymax refInput refs timeRefInput timeRefs refDirection directPlayback panelWidths',
  'M09': 'invert_image vocoder algorithm reconstruction_profile inference_device phase_initialization frequency_axis auto_parameters dynamic_range min_db max_db win_length_ms n_iter target_sr seed durationInput freqStartInput freqEndInput audioFft channel audioFrequencyMax audioCanvasHeight panelWidths',
  'M10': 'frame panelWidths webNoticeSeen',
  'M11': 'config transcriptSource panelWidths',
- 'M12': 'suffix showOpen showWidth sidebar settingsOpen phoneSplit durationInput nudgeStep showBoth showSpectrogram panelWidths',
+ 'M12': 'suffix showOpen showWidth sidebar settingsOpen phoneSplit durationInput nudgeStep snapEnabled linkWordPhone linkWordExtra linkPhoneExtra showBoth showSpectrogram panelWidths',
  'M13': 'standard display layout hanziSize ipaSize ipaSizeUserSet gap lineHeight bold italic underline showTone ipaColor hanziColor hanziFont equalWidth panelWidths',
  'M14': 'options panelWidths',
- 'M15': 'paradigm title introText interTrialText introLargeText showInterTrialText largeText advanceMode autoPlay showFilename interTrialInterval isi useBeep validKeys seed resultFormat panelWidths',
+ 'M15': 'paradigm title introText interTrialText responsePrompt showResponsePrompt introLargeText showInterTrialText largeText advanceMode autoPlay showFilename interTrialInterval isi playbackVolume useBeep validKeys seed resultFormat panelWidths',
  'M16': 'config outputDevice playChannel playVolume showSpectrum showAllChannels displayScale strength gainDb subtype rawExport exportMode leftWidth panelWidths',
  'M17': 'system introductions textSize textSizeVersion editorHeight playOnClick panelWidths',
  'M18': 'citeStyle language details showObtained readerZoom readerFit readerText readerSidebar annotationColor exportLanguage exportAnnotated paperAutoReceive paperInterval panelWidths',
@@ -66,6 +66,10 @@ PRIMITIVE_MAPS.update('frame.models.'+speaker+'.source' for speaker in ('JD2','W
 NESTED = {key:text.split() for key,text in NESTED.items()}
 
 def validate_values(module, values):
+    if module=='APP' and 'automaticAudioGain' in values and type(values['automaticAudioGain']) is not bool:raise ValueError('invalid_settings_field')
+    if module=='M15' and 'playbackVolume' in values:
+        volume=values['playbackVolume']
+        if type(volume) not in (int,float) or not math.isfinite(volume) or not 0<=volume<=1:raise ValueError('invalid_settings_field')
     def walk(value, path='', depth=0):
         if depth > 7: raise ValueError('settings_too_large')
         if isinstance(value, dict):

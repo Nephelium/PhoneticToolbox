@@ -10,7 +10,7 @@ import shutil
 import sys
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'desktop/src'))
-from ptb_desktop.papers import validate_catalog
+from ptb_desktop.papers import validate_catalog, catalog_papers
 
 
 def main():
@@ -32,13 +32,17 @@ def main():
         field='analysisPdf' if kind=='analysis' else kind
         metadata[field]={'path':f'{metadata["id"]}/{kind}-{digest[:16]}.pdf','size':len(raw),'sha256':digest}
         files.append((path,metadata[field]['path']))
-    catalog['papers']=[p for p in catalog['papers'] if p['id']!=metadata['id']]+[metadata]
+    section = 'journalPapers' if metadata.get('sourceUrl', '').startswith('https://doi.org/') else 'papers'
+    other = 'papers' if section == 'journalPapers' else 'journalPapers'
+    if any(p['id'] == metadata['id'] for p in catalog.get(other, [])):
+        raise ValueError('Paper source group cannot be changed during publication.')
+    catalog[section]=[p for p in catalog.get(section, []) if p['id']!=metadata['id']]+[metadata]
     validate_catalog(catalog)
     for source,relative in files:
         target=args.output/relative;target.parent.mkdir(parents=True,exist_ok=True)
         shutil.copyfile(source,target)
     (args.output/'catalog.json').write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+'\n','utf8')
-    print(json.dumps({'papers':len(catalog['papers']),'output':str(args.output.resolve())}))
+    print(json.dumps({'papers':len(catalog_papers(catalog)),'legacyPapers':len(catalog['papers']),'journalPapers':len(catalog.get('journalPapers',[])),'output':str(args.output.resolve())}))
 
 
 if __name__=='__main__':main()

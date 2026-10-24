@@ -10,7 +10,9 @@ test('academic acknowledgements copy complete citations and keep private lookup 
  const registry=read('third_party/source-registry.json');
  const sources=read('frontend/src/generated/sources.json');
  const academic=sources.filter((s:any)=>s.acknowledgement_group==='academic');
- assert.equal(academic.length,55);
+ assert.equal(academic.length,61);
+ for(const id of ['M19-ZENODO','M19-PAPER','M19-SHAOZI','M19-ATLAS','M19-LANGUAGE-ATLAS'])assert(academic.some((s:any)=>s.id===id),id);
+ assert(academic.some((s:any)=>s.id==='REF-M15-R-QUANTILE-TYPE7'));
  for(const id of ['WEBSITE-AOKI-SHORT-WINDOWS','REF-FAST-GRIFFINLIM','REF-NAFNET','REF-BIGVGAN'])assert(academic.some((s:any)=>s.id===id),id);
  for(const id of ['REF-SHUE-VOICE-SOURCE-2010','REF-VOICESAUCE-2011','REF-LING-VOICESAUCE-2019'])assert(academic.some((s:any)=>s.id===id),id);
  assert(!sources.some((s:any)=>s.id==='SRC-M16-VOICEVISTA'));

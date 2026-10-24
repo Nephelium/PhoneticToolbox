@@ -12,6 +12,7 @@ import buttonStyles from '../../design/buttons.css?inline';
 import backgroundStyles from '../../design/background.css?inline';
 import {syncBackgroundFrame} from '../../state/background.ts';
 import {presetChart} from './ipa-chart.ts';
+import {automaticAudioGain} from '../../state/audition.ts';
 const props=defineProps<{active:boolean;stateKey?:string;context?:ResearchContext}>();
 const emit=defineEmits<{references:[];help:[];close:[];dirty:[value:boolean]}>();
 const webPort=props.context?.files.vocal?.(props.stateKey??props.context.key);
@@ -45,12 +46,13 @@ async function message(event:MessageEvent){
   if(type==='m10-close'){emit('close');return;}
   if(type==='m10-dirty'){emit('dirty',!!event.data.dirty);return;}
   if(!ready||type!=='m10-request'||typeof id!=='string'||typeof op!=='string')return;
-  try{const value=await invoke!(op,body);event.source?.postMessage({type:'m10-response',id,ok:true,value},{targetOrigin:'*'});}
+  try{const payload=['live','preview','animation/play','audio/test','deactivate'].includes(op)?{...body,audition_auto_gain:automaticAudioGain.value}:body;const value=await invoke!(op,payload);event.source?.postMessage({type:'m10-response',id,ok:true,value},{targetOrigin:'*'});}
   catch(error){event.source?.postMessage({type:'m10-response',id,ok:false,error:error instanceof Error?error.message:'声道请求失败'},{targetOrigin:'*'});}
 }
 let observer:MutationObserver,frameSize:ResizeObserver;
 onMounted(()=>{window.addEventListener('message',message);observer=new MutationObserver(theme);observer.observe(document.documentElement,{attributes:true,attributeFilter:['style','data-theme','data-palette','data-custom-palette','data-button-style','data-button-effects','data-button-material','data-background-image','data-waveform-color']});frameSize=new ResizeObserver(()=>{if(frame.value)syncBackgroundFrame(frame.value);});if(frame.value)frameSize.observe(frame.value);});
 watch(()=>props.active,active=>{if(!active)void invoke?.('deactivate').catch(()=>{});else theme();});
+watch(automaticAudioGain,()=>{void invoke?.('deactivate',{audition_auto_gain:automaticAudioGain.value}).catch(()=>{});});
 onUnmounted(()=>{columns?.destroy();observer?.disconnect();frameSize?.disconnect();window.removeEventListener('message',message);void invoke?.('shutdown').catch(()=>{});});
 </script>
 <template>

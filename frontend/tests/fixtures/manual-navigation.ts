@@ -1,5 +1,7 @@
 import {createApp,h,nextTick,ref} from 'vue';
 import ManualReader from '../../src/manual/ManualReader.vue';
+import ManualDocument from '../../src/manual/ManualDocument.vue';
+import {manualPlayback} from '../../src/manual/playback.ts';
 import type {ManualChapter,ManualLocation,ManualProject,ManualTarget} from '../../src/manual/types.ts';
 
 /** Browser-only fixture: controlled requests exercise cancellation and project changes. */
@@ -53,4 +55,27 @@ export async function verifyManualNavigation(){
     checks.push('unmount flushes the latest scroll and cancels pending writes');
     return checks;
   }finally{if(mounted)app.unmount();container.remove();}
+}
+
+/** Changing reader visibility must still stop native media without replacing text. */
+export async function verifyManualPlaybackContext(){
+  const allowed=ref(true),container=document.createElement('div');document.body.append(container);
+  const chapter:ManualChapter={schemaVersion:'ptb-manual-chapter/1',id:'media-qa',title:'Media QA',body:{type:'doc',content:[
+    {type:'paragraph',content:[{type:'text',text:'Stable chapter text'}]},
+    {type:'audio',attrs:{assetId:'qa-audio'}}
+  ]}};
+  const source=URL.createObjectURL(new Blob([],{type:'audio/wav'}));
+  const app=createApp({render:()=>h(ManualDocument,{chapter,assets:[{id:'qa-audio',kind:'audio',path:'qa.wav',distribution:'public'}],assetResolver:()=>source,playbackAllowed:allowed.value})});
+  try{
+    app.mount(container);await nextTick();
+    const text=container.querySelector('p'),media=container.querySelector('audio')!;
+    let pauses=0;media.pause=()=>{pauses++;};
+    media.dispatchEvent(new Event('play'));allowed.value=false;await nextTick();
+    if(pauses!==1||container.querySelector('audio')!==media||container.querySelector('p')!==text)throw Error('reader visibility failed to stop and preserve its mounted media/text');
+    media.dispatchEvent(new Event('play'));await nextTick();
+    if(pauses!==2||!container.textContent?.includes('当前任务正在使用音频'))throw Error('inactive reader allowed native media playback');
+    allowed.value=true;await nextTick();media.dispatchEvent(new Event('play'));await nextTick();
+    if(pauses!==2||container.textContent?.includes('当前任务正在使用音频'))throw Error('reactivated reader failed to restore playback permission');
+    return ['reader visibility pauses its native media and preserves mounted content','inactive media rejects play and active media regains permission'];
+  }finally{manualPlayback.pause();app.unmount();container.remove();URL.revokeObjectURL(source);}
 }

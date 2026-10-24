@@ -9,6 +9,7 @@ const props=defineProps<{editor:Editor;revision:number;wave:Workspace;lip:LipTra
 const emit=defineEmits<{changed:[];'time-double-click':[time:number,ctrl:boolean];'phone-double-click':[time:number];'selection-end':[start:number,end:number];'range-selected':[]}>();
 const timeWindow=computed(()=>(props.wave.asset?.duration??1)/props.wave.zoom);
 const windowMs=ref(20);
+const trackNames=computed(()=>{props.revision;const s=props.editor.state;return s.extraTierName?[s.wordTierName,s.phoneTierName,s.extraTierName]:[s.wordTierName,s.phoneTierName];});
 const trackWidth=ref(800);
 const rangePositions=computed(()=>{const a=Math.max(0,Math.min(1,(props.wave.start-props.wave.offset)/timeWindow.value)),b=Math.max(0,Math.min(1,(props.wave.end-props.wave.offset)/timeWindow.value)),margin=Math.min(.5,115/trackWidth.value);return {a,b,close:(b-a)*trackWidth.value<190,center:Math.max(margin,Math.min(1-margin,(a+b)/2))};});
 const grid=ref<HTMLCanvasElement>(),spec=ref<HTMLCanvasElement>(),container=ref<HTMLElement>();let observer:ResizeObserver,themeObserver:MutationObserver,frame=0,cacheKey='',image:HTMLCanvasElement|undefined,oldAsset:unknown;
@@ -23,8 +24,8 @@ function draw(){
  const x=(time:number)=>(time-s.visibleStart)/s.visibleDuration*canvas.width;
  ctx.fillStyle=css('--panel');ctx.fillRect(0,0,canvas.width,canvas.height);
  const fontSize=parseFloat(css('--figure-size'))||14;ctx.font=`${fontSize*dpr}px ${css('--font-figure-ipa')||'"PTB-Doulos",serif'}`;ctx.textAlign='center';ctx.textBaseline='middle';
- for(const [row,name] of [s.wordTierName,s.phoneTierName].entries()){
-  const top=row===0?0:canvas.height*.48,bottom=row===0?canvas.height*.48:canvas.height,tier=e.tierByName(name);
+ for(const [row,name] of trackNames.value.entries()){
+  const top=row*canvas.height/trackNames.value.length,bottom=(row+1)*canvas.height/trackNames.value.length,tier=e.tierByName(name);
   ctx.strokeStyle=css('--border');ctx.strokeRect(0,top,canvas.width,bottom-top);
   if(!tier){ctx.fillStyle=css('--muted');ctx.fillText(name?'需要覆盖音频全时域的区间层：'+name:'请选择或创建'+(row===0?'音节 / 词层':'音素层'),canvas.width/2,(top+bottom)/2);continue;}
   for(const [index,item] of tier.intervals.entries()){
@@ -37,13 +38,13 @@ function draw(){
   }
   if(s.selectedBoundary?.tier===name){ctx.strokeStyle=css('--danger');ctx.setLineDash([4*dpr,3*dpr]);ctx.beginPath();ctx.moveTo(x(s.selectedBoundary.time),top);ctx.lineTo(x(s.selectedBoundary.time),bottom);ctx.stroke();ctx.setLineDash([]);}
  }
- if(s.drag?.mode==='rangeSelect'){const a=x(Math.min(s.drag.startTime,s.drag.endTime)),b=x(Math.max(s.drag.startTime,s.drag.endTime));ctx.fillStyle=css('--selection');ctx.fillRect(a,0,b-a,canvas.height*.48);}
+ if(s.drag?.mode==='rangeSelect'){const a=x(Math.min(s.drag.startTime,s.drag.endTime)),b=x(Math.max(s.drag.startTime,s.drag.endTime));ctx.fillStyle=css('--selection');ctx.fillRect(a,0,b-a,canvas.height/trackNames.value.length);}
  const sc=spec.value;resize(sc);const sx=sc.getContext('2d')!,asset=props.wave.asset;
  if(!asset){sx.clearRect(0,0,sc.width,sc.height);return;}
  const dark=document.documentElement.dataset.theme==='dark',cols=Math.min(700,sc.width),height=Math.min(360,sc.height);
- const key=[s.visibleStart,s.visibleDuration,cols,height,dark,windowMs.value].join(':');
+ const key=[s.visibleStart,s.visibleDuration,props.wave.channel,cols,height,dark,windowMs.value].join(':');
  if(key!==cacheKey||oldAsset!==asset||!image){
-  const data=spectrum(asset.channels[0],asset.sampleRate,s.visibleStart,s.visibleDuration,cols,height,dark,Math.min(900,sc.width),windowMs.value||undefined);
+  const data=spectrum(asset.channels[props.wave.channel],asset.sampleRate,s.visibleStart,s.visibleDuration,cols,height,dark,Math.min(900,sc.width),windowMs.value||undefined);
   image=document.createElement('canvas');image.width=cols;image.height=height;const c=image.getContext('2d')!;c.putImageData(new ImageData(data.rgba,cols,height),0,0);
   c.strokeStyle=css('--success');c.lineWidth=1.6;c.beginPath();data.intensity.forEach((v,i)=>{const xx=i/Math.max(1,data.intensity.length-1)*cols,yy=(1-v)*height;i===0?c.moveTo(xx,yy):c.lineTo(xx,yy);});c.stroke();cacheKey=key;oldAsset=asset;
  }
@@ -53,7 +54,7 @@ function draw(){
   for(const p of lipCurve(props.lip.times,values,props.offset,s.visibleStart,s.visibleDuration,sc.width,sc.height))p.move?sx.moveTo(p.x,p.y):sx.lineTo(p.x,p.y);sx.stroke();
  };
  if(props.showOpen)plotLip(props.lip?.open??[],css('--danger'));if(props.showWidth)plotLip(props.lip?.width??[],css('--wave'));
- for(const tier of [e.wordTier(),e.phoneTier()])for(const item of tier?.intervals??[]){const px=(item.xmin-s.visibleStart)/s.visibleDuration*sc.width;if(px>0&&px<sc.width){sx.strokeStyle=css('--teal');sx.globalAlpha=.35;sx.beginPath();sx.moveTo(px,0);sx.lineTo(px,sc.height);sx.stroke();sx.globalAlpha=1;}}
+ for(const tier of e.tierNames().map(e.tierByName))for(const item of tier?.intervals??[]){const px=(item.xmin-s.visibleStart)/s.visibleDuration*sc.width;if(px>0&&px<sc.width){sx.strokeStyle=css('--teal');sx.globalAlpha=.35;sx.beginPath();sx.moveTo(px,0);sx.lineTo(px,sc.height);sx.stroke();sx.globalAlpha=1;}}
 }
 function schedule(){cancelAnimationFrame(frame);frame=requestAnimationFrame(draw);}
 function down(event:PointerEvent){if(event.button!==0||props.disabled)return;props.editor.onGridMouseDown(event,props.rangeSelect);grid.value?.setPointerCapture(event.pointerId);grid.value?.focus();emit('changed');}
@@ -63,6 +64,7 @@ function double(event:MouseEvent){
  if(props.disabled)return;
  const hit=props.editor.hitTest(event);if(!hit)return;
  hit.time=endpointTime(hit.time,event);
+ if(hit.tier!==props.editor.state.wordTierName&&(hit.tier===props.editor.state.extraTierName||!props.editor.tiersLinked(hit.tier,props.editor.state.wordTierName))){props.editor.splitTierAt(hit.tier,hit.time);emit('changed');return;}
  const sequenceEndpoint=props.editor.state.sequenceStart!==null||!props.editor.wordTier()?.intervals.some(w=>w.text.trim()&&hit.time>=w.xmin&&hit.time<w.xmax)||(props.sequenceEditing&&event.ctrlKey);
  if(sequenceEndpoint){emit('time-double-click',hit.time,event.ctrlKey);return;}
  if(hit.tier===props.editor.state.phoneTierName){emit('phone-double-click',hit.time);return;}
@@ -76,16 +78,16 @@ function spectrumDown(event:PointerEvent){if(event.button!==0||!props.wave.asset
 function spectrumMove(event:PointerEvent){if(spectrumAnchor===null||!props.wave.asset)return;[props.wave.start,props.wave.end]=selection(spectrumAnchor,spectrumTime(event),props.wave.asset.duration);}
 function spectrumUp(event:PointerEvent){if(spectrumAnchor===null)return;spectrumMove(event);spectrumAnchor=null;emit('selection-end',props.wave.start,props.wave.end);}
 function wheel(event:WheelEvent){if(!event.ctrlKey&&!event.shiftKey)return;event.preventDefault();const wave=props.wave,duration=wave.asset?.duration??0;if(!duration)return;const length=duration/wave.zoom,rect=(event.currentTarget as HTMLElement).getBoundingClientRect(),fraction=Math.max(0,Math.min(1,(event.clientX-rect.left)/rect.width));if(event.ctrlKey){const next=Math.max(.08,Math.min(duration,length*(event.deltaY>0?1.18:.85))),anchor=wave.offset+fraction*length;wave.zoom=duration/next;wave.offset=Math.max(0,Math.min(duration-next,anchor-fraction*next));}else wave.offset=Math.max(0,Math.min(duration-length,wave.offset+(event.deltaY||event.deltaX)*length*.0015));schedule();}
-watch(()=>[props.revision,props.wave.offset,props.wave.zoom,props.offset,props.showOpen,props.showWidth,props.active,windowMs.value],()=>void nextTick(schedule));
+watch(()=>[props.revision,props.wave.offset,props.wave.zoom,props.wave.channel,props.offset,props.showOpen,props.showWidth,props.active,windowMs.value],()=>void nextTick(schedule));
 onMounted(()=>{observer=new ResizeObserver(schedule);if(container.value)observer.observe(container.value);themeObserver=new MutationObserver(()=>{cacheKey='';schedule();});themeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','style']});window.addEventListener('ptb-fonts-changed',schedule);void document.fonts.ready.then(schedule);schedule();});
 onUnmounted(()=>{observer?.disconnect();themeObserver?.disconnect();cancelAnimationFrame(frame);window.removeEventListener('ptb-fonts-changed',schedule);});
 </script>
 <template>
 <div ref="container" class="annotation-tracks" :data-start="wave.offset" :data-end="wave.offset+(wave.asset?.duration??1)/wave.zoom" @wheel="wheel">
- <div class="track-caption"><strong>语谱图</strong><span>0–{{Math.min(5000,(wave.asset?.sampleRate??10000)/2)}} Hz · Hann · 相对幅度</span><label>窗长 <select v-model.number="windowMs" aria-label="语谱窗长"><option v-for="ms in [5,10,20,50,100]" :key="ms" :value="ms">{{ms}} ms</option><option :value="0">1024 点（兼容）</option></select></label><span class="intensity-key">强度</span><span v-if="lip&&showOpen" class="open-key">唇开</span><span v-if="lip&&showWidth" class="width-key">唇宽</span></div>
+ <div class="track-caption"><strong>语谱图</strong><span>第 {{wave.channel+1}} 声道</span><span>0–{{Math.min(5000,(wave.asset?.sampleRate??10000)/2)}} Hz · Hann · 相对幅度</span><label>窗长 <select v-model.number="windowMs" aria-label="语谱窗长"><option v-for="ms in [5,10,20,50,100]" :key="ms" :value="ms">{{ms}} ms</option><option :value="0">1024 点（兼容）</option></select></label><span class="intensity-key">强度</span><span v-if="lip&&showOpen" class="open-key">唇开</span><span v-if="lip&&showWidth" class="width-key">唇宽</span></div>
  <div class="spectrum-row"><div class="frequency-labels"><span>{{Math.min(5000,(wave.asset?.sampleRate??10000)/2)}} Hz</span><span>0</span></div><div class="spectrum-wrap aligned-track"><canvas ref="spec" tabindex="0" aria-label="标注语谱图与唇形曲线" @pointerdown="spectrumDown" @pointermove="spectrumMove" @pointerup="spectrumUp" @pointercancel="spectrumUp" @dblclick="!disabled&&emit('time-double-click',endpointTime(spectrumTime($event),$event),$event.ctrlKey)"/><div v-if="wave.end>wave.start" class="linked-selection" aria-label="语谱图选区" :data-start="wave.start" :data-end="wave.end" :style="selectionStyle"/><div v-if="wave.asset&&isCurrentAudio(wave.asset,wave.channel)&&playback.position>=wave.offset&&playback.position<=wave.offset+(wave.asset.duration/wave.zoom)" class="annotation-cursor" :style="{left:((playback.position-wave.offset)/(wave.asset.duration/wave.zoom)*100)+'%'}"/></div></div>
- <div class="track-caption"><strong>标注层</strong><span>{{editor.state.wordTierName}} / {{editor.state.phoneTierName}}</span><small>{{sequenceEditing?'双击定起止点 · 音节内双击分声母/韵母 · Ctrl＋双击连续标注':'单击编辑 · 拖动边界/词 · Ctrl 多选 · 双击填充/插点'}}</small></div>
- <div class="grid-wrap aligned-track"><canvas ref="grid" class="annotation-grid" tabindex="0" aria-label="词层与音素层编辑器" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="up" @dblclick="double"/><div v-if="wave.end>wave.start" class="linked-selection grid-selection" aria-label="标注层选区" :data-start="wave.start" :data-end="wave.end" :style="selectionStyle"/></div>
+ <div class="track-caption"><strong>标注层</strong><span v-for="(name,index) in trackNames" :key="index">{{index+1}} · {{name||'未选择'}}</span><small>{{sequenceEditing?'双击定起止点 · 音节内双击分声母/韵母 · Ctrl＋双击连续标注':'单击编辑 · 拖动边界/标注 · Ctrl 多选 · 双击填充/插点'}}</small></div>
+ <div class="grid-wrap aligned-track"><canvas ref="grid" class="annotation-grid" :style="trackNames.length===3?{height:'calc(var(--annotation-grid-height,150px) * 1.5)'}:{}" tabindex="0" aria-label="词层与音素层编辑器" :data-tier-count="trackNames.length" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="up" @dblclick="double"/><div v-if="wave.end>wave.start" class="linked-selection grid-selection" aria-label="标注层选区" :data-start="wave.start" :data-end="wave.end" :style="selectionStyle"/></div>
  <div v-if="wave.end>=wave.start" class="selection-times aligned-track" aria-label="当前标注选区" :data-start="wave.start" :data-end="wave.end">
   <span v-if="rangePositions.close" class="combined" :style="{left:(rangePositions.center*100)+'%'}">{{wave.start.toFixed(6)}}–{{wave.end.toFixed(6)}} s</span>
   <template v-else><span :style="{left:(rangePositions.a*100)+'%'}">{{wave.start.toFixed(6)}} s</span><span class="range-end" :style="{left:(rangePositions.b*100)+'%'}">{{wave.end.toFixed(6)}} s</span></template>

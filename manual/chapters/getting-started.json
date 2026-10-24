@@ -6,6 +6,34 @@
     "type": "doc",
     "content": [
       {
+        "type": "paragraph",
+        "attrs": {
+          "id": "getting-started-video-tutorial"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "工具箱介绍："
+          },
+          {
+            "type": "text",
+            "text": "观看介绍视频",
+            "marks": [
+              {
+                "type": "link",
+                "attrs": {
+                  "href": "https://www.phonetictoolbox.com/#tutorial-intro"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "。"
+          }
+        ]
+      },
+      {
         "type": "heading",
         "attrs": {
           "id": "getting-started-section-01",
@@ -1992,6 +2020,37 @@
           "targetId": "settings-retention",
           "label": "查看清理设置与更新选项"
         }
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "id": "getting-started-announcements",
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "查看公告"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "点击侧栏底部的公告，可以查看工具箱的新消息。同一条公告在当前设备只自动提醒一次，关闭后仍可从这里重新查看。自动提示会避开录音、感知实验和其他对话框。"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "从3.1.0起，应用支持独立公告。后续通知会在联网打开工作台时读取，无需为每条通知重新安装软件。带有官网下载入口的公告，可以点击前往官网查看下载与安装说明。"
+          }
+        ]
       }
     ]
   },

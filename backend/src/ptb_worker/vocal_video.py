@@ -85,7 +85,7 @@ class VideoSession:
         self.packets=[];self.size=0;self.opus=None;self.closed=False
         self.cancelled=threading.Event()
         if self.target.suffix.lower() not in ('.mp4','.webm'):raise ValueError('视频扩展名应为 .mp4 或 .webm')
-        self.runtime=os.environ.get('PTB_M05_PYTHON') or (sys.executable if sys.platform=='linux' else None)
+        self.runtime=os.environ.get('PTB_M05_PYTHON') or (sys.executable if sys.platform in ('linux','darwin') else None)
         if self.target.suffix.lower()=='.mp4' and (not self.runtime or not Path(self.runtime).is_file()):
             raise ValueError('MP4 编码运行环境不可用，请通过统一工作台入口启动')
 
@@ -137,7 +137,10 @@ class VideoSession:
                 source=Path(directory)/'input.webm';source.write_bytes(raw)
                 encode(source,target,dict(width=self.width,height=self.height,duration=self.duration))
             return
-        from ptb_worker.native.windows import OwnedProcess
+        if sys.platform=='darwin':
+            from ptb_worker.native.darwin import OwnedProcess
+        else:
+            from ptb_worker.native.windows import OwnedProcess
         from . import vocal_mp4 as mp4
         with tempfile.TemporaryDirectory(prefix='ptb-m10-mp4-',dir=self.scratch_dir) as directory:
             scratch=Path(directory);source=scratch/'input.webm';source.write_bytes(raw)

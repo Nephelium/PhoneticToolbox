@@ -52,7 +52,7 @@ class BrowserVocalRuntime:
             r.close()
             return {'closed': True}
         else:
-            if op in ('animation/frame', 'audio/monitor') and 'position' in body:
+            if op in ('animation/frame', 'audio/monitor', 'animation/stop', 'deactivate', 'live') and 'position' in body:
                 r.live.acknowledge(body)
             if op in ('heartbeat', 'status') and body.get('completed') is True:
                 r.live.acknowledge(body)
@@ -76,4 +76,6 @@ class BrowserVocalRuntime:
         elif op in fields:
             key = fields[op]
             result['checkpoint'] = {key: self.checkpoint()[key]}
+        elif ('pose' in result['value'] or op=='animation/frame' and not result['value'].get('active',True)):
+            result['checkpoint'] = {'pose': self.checkpoint()['pose']}
         return json.dumps(result, ensure_ascii=False, allow_nan=False, separators=(',', ':'))

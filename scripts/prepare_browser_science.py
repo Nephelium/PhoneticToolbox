@@ -11,6 +11,35 @@ PYODIDE = '0.29.3'
 BASE = f'https://cdn.jsdelivr.net/pyodide/v{PYODIDE}/full/'
 
 
+def pack_sources(output, runtime):
+    source_records={}
+    with zipfile.ZipFile(output/'ptb-browser.zip','w',zipfile.ZIP_DEFLATED) as archive:
+        version=tomllib.loads((ROOT/'packages/phonetic_core/pyproject.toml').read_text('utf-8'))['project']['version']
+        archive.writestr(f'phonetic_core-{version}.dist-info/METADATA',f'Metadata-Version: 2.1\nName: phonetic-core\nVersion: {version}\n')
+        sources=list((ROOT/'packages/phonetic_core/src').rglob('*.py'))
+        sources.extend((ROOT/'backend/src/ptb_worker').rglob('*.py'))
+        for folder in ('ptb_worker/io','ptb_api'):
+            sources.extend((ROOT/'backend/src'/folder).glob('*.py'))
+        for source in sorted(set(sources)):
+            if not source.exists():continue
+            anchor=ROOT/('packages/phonetic_core/src' if source.is_relative_to(ROOT/'packages') else 'backend/src')
+            name=source.relative_to(anchor).as_posix();raw=source.read_bytes()
+            archive.writestr(name,raw);source_records[name]=hashlib.sha256(raw).hexdigest()
+        model=ROOT/'packages/phonetic_core/src/phonetic_core/spec2wav/data/parameters-v5.npz'
+        if hashlib.sha256(model.read_bytes()).hexdigest()!='e6edbf5c450fc08f4ff4c39d2828a15e24c4dd7286c619308c671ed4df7dffdc':raise ValueError('Approved model identity mismatch')
+        for source in (model,model.with_suffix('.json')):
+            name=source.relative_to(ROOT/'packages/phonetic_core/src').as_posix();raw=source.read_bytes();archive.writestr(name,raw);source_records[name]=hashlib.sha256(raw).hexdigest()
+        for name,module in (('openpyxl','openpyxl'),('et_xmlfile','et_xmlfile'),('python_docx','docx'),('xlrd','xlrd')):
+            wheel=next(runtime.glob(name+'-*.whl'))
+            with zipfile.ZipFile(wheel) as package:
+                for info in package.infolist():
+                    if info.filename.startswith(module+'/') and not info.is_dir():archive.writestr(info.filename,package.read(info))
+        for name in ('DoulosSIL-Regular.ttf','Doulos-OFL.txt'):
+            source=ROOT/'backend/src/ptb_worker/assets'/name
+            raw=source.read_bytes();key='ptb_worker/assets/'+name;archive.writestr(key,raw);source_records[key]=hashlib.sha256(raw).hexdigest()
+    return source_records
+
+
 def prepare(output,render_font_directory=None):
     output.mkdir(parents=True, exist_ok=True)
     if render_font_directory is not None:
@@ -52,31 +81,7 @@ def prepare(output,render_font_directory=None):
         pending.append((wheel['filename'],wheel['url'],wheel['digests']['sha256']))
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
         list(pool.map(lambda args:fetch(*args),pending))
-    source_records={}
-    with zipfile.ZipFile(output/'ptb-browser.zip','w',zipfile.ZIP_DEFLATED) as archive:
-        version=tomllib.loads((ROOT/'packages/phonetic_core/pyproject.toml').read_text('utf-8'))['project']['version']
-        archive.writestr(f'phonetic_core-{version}.dist-info/METADATA',f'Metadata-Version: 2.1\nName: phonetic-core\nVersion: {version}\n')
-        sources=list((ROOT/'packages/phonetic_core/src').rglob('*.py'))
-        sources.extend((ROOT/'backend/src/ptb_worker').rglob('*.py'))
-        for folder in ('ptb_worker/io','ptb_api'):
-            sources.extend((ROOT/'backend/src'/folder).glob('*.py'))
-        for source in sorted(set(sources)):
-            if not source.exists():continue
-            anchor=ROOT/('packages/phonetic_core/src' if source.is_relative_to(ROOT/'packages') else 'backend/src')
-            name=source.relative_to(anchor).as_posix();raw=source.read_bytes()
-            archive.writestr(name,raw);source_records[name]=hashlib.sha256(raw).hexdigest()
-        model=ROOT/'packages/phonetic_core/src/phonetic_core/spec2wav/data/parameters-v5.npz'
-        if hashlib.sha256(model.read_bytes()).hexdigest()!='e6edbf5c450fc08f4ff4c39d2828a15e24c4dd7286c619308c671ed4df7dffdc':raise ValueError('Approved model identity mismatch')
-        for source in (model,model.with_suffix('.json')):
-            name=source.relative_to(ROOT/'packages/phonetic_core/src').as_posix();raw=source.read_bytes();archive.writestr(name,raw);source_records[name]=hashlib.sha256(raw).hexdigest()
-        for name,module in (('openpyxl','openpyxl'),('et_xmlfile','et_xmlfile'),('python_docx','docx'),('xlrd','xlrd')):
-            wheel=next(runtime.glob(name+'-*.whl'))
-            with zipfile.ZipFile(wheel) as package:
-                for info in package.infolist():
-                    if info.filename.startswith(module+'/') and not info.is_dir():archive.writestr(info.filename,package.read(info))
-        for name in ('DoulosSIL-Regular.ttf','Doulos-OFL.txt'):
-            source=ROOT/'backend/src/ptb_worker/assets'/name
-            raw=source.read_bytes();key='ptb_worker/assets/'+name;archive.writestr(key,raw);source_records[key]=hashlib.sha256(raw).hexdigest()
+    source_records=pack_sources(output, runtime)
     result=dict(schema='ptb-browser-runtime/1',pyodide=PYODIDE,packages={k:lock['packages'][k]['version'] for k in sorted(wanted)},files=records,sources=source_records,archive_sha256=hashlib.sha256((output/'ptb-browser.zip').read_bytes()).hexdigest())
     if previous.get('native_praat'):
         for name,record in previous['native_praat'].items():
@@ -96,6 +101,35 @@ def prepare(output,render_font_directory=None):
     print(json.dumps(dict(success=True,files=len(records),sources=len(source_records),bytes=sum(r['bytes'] for r in records.values()))))
 
 
+def prepare_sources(output, runtime_source, *, update_lock=False):
+    """Repack current shared sources, reusing only hash-verified local binaries.
+
+    The output is an overlay: serve it before runtime_source. No downloads,
+    global installs, or edits to the caller's existing runtime directory.
+    """
+    lock_path=ROOT/'resources/manifests/browser-science-runtime.json'
+    result=json.loads(lock_path.read_text('utf-8'))
+    for prefix,records in [('runtime',result['files']),('',result['native_praat']),('fonts',result['render_fonts'])]:
+        for name,record in records.items():
+            path=runtime_source/prefix/name
+            if hashlib.sha256(path.read_bytes()).hexdigest()!=record['sha256']:
+                raise ValueError('Existing browser runtime identity mismatch: '+name)
+    output.mkdir(parents=True,exist_ok=True)
+    result['sources']=pack_sources(output,runtime_source/'runtime')
+    result['archive_sha256']=hashlib.sha256((output/'ptb-browser.zip').read_bytes()).hexdigest()
+    text=json.dumps(result,ensure_ascii=False,indent=2)+'\n'
+    (output/'manifest.json').write_text(text,'utf-8')
+    if update_lock:lock_path.write_text(text,'utf-8')
+    print(json.dumps(dict(success=True,sources=len(result['sources']),archive_sha256=result['archive_sha256'],runtime_source=str(runtime_source))))
+
+
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,required=True);parser.add_argument('--render-font-directory',type=Path)
-    options=parser.parse_args();prepare(options.output.resolve(),options.render_font_directory)
+    parser.add_argument('--sources-only',action='store_true');parser.add_argument('--runtime-source',type=Path);parser.add_argument('--update-lock',action='store_true')
+    options=parser.parse_args()
+    if options.sources_only:
+        if options.runtime_source is None:parser.error('--sources-only requires --runtime-source')
+        prepare_sources(options.output.resolve(),options.runtime_source.resolve(),update_lock=options.update_lock)
+    else:
+        if options.update_lock:parser.error('--update-lock requires --sources-only')
+        prepare(options.output.resolve(),options.render_font_directory)

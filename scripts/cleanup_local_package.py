@@ -9,6 +9,7 @@ import shutil
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
+from owned_qa_paths import DEFAULT_QA_ROOT, qa_root
 
 
 def no_links(path):
@@ -35,14 +36,14 @@ def main():
     if len(token) != 8 or any(c not in '0123456789abcdef' for c in token):
         raise ValueError('Unexpected run identity')
     external = Path(report['external']).absolute()
-    if external != Path('D:/PTB-Compact-QA-20261006') / ('local-' + token):
+    if external != qa_root(report.get('qaRoot', DEFAULT_QA_ROOT)) / ('local-' + token):
         raise ValueError('External QA ownership mismatch')
     targets = [external, out / 'owned-setup', out / 'owned-update.zip', out / 'portable-origin', out / 'installer-origin']
     for kind in ('portable', 'installer'):
         targets.extend(out / (kind + '-handoff') / part for part in ('profile', 'temp', 'vocal'))
         for retry in out.glob(kind + '-handoff-retry-*'):
             targets.extend(retry / part for part in ('profile', 'temp', 'vocal'))
-    for evidence in out.glob('portable-handoff*'):
+    for evidence in [*out.glob('portable-handoff*'), *external.glob('portable-handoff*')]:
         handoff = evidence / 'handoff.json'
         if handoff.is_file():
             request = Path(json.loads(handoff.read_text('utf8'))['request'])
@@ -50,13 +51,13 @@ def main():
             metadata = json.loads(handoff.read_text('utf8'))
             new_app = Path(metadata['origin']).absolute().parent.parent / ('PhoneticToolbox-' + report['version'] + '-' + request.parent.name[:8])
             if new_app.exists():
-                if new_app.parent != out or not new_app.name.startswith('PhoneticToolbox-' + report['version'] + '-'):
+                if new_app.parent not in (out, external) or not new_app.name.startswith('PhoneticToolbox-' + report['version'] + '-'):
                     raise ValueError('Portable handoff target is outside the owned run')
                 no_links(new_app)
                 descriptor = json.loads((new_app / 'PhoneticToolbox/application.json').read_text('utf8'))
                 if descriptor['executable']['sha256'] != report['exeSha256']:
                     raise ValueError('Portable fixture identity differs')
-                targets.append(new_app)
+                if not new_app.is_relative_to(external):targets.append(new_app)
     # Exclude this cleanup process and its command-only parent, which reference
     # the report; no executable or command may still reference a removal target.
     processes = json.loads(subprocess.check_output(['powershell.exe', '-NoProfile', '-Command',
