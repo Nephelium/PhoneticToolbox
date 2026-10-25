@@ -29,12 +29,23 @@ function csvRows(text){
   const screenshot=async name=>{await page.screenshot({path:path.join(out,name)});report.screenshots.push(name);};
   async function openModule(){
     await page.locator('.home-page').waitFor();
+    await page.waitForTimeout(3200);
+    const announcement=page.getByRole('dialog').getByRole('button',{name:'知道了',exact:true});
+    if(await announcement.isVisible())await announcement.click();
     await page.locator('.nav-item').and(page.getByRole('button',{name:'语言地图',exact:true})).click();
     await atlas().getByLabel('选择语言地图资料夹',{exact:true}).waitFor({state:'attached'});
     await page.waitForFunction(()=>{const el=document.querySelector('[aria-label="选择语言地图资料夹"]');return el&&!el.disabled;});
   }
   async function download(button,name){
+    const label=(await button.textContent()).trim();
     const event=page.waitForEvent('download',{timeout:90000});await button.click();
+    if(['SVG','PNG'].includes(label)){
+      const dialog=page.getByRole('dialog');await dialog.waitFor();
+      // These full-content exports explicitly include the legend. The options
+      // suite separately verifies the current default (legend off) and toggles.
+      await dialog.locator('.export-options>label:first-child input').check();
+      await dialog.getByRole('button',{name:'导出图片',exact:true}).click();
+    }
     const file=await event;assert.equal(await file.failure(),null);
     const target=path.join(scratch,name);await file.saveAs(target);const bytes=await fs.readFile(target);
     report.exports.push({name,suggestedFilename:file.suggestedFilename(),bytes:bytes.length,sha256:sha(bytes)});return bytes;
@@ -484,8 +495,10 @@ function csvRows(text){
     await recordFileReads();
     assert(!report.fileReads.some(r=>r.name==='unlisted-private-book.pdf'));
     assert.deepEqual(report.requests.filter(r=>!['GET','HEAD'].includes(r.method)||r.bodyBytes),[],'No upload or other network write');
-    assert.deepEqual(report.requests.filter(r=>/^https?:/.test(r.url)&&new URL(r.url).origin!==new URL(url).origin),[],'No external data requests');
-    assert.deepEqual(report.errors,[]);check('All observed network requests are same-origin read-only; no local research bytes uploaded');
+    const systemAnnouncement=r=>r.url==='https://www.phonetictoolbox.com/announcements/v1.json'&&r.method==='GET'&&r.bodyBytes===0;
+    report.systemAnnouncements=report.requests.filter(systemAnnouncement);
+    assert.deepEqual(report.requests.filter(r=>/^https?:/.test(r.url)&&new URL(r.url).origin!==new URL(url).origin&&!systemAnnouncement(r)),[],'Only the fixed read-only system announcement may leave the preview origin');
+    assert.deepEqual(report.errors,[]);check('Map data stays same-origin read-only; only the fixed system-announcement GET is allowed externally, and no local research bytes are uploaded');
     report.success=true;
   }catch(error){report.failure=String(error.stack||error);report.failedStage=stage;if(page){await screenshot('failure.png').catch(()=>{});report.failureText=await page.locator('body').innerText().catch(()=>'');}throw error;}
   finally{

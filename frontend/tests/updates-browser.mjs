@@ -79,7 +79,7 @@ try{
    assert(actualTitle&&actualVersion,'Release notes must identify their actual version');
    await page.evaluate(({notes,version})=>{window.fixture.release.notes=notes;window.fixture.release.version=version;},{notes:actualNotes,version:actualVersion});
    await dialog.locator('summary').click();await dialog.getByRole('button',{name:'检查更新',exact:true}).click();
-   await dialog.locator('.release-markdown strong').getByText(actualTitle,{exact:true}).waitFor();
+   await dialog.locator('.release-markdown :is(h1,strong)').getByText(actualTitle,{exact:true}).waitFor();
    await dialog.locator('summary').click();
    // Expected structure comes from the author's current Markdown, including
    // revisions made during release review; do not bind a writer to old counts.
@@ -91,7 +91,11 @@ try{
      await page.setViewportSize({width,height});await page.evaluate(async({theme,scale,font})=>{const {setPageScale}=await import('/src/state/pageZoom.ts');setPageScale(scale);document.documentElement.dataset.theme=theme;document.documentElement.style.fontSize=font+'px';},{theme,scale,font});
      await page.evaluate(()=>document.fonts.ready);
      const layout=await dialog.evaluate(el=>{const notes=el.querySelector('.release-notes'),action=el.querySelector('.update-footer .primary'),box=el.getBoundingClientRect(),button=action.getBoundingClientRect();return{overflow:el.scrollWidth>el.clientWidth+1,notesScroll:notes.scrollHeight>notes.clientHeight,buttonVisible:button.top>=0&&button.bottom<=innerHeight,dialogVisible:box.top>=0&&box.bottom<=innerHeight};});
-     assert.equal(layout.overflow,false);assert.equal(layout.notesScroll,true);assert.equal(layout.buttonVisible,true);assert.equal(layout.dialogVisible,true);
+     assert.equal(layout.overflow,false);assert.equal(layout.buttonVisible,true);assert.equal(layout.dialogVisible,true);
+     // Short hotfix notes may fit. Require both ends to remain reachable,
+     // and real scroll movement whenever the authored content overflows.
+     const reachable=await dialog.locator('.release-notes').evaluate(el=>{const box=el.getBoundingClientRect();el.scrollTop=el.scrollHeight;const end=el.querySelector('.release-markdown')?.lastElementChild;const bottom=!!end&&end.getBoundingClientRect().bottom<=box.bottom+1;const moves=el.scrollHeight<=el.clientHeight||el.scrollTop>0;el.scrollTop=0;const start=el.querySelector('.release-markdown')?.firstElementChild;return bottom&&moves&&!!start&&start.getBoundingClientRect().top>=box.top-1;});
+     assert.equal(reachable,true,'Both ends of the current release notes must be readable');
      await dialog.screenshot({path:path.join(folder,`notes-${theme}-${width}-${scale}.png`)});
      await dialog.locator('.release-notes').evaluate(el=>el.scrollTop=el.scrollHeight);
      await dialog.screenshot({path:path.join(folder,`notes-end-${theme}-${width}-${scale}.png`)});

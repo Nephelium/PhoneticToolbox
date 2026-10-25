@@ -115,6 +115,19 @@ test('actual SVG uses only active land and paints independent context lines befo
  }finally{map.close();}
 });
 
+test('actual Canvas sources and SVG omit coarse coastlines without changing raw context or independent borders',async()=>{
+ const raw=data(),line=(x:number)=>({type:'LineString',coordinates:[[x,22],[x+1,23]]});
+ raw.territory.features.push(feature('coarse-coast',line(120),{boundaryType:'海洋'}),feature('coarse-province',line(122),{boundaryType:'省界'}),feature('national-border',line(124),{boundaryType:'国界'}));
+ const before=structuredClone(raw),map=mount({map:async(name:keyof typeof raw)=>raw[name]});
+ try{await map.start();const ids=map.m.territory.getFeatures().map((f:any)=>f.getId());
+  assert(!ids.includes('coarse-coast'));assert(!ids.includes('coarse-province'));assert(ids.includes('national-border'));
+  const svg=map.m.exportSvg('test',[],'source');
+  const strokePath=(x:number)=>{const a=[6378137*x*Math.PI/180/1000,200-6378137*Math.log(Math.tan(Math.PI/4+22*Math.PI/360))/1000].map(n=>n*6);return `M${a[0].toFixed(2)},${a[1].toFixed(2)}`;};
+  assert(!svg.includes(strokePath(120)));assert(!svg.includes(strokePath(122)));assert(svg.includes(strokePath(124)));
+  assert.deepEqual(raw,before);
+ }finally{map.close();}
+});
+
 test('actual multilevel outlines have no fills, retain one primary, export independent choices and release listeners',async()=>{
  const raw={...data(),city:collection([feature('city:1',polygon())]),district:collection([feature('district:1',polygon())])},calls:string[]=[];
  const map=mount({map:async(name:keyof typeof raw)=>{calls.push(name);return raw[name];}});

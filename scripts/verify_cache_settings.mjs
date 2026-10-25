@@ -22,7 +22,11 @@ async function launch(label){
  let target;for(let i=0;i<1200&&child.exitCode===null;i++){
   try{const tabs=await(await fetch(`http://127.0.0.1:${port}/json/list`,{signal:AbortSignal.timeout(200)})).json();target=tabs.find(t=>t.type==='page'&&t.url.startsWith('ptbapp://app/'));if(target)break;}catch{}await sleep(100);
  }
- if(!target)throw Error('Frozen Qt page failed to start: '+label);
+ if(!target){
+  await fs.writeFile(path.join(run,'process.log'),Buffer.concat(logs));
+  await fs.writeFile(path.join(run,'startup-failure.json'),JSON.stringify({pid:child.pid,exitCode:child.exitCode,signal:child.signalCode,port,profile,cache},null,2));
+  throw Error('Frozen Qt page failed to start: '+label+' (exit '+child.exitCode+')');
+ }
  const socket=new WebSocket(target.webSocketDebuggerUrl);await new Promise((resolve,reject)=>{socket.addEventListener('open',resolve,{once:true});socket.addEventListener('error',reject,{once:true});});
  let next=0;const pending=new Map();socket.addEventListener('message',({data})=>{const v=JSON.parse(data);if(pending.has(v.id)){pending.get(v.id)(v);pending.delete(v.id);}});
  async function command(method,params){const id=++next;const promise=new Promise(resolve=>pending.set(id,resolve));socket.send(JSON.stringify({id,method,params}));let timer;let answer;try{answer=await Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('Qt command timed out: '+method)),10000)})]);}finally{clearTimeout(timer);pending.delete(id)}if(answer.error)throw Error(JSON.stringify(answer.error));return answer.result;}

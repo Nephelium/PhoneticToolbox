@@ -1,0 +1,7 @@
+{
+  "tag_name": "v3.1.2",
+  "name": "PhoneticToolbox 3.1.2 修复版",
+  "published_at": "2026-10-25T18:22:21.549923+00:00",
+  "html_url": "https://github.com/Nephelium/PhoneticToolbox/releases/tag/v3.1.2",
+  "body": "# PhoneticToolbox 3.1.2\n\n- **重点：修复语言地图闪烁和底图消失**。开启背景图片后，拖动、缩放地图时也能正常显示底图和调查点。\n- **修复海岸轮廓重复显示**：由当前地图层级统一绘制海岸轮廓，避免两套轮廓交错；SVG、PNG 导出同步修正。\n\n本次提供 Windows 修复版。macOS 下载暂时保留 3.1.1。\n\nMac 版如遇语言地图闪烁或底图不显示，请先在设置的外观页点击**不使用背景图**，暂时关闭背景图片。\n"
+}

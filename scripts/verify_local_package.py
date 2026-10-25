@@ -109,7 +109,10 @@ def main():
         phase('long-path-install-uninstall', python + ['scripts/verify_cached_install.py', '--setup', setup, '--exe', exe,
               '--output', external / 'long-install', '--with-workspace', '--long-paths', '--qa-root', selected_qa_root])
         phase('cache-processes', python + ['scripts/verify_cache_processes.py', '--exe', exe, '--output', external / 'cache-processes', '--qa-root', selected_qa_root])
-        phase('cache-settings', [node, ROOT / 'scripts/verify_cache_settings.mjs', exe, external / 'cache-settings'])
+        cache_settings = external / 'cache-settings'
+        if args.resume and cache_settings.exists():
+            cache_settings = external / ('cache-settings-retry-' + uuid.uuid4().hex[:8])
+        phase('cache-settings', [node, ROOT / 'scripts/verify_cache_settings.mjs', exe, cache_settings])
         # Real portable and installed handoff use the same final application.
         archive = out / 'owned-update.zip'
         if not archive.exists():

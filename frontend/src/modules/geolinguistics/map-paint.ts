@@ -1,7 +1,9 @@
 export interface MapPaint {fill:string;stroke:string;width:number;dash?:number[]}
 
-/** Administrative layers provide the internal boundaries for the current scale. */
-export function contextBoundaryVisible(boundaryType?:string):boolean{return boundaryType!=='省界';}
+/** Current administrative faces supply province outlines and coastline. The
+ * frozen context's 海洋 line is a separate, coarser coastline, so drawing it
+ * as well creates two shores. Independent national/disputed lines stay. */
+export function contextBoundaryVisible(boundaryType?:string):boolean{return boundaryType!=='省界'&&boundaryType!=='海洋';}
 
 /** Only the active administrative scale supplies land and coastline. */
 export function contextGeometryVisible(type:string,role?:string):boolean{

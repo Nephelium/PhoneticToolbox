@@ -257,7 +257,7 @@ def run(out,scratch,bundle=None,client_check=False,layout_check=False,frontend_d
                     fill('.geography-toolbar label select',level,'change');until('!document.querySelector(".map-loading")');pause(350)
                     svg=ET.fromstring(export('SVG','.svg').read_text('utf-8'));ns={'s':'http://www.w3.org/2000/svg'}
                     paths=svg.findall('.//s:g[@clip-path]/s:path',ns)
-                    assert len(paths)==size+14,(level,len(paths))
+                    assert len(paths)==size+13,(level,len(paths))
                     assert not any(p.get('fill')=='#edf0ed' for p in paths)
                     assert sum(p.get('fill')=='#526c78' for p in paths)==10
                     report['checks'].append(dict(theme=theme,level=level,paths=len(paths),singleScale=True))
@@ -311,7 +311,7 @@ def run(out,scratch,bundle=None,client_check=False,layout_check=False,frontend_d
                     until('!document.querySelector(".map-loading")');pause(400)
                     svg_file=export('SVG','.svg');svg=ET.fromstring(svg_file.read_text('utf-8'));ns={'s':'http://www.w3.org/2000/svg'};paths=svg.find('s:g',ns).findall('s:path',ns)
                     lines=[p for p in paths if p.get('d') and 'Z' not in p.get('d')]
-                    assert len(paths)==14+size and len(lines)==4
+                    assert len(paths)==13+size and len(lines)==3
                     assert sum(p.get('stroke')=='#9aa9aa' for p in paths)==size
                     assert sum(p.get('fill')=='#526c78' for p in paths)==10
                     assert sum(p.get('stroke-dasharray')=='4 3' for p in lines)==1
@@ -319,12 +319,12 @@ def run(out,scratch,bundle=None,client_check=False,layout_check=False,frontend_d
                     # coordinate, source seam or geographic-content comparison.
                     fingerprints={'国界':(14,6392),'争议':(1,105),'港澳':(2,52),'海洋':(362,6267),'省界':(94,18724)}
                     presence={name:sum(p.get('d').count('M')==segments and len(re.findall('[ML]',p.get('d')))==vertices for p in lines) for name,(segments,vertices) in fingerprints.items()}
-                    assert presence=={'国界':1,'争议':1,'港澳':1,'海洋':1,'省界':0},presence
+                    assert presence=={'国界':1,'争议':1,'港澳':1,'海洋':0,'省界':0},presence
                     row=dict(theme=theme,step=step,automaticLevel=level,zoom=zoom,adminFeatures=size,svgPaths=len(paths),boundaryPresence=presence,jdSymbols=10)
                     if level=='district':
                         image=QImage(str(export('PNG','.png')));assert not image.isNull() and image.width()==2*float(svg.get('width')) and image.height()==2*float(svg.get('height'));row['pngSize']=[image.width(),image.height()]
                     shot(f'renderer-{theme}-{level}-{step}');report['rendererCases'].append(row)
-            report['checks'].append('Actual Qt automatic zoom province/city/district and back: one admin set, fixed territory province omitted,4other boundary classes and10JD retained, light/dark screen/SVG and PNG exports; renderer counts only')
+            report['checks'].append('Actual Qt automatic zoom province/city/district and back: one admin set, fixed province/coastline omitted,3 independent boundary classes and10JD retained, light/dark screen/SVG and PNG exports; renderer counts only')
             report['success']=True;return
         if jiyuan_check:
             assert explicit_data is not None

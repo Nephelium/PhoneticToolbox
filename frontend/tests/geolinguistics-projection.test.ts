@@ -23,6 +23,7 @@ test('context omits country faces and province lines before projection and prese
  const raw={type:'FeatureCollection',features:[
   {type:'Feature',id:'coarse',geometry:polygon,properties:{renderRole:'administrative-display-area'}},
   {type:'Feature',id:'province',geometry:line,properties:{boundaryType:'省界'}},
+  {type:'Feature',id:'coarse-coastline',geometry:line,properties:{boundaryType:'海洋'}},
   {type:'Feature',id:'mixed',geometry:{type:'GeometryCollection',geometries:[polygon,line]},properties:{}},
   {type:'Feature',id:'symbol',geometry:polygon,properties:{renderRole:'boundary-symbol'}}
  ]},before=structuredClone(raw),read=t.mock.method(GeoJSON.prototype,'readFeatures');

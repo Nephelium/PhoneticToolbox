@@ -2,9 +2,10 @@ import {it} from 'node:test';
 import assert from 'node:assert/strict';
 import {mapPaint,mapPaintPriority,contextBoundaryVisible,contextGeometryVisible,administrativeFill} from '../src/modules/geolinguistics/map-paint.ts';
 
-it('uses the active administrative layer for province lines while retaining national context',()=>{
+it('uses the active administrative layer for province and coastline outlines while retaining national context',()=>{
  assert.equal(contextBoundaryVisible('省界'),false);
- for(const kind of ['国界','争议','港澳','海洋',undefined])assert.equal(contextBoundaryVisible(kind),true);
+ assert.equal(contextBoundaryVisible('海洋'),false);
+ for(const kind of ['国界','争议','港澳',undefined])assert.equal(contextBoundaryVisible(kind),true);
 });
 
 it('never fills open boundary or drawing lines in any layer',()=>{

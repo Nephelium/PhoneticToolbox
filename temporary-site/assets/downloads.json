@@ -1,28 +1,31 @@
 {
-  "version": "3.0.4",
+  "version": "3.1.2",
   "files": {
     "PhoneticToolbox-windows-x64.exe": {
-      "size": 496270906,
-      "sha256": "f2818b137d20f6f6f9540ff1066e1d326d0cfbeccd50c130e312bd45aacd6af7"
+      "size": 498169114,
+      "sha256": "af48ef4c2dfd184d80e1bfd9449f446c2fe7c981ed2b3dab51e4ced429aa4848"
     },
-    "PhoneticToolbox-3.0.4-windows-x64-setup.exe": {
-      "size": 498186108,
-      "sha256": "7934caf23dc3fa2cb6f1168600940002d05cbfd7b44d13944dff3b35ca32e1c2"
+    "PhoneticToolbox-3.1.2-windows-x64-portable.zip": {
+      "size": 498169680,
+      "sha256": "575fea18600585da9af1a7117f7323e804a950236848aaa602650b95a38f47eb"
+    },
+    "PhoneticToolbox-3.1.2-windows-x64-setup.exe": {
+      "size": 497967212,
+      "sha256": "2a107ece84346cba9024be9905320b947651e7a198e1b80e22af35ffc020aa48"
     }
   },
-  "source": "https://www.phonetictoolbox.com/releases/windows-x64/3.0.4/ptb-release.json",
+  "source": "https://www.phonetictoolbox.com/releases/windows-x64/3.1.2/ptb-release.json",
   "macos": {
     "schema": "ptb-macos-download/1",
-    "version": "3.0.3",
+    "version": "3.1.1",
     "channel": "preview",
-    "revision": "r6",
     "platform": "macos-arm64",
     "minimumMacOS": "14.0",
-    "testedMacOS": "26.7.1",
-    "name": "PhoneticToolbox-3.0.3-macos14-arm64-preview-r6.zip",
-    "url": "/releases/macos-arm64/3.0.3/PhoneticToolbox-3.0.3-macos14-arm64-preview-r6.zip",
-    "size": 476461931,
-    "sha256": "fc44db9ea9f29723c18393029fe97e11719a29ac9edfcdaeb464d64bcf9596a1",
+    "testedMacOS": "26.6.2",
+    "name": "PhoneticToolbox-3.1.1-macos14-arm64-preview.zip",
+    "url": "/releases/macos-arm64/3.1.1/PhoneticToolbox-3.1.1-macos14-arm64-preview.zip",
+    "size": 491915761,
+    "sha256": "6b4227705b3cf60c1d3c7cfa5759839f42b279af27d83aa9e02975b05c9514ac",
     "signing": "ad-hoc",
     "notarized": false,
     "instructions": "/#macos-download"

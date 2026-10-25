@@ -1,4 +1,4 @@
-<h1 align="center">PhoneticToolbox 3.1.1</h1>
+<h1 align="center">PhoneticToolbox 3.1.2</h1>
 
 <p align="center"><strong>语音学工具箱</strong><br>把录音、分析、标注、合成与感知实验放进同一个工作台。</p>
 
@@ -14,7 +14,7 @@ PhoneticToolbox 是韶子为语言学、实验语音学研究与教学制作的�
 
 到了 v3，十九个工具共用侧栏、标签页、设置和使用说明。从一段录音出发，可以查看波形与语谱图、提取参数、整理标注，再继续做语音合成、音系分析或感知实验。也可以打开音标表、设计实验、读几页论文，或在地图上比较各地的语言现象。
 
-下面先介绍下载与使用，再逐个展示工具和实际示例。本页对应 **3.1.1 源码**，语言地图增加全屏、多级边界与可选导出内容，优化拖动、缩放和筛选恢复；可按中国省、市、县浏览方言与语言现象，比较两地记录并制作自己的研究地图。已发布的安装包与版本信息以[官网](https://www.phonetictoolbox.com/)为准。
+下面先介绍下载与使用，再逐个展示工具和实际示例。本页对应 **3.1.2 源码**，修复语言地图在背景图片模式下闪烁、底图消失和海岸轮廓重复显示的问题；可按中国省、市、县浏览方言与语言现象，比较两地记录并制作自己的研究地图。已发布的安装包与版本信息以[官网](https://www.phonetictoolbox.com/)为准。
 
 ![旧版 Windows 工作台首页，按分析与采集、合成与操控、标注与实验、文献与学习组织原有十八个工具](docs/assets/readme/absolutely-home.png)
 
@@ -22,24 +22,26 @@ PhoneticToolbox 是韶子为语言学、实验语音学研究与教学制作的�
 
 ### 选择 Windows 版本
 
-可以在[官方网站](https://www.phonetictoolbox.com/)获取已发布的 Windows 版本。日常使用选安装版即可；想放在自己的目录里直接运行，可以选免安装版。两类应用提供相同的工具，按自己的使用习惯选择就好。下表列出 3.1.1 的构建文件名。
+可以在[官方网站](https://www.phonetictoolbox.com/)获取已发布的 Windows 版本。日常使用选安装版即可；想放在自己的目录里直接运行，可以选免安装版。两类应用提供相同的工具，按自己的使用习惯选择就好。下表列出 3.1.2 的构建文件名。
 
 | 版本 | 文件名 | 使用方式 |
 | --- | --- | --- |
 | 免安装版 | `PhoneticToolbox-windows-x64.exe` | 双击启动，无需运行安装向导 |
-| 安装版 | `PhoneticToolbox-3.1.1-windows-x64-setup.exe` | 按当前用户安装，默认不要求管理员权限，创建应用入口 |
+| 安装版 | `PhoneticToolbox-3.1.2-windows-x64-setup.exe` | 按当前用户安装，默认不要求管理员权限，创建应用入口 |
 
 Windows 版本要求 **Windows 10 1809 及以上或 Windows 11、64 位 x64 系统**。可在 Windows **设置 → 系统 → 关于 → 系统类型**中核对。
 
 安装版默认放在 `%LOCALAPPDATA%\Programs\PhoneticToolbox`。安装完成后，从开始菜单或已创建的桌面快捷方式启动应用。主程序下载包小于 500 MB，第一次打开会准备本机运行文件，展开后的磁盘占用更大。**MFA 运行环境、声学模型和发音词典独立下载，主包不包含这些组件。**
 
-也可以从 [GitHub Releases](https://github.com/Nephelium/PhoneticToolbox/releases)选择已发布的 Windows 版，旧版本仍然保留，查阅或对照时都能找到。本次三端构建及实际检查范围见[3.1.1发行验收](docs/testing/release-3.1.1.md)。
+也可以从 [GitHub Releases](https://github.com/Nephelium/PhoneticToolbox/releases)选择已发布的 Windows 版，旧版本仍然保留，查阅或对照时都能找到。本次Windows修复版的实际检查及发布状态见[3.1.2发行验收](docs/testing/release-3.1.2.md)。
 
 ### macOS 测试版
 
 [官方网站](https://www.phonetictoolbox.com/#macos-download)已提供 **3.1.1 Apple Silicon（M 系列芯片）测试版**。下载文件为 `PhoneticToolbox-3.1.1-macos14-arm64-preview.zip`，最低系统目标为 macOS 14，本轮实际验证平台为 macOS 26.6.2。解压后将 `PhoneticToolbox.app` 拖入“应用程序”，再双击打开。
 
 测试包尚未经过 Apple 公证，首次打开请参照官网 Mac 下载按钮内的安装说明。Windows 与 Mac 的下载入口均在官网，按自己的系统选择即可。
+
+macOS 本轮暂时保留 3.1.1。如遇语言地图闪烁或底图不显示，可先在设置的外观页点击**不使用背景图**，暂时关闭背景图片。
 
 ### 第一次使用
 
