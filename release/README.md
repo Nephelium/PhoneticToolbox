@@ -43,7 +43,7 @@
 | 整理版本更新说明 | [更新记录](../CHANGELOG.md)中的实际纳入改动，归档并整理到 [notes/](notes/) 下的版本文档 |
 
 - 免安装应用：`dist/<构建名>/PhoneticToolbox-windows-x64.exe`。安装版与更新 ZIP：`output/release-staging/<包装名>/artifacts/`，文件名也带 `windows-x64`。构建名唯一，按实际需要生成分发类型，不重复复制。
-- 本页Windows发行支持 Windows 10 1809 及以上、Windows 11 的 x64 系统，暂不支持 Windows x86/ARM64。macOS Apple Silicon使用独立构建入口 `scripts/build_macos.py`，各平台实际验收见[3.0.5三端记录](../docs/testing/release-3.0.5.md)。安装器使用 `x64os` 与最低系统版本限制。下载文件名和 `build-info.json.exe` 标示架构，安装后及更新 ZIP 内继续使用 `PhoneticToolbox.exe`；`application.json` 描述此固定布局，三者 EXE 字节相同。安装完成后从开始菜单或已选择创建的桌面快捷方式打开应用，不从安装器进程直接启动工作台。
+- 本页Windows发行支持 Windows 10 1809 及以上、Windows 11 的 x64 系统，暂不支持 Windows x86/ARM64。macOS Apple Silicon使用独立构建入口 `scripts/build_macos.py`，各平台实际验收见[3.1.1三端记录](../docs/testing/release-3.1.1.md)。安装器使用 `x64os` 与最低系统版本限制。下载文件名和 `build-info.json.exe` 标示架构，安装后及更新 ZIP 内继续使用 `PhoneticToolbox.exe`；`application.json` 描述此固定布局，三者 EXE 字节相同。安装完成后从开始菜单或已选择创建的桌面快捷方式打开应用，不从安装器进程直接启动工作台。
 - 先生成本轮前端与说明书，再冻结源码。构建使用既有 `.venv/m14`，EGG/LPC 和唇形保留指定科学环境；缓存路径须来自实际盘点，不能照抄历史时间戳目录。
 - 同期仍有前端开发时，可把本轮前端生成到新的 `output/` 子目录，用构建入口的 `--frontend-dist <本轮目录>` 冻结这批资源，避免读取随后被重建的共享 `frontend/dist`。未指定时沿用原入口。
 - 持久缓存按内容校验复用，安装预热、设置清理、卸载保护和真实进度均属于公共实现。首次准备与后续启动分别测量，详见[缓存决定](../docs/decisions/ADR-persistent-startup-cache.md)。

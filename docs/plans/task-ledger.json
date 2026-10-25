@@ -519,7 +519,125 @@
         "errors": [],
         "targetedDiffExitCode": 0
       },
-      "release_target": "3.1.0"
+      "release_target": "3.1.1",
+      "interaction_20261025": {
+        "status": "verified",
+        "scope": "Shared Windows/macOS/web single-scale land/coast, projection filtering, VectorImage interaction/style caches, prior indexed hover retained, fullscreen/Esc, classification marker meaning and opaque sticky table headers with wallpaper. Source popup uses opaque theme surface in normal/fullscreen and wallpaper modes.",
+        "verification": "105 directed tests; typecheck/contracts/ui-data/build:workbench; real-data Chrome23, synthetic Canvas/SVG/PNG pixel4, source Qt9 and projection/lifecycle15 stages passed. All16 runtime SHAs unchanged; owned scratch deleted. M19 source architecture11 files and docs2539 have no errors; full repository architecture reports three unrelated generated manual drifts.",
+        "remaining": "Final shared 3.1.1 Windows/Mac/web product checks completed in desktop_311_review; unified publication/postchecks pending. First-load/long-term performance, macOS14 and Safari remain separate.",
+        "evidence": [
+          "docs/testing/m19-geolinguistics.md",
+          "output/validation/geolinguistics-interaction/chrome-c378aa9a08aa46f6b73c79a07dca5dbf/report.json",
+          "output/validation/geolinguistics-paint/browser-7c4dcf14c86943ecb70e6a944ac111a3/report.json",
+          "output/validation/geolinguistics/qt-7a4c71b2af0147ccbfac6559123d5375/report.json",
+          "output/validation/geolinguistics-interaction/chrome-d0680d294be74bd2a46b184cd6851db0/report.json",
+          "output/validation/geolinguistics-performance/chrome-b82a079aab6745578390017c0a1e040c/report.json"
+        ],
+        "web_deployment_20261025": {
+          "status": "verified",
+          "operation": "m19-map-20261025-bcb7af9181c9b19f",
+          "scope": "Six frozen M19 source files only; prior live hover control preserved; no M17/homepage/manual/source-data changes",
+          "verification": "Candidate and actual HTTPS Chrome22 each; all17 real public data SHAs; automatic province/city/district exact SVG geometry and counts; fullscreen1/2/4 and Esc; four theme/wallpaper header and source-panel combinations; zero hover pixel readbacks/long tasks; SVG/PNG and local persistence; Windows/server16 HTTPS hashes; 1407 manifest/803 runtime/909 rollback files verified",
+          "remaining": "Synthetic isolated account/settings/workspace responses; real authentication/database persistence and Mac/Safari not newly tested; first-load/complex-level and sustained load performance remain separate",
+          "evidence": [
+            "output/validation/geolinguistics-web-20261025/completion.json",
+            "output/validation/geolinguistics-web-20261025/deployment.json",
+            "output/validation/geolinguistics-web-20261025/live/report.json"
+          ]
+        },
+        "desktop_311_review": {
+          "status": "verified",
+          "date": "2026-10-25",
+          "scope": "Final shared 3.1.1 product/source/private checks completed; public release and postchecks pending",
+          "evidence": [
+            "output/validation/release-311-20261025/",
+            "output/validation/geolinguistics-interaction/chrome-08e60baf10074c79bb8f9ac28f25e8f6/",
+            "output/validation/geolinguistics-performance/chrome-6aa660418214413ba7f249b018c3a39e/"
+          ],
+          "pending": [
+            "Unified web activation, immutable downloads, update channels and GitHub Release",
+            "Actual public HTTPS map interaction and complete download byte hashes"
+          ],
+          "source_evidence": [
+            "output/validation/release-311-20261025/frontend-full-extended.log",
+            "output/validation/application-performance/chrome-e87e6d3f236f493c98108ec4b5352f8f/report.json"
+          ],
+          "superseded_candidates": {
+            "windows": "PhoneticToolbox-311-20261025-map311",
+            "macOS": "20261025-134159",
+            "reason": "new user-requested scope not included"
+          },
+          "final_source_commit": "cc1cb2cbc3eba8a6b02b809aedf68ae9b9e41158",
+          "final_evidence_root": "D:\\PhoneticToolbox\\PhoneticToolbox_v3\\output\\validation\\release-311-20261025-cc1cb2",
+          "notes_approval": {
+            "version": "3.1.1",
+            "approved": true,
+            "userMessage": "文案没问题～",
+            "date": "2026-10-25",
+            "sha256": "e5e896165b258aed320416034bbef17a3424db48258239e705e8b5a7e7c02326",
+            "source": "D:\\PhoneticToolbox\\PhoneticToolbox_v3\\release\\notes\\3.1.1.md",
+            "scope": "Exact full notes shown in asynchronous review; same content for GitHub Release and update channels; all final QA remains required",
+            "explicitFullTextConfirmation": {
+              "userMessage": "确认这版文案，验收通过后统一发布",
+              "date": "2026-10-25",
+              "scope": "Exact complete 10-item notes in asynchronous question; publish jointly after all final checks pass"
+            }
+          },
+          "regional_fill_review": {
+            "cause": "exact-ID-only fill omitted descendant-only cities",
+            "correction": "aggregate matched full classification paths to actual ancestors; mixed retains existing bluegrey",
+            "zhejiang_city_fills": 11,
+            "statistics_changed": false,
+            "pan_recompute": false
+          },
+          "source_frontend_tests": 789,
+          "selection_modes": {
+            "classification_shift_selected": 83,
+            "custom_shift_selected": 2,
+            "cleared_selected_labels": 0,
+            "source_report": "output/validation/geolinguistics-interaction/chrome-e11c373900cd405da768566c2d37937b/report.json"
+          },
+          "mac_fullscreen": {
+            "source_native_window_restore": true,
+            "backend_tests": 5,
+            "final_app_pending": false,
+            "actual_final_native_escape": true
+          },
+          "cleanup": {
+            "deleted": 17,
+            "report": "output/validation/release-311-20261025-cc1cb2/superseded-build-cleanup.json"
+          },
+          "publication_status": "pending",
+          "final_product_acceptance": "D:\\PhoneticToolbox\\PhoneticToolbox_v3\\output\\validation\\release-311-20261025-cc1cb2\\windows-final-acceptance.json",
+          "windows": {
+            "exe_sha256": "a7866c539fa2d0b89a4af4a8b35ad0cf41f51a8998c2be14080b9c76a44e7ebe",
+            "full16": true,
+            "map_checks": 21,
+            "ordinary": 11,
+            "export_options": 10,
+            "manual_matrix": 168,
+            "normal_exit": 0,
+            "first_failed_reload_retained": true,
+            "unchanged_byte_isolated_repeat_passed": true
+          },
+          "macOS": {
+            "zip_sha256": "6b4227705b3cf60c1d3c7cfa5759839f42b279af27d83aa9e02975b05c9514ac",
+            "zip_bytes": 491915761,
+            "crc_members": 6886,
+            "runtime": 26,
+            "numerics": 231,
+            "normal_sessions": 6,
+            "native_escape": true,
+            "all_evidence_recovered": true
+          },
+          "web": {
+            "candidate": 23,
+            "new_options": 10,
+            "science": 9,
+            "publicly_activated": false
+          }
+        }
+      }
     },
     {
       "id": "M10-REVIEW-FIXES-20261022",
@@ -5534,7 +5652,15 @@
         "docs/testing/2026-10-05-m17-r3-report.md",
         "docs/testing/m17-hover-and-all-view-report.md",
         "docs/testing/m17-app-citation-report.md"
-      ]
+      ],
+      "nasal_mark_adjustment": {
+        "id": "M17-NASAL-MARK-20261025",
+        "status": "verified",
+        "scope": "清腭化龈后鼻音改为n̠̊ʲ，清化圈附着n；同步目录生成源、目录/键盘生成数据、覆盖清单及文档。稳定ID、矩阵与其他624项保持。",
+        "verification": "Windows独立Chrome浅深主题100%/150%四组显示/输入/撤销/重做和标注键盘显示通过，截图目检清化圈位于n上，页面错误0；22项M17测试、目录/键盘生成一致性、typecheck/contracts:check/ui-data:check/build:workbench通过；文档校验2538文件/461来源/186任务零错误，定向差异检查通过。首次探针hash导航未重载的失败诊断保留，修正探针后通过，自有scratch已清理。",
+        "remaining": "Public release/readback pending; actual final Windows/Mac and browser candidate display, insertion and undo passed.",
+        "evidence": "docs/testing/m17-hover-and-all-view-report.md#2026-10-25-清腭化鼻音清化圈位置"
+      }
     },
     {
       "id": "M18",
