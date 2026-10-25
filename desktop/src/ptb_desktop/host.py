@@ -527,22 +527,36 @@ class Workbench(QMainWindow):
         self._reader_fullscreen_generation=getattr(self,'_reader_fullscreen_generation',0)+1
         generation=self._reader_fullscreen_generation
         if request.toggleOn():
-            if not self.isFullScreen():
+            if not getattr(self,'_reader_return_active',False):
                 self._reader_previous_state=self.windowState()
                 self._reader_previous_geometry=self.saveGeometry()
+                self._reader_return_active=True
             request.accept();self.showFullScreen()
         else:
             request.accept()
             previous=getattr(self,'_reader_previous_state',Qt.WindowState.WindowNoState)
             geometry=getattr(self,'_reader_previous_geometry',None)
+            if previous & Qt.WindowState.WindowFullScreen:
+                self._reader_return_active=False
+                return
             # Chromium completes its native fullscreen transition after this
             # signal returns. Restore the host in the following event turn.
-            def restore():
+            def restore(attempt=0):
                 if self.closing or generation!=self._reader_fullscreen_generation:return
+                if sys.platform=='darwin':
+                    from .window_chrome import macos_window_fullscreen
+                    # Native Spaces may finish entering after showNormal().
+                    # Wait for the actual native state before restoring size.
+                    native=macos_window_fullscreen(self.winId(),leave=attempt>=12 and attempt%20==12)
+                    if native:
+                        if attempt<300:QTimer.singleShot(50,lambda:restore(attempt+1))
+                        return
                 if previous & Qt.WindowState.WindowMaximized:self.showMaximized()
                 else:
                     self.showNormal()
                     if geometry is not None:self.restoreGeometry(geometry)
+                self._reader_return_active=False
+            if sys.platform=='darwin':self.showNormal()
             QTimer.singleShot(0,restore)
 
     def pick_paper_export(self,name):

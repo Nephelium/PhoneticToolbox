@@ -33,6 +33,16 @@ function page(stored?:model.Project){
 }
 const ids=(rows:model.Admin[])=>rows.map(a=>a.id);
 
+test('classification and custom map point selection supports export membership and clearing independently of active detail',async()=>{
+ const f=page();try{await f.load();const m=f.m,first=m.classMarkers.value[0].id,second=m.classMarkers.value[1].id;
+  m.project.value.selected=[first,second];assert.equal(m.selectedMapPointCount.value,2);assert(m.mapPoints.value[0].filter((p:model.MapPoint)=>p.chosen).every((p:model.MapPoint)=>p.selected));
+  m.clearSelection();assert.equal(m.selectedMapPointCount.value,0);m.chooseSite(first);assert(m.project.value.selected.includes(first));assert.equal(m.selectedMapPointCount.value,1);
+  m.clearFilters();assert.equal(m.selectedMapPointCount.value,1,'clearing filters retains chosen classification points');
+  m.project.value.customSites=[{id:'user:one',name:'甲',lon:110,lat:30,admin:null,value:'A',note:''},{id:'user:two',name:'乙',lon:110.1,lat:30.1,admin:null,value:'B',note:''}];m.changeMode('custom');m.project.value.selected=['user:one','user:two'];assert.equal(m.selectedMapPointCount.value,2);
+  m.clearSelection();assert.equal(m.selectedMapPointCount.value,0);m.chooseSite('user:two');assert.equal(m.selectedSite.value,'user:two');assert.deepEqual(m.project.value.selected,['user:two']);assert.equal(m.selectedMapPointCount.value,1);
+ }finally{f.close();}
+});
+
 test('clearing all actual page filters restores every point in similarity and phenomena, including saved stale categories',async()=>{
  const stored=model.emptyProject();stored.mode='paper';stored.settings={...model.defaultSettings(),locationQuery:'荔湾',category:'stale-from-phenomena',onlySelected:true,onlyViewport:true};stored.selected=['fixture:440103'];
  const f=page(stored);try{await f.load();const m=f.m,total=m.data.value.sites.length;

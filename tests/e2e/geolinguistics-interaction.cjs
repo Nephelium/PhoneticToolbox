@@ -46,6 +46,7 @@ onBeforeUnmount(()=>{(window as any).__geoQa.delete(__qaKey);});
   await settle();await atlas.getByRole('button',{name:'收起表格',exact:true}).click();
   const boundary=atlas.locator('.geography-toolbar label').filter({hasText:'边界'}).locator('select');await boundary.selectOption('auto');
   async function view(zoom){await page.evaluate(zoom=>{const q=[...window.__geoQa.values()][0];q.map.getView().setCenter([12690321,2500000]);q.map.getView().setZoom(zoom);},zoom);await page.waitForTimeout(180);await settle();}
+  if(mode==='native-options'){const cdp=await context.newCDPSession(page);await atlas.getByRole('button',{name:'展开表格',exact:true}).click();await require('./geolinguistics-browser-options.cjs')({page,cdp,out,report});assert.deepEqual(await identity(),report.inputs);assert.deepEqual(report.errors,[]);report.success=true;return;}
   if(mode==='options'){await require('./geolinguistics-options.cjs')({page,atlas,boundary,settle,view,out,report});assert.deepEqual(await identity(),report.inputs);assert.deepEqual(report.errors,[]);report.success=true;return;}
   async function inspect(theme,zoom,level){
    await view(zoom);

@@ -1,4 +1,4 @@
-"""Window-local Windows frame integration and caption colour compatibility.
+"""Window-local native frame integration and full-screen state.
 
 Qt owns the compact title row; Windows retains resizing and snap styles.
 The optional DWM colour path needs Windows 11; no system setting is changed.
@@ -6,6 +6,35 @@ The optional DWM colour path needs Windows 11; no system setting is changed.
 import ctypes
 import re
 import sys
+from functools import lru_cache
+
+
+@lru_cache(maxsize=1)
+def _cocoa_window_messages():
+    """Typed Objective-C calls on the GUI thread; no optional Python runtime."""
+    library=ctypes.CDLL('/usr/lib/libobjc.A.dylib')
+    selector=library.sel_registerName;selector.argtypes=[ctypes.c_char_p];selector.restype=ctypes.c_void_p
+    address=ctypes.cast(library.objc_msgSend,ctypes.c_void_p).value
+    pointer=ctypes.CFUNCTYPE(ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p)(address)
+    mask=ctypes.CFUNCTYPE(ctypes.c_size_t,ctypes.c_void_p,ctypes.c_void_p)(address)
+    toggle=ctypes.CFUNCTYPE(None,ctypes.c_void_p,ctypes.c_void_p,ctypes.c_void_p)(address)
+    return library,pointer,mask,toggle,selector(b'window'),selector(b'styleMask'),selector(b'toggleFullScreen:')
+
+
+def macos_window_fullscreen(handle,*,leave=False):
+    """Read the actual NSWindow state behind Qt's NSView, optionally exit it.
+
+    Cocoa can finish entering its native Space after Qt has already processed
+    an exit request. Qt's cached WindowFullScreen flag alone misses that race.
+    NSWindowStyleMaskFullScreen is the public AppKit flag (1 << 14).
+    """
+    if sys.platform!='darwin':return False
+    library,pointer,mask,toggle,window_selector,mask_selector,toggle_selector=_cocoa_window_messages()
+    window=pointer(int(handle),window_selector)
+    if not window:return False
+    active=bool(mask(window,mask_selector)&(1<<14))
+    if active and leave:toggle(window,toggle_selector,None)
+    return active
 
 
 def configure_integrated_frame(handle):
