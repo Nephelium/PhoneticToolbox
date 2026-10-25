@@ -1,6 +1,6 @@
 # PhoneticToolbox 3.1.1 发行验收
 
-状态：三端最终成品验收通过，统一发布及公网回读待执行。用户已明确确认完整版本文案，[更新说明](../../release/notes/3.1.1.md)SHA为`e5e896165b258aed320416034bbef17a3424db48258239e705e8b5a7e7c02326`，GitHub与应用频道使用同文。
+状态：三端最终成品验收、统一公开发布与公网回读全部通过。用户已明确确认完整版本文案，[更新说明](../../release/notes/3.1.1.md)SHA为`e5e896165b258aed320416034bbef17a3424db48258239e705e8b5a7e7c02326`，GitHub与应用频道使用同文。
 
 ## 冻结与成品
 
@@ -25,4 +25,10 @@
 
 本版证据根为`output/validation/release-311-20261025-cc1cb2/`，统一产品收口见`windows-final-acceptance.json`，Windows完整回执`output/validation/local-package-b5cf0fd3/report.json`，Mac回收证据位于证据根`mac-evidence/`，Web见`candidate/report.json`和`private-final-audit.json`。所有候选、失败、重验和实际发布分别记录，不借前代包通过结果扩大本代结论。
 
-Mac为Apple Silicon测试版，ad hoc签名，未公证；macOS14为构建目标，本轮仅实际26.6.2，未新增Intel、Safari、实体麦克风或其他机器验收。浏览器使用隔离合成账号/偏好/工作区配合实际HTTPS资源，不冒充真实生产账号持久化测试。旧构建17处按正式脚本清理，保留输入缓存、原始数据、最终证据与服务器回退。未使用早期候选或未审阅的同期官网源码。
+Mac为Apple Silicon测试版，ad hoc签名，未公证；macOS14为构建目标，本轮仅实际26.6.2，未新增Intel、Safari、实体麦克风或其他机器验收。浏览器使用隔离合成账号/偏好/工作区配合实际HTTPS资源，不冒充真实生产账号持久化测试。旧构建20处按正式脚本清理，保留输入缓存、原始数据、最终证据与服务器回退。未使用早期候选或未审阅的同期官网源码。
+
+## 公开发布与后验
+
+官网、stable/preview和[GitHub v3.1.1](https://github.com/Nephelium/PhoneticToolbox/releases/tag/v3.1.1)均已发布；[网页版](https://www.phonetictoolbox.com/app/)激活`pcc1cb2`。实际公网地图23+10组、官网3组通过，两个频道与GitHub正文均和批准文案逐字节相同，四资产大小/digest对应最终成品。四包实际HTTPS完整GET累计1986224019B及HEAD/64KiB Range/SHA通过。服务器1425发布文件/803运行文件与旧1407/803回退逐SHA后验通过，原配置、Nginx、反馈、论文目录和公告保持，未迁移数据库。
+
+Mac完整ZIP与6886成员CRC、全部必要验收证据及输入清单已回收到本机，源码保留在Windows与GitHub，后续不依赖Mac服务器在线；未制作整台Mac系统/开发环境磁盘镜像。旧20处构建/安装暂存已按正式脚本清理，9处既有未完成对象保留。最终索引为证据根`completion.json`，包含所有关键回执的SHA与实际验证范围。
