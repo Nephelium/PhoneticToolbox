@@ -6,7 +6,7 @@
       "id": "RELEASE-3.1.2",
       "title": "语言地图显示修复与Windows/网页紧急发布",
       "date": "2026-10-26",
-      "status": "in_progress",
+      "status": "verified",
       "scope": "井井明确授权紧急上线Windows EXE并在受影响时更新网页版，要求打包前仔细检查其他问题；Mac服务器到期，本轮不构建，保留3.1.1包及真实版本。仅本批地图背景与固定轮廓修复进入冻结，原始资料与科研语义不改。",
       "files": [
         "README.md",
@@ -47,8 +47,8 @@
         "docs/plans/task-ledger.json"
       ],
       "verification_scope": "共用源码、实际Windows最终EXE/安装卸载/更新/缓存/科学与地图完整行为、背景模式合成像素；网页候选及实际HTTPS独立验证。Mac不构建，旧验收不代替本版。",
-      "verification": "最终af48ef4c严格Windows16阶段、科学/安装卸载/缓存/两类真实换版与重开、168字体/滚动帧、读本/绘图和清理均通过。最终EXE完整地图21项、实际设置PNG上传12外观组合/48手势/24截图RGB、比例尺12.8:1通过。790前端、类型/协议/UI数据、弹窗7项、网页24项+10选项+12背景组合/24PNG、官网八标签三宽度无JS通过。门槛聚合成功，授权发布开始。",
-      "remaining": "完成网页原子部署后实际HTTPS复验、Windows公开文件/更新频道/GitHub三资产和批准正文、官网更新小记、最终保护与清理回执；Mac保持3.1.1。",
+      "verification": "最终af48ef4c Windows16阶段、科学/安装卸载/缓存/真实两类更新重开、168字体滚动帧、读本/绘图及清理通过；EXE地图21项，实际设置上传PNG12组合/48手势/24像素、比例尺12.8:1。790前端/类型/协议/UI数据、弹窗7项，网页候选和公网24项/10选项/12背景组合/24像素、官网八标签三宽度无JS通过。GitHub最新v3.1.2三资产digest及批准正文、首页/两频道3文件CAS、134旧静态引用、1444发布/803科学/942回退及原配置/服务PID后验通过。源码e6e1988 main/v3.1.2已同步。6处旧构建成品暂存已清，9未完成候选保留。 最后3处自有scratch与两份旧私有上传候选清理完成，原失败、配方和截图保留。",
+      "remaining": "本批授权范围已完成。Mac按约束保留3.1.1，未新增Mac构建、干净Windows、其他显卡/实体设备/Safari及长期稳定性验证。",
       "evidence": [
         "docs/testing/release-3.1.2.md",
         "output/validation/local-package-beff9085/report.json",
@@ -56,7 +56,12 @@
         "output/validation/geolinguistics-background/exe-7174b088f5c24a7b932fa6b49eb87f2f/background-report.json",
         "output/validation/release-312-20261025-hotfix/prepublication-gates.json",
         "output/validation/release-312-20261025-hotfix/deployment.json",
-        "output/validation/release-312-20261025-hotfix/public-download-check.json"
+        "output/validation/release-312-20261025-hotfix/public-download-check.json",
+        "output/validation/release-312-20261025-hotfix/github-public-verified.json",
+        "output/validation/release-312-20261025-hotfix/home-channels-apply.json",
+        "output/validation/release-312-20261025-hotfix/final-guard.json",
+        "output/validation/release-312-20261025-hotfix/task-cleanup.json",
+        "output/validation/release-312-20261025-hotfix/private-staging-cleanup.json"
       ]
     },
     {
