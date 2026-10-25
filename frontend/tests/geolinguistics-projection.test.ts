@@ -4,10 +4,32 @@ import {spawnSync} from 'node:child_process';
 import GeoJSON from 'ol/format/GeoJSON.js';
 import VectorSource from 'ol/source/Vector.js';
 import {fromLonLat} from 'ol/proj.js';
-import {projectedBaseFeatures} from '../src/modules/geolinguistics/projected-base.ts';
+import {projectedBaseFeatures,projectedContextFeatures,projectedOutlineFeatures} from '../src/modules/geolinguistics/projected-base.ts';
 
 const collection=(offset=0)=>({type:'FeatureCollection',features:[{type:'Feature',id:'district:same',properties:{name:'same'},geometry:{type:'Polygon',coordinates:[[[110+offset,20],[111+offset,20],[111+offset,21],[110+offset,21],[110+offset,20]]]}}]});
 const listeners=(f:any)=>(f.getListeners('change')??[]).length;
+
+test('overlapping administrative IDs at different scales remain complete without copying geometry or changing originals',t=>{
+ const read=t.mock.method(GeoJSON.prototype,'readFeatures'),province=collection(),city=collection(),before=[structuredClone(province),structuredClone(city)];
+ const a=projectedOutlineFeatures(province,'province'),b=projectedOutlineFeatures(city,'city'),source=new VectorSource({features:[...a,...b]});
+ assert.equal(source.getFeatures().length,2);assert.notEqual(a[0].getId(),b[0].getId());assert.equal(projectedBaseFeatures(province)[0].getId(),'district:same');
+ assert.strictEqual(a[0].getGeometry(),projectedBaseFeatures(province)[0].getGeometry());assert.strictEqual(projectedOutlineFeatures(province,'province'),a);assert.equal(read.mock.callCount(),2);assert.deepEqual([province,city],before);
+ source.clear(true);source.dispose();assert.equal(listeners(a[0]),0);assert.equal(listeners(b[0]),0);
+});
+
+test('context omits country faces and province lines before projection and preserves mixed linework, symbols and raw data',t=>{
+ const polygon=collection().features[0].geometry;
+ const line={type:'LineString',coordinates:[[110,20],[111,21]]};
+ const raw={type:'FeatureCollection',features:[
+  {type:'Feature',id:'coarse',geometry:polygon,properties:{renderRole:'administrative-display-area'}},
+  {type:'Feature',id:'province',geometry:line,properties:{boundaryType:'省界'}},
+  {type:'Feature',id:'mixed',geometry:{type:'GeometryCollection',geometries:[polygon,line]},properties:{}},
+  {type:'Feature',id:'symbol',geometry:polygon,properties:{renderRole:'boundary-symbol'}}
+ ]},before=structuredClone(raw),read=t.mock.method(GeoJSON.prototype,'readFeatures');
+ const result=projectedContextFeatures(raw);assert.deepEqual(result.map(f=>f.getId()),['mixed','symbol']);
+ assert.deepEqual((result[0].getGeometry() as any).getGeometries().map((g:any)=>g.getType()),['LineString']);
+ assert.strictEqual(projectedContextFeatures(raw),result);assert.equal(read.mock.callCount(),1);assert.deepEqual(raw,before);
+});
 
 test('same immutable object projects once across four sources and reattaches without projection',t=>{
  const read=t.mock.method(GeoJSON.prototype,'readFeatures'),raw=collection(),before=structuredClone(raw);

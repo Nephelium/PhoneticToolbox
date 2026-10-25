@@ -164,11 +164,12 @@ function label(item: Asset) {
   if (item.expires_at * 1_000 <= Date.now() && item.state !== 'delete_failed') return '已到期 · 等待清理';
   return ({ uploading: '上传未完成', ready: '可下载', deleting: '正在删除', delete_failed: '删除未完成', deleted: '已删除' })[item.state];
 }
+function refreshVisible(){if(!document.hidden)void refresh();}
 onMounted(() => {
-  void refresh(); timer = setInterval(() => { void refresh(); }, 5000);
+  refreshVisible(); timer = setInterval(refreshVisible, 5000);document.addEventListener('visibilitychange',refreshVisible);
   void request<components['schemas']['Capabilities']>('capabilities').then(c => { if (!disposed) serverFileJobs.value = c.task_operations.includes('archive_zip'); }).catch(() => {});
 });
-onUnmounted(() => { disposed = true; abort.abort(); clearInterval(timer); pending.value = null; });
+onUnmounted(() => { disposed = true; abort.abort(); clearInterval(timer);document.removeEventListener('visibilitychange',refreshVisible);pending.value = null; });
 </script>
 
 <template>

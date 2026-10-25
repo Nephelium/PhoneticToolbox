@@ -6,13 +6,14 @@ import {ref,computed} from 'vue';
 import {emptyProject,validateProject,defaultSettings,isLegacyWorldView,classValues,classFilterMatches,unclassifiedClassFilter,inRegion,diversity,observation,isObservationEdited,volumeNames} from '../src/modules/geolinguistics/model.ts';
 import {displayCounts,displayText,displayColor,broadPendingCount,isBroadCategory} from '../src/modules/geolinguistics/groups.ts';
 import {wrapMapText,composeMapSvgs} from '../src/modules/geolinguistics/export.ts';
-import {mapPaint,mapPaintPriority,contextBoundaryVisible} from '../src/modules/geolinguistics/map-paint.ts';
+import {mapPaint,mapPaintPriority,contextBoundaryVisible,contextGeometryVisible} from '../src/modules/geolinguistics/map-paint.ts';
+import * as mapOptions from '../src/modules/geolinguistics/map-options.ts';
 
 // Execute the functions and state declarations from the actual SFC source. Only
 // browser / storage / map boundaries are faked; no workflow is reimplemented.
 const source=(name:string)=>readFileSync(new URL(`../src/modules/geolinguistics/${name}.vue`,import.meta.url),'utf8');
 function component(name:string,names:string[],env:Record<string,any>,state:string[]=[],expose:string[]=[]){
- env={mapPaint,mapPaintPriority,contextBoundaryVisible,projectedBaseFeatures:(value:any)=>Array.isArray(value)?value:[value],...env};
+ env={mapPaint,mapPaintPriority,contextBoundaryVisible,contextGeometryVisible,...mapOptions,boundaryFeatures:new Map(),boundaryData:new Map(),boundaries:{clear(){},addFeatures(){}},boundaryLayer:{setVisible(){}},adminLayer:{changed(){}},adminStyles:new Map(),requestedBoundaries:'',exportBusy:ref(false),exportOptions:ref(mapOptions.defaultMapExportOptions([])),modal:ref(''),projectedBaseFeatures:(value:any)=>Array.isArray(value)?value:[value],projectedContextFeatures:(value:any)=>Array.isArray(value)?value:[value],...env};
  const script=source(name).match(/<script setup lang="ts">([\s\S]*?)<\/script>/)![1];
  const file=ts.createSourceFile(name+'.ts',script,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);
  const functions=new Map<string,string>(),variables=new Map<string,string>();
@@ -23,6 +24,7 @@ function component(name:string,names:string[],env:Record<string,any>,state:strin
   }
  }
  const required=(items:Map<string,string>,key:string)=>{assert(items.has(key),`Missing ${name}.${key}`);return items.get(key)!;};
+ if(name==='GeoMap'&&names.includes('syncLevel')&&!names.includes('readBoundary'))names=[...names,'readBoundary'];
  const body=[...state.map(key=>required(variables,key)),...names.map(key=>required(functions,key)),`return {${[...names,...expose].join(',')}};`].join('\n');
  const js=ts.transpileModule(body,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.None}}).outputText;
  return new Function(...Object.keys(env),js)(...Object.values(env));
@@ -194,14 +196,14 @@ test('exports block unfinished or failed layers and a real reload restores the r
  await assert.rejects(failed,/仍然读取失败/);assert.throws(()=>api.exportSvg('图',[],'来源'),/尚未完整载入/);
 });
 
-test('a failed base layer cannot export and reload actually retries both base sources before the administrative layer',async()=>{
+test('failed context cannot export and reload retries context and the active administrative layer without requesting world land',async()=>{
  const env=exportMapEnv(),names:string[]=[];let fail=true;
  env.props.port.map=async(name:string)=>{names.push(name);if(name==='territory'&&fail)throw Error('国土轮廓读取失败');return [];};
  const {baseReady:_,...inputs}=env;
  const api=component('GeoMap',['currentLevel','syncLevel','loadBase','reload','exportSvg'],inputs,['disposed','baseReady','levelEpoch','lastMapError','lastLevel','requestedLevel','escape']);
  await assert.rejects(api.loadBase(),/国土轮廓读取失败/);assert.throws(()=>api.exportSvg('图',[],'来源'),/尚未完整载入/);
  fail=false;await api.reload();
- assert.deepEqual(names,['world','territory','world','territory','province']);assert.match(api.exportSvg('图',[],'来源'),/<svg/);
+ assert.deepEqual(names,['territory','territory','province']);assert.match(api.exportSvg('图',[],'来源'),/<svg/);
 });
 
 test('selecting an unclassified path matches only its empty layer and retains legacy wildcard projects',()=>{
@@ -222,7 +224,7 @@ test('personal observations label map and CSV exports while retaining the origin
  const feature={id:'F1_P',volume:'P',number:1,page:7,title:'测试现象',categories:['A1','B1'],labels:{},groups:[{id:'a',label:'甲类',codes:['A1'],page:7,labelKind:'source'},{id:'b',label:'乙类',codes:['B1'],page:7,labelKind:'source'}]};
  const data=ref({sites:[{id:'S1',name:'点甲',lon:110,lat:30}],observations:{F1_P:{values:['A1'],raw:{}}}}),project=ref(emptyProject());project.value.mode='features';
  const captured:any[]=[],files:Blob[]=[];
- const env={data,project,feature:ref(feature),featureDetail:ref('broad'),visibleSites:ref([{site:data.value.sites[0],index:0}]),baseSites:ref([{site:data.value.sites[0],index:0}]),mapFeatures:ref([feature]),legend:ref([]),maps:ref([{exportSvg:(title:string,legend:any,source:string)=>{captured.push({title,legend,source});return '<svg width="1200" height="900"/>';}}]),sheet:ref('combined'),paperMode:ref('rgb'),observation,isObservationEdited,displayCounts,displayText,displayColor,broadPendingCount,isBroadCategory,volumeNames,composeMapSvgs,document:{fonts:{load:async()=>{},ready:Promise.resolve()}},ipaFontUrl:'test-font',ipaFontLicense:'font license',fetch:async()=>({ok:true,blob:async()=>new Blob(['font'])}),FileReader:class{result='data:font/ttf;base64,AA==';onload=()=>{};readAsDataURL(){this.onload();}},exportFile:async(_name:string,blob:Blob)=>{files.push(blob);},error:ref(''),csvText:(rows:any)=>JSON.stringify(rows),valueLabel:()=>''};
+ const env={data,project,feature:ref(feature),featureDetail:ref('broad'),visibleSites:ref([{site:data.value.sites[0],index:0}]),baseSites:ref([{site:data.value.sites[0],index:0}]),mapFeatures:ref([feature]),legend:ref([]),maps:ref([{prepareExport:async()=>{},exportSvg:(title:string,legend:any,source:string)=>{captured.push({title,legend,source});return '<svg width="1200" height="900"/>';}}]),sheet:ref('combined'),paperMode:ref('rgb'),observation,isObservationEdited,displayCounts,displayText,displayColor,broadPendingCount,isBroadCategory,volumeNames,composeMapSvgs,document:{fonts:{load:async()=>{},ready:Promise.resolve()}},ipaFontUrl:'test-font',ipaFontLicense:'font license',fetch:async()=>({ok:true,blob:async()=>new Blob(['font'])}),FileReader:class{result='data:font/ttf;base64,AA==';onload=()=>{};readAsDataURL(){this.onload();}},exportFile:async(_name:string,blob:Blob)=>{files.push(blob);},error:ref(''),csvText:(rows:any)=>JSON.stringify(rows),valueLabel:()=>''};
  const api=component('GeolinguisticsPage',['legendRecords','personalObservationCount','mapHandle','exportMap','exportTable'],env);
  await api.exportMap('svg');assert.equal(api.personalObservationCount(feature),0);assert.ok(!captured[0].source.includes('含个人校订'));
  project.value.edits['S1:F1_P']='B1';await api.exportMap('svg');assert.equal(api.personalObservationCount(feature),1);

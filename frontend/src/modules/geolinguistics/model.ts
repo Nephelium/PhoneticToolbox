@@ -1,4 +1,5 @@
 import type {BroadGroup,FeatureDetail} from './groups.ts';
+import type {BoundaryLevel} from './map-options.ts';
 export type Volume='P'|'L'|'S';
 export type Mode='features'|'classification'|'paper'|'custom';
 export interface GroupException {code:string;reason:string}
@@ -12,11 +13,11 @@ export interface Classifications {author:string;book:string;columns:string[];she
 export interface PaperPoint {mds:[number,number,number];sharp:string[];heat:string[]}
 export interface PaperData {points:PaperPoint[];matrices:string[];colors:Record<string,Record<string,Record<string,string>>>}
 export interface Resources {catalog:Catalog;sites:Site[];observations:Record<string,Observation>;classification:Classifications;admin:Admin[];paper:PaperData}
-export interface MapPoint {id:string;name:string;lon:number;lat:number;color:string;label:string;multi?:boolean;selected?:boolean;unclassified?:boolean;incomplete?:boolean}
+export interface MapPoint {id:string;name:string;lon:number;lat:number;color:string;label:string;multi?:boolean;selected?:boolean;chosen?:boolean;unclassified?:boolean;incomplete?:boolean}
 export interface ViewState {center:[number,number];zoom:number}
 /** The retired world button saved this fixed view; ordinary pans remain untouched. */
 export function isLegacyWorldView(view:ViewState){return Math.abs(view.center[0]-10)<1e-6&&Math.abs(view.center[1]-20)<1e-6&&Math.abs(view.zoom-2)<1e-6;}
-export interface ProjectSettings {volume:Volume;query:string;locationQuery:string;region:string;category:string;sheet:string;classFilters:string[];classDepth:number;classSearch:string;level:'auto'|'province'|'city'|'district';labels:boolean;mapCount:number;extraFeatures:string[];paperMode:string;clusters:number;matrixName:string;onlySelected:boolean;onlyViewport:boolean;tableOpen:boolean;selectedSite:string;selectedClass:string}
+export interface ProjectSettings {volume:Volume;query:string;locationQuery:string;region:string;category:string;sheet:string;classFilters:string[];classDepth:number;classSearch:string;level:'auto'|'province'|'city'|'district';extraBoundaries?:BoundaryLevel[];labels:boolean;mapCount:number;extraFeatures:string[];paperMode:string;clusters:number;matrixName:string;onlySelected:boolean;onlyViewport:boolean;tableOpen:boolean;selectedSite:string;selectedClass:string}
 export function defaultSettings():ProjectSettings{return {volume:'P',query:'',locationQuery:'',region:'',category:'',sheet:'combined',classFilters:['','','',''],classDepth:3,classSearch:'',level:'auto',labels:false,mapCount:1,extraFeatures:['F117_P','F68_L','F191_L'],paperMode:'rgb',clusters:5,matrixName:'main',onlySelected:false,onlyViewport:false,tableOpen:true,selectedSite:'',selectedClass:''};}
 export interface Project {schema:'ptb-geolinguistics/1';dataset:string;name:string;edits:Record<string,string>;classEdits:Record<string,string[]>;labels:Record<string,Record<string,string>>;customSites:(Site&{value:string;note:string})[];drawings:unknown;selected:string[];view:ViewState;feature:string;mode:Mode;settings?:ProjectSettings;atlasView?:'original'|'split'|'interactive';bookmarks?:string[];featureScope?:'reviewed'|'all';featureDetail?:FeatureDetail}
 export function emptyProject():Project{return {schema:'ptb-geolinguistics/1',dataset:'m19-local-20261022',name:'语言地图研究',edits:{},classEdits:{},labels:{},customSites:[],drawings:{type:'FeatureCollection',features:[]},selected:[],view:{center:[105,33],zoom:4},feature:'F1_P',mode:'classification',bookmarks:[],featureDetail:'broad'};}
@@ -28,6 +29,15 @@ export function observation(data:Resources,project:Project,feature:string,index:
 export function isObservationEdited(data:Resources,project:Project,feature:string,index:number){const key=data.sites[index].id+':'+feature;return Object.hasOwn(project.edits,key)&&project.edits[key]!==data.observations[feature]?.values[index];}
 export function classValues(row:ClassificationRow,project:Project){return project.classEdits[row.id]??row.values;}
 export function classPath(values:string[],level=4){return values.slice(6,6+level).map(v=>v||'未分').join(' / ');}
+/** A city/province face covers its matched descendants, not only rows whose
+ * representative point happens to carry that exact administrative ID. Keep
+ * distinct full category paths; mixed faces share the existing mixed color. */
+export function classificationPolygonColors(rows:ClassificationRow[],project:Project,index:ReadonlyMap<string,Admin>,depth:number){
+ const paths=new Map<string,Set<string>>();for(const row of rows){const path=classPath(classValues(row,project),depth),seen=new Set<string>();let id=row.admin;
+  while(id&&index.has(id)&&!seen.has(id)){seen.add(id);let values=paths.get(id);if(!values){values=new Set();paths.set(id,values);}values.add(path);id=index.get(id)!.parent;}
+ }
+ return Object.fromEntries([...paths].map(([id,values])=>[id,values.size>1?'#647d8b':categoryColor([...values][0])]));
+}
 /** Empty string remains the historical wildcard; this value selects an empty classification layer. */
 export const unclassifiedClassFilter='@empty-classification-layer';
 export function classFilterMatches(filter:string,value:string){return filter===unclassifiedClassFilter?!value:!filter||value===filter;}
@@ -81,6 +91,7 @@ export function validateProject(input:unknown):Project{
  let vertices=0;const line=(v:unknown):boolean=>Array.isArray(v)&&v.length>=2&&v.every(c=>Array.isArray(c)&&c.length===2&&c.every(Number.isFinite)&&Math.abs(c[0])<=180&&Math.abs(c[1])<=85&&++vertices<=100000);
  for(const item of drawings.features){const f=item as {type?:string;geometry?:{type?:string;coordinates?:unknown}};const g=f?.geometry;if(f?.type!=='Feature'||!g||(g.type==='LineString'?!line(g.coordinates):g.type==='Polygon'?!Array.isArray(g.coordinates)||!g.coordinates.length||!g.coordinates.every(r=>line(r)&&r.length>=4&&r[0][0]===r.at(-1)[0]&&r[0][1]===r.at(-1)[1]):true))throw Error('绘图坐标或形状无效。');}
  if(p.settings){const s=p.settings,defaults=defaultSettings();for(const key of Object.keys(defaults) as (keyof ProjectSettings)[])if(Array.isArray(defaults[key])?!Array.isArray(s[key])||((s[key] as unknown[]).some(v=>typeof v!=='string')):typeof s[key]!==typeof defaults[key])throw Error('工程筛选设置无效。');
+  if(s.extraBoundaries!==undefined&&(!Array.isArray(s.extraBoundaries)||s.extraBoundaries.some(v=>!['province','city','district'].includes(v))||new Set(s.extraBoundaries).size!==s.extraBoundaries.length))throw Error('工程边界设置无效。');
   if(!['P','L','S'].includes(s.volume)||!['combined','areas','islands'].includes(s.sheet)||!['auto','province','city','district'].includes(s.level)||![1,2,4].includes(s.mapCount)||![1,2,3,4].includes(s.classDepth)||!Number.isInteger(s.clusters)||s.clusters<2||s.clusters>10||s.classFilters.length!==4||s.extraFeatures.length!==3||!['rgb','d1','d2','d3','sharp','heat'].includes(s.paperMode)||!['main','type-0-0','type-0-1','type-1-0','type-1-1'].includes(s.matrixName))throw Error('工程筛选设置超出范围。');}
  return {...structuredClone(p),featureDetail:p.featureDetail??'fine'};
 }

@@ -26,16 +26,16 @@ def main():
         if args.expect_cached:
             fixture=scratch/'generation-fixture'
             shutil.copytree(scratch/'geolinguistics-data',fixture)
-            world=fixture/'maps/world.json';geo=json.loads(world.read_text('utf-8'))
-            geo['features'].append({'type':'Feature','id':'qa-generation-marker','properties':{'name':'QA synthetic generation marker'},
+            admin_map=fixture/'maps/province.json';geo=json.loads(admin_map.read_text('utf-8'))
+            geo['features'].append({'type':'Feature','id':'qa-generation-marker','properties':{'name':'QA synthetic generation marker','level':'province'},
                 'geometry':{'type':'Polygon','coordinates':[[[130,20],[131,20],[130.5,21],[130,20]]]}})
-            world.write_text(json.dumps(geo,separators=(',',':')),encoding='utf-8')
+            admin_map.write_text(json.dumps(geo,separators=(',',':')),encoding='utf-8')
             manifest=json.loads((fixture/'data-manifest.json').read_text('utf-8'))
-            entry=next(f for f in manifest['files'] if f['path']=='maps/world.json')
-            entry.update(bytes=world.stat().st_size,sha256=hashlib.sha256(world.read_bytes()).hexdigest())
+            entry=next(f for f in manifest['files'] if f['path']=='maps/province.json')
+            entry.update(bytes=admin_map.stat().st_size,sha256=hashlib.sha256(admin_map.read_bytes()).hexdigest())
             (fixture/'data-manifest.json').write_text(json.dumps(manifest,separators=(',',':')),encoding='utf-8')
-            (out/'generation-fixture.json').write_text(json.dumps({'synthetic':True,'changed':'maps/world.json only; added one triangle, original 16-file source remains untouched',
-                'worldSha256':entry['sha256'],'features':len(geo['features'])},indent=2),encoding='utf-8')
+            (out/'generation-fixture.json').write_text(json.dumps({'synthetic':True,'changed':'maps/province.json only; added one triangle, original 16-file source remains untouched',
+                'provinceSha256':entry['sha256'],'features':len(geo['features'])},indent=2),encoding='utf-8')
         (out/'inputs.json').write_text(json.dumps({'source':str(args.source.resolve()),
             'manifestSha256':hashlib.sha256((args.source/'data-manifest.json').read_bytes()).hexdigest()},indent=2),encoding='utf-8')
         commands=[]

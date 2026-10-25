@@ -13,7 +13,6 @@ export function mapAttributions(admin:readonly {source:string;supplementalSource
  if(sources.has('hk-had-official'))result.push({id:'hk-had',label:'© 香港特别行政区政府 · 民政事务总署 / DATA.GOV.HK',shortLabel:'© 香港政府',url:'https://data.gov.hk/en-data/dataset/hk-had-json1-hong-kong-administrative-boundaries',license:'DATA.GOV.HK 使用条款',details:'行政区边界 2026，使用条款 1.2（2025-05-26）'});
  if([...sources].some(source=>source.startsWith('gary-')))result.push({id:'gary',label:'GaryBikini / ChinaAdminDivisonSHP',url:'https://github.com/GaryBikini/ChinaAdminDivisonSHP'});
  if(!datav)result.push({id:'territory',label:'Huang 等（2024）轮廓',shortLabel:'Huang 等',url:'https://doi.org/10.5281/zenodo.10697975',license:'CC BY 4.0'});
- result.push({id:'world',label:'Natural Earth',url:'https://www.naturalearthdata.com/about/terms-of-use/',license:'Public domain'});
  return result;
 }
 

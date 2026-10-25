@@ -21,14 +21,14 @@ const mapProps=(attributions:ReturnType<typeof mapAttributions>)=>({port:{} as a
 describe('boundary provenance',()=>{
  it('credits GeoAtlas study data and the selected island source without stale outline credits',()=>{
   const items=mapAttributions([{source:'datav-areas-v3-inferred-gcj-wgs84',supplementalSources:['nlsc-taiping']}]);
-  assert.deepEqual(items.map(item=>item.id),['datav','nlsc','world']);
+  assert.deepEqual(items.map(item=>item.id),['datav','nlsc']);
   const text=mapAttributionText(items);
   assert.ok(text.includes('仅供学习和交流'));assert.ok(text.includes('太平岛实际岛面'));
   assert.ok(!text.includes('MIT'));assert.ok(!text.includes('Huang'));assert.ok(!text.includes('OpenStreetMap'));
  });
  it('credits the loaded OSM and official regional data without claiming the old source',()=>{
   const items=mapAttributions([{source:'osm-20261022'},{source:'nlsc-official'},{source:'hk-had-official'},{source:'osm-20261022'}]);
-  assert.deepEqual(items.map(item=>item.id),['osm','nlsc','hk-had','territory','world']);
+  assert.deepEqual(items.map(item=>item.id),['osm','nlsc','hk-had','territory']);
   const text=mapAttributionText(items);
   assert.ok(text.includes('© OpenStreetMap contributors（ODbL 1.0） https://www.openstreetmap.org/copyright'));
   assert.ok(text.includes('© 香港特别行政区政府 · 民政事务总署 / DATA.GOV.HK'));
@@ -49,7 +49,8 @@ describe('boundary provenance',()=>{
   const context:any={},html=await renderToString(createSSRApp({render:()=>h(GeoMap,mapProps(items))}),context),details=context.teleports.body;
   assert.match(html,/<a[^>]+class="map-osm-credit"[^>]+href="https:\/\/www.openstreetmap.org\/copyright"[^>]*>© OpenStreetMap<\/a>/);
   assert.match(html,/aria-label="地图来源" aria-expanded="false" aria-controls="([^"]+)"/);
-  assert.match(details,/<ul[^>]+class="map-attribution-details" hidden[^>]+aria-label="地图来源与许可"/);
+  assert.match(details,/<ul[^>]+class="map-attribution-details"[^>]* hidden[^>]+aria-label="地图来源与许可"/);
+  assert.match(details,/<ul[^>]+data-background-surface/);
   for(const item of items){assert(details.includes(item.url));assert(details.includes(item.label));if(item.license)assert(details.includes(item.license));}
  });
  it('four controls have independent identities and legacy sources do not falsely credit OSM',async()=>{

@@ -82,7 +82,7 @@ def verify_datav_regions(data_root,js,click,fill,until,pause,export,shot,report)
     fill('.geography-toolbar label select','auto','change');fill('[aria-label="省级地区"]','','change');pause(500)
     report['checks'].append('Reviewed real GeoAtlas data: China/Hainan fit south to Zengmu; direct district/source-city choices; Taiwan province with 14 actual SVG components and no fabricated children; all actual open boundary SVG paths have fill=none')
 
-def run(out,scratch,bundle=None,client_check=False,layout_check=False,frontend_dist=None,data_directory=None,jiyuan_check=False,renderer_check=False,geography_check=False):
+def run(out,scratch,bundle=None,client_check=False,layout_check=False,frontend_dist=None,data_directory=None,jiyuan_check=False,renderer_check=False,geography_check=False,interaction_check=False):
     if bundle is None:configure()
     bundle=bundle or ROOT
     from PyQt6.QtCore import QEventLoop,QTimer,Qt,QPoint,QCoreApplication,QEvent
@@ -162,6 +162,12 @@ def run(out,scratch,bundle=None,client_check=False,layout_check=False,frontend_d
         report.setdefault('buttonTypography',[]).append({'tools':tools,'sources':sources})
     def export(label,suffix):
         before=len(chosen);click(label)
+        if label in ('SVG','PNG'):
+            # Existing scientific checks compare every legend entry. Select that
+            # content explicitly; separate options acceptance checks the defaults.
+            js('(()=>{const e=document.querySelector(".export-options>label input");e.checked=true;e.dispatchEvent(new Event("change",{bubbles:true}));})()')
+            js('(()=>{const label=[...document.querySelectorAll(".geography-toolbar label")].find(e=>e.textContent.trim()==="地名");if(label?.querySelector("input")?.checked){const e=document.querySelector("[aria-label=导出地名]");e.value="all";e.dispatchEvent(new Event("change",{bubbles:true}));}})()')
+            click('导出图片')
         end=time.monotonic()+30
         while time.monotonic()<end:
             if len(chosen)>before and chosen[-1].is_file() and chosen[-1].stat().st_size>0:
@@ -241,6 +247,44 @@ def run(out,scratch,bundle=None,client_check=False,layout_check=False,frontend_d
         click('语言地图')
         until('document.querySelector(".atlas-catalog")?.textContent.includes("3666")&&document.querySelectorAll(".ol-layer canvas").length>=1')
         assert js('document.querySelector(".mode-tabs button").textContent==="方言分布"&&document.querySelector(".mode-tabs button").getAttribute("aria-selected")==="true"')
+        if interaction_check:
+            assert explicit_data is not None
+            report['scope']='Current shared source, actual Windows Qt WebEngine; real trial2 scale/exports and native map fullscreen. No final EXE or Mac claim.'
+            js('[...document.querySelectorAll("dialog button")].find(b=>b.textContent.trim()==="知道了")?.click()')
+            for theme in ['light','dark']:
+                js('document.documentElement.dataset.theme='+json.dumps(theme))
+                for level,size in [('province',34),('city',370),('district',2875)]:
+                    fill('.geography-toolbar label select',level,'change');until('!document.querySelector(".map-loading")');pause(350)
+                    svg=ET.fromstring(export('SVG','.svg').read_text('utf-8'));ns={'s':'http://www.w3.org/2000/svg'}
+                    paths=svg.findall('.//s:g[@clip-path]/s:path',ns)
+                    assert len(paths)==size+14,(level,len(paths))
+                    assert not any(p.get('fill')=='#edf0ed' for p in paths)
+                    assert sum(p.get('fill')=='#526c78' for p in paths)==10
+                    report['checks'].append(dict(theme=theme,level=level,paths=len(paths),singleScale=True))
+                shot('single-scale-'+theme)
+            click('语言现象');choose_feature('F120_P')
+            def native_click(label):
+                position=js('(()=>{const e=[...document.querySelectorAll("button")].find(b=>b.offsetParent&&b.textContent.trim()==='+json.dumps(label)+');if(!e)return null;const r=e.getBoundingClientRect();return [r.x+r.width/2,r.y+r.height/2]})()')
+                assert position,label
+                QTest.mouseClick(window.view.focusProxy() or window.view,Qt.MouseButton.LeftButton,pos=QPoint(round(position[0]),round(position[1])))
+                pause(250)
+            for count in [1,2,4]:
+                fill('.map-heading label select',str(count),'change');until('!document.querySelector(".map-loading")');pause(350)
+                before=json.loads(export('导出工程','.json').read_text('utf-8'))['view']
+                original_size=(window.width(),window.height());native_click('全屏地图')
+                until('document.fullscreenElement?.classList.contains("atlas-center")===true');pause(500)
+                assert window.isFullScreen()
+                assert js('document.querySelectorAll(":fullscreen .geo-map").length')==count
+                shot('fullscreen-'+str(count))
+                if count==2:QTest.keyClick(window.view.focusProxy() or window.view,Qt.Key.Key_Escape)
+                else:native_click('退出全屏')
+                until('!document.fullscreenElement');pause(500)
+                assert not window.isFullScreen()
+                assert (window.width(),window.height())==original_size
+                after=json.loads(export('导出工程','.json').read_text('utf-8'))['view']
+                assert before==after,(before,after)
+                report['checks'].append(dict(fullscreenMaps=count,nativeExit='Escape' if count==2 else 'button',windowAndViewRestored=True))
+            report['success']=True;return
         if geography_check:
             from ptb_desktop.startup_cache import external_executable
             from ptb_desktop.web_assets import geolinguistics_directory
@@ -267,7 +311,7 @@ def run(out,scratch,bundle=None,client_check=False,layout_check=False,frontend_d
                     until('!document.querySelector(".map-loading")');pause(400)
                     svg_file=export('SVG','.svg');svg=ET.fromstring(svg_file.read_text('utf-8'));ns={'s':'http://www.w3.org/2000/svg'};paths=svg.find('s:g',ns).findall('s:path',ns)
                     lines=[p for p in paths if p.get('d') and 'Z' not in p.get('d')]
-                    assert len(paths)==127+15+size and len(lines)==4
+                    assert len(paths)==14+size and len(lines)==4
                     assert sum(p.get('stroke')=='#9aa9aa' for p in paths)==size
                     assert sum(p.get('fill')=='#526c78' for p in paths)==10
                     assert sum(p.get('stroke-dasharray')=='4 3' for p in lines)==1
@@ -718,7 +762,8 @@ if __name__=='__main__':
     parser.add_argument('--layout-only',action='store_true')
     parser.add_argument('--jiyuan-only',action='store_true')
     parser.add_argument('--renderer-only',action='store_true')
+    parser.add_argument('--interaction-only',action='store_true')
     parser.add_argument('--geography-audit-only',action='store_true',help='Explicit historical geographic-content UI probe; excluded from default full and renderer checks')
     args=parser.parse_args()
     with verification_run('geolinguistics','qt','M19 actual offline data, map canvas, curated classification, scientific results, edit and persistence') as (out,scratch):
-        print(out,flush=True);run(out,scratch,client_check=args.compact_client,layout_check=args.layout_only,frontend_dist=args.frontend_dist,data_directory=args.data_directory,jiyuan_check=args.jiyuan_only,renderer_check=args.renderer_only,geography_check=args.geography_audit_only)
+        print(out,flush=True);run(out,scratch,client_check=args.compact_client,layout_check=args.layout_only,frontend_dist=args.frontend_dist,data_directory=args.data_directory,jiyuan_check=args.jiyuan_only,renderer_check=args.renderer_only,geography_check=args.geography_audit_only,interaction_check=args.interaction_only)

@@ -6,6 +6,8 @@ import ts from 'typescript';
 import * as vue from 'vue';
 import * as model from '../src/modules/geolinguistics/model.ts';
 import * as groups from '../src/modules/geolinguistics/groups.ts';
+import * as attribution from '../src/modules/geolinguistics/attribution.ts';
+import * as mapOptions from '../src/modules/geolinguistics/map-options.ts';
 import {geoAtlasAdmins,geoAtlasResources} from './fixtures/geolinguistics-regions.ts';
 
 // Execute the full, actual SFC setup. Only storage, file transport and mounted
@@ -19,15 +21,49 @@ function page(stored?:model.Project){
   if(name==='vue')return {...vue,onMounted:noop,onBeforeUnmount:(fn:()=>void)=>cleanup.push(fn)};
   if(name==='./model.ts')return model;
   if(name==='./groups.ts')return groups;
+  if(name==='./attribution.ts')return attribution;
+  if(name==='./map-options.ts')return mapOptions;
   if(name==='../../platform/local-assets.ts')return {LocalAssets:class{async value(){return stored?JSON.stringify(stored):null;}async compare(){}}};
   if(name==='../../platform/geolinguistics.ts')return {createGeoPort:()=>({load:async()=>geoAtlasResources()})};
   return {default:{}};
  };
- new Function('require','module','exports','window','document',js)(require,module,module.exports,{addEventListener:noop,removeEventListener:noop},{fonts:{load:async()=>[],ready:Promise.resolve()}});
+ new Function('require','module','exports','window','document',js)(require,module,module.exports,{addEventListener:noop,removeEventListener:noop},{addEventListener:noop,removeEventListener:noop,fonts:{load:async()=>[],ready:Promise.resolve()}});
  const m=scope.run(()=>module.exports.default.setup({active:true,stateKey:'owned-region-test'},{emit:noop,expose:noop}));
  return {m,async load(){assert.equal(await m.load(),true,m.error.value);},close(){for(const fn of cleanup)fn();scope.stop();}};
 }
 const ids=(rows:model.Admin[])=>rows.map(a=>a.id);
+
+test('clearing all actual page filters restores every point in similarity and phenomena, including saved stale categories',async()=>{
+ const stored=model.emptyProject();stored.mode='paper';stored.settings={...model.defaultSettings(),locationQuery:'荔湾',category:'stale-from-phenomena',onlySelected:true,onlyViewport:true};stored.selected=['fixture:440103'];
+ const f=page(stored);try{await f.load();const m=f.m,total=m.data.value.sites.length;
+  m.viewExtent.value=[113,23,114,24];await vue.nextTick();assert.equal(m.visibleSites.value.length,1);assert(m.activeFilters.value.some((v:string)=>v.includes('荔湾')));
+  m.clearFilters();await vue.nextTick();assert.equal(m.count.value,total);assert.equal(m.mapPoints.value[0].length,total);assert.deepEqual(m.activeFilters.value,[]);
+  m.category.value='nonexistent';assert.equal(m.visibleSites.value.length,total,'phenomenon category cannot filter similarity');
+  m.changeMode('features');m.locationQuery.value='荔湾';m.onlySelected.value=true;m.onlyViewport.value=true;m.region.value='province:440000';m.category.value='nonexistent';assert.equal(m.count.value,0);
+  m.clearFilters();await vue.nextTick();assert.equal(m.count.value,total);assert.equal(m.mapPoints.value[0].length,total);assert.deepEqual(m.project.value.selected,stored.selected,'clearing filters retains comparison selection');
+  m.selectedSite.value=stored.selected[0];m.onlySelected.value=true;m.clearSelection();await vue.nextTick();assert.equal(m.selectedSite.value,'');assert.equal(m.onlySelected.value,false);assert.equal(m.count.value,total);assert.deepEqual(m.project.value.selected,[]);
+ }finally{f.close();}
+});
+
+test('actual export dialog starts without legend/names, with scale and current manual/automatic boundary choices',async()=>{
+ const f=page();try{await f.load();const m=f.m;
+  m.level.value='district';m.extraBoundaries.value=['province','city'];m.openExport('png');assert.equal(m.modal.value,'export');assert.deepEqual(m.exportOptions.value,{legend:false,scale:true,names:'none',boundaries:['province','city','district']});
+  m.exportOptions.value.boundaries=[];assert.deepEqual(m.extraBoundaries.value,['province','city'],'export edits do not modify live boundaries');
+  m.level.value='auto';m.extraBoundaries.value=[];m.project.value.view.zoom=7;m.openExport('svg');assert.deepEqual(m.exportOptions.value.boundaries,['city']);
+  m.level.value='province';m.project.value.view.zoom=10;m.openExport('svg');assert.deepEqual(m.exportOptions.value.boundaries,['province'],'manual primary wins over zoom');
+  const old=model.emptyProject();old.settings=model.defaultSettings();assert.doesNotThrow(()=>model.validateProject(old));
+  old.settings.extraBoundaries=['province','city'];assert.deepEqual(model.validateProject(old).settings!.extraBoundaries,['province','city']);
+  (old.settings as any).extraBoundaries=['world'];assert.throws(()=>model.validateProject(old),/边界设置/);
+ }finally{f.close();}
+});
+
+test('actual SFC reuses source credits across view changes and refreshes them with replacement data',async()=>{
+ const f=page();try{await f.load();const m=f.m,first=m.attributions.value,firstColors=m.polygonColors.value;
+  for(let i=0;i<4;i++){m.setView({center:[105+i,35],zoom:5+i});m.tableOpen.value=!m.tableOpen.value;assert.equal(m.attributions.value,first);assert.equal(m.polygonColors.value,firstColors,'pan/table changes reuse regional aggregation');}
+  m.resources.value={...m.resources.value,admin:[{...m.resources.value.admin[0],source:'datav-review',supplementalSources:['nlsc-taiping']}]};
+  assert.notEqual(m.attributions.value,first);assert.deepEqual(m.attributions.value.map((v:attribution.MapAttribution)=>v.id),['datav','nlsc']);
+ }finally{f.close();}
+});
 
 test('actual SFC lists districts directly below municipalities and SAR provinces without inserting a city',async()=>{
  const f=page();try{await f.load();const m=f.m;

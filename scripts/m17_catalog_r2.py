@@ -149,7 +149,7 @@ def apply_r2(entries, charts):
    assert value not in combo_map,value
    combo_map[value]=(row,col)
  bind(0,0,'pʰ');bind(0,4,'t̪ʰ t̪ d̪');bind(0,6,'t̠ʰ t̠ d̠');bind(0,7,'ʈʰ');bind(0,6,'t̠ʲ d̠ʲ');bind(0,9,'cʰ');bind(0,10,'kʰ');bind(0,11,'qʰ')
- for col,vals in [(0,'m̥'),(1,'ɱ̊'),(4,'n̪̊ n̪'),(6,'n̠̊ n̠'),(7,'ɳ̊'),(6,'n̠ʲ̊ n̠ʲ'),(9,'ɲ̊'),(11,'ɴ̥')]:bind(1,col,vals)
+ for col,vals in [(0,'m̥'),(1,'ɱ̊'),(4,'n̪̊ n̪'),(6,'n̠̊ n̠'),(7,'ɳ̊'),(6,'n̠̊ʲ n̠ʲ'),(9,'ɲ̊'),(11,'ɴ̥')]:bind(1,col,vals)
  for col,vals in [(0,'ʙ̥'),(4,'r̪̊ r̪'),(5,'r̥'),(6,'r̠̊ r̠'),(11,'ʀ̥')]:bind(2,col,vals)
  bind(3,1,'ⱱ̟');bind(3,5,'ɾ̥');bind(3,7,'ɽ̊')
  bind(4,4,'s̪ z̪');bind(4,6,'s̠ z̠');bind(5,4,'ɬ̪ ɮ̪');bind(5,6,'ɬ̠ ɮ̠')

@@ -22,10 +22,16 @@ export const paintTerritory=collection([
  // across this opaque display face in both actual Canvas and exported SVG.
  feature('overlap-dispute-face','Polygon',polygon(-8,1.7,4,.6)),
 ]);
+export const paintAdmin=collection([
+ feature('land','Polygon',polygon(-9,-5,2,2)),
+ feature('ordinary','Polygon',polygon(-8,-3,4,4)),
+ feature('collection-area','Polygon',polygon(-8,3,3,2)),
+ feature('overlap-dispute-face','Polygon',polygon(-8,1.7,4,.6)),
+]);
 export function createGeoPort():GeoPort{
  const resources=geoAtlasResources();
  resources.admin=[{id:'province:fixture',code:'fixture',name:'合成绘制范围',level:'province',parent:'',province:'province:fixture',center:[105,30],extent:[95,24,115,37],source:'datav-qa-fixture'}];
  resources.sites=[{id:'fixture:offscreen',name:'合成调查点',lon:125,lat:10,admin:null}];resources.classification.sheets[0].rows=[];
  resources.observations.F1_P={values:['A1'],raw:{}};resources.paper.points=[{mds:[0,0,0],sharp:[],heat:[]}];
- return {load:async()=>resources,map:async name=>name==='world'?paintWorld:name==='territory'?paintTerritory:collection([]),matrix:async()=>new Float64Array(),useDirectory:async()=>{throw Error('Fixture does not import research data.');},download:async()=>{throw Error('Fixture does not download research data.');},save:async(name,blob)=>{(window as any).__paintExports.push({name,blob});return 'requested';}};
+ return {load:async()=>resources,map:async name=>name==='world'?paintWorld:name==='territory'?paintTerritory:paintAdmin,matrix:async()=>new Float64Array(),useDirectory:async()=>{throw Error('Fixture does not import research data.');},download:async()=>{throw Error('Fixture does not download research data.');},save:async(name,blob)=>{(window as any).__paintExports.push({name,blob});return 'requested';}};
 }

@@ -1,11 +1,11 @@
 // Test-only production build: preserve OL calls/results while measuring projection.
 import {build, loadConfigFromFile} from '../../frontend/node_modules/vite/dist/node/index.js';
-import {resolve,basename} from 'node:path';
+import {resolve} from 'node:path';
 import {writeFile, readFile, readdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 const root=resolve(import.meta.dirname,'../..'),out=resolve(process.argv[2]);
 const rendererOnly=process.env.PTB_GEO_RENDERER_ONLY==='1';
-const frontend=resolve('F:/PhoneticToolboxData/geolinguistics-builds','frontend-datav-'+(rendererOnly?'renderer-':'performance-')+basename(out));
+const frontend=resolve(out,'scratch/frontend');
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const files=[...(await readdir(resolve(root,'frontend/src/modules/geolinguistics'))).filter(p=>/\.(ts|vue)$/.test(p)).map(p=>'src/modules/geolinguistics/'+p),
   ...(await readdir(resolve(root,'frontend/src/platform'))).filter(p=>p.startsWith('geolinguistics')&&p.endsWith('.ts')).map(p=>'src/platform/'+p)];

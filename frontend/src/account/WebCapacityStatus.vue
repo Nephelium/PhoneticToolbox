@@ -19,13 +19,13 @@ async function request<T>(path:string,body?:unknown):Promise<T>{
  const value=await r.json();if(!r.ok)throw Error(value.detail);return value;
 }
 async function refresh(){
- if(loading||disposed)return;loading=true;
+ if(loading||disposed||document.hidden)return;loading=true;
  try{const [u,p,a]=await Promise.all([request<components['schemas']['StorageUsage']>('storage/usage'),request<components['schemas']['PresenceView']>('workspaces/presence?include_load=false'),request<components['schemas']['CapacityRequestView']|null>('workspaces/capacity-request')]);
   if(!disposed){usage.value=u;presence.value=p;application.value=a;if(a && a.state!=='pending')notice.value='';}
  }catch{if(!disposed){presence.value=null;usage.value=null;}}finally{loading=false;}
 }
 async function refreshLoad(){
- if(loadLoading||disposed)return;loadLoading=true;const details=loadExpanded.value;
+ if(loadLoading||disposed||document.hidden)return;loadLoading=true;const details=loadExpanded.value;
  try{const value=await request<components['schemas']['ServerLoadView']>('workspaces/server-load?details='+details);if(!disposed&&details===loadExpanded.value)server.value=value;}
  catch{if(!disposed&&details===loadExpanded.value)server.value=null;}
  finally{loadLoading=false;if(!disposed&&details!==loadExpanded.value)void refreshLoad();}
@@ -37,8 +37,9 @@ async function submit(){
  catch(e){notice.value=({capacity_not_increase:'申请额度应高于当前额度。',capacity_request_limited:'今天的申请次数已用完，请明天再试。',capacity_reason_required:'请填写扩容用途。'} as Record<string,string>)[e instanceof Error?e.message:'']||'申请未确认，请稍后重试。';}
  finally{busy.value=false;}
 }
-onMounted(()=>{void refresh();void refreshLoad();timer=setInterval(()=>void refresh(),30000);loadTimer=setInterval(()=>void refreshLoad(),1000);});
-onUnmounted(()=>{disposed=true;abort.abort();clearInterval(timer);clearInterval(loadTimer);});
+function visibility(){if(!document.hidden){void refresh();void refreshLoad();}}
+onMounted(()=>{visibility();timer=setInterval(()=>void refresh(),30000);loadTimer=setInterval(()=>void refreshLoad(),1000);document.addEventListener('visibilitychange',visibility);});
+onUnmounted(()=>{disposed=true;abort.abort();clearInterval(timer);clearInterval(loadTimer);document.removeEventListener('visibilitychange',visibility);});
 </script>
 <template>
  <aside class="web-capacity" aria-label="在线人数与个人容量">

@@ -29,7 +29,7 @@ const root=path.resolve(__dirname,'../..'),[out,scratch]=process.argv.slice(2);
   });
   page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));
   cdp=await context.newCDPSession(page);await cdp.send('Performance.enable');
-  await page.goto(server.resolvedUrls.local[0]);await page.locator('.home-page').waitFor();
+  await page.goto(server.resolvedUrls.local[0]);await page.locator('.home-page').waitFor();await page.waitForTimeout(3200);const announcement=page.getByRole('dialog').getByRole('button',{name:'知道了',exact:true});if(await announcement.isVisible())await announcement.click();
   await page.locator('.nav-item').and(page.getByRole('button',{name:'语言地图',exact:true})).click();
   const atlas=page.locator('.language-atlas');await atlas.getByLabel('选择语言地图资料夹',{exact:true}).waitFor({state:'attached'});
   async function measure(name,action,count){
@@ -70,16 +70,16 @@ const root=path.resolve(__dirname,'../..'),[out,scratch]=process.argv.slice(2);
    assert.equal(byName['four-to-one-map'].mapRefs.entries.filter(v=>v?.present).length,1);
    for(const stage of report.stages)assert.equal(stage.mapRefs.entries.filter(v=>v?.present).length,stage.mapRefs.domCount,stage.name);
    async function triangleCount(name){
-    const pending=page.waitForEvent('download');await atlas.getByRole('button',{name:'SVG',exact:true}).click();const downloaded=await pending;
+    const pending=page.waitForEvent('download');await atlas.getByRole('button',{name:'SVG',exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'导出图片',exact:true}).click();const downloaded=await pending;
     const file=path.join(scratch,name+'.svg');await downloaded.saveAs(file);const xml=await fs.readFile(file,'utf8');
-    return page.evaluate(xml=>[...new DOMParser().parseFromString(xml,'image/svg+xml').querySelectorAll('g[clip-path] path')].filter(p=>p.getAttribute('fill')==='#edf0ed'&&(p.getAttribute('d').match(/M/g)||[]).length===1&&(p.getAttribute('d').match(/L/g)||[]).length===3&&p.getAttribute('d').endsWith('Z')).length,xml);
+    return page.evaluate(xml=>[...new DOMParser().parseFromString(xml,'image/svg+xml').querySelectorAll('g[clip-path] path')].filter(p=>p.getAttribute('fill')==='#f8f8f1'&&p.getAttribute('stroke')==='#9aa9aa'&&(p.getAttribute('d').match(/M/g)||[]).length===1&&(p.getAttribute('d').match(/L/g)||[]).length===3&&p.getAttribute('d').endsWith('Z')).length,xml);
    }
    await level.selectOption('province');await page.waitForFunction(()=>!document.querySelector('.map-loading'));
    await atlas.getByRole('button',{name:'中国',exact:true}).click();await page.waitForTimeout(500);
    const original=await triangleCount('generation-original');
-   await measure('dataset-generation-fixture',async()=>{await atlas.getByLabel('选择语言地图资料夹',{exact:true}).setInputFiles(path.join(scratch,'generation-fixture'));await page.waitForFunction(()=>window.__ptbGeoPerf.reads.some(r=>r.stage==='dataset-generation-fixture'&&r.features===128));},4);
+   await measure('dataset-generation-fixture',async()=>{await atlas.getByLabel('选择语言地图资料夹',{exact:true}).setInputFiles(path.join(scratch,'generation-fixture'));await page.waitForFunction(()=>window.__ptbGeoPerf.reads.some(r=>r.stage==='dataset-generation-fixture'&&r.features===35));},4);
    const replacement=await triangleCount('generation-replacement');assert.equal(replacement,original+4);
-   await measure('dataset-original-restore',async()=>{await atlas.getByLabel('选择语言地图资料夹',{exact:true}).setInputFiles(path.join(scratch,'geolinguistics-data'));await page.waitForFunction(()=>window.__ptbGeoPerf.reads.some(r=>r.stage==='dataset-original-restore'&&r.features===127));},4);
+   await measure('dataset-original-restore',async()=>{await atlas.getByLabel('选择语言地图资料夹',{exact:true}).setInputFiles(path.join(scratch,'geolinguistics-data'));await page.waitForFunction(()=>window.__ptbGeoPerf.reads.some(r=>r.stage==='dataset-original-restore'&&r.features===34));},4);
    const restored=await triangleCount('generation-restored');assert.equal(restored,original);
    report.datasetGeneration={syntheticMarker:true,panels:4,boundary:'province',originalTriangles:original,replacementTriangles:replacement,restoredTriangles:restored};
   }

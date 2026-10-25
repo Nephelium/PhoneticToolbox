@@ -18612,17 +18612,17 @@
       "id": "ipa-combinations-021",
       "system": "ipa",
       "section": "combinations",
-      "display": "n̠ʲ̊",
-      "insertText": "n̠ʲ̊",
+      "display": "n̠̊ʲ",
+      "insertText": "n̠̊ʲ",
       "insertionMode": "literal",
       "codePoints": [
         "U+006E",
         "U+0320",
-        "U+02B2",
-        "U+030A"
+        "U+030A",
+        "U+02B2"
       ],
       "nameZh": "清腭化龈后鼻音",
-      "nameEn": "combined transcription: n̠ʲ̊",
+      "nameEn": "combined transcription: n̠̊ʲ",
       "descriptionZh": "清腭化龈后鼻音。后移号细化构音位置。上标j标记腭化。上置清化圈标记无声带振动，并避开下伸笔画。这是组合输入示例，未作为官方新增基本字母计数。",
       "usageZh": "点击输入整个组合。可在编辑框继续修改各基底或附加记号；连音线和标记顺序原样保存。",
       "contrastZh": "截图中的组合范围用于选择条目，具体记法按 IPA 构音和附加符号原则重写；不复制截图的美术布局，也不据此宣称某种组合在所有语言中成立。",

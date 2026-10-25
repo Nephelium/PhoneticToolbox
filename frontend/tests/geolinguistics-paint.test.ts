@@ -1,6 +1,6 @@
 import {it} from 'node:test';
 import assert from 'node:assert/strict';
-import {mapPaint,mapPaintPriority,contextBoundaryVisible} from '../src/modules/geolinguistics/map-paint.ts';
+import {mapPaint,mapPaintPriority,contextBoundaryVisible,contextGeometryVisible,administrativeFill} from '../src/modules/geolinguistics/map-paint.ts';
 
 it('uses the active administrative layer for province lines while retaining national context',()=>{
  assert.equal(contextBoundaryVisible('省界'),false);
@@ -28,8 +28,8 @@ it('does not turn separate legacy dash components into an invented dashed stroke
 });
 
 it('preserves polygon colours and drawn polygon fill',()=>{
- assert.equal(mapPaint(2,'Polygon','#2468ac').fill,'#2468ac38');
- assert.equal(mapPaint(2,'Polygon').fill,'none');
+ assert.equal(mapPaint(2,'Polygon','#2468ac').fill,administrativeFill('#2468ac'));assert.match(administrativeFill('#2468ac'),/^#[0-9a-f]{6}$/);
+ assert.equal(mapPaint(2,'Polygon').fill,'#f8f8f1');
  assert.equal(mapPaint(3,'Polygon').fill,'#397da525');
  assert.deepEqual(mapPaint(3,'Polygon').dash,[6,4]);
 });
@@ -39,4 +39,9 @@ it('orders territory area before actual and disputed lines, then independent sym
  for(const type of ['LineString','MultiLineString'])assert.equal(mapPaintPriority(type),1);
  assert.equal(mapPaintPriority('Polygon','disputed-line'),1);
  assert.equal(mapPaintPriority('MultiPolygon','boundary-symbol'),2);
+});
+
+it('hides coarse context faces and retains independent linework and symbols',()=>{
+ for(const type of ['Polygon','MultiPolygon']){assert.equal(contextGeometryVisible(type),false);assert.equal(contextGeometryVisible(type,'administrative-display-area'),false);assert.equal(contextGeometryVisible(type,'boundary-symbol'),true);}
+ for(const type of ['LineString','MultiLineString'])assert.equal(contextGeometryVisible(type,'boundary-line'),true);
 });

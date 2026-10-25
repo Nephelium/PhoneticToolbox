@@ -52,3 +52,14 @@ Windows 源码已执行 `node --test tests/m17-ipa-plus.test.ts tests/m17-r2-sou
 - 执行命令：`npm run typecheck`、`node --test tests/m17-ipa-plus.test.ts tests/m17-r2-sources.test.ts tests/m17-r3.test.ts`、`npm run contracts:check`、`npm run ui-data:check`、`npm run build:workbench`。构建仅有大分块与插件耗时提示。
 - 浏览器通过一次性 Node/Playwright 探针启动独立 Chrome 与项目 Vite，使用 `changeBackground` 导入内存生成的条纹 PNG，分别检查浅深主题计算样式、28 个按钮及输入结果，截图已目检。未使用用户设置/草稿；自有浏览器与服务已关闭，临时浏览器配置由 Playwright 管理。报告及两张截图保存在 `output/playwright/m17-vowel-transparent-20261023/`。
 - Qt、最终 EXE/Mac 包与公开网页未更新或新增验证，已打开的源码窗口需重开载入。
+
+## 2026-10-25 清腭化鼻音清化圈位置
+
+- `M17-NASAL-MARK-20261025` 在Windows源码/独立Chrome范围为 `verified`。原序列将U+030A放在腭化上标U+02B2后，清化圈因此附到上标。改为 `n̠̊ʲ`，码位依次为 `U+006E U+0320 U+030A U+02B2`，清化圈跟随n及其后移号。修正显示、输入和码位说明，稳定ID `ipa-combinations-021`、所有矩阵与其他624项保持。
+- 从 `scripts/verify_m17_catalog.py --write` 重新生成目录/覆盖CSV，再以 `node frontend/scripts/generate-ipa-keyboard.mjs` 同步标注键盘；对应部位绑定和组合清单同步。说明书中的历史截图与截图转录未改写。
+- `python -X utf8 -B scripts/verify_m17_catalog.py`、`node frontend/scripts/generate-ipa-keyboard.mjs --check`、`node --test frontend/tests/m17-ipa-plus.test.ts frontend/tests/m17-r2-sources.test.ts frontend/tests/m17-r3.test.ts` 通过，22项测试零失败。`npm --prefix frontend run typecheck`、`contracts:check`、`ui-data:check`、`build:workbench` 通过，构建保留大分块/插件耗时提示。
+- 一次性探针 `output/playwright/m17-nasal-mark-20261025/probe.cjs` 使用独立Chrome配置和本项目Vite。浅/深主题与100%/150%四组实际按钮、点击输入、撤销/重做均通过，M12共用音标键盘显示通过，页面错误0。浅深150%截图及标注键盘截图已目检，清化圈在n上方。与HEAD比较确认其他624项及全部图表数据未变。
+- 报告、截图与清理回执位于 `output/validation/m17-nasal-mark-20261025/`。首次探针直接同页hash导航未重新初始化模块，标注键盘等待超时；补页面重载后通过，原失败诊断保留。自有浏览器和服务关闭后scratch按项目入口清理。
+- Qt、最终EXE/Mac包、系统DPI与其他平台未新增验证，未打包或发布。源码工作台重开后载入本次构建。
+
+- 收尾：python scripts/validate_docs.py 检查2538文件/461来源/186任务零错误，历史快照断链单列；定向 git diff --check 通过。
