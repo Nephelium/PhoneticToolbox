@@ -66,7 +66,15 @@
         "install_exit": 0,
         "exe_sha256": "eca5a452c20920958b49f7d034ab43afe99871c31b122f81cd8f5d7ee45b674b",
         "application_launched": false,
-        "receipt": "output/validation/release-313-20261103/local-install.json"
+        "receipt": "output/validation/release-313-20261103/local-install.json",
+        "start_menu_followup": {
+          "status": "blocked",
+          "finding": "安装元数据为3.1.3，原开始菜单子目录快捷方式存在且目标正确，但Get-StartApps和AppsFolder未列出",
+          "action": "刷新原快捷方式图标/描述，补建顶层中文名称入口；未打开应用或重启Shell",
+          "remaining": "Windows应用列表收录/用户实际开始菜单显示待确认，未终止用户桌面进程",
+          "verification": "安装EXE完整SHA与正式3.1.3一致，顶层快捷方式重新读回的目标正确；文档检查通过。Get-StartApps仍未列出，不宣称开始菜单显示恢复",
+          "evidence": "output/validation/website-313-full-notes/start-menu-check.json"
+        }
       },
       "website_full_notes": {
         "status": "verified",
@@ -83,6 +91,12 @@
         "remaining": [],
         "release": "r6efd0ddd633b64b8",
         "evidence": "output/validation/website-313-full-notes"
+      },
+      "website_notes_rule": {
+        "status": "verified",
+        "file": "AGENTS.md",
+        "requirement": "官网更新小记全文页内展示，中英日完整同步发布，禁止只放摘要和链接",
+        "authorization": "2026-11-03井井明确要求写入项目规则"
       }
     },
     {
