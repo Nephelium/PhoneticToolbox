@@ -3,6 +3,27 @@
   "created_on": "2026-09-09",
   "tasks": [
     {
+      "id": "UPDATE-NOTES-I18N-20261104",
+      "title": "应用更新说明按用户语言选择全文",
+      "date": "2026-11-04",
+      "status": "verified",
+      "scope": "Windows更新清单/桌面桥/共享界面按zh-CN、en、ja选择完整正文，兼容旧notes；发布工具准备三语清单",
+      "files": [
+        "desktop/src/ptb_desktop/updates.py",
+        "frontend/src/platform/updates.ts",
+        "frontend/src/components/UpdatePanel.vue",
+        "release/localize_update_manifest.py",
+        "release/README.md",
+        "release/notes/3.1.3.en.md",
+        "release/notes/3.1.3.ja.md"
+      ],
+      "verification": "85项宿主/签名/清单工具与8项前端测试、类型检查/独立构建通过；真实Chrome更新弹窗13组通过，包含三语×浅深主题、全文4章节13条、切换不重新检查或下载。证据output/validation/update-notes-i18n和updates-ui/check-24762487-7230-4f2d-a35f-f82bf9fea72f/report.json",
+      "remaining": [
+        "后续成品打包/发布尚未执行，现有3.1.3不支持此新增字段",
+        "Mac当前仍手动更新，未进行Mac设备验证"
+      ]
+    },
+    {
       "id": "RELEASE-3.1.3-REVIEW",
       "title": "3.1.3发行与最终成品复验",
       "date": "2026-11-03",
@@ -57,7 +78,7 @@
         "previously_denied_frontend_directories": "not retried"
       },
       "local_installation": {
-        "status": "verified",
+        "status": "uninstalled_by_user_request",
         "from": "3.1.1",
         "to": "3.1.3",
         "preserved_files": 1503,
@@ -71,9 +92,18 @@
           "status": "blocked",
           "finding": "安装元数据为3.1.3，原开始菜单子目录快捷方式存在且目标正确，但Get-StartApps和AppsFolder未列出",
           "action": "刷新原快捷方式图标/描述，补建顶层中文名称入口；未打开应用或重启Shell",
-          "remaining": "Windows应用列表收录/用户实际开始菜单显示待确认，未终止用户桌面进程",
-          "verification": "安装EXE完整SHA与正式3.1.3一致，顶层快捷方式重新读回的目标正确；文档检查通过。Get-StartApps仍未列出，不宣称开始菜单显示恢复",
-          "evidence": "output/validation/website-313-full-notes/start-menu-check.json"
+          "remaining": "用户取消继续排查，改为卸载后自行安装。缓存重建未执行。",
+          "verification": "已按逐次授权重启StartMenuExperienceHost和Explorer，保存并恢复3个文件夹窗口；同一正式3.1.3执行静默修复安装退出0。应用列表仍未收录，未宣称解决。公共开始菜单写入和原生固定被Windows拒绝，未绕过。",
+          "evidence": "output/validation/start-menu-313/shortcut-identity.json",
+          "updated_on": "2026-11-04"
+        },
+        "user_requested_uninstall": {
+          "status": "verified",
+          "date": "2026-11-04",
+          "authorization": "用户要求卸载并提供3.1.3安装包自行安装",
+          "preservation": "卸载前重新备份1504文件823746321字节，待卸载后恢复核验",
+          "evidence": "output/validation/uninstall-313-20261104",
+          "verification": "正式卸载器退出0，安装EXE/卸载注册项/原始及补建开始菜单快捷方式均不存在；1504个用户数据文件823746321字节恢复后逐项SHA核验通过，未重新安装。安装包HTTPS HEAD 200，498793724字节。"
         }
       },
       "website_full_notes": {

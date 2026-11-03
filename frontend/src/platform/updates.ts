@@ -1,4 +1,4 @@
-import {tr,messageText,type MessageDescriptor} from '../i18n/index.ts';
+import {tr,messageText,type MessageDescriptor,type AppLocale} from '../i18n/index.ts';
 import {ModuleDisplayError,uiMessage,responseError,uiErrorMessage} from '../modules/module-localization.ts';
 // Updates are an explicit native capability. No browser fetch or network fallback.
 export type UpdateSource='auto'|'server'|'github';
@@ -6,7 +6,13 @@ export type ReleaseChannel='preview'|'stable';
 export type PackageKind='portable'|'installer';
 export interface UpdatePreferences{source:UpdateSource;channel:ReleaseChannel;autoCheck:boolean;currentVersion:string;packageKind:PackageKind;checkIntervalHours:number;applyAvailable:boolean}
 export interface UpdatePackage{kind:PackageKind;name:string;size:number;sha256:string;source:'server'|'github'}
-export interface UpdateRelease{id:string;version:string;source:'server'|'github';notes:string;publishedAt:string;packages:UpdatePackage[]}
+export interface UpdateRelease{id:string;version:string;source:'server'|'github';notes:string;notesByLocale?:Partial<Record<AppLocale,string>>;publishedAt:string;packages:UpdatePackage[]}
+/** Use the selected UI language; older manifests retain their original notes. */
+export function localizedReleaseNotes(release:Pick<UpdateRelease,'notes'|'notesByLocale'>|null|undefined,language:AppLocale):string{
+  if(!release)return '';
+  const translated=release.notesByLocale?.[language];
+  return typeof translated==='string'&&translated.trim()?translated:release.notes;
+}
 export interface SourceResult{status:'checked'|'no-releases'|'error';count?:number;version?:string|null;code?:string;message?:string;display?:MessageDescriptor}
 export interface UpdateCheck{status:'available'|'up-to-date'|'incomplete'|'deferred';reason?:'disabled'|'interval';currentVersion:string;channel?:ReleaseChannel;checkedAt?:number;region?:{country:string|null;source:'network'|'system'|'unknown'|'manual';label:string;preferredSource:'server'|'github'};preferredSource?:'server'|'github';sources:Partial<Record<'server'|'github',SourceResult>>;candidate:UpdateRelease|null;shouldPrompt:boolean;packageKind?:PackageKind;packageUnavailable?:boolean}
 export interface DownloadProgress{phase:'downloading'|'fallback'|'verified';source:'server'|'github';received:number;total:number;message?:string}

@@ -79,3 +79,20 @@ test('one failed native update and partial source results retranslate without an
   assert.equal(channel.requests.length,1);assert.equal(channel.cancelled.length,0);
  }finally{installUpdatesChannel(undefined);await setLocale('zh-CN');}
 });
+
+
+test('release notes follow the reactive selected language and preserve legacy fallback',async()=>{
+  const {computed}=await import('vue');
+  const {locale}=await import('../src/i18n/index.ts');
+  const {localizedReleaseNotes}=await import('../src/platform/updates.ts');
+  const release={notes:'旧版中文正文',notesByLocale:{'zh-CN':'完整中文','en':'Full English notes','ja':'日本語の全文'}};
+  const text=computed(()=>localizedReleaseNotes(release,locale.value));
+  try{
+    for(const language of ['zh-CN','en','ja'] as const){
+      await setLocale(language);assert.equal(text.value,release.notesByLocale[language]);
+    }
+    assert.equal(localizedReleaseNotes({notes:'legacy'},'en'),'legacy');
+    assert.equal(localizedReleaseNotes({notes:'fallback',notesByLocale:{en:' '}},'en'),'fallback');
+    assert.equal(localizedReleaseNotes(undefined,'ja'),'');
+  }finally{await setLocale('zh-CN');}
+});

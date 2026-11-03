@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {messageRef} from '../i18n/index.ts';
 import {uiMessage,uiError,uiErrorMessage,localized} from '../modules/module-localization.ts';
-import {tr} from '../i18n/index.ts';
+import {tr,locale} from '../i18n/index.ts';
 import {computed,onBeforeUnmount,onMounted,ref,watch} from 'vue';
-import {updater,updatesAvailable,onUpdatesAvailability,checkMessage,sourceLabel,updateDisplayMessage,type UpdateCheck,type UpdatePreferences,type DownloadProgress,type VerifiedDownload} from '../platform/updates';
+import {updater,updatesAvailable,onUpdatesAvailability,checkMessage,sourceLabel,updateDisplayMessage,localizedReleaseNotes,type UpdateCheck,type UpdatePreferences,type DownloadProgress,type VerifiedDownload} from '../platform/updates';
 import {renderReleaseNotes} from '../platform/release-notes';
 import ModalDialog from './ModalDialog.vue';
 const emit=defineEmits<{checked:[result:UpdateCheck|undefined];downloaded:[download:VerifiedDownload];applied:[]}>();
@@ -15,7 +15,7 @@ watch(()=>props.initialResult,value=>{if(value&&!busy.value)result.value=value;}
 let abort:AbortController|undefined;
 const unsubscribe=onUpdatesAvailability(()=>{available.value=updatesAvailable();if(available.value)void load();});
 const candidate=computed(()=>result.value?.candidate),packageInfo=computed(()=>candidate.value?.packages.find(item=>item.kind===prefs.value?.packageKind));
-const notes=computed(()=>renderReleaseNotes(candidate.value?.notes||''));
+const notes=computed(()=>renderReleaseNotes(localizedReleaseNotes(candidate.value,locale.value)));
 watch(candidate,value=>{settingsOpen.value=!value;},{immediate:true});
 const percentage=computed(()=>progress.value?Math.round(100*progress.value.received/progress.value.total):0);
 const progressMessage=computed(()=>download.value?tr('components.the_update_was_downloaded_and_verified'):progress.value?.phase==='verified'?tr('components.finishing_verification'):progress.value?.phase==='fallback'?tr('components.trying_another_source'):progress.value?tr('components.downloading_update_from_value_value',{v0:(sourceLabel(progress.value.source)),v1:(percentage.value)}):operation.value==='download'?tr('components.preparing_download'):tr('components.checking_for_updates'));

@@ -23,7 +23,7 @@ def test_valid_and_key_order_independent(signed):
     verify_manifest(dict(reversed(list(value.items()))),trust)
 
 
-@pytest.mark.parametrize('field',['notes','version','packages'])
+@pytest.mark.parametrize('field',['notes','notesByLocale','version','packages'])
 def test_tamper_rejected(signed,field):
     value,trust=signed;value=copy.deepcopy(value)
     value[field]='changed'

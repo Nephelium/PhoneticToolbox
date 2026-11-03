@@ -7,7 +7,7 @@ No install/extraction is performed here; the packager supplies the apply callbac
 from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import total_ordering
 import ctypes
 import hashlib
@@ -198,6 +198,7 @@ class Release:
     notes: str
     published_at: str
     packages: list[Package]
+    notes_by_locale: dict[str, str] = field(default_factory=dict)
 
 
 class UpdateService:
@@ -364,7 +365,12 @@ class UpdateService:
         notes, published = obj.get('notes', ''), obj.get('publishedAt', '')
         if not isinstance(notes, str) or len(notes) > 50000 or not isinstance(published, str) or len(published) > 80:
             raise UpdateError('MANIFEST_INVALID', '版本说明无效。')
-        return Release(version, source, notes, published, parsed)
+        localized = obj.get('notesByLocale', {})
+        if (not isinstance(localized, dict) or len(localized) > 3
+                or any(key not in ('zh-CN', 'en', 'ja') or not isinstance(value, str)
+                       or not value.strip() or len(value) > 50000 for key, value in localized.items())):
+            raise UpdateError('MANIFEST_INVALID', '版本说明无效。')
+        return Release(version, source, notes, published, parsed, dict(localized))
 
     def _server(self, channel, cancel):
         url = SERVER_MANIFEST.replace('/preview/', f'/{channel}/')
@@ -499,7 +505,7 @@ class UpdateService:
                         packages.extend(alternate.packages)
                 self._releases[release_id] = best, packages
                 candidate = {'id': release_id, 'version': best.version.value, 'source': best.source,
-                             'notes': best.notes, 'publishedAt': best.published_at,
+                             'notes': best.notes, 'notesByLocale': best.notes_by_locale, 'publishedAt': best.published_at,
                              'packages': [p.public() for p in best.packages]}
             failed = any(r['status'] == 'error' for r in results.values())
             status = 'available' if candidate else 'incomplete' if failed or unavailable or best is None else 'up-to-date'

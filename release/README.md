@@ -67,3 +67,9 @@ python release/sign_update_manifest.py --input release.json --output release.sig
 加密 PEM 使用 `--password-stdin`，密码不作为命令行参数。签名载荷为固定域前缀和排除 signature 字段后排序的紧凑 UTF-8 JSON，只接受安全整数及普通 JSON 类型，拒绝浮点数。下载包的 URL、大小、SHA-256、版本和说明均纳入签名。客户端信任根仅来自 `ptb_desktop/update_signatures.py` 的冻结源码，不能从远端清单或用户偏好加载。配置公钥后，所有候选渠道必须验签，GitHub 仅有 digest 的发行不能回退绕过。签名保证真实性，不能保证远端提供的是最新发行。
 
 当前 `TRUSTED_UPDATE_KEYS={}`，维持既有更新协议，**尚未获得数字签名保护**。本轮只完成工具、验签实现及公开 RFC 8032 测试向量验证，没有生成或修改正式密钥。正式启用前需井井确认公钥及签名发布流程，准备两渠道完整签名清单与随包运行库，再验证最终成品。
+
+## 按界面语言显示更新说明
+
+新版客户端读取清单中的可选 `notesByLocale`（`zh-CN`、`en`、`ja`），更新弹窗按当前界面语言选择全文，打开后切换语言也即时更新。`notes` 保留原中文，供旧客户端及缺少对应翻译时回退。语言不影响平台、更新版本或下载文件。Mac测试包仍按既有规则手动更新，不启用Windows频道。
+
+发布前维护 `notes/<版本>.md`、`notes/<版本>.en.md`、`notes/<版本>.ja.md` 三份完整说明，运行 `python release/localize_update_manifest.py --manifest <未签名清单> --output <新清单>`，再按既有流程签名及上传。工具要求三语齐全、中文与原清单一致，拒绝修改已签名清单。官网频道与GitHub的 `ptb-release.json` 资产均使用带三语正文的清单；仅有GitHub正文/包摘要的历史Release继续显示原正文。完整三语文案仍须按项目规则交井井确认后发布。当前已发布3.1.3不支持按语言选择更新说明，本次源码修改需随后续成品发行生效。

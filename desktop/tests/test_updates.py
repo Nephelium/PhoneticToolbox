@@ -359,3 +359,25 @@ def test_update_context_keys_do_not_depend_on_ambiguous_legacy_text():
     result = UpdateService._failure(UpdateError('CONFIRM_REQUIRED', '请确认后再下载更新。'))
     assert result['message'] == '请确认后再下载更新。'
     assert result['display'] == {'key': 'native.errors.updates.confirmDownload'}
+
+
+def test_localized_notes_survive_server_and_github_manifest(tmp_path):
+    notes = {'zh-CN': '完整中文', 'en': '# Full English', 'ja': '# 日本語の全文'}
+    data = manifest(); data['notesByLocale'] = notes
+    service, transport = make_service(tmp_path, server=data)
+    result = service.check(manual=True, source='server')
+    assert result['candidate']['notesByLocale'] == notes
+    assert result['candidate']['notes'] == data['notes']
+    item = github_release()
+    url = GITHUB_PACKAGE.rsplit('/', 1)[0] + '/ptb-release.json'
+    item['assets'].append({'name': 'ptb-release.json', 'browser_download_url': url})
+    transport.responses[f'{GITHUB_RELEASES}?per_page=100&page=1'] = [item]
+    transport.responses[url] = manifest(source='github') | {'notesByLocale': notes}
+    assert service.check(manual=True, source='github')['candidate']['notesByLocale'] == notes
+
+
+@pytest.mark.parametrize('value', [None, [], {'fr': 'unsupported'}, {'en': 1}, {'ja': ''}, {'en': ' '}, {'en': 'x'*50001}])
+def test_invalid_localized_notes_rejected(tmp_path, value):
+    service, _ = make_service(tmp_path)
+    with pytest.raises(UpdateError, match='版本说明'):
+        service._manifest(manifest() | {'notesByLocale': value}, 'server', 'preview')

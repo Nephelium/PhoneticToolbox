@@ -76,6 +76,27 @@ try{
  assert.equal(await dialog.getByRole('button',{name:'退出并更新',exact:true}).count(),0);
  assert.equal(await page.evaluate(()=>window.fixture.requests.filter(r=>r.operation==='download').length),0);
  checks.push({name:'actual AppShell opens the shared update dialog with version comparison, eight list items and eight bold topics; startup never downloads'});
+
+ // Check locale selection in the already-open real UpdatePanel without another native check.
+ const localeNotes=Object.fromEntries(await Promise.all(['zh-CN','en','ja'].map(async language=>[language,await fs.readFile(path.join(repo,'release/notes','3.1.3'+(language==='zh-CN'?'':'.'+language)+'.md'),'utf8')])));
+ await page.evaluate(notes=>{window.fixture.release.notesByLocale=notes;},localeNotes);
+ await dialog.locator('summary').click();await dialog.getByRole('button',{name:'检查更新',exact:true}).click();
+ await dialog.locator('.release-markdown h1').waitFor();
+ const nativeChecks=await page.evaluate(()=>window.fixture.requests.filter(r=>r.operation==='check').length);
+ for(const language of ['zh-CN','en','ja'])for(const theme of ['light','dark']){
+   await page.evaluate(async({language,theme})=>{const {setLocale}=await import('/src/i18n/index.ts');await setLocale(language);document.documentElement.dataset.theme=theme;},{language,theme});
+   const panel=page.locator('.update-panel');
+   await panel.locator('.release-markdown h2').first().getByText(language==='zh-CN'?'声学分析':language==='en'?'Acoustic analysis':'音響分析',{exact:true}).waitFor();
+   assert.equal(await panel.locator('.release-markdown h2').count(),4);assert.equal(await panel.locator('.release-markdown li').count(),13);
+   assert((await panel.locator('.release-notes').innerText()).includes('5.0309 dB'));
+   assert.equal(await page.evaluate(()=>window.fixture.requests.filter(r=>r.operation==='check').length),nativeChecks);
+   assert.equal(await page.evaluate(()=>window.fixture.requests.filter(r=>r.operation==='download'||r.operation==='apply').length),0);
+   await panel.screenshot({path:path.join(folder,`localized-${language}-${theme}.png`)});
+   checks.push({name:'Complete release notes follow current UI locale without a refetch or download',language,theme});
+ }
+ await page.evaluate(async()=>{const {setLocale}=await import('/src/i18n/index.ts');await setLocale('zh-CN');delete window.fixture.release.notesByLocale;});
+ await dialog.locator('summary').click();await dialog.getByRole('button',{name:'检查更新',exact:true}).click();
+ await dialog.locator('.release-notes li').first().getByText(/更新窗口/).waitFor();
  if(actualNotes!==null){
    assert(actualTitle&&actualVersion,'Release notes must identify their actual version');
    await page.evaluate(({notes,version})=>{window.fixture.release.notes=notes;window.fixture.release.version=version;},{notes:actualNotes,version:actualVersion});
